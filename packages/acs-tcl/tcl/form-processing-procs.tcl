@@ -352,10 +352,29 @@ ad_proc -public ad_form {
     <p>
 
     The -form block is a list of form elements, which themselves are lists consisting of one or two
-    elements.  The first member of each element sublist declares the form element name, type, widget, whether or
+    elements.  The first member of each element sublist declares the form element name, datatype, widget, whether or
     not the element is a multiple element (multiselect, for instance), and optional conversion arguments.  The second,
     optional member consists of a list of form element parameters and values.  All parameters accepted by the form
     element create procedure are allowed.
+
+    <p>
+  
+    <ul>
+      <li>
+        <a href="/api-doc/proc-search?query%5fstring=template%3a%3adata%3a%3avalidate">Avaliable datatypes</a>. 
+        For example, the procedure <code>template::data::validate::float</code> on this list implements the 'float' datatype.
+      </li>
+      <li>
+        <a href="/api-doc/proc-search?query_string=template%3A%3Awidget">Available widgets</a>.
+        For example, the procedure <code>template::widget::radio</code> implements the 'radio' widget. 
+        Not all widgets are compatible with all datatypes.
+      </li>
+      <li>
+        <a href="/api-doc/proc-view?proc=template%3a%3aelement%3a%3acreate">Form element parameters and values</a>.
+        For example, the parameter <code>-label "My label"</code> is written <code>{label "My label"}</code> in the
+        element sublist of the -form block to ad_form.
+      </li>
+    </ul>
 
     <p>
 
