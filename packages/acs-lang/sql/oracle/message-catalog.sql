@@ -8,6 +8,14 @@
 -- @creation-date 2000-09-10
 -- @cvs-id $Id$
 --
+
+create table lang_user_timezone (
+    user_id            integer
+                       constraint lang_user_timezone_user_id_fk
+                       references users (user_id) on delete cascade,
+    timezone           varchar2(100)
+);
+
 create table lang_message_keys ( 
     message_key        varchar2(200)
                        constraint lang_message_keys_m_key_nn
@@ -47,6 +55,29 @@ comment on table lang_messages is '
     This table should be read at boot time -from ACS- to load all the messages
     into an nsv_array.
 ';
+
+create table lang_messages_audit (    
+    message_key        varchar2(200)
+                       constraint lang_messages_audit_key_nn
+                       not null,
+    package_key        varchar2(100)
+                       constraint lang_messages_audit_p_key_nn
+                       not null,
+    locale             varchar2(30) 
+                       constraint lang_messages_audit_l_fk
+                       references ad_locales(locale)
+                       constraint lang_messages_audit_l_nn
+                       not null,
+    message            clob,
+    overwrite_date     date default sysdate not null,
+    overwrite_user     integer
+                       constraint lang_messages_audit_ou_fk
+                       references users (user_id),
+    constraint lang_messages_audit_fk
+    foreign key (message_key, package_key) 
+    references lang_message_keys(message_key, package_key)
+    on delete cascade
+);
 
 -- ****************************************************************************
 -- * The lang_translate_columns table holds the columns that require translation.

@@ -25,3 +25,5 @@
 </if>
 
 <formtemplate id="batch_editor"></formtemplate>
+
+<include src="lookups-include" package_key="@package_key@" message_key_list="@displayed_keys@">

@@ -41,10 +41,10 @@ element create locale site_wide_locale -datatype text -widget select -optional \
 
 if { ($package_id != "") && ([ad_conn user_id] != 0) } {
     element create locale package_level_explain -datatype text -widget inform -label "&nbsp;" \
-            -value "Your locale setting for this specific [apm_package_key_from_id $package_id] package. This will override the site-wide setting if it is set."
+            -value "Your locale setting for [apm_instance_name_from_id $package_id]. If set, this will override the site-wide setting in this particular application."
     
     element create locale package_level_locale -datatype text -widget select -optional \
-            -label "Locale for this [apm_package_key_from_id $package_id]" \
+            -label "Locale for [apm_instance_name_from_id $package_id]" \
             -options $list_of_locales
 }
 

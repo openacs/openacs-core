@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-  <fullquery name="lang::catalog::import_from_all_files.all_enabled_not_loaded_packages">
+  <fullquery name="lang::catalog::import_from_all_files_and_cache.all_enabled_not_loaded_packages">
     <querytext>
       select package_key
       from   apm_package_types

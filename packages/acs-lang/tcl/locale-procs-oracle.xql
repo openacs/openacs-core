@@ -6,7 +6,7 @@
    <fullquery name="lang::system::timezone_utc_offset.system_utc_offset">      
       <querytext>
       
-	select ( (sysdate - timezone.local_to_utc (:system_timezone, sysdate)) * 24 ) from dual
+	select ( (sysdate - timezone.local_to_utc (timezone.get_id(:system_timezone), sysdate)) * 24 ) from dual
     
       </querytext>
    </fullquery>

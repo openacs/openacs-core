@@ -55,8 +55,6 @@ comment on table ad_locales is '
 
 create table ad_locale_user_prefs (
   user_id               integer
-                        constraint ad_locale_user_prefs_pk
-                        primary key
                         constraint ad_locale_user_prefs_users_fk
                         references users (user_id) on delete cascade,
   package_id            integer

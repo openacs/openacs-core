@@ -21,3 +21,7 @@
 </else>
 
 </div>
+
+<include src="lookups-include" package_key="@package_key@" message_key_list="@message_key@">
+
+<include src="audit-include" current_locale="@current_locale@" message_key="@message_key@" package_key="@package_key@">

@@ -3,13 +3,7 @@
   <property name="context_bar">@context_bar@</property>
 
 <if @admin_p@>
-  <table align="right">
-    <tr>
-      <td align="right">
-        <a href="admin">Administration</a>
-      </td>
-    </tr>
-  </table>
+  <a href="admin">Administration</a>
 </if>
 
 <blockquote>

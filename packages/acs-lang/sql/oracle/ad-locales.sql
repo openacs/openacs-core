@@ -114,10 +114,24 @@ commit;
 
 create table ad_locale_user_prefs (
        user_id                        integer
-                                      primary key
+                                      constraint ad_locale_user_prefs_user_fk
                                       references users (user_id),
        locale                         varchar2(30) not null
                                       constraint
-                                      trb_language_preference_lid_fk
-                                      references ad_locales (locale)
+                                      ad_locale_user_prefs_locale_fk
+                                      references ad_locales (locale),
+       package_id                     integer
+                                      constraint ad_locale_user_prefs_pid_fk
+                                      references apm_packages(package_id) on delete cascade
 );
+
+-- primary key should be package_id and user_id
+create table user_timezone_pref (
+  user_id                             integer
+                                      constraint user_timezone_pref_pk
+                                      primary key
+                                      constraint user_timezone_pref_user_fk
+                                      references users (user_id),
+  timezone                            integer
+
+)
