@@ -322,16 +322,19 @@ create table acs_rels (
 	rel_id		integer not null
 			constraint acs_rels_rel_id_fk
 			references acs_objects (object_id)
+                        on delete cascade
 			constraint acs_rels_pk primary key,
 	rel_type	varchar(100) not null
 			constraint acs_rels_rel_type_fk
 			references acs_rel_types (rel_type),
 	object_id_one	integer not null
 			constraint acs_object_rels_one_fk
-			references acs_objects (object_id),
+			references acs_objects (object_id)
+                        on delete cascade,
 	object_id_two	integer not null
 			constraint acs_object_rels_two_fk
-			references acs_objects (object_id),
+			references acs_objects (object_id)
+                        on delete cascade,
 	constraint acs_object_rels_un unique
 	(rel_type, object_id_one, object_id_two)
 );
