@@ -11,7 +11,7 @@ select acs_permission.grant_permission(
 </querytext>
 </fullquery>
 
-<fullquery name="grant_admin">
+<fullquery name="revoke_admin">
 <querytext>
 select acs_permission.revoke_permission(
         acs.magic_object_id('security_context_root'),
