@@ -47,7 +47,7 @@ ad_proc ad_context_bar { args } {
     if {[string match /pvt/home* [ad_conn url]]} {
       set display_main_p 0
     } else {
-      lappend context [list "/pvt/home" "Your Workspace"]
+      lappend context [list "[ad_pvt_home]" "[ad_pvt_home_name]"]
     }
   }
 
@@ -96,7 +96,7 @@ ad_proc ad_context_bar { args } {
 proc_doc ad_context_bar_ws args {
     Returns a Yahoo-style hierarchical navbar, starting with a link to workspace.
 } {
-    set choices [list "<a href=\"[ad_pvt_home]\">Your Workspace</a>"]
+    set choices [list "[ad_pvt_home_link]"]
 
 #    if { [ad_conn scope on_which_table] != "." } {
 #	if { [llength $args] == 0 } {
@@ -129,7 +129,7 @@ proc_doc ad_context_bar_ws_or_index args {
     if { [ad_get_user_id] == 0 } {
 	set choices [list "<a href=\"/\">[ad_system_name]</a>"] 
     } else {
-	set choices [list "<a href=\"[ad_pvt_home]\">Your Workspace</a>"]
+	set choices [list "[ad_pvt_home_link]"]
     }
 
 # lars, Apr25-00: Took out this old scoping thing
@@ -159,7 +159,7 @@ proc_doc ad_admin_context_bar args {
     workspace and admin home.
     Suitable for use in pages underneath /admin.
 } {
-    set choices [list "<a href=\"[ad_pvt_home]\">Your Workspace</a>" "<a href=\"/acs-admin/\">ACS System Wide Administration</a>"]
+    set choices [list "[ad_pvt_home_link]" "<a href=\"/acs-admin/\">ACS System Wide Administration</a>"]
     set index 0
     foreach arg $args {
 	incr index
