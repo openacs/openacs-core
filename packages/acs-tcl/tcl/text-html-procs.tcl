@@ -280,11 +280,7 @@ ad_proc -private util_close_html_tags {
     set nobr_tagptr 0
     set nobr_len 0
 
-    if { $break_soft > 0 } {
-        set break_soft [expr $break_soft - [string length $ellipsis]]
-    }
     if { $break_hard > 0 } {
-        set break_hard [expr $break_hard - [string length $ellipsis]]
         if { $break_soft == 0 } {
             set break_soft $break_hard
         }
@@ -321,7 +317,7 @@ ad_proc -private util_close_html_tags {
                 if { $break_soft } {
                     if {! $nobr && [expr [string length $pretag] + $out_len] > $break_soft } {
                         # first chop pretag to the right length
-                        set pretag [string range $pretag 0 [expr $break_soft - $out_len]]
+                        set pretag [string range $pretag 0 [expr $break_soft - $out_len - [string length $ellipsis]]]
                         # clip the last word
                         regsub "\[^ \t\n\r]*$" $pretag {} pretag
                         append out [string range $pretag 0 $break_soft]
@@ -1263,7 +1259,7 @@ ad_proc -public ad_html_text_convert {
     {-from text/plain}
     {-to text/html}
     {-maxlen 70}
-    {-truncate_len 70}
+    {-truncate_len 0}
     {-ellipsis "..."}
     {-more ""}
     text
