@@ -52,13 +52,14 @@
 		case when valid_types.rel_type = null then 0 else 1 end as valid_p
 	from 
 		(select
-			t.pretty_name, t.object_type, tree_level(t.tree_sortkey) as level,
-		        lpad('&nbsp;', (tree_level(t.tree_sortkey) - 1) * 4) as indent,
-	        	t.tree_sortkey as sortkey
+			t2.pretty_name, t2.object_type, tree_level(t2.tree_sortkey) - tree_level(t1.tree_sortkey) as level,
+		        repeat('&nbsp;', (tree_level(t2.tree_sortkey) - tree_level(t1.tree_sortkey)) * 4) as indent,
+	        	t2.tree_sortkey as sortkey
 		from
-			acs_object_types t
-		where tree_sortkey like (select tree_sortkey || '%' 
-					from acs_object_types where object_type = :start_with)) types left join
+			acs_object_types t1,
+			acs_object_types t2
+		where	t2.tree_sortkey like (t1.tree_sortkey || '%')
+		  and   t1.object_type = :start_with) types left join
 		(select
 			rel_type
 		from

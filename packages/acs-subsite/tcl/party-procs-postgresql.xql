@@ -25,8 +25,8 @@
 	       case when valid_types.object_type = null then 0 else 1 end as valid_p
 	  from (select t2.pretty_name,
 		       t2.object_type,
-		       tree_level(t2.tree_sortkey) as tree_level,
-		       repeat('&nbsp;', (tree_level(t2.tree_sortkey) - 1) * 4) as indent,
+		       tree_level(t2.tree_sortkey) - tree_level(t1.tree_sortkey) as tree_level,
+		       repeat('&nbsp;', (tree_level(t2.tree_sortkey) - tree_level(t1.tree_sortkey)) * 4) as indent,
 		       t2.tree_sortkey
 		  from acs_object_types t1,
 		       acs_object_types t2
