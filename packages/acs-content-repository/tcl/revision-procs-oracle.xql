@@ -116,7 +116,7 @@
              revision_id   => :revision_id,
              creation_user => :creation_user,
              creation_ip   => :creation_ip,
-	     filename      => :ojbect_name
+	     filename      => :object_name
            );
          end;
       </querytext>
