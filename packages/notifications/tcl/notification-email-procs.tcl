@@ -151,7 +151,7 @@ namespace eval notification::email {
         set bounce_to [parse_email_address $to_addr]
 	set bounce_address [parse_email_address $from_addr]
 	set bounce_from "MAILER-DAEMON@$domain"
-	set bounce_subject "failure notice"
+	set bounce_subject "failure debug"
 	set l "Hi.  This is the notification program at $domain.\n"
 	append l "I'm afraid I wasn't able to deliver your message to the\n"
 	append l "following addresses.  This is a permament error; I've\n"
@@ -182,7 +182,7 @@ namespace eval notification::email {
         @param queue_dir The location of the qmail mail queue in
         the file-system.
     } {
-	ns_log notice "load_qmail_mail_queue: checking $queue_dir/new/ for incoming mail"
+	ns_log debug "load_qmail_mail_queue: checking $queue_dir/new/ for incoming mail"
 
         if {[catch {
             set messages [glob "$queue_dir/new/*"]
@@ -298,7 +298,7 @@ namespace eval notification::email {
 
             # We don't accept empty users for now
             if {[empty_string_p $from_user]} {
-                ns_log Notice "load_qmail_mail_queue: no user for from address: $from, to: $to. bouncing message."
+                ns_log debug "load_qmail_mail_queue: no user for from address: $from, to: $to. bouncing message."
 		# bounce message with an informative error.
 		bounce_mail_message  -to_addr $email_headers(from) \
 		    -from_addr $email_headers(to) \
@@ -315,7 +315,7 @@ namespace eval notification::email {
             set to_stuff [parse_reply_address -reply_address $to]
             # We don't accept a bad incoming email address
             if {[empty_string_p $to_stuff]} {
-                ns_log Notice "load_qmail_mail_queue: bad to address $to from $from. bouncing message."
+                ns_log debug "load_qmail_mail_queue: bad to address $to from $from. bouncing message."
 
 		# bounce message here
 		bounce_mail_message -to_addr $email_headers(from) \
@@ -360,7 +360,7 @@ namespace eval notification::email {
     ad_proc -public scan_replies {} {
         scan for replies
     } {
-        ns_log Notice "notification::email::scan_replies: about to load qmail queue"
+        ns_log debug "notification::email::scan_replies: about to load qmail queue"
         return [load_qmail_mail_queue -queue_dir [qmail_mail_queue_dir]]
     }
 
