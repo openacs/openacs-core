@@ -357,7 +357,16 @@ ad_proc -public auth::authority::batch_sync {
     return $job_id
 }
 
+ad_proc -public auth::authority::get_short_names {} {
+    Return a list of authority short names.
 
+    @author Peter Marklund
+} {
+    return [db_list select_authority_short_names {
+        select short_name
+        from auth_authorities
+    }]
+}
 
 
 
@@ -495,5 +504,3 @@ ad_proc -public auth::authority::local {} {
 } {
     return [auth::authority::get_id -short_name "local"]
 }
-
-
