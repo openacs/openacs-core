@@ -31,8 +31,8 @@ aa_register_case -cats {smoke production_safe} files__tcl_file_syntax_errors {
         set data [read $fp]
         close $fp
 
-        # Check that the file parses        
-        if {! [info complete $data] } { 
+        # Check that the file parses
+        if {! [info complete $data] } {
             aa_log_result fail "$file parses successfully"
         } else {
             incr good
@@ -46,14 +46,14 @@ aa_register_case -cats {smoke production_safe} -error_level notice files__tcl_fi
 
     @author Jeff Davis davis@xarg.net
 } {
-    # couple of local helper procs 
-    proc ::tcl_p {file} { 
+    # couple of local helper procs
+    proc ::tcl_p {file} {
         return [expr [string match {*.tcl} $file] || [file isdirectory $file]]
     }
-    
+
     # if startdir is not [acs_root_dir]/packages, then somebody checked in the wrong thing by accident
     set startdir [acs_root_dir]/packages
-    
+
     aa_log "Checks starting from $startdir"
     set count 0
     #inspect every tcl file in the directory tree starting with $startdir
@@ -65,7 +65,7 @@ aa_register_case -cats {smoke production_safe} -error_level notice files__tcl_fi
 
 	if {![regexp {/packages/acs-tcl/tcl/test/acs-tcl-test-procs\.tcl$} $file match]} {
 	    if {[string first @returns $data] < 0} { 
-                aa_log_result fail "$file should not contain '@returns'.  @returns is probably a typo of @return" 
+                aa_log_result fail "$file should not contain '@returns'.  @returns is probably a typo of @return"
             }
 	}
     }
@@ -246,12 +246,15 @@ aa_register_case -cats {smoke} files__check_xql_files {
 
             if {[string equal $db postgresql] || [empty_string_p $dummy]} {
                 if {[regexp -nocase {(nvl[ ]*\(|decode[ ]*\(| connect by )} $data match]} {
-                    aa_log_result fail "postgres or generic with oracle code $file: $match" 
+                    aa_log_result fail "postgres or generic with oracle code $file: $match"
+                }
+                if {[regexp -nocase {((limit|offset)[ ]*:)} $data match]} {
+                    aa_log_result fail "postgres <7.4 does not support limit :var binding with our driver"
                 }
                 set allxql($base) $file
             } else {
-                if {[regexp -nocase {(now[ ]*\(| limit |outer join )} $data match ] || [empty_string_p $dummy]} {
-                    aa_log_result fail "oracle or generic with postgres code $file: $match" 
+                if {[regexp -nocase {(now[ ]*\(| limit | offset | outer join )} $data match ] || [empty_string_p $dummy]} {
+                    aa_log_result fail "oracle or generic with postgres code $file: $match"
                 }
                 set allxql($base) $file
             }
@@ -264,13 +267,15 @@ aa_register_case -cats {smoke} files__check_xql_files {
         # check there is a corresponding .tcl file
         if {![file exists ${xql}.tcl]
             && ![file exists ${xql}.vuh]} {
-            # JCD: Hack to exclude calendar/www/views which is the only current file which has 
+            # JCD: Hack to exclude calendar/www/views which is the only current file which has
             # no associated tcl file.
             if {[string first calendar/www/views $allxql($xql)] <  0} {
-                aa_log_result fail "missing .tcl or .vuh file for $allxql($xql)" 
+                aa_log_result fail "missing .tcl or .vuh file for $allxql($xql)"
             }
         }
-        if { 0 } { 
+        if { 0 } {
+            # JCD: disabled for now...
+
             # check that if there is a db specific version that the corresponding
             # generic or other db file exists...
             if {[info exists onexql(${xql}-oracle)]
