@@ -168,12 +168,7 @@ ad_proc -public auth::sync::job::end {
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    db_dml set_end_time {
-        update auth_batch_jobs
-        set    job_end_time = current_timestamp,
-               message = :message
-        where  job_id = :job_id
-    }
+    db_dml update_job_end {}
     
     # interactive_p, run_time_seconds, num_actions, num_problems
     get -job_id $job_id -array job
