@@ -453,7 +453,7 @@ begin
 
   if copy__folder_id = content_item__get_root_folder(null) 
      or copy__folder_id = content_template__get_root_folder() 
-     or copy__target_folder_id = copy__folder_id 
+     or copy__target_folder_id = copy__folder_id then
     v_valid_folders_p := 0;
   end if;
 
