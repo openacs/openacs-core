@@ -595,13 +595,21 @@ namespace eval lang::util {
         "not translated" message.
         
         @author Lars Pind (lars@collaboraid.biz)
-        @create-date October 24, 2002
+        @creation-date October 24, 2002
 
-        @return 1 if translator mode is enabled, 0 otherwise.
+        @return 1 if translator mode is enabled, 0 otherwise. Returns 0 if there is
+                no HTTP connection.
 
         @see lang::util::translator_mode_set
     } {
-        return [ad_get_client_property -default 0 acs-lang translator_mode_p]
+        global ad_conn
+        if { [info exists ad_conn] } {
+            # THere is an HTTP connection - return the client property
+            return [ad_get_client_property -default 0 acs-lang translator_mode_p]
+        } else {
+            # No HTTP connection
+            return 0
+        }
     }
     
     ad_proc -public translator_mode_set {
@@ -611,7 +619,7 @@ namespace eval lang::util {
         not. 
         
         @author Lars Pind (lars@collaboraid.biz)
-        @create-date October 24, 2002
+        @creation-date October 24, 2002
 
         @param translator_mode_p 1 if you want translator mode to be enabled, 0 otherwise.
 
