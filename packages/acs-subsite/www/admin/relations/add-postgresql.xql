@@ -43,8 +43,8 @@ cross join (select element_id from application_group_element_map
                    p.party_id
             from (select o.object_id as party_id
                   from acs_objects o,
-                       (select ot.object_type from acs_object_types ot, acs_object_types ot2
-                        where ot.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
+                       (select ot2.object_type from acs_object_types ot, acs_object_types ot2
+                        where ot2.tree_sortkey between ot.tree_sortkey and tree_right(ot.tree_sortkey)
                           and $start_with) t
                   where o.object_type = t.object_type) p left join
                  (select element_id
