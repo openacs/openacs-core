@@ -24,7 +24,7 @@ set export_vars [export_url_vars user_id]
 set admin_email [db_string unused "select email from 
 parties where party_id = :admin_user_id"]
 
-if [catch {ns_sendmail "$email" "$admin_email" "You have been added as a user to [ad_system_name] at [ad_parameter SystemUrl]" "$message"} errmsg] {
+if [catch {ns_sendmail "$email" "$admin_email" "You have been added as a user to [ad_system_name] at [ad_url]" "$message"} errmsg] {
     ad_return_error "Mail Failed" "The system was unable to send email.  Please notify the user personally.  This problem is probably caused by a misconfiguration of your email system.  Here is the error:
 <blockquote><pre>
 [ad_quotehtml $errmsg]
