@@ -18,6 +18,14 @@
       </querytext>
 </fullquery>
 
+<fullquery name="cr_import_content.get_content_type">
+      <querytext>
+            select content_type
+	    from cr_items
+            where item_id = :item_id
+      </querytext>
+</fullquery>
+
 <fullquery name="cr_import_content.mime_type_insert">
       <querytext>
             insert into cr_mime_types (mime_type) 
