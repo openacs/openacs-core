@@ -773,7 +773,7 @@ ad_proc -public callback {
         }
     }
 
-    if {![string equal impl *] && ![info exists c]} {
+    if {![string equal $impl *] && ![info exists c]} {
         error "callback $callback implementation $impl does not exist"
     }
 
