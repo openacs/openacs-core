@@ -269,6 +269,7 @@ password:</msg>
   <msg key="lt_Your_URL_doesnt_have_">Your URL doesn't have the correct form.  A valid URL would be something like &quot;%valid_url_example%&quot;.</msg>
   <msg key="Make_yourself_invisible_label">Make yourself invisible</msg>
   <msg key="Make_yourself_visible_label">Make yourself visible</msg>
+  <msg key="Manage_your_notifications">Manage your notifications</msg>
   <msg key="Name">Name:</msg>
   <msg key="New_Password">New Password</msg>
   <msg key="New_users">New users:</msg>
