@@ -1099,6 +1099,9 @@ ad_proc -public ad_conn {args} {
         if { $var == "form" } {
             return [ns_getform] 
         }
+        if { $var == "all" } {
+            return [array get ad_conn]
+        }
 
         if { [info exists ad_conn($var)] } {
             return $ad_conn($var)
