@@ -156,13 +156,24 @@ ad_proc -public content::get_content_value { revision_id } {
 }
 
 
-ad_proc -public content::init { urlvar rootvar {content_root ""} {template_root ""} {context "public"} {rev_id ""} {content_type ""} } {
+ad_proc -public content::init {
+    {-resolve_index "f"}
+    {-revision "live"}
+    urlvar
+    rootvar
+    {content_root ""}
+    {template_root ""}
+    {context "public"}
+    {rev_id ""}
+    {content_type ""}
+} {
 
     upvar $urlvar url $rootvar root_path
-
+    variable root_folder_id
     variable item_id
     variable revision_id
 
+    set root_folder_id $content_root
     # if a .tcl file exists at this url, then don't do any queries
     if { [file exists [ns_url2file "$url.tcl"]] } {
         return 0
@@ -189,15 +200,22 @@ ad_proc -public content::init { urlvar rootvar {content_root ""} {template_root 
         set content_type $item_info(content_type)
     }
 
+    # TODO accept latest revision as well. DaveB
     # Make sure that a live revision exists
     if { [empty_string_p $rev_id] } {
-        set live_revision [db_string get_live_revision ""]
+      if {[string equal "best" $revision]} {
+	  # lastest_revision unless live_revision is set, then live_revision
+	  set revision_id [item::get_best_revision $item_id]
+      } else {
+	  # default live_revision
+	  set revision_id [item::get_live_revision $item_id]
+      }
 
-        if { [template::util::is_nil live_revision] } {
+      if { [string equal "" $revision_id] } {
             ns_log notice "content::init: no live revision found for content item $item_id"
             return 0
         }
-        set revision_id $live_revision
+
     } else {
         set revision_id $rev_id
     }
