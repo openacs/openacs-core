@@ -5,6 +5,7 @@
     <package-name>ACS Subsite</package-name>
     <pretty-plural>ACS Subsite Services</pretty-plural>
     <singleton-p>f</singleton-p>
+    <initial-install-p>t</initial-install-p>
 
     <version name="4.2" url="http://www.arsdigita.com/acs-repository/download/apm/acs-subsite-4.2.apm">
     <database-support>

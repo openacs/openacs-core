@@ -5,6 +5,7 @@
     <package-name>ACS Kernel</package-name>
     <pretty-plural>ACS Kernel Services</pretty-plural>
     <singleton-p>t</singleton-p>
+    <initial-install-p>t</initial-install-p>
 
     <version name="4.2" url="http://www.arsdigita.com/acs-repository/download/apm/acs-kernel-4.2.apm">
     <database-support>

@@ -5,7 +5,7 @@
       <querytext>
       
     select version_id, package_key, package_uri, pretty_name, version_name, version_uri,
-    summary, description_format, description, 
+    summary, description_format, description, singleton_p, initial_install_p,
     to_char(release_date, 'Month DD, YYYY') as release_date , vendor, vendor_uri,
     enabled_p, installed_p, tagged_p, imported_p, data_model_loaded_p, 
     to_char(activation_date, 'Month DD, YYYY') as activation_date,

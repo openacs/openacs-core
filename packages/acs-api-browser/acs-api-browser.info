@@ -5,6 +5,7 @@
     <package-name>ACS API Browser</package-name>
     <pretty-plural>ACS API Browsers</pretty-plural>
     <singleton-p>t</singleton-p>
+    <initial-install-p>t</initial-install-p>
 
     <version name="4.1.1" url="http://www.arsdigita.com/acs-repository/download/apm/acs-api-browser-4.1.1.apm">
     <database-support>

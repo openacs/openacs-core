@@ -5,6 +5,7 @@
     <package-name>ACS Administration</package-name>
     <pretty-plural>ACS Administration Services</pretty-plural>
     <singleton-p>t</singleton-p>
+    <initial-install-p>t</initial-install-p>
 
     <version name="4.1.1" url="http://www.arsdigita.com/acs-repository/download/apm/acs-admin-4.1.1.apm">
     <database-support>

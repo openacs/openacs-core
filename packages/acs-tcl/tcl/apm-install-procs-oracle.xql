@@ -114,6 +114,7 @@
 			package_uri => :package_uri,
 			pretty_name => :pretty_name,
 			pretty_plural => :pretty_plural,
+			initial_install_p => :initial_install_p,
 			singleton_p => :singleton_p,
 			spec_file_path => :spec_file_path,
 			spec_file_mtime => :spec_file_mtime
@@ -133,6 +134,7 @@
 			package_uri => :package_uri,
 			pretty_name => :pretty_name,
 			pretty_plural => :pretty_plural,
+			initial_install_p => :initial_install_p,
 			singleton_p => :singleton_p,
 			spec_file_path => :spec_file_path,
 			spec_file_mtime => :spec_file_mtime
@@ -166,7 +168,7 @@
 </fullquery>
 
  
-<fullquery name="apm_package_install.package_instantiate_mount">      
+<fullquery name="apm_package_instantiate_and_mount.package_instantiate_and_mount">      
       <querytext>
       
 	    declare

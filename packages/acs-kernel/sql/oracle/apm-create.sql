@@ -32,6 +32,9 @@ create table apm_package_types (
 				check (package_type in ('apm_application', 'apm_service')),
     spec_file_path		varchar2(1500),
     spec_file_mtime		integer,
+    initial_install_p		char(1) default 'f' not null
+				constraint apm_packages_init_install_p_ck
+				check (initial_install_p in ('t', 'f')),
     singleton_p			char(1) default 'f' not null
 				constraint apm_packages_site_avail_p_ck
 				check (singleton_p in ('t', 'f'))
@@ -69,6 +72,10 @@ comment on column apm_package_types.singleton_p is '
  restricted to the acs-admin/ subsite.
 ';
 
+comment on column apm_package_types.initial_install_p is '
+ Indicates if the package should be installed during initial installation,
+ in other words whether or not this package is part of the OpenACS core.
+';
 
 begin
 -- Create a new object type for packages.
@@ -129,6 +136,14 @@ begin
    datatype => 'boolean',
    pretty_name => 'Singleton',
    pretty_plural => 'Singletons'
+ ); 
+
+ attr_id := acs_attribute.create_attribute(
+   object_type => 'apm_package',
+   attribute_name => 'initial_install_p',
+   datatype => 'boolean',
+   pretty_name => 'Initial Install',
+   pretty_plural => 'Initial Installs'
  ); 
 
 end;
@@ -482,11 +497,11 @@ comment on table apm_package_owners is '
 
 -- DCW - 2001-05-04, converted tarball storage to use content repository.
 create or replace view apm_package_version_info as
-    select v.package_key, t.package_uri, t.pretty_name, v.version_id, v.version_name,
+    select v.package_key, t.package_uri, t.pretty_name, t.singleton_p, t.initial_install_p,
+           v.version_id, v.version_name,
            v.version_uri, v.summary, v.description_format, v.description, v.release_date,
            v.vendor, v.vendor_uri, v.enabled_p, v.installed_p, v.tagged_p, v.imported_p, v.data_model_loaded_p,
            v.activation_date, v.deactivation_date,
-           -- dbms_lob.getlength(distribution_tarball) tarball_length,
            nvl(v.content_length,0) as tarball_length,
            distribution_uri, distribution_date
     from   apm_package_types t, apm_package_versions v
@@ -886,6 +901,8 @@ as
     pretty_plural		in apm_package_types.pretty_plural%TYPE,
     package_uri			in apm_package_types.package_uri%TYPE,
     package_type		in apm_package_types.package_type%TYPE,
+    initial_install_p		in apm_package_types.initial_install_p%TYPE 
+				default 'f',    
     singleton_p			in apm_package_types.singleton_p%TYPE 
 				default 'f',    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
@@ -904,6 +921,8 @@ as
     	    	    	    	default null,
     package_type		in apm_package_types.package_type%TYPE
     	    	    	    	default null,
+    initial_install_p		in apm_package_types.initial_install_p%TYPE 
+    	    	    	    	default null,    
     singleton_p			in apm_package_types.singleton_p%TYPE 
     	    	    	    	default null,    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
@@ -927,6 +946,8 @@ as
     pretty_name			in apm_package_types.pretty_name%TYPE,
     pretty_plural		in apm_package_types.pretty_plural%TYPE,
     package_uri			in apm_package_types.package_uri%TYPE,
+    initial_install_p		in apm_package_types.initial_install_p%TYPE 
+				default 'f',    
     singleton_p			in apm_package_types.singleton_p%TYPE 
 				default 'f',    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
@@ -947,6 +968,8 @@ as
     pretty_name			in apm_package_types.pretty_name%TYPE,
     pretty_plural		in apm_package_types.pretty_plural%TYPE,
     package_uri			in apm_package_types.package_uri%TYPE,
+    initial_install_p		in apm_package_types.initial_install_p%TYPE 
+				default 'f',    
     singleton_p			in apm_package_types.singleton_p%TYPE 
 				default 'f',    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
@@ -1064,6 +1087,10 @@ function new (
   procedure delete (
    package_id		in apm_packages.package_id%TYPE
   );
+
+  function initial_install_p (
+	package_key		in apm_packages.package_key%TYPE
+  ) return integer;
 
   function singleton_p (
 	package_key		in apm_packages.package_key%TYPE
@@ -1237,6 +1264,7 @@ as
     pretty_plural		in acs_object_types.pretty_plural%TYPE,
     package_uri			in apm_package_types.package_uri%TYPE,
     package_type		in apm_package_types.package_type%TYPE,
+    initial_install_p		in apm_package_types.initial_install_p%TYPE,
     singleton_p			in apm_package_types.singleton_p%TYPE,
     spec_file_path		in apm_package_types.spec_file_path%TYPE default null,
     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE default null
@@ -1251,6 +1279,8 @@ as
     package_uri			in apm_package_types.package_uri%TYPE
     	    	    	    	default null,    
     package_type		in apm_package_types.package_type%TYPE
+    	    	    	    	default null,
+    initial_install_p		in apm_package_types.initial_install_p%TYPE
     	    	    	    	default null,
     singleton_p			in apm_package_types.singleton_p%TYPE
     	    	    	    	default null,
@@ -1348,6 +1378,8 @@ as
     pretty_plural		in apm_package_types.pretty_plural%TYPE,
     package_uri			in apm_package_types.package_uri%TYPE,
     package_type		in apm_package_types.package_type%TYPE,
+    initial_install_p		in apm_package_types.initial_install_p%TYPE 
+				default 'f',    
     singleton_p			in apm_package_types.singleton_p%TYPE 
 				default 'f',    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
@@ -1363,6 +1395,7 @@ as
 	pretty_plural => register_package.pretty_plural,
 	package_uri => register_package.package_uri,
 	package_type => register_package.package_type,
+	initial_install_p => register_package.initial_install_p,
 	singleton_p => register_package.singleton_p,
 	spec_file_path => register_package.spec_file_path,
 	spec_file_mtime => spec_file_mtime
@@ -1379,6 +1412,8 @@ as
     	    	    	    	default null,
     package_type		in apm_package_types.package_type%TYPE
     	    	    	    	default null,
+    initial_install_p		in apm_package_types.initial_install_p%TYPE 
+    	    	    	    	default null,    
     singleton_p			in apm_package_types.singleton_p%TYPE 
     	    	    	    	default null,    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
@@ -1395,6 +1430,7 @@ as
 	pretty_plural => update_package.pretty_plural,
 	package_uri => update_package.package_uri,
 	package_type => update_package.package_type,
+	initial_install_p => update_package.initial_install_p,
 	singleton_p => update_package.singleton_p,
 	spec_file_path => update_package.spec_file_path,
 	spec_file_mtime => update_package.spec_file_mtime
@@ -1431,6 +1467,8 @@ as
     pretty_name			in apm_package_types.pretty_name%TYPE,
     pretty_plural		in apm_package_types.pretty_plural%TYPE,
     package_uri			in apm_package_types.package_uri%TYPE,
+    initial_install_p		in apm_package_types.initial_install_p%TYPE 
+				default 'f',    
     singleton_p			in apm_package_types.singleton_p%TYPE 
 				default 'f',    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
@@ -1446,6 +1484,7 @@ as
 	pretty_plural => register_application.pretty_plural,
 	package_uri => register_application.package_uri,
 	package_type => 'apm_application',
+	initial_install_p => register_application.initial_install_p,
 	singleton_p => register_application.singleton_p,
 	spec_file_path => register_application.spec_file_path,
 	spec_file_mtime => register_application.spec_file_mtime
@@ -1469,6 +1508,8 @@ as
     pretty_name			in apm_package_types.pretty_name%TYPE,
     pretty_plural		in apm_package_types.pretty_plural%TYPE,
     package_uri			in apm_package_types.package_uri%TYPE,
+    initial_install_p		in apm_package_types.initial_install_p%TYPE 
+				default 'f',    
     singleton_p			in apm_package_types.singleton_p%TYPE 
 				default 'f',    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
@@ -1484,6 +1525,7 @@ as
 	pretty_plural => register_service.pretty_plural,
 	package_uri => register_service.package_uri,
 	package_type => 'apm_service',
+	initial_install_p => register_service.initial_install_p,
 	singleton_p => register_service.singleton_p,
 	spec_file_path => register_service.spec_file_path,
 	spec_file_mtime => register_service.spec_file_mtime
@@ -1847,6 +1889,24 @@ end new;
 	object_id => package_id
     );
    end delete;
+
+    function initial_install_p (
+	package_key		in apm_packages.package_key%TYPE
+    ) return integer
+    is
+        v_initial_install_p integer;
+    begin
+        select 1 into v_initial_install_p
+	from apm_package_types
+	where package_key = initial_install_p.package_key
+        and initial_install_p = 't';
+	return v_initial_install_p;
+	
+	exception 
+	    when NO_DATA_FOUND
+            then
+                return 0;
+    end initial_install_p;
 
     function singleton_p (
 	package_key		in apm_packages.package_key%TYPE
@@ -2424,6 +2484,7 @@ as
     pretty_plural		in acs_object_types.pretty_plural%TYPE,
     package_uri			in apm_package_types.package_uri%TYPE,
     package_type		in apm_package_types.package_type%TYPE,
+    initial_install_p		in apm_package_types.initial_install_p%TYPE,
     singleton_p			in apm_package_types.singleton_p%TYPE,
     spec_file_path		in apm_package_types.spec_file_path%TYPE default null,
     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE default null
@@ -2432,11 +2493,11 @@ as
   begin
    insert into apm_package_types
     (package_key, pretty_name, pretty_plural, package_uri, package_type,
-    spec_file_path, spec_file_mtime, singleton_p)
+    spec_file_path, spec_file_mtime, initial_install_p, singleton_p)
    values
     (create_type.package_key, create_type.pretty_name, create_type.pretty_plural,
      create_type.package_uri, create_type.package_type, create_type.spec_file_path, 
-     create_type.spec_file_mtime, create_type.singleton_p);
+     create_type.spec_file_mtime, create_type.initial_install_p, create_type.singleton_p);
   end create_type;
 
   function update_type(    
@@ -2449,6 +2510,8 @@ as
     	    	    	    	default null,
     package_type		in apm_package_types.package_type%TYPE
     	    	    	        default null,
+    initial_install_p		in apm_package_types.initial_install_p%TYPE
+    	    	    	    	default null,
     singleton_p			in apm_package_types.singleton_p%TYPE
     	    	    	    	default null,
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
@@ -2465,6 +2528,7 @@ as
     	package_type = nvl(update_type.package_type, package_type),
     	spec_file_path = nvl(update_type.spec_file_path, spec_file_path),
     	spec_file_mtime = nvl(update_type.spec_file_mtime, spec_file_mtime),
+    	initial_install_p = nvl(update_type.initial_install_p, initial_install_p),
     	singleton_p = nvl(update_type.singleton_p, singleton_p)
       where package_key = update_type.package_key;
       return update_type.package_key;

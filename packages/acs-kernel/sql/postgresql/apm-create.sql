@@ -32,6 +32,7 @@ create table apm_package_types (
 				check (package_type in ('apm_application', 'apm_service')),
     spec_file_path		varchar(1500),
     spec_file_mtime		integer,
+    initial_install_p		boolean default 'f' not null,
     singleton_p			boolean default 'f' not null
 );
 
@@ -59,6 +60,11 @@ comment on column apm_package_types.spec_file_mtime is '
 database so that if a user changes the specification file by editing the file
 (as opposed to using the UI, the system can read the .info file and update
 the information in the database appropriately.
+';
+
+comment on column apm_package_types.initial_install_p is '
+ Indicates if the package should be installed during initial installation,
+ in other words whether or not this package is part of the OpenACS core.
 ';
 
 comment on column apm_package_types.singleton_p is '
@@ -155,6 +161,22 @@ begin
    ''number'',
    ''Specification File Modified Time'',
    ''Specification File Modified Times'',
+   null,
+   null,
+   null,
+   1,
+   1,
+   null,
+   ''type_specific'',
+   ''f''
+   );
+
+ attr_id := acs_attribute__create_attribute (
+   ''apm_package'',
+   ''initial_install_p'',
+   ''boolean'',
+   ''Initial Install'',
+   ''Initial Installs'',
    null,
    null,
    null,
@@ -649,11 +671,11 @@ comment on table apm_package_owners is '
 
 -- DCW - 2001-05-04, converted tarball storage to use content repository.
 create view apm_package_version_info as
-    select v.package_key, t.package_uri, t.pretty_name, v.version_id, v.version_name,
+    select v.package_key, t.package_uri, t.pretty_name, t.singleton_p, t.initial_install_p,
+           v.version_id, v.version_name,
            v.version_uri, v.summary, v.description_format, v.description, v.release_date,
            v.vendor, v.vendor_uri, v.enabled_p, v.installed_p, v.tagged_p, v.imported_p, v.data_model_loaded_p,
            v.activation_date, v.deactivation_date,
---           dbms_lob.getlength(distribution_tarball) tarball_length,
            coalesce(v.content_length,0) as tarball_length,
            distribution_uri, distribution_date
     from   apm_package_types t, apm_package_versions v 
@@ -1166,473 +1188,7 @@ select inline_7 ();
 
 drop function inline_7 ();
 
-
--- show errors
-
--- Public Programmer level API.
--- create or replace package apm
--- as
---   procedure register_package (
---     package_key			in apm_package_types.package_key%TYPE,
---     pretty_name			in apm_package_types.pretty_name%TYPE,
---     pretty_plural		in apm_package_types.pretty_plural%TYPE,
---     package_uri			in apm_package_types.package_uri%TYPE,
---     package_type		in apm_package_types.package_type%TYPE,
---     singleton_p			in apm_package_types.singleton_p%TYPE 
--- 				default 'f',    
---     spec_file_path		in apm_package_types.spec_file_path%TYPE 
--- 				default null,
---     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE 
--- 				default null
---   );
--- 
---   function update_package (
---     package_key			in apm_package_types.package_key%TYPE,
---     pretty_name			in apm_package_types.pretty_name%TYPE
---     	    	    	    	default null,
---     pretty_plural		in apm_package_types.pretty_plural%TYPE
---     	    	    	    	default null,
---     package_uri			in apm_package_types.package_uri%TYPE
---     	    	    	    	default null,
---     package_type		in apm_package_types.package_type%TYPE
---     	    	    	    	default null,
---     singleton_p			in apm_package_types.singleton_p%TYPE 
---     	    	    	    	default null,    
---     spec_file_path		in apm_package_types.spec_file_path%TYPE 
---     	    	    	    	default null,
---     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE 
--- 				default null
---   ) return apm_package_types.package_type%TYPE;   
---    
---   procedure unregister_package (
---     package_key		in apm_package_types.package_key%TYPE,
---     cascade_p		in char default 't'
---   );
--- 
---   function register_p (
---     package_key		in apm_package_types.package_key%TYPE
---   ) return integer;
--- 
---   -- Informs the APM that this application is available for use.
---   procedure register_application (
---     package_key			in apm_package_types.package_key%TYPE,
---     pretty_name			in apm_package_types.pretty_name%TYPE,
---     pretty_plural		in apm_package_types.pretty_plural%TYPE,
---     package_uri			in apm_package_types.package_uri%TYPE,
---     singleton_p			in apm_package_types.singleton_p%TYPE 
--- 				default 'f',    
---     spec_file_path		in apm_package_types.spec_file_path%TYPE 
--- 				default null,
---     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE 
--- 				default null
---   );
--- 
---   -- Remove the application from the system. 
---   procedure unregister_application (
---     package_key		in apm_package_types.package_key%TYPE,
---     -- Delete all objects associated with this application.	
---     cascade_p		in char default 'f'
---   ); 
--- 
---   procedure register_service (
---     package_key			in apm_package_types.package_key%TYPE,
---     pretty_name			in apm_package_types.pretty_name%TYPE,
---     pretty_plural		in apm_package_types.pretty_plural%TYPE,
---     package_uri			in apm_package_types.package_uri%TYPE,
---     singleton_p			in apm_package_types.singleton_p%TYPE 
--- 				default 'f',    
---     spec_file_path		in apm_package_types.spec_file_path%TYPE 
--- 				default null,
---     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE 
--- 				default null
---   );
--- 
---   -- Remove the service from the system. 
---   procedure unregister_service (
---     package_key		in apm_package_types.package_key%TYPE,
---     -- Delete all objects associated with this service.	
---     cascade_p		in char default 'f'
---   ); 
--- 
---   -- Indicate to APM that a parameter is available to the system.
---   function register_parameter (
---     parameter_id		in apm_parameters.parameter_id%TYPE 
--- 				default null,
---     package_key			in apm_parameters.package_key%TYPE,				
---     parameter_name		in apm_parameters.parameter_name%TYPE,
---     description			in apm_parameters.description%TYPE
--- 				default null,
---     datatype			in apm_parameters.datatype%TYPE 
--- 				default 'string',
---     default_value		in apm_parameters.default_value%TYPE 
--- 				default null,
---     section_name		in apm_parameters.section_name%TYPE
--- 				default null,
---     min_n_values		in apm_parameters.min_n_values%TYPE 
--- 				default 1,
---     max_n_values		in apm_parameters.max_n_values%TYPE 
--- 				default 1
---   ) return apm_parameters.parameter_id%TYPE;
--- 
---   function update_parameter (
---     parameter_id		in apm_parameters.parameter_id%TYPE,
---     parameter_name		in apm_parameters.parameter_name%TYPE
---     	    	    	    	default null,
---     description			in apm_parameters.description%TYPE
--- 				default null,
---     datatype			in apm_parameters.datatype%TYPE 
--- 				default 'string',
---     default_value		in apm_parameters.default_value%TYPE 
--- 				default null,
---     section_name		in apm_parameters.section_name%TYPE
--- 				default null,
---     min_n_values		in apm_parameters.min_n_values%TYPE 
--- 				default 1,
---     max_n_values		in apm_parameters.max_n_values%TYPE 
--- 				default 1
---   ) return apm_parameters.parameter_name%TYPE;
--- 
---   function parameter_p(
---     package_key                 in apm_package_types.package_key%TYPE,
---     parameter_name              in apm_parameters.parameter_name%TYPE
---   ) return integer;
--- 
---   -- Remove any uses of this parameter.
---   procedure unregister_parameter (
---     parameter_id		in apm_parameters.parameter_id%TYPE 
--- 				default null
---   );
--- 
---   -- Return the value of this parameter for a specific package and parameter.
---   function get_value (
---     parameter_id		in apm_parameter_values.parameter_id%TYPE,
---     package_id			in apm_packages.package_id%TYPE		    
---   ) return apm_parameter_values.attr_value%TYPE;
--- 
---   function get_value (
---     package_id			in apm_packages.package_id%TYPE,
---     parameter_name		in apm_parameters.parameter_name%TYPE
---   ) return apm_parameter_values.attr_value%TYPE;
--- 
---   -- Sets a value for a parameter for a package instance.
---   procedure set_value (
---     parameter_id		in apm_parameter_values.parameter_id%TYPE,
---     package_id			in apm_packages.package_id%TYPE,	    
---     attr_value			in apm_parameter_values.attr_value%TYPE
---   );
--- 
---   procedure set_value (
---     package_id			in apm_packages.package_id%TYPE,
---     parameter_name		in apm_parameters.parameter_name%TYPE,
---     attr_value			in apm_parameter_values.attr_value%TYPE
---   );	
---     		    
--- 
--- end apm;
-
--- show errors
-
--- create or replace package apm_package
--- as
--- 
--- function new (
---   package_id		in apm_packages.package_id%TYPE 
--- 			default null,
---   instance_name		in apm_packages.instance_name%TYPE
--- 			default null,
---   package_key		in apm_packages.package_key%TYPE,
---   object_type		in acs_objects.object_type%TYPE
--- 			default 'apm_package', 
---   creation_date		in acs_objects.creation_date%TYPE 
--- 			default sysdate,
---   creation_user		in acs_objects.creation_user%TYPE 
--- 			default null,
---   creation_ip		in acs_objects.creation_ip%TYPE 
--- 			default null,
---   context_id		in acs_objects.context_id%TYPE 
--- 			default null
---   ) return apm_packages.package_id%TYPE;
--- 
---   procedure delete (
---    package_id		in apm_packages.package_id%TYPE
---   );
--- 
---   function singleton_p (
--- 	package_key		in apm_packages.package_key%TYPE
---   ) return integer;
--- 
---   function num_instances (
--- 	package_key		in apm_package_types.package_key%TYPE
---   ) return integer;
--- 
---   function name (
---     package_id		in apm_packages.package_id%TYPE
---   ) return varchar2;
--- 
---  -- Enable a package to be utilized by a subsite.
---   procedure enable (
---    package_id		in apm_packages.package_id%TYPE
---   );
---   
---   procedure disable (
---    package_id		in apm_packages.package_id%TYPE
---   );
--- 
---   function highest_version (
---    package_key		in apm_package_types.package_key%TYPE
---   ) return apm_package_versions.version_id%TYPE;
---   
--- end apm_package;
-
--- show errors
-
--- create or replace package apm_package_version
--- as
---   function new (
---     version_id			in apm_package_versions.version_id%TYPE
--- 					default null,
---     package_key			in apm_package_versions.package_key%TYPE,
---     version_name		in apm_package_versions.version_name%TYPE 
--- 					default null,
---     version_uri			in apm_package_versions.version_uri%TYPE,
---     summary			in apm_package_versions.summary%TYPE,
---     description_format		in apm_package_versions.description_format%TYPE,
---     description			in apm_package_versions.description%TYPE,
---     release_date		in apm_package_versions.release_date%TYPE,
---     vendor			in apm_package_versions.vendor%TYPE,
---     vendor_uri			in apm_package_versions.vendor_uri%TYPE,
---     installed_p			in apm_package_versions.installed_p%TYPE
--- 					default 'f',
---     data_model_loaded_p		in apm_package_versions.data_model_loaded_p%TYPE
--- 				        default 'f'
---   ) return apm_package_versions.version_id%TYPE;
--- 
---   procedure delete (
---       version_id		in apm_packages.package_id%TYPE
---   );
--- 
---   procedure enable (
---        version_id			in apm_package_versions.version_id%TYPE
---   );
--- 
---   procedure disable (
---        version_id			in apm_package_versions.version_id%TYPE
---   );
--- 
---  function edit (
---       new_version_id		in apm_package_versions.version_id%TYPE
--- 				default null,
---       version_id		in apm_package_versions.version_id%TYPE,
---       version_name		in apm_package_versions.version_name%TYPE 
--- 				default null,
---       version_uri		in apm_package_versions.version_uri%TYPE,
---       summary			in apm_package_versions.summary%TYPE,
---       description_format	in apm_package_versions.description_format%TYPE,
---       description		in apm_package_versions.description%TYPE,
---       release_date		in apm_package_versions.release_date%TYPE,
---       vendor			in apm_package_versions.vendor%TYPE,
---       vendor_uri		in apm_package_versions.vendor_uri%TYPE,
---       installed_p		in apm_package_versions.installed_p%TYPE
--- 				default 'f',
---       data_model_loaded_p	in apm_package_versions.data_model_loaded_p%TYPE
--- 				default 'f'
---     ) return apm_package_versions.version_id%TYPE;
--- 
---   -- Add a file to the indicated version.
---   function add_file(
---     file_id			in apm_package_files.file_id%TYPE
--- 				default null,
---     version_id			in apm_package_versions.version_id%TYPE,
---     path			in apm_package_files.path%TYPE,
---     file_type			in apm_package_file_types.file_type_key%TYPE
---   ) return apm_package_files.file_id%TYPE;
--- 
---   -- Remove a file from the indicated version.
---   procedure remove_file(
---     version_id			in apm_package_versions.version_id%TYPE,
---     path			in apm_package_files.path%TYPE
---   );
--- 
---   -- Add an interface provided by this version.
---   function add_interface(
---     interface_id		in apm_package_dependencies.dependency_id%TYPE
--- 			        default null,
---     version_id			in apm_package_versions.version_id%TYPE,
---     interface_uri		in apm_package_dependencies.service_uri%TYPE,
---     interface_version		in apm_package_dependencies.service_version%TYPE
---   ) return apm_package_dependencies.dependency_id%TYPE;
--- 
---   procedure remove_interface(
---     interface_id		in apm_package_dependencies.dependency_id%TYPE
---   );
--- 
---   procedure remove_interface(
---     interface_uri		in apm_package_dependencies.service_uri%TYPE,
---     interface_version		in apm_package_dependencies.service_version%TYPE,
---     version_id			in apm_package_versions.version_id%TYPE
---   );
--- 
---   -- Add a requirement for this version.  A requirement is some interface that this
---   -- version depends on.
---   function add_dependency(
---     dependency_id		in apm_package_dependencies.dependency_id%TYPE
--- 			        default null,
---     version_id			in apm_package_versions.version_id%TYPE,
---     dependency_uri		in apm_package_dependencies.service_uri%TYPE,
---     dependency_version		in apm_package_dependencies.service_version%TYPE
---   ) return apm_package_dependencies.dependency_id%TYPE;
--- 
---   procedure remove_dependency(
---     dependency_id		in apm_package_dependencies.dependency_id%TYPE
---   );
--- 
---   procedure remove_dependency(
---     dependency_uri		in apm_package_dependencies.service_uri%TYPE,
---     dependency_version		in apm_package_dependencies.service_version%TYPE,
---     version_id			in apm_package_versions.version_id%TYPE
---   );
--- 
---   -- Given a version_name (e.g. 3.2a), return
---   -- something that can be lexicographically sorted.
---   function sortable_version_name (
---     version_name		in apm_package_versions.version_name%TYPE
---   ) return varchar2;
--- 
---   -- Given two version names, return 1 if one > two, -1 if two > one, 0 otherwise. 
---   -- Deprecate?
---   function version_name_greater(
---     version_name_one		in apm_package_versions.version_name%TYPE,
---     version_name_two		in apm_package_versions.version_name%TYPE
---   ) return integer;
--- 
---   function upgrade_p(
---     path			in apm_package_files.path%TYPE,
---     initial_version_name	in apm_package_versions.version_name%TYPE,
---     final_version_name		in apm_package_versions.version_name%TYPE
---    ) return integer;
--- 
---   procedure upgrade(
---     version_id                  in apm_package_versions.version_id%TYPE
---   );
--- 
--- end apm_package_version;
-
--- show errors
-
--- create or replace package apm_package_type
--- as
---  procedure create_type(
---     package_key			in apm_package_types.package_key%TYPE,
---     pretty_name			in acs_object_types.pretty_name%TYPE,
---     pretty_plural		in acs_object_types.pretty_plural%TYPE,
---     package_uri			in apm_package_types.package_uri%TYPE,
---     package_type		in apm_package_types.package_type%TYPE,
---     singleton_p			in apm_package_types.singleton_p%TYPE,
---     spec_file_path		in apm_package_types.spec_file_path%TYPE default null,
---     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE default null
---   );
--- 
---   function update_type (    
---     package_key			in apm_package_types.package_key%TYPE,
---     pretty_name			in acs_object_types.pretty_name%TYPE
---     	    	    	    	default null,
---     pretty_plural		in acs_object_types.pretty_plural%TYPE
---     	    	    	    	default null,
---     package_uri			in apm_package_types.package_uri%TYPE
---     	    	    	    	default null,    
---     package_type		in apm_package_types.package_type%TYPE
---     	    	    	    	default null,
---     singleton_p			in apm_package_types.singleton_p%TYPE
---     	    	    	    	default null,
---     spec_file_path		in apm_package_types.spec_file_path%TYPE 
---     	    	    	    	default null,
---     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE
---     	    	    	    	 default null
---   ) return apm_package_types.package_type%TYPE;
---   
---   procedure drop_type (
---     package_key		in apm_package_types.package_key%TYPE,
---     cascade_p		in char default 'f'
---   );
--- 
---   function num_parameters (
---     package_key         in apm_package_types.package_key%TYPE
---   ) return integer;
--- 
--- end apm_package_type;
-
--- show errors
-
-
-
--- Private APM System API for managing parameter values.
--- create or replace package apm_parameter_value
--- as
---   function new (
---     value_id			in apm_parameter_values.value_id%TYPE default null,
---     package_id			in apm_packages.package_id%TYPE,
---     parameter_id		in apm_parameter_values.parameter_id%TYPE,
---     attr_value			in apm_parameter_values.attr_value%TYPE
---   ) return apm_parameter_values.value_id%TYPE;
--- 
---   procedure delete (
---     value_id			in apm_parameter_values.value_id%TYPE default null
---   );
---  end apm_parameter_value;
--- /
--- show errors
--- 
--- create or replace package apm_application
--- as
--- 
--- function new (
---     application_id	in acs_objects.object_id%TYPE default null,
---     instance_name	in apm_packages.instance_name%TYPE
--- 			default null,
---     package_key		in apm_package_types.package_key%TYPE,
---     object_type		in acs_objects.object_type%TYPE
--- 			   default 'apm_application',
---     creation_date	in acs_objects.creation_date%TYPE default sysdate,
---     creation_user	in acs_objects.creation_user%TYPE default null,
---     creation_ip		in acs_objects.creation_ip%TYPE default null,
---     context_id		in acs_objects.context_id%TYPE default null
---   ) return acs_objects.object_id%TYPE;
--- 
---   procedure delete (
---     application_id		in acs_objects.object_id%TYPE
---   );
--- 
--- end;
-
--- show errors
-
-
--- create or replace package apm_service
--- as
--- 
---   function new (
---     service_id		in acs_objects.object_id%TYPE default null,
---     instance_name	in apm_packages.instance_name%TYPE
--- 			default null,
---     package_key		in apm_package_types.package_key%TYPE,
---     object_type		in acs_objects.object_type%TYPE default 'apm_service',
---     creation_date	in acs_objects.creation_date%TYPE default sysdate,
---     creation_user	in acs_objects.creation_user%TYPE default null,
---     creation_ip		in acs_objects.creation_ip%TYPE default null,
---     context_id		in acs_objects.context_id%TYPE default null
---   ) return acs_objects.object_id%TYPE;
--- 
---   procedure delete (
---     service_id		in acs_objects.object_id%TYPE
---   );
--- 
--- end;
-
--- show errors
-
--- create or replace package body apm
--- procedure register_package
-create function apm__register_package (varchar,varchar,varchar,varchar,varchar,boolean,varchar,integer)
+create function apm__register_package (varchar,varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
 returns integer as '
 declare
   package_key            alias for $1;  
@@ -1640,9 +1196,10 @@ declare
   pretty_plural          alias for $3;  
   package_uri            alias for $4;  
   package_type           alias for $5;  
-  singleton_p            alias for $6;  -- default ''f''  
-  spec_file_path         alias for $7;  -- default null
-  spec_file_mtime        alias for $8;  -- default null
+  initial_install_p      alias for $6;  -- default ''f''  
+  singleton_p            alias for $7;  -- default ''f''  
+  spec_file_path         alias for $8;  -- default null
+  spec_file_mtime        alias for $9;  -- default null
 begin
     PERFORM apm_package_type__create_type(
     	package_key,
@@ -1650,6 +1207,7 @@ begin
 	pretty_plural,
 	package_uri,
 	package_type,
+	initial_install_p,
 	singleton_p,
 	spec_file_path,
 	spec_file_mtime
@@ -1660,7 +1218,7 @@ end;' language 'plpgsql';
 
 
 -- function update_package
-create function apm__update_package (varchar,varchar,varchar,varchar,varchar,boolean,varchar,integer)
+create function apm__update_package (varchar,varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
 returns varchar as '
 declare
   package_key            alias for $1;  
@@ -1668,9 +1226,10 @@ declare
   pretty_plural          alias for $3;  -- default null  
   package_uri            alias for $4;  -- default null  
   package_type           alias for $5;  -- default null  
-  singleton_p            alias for $6;  -- default null  
-  spec_file_path         alias for $7;  -- default null  
-  spec_file_mtime        alias for $8;  -- default null  
+  initial_install_p      alias for $6;  -- default null  
+  singleton_p            alias for $7;  -- default null  
+  spec_file_path         alias for $8;  -- default null  
+  spec_file_mtime        alias for $9;  -- default null  
 begin
  
     return apm_package_type__update_type(
@@ -1679,6 +1238,7 @@ begin
 	pretty_plural,
 	package_uri,
 	package_type,
+	initial_install_p,
 	singleton_p,
 	spec_file_path,
 	spec_file_mtime
@@ -1720,16 +1280,17 @@ end;' language 'plpgsql';
 
 
 -- procedure register_application
-create function apm__register_application (varchar,varchar,varchar,varchar,boolean,varchar,integer)
+create function apm__register_application (varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
 returns integer as '
 declare
   package_key            alias for $1;  
   pretty_name            alias for $2;  
   pretty_plural          alias for $3;  
   package_uri            alias for $4;  
-  singleton_p            alias for $5;  -- default ''f'' 
-  spec_file_path         alias for $6;  -- default null
-  spec_file_mtime        alias for $7;  -- default null
+  initial_install_p      alias for $5;  -- default ''f'' 
+  singleton_p            alias for $6;  -- default ''f'' 
+  spec_file_path         alias for $7;  -- default null
+  spec_file_mtime        alias for $8;  -- default null
 begin
    PERFORM apm__register_package(
 	package_key,
@@ -1737,6 +1298,7 @@ begin
 	pretty_plural,
 	package_uri,
 	''apm_application'',
+	initial_install_p,
 	singleton_p,
 	spec_file_path,
 	spec_file_mtime
@@ -1763,16 +1325,17 @@ end;' language 'plpgsql';
 
 
 -- procedure register_service
-create function apm__register_service (varchar,varchar,varchar,varchar,boolean,varchar,integer)
+create function apm__register_service (varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
 returns integer as '
 declare
   package_key            alias for $1;  
   pretty_name            alias for $2;  
   pretty_plural          alias for $3;  
   package_uri            alias for $4;  
-  singleton_p            alias for $5;  -- default ''f''  
-  spec_file_path         alias for $6;  -- default null
-  spec_file_mtime        alias for $7;  -- default null
+  initial_install_p      alias for $5;  -- default ''f''  
+  singleton_p            alias for $6;  -- default ''f''  
+  spec_file_path         alias for $7;  -- default null
+  spec_file_mtime        alias for $8;  -- default null
 begin
    PERFORM apm__register_package(
 	package_key,
@@ -1780,6 +1343,7 @@ begin
 	pretty_plural,
 	package_uri,
 	''apm_service'',
+	initial_install_p,
 	singleton_p,
 	spec_file_path,
 	spec_file_mtime
@@ -2173,6 +1737,23 @@ begin
     );   
 
     return 0;
+end;' language 'plpgsql';
+
+create function apm_package__initial_install_p (varchar) returns integer as '
+declare
+	initial_install_p__package_key  alias for $1;
+        v_initial_install_p             integer;
+begin
+        select 1 into v_initial_install_p
+	from apm_package_types
+	where package_key = initial_install_p__package_key
+        and initial_install_p = ''t'';
+	
+        if NOT FOUND then 
+           return 0;
+        else
+           return v_initial_install_p;
+        end if;
 end;' language 'plpgsql';
 
 create function apm_package__singleton_p (varchar) returns integer as '
@@ -2796,7 +2377,7 @@ end;' language 'plpgsql';
 
 -- create or replace package body apm_package_type
 -- procedure create_type
-create function apm_package_type__create_type (varchar,varchar,varchar,varchar,varchar,boolean,varchar,integer)
+create function apm_package_type__create_type (varchar,varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
 returns integer as '
 declare
   create_type__package_key            alias for $1;  
@@ -2804,24 +2385,25 @@ declare
   create_type__pretty_plural          alias for $3;  
   create_type__package_uri            alias for $4;  
   create_type__package_type           alias for $5;  
-  create_type__singleton_p            alias for $6;  
-  create_type__spec_file_path         alias for $7;  -- default null  
-  create_type__spec_file_mtime        alias for $8;  -- default null
+  create_type__initial_install_p      alias for $6;  
+  create_type__singleton_p            alias for $7;  
+  create_type__spec_file_path         alias for $8;  -- default null  
+  create_type__spec_file_mtime        alias for $9;  -- default null
 begin
    insert into apm_package_types
     (package_key, pretty_name, pretty_plural, package_uri, package_type,
-    spec_file_path, spec_file_mtime, singleton_p)
+    spec_file_path, spec_file_mtime, initial_install_p, singleton_p)
    values
     (create_type__package_key, create_type__pretty_name, create_type__pretty_plural,
      create_type__package_uri, create_type__package_type, create_type__spec_file_path, 
-     create_type__spec_file_mtime, create_type__singleton_p);
+     create_type__spec_file_mtime, create_type__initial_install_p, create_type__singleton_p);
 
    return 0; 
 end;' language 'plpgsql';
 
 
 -- function update_type
-create function apm_package_type__update_type (varchar,varchar,varchar,varchar,varchar,boolean,varchar,integer)
+create function apm_package_type__update_type (varchar,varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
 returns varchar as '
 declare
   update_type__package_key            alias for $1;  
@@ -2829,9 +2411,10 @@ declare
   update_type__pretty_plural          alias for $3;  -- default null
   update_type__package_uri            alias for $4;  -- default null
   update_type__package_type           alias for $5;  -- default null  
-  update_type__singleton_p            alias for $6;  -- default null  
-  update_type__spec_file_path         alias for $7;  -- default null  
-  update_type__spec_file_mtime        alias for $8;  -- default null  
+  update_type__initial_install_p      alias for $6;  -- default null  
+  update_type__singleton_p            alias for $7;  -- default null  
+  update_type__spec_file_path         alias for $8;  -- default null  
+  update_type__spec_file_mtime        alias for $9;  -- default null  
 begin
       UPDATE apm_package_types SET
       	pretty_name = coalesce(update_type__pretty_name, pretty_name),
@@ -2841,6 +2424,7 @@ begin
     	spec_file_path = coalesce(update_type__spec_file_path, spec_file_path),
     	spec_file_mtime = coalesce(update_type__spec_file_mtime, spec_file_mtime),
     	singleton_p = coalesce(update_type__singleton_p, singleton_p)
+    	initial_install_p = coalesce(update_type__initial_install_p, initial_install_p)
       where package_key = update_type__package_key;
 
       return update_type__package_key;

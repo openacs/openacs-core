@@ -14,7 +14,7 @@ db_1row apm_all_version_info {
     select version_id, package_key, package_uri, pretty_name, version_name, version_uri,
     summary, description_format, description, release_date, vendor, vendor_uri,
     enabled_p, installed_p, tagged_p, imported_p, data_model_loaded_p, activation_date, tarball_length, 
-    deactivation_date, distribution_uri, distribution_date
+    deactivation_date, distribution_uri, distribution_date, singleton_p, initial_install_p
     from apm_package_version_info where version_id = :version_id
 }
 
@@ -70,6 +70,16 @@ function checkMailto(element) {
 <tr>
   <th align=right nowrap>Package Name:</th>
   <td>$pretty_name</td>
+</tr>
+
+<tr>
+  <th align=right nowrap>OpenACS Core:</th>
+  <td>$initial_install_p</td>
+</tr>
+
+<tr>
+  <th align=right nowrap>Singleton:</th>
+  <td>$singleton_p</td>
 </tr>
 
 <tr>

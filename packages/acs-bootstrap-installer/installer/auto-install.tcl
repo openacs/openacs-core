@@ -84,7 +84,7 @@ Unable to create the site-wide administrator:
 ns_write "  <p><li>Installing packages.<p>
 "
 # Attempt to install all packages.
-set dependency_results [apm_dependency_check [apm_scan_packages -new [acs_root_dir]/packages]]
+set dependency_results [apm_dependency_check -initial_install [apm_scan_packages -new [acs_root_dir]/packages]]
 set dependencies_satisfied_p [lindex $dependency_results 0]
 set pkg_list [lindex $dependency_results 1]
 apm_packages_full_install -callback apm_ns_write_callback $pkg_list

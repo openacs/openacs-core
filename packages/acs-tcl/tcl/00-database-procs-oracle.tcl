@@ -46,7 +46,7 @@ proc_doc db_exec_plsql { statement_name sql args } {
     }
 }
 
-ad_proc -private db_exec { type db statement_name sql args } {
+ad_proc -private db_exec { type db statement_name pre_sql args } {
 
     A helper procedure to execute a SQL statement, potentially binding
     depending on the value of the $bind variable in the calling environment
