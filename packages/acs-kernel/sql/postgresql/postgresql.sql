@@ -54,6 +54,15 @@ begin
 end;' language 'plpgsql';
 
 
+create function instr(varchar,char) returns integer as '
+declare
+        str             alias for $1;
+        pat             alias for $2;
+begin
+        return instr(str,pat,1,1);
+end;' language 'plpgsql';
+
+
 create function get_func_drop_command (varchar) returns varchar as '
 declare
         fname           alias for $1;
