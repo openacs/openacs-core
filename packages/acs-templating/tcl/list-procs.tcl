@@ -398,7 +398,7 @@ ad_proc -public template::list::create {
                                        -spec $format_spec \
                                        -ulevel 2]
         }
-        set filter_spec [list label "Formats" values $filter_values has_default_p 1]
+        set filter_spec [list label [_ acs-templating.Formats] values $filter_values has_default_p 1]
         
         template::list::filter::create \
             -list_name $name \
@@ -2362,9 +2362,7 @@ ad_proc -public template::list::orderby::create {
         template::list::filter::create \
             -list_name $list_name \
             -filter_name $list_properties(orderby_name) \
-            -spec { 
-                label "Sort order" 
-            } \
+            -spec [list label [_ acs-templating.Sort_order]] \
             -ulevel 2
     }
     
