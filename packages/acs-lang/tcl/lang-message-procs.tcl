@@ -115,6 +115,12 @@ ad_proc -public lang::message::register {
                 ns_log Notice "lang::message::register - Giving message for key $message_key in locale $locale an upgrade status of $message_upgrade_status"
             }
 
+            if { [ad_conn isconnected] } {
+                set creation_user [ad_conn user_id]
+            } else {
+                set creation_user [db_null]
+            }
+ 
             # avoiding bug#2011927 from Oracle.
             if { [empty_string_p [string trim $message]] } {
                 db_dml lang_message_insert_null_msg {}
@@ -125,8 +131,6 @@ ad_proc -public lang::message::register {
                 db_dml lang_message_insert {} -clobs [list $message]
             }
             nsv_set lang_message_$locale $key $message
-
-            lang::audit::created_message $package_key $message_key $locale
         }
     }
 }

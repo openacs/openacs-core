@@ -5,8 +5,8 @@
 
   <fullquery name="lang::message::register.lang_message_insert">      
     <querytext>
-      insert into lang_messages (package_key, message_key, locale, message, upgrade_status) 
-      values (:package_key, :message_key, :locale, :message, :message_upgrade_status) 
+      insert into lang_messages (package_key, message_key, locale, message, upgrade_status, creation_user) 
+      values (:package_key, :message_key, :locale, :message, :message_upgrade_status, :creation_user) 
     </querytext>
   </fullquery>
 
