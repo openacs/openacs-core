@@ -3,11 +3,15 @@
 @context_bar@
 <hr>
 
-<table width="100%"><tr><td nowrap>
+<center>
 <form method=GET action=search>
-<center><small>
-<input type=text name=q size=31 maxlength=256>
-<input type=submit value=Search>
-</small></center>
+  <small>
+  <a href=advanced-search>Advanced Search</a>
+  <br>
+  <input type=text name=q size=31 maxlength=256>
+  <br>
+  <input type=submit value="Search" name=t>
+  <input type=submit value="Feeling Lucky" name=t>
+  </small>
 </form>
-</td></tr></table>
+</center>
