@@ -12,7 +12,7 @@ Currently, the system is able to handle the following types of groups:
   <else>
   
   <multiple name="group_types">
-    <li> @group_types.indent@<a href="one?group_type=@group_types.group_type@">@group_types.pretty_plural@</a> (number of groups defined: @group_types.number_groups@)
+    <li> @group_types.indent;noquote@<a href="one?group_type=@group_types.group_type@">@group_types.pretty_plural@</a> (number of groups defined: @group_types.number_groups@)
     </li>
   </multiple>
 
