@@ -32,7 +32,7 @@ ad_proc -public ::content::item::new {
     {-storage_type "file"}
     {-attributes ""}
 } {
-    @author Dave Bauer (dave@thedesignexperience.org)
+    @author Dave Bauer (dave@etthedesignexperience.org)
     @creation-date 2004-05-28
 
     Create a new content item This proc creates versioned content
@@ -109,7 +109,7 @@ ad_proc -public ::content::item::delete {
 } {
     return [package_exec_plsql \
                 -var_list [list [list item_id $item_id]] \
-                content_item delete]
+                content_item del]
 }
 
 ad_proc -public ::content::item::rename {
@@ -156,7 +156,9 @@ ad_proc -public ::content::item::move {
 
 ad_proc -public ::content::item::get {
     -item_id:required
+    {-array "content_item"}
     {-revision "live"}
+    {-revision_id ""}
     {-attributes ""}
 } {
     @author Dave Bauer (dave@thedesignexperience.org)
@@ -170,9 +172,46 @@ ad_proc -public ::content::item::get {
 
     @error
 } {
-    error "not implemented"
+    upvar $array content_item
 
-    # get attributes of the content_item use the content_typex view
+    array set content_item {}
+    if {![string equal "" $item_id]} {
+        item::get -item_id $item_id -array item
+    } else {
+        db_1row get_item_from_revision_id "select * from cr_items where item_id=(select item_id from cr_revisions where revision_id=:revision_id)" -column_array item
+    }
+    if {[array size item] < 1} {
+        return 0
+    }
+
+    acs_object_type::get -object_type $item(content_type) -array object_type
+
+    set revision_id 0
+    if {[string equal $revision "live"] && ![empty_string_p $item(live_revision)]} {
+        set revision_id $item(live_revision)
+    } elseif {[string equal $revision "best"]} {
+        if {![empty_string_p $item(live_revision)]} {
+            set revision_id $item(live_revision)
+        } else {
+            set revision_id $item(latest_revision)
+        }
+    } elseif {[string equal $revision "latest"]} {
+        set revision_id $item(latest_revision)
+    }
+
+    if {!$revision_id} {
+        return 0
+    }
+
+    # content array will be set by item::get_conrent_revision
+    item::get_revision_content $revision_id
+
+    set content_item_list [array get item]
+    append content_item_list " [array get content]"
+
+    array set content_item $content_item_list
+
+    return 1
 }
 
 ad_proc -public ::content::item::update {
@@ -542,9 +581,9 @@ ad_proc -public content::item::register_template {
 ad_proc -public content::item::relate {
     -item_id:required
     -object_id:required
-    {-relation_tag ""}
+    {-relation_tag "generic"}
     {-order_n ""}
-    {-relation_type ""}
+    {-relation_type "cr_item_rel"}
 } {
     @param item_id
     @param object_id
