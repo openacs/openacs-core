@@ -152,6 +152,7 @@ aa_register_case spellcheck__spellcheck_properties {
     array set element {
 	id test_element
 	widget text	
+	mode edit
     }
 
     set command {template::util::spellcheck::spellcheck_properties -element_ref element}
