@@ -3871,3 +3871,82 @@ ad_proc -public util_list_of_ns_sets_to_list_of_lists {
     
     return $result
 }
+
+ad_proc -public xml_get_child_node_content_by_path {
+    node
+    path_list
+} {
+    Return the first non-empty contents of a child node down a given path from the current node.
+
+    <p>
+    
+    Example:<pre>
+set tree [xml_parse -persist {
+    &lt;enterprise&gt;
+      &lt;properties&gt;
+        &lt;datasource&gt;Dunelm Services Limited&lt;/datasource&gt;
+        &lt;target&gt;Telecommunications LMS&lt;/target&gt;
+        &lt;type&gt;DATABASE UPDATE&lt;/type&gt;
+        &lt;datetime&gt;2001-08-08&lt;/datetime&gt;
+      &lt;/properties&gt;
+      &lt;person recstatus = &quot;1&quot;&gt;
+        &lt;comments&gt;Add a new Person record.&lt;/comments&gt;
+        &lt;sourcedid&gt;
+          &lt;source&gt;Dunelm Services Limited&lt;/source&gt;
+          &lt;id&gt;CK1&lt;/id&gt;
+        &lt;/sourcedid&gt;
+        &lt;name&gt;
+          &lt;fn&gt;Clark Kent&lt;/fn&gt;
+          &lt;sort&gt;Kent, C&lt;/sort&gt;
+          &lt;nickname&gt;Superman&lt;/nickname&gt;
+        &lt;/name&gt;
+        &lt;demographics&gt;
+          &lt;gender&gt;2&lt;/gender&gt;
+        &lt;/demographics&gt;
+        &lt;adr&gt;
+          &lt;extadd&gt;The Daily Planet&lt;/extadd&gt;
+          &lt;locality&gt;Metropolis&lt;/locality&gt;
+          &lt;country&gt;USA&lt;/country&gt;
+        &lt;/adr&gt;
+      &lt;/person&gt;
+    &lt;/enterprise&gt;
+}]
+
+set root_node [xml_doc_get_first_node $tree]
+
+aa_equals &quot;person -&gt; name -&gt; nickname is Superman&quot; \
+    [xml_get_child_node_content_by_path $root_node { { person name nickname } }] &quot;Superman&quot;
+
+aa_equals &quot;Same, but after trying a couple of non-existent paths or empty notes&quot; \
+    [xml_get_child_node_content_by_path $root_node { { does not exist } { properties } { person name nickname } { person sourcedid id } }] &quot;Superman&quot;
+aa_equals &quot;properties -&gt; datetime&quot; \
+    [xml_get_child_node_content_by_path $root_node { { person commments foo } { person name first_names } { properties datetime } }] &quot;2001-08-08&quot;
+</pre>
+
+    @param node        The node to start from
+    @param path_list   List of list of nodes to try, e.g. 
+                       { { user_id } { sourcedid id } }, or { { name given } { name fn } }.
+
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    set result {}
+    foreach path $path_list {
+        set current_node $node
+        foreach element_name $path {
+            set current_node [xml_node_get_first_child_by_name $current_node $element_name]
+
+            if { [empty_string_p $current_node] } {
+                # Try the next path
+                break
+            }
+        }
+        if { ![empty_string_p $current_node] } {
+            set result [xml_node_get_content $current_node]
+            if { ![empty_string_p $result] } {
+                # Found the value, we're done
+                break
+            }
+        }
+    }
+    return $result
+}
