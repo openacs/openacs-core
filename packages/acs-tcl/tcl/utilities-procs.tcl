@@ -2158,7 +2158,7 @@ ad_proc ad_get_cookie {
 
     set headers [ad_conn headers]
     set cookie [ns_set iget $headers Cookie]
-    if { [regexp "$name=(\[^;\]*)" $cookie match value] } {
+    if { [regexp " $name=(\[^;\]*)" " $cookie" match value] } {
 	return $value
     }
 
@@ -2169,11 +2169,12 @@ ad_proc ad_set_cookie {
     {
 	-replace f
 	-secure f
+        -expire f
 	-max_age ""
 	-domain ""
 	-path "/"
     }
-    name value
+    name {value ""}
 } { 
 
     Sets a cookie.
@@ -2182,6 +2183,10 @@ ad_proc ad_set_cookie {
     seconds (consistent with RFC 2109). max_age inf specifies cookies
     that never expire. The default behavior is to issue session
     cookies.
+    
+    @param expire specifies whether we should expire (clear) the cookie. 
+    Setting Max-Age to zero ought to do this, but it doesn't in some browsers
+    (tested on IE 6).
 
     @param path specifies a subset of URLs to which this cookie
     applies. It must be a prefix of the URL being accessed.
@@ -2191,7 +2196,7 @@ ad_proc ad_set_cookie {
 
     @param secure specifies to the user agent that the cookie should
     only be transmitted back to the server of secure transport.
-
+    
     @param replace forces the current output headers to be checked for
     the same cookie. If the same cookie is set for a second time
     without the replace option being specified, the client will
@@ -2223,11 +2228,17 @@ ad_proc ad_set_cookie {
     }
 
     if { $max_age == "inf" } {
-	# netscape seemed unhappy with huge max-age, so we use
-	# expires which seems to work on both netscape and IE
-	append cookie "; Expires=Fri, 01-Jan-2035 01:00:00 GMT"
+        if { ![string equal $expire "t"] } {
+            # netscape seemed unhappy with huge max-age, so we use
+            # expires which seems to work on both netscape and IE
+            append cookie "; Expires=Fri, 01-Jan-2035 01:00:00 GMT"
+        }
     } elseif { $max_age != "" } {
 	append cookie "; Max-Age=$max_age"
+    }
+
+    if { [string equal $expire "t"] } {
+        append cookie "; Expires=Fri, 01-Jan-1980 01:00:00 GMT"
     }
 
     if { $domain != "" } {
