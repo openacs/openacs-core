@@ -398,7 +398,6 @@ ad_proc -public template::paginator::get_pages { name group } {
 
   set group_count $properties(group_count)
   set group_size $properties(groupsize)
- # set page_count [expr $properties(page_count) + $properties(page_offset)]
   set page_count $properties(page_count)
 
   if { $group > $group_count } {
@@ -409,7 +408,7 @@ ad_proc -public template::paginator::get_pages { name group } {
   }
 
   set start [expr ($group - 1) * $group_size + 1]
-  set end [expr $start + $group_size]
+  set end [expr $start + $group_size - 1]
 
     if { $end > $page_count } { set end $page_count }
 
@@ -618,6 +617,7 @@ ad_proc -public template::paginator::get_display_info { name datasource page } {
   set info(group_count) $properties(group_count)
   set info(current_page) $page
   set info(current_group) $group
+  set info(groupsize) $groupsize
 
   array set info {
     next_page {} 
@@ -639,11 +639,11 @@ ad_proc -public template::paginator::get_display_info { name datasource page } {
   }
 
 
-  if { $group > 1 } {
+  if { $group > 1 && $groupsize > 1 } {
     set info(previous_group) [expr ($group - 2) * $groupsize + 1]
   }
 
-  if { $group < $properties(group_count) } {
+  if { $group < $properties(group_count) && $groupsize > 1 } {
     set info(next_group) [expr $group * $groupsize + 1]
   }
 

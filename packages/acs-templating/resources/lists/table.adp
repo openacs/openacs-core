@@ -15,7 +15,7 @@
     <if \@paginator.page_count@ gt 1>
       <tr width="100%" class="list-paginator">
         <td colspan="@elements:rowcount@" align="center">
-          <if \@paginator.group_count@ gt 1>
+          <if \@paginator.group_count@ gt 1 and \@paginator.groupsize@ gt 1>
             <if \@paginator.previous_group_url@ not nil>
               <a href="\@paginator.previous_group_url@" title="\@paginator.previous_group_context@">&lt;&lt;</a>
             </if>
@@ -46,7 +46,7 @@
           <else>
             &nbsp;&gt;&nbsp;
           </else>
-          <if \@paginator.group_count@ gt 1>
+          <if \@paginator.group_count@ gt 1 and \@paginator.groupsize@ gt 1>
             <if \@paginator.next_group_url@ not nil>
               <a href="\@paginator.next_group_url@" title="\@paginator.next_group_context@">&gt;&gt;</a>
             </if>
