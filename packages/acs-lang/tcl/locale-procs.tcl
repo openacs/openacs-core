@@ -250,6 +250,11 @@ namespace eval lang::conn {
                 set locale [lang::system::locale -package_id $package_id -site_wide=$site_wide_p]
             }
         }
+	
+	# Check browser Accept-Language header
+	# Hm. Site-wide will always be set. Hm.
+	# Check Yon's ACS Java g15n doc
+	
         return $locale
     }
 
