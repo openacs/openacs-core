@@ -1333,7 +1333,35 @@ begin
   
 end;' language 'plpgsql';
 
+create function acs_object__update_last_modified (integer, timestamp)
+returns integer as '
+declare
+    acs_object__update_last_modified__object_id     alias for $1; 
+    acs_object__update_last_modified__last_modified alias for $2; -- default now()
+    v_parent_id                                     acs_objects.context_id%TYPE;
+    v_last_modified                                 timestamp;
+begin
+    if acs_object__update_last_modified__last_modified is null then
+        v_last_modified := now();
+    else
+        v_last_modified := acs_object__update_last_modified__last_modified;
+    end if;
 
+    update acs_objects
+    set acs_objects.last_modified = v_last_modified
+    where acs_objects.object_id = acs_object__update_last_modified__object_id;
+
+    select acs_objects.context_id
+    into v_parent_id
+    from acs_objects
+    where acs_objects.object_id = acs_object__update_last_modified__object_id;
+
+    if v_parent_id is not null and v_parent_id != 0 then
+        select acs_object__update_last_modified(v_parent_id);
+    end if;
+
+    return acs_object__update_last_modified__object_id;
+end;' language 'plpgsql';
 
 -- show errors
 
