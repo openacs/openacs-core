@@ -3018,6 +3018,24 @@ ad_proc -public util_list_to_ns_set { aList } {
     return $setid
 }
 
+ad_proc -public util_sets_equal_p { list1 list2 } {
+    Return 1 if the two lists contain sets of identical items (strings)
+    (regardless of order) and 0 otherwise. 
+
+    @author Peter Marklund
+} {
+    if { [llength $list1] != [llength $list2] } {
+        return 0
+    }
+
+    foreach item $list1 {
+        if { [lsearch -exact $list2 $item] < 0 } {
+            return 0
+        }
+    }
+
+    return 1    
+}
 
 ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename 
                                -name {-mime_type */*} {-mode formvars} 
