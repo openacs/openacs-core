@@ -18,6 +18,7 @@
   </msg>
   <msg key="Account_reopened_message">Your account at %system_name% has been reopened. Welcome back.</msg>
   <msg key="Account_reopened_title">Account Reopened</msg>
+  <msg key="Admin">Admin</msg>
   <msg key="Answer">Answer</msg>
   <msg key="at">at</msg>
   <msg key="Bad_Password">Bad Password</msg>
@@ -25,6 +26,7 @@
   <msg key="cannot_retrieve_password">Retrieving password from local authority is not supported.</msg>
   <msg key="Change_locale_label">Change language</msg>
   <msg key="Change_my_Password">Change my Password</msg>
+  <msg key="Change_pass_email_por">Change password, email, portrait</msg>
   <msg key="Check_Your_Inbox">Check Your Inbox</msg>
   <msg key="Children">Children</msg>
   <msg key="Close_account_explanation">
@@ -44,6 +46,8 @@ logging in again. &lt;/p&gt;
   <msg key="Currently_invisible_msg">&lt;p&gt; Your online status is currently not visible to other users. &lt;/p&gt;</msg>
   <msg key="Currently_visible_msg">&lt;p&gt; Your online status is currently visible to other users. &lt;/p&gt;</msg>
   <msg key="Customize_Question">Customize Question</msg>
+  <msg key="DevAdmin">DevAdmin</msg>
+  <msg key="Developers_Admin">Developer's Administration</msg>
   <msg key="Direct_Permissions">Direct Permissions</msg>
   <msg key="Email">Email</msg>
   <msg key="email_body_Forgotten_password">Here is your new login information:
@@ -77,6 +81,9 @@ Please visit the following link to change your password now:
   <msg key="Join_group_name">Join %group_name%</msg>
   <msg key="Last_name">Last name</msg>
   <msg key="Log_In">Log In</msg>
+  <msg key="Log_in_to_system">Log in to %system_name%</msg>
+  <msg key="Logout">Logout</msg>
+  <msg key="Logout_from_system">Logout from %system_name%</msg>
   <msg key="lt_Cannot_join_this_grou">Cannot join this group.</msg>
   <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) registered as a user of 
 %system_url%</msg>
@@ -126,6 +133,7 @@ waiting approval.</msg>
   <msg key="Make_yourself_visible_label">Make yourself visible</msg>
   <msg key="Manage_your_notifications">Manage your notifications</msg>
   <msg key="New_Password">New Password</msg>
+  <msg key="Not_logged_in">Not logged in</msg>
   <msg key="no_portrait_title_message">your portrait</msg>
   <msg key="none">none</msg>
   <description key="none">Used to indicate that a list of permissions or objects is empty.</description>
@@ -160,6 +168,7 @@ You can always change your password by doing the following:
   </msg>
   <msg key="Revoke_Checked">Revoke Checked</msg>
   <msg key="Screen_name">Screen name</msg>
+  <msg key="Site_wide_administration">Site-wide administration</msg>
   <msg key="Show">Show</msg>
   <msg key="sorry_forgotten_pwd">Sorry, we can't help you with your forgotten password.</msg>
   <msg key="Thank_you">Thank you.</msg>
@@ -168,7 +177,9 @@ You can always change your password by doing the following:
   <msg key="Update_Password">Update Password</msg>
   <msg key="upload_a_portrait">upload a portrait</msg>
   <msg key="Username">Username</msg>
+  <msg key="Welcome_user">Welcome, %user_name%</msg>
   <msg key="Whos_Online_link_label">Users currently online</msg>
   <msg key="Whos_Online_title">Who's Online</msg>
+  <msg key="Your_Account">Your Account</msg>
   <msg key="Your_Portrait">Your Portrait</msg>
 </message_catalog>
