@@ -2,6 +2,10 @@ ad_library {
 
     Notification Requests
 
+    When a user wishes to receive notifications of a certain type on a given object,
+    he issues a notification request. This request is recorded specifically for that user.
+    These procs help to manage such requests.
+
     @creation-date 2002-05-24
     @author Ben Adida <ben@openforce.biz>
     @cvs-id $Id$
@@ -19,7 +23,7 @@ namespace eval notification::request {
         {-delivery_method_id:required}
         {-format "text"}
     } {
-        create a new request
+        create a new request for a given user, notification type, object, interval and delivery method.
     } {
         set request_id [get_request_id -type_id $type_id -object_id $object_id -user_id $user_id]
 
@@ -40,7 +44,10 @@ namespace eval notification::request {
         {-object_id:required}
         {-user_id:required}
     } {
-        Checks if a particular notification request exists
+        Checks if a particular notification request exists, and if so return the request ID.
+	Note that the primary key on notification requests is notification_type, object, user.
+	Interval and delivery method are specific parameters, but do not impact the uniqueness:
+	a user can choose only one interval and delivery method for a given notification type and object.
     } {
         return [db_string select_request_id {} -default {}]
     }
@@ -48,7 +55,7 @@ namespace eval notification::request {
     ad_proc -public delete {
         {-request_id:required}
     } {
-        delete a request
+        delete a request for notifications by request ID.
     } {
         # do the delete
         db_exec_plsql delete_request {}
@@ -58,7 +65,7 @@ namespace eval notification::request {
         {-object_id:required}
     } {
         remove all requests for a particular object ID
-        usually because the object is getting deleted
+        usually because the object is getting deleted.
     } {
         # Do it
         db_exec_plsql delete_all_requests {}

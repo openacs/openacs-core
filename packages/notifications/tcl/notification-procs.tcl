@@ -2,6 +2,14 @@ ad_library {
 
     Notifications
 
+    Core procs for managing notifications. Important concepts:
+    <ul>
+    <li> notification: a single message that needs to be sent to users. 
+    <li> intervals: the duration of time between notifications. Ranges from "instantaneous" to "weekly".
+    <li> delivery method: the means by which a notification is delivered. "email" is the obvious one, but "sms" might be another.
+    <li> notification type: a category of notifications, like forum_notification for forum postings, or forum_statistics for regular updates on forum statistics (this latest one is for illustration purposes only and doesn't currently exist in the forums package).
+    </ul>
+
     @creation-date 2002-05-24
     @author Ben Adida <ben@openforce.biz>
     @cvs-id $Id$
@@ -11,11 +19,16 @@ ad_library {
 namespace eval notification {
 
     ad_proc -public package_key {} {
+	The package key
+    } {
         return "notifications"
     }
 
     ad_proc -public get_interval_id {
         {-name:required}
+    } {
+	obtain the interval ID for an interval with the given name.
+	Interval names are unique, but are not the primary key.
     } {
         return [db_string select_interval_id {} -default ""]
     }
@@ -23,21 +36,35 @@ namespace eval notification {
     ad_proc -public get_delivery_method_id {
         {-name:required}
     } {
+	obtain the delivery method ID with the given name.
+	Delivery method names are unique, but are not the primary key.
+    } {
         return [db_string select_delivery_method_id {} -default ""]
     }
 
     ad_proc -public get_all_intervals {} {
+	return a list of all available intervals in a list of lists format,
+	with the following fields: name, interval_id, n_seconds.
+    } {
         return [db_list_of_lists select_all_intervals {}]
     }
     
     ad_proc -public get_intervals {
         {-type_id:required}
     } {
+	return a list of intervals that are associated with a given notification type
+	(not all intervals are available to all notification types).
+	The fields for each interval is: name, interval_id, n_seconds.
+    } {
         return [db_list_of_lists select_intervals {}]
     }
 
     ad_proc -public get_delivery_methods {
         {-type_id:required}
+    } {
+	return a list of delivery methods associated with a given notification type
+	(not all delivery methods are available to all notification types).
+	The fields are: pretty_name, delivery_method_id
     } {
         return [db_list_of_lists select_delivery_methods {}]
     }

@@ -1,6 +1,12 @@
 ad_library {
 
     Notification Delivery Methods
+    
+    Functions to support notification delivery methods. A delivery method is a means by which
+    a notification is sent to a user. "Email" is a common one, but others, like "sms", may exist.
+
+    The delivery method integration is done via acs-service-contract: any new delivery method must implement
+    this service contract.
 
     @creation-date 2002-05-24
     @author Ben Adida <ben@openforce.biz>
@@ -13,6 +19,8 @@ namespace eval notification::delivery {
     ad_proc -private get_impl_key {
         {-delivery_method_id:required}
     } {
+	Return the service contract implementation key for notification delivery methods
+    } {
         return [db_string select_impl_key {}]
     }
 
@@ -24,7 +32,9 @@ namespace eval notification::delivery {
         {-subject:required}
         {-content:required}
     } {
-        do the delivery of certain content to a particular user
+        do the delivery of certain content to a particular user using a particular delivery method.
+	This is just a wrapper proc that sets up the call to the service contract implementation for
+	a given delivery method.
     } {
         #need to check if its ok to notify this user in this way.  For now just checks if they are an approved user.
         if { ![notification::security::can_notify_user -user_id $to_user_id -delivery_method_id $delivery_method_id] } {
@@ -45,7 +55,11 @@ namespace eval notification::delivery {
     ad_proc -public scan_replies {
         {-delivery_method_id:required}
     } {
-        scan for replies
+        scan for replies.
+	
+	Every delivery method allows for replies. This is the wrapper proc that
+	indicates to the delivery method service contract implementation that it's time to
+	scan for replies.
     } {
         # Get the implementation key
         set impl_key [get_impl_key -delivery_method_id $delivery_method_id]
