@@ -2250,15 +2250,28 @@ ad_proc -public ad_schedule_proc {
 	-once f
 	-debug t
 	-all_servers f
+        -schedule_proc ""
     }
     interval
     proc
     args
 } { 
-    Replacement for ns_schedule_proc, allowing us to track what's going
+    Replacement for ns_schedule_proc and friends, allowing us to track what's going
     on. Can be monitored via /admin/monitoring/schedule-procs.tcl. The
     procedure defaults to run on only the canonical server unless the
     all_servers flag is set to true.
+
+    @param thread If true run scheduled proc in its own thread
+    @param once If true only run the scheduled proc once
+    @param debug If true log debugging information
+    @param all_servers If true run on all servers in a cluster
+    @param schedule_proc ns_schedule_daily, ns_schedule_weekly or blank
+    @param interval If schedule_proc is empty, the interval to run the proc
+           in seconds, otherwise a list of interval arguments to pass to
+           ns_schedule_daily or ns_schedule_weekly
+    @param proc The proc to schedule
+    @param args And the args to pass it
+
 } {
     # we don't schedule a proc to run if we have enabled server clustering,
     # we're not the canonical server, and the procedure was not requested to run on all servers.
@@ -2286,7 +2299,12 @@ ad_proc -public ad_schedule_proc {
     }
 
     # Schedule the wrapper procedure (ad_run_scheduled_proc).
-    eval [concat [list ns_schedule_proc] $my_args [list $interval ad_run_scheduled_proc [list $proc_info]]]
+
+    if { [empty_string_p $schedule_proc] } {
+        eval [concat [list ns_schedule_proc] $my_args [list $interval ad_run_scheduled_proc [list $proc_info]]]
+    } else {
+        eval [concat [list $schedule_proc] $my_args $interval [list ad_run_scheduled_proc [list $proc_info]]]
+    }
 }
 
 ad_proc -deprecated util_ReturnMetaRefresh { url { seconds_delay 0 }} {
