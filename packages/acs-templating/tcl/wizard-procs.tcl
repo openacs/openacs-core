@@ -80,6 +80,7 @@ ad_proc -public template::wizard::create { args } {
     # keep wizard properties and a list of the steps
     upvar #$level wizard:steps steps wizard:properties opts 
     upvar #$level wizard:rowcount rowcount
+    upvar #$level wizard:columns columns
     upvar #$level wizard:name wizard_name
     upvar #$level wizard:wizards wizards
 
@@ -93,6 +94,8 @@ ad_proc -public template::wizard::create { args } {
 	set wizard_name "wizard${level}"
     }
     set wizards [get_wizards]
+
+    set columns [list label rownum id link url]
 
     # lets add the visited step param
     lappend opts(params) wizard_visitedstep${wizard_name}
