@@ -177,7 +177,7 @@
         parameters, taken directly from the dotlrn package.
       </para>
 
-      <table frame="all">
+      <informaltable frame="all">
         <tgroup cols="2" colsep="1" rowsep="1">
           <colspec colname="c1"/>
           <colspec colname="c2"/>
@@ -198,13 +198,13 @@
             </row>
           </tbody>
         </tgroup>
-      </table>
+      </informaltable>
 
       <para>
         Then, depending on how we retrieve the value, here's what we get:
       </para>
   
-      <table frame="all">
+      <informaltable frame="all">
         <tgroup cols="2" colsep="1" rowsep="1">
           <colspec colname="c1"/>
           <colspec colname="c2"/>
@@ -229,7 +229,7 @@
             </row>
           </tbody>
         </tgroup>
-      </table>
+      </informaltable>
   
       <para>
         The value in the rightmost column in the table above is the
