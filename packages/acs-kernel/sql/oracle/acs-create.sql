@@ -166,7 +166,7 @@ as
   and person_id = user_id
   and u.user_id = m.member_id
   and m.rel_id = mr.rel_id
-  and m.group_id = acs.magic_object_id('registered_users')
+  and m.group_id = (select acs.magic_object_id('registered_users') from dual)
   and mr.member_state = 'approved'
   and u.email_verified_p = 't';
 
