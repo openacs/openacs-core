@@ -1,5 +1,5 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
@@ -172,4 +172,17 @@ standard OpenACS &version; distribution.
       <computeroutput>http://yourserver.test:8000/my-first-package</computeroutput>
       to be satisfied from the files at <computeroutput>/var/lib/aolserver/service0/packages/myfirstpackage/www</computeroutput>.</para>
     </sect2>
+    <sect2>
+      <title>Quick start</title>
+      <para>The remainder of the tutorial walks you through each file one at a time as you create the package.  You can skip all this, and get a working package, by doing the following:</para>
+    <screen>cd /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/tutorial
+psql <replaceable>service0</replaceable> -f myfirstpackage-create.sql
+cp note-edit.* note-delete.tcl index.* ../../../../myfirstpackage/www/
+mkdir ../../../../myfirstpackage/lib
+cp note-list.* ../../../../myfirstpackage/lib/
+cp myfirstpackage-*sql ../../../../myfirstpackage/sql/postgresql/
+cp myfirstpackage-procs.tcl ../../../../myfirstpackage/tcl/test/
+cp note-procs.tcl ../../../../myfirstpackage/tcl/</screen>
+<para>After restarting the server, the tutorial application will be installed and working at the url you selected in the previous step.</para>
+  </sect2>
   </sect1>

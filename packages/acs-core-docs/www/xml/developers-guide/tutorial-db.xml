@@ -41,8 +41,7 @@
       can see them with <computeroutput> select object_type from
       acs_object_types;</computeroutput>.)  One such object is the
       content_item, which is part of the content repository system.
-      We will make our data objects children of the content_item
-      object.  Not only will we gain the benefits of both OpenACS
+      To use it, we will make our data objects children of the content_revision object, which is a child of content_item.  Not only will we gain the benefits of both OpenACS
       Objects and content objects, we can also use some content
       repository functions to simplify our database creation.  (<ulink url="objects.html">More
       information about ACS Objects</ulink>.  <ulink

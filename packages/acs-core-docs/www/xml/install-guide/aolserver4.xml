@@ -50,7 +50,6 @@ make install</action>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsoracle</userinput>
-[root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsxml</userinput>
 [root aolserver]# <userinput>wget http://www.tdom.org/tDOM-0.7.8.tar.gz</userinput>
 [root aolserver]# <userinput>tar xvfz tDOM-0.7.8.tar.gz</userinput>
 [root root]# 
@@ -62,7 +61,6 @@ cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsoracle
-cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsxml
 wget http://www.tdom.org/tDOM-0.7.8.tar.gz
 tar xvfz tDOM-0.7.8.tar.gz</action></screen>
     </listitem>
@@ -75,7 +73,7 @@ tar xvfz tDOM-0.7.8.tar.gz</action></screen>
 [root aolserver]# <userinput>./configure --prefix=/usr/local/aolserver40r2 --with-tcl=/usr/local/lib/</userinput>
 [root aolserver]# <userinput>make install</userinput>
       <action>cd /usr/local/src/aolserver40r2/aolserver
-./configure --with-tcl=/usr/local/lib/
+./configure --prefix=/usr/local/aolserver40r2 --with-tcl=/usr/local/lib/
 make install
 ln -s /usr/local/aolserver40r2 /usr/local/aolserver</action></screen>
       <para>If this is the only version of AOLserver in use, or is the default version, create a symlink.  If not, then be sure to use <computeroutput>/usr/local/aolserver40r2</computeroutput> instead of <computeroutput>/usr/local/aolserver</computeroutput> in future steps.</para>

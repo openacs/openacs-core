@@ -105,4 +105,288 @@ set foo_date_ansi [lc_time_system_to_conn $foo_date_ansi]</pre><p>When a datetim
         test. If you don't provide the package_key argument then all
         packages with catalog files will be checked. 
         The script will run its checks primarily on en_US xml catalog files.
-      </p></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="i18n-introduction.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="i18n-design.html">Next</a></td></tr><tr><td width="40%" align="left">How Internationalization/Localization works in OpenACS </td><td width="20%" align="center"><a accesskey="u" href="i18n.html">Up</a></td><td width="40%" align="right"> Design Notes</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/i18n-convert.html#comments">View comments on this page at openacs.org</a></center></body></html>
+      </p></li></ol></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2555716"></a>Common mistakes while internationalizing</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p><b>Don't internationalize internal code words. </b>Many packages use code words or key words, such as "open" and "closed", which will never be shown to the user.  They may match key values in the database, or be used in a switch or if statement.  Don't change these.</p></li><li><p>These notes haven't been formatted yet:</p><div class="literallayout"><p><br>
+<br>
+<br>
+There are a nubmer of instances of constructing sentences via concatination (you <br>
+can just look at keys like: <br>
+  &lt;msg key="Page_with_pagination"&gt;Page with  [ %pagination_filter% ] &amp;nbsp; &amp;nbsp; Show&lt;/msg&gt;<br>
+to spot them.<br>
+<br>
+They key choice is not great.  It's as if in coding you decided to use <br>
+v1, v2, v3... for your variable names.<br>
+<br>
+Here is You_#:<br>
+<br>
+&lt;msg key="You"&gt;You can filter by this %component_name% by viisting %filter_url_string%&lt;/msg&gt;<br>
+&lt;msg key="You_1"&gt;You do not have permission to map this patch to a bug. Only the submitter of the patch and users with write permission on this Bug Tracker project (package instance) may do so.&lt;/msg&gt;<br>
+&lt;msg key="You_2"&gt;You do not have permission to edit this patch. Only the submitter of the patch and users with write permission on the Bug Tracker project (package instance) may do so.&lt;/msg&gt;<br>
+&lt;msg key="You_3"&gt;You do not have permission to reopen this refused patch, only users with write permission on the Bug Tracker package instance (project) may do so.&lt;/msg&gt;<br>
+&lt;msg key="You_4"&gt;You do not have permission to reopen this deleted patch, only users with write permission on the Bug Tracker package instance (project) and the submitter of the patch may do so.&lt;/msg&gt;<br>
+&lt;msg key="You_5"&gt;do not have permission to cancel this patch - only the submitter of the patch may do so. If you are an administrator you can however refuse the patch.&lt;/msg&gt;<br>
+&lt;msg key="You_6"&gt;You don't have permission to edit this patch.&lt;/msg&gt;<br>
+&lt;msg key="You_7"&gt;You do not have permission to unmap a bug from this patch. Only the submitter of the patch and users with write permission on the Bug Tracker package instance (project) may do so.&lt;/msg&gt;<br>
+<br>
+I would much prefer keys like: filter_by_link, perm_nomap, perm_noedit, perm_noropen_refused, etc. <br>
+<br>
+Also, the semantic content is at odds with the key in a lot of them<br>
+eg:<br>
+<br>
+ &lt;msg key="Fix"&gt;for version&lt;/msg&gt;<br>
+ &lt;msg key="Fix_1"&gt;for&lt;/msg&gt;<br>
+ &lt;msg key="Fix_2"&gt;for Bugs&lt;/msg&gt;<br>
+<br>
+<br>
+The reason I think message key choice is important is that programmers and<br>
+designers, when editing an tcl or adp page, can easily get things<br>
+confused and put in the wrong key.  It can also act as a simple<br>
+guide for translators for intended semantic content of a key.<br>
+<br>
+<br>
+============================================================-<br>
+<br>
+SOME SPECIFIC COMMENTS PER FILE:<br>
+<br>
+http://cvs.openacs.org/cvs/openacs-4/packages/bug-tracker/lib/nav-bar.tcl?r1=1.12&amp;r2=1.11<br>
+<br>
+You assume:<br>
+<br>
+  multirow append links "New [bug_tracker::conn Bug]" "${url_prefix}bug-add"<br>
+<br>
+can be translated as <br>
+<br>
+  multirow append links "[_ bug-tracker.New] [bug_tracker::conn Bug]" "${url_prefix}bug-add"<br>
+<br>
+You should translate this as something like<br>
+<br>
+  set bug_label [bug_tracker::conn Bug]<br>
+  multirow append links "[_ bug-tracker.New_Bug]" "${url_prefix}bug-add"<br>
+<br>
+where New_Bug is "New %bug_label%"<br>
+<br>
+(same problem with New Patch).<br>
+<br>
+============================================================<br>
+<br>
+http://cvs.openacs.org/cvs/openacs-4/packages/bug-tracker/lib/pagination.adp?r1=1.4&amp;r2=1.3<br>
+<br>
+<br>
+Again, bad to translate fragments:<br>
+<br>
+  Page with  [ @pagination_filter@ ]     Show &lt;input type="text" name="interval_size" value="@interval_size@" /&gt; @pretty_plural@ per page &lt;input type="submit" value="Go" /&gt; 	 <br>
+<br>
+ translated to <br>
+<br>
+  #bug-tracker.Page_with_pagination# &lt;input type="text" name="interval_size" value="@interval_size@" /&gt; #bug-tracker.pretty_plural_per_page# &lt;input type="submit" value="Go" /&gt;<br>
+<br>
+ with key <br>
+<br>
+  &lt;msg key="Page_with_pagination"&gt;Page with  [ %pagination_filter% ] &amp;nbsp; &amp;nbsp; Show&lt;/msg&gt;<br>
+<br>
+<br>
+<br>
+============================================================<br>
+<br>
+http://cvs.openacs.org/cvs/openacs-4/packages/bug-tracker/tcl/bug-procs.tcl?r1=1.15&amp;r2=1.14<br>
+<br>
+<br>
+You tranlate an internal key here: <br>
+<br>
+  workflow::case::add_log_data \ 	    <br>
+       -entry_id $entry_id \ 	    <br>
+       -key "resolution" \ 	    <br>
+       -value [db_string select_resolution_code {}]<br>
+<br>
+  workflow::case::add_log_data \ 	    <br>
+       -entry_id $entry_id \<br>
+       -key "[_ bug-tracker.resolution]" \<br>
+       -value [db_string select_resolution_code {}]<br>
+<br>
+(see also bug 1748)<br>
+<br>
+----------------------------------------<br>
+<br>
+I think the key choice here is poor.  You should attempt to preserve semantic meaning<br>
+of these phrases in the key:<br>
+<br>
+ return "Bug-tracker component maintainer" translated to return "[_ bug-tracker.Bug-tracker]"<br>
+<br>
+ return "Bug-tracker bug info" translated to return "[_ bug-tracker.Bug-tracker_2]"<br>
+<br>
+ return "Bug-tracker project maintainer" translated to return "[_ bug-tracker.Bug-tracker_1]"<br>
+<br>
+<br>
+============================================================<br>
+<br>
+http://cvs.openacs.org/cvs/openacs-4/packages/bug-tracker/www/admin/component-ae.tcl?r1=1.10&amp;r2=1.9<br>
+<br>
+bad key choice and I am not sure why the Add and Edit words are removed for this: <br>
+<br>
+ if { [info exists component_id] } {<br>
+     set page_title "Edit [bug_tracker::conn Component]"<br>
+ } else {<br>
+     set page_title "Add [bug_tracker::conn Component]"<br>
+ }<br>
+<br>
+ translated to:<br>
+<br>
+ if { [info exists component_id] } {<br>
+     set page_title [_ bug-tracker.Edit_1]<br>
+ } else {<br>
+     set page_title [_ bug-tracker.Add]<br>
+ }<br>
+<br>
+<br>
+ Edit_1 and Add are:<br>
+<br>
+ &lt;msg key="Edit_1"&gt;%component_name%&lt;/msg&gt;<br>
+ &lt;msg key="Add"&gt;%component_name%&lt;/msg&gt;<br>
+<br>
+----------------------------------------<br>
+<br>
+Where did Name go in label:<br>
+<br>
+    {name:text {html { size 50 }} {label "[bug_tracker::conn Component] Name"}}<br>
+  translated to <br>
+    {name:text {html { size 50 }} {label "[_ bug-tracker.Component]"}}<br>
+  with <br>
+    &lt;msg key="Component"&gt;Component&lt;/msg&gt; <br>
+<br>
+<br>
+----------------------------------------<br>
+<br>
+Bad key choice:<br>
+<br>
+   {help_text "You can filter by this [bug_tracker::conn component] by viisting [ad_conn package_url]com/this-name/"}<br>
+ tranlated to <br>
+   {help_text "[_ bug-tracker.You]"}<br>
+<br>
+<br>
+============================================================<br>
+<br>
+http://cvs.openacs.org/cvs/openacs-4/packages/bug-tracker/www/admin/index.adp?r1=1.7&amp;r2=1.6<br>
+<br>
+<br>
+Convoluted logic in adp, concatenating bug/bugs with a number:<br>
+<br>
+&lt;if @components.view_bugs_url@ not nil&gt;&lt;a href="@components.view_bugs_url@" title="View the @pretty_names.bugs@ for this component"&gt;&lt;/if&gt;@components.num_bugs@ &lt;if @components.num_bugs@ eq 1&gt;@pretty_names.bug@&lt;/if&gt;&lt;else&gt;@pretty_names.bugs@&lt;/else&gt;&lt;if @components.view_bugs_url@ not nil&gt;&lt;/a&gt;&lt;/if&gt;<br>
+<br>
+&lt;if @components.view_bugs_url@ not nil&gt;&lt;a href="@components.view_bugs_url@" title="#bug-tracker.View_the_bug_fo_component#"&gt;&lt;/if&gt;@components.num_bugs@ &lt;if @components.num_bugs@ eq 1&gt;@pretty_names.bug@&lt;/if&gt;&lt;else&gt;@pretty_names.bugs@&lt;/else&gt;&lt;if @components.view_bugs_url@ not nil&gt;&lt;/a&gt;&lt;/if&gt;<br>
+<br>
+It would probably be better to do this as something like:<br>
+<br>
+&lt;if @components.view_bugs_url@ not nil&gt;<br>
+  &lt;if @components.num_bugs@ eq 1&gt;<br>
+    &lt;a href="@components.view_bugs_url@" title="#bug-tracker.View_the_bug_fo_component#"&gt;#bug-tracker.one_bug#&lt;/a&gt;<br>
+  &lt;/if&gt;&lt;else&gt;<br>
+    &lt;a href="@components.view_bugs_url@" title="#bug-tracker.View_the_bug_fo_component#"&gt;#bug-tracker.N_bugs#&lt;/a&gt;<br>
+  &lt;/else&gt;<br>
+&lt;/if&gt;<br>
+<br>
+============================================================<br>
+<br>
+http://cvs.openacs.org/cvs/openacs-4/packages/bug-tracker/www/admin/versions.adp?r1=1.6&amp;r2=1.5<br>
+<br>
+Full name created by concatenating first and last name (admittedly this is pervasive in the toolkit):<br>
+<br>
+  &lt;a href="@past_version.maintainer_url@" title="#bug-tracker.Email# @past_version.maintainer_email@"&gt;@past_version.maintainer_first_names@ @past_version.maintainer_last_name@&lt;/a&gt;<br>
+<br>
+Also, title is concatenated as well.<br>
+<br>
+============================================================<br>
+<br>
+http://cvs.openacs.org/cvs/openacs-4/packages/bug-tracker/www/bug.tcl?r1=1.28&amp;r2=1.27<br>
+<br>
+Internal key translated:<br>
+ {show_patch_status "open"}<br>
+to <br>
+ {show_patch_status "[_ bug-tracker.open]"}<br>
+<br>
+<br>
+Does this work?<br>
+         set page_title "[bug_tracker::conn Bug] #$bug_number"<br>
+tranlated to:<br>
+	 set Bug_name [bug_tracker::conn Bug]<br>
+ 	 set page_title "[_ bug-tracker.%Bug_name% %bug_number%]"<br>
+<br>
+I don't see how bug-tracker.%Bug_name% can be expected to exist but maybe I don't <br>
+understand the idiom.<br>
+<br>
+Internal key translated: <br>
+<br>
+  if { [string equal [workflow::action::get_element -action_id $action_id -element short_name] "edit"] } {<br>
+<br>
+to <br>
+<br>
+  if { [string equal [workflow::action::get_element -action_id $action_id -element short_name] "[_ acs-kernel.common_edit]"] } {<br>
+<br>
+<br>
+============================================================<br>
+<br>
+http://cvs.openacs.org/cvs/openacs-4/packages/bug-tracker/www/patch.tcl?r1=1.9&amp;r2=1.8<br>
+<br>
+All the mode internal keys were translated.<br>
+<br>
+----------------------------------------<br>
+I would suggest that the option list be returned from a function so this is not duplicated all over the place:<br>
+<br>
+ -options { { "[_ bug-tracker.Plain]" plain } { "[_ bug-tracker.HTML]" html } { "[_ bug-tracker.Preformatted]" pre } }<br>
+<br>
+These also seem like a candidate for common keys.<br>
+<br>
+----------------------------------------<br>
+<br>
+mode, status internal keys translated here as well.<br>
+<br>
+<br>
+<br>
+I fixed most of the outright bugs in the bug-tracker.<br>
+<br>
+The other things I ran into were:<br>
+<br>
+1. Quoting in the message catalog for tcl <br>
+<br>
+   i.e. a string like <br>
+     set title "Patch \"$patch_summary\" is nice."<br>
+   being translated to <br>
+     &lt;msg&gt;Patch \"$patch_summary\" is nice.&lt;/msg&gt;<br>
+   (should remove the \ quoting since its not needed).<br>
+<br>
+   Also, some keys had %var;noquote%, which is not needed since those<br>
+   variables are not quoted (and in fact the variable won't even be<br>
+   recognized so you get the literal %var;noquote% in the output).<br>
+<br>
+<br>
+2. Things in literal lists like<br>
+<br>
+     array set names { key "Pretty" ...} <br>
+<br>
+   being translated to <br>
+<br>
+     array set names { key "[_bug-tracker.Pretty]" ...} <br>
+<br>
+  which won't work since the _ func will not be called <br>
+  <br>
+  Needs to be     <br>
+     <br>
+     array set names [list key [_bug-tracker.Pretty] ...]<br>
+<br>
+  (strictly speaking the " does not need to go but "[...]" <br>
+  pretty much never needs quotes and I mostly find them annoying).<br>
+<br>
+<br>
+3. A lot of the acs-kernel.common_* keys had the wrong case (although <br>
+   we have keys like acs-kernel.common_edit = "Edit" which I think is <br>
+   a mistake).<br>
+<br>
+<br>
+<br>
+The big remaining issue is that we have things like <br>
+bug_tracker::bug::workflow_create with lookups in the spec but<br>
+I don't think you want to do those lookups til runtime.<br>
+<br>
+Also the parameters in bug_tracker::get_default_configurations<br>
+should be translated  (I am not sure if this gets stuffed into the db<br>
+or not).<br>
+<br>
+</p></div></li><li><p>Code within curly brackets isn't evaluated.  This code</p><pre class="programlisting">return { key "[_ bug-tracker.Key_Desc]" }</pre><p>... will not process correctly.  Instead, it should be</p><pre class="programlisting">return {??? }</pre></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="i18n-introduction.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="i18n-design.html">Next</a></td></tr><tr><td width="40%" align="left">How Internationalization/Localization works in OpenACS </td><td width="20%" align="center"><a accesskey="u" href="i18n.html">Up</a></td><td width="40%" align="right"> Design Notes</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/i18n-convert.html#comments">View comments on this page at openacs.org</a></center></body></html>
