@@ -53,7 +53,7 @@ ad_form -extend -name recover_password -form {
 } -validate {
     {username
         { ![empty_string_p [acs_user::get_by_username -authority_id $authority_id -username $username]] }
-        { Authority and username did not match }
+        { Could not find username at authority }
     }
 }
 
