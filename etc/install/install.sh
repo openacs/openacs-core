@@ -607,6 +607,7 @@ echo "  <info type=\"adminpassword\">$admin_password</info>" >> $xmlreportfile
 echo "  <info type=\"install-begin-epoch\">$installation_start_time</info>" >> $xmlreportfile
 echo "  <info type=\"install-end-epoch\">$(date +%s)</info>" >> $xmlreportfile
 echo "  <info type=\"install-end-timestamp\">$(date)</info>" >> $xmlreportfile
+echo "  <info type=\"script_path\">$script_path</info>" >> $xmlreportfile
 echo "</service>"  >> $xmlreportfile
 
   # Report the time at which we were done
