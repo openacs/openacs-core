@@ -122,13 +122,16 @@ ad_proc -public auth::authority::create {
             set short_name [string_truncate -len 255 $short_name]
         }
 
-        set authority_id [db_exec_plsql create_authority {}]
+        db_transaction {
+            set authority_id [db_exec_plsql create_authority {}]
 
-        # Set the arguments not taken by the new function with an update statement
-        foreach column {get_doc_impl_id process_doc_impl_id snapshot_p batch_sync_enabled_p} {
-            set edit_columns($column) [set $column]
+            # Set the arguments not taken by the new function with an update statement
+            foreach column {get_doc_impl_id process_doc_impl_id snapshot_p batch_sync_enabled_p help_contact_text_format} {
+                set edit_columns($column) [set $column]
+            }        
+            
+            edit -authority_id $authority_id -array edit_columns
         }
-        edit -authority_id $authority_id -array edit_columns
     }
 
     # Flush the cache, so that if we've tried to request this short_name while it didn't exist, we will now find it
