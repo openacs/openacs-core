@@ -49,10 +49,10 @@ BEGINNING OF TEMPLATE
 END OF TEMPLATE -->
 
   <sect2 id="release-notes-5-0-0">
-    <title>Version 5.0.0 Release Candidate 1</title>
+    <title>Version 5.0.0</title>
 
     <para>
-	This is the first Release Candidate for OpenACS 5.0.0.  This version contains no known security, data loss, or crashing bugs, nor any bugs judged release blockers.  This version has received manual testing.  It has passed current automated testing, which is not comprehensive.  If no new critical bugs are found in the week following public release, this Release Candidate will be the final version of OpenACS 5.0.0.  This version is tagged in CVS as oacs-5-0-0rc1.  The OpenACS core team has decided to relax several release criteria: the language translations in this package lag several months behind work on the public translation server, and the upgrade process from 4.6.3 requires manual intervention.
+	This is OpenACS 5.0.0.  This version contains no known security, data loss, or crashing bugs, nor any bugs judged release blockers.  This version has received manual testing.  It has passed current automated testing, which is not comprehensive.  This release contains work done on the translation server http://translate.openacs.org through 3 Nov 2003.  
   </para>
     
     <para>
