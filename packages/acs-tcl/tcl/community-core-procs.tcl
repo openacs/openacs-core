@@ -102,13 +102,15 @@ ad_proc ad_user_new {
         set username $email
     }
 
-    if { [ad_conn isconnected] } {
+    set creation_user ""
+    set peeraddr ""
+    
+    # This may fail, either because there's no connection, or because
+    # we're in the bootstrap-installer, at which point [ad_conn user_id] is undefined.
+    catch {
         set creation_user [ad_conn user_id]
         set peeraddr [ad_conn peeraddr]
-    } else {
-        set creation_user ""
-        set peeraddr ""
-    }
+    } 
 
     set salt [sec_random_token]
     set hashed_password [ns_sha1 "$password$salt"]
