@@ -108,6 +108,8 @@
             <file type="query_file" path="tcl/security-procs.xql"/>
             <file type="tcl_procs" path="tcl/server-cluster-procs.tcl"/>
             <file type="tcl_procs" path="tcl/set-operation-procs.tcl"/>
+            <file type="tcl_procs" path="tcl/site-node-apm-integration-procs.tcl"/>
+            <file type="query_file" path="tcl/site-node-apm-integration-procs.xql"/>
             <file type="query_file" db_type="oracle" path="tcl/site-node-object-map-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/site-node-object-map-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/site-node-object-map-procs.tcl"/>
