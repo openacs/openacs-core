@@ -1,4 +1,4 @@
-zad_library {
+ad_library {
     Contains procs used to manipulate chunks of text and html,
     most notably converting between them.
     
@@ -119,8 +119,6 @@ ad_proc -public util_convert_line_breaks_to_html {
     
     # Remove whitespace before \n's
     regsub -all {[ \t]*\n} $text "\n" text
-
-
     
     # Wrap P's around paragraphs
     set text "<p>$text</p>"
@@ -130,10 +128,11 @@ ad_proc -public util_convert_line_breaks_to_html {
     # Lars: This must be done after we've made P tags, because otherwise the line
     # breaks will already have been converted into BR's.
 
-    # remove line breaks right before HTML tags that will insert a paragraph break themselves
+    # remove line breaks right before and after HTML tags that will insert a paragraph break themselves
     if { $includes_html_p } {
         foreach tag { ul ol li blockquote p div table tr td th } {
             regsub -all -nocase "\\n\\s*(<${tag}\\s*\[^>\]*>)" $text {\1} text
+            regsub -all -nocase "(<${tag}\\s*\[^>\]*>)\\s*\\n" $text {\1} text
         }
     }
 
