@@ -162,6 +162,18 @@ ad_proc -public template::util::richtext::get_property { what richtext_list } {
 }
 
 ad_proc -public template::widget::richtext { element_reference tag_attributes } {
+    Implements the richtext widget, which offers rich text editing options.
+
+    If the acs-templating.UseHtmlAreaForRichtextP parameter is set to true (1), this will use the htmlArea WYSIWYG editor widget.
+    Otherwise, it will use a normal textarea, with a drop-down to select a format. The available formats are:
+    <ul>
+    <li>Enhanced text = Allows HTML, but automatically inserts line and paragraph breaks.
+    <li>Plain text = Automatically inserts line and paragraph breaks, and quotes all HTML-specific characters, such as less-than, greater-than, etc.
+    <li>Fixed-width text = Same as plain text, but conserves spacing; useful for tabular data.
+    <li>HTML = normal HTML.
+    </ul>
+    You can also parameterize the richtext widget with a 'htmlarea_p' attribute, which can be true or false, and which will override the parameter setting.
+} {
 
   upvar $element_reference element
 
@@ -184,8 +196,29 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
   if { [string equal $element(mode) "edit"] } {
       append output {<script language="javascript"><!--} \n {acs_RichText_WriteButtons();  //--></script>}
       
+      set attributes(id) "richtext__$element(form_id)__$element(id)"
+      
+      if { [exists_and_not_null element(htmlarea_p)] } {
+          set htmlarea_p [template::util::is_true $element(htmlarea_p)]
+      } else {
+          set htmlarea_p [parameter::get \
+                              -package_id [apm_package_id_from_key "acs-templating"] \
+                              -parameter "UseHtmlAreaForRichtextP" \
+                              -default 0]
+      }
+
+      if { $htmlarea_p } {
+          # Tell the blank-master to include the special stuff for htmlArea in the page header
+          global acs_blank_master__htmlareas
+          lappend acs_blank_master__htmlareas $attributes(id)
+      }
+
       append output [textarea_internal "$element(id)" attributes $contents]
-      append output "<br>Format: [menu "$element(id).format" [template::util::richtext::format_options] $format attributes]"
+      if { $htmlarea_p } {
+          append output "<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\">"
+      } else {
+          append output "<br>Format: [menu "$element(id).format" [template::util::richtext::format_options] $format attributes]"
+      }
           
       # Spell-checker
       array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
