@@ -14,13 +14,13 @@
   
   <para>Skip this section if you will run only Oracle.</para>
 
-  <para>OpenACS &version; will run with <link linkend="source-postgresql">PostgreSQL</link> 7.2.x, 7.3.2, 7.3.3, and 7.3.4.  7.3.4 is the recommended version of PostgreSQL.  PostgreSQL 7.4 has been verified.</para>
+  <para>OpenACS &version; will run with <link linkend="source-postgresql">PostgreSQL</link> 7.3.2, 7.3.3, and 7.3.4.  7.3.4 is the recommended version of PostgreSQL.  PostgreSQL 7.4 has been verified.</para>
 
   <itemizedlist>
     <listitem>
       <formalpara id="install-postgres-mac">
         <title>Mac OS X</title>
-        <para>If you are running Mac OS X prior to 10.3, you should be able to install and use PostGreSQL 7.2.x or 7.3.x.  Mac OS X 10.3 requires PostGreSQL 7.4.</para>
+        <para>If you are running Mac OS X prior to 10.3, you should be able to install and use PostGreSQL 7.3.x.  Mac OS X 10.3 requires PostGreSQL 7.4.</para>
       </formalpara>
     </listitem>
     <listitem>
@@ -28,7 +28,11 @@
         <title>Debian</title>
         <para></para>
       </formalpara>
-      <para>Debian users, especially Debian stable users, should install PostGreSQL from source as detailed below.  Debian unstable users: the following process has been known to work:</para>
+      <para>Debian users, especially Debian stable users, should
+      install PostGreSQL from source as detailed below. Debian
+      unstable users: the following process has been known to work
+      (but you should double-check that the version of PostGreSQL is
+      7.3 or above):</para>
       <screen><userinput>apt-get install postgresql postgresql-dev postgresql-doc
 ln -s /usr/include/postgresql/ /usr/include/pgsql
 ln -s /var/lib/postgres /usr/local/pgsql
