@@ -79,7 +79,7 @@ proc ad_pvt_home_link {} {
 
 proc ad_site_home_link {} {
     if { [ad_get_user_id] != 0 } {
-	return "<a href=\"[ad_pvt_home_link]\">[ad_system_name]</a>"
+	return "<a href=\"[ad_pvt_home]\">[ad_system_name]</a>"
     } else {
 	# we don't know who this person is
 	return "<a href=\"/\">[ad_system_name]</a>"

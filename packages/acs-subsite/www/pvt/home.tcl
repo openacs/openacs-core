@@ -105,7 +105,7 @@ if [ad_parameter SolicitPortraitP "user-info" 0] {
 set header [ad_header "$full_name's workspace at $system_name"]
 
 if {[ad_conn package_url] == "/"} {
-  set context_bar [ad_context_bar "Your workspace"]
+  set context_bar [ad_context_bar "[ad_pvt_home_name]"]
 } else {
   set context_bar [ad_context_bar "Home"]
 }

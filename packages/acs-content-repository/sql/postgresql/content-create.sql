@@ -205,6 +205,7 @@ create unique index cr_items_by_latest_revision on cr_items(latest_revision);
 create unique index cr_items_unique_name on cr_items(parent_id, name);
 create unique index cr_items_unique_id on cr_items(parent_id, item_id);
 create index cr_items_by_parent_id on cr_items(parent_id);
+create index cr_sortkey_idx on cr_items(tree_sortkey);
 
 -- content-create.sql patch
 --
