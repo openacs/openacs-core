@@ -120,7 +120,7 @@ ad_proc -private auth::local::authentication::Authenticate {
         set auth_info(auth_status) "ok"
     } else {
         set auth_info(auth_status) "bad_password"
-        set auth_info(auth_message) "Invalid username or password"
+        set auth_info(auth_message) [_ acs-authentication.Invalid_username_or_password]
         return [array get auth_info]
     }
 
