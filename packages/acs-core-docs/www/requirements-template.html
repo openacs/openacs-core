@@ -1,8 +1,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>System/Application Requirements Template</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="eng-standards.html" title="Chapter 6. Engineering Standards"><link rel="previous" href="filename.html" title="Detailed Design Documentation Template"><link rel="next" href="eng-standards-versioning.html" title="Release Version Numbering"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="filename.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 6. Engineering Standards</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="eng-standards-versioning.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="requirements-template"></a>System/Application Requirements Template</h2></div></div><div class="authorblurb"><p><p>By <a href="mailto:youremail@arsdigita.com" target="_top">You</a></p><br>
-		  OpenACS docs are written by the named authors, but may be edited
-		  by OpenACS documentation staff.
-		</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="yourpackage-requirements-introduction"></a>Introduction</h3></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>System/Application Requirements Template</title><meta name="generator" content="DocBook XSL Stylesheets V1.56.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="eng-standards.html" title="Chapter 6. Engineering Standards"><link rel="previous" href="filename.html" title="Detailed Design Documentation Template"><link rel="next" href="eng-standards-versioning.html" title="Release Version Numbering"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="filename.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 6. Engineering Standards</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="eng-standards-versioning.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="requirements-template"></a>System/Application Requirements Template</h2></div></div><div class="authorblurb"><p><p>By <a href="mailto:youremail@arsdigita.com" target="_top">You</a></p><br>
+          OpenACS docs are written by the named authors, but may be edited
+          by OpenACS documentation staff.
+        </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="yourpackage-requirements-introduction"></a>Introduction</h3></div></div><p>
       <span class="emphasis"><em>Briefly explain to the reader what this document is for, whether
 	it records the requirements for a new system, a client application, a
 	toolkit subsystem, etc. Remember your audience: fellow programmers,
@@ -47,21 +47,21 @@
 	leave generous gaps on the first writing of requirements (e.g. 1, 10,
 	20, 30, 40, etc.) because you'll want to leave room for any missing
 	key requirements that may arise.  </em></span>
-    </p><div class="itemizedlist"><ul type="disc"><li><p><span class="strong"><em>10.0 A Common Solution</em></span></p><p>
+    </p><div class="itemizedlist"><ul type="disc"><li><p><span class="strong">10.0 A Common Solution</span></p><p>
 	  Programmers and designers should only have to learn a single
 	  system that serves as a UI substrate for all the functionally
 	  specific modules in the toolkit. 
-	</p><blockquote class="blockquote"><p><span class="strong"><em>10.0.1</em></span></p><p>
+	</p><blockquote class="blockquote"><p><span class="strong">10.0.1</span></p><p>
 	    The system should not make any assumptions about how pages should
 	    look or function.
-	  </p><p><span class="strong"><em>10.0.5</em></span></p><p>
+	  </p><p><span class="strong">10.0.5</span></p><p>
 	    Publishers should be able to change the default presentation of
 	    any module using a single methodology with minimal exposure to
 	    code.
 	  </p></blockquote></li></ul></div><p>
       For guidelines writing requirements, take a 
       <a href="http://www.arsdigita.com/ad-sepg/process/requirements-quality.html" target="_top">look
-	at the quality standards</a>, along with a good example, such as <a href="apm-requirements.html">OpenACS 4.5 Package Manager Requirements</a>.
+	at the quality standards</a>, along with a good example, such as <a href="apm-requirements.html">OpenACS 4.6 Package Manager Requirements</a>.
     </p><p>
       Besides writing requirements in natural language, consider using the
       following techniques as needed:
@@ -81,6 +81,4 @@
 	pre-existing system or prototype first, and thus you may want to write
 	some thoughts on implementation, for aiding and guiding yourself or
 	other programmers. </em></span> 
-    </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="yourpackage-revision-history"></a>Revision History</h3></div></div><div class="informaltable"><table border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Document Revision #</th><th>Action Taken, Notes</th><th>When?</th><th>By Whom?</th></tr></thead><tbody><tr><td>0.3</td><td>Edited further, incorporated feedback from Michael Yoon</td><td>9/05/2000</td><td>Kai Wu</td></tr><tr><td>0.2</td><td>Edited</td><td>8/22/2000</td><td>Kai Wu</td></tr><tr><td>0.1</td><td>Created</td><td>8/21/2000</td><td>Josh Finkler, Audrey McLoghlin</td></tr></tbody></table></div><p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="filename.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="eng-standards-versioning.html">Next</a></td></tr><tr><td width="40%" align="left">Detailed Design Documentation Template&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td><td width="40%" align="right">&nbsp;Release Version Numbering</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">
-			vinod@kurup.com
-		  </a></address></div></body></html>
+    </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="yourpackage-revision-history"></a>Revision History</h3></div></div><div class="informaltable"><table border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Document Revision #</th><th>Action Taken, Notes</th><th>When?</th><th>By Whom?</th></tr></thead><tbody><tr><td>0.3</td><td>Edited further, incorporated feedback from Michael Yoon</td><td>9/05/2000</td><td>Kai Wu</td></tr><tr><td>0.2</td><td>Edited</td><td>8/22/2000</td><td>Kai Wu</td></tr><tr><td>0.1</td><td>Created</td><td>8/21/2000</td><td>Josh Finkler, Audrey McLoghlin</td></tr></tbody></table></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="filename.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="eng-standards-versioning.html">Next</a></td></tr><tr><td width="40%" align="left">Detailed Design Documentation Template&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td><td width="40%" align="right">&nbsp;Release Version Numbering</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/requirements-template.html#comments">View comments on this page at openacs.org</a></center></body></html>

@@ -4,25 +4,28 @@
 # created.
 # Original version by Don Baccus (dhogaza@pacifier.com>
 # Modified for openacs4 by Vinod Kurup <vinod@kurup.com>
-# 18 Jan 2002
+# Last modified: 14 Nov 2002
 # This version: ftp only.	
 
 proc acs_pgbackup {} {	
     # Set these to the appropriate values for your installation.
-    set pg_bin       "/usr/local/pgsql/bin"
-    set bak          "/usr/local/aolserver/backup"
-    set servername   "birdnotes"
     set ftp_user     "my-ftp-username"
     set ftp_password "my-ftp-password"
     set ftp_dir      "my-ftp-path"
     set ftp_server   "my.ftpserver.com"
+    set bak          "[file dirname [ns_info pageroot]]/backup"
+    set servername   "[ns_info server]"
 
+    set pguser "-U [db_get_username]"
     set day [clock format [clock seconds] -format %d]
     set data "${servername}_${day}.dmp"
+	
+	# make the backup directory
+	ns_mkdir $bak
 
     ns_log Notice "Backup of [ad_system_name] starting."
     ns_log Notice "pg_dump beginning..."
-    if [catch {append msg [exec "$pg_bin/pg_dump" $servername ">$bak/$data"]} errmsg] { 
+    if [catch {append msg [exec "pg_dump" $pguser $servername ">$bak/$data"]} errmsg] { 
 		ns_log Error "pg_dump failed: $errmsg" 
 		ns_sendmail [ad_system_owner] [ad_system_owner] "[ad_system_name] : pg_dump failed..." "$errmsg" 
 		return 
@@ -49,7 +52,7 @@ proc acs_pgbackup {} {
     
     # Replicate the above code to make remote copies to other systems	
     ns_log Notice "vacuum beginning..." 	
-    if [catch {append msg [exec "$pg_bin/vacuumdb" "-q" "-z" "$servername"]} errmsg] { 
+    if [catch {append msg [exec "vacuumdb" $pguser "-q" "-z" "$servername"]} errmsg] { 
 		ns_log Error "vacuum failed: $errmsg" 
 		ns_sendmail [ad_system_owner] [ad_system_owner] "[ad_system_name] : vacuum failed..." "$errmsg" 
     }	

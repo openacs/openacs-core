@@ -1,9 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Using Templates in OpenACS 4.5</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="dev-guide.html" title="Chapter 4. OpenACS Developer's Guide"><link rel="previous" href="db-api.html" title="The OpenACS Database Access API"><link rel="next" href="permissions.html" title="Groups, Context, Permissions"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="db-api.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 4. OpenACS Developer's Guide</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="permissions.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="templates"></a>Using Templates in OpenACS 4.5</h2></div></div><div class="authorblurb"><p><p>By <a href="mailto:psu@arsdigita.com" target="_top">Pete Su</a></p><br>
-		  OpenACS docs are written by the named authors, but may be edited
-		  by OpenACS documentation staff.
-		</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="templates-overview"></a>Overview</h3></div></div><p>
-The OpenACS 4.5 Template System (ATS) is designed to allow developers to
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Using Templates in OpenACS 4.6</title><meta name="generator" content="DocBook XSL Stylesheets V1.56.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="dev-guide.html" title="Chapter 4. OpenACS Developer's Guide"><link rel="previous" href="db-api.html" title="The OpenACS Database Access API"><link rel="next" href="permissions.html" title="Groups, Context, Permissions"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="db-api.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 4. OpenACS Developer's Guide</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="permissions.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="templates"></a>Using Templates in OpenACS 4.6</h2></div></div><div class="authorblurb"><p><p>By <a href="mailto:psu@arsdigita.com" target="_top">Pete Su</a></p><br>
+          OpenACS docs are written by the named authors, but may be edited
+          by OpenACS documentation staff.
+        </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="templates-overview"></a>Overview</h3></div></div><p>
+The OpenACS 4.6 Template System (ATS) is designed to allow developers to
 cleanly separate <span class="emphasis"><em>application logic</em></span> from <span class="emphasis"><em>display
 logic</em></span>. The intent is to have all of the logic related to
 manipulating the database and other application state data in one
@@ -16,7 +16,7 @@ In ATS, you write two files for every user-visible page in the
 system. One is a plain <tt>.tcl</tt> file and the other is a
 special <tt>.adp</tt> file. The <tt>.tcl</tt> file runs a
 script that sets up a set of name/value bindings that we call <span class="emphasis"><em>data
-sources</em></span>. These <a href="/docs/acs-templating/guide/data.html" target="_top">data sources</a> are generally the results of Tcl and/or database queries
+sources</em></span>. These <a href="/doc/acs-templating/guide/data.html" target="_top">data sources</a> are generally the results of Tcl and/or database queries
 or some combination thereof. The template system automatically makes
 them available to the <tt>.adp</tt> file, or the display part of
 the template, which is written in a combination of HTML, special
@@ -160,7 +160,7 @@ After putting all these files into
 </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="templates-summary"></a>Summary</h3></div></div><p>
 Templates separate application logic from display logic by requiring
 the developer to write pages in two stages, one file for database
-queries and application logic, and another for display. In OpenACS 4.5, the
+queries and application logic, and another for display. In OpenACS 4.6, the
 logic part of the page is just a <tt>.tcl</tt> that sets up
 <span class="emphasis"><em>data sources</em></span> that are used by the display part of the page. The
 display part of the page is an <tt>.adp</tt> file with some
@@ -168,6 +168,4 @@ special tags and notations for dealing with display logic and
 inserting properties into the text of the page. Later on we'll get
 into templates more deeply, and show how to use database queries as
 data sources.
-</p><p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="db-api.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="permissions.html">Next</a></td></tr><tr><td width="40%" align="left">The OpenACS Database Access API&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right">&nbsp;Groups, Context, Permissions</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">
-			vinod@kurup.com
-		  </a></address></div></body></html>
+</p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="db-api.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="permissions.html">Next</a></td></tr><tr><td width="40%" align="left">The OpenACS Database Access API&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right">&nbsp;Groups, Context, Permissions</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/templates.html#comments">View comments on this page at openacs.org</a></center></body></html>

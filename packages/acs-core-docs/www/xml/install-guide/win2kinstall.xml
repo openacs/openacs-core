@@ -6,12 +6,12 @@
 </authorblurb>
     
   <para><emphasis role="strong">NOTE:</emphasis> These instructions were
-	valid for ACS v4, but have not been tested with OpenACS. Currently
-	(8/2002), the best option to get OpenACS &version; running on Windows
-	is to use <ulink url="http://vmware.com">VMware</ulink> and John
-	Sequeira's <ulink
-	url="http://www.pobox.com/~johnseq/projects/oasisvm/">Oasis VM
-	distribution</ulink>
+    valid for ACS v4, but have not been tested with OpenACS. Currently
+    (8/2002), the best option to get OpenACS &version; running on Windows
+    is to use <ulink url="http://vmware.com">VMware</ulink> and John
+    Sequeira's <ulink
+    url="http://www.pobox.com/~johnseq/projects/oasisvm/">Oasis VM
+    distribution</ulink>
   </para>
 
 

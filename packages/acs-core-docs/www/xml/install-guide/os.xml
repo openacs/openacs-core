@@ -42,16 +42,17 @@
 		  <xref linkend="win2k-installation" />
 		</para>
 		<para>
+
 		  This was written for ACS and has <emphasis>not</emphasis> yet
-		  been updated for OpenACS. (Note: AOLServer is no longer
-		  supporting Windows - it may be possible to run AOLServer under
-		  <ulink url="http://www.cygwin.com">Cygwin</ulink>, but I haven't
-		  seen any success reports yet). Another alternative is to use John
-		  Sequeira's <ulink
+		  been updated for OpenACS. (Note: AOLServer is not currently
+		  supported on Windows, but this may change soon. Keep an eye on
+		  the AOLserver mailing list or the OpenACS forums) Another
+		  alternative is to use John Sequeira's <ulink
 		  url="http://www.pobox.com/~johnseq/projects/oasisvm/">Oasis
 		  VM</ulink>, which is basically a fully working OpenACS &version;
 		  system that you load into <ulink
 		  url="http://vmware.com">VMware</ulink>.
+
 		</para>
 	  </listitem>
 	  
@@ -89,17 +90,25 @@
 
 		<tbody>
 		  <row>
-			<entry>recent kernel</entry> <entry>Currently version 2.2.19 or
-			greater is the standard requirement. Some people are using 2.4.x
-			(2.4.16) kernels.</entry>
+			<entry>recent kernel</entry> 
+
+			<entry>
+
+			  Version 2.2.22 or greater is the standard requirement. I used
+			  version 2.4.19 for this guide.
+
+			</entry>
 		  </row>
 
 		  <row>
-			<entry>bash </entry> 
-			<entry>Bash is the standard Linux shell.
-			  We assume you are using bash for these instructions.  If you're
-			  not using bash, then you will need to substitute your shell's
-			  conventions for setting environment variables when appropriate.
+			<entry>bash</entry> 
+			<entry>
+
+			  Bash is the standard Linux shell and we assume you are using
+			  bash for these instructions.  If not, you will need to
+			  substitute your shell's conventions for setting environment
+			  variables when appropriate.
+
 			</entry>
 		  </row>
 
@@ -113,19 +122,10 @@
 		  </row>
 
 		  <row>
-			<entry>perl (and perl-suid)</entry> 
-			<entry>
-			  A few parts of the ACS require <ulink
-				url="http://www.perl.org/">perl</ulink> to work correctly.
-				(Debian users: <computeroutput>apt-get install
-				perl-suid</computeroutput>)</entry>
-		  </row>
-
-		  <row>
 			<entry>GNU Make (3.76.1 or better)</entry> 
 			<entry>
-			  PostgreSQL and AOLServer require gmake to compile. Note that
-			  on some linux distributions, GNU Make is simply named
+			  PostgreSQL and AOLserver require gmake to compile. Note that
+			  on most linux distributions, GNU Make is simply named
 			  <computeroutput>make</computeroutput> and there is no
 			  <computeroutput>gmake</computeroutput>, whereas on BSD
 			  distributions, <computeroutput>make</computeroutput> and
@@ -145,9 +145,45 @@
 		  <row>
 			<entry>libxml2</entry>
 			<entry>
-			  OpenACS &version; stores queries in XML files, so libxml2 is used to
-			  parse these files. (Debian users: <computeroutput>apt-get
-			  install libxml2-dev</computeroutput>)
+
+			  OpenACS &version; stores queries in XML files, so libxml2 is
+			  used to parse these files. (Debian users:
+			  <computeroutput>apt-get install libxml2-dev</computeroutput>)
+
+			</entry>
+		  </row>
+
+		  <row>
+			<entry>daemontools</entry>
+			<entry>
+
+			  If you decide to follow our recommendations, you'll need
+			  daemontools installed. We'll explain where to get it when you
+			  need it.
+
+			</entry>
+		  </row>
+
+		  <row>
+			<entry>docbook-xml, docbook-xsl, libxslt, xsltproc</entry>
+			<entry>
+
+			  Only needed if you plan to write or edit OpenACS
+			  documentation. (docbook-xml v4.2, docbook-xsl v1.56, libxslt
+			  1.0.21, xsltproc 1.0.21)
+
+			</entry>
+		  </row>
+
+		  <row>
+			<entry>a MTA (Mail Transfer Agent)</entry>
+			<entry>
+
+			  An MTA is needed for OpenACS to send notifications or handle
+			  incoming mail. Qmail seems to be the most popular choice in
+			  the OpenACS community. Other options include Postfix, Exim
+			  and Sendmail.
+
 			</entry>
 		  </row>
 
@@ -162,88 +198,159 @@
 
 	<itemizedlist>
 	  <listitem><para> 
+
 		  We'll compile stuff in
 		  <computeroutput>/usr/local/src</computeroutput>
+
 		  </para></listitem>
 
 	  <listitem><para>
-		  PostgreSQL will go into <computeroutput>/usr/local/pgsql</computeroutput>
+		  
+		  PostgreSQL will go into
+		  <computeroutput>/usr/local/pgsql</computeroutput>
+
 		</para></listitem>
+
 	  <listitem><para>
-		  AOLServer will go into <computeroutput>/usr/local/aolserver</computeroutput>
+
+		  AOLServer will go into
+		  <computeroutput>/usr/local/aolserver</computeroutput>
+
 		</para></listitem>
+
 	  <listitem><para>
-		  The web root will go into <computeroutput>/web</computeroutput>
+
+		  The web root will go into your home directory
+		  (e.g. <computeroutput>/home/<emphasis>joeuser</emphasis>/web</computeroutput>)
+
 		</para></listitem>
 	</itemizedlist>
 
 	<para>
+
 	  None of these locations are set in stone - they're simply the values
 	  that we've chosen. You are free to install your software in other
 	  locations, but you'll need to adjust the instructions in this
 	  document to point to those locations.
+
 	</para>
 
+	<para>
+
+	  Note that previous versions of this document recommended using
+	  <computeroutput>/web</computeroutput> for the web root and running
+	  AOLserver as the <computeroutput>nsadmin</computeroutput> user. For
+	  security and compatibility reasons, this is no longer recommended.
+
+	</para>
+
+	<para>
+
+	  This guide will use <computeroutput>joeuser</computeroutput> as a
+      normal user. Substitute your own username wherever you see
+      <computeroutput>joeuser</computeroutput>.
+
+    </para>
   </sect2>
 
   <sect2 id="os-install" xreflabel="Linux Install Guides">
-	<title>Linux Install Guides</title>
-	<para>
-	  Here's a list of some helpful documentation for various OS's
-	</para>
+    <title>Linux Install Guides</title>
+    <para>
+      Here's a list of some helpful documentation for various OS's
+    </para>
 
-	<itemizedlist>
-	  <listitem><para>
-		  <ulink url="http://tinyplanet.ca/pubs/debian/">Painless Debian
-		  GNU/Linux</ulink> by Stephen van Egmond
-		</para></listitem>
+    <itemizedlist>
+      <listitem><para>
+          <ulink url="http://tinyplanet.ca/pubs/debian/">Painless Debian
+          GNU/Linux</ulink> by Stephen van Egmond
+        </para></listitem>
 
-	  <listitem><para> <ulink
-		  url="http://www.debian.org/releases/stable/installmanual">Official
-		  Debian Guide</ulink> </para></listitem>
+      <listitem><para> 
 
-	  <listitem><para><ulink url="http://www.redhat.com/docs/manuals/linux/">RedHat</ulink></para></listitem>
+          <ulink
+          url="http://www.debian.org/releases/stable/installmanual">Official
+          Debian Guide</ulink> 
 
-	  <listitem><para><ulink url="http://www.linux-mandrake.com/en/fdoc.php3">Mandrake</ulink></para></listitem>
+        </para></listitem>
 
-	  <listitem><para><ulink url="http://sdb.suse.de/sdb/en/html/">SuSE</ulink></para></listitem>
+      <listitem><para>
 
-	</itemizedlist>
+          <ulink
+          url="http://www.redhat.com/docs/manuals/linux/">RedHat</ulink>
+
+        </para></listitem>
+
+      <listitem><para>
+
+          <ulink
+          url="http://www.linux-mandrake.com/en/fdoc.php3">Mandrake</ulink>
+
+        </para></listitem>
+
+      <listitem><para>
+
+          <ulink url="http://sdb.suse.de/sdb/en/html/">SuSE</ulink>
+
+        </para></listitem>
+
+    </itemizedlist>
 
   </sect2>
 
   <sect2 id="os-security" xreflabel="Security Information">
-	<title>Security Information</title>
-	<para>
-	  Once you get your OS installed, it's imperative that you secure your
-	  installation. As Jon Griffin repeatedly warns us, "No distribution is
-	  secure out of the box." Again, this topic is too big to cover properly
-	  here, so see these links.
-	</para>
+    <title>Security Information</title>
+    <para>
 
-	<itemizedlist>
-	  <listitem><para> 
-		  <ulink url="http://jongriffin.com/static/linuxnotes">Jon Griffin's notes</ulink>
-		  </para></listitem>
+      Once you get your OS installed, it's imperative that you secure your
+      installation. As Jon Griffin repeatedly warns us, "No distribution is
+      secure out of the box." Again, this topic is too big to cover properly
+      here, so see these links.
 
-	  <listitem><para> 
-		  <ulink url="http://www.seifried.org/lasg/">Linux Administrators Security Guide</ulink>
-		  </para></listitem>
+    </para>
 
-	  <listitem><para> 
-		  <ulink
-			url="http://www.suse.com/en/support/howto/secure_webserv/index.html">Installation
-			of a Secure Webserver</ulink>
-		</para></listitem>
+    <itemizedlist>
 
-	  <listitem><para>
-		  Others?
-		  </para></listitem>
+      <listitem>
+        <para>
 
-	</itemizedlist>
+          <ulink url="http://www.openna.com/products/books/sol/solus.php">Securing and Optimizing Linux - version 2.0</ulink>
+
+        </para>
+      </listitem>
+
+      <listitem><para> 
+
+          <ulink url="http://jongriffin.com/static/linuxnotes">Jon
+          Griffin's notes</ulink>
+
+          </para></listitem>
+
+      <listitem><para> 
+
+          <ulink url="http://www.seifried.org/lasg/">Linux Administrators
+          Security Guide</ulink>
+
+          </para></listitem>
+
+      <listitem><para> 
+
+          <ulink
+            url="http://www.suse.com/en/support/howto/secure_webserv/index.html">Installation
+            of a Secure Webserver</ulink>
+
+        </para></listitem>
+
+      <listitem><para>
+
+          Others?
+
+          </para></listitem>
+
+    </itemizedlist>
   </sect2>
 
-	<para><phrase role="cvstag">($Id$)</phrase></para>
+
+    <para><phrase role="cvstag">($Id$)</phrase></para>
 
 </sect1>
 <!--

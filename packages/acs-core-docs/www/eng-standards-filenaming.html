@@ -1,9 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>ACS File Naming and Formatting Standards</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="eng-standards.html" title="Chapter 6. Engineering Standards"><link rel="previous" href="eng-standards-constraint-naming.html" title="Constraint naming standard"><link rel="next" href="eng-standards-plsql.html" title="PL/SQL Standards"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="eng-standards-constraint-naming.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 6. Engineering Standards</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="eng-standards-plsql.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="eng-standards-filenaming"></a>ACS File Naming and Formatting Standards</h2></div></div><div class="authorblurb"><p><p>By <a href="mailto:michael@arsdigita.com" target="_top">michael@arsdigita.com</a> and 
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>ACS File Naming and Formatting Standards</title><meta name="generator" content="DocBook XSL Stylesheets V1.56.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="eng-standards.html" title="Chapter 6. Engineering Standards"><link rel="previous" href="eng-standards-constraint-naming.html" title="Constraint naming standard"><link rel="next" href="eng-standards-plsql.html" title="PL/SQL Standards"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="eng-standards-constraint-naming.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 6. Engineering Standards</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="eng-standards-plsql.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="eng-standards-filenaming"></a>ACS File Naming and Formatting Standards</h2></div></div><div class="authorblurb"><p><p>By <a href="mailto:michael@arsdigita.com" target="_top">michael@arsdigita.com</a> and 
 <a href="mailto:aure@arsdigita.com" target="_top">aure@arsdigita.com</a></p><br>
-		  OpenACS docs are written by the named authors, but may be edited
-		  by OpenACS documentation staff.
-		</p></div><p>
+          OpenACS docs are written by the named authors, but may be edited
+          by OpenACS documentation staff.
+        </p></div><p>
 To ensure consistency (and its collateral benefit, maintainability),
 we define and adhere to standards in the following areas:
 </p><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="eng-standards-filenaming-nomenclature"></a>File Nomenclature</h3></div></div><p>
@@ -37,7 +37,7 @@ For example, the page to view one bookmark is
 For example, the page to view the properties of an
 ecommerce product is
 <tt>/ecommerce/product.tcl</tt>.
-</p></li><li><p>For naming files in a page flow, use the convention:</p><div class="itemizedlist"><ul type="round"><li><p><span class="emphasis"><em><tt>foobar.extension</tt></em></span> (Step 1)</p></li><li><p><span class="emphasis"><em><tt>foobar-2.extension</tt></em></span> (Step 2)</p></li><li><p>...</p></li><li><p><span class="emphasis"><em><tt>foobar-N.extension</tt></em></span> (Step N)</p></li></ul></div><p>
+</p></li><li><p>For naming files in a page flow, use the convention:</p><div class="itemizedlist"><ul type="circle"><li><p><span class="emphasis"><em><tt>foobar.extension</tt></em></span> (Step 1)</p></li><li><p><span class="emphasis"><em><tt>foobar-2.extension</tt></em></span> (Step 2)</p></li><li><p>...</p></li><li><p><span class="emphasis"><em><tt>foobar-N.extension</tt></em></span> (Step N)</p></li></ul></div><p>
 where <span class="emphasis"><em><tt>foobar</tt></em></span> is determined by the above
 rules.
 </p><p>
@@ -94,7 +94,7 @@ Last Modified: file-standards.html,v 1.2 2000/09/19 07:22:45 ron Exp
 &lt;/p&gt;
 </pre><p>
 This can be at the top or bottom of the file.
-</p><p><div>Using ad_page_contract</div><p>
+</p><div>Using ad_page_contract</div><p>
 For non-library Tcl files (those not in the private Tcl directory),
 use <a href="tcl-doc.html#tcl-doc-ad-page-contract" title="ad_page_contract"><tt>ad_page_contract</tt></a>
 after the file path comment (this supersedes set_the_usual_form_variables and
@@ -141,7 +141,7 @@ will also trim leading zeros. Note that unless you specify
 QQvariables, which were automatically created by ad_page_variables and
 set_the_usual_form_variables. The use of bind variables makes such
 previous variable syntax obsolete.
-</p></li></ul></div><p><div>Using ad_library</div><p>
+</p></li></ul></div><div>Using ad_library</div><p>
 For shared Tcl library files, use <a href="tcl-doc.html#tcl-doc-ad-library" title="ad_library"><tt>ad_library</tt></a> after
 the file path comment. Its only argument is a doc_string in the
 standard (javadoc-style) format, like
@@ -156,7 +156,7 @@ ad_library {
     @author John Doe (jdoe@arsdigita.com)
     @cvs-id file-standards.html,v 1.2 2000/09/19 07:22:45 ron Exp
 }
-</pre><p><div>Non-Tcl Files</div><p>
+</pre><div>Non-Tcl Files</div><p>
 For SQL and other non-Tcl source files, the following file header structure is recommended:
 </p><pre class="programlisting">
 -- <span class="emphasis"><em>path relative to the ACS root directory</em></span>
@@ -229,6 +229,4 @@ customize the look and feel of the entire site.
 </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="eng-standards-filenaming-tcllib"></a>Tcl Library Files</h3></div></div><p>
 Further standards for Tcl library files are under discussion; we plan to 
 include naming conventions for procs.
-</p><p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eng-standards-constraint-naming.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="eng-standards-plsql.html">Next</a></td></tr><tr><td width="40%" align="left">Constraint naming standard&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td><td width="40%" align="right">&nbsp;PL/SQL Standards</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">
-			vinod@kurup.com
-		  </a></address></div></body></html>
+</p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eng-standards-constraint-naming.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="eng-standards-plsql.html">Next</a></td></tr><tr><td width="40%" align="left">Constraint naming standard&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td><td width="40%" align="right">&nbsp;PL/SQL Standards</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/eng-standards-filenaming.html#comments">View comments on this page at openacs.org</a></center></body></html>

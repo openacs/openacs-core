@@ -3,14 +3,18 @@ ns_log notice "nsd.tcl: starting to read config file..."
 # which database do you want? postgres or oracle
 set database              postgres 
 
+# oracle needs a password
 if {$database == "oracle"} {
-    set db_password        "mysitepassword"
+    set db_password        "mydbpassword"
 }
 
+# listen on these ports
 set httpport              8000
 set httpsport             8443 
 
-# The hostname and address should be set to actual values.
+# ns_info will try to guess these values based on
+# your OS settings, but you may have to replace them
+# with sane values if it guesses wrong!
 set hostname               [ns_info hostname]
 set address                [ns_info address]
 
@@ -18,10 +22,15 @@ set server              "birdnotes"
 set db_name             $server
 set servername          "Birdnotes.net Community"
 
-set serverroot          "/web/${server}"
+# User account
+# This is used in 2 places
+#  1) to set the serverroot
+#  2) to access Postgresql via this username
+set user_account         joeuser
+set serverroot          "/home/${user_account}/web/${server}"
 
-# if debug is false, all debugging will be turned off
-set debug true
+# if debug is false, all debug-level logging will be turned off
+set debug false
 
 # you shouldn't need to adjust much below here
 # for a standard install
@@ -29,7 +38,7 @@ set debug true
 # 
 # AOLserver's home and binary directories. Autoconfigurable. 
 #
-set homedir                 [file dirname [ns_info config]] 
+set homedir                 [file dirname [file dirname [ns_info nsd]]] 
 set bindir                  [file dirname [ns_info nsd]] 
 
 #
@@ -51,7 +60,7 @@ set sslcertfile ${homedir}/servers/${server}/modules/nsssl/certfile.pem
 #
 
 ns_section ns/parameters 
-ns_param   serverlog          ${homedir}/log/${server}-error.log 
+ns_param   serverlog          ${serverroot}/log/error.log 
 ns_param   home               $homedir 
 ns_param   maxkeepalive       0
 ns_param   logroll            on
@@ -86,7 +95,7 @@ ns_section ns/server/${server}/tcl
 ns_param   library        ${serverroot}/tcl
 ns_param   autoclose      on 
 ns_param   debug          $debug
- 
+ns_param   SharedLibrary  ${homedir}/modules/tcl 
 
 ############################################################ 
 # 
@@ -193,7 +202,7 @@ if { $database == "oracle" } {
 } else {
     ns_param   driver             postgres 
     ns_param   datasource         localhost::${db_name}
-    ns_param   user               nsadmin
+    ns_param   user               $user_account
     ns_param   password           ""
 } 
 
@@ -212,7 +221,7 @@ if { $database == "oracle" } {
 } else {
     ns_param   driver             postgres 
     ns_param   datasource         localhost::${db_name}
-    ns_param   user               nsadmin
+    ns_param   user               $user_account
     ns_param   password           ""
 } 
 
@@ -231,7 +240,7 @@ if { $database == "oracle" } {
 } else {
     ns_param   driver             postgres 
     ns_param   datasource         localhost::${db_name}
-    ns_param   user               nsadmin
+    ns_param   user               $user_account
     ns_param   password           ""
 } 
 
@@ -247,7 +256,7 @@ ns_param   403                "global/forbidden.html"
 # Access log -- nslog 
 # 
 ns_section ns/server/${server}/module/nslog 
-ns_param   file                 ${homedir}/log/${server}.log
+ns_param   file                 ${serverroot}/log/access.log
 ns_param   enablehostnamelookup false
 ns_param   logcombined          true
 #ns_param   logrefer             false
@@ -279,8 +288,8 @@ ns_param   classpath          /usr/local/jdk/jdk118_v1/lib/classes.zip:${bindir}
 # should be right.
 # 
 #ns_section "ns/server/${server}/module/nscgi" 
-#       ns_param   map "GET  /cgi-bin/ /web/$server/cgi-bin"
-#       ns_param   map "POST /cgi-bin/ /web/$server/cgi-bin" 
+#       ns_param   map "GET  /cgi-bin /web/$server/cgi-bin"
+#       ns_param   map "POST /cgi-bin /web/$server/cgi-bin" 
 #       ns_param   Interps CGIinterps
 
 #ns_section "ns/interps/CGIinterps" 

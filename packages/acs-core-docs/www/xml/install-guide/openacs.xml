@@ -15,26 +15,30 @@
         </para></listitem>
 
       <listitem><para> 
-		  Login as <computeroutput>nsadmin</computeroutput>
-		  and untar the downloaded components into
-		  <computeroutput>/web</computeroutput> directory. The OpenACS
-		  &version; tarball is currently named
-		  <computeroutput>openacs-4-5-release.tgz</computeroutput>. Replace
-		  <computeroutput>openacs-4-5-release.tgz</computeroutput> in the
+
+		  Create a directory called <computeroutput>web</computeroutput>
+		  inside your home directory and untar the downloaded components
+		  there. Set the permissions as directed. The OpenACS &version;
+		  tarball is currently named
+		  <computeroutput>openacs-4-6-release.tgz</computeroutput>. Replace
+		  <computeroutput>openacs-4-6-release.tgz</computeroutput> in the
 		  commands below with whatever the current tarball is named.
+
 		</para>
 
 		<programlisting>
-joeuser:~$ su - nsadmin
-Password: ***********
-nsadmin:~$ cd /web
-nsadmin:/web$ tar xzf /tmp/openacs-4-5-release.tgz</programlisting>
+joeuser:~$ mkdir -p web
+joeuser:~$ chown <emphasis>joeuser</emphasis>.web web
+joeuser:~$ cd web
+joeuser:~/web$ tar xzf /tmp/openacs-4-6-release.tgz
+joeuser:~/web$ chown -R <emphasis>joeuser</emphasis>.web openacs-4
+joeuser:~/web$ chmod -R g+w openacs-4</programlisting>
       </listitem>
 
       <listitem><para> 
 		  You should now have an
 		  <computeroutput>openacs-4/</computeroutput> directory tree in
-		  <computeroutput>/web</computeroutput>. Rename this directory to
+		  <computeroutput>~/web</computeroutput>. Rename this directory to
 		  whatever you want your web service to be identified as. The name
 		  of your web service is referred to as the
 		  <emphasis>service_name</emphasis>. Since you can run multiple
@@ -50,14 +54,23 @@ nsadmin:/web$ tar xzf /tmp/openacs-4-5-release.tgz</programlisting>
 		</para>
 
 		<programlisting>
-nsadmin:/web$ ls -l
-total 4
-drwxr-xr-x    8 nsadmin  nsadmin      4096 Nov 27 09:32 openacs-4
-nsadmin:/web$ mv openacs-4 <emphasis>birdnotes</emphasis>
-nsadmin:/web$ ls -l
-total 4
-drwxr-xr-x    8 nsadmin  nsadmin      4096 Dec 20 14:37 birdnotes</programlisting>
+joeuser:~/web$ ls -l
+drwxrwxr-x    8 joeuser  web      4096 Nov 27 09:32 openacs-4
+joeuser:~/web$ mv openacs-4 <emphasis>birdnotes</emphasis>
+joeuser:~/web$ ls -l
+drwxrwxr-x    8 joeuser  web      4096 Dec 20 14:37 birdnotes</programlisting>
       </listitem>
+
+	  <listitem>
+		<para>
+
+		  Finally create a directory for the AOLserver logs.
+
+		</para>
+		<programlisting>
+joeuser:~/web$ mkdir birdnotes/log</programlisting>
+	  </listitem>
+
     </itemizedlist>
 
   </sect2>
@@ -70,38 +83,40 @@ drwxr-xr-x    8 nsadmin  nsadmin      4096 Dec 20 14:37 birdnotes</programlistin
   <sect2 id="install-openacs-prepare-oracle" xreflabel="Prepare Oracle for OpenACS">
 	<title>Prepare Oracle for OpenACS</title>
 
-    <para>You should be logged on as
-	  <computeroutput>nsadmin</computeroutput> for this step and you should
-	  make sure that <computeroutput>nsadmin</computeroutput> is in the
-	  <computeroutput>dba</computeroutput> group.</para>
+    <para>
+
+	  You should be sure that your user account
+	  (e.g. <computeroutput>joeuser</computeroutput>) is in the
+	  <computeroutput>dba</computeroutput> group.
+
+	</para>
 
     <itemizedlist>
       <listitem><para> 
-		  Verify nsadmin membership by typing
+		  Verify membership by typing
 		  <computeroutput>groups</computeroutput> when you login:
 
 		  <programlisting>
-nsadmin:~$ groups
-nsadmin dba web</programlisting>
+joeuser:~$ groups
+dba web</programlisting>
 
 		  If you do not see these groups, take the following action: 
 
 		  <programlisting>
-nsadmin:~$ su -      
+joeuser:~$ su -      
 Password: ************
-root:~# usermod -g nsadmin -G dba,web nsadmin</programlisting>
+root:~# adduser <emphasis>joeuser</emphasis> dba</programlisting>
 
 		  If you get an error about an undefined group, then add that group
 		  manually:
 
 <programlisting>
 root:~# groupadd dba
-root:~# groupadd nsadmin
 root:~# groupadd web</programlisting>
 
 		  Make sure to logout as <computeroutput>root</computeroutput> when
 		  you are finished with this step and log back in as
-		  <computeroutput>nsadmin</computeroutput>.
+		  your regular user.
 		</para></listitem>
 
       <listitem><para> 
@@ -109,7 +124,7 @@ root:~# groupadd web</programlisting>
 		  <computeroutput>svrmgrl</computeroutput> and login:
         
 		  <programlisting>
-nsadmin:~$ svrmgrl
+joeuser:~$ svrmgrl
 
 SVRMGR&gt; connect internal
 Connected.</programlisting>
@@ -157,27 +172,29 @@ SVRMGR&gt;  select file_name from dba_data_files;</programlisting>
 
 		<programlisting>
 SVRMGR&gt; exit
-nsadmin:~$ su -
+joeuser:~$ su -
 Password: ************
 root:~# mkdir -p /ora8/m02/oradata/ora8/
-root:~# chown nsadmin.web /ora8/m02/oradata/ora8
+root:~# chown <emphasis>joeuser</emphasis>.web /ora8/m02/oradata/ora8
 root:~# chmod 775 /ora8/m02/oradata/ora8
 root:~# exit
-nsadmin:~$</programlisting>
+joeuser:~$</programlisting>
       </listitem>
 
       <listitem><para> 
-		  As <computeroutput>nsadmin</computeroutput>, create a tablespace for
-		  the service. It is important that the tablespace can
-		  <computeroutput>autoextend</computeroutput>. This allows the
-		  tablespace&#39;s storage capacity to grow as the size of the data
-		  grows. We set the pctincrease to be a very low value so that our
-		  extents won&#39;t grow geometrically. We do not set it to 0 at
-		  the tablespace level because this would affect Oracle&#39;s
-		  ability to automatically coalesce free space in the
-		  tablespace. </para>
+
+		  Create a tablespace for the service. It is important that the
+		  tablespace can <computeroutput>autoextend</computeroutput>. This
+		  allows the tablespace&#39;s storage capacity to grow as the size
+		  of the data grows. We set the pctincrease to be a very low value
+		  so that our extents won&#39;t grow geometrically. We do not set
+		  it to 0 at the tablespace level because this would affect
+		  Oracle&#39;s ability to automatically coalesce free space in the
+		  tablespace.
+
+		</para>
 		<programlisting>
-nsadmin:~$ svrmgrl
+joeuser:~$ svrmgrl
 
 SVRMGR&gt; connect internal;
 SVRMGR&gt; create tablespace <emphasis>birdnotes</emphasis> 
@@ -223,7 +240,7 @@ SVRMGR&gt; exit;</programlisting>
         <emphasis>service_name</emphasis> account: </para>
 
 		<programlisting>
-nsadmin:~$ sqlplus <emphasis>birdnotes</emphasis>/<emphasis>birdnotespassword</emphasis>
+joeuser:~$ sqlplus <emphasis>birdnotes</emphasis>/<emphasis>birdnotespassword</emphasis>
 SQL&gt; select sysdate from dual;
 
 SYSDATE
@@ -247,13 +264,12 @@ SQL&gt; exit</programlisting>
 		</para>
 
 		<programlisting>
-nsadmin:~$ cp /tmp/nsd-oracle.txt ./bin/nsd-oracle
-nsadmin:~$ chmod 700 ./bin/nsd-oracle</programlisting>
-	<note>
-	  <para>RedHat 7.3 and 8.0 users: set the the LD_ASSUME_KERNEL environment 
-                variable in your nsd-oracle script: 
-<programlisting>export LD_ASSUME_KERNEL=2.2.5		</programlisting></para>
-	</note>
+joeuser:~$ su -
+Password: ********
+root:~# cd /usr/local/aolserver/bin
+root:/usr/local/aolserver/bin# cp /tmp/nsd-oracle.txt ./nsd-oracle
+root:/usr/local/aolserver/bin# chmod 750 nsd-oracle
+root:/usr/local/aolserver/bin# exit</programlisting>
 
 	  </listitem>
 	</itemizedlist>
@@ -268,7 +284,7 @@ nsadmin:~$ chmod 700 ./bin/nsd-oracle</programlisting>
 	  (i.e. <computeroutput>birdnotes</computeroutput>)
 	</para>
 	<programlisting>
-nsadmin:/web$ createdb <emphasis>birdnotes</emphasis>
+joeuser:~/web$ createdb <emphasis>birdnotes</emphasis>
 CREATE DATABASE</programlisting>
 
 	<para>Next we'll set up AOLserver so that it has the proper environment
@@ -277,9 +293,13 @@ CREATE DATABASE</programlisting>
 	  <computeroutput>/tmp/nsd-postgres.txt</computeroutput> :</para>
 	
 	<programlisting>
-nsadmin:/web$ cd
-nsadmin:~$ cp /tmp/nsd-postgres.txt ./bin/nsd-postgres
-nsadmin:~$ chmod 700 ./bin/nsd-postgres</programlisting>
+joeuser:~/web$ cd
+joeuser:~$ su -
+Password: ********
+root:~# cd /usr/local/aolserver/bin
+root:/usr/local/aolserver/bin# cp /tmp/nsd-postgres.txt ./nsd-postgres
+root:/usr/local/aolserver/bin# chmod 755 nsd-postgres
+root:/usr/local/aolserver/bin# exit</programlisting>
 
   </sect2>
 
@@ -302,17 +322,19 @@ nsadmin:~$ chmod 700 ./bin/nsd-postgres</programlisting>
 		</para></listitem>
 
 	  <listitem><para> 
-		  Modify it for your needs and save it in
-		  <computeroutput>/usr/local/aolserver/birdnotes.tcl</computeroutput>
-		  (Of course change <computeroutput>birdnotes</computeroutput> to
-		  whatever you're using as your <emphasis>service-name</emphasis>
+
+		  Modify it for your needs and save it inside your
+		  <computeroutput>~/web/birdnotes</computeroutput> directory.  (Of
+		  course change <computeroutput>birdnotes</computeroutput> to
+		  whatever you're using as your <emphasis>service-name</emphasis>.)
+
 		</para></listitem>
 	</orderedlist>
 
 	<programlisting>
-nsadmin:~$ cp /tmp/openacs4.tcl.txt ./<emphasis>birdnotes</emphasis>.tcl
-nsadmin:~$ chmod 660 <emphasis>birdnotes</emphasis>.tcl
-nsadmin:~$ emacs <emphasis>birdnotes</emphasis>.tcl</programlisting>
+joeuser:~$ cp /tmp/openacs4.tcl.txt ./web/<emphasis>birdnotes</emphasis>/nsd.tcl
+joeuser:~$ chmod 600 ./web/<emphasis>birdnotes</emphasis>/nsd.tcl
+joeuser:~$ emacs ./web/<emphasis>birdnotes</emphasis>/nsd.tcl</programlisting>
 
 	<para>
 	  Specifically, you'll have set the following variables
@@ -341,6 +363,14 @@ nsadmin:~$ emacs <emphasis>birdnotes</emphasis>.tcl</programlisting>
 	  <listitem><para><emphasis>httpport</emphasis> - If you want your
 		  server on a different port, enter it here</para></listitem>
 
+	  <listitem>
+		<para>
+
+		  <emphasis>user_account</emphasis> - The account that will both
+		  own OpenACS files and connect to the database (for Postgresql).
+		
+		</para>
+	  </listitem>
 	</itemizedlist>
 
 	<para>
@@ -356,10 +386,10 @@ nsadmin:~$ emacs <emphasis>birdnotes</emphasis>.tcl</programlisting>
 	  <computeroutput>nsd-postgres</computeroutput> with
 	  <computeroutput>nsd-oracle</computeroutput>): </para>
 	<programlisting>
-nsadmin:~$ killall nsd
+joeuser:~$ killall nsd
 ; Should probably see:
 nsd: no process killed
-nsadmin:~$ /usr/local/aolserver/bin/nsd-postgres -t /usr/local/aolserver/<emphasis>birdnotes</emphasis>.tcl</programlisting>
+joeuser:~$ /usr/local/aolserver/bin/nsd-postgres -t ~/web/<emphasis>birdnotes</emphasis>/nsd.tcl</programlisting>
 
 	<para>
 	  Attempt to connect to the service from a web browser as you did
@@ -376,15 +406,16 @@ http://<emphasis>ip_name</emphasis>:<emphasis>ip_port</emphasis>/</programlistin
 	</para>
 
 	<para>
+
 	  If you don&#39;t see the login page, view your error log
-        (<computeroutput>/usr/local/aolserver/log/<emphasis>birdnotes</emphasis>-error.log</computeroutput>)
+	  (<computeroutput>~/web/<emphasis>birdnotes</emphasis>/log/error.log</computeroutput>)
 	  to make sure the service is starting without any problems. If you
-	  need to make changes, don&#39;t forget to kill any running
-	  servers.
+	  need to make changes, don&#39;t forget to kill any running servers.
+
 	</para>
 
 	<programlisting>
-nsadmin:~$ killall nsd</programlisting>
+joeuser:~$ killall nsd</programlisting>
 	
   </sect2>
 
@@ -409,37 +440,45 @@ nsadmin:~$ killall nsd</programlisting>
 		  OpenACS Kernel data model.  
 		</para></listitem>
 
-      <listitem><para> 
+      <listitem><para>
+
 		  The next page shows the results of loading the OpenACS Kernel
 		  data model - be prepared to wait a few minutes as it works. You
-		  should see a string of &quot;No errors.&quot; as the tables are
-		  created.  You'll see the line:
+		  should see a string of output messages from the database as the
+		  datamodel is created.  You'll see the line:
+
 		</para>
 
 		<programlisting>
 Loading package .info files ... this will take a few minutes</programlisting>
 
 		<para>
-		  This will really take a few minutes. Have faith! Finally,
-		  another <computeroutput>Next</computeroutput> button will appear at
-		  the bottom - click it.
+
+		  This will really take a few minutes. Have faith! Finally, another
+		  <computeroutput>Next</computeroutput> button will appear at the
+		  bottom - click it.
+
 		</para>
 	  </listitem>
 
       <listitem><para> 		  
-		  The following page shows the results of loading the package data
-		  models. You should see positive results for each of the
+
+		  The following page shows the results of loading the core package
+		  data models. You should see positive results for each of the
 		  previously selected packages, but watch out for any
 		  errors. Eventually, the page will display &quot;Generating secret
 		  tokens&quot; and then &quot;Done&quot;- click
-		  <computeroutput>Next</computeroutput>.  
+		  <computeroutput>Next</computeroutput>.
+
 		</para></listitem>
 
       <listitem><para>
+
 		  You should see a page, &quot;OpenACS Installation: Create
 		  Administrator&quot; with form fields to define the OpenACS site
 		  administrator. Fill out the fields as appropriate, and click
-		  <computeroutput>Create User</computeroutput>.  
+		  <computeroutput>Create User</computeroutput>.
+
 		</para></listitem>
 
       <listitem><para>
@@ -458,7 +497,7 @@ Loading package .info files ... this will take a few minutes</programlisting>
 		</para>
 
 		<programlisting>
-nsadmin:~$ /usr/local/aolserver/bin/nsd-postgres -t /usr/local/aolserver/<emphasis>birdnotes</emphasis>.tcl</programlisting>
+joeuser:~$ /usr/local/aolserver/bin/nsd-postgres -t ~/web/<emphasis>birdnotes</emphasis>/nsd.tcl</programlisting>
 	  </listitem>
 
       <listitem><para> 
@@ -544,7 +583,7 @@ nsadmin:~$ /usr/local/aolserver/bin/nsd-postgres -t /usr/local/aolserver/<emphas
 			<computeroutput>/usr/local/bin</computeroutput>. 
 		  </para>
 		<programlisting>
-nsadmin:~$ su - 
+joeuser:~$ su - 
 Password: ***********
 root:~# cp /tmp/restart-aolserver.txt /usr/local/bin/restart-aolserver
 root:~# chown root.web /usr/local/bin/restart-aolserver
@@ -562,156 +601,161 @@ root:~# exit</programlisting>
 			running. You should see the following lines. </para>
 
 		<programlisting>
-nsadmin:~$ killall nsd
+joeuser:~$ killall nsd
 nsd: no process killed
-nsadmin:~$ /usr/local/aolserver/bin/nsd-postgres -t /usr/local/aolserver/<emphasis>birdnotes</emphasis>.tcl
-nsadmin:~$ restart-aolserver <emphasis>birdnotes</emphasis>
+joeuser:~$ /usr/local/aolserver/bin/nsd-postgres -t ~/web/<emphasis>birdnotes</emphasis>/nsd.tcl
+joeuser:~$ restart-aolserver <emphasis>birdnotes</emphasis>
 Killing 23727 
-nsadmin:~$ killall nsd
+joeuser:~$ killall nsd
 nsd: no process killed</programlisting>
 
-		<para>
-			The number 23727 indicates the process id(s) (PIDs) of the
-			processes being killed. It is important that <emphasis
-			role="strong">no processes are killed</emphasis> by the second
-			call to <computeroutput>killall</computeroutput>. If there are
-			processes being killed, it means that the script is not
-			working.</para></listitem>
+        <para>
+            The number 23727 indicates the process id(s) (PIDs) of the
+            processes being killed. It is important that <emphasis
+            role="strong">no processes are killed</emphasis> by the second
+            call to <computeroutput>killall</computeroutput>. If there are
+            processes being killed, it means that the script is not
+            working.</para></listitem>
 
       <listitem><para> 
-		  Assuming that the <computeroutput>restart-aolserver</computeroutput>
-		  script worked, login as root and open
-		  <computeroutput>/etc/inittab</computeroutput> for
-		  editing. </para>
-		<programlisting>
-nsadmin:~$ su -
+          Assuming that the <computeroutput>restart-aolserver</computeroutput>
+          script worked, login as root and open
+          <computeroutput>/etc/inittab</computeroutput> for
+          editing. </para>
+        <programlisting>
+joeuser:~$ su -
 Password: ************
 root:~# emacs -nw /etc/inittab</programlisting>
       </listitem>
 
       <listitem><para> 
-			Copy this line into the bottom of the file as a template,
-			making sure that the first field
-			<computeroutput>nss1</computeroutput> is unique.
-		  </para>
-		  <programlisting>
-nss1:345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nsadmin -g web -t /usr/local/aolserver/<emphasis>birdnotes</emphasis>.tcl</programlisting>
-		</listitem>
+            Copy this line into the bottom of the file as a template,
+            making sure that the first field
+            <computeroutput>nss1</computeroutput> is unique.
+          </para>
+          <programlisting>
+nss1:345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nobody -g web -t /home/<emphasis>joeuser</emphasis>/web/<emphasis>birdnotes</emphasis>/nsd.tcl</programlisting>
+        </listitem>
 
-		<listitem><para>
-			<emphasis role="strong">Important:</emphasis> Make sure there is a
-			newline at the end of the file. If there is not a newline at
-			the end of the file, the system may suffer catastrophic
-			failures.  
-		  </para></listitem>
+        <listitem><para>
+            <emphasis role="strong">Important:</emphasis> Make sure there is a
+            newline at the end of the file. If there is not a newline at
+            the end of the file, the system may suffer catastrophic
+            failures.  
+          </para></listitem>
 
-		<listitem><para>
-			Still as root, enter the following command to re-initialize
-			<computeroutput>/etc/inittab</computeroutput>. </para>
+        <listitem><para>
+            Still as root, enter the following command to re-initialize
+            <computeroutput>/etc/inittab</computeroutput>. </para>
 
-		  <programlisting>
+          <programlisting>
 root:~# killall nsd    
 nsd: no process killed
 root:~# /sbin/init q</programlisting>        
-		</listitem>
+        </listitem>
 
-		<listitem><para> 
-			See if it worked by running the
-			<computeroutput>restart-aolserver</computeroutput> script
-			again. </para>
+        <listitem><para> 
+            See if it worked by running the
+            <computeroutput>restart-aolserver</computeroutput> script
+            again. </para>
 
-		  <programlisting>
+          <programlisting>
 root:~# restart-aolserver <emphasis>birdnotes</emphasis>
 Killing 23750</programlisting>
-		</listitem>
-	  </itemizedlist>
+        </listitem>
+      </itemizedlist>
 
-	  <para>
-		If processes were killed, congratulations, your server is now
-		automated for startup and shutdown. 
-	  </para>
-	</sect3>
+      <para>
+        If processes were killed, congratulations, your server is now
+        automated for startup and shutdown. 
+      </para>
+    </sect3>
 
-	<sect3 id="install-openacs-daemontools" xreflabel="Install daemontools">
-	  <title>Install daemontools</title>
+    <sect3 id="install-openacs-daemontools" xreflabel="Install daemontools">
+      <title>Install daemontools</title>
 
-	  <para>
+      <para>
 
-		Installation instructions:
+        Installation instructions:
 
-		<variablelist>
-		  <varlistentry>
-			<term>Debian</term>
-			<listitem><para><programlisting>
+        <variablelist>
+          <varlistentry>
+            <term>Debian</term>
+            <listitem><para><programlisting>
 root:~# apt-get install daemontools-installer
-root:~# build-daemontools
-root:~# # answer 'yes' when asked to create symlink from /service to /var/lib/svscan</programlisting>
-			  </para></listitem>
-		  </varlistentry>
+root:~# build-daemontools</programlisting>
+              </para></listitem>
+          </varlistentry>
 
-			<varlistentry>
-			  <term>Red Hat</term>
-			  <listitem><para>RPMs for RH 6.2 and RPM 7.1 are available
-			  <ulink
-			  url="http://untroubled.org/rpms/daemontools/">http://untroubled.org/rpms/daemontools</ulink>. I
-			  have not tested these, so I have no idea whether they work
-			  properly.
-				</para></listitem>
-			</varlistentry>
+            <varlistentry>
+              <term>Red Hat</term>
+              <listitem><para>RPMs for RH 6.2 and RPM 7.1 are available
+              <ulink
+              url="http://untroubled.org/rpms/daemontools/">http://untroubled.org/rpms/daemontools</ulink>. I
+              have not tested these, so I have no idea whether they work
+              properly.
+                </para></listitem>
+            </varlistentry>
 
-		  <varlistentry>
-			<term>Other distributions</term>
-			<listitem><para>
+          <varlistentry>
+            <term>Other distributions</term>
+            <listitem><para>
 
-				You can download the source directly from the author's site
-				at <ulink
-				url="http://cr.yp.to/daemontools/install.html">http://cr.yp.to/daemontools/install.html</ulink>.
+                You can download the source directly from the author's site
+                at <ulink
+                url="http://cr.yp.to/daemontools/install.html">http://cr.yp.to/daemontools/install.html</ulink>.
 
-			  </para></listitem>				
-		  </varlistentry>				
+              </para></listitem>                
+          </varlistentry>               
 
-		</variablelist>
-	  </para>
+        </variablelist>
+      </para>
 
-	  <para>
-		Create a file called <computeroutput>run</computeroutput> inside
-		<computeroutput>/web/<emphasis>birdnotes</emphasis></computeroutput>:
-	  </para>
+      <para>
+        Create a file called <computeroutput>run</computeroutput> inside
+        <computeroutput>~/web/<emphasis>birdnotes</emphasis></computeroutput>:
+      </para>
 
-	  <programlisting>
-nsadmin:~$ cd /web/birdnotes
-nsadmin:/web/birdnotes$ emacs run</programlisting>
+      <programlisting>
+joeuser:~$ cd web/birdnotes
+joeuser:~/web/birdnotes$ emacs run</programlisting>
 
-	  <para>
-		Copy this text into that file:
-	  </para>
+      <para>
+        Copy this text into that file:
+      </para>
 
-	  <programlisting>
+      <programlisting>
 #!/bin/sh 
 
-exec /usr/local/aolserver/bin/nsd-postgres -it /usr/local/aolserver/birdnotes.tcl -u nsadmin -g web</programlisting>
-	  
-	  <para>
-		As root, change the ownership of this file:
-	  </para>
+exec /usr/local/aolserver/bin/nsd-postgres -it /home/<emphasis>joeuser</emphasis>/web/birdnotes/nsd.tcl -u nobody -g web</programlisting>
+      
+      <para>
 
-	  <programlisting>
-nsadmin:/web/birdnotes$ su -
+        As root, change the ownership of this file. We also need to delete
+        any logs that may be present from previous testing. If they are
+        owned by users other than <computeroutput>nobody</computeroutput>,
+        then AOLserver willl not be able to append to them.
+
+      </para>
+
+      <programlisting>
+joeuser:~/web/birdnotes$ rm log/*
+joeuser:~/web/birdnotes$ su -
 Password: ***********
-root:~# chown root.root /web/birdnotes/run
-root:~# chmod 700 /web/birdnotes/run</programlisting>
+root:~# chown root.root /home/<emphasis>joeuser</emphasis>/web/birdnotes/run
+root:~# chmod 700 /home/<emphasis>joeuser</emphasis>/web/birdnotes/run</programlisting>
 
-	  <para>
-		Now, we'll link our web root to the
-		<computeroutput>/service</computeroutput> directory. This causes
-		daemontools to monitor this directory. It should find your
-		<computeroutput>run</computeroutput> script and run it as soon as
-		you hit return.
-	  </para>
+      <para>
+        Now, we'll link our web root to the
+        <computeroutput>/service</computeroutput> directory. This causes
+        daemontools to monitor this directory. It should find your
+        <computeroutput>run</computeroutput> script and run it as soon as
+        you hit return.
+      </para>
 
-	  <programlisting>
+      <programlisting>
 root:~# killall nsd
-root:~# ln -s /web/birdnotes /service
+root:~# ln -s /home/<emphasis>joeuser</emphasis>/web/birdnotes /service
 root:~# ps -A | grep nsd
 19359 pts/3    00:00:08 nsd
 19361 pts/3    00:00:00 nsd
@@ -719,179 +763,188 @@ root:~# ps -A | grep nsd
 19363 pts/3    00:00:00 nsd
 19364 pts/3    00:00:00 nsd</programlisting>
 
-	  <para>
-		At this point, you should be able to use the
-		<computeroutput>restart-aolserver</computeroutput> script described
-		in <xref linkend="install-openacs-inittab"/>. Daemontools, however,
-		allows you much more precision control.
-	  </para>
+      <para>
+        At this point, you should be able to use the
+        <computeroutput>restart-aolserver</computeroutput> script described
+        in <xref linkend="install-openacs-inittab"/>. Daemontools, however,
+        provides you with more precise control.
+      </para>
 
-	  <itemizedlist>
-		<listitem><para>
-			<computeroutput>svc -d /web/birdnotes</computeroutput> - Bring
-			the server down
-		  </para></listitem>
+      <itemizedlist>
+        <listitem><para>
 
-		<listitem><para>
-			<computeroutput>svc -u /web/birdnotes</computeroutput> - Start
-			the server up. Also, restart it whenever it stops.
-		  </para></listitem>
+            <computeroutput>svc -d /service/birdnotes</computeroutput> -
+            Bring the server down
 
-		<listitem><para>
-			<computeroutput>svc -o /web/birdnotes</computeroutput> - Start
-			the server up once. Do not restart it if it stops.
-		  </para></listitem>
+          </para></listitem>
 
-		<listitem><para>
-			<computeroutput>svc -t /web/birdnotes</computeroutput> - Stop
-			and immediately restart the server
-		  </para></listitem>
+        <listitem><para>
 
-		<listitem><para>
-		
-			<computeroutput>svc -k /web/birdnotes</computeroutput> - Sends
-			the server a KILL signal. This is like KILL -9. AOLserver exits
-			immediately. If svc -t fails to fully kill AOLserver, use this
-			option.
+            <computeroutput>svc -u /service/birdnotes</computeroutput> -
+            Start the server up. Also, restart it whenever it stops.
 
-		  </para></listitem>
-	  </itemizedlist>
+          </para></listitem>
 
-	  <para>
-		At this point, these commands will work only for the
-		<computeroutput>root</computeroutput> user. We can give a group
-		permission to run these commands as well. Download this <ulink
-		url="files/svgroup.txt">script</ulink> to
-		<computeroutput>/tmp</computeroutput>.
-	  </para>
+        <listitem><para>
 
-	  <programlisting>
+            <computeroutput>svc -o /service/birdnotes</computeroutput> -
+            Start the server up once. Do not restart it if it stops.
+
+          </para></listitem>
+
+        <listitem><para>
+
+            <computeroutput>svc -t /service/birdnotes</computeroutput> -
+            Stop and immediately restart the server
+
+          </para></listitem>
+
+        <listitem><para>
+        
+            <computeroutput>svc -k /service/birdnotes</computeroutput> -
+            Sends the server a KILL signal. This is like KILL -9. AOLserver
+            exits immediately. If svc -t fails to fully kill AOLserver, use
+            this option.
+
+          </para></listitem>
+      </itemizedlist>
+
+      <para>
+        At this point, these commands will work only for the
+        <computeroutput>root</computeroutput> user. We can give a group
+        permission to run these commands as well. Download this <ulink
+        url="files/svgroup.txt">script</ulink> to
+        <computeroutput>/tmp</computeroutput>.
+      </para>
+
+      <programlisting>
 root:~# cp /tmp/svgroup.txt /usr/local/bin/svgroup
 root:~# chmod 755 /usr/local/bin/svgroup
 root:~# svgroup web /service/birdnotes</programlisting>
 
-	  <para>
-		This command will give the <computeroutput>web</computeroutput>
-		group permission to use <computeroutput>svc</computeroutput> commands
-		on the <emphasis>birdnotes</emphasis> server.
-	  </para>
+      <para>
+        This command will give the <computeroutput>web</computeroutput>
+        group permission to use <computeroutput>svc</computeroutput> commands
+        on the <emphasis>birdnotes</emphasis> server.
+      </para>
 
-	  <para>
-		Try it out. You may want to <computeroutput>tail -f
-		/usr/local/aolserver/log/birdnotes-error.log</computeroutput> in
-		another window, so you can see what happens when you type these
-		commands.
-	  </para>
+      <para>
+        Try it out. You may want to <computeroutput>tail -f
+        ~/web/birdnotes/log/error.log</computeroutput> in
+        another window, so you can see what happens when you type these
+        commands.
+      </para>
 
-	  <programlisting>
+      <programlisting>
 root:~# exit
-nsadmin:~$ # first, bring the server down
-nsadmin:~$ svc -d /web/birdnotes
-nsadmin:~$ # now, start the server up
-nsadmin:~$ svc -u /web/birdnotes
-nsadmin:~$ # wait for server to come up, then restart it
-nsadmin:~$ svc -t /web/birdnotes</programlisting>
+joeuser:~$ # first, bring the server down
+joeuser:~$ svc -d /service/birdnotes
+joeuser:~$ # now, start the server up
+joeuser:~$ svc -u /service/birdnotes
+joeuser:~$ # wait for server to come up, then restart it
+joeuser:~$ svc -t /service/birdnotes</programlisting>
 
-	  <para>
-		Most of this information comes from Tom Jackson's <ulink
-		  url="http://zmbh.com/daemontools-aolserver/aolserver+daemontools.html">AOLServer+Daemontools
-		  Mini-HOWTO</ulink>.
-	  </para>
-	</sect3>
+      <para>
+
+        Most of this information comes from Tom Jackson's <ulink
+          url="http://zmbh.com/daemontools-aolserver/aolserver+daemontools.html">AOLServer+Daemontools
+          Mini-HOWTO</ulink>.
+
+      </para>
+    </sect3>
   </sect2>
 
   <sect2 id="install-openacs-port80">
-	<title>Running AOLserver on Port 80</title>
-	<para>
-	  If you want to run the service on port 80 (the default HTTP port),
-	  you need to set the port to 80 in your
-	  <computeroutput>service_name.tcl</computeroutput> file in
-	  <computeroutput>/usr/local/aolserver</computeroutput>. 
-	</para>
-
-	<para>
-	  Moreover, you will need to start the service as
-	  <computeroutput>root</computeroutput>. If you follow the instructions
-	  above for <link linkend="install-openacs-keepalive">automating
-	  startup</link>, this will be taken care of, but if you ever start the
-	  server from the command line, be sure to <computeroutput>su
-	  -</computeroutput> first.
-	</para>
+    <title>Running AOLserver on Port 80</title>
+    <para>
+      If you want to run the service on port 80 (the default HTTP port),
+      you need to set the port to 80 in your
+      <computeroutput>nsd.tcl</computeroutput> config file.
+    </para>
 
     <para>
-	  Port 80 is a <emphasis>privileged</emphasis> port. Only certain users
-	  can claim it. When you start <computeroutput>nsd</computeroutput> as
-	  root, it obtains the port, and then changes to run as whatever user
-	  you specify in the server configuration file. This ensures a high
-	  level of security, as the server, once started, is not running as
-	  <computeroutput>root</computeroutput>. This mean that if someone was
-	  able to exploit your web server to execute a command on your server,
-	  they would not be able to gain <computeroutput>root</computeroutput>
-	  access.</para>
+      Moreover, you will need to start the service as
+      <computeroutput>root</computeroutput>. If you follow the instructions
+      above for <link linkend="install-openacs-keepalive">automating
+      startup</link>, this will be taken care of, but if you ever start the
+      server from the command line, be sure to <computeroutput>su
+      -</computeroutput> first.
+    </para>
+
+    <para>
+      Port 80 is a <emphasis>privileged</emphasis> port. Only certain users
+      can claim it. When you start <computeroutput>nsd</computeroutput> as
+      root, it obtains the port, and then changes to run as whatever user
+      you specify in the server configuration file. This ensures a high
+      level of security, as the server, once started, is not running as
+      <computeroutput>root</computeroutput>. This mean that if someone was
+      able to exploit your web server to execute a command on your server,
+      they would not be able to gain <computeroutput>root</computeroutput>
+      access.</para>
   </sect2>
 
   <sect2 id="install-openacs-delete-tablespace">
-	<title>Deleting a tablespace</title>
+    <title>Deleting a tablespace</title>
 
-	<para>Skip down for instructions on <xref linkend="install-openacs-delete-postgres-tablespace"/>.
-	</para>
+    <para>Skip down for instructions on <xref linkend="install-openacs-delete-postgres-tablespace"/>.
+    </para>
 
-	<sect3 id="install-openacs-delete-oracle-tablespace">
-	  <title>Deleting an Oracle tablespace</title>
+    <sect3 id="install-openacs-delete-oracle-tablespace">
+      <title>Deleting an Oracle tablespace</title>
 
-	  <para>
-		Should it become necessary to rebuild a tablespace from scratch,
-		you can use the <computeroutput>drop user</computeroutput> command
-		in SVRMGRL with the <computeroutput>cascade</computeroutput>
-		option. This command will drop the user and every database object
-		the user owns.</para>
+      <para>
+        Should it become necessary to rebuild a tablespace from scratch,
+        you can use the <computeroutput>drop user</computeroutput> command
+        in SVRMGRL with the <computeroutput>cascade</computeroutput>
+        option. This command will drop the user and every database object
+        the user owns.</para>
 
-	  <programlisting>
+      <programlisting>
 SVRMGR&gt; drop user <emphasis>birdnotes</emphasis> cascade;</programlisting>
 
-	  <para>
-		If this does not work because svrmgrl &quot;cannot drop a user that
-		is currently connected&quot;, make sure to kill the AOLserver using
-		this user. If it still does not work, do:</para>
+      <para>
+        If this does not work because svrmgrl &quot;cannot drop a user that
+        is currently connected&quot;, make sure to kill the AOLserver using
+        this user. If it still does not work, do:</para>
 
-	  <programlisting>
+      <programlisting>
 SVRMGR&gt; select username, sid, serial# from v$session where lower(username)=&#39;<emphasis>birdnotes</emphasis>&#39;;</programlisting>
 
-	  <para>and then</para>
-	  <programlisting>
+      <para>and then</para>
+      <programlisting>
 SVRMGR&gt; alter system kill session &#39;<emphasis>sid</emphasis>,<emphasis>serial#</emphasis>&#39;;</programlisting>
 
-	  <para>
-		where <emphasis>sid</emphasis> and <emphasis>serial#</emphasis> are
-		replaced with the corresponding values for the open session.</para>
+      <para>
+        where <emphasis>sid</emphasis> and <emphasis>serial#</emphasis> are
+        replaced with the corresponding values for the open session.</para>
 
-	  <para><emphasis role="strong">Use with caution!</emphasis></para>
+      <para><emphasis role="strong">Use with caution!</emphasis></para>
 
-	  <para>
-		If you feel the need to delete <emphasis>everything</emphasis>
-		related to the service, you can also issue the following:</para>
-	  <programlisting>
+      <para>
+        If you feel the need to delete <emphasis>everything</emphasis>
+        related to the service, you can also issue the following:</para>
+      <programlisting>
 SVRMGR&gt; drop tablespace <emphasis>birdnotes</emphasis> including contents cascade constraints;</programlisting>   
-	</sect3>
+    </sect3>
 
-	<sect3 id="install-openacs-delete-postgres-tablespace" xreflabel="Deleting a PostgreSQL tablespace">
-	  <title>Deleting a PostgreSQL tablespace</title>
+    <sect3 id="install-openacs-delete-postgres-tablespace" xreflabel="Deleting a PostgreSQL tablespace">
+      <title>Deleting a PostgreSQL tablespace</title>
 
-	  <para>
-		Dropping a PostgreSQL tablespace is easy. You have to stop any
-		AOLserver instances that are using the database that you wish to
-		drop. If you're using daemontools, this is simple, just use the
-		'down' flag (-d). If you're using inittab, you have to comment out
-		your server in <computeroutput>/etc/inittab</computeroutput>,
-		reread the inittab with <computeroutput>/sbin/init
-		q</computeroutput>, and then <computeroutput>restart-aolserver
-		<emphasis>birdnotes</emphasis></computeroutput>.</para>
-	
-	  <para>Then, to drop the db, just do:</para>
-	  <programlisting>
-nsadmin:~$ dropdb <emphasis>birdnotes</emphasis>
+      <para>
+        Dropping a PostgreSQL tablespace is easy. You have to stop any
+        AOLserver instances that are using the database that you wish to
+        drop. If you're using daemontools, this is simple, just use the
+        'down' flag (-d). If you're using inittab, you have to comment out
+        your server in <computeroutput>/etc/inittab</computeroutput>,
+        reread the inittab with <computeroutput>/sbin/init
+        q</computeroutput>, and then <computeroutput>restart-aolserver
+        <emphasis>birdnotes</emphasis></computeroutput>.</para>
+    
+      <para>Then, to drop the db, just do:</para>
+      <programlisting>
+joeuser:~$ dropdb <emphasis>birdnotes</emphasis>
 DROP DATABASE</programlisting>
-	</sect3>
+    </sect3>
   </sect2>
 
   <para><phrase role="cvstag">($Id$)</phrase></para>
