@@ -1,5 +1,3 @@
-
-#
 # Query Dispatching for multi-RDBMS capability
 # The OpenACS Project
 #
@@ -7,34 +5,72 @@
 #
 # STATE OF THIS FILE (7/12/2001) - ben:
 # This is now patched to use ns_xml 1.4 which works!
-#
 
 # The Query Dispatcher is documented at http://openacs.org/
+# The Query Dispatcher needs ns_xml to work.
 
 # This doesn't use the ad_proc construct, or any significant aD constructs,
 # because we want this piece to be usable in a separate context. While this makes
 # the coding somewhat more complicated, it's still easy to document and write clear,
 # virgin Tcl code.
 
-# This needs ns_xml to work.
+
+
+# The following code allows ad_proc to be used
+# here (a local workalike is declared if absent).
+# added 2002-09-11 Jeff Davis (davis@xarg.net)
+if {! [string equal {} [info procs ad_library]]} { 
+    ad_library {
+        Query Dispatching for multi-RDBMS capability
+
+        @author Ben Adida (ben@openforce.net)
+        @cvs-id $Id$
+    } 
+}
+
+if { ! [string equal {} [info procs ad_proc]] } {
+    set remove_ad_proc_p 0
+} else { 
+    set remove_ad_proc_p 1
+    proc ad_proc {name arglist args} { 
+        # args can be {docs body} {body} {docs -} 
+        # make sure it is non empty and does not end in -
+        if {[llength $args] && ![string equal [lindex $args end] "-"]} { 
+            proc $name $arglist [lindex $args end]
+        }
+    }
+}
+
 
 ##################################
 # The RDBMS Data Abstraction
 ##################################
 
-proc db_rdbms_create {type version} {
+ad_proc db_rdbms_create {type version} {
+    @return rdbms descriptor
+} { 
     return [list $type $version]
 }
 
-proc db_rdbms_get_type {rdbms} {
+ad_proc db_rdbms_get_type {rdbms} {
+    @param rdbms descriptor constructed by db_rdbms_create
+
+    @return rdbms name
+} { 
     return [lindex $rdbms 0]
 }
 
-proc db_rdbms_get_version {rdbms} {
+ad_proc db_rdbms_get_version {rdbms} {
+    @param rdbms descriptor constructed by db_rdbms_create
+
+    @return version identifier
+} { 
     return [lindex $rdbms 1]
 }
 
-proc db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
+ad_proc db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
+    @return 0 if test incompatible with pattern, 1 if miscible
+} { 
     db_qd_log QDDebug "The RDBMS_TEST is [db_rdbms_get_type $rdbms_test] - [db_rdbms_get_version $rdbms_test]"
     db_qd_log QDDebug "The RDBMS_PATTERN is [db_rdbms_get_type $rdbms_pattern] - [db_rdbms_get_version $rdbms_pattern]"
 
@@ -55,7 +91,7 @@ proc db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
     }
 
     # If the query being tested was written for a version that is older than 
-	# the current RDBMS then we have compatibility. Otherwise we don't.
+    # the current RDBMS then we have compatibility. Otherwise we don't.
     if {[db_rdbms_get_version $rdbms_test] <= [db_rdbms_get_version $rdbms_pattern]} {
 	return 1
     }
@@ -72,35 +108,60 @@ proc db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
 
 
 
-# The Constructor
 
-proc db_fullquery_create {queryname querytext bind_vars_lst query_type rdbms load_location} {
+ad_proc db_fullquery_create {queryname querytext bind_vars_lst query_type rdbms load_location} {
+    FullQuery Data Abstraction Constructor
+} { 
     return [list $queryname $querytext $bind_vars_lst $query_type $rdbms $load_location]
 }
 
 # The Accessor procs
 
-proc db_fullquery_get_name {fullquery} {
+ad_proc db_fullquery_get_name {fullquery} {
+    Accessor for fullquery data abstraction
+    @param fullquery datastructure constructed by db_fullquery_create 
+    @return name
+} {
     return [lindex $fullquery 0]
 }
 
-proc db_fullquery_get_querytext {fullquery} {
+ad_proc db_fullquery_get_querytext {fullquery} {
+    Accessor for fullquery data abstraction
+    @param fullquery datastructure constructed by db_fullquery_create 
+    @return query text
+} {
     return [lindex $fullquery 1]
 }
 
-proc db_fullquery_get_bind_vars {fullquery} {
+ad_proc db_fullquery_get_bind_vars {fullquery} {
+    Accessor for fullquery data abstraction
+    @param fullquery datastructure constructed by db_fullquery_create 
+    @return bind vars
+} {
     return [lindex $fullquery 2]
 }
 
-proc db_fullquery_get_query_type {fullquery} {
+ad_proc db_fullquery_get_query_type {fullquery} {
+    Accessor for fullquery data abstraction
+    @param fullquery datastructure constructed by db_fullquery_create 
+    @return query type
+} {
     return [lindex $fullquery 3]
 }
 
-proc db_fullquery_get_rdbms {fullquery} {
+ad_proc db_fullquery_get_rdbms {fullquery} {
+    Accessor for fullquery data abstraction
+    @param fullquery datastructure constructed by db_fullquery_create 
+    @return rdbms descriptor
+} {
     return [lindex $fullquery 4]
 }
 
-proc db_fullquery_get_load_location {fullquery} {
+ad_proc db_fullquery_get_load_location {fullquery} {
+    Accessor for fullquery data abstraction
+    @param fullquery datastructure constructed by db_fullquery_create 
+    @return load location 
+} {
     return [lindex $fullquery 5]
 }
 
@@ -111,9 +172,10 @@ proc db_fullquery_get_load_location {fullquery} {
 #
 ################################################
 
-# For now, we're going to say that versions are numbers and that
-# there is always backwards compatibility.
-proc db_qd_pick_most_specific_query {rdbms query_1 query_2} {
+ad_proc db_qd_pick_most_specific_query {rdbms query_1 query_2} {
+    For now, we're going to say that versions are numbers and that
+    there is always backwards compatibility.
+} {
     set rdbms_1 [db_fullquery_get_rdbms $query_1]
     set rdbms_2 [db_fullquery_get_rdbms $query_2]
 
@@ -143,16 +205,19 @@ proc db_qd_pick_most_specific_query {rdbms query_1 query_2} {
 #
 ################################################
 
-# A procedure that is called from the outside world (APM) 
-# to load a particular file
-proc db_qd_load_query_file {file_path} {
+ad_proc db_qd_load_query_file {file_path} {
+    A procedure that is called from the outside world (APM) 
+    to load a particular file
+} { 
     if { [catch {db_qd_internal_load_cache $file_path} errmsg] } {
         db_qd_log Error "Error parsing queryfile $file_path:\n\n$errmsg"
     }
 }
 
-# Find the fully qualified name of the query
-proc db_qd_get_fullname {local_name {added_stack_num 1}} {
+
+ad_proc db_qd_get_fullname {local_name {added_stack_num 1}} {
+    Find the fully qualified name of the query
+} { 
     # We do a check to see if we already have a fullname.
     # Since the DB procs are a bit incestuous, this might get
     # called more than once. DAMMIT! (ben)
@@ -326,19 +391,21 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
     return $full_name
 }
 
-# Fetch a query with a given name
-#
-# This procedure returns the latest FullQuery data structure
-# given proper scoping rules for a complete/global query name.
-# This may or may not be cached, the caller need not know.
-proc db_qd_fetch {fullquery_name {rdbms {}}} {
+ad_proc db_qd_fetch {fullquery_name {rdbms {}}} {
+    Fetch a query with a given name
+
+    This procedure returns the latest FullQuery data structure
+    given proper scoping rules for a complete/global query name.
+    This may or may not be cached, the caller need not know.
+} { 
     # For now we consider that everything is cached
     # from startup time
     return [db_qd_internal_get_cache $fullquery_name]
 }
 
-# Do the right thing 
-proc db_qd_replace_sql {statement_name sql} {
+ad_proc db_qd_replace_sql {statement_name sql} {
+    @return sql for statement_name (defaulting to sql if not found)
+} { 
     set fullquery [db_qd_fetch $statement_name]
 
     if {![empty_string_p $fullquery]} {
@@ -350,9 +417,10 @@ proc db_qd_replace_sql {statement_name sql} {
     return $sql
 }
 
-# fetch a query snippet.  used to provide db-specific query snippets when 
-# porting highly dynamic queries.  (OpenACS - DanW)
-proc db_map {snippet_name} {
+ad_proc db_map {snippet_name} {
+    fetch a query snippet.  used to provide db-specific query snippets when 
+    porting highly dynamic queries.  (OpenACS - DanW)
+} { 
     set fullname [db_qd_get_fullname $snippet_name]
     set fullquery [db_qd_fetch $fullname]
     set sql [db_fullquery_get_querytext $fullquery]
@@ -361,12 +429,15 @@ proc db_map {snippet_name} {
     return [uplevel 1 [list subst -nobackslashes $sql]]
 }
 
-# Check compatibility of a FullQuery against an RDBMS
-#
-# This procedure returns true or false. The RDBMS argument
-# can be left out, in which case, the currently running RDBMS
-# is the one against which compatibility will be checked.
-proc db_fullquery_compatible_p {fullquery {rdbms {}}} {
+ad_proc db_fullquery_compatible_p {fullquery {rdbms {}}} {
+    Check compatibility of a FullQuery against an RDBMS
+
+    This procedure returns true or false. The RDBMS argument
+    can be left out, in which case, the currently running RDBMS
+    is the one against which compatibility will be checked.
+
+    NOTE: not complete -- should return something depending on compatibility of RDBMSs
+} { 
     set query_rdbms [db_fullquery_get_rdbms $fullquery]
 
     # NOTE: not complete
@@ -383,17 +454,18 @@ proc db_fullquery_compatible_p {fullquery {rdbms {}}} {
 #
 ######################################################
 
-# Load up a bunch of queries from a file pointer
-#
-# The file_tag parameter is for later flushing of a series
-# of queries when a particular query file has been changed.
-#
-# DRB: it is now used to track the mtime of the query file when loaded,
-# used by the APM to determine when a package should be reloaded.  This
-# code depends on the file tag parameter being set to the actual file path
-# to the query file.
 
-proc db_qd_internal_load_queries {file_pointer file_tag} {
+ad_proc db_qd_internal_load_queries {file_pointer file_tag} {
+    Load up a bunch of queries from a file pointer
+
+    The file_tag parameter is for later flushing of a series
+    of queries when a particular query file has been changed.
+
+    DRB: it is now used to track the mtime of the query file when loaded,
+    used by the APM to determine when a package should be reloaded.  This
+    code depends on the file tag parameter being set to the actual file path
+    to the query file.
+} { 
     # While there are surely efficient ways of loading large files,
     # we're going to assume smaller files for now. Plus, this doesn't happen
     # often.
@@ -457,9 +529,10 @@ proc db_qd_internal_load_queries {file_pointer file_tag} {
 }
 
 
-# Load from Cache
-proc db_qd_internal_get_cache {fullquery_name} {
 
+ad_proc db_qd_internal_get_cache {fullquery_name} {
+    Load from Cache
+} { 
     # If we have no record
     if {![nsv_exists OACS_FULLQUERIES $fullquery_name]} {
 	return ""
@@ -483,10 +556,9 @@ proc db_qd_internal_get_cache {fullquery_name} {
     return $fullquery_array
 }
 
-# Store in Cache
-#
-# The load_location is the file where this query was found
-proc db_qd_internal_store_cache {fullquery} {
+ad_proc db_qd_internal_store_cache {fullquery} {
+    Store in Cache.  The load_location is the file where this query was found.
+} { 
 
     # Check if it's compatible at all!
     if {![db_rdbms_compatible_p [db_fullquery_get_rdbms $fullquery] [db_current_rdbms]]} {
@@ -509,8 +581,10 @@ proc db_qd_internal_store_cache {fullquery} {
     nsv_set OACS_FULLQUERIES $name $fullquery
 }
 
-# Flush queries for a particular file path, and reload them
-proc db_qd_internal_load_cache {file_path} {
+
+ad_proc db_qd_internal_load_cache {file_path} {
+    Flush queries for a particular file path, and reload them
+} {
     # First we actually need to flush queries that are associated with that file tag
     # in case they are not all replaced by reloading that file. That is nasty! Oh well.
 
@@ -527,7 +601,9 @@ proc db_qd_internal_load_cache {file_path} {
 ## NAMING
 ##
 
-proc db_qd_internal_get_queryname_root {relative_path} {
+ad_proc db_qd_internal_get_queryname_root {relative_path} {
+    @return relative path with trailing .
+} { 
     # remove the prepended "/packages/" string
     regsub {^\/?packages\/} $relative_path {} relative_path
 
@@ -555,8 +631,9 @@ proc db_qd_internal_get_queryname_root {relative_path} {
 ## The architecture of this parsing scheme allows for streaming XML parsing
 ## in the future. But right now we keep things simple
 
-# Initialize the parsing state
-proc db_qd_internal_parse_init {stuff_to_parse file_path} {
+ad_proc db_qd_internal_parse_init {stuff_to_parse file_path} {
+    Initialize the parsing state
+} { 
     
     # Do initial parse
     set parsed_doc [xml_parse -persist $stuff_to_parse]
@@ -588,8 +665,9 @@ proc db_qd_internal_parse_init {stuff_to_parse file_path} {
     return [list $index $parsed_stuff $parsed_doc $default_rdbms $file_path]
 }
 
-# Parse one query using the query state
-proc db_qd_internal_parse_one_query {parsing_state} {
+ad_proc db_qd_internal_parse_one_query {parsing_state} {
+    Parse one query using the query state
+} { 
     
     # Find the index that we're looking at
     set index [lindex $parsing_state 0]
@@ -634,8 +712,9 @@ proc db_qd_internal_parse_one_query {parsing_state} {
 }
 
 
-# Parse one query from an XML node
-proc db_qd_internal_parse_one_query_from_xml_node {one_query_node {default_rdbms {}} {file_path {}}} {
+ad_proc db_qd_internal_parse_one_query_from_xml_node {one_query_node {default_rdbms {}} {file_path {}}} {
+    Parse one query from an XML node
+} { 
     db_qd_log QDDebug "parsing one query node in XML with name -[xml_node_get_name $one_query_node]-"
 
     # Check that this is a fullquery
@@ -663,8 +742,9 @@ proc db_qd_internal_parse_one_query_from_xml_node {one_query_node {default_rdbms
     return [db_fullquery_create $queryname $querytext [list] "" $rdbms $file_path]
 }
 
-# Parse and RDBMS struct from an XML fragment node
-proc db_rdbms_parse_from_xml_node {rdbms_node} {
+ad_proc db_rdbms_parse_from_xml_node {rdbms_node} {
+    Parse and RDBMS struct from an XML fragment node
+} { 
     # Check that it's RDBMS
     if {[xml_node_get_name $rdbms_node] != "rdbms"} {
 	db_qd_log Debug "PARSER = BAD RDBMS NODE!"
@@ -685,17 +765,21 @@ proc db_rdbms_parse_from_xml_node {rdbms_node} {
 ## RELATIVE AND ABSOLUTE QUERY PATHS
 ##
 
-# The token that indicates the root of all queries
-proc db_qd_root_path {} {
+ad_proc db_qd_root_path {} {
+    The token that indicates the root of all queries
+} { 
     return "dbqd."
 }
 
-proc db_qd_null_path {} {
+ad_proc db_qd_null_path {} {
+    The null path 
+} { 
     return "[db_qd_root_path].NULL"
 }
 
-# Check if the path is relative
-proc db_qd_relative_path_p {path} {
+ad_proc db_qd_relative_path_p {path} {
+    Check if the path is relative
+} { 
     set root_path [db_qd_root_path]
     set root_path_length [string length $root_path]
 
@@ -707,8 +791,10 @@ proc db_qd_relative_path_p {path} {
     }
 }
 
-# Make a path absolute
-proc db_qd_make_absolute_path {relative_root suffix} {
+
+ad_proc db_qd_make_absolute_path {relative_root suffix} {
+    Make a path absolute
+} { 
     return "[db_qd_root_path]${relative_root}$suffix"
 }
 
@@ -716,7 +802,7 @@ proc db_qd_make_absolute_path {relative_root suffix} {
 ##
 ## Extra Utilities to Massage the system and Rub it in all the right ways
 ##
-proc db_qd_internal_prepare_queryfile_content {file_content} {
+ad_proc db_qd_internal_prepare_queryfile_content {file_content} {
     
     set new_file_content ""
 
@@ -768,11 +854,16 @@ proc db_qd_internal_prepare_queryfile_content {file_content} {
 ## Logging
 ##
 
-proc db_qd_log {level msg} {
-    # Centralized DB QD logging
-    # If you want to debug the DQ, change QDDebug below to Debug
+ad_proc db_qd_log {level msg} {
+    Centralized DB QD logging
+    If you want to debug the DQ, change QDDebug below to Debug
+} { 
     if {![string equal "QDDebug" $level]} {
         ns_log $level "$msg"
     }
 }
 
+# clean up after ourselves here.
+if { $remove_ad_proc_p } { 
+    rename ad_proc {}
+}
