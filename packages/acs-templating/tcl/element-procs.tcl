@@ -606,7 +606,7 @@ ad_proc -private template::element::render { form_id element_id tag_attributes }
   if { ![string equal $element(mode) "edit"] && [info exists element(display_value)] && ![string equal $element(widget) "hidden"] } {
     return "$element(before_html) $element(display_value) $element(after_html)"  
   } else {
-    return "$element(before_html) [template::widget::$element(widget) element $tag_attributes] $element(after_html)"
+    return "[string trim "$element(before_html) [template::widget::$element(widget) element $tag_attributes] $element(after_html)"]"
   }
 }
 
