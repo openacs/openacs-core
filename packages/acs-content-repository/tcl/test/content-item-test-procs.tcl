@@ -10,8 +10,6 @@ ad_library {
     
 }
 
-# FIXME DaveB Write some tests!
-
 aa_register_case content_item {
     content item test
 } {
@@ -19,7 +17,10 @@ aa_register_case content_item {
     aa_run_with_teardown \
         -rollback \
         -test_code {
+
+            #########################################################
             # create a cr_folder
+            #########################################################
             set first_folder_id [db_nextval "acs_object_id_seq"]
             set returned_first_folder_id [content::folder::new \
                                               -folder_id $first_folder_id \
@@ -34,38 +35,182 @@ aa_register_case content_item {
             set is_empty [content::folder::is_empty -folder_id $first_folder_id]
             aa_true "Folder is empty" [string is true $is_empty]
 
-            # create another
+            #########################################################
+            # create another cr_folder
+            #########################################################
+
             set second_folder_id [db_nextval  "acs_object_id_seq"]
             set returned_second_folder_id [content::folder::new \
                                                -folder_id $second_folder_id \
                                                -name "test_folder_${second_folder_id}"]
             aa_true "Folder 2 created" [expr $second_folder_id == $returned_second_folder_id]
+
+
+            #########################################################
             # create a cr_item
+            #########################################################
+
+            set test_name "cr_test_item[ad_generate_random_string]"
             set first_item_id [db_nextval  "acs_object_id_seq"]
             set returned_first_item_id [content::item::new \
-                                            -name "test_item_one" \
+                                            -name "$test_name" \
                                             -item_id $first_item_id \
-                                            -parent_id $first_folder_id]
+                                            -parent_id $first_folder_id \
+                                            -attributes [list [list title "$test_name"]]
+                                       ]
 
             aa_true "First item created" [expr $first_item_id == $returned_first_item_id]
+
+            aa_true "first item exists" [expr [content::item::get -item_id $first_item_id] == 1]
+
+            aa_true "First item's revision exists" \
+                [expr \
+                     {![string equal "" \
+                            [db_string get_revision "select
+                                                     latest_revision
+ from cr_items, cr_revisions where latest_revision=revision_id and cr_items.item_id=:first_item_id" -default ""]]}]
 
             # check the folder is not empty now.
             set is_empty [content::folder::is_empty -folder_id $first_folder_id]
             aa_true "Folder 1 is not empty" [string is false $is_empty]
 
+            #########################################################
+            # create a cr_item with evil string
+            #########################################################
+            
+            set evil_string {-Bad [BAD] \077 \{ $Bad }
+            set evil_test_name  "${evil_string}cr_test_item[ad_generate_random_string]"
+            aa_log "evil_test_name is $evil_test_name"
+            set evil_item_id [db_nextval  "acs_object_id_seq"]
+            set returned_evil_item_id [content::item::new \
+                                            -name "${evil_test_name}" \
+                                            -item_id $evil_item_id \
+                                            -parent_id $first_folder_id \
+                                           -attributes [list [list title "${evil_test_name}"]]
+                                       ]
+
+            aa_true "Evil_name item created" [expr $evil_item_id == $returned_evil_item_id]
+
+            aa_true "Evil_name item exists" [expr \
+                                                 [content::item::get \
+                                                      -item_id $evil_item_id \
+                                                      -revision latest \
+                                                      -array_name evil_name] == 1]
+            aa_true "Evil_name item's revision exists" \
+                [expr \
+                     {![string equal "" $evil_name(latest_revision)]}]
+
+            #########################################################
+            # delete the evil_name item
+            #########################################################
+            
+            # in oracle content_item.del is not a fucntion and cannot
+            # return true or false so we have to rely on a query to
+            # see if the item exists or not
+            
+            content::item::delete -item_id $evil_item_id
+            array unset evil_name
+            aa_true "evil_name item no longer exists" [expr \
+                [content::item::get \
+                     -item_id $evil_item_id \
+                     -revision "latest" \
+                     -array_name evil_name] == 0]
+            aa_true "evil_name item revision does not exist" [expr \
+                                                              ![info exists evil(latest_revision)]]
+
+
+            #########################################################
+            # create a new content type
+            #########################################################
+
+	    catch {content::type::delete -content_type "test_type"} errmsg
+	    set new_type_id [content::type::new \
+               -content_type "test_type" \
+                -pretty_name "test_type" \
+                -pretty_plural "test_type" \
+                -table_name "test_type" \
+                -id_column "test_id"]
+
+
+            #########################################################
+            # create an attribute
+            #########################################################
+            content::type::attribute::new \
+                -content_type "test_type" \
+                -attribute_name "attribute_name" \
+                -datatype "text" \
+                -pretty_name "Attribute Name" \
+                -pretty_plural "Attribute Names" \
+                -column_spec "text"
+            
+            # todo test that new item is NOT allowed to be created
+            # unless registered by catching error when creating new
+            # item
+            
+            #########################################################
+            # register new type to folder
+            #########################################################
+
+            content::folder::register_content_type \
+                -folder_id $first_folder_id \
+                -content_type "test_type"
+            # create an item of that type
+            set new_type_item_id [db_nextval  "acs_object_id_seq"]
+            set returned_new_type_item_id [content::item::new \
+                                            -name "test_item_${new_type_item_id}" \
+                                            -item_id $new_type_item_id \
+                                            -parent_id $first_folder_id \
+                                            -content_type  "test_type" \
+                                               -attributes [list [list title "Title"] [list attribute_name "attribute_value"]]]
+
+            #########################################################
+            # check that the item exists
+            #########################################################
+
+            aa_true "New Type item created" [expr $new_type_item_id == $returned_new_type_item_id]
+            aa_true "New Type item exists" [expr [content::item::get \
+                                                      -item_id $new_type_item_id \
+                                                      -revision "latest" \
+                                                      -array_name new_type_item] == 1]
+
+            #########################################################
+            # check that extended attribute exists
+            #########################################################
+            aa_true "Extended attribute set" [expr [string equal "attribute_value" \
+                               $new_type_item(attribute_name)]]
+            #########################################################
             # copy it
-
+            #########################################################
+            #TODO
+            
+            #########################################################
             # move the copy
+            #########################################################
+            #TODO
 
-            # delete the copy
+            #########################################################
+            # delete the item
+            #########################################################
+            #TODO
 
+            #########################################################
             # rename it
+            #########################################################
+            #TODO
 
+            #########################################################
             # publish it
+            #########################################################
+            #TODO
 
+            #########################################################
             # unpublish it
+            #########################################################
+            #TODO
 
+            #########################################################
             # delete first folder and everything in it to clean up
+            #########################################################
             content::folder::delete \
                 -folder_id $second_folder_id
 
