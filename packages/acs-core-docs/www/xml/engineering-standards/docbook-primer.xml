@@ -364,7 +364,7 @@
         description, current version, implementation status,
         author/maintainers, link(s) to more info.  Current version
         available at the <ulink
-        url="http://openacs.org/projects/openacs/packages/">Package status</ulink> page.
+        url="http://openacs.org/repository/5-2/">repository</ulink>.
        </para></listitem>
       <listitem><para>
         Include dependencies/requirements, known conflicts, and
@@ -383,7 +383,7 @@
         supported by the current e-commerce module? There are some
         packages where the name is clear enough, but what are the
         limitations of the standard package?
-       </para></listitem>
+      </para></listitem>
       <listitem><para>
         End-user docs should not be duplicative. The package
         description information and almost everything about a
@@ -397,7 +397,95 @@
       </para></listitem>
     </itemizedlist>
   </sect2>
-  
+
+  <sect2 id="docs-admin-reqs" xreflabel="Administrators Documentation Requirements">
+    <title>OpenACS Documentation Requirements for Site and Administrators</title>
+    <para>
+      By the OpenACS Community. This section is a collection of
+      documentation requirements that have been expressed in the
+      OpenACS forums to 4th July 2003.
+    </para>    
+    <para>
+      OpenACS administrators' documentation should meet the following goals. No
+      significance has been given to the order presented, topic breadth or depth here.
+    </para>
+    <itemizedlist>
+      <listitem><para>
+        For each requirement below, include links to developer tutorials
+        and other documentation for more detail.
+      </para></listitem>
+      <listitem><para>
+        Describe a structural overview of a working system and how
+        the components work together. "The Layered Cake view" a
+        general network view of system; a table showing system
+        levels versus roles to help with understanding how the
+        subsystems are interconnected. 
+      </para></listitem>
+      <listitem><para>
+        Provide a comprehensive description of typical
+        administrative processes for operating an OpenACS system
+        responsibly, including reading logs and command line views that
+        describe status of various active processes.
+      </para></listitem>
+      <listitem><para>
+        Create a list of administrative tools that are useful to
+        administrating OpenACS, including developer support,
+        schema-browser and api browser. Link to AOLserver's config
+        file documentation.
+      </para></listitem>
+      <listitem><para>
+        Resources on high level subjects such as web services,
+        security guidelines
+      </para></listitem>
+      <listitem><para>
+        Describe typical skill sets (and perhaps mapped to
+        standardized job titles) for administrating an OpenACS
+        system (human-resources style).  For a subsite
+        admin/moderator attributes might include trustworthy,
+        sociable, familiarity with the applications and
+        subsystems, work/group communication skills et cetera
+      </para></listitem>
+      <listitem><para>
+        Describe how to set up typical site moderation and
+        administration including parameters, permissions, "Hello
+        World" page
+      </para></listitem>
+      <listitem><para>
+        Show directory structure of a typical package, explanation
+        of the various file types in a package (tcl,adp,xql) and how
+        those relate to the previously described subsystems, when
+        they get refreshed etc.
+      </para></listitem>
+      <listitem><para>
+        Ways to build a "Hello World" page
+      </para></listitem>
+      <listitem><para>
+        Show examples of how the OpenACS templating system is used,
+        including portal sections of pages. For example, create a
+        customised auto-refreshing startpage using lars-blogger, a
+        photo gallery, and latest posts from a forum. This should
+        rely heavily on documentation existing elsewhere to keep
+        current. This would essentially be a heavily annotated list
+        of links.
+      </para></listitem>
+      <listitem><para>
+        Show ways of modifying the look and feel across pages of an
+        OpenACS website. Refer to the skins package tutorial.
+      </para></listitem>
+      <listitem><para>
+        Describe a methodology for diagnosing problems, finding
+        error statements and interpreting them --for OpenACS and the
+        underlying processes.
+      </para></listitem>
+      <listitem><para>
+        FAQs: Administration tasks commonly discussed on boards:
+        admin page flow, how to change the looks of a subsite with a
+        new master.adp, options on "user pages" , a quick
+        introduction to the functions and processes. info about the
+        user variables, file locations
+      </para></listitem>
+    </itemizedlist>
+  </sect2>
 
   <sect2 id="dbprimer-why" xreflabel="Why DocBook?">
     <title>OpenACS Documentation Strategy: Why DocBook?</title>
