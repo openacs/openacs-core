@@ -166,6 +166,9 @@ ad_proc -public install::xml::action::mount { node } {
 
     set out [list]
 
+    # Remove double slashes
+    regsub -all {//} $mount_point "/" mount_point
+
     if {[string is space $mount_point] ||
         [string equal $mount_point "/"]} {
         array set site_node [site_node::get -url "/"]
@@ -246,6 +249,9 @@ ad_proc -public install::xml::action::mount-existing { node } {
     set mount_point [apm_attribute_value -default "" $node mount-point]
 
     set out [list]
+
+    # Remove double slashes
+    regsub -all {//} $mount_point "/" mount_point
 
     if {[string is space $mount_point] ||
         [string equal $mount_point "/"]} {
@@ -479,6 +485,9 @@ ad_proc -public install::xml::object_id::package { node } {
     set id [apm_attribute_value -default "" $node package-id]
     set package_key [apm_attribute_value -default "" $node package-key]
     set url [apm_attribute_value -default "" $node url]
+
+    # Remove double slashes
+    regsub -all {//} $url "/" url
 
     if { ![string equal $package_key ""] && ![string equal $url ""] } {
         error "set-parameter: Can't specify both package and url for $url and $package_key"
