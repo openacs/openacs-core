@@ -9,6 +9,7 @@
 \i user-profiles-drop.sql
 \i application-groups-drop.sql
 \i portraits-drop.sql
+\i email-image-drop.sql
 \i attributes-drop.sql
 \i host-node-map-drop.sql
 \i site-node-selection-dro.sql

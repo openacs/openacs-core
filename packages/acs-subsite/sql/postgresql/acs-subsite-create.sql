@@ -9,6 +9,7 @@
 
 \i attribute.sql
 \i portraits.sql
+\i email-image.sql
 \i application-groups-create.sql
 \i subsite-callbacks-create.sql
 \i host-node-map-create.sql
