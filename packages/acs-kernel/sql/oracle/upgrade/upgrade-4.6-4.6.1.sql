@@ -1,5 +1,6 @@
-
 -- This giant package body is here since we are adding 
+-- two lines to acs_object.delete() to delete direct permissions 
+-- granted on the object which we are deleting
 --
 create or replace package body acs_object
 as
