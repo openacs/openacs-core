@@ -47,6 +47,16 @@ if { ![template::util::is_nil focus] } {
 
 multirow append attribute onload [join $onload " "]
 
+# Additional Body Attributes
+
+if {[exists_and_not_null body_attributes]} {
+    foreach body_attribute $body_attributes {
+	multirow append attribute [lindex $body_attribute 0] [lindex $body_attribute 1]
+    }
+} else {
+    set body_attributes ""
+}
+
 # Header links (stylesheets, javascript)
 multirow create header_links rel type href media
 multirow append header_links "stylesheet" "text/css" "/resources/acs-templating/lists.css" "all"
