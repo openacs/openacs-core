@@ -47,7 +47,11 @@ for this user.
 </tr>
 <tr>
   <th align=right>Username:</th>
-  <td><input name=username size=20></td>
+  <td><input name=username size=20><br>
+    Once your server is installed, you can choose to have users login with username instead of email.
+    This is particularly useful if you're authenticating against other services, such as LDAP or the 
+    local operating system, which may not use email as the basis of authentication.
+  </td>
 </tr>
 <tr>
   <th align=right>First Name:</th>
