@@ -31,13 +31,13 @@
       The documentation for <productname>OpenACS</productname> is
       written using DocBook XML. The reasons why we are using
       DocBook	are explained in more details in the
-      <xref linkend="dbprimer-why"/> section. I will add the reasons why
+      next section. A few more reasons why
       we are using Docbook XML instead of Docbook SGML:
     </para>
     <itemizedlist>
       <listitem><para>
-	<emphasis>Consistency</emphasis>. We already have a bunch of
-	.xml files that ArsDigita wrote. Trying to re-write them to
+	<emphasis>Consistency</emphasis>. We started with a collection 
+	of DcoBook XML files that ArsDigita wrote. Trying to re-write them to
 	conform to the SGML DTD would be unnecessary work (I tried).
 	</para></listitem>
       <listitem><para>
@@ -47,6 +47,11 @@
 	<ulink
                url="http://en.tldp.org/LDP/LDP-Author-Guide/docbookxml.html">LDP 
 	  Author Guide</ulink>.
+	</para></listitem>
+      <listitem><para>
+	<emphasis>The tool chain has matured</emphasis>. xsltproc and other XML 
+	based tools have improved to the point where they are about as good as 
+	the SGML tools and generation of both html and pdf output is straighforward.
 	</para></listitem>
     </itemizedlist>
   </sect2>
@@ -66,12 +71,12 @@
 
     <para>
       Theoretically any strict DTD would have been sufficient - we could even write our own. But DocBook has been around
-      for a while (since <ulink url="http://docbook.org/tdg/en/html/ch01.html#d0e2132">early 90's</ulink>), 
-      it's well-tested, it's complete, it's extremely well-suited for technical documents
+      for a while (since the <ulink url="http://docbook.org/tdg/en/html/ch01.html#d0e2132">early 90's</ulink>), 
+      it's well-tested, it's complete, it's designed for technical documentation
       and best of all, it's open-source. A growing community surrounds DocBook (has 
-      <ulink url="http://www.oasis-open.org/committees/docbook/mailinglist/index.html">mailing lists</ulink>) 
+      <ulink url="http://docbook.org/mailinglist/index.html">mailing lists</ulink>) 
       and a number of free and commercial
-      <ulink url="http://www.oasis-open.org/committees/docbook/tools/index.html">tools</ulink> are available
+      <ulink url="http://www.docbook.org/wiki/moin.cgi/DocBookTools">tools</ulink> are available
       for editing and publishing DocBook documents.
     </para>
 
@@ -177,7 +182,7 @@
       <emphasis>System/Application Requirements Template</emphasis>.
     </para>
   </sect2>
-	  
+
   <sect2 id="dbprimer-structure">
     <title>Document Structure</title>
 
@@ -223,7 +228,7 @@
     <para>
       <indexterm><primary>Sections</primary><secondary>Headlines</secondary></indexterm>
       Given that your job starts at the <computeroutput>sect1</computeroutput>-level, all your documents should open with a
-      <ulink url="http://docbook.org/tdg/html/sect1.html"><computeroutput>&lt;sect1&gt;</computeroutput></ulink>-tag and end 
+      <ulink url="http://docbook.org/tdg/en/html/sect1.html"><computeroutput>&lt;sect1&gt;</computeroutput></ulink>-tag and end 
       with the corresponding <computeroutput>&lt;/sect1&gt;</computeroutput>.
     </para>
 
@@ -250,18 +255,18 @@
     </para>
 
     <programlisting>
-      &lt;sect1 id="docbook-primer" xreflabel="aD DocBook Primer"&gt;
-      &lt;title&gt;aD DocBook Primer&lt;/title&gt;
+&lt;sect1 id="docbook-primer" xreflabel="aD DocBook Primer"&gt;
+  &lt;title&gt;aD DocBook Primer&lt;/title&gt;
 
-      ...
+...
 
-      &lt;/sect1&gt;
-    </programlisting>
+&lt;/sect1&gt;
+</programlisting>
 
     <para>
       <indexterm><primary>sect2</primary></indexterm>
       Inside this container your document will be split up into 
-      <ulink url="http://docbook.org/tdg/html/sect2.html"><computeroutput>&lt;sect2&gt;</computeroutput></ulink>'s,
+      <ulink url="http://docbook.org/tdg/en/html/sect2.html"><computeroutput>&lt;sect2&gt;</computeroutput></ulink>'s,
       each with the same requirements - <computeroutput>id</computeroutput> and <computeroutput>xreflabel</computeroutput>
       attributes, and a <computeroutput>&lt;title&gt;</computeroutput>-tag inside. Actually, the <computeroutput>xreflabel</computeroutput> is never required in sections, but it makes linking to that section a lot easier.
     </para>
@@ -282,13 +287,13 @@
       <indexterm><primary>computeroutput</primary><secondary>code</secondary></indexterm>
       For displaying a snippet of code, a filename or anything else you just want to appear as a part of
       a sentence, we will use the tag 
-      <ulink url="http://docbook.org/tdg/html/computeroutput.html"><computeroutput>&lt;computeroutput&gt;</computeroutput></ulink>.
+      <ulink url="http://docbook.org/tdg/en/html/computeroutput.html"><computeroutput>&lt;computeroutput&gt;</computeroutput></ulink>.
       This takes the place of the HTML-tag <computeroutput>&lt;code&gt;</computeroutput>
     </para>
 
     <para>
       For bigger chunks of code such as SQL-blocks, the tag 
-      <ulink url="http://docbook.org/tdg/html/programlisting.html"><computeroutput>&lt;programlisting&gt;</computeroutput></ulink> is used. Just wrap your code block in it; mono-spacing, indents and all that stuff is taken care of
+      <ulink url="http://docbook.org/tdg/en/html/programlisting.html"><computeroutput>&lt;programlisting&gt;</computeroutput></ulink> is used. Just wrap your code block in it; mono-spacing, indents and all that stuff is taken care of
       automatically. 
     </para>
 
@@ -315,20 +320,20 @@
 
 	  <para><indexterm><primary>xref</primary><secondary>linkend</secondary></indexterm>Check out how I link to a subsection of the Developer's Guide:</para>
 
-	  <programlisting>
 
-	    Put this in your XML:
+	  <para>Put this in your XML:</para>
 
-	    - Find information about creating a package in
-	    &lt;xref linkend="packages-making-a-package"&gt;&lt;/xref&gt;.
+<programlisting>
+- Find information about creating a package in
+&lt;xref linkend="packages-making-a-package"&gt;&lt;/xref&gt;.
+</programlisting>
 
+	  <para>And the output is:</para>
 
-	    And the output is:
-
-	    - Find information about creating a package in 
-	    <xref linkend="packages-making-a-package"></xref>
-
-	  </programlisting>
+<programlisting>
+- Find information about creating a package in 
+<xref linkend="packages-making-a-package"></xref>.
+</programlisting>
 
 	  <para>
 	    Note that even though this is an empty tag, you have to either:
@@ -351,20 +356,20 @@
 	  <para>If the section you link to hasn't a specified <computeroutput>xreflabel</computeroutput>-attribute,
 	    the link is going to look like this:</para>
 
-	  <programlisting>
 
-	    Put this in your XML:
+	   <para>Put this in your XML:</para>
+<programlisting>
+-Find information about what a package looks like in 
+&lt;xref linkend="packages-looks"&gt;&lt;/xref&gt;.
+</programlisting>
 
-	    - Find information about what a package looks like in 
-	    &lt;xref linkend="packages-looks"&gt;&lt;/xref&gt;.
+	<para>And the output is:</para>
 
+<programlisting>
+- Find information about what a package looks like in 
+<xref linkend="packages-looks"></xref>.
+</programlisting>
 
-	    And the output is:
-
-	    - Find information about what a package looks like in 
-	    <xref linkend="packages-looks"></xref>
-
-	  </programlisting>
 
 	  <para>
 	    Note that since I haven't provided an <computeroutput>xreflabel</computeroutput> for the subsection, 
@@ -383,7 +388,7 @@
 	    If you're hyper-linking out of the documentation, it works almost the same way as HTML - the tag is just
 	    a little different
 
-	    (<ulink url="http://docbook.org/tdg/html/ulink.html"><computeroutput>&lt;ulink&gt;</computeroutput></ulink>):
+	    (<ulink url="http://docbook.org/tdg/en/html/ulink.html"><computeroutput>&lt;ulink&gt;</computeroutput></ulink>):
 
 	  </para>
 
@@ -422,29 +427,29 @@
     <para>
       <indexterm><primary>Graphics</primary><secondary>Images</secondary></indexterm>
       To insert a graphic we use the elements 
-      <ulink url="http://docbook.org/tdg/html/mediaobject.html"><computeroutput>&lt;mediaobject&gt;</computeroutput></ulink>,
-      <ulink url="http://docbook.org/tdg/html/imageobject.html"><computeroutput>&lt;imageobject&gt;</computeroutput></ulink>,
+      <ulink url="http://docbook.org/tdg/en/html/mediaobject.html"><computeroutput>&lt;mediaobject&gt;</computeroutput></ulink>,
+      <ulink url="http://docbook.org/tdg/en/html/imageobject.html"><computeroutput>&lt;imageobject&gt;</computeroutput></ulink>,
       and
-      <ulink url="http://docbook.org/tdg/html/imagedata.html"><computeroutput>&lt;imagedata&gt;</computeroutput></ulink>. 
+      <ulink url="http://docbook.org/tdg/en/html/imagedata.html"><computeroutput>&lt;imagedata&gt;</computeroutput></ulink>. 
       The news is that you have to provide two versions of all your graphics - one for the Web (probably a GIF or a JPEG) 
       and one for print (EPS). Finally you should provide a brief description wrapped in
-      <ulink url="http://docbook.org/tdg/html/textobject.html"><computeroutput>&lt;textobject&gt;</computeroutput></ulink> - 
+      <ulink url="http://docbook.org/tdg/en/html/textobject.html"><computeroutput>&lt;textobject&gt;</computeroutput></ulink> - 
       in HTML this will be the ALT text.
     </para>
 
     <programlisting>
-      &lt;mediaobject&gt;
-      &lt;imageobject&gt;
-      &lt;imagedata fileref="../images/rp-flow.gif" format="GIF" align="center"/&gt;
-      &lt;/imageobject&gt;
-      &lt;imageobject&gt;
-      &lt;imagedata fileref="../images/rp-flow.eps" format="EPS" align="center"/&gt;
-      &lt;/imageobject&gt;
-      &lt;textobject&gt;
-      &lt;phrase&gt;This is an image of the flow in the Request Processor&lt;/phrase&gt;
-      &lt;/textobject&gt;
-      &lt;/mediaobject&gt;
-    </programlisting>
+&lt;mediaobject&gt;
+  &lt;imageobject&gt;
+    &lt;imagedata fileref="../images/rp-flow.gif" format="GIF" align="center"/&gt;
+  &lt;/imageobject&gt;
+  &lt;imageobject&gt;
+    &lt;imagedata fileref="../images/rp-flow.eps" format="EPS" align="center"/&gt;
+  &lt;/imageobject&gt;
+  &lt;textobject&gt;
+    &lt;phrase&gt;This is an image of the flow in the Request Processor&lt;/phrase&gt;
+  &lt;/textobject&gt;
+&lt;/mediaobject&gt;
+</programlisting>
 
     <para>
       Put your graphics in a separate directory ("images") and link to them 
@@ -468,19 +473,19 @@
 	<listitem><para>
 	    Making an unordered list is pretty much like doing the same thing in HTML - if you close your <computeroutput>&lt;li&gt;</computeroutput>, that is. The only differences are that each list item has to be wrapped in something more, such as
 	    <computeroutput>&lt;para&gt;</computeroutput>, and that the tags are called
-	    <ulink url="http://docbook.org/tdg/html/itemizedlist.html"><computeroutput>&lt;itemizedlist&gt;</computeroutput></ulink>
+	    <ulink url="http://docbook.org/tdg/en/html/itemizedlist.html"><computeroutput>&lt;itemizedlist&gt;</computeroutput></ulink>
 	    and
-	    <ulink url="http://docbook.org/tdg/html/listitem.html"><computeroutput>&lt;listitem&gt;</computeroutput></ulink>:
+	    <ulink url="http://docbook.org/tdg/en/html/listitem.html"><computeroutput>&lt;listitem&gt;</computeroutput></ulink>:
 	  </para>
 
-	  <programlisting>
-	    &lt;itemizedlist&gt;
-	    
-	    &lt;listitem&gt;&lt;para&gt;Stuff goes here&lt;/para&gt;&lt;/listitem&gt;
-	    &lt;listitem&gt;&lt;para&gt;More stuff goes here&lt;/para&gt;&lt;/listitem&gt;
+<programlisting>
+&lt;itemizedlist&gt;
 
-	    &lt;/itemizedlist&gt;
-	  </programlisting>
+  &lt;listitem&gt;&lt;para&gt;Stuff goes here&lt;/para&gt;&lt;/listitem&gt;
+  &lt;listitem&gt;&lt;para&gt;More stuff goes here&lt;/para&gt;&lt;/listitem&gt;
+
+&lt;/itemizedlist&gt;
+</programlisting>
 
 	</listitem>
       </varlistentry>
@@ -490,16 +495,16 @@
 	<term><emphasis role="strong">2. How to make an &lt;ol&gt;</emphasis></term>
 	<listitem><para>
 	    The ordered list is like the preceding, except that you use 
-	    <ulink url="http://docbook.org/tdg/html/orderedlist.html"><computeroutput>&lt;orderedlist&gt;</computeroutput></ulink> instead:</para>
+	    <ulink url="http://docbook.org/tdg/en/html/orderedlist.html"><computeroutput>&lt;orderedlist&gt;</computeroutput></ulink> instead:</para>
 
 	  <programlisting>
-	    &lt;orderedlist&gt;
-	    
-	    &lt;listitem&gt;&lt;para&gt;Stuff goes here&lt;/para&gt;&lt;/listitem&gt;
-	    &lt;listitem&gt;&lt;para&gt;More stuff goes here&lt;/para&gt;&lt;/listitem&gt;
+&lt;orderedlist&gt;
 
-	    &lt;/orderedlist&gt;
-	  </programlisting>
+  &lt;listitem&gt;&lt;para&gt;Stuff goes here&lt;/para&gt;&lt;/listitem&gt;
+  &lt;listitem&gt;&lt;para&gt;More stuff goes here&lt;/para&gt;&lt;/listitem&gt;
+
+&lt;/orderedlist&gt;
+</programlisting>
 
 	</listitem>
       </varlistentry>
@@ -510,26 +515,26 @@
 	<listitem><para>
 	    This kind of list is called a <computeroutput>variablelist</computeroutput> and these are the tags you'll need to 
 	    make it happen:
-	    <ulink url="http://docbook.org/tdg/html/variablelist.html"><computeroutput>&lt;variablelist&gt;</computeroutput></ulink>,
-	    <ulink url="http://docbook.org/tdg/html/varlistentry.html"><computeroutput>&lt;varlistentry&gt;</computeroutput></ulink>, 
-	    <ulink url="http://docbook.org/tdg/html/term.html"><computeroutput>&lt;term&gt;</computeroutput></ulink> and
-	    <ulink url="http://docbook.org/tdg/html/listitem.html"><computeroutput>&lt;listitem&gt;</computeroutput></ulink>:</para>
+	    <ulink url="http://docbook.org/tdg/en/html/variablelist.html"><computeroutput>&lt;variablelist&gt;</computeroutput></ulink>,
+	    <ulink url="http://docbook.org/tdg/en/html/varlistentry.html"><computeroutput>&lt;varlistentry&gt;</computeroutput></ulink>, 
+	    <ulink url="http://docbook.org/tdg/en/html/term.html"><computeroutput>&lt;term&gt;</computeroutput></ulink> and
+	    <ulink url="http://docbook.org/tdg/en/html/listitem.html"><computeroutput>&lt;listitem&gt;</computeroutput></ulink>:</para>
 
 	  <programlisting>
-	    &lt;variablelist&gt;
-	    
-	    &lt;varlistentry&gt;
-	    &lt;term&gt;Heading (&lt;dt&gt;) goes here&lt;/term&gt;
-	    &lt;listitem&gt;&lt;para&gt;And stuff (&lt;dd&gt;)goes here&lt;/para&gt;&lt;/listitem&gt;
-	    &lt;/varlistentry&gt;
+&lt;variablelist&gt;
 
-	    &lt;varlistentry&gt;
-	    &lt;term&gt;Another heading goes here&lt;/term&gt;
-	    &lt;listitem&gt;&lt;para&gt;And more stuff goes here&lt;/para&gt;&lt;/listitem&gt;
-	    &lt;/varlistentry&gt;
+  &lt;varlistentry&gt;
+    &lt;term&gt;Heading (&lt;dt&gt;) goes here&lt;/term&gt;
+    &lt;listitem&gt;&lt;para&gt;And stuff (&lt;dd&gt;)goes here&lt;/para&gt;&lt;/listitem&gt;
+  &lt;/varlistentry&gt;
 
-	    &lt;/variablelist&gt;
-	  </programlisting>
+  &lt;varlistentry&gt;
+    &lt;term&gt;Another heading goes here&lt;/term&gt;
+    &lt;listitem&gt;&lt;para&gt;And more stuff goes here&lt;/para&gt;&lt;/listitem&gt;
+  &lt;/varlistentry&gt;
+
+&lt;/variablelist&gt;
+</programlisting>
 
 	</listitem>
       </varlistentry>
@@ -545,43 +550,42 @@
     <para>
       <indexterm><primary>informaltable</primary><secondary>table</secondary></indexterm>
       DocBook supports several types of tables, but in most cases, the
-      <ulink url="http://docbook.org/tdg/html/informaltable.html"><computeroutput>&lt;informaltable&gt;</computeroutput></ulink>
+      <ulink url="http://docbook.org/tdg/en/html/informaltable.html"><computeroutput>&lt;informaltable&gt;</computeroutput></ulink>
       is enough:
     </para>
 
     <programlisting>
-      &lt;informaltable frame="all"&gt;
-      &lt;tgroup cols="3"&gt;
-      &lt;tbody&gt;
+&lt;informaltable frame="all"&gt;
+  &lt;tgroup cols="3"&gt;
+    &lt;tbody&gt;
 
       &lt;row&gt;
-      &lt;entry&gt;a1&lt;/entry&gt;
-      &lt;entry&gt;b1&lt;/entry&gt;
-      &lt;entry&gt;c1&lt;/entry&gt;
+        &lt;entry&gt;a1&lt;/entry&gt;
+        &lt;entry&gt;b1&lt;/entry&gt;
+        &lt;entry&gt;c1&lt;/entry&gt;
       &lt;/row&gt;
 
       &lt;row&gt;
-      &lt;entry&gt;a2&lt;/entry&gt;
-      &lt;entry&gt;b2&lt;/entry&gt;
-      &lt;entry&gt;c2&lt;/entry&gt;
+        &lt;entry&gt;a2&lt;/entry&gt;
+        &lt;entry&gt;b2&lt;/entry&gt;
+        &lt;entry&gt;c2&lt;/entry&gt;
       &lt;/row&gt;
 
       &lt;row&gt;
-      &lt;entry&gt;a3&lt;/entry&gt;
-      &lt;entry&gt;b3&lt;/entry&gt;
-      &lt;entry&gt;c3&lt;/entry&gt;
+        &lt;entry&gt;a3&lt;/entry&gt;
+        &lt;entry&gt;b3&lt;/entry&gt;
+        &lt;entry&gt;c3&lt;/entry&gt;
       &lt;/row&gt;
 
-      &lt;/tbody&gt;
-      &lt;/tgroup&gt;
-      &lt;/informaltable&gt;
-    </programlisting>
+    &lt;/tbody&gt;
+  &lt;/tgroup&gt;
+&lt;/informaltable&gt;
+</programlisting>
 
     <para>
       With our current XSL-style-sheet, the output of the markup above will be a simple HTML-table:
     </para>
 
-    <blockquote>
       <informaltable frame="all">
 	<tgroup cols="3">
 	  <tbody>
@@ -607,12 +611,11 @@
 	  </tbody>
 	</tgroup>
       </informaltable>
-    </blockquote>
 
 
     <para>
       If you want cells to span more than one row or column, it gets a bit more complicated - check out
-      <ulink url="http://docbook.org/tdg/html/table.html"><computeroutput>&lt;table&gt;</computeroutput></ulink>
+      <ulink url="http://docbook.org/tdg/en/html/table.html"><computeroutput>&lt;table&gt;</computeroutput></ulink>
       for an example.
     </para>
   </sect2>
@@ -625,7 +628,7 @@
     <para>
       <indexterm><primary>emphasis</primary><secondary>bold, italics</secondary></indexterm>
       Our documentation uses two flavors of emphasis - italics and bold type. DocBook uses one - 
-      <ulink url="http://docbook.org/tdg/html/emphasis.html"><computeroutput>&lt;emphasis&gt;</computeroutput></ulink>.
+      <ulink url="http://docbook.org/tdg/en/html/emphasis.html"><computeroutput>&lt;emphasis&gt;</computeroutput></ulink>.
     </para>
 
     <para>
@@ -647,9 +650,9 @@
 
     <para>
       Use
-      <ulink url="http://docbook.org/tdg/html/indexterm.html"><computeroutput>&lt;indexterm&gt;</computeroutput></ulink>,
-      <ulink url="http://docbook.org/tdg/html/primary.html"><computeroutput>&lt;primary&gt;</computeroutput></ulink> and
-      <ulink url="http://docbook.org/tdg/html/secondary.html"><computeroutput>&lt;secondary&gt;</computeroutput></ulink>
+      <ulink url="http://docbook.org/tdg/en/html/indexterm.html"><computeroutput>&lt;indexterm&gt;</computeroutput></ulink>,
+      <ulink url="http://docbook.org/tdg/en/html/primary.html"><computeroutput>&lt;primary&gt;</computeroutput></ulink> and
+      <ulink url="http://docbook.org/tdg/en/html/secondary.html"><computeroutput>&lt;secondary&gt;</computeroutput></ulink>
       for this. See these links for an explanation.
     </para>
   </sect2>
@@ -663,9 +666,8 @@
     
     <para>
       Once you have the <xref linkend="dbprimer-validation"></xref>
-      installed, you can convert your xml documents to HTML (or other
-      formats. Let me know if you are able to convert to other
-      formats).
+      installed, you can convert your xml documents to HTML or other
+      formats.
     </para>
     
     <para>
@@ -675,6 +677,8 @@
       multiple files, you call a different stylesheet. 
     </para>
     
+
+	
     <para>
       To generate a single HTML file from your DocBook XML file,
       use the command:
@@ -682,8 +686,9 @@
     
     <programlisting>
 bash$  xsltproc -o outputfilename.xml /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/html.xsl filename.xml
-    </programlisting>
+</programlisting>
 
+    
     <note>
       <para>
       This example uses Daniel Veillard's <emphasis
@@ -703,7 +708,12 @@ bash$  xsltproc -o outputfilename.xml /usr/share/sgml/docbook/stylesheet/xsl/nwa
 
     <programlisting>
 bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl filename.xml
-    </programlisting>
+</programlisting>
+
+    <para> 
+	You could also look at the <ulink url="http://cvs.openacs.org/cvs/openacs-4/packages/acs-core-docs/www/xml/Makefile?view=markup">acs-core-docs Makefile</ulink> 
+	for examples of how these documents are generated.`
+    </para>
 
   </sect2>
   
