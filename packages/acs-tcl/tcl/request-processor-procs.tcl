@@ -1194,6 +1194,7 @@ ad_proc -public ad_conn {args} {
 	path_info ""
 	system_p 0
         recursion_count 0
+        form_count -1
       }
         array unset ad_conn subsite_id
         array unset ad_conn locale
