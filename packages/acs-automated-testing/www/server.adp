@@ -13,7 +13,7 @@
   <if @admin_p@>
     <li>Login:
       <ul>
-        <li><a href="@admin_login_url@">Admin user</a>
+        <li><a href="@admin_login_url@">Admin user</a> (pwd: @service.adminpassword@)
       </ul>
     </li>
   </if>
@@ -30,12 +30,6 @@
       <li>DB: @service.dbtype@ @service.dbversion@
       <li>Webserver: : @service.webserver@
       <li>Openacs flag: @service.openacs_cvs_flag@
-    </ul>
-  </li>
-  <li>Logs
-    <ul>
-      <li><a href="@service.auto_test_url@">Automated testing</a>
-      <li>Install Log (TODO)
     </ul>
   </li>
   <li>Test failures
