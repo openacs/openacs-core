@@ -142,8 +142,14 @@ namespace eval site_node {
 
     ad_proc -public get_from_url {
         {-url:required}
+    	{-exact:boolean}
     } {
-        returns an array representing the site node that matches the given url
+        Returns an array representing the site node that matches the given url.<p>
+
+	A trailing '/' will be appended to $url if required and not present.<p>
+
+	If the '-exact' switch is not present and $url is not found, returns the
+	first match found by successively removing the trailing $url path component.<p>
 
         @see site_node::get
     } {
@@ -162,18 +168,20 @@ namespace eval site_node {
         }
 
         # chomp off part of the url and re-attempt
-        while {![empty_string_p $url]} {
-            set url [string trimright $url /]
-            set url [string range $url 0 [string last / $url]]
+	if {!$exact_p} {
+	    while {![empty_string_p $url]} {
+		set url [string trimright $url /]
+		set url [string range $url 0 [string last / $url]]
 
-            if {[nsv_exists site_nodes $url]} {
-                array set node [nsv_get site_nodes $url]
+		if {[nsv_exists site_nodes $url]} {
+		    array set node [nsv_get site_nodes $url]
 
-                if {[string equal $node(pattern_p) t] && ![empty_string_p $node(object_id)]} {
-                    return [array get node]
-                }
-            }
-        }
+		    if {[string equal $node(pattern_p) t] && ![empty_string_p $node(object_id)]} {
+			return [array get node]
+		    }
+		}
+	    }
+	}
 
         error "site node not found at url $url"
     }
