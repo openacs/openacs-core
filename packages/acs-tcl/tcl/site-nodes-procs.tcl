@@ -693,6 +693,9 @@ ad_proc -public site_node::get_package_url {
 } {
     Get the URL of any mounted instance of a package with the given package_key.
 
+    If there is more than one mounted instance of a package, returns
+    the first URL.
+
     @return a URL, or empty string if no instance of the package is mounted.
 } {
     if { [nsv_exists site_node_url_by_package_key $package_key] } {
