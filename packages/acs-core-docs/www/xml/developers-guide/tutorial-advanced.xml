@@ -613,7 +613,7 @@ ad_form -extend -name note \ </userinput>
     </orderedlist>
     </sect1>
 
-  <sect 1 id="profile-code">
+  <sect1 id="profile-code">
       <title>Profile your code</title>
       <para>There are several facilities for profiling your code in
       OpenACS. The first thing to do is to install the
@@ -623,7 +623,7 @@ ad_form -extend -name note \ </userinput>
       url="http://openacs.org/forums/message-view?message_id=161324">profiling
       your code using ds_profile</ulink>
       </para>
-  </sect>
+  </sect1>
 
       <sect1 id="tutorial-distribute">
         <title>Prepare the package for distribution.</title>
@@ -932,7 +932,7 @@ drop function inline_0();
       some_table children
       WHERE 
       children.tree_sorktey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
-      and parent.tree_sortkey <> children.tree_sortkey
+      and parent.tree_sortkey &lt;&gt; children.tree_sortkey
       and parent.key = :the_parent_key;
       </programlisting>
 
@@ -943,7 +943,7 @@ drop function inline_0();
     numbers in tree_sortkey SQL queries, like
     <computeroutput>tree_level(children.tree_sortkey) -
     4</computeroutput>. That is basically an incorrect way to do it,
-    and subtracting the parent's tree_level is the preferred method.<para>
+    and subtracting the parent's tree_level is the preferred method.</para>
 
     <para>This example does not include the parent. To return the entire subtree including the parent, leave out the non-equals clause:</para>
 
@@ -1024,7 +1024,7 @@ db_multirow \
 
   </sect1>
   <sect1 id="tutorial-future-topics">
-  <para>Future Topics:</para>
+  <title>Future Topics</title>
     <itemizedlist>
       <listitem><para>How to enforce security so that users can't
       change other users records</para>
