@@ -1,4 +1,4 @@
--- packages/ref-country/sql/oracle/ref-country-create.sql
+-- packages/ref-country/sql/oracle/ref-countries-create.sql
 --
 -- @author jon@jongriffin.com.com
 -- @creation-date 2001-08-27
