@@ -8,12 +8,6 @@
   <if @focus@ not nil>
     <property name="focus">@focus;noquote@</property>
   </if>
-  <if @context_bar@ not nil>
-    <property name="context_bar">@context_bar;noquote@</property>
-  </if>
-  <if @context@ not nil>
-    <property name="context">@context;noquote@</property>
-  </if>
   <property name="header_stuff">
     @header_stuff;noquote@
     <!--<link rel="stylesheet" type="text/css" href="@css_url@" media="all">-->
@@ -27,10 +21,29 @@
 
 <!-- Context bar -->
 
-    <div class="subsite-context-bar">
-      <div style="float: right">@subnavbar_link;noquote@</div>
-      @context_bar;noquote@&nbsp;
-    </div>
+  <div id="context-bar">
+    <if @context_bar@ not nil>
+      <div id="breadcrumbs">@context_bar;noquote@</div>
+    </if>
+    <else>
+      <if @context:rowcount@ not nil>
+        <div id="breadcrumbs">
+          <ul>
+            <multiple name="context">
+              <if @context.url@ not nil>
+                <li><a href="@context.url@">@context.label@</a> &#187;</li>
+              </if>
+              <else>
+                <li>@context.label@</li>
+              </else>
+            </multiple>
+          </ul>
+        </div>
+      </if>
+    </else>
+    <div id="subnavbar_links">@subnavbar_link;noquote@</div>
+    <div style="clear: both;"></div>
+  </div>
 
 <!-- Top level navigation -->
 
