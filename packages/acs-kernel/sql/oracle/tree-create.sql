@@ -130,7 +130,7 @@ as
         then
             return '000000';
         else
-            return (int_to_hex(hex_to_int(tree_key) +1));
+            return (lpad(int_to_hex(hex_to_int(tree_key) + 1)), 6, '0');
         end if;
     end increment_key;
 
@@ -140,7 +140,7 @@ as
     ) return raw
     is
     begin
-        return parent_key || lpad(increment_key(max_child_key), 6, '0');
+        return parent_key || increment_key(max_child_key);
     end next_key;
 
     function left (
