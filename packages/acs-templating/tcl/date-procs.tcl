@@ -51,17 +51,17 @@ ad_proc -public template::util::date::init {} {
 
   # Forward lookup
   array set fragment_widgets {
-    YYYY {dateFragment year 4 Year}
-      YY {dateFragment short_year 2 Year} 
-      MM {dateFragment month 2 Month}
-     MON {monthFragment month short Month}
-   MONTH {monthFragment month long Month}
-      DD {dateFragment day 2 Day}
-    HH12 {dateFragment short_hours 2 {12-Hour}}  
-    HH24 {dateFragment hours 2 {24-Hour}}
-      MI {dateFragment minutes 2 Minutes}
-      SS {dateFragment seconds 2 Seconds}
-      AM {ampmFragment ampm 2 Meridian}
+    YYYY {dateFragment year 4 [_ acs-templating.Year]}
+      YY {dateFragment short_year 2 [_ acs-templating.Year]} 
+      MM {dateFragment month 2 [_ acs-templating.Month]}
+     MON {monthFragment month short [_ acs-templating.Month]}
+   MONTH {monthFragment month long [_ acs-templating.Month]}
+      DD {dateFragment day 2 [_ acs-templating.Day]}
+    HH12 {dateFragment short_hours 2 {[_ acs-templating.12-Hour]}}  
+    HH24 {dateFragment hours 2 {[_ acs-templating.24-Hour]}}
+      MI {dateFragment minutes 2 [_ acs-templating.Minutes]}
+      SS {dateFragment seconds 2 [_ acs-templating.Seconds]}
+      AM {ampmFragment ampm 2 [_ acs-templating.Meridian]}
   }
 
   # Reverse lookup
