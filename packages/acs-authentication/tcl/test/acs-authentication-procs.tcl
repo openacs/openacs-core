@@ -30,6 +30,7 @@ aa_register_case auth_authenticate {
             # Successful authentication
             array set auth_info \
                 [auth::authenticate \
+                     -no_cookie \
                      -username $username \
                      -password $password]
     
@@ -40,6 +41,7 @@ aa_register_case auth_authenticate {
             array unset auth_info
             array set auth_info \
                 [auth::authenticate \
+                     -no_cookie \
                      -username $username \
                      -password "blabla"]
 
@@ -50,6 +52,7 @@ aa_register_case auth_authenticate {
             array unset auth_info
             array set auth_info \
                 [auth::authenticate \
+                     -no_cookie \
                      -username $username \
                      -password ""]
 
@@ -60,6 +63,7 @@ aa_register_case auth_authenticate {
             array unset auth_info
             array set auth_info \
                 [auth::authenticate \
+                     -no_cookie \
                      -username "blabla" \
                      -password $password]
 
@@ -70,6 +74,7 @@ aa_register_case auth_authenticate {
             array unset auth_info
             array set auth_info \
                 [auth::authenticate \
+                     -no_cookie \
                      -username "" \
                      -password $password]
 
@@ -80,6 +85,7 @@ aa_register_case auth_authenticate {
             array unset auth_info
             array set auth_info \
                 [auth::authenticate \
+                     -no_cookie \
                      -authority_id -123 \
                      -username $username \
                      -password $password]
@@ -96,6 +102,7 @@ aa_register_case auth_authenticate {
                 array unset auth_info
                 array set auth_info \
                     [auth::authenticate \
+                         -no_cookie \
                          -username $username \
                          -password $password]
     
@@ -309,7 +316,7 @@ aa_register_case auth_password_change {
         }
 }
 
-aa_register_case auth_password_recovver {
+aa_register_case auth_password_recover {
     Test the auth::password::recover_password proc.
 
     @author Simon Carstensen

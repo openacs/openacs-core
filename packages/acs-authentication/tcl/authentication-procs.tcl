@@ -45,6 +45,7 @@ ad_proc -public auth::authenticate {
     {-username:required}
     {-password:required}
     {-persistent:boolean}
+    {-no_cookie:boolean}
 } {
     Try to authenticate and login the user forever by validating the username/password combination, 
     and return authentication and account status codes.    
@@ -53,6 +54,7 @@ ad_proc -public auth::authenticate {
     @param username Authority specific username of the user.
     @param passowrd The password as the user entered it.
     @param persistent Set this if you want a permanent login cookie
+    @param no_cookie Set this if you don't want to issue a login cookie
     
     @return Array list with the following entries:
     
@@ -89,6 +91,12 @@ ad_proc -public auth::authenticate {
                                  -username $username \
                                  -authority_id $authority_id \
                                  -password $password]
+
+        # We do this so that if there aren't even the auth_status and account_status that need be
+        # in the array, that gets caught below
+        if { [string equal $auth_info(auth_status) "ok"] } {
+            set dummy $auth_info(account_status)
+        }
     } {
         set auth_info(auth_status) failed_to_connect
         set auth_info(auth_message) "Error invoking the authentication driver."
@@ -104,13 +112,6 @@ ad_proc -public auth::authenticate {
 
 
     # Verify auth_info/auth_message return codes
-    array set default_auth_message {
-        no_account {Unknown username}
-        bad_password {Bad password}
-        auth_error {Invalid username/password}
-        failed_to_connect {Error communicating with authentication server}
-    }
-
     switch $auth_info(auth_status) {
         ok { 
             # Continue below
@@ -120,6 +121,12 @@ ad_proc -public auth::authenticate {
         auth_error -
         failed_to_connect {
             if { ![exists_and_not_null auth_info(auth_message)] } {
+                array set default_auth_message {
+                    no_account {Unknown username}
+                    bad_password {Bad password}
+                    auth_error {Invalid username/password}
+                    failed_to_connect {Error communicating with authentication server}
+                }
                 set auth_info(auth_message) $default_auth_message($auth_info(auth_status))
             }
             return [array get auth_info]
@@ -192,7 +199,7 @@ ad_proc -public auth::authenticate {
     }
         
     # Issue login cookie if login was successful
-    if { [string equal $auth_info(auth_status) "ok"] && [string equal $auth_info(account_status) "ok"] } {
+    if { [string equal $auth_info(auth_status) "ok"] && [string equal $auth_info(account_status) "ok"] && !$no_cookie_p } {
         auth::issue_login -user_id $auth_info(user_id) -persistent=$persistent_p
     }
     
