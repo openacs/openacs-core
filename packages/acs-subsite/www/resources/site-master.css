@@ -26,7 +26,8 @@ a.system-name:hover {
   text-decoration: none;
 }
 
-span.button-header { 
+
+a.button { 
   border-width: 1px; 
   border-style: solid; 
   text-align: center; 
@@ -35,17 +36,6 @@ span.button-header {
   padding: 1px;
   padding-left: 4px;
   padding-right: 4px;
-}
-span.button { 
-  border-width: 1px;
-  border-style: solid;
-  text-align: center;
-  border-color: #999999;
-  background-color: #107AAE;
-  padding: 1px;
-  padding-left: 4px;
-  padding-right: 4px;
-  font-size: 90%;
 }
 a.button:link { 
   color: white;
@@ -123,7 +113,7 @@ a.navbar-selected:hover {
 
 
 #subnavbar { 
-  padding-top: 6px; 
+  padding-top: 12px; 
   font-size: 85%;
 }
 #subnavbar-body { 
