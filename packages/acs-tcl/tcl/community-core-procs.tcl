@@ -88,7 +88,7 @@ ad_proc ad_user_new {email first_names last_name password password_question pass
     
     db_transaction {
 
-	db_exec_plsql user_insert {
+	set user_id [db_exec_plsql user_insert {
 	begin
 	    :1 := acs.add_user(user_id => :user_id,
 			 email => :email,
@@ -103,7 +103,10 @@ ad_proc ad_user_new {email first_names last_name password password_question pass
 	                 email_verified_p => :email_verified_p,
 	                 member_state => :member_state);
 	    end;
-	} 
+	}] 
+
+        # Call the extension
+        acs_user_extension::user_new -user_id $user_id
 
     } on_error {
 	# we got an error.  log it and signal failure.

@@ -107,6 +107,8 @@
             <file type="tcl_procs" path="tcl/tcl-documentation-procs.tcl"/>
             <file path="tcl/tcl-documentation-tests.tcl"/>
             <file type="tcl_procs" path="tcl/text-html-procs.tcl"/>
+            <file type="tcl_procs" path="tcl/user-extensions-procs.tcl"/>
+            <file type="query_file" path="tcl/user-extensions-procs.xql"/>
             <file type="tcl_init" path="tcl/utilities-init.tcl"/>
             <file type="tcl_procs" path="tcl/utilities-procs.tcl"/>
             <file type="query_file" path="tcl/utilities-procs.xql"/>
