@@ -53,7 +53,6 @@ set table_def {
     { package_key "Key" "" "<td><a href=\"version-view?version_id=$version_id\">$package_key</a></td>" }
     { pretty_name "Name" "" "<td><a href=\"version-view?version_id=$version_id\">$pretty_name</a></td>" }
     { version_name "Ver." "" "" }
-    { n_files "Files" "" {<td align=right>&nbsp;&nbsp;<a href=\"version-files?version_id=$version_id\">$n_files</a>&nbsp;</td>} }
     {
 	status "Status" "" {<td align=center>&nbsp;&nbsp;[eval {
 	    if { $installed_p == "t" } {
