@@ -277,6 +277,21 @@ ad_proc -private lang::catalog::assert_catalog_file { catalog_file_path } {
     }
 }
 
+ad_proc -private lang::catalog::package_has_files_in_locale_p {package_key locale} {
+    Return 1 if the given package has any catalog files for the given locale
+    and 0 otherwise.
+
+    @author Peter Marklund
+} {
+    if { [catch {glob [package_catalog_dir $package_key]/$package_key.${locale}.*}] } {
+        set has_file_in_locale_p 0
+    } else {
+        set has_file_in_locale_p 1
+    }
+    
+    return $has_file_in_locale_p
+}
+
 ad_proc -private lang::catalog::get_catalog_file_path { 
     {-backup_from_version ""}
     {-backup_to_version ""}
@@ -285,6 +300,9 @@ ad_proc -private lang::catalog::get_catalog_file_path {
     {-charset:required}
 } {
     Get the full path of the catalog file for a given package, locale, and charset.
+
+    @see apm_parse_catalog_path
+    @see lang::catalog::package_has_files_in_locale_p
 
     @author Peter Marklund
 } {
@@ -641,7 +659,13 @@ ad_proc -public lang::catalog::import_from_files {
         from ad_locales
         where enabled_p = 't'
     } {        
+        # If we are only processing certain locales and this is not one of them - continue
         if { ![empty_string_p $restrict_to_locale] && ![string equal $restrict_to_locale $locale]} {
+            continue
+        }
+
+        # If the package has no files in this locale - continue
+        if { ![package_has_files_in_locale_p $package_key $locale] } {
             continue
         }
 
