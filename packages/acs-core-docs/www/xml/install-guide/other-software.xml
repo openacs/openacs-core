@@ -790,6 +790,9 @@ cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
         <title>Install on AOLserver4</title>
         <para> You will need the AOLserver4 source in <computeroutput>/usr/local/src/aolserver/aolserver</computeroutput> and OpenSSL installed in <computeroutput>/usr/local/ssl</computeroutput> (or at least symlinked there).</para>
 
+      <para>Currently, we are installing nsopenssl from the most
+      current version available (called HEAD, on CVS).</para>
+
       <screen>[root bin]#<userinput> cd /usr/local/src/aolserver</userinput>
 [root aolserver]# <userinput>cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver login</userinput>
 [root aolserver]# <userinput>cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsopenssl</userinput>
@@ -827,7 +830,12 @@ ln -s /usr/local/ssl/lib/libcrypto.so.0.9.7 libcrypto.so.0.9.7
         <replaceable>your_ip:your_http_port</replaceable>,<replaceable>your_ip:your_https_port</replaceable></computeroutput>
         to the nsd call. If you are using daemontools, this can be
         changed in your <computeroutput>etc/daemontools/run
-        file</computeroutput>).<para>
+        file</computeroutput>). These should be the actual IP address
+        of the server. Some people have also found that they needed to
+        put a <computeroutput>sleep 2</computeroutput>line in front of
+        the exec statement in the <computeroutput>run</computeroutput>
+        file. Check your error.log and try that if you get permission
+        errors.<para>
 
       <para>To enable SSL support in your server, make sure your
       etc/config.tcl file has a section on "OpenSSL 3 with AOLserver4". If
