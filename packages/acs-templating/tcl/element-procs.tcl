@@ -527,10 +527,12 @@ ad_proc -public template::element::querygetall { element_ref } {
     set values [template::data::transform::$datatype element]
   }
     
-    if { [lindex [template::util::spellcheck::spellcheck_properties -element_ref element] 0] } {
+  set spellcheck [lindex [template::util::spellcheck::spellcheck_properties -element_ref element] 0]
+
+  if { ![string equal ":nospell:" $spellcheck] } {
 	
-	set values [template::data::transform::spellcheck -element_ref element -values $values]
-    }
+    set values [template::data::transform::spellcheck -element_ref element -values $values]
+  }
 
   return $values
 }

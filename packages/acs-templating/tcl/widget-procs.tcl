@@ -210,14 +210,12 @@ ad_proc -public template::widget::textarea { element_reference tag_attributes } 
   set output [textarea_internal $element(name) attributes $value $mode]
 
   set spellcheck_properties [template::util::spellcheck::spellcheck_properties -element_ref element]
-  set spellcheck_p [lindex $spellcheck_properties 0]
+  set spellcheck [lindex $spellcheck_properties 0]
 
-  if { $spellcheck_p } {
-      set yes_checked [lindex $spellcheck_properties 1]
-      set no_checked [lindex $spellcheck_properties 2]
-      append output "<br>Spellcheck? 
-<input type=\"radio\" name=\"$element(id).spellcheck_p\" value=\"1\" $yes_checked /> Yes \n
-<input type=\"radio\" name=\"$element(id).spellcheck_p\" value=\"0\" $no_checked /> No"
+  if { ![string equal ":nospell:" $spellcheck] } {
+      set selected_option [lindex $spellcheck_properties 1]
+      append output "<br>Spellcheck: 
+[menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $selected_option {}]"
   }   
   
   return $output
@@ -333,14 +331,12 @@ ad_proc -public template::widget::text { element_reference tag_attributes } {
   upvar $element_reference element
 
   set spellcheck_properties [template::util::spellcheck::spellcheck_properties -element_ref element]
-  set spellcheck_p [lindex $spellcheck_properties 0]
+  set spellcheck [lindex $spellcheck_properties 0]
 
-  if { [string equal $element(mode) "edit"] && $spellcheck_p } {
-      set yes_checked [lindex $spellcheck_properties 1]
-      set no_checked [lindex $spellcheck_properties 2]
-      return "[input text element $tag_attributes] <br>Spellcheck? 
-<input type=\"radio\" name=\"$element(id).spellcheck_p\" value=\"1\" $yes_checked /> Yes \n
-<input type=\"radio\" name=\"$element(id).spellcheck_p\" value=\"0\" $no_checked /> No"
+  if { [string equal $element(mode) "edit"] && ![string equal ":nospell:" $spellcheck] } {
+      set selected_option [lindex $spellcheck_properties 1]
+      return "[input text element $tag_attributes] <br>Spellcheck: 
+[menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $selected_option {}]"
   } else {
       return [input text element $tag_attributes]
   }
