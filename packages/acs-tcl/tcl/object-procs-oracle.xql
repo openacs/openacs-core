@@ -24,7 +24,6 @@
                to_char(o.last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
                o.modifying_user,
                o.modifying_ip,
-               o.tree_sortkey,
                acs_object.name(o.object_id) as object_name
         from   acs_objects o
         where  o.object_id = :object_id

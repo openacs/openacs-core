@@ -77,6 +77,7 @@ ad_proc -public apm_dependency_provided_p {
     @param dependency_uri The dependency that is being checked.
     @param dependency_version The version of the dependency being checked.
 } {
+
     set old_version_p 0
     set found_p 0
     ns_log Debug "apm_dependency_provided_p: Scanning for $dependency_uri version $dependency_version"
