@@ -168,11 +168,8 @@ ad_proc -public item::get_best_revision { item_id } {
   @see proc item::get_item_from_revision
 
 } {
-  template::query gbr_get_best_revision revision_id onevalue "
-    select content_item.get_best_revision(:item_id) from dual
-  " -cache "item_best_revision $item_id"
-
-  return $revision_id
+   
+    return [db_string gbr_get_best_revision ""]
 }
 
 
