@@ -57,6 +57,11 @@ list::create \
         package_pretty_name {
             label "Application"
         }
+        permissions {
+            label "Permissions"
+            link_url_eval {[export_vars -base permissions { package_id }]}
+            display_template {Permissions}
+        }
         delete {
             sub_class narrow
             display_template {
