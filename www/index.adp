@@ -30,8 +30,21 @@
       </else>
       </p>
       
+      <p> 
+      Here are the <b>packages currently available</b> on your
+      system:
+      </p>
+
+      <ul>
+        <multiple name=nodes>
+          <li><a href="@nodes.url@">@nodes.name@</a></li>
+        </multiple>
+      </ul>
       
-      
+      <if @name@ not nil>
+        If you like, you can go directly to <a href="@home_url@">@name@'s
+        @home_url_name@</a>.
+      </if>       
       
       <h2>How to Customize Your Site</h2>
       
@@ -112,24 +125,7 @@
       title="Software Development Manager on openacs.org">Bug
       Tracker</a>. If you have bugfixes or patches
       yourself, post them there as well. 
-      </p>
-      
-      <p> 
-      Here are the <b>packages currently available</b> on your
-      system:
-      </p>
-
-      <ul>
-        <multiple name=nodes>
-          <li><a href="@nodes.url@">@nodes.name@</a></li>
-        </multiple>
-      </ul>
-      
-      <if @name@ not nil>
-        If you like, you can go directly to <a href="@home_url@">@name@'s
-        @home_url_name@</a>.
-      </if> 
-
+      </p>      
 
     </td>
     <td valign="top">
