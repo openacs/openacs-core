@@ -7,6 +7,9 @@
 # restart commands are expected to be in a config file named keepalive-config.tcl 
 # in the same directory as this script
 #
+# If you're having problems with this script, you should look at this thread:
+# http://openacs.org/forums/message-view?message_id=260846
+#
 # @author Peter Marklund
 
 # the next line restarts using tclsh, the trailing slash is intentional \
