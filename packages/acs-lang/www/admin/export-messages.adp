@@ -26,6 +26,7 @@ locale <b>@locale@</b>
   </p>
 </if>
 
-<p>
-  <b>&raquo;</b> <a href="@return_url@">Return</a>
-</p>
+<ul class="action-links">
+  <li><a href="@return_url@">Return</a></li>
+</ul>
+

@@ -24,7 +24,7 @@
 </else>
 
 <if @create_p@ true>
-  <p>
-    <b>&raquo;</b> <a href="@delete_url@">Delete this message</a>
-  </p>
+  <ul class="action-links">
+    <li> <a href="@delete_url@">Delete this message</a></li>
+  </ul>
 </if>

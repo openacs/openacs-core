@@ -12,8 +12,8 @@
 </if>
 
 <if @edit_url@ not nil>
-  <p>
-    <b>&raquo;</b> <a href="@edit_url@">Edit this message</a>
-  </p>
+  <ul class="action-links">
+    <li><a href="@edit_url@">Edit this message</a></li>
+  </ul>
 </if>
 

@@ -4,35 +4,26 @@
 
 <include src="/packages/acs-lang/lib/conflict-link" />
 
-<p>
-  <b>&raquo;</b>
-  Toggle translator mode: 
-  <if @translator_mode_p@ true><b>On</b> | <a href="translator-mode-toggle">Off</a></if>
-  <else><a href="translator-mode-toggle">On</a> | <b>Off</b></else>
-</p>
+<ul class="action-links">
+  <li>Toggle translator mode: 
+    <if @translator_mode_p@ true><b>On</b> | <a href="translator-mode-toggle">Off</a></if>
+    <else><a href="translator-mode-toggle">On</a> | <b>Off</b></else>
+  </li>
 
-<p>
-  <b>&raquo;</b> <a href="@parameter_url@">Change system locale</a>: Current system locale is <b>@system_locale_label@ [ @system_locale@ ]</b>
-</p>
+  <li><a href="@parameter_url@">Change system locale</a>: Current system locale is <b>@system_locale_label@ [ @system_locale@ ]</b></li>
 
 <if @timezone_p@>
-  <p>
-    <b>&raquo;</b> <a href="set-system-timezone">Change system timezone</a>: Current system timezone is <b>@timezone@</b>
-  </p>
+  <li><a href="set-system-timezone">Change system timezone</a>: Current system timezone is <b>@timezone@</b></li>
 </if>
 
-<p>
-  <b>&raquo;</b> <a href="lookup">Look up message</a>
-</p>
+<li><a href="lookup">Look up message</a></li>
 
 <if @site_wide_admin_p@>
-  <p>
-    <b>&raquo;</b> <a href="@import_url@" title="Imports messages system-wide from catalog files" onclick="return confirm('Are you sure you want to import all I18N messages from catalog files?');">Import all messages</a>
-  </p>
-  <p>
-    <b>&raquo;</b> <a href="@export_url@" title="Export messages system-wide to catalog files" onclick="return confirm('Are you sure you want to export all I18N messages to catalog files?');">Export all messages</a>
-  </p>
+  <li><a href="@import_url@" title="Imports messages system-wide from catalog files" onclick="return confirm('Are you sure you want to import all I18N messages from catalog files?');">Import all messages</a></li>
+  <li><a href="@export_url@" title="Export messages system-wide to catalog files" onclick="return confirm('Are you sure you want to export all I18N messages to catalog files?');">Export all messages</a></li>
 </if>
+
+</ul>
 
 <h2>Installed Locales</h2>
 
@@ -61,10 +52,10 @@
       <td align="right"><if @locales.enabled_p@ true or @locales.num_translated@ gt 0><if @locales.num_untranslated_pretty@ ne 0>@locales.num_untranslated_pretty@</if></if></td>
       <td align="center">
         <if @locales.enabled_p@ true>
-          <a href="@locales.locale_enabled_p_url@" title="Disable this locale"><img src="/shared/images/checkboxchecked" height="13" width="13" border="0" style="background-color: white;"></a>
+          <a href="@locales.locale_enabled_p_url@" title="Disable this locale"><img src="/resources/acs-subsite/checkboxchecked.gif" height="13" width="13" border="0" style="background-color: white;"></a>
         </if>
         <else>
-          <a href="@locales.locale_enabled_p_url@" title="Enable this locale"><img src="/shared/images/checkbox" height="13" width="13" border="0" style="background-color: white;"></a>
+          <a href="@locales.locale_enabled_p_url@" title="Enable this locale"><img src="/resources/acs-subsite/checkbox.gif" height="13" width="13" border="0" style="background-color: white;"></a>
         </else>
       </td>
       <td align="center">
@@ -88,10 +79,6 @@
  </tr>
 </table>
 
-<p>
-  <b>&raquo;</b> <a href="locale-new">Create New Locale</a>
-</p>
-
-
-
-
+<ul class="action-links">
+  <li><a href="locale-new">Create New Locale</a></li>
+</ul>

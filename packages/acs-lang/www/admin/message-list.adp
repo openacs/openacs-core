@@ -13,29 +13,24 @@
 
 <include src="/packages/acs-lang/lib/conflict-link" locale="@current_locale@" package_key="@package_key@"/>
 
-<if @create_p@ true>
-  <p>
-    <b>&raquo;</b> <a href="@new_message_url@">Create new message</a>
-  </p>
-</if>
-
-<if @messages:rowcount@ eq 0>
-  <i>No messages</i>
-</if>
-<else>
-  <p>
-    <b>&raquo;</b> <a href="@batch_edit_url@">Batch edit these messages</a>
-  </p>
-
-  <if @site_wide_admin_p@>
-    <p>
-      <b>&raquo;</b> <a href="@import_messages_url@">Import messages from catalog files</a>
-    </p>
-    <p>
-      <b>&raquo;</b> <a href="@export_messages_url@">Export messages to catalog files</a>
-    </p>
+<ul class="action-links">
+  <if @create_p@ true>
+    <li><a href="@new_message_url@">Create new message</a></li>
   </if>
 
+  <if @messages:rowcount@ eq 0>
+    <i>No messages</i>
+  </if>
+  <else>
+    <li><a href="@batch_edit_url@">Batch edit these messages</a></li>
+    <if @site_wide_admin_p@>
+      <li><a href="@import_messages_url@">Import messages from catalog files</a></li>
+      <li><a href="@export_messages_url@">Export messages to catalog files</a></li>
+    </if>
+  </else>
+</ul>
+
+<if @messages:rowcount@ gt 0>
   <table cellpadding="0" cellspacing="0" border="0">
     <tr>
       <td style="background: #CCCCCC">
@@ -77,4 +72,4 @@
       </td>
     </tr>
   </table>
-</else>
+</if>
