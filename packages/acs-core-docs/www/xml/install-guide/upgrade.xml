@@ -286,7 +286,7 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
           <listitem>
             <formalpara>
               <title>Upgrading a Custom or CVS site</title>
-              <para>If you have no custom code, and your site is not in a CVS repository, upgrade with these steps:</para>
+              <para>If you have custom code, and your site is in a CVS repository, upgrade with these steps:</para>
             </formalpara>
             <orderedlist>
               <listitem>
