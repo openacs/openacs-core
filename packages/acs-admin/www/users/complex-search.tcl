@@ -28,6 +28,7 @@ ad_page_contract {
 
     @author Mark Thomas (mthomas@arsdigita.com)
 } {
+    {authority_id:integer ""}
     {email ""}
     {ip ""}
     {last_name_starts_with ""}
@@ -106,6 +107,12 @@ if {[exists_and_not_null limit_to_users_in_group_id] && ![regexp {[^-0-9]} $limi
     incr rowcount
     set criteria:[set rowcount](data) \
         "Is a member of '$group_name'"
+}
+
+if { [exists_and_not_null authority_id] } {
+    lappend where_clause "authority_id = :authority_id"
+    incr rowcount
+    set criteria:[set rowcount](data) "Authority is '[auth::authority::get_element -authority_id $authority_id -element pretty_name]'"
 }
 
 if { [exists_and_not_null email] } {
