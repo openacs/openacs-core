@@ -387,6 +387,10 @@ ad_proc -public apm_load_packages {
     }
 
     if { $load_libraries_p } {
+        # branimir: acs-lang needs to be initialized before anything else
+        # because there are packages whose *-init.tcl files depend on it.
+        apm_load_libraries -force_reload=$force_reload_p -init -packages acs-lang
+
         apm_load_libraries -force_reload=$force_reload_p -init -packages $packages
     }
 
