@@ -162,12 +162,7 @@ ad_proc -public ad_quotehtml { arg } {
     ns_quotehtml does not).
 
 } {
-    # we have to do & first or we'll hose ourselves with the ones lower down
-    regsub -all & $arg \\&amp\; arg
-    regsub -all \" $arg \\&quot\; arg
-    regsub -all < $arg \\&lt\; arg
-    regsub -all > $arg \\&gt\; arg
-    return $arg
+    return [string map {& &amp; \" &quot; < &lt; > &gt;} $arg]
 }
 
 
