@@ -119,7 +119,7 @@ begin
 	fetch c_folder_children_cur into v_child_item_id;
 	exit when c_folder_children_cur%NOTFOUND;
 	if is_folder(v_child_item_id) = 't' then
-	  content_folder.del(v_child_item_id);
+	  content_folder.del(v_child_item_id,'t');
         else
 
          content_item.del(v_child_item_id);
