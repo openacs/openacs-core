@@ -45,7 +45,7 @@ aa_register_component "my_component" {
 }
 
 aa_register_case -cats {
-  script
+  tcl
 } -init_classes {
   my_init
 } "aa_example-000" {
@@ -84,7 +84,7 @@ aa_register_case -cats {
 }
 
 aa_register_case -cats {
-  script
+  tcl
 } -init_classes {
   my_init my_init2
 } "aa-example-001" {
@@ -116,7 +116,7 @@ aa_register_case -cats {
 }
 
 aa_register_case -cats {
-  script
+  tcl
 } "aa_example-002" {
   Tests un-successful audit writing.
   First call fails.
@@ -137,6 +137,14 @@ aa_register_case -cats {
   set result [aa_example_write_audit_entries $entries]
 
   aa_false "return value false" $result
-  aa_equals "entries parameter not currupted" $entries $entries_ex
+  aa_equals "entries parameter not corrupted" $entries $entries_ex
+}
+
+aa_register_case -cats {
+    security_risk
+} "aa_example-exclusion-security-risk" {
+    If security-risk is not checked, this test shouldn't run
+} {
+    aa_log "Unless security-risk is was checked, you shouldn't see this test."
 }
 

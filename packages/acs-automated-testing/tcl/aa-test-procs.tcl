@@ -25,6 +25,7 @@ if { ![nsv_exists aa_test cases] } {
     nsv_set aa_test components {}
     nsv_set aa_test init_classes {}
     nsv_set aa_test categories { config db api web smoke stress security_risk populator production_safe }
+    nsv_set aa_test exclusion_categories { stress security_risk }
 }
 
 ad_proc -public aa_stub {
@@ -293,15 +294,15 @@ ad_proc -public aa_register_case {
     @param libraries A list of keywords of additional code modules to load.  The entire test case will fail if any package is missing.  Currently includes <b>tclwebtest</b>.
 
     @param cats Properties of the test case.  Must be zero or more of the following:
-<ul>
-<li><b>db</b>: Tests the database directly
-<li><b>api</b>: tests the TCL API
-<li><b>web</b>: tests HTTP interface
-<li><b>smoke</b>: Minimal test to assure functionality and catch basic errors.
-<li><b>stress</b>: Puts heavy load on server or creates large numbers of records.  Intended to simulate maximal production load. 
-<li><b>security_risk</b>: May introduce a security risk.
-<li><b>populator</b>: Creates and leaves sample data.
-<li><b>production_safe</b>: Can be run without the risk of adding or deleting data.
+    <ul>
+    <li><b>db</b>: Tests the database directly
+    <li><b>api</b>: tests the TCL API
+    <li><b>web</b>: tests HTTP interface
+    <li><b>smoke</b>: Minimal test to assure functionality and catch basic errors.
+    <li><b>stress</b>: Puts heavy load on server or creates large numbers of records.  Intended to simulate maximal production load. 
+    <li><b>security_risk</b>: May introduce a security risk.
+    <li><b>populator</b>: Creates sample data for future use.
+    <li><b>production_safe</b>: Can be used on a live production site, ie for sanity checking or keepalive purposes.  Implies: no risk of adding or deleting data; no risk of crashing; minimal cpu/db/net load.
 </ul>
     @param error_level Force all test failures to this error level.  One of 
 <ul>
@@ -490,6 +491,8 @@ ad_proc -public aa_export_vars {
 }
 
 ad_proc -public aa_runseries {
+    {-stress 0}
+    {-security_risk 0}
     -quiet:boolean
     {-testcase_id ""}
     by_package_key
@@ -530,12 +533,33 @@ ad_proc -public aa_runseries {
             set package_key    [lindex $testcase 3]
             set categories     [lindex $testcase 4]
             set init_classes   [lindex $testcase 5]
-            if {($by_package_key == "" || ($by_package_key == $package_key)) && \
-                    ($by_category == "" || ([lsearch $categories $by_category] != -1))} {
-                lappend testcase_ids $testcase_id
-                foreach init_class $init_classes {
-                    set classes([list $package_key $init_class]) 1
-                }
+
+            # try to disqualify the test case
+
+            # if category is specified, 
+            if { [exists_and_not_null by_package_key] && $by_package_key != $package_key } {
+                continue
+            }
+
+            # is it the wrong category?
+            if { [exists_and_not_null by_category] && [lsearch $categories $by_category] < 0 } {
+                continue
+            }
+
+            # if we don't want stress, then the test must not be stress
+            if { ! $stress && [lsearch $categories "stress"] >= 0 } {
+                continue
+            }
+            
+            # if we don't want security risks, then the test must not be stress
+            if { ! $security_risk && [lsearch $categories "security_risk"] >= 0 } {
+                continue
+            }
+            
+            # we made it through the filters, so add the test case
+            lappend testcase_ids $testcase_id
+            foreach init_class $init_classes {
+                set classes([list $package_key $init_class]) 1
             }
         }
     }
@@ -1044,12 +1068,3 @@ ad_proc -public aa_test::parse_test_server_file {
 
     set service(rebuild_cmd) "sh [file join $service(script_path) recreate.sh]"
 }
-
-
-
-
-
-
-
-
- 

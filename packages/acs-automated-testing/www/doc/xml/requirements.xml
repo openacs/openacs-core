@@ -36,13 +36,13 @@
             <row>
               <entry>1.1</entry>
               <entry>partial</entry>
-              <entry>A</entry>
+              <entry>Done</entry>
               <entry><emphasis role="strong">Execute HTTP tests</emphasis>.  Execute tests that can interact with a the webserver via the external, HTTP interface, including retrieving pages, following links, and submitting forms.  (This is partially done in the sense that we can make http calls from tcl api, but there is no framework for doing anything complicated.)</entry>
             </row>
             <row>
               <entry>1.1.1</entry>
               <entry></entry>
-              <entry>A</entry>
+              <entry>Done</entry>
               <entry><emphasis role="strong">Execute tclwebtest scripts</emphasis>.  A test can contain tclwebtest commands.  If tclwebtest is not installed, those commands fail gracefully.</entry>
             </row>
             <row>
@@ -54,34 +54,11 @@
 
             <row>
               <entry>2</entry>
-              <entry></entry>
-              <entry>A</entry>
-              <entry><emphasis role="strong">Tests have categories</emphasis>.  Individual tests can be marked as belonging to zero, one, or many of these categories.  The UI provides for running only tests in selected categories, and for viewing only results of tests in selected categories.
-<programlisting>Testing Mode
-  Regression
-  Smoke
-  Stress
-  Default-Only (for tests, such as front page UI tests, that will break 
-                once the default site is modified and can be ignored on 
-                non-default sites)
-Layer
-  Web Page
-  TCL Page Contract
-  TCL API
-  SQL  
-Severity (derives from ns_log values)
-  Notice (use this for informational items that do not imply a problem)
-  Warning (use this for submitted tests w/o fixes; hygiene tests such as deprecated function sweeps)
-  Error (default severity)
-  Test Validity Bug (use this for problems that suggest the test itself in invalid or broken)
-Test Data
-  Self-contained  Requires no test data, leaves no test data.
-  Populate  Generates and leaves test data, for other tests or for end users.
-Package Version
-  5.0.0
-  etc
-</programlisting></entry>
-            </row>
+              <entry>Done</entry>
+              <entry>Done</entry>
+              <entry><emphasis role="strong">Tests have categories</emphasis>.  Individual tests can be marked as belonging to zero, one, or many of these categories.  The UI provides for running only tests in selected categories, and for viewing only results of tests in selected categories.</entry>
+          </row>
+            
 
             <row>
               <entry>2.1</entry>
@@ -129,7 +106,38 @@ Package Version
           </tbody>
         </tgroup>
       </informaltable>
-	</sect2>
+
+      <para>Because the current test package uses in-memory variables instead of database objects to track its tests, it is incompatible with the standard category package.  It uses an internal, single-dimension category field.  Should this eventually get extended, a more complete list of categories to implement could be:</para>
+<programlisting>Testing Mode
+  Regression
+  Smoke
+  Stress
+  Default-Only (for tests, such as front page UI tests, that will break 
+                once the default site is modified and can be ignored on 
+                non-default sites)
+  production-safe
+  security_risk
+Layer
+  Web Page
+  TCL Page Contract
+  TCL API
+  SQL  
+Severity (derives from ns_log values)
+  Notice (use this for informational items that do not imply a problem)
+  Warning (use this for submitted tests w/o fixes; hygiene tests such as deprecated function sweeps)
+  Error (default severity)
+  Test Validity Bug (use this for problems that suggest the test itself in invalid or broken)
+Test Data
+  Self-contained  Requires no test data, leaves no test data.
+  Populate  Generates and leaves test data, for other tests or for end users.
+Package Version
+  5.0.0
+  etc
+</programlisting>
+
+    </sect2>
+
+
 	<sect2>
 	    <title>References</title>
 	    	<itemizedlist>

@@ -10,48 +10,88 @@
       <th bgcolor="#ECECEC">View by</th>
     </tr>
     <tr>
-      <td align=center> [
+
+      <td> [
       <if @by_category@ eq "">
          <strong> all </strong>
       </if><else>
-         <a href="index?by_package_key=@by_package_key@&view_by=@view_by@&quiet=@quiet@">all</a>
+         <a href="index?stress=@stress@&security_risk=@security_risk@&by_package_key=@by_package_key@&view_by=@view_by@&quiet=@quiet@">all</a>
       </else>
-      <multiple name="all_categories">
+      <multiple name="main_categories">
         |
-        <if @by_category@ eq @all_categories.name@>
-           <strong> @all_categories.name@ </strong>
+        <if @by_category@ eq @main_categories.name@>
+           <strong> @main_categories.name@ </strong>
         </if><else>
-           <a href="index?by_package_key=@by_package_key@&view_by=@view_by@&by_category=@all_categories.name@&quiet=@quiet@">@all_categories.name@</a>
+           <a href="index?stress=@stress@&security_risk=@security_risk@&by_package_key=@by_package_key@&view_by=@view_by@&by_category=@main_categories.name@&quiet=@quiet@">@main_categories.name@</a>
         </else>
       </multiple> ]
+ <div class="form-help-text">
+                  <img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" border="0">
+                  View and run only tests in this category (<a
+      href="/api-doc/proc-view?proc=aa%5fregister%5fcase">more info</a>)
+                </div>
+
+<p><if @stress@ eq 1>                
+      <a href="index?stress=0&security_risk=@security_risk@&by_package_key=@by_package_key@&view_by=@view_by@&by_category=@by_category@&quiet=0" style="padding-top: 2px; padding-bottom: -2px;">
+        <img src="/resources/acs-subsite/checkboxchecked.gif" border="0" height="13" width="13"/>
+      </a>
+    </if>
+    <else>
+      <a href="index?stress=1&security_risk=@security_risk@&by_package_key=@by_package_key@&view_by=@view_by@&by_category=@by_category@&quiet=0" style="padding: 0px;">
+        <img src="/resources/acs-subsite/checkbox.gif" border="0" height="13" width="13"/>
+      </a>
+      </button>
+    </else>
+    Include Stress tests
+</p>
+<p><if @security_risk@ eq 1>                
+      <a href="index?stress=@stress@&security_risk=0&by_package_key=@by_package_key@&view_by=@view_by@&by_category=@by_category@&quiet=0" style="padding-top: 2px; padding-bottom: -2px;">
+        <img src="/resources/acs-subsite/checkboxchecked.gif" border="0" height="13" width="13"/>
+      </a>
+    </if>
+    <else>
+      <a href="index?stress=@stress@&security_risk=1&by_package_key=@by_package_key@&view_by=@view_by@&by_category=@by_category@&quiet=0" style="padding: 0px;">
+        <img src="/resources/acs-subsite/checkbox.gif" border="0" height="13" width="13"/>
+      </a>
+      </button>
+    </else>
+    Include tests that may compromise security
+</p>
     </td>
-    <td align=center> [
+
+    <td align=center valign="top"> [
       <if @quiet@ eq "1">
          <strong> quiet </strong> | 
-         <a href="index?by_package_key=@by_package_key@&view_by=@view_by@&by_category=@by_category@&quiet=0">verbose</a>
+         <a href="index?stress=@stress@&security_risk=@security_risk@&by_package_key=@by_package_key@&view_by=@view_by@&by_category=@by_category@&quiet=0">verbose</a>
       </if><else>
-         <a href="index?by_package_key=@by_package_key@&view_by=@view_by@&by_category=@by_category@&quiet=1">quiet</a>
+         <a href="index?stress=@stress@&security_risk=@security_risk@&by_package_key=@by_package_key@&view_by=@view_by@&by_category=@by_category@&quiet=1">quiet</a>
          | <strong> verbose </strong>
       </else>  ]
+ <div class="form-help-text">
+                  <img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" border="0">
+                  Quiet mode shows only test failures.
+                </div>
     </td>
-    <td align=center> [
+
+    <td align=center valign="top"> [
       <if @view_by@ eq "" or @view_by@ eq "package">
          <strong> package </strong> | 
-         <a href="index?by_package_key=@by_package_key@&view_by=testcase&by_category=@by_category@&quiet=@quiet@">testcase</a>
+         <a href="index?stress=@stress@&security_risk=@security_risk@&by_package_key=@by_package_key@&view_by=testcase&by_category=@by_category@&quiet=@quiet@">testcase</a>
       </if><else>
-         <a href="index?view_by=package&by_category=@by_category@&quiet=@quiet@">package</a>
+         <a href="index?stress=@stress@&security_risk=@security_risk@&view_by=package&by_category=@by_category@&quiet=@quiet@">package</a>
          | <strong> testcase </strong>
       </else>  ]
     </td>
+
     </tr>
   </table>
 
   <blockquote>
     <b>&raquo;</b>
-    <a href="rerun?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@"> Rerun displayed test cases</a>
+    <a href="rerun?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@&stress=@stress@&security_risk=@security_risk@"> Rerun displayed test cases</a>
     <br>
     <b>&raquo;</b>
-    <a href="clear?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@"> Clear test result data</a> </li>
+    <a href="clear?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@&stress=@stress@&security_risk=@security_risk@"> Clear test result data</a> </li>
   </blockquote>
 
   <if @view_by@ eq "package">
@@ -65,7 +105,7 @@
     </tr>
     <multiple name="packageinfo">
       <tr>
-        <td> <a href="index?by_package_key=@packageinfo.key@&view_by=testcase&quiet=@quiet@">@packageinfo.key@</a></td>
+        <td> <a href="index?stress=@stress@&security_risk=@security_risk@&by_package_key=@packageinfo.key@&view_by=testcase&quiet=@quiet@">@packageinfo.key@</a></td>
         <if @packageinfo.total@ eq "0">
           <td> No Data </td><td>-</td><td>-</td>
           <td>
@@ -131,10 +171,10 @@
 
   <blockquote>
     <b>&raquo;</b>
-    <a href="rerun?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@"> Rerun displayed test cases</a>
+    <a href="rerun?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@&stress=@stress@&security_risk=@security_risk@"> Rerun displayed test cases</a>
     <br>
     <b>&raquo;</b>
-    <a href="clear?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@"> Clear test result data</a> </li>
+    <a href="clear?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@&stress=@stress@&security_risk=@security_risk@"> Clear test result data</a> </li>
   </blockquote>
 
   </body>
