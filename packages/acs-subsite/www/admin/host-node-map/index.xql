@@ -4,11 +4,7 @@
 
 <fullquery name="node_list">      
       <querytext>
-
-          select name, node_id
-	  from site_nodes
-          order by name
-      
+          select node_id from site_nodes
       </querytext>
 </fullquery>
 

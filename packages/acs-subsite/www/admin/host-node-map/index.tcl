@@ -24,14 +24,14 @@ db_foreach host_node_pair {
     </tr>"
 } 
 
-set nodes ""
+set nodes [list]
 set root_id [ad_conn node_id]
-db_foreach node_list {
-    select name, node_id
-    from site_nodes
-    order by name
-} {
-    append nodes "<input type=radio name=root value=$node_id> /$name<br>"
+set node_list [list]
+db_foreach node_list {} { 
+    lappend node_list [list [site_node::get_element -node_id $node_id -element url] $node_id]
+}
+foreach node [lsort $node_list] {
+    append nodes "<input type=radio name=root value=\"[lindex $node 1]\">[lindex $node 0]<br>\n"
 }
 
 
