@@ -137,8 +137,6 @@ doc_body_append "
 <h3>Help</h3>
 
 <blockquote>
-A particular version of a package is <b>installed</b> if the files necessary to run it
-are present in the filesystem.
 It is <b>enabled</b> if it is scheduled to run at server startup
 and deliverable by the request processor.
 
