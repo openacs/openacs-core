@@ -862,7 +862,7 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
                 set __db_ws [lindex [lindex $__db_lst $__db_i] 0]
                 set __db_we [lindex [lindex $__db_lst $__db_i] 1]
                 set __db_bind_var [string range $__db_sql $__db_ws $__db_we]                
-                if {![string match "::*" $__db_] && ![db_bind_var_quoted_p $sql $__db_ws $__db_we]} {
+                if {![string match "::*" $__db_bind_var] && ![db_bind_var_quoted_p $__db_sql $__db_ws $__db_we]} {
                     set __db_tcl_var [string range $__db_bind_var 1 end]
                     set __db_tcl_var [set $__db_tcl_var]
                     if {[string equal $__db_tcl_var ""]} {
@@ -884,7 +884,7 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
             set ws [lindex [lindex $lst $i] 0]
             set we [lindex [lindex $lst $i] 1]
             set bind_var [string range $sql $ws $we]
-            if {![string match "::*" $bind_var] && ![db_bind_var_quoted_p $sql $ws $we]} {
+            if {![string match "::*" $bind_var] && ![db_bind_var_quoted_p $lsql $ws $we]} {
                 set tcl_var [string range $bind_var 1 end]
                 set val $bind_vars($tcl_var)
                 if {[string equal $val ""]} {
