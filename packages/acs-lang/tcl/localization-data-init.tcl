@@ -279,6 +279,36 @@ nsv_set locale pl_PL,t_fmt_ampm "%H:%M:%S "
 nsv_set locale pl_PL,t_fmt "%T"
 nsv_set locale pl_PL,thousands_sep " "
 
+# Russia
+nsv_set locale ru_RU,abday {{вс} {пн} {вт} {ср} {чт} {пт} {сб}}
+nsv_set locale ru_RU,abmon {{€нв} {фев} {мар} {апр} {май} {июн} {июл} {авг} {сен} {окт} {но€} {дек}}
+nsv_set locale ru_RU,am_str ""
+nsv_set locale ru_RU,currency_symbol "р."
+nsv_set locale ru_RU,day {{воскресенье} {понедельник} {вторник} {среда} {четверг} {п€тница} {суббота}}
+nsv_set locale ru_RU,decimal_point "."
+nsv_set locale ru_RU,d_fmt "%d.%m.%y"
+nsv_set locale ru_RU,d_t_fmt "%a %d %B %Y г., %H:%M %Z"
+nsv_set locale ru_RU,frac_digits 2
+nsv_set locale ru_RU,grouping {3 3 }
+nsv_set locale ru_RU,int_curr_symbol "RUB "
+nsv_set locale ru_RU,int_frac_digits 2
+nsv_set locale ru_RU,mon_decimal_point "."
+nsv_set locale ru_RU,mon_grouping {3 3 }
+nsv_set locale ru_RU,mon {{€нварь} {февраль} {март} {апрель} {май} {июнь} {июль} {август} {сент€брь} {окт€брь} {но€брь} {декабрь}}
+nsv_set locale ru_RU,mon_longdate {{€нвар€} {феврал€} {марта} {апрел€} {ма€} {июн€} {июл€} {августа} {сент€бр€} {окт€бр€} {но€бр€} {декабр€}}
+nsv_set locale ru_RU,mon_thousands_sep " "
+nsv_set locale ru_RU,n_cs_precedes 0
+nsv_set locale ru_RU,negative_sign "-"
+nsv_set locale ru_RU,n_sep_by_space 0
+nsv_set locale ru_RU,n_sign_posn 1
+nsv_set locale ru_RU,p_cs_precedes 0
+nsv_set locale ru_RU,pm_str ""
+nsv_set locale ru_RU,positive_sign ""
+nsv_set locale ru_RU,p_sep_by_space 0
+nsv_set locale ru_RU,p_sign_posn 1
+nsv_set locale ru_RU,t_fmt_ampm ""
+nsv_set locale ru_RU,t_fmt "%H:%M"
+nsv_set locale ru_RU,thousands_sep " "
 
 
 
