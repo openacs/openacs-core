@@ -1,7 +1,7 @@
 create table search_observer_queue (
     object_id		   integer
 			   constraint search_observer_queue_object_id_fk 
-			   references acs_objects(object_id),
+			   references acs_objects(object_id) on delete cascade,
     date		   timestamp default now(),
     event		   varchar(6)
 			   constraint search_observer_queue_event_ck
