@@ -681,6 +681,15 @@ ad_proc -public template::multirow {
       set columns $args
     }
 
+    unset {
+      upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
+      for { set i 1 } { $i <= $rowcount } { incr i } {
+        upvar $multirow_level_up $name:$i row
+        unset row
+      }
+      unset rowcount columns
+    }
+
     extend {
       upvar $multirow_level_up $name:columns columns
       foreach column_name $args {
