@@ -82,17 +82,17 @@ Done Building Sat Mar  8 10:31:35 PST 2003
 	  communicate with the database.  There is one script each for
 	  Oracle and PostgreSQL.  They don't conflict, so if you plan
 	  to use both databases, install both.</p><div class="itemizedlist"><ul type="disc"><li><p>Oracle</p><pre class="screen">[root aolserver]# <b class="userinput"><tt>cd /usr/local/aolserver/bin</tt></b>
-[root bin]# <b class="userinput"><tt>cp /tmp/openacs-5.1.2/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</tt></b>
+[root bin]# <b class="userinput"><tt>cp /tmp/openacs-5.1.3/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</tt></b>
 [root bin]# <b class="userinput"><tt>chmod 750 nsd-oracle</tt></b>
 [root bin]#
 <span class="action"><span class="action">cd /usr/local/aolserver/bin
-cp /tmp/openacs-5.1.2/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
+cp /tmp/openacs-5.1.3/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
 chmod 750 nsd-oracle</span></span></pre></li><li><p>PostgreSQL</p><pre class="screen">[root aolserver]# <b class="userinput"><tt>cd /usr/local/aolserver/bin</tt></b>
-[root bin]# <b class="userinput"><tt>cp /tmp/openacs-5.1.2/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</tt></b>
+[root bin]# <b class="userinput"><tt>cp /tmp/openacs-5.1.3/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</tt></b>
 [root bin]# <b class="userinput"><tt>chmod 755 nsd-postgres</tt></b>
 [root bin]#
 <span class="action"><span class="action">cd /usr/local/aolserver/bin
-cp /tmp/openacs-5.1.2/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
+cp /tmp/openacs-5.1.3/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
 chmod 755 nsd-postgres</span></span></pre></li></ul></div></li><li><a name="install-tdom"></a><p><b>Install tDOM. </b>Download the <a href="individual-programs.html#source-tdom">tDOM
         tarball</a>, unpack it, adjust the configuration file to match our patched
         distribution of aolserver, and compile it.</p><pre class="screen">[root root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
@@ -169,7 +169,9 @@ drwxrwsr-x    3 root     web          4096 Mar  8 10:31 servers
 cd /usr/local/aolserver
 chown -R root.web log servers
 chmod -R g+w log servers
-ls -l</span></span></pre><p>Now, we'll run a quick test to ensure AOLserver is running
+ls -l</span></span></pre><p>Note: AOLserver4.x does not include a default start page, so we create one for this test. Type 
+        <b class="userinput"><tt>echo "Welcome to AOLserver" &gt; /usr/local/aolserver40r8/servers/server1/pages/index.html</tt></b>
+      </p><p>Now, we'll run a quick test to ensure AOLserver is running
           correctly. We'll use the sample config file provided with
           AOLserver. This file will attempt to guess your IP address and
           hostname. It will then start up the server at port 8000 of that

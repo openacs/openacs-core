@@ -57,7 +57,7 @@ chmod 770 /var/lib/aolserver</action></screen>
 <screen>
 [root root]# <userinput>useradd <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [root root]#</screen>
-    <para><title>FreeBSD</title> creates the user this way:</para>
+    <para>FreeBSD creates the user this way:</para>
 <screen>
 [root root]# <userinput>mkdir -p /home/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [root root]# <userinput>pw useradd -n <replaceable>$OPENACS_SERVICE_NAME</replaceable> -g web -d /home/<replaceable>$OPENACS_SERVICE_NAME</replaceable> -s /bin/bash</userinput>

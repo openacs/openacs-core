@@ -7,10 +7,10 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="5.1.2" url="http://openacs.org/repository/download/apm/acs-reference-5.1.2.apm">
+    <version name="5.1.3" url="http://openacs.org/repository/download/apm/acs-reference-5.1.3.apm">
         <owner url="mailto:jon@jongriffin.com">Jon Griffin</owner>
         <summary>Tools and API for managing refrence data.</summary>
-        <release-date>2004-10-21</release-date>
+        <release-date>2004-11-26</release-date>
         <vendor url="http://www.mayuli.com">Mayuli Enterprises, LLC</vendor>
         <description format="text/html">Reference Data provides an API to support:
 &lt;ul&gt;
@@ -18,7 +18,7 @@
 &lt;li&gt; Running standard reports on this data.
 &lt;li&gt; Monitoring the usage of reference data.
 &lt;/ul&gt;</description>
-        <provides url="acs-reference" version="5.1.2"/>
+        <provides url="acs-reference" version="5.1.3"/>
         <requires url="acs-kernel" version="5.0.0"/>
 
         <callbacks>

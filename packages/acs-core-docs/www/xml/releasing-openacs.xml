@@ -19,6 +19,15 @@
       </listitem>
       <listitem>
         <formalpara>
+          <title>Rebuild the Changelog</title>
+            <para>Rebuild the Changelog.  I use a tool called cvs2cl.  Run this command from the package root to automatically generate a Changelog file  in the same dir.  We generate two changelogs, one for the minor branch and one for the most recent release.  The example below is for OpenACS 5.0.2:</para>
+        </formalpara>
+        <screen><action>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME
+cvs2cl -F <replaceable>oacs-5-0</replaceable> --delta <replaceable>openacs-5-0-0-final</replaceable>:<replaceable>oacs-5-0</replaceable> -f ChangeLog
+cvs2cl -F <replaceable>oacs-5-0</replaceable> --delta <replaceable>openacs-5-0-1-final</replaceable>:<replaceable>oacs-5-0</replaceable> -f ChangeLog-recent</action></screen>
+      </listitem>
+      <listitem>
+        <formalpara>
           <title>Update Version Numbers</title>
           <para>The version numbers in the documentation and in the packages must be updated.  This should only happen after a release candidate is approved.</para>
         </formalpara>
@@ -41,7 +50,7 @@ make</screen>
             <para>Update /var/lib/aolserver/$OPENACS_SERVICE_NAME/readme.txt with the new version number</para>
           </listitem>
           <listitem>
-            <para>Update version number in all of the core packages.  Here's a bash/perl script which works but could be made easier to use.  Run it from /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages:</para>
+            <para>Update version number and release date in all of the core packages.  Here's a bash/perl script which works but could be made easier to use.  (It depends on all of the old versions and dates being identical.)  Run it from /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages:</para>
           <programlisting>#!/bin/sh
 # run this file from ../packages to renumber all .info version numbers
 
@@ -61,23 +70,16 @@ for dir in `find -name *.info`
   perl -p -i -e 's/name="5\.0\.0"/name="5\.1\.0d1"/' $dir
   perl -p -i -e 's/-5\.0\.0.apm"/-5\.1\.0d1.apm"/' $dir
   perl -p -i -e 's/(provides.*version)="5\.0\.0"/\1="5\.1\.0d1"/' $dir
+  perl -p -i -e 's/2004-10-21/2004-11-26/' $dir
 done</programlisting>
+        </listitem>
+        <listitem>
+          <para>Install a new site using the modified code and verify that the automated tests pass.</para>
         </listitem>
         <listitem>
           <para>Commit changes to CVS</para>
           </listitem>
         </orderedlist>
-      </listitem>
-      <listitem>
-        <formalpara>
-          <title>Rebuild the Changelog</title>
-            <para>Rebuild the Changelog.  I use a tool called cvs2cl.  Run this command from the package root to automatically generate a Changelog file  in the same dir:</para>
-        </formalpara>
-        <screen>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME
-perl /var/tmp/cvs2cl/cvs2cl.pl -F <replaceable>oacs-5-0</replaceable> --delta <replaceable>openacs-5-0-0-final</replaceable>:<replaceable>oacs-5-0</replaceable></screen>
-        <para>
-          Commit changes
-        </para>
       </listitem>
       <listitem>
         <formalpara>

@@ -6,15 +6,15 @@
             Commit that file (or files): </p><pre class="screen"><span class="action"><span class="action">cvs commit -m "what I did and why" filename</span></span></pre><p>
             Because this occurs in your personal checkout and not an anonymous
             one, this commit automagically moves back upstream to the Mother
-            Ship repository at openacs.org.  The names of the changed files, and your comments, are sent to a mailing list for OpenACS developers.  A Core Team developer may review or roll back your changes if necessary.
+            Ship repository at cvs.openacs.org.  The names of the changed files, and your comments, are sent to a mailing list for OpenACS developers.  A Core Team developer may review or roll back your changes if necessary.
           </p></li><li><p>
                   Confirm via the <a href="http://cvs.openacs.org/cvs/openacs-4/" target="_top">
                     OpenACS CVS browser </a>
                   that your changes are where you intended them to be.
                 </p></li></ol></div></li><li><p>Add a new package.  Contact the <a href="mailto:oct@openacs.org" target="_top">Core Team</a> to get approval and to get a module alias created.</p><div class="orderedlist"><ol type="a"><li><p>
                 Check out acs-core on the HEAD branch.  (Weird things happen if you add files to a branch but not to HEAD):</p><pre class="screen"><span class="action"><span class="action">cd /tmp
-cvs -d:ext:openacs.org:/cvsroot checkout acs-core</span></span></pre><p>Copy your package directory from your working directory to this directory.  Make sure not to copy any CVSROOT directories.</p><pre class="screen"><span class="action"><span class="action">cp /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packagse/<span class="replaceable"><span class="replaceable">newpackage</span></span> /tmp/openacs-4/packages</span></span></pre><p>Import the package into the OpenACS.org cvs repository:</p><pre class="screen"><span class="action"><span class="action">cd /tmp/openacs-4/packages/<span class="replaceable"><span class="replaceable">newpackage</span></span>
-cvs import -m "Initial import of <span class="replaceable"><span class="replaceable">newpackage</span></span>" openacs-4/packages/newpackage <span class="replaceable"><span class="replaceable">myname</span></span> <span class="replaceable"><span class="replaceable">0.1d</span></span></span></span></pre></li><li><p>Add the new package to the modules file. (An administrator has to do this step.)  On any machine, in a temporary directory:</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:openacs.org:/cvsroot co CVSROOT
+cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre><p>Copy your package directory from your working directory to this directory.  Make sure not to copy any CVSROOT directories.</p><pre class="screen"><span class="action"><span class="action">cp /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packagse/<span class="replaceable"><span class="replaceable">newpackage</span></span> /tmp/openacs-4/packages</span></span></pre><p>Import the package into the cvs.openacs.org cvs repository:</p><pre class="screen"><span class="action"><span class="action">cd /tmp/openacs-4/packages/<span class="replaceable"><span class="replaceable">newpackage</span></span>
+cvs import -m "Initial import of <span class="replaceable"><span class="replaceable">newpackage</span></span>" openacs-4/packages/newpackage <span class="replaceable"><span class="replaceable">myname</span></span> <span class="replaceable"><span class="replaceable">0.1d</span></span></span></span></pre></li><li><p>Add the new package to the modules file. (An administrator has to do this step.)  On any machine, in a temporary directory:</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
 cd CVSROOT
 emacs modules</span></span></pre><p>Add a line of the form:</p><pre class="programlisting"><span class="replaceable"><span class="replaceable">photo-album-portlet</span></span> openacs-4/packages/<span class="replaceable"><span class="replaceable">photo-album-portlet</span></span></pre><p>Commit the change:</p><pre class="screen"><span class="action"><span class="action">cvs commit -m "added alias for package <span class="replaceable"><span class="replaceable">newpackage</span></span>" modules</span></span></pre><p>This should print something like:</p><div class="literallayout"><p>cvs commit: Examining .<br>
 **** Access allowed: Personal Karma exceeds Environmental Karma.<br>
@@ -23,7 +23,7 @@ Checking in modules;<br>
 new revision: 1.94; previous revision: 1.93<br>
 done<br>
 cvs commit: Rebuilding administrative file database</p></div></li><li><p>See <a href="releasing-package.html" title="How to package and release an OpenACS Package">the section called &#8220;How to package and release an OpenACS Package&#8221;</a></p></li></ol></div></li></ol></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Commit_Rules"></a>
-      Rules for Committing Code to the OpenACS.org repository
+      Rules for Committing Code to the OpenACS repository
     </h3></div></div></div><p>
       CVS commit procedures are governed by 
       <a href="http://openacs.org/forums/message-view?message_id=185506" target="_top">
@@ -59,7 +59,7 @@ cvs commit: Rebuilding administrative file database</p></div></li><li><p>See <a 
           Code
         </p><div class="orderedlist"><ol type="1"><li><p>
               Only GPL code and material should be committed to the
-              openacs.org CVS repository
+              OpenACS CVS repository (cvs.openacs.org)
             </p></li><li><p>
               Code should only be reformatted when functionality is
               changed, e.g. when you change control flow and reindent to reflect
@@ -134,7 +134,7 @@ cvs commit: Rebuilding administrative file database</p></div></li><li><p>See <a 
           flag which defaults to no-effect wouldn't require a TIP. Added a
           new mandatory flag to an existing function would require a
           TIP.
-        </p></li></ol></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2583865"></a>
+        </p></li></ol></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2564420"></a>
         Reasons
       </h4></div></div></div><p>
         We don't currently have clear standards for committing
@@ -170,7 +170,7 @@ cvs commit: Rebuilding administrative file database</p></div></li><li><p>See <a 
         applies to all packages. This tag can be used to fork packages as
         needed, and provides a common ancestor between the fork and the
         OpenACS code so that patches can be generated.
-      </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2583921"></a>
+      </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2564477"></a>
       Informal Guidelines
     </h3></div></div></div><p>
       Informal guidelines which may be obsolete in places and should be reviewed:

@@ -437,7 +437,7 @@ Stopping PostgreSQL: ok
 Starting PostgreSQL: ok
 [root root]#
 <action>/usr/local/etc/rc.d/postgresql.sh start</action></screen>
-        
+        </listitem>
         <listitem><para>SuSE:</para>
           
           <note>
@@ -564,7 +564,7 @@ checkpoint_segments = 3     # in logfile segments (16MB each), min 1
         </listitem>
       </orderedlist>
 
-      <para><title>FreeBSD users:</title> See <userinput>man syctl</userinput>, <userinput>man 5 sysctl</userinput>
+      <para>FreeBSD users: See <userinput>man syctl</userinput>, <userinput>man 5 sysctl</userinput>
       and <userinput>man 5 loader.conf</userinput>.</para>
 
       <para>Performance tuning resources:</para>
@@ -626,4 +626,3 @@ checkpoint_segments = 3     # in logfile segments (16MB each), min 1
   <para><phrase role="cvstag">($Id$)</phrase></para>
   </sect2>
 </sect1>
-

@@ -719,6 +719,8 @@ logout
             </listitem>
           </orderedlist>
         </listitem>
+
+
         <listitem>
           <para>Identify a runaway Oracle query: first, use <userinput>ps aux</userinput> or <userinput>top</userinput> to get the UNIX process ID of a runaway Oracle process.</para>
         <para>Log in to SQL*Plus as the admin:</para>
@@ -755,6 +757,31 @@ Password:</screen>
         <para>To kill a troubled process:</para>
         <programlisting>alter system kill session 'SID,SERIAL#';  --substitute values for SID and SERIAL#</programlisting>
         <para>(See <ulink url="http://www.piskorski.com/docs/oracle.html">Andrew Piskorski's Oracle notes</ulink>)</para>
+        </listitem>
+
+        <listitem>
+          <para>Identify a runaway Postgres query.  First, logging must be enabled in the database.  This imposes a performance penalty and should not be done in normal operation.</para>
+          <para>Edit the file <computeroutput>postgresql.conf</computeroutput> - its location depends on the PostGreSQL installation - and change</para>
+          <programlisting>#stats_command_string = false</programlisting>
+          <para>to</para>
+          <programlisting>stats_command_string = true</programlisting>
+          <para>Next, connect to postgres (<computeroutput>psql <replaceable>service0</replaceable></computeroutput>) and <computeroutput>select * from pg_stat_activity;</computeroutput>.  Typical output should look like:</para>
+          <programlisting>
+  datid   |   datname   | procpid | usesysid | usename |  current_query
+----------+-------------+---------+----------+---------+-----------------
+ 64344418 | openacs.org |   14122 |      101 | nsadmin | &lt;IDLE&gt;
+ 64344418 | openacs.org |   14123 |      101 | nsadmin |
+                                                         delete
+                                                         from acs_mail_lite_queue
+                                                         where message_id = '2478608';
+ 64344418 | openacs.org |   14124 |      101 | nsadmin | &lt;IDLE&gt;
+ 64344418 | openacs.org |   14137 |      101 | nsadmin | &lt;IDLE&gt;
+ 64344418 | openacs.org |   14139 |      101 | nsadmin | &lt;IDLE&gt;
+ 64344418 | openacs.org |   14309 |      101 | nsadmin | &lt;IDLE&gt;
+ 64344418 | openacs.org |   14311 |      101 | nsadmin | &lt;IDLE&gt;
+ 64344418 | openacs.org |   14549 |      101 | nsadmin | &lt;IDLE&gt;
+(8 rows)
+openacs.org=&gt;</programlisting>
         </listitem>
       </itemizedlist>
     </listitem>

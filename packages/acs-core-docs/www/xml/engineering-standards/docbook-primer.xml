@@ -1,10 +1,10 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-<sect1 id="docbook-primer" xreflabel="OpenACS Documentation Guide">
+<sect1 id="docbook-primer">
   <title>OpenACS Documentation Guide</title>
 
   <para>
@@ -24,7 +24,7 @@
     </para>
  
     <para>
-      <title>The history of OpenACS documentation</title>  ..began by
+      The history of OpenACS documentation:  ..began by
       building on a good documentation base from ArsDigita's ACS in the
       late 1990's. Some sections of the documentation, however, lacked
       details and examples; others simply did not exist. The OpenACS
@@ -76,7 +76,7 @@
     </para>
     <orderedlist>
       <listitem><para>
-        <title>Requirements phase</title> is about setting goals and
+        <emphasis role="strong">Requirements phase</emphasis> is about setting goals and
         specifications, and includes exploration of scenarios, use cases
         etc.  As an example, see the <ulink
         url="http://openacs.org/doc/openacs-4/requirements-template.html">
@@ -84,14 +84,14 @@
         systems requirements for developers.
       </para></listitem>
       <listitem><para>
-        <title>Strategy phase</title> is about creating an approach
+        <emphasis role="strong">Strategy phase</emphasis> is about creating an approach
         to doing work. It sets behavioral guidelines and boundaries
         that help keep perspective on how efforts are directed.
         OpenACS developers discuss strategy when coordinating
         efforts such as code revisioning and new features.
       </para></listitem>
       <listitem><para>
-        <title>Planning phase</title> is about explicitly stating
+        <emphasis role="strong">Planning phase</emphasis> is about explicitly stating
         the way to implement the strategy as a set of methods.
         OpenACS system design requires planning. For example, see
         <ulink
@@ -100,13 +100,13 @@
         design. 
       </para></listitem>
       <listitem><para>
-        <title>Implementation phase</title> is about performing the
+        <emphasis role="strong">Implementation phase</emphasis> is about performing the
         work according to the plan, where decisions on how to handle
         unforseen circumstances are guided by the strategy and
         requirements.
       </para></listitem>
       <listitem><para>
-        <title>Verification phase</title> measures how well the plan
+        <emphasis role="strong">Verification phase</emphasis> measures how well the plan
         was implemented. Success is measured by A) verifying if the
         project has met the established goals, and B) reviewing for
         ongoing problem areas etc.  OpenACS follows verification
@@ -279,9 +279,11 @@
       significance has been given to the order presented, topic breadth or depth here.
     </para>
     <itemizedlist>
-      <listitem><para>
-        End-users should not have to read docs to use the system. 
-      </para></listitem>
+      <listitem>
+        <para>
+          End-users should not have to read docs to use the system. 
+        </para>
+      </listitem>
       <listitem><para>
         Include how to get help. How and where to find answers,
         contact others, what to do if one gets an AOLserver or other
@@ -297,7 +299,7 @@
         and writing about some tacit knowledge re: OpenACS.org and
         the opensource culture.
       </para></listitem>
-      <para><listitem>
+      <listitem><para>
         Introduce and inspire readers about the uses, benefits, and
         the possibilities this system brings (think customer
         solution, customer cost, convenience, value). A
@@ -318,7 +320,7 @@
         most portals just add another layer of complexity to the
         cake. See <ulink
         url="http://openacs.org/bboard/q-and-a-fetch-msg.tcl?msg_id=
-        00058H&topic_id=11&topic=OpenACS">Slides on OACS
+        00058H&amp;topic_id=11&amp;topic=OpenACS">Slides on OACS
         features</ulink>...a set of slides on OACS features that can
         be used for beginners who want to know OACS is about and
         what they can do with it. Screen captures that highlight
@@ -436,8 +438,7 @@
         description information and almost everything about a
         package for administrators and developers is already
         described in the package itself through two basic
-        development document templates: a <a
-        href="http://openacs.org/doc/current/requirements-template.
+        development document templates: a <ulink url="http://openacs.org/doc/current/requirements-template.
         html">Requirements Template</ulink> and <ulink
         url="http://openacs.org/doc/current/filename.html">Detailed
         Design Document</ulink>.
@@ -589,55 +590,68 @@
       significance has been given to the order presented, topic breadth or depth here.
     </para>
     <itemizedlist>
-      <listitem><para>
+      <listitem>
+        <para>
         list learning prerequisites to customize, fix, and improve
         OACS modules, and create new ones. You are expected to have
         read and understand the information [minimum requirements
         similar to adept at  Using OpenACS Administrating Guide]
         before reading this guide.
-      </para><itemizedlist>
-      <listitem><para> 
+        </para>
+      </listitem>
+      <listitem>
+        <para> 
         Refer to development documentation instead of duplicating here
-      </para><itemizedlist>
+      </para>
+      </listitem>
       <listitem><para>
         List suggestions for installing and setting up a development
         environment; these can be annotated links to the
         installation documentation
-      </para><itemizedlist>
+      </para>
+      </listitem>
       <listitem><para>
         Provide working examples that highlight the various
         subsystems, tcl environment, OpenACS protocols, aolserver
         template and ns_* commands, OpenACS templating, sql queries,
         db triggers, scheduling protocols, how to use the page contract,
         how to get the accessing user_id etc
-      </para><itemizedlist>
+      </para>
+      </listitem>
       <listitem><para>
         Show how to construct basic SQL queries using the db API,
-      </para><itemizedlist>
+      </para>
+      </listitem>
       <listitem><para>
         The life of an http request to a dynamic, templated page
-      </para><itemizedlist>
+      </para>
+      </listitem>
       <listitem><para>
         General rules to follow for stability, scalability
-      </para><itemizedlist>
+      </para>
+      </listitem>
       <listitem><para>
         Show the step by step customizing of an existing package
         that meets current recommended coding styles of OpenACS
         package development, by referring to developer resources.
-      </para><itemizedlist>
+      </para>
+      </listitem>
       <listitem><para>
         Use the ArsDigita problem sets and "what Lars produced for ACS Java" as inspiration for a
         PostgreSQL equivalent tutorial about developing a new
         OpenACS package including discussion of the significance of
         the package documentation templates
-      </para><itemizedlist>
+      </para>
+      </listitem>
       <listitem><para>
         Include a summary of important links used by developers
-      </para><itemizedlist>
+      </para>
+      </listitem>
       <listitem><para>
         Note any deprecated tools and methods by linking to prior
         versions instead of describing them in current docs
-      </para></listitem>
+      </para>
+      </listitem>
     </itemizedlist>
   </sect2>
   
@@ -656,43 +670,43 @@
       <listitem><para>
         list documentation assumptions, such as familiarity with
         modifying OpenACS packages. All kernel docs are here etc.
-      </para><listitem>
+      </para></listitem>
       <listitem><para>
         This documentation should be written for ongoing use by
         developers, not as a tutorial.
-      </para><listitem>
+      </para></listitem>
       <listitem><para>
         List of practical development and diagnostics tools and
         methodologies.
-      </para><listitem>
+      </para></listitem>
       <listitem><para>
         List of OpenACS development resources, api-doc,
         schema-browser, developer-support package etc.
-      </para><listitem>
+      </para></listitem>
       <listitem><para>
         Identify each OpenACS subsystem, explain why it is used
         (instead of other choices). In the case of subsystems that
         are developed outside of OpenACS such as tcl, include
         external references to development and reference areas.
-      </para><listitem>
+      </para></listitem>
       <listitem><para>
         Show current engineering standards and indicate where
         changes to the standards are in the works.
-      </para><listitem>
+      </para></listitem>
       <listitem><para>
         Sections should be dedicated to DotLRN standards as well, if
         they are not available elsewhere.
-      </para><listitem>
+      </para></listitem>
       <listitem><para>
         Add overview diagrams showing the core parts of the
         datamodel including an updated summary of Greenspun's
         Chapter 4: Data Models and the Object System 
-      </para><listitem>
+      </para></listitem>
       <listitem><para>
         package design guidelines and development process templates
         including planning, core functions, testing, usability, and
         creating case studies
-      </para><listitem>
+      </para></listitem>
       <listitem><para>
         Standard package conventions, where to see "model" code, and
         guidelines (or where to find them) for:
@@ -736,7 +750,7 @@
             the new CR Tcl API
           </para></listitem>
         </itemizedlist>
-      </para><listitem>
+      </para></listitem>
       <listitem><para>
         Document kernel coding requirements, strategy and guidelines
         to help code changers make decisions that meet kernel
@@ -1100,7 +1114,7 @@
 
 <programlisting>
 - Find information about creating a package in 
-<xref linkend="packages-making-a-package"></xref>.
+<xref linkend="packages-making-a-package"/>.
 </programlisting>
 
       <para>
@@ -1135,7 +1149,7 @@
 
 <programlisting>
 - Find information about what a package looks like in 
-<xref linkend="packages-looks"></xref>.
+<xref linkend="packages-looks"/>.
 </programlisting>
 
 
@@ -1433,7 +1447,7 @@
     </note>
     
     <para>
-      Once you have the <xref linkend="dbprimer-validation"></xref>
+      Once you have the <xref linkend="dbprimer-validation"/>
       installed, you can convert your xml documents to HTML or other
       formats.
     </para>
