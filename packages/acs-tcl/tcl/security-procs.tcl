@@ -1141,6 +1141,12 @@ ad_proc -public ad_get_client_property {
 } {
     if { [empty_string_p $session_id] } {
         set id [ad_conn session_id]
+        
+        # if session_id is still undefined in the connection then we 
+        # should just return the default
+        if { [empty_string_p $id] } {
+            return $default
+        }
     } else {
         set id $session_id
     }
