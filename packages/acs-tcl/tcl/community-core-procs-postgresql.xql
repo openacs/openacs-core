@@ -30,7 +30,7 @@
 
 <fullquery name="acs_user::delete.permanent_delete">
       <querytext>
-          select acs_user__delete(:user_id);
+          select acs__remove_user(:user_id);
       </querytext>
 </fullquery>
 

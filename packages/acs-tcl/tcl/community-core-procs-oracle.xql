@@ -31,7 +31,7 @@
 <fullquery name="acs_user::delete.permanent_delete">
       <querytext>
           begin
-              acs_user.del(
+              acs.remove_user(
                   user_id => :user_id
               );
           end;
