@@ -168,8 +168,8 @@ html>body #navbar { bottom: 0px }
   text-decoration: underline;
 }
 #navbar #navbar-here { 
-  border-bottom-color: #dddddd;
-  background-color: #dddddd;
+  border-bottom-color: white;
+  background-color: white;
 }
 #navbar #navbar-here a {
   color: black;
@@ -178,12 +178,9 @@ html>body #navbar { bottom: 0px }
 
 #navbar-body { 
   border-bottom: 1px solid #016799;
-  background-color: #dddddd;
+  background-color: white;
   clear: both;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 4px;
-  padding-right: 4px;
+  padding: 12px;
 }
 
 
@@ -236,6 +233,8 @@ html>body #subnavbar { bottom: 0px }
 
 #subnavbar-body { 
   border-bottom: 1px solid #016799;
+  border-left: 1px solid #016799;
+  border-right: 1px solid #016799;
   background-color: white;
   clear: both;
   padding-top: 6px;
