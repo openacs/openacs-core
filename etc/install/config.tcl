@@ -24,10 +24,15 @@ set pg_bindir "/usr/local/pgsql/bin"
 set serverroot "/var/lib/aolserver/${server}"
 set server_url "http://localhost:8000"
 set error_log_file "${serverroot}/log/error.log"
+# OS user that AOLserver runs as
+set aolserver_user "${server}"
 
 # the default server control parameters use daemontools
 set use_daemontools "true"
+# Link from this dir. Don't use trailing slash.
 set svscanroot "/var/lib/svscan/${server}"
+# Link to this dir
+set svscan_sourcedir "$serverroot/etc/daemontools"
 set start_server_command "svc -u ${svscanroot}"
 set stop_server_command "svc -d ${svscanroot}"
 set restart_server_command "svc -t ${svscanroot}"

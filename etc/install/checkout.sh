@@ -25,7 +25,7 @@ source functions.sh
 
 # Fetch config parameters
 serverroot=`get_config_param serverroot`
-start_server_command=`get_config_param start_server_command`
+aolserver_user=`get_config_param aolserver_user`
 use_timesaver_files=`get_config_param use_timesaver_files`
 
 echo "$0: Starting checkout for server path $serverroot with config_file $config_file and dotlrn=$dotlrn"
@@ -91,6 +91,5 @@ echo $(date) > ${serverroot}/www/SYSTEM/checkout-date
 # Set proper privileges
 
 # TODO - get service name and group from config file
-chown -R service0.web ${serverroot}
+chown -R ${aolsever_user}.web ${serverroot}
 chmod -R go+rwX ${serverroot}
-

@@ -1,10 +1,12 @@
 #!/bin/sh
 #
-# This script runs the dotlrn-install.sh script and sends
+# This script runs the install.sh script and sends
 # an email alert if there are installation errors. The
 # script is intended to be run by cron.
 #
 # Must be executed as root
+
+set -x
 
 # Make script dir current dir for convenience
 script_path=$(dirname $(which $0))
@@ -18,7 +20,7 @@ if [ -f ~/.bashrc ]; then
 fi
 
 # Clumsy argument handling, can't use shift as I'm passing
-# the arguments to dotlrn-install.sh
+# the arguments to install.sh
 config_file_next=0
 for arg in $@;
 do
@@ -41,7 +43,7 @@ if [ ! -d ${output_dir} ]; then
     mkdir -p $output_dir
 fi
 installation_output_file="${output_dir}/installation-output"
-./dotlrn-install.sh $@ &> $installation_output_file
+./install.sh $@ &> $installation_output_file
 
 # Get lines with alert keywords or lines with failed TclWebtest tests
 error_lines=$(egrep -i "(FAILED: .+\.test)|($alert_keyword)" $installation_output_file)
