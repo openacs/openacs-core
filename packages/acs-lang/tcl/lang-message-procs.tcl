@@ -287,11 +287,19 @@ ad_proc -public lang::message::lookup {
     Returns a translated string for the given locale and message key.
     If the user is a translator, inserts tags to link to the translator
     interface. This allows a translator to work from the context of a web page.
+    
+    Messages will have %name% replaced with variables either from substitution_list, 
+    if present, or from the caller's namespace (or upvar_level's namespace).
+    Set upvar_level to 0 and substitution_list empty to prevent substitution from happening
+
+    Note that this proc does not use named parameters, because named parameters are 
+    relatively slow, and this is going to get called a whole lot on each request.
 
     @param locale             Locale (e.g., "en_US") or language (e.g., "en") string.
                               If locale is the empty string ad_conn locale will be used
                               if we are in an HTTP connection, otherwise the system locale
                               (SiteWideLocale) will be used.
+
     @param key                Unique identifier for this message. Will be the same 
                               identifier for each locale. All keys belong to a certain 
                               package and should be prefixed with the package key of that package 
@@ -300,10 +308,12 @@ ad_proc -public lang::message::lookup {
                               characters and underscores). If the key does not belong to 
                               any particular package it should not contain a dot. A lookup
                               is always attempted with the exact key given to this proc.
+
     @param default            Text to return if there is no message in the message catalog for
                               the given locale. This argument is optional. If this argument is
                               not provided or is the empty string then the text returned will
                               be TRANSLATION MISSING - $key.
+
     @param substitution_list  A list of values to substitute into the message. This argument should
                               only be given for certain messages that contain place holders (on the syntax
                               %var_name%) for embedding variable values, see lang::message::format.
@@ -395,9 +405,8 @@ ad_proc -public lang::message::lookup {
                     if { [message_exists_p $locale $key] } {
                         set message [nsv_get lang_message_$locale $key]
                     } else {
-                        ns_log Error "lang::message::lookup: Key '$key' does not exists in en_US"
-                        #set message "NO KEY: $key"
-                        set message {}
+                        ns_log Error "lang::message::lookup: Key '$key' does not exist in en_US"
+                        set message "MESSAGE KEY MISSING: '$key'"
                     }
                 }
             }
@@ -405,6 +414,7 @@ ad_proc -public lang::message::lookup {
     }
     
     # Do any variable substitutions (interpolation of variables)
+    # Set upvar_level to 0 and substitution_list empty to prevent substitution from happening
     if { [llength $substitution_list] > 0 || ($upvar_level >= 1 && [string first "%" $message] != -1) } {
         set message [lang::message::format $message $substitution_list [expr $upvar_level + 1]]
     }
