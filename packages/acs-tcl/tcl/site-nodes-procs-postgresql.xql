@@ -19,11 +19,11 @@
 </fullquery>
 
  
-<fullquery name="site_node_create">
+<fullquery name="site_node_create.node_new">
 <querytext>
 select site_node__new (
         :new_node_id,
-        :parent_id,
+        :parent_node_id,
         :name,
 	NULL,
         :directory_p,
