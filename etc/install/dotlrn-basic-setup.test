@@ -8,6 +8,10 @@ if { [catch {
     
     ::twt::log_section "Add the site wide admin to dotLRN"
     ::twt::dotlrn::add_site_wide_admin $server_url
+
+    ::twt::log_section "Load I18N Messages and enter German locale"
+    ::twt::acs_lang::load_i18n_messages    
+    ::twt::acs_lang::set_locale de_DE
     
     ::twt::log_section "Upload users"
     ::twt::user::upload_users $server_url

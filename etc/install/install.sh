@@ -322,7 +322,9 @@ if parameter_true $do_install; then
   if parameter_true "$dotlrn_demo_data"; then
       # Do .LRN demo data setup
       echo "$0: Starting basic setup of .LRN at $(date)"
+      cp ${script_path}/tcl/eval-command.tcl $serverroot/www/eval-command.tcl
       ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-basic-setup.test
+      rm $serverroot/www/eval-command.tcl
   fi
       
   if parameter_true $crawl_links; then
