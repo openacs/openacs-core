@@ -306,16 +306,20 @@ logout
                 </orderedlist>
               </listitem>
               <listitem>
-                <formalpara>
+                <formalpara id="restore-postgres">
                   <title>Postgres</title>
-                  <para>Because of a bug in Postgres backup-recovery, database objects are not guaranteed to be created in the right order.  To compensate, we pre-creating some critical items first, which leads to some harmless errors.</para>
-                </formalpara>
+                <para>If the database user does not already exist, create it.</para>
+</formalpara>
                 <screen>[root root]# <userinput>su - postgres</userinput>
 [postgres ~]$ <userinput>createuser <replaceable>service0</replaceable></userinput>
 Shall the new user be allowed to create databases? (y/n) <userinput>y</userinput>
 Shall the new user be allowed to create more new users? (y/n) <userinput>y</userinput>
 CREATE USER
-[postgres ~]$ <userinput>su - <replaceable>service0</replaceable></userinput>
+[postgres ~]$ <userinput>exit</userinput>
+</screen>
+                <para>Because of a bug in Postgres backup-recovery, database objects are not guaranteed to be created in the right order.  In practice, running the OpenACS initialization script is always sufficient to create any out-of-order database objects.  Next, restore the database from the dump file.  The restoration will show some error messages at the beginning for objects that were pre-created from the OpenACS initialization script, which can be ignored.</para>
+
+<screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
 [service0 ~]$ <userinput>createdb <replaceable>service0</replaceable></userinput>
 CREATE DATABASE
 [service0 ~]$<userinput> psql -f /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-kernel/sql/postgresql/postgresql.sql <replaceable>service0</replaceable></userinput>

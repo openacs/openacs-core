@@ -1,12 +1,12 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Prerequisite Software</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="install-overview.html" title="Chapter 2. Installation Overview"><link rel="previous" href="install-steps.html" title="Basic Steps"><link rel="next" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-steps.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Installation Overview</th><td width="20%" align="right"> <a accesskey="n" href="complete-install.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="individual-programs"></a>Prerequisite Software</h2></div></div><div></div></div><div class="authorblurb"><p>by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a></p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Prerequisite Software</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="install-overview.html" title="Chapter 2. Installation Overview"><link rel="previous" href="install-steps.html" title="Basic Steps"><link rel="next" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-steps.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Installation Overview</th><td width="20%" align="right"> <a accesskey="n" href="complete-install.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="individual-programs"></a>Prerequisite Software</h2></div></div><div></div></div><div class="authorblurb"><p><p>by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a></p><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><p>
+        </p></div><p>
 	OpenACS requires, at a minimum, an operating system, database,
 	and webserver.  Many additional programs, such as a Mail
 	Transport Agent and source control system, are also needed for
 	a fully effective instance.
-  </p><div class="itemizedlist"><ul type="disc"><li><a name="openacs-download"></a><p><b><a href="http://openacs.org/projects/openacs/download/" target="_top">OpenACS 5.0.0b4</a>. </b>The OpenACS tarball comprises the core packages and
+  </p><div class="itemizedlist"><ul type="disc"><li><a name="openacs-download"></a><p><b><a href="http://openacs.org/projects/openacs/download/" target="_top">OpenACS 5.0.0rc1</a>. </b>The OpenACS tarball comprises the core packages and
             many useful additional packages.  This includes a full set
             of documentation.  The tarball works with both PostgreSQL
             and Oracle.</p></li><li><p><b>Operating System. </b>OpenACS is designed for a Unix-like system.  It is
@@ -38,7 +38,7 @@
               distributions. </p></li><li><p><b>TCL 8.3 development headers and libraries, OPTIONAL. </b>  The site-wide-search service, OpenFTS, requires these to
 			  compile. (Debian users: <tt class="computeroutput">apt-get install
 			  tcl8.3-dev</tt>).  You need this
-              to install OpenFTS.</p></li></ul></div></li><li><a name="source-tdom"></a><p><b>tDOM, REQUIRED. </b>OpenACS 5.0.0b4 stores
+              to install OpenFTS.</p></li></ul></div></li><li><a name="source-tdom"></a><p><b>tDOM, REQUIRED. </b>OpenACS 5.0.0rc1 stores
           queries in XML files, so we use an AOLserver module called
           tDOM to parse these files.  (This replaces libxml2, which
           was used prior to 4.6.4.)  tDOM is available from <a href="http://www.tdom.org" target="_top">http://www.tdom.org</a>).</p></li><li><a name="source-tclwebtest"></a><p><b>tclwebtest, OPTIONAL. </b>tclwebtest 0.3 is a tool for testing web interfaces
@@ -49,7 +49,7 @@
         running Apache with mod_nsd - see <a href="http://openacs.org/forums/message-view?message_id=21461" target="_top">this
         post.</a></p><div class="itemizedlist"><ul type="circle"><li><a name="source-aolserver"></a><p><b><a href="http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar.gz" target="_top">AOLserver 3.3oacs1</a>, REQUIRED. </b>Mat Kovach's source distribution of AOLserver, including all of the patches listed below.</p><p>
       Mat Kovach is graciously maintaining an AOLserver distribution that
-      includes all the patches and modules needed to run OpenACS 5.0.0b4. These
+      includes all the patches and modules needed to run OpenACS 5.0.0rc1. These
       instructions will describe how to install using his source
       distribution. He also has binaries for SuSE 7.3 and OpenBSD 2.8 (and
       perhaps more to come), currently located at <a href="http://uptime.openacs.org/aolserver-openacs/" target="_top">uptime.openacs.org</a>.

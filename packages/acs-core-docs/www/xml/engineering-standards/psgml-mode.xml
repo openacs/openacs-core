@@ -11,6 +11,8 @@
 <para>By David Lutterkort</para>
 </authorblurb>
 
+  <para>Note: <computeroutput>nxml</computeroutput> mode replaces and/or complements psgml mode.  <ulink url="http://www.xmlhack.com/read.php?item=2061">More information</ulink>.</para>
+
 <sect2 id="psgml-mode-whatisit">
 <title>What it is</title>
 
