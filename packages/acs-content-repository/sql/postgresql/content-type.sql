@@ -485,6 +485,32 @@ begin
   
 end;' language 'plpgsql';
 
+
+-- dummy table provides a target for updates in dynamically generated trigger
+-- statements.  If type is cr_revisions then rule would end up having only a 
+-- select statement which causes an error to be thrown by the dml command.
+-- dml command checks for NS_ROWS result and throws and error if found.  
+-- Using a dummy update causes NS_OK to be returned which satisfies the dml
+-- result checking.
+
+-- DCW, 2001-06-09
+
+create table cr_dummy (
+       val integer
+);
+
+insert into cr_dummy (val) values (null);
+
+create function cr_dummy_ins_del_tr () returns opaque as '
+begin
+        raise execption ''Only updates are allowed on cr_dummy'';
+        return null;
+end;' language 'plpgsql';
+
+create trigger cr_dummy_ins_del_tr before insert or delete on 
+cr_dummy for each row execute procedure cr_dummy_ins_del_tr ();
+
+
 -- FIXME: need to look at this in more detail.  This probably can't be made 
 -- to work reliably in postgresql.  Currently we are using a rule to insert 
 -- into the input view when a new content revision is added.  Pg locks the 
@@ -524,6 +550,7 @@ begin
 
   rule_text := ''create rule '' || v_table_name || ''_r as on insert to '' ||
                v_table_name || ''i do instead (
+                update cr_dummy set val = (
                 select content_revision__new(
                                      new.title,
                                      new.description,
@@ -539,7 +566,7 @@ begin
                                      now(),
                                      new.creation_user, 
                                      new.creation_ip
-                );
+                ));
                 '';
 
   -- add an insert statement for each subtype in the hierarchy for this type
