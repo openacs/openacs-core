@@ -163,7 +163,7 @@ ad_proc -private apm_mark_version_for_reload { version_id { file_info_var "" } }
 	upvar $file_info_var file_info
     }
 
-    db_1row package_key_select "select package_key from apm_package_version_info where version_id = :version_id"
+    set package_key [apm_package_key_from_version_id $version_id]
 
     set changed_files [list]
     set file_info [list]
@@ -212,11 +212,7 @@ ad_proc -private apm_version_load_status { version_id } {
 	return "never_loaded"
     }
 
-    db_1row package_key_select {
-        select package_key
-        from apm_package_version_info
-        where version_id = :version_id
-    }
+    set package_key [apm_package_key_from_version_id $version_id]
 
     foreach file [apm_version_file_list -type "tcl_procs" -db_type [db_type] $version_id] {
 	# If $file has never been loaded, i.e., it has been added to the version
@@ -808,6 +804,31 @@ ad_proc -public apm_package_url_from_key {package_key} {
 ad_proc -public apm_package_url_from_key_mem {package_key} {
     set package_id [apm_package_id_from_key $package_key]
     return [apm_package_url_from_id $package_id]
+}
+
+#
+# version_id -> package_key
+#
+
+ad_proc -public apm_package_key_from_version_id {version_id} {
+    Returns the package_key for the given APM package version id. Goes to the database
+    the first time called and then uses a cached value. Calls the proc apm_package_key_from_version_id_mem.    
+
+    @author Peter Marklund (peter@collaboraid.biz)
+} {
+    return [util_memoize "apm_package_key_from_version_id_mem $version_id"]
+    
+}
+
+ad_proc -private apm_package_key_from_version_id_mem {version_id} {
+    Returns the package_key for the given APM package version id. Goes to the database
+    everytime called.
+
+    @author Peter Marklund (peter@collaboraid.biz)
+} {
+    return [db_string apm_package_id_from_key {
+        select package_key from apm_package_version_info where version_id = :version_id
+    } -default 0]
 }
 
 ad_proc -public apm_version_info {version_id} {
