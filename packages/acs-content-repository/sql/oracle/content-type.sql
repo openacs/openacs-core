@@ -56,8 +56,21 @@ procedure create_type (
 
   table_exists integer;
   v_supertype_table acs_object_types.table_name%TYPE;
-
+  v_count       integer;
 begin
+
+  if (supertype != 'content_revision') and (content_type != 'content_revision') then
+    select count(*)
+    into  v_count
+    from  acs_object_type_supertype_map
+    where object_type = create_type.supertype
+    and   ancestor_type = 'content_revision';
+
+    if v_count = 0 then
+        raise_application_error(-20000, 'Content types can only be created as subclasses of content_revision or a derivation thereof. ' || supertype || ' is not a subclass oc content_revision.');
+    end if;
+  end if;
+
 
  -- create the attribute table if not already created
 
