@@ -25,6 +25,9 @@ create table lang_message_keys (
                        references apm_package_types(package_key)
                        constraint lang_message_keys_p_key_nn
                        not null,
+    upgrade_status     varchar2(30)
+                       constraint lang_message_keys_us_ck
+                       check (upgrade_status in ('no_upgrade', 'added','deleted')),
     constraint lang_message_keys_pk
     primary key (message_key, package_key)
 );
@@ -42,6 +45,9 @@ create table lang_messages (
                        constraint lang_messages_locale_nn
                        not null,
     message            clob,
+    upgrade_status     varchar2(30)
+                       constraint lang_messages_us_ck
+                       check (upgrade_status in ('no_upgrade', 'added', 'deleted', 'updated')),
     constraint lang_messages_fk
     foreign key (message_key, package_key) 
     references lang_message_keys(message_key, package_key)
