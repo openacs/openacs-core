@@ -37,7 +37,6 @@ ad_proc -public auth::sync::job::get {
 
     db_1row select_job {} -column_array row
 
-    # TODO: This is temporary, make sure this is where the UI ends up
     set row(log_url) [export_vars -base "[ad_url]/acs-admin/auth/batch-job" { job_id }]
 }
 
@@ -580,6 +579,33 @@ ad_proc -private auth::sync::ProcessDocument {
                 -call_args [list $job_id $document $parameters]]
 }
 
+ad_proc -private auth::sync::GetAcknowledgementDocument {
+    {-authority_id:required}
+    {-job_id:required}
+    {-document:required}
+} {
+    Wrapper for the GetAckDocument operation of the auth_sync_process service contract.
+} {
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "process_doc_impl_id"]
+
+    if { [empty_string_p $impl_id] } {
+        # No implementation of auth_sync_process
+        set authority_pretty_name [auth::authority::get_element -authority_id $authority_id -element "pretty_name"]
+        error "The authority '$authority_pretty_name' doesn't support auth_sync_process"
+    }
+
+    set parameters [auth::driver::get_parameter_values \
+                        -authority_id $authority_id \
+                        -impl_id $impl_id]
+
+    return [acs_sc::invoke \
+                -error \
+                -contract "auth_sync_process" \
+                -impl_id $impl_id \
+                -operation GetAcknowledgementDocument \
+                -call_args [list $job_id $document $parameters]]
+}
+
 ad_proc -private auth::sync::GetElements {
     {-authority_id:required}
 } {
@@ -702,6 +728,7 @@ ad_proc -private auth::sync::process_doc::ims::register_impl {} {
         pretty_name "IMS Enterprise 1.1"
         aliases {
             ProcessDocument auth::sync::process_doc::ims::ProcessDocument
+            GetAcknowledgementDocument auth::sync::process_doc::ims::GetAcknowledgementDocument
             GetElements auth::sync::process_doc::ims::GetElements
             GetParameters auth::sync::process_doc::ims::GetParameters
         }
@@ -790,4 +817,58 @@ ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
             -username $username \
             -array user_info
     }
+}
+
+
+ad_proc -public auth::sync::process_doc::ims::GetAcknowledgementDocument {
+    job_id
+    document
+    parameters
+} {
+    Generates an record-wise acknolwedgement document in home-brewed 
+    adaptation of the IMS Enterprise v 1.1 spec.
+} {
+    set tree [xml_parse -persist $document]
+    set root_node [xml_doc_get_first_node $tree]
+    if { ![string equal [xml_node_get_name $root_node] "enterprise"] } {
+        error "Root node was not <enterprise>"
+    }
+
+    set timestamp [xml_get_child_node_content_by_path $root_node { { properties datetime } }]
+
+    append doc {<?xml version="1.0" encoding="} [ns_config "ns/parameters" OutputCharset] {"?>} \n
+    append doc {<enterprise>} \n
+    append doc {  <properties>} \n
+    append doc {    <type>acknowledgement</type>} \n
+    append doc {    <datetime>} $timestamp {</datetime>} \n
+    append doc {  </properties>} \n
+
+    array set recstatus {
+        insert 1
+        update 2
+        delete 3
+    }
+
+    # Loop over successful actions
+    db_foreach select_success_actions {
+        select entry_id,
+               operation,
+               username
+        from   auth_batch_job_entries
+        where  job_id = :job_id
+        and    success_p = 't'
+        order  by entry_id
+    } {
+        if { [info exists recstatus($operation)] } {
+            append doc {  <person recstatus="} $recstatus($operation)  {">} \n
+            append doc {    <sourcedid><source>OpenACS</source><id>} $username {</id></sourcedid>} \n
+            append doc {  </person>} \n
+        } else {
+            ns_log Error "Illegal operation encountered in job action log: '$operation'. Entry_id is '$entry_id'."
+        }
+    }
+
+    append doc {</enterprise>} \n
+    
+    return $doc
 }
