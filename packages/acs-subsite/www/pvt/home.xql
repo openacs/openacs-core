@@ -4,8 +4,7 @@
 <fullquery name="pvt_home_user_info">      
       <querytext>
       
-    select first_names, last_name, email, url,
-    coalesce(screen_name,'&lt; none set up &gt;') as screen_name
+    select first_names, last_name, email, url, screen_name
     from cc_users 
     where user_id=:user_id
 
@@ -31,7 +30,7 @@ and attribute_id =
 <fullquery name="get_portrait_info">      
       <querytext>
       
-    select cr.publish_date, coalesce(cr.title,'your portrait') as portrait_title
+    select cr.publish_date, cr.title as portrait_title
     from cr_revisions cr, cr_items ci, acs_rels a
     where cr.revision_id = ci.live_revision
     and  ci.item_id = a.object_id_two
