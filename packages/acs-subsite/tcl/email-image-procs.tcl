@@ -17,7 +17,7 @@ ad_proc -public email_image::update_private_p {
     @level   Change to this level
 } {
     db_transaction {
-	db_dml update_users { *SQL* }
+	db_dml update_users {  }
     }
 }
 
@@ -27,7 +27,7 @@ ad_proc -public email_image::get_priv_email {
     Returns the priv_email field of the user from the users table.
     @user_id
 } {
-    return [db_string get_private_email { *SQL* }]
+    return [db_string get_private_email {  }]
 }
 
 
@@ -120,7 +120,7 @@ ad_proc -public email_image::get_email {
 
     @user_id
 } {
-    return [db_string get_email { *SQL* }]
+    return [db_string get_email {  }]
 }
 
 
@@ -185,9 +185,9 @@ ad_proc -public email_image::new_item {
 			     -description "User email image"  -creation_ip $creation_ip ]
 	
 	email_image::add_relation -user_id $user_id -item_id $item_id
-	db_dml update_cr_items { *SQL* }
-	db_dml lob_content { *SQL* } -blob_files [list ${dest_path}]
-	db_dml lob_size { *SQL* }
+	db_dml update_cr_items {  }
+	db_dml lob_content {  } -blob_files [list ${dest_path}]
+	db_dml lob_size {  }
     }
     
     # Delete the temporary file created by ImageMagick
@@ -280,9 +280,9 @@ ad_proc -public email_image::edit_email_image {
 
 	    email_image::add_relation -user_id $user_id -item_id $item_id
 
-	    db_dml update_cr_items { *SQL* }
-	    db_dml lob_content { *SQL* } -blob_files [list ${dest_path}]
-	    db_dml lob_size { *SQL* }
+	    db_dml update_cr_items {  }
+	    db_dml lob_content {  } -blob_files [list ${dest_path}]
+	    db_dml lob_size {  }
 	}
     }
     # Delete the temporary file created by ImageMagick
@@ -294,7 +294,7 @@ ad_proc -public email_image::edit_email_image {
 ad_proc -public email_image::get_folder_id { } {
     Returns the folder_id of the folder with the name "Email_Images"
 } {
-    return [db_string check_folder_name { *SQL* } ]
+    return [db_string check_folder_name {  } ]
 }
 
 ad_proc -public email_image::add_relation {
@@ -305,7 +305,7 @@ ad_proc -public email_image::add_relation {
     @user_id
     @item_id the item_id of the image in the content repository
 } {
-    db_exec_plsql add_relation { *SQL* }
+    db_exec_plsql add_relation {  }
 }
 
 ad_proc -public email_image::get_related_item_id {
@@ -315,7 +315,7 @@ ad_proc -public email_image::get_related_item_id {
     user_id.
     @user_id
 } {
-    return [db_string get_rel_item { *SQL* } -default -1 ]
+    return [db_string get_rel_item {  } -default -1 ]
 }
 
 
