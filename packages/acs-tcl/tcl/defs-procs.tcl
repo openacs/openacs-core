@@ -423,11 +423,22 @@ ad_proc ad_return_exception_page {
     @param title Title to be used for the error (will be shown to user)
     @param explanation Explanation for the exception.
 } {
-    doc_return $status text/html "[ad_header_with_extra_stuff $title "" ""]
-<h2>$title</h2>
-<hr>
-$explanation
-[ad_footer]";				#"emacs
+    set page "[ad_header_with_extra_stuff $title "" ""]
+ <h2>$title</h2>\n<hr>$explanation\n[ad_footer]"
+
+    # JCD: IE 5 and 6 have a "friendly HTTP errors" setting which
+    # prevent display of short error return pages so here we pad them
+    # out to circumvent it.  Unfortunately quite a few pages use
+    # ad_return_error with links to other pages (download for
+    # example among others
+    if {$status > 399 
+        && [string match {*; MSIE *} [ns_set iget [ad_conn headers] User-Agent]]
+        && [string length $page] < 512 } { 
+        append page [string repeat " " [expr 513 - [string length $page]]]
+    }
+    
+    doc_return $status text/html $page
+
     # raise abortion flag, e.g., for templating
     global request_aborted
     set request_aborted [list $status $title]
