@@ -20,7 +20,7 @@ db_1row object_info {}
 
 set elements [list]
 lappend elements grantee_name { 
-    label "[_ acs-subsite.Name]" 
+    label "[_ acs-subsite.Name]"
     link_url_col name_url
     display_template {
         <if @permissions.any_perm_p_@ true>
@@ -63,17 +63,17 @@ lappend elements remove_all {
 
 
 
-set perm_url "[site_node_closest_ancestor_package_url]permissions/"
+set perm_url "[ad_conn subsite_url]permissions/"
 
 if { ![exists_and_not_null user_add_url] } {
     set user_add_url "${perm_url}perm-user-add"
 }
 set user_add_url [export_vars -base $user_add_url { object_id expanded {return_url "[ad_return_url]"}}]
 
+set actions [list \
+                 [_ acs-subsite.Grant_Permission] "${perm_url}grant?[export_vars {return_url application_url object_id}]" [_ acs-subsite.Grant_Permission] \
+                 [_ acs-subsite.Search_For_Exist_User] $user_add_url [_ acs-subsite.Search_For_Exist_User]]
 
-set actions [list "[_ acs-subsite.Grant_Permission]" "${perm_url}grant?[export_vars {return_url application_url object_id}]" "[_ acs-subsite.Grant_Permission]" \
-				"[_ acs-subsite.Search_For_Exist_User]" $user_add_url "[_ acs-subsite.Search_For_Exist_User]"]
-				
 if { ![empty_string_p $context_id] } {
     set inherit_p [permission::inherit_p -object_id $object_id]
 
@@ -91,7 +91,7 @@ template::list::create \
     -name permissions \
     -multirow permissions \
     -actions $actions \
-    -elements $elements 
+    -elements $elements
 
 
 set perm_form_export_vars [export_vars -form {object_id privs return_url}]
@@ -99,7 +99,6 @@ set perm_form_export_vars [export_vars -form {object_id privs return_url}]
 set perm_modify_url "${perm_url}perm-modify"
 
 set application_group_id [application_group::group_id_from_package_id -package_id [ad_conn subsite_id]]
-
 
 # PERMISSION: yes = 2, no = 0
 # DIRECT:     yes = 1, no = -1
@@ -120,9 +119,7 @@ set application_group_id [application_group::group_id_from_package_id -package_i
 db_multirow -extend { name_url } permissions permissions {} {
     if { [string equal $object_type "user"] && $grantee_id != 0 } {
         set name_url [acs_community_member_url -user_id $grantee_id]
-}
+    }
 }
 
-
-ad_return_template
 
