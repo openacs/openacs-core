@@ -1682,9 +1682,6 @@ begin
           content_item__get_content_type(content_symlink__resolve(move__item_id)),''f'') = ''t''
       then
     -- update the parent_id for the item
-    if move__name = '''' then
-	move__name := NULL;
-    end if;
 
     update cr_items 
       set parent_id = move__target_folder_id,
