@@ -28,7 +28,7 @@ set exclude_package_list { cms cms-news-demo glossary site-wide-search spam libr
 set head_channel "5-1"
 
 # Set this to 1 to only checkout sample packages -- useful for debugging and testing
-set debug_p 1
+set debug_p 0
 
 
 #----------------------------------------------------------------------
