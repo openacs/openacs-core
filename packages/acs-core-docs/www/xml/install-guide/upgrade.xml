@@ -75,9 +75,7 @@
       </tgroup>
     </table>
   </sect1>
-  <sect1 id="upgrade-openacs">
-    <title>Upgrading OpenACS</title>
-    <sect2 id="upgrade-4.5-to-4.6">
+    <sect1 id="upgrade-4.5-to-4.6">
       <title>Upgrading 4.5 or higher to 4.6.3</title>
       <indexterm>
         <primary>upgrade</primary>
@@ -168,8 +166,8 @@
           </formalpara>
         </listitem>
       </orderedlist>
-    </sect2>
-    <sect2 id="upgrade-4.6.3-to-5">
+    </sect1>
+    <sect1 id="upgrade-4.6.3-to-5">
       <title>Upgrading OpenACS 4.6.3 to 5.0</title>
       <itemizedlist>
         <listitem>
@@ -261,8 +259,8 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
           See also these forum posts: <ulink url="http://openacs.org/forums/message-view?message_id=143497">Forum OpenACS Development: 4.6.3 upgrade to 5-HEAD: final results</ulink>, <ulink url="http://openacs.org/forums/message-view?message_id=152200">OpenACS 5.0 Upgrade Experiences</ulink>.</para>
         </listitem>
       </itemizedlist>
-    </sect2>
-    <sect2 id="upgrade-5-0-dot">
+    </sect1>
+    <sect1 id="upgrade-5-0-dot">
       <title>Upgrading 5.0.0 to 5.0.x</title>
         <itemizedlist>
           <listitem>
@@ -312,8 +310,7 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
             </orderedlist>
           </listitem>
         </itemizedlist>
-      </sect2>
-    </sect1>
+      </sect1>
   <sect1 id="upgrade-openacs-files">
     <title>Upgrading the OpenACS files</title>
     <para>OpenACS is distributed as a collection of files, available as one big tarball, via CVS, and via automatic download from within the APM.  Upgrades work by first changing the file system (via any of the previous methods), and then using the APM to scan the file system, find upgrade scripts, and execute them.  This section describes how to upgrade the file system.  Starting with OpenACS 5.0, this section can generally be skipped because the OpenACS APM can directly download new files from the openacs.org repository.</para>
@@ -541,9 +538,8 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
           </screen>
         </listitem>
         <listitem>
-          <para>Use perl to replace <computeroutput>timestamp</computeroutput> with <computeroutput>timestamptz</computeroutput> in the dump file.</para>
-          <programlisting>find . -type f -name "*sql" | xargs perl -p -i.tmp -e "s/timestamp with time zone/timestamptz/g"
-          find . -type f -name "*sql" | xargs perl -p -i.tmp -e "s/\\wtimestamp[^t]/ timestamptz/g"</programlisting>
+            <para>Use perl to replace <computeroutput>timestamp</computeroutput> with <computeroutput>timestamptz</computeroutput> in the dump file.  See example perl code in step two in <ulink url="http://cvs.openacs.org/cvs/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?only_with_tag=HEAD">/contrib/misc/upgrade_4.6_to_5.0.sh</ulink></para>
+          
         </listitem>
         <listitem>
           <para>Create a new user for PostgreSQL 7.3.x, as per the
