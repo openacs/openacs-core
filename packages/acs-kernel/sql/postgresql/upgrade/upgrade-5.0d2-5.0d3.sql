@@ -1,4 +1,4 @@
--- 
+--
 -- Upgrade script from 5.0d2 to 5.0d3
 --
 -- @author Peter Marklund (peter@collaboraid.biz)
@@ -221,17 +221,18 @@ alter table users add authority_id integer
                       references auth_authorities(authority_id);
 
 alter table users add username varchar(100);
-update users set username = '-';
 -- set all current users' username to equal their email
 -- and their authority to be the local authority
 -- Exclude the unregistered visitor as he/she has a null email
-update users 
+update users
 set    username = (select email from parties where party_id = user_id),
        authority_id = (select authority_id from auth_authorities where short_name = 'local')
-and user_id <> 0;
+where user_id <> 0 and username is null;
 
--- Does not work with PG 7.2
--- alter table users alter column username set not null;
+update users set username = '-' where username is null;
+
+-- Does not work with PG 7.2, 5.0 only supports 7.3+ so set not null.
+alter table users alter column username set not null;
 
 alter table users add constraint users_authority_username_un
                       unique (authority_id, username);
