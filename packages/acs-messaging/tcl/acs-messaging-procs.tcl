@@ -46,7 +46,7 @@ ad_proc -public acs_messaging_format_as_html {
     if {[string eq $mime_type "text/plain"]} {
 	set result "<pre>[ad_quotehtml $content]</pre>"
     } elseif {[string eq $mime_type "text/plain; format=flowed"]} {
-	set result [ad_text_to_html $content]
+	set result [ad_text_to_html -- $content]
     } elseif {[string eq $mime_type "text/html"]} {
 	set result $content
     } else {
