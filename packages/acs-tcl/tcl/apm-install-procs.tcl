@@ -1686,6 +1686,16 @@ ad_proc -private apm_mount_core_packages {} {
     ns_log Notice "apm_mount_core_packages: Finished mounting of core packages"
 }
 
+ad_proc -public apm_version_sortable {
+    version
+} {
+    Return a sortable version of the version name.
+
+    @author Jeff Davis
+} {
+    return [db_string sortable_version {}]
+}
+
 ad_proc -public apm_version_names_compare {
     version_name_1
     version_name_2
