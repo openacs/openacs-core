@@ -11,15 +11,14 @@ ad_page_contract {
 }
 
 # Get the paths
-set the_url [ad_conn path_info]
-set package_key [ad_conn package_key]
 set the_root [ns_info pageroot]
+set the_url [ad_conn path_info]
+set content_type ""
+
 
 # Get the IDs
-set content_root \
-  [db_string content_root "select content_item.get_root_folder from dual"]
-set template_root \
-  [db_string template_root "select content_template.get_root_folder from dual"]
+set content_root [db_string content_root ""]
+set template_root [db_string template_root ""]
 
 # Serve the page
 
@@ -27,7 +26,7 @@ set template_root \
 # as though it's been passed by reference.   This requires that the redirect treat the
 # path as an absolute path within the filesystem.
 
-if { [content::init the_url the_root $content_root $template_root public $revision_id] } {
+if { [content::init the_url the_root $content_root $template_root public $revision_id $content_type] } {
   set file "$the_root/$the_url"
   rp_internal_redirect -absolute_path $file
 } else {

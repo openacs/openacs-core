@@ -36,12 +36,19 @@
       </querytext>
 </fullquery>
 
+<partialquery name="content::get_content.content_as_text">
+	<querytext>
+
+	, content as text
+
+	</querytext>
+</partialquery>
+
 <fullquery name="content::get_content.get_content">      
       <querytext>
 
         select 
            x.*, 
-          :item_id as item_id $text_sql, 
           :content_type as content_type
           $text_sql
         from

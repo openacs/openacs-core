@@ -2,14 +2,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<partialquery name="content::get_content.content_as_text">
-	<querytext>
-
-	, content as text
-
-	</querytext>
-</partialquery>
-
 <fullquery name="content::get_folder_labels.get_url">      
       <querytext>
 
@@ -79,11 +71,11 @@
       <querytext>
 
         select 
-        (select live_revision from cr_items where item_id = content_item__get_template(:item_id, :context)) as template_id,
-          content_template__get_path(
-          content_item__get_template(:item_id, :context),:template_root) as template_url 
+          content_item__get_live_revision(content_item__get_template(:item_id, :context)) as template_id,
+          content_template__get_path(content_item__get_template(:item_id, :context),:template_root) as template_url 
         from 
           dual
+
 
       </querytext>
 </fullquery>

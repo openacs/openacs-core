@@ -3,14 +3,6 @@
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
 
-<partialquery name="content::get_content.content_as_text">
-	<querytext>
-
-	, content.blob_to_string(content) as text
-
-	</querytext>
-</partialquery>
-
 <fullquery name="content::get_folder_labels.get_url">      
       <querytext>
 
@@ -95,9 +87,8 @@
       <querytext>
 
         select 
-          (select live_revision from cr_items where item_id = content_item.get_template(:item_id, :context)) as template_id,
-          content_template.get_path(
-          content_item.get_template(:item_id, :context),:template_root) as template_url 
+          content_item.get_live_revision(content_item.get_template(:item_id, :context)) as template_id,
+          content_template.get_path(content_item.get_template(:item_id, :context), :template_root) as template_url 
         from 
           dual
 

@@ -1378,7 +1378,10 @@ function new (
   --    @param name          The name for the template, must be a valid UNIX-like filename.
   --                         If a template with this name already exists under the specified
   --                         parent item, an error is thrown
+  --    @param text          The body of the .adp template itself, defaults to null
   --    @param parent_id     The parent of this item, defaults to null
+  --    @param is_live       The should the revision be set live, defaults to 't'. Requires
+  --                         that text is not null or there will be no revision to begin with                             
   --    @param template_id   The id of the new template. A new id will be allocated if this
   --                         parameter is null
   --    @param creation_date As in <tt>acs_object.new</tt>
@@ -1389,7 +1392,9 @@ function new (
   --         {content_type.register_template}
   --*/
   name          in cr_items.name%TYPE,
+  text          in varchar2 default null,
   parent_id     in cr_items.parent_id%TYPE default null,
+  is_live 		in char default 't',
   template_id	in cr_templates.template_id%TYPE default null,
   creation_date	in acs_objects.creation_date%TYPE
 			   default sysdate,
