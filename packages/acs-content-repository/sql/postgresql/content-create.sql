@@ -1248,23 +1248,21 @@ begin
                        ''content_revision'',
 	               v_item_id,
 	               ''public'',
-                       ''f'');
+                       ''t'');
 
-  PERFORM content_type__set_default_template(
-                        ''content_revision'',
-                        v_item_id,
-                        ''public'' );
 
   PERFORM content_type__register_template(
                        ''image'',
 	               v_item_id,
 	               ''public'',
-                       ''f'');
+                       ''t'');
 
-  PERFORM content_type__set_default_template(
-                        ''image'',
-                        v_item_id,
-                        ''public'' );
+  -- testing, this may go away.  DanW
+  PERFORM content_type__register_template(
+                       ''content_template'',
+	               v_item_id,
+	               ''public'',
+                       ''t'');
 
   return 0;
 end;' language 'plpgsql';

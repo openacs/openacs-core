@@ -202,24 +202,33 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
     return 0
   }
 
-  # Get the content ID, content type 
-  set query "
+  # cache this query persistently for 1 hour
+  template::query get_item_info item_info onerow "
     select 
       item_id, content_type
     from 
       cr_items
     where
-      item_id = content_item.get_id(:url, :content_root)"
-
-  # cache this query persistently for 1 hour
-  template::query get_item_info item_info onerow $query \
-	  -cache "get_id_filter $url $content_root" \
-	  -persistent -timeout 216000
+      item_id = content_item.get_id(:url, :content_root)" \
+   -cache "get_id_filter $url $content_root" \
+   -persistent -timeout 216000
 
   # No item found, so do not handle this request
   if { ![info exists item_info] } { 
-    ns_log Notice "No content found for url $url"
-    return 0 
+      template::query get_template_info item_info onerow "
+        select 
+          item_id, content_type
+        from 
+          cr_items
+        where
+          item_id = content_item.get_id(:url, :template_root)" \
+      -cache "get_id_filter $url $template_root" \
+      -persistent -timeout 216000
+    
+      if { ![info exists item_info] } { 
+          ns_log Notice "No content found for url $url"
+          return 0 
+      }
   }
 
   variable item_url
