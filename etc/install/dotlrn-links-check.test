@@ -1,0 +1,28 @@
+if { [catch {
+    # Source procedures
+    source tclwebtest-functions.tcl
+
+    # Test Execution START
+
+    # Login the site wide admin
+    login_site_wide_admin
+
+    puts "crawling links starting from /dotlrn"        
+    lappend __url_history "${server_url}/dotlrn"
+    crawl_links
+
+    puts "crawling links starting from /dotlrn/admin"        
+    lappend __url_history "${server_url}/dotlrn/admin"
+    crawl_links 
+
+    # Test Execution END
+} result] } {
+    global errorInfo
+    puts stderr $result
+    puts stderr "*** Tcl TRACE ***"
+    puts stderr $errorInfo
+
+    puts "The response body is: [response body]"
+
+    error "Test failed: $result"
+}

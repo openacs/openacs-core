@@ -1,0 +1,60 @@
+if { [catch {
+    # Source procedures
+    source tclwebtest-functions.tcl
+
+    # Test Execution START
+
+    # Login the site wide admin
+    login_site_wide_admin
+
+    # We need a few users
+    upload_users $server_url
+
+    # We want the users to have a known password so people can log in with them
+    set_users_passwords $server_url
+
+    # Add the site wide admin to dotLRN
+    add_site_wide_admin_to_dotlrn $server_url
+
+    # Setup a few terms
+    setup_terms $server_url
+
+    # Departments
+    setup_departments $server_url
+
+    # Setup subjects
+    setup_subjects $server_url
+
+    # We can now add a few classes
+    setup_classes $server_url
+
+    # Setup members, i.e. professors, students and assistants
+    setup_class_memberships $server_url
+
+    # We want to show off the subgroup functionality
+    setup_class_subgroups $server_url
+
+    # Sloan uses this member list - only add it for the computing classes
+    # So that we can demo adding it to other classes
+    add_member_applet_to_classes $server_url
+
+    # Add a default forum to each class
+    add_default_class_forums $server_url
+
+    # Add some communities as well (i.e. Tennis Club etc.)
+    setup_communities $server_url    
+
+    # Add some news items to each class
+    add_class_news_items $server_url
+
+    # Test Execution END
+} result] } {
+    global errorInfo
+    puts stderr $result
+    puts stderr "*** Tcl TRACE ***"
+    puts stderr $errorInfo
+
+    puts "The response body is: [response body]"
+
+    error "Test failed: $result"
+}
