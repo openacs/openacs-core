@@ -254,6 +254,7 @@ ns_section ns/server/${server}/module/nslog
     ns_param   extendedheaders    COOKIE
 #    ns_param   logrefer           false
 #    ns_param   loguseragent       false
+    ns_param   logreqtime         true
     ns_param   maxbackup          1000
     ns_param   rollday            *
     ns_param   rollfmt            %Y-%m-%d-%H:%M
