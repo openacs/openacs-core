@@ -49,7 +49,7 @@ if { [regexp aspell $bin] } {
         }
     } {
         ns_log Notice "Gettings dicts and default_lang for aspell failed with error message: \"$errmsg\""
-	ns_log Notice "You might want to upgrade to a more recent version of Aspell ..."
+	ns_log Notice "You might want to upgrade to a more recent version of Aspell ... http://aspell.sourceforge.net/"
     }
 } elseif { [regexp ispell $bin] } {
     # ispell - if someone knows how to get the available dictionaries and the
