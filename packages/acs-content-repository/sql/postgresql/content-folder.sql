@@ -406,7 +406,7 @@ begin
     PERFORM content_item__rename(rename__folder_id, rename__name);
   end if;
 
-  if rename__label is not null and rename_label != '''' then
+  if rename__label is not null and rename__label != '''' then
     update acs_objects
     set title = rename__label
     where object_id = rename__folder_id;
