@@ -7,7 +7,7 @@
 -- @cvs-id $Id$
 --
 
-create index cr_items_name on cr_items(name);
+-- create index cr_items_name on cr_items(name);
 
 drop trigger cr_items_tree_insert_tr on cr_items;
 

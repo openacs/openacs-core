@@ -7,4 +7,4 @@
 -- @cvs-id $Id$
 --
 
-create index cr_items_name on cr_items(name);
+-- create index cr_items_name on cr_items(name);

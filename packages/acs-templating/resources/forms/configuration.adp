@@ -53,7 +53,7 @@
                 <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform" and @elements.widget@ ne "select"><font color="red">*</font></if>
               </if>
 
-              <if @elements.widget@ in radio checkbox>
+              <if @elements.widget@ eq radio or @elements.widget@ eq checkbox>
                 <noparse>
                   <table cellpadding="4" cellspacing="0" border="0">
                     <formgroup id="@elements.id@">

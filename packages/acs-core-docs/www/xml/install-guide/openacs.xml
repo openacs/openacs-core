@@ -353,13 +353,13 @@ logout
 [root root]#</screen>
               </listitem>
               <listitem id="create-database">
-                <para>Create a database with the same name as our service name, <replaceable>$OPENACS_SERVICE_NAME</replaceable>.</para>
+                <para>Create a database with the same name as our service name, <replaceable>$OPENACS_SERVICE_NAME</replaceable>. The full pathname for <computeroutput>createdb</computeroutput> needs to be used, since the pgsql directory has not been added to the $OPENACS_SERVICE_NAME bash profile.</para>
                 <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>createdb -E UNICODE <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>/usr/local/pgsql/bin/createdb -E UNICODE <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 CREATE DATABASE
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$
-<action>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable>
-createdb -E UNICODE <replaceable>$OPENACS_SERVICE_NAME</replaceable></action></screen>
+<action>su - $OPENACS_SERVICE_NAME</replaceable>
+/usr/local/pgsql/bin/createdb -E UNICODE <replaceable>$OPENACS_SERVICE_NAME</replaceable></action></screen>
               </listitem>
               <listitem>
                 <para>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.  Recommended: <computeroutput>VACUUM ANALYZE</computeroutput> every hour and <computeroutput>VACUUM FULL ANALYZE</computeroutput> every day.</para>

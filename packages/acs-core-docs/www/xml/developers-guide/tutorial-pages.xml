@@ -25,7 +25,7 @@
         <title>Page Map</title>
         <mediaobject>
           <imageobject>
-            <imagedata fileref="images/tutorial-page-map.png" format="PNG" align="center"/>
+            <imagedata fileref="../images/tutorial-page-map.png" format="PNG" align="center"/>
           </imageobject>
         </mediaobject>
       </figure>

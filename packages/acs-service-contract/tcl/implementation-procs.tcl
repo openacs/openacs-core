@@ -132,8 +132,13 @@ ad_proc -public acs_sc::impl::new_from_spec {
 ad_proc -public acs_sc::impl::get_id {
     {-owner:required}
     {-name:required}
+    -contract
 } {
-    return [db_string select_impl_id {}]
+    if {[exists_and_not_null contract]} {
+        return [db_string select_impl_id_with_contract {}]
+    } else {
+        return [db_string select_impl_id {}]
+    }
 }
 
 ad_proc -public acs_sc::impl::get {

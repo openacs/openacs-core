@@ -79,8 +79,8 @@ function new (
   relation_tag  in cr_child_rels.relation_tag%TYPE default null,
   is_live       in char default 'f',
   storage_type  in cr_items.storage_type%TYPE default 'lob',
+  security_inherit_p in acs_objects.security_inherit_p%TYPE default 't'
   package_id    in acs_objects.package_id%TYPE default null
-
 ) return cr_items.item_id%TYPE
 is
   v_parent_id      cr_items.parent_id%TYPE;
@@ -185,7 +185,8 @@ begin
       context_id        => v_context_id,
       creation_date	=> content_item.new.creation_date, 
       creation_user	=> content_item.new.creation_user, 
-      creation_ip	=> content_item.new.creation_ip 
+      creation_ip	=> content_item.new.creation_ip,
+      security_inherit_p => content_item.new.security_inherit_p
   );
 
   -- Turn off security inheritance if there is no security context

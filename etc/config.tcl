@@ -16,6 +16,7 @@ set httpsport                 8443
 #  /var/lib/aolserver/service0/packages/etc/daemontools/run
 
 # The hostname and address should be set to actual values.
+# setting the address to 0.0.0.0 means aolserver listens on all interfaces
 set hostname                  [ns_info hostname]
 #set address                   [ns_info address]
 set address                   0.0.0.0
@@ -132,11 +133,11 @@ ns_section ns/servers
 ns_section ns/server/${server} 
     ns_param   directoryfile      $directoryfile
     ns_param   pageroot           $pageroot
-    ns_param   maxconnections     5
+    ns_param   maxconnections     100      ;# Max connections to put on queue
     ns_param   maxdropped         0
-    ns_param   maxthreads         5
+    ns_param   maxthreads         10
     ns_param   minthreads         5
-    ns_param   threadtimeout      120
+    ns_param   threadtimeout      120      ;# Idle threads die at this rate
     ns_param   globalstats        false    ;# Enable built-in statistics 
     ns_param   urlstats           false    ;# Enable URL statistics 
     ns_param   maxurlstats        1000     ;# Max number of URL's to do stats on
@@ -237,6 +238,8 @@ ns_section ns/server/${server}/module/nssock
     ns_param   address            $address
     ns_param   hostname           $hostname
     ns_param   port               $httpport
+# setting maxinput higher than practical may leave the server vulnerable to resource DoS attacks
+# see http://www.panoptic.com/wiki/aolserver/166
     ns_param   maxinput           [expr 20 * 1024 * 1024] ;# Maximum File Size for uploads in bytes
     ns_param   recvwait           [expr 5 * 60] ;# Maximum request time in minutes
 
@@ -255,6 +258,7 @@ ns_section ns/server/${server}/module/nslog
     ns_param   extendedheaders    COOKIE
 #    ns_param   logrefer           false
 #    ns_param   loguseragent       false
+    ns_param   logreqtime         true
     ns_param   maxbackup          1000
     ns_param   rollday            *
     ns_param   rollfmt            %Y-%m-%d-%H:%M

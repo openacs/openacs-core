@@ -45,7 +45,7 @@
         <title>Upgrading with the APM</title>
         <mediaobject>
           <imageobject>
-            <imagedata fileref="images/upgrade-apm.png" format="PNG" align="center"/>
+            <imagedata fileref="../images/upgrade-apm.png" format="PNG" align="center"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -393,7 +393,7 @@ exit</action></screen>
           <title>Upgrading a local CVS repository</title>
           <mediaobject>
             <imageobject>
-              <imagedata fileref="images/upgrade-cvs.png" format="PNG" align="center"/>
+              <imagedata fileref="../images/upgrade-cvs.png" format="PNG" align="center"/>
             </imageobject>
           </mediaobject>
         </figure>

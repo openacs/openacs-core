@@ -1,5 +1,6 @@
 <property name="focus">@focus;noquote@</property>
 
+<div id="register-login">
 <formtemplate id="login"></formtemplate>
 
 <if @forgotten_pwd_url@ not nil>
@@ -17,3 +18,4 @@
 </if>
 
 </if>
+</div>-

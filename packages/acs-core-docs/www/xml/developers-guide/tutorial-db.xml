@@ -54,7 +54,7 @@
       <title>Tutorial Data Model</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/tutorial-data-model.png" format="PNG" align="center"/>
+          <imagedata fileref="../images/tutorial-data-model.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
 </figure>

@@ -17,7 +17,7 @@
   <title>The intended page map</title>
   <mediaobject>
   <imageobject>
-          <imagedata fileref="images/openacs-best-practice.png" format="PNG"/>
+          <imagedata fileref="../images/openacs-best-practice.png" format="PNG"/>
   </imageobject>
   </mediaobject>
 </sect2>

@@ -23,7 +23,7 @@
       <title>Backup and Recovery Strategy</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/backup.png" format="PNG" align="center"/>
+          <imagedata fileref="../images/backup.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
     </figure>

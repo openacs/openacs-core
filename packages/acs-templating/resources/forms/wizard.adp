@@ -38,7 +38,7 @@
           </if></td>
         </else>
 
-	  <if @elements.widget@ in radio checkbox>
+          <if @elements.widget@ eq radio or @elements.widget@ eq checkbox>
             <if @elements.wide@ not nil>
               <if @elements.help_text@ not nil>
                 &nbsp;&nbsp;

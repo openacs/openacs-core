@@ -113,7 +113,7 @@ template::list::create \
 		<a name="new" />
 		<form name=new_application action=package-new>
 		<input name=instance_name type=text size=8 value="">
-		@nodes.action_form_part;noquote@
+		(@nodes.action_form_part;noquote@)
 		<input type=submit value=New>
 		</form>
 		</if>
@@ -121,7 +121,7 @@ template::list::create \
 		<a name="rename" />
 		<form name=rename_application action=rename>
 		<input name=instance_name type=text value="@nodes.instance@">
-		@nodes.action_form_part;noquote@
+		(@nodes.action_form_part;noquote@)
 		<input type=submit value=Rename>
 		</form>
 		</if>
