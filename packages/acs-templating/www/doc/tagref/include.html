@@ -20,7 +20,11 @@ other properties to them.</p>
 
 <h3>Usage</h3>
 
-<pre>&lt;include src="subtemplate.adp" attribute=value ...></pre>
+<pre>&lt;include src="subtemplate" attribute=value ...></pre>
+
+or
+
+<pre>&lt;include src="/packages/packagename/www/lib/subtemplate" attribute=value ...></pre>
 
 <h3>Notes</h3>
     <ul>
@@ -32,12 +36,12 @@ other properties to them.</p>
 	  subtemplate, specify the variable name surrounded by at signs as
 	  the value:
 
-	<pre>&lt;include src="subtemplate.adp" source_id="@source_id@" ...></pre>
+	<pre>&lt;include src="subtemplate" source_id="@source_id@" ...></pre>
 
 	To pass a datasource, e.g. <code>users</code>, by reference, use
 	this notation:
 
-	<pre>&lt;include src="subtemplate.adp" &persons="users" ...></pre>
+	<pre>&lt;include src="subtemplate" &persons="users" ...></pre>
 
 	This is particularly useful for passing onerow and multirow data
 	sourced.  Note that in this case, if the subtemplate modifies the
