@@ -130,7 +130,6 @@ ad_proc ad_user_new {
             set    password_question = :password_question,
                    password_answer = :password_answer
             where  user_id = :user_id
-            
         }
 
         if {[catch {
