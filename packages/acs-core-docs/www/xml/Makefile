@@ -18,8 +18,7 @@
 XSLTPROC=/usr/bin/xsltproc
 HTMLDOC=/usr/bin/htmldoc
 
-
-all: html pdf
+all: html 
 
 XSL:
 	if [ ! -d XSL -a ! -L XSL ]; then \
@@ -60,5 +59,8 @@ html: prelim XSL
 # adding --nonet --novalid is much faster but generates a bunch of bogus error messages
 	cd .. ; $(XSLTPROC) --novalid --nonet --xinclude xml/openacs.xsl xml/index.xml
 
-pdf: html XSL
-#	$(HTMLDOC) --batch ../for-everyone.book ../for-admins.book ../for-developers.book
+# I got this to work with FOP 0.20.5 and docbook-xsl 1.62, and Jimi 1.0
+# see README.fop for some notes.
+pdf: XSL
+	cd ..; $(XSLTPROC)  --xinclude --output fop.fo xml/fo.xsl xml/index.xml
+	cd ..; fop -d fop.fo -pdf full.pdf
