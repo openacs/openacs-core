@@ -173,7 +173,11 @@
         <listitem>
           <formalpara>
             <title>Oracle</title>
-            <para>Not yet documented.  It should be possible to upgrade via the APM just as when upgrading to 4.6.3.</para>
+            <para>This forum posting documents 
+            <ulink url="http://openacs.org/forums/message-view?message_id=201394">
+            how to upgrade an Oracle installation from OpenACS 4.6.3 to 5
+            </ulink>.
+            </para>
           </formalpara>
         </listitem>
         <listitem>
