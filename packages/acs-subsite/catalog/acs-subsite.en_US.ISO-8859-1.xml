@@ -51,6 +51,8 @@
   <msg key="Change_pass_email_por">Change password, email, portrait</msg>
   <msg key="Check_Your_Inbox">Check Your Inbox</msg>
   <msg key="Children">Children</msg>
+  <msg key="choose_assessment">Choose an assessment for registration</msg>
+  <msg key="choose_assessment_help">Select an assessment to be responded in the registration process</msg>
   <msg key="Close_account_explanation">
 &lt;p&gt; Please confirm that you would like to close your account at %system_name%. &lt;/p&gt;
 
@@ -271,6 +273,7 @@ account was deleted for some reason.</msg>
   <msg key="Name">Name</msg>
   <msg key="New_Password">New Password</msg>
   <msg key="No_applications">No applications</msg>
+  <msg key="no_assessment">No assessment available</msg>
   <msg key="No_ISO_Codes">No ISO Codes</msg>
   <msg key="No_package_parameters">This package does not have any parameters.</msg>
   <msg key="no_portrait_title_message">your portrait</msg>
