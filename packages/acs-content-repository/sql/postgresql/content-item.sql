@@ -1368,11 +1368,11 @@ begin
 end;' language 'plpgsql';
 
 
-create or replace function content_item__rename (integer,varchar)
+create or replace function content_item__edit_name (integer,varchar)
 returns integer as '
 declare
-  rename__item_id                alias for $1;  
-  rename__name                   alias for $2;  
+  edit_name__item_id                alias for $1;  
+  edit_name__name                   alias for $2;  
   exists_id                      integer;       
 begin
   select
@@ -1382,25 +1382,25 @@ begin
   from 
     cr_items
   where
-    name = rename__name
+    name = edit_name__name
   and 
     parent_id = (select 
 	           parent_id
 		 from
 		   cr_items
 		 where
-		   item_id = rename__item_id);
+		   item_id = edit_name__item_id);
   if NOT FOUND then
     update cr_items
-      set name = rename__name
-      where item_id = rename__item_id;
+      set name = edit_name__name
+      where item_id = edit_name__item_id;
 
     update acs_objects
-      set title = rename__name
-      where object_id = rename__item_id;
+      set title = edit_name__name
+      where object_id = edit_name__item_id;
   else
-    if exists_id != rename__item_id then
-      raise EXCEPTION ''-20000: An item with the name % already exists in this directory.'', rename__name;
+    if exists_id != edit_name__item_id then
+      raise EXCEPTION ''-20000: An item with the name % already exists in this directory.'', edit_name__name;
     end if;
   end if;
 
