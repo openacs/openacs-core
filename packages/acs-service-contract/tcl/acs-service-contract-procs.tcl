@@ -15,23 +15,36 @@ namespace eval acs_sc {}
 #####
 
 ad_proc -public acs_sc::invoke {
-    {-contract:required}
+    {-contract ""}
     {-operation:required}
-    {-impl:required}
+    {-impl ""}
+    {-impl_id ""}
     {-call_args {}}
+    {-error:boolean}
 } {
     A wrapper for the acs_sc_call procedure, with explicitly named
     parameters so it's easier to figure out how to use it.
+    You must supply either contract and impl, or just impl_id.
     
     @param contract_name The name of the contract you wish to use.
     @param operation_name The name of the operation in the contract you wish to call.
-    @param impl_name The name of the implementation you wish to use.
+    @param impl The name of the implementation you wish to use.
+    @param impl_id The ID of the implementation you wish to use.
     @param args The arguments you want to pass to the proc.
+    @param error If specified, will throw an error if the operation isn't implemented.
     
     @author Lars Pind (lars@collaboraid.biz)
     @see acs_sc_call
 } {
-    return [acs_sc_call $contract $operation $call_args $impl]
+    if { [exists_and_not_null impl_id] } {
+        acs_sc::impl::get -impl_id $impl_id -array impl_info
+        set impl $impl_info(impl_name)
+        set contract $impl_info(impl_contract_name)
+    }
+    if { ![exists_and_not_null impl] || ![exists_and_not_null contract] } {
+        error "You must supply either impl_id, or contract and impl to acs_sc::invoke"
+    }
+    return [acs_sc_call -error=$error_p $contract $operation $call_args $impl]
 }
 
 
@@ -242,7 +255,8 @@ ad_proc -private acs_sc_get_statement {
 
 
 
-ad_proc -public acs_sc_call {
+ad_proc -deprecated acs_sc_call {
+    {-error:boolean}
     contract
     operation
     {arguments ""}
@@ -252,6 +266,7 @@ ad_proc -public acs_sc_call {
     @param operation the method to invoke
     @param arguments list of arguments to pass to the method
     @param impl the implementation name.
+    @param error If specified, will throw an error if the operation isn't implemented.
 
     @author Neophytos Demetriou
 } {
@@ -260,11 +275,11 @@ ad_proc -public acs_sc_call {
     if { [llength [info procs $proc_name]] == 1 } {
 	return [apply $proc_name $arguments]
     } else {
-	# QUESTION: 
-	# SHOULD WE PRODUCE AN ERROR HERE? 
-	# MAYBE NOT, THE SEMANTICS MIGHT REQUIRE TO CALL 
-	# THE FUNCTION ONLY IF THE IMPLEMENTATION IS SUPPORTED.
-	ns_log warning "ACS-SC: Function Not Found: $proc_name [info procs $proc_name]"
+        if { $error_p } {
+            error "Operation $operation is not implemented in '$impl' implementation of contract '$contract'"
+        } else {
+            ns_log warning "ACS-SC: Function Not Found: $proc_name [info procs $proc_name]"
+        }
 	return
     }
 }
