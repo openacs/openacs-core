@@ -1,5 +1,5 @@
 ad_library {
-    Rich text input widgetand datatype for OpenACS templating system.
+    Rich text input widget and datatype for OpenACS templating system.
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 2003-01-27
@@ -54,13 +54,12 @@ ad_proc -public template::util::richtext::format_options {} {
 
 ad_proc -public template::data::validate::richtext { value_ref message_ref } {
 
-    upvar 2 $message_ref message $value_ref value
+    upvar 2 $message_ref message $value_ref richtext_list
 
-    # a richtext is a 2 element list consisting of { contents format }
-    set contents  [lindex $value 0]
-    set format    [lindex $value 1]
+    set contents    [lindex $richtext_list 0]
+    set format      [lindex $richtext_list 1]
 
-    if { [lsearch [template::util::richtext::formats] $format] == -1 } {
+    if { ![empty_string_p $contents] && [lsearch -exact [template::util::richtext::formats] $format] == -1 } {
 	set message "Invalid format, '$format'."
 	return 0
     }
@@ -85,30 +84,29 @@ ad_proc -public template::data::transform::richtext { element_ref } {
     set contents [ns_queryget $element_id]
     set format [ns_queryget $element_id.format]
 
-    set richtext_list [list $contents $format]
-
     if { [empty_string_p $contents] } {
+        # We need to return the empty list in order for form builder to think of it 
+        # as a non-value in case of a required element.
         return [list]
     } else {
-        return [list $richtext_list]
+        return [list [list $contents $format]]
     }
 }
 
 ad_proc -public template::util::richtext::set_property { what richtext_list value } {
-    
-    Replace a property in a list created by a richtext widget.
+    Set a property of the richtext datatype. 
 
-    @param what one of:<ul>
-    <li>contents</li>
-    <li>format</li>
-    </ul>
+    @param what One of
+      <ul>
+        <li>contents (synonyms content, text)</li>
+        <li>format (synonym mime_type)</li>
+      </ul>
+
     @param richtext_list the richtext list to modify
     @param value the new value
 
     @return the modified list
-
 } {
-
     set contents [lindex $richtext_list 0]
     set format   [lindex $richtext_list 1]
 
@@ -129,17 +127,16 @@ ad_proc -public template::util::richtext::set_property { what richtext_list valu
 
 ad_proc -public template::util::richtext::get_property { what richtext_list } {
     
-    Returns a property of a list created by a richtext widget.
+    Get a property of the richtext datatype. Valid proerties are: 
     
-    @param what the name of the property. Must be one of:<ul>
-    <li>contents - returns the actual contents of the textarea field</li>
-    <li>format - returns the mimetype, e.g. 'text/plain'</li>
+    @param what the name of the property. Must be one of:
+    <ul>
+    <li>contents (synonyms content, text) - returns the actual contents of the textarea field</li>
+    <li>format (synonym mime_type) - returns the mimetype, e.g. 'text/plain'</li>
     <li>html_value - returns the content converted to html format, regardless of the format the content is actually in. In case it is already text/html no conversion will be applied.</li></ul>
-    @param richtext_list a richtext widget list, usually created with ad_form
-    
 
+    @param richtext_list a richtext datatype value, usually created with ad_form.
 } {
-
     set contents  [lindex $richtext_list 0]
     set format    [lindex $richtext_list 1]
 
@@ -185,52 +182,19 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
   set output {}
 
   if { [string equal $element(mode) "edit"] } {
-      append output {
-<script language="javascript">
-<!--
-function formatStr (v) {
-    if (!document.selection) return;
-    var str = document.selection.createRange().text;
-    if (!str) return;
-    document.selection.createRange().text = '<' + v + '>' + str + '</' + v + '>';
-}
-
-function insertLink () {
-    if (!document.selection) return;
-    var str = document.selection.createRange().text;
-    if (!str) return;
-    var my_link = prompt('Enter URL:', 'http://');
-    if (my_link != null)
-        document.selection.createRange().text = '<a href="' + my_link + '">' + str + '</a>';
-}
-
-if (document.selection) {
-    document.write('<table border="0" cellspacing="0" cellpadding="0" width="80">');
-    document.write('<tr>');
-    document.write('<td width="24"><a href="javascript:formatStr(\'b\')" tabIndex="-1"><img src="/resources/acs-subsite/bold-button.gif" alt="bold" width="24" height="18" border="0"></a></td>');
-    document.write('<td width="24"><a href="javascript:formatStr(\'i\')" tabIndex="-1"><img src="/resources/acs-subsite/italic-button.gif" alt="italic" width="24" height="18" border="0"></a></td>');
-    document.write('<td width="26"><a href="javascript:insertLink()" tabIndex="-1"><img src="/resources/acs-subsite/url-button.gif" alt="link" width="26" height="18" border="0"></a></td>');
-    document.write('</tr>');
-    document.write('</table>');
-}
-//-->
-</script>
-      }
-
+      append output {<script language="javascript"><!--} \n {acs_RichText_WriteButtons();  //--></script>}
+      
       append output [textarea_internal "$element(id)" attributes $contents]
-      append output "<br>Format: [menu "$element(id).format" [template::util::richtext::format_options] $format {}]"
-
+      append output "<br>Format: [menu "$element(id).format" [template::util::richtext::format_options] $format attributes]"
+          
       # Spell-checker
       array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
-
       if { $spellcheck(render_p) } {
-          append output " Spellcheck: [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) {}]"
-      }   
-
+          append output " Spellcheck: [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) attributes]"
+      }
   } else {
       # Display mode
       if { [info exists element(value)] } {
-
           append output [template::util::richtext::get_property html_value $element(value)]
           append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ad_quotehtml $contents]\">"
           append output "<input type=\"hidden\" name=\"$element(id).format\" value=\"[ad_quotehtml $format]\">"
