@@ -31,7 +31,7 @@ ad_proc -private apm_attribute_value {
     Parses the XML element to return the value for the specified attribute.
 
 } {
-    ns_log notice "apm_attribute_value $element $attribute $default --> [xml_node_get_attribute $element $attribute $default]"
+    ns_log Debug "apm_attribute_value $element $attribute $default --> [xml_node_get_attribute $element $attribute $default]"
     return [xml_node_get_attribute $element $attribute $default]
 }
 
@@ -43,14 +43,13 @@ ad_proc -private apm_tag_value {
 } {
     Parses the XML element and returns the associated property name if it exists.
 } {
-    ns_log notice "apm_tag_value [$root nodeName] $property_name"
+    ns_log Debug "apm_tag_value [$root nodeName] $property_name"
     set node [xml_node_get_first_child_by_name $root $property_name]
 
     if { ![empty_string_p $node] } {
-#	ns_log notice "apm_tag_value $root $property_name $default --> [xml_node_get_content $node]"
 	return [xml_node_get_content $node]
     }    
-    ns_log notice "apm_tag_value $root $property_name $default --> $default"
+    ns_log Debug "apm_tag_value $root $property_name $default --> $default"
     return $default
 }
 
