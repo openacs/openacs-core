@@ -443,6 +443,9 @@ ad_proc -public auth::create_user {
         }
     }
 
+    # email_verified_p 
+    set user_info(email_verified_p) $email_verified_p
+
     db_transaction {
         array set creation_info [auth::create_local_account \
                                      -user_id $user_id \
