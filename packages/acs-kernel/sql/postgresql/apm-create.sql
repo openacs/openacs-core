@@ -2737,7 +2737,7 @@ begin
 	-- Set v_path to the tail of the path (the file name).        
 	v_path := substr(upgrade_p__path, instr(upgrade_p__path, ''/'', -1) + 1);
 
-	-- Remove the extension, if it''s .sql.
+	-- Remove the extension, if it is .sql.
 	v_pos1 := position(''.'' in v_path);
 	if v_pos1 > 0 and substr(v_path, v_pos1) = ''.sql'' then
 	    v_path := substr(v_path, 1, v_pos1 - 1);
