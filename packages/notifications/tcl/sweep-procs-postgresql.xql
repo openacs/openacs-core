@@ -11,7 +11,7 @@
            select distinct notification_id
            from notifications inner join notification_requests using (type_id, object_id)
              left outer join notification_user_map using (notification_id, user_id)
-           where sent_date is null;
+           where sent_date is null
         </querytext>
     </fullquery>
 
@@ -31,7 +31,7 @@
             where sent_date is null
               and creation_date <= notif_date
               and interval_id = :interval_id
-            order by user_id, type_id;
+            order by user_id, type_id
         </querytext>
     </fullquery>
 
