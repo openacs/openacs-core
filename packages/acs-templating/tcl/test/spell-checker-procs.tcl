@@ -161,7 +161,7 @@ aa_register_case spellcheck__spellcheck_properties {
 
     set spellcheck_properties [eval $command]
     set spellcheck_p [lindex $spellcheck_properties 0]
-    aa_true "Spell-checking enabled" $spellcheck_p
+    aa_false "Spell-checking disabled" $spellcheck_p
 
     if { $spellcheck_p } {
 	set yes_checked [lindex $spellcheck_properties 1]
