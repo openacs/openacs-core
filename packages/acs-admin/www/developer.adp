@@ -97,6 +97,6 @@
       title="Software Development Manager on openacs.org">Bug
       Tracker</a>. 
       </li>
-      <li>Please read our <a href="http://openacs.org/contribute">conbribution instructions</a> to learn how you can become involved in the OpenACS project.
+      <li>Please read our <a href="http://openacs.org/contribute">contribution instructions</a> to learn how you can become involved in the OpenACS project.
       If you develop your own OpenACS packages there is a good chance they will be useful to other people in the community and after review they can be included in the OpenACS distribution.</li>
       </ul>	

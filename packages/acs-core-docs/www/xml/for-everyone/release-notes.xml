@@ -33,8 +33,44 @@ BEGINNING OF TEMPLATE
   </sect2>
 END OF TEMPLATE -->
 
+  <sect2 id="release-notes-5-1-1">
+    <title>Release 5.1.1</title>
+    <itemizedlist>
+      <listitem>
+        <para>This is the first release using the newest adjustment to the versioning convention.  The OpenACS 5.1.1 tag will apply to OpenACS core as well as to the most recent released version of every package, including .LRN.</para>
+      </listitem>
+      <listitem>
+        <para>Translations syncronized with the translation server.
+        </para>
+      </listitem>
+      <listitem>
+        <para><ulink url="
+            http://openacs.org/bugtracker/openacs/com/acs-lang/bug?bug%5fnumber=1519">Bug
+            1519</ulink> fixed.  This involved renaming all catalog
+          files for ch_ZH, TH_TH, AR_EG, AR_LB, ms_my, RO_RO, FA_IR,
+          and HR_HR.  If you work with any of those locales, you
+          should do a full catalog export and then import (via
+          <ulink url="/acs-lang/admin">/acs-lang/admin</ulink>) after
+          upgrading acs-lang.  (And, of course, make a backup of both
+          the files and database before upgrading.)</para>
+      </listitem>
+      <listitem>
+        <para>Other bug fixes since 5.1.0: <ulink
+            url="http://openacs.org/bugtracker/openacs/bug?bug_number=1785">1785</ulink>,
+          <ulink
+            url="http://openacs.org/bugtracker/openacs/bug?bug_number=1793">1793</ulink>,
+      and over a dozen additional bug fixes.</para>
+      </listitem>
+      <listitem>
+        <para>For a complete change list, see the  Change list since
+          5.0.0 in <link linkend="changelog">Changelog</link>.</para>
+      </listitem>
+    </itemizedlist>
+   </sect2>
+
+
    <sect2 id="release-notes-5-1-0">
-     <title>Version 5.1.0</title>
+     <title>Release 5.1.0</title>
  
        <itemizedlist>
          <listitem>
@@ -49,7 +85,7 @@ END OF TEMPLATE -->
    </sect2>
 
   <sect2 id="release-notes-5-0-4">
-    <title>Version 5.0.4</title>
+    <title>Release 5.0.4</title>
 
       <itemizedlist>
         <listitem>
@@ -59,7 +95,7 @@ END OF TEMPLATE -->
     </sect2>
 
   <sect2 id="release-notes-5-0-3">
-    <title>Version 5.0.3</title>
+    <title>Release 5.0.3</title>
 
       <itemizedlist>
         <listitem>
@@ -70,7 +106,7 @@ END OF TEMPLATE -->
 
 
   <sect2 id="release-notes-5-0-2">
-    <title>Version 5.0.2</title>
+    <title>Release 5.0.2</title>
 
       <itemizedlist>
         <listitem>
@@ -86,7 +122,7 @@ END OF TEMPLATE -->
     </sect2>
 
   <sect2 id="release-notes-5-0-1">
-    <title>Version 5.0.1</title>
+    <title>Release 5.0.1</title>
       <itemizedlist>
         <listitem>
           <para>All work on the translation server from 7 Nov 2003 to 7 Feb 2004 is now included in catalogs.</para>
@@ -104,7 +140,7 @@ END OF TEMPLATE -->
     </sect2>
 
   <sect2 id="release-notes-5-0-0">
-    <title>Version 5.0.0</title>
+    <title>Release 5.0.0</title>
 
     <para>
 	This is OpenACS 5.0.0.  This version contains no known security, data loss, or crashing bugs, nor any bugs judged release blockers.  This version has received manual testing.  It has passed current automated testing, which is not comprehensive.  This release contains work done on the translation server http://translate.openacs.org through 7 Nov 2003.  
@@ -275,24 +311,30 @@ END OF TEMPLATE -->
 
 
   <sect2>
-    <title>Version 4.6.3</title>
+    <title>Release 4.6.3</title>
     <para><ulink url="release-notes-4-6-3.html">Release Notes for 4.6.3</ulink></para>
   </sect2>
 
 
   <sect2>
-    <title>Version 4.6.2</title>
+    <title>Release 4.6.2</title>
     <para><ulink url="release-notes-4-6-2.html">Release Notes for 4.6.2</ulink></para>
   </sect2>
 
   <sect2>
-    <title>Version 4.6</title>
+    <title>Release 4.6</title>
     <para><ulink url="release-notes-4-6.html">Release Notes for 4.6</ulink></para>
   </sect2>
 
   <sect2>
-    <title>Version 4.5</title>
+    <title>Release 4.5</title>
     <para><ulink url="release-notes-4-5.html">Release Notes for 4.5</ulink></para>
   </sect2>
 
+
+  <sect2 id="changelog">
+    <title>Changelog</title>
+    <programlisting><xi:include href="../../../../../ChangeLog" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>ChangeLog missing</xi:fallback></xi:include></programlisting>
+
+  </sect2>
 </sect1>

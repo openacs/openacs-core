@@ -197,7 +197,7 @@ ad_proc -private datatype_to_sql_type {
     switch $datatype {
         "string" { set type "varchar(1000)" }
         "boolean" { set type "char(1)"
-                    set constraint "[generate_constraint $table $column "ck"] check ($column in ('t','f'))" }
+                    set constraint "[plsql_utility::generate_constraint_name $table $column "ck"] check ($column in ('t','f'))" }
         "number" { set type "number" }
         "money" { set type "number (12,2)" }
         "date" { set type "date" }

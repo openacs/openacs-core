@@ -699,7 +699,8 @@ ad_proc -private auth::password::ChangePassword {
                 -call_args [list $username \
                                  $old_password \
                                  $new_password \
-                                 $parameters]]
+                                 $parameters \
+			         $authority_id]]
 }
 
 ad_proc -private auth::password::RetrievePassword {
@@ -763,5 +764,6 @@ ad_proc -private auth::password::ResetPassword {
                 -impl_id $impl_id \
                 -operation ResetPassword \
                 -call_args [list $username \
-                                 $parameters]]
+				$parameters \
+			        $authority_id]]
 }

@@ -411,6 +411,15 @@ ad_proc -public template::util::date::set_property { what date value } {
 
 } {
 
+    # if value is an empty string, just return the date that was
+    # passed in, otherwise this procedure will fail.
+    # This is needed for the automated sql/linear conversion used by
+    # ad_form.
+
+    if {[empty_string_p $value]} {
+        return $date
+    }
+    
   # Erase leading zeroes from the value, but make sure that 00
   # is not completely erased - but only for single-element properties
 

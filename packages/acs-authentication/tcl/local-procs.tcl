@@ -102,15 +102,18 @@ ad_proc -private auth::local::authentication::Authenticate {
     username
     password
     {parameters {}}
+    {authority_id {}}
 } {
     Implements the Authenticate operation of the auth_authentication 
     service contract for the local account implementation.
 } {
     array set auth_info [list]
 
-    set authority_id [auth::authority::local]
+    if [empty_string_p $authority_id] {
+	set authority_id [auth::authority::local]
+    }
 
-    set user_id [acs_user::get_by_username -username $username]
+    set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
     if { [empty_string_p $user_id] } {
         set result(auth_status) "no_account"
         return [array get result]
@@ -214,6 +217,7 @@ ad_proc -private auth::local::password::ChangePassword {
     old_password
     new_password
     {parameters {}}
+    {authority_id {}}
 } {
     Implements the ChangePassword operation of the auth_password 
     service contract for the local account implementation.
@@ -223,7 +227,7 @@ ad_proc -private auth::local::password::ChangePassword {
         password_message {} 
     }
 
-    set user_id [acs_user::get_by_username -username $username]
+    set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
     if { [empty_string_p $user_id] } {
         set result(password_status) "no_account"
         return [array get result]
@@ -244,7 +248,7 @@ ad_proc -private auth::local::password::ChangePassword {
 
     if { [parameter::get -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -default 1] } {
 	with_catch errmsg {
-	    acs_user::get -username $username -array user
+	    acs_user::get -username $username -authority_id $authority_id -array user
 	    
 	    set system_name [ad_system_name]
 	    set pvt_home_name [ad_pvt_home_name]
@@ -291,6 +295,8 @@ ad_proc -private auth::local::password::RetrievePassword {
 ad_proc -private auth::local::password::ResetPassword {
     username
     parameters
+    {authority_id {}}
+    {new_password {}}
 } {
     Implements the ResetPassword operation of the auth_password 
     service contract for the local account implementation.
@@ -300,14 +306,18 @@ ad_proc -private auth::local::password::ResetPassword {
         password_message {} 
     }
 
-    set user_id [acs_user::get_by_username -username $username]
+    set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
     if { [empty_string_p $user_id] } {
         set result(password_status) "no_account"
         return [array get result]
     }
 
     # Reset the password
-    set password [ad_generate_random_string]
+    if [empty_string_p $new_password] {
+	set password $new_password
+    } else {
+	set password [ad_generate_random_string]
+    }
 
     ad_change_password $user_id $password
 
