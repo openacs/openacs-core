@@ -6,7 +6,7 @@
   <include src="/packages/acs-api-browser/lib/search" query_string="@query_string@">
 </div>
 
-<h3>Procedure Matches:</h3>
+<h3>Procedure Matches</h3>
 <ul>
   <multiple name="results">
   <li> <if @results.score@ lt 10>&nbsp;&nbsp;</if>@results.score@: <a href=@results.url@>@results.proc@</a>
