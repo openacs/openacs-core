@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title></title><meta name="generator" content="DocBook XSL Stylesheets V1.53.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="dev-guide.html" title="Chapter 4. OpenACS Developer's Guide"><link rel="previous" href="subsites.html" title="Writing OpenACS 4.5 Application Pages"><link rel="next" href="more-developer-info.html" title="Chapter 5. Other Developer Resources"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="subsites.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 4. OpenACS Developer's Guide</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="more-developer-info.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="i18n"></a></h2></div></div><div class="authorblurb"><p><p>
+      By <a href="http://www.petermarklund.com/" target="_top">Peter Marklund</a>
+      and <a href="http://www.pinds.com/" target="_top">Lars Pind</a>
+    </p><br>
+		  OpenACS docs are written by the named authors, but may be edited
+		  by OpenACS documentation staff.
+		</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="i18n-introduction"></a>Introduction</h3></div></div><p>
+      This document describes how to develop internationalized OpenACS packages.
+    </p><p>
+      At this point, we've only covered things that involve the
+      message catalog: Dynamically picking a chunk of text to spit out
+      based on the locale. 
+    </p><p>
+      Each section below consists on one part about how to write
+      new internationalized packages, and which explains the details
+      of how it works, and then another part that talks about the
+      process for internationalizing existing packages.
+    </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="i18n-message-catalog"></a>Using the Message Catalog</h3></div></div><p>
+      The following section will tell you how to deal with localizable
+      text in ADP files, in TCL files, and in APM Parameters.
+    </p><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="i18n-message-catalog-adps"></a>Template Files (ADP Files)</h4></div></div><p>
+        Internationalizing templates is about replacing human readable
+        text in a certain language with intenral message keys, which
+        can then be dynamically replaced with real human language in the desired
+        locale.
+      </p><p>
+        There are 3 syntaxes to choose from: The short, the verbose,
+        and the temporary. Each offer different advantages, but
+        generally, what you want to do is use the short notation for
+        new packages and use the temporary notation for
+        internationalizing old packages, then have the APM translate
+        those into the short notation.
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+            The <span class="strong">short</span>:
+            #<span class="emphasis"><em>message_key</em></span>#
+          </p><p>
+            The advantage of the short syntax is that it's short. It's
+            as simple as inserting the value of a variable.
+          </p></li><li><p>
+            The <span class="strong">verbose</span>: &lt;trn
+            key=&quot;<span class="emphasis"><em>message_key</em></span>&quot;
+            locale=&quot;<span class="emphasis"><em>locale</em></span>&quot;&gt;<span class="emphasis"><em>default
+            text</em></span>&lt;/trn&gt;
+          </p><p>
+            The verbose syntax allows you to specify a default text in
+            a certain language. This syntax is not recommended
+            anymore, but it can be convenient for development, because
+            it still works even if you haven't created the message
+            in the message catalog yet, because what it'll do is
+            create the message key with the default text from the tag
+            as the localized message.
+          </p></li><li><p>
+            The <span class="strong">temporary</span>:
+            &lt;#<span class="emphasis"><em>message_key</em></span> <span class="emphasis"><em>original text</em></span>#&gt;
+          </p><p>
+            This syntax has been designed to make it easy to
+            internationalize existing pages. This is not a syntax that
+            stays in the page. As you'll see later, it'll be replaced
+            with the short syntax by a special feature of the APM. You
+            may leave out the message_key by writing an underscore (_)
+            character instead, in which case a message key will be
+            auto-generated by the APM.
+          </p></li></ul></div><p>
+        We recommend the short notation for new package development.
+      </p></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="i18n-message-catalog-params"></a>APM Parameters</h4></div></div><p>
+        Some parameters contain text that need to be localized. In
+        this case, instead of storing the real text in the parameter,
+        you should use message keys using the short notation above,
+        i.e.  <span class="strong">#<span class="emphasis"><em>message-key</em></span>#</span>.
+      </p><p>
+       In order to avoid clashes with other uses of the hash
+         character, you need to tell the APM that the parameter value
+         needs to be localized when retrieving it. You do that by saying:
+         <span class="strong">parameter::get -localize</span>.
+      </p><p>
+        Here are a couple of examples. Say we have the following two
+        parameters, taken directly from the dotlrn package.
+      </p><div class="table"><a name="id2878000"></a><p class="title"><b>Table 4.1. </b></p><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Parameter Name</th><th>Parameter Value</th></tr></thead><tbody><tr><td>class_instance_pages_csv</td><td>#dotlrn.class_page_home_title#,Simple 2-Column;#dotlrn.class_page_calendar_title#,Simple 1-Column;#dotlrn.class_page_file_storage_title#,Simple 1-Column</td></tr><tr><td>departments_pretty_name</td><td>#departments_pretty_name#</td></tr></tbody></table></div><p>
+        Then, depending on how we retrieve the value, here's what we get:
+      </p><div class="table"><a name="id2878089"></a><p class="title"><b>Table 4.2. </b></p><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Command used to retrieve Value</th><th>Retrieved Value</th></tr></thead><tbody><tr><td>parameter::get <span class="strong">-localize</span> -parameter class_instances_pages_csv</td><td>Kurs Startseite,Simple 2-Column;Kalender,Simple 1-Column;Dateien,Simple 1-Column</td></tr><tr><td>parameter::get <span class="strong">-localize</span> -parameter departments_pretty_name</td><td>Abteilung</td></tr><tr><td>parameter::get -parameter departments_pretty_name</td><td>#departments_pretty_name#</td></tr></tbody></table></div><p>
+        The value in the rightmost column in the table above is the
+        value returned by an invocation of parameter::get. Note that
+        for localization to happen you must use the -localize flag.
+      </p><p>
+        The locale used for the message lookup will be the locale of
+        the current request, i.e. lang::conn::locale or ad_conn
+        locale.
+      </p><p>
+        You're responsible for creating the keys in the message
+        catalog yourself.
+      </p></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="i18n-date-time-number"></a>Dates, Times, and Numbers</h3></div></div><p>
+      Let's deal with dates and times first. The way it works is as follows:
+    </p><div class="orderedlist"><ol type="1"><li><p>
+          Get the date in ANSI format from the database (YYYY-MM-DD
+          HH24:MI:SS, the time portion is optional). Name the column
+          in the SQL statement something that ends in
+          &quot;_ansi&quot;, such as
+          &quot;posting_date_ansi&quot;. Example:
+          <tt>to_char(posting_date, 'YYYY-MM-DD
+          HH24:MI:SS') as posting_date_ansi</tt>
+        </p></li><li><p>
+          Use the Tcl command &quot;lc_time_fmt&quot; to format the
+          date in pretty format. There are a number of standard,
+          localizable formats to choose from (see below). Example:
+          <tt>set posting_date_pretty [lc_time_fmt
+          $posting_date_ansi &quot;%q&quot;]</tt>
+        </p></li><li><p>
+          Use the &quot;*_pretty&quot;-version in your ADP page.
+        </p></li></ol></div><p>
+      Here's the list of standard date and time formats to choose
+      from:
+    </p><div class="itemizedlist"><ul type="disc"><li><p>
+          %c: Long date and time (Mon November 18, 2002 12:00 AM)
+        </p></li><li><p>
+          %x: Short date (11/18/02)
+        </p></li><li><p>
+          %X: Time (12:00 AM)
+        </p></li><li><p>
+          %q: Long date without weekday (November 18, 2002)
+        </p></li><li><p>
+           %Q: Long date with weekday (Monday November 18, 2002)
+        </p></li></ul></div><p>
+      If the abbreviations seem a bit strange, it's because they
+      are. Most of them are standardized (see <tt>man
+      strftime</tt> for example). %q and %Q are our
+      proprietary additions, and 'q' was just about the only letter
+      left in the alphabet.
+    </p><p>
+      The command 'lc_fmt_time' allows you to pass in a specific date
+      and time format as well, but please don't, because the whole
+      point is to make it possible for administrators to change date
+      and time formats site-wide based on locales.
+    </p><p>
+      Numbers are very easy to format. Just say
+      <tt>lc_numeric $value</tt>, and it'll
+      format the number using the appropriate decimal point and
+      thousand separator for the locale.
+    </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="i18n-convert"></a>Internationalizing Existing Packages</h3></div></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="i18n-convert-adp-tcl-files"></a>Page Files (ADP and Tcl Files) </h4></div></div><p>
+        We've created a couple of tools especially for
+        internationalizing the pages of existing packages. The tools can
+        be accessed from the &quot;Manage Internationalization&quot;
+        linked from the package manager page for a package.
+      </p><p>
+        The process consists of four steps:
+      </p><div class="orderedlist"><ol type="1"><li><p>
+            <span class="strong">Replace text with tags</span>:
+            This is an automated process, which will try to
+            automatically locate chunks of translatable text,
+            auto-generate a reasonable message key, and surround the
+            text with the temporary &lt;#...#&gt; notation mentioned
+            above.
+          </p></li><li><p>
+            <span class="strong">Manually verify each ADP
+            file</span>. If necessary, you can add additional
+            &lt;#...#&gt; tags, or you can move or remove the ones set
+            by the automated step.
+          </p></li><li><p>
+            <span class="strong">Manually mark up Tcl
+            files</span>, marking up translatable text with the
+            &lt;#...#&gt; notation.
+          </p></li><li><p>
+            <span class="strong">Replace tags with keys</span>:
+            This is an automated process, which will replace the
+            temporary &lt;#...#&gt; notation in both ADP and Tcl files
+            with the appropriate notation for the type of file, and
+            store the text in the message catalog. You need to run the
+            process twice, once for ADP files, and once for Tcl files.
+          </p></li></ol></div><div class="sect4"><div class="titlepage"><div><h5 class="title"><a name="i18n-convert-replace-text-with-tags"></a>Replace Text With Tags Step</h5></div></div><p>
+          When you run this step, any modified files are backed up in
+          a file with a &quot;.orig&quot; suffix. Those files are
+          never overwritten, though, so the .orig file will always be
+          the original page file, not the second-to-last file. Running
+          this action multiple times is harmless.
+        </p><p>
+          The system will auto-generate suggested message keys. 
+        </p><p>
+          ... (WRITE MORE HERE!)
+        </p></div><div class="sect4"><div class="titlepage"><div><h5 class="title"><a name="i18n-convert-replace-tags-with-keys"></a>Replace Tags With Keys Step</h5></div></div><p>
+          
+        </p></div></div><p>
+      Next step is to internationalize parameters that contain
+      localizable text. See the section <a href="i18n.html#i18n-message-catalog-params">Multilingual APM Parameters</a>.
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="subsites.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="more-developer-info.html">Next</a></td></tr><tr><td width="40%" align="left">Writing OpenACS 4.5 Application Pages&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right">&nbsp;Chapter 5. Other Developer Resources</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">
+			vinod@kurup.com
+		  </a></address></div></body></html>
