@@ -639,6 +639,10 @@ ad_proc -public site_node::get_package_url {
 
     @return a URL, or empty string if no instance of the package is mounted.
 } {
+    # TODO: Accept URL, and find the mounted instance nearest to that URL, e.g. 
+    # first look in same subsite as the URL given, then go up the tree of subsites
+    # until you reach the main site.
+    
     return [lindex [site_node::get_children \
 			-all \
 			-node_id [site_node::get_node_id -url /] \
