@@ -576,6 +576,10 @@ chmod 700 /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/et
           Debian users: use /usr/lib/ssl/misc/CA.pl instead of /usr/share/ssl/CA
         </para>
 
+        <para>
+          Mac OS X users: use perl /System/Library/OpenSSL/misc/CA.pl -newcert instead of /usr/share/ssl/CA
+        </para>
+
             <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/certs</userinput>
 [$OPENACS_SERVICE_NAME certs]$ <userinput>perl /usr/share/ssl/misc/CA -newcert</userinput>
 Using configuration from /usr/share/ssl/openssl.cnf
