@@ -18,19 +18,13 @@ if {[empty_string_p $root_id]} {
     set root_id [ad_conn node_id]
 }
 
-# We do a check for the admin privilege because a user could have
-# admin privilege on a site_node that has other site_nodes beneath it
-# that the user does not have admin privilege on.  If we don't do this
-# check, the user could end up making changes on site_nodes that he
-# does not have the admin privilege for.
+# Check if the user has site-wide-admin privileges
+set site_wide_admin_p [acs_user::site_wide_admin_p]
+
 
 array set node [site_node::get -node_id $root_id]
 set parent_id $node(parent_id)
 set object_id $node(object_id)
-
-if {![empty_string_p $object_id]} {
-    ad_require_permission $object_id admin
-}
 
 if {![empty_string_p $new_parent]} {
     set javascript "onLoad=\"javascript:document.new_parent.name.focus();document.new_parent.name.select()\""
@@ -46,7 +40,7 @@ set javascript "onload=\"javascript:document.check_checkbox()\""
 
 set parent_link ".?[export_url_vars expand:multiple root_id=$parent_id]"
 
-set page_title "Site Map "
+set page_title "[ad_system_name] Site Map"
 set context [list $page_title]
 
 set user_id [ad_conn user_id]
@@ -86,7 +80,6 @@ template::list::create \
     -key node_id \
     -elements {
 	 name_instance {
-            label "<center>Instance</center>"
             html "align left"
 	    display_template {
 		<a name="@nodes.node_id@">@nodes.tree_indent;noquote@</a>
@@ -114,7 +107,6 @@ template::list::create \
 		</if>
 	    }
         } instance_url {
-            label "<center>URL</center>"
             html "align left"
 	    display_template {
 		<if @nodes.action_type@ eq "new_app">
@@ -134,7 +126,7 @@ template::list::create \
 		</form>
 		</if>
 		<else>
-		<font size=2>@nodes.instance_url;noquote@</font>
+		<font size=2>(@nodes.instance_url;noquote@)</font>
 		</else>
 	    }
         }
