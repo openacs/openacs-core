@@ -11,6 +11,14 @@
 # It would be nice if this could be used without the ACS, so we're not
 # using ad_proc constructs for this at this point.
 
+# Clean stuff up if we have to
+# I'm unhappy about this, but there seem to be bugs in the XML parser!! (ben)
+proc xml_prepare_data {xml_data} {
+    # remove comments
+    regsub -all {<!--[^>]*-->} $xml_data "" new_xml_data
+    return $new_xml_data
+}
+
 # Find nodes of a parent that have a given name
 proc xml_find_child_nodes {parent_node name} {
     set children [ns_xml node children $parent_node]

@@ -1,8 +1,10 @@
 ad_library {
 
     Functions that APM uses to parse and generate XML.
+    Changed to use ns_xml by ben (OpenACS).
 
     @author Bryan Quinn (bquinn@arsdigita.com)
+    @author Ben Adida (ben@mit.edu)
     @creation-date Fri Oct  6 21:47:39 2000
     @cvs-id $Id$
 } 
@@ -16,13 +18,15 @@ ad_proc -private apm_load_xml_packages {} {
 } {
     global ad_conn
     if { ![info exists ad_conn(xml_loaded_p)] } {
-	foreach file [glob "[acs_package_root_dir acs-tcl]/tcl/xml-*-procs.tcl"] {
-	    apm_source $file
-	}
+	# ns_xml needs to be loaded
+
+#  	foreach file [glob "[acs_package_root_dir acs-tcl]/tcl/xml-*-procs.tcl"] {
+#  	    apm_source $file
+#  	}
 	set ad_conn(xml_loaded_p) 1
     }
 
-    package require xml 1.9
+#    package require xml 1.9
 }
 
 ad_proc -private apm_required_attribute_value { element attribute } {
@@ -47,7 +51,9 @@ ad_proc -private apm_attribute_value {
     Parses the XML element to return the value for the specified attribute.
 
 } {
-    set value [dom::element getAttribute $element $attribute]
+    # set value [dom::element getAttribute $element $attribute]
+    set value [ns_xml node getattr $element $attribute]
+
     if { [empty_string_p $value] } {
 	return $default
     } else {
@@ -63,9 +69,12 @@ ad_proc -private apm_tag_value {
 } {
     Parses the XML element and returns the associated property name if it exists.
 } {
-    set node [lindex [dom::element getElementsByTagName $root $property_name] 0]
+    # set node [lindex [dom::element getElementsByTagName $root $property_name] 0]
+    set node [lindex [xml_find_child_nodes $root $property_name] 0]
+
     if { ![empty_string_p $node] } {
-	return [dom::node cget [dom::node cget $node -firstChild] -nodeValue]
+	# return [dom::node cget [dom::node cget $node -firstChild] -nodeValue]
+	return [ns_xml node getcontent [lindex [ns_xml node children $node] 0]]
     } else {
 	return $default
     }    
@@ -279,9 +288,28 @@ ad_proc -public apm_read_package_info_file { path } {
     set xml_data [read $file]
     close $file
 
-    set tree [dom::DOMImplementation parse $xml_data]
-    set package [dom::node cget $tree -firstChild]
-    if { ![string equal [dom::node cget $package -nodeName] "package"] } {
+    set xml_data [xml_prepare_data $xml_data]
+
+    # set tree [dom::DOMImplementation parse $xml_data]
+    set tree [ns_xml parse $xml_data]
+    # set package [dom::node cget $tree -firstChild]
+    set root_node [ns_xml doc root $tree]
+    ns_log Notice "XML: root node is [ns_xml node name $root_node]"
+    set package $root_node
+
+    # set root_name [dom::node cget $package -nodeName]
+    set root_name [ns_xml node name $package]
+
+    # Debugging Children
+    set root_children [ns_xml node children $root_node]
+
+    ns_log Notice "XML - there are [llength $root_children] child nodes"
+    foreach child $root_children {
+	ns_log Notice "XML - one root child: [ns_xml node name $child]"
+    }
+
+    if { ![string equal $root_name "package"] } {
+	ns_log Notice "XML: the root name is $root_name"
 	error "Expected <package> as root node"
     }
     set properties(package.key) [apm_required_attribute_value $package key]
@@ -293,7 +321,9 @@ ad_proc -public apm_read_package_info_file { path } {
     set properties(pretty-plural) [apm_tag_value -default "$properties(package-name)s" $package pretty-plural]
 
 
-    set versions [dom::element getElementsByTagName $package version]
+    # set versions [dom::element getElementsByTagName $package version]
+    set versions [xml_find_child_nodes $package version]
+
     if { [llength $versions] != 1 } {
 	error "Package must contain exactly one <version> node"
     }
@@ -318,9 +348,11 @@ ad_proc -public apm_read_package_info_file { path } {
 	vendor url
 	description format
     } {
-	set node [lindex [dom::element getElementsByTagName $version $property_name] 0]
+	# set node [lindex [dom::element getElementsByTagName $version $property_name] 0]
+	set node [lindex [xml_find_child_nodes $version $property_name] 0]
 	if { ![empty_string_p $node] } {
-	    set properties($property_name.$attribute_name) [dom::element getAttribute $node $attribute_name]
+	    # set properties($property_name.$attribute_name) [dom::element getAttribute $node $attribute_name]
+	    set properties($property_name.$attribute_name) [apm_attribute_value $node $attribute_name]
 	} else {
 	    set properties($property_name.$attribute_name) ""
 	}
@@ -337,7 +369,10 @@ ad_proc -public apm_read_package_info_file { path } {
     set properties(requires) [list]
 
     foreach dependency_type { provides requires } {
-	foreach node [dom::element getElementsByTagName $version $dependency_type] {
+	# set dependency_types [dom::element getElementsByTagName $version $dependency_type]
+	set dependency_types [xml_find_child_nodes $version $dependency_type]
+
+	foreach node $dependency_types {
 	    set service_uri [apm_required_attribute_value $node url]
 	    set service_version [apm_required_attribute_value $node version]
 	    lappend properties($dependency_type) [list $service_uri $service_version]
@@ -348,11 +383,19 @@ ad_proc -public apm_read_package_info_file { path } {
 
     set properties(files) [list]
 
-    foreach node [dom::element getElementsByTagName $version "files"] {
-	foreach file_node [dom::element getElementsByTagName $node "file"] {
+    # set nodes [dom::element getElementsByTagName $version "files"]
+    set files [xml_find_child_nodes $version files]
+
+    foreach node $files {
+	# set file_nodes [dom::element getElementsByTagName $node "file"]
+	set file_nodes [xml_find_child_nodes $node file]
+	
+	foreach file_node $file_nodes {
 	    set file_path [apm_required_attribute_value $file_node path]
-	    set type [dom::element getAttribute $file_node type]
-	    set db_type [dom::element getAttribute $file_node db_type]
+	    # set type [dom::element getAttribute $file_node type]
+	    set type [apm_attribute_value $file_node type]
+	    # set db_type [dom::element getAttribute $file_node db_type]
+	    set db_type [apm_attribute_value $file_node db_type]
 	    # Validate the file type: it must be null (unknown type) or
 	    # some value in [apm_file_type_keys].
 	    if { ![empty_string_p $type] && [lsearch -exact [apm_file_type_keys] $type] < 0 } {
@@ -371,9 +414,14 @@ ad_proc -public apm_read_package_info_file { path } {
 
     set properties(owners) [list]
 
-    foreach node [dom::element getElementsByTagName $version "owner"] {
-	set url [dom::element getAttribute $node url]
-	set name [dom::node cget [dom::node cget $node -firstChild] -nodeValue]
+    # set owners [dom::element getElementsByTagName $version "owner"]
+    set owners [xml_find_child_nodes $version owner]
+
+    foreach node $owners {
+	# set url [dom::element getAttribute $node url]
+	set url [apm_attribute_value $node url]
+	# set name [dom::node cget [dom::node cget $node -firstChild] -nodeValue]
+	set name [ns_xml node getcontent [lindex [ns_xml node children $node] 0]]
 	lappend properties(owners) [list $name $url]
     }
 
@@ -381,15 +429,30 @@ ad_proc -public apm_read_package_info_file { path } {
 
     set properties(parameters) [list]
     ns_log Debug "APM: Reading Parameters"
-    foreach node [dom::element getElementsByTagName $version "parameters"] {
-	foreach parameter_node [dom::element getElementsByTagName $node "parameter"] {	  
-	    set default_value [dom::element getAttribute $parameter_node default]
-	    set min_n_values [dom::element getAttribute $parameter_node min_n_values]
-	    set max_n_values [dom::element getAttribute $parameter_node max_n_values]
-	    set description [dom::element getAttribute $parameter_node description]
-	    set section_name [dom::element getAttribute $parameter_node section_name]
-	    set datatype [dom::element getAttribute $parameter_node datatype]
-	    set name [dom::element getAttribute $parameter_node name]
+
+    # set parameters [dom::element getElementsByTagName $version "parameters"]
+    set parameters [xml_find_child_nodes $version parameters]
+
+    foreach node $parameters {
+	# set parameter_nodes [dom::element getElementsByTagName $node "parameter"]
+	set parameter_nodes [xml_find_child_nodes $node parameter]
+
+	foreach parameter_node $parameter_nodes {	  
+	    # set default_value [dom::element getAttribute $parameter_node default]
+	    set default_value [apm_attribute_value $parameter_node default]
+	    # set min_n_values [dom::element getAttribute $parameter_node min_n_values]
+	    set min_n_values [apm_attribute_value $parameter_node min_n_values]
+	    # set max_n_values [dom::element getAttribute $parameter_node max_n_values]
+	    set max_n_values [apm_attribute_value $parameter_node max_n_values]
+	    # set description [dom::element getAttribute $parameter_node description]
+	    set description [apm_attribute_value $parameter_node description]
+	    # set section_name [dom::element getAttribute $parameter_node section_name]
+	    set section_name [apm_attribute_value $parameter_node section_name]
+	    # set datatype [dom::element getAttribute $parameter_node datatype]
+	    set datatype [apm_attribute_value $parameter_node datatype]
+	    # set name [dom::element getAttribute $parameter_node name]
+	    set name [apm_attribute_value $parameter_node name]
+
 	    ns_log Debug "APM: Reading parameter $name with default $default_value"
 	    lappend properties(parameters) [list $name $description $section_name $datatype $min_n_values $max_n_values $default_value]
 	}
