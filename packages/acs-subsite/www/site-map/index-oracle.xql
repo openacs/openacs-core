@@ -35,7 +35,8 @@
                    directory_p,
                    parent_id,
                    n_children,
-                   decode(acs_permission.permission_p(object_id, :user_id, 'admin'), 't', 1, 0) object_admin_p
+                   decode(acs_permission.permission_p(object_id, :user_id, 'admin'), 't', 1, 0) object_admin_p,
+                   (select view_p from site_nodes_selection where node_id=site_map.node_id) as view_p
             from apm_packages p,
                  (select node_id,
                          site_node.url(node_id) as url,
