@@ -111,7 +111,7 @@ ad_proc adp_parse_ad_conn_file {} {
     }
 }
 
-ad_proc -public -default ad_template_return {{file_stub ""}} {
+ad_proc -public -deprecated -warn ad_template_return {{file_stub ""}} {
     Alias proc (wrapper) for ad_return_template
 } {
     uplevel 1 "ad_return_template $file_stub"
