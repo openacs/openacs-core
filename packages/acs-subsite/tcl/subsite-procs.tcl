@@ -500,6 +500,9 @@ ad_proc subsite::get_pageflow_struct {} {
                 members {
                     label "Members"
                     url ""
+                    selected_patterns {
+                        *
+                    }
                 }
             }
         }
