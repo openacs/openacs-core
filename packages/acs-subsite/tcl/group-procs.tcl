@@ -171,6 +171,35 @@ ad_proc group::delete { group_id } {
     return $object_type
 }
 
+ad_proc -public group::get {
+    {-group_id:required}
+    {-array:required}
+} {
+    Get basic info about a group: group_name, join_policy.
+    
+    @param array The name of an array in the caller's namespace where the info gets delivered.
+
+    @see group::get_element
+} {
+    upvar 1 $array row
+    db_1row group_info {
+        select group_name, join_policy
+        from   groups
+        where  group_id = :group_id
+    } -column_array row
+}
+
+ad_proc -public group::get_element {
+    {-group_id:required}
+    {-element:required}
+} {
+    Get an element from the basic info about a group: group_name, join_policy.
+
+    @see group::get
+} {
+    group::get -group_id $group_id -array row
+    return $row($element)
+}
 
 ad_proc -public group::permission_p { 
     { -user_id "" }
@@ -298,7 +327,6 @@ ad_proc -public group::default_member_state {
     @param create_p - 1 if the user has 'create' privilege on the group, 
                       0 otherwise.
 } {
-
     if {$create_p || [string equal $join_policy open]} {
         return "approved"
     }
@@ -401,4 +429,37 @@ ad_proc -public group::admin_p {
 }
 
 
+ad_proc -public group::add_member {
+    {-group_id:required}
+    {-user_id:required}
+    {-rel_type ""}
+    {-member_state ""}
+} {
+    Adds a user to a group, checking that the rel_type is permissible given the user's privileges, 
+    Can default both the rel_type and the member_state to their relevant values.
+} {       
+    set admin_p [permission::permission_p -object_id $group_id -privilege "admin"]
+    
+    # Only admins can add non-membership_rel members
+    if { [empty_string_p $rel_type] || \
+             (![empty_string_p $rel_type] && ![string equal $rel_type "membership_rel"] && \
+                  ![permission::permission_p -object_id $group_id -privilege "admin"]) } {
+        set rel_type "membership_rel"
+    }
+    
+    group::get -group_id $group_id -array group
+    set create_p [group::permission_p -privilege create $group_id]
+    
+    if { [string equal $group(join_policy) "closed"] && !$create_p } {
+        error "You do not have permission to add members to the group '$group(group_name)'"
+    }
 
+    if { [empty_string_p $member_state] } {
+        set member_state [group::default_member_state \
+                              -join_policy $group(join_policy) \
+                              -create_p $create_p]
+    }
+
+    
+    relation_add -member_state $member_state $rel_type $group_id $user_id
+}
