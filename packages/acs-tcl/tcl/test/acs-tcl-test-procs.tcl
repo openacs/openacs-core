@@ -747,7 +747,7 @@ aa_register_case -cats {} -error_level notice acs_tcl__tcl_file_common_errors {
 aa_register_case -cats {db smoke production_safe} acs-tcl__named_constraints {
     Check that there are no tables with unnamed constraints
 
-    @author Jeff Davis davis@xarg.net
+
 } {
     switch -exact -- [db_name] { 
         PostgreSQL { 
@@ -760,6 +760,55 @@ aa_register_case -cats {db smoke production_safe} acs-tcl__named_constraints {
         default { 
             aa_log "Not run for [db_name]"
         }
+    }
+}
+
+aa_register_case -cats {smoke production_safe} acs-tcl__check_info_files { 
+    Check that all the info files parse correctly
+
+    @author Jeff Davis davis@xarg.net
+} { 
+    foreach spec_file [glob -nocomplain "[acs_root_dir]/packages/*/*.info"] {
+        set errp 0
+        if {  [catch {array set version [apm_read_package_info_file $spec_file]} errMsg] } {
+            aa_log_result fail "$spec_file returned $errMsg"
+            set errp 1
+        } else {
+            regexp {packages/([^/]*)/} $spec_file match key
+            if {![string equal $version(package.key) $key]} {
+                aa_log_result fail "MISMATCH DIRECTORY/PACKAGE KEY: $spec_file $version(package.key) != $key"
+                set errp 1
+            }
+            # check on the requires, provides, etc stuff.
+            if {[empty_string_p $version(provides)] 
+                && [string equal $version(package.type) apm_service] } {
+                aa_log_result fail "$spec_file SERVICE MISSING PROVIDES: $key"
+                set errp 1
+            } elseif { ![empty_string_p $version(provides)]} {
+                if { ![string equal $version(name) [lindex [lindex $version(provides) 0] 1]]} {
+                    aa_log_result fail "$spec_file: MISMATCH PROVIDES VERSION: $version(provides) $version(name)"
+                    set errp 1
+                }
+                if { ![string equal $key [lindex [lindex $version(provides) 0] 0]]} {
+                    aa_log_result fail "$spec_file MISMATCH PROVIDES KEY: $key $version(provides)"
+                    set errp 1
+                }
+            }
+
+            # check for duplicate parameters
+            array unset params
+            foreach param $version(parameters) {
+                set name [lindex $param 0]
+                if {[info exists params($name)]} {
+                    aa_log_result fail "$spec_file: DUPLICATE PARAMETER: $name"
+                    set errp 1
+                }
+                set params($name) $name
+            }
+        }
+        if {!$errp} {
+            aa_log_result pass "$spec_file no errors"
+        } 
     }
 }
 
