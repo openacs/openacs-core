@@ -1946,13 +1946,14 @@ end;' language 'plpgsql';
 
 
 -- function copy
-create function apm_package_version__copy (integer,integer,varchar,varchar)
+create function apm_package_version__copy (integer,integer,varchar,varchar,boolean)
 returns integer as '
 declare
   copy__version_id             alias for $1;  
   copy__new_version_id         alias for $2;  -- default null  
   copy__new_version_name       alias for $3;  
   copy__new_version_uri        alias for $4;  
+  copy__copy_owners_p          alias for $5;
   v_version_id                 integer;       
 begin
 	v_version_id := acs_object__new(
@@ -1983,10 +1984,12 @@ begin
 	    from apm_package_files
 	    where version_id = copy__version_id;
     
-	insert into apm_package_owners(version_id, owner_uri, owner_name, sort_key)
-	    select v_version_id, owner_uri, owner_name, sort_key
-	    from apm_package_owners
-	    where version_id = copy__version_id;
+        if copy__copy_owners_p then
+            insert into apm_package_owners(version_id, owner_uri, owner_name, sort_key)
+                select v_version_id, owner_uri, owner_name, sort_key
+                from apm_package_owners
+                where version_id = copy__version_id;
+        end if;
     
 	return v_version_id;
    
@@ -2022,7 +2025,8 @@ begin
 			 edit__version_id,
 			 edit__new_version_id,
 			 edit__version_name,
-			 edit__version_uri
+			 edit__version_uri,
+                         ''f''
 			);
          else 
 	   v_version_id := edit__version_id;			

@@ -6,7 +6,6 @@ ad_page_contract {
 } -properties {
     site_link:onevalue
     export_vars:onevalue
-    user_id:onevalue
     email:onevalue
 }
 
@@ -34,6 +33,17 @@ if { $member_state == "deleted" } {
 }
 
 set site_link [ad_site_home_link]
-set export_vars [export_form_vars user_id email]
+
+# One common problem with login is that people can hit the back button
+# after a user logs out and relogin by using the cached password in
+# the browser. We generate a unique hashed timestamp so that users
+# cannot use the back button.
+
+set time [ns_time]
+set token_id [sec_get_random_cached_token_id]
+set token [sec_get_token $token_id]
+set hash [ns_sha1 "$time$token_id$token"]
+
+set export_vars [export_form_vars return_url time token_id hash email]
 
 ad_return_template
