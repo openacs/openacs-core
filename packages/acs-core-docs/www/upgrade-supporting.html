@@ -28,9 +28,9 @@
           [service0 dev]$ <b class="userinput"><tt>exit</tt></b>
           [root root]# 
           <span class="action"><span class="action">su - <span class="replaceable"><span class="replaceable">service0</span></span>
-          psql <span class="replaceable"><span class="replaceable">service0</span></span> -f /usr/local/pgsql/share/contrib/openfts.sql
-          psql <span class="replaceable"><span class="replaceable">service0</span></span> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql
-          exit</span></span></pre></li><li><p><b>OPTIONAL: Install the new OpenFTS Engine. </b>If you want to upgrade the OpenFTS Engine, do these
+psql <span class="replaceable"><span class="replaceable">service0</span></span> -f /usr/local/pgsql/share/contrib/openfts.sql
+psql <span class="replaceable"><span class="replaceable">service0</span></span> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql
+exit</span></span></pre></li><li><p><b>OPTIONAL: Install the new OpenFTS Engine. </b>If you want to upgrade the OpenFTS Engine, do these
             steps.  (You must have already upgraded the OpenFTS driver to
             0.3.2.)</p><div class="orderedlist"><ol type="a"><li><p>Browse to <tt class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver</span></span>/admin/site-map</tt></p></li><li><p>On the <tt class="computeroutput">openfts</tt> line, click on <tt class="computeroutput"><span class="guilabel"><span class="guilabel">set parameters</span></span></tt>.</p></li><li><p>Change the value of <tt class="computeroutput">openfts_tcl_src_path</tt> from <tt class="computeroutput">/usr/local/src/Search-OpenFTS-tcl-0.2/</tt> to <tt class="computeroutput">/usr/local/src/Search-OpenFTS-tcl-0.3.2/</tt></p></li><li><p>Click <tt class="computeroutput"><span class="guibutton"><span class="guibutton">Set Parameters</span></span></tt></p></li><li><pre class="screen">[root root]# restart-aolserver <span class="replaceable"><span class="replaceable">service0</span></span></pre></li><li><p>Browse to <tt class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver</span></span>/openfts</tt></p></li><li><p><span class="bold"><b>Click <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Administration</span></span></tt>.</b></span></p></li><li><p><span class="bold"><b>Click <tt class="computeroutput"><span class="guibutton"><span class="guibutton">Initialize OpenFTS Engine</span></span></tt></b></span></p></li></ol></div></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="upgrade-postgres-7.2-to-7.3"></a>Upgrading from PostGreSQL 7.2 to 7.3</h3></div></div><div></div></div><p>An OpenACS database created in PostGreSQL 7.2 will not
       work correctly in PostGreSQL 7.3.  This is because 7.2 truncates
@@ -60,7 +60,10 @@
           Postgres installation guide. Keep in mind that your
           installation location is different, and your startup script
           (/etc/init.d/postgres73 should be named differently. You
-          might even need to edit that file to make the paths correct)
+          might even need to edit that file to make the paths
+          correct). You'll also need to add <tt class="computeroutput">export
+          PGPORT=5434</tt> to the .bashrc and/or
+          .bash_profile for the postgres73 user.
           </p></li><li><p>Install PostgreSQL 7.3.x. Note that you PostgreSQL
           must listen on a different port in order to work
           correctly, so you'll need to edit the configuration file
@@ -72,4 +75,4 @@
           postgres73 user's home directory.</p></li><li><p>Change the path in
           <span class="replaceable"><span class="replaceable">service0</span></span>'s .bashrc or
           .bash_profile (or both) files to reflect the new postgres73
-          user directory.</p></li><li><p>Restore the database from dump as per the <a href="snapshot-backup.html#restore-postgres">recovery instructions</a>.</p></li></ol></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="upgrade-openacs-files.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="maintenance-web.html">Next</a></td></tr><tr><td width="40%" align="left">Upgrading the OpenACS files </td><td width="20%" align="center"><a accesskey="u" href="upgrade.html">Up</a></td><td width="40%" align="right"> Chapter 6. Production Environments</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/upgrade-supporting.html#comments">View comments on this page at openacs.org</a></center></body></html>
+          user directory. Also add in the PGPORT.</p></li><li><p>Restore the database from dump as per the <a href="snapshot-backup.html#restore-postgres">recovery instructions</a>.</p></li></ol></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="upgrade-openacs-files.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="maintenance-web.html">Next</a></td></tr><tr><td width="40%" align="left">Upgrading the OpenACS files </td><td width="20%" align="center"><a accesskey="u" href="upgrade.html">Up</a></td><td width="40%" align="right"> Chapter 6. Production Environments</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/upgrade-supporting.html#comments">View comments on this page at openacs.org</a></center></body></html>

@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Introduction to Developing Internationalized Packages</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="i18n.html" title="Chapter 14. Internationalization"><link rel="previous" href="i18n-translators.html" title="Translator's Guide"><link rel="next" href="i18n-convert.html" title="Internationalizing Existing Packages"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="i18n-translators.html">Prev</a> </td><th width="60%" align="center">Chapter 14. Internationalization</th><td width="20%" align="right"> <a accesskey="n" href="i18n-convert.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="i18n-introduction"></a>Introduction to Developing Internationalized Packages</h2></div></div><div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>How Internationalization/Localization works in OpenACS</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="i18n.html" title="Chapter 14. Internationalization"><link rel="previous" href="i18n-overview.html" title=""><link rel="next" href="i18n-convert.html" title="How to Internationalize a Package"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="i18n-overview.html">Prev</a> </td><th width="60%" align="center">Chapter 14. Internationalization</th><td width="20%" align="right"> <a accesskey="n" href="i18n-convert.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="i18n-introduction"></a>How Internationalization/Localization works in OpenACS</h2></div></div><div></div></div><p>
       This document describes how to develop internationalized OpenACS
       packages, including writing new packages with
       internationalization and converting old packages.  Text that
@@ -12,27 +12,17 @@
       Otherwise, your package will not be usable for all locales.
     </p><p>
       The main difference between monolingual and internationalized
-      packages is that all user-visible text in an internationalized
+      packages is that all user-visible text in the code of an internationalized
       package are coded as "message keys."  The message keys
       correspond to a message catalog, which contains versions of the
-      text for each available language.  Both script files
-      (ADP/TCL) and APM parameters are affected.
+      text for each available language.  Script files (.adp and .tcl and .vuh), database files (.sql), and APM parameters are affected.
+
     </p><p>
       Other differences include: all dates read or written to the
       database must use internationalized functions.  All displayed
       dates must use internationalized functions.  All displayed
       numbers must use internationalized functions.
-</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-aolserver"></a>AOLserver Configuration for Multilingual Sites</h3></div></div><div></div></div><p>
-      For multilingual websites we recommend using the UTF8
-      charset. In order for AOLserver to use utf8 you need to set
-      the config parameters OutputCharset and
-      URLCharset to utf-8 in your AOLserver config file (use the etc/config.tcl
-      template file).  This is the default for OpenACS 5.1 and later. For sites running on Oracle you need to make
-      sure that AOLserver is running with the NLS_LANG environment
-      variable set to .UTF8. You should set this variable in the
-      nsd-oracle run script (use the
-      acs-core-docs/www/files/nds-oracle.txt template file).
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-message-catalog"></a>Using the Message Catalog</h3></div></div><div></div></div><p>
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-content"></a>User Content</h3></div></div><div></div></div><p>OpenACS does not have a general system for supporting multiple, localized versions of user-input content.  This document currently refers only to internationalizing the text in the package user interface.</p></div><p>
       Localizable text must be handled in ADP files, in TCL files, and
       in APM Parameters.  OpenACS provides two approaches, message
       keys and localized ADP files.  For ADP pages which are mostly
@@ -42,7 +32,7 @@
       which are static and mostly text, it may be easier to create a
       new ADP page for each language.  In this case, the pages are
       distinguished by a file naming convention.
-    </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2571793"></a>Separate Templates for each Locale</h4></div></div><div></div></div><p>If the request processor finds a file named <tt class="computeroutput">filename.locale.adp</tt>, where locale matches the user's locale, it will process that file instead of <tt class="computeroutput">filename.adp</tt>.  For example, for a user with locale <tt class="computeroutput">tl_PH</tt>, the file <tt class="computeroutput">index.tl_PH.adp</tt>, if found, will be used instead of <tt class="computeroutput">index.adp</tt>.  The locale-specific file should thus contain text in the language appropriate for that locale.  The code in the page, however, should still be in English.  Message keys are still processed.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="i18n-message-catalog-adps"></a>Message Keys in Template Files (ADP Files)</h4></div></div><div></div></div><p>
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-locale-templates"></a>Separate Templates for each Locale</h3></div></div><div></div></div><p>If the request processor finds a file named <tt class="computeroutput">filename.locale.adp</tt>, where locale matches the user's locale, it will process that file instead of <tt class="computeroutput">filename.adp</tt>.  For example, for a user with locale <tt class="computeroutput">tl_PH</tt>, the file <tt class="computeroutput">index.tl_PH.adp</tt>, if found, will be used instead of <tt class="computeroutput">index.adp</tt>.  The locale-specific file should thus contain text in the language appropriate for that locale.  The code in the page, however, should still be in English.  Message keys are processed normally.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-message-catalog"></a>Message Catalogs</h3></div></div><div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="i18n-message-catalog-adps"></a>Message Keys in Template Files (ADP Files)</h4></div></div><div></div></div><p>
         Internationalizing templates is about replacing human readable
         text in a certain language with internal message keys, which
         can then be dynamically replaced with real human language in
@@ -97,17 +87,13 @@
         <tt class="computeroutput">\#package_key.message_key\#</tt>. In Tcl
         files all message lookups *must* be on either of the following formats:
       </p><p>
-        </p><div class="itemizedlist"><ul type="disc"><li>Typical static key lookup: <tt class="computeroutput">[_ package_key.message_key]</tt> - The message key and package key used here must be string literals, they can't result from variable evaluation.
-          </li><li>
-            Static key lookup with non-default locale: <tt class="computeroutput">[lang::message::lookup $locale package_key.message_key]</tt> - The message key and package key used here must be string literals, they can't result from variable evaluation.
-          </li><li>
+        </p><div class="itemizedlist"><ul type="disc"><li><p>Typical static key lookup: <tt class="computeroutput">[_ package_key.message_key]</tt> - The message key and package key used here must be string literals, they can't result from variable evaluation.</p></li><li><p>
+            Static key lookup with non-default locale: <tt class="computeroutput">[lang::message::lookup $locale package_key.message_key]</tt> - The message key and package key used here must be string literals, they can't result from variable evaluation.</p></li><li><p>
             Dynamic key lookup: <tt class="computeroutput">[lang::util::localize $var_with_embedded_message_keys]</tt> - In this case the message keys in the variable <tt class="computeroutput">var_with_embedded_message_keys</tt> must appear as string literals <tt class="computeroutput">\#package_key.message_key\#</tt> somewhere in the code. Here is an example of a dynamic lookup:
-            
-            <tt class="computeroutput">
-              set message_key_array {
-                 dynamic_key_1  \#package_key.message_key1\#
-                 dynamic_key_2  \#package_key.message_key2\#
-              }
+            </p><tt class="computeroutput">set message_key_array {
+    dynamic_key_1  \#package_key.message_key1\#
+    dynamic_key_2  \#package_key.message_key2\#
+}
 
               set my_text [lang::util::localize $message_key_array([get_dynamic_key])]
             </tt></li></ul></div><p>  
@@ -116,16 +102,20 @@
         context bars, and form labels and options. Many times the texts are
         enclosed in double quotes. The following is an example of grep commands 
         that can be used on Linux to highlight translatable text in TCL files:
-      </p><tt class="computeroutput">
-      # Find text in double quotes
-      find -iname '*.tcl'|xargs egrep -i '"[a-z]'
-      # Find untranslated text in form labels, options and values
-      find -iname '*.tcl'|xargs egrep -i '\-(options|label|value)'|egrep -v '&lt;#'|egrep -v '\-(value|label|options)[[:space:]]+\$[a-zA-Z_]+[[:space:]]*\\?[[:space:]]*$'
-      # Find text in page titles and context bars
-      find -iname '*.tcl'|xargs egrep -i 'set (title|page_title|context_bar) '|egrep -v '&lt;#'
-      # Find text in error messages
-      find -iname '*.tcl'|xargs egrep -i '(ad_complain|ad_return_error)'|egrep -v '&lt;#'
-      </tt><p>
+      </p><pre class="screen">
+# Find text in double quotes
+<b class="userinput"><tt>find -iname '*.tcl'|xargs egrep -i '"[a-z]'</tt></b>
+
+# Find untranslated text in form labels, options and values
+<b class="userinput"><tt>find -iname '*.tcl'|xargs egrep -i '\-(options|label|value)'|egrep -v '&lt;#'|egrep -v '\-(value|label|options)[[:space:]]+\$[a-zA-Z_]+[[:space:]]*\\?[[:space:]]*$'</tt></b>
+
+# Find text in page titles and context bars
+<b class="userinput"><tt>find -iname '*.tcl'|xargs egrep -i 'set (title|page_title|context_bar) '|egrep -v '&lt;#'</tt></b>
+
+# Find text in error messages
+<b class="userinput"><tt>find -iname '*.tcl'|xargs egrep -i '(ad_complain|ad_return_error)'|egrep -v '&lt;#'</tt></b>
+
+      </pre><p>
         You may mark up translatable text in TCL library files and TCL pages
         with temporary tags on the &lt;#key text#&gt; syntax. 
         If you have a sentence or paragraph of text with
@@ -154,47 +144,43 @@
       </p><p>
       Alternatively, you may pass in an array list of the variable values to be interpolated into the message so that
       our example becomes:
-      </p><tt class="computeroutput">
-      set msg_subst_list [list subject [parameter::get -localize -parameter classes_pretty_name] 
-                               class_instances [parameter::get -localize -parameter class_instances_pretty_plural]]
+      </p><pre class="screen">
+<b class="userinput"><tt>set msg_subst_list [list subject [parameter::get -localize -parameter classes_pretty_name] class_instances [parameter::get -localize -parameter class_instances_pretty_plural]]
 
-      ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
-      </tt><p>
+ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
+</tt></b>
+</pre><p>
         When we were done going through the tcl files we ran the following
         commands to check for mistakes:
-      </p><tt class="computeroutput">
-      # Message tags should usually not be in curly braces since then the message lookup may not be
-      # executed then (you can usually replace curly braces with the list command). Find message tags 
-      # in curly braces (should return nothing, or possibly a few lines for inspection)
-      find -iname '*.tcl'|xargs egrep -i '\{.*&lt;#'
-      # Check if you've forgotten space between default key and text in message tags (should return nothing)
-      find -iname '*.tcl'|xargs egrep -i '&lt;#_[^ ]'
-      # Review the list of tcl files with no message lookups
-      for tcl_file in $(find -iname '*.tcl'); do egrep -L '(&lt;#|\[_)' $tcl_file; done
-      </tt><p>
+      </p><pre class="screen">
+# Message tags should usually not be in curly braces since then the message lookup may not be
+# executed then (you can usually replace curly braces with the list command). Find message tags 
+# in curly braces (should return nothing, or possibly a few lines for inspection)
+<b class="userinput"><tt>find -iname '*.tcl'|xargs egrep -i '\{.*&lt;#'</tt></b>
+
+# Check if you've forgotten space between default key and text in message tags (should return nothing)
+<b class="userinput"><tt>find -iname '*.tcl'|xargs egrep -i '&lt;#_[^ ]'</tt></b>
+
+# Review the list of tcl files with no message lookups
+<b class="userinput"><tt>for tcl_file in $(find -iname '*.tcl'); do egrep -L '(&lt;#|\[_)' $tcl_file; done</tt></b>
+</pre><p>
         When you feel ready you may vist your package in the
         <a href="/acs-admin/apm" target="_top">package manager</a>
         and run the action "Replace tags with keys
         and insert into catalog" on the TCL files that you've edited to
         replace the temporary tags with calls to the message lookup
         procedure.
-      </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="catalog-consistency-check"></a>Checking the Consistency of Catalog Files</h4></div></div><div></div></div><p>
-        This section describes how to check that the set of keys used in
-        message lookups in tcl, adp, and info files and the set of keys in
-        the catalog file are identical.  The scripts below assume that
-        message lookups in adp and info files are on the format
-        \#package_key.message_key\#, and that message lookups in tcl files
-        are always is done with one of the valid lookups described above. The script further assumes
-        that you have perl installed and in your path.  Run the script like
-        this:
-      </p><tt class="computeroutput">
-      acs-lang/bin/check-catalog.sh package_key
-      </tt><p>
-        where package_key is the key of the package that you want to
-        test. If you don't provide the package_key argument then all
-        packages with catalog files will be checked. 
-        The script will run its checks primarily on en_US xml catalog files.
-      </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="i18n-message-apm-params"></a>APM Parameters</h4></div></div><div></div></div><p>
+      </p><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="i18n-date-time-number"></a>Dates, Times, and Numbers in TCL files</h5></div></div><div></div></div><p>
+      Most date, time, and number variables are calculated in TCL files.  Dates and times must be converted when stored in the database,
+      when retrieved from the database, and when displayed.  All dates
+      are stored in the database in the server's timezone, which is an
+      APM Parameter set at
+      <tt class="computeroutput">/acs-lang/admin/set-system-timezone</tt>
+      and readable at
+      <tt class="computeroutput">lang::system::timezone.</tt>.  When
+      retrieved from the database and displayed, dates and times must
+      be localized to the user's locale.
+    </p></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="i18n-message-apm-params"></a>APM Parameters</h4></div></div><div></div></div><p>
         Some parameters contain text that need to be localized. In
         this case, instead of storing the real text in the parameter,
         you should use message keys using the short notation above,
@@ -220,41 +206,4 @@
       </p><p>
         Developers are responsible for creating the keys in the message
         catalog, which is available at <tt class="computeroutput">/acs-lang/admin/</tt>
-      </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-date-time-number"></a>Dates, Times, and Numbers</h3></div></div><div></div></div><p>
-      Dates and times must be converted when stored in the database,
-      when retrieved from the database, and when displayed.  All dates
-      are stored in the database in the server's timezone, which is an
-      APM Parameter set at
-      <tt class="computeroutput">/acs-lang/admin/set-system-timezone</tt>
-      and readable at
-      <tt class="computeroutput">lang::system::timezone.</tt>.  When
-      retrieved from the database and displayed, dates and times must
-      be localized to the user's locale.
-    </p><div class="orderedlist"><ol type="1"><li><p>
-          Get the date in ANSI format from the database (YYYY-MM-DD
-          HH24:MI:SS; the time portion is optional).  By convention,
-          we identify dates in ansi format by ending the column name
-          with <tt class="computeroutput">_ansi</tt>.
-          Example:</p><pre class="programlisting">select to_char(posting_date, 'YYYY-MM-DD HH24:MI:SS') as posting_date_ansi
-  from table
-</pre></li><li><p>
-          Use the Tcl command <tt class="computeroutput">lc_time_fmt</tt> to format the
-          date in "pretty" format.  Several standard formats localize automatically:
-</p><div class="itemizedlist"><ul type="disc"><li><p>
-          %c: Long date and time (Mon November 18, 2002 12:00 AM)
-        </p></li><li><p>
-          %x: Short date (11/18/02)
-        </p></li><li><p>
-          %X: Time (12:00 AM)
-        </p></li><li><p>
-          %q: Long date without weekday (November 18, 2002)
-        </p></li><li><p>
-           %Q: Long date with weekday (Monday November 18, 2002)
-        </p></li></ul></div><p>
-      The "q" format strings are OpenACS additions; the rest follow unix standards (see <tt class="computeroutput">man
-      strftime</tt>).
-    </p><pre class="programlisting">set posting_date_pretty [lc_time_fmt $posting_date_ansi "%q"]</pre></li><li><p>
-          Use the <tt class="computeroutput">*_pretty</tt> version in your ADP page.
-        </p></li></ol></div><p>
-      To internationalize numbers, use <tt class="computeroutput">lc_numeric $value</tt>, which formats the number using the appropriate decimal point and thousand separator for the locale.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-forms"></a>Internationalizing Forms</h3></div></div><div></div></div><p>When coding forms, remember to use message keys for each piece of text that is user-visible, including form option labels and button labels.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="i18n-translators.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="i18n-convert.html">Next</a></td></tr><tr><td width="40%" align="left">Translator's Guide </td><td width="20%" align="center"><a accesskey="u" href="i18n.html">Up</a></td><td width="40%" align="right"> Internationalizing Existing Packages</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/i18n-introduction.html#comments">View comments on this page at openacs.org</a></center></body></html>
+      </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="i18n-overview.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="i18n-convert.html">Next</a></td></tr><tr><td width="40%" align="left"> </td><td width="20%" align="center"><a accesskey="u" href="i18n.html">Up</a></td><td width="40%" align="right"> How to Internationalize a Package</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/i18n-introduction.html#comments">View comments on this page at openacs.org</a></center></body></html>

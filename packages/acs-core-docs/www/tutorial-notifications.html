@@ -72,6 +72,95 @@
 
     select inline_0();
     drop function inline_0();
+    </pre><p>You also need a drop script. This is untested for
+    comptability with the above script.</p><pre class="programlisting">
+      -- @author gwong@orchardlabs.com,ben@openforce.biz
+      -- @creation-date 2002-05-16
+      --
+      -- This code is newly concocted by Ben, but with significant concepts and code
+      -- lifted from Gilbert's UBB forums. Thanks Orchard Labs.
+      -- Lars and Jade in turn lifted this from gwong and ben.
+
+create function inline_0 ()
+returns integer as '
+declare
+    row                             record;
+begin
+    for row in select nt.type_id
+               from notification_types nt
+               where nt.short_name in (''lars_blogger_notif_type'',''lars_blogger_notif'')
+    loop
+        perform notification_type__delete(row.type_id);
+    end loop;
+
+    return null;
+end;' language 'plpgsql';
+
+select inline_0();
+drop function inline_0 ();
+
+--
+-- Service contract drop stuff was missing - Roberto Mello 
+--
+
+create function inline_0() returns integer as '
+declare
+        impl_id integer;
+        v_foo   integer;
+begin
+
+        -- the notification type impl
+        impl_id := acs_sc_impl__get_id (
+                      ''NotificationType'',		-- impl_contract_name
+                      ''lars_blogger_notif_type''	-- impl_name
+        );
+
+        PERFORM acs_sc_binding__delete (
+                    ''NotificationType'',
+                    ''lars_blogger_notif_type''
+        );
+
+        v_foo := acs_sc_impl_alias__delete (
+                    ''NotificationType'',		-- impl_contract_name	
+                    ''lars_blogger_notif_type'',	-- impl_name
+                    ''GetURL''				-- impl_operation_name
+        );
+
+        v_foo := acs_sc_impl_alias__delete (
+                    ''NotificationType'',		-- impl_contract_name	
+                    ''lars_blogger_notif_type'',	-- impl_name
+                    ''ProcessReply''			-- impl_operation_name
+        );
+
+	select into v_foo type_id 
+	  from notification_types
+	 where sc_impl_id = impl_id
+	  and short_name = ''lars_blogger_notif'';
+
+	perform notification_type__delete (v_foo);
+
+	delete from notification_types_intervals
+	 where type_id = v_foo 
+	   and interval_id in ( 
+		select interval_id
+		  from notification_intervals 
+		 where name in (''instant'',''hourly'',''daily'')
+	);
+
+	delete from notification_types_del_methods
+	 where type_id = v_foo
+	   and delivery_method_id in (
+		select delivery_method_id
+		  from notification_delivery_methods 
+		 where short_name in (''email'')
+	);
+
+	return (0);
+end;
+' language 'plpgsql';
+
+select inline_0();
+drop function inline_0();
     </pre><p>The next step is to setup our notification creation. A new notification must 
     be added to the notification table for each blog entry added. We do this using the 
     notification::new procedure</p><pre class="programlisting">
@@ -82,10 +171,17 @@
             -response_id $blog(entry_id) \
             -notif_subject $blog(title) \
             -notif_text $new_content
-    </pre><p>This code is placed in the tcl procedure that creates blog entries, right after
-    the entry gets created in the code. The <tt class="computeroutput">$blog(package_id)</tt> 
-    is the OpenACS object_id of the Weblogger instance to which the entry has been posted to 
-    and the <tt class="computeroutput">$new_content</tt> is the content of the entry.</p><p>The final step is to setup the notification subscription process. In this 
+    </pre><p>This code is placed in the tcl procedure that creates blog
+    entries, right after the entry gets created in the code. The
+    <tt class="computeroutput">$blog(package_id)</tt> is the OpenACS
+    object_id of the Weblogger instance to which the entry has been
+    posted to and the <tt class="computeroutput">$new_content</tt> is
+    the content of the entry. This example uses the package_id for the
+    object_id, which results in setting up notifications for all
+    changes for blogger entries in this package. However, if you
+    instead used the blog_entry_id or something like that, you could
+    set up per-item notifications. The forums packages does this --
+    you can look at it for an example.</p><p>The final step is to setup the notification subscription process. In this 
     example we want to let a user find out when a new entry has been posted to the blog. To 
     do this we put a link on the blog that allows them to subscribe to notifications of new 
     entries. The notifications/requests-new page is very handy in this situation.</p><p>Such a link can be created using the <tt class="computeroutput">notification::display::request_widget</tt> 
