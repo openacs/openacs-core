@@ -130,15 +130,19 @@ ad_proc -public auth::authority::create {
             }
         }
 
-        lappend names "autority_id"
+        if { ![exists_and_not_null context_id] } {
+            set context_id [ad_conn package_id]
+        }
 
-        db_dml insert_authority "
-            insert into auth_authorities (
-                [join $names ", "]
-            ) values (
-                :[join $names ", :"]
-            )
-        "
+        if { ![exists_and_not_null creation_user] } {
+            set creation_user [ad_conn user_id]
+        }
+
+        if { ![exists_and_not_null creation_ip] } {
+            set creation_ip [ad_conn peeraddr]
+        }
+
+        set authority_id [db_exec_plsql create_authority {}]
     }
 
     return $authority_id
@@ -261,3 +265,10 @@ ad_proc -public auth::authority::edit {
     "
 }
 
+ad_proc -public auth::authority::delete {
+    {-authority_id:required}
+} {
+    Delete an authority.
+} {
+    db_exec_plsql delete_authority {}
+}

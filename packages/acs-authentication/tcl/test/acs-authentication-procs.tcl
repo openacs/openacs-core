@@ -259,12 +259,16 @@ aa_register_case auth_password_forgotten {
         return
     }
     
-    array set password_result [auth::password::forgotten \
-                                   -authority_id $test_vars(authority_id) \
-                                   -username $test_vars(username)]
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+            array set password_result [auth::password::forgotten \
+                                           -authority_id $test_vars(authority_id) \
+                                           -username $test_vars(username)]
 
-    aa_equals "status ok" $password_result(password_status) "ok"
-    aa_true "non-empty message" [expr ![empty_string_p $password_result(password_message)]]
+            aa_equals "status ok" $password_result(password_status) "ok"
+            aa_true "non-empty message" [expr ![empty_string_p $password_result(password_message)]]
+        }
 }
 
 aa_register_case auth_password_get_forgotten_url {
@@ -349,6 +353,81 @@ aa_register_case auth_password_reset {
             aa_false "cannot authenticate with old password" [string equal $auth_result(auth_status) "ok"]
         }
 }
+
+###########
+#
+# Authority Management API
+#
+###########
+
+aa_register_case auth_authority_api {
+    Test the auth::authority::create, auth::authority::edit, and auth::authority::delete procs.
+
+    @author Simon Carstensen
+} {
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+
+            # Add authority and test that it was added correctly.
+            array set columns {
+                short_name "test"
+                pretty_name "Test authority"
+                help_contact_text "Blah blah"
+                enabled_p "t"
+                sort_order "1000"
+                auth_impl_id ""
+                pwd_impl_id ""
+                forgotten_pwd_url ""
+                change_pwd_url ""
+                register_impl_id ""
+                register_url ""
+            }
+
+            
+            set authority_id [auth::authority::create -array columns]
+
+            set authority_added_p [db_string authority_added_p {
+                select count(*) from auth_authorities where authority_id = :authority_id
+            } -default "0"]
+
+            aa_true "was the authority added?" $authority_added_p
+
+            # Edit authority and test that it has actually changed.
+            array set columns {
+                short_name "test2"
+                pretty_name "Test authority2"
+                help_contact_text "Blah blah2"
+                enabled_p "f"
+                sort_order "1001"
+                forgotten_pwd_url "foobar.com"
+                change_pwd_url "foobar.com"
+                register_url "foobar.com"
+            }
+
+            auth::authority::edit \
+                -authority_id $authority_id \
+                -array columns
+
+            auth::authority::get \
+                -authority_id $authority_id \
+                -array edit_result
+
+            foreach column [array names columns] {
+                aa_equals "edited column $column" $edit_result($column) $columns($column)
+            }
+
+            # Delete authority and test that it was actually added.
+            auth::authority::delete -authority_id $authority_id
+
+            set authority_exists_p [db_string authority_added_p {
+                select count(*) from auth_authorities where authority_id = :authority_id
+            } -default "0"]
+
+            aa_false "was the authority deleted?" $authority_exists_p
+        }
+}
+
 
 #####
 #
