@@ -1,10 +1,10 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-<sect1 id="i18n">
+<chapter id="i18n">
   <title>Internationalization</title>
 
   <authorblurb>
@@ -14,9 +14,110 @@
     </para>
   </authorblurb>
 
-  <sect2 id="i18n-introduction">
+  <sect1 id="i18n-overview">
+    <table id="i18n-l10n-process">
+      <title>Internationalization and Localization</title>
+      <tgroup cols="1">
+        <colspec colname="step"/>
+        <colspec colname="description"/>
+        <colspec colname="who"/>
+        <thead>
+          <row>
+            <entry colname="step">Stage</entry>
+            <entry colname="description">Task</entry>
+            <entry colname="who">Who</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry colname="step">Internationalization</entry>
+            <entry>Package Developer uses the acs-lang tools to replace all visible text in a package with <emphasis>message keys</emphasis>.  (<link linkend="i18n-introduction">More information</link>)</entry>
+            <entry>Package Developer</entry>
+          </row>
+          <row>
+            <entry morerows="1" colname="step">Release Management</entry>
+            <entry>The newly internationalized package is released.</entry>
+            <entry>Package Developer</entry>
+          </row>
+          <row>
+            <entry>The translation server is updated with the new package.</entry>
+            <entry>Translation server maintainers</entry>
+          </row>
+          <row>
+            <entry colname="step">Localization</entry>
+            <entry>Translators work in their respective locales to write text for each message key.  (<link linkend="i18n-translators">More information</link>)</entry>
+            <entry>Translators</entry>
+          </row>
+          <row>
+            <entry morerows="2" colname="step">Release Management</entry>
+            <entry>The translated text in the database of the translation server is compared to the current translations in the OpenACS code base, conflicts are resolved, and the new text is written to catalog files on the translation server.</entry>
+            <entry>Translation server maintainers</entry>
+          </row>
+          <row>
+            <entry>The catalog files are committed to the OpenACS code base.</entry>
+            <entry>Translation server maintainers</entry>
+          </row>
+          <row>
+            <entry>A new version of OpenACS core and/or affected packages is released and published in the OpenACS.org repository.</entry>
+            <entry>Release Manager</entry>
+          </row>
+          <row>
+            <entry morerows="1" colname="step">Upgrading</entry>
+            <entry>Site Administrators upgrade their OpenACS sites, either via the automatic upgrade from the Repository or via tarball or CVS </entry> 
+            <entry>Site Administrators</entry>
+          </row>
+          <row>
+            <entry>Site Administrators import the new translations.  Existing local translations, if they exist, are not overwritten.</entry>
+            <entry>Site Administrators</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </sect1>
 
-    <title>Introduction</title>
+
+  <sect1 id="i18n-translators">
+    <title>Translator's Guide</title>
+    <para>Most translators use the <ulink url="http://translate.openacs.org">OpenACS Public Translation Server</ulink>, because the process of getting new message keys onto the server and getting new translations back into the distribution are handled by the maintainers of that machine.  You can also do translation work on your own OpenACS site; this makes your own translations more readily available to you but also means that your work will not be shared with other users unless you take extra steps (contacting an OpenACS core developer or submitting a patch) to get your work back to the OpenACS core.</para>
+    <para>The basic steps for translators:</para>
+    <itemizedlist>
+      <listitem>
+        <para>Go to the <ulink url="/acs-lang">Localization</ulink> page and choose the locale that you are translating to. If the locale is not present you need to visit <ulink url="/acs-lang/admin">Administration of Localization</ulink> and create the locale.</para>
+      </listitem>
+      <listitem>
+        <formalpara>
+          <title>Translating with Translator Mode</title>
+          <para>To translate messages in the pages they appear, <ulink url="http://localhost:8008/acs-lang/admin/translator-mode-toggle">Toggle Translator Mode</ulink> and then browse to the page you want to translate.  Untranslated messages will have a yellow background and a red star that you click to translate the message. Translated messages have a green star next to them that is a hyperlink to editing your translation. There is a history mechanism that allows you to see previous translations in case you would want to revert a translation.</para>
+        </formalpara>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/translator-mode.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+        <para>While in Translator mode, a list of all message keys appears at the bottom of each page.</para>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/translations.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+      </listitem>
+      <listitem>
+        <formalpara>
+          <title>Batch translation</title>
+          <para>To translate many messages at once, go to <ulink url="/acs-lang/admin">Administration of Localization</ulink>, click on the locale to translate, then click on a package, and then click <computeroutput>Batch edit these messages</computeroutput>.</para>
+        </formalpara>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/translation-batch-edit.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+
+      </listitem>
+    </itemizedlist>
+  </sect1>
+  <sect1 id="i18n-introduction">
+
+    <title>Introduction to Developing Internationalized Packages</title>
 
     <para>
       This document describes how to develop internationalized OpenACS
@@ -48,8 +149,6 @@
       numbers must use internationalized functions.
 </para>
 
-  </sect2>
-
   <sect2 id="i18n-aolserver">
 
     <title>AOLserver Configuration for Multilingual Sites</title>
@@ -59,7 +158,7 @@
       charset. In order for AOLserver to use utf8 you need to set
       the config parameters OutputCharset and
       URLCharset to utf-8 in your AOLserver config file (use the etc/config.tcl
-      template file). For sites running on Oracle you need to make
+      template file).  This is the default for OpenACS 5.1 and later. For sites running on Oracle you need to make
       sure that AOLserver is running with the NLS_LANG environment
       variable set to .UTF8. You should set this variable in the
       nsd-oracle run script (use the
@@ -429,9 +528,7 @@
       </para>
 
     </sect3>
-
-  </sect2>
-
+    </sect2>
 
   <sect2 id="i18n-date-time-number">
 
@@ -523,14 +620,15 @@
       To internationalize numbers, use <computeroutput>lc_numeric $value</computeroutput>, which formats the number using the appropriate decimal point and thousand separator for the locale.
     </para>
     
-  </sect2>
+    </sect2>
 
   <sect2 id="i18n-forms">
     <title>Internationalizing Forms</title>
     <para>When coding forms, remember to use message keys for each piece of text that is user-visible, including form option labels and button labels.</para>
-  </sect2>
+    </sect2>
+  </sect1>
 
-  <sect2 id="i18n-convert">
+  <sect1 id="i18n-convert">
 
     <title>Internationalizing Existing Packages</title>
 
@@ -582,9 +680,9 @@ set foo_date_ansi [lc_time_system_to_conn $foo_date_ansi]</programlisting>
         </listitem>
       </orderedlist>
     </sect3>
-  </sect2>
+  </sect1>
 
-  <sect2 id="i18n-design">
+  <sect1 id="i18n-design">
     <title>Design Notes</title>
     <para>User locale is a property of ad_conn, <computeroutput>ad_conn locale</computeroutput>.  The request processor sets this by calling <computeroutput>lang::conn::locale</computeroutput>, which looks for the following in order of precedence:</para>
     <orderedlist>
@@ -598,6 +696,6 @@ set foo_date_ansi [lc_time_system_to_conn $foo_date_ansi]</programlisting>
     </orderedlist>
     <para>For ADP pages, message key lookup occurs in the templating engine.  For TCL pages, message key lookup happens with the <computeroutput>_</computeroutput> function.  In both cases, if the requested locale is not found but a locale which is the default for the language which matches your locale's language is
 found, then that locale is offered instead.</para>
-  </sect2>
+  </sect1>
 
-</sect1>
+</chapter>
