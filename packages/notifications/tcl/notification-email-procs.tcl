@@ -1,0 +1,181 @@
+ad_library {
+
+    Notifications Email Delivery Method
+
+    @creation-date 2002-06-20
+    @author Ben Adida <ben@openforce.biz>
+    @cvs-id $Id$
+
+}
+
+namespace eval notification::email {
+
+    ad_proc -public address_domain {} {
+        return "ny03.openforce.net"
+    }
+
+    ad_proc -public reply_address {
+        {-object_id:required}
+        {-type_id:required}
+    } {
+        return "notification-$object_id-$type_id@[address_domain]"
+    }
+
+    ad_proc -public parse_reply_address {
+        {-reply_address:required}
+    } {
+        This takes a reply address, checks it for consistency, and returns a list of object_id and type_id
+    } {
+        # Check the format and extract type_id and object_id at the same time
+        if {![regexp {^notification-([0-9]*)-([0-9]*)@} $reply_address all object_id type_id]} {
+            return ""
+        }
+
+        return [list $object_id $type_id]
+    }
+
+
+    ad_proc -public send {
+        to_user_id
+        reply_object_id
+        notification_type_id
+        subject
+        content
+    } {
+        Send the actual email
+    } {
+        # Get email
+        set email [cc_email_from_party $to_user_id]
+
+        acs_mail_lite::send \
+            -to_addr $email \
+            -from_addr [reply_address -object_id $reply_object_id -type_id $notification_type_id] \
+            -subject $subject \
+            -body $content
+    }
+
+    ad_proc -private qmail_mail_queue_dir {} {
+        return ""
+    }
+    
+    ad_proc -private load_qmail_mail_queue {
+        {-queue_dir:required}
+    } {
+        Scans qmail incoming email queue and queues up messages 
+        using acs-mail.  
+
+        @Author dan.wickstrom@openforce.net, ben@openforce
+        @creation-date 22 Sept, 2001
+    
+        @param queue_dir The location of the qmail mail queue in
+        the file-system.
+    } {
+        if [catch {set messages [glob "$queue_dir/new/*"]} ] {
+            ns_log Notice "queue dir = [glob $queue_dir/new/*]"
+            return [list]
+        }
+
+        set mail_link_ids [list]
+        set new_messages_p 0
+        
+        foreach msg $messages {
+            ns_log Notice "opening file: $msg"
+            if [catch {set f [open $msg r]}] {
+                continue
+            }
+            set file [read $f]
+            close $f
+            set file [split $file "\n"]
+            
+            set new_messages 1
+            set end_of_headers_p 0
+            set i 0
+            set line [lindex $file $i]
+            set headers [list]
+            
+            # walk through the headers and extract each one
+            while ![empty_string_p $line] {
+                set next_line [lindex $file [expr $i + 1]]
+                if {[regexp {^[ ]*$} $next_line match] && $i > 0} {
+                    set end_of_headers_p 1
+                }
+                if {[regexp {^([^:]+):[ ]+(.+)$} $line match name value]} {
+                    # join headers that span more than one line (e.g. Received)
+                    if { ![regexp {^([^:]+):[ ]+(.+)$} $next_line match] && !$end_of_headers_p} {
+		        append line $next_line
+		        incr i
+                    }
+                    lappend headers [string tolower $name] $value
+                    
+                    if {$end_of_headers_p} {
+		        incr i
+		        break
+                    }
+                } else {
+                    # The headers and the body are delimited by a null line as specified by RFC822
+                    if {[regexp {^[ ]*$} $line match]} {
+		        incr i
+		        break
+                    }
+                }
+                incr i
+                set line [lindex $file $i]	    
+            }
+            set body "\n[join [lrange $file $i end] "\n"]"
+            
+            # okay now we have a list of headers and the body, let's 
+            # put it into notifications stuff
+            array set email_headers $headers
+            
+            if [catch {set from $email_headers(from)}] {
+                set from ""
+            }
+            if [catch {set to $email_headers(to)}] {
+                set to ""
+            }
+            
+            # Find the from user
+            set from_user [cc_lookup_email_user $from]
+
+            # We don't accept empty users for now
+            if {[empty_string_p $from_user]} {
+                ns_log Notice "NOTIF-INCOMING-EMAIL: no user $from"
+                continue
+            }
+            
+            set to_stuff [notification::reply::parse_reply_address -reply_address $to]
+
+            # We don't accept a bad incoming email address
+            if {[empty_string_p $to_stuff]} {
+                ns_log Notice "NOTIF-INCOMING-EMAIL: bad to address $to"
+                continue
+            }
+
+            set object_id [lindex $to_stuff 0]
+            set type_id [lindex $to_stuff 1]
+
+            db_transaction {
+                set reply_id [notification::reply::new \
+                        -object_id $object_id \
+                        -type_id $type_id \
+                        -from_user $from_user \
+                        -subject $email_headers(subject) \
+                        -content $body]
+                
+                catch {ns_unlink $msg}	
+            } on_error {
+                ns_log Error "Error inserting incoming email into the queue"
+            }
+        }
+        
+        return $list_of_reply_ids
+    }
+
+    ad_proc -public scan_replies {} {
+        scan for replies
+    } {
+        ns_log Notice "NOTIF-EMAIL: about to load qmail queue"
+        return [load_qmail_mail_queue -queue_dir [qmail_mail_queue_dir]]
+    }
+
+}
