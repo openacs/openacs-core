@@ -20,7 +20,7 @@
                 :last_name,
                 :hashed_password,
                 :salt,
-                null,
+                :screen_name,
                 :email_verified_p,
                 :member_state
             );

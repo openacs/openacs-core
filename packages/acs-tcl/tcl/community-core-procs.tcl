@@ -67,7 +67,7 @@ ad_proc cc_name_to_group { name } {
     return [util_memoize [list cc_lookup_name_group $name]]
 }
 
-ad_proc ad_user_new {
+ad_proc -deprecated ad_user_new {
     email
     first_names
     last_name
@@ -80,10 +80,13 @@ ad_proc ad_user_new {
     {user_id ""} 
     {username ""} 
     {authority_id ""}
+    {screen_name ""}
 } {
-
     Creates a new user in the system.  The user_id can be specified as an argument to enable double click protection.
     If this procedure succeeds, returns the new user_id.  Otherwise, returns 0.
+    
+    @see auth::create_user
+    @see auth::create_local_account
 } {
     if { [empty_string_p $user_id] } {
         set user_id [db_nextval acs_object_id_seq]
