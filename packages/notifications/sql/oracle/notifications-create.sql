@@ -17,3 +17,4 @@
 -- @ notifications-delivery-sc-create.sql
 
 @ notifications-init.sql
+@ email-sc-impl-create.sql

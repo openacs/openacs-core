@@ -35,12 +35,14 @@ begin
         creation_ip => null
     );
            
-    v_foo:= notification_delivery_method.new(
-        short_name => 'email',
-        pretty_name => 'Email',
-        creation_user => null,
-        creation_ip => null
-    );
+-- This now done by email-sc-impl-create.sql
+-- 
+--     v_foo:= notification_delivery_method.new(
+--         short_name => 'email',
+--         pretty_name => 'Email',
+--         creation_user => null,
+--         creation_ip => null
+--     );
 
 end;
 /
