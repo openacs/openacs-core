@@ -293,10 +293,9 @@ ad_proc -public subsite::package_keys {
     @return the packages keys of all installed packages acting as subsites.
 } {
     if {$no_cache_p} {
-        if {[catch {set keys [db_list get_keys {}]} errMsg]
-            || [empty_string_p $keys]} {
-            return {acs-subsite}
-        }
+        #if {[catch {set keys [db_list get_keys {}]} errMsg] || [empty_string_p $keys]} {
+        return {acs-subsite}
+        # }
         return $keys
     } else {
         return [util_memoize "subsite::package_keys -no_cache"]
