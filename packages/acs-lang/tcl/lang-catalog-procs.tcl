@@ -664,9 +664,7 @@ ad_proc -public lang::catalog::import_from_all_files_and_cache {} {
         nsv_set lang_catalog_import_from_all_files_and_cache executed_p 1
 
         db_foreach all_enabled_not_loaded_packages {} {
-            ns_log Notice "pm debug package $package_key is enabled and does not have message keys"
             if { [file isdirectory [file join [acs_package_root_dir $package_key] catalog]] } {
-                ns_log Notice "pm debug package $package_key has a catalog dir"
                 lang::catalog::import_from_files $package_key
             }
         }
