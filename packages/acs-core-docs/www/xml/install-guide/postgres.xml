@@ -31,11 +31,14 @@
         <title>Special Notes for Debian</title>
         <para></para>
       </formalpara>
-      <para>Debian users, especially Debian stable users, should
-      install PostGreSQL from source as detailed below. Debian
+      
+      <para>Debian stable user should install PostGreSQL from source
+      as detailed below, or they should use the www.backports.org
+      backport for Postgres to get a more current version. Debian
       unstable users: the following process has been known to work
       (but you should double-check that the version of PostGreSQL is
       7.3 or above):</para>
+
       <screen><userinput>apt-get install postgresql postgresql-dev postgresql-doc
 ln -s /usr/include/postgresql/ /usr/include/pgsql
 ln -s /var/lib/postgres /usr/local/pgsql
