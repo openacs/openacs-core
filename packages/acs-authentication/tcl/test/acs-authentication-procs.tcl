@@ -466,7 +466,6 @@ aa_register_case auth_authority_api {
 
             # Add authority and test that it was added correctly.
             array set columns {
-                short_name "test"
                 pretty_name "Test authority"
                 help_contact_text "Blah blah"
                 enabled_p "t"
@@ -482,6 +481,7 @@ aa_register_case auth_authority_api {
                 snapshot_p "f"
                 batch_sync_enabled_p "f"
             }
+            set columns(short_name) [ad_generate_random_string]
             
             set authority_id [auth::authority::create -array columns]
 
