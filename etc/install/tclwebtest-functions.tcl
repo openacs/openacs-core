@@ -814,8 +814,8 @@ proc add_site_wide_admin_to_dotlrn { server_url } {
     # Goto users page
     do_request "$server_url/dotlrn/admin/users?type=pending"
 
-    # Goto the community page for the site-wide admin (__admin_last_name)
-    link follow ~c $__admin_last_name
+    # Goto the community page for the site-wide admin (assuming he's first in the list)
+    link follow ~u {user\?user_id=}
 
     # Follow the add to dotlrn link
     link follow ~u "user-new-2"

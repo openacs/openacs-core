@@ -186,7 +186,9 @@ if [ $database == "postgres" ]; then
     su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/dropdb -p $pg_port $pg_db_name; ${pg_bindir}/createdb -p $pg_port $pg_db_name; ${pg_bindir}/createlang -p $pg_port plpgsql $pg_db_name";
 else
     #Oracle
-    su oracle -c "cd $script_path; config_file=$config_file ./oracle/recreate-user.sh";
+    # Need to su to login shell for sqlplus to be in path. Should maybe make ORA_HOME
+    # a config param instead.
+    su - oracle -c "cd $script_path; config_file=$config_file ./oracle/recreate-user.sh";
 fi
 
 # Move away the old sources and checkout new ones check do_checkout
@@ -288,17 +290,20 @@ if parameter_true $do_install; then
       echo "$0: Starting basic setup of .LRN at $(date)"
       ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-basic-setup.test
   fi
-  
-  if [ $database == "postgres" ]; then
-      # Run vacuum analyze
-      echo "$0: Beginning 'vacuum analyze' at $(date)"
-      su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/vacuumdb -p $pg_port -z `get_config_param pg_db_name`"
-  fi
-    
+      
   if parameter_true $crawl_links; then
       # Search for broken pages
       echo "$0: Starting to crawl links to search for broken pages at $(date)"
       ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-links-check.test
+  fi
+
+  # Run the Tcl API tests
+  ${tclwebtest_dir}/tclwebtest -config_file $config_file tcl-api-test.test
+
+  if [ $database == "postgres" ]; then
+      # Run vacuum analyze
+      echo "$0: Beginning 'vacuum analyze' at $(date)"
+      su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/vacuumdb -p $pg_port -z `get_config_param pg_db_name`"
   fi
   
   # Report the time at which we were done
