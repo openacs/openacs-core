@@ -264,6 +264,17 @@ ad_proc -public item::get_extended_url { item_id args } {
   return $file_url
 } 
 
+ad_proc -public item::get_type { item_id } {
+  Returns the content type of the specified item, or empty string
+  if the item_id is invalid
+} {
+  if { [db_0or1row get_content_type ""] } {
+    return $content_type
+  } else {
+    return ""
+  }
+}
+
 ad_proc item::copy {
     -item_id:required
     -target_folder_id:required

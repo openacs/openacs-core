@@ -1,6 +1,13 @@
 <?xml version="1.0"?>
 <queryset>
 
+<fullquery name="item::get_type.get_content_type">
+  <querytext>
+    select content_type from cr_items
+    where item_id = :item_id
+  </querytext>
+</fullquery>
+
 <fullquery name="item::get_live_revision.glr_get_live_revision">      
       <querytext>
       
