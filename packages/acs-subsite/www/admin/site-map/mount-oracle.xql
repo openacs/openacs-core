@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 
 <queryset>
-   <rdbms><type>postgresql</type><version>7.1</version></rdbms>
+   <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
 <fullquery name="url">      
       <querytext>
       
-  select site_node__url(:node_id) 
+  select site_node.url(:node_id) from dual
 
       </querytext>
 </fullquery>
@@ -15,12 +15,12 @@
 <fullquery name="packages_unmounted_select">      
       <querytext>
       
-  select package_id, acs_object__name(package_id) as name
+  select package_id, acs_object.name(package_id) as name
   from
   apm_packages
-  where (acs_permission__permission_p(package_id, :user_id, 'read') = 't' or
-         acs_permission__permission_p(package_id, acs__magic_object_id('the_public'), 'read') = 't')
-        and apm_package__singleton_p(package_key) = 0
+  where (acs_permission.permission_p(package_id, :user_id, 'read') = 't' or
+         acs_permission.permission_p(package_id, acs.magic_object_id('the_public'), 'read') = 't')
+        and apm_package.singleton_p(package_key) = 0
         and not exists (select 1
                            from site_nodes
                            where object_id = package_id)  
@@ -34,11 +34,11 @@
 <fullquery name="packages_mounted_select">      
       <querytext>
       
-  select package_id, acs_object__name(package_id) as name
+  select package_id, acs_object.name(package_id) as name
   from
   apm_packages
-  where (acs_permission__permission_p(package_id, :user_id, 'read') = 't' or
-         acs_permission__permission_p(package_id, acs__magic_object_id('the_public'), 'read') = 't')
+  where (acs_permission.permission_p(package_id, :user_id, 'read') = 't' or
+         acs_permission.permission_p(package_id, acs.magic_object_id('the_public'), 'read') = 't')
         and exists (select 1
                        from site_nodes
                        where object_id = package_id)  
@@ -51,12 +51,12 @@
 <fullquery name="packages_singleton_select">      
       <querytext>
       
-  select package_id, acs_object__name(package_id) as name
+  select package_id, acs_object.name(package_id) as name
   from
   apm_packages
-  where (acs_permission__permission_p(package_id, :user_id, 'read') = 't' or
-         acs_permission__permission_p(package_id, acs__magic_object_id('the_public'), 'read') = 't')
-        and apm_package__singleton_p(package_key) = 1
+  where (acs_permission.permission_p(package_id, :user_id, 'read') = 't' or
+         acs_permission.permission_p(package_id, acs.magic_object_id('the_public'), 'read') = 't')
+        and apm_package.singleton_p(package_key) = 1
         and not exists (select 1
                            from site_nodes
                            where object_id = package_id)  

@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
 
 <queryset>
-   <rdbms><type>postgresql</type><version>7.1</version></rdbms>
+   <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
 <fullquery name="node_delete">      
       <querytext>
-
-      select site_node__delete(:node_id)
+      
+    begin
+      site_node.delete(:node_id);
+    end;
   
       </querytext>
 </fullquery>

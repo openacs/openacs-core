@@ -1,9 +1,11 @@
 <?xml version="1.0"?>
-<queryset>
-<rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="dbqd.acs-subsite.www.admin.site-map.unmounted.packages_normal_select">
-  <querytext>
+<queryset>
+   <rdbms><type>postgresql</type><version>7.1</version></rdbms>
+
+<fullquery name="packages_normal_select">      
+      <querytext>
+      
   select package_id, acs_object__name(package_id) as name
   from
   apm_packages
@@ -14,11 +16,14 @@
                     from site_nodes
                     where object_id = package_id)  
   order by name
-  </querytext>
+
+      </querytext>
 </fullquery>
 
-<fullquery name="dbqd.acs-subsite.www.admin.site-map.unmounted.packages_singleton_select">
-  <querytext>
+ 
+<fullquery name="packages_singleton_select">      
+      <querytext>
+      
   select package_id, acs_object__name(package_id) as name
   from
   apm_packages
@@ -29,7 +34,9 @@
                     from site_nodes
                     where object_id = package_id)  
   order by name
-  </querytext>
+
+      </querytext>
 </fullquery>
 
+ 
 </queryset>
