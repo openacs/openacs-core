@@ -973,6 +973,61 @@ db_multirow \
     </programlisting>
   </sect1>
 
+  <sect1 id="tutorial-caching">
+    <title>Basic Caching</title>
+    <authorblurb>
+      <para>Based on <ulink url="http://openacs.org/forums/message-view?message_id=157448">a post by Dave Bauer</ulink>.</para>
+    </authorblurb>
+    <orderedlist>
+      <listitem>
+        <para>Implement your proc as <computeroutput>my_proc_not_cached</computeroutput></para>
+      </listitem>
+      <listitem>
+        <para>Create a version of your proc called <computeroutput>my_proc</computeroutput> which wraps the non-cached version in the caching mechanism.  In this example, my_proc_not_cached takes one argument, -foo, so the wrapper passes that on.</para>
+        <programlisting>ad_proc my_proc {-foo} {
+        Get a cached version of my_proc.
+} {
+    return [util_memoize my_proc_not_cached -foo $foo]
+}</programlisting>
+      </listitem>
+      <listitem>
+        <para>In your code, always call my_proc.  There will be a seperate cache item for each unique call to my_proc_not_cached so that calls with different arguments are cached seperately. You can flush the cache for each cache key by calling util_memoize_flush my_proc_not_cached args.</para>
+      </listitem>
+      <listitem>
+        <para>
+          The cached material will of course become obsolete over time.  There are two ways to handle this.</para> 
+
+        <itemizedlist>
+          <listitem>
+            <para>Timed Expiration: pass in max_age to util_memoize.  If the content is older than max_age, it will be re-generated.</para>
+          </listitem>
+          <listitem>
+            <para>
+              Direct Flushing.  In any proc which invalidates the cached content, call  util_memoize_flush my_proc_not_cached args.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>If you are correctly flushing the cached value, then it will need to be reloaded.  You may wish to pre-load it, so that the loading delay does not impact users.  If you have a sequence of pages, you could call the cached proc in advance, to increase the chances that it's loaded and current when the user reaches it.  Or, you can call (and discard) it immediately after flushing it.</para>
+      </listitem>
+    </orderedlist>
+  </sect1>
+  <sect1 id="tutorial-schedule-procs">
+    <title>Scheduled Procedures</title>
+    <para>Put this proc in a file <computeroutput>/packages/<replaceable>myfirstpackage</replaceable>/tcl/scheduled-init.tcl</computeroutput>.  Files in /tcl with the -init.tcl ending are sourced on server startup.  This one executes my_proc every 60 seconds:</para>
+    <programlisting>ad_schedule_proc 60 myfirstpackage::my_proc
+</programlisting>
+<para>This executes once a day, at midnight:</para>
+    <programlisting>ad_schedule_proc \
+    -schedule_proc ns_schedule_daily \
+    [list 0 0] \
+    myfirstpackage::my_proc
+</programlisting>
+    <para>See <ulink url="/api-doc/proc-view?proc=ad%5fschedule%5fproc">ad_schedule_proc</ulink> for more information.</para>
+  </sect1>
+
+
+
   <sect1 id="tutorial-future-topics">
   <title>Future Topics</title>
     <itemizedlist>
@@ -988,7 +1043,6 @@ db_multirow \
       <listitem><para>How and when to put procedures in a tcl procedure library</para></listitem>
       <listitem><para>More on ad_form - data validation, other stuff.
       (plan to draw from Jon Griffin's doc)</para></listitem>
-      <listitem><para>How and when to implement caching</para></listitem>
       <listitem><para>partialquery in xql</para></listitem>
       <listitem><para>How to use the html/text entry widget to get the
       "does this look right" confirm page </para></listitem>
