@@ -41,6 +41,32 @@ ad_proc -public ad_context_bar_html {
     return $out
 }
 
+ad_proc ad_context_node_list { node_id } {
+    Starting with the given node_id, return a list of
+    [list url instance_name] items for parent nodes.
+
+    @author Peter Marklund
+} {
+    set context [list]
+
+    while { ![empty_string_p $node_id] } {
+        array set node [site_node::get -node_id $node_id]
+        
+        # JCD: Provide something for the name if the instance name is
+        # absent.  name is the tail bit of the url which seems like a
+        # reasonable thing to display.
+        if {[empty_string_p $node(instance_name)]} { 
+            set node(instance_name) $node(name)
+        }
+
+        set context [concat [list [list $node(url) $node(instance_name)]] $context]
+
+        set node_id $node(parent_id)
+    }
+
+    return $context
+}
+
 ad_proc -public ad_context_bar { 
     -node_id
     args
@@ -55,11 +81,12 @@ ad_proc -public ad_context_bar {
     @see ad_context_bar_html
     @see ad_admin_context_bar
 } {
-    if { ![info exists node_id] } {
-        set node_id [ad_conn node_id]
-    }
     if {![parameter::get -package_id [site_node_closest_ancestor_package "acs-subsite"] -parameter ShowContextBarP -default 1]} {
 	return ""
+    }
+
+    if { ![exists_and_not_null node_id] } {
+        set node_id [ad_conn node_id]
     }
 
     set context [list]
@@ -69,9 +96,8 @@ ad_proc -public ad_context_bar {
     }
 
 
-    db_foreach context {} { 
-        lappend context [list $url $object_name]
-    }
+    set context [concat $context [ad_context_node_list $node_id]]
+
     if { [string match admin/* [ad_conn extra_url]] } {
         lappend context [list "[ad_conn package_url]admin/" \
                              "Administration"]
