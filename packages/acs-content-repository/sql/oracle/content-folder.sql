@@ -24,7 +24,7 @@ function new (
   creation_user	in acs_objects.creation_user%TYPE default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
   security_inherit_p in acs_objects.security_inherit_p%TYPE default 't',
-  package_id	in cr_folders.package_id%TYPE default null
+  package_id	in acs_objects.package_id%TYPE default null
 ) return cr_folders.folder_id%TYPE is
   v_folder_id	cr_folders.folder_id%TYPE;
   v_context_id	acs_objects.context_id%TYPE;
