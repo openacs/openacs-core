@@ -73,7 +73,7 @@ ad_proc -public cr_create_content_file {
     if { $move_p } { 
         file rename -- $client_filename [cr_fs_path]$content_file
     } else { 
-        file copy -- $client_filename [cr_fs_path]$content_file
+        file copy -force -- $client_filename [cr_fs_path]$content_file
     }
 
     return $content_file
