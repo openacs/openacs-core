@@ -2327,8 +2327,8 @@ begin
 	v_path := substr(upgrade_p__path, instr(upgrade_p__path, ''/'', -1) + 1);
 
 	-- Remove the extension, if it is .sql.
-	v_pos1 := position(''.'' in v_path);
-	if v_pos1 > 0 and substr(v_path, v_pos1) = ''.sql'' then
+	v_pos1 := position(''.sql'' in v_path);
+	if v_pos1 > 0 then
 	    v_path := substr(v_path, 1, v_pos1 - 1);
 	end if;
 
