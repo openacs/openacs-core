@@ -1,24 +1,19 @@
-<master>
+<master src="master">
 <property name=title>Add a user</property>
+<property name="context_bar">@context_bar@</property>
 
-<h2>Add a user</h2>
 
-@context_bar@
-
-<hr>
-
+<p>
 @first_names@ @last_name@ has been added to @system_name@.
 Edit the message below and hit "Send Email" to 
 notify this user.
+</p>
 
 <p>
 <form method="post" action="user-add-3">
 <input type="hidden" name="referer" value="@referer@"></input>
 @export_vars@
 Message:
-
-<p>
-
 <textarea name=message rows=10 cols=70 wrap=hard>
 @first_names@ @last_name@, 
 
@@ -34,15 +29,11 @@ Thank you,
 @administration_name@
 </textarea>
 
-<p>
-
 <center>
-
-<input type="submit" value="Send Email">
-
+<input type="submit" value="Send Email" />
 </center>
 
 </form>
-<p>
+</p>
 
 
