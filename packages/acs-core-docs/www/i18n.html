@@ -1,11 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title></title><meta name="generator" content="DocBook XSL Stylesheets V1.53.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="dev-guide.html" title="Chapter 4. OpenACS Developer's Guide"><link rel="previous" href="subsites.html" title="Writing OpenACS 4.5 Application Pages"><link rel="next" href="more-developer-info.html" title="Chapter 5. Other Developer Resources"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="subsites.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 4. OpenACS Developer's Guide</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="more-developer-info.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="i18n"></a></h2></div></div><div class="authorblurb"><p><p>
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Internationalization</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="dev-guide.html" title="Chapter 6. OpenACS Developer's Guide"><link rel="previous" href="submissions.html" title="Contributions"><link rel="next" href="more-developer-info.html" title="Chapter 7. Other Developer Resources"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="submissions.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 6. OpenACS Developer's Guide</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="more-developer-info.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="i18n"></a>Internationalization</h2></div></div><div class="authorblurb"><p><p>
       By <a href="http://www.petermarklund.com/" target="_top">Peter Marklund</a>
       and <a href="http://www.pinds.com/" target="_top">Lars Pind</a>
     </p><br>
-		  OpenACS docs are written by the named authors, but may be edited
-		  by OpenACS documentation staff.
-		</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="i18n-introduction"></a>Introduction</h3></div></div><p>
+          OpenACS docs are written by the named authors, but may be edited
+          by OpenACS documentation staff.
+        </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="i18n-introduction"></a>Introduction</h3></div></div><p>
       This document describes how to develop internationalized OpenACS packages.
     </p><p>
       At this point, we've only covered things that involve the
@@ -32,13 +32,13 @@
         internationalizing old packages, then have the APM translate
         those into the short notation.
       </p><div class="itemizedlist"><ul type="disc"><li><p>
-            The <span class="strong">short</span>:
+            The <span class="strong"><em>short</em></span>:
             #<span class="emphasis"><em>message_key</em></span>#
           </p><p>
             The advantage of the short syntax is that it's short. It's
             as simple as inserting the value of a variable.
           </p></li><li><p>
-            The <span class="strong">verbose</span>: &lt;trn
+            The <span class="strong"><em>verbose</em></span>: &lt;trn
             key=&quot;<span class="emphasis"><em>message_key</em></span>&quot;
             locale=&quot;<span class="emphasis"><em>locale</em></span>&quot;&gt;<span class="emphasis"><em>default
             text</em></span>&lt;/trn&gt;
@@ -51,7 +51,7 @@
             create the message key with the default text from the tag
             as the localized message.
           </p></li><li><p>
-            The <span class="strong">temporary</span>:
+            The <span class="strong"><em>temporary</em></span>:
             &lt;#<span class="emphasis"><em>message_key</em></span> <span class="emphasis"><em>original text</em></span>#&gt;
           </p><p>
             This syntax has been designed to make it easy to
@@ -67,18 +67,18 @@
         Some parameters contain text that need to be localized. In
         this case, instead of storing the real text in the parameter,
         you should use message keys using the short notation above,
-        i.e.  <span class="strong">#<span class="emphasis"><em>message-key</em></span>#</span>.
+        i.e.  <span class="strong"><em>#<span class="emphasis"><em>message-key</em></span>#</em></span>.
       </p><p>
        In order to avoid clashes with other uses of the hash
          character, you need to tell the APM that the parameter value
          needs to be localized when retrieving it. You do that by saying:
-         <span class="strong">parameter::get -localize</span>.
+         <span class="strong"><em>parameter::get -localize</em></span>.
       </p><p>
         Here are a couple of examples. Say we have the following two
         parameters, taken directly from the dotlrn package.
-      </p><div class="table"><a name="id2878000"></a><p class="title"><b>Table 4.1. </b></p><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Parameter Name</th><th>Parameter Value</th></tr></thead><tbody><tr><td>class_instance_pages_csv</td><td>#dotlrn.class_page_home_title#,Simple 2-Column;#dotlrn.class_page_calendar_title#,Simple 1-Column;#dotlrn.class_page_file_storage_title#,Simple 1-Column</td></tr><tr><td>departments_pretty_name</td><td>#departments_pretty_name#</td></tr></tbody></table></div><p>
+      </p><div class="table"><p class="title"><b>Table 6.1. </b></p><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Parameter Name</th><th>Parameter Value</th></tr></thead><tbody><tr><td>class_instance_pages_csv</td><td>#dotlrn.class_page_home_title#,Simple 2-Column;#dotlrn.class_page_calendar_title#,Simple 1-Column;#dotlrn.class_page_file_storage_title#,Simple 1-Column</td></tr><tr><td>departments_pretty_name</td><td>#departments_pretty_name#</td></tr></tbody></table></div><p>
         Then, depending on how we retrieve the value, here's what we get:
-      </p><div class="table"><a name="id2878089"></a><p class="title"><b>Table 4.2. </b></p><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Command used to retrieve Value</th><th>Retrieved Value</th></tr></thead><tbody><tr><td>parameter::get <span class="strong">-localize</span> -parameter class_instances_pages_csv</td><td>Kurs Startseite,Simple 2-Column;Kalender,Simple 1-Column;Dateien,Simple 1-Column</td></tr><tr><td>parameter::get <span class="strong">-localize</span> -parameter departments_pretty_name</td><td>Abteilung</td></tr><tr><td>parameter::get -parameter departments_pretty_name</td><td>#departments_pretty_name#</td></tr></tbody></table></div><p>
+      </p><div class="table"><p class="title"><b>Table 6.2. </b></p><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Command used to retrieve Value</th><th>Retrieved Value</th></tr></thead><tbody><tr><td>parameter::get <span class="strong"><em>-localize</em></span> -parameter class_instances_pages_csv</td><td>Kurs Startseite,Simple 2-Column;Kalender,Simple 1-Column;Dateien,Simple 1-Column</td></tr><tr><td>parameter::get <span class="strong"><em>-localize</em></span> -parameter departments_pretty_name</td><td>Abteilung</td></tr><tr><td>parameter::get -parameter departments_pretty_name</td><td>#departments_pretty_name#</td></tr></tbody></table></div><p>
         The value in the rightmost column in the table above is the
         value returned by an invocation of parameter::get. Note that
         for localization to happen you must use the -localize flag.
@@ -144,23 +144,23 @@
       </p><p>
         The process consists of four steps:
       </p><div class="orderedlist"><ol type="1"><li><p>
-            <span class="strong">Replace text with tags</span>:
+            <span class="strong"><em>Replace text with tags</em></span>:
             This is an automated process, which will try to
             automatically locate chunks of translatable text,
             auto-generate a reasonable message key, and surround the
             text with the temporary &lt;#...#&gt; notation mentioned
             above.
           </p></li><li><p>
-            <span class="strong">Manually verify each ADP
-            file</span>. If necessary, you can add additional
+            <span class="strong"><em>Manually verify each ADP
+            file</em></span>. If necessary, you can add additional
             &lt;#...#&gt; tags, or you can move or remove the ones set
             by the automated step.
           </p></li><li><p>
-            <span class="strong">Manually mark up Tcl
-            files</span>, marking up translatable text with the
+            <span class="strong"><em>Manually mark up Tcl
+            files</em></span>, marking up translatable text with the
             &lt;#...#&gt; notation.
           </p></li><li><p>
-            <span class="strong">Replace tags with keys</span>:
+            <span class="strong"><em>Replace tags with keys</em></span>:
             This is an automated process, which will replace the
             temporary &lt;#...#&gt; notation in both ADP and Tcl files
             with the appropriate notation for the type of file, and
@@ -181,6 +181,4 @@
         </p></div></div><p>
       Next step is to internationalize parameters that contain
       localizable text. See the section <a href="i18n.html#i18n-message-catalog-params">Multilingual APM Parameters</a>.
-    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="subsites.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="more-developer-info.html">Next</a></td></tr><tr><td width="40%" align="left">Writing OpenACS 4.5 Application Pages&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right">&nbsp;Chapter 5. Other Developer Resources</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">
-			vinod@kurup.com
-		  </a></address></div></body></html>
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="submissions.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="more-developer-info.html">Next</a></td></tr><tr><td width="40%" align="left">Contributions&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right">&nbsp;Chapter 7. Other Developer Resources</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/i18n.html#comments">View comments on this page at openacs.org</a></center></body></html>
