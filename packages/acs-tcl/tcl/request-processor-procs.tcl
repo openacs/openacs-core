@@ -14,17 +14,23 @@ ad_library {
 #
 #####
 
-ad_proc -public rp_internal_redirect { path } {
+ad_proc -public rp_internal_redirect {
+    -absolute_path:boolean
+    path
+} {
 
     Tell the request processor to return some other page.
 
     The path can either be relative to the current directory (e.g. "some-template") 
-    or absolute from the server root (e.g. "/packages/my-package/www/some-template"). 
+    relative to the server root (e.g. "/packages/my-package/www/some-template"), or
+    an absolute path (e.g. "/home/donb/openacs-4/templates/some-cms-template"). 
+
     When there is no extension then the request processor will choose the 
     matching file according to the extension preferences.
 
     Parameters will stay the same as in the initial request.
 
+    @param absolute_path If set the path is an absolute path within the host filesystem
     @param path path to the file to serve
 
 } {
@@ -39,11 +45,13 @@ ad_proc -public rp_internal_redirect { path } {
         incr __rp_internal_redirect_recursion_counter
     }
 
-    if { [string index $path 0] != "/" } {
-        # it's a relative path, prepend the current location
-        set path "[file dirname [ad_conn file]]/$path"
-    } else {
-        set path "[acs_root_dir]$path"
+    if { [string is false $absolute_path_p] } {
+        if { [string index $path 0] != "/" } {
+            # it's a relative path, prepend the current location
+            set path "[file dirname [ad_conn file]]/$path"
+        } else {
+            set path "[acs_root_dir]$path"
+        }
     }
 
     # save the current file setting

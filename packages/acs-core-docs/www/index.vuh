@@ -9,9 +9,9 @@ set path_tail \
   "doc[string range [ad_conn path_info] [string length $package_key] end]"
 
 if {![string compare [ad_conn path_info] "index.html"]} {
-    rp_serve_abstract_file "[acs_root_dir]/packages/acs-core-docs/www/index.adp"
+    rp_internal_redirect "/packages/acs-core-docs/www/index.adp"
 } elseif {[file isdirectory "[acs_root_dir]/packages/$package_key/www/doc"]} {
-  rp_serve_abstract_file "[acs_root_dir]/packages/$package_key/www/$path_tail"
+  rp_internal_redirect "/packages/$package_key/www/$path_tail"
 } else {
-  rp_serve_abstract_file "[acs_root_dir]/packages/$package_key/$path_tail"
+  rp_internal_redirect "/packages/$package_key/$path_tail"
 }
