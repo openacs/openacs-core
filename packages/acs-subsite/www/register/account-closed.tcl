@@ -6,6 +6,6 @@ ad_page_contract {
     {message:allhtml ""}
 }
 
-set page_title "Log Denied"
+set page_title "Login Denied"
 set context [list $page_title]
 
