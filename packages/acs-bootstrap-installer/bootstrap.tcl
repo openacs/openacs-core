@@ -130,13 +130,44 @@ set errno [catch {
 	nsv_set apm_enabled_package $package_key 1
     }
 
+    #
+    # Check for the presence of the automated testing package.
+    #
+    set load_tests_p 0
+    foreach enabled_p [db_list automated_test_enabled_select {
+      select attr_value as enabled_p
+      from apm_parameter_values, apm_parameters
+      where apm_parameter_values.parameter_id = apm_parameters.parameter_id and
+            apm_parameters.parameter_name = 'enabled_p' and
+            apm_parameter_values.package_id in
+        (select package_id from apm_packages, site_nodes
+         where package_key = 'acs-automated-testing' and
+               apm_packages.package_id = site_nodes.object_id);
+    }] {
+	    if {$enabled_p} {
+        set load_tests_p 1
+      }
+    }
+
+
     # Load *-procs.tcl and *-init.tcl files for enabled packages.
     apm_load_libraries -procs
 
     # Load up the Queries (OpenACS, ben@mit.edu)
     apm_load_queries
 
+    # Load up the Automated Tests and associated Queries if necessary
+    if {$load_tests_p} {
+      apm_load_libraries -test_procs
+      apm_load_queries -test_queries
+    }
+
     apm_load_libraries -init
+
+    # Load up the Automated Tests initialisation scripts is necessary
+    if {$load_tests_p} {
+      apm_load_libraries -test_init
+    }
 
     if { ![nsv_exists rp_properties request_count] } {
 	# security-init.tcl has not been invoked, so it's safe to say that the
