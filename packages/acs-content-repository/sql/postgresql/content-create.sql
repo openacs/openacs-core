@@ -62,9 +62,30 @@ comment on table cr_mime_types is '
 
 -- Common mime types (administered from admin pages)
 
-insert into cr_mime_types values ('Plain text', 'text/plain', 'txt');
-insert into cr_mime_types values ('HTML text', 'text/html', 'html');
-insert into cr_mime_types values ('Rich Text Format (RTF)', 'text/richtext', 'rtf');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Plain text', 'text/plain', 'txt');
+insert into cr_mime_types(label, mime_type, file_extension) values ('HTML text', 'text/html', 'html');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Rich Text Format (RTF)', 'text/richtext', 'rtf');
+
+insert into cr_mime_types(label, mime_type, file_extension) values ('Binary', 'application/octet-stream', 'bin');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft Word', 'application/msword', 'doc');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft Excel', 'application/msexcel', 'xls');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft PowerPoint', 'application/powerpoint', 'ppt');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft Project', 'application/msproject', 'mpp');
+insert into cr_mime_types(label, mime_type, file_extension) values ('PostScript', 'application/postscript', 'ps');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Adobe Illustrator', 'application/x-illustrator', 'ai');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Adobe PageMaker', 'application/x-pagemaker', 'p65');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Filemaker Pro', 'application/filemaker', 'fm');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Image Pict', 'image/x-pict', 'pic');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Photoshop', 'application/x-photoshop', 'psd');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Acrobat', 'application/pdf', 'pdf');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Video Quicktime', 'video/quicktime', 'mov');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Video MPEG', 'video/mpeg', 'mpg');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Audio AIFF',  'audio/aiff', 'aif');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Audio Basic', 'audio/basic',      'au');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Audio Voice', 'audio/voice',      'voc');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Audio Wave', 'audio/wave', 'wav');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Archive Zip', 'application/zip', 'zip');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Archive Tar', 'application/z-tar', 'tar');
 
 create table cr_content_mime_type_map (
   content_type  varchar(100)
