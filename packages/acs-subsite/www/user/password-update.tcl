@@ -7,6 +7,7 @@ ad_page_contract {
     {user_id {[ad_conn untrusted_user_id]}}
     {return_url ""}
     {old_password ""}
+    {message ""}
 }
 # This is a bit confusing, but old_password is what we get passed in here,
 # whereas password_old is the form element.
@@ -58,6 +59,7 @@ ad_form -name update -edit_buttons [list [list [_ acs-kernel.common_update] "ok"
     {user_id:integer(hidden)}
     {return_url:text(hidden),optional}
     {old_password:text(hidden),optional}
+    {message:text(hidden),optional}
 }
 
 if { [exists_and_not_null old_password] } {
