@@ -166,11 +166,7 @@ aa_register_case sync_actions {
 
             aa_equals "entry.success_p" $entry(success_p) "f"
 
-            if { [aa_true "entry.element_messages not empty" [exists_and_not_null entry(element_messages)]] } {
-                array unset elm_msgs
-                array set elm_msgs $entry(element_messages)
-                aa_true "username, email have problems" [util_sets_equal_p { username email } [array names elm_msgs]]
-            }
+            aa_true "entry.message not empty" [exists_and_not_null entry(message)]
 
             aa_log "entry.user_id = '$entry(user_id)'"
             aa_log "entry.message = '$entry(message)'"
@@ -669,7 +665,7 @@ aa_register_case sync_batch_ims_example_doc {
                         aa_true "email has a problem (email missing)" [util_sets_equal_p { email } [array names elm_msgs]]
                     }
                     update {
-                        aa_true "username has a problem (don't have this user)" [util_sets_equal_p { username } [array names elm_msgs]]
+                        aa_true "User does not exist" [expr ![empty_string_p $entry(message)]]
                     }
                     delete {
                         aa_false "Message is not empty" [empty_string_p $entry(message)]
@@ -703,10 +699,13 @@ aa_register_case sync_batch_ims_test {
     <sourcedid>
       <id>$ims_doc(username)</id>
     </sourcedid>
-    <n>
-      <given>$ims_doc(first_names)</given>
-      <family>$ims_doc(last_name)</family>
-    </n>
+    <name>
+      <fn>$ims_doc(first_names) $ims_doc(last_name)</fn>
+      <n>
+        <given>$ims_doc(first_names)</given>
+        <family>$ims_doc(last_name)</family>
+      </n>
+    </name>
     <email>$ims_doc(email)</email>
     <url>$ims_doc(url)</url>
   </person>
@@ -743,9 +742,8 @@ aa_register_case sync_batch_ims_test {
                 help_contact_text {}
                 batch_sync_enabled_p f
             }
-            set new_auth(get_doc_impl_id) 1
+
             set new_auth(process_doc_impl_id) [acs_sc::impl::get_id -owner "acs-authentication" -name "IMS_Enterprise_v_1p1"]
-            
             set new_auth(get_doc_impl_id) [acs_sc::impl::get_id -owner "acs-authentication" -name "HTTPGet"]
 
             set authority_id [auth::authority::create \
@@ -759,6 +757,8 @@ aa_register_case sync_batch_ims_test {
             # Insert
             #
             #####
+
+            aa_log "--- Insert test ---"
 
             # Setup dummy variables
             set ims_doc(recstatus) 1
@@ -803,6 +803,8 @@ aa_register_case sync_batch_ims_test {
             #
             #####
 
+            aa_log "--- Update test ---"
+
             # Setup dummy variables
             set ims_doc(recstatus) 2
             # username is unchanged
@@ -842,6 +844,8 @@ aa_register_case sync_batch_ims_test {
             #
             #####
 
+            aa_log "--- Delete test ---"
+
             # Setup dummy variables
             set ims_doc(recstatus) 3
             # username is unchanged
@@ -880,6 +884,8 @@ aa_register_case sync_batch_ims_test {
             # Reuse username and email
             #
             #####
+
+            aa_log "--- Reuse username/email of a deleted user test ---"
 
             # Setup dummy variables
             set ims_doc(recstatus) 1
@@ -922,9 +928,19 @@ aa_register_case sync_batch_ims_test {
             #
             #####
             
-            set elements [auth::sync::GetElements -authority_id $authority_id]
+            aa_log "--- GetElements test ---"
+
+            set desired_elements [ad_generate_random_string]
+
+            auth::driver::set_parameter_value \
+                -authority_id $authority_id \
+                -impl_id [acs_sc::impl::get_id -owner "acs-authentication" -name "IMS_Enterprise_v_1p1"] \
+                -parameter Elements \
+                -value $desired_elements
             
-            aa_true "Elements are usernaem, email, first_names, last_name, url" [util_sets_equal_p { username email first_names last_name url } $elements]
+            set elements [auth::sync::GetElements -authority_id $authority_id]
+
+            aa_equals "Elements are '$desired_elements'" $elements $desired_elements
 
         }
 }

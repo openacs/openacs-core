@@ -355,8 +355,12 @@ ad_proc -public auth::sync::job::action {
             }
             insert {
                 if { ![empty_string_p $user_id] } {
-                    set success_p 0
-                    set result(message) "A user with username '$username' already exists"
+                    acs_user::get -user_id $user_id -array existing_user_info
+                    if { ![string equal $existing_user_info(member_state) "banned"] } {
+                        # Inserting a user that already exists (and is not deleted)
+                        set success_p 0
+                        set result(message) "A user with username '$username' already exists"
+                    }
                 }
             }
         }
