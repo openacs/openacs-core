@@ -13,7 +13,7 @@ ad_page_contract {
     {return_url ""}
 } -validate {
     old_password_match -requires {user_id:integer password_old} {
-        if {![empty_string_p $user_id] && ![ad_check_password $user_id $password_old]} {
+        if {![permission::permission_p -object_id $user_id -privilege "admin"] && ![empty_string_p $user_id] && ![ad_check_password $user_id $password_old]} {
             ad_complain "Your current password does not match what you entered in the form."
         }
     }
@@ -34,14 +34,12 @@ if {[empty_string_p $user_id]} {
     set user_id [ad_verify_and_get_user_id]
     permission::require_permission -party_id $user_id -object_id $user_id -privilege "write"
 } else {
-    permission::require_permission -party_id $user_id -object_id $user_id -privilege "admin"
+    permission::require_permission -object_id $user_id -privilege "admin"
 }
 
 if {[catch {ad_change_password $user_id $password_1} errmsg]} {
     ad_return_error "Wasn't able to change your password. Please contact the system administrator."
 }
-
-ad_user_login $user_id
 
 if {[empty_string_p $return_url]} {
     set return_url [ad_parameter -package_id [ad_acs_kernel_id] "HomeURL"]
