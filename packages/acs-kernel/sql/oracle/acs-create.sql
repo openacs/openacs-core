@@ -7,9 +7,9 @@
 --
 
 create table acs_magic_objects (
-	name		varchar2(100)
-			constraint acs_magic_objects_pk primary key,
-	object_id	not null constraint acs_magic_objects_object_id_fk
+        name                varchar2(100)
+                        constraint acs_magic_objects_pk primary key,
+        object_id        not null constraint acs_magic_objects_object_id_fk
                         references acs_objects(object_id)
 );
 
@@ -23,36 +23,32 @@ comment on table acs_magic_objects is '
 create or replace package acs
 as
 
-  function add_user (
-    user_id		in users.user_id%TYPE default null,
-    object_type		in acs_objects.object_type%TYPE
-	 		   default 'user',
-    creation_date	in acs_objects.creation_date%TYPE
-			   default sysdate,
-    creation_user	in acs_objects.creation_user%TYPE
-			   default null,
-    creation_ip		in acs_objects.creation_ip%TYPE default null,
-    email		in parties.email%TYPE,
-    url			in parties.url%TYPE default null,
-    first_names		in persons.first_names%TYPE,
-    last_name		in persons.last_name%TYPE,
-    password		in users.password%TYPE,
-    salt		in users.salt%TYPE,
-    password_question   in users.password_question%TYPE default null,
-    password_answer	in users.password_answer%TYPE default null,
-    screen_name		in users.screen_name%TYPE default null,
-    email_verified_p 	in users.email_verified_p%TYPE default 't',
-    member_state	in membership_rels.member_state%TYPE default 'approved'
-  )
-  return users.user_id%TYPE;
+    function add_user (
+        user_id in users.user_id%TYPE default null,
+        object_type in acs_objects.object_type%TYPE default 'user',
+        creation_date in acs_objects.creation_date%TYPE default sysdate,
+        creation_user in acs_objects.creation_user%TYPE default null,
+        creation_ip in acs_objects.creation_ip%TYPE default null,
+        email in parties.email%TYPE,
+        url in parties.url%TYPE default null,
+        first_names in persons.first_names%TYPE,
+        last_name in persons.last_name%TYPE,
+        password in users.password%TYPE,
+        salt in users.salt%TYPE,
+        password_question in users.password_question%TYPE default null,
+        password_answer in users.password_answer%TYPE default null,
+        screen_name in users.screen_name%TYPE default null,
+        email_verified_p in users.email_verified_p%TYPE default 't',
+        member_state in membership_rels.member_state%TYPE default 'approved'
+    ) return users.user_id%TYPE;
 
-  procedure remove_user (
-    user_id	in users.user_id%TYPE
-  );
+    procedure remove_user (
+        user_id in users.user_id%TYPE
+    );
 
-  function magic_object_id (
-     name	in acs_magic_objects.name%TYPE
-  ) return acs_objects.object_id%TYPE;
+    function magic_object_id (
+        name in acs_magic_objects.name%TYPE
+    ) return acs_objects.object_id%TYPE;
 
 end acs;
 /
@@ -60,81 +56,100 @@ show errors
 
 create or replace package body acs
 as
+    function add_user (
+        user_id in users.user_id%TYPE default null,
+        object_type in acs_objects.object_type%TYPE default 'user',
+        creation_date in acs_objects.creation_date%TYPE default sysdate,
+        creation_user in acs_objects.creation_user%TYPE default null,
+        creation_ip in acs_objects.creation_ip%TYPE default null,
+        email in parties.email%TYPE,
+        url in parties.url%TYPE default null,
+        first_names in persons.first_names%TYPE,
+        last_name in persons.last_name%TYPE,
+        password in users.password%TYPE,
+        salt in users.salt%TYPE,
+        password_question in users.password_question%TYPE default null,
+        password_answer in users.password_answer%TYPE default null,
+        screen_name in users.screen_name%TYPE default null,
+        email_verified_p in users.email_verified_p%TYPE default 't',
+        member_state in membership_rels.member_state%TYPE default 'approved'
+    ) return users.user_id%TYPE
+    is
+        v_user_id                users.user_id%TYPE;
+        v_rel_id                membership_rels.rel_id%TYPE;
+    begin
+        v_user_id := acs_user.new(
+            user_id => user_id,
+            object_type => object_type,
+            creation_date => creation_date,
+            creation_user => creation_user,
+            creation_ip => creation_ip,
+            email => email,
+            url => url,
+            first_names => first_names,
+            last_name => last_name,
+            password => password,
+            salt => salt,
+            password_question => password_question,
+            password_answer => password_answer,
+            screen_name => screen_name,
+            email_verified_p => email_verified_p
+        );
+    
+        v_rel_id := membership_rel.new (
+            object_id_two => v_user_id,
+            object_id_one => acs.magic_object_id('registered_users'),
+            member_state => member_state
+        );
 
-  function add_user (
-    user_id		in users.user_id%TYPE default null,
-    object_type		in acs_objects.object_type%TYPE
-	 		   default 'user',
-    creation_date	in acs_objects.creation_date%TYPE
-			   default sysdate,
-    creation_user	in acs_objects.creation_user%TYPE
-			   default null,
-    creation_ip		in acs_objects.creation_ip%TYPE default null,
-    email		in parties.email%TYPE,
-    url			in parties.url%TYPE default null,
-    first_names		in persons.first_names%TYPE,
-    last_name		in persons.last_name%TYPE,
-    password		in users.password%TYPE,
-    salt		in users.salt%TYPE,
-    password_question   in users.password_question%TYPE default null,
-    password_answer	in users.password_answer%TYPE default null,
-    screen_name		in users.screen_name%TYPE default null,
-    email_verified_p 	in users.email_verified_p%TYPE default 't',
-    member_state	in membership_rels.member_state%TYPE default 'approved'
-  ) return users.user_id%TYPE
-  is
-    v_user_id		users.user_id%TYPE;
-    v_rel_id		membership_rels.rel_id%TYPE;
-  begin
-    v_user_id := acs_user.new (user_id, object_type, creation_date,
-				creation_user, creation_ip, email,
-				url, first_names, last_name, password,
-				salt, password_question, password_answer,
-				screen_name, email_verified_p);
-   
-    v_rel_id := membership_rel.new (
-      object_id_two => v_user_id,
-      object_id_one => acs.magic_object_id('registered_users'),
-      member_state => member_state);
+        acs_permission.grant_permission (
+            object_id => v_user_id,
+            grantee_id => v_user_id,
+            privilege => 'read'
+        );
 
-    acs_permission.grant_permission (
-      object_id => v_user_id,
-      grantee_id => v_user_id,
-      privilege => 'read'
-      );
+        acs_permission.grant_permission (
+            object_id => v_user_id,
+            grantee_id => v_user_id,
+            privilege => 'write'
+        );
 
-    acs_permission.grant_permission (
-      object_id => v_user_id,
-      grantee_id => v_user_id,
-      privilege => 'write'
-      );
+        return v_user_id;
+    end;
 
-    return v_user_id;
-  end;
+    procedure remove_user (
+        user_id in users.user_id%TYPE
+    )
+    is
+    begin
+        delete
+        from acs_permissions
+        where grantee_id = user_id;
 
-  procedure remove_user (
-    user_id	in users.user_id%TYPE
-  )
-  is
-  begin
-    delete from users
-    where user_id = remove_user.user_id;
-  end;
+        for row in (select rel_id
+                    from acs_rels
+                    where object_id_two = user_id) loop
 
-  function magic_object_id (
-   name		in acs_magic_objects.name%TYPE
-  ) return acs_objects.object_id%TYPE
-  is
-    object_id acs_objects.object_id%TYPE;
-  begin
-    select object_id
-    into magic_object_id.object_id
-    from acs_magic_objects
-    where name = magic_object_id.name;
+            acs_rel.delete(rel_id => row.rel_id);
 
-    return object_id;
-  end magic_object_id;
+        end loop;
 
+        acs_user.delete(user_id => user_id);
+    end;
+
+    function magic_object_id (
+        name in acs_magic_objects.name%TYPE
+    ) return acs_objects.object_id%TYPE
+    is
+        object_id acs_objects.object_id%TYPE;
+    begin
+        select object_id
+        into magic_object_id.object_id
+        from acs_magic_objects
+        where name = magic_object_id.name;
+
+        return object_id;
+    end magic_object_id;
 end acs;
 /
 show errors
