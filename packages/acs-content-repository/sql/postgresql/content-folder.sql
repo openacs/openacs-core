@@ -33,6 +33,8 @@ begin
 
 end;' language 'plpgsql';
 -- function new
+select define_function_args('content_folder__new','name,label,description,parent_id,context_id,folder_id,creation_date,creation_user,creation_ip');
+
 create function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
