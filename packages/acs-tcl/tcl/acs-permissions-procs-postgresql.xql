@@ -26,9 +26,7 @@
         <querytext>
             select count(*)
             from dual
-            where exists (select 1
-                          from dual
-                          where 't' = acs_permission__permission_p(:object_id, :party_id, :privilege))
+            where 't' = acs_permission__permission_p(:object_id, :party_id, :privilege)
         </querytext>
     </fullquery>
 
