@@ -145,6 +145,7 @@ namespace eval notification::email {
 	@param from_addr who the bouncing message as sent to
 	@param the message body
 	@param message_headers the headers of the message
+	@param reason (defaults to nothing).  Reason for bounce
     } {
         set domain [address_domain]
         set bounce_to [parse_email_address $to_addr]
@@ -167,7 +168,6 @@ namespace eval notification::email {
 	    -subject $bounce_subject \
 	    -body $l \
 	    -extraheaders ""
-        ns_log Notice "bounce: To: $bounce_to From: $bounce_from Subject $bounce_subject body: $l"
     }
 
     ad_proc -private load_qmail_mail_queue {

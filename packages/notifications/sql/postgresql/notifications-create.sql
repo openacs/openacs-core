@@ -15,3 +15,4 @@
 \i notifications-replies-package-create.sql
 
 \i notifications-init.sql
+\i notifications-replies-extra-create.sql
