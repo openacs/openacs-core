@@ -436,7 +436,7 @@ declare
   register_content_type__folder_id              alias for $1;  
   register_content_type__content_type           alias for $2;  
   register_content_type__include_subtypes       alias for $3;  
-  v_is_registered                               varchar(100);  
+  v_is_registered                               varchar;  
 begin
 
   if register_content_type__include_subtypes = ''f'' then

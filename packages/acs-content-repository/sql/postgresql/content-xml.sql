@@ -22,7 +22,7 @@ create sequence cr_xml_doc_seq;
 
 create table cr_xml_docs (
     doc_id        integer primary key,
-    doc           text
+    doc           text default '' not null
 );
 
 comment on table cr_xml_docs is '

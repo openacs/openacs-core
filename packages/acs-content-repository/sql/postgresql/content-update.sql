@@ -183,7 +183,7 @@ begin
 	items_released   integer not null,
 	items_expired    integer not null,
 	err_num          integer,
-	err_msg          varchar(500)
+	err_msg          varchar(500) default \\\'\\\' not null
       )'';
 
   end if;

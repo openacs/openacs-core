@@ -101,7 +101,7 @@ declare
   drop_type__drop_children_p        alias for $2;  
   drop_type__drop_table_p           alias for $3;  
   table_exists                      boolean;       
-  v_table_name                      varchar(50);   
+  v_table_name                      varchar;   
   is_subclassed_p                   boolean;      
   child_rec                         record;    
   attr_row                          record;
