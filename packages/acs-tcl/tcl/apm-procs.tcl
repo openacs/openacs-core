@@ -253,6 +253,8 @@ ad_proc -private apm_load_libraries {
     {-callback apm_dummy_callback}
     {-procs:boolean} 
     {-init:boolean}
+    {-test_procs:boolean} 
+    {-test_init:boolean}
 } {
 
     Loads all -procs.tcl (if $procs_or_init is "procs") or -init.tcl (if $procs_or_init is
@@ -293,8 +295,16 @@ ad_proc -private apm_load_libraries {
 		set paths [concat $paths [glob -nocomplain "$dir/*init.tcl"]]
                 set paths [concat $paths [glob -nocomplain "$dir/*init-[db_type].tcl"]]
 	    }    
+	    if {$test_procs_p} {
+		set paths [concat $paths [glob -nocomplain "$dir/test/*procs.tcl"]]
+                set paths [concat $paths [glob -nocomplain "$dir/test/*procs-[db_type].tcl"]]
+	    }    
+	    if {$test_init_p} {
+		set paths [concat $paths [glob -nocomplain "$dir/test/*init.tcl"]]
+                set paths [concat $paths [glob -nocomplain "$dir/test/*init-[db_type].tcl"]]
+	    }    
 	}
-	
+
 	foreach path [lsort $paths] {
 	    set rel_path [string range $path $base_len end]
 	    lappend files [list $package $rel_path]
@@ -314,6 +324,7 @@ ad_proc -private apm_load_libraries {
 # but is only loading query information
 ad_proc -private apm_load_queries {
     {-callback apm_dummy_callback}
+    {-test_queries:boolean}
 } {
     set packages [db_list apm_enabled_packages_q {
 	select distinct package_key
@@ -330,12 +341,33 @@ ad_proc -private apm_load_queries {
     	    ns_log Error "apm_load_queries: Unable to locate [acs_root_dir]/packages/$package/*. when scanning for SQL queries to load."
         }
 
+        set testdir    "[acs_root_dir]/packages/$package/tcl/test"
+        set testlength [string length $testdir]
+
         foreach file [lsort $files] {
 
             set file_db_type [apm_guess_db_type $package $file]
             set file_type [apm_guess_file_type $package $file]
 
-            if {[string equal $file_type query_file] &&
+            if {![string compare -length $testlength $testdir $file]} {
+              set is_test_file_p 1
+            } else {
+              set is_test_file_p 0
+            }
+
+            #
+            # Note this exclusive or represents the following:
+            # test_queries_p - Load normal xql files or load test xql files
+            # is_test_file_p - Current file is a test file or not.
+            #
+            # !(test_queries_p ^ is_test_file_p)  = Load it or not?
+            #             !( 0 ^ 0 )             = Yep
+            #             !( 0 ^ 1 )             = Nope
+            #             !( 1 ^ 0 )             = Nope
+            #             !( 1 ^ 1 )             = Yep
+            #
+            if {![expr $test_queries_p ^ $is_test_file_p] &&
+                [string equal $file_type query_file] &&
                 ([empty_string_p $file_db_type] || [string equal $file_db_type [db_type]])} {
 	        db_qd_load_query_file $file
             } 
