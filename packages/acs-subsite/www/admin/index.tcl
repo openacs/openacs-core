@@ -8,7 +8,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     subsite_name:onevalue
     acs_admin_available_p:onevalue
     acs_admin_url:onevalue
@@ -35,6 +35,6 @@ if {[db_0or1row acs_admin_url_get {
     set acs_admin_available_p "f"
 }
 
-set context_bar {}
+set context {}
 
 ad_return_template

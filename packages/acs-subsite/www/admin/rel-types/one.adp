@@ -1,5 +1,5 @@
-<master src="../master">
-<property name="context_bar">@context_bar@</property>
+<master>
+<property name="context">@context@</property>
 <property name="title">Relationship Type "@rel_type_pretty_name@"</property>
 				   
 <h4>Relations of this type</h4>

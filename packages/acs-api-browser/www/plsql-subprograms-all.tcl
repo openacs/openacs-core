@@ -8,11 +8,11 @@ ad_page_contract {
     @cvs-id $Id$
 } -properties {
     title:onevalue
-    context_bar:onevalue
+    context:onevalue
     all_subprograms:multirow
 }
 
-set context_bar [ad_context_bar "All PL/SQL Subprograms"]
+set context [list "All PL/SQL Subprograms"]
 
 # Organize the subprograms under three headings: FUNCTION, PROCEDURE,
 # and PACKAGE.

@@ -1,6 +1,6 @@
-<master src="master">
+<master>
 <property name="title">Portrait of @first_names@ @last_name@</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <p>This is the image that we show to other users at @system_name@:</p>
 

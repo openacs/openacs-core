@@ -17,7 +17,7 @@ ad_page_contract {
     required_p:notnull
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     export_vars:onevalue
     pretty_name:onevalue
     datatypes:multirow

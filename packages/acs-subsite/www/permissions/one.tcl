@@ -20,7 +20,7 @@ doc_body_append "[ad_header "Permissions for $name"]
 
 <h2>Permissions for $name</h2>
 
-[ad_context_bar {. "Permissions"} "Permissions for $name"]
+[ad_context_bar [list "./" "Permissions"] "Permissions for $name"]
 <hr>
 
 <h3>Inherited Permissions</h3>

@@ -15,7 +15,7 @@ ad_page_contract {
     rel_type:notnull
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     export_vars:onevalue
     segment_name:onevalue
 } -validate {
@@ -66,7 +66,7 @@ if { ![db_string segments_exists_p {
 }
 
 
-set context_bar [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] [list one?[ad_export_vars segment_id] "One segment"] "Create constraints"]
+set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] [list one?[ad_export_vars segment_id] "One segment"] "Create constraints"]
 set export_vars [ad_export_vars -form {segment_id return_url}]
 
 ad_return_template

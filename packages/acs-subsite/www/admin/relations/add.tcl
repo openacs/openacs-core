@@ -16,7 +16,7 @@ ad_page_contract {
     { return_url "" }
     { allow_out_of_scope_p "f" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     role_pretty_name:onevalue
     group_name:onevalue
     export_form_vars:onevalue
@@ -42,7 +42,7 @@ ad_page_contract {
 # double-click protection (which we're not doing yet).  We also need
 # to check permissions on the party.
 
-set context_bar [list "Add relation"]
+set context [list "Add relation"]
 
 set export_var_list [list group_id rel_type exact_p return_url allow_out_of_scope_p]
 

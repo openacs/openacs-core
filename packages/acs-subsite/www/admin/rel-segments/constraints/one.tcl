@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     constraint_id:naturalnum,notnull
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     admin_p:onevalue
     props:onerow
     rel:onerow
@@ -58,7 +58,7 @@ if { ![db_0or1row select_constraint_properties {
 
 set segment_id $props(segment_id)
 
-set context_bar [list [list "../" "Relational segments"] [list "../one?segment_id=$props(segment_id)" "One Segment"] "One constraint"]
+set context [list [list "../" "Relational segments"] [list "../one?segment_id=$props(segment_id)" "One Segment"] "One constraint"]
 
 # Now we pull out information about the relationship types for each
 # segment. The outer join is there in case the role in acs_rel_types

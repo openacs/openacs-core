@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Complete List of ISO Codes</property>
 
 Please locate your country's code among those listed below then use

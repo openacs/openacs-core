@@ -11,7 +11,7 @@ ad_page_contract {
     group_id:integer,notnull
     {return_url ""}
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     group_id:onevalue
     group_name:onevalue
     admin_p:onevalue
@@ -32,7 +32,7 @@ ad_page_contract {
 }
 
 
-set context_bar [list \
+set context [list \
         [list "[ad_conn package_url]admin/groups/" "Groups"] \
 	[list "one?group_id=$group_id" "One Group" ] \
         "Edit Join Policy"]

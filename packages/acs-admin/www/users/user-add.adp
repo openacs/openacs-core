@@ -1,7 +1,7 @@
-<master src="master">
+<master>
 <property name=title>Add a user</property>
 <property name="focus">user.email</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <form action="user-add-2" method="post" name="user">
 @export_vars@

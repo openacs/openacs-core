@@ -1,6 +1,6 @@
-<master src="master">
+<master>
 <property name="title">Edit comment for the portrait of @first_names@ @last_name@</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <form method="post" action="comment-edit-2.tcl">
 @export_vars@

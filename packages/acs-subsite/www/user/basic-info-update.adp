@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Update Basic Information</property>
 <property name="context_bar">in @site_link@</property>
 

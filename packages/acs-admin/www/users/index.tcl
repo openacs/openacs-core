@@ -15,14 +15,14 @@
 	@cvs-id $Id$
 	@author Multiple
     } {} -properties {
-	context_bar:onevalue
+	context:onevalue
 	n_users:onevalue
 	n_deleted_users:onevalue
 	last_registration:onevalue
         groups:onevalue
     }
 
-    set context_bar [ad_admin_context_bar "Users"]
+    set context [list "Users"]
 
     # XXX This query should be optimized
     db_1row users_n_users "select 

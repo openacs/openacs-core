@@ -1,5 +1,5 @@
-<master src="../master">
-<property name="context_bar">@context_bar@</property>
+<master>
+<property name="context">@context@</property>
 <property name="title">Specify values for @attribute_pretty_name@</property>
 
 Note: Every value must have a unique name. Duplicate names will be ignored.

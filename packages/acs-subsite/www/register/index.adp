@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name=title>Log In</property>
 <property name=focus>login.email</property>
 <property name="context_bar">to <a href="/">@system_name@</a></property>

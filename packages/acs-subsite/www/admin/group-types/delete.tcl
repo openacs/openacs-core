@@ -13,7 +13,7 @@ ad_page_contract {
     { return_url "" }
 } -properties {
     subtypes:multirow
-    context_bar:onevalue
+    context:onevalue
     export_url_vars:onevalue
     export_form_vars:onevalue
     group_type:onevalue
@@ -28,7 +28,7 @@ ad_page_contract {
     }
 }
 
-set context_bar [list \
+set context [list \
          [list "[ad_conn package_url]admin/group-types/" "Group types"] \
          [list one?[export_url_vars group_type] "One group type"] \
          "Delete group type"]

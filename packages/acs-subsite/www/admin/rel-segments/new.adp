@@ -1,5 +1,5 @@
-<master src="../master">
-<property name="context_bar">@context_bar@</property>
+<master>
+<property name="context">@context@</property>
 <property name="title">Create relational segment</property>
 <property name="focus">segment_new.segment_name</property>
 

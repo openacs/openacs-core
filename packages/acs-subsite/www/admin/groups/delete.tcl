@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     group_id:integer,notnull
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     group_name:onevalue
     number:onerow
     group_id:onevalue
@@ -23,7 +23,7 @@ ad_page_contract {
     }
 }
 
-set context_bar [list [list "" "Groups"] [list one?[ad_export_vars {group_id}] "One Group"] "Nuke group"]
+set context [list [list "" "Groups"] [list one?[ad_export_vars {group_id}] "One Group"] "Nuke group"]
 set group_name [db_string object_name {select acs_object.name(:group_id) from dual}]
 set export_form_vars [ad_export_vars -form {group_id}]
 

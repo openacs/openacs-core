@@ -1,5 +1,5 @@
-<master src="../../master">
-<property name="context_bar">@context_bar@</property>
+<master>
+<property name="context">@context@</property>
 <property name="title">Delete @constraint_name@</property>
 
 Are you sure you want to delete the constraint @constraint_name@ on segment @segment_name@?

@@ -1,6 +1,6 @@
-<master src="master">
+<master>
 <property name=title>Add a user</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 
 <p>

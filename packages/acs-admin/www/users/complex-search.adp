@@ -1,6 +1,6 @@
-<master src="master">
+<master>
 <property name="title">Complex User Search</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <if @criteria:rowcount@ eq 0>
   all matching users

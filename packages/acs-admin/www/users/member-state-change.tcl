@@ -11,7 +11,7 @@ ad_page_contract {
     {email_verified_p "no_change"}
     {return_url ""}
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     export_vars:onevalue
     action:onevalue
     return_url:onevalue
@@ -103,7 +103,7 @@ if [empty_string_p $return_url] {
     ad_script_abort
 }
 
-set context_bar [ad_admin_context_bar [list "index.tcl" "Users"] "$action"]
+set context [list [list "./" "Users"] "$action"]
 set export_vars [export_url_vars email email_from subject message return_url]
 
 ad_return_template

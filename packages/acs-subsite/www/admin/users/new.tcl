@@ -17,12 +17,12 @@ ad_page_contract {
     {add_with_rel_type "user_profile"}
     {group_rel_type_list ""}
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     user_type_pretty_name:onevalue
     attributes:multirow
 }
 
-set context_bar [list [list "" "Parties"] "Add a user"]
+set context [list [list "" "Parties"] "Add a user"]
 
 set export_var_list [list \
 	user_id user_type add_to_group_id add_with_rel_type \

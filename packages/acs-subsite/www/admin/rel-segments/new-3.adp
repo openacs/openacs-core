@@ -1,5 +1,5 @@
-<master src="../master">
-<property name="context_bar">@context_bar@</property>
+<master>
+<property name="context">@context@</property>
 <property name="title">Add Constraint on @segment_name@</property>
 
 Now that you have created a relational segment, you can create

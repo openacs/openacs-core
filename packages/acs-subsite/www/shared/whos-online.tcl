@@ -4,7 +4,7 @@ ad_page_contract {
     @cvs-id $Id$
 } -properties {
     title:onevalue
-    context_bar:onevalue
+    context:onevalue
     last_visit_interval:onevalue
     chat_system_name:onevalue
     connected_user_id:onevalue
@@ -21,7 +21,7 @@ order by upper(last_name), upper(first_names), email"
 db_release_unused_handles
 
 set title "Who's Online?"
-set context_bar [ad_context_bar_ws_or_index "Who's Online"]
+set context [list "Who's Online"]
 
 set last_visit_interval [ad_parameter LastVisitUpdateInterval ""]
 

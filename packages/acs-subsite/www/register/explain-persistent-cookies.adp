@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Saving email address and password</property>
 <property name="context_bar">at @home_link@</property>
 

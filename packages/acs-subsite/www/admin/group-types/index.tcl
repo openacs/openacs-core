@@ -9,13 +9,13 @@ ad_page_contract {
     @cvs-id $Id$
 } {
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     group_types:multirow
 }
 
 subsite::configure_if_necessary
 
-set context_bar [list "Group types"]
+set context [list "Group types"]
 
 # we may want to move the inner count to get the number of groups of
 # each type to its own pl/sql function. That way, we execute the

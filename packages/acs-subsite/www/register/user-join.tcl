@@ -11,7 +11,7 @@ ad_page_contract {
     {rel_type:notnull "membership_rel"}
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     role_pretty_name:onevalue
     group_name:onevalue
     export_form_vars:onevalue
@@ -38,7 +38,7 @@ set export_var_list [list group_id rel_type return_url]
 
 set party_id [ad_conn user_id]
 
-set context_bar [list "Join $group_name"]
+set context [list "Join $group_name"]
 
 template::form create join
 

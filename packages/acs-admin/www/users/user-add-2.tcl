@@ -10,7 +10,7 @@ ad_page_contract {
     password_confirmation
     {referer "/acs-admin/users"}
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     export_vars:onevalue
     system_name:onevalue
     system_url:onevalue
@@ -103,7 +103,7 @@ if { [db_string double_click {}] != 0 } {
 set administration_name [db_string admin_name "select
 first_names || ' ' || last_name from persons where person_id = :admin_user_id"]
 
-set context_bar [ad_admin_context_bar [list "index.tcl" "Users"] "Notify added user"]
+set context [list [list "./" "Users"] "Notify added user"]
 set system_name [ad_system_name]
 set export_vars [export_form_vars email first_names last_name user_id]
 set system_url [ad_parameter -package_id [ad_acs_kernel_id] SystemURL ""].

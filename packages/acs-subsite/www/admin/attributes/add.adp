@@ -1,5 +1,5 @@
-<master src="../master">
-<property name="context_bar">@context_bar@</property>
+<master>
+<property name="context">@context@</property>
 <property name="title">Add attribute to @object_pretty_name@</property>
 <property name="focus">main_form.pretty_name</property>
 

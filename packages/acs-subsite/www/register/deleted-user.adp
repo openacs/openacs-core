@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Welcome Back</property>
 <property name="context_bar">to @site_link@</property>
 

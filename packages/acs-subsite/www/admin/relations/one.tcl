@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     rel_id:integer,notnull
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     rel_id:onevalue
     rel:onerow
     delete_p:onevalue
@@ -41,7 +41,7 @@ set admin_p [ad_permission_p $rel_id "admin"]
 set delete_p [ad_permission_p $rel_id "delete"]
 set write_p [ad_permission_p $rel_id "write"]
 
-set context_bar [list "One relation"]
+set context [list "One relation"]
 
 set subsite_group_id [application_group::group_id_from_package_id]
 

@@ -12,14 +12,14 @@ ad_page_contract {
     attribute_id:notnull,naturalnum,attribute_dynamic_p
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     attribute_id:onevalue
     object_type:onevalue
     attribute_pretty_name:onevalue
     export_form_vars:onevalue
 }
 
-set context_bar [list [list one?[ad_export_vars attribute_id] "One attribute"] "Delete attribute"]
+set context [list [list one?[ad_export_vars attribute_id] "One attribute"] "Delete attribute"]
 
 db_1row select_object_type {
     select a.object_type, a.pretty_name as attribute_pretty_name

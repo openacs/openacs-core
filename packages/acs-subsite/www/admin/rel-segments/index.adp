@@ -1,5 +1,5 @@
-<master src="../master">
-<property name="context_bar">@context_bar@</property>
+<master>
+<property name="context">@context@</property>
 <property name="title">Relational Segment administration</property>
 
 Currently, the system is able to handle the following relational segments:

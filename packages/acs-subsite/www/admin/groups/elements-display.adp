@@ -1,5 +1,5 @@
-<master src="../master">
-<property name="context_bar">@context_bar@</property>
+<master>
+<property name="context">@context@</property>
 <property name="title">@role_pretty_plural@ of @group_name@</property>
 
 <include src="elements-display-list" group_id="@group_id@" rel_type="@rel_type@" member_state="@member_state@">

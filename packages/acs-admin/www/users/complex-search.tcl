@@ -54,7 +54,7 @@ ad_page_contract {
     export_authorize:onevalue
     passthrough_parameters:onevalue
     combine_method:onevalue
-    context_bar:onevalue
+    context:onevalue
 }
 
 # Check input.
@@ -62,7 +62,7 @@ set exception_count 0
 set exception_text ""
 
 
-set context_bar [ad_admin_context_bar [list "index" "Users"] "Complex search"]
+set context [list [list "index" "Users"] "Complex search"]
 
 if { ![info exists target] || [empty_string_p $target] } {
     incr exception_count

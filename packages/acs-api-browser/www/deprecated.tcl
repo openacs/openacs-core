@@ -11,12 +11,12 @@ ad_page_contract {
 } {
 } -properties {
     title:onevalue
-    context_bar:onevalue
+    context:onevalue
     deprecated:multirow
 }
 
 set title "Deprecated Procedure Search"
-set context_bar [ad_context_bar "Deprecated Procedures"]
+set context [list "Deprecated Procedures"]
 
 multirow create deprecated proc args
 

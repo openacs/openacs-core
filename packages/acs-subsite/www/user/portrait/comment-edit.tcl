@@ -8,7 +8,7 @@ ad_page_contract {
     {return_url "" }
     {user_id ""}
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     export_vars:onevalue
     description:onevalue
     first_names:onevalue
@@ -49,7 +49,5 @@ where revision_id = (select live_revision
 
 db_release_unused_handles
 
-set context_bar [ad_context_bar_ws [list index "Your Portrait"] "Edit comment"]
+set context [list [list "./" "Your Portrait"] "Edit comment"]
 set export_vars [export_form_vars user_id return_url]
-
-ad_return_template

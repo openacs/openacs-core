@@ -1,5 +1,5 @@
-<master src="../master">
-<property name="context_bar">@context_bar@</property>
+<master>
+<property name="context">@context@</property>
 <property name="title">Relationship administration</property>
 
 Currently, the system is able to handle the following types of relationships: 

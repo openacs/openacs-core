@@ -12,13 +12,13 @@ ad_page_contract {
     group_id:integer,notnull
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     export_vars:onevalue
     return_url_enc:onevalue
     primary_rels:multirow
 }
 
-set context_bar [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list "one?[ad_export_vars group_id]" "One Group"] "Add relation type"]
+set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list "one?[ad_export_vars group_id]" "One Group"] "Add relation type"]
 set return_url_enc [ad_urlencode "[ad_conn url]?[ad_conn query]"]
 
 # Select out all the relationship types that are not currently

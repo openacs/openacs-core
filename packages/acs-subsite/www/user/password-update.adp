@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Update Password</property>
 <property name="context_bar">for @first_names@ @last_name@ in @site_link@</property>
 

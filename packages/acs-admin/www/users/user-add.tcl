@@ -5,11 +5,11 @@ ad_page_contract {
 } -query {
     {referer "/acs-admin/users"}
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     export_vars:onevalue
 }
 
-set context_bar [ad_admin_context_bar [list "index.tcl" "Users"] "Add user"]
+set context [list [list "./" "Users"] "Add user"]
 
 # generate unique key here so we can handle the "user hit s" case
 set user_id [db_nextval acs_object_id_seq]

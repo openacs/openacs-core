@@ -13,10 +13,10 @@ ad_page_contract {
     { supertype:trim "" }
     { approval_policy:trim "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
 }
 
-set context_bar [list [list "[ad_conn package_url]admin/group-types/" "Group types"] "Add type"]
+set context [list [list "[ad_conn package_url]admin/group-types/" "Group types"] "Add type"]
 
 template::form create group_type
 

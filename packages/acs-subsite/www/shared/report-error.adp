@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Application error</property>
 
 <if @custom_message@ nil>

@@ -13,7 +13,7 @@ ad_page_contract {
     group_rel_id:integer,notnull
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     rel_pretty_name:onevalue
     group_name:onevalue
     export_vars:onevalue
@@ -33,6 +33,6 @@ if { ![db_0or1row select_info {
 ad_require_permission $group_id admin
 
 set export_vars [ad_export_vars -form {group_rel_id return_url}]
-set context_bar [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[ad_export_vars {group_id}] "One group"] "Remove relation type"]
+set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[ad_export_vars {group_id}] "One group"] "Remove relation type"]
 
 ad_return_template

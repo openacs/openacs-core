@@ -13,7 +13,7 @@ ad_page_contract {
     enum_value:trim,notnull
     { return_url "one?[ad_export_vars attribute_id]" }    
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     export_vars:onevalue
     pretty_name:onevalue
 }
@@ -29,7 +29,7 @@ if { ![db_0or1row select_pretty_name {
     return
 }
 
-set context_bar [list [list one?[ad_export_vars attribute_id] "One attribute"] "Delete value"]
+set context [list [list one?[ad_export_vars attribute_id] "One attribute"] "Delete value"]
 set export_vars [ad_export_vars -form {attribute_id enum_value return_url}]
 
 ad_return_template

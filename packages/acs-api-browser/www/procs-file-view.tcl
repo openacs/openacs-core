@@ -8,7 +8,7 @@ ad_page_contract {
     path
 } -properties {
     title:onevalue
-    context_bar:onevalue
+    context:onevalue
     dimensional_slider:onevalue
     library_documentation:onevalue
     proc_list:multirow
@@ -39,20 +39,20 @@ set dimensional_list {
     }
 }
 
-set context_bar_elements [list]
+set context [list]
 if { [info exists version_id] } {
     db_1row package_info_from_package_id {
         select pretty_name, package_key, version_name
           from apm_package_version_info
          where version_id = :version_id
     }
-    lappend context_bar_elements [list "package-view?version_id=$version_id" "$pretty_name $version_name"]
+    lappend context [list "package-view?version_id=$version_id" "$pretty_name $version_name"]
 }
 
-lappend context_bar_elements [file tail $path]
+lappend context [file tail $path]
 
 set title [file tail $path]
-set context_bar [eval ad_context_bar $context_bar_elements]
+
 set dimensional_slider [ad_dimensional $dimensional_list]
 set library_documentation [api_library_documentation $path]
 

@@ -1,5 +1,5 @@
-<master src="../../master">
-<property name="context_bar">@context_bar@</property>
+<master>
+<property name="context">@context@</property>
 <property name="title">@props.constraint_name@</property>
 
 All elements in side @props.rel_side@ of the segment 

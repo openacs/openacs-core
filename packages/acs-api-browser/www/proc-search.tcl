@@ -21,7 +21,7 @@ ad_page_contract {
     query_string
 } -properties {
     title:onevalue
-    context_bar:onevalue
+    context:onevalue
     name_weight:onevalue
     doc_weight:onevalue
     param_weight:onevalue
@@ -118,7 +118,7 @@ if {$quick_view && ![empty_string_p $matches]} {
 }
 
 set title "Procedure Search for: \"$query_string\""
-set context_bar [ad_context_bar "Search: $query_string"]
+set context [list "Search: $query_string"]
 
 multirow create results score proc args url
 

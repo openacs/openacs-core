@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Awaiting Approval</property>
 
 <p>Your registration request has been submitted 

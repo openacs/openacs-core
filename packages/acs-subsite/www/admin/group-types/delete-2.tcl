@@ -13,7 +13,7 @@ ad_page_contract {
     { return_url "" }
     { operation "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
 } -validate {
     user_can_delete_group -requires {group_type:notnull} {
 	if { ![group_type::drop_all_groups_p $group_type] } {

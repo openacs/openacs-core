@@ -7,7 +7,7 @@ ad_page_contract {
     source_p:optional,integer,trim
 } -properties {
     title:onevalue
-    context_bar:onevalue
+    context:onevalue
     source_p:onevalue
     default_source_p:onevalue
     return_url:onevalue
@@ -16,7 +16,7 @@ ad_page_contract {
 }
 
 set title $proc
-set context_bar [ad_context_bar $proc]
+set context [list $proc]
 
 set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_source_p]
 set return_url [ns_urlencode [ad_conn url]?[export_url_vars proc]]

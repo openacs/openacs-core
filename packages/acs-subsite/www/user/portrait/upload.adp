@@ -1,6 +1,6 @@
-<master src="master">
+<master>
 <property name=title>Upload Portrait</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 How would you like the world to see @first_names@ @last_name@?
 

@@ -12,13 +12,13 @@ ad_page_contract {
     attribute_id:naturalnum,notnull
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     attribute:onerow
     url_vars:onevalue
     dynamic_p:onevalue
     enum_values:multirow
 }
-set context_bar [list "One attribute"]
+set context [list "One attribute"]
 
 set url_vars [ad_export_vars {attribute_id return_url}]
 

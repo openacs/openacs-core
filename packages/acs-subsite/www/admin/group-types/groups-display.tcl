@@ -11,14 +11,14 @@ ad_page_contract {
 } {
     group_type:notnull
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     group_type_pretty_name:onevalue
     group_type:onevalue
     group_type_enc:onevalue
 }
 
 set user_id [ad_conn user_id]
-set context_bar [list [list "[ad_conn package_url]admin/group-types/" "Group types"] [list one?[ad_export_vars group_type] "One type"] "Groups"]
+set context [list [list "[ad_conn package_url]admin/group-types/" "Group types"] [list one?[ad_export_vars group_type] "One type"] "Groups"]
 set group_type_enc [ad_urlencode $group_type]
 
 if { ![db_0or1row select_type_info {

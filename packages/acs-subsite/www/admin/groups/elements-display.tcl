@@ -13,7 +13,7 @@ ad_page_contract {
     rel_type:notnull
     {member_state ""}
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     create_p:onevalue
     group_id:onevalue
     group_name:onevalue
@@ -49,6 +49,6 @@ db_1row group_and_rel_info {
      where rel_types.rel_type = :rel_type
 }
 
-set context_bar [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[ad_export_vars group_id] "One Group"] "All $role_pretty_plural"]
+set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[ad_export_vars group_id] "One Group"] "All $role_pretty_plural"]
 
 ad_return_template

@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name=title>Sent: @sent_subject@</property>
 
 @sent_message@

@@ -1,5 +1,5 @@
-<master src="../master">
-<property name="context_bar">@context_bar@</property>
+<master>
+<property name="context">@context@</property>
 <property name="title">Relationship types exist that depend on this group type</property>
 
 You must remove all of the following relationship types before you can

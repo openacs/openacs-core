@@ -1,5 +1,5 @@
 
-set context_bar [ad_context_bar]
+set context [list]
 
 db_multirow valid_installed_binding valid_installed_binding ""
 

@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Customized Question/Answer Entered</property>
 
 <p>Please Wait for our Email</p>

@@ -1,6 +1,6 @@
-<master src="master">
+<master>
 <property name=title>@first_names@ @last_name@</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <if @inline_portrait_state@ eq "inline">
   <a href="portrait?@portrait_export_vars@"><img src="portrait-bits?@portrait_export_vars@" align="right" width="@width@" height="@height@"></a><br />

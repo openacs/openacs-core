@@ -1,6 +1,6 @@
-<master src="master">
+<master>
 <property name="title">Erase Portrait</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <if @admin_p@ eq 0>
   <p>Are you sure that you want to erase your portrait?</p>

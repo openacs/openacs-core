@@ -1,6 +1,6 @@
-<master src="master">
+<master>
 <property name=title>Registration History</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 <table>
   <tr><th>Year</th><th align="left">Month</th><th>Registrations</th></tr>
 <multiple name="user_rows">

@@ -15,7 +15,7 @@ ad_page_contract {
     required_rel_segment:optional
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     segment_name:onevalue
     return_url_enc:onevalue
     violations:onerow
@@ -35,7 +35,7 @@ ad_page_contract {
 
 set return_url_enc [ad_urlencode "[ad_conn url]?[ad_export_vars {rel_segment constraint_name rel_side required_rel_segment return_url}]"]
 
-set context_bar [list [list "../" "Relational segments"] [list "../one?segment_id=$rel_segment" "One Segment"] "Add constraint"]
+set context [list [list "../" "Relational segments"] [list "../one?segment_id=$rel_segment" "One Segment"] "Add constraint"]
 
 set package_id [ad_conn package_id]
 
