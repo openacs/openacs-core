@@ -190,10 +190,11 @@ ad_proc ad_table {
         -Taudit {}
         -Trows_per_band 1
         -Tband_colors {{} {"#ececec"}}
+        -Tband_classes {{even} {odd}}
         -Trows_per_page 0
         -Tmax_rows 0
-        -Ttable_extra_html {}
-        -Theader_row_extra {bgcolor="#f8f8f8"}
+        -Ttable_extra_html {cellpadding=3 cellspacing=0 class="table-display"}
+        -Theader_row_extra {bgcolor="#f8f8f8" class="table-header"}
         -Ttable_break_html "<br /><br />"
         -Tpre_row_code {}
         -Trow_code {[subst $Trow_default]}
@@ -281,7 +282,9 @@ ad_proc ad_table {
 	set Tband_count 0
 	set Tpage_count 0
 	set Tband_color 0
+	set Tband_class 0
 	set Tn_bands [llength $Tband_colors]
+	set Tn_band_classes [llength $Tband_classes]
 	set Tform [ad_conn form]
 	
 	# export variables from calling environment
@@ -418,28 +421,31 @@ ad_proc ad_table {
 
 	    if { $Trows_per_page && $Tpage_count >= $Trows_per_page } { 
 		set Tband_color 0
+		set Tband_class 0
 		set Tband_count 0
 		set Tpage_count 0
 
 	    }
 
+            set Trow_default {}
 	    # generate the row band color 
-	    if { $Tn_bands } {
-		if { $Tband_count >= $Trows_per_band } {
-		    set Tband_count 0
-		    set Tband_color [expr ($Tband_color + 1) % $Tn_bands ]
-		}
-		# do this check since we would like the ability to band with
-		# page background as well
-		if {[empty_string_p [lindex $Tband_colors $Tband_color]]} {
-		    set Trow_default "<tr>\n"
-		} else {
-		    set Trow_default "<tr bgcolor=\"[lindex $Tband_colors $Tband_color]\">\n"
-		}
-	    } else { 
-		set Trow_default "<tr>\n"
-	    }
+            if { $Tband_count >= $Trows_per_band } {
+                set Tband_count 0
+                set Tband_color [expr ($Tband_color + 1) % $Tn_bands ]
+                set Tband_class [expr ($Tband_class + 1) % $Tn_band_classes ]
+            }
+            # do this check since we would like the ability to band with
+            # page background as well
+            if {$Tn_bands && ![empty_string_p [lindex $Tband_colors $Tband_color]]} {
+                append Trow_default " bgcolor=[lindex $Tband_colors $Tband_color]"
+            }
+            if {$Tn_band_classes && ![empty_string_p [lindex $Tband_classes $Tband_class]]} {
+                append Trow_default " class=\"[lindex $Tband_classes $Tband_class]\""
+            }
+
 	    
+            set Trow_default "<tr$Trow_default>"
+
 	    append Thtml [subst $Trow_code]
 	    
 	    foreach Ti $Tcolumn_list {
