@@ -9,6 +9,7 @@
     from site_nodes s, apm_packages p
     where s.object_id = p.package_id
     and p.package_key = 'acs-subsite'
+    order by upper(instance_name), instance_name
 
       </querytext>
 </fullquery>
