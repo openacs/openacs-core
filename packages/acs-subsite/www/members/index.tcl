@@ -88,6 +88,7 @@ template::list::create \
     -key rel_id \
     -row_pretty_plural "members" \
     -page_size 50 \
+    -page_flush_p t \
     -page_query_name members_pagination \
     -actions $actions \
     -elements {
@@ -104,32 +105,39 @@ template::list::create \
             label "[_ acs-subsite.Role]"
             display_template {
                 @members.rel_role_pretty@
+            }
+        }
+        rel_role_action {
+            label {}
+            display_template {
                 <if @members.make_admin_url@ not nil>
-                  (<a href="@members.make_admin_url@">#acs-subsite.Make_administrator#</a>)
+                  <a href="@members.make_admin_url@">#acs-subsite.Make_administrator#</a>
                 </if>
                 <if @members.make_member_url@ not nil>
-                  (<a href="@members.make_member_url@">#acs-subsite.Make_member#</a>)
+                  <a href="@members.make_member_url@">#acs-subsite.Make_member#</a>
                 </if>
             }
         }
         member_state_pretty {
             label "[_ acs-subsite.Member_State]"
+        }
+        member_state_change {
+            label {}
             display_template {
-                @members.member_state_pretty@
                 <if @members.approve_url@ not nil>
-                  (<a href="@members.approve_url@">#acs-subsite.Approve#</a>)
+                  <a href="@members.approve_url@">#acs-subsite.Approve#</a>
                 </if>
                 <if @members.reject_url@ not nil>
-                  (<a href="@members.reject_url@">#acs-subsite.Reject#</a>)
+                  <a href="@members.reject_url@">#acs-subsite.Reject#</a>
                 </if>
                 <if @members.ban_url@ not nil>
-                  (<a href="@members.ban_url@">#acs-subsite.Ban#</a>)
+                  <a href="@members.ban_url@">#acs-subsite.Ban#</a>
                 </if>
                 <if @members.delete_url@ not nil>
-                  (<a href="@members.delete_url@">#acs-subsite.Delete#</a>)
+                  <a href="@members.delete_url@">#acs-subsite.Delete#</a>
                 </if>
                 <if @members.remove_url@ not nil>
-                  (<a href="@members.remove_url@">#acs-subsite.Remove#</a>)
+                  <a href="@members.remove_url@">#acs-subsite.Remove#</a>
                 </if>
             }
         }
@@ -150,10 +158,6 @@ template::list::create \
         email {
             label "[_ acs-subsite.Email]"
             orderby "u.email"
-        }
-        rel_role {
-            label "[_ acs-subsite.Role]"
-            orderby "role.pretty_name"
         }
     }
 
