@@ -46,11 +46,11 @@ list::create \
                 <if @authorities.sort_order@ ne @authorities.highest_sort_order@>
                   <a href="@authorities.sort_order_url_up@" title="Move this authority up"><img src="/resources/acs-subsite/arrow-up.gif" border="0" width="15" height="15"></a>
                 </if>
-                <else><img src="/resources/spacer.gif" width="15" height="15"></else>
+                <else><img src="/resources/acs-subsite/spacer.gif" width="15" height="15"></else>
                 <if @authorities.sort_order@ ne  @authorities.lowest_sort_order@>
                   <a href="@authorities.sort_order_url_down@" title="Move this authority down"><img src="/resources/acs-subsite/arrow-down.gif" border="0" width="15" height="15"></a>
                 </if>
-                <else><img src="/resources/spacer.gif" width="15" height="15"></else>
+                <else><img src="/resources/acs-subsite/spacer.gif" width="15" height="15"></else>
           }
         }
         registration {
