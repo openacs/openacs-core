@@ -17,7 +17,6 @@ ad_page_contract {
     export_user_id:onevalue
     ad_url:onevalue
     member_link:onevalue
-    subsite_url:onevalue
     pvt_home_url:onevalue
 }
 
@@ -32,16 +31,15 @@ set page_title [ad_pvt_home_name]
 
 set pvt_home_url [ad_pvt_home]
 
-set subsite_url [subsite::get_element -element url]
-
 set context [list $page_title]
+
+set fragments [callback user::workspace -user_id $user_id]
 
 set ad_url [ad_url]
 
 set community_member_url [acs_community_member_url -user_id $user_id]
 
 set notifications_url [lindex [site_node::get_children -node_id [subsite::get_element -element node_id] -package_key "notifications"] 0]
-
 
 set system_name [ad_system_name]
 

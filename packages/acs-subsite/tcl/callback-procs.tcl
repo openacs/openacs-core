@@ -1,0 +1,26 @@
+ad_library {
+    Callback definitions 
+
+    @author Jeff Davis <davis@xarg.net>
+    @creation-date 2005-03-11
+    @cvs-id $Id$
+}
+
+ad_proc -public -callback user::workspace {
+    -user_id
+} {
+    used to generate html fragments for display on the /pvt/home page.
+
+    The html fragment should have an h2 header for sectioning.
+
+    @param user_id - the user to display
+
+    @see callback::user::workspace::impl::acs-subsite
+} -
+
+
+ad_proc -public -callback user::workspace -impl acs-subsite {} {
+    Generate a table showing the application group membership 
+} {
+    return [template::adp_include /packages/acs-subsite/lib/user-subsites [list user_id $user_id]]
+}
