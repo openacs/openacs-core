@@ -90,10 +90,10 @@
         <th bgcolor=#c0c0c0>Testcase id</th>
         <th bgcolor=#c0c0c0>Categories</th>
         <th bgcolor=#c0c0c0>Description</th>
+        <th bgcolor=#c0c0c0>Result</th>
         <th bgcolor=#c0c0c0>Timestamp</th>
         <th bgcolor=#c0c0c0>Passes</th>
         <th bgcolor=#c0c0c0>Fails</th>
-        <th bgcolor=#c0c0c0>Result</th>
     </tr>
     <multiple name="tests">
       <if @tests.marker@ eq 1>
@@ -110,9 +110,6 @@
               <font color=#ff0000> fail </font>
           </td>
         </if><else>
-          <td> @tests.timestamp@ </td>
-          <td> @tests.passes@ </td>
-          <td> @tests.fails@ </td>
           <td>
             <if @tests.fails@ gt 0>
               <font color=#ff0000> fail </font>
@@ -120,6 +117,9 @@
               passed
             </else>
           </td>
+          <td> @tests.timestamp@ </td>
+          <td> @tests.passes@ </td>
+          <td> @tests.fails@ </td>
         </else>
       </tr>
     </multiple>

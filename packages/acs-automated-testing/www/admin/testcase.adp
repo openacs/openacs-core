@@ -65,7 +65,7 @@
             </font>
           </if>
         </td>
-        <td> @tests.notes@ </td>
+        <td> <pre>@tests.notes@</pre> </td>
   
       </tr>
     </multiple>
