@@ -2417,6 +2417,67 @@ ad_proc -public ad_schedule_proc {
            in seconds, otherwise a list of interval arguments to pass to
            ns_schedule_daily or ns_schedule_weekly
     @param proc The proc to schedule
+# Brad Duell (bduell@ncacasi.org) 07/10/2003
+# User session variables, then redirect
+ad_proc -public ad_cache_returnredirect { url { persistent "f" } { excluded_vars "" } } {
+    An addition to ad_returnredirect.  It caches all variables in the redirect except those in excluded_vars
+    and then calls ad_returnredirect with the resultant string.
+
+    @author Brad Duell (bduell@ncacasi.org)
+
+} {
+    util_memoize_flush_regexp [list [ad_conn session_id] [ad_conn package_id]]
+
+    set url_list [split $url "?"]
+    set url [lindex $url_list 0]
+    set vars [lindex $url_list 1]
+
+    set excluded_vars_list ""
+    set excluded_vars_url ""
+    for { set i 0 } { $i < [llength $excluded_vars] } { incr i } {
+	set item [lindex [lindex $excluded_vars $i] 0]
+	set value [lindex [lindex $excluded_vars $i] 1]
+	if { [empty_string_p $value] } {
+	    # Obtain value from adp level
+	    upvar #[template::adp_level] __item item_reference
+	    set item_reference $item
+	    upvar #[template::adp_level] __value value_reference
+	    uplevel #[template::adp_level] {set __value [expr $$__item]}
+	    set value $value_reference
+	}
+	lappend excluded_vars_list $item
+	if { ![empty_string_p $value] } {
+	    # Value provided
+	    if { ![empty_string_p $excluded_vars_url] } {
+		append excluded_vars_url "&"
+	    }
+	    append excluded_vars_url [export_vars -url [list [list "$item" "$value"]]]
+	}
+    }
+
+    set saved_list ""
+    if { ![empty_string_p $vars] } {
+	foreach item_value [split $vars "&"] {
+	    set item_value_pair [split $item_value "="]
+	    set item [lindex $item_value_pair 0]
+	    set value [ns_urldecode [lindex $item_value_pair 1]]
+	    if { [lsearch -exact $excluded_vars_list $item] == -1 } {
+		# No need to save the value if it's being passed ...
+		if { [lsearch -exact $saved_list $item] != -1 } {
+		    # Allows for multiple values ...
+		    append value " [ad_get_client_property [ad_conn package_id] $item]"
+		} else {
+		    # We'll keep track of who we've saved for this package ...
+		    lappend saved_list $item
+		}
+		ad_set_client_property -persistent $persistent [ad_conn package_id] $item $value
+	    }
+	}
+    }
+
+    ad_returnredirect "$url?$excluded_vars_url"
+}
+
     @param args And the args to pass it
 
 } {
