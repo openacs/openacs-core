@@ -19,7 +19,7 @@
         <input type=hidden name="object_id" value="@object_id@">
           <ul>
             <multiple name="acl">
-              <li> @acl.grantee_name@, @acl.privilege@ <input type="checkbox" name="revoke_list" value="$grantee_id $privilege"></li>
+              <li> @acl.grantee_name@, @acl.privilege@ <input type="checkbox" name="revoke_list" value="@acl.grantee_id@ @acl.privilege@"></li>
             </multiple>
           </ul>
     </if>
