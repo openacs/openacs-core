@@ -87,7 +87,8 @@ as
         creation_date in acs_objects.creation_date%TYPE default sysdate,
         creation_user in acs_objects.creation_user%TYPE default null,
         creation_ip   in acs_objects.creation_ip%TYPE   default null,
-        is_live       in char                           default 't'
+        is_live       in char                           default 't',
+        storage_type  in cr_items.storage_type%TYPE	default 'file'
     ) return acs_objects.object_id%TYPE;
 
     function edit_file (
@@ -119,7 +120,8 @@ as
         creation_date in acs_objects.creation_date%TYPE default sysdate,
         creation_user in acs_objects.creation_user%TYPE default null,
         creation_ip   in acs_objects.creation_ip%TYPE   default null,
-        is_live       in char                           default 't'
+        is_live       in char                           default 't',
+        storage_type  in cr_items.storage_type%TYPE	default 'file'
     ) return acs_objects.object_id%TYPE;
 
     function edit_image (
@@ -391,7 +393,8 @@ as
         creation_date in acs_objects.creation_date%TYPE default sysdate,
         creation_user in acs_objects.creation_user%TYPE default null,
         creation_ip   in acs_objects.creation_ip%TYPE   default null,
-        is_live       in char                           default 't'
+        is_live       in char                           default 't',
+        storage_type  in cr_items.storage_type%TYPE	default 'file'
     ) return acs_objects.object_id%TYPE
     is
         v_file_id      cr_items.item_id%TYPE;
@@ -404,7 +407,8 @@ as
             item_id        => file_id,
             creation_date  => creation_date,
             creation_user  => creation_user,
-            creation_ip    => creation_ip
+            creation_ip    => creation_ip,
+            storage_type   => storage_type
         );
 
         -- create an initial revision for the new attachment
@@ -477,7 +481,8 @@ as
         creation_date  in acs_objects.creation_date%TYPE  default sysdate,
         creation_user  in acs_objects.creation_user%TYPE  default null,
         creation_ip    in acs_objects.creation_ip%TYPE    default null,
-        is_live        in char                            default 't'
+        is_live        in char                            default 't',
+        storage_type   in cr_items.storage_type%TYPE      default 'file'
     ) return acs_objects.object_id%TYPE
     is
         v_image_id     cr_items.item_id%TYPE;
@@ -490,7 +495,8 @@ as
             item_id        => image_id,
             creation_date  => creation_date,
             creation_user  => creation_user,
-            creation_ip    => creation_ip
+            creation_ip    => creation_ip,
+            storage_type   => storage_type
         );
 
         -- create an initial revision for the new attachment

@@ -1142,6 +1142,9 @@ ad_proc -public ad_html_text_convert {
     Text to html does ad_text_to_html, and html to text does a ad_html_to_text.
     See those procs for details.
 
+    DRB: Modified this to accept mime types (text/plain or text/html).  Simplies things when 
+    providing confirmation pages for input destined for the content repository ...
+
     @param from specify with html or text what type of text you're providing.
     @param to specify what format you want this translated into
     
@@ -1149,12 +1152,15 @@ ad_proc -public ad_html_text_convert {
     @creation-date 19 July 2000
 } {
     switch $from {
+        text/html -
 	html {
 	    switch $to {
+                text/html -
 		html {
 		    ad_html_security_check $text
 		    return [util_close_html_tags $text]
 		}
+                text/plain -
 		text {
 		    return [ad_html_to_text -- $text]
 		}
@@ -1163,11 +1169,14 @@ ad_proc -public ad_html_text_convert {
 		}
 	    }
 	} 
+        text/plain -
 	text {
 	    switch $to {
+                text/html -
 		html {
 		    return [ad_text_to_html -- $text]
 		}
+                text/plain -
 		text {
 		    return [wrap_string $text 70]
 		}
