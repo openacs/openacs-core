@@ -1746,13 +1746,14 @@ create or replace function apm_package__highest_version (varchar) returns intege
 declare
      highest_version__package_key    alias for $1;
      v_version_id                    apm_package_versions.version_id%TYPE;
+     v_max_version                   varchar;
 begin
-     select version_id into v_version_id
-	from apm_package_version_info i 
-	where apm_package_version__sortable_version_name(version_name) = 
-             (select max(apm_package_version__sortable_version_name(v.version_name))
-	             from apm_package_version_info v where v.package_key = highest_version__package_key)
-	and package_key = highest_version__package_key;
+     select max(apm_package_version__sortable_version_name(v.version_name)) into v_max_version 
+       from apm_package_version_info v where v.package_key = highest_version__package_key;
+
+     select version_id into v_version_id from apm_package_version_info i 
+	where apm_package_version__sortable_version_name(version_name) = v_max_version and i.package_key = highest_version__package_key;
+
       if NOT FOUND then 
          return 0;
       else

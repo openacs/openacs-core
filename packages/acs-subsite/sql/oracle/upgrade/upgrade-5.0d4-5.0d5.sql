@@ -288,7 +288,7 @@ as
 
     membership_rel.del(profile_id);
 
-  end delete;
+  end del;
 
 end user_profile;
 /

@@ -1,6 +1,6 @@
 This is the OpenACS - the Open Architecture Community System.
 
-Version 5.0.0 beta 4
+Version 5.0.0 Final
 
 --------------
 
@@ -35,11 +35,8 @@ http://philip.greenspun.com/panda/community
 The original ACS was Copyright (C) 1995-2000 ArsDigita Corporation
 and, in some cases, individual authors.
 
-OpenACS is a community created and supported software system, visit
+OpenACS is a community created and supported software system; visit
 http://openacs.org for more information. 
-
-The major change in OpenACS 4.x is its database-independence; it can
-use either PostgreSQL (7.2 or later) or Oracle (8.1.6 or later).
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

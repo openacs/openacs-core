@@ -448,6 +448,36 @@ ad_proc -public group::add_member {
                               -join_policy $group(join_policy) \
                               -create_p $create_p]
     }
+
+    if { ![string equal $rel_type "membership_rel"] } {
+        # Add them with a membership_rel first
+        relation_add -member_state $member_state "membership_rel" $group_id $user_id
+    }
     
     relation_add -member_state $member_state $rel_type $group_id $user_id
+}
+
+
+ad_proc -public group::remove_member {
+    {-group_id:required}
+    {-user_id:required}
+} {
+    Removes a user from a group. No permission checking.
+} {       
+
+    # Find all acs_rels between this group and this user, which are membership_rels or descendants thereof (admin_rels, for example)
+    set rel_id_list [db_list select_rel_ids { 
+        select r.rel_id
+        from   acs_rels r,
+               membership_rels mr
+        where  r.rel_id = mr.rel_id
+        and    r.object_id_one = :group_id
+        and    r.object_id_two = :user_id
+    }]
+    
+    db_transaction {
+        foreach rel_id $rel_id_list {
+            relation_remove $rel_id
+        }
+    }
 }

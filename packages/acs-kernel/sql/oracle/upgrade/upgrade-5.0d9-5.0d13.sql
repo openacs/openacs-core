@@ -3175,18 +3175,39 @@ end acs_user;
 /
 show errors
 
---
--- packages/acs-kernel/sql/groups-body-create.sql
---
--- @author rhs@mit.edu
--- @creation-date 2000-08-22
--- @cvs-id $Id$
---
 
 
---------------------
--- PACKAGE BODIES --
---------------------
+
+create or replace package composition_rel
+as
+
+  function new (
+    rel_id              in composition_rels.rel_id%TYPE default null,
+    rel_type            in acs_rels.rel_type%TYPE default 'composition_rel',
+    object_id_one       in acs_rels.object_id_one%TYPE,
+    object_id_two       in acs_rels.object_id_two%TYPE,
+    creation_user       in acs_objects.creation_user%TYPE default null,
+    creation_ip         in acs_objects.creation_ip%TYPE default null
+  ) return composition_rels.rel_id%TYPE;
+
+  procedure del (
+    rel_id      in composition_rels.rel_id%TYPE
+  );
+
+  function check_path_exists_p (
+    component_id        in groups.group_id%TYPE,
+    container_id        in groups.group_id%TYPE
+  ) return char;
+
+  function check_representation (
+    rel_id      in composition_rels.rel_id%TYPE
+  ) return char;
+
+end composition_rel;
+/
+show errors
+
+
 
 create or replace package body composition_rel
 as
@@ -3367,6 +3388,52 @@ show errors
 
 
 
+create or replace package membership_rel
+as
+
+  function new (
+    rel_id              in membership_rels.rel_id%TYPE default null,
+    rel_type            in acs_rels.rel_type%TYPE default 'membership_rel',
+    object_id_one       in acs_rels.object_id_one%TYPE,
+    object_id_two       in acs_rels.object_id_two%TYPE,
+    member_state        in membership_rels.member_state%TYPE default 'approved',
+    creation_user       in acs_objects.creation_user%TYPE default null,
+    creation_ip         in acs_objects.creation_ip%TYPE default null
+  ) return membership_rels.rel_id%TYPE;
+
+  procedure ban (
+    rel_id      in membership_rels.rel_id%TYPE
+  );
+
+  procedure approve (
+    rel_id      in membership_rels.rel_id%TYPE
+  );
+
+  procedure reject (
+    rel_id      in membership_rels.rel_id%TYPE
+  );
+
+  procedure unapprove (
+    rel_id      in membership_rels.rel_id%TYPE
+  );
+
+  procedure deleted (
+    rel_id      in membership_rels.rel_id%TYPE
+  );
+
+  procedure del (
+    rel_id      in membership_rels.rel_id%TYPE
+  );
+
+  function check_representation (
+    rel_id      in membership_rels.rel_id%TYPE
+  ) return char;
+
+end membership_rel;
+/
+show errors
+
+
 
 create or replace package body membership_rel
 as
@@ -3543,6 +3610,28 @@ show errors
 
 
 
+create or replace package admin_rel
+as
+
+  function new (
+    rel_id              in admin_rels.rel_id%TYPE default null,
+    rel_type            in acs_rels.rel_type%TYPE default 'admin_rel',
+    object_id_one       in acs_rels.object_id_one%TYPE,
+    object_id_two       in acs_rels.object_id_two%TYPE,
+    member_state        in membership_rels.member_state%TYPE default 'approved',
+    creation_user       in acs_objects.creation_user%TYPE default null,
+    creation_ip         in acs_objects.creation_ip%TYPE default null
+  ) return admin_rels.rel_id%TYPE;
+
+  procedure del (
+    rel_id      in admin_rels.rel_id%TYPE
+  );
+
+end admin_rel;
+/
+show errors
+
+
 create or replace package body admin_rel
 as
 
@@ -3589,6 +3678,46 @@ end admin_rel;
 show errors
 
 
+
+create or replace package acs_group
+is
+ function new (
+  group_id              in groups.group_id%TYPE default null,
+  object_type           in acs_objects.object_type%TYPE
+                           default 'group',
+  creation_date         in acs_objects.creation_date%TYPE
+                           default sysdate,
+  creation_user         in acs_objects.creation_user%TYPE
+                           default null,
+  creation_ip           in acs_objects.creation_ip%TYPE default null,
+  email                 in parties.email%TYPE default null,
+  url                   in parties.url%TYPE default null,
+  group_name            in groups.group_name%TYPE,
+  join_policy           in groups.join_policy%TYPE default null,
+  context_id	in acs_objects.context_id%TYPE default null
+ ) return groups.group_id%TYPE;
+
+ procedure del (
+   group_id     in groups.group_id%TYPE
+ );
+
+ function name (
+  group_id      in groups.group_id%TYPE
+ ) return varchar2;
+
+ function member_p (
+  party_id      in parties.party_id%TYPE,
+  group_id	in groups.group_id%TYPE,
+  cascade_membership char	
+ ) return char;
+
+ function check_representation (
+  group_id      in groups.group_id%TYPE
+ ) return char;
+
+end acs_group;
+/
+show errors
 
 create or replace package body acs_group
 is
@@ -3772,155 +3901,9 @@ end acs_group;
 /
 show errors
 
---
--- packages/acs-kernel/sql/groups-create.sql
---
--- @author rhs@mit.edu
--- @creation-date 2000-08-22
--- @cvs-id $Id$
---
-
---------------
--- PACKAGES --
---------------
-
-create or replace package composition_rel
-as
-
-  function new (
-    rel_id              in composition_rels.rel_id%TYPE default null,
-    rel_type            in acs_rels.rel_type%TYPE default 'composition_rel',
-    object_id_one       in acs_rels.object_id_one%TYPE,
-    object_id_two       in acs_rels.object_id_two%TYPE,
-    creation_user       in acs_objects.creation_user%TYPE default null,
-    creation_ip         in acs_objects.creation_ip%TYPE default null
-  ) return composition_rels.rel_id%TYPE;
-
-  procedure del (
-    rel_id      in composition_rels.rel_id%TYPE
-  );
-
-  function check_path_exists_p (
-    component_id        in groups.group_id%TYPE,
-    container_id        in groups.group_id%TYPE
-  ) return char;
-
-  function check_representation (
-    rel_id      in composition_rels.rel_id%TYPE
-  ) return char;
-
-end composition_rel;
-/
-show errors
 
 
-create or replace package membership_rel
-as
 
-  function new (
-    rel_id              in membership_rels.rel_id%TYPE default null,
-    rel_type            in acs_rels.rel_type%TYPE default 'membership_rel',
-    object_id_one       in acs_rels.object_id_one%TYPE,
-    object_id_two       in acs_rels.object_id_two%TYPE,
-    member_state        in membership_rels.member_state%TYPE default 'approved',
-    creation_user       in acs_objects.creation_user%TYPE default null,
-    creation_ip         in acs_objects.creation_ip%TYPE default null
-  ) return membership_rels.rel_id%TYPE;
-
-  procedure ban (
-    rel_id      in membership_rels.rel_id%TYPE
-  );
-
-  procedure approve (
-    rel_id      in membership_rels.rel_id%TYPE
-  );
-
-  procedure reject (
-    rel_id      in membership_rels.rel_id%TYPE
-  );
-
-  procedure unapprove (
-    rel_id      in membership_rels.rel_id%TYPE
-  );
-
-  procedure deleted (
-    rel_id      in membership_rels.rel_id%TYPE
-  );
-
-  procedure del (
-    rel_id      in membership_rels.rel_id%TYPE
-  );
-
-  function check_representation (
-    rel_id      in membership_rels.rel_id%TYPE
-  ) return char;
-
-end membership_rel;
-/
-show errors
-
-
-create or replace package admin_rel
-as
-
-  function new (
-    rel_id              in admin_rels.rel_id%TYPE default null,
-    rel_type            in acs_rels.rel_type%TYPE default 'admin_rel',
-    object_id_one       in acs_rels.object_id_one%TYPE,
-    object_id_two       in acs_rels.object_id_two%TYPE,
-    member_state        in membership_rels.member_state%TYPE default 'approved',
-    creation_user       in acs_objects.creation_user%TYPE default null,
-    creation_ip         in acs_objects.creation_ip%TYPE default null
-  ) return admin_rels.rel_id%TYPE;
-
-  procedure del (
-    rel_id      in admin_rels.rel_id%TYPE
-  );
-
-end admin_rel;
-/
-show errors
-
-
-create or replace package acs_group
-is
- function new (
-  group_id              in groups.group_id%TYPE default null,
-  object_type           in acs_objects.object_type%TYPE
-                           default 'group',
-  creation_date         in acs_objects.creation_date%TYPE
-                           default sysdate,
-  creation_user         in acs_objects.creation_user%TYPE
-                           default null,
-  creation_ip           in acs_objects.creation_ip%TYPE default null,
-  email                 in parties.email%TYPE default null,
-  url                   in parties.url%TYPE default null,
-  group_name            in groups.group_name%TYPE,
-  join_policy           in groups.join_policy%TYPE default null,
-  context_id	in acs_objects.context_id%TYPE default null
- ) return groups.group_id%TYPE;
-
- procedure del (
-   group_id     in groups.group_id%TYPE
- );
-
- function name (
-  group_id      in groups.group_id%TYPE
- ) return varchar2;
-
- function member_p (
-  party_id      in parties.party_id%TYPE,
-  group_id	in groups.group_id%TYPE,
-  cascade_membership char	
- ) return char;
-
- function check_representation (
-  group_id      in groups.group_id%TYPE
- ) return char;
-
-end acs_group;
-/
-show errors
 
 -- Data model to keep a journal of all actions on objects.
 -- 
@@ -4022,19 +4005,78 @@ end journal_entry;
 /
 show errors;
 
---
--- /packages/acs-kernel/sql/rel-constraints-create.sql
--- 
--- Add support for relational constraints based on relational segmentation.
---
--- @author Oumi Mehrotra (oumi@arsdigita.com)
--- @creation-date 2000-11-22
--- @cvs-id $Id$
 
--- Copyright (C) 1999-2000 ArsDigita Corporation
--- This is free software distributed under the terms of the GNU Public
--- License.  Full text of the license is available from the GNU Project:
--- http://www.fsf.org/copyleft/gpl.html
+
+create or replace package rel_constraint
+as
+
+  function new (
+    --/** Creates a new relational constraint
+    -- 
+    --    @author Oumi Mehrotra (oumi@arsdigita.com)
+    --    @creation-date 12/2000
+    -- 
+    --*/
+    constraint_id	in rel_constraints.constraint_id%TYPE default null,
+    constraint_type     in acs_objects.object_type%TYPE default 'rel_constraint',
+    constraint_name	in rel_constraints.constraint_name%TYPE,
+    rel_segment		in rel_constraints.rel_segment%TYPE,
+    rel_side	        in rel_constraints.rel_side%TYPE default 'two',
+    required_rel_segment in rel_constraints.required_rel_segment%TYPE,
+    context_id		in acs_objects.context_id%TYPE default null,
+    creation_user	in acs_objects.creation_user%TYPE default null,
+    creation_ip		in acs_objects.creation_ip%TYPE default null
+  ) return rel_constraints.constraint_id%TYPE;
+
+  procedure del (
+    constraint_id	in rel_constraints.constraint_id%TYPE
+  );
+
+  function get_constraint_id (
+    --/** Returns the constraint_id associated with the specified
+    --    rel_segment and required_rel_segment for the specified site.
+    -- 
+    --    @author Oumi Mehrotra (oumi@arsdigita.com)
+    --    @creation-date 12/2000
+    -- 
+    --*/
+    rel_segment		in rel_constraints.rel_segment%TYPE,
+    rel_side	        in rel_constraints.rel_side%TYPE default 'two',
+    required_rel_segment in rel_constraints.required_rel_segment%TYPE
+  ) return rel_constraints.constraint_id%TYPE;
+
+  function violation (
+    --/** Checks to see if there a relational constraint is violated
+    --    by the precense of the specified relation. If not, returns 
+    --    null. If so, returns an appropriate error string.
+    -- 
+    --    @author Oumi Mehrotra (oumi@arsdigita.com)
+    --    @creation-date 12/2000
+    -- 
+    --    @param rel_id  The relation for which we want to find 
+    --                   any violations
+    --*/
+    rel_id	in acs_rels.rel_id%TYPE
+  ) return varchar;
+
+
+  function violation_if_removed (
+    --/** Checks to see if removing the specified relation would violate
+    --    a relational constraint. If not, returns null. If so, returns
+    --    an appropriate error string.
+    -- 
+    --    @author Michael Bryzek (mbryzek@arsdigita.com)
+    --    @creation-date 1/2001
+    -- 
+    --    @param rel_id  The relation that we are planning to remove
+    --*/
+    rel_id	in acs_rels.rel_id%TYPE
+  ) return varchar;
+
+end;
+/
+show errors
+
 
 
 create or replace package body rel_constraint
@@ -4178,108 +4220,89 @@ end;
 /
 show errors
 
---
--- /packages/acs-kernel/sql/rel-constraints-create.sql
--- 
--- Add support for relational constraints based on relational segmentation.
---
--- @author Oumi Mehrotra (oumi@arsdigita.com)
--- @creation-date 2000-11-22
--- @cvs-id $Id$
 
--- Copyright (C) 1999-2000 ArsDigita Corporation
--- This is free software distributed under the terms of the GNU Public
--- License.  Full text of the license is available from the GNU Project:
--- http://www.fsf.org/copyleft/gpl.html
 
---------------
--- PACKAGES --
---------------
+create or replace package rel_segment
+is
+ function new (
+  --/** Creates a new relational segment
+  -- 
+  --    @author Oumi Mehrotra (oumi@arsdigita.com)
+  --    @creation-date 12/2000
+  -- 
+  --*/
+  segment_id            in rel_segments.segment_id%TYPE default null,
+  object_type           in acs_objects.object_type%TYPE
+                           default 'rel_segment',
+  creation_date         in acs_objects.creation_date%TYPE
+                           default sysdate,
+  creation_user         in acs_objects.creation_user%TYPE
+                           default null,
+  creation_ip           in acs_objects.creation_ip%TYPE default null,
+  email                 in parties.email%TYPE default null,
+  url                   in parties.url%TYPE default null,
+  segment_name          in rel_segments.segment_name%TYPE,
+  group_id              in rel_segments.group_id%TYPE,
+  rel_type              in rel_segments.rel_type%TYPE,
+  context_id	in acs_objects.context_id%TYPE default null
+ ) return rel_segments.segment_id%TYPE;
 
-create or replace package rel_constraint
-as
-
-  function new (
-    --/** Creates a new relational constraint
+ procedure del (
+    --/** Deletes a relational segment
     -- 
     --    @author Oumi Mehrotra (oumi@arsdigita.com)
     --    @creation-date 12/2000
     -- 
     --*/
-    constraint_id	in rel_constraints.constraint_id%TYPE default null,
-    constraint_type     in acs_objects.object_type%TYPE default 'rel_constraint',
-    constraint_name	in rel_constraints.constraint_name%TYPE,
-    rel_segment		in rel_constraints.rel_segment%TYPE,
-    rel_side	        in rel_constraints.rel_side%TYPE default 'two',
-    required_rel_segment in rel_constraints.required_rel_segment%TYPE,
-    context_id		in acs_objects.context_id%TYPE default null,
-    creation_user	in acs_objects.creation_user%TYPE default null,
-    creation_ip		in acs_objects.creation_ip%TYPE default null
-  ) return rel_constraints.constraint_id%TYPE;
+   segment_id     in rel_segments.segment_id%TYPE
+ );
 
-  procedure del (
-    constraint_id	in rel_constraints.constraint_id%TYPE
-  );
+ function name (
+  segment_id      in rel_segments.segment_id%TYPE
+ ) return rel_segments.segment_name%TYPE;
 
-  function get_constraint_id (
-    --/** Returns the constraint_id associated with the specified
-    --    rel_segment and required_rel_segment for the specified site.
-    -- 
+ function get (
+    --/** EXPERIMENTAL / UNSTABLE -- use at your own risk
+    --    Get the id of a segment given a group_id and rel_type.
+    --    This depends on the uniqueness of group_id,rel_type.  We
+    --    might remove the unique constraint in the future, in which
+    --    case we would also probably remove this function.
+    --
     --    @author Oumi Mehrotra (oumi@arsdigita.com)
     --    @creation-date 12/2000
-    -- 
+    --
     --*/
-    rel_segment		in rel_constraints.rel_segment%TYPE,
-    rel_side	        in rel_constraints.rel_side%TYPE default 'two',
-    required_rel_segment in rel_constraints.required_rel_segment%TYPE
-  ) return rel_constraints.constraint_id%TYPE;
 
-  function violation (
-    --/** Checks to see if there a relational constraint is violated
-    --    by the precense of the specified relation. If not, returns 
-    --    null. If so, returns an appropriate error string.
-    -- 
+   group_id       in rel_segments.group_id%TYPE,
+   rel_type       in rel_segments.rel_type%TYPE
+ ) return rel_segments.segment_id%TYPE;
+
+ function get_or_new (
+    --/** EXPERIMENTAL / UNSTABLE -- use at your own risk
+    --
+    --    This function simplifies the use of segments a little by letting
+    --    you not have to worry about creating and initializing segments.
+    --    If the segment you're interested in exists, this function
+    --    returns its segment_id.
+    --    If the segment you're interested in doesn't exist, this function
+    --    does a pretty minimal amount of initialization for the segment
+    --    and returns a new segment_id.
+    --
     --    @author Oumi Mehrotra (oumi@arsdigita.com)
     --    @creation-date 12/2000
-    -- 
-    --    @param rel_id  The relation for which we want to find 
-    --                   any violations
+    --
     --*/
-    rel_id	in acs_rels.rel_id%TYPE
-  ) return varchar;
+   group_id       in rel_segments.group_id%TYPE,
+   rel_type       in rel_segments.rel_type%TYPE,
+   segment_name   in rel_segments.segment_name%TYPE
+                  default null
+ ) return rel_segments.segment_id%TYPE;
 
-
-  function violation_if_removed (
-    --/** Checks to see if removing the specified relation would violate
-    --    a relational constraint. If not, returns null. If so, returns
-    --    an appropriate error string.
-    -- 
-    --    @author Michael Bryzek (mbryzek@arsdigita.com)
-    --    @creation-date 1/2001
-    -- 
-    --    @param rel_id  The relation that we are planning to remove
-    --*/
-    rel_id	in acs_rels.rel_id%TYPE
-  ) return varchar;
-
-end;
+end rel_segment;
 /
 show errors
---
--- packages/acs-kernel/sql/rel-segments-create.sql
---
--- @author Oumi Mehrotra oumi@arsdigita.com
--- @creation-date 2000-11-22
--- @cvs-id $Id$
 
--- Copyright (C) 1999-2000 ArsDigita Corporation
--- This is free software distributed under the terms of the GNU Public
--- License.  Full text of the license is available from the GNU Project:
--- http://www.fsf.org/copyleft/gpl.html
 
-------------------
--- PACKAGE BODY --
-------------------
 
 create or replace package body rel_segment
 is
@@ -4419,105 +4442,6 @@ is
 
   return segment_name;
  end name;
-
-end rel_segment;
-/
-show errors
-
---
--- packages/acs-kernel/sql/rel-segments-create.sql
---
--- @author Oumi Mehrotra oumi@arsdigita.com
--- @creation-date 2000-11-22
--- @cvs-id $Id$
-
--- Copyright (C) 1999-2000 ArsDigita Corporation
--- This is free software distributed under the terms of the GNU Public
--- License.  Full text of the license is available from the GNU Project:
--- http://www.fsf.org/copyleft/gpl.html
-
--- WARNING!
--- Relational segments is a new and experimental concept.  The API may
--- change in the future, particularly the functions marked "EXPERIMENTAL".
--- 
-
--- create pl/sql package rel_segment
-
-create or replace package rel_segment
-is
- function new (
-  --/** Creates a new relational segment
-  -- 
-  --    @author Oumi Mehrotra (oumi@arsdigita.com)
-  --    @creation-date 12/2000
-  -- 
-  --*/
-  segment_id            in rel_segments.segment_id%TYPE default null,
-  object_type           in acs_objects.object_type%TYPE
-                           default 'rel_segment',
-  creation_date         in acs_objects.creation_date%TYPE
-                           default sysdate,
-  creation_user         in acs_objects.creation_user%TYPE
-                           default null,
-  creation_ip           in acs_objects.creation_ip%TYPE default null,
-  email                 in parties.email%TYPE default null,
-  url                   in parties.url%TYPE default null,
-  segment_name          in rel_segments.segment_name%TYPE,
-  group_id              in rel_segments.group_id%TYPE,
-  rel_type              in rel_segments.rel_type%TYPE,
-  context_id	in acs_objects.context_id%TYPE default null
- ) return rel_segments.segment_id%TYPE;
-
- procedure del (
-    --/** Deletes a relational segment
-    -- 
-    --    @author Oumi Mehrotra (oumi@arsdigita.com)
-    --    @creation-date 12/2000
-    -- 
-    --*/
-   segment_id     in rel_segments.segment_id%TYPE
- );
-
- function name (
-  segment_id      in rel_segments.segment_id%TYPE
- ) return rel_segments.segment_name%TYPE;
-
- function get (
-    --/** EXPERIMENTAL / UNSTABLE -- use at your own risk
-    --    Get the id of a segment given a group_id and rel_type.
-    --    This depends on the uniqueness of group_id,rel_type.  We
-    --    might remove the unique constraint in the future, in which
-    --    case we would also probably remove this function.
-    --
-    --    @author Oumi Mehrotra (oumi@arsdigita.com)
-    --    @creation-date 12/2000
-    --
-    --*/
-
-   group_id       in rel_segments.group_id%TYPE,
-   rel_type       in rel_segments.rel_type%TYPE
- ) return rel_segments.segment_id%TYPE;
-
- function get_or_new (
-    --/** EXPERIMENTAL / UNSTABLE -- use at your own risk
-    --
-    --    This function simplifies the use of segments a little by letting
-    --    you not have to worry about creating and initializing segments.
-    --    If the segment you're interested in exists, this function
-    --    returns its segment_id.
-    --    If the segment you're interested in doesn't exist, this function
-    --    does a pretty minimal amount of initialization for the segment
-    --    and returns a new segment_id.
-    --
-    --    @author Oumi Mehrotra (oumi@arsdigita.com)
-    --    @creation-date 12/2000
-    --
-    --*/
-   group_id       in rel_segments.group_id%TYPE,
-   rel_type       in rel_segments.rel_type%TYPE,
-   segment_name   in rel_segments.segment_name%TYPE
-                  default null
- ) return rel_segments.segment_id%TYPE;
 
 end rel_segment;
 /

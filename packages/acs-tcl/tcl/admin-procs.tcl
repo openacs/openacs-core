@@ -10,11 +10,13 @@ ad_library {
 
 ad_proc -deprecated -warn ad_ssl_available_p {} {
     Returns 1 if this AOLserver has the SSL module installed.
+
+    @see security::https_available_p
 } {
     return [security::https_available_p]
 }
 
-proc_doc ad_restrict_to_https {conn args why} {
+ad_proc -public ad_restrict_to_https {conn args why} {
     Redirects user to HTTPS.
 
     @author Allen Pulsifer (pulsifer@mediaone.net)
@@ -30,7 +32,7 @@ proc_doc ad_restrict_to_https {conn args why} {
     return "filter_return"
 }
 
-proc_doc ad_approval_system_inuse_p {} {
+ad_proc -public ad_approval_system_inuse_p {} {
     Returns 1 if the system is configured to use and approval system.
 } {
     if {[ad_parameter RegistrationRequiresEmailVerification] && [ad_parameter RegistrationRequiresApprovalP] } {
@@ -40,13 +42,13 @@ proc_doc ad_approval_system_inuse_p {} {
     }
 }
 
-proc_doc ad_user_class_parameters {} {
+ad_proc -private ad_user_class_parameters {} {
     Returns the list of parameter var names used to define a user class.
 } {
     return [list category_id country_code usps_abbrev intranet_user_p group_id last_name_starts_with email_starts_with expensive user_state sex age_above_years age_below_years registration_during_month registration_before_days registration_after_days registration_after_date last_login_before_days last_login_after_days last_login_equals_days number_visits_below number_visits_above user_class_id sql_post_select crm_state curriculum_elements_completed]
 }
  
-proc_doc ad_user_class_description { set_id } {
+ad_proc -private ad_user_class_description { set_id } {
     Takes an ns_set of key/value pairs and produces a human-readable description of the class of users specified.
 } {
     set clauses [list]
@@ -175,7 +177,7 @@ proc_doc ad_user_class_description { set_id } {
     return $pretty_description
 }
 
-proc_doc ad_user_class_query { set_id  } {
+ad_proc -private ad_user_class_query { set_id  } {
     Takes an ns_set of key/value pairs and produces a query for the class of users specified (one user per row returned).
 
     @param set_id The id of a ns_set containing all the parameters of the user class.
@@ -408,7 +410,7 @@ proc_doc ad_user_class_query { set_id  } {
 }
 
     
-proc_doc ad_user_class_query_count_only { set_id } {
+ad_proc -private ad_user_class_query_count_only { set_id } {
     Takes an ns_set of key/value pairs and produces a query that will compute the number of users in the class specified.
 } {
     set new_set [ns_set copy $set_id]
@@ -416,7 +418,7 @@ proc_doc ad_user_class_query_count_only { set_id } {
     return [ad_user_class_query $new_set]
 }
 
-proc_doc ad_registration_finite_state_machine_admin_links {
+ad_proc -private ad_registration_finite_state_machine_admin_links {
     member_state
     email_verified_p
     user_id

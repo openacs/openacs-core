@@ -12,7 +12,7 @@
              nvl(u.last_name || ' ', '') ||
              u.email || ' ' ||
              nvl(u.screen_name, '')) like upper('%'||:value||'%')
-      and    not exists (select 1 from acs_rels where object_id_one = $group_id and object_id_two = u.user_id)
+      and    not exists (select 1 from acs_rels where object_id_one = $group_id and object_id_two = u.user_id and rel_type = 'membership_rel')
       order  by name
 
       </querytext>

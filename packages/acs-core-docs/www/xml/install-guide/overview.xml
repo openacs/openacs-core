@@ -208,18 +208,18 @@
         <para>This is text that you will
           <computeroutput>see</computeroutput> and <userinput>type</userinput> in a command shell, including <replaceable>text you may have to
             change</replaceable>.  It is followed by a list of just the commands,
-          which you can copy and paste.</para>
+          which you can copy and paste. The command prompt varies by system; in the examples we use the form<computeroutput>[service0 aolserver]$</computeroutput>, where <computeroutput>service0</computeroutput> is the current user and <computeroutput>aolserver</computeroutput> is the current directory.  The root prompt is shown ending in # and all other prompts in $.</para>
         <screen>
-[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost aolserver]$ <userinput>svc -d /service/<replaceable>server1</replaceable></userinput>
-[nsadmin@localhost aolserver]$ <userinput>dropdb <replaceable>server1</replaceable></userinput>
+[root root]# <userinput>su - service0</userinput>
+[service0 aolserver]$ <userinput>svc -d /service/<replaceable>service0</replaceable></userinput>
+[service0 aolserver]$ <userinput>dropdb <replaceable>service0</replaceable></userinput>
 DROP DATABASE
-[nsadmin@localhost aolserver]$ <userinput>createdb <replaceable>server1</replaceable></userinput>
+[service0 aolserver]$ <userinput>createdb <replaceable>service0</replaceable></userinput>
 CREATE DATABASE
-<action>su - nsadmin
-svc -d /service/<replaceable>server1</replaceable>
-dropdb <replaceable>server1</replaceable>
-createdb <replaceable>server1</replaceable></action></screen>
+<action>su - service0
+svc -d /service/<replaceable>service0</replaceable>
+dropdb <replaceable>service0</replaceable>
+createdb <replaceable>service0</replaceable></action></screen>
       </listitem>
     </itemizedlist>
   </sect2>

@@ -739,7 +739,7 @@ proc sgml::Entity {opts entityrefcmd pcdatacmd entities ref} {
     upvar #0 $options(-statevariable) state
 
     if {![string length $entities]} {
-	set entities [namespace current EntityPredef]
+	set entities [namespace current]::EntityPredef
     }
 
     switch -glob -- $ref {

@@ -169,9 +169,31 @@ ad_proc -public template::util::date::from_ansi {
 }
 
 ad_proc -public template::util::date::get_property { what date } {
-    Access properties of the Date object
-    Is it better to name them symbolically, as opposed to 
-    using the format string codes ?
+
+    Returns a property of a date list, usually created by ad_form.
+
+    @param what the name of the property. one of:<ul>
+    <li>year</li>
+    <li>month</li>
+    <li>day</li>
+    <li>hours</li>
+    <li>minutes</li>
+    <li>seconds</li>
+    <li>format</li>
+    <li>long_month_name</li>
+    <li>short_month_name</li>
+    <li>days_in_month</li>
+    <li>short_year</li>
+    <li>short_hours</li>
+    <li>ampm</li>
+    <li>not_null</li>
+    <li>sql_date</li>
+    <li>linear_date</li>
+    <li>linear_date_no_time</li>
+    <li>display_date</li>
+    <li>clock</li>
+    </ul>
+    @param date the date widget list
 } {
 
   variable month_data
@@ -355,6 +377,9 @@ ad_proc -public template::util::date::get_property { what date } {
       }
       return [clock scan $value]
     }
+    default {
+      error "util::date::get_property: unknown property: '$what'."
+    }
   }
 }
 
@@ -372,7 +397,15 @@ ad_proc -public template::util::date::compare { date1 date2 } {
 }
 
 ad_proc -public template::util::date::set_property { what date value } {
-    mutate properties of the Date object
+
+    Replace a property in a list created by a date widget.
+
+    @param what name of the property (see source for allowed values)
+    @param date the date list
+    @param value the new value
+
+    @return the modified list
+
 } {
 
   # Erase leading zeroes from the value, but make sure that 00
@@ -456,6 +489,9 @@ ad_proc -public template::util::date::set_property { what date value } {
     }
     now {
       return [template::util::date set_property clock $date [clock seconds]]
+    }
+    default {
+      error "util::date::set_property: unknown property: '$what'."
     }
   }
 

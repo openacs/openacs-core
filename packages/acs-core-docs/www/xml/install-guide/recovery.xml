@@ -5,11 +5,20 @@
 %myvars;
 ]>
   <sect1 id="backup-recovery">
-    <title>Backup and Recovery</title>
-    <authorblurb>
-      <para>By <ulink url="mailto:dhogaza@pacifier.com">Don Baccus</ulink> with additions
+  <title>Backup and Recovery</title>
+  <authorblurb>
+    <para>By <ulink url="mailto:dhogaza@pacifier.com">Don Baccus</ulink> with additions
       by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
   </authorblurb>
+  <para>We will cover some basic backup and recovery strategies.  These are intended to 
+    be robust but simple enough to set up.  For a large scale production site you would 
+    probably need to create your own backup strategies (in particular full dumps from 
+    oracle, while easy to set up, are far from the best solution).
+    </para>
+  
+  <para>There are three basic things which need to be backed up, the database data, the server 
+    source tree, and the acs-content-repository (which is in the server source tree).</para>
+
   <sect2 id="install-next-backups">
     <title>Backup Strategy</title>
     <para>
@@ -57,11 +66,11 @@
       OpenACS installations comprise files and database contents.
       If you follow the reference install and put all files,
       including configuration files, in
-      <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/</computeroutput>,
+      <filename>/var/lib/aolserver/<replaceable>service0</replaceable>/</filename>,
       and back up the database nightly to a file in
-      <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/database-backup</computeroutput>,
+      <filename>/var/lib/aolserver/<replaceable>service0</replaceable>/database-backup</filename>,
       then you can apply standard file-based backup strategies to
-      <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable></computeroutput>
+      <filename>/var/lib/aolserver/<replaceable>service0</replaceable></filename>
     </para>
   </sect2>
   
@@ -69,13 +78,14 @@
     <title>Manual backup and recovery</title>
     
     <para>This section describes how to make a one-time backup and
-    restore of the files and database.  This is useful for rolling back to
-    known-good versions of a service, such as at initial
+    restore of the files and database.  This is useful for rolling
+    back to known-good versions of a service, such as at initial
     installation and just before an upgrade.  First, you back up the
     database to a file within the file tree.  Then, you back up the
     file tree.  All of the information needed to rebuild the site,
-    including the AOLserver config files, is then in tree for
-    regular file system backup.</para>
+    including the AOLserver config files, is then in tree for regular
+    file system backup.</para>
+
     <orderedlist>
       <listitem>
         <formalpara>
@@ -84,7 +94,7 @@
         </formalpara>
         <itemizedlist>
           <listitem>
-            <formalpara>
+            <formalpara id="oracle-snapshot-backup">
               <title>Oracle</title>
               <para></para>
             </formalpara>
@@ -92,37 +102,34 @@
               <listitem><para> 
               Download the backup script. Save the file <ulink
               url="files/export-oracle.txt">export-oracle.txt</ulink> as
-              <computeroutput>/tmp/export-oracle.txt</computeroutput>
+              <filename>/tmp/export-oracle.txt</filename>
               </para></listitem>
               
               <listitem><para>
               Login as root. The following commands will install the export script:
               </para> 
-              <programlisting>
-                joeuser:~$ su -
-                Password: ***********
-                root:~# cp /tmp/export-oracle.txt /usr/sbin/export-oracle
-              root:~# chmod 700 /usr/sbin/export-oracle</programlisting>
+              <programlisting>[joeuser ~]$ <userinput>su -</userinput>
+[root ~]# <userinput>cp /tmp/export-oracle.txt /usr/sbin/export-oracle</userinput>
+[root ~]# <userinput>chmod 700 /usr/sbin/export-oracle</userinput></programlisting>
               </listitem>
 
               <listitem><para>
               Setup the export directory; this is the directory where backups will
               be stored. We recommend the directory
-              <computeroutput>/ora8/m02/oracle-exports</computeroutput>.</para>
+              <filename>/ora8/m02/oracle-exports</filename>.</para>
 
-              <programlisting>
-                root:~# mkdir /ora8/m02/oracle-exports
-                root:~# chown oracle.dba /ora8/m02/oracle-exports
-              root:~# chmod 770 /ora8/m02/oracle-exports</programlisting>
+              <programlisting>[root ~]# <userinput>mkdir <replaceable>/ora8/m02/</replaceable>oracle-exports</userinput>
+[root ~]# <userinput>chown oracle:dba <replaceable>/ora8/m02/</replaceable>oracle-exports</userinput>
+[root ~]# <userinput>chmod 770 <replaceable>/ora8/m02/</replaceable>oracle-exports</userinput></programlisting>
               </listitem>
 
               <listitem><para> 
               Now edit
-              <computeroutput>/usr/sbin/export-oracle</computeroutput> and
+              <filename>/usr/sbin/export-oracle</filename> and
               change the <computeroutput>SERVICE_NAME</computeroutput> and
               <computeroutput>DATABASE_PASSWORD</computeroutput> fields to
               their correct values. If you want to use a directory other than
-              <computeroutput>/ora8/m02/oracle-exports</computeroutput>, you
+              <filename>/ora8/m02/oracle-exports</filename>, you
               also need to change the
               <computeroutput>exportdir</computeroutput> setting.
               </para>
@@ -130,63 +137,61 @@
                 Test the export procedure by running the command:
               </para>
 
-              <programlisting>
-                root:~# /usr/sbin/export-oracle
-                mv: /ora8/m02/oracle-exports/oraexport-service_name.dmp.gz: No such file or directory
+              <programlisting>[root ~]# <userinput>/usr/sbin/export-oracle</userinput>
+mv: /ora8/m02/oracle-exports/oraexport-service_name.dmp.gz: No such file or directory
 
-                Export: Release 8.1.6.1.0 - Production on Sun Jun 11 18:07:45 2000
+Export: Release 8.1.6.1.0 - Production on Sun Jun 11 18:07:45 2000
 
-                (c) Copyright 1999 Oracle Corporation.  All rights reserved.
+(c) Copyright 1999 Oracle Corporation.  All rights reserved.
 
-
-                Connected to: Oracle8i Enterprise Edition Release 8.1.6.1.0 - Production
-                With the Partitioning option
-                JServer Release 8.1.6.0.0 - Production
-                Export done in US7ASCII character set and US7ASCII NCHAR character set
-                . exporting pre-schema procedural objects and actions
-                . exporting foreign function library names for user SERVICE_NAME 
-                . exporting object type definitions for user SERVICE_NAME 
-                About to export SERVICE_NAME&#39;s objects ...
-                . exporting database links
-                . exporting sequence numbers
-                . exporting cluster definitions
-                . about to export SERVICE_NAME&#39;s tables via Conventional Path ...
-                . exporting synonyms
-                . exporting views
-                . exporting stored procedures
-                . exporting operators
-                . exporting referential integrity constraints
-                . exporting triggers
-                . exporting indextypes
-                . exporting bitmap, functional and extensible indexes
-                . exporting posttables actions
-                . exporting snapshots
-                . exporting snapshot logs
-                . exporting job queues
-                . exporting refresh groups and children
-                . exporting dimensions
-                . exporting post-schema procedural objects and actions
-                . exporting statistics
-              Export terminated successfully without warnings.</programlisting>
-
+Connected to: Oracle8i Enterprise Edition Release 8.1.6.1.0 - Production
+With the Partitioning option
+JServer Release 8.1.6.0.0 - Production
+Export done in US7ASCII character set and US7ASCII NCHAR character set
+  . exporting pre-schema procedural objects and actions
+  . exporting foreign function library names for user SERVICE_NAME 
+  . exporting object type definitions for user SERVICE_NAME 
+  About to export SERVICE_NAME&#39;s objects ...
+  . exporting database links
+  . exporting sequence numbers
+  . exporting cluster definitions
+  . about to export SERVICE_NAME&#39;s tables via Conventional Path ...
+  . exporting synonyms
+  . exporting views
+  . exporting stored procedures
+  . exporting operators
+  . exporting referential integrity constraints
+  . exporting triggers
+  . exporting indextypes
+  . exporting bitmap, functional and extensible indexes
+  . exporting posttables actions
+  . exporting snapshots
+  . exporting snapshot logs
+  . exporting job queues
+  . exporting refresh groups and children
+  . exporting dimensions
+  . exporting post-schema procedural objects and actions
+  . exporting statistics
+Export terminated successfully without warnings.</programlisting>
               </listitem>
             </itemizedlist>
           </listitem>
+
           <listitem>
-            <formalpara>
+            <formalpara id="postgres-snapshot-backup">
               <title>PostgreSQL</title>
               <para>Create a backup file and verify that it was created and has a reasonable size (several megabytes).</para>
             </formalpara>
-            <screen>[root@localhost root]# <userinput>su - service0</userinput>
-            [service0@localhost service0]$ <userinput>pg_dump -f /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/before_upgrade_to_4.6.dmp <replaceable>service0</replaceable></userinput>
-            [service0@localhost service0]$ <userinput>ls -al /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/before_upgrade_to_4.6.dmp </userinput>
-            -rw-rw-r-x    1 service0  service0   4005995 Feb 21 18:28 /var/lib/aolserver/service0/database-backup/before_upgrade_to_4.6.dmp
-            [service0@localhost service0]$ <userinput>exit</userinput>
-            [root@localhost root]#
-            <action>su - service0
-            pg_dump -f /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/before_upgrade_to_4.6.dmp <replaceable>openacs-dev</replaceable>
-            ls -al /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/before_upgrade_to_4.6.dmp
-            exit</action></screen>
+            <screen>[root root]# <userinput>su - service0</userinput>
+[service0 service0]$ <userinput>pg_dump -f /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/before_upgrade_to_4.6.dmp <replaceable>service0</replaceable></userinput>
+[service0 service0]$ <userinput>ls -al /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/before_upgrade_to_4.6.dmp </userinput>
+-rw-rw-r-x    1 service0  service0   4005995 Feb 21 18:28 /var/lib/aolserver/service0/database-backup/before_upgrade_to_4.6.dmp
+[service0 service0]$ <userinput>exit</userinput>
+[root root]#
+<action>su - service0
+pg_dump -f /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/before_upgrade_to_4.6.dmp <replaceable>openacs-dev</replaceable>
+ls -al /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/before_upgrade_to_4.6.dmp
+exit</action></screen>
           </listitem>
         </itemizedlist>
       </listitem>
@@ -195,7 +200,7 @@
           <title>Back up the file system</title>
           <para>Back up all of the files in the service, including the
           database backup file but excluding the auto-generated
-          <computeroutput>supervise</computeroutput> directory, which is
+          <filename>supervise</filename> directory, which is
           unneccesary and has complicated permissions.  </para>
         </formalpara>
         <para>In the tar command,</para>
@@ -211,7 +216,7 @@
             <para><computeroutput>s</computeroutput> preserves file sort order</para>
           </listitem>
           <listitem>
-            <para><computeroutput>j</computeroutput> compresses the output with bz2.</para>
+            <para><computeroutput>z</computeroutput> compresses the output with gzip.</para>
           </listitem>
           <listitem>
             <para>The <computeroutput>--exclude</computeroutput> clauses skips some daemontools files that
@@ -226,37 +231,38 @@
           </listitem>
           <listitem>
             <para>The last clause,
-            <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/</computeroutput>,
+            <filename>/var/lib/aolserver/<replaceable>service0</replaceable>/</filename>,
             specifies the starting point for backup.  Tar defaults to
             recursive backup.</para>
           </listitem>
         </itemizedlist>
-        <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-        [service0@yourserver service0]$ <userinput>tar -cpsj --exclude /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/supervise --file /tmp/<replaceable>service0</replaceable>-backup.tar.bz2 /var/lib/aolserver/<replaceable>service0</replaceable>/ </userinput>
-        tar: Removing leading `/' from member names
-        [service0@yourserver service0]$</screen>
+        <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+[service0 service0]$ <userinput>tar -cpsz --exclude /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/supervise \
+   --file /tmp/<replaceable>service0</replaceable>-backup.tar.gz /var/lib/aolserver/<replaceable>service0</replaceable>/</userinput>
+tar: Removing leading `/' from member names
+[service0 service0]$</screen>
       </listitem>
       <listitem>
         <formalpara>
           <title>Suffer a catastrophic failure on your production system</title>
           <para>(We'll simulate this step)</para>
         </formalpara>
-        <screen>[root@yourserver root]# <userinput>svc -d /service/service0</userinput>
-        [root@yourserver root]# <userinput>mv /var/lib/aolserver/service0/ /var/lib/aolserver/service0.lost</userinput>
-        [root@yourserver root]#<userinput> rm /service/service0</userinput>
-        rm: remove symbolic link `/service/service0'? y
-        [root@yourserver root]# <userinput>ps -auxw | grep service0</userinput>
-        root      1496  0.0  0.0  1312  252 ?        S    16:58   0:00 supervise service0
-        [root@yourserver root]#<userinput> kill<replaceable> 1496</replaceable></userinput>
-        [root@yourserver root]# <userinput>ps -auxw | grep service0</userinput>
-        [root@yourserver root]# <userinput>su - postgres</userinput>
-        [postgres@yourserver pgsql]$ <userinput>dropdb service0</userinput>
-        DROP DATABASE
-        [postgres@yourserver pgsql]$ <userinput>dropuser service0</userinput>
-        DROP USER
-        [postgres@yourserver pgsql]$ <userinput>exit</userinput>
-        logout
-        [root@yourserver root]#</screen>
+        <screen>[root root]# <userinput>svc -d /service/service0</userinput>
+[root root]# <userinput>mv /var/lib/aolserver/service0/ /var/lib/aolserver/service0.lost</userinput>
+[root root]#<userinput> rm /service/service0</userinput>
+rm: remove symbolic link `/service/service0'? y
+[root root]# <userinput>ps -auxw | grep service0</userinput>
+root      1496  0.0  0.0  1312  252 ?        S    16:58   0:00 supervise service0
+[root root]#<userinput> kill<replaceable> 1496</replaceable></userinput>
+[root root]# <userinput>ps -auxw | grep service0</userinput>
+[root root]# <userinput>su - postgres</userinput>
+[postgres pgsql]$ <userinput>dropdb service0</userinput>
+DROP DATABASE
+[postgres pgsql]$ <userinput>dropuser service0</userinput>
+DROP USER
+[postgres pgsql]$ <userinput>exit</userinput>
+logout
+[root root]#</screen>
       </listitem>
       <listitem>
         <formalpara id="recovery">
@@ -273,13 +279,11 @@
           </listitem>
           <listitem>
             <para>Restore the OpenACS files and database backup file.</para>
-            <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-            [service0@yourserver service0]$ <userinput>cd /var/lib/aolserver</userinput>
-            [service0@yourserver aolserver]$<userinput> tar xjf /tmp/service0-backup.tar.bz2</userinput>
-            [service0@yourserver aolserver]$ <userinput>chmod -R 775 <replaceable>service0</replaceable></userinput>
-            [service0@yourserver aolserver]$ <userinput>chown -R <replaceable>service0.web</replaceable> <replaceable>service0</replaceable></userinput>
-
-            </screen>
+            <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+[service0 service0]$ <userinput>cd /var/lib/aolserver</userinput>
+[service0 aolserver]$<userinput> tar xzf /tmp/service0-backup.tar.gz</userinput>
+[service0 aolserver]$ <userinput>chmod -R 775 <replaceable>service0</replaceable></userinput>
+[service0 aolserver]$ <userinput>chown -R <replaceable>service0.web</replaceable> <replaceable>service0</replaceable></userinput></screen>
           </listitem>
           <listitem>
             <para>Restore the database</para>
@@ -302,35 +306,37 @@
                 </orderedlist>
               </listitem>
               <listitem>
-                <formalpara>
+                <formalpara id="restore-postgres">
                   <title>Postgres</title>
-                  <para></para>
-                </formalpara>
-                <para>Because of a bug in Postgres backup-recovery, database objects are not guaranteed to be created in the right order.  To compensate, we pre-creating some critical items first, which leads to some harmless errors.</para>
-                <screen>[root@yourserver root]# <userinput>su - postgres</userinput>
-                [postgres@yourserver pgsql]$ <userinput>createuser <replaceable>service0</replaceable></userinput>
-                Shall the new user be allowed to create databases? (y/n) <userinput>y</userinput>
-                Shall the new user be allowed to create more new users? (y/n) <userinput>y</userinput>
-                CREATE USER
-                [service0@yourserver web]$ <userinput>createdb <replaceable>service0</replaceable></userinput>
-                CREATE DATABASE
-                [service0@yourserver web]$<userinput> psql -f /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-kernel/sql/postgresql/postgresql.sql <replaceable>service0</replaceable></userinput>
-                <emphasis>(many lines omitted)</emphasis>
-                [service0@yourserver web]$ <userinput>psql <replaceable>service0</replaceable> &lt; /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/<replaceable>database-backup.dmp</replaceable></userinput>
-                <emphasis>(many lines omitted)</emphasis>
-                [service0@yourserver web]$ <userinput>exit</userinput>
-                [postgres@yourserver pgsql]$ <userinput>exit</userinput>
-                logout
-                </screen>
+                <para>If the database user does not already exist, create it.</para>
+</formalpara>
+                <screen>[root root]# <userinput>su - postgres</userinput>
+[postgres ~]$ <userinput>createuser <replaceable>service0</replaceable></userinput>
+Shall the new user be allowed to create databases? (y/n) <userinput>y</userinput>
+Shall the new user be allowed to create more new users? (y/n) <userinput>y</userinput>
+CREATE USER
+[postgres ~]$ <userinput>exit</userinput>
+</screen>
+                <para>Because of a bug in Postgres backup-recovery, database objects are not guaranteed to be created in the right order.  In practice, running the OpenACS initialization script is always sufficient to create any out-of-order database objects.  Next, restore the database from the dump file.  The restoration will show some error messages at the beginning for objects that were pre-created from the OpenACS initialization script, which can be ignored.</para>
+
+<screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+[service0 ~]$ <userinput>createdb <replaceable>service0</replaceable></userinput>
+CREATE DATABASE
+[service0 ~]$<userinput> psql -f /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-kernel/sql/postgresql/postgresql.sql <replaceable>service0</replaceable></userinput>
+<emphasis>(many lines omitted)</emphasis>
+[service0 ~]$ <userinput>psql <replaceable>service0</replaceable> &lt; /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/<replaceable>database-backup.dmp</replaceable></userinput>
+<emphasis>(many lines omitted)</emphasis>
+[service0 ~]$ <userinput>exit</userinput>
+[postgres ~]$ <userinput>exit</userinput>
+logout</screen>
               </listitem>
             </itemizedlist>
           </listitem>
           <listitem>
             <para>Activate the service</para>
-            <screen>[root@yourserver root]# <userinput>ln -s /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools /service/<replaceable>service0</replaceable></userinput>
-            [root@yourserver root]# <userinput>sleep 10</userinput>
-            [root@yourserver root]# <userinput>svgroup web /service/<replaceable>service0</replaceable></userinput>
-            [root@yourserver root]#</screen>
+            <screen>[root root]# <userinput>ln -s /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools /service/<replaceable>service0</replaceable></userinput>
+[root root]# <userinput>sleep 10</userinput>
+[root root]# <userinput>svgroup web /service/<replaceable>service0</replaceable></userinput></screen>
           </listitem>
         </orderedlist>
       </listitem>
@@ -339,13 +345,13 @@
 
   <sect2 id="automated-backup">
     <title>Automated Backup (OPTIONAL)</title>
-    <para>The recommended backup strategy for a production sit is to use an automated script which first backs up the database to a file in <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/database-backup</computeroutput> and then backs up all of <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable></computeroutput> to a single zip file, and then copies that zip file to another computer.</para>
+    <para>The recommended backup strategy for a production sit is to use an automated script which first backs up the database to a file in <filename>/var/lib/aolserver/<replaceable>service0</replaceable>/database-backup</filename> and then backs up all of <filename>/var/lib/aolserver/<replaceable>service0</replaceable></filename> to a single zip file, and then copies that zip file to another computer.</para>
     <orderedlist>
       <listitem>
         <para>Make sure that the manual backup process described above works.</para>
       </listitem>
       <listitem>
-        <para>Customize the default backup script.  Edit <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/backup.sh</computeroutput> with your specific parameters.</para>
+        <para>Customize the default backup script.  Edit <filename>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/backup.sh</filename> with your specific parameters.</para>
       </listitem>
       <listitem>
         <para>
@@ -363,39 +369,39 @@
   <sect2 id="backups-with-cvs">
     <title>Using CVS for backup-recovery</title>
     <para>CVS-only backup is often appropriate for development sites.  If you are already using CVS and your data is not important, you probably don't
-    need to do anything to back up your files.  Just make
-    sure that your current work is checked into the system.
-    You can then roll back based on date - note the
-    current system time, down to the minute.  For maximum
-    safety, you can apply a tag to your current
-    files.  You will still need to back up your database.</para>
-    <para>  Note that, if you did the CVS options in this document, the <computeroutput>/var/lib/aolserver/service0/etc</computeroutput> directory is not included in cvs and you may want to add it.</para>
-    <screen>[root@localhost root]# <userinput>su - service0</userinput>
-    [service0@localhost service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
-    [service0@localhost service0]$ <userinput>cvs commit -m "last-minute commits before upgrade to 4.6"</userinput>
-    cvs commit: Examining .
-    cvs commit: Examining bin
-    (many lines omitted)
-    [service0@localhost service0]$ <userinput>cvs tag before_upgrade_to_4_6</userinput>
-    cvs server: Tagging bin
-    T bin/acs-4-0-publish.sh
-    T bin/ad-context-server.pl
-    (many lines omitted)
-    [service0@localhost service0]$ <userinput>exit</userinput>
-    [root@localhost root]# 
-    <action>su - service0
-    cd /var/lib/aolserver/<replaceable>service0</replaceable>
-    cvs commit -m "last-minute commits before upgrade to 4.6"
-    cvs tag before_upgrade_to_4_6
-    exit</action></screen>
+      need to do anything to back up your files.  Just make
+      sure that your current work is checked into the system.
+      You can then roll back based on date - note the
+      current system time, down to the minute.  For maximum
+      safety, you can apply a tag to your current
+      files.  You will still need to back up your database.</para>
+    <para>  Note that, if you did the CVS options in this document, the <filename>/var/lib/aolserver/service0/etc</filename> directory is not included in cvs and you may want to add it.</para>
+    <screen>[root root]# <userinput>su - service0</userinput>
+[service0 service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
+[service0 service0]$ <userinput>cvs commit -m "last-minute commits before upgrade to 4.6"</userinput>
+cvs commit: Examining .
+cvs commit: Examining bin
+<emphasis>(many lines omitted)</emphasis>
+[service0 service0]$ <userinput>cvs tag before_upgrade_to_4_6</userinput>
+cvs server: Tagging bin
+T bin/acs-4-0-publish.sh
+T bin/ad-context-server.pl
+(many lines omitted)
+[service0 service0]$ <userinput>exit</userinput>
+[root root]# 
+<action>su - service0
+cd /var/lib/aolserver/<replaceable>service0</replaceable>
+cvs commit -m "last-minute commits before upgrade to 4.6"
+cvs tag before_upgrade_to_4_6
+exit</action></screen>
     <para>To restore files from a cvs tag such as the one used above:</para>
-    <screen>[root@localhost root]# <userinput>su - service0</userinput>
-    [service0@localhost service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
-    [service0@localhost service0]$ <userinput>cvs up -r current</userinput>
-    [service0@localhost service0]$ <userinput>exit</userinput>
-    <action><userinput>su - service0</userinput>
-    cd /var/lib/aolserver/<replaceable>service0</replaceable>
-    cvs up -r current</action></screen>
+    <screen>[root root]# <userinput>su - service0</userinput>
+[service0 service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
+[service0 service0]$ <userinput>cvs up -r current</userinput>
+[service0 service0]$ <userinput>exit</userinput>
+<action>su - service0
+cd /var/lib/aolserver/<replaceable>service0</replaceable>
+cvs up -r current</action></screen>
   </sect2>
-    <para><phrase role="cvstag">($Id$)</phrase></para>
+  <para><phrase role="cvstag">($Id$)</phrase></para>
 </sect1>

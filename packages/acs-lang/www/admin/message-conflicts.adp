@@ -1,5 +1,6 @@
 <master>
   <property name="title">@page_title@</property>
+  <property name="context">@context;noquote@</property>
 
 <p>
   This page lists conflicts resulting from message catalog imports that need manual resolution by a translator

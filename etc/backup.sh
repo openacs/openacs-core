@@ -86,7 +86,7 @@ if [[ $DOM = "01" || $DOW = "Sun" ]];
     TYPE="full";
 fi
 
-if $TYPE == "full";
+if [ $TYPE == "full" ];
     then
     NEWER=""
 else
@@ -152,7 +152,7 @@ done
 # incremental backups are relative to the last successful full
 # backup
 
-if $TYPE == "full";
+if [ $TYPE == "full" ];
     then
     NEWER=""
     NOW=`date +%Y-%m-%d`

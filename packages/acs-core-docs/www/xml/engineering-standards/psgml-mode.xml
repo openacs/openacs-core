@@ -11,6 +11,8 @@
 <para>By David Lutterkort</para>
 </authorblurb>
 
+  <para>Note: <computeroutput>nxml</computeroutput> mode replaces and/or complements psgml mode.  <ulink url="http://www.xmlhack.com/read.php?item=2061">More information</ulink>.</para>
+
 <sect2 id="psgml-mode-whatisit">
 <title>What it is</title>
 
@@ -80,7 +82,7 @@ directory and put the line </para>
 in it. By maintaining your own <computeroutput>CATALOG</computeroutput>, it is easy to add more
 DTD&#39;s without changing your emacs settings. (<emphasis>How about that HTML 4.01 DTD you
 always wanted to get from <ulink url="http://www.w3.org/TR/html4/">W3C</ulink> ? The
-DTD is in the zip archives and tarballs available on the site.</emphasis></para></listitem>
+DTD is in the zip archives and tarballs available on the site.</emphasis>)</para></listitem>
 </orderedlist>
 
 <para>That&#39;s it. Now you are ready to tell emacs all about PSGML mode and
@@ -133,7 +135,7 @@ into the <computeroutput>.emacs</computeroutput> file:</para>
       ;; Some convenient key definitions:
       (define-key sgml-mode-map &quot;\C-c\C-x\C-e&quot; &#39;sgml-describe-element-type)
       (define-key sgml-mode-map &quot;\C-c\C-x\C-i&quot; &#39;sgml-general-dtd-info)
-      (define-key sgml-mode-map &quot;\C-c\C-x\C-t&quot; &#39;sgml-describe-entity))))
+      (define-key sgml-mode-map &quot;\C-c\C-x\C-t&quot; &#39;sgml-describe-entity)
    
 </programlisting>
 

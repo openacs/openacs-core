@@ -6,9 +6,19 @@ ad_page_contract {
 } {
     locale:optional
     package_key:optional
+    upgrade_status:optional
+}
+
+foreach optional_var {locale package_key} {
+    if { [info exists $optional_var] } {
+        if { [empty_string_p [set $optional_var]] } {
+            unset $optional_var
+        }
+    }
 }
 
 set page_title "I18N Message Conflicts"
+set context [list $page_title]
 
 list::create \
     -name messages \
@@ -59,7 +69,15 @@ list::create \
                 order  by pretty_name
             }]}
         }
-
+        upgrade_status {
+            label "Status"
+            where_clause "upgrade_status = :upgrade_status"
+            values {[db_list_of_lists upgrade_statuses {
+                select distinct upgrade_status, upgrade_status
+                from lang_messages
+                where conflict_p = 't'
+            }]}
+        }
     }
 
 db_multirow -unclobber -extend { edit_url accept_url } messages select_messages "

@@ -25,7 +25,7 @@
                o.modifying_user,
                o.modifying_ip,
                o.tree_sortkey,
-               acs_object__name(o.object_id)
+               acs_object__name(o.object_id) as object_name
         from   acs_objects o
         where  o.object_id = :object_id
     

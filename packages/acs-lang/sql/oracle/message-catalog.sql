@@ -96,6 +96,8 @@ create table lang_messages_audit (
     overwrite_user     integer
                        constraint lang_messages_audit_ou_fk
                        references users (user_id),
+    constraint lang_messages_audit_pk
+    primary key (package_key, message_key, locale, overwrite_date),
     constraint lang_messages_audit_fk
     foreign key (message_key, package_key) 
     references lang_message_keys(message_key, package_key)

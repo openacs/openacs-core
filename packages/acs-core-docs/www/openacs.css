@@ -1,64 +1,28 @@
 /* These are aimed at DocBook output, specifically from the chunk.xsl style and derivatives /*
 
-body,ol,td,th,hr,h1,h2,h3,strong,dl,a,blockquote,em,.force,dt,dd,ul,li,p { 
-	font-family: verdana,helvetica,arial,sans-serif;
-}
+body, ol, td, th, hr, h1, h2, h3, strong, dl, a, blockquote, em, .force, dt, dd, ul, li, p{font-family:verdana,helvetica,arial,sans-serif}
+a:link{color:0000ff}
+a:visited{color:000099}
+a.topnav{font-size:1.2em}
+a.bottomnav{font-size:1.2em}
 
-a:link {color: #f00;}
-a:visited {color: #000099;}
+code{font-family:mono-space}
+.CVS, .cvstag{font-family:mono-space; font-size:small; color:#999999; text-align:right}
 
-a.topnav {font-size: 1.2em;}
-a.bottomnav {font-size: 1.2em;}
-
-code {
-	font-family: courier,monospace;
-}
-
-.codeblock {
-	background-color: #fff;
-	font-family: monospace;
-}
-.strong {font-weight: bold;}
-.authorblurb {font-size: small;}
+.codeblock{background-color:#ffffff;font-family:monospace}
+.strong{font-weight:bold}
+.authorblurb{font-size:small}
 
 /* this is intended to catch docbook Screen stuff */
-pre  {background-color: #eee;}
+pre {background-color:#eeeeee;}
 
 /* DocBook stuff */
-.guibutton {
-	background-color: #fff;
-	border: solid #eee 3px;
-	margin: 2px;
-}
-.replaceable {
-	color: red;
-	font-style: italic;
-}
-.guilabel {
-	background-color: #ccc;
-	margin: 2px;
-}
-.programlisting {
-	background-color: #eee;
-	margin-left: 1em;
-	padding-left: .5em;
-}
-.strong {font-weight:bold;}
-.authorblurb {font-size:small;}
-.screen {
-	padding:4px; 
-	margin-left: 1em;
-}
-.action {font-weight:bold;}
-
-.table,.informaltable,.informalfigure,.figure { margin-left: 1em; }
-
-body { margin: 1em 0 0 1em; max-width: 75em; }
-
-div.cvstag {
-	font-family: courier,monospace;
-	color: #999;
-	font-size: small;
-	text-align: right;
-}
+.guibutton{background-color:white;border: solid#eeeeee; padding:1px;}
+.replaceable{color:red; font-style:italic;}
+.guilabel{background-color:silver; padding:2px;}
+.programlisting{background-color:#eeeeee}
+.strong{font-weight:bold}
+.authorblurb{font-size:small}
+.screen{padding:3px;}
+.action{padding:0.5em; margin:0.5em;font-weight:bold;}
 

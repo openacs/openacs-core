@@ -8,6 +8,7 @@ ad_page_contract {
 acs_user::get -user_id $user_id -array user_info
 
 auth::password::reset \
+    -admin \
     -authority_id $user_info(authority_id) \
     -username $user_info(username)
 

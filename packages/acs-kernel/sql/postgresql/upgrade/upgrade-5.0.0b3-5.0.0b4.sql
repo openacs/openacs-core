@@ -531,23 +531,24 @@ returns integer as '
 declare
   drop_type__rel_type               alias for $1;  
   drop_type__cascade_p              alias for $2;  -- default ''f''  
+  v_cascade                         boolean;
 begin
     -- XXX do cascade_p.
     -- JCD: cascade_p seems to be ignored in acs_o_type__drop_type anyway...
-
     if drop_type__cascade_p is null then 
-	drop_type__cascade_p := ''f'';
+	v_cascade_p := ''f'';
+    else 
+	v_cascade_p := drop_type__cascade_p;
     end if;
 
     delete from acs_rel_types
 	  where rel_type = drop_type__rel_type;
 
     PERFORM acs_object_type__drop_type(drop_type__rel_type, 
-                                       drop_type__cascade_p);
+                                       v_cascade_p);
 
     return 0; 
 end;' language 'plpgsql';
-
 
 
 create or replace function apm__unregister_package (varchar,boolean)
@@ -771,7 +772,8 @@ end;' language 'plpgsql' stable strict;
 
 ---- DRB: fixes bug 1144
 
-create or replace view registered_users
+drop view registered_users;
+create view registered_users
 as
   select p.email, p.url, pe.first_names, pe.last_name, u.*, mr.member_state
   from parties p, persons pe, users u, group_member_map m, membership_rels mr, acs_magic_objects amo
@@ -786,7 +788,9 @@ as
   and mr.member_state = 'approved'
   and u.email_verified_p = 't';
 
-create or replace view cc_users
+
+drop view cc_users;
+create view cc_users
 as
 select o.*, pa.*, pe.*, u.*, mr.member_state, mr.rel_id
 from acs_objects o, parties pa, persons pe, users u, group_member_map m, membership_rels mr, acs_magic_objects amo
@@ -800,3 +804,176 @@ where o.object_id = pa.party_id
   and m.container_id = m.group_id
   and m.rel_type = 'membership_rel';
 
+drop function acs__add_user(int4,varchar,timestamptz,int4,varchar,varchar,varchar,varchar,varchar,bpchar,bpchar,varchar,varchar,varchar,bool,varchar);
+
+create or replace function acs__add_user (
+    integer,      -- user_id
+    varchar,      -- object_type
+    timestamptz,  -- creation_date
+    integer,      -- creation_user
+    varchar,      -- cretion_ip
+    integer,      -- authority_id; default 'local'
+    varchar,      -- username
+    varchar,      -- email
+    varchar,      -- url
+    varchar,      -- first_names
+    varchar,      -- last_name
+    char,         -- password
+    char,         -- salt
+    varchar,      -- screen_name
+    boolean,      -- email_verified_p
+    varchar       -- member_state
+)
+returns integer as '
+declare
+    p_user_id              alias for $1;  -- default null    
+    p_object_type          alias for $2;  -- default ''user''
+    p_creation_date        alias for $3;  -- default now()
+    p_creation_user        alias for $4;  -- default null
+    p_creation_ip          alias for $5;  -- default null
+    p_authority_id         alias for $6;  -- defaults to local authority
+    p_username             alias for $7;  --
+    p_email                alias for $8;  
+    p_url                  alias for $9;  -- default null
+    p_first_names          alias for $10;  
+    p_last_name            alias for $11;  
+    p_password             alias for $12; 
+    p_salt                 alias for $13; 
+    p_screen_name          alias for $14; -- default null
+    p_email_verified_p     alias for $15; -- default ''t''
+    p_member_state         alias for $16; -- default ''approved''
+    v_user_id              users.user_id%TYPE;
+    v_rel_id               membership_rels.rel_id%TYPE;
+begin
+    v_user_id := acs_user__new (
+        p_user_id, 
+        p_object_type, 
+        p_creation_date,
+        p_creation_user, 
+        p_creation_ip, 
+        p_authority_id,
+        p_username,
+        p_email,
+        p_url, 
+        p_first_names, 
+        p_last_name, 
+        p_password,
+	p_salt, 
+        p_screen_name, 
+        p_email_verified_p,
+        null                  -- context_id
+    );
+   
+    v_rel_id := membership_rel__new (
+      null,
+      ''membership_rel'',
+      acs__magic_object_id(''registered_users''),      
+      v_user_id,
+      p_member_state,
+      null,
+      null);
+
+    PERFORM acs_permission__grant_permission (
+      v_user_id,
+      v_user_id,
+      ''read''
+      );
+
+    PERFORM acs_permission__grant_permission (
+      v_user_id,
+      v_user_id,
+      ''write''
+      );
+
+    return v_user_id;
+   
+end;' language 'plpgsql';
+
+
+drop function acs_user__new(int4,varchar,timestamptz,int4,varchar,varchar,varchar,varchar,varchar,bpchar,bpchar,varchar,varchar,varchar,bool,int4);
+
+create or replace function acs_user__new (
+    integer,      -- user_id
+    varchar,      -- object_type
+    timestamptz,  -- creation_date
+    integer,      -- creation_user
+    varchar,      -- creation_ip
+    integer,      -- authority_id; default 'local'
+    varchar,      -- username
+    varchar,      -- email
+    varchar,      -- url
+    varchar,      -- first_names
+    varchar,      -- last_name
+    char,         -- password
+    char,         -- salt
+    varchar,      -- screen_name
+    boolean,      -- email_verified_p
+    integer       -- context_id
+)
+returns integer as '
+declare
+    p_user_id                  alias for $1;  -- default null  
+    p_object_type              alias for $2;  -- default ''user''
+    p_creation_date            alias for $3;  -- default now()
+    p_creation_user            alias for $4;  -- default null
+    p_creation_ip              alias for $5;  -- default null
+    p_authority_id             alias for $6;  -- defaults to local authority
+    p_username                 alias for $7;  --
+    p_email                    alias for $8;  
+    p_url                      alias for $9;  -- default null
+    p_first_names              alias for $10;  
+    p_last_name                alias for $11;  
+    p_password                 alias for $12; 
+    p_salt                     alias for $13; 
+    p_screen_name              alias for $14; -- default null
+    p_email_verified_p         alias for $15; -- default ''t''
+    p_context_id               alias for $16; -- default null
+    v_user_id                  users.user_id%TYPE;
+    v_authority_id             auth_authorities.authority_id%TYPE;
+    v_person_exists            varchar;			
+begin
+    v_user_id := p_user_id;
+
+    select case when count(*) = 0 then ''f'' else ''t'' end into v_person_exists
+    from persons where person_id = v_user_id;
+
+    if v_person_exists = ''f'' then
+        v_user_id := person__new(
+            v_user_id, 
+            p_object_type,
+            p_creation_date, 
+            p_creation_user, 
+            p_creation_ip,
+            p_email, 
+            p_url, 
+            p_first_names, 
+            p_last_name, 
+            p_context_id
+        );
+    else
+     update acs_objects set object_type = ''user'' where object_id = v_user_id;
+    end if;
+
+    -- default to local authority
+    if p_authority_id is null then
+        select authority_id
+        into   v_authority_id
+        from   auth_authorities
+        where  short_name = ''local'';
+    else
+        v_authority_id := p_authority_id;
+    end if;
+
+    insert into users
+       (user_id, authority_id, username, password, salt, screen_name, email_verified_p)
+    values
+       (v_user_id, v_authority_id, p_username, p_password, p_salt, p_screen_name, p_email_verified_p);
+
+    insert into user_preferences
+      (user_id)
+      values
+      (v_user_id);
+
+    return v_user_id;
+  
+end;' language 'plpgsql';

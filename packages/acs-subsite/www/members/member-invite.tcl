@@ -67,13 +67,7 @@ ad_form -extend -name user_search -on_submit {
             group::add_member \
                 -group_id $group_id \
                 -user_id $user_id \
-                -rel_type membership_rel
-
-            # DRB: This is a bandaid-patch to make relseg usage consistent with the
-            # older parts of the toolkit.  Relsegs need reworking but until then...
-            if { ![string equal $rel_type membership_rel] } {
-                relation_add -member_state "" $rel_type $group_id $user_id
-            }
+                -rel_type $rel_type
         } {
             form set_error user_search user_id "Error adding user to community: $errmsg"
             global errorInfo

@@ -27,7 +27,7 @@
           member_role.pretty_name as member_role_pretty
         from acs_rel_roles admin_role, acs_rel_roles member_role
         where admin_role.role = 'admin'
-          and member_role.role = 'member';
+          and member_role.role = 'member'
 
       </querytext>
 </fullquery>
