@@ -172,7 +172,8 @@ ad_proc -public ad_form {
     <p><dt><b>-on_request</b></dt><p>
     <dd>A code block which sets the values for each element of the form meant to be modifiable by
         the user when the built-in key management feature is being used or to define options for
-        select lists etc.  
+        select lists etc. You just need to set the values as local
+        variables in the code block, and they'll get fetched and used as element values for you.
     </dd>
 
     <p><dt><b>-select_query</b></dt><p>
@@ -213,10 +214,14 @@ ad_proc -public ad_form {
         block.
     </dd>
 
+    <p><dt><b>-on_refresh</b></dt><p>
+    <dd>Executed when the form comes back from being refreshed using javascript with the __refreshing_p flag set.
+    </dd>
+
     <p><dt><b>-on_submit</b></dt><p>
     <dd>When the form is submitted, this code block will be executed before any new_data or edit_data code block.
         Use this if your form doesn't interact with the database or if the database type involved includes a Tcl
-        API that works for both new and existing data.
+        API that works for both new and existing data. The values of the form's elements will be available as local variables.
     </dd>
 
     <p><dt><b>-new_data</b></dt><p>
