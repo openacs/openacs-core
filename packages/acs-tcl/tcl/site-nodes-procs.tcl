@@ -76,6 +76,7 @@ ad_proc -public site_node::delete {
 ad_proc -public site_node::mount {
     {-node_id:required}
     {-object_id:required}
+    {-context_id}
 } {
     mount object at site node
 } {
@@ -131,9 +132,15 @@ ad_proc -public site_node::mount {
         ns_mutex unlock [nsv_get site_nodes_mutex mutex]
     }
 
-    # update context_id
-    set context_id [site_node::closest_ancestor_package -node_id $node_id]
-    db_dml update_package_context_id ""
+    # DAVEB update context_id if it is passed in
+    # some code relies on context_id to be set by
+    # instantiate_and_mount so we can't assume
+    # anything at this point. Callers that need to set context_id
+    # for example, when an unmounted package is mounted,
+    # should pass in the correct context_id
+    if {[info exists context_id]} {
+        db_dml update_package_context_id ""
+    }
 
     apm_invoke_callback_proc -package_key [apm_package_key_from_id $object_id] -type "after-mount" -arg_list [list node_id $node_id package_id $object_id]
 
