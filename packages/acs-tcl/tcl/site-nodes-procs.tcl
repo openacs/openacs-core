@@ -575,6 +575,19 @@ ad_proc -public site_node::closest_ancestor_package {
 
 }    
 
+ad_proc -public site_node::get_package_url {
+    {-package_key:required}
+} {
+    Get the URL of any mounted instance of a package with the given package_key.
+
+    @return a URL, or empty string if no instance of the package is mounted.
+} {
+    return [lindex [site_node::get_children \
+			-all \
+			-node_id [site_node::get_node_id -url /] \
+			-package_key $package_key] 0]
+}
+
 
 ad_proc -public site_node::verify_folder_name {
     {-parent_node_id:required}
