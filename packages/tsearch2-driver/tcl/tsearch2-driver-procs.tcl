@@ -162,7 +162,7 @@ ad_proc -public tsearch2::summary {
     @error 
 } {
     set query [tsearch2::build_query -query $query]
-   return [db_string summary "select headline(:txt,to_tsquery('default',:query))"]
+   return [db_string summary "select headline('default',:txt,to_tsquery('default',:query))"]
 }
 
 ad_proc -public tsearch2::driver_info {
