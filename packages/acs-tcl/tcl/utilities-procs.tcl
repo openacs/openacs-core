@@ -2351,14 +2351,14 @@ ad_proc -public ad_set_cookie {
         if { ![string equal $expire "t"] } {
             # netscape seemed unhappy with huge max-age, so we use
             # expires which seems to work on both netscape and IE
-            append cookie "; Expires=Fri, 01-Jan-2035 01:00:00 GMT"
+            append cookie "; Expires=Mon, 01-Jan-2035 01:00:00 GMT"
         }
     } elseif { $max_age != "" } {
 	append cookie "; Max-Age=$max_age"
     }
 
     if { [string equal $expire "t"] } {
-        append cookie "; Expires=Fri, 01-Jan-1980 01:00:00 GMT"
+        append cookie "; Expires=Tue, 01-Jan-1980 01:00:00 GMT"
     }
 
     if { $domain != "" } {

@@ -564,7 +564,7 @@ ad_proc -public template::util::set_cookie { expire_state name value { domain ""
   switch $expire_state {
 
     persistent {
-      append cookie ";expires=Fri, 01-Jan-2020 01:00:00 GMT"
+      append cookie ";expires=Wed, 01-Jan-2020 01:00:00 GMT"
     }
 
     "" -
@@ -590,7 +590,7 @@ ad_proc -public template::util::clear_cookie { name { domain "" } } {
   }
 
   set cookie "$name=expired; path=/; domain=$domain;"
-  append cookie "expires=Fri, 01-Jan-1980 01:00:00 GMT"
+  append cookie "expires=Tue, 01-Jan-1980 01:00:00 GMT"
 
   ns_set put [ns_conn outputheaders] "Set-Cookie" $cookie
 } 
