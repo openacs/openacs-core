@@ -31,7 +31,6 @@
             <file type="tcl_procs" path="tcl/30-xml-utils-procs.tcl"/>
             <file type="tcl_procs" path="tcl/acs-kernel-procs.tcl"/>
             <file type="query_file" path="tcl/acs-kernel-procs.xql"/>
-            <file type="tcl_procs" path="tcl/openacs-kernel-procs.tcl"/>
             <file type="query_file" db_type="oracle" path="tcl/acs-permissions-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/acs-permissions-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/acs-permissions-procs.tcl"/>
@@ -72,6 +71,9 @@
             <file type="tcl_init" path="tcl/document-init.tcl"/>
             <file type="tcl_procs" path="tcl/document-procs.tcl"/>
             <file type="tcl_procs" path="tcl/exception-procs.tcl"/>
+            <file type="query_file" db_type="oracle" path="tcl/membership-rel-procs-oracle.xql"/>
+            <file type="query_file" db_type="postgresql" path="tcl/membership-rel-procs-postgresql.xql"/>
+            <file type="tcl_procs" path="tcl/membership-rel-procs.tcl"/>
             <file type="tcl_procs" path="tcl/memoize-procs.tcl"/>
             <file type="query_file" db_type="oracle" path="tcl/navigation-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/navigation-procs-postgresql.xql"/>
@@ -84,6 +86,7 @@
             <file type="query_file" db_type="postgresql" path="tcl/object-type-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/object-type-procs.tcl"/>
             <file type="query_file" path="tcl/object-type-procs.xql"/>
+            <file type="tcl_procs" path="tcl/openacs-kernel-procs.tcl"/>
             <file type="tcl_init" path="tcl/request-processor-init.tcl"/>
             <file type="query_file" path="tcl/request-processor-init.xql"/>
             <file type="query_file" db_type="oracle" path="tcl/request-processor-procs-oracle.xql"/>
