@@ -7,7 +7,7 @@
   <msg key="Delivery_Method">Zustellungsart</msg>
   <msg key="Frequency">Häufigkeit</msg>
   <msg key="Item">Gegenstand</msg>
-  <msg key="lt_Getting_too_much_emai">Bekommen Sie zu viele E-Mails von dotLRN? Unter %manage_notifications_url% können Sie Ihre Benachrichtigungsoptionen verwalten.  
+  <msg key="lt_Getting_too_much_emai">Bekommen Sie zu viele E-Mails? Unter %manage_notifications_url% können Sie Ihre Benachrichtigungsoptionen verwalten.  
       </msg>
   <msg key="lt_Notification_Interval">Benachrichtigungsintervall</msg>
   <msg key="lt_Request_Notification_">Benachrichtigungsfunktion für %pretty_name% aktivieren</msg>
