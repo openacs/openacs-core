@@ -35,8 +35,15 @@
           </para></listitem>
 
       <listitem><para>
-          The OpenACS PostgreSQL driver is available from <ulink
-          url="http://openacs.org/software">OpenACS</ulink>
+
+          The OpenACS PostgreSQL driver (nspostgres.so) is available from
+          <ulink
+          url="http://prdownloads.sourceforge.net/aolserver/nspostgres-3.5beta1.tar.gz?download">SourceForge. If
+          you do decide to use nspostgres.so, you have to remember to
+          change the AOLserver config file to point to nspostgres.so
+          instead of postgres.so. This guide uses Mat Kovach's distro
+          (i.e. postgres.so)</ulink>
+
         </para></listitem>
 
       <listitem><para>

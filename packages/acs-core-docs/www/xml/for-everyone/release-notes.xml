@@ -13,20 +13,20 @@
 
   <para>
 	Please report bugs using our
-	<ulink url="http://openacs.org/sdm/one-package?package_id=9">
-	  Software Development Manager</ulink> at the <ulink
+	<ulink url="http://openacs.org/bugtracker/openacs/">
+	  Bug Tracker</ulink> at the <ulink
 	  url="http://openacs.org/">OpenACS website</ulink>.  The latest
-	information on installing this release under Oracle 8.1.6/7
-	or PostgreSQL 7.1.* can be found there as well.  Currently the
+	information on installing this release under Oracle 8.1.7
+	or PostgreSQL 7.2.* can be found there as well.  Currently the
 	toolkit will not install under Oracle 9i due to Oracle having made
 	"delete" an illegal name for PL/SQL procedures and functions.
   </para>
 
   <para>
 	You may want to begin by reading our installation documentation for
-	<xref linkend="unix-install"/> or <xref linkend="win-install"/>.  Note
-	that the Windows documentation is not current for OpenACS &version;,
-	but an alternative is to use John Sequeira's <ulink
+	<xref linkend="unix-install"/>.  Note that the Windows documentation is
+	not current for OpenACS &version;, but an alternative is to use John
+	Sequeira's <ulink
 	url="http://www.pobox.com/~johnseq/projects/oasisvm/">Oasis VM
 	project</ulink>.
   </para>
@@ -70,168 +70,17 @@
 	<title>Testing Notes</title>
 
 	<para>
-	  Here are some notes from our testing group.  While not quite up to
-	  date it should give you some ideas of where things stand.
-	</para>
 
-<programlisting>
- Summarised Testing Status
+	  <ulink url="http://open-msg.com">OpenMSG</ulink> has organized the
+	  OpenACS &version; testing process with test servers provided by
+	  <ulink url="http:hub.org">Hub.org</ulink>. Visit the <ulink
+	  url="http://213.107.207.131:8000/">acceptance test server</ulink> to
+	  see the current status of various packages. This may not be a
+	  permanent link. If it's not working, do a search of the <ulink
+	  url="http://openacs.org/forums/">OpenACS forums</ulink>.
 
-Skin
-Minimal
-Release w/caution
-Comments:
+    </para>
 
-Package: Page
-Test Coverage: Minimal
-Release w/caution
-Comments:
-
-Package: Bboard
-Test Coverage: Reasonable
-Suggested Status: Alpha
-Comments:
-
-Package: Static Pages
-Test Coverage: Minimal
-Suggested Status: Release w/caution
-Comments:
-
-Package: Ticket Tracker
-Test Coverage: Reasonable
-Suggested Status: Alpha
-Comments: Don tested personally
-
-Package: Ticket Tracker Lite
-Test Coverage: Unknown
-Suggested Status: 
-Comments:
-
-Package: Acs-lang
-Test Coverage: Reasonable
-Suggested Status: Alpha
-Comments: Oracle only
-
-Package: Simple-survey
-Test Coverage: Reasonable
-Suggested Status: Alpha
-Comments:
-
-Package: Portal
-Test Coverage: Extensive
-Suggested Status: Alpha
-Comments:
-
-Package: Notes
-Test Coverage: Extensive
-Suggested Status: Alpha
-Comments:
-
-Package: Bookmarks
-Test Coverage: Extensive
-Suggested Status: Alpha
-Comments:
-
-Package: Clickthrough
-Test Coverage: Extensive
-Suggested Status: Alpha
-Comments:
-
-Package: Acs-mail
-Test Coverage: Reasonable
-Suggested Status: Release w/caution
-Comments:
-
-Package: Acs-messaging
-Test Coverage: Reasonable
-Suggested Status: Release w/caution
-Comments:
-
-Package: File manager
-Test Coverage: Minimal
-Suggested Status: Release w/caution
-Comments:
-
-Package: File Storage
-Test Coverage: Minimal
-Suggested Status: Release w/caution
-Comments:
-
-Package: Site-wide-search
-Test Coverage: Minimal
-Suggested Status: Release w/caution
-Comments:
-
-Package: General Comments
-Test Coverage: Extensive
-Suggested Status: Alpha
-Comments:
-
-Package: Acs-events
-Test Coverage: None
-Suggested Status: 
-Comments: Automated Testing
-
-Package: Acs-datetime
-Test Coverage: None
-Suggested Status: 
-Comments: Automated Testing
-
-Package: Acs-tcl
-Test Coverage: Reasonable
-Suggested Status: Release w/caution
-Comments: Automated Testing
-
-Package: Acs-templating
-Test Coverage: Reasonable
-Suggested Status: Release w/caution
-Comments: Automated Testing
-
-Package: Acs-util
-Test Coverage: Reasonable
-Suggested Status: Release w/caution
-Comments: Automated Testing
-
-Package: Acs-Content-repository
-Test Coverage: Minimal
-Suggested Status: Release w/caution
-Comments: Automated Testing
-
-Package: Acs-content
-Test Coverage: Minimal
-Suggested Status: Release w/caution
-Comments: Automated Testing
-
-Package: Acs-kernel
-Test Coverage: Reasonable
-Suggested Status: Alpha
-Comments: Automated Testing
-
-Package: Acs-subsite
-Test Coverage: Reasonable
-Suggested Status: Alpha
-Comments: 
-
-Package: Acs-bootstrap-installer
-Test Coverage: Extensive
-Suggested Status: Alpha
-Comments: Developers have used this extensively
-
-Package: Acs-api-browser
-Test Coverage: Minimal
-Suggested Status: Release w/caution
-Comments: Automated Testing
-
-Package: Acs-workflow
-Test Coverage: Minimal
-Suggested Status: Release w/caution
-Comments: 
-
-Package: calendar
-Test Coverage: Minimal
-Suggested Status: Alpha
-Comments: Don tested personally
-	</programlisting>
   </sect2>
 
   <para><phrase role="cvstag">($Id$)</phrase></para>

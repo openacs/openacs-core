@@ -158,7 +158,7 @@
     <para>
       You can look at some templates for documents (in Docbook XML) in
       the <ulink
-      url="http://openacs.org/sdm/package-repository.tcl?current_entry=DIRECTORY%20%2fopenacs%2d4%2fpackages%2facs%2dcore%2ddocs%2fwww%20xml&amp;package_id=9">sources
+      url="http://openacs.org/cvs/openacs-4/packages/acs-core-docs/www/xml/engineering-standards">sources
       for acs-core-docs</ulink>, especially the <emphasis>
       Detailed Design Documentation Template</emphasis> and the
       <emphasis>System/Application Requirements Template</emphasis>.
@@ -199,7 +199,7 @@
       and we will provide a set of templates for documenting an entire package. </para>
 
     <para>For now you can take a look at the
-      <ulink url="http://openacs.org/sdm/package-repository.tcl?current_entry=DIRECTORY%20%2fopenacs%2d4%2fpackages%2facs%2dcore%2ddocs%2fwww%20xml&amp;package_id=9">sources of these DocBook documents</ulink>
+      <ulink url="http://openacs.org/cvs/openacs-4/packages/acs-core-docs/www/xml/engineering-standards">sources of these DocBook documents</ulink>
       to get an idea of how they are tied together.
     </para>
   </sect2>

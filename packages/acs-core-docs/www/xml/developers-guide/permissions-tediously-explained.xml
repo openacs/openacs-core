@@ -15,8 +15,8 @@
       of code and trying to understand exactly what went wrong.
       It is geared towards developers who understand the general permissions
       system to the extent that is described in the 
-      <ulink url="http://openacs.org/doc/openacs-4/developer-guide/permissions.html">
-      OpenACS 4.x Permisisons documentation</ulink>,
+      <ulink url="http://openacs.org/doc/openacs-4/permissions.html">
+      OpenACS 4.x Permissions documentation</ulink>,
       but who haven't had the opportunity to take a long, careful look at the
       system internals.
     </para>
