@@ -265,8 +265,8 @@ account was deleted for some reason.</msg>
   <msg key="manage_users_email">Manage users E-mail privacy</msg>
   <msg key="Manage_your_notifications">Manage your notifications</msg>
   <msg key="Mem_list_not_allowed">Sorry, but you are not allowed to view the members list.</msg>
-  <msg key="Member_State">Member State</msg>
   <msg key="Member">Member</msg>
+  <msg key="Member_State">Member State</msg>
   <msg key="Members">Members</msg>
   <msg key="Name">Name</msg>
   <msg key="New_Password">New Password</msg>
@@ -282,8 +282,8 @@ account was deleted for some reason.</msg>
   <msg key="Not_logged_in">Not logged in</msg>
   <msg key="Notes">Notes:</msg>
   <msg key="Notice">Notice:</msg>
-  <msg key="Online">Online</msg>
   <msg key="on_name_to">on %name% to:</msg>
+  <msg key="Online">Online</msg>
   <msg key="optional">(optional)</msg>
   <msg key="Options">Options</msg>
   <msg key="Or_add_a_new_user">Or add a new user</msg>

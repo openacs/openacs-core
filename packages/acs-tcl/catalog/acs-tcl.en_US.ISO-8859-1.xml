@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-tcl" package_version="5.2.0d2" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-tcl" package_version="5.2.0d3" locale="en_US" charset="ISO-8859-1">
 
   <msg key="approve">approve</msg>
   <msg key="approve_email">approve email</msg>
   <msg key="ban">ban</msg>
+  <msg key="Browser_of_the_user">User's Browser:</msg>
+  <msg key="Comments">&lt;b&gt; Comments: &lt;/b&gt;&lt;br&gt; 
+    &lt;span style=&quot;color:red;&quot;&gt; (Please explain what you where trying to do) &lt;/span&gt;</msg>
   <msg key="delete">delete</msg>
+  <msg key="Detais">Details:</msg>
+  <msg key="Email">Email:</msg>
+  <msg key="Error">Error Description:</msg>
+  <msg key="Error_Description">Error Description</msg>
+  <msg key="Error_details">Error Details</msg>
+  <msg key="Error_Report">Error Report</msg>
+  <msg key="File">File with error:</msg>
+  <msg key="Insert_error">Theres was an error Inserting the Information to the Data Base: </msg>
+  <msg key="lt_Automatically_Submite">Error Submitted Automatically</msg>
+  <msg key="lt_Error_Report_in_ad_sy">Error Report in %system_name%</msg>
+  <msg key="lt_NB_This_error_was_sub">This error was submitted</msg>
   <msg key="lt_require_email_verific">require email verification</msg>
+  <msg key="lt_The_email_you_submit">Please, enter a valid email address.</msg>
+  <msg key="lt_User_Id_of_the_user_t">User ID:</msg>
   <msg key="maturity_immature">Immature</msg>
   <description key="maturity_immature">Maturity level is visible in the Installer and when browsing the repository
 
@@ -48,36 +64,20 @@ Level 0: New Submission. This is the default for packages that don't have it set
 
 http://openacs.org/forums/message-view?message%5fid=161393 </description>
 
-  <msg key="reject">reject</msg>
-  <msg key="undelete">undelete</msg>
   <msg key="Page">Page with error:</msg>
   <msg key="Previus">Previous Page:</msg>
+  <msg key="Public_User">Public User</msg>
+  <msg key="reject">reject</msg>
   <msg key="Report">Report Error</msg>
+  <msg key="Return_prev">Take me back where I was (before the error)</msg>
   <msg key="Server">Server Error</msg>
+  <msg key="Success_error_submitted">The Error has been reported to the developers</msg>
   <msg key="The">The error whas the following:</msg>
   <msg key="There">There was a server error processing your request. We apologize.</msg>
   <msg key="There_1">There was a server error</msg>
   <msg key="This">This file has generated an error.</msg>
-  <msg key="We">We would appreciate if you can specify some details about what you were trying to do.</msg>
-  <msg key="Detais">Details:</msg>
-  <msg key="Email">Email:</msg>
-  <msg key="Error">Error Description:</msg>
-  <msg key="File">File with error:</msg>
-  <msg key="Public_User">Public User</msg>
-  <msg key="lt_The_email_you_submit">Please, enter a valid email address.</msg>
-  <msg key="lt_Error_Report_in_ad_sy">Error Report in %system_name%</msg>
-  <msg key="Error_Report">Error Report</msg>
-  <msg key="Error_Description">Error Description</msg>
-  <msg key="Comments">&lt;b&gt; Comments: &lt;/b&gt;&lt;br&gt; 
-    &lt;span style=&quot;color:red;&quot;&gt; (Please explain what you where trying to do) &lt;/span&gt;</msg>
-  <msg key="User_Name">User Name:</msg>
-  <msg key="lt_User_Id_of_the_user_t">User ID:</msg>
-  <msg key="Browser_of_the_user">User's Browser:</msg>
+  <msg key="undelete">undelete</msg>
   <msg key="User_comments">User's Comments:</msg>
-  <msg key="Error_details">Error Details</msg>
-  <msg key="lt_NB_This_error_was_sub">This error was submitted</msg>
-  <msg key="Insert_error">Theres was an error Inserting the Information to the Data Base: <pre>%errmsg%</pre></msg>
-  <msg key="lt_Automatically_Submite">Error Submitted Automatically</msg>
-  <msg key="Success_error_submitted">The Error has been reported to the developers</msg>
-  <msg key="Return_prev">Take me back where I was (before the error)</msg>
+  <msg key="User_Name">User Name:</msg>
+  <msg key="We">We would appreciate if you can specify some details about what you were trying to do.</msg>
 </message_catalog>
