@@ -11,7 +11,7 @@ subsite::assert_user_may_add_member
 set group_id [application_group::group_id_from_package_id]
 set admin_p [permission::permission_p -object_id $group_id -privilege "admin"]
 
-set page_title "Inivite Member to [ad_conn instance_name]"
+set page_title "Invite Member to [ad_conn instance_name]"
 set context [list [list "." "Members"] "Invite"]
 
 group::get \
