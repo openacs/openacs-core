@@ -450,6 +450,16 @@ template_tag formtemplate { chunk params } {
 
   } else {
 
+    template::adp_append_code "
+      set buttons \"\$form_properties(mode)_buttons\"
+      template::multirow create form_buttons label name
+
+      foreach button \$form_properties(\$buttons) {
+        template::multirow append form_buttons \
+          \[lindex \$button 0\] \
+          \"formbutton:\[lindex \$button 1\]\"
+      }"    
+
     # compile the static form layout specified in the template
     template::adp_compile_chunk $chunk
    
