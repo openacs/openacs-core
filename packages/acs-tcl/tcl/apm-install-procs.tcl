@@ -1457,6 +1457,7 @@ ad_proc -private apm_data_model_scripts_find {
     }
     set data_model_list [list]
     set upgrade_file_list [list]
+    set ctl_file_list [list]
     set file_list [apm_get_package_files -file_types $types_to_retrieve -package_path $package_path -package_key $package_key]
 
     foreach path $file_list {
@@ -1465,22 +1466,28 @@ ad_proc -private apm_data_model_scripts_find {
 	apm_log APMDebug "APM: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
 
 	if {[lsearch -exact $types_to_retrieve $file_type] != -1 } {
+            set list_item [list $path $file_type $package_key]
 	    if { [string equal $file_type "data_model_upgrade"] } {
                 # Upgrade script
 		if {[apm_upgrade_for_version_p $path $upgrade_from_version_name \
 			$upgrade_to_version_name]} {
 		    # Its a valid upgrade script.
 		    ns_log Debug "APM: Adding $path to the list of upgrade files."
-		    lappend upgrade_file_list [list $path $file_type $package_key]
+		    lappend upgrade_file_list $list_item
 		}
-	    } else {
+	    } elseif { [string equal $file_type "ctl_file"] } {
+                lappend ctl_file_list $list_item
+            } else {
                 # Install script
 		apm_log APMDebug "APM: Adding $path to the list of data model files."
-		lappend data_model_list [list $path $file_type $package_key ]
+		lappend data_model_list $list_item
 	    }
 	}
     }
-    set file_list [concat [apm_order_upgrade_scripts $upgrade_file_list] $data_model_list]
+    # ctl files need to be loaded after the sql create scripts
+    set file_list [concat [apm_order_upgrade_scripts $upgrade_file_list] \
+                          $data_model_list \
+                          $ctl_file_list]
     apm_log APMDebug "APM: Data model scripts for $package_key: $file_list"
 
     return $file_list
