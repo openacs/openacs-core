@@ -148,7 +148,7 @@ ad_proc -public template::list::create {
     @param  has_checkboxes Set this flag if your table already includes the checkboxes for the bulk actions.
                            If not, and your list has bulk actions, we will add a checkbox column for you as the first column.
 
-    @param  checbox_name   You can explicitly name the checkbox column here, so you can refer to it and place it where you
+    @param  checkbox_name  You can explicitly name the checkbox column here, so you can refer to it and place it where you
                            want it when you specify display formats. Defaults to 'checkbox'. See the 'formats' option.
 
     @param  row_pretty_plural
