@@ -30,6 +30,7 @@ set form_widgets_full {
     {pretty_name:text
         {html {size 50}}
         {label "Name"}
+        {section "General"}
     }        
 
     {enabled_p:text(radio)
@@ -38,16 +39,21 @@ set form_widgets_full {
         {value t}
     }
 
+    {help_contact_text:richtext,optional
+        {html {cols 60 rows 13}} 
+        {label "Help contact text"}
+        {help_text "Contact information (phone, email, etc.) to be displayed as a last resort when people are having problems with an authority."}
+    }        
     {auth_impl_id:integer(select),optional
         {label "Authentication"}
         {section "Authentication"}
-        {options {[acs_sc::impl::get_options -empty_label "Disabled" -contract_name auth_authentication]}}
+        {options {[acs_sc::impl::get_options -empty_label "--Disabled--" -contract_name auth_authentication]}}
     }
 
     {pwd_impl_id:integer(select),optional
         {label "Password management"}
         {section "Password Management"}
-        {options {[acs_sc::impl::get_options -empty_label "Disabled" -contract_name auth_password]}}
+        {options {[acs_sc::impl::get_options -empty_label "--Disabled--" -contract_name auth_password]}}
     }
 
     {forgotten_pwd_url:text,optional
@@ -64,20 +70,13 @@ set form_widgets_full {
     {register_impl_id:integer(select),optional
         {label "Account registration"}
         {section "Account Registration"}
-        {options {[acs_sc::impl::get_options -empty_label "Disabled" -contract_name auth_registration]}}
+        {options {[acs_sc::impl::get_options -empty_label "--Disabled--" -contract_name auth_registration]}}
     }
 
     {register_url:text,optional
         {html {size 50}}
         {label "Account registration URL"}
         {help_text "URL where users register for a new account."}
-    }        
-
-    {help_contact_text:richtext,optional
-        {html {cols 60 rows 13}} 
-        {label "Help contact text"}
-        {section "User Help"}
-        {help_text "Contact information (phone, email, etc.) to be displayed as a last resort when people are having problems with an authority."}
     }        
 
     {batch_sync_enabled_p:text(radio)
@@ -89,12 +88,12 @@ set form_widgets_full {
 
     {get_doc_impl_id:integer(select),optional
         {label "GetDocument implementation"}
-        {options {[acs_sc::impl::get_options -empty_label "Disabled" -contract_name auth_sync_retrieve]}}
+        {options {[acs_sc::impl::get_options -empty_label "--Disabled--" -contract_name auth_sync_retrieve]}}
     }
 
     {process_doc_impl_id:integer(select),optional
         {label "ProcessDocument implementation"}
-        {options {[acs_sc::impl::get_options -empty_label "Disabled" -contract_name auth_sync_process]}}
+        {options {[acs_sc::impl::get_options -empty_label "--Disabled--" -contract_name auth_sync_process]}}
     }
 }
 
