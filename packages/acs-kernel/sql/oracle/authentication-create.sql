@@ -91,7 +91,7 @@ create table auth_driver_params(
                       references acs_objects(object_id)
                       constraint auth_driver_params_iid_nn
                       not null,
-      key             clob,
+      key             varchar2(200),
       value           clob,
       unique (authority_id, impl_id)
 );
