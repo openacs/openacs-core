@@ -29,8 +29,17 @@ multirow create attribute key value
 
 set onload {}
 
+# Handle htmlArea widget, which needs special javascript and css in the page header
+global acs_blank_master__htmlareas
+if { [info exists acs_blank_master__htmlareas] } {
+    foreach htmlarea_id $acs_blank_master__htmlareas {
+        append header_stuff "<script type=\"text/javascript\">var editor_var_${htmlarea_id} = null;</script>"
+        lappend onload "acs_initHtmlArea(editor_var_${htmlarea_id}, '${htmlarea_id}');"
+    }
+}
+
 if { ![template::util::is_nil focus] } {
-    # Handle elements wohse name contains a dot
+    # Handle elements where the name contains a dot
     if { [regexp {^([^.]*)\.(.*)$} $focus match form_name element_name] } {
         lappend onload "acs_Focus('${form_name}', '${element_name}');"
     }
