@@ -8,7 +8,9 @@ if { $show_p } {
 
     set ds_url [ds_support_url]
 
-    set comments_p [ds_comments_p]
+    #set comments_p [ds_comments_p]
+    # LARS: Always have comments turned on
+    set comments_p 1
 
     multirow create comments text
     if { $comments_p } {
