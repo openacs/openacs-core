@@ -199,7 +199,9 @@ start_server_command=`get_config_param start_server_command`
 restart_server_command=`get_config_param restart_server_command`
 startup_seconds=`get_config_param startup_seconds`
 shutdown_seconds=`get_config_param shutdown_seconds`
-restart_seconds=$(expr $startup_seconds + $shutdown_seconds)
+startup_loop_count=`get_config_param startup_loop_count`
+restart_loop_count=`get_config_param restart_loop_count`
+shutdown_loop_count=`get_config_param shutdown_loop_count`
 dotlrn_demo_data=`get_config_param dotlrn_demo_data`
 crawl_links=`get_config_param crawl_links`
 aolserver_user=`get_config_param aolserver_user`
@@ -254,7 +256,7 @@ fi
 
 # Wait in a finite loop for the server to come down
 x=0
-while test "$x" -lt 10 ; do
+while test "$x" -lt $shutdown_loop_count ; do
 
     pid=`grep_for_pid "nsd.*$serverroot"`
     if [ "$pid" == "" ]; then
@@ -445,7 +447,7 @@ if [ -f ${script_path}/success ]; then
     rm ${script_path}/success
 fi
 x=0
-while test "$x" -lt 50 ; do
+while test "$x" -lt $startup_loop_count ; do
 
     # check for static file
     echo "$(date): attempting: wget --tries=1 $wget_test"
@@ -454,7 +456,7 @@ while test "$x" -lt 50 ; do
 	echo "$(date): Server is up"
 	break
     fi
-    echo "$(date): Waiting for $restart_seconds seconds for server to respond."
+    echo "$(date): Waiting for $startup_seconds seconds for server to respond."
     sleep $startup_seconds
     x=`expr "$x" + 1`
 done
@@ -496,7 +498,7 @@ if parameter_true $do_install; then
   fi
   # Wait in a finite loop for the server to become responsive
   x=0
-  while test "$x" -lt 50 ; do
+  while test "$x" -lt $restart_loop_count ; do
       # check for database responsiveness
       wget_test=${server_url}/SYSTEM/dbtest
       echo "$(date): trying to retrieve $wget_test"
@@ -505,8 +507,8 @@ if parameter_true $do_install; then
 	  echo "$(date): Server is up"
 	  break
       fi
-      echo "$(date): Waiting for $restart_seconds seconds for server to respond."
-      sleep $restart_seconds
+      echo "$(date): Waiting for $startup_seconds seconds for server to respond."
+      sleep $startup_seconds
       x=`expr "$x" + 1`
   done
 

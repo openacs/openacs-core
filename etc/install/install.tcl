@@ -189,12 +189,15 @@ set start_server_command "exec /usr/local/aolserver/bin/nsd-postgres -it $server
 set stop_server_command "killall nsd"
 set restart_server_command "${stop_server_command}; ${start_server_command}"
 
-# Estimated number of seconds from the startup command is executed until the server is actually up
-set startup_seconds 20
-# Estimated number of seconds from the shutdown command is executed until the server is actually down
-set shutdown_seconds 10
+# Number of loops and seconds per loop while waiting for the server to start
+# or restart
+set startup_seconds 10
+set startup_loop_count 30
+set restart_loop_count 50
 
-
+# Number of loops and seconds per loop while waiting for the server to stop
+set shutdown_seconds 5
+set shutdown_loop_count 10
 
 #----------------------------------------------------------------------
 # OpenACS configuration options
