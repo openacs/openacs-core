@@ -215,7 +215,7 @@ ad_proc -private db_getrow { db selection } {
 proc_doc db_string { statement_name sql args } {
     Usage: <b>db_string</b> <i>statement-name sql</i> [ <tt>-default</tt> <i>default</i> ] [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
   
-    Returns the first column of the result of the SQL query $sql.
+    <p>Returns the first column of the result of the SQL query $sql.
     If the query doesn't return a row, returns $default (or raises an error if no $default is provided).
 
 } {
@@ -240,7 +240,7 @@ proc_doc db_string { statement_name sql args } {
 proc_doc db_list { statement_name sql args } {
     Usage: <b>db_list</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
     
-    Returns a Tcl list of the values in the first column of the result of SQL query <tt>sql</tt>. 
+    <p>Returns a Tcl list of the values in the first column of the result of SQL query <tt>sql</tt>. 
     If <tt>sql</tt> doesn't return any rows, returns an empty list. Analogous to <tt>database_to_tcl_list</tt>.
 	
 } {
@@ -263,7 +263,7 @@ proc_doc db_list { statement_name sql args } {
 proc_doc db_list_of_lists { statement_name sql args } {
     Usage: <b>db_list_of_lists</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
 
-    Returns a Tcl list, each element of which is a list of all column 
+    <p>Returns a Tcl list, each element of which is a list of all column 
     values in a row of the result of the SQL query<tt>sql</tt>. If 
     <tt>sql</tt> doesn't return any rows, returns an empty list. 
     Analogous to <tt>database_to_tcl_list_list</tt>.
@@ -328,7 +328,7 @@ proc_doc db_foreach { statement_name sql args } {
     <blockquote>
     db_foreach <em><i>statement-name sql</i></em> [ -bind <em><i>bind_set_id</i></em> | -bind <em><i>bind_value_list</i></em> ] \
         [ -column_array <em><i>array_name</i></em> | -column_set <em><i>set_name</i></em> ] \
-	    <em><i>code_block</i></em> [ if_no_rows <em><i>if_no_rows_block ]</i></em>
+	    <em><i>code_block</i></em> [ if_no_rows <em><i>if_no_rows_block</i> ]</em>
 
     </blockquote>
 
@@ -450,7 +450,7 @@ ad_proc -public db_multirow {
     <blockquote>
     db_multirow [ -local ] [ -append ] [ -extend <em><i>column_list</i></em> ] \
         <em><i>var-name statement-name sql</i></em> [ -bind <em><i>bind_set_id</i></em> | -bind <em><i>bind_value_list</i></em> ] \
-	<em><i>code_block</i></em> [ if_no_rows <em><i>if_no_rows_block ]</i></em>
+	<em><i>code_block</i></em> [ if_no_rows <em><i>if_no_rows_block</i> ]</em>
 
     </blockquote>
 
