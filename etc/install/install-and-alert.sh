@@ -51,8 +51,6 @@ done
 if parameter_true "$server_overridden"; then
     echo "$0: Overriding config server setting with $server"
     create_override_config_file $server $config_file
-else
-    export source_config_file=$config_file
 fi
 
 alert_keyword=`get_config_param alert_keyword`
