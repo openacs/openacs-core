@@ -61,6 +61,7 @@ preserved, as they're part of the community's history. &lt;/p&gt;
 logging in again. &lt;/p&gt;
   </msg>
   <msg key="Close_your_account">Close your account</msg>
+  <msg key="Closed_group">Closed Group</msg>
   <msg key="Comment">Comment</msg>
   <msg key="Confirm">Confirm</msg>
   <msg key="Continue">Continue</msg>
@@ -317,6 +318,7 @@ You can always change your password by doing the following:
   <msg key="subsites">subsites</msg>
   <msg key="Thank_you">Thank you.</msg>
   <msg key="The_ISO_codes_were_not">The ISO codes were not loaded on this server.</msg>
+  <msg key="This_group_is_closed">This group is closed. New members can only get access by invitation.</msg>
   <msg key="this_subsite">this subsite</msg>
   <msg key="This_user_has_left_the">This user has left the community.</msg>
   <msg key="To_log_in_visit_the">To log in, visit the</msg>
