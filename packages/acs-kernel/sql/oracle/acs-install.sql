@@ -13,7 +13,6 @@ declare
     node_id    site_nodes.node_id%TYPE;
     main_site_id site_nodes.node_id%TYPE;
     admin_id	apm_packages.package_id%TYPE;
-    workflow_id 	apm_packages.package_id%TYPE;
     docs_id    apm_packages.package_id%TYPE;
     api_doc_id apm_packages.package_id%TYPE;
     cr_id apm_packages.package_id%TYPE;
@@ -77,20 +76,6 @@ begin
     object_id => cr_id
   );
 
-  workflow_id := apm_service.new (
-      instance_name => 'ACS Workflow',
-      package_key => 'acs-workflow'
-  );
-  apm_package.enable(workflow_id);
-
-  node_id := site_node.new (
-    parent_id => site_node.node_id('/'),
-    name => 'acs-workflow',
-    directory_p => 't',
-    pattern_p => 't',
-    object_id => workflow_id
-  );
-  
   docs_id := apm_service.new (
       instance_name => 'ACS Core Documents',
       package_key => 'acs-core-docs',
