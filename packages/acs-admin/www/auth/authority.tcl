@@ -134,7 +134,6 @@ ad_form -name authority \
         -mode $ad_form_mode \
         -form $form_widgets \
 -on_request {
-    
 } -edit_request {
 
     auth::authority::get -authority_id $authority_id -array element_array
@@ -143,6 +142,10 @@ ad_form -name authority \
         set $element_name $element_array($element_name)
     }
 
+    set help_contact_text [template::util::richtext::create]
+    set help_contact_text [template::util::richtext::set_property contents $help_contact_text $element_array(help_contact_text)]
+    set help_contact_text [template::util::richtext::set_property format $help_contact_text  $element_array(help_contact_text_format)]
+    
 } -new_data {
 
     foreach var_name [template::form::get_elements -no_api authority] {
@@ -151,7 +154,8 @@ ad_form -name authority \
 
     set element_array(sort_order) ""
     set element_array(short_name) ""
-    set element_array(help_contact_text_format) $help_contact_text.format
+    set element_array(help_contact_text) [template::util::richtext::get_property contents $help_contact_text]
+    set element_array(help_contact_text_format) [template::util::richtext::get_property format $help_contact_text]
 
     auth::authority::create \
         -authority_id $authority_id \
@@ -164,6 +168,9 @@ ad_form -name authority \
             set element_array($var_name) [set $var_name]
         }
     }
+
+    set element_array(help_contact_text) [template::util::richtext::get_property contents $help_contact_text]
+    set element_array(help_contact_text_format) [template::util::richtext::get_property format $help_contact_text]
 
     auth::authority::edit \
         -authority_id $authority_id \
