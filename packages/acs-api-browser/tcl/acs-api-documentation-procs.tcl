@@ -449,7 +449,7 @@ ad_proc -public api_proc_documentation {
 	}
 	
 	if { [llength $doc_elements(switches)] > 0 } {
-		append out "<p><dt><b>Switches:</b></dt><dd>\n"
+		append out "<dt><b>Switches:</b></dt><dd>\n"
 		foreach switch $doc_elements(switches) {
 			append out "<b>-$switch</b>"
 			if { [lsearch $flags($switch) "boolean"] >= 0 } {
@@ -476,7 +476,7 @@ ad_proc -public api_proc_documentation {
 	}
 	
 	if { [llength $doc_elements(positionals)] > 0 } {
-		append out "<p><dt><b>Parameters:</b></dt><dd>\n"
+		append out "<dt><b>Parameters:</b></dt><dd>\n"
 		foreach positional $doc_elements(positionals) {
 			append out "<b>$positional</b>"
 			if { [info exists default_values($positional)] } {
@@ -505,7 +505,7 @@ ad_proc -public api_proc_documentation {
 	append out [api_format_common_elements doc_elements]
 	
 	if { $source_p } {
-		append out "<p><dt><b>Source code:</b></dt><dd>
+		append out "<dt><b>Source code:</b></dt><dd>
 <pre>[ns_quotehtml [info body $proc_name]]<pre>
 </dd><p>\n"
 	}
