@@ -8,12 +8,14 @@ ad_page_contract {
     @author Bryan Quinn (bquinn@arsdigita.com)
     @cvs-id $Id$
 } {
+    system_url:notnull
     system_name:notnull
     publisher_name:notnull
     system_owner:notnull
     admin_owner:notnull
     host_administrator:notnull
-	outgoing_sender:notnull
+    outgoing_sender:notnull
+    new_registrations:notnull
 }
 
 set kernel_id [db_string acs_kernel_id_get {
@@ -22,12 +24,13 @@ set kernel_id [db_string acs_kernel_id_get {
 }]
 
 foreach { var param } {
+    system_url SystemURL
     system_name SystemName
     publisher_name PublisherName
     system_owner SystemOwner
     admin_owner AdminOwner
     host_administrator HostAdministrator
-	outgoing_sender OutgoingSender
+    outgoing_sender OutgoingSender
 } {
     ad_parameter -set [set $var] -package_id $kernel_id $param
 }
@@ -40,5 +43,6 @@ set main_site_id [db_string main_site_id_select {
 }]
 
 ad_parameter -set "acs-admin/*" -package_id $main_site_id RestrictToSSL
+ad_parameter -set $new_registrations -package_id $main_site_id NewRegistrationEmailAddress
 
 ad_returnredirect "/?done_p=1"
