@@ -13,6 +13,8 @@ ns_log notice "nsd.tcl: starting to read config file..."
 set httpport                  8000
 set httpsport                 8443 
 
+# If setting port below 1024 with AOLServer 4, read daemontools/run
+
 # The hostname and address should be set to actual values.
 set hostname                  [ns_info hostname]
 set address                   [ns_info address]
@@ -52,7 +54,9 @@ ns_param   nssock             ${bindir}/nssock.so
 ns_param   nslog              ${bindir}/nslog.so 
 ns_param   nssha1             ${bindir}/nssha1.so 
 ns_param   nscache            ${bindir}/nscache.so 
-ns_param   nsrewrite          ${bindir}/nsrewrite.so 
+
+#nsrewrite is not used by any standard OpenACS code
+#ns_param   nsrewrite          ${bindir}/nsrewrite.so 
 
 #---------------------------------------------------------------------
 # nsopenssl will fail unless the cert files are present as specified
