@@ -74,17 +74,10 @@ This variable must be set in order for the Oracle software to work properly (eve
         set my_error_p 1
     } 
 
-    set pool [lindex [nsv_get db_available_pools .] 0]
-    set db [ns_db gethandle $pool]
-
     # First we look for the overall presence of interMedia
-    set sql "SELECT (SELECT COUNT(*) FROM USER_ROLE_PRIVS WHERE GRANTED_ROLE = 'CTXAPP') ctxrole,
+    db_1row check_role "SELECT (SELECT COUNT(*) FROM USER_ROLE_PRIVS WHERE GRANTED_ROLE = 'CTXAPP') ctxrole,
        (SELECT COUNT(*) FROM ALL_USERS WHERE USERNAME = 'CTXSYS') ctxuser,
        USER FROM DUAL"
-    set results [ns_db 1row $db $sql] 
-    set ctxrole [ns_set value $results 0]
-    set ctxuser [ns_set value $results 1]
-    set thisuser [ns_set value $results 2]
     if {$ctxuser < 1} {
         append my_errors "<li><p><strong>The CTXSYS user does not exist in your database. This means 
 that interMedia is probably not installed. interMedia is needed for full-text searching. 
@@ -128,12 +121,9 @@ ALTER USER $thisuser DEFAULT ROLE ALL;
    	   RETURN '';
    	END IF;
       END oacs_get_oracle_version;"
-    ns_db dml $db $sql
+    db_dml create_oacs_get_oracle_version $sql
 
-    set sql "SELECT DBMS_UTILITY.PORT_STRING platform, oacs_get_oracle_version('version') dbversion FROM DUAL"
-    set results [ns_db 1row $db $sql]
-    set platform [ns_set value $results 0]
-    set dbversion [ns_set value $results 1]
+    db_1row get_platform_dbversion  "SELECT DBMS_UTILITY.PORT_STRING platform, oacs_get_oracle_version('version') dbversion FROM DUAL"
     # the following isn't used currently, but maybe someday we'll give the user
     # a snapshot of what we think their environment is
     switch -regexp -- $platform {
@@ -176,10 +166,7 @@ chmod 755 \$ORACLE_HOME/ctx/bin/ctxhx
     }
 
     # do some cleanup
-    set sql "DROP FUNCTION oacs_get_oracle_version"
-    ns_db dml $db $sql
-    ns_db releasehandle $db
-
+    db_dml drop "DROP FUNCTION oacs_get_oracle_version"
  
     # ksh must be installed for Oracle's loadjava to work.
 
