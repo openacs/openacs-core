@@ -339,6 +339,7 @@ if { $database == "oracle" } {
 if { $database == "oracle" } {
     ns_section "ns/db/driver/ora8"
     ns_param  maxStringLogLength -1
+    ns_param  LobBufferSize      32768
 }
 
 # 
