@@ -285,13 +285,13 @@ ad_proc -public apm_file_watch {path} {
 }
 
 ad_proc -public apm_file_watch_cancel {
-    {-path ""}
+    {path ""}
 } {
     Stop watching a certain file, or all watched files if path
     is not specified. If the file is not watched
     this procedure does nothing.
 
-    @param path The path relative to server root of the file to stop watching.
+    @param path The path relative to server root of the file to stop watching. Optional.
 
     @author Peter Marklund
 } {
@@ -351,16 +351,51 @@ ad_proc -private apm_watch_all_files { package_key } {
     Watch all Tcl procs and xql query files in the given
     package
 
+    @see apm_file_watch
+    @see apm_get_watchable_files
+
     @author Peter Marklund
 } {        
+    foreach rel_path [apm_get_watchable_files $package_key] {
+        apm_file_watch $rel_path
+    }
+}
+
+ad_proc -private apm_cancel_all_watches { package_key } {
+    Cancel all watches in the given package.
+
+    @param package_key The package_key of the package to stop watching.
+
+    @see apm_file_watch_cancel
+    @see apm_get_watchable_files
+
+    @author Peter Marklund
+} {
+    foreach rel_path [apm_get_watchable_files $package_key] {
+        apm_file_watch_cancel $rel_path
+    }
+}
+
+ad_proc -private apm_get_watchable_files { package_key } {
+    Get a list of paths relative to server root of watchable
+    files in the given package
+
+    @param package_key Key of the package to get paths for
+
+    @author Peter Marklund
+} {
+    set watchable_file [list]
+
     set files [ad_find_all_files [acs_root_dir]/packages/$package_key]
     foreach file [lsort $files] {
         set rel_path [ad_make_relative_path $file]
         if { [apm_file_watchable_p $rel_path] } {
-            apm_file_watch $rel_path
+            lappend watchable_files $rel_path
         }
     }
-}
+
+    return $watchable_files
+} 
 
 ad_proc -public pkg_home {package_key} {
 
