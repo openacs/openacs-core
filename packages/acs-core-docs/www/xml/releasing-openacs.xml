@@ -7,7 +7,9 @@
 ]>
 
 <chapter id="releasing-openacs">
-  <title>How to package and release OpenACS</title>
+  <title>Releasing OpenACS</title>
+  <section id="releasing-openacs-core">
+    <title>OpenACS Core and .LRN</title>
     <orderedlist>
       <listitem>
         <para>Update version numbers:</para>
@@ -183,7 +185,7 @@ rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<replaceable>5.0.0a1</repl
     <programlisting><xi:include href="../../../../etc/install/build-release.sh" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>release script missing</xi:fallback></xi:include></programlisting>
 
     <para><phrase role="cvstag">($Id$)</phrase></para>
-
+  </section>
     <section id="update-repository">
         <title>How to Update the OpenACS.org repository</title>
     <orderedlist>
@@ -229,6 +231,27 @@ rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<replaceable>5.0.0a1</repl
       </listitem>
     </orderedlist>
     </section>
+    <section id="releasing-package">
+  <title>How to package and release an OpenACS Package</title>
+    <para>In this example, we are packaging and releasing <computeroutput>myfirstpackage</computeroutput> as version 1.0.0, which is compatible with OpenACS 5.0.x.</para>
+    <orderedlist>
+      <listitem>
+        <para>Update the version number of your packages in the <ulink url="/acs-admin/apm/">APM</ulink>.</para>
+      </listitem>
+      <listitem>
+        <para>Make sure all changes are committed.</para>
+      </listitem>
+      <listitem>
+        <para>Tag the updated work.:</para>
+        <screen><action>cd /var/lib/aolserver/service0/packages/<replaceable>myfirstpackage</replaceable>
+cvs tag <replaceable>myfirstpackages-1-0-0-final</replaceable>
+cvs tag -F <replaceable>openacs-5-0-compat</replaceable>
+</action></screen>
+      </listitem>
+    </orderedlist>
+    <para>Done.  The package will be added to the <ulink url="http://openacs.org/repository">repository</ulink> automatically.  If the correct version does not show up within 24 hours, ask for help on the OpenACS.org development forum.</para>
+    </section>
+
 
     <section id="update-translations">
         <title>How to Update the translations</title>
