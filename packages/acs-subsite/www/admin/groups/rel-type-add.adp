@@ -15,7 +15,7 @@ Select relation type:
 <select name="rel_type">
   <option value=""> -- Please select --
 <multiple name="primary_rels">
-  <option value="@primary_rels.rel_type@"> @primary_rels.indent@ @primary_rels.pretty_name@
+  <option value="@primary_rels.rel_type@"> @primary_rels.indent;noquote@ @primary_rels.pretty_name@
 </multiple>
 </select>
 
