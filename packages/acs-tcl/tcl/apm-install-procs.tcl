@@ -304,7 +304,7 @@ ad_proc -private apm_package_install {
     set package_key $version(package.key)
 
     # Install Queries (OpenACS Query Dispatcher - ben)
-    apm_package_install_queries $package_key
+    apm_package_install_queries $package_key $version(files)
 
     if { $copy_files_p } {
 	if { [empty_string_p $install_path] } {
@@ -743,27 +743,40 @@ ad_proc -private apm_package_install_files { {-callback apm_dummy_callback} file
     }
 }
 
-# This is for the OpenACS system
-# We need the APM augmented to install the queries for a package
-# when the package is installed
-# (ben)
-ad_proc -private apm_package_install_queries {package_key} {
-    Loads up queries for one package
+ad_proc -private apm_package_install_queries {
+    {-callback apm_dummy_callback}
+    package_key
+    files
+} {
+    Given a spec file, reads in the data model files to load from it.
+
+    @param package_key The package key from the .info file.
+    @param files List of files for this package from the package's .info file
+    @author Don Baccus (dhogaza@pacifier.com)
+
+    This replaces the brute-force version originally provided by
+    Ben, which manually searched the package directories rather than
+    use the package information file.
+
 } {
     set path "[acs_package_root_dir $package_key]"
 
-    # Traverse path for www/*.xql files
-    set files [glob -nocomplain ${path}/www/*.sql]
-    set files [concat $files [glob -nocomplain ${path}/tcl/*.xql]]
 
     ns_log Notice "APM/QD = loading up package query files for $package_key"
+    set ul_p 0
 
-    foreach file $files {
-	ns_log Notice "APM/QD = one file $file"
+    foreach query_file [apm_query_files_find $package_key $files] {
+	ns_log Debug "APM/QD: Now processing query file $query_file"
+        if { !$ul_p } {
+            apm_callback_and_log $callback "<ul>\n"
+            set ul_p 1
+        }
+        apm_callback_and_log $callback "<li>Loading data model $path/$file_path..."
 	db_fullquery_internal_load_cache $file
     }
-
-    ns_log Notice "APM/QD = DONE loading package query files"
+    if { $ul_p } {
+        apm_callback_and_log $callback "</ul>\n"
+    }
 }
 
 ad_proc -private apm_package_install_spec { version_id } {
@@ -1142,4 +1155,33 @@ ad_proc -private apm_data_model_scripts_find {
     set file_list [concat [apm_order_upgrade_scripts $upgrade_file_list] $data_model_list]
     ns_log Debug "APM: Data model scripts for $package_key: $file_list"
     return $file_list
+}
+
+ad_proc -private apm_query_files_find {
+    package_key
+    file_list
+} {
+    @file_list A list of files and file types of form [list [list "foo.sql" "data_model_upgrade"] ...] 
+} {
+
+    set query_file_list [list]
+
+    foreach file $file_list {
+	set path [lindex $file 0]
+	set file_type [lindex $file 1]
+        set file_db_type [lindex $file 2]
+	ns_log Debug "APM/QD: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
+
+        # DRB: we return query files which match the given database type or for which no db_type
+        # is defined, which we interpret to mean a file containing queries that work with all of our
+        # supported databases.
+
+	if {[lsearch -exact "query_file" $file_type] != -1 && \
+            ([empty_string_p $file_db_type] || ![string compare [db_type] $file_db_type])} {
+            ns_log Debug "APM: Adding $path to the list of query files."
+            lappend query_file_list $path
+	}
+    }
+    ns_log Notice "APM: Data model scripts for $package_key: $query_file_list"
+    return $query_file_list
 }

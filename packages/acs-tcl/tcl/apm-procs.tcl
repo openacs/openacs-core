@@ -301,6 +301,18 @@ ad_proc -private apm_load_queries {
 	where enabled_p='t'
     }]
 
+    # DRB: We only want to load those files that match our database
+    # type or no type at all (i.e. works for any database).  I'm doing
+    # this mostly because it is how things will be done when we do
+    # them RIGHT (i.e. using the package file info in the RDBMS).
+
+    set exclude_strings [list]
+    foreach known_database_type [nsv_get ad_known_database_types .] {
+        if { ![string match [lindex $known_database_type 0] [db_type]] } {
+            lappend exclude_strings "*-[lindex $known_database_type 0].*"
+        }
+    }
+
     # Scan the package directory for files to source.    
     set files [list]    
     foreach package $packages {
@@ -316,13 +328,22 @@ ad_proc -private apm_load_queries {
 
         # DRB: For now just slurp all .sql files
 	foreach dir $dirs {
-	    set paths [concat $paths [glob -nocomplain "$dir/*.sql"]]
+	    set paths [concat $paths [glob -nocomplain [file join $dir *.xql]]]
 	}
 	
 	foreach path [lsort $paths] {
 	    set rel_path [string range $path $base_len end]
             # DRB: db_fullquery_internal_load_cache expects the full pathname...
-	    lappend files "$base/$rel_path"
+            set load_query_file 1
+            foreach exclude_string $exclude_strings {
+                if { [string match $exclude_string $path] } {
+                    set load_query_file 0
+                    break
+                }
+            }
+            if { $load_query_file } {
+	        lappend files "$base/$rel_path"
+            }
 	}
     }
       

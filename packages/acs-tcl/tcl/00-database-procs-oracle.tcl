@@ -7,18 +7,6 @@ ad_library {
     @cvs-id $Id$
 }
 
-# DRB: The following two routines are an attempt to abstract the notion of
-# "NULL", since Oracle differs from SQL92-compliant RDBMS engines in 
-# treating the empty string as a null.  Unfortunately, they're implemented
-# naively and don't help.  We'll keep them for now but eventually should
-# root out calls to them and replace them with the empty string.
-
-ad_proc -public db_null {} {
-    Represents the SQL keyword <code>null</code> for use in SQL DML statements.
-} {
-    return ""
-}
-
 ad_proc -public db_nullify_empty_string { string } {
     A convenience function that returns [db_null] if $string is the empty string.
 } {
