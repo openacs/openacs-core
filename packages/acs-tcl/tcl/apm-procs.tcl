@@ -1504,6 +1504,56 @@ ad_proc -public apm_package_instance_delete {
     db_exec_plsql apm_package_instance_delete {}
 }
 
+ad_proc -public apm_get_installed_versions {
+    -array:required
+} {
+    Sets the current installed version of packages installed on this system
+    in an array keyed by package_key.
+    
+    @param array Name of array in caller's namespace where you want this set
+} {
+    upvar 1 $array installed_version
+
+    db_foreach installed_packages { 
+        select package_key, version_name
+        from   apm_package_versions
+        where  enabled_p = 't'
+    } {
+        set installed_version($package_key) $version_name
+    }
+}
+
+ad_proc -public apm_get_installed_provides {
+    -array:required
+} {
+    Sets the dependencies provided by the packages installed on this system
+    in an array keyed by dependency service-uri.
+    
+    @param array Name of array in caller's namespace where you want this set
+} {
+    upvar 1 $array installed_provides
+
+    # All packages provides themselves
+    apm_get_installed_versions -array installed_provides
+    
+    # Now check what the provides clauses say
+    db_foreach installed_provides { 
+	select service_uri, 
+               service_version
+	from   apm_package_dependencies d, 
+               apm_package_versions v
+	where  d.dependency_type = 'provides'
+	and    d.version_id = v.version_id
+	and    v.enabled_p = 't'
+    } {
+        if { ![info exists installed_provides($service_uri)] || \
+                 [apm_version_names_compare $installed_provides($service_uri) $service_version] == -1 } {
+            set installed_provides($service_uri) $service_version
+        }
+    }
+}
+
+
 ##
 ## Logging
 ##

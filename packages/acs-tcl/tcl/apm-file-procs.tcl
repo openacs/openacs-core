@@ -504,14 +504,40 @@ ad_proc -private apm_gzip_cmd {} {
 }
 
 ad_proc -private apm_load_apm_file {
-    {
-	-callback apm_dummy_callback
-    } file_path
+    {-callback apm_dummy_callback}
+    {-url {}}
+    {file_path {}}
 } {
     
     Uncompresses and loads an APM file into the filesystem.
 
+    @param url If specified, will download the APM file first.
+
+    @return If successful, a path to the .info file of the package uncompressed 
+            into the apm-workspace directory
+
 } {
+    apm_callback_and_log $callback "<li>Downloading $url..."
+    if { [catch {
+	# Open a destination file.
+	set file_path [ns_tmpnam].apm
+	set fileChan [open $file_path w+ 0600]
+	# Open the channel to the server.
+	set httpChan [lindex [ns_httpopen GET $url] 0]
+	ns_log Debug "APM: Copying data from $url"
+	# Copy the data
+	fcopy $httpChan $fileChan
+	# Clean up.
+	ns_log Debug "APM: Done copying data."
+	close $httpChan
+	close $fileChan
+    } errmsg] } {
+	apm_callback_and_log $callback "Unable to download. Please check your URL.</ul>.
+	The following error was returned: <blockquote><pre>[ad_quotehtml $errmsg]
+	</pre></blockquote>[ad_footer]"
+	return
+    }	
+
     if {![file exists $file_path]} {
 	apm_callback_and_log $callback  "
 	The file cannot be found.  Your URL or your file name is incorrect.  Please verify that the file name
@@ -597,10 +623,15 @@ ad_proc -private apm_load_apm_file {
     
 	apm_callback_and_log $callback  "<li>Extracting files into the filesytem."
 	apm_callback_and_log $callback  "<li>$pretty_name $version_name ready for installation."
+
+        # LARS: This looks odd -- package_key is not a directory
 	# Remove the directory if it exists.
-	if {[file exists $package_key]} {
-	    file delete -force $package_key
-	}
+	#if {[file exists $package_key]} {
+	#    file delete -force $package_key
+	#}
+        
 	exec sh -c "cd $install_path ; [apm_gunzip_cmd] -q -c $file_path | [apm_tar_cmd] xf -" 2>/dev/null
+
+        return "${install_path}/${package_key}/${package_key}.info"
     }
 }

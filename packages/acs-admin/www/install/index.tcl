@@ -55,8 +55,19 @@ db_multirow -extend { package_type_pretty } packages packages "
 }
 
 
-set local_install_url "local-install"
+set local_install_url "install"
 
-set local_service_install_url [export_vars -base "local-install" { { package_type apm_service } }]
+set local_service_install_url [export_vars -base "install" { { package_type apm_service } }]
 
-set local_upgrade_url [export_vars -base "local-install" { { package_type all } { upgrade_p 1 } }]
+set local_upgrade_url [export_vars -base "install" { { package_type all } { upgrade_p 1 } }]
+
+
+
+set channel "[db_type]-5-0"
+set repository_url "http://lars.cph02.collaboraid.net/repository/$channel/"
+
+set remote_install_url [export_vars -base "install" { repository_url }]
+
+set remote_service_install_url [export_vars -base "install" { { package_type apm_service } repository_url }]
+
+set remote_upgrade_url [export_vars -base "install" { { package_type all } { upgrade_p 1 } repository_url }]
