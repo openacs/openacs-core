@@ -682,7 +682,7 @@ ad_proc -public lang::catalog::import {
 
         foreach file_path $catalog_files {
             # Use a catch so that parse failure of one file doesn't cause the import of all files to fail
-            if { [catch {import_messages_from_file $file_path} errMsg] } {
+            if { [catch {import_from_file $file_path} errMsg] } {
                 global errorInfo
                 
                 ns_log Error "The import of file $file_path failed, error message is:\n\n${errMsg}\n\nstack trace:\n\n$errorInfo\n\n"
@@ -709,8 +709,8 @@ ad_proc -private lang::catalog::get_catalog_paths_for_import {
     @author Peter Marklund
 } {
     # We always need to register en_US messages first as they create the keys
-    set en_us_locale_list [list [list en_US [ad_locale charset en_US]]]
-    set other_locales_list [db_list_of_lists locales_and_charsets {
+    set en_us_locale_list [list en_US]
+    set other_locales_list [db_list locales {
         select locale
         from ad_locales
         where enabled_p = 't'
@@ -723,7 +723,7 @@ ad_proc -private lang::catalog::get_catalog_paths_for_import {
     foreach locale $locales_list {        
 
         # If we are only processing certain locales and this is not one of them - continue
-        if { [llength $locales] > 0 && [lsearch $locales $locale] == -1 } {
+        if { [llength $locales] > 0 && [lsearch -exact $locales $locale] == -1 } {
             continue
         }
 
