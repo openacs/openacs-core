@@ -6,8 +6,15 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-	{return_url "/"}
-    
+    {return_url ""}
+}
+
+if { [empty_string_p $return_url] } {
+    if { [permission::permission_p -object_id [subsite::get_element -element package_id] -party_id 0 -privilege read] } {
+        set return_url [subsite::get_element -element url]
+    } else {
+        set return_url /
+    }
 }
 
 ad_user_logout 
