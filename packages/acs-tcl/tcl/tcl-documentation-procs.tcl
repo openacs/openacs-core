@@ -1729,7 +1729,7 @@ ad_page_contract_filter -type post time24 { name time } {
 	    || $time(minutes) < 0 || $time(minutes) > 59 \
 	    || $time(seconds) < 0 || $time(seconds) > 59
     } {
-	ad_complain "Invalid time: $time(time) $time(ampm)"
+	ad_complain "Invalid time: $time(time)"
 	return 0
     }
 
