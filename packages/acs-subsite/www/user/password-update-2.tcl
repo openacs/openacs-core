@@ -43,6 +43,10 @@ if {[catch {ad_change_password $user_id $password_1} errmsg]} {
     ad_return_error "Wasn't able to change your password. Please contact the system administrator."
 }
 
+if {![ad_conn user_id]} {
+    ad_user_login $user_id
+}
+
 if {[empty_string_p $return_url]} {
     set return_url [ad_parameter -package_id [ad_acs_kernel_id] "HomeURL"]
 }
