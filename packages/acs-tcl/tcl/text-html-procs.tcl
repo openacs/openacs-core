@@ -1411,7 +1411,7 @@ ad_proc string_truncate {
     @creation-date September 8, 2002
 } {
     if { [string length $string] > $len } {
-        set string "[string range $string 0 [expr $len-[string length $ellipsis]]]$ellipsis"
+        set string "[string range $string 0 [expr $len-[string length $ellipsis]-1]]$ellipsis"
     } 
     
     if { [string equal $format "html"] && !$no_format_p } {
