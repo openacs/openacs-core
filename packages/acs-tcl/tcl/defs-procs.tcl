@@ -8,7 +8,7 @@ ad_library {
     @cvs-id defs-procs.tcl,v 1.19.2.2 2003/03/28 13:43:28 lars Exp
 }
 
-ad_proc ad_acs_version {} {
+ad_proc -public ad_acs_version {} {
     The OpenACS version of this instance.
 
     @return version string (major.minor.release)
@@ -24,7 +24,7 @@ ad_proc ad_acs_version {} {
     }
 }
 
-ad_proc ad_acs_release_date {} {
+ad_proc -public ad_acs_release_date {} {
     The OpenACS release date of this instance.
 
     @return pretty version of the release date
@@ -42,7 +42,7 @@ ad_proc ad_acs_release_date {} {
     }
 }
 
-ad_proc ad_host_administrator {} {
+ad_proc -public ad_host_administrator {} {
     As defined in the HostAdministrator kernel parameter.
 
     @return The e-mail address of a technical person who can fix problems
@@ -57,7 +57,7 @@ ad_proc -public ad_outgoing_sender {} {
 }
 
 
-ad_proc ad_graphics_site_available_p {} {
+ad_proc -deprecated ad_graphics_site_available_p {} {
     As defined in the GraphicsSiteAvailableP kernel parameter.
     @return 1 if there is a graphics site
 } {
@@ -87,7 +87,7 @@ ad_proc -public ad_admin_home {} {
 
 # is this accurate? (rbm, aug 2002)
 
-ad_proc ad_package_admin_home { package_key } {
+ad_proc -public ad_package_admin_home { package_key } {
     @return directory for the especified package's admin home.
 } {
     return "[ad_admin_home]/$package_key"
@@ -100,11 +100,11 @@ ad_proc -public ad_pvt_home_name {} {
     return [ad_parameter -package_id [ad_acs_kernel_id] HomeName]
 }
 
-proc ad_pvt_home_link {} {
+ad_proc -public ad_pvt_home_link {} {
     return "<a href=\"[ad_pvt_home]\">[ad_pvt_home_name]</a>"
 }
 
-ad_proc ad_site_home_link {} {
+ad_proc -public ad_site_home_link {} {
     @return a link to the user's workspace if the user is logged in. Otherwise, a link to the page root.
 } {
     if { [ad_get_user_id] != 0 } {
@@ -115,7 +115,7 @@ ad_proc ad_site_home_link {} {
     }
 }
 
-ad_proc ad_system_owner {} {
+ad_proc -public ad_system_owner {} {
     Person who owns the service 
     this person would be interested in user feedback, etc.
 } {
@@ -123,14 +123,14 @@ ad_proc ad_system_owner {} {
 }
 
 
-ad_proc ad_publisher_name {} {
+ad_proc -public ad_publisher_name {} {
     A human-readable name of the publisher, suitable for
     legal blather.
 } {
     return [ad_parameter -package_id [ad_acs_kernel_id]  PublisherName]
 }
 
-ad_proc ad_url {} {
+ad_proc -public ad_url {} {
     This will be called by email alerts. Do not use ad_conn location
     @return the system url as defined in the kernel parameter SystemURL.
 } {
