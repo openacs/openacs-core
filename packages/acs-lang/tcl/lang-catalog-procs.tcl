@@ -949,9 +949,8 @@ ad_proc -private lang::catalog::import_messages {
 
         if { [lsearch -exact {added updated deleted} $upgrade_status] != -1 } {
             incr message_count($upgrade_status)
-        } else {
-            incr message_count(processed)
-        }
+        } 
+        incr message_count(processed)
 
     } ;# End of message key loop
 
