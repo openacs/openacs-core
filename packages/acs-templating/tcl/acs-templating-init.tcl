@@ -73,7 +73,10 @@ namespace eval template {
     # An array of default buttons and their names
     variable default_button_labels
     array set default_button_labels \
-	[list back [_ acs-templating.Previous_with_arrow] [_ acs-kernel.common_repeat] next [_ acs-templating.Next_with_arrow] finish [_ acs-kernel.common_finish]]
+	[list back [_ acs-templating.Previous_with_arrow] \
+             repeat [_ acs-kernel.common_repeat] \
+             next [_ acs-templating.Next_with_arrow] \
+             finish [_ acs-kernel.common_finish]]
   }
 
   namespace eval paginator {
