@@ -1,6 +1,6 @@
 <master>
 <property name=title>All PL/SQL Subprograms</property>
-<property name="context">@context@</property>
+<property name="context">@context;noquote@</property>
 
 <multiple name="all_subprograms">
 <h2>@all_subprograms.type@</h2>

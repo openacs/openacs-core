@@ -1,5 +1,5 @@
 <master>
-<property name="title">@title@</property>
+<property name="title">@title;noquote@</property>
 
 @message@
 

@@ -1,10 +1,10 @@
 <master>
-<property name="context">@context@</property>
-<property name="title">@role_pretty_plural@ of @group_name@</property>
+<property name="context">@context;noquote@</property>
+<property name="title">@role_pretty_plural;noquote@ of @group_name;noquote@</property>
 
-<include src="elements-display-list" group_id="@group_id@" rel_type="@rel_type@" member_state="@member_state@">
+<include src="elements-display-list" group_id="@group_id;noquote@" rel_type="@rel_type;noquote@" member_state="@member_state;noquote@">
 
-<if @member_state@ eq approved or @member_state@ eq "">
+<if @member_state;noquote@ eq approved or @member_state;noquote@ eq "">
     <if @create_p@ eq 1>
       <ul>
         <li> <a href=../relations/add?group_id=@group_id@&rel_type=@rel_type_enc@&return_url=@return_url_enc@>

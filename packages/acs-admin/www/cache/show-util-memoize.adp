@@ -1,5 +1,5 @@
   <master>
-    <property name="title">util_memoize: @pattern@</property>
+    <property name="title">util_memoize: @pattern;noquote@</property>
     <property name="context">{./ "Cache data"} search</property>
 
     Search for <b><code>@pattern@</code></b>:

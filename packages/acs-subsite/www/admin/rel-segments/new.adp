@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context@</property>
+<property name="context">@context;noquote@</property>
 <property name="title">Create relational segment</property>
 <property name="focus">segment_new.segment_name</property>
 
@@ -20,7 +20,7 @@ You are creating a segment for
 <p>
 
 <form name=segment_new method=get action=new-3>
-@export_vars@
+@export_vars;noquote@
 
 Segment Name:
   <input type=text name=segment_name maxlength=230>

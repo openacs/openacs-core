@@ -7,7 +7,7 @@
 <p>#acs-subsite.lt_You_can_log_in_now_us#
 
 <form action="user-login" method="post">
-@export_vars@
+@export_vars;noquote@
 #acs-subsite.Password#  <input type="password" name="password" size="20" />
 <input type="submit" value="#acs-subsite.Login#" />
 </form>

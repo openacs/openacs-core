@@ -1,7 +1,7 @@
 <master src="master">
  <property name="title">Edit a message</property>
- <property name="header_stuff">@header_stuff@</property>
- <property name="context_bar">@context_bar@</property>
+ <property name="header_stuff">@header_stuff;noquote@</property>
+ <property name="context_bar">@context_bar;noquote@</property>
 
 <div>
 
@@ -22,6 +22,6 @@
 
 </div>
 
-<include src="lookups-include" package_key="@package_key@" message_key_list="@message_key@">
+<include src="lookups-include" package_key="@package_key;noquote@" message_key_list="@message_key;noquote@">
 
-<include src="audit-include" current_locale="@current_locale@" message_key="@message_key@" package_key="@package_key@">
+<include src="audit-include" current_locale="@current_locale;noquote@" message_key="@message_key;noquote@" package_key="@package_key;noquote@">

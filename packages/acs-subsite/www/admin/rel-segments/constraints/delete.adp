@@ -1,6 +1,6 @@
 <master>
-<property name="context">@context@</property>
-<property name="title">Delete @constraint_name@</property>
+<property name="context">@context;noquote@</property>
+<property name="title">Delete @constraint_name;noquote@</property>
 
 Are you sure you want to delete the constraint @constraint_name@ on segment @segment_name@?
 
@@ -8,5 +8,5 @@ Are you sure you want to delete the constraint @constraint_name@ on segment @seg
 <p>
 
 <center>
-<include src="../../confirm-delete-form" action="delete-2" export_vars="@export_vars@" no_button="No, I want to cancel my request" yes_button="Yes, I really want to delete this constraint">
+<include src="../../confirm-delete-form" action="delete-2" export_vars="@export_vars;noquote@" no_button="No, I want to cancel my request" yes_button="Yes, I really want to delete this constraint">
 </center>

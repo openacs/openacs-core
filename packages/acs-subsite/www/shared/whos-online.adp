@@ -1,6 +1,6 @@
 <master>
-<property name="title">@title@</property>
-<property name="context">@context@</property>
+<property name="title">@title;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <if @chat_system_name@ not nil>
   This page is mostly useful in conjunction with 

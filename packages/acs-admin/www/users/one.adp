@@ -1,11 +1,11 @@
 <master>
-<property name=title>@first_names@ @last_name@</property>
-<property name="context">@context@</property>
+<property name=title>@first_names;noquote@ @last_name;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <ul>
 <li>Name:  @first_names@ @last_name@ (<a href="@public_link@">public page</a>)</li>
 <li>Email:  <a href="mailto:@email@">@email@</a></li>
-<li>Screen name:  @screen_name@ </li>
+<li>Screen name:  @screen_name;noquote@ </li>
 <if @url@ not nil>
   <li>Homepage: <a href="@url@">@url@</a></li>
 </if>
@@ -23,7 +23,7 @@
   <li>Portrait:  <a href="/shared/portrait?user_id=@user_id@">@portrait_title@</a></li>
 </if>
 </ul>
-Member state: @member_state@ @user_finite_state_links@
+Member state: @member_state@ @user_finite_state_links;noquote@
 
 <h2>This user is a member of the following groups:</h2>
 <p>Note: These are the groups to which the user has been granted 

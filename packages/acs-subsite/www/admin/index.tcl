@@ -21,6 +21,10 @@ set acs_admin_url "/acs-admin"
 array set acs_admin_node [site_node::get -url $acs_admin_url]
 set acs_admin_name $acs_admin_node(instance_name)
 
+# Dirk: temporary fix for noquote hacking
+set acs_admin_available_p 1
+set instance_name "foobar"
+
 set context {}
 
 ad_return_template

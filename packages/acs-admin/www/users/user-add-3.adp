@@ -1,6 +1,6 @@
 <master>
 <property name=title>Email sent</property>
-<property name="context">@context@</property>
+<property name="context">@context;noquote@</property>
 
 <p>
 @first_names@ @last_name@ has been notified.

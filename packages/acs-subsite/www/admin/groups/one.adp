@@ -1,6 +1,6 @@
 <master>
-<property name="context">@context@</property>
-<property name="title">@group_name@</property>
+<property name="context">@context;noquote@</property>
+<property name="title">@group_name;noquote@</property>
 
 <h3>Attributes</h3>
 
@@ -31,9 +31,9 @@
 
  
 <h3>Permissible relationship types</h3>
-<include src="elements-by-rel-type" group_id=@group_id@>
+<include src="elements-by-rel-type" group_id=@group_id;noquote@>
 
-<if @admin_p@ eq 1>
+<if @admin_p;noquote@ eq 1>
   <h3>Extreme Actions</h3>
   <ul>
     <li> <a href=delete?group_id=@group_id@>Nuke this group</a>

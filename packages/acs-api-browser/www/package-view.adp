@@ -1,8 +1,8 @@
 <master>
-<property name=title>@title@</property>
-<property name="context">@context@</property>
+<property name=title>@title;noquote@</property>
+<property name="context">@context;noquote@</property>
 
-@dimensional_slider@
+@dimensional_slider;noquote@
 
 <if @kind@ eq "procs_files">
 <blockquote>
@@ -48,7 +48,7 @@
   <multiple name="content_pages">
   <tr valign=top>
     <if @content_pages.content_type@ eq "page">
-      <td>@content_pages.indentation@
+      <td>@content_pages.indentation;noquote@
        <b><a href="content-page-view?version_id=@version_id@&amp;path=@content_pages.full_path@">@content_pages.name@</a></b>
        <if @content_pages.type@ ne "">
          <a href="type-view?type=@content_pages.type@"></a>
@@ -57,7 +57,7 @@
       <td>@content_pages.first_sentence@</td>
     </if>
     <if @content_pages.content_type@ eq "directory">
-      <td>@content_pages.indentation@<b>@content_pages.name@/</b></td>
+      <td>@content_pages.indentation;noquote@<b>@content_pages.name@/</b></td>
     </if>
   </tr>
   </multiple>

@@ -1,6 +1,6 @@
 <master>
-<property name="context">@context@</property>
-<property name="title">@group_name@</property>
+<property name="context">@context;noquote@</property>
+<property name="title">@group_name;noquote@</property>
 
 <blockquote>
 

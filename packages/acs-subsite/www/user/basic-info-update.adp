@@ -1,9 +1,9 @@
 <master>
 <property name="title">Update Basic Information</property>
-<property name="context_bar">in @site_link@</property>
+<property name="context_bar">in @site_link;noquote@</property>
 
 <form method="post" action="basic-info-update-2">
-@export_vars@
+@export_vars;noquote@
 <table>
 <tr>
  <th>Name:</th><td><input type="text" name="first_names" size="20" value="@first_names@" /> 

@@ -1,6 +1,6 @@
   <master>
     <property name="title">#acs-subsite.Permissions_for_name#</property>
-    <property name="context">@context@</property>
+    <property name="context">@context;noquote@</property>
 
     <h3>#acs-subsite.lt_Inherited_Permissions#</h3>
     <if @inherited:rowcount@ gt 0>
@@ -32,7 +32,7 @@
     <input type=submit value="#acs-subsite.Revoke_Checked#">
     </form>
     </if>
-    @controls@
+    @controls;noquote@
 
     <h3>#acs-subsite.Children#</h3>
     <if @children_p@>

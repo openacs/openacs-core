@@ -1,6 +1,6 @@
 <master>
-<property name=title>@title@</property>
-<property name="context">@context@</property>
+<property name=title>@title;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <if @package_slider_list@ ne "">
 <table align=right><tr><td>

@@ -1,6 +1,6 @@
 <master src="master">
 <property name="title">Delete locale confirmation</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context_bar">@context_bar;noquote@</property>
 
 <p style="color: red; font-weight: bold">Are you sure you want to proceed?</p>
 <p />

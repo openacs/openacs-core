@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context@</property>
+<property name="context">@context;noquote@</property>
 <property name="title">Relational Segment administration</property>
 
 Currently, the system is able to handle the following relational segments:

@@ -1,6 +1,6 @@
 <master>
-<property name="context_bar">@context_bar@</property>
-<property name="title">@title@</property>
+<property name="context_bar">@context_bar;noquote@</property>
+<property name="title">@title;noquote@</property>
 
 <if @data:rowcount@ eq 0>
 <i>You have no reference data in the database right now.</i><p>

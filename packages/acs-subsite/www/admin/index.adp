@@ -1,6 +1,6 @@
 <master>
-<property name="context">@context@</property>
-<property name="title">@subsite_name@ Administration</property>
+<property name="context">@context;noquote@</property>
+<property name="title">@subsite_name;noquote@ Administration</property>
 
 <ul>
   <li><a href=site-map/>Site Map</a>

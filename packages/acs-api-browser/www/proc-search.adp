@@ -1,12 +1,12 @@
 <master>
-<property name=title>@title@</property>
-<property name="context">@context@</property>
+<property name=title>@title;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <h3>Procedure Matches:</h3>
 <ul>
   <multiple name="results">
   <li> <if @results.score@ lt 10>&nbsp;&nbsp;</if>@results.score@: <a href=@results.url@>@results.proc@</a>
-   <i>@results.args@</i>
+   <i>@results.args;noquote@</i>
    </multiple>
 </ul>
 

@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context@</property>
+<property name="context">@context;noquote@</property>
 <property name="title">Constraints on relationship type</property>
 
 Relational segments allows you to treat all parties that have a
@@ -20,5 +20,5 @@ Would you like to create a relational segment and/or constraints now?
 <p>
 
 <center>
-<include src="../confirm-delete-form" action="constraints-create-2" export_vars="@export_vars@" no_button=" No " yes_button=" Yes ">
+<include src="../confirm-delete-form" action="constraints-create-2" export_vars="@export_vars;noquote@" no_button=" No " yes_button=" Yes ">
 </center>

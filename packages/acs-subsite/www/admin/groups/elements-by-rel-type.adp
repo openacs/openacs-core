@@ -17,7 +17,7 @@
         </ul>
       </if><else>
         <br>
-	<include src="elements-display-list" group_id="@group_id@" rel_type="@rels.rel_type@" return_url_enc=@return_url_enc@ member_state="approved">
+	<include src="elements-display-list" group_id="@group_id;noquote@" rel_type="@rels.rel_type;noquote@" return_url_enc=@return_url_enc;noquote@ member_state="approved">
       </else>
     </else>
   </group>

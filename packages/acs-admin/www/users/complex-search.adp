@@ -1,6 +1,6 @@
 <master>
 <property name="title">Complex User Search</property>
-<property name="context">@context@</property>
+<property name="context">@context;noquote@</property>
 
 <if @criteria:rowcount@ eq 0>
   all matching users

@@ -1,6 +1,6 @@
 <master>
-<property name="title">@subsite_name@</property>
-<property name="context">@context@</property>
+<property name="title">@subsite_name;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <ul>
  <if @nodes:rowcount@ eq 0> 

@@ -16,7 +16,7 @@
 
     <p>
      @lt@multiple name=v>
-<include src=include indent="@indent@      " l="
+<include src=include indent="@indent;noquote@      " l="
       {%x% FALSE nil}
       {%y% TRUE nil}
       {%z% TRUE nil}
@@ -24,7 +24,7 @@
       {%y% TRUE defined}
       {%z% FALSE defined}
       {%x% FALSE lt 3}
-      {@quot@yes@quot@ TRUE true}
+      {@quot;noquote@yes@quot;noquote@ TRUE true}
       {0 FALSE true}
       {t FALSE false}
       {oFf TRUE false}

@@ -31,7 +31,7 @@
       <else>
        <tr>
         <if @elements.label@ not nil>
-	<td><b>@elements.label@</b>&nbsp;&nbsp;
+	<td><b>@elements.label;noquote@</b>&nbsp;&nbsp;
           <if @elements.help_text@ not nil>
             <br>&nbsp;&nbsp;
             <font size=-1><noparse><formhelp id=@elements.id@></noparse></font><br>
@@ -45,7 +45,7 @@
             <table cellpadding="4" cellspacing="0" border="0">
 	      <formgroup id=@elements.id@>
 		<tr>
-                  <td>\@formgroup.widget@</td>
+                  <td>\@formgroup.widget;noquote@</td>
                   <td>
                     <label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">\@formgroup.label@</label>
                   </td>

@@ -12,9 +12,9 @@
 
 <div>
 
-<include src="locales-tabs" tab="@tab@" show_locales_p="@show_locales_p@">
+<include src="locales-tabs" tab="@tab;noquote@" show_locales_p="@show_locales_p;noquote@">
 
-<if @tab@ eq "home">
+<if @tab;noquote@ eq "home">
   <p>Here you can edit locales and internationalize messages in the user interface of the system.</p>
   <ul>
     <p>
@@ -47,11 +47,11 @@
 </if>
 
 <if @tab@ eq "locales">
-  <include src="locales" tab="@tab@">
+  <include src="locales" tab="@tab;noquote@">
 </if>
 
 <if @tab@ eq "localized-messages">
- <include src="localized-messages" tab="@tab@">
+ <include src="localized-messages" tab="@tab;noquote@">
 </if>
 
 </div>

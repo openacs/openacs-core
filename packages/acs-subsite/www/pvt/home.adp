@@ -1,6 +1,6 @@
 <master>
-<property name=title>@full_name@'s workspace at @system_name@</property>
-<property name="context">@context@</property>
+<property name=title>@full_name;noquote@'s workspace at @system_name;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <ul>
 
@@ -29,7 +29,7 @@
 <li>#acs-subsite.Name#  @full_name@</li>
 <li>#acs-subsite.email_address#  @email@</li>
 <li>#acs-subsite.personal_URL#  <a target=new_window href="@url@">@url@</a></li>
-<li>#acs-subsite.screen_name#  @screen_name@</li>
+<li>#acs-subsite.screen_name#  @screen_name;noquote@</li>
 <li>#acs-subsite.bio# @bio@</li>
 </ul>
 <p>(<a href="/user/basic-info-update">#acs-subsite.update#</a>)</p>

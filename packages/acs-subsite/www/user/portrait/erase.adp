@@ -1,6 +1,6 @@
 <master>
 <property name="title">Erase Portrait</property>
-<property name="context">@context@</property>
+<property name="context">@context;noquote@</property>
 
 <if @admin_p@ eq 0>
   <p>Are you sure that you want to erase your portrait?</p>
@@ -10,7 +10,7 @@
 </else>
 
 <form method="get" action="erase-2">
-@export_vars@
+@export_vars;noquote@
 <center>
 <input type="submit" value="Yes, I'm sure" />
 </center>
