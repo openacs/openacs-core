@@ -26,6 +26,9 @@ namespace eval acs_mail_lite {
             set eh_list ""
         }
 
+        # Subject cannot contain newlines -- replace with spaces
+        regsub -all {\n} $subject { } subject
+
         # Subject can not be longer than 200 characters
         if { [string length $subject] > 200 } {
             set subject "[string range $subject 0 196]..."
