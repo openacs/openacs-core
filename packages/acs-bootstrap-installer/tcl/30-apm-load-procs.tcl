@@ -71,9 +71,16 @@ ad_proc apm_guess_file_type { package_key path } {
 } {
     set components [split $path "/"]
     set dirs_in_pageroot [llength [split [ns_info pageroot] "/"]]	   ;# See comments by RBM
-    set components_lesser [lrange $components $dirs_in_pageroot end]
+
+    # Fix to cope with both full and relative paths
+    if { [string index $path 0] == "/"} {                          
+	set components_lesser [lrange $components $dirs_in_pageroot end] 
+    } else {
+	set components_lesser $components
+    }
     set extension [file extension $path]
     set type ""
+
 
     # DRB: someone named a file "acs-mail-create-packages.sql" rather than
     # the conventional "acs-mail-packages-create.sql", causing it to be
@@ -124,7 +131,7 @@ ad_proc apm_guess_file_type { package_key path } {
 	        set type "tcl_$kind"
             } else {
                 set type "tcl_util"
-            }
+	    }
 	}
     }
     return $type
