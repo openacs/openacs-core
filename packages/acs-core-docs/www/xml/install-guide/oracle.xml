@@ -931,7 +931,7 @@ Enter the full pathname of the local bin directory: [/usr/local/bin]:
 
 Creating /etc/oratab file...
 Entry will be added to the /etc/oratab file by
-Database Configuration Assistant when a database is created
+Database Configuration Assistants when a database is created
 Finished running generic part of root.sh script.
 Now product-specific root actions will be performed.
 IMPORTANT NOTE: Please delete any log and trace files previously
@@ -1246,7 +1246,7 @@ oracle:~$ dbassist</programlisting>
 
       <listitem><para>
           Accept all of the options, and click
-          &quot;<computeroutput>Next</computeroutput>&quot; Oracle Visual
+          <computeroutput>Next</computeroutput> Oracle Visual
           Information Retrieval may be grayed out. If so, you can ignore
           it; just make sure that everything else is checked.
         </para></listitem>
@@ -1256,7 +1256,9 @@ oracle:~$ dbassist</programlisting>
           &quot;<computeroutput>ora8</computeroutput>&quot;; for
           &quot;SID&quot;, also enter
           &quot;<computeroutput>ora8</computeroutput>&quot; (it should do
-          this automatically). Click
+          this automatically).  Click <computeroutput>"Change
+          Character Set</computeroutput> and select
+          <computeroutput>UTF8</computeroutput>. Click
           &quot;<computeroutput>Next</computeroutput>&quot;.
         </para></listitem>
 
@@ -1613,7 +1615,7 @@ ora8:/ora8/m01/app/oracle/product/8.1.7:Y</programlisting>
 oracle:~$ su -
 root:~# cp /tmp/oracle8i.txt /etc/rc.d/init.d/oracle8i
 root:~# chown root.root /etc/rc.d/init.d/oracle8i
-root:~# chmod 700 /etc/rc.d/init.d/oracle8i</programlisting>
+root:~# chmod 755 /etc/rc.d/init.d/oracle8i</programlisting>
       </listitem>
 
       <listitem><para> 
@@ -1779,12 +1781,12 @@ Finished.</programlisting>
 root:~# su - oracle
 oracle:~$ cp /tmp/startlsnr.txt /ora8/m01/app/oracle/product/8.1.7/bin/startlsnr
 oracle:~$ cp /tmp/stoplsnr.txt /ora8/m01/app/oracle/product/8.1.7/bin/stoplsnr    
-oracle:~$ chmod 700 /ora8/m01/app/oracle/product/8.1.7/bin/startlsnr
-oracle:~$ chmod 700 /ora8/m01/app/oracle/product/8.1.7/bin/stoplsnr
+oracle:~$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/startlsnr
+oracle:~$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/stoplsnr
 oracle:~$ exit
 root:~# cp /tmp/listener8i.txt /etc/rc.d/init.d/listener8i
 root:~# cd /etc/rc.d/init.d
-root:/etc/rc.d/init.d# chmod 700 listener8i</programlisting>
+root:/etc/rc.d/init.d# chmod 755 listener8i</programlisting>
 
         <para>
           Test the listener automation by running the following commands

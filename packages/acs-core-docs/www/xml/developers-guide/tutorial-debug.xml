@@ -1,0 +1,86 @@
+<sect1 id="tutorial-debug">
+  <title>Debugging and Automated Testing</title>
+  <important>
+    <para>This section is a work in progress.</para>
+  </important>
+
+  <authorblurb>
+    by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+  </authorblurb>
+  
+  <sect2><title>Debugging</title>
+    <formalpara>
+      <title>PostgreSQL</title>
+      <para>You can work directly with the database to do debugging
+          steps like looking directly at tables and testing stored
+          procedures.  <emphasis role='bold'>Start emacs.  Type
+            <userinput>M-x sql-postgres</userinput>.  Press enter for
+            server name and use <userinput>openacs-dev</userinput> for
+            database name.  You can use C-(up arrow) and C-(down arrow)
+            for command history.</emphasis></para>
+    </formalpara>
+
+      <para>Hint: "Parse error near *" usually means that an xql file
+      wasn't recognized, because the tcl file is choking on the *SQL*
+      placeholder that it falls back on.</para>
+    <formalpara>
+      <title>Watching the server log</title>
+
+<para>NOTE: explain how to add tcl to directly write your own log output</para>
+      <para>To set up real-time monitoring of the Aolserver error
+          log, <emphasis role='bold'>type <screen>less /usr/local/aolserver/log/openacs-dev-error.log</screen></emphasis>
+          <literallayout>F to show new log entries in real time (like tail -f)
+C-c to stop and F to start it up again. 
+G goes to the end.
+? searches backward 
+/ searches forward. 
+          </literallayout>
+        </para>
+    </formalpara>
+  </sect2>
+
+
+  <sect2>
+    <title>Manual testing</title>
+        <para>Make a list of basic tests to make sure it works</para>
+        <segmentedlist>
+          <?dbhtml list-presentation="table"?>
+          <segtitle>Test Num</segtitle>
+          <segtitle>Action</segtitle>
+          <segtitle>Expected Result</segtitle>
+          <seglistitem>
+            <seg>001</seg>
+            <seg>Browse to the index page while not logged in and
+            while one or more notes exist.</seg>
+            <seg>No edit or delete or add links should appear.</seg>
+          </seglistitem>
+          <seglistitem>
+            <seg>002</seg>
+            <seg>Browse to the index page while logged in.  An Edit
+            link should appear.  Click on it.  Fill out the form and
+            click Submit.</seg>
+            <seg>The text added in the form should be visible on the
+            index page.</seg>
+          </seglistitem>
+        </segmentedlist>
+        <para>Other things to test: try to delete someone else's
+        note.  Try to delete your own note.  Edit your own note.
+        Search for a note.</para>
+      </sect2>
+
+      <sect2>
+        <title>Write automated tests</title>
+        <para><indexterm>
+            <primary>Create the automated tests for the package.</primary>
+          </indexterm>(Forthcoming.)</para>
+      </sect2>
+
+
+
+</sect1>
+
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "book" "chapter")
+       End:
+-->
