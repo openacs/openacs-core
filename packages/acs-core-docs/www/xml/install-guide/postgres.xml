@@ -190,11 +190,11 @@ logout
       <itemizedlist>
         <listitem><para>Red Hat:</para>
           
-          <screen>[root@yourserver src]# <userinput>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</userinput>
+          <screen>[root@yourserver src]# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</userinput>
 [root@yourserver src]# <userinput>chown root.root /etc/rc.d/init.d/postgresql</userinput>
 [root@yourserver src]# <userinput>chmod 700 /etc/rc.d/init.d/postgresql</userinput>
 [root@yourserver src]# 
-<action>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+<action>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/rc.d/init.d/postgresql
 chmod 700 /etc/rc.d/init.d/postgresql</action></screen>
           
@@ -222,11 +222,11 @@ chkconfig --list postgresql
 service postgresql start</action></screen>
         </listitem>
         <listitem><para>Debian:</para>
-          <screen>root:~# <userinput>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</userinput>
+          <screen>root:~# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</userinput>
 root:~# <userinput>chown root.root /etc/init.d/postgresql</userinput>
 root:~# <userinput>chmod 700 /etc/init.d/postgresql</userinput>
 root:~# <action>
-cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/init.d/postgresql
 chmod 700 /etc/init.d/postgresql</action></screen>
           <para>Test the script</para>
@@ -270,7 +270,7 @@ root:~#</screen>
           </para>
           </note>
           
-          <screen>root:~# <userinput>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</userinput>
+          <screen>root:~# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</userinput>
 root:~# <userinput>chown root.root /etc/rc.d/init.d/postgresql</userinput>
 root:~# <userinput>chmod 700 /etc/rc.d/init.d/postgresql</userinput></screen>
           <para>

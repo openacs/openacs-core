@@ -153,7 +153,7 @@ segregation of records by package, required to make the package
 "package-aware." 
 define_function_args prepares the function to be used by a tcl wrapper function. */
 </emphasis>
-select define_function_args(samplenote__new,'note_id,title,creation_date,creation_user,creation_ip,context_id'); 
+select define_function_args('samplenote__new','note_id,title,creation_date,creation_user,creation_ip,context_id'); 
 
 create or replace function samplenote__new (integer,varchar,varchar,timestamptz,integer,varchar,integer)
 returns integer as '

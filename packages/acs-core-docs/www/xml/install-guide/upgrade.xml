@@ -11,16 +11,16 @@
     OpenACS prior to 4.5, upgrading will require manual effort.</para>
 </sect1>
 
-<sect1 id="upgrade-4.5-to-4.6">
-  <title>Upgrading OpenACS 4.5 to 4.6</title>
+<sect1 id="upgrade-4.5">
+  <title>Upgrading from OpenACS 4.5</title>
     <sect2><title>Checklist</title>
-    <para>The required platform for OpenACS 4.6 is the same as
+    <para>The required platform for OpenACS &version; is the same as
     4.5, with the excepion of OpenFTS.  You now need OpenFTS 0.3.2, not 0.2.
-    OpenACS 4.6 does not support PostGreSQL 7.3.</para>
+    OpenACS &version; supports PostGreSQL 7.2.3 and 7.3.2.</para>
     <itemizedlist mark="circle">
       <listitem><para>A computer with OpenACS 4.5.</para>
       </listitem>
-      <listitem><para><ulink url="http://openacs.org/projects/openacs/download/">OpenACS 4.6 tarball</ulink></para>
+      <listitem><para><ulink url="http://openacs.org/projects/openacs/download/">OpenACS &version; tarball</ulink></para>
       </listitem>
       <listitem><para>Required for Full Text Search on PostGreSQL: <ulink url="http://openfts.sourceforge.net">OpenFTS 0.3.2</ulink></para>
       </listitem>
@@ -29,7 +29,7 @@
   <sect2>
     <title>Overview</title>
     <para>OpenACS consists of files and a database schema.  The files
-    in the OpenACS 4.6 tarball include database upgrade scripts.  To start the
+    in the OpenACS &version; tarball include database upgrade scripts.  To start the
     upgrade, replace your existing files with the new files and
     then restart the server.  Then, browse to the APM, which will
     detect the new packages and offer to run the appropriate database upgrade
@@ -108,7 +108,7 @@ exit</action></screen>
             </formalpara>
             <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
 [nsadmin@localhost aolserver]$ <userinput>cd /web/<replaceable>openacs-dev</replaceable></userinput>
-[nsadmin@localhost openacs-dev]$ <userinput>cvs commit -m "last-minute commits before upgrade to 4.6"</userinput>
+[nsadmin@localhost openacs-dev]$ <userinput>cvs commit -m "last-minute commits before upgrade to &version;"</userinput>
 cvs commit: Examining .
 cvs commit: Examining bin
 (many lines omitted)
@@ -121,7 +121,7 @@ T bin/ad-context-server.pl
 [root@localhost root]# 
 <action>su - nsadmin
 cd /web/<replaceable>openacs-dev</replaceable>
-cvs commit -m "last-minute commits before upgrade to 4.6"
+cvs commit -m "last-minute commits before upgrade to &version;"
 cvs tag before_upgrade_to_4_6
 exit</action></screen>
           </listitem>
@@ -185,7 +185,7 @@ cd tsearch/
 make
 make install
 exit</screen>
-            <para>In order for the OpenACS 4.6 OpenFTS Engine to use the OpenFTS 0.3.2 driver, we need some commands added to the database.</para>
+            <para>In order for the OpenACS &version; OpenFTS Engine to use the OpenFTS 0.3.2 driver, we need some commands added to the database.</para>
             <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
 [nsadmin@localhost dev]$ <userinput>psql <replaceable>openacs-dev</replaceable> -f /usr/local/pgsql/share/contrib/openfts.sql</userinput>
 CREATE

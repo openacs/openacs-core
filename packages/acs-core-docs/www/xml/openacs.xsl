@@ -3,7 +3,7 @@
         version="1.1"
                 exclude-result-prefixes="doc">
 
-<!-- vinodk: Imports chunk.xsl                   -->
+<!-- vinodk: Import chunk.xsl - location depends on which distribution    -->
 
 <!-- Red Hat 8/xsl-stylesheets 1.50.0-3
   <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets-1.50.0-3/html/chunk.xsl"/>
@@ -46,18 +46,18 @@
                   <xsl:call-template name="gentext.nav.prev"/>
                 </a>
               </xsl:if>
-              <xsl:text><![CDATA[&nbsp;]]></xsl:text>
+              <xsl:text> </xsl:text>
             </td>
             <th width="60%" align="center">
               <xsl:choose>
                 <xsl:when test="count($up) > 0 and $up != $home">
                   <xsl:apply-templates select="$up" mode="object.title.markup"/>
                 </xsl:when>
-                <xsl:otherwise><![CDATA[&nbsp;]]></xsl:otherwise>
+                <xsl:otherwise> </xsl:otherwise>
               </xsl:choose>
             </th>
             <td width="20%" align="right">
-              <xsl:text><![CDATA[&nbsp;]]></xsl:text>
+              <xsl:text> </xsl:text>
               <xsl:if test="count($next)>0">
                 <a accesskey="n">
                   <xsl:attribute name="href">
@@ -100,7 +100,7 @@
                   <xsl:call-template name="gentext.nav.prev"/>
                 </a>
               </xsl:if>
-              <xsl:text><![CDATA[&nbsp;]]></xsl:text>
+              <xsl:text> </xsl:text>
             </td>
             <td width="20%" align="center">
               <xsl:choose>
@@ -114,11 +114,11 @@
                     <xsl:call-template name="gentext.nav.home"/>
                   </a>
                 </xsl:when>
-                <xsl:otherwise><![CDATA[&nbsp;]]></xsl:otherwise>
+                <xsl:otherwise> </xsl:otherwise>
               </xsl:choose>
             </td>
             <td width="40%" align="right">
-              <xsl:text><![CDATA[&nbsp;]]></xsl:text>
+              <xsl:text> </xsl:text>
               <xsl:if test="count($next)>0">
                 <a accesskey="n">
                   <xsl:attribute name="href">
@@ -135,7 +135,7 @@
           <tr>
             <td width="40%" align="left">
               <xsl:apply-templates select="$prev" mode="object.title.markup"/>
-              <xsl:text><![CDATA[&nbsp;]]></xsl:text>
+              <xsl:text> </xsl:text>
             </td>
             <td width="20%" align="center">
               <xsl:choose>
@@ -149,11 +149,11 @@
                     <xsl:call-template name="gentext.nav.up"/>
                   </a>
                 </xsl:when>
-                <xsl:otherwise><![CDATA[&nbsp;]]></xsl:otherwise>
+                <xsl:otherwise> </xsl:otherwise>
               </xsl:choose>
             </td>
             <td width="40%" align="right">
-              <xsl:text><![CDATA[&nbsp;]]></xsl:text>
+              <xsl:text> </xsl:text>
               <xsl:apply-templates select="$next" mode="object.title.markup"/>
             </td>
           </tr>
