@@ -25,7 +25,7 @@ ad_form -name shell -form {
       {html {cols 80 rows 10}}
     }
   } -on_submit {
-    if {[catch {set result [uplevel $script]}]} {
+    if {[catch {set result [uplevel 1 $script]}]} {
       global errorInfo
       set result "ERROR:\n$errorInfo"
     }
