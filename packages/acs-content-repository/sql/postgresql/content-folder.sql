@@ -132,7 +132,7 @@ declare
   v_context_id                acs_objects.context_id%TYPE;
 begin
 
-        perform content_folder__new (
+        return content_folder__new (
                 new__name,
                 new__label,
                 new__description,
@@ -146,7 +146,6 @@ begin
                 null
         );
 
-  return null; 
 end;' language 'plpgsql';
 
 select define_function_args('content_folder__new','name,label,description,parent_id,context_id,folder_id,creation_date;now,creation_user,creation_ip,security_inherit_p;t,package_id');
