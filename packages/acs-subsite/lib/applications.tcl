@@ -14,34 +14,27 @@ list::create \
         }
     }
 
+set subsite_node_id [subsite::get_element -element node_id]
 
+set user_id [ad_conn user_id]
 
-set applications [list]
-
-foreach url [site_node::get_children -package_type apm_application -node_id [subsite::get_element -element node_id]] {
-    array unset node 
-    array set node [site_node::get_from_url -url $url -exact]
-
-    if { [permission::permission_p -object_id $node(object_id) -privilege read] } {
-        lappend applications [list \
-                                  $node(instance_name) \
-                                  $node(node_id) \
-                                  $node(name) \
-                                  $node(object_id)]
-    }
-}
-
-# Sort them by instance_name
-set applications [lsort -index 0 $applications]
-
-multirow create applications instance_name node_id name package_id read_p
-
-foreach elm $applications {
-    multirow append applications \
-        [lindex $elm 0] \
-        [lindex $elm 1] \
-        [lindex $elm 2] \
-        [lindex $elm 3] \
-        [lindex $elm 4]
+db_multirow applications select_applications {
+    select p.package_id,
+           p.instance_name,
+           n.node_id, 
+           n.name
+    from   site_nodes n,
+           apm_packages p,
+           apm_package_types t
+    where  n.parent_id = :subsite_node_id
+    and    p.package_id = n.object_id
+    and    t.package_key = p.package_key
+    and    t.package_type = 'apm_application'
+    and    exists (select 1 
+                   from   all_object_party_privilege_map perm 
+                   where  perm.object_id = p.package_id
+                   and    perm.privilege = 'read'
+                   and    perm.party_id = :user_id)
+    order  by upper(instance_name)
 }
 

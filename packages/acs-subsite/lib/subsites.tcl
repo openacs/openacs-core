@@ -23,61 +23,32 @@ list::create \
     }
 
 
-set subsites [list]
-set package_ids [list]
+set subsite_node_id [subsite::get_element -element node_id]
 
-foreach url [site_node::get_children -package_key acs-subsite -node_id [subsite::get_element -element node_id]] {
-    array unset node 
-    array set node [site_node::get_from_url -url $url -exact]
+set user_id [ad_conn user_id]
 
-    if { [permission::permission_p -object_id $node(object_id) -privilege read -party_id [ad_conn untrusted_user_id]] } {
-        # TODO
-        set edit_url {}
-        if { [permission::permission_p -object_id $node(object_id) -privilege admin] } {
-            set edit_url {}
-        }
-        lappend subsites [list \
-                              $node(instance_name) \
-                              $node(node_id) \
-                              $node(name) \
-                              $node(object_id) \
-                              $node(url)]
-        lappend package_ids $node(object_id)
-    }
+db_multirow subsites select_subsites {
+    select p.package_id,
+           p.instance_name,
+           n.node_id, 
+           n.name,
+           (select count(*)
+            from   application_groups ag,
+                   group_approved_member_map m
+            where  ag.package_id = p.package_id
+            and    m.group_id = ag.group_id) as num_members
+    from   site_nodes n,
+           apm_packages p
+    where  n.parent_id = :subsite_node_id
+    and    p.package_id = n.object_id
+    and    p.package_key = 'acs-subsite'
+    and    exists (select 1 
+                   from   all_object_party_privilege_map perm 
+                   where  perm.object_id = p.package_id
+                   and    perm.privilege = 'read'
+                   and    perm.party_id = :user_id)
+    order  by upper(instance_name)
 }
 
-array set num_members [list]
-if { [llength $package_ids] > 0 } { 
-    db_foreach num_members "
-        select ag.package_id,
-               count(member_id) as n_members
-        from   application_groups ag,
-               group_approved_member_map m
-        where  ag.package_id in ('[join $package_ids "','"]')
-        and    m.group_id = ag.group_id
-        group  by ag.package_id
-    " {
-        set num_members($package_id) [lc_numeric $n_members]
-    }
-}
 
-# Sort them by instance_name
-set subsites [lsort -index 0 $subsites]
-
-multirow create subsites instance_name node_id name package_id url num_members
-
-foreach elm $subsites {
-    set package_id [lindex $elm 3]
-    if { ![info exists num_members($package_id)] } {
-        set num_members($package_id) {}
-    }
-
-    multirow append subsites \
-        [lindex $elm 0] \
-        [lindex $elm 1] \
-        [lindex $elm 2] \
-        [lindex $elm 3] \
-        [lindex $elm 4] \
-        $num_members($package_id)
-}
 
