@@ -47,3 +47,4 @@ end;
 
 -- data, but this doesn't work from the apm
 @ '../common/ref-language-data.sql'
+commit;
