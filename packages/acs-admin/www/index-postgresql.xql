@@ -5,7 +5,7 @@
 <fullquery name="subsite_admin_urls">      
       <querytext>
       
-    select site_node__url(node_id) || 'admin/' as subsite_admin_url, instance_name
+    select site_node__url(node_id) || 'admin/' as admin_url, instance_name
     from site_nodes s, apm_packages p
     where s.object_id = p.package_id
     and p.package_key = 'acs-subsite'
