@@ -18,19 +18,29 @@ ad_library {
 namespace eval lang::message {
 
     ad_proc -public register { 
+        -upgrade:boolean
         locale
         package_key
         message_key
         message
     } { 
-        Registers a message in a given locale or language.
+        <p>
+        Registers a message for a given locale and package.
         Inserts the message key into the database if it
         doesn't already exists. Inserts the message itself
         in the given locale into the database if it doesn't
         exist and updates it if it does. Also updates the
         cache with the message.
-    
-        @author Jeff Davis (davis@arsdigita.com)
+        </p>
+
+        <p>
+        If we are registering a message as part of an upgrade, appropriate
+        upgrade status for the message key (added) and the message (updated or
+        added) will be set.
+        </p>
+
+        @author Jeff Davis
+        @author Peter Marklund
         @author Bruno Mattarollo (bruno.mattarollo@ams.greenpeace.org)
         @author Christian Hvid
 
@@ -42,6 +52,9 @@ namespace eval lang::message {
         @param package_key   The package key of the package that the message belongs to.
         @param message_key   The key that identifies the message within the package.
         @param message       The message text
+        @param upgrade       A boolean switch indicating if this message is registered
+                             as part of a message catalog upgrade or not. The default
+                             (switch not provided) is that we are not upgrading.
     } { 
         # Create a globally unique key for the cache
         set key "${package_key}.${message_key}"
@@ -51,10 +64,15 @@ namespace eval lang::message {
         set key_exists_p [db_string message_key_exists_p {}]
 
         if { ! $key_exists_p } {
+            set key_upgrade_status [ad_decode $upgrade_p 1 "added" "no_upgrade"]
+            if { $upgrade_p } {
+                ns_log Notice "lang::message::register - Giving message key $message_key an upgrade status of $key_upgrade_status"
+            }
             db_dml insert_message_key {}
         }
 
-        # Check if the $lang parameter is a language or a locale
+        # Qualify the locale variable value with a country code if it is
+        # just a language
         if { [string length $locale] == 2 } {
             # It seems to be a language (iso codes are 2 characters)
             # We don't do a more throughout check since this is not
@@ -63,7 +81,7 @@ namespace eval lang::message {
             set locale [util_memoize [list ad_locale_locale_from_lang $locale]]
         } 
 
-        # Check the cache
+        # Different logic for update and insert
         if { [nsv_exists lang_message_$locale $key] } { 
             # Update existing message if the message has changed
 
@@ -71,6 +89,11 @@ namespace eval lang::message {
             if { ![string equal $message $old_message] } {
 
                 lang::audit::changed_message $old_message $package_key $message_key $locale
+
+                set message_upgrade_status [ad_decode $upgrade_p 1 "updated" "no_upgrade"]
+                if { $upgrade_p } {
+                    ns_log Notice "lang::message::register - Giving message for key $message_key in locale $locale an upgrade status of $message_upgrade_status"
+                }
 
                 # Trying to avoid hitting Oracle bug#2011927    
                 if { [empty_string_p [string trim $message]] } {
@@ -82,10 +105,14 @@ namespace eval lang::message {
             }
         } else { 
             # Insert new message
-            ns_log Debug "lang::message::register - Inserting into database message: $locale $key" 
-            db_transaction {
-                # As above, avoiding the bug#2011927 from Oracle.
 
+            db_transaction {
+                set message_upgrade_status [ad_decode $upgrade_p 1 "added" "no_upgrade"]
+                if { $upgrade_p } {
+                    ns_log Notice "lang::message::register - Giving message for key $message_key in locale $locale an upgrade status of $message_upgrade_status"
+                }
+
+                # avoiding bug#2011927 from Oracle.
                 if { [empty_string_p [string trim $message]] } {
                     db_dml lang_message_insert_null_msg {}
                 } else {
@@ -219,6 +246,17 @@ namespace eval lang::message {
         return {^(.*?)(%%|%[a-zA-Z_\.]+%)(.*)$}
     }
 
+    ad_proc -public message_exists_p { locale key } {
+        Return 1 if message exists in given locale, 0 otherwise.
+
+        @author Peter Marklund
+    } {
+        # Make sure the catalog files have been loaded
+        lang::catalog::import_from_all_files_and_cache
+
+        return [nsv_exists lang_message_$locale $key]        
+    }
+
     ad_proc -public lookup {
         locale
         key
@@ -261,7 +299,8 @@ namespace eval lang::message {
                                   usually invoked by the underscore proc (_). Set upvar level to less than
                                   1 if you don't want variable interpolation to be done.
     
-        @author Jeff Davis (davis@arsdigita.com), Henry Minsky (hqm@arsdigita.com)
+        @author Jeff Davis (davis@arsdigita.com)
+        @author Henry Minsky (hqm@arsdigita.com)
         @author Peter Marklund (peter@collaboraid.biz)
         @see _
         
@@ -305,7 +344,7 @@ namespace eval lang::message {
             set translate_url "/acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } { locales $locale } { package_key $package_key_part } return_url }]"
         }
 
-        if { [nsv_exists lang_message_$locale $key] } {
+        if { [message_exists_p $locale $key] } {
             # Message exists in the given locale
 
             set return_value [nsv_get lang_message_$locale $key]
@@ -443,7 +482,7 @@ ad_proc -public _ {
     key
     {substitution_list {}}
 } {
-    Short hand proc that invokes the lang::util::lookup proc. 
+    Short hand proc that invokes the lang::message::lookup proc. 
     Returns a localized text from the message catalog with the locale ad_conn locale
     if invoked within a request, or the system locale otherwise.
     
