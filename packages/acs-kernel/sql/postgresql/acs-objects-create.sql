@@ -696,8 +696,6 @@ end;' language 'plpgsql';
 
 -- function new
 
-select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id');
-
 create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
@@ -715,8 +713,6 @@ begin
                          ''t'', null, null);
 end;' language 'plpgsql';
 
-select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id,new__security_inherit_p;t');
-
 create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean)
 returns integer as '
 declare
@@ -732,8 +728,6 @@ begin
                          new__creation_user, new__creation_ip, new__context_id,
                          new__security_inherit_p, null, null);
 end;' language 'plpgsql';
-
-select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id,new__security_inherit_p;t,new__title');
 
 create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean,varchar)
 returns integer as '
@@ -752,8 +746,6 @@ begin
                          new__security_inherit_p, new__title, null);
 end;' language 'plpgsql';
 
-select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id,new__security_inherit_p;t,new__title,new__package_id');
-
 create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,varchar,integer)
 returns integer as '
 declare
@@ -771,8 +763,6 @@ begin
                          ''t'', new__title, new__package_id);
 end;' language 'plpgsql';
 
-select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id,new__title');
-
 create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,varchar)
 returns integer as '
 declare
@@ -788,8 +778,6 @@ begin
                          new__creation_user, new__creation_ip, new__context_id,
                          ''t'', new__title, null);
 end;' language 'plpgsql';
-
-select define_function_args('acs_object__new','object_id,object_type');
 
 create function acs_object__new (integer,varchar) returns integer as '
 declare

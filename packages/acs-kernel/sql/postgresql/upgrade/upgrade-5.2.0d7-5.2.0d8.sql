@@ -2,18 +2,6 @@ select define_function_args('acs_object__initialize_attributes','initialize_attr
 
 select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id,new__security_inherit_p;t,new__title,new__package_id');
 
-select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id');
-
-select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id,new__security_inherit_p;t');
-
-select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id,new__security_inherit_p;t,new__title');
-
-select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id,new__security_inherit_p;t,new__title,new__package_id');
-
-select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id,new__title');
-
-select define_function_args('acs_object__new','object_id,object_type');
-
 select define_function_args('acs_object__delete','delete__object_id');
 
 select define_function_args('acs_object__name','name__object_id');
