@@ -556,6 +556,33 @@ db_multirow -extend { user_url } users users_query {
     set user_url [acs_community_member_url -user_id $user_id]
 }
     </programlisting>
+
+          <para>
+            You can also iterate over a multirow after it has been
+            created - check the documentation for
+            template::multirow</para>
+
+          <para>
+            For example,
+          </para>
+
+          <programlisting>
+db_multirow assets assets {
+  select asset_id,
+    from ...
+}
+
+..
+
+set asset_id_l [list]
+multirow foreach assets {
+  lappend asset_id_l $asset_id
+}
+          </programlisting>
+
+          <para>Technically it's equivalent to using a code block on
+          the end of your db_multirow.</para>
+
   	</listitem>
       </varlistentry>	
 
