@@ -115,8 +115,8 @@
 </p>
 
 <pre>
-# List image tags, look for alt attributes with literal text
-find -iname '*.adp'|xargs egrep -i '&lt;img'
+# List image tags with alt attributes, look for alt attributes with literal text
+find -iname '*.adp'|xargs egrep -i '&lt;img.*alt='
 # List submit buttons, look for text in the value attribute 
 find -iname '*.adp'|xargs egrep -i '&lt;input[^&gt;]*type="?submit'
 </pre>
