@@ -577,7 +577,13 @@ ad_form -extend \
     <para>One of the nice things about using the OpenACS object system
     is that it has a built-in facility for tracking hierarchical data
     in an efficient way. The algorithm behind this is called
-    <computeroutput>tree_sortkey.</computeroutput></para>
+    <computeroutput>tree_sortkey.</computeroutput>. This is built into
+    the PostgreSql portion of the
+    <computeroutput>acs_objects</computeroutput> table. (If you are
+    using Oracle, then you should just use CONNECT BY to build your
+    hierarchical queries, using context_id as the parent_id
+    column). Note that packages based on acs_objects use and/or abuse
+    context_id inconsistently to maintain a hierarchy.</para>
 
     <para>Any time your tables are subclasses of the acs_objects
     table, then you automatically get the ability to structure them
