@@ -154,10 +154,7 @@ foreach { var param } {
 
 # set the Main Site RestrictToSSL parameter
 
-set main_site_id [db_string main_site_id_select { 
-    select package_id from apm_packages
-    where instance_name = 'Main Site' 
-}]
+set main_site_id [subsite::main_site_id]
 
 ad_parameter -set "acs-admin/*" -package_id $main_site_id RestrictToSSL
 ad_parameter -set $new_registrations -package_id $main_site_id NewRegistrationEmailAddress
