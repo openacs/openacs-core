@@ -20,10 +20,10 @@ set feedback off
 @@ groups-create
 @@ rel-segments-create
 @@ rel-constraints-create
+@@ acs-permissions-create
 @@ groups-body-create
 @@ rel-segments-body-create
 @@ rel-constraints-body-create
-@@ acs-permissions-create
 @@ security-create
 @@ journal-create
 @@ site-nodes-create
