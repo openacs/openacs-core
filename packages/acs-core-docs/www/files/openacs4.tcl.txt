@@ -63,7 +63,7 @@ ns_param   debug              $debug
 # 
 ns_section ns/threads 
 ns_param   mutexmeter         true      ;# measure lock contention 
-ns_param   stacksize          [expr 128*1024]
+ns_param   stacksize          500000
 
 # 
 # MIME types. 
