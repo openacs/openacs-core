@@ -86,7 +86,7 @@ create table auth_driver_params(
                       references acs_objects(object_id)
                       constraint auth_driver_params_iid_nn
                       not null,
-      key             text,
+      key             varchar(200),
       value           text,
       unique (authority_id, impl_id)
 );
