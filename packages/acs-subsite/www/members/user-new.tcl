@@ -13,15 +13,15 @@ set context [list [list "." "Members"] "Invite"]
 
 set group_id [application_group::group_id_from_package_id]
 
-
 #
 # Check if email already belongs to a user
 #
 
-set found_p [db_0or1row select_user { select user_id from cc_users where email = :email }]
+set found_p [db_0or1row select_user { select user_id from cc_users where lower(email) = lower(:email) }]
 
 if { $found_p } {
     # A user with this email already exists. Make them members.
+    set member_state approved
 
     db_transaction {
 	set rel_id [relation_add -member_state $member_state "membership_rel" $group_id $user_id]
