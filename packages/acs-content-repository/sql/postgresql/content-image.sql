@@ -340,7 +340,7 @@ begin
         item_id = v_item_id
       order by revision_id asc
     loop
-      PERFORM content_revision__delete_revision (
+      PERFORM content_revision__delete (
         v_revision_id
       );
     end loop;
