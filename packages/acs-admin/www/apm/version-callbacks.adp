@@ -28,6 +28,111 @@
 
 <if @unused_types_p@ eq 1>
   <p>
-    <a href="version-callback-add-edit?version_id=@version_id@">Add callback</a>
+    <b>&raquo;</b> <a href="version-callback-add-edit?version_id=@version_id@">Add callback</a>
   </p>
 </if>
+
+<h3>Help</h3>
+
+<p>
+  Here's the list of available callbacks and the parameters they will be called with.
+</p>
+
+<p>
+  For install, uninstall, and upgrade, the before/after part of the
+  name refers to before or after the database create/upgrade/drop
+  scripts have been run. For mounting and instantiating, well, that should be fairly obvious.
+</p>
+
+<table cellspacing="1" cellpadding="4" bgcolor="#999999">
+  <tr bgcolor="white">
+    <th>Callback</th>
+    <th>Parameters</th>
+  </tr>
+
+  <tr bgcolor="white">
+    <td>
+      before-install
+    </td>
+    <td>
+      
+    </td>
+  </tr>
+
+  <tr bgcolor="white">
+    <td>
+      after-install
+    </td>
+    <td>
+      
+    </td>
+  </tr>
+
+  <tr bgcolor="white">
+    <td>
+      before-upgrade
+    </td>
+    <td>
+      from_version_name
+      to_version_name
+    </td>
+  </tr>
+
+  <tr bgcolor="white">
+    <td>
+      after-upgrade
+    </td>
+    <td>
+      from_version_name
+      to_version_name
+    </td>
+  </tr>
+
+  <tr bgcolor="white">
+    <td>
+      before-uninstall
+    </td>
+    <td>
+      
+    </td>
+  </tr>
+
+  <tr bgcolor="white">
+    <td>
+      after-instantiate
+    </td>
+    <td>
+      package_id      
+    </td>
+  </tr>
+
+  <tr bgcolor="white">
+    <td>
+      before-uninstantiate
+    </td>
+    <td>
+      package_id
+    </td>
+  </tr>
+
+  <tr bgcolor="white">
+    <td>
+      after-mount
+    </td>
+    <td>
+      package_id
+      node_id
+    </td>
+  </tr>
+
+  <tr bgcolor="white">
+    <td>
+      before-unmount
+    </td>
+    <td>
+      package_id 
+      node_id
+    </td>
+  </tr>
+
+</table>
