@@ -138,18 +138,4 @@ namespace eval oacs_util {
 	}
     }
 
-    ad_proc -public parameter {
-	{-package_key:required}
-	{-key:required}
-    } {
-        wraps ad_parameter. i'm just sick of ad_parameter calling verbosity. 
-        i will break down and re-write it, just not tonight
-        @author arjun@openforce
-    } {
-        return [ad_parameter \
-                -package_id [apm_package_id_from_key $package_key] \
-                $key
-        ]
-    }
-
 }
