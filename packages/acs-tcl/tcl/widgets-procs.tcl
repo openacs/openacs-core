@@ -1,4 +1,4 @@
-1ad_library {
+ad_library {
     UI widgets for use in forms, etc.
 
     @cvs-id $Id$
