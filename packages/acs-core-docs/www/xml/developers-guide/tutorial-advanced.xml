@@ -887,8 +887,6 @@ db_multirow \
 
     set to_addr "me@myemail.com"
 
-    set message_type  "text/html"
-
     # the from to html closes any open tags.
     set message_html [ad_html_text_convert -from html -to html $message]
 
