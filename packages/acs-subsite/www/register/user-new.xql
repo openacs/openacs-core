@@ -6,7 +6,7 @@
       select parties.party_id as user_id, persons.first_names, persons.last_name
       from parties, persons
       where parties.party_id = persons.person_id
-        and lower(parties.email) = lower(:email)
+        and parties.email = lower(:email)
    </querytext>
 </fullquery>
  
