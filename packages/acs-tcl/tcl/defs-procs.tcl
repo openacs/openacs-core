@@ -489,16 +489,13 @@ ad_proc -deprecated ad_parameter {
     if {[info exists set]} {
 	set ns_param [parameter::set_value -package_id $package_id -parameter $name -value $set]
     } else {
-        set ns_param [ad_parameter_from_file $name $package_key]
-	if {[empty_string_p $ns_param]} {
-            set ns_param [parameter::get -package_id $package_id -parameter $name -default $default]
-	}
+        set ns_param [parameter::get -package_id $package_id -parameter $name -default $default]
     }
 
     return $ns_param
 }
 
-ad_proc -deprecated ad_parameter_from_file {
+ad_proc -public ad_parameter_from_file {
     name
     {package_key ""}
 } {
