@@ -2584,13 +2584,13 @@ ad_proc -public db_tables {
 
         postgresql {
             set sql_table_names_with_pattern {
-                select relname
+                select relname as table_name
                 from pg_class
                 where relname like lower(:pattern) and
                 relname !~ '^pg_' and relkind = 'r'
             }
             set sql_table_names_without_pattern {
-                select relname
+                select relname as table_name
                 from pg_class
                 where relname !~ '^pg_' and relkind = 'r'
             }
