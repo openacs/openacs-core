@@ -33,10 +33,7 @@ if { [string compare $hash $computed_hash] != 0 } {
 
 set email [string tolower $email]
 
-if { ![db_0or1row user_login_user_id_from_email {
-    select user_id, member_state, email_verified_p
-    from cc_users
-    where email = :email}] } {
+if { ![db_0or1row user_login_user_id_from_email {}] } {
 
     # The user is not in the database. Redirect to user-new.tcl so the user can register.
     ad_set_client_property -persistent "f" register password $password
@@ -54,6 +51,16 @@ switch $member_state {
             ad_script_abort
 	}
 	if { [ad_check_password $user_id $password] } {
+
+            set PasswordExpirationDays [parameter::get -parameter PasswordExpirationDays -default 0]
+
+            # We also allow for empty value of password_age_days, in case the column is null after upgrading
+            if { $PasswordExpirationDays > 0 && ([empty_string_p $password_age_days] || $password_age_days > $PasswordExpirationDays) } {
+                # Password is expired, must be changed now
+                ad_returnredirect "[ad_conn package_url]/user/password-update?[export_vars { user_id return_url { expired_p 1 }}]"
+                ad_script_abort
+            }
+
 	    # The user has provided a correct, non-empty password. Log
 	    # him/her in and redirect to return_url.
 	    ad_user_login -forever=$persistent_cookie_p $user_id

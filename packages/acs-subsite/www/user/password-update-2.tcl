@@ -27,6 +27,11 @@ ad_page_contract {
             ad_complain "Your passwords don't match! Presumably, you made a typo while entering one of them."
         }
     }
+    new_password_old_password_different -requires { new_password_match } {
+        if { [string equal $password_old $password_1] } {
+            ad_complain "Your new password is identical to your old password. If you don't want to change your password, use your browser's back button to get out."
+        }
+    }
 }
 
 if {[empty_string_p $user_id]} {
@@ -43,7 +48,7 @@ if {[catch {ad_change_password $user_id $password_1} errmsg]} {
     ad_return_error "Wasn't able to change your password. Please contact the system administrator."
 }
 
-if {![ad_conn user_id]} {
+if { ![ad_conn user_id] } {
     ad_user_login $user_id
 }
 

@@ -16,6 +16,14 @@ ad_page_contract {
     user_id:onevalue
 }
 
+# We may have to redirect to some application page
+set redirect_url [parameter::get -parameter IndexRedirectUrl -default {}]
+
+if { ![empty_string_p $redirect_url] } {
+    ad_returnredirect $redirect_url
+    ad_script_abort
+}
+
 set context [list]
 set package_id [ad_conn package_id]
 set admin_p [ad_permission_p $package_id admin]
