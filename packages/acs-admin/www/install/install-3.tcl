@@ -56,6 +56,11 @@ foreach package_key $install {
     
     if { [exists_and_not_null version(download_url)] } {
         set spec_file [apm_load_apm_file -url $version(download_url)]
+        if { [empty_string_p $spec_file] } {
+            ns_log Error "Error downloading package $package_key from $version(download_url). Installing package failed."
+            set success_p 0
+            continue
+        }
         set package_path "[apm_workspace_install_dir]/$package_key"
     } else {
         set spec_file $version(path)
