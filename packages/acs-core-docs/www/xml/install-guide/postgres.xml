@@ -1,4 +1,4 @@
-<sect1 id="postgres" xreflabel="Installing Postgresql">
+<sect1 id="postgres" xreflabel="Installing PostgreSQL">
   <title>Install PostgreSQL 7.1.3</title>
 
   <para>
@@ -23,8 +23,7 @@
 joeuser:~$ su -
 Password: ***********
 root:~# cd /usr/local/src
-root:/usr/local/src# tar xzf /tmp/postgresql-7.1.3.tar.gz
-	</programlisting>
+root:/usr/local/src# tar xzf /tmp/postgresql-7.1.3.tar.gz</programlisting>
 
   </sect2>
 
@@ -48,8 +47,7 @@ root:~# chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.1.3
 root:~# exit
 logout
 joeuser:~$ su - postgres
-Password: ***********
-	</programlisting>
+Password: ***********</programlisting>
   </sect2>
 
   <sect2 id="install-postgres-env">
@@ -63,11 +61,10 @@ Password: ***********
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib
 PATH=$PATH:/usr/local/pgsql/bin
 
-export PATH LD_LIBRARY_PATH
-	</programlisting>
+export PATH LD_LIBRARY_PATH</programlisting>
 
 	<para>
-	  Logout and login again as <phrase>postgres</phrase>. Use the
+	  Logout and login again as <computeroutput>postgres</computeroutput>. Use the
 	  <computeroutput>echo</computeroutput> command to make sure that
 	  <computeroutput>/usr/local/pgsql/bin</computeroutput> is now in your
 	  PATH
@@ -79,8 +76,7 @@ logout
 joeuser:~$ su - postgres
 Password: ************
 postgres:~$ echo $PATH
-/usr/local/bin:/usr/bin:/bin: ... :/usr/local/pgsql/bin
-	</programlisting>
+/usr/local/bin:/usr/bin:/bin: ... :/usr/local/pgsql/bin</programlisting>
   </sect2>
 
   <sect2 id="install-postgres-compile" xreflabel="Compile PostgreSQL">
@@ -99,8 +95,7 @@ postgres:~$ echo $PATH
 	<programlisting>
 postgres:~$ cd /usr/local/src/postgresql-7.1.3
 postgres:/usr/local/src/postgresql-7.1.3$ ./configure
-postgres:/usr/local/src/postgresql-7.1.3$ make all
-	</programlisting>
+postgres:/usr/local/src/postgresql-7.1.3$ make all</programlisting>
 
 	<para>
 	  Compilation will take a while (about 10 minutes). Once it's done, you
@@ -108,8 +103,7 @@ postgres:/usr/local/src/postgresql-7.1.3$ make all
 	</para>
 
 	<programlisting>
-All of PostgreSQL is successfully made. Ready to install.
-	</programlisting>
+All of PostgreSQL is successfully made. Ready to install.</programlisting>
 
 	<para>
 	  Next, we'll install PostgreSQL. If all is successful, you'll see the
@@ -119,12 +113,11 @@ All of PostgreSQL is successfully made. Ready to install.
 	<programlisting>
 postgres:/usr/local/src/postgresql-7.1.3$ make install
 ...
-Thank you for choosing PostgreSQL, the most advanced open source database engine.
-	</programlisting>
+Thank you for choosing PostgreSQL, the most advanced open source database engine.</programlisting>
   </sect2>
 
   <sect2 id="install-postgres-openfts">
-	<title>Prepare Postgres for OpenFTS</title>
+	<title>Prepare PostgreSQL for OpenFTS</title>
 
 	<para>
 	  OpenFTS is the module that provides full text search to OpenACS 4. We
@@ -136,8 +129,7 @@ Thank you for choosing PostgreSQL, the most advanced open source database engine
 postgres:/usr/local/src/postgresql-7.1.3$ make install-all-headers
 postgres:/usr/local/src/postgresql-7.1.3$ cd contrib/intarray
 postgres:/usr/local/src/postgresql-7.1.3/contrib/intarray$ make
-postgres:/usr/local/src/postgresql-7.1.3/contrib/intarray$ make install
-	</programlisting>
+postgres:/usr/local/src/postgresql-7.1.3/contrib/intarray$ make install</programlisting>
   </sect2>
 
   <sect2 id="install-postgres-startup">
@@ -152,11 +144,10 @@ postgres:/usr/local/src/postgresql-7.1.3/contrib/intarray$ make install
 postgres:/usr/local/src/postgresql-7.1.3/contrib/intarray$ cd
 postgres:~$ /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
 postgres:~$ /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l /usr/local/pgsql/data/server.log start
-postmaster successfully started
-	</programlisting>
+postmaster successfully started</programlisting>
 
 	<para>
-	  Postgres errors will be logged in
+	  PostgreSQL errors will be logged in
 	  <computeroutput>/usr/local/pgsql/data/server.log</computeroutput>
 	</para>
   </sect2>
@@ -185,13 +176,12 @@ postgres:~$ createlang -l template1
 postgres:~$ createuser nsadmin
 Shall the new user be allowed to create databases? (y/n) y
 Shall the new user be allowed to create more new users? (y/n) y
-CREATE USER
-	</programlisting>
+CREATE USER</programlisting>
 
   </sect2>
 
   <sect2 id="install-postgres-test">
-	<title>Test Postgres</title>
+	<title>Test PostgreSQL</title>
 	<para>
 	  Create a database and try some simple commands. The output should be
 	  as shown.
@@ -224,8 +214,7 @@ mytestdb=# select test1();
 
 mytestdb=# \q
 postgres:~$ dropdb mytestdb
-DROP DATABASE
-	  </programlisting>
+DROP DATABASE</programlisting>
 
   </sect2>
 
@@ -245,15 +234,13 @@ postgres:~$ su -
 Password: ***********
 root:~# cp /tmp/postgresql.txt /etc/init.d/postgresql
 root:~# chown root.root /etc/init.d/postgresql
-root:~# chmod 700 /etc/init.d/postgresql
-		</programlisting>
+root:~# chmod 700 /etc/init.d/postgresql</programlisting>
 
 		<para>Test the script</para>
 
 		<programlisting>
 root:~# /etc/init.d/postgresql stop
-Stopping PostgreSQL: ok
-		</programlisting>
+Stopping PostgreSQL: ok</programlisting>
 
 		<para>
 		  If PostgreSQL successfully stopped, then use the following
@@ -274,8 +261,7 @@ root:~# update-rc.d postgresql defaults
 root:~# /etc/init.d/postgresql start
 Starting PostgreSQL: ok
 root:~# exit
-postgres:~$ exit
-		</programlisting>
+postgres:~$ exit</programlisting>
 	  </listitem>
 
 	  <listitem><para>Red Hat:</para>
@@ -285,15 +271,13 @@ postgres:~$ su -
 Password: ***********
 root:~# cp /tmp/postgresql.txt /etc/rc.d/init.d/postgresql
 root:~# chown root.root /etc/rc.d/init.d/postgresql
-root:~# chmod 700 /etc/rc.d/init.d/postgresql
-		  </programlisting>
+root:~# chmod 700 /etc/rc.d/init.d/postgresql</programlisting>
 
 		<para>Test the script</para>
 
 		<programlisting>
 root:~# /etc/rc.d/init.d/postgresql stop
-Stopping PostgreSQL: ok
-		</programlisting>
+Stopping PostgreSQL: ok</programlisting>
 
 		<para>If PostgreSQL successfully stopped, then use the following
 		  command to make sure that the script is run appropriately at boot
@@ -308,8 +292,7 @@ postgresql        0:off   1:off   2:off   3:on    4:on    5:on    6:off
 root:~# /etc/rc.d/init.d/postgresql start
 Starting PostgreSQL: ok
 root:~# exit
-postgres:~$ exit
-		</programlisting>
+postgres:~$ exit</programlisting>
 	  </listitem>
 
 	  <listitem><para>SuSE:</para>
@@ -319,15 +302,13 @@ postgres:~$ su -
 Password: ***********
 root:~# cp /tmp/postgresql.txt /etc/rc.d/init.d/postgresql
 root:~# chown root.root /etc/rc.d/init.d/postgresql
-root:~# chmod 700 /etc/rc.d/init.d/postgresql
-		</programlisting>
+root:~# chmod 700 /etc/rc.d/init.d/postgresql</programlisting>
 
 		<para>Test the script</para>
 
 		<programlisting>
 root:~# /etc/rc.d/init.d/postgresql stop
-Stopping PostgreSQL: ok
-		</programlisting>
+Stopping PostgreSQL: ok</programlisting>
 		
 		<para>
 		  If PostgreSQL successfully stopped, then use the following
@@ -348,8 +329,7 @@ root:/etc/rc.d/init.d# cp S20postgresql rc4.d
 root:/etc/rc.d/init.d# cp K20postgresql rc5.d
 root:/etc/rc.d/init.d# cp S20postgresql rc5.d
 root:/etc/rc.d/init.d# rm K20postgresql
-root:/etc/rc.d/init.d# rm S20postgresql   
-		</programlisting>
+root:/etc/rc.d/init.d# rm S20postgresql</programlisting>
 
 		<para>
 		  Test configuration
@@ -359,8 +339,7 @@ root:/etc/rc.d/init.d# rm S20postgresql
 root:/etc/rc.d/init.d # cd
 root:~ # /etc/rc.d/init.d/rc2.d/S20postgresql start
 Starting PostgreSQL: ok
-root:~ # exit
-		</programlisting>
+root:~ # exit</programlisting>
 	  </listitem>
 	</itemizedlist>
 
@@ -375,14 +354,14 @@ root:~ # exit
   </sect2>
 
   <sect2 id="install-postgres-moreinfo">
-	<title>Learn more about Postgresql</title>
+	<title>Learn more about PostgreSQL</title>
 	<para>
 		  Here are some links: 
 	</para>
 	
 	<itemizedlist>
 	  <listitem><para>
-		  <ulink url="http://www.postgresql.org/idocs/">Official Postgres Docs</ulink>
+		  <ulink url="http://www.postgresql.org/idocs/">Official PostgreSQL Docs</ulink>
 		</para></listitem>
 
 	  <listitem><para>

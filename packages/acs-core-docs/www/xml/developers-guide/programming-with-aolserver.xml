@@ -15,14 +15,14 @@ of global namespace, not one:
 </para>
 
 <orderedlist>
-<listitem><para><phrase><emphasis>Server</emphasis>-global</phrase>: As you&#39;d expect, there is
+<listitem><para><emphasis>Server</emphasis>-global: As you&#39;d expect, there is
 only one server-global namespace per server, and variables set within it can
 be accessed by any Tcl code running subsequently, in any of the server&#39;s
 threads. To set/get server-global variables, use AOLserver 3&#39;s <ulink url="http://www.aolserver.com/docs/nsv.adp"><computeroutput>nsv</computeroutput> API</ulink>
 (which supersedes <computeroutput>ns_share</computeroutput> from the pre-3.0 API). 
 </para></listitem>
 
-<listitem><para><phrase><emphasis>Script</emphasis>-global</phrase>: Each Tcl script (ADP, Tcl page,
+<listitem><para><emphasis>Script</emphasis>-global: Each Tcl script (ADP, Tcl page,
 registered proc, filter, etc.) executing within an AOLserver thread has its
 own global namespace. Any variable set in the top level of a script is, by
 definition, script-global, meaning that it is accessible only by subsequent
@@ -64,9 +64,9 @@ server initialization into the new interpreter). This happens <emphasis>every
 time</emphasis> the task is executed - and it is a very expensive process that
 should not be taken lightly!</para>
 
-<para><phrase>The moral:</phrase> if you have a lightweight scheduled procedure
-which runs frequently, <phrase>don&#39;t use the <computeroutput>-thread</computeroutput>
-switch</phrase>.</para>
+<para>The moral: if you have a lightweight scheduled procedure
+which runs frequently, don&#39;t use the <computeroutput>-thread</computeroutput>
+switch.</para>
 
 
 
@@ -128,11 +128,11 @@ set email [lindex $user_info 1]
 more than one value from a function. When to use which depends on the
 circumstances.</para>
 
-<para><phrase>Using Arrays and Pass-By-Value</phrase></para>
+<para>Using Arrays and Pass-By-Value</para>
 
 <para>
-The one we generally prefer is <phrase>returning an <ulink url="http://aolserver.com/docs/tcl/tcl8.3/TclCmd/array.htm#M8"><computeroutput>array
-get</computeroutput></ulink>-formatted list</phrase>. It has all the nice properties of
+The one we generally prefer is returning an <ulink url="http://aolserver.com/docs/tcl/tcl8.3/TclCmd/array.htm#M8"><computeroutput>array
+get</computeroutput></ulink>-formatted list. It has all the nice properties of
 pass-by-value, and it uses Tcl arrays, which have good native support. 
 </para>
  
@@ -172,7 +172,7 @@ ad_proc ad_get_user_info { user_id } {
 </programlisting>
 
 
-<para><phrase>Using Arrays and Pass-By-Reference</phrase></para>
+<para>Using Arrays and Pass-By-Reference</para>
 
 <para>
 Sometimes pass-by-value incurs too much overhead, and you&#39;d rather
@@ -189,8 +189,8 @@ milisecond. The time depends almost completely on the number of entries, and
 almost not at all on the size of the entries.</emphasis></para></blockquote>
 
 <para>
-You implement pass-by-reference in Tcl by <phrase>taking the name of an array
-as an argument and <computeroutput>upvar</computeroutput> it</phrase>. 
+You implement pass-by-reference in Tcl by taking the name of an array
+as an argument and <computeroutput>upvar</computeroutput> it. 
 </para>
  
 
@@ -221,7 +221,7 @@ side effects in other places. Especially if have a chain of
 <computeroutput>upvar</computeroutput>s through several layers of the call stack, you&#39;ll have
 a hard time debugging.</para>
 
-<para><phrase>Multisets: Using <computeroutput>ns_set</computeroutput>s and Pass-By-Reference</phrase></para>
+<para>Multisets: Using <computeroutput>ns_set</computeroutput>s and Pass-By-Reference</para>
 
 <para>
 An array is a type of <emphasis>set</emphasis>, which means you can&#39;t have multiple
@@ -229,9 +229,9 @@ entries with the same key. Data structures that can have multiple entries for
 the same key are known as a <emphasis>multiset</emphasis> or <emphasis>bag</emphasis>. 
 </para>
 
-<para>If your data can have <phrase>multiple entries with the same key</phrase>,
-you should use the AOLserver built-in <ulink url="http://www.aolserver.com/docs/tcldev/tapi-120.htm#197598"><phrase><computeroutput>
-ns_set</computeroutput></phrase></ulink>. You can also do a case-insensitive lookup on an
+<para>If your data can have multiple entries with the same key,
+you should use the AOLserver built-in <ulink url="http://www.aolserver.com/docs/tcldev/tapi-120.htm#197598"><computeroutput>
+ns_set</computeroutput></ulink>. You can also do a case-insensitive lookup on an
 <computeroutput>ns_set</computeroutput>, something you can&#39;t easily do on an array. This is
 especially useful for things like HTTP headers, which happen to have these
 exact properties.</para>

@@ -1,5 +1,5 @@
-<sect1 id="object-system-design" xreflabel="ACS 4 Object Model Design">
-<title>ACS 4 Object Model Design</title>
+<sect1 id="object-system-design" xreflabel="OpenACS 4 Object Model Design">
+<title>OpenACS 4 Object Model Design</title>
 
 <authorblurb><para>
 by <ulink url="mailto:psu@arsdigita.com">Pete Su</ulink>,
@@ -52,9 +52,9 @@ Requirements</link></para></listitem>
 <title>Introduction</title>
 
 
-<para>Before ACS 4, software developers writing ACS applications or modules
+<para>Before OpenACS 4, software developers writing OpenACS applications or modules
 would develop each data model separately. However, many applications built on
-ACS share certain characteristics or require certain common services.
+OpenACS share certain characteristics or require certain common services.
 Examples of such services include:</para>
 
 <itemizedlist>
@@ -84,12 +84,12 @@ include:</para>
 </itemizedlist>
 
 <para>In the past, developers had to use ad-hoc and inconsistent schemes to
-interface to various &quot;general&quot; services. ACS 4 defines a central
+interface to various &quot;general&quot; services. OpenACS 4 defines a central
 data model that keeps track of the application objects that we wish to
 manage, and serves as a primary store of <emphasis>metadata</emphasis>. By
 <emphasis>metadata</emphasis>, we mean data stored on behalf of an application
 <emphasis>outside</emphasis> of the application&#39;s data model in order to enable
-certain central services. The ACS 4 Object Model (or object system) manages
+certain central services. The OpenACS 4 Object Model (or object system) manages
 several different kinds of data and metadata to allow us to provide general
 services to applications:</para>
 
@@ -123,7 +123,7 @@ groups).
 <para>The next section will explore these facilities in the context of the the
 particular programming idioms that we wish to generalize.</para>
 
-<para><phrase>Related Links</phrase></para>
+<para><emphasis role="strong">Related Links</emphasis></para>
 
 <para>This design document should be read along with the design documents for <link linkend="groups-design">the new groups system</link>, <link linkend="subsites-design">subsites</link> and <link linkend="permissions-design">the permissions system</link></para>
 
@@ -133,33 +133,33 @@ particular programming idioms that we wish to generalize.</para>
 <title>History</title>
 
 
-<para>The motivation for most of the facilities in the ACS 4 Object Model can be
+<para>The motivation for most of the facilities in the OpenACS 4 Object Model can be
 understood in the context of the 3.x code base and the kinds of programming
 idioms that evolved there. These are listed and discussed below.</para>
 
 <sect3 id="objects-design-object-ident" xreflabel="Object Identification">
 <title>Object Identification</title>
 
-<para>Object identification is a central mechanism in ACS 4. Every application
-object in ACS 4 has a unique ID which is mapped to a row in a central table
-called <computeroutput>acs_objects</computeroutput>. Developers that wish to use ACS 4 services
+<para>Object identification is a central mechanism in OpenACS 4. Every application
+object in OpenACS 4 has a unique ID which is mapped to a row in a central table
+called <computeroutput>acs_objects</computeroutput>. Developers that wish to use OpenACS 4 services
 need only take a few simple steps to make sure that their application objects
 appear in this table. The fact that every object has a known unique
 identifier means that the core can deal with all objects in a generic way. In
 other words, we use object identifiers to enable centralized services in a
 global and uniform manner.</para>
 
-<para><emphasis>Implicit Object Identifiers in ACS 3.x</emphasis></para>
+<para><emphasis>Implicit Object Identifiers in OpenACS 3.x</emphasis></para>
 
 <para>The motivation for implementing general object identifiers comes from
-several observations of data models in ACS 3.x. Many modules use a
+several observations of data models in OpenACS 3.x. Many modules use a
 <computeroutput>(user_id, group_id, scope)</computeroutput> column-triple for the purpose of
 recording ownership information on objects, for access control. User/groups
 also uses <computeroutput>(user_id, group_id)</computeroutput> pairs in its
 <computeroutput>user_group_map</computeroutput> table as a way to identify data associated with a
 single membership relation.</para>
 
-<para>Also, in ACS 3.x many utility modules exist that do nothing more than
+<para>Also, in OpenACS 3.x many utility modules exist that do nothing more than
 attach some extra attributes to existing application data. For example,
 general comments maintains a table that maps application &quot;page&quot;
 data (static or dynamic pages on the website) to one or more user comments on
@@ -177,22 +177,22 @@ that their definition and use is ad-hoc and inconsistent, making the
 construction of generic application-independent services unnecessarily
 difficult.</para>
 
-<para><emphasis>Object Identifiers in ACS 4</emphasis></para>
+<para><emphasis>Object Identifiers in OpenACS 4</emphasis></para>
 
-<para>The ACS 4 Object Model defines a single mechanism that applications use to
+<para>The OpenACS 4 Object Model defines a single mechanism that applications use to
 attach unique identifiers to application data. This identifier is the primary
 key of the <computeroutput>acs_objects</computeroutput> table. This table forms the core of what
 we need to provide generic services like access control, general attribute
 storage, general presentation and forms tools, and generalized administrative
 interfaces. In addition, the object system provides an API that makes it easy
 to create new objects when creating application data. All an application must
-do to take advantage of general services in ACS 4 is to use the new API to
+do to take advantage of general services in OpenACS 4 is to use the new API to
 make sure every object the system is to manage is associated with a row in
 <computeroutput>acs_objects</computeroutput>. More importantly, if they do this, new services
 like general comments can be created without requiring existing applications
 to &quot;hook into&quot; them via new metadata.</para>
 
-<para><phrase>Note:</phrase> Object identifiers are a good example of metadata
+<para><emphasis role="strong">Note:</emphasis> Object identifiers are a good example of metadata
 in the new system. Each row in <computeroutput>acs_objects</computeroutput> stores information
 <emphasis>about</emphasis> the application object, but not the application object itself.
 This becomes more clear if you skip ahead and look at the SQL schema code
@@ -202,7 +202,7 @@ that defines this table.</para>
 <sect3 id="objects-design-obj-context" xreflabel="Object Context and Access Control">
 <title>Object Context and Access Control</title>
 
-<para>Until the implementation of the general permissions system, every ACS
+<para>Until the implementation of the general permissions system, every OpenACS
 application had to manage access control to its data separately. Later on, a
 notion of &quot;scoping&quot; was introduced into the core data model.</para>
 
@@ -215,11 +215,11 @@ hypothetical rows in the <computeroutput>address_book</computeroutput> table:</p
 <tgroup cols="3">
 <tbody>
 <row>
-<entry><phrase>...</phrase></entry>
-<entry><phrase><computeroutput>scope</computeroutput></phrase></entry>
-<entry><phrase><computeroutput>user_id</computeroutput></phrase></entry>
-<entry><phrase><computeroutput>group_id</computeroutput></phrase></entry>
-<entry><phrase>...</phrase></entry>
+<entry><emphasis role="strong">...</emphasis></entry>
+<entry><emphasis role="strong"><computeroutput>scope</computeroutput></emphasis></entry>
+<entry><emphasis role="strong"><computeroutput>user_id</computeroutput></emphasis></entry>
+<entry><emphasis role="strong"><computeroutput>group_id</computeroutput></emphasis></entry>
+<entry><emphasis role="strong">...</emphasis></entry>
 </row>
 
 <row>
@@ -258,7 +258,7 @@ given object belongs, where each context is <emphasis>either</emphasis> a person
 <emphasis>or</emphasis> a group of people <emphasis>or</emphasis> the general public (itself a group
 of people).</para>
 
-<para>In ACS 4, rather than breaking the world into a limited set of scopes,
+<para>In OpenACS 4, rather than breaking the world into a limited set of scopes,
 every object lives in a single <emphasis>context</emphasis>. A context is just an
 abstract name for the default security domain to which the object belongs.
 Each context has a unique identifier, and all the contexts in a system form a
@@ -271,11 +271,11 @@ column of the <computeroutput>acs_objects</computeroutput> table.</para>
 
 <para>We use an object&#39;s context to provide a default answer to questions
 regarding access control. Whenever we ask a question of the form &quot;can
-user X perform action Y on object Z&quot;, the ACS security model will defer
+user X perform action Y on object Z&quot;, the OpenACS security model will defer
 to an object&#39;s context if there is no information about user X&#39;s
 permission to perform action Y on object Z.</para>
 
-<para>The context system forms the basis for the rest of the ACS access control
+<para>The context system forms the basis for the rest of the OpenACS access control
 system, which is described in in two separate documents: one for the <link linkend="permissions-design">permissions system</link> and another for the
 <link linkend="groups-design">party groups</link> system. The context system
 is also used to implement <link linkend="subsites-design">subsites</link>.</para>
@@ -284,13 +284,13 @@ is also used to implement <link linkend="subsites-design">subsites</link>.</para
 <sect3 id="objects-design-obj-types">
 <title>Object Types</title>
 
-<para>As mentioned above, many ACS modules provide extensible data models, and
+<para>As mentioned above, many OpenACS modules provide extensible data models, and
 need to use application specific mechanisms to keep track of user defined
 attributes and to map application data to these attributes. In the past,
 modules either used user/groups or their own ad hoc data model to provide
 this functionality.</para>
 
-<para><emphasis>User/Groups in ACS 3.x</emphasis></para>
+<para><emphasis>User/Groups in OpenACS 3.x</emphasis></para>
 
 <para>The user/group system allowed developers to define <emphasis>group types</emphasis>
 along with attributes to be stored with each instance of a group type. Each
@@ -309,28 +309,28 @@ column. These tables allowed developers and users to define custom sets of
 attributes to store on groups and group members without changing the data
 model at the code level.</para>
 
-<para>Many applications in ACS 3.x and earlier used the group type mechanism in
+<para>Many applications in OpenACS 3.x and earlier used the group type mechanism in
 ways that were only tangentially related to groups of users, just to obtain
 access to this group types mechanism. Thus the motivation for generalizing
-the group types mechanism in ACS 4.</para>
+the group types mechanism in OpenACS 4.</para>
 
 <para><emphasis>Object Types and Subtypes</emphasis></para>
 
-<para>In ACS 4 <emphasis>object types</emphasis> generalize the ACS 3.x notion of group
+<para>In OpenACS 4 <emphasis>object types</emphasis> generalize the OpenACS 3.x notion of group
 types. Each object type can define one or more attributes to be attached to
 instances of the type. This allows developers to define new types without
 being artificially tied to a particular module (i.e. user/groups).</para>
 
-<para>In addition, the ACS 4 object model provides mechanism for defining
+<para>In addition, the OpenACS 4 object model provides mechanism for defining
 <emphasis>subtypes</emphasis> of existing types. A subtype of a parent type inherits all
 the attributes defined in the parent type, and can define some of its own.
-The motivation for subtypes comes from the need for ACS to be more
-extensible. In ACS 3.x, many applications extended the core data models by
+The motivation for subtypes comes from the need for OpenACS to be more
+extensible. In OpenACS 3.x, many applications extended the core data models by
 directly adding more columns, in order to provide convenient access to new
 information. This resulted in core data tables that were too &quot;fat&quot;,
 containing a hodge podge of unrelated information that should have been
 normalized away. The canonical example of this is the explosion of the
-<computeroutput>users</computeroutput> table in ACS 3.x. In addition to being sloppy technically,
+<computeroutput>users</computeroutput> table in OpenACS 3.x. In addition to being sloppy technically,
 these fat tables have a couple of other problems:</para>
 
 <itemizedlist>
@@ -352,12 +352,12 @@ information.</para>
 <sect3 id="objects-design-attributes">
 <title>Object Attributes, Skinny Tables</title>
 
-<para>As we described above, the ACS 3.x user/groups system stored object
+<para>As we described above, the OpenACS 3.x user/groups system stored object
 attributes in two ways. The first was to use columns in the helper table. The
 second consisted of two tables, one describing attributes and one storing
 values, to provide a flexible means for attaching attributes to metadata
 objects. This style of attribute storage is used in several other parts of
-ACS 3.x, and we will refer to it as &quot;skinny tables&quot;. For
+OpenACS 3.x, and we will refer to it as &quot;skinny tables&quot;. For
 example:</para>
 
 <itemizedlist>
@@ -377,12 +377,12 @@ store values for those attributes.</para></listitem>
 but <emphasis>should</emphasis>, e.g. the <computeroutput>users_preferences</computeroutput> table, which
 stores preferences for registered users in columns such as
 <computeroutput>prefer_text_only_p</computeroutput> and <computeroutput>dont_spam_me_p</computeroutput>. The
-&quot;standard&quot; way for an ACS 3.x-based application to add to the list
+&quot;standard&quot; way for an OpenACS 3.x-based application to add to the list
 of user preferences is to add a column to the <computeroutput>users_preferences</computeroutput>
 table (exactly the kind of data model change that has historically
-complicated the process of upgrading to a more recent ACS version).</para>
+complicated the process of upgrading to a more recent OpenACS version).</para>
 
-<para>The Objet Model generalizes the scheme used in the old ACS 3.x user/groups
+<para>The Objet Model generalizes the scheme used in the old OpenACS 3.x user/groups
 system. It defines a table called <computeroutput>acs_attributes</computeroutput> that record
 what attributes belong to which object types, and how the attributes are
 stored. As before, attributes can either be stored in helper tables, or in a
@@ -399,7 +399,7 @@ and more efficient, skinny tables are more flexible but limited.</para>
 <sect3 id="objects-design-relation-types" xreflabel="Relation Types">
 <title>Relation Types</title>
 
-<para>Many ACS 3.x modules use <emphasis>mapping tables</emphasis> to model relationships
+<para>Many OpenACS 3.x modules use <emphasis>mapping tables</emphasis> to model relationships
 between application objects. Again, the 3.x user/groups system provides the
 canonical example of this design style. In that system, there was a single
 table called <computeroutput>user_group_map</computeroutput> that kept track of which users
@@ -410,7 +410,7 @@ attach custom attributes to group members. In fact, these attributes were not
 really attached to the users, but to the fact that a user was a member of a
 particular group - a subtle but important distinction.</para>
 
-<para>In ACS 4, <emphasis>relation types</emphasis> generalize this mechanism. Relation
+<para>In OpenACS 4, <emphasis>relation types</emphasis> generalize this mechanism. Relation
 types allow developers to define general mappings from objects of a given
 type T, to other objects of a given type R. Each relation type is a subtype
 of <computeroutput>acs_object</computeroutput>, extended with extra attributes that store
@@ -432,7 +432,7 @@ replaced by a central skinny table that the relation type system defines.</para>
 the &quot;fact&quot; that object X and object Y are related to each other. On
 the face of it, they seem like a redundant mechanism however, since one could
 easily create a mapping table to do the same thing. The advantage of
-registering this table as a relation type is that in principle the ACS 4
+registering this table as a relation type is that in principle the OpenACS 4
 object system could use the meta data in the types table to do useful things
 in a generic way on all relation types. But this mechanism doesn&#39;t really
 exist yet.</para>
@@ -447,8 +447,8 @@ them, you should just skip to the <link linkend="object-system-design-relsmodel"
 <title>Summary and Design Considerations</title>
 
 
-<para>The ACS 4 Object Model is designed to generalize and unify the following
-mechanisms that are repeatedly implemented in ACS-based systems to manage
+<para>The OpenACS 4 Object Model is designed to generalize and unify the following
+mechanisms that are repeatedly implemented in OpenACS-based systems to manage
 generic and application specific metadata:</para>
 
 <sect3 id="objects-design-why-not-objdb">
@@ -466,15 +466,14 @@ to interact with the database from a language that does not have this tight
 coupling, and it limits the data models that we can write to ideas that are
 expressible in the host language. In particular, we lose many of the best
 features of the relational database model. This is a disaster from an ease of
-use standpoint, and makes it impossible to use these systems for the
-development that we do at ArsDigita.</para>
-
+use standpoint.
+	  </para>
 <para>The &quot;Object relational&quot; systems provide an interesting
 alternative. Here, some notion of subtyping is embedded into an existing SQL
 or SQL-like database engine. Examples of systems like this include the new
 Informix, PostgreSQL 7, and Oracle has something like this too. The main
 problem with these systems: each one implements their own non-portable
-extensions to SQL to implement subtyping. Thus, making ACS data models
+extensions to SQL to implement subtyping. Thus, making OpenACS data models
 portable would become even more difficult. In addition, each of these object
 systems have strange limitations that make using inheritance difficult in
 practice. Finally, object databases are not as widely used as traditional
@@ -491,7 +490,7 @@ our existing relational data model. By doing this, we retain all the power of
 the relational data model while gaining the object oriented features we need
 most.</para>
 
-<para>In the context of ACS 4, this means using the object model to make our
+<para>In the context of OpenACS 4, this means using the object model to make our
 data models more flexible, so that new modules can easily gain access to
 generic features. However, while the API itself doesn&#39;t enforce the idea
 that applications only use the object model for metadata, it is also the case
@@ -501,8 +500,8 @@ type hierarchy is fairly small. But the object system data model is not
 designed to support, for example, a huge type tree like the Java runtime
 libraries might define.</para>
 
-<para>This last point cannot be over-stressed: <phrase>the object model is not
-meant to be used for large scale application data storage</phrase>. It is
+<para>This last point cannot be over-stressed: <emphasis role="strong">the object model is not
+meant to be used for large scale application data storage</emphasis>. It is
 meant to represent and store metadata, not application data.</para>
 </sect3>
 </sect2>
@@ -511,7 +510,7 @@ meant to represent and store metadata, not application data.</para>
 <title>Data Model</title>
 
 
-<para>Like most data models, the ACS Core data model has two levels:</para>
+<para>Like most data models, the OpenACS Core data model has two levels:</para>
 
 <orderedlist>
 <listitem><para>The <emphasis>knowledge level</emphasis> (i.e. the metadata model)</para></listitem>
@@ -547,7 +546,7 @@ and things like constraint names are not included.</para>
 <sect3 id="objects-design-knowledge-level">
 <title>Knowledge-Level Model</title>
 
-<para>The knowledge level data model for ACS objects centers around three tables
+<para>The knowledge level data model for OpenACS objects centers around three tables
 that keep track of object types, attributes, and relation types. The first
 table is <computeroutput>acs_object_types</computeroutput>, shown here in an abbreviated
 form:</para>
@@ -663,7 +662,7 @@ Attributes can be defined to hold 0 or more total values.</para></listitem>
 
 <listitem><para>The <computeroutput>static_p</computeroutput> flag indicates whether this attribute value is
 shard by all instances of a type, as with static member fields in C++. Static
-attribute are like group level attributes in ACS 3.x.</para></listitem>
+attribute are like group level attributes in OpenACS 3.x.</para></listitem>
 </itemizedlist>
 
 
@@ -677,7 +676,7 @@ to the user. This is a subtle but important distinction, because it allowed
 the 3.x system to store multiple sets of attributes on a given user, one set
 for each group membership relation in which they participated.</para>
 
-<para>In ACS 4, this sort of data can be stored as a relationship type, in <anchor id="object-system-design-relsmodel"/>
+<para>In OpenACS 4, this sort of data can be stored as a relationship type, in <anchor id="object-system-design-relsmodel"/>
 <computeroutput>acs_rel_types</computeroutput>. The key parts of this table look like this:</para>
 
  
@@ -727,7 +726,7 @@ related to on either side of the relation.</para></listitem>
 <para>To summarize, the <computeroutput>acs_object_types</computeroutput> and
 <computeroutput>acs_attributes</computeroutput> tables store metadata that describes every object
 type and attribute in the system. These tables generalize the group types
-data model in ACS 3.x. The <computeroutput>acs_rel_types</computeroutput> table stores
+data model in OpenACS 3.x. The <computeroutput>acs_rel_types</computeroutput> table stores
 information about relation types.</para>
 
 <para>This part of the data model is somewhat analogous to the data dictionary
@@ -850,7 +849,7 @@ generic skinny tables.</para>
 <sect3 id="objects-design-discussion">
 <title>Summary and Discussion</title>
 
-<para>The core tables in the ACS 4 data model store information about instances
+<para>The core tables in the OpenACS 4 data model store information about instances
 of object types and relation types. The <computeroutput>acs_object</computeroutput> table
 provides the central location that contains a single row for every object in
 the system. Services can use this table along with the metadata in stored in
@@ -1186,7 +1185,7 @@ procedure for creating a new ticket:</para>
 <para>This function will typically be defined in the context of a PL/SQL
 package, but we&#39;ve left it stand-alone here for simplicity.</para>
 
-<para>To summarize: in order to take advantage of ACS 4 services, a new
+<para>To summarize: in order to take advantage of OpenACS 4 services, a new
 application need only do three things:</para>
 
 <itemizedlist>
@@ -1201,14 +1200,14 @@ section.</para></listitem>
 insert a new row into the application data model.</para></listitem>
 </itemizedlist>
 
-<para>One of the design goals of ACS 4 was to provide a straightforward and
+<para>One of the design goals of OpenACS 4 was to provide a straightforward and
 consistent mechanism to provide applications with general services. What we
 have seen here is that three simple steps and minimal changes in the
 application data model are sufficient to make sure that application objects
 are represented in the <computeroutput>acs_objects</computeroutput> table. Subsequently, all of
-the general services in ACS 4 (i.e. permissions, general comments, and so on)
+the general services in OpenACS 4 (i.e. permissions, general comments, and so on)
 are written to work with any object that appears in <computeroutput>acs_objects</computeroutput>.
-Therefore, in general these three steps are sufficient to make ACS 4 services
+Therefore, in general these three steps are sufficient to make OpenACS 4 services
 available to your application.</para>
 </sect3>
 <sect3 id="objects-design-relat-types">
@@ -1302,7 +1301,7 @@ create and destroy instances of a relation type:</para>
 </programlisting>
 
 
-<para>A good example of how to use relation types appears in the ACS 4 data
+<para>A good example of how to use relation types appears in the OpenACS 4 data
 model for <emphasis>groups</emphasis>. As in 3.x, group membership is modeled using a
 mapping table, but now we create this mapping using relation types instead of
 explicitly creating a table. First, we create a helper table to store state
@@ -1483,10 +1482,10 @@ are his and his alone.</para>
 <tgroup cols="4">
 <tbody>
 <row>
-<entry><phrase>Document Revision #</phrase></entry>
-<entry><phrase>Action Taken, Notes</phrase></entry>
-<entry><phrase>When?</phrase></entry>
-<entry><phrase>By Whom?</phrase></entry>
+<entry><emphasis role="strong">Document Revision #</emphasis></entry>
+<entry><emphasis role="strong">Action Taken, Notes</emphasis></entry>
+<entry><emphasis role="strong">When?</emphasis></entry>
+<entry><emphasis role="strong">By Whom?</emphasis></entry>
 </row>
 
 <row>

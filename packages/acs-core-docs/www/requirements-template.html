@@ -1,81 +1,242 @@
-<html xmlns:lxslt="http://xml.apache.org/xslt" xmlns:saxon="http://icl.com/saxon" xmlns:xalanredirect="org.apache.xalan.xslt.extensions.Redirect"><head>
-<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>5. System/Application Requirements Template</title><link rel="stylesheet" href="ad.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.24"><link rel="home" href="index.html" title="ACS Core"><link rel="up" href="eng-standards.html" title="6. Engineering Standards"><link rel="previous" href="filename.html" title="4. Detailed Design Documentation Template"><link rel="next" href="eng-standards-versioning.html" title="6. Release Version Numbering"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><a href="http://www.openacs.org/"><img src="images/alex.jpg" border="0"></a><br><br><a class="topnav" href="/">Home</a><span class="topnav"> : </span><a class="topnav" href="index">Documentation</a><span class="topnav"> : </span><a class="topnav" href="acs-dev.html">Part III. For ACS Developers</a><span class="topnav"> : </span><a class="topnav" href="eng-standards.html">6. Engineering Standards</a><span class="topnav"> : </span><strong class="topnav">5. System/Application Requirements Template&nbsp;</strong><hr size="1" noshade><div id="requirements-template" class="sect1"><div class="titlepage"><h2 class="title" style="clear: all"><a name="requirements-template"></a><span class="label">5.</span> <span class="title">System/Application Requirements Template</span></h2></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt>5.1. <a href="requirements-template.html#yourpackage-requirements-introduction">Introduction</a></dt><dt>5.2. <a href="requirements-template.html#yourpackage-requirements-vision">Vision Statement</a></dt><dt>5.3. <a href="requirements-template.html#yourpackage-requirements-system-app-overview">System/Application Overview</a></dt><dt>5.4. <a href="requirements-template.html#yourpackage-requirements-cases">Use-cases and User-scenarios</a></dt><dt>5.5. <a href="requirements-template.html#yourpackage-requirements-competitive-analysis">Optional: Competitive Analysis</a></dt><dt>5.6. <a href="requirements-template.html#yourpackage-requirements-links">Related Links</a></dt><dt>5.7. <a href="requirements-template.html#yourpackage-requirements-requirements">Requirements</a></dt><dt>5.8. <a href="requirements-template.html#yourpackage-requirements-implementation">Optional: Implementation Notes</a></dt><dt>5.9. <a href="requirements-template.html#yourpackage-revision-history">Revision History</a></dt></dl></div><p><p>By <a href="mailto:youremail@arsdigita.com" target="_top">You</a></p></p><div id="yourpackage-requirements-introduction" class="sect2"><div class="titlepage"><h3 class="title"><a name="yourpackage-requirements-introduction"></a><span class="label">5.1.</span> <span class="title">Introduction</span></h3></div><p>
-<i>Briefly explain to the reader what this document is for, whether
-it records the requirements for a new system, a client application, a
-toolkit subsystem, etc. Remember your audience: fellow programmers,
-AND interested non-technical parties such as potential clients, who
-may all want to see how rigorous our engineering process is. Here and
-everywhere, write clearly and precisely; for requirements
-documentation, write at a level that any intelligent layperson can
-understand.</i> 
-</p></div><div id="yourpackage-requirements-vision" class="sect2"><div class="titlepage"><h3 class="title"><a name="yourpackage-requirements-vision"></a><span class="label">5.2.</span> <span class="title">Vision Statement</span></h3></div><p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type">
+<title>System/Application Requirements Template</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.45">
+<link rel="home" href="index.html" title="OpenACS Documentation">
+<link rel="up" href="eng-standards.html" title="Chapter 6. Engineering Standards">
+<link rel="previous" href="filename.html" title="Detailed Design Documentation Template">
+<link rel="next" href="eng-standards-versioning.html" title="Release Version Numbering">
+<link rel="stylesheet" href="openacs.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr>
+<td width="20%" align="left">
+<a accesskey="p" href="filename.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 6. Engineering Standards</th>
+<td width="20%" align="right"> <a accesskey="n" href="eng-standards-versioning.html">Next</a>
+</td>
+</tr></table>
+<hr>
+</div>
+<div class="sect1">
+<div class="titlepage"><div><h2 class="title" style="clear: both">
+<a name="requirements-template"></a>System/Application Requirements Template</h2></div></div>
+<div class="authorblurb"><p>By <a href="mailto:youremail@arsdigita.com" target="_top">You</a>
+</p></div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="yourpackage-requirements-introduction"></a>Introduction</h3></div></div>
+<p>
+      <span class="emphasis"><i>Briefly explain to the reader what this document is for, whether
+	it records the requirements for a new system, a client application, a
+	toolkit subsystem, etc. Remember your audience: fellow programmers,
+	AND interested non-technical parties such as potential clients, who
+	may all want to see how rigorous our engineering process is. Here and
+	everywhere, write clearly and precisely; for requirements
+	documentation, write at a level that any intelligent layperson can
+	understand.</i></span> 
+    </p>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="yourpackage-requirements-vision"></a>Vision Statement</h3></div></div>
+<p>
 
 
-<i>Very broadly, describe how the system meets a need of a business,
-group, the ACS as a whole, etc.  Make sure that technical and
-non-technical readers alike would understand what the system would do
-and why it's useful.  Whenever applicable, you should explicitly state
-what the business value of the system is. </i>
-</p></div><div id="yourpackage-requirements-system-app-overview" class="sect2"><div class="titlepage"><h3 class="title"><a name="yourpackage-requirements-system-app-overview"></a><span class="label">5.3.</span> <span class="title">System/Application Overview</span></h3></div><p>
-<i>Discuss the high-level breakdown of the components that make up
-the system.  You can go by functional areas, by the main transactions
-the system allows, etc. </i> 
-</p><p>
-<i>You should also state the context and dependencies of the system
-here, e.g. if it's an application-level package for ACS 4, briefly
-describe how it uses kernel services, like permissions or subsites. </i>
-</p></div><div id="yourpackage-requirements-cases" class="sect2"><div class="titlepage"><h3 class="title"><a name="yourpackage-requirements-cases"></a><span class="label">5.4.</span> <span class="title">Use-cases and User-scenarios</span></h3></div><p>
-<i>Determine the types or classes of users who would use the
-system, and what their experience would be like at a high-level.
-Sketch what their experience would be like and what actions they would
-take, and how the system would support them.</i>  
-</p></div><div id="yourpackage-requirements-competitive-analysis" class="sect2"><div class="titlepage"><h3 class="title"><a name="yourpackage-requirements-competitive-analysis"></a><span class="label">5.5.</span> <span class="title">Optional: Competitive Analysis</span></h3></div><p>
-<i>Describe other systems or services that are comparable to what
-you're building.  If applicable, say why your implementation will be
-superior, where it will match the competition, and where/why it will
-lack existing best-of-breed capabilities.  This section is also in the
-Design doc, so write about it where you deem most appropriate.</i>
-</p></div><div id="yourpackage-requirements-links" class="sect2"><div class="titlepage"><h3 class="title"><a name="yourpackage-requirements-links"></a><span class="label">5.6.</span> <span class="title">Related Links</span></h3></div><p>Include all pertinent links to supporting and related material,
-such as: </p><div class="itemizedlist"><ul><li><a name="N9801"></a><p> System/Package "coversheet" - where all documentation for this software is linked off of</p></li><li><a name="N9804"></a><p> Design document</p></li><li><a name="N9807"></a><p> Developer's guide</p></li><li><a name="N9810"></a><p> User's guide</p></li><li><a name="N9813"></a><p> Other-cool-system-related-to-this-one document</p></li><li><a name="N9816"></a><p> Test plan </p></li><li><a name="N9819"></a><p> Competitive system(s)</p></li></ul></div></div><div id="yourpackage-requirements-requirements" class="sect2"><div class="titlepage"><h3 class="title"><a name="yourpackage-requirements-requirements"></a><span class="label">5.7.</span> <span class="title">Requirements</span></h3></div><p>
-<i>The main course of the document, requirements. Break up the
-requirements sections (A, B, C, etc.) as needed.  Within each section,
-create a list denominated with unique identifiers that reflect any
-functional hierarchy present, e.g. 20.5.13. - for the first number,
-leave generous gaps on the first writing of requirements (e.g. 1, 10,
-20, 30, 40, etc.) because you'll want to leave room for any missing
-key requirements that may arise.  </i>
-</p><div class="itemizedlist"><ul><li><a name="N9832"></a><p><strong>10.0 A Common Solution</strong></p><p>
-Programmers and designers should only have to learn a single
-system that serves as a UI substrate for all the functionally
-specific modules in the toolkit. 
-</p><blockquote class="blockquote"><p><strong>10.0.1</strong></p><p>
-              The system should not make any assumptions about how pages should
-              look or function.
-</p><p><strong>10.0.5</strong></p><p>
-              Publishers should be able to change the default presentation of
-              any module using a single methodology with minimal exposure to
-              code.
-            </p></blockquote></li></ul></div><p>
-For guidelines writing requirements, take a 
-<a href="http://www.openacs.org/ad-sepg/process/requirements-quality.html" target="_top">look
-at the quality standards</a>, along with a good example, such as <a href="apm-requirements.html">ACS 4 Package Manager Requirements</a>.
-</p><p>
-Besides writing requirements in natural language, consider using the
-following techniques as needed:
-</p><div class="itemizedlist"><ul><li><a name="N9864"></a><p> Pseudocode - a quasi programming language, combining the
-informality of natural language with the strict syntax and control
-structures of a programming language. </p></li><li><a name="N9867"></a><p> Finite State Machines - a hypothetical machine that can be in
-only one of a given number of states at any specific time.  Useful to
-model situations that are rigidly deterministic, that is, any set of
-inputs mathematically determines the system outputs. </p></li><li><a name="N9870"></a><p> Decision Trees and Decision Tables - similar to FSMs, but better
-suited to handle combinations of inputs.  </p></li><li><a name="N9873"></a><p> Flowcharts - easy to draw and understand, suited for event and
-decision driven systems.  UML is the industry standard here.</p></li><li><a name="N9876"></a><p> Entity-Relationship diagrams - a necessary part of Design
-documents, sometimes a high-level ER diagram is useful for
-requirements as well.</p></li></ul></div></div><div id="yourpackage-requirements-implementation" class="sect2"><div class="titlepage"><h3 class="title"><a name="yourpackage-requirements-implementation"></a><span class="label">5.8.</span> <span class="title">Optional: Implementation Notes</span></h3></div><p>
-<i>Although in theory coding comes after design, which comes after
-requirements, we do not, and perhaps should not, always follow such a
-rigid process (a.k.a. the waterfall lifecyle).  Often, there is a
-pre-existing system or prototype first, and thus you may want to write
-some thoughts on implementation, for aiding and guiding yourself or
-other programmers. </i> 
-</p></div><div id="yourpackage-revision-history" class="sect2"><div class="titlepage"><h3 class="title"><a name="yourpackage-revision-history"></a><span class="label">5.9.</span> <span class="title">Revision History</span></h3></div><div class="informaltable" id="N9892"><a name="N9892"></a><table cellpadding="5" cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th class="revisionheader" xmlns="http://www.w3.org/TR/xhtml1/transitional">Document Revision #</th><th xmlns="http://www.w3.org/TR/xhtml1/transitional">Action Taken, Notes</th><th xmlns="http://www.w3.org/TR/xhtml1/transitional">When?</th><th xmlns="http://www.w3.org/TR/xhtml1/transitional">By Whom?</th></tr></thead><tbody><tr><td class="revisionbody" xmlns="http://www.w3.org/TR/xhtml1/transitional">0.3</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Edited further, incorporated feedback from Michael Yoon</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">9/05/2000</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Kai Wu</td></tr><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional">0.2</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Edited</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">8/22/2000</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Kai Wu</td></tr><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional">0.1</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Created</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">8/21/2000</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Josh Finkler, Audrey McLoghlin</td></tr></tbody></table></div><p><div align="right" class="cvstag">($Id$)</div></p></div></div><div class="navfooter"><hr size="1" noshade><table width="100%"><tr><td width="40%" align="left"><a class="bottomnav" href="filename.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a href="mailto:acs-docs@arsdigita.com"><address class="nav">acs-docs@arsdigita.com</address></a></td><td width="40%" align="right">&nbsp;<a class="bottomnav" href="eng-standards-versioning.html">Next</a></td></tr></table></div></body></html>
+      <span class="emphasis"><i>Very broadly, describe how the system meets a need of a business,
+	group, the OpenACS as a whole, etc.  Make sure that technical and
+	non-technical readers alike would understand what the system would do
+	and why it's useful.  Whenever applicable, you should explicitly state
+	what the business value of the system is. </i></span>
+    </p>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="yourpackage-requirements-system-app-overview"></a>System/Application Overview</h3></div></div>
+<p>
+      <span class="emphasis"><i>Discuss the high-level breakdown of the components that make up
+	the system.  You can go by functional areas, by the main transactions
+	the system allows, etc. </i></span> 
+    </p>
+<p>
+      <span class="emphasis"><i>You should also state the context and dependencies of the system
+	here, e.g. if it's an application-level package for OpenACS 4, briefly
+	describe how it uses kernel services, like permissions or subsites. </i></span>
+    </p>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="yourpackage-requirements-cases"></a>Use-cases and User-scenarios</h3></div></div>
+<p>
+      <span class="emphasis"><i>Determine the types or classes of users who would use the
+	system, and what their experience would be like at a high-level.
+	Sketch what their experience would be like and what actions they would
+	take, and how the system would support them.</i></span>  
+    </p>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="yourpackage-requirements-competitive-analysis"></a>Optional: Competitive Analysis</h3></div></div>
+<p>
+      <span class="emphasis"><i>Describe other systems or services that are comparable to what
+	you're building.  If applicable, say why your implementation will be
+	superior, where it will match the competition, and where/why it will
+	lack existing best-of-breed capabilities.  This section is also in the
+	Design doc, so write about it where you deem most appropriate.</i></span>
+    </p>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="yourpackage-requirements-links"></a>Related Links</h3></div></div>
+<p>Include all pertinent links to supporting and related material,
+      such as: </p>
+<div class="itemizedlist"><ul>
+<li><p> System/Package &quot;coversheet&quot; - where all documentation for this software is linked off of</p></li>
+<li><p> Design document</p></li>
+<li><p> Developer's guide</p></li>
+<li><p> User's guide</p></li>
+<li><p> Other-cool-system-related-to-this-one document</p></li>
+<li><p> Test plan </p></li>
+<li><p> Competitive system(s)</p></li>
+</ul></div>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="yourpackage-requirements-requirements"></a>Requirements</h3></div></div>
+<p>
+      <span class="emphasis"><i>The main course of the document, requirements. Break up the
+	requirements sections (A, B, C, etc.) as needed.  Within each section,
+	create a list denominated with unique identifiers that reflect any
+	functional hierarchy present, e.g. 20.5.13. - for the first number,
+	leave generous gaps on the first writing of requirements (e.g. 1, 10,
+	20, 30, 40, etc.) because you'll want to leave room for any missing
+	key requirements that may arise.  </i></span>
+    </p>
+<div class="itemizedlist"><ul><li>
+<p><span class="strong"><i>10.0 A Common Solution</i></span></p>
+<p>
+	  Programmers and designers should only have to learn a single
+	  system that serves as a UI substrate for all the functionally
+	  specific modules in the toolkit. 
+	</p>
+<blockquote class="blockquote">
+<p><span class="strong"><i>10.0.1</i></span></p>
+<p>
+	    The system should not make any assumptions about how pages should
+	    look or function.
+	  </p>
+<p><span class="strong"><i>10.0.5</i></span></p>
+<p>
+	    Publishers should be able to change the default presentation of
+	    any module using a single methodology with minimal exposure to
+	    code.
+	  </p>
+</blockquote>
+</li></ul></div>
+<p>
+      For guidelines writing requirements, take a 
+      <a href="http://www.arsdigita.com/ad-sepg/process/requirements-quality.html" target="_top">look
+	at the quality standards</a>, along with a good example, such as <a href="apm-requirements.html">OpenACS 4 Package Manager Requirements</a>.
+    </p>
+<p>
+      Besides writing requirements in natural language, consider using the
+      following techniques as needed:
+    </p>
+<div class="itemizedlist"><ul>
+<li><p> Pseudocode - a quasi programming language, combining the
+	  informality of natural language with the strict syntax and control
+	  structures of a programming language. </p></li>
+<li><p> Finite State Machines - a hypothetical machine that can be in
+	  only one of a given number of states at any specific time.  Useful to
+	  model situations that are rigidly deterministic, that is, any set of
+	  inputs mathematically determines the system outputs. </p></li>
+<li><p> Decision Trees and Decision Tables - similar to FSMs, but better
+	  suited to handle combinations of inputs.  </p></li>
+<li><p> Flowcharts - easy to draw and understand, suited for event and
+	  decision driven systems.  UML is the industry standard here.</p></li>
+<li><p> Entity-Relationship diagrams - a necessary part of Design
+	  documents, sometimes a high-level ER diagram is useful for
+	  requirements as well.</p></li>
+</ul></div>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="yourpackage-requirements-implementation"></a>Optional: Implementation Notes</h3></div></div>
+<p>
+      <span class="emphasis"><i>Although in theory coding comes after design, which comes after
+	requirements, we do not, and perhaps should not, always follow such a
+	rigid process (a.k.a. the waterfall lifecyle).  Often, there is a
+	pre-existing system or prototype first, and thus you may want to write
+	some thoughts on implementation, for aiding and guiding yourself or
+	other programmers. </i></span> 
+    </p>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="yourpackage-revision-history"></a>Revision History</h3></div></div>
+<div class="informaltable"><table border="1">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>Document Revision #</th>
+<th>Action Taken, Notes</th>
+<th>When?</th>
+<th>By Whom?</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>0.3</td>
+<td>Edited further, incorporated feedback from Michael Yoon</td>
+<td>9/05/2000</td>
+<td>Kai Wu</td>
+</tr>
+<tr>
+<td>0.2</td>
+<td>Edited</td>
+<td>8/22/2000</td>
+<td>Kai Wu</td>
+</tr>
+<tr>
+<td>0.1</td>
+<td>Created</td>
+<td>8/21/2000</td>
+<td>Josh Finkler, Audrey McLoghlin</td>
+</tr>
+</tbody>
+</table></div>
+<p><div class="cvstag">($Id$)</div></p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="filename.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="eng-standards-versioning.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left">Detailed Design Documentation Template </td>
+<td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td>
+<td width="40%" align="right"> Release Version Numbering</td>
+</tr>
+</table>
+<hr>
+<address><a href="mailto:rmello@cc.usu.edu">
+			rmello@cc.usu.edu
+		  </a></address>
+<address><a href="mailto:vinod@kurup.com">
+			vinod@kurup.com
+		  </a></address>
+</div>
+</body>
+</html>

@@ -13,7 +13,7 @@
 
 
 <para>
-The ACS 4 Permissions system allows developers and administrators to
+The OpenACS 4 Permissions system allows developers and administrators to
 set access control policies at the object level, that is, any
 application or system object represented by a row in the
 <computeroutput>acs_objects</computeroutput> table can be access-controlled via a simple
@@ -26,7 +26,7 @@ API call.
 Although this may all sound easy and wonderful, no developer or
 administrator would want to <emphasis>explicitly</emphasis> set access control
 rights for <emphasis>every user</emphasis> and <emphasis>every object</emphasis> on a
-site. Therefore, ACS 4 has two auxiliary mechanisms for making this
+site. Therefore, OpenACS 4 has two auxiliary mechanisms for making this
 easier: First, the Groups system allows users to be grouped together
 in flexible ways. Second, the object model defines a notion of
 <emphasis>object context</emphasis>, which allows applications to group objects
@@ -43,11 +43,11 @@ permissions system.
 
 
 <para>
-In ACS 3.x, the groups system allowed developers and administrators to
+In OpenACS 3.x, the groups system allowed developers and administrators to
 define simple groupings of users. Each group had a human readable name
 and unique ID, and there was a single mapping table that mapped users
 to groups. (The actual data model was more complicated because it
-contained a meta-data system much like the ACS 4 object type system,
+contained a meta-data system much like the OpenACS 4 object type system,
 but that's not relevant right now.)
 </para>
 
@@ -64,7 +64,7 @@ group.
 </para>
 
 <para>
-In ACS 3.x, you also could not express the fact that group A should
+In OpenACS 3.x, you also could not express the fact that group A should
 itself be a member of group B, without also implying that all of its
 members are also members of B. This type of relationship also comes up
 in the real world, though not as often. A good example is an
@@ -75,7 +75,7 @@ Greenpeace.
 </para>
 
 <para>
-ACS 4 solves both of these modeling problems by introducing a new
+OpenACS 4 solves both of these modeling problems by introducing a new
 abstraction called a <emphasis>party</emphasis>. Parties have a recursive
 definition, and we can illustrate how it works with the following
 simplified data model. First, we define the <computeroutput>parties</computeroutput>
@@ -122,7 +122,7 @@ create table persons (
 <para>
 The <computeroutput>users</computeroutput> table is also defined in this data model as a
 subtype of <computeroutput>person</computeroutput>. It contains many of the basic columns
-that the old ACS 3.x <computeroutput>users</computeroutput> table contained.
+that the old OpenACS 3.x <computeroutput>users</computeroutput> table contained.
 </para>
 
 <para>
@@ -169,18 +169,18 @@ privileges are.
 </para>
 
 <para>
-In ACS 4, a privilege models the right to perform some operation on
+In OpenACS 4, a privilege models the right to perform some operation on
 some object. They are the basic units out of which we build access
 control policies.  For example, in the Unix filesystem we typically
 implement access control by granting users some combination of
-read. write or execute privileges on files and directories. In ACS 4,
+read. write or execute privileges on files and directories. In OpenACS 4,
 the table of privileges is organized hierarchically so that developers
 can define privileges that aggregate some set of privileges
 together. For example, if we have read, write, create and delete
 privileges, it might be convenient to combine them into a new privilege
 called "admin". Then if we grant a user this privilege she is
 automatically granted all the child privileges that the privilege
-contains. The ACS 4 kernel data model actually defines these
+contains. The OpenACS 4 kernel data model actually defines these
 privileges as follows:
 </para>
  
@@ -239,8 +239,8 @@ use contexts to achieve this goal.
 
 
 <para>
-In ACS 4, an object context is a generalization of the scoping
-mechanism introduced in ACS 3.x.  "Scoping" and "scope" are terms best
+In OpenACS 4, an object context is a generalization of the scoping
+mechanism introduced in OpenACS 3.x.  "Scoping" and "scope" are terms best
 explained by example: consider some hypothetical rows in the
 <computeroutput>address_book</computeroutput> table:
 </para>
@@ -248,16 +248,18 @@ explained by example: consider some hypothetical rows in the
 <blockquote>
 <informaltable frame="all">
 <tgroup cols="5">
-<tbody>
+<thead>
 
 <row>
 <entry>...</entry>
-<entry><phrase><computeroutput>scope</computeroutput></phrase></entry>
-<entry><phrase><computeroutput>user_id</computeroutput></phrase></entry>
-<entry><phrase><computeroutput>group_id</computeroutput></phrase></entry>
+<entry><computeroutput>scope</computeroutput></entry>
+<entry><computeroutput>user_id</computeroutput></entry>
+<entry><computeroutput>group_id</computeroutput></entry>
 <entry>...</entry>
 </row>
+</thead>
 
+<tbody>
 <row><entry>...</entry>
 <entry><computeroutput>user</computeroutput></entry>
 <entry><computeroutput>123</computeroutput></entry>
@@ -298,7 +300,7 @@ person <emphasis>or</emphasis> a group of people <emphasis>or</emphasis> the gen
 </para>
 
 <para>
-In ACS 4, rather than breaking the world into a limited set of scopes,
+In OpenACS 4, rather than breaking the world into a limited set of scopes,
 every object lives in a single <emphasis>context</emphasis>.  A context is just an
 another object that represents the security domain to which the object
 belongs. By convention, if an object A doesn't have any permissions
@@ -317,7 +319,7 @@ permissions in a subtree of some context.
 application. With only row-level permissions it is not obvious how to
 reasonably initialize the access control list when creating a
 message. At best, we have to explicitly grant various read and write
-privileges whenever we create a message, which is tedious.  In ACS 4,
+privileges whenever we create a message, which is tedious.  In OpenACS 4,
 a reasonable thing to do is to create an object representing a forum,
 and point the <computeroutput>context_id</computeroutput> field of a new message at the
 forum. Then, suppose we grant every user in the system read-access to
@@ -341,7 +343,7 @@ hierarchy for a hypothetical site:
 
 <para>
 A few things to note here. First, the top two contexts in the picture
-are "magic" in some sense because they are created by default by ACS
+are "magic" in some sense because they are created by default by OpenACS
 for a specific purpose. The object <computeroutput>default_context</computeroutput>
 represents the root of the context hierarchy for the entire site. All
 permission searches walk up the tree to this point and then stop. If
@@ -502,7 +504,7 @@ Now put the more complex code back. You'll notice a lot of stuff like this:
 <para>
 This displays the title of the note as either a link or plain text
 depending on whether or not we have write privileges on the object.
-The <computeroutput>if</computeroutput> tag is something that the ACS 4 template system
+The <computeroutput>if</computeroutput> tag is something that the OpenACS 4 template system
 defines for you to support conditional presentation. The <ulink url="/doc/acs-templating/developer-guide.html">templates developer guide</ulink> provides more information about this.
 </para>
 
@@ -527,7 +529,7 @@ that's beyond the scope of this example.
 
 
 <para>
-ACS 4 defines three separate mechanisms for specifying access control
+OpenACS 4 defines three separate mechanisms for specifying access control
 in applications. The Groups data model allows you to define 
 hierarchical organizations of users and groups of users. The Permissions
 data model allows you to define a hierarchy of user rights. Finally,

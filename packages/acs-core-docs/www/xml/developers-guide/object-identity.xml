@@ -7,7 +7,7 @@ by <ulink url="http://planitia.org">Rafael H. Schloming</ulink>
 </para></authorblurb>
 
 
-<para>One of the major design features of ACS 4 is the explicit representation
+<para>One of the major design features of OpenACS 4 is the explicit representation
 of <emphasis>object identity</emphasis>. The reason I say &quot;explicit
 representation&quot; is because the concept of object identity has been
 around forever. It is inherent to our problem domain. Consider the example of

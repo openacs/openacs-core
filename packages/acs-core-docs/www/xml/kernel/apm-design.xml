@@ -1,5 +1,5 @@
-<sect1 id="apm-design" xreflabel="ACS 4 Package Manager Design">
-<title>ACS 4 Package Manager Design</title>
+<sect1 id="apm-design" xreflabel="OpenACS 4 Package Manager Design">
+<title>OpenACS 4 Package Manager Design</title>
 
 
 <authorblurb><para>
@@ -12,7 +12,7 @@ by <ulink url="mailto:bquinn@arsdigita.com">Bryan Quinn</ulink>
 
 
 <itemizedlist>
-<listitem><para><ulink url="/acs-admin/apm">ACS Administrator directory</ulink></para></listitem>
+<listitem><para><ulink url="/acs-admin/apm">OpenACS Administrator directory</ulink></para></listitem>
 
 <listitem><para><xref linkend="apm-requirements"/></para></listitem>
 
@@ -51,7 +51,7 @@ apm-admin-procs.tcl</ulink> (Supports APM UI)</para></listitem>
 <title>Introduction</title>
 
 <para>
-In general terms, a <phrase>package</phrase> is a unit of software that
+In general terms, a <emphasis role="strong">package</emphasis> is a unit of software that
 serves a single well-defined purpose. That purpose may be to provide a
 service directly to one or more classes of end-user, (e.g., discussion forums
 and file storage for community members, user profiling tools for the site
@@ -62,7 +62,7 @@ into one of two categories:
 </para>
 
 <itemizedlist>
-<listitem><para><phrase>ACS Applications:</phrase> a &quot;program or group of programs
+<listitem><para><emphasis role="strong">OpenACS Applications:</emphasis> a &quot;program or group of programs
 designed for end users&quot; (the <ulink url="http://www.pcwebopaedia.com/TERM/a/application.html">Webopedia
 definition</ulink>); also known as <emphasis>modules</emphasis>, for historical reasons.
 Examples of applications include <ulink url="/doc/bboard">Bboard</ulink> and <ulink url="/doc/news">News</ulink>. 
@@ -70,14 +70,14 @@ Examples of applications include <ulink url="/doc/bboard">Bboard</ulink> and <ul
 
 </para></listitem>
 
-<listitem><para><phrase>ACS Services:</phrase> the aforementioned building blocks.
-Examples of services include the <ulink url="/doc/acs-content-repository">ACS
-Content Repository</ulink>, the <ulink url="/doc/acs-templating">ACS Templating
-System</ulink>, and the <link linkend="kernel-doc">ACS Kernel</link>, which includes
+<listitem><para><emphasis role="strong">OpenACS Services:</emphasis> the aforementioned building blocks.
+Examples of services include the <ulink url="/doc/acs-content-repository">OpenACS
+Content Repository</ulink>, the <ulink url="/doc/acs-templating">OpenACS Templating
+System</ulink>, and the <link linkend="kernel-doc">OpenACS Kernel</link>, which includes
 APM.</para></listitem>
 </itemizedlist>
 
-<para>An installation of the ACS includes the ACS Kernel, some services that
+<para>An installation of the OpenACS includes the OpenACS Kernel, some services that
 extend the kernel&#39;s functionality, and some applications intended for
 end-users. Packages function as individual pieces of <link linkend="subsites-design">subsites</link>. A subsite can contain multiple
 application and service instances that provide the end-user with capabilities
@@ -86,14 +86,14 @@ and content customized to the particular subsite.</para>
 <para>This architecture supports the growth of collaborative commerce. For
 example, Jane User starts a forum focusing on the merits of View Cameras by
 creating an instance of the Bboard application for her personal subsite on an
-ACS Installation. Jack User discovers Jane&#39;s forum and includes a link to
+OpenACS Installation. Jack User discovers Jane&#39;s forum and includes a link to
 it in his subsite. As interest in Jane&#39;s forum grows, she creates a
 subsite specializing in providing information about View cameras. This
 subsite now includes several package instances beyond Bboard; it could
 potentially include its own Ecommerce capabilities (ala <ulink url="http://shopping.yahoo.com">Yahoo! Shopping</ulink>). This could include a
 knowledge management application that allows users to spread expertise about
 view cameras and a portal application that links to reliable camera models
-and resellers. Any subsite enabled package that is added to the ACS
+and resellers. Any subsite enabled package that is added to the OpenACS
 installation through APM is another potential package instance that can
 become part of Jane&#39;s View Camera subsite.</para>
 
@@ -203,14 +203,14 @@ installation that uses only two of the thirty-odd modules available circa ACS
     <imagedata fileref="images/acs-without-apm-vs-with-apm.png" format="PNG" align="center"/>
   </imageobject>
   <textobject>
-    <phrase>ACS without APM vs. with APM</phrase>
+    <emphasis role="strong">OpenACS without APM vs. with APM</emphasis>
   </textobject>
 </mediaobject>
 
 
 
-<para>APM itself is part of a package, the <phrase>ACS Kernel</phrase>, an ACS
-service that is the only mandatory component of an ACS installation.</para>
+<para>APM itself is part of a package, the <emphasis role="strong">OpenACS Kernel</emphasis>, an OpenACS
+service that is the only mandatory component of an OpenACS installation.</para>
 
 
 
@@ -220,7 +220,7 @@ service that is the only mandatory component of an ACS installation.</para>
 <title>Competitive Analysis</title>
 
 
-<para>The ACS is a platform for web-based application software, and any software
+<para>The OpenACS is a platform for web-based application software, and any software
 platform has the potential to develop problems like those described above.
 Fortunately, there are many precedents for systematic solutions,
 including:</para>
@@ -235,15 +235,15 @@ collection</ulink></para></listitem>
 <listitem><para><ulink url="http://www.redhat.com/">Red Hat Linux</ulink> has <ulink url="http://rpm.redhat.com/">the Red Hat Package Manager (RPM)</ulink></para></listitem>
 </itemizedlist>
 
-<para>Borrowing from all of the above, ACS 3.3 introduces its own package
-management system, the ACS Package Manager (APM), which consists of:</para>
+<para>Borrowing from all of the above, OpenACS 3.3 introduces its own package
+management system, the OpenACS Package Manager (APM), which consists of:</para>
 
 <itemizedlist>
-<listitem><para><phrase>a standard format for APM packages</phrase> (also called
-&quot;ACS packages&quot;), including: </para>
+<listitem><para><emphasis role="strong">a standard format for APM packages</emphasis> (also called
+&quot;OpenACS packages&quot;), including: </para>
 
 <itemizedlist>
-<listitem><para>version numbering, independent of any other package and the ACS as a
+<listitem><para>version numbering, independent of any other package and the OpenACS as a
 whole</para></listitem>
 
 <listitem><para>specification of the package interface</para></listitem>
@@ -256,7 +256,7 @@ whole</para></listitem>
 
 </listitem>
 
-<listitem><para><phrase>web-based tools for package management:</phrase> </para>
+<listitem><para><emphasis role="strong">web-based tools for package management:</emphasis> </para>
 
 <itemizedlist>
 <listitem><para>obtaining packages from a remote distribution point</para></listitem>
@@ -270,7 +270,7 @@ whole</para></listitem>
 </orderedlist>
 </listitem>
 
-<listitem><para>configuring packages (obsoleting the monolithic ACS configuration
+<listitem><para>configuring packages (obsoleting the monolithic OpenACS configuration
 file)</para></listitem>
 
 <listitem><para>upgrading packages, without clobbering local modifications</para></listitem>
@@ -281,13 +281,13 @@ file)</para></listitem>
 
 </listitem>
 
-<listitem><para><phrase>a registry of installed packages</phrase>, database-backed and
+<listitem><para><emphasis role="strong">a registry of installed packages</emphasis>, database-backed and
 integrated with filesystem-based version control 
 
 
 </para></listitem>
 
-<listitem><para><phrase>web-based tools for package development:</phrase> </para>
+<listitem><para><emphasis role="strong">web-based tools for package development:</emphasis> </para>
 
 <itemizedlist>
 <listitem><para>creating new packages locally</para></listitem>
@@ -310,7 +310,7 @@ The design chosen for APM was meant to satisfy the following constraints:
 <listitem><para>The process of authoring a package must be as simple as possible.</para></listitem>
 
 <listitem><para>Strict conventions must be established that provide a set of canonical
-locations and names for files and patterns, for ACS application
+locations and names for files and patterns, for OpenACS application
 development.</para></listitem>
 
 <listitem><para>The processes of installing, upgrading, and using packages must be
@@ -323,7 +323,7 @@ at an easily configurable URL.</para></listitem>
 <para>All of these requirements were met, but at the cost of development
 simplicity. As <xref linkend="packages"/> demonstrates, a set of strict directory conventions are
 required in order for a package to use APM. This contrasts with the apparent
-simplicity available to developers of the ACS 3.3 system. However, while the
+simplicity available to developers of the OpenACS 3.3 system. However, while the
 system has become more complex for developers to build packages, this
 complexity is easily managed and is compensated for by additional
 capabilities.</para>
@@ -343,10 +343,10 @@ pages.</para></listitem>
 on an appropriate URL, and set parameters for that particular instance.</para></listitem>
 </orderedlist>
 
-<para>While this is complex, especially to a new ACS developer, the
+<para>While this is complex, especially to a new OpenACS developer, the
 documentation walks the developer through each of these steps. Moreover, from
 following these steps, the package can be subsite specific, available to
-subsites across the system, and be available for distribution to other ACS
+subsites across the system, and be available for distribution to other OpenACS
 installations without doing a monolithic upgrade or reinstall.</para>
 
 </sect2>
@@ -371,9 +371,9 @@ model, and a UI:</para>
 
 
 
-<para><phrase>Authoring a Package</phrase></para>
+<para><emphasis role="strong">Authoring a Package</emphasis></para>
 
-<para>Full instructions on how to prepare an ACS package are available in <xref linkend="packages"/>. The API here can be invoked manually by a package&#39;s data model
+<para>Full instructions on how to prepare an OpenACS package are available in <xref linkend="packages"/>. The API here can be invoked manually by a package&#39;s data model
 creation script, but need not to be used. This API is part of the <ulink url="/api-doc/plsql-subprogram-one?type=PACKAGE&amp;name=APM">APM PL/SQL
 package</ulink>.</para>
 
@@ -398,9 +398,9 @@ procedure register_application (
 </programlisting>
 
 
-<para>The procedure above registers an ACS application in the APM. It creates a
-new ACS object and stores information about the package, such as its name, in
-the APM data model. There is an analogous procedure for ACS services, called
+<para>The procedure above registers an OpenACS application in the APM. It creates a
+new OpenACS object and stores information about the package, such as its name, in
+the APM data model. There is an analogous procedure for OpenACS services, called
 <computeroutput>apm.register_service</computeroutput>.</para>
 
 <para>To remove an application from the system, there are the calls
@@ -422,7 +422,7 @@ procedure unregister_application (
 
 
 <para>Use the <computeroutput>cascade_p</computeroutput> only if you want to completely remove the
-package from the ACS.</para>
+package from the OpenACS.</para>
 
 <para>In order to determine if a particular package exists in the system, use
 the <computeroutput>register_p</computeroutput> predicate. It returns 1 if the specified
@@ -439,7 +439,7 @@ function register_p (
 </programlisting>
 
 
-<para><phrase>Maintaining Multiple Versions of a Package</phrase></para>
+<para><emphasis role="strong">Maintaining Multiple Versions of a Package</emphasis></para>
 
 <para>While the package authoring API provides a means for registering a
 package, some information about a package is version dependent. For example,
@@ -567,7 +567,7 @@ function edit (
 
 <para>Versions can be enabled or disabled. Enabling a version instructs APM to
 source the package&#39;s libraries on startup and to make the package
-available to the ACS.</para>
+available to the OpenACS.</para>
 
  
 
@@ -585,7 +585,7 @@ procedure disable (
 
 
 <para>Files associated with a version can be added and removed. The path is
-relative to the <phrase>package-root</phrase> which is
+relative to the <emphasis role="strong">package-root</emphasis> which is
 <computeroutput>acs-server-root/packages/package-key</computeroutput>.</para>
 
 
@@ -693,7 +693,7 @@ function compare(
 </programlisting>
 
 
-<para><phrase>Creating Instances of a Package</phrase></para>
+<para><emphasis role="strong">Creating Instances of a Package</emphasis></para>
 
 <para>Once a package is registered in the system, it is possible to create
 instances of it. Each instance can maintain its own content and
@@ -729,8 +729,8 @@ end apm_application;
 
 <para>Just creating a package instance is not sufficient for it to be served
 from the web server. A corresponding site node must be created for it. As an
-example, here is how the <ulink url="/api-doc">ACS API Documentation</ulink> service
-makes itself available on the ACS main site:</para>
+example, here is how the <ulink url="/api-doc">OpenACS API Documentation</ulink> service
+makes itself available on the OpenACS main site:</para>
 
  
 
@@ -740,7 +740,7 @@ declare
     api_doc_id integer;
 begin
     api_doc_id := apm_service.new (
-      instance_name =&gt; &#39;ACS API Browser&#39;,
+      instance_name =&gt; &#39;OpenACS API Browser&#39;,
       package_key =&gt; &#39;acs-api-browser&#39;,
       context_id =&gt; main_site_id
     );
@@ -764,7 +764,7 @@ show errors
 </programlisting>
 
 
-<para><phrase>Specifying Configuration Parameters for each Instance</phrase></para>
+<para><emphasis role="strong">Specifying Configuration Parameters for each Instance</emphasis></para>
 
 <para>A parameter is a setting that can be changed on a package instance basis.
 Parameters are registered on each <computeroutput>package_key</computeroutput>, and the values
@@ -872,8 +872,8 @@ procedure set_value (
 
 <para>The central piece of the data model is the <computeroutput>apm_package_types</computeroutput>
 table where each package is registered. When a new application or service is
-installed on an ACS instance, a corresponding row in this table is inserted
-with information about the type of package, e.g. if the <ulink url="/doc/bboard">bboard package</ulink> is installed on your ACS server, a row
+installed on an OpenACS instance, a corresponding row in this table is inserted
+with information about the type of package, e.g. if the <ulink url="/doc/bboard">bboard package</ulink> is installed on your OpenACS server, a row
 in <computeroutput>apm_package_types</computeroutput> will be created, noting that it&#39;s an
 application package type.</para>
 
@@ -952,8 +952,8 @@ information available from the <computeroutput>apm_package_types</computeroutput
 
 
 <para>The <ulink url="/acs-admin/apm">APM&#39;s user interface</ulink> is part of the
-<ulink url="/acs-admin">ACS Administration Service</ulink>. The UI is the primary
-point of contact with APM by developers and administrators. It is part of ACS
+<ulink url="/acs-admin">OpenACS Administration Service</ulink>. The UI is the primary
+point of contact with APM by developers and administrators. It is part of OpenACS
 Administration, because only the site-wide administrator should be able to
 access it. Thus in order to develop a package, the developer must be granted
 site-wide administration.</para>
@@ -970,7 +970,7 @@ page. These parameters need not be changed under most circumstances, but may
 need to be tweaked for Windows compatibility.</para>
 
 <itemizedlist>
-<listitem><para><phrase>GzipExecutableDirectory</phrase>
+<listitem><para><emphasis role="strong">GzipExecutableDirectory</emphasis>
  This directory points to where the <computeroutput>gunzip</computeroutput> program can be found
 for uncompressing <computeroutput>gzip</computeroutput> archives. This is needed for the
 installation of <computeroutput>.apm</computeroutput> files which are simply <computeroutput>gzip</computeroutput>ed
@@ -979,7 +979,7 @@ tarballs. Default is <computeroutput>/usr/local/bin</computeroutput>
 
 </para></listitem>
 
-<listitem><para><phrase>InfoFilePermissionsMode</phrase>
+<listitem><para><emphasis role="strong">InfoFilePermissionsMode</emphasis>
  This sets the default UNIX permissions used when creating files using the
 APM. Default is 775.</para></listitem>
 </itemizedlist>
@@ -990,13 +990,13 @@ APM. Default is 775.</para></listitem>
 <title>Future Improvements/Areas of Likely Change</title>
 
 
-<para>APM has been in production since ACS 3.3, and as of version 4.0 offers a
-stable set of features. One major feature planned is integration with the ACS
+<para>APM has been in production since OpenACS 3.3, and as of version 4.0 offers a
+stable set of features. One major feature planned is integration with the OpenACS
 Package Repository for automatic dependency satisfaction. When a user tries
 to install a package that depends on other packages, the APM will contact the
 package repository, determine what packages depend on it, and offer the user
 a chance to download and install them all. This improvement offers value to
-end users by facilitating the extension of their ACS systems.</para>
+end users by facilitating the extension of their OpenACS systems.</para>
 
 <para>Architecturally, minor improvements to the data model and the
 specification file are planned to increase modularity. The current
@@ -1042,10 +1042,10 @@ Salz, Michael Yoon, and Lars Pind.</para></listitem>
 <tgroup cols="4">
 <tbody>
 <row>
-<entry><phrase>Document Revision #</phrase></entry>
-<entry><phrase>Action Taken, Notes</phrase></entry>
-<entry><phrase>When?</phrase></entry>
-<entry><phrase>By Whom?</phrase></entry>
+<entry><emphasis role="strong">Document Revision #</emphasis></entry>
+<entry><emphasis role="strong">Action Taken, Notes</emphasis></entry>
+<entry><emphasis role="strong">When?</emphasis></entry>
+<entry><emphasis role="strong">By Whom?</emphasis></entry>
 </row>
 
 <row>

@@ -6,7 +6,7 @@
 </authorblurb>
 
 <para> 
-ACS version numbers help identify at a high-level what is in a
+OpenACS version numbers help identify at a high-level what is in a
 particular release and what has changed since the last release. A
 "version number" is really just a string of the form:
 </para>
@@ -17,9 +17,9 @@ particular release and what has changed since the last release. A
 
 <para>
 A change in the <emphasis>major</emphasis> version number indicates a fundamental
-change in the architecture of the system, e.g. ACS 2 to ACS 3.  A
+change in the architecture of the system, e.g. OpenACS 3 to ACS 4.  A
 change in the <emphasis>minor</emphasis> version number signifies the addition of
-new modules and minor data model changes, e.g. ACS 3.1 to ACS 3.2.
+new modules and minor data model changes, e.g. OpenACS 3.1 to OpenACS 3.2.
 The final <emphasis>release</emphasis> number indicates the relative maturity of a
 release and marks things like bug fixes; it follows the ordered
 progression:
@@ -41,13 +41,13 @@ So typical release version numbers would be:
  
 
 <programlisting>
-acs-3.2.2
-acs-4.0.beta
+openacs-3.2.5
+openacs-4.0.beta
 </programlisting>
 
 <para>
-The first is a relatively mature release of the ACS 3.2 base code
-and the second is a non-public release of ACS 4.0 that probably still
+The first is a relatively mature release of the OpenACS 3.2 base code
+and the second is a non-public release of OpenACS 4.0 that probably still
 has lots of bugs.
 </para>
 
@@ -96,7 +96,7 @@ description:
 </programlisting>
 
 <para>
-In the future, ArsDigita packages should follow this same
+In the future, OpenACS packages should follow this same
 convention on version numbers.
 </para>
 
@@ -107,11 +107,11 @@ convention on version numbers.
 
 <para>So what distinguishes an <emphasis>alpha</emphasis> release from a <emphasis>beta</emphasis>
 release?  Or from a production release?  We follow a specific set of
-rules for how ACS makes the transition from one state of maturity to
+rules for how OpenACS makes the transition from one state of maturity to
 the next.</para>
 
 <para> Every release must pass the minimum requirements that it cleanly
-installs and cleanly upgrades from the previous version of ACS.  In
+installs and cleanly upgrades from the previous version of OpenACS.  In
 addition to this the <emphasis>release</emphasis> label implies:</para>
 
 <blockquote>

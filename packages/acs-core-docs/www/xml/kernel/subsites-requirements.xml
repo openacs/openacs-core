@@ -1,5 +1,5 @@
-<sect1 id="subsites-requirements" xreflabel="ACS 4 Subsites Requirements">
-<title>ACS 4 Subsites Requirements</title>
+<sect1 id="subsites-requirements" xreflabel="OpenACS 4 Subsites Requirements">
+<title>OpenACS 4 Subsites Requirements</title>
 
 <authorblurb><para>
 by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> and <ulink url="mailto:dennis@arsdigita.com">Dennis Gregorovic</ulink> 
@@ -11,9 +11,9 @@ by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> and <ulink url="
 
 
 
-<para>The following is a requirements document for ACS 4 Subsites, part of the
-ACS 4 Kernel. The Subsites system allows one ACS server instance to serve
-multiple user communities, by enabling the suite of available ACS
+<para>The following is a requirements document for OpenACS 4 Subsites, part of the
+OpenACS 4 Kernel. The Subsites system allows one OpenACS server instance to serve
+multiple user communities, by enabling the suite of available OpenACS
 applications to be customized for defined user communities.</para>
 
 
@@ -28,8 +28,8 @@ applications to be customized for defined user communities.</para>
 reflecting real-world relationships. For example, a corporate
 intranet/extranet website serves both units within the company (e.g.,
 offices, departments, teams, projects) and external parties (e.g., customers,
-partners, vendors). Subsites enable a single ACS instance to provide each
-subcommunity with its own &quot;virtual website,&quot; by assembling ACS
+partners, vendors). Subsites enable a single OpenACS instance to provide each
+subcommunity with its own &quot;virtual website,&quot; by assembling OpenACS
 packages that together deliver a feature set tailored to the needs of the
 subcommunity.</para>
 
@@ -41,7 +41,7 @@ subcommunity.</para>
 
 
 
-<para>The ACS subsite system allows a single ACS installation to serve multiple
+<para>The OpenACS subsite system allows a single OpenACS installation to serve multiple
 communities. At an implementation level this is primarily accomplished by
 having an application &quot;scope&quot; its content to a particular package
 instance. The <link linkend="rp-design">request
@@ -122,27 +122,27 @@ defaults.</para>
 <para>A subsite API is required for programmers to ensure their packages are
 subsite-aware. The following functions should be sufficient for this:</para>
 
-<para><phrase>10.10.0 Package creation</phrase></para>
+<para><emphasis role="strong">10.10.0 Package creation</emphasis></para>
 
 <para>The system must provide an API call to create a package, and it must be
 possible for the context (to which the package belongs) to be specified.</para>
 
-<para><phrase>10.20.0 Package deletion</phrase></para>
+<para><emphasis role="strong">10.20.0 Package deletion</emphasis></para>
 
 <para>The system must provide an API call to delete a package and all related
 objects in the subsite&#39;s context.</para>
 
-<para><phrase>10.30.0 Object&#39;s package information</phrase></para>
+<para><emphasis role="strong">10.30.0 Object&#39;s package information</emphasis></para>
 
 <para>Given an object ID, the system must provide an API call to determine the
 package (ID) to which the object belongs.</para>
 
-<para><phrase>10.40.0 URL from package</phrase></para>
+<para><emphasis role="strong">10.40.0 URL from package</emphasis></para>
 
 <para>Given a package (ID), the system must provide an API call to return the
 canonical URL for that package.</para>
 
-<para><phrase>10.50.0 Main subsite&#39;s package_id</phrase></para>
+<para><emphasis role="strong">10.50.0 Main subsite&#39;s package_id</emphasis></para>
 
 <para>The system must provide an API call to return a package ID corresponding
 to the main subsite&#39;s package ID (the degenerate subsite).</para>
@@ -155,11 +155,11 @@ to the main subsite&#39;s package ID (the degenerate subsite).</para>
 
 
 
-<para><phrase>The Programmer&#39;s User Interface</phrase></para>
+<para><emphasis role="strong">The Programmer&#39;s User Interface</emphasis></para>
 
 <para>There is no programmer&#39;s UI, other than the API described above.</para>
 
-<para><phrase>The Administrator&#39;s User Interface</phrase></para>
+<para><emphasis role="strong">The Administrator&#39;s User Interface</emphasis></para>
 
 <para>The UI for administrators is a set of HTML pages that are used to drive
 the underlying API for package instance management (i.e. adding, removing, or
@@ -169,19 +169,19 @@ Site-Wide Administrators can manage all subsites.</para>
 
 <itemizedlist>
 <listitem>
-<para><phrase>20.10.0 Package creation</phrase></para>
+<para><emphasis role="strong">20.10.0 Package creation</emphasis></para>
 
-<para><phrase>20.10.1</phrase> The administrator should be able to create a
+<para><emphasis role="strong">20.10.1</emphasis> The administrator should be able to create a
 package and make it available at a URL underneath the subsite.</para>
 </listitem>
 
 <listitem>
-<para><phrase>20.20.0 Package deactivation</phrase></para>
+<para><emphasis role="strong">20.20.0 Package deactivation</emphasis></para>
 
-<para><phrase>20.20.1</phrase> The administrator should be able to deactivate
+<para><emphasis role="strong">20.20.1</emphasis> The administrator should be able to deactivate
 any package, causing it to be inaccessible to users.</para>
 
-<para><phrase>20.20.5</phrase> Deactivating a package makes the package no
+<para><emphasis role="strong">20.20.5</emphasis> Deactivating a package makes the package no
 longer accessible, but it does not remove data created within the context of
 that package.</para>
 </listitem>
@@ -200,10 +200,10 @@ that package.</para>
 <tgroup cols="4">
 <tbody>
 <row>
-<entry><phrase>Document Revision #</phrase></entry>
-<entry><phrase>Action Taken, Notes</phrase></entry>
-<entry><phrase>When?</phrase></entry>
-<entry><phrase>By Whom?</phrase></entry>
+<entry><emphasis role="strong">Document Revision #</emphasis></entry>
+<entry><emphasis role="strong">Action Taken, Notes</emphasis></entry>
+<entry><emphasis role="strong">When?</emphasis></entry>
+<entry><emphasis role="strong">By Whom?</emphasis></entry>
 </row>
 
 <row>

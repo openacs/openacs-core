@@ -1,5 +1,5 @@
-<sect1 id="aolserver" xreflabel="Install AOLserver">
-  <title>Install AOLserver</title>
+<sect1 id="aolserver" xreflabel="Install AOLserver 3.3+ad13">
+  <title>Install AOLserver 3.3+ad13</title>
 
   <sect2 id="install-aolserver-download" xreflabel="Download AOLServer">
 	<title>Download the Distribution</title>
@@ -62,7 +62,7 @@
 
 	<para>
 
-	  Download <ulink
+	  .... or just Download <ulink
 	  url="http://uptime.openacs.org/aolserver-openacs/aolserver3.3ad13-oacs1-beta-src.tar.gz">Mat's
 	  AOLServer distribution</ulink> to
 	  <computeroutput>/tmp</computeroutput>
@@ -72,8 +72,7 @@
 	<programlisting>
 joeuser:~$ cd /tmp
 joeuser:/tmp$ wget -c http://uptime.openacs.org/aolserver-openacs/aolserver3.3ad13-oacs1-beta-src.tar.gz
-joeuser:/tmp$ cd
-	</programlisting>
+joeuser:/tmp$ cd</programlisting>
 
 	<para>
 
@@ -87,8 +86,7 @@ joeuser:/tmp$ cd
 joeuser:~$ su -
 Password: **********
 root:~$ cd /usr/local/src
-root:/usr/local/src# tar xzf /tmp/aolserver3.3ad13-oacs1-beta-src.tar.gz 
-	</programlisting>
+root:/usr/local/src# tar xzf /tmp/aolserver3.3ad13-oacs1-beta-src.tar.gz</programlisting>
   </sect2>
 
   <sect2 id="install-aolserver-user-accounts">
@@ -119,8 +117,7 @@ root:~# passwd nsadmin
 root:~# mkdir -p /web /usr/local/aolserver
 root:~# chown -R nsadmin.web /usr/local/aolserver /web /usr/local/src/aolserver
 root:~# chmod 775 /usr/local/aolserver /web
-root:~# exit
-		</programlisting>
+root:~# exit</programlisting>
       </listitem>
 
 	</itemizedlist>
@@ -140,8 +137,7 @@ root:~# exit
 		<programlisting>
 joeuser:~$ su - nsadmin
 Password: ***********
-nsadmin:~$ emacs .bash_profile
-		</programlisting>
+nsadmin:~$ emacs .bash_profile</programlisting>
 
 		<para>
 		  Add the first set of lines, if you're using Oracle. The 2nd set
@@ -163,10 +159,9 @@ export ORACLE_SID=ora8
 export ORACLE_TERM=vt100
 export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
    
-# For Postgres
+# For PostgreSQL
 export PATH=$PATH:/usr/local/pgsql/bin
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib
-		</programlisting>
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib</programlisting>
 
         <para>
 		  Be absolutely certain that you have entered these lines correctly
@@ -184,8 +179,7 @@ Password: *********
 nsadmin:~$ echo $PATH
 ...some other directory paths...:/usr/local/pgsql/bin
 nsadmin:~$ echo $LD_LIBRARY_PATH
-:/usr/local/pgsql/lib
-		</programlisting>
+:/usr/local/pgsql/lib</programlisting>
 
 		<para>
 		  Note: The result should be different if you're using Oracle. 
@@ -223,8 +217,7 @@ nsadmin:~$ echo $LD_LIBRARY_PATH
 nsadmin:~$ cd /usr/local/src/aolserver
 nsadmin:/usr/local/src/aolserver$ ./conf-clean
 cat: BUILD-MODULES: No such file or directory
-Done.
-		</programlisting>
+Done.</programlisting>
 	  </listitem>
 
 	  <listitem><para>
@@ -237,8 +230,7 @@ Done.
 		</para>
 
 		<programlisting>
-nsadmin:/usr/local/src/aolserver$ echo "postgresql" > conf-db
-		</programlisting>
+nsadmin:/usr/local/src/aolserver$ echo "postgresql" > conf-db</programlisting>
 	  </listitem>
 
 	  <listitem><para>
@@ -246,7 +238,7 @@ nsadmin:/usr/local/src/aolserver$ echo "postgresql" > conf-db
 		  <computeroutput>conf-inst</computeroutput> should contain the
 		  location where AOLserver is to be installed. This defaults to
 		  <computeroutput>/usr/local/aolserver</computeroutput>, so we
-		  don't need to change anything.
+		  don't need to change it.
 
 		</para></listitem>
 
@@ -259,14 +251,12 @@ nsadmin:/usr/local/src/aolserver$ echo "postgresql" > conf-db
 		</para>
 
 		<programlisting>
-nsadmin:/usr/local/src/aolserver$ echo "make" > conf-make
-		</programlisting>
+nsadmin:/usr/local/src/aolserver$ echo "make" > conf-make</programlisting>
 	  </listitem>
 
       <listitem><para>Compile and install AOLserver and modules</para>
 		<programlisting>
-nsadmin:/usr/local/src/aolserver$ ./conf
-		</programlisting>
+nsadmin:/usr/local/src/aolserver$ ./conf</programlisting>
 
 		<para>
 		  This takes about 5 minutes. All of the results are logged to
@@ -292,8 +282,7 @@ nsadmin:/usr/local/src/aolserver$ ./conf
 
 		<programlisting>
 nsadmin:/usr/local/src/aolserver$ cd
-nsadmin:~$ ./bin/nsd -t sample-config.tcl
-		</programlisting>
+nsadmin:~$ ./bin/nsd -t sample-config.tcl</programlisting>
 
         <para>
 		  As the AOLserver daemon starts up, you should see a few normal
@@ -302,8 +291,7 @@ nsadmin:~$ ./bin/nsd -t sample-config.tcl
 
 		<programlisting>
 Warning: nsd.tcl: nsssl not loaded -- key/cert files do not exist.
-Warning: nsd.tcl: nscp not loaded -- user/password is not set.
-		</programlisting>
+Warning: nsd.tcl: nscp not loaded -- user/password is not set.</programlisting>
 
 		<para>		  
 		  The first warning means that the server is missing files for
@@ -328,21 +316,20 @@ Warning: nsd.tcl: nscp not loaded -- user/password is not set.
 		</para>
 
 		<programlisting>
-nsadmin:~$ lynx localhost:8000
-		</programlisting>
+nsadmin:~$ lynx localhost:8000</programlisting>
 
-        <para>You should see a <phrase>Welcome to AOLserver</phrase>
-		  page. If this doesn&#39;t work, try going to
-		  <phrase>http://127.0.0.1:8000/</phrase>. If this still doesn't
-		  work, check out the <xref
+        <para>
+		  You should see a &quot;Welcome to AOLserver&quot; page. If this
+		  doesn&#39;t work, try going to
+		  <computeroutput>http://127.0.0.1:8000/</computeroutput>. If this
+		  still doesn't work, check out the <xref
 		  linkend="install-aolserver-troubleshooting"/> section below.
 		  </para></listitem>
 
       <listitem><para>
 		  Shutdown the test server: </para>
 		<programlisting>
-nsadmin:~$ killall nsd
-		</programlisting>
+nsadmin:~$ killall nsd</programlisting>
 
         <para>
 		  The <computeroutput>killall</computeroutput> command will kill
@@ -366,8 +353,7 @@ nsadmin:~$ killall nsd
 	  You should also try to find lines of the form:</para>
 	<programlisting>
 [01/Jun/2000:12:11:20][5914.2051][-nssock-] Notice: nssock: listening on http://localhost.localdomain:8000 (127.0.0.1:8000)
-[01/Jun/2000:12:11:20][5914.2051][-nssock-] Notice: accepting connections
-	</programlisting>
+[01/Jun/2000:12:11:20][5914.2051][-nssock-] Notice: accepting connections</programlisting>
 
     <para>If you can find these lines, try entering the URL the server is
 	  listening on. If you cannot find these lines, there must be an error
@@ -380,8 +366,7 @@ nsadmin:~$ killall nsd
 
 	<programlisting>
 set hostname        [ns_info hostname]
-set address         [ns_info address]
-	</programlisting>
+set address         [ns_info address]</programlisting>
 
 	<para>If you get an error that nssock can't get the requested address,
 	  you can set these manually:</para>
@@ -390,8 +375,7 @@ set address         [ns_info address]
 #set hostname        [ns_info hostname]
 set hostname 127.0.0.1
 #set address         [ns_info address]
-set address 127.0.0.1
-	</programlisting>
+set address 127.0.0.1</programlisting>
 
 	<para>
 	  If you get an error that nssock can't assign the requested port,

@@ -23,8 +23,7 @@
 joeuser:~$ su - nsadmin
 Password: ***********
 nsadmin:~$ cd /web
-nsadmin:/web$ tar xzf /tmp/alpha2.tgz
-		</programlisting>
+nsadmin:/web$ tar xzf /tmp/alpha2.tgz</programlisting>
       </listitem>
 
       <listitem><para> 
@@ -52,8 +51,7 @@ drwxr-xr-x    8 nsadmin  nsadmin      4096 Nov 27 09:32 openacs-4
 nsadmin:/web$ mv openacs-4 <emphasis>birdnotes</emphasis>
 nsadmin:/web$ ls -l
 total 4
-drwxr-xr-x    8 nsadmin  nsadmin      4096 Dec 20 14:37 birdnotes
-		</programlisting>
+drwxr-xr-x    8 nsadmin  nsadmin      4096 Dec 20 14:37 birdnotes</programlisting>
       </listitem>
     </itemizedlist>
 
@@ -79,16 +77,14 @@ drwxr-xr-x    8 nsadmin  nsadmin      4096 Dec 20 14:37 birdnotes
 
 		  <programlisting>
 nsadmin:~$ groups
-nsadmin dba web
-		  </programlisting>
+nsadmin dba web</programlisting>
 
 		  If you do not see these groups, take the following action: 
 
 		  <programlisting>
 nsadmin:~$ su -      
 Password: ************
-root:~# usermod -g nsadmin -G dba,web nsadmin
-		  </programlisting>
+root:~# usermod -g nsadmin -G dba,web nsadmin</programlisting>
 
 		  If you get an error about an undefined group, then add that group
 		  manually:
@@ -96,8 +92,7 @@ root:~# usermod -g nsadmin -G dba,web nsadmin
 <programlisting>
 root:~# groupadd dba
 root:~# groupadd nsadmin
-root:~# groupadd web
-</programlisting>
+root:~# groupadd web</programlisting>
 
 		  Make sure to logout as <computeroutput>root</computeroutput> when
 		  you are finished with this step and log back in as
@@ -112,16 +107,14 @@ root:~# groupadd web
 nsadmin:~$ svrmgrl
 
 SVRMGR&gt; connect internal
-Connected.
-		  </programlisting>
+Connected.</programlisting>
 		</para></listitem>
 
       <listitem><para>
 		  Determine where the system tablespaces are stored: 
 
 		  <programlisting>
-SVRMGR&gt;  select file_name from dba_data_files;
-		  </programlisting>
+SVRMGR&gt;  select file_name from dba_data_files;</programlisting>
         Example results: 
 
 		  <programlisting>
@@ -131,8 +124,7 @@ SVRMGR&gt;  select file_name from dba_data_files;
 /ora8/m01/app/oracle/oradata/ora8/temp01.dbf
 /ora8/m01/app/oracle/oradata/ora8/users01.dbf
 /ora8/m01/app/oracle/oradata/ora8/indx01.dbf
-/ora8/m01/app/oracle/oradata/ora8/drsys01.dbf
-		  </programlisting>
+/ora8/m01/app/oracle/oradata/ora8/drsys01.dbf</programlisting>
 		</para></listitem>
 
       <listitem><para> 
@@ -166,8 +158,7 @@ root:~# mkdir -p /ora8/m02/oradata/ora8/
 root:~# chown nsadmin.web /ora8/m02/oradata/ora8
 root:~# chmod 775 /ora8/m02/oradata/ora8
 root:~# exit
-nsadmin:~$
-		</programlisting>
+nsadmin:~$</programlisting>
       </listitem>
 
       <listitem><para> 
@@ -184,8 +175,7 @@ nsadmin:~$
 nsadmin:~$ svrmgrl
 
 SVRMGR&gt; connect internal;
-SVRMGR&gt; create tablespace <emphasis>birdnotes</emphasis> datafile &#39;/ora8/m02/oradata/ora8/<emphasis>birdnotes</emphasis>01.dbf&#39; size 50m autoextend on default storage (pctincrease 1);
-		</programlisting>
+SVRMGR&gt; create tablespace <emphasis>birdnotes</emphasis> datafile &#39;/ora8/m02/oradata/ora8/<emphasis>birdnotes</emphasis>01.dbf&#39; size 50m autoextend on default storage (pctincrease 1);</programlisting>
       </listitem>
 
       <listitem><para> 
@@ -194,13 +184,13 @@ SVRMGR&gt; create tablespace <emphasis>birdnotes</emphasis> datafile &#39;/ora8/
 		  <computeroutput>birdnotespassword</computeroutput> as our password.</para>
 
         <para>
-		  <phrase>Write down what you specify as
-			<emphasis>service_name</emphasis>
+		  Write down what you specify as <emphasis>service_name</emphasis>
 			(i.e. <computeroutput>birdnotes</computeroutput>) and
 			<emphasis>database_password</emphasis>
-			(i.e. <computeroutput>birdnotespassword</computeroutput>)
-			</phrase>. You will need this information for configuring
-			exports and AOLserver.</para>
+			(i.e. <computeroutput>birdnotespassword</computeroutput>). You
+			will need this information for configuring exports and
+			AOLserver.
+		</para>
 
 		<programlisting>
 SVRMGR&gt; create user <emphasis>birdnotes</emphasis> identified by <emphasis>birdnotespassword</emphasis> default tablespace <emphasis>birdnotes</emphasis>
@@ -208,8 +198,7 @@ temporary tablespace temp quota unlimited on <emphasis>birdnotes</emphasis>;
 SVRMGR&gt; grant connect, resource, ctxapp, javasyspriv, query rewrite to <emphasis>birdnotes</emphasis>;
 SVRMGR&gt; revoke unlimited tablespace from <emphasis>birdnotes</emphasis>;
 SVRMGR&gt; alter user <emphasis>birdnotes</emphasis> quota unlimited on <emphasis>birdnotes</emphasis>;
-SVRMGR&gt; exit;
-		</programlisting>
+SVRMGR&gt; exit;</programlisting>
 
         <para>
 		  Your table space is now ready. In case you are trying to delete a
@@ -229,8 +218,7 @@ SYSDATE
 ----------
 2001-12-20
 
-SQL&gt; exit
-		</programlisting>
+SQL&gt; exit</programlisting>
 
         <para>
 		  You should see today&#39;s date in a format &#39;YYYY-MM-DD.&#39;
@@ -248,24 +236,22 @@ SQL&gt; exit
 
 		<programlisting>
 nsadmin:~$ cp /tmp/nsd-oracle.txt ./bin/nsd-oracle
-nsadmin:~$ chmod 700 ./bin/nsd-oracle
-		</programlisting>
+nsadmin:~$ chmod 700 ./bin/nsd-oracle</programlisting>
 	  </listitem>
 	</itemizedlist>
   </sect2>
 
-  <sect2 id="install-openacs-prepare-postgres" xreflabel="Prepare Postgres for OpenACS">
-	<title>Prepare Postgres for OpenACS</title>
+  <sect2 id="install-openacs-prepare-postgres" xreflabel="Prepare PostgreSQL for OpenACS">
+	<title>Prepare PostgreSQL for OpenACS</title>
 	<para>
-	  Preparing Postgres is just a little bit simpler than preparing
+	  Preparing PostgreSQL is just a little bit simpler than preparing
 	  Oracle. We simply need to create a database with the name of our
 	  <emphasis>service-name</emphasis>
 	  (i.e. <computeroutput>birdnotes</computeroutput>)
 	</para>
 	<programlisting>
 nsadmin:/web$ createdb <emphasis>birdnotes</emphasis>
-CREATE DATABASE
-	</programlisting>
+CREATE DATABASE</programlisting>
 
 	<para>Next we'll set up AOLserver so that it has the proper environment
 	  variables set before launching. Download this <ulink
@@ -275,8 +261,7 @@ CREATE DATABASE
 	<programlisting>
 nsadmin:/web$ cd
 nsadmin:~$ cp /tmp/nsd-postgres.txt ./bin/nsd-postgres
-nsadmin:~$ chmod 700 ./bin/nsd-postgres
-	</programlisting>
+nsadmin:~$ chmod 700 ./bin/nsd-postgres</programlisting>
 
   </sect2>
 
@@ -309,8 +294,7 @@ nsadmin:~$ chmod 700 ./bin/nsd-postgres
 	<programlisting>
 nsadmin:~$ cp /tmp/openacs4.tcl.txt ./<emphasis>birdnotes</emphasis>.tcl
 nsadmin:~$ chmod 660 <emphasis>birdnotes</emphasis>.tcl
-nsadmin:~$ emacs <emphasis>birdnotes</emphasis>.tcl
-	</programlisting>
+nsadmin:~$ emacs <emphasis>birdnotes</emphasis>.tcl</programlisting>
 
 	<para>
 	  Specifically, you'll have set the following variables
@@ -350,15 +334,14 @@ nsadmin:~$ emacs <emphasis>birdnotes</emphasis>.tcl
 
 	<para>
 	  Kill any current running AOLserver processes and start a new
-	  one. (Note, if you are using Oracle, rather than postgres, replace
+	  one. (Note, if you are using Oracle, rather than PostgreSQL, replace
 	  <computeroutput>nsd-postgres</computeroutput> with
 	  <computeroutput>nsd-oracle</computeroutput>): </para>
 	<programlisting>
 nsadmin:~$ killall nsd
 ; Should probably see:
 nsd: no process killed
-nsadmin:~$ /usr/local/aolserver/bin/nsd-postgres -t /usr/local/aolserver/<emphasis>birdnotes</emphasis>.tcl
-	</programlisting>
+nsadmin:~$ /usr/local/aolserver/bin/nsd-postgres -t /usr/local/aolserver/<emphasis>birdnotes</emphasis>.tcl</programlisting>
 
 	<para>
 	  Attempt to connect to the service from a web browser as you did
@@ -366,8 +349,7 @@ nsadmin:~$ /usr/local/aolserver/bin/nsd-postgres -t /usr/local/aolserver/<emphas
 	  specify a URL like:
 	</para>
 	<programlisting>
-http://<emphasis>ip_name</emphasis>:<emphasis>ip_port</emphasis>/
-	</programlisting>
+http://<emphasis>ip_name</emphasis>:<emphasis>ip_port</emphasis>/</programlisting>
 
 	<para>
 	  You should see a page that looks like <ulink
@@ -384,8 +366,7 @@ http://<emphasis>ip_name</emphasis>:<emphasis>ip_port</emphasis>/
 	</para>
 
 	<programlisting>
-nsadmin:~$ killall nsd
-	</programlisting>
+nsadmin:~$ killall nsd</programlisting>
 	
   </sect2>
 
@@ -418,8 +399,7 @@ nsadmin:~$ killall nsd
 		</para>
 
 		<programlisting>
-Loading package .info files ... this will take a few minutes
-		</programlisting>
+Loading package .info files ... this will take a few minutes</programlisting>
 
 		<para>
 		  This will really take a few minutes. Have faith! Finally,
@@ -460,8 +440,7 @@ Loading package .info files ... this will take a few minutes
 		</para>
 
 		<programlisting>
-nsadmin:~$ /usr/local/aolserver/bin/nsd-postgres -t /usr/local/aolserver/<emphasis>birdnotes</emphasis>.tcl
-		</programlisting>
+nsadmin:~$ /usr/local/aolserver/bin/nsd-postgres -t /usr/local/aolserver/<emphasis>birdnotes</emphasis>.tcl</programlisting>
 	  </listitem>
 
       <listitem><para> 
@@ -553,8 +532,7 @@ root:~# cp /tmp/restart-aolserver.txt /usr/local/bin/restart-aolserver
 root:~# chown root.web /usr/local/bin/restart-aolserver
 root:~# chmod 4750 /usr/local/bin/restart-aolserver
 root:~# ln -s /usr/bin/perl /usr/local/bin/perl
-root:~# exit
-		</programlisting>
+root:~# exit</programlisting>
       </listitem>
 
       <listitem><para> 
@@ -572,8 +550,7 @@ nsadmin:~$ /usr/local/aolserver/bin/nsd-postgres -it /usr/local/aolserver/<empha
 nsadmin:~$ restart-aolserver <emphasis>birdnotes</emphasis>
 Killing 23727 
 nsadmin:~$ killall nsd
-nsd: no process killed
-		</programlisting>
+nsd: no process killed</programlisting>
 
 		<para>
 			The number 23727 indicates the process id(s) (PIDs) of the
@@ -591,8 +568,7 @@ nsd: no process killed
 		<programlisting>
 nsadmin:~$ su -
 Password: ************
-root:~# emacs -nw /etc/inittab    
-		</programlisting>
+root:~# emacs -nw /etc/inittab</programlisting>
       </listitem>
 
       <listitem><para> 
@@ -601,15 +577,14 @@ root:~# emacs -nw /etc/inittab
 			<computeroutput>nss1</computeroutput> is unique.
 		  </para>
 		  <programlisting>
-nss1:2345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nsadmin -g web -t /usr/local/aolserver/<emphasis>birdnotes</emphasis>.tcl
-		  </programlisting>
+nss1:2345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nsadmin -g web -t /usr/local/aolserver/<emphasis>birdnotes</emphasis>.tcl</programlisting>
 		</listitem>
 
 		<listitem><para>
-			<phrase>Important:</phrase> Make sure there is a newline at the
-			end of the file. If there is not a newline at the end of the
-			file, the system may suffer catastrophic
-			failures.
+			<emphasis role="strong">Important:</emphasis> Make sure there is a
+			newline at the end of the file. If there is not a newline at
+			the end of the file, the system may suffer catastrophic
+			failures.  
 		  </para></listitem>
 
 		<listitem><para>
@@ -619,8 +594,7 @@ nss1:2345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nsadmin -g web -t 
 		  <programlisting>
 root:~# killall nsd    
 nsd: no process killed
-root:~# /sbin/init q
-		  </programlisting>        
+root:~# /sbin/init q</programlisting>        
 		</listitem>
 
 		<listitem><para> 
@@ -630,8 +604,7 @@ root:~# /sbin/init q
 
 		  <programlisting>
 root:~# restart-aolserver <emphasis>birdnotes</emphasis>
-Killing 23750 
-		  </programlisting>
+Killing 23750</programlisting>
 		</listitem>
 	  </itemizedlist>
 
@@ -652,12 +625,10 @@ Killing 23750
 		  <varlistentry>
 			<term>Debian</term>
 			<listitem><para>
-
 				<programlisting>
 root:~# apt-get install daemontools-installer
 root:~# build-daemontools
-root:~# # answer 'yes' when asked to create symlink from /service to /var/lib/svscan
-				</programlisting>
+root:~# # answer 'yes' when asked to create symlink from /service to /var/lib/svscan</programlisting>
 			  </para></listitem>
 		  </varlistentry>
 
@@ -692,8 +663,7 @@ root:~# # answer 'yes' when asked to create symlink from /service to /var/lib/sv
 
 	  <programlisting>
 nsadmin:~$ cd /web/birdnotes
-nsadmin:/web/birdnotes$ emacs run
-	  </programlisting>
+nsadmin:/web/birdnotes$ emacs run</programlisting>
 
 	  <para>
 		Copy this text into that file:
@@ -702,8 +672,7 @@ nsadmin:/web/birdnotes$ emacs run
 	  <programlisting>
 #!/bin/sh 
 
-exec /usr/local/aolserver/bin/nsd-postgres -it /usr/local/aolserver/birdnotes.tcl -u nsadmin -g web
-	  </programlisting>
+exec /usr/local/aolserver/bin/nsd-postgres -it /usr/local/aolserver/birdnotes.tcl -u nsadmin -g web</programlisting>
 	  
 	  <para>
 		As root, change the ownership of this file:
@@ -713,8 +682,7 @@ exec /usr/local/aolserver/bin/nsd-postgres -it /usr/local/aolserver/birdnotes.tc
 nsadmin:/web/birdnotes$ su -
 Password: ***********
 root:~# chown root.root /web/birdnotes/run
-root:~# chmod 700 /web/birdnotes/run
-	  </programlisting>
+root:~# chmod 700 /web/birdnotes/run</programlisting>
 
 	  <para>
 		Now, we'll link our web root to the
@@ -732,8 +700,7 @@ root:~# ps -A | grep nsd
 19361 pts/3    00:00:00 nsd
 19362 pts/3    00:00:00 nsd
 19363 pts/3    00:00:00 nsd
-19364 pts/3    00:00:00 nsd
-	  </programlisting>
+19364 pts/3    00:00:00 nsd</programlisting>
 
 	  <para>
 		At this point, you should be able to use the
@@ -784,8 +751,7 @@ root:~# ps -A | grep nsd
 	  <programlisting>
 root:~# cp /tmp/svgroup.txt /usr/local/bin/svgroup
 root:~# chmod 755 /usr/local/bin/svgroup
-root:~# svgroup web /service/birdnotes
-	  </programlisting>
+root:~# svgroup web /service/birdnotes</programlisting>
 
 	  <para>
 		This command will give the <computeroutput>web</computeroutput>
@@ -807,8 +773,7 @@ nsadmin:~$ svc -d /web/birdnotes
 nsadmin:~$ # now, start the server up
 nsadmin:~$ svc -u /web/birdnotes
 nsadmin:~$ # wait for server to come up, then restart it
-nsadmin:~$ svc -t /web/birdnotes
-	  </programlisting>
+nsadmin:~$ svc -t /web/birdnotes</programlisting>
 
 	  <para>
 		Most of this information comes from Tom Jackson's <ulink
@@ -865,8 +830,7 @@ nsadmin:~$ svc -t /web/birdnotes
 		the user owns.</para>
 
 	  <programlisting>
-SVRMGR&gt; drop user <emphasis>birdnotes</emphasis> cascade;
-	  </programlisting>
+SVRMGR&gt; drop user <emphasis>birdnotes</emphasis> cascade;</programlisting>
 
 	  <para>
 		If this does not work because svrmgrl &quot;cannot drop a user that
@@ -874,33 +838,30 @@ SVRMGR&gt; drop user <emphasis>birdnotes</emphasis> cascade;
 		this user. If it still does not work, do:</para>
 
 	  <programlisting>
-SVRMGR&gt; select username, sid, serial# from v$session where username=&#39;<emphasis>birdnotes</emphasis>&#39;;
-	  </programlisting>
+SVRMGR&gt; select username, sid, serial# from v$session where username=&#39;<emphasis>birdnotes</emphasis>&#39;;</programlisting>
 
 	  <para>and then</para>
 	  <programlisting>
-SVRMGR&gt; alter system kill session &#39;<emphasis>sid</emphasis>,<emphasis>serial#</emphasis>&#39;;
-	  </programlisting>
+SVRMGR&gt; alter system kill session &#39;<emphasis>sid</emphasis>,<emphasis>serial#</emphasis>&#39;;</programlisting>
 
 	  <para>
 		where <emphasis>sid</emphasis> and <emphasis>serial#</emphasis> are
 		replaced with the corresponding values for the open session.</para>
 
-	  <para><phrase>Use with caution!</phrase></para>
+	  <para><emphasis role="strong">Use with caution!</emphasis></para>
 
 	  <para>
 		If you feel the need to delete <emphasis>everything</emphasis>
 		related to the service, you can also issue the following:</para>
 	  <programlisting>
-SVRMGR&gt; drop tablespace <emphasis>birdnotes</emphasis> including contents cascade constraints;
-	  </programlisting>   
+SVRMGR&gt; drop tablespace <emphasis>birdnotes</emphasis> including contents cascade constraints;</programlisting>   
 	</sect3>
 
-	<sect3 id="install-openacs-delete-postgres-tablespace" xreflabel="Deleting a Postgres tablespace">
-	  <title>Deleting a Postgres tablespace</title>
+	<sect3 id="install-openacs-delete-postgres-tablespace" xreflabel="Deleting a PostgreSQL tablespace">
+	  <title>Deleting a PostgreSQL tablespace</title>
 
 	  <para>
-		Dropping a Postgres tablespace is easy. You have to stop any
+		Dropping a PostgreSQL tablespace is easy. You have to stop any
 		AOLserver instances that are using the database that you wish to
 		drop. If you're using daemontools, this is simple, just use the
 		'down' flag (-d). If you're using inittab, you have to comment out
@@ -912,8 +873,7 @@ SVRMGR&gt; drop tablespace <emphasis>birdnotes</emphasis> including contents cas
 	  <para>Then, to drop the db, just do:</para>
 	  <programlisting>
 nsadmin:~$ dropdb <emphasis>birdnotes</emphasis>
-DROP DATABASE
-	  </programlisting>
+DROP DATABASE</programlisting>
 	</sect3>
   </sect2>
 

@@ -1,5 +1,5 @@
-<sect1 id="permissions-requirements" xreflabel="ACS 4 Permissions Requirements">
-<title>ACS 4 Permissions Requirements</title>
+<sect1 id="permissions-requirements" xreflabel="OpenACS 4 Permissions Requirements">
+<title>OpenACS 4 Permissions Requirements</title>
 
 <authorblurb><para>
 by <ulink url="mailto:jmp@arsdigita.com">John McClary Prevost</ulink> 
@@ -9,9 +9,9 @@ by <ulink url="mailto:jmp@arsdigita.com">John McClary Prevost</ulink>
 <title>Introduction</title>
 
 
-<para>This document records requirements for the ACS 4 Permissions system, a
-component of the ACS 4 Kernel. The Permissions system is meant to unify and
-centralize the handling of access and control on a given ACS 4 system.</para>
+<para>This document records requirements for the OpenACS 4 Permissions system, a
+component of the OpenACS 4 Kernel. The Permissions system is meant to unify and
+centralize the handling of access and control on a given OpenACS 4 system.</para>
 
 </sect2>
 
@@ -23,17 +23,17 @@ centralize the handling of access and control on a given ACS 4 system.</para>
 permissions, or &quot;who can do what, on what.&quot; On web services, which
 typically involve large numbers of users belonging to different groups,
 permissions handling is a critical need: access to content, services, and
-information generally must be controlled. The ACS 4 Permissions system is
-meant to serve as a consistent, unified interface for higher-level ACS
+information generally must be controlled. The OpenACS 4 Permissions system is
+meant to serve as a consistent, unified interface for higher-level OpenACS
 applications to handle permissions. Consolidating access control in such a
 manner reduces both cost and risk: cost, in that less code has to be written
 and maintained for dealing with recurring permissions situations; risk, in
 that we need not rely on any single programmer&#39;s diligence to ensure
 access control is implemented and enforced correctly.</para>
 
-<para><phrase>Historical Motivations</phrase></para>
+<para><emphasis role="strong">Historical Motivations</emphasis></para>
 
-<para>In earlier versions of the ACS, permissions and access control was handled
+<para>In earlier versions of the OpenACS, permissions and access control was handled
 on a module-by-module basis, often even on a page-by-page basis. For example,
 a typical module might allow any registered user to access its pages
 read-only, but only allow members of a certain group to make changes. The way
@@ -44,7 +44,7 @@ row based on the information in that row.</para>
 
 <para>Problems resulting from this piecemeal approach to permissions and access
 control were many, the two major ones being inconsistency, and
-repeated/redundant code. Thus the drive in ACS 4 to provide a unified,
+repeated/redundant code. Thus the drive in OpenACS 4 to provide a unified,
 consistent permissions system that both programmers and administrators can
 readily use.</para>
 
@@ -54,7 +54,7 @@ readily use.</para>
 <title>System Overview</title>
 
 
-<para>The ACS 4 Permissions system has two main pieces: first, an API for
+<para>The OpenACS 4 Permissions system has two main pieces: first, an API for
 developers to readily handle access control in their applications. The second
 piece of the system is a UI meant primarily for (subsite) administrators to
 grant and revoke permissions to system entities under their control.</para>
@@ -62,7 +62,7 @@ grant and revoke permissions to system entities under their control.</para>
 <para>Consistency is a key characteristic of the Permissions system - both for a
 common administrative interface, and easily deployed and maintained access
 control. The system must be flexible enough to support every access model
-required in ACS applications, but not so flexible that pieces will go unused
+required in OpenACS applications, but not so flexible that pieces will go unused
 or fall outside the common administrative interfaces.</para>
 
 </sect2>
@@ -71,25 +71,25 @@ or fall outside the common administrative interfaces.</para>
 <title>Use Cases and User Scenarios</title>
 
 
-<para><phrase>Terminology</phrase></para>
+<para><emphasis role="strong">Terminology</emphasis></para>
 
 <para>The primary question an access control system must answer is a three-way
 relation, like that between the parts of most simple sentences. A simple
 sentence generally has three parts, a subject, an object, and a verb - in the
-context of ACS Permissions, our simple sentence is, &quot;Can this party
+context of OpenACS Permissions, our simple sentence is, &quot;Can this party
 perform this operation on this target?&quot; Definitions:</para>
 
 
-<para>The subject of the sentence is &quot;<phrase>party</phrase>&quot; - a
+<para>The subject of the sentence is &quot;<emphasis role="strong">party</emphasis>&quot; - a
 distinguishable actor whose access may be controlled, this special word is
 used because one person may be represented by several parties, and one party
 may represent many users (or no users at all).</para>
 
-<para>The object of the sentence is &quot;<phrase>target</phrase>&quot; - this
+<para>The object of the sentence is &quot;<emphasis role="strong">target</emphasis>&quot; - this
 is an entity, or object, that the party wishes to perform some action on. An
 entity/object here is anything that can be put under access control.</para>
 
-<para>The verb of the sentence is &quot;operation&quot; - a behavior on the ACS
+<para>The verb of the sentence is &quot;operation&quot; - a behavior on the OpenACS
 system subject to control, this word is used to represent the fact that a
 single operation may be part of many larger actions the system wants to
 perform. If &quot;foo&quot; is an operation, than we sometimes refer to the
@@ -118,33 +118,33 @@ instance?</para>
 <title>Functional Requirements</title>
 
 
-<para><phrase>10.0 Granularity</phrase></para>
+<para><emphasis role="strong">10.0 Granularity</emphasis></para>
 
 <para>The system must support access control down to the level of a single
-entity (this would imply down to the level of a row in the ACS Objects data
+entity (this would imply down to the level of a row in the OpenACS Objects data
 model).</para>
 
-<para><phrase>20.0 Operations</phrase></para>
+<para><emphasis role="strong">20.0 Operations</emphasis></para>
 
 <para>The system itself must be able to answer the essential permissions
 question as well as several derived questions.</para>
 
-<blockquote><para><phrase>20.10 Basic Access Check</phrase></para>
+<blockquote><para><emphasis role="strong">20.10 Basic Access Check</emphasis></para>
 
 <para>The system must be able to answer the question, &quot;May party P perform
 operation O on target T?&quot;</para>
 
-</blockquote><blockquote><para><phrase>20.20 Allowed Parties Check</phrase></para>
+</blockquote><blockquote><para><emphasis role="strong">20.20 Allowed Parties Check</emphasis></para>
 
 <para>The system must be able to answer the question, &quot;Which parties may
 perform operation O on target T?&quot;</para>
 
-</blockquote><blockquote><para><phrase>20.30 Allowed Operations Check</phrase></para>
+</blockquote><blockquote><para><emphasis role="strong">20.30 Allowed Operations Check</emphasis></para>
 
 <para>The system must be able to answer the question, &quot;Which operations may
 party P perform on target T?&quot;</para>
 
-</blockquote><blockquote><para><phrase>20.40 Allowed Targets Check</phrase></para>
+</blockquote><blockquote><para><emphasis role="strong">20.40 Allowed Targets Check</emphasis></para>
 
 <para>The system must be able to answer the question, &quot;Upon which targets
 may party P perform operation O?&quot;</para>
@@ -156,9 +156,9 @@ may party P perform operation O?&quot;</para>
 <title>Behavioral Requirements</title>
 
 
-<para><phrase>40.0 Scale of Privileges</phrase></para>
+<para><emphasis role="strong">40.0 Scale of Privileges</emphasis></para>
 
-<para>Privileges must be designed with appropriate scope for a given ACS
+<para>Privileges must be designed with appropriate scope for a given OpenACS
 package. Some privileges are of general utility (e.g. &quot;read&quot; and
 &quot;write&quot;). Others are of more limited use (e.g. &quot;moderate&quot;
 - applies mainly to a package like bboard, where many users are contributing
@@ -166,43 +166,43 @@ content simultaneously). A package defining its own privileges should do so
 with moderation, being careful not to overload a privilege like
 &quot;read&quot; to mean too many things.</para>
 
-<para><phrase>50.0 Aggregation of Operations (Privileges)</phrase></para>
+<para><emphasis role="strong">50.0 Aggregation of Operations (Privileges)</emphasis></para>
 
 <para>For user interface purposes, it can be appropriate to group certain
 privileges under others. For example, anyone with the &quot;admin&quot;
 privilege may also automatically receive &quot;read&quot;, &quot;write&quot;,
 &quot;delete&quot;, etc. privileges.</para>
 
-<para><phrase>60.0 Aggregation of Parties (Groups)</phrase></para>
+<para><emphasis role="strong">60.0 Aggregation of Parties (Groups)</emphasis></para>
 
 <para>The system must allow aggregation of parties. The exact method used for
-aggregation will probably be addressed by the ACS 4 &quot;Groups&quot;
+aggregation will probably be addressed by the OpenACS 4 &quot;Groups&quot;
 system. Regardless of the exact behavior of aggregate parties, if an
 aggregate party exists, then access which is granted to the aggregate party
 should be available to all members of that aggregate.</para>
 
-<para><phrase>70.0 Scope of Access Control</phrase></para>
+<para><emphasis role="strong">70.0 Scope of Access Control</emphasis></para>
 
-<blockquote><para><phrase>70.10 Context</phrase></para>
+<blockquote><para><emphasis role="strong">70.10 Context</emphasis></para>
 
 <para>There must be a method for objects to receive default access control from
 some context. For example, if you do not have read access to a bboard, you
 should not have read access to a message in that bboard.</para>
 
-</blockquote><blockquote><para><phrase>70.20 Overriding</phrase></para>
+</blockquote><blockquote><para><emphasis role="strong">70.20 Overriding</emphasis></para>
 
 <para>It must be possible to override defaults provided by the context of an
 object (as in 70.10), in both a positive and negative manner.</para>
 </blockquote>
 
-<blockquote><para><phrase>70.20.10 Positive Overriding</phrase></para>
+<blockquote><para><emphasis role="strong">70.20.10 Positive Overriding</emphasis></para>
 
 <para>It must be possible to allow a party more access to some target than they
 would get by default. (For example, a user does not have the right to edit
 any message on a bboard. But a user does possibly have the right to edit
 their own messages.)</para>
 
-</blockquote><blockquote><para><phrase>70.20.20 Negative Overriding</phrase></para>
+</blockquote><blockquote><para><emphasis role="strong">70.20.20 Negative Overriding</emphasis></para>
 
 <para>It must be possible to deny a party access to some target that their
 inherited privileges would have allowed. (For example, a subdirectory in the
@@ -211,7 +211,7 @@ be possible, however, to make a subdirectory private to some group.)</para>
 </blockquote>
 
 
-<para><phrase>100.0 Efficiency</phrase></para>
+<para><emphasis role="strong">100.0 Efficiency</emphasis></para>
 
 <para>At least the basic access check (20.10) and the allowed targets check
 (20.40) must be efficient enough for general use, i.e. scalable under fairly
@@ -223,7 +223,7 @@ targets check (20.40).</para>
 current user has access to should not be much slower than the <computeroutput>SELECT</computeroutput>
 on its own.</para>
 
-<para><phrase>120.0 Ease of Use</phrase></para>
+<para><emphasis role="strong">120.0 Ease of Use</emphasis></para>
 
 <para>Since most SQL queries will contain an allowed target check in the where
 clause, whatever mechanism is used to make checks in SQL should be fairly
@@ -244,10 +244,10 @@ current user has access to should not add more than one line to a query.</para>
 <tgroup cols="4">
 <tbody>
 <row>
-<entry><phrase>Document Revision #</phrase></entry>
-<entry><phrase>Action Taken, Notes</phrase></entry>
-<entry><phrase>When?</phrase></entry>
-<entry><phrase>By Whom?</phrase></entry>
+<entry><emphasis role="strong">Document Revision #</emphasis></entry>
+<entry><emphasis role="strong">Action Taken, Notes</emphasis></entry>
+<entry><emphasis role="strong">When?</emphasis></entry>
+<entry><emphasis role="strong">By Whom?</emphasis></entry>
 </row>
 
 <row>

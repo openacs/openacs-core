@@ -58,8 +58,7 @@
 			</para>
 			<programlisting>
 $ cd /directory/where/oracle/is
-$ tar -xvf oracle81701.tar
-			</programlisting>
+$ tar -xvf oracle81701.tar</programlisting>
 		  </listitem>
 		</itemizedlist>
 	  </listitem>
@@ -106,8 +105,7 @@ $ tar -xvf oracle81701.tar
 		  <computeroutput>startx</computeroutput>
 		  
 		  <programlisting>
-joeuser:~$ startx
-		  </programlisting>
+joeuser:~$ startx</programlisting>
 		</para></listitem>
 
 	  <listitem><para>
@@ -116,8 +114,7 @@ joeuser:~$ startx
 		  <programlisting>
 joeuser:~$ su -
 Password: ***********
-root:~#
-		  </programlisting>
+root:~#</programlisting>
 		</para></listitem>
 
 	  <listitem><para>
@@ -137,8 +134,7 @@ root:~# groupadd dba
 root:~# groupadd oinstall
 root:~# groupadd oracle
 root:~# useradd -g dba -G oinstall,oracle -m oracle
-root:~# passwd oracle
-		</programlisting>
+root:~# passwd oracle</programlisting>
 
 		<para>
 		  You will be prompted for the New Password and Confirmation of
@@ -153,9 +149,9 @@ root:~# passwd oracle
 		</para>
 
 		<para>
-		  <phrase>Note:</phrase> the Oracle install needs about 1 GB free
-		  on <computeroutput>/ora8</computeroutput> to install
-		  successfully.
+		  <emphasis role="strong">Note:</emphasis> the Oracle install needs
+		  about 1 GB free on <computeroutput>/ora8</computeroutput> to
+		  install successfully.
 		</para>
 
 		<programlisting>
@@ -163,8 +159,7 @@ root:~# mkdir /ora8
 root:/ora8# cd /ora8
 root:/ora8# mkdir -p m01 m02 m03/oradata/ora8
 root:/ora8# chown -R oracle.dba /ora8
-root:/ora8# exit
-		</programlisting>
+root:/ora8# exit</programlisting>
 	  </listitem>
 
 	  <listitem><para>
@@ -181,8 +176,7 @@ root:/ora8# exit
 
 			<programlisting>
 joeuser:~$ su - oracle
-Password: ********
-			</programlisting>
+Password: ********</programlisting>
 		  </listitem>
 
 		  <listitem><para>
@@ -193,8 +187,7 @@ Password: ********
 			</para>
 
 			<programlisting>
-oracle:~$ emacs .bash_profile
-			</programlisting>
+oracle:~$ emacs .bash_profile</programlisting>
 
 			<para>
 			  You may get this error trying to start emacs: 
@@ -206,16 +199,14 @@ Xlib: Client is not authorized to connect to Server
 emacs: Cannot connect to X server :0.
 Check the DISPLAY environment variable or use `-d&#39;.
 Also use the `xhost&#39; program to verify that it is set to permit
-connections from your machine.
-			</programlisting>
+connections from your machine.</programlisting>
 
 			<para>
 			  If so, open a new terminal window and do the following:
 			</para>
 
 			<programlisting>
-joeuser:~$ xhost +localhost
-			</programlisting>
+joeuser:~$ xhost +localhost</programlisting>
 
 			<para>
 			  Now, back in the oracle terminal:
@@ -223,8 +214,7 @@ joeuser:~$ xhost +localhost
 
 			<programlisting>
 oracle:~$ export DISPLAY=localhost:0.0
-oracle:~$ emacs .bash_profile       
-			</programlisting>
+oracle:~$ emacs .bash_profile</programlisting>
 
 			<para>			  
 			  Try this procedure anytime you get an Xlib connection refused
@@ -246,8 +236,7 @@ export ORACLE_SID=ora8
 export ORACLE_TERM=vt100
 export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
 
-umask 022
-			</programlisting>
+umask 022</programlisting>
 
 			<para>
 			  Save the file by typing <computeroutput>CTRL-X
@@ -260,14 +249,13 @@ umask 022
 		</itemizedlist>
 
 		<para>
-		  Make sure that you do <phrase>not</phrase> add any lines like the
-		  following
+		  Make sure that you do <emphasis role="strong">not</emphasis> add
+		  any lines like the following
 		</para>
 
 		<programlisting>
 # NLS_LANG=american
-# export NLS_LANG
-		</programlisting>
+# export NLS_LANG</programlisting>
 
 		<para>
 		  These lines will change the Oracle date settings and will break
@@ -281,8 +269,7 @@ umask 022
 		</para>
 		
 		<programlisting>
-oracle:~$ exit
-		</programlisting>
+oracle:~$ exit</programlisting>
 	  </listitem>
 
 	  <listitem><para> 
@@ -296,8 +283,7 @@ oracle:~$ exit
 
 		<programlisting>
 oracle:~$ su - oracle
-oracle:~$ env | grep ORA
-		</programlisting>
+oracle:~$ env | grep ORA</programlisting>
 
 		<para>
 		  If it worked, you should see: 
@@ -308,8 +294,7 @@ ORACLE_SID=ora8
 ORACLE_BASE=/ora8/m01/app/oracle
 ORACLE_TERM=vt100
 ORACLE_HOME=/ora8/m01/app/oracle/product/8.1.7
-ORA_NLS33=/ora8/m01/app/oracle/product/8.1.7/ocommon/nls/admin/data
-		</programlisting>
+ORA_NLS33=/ora8/m01/app/oracle/product/8.1.7/ocommon/nls/admin/data</programlisting>
 
 		<para>
 		  If not, try adding the files to
@@ -333,8 +318,7 @@ ORA_NLS33=/ora8/m01/app/oracle/product/8.1.7/ocommon/nls/admin/data
 
 		<programlisting>
 oracle:~$ echo $PATH
-/bin:/usr/bin:/usr/local/bin:/usr/bin/X11:/usr/X11R6/bin:/home/oracle/bin:/ora8/m01/app/oracle/product/8.1.7/bin
-		</programlisting>
+/bin:/usr/bin:/usr/local/bin:/usr/bin/X11:/usr/X11R6/bin:/home/oracle/bin:/ora8/m01/app/oracle/product/8.1.7/bin</programlisting>
 
 		<para>
 		  If they are not, then add them to the
@@ -360,8 +344,7 @@ oracle:~$ echo $PATH
 joeuser:~$ xhost +localhost
 joeuser:~$ su - oracle
 Password: **********
-oracle:~$ export DISPLAY=localhost:0.0
-		</programlisting>
+oracle:~$ export DISPLAY=localhost:0.0</programlisting>
 	  </listitem>
 
 	  <listitem><para>
@@ -379,8 +362,7 @@ oracle:~$ export DISPLAY=localhost:0.0
 oracle:~$ su - root
 root:~# mount -t iso9660 /dev/cdrom /mnt/cdrom
 root:~# exit
-oracle:~$ cd /mnt/cdrom
-			</programlisting>
+oracle:~$ cd /mnt/cdrom</programlisting>
 		  </listitem>
 
 		  <listitem><para>
@@ -390,8 +372,7 @@ oracle:~$ cd /mnt/cdrom
 			</para>
 
 			<programlisting>
-oracle:~$ cd /where/oracle/Disk1
-			</programlisting>
+oracle:~$ cd /where/oracle/Disk1</programlisting>
 		  </listitem>
 		</itemizedlist>
 
@@ -401,8 +382,7 @@ oracle:~$ cd /where/oracle/Disk1
 
 		<programlisting>
 oracle:/where/oracle/Disk1$ ls
-doc  index.htm  install  runInstaller  stage  starterdb
-		</programlisting>
+doc  index.htm  install  runInstaller  stage  starterdb</programlisting>
 
 		<para>
 		  If you don&#39;t see
@@ -416,8 +396,7 @@ doc  index.htm  install  runInstaller  stage  starterdb
 		</para>
 
 		<programlisting>
-oracle:/where/oracle/Disk1$ ./runInstaller
-		</programlisting>
+oracle:/where/oracle/Disk1$ ./runInstaller</programlisting>
 
 		<para>
 		  A window will open that welcomes you to the &#39;Oracle Universal
@@ -489,8 +468,7 @@ oracle:/where/oracle/Disk1$ ./runInstaller
 
 			  <programlisting>
 joueser:~$ su -
-root:~# ln -s /usr/bin/awk /bin/awk
-			  </programlisting>
+root:~# ln -s /usr/bin/awk /bin/awk</programlisting>
 			</listitem>
 		  </itemizedlist>
 
@@ -507,8 +485,7 @@ Creating Oracle Inventory pointer file (/etc/oraInst.loc)
 Changing groupname of /ora8/m01/app/oracle/oraInventory to oinstall.
 root:~# mkdir -p /usr/local/java
 root:~# exit
-joeuser:~$ exit
-			</programlisting>
+joeuser:~$ exit</programlisting>
 		  </listitem>
 
 		  <listitem><para>
@@ -550,9 +527,8 @@ joeuser:~$ exit
 		<itemizedlist>
 		  <listitem><para>
 			  In addition to the defaults, make sure that &quot;Oracle SQLJ
-			  8.1.6.0,&quot; &quot;Oracle Protocol Support 8.1.6.1.0,&quot; and
-			  &quot;Linux Documentation 8.1.6.0.0&quot; are also checked (they 
-			  were not in release 8.1.5).
+			  8.1.7.0,&quot; &quot;Oracle Protocol Support 8.1.7.0.0,&quot; and
+			  &quot;Linux Documentation 8.1.7.0.0&quot; are also checked.
 			</para></listitem>
 
 		  <listitem><para>
@@ -613,6 +589,30 @@ joeuser:~$ exit
 	  </listitem>
 
 	  <listitem><para>
+		  The &quot;Authentication Methods&quot; screen
+		</para>
+		<itemizedlist>
+		  <listitem><para>
+			  Click &quot;Next&quot;
+			</para></listitem>
+		</itemizedlist>
+	  </listitem>
+
+	  <listitem><para>
+		  The next screen is &quot;Choose JDK home directory&quot;
+		</para>
+		<itemizedlist>
+		  <listitem><para>
+			  Keep the default path: <computeroutput>/usr/local/java</computeroutput>
+			</para></listitem>
+
+		  <listitem><para>
+			  Click &quot;Next&quot;
+			</para></listitem>
+		</itemizedlist>
+	  </listitem>
+
+	  <listitem><para>
 		  The &quot;Create a Database&quot; screen in the OUI
 		</para>
 
@@ -620,6 +620,22 @@ joeuser:~$ exit
 		  <listitem><para>
 			  Select &quot;No&quot; as we will do this later, after some
 			  important configuration changes.
+			</para></listitem>
+
+		  <listitem><para>
+			  Click &quot;Next&quot;
+			</para></listitem>
+		</itemizedlist>
+	  </listitem>
+
+	  <listitem><para>
+		  The next screen is &quot;Oracle Product Support&quot;
+		</para>
+
+		<itemizedlist>
+		  <listitem><para>
+			  TCP should be checked with &quot;Status&quot; listed as
+			  Required
 			</para></listitem>
 
 		  <listitem><para>
@@ -639,7 +655,7 @@ joeuser:~$ exit
 			</para></listitem>
 		  
 		  <listitem><para>
-			  Check that &quot;(91 products)&quot; is in the &quot;New
+			  Check that &quot;(144 products)&quot; is in the &quot;New
 			  Installations&quot; section title.
 			</para></listitem>
 
@@ -679,7 +695,7 @@ The following environment variables are set as:
 
 Enter the full pathname of the local bin directory: [/usr/local/bin]: 
 
-<phrase>Press ENTER here to accept default of /usr/local/bin</phrase>
+<computeroutput>Press ENTER here to accept default of /usr/local/bin</computeroutput>
       
 
 Creating /etc/oratab file...
@@ -691,8 +707,7 @@ IMPORTANT NOTE: Please delete any log and trace files previously
                 created by the Oracle Enterprise Manager Intelligent
                 Agent. These files may be found in the directories
                 you use for storing other Net8 log and trace files.
-                If such files exist, the OEM IA may not restart.
-			</programlisting>
+                If such files exist, the OEM IA may not restart.</programlisting>
 		  </listitem>
 
 		  <listitem><para> 
@@ -703,8 +718,7 @@ IMPORTANT NOTE: Please delete any log and trace files previously
 
 		<programlisting>
 root:~# exit
-joeuser:~$ exit
-		</programlisting>
+joeuser:~$ exit</programlisting>
 	  </listitem>
 
 	  <listitem><para>
@@ -731,7 +745,7 @@ joeuser:~$ exit
 		<itemizedlist>
 		  <listitem><para>
 			  Make sure the &quot;Perform Typical installation&quot; is
-			  <phrase>not</phrase> selected.
+			  <emphasis role="strong">not</emphasis> selected.
 			</para></listitem>
 
 		  <listitem><para>
@@ -907,8 +921,7 @@ joeuser:~$ xhost +localhost
 joeuser:~$ su - oracle
 Password: *********
 oracle:~$ export DISPLAY=localhost:0.0
-oracle:~$ dbassist 
-		</programlisting>
+oracle:~$ dbassist</programlisting>
 
 	  </listitem>
 
@@ -1003,8 +1016,8 @@ oracle:~$ dbassist
 		</para></listitem>
 
 	  <listitem><para>
-		  Go to the &quot;<phrase>temporary</phrase>&quot; and
-		  &quot;<phrase>rollback</phrase>&quot; tabs, and change the Size
+		  Go to the &quot;temporary&quot; and
+		  &quot;rollback&quot; tabs, and change the Size
 		  (upper-right text box) to
 		  <computeroutput>150</computeroutput>MB. Click
 		  &quot;<computeroutput>Next</computeroutput>&quot;
@@ -1071,8 +1084,7 @@ oracle:~$ dbassist
 		</para>
 
 		<programlisting>
-oracle:~$ emacs /ora8/m01/app/oracle/product/8.1.7/dbs/initora8.ora  
-		</programlisting>
+oracle:~$ emacs /ora8/m01/app/oracle/product/8.1.7/dbs/initora8.ora</programlisting>
 	  </listitem>
 
 	  <listitem><para>
@@ -1080,8 +1092,7 @@ oracle:~$ emacs /ora8/m01/app/oracle/product/8.1.7/dbs/initora8.ora
 		</para>
 
 		<programlisting>
-nls_date_format = &quot;YYYY-MM-DD&quot;
-		</programlisting>
+nls_date_format = &quot;YYYY-MM-DD&quot;</programlisting>
 	  </listitem>
 
 	  <listitem><para>
@@ -1095,8 +1106,7 @@ nls_date_format = &quot;YYYY-MM-DD&quot;
 		</para>
 
 		<programlisting>
-open_cursors = 500
-		</programlisting>
+open_cursors = 500</programlisting>
 	  </listitem>
 
 	  <listitem><para>
@@ -1125,8 +1135,7 @@ open_cursors = 500
 
 		<programlisting>
 oracle:~$ cd /ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib
-oracle:/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib$ ./sqlora8.sh
-		</programlisting>
+oracle:/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib$ ./sqlora8.sh</programlisting>
 
 		<para>
 		  In some instances, Oracle will save the file to
@@ -1174,8 +1183,7 @@ oracle:/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib$ ./sqlora8.sh
 		</para>
 
 		<programlisting>
-oracle:~$ cp /tmp/acceptance-sql.txt /tmp/acceptance.sql
-		</programlisting>
+oracle:~$ cp /tmp/acceptance-sql.txt /tmp/acceptance.sql</programlisting>
 	  </listitem>
 
 	  <listitem><para>		  
@@ -1184,8 +1192,7 @@ oracle:~$ cp /tmp/acceptance-sql.txt /tmp/acceptance.sql
 		</para>
 
 		<programlisting>
-oracle:~$ sqlplus system/manager
-		</programlisting>
+oracle:~$ sqlplus system/manager</programlisting>
 
 		<para>
 		  SQL*Plus should startup. If you get an <computeroutput>ORA-01034:
@@ -1196,8 +1203,7 @@ oracle:~$ sqlplus system/manager
 		<programlisting>
 oracle:~$ svrmgrl
 SVRMGR&gt; connect internal
-SVRMGR&gt; startup
-		</programlisting>
+SVRMGR&gt; startup</programlisting>
 	  </listitem>
 
 	  <listitem><para>
@@ -1209,8 +1215,7 @@ SVRMGR&gt; startup
 		<programlisting>
 SQL&gt; alter user system identified by alexisahunk;
 SQL&gt; alter user sys identified by alexisahunk;
-SQL&gt; alter user ctxsys identified by alexisahunk;
-		</programlisting>
+SQL&gt; alter user ctxsys identified by alexisahunk;</programlisting>
 	  </listitem>
 
 	  <listitem><para>
@@ -1218,8 +1223,7 @@ SQL&gt; alter user ctxsys identified by alexisahunk;
 		</para>
 
 		<programlisting>
-SQL&gt; select sysdate from dual;
-		</programlisting>
+SQL&gt; select sysdate from dual;</programlisting>
 
 		<para>
 		  If you don&#39;t see a date that fits the format
@@ -1242,8 +1246,7 @@ SYSDATE
 ----------
 2000-06-10
 
-SQL&gt; 
-		</programlisting>
+SQL&gt;</programlisting>
 
 		<para>
 		  Many people encounter an error regarding <computeroutput>maximum
@@ -1252,8 +1255,7 @@ SQL&gt;
 
 		<programlisting>
 ERROR at line 1:
-ORA-01450: maximum key length (758) exceeded
-		</programlisting>
+ORA-01450: maximum key length (758) exceeded</programlisting>
 
 		<para>
 		  This error occurs if your database block size is wrong and is
@@ -1299,8 +1301,7 @@ ORA-01450: maximum key length (758) exceeded
 
 		<programlisting>
 oracle:~$ cp /tmp/dbstart.txt /ora8/m01/app/oracle/product/8.1.7/bin/dbstart 
-oracle:~$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/dbstart 
-		</programlisting>
+oracle:~$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/dbstart</programlisting>
 	  </listitem>
 
 	  <listitem><para>
@@ -1316,8 +1317,7 @@ oracle:~$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/dbstart
 		  <listitem><para>You will see this line. </para>
 
 			<programlisting>
-ora8:/ora8/m01/app/oracle/product/8.1.7:N
-			</programlisting>
+ora8:/ora8/m01/app/oracle/product/8.1.7:N</programlisting>
 
 			<para>
 			  By the way, if you changed the service name or have multiple
@@ -1337,8 +1337,7 @@ ora8:/ora8/m01/app/oracle/product/8.1.7:N
 			</para>
 
 			<programlisting>
-ora8:/ora8/m01/app/oracle/product/8.1.7:Y
-			</programlisting>
+ora8:/ora8/m01/app/oracle/product/8.1.7:Y</programlisting>
 
 		  </listitem>
 
@@ -1363,8 +1362,7 @@ ora8:/ora8/m01/app/oracle/product/8.1.7:Y
 oracle:~$ su -
 root:~# cp /tmp/oracle8i.txt /etc/rc.d/init.d/oracle8i
 root:~# chown root.root /etc/rc.d/init.d/oracle8i
-root:~# chmod 700 /etc/rc.d/init.d/oracle8i      
-		</programlisting>
+root:~# chmod 700 /etc/rc.d/init.d/oracle8i</programlisting>
 	  </listitem>
 
 	  <listitem><para> 
@@ -1412,8 +1410,7 @@ Database mounted.
 Database opened.
 SQL&gt; Disconnected
 
-Database &quot;ora8&quot; warm started.
-		</programlisting>
+Database &quot;ora8&quot; warm started.</programlisting>
 	  </listitem>
 
 	  <listitem><para>		  
@@ -1428,8 +1425,7 @@ root:~# cd /etc/rc.d/init.d/
 root:~# chkconfig --add oracle8i
 root:~# chkconfig --list oracle8i
 ; You should see:
-oracle8i        0:off   1:off   2:off   3:on    4:on    5:on    6:off
-			</programlisting>
+oracle8i        0:off   1:off   2:off   3:on    4:on    5:on    6:off</programlisting>
 		  </listitem>
 
 		  <listitem><para>Debian users:</para>
@@ -1442,8 +1438,7 @@ root:~# update-rc.d oracle8i defaults
    /etc/rc2.d/S20oracle8i -> ../init.d/oracle8i
    /etc/rc3.d/S20oracle8i -> ../init.d/oracle8i
    /etc/rc4.d/S20oracle8i -> ../init.d/oracle8i
-   /etc/rc5.d/S20oracle8i -> ../init.d/oracle8i
-			</programlisting>
+   /etc/rc5.d/S20oracle8i -> ../init.d/oracle8i</programlisting>
 			</listitem>
 		</itemizedlist>
 
@@ -1490,8 +1485,7 @@ oracle:~$ chmod 700 /ora8/m01/app/oracle/product/8.1.7/bin/stoplsnr
 oracle:~$ exit
 root:~# cp /tmp/listener8i.txt /etc/rc.d/init.d/listener8i
 root:~# cd /etc/rc.d/init.d
-root:/etc/rc.d/init.d# chmod 700 listener8i
-		</programlisting>
+root:/etc/rc.d/init.d# chmod 700 listener8i</programlisting>
 
 		<para>
 		  Test the listener automation by running the following commands
@@ -1540,8 +1534,7 @@ Listener Log File         /ora8/m01/app/oracle/product/8.1.7/network/log/listene
 Services Summary...
   PLSExtProc        has 1 service handler(s)
   ora8      has 1 service handler(s)
-The command completed successfully
-		</programlisting>
+The command completed successfully</programlisting>
 
 		<para>
 		  This test will verify that the listener is operating
@@ -1566,8 +1559,7 @@ SYSDATE
 
 SQL&gt; exit
 oracle:~$ exit
-root:~#
-		</programlisting>
+root:~#</programlisting>
 
 		<itemizedlist>
 		  <listitem><para>RedHat users:</para>
@@ -1579,8 +1571,7 @@ root:~#
 root:~# cd /etc/rc.d/init.d/
 root:/etc/rc.d/init.d# chkconfig --add listener8i
 root:/etc/rc.d/init.d# chkconfig --list listener8i
-listener8i      0:off   1:off   2:off   3:on    4:on    5:on    6:off
-			</programlisting>
+listener8i      0:off   1:off   2:off   3:on    4:on    5:on    6:off</programlisting>
 		  </listitem>
 
 		  <listitem><para>Debian users:</para>
@@ -1597,8 +1588,7 @@ root:~# update-rc.d listener8i defaults 21 19
    /etc/rc2.d/S21listener8i -> ../init.d/listener8i
    /etc/rc3.d/S21listener8i -> ../init.d/listener8i
    /etc/rc4.d/S21listener8i -> ../init.d/listener8i
-   /etc/rc5.d/S21listener8i -> ../init.d/listener8i
-			</programlisting>
+   /etc/rc5.d/S21listener8i -> ../init.d/listener8i</programlisting>
 		  </listitem>
 		</itemizedlist>
 	  </listitem>
@@ -1613,8 +1603,7 @@ root:~# update-rc.d listener8i defaults 21 19
 		</para>
 
 		<programlisting>
-root:~# /sbin/shutdown -r -t 0 now
-		</programlisting>
+root:~# /sbin/shutdown -r -t 0 now</programlisting>
 
 		<para>
 		  Log back in and ensure that Oracle started automatically. 
@@ -1624,9 +1613,7 @@ root:~# /sbin/shutdown -r -t 0 now
 joeuser:~$ su - oracle
 oracle:~$ sqlplus system/alexisahunk@ora8
 
-SQL&gt; exit
-  
-		</programlisting>
+SQL&gt; exit</programlisting>
 	  </listitem>
 	</itemizedlist>
 
@@ -1651,14 +1638,13 @@ SQL&gt; exit
 
 	<para>
 	  To fix this, you should include the following line in
-	  <phrase><computeroutput>$ORACLE_HOME/dbs/init</computeroutput><emphasis>SID</emphasis><computeroutput>.ora</computeroutput></phrase>
+	  <computeroutput>$ORACLE_HOME/dbs/init</computeroutput><emphasis>SID</emphasis><computeroutput>.ora</computeroutput>
 	  or for the default case,
-	  <phrase><computeroutput>$ORACLE_HOME/dbs/initora8.ora</computeroutput></phrase>
+	  <computeroutput>$ORACLE_HOME/dbs/initora8.ora</computeroutput>
 	</para>
 
 	<programlisting>
-nls_date_format = &quot;YYYY-MM-DD&quot;
-	</programlisting>
+nls_date_format = &quot;YYYY-MM-DD&quot;</programlisting>
 
 	<para>
 	  You test whether this solved the problem by firing up
@@ -1666,8 +1652,7 @@ nls_date_format = &quot;YYYY-MM-DD&quot;
 	</para>
 
 	<programlisting>
-SQL&gt; select sysdate from dual;
-	</programlisting>
+SQL&gt; select sysdate from dual;</programlisting>
 
 	<para>
 	  You should see back a date like
@@ -1680,8 +1665,7 @@ SQL&gt; select sysdate from dual;
 
 	<programlisting>
 SQL&gt; column sysdate format a15
-SQL&gt; select sysdate from dual;
-	</programlisting>
+SQL&gt; select sysdate from dual;</programlisting>
 
 	<para>
 	  If the date does not conform to this format, double-check that you
@@ -1698,8 +1682,7 @@ SQL&gt; select sysdate from dual;
 	</para>
 
 	<programlisting>
-export nls_lang = american
-	</programlisting>
+export nls_lang = american</programlisting>
 
 	<para>
 	  Setting this environment variable will override the date
@@ -1709,8 +1692,7 @@ export nls_lang = american
 	</para>
 
 	<programlisting>
-export nls_date_format = &#39;YYYY-MM-DD&#39;
-	</programlisting>
+export nls_date_format = &#39;YYYY-MM-DD&#39;</programlisting>
 
 	<para>
 	  Log back in again. If adding the
@@ -1734,8 +1716,7 @@ export nls_date_format = &#39;YYYY-MM-DD&#39;
 			</para>
 
 			<programlisting>
-oracle:~$ sqlplus system/changeme
-			</programlisting>
+oracle:~$ sqlplus system/changeme</programlisting>
 		  </listitem>
 
 		  <listitem><para>			  
@@ -1744,8 +1725,7 @@ oracle:~$ sqlplus system/changeme
 			</para>
 
 			<programlisting>
-SQL&gt; drop user <emphasis>oracle_user_name</emphasis> cascade;
-			</programlisting>
+SQL&gt; drop user <emphasis>oracle_user_name</emphasis> cascade;</programlisting>
 		  </listitem>
 
 		  <listitem><para>
@@ -1755,8 +1735,7 @@ SQL&gt; drop user <emphasis>oracle_user_name</emphasis> cascade;
 			  your database entirely.
 			</para>
 			<programlisting>
-SQL&gt; drop tablespace <emphasis>table_space_name</emphasis> including contents cascade constraints;
-			</programlisting>
+SQL&gt; drop tablespace <emphasis>table_space_name</emphasis> including contents cascade constraints;</programlisting>
 		  </listitem>
 		</itemizedlist>
 	  </listitem>
@@ -1778,9 +1757,9 @@ SQL&gt; drop tablespace <emphasis>table_space_name</emphasis> including contents
 	  <tgroup cols="3">
 		<thead>
 		  <row>
-			<entry><phrase>Variable</phrase></entry>
-			<entry><phrase>Value</phrase></entry>
-			<entry><phrase>Reason</phrase></entry>
+			<entry>Variable</entry>
+			<entry>Value</entry>
+			<entry>Reason</entry>
 		  </row>
 		</thead>
 

@@ -1,5 +1,5 @@
-<sect1 id="security-requirements" xreflabel="ACS 4 Security Requirements">
-<title>ACS 4 Security Requirements</title>
+<sect1 id="security-requirements" xreflabel="OpenACS 4 Security Requirements">
+<title>OpenACS 4 Security Requirements</title>
 
 <authorblurb><para>
 by <ulink url="mailto:richardl@arsdigita.com">Richard Li</ulink> 
@@ -10,7 +10,7 @@ by <ulink url="mailto:richardl@arsdigita.com">Richard Li</ulink>
 <title>Introduction</title>
 
 <para>
-This document lists the requirements for the security system for the ACS. 
+This document lists the requirements for the security system for the OpenACS. 
 </para>
 
 </sect2>
@@ -36,7 +36,7 @@ vendors require that the user identity be securely validated.
 The security system consists of a number of subsystems. 
 </para>
 
-<para><phrase>Signed Cookies</phrase></para>
+<para><emphasis role="strong">Signed Cookies</emphasis></para>
 
 <para>
 Cookies play a key role in storing user information. However, since they are
@@ -47,15 +47,15 @@ hit.
 </para>
 
 <itemizedlist>
-<listitem><para><phrase>10.0 Guaranteed Tamper Detection</phrase> Any tampering of cookie
+<listitem><para><emphasis role="strong">10.0 Guaranteed Tamper Detection</emphasis> Any tampering of cookie
 data should be easily detectable by the web server.</para></listitem>
 
-<listitem><para><phrase>10.1 Performance and Scalability</phrase> Validation and
+<listitem><para><emphasis role="strong">10.1 Performance and Scalability</emphasis> Validation and
 verification of the cookie should be easily scalable and should not require a
 database query on every hit.</para></listitem>
 </itemizedlist>
 
-<para><phrase>Session Properties</phrase></para>
+<para><emphasis role="strong">Session Properties</emphasis></para>
 
 <para>
 Applications should be able to store session-level properties in a database
@@ -63,15 +63,15 @@ table.
 </para>
 
 <itemizedlist>
-<listitem><para><phrase>11.0 Storage API</phrase> Session-level data should be accessible
+<listitem><para><emphasis role="strong">11.0 Storage API</emphasis> Session-level data should be accessible
 via an API.</para></listitem>
 
-<listitem><para><phrase>11.1 Purge Mechanism</phrase> An efficient pruning mechanism
+<listitem><para><emphasis role="strong">11.1 Purge Mechanism</emphasis> An efficient pruning mechanism
 should be used to prevent old session level properties from filling up the
 table.</para></listitem>
 </itemizedlist>
 
-<para><phrase>Login</phrase></para>
+<para><emphasis role="strong">Login</emphasis></para>
 
 <para>
 The security system should support the concept of persistent user logins.
@@ -79,31 +79,31 @@ This persistence takes several forms.
 </para>
 
 <itemizedlist>
-<listitem><para><phrase>12.0 Permanent Login</phrase> Users should be able to maintain a
+<listitem><para><emphasis role="strong">12.0 Permanent Login</emphasis> Users should be able to maintain a
 permanent user login so that they never need to type their password.</para></listitem>
 
-<listitem><para><phrase>12.1 Session Login</phrase> The security system should support
+<listitem><para><emphasis role="strong">12.1 Session Login</emphasis> The security system should support
 the concept of a session, with authentication tokens that become invalid
 after a certain period of time.</para></listitem>
 
-<listitem><para><phrase>12.2 Session Definition</phrase> A session is a sequence of
+<listitem><para><emphasis role="strong">12.2 Session Definition</emphasis> A session is a sequence of
 clicks by one user from one browser in which no two clicks are separated by
 more than some constant (the session timeout).</para></listitem>
 
-<listitem><para><phrase>12.3 Stateless</phrase> The security system should not require
+<listitem><para><emphasis role="strong">12.3 Stateless</emphasis> The security system should not require
 state that is stored in the server. Required state may reside only in the
 user request (including cookies), and in the database. A single user should
 be able to log in to the system even if the user is sent to a different
 AOLserver for each step of the login process (e.g., by a load balancer).</para></listitem>
 
-<listitem><para><phrase>12.4 Secure</phrase> The security system should not store
+<listitem><para><emphasis role="strong">12.4 Secure</emphasis> The security system should not store
 passwords in clear text in the database.</para></listitem>
 </itemizedlist>
 
 
 
 <itemizedlist>
-<listitem><para><phrase>13.0 SSL Hardware</phrase> The system must work when the SSL
+<listitem><para><emphasis role="strong">13.0 SSL Hardware</emphasis> The system must work when the SSL
 processing occurs outside of the web server (in specialized hardware, in a
 firewall, etc.).</para></listitem>
 </itemizedlist>

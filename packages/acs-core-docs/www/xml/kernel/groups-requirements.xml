@@ -1,5 +1,5 @@
-<sect1 id="groups-requirements" xreflabel="ACS 4 Groups Requirements">
-<title>ACS 4 Groups Requirements</title>
+<sect1 id="groups-requirements" xreflabel="OpenACS 4 Groups Requirements">
+<title>OpenACS 4 Groups Requirements</title>
 
 <authorblurb><para>
 by <ulink url="http://planitia.org">Rafael H. Schloming</ulink>, <ulink url="mailto:mthomas@arsdigita.com">Mark Thomas</ulink> 
@@ -11,9 +11,9 @@ by <ulink url="http://planitia.org">Rafael H. Schloming</ulink>, <ulink url="mai
 
 
 <para>Almost all database-backed websites have users, and need to model the
-grouping of users. The ACS 4 Parties and Groups system is intended to provide
+grouping of users. The OpenACS 4 Parties and Groups system is intended to provide
 the flexibility needed to model complex real-world organizational structures,
-particularly to support powerful subsite services; that is, where one ACS
+particularly to support powerful subsite services; that is, where one OpenACS
 installation can support what appears to the user as distinct web services
 for different user communities.</para>
 
@@ -30,12 +30,12 @@ corporation can be broken into structures (the corporation, its divisions,
 and their departments) or regions (the Boston office, the LA office); a
 person who is employed by (is a member of) a specific department is also a
 member of the division and the corporation, and works at (is a member of, but
-in a different sense) a particular office. ACS 4&#39;s Parties and Groups
+in a different sense) a particular office. OpenACS 4&#39;s Parties and Groups
 system will support such complex relations faithfully.</para>
 
-<para><phrase>Historical Motivations</phrase></para>
+<para><emphasis role="strong">Historical Motivations</emphasis></para>
 
-<para>The primary limitation of the ACS 3.x user group system is that it
+<para>The primary limitation of the OpenACS 3.x user group system is that it
 restricts the application developer to representing a &quot;flat group&quot;
 that contains only users: The <computeroutput>user_groups</computeroutput> table may contain the
 <computeroutput>group_id</computeroutput> of a parent group, but parent-child relationship
@@ -44,7 +44,7 @@ groups to be represented. Moreover, the Oracle database&#39;s limited support
 for tree-like structures makes the queries over these relationships
 expensive.</para>
 
-<para>In addition, the Module Scoping design in ACS 3.0 introduced a
+<para>In addition, the Module Scoping design in OpenACS 3.0 introduced a
 <emphasis>party</emphasis> abstraction - a thing that is a person or a group of people -
 though not in the form of an explicit table. Rather, the triple of
 <computeroutput>scope</computeroutput>, <computeroutput>user_id</computeroutput>, and <computeroutput>group_id</computeroutput> columns
@@ -64,8 +64,8 @@ functions and procedures to check both the <computeroutput>user_id</computeroutp
 <computeroutput>group_id</computeroutput> values</para></listitem>
 </itemizedlist>
 
-<para>In sum, the goal of the <phrase>Parties and Groups</phrase> system is to
-provide ACS programmers and site administrators with simple tools that fully
+<para>In sum, the goal of the <emphasis role="strong">Parties and Groups</emphasis> system is to
+provide OpenACS programmers and site administrators with simple tools that fully
 describe the complex relationships that exist among groups in the real
 world.</para>
 
@@ -85,33 +85,33 @@ users.</para>
 <title>System Overview</title>
 
 
-<para>We start with <phrase>Groups</phrase>, which contain members; the
-<phrase>member can be either a person or another group</phrase> (i.e. a
+<para>We start with <emphasis role="strong">Groups</emphasis>, which contain members; the
+<emphasis role="strong">member can be either a person or another group</emphasis> (i.e. a
 member is a party).</para>
 
 <para>In addition to membership, the party and groups system defines a
-<phrase>composition</phrase> relationship that may exist between groups: A
-group can be a <phrase>component</phrase> of another group. The child group
+<emphasis role="strong">composition</emphasis> relationship that may exist between groups: A
+group can be a <emphasis role="strong">component</emphasis> of another group. The child group
 is called a <emphasis>component group</emphasis>; the parent group is called a
 <emphasis>composite group</emphasis>.</para>
 
-<para>A group <phrase>G<subscript>c</subscript></phrase> can be a member and/or a component
-of another group <phrase>G<subscript>p</subscript></phrase>; the difference is in the way
-the members of <phrase>G<subscript>c</subscript></phrase> are related to
-<phrase>G<subscript>p</subscript></phrase>:</para>
+<para>A group <emphasis role="strong">G<subscript>c</subscript></emphasis> can be a member and/or a component
+of another group <emphasis role="strong">G<subscript>p</subscript></emphasis>; the difference is in the way
+the members of <emphasis role="strong">G<subscript>c</subscript></emphasis> are related to
+<emphasis role="strong">G<subscript>p</subscript></emphasis>:</para>
 
 <itemizedlist>
-<listitem><para>If a party <phrase>P</phrase> is a member (or a component) of
-<phrase>G<subscript>c</subscript></phrase> and if <phrase>G<subscript>c</subscript></phrase> is a
-component of <phrase>G<subscript>p</subscript></phrase>, then <phrase>P</phrase> is also
-a member (or a component) of <phrase>G<subscript>p</subscript></phrase></para></listitem>
+<listitem><para>If a party <emphasis role="strong">P</emphasis> is a member (or a component) of
+<emphasis role="strong">G<subscript>c</subscript></emphasis> and if <emphasis role="strong">G<subscript>c</subscript></emphasis> is a
+component of <emphasis role="strong">G<subscript>p</subscript></emphasis>, then <emphasis role="strong">P</emphasis> is also
+a member (or a component) of <emphasis role="strong">G<subscript>p</subscript></emphasis></para></listitem>
 
-<listitem><para>If a party <phrase>P</phrase> is a member (or a component) of
-<phrase>G<subscript>c</subscript></phrase> and if <phrase>G<subscript>c</subscript></phrase> is a
-member of <phrase>G<subscript>p</subscript></phrase>, then <phrase>no
-relationship</phrase> between <phrase>P</phrase> and
-<phrase>G<subscript>p</subscript></phrase> exists as a result of the relationship between
-<phrase>G<subscript>p</subscript></phrase> and <phrase>G<subscript>p</subscript></phrase>.</para></listitem>
+<listitem><para>If a party <emphasis role="strong">P</emphasis> is a member (or a component) of
+<emphasis role="strong">G<subscript>c</subscript></emphasis> and if <emphasis role="strong">G<subscript>c</subscript></emphasis> is a
+member of <emphasis role="strong">G<subscript>p</subscript></emphasis>, then <emphasis role="strong">no
+relationship</emphasis> between <emphasis role="strong">P</emphasis> and
+<emphasis role="strong">G<subscript>p</subscript></emphasis> exists as a result of the relationship between
+<emphasis role="strong">G<subscript>p</subscript></emphasis> and <emphasis role="strong">G<subscript>p</subscript></emphasis>.</para></listitem>
 </itemizedlist>
 
 <para>Consider an example to make this less abstract: Pretend that the Sierra
@@ -121,7 +121,7 @@ is a member of the Massachusetts Chapter of the Sierra Club, Eddie is
 automatically a member of the Sierra Club, but being a Sierra Club member
 does not make Eddie a member of Greenpeace.</para>
 
-<para>In the ACS, Greenpeace, Sierra Club, and the Sierra Club chapters would be
+<para>In the OpenACS, Greenpeace, Sierra Club, and the Sierra Club chapters would be
 modeled as groups, and Eddie would be a user. There would be a composition
 relationship between each Sierra Club chapter and the Sierra Club. Membership
 relationships would exist between Eddie and the Massachusetts Chapter,
@@ -133,11 +133,11 @@ groups system must provide a base type that specifies the bare minimum
 necessary to join a group.</para>
 
 <para>The parties and groups system must support constraints between a composite
-group <phrase>G<subscript>P</subscript></phrase> and any of its component groups,
-<phrase>G<subscript>C</subscript></phrase>. For example, the system should be able to
-enforce a rule like: Do not allow a party <phrase>P</phrase> to become a
-member of <phrase>G<subscript>C</subscript></phrase> unless <phrase>P</phrase> is already
-a member of <phrase>G<subscript>P</subscript></phrase>.</para>
+group <emphasis role="strong">G<subscript>P</subscript></emphasis> and any of its component groups,
+<emphasis role="strong">G<subscript>C</subscript></emphasis>. For example, the system should be able to
+enforce a rule like: Do not allow a party <emphasis role="strong">P</emphasis> to become a
+member of <emphasis role="strong">G<subscript>C</subscript></emphasis> unless <emphasis role="strong">P</emphasis> is already
+a member of <emphasis role="strong">G<subscript>P</subscript></emphasis>.</para>
 
 </sect2>
 
@@ -160,75 +160,75 @@ the following types of entities:</para>
 
 <variablelist>
 <varlistentry>
-<term><phrase>10.0 Parties</phrase>
+<term><emphasis role="strong">10.0 Parties</emphasis>
 
 </term>
  
 <listitem>
-<para>A <phrase>party</phrase> is an entity used to represent either a
+<para>A <emphasis role="strong">party</emphasis> is an entity used to represent either a
 <emphasis>group</emphasis> or a <emphasis>person</emphasis>.</para>
 
 <para>The data model should enforce these constraints:</para>
 
-<para><phrase>10.10</phrase> A party has an email address, which can be
+<para><emphasis role="strong">10.10</emphasis> A party has an email address, which can be
 empty.</para>
 
-<para><phrase>10.20</phrase> A party may have multiple email addresses
+<para><emphasis role="strong">10.20</emphasis> A party may have multiple email addresses
 associated with it.</para>
 
-<para><phrase>10.30</phrase> The email address of a party must be unique within
-an ACS system.</para>
+<para><emphasis role="strong">10.30</emphasis> The email address of a party must be unique within
+an OpenACS system.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>20.0 Groups</phrase>
+<term><emphasis role="strong">20.0 Groups</emphasis>
 
 </term>
  
 <listitem>
-<para>A <phrase>group</phrase> is a collection of zero or more parties.</para>
+<para>A <emphasis role="strong">group</emphasis> is a collection of zero or more parties.</para>
 
-<para><phrase>20.10</phrase> The data model should support the subclassing of
-groups via ACS Objects.</para>
+<para><emphasis role="strong">20.10</emphasis> The data model should support the subclassing of
+groups via OpenACS Objects.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>30.0 Persons</phrase>
+<term><emphasis role="strong">30.0 Persons</emphasis>
 
 </term>
  
 <listitem>
-<para>A <phrase>person</phrase> represents an actual human being, past or
+<para>A <emphasis role="strong">person</emphasis> represents an actual human being, past or
 present.</para>
 
-<para><anchor id="groups-requirements-30-10"/><phrase>30.10.</phrase> A person must have
+<para><anchor id="groups-requirements-30-10"/><emphasis role="strong">30.10.</emphasis> A person must have
 an associated name.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>40.0 Users</phrase>
+<term><emphasis role="strong">40.0 Users</emphasis>
 
 </term>
  
 <listitem>
-<para>A <phrase>user</phrase> is a person who has registered with an ACS site. A
+<para>A <emphasis role="strong">user</emphasis> is a person who has registered with an OpenACS site. A
 user may have additional attributes, such as a screen name.</para>
 
 <para>The data model should enforce these constraints:</para>
 
-<para><phrase>40.10</phrase> A user must have a non-empty email address.</para>
+<para><emphasis role="strong">40.10</emphasis> A user must have a non-empty email address.</para>
 
-<para><phrase>40.20</phrase> Two different users may not have the same email
-address on a single ACS installation; i.e., an email address identifies a
+<para><emphasis role="strong">40.20</emphasis> Two different users may not have the same email
+address on a single OpenACS installation; i.e., an email address identifies a
 single user on the system.</para>
 
-<para><phrase>40.30</phrase> A user may have multiple email addresses; for
+<para><emphasis role="strong">40.30</emphasis> A user may have multiple email addresses; for
 example, two or more email addresses may identify a single user.</para>
 
-<para><phrase>40.40</phrase> A user must have password field which can be
+<para><emphasis role="strong">40.40</emphasis> A user must have password field which can be
 empty.</para>
 </listitem>
 </varlistentry>
@@ -239,38 +239,38 @@ the following types of relationships between entities:</para>
 
 <variablelist>
 <varlistentry>
-<term><phrase>50.0 Membership</phrase>
+<term><emphasis role="strong">50.0 Membership</emphasis>
 
 </term>
  
 <listitem><para>
-A party <phrase>P</phrase> is considered a <phrase>member</phrase> of a
-group <phrase>G</phrase></para>
+A party <emphasis role="strong">P</emphasis> is considered a <emphasis role="strong">member</emphasis> of a
+group <emphasis role="strong">G</emphasis></para>
 
 <itemizedlist>
-<listitem><para>when a direct membership relationship exists between <phrase>P</phrase>
-and <phrase>G</phrase></para></listitem>
+<listitem><para>when a direct membership relationship exists between <emphasis role="strong">P</emphasis>
+and <emphasis role="strong">G</emphasis></para></listitem>
 
 <listitem><para>or when there exists a direct membership relationship between
-<phrase>P</phrase> and some group <phrase>G<subscript>C</subscript></phrase> and
-<phrase>G<subscript>C</subscript></phrase> has a composition relationship (c.f., <link linkend="groups-requirements-60-0">60.0</link>) with <phrase>G</phrase>.</para></listitem>
+<emphasis role="strong">P</emphasis> and some group <emphasis role="strong">G<subscript>C</subscript></emphasis> and
+<emphasis role="strong">G<subscript>C</subscript></emphasis> has a composition relationship (c.f., <link linkend="groups-requirements-60-0">60.0</link>) with <emphasis role="strong">G</emphasis>.</para></listitem>
 </itemizedlist>
  
 
-<para><phrase>50.10</phrase> A party may be a member of multiple groups.</para>
+<para><emphasis role="strong">50.10</emphasis> A party may be a member of multiple groups.</para>
 
-<para><phrase>50.20</phrase> A party may be a member of the same group multiple
+<para><emphasis role="strong">50.20</emphasis> A party may be a member of the same group multiple
 times only when all the memberships have different types; for example, Jane
 may be a member of The Company by being both an Employee and an
 Executive.</para>
 
-<para><phrase>50.30</phrase> A party as a member of itself is not supported.</para>
+<para><emphasis role="strong">50.30</emphasis> A party as a member of itself is not supported.</para>
 
-<para><phrase>50.40</phrase> The data model must support membership
+<para><emphasis role="strong">50.40</emphasis> The data model must support membership
 constraints.</para>
 
-<para><phrase>50.50</phrase>The data model should support the subclassing of
-membership via ACS Relationships.</para>
+<para><emphasis role="strong">50.50</emphasis>The data model should support the subclassing of
+membership via OpenACS Relationships.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -279,36 +279,36 @@ membership via ACS Relationships.</para>
 <varlistentry>
 <term>
 <anchor id="groups-requirements-60-0"/>
-<phrase>60.0 Composition</phrase>
+<emphasis role="strong">60.0 Composition</emphasis>
 </term>
  
 <listitem>
-<para>A group <phrase>G<subscript>C</subscript></phrase> is considered a
-<phrase>component</phrase> of a second group
-<phrase>G<subscript>P</subscript></phrase></para>
+<para>A group <emphasis role="strong">G<subscript>C</subscript></emphasis> is considered a
+<emphasis role="strong">component</emphasis> of a second group
+<emphasis role="strong">G<subscript>P</subscript></emphasis></para>
 
 <itemizedlist>
 <listitem><para>when a direct composition relationship exists between
-<phrase>G<subscript>C</subscript></phrase> and <phrase>G<subscript>P</subscript></phrase></para></listitem>
+<emphasis role="strong">G<subscript>C</subscript></emphasis> and <emphasis role="strong">G<subscript>P</subscript></emphasis></para></listitem>
 
 <listitem><para>or when there exists a direct composition relationship between
-<phrase>G<subscript>C</subscript></phrase> and some group <phrase>G<subscript>i</subscript></phrase>
-and <phrase>G<subscript>i</subscript></phrase> has a composition relationship with
-<phrase>G<subscript>P</subscript></phrase>.</para></listitem>
+<emphasis role="strong">G<subscript>C</subscript></emphasis> and some group <emphasis role="strong">G<subscript>i</subscript></emphasis>
+and <emphasis role="strong">G<subscript>i</subscript></emphasis> has a composition relationship with
+<emphasis role="strong">G<subscript>P</subscript></emphasis>.</para></listitem>
 </itemizedlist>
 
  
 
-<para><phrase>60.10</phrase>A group may be a component of multiple groups.</para>
+<para><emphasis role="strong">60.10</emphasis>A group may be a component of multiple groups.</para>
 
-<para><phrase>60.20</phrase>A group as a component of itself is not
+<para><emphasis role="strong">60.20</emphasis>A group as a component of itself is not
 supported.</para>
 
-<para><phrase>60.30</phrase>The data model must support component
+<para><emphasis role="strong">60.30</emphasis>The data model must support component
 constraints.</para>
 
-<para><phrase>60.40</phrase>The data model should support the subclassing of
-composition via ACS Relationships.</para>
+<para><emphasis role="strong">60.40</emphasis>The data model should support the subclassing of
+composition via OpenACS Relationships.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -323,7 +323,7 @@ composition via ACS Relationships.</para>
 
 <variablelist>
 <varlistentry>
-<term><phrase>70.10 Create a group</phrase>
+<term><emphasis role="strong">70.10 Create a group</emphasis>
 
 </term>
  
@@ -336,7 +336,7 @@ in the data model.</para>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>70.20 Create a person</phrase>
+<term><emphasis role="strong">70.20 Create a person</emphasis>
 
 </term>
  
@@ -349,7 +349,7 @@ in the data model.</para>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>70.30 Create a user</phrase>
+<term><emphasis role="strong">70.30 Create a user</emphasis>
 
 </term>
  
@@ -362,7 +362,7 @@ the data model.</para>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>80.10 Refine a person to a user</phrase>
+<term><emphasis role="strong">80.10 Refine a person to a user</emphasis>
 
 </term>
  
@@ -375,7 +375,7 @@ model.</para>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>80.30 Demote a user to a person</phrase>
+<term><emphasis role="strong">80.30 Demote a user to a person</emphasis>
 
 </term>
  
@@ -388,7 +388,7 @@ laid out in the data model.</para>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>90.10 Update a party</phrase>
+<term><emphasis role="strong">90.10 Update a party</emphasis>
 
 </term>
  
@@ -399,7 +399,7 @@ party. This API is subject to the constraints laid out in the data model.</para>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>95.10 Get the attributes of a party</phrase>
+<term><emphasis role="strong">95.10 Get the attributes of a party</emphasis>
 
 </term>
  
@@ -410,7 +410,7 @@ API is subject to the constraints laid out in the data model.</para>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>100.10 Delete a party</phrase>
+<term><emphasis role="strong">100.10 Delete a party</emphasis>
 
 
 </term>
@@ -419,17 +419,17 @@ API is subject to the constraints laid out in the data model.</para>
 <para>The system provides an API for deleting a party. This API is subject to
 the constraints laid out in the data model.</para>
 
-<para><phrase>100.30</phrase> The system may provide a single API call to remove
+<para><emphasis role="strong">100.30</emphasis> The system may provide a single API call to remove
 the party from all groups and then delete the party.</para>
 
-<para><phrase>100.40</phrase> In the case of a group, the system may provide a
+<para><emphasis role="strong">100.40</emphasis> In the case of a group, the system may provide a
 single API call to remove all parties from a group and then delete the
 group.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>110.0 Add a party as a member of a group</phrase>
+<term><emphasis role="strong">110.0 Add a party as a member of a group</emphasis>
 
 </term>
  
@@ -441,7 +441,7 @@ data model.</para>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>115.0 Add a group as a component of a second group</phrase>
+<term><emphasis role="strong">115.0 Add a group as a component of a second group</emphasis>
 
 </term>
  
@@ -453,7 +453,7 @@ in the data model.</para>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>120.0 Remove a party as a member of a group</phrase>
+<term><emphasis role="strong">120.0 Remove a party as a member of a group</emphasis>
 
 </term>
  
@@ -465,8 +465,8 @@ data model.</para>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>125.0 Remove a group as a component of a second
-group</phrase>
+<term><emphasis role="strong">125.0 Remove a group as a component of a second
+group</emphasis>
 
 </term>
  
@@ -478,107 +478,107 @@ out in the data model.</para>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>130.0 Membership check</phrase>
+<term><emphasis role="strong">130.0 Membership check</emphasis>
 
 
 </term>
  
 <listitem>
 <para>The parties and groups system provides an API for answering the question:
-&quot;Is party <phrase>P</phrase> a member of group
-<phrase>G</phrase>?&quot;</para>
+&quot;Is party <emphasis role="strong">P</emphasis> a member of group
+<emphasis role="strong">G</emphasis>?&quot;</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>135.0 Composition check</phrase>
+<term><emphasis role="strong">135.0 Composition check</emphasis>
 
 
 </term>
  
 <listitem>
 <para>The parties and groups system provides an API for answering the question:
-&quot;Is group <phrase>G<subscript>C</subscript></phrase> a component of group
-<phrase>G<subscript>P</subscript></phrase>?&quot;</para>
+&quot;Is group <emphasis role="strong">G<subscript>C</subscript></emphasis> a component of group
+<emphasis role="strong">G<subscript>P</subscript></emphasis>?&quot;</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>140.0 Get members query</phrase>
+<term><emphasis role="strong">140.0 Get members query</emphasis>
 
 
 </term>
  
 <listitem>
 <para>The parties and groups system provides an API for answering the question:
-&quot;Which parties are members of group <phrase>G</phrase>?&quot;</para>
+&quot;Which parties are members of group <emphasis role="strong">G</emphasis>?&quot;</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>145.0 Get components query</phrase>
+<term><emphasis role="strong">145.0 Get components query</emphasis>
 
 
 </term>
  
 <listitem>
 <para>The parties and groups system provides an API for answering the question:
-&quot;Which groups are components of group <phrase>G</phrase>?&quot;</para>
+&quot;Which groups are components of group <emphasis role="strong">G</emphasis>?&quot;</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>150.0 Member-of-groups query</phrase>
+<term><emphasis role="strong">150.0 Member-of-groups query</emphasis>
 
 
 </term>
  
 <listitem>
 <para>The parties and groups system provides an API for answering the question:
-&quot;Of which groups is party <phrase>P</phrase> a member?&quot;</para>
+&quot;Of which groups is party <emphasis role="strong">P</emphasis> a member?&quot;</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>155.0 Component-of-groups query</phrase>
+<term><emphasis role="strong">155.0 Component-of-groups query</emphasis>
 
 
 </term>
  
 <listitem>
 <para>The parties and groups system provides an API for answering the question:
-&quot;Of which groups is group <phrase>G</phrase> a component?&quot;</para>
+&quot;Of which groups is group <emphasis role="strong">G</emphasis> a component?&quot;</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>160.0 Allowed membership check</phrase>
+<term><emphasis role="strong">160.0 Allowed membership check</emphasis>
 
 
 </term>
  
 <listitem>
 <para>The parties and groups system provides an API for answering the question:
-&quot;Is party <phrase>P</phrase> allowed to become a member of group
-<phrase>G</phrase>?&quot;</para>
+&quot;Is party <emphasis role="strong">P</emphasis> allowed to become a member of group
+<emphasis role="strong">G</emphasis>?&quot;</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>165.0 Allowed composition check</phrase>
+<term><emphasis role="strong">165.0 Allowed composition check</emphasis>
 
 
 </term>
  
 <listitem>
 <para>The parties and groups system provides an API for answering the question:
-&quot;Is group <phrase>G<subscript>C</subscript></phrase> allowed to become a component
-of group <phrase>G<subscript>P</subscript></phrase>?&quot;</para>
+&quot;Is group <emphasis role="strong">G<subscript>C</subscript></emphasis> allowed to become a component
+of group <emphasis role="strong">G<subscript>P</subscript></emphasis>?&quot;</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>170.0 Efficiency</phrase>
+<term><emphasis role="strong">170.0 Efficiency</emphasis>
 
 
 </term>
@@ -592,7 +592,7 @@ membership.</para>
 </varlistentry>
 
 <varlistentry>
-<term><phrase>180.0 Ease of Use</phrase>
+<term><emphasis role="strong">180.0 Ease of Use</emphasis>
 
 
 </term>
@@ -615,19 +615,19 @@ should be fairly small and simple.</para>
 underlying API. The user interface may provide the following functions:</para>
 
 <itemizedlist>
-<listitem><para><phrase>200.0</phrase> Create a party</para></listitem>
+<listitem><para><emphasis role="strong">200.0</emphasis> Create a party</para></listitem>
 
-<listitem><para><phrase>210.0</phrase> View the attributes of a party</para></listitem>
+<listitem><para><emphasis role="strong">210.0</emphasis> View the attributes of a party</para></listitem>
 
-<listitem><para><phrase>220.0</phrase> Update the attributes of a party</para></listitem>
+<listitem><para><emphasis role="strong">220.0</emphasis> Update the attributes of a party</para></listitem>
 
-<listitem><para><phrase>240.0</phrase> Delete a party</para></listitem>
+<listitem><para><emphasis role="strong">240.0</emphasis> Delete a party</para></listitem>
 
-<listitem><para><phrase>250.0</phrase> Add a party to a group</para></listitem>
+<listitem><para><emphasis role="strong">250.0</emphasis> Add a party to a group</para></listitem>
 
-<listitem><para><phrase>260.0</phrase> Remove a party from a group</para></listitem>
+<listitem><para><emphasis role="strong">260.0</emphasis> Remove a party from a group</para></listitem>
 
-<listitem><para><phrase>270.0</phrase> Perform the membership and composition checks
+<listitem><para><emphasis role="strong">270.0</emphasis> Perform the membership and composition checks
 outlined in 130.x to 165.x</para></listitem>
 </itemizedlist>
 
@@ -642,10 +642,10 @@ outlined in 130.x to 165.x</para></listitem>
 <tgroup cols="4">
 <tbody>
 <row>
-<entry><phrase>Document Revision #</phrase></entry>
-<entry><phrase>Action Taken, Notes</phrase></entry>
-<entry><phrase>When?</phrase></entry>
-<entry><phrase>By Whom?</phrase></entry>
+<entry><emphasis role="strong">Document Revision #</emphasis></entry>
+<entry><emphasis role="strong">Action Taken, Notes</emphasis></entry>
+<entry><emphasis role="strong">When?</emphasis></entry>
+<entry><emphasis role="strong">By Whom?</emphasis></entry>
 </row>
 
 <row>

@@ -1,5 +1,5 @@
-<sect1 id="groups-design" xreflabel="ACS 4 Groups Design">
-<title>ACS 4 Groups Design</title>
+<sect1 id="groups-design" xreflabel="OpenACS 4 Groups Design">
+<title>OpenACS 4 Groups Design</title>
 
 <authorblurb><para>
 by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> and <ulink url="mailto:mthomas@arsdigita.com">Mark Thomas</ulink> 
@@ -45,9 +45,9 @@ community-core-create.sql</ulink></para></listitem>
 
 
 <para>Almost all database-backed websites have users, and need to model the
-grouping of users. The ACS 4 Parties and Groups system is intended to provide
+grouping of users. The OpenACS 4 Parties and Groups system is intended to provide
 the flexibility needed to model complex real-world organizational structures,
-particularly to support powerful subsite services; that is, where one ACS
+particularly to support powerful subsite services; that is, where one OpenACS
 installation can support what appears to the user as distinct web services
 for different user communities.</para>
 
@@ -57,7 +57,7 @@ for different user communities.</para>
 <title>Historical Considerations</title>
 
 
-<para>The primary limitation of the ACS 3.x user group system is that it
+<para>The primary limitation of the OpenACS 3.x user group system is that it
 restricts the application developer to representing a &quot;flat group&quot;
 that contains only users: The <computeroutput>user_groups</computeroutput> table may contain the
 <computeroutput>group_id</computeroutput> of a parent group, but parent-child relationship
@@ -66,7 +66,7 @@ groups to be represented. Moreover, the Oracle database&#39;s limited support
 for tree-like structures makes the queries over these relationships
 expensive.</para>
 
-<para>In addition, the Module Scoping design in ACS 3.0 introduced a
+<para>In addition, the Module Scoping design in OpenACS 3.0 introduced a
 <emphasis>party</emphasis> abstraction - a thing that is a person or a group of people -
 though not in the form of an explicit table. Rather, the triple of
 <computeroutput>scope</computeroutput>, <computeroutput>user_id</computeroutput>, and <computeroutput>group_id</computeroutput> columns
@@ -194,8 +194,8 @@ party.</para></listitem>
 
 </term>
  
-<listitem><para>A mapping of a party <phrase>P</phrase> to the groups
-{<phrase>G<subscript>i</subscript></phrase>}the party is a member of; this mapping
+<listitem><para>A mapping of a party <emphasis role="strong">P</emphasis> to the groups
+{<emphasis role="strong">G<subscript>i</subscript></emphasis>}the party is a member of; this mapping
 includes the type of relationship by including the appropriate<computeroutput>rel_id</computeroutput>
 from the <computeroutput>membership_rels</computeroutput> table.</para></listitem>
 </varlistentry>
@@ -214,8 +214,8 @@ group.</para></listitem>
 
 </term>
  
-<listitem><para>A mapping of a group <phrase>G</phrase>to the set of groups
-{<phrase>G<subscript>i</subscript></phrase>} that <phrase>G</phrase> is a component of;
+<listitem><para>A mapping of a group <emphasis role="strong">G</emphasis>to the set of groups
+{<emphasis role="strong">G<subscript>i</subscript></emphasis>} that <emphasis role="strong">G</emphasis> is a component of;
 this mapping includes the type of relationship by including the
 appropriate<computeroutput>rel_id</computeroutput> from the <computeroutput>composition_rels</computeroutput> table.</para></listitem>
 </varlistentry>
@@ -314,7 +314,7 @@ of relationship by including the appropriate<computeroutput>rel_id</computeroutp
  
 <listitem><para>A person may appear in the group member map multiple times, for example,
 by being a member of two different groups that are both components of a third
-group. This view is strictly a mapping of <phrase>approved</phrase> members
+group. This view is strictly a mapping of <emphasis role="strong">approved</emphasis> members
 to groups.</para></listitem>
 </varlistentry>
 
@@ -323,8 +323,8 @@ to groups.</para></listitem>
 
 </term>
  
-<listitem><para>A mapping of a group <phrase>G</phrase>to the set of groups
-{<phrase>G<subscript>i</subscript></phrase>} group <phrase>G</phrase> is a component of;
+<listitem><para>A mapping of a group <emphasis role="strong">G</emphasis>to the set of groups
+{<emphasis role="strong">G<subscript>i</subscript></emphasis>} group <emphasis role="strong">G</emphasis> is a component of;
 this mapping includes the type of relationship by including the
 appropriate<computeroutput>rel_id</computeroutput> from the <computeroutput>composition_rels</computeroutput> table.</para></listitem>
 </varlistentry>
@@ -334,8 +334,8 @@ appropriate<computeroutput>rel_id</computeroutput> from the <computeroutput>comp
 
 </term>
  
-<listitem><para>A mapping of a party <phrase>P</phrase> to the set of parties
-{<phrase>P<subscript>i</subscript></phrase>} party <phrase>P</phrase> is a member
+<listitem><para>A mapping of a party <emphasis role="strong">P</emphasis> to the set of parties
+{<emphasis role="strong">P<subscript>i</subscript></emphasis>} party <emphasis role="strong">P</emphasis> is a member
 of.</para></listitem>
 </varlistentry>
 
@@ -344,9 +344,9 @@ of.</para></listitem>
 
 </term>
  
-<listitem><para>A mapping of a party <phrase>P</phrase> to the set of parties
-{<phrase>P<subscript>i</subscript></phrase>} party <phrase>P</phrase> is an
-<phrase>approved</phrase> member of.</para></listitem>
+<listitem><para>A mapping of a party <emphasis role="strong">P</emphasis> to the set of parties
+{<emphasis role="strong">P<subscript>i</subscript></emphasis>} party <emphasis role="strong">P</emphasis> is an
+<emphasis role="strong">approved</emphasis> member of.</para></listitem>
 </varlistentry>
 </variablelist>
 
@@ -374,7 +374,7 @@ used to query group membership and composition.</para>
 <sect3 id="groups-design-pl-sql-api">
 <title>PL/SQL API</title>
 
-<para><phrase>Person</phrase></para>
+<para><emphasis role="strong">Person</emphasis></para>
 
 <para><computeroutput>person.new</computeroutput> creates a new person and returns the
 <computeroutput>person_id</computeroutput>. The function must be given the full name of the person in
@@ -415,7 +415,7 @@ function person.name (
 ) return varchar;
 </programlisting>
 
-<para><phrase>User</phrase></para>
+<para><emphasis role="strong">User</emphasis></para>
 
 <para><computeroutput>acs_user.new</computeroutput> creates a new user and returns the <computeroutput>user_id</computeroutput>.
 The function must be given the user&#39;s email address and the full name of
@@ -475,7 +475,7 @@ procedure acs_user.unapprove_email (
 );
 </programlisting>
 
-<para><phrase>Group</phrase></para>
+<para><emphasis role="strong">Group</emphasis></para>
 
 <para><computeroutput>acs_group.new</computeroutput> creates a new group and returns the
 <computeroutput>group_id</computeroutput>. All fields are optional and default to null except for
@@ -517,7 +517,7 @@ function acs_group.member_p (
 ) return char;
 </programlisting>
 
-<para><phrase>Membership Relationship</phrase></para>
+<para><emphasis role="strong">Membership Relationship</emphasis></para>
 
 <para><computeroutput>membership_rel.new</computeroutput> creates a new membership relationship type
 between two parties and returns the relationship type&#39;s <computeroutput>rel_id</computeroutput>.
@@ -593,7 +593,7 @@ procedure membership_rel.delete (
 );
 </programlisting>
 
-<para><phrase>Composition Relationship</phrase></para>
+<para><emphasis role="strong">Composition Relationship</emphasis></para>
 
 <para><computeroutput>composition_rel.new</computeroutput> creates a new composition relationship type
 and returns the relationship&#39;s <computeroutput>rel_id</computeroutput>. All fields are optional
@@ -697,10 +697,10 @@ procedure membership_rel.delete (
 <tgroup cols="4">
 <tbody>
 <row>
-<entry><phrase>Document Revision #</phrase></entry>
-<entry><phrase>Action Taken, Notes</phrase></entry>
-<entry><phrase>When?</phrase></entry>
-<entry><phrase>By Whom?</phrase></entry>
+<entry><emphasis role="strong">Document Revision #</emphasis></entry>
+<entry><emphasis role="strong">Action Taken, Notes</emphasis></entry>
+<entry><emphasis role="strong">When?</emphasis></entry>
+<entry><emphasis role="strong">By Whom?</emphasis></entry>
 </row>
 
 <row>

@@ -15,7 +15,7 @@ by <ulink url="mailto:jsalz@mit.edu">Jon Salz</ulink> on 3 July 2000
 <title>The Big Picture</title>
 
 
-<para>In versions of the ACS prior to 3.4, <ulink url="/doc/standards">the standard
+<para>In versions of the OpenACS prior to 3.4, <ulink url="/doc/standards">the standard
 place</ulink> to document Tcl files (both Tcl pages and Tcl library files) was in
 a comment at the top of the file:</para>
 
@@ -45,14 +45,14 @@ introduces a new API for documenting Tcl files and, on top of that, a
 web-based user interface for browsing the documentation:</para>
 
 <itemizedlist>
-<listitem><para><phrase><computeroutput><link linkend="tcl-doc-ad-page-contract">ad_page_contract</link></computeroutput></phrase>: Every Tcl page
-has a <phrase>contract</phrase> that explicitly defines what inputs the page
+<listitem><para><emphasis role="strong"><computeroutput><link linkend="tcl-doc-ad-page-contract">ad_page_contract</link></computeroutput></emphasis>: Every Tcl page
+has a <emphasis role="strong">contract</emphasis> that explicitly defines what inputs the page
 expects (with more precision than <computeroutput>ad_page_variables</computeroutput>) and
 incorporates metadata about the page (what used to live in the top-of-page
 comment). Like <computeroutput>ad_page_variables</computeroutput>, <computeroutput>ad_page_contract</computeroutput>
 also sets the specified variables in the context of the Tcl page.</para></listitem>
 
-<listitem><para><phrase><computeroutput><link linkend="tcl-doc-ad-library">ad_library</link></computeroutput></phrase>: To be
+<listitem><para><emphasis role="strong"><computeroutput><link linkend="tcl-doc-ad-library">ad_library</link></computeroutput></emphasis>: To be
 called at the top of every library file (i.e., all files in the
 <computeroutput>/tcl/</computeroutput> directory under the server root and
 <computeroutput>*-procs.tcl</computeroutput> files under <computeroutput>/packages/</computeroutput>).</para></listitem>
@@ -128,56 +128,56 @@ Note that:
 </para>
 
 <itemizedlist>
-<listitem><para><phrase>By convention, <computeroutput>ad_page_contract</computeroutput> should be preceded
-by a comment line containing the file&#39;s path</phrase>. The comment is on
+<listitem><para><emphasis role="strong">By convention, <computeroutput>ad_page_contract</computeroutput> should be preceded
+by a comment line containing the file&#39;s path</emphasis>. The comment is on
 line 1, and the contract starts on line 2.
 </para></listitem>
 
-<listitem><para><phrase><computeroutput>ad_page_contract</computeroutput></phrase>&#39;s first argument is
+<listitem><para><emphasis role="strong"><computeroutput>ad_page_contract</computeroutput></emphasis>&#39;s first argument is
 the list of expected arguments from the HTTP query (<computeroutput>version_id</computeroutput>,
 <computeroutput>public_p</computeroutput>, <computeroutput>kind</computeroutput>, and <computeroutput>format</computeroutput>). Like
 <computeroutput>ad_page_variables</computeroutput>, <computeroutput>ad_page_contract</computeroutput> sets the
 corresponding Tcl variables when the page is executed.
 </para></listitem>
 
-<listitem><para><phrase>Arguments can have defaults</phrase>, specified using the same
+<listitem><para><emphasis role="strong">Arguments can have defaults</emphasis>, specified using the same
 syntax as in the Tcl <computeroutput>proc</computeroutput> (a two-element list where the first
 element is the parameter name and the second argument is the default value).
 
 </para></listitem>
 
-<listitem><para><phrase>Arguments can have flags</phrase>, specified by following the
+<listitem><para><emphasis role="strong">Arguments can have flags</emphasis>, specified by following the
 name of the query argument with a colon and one or more of the following
 strings (separated by commas): </para>
  
 
 <itemizedlist>
-<listitem><para><phrase><computeroutput>optional</computeroutput></phrase>: the query argument doesn&#39;t
+<listitem><para><emphasis role="strong"><computeroutput>optional</computeroutput></emphasis>: the query argument doesn&#39;t
 need to be provided; if it&#39;s not, the variable for that argument simply
 won&#39;t be set. For instance, if I call the script above without a
 <computeroutput>public_p</computeroutput> in the query, then in the page body <computeroutput>[info exists
 public_p]</computeroutput> will return 0.
 </para></listitem>
 
-<listitem><para><phrase><computeroutput>integer</computeroutput></phrase>: the argument must be an integer
+<listitem><para><emphasis role="strong"><computeroutput>integer</computeroutput></emphasis>: the argument must be an integer
 (<computeroutput>ad_page_contract</computeroutput> will fail and display and error if not). This
 flag, like the next, is intended to prevent clients from fudging query
 arguments to trick scripts into executing arbitrary SQL. 
 
 </para></listitem>
 
-<listitem><para><phrase><computeroutput>sql_identifier</computeroutput></phrase>: the argument must be a SQL
+<listitem><para><emphasis role="strong"><computeroutput>sql_identifier</computeroutput></emphasis>: the argument must be a SQL
 identifier (i.e., <computeroutput>[string is wordchar $the_query_var]</computeroutput> must
 return true). 
 
 </para></listitem>
 
-<listitem><para><phrase><computeroutput>trim</computeroutput></phrase>: the argument will be [string
+<listitem><para><emphasis role="strong"><computeroutput>trim</computeroutput></emphasis>: the argument will be [string
 trim]&#39;ed. 
 
 </para></listitem>
 
-<listitem><para><phrase><computeroutput>multiple</computeroutput></phrase>: the argument may be specified
+<listitem><para><emphasis role="strong"><computeroutput>multiple</computeroutput></emphasis>: the argument may be specified
 arbitrarily many times in the query string, and the variable will be set to a
 list of all those values (or an empty list if it&#39;s unspecified). This is
 analogous to the <computeroutput>-multiple-list</computeroutput> flag to
@@ -201,7 +201,7 @@ then <computeroutput>$dest_user_id</computeroutput> is set to <computeroutput>[l
 
 </para></listitem>
 
-<listitem><para><phrase><computeroutput>array</computeroutput></phrase>: the argument may be specified
+<listitem><para><emphasis role="strong"><computeroutput>array</computeroutput></emphasis>: the argument may be specified
 arbitrarily many times in the query string, with parameter names with
 suffixes like <computeroutput>_1</computeroutput>, <computeroutput>_2</computeroutput>, <computeroutput>_3</computeroutput>, etc. The
 variable is set to a list of all those values (or an empty list if none are
@@ -226,8 +226,8 @@ then <computeroutput>$dest_user_id</computeroutput> is set to <computeroutput>[l
 
 </listitem>
 
-<listitem><para><phrase>You can provide structured, HTML-formatted documentation for your
-contract</phrase>. Note that format is derived heavily from Javadoc: a
+<listitem><para><emphasis role="strong">You can provide structured, HTML-formatted documentation for your
+contract</emphasis>. Note that format is derived heavily from Javadoc: a
 general description of the script&#39;s functionality, followed optionally by
 a series of named attributes tagged by at symbols (<computeroutput>@</computeroutput>). You are
 encouraged to provide: 
@@ -241,7 +241,7 @@ summary.
 
 </para></listitem>
 
-<listitem><para>A <phrase><computeroutput>@param</computeroutput></phrase> tag for each allowable query
+<listitem><para>A <emphasis role="strong"><computeroutput>@param</computeroutput></emphasis> tag for each allowable query
 argument. The format is </para>
 
  
@@ -257,13 +257,13 @@ argument. The format is </para>
 
 </listitem>
 
-<listitem><para>An <phrase><computeroutput>@author</computeroutput></phrase> tag for each author. Specify the
+<listitem><para>An <emphasis role="strong"><computeroutput>@author</computeroutput></emphasis> tag for each author. Specify the
 author&#39;s name, followed his or her email address in parentheses.</para></listitem>
 
-<listitem><para>A <phrase><computeroutput>@creation-date</computeroutput></phrase> tag indicating when the
+<listitem><para>A <emphasis role="strong"><computeroutput>@creation-date</computeroutput></emphasis> tag indicating when the
 script was first created.</para></listitem>
 
-<listitem><para>A <phrase><computeroutput>@cvs-id</computeroutput></phrase> tag containing the page&#39;s CVS
+<listitem><para>A <emphasis role="strong"><computeroutput>@cvs-id</computeroutput></emphasis> tag containing the page&#39;s CVS
 identification string. Just use <computeroutput>$Id: tcl-documentation.html,v 1.2
 2000/09/19 07:22:35 ron Exp $</computeroutput> when creating the file, and CVS will
 substitute an appropriate string when you check the file in.</para></listitem>
@@ -328,13 +328,13 @@ You are encouraged to provide:
 </para>
 
 <itemizedlist>
-<listitem><para>An <phrase><computeroutput>@author</computeroutput></phrase> tag for each author. Specify the
+<listitem><para>An <emphasis role="strong"><computeroutput>@author</computeroutput></emphasis> tag for each author. Specify the
 author&#39;s name, followed his or her email address in parentheses.</para></listitem>
 
-<listitem><para>A <phrase><computeroutput>@creation-date</computeroutput></phrase> tag indicating when the
+<listitem><para>A <emphasis role="strong"><computeroutput>@creation-date</computeroutput></emphasis> tag indicating when the
 script was first created.</para></listitem>
 
-<listitem><para>A <phrase><computeroutput>@cvs-id</computeroutput></phrase> tag containing the page&#39;s CVS
+<listitem><para>A <emphasis role="strong"><computeroutput>@cvs-id</computeroutput></emphasis> tag containing the page&#39;s CVS
 identification string. Just use <computeroutput>$Id: tcl-documentation.html,v 1.2
 2000/09/19 07:22:35 ron Exp $</computeroutput> when creating the file, and CVS will
 substitute an appropriate string when you check the file in.</para></listitem>

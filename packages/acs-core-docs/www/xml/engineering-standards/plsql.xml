@@ -10,12 +10,12 @@ and <ulink url="mailto:yon@arsdigita.com">yon@arsdigita.com</ulink>
 </authorblurb>
 
 <para>
-  Like any other part of the ACS, PL/SQL code must be maintainable and
-  professional. This means that it must be consistent and therefore
-  must abide by certain standards. The standards will ensure that our
-  product will be useful long after the current people building and
-  maintaining it are around. Following are some standards and
-  guidelines that will help us achieve this goal:
+  Like any other part of the OpenACS, PL/SQL (or pl/pgsql) code must be
+  maintainable and professional. This means that it must be consistent and
+  therefore must abide by certain standards. The standards will ensure that
+  our product will be useful long after the current people building and
+  maintaining it are around. Following are some standards and guidelines
+  that will help us achieve this goal:
 </para>
 
 <sect2 id="eng-standards-plsql-general">
@@ -139,7 +139,7 @@ and <ulink url="mailto:yon@arsdigita.com">yon@arsdigita.com</ulink>
                 .
                 delete
                   from parties
-                 where party_id = <phrase>myproc</phrase>.party_id;
+                 where party_id = myproc.party_id;
                 .
                 .
             end myproc;

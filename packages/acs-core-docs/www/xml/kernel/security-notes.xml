@@ -1,5 +1,5 @@
-<sect1 id="security-notes" xreflabel="ACS 4 Security Notes">
-<title>ACS 4 Security Notes</title>
+<sect1 id="security-notes" xreflabel="OpenACS 4 Security Notes">
+<title>OpenACS 4 Security Notes</title>
 
 
 <authorblurb><para>
@@ -55,7 +55,7 @@ procedure defined in <computeroutput>security-procs.tcl</computeroutput>:</para>
 
 
 <para>The source code must also be edited if the user login pages have been
-moved out of an ACS system. This information is contained by the
+moved out of an OpenACS system. This information is contained by the
 <computeroutput>ad_login_page</computeroutput> procedure in <computeroutput>security-procs.tcl</computeroutput>:</para>
 
  
