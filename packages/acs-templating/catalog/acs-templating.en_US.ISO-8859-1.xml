@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <message_catalog package_key="acs-templating" package_version="5.0d3" locale="en_US" charset="ISO-8859-1">
 
-  <msg key="Previous_with_arrow>&lt;>&lt; Previous</msg>
+  <msg key="Previous_with_arrow">&lt;&lt; Previous</msg>
   <msg key="Next_with_arrow">Next &gt;&gt;</msg>
   <msg key="Tag_handler_invalid_number_of_args">Invalid number of arguments to tag handler.</msg>
   <msg key="Template_parser_error_in_parameter_list">Error in parameter list</msg>
@@ -14,4 +14,5 @@
   <msg key="Invalid_filename">Invalid filename</msg>
   <msg key="Invalid_email_format">Invalid email format</msg>
   <msg key="Invalid_url">Invalid url</msg>
+  <msg key="No_row_pretty_plural">No %row_pretty_plural%.</msg>
 </message_catalog>
