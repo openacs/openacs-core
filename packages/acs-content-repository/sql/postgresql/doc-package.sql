@@ -26,8 +26,11 @@ declare
   proc_name              alias for $1;  
   package_name           alias for $2;  
 begin
+        return definition 
+          from acs_func_headers 
+         where fname = (package_name || ''__'' || proc_name)::name 
+         limit 1;
 
-        return definition from acs_func_headers where fname = proc_name::name limit 1;
 end;' language 'plpgsql';
 
 
@@ -38,7 +41,7 @@ declare
   package_name           alias for $1;  
 begin
 
-        return ''NOT IMPLEMENTED FOR POSTGRESQL'';
+        return '''';
    
 end;' language 'plpgsql';
 
