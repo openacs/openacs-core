@@ -32,7 +32,9 @@ Corrections</a>
 
 <strong>Archive</strong>
 <ul>
-<li><a href="http://openacs.org/projects/openacs/doc-project/olddocs">Documentation for Earlier Versions of OpenACS</a>
+<li><a
+href="http://openacs.org/projects/openacs/doc-project/olddocs">Documentation
+for Past and Future Versions of OpenACS</a>
 </ul>
 </td>
 
