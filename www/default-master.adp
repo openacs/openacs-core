@@ -7,8 +7,5 @@
 
 <slave>
 
-<hr>
-<address><a href="mailto:@signatory@">@signatory@</a></address>
-@ds_link@
 </body>
 </html>
