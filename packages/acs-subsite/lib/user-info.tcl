@@ -93,12 +93,13 @@ ad_form -extend -name user_info -form {
 }
 
 if { ![string equal [acs_user::ScreenName] "none"] } {
-    ad_form -extend -name user_info -form [list \
-                                               [list screen_name:text[ad_decode [acs_user::ScreenName] "solicit" ",optional" ""] \
-                                                    {label "Screen name"} \
-                                                    {html {size 50}} \
-                                                    {mode $elm_mode(screen_name)} \
-                                                   ]]
+    ad_form -extend -name user_info -form \
+        [list \
+             [list screen_name:text[ad_decode [acs_user::ScreenName] "solicit" ",optional" ""] \
+                  {label "Screen name"} \
+                  {html {size 50}} \
+                  {mode $elm_mode(screen_name)} \
+                 ]]
 }
 
 
