@@ -21,7 +21,7 @@
 <h3>Localize Package</h3>
 
 <p>
-  <b>&raquo;</b> <a href="@localize_url@">Localize messages in package</a>
+  <b>&raquo;</b> <a href="@localize_url@">Localize messages in this package</a>
 </p>
 
 <h3>Internationalize Package</h3>
