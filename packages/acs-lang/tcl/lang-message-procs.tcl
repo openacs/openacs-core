@@ -125,6 +125,8 @@ ad_proc -public lang::message::register {
                 db_dml lang_message_insert {} -clobs [list $message]
             }
             nsv_set lang_message_$locale $key $message
+
+            lang::audit::created_message $package_key $message_key $locale
         }
     }
 }
