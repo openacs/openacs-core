@@ -423,7 +423,7 @@ ad_proc ad_return_exception_page {
     @param title Title to be used for the error (will be shown to user)
     @param explanation Explanation for the exception.
 } {
-    ns_return $status text/html "[ad_header_with_extra_stuff $title "" ""]
+    doc_return $status text/html "[ad_header_with_extra_stuff $title "" ""]
 <h2>$title</h2>
 <hr>
 $explanation
