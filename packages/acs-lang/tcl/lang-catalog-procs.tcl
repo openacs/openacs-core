@@ -201,11 +201,14 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
          }
 
          # Write the messages and descriptions to the file
-         set file_charset [default_charset_if_unsupported $charset]
-         set catalog_file_name "[package_catalog_dir $package_key]/${package_key}.${locale}.${file_charset}.xml"
+         set file_charset [default_charset_if_unsupported $charset]         
+         set catalog_file_path [get_catalog_file_path \
+                 -package_key $package_key \
+                 -locale $locale \
+                 -charset $file_charset]
          
          export_messages_to_file -descriptions_list $descriptions_list \
-             $catalog_file_name $messages_list
+             $catalog_file_path $messages_list
      } 
 }
 
@@ -272,6 +275,31 @@ ad_proc -private lang::catalog::assert_catalog_file { catalog_file_path } {
     if { ![apm_is_catalog_file $catalog_file_path] } {
         error "lang::catalog::assert_filename_format - Invalid message catalog path, cannot extract package_key, locale, and charset from file path $catalog_file_path"
     }
+}
+
+ad_proc -private lang::catalog::get_catalog_file_path { 
+    {-backup_from_version ""}
+    {-backup_to_version ""}
+    {-package_key:required} 
+    {-locale:required}
+    {-charset:required}
+} {
+    Get the full path of the catalog file for a given package, locale, and charset.
+
+    @author Peter Marklund
+} {
+    set catalog_dir [package_catalog_dir $package_key]
+
+    set message_backup_prefix ""
+    if { ![empty_string_p $backup_from_version] } {
+        set message_backup_prefix "[message_backup_file_prefix]${backup_from_version}-${backup_to_version}_"
+    }
+
+    set filename "${message_backup_prefix}${package_key}.${locale}.${charset}.xml"
+
+    set file_path "[package_catalog_dir $package_key]/$filename"
+    
+    return $file_path
 }
 
 ad_proc -public lang::catalog::export_messages_to_file { 
@@ -540,11 +568,17 @@ ad_proc -public lang::catalog::import_messages_from_file {
     if { $upgrade_p && [array size overwritten_db_messages] > 0 } {
         set system_package_version [system_package_version_name $package_key]
         # Note that export_messages_to_file demands a certain filename format
-        set catalog_dir [package_catalog_dir $package_key]
         set file_charset [default_charset_if_unsupported $charset]
-        set filename "[message_backup_file_prefix]${system_package_version}-$catalog_array(package_version)_${package_key}.${locale}.${file_charset}.xml"
+
         ns_log Notice "lang::catalog::import_messages_from_file - Saving overwritten messages during upgrade for package $package_key and locale $locale in file $filename"
-        export_messages_to_file "${catalog_dir}/${filename}" [array get overwritten_db_messages]
+
+        set file_path [get_catalog_file_path \
+                -backup_from_version ${system_package_version} \
+                -backup_to_version $catalog_array(package_version) \
+                -package_key $package_key \
+                -locale $locale \
+                -charset $file_charset]
+        export_messages_to_file $file_path [array get overwritten_db_messages]
     }
 }
 
@@ -555,13 +589,36 @@ ad_proc -private lang::catalog::system_package_version_name { package_key } {
     return [db_string get_version_name {}]
 }
 
-ad_proc -public lang::catalog::import_from_files { package_key } {
+ad_proc -public lang::catalog::import_from_files_for_locale { locale } {
+    Import messages for the given locale from catalog files in all enabled packages.
+
+    @author Peter Marklund
+} {
+    if { [lsearch [lang::system::get_locales] $locale] == -1 } {
+        error "lang::catalog::import_locale_from_files: Cannot import messages from files for locale $locale as it is not among the enabled locales ([lang::system::get_locales])"
+    }
+
+    foreach package_key [apm_enabled_packages] {
+        # Skip the package if it has no catalog files at all
+        if { ![file exists [package_catalog_dir $package_key]] } {
+            continue
+        }
+        
+        import_from_files -restrict_to_locale $locale $package_key
+    }
+}
+
+ad_proc -public lang::catalog::import_from_files { 
+    {-restrict_to_locale ""}
+    package_key 
+} {
     Import (load) all catalog files of a certain package. Catalog files
     should be stored in the /packages/package_key/catalog directory
     and have the ending .xml (i.e. /package/dotlrn/catalog/dotlrn.en_US.iso-8859-1.xml).
     This procedure invokes lang::catalog::import_messages_from_file.
 
     @param package_key The package key of the package to import catalog files for
+    @param restrict_to_locale Restrict importing to catalog files of the given locale
 
     @author Peter Marklund (peter@collaboraid.biz)
 } {
@@ -570,19 +627,62 @@ ad_proc -public lang::catalog::import_from_files { package_key } {
         error "lang::catalog::import_from_files - the package_key argument is the empty string"
     }
 
-    # Get all catalog files of the package
-    set glob_pattern [file join [acs_package_root_dir $package_key] catalog *.xml]
-    set msg_file_list [glob -nocomplain $glob_pattern]
+    # Get all catalog files for enabled locales
+    set catalog_file_list [list]
+    db_foreach select_locales {
+        select locale,
+               mime_charset
+        from ad_locales
+        where enabled_p = 't'
+    } {        
+        if { ![empty_string_p $restrict_to_locale] && ![string equal $restrict_to_locale $locale]} {
+            continue
+        }
+
+        set charset [default_charset_if_unsupported $mime_charset]
+        
+        set file_path [get_catalog_file_path \
+                -package_key $package_key \
+                -locale $locale \
+                -charset $charset]
+
+        if { [file exists $file_path] } {
+            lappend catalog_file_list $file_path
+        } else {
+            if { ![string equal $charset $mime_charset] } {
+                # File doesn't exist, but charset was unsupported and defaulted to something else (probably utf-8)
+                # For backward compatibility we check if the catalog has the mime charset in the filename even if it's
+                # unsupported
+                set alternate_file_path [get_catalog_file_path \
+                        -package_key $package_key \
+                        -locale $locale \
+                        -charset $mime_charset]
+
+                if { [file exists $alternate_file_path] } {
+                    lappend catalog_file_list $alternate_file_path
+                } else {
+                    set error_text "lang::catalog::import_from_files - No catalog file found for locale $locale and charset ${mime_charset} (defaulted to $charset as $mime_charset is unsupported). Attempted both path $file_path and $alternate_file_path"
+                    if { ![string equal $charset $mime_charset] } {
+                        append error_text " (defaulted to $charset as $mime_charset is unsupported)"
+                    }               
+                    ns_log Error $error_text
+                }
+            } else {
+                # The file doesn't exist and we have no alternate charset to attempt - fail
+                ns_log Error "lang::catalog::import_from_files - No catalog file found for locale $locale and charset ${mime_charset}. Attempted path $file_path"
+            }
+        }
+    }
 
     # Issue a warning and exit if there are no catalog files
-    if { [empty_string_p $msg_file_list] } {
+    if { [empty_string_p $catalog_file_list] } {
         ns_log Warning "lang::catalog::import_from_files - No catalog files found for package $package_key"
         return
     }
 
     # Loop over each catalog file
-    ns_log Notice "lang::catalog::import_from_files - Starting import of message catalogs: $msg_file_list"
-    foreach file_path $msg_file_list {
+    ns_log Notice "lang::catalog::import_from_files - Starting import of message catalogs: $catalog_file_list"
+    foreach file_path $catalog_file_list {
 
         # First make sure this is really a message catalog file and not some other xml file in the catalog
         # directory like a file with saved messages from an upgrade

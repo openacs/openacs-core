@@ -28,7 +28,7 @@ set default_locale_label [ad_locale_get_label $default_locale]
 set page_title $locale_label
 set context [list $page_title]
 
-
+set locale_enabled_p [expr [lsearch [lang::system::get_locales] $current_locale] != -1]
 
 
 

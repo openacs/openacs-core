@@ -6,6 +6,12 @@
 Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="submit" value="Search">
 </formtemplate>
 
+<if @locale_enabled_p@>
+  <p>
+    <b>&raquo;</b> <a href="import-locale-from-files?locale=@current_locale@" title="Imports all messages for this locale from the catalog files"  onclick="return confirm('Importing messages for this locale from the filesystem should typically only be done once. If you already have translated messages in this locale those may be overwritten by the import, so be very cautious.');">Import all messages for this locale</a>
+  </p>
+</if>
+
 <table cellpadding="0" cellspacing="0" border="0">
   <tr>
     <td style="background: #CCCCCC">
