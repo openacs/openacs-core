@@ -556,25 +556,6 @@ aa_register_case auth_authority_api {
 }
 
 
-aa_register_case auth_driver_get_parameters {
-    Test the auth::driver::get_parameters proc.
-} {
-    aa_run_with_teardown \
-        -rollback \
-        -test_code {        
-            set impl_id [db_string select_impl_id {
-                select auth_impl_id
-                from   auth_authorities
-                where  short_name = 'local'
-            }]
-    
-            set parameters [auth::driver::get_parameters -impl_id $impl_id]
-
-            aa_true "List of parameters should be empty for local authority" [empty_string_p $parameters]
-
-        }
-}
-
 aa_register_case auth_driver_get_parameter_values {
     Test the auth::driver::set_parameter_values proc.
 } {
@@ -583,56 +564,41 @@ aa_register_case auth_driver_get_parameter_values {
         -test_code {
             auth::authority::get -authority_id [auth::authority::local] -array authority
 
-            set parameter [ad_generate_random_string]
-            set value [ad_generate_random_string]
+            set sync_retrieve_impl_id [acs_sc::impl::get_id -owner acs-authentication -name HTTPGet]
 
-            # Set a parameter value
-            auth::driver::set_parameter_value \
-                -authority_id $authority(authority_id) \
-                -impl_id $authority(auth_impl_id) \
-                -parameter $parameter \
-                -value $value
+            array set parameters_array [auth::driver::get_parameters -impl_id $sync_retrieve_impl_id]
 
-            set authority_id $authority(authority_id)
-            set impl_id $authority(auth_impl_id)
+            set parameters [array names parameters_array]
 
-            set db_value [db_string select_value {
-                select value 
-                from   auth_driver_params
-                where  impl_id = :impl_id
-                and    authority_id = :authority_id
-                and    key = :parameter
-            }]
+            aa_true "List of parameters is not empty" [expr [llength $parameters] != 0]
 
-            aa_log "Parameter value in DB: '$db_value'"
+            array set values [list]
 
-            set values [auth::driver::get_parameter_values \
-                            -authority_id $authority(authority_id) \
-                            -impl_id $authority(auth_impl_id)]
-
-            aa_log "auth::driver::get_parameter_values: '$values'"
-
-            # LARS TODO: This test is wrong -- get_parameter_values will only return the parameters actually
-            # required by the implementation, which is what it should do. Need to write a new test
-            #aa_true "Did get_parameter return the correct value?" [util_sets_equal_p $values [list $parameter $value]]
-
-
-            set new_value [ad_generate_random_string]
-
-            auth::driver::set_parameter_value \
-                -authority_id $authority(authority_id) \
-                -impl_id $authority(auth_impl_id) \
-                -parameter $parameter \
-                -value $new_value
-        
-            set values [auth::driver::get_parameter_values \
-                            -authority_id $authority(authority_id) \
-                            -impl_id $authority(auth_impl_id)]
-
-            aa_log "auth::driver::get_parameter_values: '$values'"
-
-            #aa_true "Does it return the new value?" [util_sets_equal_p $values [list $parameter $new_value]]
+            # Set the values
+            foreach parameter $parameters {
+                set value($parameter) [ad_generate_random_string]
+                
+                # Set a parameter value
+                auth::driver::set_parameter_value \
+                    -authority_id $authority(authority_id) \
+                    -impl_id $sync_retrieve_impl_id \
+                    -parameter $parameter \
+                    -value $value($parameter)
+            }
             
+            # Get and verify values
+            
+            array set retrieved_value [auth::driver::get_parameter_values \
+                                            -authority_id $authority(authority_id) \
+                                            -impl_id $sync_retrieve_impl_id]
+            
+            foreach parameter $parameters {
+                if { [aa_true "Parameter $parameter exists" [info exists retrieved_value($parameter)]] } {
+                    aa_equals "Parameter value retrieved is the one we set" $retrieved_value($parameter) $value($parameter)
+                }
+                array unset retrieved_value $parameter
+            }
+            aa_true "Only the right parameters were retrieved" [expr [llength [array names retrieved_value]] == 0]
         }
 }
 
