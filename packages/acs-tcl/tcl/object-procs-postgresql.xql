@@ -3,11 +3,11 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="secret_tokens_exists">      
+<fullquery name="acs_object_name.object_name_get">      
       <querytext>
 
-      select case when count(*) = 0 then 0 else 1 end from secret_tokens
-
+        select acs_object__name(:object_id); 
+    
       </querytext>
 </fullquery>
 
