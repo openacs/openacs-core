@@ -110,7 +110,6 @@ ad_proc -public auth::authenticate {
     #   auth_info(account_status) 
     #   auth_info(account_message) 
 
-
     # Verify auth_info/auth_message return codes
     switch $auth_info(auth_status) {
         ok { 
@@ -142,7 +141,9 @@ ad_proc -public auth::authenticate {
     switch $auth_info(account_status) {
         ok { 
             # Continue below
-            set auth_info(account_message) {}
+            if { ![info exists auth_info(account_message)] } {
+                set auth_info(account_message) {}
+            }
         }
         closed {
             if { ![exists_and_not_null auth_info(account_message)] } {
@@ -176,6 +177,9 @@ ad_proc -public auth::authenticate {
     switch $auth_info(account_status) {
         ok { 
             # Continue below
+            if { ![info exists auth_info(account_message)] } {
+                set auth_info(account_message) {}
+            }
         }
         closed {
             if { ![exists_and_not_null auth_info(account_message)] } {
@@ -194,8 +198,12 @@ ad_proc -public auth::authenticate {
     }
 
     if { [exists_and_not_null remote_account_message] } {
-        # Concatenate local and remote account messages
-        set auth_info(account_message) "<p>[auth::authority::get_element -authority_id $authority_id -element pretty_name]: $remote_account_message </p> <p>[ad_system_name]: $auth_info(account_message)</p>"
+        if { [exists_and_not_null auth_info(account_message)] } {
+            # Concatenate local and remote account messages
+            set auth_info(account_message) "<p>[auth::authority::get_element -authority_id $authority_id -element pretty_name]: $remote_account_message </p> <p>[ad_system_name]: $auth_info(account_message)</p>"
+        } else {
+            set auth_info(account_message) $remote_account_message
+        }
     }
         
     # Issue login cookie if login was successful
