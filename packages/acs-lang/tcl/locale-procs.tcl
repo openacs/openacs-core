@@ -518,8 +518,6 @@ ad_proc -private lang::conn::get_accept_language_header {} {
             append elm "_[string toupper [lindex $elmv 1]]"
         }
 
-        ns_log Notice "appending $elm"
-        
         lappend acclangv $elm
     }
     
