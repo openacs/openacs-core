@@ -66,7 +66,7 @@ if { [nsv_exists acs_properties database_problem] } {
     # This NSV entry is set if there's some sort of problem with the database
     # driver. We aren't going to get very far in that case.
 
-    append body "
+    append body "<p>
 [nsv_get acs_properties database_problem]
 
 <p><b>The first step involved in setting up your ACS

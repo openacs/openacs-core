@@ -7,6 +7,13 @@ ad_library {
     @cvs-id $Id$
 }
 
+ad_proc db_compatible_rdbms_p { db_type } {
+    Returns 1 if the given db_type is compatible with the current RDBMS.  If db_type
+    is blank we assume this is a legacy Oracle package that's not been ported to
+    PostgreSQL so don't return 1 as we do when running in Oracle mode.
+} {
+    return [expr { [string equal [db_type] $db_type] || [string equal $db_type "common"] }]
+}
 proc_doc db_nextval { sequence } { Returns the next value for a sequence. This can utilize a pool of sequence values to save hits to the database. } {
     return [db_string nextval "select ${sequence}.nextval"]
 }
@@ -576,7 +583,7 @@ ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
     Sources a SQL file (in psql format).
  
 } {
-     
+    global tcl_platform 
     set file_name [file tail $file]
 
     set pguser [db_get_username]
@@ -590,7 +597,12 @@ ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
     }
 
     cd [file dirname $file]
-    set fp [open "|[file join [db_get_pgbin] psql] $pgport $pguser -f $file_name [db_get_database]" "r"]
+ 
+    if { $tcl_platform(platform) == "windows" } {
+        set fp [open "|[file join [db_get_pgbin] psql] -h [ns_info hostname] $pgport $pguser -f $file_name [db_get_database]" "r"]
+    } else {
+        set fp [open "|[file join [db_get_pgbin] psql] $pgport $pguser -f $file_name [db_get_database]" "r"]
+    }
 
     while { [gets $fp line] >= 0 } {
  	# Don't bother writing out lines which are purely whitespace.
