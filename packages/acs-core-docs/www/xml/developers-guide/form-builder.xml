@@ -100,6 +100,14 @@ if {[string equal "" $mypage]} {
     </programlisting>
   </sect2>
 
+  <sect2 id="form-widgets">
+    <title>Tips for form widgets</title>
+    <para>Here are some tips for dealing with some of the form widgets:</para>
+
+    <para><ulink url="http://openacs.org/forums/message-view?message_id=106331">Current widget</ulink></para>
+
+  </sect2>
+
   <sect2 id="errors">
     <title>Common Errors</title>
     <para>Here are some common errors and what to do when you
