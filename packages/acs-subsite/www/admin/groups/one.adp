@@ -30,7 +30,7 @@
 </ul>
 
  
-<h3>Permissable relationship types</h3>
+<h3>Permissible relationship types</h3>
 <include src="elements-by-rel-type" group_id=@group_id@>
 
 <if @admin_p@ eq 1>
