@@ -94,7 +94,3 @@ fi
 
 echo $(date) > ${serverroot}/www/SYSTEM/checkout-date
 # Set proper privileges
-
-# Change owner and permissions on checked out files
-chown -R ${aolsever_user}.${aolserver_group} ${serverroot}
-chmod -R go+rwX ${serverroot}

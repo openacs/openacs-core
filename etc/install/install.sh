@@ -202,7 +202,7 @@ echo "$0: Taking down $serverroot at $(date)"
 
 if parameter_true $use_daemontools; then
     $svc_bindir/svc -d ${svscanroot}
-    echo "$0: supervise status is: $(svstat ${svscanroot})"
+    echo "$0: supervise status is: $($svc_bindir/svstat ${svscanroot})"
 else
     # non-daemontools stop
     $stop_server_command
@@ -271,7 +271,7 @@ if parameter_true $do_checkout; then
         fi
         if [ -r "$svscan_sourcedir" ]; then
             $svc_bindir/svc -dx $svscan_sourcedir
-            echo "$0: supervise status is: $(svstat ${svscanroot})"
+            echo "$0: supervise status is: $($svc_bindir/svstat ${svscanroot})"
         fi
     fi
 
@@ -286,14 +286,6 @@ if parameter_true $do_checkout; then
     echo "$0: Checking out OpenACS at $(date)"
     chmod +x checkout.sh
     config_file=$config_file dotlrn=$dotlrn ./checkout.sh
-
-    if [ -z "$aolserver_config_file" ]; then
-        # No AOLserver config file specified - we are using the standard etc/config.tcl file.
-        # We need to update it with settings in install.tcl since certain parameters 
-        # (such as serverroot) are duplicated between the two files.
-        ./config-replace.sh $config_file
-        chmod +x $serverroot/etc/daemontools/run
-    fi 
 
     # The post_checkout script can copy back any files (AOLServer config files,
     # log files etc.) under the new source tree, and apply any patches
@@ -312,7 +304,7 @@ if parameter_true $do_checkout; then
         # allow svscan to start
         echo "$0: Waiting for 10 seconds for svscan to come up at $(date)"
         sleep 10
-        echo "$0: supervise status is: $(svstat ${svscanroot})"	
+        echo "$0: supervise status is: $($svc_bindir/svstat ${svscanroot})"	
         echo "$0: daemontools errors: : $(ps -auxw | grep readproctitle)"
         # Check if svgroup is present, and if so, use it
 	if which svgroup &> /dev/null; then
@@ -322,16 +314,41 @@ if parameter_true $do_checkout; then
     fi
 fi
 
+if [ -z "$aolserver_config_file" ]; then
+    # No AOLserver config file specified - we are using the standard etc/config.tcl file.
+    # We need to update it with settings in install.tcl since certain parameters 
+    # (such as serverroot) are duplicated between the two files.
+    echo "$0: Editing AOLserver config file with parameter settings in install.tcl"
+    ./config-replace.sh $config_file
+    chmod +x $svscan_sourcedir/run
+else
+    # Copy specified config file to the right path
+    echo "$0: Copying custom AOLserver config file $aolserver_config_file"
+    cp $aolserver_config_file $serverroot/etc/config.tcl
+fi 
+
+# Edit the run script
+echo "$0: Editing run script at $svscan_sourcedir/run"
+./run-create.sh $config_file
+chmod +x $svscan_sourcedir/run
+
+# Make sure we always have sensible ownership and permissions in the whole source tree
+echo "$0: Setting permissions and ownership for files under ${serverroot}"
+chown -R ${aolserver_user}.${aolserver_group} ${serverroot}
+chmod -R go+rwX ${serverroot}
+
 # Bring up the server again
-echo "$0: Bringing the server $serverroot back up at $date with command $command"
 if parameter_true $use_daemontools; then
     if [ -f $svscanroot/down ]; then
 	rm $svscanroot/down
     fi
-        $svc_bindir/svc -u $svscanroot
-    echo "$0: supervise status is: $(svstat ${svscanroot})"	
+    command="$svc_bindir/svc -u $svscanroot"
+    echo "$0: Bringing the server $serverroot back up at $(date) with command $command"
+    $command
+    echo "$0: supervise status is: $($svc_bindir/svstat ${svscanroot})"	
 else
     # non-daemontools command
+    echo "$0: Bringing the server $serverroot back up at $(date) with command $start_server_command"
     $start_server_command
 fi
 
