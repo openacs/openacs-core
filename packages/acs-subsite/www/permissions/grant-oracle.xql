@@ -13,8 +13,10 @@
 <fullquery name="parties">      
       <querytext>
       
-  select party_id, acs_object.name(party_id) as name
-  from parties
+  select p.party_id, 
+         acs_object.name(p.party_id) || nvl2(p.email, ' ('||p.email||')', '') as name
+  from   parties p
+  order  by name
 
       </querytext>
 </fullquery>

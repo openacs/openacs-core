@@ -27,11 +27,7 @@ doc_body_append "[ad_header "Grant Permission on $name"]
 
 <select name=privilege>
 "
-db_foreach privileges {
-  select privilege
-  from acs_privileges
-  order by privilege
-} {
+db_foreach privileges {} {
   doc_body_append "<option value=$privilege>$privilege</option>\n"
 }
 
@@ -41,10 +37,7 @@ on $name to
 <select name=party_id>
 "
 
-db_foreach parties {
-  select party_id, acs_object.name(party_id) as name
-  from parties
-} {
+db_foreach parties {} {
   doc_body_append "<option value=$party_id>$name</option>\n"
 }
 
