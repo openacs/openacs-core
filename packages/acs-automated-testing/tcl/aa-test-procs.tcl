@@ -1019,8 +1019,7 @@ ad_proc -private aa_execute_rollback_tests {} {
 namespace eval aa_test {}
 
 ad_proc -public aa_test::xml_report_dir {} {
-    # TODO: make this a parameter
-    return "/var/log/openacs-install"
+    return [parameter::get -parameter XMLReportDir]
 }
 
 ad_proc -private aa_test::test_file_path {
@@ -1138,21 +1137,21 @@ ad_proc -private aa_test::write_test_file {} {
     @author Peter Marklund
     
 } {
-    set xml_doc [get_test_doc]
-
-    set hostname [exec hostname]
-    set server [ns_info server]
+    set xml_doc ""
 
     set report_dir [aa_test::xml_report_dir]
+    if { [file isdirectory $report_dir] } {
 
-    if { ![file isdirectory $report_dir] } {
-        if { [catch {exec mkdir -p $report_dir} errmsg] } {
-            ns_log Error "Could not create directory $report_dir to write xml test report to. Not generating report"
-            return ""
+        set hostname [exec hostname]
+        set server [ns_info server]
+        set file_path "$report_dir/${hostname}-${server}-testreport.xml"
+
+        set xml_doc [get_test_doc]
+    
+        if { [catch {template::util::write_file $file_path $xml_doc} errmsg] } {
+            ns_log Error "Failed to write xml test report to path $file_path - $errmsg"
         }
     }
-
-    template::util::write_file "$report_dir/${hostname}-${server}-testreport.xml" $xml_doc
 
     return $xml_doc
 }
