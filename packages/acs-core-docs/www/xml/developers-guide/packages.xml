@@ -8,7 +8,7 @@
   <title>OpenACS &version; Packages</title>
 
   <authorblurb>
-    By Pete Su and Bryan Quinn
+    <para>By Pete Su and Bryan Quinn</para>
   </authorblurb>
   
   <sect2 id="packages-overview">

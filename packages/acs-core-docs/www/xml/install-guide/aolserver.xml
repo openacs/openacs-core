@@ -8,7 +8,7 @@
   <title>Install AOLserver 3.3oacs1</title>
 
   <authorblurb>
-    by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+    <para>by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink></para>
   </authorblurb>
 
   <orderedlist>
@@ -168,7 +168,7 @@ Length: 826,613 [application/x-compressed]
 wget --passive http://www.tdom.org/tDOM-0.7.8.tar.gz
 tar xzf tDOM-0.7.8.tar.gz
 cd tDOM-0.7.8/unix</action> </screen>
-      <para>Edit the file CONFIG and change this section: 
+      <para>Edit the file CONFIG and change this section:</para>
 <programlisting># ----------------------------------------------------
 # aolsrc="/usr/src/aolserver-3.4"
 # ../configure --enable-threads --disable-tdomalloc \
@@ -203,7 +203,6 @@ make
 cp libtdom0.7.8.so /usr/local/aolserver/bin/
 cd /usr/local/aolserver/bin
 ln -s libtdom0.7.8.so libtdom.so</action></screen>
-</para>
     </listitem>
     <listitem>
       <para><link linkend="install-nsopenssl">Install nsopenssl</link>

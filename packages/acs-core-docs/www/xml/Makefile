@@ -62,5 +62,11 @@ html: prelim XSL
 # I got this to work with FOP 0.20.5 and docbook-xsl 1.62, and Jimi 1.0
 # see README.fop for some notes.
 pdf: XSL
-	cd ..; $(XSLTPROC)  --xinclude --output fop.fo xml/fo.xsl xml/index.xml
-	cd ..; fop -d fop.fo -pdf full.pdf
+	cd ..; $(XSLTPROC) --xinclude --output fop.fo xml/fo.xsl xml/index.xml
+	cd ..; fop -fo fop.fo -pdf full.pdf
+
+# Validate with xmllint. --postvalid is needed so validation takes place after xincludes.
+# In emacs do M-x compile then make lint; then C-x ` to walk through the resulting errors.
+#
+lint: XSL
+	xmllint --xinclude --noout -postvalid index.xml 2>&1 | grep -v 'No declaration for attribute base of element'

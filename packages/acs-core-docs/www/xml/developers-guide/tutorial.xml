@@ -10,16 +10,18 @@
     <title>Creating a Package</title>
     
     <authorblurb>
-      by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+      <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
     </authorblurb>
     
 <sect2 id="tutorial-picture">
   <title>The intended page map</title>
-<para>...</para>
-<imageobject>
-          <imagedata fileref="images/openacs best practice.png" format="png"/>
+  <mediaobject>
+  <imageobject>
+          <imagedata fileref="images/openacs best practice.png" format="PNG"/>
   </imageobject>
+  </mediaobject>
 </sect2>
+
 
     <sect2>
       <title>Overview</title>
@@ -27,9 +29,9 @@
     package.  A package is a a discrete collection of web
     pages, tcl code, and database tables and procedures.  A package
       with user interface is called an <emphasis
-      type="strong">application</emphasis>; a package which provides
+      role="strong">application</emphasis>; a package which provides
       functions to other packages and has no direct interface, a
-      <emphasis type="bold">service</emphasis>.  A package
+      <emphasis role="strong">service</emphasis>.  A package
     can be installed, upgraded, and removed.  It communicates with
     other packages through an API.  This chapter walks you through the
     minimum steps to create a useful package, including writing

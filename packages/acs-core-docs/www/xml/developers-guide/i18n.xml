@@ -100,21 +100,21 @@
         <listitem>
           <para>
             The <emphasis role="strong">short</emphasis>:
-            <computeroutput>#<emphasis>package_key.message_key</emphasis>#</computeroutput>
+            <computeroutput>#<replaceable>package_key.message_key</replaceable>#</computeroutput>
           </para>
           <para>
             The advantage of the short syntax is that it's short. It's
             as simple as inserting the value of a variable.  Example:
-            <emphasis>#forum.title#</emphasis>
+            <replaceable>#forum.title#</replaceable>
           </para>
         </listitem>
 
         <listitem>
           <para>
             The <emphasis role="strong">verbose</emphasis>: <computeroutput>&lt;trn
-            key="<emphasis>package_key.message_key</emphasis>"
-            locale="<emphasis>locale</emphasis>"&gt;<emphasis>default
-            text</emphasis>&lt;/trn&gt;</computeroutput>
+            key="<replaceable>package_key.message_key</replaceable>"
+            locale="<replaceable>locale</replaceable>"&gt;<replaceable>default
+            text</replaceable>&lt;/trn&gt;</computeroutput>
           </para>
           <para>
             The verbose syntax allows you to specify a default text in
@@ -131,8 +131,8 @@
         <listitem>
           <para>
             The <emphasis role="strong">temporary</emphasis>:
-           <computeroutput> &lt;#<emphasis>message_key</emphasis>
-           <emphasis>original text</emphasis>#&gt;</computeroutput>
+           <computeroutput> &lt;#<replaceable>message_key</replaceable>
+           <replaceable>original text</replaceable>#&gt;</computeroutput>
           </para>
           <para>
             This syntax has been designed to make it easy to

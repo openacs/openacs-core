@@ -8,7 +8,7 @@
 <title>OpenACS 4 Permissions Design</title>
 
 <authorblurb>
-by John Prevost and <ulink url="http://planitia.org">Rafael H. Schloming</ulink> 
+<para>By John Prevost and <ulink url="http://planitia.org">Rafael H. Schloming</ulink> </para>
 </authorblurb>
 
 <sect2 id="permissions-design-essentials">

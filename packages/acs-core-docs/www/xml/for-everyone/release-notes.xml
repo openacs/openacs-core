@@ -184,8 +184,9 @@ END OF TEMPLATE -->
 
   </itemizedlist>
 
-      </sect2>
   <para><phrase role="cvstag">($Id$)</phrase></para>
+  </sect2>
+
 
   <sect2>
     <title>Version 4.6.3</title>

@@ -9,7 +9,7 @@
   <title>Install PostGreSQL</title>
 
   <authorblurb>
-	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+    <para>by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink></para>
   </authorblurb>
   
   <para>Skip this section if you will run only Oracle.</para>
@@ -476,9 +476,10 @@ checkpoint_segments = 3     # in logfile segments (16MB each), min 1
         </para></listitem>
       
     </itemizedlist>
+  <para><phrase role="cvstag">($Id$)</phrase></para>
   </sect2>
 
-  <para><phrase role="cvstag">($Id$)</phrase></para>
+
 
 </sect1>
 

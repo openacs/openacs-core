@@ -4,14 +4,12 @@
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
- <sect1 id="subsites" xreflabbel="Writing OpenACS Application Pages">
+ <sect1 id="subsites" xreflabel="Writing OpenACS Application Pages">
 <title>Writing OpenACS &version; Application Pages</title>
 
  
 <authorblurb>
-<para>
-By Rafael H. Schloming and Pete Su
-</para>
+<para>By Rafael H. Schloming and Pete Su</para>
 </authorblurb>
 
 

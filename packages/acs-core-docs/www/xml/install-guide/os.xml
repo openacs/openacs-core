@@ -8,7 +8,7 @@
   <title>Install Unix-like system and supporting software</title>
   
   <authorblurb>
-    by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+    <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
   </authorblurb>
   <sect2 id="unix-install">
     <title>a Unix-like system</title>
@@ -46,8 +46,10 @@
     <para>To install a machine to the specifications of the Reference
     Platform, do the <link linkend="install-redhat">walkthrough of the
     Red Hat 8.0 Install for OpenACS</link>.</para>
+
+    <para><phrase role="cvstag">($Id$)</phrase></para>
   </sect2>
 
-  <para><phrase role="cvstag">($Id$)</phrase></para>
+
   
 </sect1>

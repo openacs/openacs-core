@@ -8,7 +8,7 @@
 <title>OpenACS &version; Package Manager Requirements</title>
 
 <authorblurb>
-byBryan Quinn and Todd Nightingale
+<para>By Bryan Quinn and Todd Nightingale</para>
 </authorblurb>
 
 <sect2 id="apm-requirements-intro">

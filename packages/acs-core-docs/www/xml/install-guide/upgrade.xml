@@ -7,7 +7,7 @@
 <sect1 id="upgrade-detail">
     <title>Support for upgrades.</title>
   <authorblurb>
-    by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+    <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
   </authorblurb>
   <para>Starting with Version 4.5, all OpenACS core packages support
     automatic upgrade.  That means that, if you have OpenACS 4.5
@@ -68,7 +68,7 @@
   <sect2><title><indexterm>
         <primary>upgrade</primary>
         <secondary>OpenACS 4.5 to 4.6</secondary>
-        <secondary>Linux/Unix</secondary>
+        <tertiary>Linux/Unix</tertiary>
 </indexterm>Upgrading on Linux/Unix</title>
     <orderedlist>
       <listitem>
@@ -141,9 +141,9 @@ exit</action></screen>
         </orderedlist>
       </listitem>
       <listitem>
-        <formalpara>
-          <title>Stop the server</title>
-        </formalpara>
+        <para>
+         Stop the server
+        </para>
         <screen>[root@localhost root]# <userinput>svc -d /service/<replaceable>openacs-dev</replaceable></userinput></screen>
       </listitem>
       <listitem>
@@ -170,9 +170,9 @@ cp -r openacs-4-6/* openacs-4
 exit</action></screen>
           </listitem>
           <listitem>
-            <formalpara>
-              <title>Upgrading files with CVS</title>
-            </formalpara>
+            <para>
+              <emphasis role="strong">Upgrading files with CVS</emphasis>
+	    </para>
             <orderedlist>
               
               <listitem>
@@ -229,9 +229,9 @@ exit</action></screen>
         </itemizedlist>
       </listitem>
       <listitem>
-        <formalpara>
-          <title>Start the server</title>
-        </formalpara>
+        <para>
+          <emphasis role="strong">Start the server</emphasis>
+        </para>
         <screen>[root@localhost root]# <userinput>svc -u /service/<replaceable>openacs-dev</replaceable></userinput></screen>
       </listitem>
       <listitem>
@@ -304,11 +304,11 @@ exit</action></screen>
       <listitem>
         <formalpara>
           <title>Rollback</title>
-          <para>If anything goes wrong, <link linkend="rollback-database">roll back</link> to the backup snapshot.</para>
+          <para>If anything goes wrong, <link linkend="backup-recovery">roll back</link> to the backup snapshot.</para>
         </formalpara>
       </listitem>
     </orderedlist>
+    <para><phrase role="cvstag">($Id$)</phrase></para>
   </sect2>
-  <para><phrase role="cvstag">($Id$)</phrase></para>
 
 </sect1>

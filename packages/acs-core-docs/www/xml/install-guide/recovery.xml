@@ -7,9 +7,9 @@
   <sect1 id="backup-recovery">
     <title>Backup and Recovery</title>
     <authorblurb>
-    by <ulink url="mailto:dhogaza@pacifier.com">Don Baccus</ulink>
-
-      with additions by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>  </authorblurb>
+      <para>By <ulink url="mailto:dhogaza@pacifier.com">Don Baccus</ulink> with additions
+      by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
+  </authorblurb>
 
   <sect2 id="install-next-backups">
     <title>Backup Strategy</title>
@@ -508,9 +508,11 @@ exit</action></screen>
 <action><userinput>su - service0</userinput>
 cd /var/lib/aolserver/<replaceable>service0</replaceable>
 cvs up -r current</action></screen>
+
+    <para><phrase role="cvstag">($Id$)</phrase></para>
   </sect2>
     
-    <para><phrase role="cvstag">($Id$)</phrase></para>
+
 </sect1>
     
   

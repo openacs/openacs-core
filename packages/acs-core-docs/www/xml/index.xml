@@ -1,20 +1,22 @@
-<?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [ 
+<?xml version='1.0'?>
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
 <!-- Global variables are defined in variables.ent -->
-<!ENTITY % myvars SYSTEM "variables.ent" >
+<!ENTITY % myvars SYSTEM "variables.ent">
 %myvars;
 
 ]>
 
 <book>
   <title>OpenACS Core Documentation</title>
-    
+
   <part id="for-everyone">
     <title>OpenACS For Everyone</title>
 
     <chapter id="general-documents">
       <title>High level information: What is OpenACS?</title>
+
       <sect1 id="openacs-overview" xreflabel="OpenACS Overview">
         <title>Overview</title>
 	  <para>
@@ -56,7 +58,7 @@
 	    System. ArsDigita (now part of Red Hat, Inc.) kindly made
 	    their work available under the <ulink
 	    url="http://dev.openacs.org/about/licensing/">GPL</ulink>,
-	    making all of this possible. 
+	    making all of this possible.
 	  </para>
 
 	<para>
@@ -84,7 +86,7 @@
 	  the development and numerous developers and non-developers
 	  contribute from around the world.
 	</para>
-        
+
         <para>
 	    The OpenACS community would like to hear your comments and
 	    help you in your endeavors with the system. Stop by our
@@ -97,89 +99,93 @@
       </xi:include>
     </chapter>
   </part>
-  
+
   <part id="acs-admin">
     <title>Administrator's Guide</title>
 
   <chapter id="install-overview">
     <title>Installation Overview</title>
-    
+
     <authorblurb>
-      by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+      <para>by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink></para>
     </authorblurb>
 
-    <xi:include href="install-guide/overview.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="install-guide/overview.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>Overview Section Missing</xi:fallback>
     </xi:include>
 
-<!--    <xi:include href="install-guide/quick.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+<!--    <xi:include href="install-guide/quick.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback><para>Quick Guide Missing</para></xi:fallback>
     </xi:include>
 -->
-    <xi:include href="install-guide/software.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="install-guide/software.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>Section Missing</xi:fallback>
     </xi:include>
     </chapter>
- 
+
     <chapter id="complete-install">
       <title>Complete Installation</title>
       <xi:include href="install-guide/os.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-      <xi:fallback>Section Missing</xi:fallback>
-    </xi:include>
- 
-      <xi:include href="install-guide/oracle.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-      <xi:fallback><para>Section Missing</para></xi:fallback>
-    </xi:include>
- 
-      <xi:include  href="install-guide/postgres.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-      <xi:fallback>Section Missing</xi:fallback>
-    </xi:include>
- 
-      <xi:include href="install-guide/aolserver.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-      <xi:fallback>Section Missing</xi:fallback>
-    </xi:include>
- 
-      <xi:include href="install-guide/openacs.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-      <xi:fallback>Section Missing</xi:fallback>
-    </xi:include>
- 
-      <xi:include href="install-guide/win2kinstall.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section Missing</xi:fallback>
+      </xi:include>
+
+      <xi:include href="install-guide/oracle.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback><para>Section Missing</para></xi:fallback>
+      </xi:include>
+      <xi:include  href="install-guide/postgres.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section Missing</xi:fallback>
+      </xi:include>
+
+      <xi:include href="install-guide/aolserver.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section Missing</xi:fallback>
+      </xi:include>
+
+      <xi:include href="install-guide/openacs.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section Missing</xi:fallback>
+      </xi:include>
+
+      <xi:include href="install-guide/win2kinstall.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="install-guide/macinstall.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-    </chapter>    
+      </xi:include>
+
+      <xi:include href="install-guide/macinstall.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+    </chapter>
+
     <chapter id="configure">
       <title>Configuring a New Service</title>
       <para>Placeholder</para> 
     </chapter>
 
     <chapter id="upgrade">
-          <title>Upgrading</title>
-          <xi:include href="install-guide/upgrade.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-        </chapter>
-    <chapter id="maintenance">
-          <title>Maintenance</title>
-          <xi:include href="install-guide/maintenance.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="install-guide/database-maintenance.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="install-guide/recovery.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
+      <title>Upgrading</title>
+      <xi:include href="install-guide/upgrade.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
     </chapter>
-    <xi:include href="install-guide/red-hat.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-    <xi:include href="install-guide/other-software.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-    <xi:include href="install-guide/credits.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+    <chapter id="maintenance">
+       <title>Maintenance</title>
+       <xi:include href="install-guide/maintenance.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+         <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="install-guide/database-maintenance.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="install-guide/recovery.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+    </chapter>
+
+    <xi:include href="install-guide/red-hat.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>Section missing</xi:fallback>
+    </xi:include>
+
+    <xi:include href="install-guide/other-software.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>Section missing</xi:fallback>
+    </xi:include>
+
+    <xi:include href="install-guide/credits.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>Section Missing</xi:fallback>
     </xi:include>
   </part>
@@ -191,99 +197,100 @@
       </para>
     </partintro>
 
-    <chapter id="tutorial">
+    <chapter id="tutorial"> 
       <title>Development Tutorial</title>
-      <xi:include href="developers-guide/tutorial.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="developers-guide/tutorial-db.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="developers-guide/tutorial-pages.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="developers-guide/tutorial-debug.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="developers-guide/tutorial-advanced.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
+      <xi:include href="developers-guide/tutorial.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="developers-guide/tutorial-db.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="developers-guide/tutorial-pages.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="developers-guide/tutorial-debug.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="developers-guide/tutorial-advanced.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
     </chapter>
 
     <chapter id="dev-guide">
       <title>Development Reference</title>
-      <xi:include href="developers-guide/packages.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="developers-guide/objects.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="developers-guide/rp.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="developers-guide/db-api.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="developers-guide/templates.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="developers-guide/permissions.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="developers-guide/subsites.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="developers-guide/parties.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="developers-guide/permissions-tediously-explained.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+      <xi:include href="developers-guide/packages.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
-      <xi:include href="developers-guide/object-identity.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="developers-guide/programming-with-aolserver.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
+      <xi:include href="developers-guide/objects.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="developers-guide/rp.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="developers-guide/db-api.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="developers-guide/templates.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="developers-guide/permissions.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="developers-guide/subsites.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="developers-guide/parties.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="developers-guide/permissions-tediously-explained.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="developers-guide/object-identity.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="developers-guide/programming-with-aolserver.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
     </chapter>
 
     <chapter id="eng-standards">
       <title>Engineering Standards</title>
 
-      <xi:include href="engineering-standards/docbook-primer.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="engineering-standards/psgml-mode.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="engineering-standards/design-template.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="engineering-standards/requirements-template.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="engineering-standards/eng-standards-versioning.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="engineering-standards/constraint-naming.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="engineering-standards/filenaming.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="engineering-standards/plsql.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-      <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
+      <xi:include href="engineering-standards/docbook-primer.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="engineering-standards/psgml-mode.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="engineering-standards/design-template.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="engineering-standards/requirements-template.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="engineering-standards/eng-standards-versioning.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="engineering-standards/constraint-naming.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="engineering-standards/filenaming.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="engineering-standards/plsql.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
 
     </chapter>
-    <xi:include href="developers-guide/cvs.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>CVS Section missing</xi:fallback>
-      </xi:include> 
-    <xi:include href="releasing-openacs.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>'Releasing OpenACS' missing</xi:fallback>
-      </xi:include> 
+    <xi:include href="developers-guide/cvs.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>CVS Section missing</xi:fallback>
+    </xi:include>
+    <xi:include href="releasing-openacs.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>'Releasing OpenACS' missing</xi:fallback>
+    </xi:include>
   </part>
-  
+
   <part id="acs-plat-dev">
     <title>For OpenACS Platform Developers</title>
     <preface id="platform-dev">
@@ -297,7 +304,7 @@
 
       <sect1 id="kernel-overview">
         <title>Overview</title>
-        
+
 	<itemizedlist>
 	  <listitem>
             <para>
@@ -319,12 +326,15 @@
           </listitem>
 	  <listitem>
             <para>
-              <emphasis>OpenACS Application packages</emphasis>, which typically provide user-level
+
+              <emphasis>OpenACS Application packages</emphasis>,
+              which typically provide user-level
 	      web services built on top of the Kernel and Core.  Such
 	      packages include those built by ArsDigita as well as
 	      external contributors.  Application packages are
 	      developed separately from the Kernel, and are typically
 	      released independently of it.
+
 	    </para>
           </listitem>
 	</itemizedlist>
@@ -334,75 +344,75 @@
 	</para>
       </sect1>
 
-      <xi:include href="kernel/object-system-req.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:include href="kernel/object-system-req.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/object-system-design.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/object-system-design.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/permissions-requirements.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/permissions-requirements.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/permissions-design.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/permissions-design.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/groups-requirements.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/groups-requirements.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/groups-design.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/groups-design.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/subsites-requirements.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/subsites-requirements.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/subsites-design.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/subsites-design.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/apm-requirements.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/apm-requirements.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/apm-design.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/apm-design.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/db-api.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/db-api.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/i18n-requirements.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/i18n-requirements.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="developers-guide/i18n.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="developers-guide/i18n.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/security-requirements.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/security-requirements.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/security-design.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/security-design.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/security-notes.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/security-notes.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/rp-requirements.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/rp-requirements.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/rp-design.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/rp-design.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/tcl-doc.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/tcl-doc.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/bootstrap-acs.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/bootstrap-acs.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/ext-auth.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/ext-auth.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
-      <xi:include href="kernel/ext-auth-design.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      </xi:include>
+      <xi:include href="kernel/ext-auth-design.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
-      </xi:include> 
+      </xi:include>
 
     </chapter>
 
   </part>
-
+<index/>
 </book>

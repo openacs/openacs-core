@@ -16,6 +16,7 @@
 <!-- vinodk: Not sure if this is needed                   -->
   <xsl:output media-type="text/html" encoding="utf-8"/>
 
+  <xsl:variable name="generate.index">1</xsl:variable>
 
 <!-- vinodk: narrower TOC's, use chunker (?), pretty file names      -->
   <xsl:variable name="toc.section.depth">1</xsl:variable>
@@ -198,14 +199,11 @@
                   for authorblurb. Also add doc disclaimer.   -->
   <xsl:template match="authorblurb">
     <div class="{name(.)}">
-      <p>
       <xsl:apply-templates/>
-        <br />
         <xsl:text>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </xsl:text>
-      </p>
     </div>
   </xsl:template>
   

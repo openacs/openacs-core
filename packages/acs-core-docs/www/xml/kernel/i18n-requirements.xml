@@ -8,12 +8,12 @@
   <title>OpenACS Internationalization Requirements</title>
 
   <authorblurb>
-      by Henry Minsky, 
+      <para>by Henry Minsky, 
        <ulink url="mailto:yon@openforce.net">Yon Feldman</ulink>, 
        <ulink url="mailto:lars@collaboraid.biz">Lars Pind</ulink>,
        <ulink url="mailto:peter@collaboraid.biz">Peter Marklund</ulink>, 
        <ulink url="mailto:christian@collaboraid.biz">Christian Hvid</ulink>,
-       and others.
+       and others.</para>
   </authorblurb>
 
   <sect2 id="i18n-requirements-introduction">
@@ -118,7 +118,11 @@ without a mechanism to incorporate the locale-specific changes
 cleanly back into the code base, it would require making a new fork
 of the source code for each locale.</para>
 
-</sect2><sect2 id="III._System/Application_Overview"><title>System/Application Overview</title>
+</sect2>
+
+<sect2 id="system-application-overview">
+
+<title>System/Application Overview</title>
 
 <para>A globalized application will perform some or all of the
 following steps to handle a page request for a specific
@@ -369,7 +373,9 @@ getting the current request locale from the
 </itemizedlist>
 </blockquote>
 
-</sect2><sect2 id="VI.C_Resource_Bundles_/_Content_Repository"><title>Resource Bundles / Content Repository</title>
+</sect2><sect2 id="resource-bundles">
+
+<title>Resource Bundles / Content Repository</title>
 
 <para><emphasis>30.0</emphasis></para>
 <para>A mechanism must be provided for a developer to group a set

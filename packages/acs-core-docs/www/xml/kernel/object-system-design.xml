@@ -8,7 +8,7 @@
 <title>OpenACS 4 Object Model Design</title>
 
 <authorblurb>
-by Pete Su, Michael Yoon, Richard Li, Rafael Schloming
+<para>By Pete Su, Michael Yoon, Richard Li, Rafael Schloming</para>
 </authorblurb>
 
 <sect2 id="object-system-design-essentials">

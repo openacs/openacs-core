@@ -8,7 +8,7 @@
 <title>OpenACS 4 Security Design</title>
 
 <authorblurb>
-by Richard Li and Archit Shah
+<para>By Richard Li and Archit Shah</para>
 </authorblurb>
 
 
@@ -476,7 +476,7 @@ cascading delete.
 
 </sect3>
 
-<sect4 id="secure-session-properties">
+<sect3 id="secure-session-properties">
 <title>Secure Session Properties</title>
 
 <para>Session properties can be set as secure. In this case,
@@ -484,7 +484,7 @@ cascading delete.
 secure. <computeroutput>ad_get_client_property</computeroutput> will behave as if the property
 had not been set if the property was not set securely.</para>
 
-</sect4>
+</sect3>
 
 <sect3 id="digital-signatures">
 <title>Digital Signatures &amp; Signed Cookies</title>

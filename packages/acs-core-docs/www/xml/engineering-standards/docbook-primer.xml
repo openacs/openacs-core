@@ -658,7 +658,7 @@
     <title>Converting to HTML</title>
 
     <note>
-      This section is quoted almost verbatim from the LDP Author Guide.      
+      <para>This section is quoted almost verbatim from the LDP Author Guide.</para>
     </note>
     
     <para>
@@ -685,12 +685,14 @@ bash$  xsltproc -o outputfilename.xml /usr/share/sgml/docbook/stylesheet/xsl/nwa
     </programlisting>
 
     <note>
+      <para>
       This example uses Daniel Veillard's <emphasis
       role="strong">xsltproc</emphasis> command available
       as part of libxslt from <ulink
       url="http://www.xmlsoft.org/XSLT/">http://www.xmlsoft.org/XSLT/</ulink>.
       If you are using other XML processors such as Xalan or Saxon,
       you will need to change the command line appropriately.
+      </para>
     </note>
 
     <para>

@@ -11,7 +11,7 @@
   </important>
 
   <authorblurb>
-    by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+    <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
   </authorblurb>
   
   <sect2><title>Debugging</title>
@@ -81,13 +81,15 @@ G goes to the end.
   </sect2>
   
   <sect2>
-    <authorblurb>
-      by <ulink url="mailto:simon@collaboraid.net">Simon Carstensen</ulink>
-    </authorblurb>
     <title>Write automated tests</title>
-    <para><indexterm>
-        <primary>Create the automated tests for the package.</primary>
-      </indexterm>It seems to me that a lot of
+
+    <authorblurb>
+      <para>by <ulink url="mailto:simon@collaboraid.net">Simon Carstensen</ulink></para>
+    </authorblurb>
+
+    <para>
+      <indexterm><primary>Automated tests</primary></indexterm>
+It seems to me that a lot of
 people have been asking for some guidelines on how to write automated
 tests. I've done several tests by now and have found the process to be
 extremely easy and useful. It's a joy to work with automated testing

@@ -89,13 +89,13 @@ create table <emphasis role="bold">acs_objects</emphasis> (
   create table <emphasis role="bold">acs_permissions</emphasis> (
       object_id
           not null
-          constraint acs_permissions_on_what_id_fk references <xref linkend="acs_objects">acs_objects</xref> (object_id),
+          constraint acs_permissions_on_what_id_fk references <xref linkend="acs_objects"/> (object_id),
       grantee_id
           not null
-          constraint acs_permissions_grantee_id_fk references <xref linkend="tedious-parties">parties</xref> (party_id),
+          constraint acs_permissions_grantee_id_fk references <xref linkend="tedious-parties"/> (party_id),
       privilege
           not null
-          constraint acs_permissions_priv_fk references <xref linkend="acs_privileges">acs_privileges</xref> (privilege),
+          constraint acs_permissions_priv_fk references <xref linkend="acs_privileges"/> (privilege),
       constraint acs_permissions_pk
           primary key (object_id, grantee_id, privilege)
   );
@@ -121,7 +121,7 @@ create table <emphasis role="bold">acs_objects</emphasis> (
       entries of the form: 
     </para>
 
-    <table frame="all">
+    <informaltable frame="all">
       <tgroup cols="3" align="center" colsep="1" rowsep="1">
         <colspec colname="c1"/>
         <colspec colname="c2"/>
@@ -196,7 +196,7 @@ create table <emphasis role="bold">acs_objects</emphasis> (
           </row>
         </tbody>
       </tgroup>
-    </table>
+    </informaltable>
 
     <para>
       Although quite feasible, this approach fails to take advantage of the fact
@@ -223,6 +223,7 @@ create table <emphasis role="bold">acs_objects</emphasis> (
     </para>
 
     <table frame="all">
+      <title>Context Hierarchy Example</title>
       <tgroup cols="3" align="center" colsep="1" rowsep="1">
         <colspec colname="c1"/>
         <colspec colname="c2"/>
@@ -275,12 +276,13 @@ create table <emphasis role="bold">acs_objects</emphasis> (
     </table>
     
     <para>
-      This can be represented in the <computeroutput>
-      <xref linkend="acs_objects">acs_objects</xref></computeroutput> table
+      This can be represented in the 
+      <xref linkend="acs_objects"/> table
       by the following entries: 
     </para>
 
     <table frame="all">
+      <title>acs_objects example data</title>
       <tgroup cols="2" align="center" colsep="1" rowsep="1">
         <colspec colname="c1"/>
         <colspec colname="c2"/>
@@ -322,10 +324,10 @@ create table <emphasis role="bold">acs_objects</emphasis> (
       we can compute that object 40 is the second-generation descendant of object 10.
       With this in mind, if we want to record the fact that user Joe has the <emphasis>read</emphasis> privilege on objects
       <emphasis>A</emphasis>, ..., <emphasis>F</emphasis>, we only need to record one entry in the
-      <computeroutput><xref linkend="acs_permissions">acs_permissions</xref></computeroutput> table. 
+      <xref linkend="acs_permissions"/> table. 
     </para>
 
-    <table frame="all">
+    <informaltable frame="all">
       <tgroup cols="3" align="center" colsep="1" rowsep="1">
         <colspec colname="c1"/>
         <colspec colname="c2"/>
@@ -345,7 +347,7 @@ create table <emphasis role="bold">acs_objects</emphasis> (
           </row>
         </tbody>
       </tgroup>
-    </table>
+    </informaltable>
 
     <para>
       The fact that Joe can also read <emphasis>B</emphasis>, <emphasis>C</emphasis>, 
@@ -359,7 +361,7 @@ create table <emphasis role="bold">acs_objects</emphasis> (
       One way to solve this problem is to cache a flattened view of the context tree like so: 
     </para>
 
-    <table frame="all">
+    <informaltable frame="all">
       <tgroup cols="3" align="center" colsep="1" rowsep="1">
         <colspec colname="c1"/>
         <colspec colname="c2"/>
@@ -444,7 +446,7 @@ create table <emphasis role="bold">acs_objects</emphasis> (
           </row>
         </tbody>
       </tgroup>
-    </table>
+    </informaltable>
 
     <para>
       Note that the number of entries in the flattened view grows exponentially with
@@ -453,7 +455,7 @@ create table <emphasis role="bold">acs_objects</emphasis> (
       in its flattened view is
     </para>
     
-    <para align="center">
+    <para>
       1 + 2*2 + 3*4 + 4*8 + 5*16 + ... + (n+1)*2<superscript>n</superscript> = n*2<superscript>n+1</superscript> + 1</para>
 
     <para>
@@ -467,10 +469,10 @@ create table <emphasis role="bold">acs_objects</emphasis> (
   create table <emphasis role="bold">acs_object_context_index</emphasis> (
       object_id
           not null
-          constraint acs_obj_context_idx_obj_id_fk references <xref linkend="acs_objects">acs_objects</xref>(object_id),
+          constraint acs_obj_context_idx_obj_id_fk references <xref linkend="acs_objects"/> (object_id),
       ancestor_id
           not null
-          constraint acs_obj_context_idx_anc_id_fk references <xref linkend="acs_objects">acs_objects</xref>(object_id),
+          constraint acs_obj_context_idx_anc_id_fk references <xref linkend="acs_objects"/> (object_id),
       n_generations	    integer
           not null
           constraint acs_obj_context_idx_n_gen_ck check (n_generations <markup>></markup>= 0),
@@ -492,32 +494,32 @@ create table <emphasis role="bold">acs_objects</emphasis> (
 
     <para>
       The <computeroutput>acs_object_context_index</computeroutput> is kept in sync with the
-      <computeroutput><xref linkend="acs_objects">acs_objects</xref></computeroutput> 
+      <xref linkend="acs_objects"/>
       table by triggers like this: 
     </para>
 
     <programlisting>
 create or replace trigger acs_objects_context_id_in_tr
-after insert on <xref linkend="acs_objects">acs_objects</xref>
+after insert on <xref linkend="acs_objects"/>
 for each row
 begin
-    insert into <xref linkend="acs_object_context_index">acs_object_context_index</xref>
+    insert into <xref linkend="acs_object_context_index"/>
      (object_id, ancestor_id, n_generations)
     values
      (:new.object_id, :new.object_id, 0);
 
     if :new.context_id is not null and :new.security_inherit_p = 't' then
-      insert into <xref linkend="acs_object_context_index">acs_object_context_index</xref>
+      insert into <xref linkend="acs_object_context_index"/>
        (object_id, ancestor_id,
         n_generations)
       select
        :new.object_id as object_id, ancestor_id,
        n_generations + 1 as n_generations
-      from <xref linkend="acs_object_context_index">acs_object_context_index</xref>
+      from <xref linkend="acs_object_context_index"/>
       where object_id = :new.context_id;
     elsif :new.object_id != 0 then
       -- 0 is the id of the security context root object
-      insert into <xref linkend="acs_object_context_index">acs_object_context_index</xref>
+      insert into <xref linkend="acs_object_context_index"/>
        (object_id, ancestor_id, n_generations)
       values
        (:new.object_id, 0, 1);
@@ -526,14 +528,14 @@ end;
 </programlisting>
 
     <para>
-      One final note about <computeroutput>
-      <xref linkend="acs_objects">acs_objects</xref></computeroutput>. By setting
+      One final note about 
+      <xref linkend="acs_objects"/>. By setting
       an object's <computeroutput>security_inherit_p</computeroutput> column to 'f', you can stop permissions
       from cascading down the context tree. In the following example, Joe does not have
       the read permissions on <emphasis>C</emphasis> and <emphasis>F</emphasis>. 
     </para>
 
-    <table frame="all">
+    <informaltable frame="all">
       <tgroup cols="3" align="center" colsep="1" rowsep="1">
         <colspec colname="c1"/>
         <colspec colname="c2"/>
@@ -589,7 +591,7 @@ security_inherit_p = 'f'
           </row>
         </tbody>
       </tgroup>
-    </table>
+    </informaltable>
     
   </sect2>
 
@@ -602,7 +604,7 @@ security_inherit_p = 'f'
       the Bboard package defines the following privileges: 
     </para>
 
-    <table frame="all">
+    <informaltable frame="all">
       <tgroup cols="1" align="center" colsep="1" rowsep="1">
         <colspec colname="c1"/>
 	<thead>
@@ -652,7 +654,7 @@ security_inherit_p = 'f'
 	  </row>
         </tbody>
       </tgroup>
-    </table>
+    </informaltable>
 
     <para>
       By defining parent-child relationship between privileges, the OpenACS data model
@@ -665,7 +667,7 @@ security_inherit_p = 'f'
       as follows.
     </para>
 
-    <table frame="all">
+    <informaltable frame="all">
       <tgroup cols="13" align="center" colsep="1" rowsep="1">
         <colspec colname="c1"/>
         <colspec colname="c2"/>
@@ -707,7 +709,7 @@ security_inherit_p = 'f'
 	  </row>
 	</tbody>
        </tgroup>
-     </table>
+     </informaltable>
 
     <para>
       The parent-child relationship between privileges is represented in
@@ -719,10 +721,10 @@ security_inherit_p = 'f'
   create table <emphasis role="bold">acs_privilege_hierarchy</emphasis> (
       privilege
           not null
-          constraint acs_priv_hier_priv_fk references <xref linkend="acs_privileges">acs_privileges</xref> (privilege),
+          constraint acs_priv_hier_priv_fk references <xref linkend="acs_privileges"/> (privilege),
       child_privilege
           not null
-          constraint acs_priv_hier_child_priv_fk references <xref linkend="acs_privileges">acs_privileges</xref> (privilege),
+          constraint acs_priv_hier_child_priv_fk references <xref linkend="acs_privileges"/> (privilege),
       constraint acs_privilege_hierarchy_pk
           primary key (privilege, child_privilege)
   );
@@ -740,14 +742,14 @@ security_inherit_p = 'f'
     p1.privilege,
     p2.privilege as descendant
   from
-    <xref linkend="acs_privileges">acs_privileges</xref> p1,
-    <xref linkend="acs_privileges">acs_privileges</xref> p2
+    <xref linkend="acs_privileges"/> p1,
+    <xref linkend="acs_privileges"/> p2
   where
     p2.privilege in 
       (select
          child_privilege
        from
-         <xref linkend="acs_privilege_hierarchy">acs_privilege_hierarchy</xref>
+         <xref linkend="acs_privilege_hierarchy"/>
        start with
          privilege = p1.privilege
        connect by
@@ -773,46 +775,38 @@ security_inherit_p = 'f'
       data model is set up as follows. 
     </para>
 
-    <table frame="all">
+    <informaltable frame="all">
       <tgroup cols="2" align="center" colsep="1" rowsep="1">
         <colspec colname="c1"/>
         <colspec colname="c2"/>
         <tbody>
 	  <row>
 	    <entry namest="c1" nameend="c2">
-	      <xref linkend="tedious-parties">
-	        <computeroutput>parties</computeroutput>
-              </xref> 
+	      <xref linkend="tedious-parties"/>
 	    </entry>
 	  </row>
 	  <row>
             <entry>
-	      <xref linkend="persons">
-	        <computeroutput>persons</computeroutput>
-              </xref>
+	      <xref linkend="persons"/>
 	    </entry>
 	    <entry morerows="1" valign="top">
-	      <xref linkend="groups">
-	        <computeroutput>groups</computeroutput>
-	      </xref>
+	      <xref linkend="groups"/>
 	    </entry>
 	  </row>
 	  <row>
 	    <entry>
-              <xref linkend="users">
-	        <computeroutput>users</computeroutput>
-              </xref>
+              <xref linkend="users"/>
 	    </entry>
 	  </row>
 	</tbody>
       </tgroup>
-    </table>
+    </informaltable>
 
     <programlisting id="tedious-parties" xreflabel="parties">
   create table <emphasis role="bold">parties</emphasis> (
       party_id
           not null
-          constraint parties_party_id_fk references <xref linkend="acs_objects">acs_objects</xref> (object_id)
+          constraint parties_party_id_fk references <xref linkend="acs_objects"/> (object_id)
           constraint parties_pk primary key,
       email               varchar2(100)
           constraint parties_email_un unique,
@@ -824,7 +818,7 @@ security_inherit_p = 'f'
   create table <emphasis role="bold">persons</emphasis> (
       person_id
           not null
-          constraint persons_person_id_fk references <xref linkend="tedious-parties">parties</xref> (party_id)
+          constraint persons_person_id_fk references <xref linkend="tedious-parties"/> (party_id)
           constraint persons_pk primary key,
       first_names          varchar2(100)
           not null,
@@ -837,7 +831,7 @@ security_inherit_p = 'f'
   create table <emphasis role="bold">users</emphasis> (
       user_id
           not null
-          constraint users_user_id_fk references <xref linkend="persons">persons</xref> (person_id)
+          constraint users_user_id_fk references <xref linkend="persons"/> (person_id)
           constraint users_pk primary key,
       password        char(40),
       -- other attributes
@@ -848,7 +842,7 @@ security_inherit_p = 'f'
   create table <emphasis role="bold">groups</emphasis> (
       group_id
           not null
-          constraint groups_group_id_fk references <xref linkend="tedious-parties">parties</xref> (party_id)
+          constraint groups_group_id_fk references <xref linkend="tedious-parties"/> (party_id)
           constraint groups_pk primary key,
       group_name           varchar2(100) not null
   );
@@ -856,7 +850,7 @@ security_inherit_p = 'f'
 
     <para>
       Recall that the <computeroutput>grantee_id</computeroutput> column of the
-      <xref linkend="acs_permissions">acs_permissions</xref> table references 
+      <xref linkend="acs_permissions"/> table references 
       <computeroutput>parties.party_id</computeroutput>.
       This means that you can grant a privilege on an object to a party, person, user, or group.
       Groups represent aggregations of parties. The most common scenario that you are likely
@@ -877,17 +871,17 @@ security_inherit_p = 'f'
   create table <emphasis role="bold">acs_rels</emphasis> (
       rel_id
           not null
-          constraint acs_rels_rel_id_fk references <xref linkend="acs_objects">acs_objects</xref> (object_id)
+          constraint acs_rels_rel_id_fk references <xref linkend="acs_objects"/> (object_id)
           constraint acs_rels_pk primary key,
       rel_type
           not null
           constraint acs_rels_rel_type_fk references acs_rel_types (rel_type),
       object_id_one
           not null
-          constraint acs_object_rels_one_fk references <xref linkend="acs_objects">acs_objects</xref> (object_id),
+          constraint acs_object_rels_one_fk references <xref linkend="acs_objects"/> (object_id),
       object_id_two
           not null
-          constraint acs_object_rels_two_fk references <xref linkend="acs_objects">acs_objects</xref> (object_id),
+          constraint acs_object_rels_two_fk references <xref linkend="acs_objects"/> (object_id),
       constraint acs_object_rels_un
           unique (rel_type, object_id_one, object_id_two)
   );
@@ -896,7 +890,7 @@ security_inherit_p = 'f'
     <programlisting id="membership_rels" xreflabel="membership_rels">
   create table <emphasis role="bold">membership_rels</emphasis> (
       rel_id
-          constraint membership_rel_rel_id_fk references <xref linkend="acs_rels">acs_rels</xref> (rel_id)
+          constraint membership_rel_rel_id_fk references <xref linkend="acs_rels"/> (rel_id)
           constraint membership_rel_rel_id_pk primary key,
       -- null means waiting for admin approval
       member_state         varchar2(20)
@@ -906,11 +900,11 @@ security_inherit_p = 'f'
     </programlisting>
 
     <para>
-      The <computeroutput><xref linkend="acs_rels">acs_rels</xref></computeroutput> 
+      The <xref linkend="acs_rels"/>
       table entries would look like so: 
     </para>
 
-    <table frame="all">
+    <informaltable frame="all">
       <tgroup cols="3" align="center" colsep="1" rowsep="1">
         <colspec colname="c1"/>
         <colspec colname="c2"/>
@@ -964,7 +958,7 @@ security_inherit_p = 'f'
 	  </row>
 	</tbody>
       </tgroup>
-    </table>
+    </informaltable>
 
     <para>
       Another way of building up groups is by adding subgroups.  Suppose
@@ -972,24 +966,24 @@ security_inherit_p = 'f'
       of <emphasis>Pranksters</emphasis>.  We say that the <emphasis>Pranksters</emphasis> group
       is <emphasis role="strong">composed</emphasis> of 
       groups <emphasis>Merry Pranksters</emphasis> and <emphasis>Sad Pranksters</emphasis>.  This
-      information is stored in the <computeroutput><xref linkend="acs_rels">acs_rels</xref></computeroutput>
+      information is stored in the <xref linkend="acs_rels"/>
       and <computeroutput>composition_rels</computeroutput> tables. 
     </para>
       
     <programlisting id="composition_rels" xreflabel="composition_rels">
 create table <emphasis role="bold">composition_rels</emphasis> (
     rel_id
-        constraint composition_rel_rel_id_fk references <xref linkend="acs_rels">acs_rels</xref> (rel_id)
+        constraint composition_rel_rel_id_fk references <xref linkend="acs_rels"/> (rel_id)
         constraint composition_rel_rel_id_pk primary key
 );
     </programlisting>
 
     <para>
       The relevant entries in the 
-      <computeroutput><xref linkend="acs_rels">acs_rels</xref></computeroutput> look like so. 
+      <xref linkend="acs_rels"/> look like so. 
     </para>
 
-    <table frame="all">
+    <informaltable frame="all">
       <tgroup cols="3" align="center" colsep="1" rowsep="1">
         <colspec colname="c1"/>
         <colspec colname="c2"/>
@@ -1032,7 +1026,7 @@ create table <emphasis role="bold">composition_rels</emphasis> (
 	  </row>
 	</tbody>
       </tgroup>
-    </table>
+    </informaltable>
 
     <para>
       The composition relationship means that if I add Matt, Mel, and Mary to the 
@@ -1059,16 +1053,16 @@ create table <emphasis role="bold">composition_rels</emphasis> (
  create table <emphasis role="bold">group_component_index</emphasis> (
           group_id        not null
                           constraint group_comp_index_group_id_fk
-                          references <xref linkend="groups">groups</xref> (group_id),
+                          references <xref linkend="groups"/> (group_id),
           component_id    not null
                           constraint group_comp_index_comp_id_fk
-                          references <xref linkend="groups">groups</xref> (group_id),
+                          references <xref linkend="groups"/> (group_id),
           rel_id          not null
                           constraint group_comp_index_rel_id_fk
                           references composition_rels (rel_id),
           container_id    not null
                           constraint group_comp_index_cont_id_ck
-                          references <xref linkend="groups">groups</xref> (group_id),
+                          references <xref linkend="groups"/> (group_id),
           constraint group_component_index_ck
           check (group_id != component_id),
           constraint group_component_index_pk
@@ -1080,16 +1074,16 @@ create table <emphasis role="bold">composition_rels</emphasis> (
   create table <emphasis role="bold">group_member_index</emphasis> (
       group_id
           not null
-          constraint group_member_index_grp_id_fk references <xref linkend="groups">groups</xref> (group_id),
+          constraint group_member_index_grp_id_fk references <xref linkend="groups"/> (group_id),
       member_id
           not null
-          constraint group_member_index_mem_id_fk references <xref linkend="tedious-parties">parties</xref> (party_id),
+          constraint group_member_index_mem_id_fk references <xref linkend="tedious-parties"/> (party_id),
       rel_id
           not null
-          constraint group_member_index_rel_id_fk references <xref linkend="membership_rels">membership_rels</xref> (rel_id),
+          constraint group_member_index_rel_id_fk references <xref linkend="membership_rels"/> (rel_id),
       container_id
           not null
-          constraint group_member_index_cont_id_fk references <xref linkend="groups">groups</xref> (group_id),
+          constraint group_member_index_cont_id_fk references <xref linkend="groups"/> (group_id),
       constraint group_member_index_pk
           primary key (member_id, group_id, rel_id)
   ) organization index;
@@ -1097,7 +1091,7 @@ create table <emphasis role="bold">composition_rels</emphasis> (
 
     <para>
       The <computeroutput>group_component_index</computeroutput> table stores a flattened representation of the
-      group composition hierarchy that is maintained in sync with the <computeroutput><xref linkend="acs_rels">acs_rels</xref></computeroutput>
+      group composition hierarchy that is maintained in sync with the <xref linkend="acs_rels"/>
       and <computeroutput>composition_rels</computeroutput> tables through triggers. 
     </para>
       
@@ -1105,10 +1099,10 @@ create table <emphasis role="bold">composition_rels</emphasis> (
       As far as the <computeroutput>group_member_index</computeroutput> table goes, I am not sure I understand its
       purpose.  It maintains group-member relationships that are resolved with respect
       to group composition.  Note that information stored in
-      <computeroutput><xref linkend="group_member_index">group_member_index</xref></computeroutput> can be trivially derived by joining
-      <computeroutput><xref linkend="membership_rels">membership_rels</xref></computeroutput>,
-      <computeroutput><xref linkend="acs_rels">acs_rels</xref></computeroutput>,
-      and <computeroutput><xref linkend="group_component_index">group_component_index</xref></computeroutput>. Here
+      <xref linkend="group_member_index"/> can be trivially derived by joining
+      <xref linkend="membership_rels"/>,
+      <xref linkend="acs_rels"/>,
+      and <xref linkend="group_component_index"/>. Here
       is a view that does it. (This view is <emphasis>not</emphasis> part of the OpenACS Kernel data model.)
     </para>
       
@@ -1122,15 +1116,15 @@ from
    select
      group_id, group_id as component_id
    from
-     <xref linkend="groups">groups</xref>
+     <xref linkend="groups"/>
    union
    select
      group_id, component_id
    from
      group_component_index
   ) gci,
-  <xref linkend="membership_rels">membership_rels</xref> mr,
-  <xref linkend="acs_rels">acs_rels</xref> r
+  <xref linkend="membership_rels"/> mr,
+  <xref linkend="acs_rels"/> r
 where
   mr.rel_id = r.rel_id
   and r.object_id_one = gci.component_id;
@@ -1138,7 +1132,7 @@ where
 
     <para>
       A heuristic way to verify that <computeroutput>group_member_view</computeroutput> is essentially identical
-      to <computeroutput><xref linkend="group_member_index">group_member_index</xref></computeroutput> is to compute the
+      to <xref linkend="group_member_index"/> is to compute the
       symmetric difference between the two: 
     </para>
 
@@ -1149,14 +1143,14 @@ from
   (
    select group_id, member_id from group_member_view
    minus
-   select group_id, member_id from <xref linkend="group_member_index">group_member_index</xref>
+   select group_id, member_id from <xref linkend="group_member_index"/>
   )
 union
 select
   group_id, member_id
 from
   (
-   select group_id, member_id from <xref linkend="group_member_index">group_member_index</xref>
+   select group_id, member_id from <xref linkend="group_member_index"/>
    minus
    select group_id, member_id from group_member_view
   )
@@ -1165,7 +1159,7 @@ from
     <para>
       The query returns no rows.  The important point is, if we
       have a flattened view of the composition hierarchy -- like one provided
-      by the <computeroutput><xref linkend="group_component_index">group_component_index</xref></computeroutput> table --
+      by the <xref linkend="group_component_index"/> table --
       membership relationship resolution can be computed trivially with no hierarchical
       queries involved. There is no need to keep the view in a denormalized
       table, unless doing so results in substantial performance gains.
@@ -1196,7 +1190,7 @@ from
     begin
       -- XXX This must be fixed: -1 shouldn't be hardcoded (it is the public)
       select decode(count(*),0,'f','t') into exists_p
-        from <xref linkend="acs_object_party_privilege_map">acs_object_party_privilege_map</xref>
+        from <xref linkend="acs_object_party_privilege_map"/>
        where object_id = permission_p.object_id
          and party_id in (permission_p.party_id, -1)
          and privilege = permission_p.privilege;
@@ -1208,7 +1202,7 @@ from
 
     <para>
       The function simply queries 
-      <computeroutput><xref linkend="acs_object_party_privilege_map">acs_object_party_privilege_map</xref></computeroutput>,
+      <xref linkend="acs_object_party_privilege_map"/>,
       which is a humongous view that joins three flattened hierarchies:
       the context tree, the privilege hierarchy,
       the party composition (and membership) hierarchy. As such,
@@ -1225,7 +1219,7 @@ from
     
     <programlisting>
 select count(*)
-  from <xref linkend="acs_object_party_privilege_map">acs_object_party_privilege_map</xref>;
+  from <xref linkend="acs_object_party_privilege_map"/>;
     </programlisting>
 
     <para>
@@ -1238,7 +1232,7 @@ select count(*)
         select
            object_id, party_id
         from
-           <xref linkend="acs_object_party_privilege_map">acs_object_party_privilege_map</xref>
+           <xref linkend="acs_object_party_privilege_map"/>
         where
            privilege = 'foo_create';
   begin
@@ -1278,7 +1272,7 @@ select count(*)
       one entry that needed to be deleted: 
     </para>
 
-    <table frame="all">
+    <informaltable frame="all">
       <tgroup cols="3" align="center" colsep="1" rowsep="1">
         <colspec colname="c1"/>
         <colspec colname="c2"/>
@@ -1310,7 +1304,7 @@ select count(*)
 	  </row>
 	</tbody>
       </tgroup>
-    </table>
+    </informaltable>
 
     <para>
       The above script would never get around to deleting this entry because it had
@@ -1331,8 +1325,8 @@ select
   gmm.member_id as party_id,
   ogpm.privilege
 from
-  <xref linkend="acs_object_grantee_priv_map">acs_object_grantee_priv_map</xref> ogpm,
-  <xref linkend="group_member_map">group_member_map</xref> gmm
+  <xref linkend="acs_object_grantee_priv_map"/> ogpm,
+  <xref linkend="group_member_map"/> gmm
 where
   ogpm.grantee_id = gmm.group_id
 union
@@ -1341,7 +1335,7 @@ select
   grantee_id as party_id,
   privilege
 from
-  <xref linkend="acs_object_grantee_priv_map">acs_object_grantee_priv_map</xref>;
+  <xref linkend="acs_object_grantee_priv_map"/>;
     </programlisting>
 
     <programlisting id="acs_object_grantee_priv_map" xreflabel="acs_object_grantee_priv_map">
@@ -1352,8 +1346,8 @@ select
   a.grantee_id,
   m.descendant as privilege
 from
-  <xref linkend="acs_permissions_all">acs_permissions_all</xref> a,
-  <xref linkend="acs_privilege_descendant_map">acs_privilege_descendant_map</xref> m
+  <xref linkend="acs_permissions_all"/> a,
+  <xref linkend="acs_privilege_descendant_map"/> m
 where
   a.privilege = m.privilege;
     </programlisting>
@@ -1367,8 +1361,8 @@ select
   p.grantee_id,
   p.privilege
 from
-  <xref linkend="acs_object_paths">acs_object_paths</xref> op,
-  <xref linkend="acs_permissions">acs_permissions</xref> p
+  <xref linkend="acs_object_paths"/> op,
+  <xref linkend="acs_permissions"/> p
 where
   op.ancestor_id = p.object_id;
     </programlisting>
@@ -1381,7 +1375,7 @@ select
   ancestor_id,
   n_generations
 from
-  <xref linkend="acs_object_context_index">acs_object_context_index</xref>;
+  <xref linkend="acs_object_context_index"/>;
     </programlisting>
 
     <programlisting id="group_member_map" xreflabel="group_member_map"> 
@@ -1394,7 +1388,7 @@ select
   rel_id,
   container_id
 from
-  <xref linkend="group_member_index">group_member_index</xref>;
+  <xref linkend="group_member_index"/>;
     </programlisting>
 
   </sect2>

@@ -48,7 +48,7 @@
 </xsl:template>
 
 <xsl:template match="accel">
-    <fo:inline font-text-decoration="underline" weight="bold" xsl:use-attribute-sets="monospace.properties"><xsl:call-template name="inline.charseq"/></fo:inline>
+    <fo:inline text-decoration="underline" font-weight="bold" xsl:use-attribute-sets="monospace.properties"><xsl:call-template name="inline.charseq"/></fo:inline>
 </xsl:template>
 
 </xsl:stylesheet>

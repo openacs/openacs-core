@@ -8,7 +8,7 @@
     <title>Using CVS with an OpenACS Site</title>
     
     <authorblurb>
-      by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+<para>      By <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
     </authorblurb>
     <sect1 id="cvs-service-import">
       <title>Add the Service to CVS - OPTIONAL</title>

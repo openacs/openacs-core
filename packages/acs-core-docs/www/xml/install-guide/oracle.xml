@@ -8,20 +8,17 @@
   <title>Install Oracle 8.1.7</title>
 
   <authorblurb>
-	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+	<para>By <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink></para>
   </authorblurb>
-
-  <para>
-
-	Skip this page if you're not interested in Oracle.
-
-  </para>
 
   <note>
 	<para>
+	Skip this section if you're not interested in Oracle.
+	</para>
 
-	  OpenACS &version; does not yet work with Oracle 9i
 
+	<para>
+        OpenACS &version; does not yet work with Oracle 9i
 	</para>
 
 	<para>
@@ -587,59 +584,55 @@ oracle:/where/oracle/Disk1$ ./runInstaller</programlisting>
             </para></listitem>
         </itemizedlist>
       </listitem>
-      
+
       <listitem><para>
 
           The &quot;Unix Group Name&quot; screen in the OUI:
-          
+
         </para>
-        
+
         <itemizedlist>
           <listitem><para> 
-              
+
               The Unix Group name needs to be set to
               &#39;<computeroutput>oinstall</computeroutput>&#39; ( we made
               this Unix group earlier ).
-              
+
             </para></listitem>
-          
+
           <listitem><para>
-              
+
               Click &quot;Next&quot;
-              
+
             </para></listitem>
-          
-          <listitem><para> 
-              
+
+          <listitem>
+	    <para>
               A popup window appears instantly, requesting you
               to run a script as root:
-              
-            </para></listitem>
-          
-        <itemizedlist>
-          <listitem><para>
-              
-              Debian users need to link
-              <computeroutput>/bin/awk</computeroutput> to
-              <computeroutput>/usr/bin/awk</computeroutput> before
-              running the script below
-              
             </para>
-            
+          </listitem>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+                Debian users need to link
+                <computeroutput>/bin/awk</computeroutput> to
+                <computeroutput>/usr/bin/awk</computeroutput> before
+                running the script below
+              </para>
             <programlisting>
 joueser:~$ su -
 root:~# ln -s /usr/bin/awk /bin/awk</programlisting>
           </listitem>
         </itemizedlist>
-        
-      <listitem><para>
-          
+      </listitem>
+      <listitem>
+        <para>
           Open a new terminal window, then type:
-          
         </para>
-        
-        <programlisting>
-joeuser:~$ su -
+
+        <programlisting>joeuser:~$ su -
 root:~# cd /ora8/m01/app/oracle/product/8.1.7
 root:~# ./orainstRoot.sh  
 ; You should see:
@@ -648,162 +641,124 @@ Changing groupname of /ora8/m01/app/oracle/oraInventory to oinstall.
 root:~# mkdir -p /usr/local/java
 root:~# exit
 joeuser:~$ exit</programlisting>
+
       </listitem>
 
       <listitem><para>
-          
           Click &quot;Retry&quot;
-          
         </para></listitem>
     </itemizedlist>
   </listitem>
-    
-    <listitem><para>
-        
-        The &quot;Available Products&quot; screen in the OUI:
-        
-      </para>
-      
-      <itemizedlist>
-        <listitem><para>
-            
-            Select &quot;Oracle 8i Enterprise Edition 8.1.7.1.0&quot;
-            
-          </para></listitem>
-        
-        <listitem><para>
 
+    <listitem>
+      <para>
+        The &quot;Available Products&quot; screen in the OUI:
+      </para>
+
+      <itemizedlist>
+        <listitem><para>
+            Select &quot;Oracle 8i Enterprise Edition 8.1.7.1.0&quot;
+        </para></listitem>
+
+        <listitem><para>
             Click &quot;Next&quot;
-            
           </para></listitem>
+
       </itemizedlist>
     </listitem>
-    
-    <listitem><para>
-        
+
+    <listitem>
+      <para>
         The &quot;Installation Types&quot; screen
-        
       </para>
-      
+
       <itemizedlist>
-        <listitem><para>
-            
+        <listitem>
+          <para>
             Select the &quot;Custom&quot; installation type.
-            
-          </para></listitem>
-        
+          </para>
+        </listitem>
+
         <listitem><para>
-            
             Click &quot;Next&quot;
-            
           </para></listitem>
       </itemizedlist>
     </listitem>
-    
+
     <listitem><para>
-        
         The &quot;Available Product Components&quot; screen
-        
       </para>
-      
+
       <itemizedlist>
         <listitem><para>
-            
             In addition to the defaults, make sure that &quot;Oracle SQLJ
             8.1.7.0,&quot; &quot;Oracle Protocol Support 8.1.7.0.0,&quot; and
             &quot;Linux Documentation 8.1.7.0.0&quot; are also checked.
-            
           </para></listitem>
-        
+
         <listitem><para>
-            
             Click &quot;Next&quot;
-            
           </para></listitem>
-        
+
         <listitem><para>
-            
             A progress bar will appear for about 1 minute.
-            
           </para></listitem>
       </itemizedlist>
     </listitem>
-    
+
     <listitem><para>
-        
         The &quot;Component Locations&quot; screen in the OUI
-        
       </para>
-      
+
       <itemizedlist>
         <listitem><para> 
-            
             Click on the &quot;Java Runtime Environment 1.1.8&quot; It
             should have the path
             &quot;<computeroutput>/ora8/m01/app/oracle/jre/1.1.8</computeroutput>&quot;
-            
           </para></listitem>
-        
+
         <listitem><para>
-            
             Click &quot;Next&quot;
-            
           </para></listitem>
-        
+
         <listitem><para>
-            
             A progress bar will appear for about 1 minute.
-            
           </para></listitem>
       </itemizedlist>
     </listitem>
-    
+
     <listitem><para>
-        
         The &quot;Privileged Operation System Groups&quot; screen in the
         OUI
-        
       </para>
-      
+
       <itemizedlist>
         <listitem><para>
-            
             Enter &quot;dba&quot; for &quot;Database Administrator
             (OSDBA) Group&quot;
-            
           </para></listitem>
-        
-        <listitem><para>              
 
+        <listitem><para>
             Enter &quot;dba&quot; for the &quot;Database Operator
             (OSOPER) Group&quot;
-
           </para></listitem>
 
           <listitem><para>
-
             Click &quot;Next&quot;
-
           </para></listitem>
 
         <listitem><para>
-
             A progress bar will appear for about 1 minute.
-
           </para></listitem>
       </itemizedlist>
     </listitem>
 
     <listitem><para>
-
         The &quot;Authentication Methods&quot; screen
-        
       </para>
       <itemizedlist>
         <listitem><para>
-
             Click &quot;Next&quot;
-
           </para></listitem>
       </itemizedlist>
     </listitem>
@@ -2118,8 +2073,9 @@ SQL&gt; drop tablespace <emphasis>table_space_name</emphasis> including contents
         </tbody>
       </tgroup>
     </informaltable>
+
+    <para><phrase role="cvstag">($Id$)</phrase></para>
   </sect2>
 
-  <para><phrase role="cvstag">($Id$)</phrase></para>
 
 </sect1>
