@@ -480,7 +480,7 @@ begin
   end LOOP;
 
   return ''insert into '' || v_table_name || 
-    '' ( '' || v_id_column || cols || '' ) values (new.revision_id'' ||
+    '' ( '' || v_id_column || cols || '' ) values (cr_dummy.val'' ||
     vals || '')'';
   
 end;' language 'plpgsql';
