@@ -7,7 +7,7 @@
   align="right" width="@width@" height="@height@" alt="Portrait of @first_names@ @last_name@"></a>
 </if>
 <else>
-  <if @inline_portrait_state eq "link">
+  <if @inline_portrait_state@ eq "link">
     <ul class="action-links">
       <li><a href="portrait?@portrait_export_vars@">#acs-subsite.Portrait#</a></li>
     </ul>
