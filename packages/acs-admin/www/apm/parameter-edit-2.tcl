@@ -31,7 +31,7 @@ db_transaction {
 
     apm_parameter_update $parameter_id $package_key $parameter_name $description \
 	    $default_value $datatype $section_name $min_n_values $max_n_values
-    apm_generate_package_spec $version_id
+    apm_package_install_spec $version_id
 } on_error {
     ad_return_error "Database Error" "The parameter could not be updated.  
 The database returned the following error:<p>
