@@ -31,20 +31,17 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --------------
 
+For installation instructions, please see
+http://openacs.org/doc/openacs-4/acs-admin
+
 Documentation for this system is at viewable via your favorite browser 
 at http://openacs.org/doc
 
-For installation instructions, please see
-http://openacs.org/4/
-
 Once your service is up and running, this same documenation is
-available at 
-
-http://yourservicename/www/doc/
+available at http://yourservicename/doc/
 
 The release notes for this release are available at
-packages/acs-core-docs/www/release-notes/.
+packages/acs-core-docs/www/release-notes.html
 
 Please report bugs via http://openacs.org/sdm
-
-
+and any questions and feedback at http://openacs.org/bboard/
