@@ -13,10 +13,9 @@
         <database>postgresql</database>
     </database-support>
         <owner url="mailto:jon@jongriffin.com">Jon Griffin</owner>
-        <summary>This is the ISO language reference data.</summary>
+        <summary>ISO 639-1 language reference data for acs-reference.</summary>
         <vendor url="www.mayuli.com">Mayuli Enterprises LLC</vendor>
-        <description format="text/plain">This is the ISO language reference data.
-You should use this if you are using the reference data package as many other reference data packages are dependent on this.</description>
+        <description format="text/plain">This is the ISO 639-1 language reference data (with languages names in english).</description>
 
         <provides url="ref-language" version="0.1d"/>
         <requires url="acs-kernel" version="4.6.2"/>
