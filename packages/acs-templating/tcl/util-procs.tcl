@@ -344,7 +344,10 @@ ad_proc -public template::util::list_to_lookup { values array_ref } {
 }
 
 
-ad_proc -public template::util::multirow_to_list { name } {
+ad_proc -public template::util::multirow_to_list { 
+    {-level 1}
+    name 
+} {
     generate a list structure representitive of a multirow data source
 
     @param name the name of an existing multirow data source
@@ -355,13 +358,14 @@ ad_proc -public template::util::multirow_to_list { name } {
     @see proc template::util::list_to_multirow
 } {
 
-  upvar $name:rowcount rowcount
+  upvar $level $name:rowcount rowcount
 
   set rows [list]
 
   for { set i 1 } { $i <= $rowcount } { incr i } {
 
-    upvar $name:$i row
+    upvar $level $name:$i row
+
     lappend rows [array get row]
   }
 
