@@ -107,7 +107,7 @@ ad_proc ds_link {} {
 	
 	set ds_url [ds_support_url]
 	if {![empty_string_p $ds_url]} {
-	    append out "<a href=\"${ds_url}request-info?request=$ad_conn(request)\">Developer Information</a><br />"
+	    append out "<a href=\"${ds_url}\">Developer Support Home</a> - <a href=\"${ds_url}request-info?request=$ad_conn(request)\">Request Information</a><br />"
 	} else {
 	    ns_log Error "ACS-Developer-Support: Unable to offer link to Developer Support \
 		    because it is not mounted anywhere."
