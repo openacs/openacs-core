@@ -405,7 +405,7 @@ look at the code <ulink url="http://cvs.openacs.org/cvs/openacs-4/packages/notes
 
 ad_page_contract {
    @author you
-   @cvs-id $Id$
+   @cvs-id &#x0024;Id$
 } -properties {
   notes:multirow
   context_bar:onevalue
