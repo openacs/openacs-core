@@ -30,7 +30,7 @@ The install.sh script can also be used to perform a full .LRN test
 data setup, or to only perform a cvs checkout, or only recreate the
 database. Invoke install.sh --help to see command line switches.
 
-*** Prerequisites
+*** Prerequisites in full
 
 1) If you already have a server running that is to be recreated - move
 away and save any local changes (patches) that you have made to the
@@ -70,3 +70,8 @@ as root.
 http://tclwebtest.sourceforge.net) and specify the directory the
 tclwebtest executable resides in in your config file (the default
 config file is config.tcl).
+
+*** FAQ
+
+Q: How do I copy files into the source tree after checkout, but before install?
+A: You can specify 

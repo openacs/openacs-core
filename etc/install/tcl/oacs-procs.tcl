@@ -25,17 +25,14 @@ ad_proc ::twt::oacs::user_id_from_email { email } {
     "]
 }
 
-ad_proc ::twt::oacs::get_classes_to_join { email } {
-    Return a list of ids for classes that the user with
-    given email can join.
+ad_proc ::twt::oacs::get_class_to_join { user_id } {
+    Return community_id of a random class that the user can join.
 } {
-    set user_id [user_id_from_email $email]
-
-    return [::twt::oacs::eval "
+    set community_ids [::twt::oacs::eval "
         db_list can_join_community_ids {
             select community_id
             from dotlrn_class_instances_full
-            where dotlrn_class_instances_full.join_policy <> 'closed'
+            where dotlrn_class_instances_full.join_policy = 'open'
             and not exists (select 1
                             from dotlrn_member_rels_full
                             where dotlrn_member_rels_full.user_id = '$user_id'
@@ -43,22 +40,23 @@ ad_proc ::twt::oacs::get_classes_to_join { email } {
 
         }
     "]
+        
+    return [::twt::get_random_items_from_list $community_ids 1]
 }
 
-ad_proc ::twt::oacs::get_clubs_to_join { email } {
-    Return a list of ids for clubs that the user with
-    given email can join.
+ad_proc ::twt::oacs::get_club_to_join { user_id join_policy } {
+    Return community_id of a random club that the user can join.
 } {
-    set user_id [user_id_from_email $email]
-
     return [::twt::oacs::eval "
         db_list can_join_club_ids {
             select f.community_id
                 from dotlrn_clubs_full f
-                where f.join_policy <> 'closed'
+                where f.join_policy = '$join_policy'
                   and f.club_id not in (select dotlrn_member_rels_full.community_id as club_id
                                           from dotlrn_member_rels_full
                                          where dotlrn_member_rels_full.user_id = '$user_id')
         }
     "]
+
+    return [::twt::get_random_items_from_list $community_ids 1]
 }
