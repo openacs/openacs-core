@@ -7,5 +7,7 @@
 </p>
 
 <p>
-  <a href="@yes_url@">Delete</a> - <a href="@no_url@">Cancel, do not delete</a>
+  <a href="@yes_url@" class="button">Delete</a> 
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="@no_url@" class="button">Cancel, do not delete</a>
 </p>
