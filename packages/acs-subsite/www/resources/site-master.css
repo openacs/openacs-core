@@ -225,6 +225,7 @@ a.subsite-section:hover {
 div.subsite-context-bar {
   font-size: 85%;
   margin-bottom: 4px;
+  position: relative;
 }
 
 h1 {
