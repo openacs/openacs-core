@@ -30,6 +30,7 @@ source ./functions.sh
 serverroot=`get_config_param serverroot`
 aolserver_user=`get_config_param aolserver_user`
 aolserver_group=`get_config_param aolserver_group`
+packages_list=`get_config_param packages_list`
 
 echo "$0: Starting checkout for server path $serverroot with config_file $config_file and dotlrn=$dotlrn"
 
@@ -63,10 +64,19 @@ cvs -q -z3 -d :pserver:anonymous@openacs.org:/cvsroot checkout $oacs_branch_swit
 mv ${serverroot}-tmp/openacs-4 ${serverroot}
 rmdir ${serverroot}-tmp
 
+cd ${serverroot}/packages
+
+if [ -n "$packages_list" ]; then
+    # Checkout additional packages (modules)
+    for package in $packages_list
+    do
+      cvs -q -z3 -d :pserver:anonymous@openacs.org:/cvsroot checkout $oacs_branch_switch $package
+    done
+fi
+
 if [ $dotlrn == "yes" ]; then
     # Checkout needed packages
     echo "$0: Checking out packages from branch $oacs_branch"
-    cd ${serverroot}/packages
     cvs -q -z3 -d :pserver:anonymous@openacs.org:/cvsroot co $oacs_branch_switch dotlrn-prereq
 
     # Checkout .LRN

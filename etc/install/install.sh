@@ -170,6 +170,7 @@ aolserver_group=`get_config_param aolserver_group`
 admin_email=`get_config_param admin_email`
 admin_password=`get_config_param admin_password`
 aolserver_config_file=`get_config_param aolserver_config_file`
+install_xml_file=`get_config_param install_xml_file`
 
 # If pre/post checkout scripts have been provided, check that they can
 # be executed
@@ -328,6 +329,9 @@ if parameter_true $do_install; then
   if [ $dotlrn == "yes" ]; then
     # Make sure the dotlrn/install.xml file is at the server root
     cp $serverroot/packages/dotlrn/install.xml $serverroot
+  elif [ -n "$install_xml_file" ]; then
+      # Copy specified install.xml file
+      cp ${install_xml_file} $serverroot
   fi
 
   # Install OpenACS
