@@ -2600,7 +2600,11 @@ ad_proc -public ad_returnredirect {
     @see util_user_message
     @see ad_script_abort
 } {
-    util_user_message -message $message
+    if { [string is false $html_p] } {
+      	util_user_message -message $message
+    } else {
+      	util_user_message -message $message -html
+    }
 
     if { [util_complete_url_p $target_url] } {
         # http://myserver.com/foo/bar.tcl style - just pass to ns_returnredirect
@@ -2629,13 +2633,7 @@ ad_proc -public ad_returnredirect {
         util_ReturnMetaRefresh $url 
     } else {
         ns_returnredirect $url
-    }
-    
-    if { [string is false $html_p] } {
-	util_user_message -message $message
-    } else {
-	util_user_message -message $message -html
-    }
+    }    
 }
 
 ad_proc -public util_user_message { 
