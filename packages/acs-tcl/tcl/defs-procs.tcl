@@ -636,8 +636,8 @@ ad_proc -deprecated ad_parameter {
 } {
     Package instances can have parameters associated with them.  This function is used for accessing  
     and setting these values.  Parameter values are stored in the database and cached within memory.
-    New parameters can be created with the <a href=\"/acs-admin/apm/\">APM</a> and values can be set
-    using the <a href=\"/admin/site-map\">Site Map UI.</a>.  Because parameters are specified on an instance
+    New parameters can be created with the <a href="/acs-admin/apm/">APM</a> and values can be set
+    using the <a href="/admin/site-map">Site Map UI.</a>.  Because parameters are specified on an instance
     basis, setting the package_key parameter (preserved from the old version of this function) does not 
     affect the parameter retrieved.  If the code that calls ad_parameter is being called within the scope
     of a running server, the package_id will be determined automatically.  However, if you want to use a

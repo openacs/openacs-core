@@ -1002,7 +1002,7 @@ ad_proc -public -deprecated ad_acs_admin_id {} {
 ad_proc -public ad_conn {args} {
 
   Returns a property about the connection. See the <a
-  href="/doc/acs-kernel/request-processor/design.html">request
+  href="/doc/request-processor.html">request
   processor documentation</a> for a list of allowable values. If -set
   is passed then it sets a property.
 

@@ -22,7 +22,8 @@ ad_proc api_page_documentation_mode_p { } {
     Determines whether the thread is in "gathering documentation" or "executing the page" mode.
 
     @return true if the thread is in "gathering documentation" mode, or false otherwise.
-    @see doc_set_page_documentation_mode_p
+
+    @see doc_set_page_documentation_mode
 
 } {
     global ad_conn
