@@ -2299,7 +2299,7 @@ begin
       values
       (v_version_id, apm_pkg_ver__package_key, apm_pkg_ver__version_name, 
        apm_pkg_ver__version_uri, coalesce(apm_pkg_ver__summary,''''), 
-       apm_pkg_ver__description_format, coalesce(apm_pkg_ver__description,''''),
+       coalesce(apm_pkg_ver__description_format,''''), coalesce(apm_pkg_ver__description,''''),
        apm_pkg_ver__release_date, coalesce(apm_pkg_ver__vendor,''''), coalesce(apm_pkg_ver__vendor_uri,''''),
        apm_pkg_ver__installed_p, apm_pkg_ver__data_model_loaded_p);
 
