@@ -227,22 +227,21 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
 
     util_unlist $filter_info filter_index debug_p arg_count proc arg
 
-#      if { $debug_p } {
-#      ns_log "Notice" "Invoking $why filter $proc"
-#      }
     rp_debug -debug $debug_p "Invoking $why filter $proc"
 
     switch $arg_count {
 	0 { set errno [catch { set result [$proc] } error] }
 	1 { set errno [catch { set result [$proc $why] } error] }
 	2 { set errno [catch { set result [$proc $conn $why] } error] }
-	default { set errno [catch {
-	  ad_try {
-	    set result [$proc $conn $arg $why]
-	  } ad_script_abort val {
-	    set result "filter_return"
-	  }
-	} error] }
+	default {
+            set errno [catch {
+                ad_try {
+                    set result [$proc $conn $arg $why]
+                } ad_script_abort val {
+                    set result "filter_return"
+                }
+            } error] 
+        }
     }
 
     global errorCode
@@ -258,22 +257,21 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
 	    [string compare $result "filter_return"] } {
        set error_msg "error in filter $proc for [ns_conn method] [ns_conn url]?[ns_conn query].  Filter returned invalid result \"$result\""
        ad_call_proc_if_exists ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] $startclicks [clock clicks] "error" $error_msg]
-        # report the bad filter_return message
-        rp_debug -debug t error $error_msg
+       # report the bad filter_return message
+       rp_debug -debug t error $error_msg
        rp_report_error -message $error_msg
-	set result "filter_return"
+       set result "filter_return"
     } else {
        ad_call_proc_if_exists ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] $startclicks [clock clicks] $result]
     }
 
-#      if { $debug_p } {
-#      ns_log "Notice" "Done invoking $why filter $proc (returning $result)"
-#      }
     rp_debug -debug $debug_p "Done invoking $why filter $proc (returning $result)"
 
-    if { [string compare $result "filter_return"] } {
-      rp_finish_serving_page
-    }
+# JCD: Why was this here?  the rp_finish_serving_page is called inside the 
+# handlers and this handles trace filters 
+#    if { [string compare $result "filter_return"] } {
+#      rp_finish_serving_page
+#    }
 
     return $result
 }
@@ -287,9 +285,6 @@ ad_proc -private rp_invoke_proc { conn argv } {
 
     util_unlist $argv proc_index debug_p arg_count proc arg
 
-#      if { $debug_p } {
-#      ns_log "Notice" "Invoking registered procedure $proc"
-#      }
     rp_debug -debug $debug_p "Invoking registered procedure $proc"
 
     switch $arg_count {
@@ -315,9 +310,6 @@ ad_proc -private rp_invoke_proc { conn argv } {
       ad_call_proc_if_exists ds_add rp [list registered_proc [list $proc $arg] $startclicks [clock clicks]]
     }
 
-#      if { $debug_p } {
-#        ns_log "Notice" "Done invoking registered procedure $proc"
-#      }
     rp_debug -debug $debug_p "Done Invoking registered procedure $proc"
 
     rp_finish_serving_page
@@ -326,8 +318,7 @@ ad_proc -private rp_invoke_proc { conn argv } {
 ad_proc -private rp_finish_serving_page {} {
     global doc_properties
     if { [info exists doc_properties(body)] } {
-        set l [string length $doc_properties(body)]
-       rp_debug "Returning page: $l [ad_quotehtml [string range $doc_properties(body) 0 100]]"
+        rp_debug "Returning page:[info level [expr [info level] - 1]]: [ad_quotehtml [string range $doc_properties(body) 0 100]]"
 	doc_return 200 text/html $doc_properties(body)
     }
 }
@@ -467,6 +458,10 @@ ad_proc -private rp_filter { why } {
     ad_conn -set request [nsv_incr rp_properties request_count]
     ad_conn -set user_id 0
     ad_conn -set start_clicks [clock clicks]
+
+    ad_call_proc_if_exists ds_collect_connection_info
+
+
 
     # -------------------------------------------------------------------------
     # Start of patch "hostname-based subsites"
@@ -620,25 +615,26 @@ ad_proc -private rp_filter { why } {
 
 ad_proc -private rp_debug { { -debug f } { -ns_log_level notice } string } {
 
-  Logs a debugging message, including a high-resolution (millisecond)
-  timestamp.
+    Logs a debugging message, including a high-resolution (millisecond)
+    timestamp. 
 
 } {
-    if { [util_memoize {ad_parameter -package_id [ad_acs_kernel_id] DebugP request-processor 0} 60] } {
+    if { [ad_parameter -package_id [ad_acs_kernel_id] DebugP request-processor 0] } { 
 	global ad_conn
 	set clicks [clock clicks]
         ad_call_proc_if_exists ds_add rp [list debug $string $clicks $clicks]
     }
-    if {
-        [util_memoize {ad_parameter -package_id [ad_acs_kernel_id] LogDebugP request-processor 0} 60] || [string equal $debug t] || [string equal $debug 1]
-    } {
+    if { [ad_parameter -package_id [ad_acs_kernel_id] LogDebugP request-processor 0]
+         || [string equal $debug t] 
+         || [string equal $debug 1]
+     } {
 	global ad_conn
 	if { [info exists ad_conn(start_clicks)] } {
-           set timing " ([expr {([clock clicks] - $ad_conn(start_clicks))/1000.0}] ms)"
+            set timing " ([expr {([clock clicks] - $ad_conn(start_clicks))/1000.0}] ms)"
 	} else {
-           set timing ""
+            set timing ""
 	}
-       ns_log $ns_log_level "RP$timing: $string"
+        ns_log $ns_log_level "RP$timing: $string"
     }
 }
 
@@ -657,9 +653,7 @@ ad_proc rp_report_error {
 
     set error_url [ad_conn url]
 
-    if { [llength [info procs ds_collection_enabled_p]] == 1 && [ds_collection_enabled_p] } {
-	ad_call_proc_if_exists ds_add conn error $message
-    }
+    ad_call_proc_if_exists ds_add conn error $message
 
     if {![ad_parameter -package_id [ad_acs_kernel_id] "RestrictErrorsToAdminsP" dummy 0] || \
 	[permission::permission_p -object_id [ad_conn package_id] -privilege admin] } {
@@ -725,8 +719,6 @@ ad_proc -private rp_handler {} {
   the server.
 
 } {
-  ad_call_proc_if_exists ds_collect_connection_info
-
   # JCD: keep track of rp_handler call count to prevent dev support from recording 
   # information twice when for example we get a 404 internal redirect. We should probably 
   set recursion_count [ad_conn recursion_count] 
