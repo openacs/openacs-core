@@ -199,16 +199,13 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/
 	<title>Compile and install PostgreSQL</title>
 	<para>
 	  Change to the postgres user and run <computeroutput>./configure</computeroutput> to set the compilation options automatically. This is the point at which you can
-	  configure PostgreSQL in various ways. For example, if you want to
-	  enable
-	  Unicode<indexterm><primary>Unicode</primary><secondary>in PostgreSQL</secondary></indexterm> support, add the flags <computeroutput>--enable-locale</computeroutput> and <computeroutput>--enable-multibyte</computeroutput>. If you want to see what the other possibilities are, run <computeroutput>./configure --help</computeroutput>.
+	  configure PostgreSQL in various ways. For example, if you are installing on "OS X" add the flags <computeroutput> --with-includes=/sw/include/ --with-libraries=/sw/lib</computeroutput>. If you want to see what the other possibilities are, run <computeroutput>./configure --help</computeroutput>.
 	</para>
       </formalpara>
           <para>On debian woody (stable, 3.0), do <computeroutput>./configure --without-readline --without-zlib</computeroutput>.</para>
       <screen>[root src]# <userinput>su - postgres</userinput>
 [postgres pgsql]$<userinput> cd /usr/local/src/postgresql-7.4.5</userinput>
-[postgres postgresql-7.4.5]$ <userinput>./configure --with-includes=/sw/include/ --with-libraries=/sw/lib --enable-locale --enable-multibyte \
-  --enable-syslog --enable-unicode-conversion --enable-recode </userinput>
+[postgres postgresql-7.4.5]$ <userinput>./configure</userinput>
 creating cache ./config.cache
 checking host system type... i686-pc-linux-gnu
 (many lines omitted>
@@ -228,7 +225,7 @@ Thank you for choosing PostgreSQL, the most advanced open source database
 engine.
 <action>su - postgres
 cd /usr/local/src/postgresql-7.4.5
-/configure --with-includes=/sw/include/ --with-libraries=/sw/lib --enable-locale --enable-multibyte --enable-syslog --enable-unicode-conversion --enable-recode
+./configure 
 make all
 make install</action></screen>
     </listitem>
