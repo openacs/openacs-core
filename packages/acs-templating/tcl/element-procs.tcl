@@ -348,7 +348,6 @@ ad_proc -private template::element::validate { form_id element_id } {
 
   # if the element is optional and the value is an empty string, then ignore
   if { $is_optional && [string equal [lindex $values 0] {}] } {
-
     set values [list]
 
     # also clobber the value(s) for a submit widget
