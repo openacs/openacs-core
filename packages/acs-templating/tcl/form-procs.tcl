@@ -120,6 +120,12 @@ ad_proc -public template::form::create { id args } {
 } {
   set level [template::adp_level]
 
+  # bump the form_count for widgets that use javascript to navigate through
+  # the form (liberated from my Greenpeace work ages ago)
+
+  global ad_conn    
+  incr ad_conn(form_count)
+
   # keep form properties and a list of the element items
   upvar #$level $id:elements elements $id:properties opts
 
