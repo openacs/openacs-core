@@ -185,8 +185,8 @@ ad_proc -private lang::message::format {
 
     Here is an example:
 
-    set localized_message "The %frog% jumped across the %fence%. About 50% of the time, he stumbled, or maybe it was %%20 %times%."
-    set value_list {frog frog fence fence}
+    set localized_message "The %animal% jumped across the %barrier%. About 50% of the time, he stumbled, or maybe it was %%20 %times%."
+    set value_list { animal "frog" barrier "fence" }
 
     puts "[format $localized_message $value_list]"
     
@@ -383,7 +383,8 @@ ad_proc -public lang::message::lookup {
                         set message [nsv_get lang_message_$locale $key]
                     } else {
                         ns_log Error "lang::message::lookup: Key '$key' does not exists in en_US"
-                        set message "NO KEY: $key"
+                        #set message "NO KEY: $key"
+                        set message {}
                     }
                 }
             }
@@ -512,15 +513,26 @@ ad_proc -public _ {
     Short hand proc that invokes the lang::message::lookup proc. 
     Returns a localized text from the message catalog with the locale ad_conn locale
     if invoked within a request, or the system locale otherwise.
-    
+
+    <p>
+
+    Example: 
+<pre>
+    set the_url [export_vars -base "[ad_conn package_url]view" { item_id }]
+    set body [_ my-package.lt_To_view_this_item [list item_url $the_url]]
+</pre>
+
+    If the message value is "To view this item, please click here: %item_url%", then the URL will be insert into the message.
+
     @param key        Unique identifier for this message. Will be the same identifier
                       for each locale. The key is on the format package_key.message_key
 
-    substitution_list A list of values to substitute into the message. This argument should
-                      only be given for certain messages that contain place holders (on the syntax
+    @param substitution_list 
+                      A list of values to substitute into the message on the form { name value name value ... }. 
+                      This argument should only be given for certain messages that contain place holders (on the syntax
                       %1:pretty_name%, %2:another_pretty_name% etc) for embedding variable values.
                       If the message contains variables that should be interpolated and this argument
-                      is not provided then upvar will be used to fetch the varialbe values.
+                      is not provided then upvar will be used to fetch the variable values.
 
     @return           A localized message
     
@@ -529,6 +541,7 @@ ad_proc -public _ {
     @author Christian Hvid (chvid@collaboraid.biz)
 
     @see lang::message::lookup
+    @see lang::message::format
 } {
     return [lang::message::lookup "" $key "TRANSLATION MISSING" $substitution_list]
 }
