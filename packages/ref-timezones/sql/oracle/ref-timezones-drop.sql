@@ -16,6 +16,7 @@ begin
     acs_reference.delete(v_repository_id);
 end;
 /
+show errors;
 
 drop sequence timezone_seq;
 drop table    timezone_rules;

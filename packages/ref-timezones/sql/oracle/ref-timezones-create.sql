@@ -43,7 +43,7 @@ end;
 
 -- The following table stores the rules for converting between
 -- local and UTC time. Each rule is specified by timezone, its
--- gmt_offset, and the times during which it applies. 
+-- gmt_offset in seconds, and the times during which it applies. 
     
 create table timezone_rules (
     -- which timezone does this rule apply to?
@@ -58,7 +58,7 @@ create table timezone_rules (
     -- local start/end time of this rule
     local_start		date,
     local_end		date,
-    -- GMT offset in fractions of day (UTC + gmt_offset = local)
+    -- GMT offset in seconds
     gmt_offset		numeric,
     -- is Daylight Savings Time in effect for this rule?
     isdst		char(1) 
@@ -68,6 +68,21 @@ create table timezone_rules (
 
 create index timezone_rules_idx1 on timezone_rules(tz_id, utc_start,   utc_end);
 create index timezone_rules_idx2 on timezone_rules(tz_id, local_start, local_end);
+
+-- DRB: This is declared as a function outside the timezones package so we can 
+-- use the same data inserts for both PG and Oracle.
+
+create or replace function rdbms_date(
+         raw_date	in varchar
+) return date
+is
+     new_date date;
+begin
+     select to_date(raw_date, 'Mon DD YYYY HH:MI:SS') into new_date from dual;
+     return new_date;
+end rdbms_date;
+/
+show errors;
 
 -------------------------------------------------------------------------------
 -- TimeZone package
@@ -279,10 +294,9 @@ as
 	       to_date(utc_end,  'Mon dd hh24:mi:ss yyyy'),
 	       to_date(local_start,'Mon dd hh24:mi:ss yyyy'),
 	       to_date(local_end,'Mon dd hh24:mi:ss yyyy'),
-	       gmt_offset / 86400,
+	       gmt_offset,
 	       decode(isdst,0,'f',1,'t'));
     end;
-
 
     function utc_to_local (
 	 tz_id     in timezones.tz_id%TYPE,
@@ -291,7 +305,7 @@ as
     is
 	 local_time date;
     begin
-	 select utc_time + gmt_offset into local_time
+	 select utc_time + gmt_offset/86400 into local_time
 	 from   timezone_rules
 	 where  tz_id  = utc_to_local.tz_id
 	 and    utc_time between utc_start and utc_end
@@ -321,7 +335,7 @@ as
     is
 	 utc_time date;
     begin
-	 select local_time - gmt_offset into utc_time
+	 select local_time - gmt_offset/86400 into utc_time
 	 from   timezone_rules
 	 where  tz_id = local_to_utc.tz_id
 	 and    local_time between local_start and local_end
@@ -349,7 +363,7 @@ as
     is
 	 v_offset integer;
     begin
-	 select round(gmt_offset*86400,0) into v_offset
+	 select gmt_offset into v_offset
 	 from   timezone_rules
 	 where  tz_id = get_offset.tz_id
 	 and    local_time between local_start and local_end
@@ -378,8 +392,8 @@ as
     is
 	 v_offset number;
     begin
-	 select decode (isdst,'t', round(gmt_offset*86400,0) - 3600, 
-                              'f', round(gmt_offset*86400,0)) into v_offset
+	 select decode (isdst,'t', gmt_offset - 3600, 
+                              'f', gmt_offset) into v_offset
 	 from   timezone_rules
 	 where  tz_id  = get_rawoffset.tz_id
 	 and    local_time between local_start and local_end
