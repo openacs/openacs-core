@@ -25,11 +25,11 @@ if { [ns_queryexists done_p] } {
   if { [ad_verify_install] } {
     install_return 200 "OpenACS Installation Complete" "
 
-You have successfully installed the OpenACS Community System!
+You have successfully installed the Open Architecture Community System (OpenACS)!
 
 <p> Your server process has been terminated.  Unless you have configured your
 web server to restart automatically, as outlined in the 
-<a href=\"http://openacs.org/4/\">ACS 4.x Installation Guide</a>, 
+<a href=\"http://openacs.org/doc/openacs-4/\">OpenACS 4.x Installation Guide</a>, 
 you will need to start your web server again.
 When the web server restarts, OpenACS will be fully functional and you can reload 
 this page to access the running web server.
@@ -49,7 +49,7 @@ using the <a href=\"http://openacs.org/sdm/\">SDM</a>.
 
 set body "
 
-Thank you for installing the OpenACS Community System,
+Thank you for installing the Open Architecture Community System (OpenACS),
 a suite of fully-integrated enterprise-class solutions
 for collaborative commerce.
 This is the OpenACS Installer which performs all the steps necessary
@@ -71,12 +71,12 @@ if { [nsv_exists acs_properties database_problem] } {
 
 <p><b>The first step involved in setting up your OpenACS
 installation is to configure your RDBMS, correctly install a database driver,
-and configure OpenNSD to use it.  You can download 
-and install the latest version of the ArsDigita Oracle driver for
-OpenNSD from the <a href=\"http://www.arsdigita.com/download/\">ArsDigita Web site</a>
-and the latest version of the OpenACS Postgres driver from the
-<a href=\"http://openacs.org/download\">OpenAcs Web site</a>.<p>
-Once you're sure everything is installed and configured correctly, restart OpenNSD.</b></p>
+and configure AOLserver to use it.  You can download 
+and install the latest version of the AOLserver Oracle and PostgreSQL drivers
+from the <a href='http://openacs.org/software.adp'>OpenACS.org Software Page</a>.
+
+<p>
+Once you're sure everything is installed and configured correctly, restart AOLserver.</b></p>
 "
     install_return 200 "Error" $body
     return
@@ -114,7 +114,7 @@ if { [string range [info tclversion] 0 0] < 8 } {
     set error_p 1
 }
  
-# OpenNSD must support ns_cache.
+# AOLserver must support ns_cache.
 if {[llength [info commands ns_cache]] < 1} {
     append errors "<li><p><strong>The <code>ns_cache</code> module is not installed.  This
 is required to support the OpenACS Security system.  Please make sure that <code>ns_cache</code>
@@ -133,18 +133,18 @@ After adding <code>ns_cache</code>, please restart your web server.
     set error_p 1
 } 
 
-# OpenNSD must have XML parsing.
+# AOLserver must have XML parsing.
 if {![xml_support_ok xml_status_msg]} {
-    append errors "XML support for OpenNSD is problematic:<p> $xml_status_msg"
+    append errors "Problems with XML support for AOLserver:<p> $xml_status_msg"
     set error_p 1
 } 
 
-# OpenNSD must support the "fancy" ADP parser.
+# AOLserver must support the "fancy" ADP parser.
 set adp_support [ns_config "ns/server/[ns_info server]/adp" DefaultParser]
 if { [string compare $adp_support "fancy"] } {
     append errors "<li><p><strong>The fancy ADP parser is not enabled.  This is required to support 
 the OpenACS Templating System.  Without this templating system, none of the OpenACS pages installed by default
-will display.  Please add the following to your OpenNSD configuration file (usually in 
+will display.  Please add the following to your AOLserver configuration file (usually in 
 <code>/home/aol30/yourservname.ini</code>) or see the <a href=\"/doc/install-guide/\">Installation Guide</a> for 
 more information.<p>
 <blockquote><pre>
@@ -157,13 +157,13 @@ After adding support for the fancy ADP parser, please restart your web server.
     set error_p 1
 }   
 
-# OpenNSD must have a large stack size (at least 128K)
+# AOLserver must have a large stack size (at least 128K)
 set stacksize [ns_config "ns/threads" StackSize]
 if { $stacksize < [expr 128 * 1024] } {
 
-    append errors "<li><p>The configured OpenNSD Stacksize is too small ($stacksize).
+    append errors "<li><p>The configured AOLserver Stacksize is too small ($stacksize).
 OpenACS requires a StackSize parameter of at least 131072 (ie 128K).
-Please add the following to your OpenNSD configuration file or 
+Please add the following to your AOLserver configuration file or 
 see the <a href=\"/doc/install-guide/\">Installation Guide</a> for more information.<p>
 <blockquote><pre>
 \[ns/threads\] 
