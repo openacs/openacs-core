@@ -696,7 +696,7 @@ ad_proc -public template::multirow {
     size {
       upvar $multirow_level_up $name:rowcount rowcount
       if { [template::util::is_nil rowcount] } {
-        error "malformed multirow datasource - $name"
+          return 0
       }
       return $rowcount
     }
