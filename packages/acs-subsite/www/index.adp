@@ -35,11 +35,13 @@
       <include src="/packages/acs-subsite/lib/subsites">
     </td>
   </tr>
+  <if @show_members_page_link_p@>
   <tr>
-    <td>
+    <td valign="top" colspan="2">
       <p> <b>&raquo;</b> <a href="members/">Members</a> </p>
     </td>
   </tr>
+  </if>
 </table>
   
 

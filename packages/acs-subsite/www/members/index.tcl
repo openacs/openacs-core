@@ -23,9 +23,13 @@ set user_id [ad_conn user_id]
 #    - does user have delete on group?
 set admin_p [ad_permission_p -user_id $user_id $group_id "admin"]
 
-if { !$admin_p && ![parameter::get -parameter "MembersCanSeeMembersP" -default 1] } {
-    ad_return_forbidden "Cannot see the members list" "I'm sorry, but you're not allowed to view the members list"
-    ad_script_abort
+set show_member_list_to [parameter::get -parameter "ShowMembersListTo" -default 2]
+if { $admin_p || ($user_id != 0 && $show_member_list_to == 1) || \
+    $show_member_list_to == 0} {
+    set show_members_list_p 1
+} else {
+    set show_members_list_p 0
+    set title "Cannot see the members list"
 }
 
 if { $admin_p } {

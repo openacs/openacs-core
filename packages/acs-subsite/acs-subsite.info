@@ -7,14 +7,14 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.0d5" url="http://www.openacs.org/repository/download/apm/acs-subsite-5.0d5.apm">
+    <version name="5.0d6" url="http://www.openacs.org/repository/download/apm/acs-subsite-5.0d6.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Provides the ability to create subsite within the OpenACS Community System.</summary>
-        <release-date>2003-09-12</release-date>
+        <release-date>2003-10-10</release-date>
         <vendor url="http://www.openacs.org/">OpenACS</vendor>
         <description format="text/html">Aware of parties, groups, users, portraits, ...</description>
 
-        <provides url="acs-subsite" version="5.0d5"/>
+        <provides url="acs-subsite" version="5.0d6"/>
         <requires url="acs-content-repository" version="5.0d1"/>
         <requires url="acs-kernel" version="5.0d13"/>
         <requires url="acs-tcl" version="5.0d1"/>
@@ -46,6 +46,8 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRequiresApprovalP"  default="0" description="set this to 1 if user does not go live immediately" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRequiresEmailVerificationP"  default="0" description="set this to 1 if the user has to receive and email and come back to the site" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RestrictToSSL"  default="admin/*" description="URLs we want restricted to SSL. Note that this only takes effect if you have an SSL listener configured on your AOLserver and kernel parameter RegisterRestrictToSSLFilters is set to 1 (its default)."/>
+            <parameter datatype="string" min_n_values="1" max_n_values="1" name="ShowMembersListTo" default="1" description="Who can see the subsite members list. 0: Everyone. 1: Registered users. 2: Only administrators." />
+            <parameter datatype="string" min_n_values="1" max_n_values="1" name="MembersCanInviteMembersP" default="0" description="Set this to 1 if you want to allow members to invite other members." section_name="user-info"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ShowContextBarP"  default="1" description="Should context bars appear on pages?"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SolicitPortraitP"  default="1" description="Set this to 1 if you want users to be asked to submit a portrait." section_name="user-info"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SomeAmericanReadersP"  default="1" description="is it even worth bothering asking for state and zip code?"/>

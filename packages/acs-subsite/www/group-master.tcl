@@ -23,7 +23,7 @@ set subsite_node_id $subsite_sitenode(node_id)
 set subsite_name $subsite_sitenode(instance_name)
 
 # Where to find the stylesheet
-set css_url "/resoources/acs-subsite/group-master.css"
+set css_url "/resources/acs-subsite/group-master.css"
 
 # Context bar
 if { [template::util::is_nil no_context_p] } {
