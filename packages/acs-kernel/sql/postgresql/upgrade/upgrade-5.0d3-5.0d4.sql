@@ -16,7 +16,8 @@ create table auth_driver_params(
                       not null,
       impl_id         integer
                       constraint auth_driver_params_iid_fk
-                      references acs_sc_impls(impl_id)
+                      -- Cannot reference acs_sc_impls table as it doesn't exist yet
+                      references acs_objects(object_id)
                       constraint auth_driver_params_iid_nn
                       not null,
       key             text,
