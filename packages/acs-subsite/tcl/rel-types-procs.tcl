@@ -147,34 +147,14 @@ namespace eval rel_types {
 	set plsql [list]
 
 	# Create the actual acs object type
-	lappend plsql_drop [list "drop_type" "begin acs_rel_type.drop_type(:rel_type); end;" db_exec_plsql]
-	lappend plsql [list "create_type" {
-	 begin
-	  acs_rel_type.create_type (	
-            rel_type          => :rel_type,
-            supertype         => :supertype,
-            pretty_name       => :pretty_name,
-            pretty_plural     => :pretty_plural,
-            table_name        => :table_name,
-            id_column         => 'rel_id',
-            package_name      => :package_name,
-            object_type_one   => :object_type_one, 
-            role_one          => :role_one,
-            min_n_rels_one    => :min_n_rels_one,
-            max_n_rels_one    => :max_n_rels_one,
-            object_type_two   => :object_type_two, 
-            role_two          => :role_two,
-            min_n_rels_two    => :min_n_rels_two,
-            max_n_rels_two    => :max_n_rels_two
-	  );
-	 end;
-	} db_exec_plsql]
-
-        # Mark the type as dynamic
-        lappend plsql [list update_type "update acs_object_types set dynamic_p='t' where object_type = :rel_type" "db_dml"]
-
+	lappend plsql_drop [list db_exec_plsql drop_type {FOO}]
+	lappend plsql [list db_exec_plsql create_type {FOO}]
+	
+	# Mark the type as dynamic
+	lappend plsql [list db_dml update_type {FOO}]
+	
 	foreach pair $plsql { 
-	    eval [lindex $pair 2] [lindex $pair 0] [lindex $pair 1]
+	    eval [lindex $pair 0] [lindex $pair 1] [lindex $pair 2]
 	}
 
 	# The following create table statement commits the
@@ -186,10 +166,12 @@ namespace eval rel_types {
                    references $references_table ($references_column)
                    constraint $pk_constraint_name primary key
 	)"} errmsg] } {
+	    ns_log Notice "BEN PROBLEM : $errmsg"
+
             # Roll back our work so for
             for { set i [expr [llength $plsql_drop] - 1] } { $i >= 0 } { incr i -1 } {
-		set pair [lindex $plsql_drop $i]
-		if { [catch {db_exec_plsql [lindex $drop_pair 0] [lindex $drop_pair 1]} err_msg_2] } {
+		set drop_pair [lindex $plsql_drop $i]
+		if { [catch {eval [lindex $drop_pair 0] [lindex $drop_pair 1] [lindex $drop_pair 2]} err_msg_2] } {
 		    append errmsg "\nAdditional error while trying to roll back: $err_msg_2"
 		    return -code error $errmsg
 		}

@@ -3,6 +3,12 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
+<fullquery name="drop_role">
+<querytext>
+begin acs_rel_type.drop_role(:role);end;
+</querytext>
+</fullquery>
+
 <fullquery name="role_used_p">      
       <querytext>
       

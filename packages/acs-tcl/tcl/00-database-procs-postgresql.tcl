@@ -37,11 +37,16 @@ proc_doc db_exec_plsql { statement_name sql args } {
     db_with_handle db {
         # plsql calls that are simple selects bypass the plpgsql 
         # mechanism for creating anonymous functions (OpenACS - Dan).
+	# if a table is being created, we need to bypass things, too (OpenACS - Ben).
         set test_sql [db_qd_replace_sql $full_statement_name $sql]
         if {[regexp -nocase -- {^\s*select} $test_sql match]} {
             db_qd_log Notice "PLPGSQL: bypassed anon function"
             set selection [db_exec 0or1row $db $full_statement_name $sql]
-        } else {
+        } elseif {[regexp -nocase -- {^\s*create table} $test_sql match] || [regexp -nocase -- {^\s*drop table} $test_sql match]} {
+            db_qd_log Notice "PLPGSQL: bypassed anon function -- create/drop table"
+            set selection [db_exec dml $db $full_statement_name $sql]
+	    return ""
+	} else {
             db_qd_log Notice "PLPGSQL: using anonymous function"
             set selection [db_exec_plpgsql $db $full_statement_name $sql \
                            $statement_name]
