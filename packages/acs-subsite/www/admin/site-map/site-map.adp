@@ -21,4 +21,4 @@ function check_checkbox () {
 
 <listtemplate name="nodes"></listtemplate>
 
-<b>&raquo;</b><a href=../site-map>Return</a><br>
+<b>&raquo;</b><a href=../site-map>Return</a>&nbsp;&nbsp;<b>&raquo;</b><a href=/site-map>#acs-subsite.UserSiteMap#</a><br><br>
