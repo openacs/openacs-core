@@ -1,0 +1,3 @@
+#!/bin/sh 
+
+exec /usr/local/aolserver/bin/nsd-postgres -it /web/service0/etc/config.tcl -u service0 -g web

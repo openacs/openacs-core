@@ -1,0 +1,135 @@
+;; Red Hat Linux default .emacs initialization file
+
+;; Are we running XEmacs or Emacs?
+(defvar running-xemacs (string-match "XEmacs\\|Lucid" emacs-version))
+
+;; Set up the keyboard so the delete key on both the regular keyboard
+;; and the keypad delete the character under the cursor and to the right
+;; under X, instead of the default, backspace behavior.
+(global-set-key [delete] 'delete-char)
+(global-set-key [kp-delete] 'delete-char)
+
+;; Make the backspace key work 
+(global-set-key [?\C-h] 'delete-backward-char)
+(global-set-key [?\C-x ?h] 'help-command)
+
+
+;; Turn on font-lock mode for Emacs
+(cond ((not running-xemacs)
+       (global-font-lock-mode t)
+))
+
+;; Visual feedback on selections
+(setq-default transient-mark-mode t)
+
+;; Always end a file with a newline
+(setq require-final-newline t)
+
+;; Stop at the end of the file, not just add lines
+(setq next-line-add-newlines nil)
+
+;; Enable wheelmouse support by default
+(cond (window-system
+       (mwheel-install)
+))
+
+;; *******************************************************************
+;; set up psgml mode...
+;; use psgml-mode instead of emacs native sgml-mode
+;; from http://www.tldp.org/LDP/LDP-Author-Guide/editing.html
+
+;;(autoload 'sgml-mode "psgml" "Major mode to edit SGML files." t )
+;;(setq auto-mode-alist
+;;  (append
+;;  (list
+;;    '("\\.sgm$" . sgml-mode)
+;;    '("\\.sgml$" . sgml-mode)
+;;    )
+;;  auto-mode-alist))
+
+;; set some psgml variables
+
+(setq sgml-auto-activate-dtd t)
+(setq sgml-omittag-transparent t)
+(setq sgml-balanced-tag-edit t)  ;; If non-nil, inserting a start-tag 
+                                 ;; will also insert the corresponding 
+                                 ;; end-tag. 
+(setq sgml-auto-insert-required-elements t)
+(setq sgml-live-element-indicator t)
+(setq sgml-tag-region-if-active t)
+
+
+;; create faces to assign to markup categories
+
+(make-face 'sgml-comment-face)
+(make-face 'sgml-start-tag-face)
+(make-face 'sgml-end-tag-face)
+(make-face 'sgml-entity-face)
+(make-face 'sgml-doctype-face) ; DOCTYPE data
+(make-face 'sgml-ignored-face) ; data ignored by PSGML
+(make-face 'sgml-ms-start-face) ; marked sections start
+(make-face 'sgml-ms-end-face) ; end of marked section
+(make-face 'sgml-pi-face) ; processing instructions
+(make-face 'sgml-sgml-face) ; the SGML declaration
+(make-face 'sgml-shortref-face) ; short references
+
+;; view a list of available colors with the emacs-lisp command:
+;;
+;; list-colors-display
+;;
+;; please assign your own groovy colors, because these are pretty bad
+;; http://www.geocities.com/kensanata/colors.html is a good reference
+
+(set-face-foreground 'sgml-comment-face "gray27")
+
+(set-face-foreground 'sgml-start-tag-face "blue")
+
+(set-face-foreground 'sgml-end-tag-face "blue")
+
+(set-face-foreground 'sgml-entity-face "navy")
+
+(set-face-foreground 'sgml-doctype-face "firebrick")
+
+(set-face-foreground 'sgml-ignored-face "snow4")
+
+(set-face-foreground 'sgml-ms-start-face "navy")
+
+(set-face-foreground 'sgml-ms-end-face "navy")
+
+(set-face-foreground 'sgml-pi-face "navy")
+
+(set-face-foreground 'sgml-sgml-face "navy")
+
+(set-face-foreground 'sgml-shortref-face "navy")
+
+;; assign faces to markup categories
+
+(setq sgml-markup-faces '
+  (
+  (comment . sgml-comment-face)
+  (start-tag . sgml-start-tag-face)
+  (end-tag . sgml-end-tag-face)
+  (entity . sgml-entity-face)
+  (doctype . sgml-doctype-face)
+  (ignored . sgml-ignored-face)
+  (ms-start . sgml-ms-start-face)
+  (ms-end . sgml-ms-end-face)
+  (pi . sgml-pi-face)
+  (sgml . sgml-sgml-face)
+  (shortref . sgml-shortref-face)
+  ))
+
+;; tell PSGML to pay attention to face settings
+(setq sgml-set-face t)
+
+
+(setq sgml-mode-hook
+      '(lambda ()
+	 (setq fill-column 70
+	       indent-tabs-mode nil
+	       next-line-add-newlines nil
+	       standard-indent 2)
+	 (auto-fill-mode t)))
+
+;; ...done setting up psgml-mode.
+;; *******************************************************************
