@@ -283,7 +283,7 @@ proc apm_bootstrap_load_queries { package_key } {
         set file_type [apm_guess_file_type $package_key $file]
 
         if {[string equal $file_type query_file] &&
-            ([empty_string_p $file_type] || [string equal $file_db_type $db_type])} {
+            ([empty_string_p $file_db_type] || [string equal $file_db_type $db_type])} {
 	    db_qd_load_query_file $file
         } 
     }
