@@ -188,7 +188,7 @@ db_multirow -extend {
                     set ban_url [export_vars -base member-state-change { rel_id {member_state banned} }]
                     set delete_url [export_vars -base member-state-change { rel_id {member_state deleted} }]
                 } else {
-                    set remove_url [export_vars -base member-remove { rel_id }]
+                    set remove_url [export_vars -base member-remove { user_id }]
                 }
             }
             "needs approval" {
@@ -196,13 +196,13 @@ db_multirow -extend {
                 if { $main_site_p } {
                     set reject_url [export_vars -base member-state-change { rel_id {member_state rejected} }]
                 } else {
-                    set remove_url [export_vars -base member-remove { rel_id }]
+                    set remove_url [export_vars -base member-remove { user_id }]
                 }
             }
             "rejected" - "deleted" - "banned" {
                 set approve_url [export_vars -base member-state-change { rel_id { member_state approved } }]
                 if { !$main_site_p } {
-                    set remove_url [export_vars -base member-remove { rel_id }]
+                    set remove_url [export_vars -base member-remove { user_id }]
                 }
             }
         }
