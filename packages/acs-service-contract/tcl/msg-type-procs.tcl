@@ -3,7 +3,7 @@ ad_library {
     
     @author Lars Pind (lars@collaboraid.biz)
     @creation-date 2003-01-14
-    @cvs-id $Id$
+    @cvs-id msg-type-procs.tcl,v 1.2.2.1 2003/03/05 14:52:43 lars Exp
 }
 
 namespace eval acs_sc::msg_type {}
@@ -16,8 +16,6 @@ ad_proc -public acs_sc::msg_type::new {
     @param specification Msg type specification in the format required by the SQL proc, namely
     'foo:integer,bar:[string]'
 } {
-    ns_log Notice "LARS: Creating msg_type $name with spec $specification"
-
     db_exec_plsql insert_msg_type {}
 }
 
@@ -57,7 +55,6 @@ ad_proc -public acs_sc::msg_type::parse_spec {
     @param name Name of new msg_type
     @param spec Spec in ad_page_contract style format, namely { foo:integer bar:string,multiple }
 } {
-    ns_log Notice "LARS: msg-type-parse-spec, name=$name, spec=$spec"
 
     db_transaction { 
 

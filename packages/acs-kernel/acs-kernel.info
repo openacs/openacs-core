@@ -13,7 +13,7 @@
         <release-date>2002-10-27</release-date>
         <vendor url="http://openacs.org/">OpenACS</vendor>
 
-        <provides url="acs-kernel" version="4.6.2"/>
+        <provides url="acs-kernel" version="4.6.3"/>
 
         <files>
             <!-- No files -->
