@@ -7,13 +7,15 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
 
-    <version name="4.2" url="http://www.arsdigita.com/acs-repository/download/apm/search-4.2.apm">
+    <version name="4.5" url="http://www.openacs.org/repository/download/apm/search-4.5.apm">
     <database-support>
+        <database>oracle</database>
         <database>postgresql</database>
     </database-support>
         <owner url="mailto:k2pts@yahoo.com">Neophytos Demetriou</owner>
+        <release-date>2002-05-15</release-date>
 
-        <!-- No dependency information -->
+        <provides url="search" version="4.5"/>
 
         <files>
             <file type="package_spec" path="search.info"/>
@@ -29,6 +31,7 @@
             <file type="tcl_procs" path="tcl/search-procs.tcl"/>
             <file path="www/advanced-search.adp"/>
             <file type="tcl_util" path="www/advanced-search.tcl"/>
+            <file type="documentation" path="www/doc/guidelines.html"/>
             <file path="www/help/basics.html"/>
             <file path="www/index.adp"/>
             <file type="tcl_util" path="www/index.tcl"/>

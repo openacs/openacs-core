@@ -104,9 +104,12 @@
 		  </row>
 
 		  <row>
-			<entry>glib 2.1 (or greater)</entry> 
-			<entry>You need recent versions of
-			  these libraries for Oracle to work properly. </entry>
+			<entry>glibc 2.1 (or greater)</entry> 
+			<entry>
+			  You need recent versions of these libraries for Oracle to
+			  work properly. If you want Unicode support, you'll need glibc
+			  2.2.
+			</entry>
 		  </row>
 
 		  <row>

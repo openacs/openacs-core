@@ -7,21 +7,21 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="4.1.2" url="http://www.arsdigita.com/acs-repository/download/apm/acs-templating-4.1.2.apm">
+    <version name="4.5" url="http://www.openacs.org/repository/download/apm/acs-templating-4.5.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
     </database-support>
-        <owner url="mailto:christian@arsdigita.com">Christian Brechb</owner>
-        <owner url="mailto:karl@arsdigita.com">Karl Goldstein</owner>
+        <owner>Karl Goldstein</owner>
+        <owner>Christian Brechb</owner>
         <summary>Separate page layout and implementation.</summary>
-        <release-date>2001-02-21</release-date>
-        <vendor url="http://www.arsdigita.com/">ArsDigita Corporation</vendor>
+        <release-date>2002-05-15</release-date>
+        <vendor url="http://www.openacs.org/">OpenACS</vendor>
         <description format="text/html">The template system provides mechanisms that allow developers and graphic designers to work independently. Templates specify the layout of the page seperately from the contents of the page. Graphic designers work primarily on the layout part of the template (the template), while programmers work primarily a script that generates the the content part of the template (the code). In addition, the
 template system provides a way to use a single layout
 specification for many physical pages, so the overall layout of a site can be more easily administered.</description>
 
-        <provides url="acs-templating" version="4.1.2"/>
+        <provides url="acs-templating" version="4.5"/>
 
         <files>
             <file type="package_spec" path="acs-templating.info"/>
@@ -30,7 +30,12 @@ specification for many physical pages, so the overall layout of a site can be mo
             <file path="resources/assets/corners/lower-right.gif"/>
             <file path="resources/assets/corners/upper-left.gif"/>
             <file path="resources/assets/corners/upper-right.gif"/>
+            <file path="resources/forms/coddo.adp"/>
+            <file path="resources/forms/confirm-button.adp"/>
+            <file type="tcl_util" path="resources/forms/confirm-button.tcl"/>
             <file path="resources/forms/grid.adp"/>
+            <file path="resources/forms/plain.adp"/>
+            <file path="resources/forms/standard-lars.adp"/>
             <file path="resources/forms/standard.adp"/>
             <file path="resources/forms/tabbed-dialog.adp"/>
             <file path="resources/forms/wizard.adp"/>
@@ -324,9 +329,9 @@ specification for many physical pages, so the overall layout of a site can be mo
             <file type="documentation" path="www/doc/widgets/table.html"/>
         </files>
         <parameters>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowCompiledTemplatesP"  default="0" description="Show thecompiled template (for debugging) at .cmp URL"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowDataDictionariesP"  default="0" description="Offer data dictionaries on .dat/.fmt URL."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RefreshCache"  default="as needed" description="When to re-translate templates.  Speical values: "/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowDataDictionariesP"  default="0" description="Offer data dictionaries on .dat/.fmt URL."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowCompiledTemplatesP"  default="0" description="Show thecompiled template (for debugging) at .cmp URL"/>
         </parameters>
 
     </version>

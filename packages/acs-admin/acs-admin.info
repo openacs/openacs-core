@@ -7,18 +7,18 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="4.1.1" url="http://openacs.org/repository/download/apm/acs-admin-4.1.1.apm">
+    <version name="4.5" url="http://openacs.org/repository/download/apm/acs-admin-4.5.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
     </database-support>
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Provides an interface for administering the OpenACS Community System Installation.</summary>
-        <release-date>2001-04-27</release-date>
+        <release-date>2002-05-15</release-date>
         <vendor url="http://www.openacs.org/">OpenACS</vendor>
         <description format="text/html">A UI for administering the OpenACS system.</description>
 
-        <provides url="acs-admin" version="4.1"/>
+        <provides url="acs-admin" version="4.5"/>
 
         <files>
             <file type="package_spec" path="acs-admin.info"/>

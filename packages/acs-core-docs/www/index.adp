@@ -14,7 +14,7 @@
 <a href="http://www.openacs.org/"><img src="images/alex.jpg" align="left" border="0"></a>
 </td>
 <td valign="bottom">
-<h1>The OpenACS Community System</h1>
+<h1>The Open Architecture Community System</h1>
 </td></tr>
 </table>
 
@@ -28,7 +28,7 @@
 
 <tr><td valign="top">
 <pre><strong>For Everyone</strong>
-        - <a href="release-notes.html">OpenACS 4.2 beta Release Notes</a>
+        - <a href="release-notes.html">OpenACS 4.5 Release Notes</a>
         - <a href="http://developer.arsdigita.com/doc/release-notes/">Older Release Notes</a>
 
 <a href="acs-admin.html"><strong>For OpenACS-admins</strong></a>
@@ -96,7 +96,7 @@ Questions or comments about the documentation?
 <br>
 Please visit the
 <a href="http://openacs.org/bboard/">OpenACS bboards</a>
-or shoot email at <a href="mailto:vinod@kurup.com">vinod@kurup.com</a> or <a href="mailto:rmello@cc.usu.edu">rmello@cc.usu.edu</a>.
+or shoot email at <a href="mailto:vinod@kurup.com">vinod@kurup.com</a> or rmello at fslc.usu.edu.
 </p>
 </blockquote>
 </body>
