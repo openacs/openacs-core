@@ -300,7 +300,7 @@ ad_proc -public publish::handle::image { item_id args } {
 
   # If an error happened, abort
   if { ![template::util::is_nil error_msg] } {
-    ns_log notice "WARNING: $error_msg"
+    ns_log Warning "publish::handle::image: WARNING: $error_msg"
     return ""
   }
 
@@ -381,11 +381,11 @@ ad_proc -private publish::merge_with_template { item_id args } {
   set ::content::template_url [item::get_template_url $item_id]    
 
   if { [string equal $::content::template_url {}] } { 
-    ns_log notice "MERGE: No template for item $item_id"
+    ns_log Warning "publish::merge_with_template: no template for item $item_id"
     return "" 
   }
 
-  ns_log notice "MERGE: Template for item $item_id is $::content::template_url"
+  ns_log debug "publish::merge_with_template: template for item $item_id is $::content::template_url"
 
   # Get the full path to the template
   set root_path [content::get_template_root]
@@ -400,7 +400,7 @@ ad_proc -private publish::merge_with_template { item_id args } {
 
   # Parse the template and return the result
   publish::push_id $item_id $revision_id
-  ns_log notice "MERGE: Parsing $file_stub"
+  ns_log debug "publish::merge_with_template: parsing $file_stub"
   set html [eval "template::adp_parse \"$file_stub\" \[list $adp_args\]"]
   publish::pop_id
 
@@ -612,7 +612,7 @@ ad_proc -private publish::handle_item { item_id args } {
   }
 
   if { [template::util::is_nil revision_id] } {
-    ns_log notice "HANDLER: No live revision for $item_id"
+    ns_log warning "publish::handle_item: No live revision for $item_id"
     return ""
   }
 
@@ -632,18 +632,18 @@ ad_proc -private publish::handle_item { item_id args } {
   if { ![info exists opts(refresh)] && \
         [info exists revision_html($revision_key)] } {
 
-    ns_log notice "HANDLER: Fetching $item_id from cache"
+    ns_log debug "publish::handle_item: Fetching $item_id from cache"
     return $revision_html($revision_key)
 
   } else {
 
     # Render the item and cache it
-    ns_log notice "HANDLER: Rendering item $item_id"
+    ns_log debug "publish::handle_item: Rendering item $item_id"
     item::get_mime_info $revision_id mime_info
     set item_handler [get_mime_handler $mime_info(mime_type)]
   
     if { [template::util::is_nil item_handler] } {
-      ns_log notice "HANDLER: No mime handler for mime type $mime_info(mime_type)"
+      ns_log warning "publish::handle_item: No mime handler for mime type $mime_info(mime_type)"
       return ""
     }
 
@@ -657,7 +657,7 @@ ad_proc -private publish::handle_item { item_id args } {
     }
 
     set html [eval $code]
-    ns_log notice "HANDLER: Caching html for revision $revision_id"
+    ns_log debug "publish::handle_item: Caching html for revision $revision_id"
     set revision_html($revision_key) $html
     
     return $html
@@ -857,7 +857,7 @@ ad_proc -private publish::foreach_publish_path { url code {root_path ""} } {
   upvar current_page_root current_page_root
 
   foreach root_path $paths {
-    ns_log Notice "FOREACH_PUBLISH_PATH: root_path: $root_path"
+    ns_log debug "publish::foreach_publish_path: root_path: $root_path"
     set current_page_root $root_path
     set filename [ns_normalizepath "/$root_path/$url"]   
     uplevel $code
@@ -895,7 +895,7 @@ ad_proc -private publish::write_multiple_blobs {
     " -file $filename
       
     ns_chmod $filename 0764
-    ns_log notice "PUBLISH: Wrote revision $revision_id to $filename"
+    ns_log debug "publish::write_multiple_blobs: Wrote revision $revision_id to $filename"
   } $root_path
 }
   
@@ -914,12 +914,12 @@ ad_proc -private publish::write_multiple_files { url text {root_path ""}} {
   @see publish::write_multiple_blobs
 
 } {
-    ns_log Notice "WRITE_MULTIPLE_FILES: root_path = $root_path"
+    ns_log debug "publish::write_multiple_files: root_path = $root_path"
   foreach_publish_path $url {
     mkdirs $filename
     template::util::write_file $filename $text
     ns_chmod $filename 0764
-    ns_log notice "PUBLISH: Wrote text to $filename"
+    ns_log debug "publish::write_multiple_files: Wrote text to $filename"
   } $root_path
 }
 
@@ -975,8 +975,7 @@ ad_proc -public publish::write_content { revision_id args } {
           set item_id [db_string get_one_revision ""]
 	  
 	  if { [template::util::is_nil item_id] } {
-	      ns_log notice \
-		  "WARNING: publish::write_content: No such revision $revision_id"
+	      ns_log warning "publish::write_content: No such revision $revision_id"
 	      return ""
 	  }
       } else {
@@ -987,7 +986,7 @@ ad_proc -public publish::write_content { revision_id args } {
       set file_url [item::get_extended_url $item_id -revision_id $revision_id]
 
       # Write blob/text to file
-      ns_log notice "Writing item $item_id to $file_url"
+      ns_log debug " publish::write_content: writing item $item_id to $file_url"
 
       if { [info exists opts(text)] } {
           db_transaction {
@@ -1008,8 +1007,7 @@ ad_proc -public publish::write_content { revision_id args } {
 	  # Determine if the blob is null. If it is, give up (or else the
 	  # ns_ora blob_get_file will crash).
 	  if { [item::content_is_null $revision_id] } {
-	      ns_log notice \
-		  "WARNING: publish::write_content: No content supplied for revision $revision_id"
+	      ns_log warning "publish::write_content: No content supplied for revision $revision_id"
 	      return ""
 	  }
 

@@ -321,7 +321,7 @@ ad_proc -public aa_register_case {
   foreach category $cats {
     if {[string trim $category] != ""} {
       if {[lsearch [nsv_get aa_test categories] $category] == -1} {
-        ns_log warning "acs-automated-testing: Unknown testcase category $category"
+        ns_log warning "aa_register_case: Unknown testcase category $category"
       }
       lappend filtered_cats $category
     }
@@ -342,7 +342,7 @@ ad_proc -public aa_register_case {
         }
       }
       if {!$found} {
-        ns_log warning "acs-automated-testing: Unknown init class $init_class"
+        ns_log warning " aa_register_case: Unknown init class $init_class"
       } else {
         lappend filtered_inits $init_class
       }
@@ -573,7 +573,7 @@ ad_proc aa_run_testcase {
            where testcase_id = :testcase_id"
   db_dml delete_testcase_final_results $sql
 
-  ns_log notice "Running testcase $testcase_id"
+  ns_log debug "aa_run_testcase: Running testcase $testcase_id"
 
   set catch_val [catch _${package_key}__$testcase_id msg]
   if {$catch_val} {
@@ -731,13 +731,13 @@ ad_proc aa_log_result {
 
   incr aa_testcase_test_id
   if {$test_result == "pass"} {
-    ns_log Debug "PASSED: $aa_testcase_id, $test_notes"
+    ns_log Debug "aa_log_result: PASSED: $aa_testcase_id, $test_notes"
     incr aa_testcase_passes
   } elseif {$test_result == "fail"} {
-    ns_log Error "FAILED: $aa_testcase_id, $test_notes"
+    ns_log Error "aa_log_result: FAILED: $aa_testcase_id, $test_notes"
     incr aa_testcase_fails
   } else {
-    ns_log Debug "LOG: $aa_testcase_id, $test_notes"
+    ns_log Debug "aa_log_result: LOG: $aa_testcase_id, $test_notes"
     set test_result "log"
   }
   # Notes in database can only hold so many characters
@@ -762,7 +762,7 @@ ad_proc aa_log_final {
 
   if {$test_fails == 0} {
   } else {
-    ns_log Error "FAILED: $aa_testcase_id, $test_fails tests failed"
+    ns_log Error "aa_log_final: FAILED: $aa_testcase_id, $test_fails tests failed"
   }
 
   db_dml testcase_result_insert {

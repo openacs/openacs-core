@@ -68,7 +68,7 @@ ad_proc -public get_content { { content_type {} } } {
   variable revision_id
 
   if { [template::util::is_nil item_id] } {
-    ns_log notice "No active item in content::get_content"
+    ns_log warning "content::get_content: No active item in content::get_content"
     return
   }
 
@@ -76,7 +76,7 @@ ad_proc -public get_content { { content_type {} } } {
   set revision_id [db_string get_revision ""]
 
   if { [template::util::is_nil revision_id] } {
-    ns_log notice "No live revision for item $item_id"
+    ns_log notice "content::get_content: No live revision for item $item_id"
     return
   }
 
@@ -84,7 +84,7 @@ ad_proc -public get_content { { content_type {} } } {
   set mime_type [db_string get_mime_type ""]
   
   if { [template::util::is_nil mime_type] } {
-    ns_log notice "No such revision: $reivision_id"
+    ns_log notice "content::get_content: No such revision: $revision_id"
     return
   }  
 
@@ -106,7 +106,7 @@ ad_proc -public get_content { { content_type {} } } {
 
   # Get (all) the content (note this is really dependent on file type)
   if {![db_0or1row get_content "" -column_array content]} {
-    ns_log Notice "No data found for item $item_id, revision $revision_id"
+    ns_log notice "content::get_content: No data found for item $item_id, revision $revision_id"
     return 0
   }
 
@@ -174,7 +174,7 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
       db_0or1row get_template_info "" -column_array item_info
     
       if { ![info exists item_info] } { 
-          ns_log Notice "No content found for url $url"
+          ns_log notice "content::init: no content found for url $url"
           return 0 
       }
   }
@@ -192,7 +192,7 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
       set live_revision [db_string get_live_revision ""]
 
       if { [template::util::is_nil live_revision] } {
-          ns_log Notice "No live revision found for content item $item_id"
+          ns_log notice "content::init: no live revision found for content item $item_id"
           return 0
       }
       set revision_id $live_revision
@@ -206,7 +206,7 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
   db_1row get_template_url "" -column_array info
 
   if { [string equal $info(template_url) {}] } { 
-    ns_log Notice "No template found to render content item $item_id in context '$context'"
+    ns_log notice "content::init: No template found to render content item $item_id in context '$context'"
     return 0
   }
 

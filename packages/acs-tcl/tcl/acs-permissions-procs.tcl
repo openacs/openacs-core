@@ -101,7 +101,7 @@ ad_proc -public permission::require_permission {
         if {!${party_id}} {
             ad_maybe_redirect_for_registration
         } else {
-            ns_log notice "$party_id doesn't have $privilege on object $object_id"
+            ns_log notice "permission::require_permission: $party_id doesn't have $privilege on object $object_id"
             ad_return_forbidden \
                 "Permission Denied" \
                 "<blockquote>

@@ -15,10 +15,10 @@ if { [security::https_available_p]
     set admin_ssl_filters_installed_p 1
 
     db_foreach path_select {} { 
-	ns_log Notice "Processing RestrictToSSL for $url"
+	ns_log Notice "admin-init.tcl: Processing RestrictToSSL for $url"
 	foreach pattern [parameter::get -package_id $package_id -parameter RestrictToSSL] {
 	    ad_register_filter preauth GET "$url$pattern" ad_restrict_to_https
-	    ns_log Notice "URLs matching \"$url$pattern\" are restricted to SSL"
+	    ns_log Notice "admin-init.tcl: URLs matching \"$url$pattern\" are restricted to SSL"
 	}
     }
     

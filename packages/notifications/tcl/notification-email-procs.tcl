@@ -144,7 +144,7 @@ namespace eval notification::email {
         if {[catch {
             set messages [glob "$queue_dir/new/*"]
         } errmsg]} {
-            ns_log Notice "queue dir = $queue_dir/new/*, no messages"
+            ns_log Debug "load_qmail_mail_queue: queue dir = $queue_dir/new/*, no messages"
             return [list]
         }
 
@@ -152,7 +152,7 @@ namespace eval notification::email {
         set new_messages_p 0
 
         foreach msg $messages {
-            ns_log Notice "opening file: $msg"
+            ns_log Debug "load_qmail_mail_queue: opening file: $msg"
             if [catch {set f [open $msg r]}] {
                 continue
             }
@@ -215,9 +215,9 @@ namespace eval notification::email {
             # a break above just exited the while loop;  now we need to skip
             # the rest of the foreach as well
             if { $is_auto_reply_p } {
-                ns_log Notice "NOTIF-INCOMING-EMAIL: message is from an auto-responder, skipping"
+                ns_log Debug "load_qmail_mail_queue: message is from an auto-responder, skipping"
                 if {[catch {ns_unlink $msg} errmsg]} {
-                    ns_log Notice "NOTIF-INCOMING-EMAIL: couldn't remove message $msg:  $errmsg"
+                    ns_log Warning "load_qmail_mail_queue: couldn't remove message $msg:  $errmsg"
                 }
                 continue
             }
@@ -243,9 +243,9 @@ namespace eval notification::email {
 
             # We don't accept empty users for now
             if {[empty_string_p $from_user]} {
-                ns_log Notice "NOTIF-INCOMING-EMAIL: no user $from"
+                ns_log Notice "load_qmail_mail_queue: no user $from"
                 if {[catch {ns_unlink $msg} errmsg]} {
-                    ns_log Notice "NOTIF-INCOMING-EMAIL: couldn't remove message $msg:  $errmsg"
+                    ns_log Warning "load_qmail_mail_queue: couldn't remove message $msg:  $errmsg"
                 }
                 continue
             }
@@ -254,9 +254,9 @@ namespace eval notification::email {
 
             # We don't accept a bad incoming email address
             if {[empty_string_p $to_stuff]} {
-                ns_log Notice "NOTIF-INCOMING-EMAIL: bad to address $to"
+                ns_log Notice "load_qmail_mail_queue: bad to address $to"
                 if {[catch {ns_unlink $msg} errmsg]} {
-                    ns_log Notice "NOTIF-INCOMING-EMAIL: couldn't remove message $msg:  $errmsg"
+                    ns_log Warning "load_qmail_mail_queue: couldn't remove message $msg:  $errmsg"
                 }
                 continue
             }
@@ -276,7 +276,7 @@ namespace eval notification::email {
 
                 lappend list_of_reply_ids $reply_id
             } on_error {
-                ns_log Error "Error inserting incoming email into the queue"
+                ns_log Error "load_qmail_mail_queue: error inserting incoming email into the queue: $errmsg"
             }
         }
 
@@ -286,7 +286,7 @@ namespace eval notification::email {
     ad_proc -public scan_replies {} {
         scan for replies
     } {
-        ns_log Notice "NOTIF-EMAIL: about to load qmail queue"
+        ns_log Notice "notification::email::scan_replies: about to load qmail queue"
         return [load_qmail_mail_queue -queue_dir [qmail_mail_queue_dir]]
     }
 

@@ -206,7 +206,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     while { [catch { set ispell_text [read -nonewline $ispell_proc] } errmsg]
 	    && $try < $max_retry } {
 	incr try
-	ns_log Notice "spellchecker had a problem: $errmsg"
+	ns_log warning "template::util::spellcheck::get_element_formtext: spellchecker had a problem: $errmsg"
     }
 
     fconfigure $ispell_proc -blocking 0

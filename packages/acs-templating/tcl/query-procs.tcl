@@ -578,7 +578,7 @@ ad_proc -private template::query::flush_cache { cache_match } {
   set names [nsv_array names __template_query_persistent_cache]
   foreach name $names {
     if { [string match $cache_match $name] } {
-      ns_log notice "FLUSHING QUERY (persistent): $name"
+      ns_log debug "template::query::flush_cache: FLUSHING QUERY (persistent): $name"
       nsv_unset __template_query_persistent_cache $name
     }
   }
@@ -588,7 +588,7 @@ ad_proc -private template::query::flush_cache { cache_match } {
   set names [array names __template_query_persistent_cache]
   foreach name $names {
     if { [string match $cache_match $name] } {
-      ns_log notice "FLUSHING QUERY (request): $name"
+      ns_log debug "template::query::flush_cache: FLUSHING QUERY (request): $name"
       unset __template_query_persistent_cache($name)
     }
   }
@@ -950,7 +950,7 @@ ad_proc -public cache { command key args } {
       set names [nsv_array names __template_cache_value]
       foreach name $names {
         if { [string match $key $name] } {
-          ns_log notice "FLUSHING CACHE: $name"
+          ns_log debug "cache: FLUSHING CACHE: $name"
           nsv_unset __template_cache_value $name
 	} 
       }

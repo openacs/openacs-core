@@ -190,7 +190,7 @@ ad_proc -public lc_numeric {
 
     # Fall back on en_US if grouping is not on valid format
     if { ![string equal $locale en_US] && ![regexp {^[0-9 ]+$} $grouping] } {
-        ns_log Error "acs-lang.localization-grouping key has invalid value $grouping for locale $locale"
+        ns_log Warning "lc_numeric: acs-lang.localization-grouping key has invalid value $grouping for locale $locale"
         return [lc_numeric $num $fmt en_US]
     }
     
@@ -219,7 +219,7 @@ ad_proc -public lc_monetary_currency {
     set row_returned [db_0or1row lc_currency_select {}]
 
     if { !$row_returned } {
-	ns_log Notice "Unsupported monetary currency, defaulting digits to 2"
+	ns_log Warning "lc_monetary_currency: Unsupported monetary currency, defaulting digits to 2"
 	set fractional_digits 2
 	set html_entity ""
     }
@@ -562,12 +562,12 @@ ad_proc -public lc_time_utc_to_local {
 	set local_time [db_exec_plsql utc_to_local {}]
     } errmsg]
     } {
-	ns_log Warning "Query exploded on time conversion from UTC, probably just an invalid date, $time_value: $errmsg"
+	ns_log Warning "lc_time_utc_to_local: Query exploded on time conversion from UTC, probably just an invalid date, $time_value: $errmsg"
     }
 
     if {[empty_string_p $local_time]} {
 	# If no conversion possible, log it and assume local is as given (i.e. UTC)	    
-	ns_log Notice "Timezone adjustment in ad_localization.tcl found no conversion to UTC for $time_value $tz"	
+	ns_log Notice "lc_time_utc_to_local: Timezone adjustment in ad_localization.tcl found no conversion to UTC for $time_value $tz"	
     }
 
     return $local_time
@@ -592,12 +592,12 @@ ad_proc -public lc_time_local_to_utc {
 	set utc_time [db_exec_plsql local_to_utc {}]
     } errmsg]
     } {
-	ns_log Warning "Query exploded on time conversion to UTC, probably just an invalid date, $time_value: $errmsg"
+	ns_log Warning "lc_time_local_to_utc: Query exploded on time conversion to UTC, probably just an invalid date, $time_value: $errmsg"
     }
 
     if {[empty_string_p $utc_time]} {
 	# If no conversion possible, log it and assume local is as given (i.e. UTC)	    
-	ns_log Notice "Timezone adjustment in ad_localization.tcl found no conversion to local time for $time_value $tz"	
+	ns_log Notice "lc_time_local_to_utc: Timezone adjustment in ad_localization.tcl found no conversion to local time for $time_value $tz"	
     }
 
     return $utc_time
@@ -666,7 +666,7 @@ ad_proc -public lc_time_tz_convert {
     with_catch errmsg {
         set time_value [db_exec_plsql convert {}]
     } {
-        ns_log Warning "Error converting timezone: $errmsg"
+        ns_log Warning "lc_time_tz_convert: Error converting timezone: $errmsg"
     }
     return $time_value
 }

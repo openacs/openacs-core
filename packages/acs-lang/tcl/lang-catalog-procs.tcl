@@ -49,7 +49,7 @@ ad_proc -private lang::catalog::default_charset_if_unsupported { charset } {
         #set default_charset [encoding system] 
         # LARS: Default to utf-8
         set default_charset utf-8
-        ns_log Warning "charset $charset not supported by tcl, assuming $default_charset"
+        ns_log Warning "lang::catalog::default_charset_if_unsupported: charset $charset not supported by tcl, assuming $default_charset"
         set charset_to_use $default_charset
     } else {
         set charset_to_use $charset
@@ -111,7 +111,7 @@ ad_proc -public lang::catalog::is_upgrade_backup_file { file_path } {
             set return_value 1
         } else {
             # Catalog file with unknown prefix
-            ns_log Warning "The file $file_path has unknown prefix $prefix"
+            ns_log Warning "lang::catalog::is_upgrade_backup_file: The file $file_path has unknown prefix $prefix"
             set return_value 0
         }
     }
@@ -278,7 +278,7 @@ ad_proc -private lang::catalog::export_to_file {
     # Create the catalog directory if it doesn't exist
     set catalog_dir [package_catalog_dir $filename_info(package_key)]
     if { ![file isdirectory $catalog_dir] } {
-        ns_log Notice "Creating new catalog directory $catalog_dir"
+        ns_log Notice "lang::catalog::export_to_file: Creating new catalog directory $catalog_dir"
         file mkdir $catalog_dir
     }
 
@@ -288,7 +288,7 @@ ad_proc -private lang::catalog::export_to_file {
         ns_log Notice "Backing up catalog file $file_path"
         file copy -- $file_path $backup_path
     } else {
-        ns_log Notice "Not backing up $file_path as backup file already exists"
+        ns_log Notice "lang::catalog::export_to_file: Not backing up $file_path as backup file already exists"
     }
 
     # Since the output charset, and thus the filename, may have changed since
@@ -328,7 +328,7 @@ ad_proc -private lang::catalog::export_to_file {
    puts $catalog_file_id "</message_catalog>"
    close $catalog_file_id       
 
-   ns_log Notice "Wrote $message_count messages to file $file_path with encoding $file_encoding"
+   ns_log Notice "lang::catalog::export_to_file: Wrote $message_count messages to file $file_path with encoding $file_encoding"
 }
 
 ad_proc -public lang::catalog::export {
@@ -398,13 +398,13 @@ ad_proc -private lang::catalog::read_file { catalog_filename } {
     @author Peter Marklund (peter@collaboraid.biz)
 } {
     if {![regexp {/([^/]*)\.([^/]*)\.(?:xml|cat)$} $catalog_filename match base msg_encoding]} { 
-        ns_log Warning "Charset info missing in filename assuming $catalog_filename is iso-8859-1" 
+        ns_log Warning "lang::catalog::read_file: Charset info missing in filename assuming $catalog_filename is iso-8859-1" 
         set msg_encoding iso-8859-1
-    }                 
+    }
     
     set msg_encoding [default_charset_if_unsupported $msg_encoding]
 
-    ns_log Notice "reading $catalog_filename in $msg_encoding"
+    ns_log Notice "lang::catalog::read_file: reading $catalog_filename in $msg_encoding"
     set in [open $catalog_filename]
     fconfigure $in -encoding [ns_encodingforcharset $msg_encoding]
     set catalog_file_contents [read $in]        
@@ -557,7 +557,7 @@ ad_proc -private lang::catalog::import_from_file {
         # want that to trigger an upgrade.
         set upgrade_p [ad_decode $higher_version_p 1 1 0]
     }
-    ns_log Notice "Loading messages in file $file_path [ad_decode $upgrade_p 0 "" ", upgrading"]"
+    ns_log Notice "lang::catalog::import_from_file: Loading messages in file $file_path [ad_decode $upgrade_p 0 "" ", upgrading"]"
 
     # Get the messages array, and the list of message keys to iterate over
     array set messages_array [lindex [array get catalog_array messages] 1]
@@ -576,7 +576,7 @@ ad_proc -private lang::catalog::import_from_file {
         template::util::multirow_foreach all_messages {
             set message_key @all_messages.message_key@
             if { [lsearch -exact $messages_array_names $message_key] < 0 } {
-                ns_log Notice "Marking message $message_key in locale $locale as deleted"
+                ns_log Notice "lang::catalog::import_from_file: Marking message $message_key in locale $locale as deleted"
                 db_dml mark_message_as_deleted {}
 
                 # One approach to deleted message keys after upgrade is to consider those
@@ -639,7 +639,7 @@ ad_proc -private lang::catalog::import_from_file {
         set system_package_version [system_package_version_name $package_key]
         # Note that export_messages_to_file demands a certain filename format
 
-        ns_log Notice "Saving overwritten messages during upgrade for package $package_key and locale $locale in file $filename"
+        ns_log Notice "lang::catalog::import_from_file: Saving overwritten messages during upgrade for package $package_key and locale $locale in file $filename"
         set file_path [get_catalog_file_path \
                 -backup_from_version ${system_package_version} \
                 -backup_to_version $catalog_array(package_version) \
@@ -693,7 +693,7 @@ ad_proc -public lang::catalog::import {
 
         # Issue a warning and exit if there are no catalog files
         if { [empty_string_p $catalog_files] } {
-            ns_log Warning "No catalog files found for package $package_key"
+            ns_log Warning "lang::catalog::import: No catalog files found for package $package_key"
             continue
         }
 
@@ -702,7 +702,7 @@ ad_proc -public lang::catalog::import {
             if { [catch {import_from_file $file_path} errMsg] } {
                 global errorInfo
                 
-                ns_log Error "The import of file $file_path failed, error message is:\n\n${errMsg}\n\nstack trace:\n\n$errorInfo\n\n"
+                ns_log Error "lang::catalog::import: The import of file $file_path failed, error message is:\n\n${errMsg}\n\nstack trace:\n\n$errorInfo\n\n"
             }
         }        
     }
@@ -756,7 +756,7 @@ ad_proc -private lang::catalog::get_catalog_paths_for_import {
         if { [file exists $file_path] } {
             lappend catalog_files $file_path
         } else {
-            ns_log Error "Catalog file $file_path not found. Failed to import messages for package $package_key and locale $locale"
+            ns_log Error "lang::catalog::get_catalog_paths_for_import: Catalog file $file_path not found. Failed to import messages for package $package_key and locale $locale"
         }
     }
 
@@ -788,7 +788,7 @@ ad_proc -private lang::catalog::translate {} {
             if [catch {
                 set translated_message [lang_babel_translate $message en_$lang]
             } errmsg] {
-                ns_log Notice "Error translating $message into $lang: $errmsg"
+                ns_log Notice "lang::catalog::translate: Error translating $message into $lang: $errmsg"
             } else {
                 lang::message::register $lang $package_key $message_key $translated_message
             }

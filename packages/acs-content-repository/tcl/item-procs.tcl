@@ -114,7 +114,7 @@ ad_proc -public item::get_revision_content { revision_id args } {
     set item_id [get_item_from_revision $revision_id]
 
     if { [template::util::is_nil item_id] } {
-      ns_log notice "No such revision: $reivision_id"
+      ns_log warning "item::get_revision_content: No such revision: $reivision_id"
       return 0
     }  
   } else {
@@ -143,7 +143,7 @@ ad_proc -public item::get_revision_content { revision_id args } {
   db_0or1row grc_get_all_content "" -column_array content
 
   if { ![array exists content] } { 
-    ns_log Notice "No data found for item $item_id, revision $revision_id"
+    ns_log warning "item::get_revision_content: No data found for item $item_id, revision $revision_id"
     return 0
   }
   
@@ -407,7 +407,7 @@ ad_proc -public item::get_live_revision { item_id } {
     set live_revision [db_string glr_get_live_revision ""]
 
     if { [template::util::is_nil live_revision] } {
-        ns_log notice "WARNING: No live revision for item $item_id"
+        ns_log warning "item::get_live_revision: No live revision for item $item_id"
         return ""
     } else {
         return $live_revision
@@ -491,7 +491,7 @@ ad_proc -public item::get_extended_url { item_id args } {
   set item_url [get_url $item_id]
 
   if { [template::util::is_nil item_url] } {
-    ns_log notice "WARNING: No item URL found for content item $item_id"
+    ns_log warning "item::get_extended_url: No item URL found for content item $item_id"
     return ""
   }
 
@@ -529,7 +529,7 @@ ad_proc -public item::get_extended_url { item_id args } {
       set revision_id [get_live_revision $item_id]
 
       if { [template::util::is_nil revision_id] } {
-	ns_log notice "WARNING: No live revision for content item $item_id"
+	ns_log warning "item::get_best_revision: No live revision for content item $item_id"
 	return ""
       }
 
@@ -651,7 +651,7 @@ ad_proc -public item::get_content {
     if { [empty_string_p $item_id] } {
         set item_id [get_item_from_revision $revision_id]
         if { [empty_string_p $item_id] } {
-            ns_log notice "No such revision: $reivision_id"
+            ns_log notice "item::get_content: no such revision: $reivision_id"
             return 0
         }  
     }

@@ -387,7 +387,7 @@ ad_proc -private template::element::validate { form_id element_id } {
     set formerror($element_id:required) "$label is required"
 
     if { [lsearch -exact {hidden submit} $element(widget)] > -1 } {
-       ns_log Notice "No value for element $label"
+       ns_log Warning "template::element::validate: No value for hidden/submit element $label"
      }
   }
 
@@ -442,7 +442,7 @@ ad_proc -private template::element::validate { form_id element_id } {
       set formerror($element_id:data) $message
 
       if { [lsearch -exact {hidden submit} $element(widget)] } {
-	ns_log Notice "Invalid value for element $label: $message"
+	ns_log Warning "template::element::validate: Invalid value for hidden/submit element $label: $message"
       }
     }
 

@@ -147,7 +147,7 @@ proc_doc check_for_form_variable_naughtiness {
         
             if { !$variable_safe_p } {
                 ns_returnerror 500 "variable $name failed '$typed_var_type' type check"
-                ns_log Error "[ad_conn url] called with \$$name = $value"
+                ns_log Error "check_for_form_variable_naughtiness: [ad_conn url] called with \$$name = $value"
                 error "variable $name failed '$typed_var_type' type check"
             }
 
@@ -464,9 +464,9 @@ ad_proc -public merge_form_with_query {
 } {
     set set_id [ns_set create]
 
-    ns_log Notice "statement_name = $statement_name"
-    ns_log Notice "sql_qry = $sql_qry"
-    ns_log Notice "set_id = $set_id"
+    ns_log debug "merge_form_with_query: statement_name = $statement_name"
+    ns_log debug "merge_form_with_query: sql_qry = $sql_qry"
+    ns_log debug "merge_form_with_query: set_id = $set_id"
 
     db_0or1row $statement_name $sql_qry -bind $bind -column_set set_id
     
@@ -1658,7 +1658,7 @@ ad_proc -public ad_httpget {
 
     Returns the data in array get form with array elements page status modified.
 } {
-    ns_log "Notice" "Getting {$url} {$headers} {$timeout} {$depth}"
+    ns_log debug "Getting {$url} {$headers} {$timeout} {$depth}"
 
     if {[incr depth] > 10} {
         return -code error "ad_httpget:  Recursive redirection:  $url"
@@ -2390,11 +2390,11 @@ ad_proc -private ad_run_scheduled_proc { proc_info } {
 
     ns_mutex unlock [nsv_get ad_procs mutex]
 
-    ns_log Debug "Running scheduled proc $proc..."
+    ns_log debug "Running scheduled proc $proc..."
 
     # Actually run the procedure.
     eval [concat [list $proc] $args]
-    ns_log Debug "Done running scheduled proc $proc."
+    ns_log debug "Done running scheduled proc $proc."
 }
 
 # Initialize NSVs for ad_schedule_proc.
@@ -2441,7 +2441,7 @@ ad_proc -public ad_schedule_proc {
     # Protect the list of scheduled procs with a mutex.
     ns_mutex lock [nsv_get ad_procs mutex]
     set proc_info [list $thread $once $interval $proc $args [ns_time] 0 $debug]
-    ns_log "Notice" "Scheduling proc $proc"
+    ns_log debug "Scheduling proc $proc"
     
     # Add to the list of scheduled procedures, for monitoring.
     set procs [nsv_get ad_procs .]
@@ -4031,7 +4031,7 @@ ad_proc util_background_exec {
         set success_p \[expr { \$errno == 0 || \$errno == 2 }\]
         set result \[list \$success_p \$errmsg \$errno \$errinfo \$errcode]
 
-        ns_log Notice \"util_background_exec: Thread named '$name' returned \$result\"
+        ns_log debug \"util_background_exec: Thread named '$name' returned \$result\"
 
         nsv_unset util_background_exec [list $name]
         nsv_set util_background_exec_result [list $name] \$result

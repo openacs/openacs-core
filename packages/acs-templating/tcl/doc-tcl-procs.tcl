@@ -172,9 +172,7 @@ ad_proc -private template::util::display_value { ref } {
     a proc used for debugging, just prints out a value to the error log
 } {
     upvar $ref value
-    ns_log notice "
-$ref:
-$value
+    ns_log notice "$ref: $value
 "
 }
 
@@ -617,13 +615,11 @@ ad_proc -private doc::parse_tcl_library { dir_list } {
   template::util::display_value file_list
 
   foreach tcl_file $file_list {
-      ns_log notice "
-      parsing through $tcl_file for documentation"
+      ns_log notice "doc::parse_tcl_library: parsing through $tcl_file for documentation"
       
       set comments_parsed_p [doc::parse_file $tcl_file]
       if {! $comments_parsed_p } {
-	 ns_log notice "
-	 no @namespace directives found in $tcl_file"
+	 ns_log notice "doc::parse_tcl_library: no @namespace directives found in $tcl_file"
       }
   }
 
