@@ -17,4 +17,4 @@
 @ notifications-replies-package-create.sql
 
 @ notifications-init.sql
-
+@ notifications-replies-extra-create.sql
