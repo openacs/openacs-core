@@ -3,8 +3,6 @@
     padding: 4px;
 }
 
-
-
 tr.form-section {
     background-color: #d0d0d0;
 }
@@ -59,3 +57,20 @@ tr.form-element {
     background-color: white;
 }
 
+
+TABLE.table-display {
+    font-family: tahoma, verdana, helvetica; 
+    font-size: 85%;
+}
+
+TR.table-header {
+    background-color: #cccccc; 
+}
+
+TR.even {
+    background-color: #f0f0f0;
+}
+
+TR.odd {
+    background-color: #e0e0e0;
+}
