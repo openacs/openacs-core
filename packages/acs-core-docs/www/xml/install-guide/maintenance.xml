@@ -600,6 +600,11 @@ S/Sd2MYA0JVmQuIt5bYowXR1KYKDka1d3DUgtoVTiFepIRUrMkZlCli08mWVjE6T
 1MU24SHLgdTfDJprEdxZOnxajnbxL420xNVc5RRXlJA8Xxhx/HBKTw==
 -----END RSA PRIVATE KEY-----</programlisting>
         </listitem>
+      <listitem>
+        If you start up using the etc/daemontools/run script, you will
+        need to edit this script to make sure the ports are bound for
+        SSL. Details of this are in the run script.
+      </listitem>
       </orderedlist>
     </sect1>
 
