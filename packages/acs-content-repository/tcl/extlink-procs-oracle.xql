@@ -48,7 +48,7 @@
    <fullquery name="content_extlink::extlink_p.extlink_check">      
       <querytext>
 
-        select content_extlink.is_extlink (:item_id);
+        select content_extlink.is_extlink (:item_id) from dual
 
       </querytext>
    </fullquery>
