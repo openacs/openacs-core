@@ -712,8 +712,8 @@ ad_proc -private lang::catalog::import_messages {
     @param locale             The locale of the messages.
 
     @return An array list containing the number of messages processed, number of messages added, 
-            number of messages updated, and the number of messages deleted by the import. The keys of the
-            array list are processed, added, updated, and deleted.
+            number of messages updated, number of messages deleted by the import, and a list of errors produced. The keys of the
+            array list are processed, added, updated, and deleted, and errors.
 
     @author Peter Marklund
     @author Lars Pind
@@ -722,13 +722,14 @@ ad_proc -private lang::catalog::import_messages {
     set message_count(added) 0
     set message_count(updated) 0
     set message_count(deleted) 0
+    set message_count(errors) [list]
 
     # Form arrays for all three sets of messages
     array set file_messages $file_messages_list
-    array set db_messages [messages_in_db \
+    array set db_messages [lang::catalog::messages_in_db \
                                -package_key $package_key \
                                -locale $locale]
-    array set base_messages [last_sync_messages \
+    array set base_messages [lang::catalog::last_sync_messages \
                                -package_key $package_key \
                                -locale $locale]
 
@@ -910,18 +911,22 @@ ad_proc -private lang::catalog::import_messages {
         }
 
         # Store a new message in the database if we are adding or updating
+        set error_p 0
         if { [string equal $upgrade_status "added"] || [string equal $upgrade_status "updated"] } {
 
             ns_log Debug "lang::catalog::import_messages - invoking lang::message::register with import_case=\"$import_case\" -update_sync=$update_sync_p $message_key $upgrade_status $conflict_p"
-            lang::message::register \
+            if { [catch {lang::message::register \
                 -update_sync \
                 -upgrade_status $upgrade_status \
                 -conflict=$conflict_p \
                 $locale \
                 $package_key \
                 $message_key \
-                $file_messages($message_key)
-
+                $file_messages($message_key)} errmsg] } {
+                
+                lappend message_count(errors) $errmsg
+                set error_p 1
+            }
         } elseif { $update_sync_p || [string equal $upgrade_status "deleted"] } {
             # Set the upgrade_status, deleted_p, conflict_p, and sync_time properties of the message
 
@@ -935,18 +940,24 @@ ad_proc -private lang::catalog::import_messages {
             }
             
             ns_log Debug "lang::catalog::import_messages - invoking lang::message::edit with import_case=\"$import_case\" -update_sync=$update_sync_p $message_key [array get edit_array]"
-            lang::message::edit \
+            if { [catch {lang::message::edit \
                 -update_sync=$update_sync_p \
                 $package_key \
                 $message_key \
                 $locale \
-                [array get edit_array]
+                [array get edit_array]} errmsg] } {
+
+                lappend message_count(errors) $errmsg
+                set error_p 1
+            }
         } else {
             ns_log Debug "lang::catalog::import_messages - not doing anything: import_case=\"$import_case\" $message_key $upgrade_status $conflict_p"
         }
 
         if { [lsearch -exact {added updated deleted} $upgrade_status] != -1 } {
-            incr message_count($upgrade_status)
+            if { ! $error_p } {
+                incr message_count($upgrade_status)
+            }
         } 
         incr message_count(processed)
 
@@ -972,8 +983,8 @@ ad_proc -public lang::catalog::import {
     @param cache       Provide this switch if you want the proc to cache all the imported messages
 
     @return An array list containing the number of messages processed, number of messages added, 
-            number of messages updated, and the number of messages deleted by the import. The keys of the
-            array list are processed, added, updated, and deleted.
+            number of messages updated, number of messages deleted by the import, and a list of errors produced. The keys of the
+            array list are processed, added, updated, and deleted, and errors.
 
     @see lang::catalog::import_messages
 
@@ -983,6 +994,7 @@ ad_proc -public lang::catalog::import {
     set message_count(added) 0
     set message_count(updated) 0
     set message_count(deleted) 0
+    set message_count(errors) [list]
 
     if { ![empty_string_p $package_key] } {
         set package_key_list $package_key
@@ -1015,18 +1027,21 @@ ad_proc -public lang::catalog::import {
             continue
         }
 
-        array unset loop_message_count
         foreach file_path $catalog_files {
             # Use a catch so that parse failure of one file doesn't cause the import of all files to fail
+            array unset loop_message_count
             if { [catch { array set loop_message_count [lang::catalog::import_from_file $file_path] } errMsg] } {
                 global errorInfo
                 
                 ns_log Error "The import of file $file_path failed, error message is:\n\n${errMsg}\n\nstack trace:\n\n$errorInfo\n\n"
-            } 
-        }
-
-        foreach action [array names loop_message_count] {
-            set message_count($action) [expr $message_count($action) + $loop_message_count($action)]
+            } else {
+                foreach action [array names loop_message_count] {
+                    if { ![string equal $action "errors"] } {
+                        set message_count($action) [expr $message_count($action) + $loop_message_count($action)]
+                    }
+                }
+                set message_count(errors) [concat $message_count(errors) $loop_message_count(errors)]
+            }
         }
     }
 

@@ -14,7 +14,7 @@
   
   <para>Skip this section if you will run only Oracle.</para>
 
-  <para>See <xref linkend="compatibility-matrix"/> for version compatibility.</para>
+  <para>OpenACS &version; will run with <link linkend="source-postgresql">PostgreSQL</link> 7.3.2, 7.3.3, and 7.3.4.  7.3.4 is the recommended version of PostgreSQL.  PostgreSQL 7.4 has been verified.</para>
 
   <itemizedlist>
     <listitem>
@@ -28,7 +28,11 @@
         <title>Special Notes for Debian</title>
         <para></para>
       </formalpara>
-      <para>Debian users, especially Debian stable users, should install PostGreSQL from source as detailed below.  Debian unstable users: the following process has been known to work:</para>
+      <para>Debian users, especially Debian stable users, should
+      install PostGreSQL from source as detailed below. Debian
+      unstable users: the following process has been known to work
+      (but you should double-check that the version of PostGreSQL is
+      7.3 or above):</para>
       <screen><userinput>apt-get install postgresql postgresql-dev postgresql-doc
 ln -s /usr/include/postgresql/ /usr/include/pgsql
 ln -s /var/lib/postgres /usr/local/pgsql
@@ -121,6 +125,10 @@ tar xfj /tmp/postgresql-7.4.1.tar.bz2</action></screen>
 	  since it will not run as root.  Since nobody will log in
 	  directly as that user, we'll leave the password blank.
 	</para>
+        <para>
+	  Debian users should probably use adduser instead of
+	  useradd. Type <computeroutput>man adduser</computeroutput>
+	</para>
       </formalpara>
       <screen>[root src]# <userinput>groupadd web</userinput>
 [root src]# <userinput>useradd -g web -d /usr/local/pgsql postgres</userinput>
@@ -181,6 +189,10 @@ LD_LIBRARY_PATH=:/usr/local/pgsql/lib
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:/root/bin:/usr/local/pgsql/bin:/usr/local/pgsql/bin
 [postgres pgsql]$ <userinput>exit</userinput>
 </screen>
+
+      <para>Don't continue unless you see correct output from
+      <computeroutput>env | grep PATH</computeroutput></para>
+
     </listitem>
     <listitem id="install-postgres-compile">
       <formalpara>
@@ -508,9 +520,10 @@ sort_mem = 32168            # min 32
 #
 checkpoint_segments = 3     # in logfile segments (16MB each), min 1
 </programlisting>
-          <para>Restart postgres (Redhat: <computeroutput>service postgresql restart</computeroutput>.  Many other systems: <computeroutput>/etc/init.d/postgresql restart</computeroutput>) so that the changes take effect.</para>
-        </listitem>
-      </orderedlist>
+          <para>Restart postgres (<computeroutput>service postgresql
+          restart</computeroutput>) or
+          (<computeroutput>/etc/init.d/postgres
+          restart</computeroutput>) so that the changes take effect.</para>
         </listitem>
       </orderedlist>
     </listitem>

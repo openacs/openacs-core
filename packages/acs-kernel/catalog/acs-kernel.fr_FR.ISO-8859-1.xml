@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.0.0a2" locale="fr_FR" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.0.0" locale="fr_FR" charset="ISO-8859-1">
 
+  <msg key="authentication_authority">Autorité</msg>
+  <msg key="common_add">Ajouter</msg>
+  <msg key="common_apply">Appliquer</msg>
+  <msg key="common_cancel">Annuler</msg>
+  <msg key="common_close">Fermer</msg>
+  <msg key="common_closed">Fermé</msg>
+  <msg key="common_continue">Continuer</msg>
+  <msg key="common_delete">Supprimer</msg>
+  <msg key="common_discard">Jeter</msg>
+  <msg key="common_edit">Modifier</msg>
+  <msg key="common_finish">Finir</msg>
+  <msg key="common_go">Accèder</msg>
+  <msg key="common_help">Aide</msg>
+  <msg key="common_next">Suivant</msg>
+  <msg key="common_no">Non</msg>
+  <msg key="common_ok">Ok</msg>
+  <msg key="common_open">Ouvrir</msg>
+  <msg key="common_previous">Précédent</msg>
+  <msg key="common_repeat">Répéter</msg>
+  <msg key="common_save">Enregistrer</msg>
+  <msg key="common_update">Mise à jour</msg>
+  <msg key="common_view">Vue</msg>
+  <msg key="common_yes">Oui</msg>
   <msg key="member_role_pretty_name">Membre</msg>
   <msg key="member_role_pretty_plural">Membres</msg>
+  <msg key="member_state_approved">Approuvé</msg>
+  <msg key="member_state_deleted">Supprimé</msg>
 </message_catalog>

@@ -72,4 +72,19 @@ if { [llength [namespace eval :: info procs ds_link]] == 1 } {
 
 set translator_mode_p [lang::util::translator_mode_p]
 
+
 set openacs_version [ad_acs_version]
+
+# Toggle translator mode link
+
+set acs_lang_url [apm_package_url_from_key "acs-lang"]
+if { [empty_string_p $acs_lang_url] } {
+    set lang_admin_p 0
+} else {
+    set lang_admin_p [permission::permission_p \
+                          -object_id [site_node::get_element -url $acs_lang_url -element object_id] \
+                          -privilege admin \
+                          -party_id [ad_conn untrusted_user_id]]
+}
+set toggle_translator_mode_url [export_vars -base "${acs_lang_url}admin/translator-mode-toggle" { { return_url [ad_return_url] } }]
+

@@ -2,6 +2,8 @@
 <message_catalog package_key="acs-subsite" package_version="5.0d6" locale="it_IT" charset="ISO-8859-1">
 
   <msg key="About_You">Riguardo a te</msg>
+  <msg key="Account_at_system_closed">La tua account su %system_name% &amp;egrave; stata chiusa.</msg>
+  <msg key="Account_closed"> &lt;p&gt;La tua account &amp;egrave; attualmente chiusa.&lt;/p&gt;  &lt;p&gt;Se lo desideri, possiamo &lt;a href=&quot;%restore_url%&quot;&gt;riaprirla&lt;/a&gt;.&lt;/p&gt;</msg>
   <msg key="Answer">Risposta:</msg>
   <msg key="at">su</msg>
   <msg key="Bad_Password">Password Inadatta</msg>

@@ -27,7 +27,7 @@ running OpenACS.
 Before OpenACS 3.3, the OpenACS startup process was extremely simple: after AOLserver
 performed its internal initialization (reading the configuration file,
 loading shared libraries and module code, etc.) it scanned through the Tcl
-library directory (generally <computeroutput>/web/</computeroutput><emphasis><computeroutput>yourservername</computeroutput></emphasis><computeroutput>/tcl</computeroutput>),
+library directory (generally <computeroutput>/var/lib/aolserver/</computeroutput><emphasis><computeroutput>yourservername</computeroutput></emphasis><computeroutput>/tcl</computeroutput>),
 sourcing each file in sequence. 
 </para>
 
@@ -69,9 +69,9 @@ same for all AOLservers, regardless of whether they are running OpenACS.
 <para>Next AOLserver sources, in lexicographical order, each file in the
 <computeroutput>/tcl</computeroutput> directory. The first such file is
 <computeroutput>0-acs-init.tcl</computeroutput>, which doesn&#39;t do much directly except to
-determine the OpenACS path root (e.g., <computeroutput>/web/</computeroutput><emphasis><computeroutput>yourservername</computeroutput></emphasis>)
+determine the OpenACS path root (e.g., <computeroutput>/var/lib/aolserver/</computeroutput><emphasis><computeroutput>yourservername</computeroutput></emphasis>)
 by trimming the final component from the path to the Tcl library directory
-(<computeroutput>/web/</computeroutput><emphasis><computeroutput>yourservername</computeroutput></emphasis><computeroutput>/tcl</computeroutput>). But
+(<computeroutput>/var/lib/aolserver/</computeroutput><emphasis><computeroutput>yourservername</computeroutput></emphasis><computeroutput>/tcl</computeroutput>). But
 <computeroutput>0-acs-init.tcl</computeroutput>&#39;s has an important function, namely sourcing
 <computeroutput>/packages/acs-core/bootstrap.tcl</computeroutput>, which does the following:</para>
 

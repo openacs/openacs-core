@@ -63,9 +63,13 @@ logging in again. &lt;/p&gt;
   <msg key="Close_your_account">Close your account</msg>
   <msg key="Closed_group">Closed Group</msg>
   <msg key="Comment">Comment</msg>
+  <msg key="Communities">Communities</msg>
+  <msg key="communities">communities</msg>
+  <msg key="community">community</msg>
   <msg key="Confirm">Confirm</msg>
   <msg key="Continue">Continue</msg>
   <msg key="Country_Name">Country Name</msg>
+  <msg key="Create_new_community">Create new %pretty_name%</msg>
   <msg key="Create_new_subsite">Create new subsite</msg>
   <msg key="Current_Password">Current Password</msg>
   <msg key="Currently_invisible_msg">&lt;p&gt; Your online status is currently not visible to other users. &lt;/p&gt;</msg>
@@ -75,6 +79,8 @@ logging in again. &lt;/p&gt;
   <msg key="default_context">default context</msg>
   <msg key="Delete">Delete</msg>
   <msg key="DevAdmin">DevAdmin</msg>
+  <description key="DevAdmin">Can we please have a description about the purpose of this key?</description>
+
   <msg key="Developers_Admin">Developer's Administration</msg>
   <msg key="Direct_Permissions">Direct Permissions</msg>
   <msg key="Disable">Disable</msg>
@@ -133,13 +139,17 @@ Please visit the following link to change your password now:
   <msg key="ISO_Code_List">ISO Code List</msg>
   <msg key="ISO_Codes_Not_Loaded">ISO Codes Not Loaded</msg>
   <msg key="ISO_Codes_not_loaded">ISO Codes not loaded</msg>
+  <msg key="Join_community">Join community</msg>
   <msg key="Join_group_name">Join %group_name%</msg>
   <msg key="Join_subsite">Join subsite</msg>
+  <msg key="Join_this_community">Join this community</msg>
   <msg key="Join_this_subsite">Join this subsite</msg>
   <msg key="Keyword">Keyword</msg>
   <msg key="Last_name">Last name</msg>
   <msg key="later">later.</msg>
+  <msg key="Leave_community">Leave community</msg>
   <msg key="Leave_subsite">Leave subsite</msg>
+  <msg key="Leave_this_community">Leave this community</msg>
   <msg key="Leave_this_subsite">Leave this subsite</msg>
   <msg key="lGo_back_without_adding">Go back without adding any users</msg>
   <msg key="Log_In">Log In</msg>
@@ -296,6 +306,7 @@ You can always change your password by doing the following:
   <msg key="Reject">Reject</msg>
   <msg key="Remember_my_login">Remember my login on this computer</msg>
   <msg key="Remove">Remove</msg>
+  <msg key="Req_membership_comm">Request membership of this community</msg>
   <msg key="Req_membership_subs">Request membership of this subsite</msg>
   <msg key="Request_membership">Request membership</msg>
   <msg key="return_to_application">return to application</msg>
@@ -313,6 +324,9 @@ You can always change your password by doing the following:
   <msg key="Status">Status</msg>
   <msg key="Story_Behind_Photo">Story Behind Photo</msg>
   <msg key="Story_behind_photo">Story Behind Photo</msg>
+  <msg key="Subcommunities">Subcommunities</msg>
+  <msg key="subcommunities">subcommunities</msg>
+  <msg key="subcommunity">subcommunity</msg>
   <msg key="subsite">subsite</msg>
   <msg key="Subsites">Subsites</msg>
   <msg key="subsites">subsites</msg>
@@ -325,6 +339,8 @@ You can always change your password by doing the following:
   <msg key="Topic">Topic</msg>
   <msg key="type_specific_info">type-specific info</msg>
   <msg key="UP">UP</msg>
+  <description key="UP">Can we please have a description of this key??</description>
+
   <msg key="up_to_context_name">up to %context_name%</msg>
   <msg key="Update">Update</msg>
   <msg key="Update_Password">Update Password</msg>

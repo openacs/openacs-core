@@ -913,7 +913,7 @@ ad_proc -public ad_form {
                     }
 
                     if { ![uplevel #$level [list db_0or1row $select_query_name [join $select_query " "] -column_array __ad_form_values__]] } {
-                        return -code error "Error when selecting values"
+                        return -code error "Error when selecting values: No rows returned."
                     }
 
                     foreach element_name $af_element_names($form_name) {

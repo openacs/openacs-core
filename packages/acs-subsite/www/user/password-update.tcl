@@ -119,6 +119,47 @@ ad_form -extend -name update -form {
             break
         }
     }
+    
+    # If old_password was supplied, handle authentication and log the user in
+    if { [exists_and_not_null old_password] } {
+        
+        # We use full-scale auth::authenticate here, in order to be sure we also get account-status checked
+        # Hm. What if there's a problem with timing, so the password update doesn't take effect immediately?
+        array set auth_info [auth::authenticate \
+                -return_url $return_url \
+                -authority_id $user(authority_id) \
+                -username $user(username) \
+                -password $password_1]
+        
+        # Handle authentication problems
+        switch $auth_info(auth_status) {
+            ok {
+                # Continue below
+            }
+            default {
+                # we shouldn't get bad password here ...
+                form set_error update password_1 $auth_info(auth_message)
+                break
+            }
+        }
+        
+        if { [exists_and_not_null auth_info(account_url)] } {
+            ad_returnredirect $auth_info(account_url)
+            ad_script_abort
+        }
+
+        # Handle account status
+        switch $auth_info(account_status) {
+            ok {
+                # Continue below
+            }
+            default {
+                # Display the message on a separate page
+                ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-closed" { { message $auth_info(account_message) } }]
+                ad_script_abort
+            }
+        }
+    }
 
     # If the account was closed, it might be open now
     if { [string equal [ad_conn account_status] "closed"] } {

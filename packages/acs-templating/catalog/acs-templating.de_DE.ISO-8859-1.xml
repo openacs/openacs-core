@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="acs-templating" package_version="5.0d3" locale="de_DE" charset="ISO-8859-1">
+
+  <msg key="Invalid_choice">Ungültige Auswahl</msg>
+  <msg key="Invalid_currency">Ungültige Währung</msg>
+  <msg key="Invalid_decimal_number">Ungültige Dezimalzahl</msg>
+  <msg key="Invalid_email_format">Ungültiges E-Mail-Format</msg>
+  <msg key="Invalid_filename">Ungültiger Dateiname</msg>
+  <msg key="Invalid_integer">Ungültiger ganzzahliger Wert</msg>
+  <msg key="Invalid_keyword">Ungültiges Schlüsselwort</msg>
+  <msg key="Invalid_natural_number">Ungültiger natürlicher Zahlenwert</msg>
+  <msg key="Invalid_url">Ungültige URL</msg>
+  <msg key="Next_with_arrow">Weiter&gt;&gt;</msg>
+  <msg key="No_row_pretty_plural">Keine %row_pretty_plural% vorhanden</msg>
+  <msg key="Previous_with_arrow">&lt;&lt;Zurück</msg>
+  <msg key="required">Angabe erforderlich</msg>
+  <msg key="Spellcheck">Rechtschreibprüfung</msg>
+  <msg key="Tag_handler_invalid_number_of_args">Ungültige Anzahl von Argumenten für das Tag-Steuerungsprogramm</msg>
+  <msg key="Template_parser_error_in_parameter_list">Fehler in der Liste der Parameter</msg>
+</message_catalog>

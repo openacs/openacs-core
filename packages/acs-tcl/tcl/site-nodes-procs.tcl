@@ -102,7 +102,9 @@ ad_proc -public site_node::instantiate_and_mount {
         }
 
         # Default node_name to package_key
-        set node_name [ad_decode $node_name "" $package_key $node_name]
+        if { [empty_string_p $node_name] } {
+            set node_name $package_key
+        }
 
         # Create the node if it doesn't exists
         set parent_url [get_url -notrailing -node_id $parent_node_id]

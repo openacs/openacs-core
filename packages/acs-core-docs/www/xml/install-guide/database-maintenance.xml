@@ -106,8 +106,9 @@ DROP DATABASE</programlisting>
   <sect1 id="install-next-nightly-vacuum">
     <title>Vacuum Postgres nightly</title>
     <para>
-      The "vacuum" command must be run periodically to reclaim space. The
-      "vacuum analyze" form additionally collects statistics on the
+      The "vacuum" command must be run periodically to reclaim space
+      in versions of PostgreSQL before 7.4. The "vacuum analyze" form
+      additionally collects statistics on the 
       disbursion of columns in the database, which the optimizer uses when
       it calculates just how to execute queries. The availability of this
       data can make a tremendous difference in the execution speed of
@@ -117,7 +118,8 @@ DROP DATABASE</programlisting>
       prefer it to happen immediately after (not before!) you've made a
       backup! The "vacuum" command is very reliable, but conservatism is
       the key to good system management. So, if you're using the export
-      procedure described above, you don't need to do this extra step.
+      procedure described above, you don't need to do this extra
+      step.
     </para>
 
     <para>Edit your crontab:</para>

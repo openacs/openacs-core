@@ -21,6 +21,14 @@ locale <b>@locale@</b>
   deleted: @message_count.deleted@.
 </p>
 
+<if @message_count.errors@ not nil>
+<p>
+  The following errors were produced:
+
+  @errors_list;noquote@
+</p>
+</if>
+
 <if @conflict_count@ gt 0>
   <font color="red">There are @conflict_count@ message conflicts in the database.</font> 
 

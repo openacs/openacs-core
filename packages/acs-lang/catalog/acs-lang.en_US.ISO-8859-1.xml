@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-lang" package_version="5.0d3" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-lang" package_version="5.0.1" locale="en_US" charset="ISO-8859-1">
 
   <msg key="available-in-this-language">Available in English</msg>
-  <description key="available-in-this-language">The language referred to in the message body should be the language of the locale, not a localized version of "English".</description>
+  <description key="available-in-this-language">The language referred to in the message body should be the language of the locale, not a localized version of &quot;English&quot;.</description>
 
   <msg key="English">English</msg>
   <msg key="French">French</msg>

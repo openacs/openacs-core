@@ -56,9 +56,14 @@
               </td>
               <td>@messages.default_message@</td>
               <if @default_locale@ ne @current_locale@>
-                <td>
-                  <if @messages.translated_message@ not nil>@messages.translated_message@</if>
-                  <else><span style="color: gray; font-style: italic;">Not translated</span></else>
+                <td>                  
+                  <if @messages.deleted_p@>
+                    <span style="color: red; font-style: italic;">DELETED</span> (@messages.translated_message@)
+                  </if>
+                  <else>
+                    <if @messages.translated_message@ not nil>@messages.translated_message@</if>
+                    <else><span style="color: gray; font-style: italic;">Not translated</span></else>
+                  </else>
                 </td>
               </if>
               <if @messages.translated_message@ not nil>

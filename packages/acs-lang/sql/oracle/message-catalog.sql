@@ -70,7 +70,10 @@ comment on table lang_messages is '
     into an nsv_array.
 ';
 
-create table lang_messages_audit (    
+create table lang_messages_audit (
+    audit_id           integer
+                       constraint lang_messages_audit_pk
+                       primary key,    
     message_key        varchar2(200)
                        constraint lang_messages_audit_key_nn
                        not null,
@@ -96,13 +99,13 @@ create table lang_messages_audit (
     overwrite_user     integer
                        constraint lang_messages_audit_ou_fk
                        references users (user_id),
-    constraint lang_messages_audit_pk
-    primary key (package_key, message_key, locale, overwrite_date),
     constraint lang_messages_audit_fk
     foreign key (message_key, package_key) 
     references lang_message_keys(message_key, package_key)
     on delete cascade
 );
+
+create sequence lang_messages_audit_id_seq;
 
 -- ****************************************************************************
 -- * The lang_translate_columns table holds the columns that require translation.
