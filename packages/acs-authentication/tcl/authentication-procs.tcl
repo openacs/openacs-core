@@ -1003,7 +1003,7 @@ ad_proc -private auth::validate_account_info {
     upvar 1 $user_array user
     upvar 1 $message_array element_messages
 
-    set required_elms { authority_id username }
+    set required_elms { }
     if { !$update_p } {
         set required_elms [concat $required_elms { first_names last_name email }]
     }
