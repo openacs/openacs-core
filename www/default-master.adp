@@ -1,4 +1,4 @@
-@doc_type@
+@doc_type;noquote@
 <html>
 <head>
 <title>@title@</title>
@@ -7,12 +7,12 @@
 <body<multiple name=attribute> @attribute.key@="@attribute.value@"</multiple>>
 <include src="login-status" />
 
-<if @body_start_include@ not nil>
-<include src="@body_start_include@" />
+<if @body_start_include;noquote@ not nil>
+<include src="@body_start_include;noquote@" />
 </if>
 
 <h1>@title@</h1>
-@context_bar@
+@context_bar;noquote@
 <hr />
 <slave>
 

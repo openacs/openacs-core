@@ -1,6 +1,6 @@
 <master>
-<property name="title">@system_name@</property>
-<property name="focus">@focus@</property>
+<property name="title">@system_name;noquote@</property>
+<property name="focus">@focus;noquote@</property>
 
 <table cellspacing="4" cellpadding="4" border="0">
   <tr>
@@ -150,7 +150,7 @@
                 <form method="post" action="register/user-login" name="login">
                   <tr bgcolor="#eeeeee">
                     <td>
-                      @form_vars@
+                      @form_vars;noquote@
                       <table>
                       <tr><td>Email:</td><td><input type="text" name="email" value="@email@" /></td></tr>
                       <tr><td>Password:</td><td><input type="password" name="password" /></td></tr>
