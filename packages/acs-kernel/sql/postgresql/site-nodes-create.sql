@@ -59,6 +59,7 @@ create table site_nodes (
 );
 
 create index site_nodes_object_id_idx on site_nodes (object_id);
+create index site_nodes_parent_id_idx on site_nodes(parent_id,object_id,node_id);
 create index site_nodes_tree_skey_idx on site_nodes (tree_sortkey);
 
 create function site_node_get_tree_sortkey(integer) returns varbit as '
