@@ -80,12 +80,12 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
 
     set function_name "__exec_${unique_id}_${fname}"
 
-    ns_log Notice "PLPGSQL: converted: $sql to: select $function_name ()"
 
     # insert tcl variable values (Openacs - Dan)
     if {![string equal $sql $pre_sql]} {
         set sql [uplevel 2 [list subst -nobackslashes $sql]]
     }
+    ns_log Notice "PLPGSQL: converted: $sql to: select $function_name ()"
 
     # create a function definition statement for the inline code 
     # binding is emulated in tcl. (OpenACS - Dan)
@@ -112,17 +112,18 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
                       [DoubleApos $proc_sql]
                       ' language 'plpgsql'"
 
+        ns_log Notice "proc_sql = $proc_sql"
         set ret_val [ns_db 0or1row $db "select $function_name ()"]
-
+        ns_log Notice "anon func selected"
         # drop the anonymous function (OpenACS - Dan)
         ns_db dml $db "drop function $function_name ()"
-
+        ns_log Notice "anon func dropped $ret_val"
         return $ret_val
 
     } error]
 
     # error in the plsql anonymous function - try and drop it.
-    catch {ns_db dml $db "drop function $function_name ()"}
+    ns_log Notice "errno = $errno"
 
     global errorInfo errorCode
     set errinfo $errorInfo
@@ -132,6 +133,8 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
 
     if { $errno == 2 } {
 	return $error
+    } else {
+        catch {ns_db dml $db "drop function $function_name ()"}
     }
 
     return -code $errno -errorinfo $errinfo -errorcode $errcode $error
@@ -244,7 +247,7 @@ proc_doc db_dml { statement_name sql args } {
     unbounded compressed text columns.  BLOBs are handled much differently,
     to.
 } {
-    ad_arg_parser { bind } $args
+    ad_arg_parser { bind blob_files } $args
 
     # Query Dispatcher (OpenACS - ben)
     set full_statement_name [db_qd_get_fullname $statement_name]
