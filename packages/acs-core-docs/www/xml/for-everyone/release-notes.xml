@@ -74,11 +74,114 @@ END OF TEMPLATE -->
 	project</ulink>.
   </para>
     
-    <para>
+  <para>
 	After installation, the full documentation set can be found by visiting
 	http://[your-host]/doc.
   </para>
+
+  <para>
+        New features in this release:       
+  </para>
     
+  <itemizedlist>
+      <listitem>
+        <para>
+          Internationalization support. 
+
+          A message catalog to store translated text, localization of
+          dates, number formatting, timezone conversion, etc. Allows
+          you to serve your users in their language.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+          External authenticaiton.
+
+          Integrate with outside user databases through e.g. LDAP, RADIUS, Kerberos, MS Active Directory. 
+          Imports user information through IMS Enterprise 1.1 format. Easily extended to support other 
+          authentication, password management, account creation, and account import mechanisms.
+
+          This includes improvements to the basic cookie handling, so logins can be expired without the 
+          user's identity being completely lost. You can set login to expire after a certain period 
+          (e.g. 8 hours, then password must be refreshed), or you can have all issues login cookies
+          expired at once, e.g. if you have left a permanent login cookie on a public machine somewhere.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+          User interface enhancements.
+
+          All pages, including site-wide and subsite admin pages, will be
+          templated, so they can be styled using master template and
+          site-wide stylesheets.
+
+          We have a new default-master template, which includes links to
+          administration, your workspace, and login/logout, and is rendered
+          using CSS.
+
+          And there's a new community template
+          (/packages/acs-subsite/www/group-master), which provides useful
+          navigation to the applications and administrative UI in a
+          subsite.
+
+          In addition, there's new, simpler UI for managing members of a
+          subsite, instantiating and mounting applications, setting
+          permissions, parameters, etc.
+
+          Site-wide admin as also seen the addition of a new simpler
+          software install UI to replace the APM for non-developer users,
+          and improved access to parameters, internationalization,
+          automated testing, service contracts, etc.
+
+          The list builder has been added for easily generating templated
+          tables and lists, with features such as filtering, sorting,
+          actions on multiple rows with checkboxes, etc. Most of all, it's
+          fast to use, and results in consistently-looking,
+          consistently-behaving, templated tables.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+          Automated testing.
+
+          The automated testing framework has been improved significantly,
+          and there are automated tests for a number of packages.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+          Security enhancements. 
+  
+          HTML quoting now happens in the templating system, greatly
+          minimizing the chance that users can sneak malicious HTML
+          into the pages of other users.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+          Oracle 9i support.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+          Who's online feature.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+          Spell checking.
+        </para>
+      </listitem>
+
+  </itemizedlist>
+
       </sect2>
   <para><phrase role="cvstag">($Id$)</phrase></para>
 
