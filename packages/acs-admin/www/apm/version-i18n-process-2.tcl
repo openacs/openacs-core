@@ -1,26 +1,24 @@
 ad_page_contract {
-    Internationalize a certain adp file.
+    Internationalize a certain adp or tcl file.
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 8 October 2002
     @cvs-id $Id$  
 } {
     version_id:integer,notnull    
-    {adp_files:multiple,notnull}
-    {adp_action:multiple}
+    {files:multiple,notnull}
+    {file_action:multiple}
     {message_keys:multiple ""}
 }
 
-set next_adp_file [lindex $adp_files 0]
+set next_file [lindex $files 0]
 
-ns_log Notice "adp_files $adp_files next_adp_file $next_adp_file"
-
-set page_title "Internationalizing ADP File $next_adp_file"
+set page_title "Internationalizing ADP File $next_file"
 set context_bar [ad_context_bar $page_title]
 
 # Figure out which actions to take on the selected adp:s
-set replace_text_p [ad_decode [lsearch -exact $adp_action replace_text] "-1" "0" "1"]
-set replace_tags_p [ad_decode [lsearch -exact $adp_action replace_tags] "-1" "0" "1"]
+set replace_text_p [ad_decode [lsearch -exact $file_action replace_text] "-1" "0" "1"]
+set replace_tags_p [ad_decode [lsearch -exact $file_action replace_tags] "-1" "0" "1"]
 
 # We need either or both of the actions to be selected
 if { (! $replace_text_p) && (! $replace_tags_p) } {
@@ -31,12 +29,12 @@ if { (! $replace_text_p) && (! $replace_tags_p) } {
 # Do text replacement
 if { $replace_text_p } {
     # Process the next adp file in the list
-    set text_adp_file $next_adp_file
+    set text_file $next_file
     set number_of_processed_files 1
 
-    ns_log Notice "Replacing text in file $text_adp_file with message tags"
-    append processing_html_result "<h3>Text replacements for $text_adp_file</h3>"
-    set adp_text_result_list [lang::util::replace_adp_text_with_message_tags "[acs_root_dir]/$text_adp_file" write $message_keys]
+    ns_log Notice "Replacing text in file $text_file with message tags"
+    append processing_html_result "<h3>Text replacements for $text_file</h3>"
+    set adp_text_result_list [lang::util::replace_adp_text_with_message_tags "[acs_root_dir]/$text_file" write $message_keys]
     set text_replacement_list [lindex $adp_text_result_list 0]
     set text_untouched_list [lindex $adp_text_result_list 1]
 
@@ -59,31 +57,31 @@ if { $replace_text_p } {
 if { $replace_tags_p } {
     if { $replace_text_p } {
         # We are also replacing text, so only process one adp file
-        set tags_adp_files $next_adp_file
+        set tags_files $next_file
         set number_of_processed_files 1
     } else {
         # We are only doing tag replacement, so process all adp files
-        set tags_adp_files $adp_files
-        set number_of_processed_files [llength $adp_files]
+        set tags_files $files
+        set number_of_processed_files [llength $files]
     }
 
-    foreach adp_file $tags_adp_files {
-        ns_log Notice "Replacing tags in file $adp_file with keys and doing insertion into message catalog"
-        append processing_html_result "<h3>Message tag replacements for $adp_file</h3>"
+    foreach file $tags_files {
+        ns_log Notice "Replacing tags in file $file with keys and doing insertion into message catalog"
+        append processing_html_result "<h3>Message tag replacements for $file</h3>"
 
-        set number_of_replacements [lang::util::replace_adp_message_tags_with_lookups $adp_file]
+        set number_of_replacements [lang::util::replace_temporary_tags_with_lookups $file]
 
         append processing_html_result "Did $number_of_replacements replacements, any further details are in the log file"
     }
 }    
 
 # Remove the processed file from the file list.
-set adp_files [lrange $adp_files $number_of_processed_files end]
+set files [lrange $files $number_of_processed_files end]
 
 # The proceed link will be to the next adp file if there is one and back to the I18N page
 # if we're done
-set proceed_url_export_vars [export_vars -url {version_id adp_files:multiple adp_action:multiple}]
-if { [llength $adp_files] > 0 } {
+set proceed_url_export_vars [export_vars -url {version_id files:multiple file_action:multiple}]
+if { [llength $files] > 0 } {
     # There are no more files to process so present a link back to the i18n page for this version
     set proceed_url "version-i18n-process?${proceed_url_export_vars}"
     set proceed_label "Process next adp file"

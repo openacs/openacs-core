@@ -2,7 +2,7 @@
 <property name="title">@page_title@</property>
 <property name="context_bar">@context_bar@</property>
 
-Choose which message keys to use for file @adp_file@. If you leave a message key blank no replacement will be done
+Choose which message keys to use for file @file@. If you leave a message key blank no replacement will be done
 and the corresponding text in the adp will be left untouched. The text that is actually replaced is bold and highlighted
 with a yellow background in the "Text to Replace" column.
 

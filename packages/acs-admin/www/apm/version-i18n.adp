@@ -5,10 +5,16 @@
 <center>
 
 <p>
-<formtemplate id="adp_list_form"></formtemplate>
+@file_type_filter@
 </p>
 
+<p>
 @pre_select_filter@ | @status_filter@
+</p>
+
+<p>
+<formtemplate id="file_list_form"></formtemplate>
+</p>
 
 </center>
 
@@ -32,8 +38,7 @@ it to leave such texts untouched.
 <p>
 The last two checkboxes in the form above let you choose which of the two available scripts to run on the selected adp files.
 You have to choose at least one of these actions, by default both are selected and for almost all cases this is the setting
-that we recommend. Running both those actions on an untranslated, or partially translated adp, should automate most
-of the translation and leave you with little manual work to do. 
+that we recommend. When translating the dotlrn package we first ran through all adp files with both actions. For each adp file, we looked at the untouched texts on the result page and manually inserted <#key text#> tags in the adp where appropriate. When we were done with this run-through we then ran the action "Replace tags with keys and insert into catalog" to remove the temporary tags from the adp:s. 
 </p>
 
 <p>
@@ -61,7 +66,7 @@ untouched (since it should not be subject to translation, for example Javascript
 <p>
 Any pieces of text that our script finds that it could not automatically extract, for example pieces of text with embedded adp variables (i.e. \@var_name\@), will be listed on the result page. Make sure to take note of these texts and translate them manually. Suppose for example
 that our script tells you that it left the text "Forum \@forum_name\@" untouched. What you should do then is to edit the corresponding
-adp file and manually replace that text with something like "<#Forum Forum#> \@forum_name\@". After you have made all such manual edits
+adp file and manually replace that text with something like "<#Forum Forum#> \@forum_name\@" (to save you from too much typing you may use the shorthand <#_ Forum#>, an underscore key will result in the script auto-generating a key for you based on the text). After you have made all such manual edits
 you can simply run the second action labeled "Replace tags with keys and insert into catalog".
 </p>
 
@@ -97,4 +102,20 @@ file then the message texts will be compared. If the message texts in the tag an
 insertion is done to the catalog file. If they differ it is assumed that the new message should be inserted into the 
 catalog file but with a different key. In this case a warning is issued in the log file and an integer is appended to the 
 message key to make it unique before insertion into the catalog file is done.
+</p>
+
+<h3>Dealing with tcl files</h3>
+<p>
+It seems translatable text in tcl files often appers in double quotes, so we used the following
+somewhat crude regexp to highlight such texts for us:
+</p>
+
+<pre>
+find -iname '*.tcl'|xargs egrep -i '"[a-z]'
+</pre>
+
+<p>
+You may mark up translatable text in tcl library files and tcl pages with temporary tags 
+(on the <#key text#> syntax mentioned previously) and then run the 
+"Replace tags with keys and insert into catalog" action on these files.
 </p>
