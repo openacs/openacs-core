@@ -1,11 +1,15 @@
 ad_library {
 
-    Routines needed by the boostrapper to load package code.   
+    Routines needed by the boostrapper to load package code. 
 
     @creation-date 26 May 2000
     @author Jon Salz [jsalz@arsdigita.com]
     @cvs-id $Id$
 }
+
+# FIXME: Peter M - This file cannot be watched with the APM as it re-initializes 
+# the reload level to 0 everytime it is sourced. Could we move these initialization 
+# to an -init.tcl file instead?
 
 # Initialize loader NSV arrays. See apm-procs.tcl for a description of
 # these arrays.
@@ -227,8 +231,9 @@ ad_proc -private apm_guess_db_type { package_key path } {
 
     2. Other files.
 
-       If it is a tcl or xql file whose name ends in a dash and database type, 
-       the file is assumed to be specific to that database type.
+       If it is a tcl, xql, or sqlj file not under the sql dir and whose name 
+       ends in a dash and database type, the file is assumed to be specific to 
+       that database type.
 
        Example: "tcl/10-database-postgresql-proc.tcl" is asusmed to be the file that
        defines the PostgreSQL-specific portions of the database API.
@@ -251,7 +256,7 @@ ad_proc -private apm_guess_db_type { package_key path } {
 
     set file_name [file tail $path]
     foreach known_database_type [nsv_get ad_known_database_types .] {
-        if { [regexp -- "\-[lindex $known_database_type 0]\.(xql|tcl)\$" $file_name match] } {
+        if { [regexp -- "\-[lindex $known_database_type 0]\.(xql|tcl|sqlj)\$" $file_name match] } {
             return [lindex $known_database_type 0]
         }
     }
