@@ -101,10 +101,10 @@
   variables (i.e. \@var_name\@), will be listed on the result
   page. Make sure to take note of these texts and translate them
   manually. Suppose for example that our script tells you that it left
-  the text "Forum \@forum_name\@" untouched. What you should do then
+  the text "Manage forum \@forum_name\@" untouched. What you should do then
   is to edit the corresponding adp file and manually replace that text
-  with something like "<#Forum Forum#> \@forum_name\@" (to save you
-  from too much typing you may use the shorthand <#_ Forum#>, an
+  with something like "<#manage_forum Manage forum \@forum_name\@#>" (to save you
+  from too much typing you may use the shorthand <#_ Manage forum \@forum_name\@#>, an
   underscore key will result in the script auto-generating a key for
   you based on the text). After you have made all such manual edits
   you can simply run the second action labeled "Replace tags with keys

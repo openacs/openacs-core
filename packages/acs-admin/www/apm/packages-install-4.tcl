@@ -7,12 +7,13 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {sql_file:multiple ""}
+    {mount_p:multiple ""} 
+    {mount_path:array ""}
 }
 
 set pkg_install_list [ad_get_client_property apm pkg_install_list]
 set pkg_enable_list [ad_get_client_property apm pkg_enable_list]
 set sql_file_paths [ad_get_client_property apm sql_file_paths]
-set catalog_file_paths [ad_get_client_property apm catalog_file_paths]
 set install_path [ad_get_client_property apm install_path]
 set copy_files_p [ad_get_client_property apm copy_files_p]
 
@@ -58,13 +59,11 @@ foreach pkg_info $pkg_install_list {
 	}
     }
 
-    set message_catalog_files [list]
-    # Find the message catalog files for the package
-    foreach file $catalog_file_paths {
-	if { [string equal [lindex $file 1] $package_key] } {
-	    # We only need a list of file paths relative to package root
-	    lappend message_catalog_files [lindex $file 0]
-	}        
+    # Mount path of package
+    if { [lsearch $mount_p $package_key] != -1 && [info exists mount_path($package_key)] && ![empty_string_p $mount_path($package_key)] } {
+        set selected_mount_path $mount_path($package_key)
+    } else {
+        set selected_mount_path ""
     }
 
     # Install the packages.
@@ -72,7 +71,8 @@ foreach pkg_info $pkg_install_list {
     if {$copy_files_p} {
 	set version_id [apm_package_install -install_path $install_path \
 		-callback apm_ns_write_callback -copy_files -load_data_model \
-		-data_model_files $data_model_files -message_catalog_files $message_catalog_files \
+		-data_model_files $data_model_files \
+                -mount_path $selected_mount_path \
                 $spec_file]
 	if {$version_id != 0} {
 	    file delete -force $install_path/$package_key
@@ -86,7 +86,7 @@ foreach pkg_info $pkg_install_list {
 		-callback apm_ns_write_callback \
                 -load_data_model \
 		-data_model_files $data_model_files \
-                -message_catalog_files $message_catalog_files \
+                -mount_path $selected_mount_path \
                 $spec_file]
     }
 
