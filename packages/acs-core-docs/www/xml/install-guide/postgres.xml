@@ -508,7 +508,7 @@ sort_mem = 32168            # min 32
 #
 checkpoint_segments = 3     # in logfile segments (16MB each), min 1
 </programlisting>
-          <para>Restart postgres (Redhat: <computeroutput>service postgresql restart</computeroutput>.  Many other systems: <computertext>/etc/init.d/postgresql restart</computertext>) so that the changes take effect.</para>
+          <para>Restart postgres (Redhat: <computeroutput>service postgresql restart</computeroutput>.  Many other systems: <computeroutput>/etc/init.d/postgresql restart</computeroutput>) so that the changes take effect.</para>
         </listitem>
       </orderedlist>
         </listitem>
