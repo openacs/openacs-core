@@ -14,3 +14,5 @@
 -- the service contracts will eventually be created
 -- @ notifications-interval-sc-create.sql
 -- @ notifications-delivery-sc-create.sql
+
+@notifications-init.sql

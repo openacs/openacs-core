@@ -235,6 +235,10 @@ as
    procedure delete (
       request_id                        in notification_requests.request_id%TYPE default null
    );
+
+   procedure delete_all (
+      object_id                        in notification_requests.object_id%TYPE default null
+   );
 end notification_request;
 /
 show errors
@@ -283,6 +287,19 @@ as
       acs_object.delete(request_id);
    end delete;
 
+   procedure delete_all (
+      object_id                        in notification_requests.object_id%TYPE default null
+   )
+   is
+      v_request                        notification_requests%ROWTYPE;
+   begin
+      for v_request in
+      (select request_id from notification_requests where object_id= delete_all.object_id)
+      LOOP    
+              notification_request.delete(v_request.request_id);
+      END LOOP;
+   end delete_all;
+
 end notification_request;
 /
 show errors
@@ -326,6 +343,7 @@ as
       object_id                         in notifications.object_id%TYPE,
       notif_date                        in notifications.notif_date%TYPE default sysdate,
       response_id                       in notifications.response_id%TYPE default null,
+      notif_subject                     in notifications.notif_subject%TYPE default null,
       notif_text                        in notifications.notif_text%TYPE default null,
       notif_html                        in notifications.notif_html%TYPE default null,
       creation_date                     in acs_objects.creation_date%TYPE default sysdate,
@@ -346,9 +364,9 @@ as
                            );
 
       insert into notifications
-      (notification_id, type_id, object_id, notif_date, response_id, notif_text, notif_html)
+      (notification_id, type_id, object_id, notif_date, response_id, notif_subject, notif_text, notif_html)
       values
-      (v_notification_id, type_id, object_id, notif_date, response_id, notif_text, notif_html);
+      (v_notification_id, type_id, object_id, notif_date, response_id, notif_subject, notif_text, notif_html);
 
       return v_notification_id;
    end new;

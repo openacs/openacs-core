@@ -10,4 +10,12 @@ end;
 </querytext>
 </fullquery>
 
+<fullquery name="notification::request::delete_all.delete_all_requests">
+<querytext>
+declare begin
+  notification_request.delete_all(object_id => :object_id);
+end;
+</querytext>
+</fullquery>
+
 </queryset>
