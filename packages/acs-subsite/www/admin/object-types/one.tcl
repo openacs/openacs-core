@@ -38,7 +38,7 @@ set title "Details for type $pretty_name"
 set page "
 [ad_admin_header $title]
 <h2>$title</h2>
-[list [list "./index" "Object Type Administration"] $title]
+[ad_context_bar [list "./" "Object Type Administration"] $title]
 <hr>
 <ul>"
 
