@@ -701,12 +701,12 @@ begin
   LOOP
     -- FIXME: this use of instr in oracle code seems incorrect.
     -- end_pos := instr(v_item_path, ''/'', start_pos);
-    end_pos := instr(v_item_path, ''/'', 1);
+    end_pos := instr(v_item_path, ''/'', start_pos);
 
     if end_pos = 0 then
-      item_name := substr(v_item_path, 1);
+      item_name := substr(v_item_path, start_pos);
     else
-      item_name := substr(v_item_path, 1, end_pos - start_pos);
+      item_name := substr(v_item_path, start_pos, end_pos - start_pos);
     end if;
 
     select 
@@ -730,7 +730,6 @@ begin
     get_id__parent_id := content_symlink__resolve(get_id__parent_id);
 
     start_pos := end_pos + 1;
-    v_item_path := substr(v_item_path, start_pos);
       
   end loop;
 
@@ -768,8 +767,12 @@ declare
   v_resolved_root_id               integer;       
   v_rel_parent_id                  integer default 0;        
   v_rel_tree_level                 integer default 0;        
-  v_path                           varchar default '''';  
+  v_path                           text    default '''';  
   v_rec                            record;
+  v_item_id                        integer;
+  v_rel_item_id                    integer;
+  v_exit_p                         boolean default ''f'';
+  v_rel_exit_p                     boolean default ''f'';
 begin
 
   -- check that the item exists
@@ -780,8 +783,7 @@ begin
   end if;
 
   -- begin walking down the path to the item (from the repository root)
-  open c_abs_cur;
-
+ 
   -- if the root folder is not null then prepare for a relative path
 
   if get_path__root_folder_id is not null then
@@ -795,41 +797,102 @@ begin
     -- elements of the item path as long as they are the same as the root
     -- folder
 
-    open c_rel_cur;
+    v_item_id         := get_path__item_id;
+    v_rel_item_id     := v_resolved_root_id;
 
-    while v_parent_id = v_rel_parent_id loop
-	fetch c_abs_cur into v_name, v_parent_id, v_tree_level;
-	fetch c_rel_cur into v_rel_parent_id, v_rel_tree_level;
-	exit when c_abs_cur%NOTFOUND or c_rel_cur%NOTFOUND;
-    end loop;
+    -- FIXME: should be replace this cursor emulation with one or two single
+    --        queries.
 
-    -- walk the remainder of the relative path, add a ''..'' for each 
+    while v_parent_id = v_rel_parent_id LOOP
+        select 
+           name, parent_id, tree_level(tree_sortkey)
+        into 
+           v_name, v_parent_id, v_tree_level
+        from
+           cr_items
+        where 
+           parent_id <> 0 
+        and
+           item_id = v_item_id;
+
+        if NOT FOUND then
+          v_exit_p = ''t'';
+        else
+          v_item_id := v_parent_id;
+        end if;
+        
+        select 
+          parent_id, tree_level(tree_sortkey) as tree_level
+        into 
+          v_rel_parent_id, v_rel_tree_level
+        from 
+          cr_items
+        where
+          parent_id <> 0
+        and
+          item_id = v_rel_item_id;
+
+        if NOT FOUND then
+          v_rel_exit_p = ''t'';
+        else
+          v_rel_item_id := v_rel_parent_id;
+        end if;
+
+        if v_rel_exit_p or v_exit_p then
+           exit;
+        end if;
+    end LOOP;
+
+    -- walk the remainder of the relative path, add a .. for each 
     -- additional step
 
-    loop
-      exit when c_rel_cur%NOTFOUND;
-      v_path := v_path || ''../'';
-      fetch c_rel_cur into v_rel_parent_id, v_rel_tree_level;
-    end loop;
+    if not v_rel_exit_p then 
+       v_path := v_path || ''../'';
+       for v_rec in  select
+                       i2.parent_id,
+                       tree_level(i2.tree_sortkey) as tree_level
+                     from
+                       cr_items i1, cr_items i2
+                     where 
+                       i2.parent_id <> 0
+                     and
+                       i1.item_id = v_rel_item_id
+                     and 
+                       i2.tree_sortkey <= i1.tree_sortkey
+                     and
+                       i1.tree_sortkey like (i2.tree_sortkey || ''%'')
+                     order by i2.tree_sortkey desc      
+       LOOP
+	 v_path := v_path || ''../'';
+       end LOOP;
+    end if;
 
-    -- an item relative to itself is ''../item''
-    if v_resolved_root_id = item_id then
+    -- an item relative to itself is ../item
+    if v_resolved_root_id = get_path__item_id then
 	v_path := ''../'';
     end if;
 
     -- loop over the remainder of the absolute path
+    v_path := v_path || v_name;
 
-    loop
-
-      v_path := v_path || v_name;
-
-      fetch c_abs_cur into v_name, v_parent_id, v_tree_level;
-
-      exit when c_abs_cur%NOTFOUND;
-
-      v_path := v_path || ''/'';
-
-    end loop;
+    for v_rec in select 
+                       i2.name, i2.parent_id, 
+                       tree_level(i2.tree_sortkey) as tree_level
+                     from
+                       cr_items i1, cr_items i2
+                     where 
+                       i2.parent_id <> 0
+                     and
+                       i1.item_id = v_item_id
+                     and 
+                       i2.tree_sortkey <= i1.tree_sortkey
+                     and
+                       i1.tree_sortkey like (i2.tree_sortkey || ''%'')
+                     order by i2.tree_sortkey desc      
+ 
+    LOOP
+      v_path := v_path || ''/'' || v_rec.name;
+    end LOOP;
 
   else
 

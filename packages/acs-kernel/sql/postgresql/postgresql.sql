@@ -17,10 +17,10 @@ begin
         
         if dir < 0 then
            v_inc := \-1;
-           v_i   := v_len;
+           v_i   := v_len + 1 - dir;
         else 
            v_inc := 1;
-           v_i   := 1;
+           v_i   := dir;
         end if;
            
         while v_i > 0 and v_i <= v_len LOOP

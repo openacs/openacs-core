@@ -8,7 +8,7 @@ end;' language 'plpgsql';
 
 create function cast_char(boolean) returns char as '
 begin
-        return case when $1 then ''t''::varchar else ''f''::varchar end;
+        return case when $1 then ''t''::char else ''f''::char end;
 end;' language 'plpgsql';
 
 create function test_content() returns integer as '
@@ -268,7 +268,7 @@ begin
                                                         sub_folder_id
                                   )
            );
-   PERFORM content_test__put_line(''Path for puppy'' || item_id
+   PERFORM content_test__put_line(''Path for puppy '' || item_id
                                   || '' from sub_sub_folder_id: '' || 
                                   sub_sub_folder_id || '' is '' || 
                                   content_item__get_path(item_id,
@@ -277,12 +277,13 @@ begin
            );
    PERFORM content_test__put_line(''Get id of item with invalid path - shouldn''''t return anything'');
    PERFORM content_test__put_line(''Found item at '' || 
-                                  content_item__get_id(''grandpa/me'', -200)
+                                  content_item__get_id(''grandpa/me'', -200,''f'')
            );
    PERFORM content_test__put_line(''Get id of item using subpath'');
    PERFORM content_test__put_line(''Found item at '' || 
                                   content_item__get_id(''pa/me/puppy'', 
-                                                       folder_id
+                                                       folder_id,
+                                                       ''f''
                                   )
            );
    PERFORM content_test__put_line(''This is the path to a folder from a subfolder'');
@@ -296,8 +297,8 @@ begin
    PERFORM content_test__put_line(''This is a path to an item from a non-existant item'');
    PERFORM content_test__put_line(''Path for '' || item_id || 
                                   '' from nonexistant_id: '' || 
-                                  -200 || '' is '' || 
-                                  content_item__get_path(item_id,-200)
+                                  -300 || '' is '' || 
+                                  content_item__get_path(item_id,-300)
            );
    PERFORM content_test__put_line(''This is a path to an item from a non-related branch'');
    PERFORM content_test__put_line(''Path for '' || item_id || 
@@ -344,11 +345,11 @@ begin
    PERFORM content_test__put_line(''Create a link in pa to aunty: Symlink is '' || symlink_a_id);
 
    PERFORM content_test__put_line(''Is '' || symlink_a_id || '' a symlink?: ''
-                                  || content_symlink__is_symlink(symlink_a_id)
+                                  || cast_char(content_symlink__is_symlink(symlink_a_id))
            );
 
    PERFORM content_test__put_line(''Is '' || folder_id || '' a symlink?: '' ||
-                                  content_symlink__is_symlink(folder_id)
+                                  cast_char(content_symlink__is_symlink(folder_id))
            );
 
    PERFORM content_test__put_line(''Path for symlink '' || symlink_a_id ||
@@ -453,4 +454,6 @@ end;' language 'plpgsql';
 select test_content();
 
 drop function test_content();
+drop function content_test__put_line(text);
+drop function cast_char(boolean);
 
