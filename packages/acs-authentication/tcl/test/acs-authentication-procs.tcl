@@ -718,7 +718,9 @@ aa_register_case auth_email_on_password_change {
                                   -user_id $user_id \
                                   -old_password $password \
                                   -new_password $new_password]
-            aa_equals "Password change OK" $result(password_status) "ok"
+            if { ![aa_equals "Password change OK" $result(password_status) "ok"] } {
+                aa_log "Message was: $result(password_message)"
+            }
             
             # Check that we get email
             aa_equals "Email sent to user" $ns_sendmail_to $email
