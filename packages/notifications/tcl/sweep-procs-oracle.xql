@@ -25,6 +25,7 @@
             select nnr.*
             from (select notifications.notification_id,
                     notifications.notif_subject,
+                    notifications.notif_text,
                     notifications.notif_html,
                     notification_requests.user_id,
                     notification_requests.type_id,
