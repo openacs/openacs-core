@@ -90,7 +90,7 @@ for { set __i 0 } { $__i < [expr $high - $low +1] } { incr __i } {
     set object_id [lindex $result(ids) $__i]
     set object_type [acs_object_type $object_id]
     array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
-    search_content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
+    search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
     set title_summary [acs_sc_call FtsEngineDriver summary [list $q $datasource(title)] $driver]
     set txt_summary [acs_sc_call FtsEngineDriver summary [list $q $txt] $driver]
     set url_one [acs_sc_call FtsContentProvider url [list $object_id] $object_type]
@@ -142,5 +142,5 @@ if [llength $search_the_web] {
     }
 }
 
-set choice_bar [search_choice_bar $items $links $values $current_result_page]
+set choice_bar [search::choice_bar $items $links $values $current_result_page]
 

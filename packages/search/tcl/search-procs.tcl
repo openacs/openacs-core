@@ -1,37 +1,50 @@
 ad_library {
-
     full-text search engine
 
     @author Neophytos Demetriou (k2pts@yahoo.com)
     @cvs-id $Id$
-
 }
 
-ad_proc search_indexer {} {
+namespace eval search {}
+
+ad_proc -private search::indexer {} {
+    Search indexer loops over the existing entries in the search_observer_queue 
+    table and calls the appropriate driver functions to index, update, or 
+    delete the entry.
+
     @author Neophytos Demetriou
 } {
 
     set driver [ad_parameter -package_id [apm_package_id_from_key search] FtsEngineDriver]
-    if { [empty_string_p $driver] } {
+    if {[empty_string_p $driver]
+        || ! [acs_sc_binding_exists_p FtsEngineDriver $driver]} {
         # Nothing to do if no driver
         return
     }
 
     db_foreach search_observer_queue_entry {} {
 
-        switch $event {
+        switch -- $event {
             INSERT {
-                set object_type [acs_object_type $object_id]
-                if {[acs_sc_binding_exists_p FtsContentProvider $object_type]} {
-                    array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
-                    search_content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
-                    acs_sc_call FtsEngineDriver index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
+                # Don't bother reindexing if we've already inserted/updated this object in this run
+                if {![info exists seen($object_id)]} {
+                    set object_type [acs_object_type $object_id]
+                    if {[acs_sc_binding_exists_p FtsContentProvider $object_type]} {
+                        array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
+                        search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
+                        acs_sc_call FtsEngineDriver index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
+                    }
+                    # Remember seeing this object so we can avoid reindexing it later
+                    set seen($object_id) 1
                 }
-                # Remember seeing this object so we can avoid reindexing it later
-                set seen($object_id) 1
             }
             DELETE {
                 acs_sc_call FtsEngineDriver unindex [list $object_id] $driver
+                # unset seen since you could conceivably delete one but then subsequently 
+                # insert it (eg when rolling back/forward the live revision).
+                if {[info exists seen($object_id)]} {
+                    unset seen($object_id)
+                }
             }
             UPDATE {
                 # Don't bother reindexing if we've already inserted/updated this object in this run
@@ -39,7 +52,7 @@ ad_proc search_indexer {} {
                     set object_type [acs_object_type $object_id]
                     if {[acs_sc_binding_exists_p FtsContentProvider $object_type]} {
                         array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
-                        search_content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
+                        search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
                         acs_sc_call FtsEngineDriver update_index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
                     }
                     # Remember seeing this object so we can avoid reindexing it later
@@ -54,7 +67,7 @@ ad_proc search_indexer {} {
 
 }
 
-ad_proc search_content_get {
+ad_proc -private search::content_get {
     _txt
     content
     mime
@@ -62,7 +75,7 @@ ad_proc search_content_get {
 } {
     @author Neophytos Demetriou
 
-    @param content
+    @param content    
     holds the filename if storage_type=file
     holds the text data if storage_type=text
     holds the lob_id if storage_type=lob
@@ -79,16 +92,14 @@ ad_proc search_content_get {
             set data [db_blob_get get_file_data {}]
         }
         lob {
-            db_transaction {
-                set data [db_blob_get get_lob_data {}]
-            }
+            set data [db_blob_get get_lob_data {}]
         }
     }
 
-    search_content_filter txt data $mime
+    search::content_filter txt data $mime
 }
 
-ad_proc search_content_filter {
+ad_proc -private search::content_filter {
     _txt
     _data
     mime
@@ -108,7 +119,7 @@ ad_proc search_content_filter {
     }
 }
 
-ad_proc search_choice_bar { items links values {default ""} } {
+ad_proc -private search::choice_bar { items links values {default ""} } {
     @author Neophytos Demetriou
 } {
 

@@ -2,7 +2,7 @@
 
 <queryset>
 
-    <fullquery name="search_indexer.search_observer_queue_entry">
+    <fullquery name="search::indexer.search_observer_queue_entry">
         <querytext>
             select object_id, event_date, event
             from search_observer_queue
@@ -10,7 +10,7 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="search_content_get.get_file_data">
+    <fullquery name="search::content_get.get_file_data">
         <querytext>
 	    select :content as content,
                    'file' as storage_type
@@ -18,7 +18,7 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="search_content_get.get_lob_data">
+    <fullquery name="search::content_get.get_lob_data">
         <querytext>
             select :content as content,
                    'lob' as storage_type
