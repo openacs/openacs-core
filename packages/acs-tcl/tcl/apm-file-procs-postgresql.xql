@@ -74,7 +74,7 @@ select content_item__new(
       <querytext>
 
                 update apm_package_versions
-                set content_length = [file size [cr_fs_path]$content_file]
+                set content_length = [cr_file_size $content_file]
                 where version_id = :version_id
 
       </querytext>
@@ -83,7 +83,7 @@ select content_item__new(
 <fullquery name="apm_extract_tarball.distribution_tar_ball_select">      
       <querytext>
 
-   select '[cr_fs_path]' || content 
+   select '[cr_fs_path]' || content as content, storage_type
      from cr_revisions 
     where revision_id = (select content_item__get_latest_revision(item_id)
                            from apm_package_versions 
