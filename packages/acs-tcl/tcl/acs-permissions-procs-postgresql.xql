@@ -4,27 +4,21 @@
 
     <fullquery name="permission::grant.grant_permission">
         <querytext>
-            declare
-            begin
-                acs_permission__grant_permission(
-                    object_id => :object_id,
-                    grantee_id => :party_id,
-                    privilege => :privilege
+                select acs_permission__grant_permission(
+                    :object_id,
+                    :party_id,
+                    :privilege
                 );
-            end;
         </querytext>
     </fullquery>
 
     <fullquery name="permission::revoke.revoke_permission">
         <querytext>
-            declare
-            begin
-                acs_permission__revoke_permission(
-                    object_id => :object_id,
-                    grantee_id => :party_id,
-                    privilege => :privilege
+             select acs_permission__revoke_permission(
+                    :object_id,
+                    :party_id,
+                    :privilege
                 );
-            end;
         </querytext>
     </fullquery>
 
