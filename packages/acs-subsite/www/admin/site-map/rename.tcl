@@ -35,14 +35,11 @@ ad_page_contract {
 # on site_nodes.  Until we have a general framework for mutators
 # I can hardly do anything better.
 
-db_dml app_rename {
-    update apm_packages
-    set instance_name = :instance_name
-    where package_id = (select object_id
-                        from site_nodes
-                        where node_id=:node_id)
-}
+set package_id [site_node::get_object_id -node_id $node_id]
 
-site_nodes_sync
+apm_package_rename \
+    -package_id $package_id \
+    -instance_name $instance_name
 
-ad_returnredirect "./?[export_url_vars expand:multiple root_id]"
+
+ad_returnredirect [export_vars -base "." { expand:multiple root_id }]
