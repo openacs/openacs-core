@@ -72,7 +72,13 @@ ad_proc -public template_tag_if_concat_params { params } {
   set size [ns_set size $params]
 
   for { set i 0 } { $i < $size } { incr i } {
-    lappend tokens [ns_set key $params $i]
+     set key [ns_set key $params $i]
+     set value [ns_set value $params $i]
+     if { [string equal $key $value] } {
+       lappend tokens $key
+     } else {
+       lappend tokens "$key=$value"
+     }
   }
 
   set tokens [eval [concat list [join $tokens " "]]]
