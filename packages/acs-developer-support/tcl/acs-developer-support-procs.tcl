@@ -213,7 +213,7 @@ proc ds_sweep_data {} {
     set names [nsv_array names ds_request]
     foreach name $names {
 	if { [regexp {^([0-9]+)\.start$} $name "" request] && \
-		$now - [nsv_get ds_request $name] > $lifetime } {
+                 $now - [lindex [nsv_get ds_request $name] 0] > $lifetime } {
 	    set kill_requests($request) 1
 	}
     }
