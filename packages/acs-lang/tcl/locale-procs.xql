@@ -1,15 +1,14 @@
 <?xml version="1.0"?>
 <queryset>
 
-   <fullquery name="lang::user::package_level_locale.get_user_locale">      
+    <fullquery name="lang::user::package_level_locale_not_cached.get_user_locale">      
       <querytext>
         select locale
         from   ad_locale_user_prefs
         where  user_id = :user_id
-        and    package_id = :package_id
+          and  package_id = :package_id
       </querytext>
    </fullquery>
-
 
    <fullquery name="lang::user::set_locale.user_locale_exists_p">
       <querytext>
