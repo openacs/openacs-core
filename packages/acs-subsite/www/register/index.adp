@@ -3,7 +3,11 @@
   <property name="context">{#acs-subsite.Log_In#}</property>
 
 <if @expired_p@ true>
-  <b>Note:</b> Your login has expired. Please retype your password to continue working.
+  <div class="general-message">Your login has expired. Please retype your password to continue working.</div>
+</if>
+
+<if @message@ not nil>
+  <div class="general-message">@message@</div>
 </if>
 
 <include src="/packages/acs-subsite/lib/login" return_url="@return_url;noquote@" no_frame_p="1" authority_id="@authority_id@" username="@username;noquote@" email="@email;noquote@" &="__adp_properties">

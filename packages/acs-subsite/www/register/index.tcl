@@ -5,6 +5,7 @@ ad_page_contract {
     {authority_id ""}
     {username ""}
     {email ""}
+    {message ""}
     {return_url ""}
 }
 
