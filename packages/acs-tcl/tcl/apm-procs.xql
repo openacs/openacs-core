@@ -9,14 +9,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="apm_mark_version_for_reload.package_key_select">      
-    <querytext>
-      select package_key 
-      from apm_package_version_info
-      where version_id = :version_id
-    </querytext>
-  </fullquery>
-  
   <fullquery name="apm_mark_version_for_reload.file_info">      
     <querytext>
       select file_id, path
@@ -25,22 +17,6 @@
       and    file_type in ('tcl_procs', 'query_file')
       and    (db_type is null or db_type = '[db_type]')
       order by path
-    </querytext>
-  </fullquery>
-
-  <fullquery name="apm_mark_version_for_reload.package_key_select">      
-    <querytext>
-      select package_key
-      from apm_package_version_info
-      where version_id = :version_id
-    </querytext>
-  </fullquery>
-
-  <fullquery name="apm_version_load_status.package_key_select">      
-    <querytext>
-      select package_key 
-      from apm_package_version_info
-      where version_id = :version_id
     </querytext>
   </fullquery>
 
