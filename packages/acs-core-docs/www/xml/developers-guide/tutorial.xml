@@ -143,7 +143,7 @@ standard OpenACS &version; distribution.
           This is the "home directory" of our new package, and all
           files in the package will be within this directory. <ulink
           url="packages.html">More on the structure of
-          packages</ulink). </para>
+          packages</ulink>). </para>
     </sect2>
     <sect2>
       <title>Add an Application Instance to the Server</title>
