@@ -8,6 +8,9 @@
       <xi:include href="install.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section Missing</xi:fallback>
       </xi:include>
+      <xi:include href="using.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section Missing</xi:fallback>
+      </xi:include>
       <xi:include href="requirements.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section Missing</xi:fallback>
       </xi:include>
