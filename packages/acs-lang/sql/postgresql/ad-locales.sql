@@ -55,7 +55,7 @@ comment on table ad_locales is '
   nls_charset is  Oracle charset name
 ';
 
-create or replace view enabled_locales as
+create view enabled_locales as
 select * from ad_locales
 where enabled_p = 't';
 
