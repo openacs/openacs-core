@@ -1,46 +1,35 @@
 #developer-toolbar {
-  font-size: 85%;
   background-color: #616093;
   color: white;
-  padding:  2px 8px;
+  font-family: tahoma, verdana;
+  font-size: 80%;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
-
-#developer-toolbar form {
-        margin: -3px 0 0 0;
-        padding: 0;
-}
-
-#developer-toolbar tr { 
-       border-top: 4px solid #616093;
-}
-
 #developer-toolbar td a { 
-  border: solid 1px grey;
-  padding: 0 2px;
+  border: solid 1px #616093;
   text-align: center; 
   color: white;
   text-decoration: none;
 }
-
 #developer-toolbar td a:hover { 
   text-decoration: none;
   background-color: #999999;
   border: solid 1px #cccccc;
 }
-#developer-toolbar #developer-search {
+#developer-toolbar #search {
+  font: 80% tahoma;
   color: white;
 }
-
-#developer-toolbar #developer-search input {
-  padding: 0;
-  font-size: 85%;
+#developer-toolbar #search input {
+  font: 100% tahoma;
 }
-
 #developer-toolbar td a.on {
   background-color: #888888;
   border: solid 1px #cccccc;
 }
-
 #developer-toolbar td a:hover.on {
   background-color: #666666;
   border: solid 1px #999999;
@@ -48,7 +37,6 @@
 
 #developer-toolbar .actions { 
   padding: 0;
-  margin: 0;
 }
 
 #developer-toolbar .actions ul { 
@@ -57,7 +45,7 @@
   display: inline;
   border: none;
 }
-
+                
 #developer-toolbar .actions ul li {
   margin: 0;
   padding: 0;
@@ -72,7 +60,8 @@ div.developer-support-adp-box-on {
   background-color: #fcc;
   border-style: solid;
   border-color: #f33;
-  border-width: 1px;
+  border-width: 1px 1px 1px 1px;
+  line-height: 1.2em;
 }
 
 div.developer-support-adp-box-off {
@@ -82,9 +71,7 @@ div.developer-support-adp-box-off {
 
 span.developer-support-adp-file-on {
   font-size: 80%;
-  line-height: 1.3em;
-  margin-left: 1em;
-  font-weight: bold;
+  line-height: 1.2em;
 }
 
 span.developer-support-adp-file-off {
@@ -110,21 +97,11 @@ div.developer-support-adp-output-off {
 
 .developer-support-footer {
   clear: both;
+  float: left;
   padding: 6px;
   border: solid 1px gray;
   background-color: #e1e1e1;
+  margin-top: 4px;
+  
 }
 
-.developer-support-footer-off {
-        display: none;
-}
-
-/* Debug tags normally display: none */ 
-div.developer-support-debug {
-        display: block;
-        border: 1px solid red;
-}
-span.developer-support-debug {
-        display: inline;
-        color: red;
-}
