@@ -33,7 +33,8 @@ specification for many physical pages, so the overall layout of a site can be mo
             <file path="resources/forms/confirm-button.adp"/>
             <file path="resources/forms/confirm-button.tcl"/>
             <file path="resources/forms/grid.adp"/>
-            <file path="resources/forms/lars-standard.adp"/>
+            <file path="resources/forms/standard-lars.adp"/>
+            <file path="resources/forms/coddo.adp"/>
             <file path="resources/forms/plain.adp"/>
             <file path="resources/forms/plainest.adp"/>
             <file path="resources/forms/standard.adp"/>
