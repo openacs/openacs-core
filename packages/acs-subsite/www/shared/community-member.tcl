@@ -21,7 +21,6 @@ ad_page_contract {
     url:onevalue
     bio:onevalue
     verified_user_id:onevalue
-    user_contributions:multirow
     subsite_url:onevalue
 }
 
