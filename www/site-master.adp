@@ -96,7 +96,7 @@
   <div class="action-list">
     <ul>
       <if @num_of_locales@ gt 1>
-        <li><a href="@change_locale_url@">Change locale</a></li>
+        <li><a href="@change_locale_url@">#acs-subsite.Change_locale_label#</a></li>
       </if>
       <else>
         <if @locale_admin_url@ not nil>
