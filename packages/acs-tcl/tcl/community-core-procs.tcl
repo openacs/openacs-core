@@ -421,27 +421,32 @@ ad_proc -public acs_user::get {
     @param  array       The name of an array into which you want the information put. 
     
     The attributes returned are: 
-                 user_id, 
-                 first_names, 
-                 last_name, 
-                 name (first_names last_name),
-                 email, 
-                 url, 
-                 screen_name,
-                 priv_name,  
-                 priv_email,
-                 email_verified_p,
-                 email_bouncing_p,
-                 no_alerts_until,
-                 last_visit,
-                 second_to_last_visit,
-                 n_sessions,
-                 password_question,
-                 password_answer,
-                 password_changed_date,
-                 member_state,
-                 rel_id,
-                 bio (if -include_bio switch is present)
+
+    <ul>
+      <li> user_id 
+      <li> username
+      <li> authority_id
+      <li> first_names
+      <li> last_name
+      <li> name (first_names last_name)
+      <li> email
+      <li> url
+      <li> screen_name
+      <li> priv_name 
+      <li> priv_email
+      <li> email_verified_p
+      <li> email_bouncing_p
+      <li> no_alerts_until
+      <li> last_visit
+      <li> second_to_last_visit
+      <li> n_sessions
+      <li> password_question
+      <li> password_answer
+      <li> password_changed_date
+      <li> member_state
+      <li> rel_id
+      <li> bio (if -include_bio switch is present)
+    </ul>
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
@@ -455,6 +460,29 @@ ad_proc -public acs_user::get {
     if { $include_bio_p } {
         set row(bio) [person::get_bio -person_id $user_id]
     }
+}
+
+ad_proc -public acs_user::get_element {
+    {-user_id {}}
+    {-element:required}
+} {
+    Get a particular element from the basic information about a user returned by acs_user::get.
+    Throws an error if the element does not exist.
+
+    @option user_id     The user_id of the user to get the bio for. Leave blank for current user.
+
+    @option element     Which element you want to retrieve.
+    
+    @return The element asked for.
+
+    @see acs_user::get
+} {
+    acs_user::get \
+        -user_id $user_id \
+        -array row \
+        -include_bio=[string equal $element "bio"]
+    
+    return $row($element)
 }
 
 ad_proc -public acs_user::update {
