@@ -73,7 +73,7 @@ if { $replace_tags_p } {
         set number_of_replacements [lang::util::replace_temporary_tags_with_lookups $file]
         set total_number_of_replacements [expr $total_number_of_replacements + $number_of_replacements]
 
-        append processing_html_result "Did $number_of_replacements replacements, any further details are in the log file"
+        append processing_html_result "Did $number_of_replacements replacements, see the log file for details"
     }
 }    
 
