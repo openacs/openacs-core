@@ -149,14 +149,17 @@ proc ad_proc args {
     # Also moved the uplevel'd call to namespace current to the if statement,
     # to avoid it being called unnecessarily.
     #
-    
+
     set proc_name_as_passed $proc_name
+    set parent_namespace [string trimleft [uplevel 1 {::namespace current}] ::]
 
     if { ![string match ::* $proc_name] } {
-        set proc_name [string trimleft [uplevel 1 {::namespace current}]::$proc_name ::]
+        set proc_name ${parent_namespace}::$proc_name
+    }
+    set proc_name [string trimleft $proc_name ::]
 
-    } else {
-        set proc_name [string trimleft $proc_name ::]
+    if {![string eq $parent_namespace {}]} { 
+        ns_log Debug "proc $proc_name_as_passed declared in namespace $parent_namespace via namespace eval; coding standard is to declare as $proc_name"
     }
 
     set arg_list [lindex $args [expr { $i + 1 }]]
