@@ -206,19 +206,19 @@ aa_register_case auth_create_user {
 }
 
 aa_register_case auth_confirm_email {
-    Test the auth::confirm_email proc.
+    Test the auth::set_email_verified proc.
 
     @author Peter Marklund
 } {
     set user_id [ad_conn user_id]
 
-    auth::confirm_email -user_id $user_id
+    auth::set_email_verified -user_id $user_id
 
     # Check that update was made in db
     set email_verified_p [db_string select_email_verified_p {
         select email_verified_p
-        from cc_users
-        where user_id = :user_id
+        from   cc_users
+        where  user_id = :user_id
     }]
 
     aa_equals "email should be verified" $email_verified_p "t"
