@@ -94,7 +94,7 @@
       </if>
       <else>
         <div id="login-box">
-          <include src="/packages/acs-subsite/www/register/login-include" return_url="/" username="@username@" authority_id="@authority_id@">
+          <include src="/packages/acs-subsite/lib/login" return_url="/" username="@username@" authority_id="@authority_id@">
         </div>
       </else>
 
