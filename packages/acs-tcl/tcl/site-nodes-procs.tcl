@@ -394,7 +394,7 @@ namespace eval site_node {
         if { ![empty_string_p $element] } {
             # We need to update the cache for all the child nodes as well
             set return_val [list]
-            foreach chil_url $child_urls {
+            foreach child_url $child_urls {
                 array unset site_node
                 array set site_node [site_node::get_from_url -url $child_url]
 
