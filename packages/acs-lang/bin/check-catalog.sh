@@ -38,10 +38,8 @@ get_catalog_keys() {
 }
 
 get_date_time_key() {
-    full_key=$1
+    message_key=$1
 
-    package_key=$(echo $full_key | ${script_path}/mygrep '^([^.]+)\.')
-    message_key=$(echo $full_key | ${script_path}/mygrep '\.([^.]+)$')
     localization_msg_part=$(echo $message_key | ${script_path}/mygrep '^localization-(.*)$')
 
     echo $localization_msg_part
@@ -49,10 +47,11 @@ get_date_time_key() {
 
 check_one_key_in_catalog_file() {
     message_key=$1
+    catalog_package_key=$2
 
-    egrep -q "<msg[[:space:]]+key=\"$message_key\"" catalog/${package_key}.en_US.ISO-8859-1.xml \
+    egrep -q "<msg[[:space:]]+key=\"$message_key\"" ../${catalog_package_key}/catalog/${catalog_package_key}.en_US.ISO-8859-1.xml \
       || \
-    echo "$0: $package_key - Warning: key $message_key not in catalog file" 
+    echo "$0: $package_key - Warning: key $message_key not in $catalog_package_key catalog file" 
 }
 
 get_message_key_pattern() {
@@ -78,7 +77,7 @@ check_consistency_non_en_US_files() {
 
     for file_name in $(ls catalog/${package_key}*.xml | grep -v 'en_US.ISO-8859-1.xml')
     do
-        echo "$0: $package_key - checking that keys in $file_name are also in en_US catalog file"
+        #echo "$0: $package_key - checking that keys in $file_name are also in en_US catalog file"
 
         for catalog_key in `get_catalog_keys $file_name`
         do
@@ -92,7 +91,7 @@ check_catalog_keys_have_lookups() {
     # Check that all keys in the catalog file are either in tcl or adp or info files
     for catalog_key in `get_catalog_keys catalog/${package_key}.en_US.ISO-8859-1.xml` 
     do 
-        date_time_key=$(get_date_time_key)
+        date_time_key=$(get_date_time_key $catalog_key)
         if [ -n "$date_time_key" ]; then
             # Need special regexp for date time message keys
             lookup_lines=$(find ../ -regex '.*\.\(info\|adp\|sql\|tcl\)' | xargs egrep "lc_get[^]]+$date_time_key")
@@ -101,7 +100,7 @@ check_catalog_keys_have_lookups() {
         fi
         
         if [ -z "$lookup_lines" ]; then
-            echo "$0: $package_key - Warning key $catalog_key in catalog file not found in any adp, info, sql, or tcl file"
+            echo "$0: $package_key - Warning: key $catalog_key in catalog file not found in any adp, info, sql, or tcl file"
         fi
     done
 }
@@ -109,18 +108,20 @@ check_catalog_keys_have_lookups() {
 check_tcl_file_lookups_are_in_catalog() {
 
     # Check that all message lookups in tcl files have entries in the message catalog
+    #echo "$0: $package_key - checking non-datetime tcl lookups"
     message_key_pattern=$(get_message_key_pattern)
     for tcl_message_key in $(find ../ -iname '*.tcl'|xargs ${script_path}/mygrep \
                              "(?ms)\[_\s+(?:\[ad_conn locale\]\s+)?\"?${package_key}\.($message_key_pattern)\"?")
-    do 
-        check_one_key_in_catalog_file $tcl_message_key
+    do        
+        check_one_key_in_catalog_file $tcl_message_key $package_key
     done
 
     # Date time message lookups are special cases as they use lc_get
+    #echo "$0: $package_key - checking datetime tcl lookups"
     for tcl_message_key in $(find ../ -iname '*.tcl'|xargs ${script_path}/mygrep \
                              "(?ms)\[lc_get[^]]+?($message_key_pattern)\"?\]")
     do 
-        check_one_key_in_catalog_file $tcl_message_key
+        check_one_key_in_catalog_file "localization-$tcl_message_key" acs-lang
     done
 }
 
@@ -133,7 +134,7 @@ check_adp_file_lookups_are_in_catalog() {
     for adp_message_key in $(find ../ -regex '.*\.\(info\|adp\)'|xargs ${script_path}/mygrep \
                             "#${package_key}\.($message_key_pattern)#")
     do 
-        check_one_key_in_catalog_file $adp_message_key
+        check_one_key_in_catalog_file $adp_message_key $package_key
     done
 }
 ### Functions end
@@ -167,9 +168,8 @@ do
     package_path="${script_path}/../../${package_key}"
     cd $package_path
 
-    for file_name in $(ls catalog/*.xml)
+    for file_name in $(ls catalog/*en_US*.xml)
     do
-        echo "$0: $package_key - checking filename consistency of catalog file $file_name"
         ${script_path}/check-catalog-file-path.pl "${package_path}/${file_name}"
     done
 
