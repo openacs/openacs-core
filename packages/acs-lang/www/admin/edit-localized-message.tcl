@@ -10,141 +10,109 @@ ad_page_contract {
 
 } {
     locale
-    message_key
     package_key
-    {translated_p 0}
-    {return_url "display-localized-messages?[export_vars { package_key locale translated_p }]"}
-} -properties {
+    message_key
+    show:optional
+    {usage_p "f"}
+    {return_url {}}
 }
 
-if {[info exists locale]} {
-    set current_locale $locale
-} else {
-    set current_locale [ad_conn locale]
-}
-
-set tab [ns_urlencode "localized-messages"]
-
-set context_bar [ad_context_bar [list "index?tab=$tab" "Locales & Messages"] \
-    [list "display-grouped-messages?tab=$tab&locale=$locale" "Listing"] \
-    [list "display-localized-messages?[export_vars { package_key locale translated_p }]" "Messages"] "Edit"]
-
-
-# This has an ugly smell: But let's hardcode the default to en_US
-
+# We rename to avoid conflict in queries
+set current_locale $locale
 set default_locale en_US
 
-# The part that deals with images is removed - so all messages are treated
-# as simple text.
-
-form create message_editing
-
-element create message_editing original_message \
-    -label "Original Message" -datatype text -widget inform
-
-element create message_editing message -label "Message" \
-    -datatype text -widget textarea -html { rows 6 cols 40 }
-
-element create message_editing comment -optional -label "Comment" \
-    -datatype text -widget textarea -html { rows 6 cols 40 }
-
-# The hidden elements for passing package key, message key and locale
-
-element create message_editing message_key -datatype text -widget hidden
-
-element create message_editing package_key -datatype text -widget hidden
-
-element create message_editing locale -datatype text -widget hidden
-
-element create message_editing translated_p -label "translated_p" -datatype text -widget hidden -value $translated_p
-element create message_editing return_url -datatype text -widget hidden -value $return_url
-
 set locale_label [ad_locale_get_label $current_locale]
+set default_locale_label [ad_locale_get_label $default_locale]
 
-# Header Stuff ... We make sure that this page doesn't get cached.
-set header_stuff "<meta http-equiv=\"Pragma\" content=\"no-cache\" />" 
+set page_title "Edit $package_key.$message_key"
+set context [list [list "package-list?[export_vars { locale }]" $locale_label] \
+                 [list "message-list?[export_vars { locale package_key show }]" $package_key] \
+                 "$package_key.$message_key"]
 
-if { [form is_request message_editing] } {
 
-    set sql_select_original_message {
-        select message
-        from lang_messages
-        where message_key = :message_key and 
-              package_key = :package_key and
-              locale = :default_locale
+set description_edit_url "edit-description?[export_vars { locale package_key message_key show }]"
+
+set usage_hide_url "[ad_conn url]?[export_vars { locale package_key message_key show return_url }]"
+set usage_show_url "[ad_conn url]?[export_vars { locale package_key message_key show {usage_p 1} return_url }]"
+
+
+ad_form -name message -form {
+    {locale:text(hidden),optional {value $current_locale}}
+    {package_key:text(hidden),optional {value $package_key}}
+    {message_key:text(hidden),optional {value $message_key}}
+    {show:text(hidden),optional}
+    {return_url:text(hidden),optional {value $return_url}}
+
+    {message_key_pretty:text(inform)
+        {label "Message Key"}
+        {value "$package_key.$message_key"}
     }
-
-    set sql_select_translated_message {
-        select message as translated_message
-        from   lang_messages
-        where  message_key = :message_key and 
-               package_key = :package_key and
-               locale = :current_locale
+    {description:text(inform)
+        {label "Description"}
+        {after_html {}}
     }
+} 
 
-    # Let's get the original message (in english)
-    db_1row select_original_message $sql_select_original_message
-
-    # let's get the translated message (we use 0or1row since the message
-    # might not exists
-    db_0or1row select_translated_message $sql_select_translated_message
-
-    if { [exists_and_not_null translated_message] } {
-        # No need to quote the message here - the form builder does it for us
-        element set_properties message_editing message -value $translated_message
-    } else {
-        element set_properties message_editing message -value "No Translation Available"
-    }
-   
-    element set_properties message_editing message_key -value $message_key
-    element set_properties message_editing package_key -value $package_key
-    element set_properties message_editing locale -value $current_locale
-    element set_properties message_editing original_message -value [ad_quotehtml $message]
-
-} else {
-
-    # We are not processing a request, therefor it's a submission. Get the values
-    # from the form and validate them
-
-    form get_values message_editing
-    if { $message == "" } {
-
-        element set_error message_editing message "Message is required"
-        set sql_select_original_message {
-            select message
-            from   lang_messages
-            where  message_key = :message_key and 
-                   package_key = :package_key and
-                   locale = :default_locale
+if { ![string equal $default_locale $current_locale] } {
+    ad_form -extend -name message -form {
+        {original_message:text(inform)
+            {label "$default_locale_label Message"}
         }
-
-        db_1row select_original_message $sql_select_original_message
-
-        element set_properties message_editing original_message -value $message
-
+    }
+}
+    
+ad_form -extend -name message -form {
+    {message:text(textarea)
+        {label "$locale_label Message"} 
+        {html { rows 6 cols 40 }}
+    }
+    {comment:text(textarea),optional
+        {label "Comment"}
+        {html { rows 6 cols 40 }}
+    }
+    {submit:text(submit)
+        {label "     Update     "}
+    }
+} -on_request {
+    db_1row select_original_message {
+        select lm.message as original_message,
+               lmk.description
+        from   lang_messages lm,
+               lang_message_keys lmk
+        where  lm.message_key = lmk.message_key
+        and    lm.package_key = lmk.package_key
+        and    lm.package_key = :package_key
+        and    lm.message_key = :message_key
+        and    lm.locale = :default_locale
     }
 
-}
+    db_0or1row select_translated_message {
+        select message as message
+        from   lang_messages
+        where  package_key = :package_key
+        and    message_key = :message_key
+        and    locale = :current_locale
+    }
+    
+    set original_message [ad_quotehtml $original_message]
+    if { [exists_and_not_null message] } {
+        set message $message
+    }
 
-
-if { [form is_valid message_editing] } {
-    # We get the values from the form
-    form get_values message_editing message_key
-    form get_values message_editing package_key
-    form get_values message_editing locale
-    form get_values message_editing message
-    form get_values message_editing return_url
+    if { [empty_string_p $description] } {
+        set description [subst {(<a href="$description_edit_url">add description</a>)}]
+    } else {
+        set description "[ad_text_to_html -- $description] [subst { (<a href="$description_edit_url">edit</a>)}]"
+    }
+} -on_submit {
 
     # Register message via acs-lang
-    lang::message::register $locale $package_key $message_key $message $comment
+    lang::message::register -comment $comment $locale $package_key $message_key $message
 
-    # Even if the country code is 2 chars, we avoid problems...
-    set escaped_locale [ns_urlencode $locale]
-
-    forward $return_url
-    
-    error $message
-
+    if { [empty_string_p $return_url] } {
+        set return_url "[ad_conn url]?[export_vars { locale package_key message_key show }]"
+    }
+    ad_returnredirect $return_url
+    ad_script_abort
 }
 
-set lookups_url "lookups?[export_vars { package_key { message_key_list $message_key } }]"

@@ -1,7 +1,4 @@
 <if @audit:rowcount@ gt 0>
-  <p>
-    Translation History:
-  </p>
   <ul>
     <multiple name="audit">
       <li>
@@ -27,3 +24,8 @@
     </multiple>
   </ul>
 </if>
+<else>
+  <p>
+    No changes or comments.
+  </p>
+</else>

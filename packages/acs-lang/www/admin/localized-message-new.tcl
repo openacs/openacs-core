@@ -15,70 +15,66 @@ ad_page_contract {
 }
 
 
+# We rename to avoid conflict in queries
+set current_locale $locale
+set default_locale en_US
+
+set locale_label [ad_locale_get_label $current_locale]
+set default_locale_label [ad_locale_get_label $default_locale]
+
+set page_title "Create New Message"
+set context [list [list "package-list?[export_vars { locale }]" $locale_label] \
+                 [list "message-list?[export_vars { locale package_key show }]" $package_key] \
+                 $page_title]
+
+
+
+
 # We check that this request is coming for the system wide default
 # locale. If not, we can't allow the creation of a new localized 
 # message.
 
-if {[info exists locale]} {
-    set locale_user $locale
-} else {
-    set locale_user [ad_conn locale]
+if { ![string equal $current_locale $default_locale] } {
+    ad_return_error "Can only create messages in the default locale" "Can only create messages in the default locale"
+    ad_script_abort
 }
 
-set default_locale en_US
+append return_url "message-list?[export_vars { locale package_key }]"
 
-if { $locale_user != $default_locale } {
-   # ooops!
-   # We should let the user know about this ... shouldn't we? noooooo... :)
-   set encoded_locale [ns_urlencode $locale_user]
-   ad_returnredirect "display-grouped-messages?locale=$encoded_locale"
+form create message_new
 
-}
-
-set locale_label [ad_locale_get_label $locale_user]
-
-append return_url "display-grouped-messages?locale=" [ns_urlencode $locale_user]
-
-set tab [ns_urlencode "localized-messages"]
-
-set context_bar [ad_context_bar [list "index?tab=$tab" "Locales & Messages"] \
-    [list "display-grouped-messages?tab=$tab&locale=$locale" "Listing"] \
-    "New"]
-
-template::form create message_new
-
-template::element create message_new package_key_display -label "Package" -datatype text \
+element create message_new package_key_display -label "Package" -datatype text \
     -widget inform -value $package_key
 
-template::element create message_new message_key -label "Message key" -datatype text -widget text
+element create message_new message_key -label "Message key" -datatype text -widget text -html { size 50 }
 
-template::element create message_new message -label "Message" -datatype text \
+element create message_new message -label "Message" -datatype text \
     -widget textarea -html { rows 6 cols 40 }
 
-template::element create message_new package_key -datatype text -widget hidden
+element create message_new package_key -datatype text -widget hidden
 
 # The two hidden tags that we need to pass on the key and language to the
 # processing of the form
-template::element create message_new locale -label "locale" -datatype text -widget hidden
+element create message_new locale -label "locale" -datatype text -widget hidden
 
-if { [template::form is_request message_new] } {
+if { [form is_request message_new] } {
 
-    template::element set_properties message_new package_key -value $package_key
-    template::element set_properties message_new locale -value $locale_user
+    element set_properties message_new package_key -value $package_key
+    element set_properties message_new locale -value $current_locale
 
 } else {
 
     # We are not getting a request, so it's a post. Get and validate
     # the values
 
-    template::form get_values message_new
+    form get_values message_new
 
     # We have to check the format of the key submitted by the user,
     # We can't accept whitespaces or tabs, only alphanumerical and "-",
     # "_" or "." characters. The 1st character can't be a "."
     if { [regexp {[^[:alnum:]\_\-\.\?]} $message_key] } {
         # We matched for a forbidden character
-        template::element set_error message_new message_key \
+        element set_error message_new message_key \
             "Key can only have alphanumeric or \"-\", \"_\", \".\" or \"?\" characters"
 
     } 
@@ -86,19 +82,16 @@ if { [template::form is_request message_new] } {
     if { [string length $message_key] >= 200 } {
 
         # Oops. The length of the key is too high.
-        template::element set_error message_new key \
+        element set_error message_new key \
             "Key can only have less than 200 characters"
 
     }
 } 
 
-if { [template::form is_valid message_new] } {
+if { [form is_valid message_new] } {
 
     # We get the values from the form
-    template::form get_values message_new package_key
-    template::form get_values message_new message_key
-    template::form get_values message_new locale
-    template::form get_values message_new message
+    form get_values message_new package_key message_key locale message
 
     # We use the acs-lang registration of a translation. Simple, eh?
 
@@ -106,6 +99,6 @@ if { [template::form is_valid message_new] } {
 
     set escaped_locale [ns_urlencode $locale]
 
-    template::forward $return_url
+    forward $return_url
 
 }

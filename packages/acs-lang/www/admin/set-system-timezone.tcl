@@ -2,7 +2,8 @@
 ad_page_contract {
   Set the acs-lang system parameter which says what the local timezone offset is
 } {
-    {timezone ""}
+    {timezone_all ""}
+    {timezone_recommended ""}
 } -properties {
     page_title
     system_timezone
@@ -17,11 +18,14 @@ if { ![lang::system::timezone_support_p] } {
     ad_script_abort
 }
 
-if {![empty_string_p $timezone]} {
-    lang::system::set_timezone $timezone
+if { ![empty_string_p $timezone_recommended] } {
+    lang::system::set_timezone $timezone_recommended
+} elseif { ![empty_string_p $timezone_all] } {
+    lang::system::set_timezone $timezone_all
 }
 
 set page_title "Set System Timezone"
+set context [list $page_title]
 
 set system_timezone [lang::system::timezone]
 
@@ -69,6 +73,8 @@ if { [info exists utc_epoch] } {
         set sysdate_utc_epoch [clock scan $sysdate_utc]
         set delta_hours [expr round(($sysdate_utc_epoch - $utc_epoch)*4.0 / (60*60)) / 4.0]
         set recommended_offset [expr $system_utc_offset + $delta_hours]
+
+        set recommended_offset_pretty "UTC [format "+%d:%02d" [expr int($recommended_offset)] [expr int($recommended_offset*60) % 60]]"
 
         if { $delta_hours == 0 } {
             set correct_p 1

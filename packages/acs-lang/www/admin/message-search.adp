@@ -1,37 +1,57 @@
-<master src="master">
+<master>
   <property name="title">@page_title@</property>
-  <property name="context_bar">@context_bar;noquote@</property>
+  <property name="context">@context;noquote@</property>
   <property name="focus">search.q</property>
 
-<formtemplate id="search"></formtemplate>
+<formtemplate id="search">
+Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="submit" value="#acs-kernel.SearchButtonLabel#">
+</formtemplate>
 
 <if @submit_p@ true>
   <h2>Search Results</h2>
-        
-  <table cellpadding="0" cellspacing="0" border="0">
-   <tr>
-     <td style="background: #CCCCCC">
-       <table cellpadding="4" cellspacing="1" border="0">
-         <tr style="background: #FFFFe4">
-           <th>Package</th>
-           <th>Key</th>
-           <th>Original Message</th>
-           <th>Translated Message</th>
-           <th>Action</th>
-         </tr>
-         <multiple name="messages">
-           <tr style="background: #EEEEEE">
-             <td><a href="@messages.package_url@" title="Batch edit messages in this package">@messages.package_key@</a></td>
-             <td>@messages.message_key@</td>
-             <td>@messages.default_message@</td>
-             <td>@messages.translated_message@</td>
-             <td>(<span class="edit-anchor"><a href="@messages.edit_url@" title="Localize this message">edit</a></span>)</td>
-           </tr>
-         </multiple>
-      </table>
-     </td>
-   </tr>
- </table>
 
-  
+  <if @other_search_url@ not nil>
+    <p>
+      <b>&raquo;</b> <a href="@other_search_url@">Search for '@q@' in @other_locale@</a>
+    </p>
+  </if>
+   
+  <if @messages:rowcount@ gt 0>        
+    <table cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <td style="background: #CCCCCC">
+          <table cellpadding="4" cellspacing="1" border="0">
+            <tr style="background: #FFFFe4">
+              <th></th>
+              <th>Package</th>
+              <th>Message Key</th>
+              <th>@default_locale_label@ Message</th>
+              <if @default_locale@ ne @current_locale@>
+                <th>@locale_label@ Message</th>
+              </if>
+            </tr>
+            <multiple name="messages">
+              <tr style="background: #EEEEEE">
+                <td>
+                  <a href="@messages.edit_url@" title="Edit or comment on translation"><img src="/shared/images/Edit16.gif" border="0" width="16" height="16"></a>
+                </td>
+                <td><a href="@messages.package_url@">@messages.package_key@</a></td>
+                <td><a href="@messages.edit_url@" title="Edit or comment on translation">@messages.message_key_pretty@</a></td>
+                <td>@messages.default_message@</td>
+                <if @default_locale@ ne @current_locale@>
+                  <td>
+                    <if @messages.translated_message@ not nil>@messages.translated_message@</if>
+                    <else><span style="color: gray; font-style: italic;">Not translated</span></else>
+                  </td>
+                </if>
+              </tr>
+            </multiple>
+         </table>
+        </td>
+      </tr>
+    </table>
+  </if>
+  <else>
+    <i>No messages found.</i>
+  </else>
 </if>

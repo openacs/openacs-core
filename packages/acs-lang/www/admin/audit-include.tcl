@@ -21,7 +21,7 @@ db_foreach audit_inv_select {
     multirow append audit_inv \
         $overwrite_user \
         $overwrite_user_name \
-        [lc_time_fmt $overwrite_date "%x %Xb"] \
+        [lc_time_fmt $overwrite_date "%x %X"] \
         $old_message \
         $new_message \
         "$old_message,$new_message" \
