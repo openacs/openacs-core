@@ -269,44 +269,6 @@ where rel_side = 'two';
 --             and rel_type = :rel_type
 --
 
--- create view rc_parties_in_required_segs as
--- select parties_in_required_segs.group_id,
---        parties_in_required_segs.rel_type,
---        parties_in_required_segs.party_id
--- from
---    (select required_segs.group_id, 
---            required_segs.rel_type, 
---            seg_parties.party_id,
---            count(*) as num_matching_segs
---     from rc_required_rel_segments required_segs,
---          rel_segment_party_map seg_parties
---     where required_segs.required_rel_segment = seg_parties.segment_id
---     group by required_segs.group_id, 
---              required_segs.rel_type, 
---              seg_parties.party_id) parties_in_required_segs,
---    (select group_id, rel_type, count(*) as total
---     from rc_required_rel_segments
---     group by group_id, rel_type) total_num_required_segs
--- where
---       parties_in_required_segs.group_id = total_num_required_segs.group_id
---   and parties_in_required_segs.rel_type = total_num_required_segs.rel_type
---   and parties_in_required_segs.num_matching_segs = total_num_required_segs.total
--- UNION ALL
--- select group_rel_type_combos.group_id,
---        group_rel_type_combos.rel_type,
---        parties.party_id
--- from rc_required_rel_segments, 
---     (select groups.group_id, comp_or_member_rel_types.rel_type
---       from groups,
---            (select object_type as rel_type from acs_object_types
---             start with object_type = 'membership_rel'
---                     or object_type = 'composition_rel'
--- --             connect by supertype = prior object_type) comp_or_member_rel_types
---      ) group_rel_type_combos,
---      parties
--- where rc_required_rel_segments.group_id(+) = group_rel_type_combos.group_id
---   and rc_required_rel_segments.rel_type(+) = group_rel_type_combos.rel_type
---   and rc_required_rel_segments.group_id is null;
 
 create view comp_or_member_rel_types as 
 select o.object_type as rel_type 
@@ -318,18 +280,19 @@ create view group_rel_type_combos as
 select groups.group_id, comp_or_member_rel_types.rel_type
        from groups, comp_or_member_rel_types;
 
-
-create view parties_in_required_segs as 
-select required_segs.group_id, 
-           required_segs.rel_type, 
+create view parties_in_required_segs as
+select required_segs.group_id,
+           required_segs.rel_type,
            seg_parties.party_id,
+           seg_parties.segment_id,
            count(*) as num_matching_segs
     from rc_required_rel_segments required_segs,
          rel_segment_party_map seg_parties
     where required_segs.required_rel_segment = seg_parties.segment_id
-    group by required_segs.group_id, 
-             required_segs.rel_type, 
-             seg_parties.party_id;
+    group by required_segs.group_id,
+             required_segs.rel_type,
+             seg_parties.party_id,
+             seg_parties.segment_id;
 
 create view total_num_required_segs as 
 select group_id, rel_type, count(*) as total

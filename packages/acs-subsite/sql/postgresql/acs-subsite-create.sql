@@ -10,9 +10,12 @@
 \i attribute.sql
 \i portraits.sql
 \i application-groups-create.sql
-\i user-profiles-create.sql
 \i subsite-callbacks-create.sql
 \i host-node-map-create.sql
+
+-- DRB: user profiles are fundamentally broken, which is probably why they
+-- weren't created in the original ACS 4.2 Oracle sources. 
+-- \i user-profiles-create.sql
 
 -- This view lets us avoid using acs_object.name to get party_names.
 -- 
