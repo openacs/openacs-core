@@ -9,7 +9,7 @@
 
 <table>
   <tr valign="top">
-    <td>#acs-subsite.Grant_1# </td>
+    <td>#acs-subsite.Grant#: </td>
 
     <td>&nbsp;</td>
 

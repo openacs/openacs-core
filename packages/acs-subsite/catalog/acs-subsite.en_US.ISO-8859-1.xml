@@ -33,6 +33,7 @@
   <msg key="Applications">Applications</msg>
   <msg key="Approve">Approve</msg>
   <msg key="at">at</msg>
+  <msg key="Authority">Authority</msg>
   <msg key="Bad_Password">Bad Password</msg>
   <msg key="Ban">Ban</msg>
   <msg key="Basic_Information">Basic Information</msg>
@@ -120,7 +121,6 @@ Please visit the following link to change your password now:
   <msg key="go_upload_the_users_por">go upload the user's portrait</msg>
   <msg key="go_upload_your_portrait">go upload your portrait</msg>
   <msg key="Grant">Grant</msg>
-  <msg key="Grant_1">Grant:</msg>
   <msg key="Grant_Permission">Grant Permission</msg>
   <msg key="Hide">Hide</msg>
   <msg key="Home_page">Home page</msg>
@@ -144,6 +144,7 @@ Please visit the following link to change your password now:
   <msg key="log_in">log in</msg>
   <msg key="Log_in_to_system">Log in to %system_name%</msg>
   <msg key="logging_back_in">logging back in</msg>
+  <msg key="Login_has_expired">The login page has expired. Please log in again.</msg>
   <msg key="Login_or_register">Login or register</msg>
   <msg key="login_page">login page</msg>
   <msg key="Logout">Logout</msg>
@@ -245,6 +246,7 @@ account was deleted for some reason.</msg>
   <msg key="No_package_parameters">This package does not have any parameters.</msg>
   <msg key="no_portrait_title_message">your portrait</msg>
   <msg key="No_pretty_plural">No %pretty_plural%</msg>
+  <msg key="No_services">No services</msg>
   <msg key="none">none</msg>
   <msg key="Not_logged_in">Not logged in</msg>
   <msg key="Notes">Notes:</msg>
@@ -287,6 +289,7 @@ You can always change your password by doing the following:
     &lt;p&gt; Once you're approved, you'll get an email message and you can return to start using %system_name%. &lt;/p&gt;
   </msg>
   <msg key="Reject">Reject</msg>
+  <msg key="Remember_my_login">Remember my login on this computer</msg>
   <msg key="Remove">Remove</msg>
   <msg key="Req_membership_comm">Request membership of this community</msg>
   <msg key="Request_membership">Request membership</msg>

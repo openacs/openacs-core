@@ -62,7 +62,7 @@ if { [llength [auth::authority::get_authority_options]] > 1 } {
     ad_form -extend -name user_info -form {
         {authority_id:text(select)
             {mode $elm_mode(authority_id)}
-            {label "Authority"}
+            {label "[_ acs-subsite.Authority]"}
             {options {[auth::authority::get_authority_options]}}
         }
     }
@@ -71,7 +71,7 @@ if { $user(authority_id) != [auth::authority::local] || ![auth::UseEmailForLogin
      ([acs_user::site_wide_admin_p] && [llength [auth::authority::get_authority_options]] > 1) } {
     ad_form -extend -name user_info -form {
         {username:text(text)
-            {label "Username"}
+            {label "[_ acs-subsite.Username]"}
             {mode $elm_mode(username)}
         }
     }
@@ -82,17 +82,17 @@ if { $user(authority_id) != [auth::authority::local] || ![auth::UseEmailForLogin
 
 ad_form -extend -name user_info -form {
     {first_names:text
-        {label "First names"}
+        {label "[_ acs-subsite.First_names]"}
         {html {size 50}}
         {mode $elm_mode(first_names)}
     }
     {last_name:text
-        {label "Last Name"}
+        {label "[_ acs-subsite.Last_name]"}
         {html {size 50}}
         {mode $elm_mode(last_name)}
     }
     {email:text
-        {label "Email"}
+        {label "[_ acs-subsite.Email]"}
         {html {size 50}}
         {mode $elm_mode(email)}
     }
@@ -102,7 +102,7 @@ if { ![string equal [acs_user::ScreenName] "none"] } {
     ad_form -extend -name user_info -form \
         [list \
              [list screen_name:text[ad_decode [acs_user::ScreenName] "solicit" ",optional" ""] \
-                  {label "Screen name"} \
+                  {label "[_ acs-subsite.Screen_name]"} \
                   {html {size 50}} \
                   {mode $elm_mode(screen_name)} \
                  ]]
@@ -111,12 +111,12 @@ if { ![string equal [acs_user::ScreenName] "none"] } {
 
 ad_form -extend -name user_info -form {
     {url:text,optional
-        {label "Home Page"}
+        {label "[_ acs-subsite.Home_page]"}
         {html {size 50}}
         {mode $elm_mode(url)}
     }
     {bio:text(textarea),optional
-        {label "About yourself"}
+        {label "[_ acs-subsite.About_You]"}
         {html {rows 8 cols 60}}
         {mode $elm_mode(bio)}
         {display_value {[ad_text_to_html -- $user(bio)]}}
