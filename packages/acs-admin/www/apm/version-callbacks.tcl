@@ -10,7 +10,7 @@ ad_page_contract {
 db_1row package_version_info "select pretty_name, version_name from apm_package_version_info where version_id = :version_id"
 
 set page_title "Tcl Callbacks"
-set context_bar [ad_context_bar [list "version-view?[export_vars { version_id }]" "$pretty_name $version_name"] $page_title]
+set context_bar [ad_context_bar [list "." "ACS Package Manager Administration"] [list "version-view?[export_vars { version_id }]" "$pretty_name $version_name"] $page_title]
 
 db_multirow callbacks get_all_callbacks {
     select type,

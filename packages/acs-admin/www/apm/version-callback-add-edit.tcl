@@ -35,7 +35,7 @@ if { [empty_string_p $type] } {
     set page_title "Edit Tcl Callback"
 }
 
-set context_bar [ad_context_bar [list "version-view?[export_vars { version_id }]" "$pretty_name $version_name"] [list $return_url "Tcl Callbacks"] $page_title]
+set context_bar [ad_context_bar [list "." "ACS Package Manager Administration"] [list "version-view?[export_vars { version_id }]" "$pretty_name $version_name"] [list $return_url "Tcl Callbacks"] $page_title]
 
 set type_label "Tcl procedure name"
 ad_form -name callback -cancel_url $return_url -form {
