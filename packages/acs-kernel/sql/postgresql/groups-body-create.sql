@@ -883,14 +883,6 @@ declare
   row                           record;
 begin
  
-   -- Delete all segments defined for this group
-   for row in  select segment_id 
-                 from rel_segments 
-                where group_id = delete__group_id 
-   LOOP
-       PERFORM rel_segment__delete(row.segment_id);
-   end loop;
-
    -- Delete all the relations of any type to this group
    for row in select r.rel_id, t.package_name
                  from acs_rels r, acs_object_types t
@@ -901,6 +893,14 @@ begin
       execute ''select '' ||  row.package_name || ''__delete('' || row.rel_id || '')'';
    end loop;
  
+   -- Delete all segments defined for this group
+   for row in  select segment_id 
+                 from rel_segments 
+                where group_id = delete__group_id 
+   LOOP
+       PERFORM rel_segment__delete(row.segment_id);
+   end loop;
+
    PERFORM party__delete(delete__group_id);
 
    return 0; 
