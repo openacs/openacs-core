@@ -544,6 +544,9 @@
             <file type="content_page" path="www/register/email-confirm.adp"/>
             <file type="content_page" path="www/register/email-confirm.tcl"/>
             <file type="query_file" path="www/register/email-confirm.xql"/>
+            <file type="content_page" path="www/register/email-for-password-2.tcl"/>
+            <file type="content_page" path="www/register/email-for-password.adp"/>
+            <file type="content_page" path="www/register/email-for-password.tcl"/>
             <file type="content_page" path="www/register/email-password-2.adp"/>
             <file type="content_page" path="www/register/email-password-2.tcl"/>
             <file type="query_file" path="www/register/email-password-2.xql"/>
@@ -574,12 +577,14 @@
             <file type="query_file" path="www/register/user-new-2.xql"/>
             <file type="content_page" path="www/register/user-new.adp"/>
             <file type="content_page" path="www/register/user-new.tcl"/>
+            <file type="query_file" path="www/register/user-new.xql"/>
             <file type="content_page" path="www/shared/1pixel.tcl"/>
             <file type="query_file" db_type="postgresql" path="www/shared/community-member-postgresql.xql"/>
             <file type="content_page" path="www/shared/community-member.adp"/>
             <file type="content_page" path="www/shared/community-member.tcl"/>
             <file type="content_page" path="www/shared/confirm.adp"/>
             <file type="content_page" path="www/shared/confirm.tcl"/>
+            <file type="content_page" path="www/shared/db-error.adp"/>
             <file type="content_page" path="www/shared/index.tcl"/>
             <file type="content_page" path="www/shared/iso-codes-no-exist.adp"/>
             <file type="content_page" path="www/shared/iso-codes.adp"/>
@@ -647,6 +652,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowPersistentLoginP"  default="1" description="do we allow persistent logins?" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailForgottenPasswordP"  default="1" description="Email users forgotten passwords" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultMaster"  default="/www/default-master" description="Path to the default master page (skin) for acs-templating.  Extensions                                             .adp/.tcl are implied."/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="UseSiteSpecificMaster"  default="0" description="Tell the default-master template that a template named site-specific-master in the same directory should be used instead of itself. "/>
         </parameters>
 
     </version>
