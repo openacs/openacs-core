@@ -143,7 +143,7 @@ ad_proc -public template_tag_if_interp_expr {} {
     }
 
     in { 
-      set expr [join [lrange $args $i end] "|"]
+      set expr "^([join [lrange $args $i end] "|"])\$"
       append condition "\[regexp \"$expr\" $arg1\] " 
       set next [llength $args]
     }
