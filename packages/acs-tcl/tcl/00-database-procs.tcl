@@ -755,7 +755,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
     if {![string equal $sql $pre_sql]} {
         set sql [uplevel 2 [list subst -nobackslashes $sql]]
     }
-    ns_log Debug Debug "PLPGSQL: converted: $sql to: select $function_name ()"
+    ns_log Debug "PLPGSQL: converted: $sql to: select $function_name ()"
 
     # create a function definition statement for the inline code 
     # binding is emulated in tcl. (OpenACS - Dan)
