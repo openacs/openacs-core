@@ -376,7 +376,7 @@ proc db_qd_internal_load_queries {file_pointer file_tag} {
     set whole_file [db_qd_internal_prepare_queryfile_content $whole_file]
 
     # Iterate and parse out each query
-    set parsing_state [db_qd_internal_parse_init $whole_file]
+    set parsing_state [db_qd_internal_parse_init $whole_file $file_tag]
     
     ns_log Notice "QD = parsing state - $parsing_state"
 
@@ -439,6 +439,15 @@ proc db_qd_internal_get_cache {fullquery_name} {
 	# we need to do something
 	return ""
     }
+
+    # See if we have the correct location for this query
+    ns_log Notice "QD= query $fullquery_name from [db_fullquery_get_load_location $fullquery_array]"
+
+    # Let's reload this query file for now (ben)
+    db_qd_load_query_file [db_fullquery_get_load_location $fullquery_array]
+
+    # reload the fullquery
+    set fullquery_array [nsv_get OACS_FULLQUERIES $fullquery_name]
 
     # What we get back from the cache is the FullQuery structure
     return $fullquery_array
@@ -517,7 +526,7 @@ proc db_qd_internal_get_queryname_root {relative_path} {
 ## in the future. But right now we keep things simple
 
 # Initialize the parsing state
-proc db_qd_internal_parse_init {stuff_to_parse} {
+proc db_qd_internal_parse_init {stuff_to_parse file_path} {
     
     # Do initial parse
     set parsed_doc [ns_xml parse -persist $stuff_to_parse]
@@ -545,7 +554,7 @@ proc db_qd_internal_parse_init {stuff_to_parse} {
 
     set parsed_stuff [xml_find_child_nodes $root_node fullquery]
 
-    return [list $index $parsed_stuff $parsed_doc $default_rdbms]
+    return [list $index $parsed_stuff $parsed_doc $default_rdbms $file_path]
 }
 
 # Parse one query using the query state
@@ -562,6 +571,7 @@ proc db_qd_internal_parse_one_query {parsing_state} {
 
     # Default RDBMS
     set default_rdbms [lindex $parsing_state 3]
+    set file_path [lindex $parsing_state 4]
 
     ns_log Notice "QD = default_rdbms is $default_rdbms"
 
@@ -586,10 +596,10 @@ proc db_qd_internal_parse_one_query {parsing_state} {
 
     # Update the parsing state so we know
     # what to parse next 
-    set parsing_state [list $index $node_list [lindex $parsing_state 2] $default_rdbms]
+    set parsing_state [list $index $node_list [lindex $parsing_state 2] $default_rdbms $file_path]
 
     # Parse the actual query from XML
-    set one_query [db_qd_internal_parse_one_query_from_xml_node $one_query_xml $default_rdbms]
+    set one_query [db_qd_internal_parse_one_query_from_xml_node $one_query_xml $default_rdbms $file_path]
 
     # Return the query and the parsing state
     return [list $one_query $parsing_state]
@@ -598,7 +608,7 @@ proc db_qd_internal_parse_one_query {parsing_state} {
 
 
 # Parse one query from an XML node
-proc db_qd_internal_parse_one_query_from_xml_node {one_query_node {default_rdbms {}}} {
+proc db_qd_internal_parse_one_query_from_xml_node {one_query_node {default_rdbms {}} {file_path {}}} {
     ns_log Notice "QD = parsing one query node in XML with name -[ns_xml node name $one_query_node]-"
 
     # Check that this is a fullquery
@@ -623,7 +633,7 @@ proc db_qd_internal_parse_one_query_from_xml_node {one_query_node {default_rdbms
 	set rdbms [db_rdbms_parse_from_xml_node $rdbms_node]
     }
 
-    return [db_fullquery_create $queryname $querytext [list] "" $rdbms ""]
+    return [db_fullquery_create $queryname $querytext [list] "" $rdbms $file_path]
 }
 
 # Parse and RDBMS struct from an XML fragment node
