@@ -211,7 +211,7 @@ ad_proc -deprecated ad_admin_present_user {
     return [acs_community_member_admin_link -user_id $user_id -label $name]
 }
 
-ad_proc ad_header {
+ad_proc -deprecated ad_header {
     {-focus ""}
     page_title
     {extra_stuff_for_document_head ""} 
@@ -227,7 +227,7 @@ ad_proc ad_header {
 
 }
 
-ad_proc ad_header_with_extra_stuff {
+ad_proc -deprecated ad_header_with_extra_stuff {
     {-focus ""}
     page_title
     {extra_stuff_for_document_head ""} 
@@ -266,7 +266,7 @@ $extra_stuff_for_document_head
     return $html
 }
 
-ad_proc ad_footer {
+ad_proc -deprecated ad_footer {
     {signatory ""} 
     {suppress_curriculum_bar_p 0}
 } {
@@ -313,13 +313,13 @@ $ds_link
 # the way a page works, they should see a link to the
 # email address of the programmer who can fix the page).
 
-ad_proc ad_admin_owner {} {
+ad_proc -public ad_admin_owner {} {
     @return E-mail address of the Administrator of this site.
 } {
     return [ad_parameter -package_id [ad_acs_kernel_id]  AdminOwner]
 }
 
-ad_proc ad_admin_header {
+ad_proc -deprecated ad_admin_header {
     {-focus ""}
     page_title
 } "" {
@@ -333,7 +333,7 @@ ad_proc ad_admin_header {
 	return [ad_header_with_extra_stuff -focus $focus $page_title]
 }
 
-ad_proc ad_admin_footer {} {
+ad_proc -deprecated ad_admin_footer {} {
     Signs pages with ad_admin_owner (usually a programmer who can fix 
     bugs) rather than the signatory of the user pages
 } {
@@ -349,7 +349,7 @@ $ds_link
 </html>"
 }
 
-ad_proc ad_return_complaint {
+ad_proc -public ad_return_complaint {
     exception_count 
     exception_text
 } {

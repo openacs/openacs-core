@@ -58,11 +58,11 @@ proc server_cluster_do_httpget { url timeout } {
     }
 }
 
-proc_doc server_cluster_logging_p {} { Returns true if we're logging cluster requests. } {
+ad_proc -private server_cluster_logging_p {} { Returns true if we're logging cluster requests. } {
     return [ad_parameter -package_id [ad_acs_kernel_id] EnableLoggingP server-cluster 0]
 }
 
-ad_proc server_cluster_httpget_from_peers {
+ad_proc -private server_cluster_httpget_from_peers {
     { -timeout 5 }
     url
 } { Schedules an HTTP GET request to be issued immediately to all peer hosts (using ad_schedule_proc -once t -thread f -debug t 0). } {
@@ -77,16 +77,17 @@ ad_proc server_cluster_httpget_from_peers {
     }
 }
 
-proc_doc ad_canonical_server_p {} { Returns true if this is the primary server, false otherwise. } {
-    # we're using IP:port to uniquely identify the canonical server, since
-    # hostname or IP does not always uniquely identify an instance of
-    # aolserver (for instance, if we have the aolservers sitting behind a
-    # load balancer). we could put something into the /home/aol30/server.ini file
-    # but since we don't distribute a standard .ini file in the ACS,
-    # we don't want to do that. richardl@arsdigita.com, 28 June 2000.
+ad_proc -private ad_canonical_server_p {} { 
+    Returns true if this is the primary server, false otherwise. 
+
+    we're using IP:port to uniquely identify the canonical server, since
+    hostname or IP does not always uniquely identify an instance of
+    aolserver (for instance, if we have the aolservers sitting behind a
+    load balancer).
+} {
     set canonical_server [ad_parameter -package_id [ad_acs_kernel_id] CanonicalServer server-cluster]
     if { [empty_string_p $canonical_server] } {
-	ns_log Error "Error: Your .ini file is set up incorrectly for server clustering. Please ensure that you have the CanonicalServer parameter set correctly."
+	ns_log Error "Your configuration is not correct for server clustering. Please ensure that you have the CanonicalServer parameter set correctly."
 	return 1
     }
 

@@ -84,7 +84,7 @@ ad_proc -public aa_stub {
   }
 }
 
-ad_proc aa_unstub {
+ad_proc -public aa_unstub {
   proc_name
 } {
   @author Peter Harper
@@ -237,7 +237,7 @@ ad_proc -public aa_register_component {
   }
 
   #  set munged_body [subst {uplevel 1 {$body}}]
-  ad_proc _${package_key}__c_$component_id {} $body
+  ad_proc -private _${package_key}__c_$component_id {} $body
 }
 
 ad_proc -public aa_call_component {
@@ -394,7 +394,7 @@ ad_proc -public aa_register_case {
     }
     "
   }
-  ad_proc _${package_key}__$testcase_id {} "
+  ad_proc -private _${package_key}__$testcase_id {} "
     $init_class_code
     set _aa_export {}
     set body_count 0
@@ -425,16 +425,18 @@ ad_proc -public aa_export_vars {
   "
 }
 
-ad_proc aa_runseries {
+ad_proc -public aa_runseries {
   -quiet:boolean
   {-testcase_id ""}
   by_package_key
   by_category
 } {
-  Runs a series of testcases. <p>
+    Runs a series of testcases.
+
   Runs all cases if both package_key and
   category are blank, otherwise it uses the package and/or category to
   select which testcases to run.
+
   @author Peter Harper
   @creation-date 24 July 2001
 } {
@@ -513,7 +515,7 @@ ad_proc aa_runseries {
 }
 
 
-ad_proc aa_run_testcase {
+ad_proc -public aa_run_testcase {
   testcase_id
 } {
   @author Peter Harper
@@ -698,7 +700,7 @@ ad_proc -public aa_error {
   aa_log_result "fail" $error_notes
 }
 
-ad_proc aa_log_result {
+ad_proc -public aa_log_result {
   test_result
   test_notes
 } {
@@ -748,7 +750,7 @@ ad_proc aa_log_result {
   db_dml test_result_insert {}
 }
 
-ad_proc aa_log_final {
+ad_proc -public aa_log_final {
   test_passes
   test_fails
 } {
@@ -772,7 +774,7 @@ ad_proc aa_log_final {
   }
 }
 
-ad_proc aa_run_with_teardown {
+ad_proc -public aa_run_with_teardown {
   {-test_code:required}
   {-teardown_code ""}
   -rollback:boolean

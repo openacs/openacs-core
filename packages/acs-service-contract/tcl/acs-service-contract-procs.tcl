@@ -229,7 +229,7 @@ ad_proc -private acs_sc_get_statement {
 
 
 
-ad_proc -deprecated acs_sc_call {
+ad_proc -private -deprecated acs_sc_call {
     {-error:boolean}
     contract
     operation
@@ -245,6 +245,8 @@ ad_proc -deprecated acs_sc_call {
     @param error If specified, will throw an error if the operation isn't implemented.
 
     @author Neophytos Demetriou
+
+    @see acs_sc::invoke
 } {
     set proc_name [acs_sc_generate_name $contract $impl $operation]
 

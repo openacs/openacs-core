@@ -15,7 +15,7 @@ ad_library {
     @cvs-id $Id$
 }
  
-ad_proc aa_example_write_audit_entry {
+ad_proc -public aa_example_write_audit_entry {
   name
   value
 } {
@@ -26,7 +26,7 @@ ad_proc aa_example_write_audit_entry {
   return 1
 }
  
-ad_proc aa_example_write_audit_entries {
+ad_proc -public aa_example_write_audit_entries {
   entries
 } {
   @author Peter Harper

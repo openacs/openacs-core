@@ -6,7 +6,7 @@ ad_library {
 
     @author mbryzek@arsdigita.com
     @creation-date Wed Dec 27 16:02:44 2000
-    @cvs-id $Id$
+    @cvs-id package-procs.tcl,v 1.10 2002/09/10 22:22:11 jeffd Exp
 
 }
 
@@ -635,7 +635,8 @@ ad_proc package_object_attribute_list {
 
 ad_proc -private package_plsql_args {
     { -function_name "NEW" }
-    object_type
+    { -package_name "" }
+    { object_type }
 } {
     Generates a list of parameters expected to a plsql function
 
@@ -653,11 +654,14 @@ ad_proc -private package_plsql_args {
     @param function_name The function name which we're looking up
 } {
 
+
+  if { [empty_string_p $package_name] } {
     db_1row select_type_info {
 	select t.package_name
 	  from acs_object_types t 
 	 where t.object_type = :object_type
     }
+  }
 
     # Get just the args
     return [db_list select_object_type_param_list {
@@ -846,7 +850,7 @@ ad_proc -public package_instantiate_object {
 	#set real_params([string toupper [lindex $row 1]]) 1
     #}
 
-    foreach arg [util_memoize "package_plsql_args \"$object_type\""] {
+    foreach arg [util_memoize [list package_plsql_args -package_name $package_name $object_type]] {
 	set real_params([string toupper $arg]) 1
     }
     

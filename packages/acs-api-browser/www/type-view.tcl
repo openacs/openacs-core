@@ -22,11 +22,9 @@ if { ![info exists version_id] && \
     }
 }
  
-if [exists_and_not_null version_id] {
-    set public_p [api_set_public $version_id]
-} else {
-    set public_p [api_set_public]
-}
+
+set public_p [api_set_public $version_id]
+
 
 set context [list]
 
