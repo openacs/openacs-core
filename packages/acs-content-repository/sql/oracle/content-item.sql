@@ -85,6 +85,7 @@ is
   v_rel_id	   acs_objects.object_id%TYPE;
   v_rel_tag        cr_child_rels.relation_tag%TYPE;
   v_context_id     acs_objects.context_id%TYPE;
+  v_storage_type   cr_items.storage_type%TYPE;
 begin
 
   -- if content_item.is_subclass(item_subtype,'content_item') = 'f' then
@@ -94,6 +95,12 @@ begin
 
   -- place the item in the context of the pages folder if no
   -- context specified 
+
+  if storage_type = 'text' then
+     v_storage_type := 'lob';
+  else 
+     v_storage_type := storage_type;
+  end if;
 
   if parent_id is null then
     v_parent_id := c_root_folder_id;
@@ -168,7 +175,7 @@ begin
     item_id, name, content_type, parent_id, storage_type
   ) values (
     v_item_id, content_item.new.name, 
-    content_item.new.content_type, v_parent_id, content_item.new.storage_type
+    content_item.new.content_type, v_parent_id, v_storage_type
   );
 
   -- if the parent is not a folder, insert into cr_child_rels
