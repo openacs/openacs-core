@@ -12,8 +12,8 @@ DOTLRN_VERSION=2-0-0b4
 OACS_BRANCH=oacs-5-0
 DOTLRN_BRANCH=dotlrn-2-0
 
-DOTLRN_ROOT=/dotlrn-cvsroot
-OACS_ROOT=/cvsroot
+DOTLRN_CVSROOT=/dotlrn-cvsroot
+OACS_CVSROOT=/cvsroot
 
 #
 # Nothing below here should need to change...
