@@ -367,154 +367,154 @@ ad_proc -private api_set_public {
 }
 
 ad_proc -public api_proc_documentation {
-    { -format text/html }
-    -script:boolean
-    -source:boolean
-    proc_name
+	{ -format text/html }
+	-script:boolean
+	-source:boolean
+	proc_name
 } {
 
-    Generates formatted documentation for a procedure.
+	Generates formatted documentation for a procedure.
 
-    @param format the type of documentation to generate. Currently, only
-        <code>text/html</code> and <code>text/plain</text> is supported.
-    @param script include information about what script this proc lives in?
-    @param source include the source code for the script?
-    @param proc_name the name of the procedure for which to generate documentation.
-    @return the formatted documentation string.
-    @error if the procedure is not defined.    
+	@param format the type of documentation to generate. Currently, only
+		<code>text/html</code> and <code>text/plain</code> are supported.
+	@param script include information about what script this proc lives in?
+	@param source include the source code for the script?
+	@param proc_name the name of the procedure for which to generate documentation.
+	@return the formatted documentation string.
+	@error if the procedure is not defined.	   
 
 } {
-    if { ![string equal $format "text/html"] && \
-            ![string equal $format "text/plain"] } {
-	return -code error "Only text/html and text/plain documentation are currently supported"
-    }
-    array set doc_elements [nsv_get api_proc_doc $proc_name]
-    array set flags $doc_elements(flags)
-    array set default_values $doc_elements(default_values)
-
-    if { $script_p } {
-	append out "<h3>[api_proc_pretty_name $proc_name]</h3>"
-    } else {
-	append out "<h3>[api_proc_pretty_name -link $proc_name]</h3>"
-    }
-
-    lappend command_line $proc_name
-    foreach switch $doc_elements(switches) {
-	if { [lsearch $flags($switch) "boolean"] >= 0 } {
-	    lappend command_line "\[ -$switch \]"
-	} elseif { [lsearch $flags($switch) "required"] >= 0 } {
-	    lappend command_line "-$switch <i>$switch</i>"
+	if { ![string equal $format "text/html"] && \
+			![string equal $format "text/plain"] } {
+		return -code error "Only text/html and text/plain documentation are currently supported"
+	}
+	array set doc_elements [nsv_get api_proc_doc $proc_name]
+	array set flags $doc_elements(flags)
+	array set default_values $doc_elements(default_values)
+	
+	if { $script_p } {
+		append out "<h3>[api_proc_pretty_name $proc_name]</h3>"
 	} else {
-	    lappend command_line "\[ -$switch <i>$switch</i> \]"
+		append out "<h3>[api_proc_pretty_name -link $proc_name]</h3>"
 	}
-    }
-
-    set counter 0
-    foreach positional $doc_elements(positionals) {
-	if { [info exists default_values($positional)] } {
-	    lappend command_line "\[ <i>$positional</i> \]"
-	} else {
-	    lappend command_line "<i>$positional</i>"
+	
+	lappend command_line $proc_name
+	foreach switch $doc_elements(switches) {
+		if { [lsearch $flags($switch) "boolean"] >= 0 } {
+			lappend command_line "\[ -$switch \]"
+		} elseif { [lsearch $flags($switch) "required"] >= 0 } {
+			lappend command_line "-$switch <i>$switch</i>"
+		} else {
+			lappend command_line "\[ -$switch <i>$switch</i> \]"
+		}
 	}
-    }
-    if { $doc_elements(varargs_p) } {
-	lappend command_line "\[ <i>args</i>... \]"
-    }
-    append out "[util_wrap_list $command_line]\n<blockquote>\n"
-
-    if { $script_p } {
-	append out "Defined in <a href=\"/api-doc/procs-file-view?path=[ns_urlencode $doc_elements(script)]\">$doc_elements(script)</a><p>"
-    }
-
-    if { $doc_elements(deprecated_p) } {
-	append out "<b><i>Deprecated."
-	if { $doc_elements(warn_p) } {
-	    append out " Invoking this procedure generates a warning."
+	
+	set counter 0
+	foreach positional $doc_elements(positionals) {
+		if { [info exists default_values($positional)] } {
+			lappend command_line "\[ <i>$positional</i> \]"
+		} else {
+			lappend command_line "<i>$positional</i>"
+		}
 	}
-	append out "</i></b><p>\n"
-    }
+	if { $doc_elements(varargs_p) } {
+		lappend command_line "\[ <i>args</i>... \]"
+	}
+	append out "[util_wrap_list $command_line]\n<blockquote>\n"
+	
+	if { $script_p } {
+		append out "Defined in <a href=\"/api-doc/procs-file-view?path=[ns_urlencode $doc_elements(script)]\">$doc_elements(script)</a><p>"
+	}
+	
+	if { $doc_elements(deprecated_p) } {
+		append out "<b><i>Deprecated."
+		if { $doc_elements(warn_p) } {
+			append out " Invoking this procedure generates a warning."
+		}
+		append out "</i></b><p>\n"
+	}
 
-    append out "[lindex $doc_elements(main) 0]
-
+	append out "[lindex $doc_elements(main) 0]
+	
 <p>
 <dl>
 "
 
-    if { [info exists doc_elements(param)] } {
-	foreach param $doc_elements(param) {
-	    if { [regexp {^([^ \t]+)[ \t](.+)$} $param "" name value] } {
-		set params($name) $value
-	    }
-	}
-    }
-
-    if { [llength $doc_elements(switches)] > 0 } {
-	append out "<p><dt><b>Switches:</b></dt><dd>\n"
-	foreach switch $doc_elements(switches) {
-		append out "<b>-$switch</b>"
-		if { [lsearch $flags($switch) "boolean"] >= 0 } {
-			append out " (boolean)"
-		} 
-
-		if { [info exists default_values($switch)] && \
-				![empty_string_p $default_values($switch)] } {
-			append out " (defaults to <code>\"$default_values($switch)\"</code>)"
-		} 
-
-		if { [lsearch $flags($switch) "required"] >= 0 } {
-			append out " (required)"
-		} else {
-			append out " (optional)"
+	if { [info exists doc_elements(param)] } {
+		foreach param $doc_elements(param) {
+			if { [regexp {^([^ \t]+)[ \t](.+)$} $param "" name value] } {
+				set params($name) $value
+			}
 		}
-
-		if { [info exists params($switch)] } {
-			append out " - $params($switch)"
-		}
-		append out "<br>\n"
 	}
-	append out "</dd>\n"
-    }
-
-    if { [llength $doc_elements(positionals)] > 0 } {
-	append out "<p><dt><b>Parameters:</b></dt><dd>\n"
-	foreach positional $doc_elements(positionals) {
-	    append out "<b>$positional</b>"
-	    if { [info exists default_values($positional)] } {
-		if { [empty_string_p $default_values($positional)] } {
-		    append out " (optional)"
-		} else {
-		    append out " (defaults to <code>\"$default_values($positional)\"</code>)"
+	
+	if { [llength $doc_elements(switches)] > 0 } {
+		append out "<p><dt><b>Switches:</b></dt><dd>\n"
+		foreach switch $doc_elements(switches) {
+			append out "<b>-$switch</b>"
+			if { [lsearch $flags($switch) "boolean"] >= 0 } {
+				append out " (boolean)"
+			} 
+			
+			if { [info exists default_values($switch)] && \
+					![empty_string_p $default_values($switch)] } {
+				append out " (defaults to <code>\"$default_values($switch)\"</code>)"
+			} 
+			
+			if { [lsearch $flags($switch) "required"] >= 0 } {
+				append out " (required)"
+			} else {
+				append out " (optional)"
+			}
+			
+			if { [info exists params($switch)] } {
+				append out " - $params($switch)"
+			}
+			append out "<br>\n"
 		}
-	    }
-	    if { [info exists params($positional)] } {
-		append out " - $params($positional)"
-	    }
-	    append out "<br>\n"
+		append out "</dd>\n"
 	}
-	append out "</dd>\n"
-    }
-
-    if { [info exists doc_elements(return)] } {
-	append out "<dt><b>Returns:</b></dt><dd>[join $doc_elements(return) "<br>"]</dd>\n"
-    }
-
-    if { [info exists doc_elements(error)] } {
-	append out "<dt><b>Error:</b></dt><dd>[join $doc_elements(error) "<br>"]</dd>\n"
-    }
-
-    append out [api_format_common_elements doc_elements]
-
-    if { $source_p } {
-	append out "<p><dt><b>Source code:</b></dt><dd>
+	
+	if { [llength $doc_elements(positionals)] > 0 } {
+		append out "<p><dt><b>Parameters:</b></dt><dd>\n"
+		foreach positional $doc_elements(positionals) {
+			append out "<b>$positional</b>"
+			if { [info exists default_values($positional)] } {
+				if { [empty_string_p $default_values($positional)] } {
+					append out " (optional)"
+				} else {
+					append out " (defaults to <code>\"$default_values($positional)\"</code>)"
+				}
+			}
+			if { [info exists params($positional)] } {
+				append out " - $params($positional)"
+			}
+			append out "<br>\n"
+		}
+		append out "</dd>\n"
+	}
+	
+	if { [info exists doc_elements(return)] } {
+		append out "<dt><b>Returns:</b></dt><dd>[join $doc_elements(return) "<br>"]</dd>\n"
+	}
+	
+	if { [info exists doc_elements(error)] } {
+		append out "<dt><b>Error:</b></dt><dd>[join $doc_elements(error) "<br>"]</dd>\n"
+	}
+	
+	append out [api_format_common_elements doc_elements]
+	
+	if { $source_p } {
+		append out "<p><dt><b>Source code:</b></dt><dd>
 <pre>[ns_quotehtml [info body $proc_name]]<pre>
 </dd><p>\n"
-    }
-
-    # No "see also" yet.
-
-    append out "</dl></blockquote>"
-
-    return $out
+	}
+	
+	# No "see also" yet.
+	
+	append out "</dl></blockquote>"
+	
+	return $out
 }
 
 ad_proc api_proc_pretty_name { 
