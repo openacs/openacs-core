@@ -242,6 +242,12 @@ ad_conn subsumes the functionality of ns_conn.</para>
 </row>
 
 <row>
+<entry valign="top"><computeroutput>[ad_conn query]</computeroutput> </entry>
+<entry valign="top">The portion of the URL from the ? on (i.e. GET
+              variables) associated with the request.</entry>
+</row>
+
+<row>
 <entry valign="top"><computeroutput>[ad_conn file]</computeroutput> </entry>
 <entry valign="top">The filepath including filename of the file being served</entry>
 </row>
