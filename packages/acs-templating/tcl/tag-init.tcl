@@ -809,3 +809,12 @@ template_tag default { chunk params } {
 
     template::adp_append_code "}"
 }
+
+# contract and comment tags for adding inline
+# documentation to adp files.
+#
+# @author Ben Bytheway (ben@vrusp.com)
+
+template_tag contract { chunk params } {}
+
+template_tag comment { chunk params } {}
