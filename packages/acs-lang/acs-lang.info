@@ -139,7 +139,7 @@ in that directory for details.</description>
         </files>
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemTimezone"  default="America/New_York" description="The timezone that Oracle is set to use. Use a name from the acs-reference package, e.g., America/Los_Angeles or Asia/Tokyo"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SiteWideLocale"  default="de_DE" description="The site-wide default locale"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SiteWideLocale"  default="en_US" description="The site-wide default locale"/>
         </parameters>
 
     </version>
