@@ -129,7 +129,6 @@ ad_proc -public acs_community_member_url {
     {-user_id:required}
 } {
     @return the url for the community member page of a particular user
-    @see acs_community_member_url
 } {
     return "[subsite::get_element -element url -notrailing][ad_parameter \
 	    -package_id [ad_acs_kernel_id] CommunityMemberURL]?[export_vars user_id]"
