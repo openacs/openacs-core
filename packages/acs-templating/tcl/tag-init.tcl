@@ -144,22 +144,25 @@ template_tag list { chunk params } {
 
   if { ![template::util::is_nil value] } {
 
-    template::adp_append_code "\nset __ats_list_value \[list $value\]\n"
+    set name [ns_set iget $params name]
+    if { [empty_string_p $name] } {
+      set name "__ats_list_value"
+    }
 
-    set name "__ats_list_value"
-    template::adp_append_code "\nset $name:rowcount [llength $value]\n"
+    template::adp_append_code "\nset $name \[eval list $value\]\n"
+    template::adp_append_code "\nset $name:rowcount \[llength \$$name\]\n"
 
   } else {
 
     # Expect a data source from the tcl script
     set name [template::get_attribute list $params name]
-    template::adp_append_code "\nset $name:rowcount \[llength \$$name\]\n"
+    template::adp_append_code "\nset {$name:rowcount} \[llength \${$name}\]\n"
   }
   
   template::adp_append_code "
 
   for { set __ats_i 0 } { \$__ats_i < \${$name:rowcount} } { incr __ats_i } {
-    set $name:item \[lindex \$$name \$__ats_i\]
+    set $name:item \[lindex \${$name} \$__ats_i\]
     set $name:rownum \[expr \$__ats_i + 1\]
   "
   template::adp_compile_chunk $chunk
