@@ -102,7 +102,7 @@ if { [llength $requests] == 0 } {
 	    array set conn [nsv_get ds_request $request]
 
 	    if { [catch {
-		set start [ns_fmttime [nsv_get ds_request "$id.start"] "%T"]
+		set start [ns_fmttime [lindex [nsv_get ds_request "$id.start"] 0] "%T"]
 	    }] } {
 		set start "?"
 	    }
@@ -133,6 +133,7 @@ if { [llength $requests] == 0 } {
 		}
 	    } else {
 		set conn(url) ""
+                set url {}
 	    }
 
 	    if { [info exists conn(query)] && ![empty_string_p $conn(query)] } {
@@ -150,7 +151,7 @@ if { [llength $requests] == 0 } {
 <td align=center>&nbsp;$start&nbsp;</td>
 <td align=right>&nbsp;$duration&nbsp;</td>
 <td>&nbsp;$peeraddr&nbsp;</td>
-<td><a href=\"request-info?request=$id\">[ns_quotehtml "$method $query"]</a></td>
+<td><a href=\"request-info?request=$id\">[ns_quotehtml "$method $url$query"]</a></td>
 </tr>
 "
             incr counter

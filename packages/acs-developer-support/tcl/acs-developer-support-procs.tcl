@@ -165,18 +165,19 @@ proc_doc ds_link {} { Returns the "Developer Information" link in a right-aligne
 }
 
 proc_doc ds_collect_connection_info {} { Collects information about the current connection. Should be called only at the very beginning of the request processor handler. } {
-    if { [ds_enabled_p] && [ds_collection_enabled_p] } {
+    # JCD: check recursion_count to ensure adding headers only one time.
+    if { [ds_enabled_p] && [ds_collection_enabled_p] && ![ad_conn recursion_count]} {
         ##This is expensive, but easy.  Otherwise we need to do it in every interpreter
         ds_replace_get_user_procs [ds_user_switching_enabled_p]
 
-	ds_add start [ns_time]
-	ds_add conn startclicks [clock clicks]
-	for { set i 0 } { $i < [ns_set size [ad_conn headers]] } { incr i } {
-	    ds_add headers [ns_set key [ad_conn headers] $i] [ns_set value [ad_conn headers] $i]
-	}
-	foreach param { method url query request peeraddr } {
-	    ds_add conn $param [ad_conn $param]
-	}
+        ds_add start [ns_time]
+        ds_add conn startclicks [clock clicks]
+        for { set i 0 } { $i < [ns_set size [ad_conn headers]] } { incr i } {
+            ds_add headers [ns_set key [ad_conn headers] $i] [ns_set value [ad_conn headers] $i]
+        }
+        foreach param { method url query request peeraddr } {
+            ds_add conn $param [ad_conn $param]
+        }
     }
 }    
 
