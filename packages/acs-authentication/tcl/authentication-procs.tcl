@@ -608,7 +608,7 @@ ad_proc -public auth::create_local_account {
     {-secret_question ""}
     {-secret_answer ""}
     {-member_state "approved"}
-    {-email_verified_p "t"}
+    {-email_verified_p ""}
 } {
     Create the local account for a user.
 
@@ -640,38 +640,40 @@ ad_proc -public auth::create_local_account {
         account_status ok
         account_message {}
     }
-    array set elm_msgs [list]
 
-    # TODO: This needs to be controlled by a parameter, to be added latter
+    # PHASE II: This needs to be controlled by a parameter
     if { [empty_string_p $username] } {
         set username $email
     }
 
     # Validate data
-    if { [string first "<" $first_names] != -1 } {
-        set element_messages(first_names) [_ acs-subsite.lt_You_cant_have_a_lt_in]
+    set user_vars { authority_id username first_names last_name email url secret_question secret_answer }
+    foreach varname $user_vars {
+        if { [info exists $varname] } {
+            set user_info($varname) [set $varname]
+        }
     }
 
-    if { [string first "<" $last_name] != -1 } {
-        set element_messages(last_name) [_ acs-subsite.lt_You_cant_have_a_lt_in_1]
-    }
-    
-    if { [empty_string_p $url] || [string equal $url "http://"] } {
-        # The user left the default hint for the url
-        set url {}
-    } elseif { ![util_url_valid_p $url] } {
-        set valid_url_example "http://openacs.org/"
-        set element_messages(url) [_ acs-subsite.lt_Your_URL_doesnt_have_]
-    }
-    if { ![empty_string_p [cc_lookup_email_user $email]] } {
-        set element_messages(email) "We already have a user with this email."
-    }
-    if { ![empty_string_p [acs_user::get_by_username -authority_id $authority_id -username $username]] } {
-        set element_messages(username) "We already have a user with this username."
-    }
+    auth::validate_user_info \
+        -user_array user_info \
+        -message_array element_messages
+
+    # Handle validation errors
     if { [llength [array names element_messages]] > 0 } {
-        return [list creation_status data_error creation_message {} element_messages [array get element_messages]]
+        return [list \
+                    creation_status "data_error" \
+                    creation_message {} \
+                    element_messages [array get element_messages] \
+                   ]
     }
+
+    # Suck user info variables back out, they may have been modified by the validate helper proc
+    foreach varname $user_vars {
+        if { [info exists user_info($varname)] } {
+            set $varname $user_info($varname)
+        }
+    }
+
 
     # Admin approval
     if { [parameter::get -parameter RegistrationRequiresApprovalP -default 0] } {
@@ -682,10 +684,12 @@ ad_proc -public auth::create_local_account {
         set member_state "approved"
     }
 
-    if { [parameter::get -parameter RegistrationRequiresEmailVerificationP -default 0] } {
-        set email_verified_p "f"
-    } else {
-        set email_verified_p "t"
+    if { [empty_string_p $email_verified_p] } {
+        if { [parameter::get -parameter RegistrationRequiresEmailVerificationP -default 0] } {
+            set email_verified_p "f"
+        } else {
+            set email_verified_p "t"
+        }
     }
     
     set error_p 0
@@ -712,10 +716,8 @@ ad_proc -public auth::create_local_account {
     if { $error_p || $user_id == 0 } {
         set result(creation_status) "failed_to_connect"
         set result(creation_message) "We experienced an error while trying to register an account for you."
-        if { $error_p } {
-            global errorInfo
-            ns_log Error "Error invoking account registratino driver for authority_id = $authority_id: $errorInfo"
-        }
+        global errorInfo
+        ns_log Error "Error creating local account.\n$errorInfo"
         return [array get result]
     }
 
@@ -740,17 +742,285 @@ ad_proc -public auth::create_local_account {
     return [array get result]
 }
 
+
+ad_proc -public auth::update_local_account {
+    {-authority_id:required}
+    {-username:required}
+    {-first_names ""}
+    {-last_name ""}
+    {-email ""}
+    {-url ""}
+    {-secret_question ""}
+    {-secret_answer ""}
+    {-member_state "approved"}
+    {-email_verified_p ""}
+} {
+    Update the local account for a user.
+
+    @return Array list containing the following entries:
+
+    <ul>
+      <li> update_status:    ok, data_error, update_error, failed_to_connect. Says whether user update succeeded.
+      <li> update_message:   Information about the problem, to be relayed to the user. If update_status is not ok, then either 
+                             update_message or element_messages is guaranteed to be non-empty, and both are 
+                             guaranteed to be in the array list.  May contain HTML.
+      <li> element_messages: list of (element_name, message, element_name, message, ...) of 
+                             errors on the individual elements (username, password, first_names, ...), 
+                             to be relayed on to the user. If update_status is not ok, then either 
+                             udpate_message or element_messages is guaranteed to be non-empty, and both are 
+                             guaranteed to be in the array list. Cannot contain HTML.
+    </ul>
+
+    All entries are guaranteed to always be set, but may be empty.
+} {
+    array set result {
+        update_status update_error
+        update_message {}
+        element_messages {}
+    }
+
+    # Validate data
+
+    # Updating: Find the existing account    
+    set user_vars { authority_id username first_names last_name email url secret_question secret_answer }
+    foreach varname $user_vars {
+        if { [info exists $varname] } {
+            set user_info($varname) [set $varname]
+        }
+    }
+
+    auth::validate_user_info \
+        -update \
+        -user_array user_info \
+        -message_array element_messages
+
+    # Handle validation errors
+    if { [llength [array names element_messages]] > 0 } {
+        return [list \
+                    update_status "data_error" \
+                    update_message {} \
+                    element_messages [array get element_messages] \
+                   ]
+    }
+
+    # Suck user info variables back out, they may have been modified by the validate helper proc
+    foreach varname $user_vars {
+        if { [info exists user_info($varname)] } {
+            set $varname $user_info($varname)
+        }
+    }
+    set user_id $user_info(user_id)
+
+    set error_p 0
+    with_catch errmsg {
+
+        db_transaction {
+            # Update persons: first_names, last_name
+            person::update \
+                -person_id $user_id \
+                -first_names $first_names \
+                -last_name $last_name
+            
+            # Update parties: email, url
+            if { [empty_string_p $email] } {
+                set success_p 0
+                set message "Email is required"
+            }
+            party::update \
+                -party_id $user_id \
+                -email $email \
+                -url $url
+            
+            # Update users: email_verified_p
+            if { ![empty_string_p $email_verified_p] } {
+                acs_user::update \
+                    -user_id $user_id \
+                    -email_verified_p $email_verified_p
+            }
+                
+            # TODO: Portrait
+        }
+    } {
+        set error_p 1
+    } 
+
+    if { $error_p } {
+        set result(update_status) "failed_to_connect"
+        set result(update_message) "We experienced an error while trying to update the account information."
+        global errorInfo
+        ns_log Error "Error updating local account.\n$errorInfo"
+        return [array get result]
+    }
+
+    # Update succeeded
+    set result(update_status) "ok"
+
+    return [array get result]
+}
+
+
+ad_proc -public auth::delete_local_account {
+    {-authority_id:required}
+    {-username:required}
+} {
+    Delete the local account for a user.
+
+    @return Array list containing the following entries:
+
+    <ul>
+      <li> delete_status:  ok, delete_error, failed_to_connect. Says whether user deletion succeeded.
+      <li> delete_message: Information about the problem, to be relayed to the user. If delete_status is not ok, then 
+                           delete_message is guaranteed to be non-empty. May contain HTML.
+    </ul>
+
+    All entries are guaranteed to always be set, but may be empty.
+} {
+    array set result {
+        delete_status ok
+        delete_message {}
+    }
+
+    set user_id [acs_user::get_by_username \
+                     -authority_id $authority_id \
+                     -username $username]
+    
+    if { [empty_string_p $user_id] } {
+        set result(delete_status) "delete_error"
+        set result(delete_messages) "No user found with this username"
+        return [array get result]
+    }
+    
+    # Mark the account banned
+    acs_user::ban -user_id $user_id
+
+    return [array get result]
+}
+
+
+ad_proc -private auth::validate_user_info {
+    {-update:boolean}
+    {-user_array:required}
+    {-message_array:required}
+} { 
+    Validates user info and returns errors, if any.
+    
+    @param update        Set this flag if you're updating an existing record, meaning we shouldn't check for duplicates.
+
+    @param user_array    Name of an array in the caller's namespace which contains the user info 
+                         (authority_id, username, email, first_names, last_name, url, secret_question, secret_answer). 
+
+    @param message_array Name of an array where you want the validation errors stored, keyed by element name.
+} {
+    upvar 1 $user_array user
+    upvar 1 $message_array element_messages
+
+    foreach elm { authority_id username first_names last_name email } {
+        if { ![exists_and_not_null user($elm)] } {
+            set element_messages(first_names) "Required"
+        }
+    }
+
+    ns_log Notice "LARS: update_p = $update_p ; user(authority_id) = $user(authority_id) ; user(username) = $user(username)"
+    if { $update_p && [exists_and_not_null user(authority_id)] && [exists_and_not_null user(username)] } {
+        set user(user_id) [acs_user::get_by_username \
+                               -authority_id $user(authority_id) \
+                               -username $user(username)]
+        
+        ns_log Notice "LARS2: user(user_id) = $user(user_id)"
+
+        if { [empty_string_p $user(user_id)] } {
+            set element_messages(username) "No user with username '$username' found for authority [auth::authority::get_element -authority_id $authority_id -element pretty_name]"
+        }
+    }
+
+    if { [exists_and_not_null user(first_names)] && [string first "<" $user(first_names)] != -1 } {
+        set element_messages(first_names) [_ acs-subsite.lt_You_cant_have_a_lt_in]
+    }
+
+    if { [exists_and_not_null user(last_name)] && [string first "<" $user(last_name)] != -1 } {
+        set element_messages(last_name) [_ acs-subsite.lt_You_cant_have_a_lt_in_1]
+    }
+
+    if { [exists_and_not_null user(email)] && ![util_email_valid_p $user(email)] } {
+        set element_messages(email) "This is not a valid email address"
+    } else {
+        set user(email) [string tolower $user(email)]
+    }
+    
+    if { ![exists_and_not_null $user(url)] || ([info exists user(url)] && [string equal $user(url) "http://"]) } {
+        # The user left the default hint for the url
+        set user(url) {}
+    } elseif { ![util_url_valid_p $user(url)] } {
+        set valid_url_example "http://openacs.org/"
+        set element_messages(url) [_ acs-subsite.lt_Your_URL_doesnt_have_]
+    }
+
+    if { [exists_and_not_null user(email)] } {
+        # Check that email is unique
+        set email $user(email)
+        ns_log Notice "LARS4: email = '$email' ; [db_list_of_lists count { select party_id, email from parties }]"
+        set email_party_id [party::get_by_email -email $user(email)]
+
+        ns_log Notice "LARS3: email_party_id = $email_party_id"
+        if { ![empty_string_p $email_party_id] && (!$update_p || $email_party_id != $user(user_id)) } {
+            # We found a user with this email, and either we're not updating, or it's not the same user_id as the one we're updating
+            
+            if { ![string equal [acs_object_type $email_party_id] "user"] } {
+                set element_messages(email) "We already have a group with this email"
+            } else {
+                acs_user::get \
+                    -user_id $email_party_id \
+                    -array email_user
+                
+                switch $email_user(member_state) {
+                    banned {
+                        # A user with this email does exist, but he's banned, so we can 'steal' his email address
+                        # by setting it to something dummy
+                        party::update \
+                            -user_id $email_party_id \
+                            -email "dummy-email-$email_party_id"
+                    }
+                    default { 
+                        set element_messages(email) "We already have a user with this email."
+                    }
+                } 
+            }
+        }
+    }
+        
+    if { [exists_and_not_null user(username)] } {
+        # Check that username is unique
+        set username_user_id [acs_user::get_by_username -authority_id $user(authority_id) -username $user(username)]
+        
+        if { ![empty_string_p $username_user_id] && (!$update_p || $username_user_id != $user(user_id)) } {
+            # We found a user with this username, and either we're not updating, or it's not the same user_id as the one we're updating
+
+            set username_member_state [acs_user::get_element -user_id $username_user_id -element member_state] 
+            switch $username_member_state {
+                banned {
+                    # A user with this username does exist, but he's banned, so we can 'steal' his username
+                    # by setting it to something dummy
+                    acs_user::update \
+                        -user_id $usrename_user_id \
+                        -username "dummy-username-$username_user_id"
+                }
+                default { 
+                    set element_messages(username) "We already have a user with this username."
+                }
+            }
+        }
+    }
+}
+
 ad_proc -public auth::set_email_verified {
     {-user_id:required}
 } {
     Update an OpenACS record with the fact that the email address on
     record was verified.
 } {
-    db_dml set_email_verified {
-        update users 
-        set    email_verified_p = 't'
-        where  user_id = :user_id
-    }
+    acs_user::update \
+        -user_id $user_id \
+        -email_verified_p "t"
 }
 
 #####
