@@ -69,14 +69,18 @@ set oacs_branch               "HEAD"
 
 
 #---------------------------------------------------------------------
-# Which additional packages should be checked out.  (dotLRN is still
-# a special case - see elsewhere in this doc.)
+# Which additional packages should be checked out.
 # A space separated list of OpenACS packages to checkout in addition 
 # to the OpenACS core packages (acs-core). 
 # These packages must be modules as defined in the cvs repository
 # file :openacs.org:/cvsroot/CVSROOT/modules.
 
 set packages_list             ""
+
+# example: cvs checkout of simulation and all pre-reqs
+# We don't use dotLRN, which is the obvious example, because it's still
+# a special case - see elsewhere in this doc.
+
 #set packages_list "bcms notifications simulation acs-mail-lite workflow file-storage"
 
 #---------------------------------------------------------------------
@@ -85,7 +89,9 @@ set packages_list             ""
 # installation
 
 set install_xml_file          ""
-#set install_xml_file          "${serverroot}/packages/foobar/install.xml"
+
+# example: install simulation during server setup
+#set install_xml_file          "${serverroot}/packages/simulation/install.xml"
 
 
 #---------------------------------------------------------------------
