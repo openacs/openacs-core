@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <queryset>
-   <rdbms><type>postgresql</type><version>7.1</version></rdbms>
+   <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
 <fullquery name="alerts_list_2">      
       <querytext>
@@ -17,7 +17,7 @@
     from   classified_email_alerts cea, ad_domains ad
     where  user_id = :user_id
     and    ad.domain_id = cea.domain_id
-    and    now() <= expires
+    and    sysdate <= expires
     order by expires desc
       </querytext>
 </fullquery>
