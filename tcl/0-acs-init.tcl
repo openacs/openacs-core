@@ -13,7 +13,7 @@ set root_directory [file dirname [string trimright [ns_info tcllib] "/"]]
 nsv_set acs_properties root_directory $root_directory
 
 ns_log "Notice" "Loading the ACS, rooted at $root_directory"
-set bootstrap_file "$root_directory/packages/acs-tcl/bootstrap/bootstrap.tcl"
+set bootstrap_file "$root_directory/packages/acs-bootstrap-installer/bootstrap.tcl"
 ns_log "Notice" "Sourcing $bootstrap_file"
 
 if { [file isfile $bootstrap_file] } {
