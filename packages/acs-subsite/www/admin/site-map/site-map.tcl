@@ -93,12 +93,17 @@ template::list::create \
     -elements {
 	checkbox {
 	    display_template {
-		<if @nodes.view_p@ eq t>
-		   <input type="checkbox" name="checkbox" value=@nodes.node_id@ checked> 
+		<if @nodes.instance_url@ eq "/">
+  		    <input type="checkbox" name="checkbox" checked disabled>
+		    <input type="hidden" name="checkbox" value=@nodes.node_id@>
 		</if>
 		<else>
-                  <input type="checkbox" name="checkbox" value=@nodes.node_id@ >  
-		
+		    <if @nodes.view_p@ eq t>
+		        <input type="checkbox" name="checkbox" value=@nodes.node_id@ checked> 
+		    </if>
+		    <else>
+                        <input type="checkbox" name="checkbox" value=@nodes.node_id@ >  
+		    </else>
 		</else>
 	    }
 	}
@@ -106,16 +111,20 @@ template::list::create \
             label "URL"
             html "align left"
 	    display_template {
-		<a name="@nodes.node_id@">
-		@nodes.tree_indent;noquote@
-		</a>
+		<a name="@nodes.node_id@">@nodes.tree_indent;noquote@</a>
+		<if @nodes.expand_mode@ gt 0>
+		    <b>@nodes.name;noquote@</b>
+		</if>
+		<else>
+		    @nodes.name;noquote@
+		</else>
+
 		<if @nodes.expand_mode@ eq 1>
-		(<a href="?@nodes.expand_url@#@nodes.node_id@">+</a>)
+		    <a href="?@nodes.expand_url@#@nodes.node_id@"><img border=0 src=/resources/down.gif></a>
 		</if>
 		<if @nodes.expand_mode@ eq 2>
-                (<a href="?@nodes.expand_url@#@nodes.node_id@">-</a>)
+                    <a href="?@nodes.expand_url@#@nodes.node_id@"><img border=0 src=/resources/up.gif></a>
                 </if>
-		@nodes.name;noquote@
 		<if @nodes.action_type@ eq "new_folder">
 		<a name="add" />
 		<form name=new_parent action=new>
@@ -171,7 +180,6 @@ db_foreach nodes_select {} {
     set delete_url ""
     set parameters_url ""
     set permissions_url ""
-
     if { [lsearch -exact $open_nodes $parent_id] == -1 && $parent_id != "" && $mylevel > 2 } { continue } 
         
     if {$directory_p == "t"} {
@@ -205,11 +213,16 @@ db_foreach nodes_select {} {
     }
     
     # use the indent variable to hold current indent level we'll use it later to indent stuff at the end by the amount of the last node
-    set indent ""
-    for {set i 0} {$i < 3*$mylevel} {incr i} {
-	append indent "&nbsp;"
+   set indent ""
+    if { $mylevel != 1 } {
+	if { $mylevel == 2 } {
+	    append indent "&nbsp;&nbsp;"
+	} else {
+	    for {set i 1} {$i <4*$mylevel} {incr i} {
+		append indent "&nbsp;"
+	    }
+	}
     }
-    
     set expand_mode 0
     if {!$root_p && $n_children > 0} {
 	set expand_mode 1
