@@ -781,6 +781,7 @@ ad_proc doc_return {args} {
 
 } {
     db_release_unused_handles
+    ad_http_cache_control
     eval "ns_return $args"
 }
 
