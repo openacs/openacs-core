@@ -53,7 +53,7 @@
       <querytext>
 
         select 
-          'function ' || proname as line_header
+          'function ' || substr(proname,length(:package_name)+3) as line_header
         from 
           pg_proc 
         where 
