@@ -169,9 +169,9 @@ namespace eval party {
 	# as an option, and we don't want to display "rel_segment" as an
 	# option.
 	if {[string equal $start_with "party"]} {
-	    set start_with_clause "(object_type = 'group' or object_type = 'person')"
+	    set start_with_clause [db_map start_with_clause_party]
 	} else {
-	    set start_with_clause "object_type = :start_with"
+	    set start_with_clause [db_map start_with_clause]
 	}
 
 	db_foreach select_sub_rel_types "
