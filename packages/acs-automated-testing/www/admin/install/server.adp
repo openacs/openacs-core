@@ -36,6 +36,32 @@
   </li>
 </ul>
 
+<h3>Test failures</h3>
+<if @has_test_report_p@>
+  <if @testcase_failures:rowcount@ eq 0>
+    <i>none</i>
+  </if>
+  <else>
+    <table>
+      <tr>
+        <th>Test case</th>
+        <th>Failure count</th>
+      </tr>
+    <multiple name="testcase_failures">
+      <tr>
+        <td>@testcase_failures.testcase_id@</td>
+        <td align="center">@testcase_failures.count@</td>
+      </tr>
+    </multiple>      
+    </table>
+  </else>
+</if>
+<else>
+  <p>
+    Unknown. Server has no test report file at $test_path.
+  </p>
+</else>
+
 <h3>Rebuild</h3>
 
 <ul
