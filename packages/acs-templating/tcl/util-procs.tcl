@@ -705,9 +705,6 @@ ad_proc -public template::util::number_list { last_number {start_at 0} } {
 }
 
 
-ad_proc -public pkg_root    key {return "/packages/$key"}
-ad_proc -public pkg_widgets key {return "/packages/$key/widgets"}
-
 # @public tcl_to_sql_list
 
 # Convert a TCL list to a SQL list, for use with the "in" statement
