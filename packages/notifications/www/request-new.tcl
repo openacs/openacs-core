@@ -1,4 +1,3 @@
-
 ad_page_contract {
 
     Request a new notification - Ask for more stuff
@@ -18,9 +17,14 @@ set user_id [ad_conn user_id]
 # Check that the object can be subcribed to
 notification::security::require_notify_object -object_id $object_id
 
-set page_title "Request Notification for $pretty_name"
 
-set context_bar [ad_context_bar $page_title]
+if {[empty_string_p $pretty_name]} { 
+    set page_title "Request Notification"
+} else { 
+    set page_title "Request Notification for $pretty_name"
+}
+
+set context [list "Request Notification"]
 
 
 form create subscribe
