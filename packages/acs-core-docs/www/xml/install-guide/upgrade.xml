@@ -454,7 +454,7 @@ exit</action></screen>
         <listitem>
           <para>Import the new code (for example, OpenACS 5.0.4, openacs-5-0-compat versions of
    ETP, blogger, and other applications) into a "vendor branch" of the
-   <REPLACEABLE>SERVICE0</REPLACEABLE> CVS tree, as described in "Upgrading a local CVS repository", step 1, above. 
+   <replaceable>service0</replaceable> CVS tree, as described in "Upgrading a local CVS repository", step 1, above. 
    As soon as we do this, any cvs update command on production might bring new code onto the production site, which
    would be bad.</para>
           <para>Do step 2 above (merging conflicts in a <replaceable>service0</replaceable>-upgrade working tree).</para>
