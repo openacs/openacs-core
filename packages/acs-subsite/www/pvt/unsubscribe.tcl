@@ -1,35 +1,14 @@
 ad_page_contract {
 
     @cvs-id $Id$
-} {} -properties {
-    site_link:onevalue
-    on_vacation_p:onevalue
-    pretty_no_alerts_until_date:onevalue
-    date_entry_widget:onevalue
-    parameter_enabled_p:onevalue
-    dont_spam_me_p:onevalue
-    context:onevalue
 }
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::get_user_id -account_status closed]
 
-db_1row vacation_time "select no_alerts_until, acs_user.receives_alerts_p(:user_id) as on_vacation_p 
-from users
-where user_id = :user_id"
+set system_name [ad_system_name]
 
-set site_link [ad_site_home_link]
+set page_title "Confirm Closing Your Account"
+set context [list [list [ad_pvt_home] [ad_pvt_home_name]] $page_title]
 
-set context [list [list [ad_pvt_home] "Your Account"] "Confirm Unsubscribe"]
-
-set pretty_no_alerts_until_date [lc_time_fmt $no_alerts_until "%q"]
-set date_entry_widget [ad_dateentrywidget_default_to_today on_vacation_until]
-
-if [db_0or1row nospam "select dont_spam_me_p
-from user_preferences
-where user_id = :user_id"] {
-    set parameter_enabled_p 1
-} else {
-    set parameter_enabled_p 0
-}
-
-ad_return_template
+set pvt_home [ad_pvt_home]
+set pvt_home_name [ad_pvt_home_name]

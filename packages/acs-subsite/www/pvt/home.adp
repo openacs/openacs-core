@@ -8,12 +8,7 @@
 <include src="/packages/acs-subsite/lib/user-info">
 
 <if @account_status@ eq "closed">
-  <p>
-    <font color="red">
-      <b> Your account is currently closed. </b> 
-    </font>
-    <a href="@login_url@">Log in</a> again to see what you can do about it.
-  </p>
+  #acs-subsite.Account_closed_workspace_msg#
 </if>
 
 <p>
@@ -21,12 +16,12 @@
 </p>
 
 <p>
-  <b>&raquo;</b> <a href="@community_member_url@">What other people see when they click your name</a>
+  <b>&raquo;</b> <a href="@community_member_url@">#acs-subsite.lt_What_other_people_see#</a>
 </p>
 
 <if @account_status@ ne "closed">
   <p>
-    <b>&raquo;</b> <a href="unsubscribe-2">Close your account</a> 
+    <b>&raquo;</b> <a href="unsubscribe">#acs-subsite.Close_your_account#</a> 
   </p>
 </if>
 
