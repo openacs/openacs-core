@@ -38,7 +38,7 @@ proc db_bootstrap_checks { errors error_p } {
     if { $version < 7.2 } {
         append my_errors "<li>Your installed version of Postgres is too old.  Please install PostgreSQL 7.2 or later.\n"
         set my_error_p 1
-    } elseif { [string equal $version "7.3"] } 
+    } elseif { [string equal $version "7.3"] } {
         append my_errors "<li>PostgreSQL 7.3 is not supported at this moment. Please use 7.2.3.\n"
         set my_error_p 1
     }
