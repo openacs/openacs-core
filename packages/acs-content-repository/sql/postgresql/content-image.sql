@@ -109,8 +109,8 @@ end;
 -- than the standard package_instantiate_object.  So we don't bother calling define_function_args
 -- here.
 
-create function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,boolean,timestamptz,varchar,integer,integer,integer,integer
-  ) returns integer as '
+create or replace function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,boolean,timestamptz,varchar,integer,integer,integer,integer)
+returns integer as '
   declare
     new__name		alias for $1;
     new__parent_id	alias for $2; -- default null
@@ -141,7 +141,7 @@ create function image__new (varchar,integer,integer,integer,varchar,integer,varc
   begin
     new__context_id := new__parent_id;
 
-    if p_package_id is null then
+    if new__package_id is null then
       v_package_id := acs_object__package_id(new__parent_id);
     else
       v_package_id := new__package_id;
@@ -163,7 +163,7 @@ create function image__new (varchar,integer,integer,integer,varchar,integer,varc
       new__mime_type,
       new__nls_language,
       null,
-      ''file'' -- storage_type,
+      ''file'', -- storage_type
       v_package_id
     );
 
@@ -211,7 +211,7 @@ create function image__new (varchar,integer,integer,integer,varchar,integer,varc
     return v_item_id;
 end; ' language 'plpgsql';
 
-create function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,boolean,timestamptz,varchar,integer,integer,integer
+create or replace function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,boolean,timestamptz,varchar,integer,integer,integer
   ) returns integer as '
   declare
     new__name		alias for $1;
@@ -253,7 +253,7 @@ end; ' language 'plpgsql';
 
 -- DRB's version
 
-create function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,varchar,
+create or replace function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,varchar,
                             varchar,timestamptz,integer, integer, integer) returns integer as '
   declare
     p_name              alias for $1;
@@ -333,7 +333,7 @@ create function image__new (varchar,integer,integer,integer,varchar,integer,varc
     return v_item_id;
 end; ' language 'plpgsql';
 
-create function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,varchar,
+create or replace function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,varchar,
                             varchar,timestamptz,integer, integer) returns integer as '
   declare
     p_name              alias for $1;
@@ -410,7 +410,7 @@ begin
       current_timestamp,
       p_creation_user,
       p_creation_ip,
-      p_package_id
+      v_package_id
     );
 
     insert into images
@@ -454,7 +454,7 @@ begin
 
 end;' language 'plpgsql';
 
-create function image__delete (integer)
+create or replace function image__delete (integer)
 returns integer as '
 declare
   v_item_id		alias for $1;

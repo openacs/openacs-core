@@ -688,7 +688,20 @@ begin
   -- the data attribute for this view will be problematic.
 
   execute ''create view '' || v_table_name ||
-    ''i as select acs_objects.*, cr.revision_id, cr.title, cr.item_id,
+    ''i as select  acs_objects.object_id,
+ acs_objects.object_type,
+ acs_objects.title as object_title,
+ acs_objects.package_id as object_package_id,
+ acs_objects.context_id,
+ acs_objects.security_inherit_p,
+ acs_objects.creation_user,
+ acs_objects.creation_date,
+ acs_objects.creation_ip,
+ acs_objects.last_modified,
+ acs_objects.modifying_user,
+ acs_objects.modifying_ip,
+ acs_objects.tree_sortkey,
+ acs_objects.max_child_sortkey, cr.revision_id, cr.title, cr.item_id,
     content_revision__get_content(cr.revision_id) as data, 
     cr_text.text_data as text,
     cr.description, cr.publish_date, cr.mime_type, cr.nls_language'' || 
@@ -703,7 +716,20 @@ begin
   end if;
 
   execute ''create view '' || v_table_name ||
-    ''x as select acs_objects.*, cr.revision_id, cr.title, cr.item_id,
+    ''x as select  acs_objects.object_id,
+ acs_objects.object_type,
+ acs_objects.title as object_title,
+ acs_objects.package_id as object_package_id,
+ acs_objects.context_id,
+ acs_objects.security_inherit_p,
+ acs_objects.creation_user,
+ acs_objects.creation_date,
+ acs_objects.creation_ip,
+ acs_objects.last_modified,
+ acs_objects.modifying_user,
+ acs_objects.modifying_ip,
+ acs_objects.tree_sortkey,
+ acs_objects.max_child_sortkey, cr.revision_id, cr.title, cr.item_id,
     cr.description, cr.publish_date, cr.mime_type, cr.nls_language,
     i.name, i.parent_id'' || 
     cols || 

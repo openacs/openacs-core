@@ -205,7 +205,7 @@ declare
   new__creation_ip            alias for $6;  -- default null
   new__text                   alias for $7;  -- default null
   new__is_live                alias for $8;  -- default ''f''
-  new__package_id             alias for $7;  -- default null
+  new__package_id             alias for $9;  -- default null
   v_template_id               cr_templates.template_id%TYPE;
   v_package_id                acs_objects.package_id%TYPE;
   v_parent_id                 cr_items.parent_id%TYPE;

@@ -204,12 +204,11 @@ begin
                              p_data,
                              p_parent_id,
                              p_context_id,
-                             p_creation_date,
                              p_creation_user,
                              p_creation_ip,
                              p_object_type,
                              p_is_live,
-                             null
+                             null::integer
    );
 end;' language 'plpgsql';
 

@@ -269,8 +269,8 @@ begin
       new__creation_ip, 
       new__item_id,
       ''t'',
-      v_package_id,
-      new__title
+      new__title,
+      v_package_id
   );
 
   select storage_type into v_storage_type
