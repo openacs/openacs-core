@@ -34,7 +34,8 @@ ad_proc db_bootstrap_set_db_type { errors } {
     #    where no AvailablePool parameters exist, as in that case the ACS
     #    slurps up all pools.  I expect mixed db environments to be more common
     #    within the OpenACS community, though, so we should do a better job of
-    #    checking.
+    #    checking.  This will especially be true of users migrating from an
+    #    [Open]ACS 3.x site or ACS 4.x classic site.
     #
     # 2. There was no checking to make sure that *all* pools are correctly
     #    configured.  Even in an Oracle-only environment one could easy mistype a
@@ -74,7 +75,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
 
     if { [string length $the_set] > 0 } {
         for {set i 0} {$i < [ns_set size $the_set]} {incr i} {
-            if { [ns_set key $the_set $i] ==  "AvailablePool" } {
+            if { [string tolower [ns_set key $the_set $i]] ==  "availablepool" } {
                 lappend pools [ns_set value $the_set $i]
             }
         }
