@@ -55,7 +55,7 @@ name to generate certain kinds of user interface.
 Full Name:    <input type=text name=first_names size=20 value="@first_names@"> <input type=text name=last_name size=25 value="@last_name@">
 <p>
 
-<if @require_question_p@ eq 1>
+<if @require_question_p@ true and @custom_question_p@ true>
 
   We also need a customized question and answer to reset your password if you forget.
 
