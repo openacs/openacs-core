@@ -29,6 +29,12 @@ namespace eval plpgsql_utility {
 	return [generate_attribute_parameter_call -prepend $prepend $function_name $the_list]
     }
 
+    ad_proc -private get_function_args {function_name} {
+        uncached version returns list of lists args
+        called from generate_attribute_parameter_call
+    } { 
+        return [db_list_of_lists get_function_args {}]
+    }
 
     ad_proc -public generate_attribute_parameter_call {
 	{ -prepend "" }
@@ -41,14 +47,8 @@ namespace eval plpgsql_utility {
 	@creation-date 07/2001
 
     } {
-	ns_log Notice "*** $function_name [join $pairs "\n"]"
 	# Get the list of real args to the function
-	set real_args [db_list_of_lists get_function_args "
-	    select arg_name, arg_default
-	      from acs_function_args
-	     where function = upper(:function_name)
-	     order by arg_seq
-	"]
+	set real_args [util_memoize [list plpgsql_utility::get_function_args $function_name]]
 
 	foreach row $pairs {
 	    set attr [string trim [lindex $row 0]]
@@ -84,12 +84,7 @@ namespace eval plpgsql_utility {
 	@creation-date 07/2001
 
     } {
-	return [db_string fetch_type "
-	       select data_type
-	         from user_tab_columns
-		where table_name = upper(:table)
-		  and column_name = upper(:column)
-	"]
+	return [db_string fetch_type {}]
     }
 
     ad_proc -public generate_attribute_parameters { 
