@@ -196,6 +196,7 @@ ad_proc -public template::element::create { form_id element_id args } {
       template::element::create $opts(form_id) $opts(id):sig \
           -datatype text \
           -widget hidden \
+          -section $opts(section) \
           -value [ad_sign $val]
   }
 
@@ -227,7 +228,7 @@ ad_proc -public template::element::set_properties { form_id element_id args } {
                 -value [ad_sign $opts(value)]
 
         } else {
-            template::element::create $opts(form_id) $opts(id):sig \
+            template::element::create $form_id $element_id:sig \
                 -datatype text \
                 -widget hidden \
                 -value [ad_sign $opts(value)]
