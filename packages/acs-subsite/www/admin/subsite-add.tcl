@@ -7,30 +7,14 @@ ad_page_contract {
     node_id:integer,optional
 }
 
-if ([string equal [ad_conn package_url] "/"]) {
+if { [string equal [ad_conn package_url] "/"] } {
     set page_title "New community"
     set subsite_pretty_name "Community name"
 } else {
     set page_title "New subcommunity"
     set subsite_pretty_name "Subcommunity name"
 }
-set context [list [list "." "Communities"] $page_title]
-
-
-set master_template_options [list]
-lappend master_template_options [list "Default" "/www/default-master"]
-lappend master_template_options [list "Community" "/packages/acs-subsite/www/group-master"]
-set current_master [parameter::get -parameter DefaultTemplate]
-set found_p 0
-foreach elm $master_template_options {
-    if { [string equal $current_master [lindex $elm 1]] } {
-        set found_p 1
-        break
-    }
-}
-if { !$found_p } {
-    lappend master_template [list $current_master $current_master]
-}
+set context [list $page_title]
 
 
 ad_form -name subsite -cancel_url . -form {
@@ -48,7 +32,7 @@ ad_form -name subsite -cancel_url . -form {
     {master_template:text(select)
         {label "Template"}
         {help_text "Choose the layout and navigation you want for your community."}
-        {options $master_template_options}
+        {options [subsite::get_template_options]}
     }
 } -on_submit {
     set folder [site_node::verify_folder_name \

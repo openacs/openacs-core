@@ -35,6 +35,11 @@ foreach url [site_node::get_children -package_key acs-subsite -node_id [subsite:
     array set node [site_node::get_from_url -url $url -exact]
 
     if { [permission::permission_p -object_id $node(object_id) -privilege read] } {
+        # TODO
+        set edit_url {}
+        if { [permission::permission_p -object_id $node(object_id) -privilege admin] } {
+            set edit_url {}
+        }
         lappend subsites [list \
                               $node(instance_name) \
                               $node(node_id) \
