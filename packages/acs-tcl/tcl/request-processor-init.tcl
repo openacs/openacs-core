@@ -17,17 +17,6 @@ proc ad_acs_admin_id_mem {} {
     } -default 0]
 }
 
-proc ad_acs_kernel_id_mem {} {
-    return [db_string acs_kernel_id_get {
-        select package_id from apm_packages
-        where package_key = 'acs-kernel'
-    } -default 0]
-}
-
-proc ad_acs_kernel_id {} "
-    return [ad_acs_kernel_id_mem]
-"
-
 proc ad_acs_admin_id {} "
     return [ad_acs_admin_id_mem]
 "

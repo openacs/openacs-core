@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="ad_acs_kernel_id.acs_kernel_id_get">      
+<fullquery name="ad_acs_kernel_id_mem.acs_kernel_id_get">      
       <querytext>
       
 	select package_id from apm_packages
@@ -11,7 +11,7 @@
 </fullquery>
 
  
-<fullquery name="ad_acs_kernel_id.acs_admin_id_get">      
+<fullquery name="ad_acs_admin_id.acs_admin_id_get">      
       <querytext>
       
         select package_id from apm_packages

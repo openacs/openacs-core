@@ -1021,15 +1021,23 @@ ad_proc -public ad_script_abort {} {
   ad_raise ad_script_abort
 }
 
+
+ad_proc -public ad_acs_kernel_id_mem {} {
+
+    Returns the package_id of the kernel. (not cached)
+
+} {
+    return [db_string acs_kernel_id_get {} -default 0]
+}
+
 ad_proc -public ad_acs_kernel_id {} {
 
     Returns the package_id of the kernel.
 
 } {
-    return [db_string acs_kernel_id_get {
-	select package_id from apm_packages
-	where package_key = 'acs-kernel'
-    } -default 0]
+    set acs_kernel_id [ad_acs_kernel_id_mem]
+    ad_proc ad_acs_kernel_id {} {Returns the package_id of the kernel.} "return $acs_kernel_id"
+    return $acs_kernel_id
 }
 
 ad_proc -public -deprecated ad_acs_admin_id {} {
