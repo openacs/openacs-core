@@ -599,6 +599,7 @@ ad_proc -private template::query::flush_cache { cache_match } {
 ad_proc -public multirow {
     {-ulevel 1}
     {-local:boolean}
+    -unclobber:boolean
     op
     name
     args
@@ -617,6 +618,7 @@ ad_proc -public multirow {
 ad_proc -public template::multirow { 
   {-ulevel 1}
   {-local:boolean}
+  -unclobber:boolean
   command
   name
   args
@@ -663,6 +665,11 @@ ad_proc -public template::multirow {
     @param name Name of the multirow datasource
 
     @param args optional args
+
+    @param unclobber This only applies to the 'foreach' command.
+    If set, will cause the proc to not overwrite local variables. Actually, what happens
+    is that the local variables will be overwritten, so you can access them within the code block. However, 
+    if you specify -unclobber, we will revert them to their original state after execution of this proc.
 
     @see db_multirow
     @see template::query::multirow
@@ -799,7 +806,25 @@ ad_proc -public template::multirow {
       if {![info exists rowcount] || ![info exists columns]} { 
         return 
       } 
-        
+      
+      # Save values of columns which we might clobber
+      if { $unclobber_p } {
+        foreach col $columns {
+          upvar 1 $col column_value __saved_$col column_save
+          
+          if { [info exists column_value] } {
+            if { [array exists column_value] } {
+              array set column_save [array get column_value]
+            } else {
+              set column_save $column_value
+            }
+            
+            # Clear the variable
+            unset column_value
+          }
+        }
+      }
+
       for { set i 1 } { $i <= $rowcount } { incr i } {
         # Pull values into variables (and into the array - aks),
         # evaluate the code block, and pull values back out to
@@ -852,6 +877,29 @@ ad_proc -public template::multirow {
           upvar 1 $column_name column_value
           if { [info exists column_value] } {
             set row($column_name) $column_value
+          }
+        }
+      }
+      
+      if { $unclobber_p } {
+        foreach col $columns {
+          upvar 1 $col column_value __saved_$col column_save
+          
+          # Unset it first, so the road's paved to restoring
+          if { [info exists column_value] } {
+            unset column_value
+          }
+          
+          # Restore it
+          if { [info exists column_save] } {
+            if { [array exists column_save] } {
+              array set column_value [array get column_save]
+            } else {
+              set column_value $column_save
+            }
+            
+            # And then remove the saved col
+            unset column_save
           }
         }
       }
@@ -1061,3 +1109,7 @@ ad_proc -public cache { command key args } {
 
   return $result
 }
+
+# Local Variables:
+# tcl-indent-level: 2
+# End:
