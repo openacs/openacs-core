@@ -432,7 +432,7 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
 
                         lob {
                             if {[regexp {^[0-9]+$} $content match]} {
-                                ns_pg blob_get $db $content
+                                return [ns_pg blob_get $db $content]
                             } else {
                                 error "invalid lob_id: should be an integer"
                             }
@@ -449,7 +449,7 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
                     close $ifp
                     return $data
                 } elseif {[regexp {^[0-9]+$} $content match]} {
-                    ns_pg blob_get $db $content
+                    return [ns_pg blob_get $db $content]
                 } else {
                     error "invalid query"
                 }
