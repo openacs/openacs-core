@@ -23,7 +23,7 @@ if {![db_0or1row get_states {
            first_names || ' ' || last_name as name,
            email,
            rel_id,
-           rowid
+           row_id
     from cc_users
     where user_id = :user_id
 }]} {
@@ -64,7 +64,7 @@ switch $email_verified_p {
     }
     "f" {
 	set action "Require Email from $name"
-	set email_message "Your email in [ad_system_name] needs approval. please go to [ad_parameter SystemURL]/register/email-confirm.tcl?[export_url_vars rowid]"
+	set email_message "Your email in [ad_system_name] needs approval. please go to [ad_parameter -package_id [ad_acs_kernel_id] SystemURL]/register/email-confirm.tcl?[export_url_vars row_id]"
     }
 }
 
