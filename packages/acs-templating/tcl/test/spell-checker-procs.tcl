@@ -159,13 +159,11 @@ aa_register_case spellcheck__spellcheck_properties {
     # text
     aa_log "--- Spell-checking enabled on widget \"$element(widget)\"? --- $command"
 
-    set spellcheck_properties [eval $command]
-    set spellcheck_p [lindex $spellcheck_properties 0]
-    aa_false "Spell-checking disabled" $spellcheck_p
+    array set spellcheck [eval $command]
+    aa_false "Spell-checking disabled" $spellcheck(perform_p)
 
-    if { $spellcheck_p } {
-	set yes_checked [lindex $spellcheck_properties 1]
-	aa_log "[ad_decode $yes_checked "checked" "'Yes'" "'No'"] is the default"
+    if { $spellcheck(perform_p) } {
+	aa_log "$spellcheck(selected_option) is the default"
     }
     
 
@@ -173,13 +171,11 @@ aa_register_case spellcheck__spellcheck_properties {
     set element(widget) textarea
     aa_log "--- Spell-checking enabled on widget \"$element(widget)\"? --- $command"
 
-    set spellcheck_properties [eval $command]
-    set spellcheck_p [lindex $spellcheck_properties 0]
-    aa_true "Spell-checking enabled" $spellcheck_p
+    array set spellcheck [eval $command]
+    aa_true "Spell-checking enabled" $spellcheck(perform_p)
     
-    if { $spellcheck_p } {
-	set yes_checked [lindex $spellcheck_properties 1]
-	aa_log "[ad_decode $yes_checked "checked" "'Yes'" "'No'"] is the default"
+    if { $spellcheck(perform_p) } {
+	aa_log "$spellcheck(selected_option) is the default"
     }
 
 
@@ -187,13 +183,11 @@ aa_register_case spellcheck__spellcheck_properties {
     set element(widget) richtext
     aa_log "--- Spell-checking enabled on widget \"$element(widget)\"? --- $command"
 
-    set spellcheck_properties [eval $command]
-    set spellcheck_p [lindex $spellcheck_properties 0]
-    aa_true "Spell-checking enabled" $spellcheck_p
+    array set spellcheck [eval $command]
+    aa_true "Spell-checking enabled" $spellcheck(perform_p)
 
-    if { $spellcheck_p } {
-	set yes_checked [lindex $spellcheck_properties 1]
-	aa_log "[ad_decode $yes_checked "checked" "'Yes'" "'No'"] is the default"
+    if { $spellcheck(perform_p) } {
+	aa_log "$spellcheck(selected_option) is the default"
     }
     
 }
