@@ -769,6 +769,9 @@ ad_proc -private apm_package_install {
 
 	apm_callback_and_log $callback "<p>Installed $version(package-name), version $version(name).</p>"
     } {
+        global errorInfo
+        ns_log Error "Error installing $version(package-name) version $version(name): $errmsg\n$errorInfo"
+
 	apm_callback_and_log -severity Error $callback "<p>Failed to install $version(package-name), version $version(name).  The following error was generated:
 <pre><blockquote>
 [ad_quotehtml $errmsg]
