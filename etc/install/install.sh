@@ -499,6 +499,9 @@ if parameter_true $do_install; then
   #-------------------------------------------------------------------
   # Install OpenACS
   echo "$(date): Starting installation of OpenACS."
+  # TODO: this should be a parameter in install.tcl
+  export TCLLIBPATH="$TCLLIBPATH /usr/local/tclwebtest"
+
   ${tclwebtest_dir}/tclwebtest -config_file $config_file openacs-install.test
   
 
