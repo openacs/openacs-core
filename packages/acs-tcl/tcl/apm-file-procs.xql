@@ -7,6 +7,12 @@
       </querytext>
 </fullquery>
 
+<fullquery name="apm_extract_tarball.distribution_tar_ball_select">      
+      <querytext>
+      select distribution_tarball from apm_package_versions where version_id = :version_id
+      </querytext>
+</fullquery>
+
  
 <fullquery name="apm_db_type_keys.db_type_keys">      
       <querytext>

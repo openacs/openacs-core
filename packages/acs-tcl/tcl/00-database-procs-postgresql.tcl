@@ -55,7 +55,7 @@ proc_doc db_exec_plsql { statement_name sql args } {
 # drops the function. Future work might involve converting this to cache the 
 # function calls
 
-ad_proc -private db_exec_plpgsql { db statement_name sql fname } {
+ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
 
     A helper procedure to execute a SQL statement, potentially binding
     depending on the value of the $bind variable in the calling environment
@@ -69,10 +69,10 @@ ad_proc -private db_exec_plpgsql { db statement_name sql fname } {
 } {
     set start_time [clock clicks]
 
-    ns_log Notice "PRE-QD: the SQL is $sql"
+    ns_log Notice "PRE-QD: the SQL is $pre_sql"
 
     # Query Dispatcher (OpenACS - ben)
-    set sql [db_qd_replace_sql $statement_name $sql]
+    set sql [db_qd_replace_sql $statement_name $pre_sql]
 
     ns_log Notice "POST-QD: the SQL is $sql"
 
@@ -83,7 +83,9 @@ ad_proc -private db_exec_plpgsql { db statement_name sql fname } {
     ns_log Notice "PLPGSQL: converted: $sql to: select $function_name ()"
 
     # insert tcl variable values (Openacs - Dan)
-    set sql [uplevel 2 [list subst -nocommands -nobackslashes $sql]]
+    if {![string equal $sql $pre_sql]} {
+        set sql [uplevel 2 [list subst -nobackslashes $sql]]
+    }
 
     # create a function definition statement for the inline code 
     # binding is emulated in tcl. (OpenACS - Dan)
@@ -190,7 +192,7 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
     return $lsql
 }
 
-ad_proc -private db_exec { type db statement_name sql args } {
+ad_proc -private db_exec { type db statement_name pre_sql args } {
 
     A helper procedure to execute a SQL statement, potentially binding
     depending on the value of the $bind variable in the calling environment
@@ -199,13 +201,15 @@ ad_proc -private db_exec { type db statement_name sql args } {
 } {
     set start_time [clock clicks]
 
-    ns_log Notice "PRE-QD: the SQL is $sql for $statement_name"
+    ns_log Notice "PRE-QD: the SQL is $pre_sql for $statement_name"
 
     # Query Dispatcher (OpenACS - ben)
-    set sql [db_qd_replace_sql $statement_name $sql]
+    set sql [db_qd_replace_sql $statement_name $pre_sql]
 
     # insert tcl variable values (Openacs - Dan)
-    set sql [uplevel 2 [list subst -nocommands -nobackslashes $sql]]
+    if {![string equal $sql $pre_sql]} {
+        set sql [uplevel 2 [list subst -nobackslashes $sql]]
+    }
 
     ns_log Notice "POST-QD: the SQL is $sql"
 
@@ -291,8 +295,74 @@ ad_proc db_blob_get_file { statement_name sql args } {
     ad_arg_parser { bind file args } $args
 
     db_with_handle db {
-	eval [list db_exec blob_get_file $db $statement_name $sql $file] $args
+	db_exec_lob $db $statement_name $sql $file
     }
+}
+
+ad_proc -private db_exec_lob { db statement_name pre_sql file } {
+
+    A helper procedure to execute a SQL statement, potentially binding
+    depending on the value of the $bind variable in the calling environment
+    (if set).
+
+    Low level replacement for db_exec which emulates blob handling.
+
+} {
+    set start_time [clock clicks]
+
+    ns_log Notice "PRE-QD: the SQL is $pre_sql"
+
+    # Query Dispatcher (OpenACS - ben)
+    set sql [db_qd_replace_sql $statement_name $pre_sql]
+
+    ns_log Notice "POST-QD: the SQL is $sql"
+
+    # insert tcl variable values (Openacs - Dan)
+    if {![string equal $sql $pre_sql]} {
+        set sql [uplevel 2 [list subst -nobackslashes $sql]]
+    }
+
+    # create a function definition statement for the inline code 
+    # binding is emulated in tcl. (OpenACS - Dan)
+
+    set errno [catch {
+	upvar bind bind
+	if { [info exists bind] && [llength $bind] != 0 } {
+	    if { [llength $bind] == 1 } {
+                set bind_vars [list]
+                set len [ns_set size $bind]
+                for {set i 0} {$i < $len} {incr i} {
+                    lappend bind_vars [ns_set key $bind $i] \
+                                      [ns_set value $bind $i]
+                }
+                set lob_sql [db_bind_var_substitution $sql $bind_vars]
+	    } else {
+                set lob_sql [db_bind_var_substitution $sql $bind]
+	    }
+	} else {
+            set lob_sql [uplevel 2 [list db_bind_var_substitution $sql]]
+	}
+
+        # get the lob id
+        set selection [ns_db 1row $db $lob_sql]
+        set lob_id [ns_set value $selection 0]
+
+        ns_pg blob_select file $db $lob_id $file
+        return
+
+    } error]
+
+    global errorInfo errorCode
+    set errinfo $errorInfo
+    set errcode $errorCode
+
+    ad_call_proc_if_exists ds_collect_db_call $db 0or1row $statement_name $sql $start_time $errno $error
+
+    if { $errno == 2 } {
+	return $error
+    }
+
+    return -code $errno -errorinfo $errinfo -errorcode $errcode $error
 }
 
 ad_proc db_get_pgbin { } {
