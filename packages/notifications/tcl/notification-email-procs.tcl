@@ -180,7 +180,7 @@ namespace eval notification::email {
                     if { [string compare -nocase $name "Auto-Submitted"] == 0 } {
                         set is_auto_reply_p 1
                         break
-                    } elseif { [string compare -nocase $name "Subject"] == 0 && [string match -nocase $value "Out of Office AutoReply:"] == 0 } {
+                    } elseif { [string compare -nocase $name "Subject"] == 0 && [string first "Out of Office AutoReply:" $value] == 0 } {
                         # added for BP
                         set is_auto_reply_p 1
                         break
