@@ -177,7 +177,7 @@ ad_proc -public install::xml::action::set-parameter { node } {
     <p>&lt;set-parameter name=&quot;<em>parameter</em>&quot; [ package=&quot;<em>package-key</em> | url=&quot;<em>package-url</em>&quot; ] value=&quot;<em>value</em>&quot; /&gt;</p>
 } { 
     set name [apm_required_attribute_value $node name]
-    set value [apm_required_attribute_value $node value]
+    set value [apm_attribute_value -default {} $node value]
 
     set package_id [install::xml::object_id::package $node]
 
