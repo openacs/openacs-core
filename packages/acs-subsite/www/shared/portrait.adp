@@ -1,27 +1,17 @@
-<master>
-<property name=title>Portrait of @first_names@ @last_name@</property>
+<master src="master">
+<property name="title">Portrait of @first_names@ @last_name@</property>
+<property name="context_bar">@context_bar@</property>
 
-<h2>Portrait of @first_names@ @last_name@</h2>
-
-@context_bar@
-
-<hr>
-
-<br>
-<br>
-
-<center>
+<p><center>
 <img @widthheight_param@ src="/shared/portrait-bits.tcl?@export_vars@">
 </center>
+</p>
 
-<br>
-<br>
-
-<ul>
+<p><ul>
 <li>Comment:  
 <blockquote>
 @description@
 </blockquote>
-<li>Uploaded:  @publish_date@
+<li>Uploaded: @publish_date@
 </ul>
-
+</p>

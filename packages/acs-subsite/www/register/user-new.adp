@@ -1,11 +1,9 @@
-<master>
-<property name=title>Register</property>
+<master src="master">
+<property name="title">Register</property>
 
-<h2>Register</h2>
 
-as a user of <a href="index">@system_name@</a>
 
-<hr>
+Register as a user of <a href="index">@system_name@</a>
 
 <form method=post action="user-new-2">
 @export_vars@
@@ -22,11 +20,11 @@ as a user of <a href="index">@system_name@</a>
   <table>
   <tr>
     <td>Password:</td>
-    <td><input type=password name=password value="@password@" size=10></td>
+    <td><input type="password" name="password" value="@password@" size="10" /></td>
   </tr>
   <tr>
     <td>Password Confirmation:</td>
-    <td><input type=password name=password_confirmation size=10></td>
+    <td><input type="password" name="password_confirmation" size="10" /></td>
   </tr>
   </table>
   <p>
@@ -41,8 +39,8 @@ as a user of <a href="index">@system_name@</a>
 
   We will generate and send to you a random password when your registration
   is confirmed. Once you login, you can change your password.
-  <input type="hidden" name="password" value="somevalue">
-  <input type="hidden" name="password_confirmation" value="othervalue">
+  <input type="hidden" name="password" value="somevalue" />
+  <input type="hidden" name="password_confirmation" value="othervalue" />
 </else>
 
 <h3>About You</h3>
@@ -52,7 +50,7 @@ name to generate certain kinds of user interface.
 
 <p>
 
-Full Name:    <input type=text name=first_names size=20 value="@first_names@"> <input type=text name=last_name size=25 value="@last_name@">
+Full Name:    <input type="text" name="first_names" size="20" value="@first_names@" /> <input type="text" name="last_name" size="25" value="@last_name@" />
 <p>
 
 <if @require_question_p@ true and @custom_question_p@ true>
@@ -61,8 +59,8 @@ Full Name:    <input type=text name=first_names size=20 value="@first_names@"> <
 
   <p>
   
-  Question: <input type=text name=question size=30><br>
-  Answer: <input type=text name=answer size=30>
+  Question: <input type="text" name="question" size="30" /><br>
+  Answer: <input type="text" name="answer" size="30" />
 
   <p>
 
@@ -72,12 +70,12 @@ If you have a Web site, we'll be able to point searchers there.
 
 <p>
 
-Personal Home Page URL:  <input type=text name=url size=50 value="http://">
+Personal Home Page URL:  <input type="text" name="url" size="50" value="http://">
 
 <p>
 
 <center>
-<input type=submit value="Register">
+<input type="submit" value="Register">
 </center>
 </form>
 

@@ -1,16 +1,17 @@
-<master>
-<property name=title>@title@</property>
+<master src="master">
+<property name="title">@title@</property>
 
 <if @email_verified_p@ eq f>
 
 <h2>Please read your email</h2>
 
-<hr>
-
+<p>
 Registration information for this service has been
 sent to @email@.
+</p>
 <p>
 Please read and follow the instructions in this email.
+</p>
 
 </if>
 <else>

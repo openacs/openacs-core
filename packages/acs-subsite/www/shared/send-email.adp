@@ -1,11 +1,7 @@
-<master>
-<property name=title>@sent_title@</property>
-
-<H2>@sent_subject@</H2>
-
-<hr>
+<master src="master">
+<property name=title>Sent: @sent_subject@</property>
 
 @sent_message@
-<br><br>
+<br /><br />
 You may <a href="@return_url@">return</a>.
 

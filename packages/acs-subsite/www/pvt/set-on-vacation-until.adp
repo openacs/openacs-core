@@ -1,16 +1,10 @@
-<master>
+<master src="master">
 <property name=title>Vacation Information Updated</property>
 
-<h2>Vacation Information Updated</h2>
+<p>Your vacation information at @site_link@ has been updated.</p>
 
-in @site_link@
+<p>You won't get any email until after @pretty_date@.</p>
 
-<hr>
-
-You won't get any email until after @pretty_date@.
-
-<p>
-
-Please return to @home_link@.
+<p>Please return to @home_link@.</p>
 
 

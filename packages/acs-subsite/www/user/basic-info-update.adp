@@ -1,37 +1,30 @@
-<master>
-<property name=title>Update Basic Information</property>
+<master src="master">
+<property name="title">Update Basic Information</property>
+<property name="context_bar">in @site_link@</property>
 
-<h2>Update Basic Information</h2>
-
-in @site_link@
-
-<hr>
-
-<form method=POST action="basic-info-update-2">
+<form method="post" action="basic-info-update-2">
 @export_vars@
 <table>
 <tr>
-<tr>
- <th>Name:<td><input type=text name=first_names size=20 value="@first_names@"> <input type=text name=last_name size=25 value="@last_name@">
+ <th>Name:</th><td><input type="text" name="first_names" size="20" value="@first_names@" /> 
+                <input type="text" name="last_name" size="25" value="@last_name@" /></td>
 </tr>
 <tr>
- <th>email address:<td><input type=text name=email size=30 value="@email@">
+ <th>email address:</th><td><input type="text" name="email" size="30" value="@email@" /></td>
 </tr>
 <tr>
- <th>Personal URL:<td><input type=text name=url size=50 value="@url@"></tr>
+ <th>Personal URL:</th><td><input type="text" name="url" size="50" value="@url@" /></td>
 </tr>
 <tr>
- <th>screen name:<td><input type=text name=screen_name size=30 value="@screen_name@">
+ <th>screen name:</th><td><input type="text" name="screen_name" size="30" value="@screen_name@" /></td>
 </tr>
 <tr>
- <th>Biography:<td><textarea name=bio rows=10 cols=50 wrap=soft>@bio@</textarea></td>
+ <th>Biography:</th><td><textarea name="bio" rows="10" cols="50" wrap="soft">@bio@</textarea></td>
 </tr>
 </table>
 
-<br>
-<br>
-<center>
+<p><center>
 <input type=submit value="Update">
-</center>
+</center></p>
 
 

@@ -1,11 +1,7 @@
-<master>
-<property name=title>Account Deleted</property>
+<master src="master">
+<property name="title">Account Deleted</property>
 
-<h2>Account Deleted</h2>
-
-<hr>
-
-Your account at @system_name@ has been marked "deleted".
+Your account at @system_name@ has been marked as "deleted".
 
 
 

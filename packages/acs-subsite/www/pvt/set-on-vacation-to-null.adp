@@ -1,14 +1,6 @@
-<master>
+<master src="master">
 <property name=title>Vacation Information Updated</property>
 
-<h2>Vacation Information Updated</h2>
+<p>You're marked as back from vacation at @site_link@.</p>
 
-in @site_link@
-
-<hr>
-
-You're marked as back from vacation.
-
-<p>
-
-Please return to @home_link@.
+<p>Please return to @home_link@.</p>

@@ -15,7 +15,7 @@ ad_page_contract {
     admin_p:onevalue
 }
 
-set context_bar {}
+set context_bar [ad_context_bar]
 set package_id [ad_conn package_id]
 set admin_p [ad_permission_p $package_id admin]
 

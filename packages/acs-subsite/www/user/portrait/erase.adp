@@ -1,22 +1,17 @@
-<master>
-<property name=title>Erase Portrait</property>
-
-<h2>Erase Portrait</h2>
-
-@context_bar@
-
-<hr>
+<master src="master">
+<property name="title">Erase Portrait</property>
+<property name="context_bar">@context_bar@</property>
 
 <if @admin_p@ eq 0>
-  Are you sure that you want to erase your portrait?
+  <p>Are you sure that you want to erase your portrait?</p>
 </if>
 <else>
-  Are you sure that you want to erase this user's portrait?
+  <p>Are you sure that you want to erase this user's portrait?</p>
 </else>
 
-<center>
-<form method=GET action="erase-2">
+<form method="get" action="erase-2">
 @export_vars@
-<input type=submit value="Yes, I'm sure">
+<center>
+<input type="submit" value="Yes, I'm sure" />
 </center>
 
