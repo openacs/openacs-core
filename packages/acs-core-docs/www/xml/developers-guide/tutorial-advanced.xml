@@ -61,11 +61,11 @@
 	pre-written documentation files for the tutorial app.  Log in
       as <replaceable>service0</replaceable>, create the standard
       directories, and copy the prepared documentation:</para>
-      <screen>[service0 service0]$ <userinput>cd /var/lib/aolserver/service0/packages/samplenote/</userinput>
-[service0 samplenote]$ <userinput>mkdir -p www/doc/xml</userinput>
-[service0 samplenote]$ <userinput>cd www/doc/xml</userinput>
-[service0 xml]$ <userinput>cp /var/lib/aolserver/service0/packages/acs-core-docs/www/files/samplenote/* .</userinput>
-[service0 xml]$</screen>
+      <screen>[service0@yourserver service0]$ <userinput>cd /var/lib/aolserver/service0/packages/samplenote/</userinput>
+[service0@yourserver samplenote]$ <userinput>mkdir -p www/doc/xml</userinput>
+[service0@yourserver samplenote]$ <userinput>cd www/doc/xml</userinput>
+[service0@yourserver xml]$ <userinput>cp /var/lib/aolserver/service0/packages/acs-core-docs/www/files/samplenote/* .</userinput>
+[service0@yourserver xml]$</screen>
       <para> OpenACS uses DocBook for documentation.  DocBook is
 	an XML standard for semantic markup of documentation.  That
 	means that the tags you use indicate meaning, not intended
@@ -86,7 +86,7 @@
       directory.  A Makefile is provided to generate html from the xml, and copy all of the
       supporting files.  If Docbook is set up correctly, all you need
       to do is:</para>
-      <screen>[service0 xml]$<userinput> make</userinput>
+      <screen>[service0@yourserver xml]$<userinput> make</userinput>
 cd .. ; /usr/bin/xsltproc ../../../acs-core-docs/www/xml/openacs.xsl xml/index.xml
 Writing requirements-introduction.html for sect1(requirements-introduction)
 Writing requirements-overview.html for sect1(requirements-overview)
@@ -102,7 +102,7 @@ Writing user-guide.html for chapter(user-guide)
 Writing admin-guide.html for chapter(admin-guide)
 Writing bi01.html for bibliography
 Writing index.html for book
-[service0 xml]$</screen>
+[service0@yourserver xml]$</screen>
       <para>Verify that the documentation was generated and reflects
       your changes by browsing to <computeroutput>http://<replaceable>yoursite</replaceable>:8000/samplenote/doc</computeroutput></para>
     </sect2>
@@ -114,20 +114,20 @@ Writing index.html for book
       traverse the directory tree manually and add as you go.  (<ulink
       url="http://www.piskorski.com/docs/cvs-conventions.html">More on
       CVS</ulink>)</para>
-      <screen>[service0 xml]$ <userinput>cd ..</userinput>
-[service0 doc]$ <userinput>cd ..</userinput>
-[service0 www]$ <userinput>cd ..</userinput>
-[service0 samplenote]$ <userinput>cd ..</userinput>
-[service0 packages]$ <userinput>cvs add samplenote/</userinput>
+      <screen>[service0@yourserver xml]$ <userinput>cd ..</userinput>
+[service0@yourserver doc]$ <userinput>cd ..</userinput>
+[service0@yourserver www]$ <userinput>cd ..</userinput>
+[service0@yourserver samplenote]$ <userinput>cd ..</userinput>
+[service0@yourserver packages]$ <userinput>cvs add samplenote/</userinput>
 Directory /cvsroot/service0/packages/samplenote added to the repository
-[service0 packages]$ <userinput>cd samplenote/</userinput>
-[service0 samplenote]$ <userinput>cvs add www</userinput>
+[service0@yourserver packages]$ <userinput>cd samplenote/</userinput>
+[service0@yourserver samplenote]$ <userinput>cvs add www</userinput>
 Directory /cvsroot/service0/packages/samplenote/www added to the repository
-[service0 samplenote]$ <userinput>cd www</userinput>
-[service0 www]$ <userinput>cvs add doc</userinput>
+[service0@yourserver samplenote]$ <userinput>cd www</userinput>
+[service0@yourserver www]$ <userinput>cvs add doc</userinput>
 Directory /cvsroot/service0/packages/samplenote/www/doc added to the repository
-[service0 www]$ <userinput>cd doc</userinput>
-[service0 doc]$ <userinput>cvs add *</userinput>
+[service0@yourserver www]$ <userinput>cd doc</userinput>
+[service0@yourserver doc]$ <userinput>cvs add *</userinput>
 cvs add: cannot add special file `CVS'; skipping
 cvs add: scheduling file `admin-guide.html' for addition
 cvs add: scheduling file `bi01.html' for addition
@@ -152,13 +152,13 @@ cvs add: scheduling file `user-interface.dia' for addition
 cvs add: scheduling file `user-interface.png' for addition
 Directory /cvsroot/service0/packages/samplenote/www/doc/xml added to the repository
 cvs add: use 'cvs commit' to add these files permanently
-[service0 doc]$ <userinput>cd xml</userinput>
-[service0 xml]$ <userinput>cvs add Makefile index.xml</userinput>
+[service0@yourserver doc]$ <userinput>cd xml</userinput>
+[service0@yourserver xml]$ <userinput>cvs add Makefile index.xml</userinput>
 cvs add: scheduling file `Makefile' for addition
 cvs add: scheduling file `index.xml' for addition
 cvs add: use 'cvs commit' to add these files permanently
-[service0 xml]$<userinput> cd ../../..</userinput>
-[service0 samplenote]$ <userinput>cvs commit -m "new package"</userinput>
+[service0@yourserver xml]$<userinput> cd ../../..</userinput>
+[service0@yourserver samplenote]$ <userinput>cvs commit -m "new package"</userinput>
 cvs commit: Examining .
 cvs commit: Examining www
 cvs commit: Examining www/doc
@@ -170,7 +170,7 @@ Checking in www/doc/admin-guide.html;
 initial revision: 1.1
 done
 <emphasis>(many lines omitted)</emphasis>
-[service0 samplenote]$</screen>
+[service0@yourserver samplenote]$</screen>
     </sect2>
   <sect2>
     <title>Delete with confirmation</title>
@@ -179,7 +179,7 @@ done
     <para>Add this column to the table_def in index.tcl</para>
     <programlisting>{delete "" {} {&lt;td&gt;&lt;a href="note-delete?note_id=$note_id"&gt;Delete&lt;/a&gt;&lt;/td&gt;}}</programlisting>
     <para>Create the delete confirmation/execution page.</para>
-    <screen>[service0 www]$ <userinput>emacs note-delete.tcl</userinput></screen>
+    <screen>[service0@yourserver www]$ <userinput>emacs note-delete.tcl</userinput></screen>
       <programlisting>ad_page_contract {
     A page that gets confirmation and then delete notes.
 
@@ -224,7 +224,7 @@ we delete the record, set redirection back to the index, and abort
 script execution.</para>
 
       <para>The database commands:</para>
-      <screen>[service0 www]$ <userinput>emacs note-delete.xql</userinput></screen>
+      <screen>[service0@yourserver www]$ <userinput>emacs note-delete.xql</userinput></screen>
       <programlisting>&lt;?xml version="1.0"?&gt;
 &lt;queryset&gt;
   &lt;fullquery name="do_delete"&gt;
@@ -239,7 +239,7 @@ script execution.</para>
   &lt;/fullquery&gt;
 &lt;/queryset&gt;</programlisting>
       <para>And the adp page:</para>
-      <screen>[service0 www]$ <userinput>emacs note-delete.adp</userinput></screen>
+      <screen>[service0@yourserver www]$ <userinput>emacs note-delete.adp</userinput></screen>
       <programlisting>&lt;master&gt;
 &lt;property name="title"&gt;@title@&lt;/property&gt;
 &lt;property name="context"&gt;{@title@}&lt;/property&gt;
@@ -303,5 +303,138 @@ set comment_add_url "[general_comments_package_url]comment-add?[export_vars {
           </indexterm>
 </para>
       </sect2>
+
+  <sect2>
+    <title>Notifications</title>
+    <authorblurb>
+      <para>by <ulink url="mailto:dave@student.usyd.edu.au">David Bell</ulink> and <ulink url="mailto:simon@collaboraid.net">Simon Carstensen</ulink></para>
+    </authorblurb>
+
+    <para>The notifications package allows you to send notifications through any 
+    defined communications medium (e.g. email, sms) upon some event occuring within 
+    the system.</para>
+    <para>This tutorial steps through the process of integrating the notifications 
+    package with your package.</para>
+   
+    <para>First step is to create the notification types. To do this a script similar 
+    to the one below needs to be loaded into Postgresql. I create this script in a 
+    package-name/sql/postgresql/package-name-notifications-init.sql file. I then load 
+    this file from my create sql file. The following code snippet is taken from 
+    Weblogger. It creates a lars_blogger_notif notification type (which was created 
+    above).</para>
+
+    <programlisting>
+    create function inline_0() returns integer as '
+    declare
+            impl_id integer;
+            v_foo   integer;
+    begin
+        -- the notification type impl
+        impl_id := acs_sc_impl__new (
+                      ''NotificationType'',
+                      ''lars_blogger_notif_type'',
+                      ''lars-blogger''
+        );
+
+        v_foo := acs_sc_impl_alias__new (
+                    ''NotificationType'',
+                    ''lars_blogger_notif_type'',
+                    ''GetURL'',
+                    ''lars_blogger::notification::get_url'',
+                    ''TCL''
+        );
+
+        v_foo := acs_sc_impl_alias__new (
+                    ''NotificationType'',
+                    ''lars_blogger_notif_type'',
+                    ''ProcessReply'',
+                    ''lars_blogger::notification::process_reply'',
+                    ''TCL''
+        );
+
+        PERFORM acs_sc_binding__new (
+                    ''NotificationType'',
+                    ''lars_blogger_notif_type''
+        );
+
+        v_foo:= notification_type__new (
+	        NULL,
+                impl_id,
+                ''lars_blogger_notif'',
+                ''Blog Notification'',
+                ''Notifications for Blog'',
+		now(),
+                NULL,
+                NULL,
+		NULL
+        );
+
+        -- enable the various intervals and delivery methods
+        insert into notification_types_intervals
+        (type_id, interval_id)
+        select v_foo, interval_id
+        from notification_intervals where name in (''instant'',''hourly'',''daily'');
+
+        insert into notification_types_del_methods
+        (type_id, delivery_method_id)
+        select v_foo, delivery_method_id
+        from notification_delivery_methods where short_name in (''email'');
+
+        return (0);
+    end;
+    ' language 'plpgsql';
+
+    select inline_0();
+    drop function inline_0();
+    </programlisting>
+
+    <para>The next step is to setup our notification creation. A new notification must 
+    be added to the notification table for each blog entry added. We do this using the 
+    notification::new procedure</para>
+
+    <programlisting>
+        notification::new \
+            -type_id [notification::type::get_type_id \
+            -short_name lars_blogger_notif] \
+            -object_id $blog(package_id) \
+            -response_id $blog(entry_id) \
+            -notif_subject $blog(title) \
+            -notif_text $new_content
+    </programlisting>
+
+    <para>This code is placed in the tcl procedure that creates blog entries, right after
+    the entry gets created in the code. The <computeroutput>$blog(package_id)</computeroutput> 
+    is the OpenACS object_id of the Weblogger instance to which the entry has been posted to 
+    and the <computeroutput>$new_content</computeroutput> is the content of the entry.</para>
+
+    <para>The final step is to setup the notification subscription process. In this 
+    example we want to let a user find out when a new entry has been posted to the blog. To 
+    do this we put a link on the blog that allows them to subscribe to notifications of new 
+    entries. The notifications/requests-new page is very handy in this situation.</para>
+
+    <para>Such a link can be created using the <computeroutput>notification::display::request_widget</computeroutput> 
+    proc:</para>
+    <programlisting>
+    set notification_chunk [notification::display::request_widget \
+        -type lars_blogger_notif \
+        -object_id $package_id \
+        -pretty_name [lars_blog_name] \
+        -url [lars_blog_public_package_url] \
+    ]
+    </programlisting>
+
+    <para>which will return something like
+
+    <programlisting>
+    You may &lt;a href="/notifications/request-new?..."&gt;request notification&lt;/a&gt; for Weblogger.</programlisting>
+
+    which can be readily put on the blog index page. The <computeroutput>pretty_name</computeroutput> 
+    parameter is what appears at the end of the text returned (i.e. "... request notification&lt;/a&gt; for pretty_name"), 
+    The <computeroutput>url</computeroutput> parameter should be set to the address we want the user 
+    to be redirected to after they have finished the subscription process.</para>
+
+    <para>This should be all you need to implement a notification system. For more examples
+    look at the forums package.</para>
+  </sect2>
 
 </sect1>
