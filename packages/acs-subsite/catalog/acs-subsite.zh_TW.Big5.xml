@@ -58,6 +58,9 @@
   <msg key="lt_Grant_Permission_on_n">授權給 %name%</msg>
   <msg key="lt_Have_you_a_hrefemail-">您 &lt;a href=&quot;email-for-password&quot;&gt; 忘了密碼了嗎?&lt;/a&gt;</msg>
   <msg key="lt_If_you_have_a_Web_sit">如果你有網站, 我們可以將搜索器指到那裡.</msg>
-  <msg key="lt_If_youre_getting_too_">如果你覺得太多我們的email</msg>
-  <msg key="lt_If_youve_forgotten_yo">如果你忘了你的密碼, 你可以 &lt;a href=&quot;%email_password_url%&quot;&gt;要求我們的系統重設你的密碼,然後email給你我們隨機產生的密碼&lt;/a&gt;.</msg>
+  <msg key="lt_If_you_want_to_check_">假如你要檢查此服務的其他使用者, 請點 %member_link%</msg>
+  <msg key="lt_If_youre_getting_too_">如果你覺得收到太多我們的email</msg>
+  <msg key="lt_If_youve_forgotten_yo">如果你忘了你的密碼, 你可以點 &lt;a href=&quot;%email_password_url%&quot;&gt; 要求我們的系統重設你的密碼,然後email給你, 我們隨機產生的密碼&lt;/a&gt;.</msg>
+  <msg key="lt_In_general_we_identif">通常我們是根據你的全名來辨認你所傳送的內容.</msg>
+  <msg key="lt_Inherited_Permissions">繼承的權限</msg>
 </message_catalog>
