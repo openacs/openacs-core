@@ -422,15 +422,15 @@ exit</action></screen>
             </tip>
 
             <para>Create a new directory as temporary working space to reconcile conflicts between the new files and your current work.  The example uses the cvs keyword yesterday, making the assumption that you haven't checked in new code to your local tree in the last day.</para>
-            <screen>[$OPENACS_SERVICE_NAME openacs-4.6]$ <userinput> cd /var/lib/aolserver</userinput>
+            <screen>[$OPENACS_SERVICE_NAME openacs-5.1]$ <userinput> cd /var/lib/aolserver</userinput>
 [$OPENACS_SERVICE_NAME tmp]$ <userinput>mkdir <replaceable>$OPENACS_SERVICE_NAME</replaceable>-upgrade</userinput>
 [$OPENACS_SERVICE_NAME tmp]$ <userinput>cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS -kk <replaceable>$OPENACS_SERVICE_NAME</replaceable> &gt; cvs.txt 2&gt;&amp;1</userinput>
 (CVS feedback here)</screen>
-          <para>The file /tmp/openacs-upgrade/cvs.txt contains the results of the upgrade.  If you changed files that are part of the OpenACS tarball and those changes conflict with the 4.5-4.6 upgrade, you'll have to manually reconcile them.  Use the emacs command <computeroutput>M-x sort-lines</computeroutput> and then, for each line that starts with a C, open that file and manually resolve the conflict by deleting the excess lines.  When you're finished, or if there aren't any conflicts, save and exit.</para>
+          <para>The file /tmp/openacs-upgrade/cvs.txt contains the results of the upgrade.  If you changed files that are part of the OpenACS tarball and those changes conflict, you'll have to manually reconcile them.  Use the emacs command <computeroutput>M-x sort-lines</computeroutput> and then, for each line that starts with a C, open that file and manually resolve the conflict by deleting the excess lines.  When you're finished, or if there aren't any conflicts, save and exit.</para>
             <para>Once you've fixed any conflicts, commit the new code
             to your local tree.  </para>
             <screen>[$OPENACS_SERVICE_NAME tmp]$ <userinput>cd openacs-upgrade</userinput>
-[$OPENACS_SERVICE_NAME openacs-upgrade]$ <userinput>cvs commit -m "Upgraded to 4.6"</userinput></screen>          </listitem>
+[$OPENACS_SERVICE_NAME openacs-upgrade]$ <userinput>cvs commit -m "Upgraded to 5.1"</userinput></screen>          </listitem>
           <listitem>
               <formalpara>
                 <title>Step 3: Upgrade your local staging site</title>
