@@ -9,7 +9,7 @@ ad_proc search_indexer {} {
 	from search_observer_queue
 	order by date asc
     } {
-	
+
 	switch $event {
 	    INSERT {
 		set object_type [db_exec_plsql get_object_type "select acs_object_util__get_object_type($object_id)"]
@@ -54,6 +54,8 @@ ad_proc search_content_get {
 } {
     upvar $_txt txt
 
+    set txt ""
+
     switch $storage_type {
 	text {
 	    set data $content
@@ -62,7 +64,7 @@ ad_proc search_content_get {
 	    set data [db_blob_get data "select '$content' as content, 'file' as storage_type"]
 	}
 	lob {
-	    set data [db_blob_get data "select '$content' as content, 'lob' as storage_type"]
+	    set data [db_blob_get data "select $content as content, 'lob' as storage_type"]
 	}
     }
 
