@@ -21,9 +21,10 @@
     <sect2>
       <title>Installing OpenACS packages</title>
 
-      <para>An OpenACS package lets your website do things it couldn't
-      before. You can have a weblog, a calendar, or even do
-      sophisticated project-management via your website.</para>
+      <para>An OpenACS package extends your website and lets it do
+      things it wasn't able to do before. You can have a weblog, a
+      forums, a calendar, or even do sophisticated project-management
+      via your website.</para>
 
       <para>After you've installed OpenACS, you can congratulate
       yourself for a job well done. Then, you'll probably want to
@@ -32,7 +33,8 @@
       <para>To install packages, you have to be an administrator on
       the OpenACS webserver. Log in, and you'll see a link to Admin or
       the Control Panel. Click on that, then click on 'Install
-      software'. </para>
+      software'. Packages are sometimes also referred to as
+      applications or software.</para>
 
       <para>At this point, you'll need to determine whether or not
       you're able to install from the repository, or whether you
@@ -54,7 +56,8 @@
       /var/lib/aolserver/$OPENACS_SERVICE_NAME/log/error.log file, and
       post your error on the OpenACS forums</para>
 
-      <para>This section is under construction</para>
+      <para>Once the package has been installed, then you will need to
+      'mount' the package. The next section handles that.</para>
     </sect2>
   </sect1>
   
@@ -65,9 +68,36 @@
     </authorblurb>
     <sect2>
       <title>Mounting OpenACS packages</title>
+
       <para>After you've installed your packages, you have to 'mount'
       them in order to make them appear on your website.</para>
+
+      <para>Make sure you are logged in, and then click on the
+      'Admin' or 'Control Panel' link to get to the Site-Wide
+      Administration page (at /acs-admin). Click on the subsite you'd
+      like the application to be available at.</para>
+
+      <para>Subsites are a way of dividing your website into logical
+      chunks. Often they represent different groups of users, or parts
+      of an organization. </para>
+
+      <para>Now click on 'Applications' (applications are the same
+      thing as packages). You'll see a list of Applications and the
+      URLs that each is located at. To mount a new application, you
+      click on 'Add application', enter the Application, title
+      (application name), and URL (URL folder name), and you're
+      done.</para>
+
+      <para>Test it out now. The URL is based on a combination of the
+      subsite URL and the application URL. So if you installed a
+      package in the Main Subsite at the URL calendar, it will be
+      available at http://www.yoursite.com/calendar. If you installed
+      it at a subsite that has a URL intranet, then it would be
+      located at http://www.yoursite.com/intranet/calendar.</para> 
+
+
     </sect2>
+
   </sect1>
 
   <sect1 id="configuring-configuring-packages">
@@ -79,6 +109,41 @@
       <title>Configuring an OpenACS package</title>
       <para>After you've installed and mounted your package, you can
       configure each instance to act as you would like. </para>
+
+      <para>This is done from the Applications page. Log in, go to the
+      Admin or Control Panel, click on the subsite the application is
+      in, and click on Applications. If you click on the 'Parameters'
+      link, you will see a list of parameters that you can change for
+      this application.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="configuring-configuring-permissions">
+    <title>Setting Permissions on an OpenACS package</title>
+    <authorblurb>
+      <para>by <ulink url="mailto:jade@rubick.com">Jade Rubick</ulink></para>
+    </authorblurb>
+    <sect2>
+      <title>Setting Permission on an OpenACS package</title>
+      <para>After you've installed and mounted your package, you can
+      configure each instance to act as you would like. </para>
+
+      <para>This is done from the Applications page. Log in, go to the
+      Admin or Control Panel, click on the subsite the application is
+      in, and click on Applications. If you click on the 'Permissions'
+      link, you will see and be able to set the permissions for that
+      application. </para>
+
+      <para>Each application may have different behavior for what Read
+      Create Write and Admin permissions mean, but generally the
+      permissions are straightforward. If you find the behavior is not
+      what you expect after setting permissions, you can post a bug in
+      the OpenACS bugtracker.</para>
+
+      <para>'The Public' refers to users to the website who are not
+      logged in. 'Registered Users' are people who have registered for
+      the site. </para>
+
     </sect2>
   </sect1>
 
