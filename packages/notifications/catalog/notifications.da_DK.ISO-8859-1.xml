@@ -7,15 +7,15 @@
   <msg key="Frequency">Frekvens</msg>
   <msg key="Item">Emne</msg>
   <msg key="lt_Getting_too_much_emai">Får du for mange e-mails? Administrér dine beskeder her: %manage_notifications_url%</msg>
-  <msg key="lt_Notification_Interval">Beskedinterval</msg>
-  <msg key="lt_Request_Notification_">Giv Mig Besked i forbindelse med %pretty_name% </msg>
+  <msg key="lt_Notification_Interval">Interval</msg>
+  <msg key="lt_Request_Notification_">Giv mig besked</msg>
   <msg key="lt_system_name_-_Batched">[%system_name% - Gruppe af Beskeder] </msg>
   <msg key="lt_You_have_no_notificat">Du har ingen Beskeder.</msg>
-  <msg key="lt_You_have_requested_no">Du har ønsket Beskeder i forbindelse med %pretty_name%. Du kan &lt;a href=&quot;%sub_url%&quot;&gt;afmelde dig her&lt;/a&gt;.</msg>
-  <msg key="lt_You_may_a_hrefsub_url">Du kan &amp;lt;a href=&amp;quot;%sub_url%&amp;quot;&amp;gt;Få Besked&amp;lt;/a&amp;gt; i forbindelse med %pretty_name%.</msg>
+  <msg key="lt_You_have_requested_no">Du får besked når nogen skriver til %pretty_name%. Du kan &lt;a href=&quot;%sub_url%&quot;&gt;afmelde dig her&lt;/a&gt;.</msg>
+  <msg key="lt_You_may_a_hrefsub_url">Du kan &lt;a href=&quot;%sub_url%&quot;&gt;få besked&lt;/a&gt; når nogen skriver til %pretty_name%.</msg>
   <msg key="Manage_Notifications">Administrér Beskeder</msg>
   <msg key="Notification_type">Beskedtype</msg>
-  <msg key="Request_Notification">Giv Mig Besked</msg>
+  <msg key="Request_Notification">Giv mig besked</msg>
   <msg key="SUBJECT">EMNE:</msg>
   <msg key="Unsubscribe">Afmeld</msg>
 </message_catalog>
