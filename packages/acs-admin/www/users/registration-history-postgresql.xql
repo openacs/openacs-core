@@ -9,6 +9,7 @@
 from users, acs_objects
 where users.user_id = acs_objects.object_id
 and creation_date is not null
+and user_id <> 0
 group by to_char(creation_date,'YYYYMM'), to_char(creation_date,'Month'), to_char(creation_date,'YYYY')
 order by 1
       </querytext>
