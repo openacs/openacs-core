@@ -314,15 +314,11 @@ select inline_3 ();
 drop function inline_3 ();
 
  
-select acs_group__new (
+select acs_object__new (
     -3,
-    'group',
+    'acs_object',
     now(),
     null,
-    null,
-    null,
-    null,
-    'Default Context',
     null,
     null
   );
