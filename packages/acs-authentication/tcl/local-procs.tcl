@@ -181,7 +181,9 @@ ad_proc -private auth::local::password::unregister_impl {} {
 }
 
 
-ad_proc -private auth::local::password::CanChangePassword {} {
+ad_proc -private auth::local::password::CanChangePassword {
+    {parameters ""}
+} {
     Implements the CanChangePassword operation of the auth_password 
     service contract for the local account implementation.
 } {
@@ -189,7 +191,9 @@ ad_proc -private auth::local::password::CanChangePassword {} {
     return 1
 }
 
-ad_proc -private auth::local::password::CanRetrievePassword {} {
+ad_proc -private auth::local::password::CanRetrievePassword {
+    {parameters ""}
+} {
     Implements the CanRetrievePassword operation of the auth_password 
     service contract for the local account implementation.
 } {
@@ -197,7 +201,9 @@ ad_proc -private auth::local::password::CanRetrievePassword {} {
     return 0
 }
 
-ad_proc -private auth::local::password::CanResetPassword {} {
+ad_proc -private auth::local::password::CanResetPassword {
+    {parameters ""}
+} {
     Implements the CanResetPassword operation of the auth_password 
     service contract for the local account implementation.
 } {
@@ -249,6 +255,7 @@ ad_proc -private auth::local::password::RetrievePassword {
     service contract for the local account implementation.
 } {
     set result(password_status) "not_supported"
+    set result(password_message) [_ acs-susbite.cannot_retrieve_password]
     return [array get result]
 }
 
@@ -260,7 +267,7 @@ ad_proc -private auth::local::password::ResetPassword {
     service contract for the local account implementation.
 } {
     array set result { 
-        password_status {}
+        password_status ok
         password_message {} 
     }
 
@@ -436,7 +443,7 @@ ad_proc -private auth::local::registration::Register {
                 "[_ acs-subsite.lt_Welcome_to_system_nam]" \
                 "[_ acs-subsite.lt_To_confirm_your_regis]"
         } {
-	    ns_returnerror "500" "$errmsg"
+	    #ns_returnerror "500" "$errmsg"
 	    ns_log Warning "Error sending email verification email to $email. Error: $errmsg"
 	}
 
