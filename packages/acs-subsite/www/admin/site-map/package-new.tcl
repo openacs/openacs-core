@@ -13,7 +13,7 @@ ad_page_contract {
     {new_package_id:integer ""}
     node_id:integer,notnull
     {new_node_p f}
-    {node_name ""}
+    {node_name:trim ""}
     {instance_name ""}
     package_key:notnull
     {expand:integer,multiple ""}
