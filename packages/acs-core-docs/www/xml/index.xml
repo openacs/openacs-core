@@ -2,6 +2,14 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [ 
 
+<!-- 
+     OpenACS Version. 
+     Update this to propagate current version numbers to documents.
+     In documents, use  &version;  
+-->
+<!ENTITY version "4.5">
+<!ENTITY majorversion "4">
+
 <!-- For Developers -->
 <!ENTITY api SYSTEM "developers-guide/db-api.xml">
 <!ENTITY rp SYSTEM "developers-guide/rp.xml">
@@ -34,7 +42,6 @@
 <!ENTITY bootstrap-acs SYSTEM "kernel/bootstrap-acs.xml">
 
 <!ENTITY programming-aolserver SYSTEM "developers-guide/programming-with-aolserver.xml">
-<!ENTITY working-with-xml SYSTEM "developers-guide/working-with-xml.xml">
 
 <!-- Engineering Standards -->
 <!ENTITY dbprimer SYSTEM "engineering-standards/docbook-primer.xml">
@@ -76,10 +83,6 @@
 
     <chapter id="general-documents" xreflabel="High level information: What is OpenACS?">
       <title>High level information: What is OpenACS?</title>
-      <sect1>
-	<title>Overview</title>
-	<para>The place to start if you want a soft, high level introduction to OpenACS</para>
-      </sect1>
 
       &release-notes;
 
@@ -111,11 +114,6 @@
     <chapter id="win-install">
       <title>Installing on Windows</title>
 
-      <sect1>
-	<title>Overview</title>
-	<para>This walks you through an OpenACS installation under Windows.</para>
-      </sect1>
-
       &win2k;
 
     </chapter>
@@ -132,11 +130,6 @@
     <chapter id="dev-guide">
       <title>OpenACS Developer's Guide</title>
 
-      <sect1>
-	<title>Overview</title>
-	<para>A tour of what you need to know in order to extend OpenACS.</para>
-      </sect1>
-
       &objects;
       &packages;
       &rp;
@@ -152,15 +145,9 @@
     <chapter id="more-developer-info">
       <title>Other Developer Resources</title>
 
-      <sect1>
-        <title>Overview</title>
-        <para>Developer information that doesn't really fit anywhere else.</para>
-      </sect1>
-
       &parties;
       &object-identity;
       &programming-aolserver;
-      &working-with-xml;
 
     </chapter>
 
@@ -181,24 +168,24 @@
     <chapter id="kernel-doc">
       <title>Kernel Documentation</title>
 
-      <sect1>
+      <sect1 id="kernel-overview" xreflabel="OpenACS &version; Kernel Overview">
         <title>Overview</title>
         <para>
-	  Compared to its predecessors, version 4 of OpenACS has a much
+	  Compared to its predecessors, version &version; of OpenACS has a much
 	  more structured organization, i.e. the most
 	  significant change is found at the system architecture level,
 	  reflected in the following hierarchy:
         </para>
 
 	<itemizedlist>
-	  <listitem><para>The <phrase>OpenACS 4 Kernel</phrase>, which handles system-wide necessities
+	  <listitem><para>The <emphasis>OpenACS &version; Kernel</emphasis>, which handles system-wide necessities
 	      such as metadata, security, users and groups, subsites, and
 	      package management and deployment.
 	    </para></listitem>
 	  
 	  
 
-	  <listitem><para>The <phrase>OpenACS 4 Core</phrase>, which comprises all the other packages
+	  <listitem><para>The <emphasis>OpenACS &version; Core</emphasis>, which comprises all the other packages
 	      that ship with the kernel and are most frequently needed by users,
 	      such as templating, bboard, and user registration/management. The
 	      packages tend to be developed and distributed with the kernel.
@@ -206,7 +193,7 @@
 	  
 	  
 	  
-	  <listitem><para><phrase>OpenACS 4 Application packages</phrase>, which typically provide
+	  <listitem><para><emphasis>OpenACS &version; Application packages</emphasis>, which typically provide
 	      user-level web services built on top of the Kernel and Core.  Such
 	      packages include those built by ArsDigita as well as external
 	      contributors.  Application packages are developed separately from

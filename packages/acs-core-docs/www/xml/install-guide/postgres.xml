@@ -120,7 +120,7 @@ Thank you for choosing PostgreSQL, the most advanced open source database engine
 	<title>Prepare PostgreSQL for OpenFTS</title>
 
 	<para>
-	  OpenFTS is the module that provides full text search to OpenACS 4. We
+	  OpenFTS is the module that provides full text search to OpenACS &version;. We
 	  won't be installing it until later, but we'll set up a couple things
 	  that are best done right now.
 	</para>

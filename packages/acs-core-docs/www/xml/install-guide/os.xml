@@ -15,7 +15,7 @@
 	  and even (shudder!) Windows systems. The remainder of this guide will
 	  be specific to Linux. Users of other OS's may find some helpful
 	  information here, but we recommend that you instead use one of these
-	  OS specific guides to install OpenACS 4.
+	  OS specific guides to install OpenACS &version;.
 	</para>
 
 	<itemizedlist>
@@ -133,7 +133,7 @@
 		  <row>
 			<entry>libxml2</entry>
 			<entry>
-			  OpenACS 4 stores queries in XML files, so libxml2 is used to
+			  OpenACS &version; stores queries in XML files, so libxml2 is used to
 			  parse these files. (Debian users: <computeroutput>apt-get
 			  install libxml2-dev</computeroutput>)
 			</entry>

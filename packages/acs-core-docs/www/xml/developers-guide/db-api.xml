@@ -1,5 +1,5 @@
-<sect1 id="db-api">
-  <title>The Database Access API</title>
+<sect1 id="db-api" xreflabel="The OpenACS Database Access API">
+  <title>The OpenACS Database Access API</title>
 
   <para>
     By <ulink url="mailto:psu@arsdigita.com">Pete Su</ulink> and
@@ -588,7 +588,7 @@ PoolSequence.sec_id_seq=20
 	<term>
 	    <computeroutput>
 	      <anchor
-		id="dbapi_db_abort_transaction"/>db_abort_transaction
+		id="devguide.dbapi_db_abort_transaction"/>db_abort_transaction
 	    </computeroutput>
 	</term>
 
@@ -610,7 +610,7 @@ db_abort_transaction
 	<term>
 	  
 	    <computeroutput>
-	      <anchor id="dbapi_db_null"/>db_null
+	      <anchor id="devguide.dbapi_db_null"/>db_null
 	    </computeroutput>
 	  
 
@@ -635,7 +635,7 @@ db_abort_transaction
 	<term>
 	  
 	    <computeroutput>
-	      <anchor id="dbapi_db_foreach"/>db_foreach
+	      <anchor id="devguide.dbapi_db_foreach"/>db_foreach
 	    </computeroutput>
 	  
 	</term>
@@ -686,7 +686,7 @@ db_foreach select_foo &quot;select foo, bar from greeble&quot; {
 	<term>
 	  
 	    <computeroutput>
-	      <anchor id="dbapi_db_1row"/>db_1row
+	      <anchor id="devguide.dbapi_db_1row"/>db_1row
 	    </computeroutput>
 	  
 	</term>
@@ -721,7 +721,7 @@ db_1row select_foo &quot;select foo, bar from greeble where greeble_id = $greebl
 	<term>
 	  
 	    <computeroutput>
-	      <anchor id="dbapi_db_0or1row"/>db_0or1row
+	      <anchor id="devguide.dbapi_db_0or1row"/>db_0or1row
 	    </computeroutput>
 	  
 	</term>
@@ -744,7 +744,7 @@ db_0or1row <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind 
       </varlistentry>
       
       <varlistentry>
-	<term><computeroutput><anchor id="dbapi_db_nextval"/>db_nextval</computeroutput> </term>
+	<term><computeroutput><anchor id="devguide.dbapi_db_nextval"/>db_nextval</computeroutput> </term>
 
 	<listitem>
 	  <programlisting>
@@ -767,7 +767,7 @@ db_nextval <emphasis>sequence-name</emphasis>
 	  
 	    <computeroutput>
 	      <anchor
-	      id="dbapi_db_register_pooled_sequence"/>db_register_pooled_sequence
+	      id="devguide.dbapi_db_register_pooled_sequence"/>db_register_pooled_sequence
 	    </computeroutput>
 	  
 	</term>
@@ -786,7 +786,7 @@ db_register_pooled_sequence <emphasis>sequence-name</emphasis> <emphasis>pool-si
       </varlistentry>
 
       <varlistentry>
-	<term><computeroutput><anchor id="dbapi_db_string"/>db_string</computeroutput> </term>
+	<term><computeroutput><anchor id="devguide.dbapi_db_string"/>db_string</computeroutput> </term>
 	
 	<listitem>
 	  <programlisting>
@@ -808,7 +808,7 @@ db_string <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -defaul
       </varlistentry>
 
       <varlistentry>
-	<term><computeroutput><anchor id="dbapi_db_list"/>db_list</computeroutput></term>
+	<term><computeroutput><anchor id="devguide.dbapi_db_list"/>db_list</computeroutput></term>
 
 	<listitem>
 	  <programlisting>
@@ -827,7 +827,7 @@ db_list <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <em
       </varlistentry>
 
       <varlistentry>
-	<term><computeroutput><anchor id="dbapi_db_list_of_lists"/>db_list_of_lists</computeroutput></term>
+	<term><computeroutput><anchor id="devguide.dbapi_db_list_of_lists"/>db_list_of_lists</computeroutput></term>
 
 	<listitem>
 	  <programlisting>
@@ -844,7 +844,7 @@ db_list_of_lists <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ 
       </varlistentry>
 
       <varlistentry>
-	<term><computeroutput><anchor id="dbapi_db_dml"/>db_dml</computeroutput></term> 
+	<term><computeroutput><anchor id="devguide.dbapi_db_dml"/>db_dml</computeroutput></term> 
 	
 	<listitem>
 	  <programlisting>
@@ -892,9 +892,9 @@ db_dml insert_photos &quot;
 
       <varlistentry>
 	<term>
-	  <computeroutput><anchor id="dbapi_db_write_clob"/>db_write_clob</computeroutput>,
-	  <computeroutput><anchor id="dbapi_db_write_blob"/>db_write_blob</computeroutput>,
-	  <computeroutput><anchor id="dbapi_db_blob_get_file"/>db_blob_get_file</computeroutput>
+	  <computeroutput><anchor id="devguide.dbapi_db_write_clob"/>db_write_clob</computeroutput>,
+	  <computeroutput><anchor id="devguide.dbapi_db_write_blob"/>db_write_blob</computeroutput>,
+	  <computeroutput><anchor id="devguide.dbapi_db_blob_get_file"/>db_blob_get_file</computeroutput>
 	</term>
 
 	<listitem>
@@ -914,7 +914,7 @@ db_blob_get_file <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ 
       </varlistentry>
 
       <varlistentry>
-	<term><computeroutput><anchor id="dbapi_db_release_unused_handles"/>db_release_unused_handles</computeroutput></term>
+	<term><computeroutput><anchor id="devguide.dbapi_db_release_unused_handles"/>db_release_unused_handles</computeroutput></term>
 	<listitem>
 	  <programlisting>
 	    db_release_unused_handles
@@ -926,7 +926,7 @@ db_blob_get_file <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ 
       </varlistentry>
 
       <varlistentry>
-	<term><computeroutput><anchor id="dbapi_db_transaction"/>db_transaction</computeroutput></term>
+	<term><computeroutput><anchor id="devguide.dbapi_db_transaction"/>db_transaction</computeroutput></term>
 	<listitem>
 
 	  <programlisting>
@@ -981,7 +981,7 @@ print_the_foo ; # Writes out &quot;foo is 8&quot;
       </varlistentry>
 
       <varlistentry>
-	<term><computeroutput><anchor id="dbapi_db_resultrows"/>db_resultrows</computeroutput></term>
+	<term><computeroutput><anchor id="devguide.dbapi_db_resultrows"/>db_resultrows</computeroutput></term>
 
 
 	<listitem>
@@ -997,7 +997,7 @@ db_resultrows
       </varlistentry>
 
       <varlistentry>
-	<term><computeroutput><anchor id="dbapi_db_with_handle"/>db_with_handle</computeroutput></term>
+	<term><computeroutput><anchor id="devguide.dbapi_db_with_handle"/>db_with_handle</computeroutput></term>
 	<listitem>
 	  <programlisting>
 db_with_handle <emphasis>var</emphasis> <emphasis>code_block</emphasis>
@@ -1040,7 +1040,7 @@ db_with_handle db {
 	  
 	    <computeroutput>
 	      <anchor
-		id="dbapi_db_nullify_empty_string"/>db_nullify_empty_string
+		id="devguide.dbapi_db_nullify_empty_string"/>db_nullify_empty_string
 	    </computeroutput>
 	  
 	</term>

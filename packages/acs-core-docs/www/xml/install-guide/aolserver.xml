@@ -6,7 +6,7 @@
 
 	<para>
 	  Mat Kovach is graciously maintaining an AOLServer distribution that
-	  includes all the patches and modules needed to run OpenACS 4. These
+	  includes all the patches and modules needed to run OpenACS &version;. These
 	  instructions will describe how to install using his source
 	  distribution. He also has binaries for SuSE 7.3 and OpenBSD 2.8 (and
 	  perhaps more to come), currently located at <ulink

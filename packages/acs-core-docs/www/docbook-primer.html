@@ -31,7 +31,7 @@
   </p>
 <div class="sect2">
 <div class="titlepage"><div><h3 class="title">
-<a name="dbprimer-overview"></a>Overview of OpenACS 4 Documentation</h3></div></div>
+<a name="dbprimer-overview"></a>Overview of OpenACS 4.5 Documentation</h3></div></div>
 <p>
       ArsDigita created a good documentation ground for us to build
       upon. Some sections of the documentation however, lack details
@@ -74,7 +74,7 @@
       In order to separate content and presentation, all OpenACS documentation will be marked up to conform to the 
       <a href="http://docbook.org/xml/index.html" target="_top">DocBook XML DTD</a> 
       
-      <a class="indexterm" name="id5388202"></a>
+      <a class="indexterm" name="id2810508"></a>
       This enables us to publish in a variety
       of formats and relieves each contributor of the burden of  presentation, freeing him to focus
       on content and sharing knowledge.
@@ -97,7 +97,7 @@
 	list of elements</a> and use more exotic features in your
       documents. The list is made up of SGML-elements but basically
       the same elements are valid in the XML DTD <span class="strong"><i>as long as you remember to</i></span>:
-      <a class="indexterm" name="id5388422"></a>
+      <a class="indexterm" name="id2728776"></a>
     </p>
 <div class="itemizedlist"><ul>
 <li><p>
@@ -173,7 +173,7 @@
       The documentation for each package will make up a little &quot;book&quot; that is structured like this 
       - examples are <span class="emphasis"><i>emphasized</i></span>:
 
-      <a class="indexterm" name="id5388645"></a>
+      <a class="indexterm" name="id2726240"></a>
 
     </p>
 <pre class="programlisting">
@@ -205,13 +205,13 @@
 <div class="titlepage"><div><h3 class="title">
 <a name="dbprimer-sections"></a>Headlines, Sections</h3></div></div>
 <p>
-      <a class="indexterm" name="id5388779"></a>
+      <a class="indexterm" name="id2726368"></a>
       Given that your job starts at the <tt>sect1</tt>-level, all your documents should open with a
       <a href="http://docbook.org/tdg/html/sect1.html" target="_top"><tt>&lt;sect1&gt;</tt></a>-tag and end 
       with the corresponding <tt>&lt;/sect1&gt;</tt>.
     </p>
 <p>
-      <a class="indexterm" name="id5388822"></a>
+      <a class="indexterm" name="id2811926"></a>
       You need to feed every <tt>&lt;sect1&gt;</tt> two attributes. The first attribute,
       <tt>id</tt>, is standard and can be used with all elements. It comes in  very 
       handy when interlinking between documents (more about this when talking about links in <a href="docbook-primer.html#dbprimer-links" title="Links">the section called &#8220;Links&#8221;</a>). 
@@ -220,7 +220,7 @@
       <tt>sect1</tt>'s will turn into filenames when the book is parsed into HTML.
     </p>
 <p>
-      <a class="indexterm" name="id5388885"></a>
+      <a class="indexterm" name="id2811989"></a>
       The other attribute is <tt>xreflabel</tt>. The value of this is the text that will appear
       as the link when referring to this <tt>sect1</tt>.
     </p>
@@ -238,7 +238,7 @@
       &lt;/sect1&gt;
     </pre>
 <p>
-      <a class="indexterm" name="id5388938"></a>
+      <a class="indexterm" name="id2812042"></a>
       Inside this container your document will be split up into 
       <a href="http://docbook.org/tdg/html/sect2.html" target="_top"><tt>&lt;sect2&gt;</tt></a>'s,
       each with the same requirements - <tt>id</tt> and <tt>xreflabel</tt>
@@ -253,7 +253,7 @@
 <div class="titlepage"><div><h3 class="title">
 <a name="dbprimer-code"></a>Code</h3></div></div>
 <p>
-      <a class="indexterm" name="id5389042"></a>
+      <a class="indexterm" name="id2812146"></a>
       For displaying a snippet of code, a filename or anything else you just want to appear as a part of
       a sentence, we will use the tag 
       <a href="http://docbook.org/tdg/html/computeroutput.html" target="_top"><tt>&lt;computeroutput&gt;</tt></a>.
@@ -269,7 +269,7 @@
 <div class="titlepage"><div><h3 class="title">
 <a name="dbprimer-links"></a>Links</h3></div></div>
 <p>
-      <a class="indexterm" name="id5389113"></a>
+      <a class="indexterm" name="id2812217"></a>
       Linking falls into two different categories: inside the book you're making and outside:
     </p>
 <div class="variablelist"><dl>
@@ -280,7 +280,7 @@
 	    with a simple tag, regardless of where that part is.
 	  </p>
 <p>
-<a class="indexterm" name="id5389158"></a>Check out how I link to a subsection of the Developer's Guide:</p>
+<a class="indexterm" name="id2812261"></a>Check out how I link to a subsection of the Developer's Guide:</p>
 <pre class="programlisting">
 
 	    Put this in your XML:
@@ -331,7 +331,7 @@
 <dt><span class="term"><span class="strong"><i>2. Linking outside the documentation</i></span></span></dt>
 <dd>
 <p>
-	    <a class="indexterm" name="id5389309"></a>
+	    <a class="indexterm" name="id2812412"></a>
 	    If you're hyper-linking out of the documentation, it works almost the same way as HTML - the tag is just
 	    a little different
 
@@ -365,7 +365,7 @@
       </i></span>
     </p>
 <p>
-      <a class="indexterm" name="id5389418"></a>
+      <a class="indexterm" name="id2812521"></a>
       To insert a graphic we use the elements 
       <a href="http://docbook.org/tdg/html/mediaobject.html" target="_top"><tt>&lt;mediaobject&gt;</tt></a>,
       <a href="http://docbook.org/tdg/html/imageobject.html" target="_top"><tt>&lt;imageobject&gt;</tt></a>,
@@ -398,7 +398,7 @@
 <div class="titlepage"><div><h3 class="title">
 <a name="dbprimer-lists"></a>Lists</h3></div></div>
 <p>
-      <a class="indexterm" name="id5389521"></a>
+      <a class="indexterm" name="id2812624"></a>
       Here's how you make the DocBook equivalent of the three usual HTML-lists:
     </p>
 <div class="variablelist"><dl>
@@ -465,7 +465,7 @@
 <div class="titlepage"><div><h3 class="title">
 <a name="dbprimer-tables"></a>Tables</h3></div></div>
 <p>
-      <a class="indexterm" name="id5389758"></a>
+      <a class="indexterm" name="id2812861"></a>
       DocBook supports several types of tables, but in most cases, the
       <a href="http://docbook.org/tdg/html/informaltable.html" target="_top"><tt>&lt;informaltable&gt;</tt></a>
       is enough:
@@ -534,7 +534,7 @@
 <div class="titlepage"><div><h3 class="title">
 <a name="dbprimer-emphasis"></a>Emphasis</h3></div></div>
 <p>
-      <a class="indexterm" name="id5389912"></a>
+      <a class="indexterm" name="id2813016"></a>
       Our documentation uses two flavors of emphasis - italics and bold type. DocBook uses one - 
       <a href="http://docbook.org/tdg/html/emphasis.html" target="_top"><tt>&lt;emphasis&gt;</tt></a>.
     </p>
@@ -663,7 +663,7 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
 <tr>
 <td>0.3</td>
 <td>
-	      Added OpenACS information, updatet tools, added
+	      Added OpenACS information, updated tools, added
 	      extra links and added info to the Publishing section.
 	    </td>
 <td>12/24/2001</td>
@@ -702,9 +702,9 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
 </tr>
 </table>
 <hr>
-<address><a href="mailto:rmello@cc.usu.edu">
-			rmello@cc.usu.edu
-		  </a></address>
+<address>
+			rmello at fslc.usu.edu
+		</address>
 <address><a href="mailto:vinod@kurup.com">
 			vinod@kurup.com
 		  </a></address>

@@ -1,12 +1,12 @@
-<sect1 id="openacs" xreflabel="Install OpenACS 4">
-<title>Install OpenACS 4</title>
+<sect1 id="openacs" xreflabel="Install OpenACS &version;">
+<title>Install OpenACS &version;</title>
 
   <sect2 id="install-openacs-download">
 	<title>Downloading OpenACS</title>
 
     <itemizedlist>
       <listitem><para> Download the <ulink
-		  url="http://www.openacs.org/software">OpenACS 4 software</ulink>
+		  url="http://www.openacs.org/software">OpenACS &version; software</ulink>
 		  to the <computeroutput>/tmp</computeroutput> directory:
         </para></listitem>
 
@@ -375,7 +375,7 @@ nsadmin:~$ killall nsd</programlisting>
 
     <para>
 	  Now that you've got AOLserver up and running, let's install OpenACS
-	  4.
+	  &version;.
 	</para>
 
     <itemizedlist>
@@ -447,7 +447,7 @@ nsadmin:~$ /usr/local/aolserver/bin/nsd-postgres -t /usr/local/aolserver/<emphas
 		  Give the server a few minutes to start up. Then
 		  reload the final page above. You should see the front page, with
 		  an area to login near the upper right.  Congratulations, OpenACS
-		  4 is now up and running!  
+		  &version; is now up and running!  
 		</para></listitem>
     </itemizedlist>
 	

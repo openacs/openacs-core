@@ -1,5 +1,5 @@
-<sect1 id="objects">
-<title>OpenACS 4 Data Models and the Object System</title>
+<sect1 id="objects" xreflabel="OpenACS &version; Data Models and the Object System">
+<title>OpenACS &version; Data Models and the Object System</title>
 
 <authorblurb>
 <para>By <ulink url="mailto:psu@arsdigita.com">Pete Su</ulink></para>
@@ -8,7 +8,7 @@
 <sect2 id="objects-overview"><title>Overview</title>
 
 <para>
-Developing data models in OpenACS 4 is much like developing data models
+Developing data models in OpenACS &version; is much like developing data models
 for OpenACS 3, save for the implementation.  As usual, you need to examine
 how to model the information that the application must store and
 manipulate, and define a suitable set of SQL tables.  In our Notes
@@ -49,12 +49,12 @@ things with Notes as well:
 </itemizedlist>
 
 <para>
-In OpenACS 4, the key to enabling these types of services on your
+In OpenACS &version;, the key to enabling these types of services on your
 application data is to take advantage of the Object System.  The first
 question anyone asks is usually "Just what are objects, and what do
 you use them for anyway?".  The short answer: objects are anything
 represented in the application's data model that will need to be
-managed by any central service in OpenACS 4, or that may be reusable in
+managed by any central service in OpenACS &version;, or that may be reusable in
 the context of future applications. Every object in the system is
 represented using a row in the <computeroutput>acs_objects</computeroutput> table. This
 table defines all the standard attributes that are stored on every
@@ -100,7 +100,7 @@ make some calls to use our <computeroutput>notes</computeroutput> table as the b
 new <emphasis>object type</emphasis>. Object types are analogous to classes in
 programming languages such as C++ and Java. For example, in Java a
 class defines a set of attributes that store data and a set of methods
-that run code. In OpenACS 4, we use one or more Oracle tables to store the
+that run code. In OpenACS &version;, we use one or more Oracle tables to store the
 data attributes, and we define a PL/SQL package to hold procedures to
 define the programming interface to the data model.
 </para>
@@ -282,7 +282,7 @@ show errors
 You might be wondering what all the extra parameters are to these
 calls, since we haven't mentioned them before.  These parameters are
 needed to fill out information that will be stored about the object
-that's not stored directly in the table you defined. The OpenACS 4 Object
+that's not stored directly in the table you defined. The OpenACS &version; Object
 System defines these attributes on the type <computeroutput>acs_object</computeroutput>
 since all objects should have these attributes. Internally, there are
 tables that store this information for you. Most of the data is pretty
@@ -445,7 +445,7 @@ system.
 </para>
 
 <para>
-There are two basic rules you should follow when designing OpenACS 4 data
+There are two basic rules you should follow when designing OpenACS &version; data
 models:
 
 
@@ -516,7 +516,7 @@ applications.
 <sect2 id="objects-summary"><title>Summary</title>
 
 <para>
-Hooking into the OpenACS 4 object system brings the application developer
+Hooking into the OpenACS &version; object system brings the application developer
 numerous benefits, and doing it involves only four easy steps:
 
 

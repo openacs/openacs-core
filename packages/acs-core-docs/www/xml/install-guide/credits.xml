@@ -7,7 +7,7 @@
 
   <itemizedlist>
 	<listitem><para>
-		<ulink url="http://developer.arsdigita.com/doc/unix-install.html">ArsDigita ACS 4.0 Installation Guide</ulink>
+		<ulink url="http://openacs.org/doc/openacs4/unix-install.html">OpenACS &version; Installation Guide</ulink>
 	  </para></listitem>
 
 	<listitem><para>

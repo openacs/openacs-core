@@ -8,6 +8,7 @@
 <link rel="up" href="unix-install.html" title="Chapter 2. Installing on Unix/Linux">
 <link rel="previous" href="unix-install.html" title="Chapter 2. Installing on Unix/Linux">
 <link rel="next" href="operating-system.html" title="Install an Operating System">
+<link rel="stylesheet" href="openacs.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="navheader">
@@ -30,7 +31,7 @@
 	  According to Philip Greenspun:
 	</p>
 <p>
-	  &#8220;The ArsDigita Community System it is a toolkit of software
+	  &#8220;The ArsDigita Community System (ACS) is a toolkit of software
 	  that will help you build Web services with a collaborative dimension,
 	  ranging from knowledge management within companies to B2C ecommerce
 	  to product support and community among the customers. The software is
@@ -38,26 +39,26 @@
 	  1995.&#8221;
 	</p>
 <p>
-	  So that's what the ArsDigita Community System (ACS) is... what's
-	  OpenACS?  OpenACS was born when Don Baccus, Ben Adida, et al decided
-	  to port ACS from Oracle to PostgreSQL, thus making it a fully
-	  open-source solution.
+	  What's OpenACS? OpenACS was born when Don Baccus, Ben Adida,
+	  et al decided to port ACS from Oracle to
+	  PostgreSQL, thus making it a fully open-source solution.
 	</p>
 <p>
-	  OpenACS 4 is the next generation of the web toolkit. It's based on
+	  OpenACS 4.5 is the next generation of the web toolkit. It's based on
 	  ACS 4, but no longer follows ArsDigita development. Unlike both ACS
 	  (which required Oracle) and OpenACS 3.x (which required PostgreSQL),
-	  OpenACS 4 allows you to use either database. It's also built in such
-	  a way to allow enterprising hackers to extend it to other
-	  databases. Don Baccus leads the development and numerous developers
-	  (and non-developers) contribute from around the world.
+	  OpenACS 4.5 allows you to use either database. It's also built in such
+	  a way to allow enterprising hackers (in the good sense of
+	  the word) to extend it to other databases. Don Baccus leads
+	  the development and numerous developers (and non-developers)
+	  contribute from around the world.
 	</p>
 </div>
 <div class="sect2">
 <div class="titlepage"><div><h3 class="title">
 <a name="install-purpose"></a>Purpose of this document</h3></div></div>
 <p>
-	  This document will describe how to install OpenACS 4 from scratch,
+	  This document will describe how to install OpenACS 4.5 from scratch,
 	  using the source code. We will assume that you have an OS installed,
 	  but we'll discuss this more in the next section. For most of this
 	  guide, we will assume that you are using Linux on a PC, but we'll
@@ -198,8 +199,8 @@
 <p>
 	  After reading through this tome, you may ask yourself if there is a
 	  better way. And there is! Jonathan Marsden has done all the dirty
-	  work to create RPMs for OpenACS4. These RPMs will install AOLServer,
-	  all the AOLServer modules, PostgreSQL and OpenACS4 simply by typing
+	  work to create RPMs for OpenACS 4.5. These RPMs will install AOLServer,
+	  all the AOLServer modules, PostgreSQL and OpenACS 4.5 simply by typing
 	  one magic command. They're currently at <a href="http://www.xc.org/jonathan/openacs/openacs4-rpm-based-install.html" target="_top">http://www.xc.org</a>,
 	  but will eventually also be available at <a href="http://openacs.org/software/" target="_top">http://openacs.org/software</a>. They're
 	  quite new and Jonathan invites (and is quite responsive to)
@@ -307,7 +308,7 @@
 </ul></div>
 </div>
 </div>
-<p><span class="cvstag">($Id$)</span></p>
+<p><div class="cvstag">($Id$)</div></p>
 </div>
 <div class="navfooter">
 <hr>
@@ -326,9 +327,12 @@
 </tr>
 </table>
 <hr>
-<center><a href="http://greenspun.com/com/kurup/acs/openacs4/install-overview.html">
-			Comments?
-		  </a></center>
+<address>
+			rmello at fslc.usu.edu
+		</address>
+<address><a href="mailto:vinod@kurup.com">
+			vinod@kurup.com
+		  </a></address>
 </div>
 </body>
 </html>

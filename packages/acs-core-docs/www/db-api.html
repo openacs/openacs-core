@@ -2,12 +2,12 @@
 <html>
 <head>
 <meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type">
-<title>The Database Access API</title>
+<title>The OpenACS Database Access API</title>
 <meta name="generator" content="DocBook XSL Stylesheets V1.45">
 <link rel="home" href="index.html" title="OpenACS Documentation">
 <link rel="up" href="dev-guide.html" title="Chapter 4. OpenACS Developer's Guide">
 <link rel="previous" href="request-processor.html" title="The Request Processor">
-<link rel="next" href="templates.html" title="Using Templates in OpenACS 4">
+<link rel="next" href="templates.html" title="Using Templates in OpenACS 4.5">
 <link rel="stylesheet" href="openacs.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,7 +23,7 @@
 </div>
 <div class="sect1">
 <div class="titlepage"><div><h2 class="title" style="clear: both">
-<a name="db-api"></a>The Database Access API</h2></div></div>
+<a name="db-api"></a>The OpenACS Database Access API</h2></div></div>
 <p>
     By <a href="mailto:psu@arsdigita.com" target="_top">Pete Su</a> and
     <a href="mailto:jsalz@mit.edu" target="_top">Jon Salz</a>. Modified
@@ -518,7 +518,7 @@ PoolSequence.sec_id_seq=20
 <div class="variablelist"><dl>
 <dt><span class="term">
 	    <tt>
-	      <a name="dbapi_db_abort_transaction"></a>db_abort_transaction
+	      <a name="devguide.dbapi_db_abort_transaction"></a>db_abort_transaction
 	    </tt>
 	</span></dt>
 <dd>
@@ -535,7 +535,7 @@ db_abort_transaction
 <dt><span class="term">
 	  
 	    <tt>
-	      <a name="dbapi_db_null"></a>db_null
+	      <a name="devguide.dbapi_db_null"></a>db_null
 	    </tt>
 	  
 
@@ -555,7 +555,7 @@ db_abort_transaction
 <dt><span class="term">
 	  
 	    <tt>
-	      <a name="dbapi_db_foreach"></a>db_foreach
+	      <a name="devguide.dbapi_db_foreach"></a>db_foreach
 	    </tt>
 	  
 	</span></dt>
@@ -597,7 +597,7 @@ db_foreach select_foo &quot;select foo, bar from greeble&quot; {
 <dt><span class="term">
 	  
 	    <tt>
-	      <a name="dbapi_db_1row"></a>db_1row
+	      <a name="devguide.dbapi_db_1row"></a>db_1row
 	    </tt>
 	  
 	</span></dt>
@@ -624,7 +624,7 @@ db_1row select_foo &quot;select foo, bar from greeble where greeble_id = $greebl
 <dt><span class="term">
 	  
 	    <tt>
-	      <a name="dbapi_db_0or1row"></a>db_0or1row
+	      <a name="devguide.dbapi_db_0or1row"></a>db_0or1row
 	    </tt>
 	  
 	</span></dt>
@@ -641,7 +641,7 @@ db_0or1row <span class="emphasis"><i>statement-name</i></span> <span class="emph
 	    than one row is returned, throws an error.
 	  </p>
 </dd>
-<dt><span class="term"><tt><a name="dbapi_db_nextval"></a>db_nextval</tt> </span></dt>
+<dt><span class="term"><tt><a name="devguide.dbapi_db_nextval"></a>db_nextval</tt> </span></dt>
 <dd>
 <pre class="programlisting">
 db_nextval <span class="emphasis"><i>sequence-name</i></span>
@@ -658,7 +658,7 @@ db_nextval <span class="emphasis"><i>sequence-name</i></span>
 <dt><span class="term">
 	  
 	    <tt>
-	      <a name="dbapi_db_register_pooled_sequence"></a>db_register_pooled_sequence
+	      <a name="devguide.dbapi_db_register_pooled_sequence"></a>db_register_pooled_sequence
 	    </tt>
 	  
 	</span></dt>
@@ -672,7 +672,7 @@ db_register_pooled_sequence <span class="emphasis"><i>sequence-name</i></span> <
 
 	  </p>
 </dd>
-<dt><span class="term"><tt><a name="dbapi_db_string"></a>db_string</tt> </span></dt>
+<dt><span class="term"><tt><a name="devguide.dbapi_db_string"></a>db_string</tt> </span></dt>
 <dd>
 <pre class="programlisting">
 db_string <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> [ -default <span class="emphasis"><i>default</i></span> ] [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ]
@@ -689,7 +689,7 @@ db_string <span class="emphasis"><i>statement-name</i></span> <span class="empha
 
 	  </p>
 </dd>
-<dt><span class="term"><tt><a name="dbapi_db_list"></a>db_list</tt></span></dt>
+<dt><span class="term"><tt><a name="devguide.dbapi_db_list"></a>db_list</tt></span></dt>
 <dd>
 <pre class="programlisting">
 db_list <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ]
@@ -703,7 +703,7 @@ db_list <span class="emphasis"><i>statement-name</i></span> <span class="emphasi
 
 	  </p>
 </dd>
-<dt><span class="term"><tt><a name="dbapi_db_list_of_lists"></a>db_list_of_lists</tt></span></dt>
+<dt><span class="term"><tt><a name="devguide.dbapi_db_list_of_lists"></a>db_list_of_lists</tt></span></dt>
 <dd>
 <pre class="programlisting">
 db_list_of_lists <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ]
@@ -715,7 +715,7 @@ db_list_of_lists <span class="emphasis"><i>statement-name</i></span> <span class
 
 	  </p>
 </dd>
-<dt><span class="term"><tt><a name="dbapi_db_dml"></a>db_dml</tt></span></dt>
+<dt><span class="term"><tt><a name="devguide.dbapi_db_dml"></a>db_dml</tt></span></dt>
 <dd>
 <pre class="programlisting">
 db_dml <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> \
@@ -753,9 +753,9 @@ db_dml insert_photos &quot;
 	  </p>
 </dd>
 <dt><span class="term">
-	  <tt><a name="dbapi_db_write_clob"></a>db_write_clob</tt>,
-	  <tt><a name="dbapi_db_write_blob"></a>db_write_blob</tt>,
-	  <tt><a name="dbapi_db_blob_get_file"></a>db_blob_get_file</tt>
+	  <tt><a name="devguide.dbapi_db_write_clob"></a>db_write_clob</tt>,
+	  <tt><a name="devguide.dbapi_db_write_blob"></a>db_write_blob</tt>,
+	  <tt><a name="devguide.dbapi_db_blob_get_file"></a>db_blob_get_file</tt>
 	</span></dt>
 <dd>
 <pre class="programlisting">
@@ -770,14 +770,14 @@ db_blob_get_file <span class="emphasis"><i>statement-name</i></span> <span class
 
 	  </p>
 </dd>
-<dt><span class="term"><tt><a name="dbapi_db_release_unused_handles"></a>db_release_unused_handles</tt></span></dt>
+<dt><span class="term"><tt><a name="devguide.dbapi_db_release_unused_handles"></a>db_release_unused_handles</tt></span></dt>
 <dd>
 <pre class="programlisting">
 	    db_release_unused_handles
 	  </pre>
 <p>Releases any allocated, unused database handles. </p>
 </dd>
-<dt><span class="term"><tt><a name="dbapi_db_transaction"></a>db_transaction</tt></span></dt>
+<dt><span class="term"><tt><a name="devguide.dbapi_db_transaction"></a>db_transaction</tt></span></dt>
 <dd>
 <pre class="programlisting">
 db_transaction <span class="emphasis"><i>code_block</i></span> [ on_error { <span class="emphasis"><i>code_block</i></span> } ]
@@ -822,7 +822,7 @@ print_the_foo ; # Writes out &quot;foo is 8&quot;
 
 	  </pre>
 </dd>
-<dt><span class="term"><tt><a name="dbapi_db_resultrows"></a>db_resultrows</tt></span></dt>
+<dt><span class="term"><tt><a name="devguide.dbapi_db_resultrows"></a>db_resultrows</tt></span></dt>
 <dd>
 <pre class="programlisting">
 db_resultrows
@@ -833,7 +833,7 @@ db_resultrows
 
 	  </p>
 </dd>
-<dt><span class="term"><tt><a name="dbapi_db_with_handle"></a>db_with_handle</tt></span></dt>
+<dt><span class="term"><tt><a name="devguide.dbapi_db_with_handle"></a>db_with_handle</tt></span></dt>
 <dd>
 <pre class="programlisting">
 db_with_handle <span class="emphasis"><i>var</i></span> <span class="emphasis"><i>code_block</i></span>
@@ -866,7 +866,7 @@ db_with_handle db {
 <dt><span class="term">
 	  
 	    <tt>
-	      <a name="dbapi_db_nullify_empty_string"></a>db_nullify_empty_string
+	      <a name="devguide.dbapi_db_nullify_empty_string"></a>db_nullify_empty_string
 	    </tt>
 	  
 	</span></dt>
@@ -924,13 +924,13 @@ db_dml foo_insert &quot;insert into foo(baz) values(:1)&quot; {[db_nullify_empty
 <tr>
 <td width="40%" align="left">The Request Processor </td>
 <td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td>
-<td width="40%" align="right"> Using Templates in OpenACS 4</td>
+<td width="40%" align="right"> Using Templates in OpenACS 4.5</td>
 </tr>
 </table>
 <hr>
-<address><a href="mailto:rmello@cc.usu.edu">
-			rmello@cc.usu.edu
-		  </a></address>
+<address>
+			rmello at fslc.usu.edu
+		</address>
 <address><a href="mailto:vinod@kurup.com">
 			vinod@kurup.com
 		  </a></address>

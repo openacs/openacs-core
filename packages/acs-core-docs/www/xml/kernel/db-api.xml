@@ -466,7 +466,7 @@ db_foreach user_group_memberships_by_role {
 </programlisting>
 
 
-<para><emphasis role="strong"><anchor id="dbapi_nulls_and_bind_vars"/>Nulls and Bind Variables</emphasis></para>
+<para><emphasis role="strong"><anchor id="kernel.dbapi_nulls_and_bind_vars"/>Nulls and Bind Variables</emphasis></para>
 
 <para>
 When processing a DML statement, Oracle coerces empty strings into
@@ -669,7 +669,7 @@ release the database handle.
 
 <variablelist>
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_abort_transaction"/>db_abort_transaction</computeroutput></emphasis>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_abort_transaction"/>db_abort_transaction</computeroutput></emphasis>
 </term>
 
 <listitem>
@@ -686,7 +686,7 @@ several nested transactions, all of them are terminated. Use this insetead of
 </varlistentry>
 
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_null"/>db_null</computeroutput></emphasis>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_null"/>db_null</computeroutput></emphasis>
 
 </term>
  
@@ -703,7 +703,7 @@ above.</para></listitem>
 
 <varlistentry>
 <term>
-<emphasis role="strong"><computeroutput><anchor id="dbapi_db_foreach"/>db_foreach</computeroutput></emphasis>
+<emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_foreach"/>db_foreach</computeroutput></emphasis>
 </term>
 
 <listitem>
@@ -742,7 +742,7 @@ loop and flush the database handle) and <computeroutput>continue</computeroutput
 </varlistentry>
 
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_1row"/>db_1row</computeroutput></emphasis></term>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_1row"/>db_1row</computeroutput></emphasis></term>
 
 <listitem>
 <programlisting>
@@ -769,7 +769,7 @@ db_1row select_foo &quot;select foo, bar from greeble where greeble_id = $greebl
 </varlistentry>
 
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_0or1row"/>db_0or1row</computeroutput></emphasis> </term>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_0or1row"/>db_0or1row</computeroutput></emphasis> </term>
 
 <listitem>
 <programlisting>
@@ -785,7 +785,7 @@ returns 0. If more than one row is returned, throws an error. </para>
 </varlistentry>
 
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_nextval"/>db_nextval</computeroutput></emphasis> </term>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_nextval"/>db_nextval</computeroutput></emphasis> </term>
 
 <listitem>
 <programlisting>
@@ -802,7 +802,7 @@ uses a value from the pool if available to save a round-trip to the database
 </varlistentry>
 
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_register_pooled_sequence"/>db_register_pooled_sequence</computeroutput></emphasis> </term>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_register_pooled_sequence"/>db_register_pooled_sequence</computeroutput></emphasis> </term>
 
 <listitem>
 <programlisting>
@@ -816,7 +816,7 @@ size of <emphasis>pool-size</emphasis> sequence values (see <emphasis><xref link
 </varlistentry>
 
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_string"/>db_string</computeroutput></emphasis> </term>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_string"/>db_string</computeroutput></emphasis> </term>
 
 <listitem>
 <programlisting>
@@ -834,7 +834,7 @@ row, returns <emphasis><computeroutput>default</computeroutput></emphasis> (or t
 </varlistentry>
 
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_list"/>db_list</computeroutput></emphasis></term>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_list"/>db_list</computeroutput></emphasis></term>
 
 <listitem>
 <programlisting>
@@ -850,7 +850,7 @@ return any rows, returns an empty list. Analogous to
 </varlistentry>
 
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_list_of_lists"/>db_list_of_lists</computeroutput></emphasis></term>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_list_of_lists"/>db_list_of_lists</computeroutput></emphasis></term>
 
 <listitem>
 <programlisting>
@@ -866,7 +866,7 @@ in a row of the result of SQL query <emphasis><computeroutput>sql</computeroutpu
 </varlistentry>
 
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_dml"/>db_dml</computeroutput></emphasis></term> 
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_dml"/>db_dml</computeroutput></emphasis></term> 
 
 <listitem>
 <programlisting>
@@ -915,9 +915,9 @@ of the files <computeroutput>/var/tmp/the_photo</computeroutput> and
 
 <varlistentry>
 <term>
-<emphasis role="strong"><computeroutput><anchor id="dbapi_db_write_clob"/>db_write_clob</computeroutput></emphasis>,
-<emphasis role="strong"><computeroutput><anchor id="dbapi_db_write_blob"/>db_write_blob</computeroutput></emphasis>,
-<emphasis role="strong"><computeroutput><anchor id="dbapi_db_blob_get_file"/>db_blob_get_file</computeroutput></emphasis>
+<emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_write_clob"/>db_write_clob</computeroutput></emphasis>,
+<emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_write_blob"/>db_write_blob</computeroutput></emphasis>,
+<emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_blob_get_file"/>db_blob_get_file</computeroutput></emphasis>
 </term>
 
 <listitem>
@@ -936,7 +936,7 @@ of the files <computeroutput>/var/tmp/the_photo</computeroutput> and
 </varlistentry>
 
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_release_unused_handles"/>db_release_unused_handles</computeroutput></emphasis></term>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_release_unused_handles"/>db_release_unused_handles</computeroutput></emphasis></term>
 <listitem>
 <programlisting>
 <emphasis role="strong">db_release_unused_handles</emphasis>
@@ -948,7 +948,7 @@ of the files <computeroutput>/var/tmp/the_photo</computeroutput> and
 </varlistentry>
 
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_transaction"/>db_transaction</computeroutput></emphasis></term>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_transaction"/>db_transaction</computeroutput></emphasis></term>
 <listitem>
 
 <programlisting>
@@ -1003,7 +1003,7 @@ print_the_foo ; # Writes out &quot;foo is 8&quot;
 </varlistentry>
 
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_resultrows"/>db_resultrows</computeroutput></emphasis></term>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_resultrows"/>db_resultrows</computeroutput></emphasis></term>
 
 
 <listitem>
@@ -1019,7 +1019,7 @@ statement.
 </varlistentry>
 
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_with_handle"/>db_with_handle</computeroutput></emphasis></term>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_with_handle"/>db_with_handle</computeroutput></emphasis></term>
 <listitem>
 <programlisting>
 <emphasis role="strong">db_with_handle</emphasis> <emphasis>var</emphasis> <emphasis>code_block</emphasis>
@@ -1059,7 +1059,7 @@ db_with_handle db {
 </varlistentry>
 
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_nullify_empty_string"/>db_nullify_empty_string</computeroutput></emphasis></term>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_nullify_empty_string"/>db_nullify_empty_string</computeroutput></emphasis></term>
 
 
 <listitem>
