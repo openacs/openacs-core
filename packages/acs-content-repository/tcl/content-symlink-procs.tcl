@@ -32,7 +32,7 @@ ad_proc -public content::symlink::copy {
 }
 
 
-ad_proc -public content::symlink::del {
+ad_proc -public content::symlink::delete {
     -symlink_id:required
 } {
     @param symlink_id
