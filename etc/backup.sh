@@ -103,7 +103,7 @@ if [ ! -s $TIMEDIR/$COMPUTER-full-date ];
     TYPE="full";
 fi
 
-if [[ $DOM = "01" || $DOW = "Sun" ]];
+if [[ $DOM == "01" || $DOW == "Sun" ]];
     then
     TYPE="full";
 fi
@@ -194,7 +194,7 @@ for directory in $DIRECTORIES
       scp_success=`$SCP -q $FULLNAME $OTHERUSER@$OTHERHOST:$BACKUPDIR`
       
      # if scp returns success, see if we should wipe
-      if [[ scp_success -eq 0 && $WIPE_OLD_AFTER_SCP_FULL == "true" && $TYPE = "full" ]];
+      if [[ scp_success -eq 0 && $WIPE_OLD_AFTER_SCP_FULL == "true" && $TYPE == "full" ]];
 	  then
 
           # wipe out all similar backups except for the just-copied one
