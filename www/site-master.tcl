@@ -77,5 +77,4 @@ if { [template::util::is_nil no_context_p] } {
 }
 
 # Curriculum bar
-
-set curriculum_bar_p [expr [apm_package_installed_p curriculum] && [llength [namespace eval :: info procs curriculum::get_bar]] == 1]
+set curriculum_bar_p [llength [site_node::get_children -all -filters { package_key "curriculum" } -node_id $subsite_node_id]]
