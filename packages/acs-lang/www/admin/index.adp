@@ -15,7 +15,7 @@
 <include src="locales-tabs" tab="@tab@" show_locales_p="@show_locales_p@">
 
 <if @tab@ eq "home">
-  <p>I want to ...</p>
+  <p>Here you can edit locales and internationalize messages in the user interface of the system.</p>
   <ul>
     <p>
       <li>
