@@ -141,6 +141,14 @@ initial revision: 1.1
 done
 <emphasis>(many lines omitted)</emphasis>
 [service0 myfirstpackage]$</screen>
+        <figure>
+          <title>Upgrading a local CVS repository</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/development-with-cvs.png" format="png" align="center"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
     </sect1>
    <sect1 id="tutorial-comments">
      <title>Adding Comments</title>

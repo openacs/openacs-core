@@ -1,10 +1,10 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-  <sect1 id="backup-recovery">
+  <chapter id="backup-recovery">
   <title>Backup and Recovery</title>
   <authorblurb>
     <para>By <ulink url="mailto:dhogaza@pacifier.com">Don Baccus</ulink> with additions
@@ -19,7 +19,16 @@
   <para>There are three basic things which need to be backed up, the database data, the server 
     source tree, and the acs-content-repository (which is in the server source tree).</para>
 
-  <sect2 id="install-next-backups">
+    <figure>
+      <title>Backup and Recovery Strategy</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/backup.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+  <sect1 id="install-next-backups">
     <title>Backup Strategy</title>
     <para>
       The purpose of backup is to enable recovery.  Backup and
@@ -72,9 +81,9 @@
       then you can apply standard file-based backup strategies to
       <filename>/var/lib/aolserver/<replaceable>service0</replaceable></filename>
     </para>
-  </sect2>
+  </sect1>
   
-  <sect2 id="snapshot-backup">
+  <sect1 id="snapshot-backup">
     <title>Manual backup and recovery</title>
     
     <para>This section describes how to make a one-time backup and
@@ -341,9 +350,9 @@ logout</screen>
         </orderedlist>
       </listitem>
     </orderedlist>
-  </sect2>
+  </sect1>
 
-  <sect2 id="automated-backup">
+  <sect1 id="automated-backup">
     <title>Automated Backup (OPTIONAL)</title>
     <para>The recommended backup strategy for a production sit is to use an automated script which first backs up the database to a file in <filename>/var/lib/aolserver/<replaceable>service0</replaceable>/database-backup</filename> and then backs up all of <filename>/var/lib/aolserver/<replaceable>service0</replaceable></filename> to a single zip file, and then copies that zip file to another computer.</para>
     <orderedlist>
@@ -365,8 +374,8 @@ logout</screen>
       </listitem>
     </orderedlist>
 
-  </sect2>
-  <sect2 id="backups-with-cvs">
+  </sect1>
+  <sect1 id="backups-with-cvs">
     <title>Using CVS for backup-recovery</title>
     <para>CVS-only backup is often appropriate for development sites.  If you are already using CVS and your data is not important, you probably don't
       need to do anything to back up your files.  Just make
@@ -402,6 +411,6 @@ exit</action></screen>
 <action>su - service0
 cd /var/lib/aolserver/<replaceable>service0</replaceable>
 cvs up -r current</action></screen>
-  </sect2>
+  </sect1>
   <para><phrase role="cvstag">($Id$)</phrase></para>
-</sect1>
+</chapter>
