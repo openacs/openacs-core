@@ -24,6 +24,7 @@ select p.parameter_id, p.parameter_name, nvl(p.description, 'No Description') de
                                 where v.package_id = :package_id) v
         where p.parameter_id = v.parameter_id(+)
         and p.package_key = (select package_key from apm_packages where package_id = :package_id)
+	$additional_sql
 
       </querytext>
 </fullquery>

@@ -24,6 +24,7 @@ select p.parameter_id, p.parameter_name, coalesce(p.description, 'No Description
                                 where v.package_id = :package_id) v
         on p.parameter_id = v.parameter_id
         where p.package_key = (select package_key from apm_packages where package_id = :package_id)
+	$additional_sql
 
       </querytext>
 </fullquery>
