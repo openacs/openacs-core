@@ -730,8 +730,10 @@ ad_proc -public template::list::orderby_clause {
     -name:required
     -orderby:boolean
 } {
-    @param  boolean     Set this flag if you want the result to start with an 'order by' if the orderby clause returned is non-empty.
-    
+    Get the order by clause for use in your DB query, or returns the empty string if not sorting in the DB.
+
+    @param name List name
+
     @param  orderby     If this is specified, this proc will also spit out the "order by" part, so it can be used directly 
                         in the query without saying 'order by' yourself.
                  
@@ -744,13 +746,39 @@ ad_proc -public template::list::orderby_clause {
     }
     
     set result {}
-    if { $orderby_p } {
-        append result "order by "
-    }
     template::list::orderby::get_reference -list_name $name -orderby_name $list_properties(orderby_selected_name)
     
-    append result $orderby_properties(orderby_$list_properties(orderby_selected_direction))
+    set result $orderby_properties(orderby_$list_properties(orderby_selected_direction))
+    if { $orderby_p && ![empty_string_p $result] } {
+        set result "order by $result"
+    }
     
+    return $result
+}
+
+ad_proc -public template::list::multirow_cols {
+    -name:required
+} {
+    Get the list of columns to order by, if ordering in web server. Otherwise returns empty string.
+    
+    @param name List name
+} {
+    # Get an upvar'd reference to list_properties
+    get_reference -name $name
+
+    if { [empty_string_p $list_properties(orderby_selected_name)] } {
+        return {}
+    }
+    
+    template::list::orderby::get_reference -list_name $name -orderby_name $list_properties(orderby_selected_name)
+
+    set result [list]
+    if { [string equal $list_properties(orderby_selected_direction) "desc"] } {
+        lappend result "-decreasing"
+    }
+
+    set result [concat $result $orderby_properties(multirow_cols)]
+
     return $result
 }
 
@@ -852,6 +880,12 @@ ad_proc -private template::list::prepare_for_rendering {
     # This one is named __list_properties to avoid getting scrambled by below multirow
     get_reference -name $name -local_name __list_properties
 
+    # Sort in webserver layer, if requested to do so    
+    set __multirow_cols [template::list::multirow_cols -name $__list_properties(name)]
+    if { ![empty_string_p $__multirow_cols] } {
+        eval template::multirow sort $__list_properties(multirow) $__multirow_cols
+    }
+
     # Upvar other variables passed in through the pass_properties property
     foreach var $__list_properties(pass_properties) {
         upvar #$__level $var $var
@@ -861,6 +895,9 @@ ad_proc -private template::list::prepare_for_rendering {
     # Dynamic columns: display_eval, link_url_eval, aggregate
     #
 
+    # TODO: If we want to be able to sort by display_eval'd element values,
+    # we'll have to do those in a separate run from doing the aggregates.
+    
     if { $__list_properties(dynamic_cols_p) || $__list_properties(aggregates_p) } {
         foreach __element_ref $__list_properties(element_refs) {
             # We don't need to prefix it with __ to become __element_properties here
@@ -2255,6 +2292,9 @@ ad_proc -public template::list::orderby::create {
       <li>
         <b>default_direction</b>: The default order direction, 'asc' or 'desc'. Defaults to 'asc'.
       </li>
+      <li>
+        <b>multirow_cols</b>: If specified, we will sort the multirow in the webserver layer by the given cols.
+      </li>
     </ul>
 
     @param list_name     Name of list.
@@ -2285,6 +2325,7 @@ ad_proc -public template::list::orderby::create {
         label {}
         orderby_desc {}
         orderby_asc {}
+        multirow_cols {}
         orderby {}
         default_direction asc
     }
@@ -2312,6 +2353,7 @@ ad_proc -public template::list::orderby::create {
     if { [info exists element_properties] } {
         set element_properties(orderby_asc) $orderby_properties(orderby_asc)
         set element_properties(orderby_desc) $orderby_properties(orderby_desc)
+        set element_properties(multirow_cols) $orderby_properties(multirow_cols)
         set element_properties(default_direction) $orderby_properties(default_direction)
     }
 
