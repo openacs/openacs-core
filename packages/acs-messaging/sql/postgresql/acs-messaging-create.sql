@@ -133,7 +133,7 @@ comment on column acs_messages_outgoing.wait_until is '
     is to be sent, all will be sent.)
 ';
 
-@@ acs-messaging-views
-@@ acs-messaging-packages
+\i acs-messaging-views
+\i acs-messaging-packages
 
 set feedback on
