@@ -38,6 +38,7 @@
            acs_rel_roles role
     where  r.object_id_one = :group_id
     and    mr.rel_id = r.rel_id
+    and    u.rel_id = mr.rel_id
     and    u.user_id = r.object_id_two
     and    rt.rel_type = r.rel_type
     and    role.role = rt.role_two
