@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d5" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.0d6" locale="nl_NL" charset="ISO-8859-1">
 
   <msg key="About_You">Over u</msg>
   <msg key="Account_closed">&lt;p&gt;Uw registratie contract is gesloten.&lt;/p&gt; &lt;p&gt;Als u wilt kunnen we &lt;a href=&quot;%restore_url%&quot;&gt;deze heropenen&lt;/a&gt;.&lt;/p&gt;</msg>
@@ -56,6 +56,7 @@
   <msg key="lt_Your_email_has_been_c_1">De e-mail is bevestigd. We zijn nu in afwachting van toestemming van de beheerder van %system_name%.</msg>
   <msg key="lt_Your_email_is_confirm">De e-mail is bevestigd.</msg>
   <msg key="lt_Your_URL_doesnt_have_">De URL heeft niet de juiste opmaak. Een geldige URL ziet er ongeveer alsvolgt uit \&quot;%valid_url_example%\&quot;.&quot;</msg>
+  <msg key="Name">Naam:</msg>
   <msg key="New_Password">Nieuw Wachtwoord:</msg>
   <msg key="no_portrait_title_message">Jouw portret</msg>
   <msg key="none">geen</msg>

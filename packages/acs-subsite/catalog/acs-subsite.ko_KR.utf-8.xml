@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d5" locale="ko_KR" charset="utf-8">
+<message_catalog package_key="acs-subsite" package_version="5.0d6" locale="ko_KR" charset="utf-8">
 
   <msg key="About_You">당신에 관해</msg>
   <msg key="Answer">응답:</msg>
@@ -50,6 +50,7 @@
   <msg key="lt_Your_email_has_been_c_1">여러분의 전자우편이 확인되었습니다. %system_name% 관리자로부터 인증대기중에 있습니다. </msg>
   <msg key="lt_Your_email_is_confirm">여러분의 전자우편은 확인되었습니다.</msg>
   <msg key="lt_Your_URL_doesnt_have_">여러분의 URL이 잘못된 형식을 가지고 있습니다. 유효한 URL은 \&quot;%valid_url_example%\&quot;.&quot; 과 같아야 합니다. </msg>
+  <msg key="Name">이름:</msg>
   <msg key="New_Password">새로운 비밀번호:</msg>
   <msg key="no_portrait_title_message">여러분의 사진</msg>
   <msg key="none">조금도 않다.</msg>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d5" locale="it_IT" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.0d6" locale="it_IT" charset="ISO-8859-1">
 
   <msg key="About_You">Riguardo a te</msg>
   <msg key="Answer">Risposta:</msg>
@@ -51,6 +51,7 @@
   <msg key="lt_Your_email_has_been_c_1">Il tuo indirizzo email &amp;egrave; stato confermato. Ora sei in attesa di approvazione da parte dell'amministratore di %system_name%.</msg>
   <msg key="lt_Your_email_is_confirm">Il tuo indirizzo email &amp;egrave; confermato</msg>
   <msg key="lt_Your_URL_doesnt_have_">L'indirizzo che hai immesso non ha una forma corretta. Un indirizzo valido dovrebbe essere qualcosa del tipo \&quot;%valid_url_example%\&quot;.&quot;</msg>
+  <msg key="Name">Nome:</msg>
   <msg key="New_Password">Nuova Password:</msg>
   <msg key="no_portrait_title_message">il tuo ritratto</msg>
   <msg key="none">nessuno</msg>
