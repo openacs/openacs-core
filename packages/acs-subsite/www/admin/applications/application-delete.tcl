@@ -25,22 +25,35 @@ if { !$confirm_p } {
     return
 }
 
+# First unmount and delete the site-nodes, then delete the package, in separate transactions, 
+# so even if the package deletion fails, it'll be gone from this subsite.
+set package_id [list]
+
 db_transaction {
     foreach id $node_id {
-        set package_id [site_node::get_object_id -node_id $id]
+        lappend package_id [site_node::get_object_id -node_id $id]
         
         # Unmount the application
         site_node::unmount -node_id $id
 
         # Delete the node
         site_node::delete -node_id $id
-        
-        # Delete the instance
-        apm_package_instance_delete $package_id
-        
     }
 }
-    
+
+db_transaction {
+    foreach id $package_id {
+        # Delete the instance
+        apm_package_instance_delete $id
+    }
+} on_error {
+    set error_p 1
+    global errorInfo
+    ns_log Error "Error deleting package with package_id $id: $errmsg\n$errorInfo"
+    # Hm. Not sure what to do. For now, let's rethrow the error.
+    error $errmsg $errorInfo
+}
+     
 ad_returnredirect .
 
 
