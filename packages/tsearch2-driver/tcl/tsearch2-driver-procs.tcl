@@ -126,11 +126,11 @@ ad_proc -public tsearch2::search {
     set limit_clause ""
     set offset_clause ""
 
-    if {[string is integer -strict $limit]} {
-	set limit_clause " limit $limit "
+    if {[string is integer $limit]} {
+	set limit_clause " limit :limit "
     }
-    if {[string is integer -strict $offset]} {
-	set offset_clause " offset $offset "
+    if {[string is integer $offset]} {
+	set offset_clause " offset :offset "
     }
     set query_text "select object_id from txt where fti @@ to_tsquery('default',:query) and exists (select 1
                    from acs_object_party_privilege_map m
@@ -210,21 +210,136 @@ ad_proc tsearch2::build_query { -query } {
     if {$p != 0} {
 	regsub -all {\(|\)} $query {} query
     }
-    
+
     # replace boolean words with boolean operators
     regsub -nocase "^not " $query {!} query
-    set query [string map -nocase {" and " & " or " | " not " !} $query]
+    set query [string map {" and " " & " " or " " | " " not " " ! "} " $query "]
     # remove leading and trailing spaces so they aren't turned into &
     set query [string trim $query]
     # remove any spaces between words and operators
-    regsub -all {\s*([!&|])\s+} $query {\1} query
-    # all remaining spaces between words turn into |
-    regsub -all {\s+} $query {\&} query
+    # all remaining spaces between words turn into &
+    regsub -all {([-/@.\d\w\(\)])\s+?([-/@.\d\w\(\)])} $query {\1 \& \2} query
     # if a ! is by itself then prepend &
-    regsub {(\w)([!])} $query {\1\&!} query
+    regsub {(\w+?)\s*(!)} $query {\1 \& !} query
     # if there is )( then insert an & between them 
     # or if there is )\w or \w( insert an & between them
-    regsub {(\))([\(\w])} $query {\1\&\2} query
-    regsub {([\)\w])(\()} $query {\1\&\2} query
+    regsub {(\))([\(\w])} $query {\1\ & \2} query
+    regsub {([\)\w])(\()} $query {\1\ & \2} query
     return $query
+}
+
+ad_proc -public tsearch2::seperate_query_and_operators {
+    -query
+} {
+    Seperates special operators from full text query
+    
+    @author Dave Bauer (dave@thedesignexperience.org)
+    @creation-date 2004-07-10
+    
+    @param query
+
+    @return list of query and operators
+    
+    @error 
+} {
+    # remove evil characters
+    regsub {\[|\]|\{|\}} $query {} query
+    
+    # match quotes
+    set quote_count [regexp -all {\"} $query]
+    # if quotes don't match, just remove all of them
+    if {[expr $quote_count % 2] == 1} {
+	regsub -all {\"} $query {} query
+    }
+
+    set main_query ""
+    set operators ""
+    set last_operator ""
+    set start_q 0
+    set end_q 0
+    set valid_operators [tsearch2_driver::valid_operators]
+    foreach e [split $query] {
+        ns_log notice "
+DB --------------------------------------------------------------------------------
+DB DAVE debugging procedure tsearch2::seperate_query_and_operators
+DB --------------------------------------------------------------------------------
+DB e = '${e}'
+DB --------------------------------------------------------------------------------"
+	if {[regexp {(^\w*):} $e discard operator] \
+		&& [lsearch -exact $valid_operators $operator] != -1} {
+	    # query element contains an operator, split operator from
+	    # query fragment
+	    set e [split $e ":"]
+	    set e [list $operator [lindex $e 1]]
+	}
+	# count quotes to see if this element
+	# is part of a phrase
+	if {$start_q ne 1} {
+	    set start_q [regexp {^\"} $e]
+	}
+	set end_q [regexp {\"$} $e]
+
+	if {$start_q} {
+	    set sq {"}
+	} else {
+	    set sq {}
+	}			
+	if {$end_q} {
+	    set start_q 0
+	    set eq {"}
+	} else {
+	    set eq {}
+	} 
+
+        # now that we know if its parts of a phrase, get rid of the
+	# quotes
+        regsub -all {\"} $e {} e
+	
+	if {[llength $e] > 1} {
+	    # query element contains a valid operator
+	    set last_operator [lindex $e 0]
+	    set e [lindex $e 1]
+	} else {
+            set last_operator ""
+        }
+	# regular search term
+	ns_log debug "operator(e)='${e}' start_q=$start_q end_q=$end_q"
+	if {![string equal "" $last_operator]} {
+	    # FIXME need introspection for operator phrase support
+	    if {($last_operator eq "title:" || $last_operator eq "description:") && ($start_q || $end_q)} {
+		lappend ${last_operator}_phrase [regsub -all {\"} $e {}]
+	    } else {
+		lappend $last_operator [regsub -all {\"} ${e} {}]
+	    }
+	} else {
+	    if {$start_q || $end_q} {
+		lappend phrase $e
+	    } else {
+		lappend main_query $e
+	    }
+	}
+    }
+
+    foreach op $valid_operators {
+	if {[exists_and_not_null $op]} {
+	    lappend operators $op $title
+	}
+    }
+    lappend result $main_query
+    if {![string equal "" $operators]} {
+        lappend result $operators
+    }
+    return $result
+}
+
+ad_proc -private tsearch2_driver::valid_operators {
+} {
+    @author Dave Bauer (dave@thedesignexperience.org)
+    @creation-date 2005-03-06
+    
+    @return list of advanced operator names
+    
+    @error 
+} {
+    return {title description package_id parent_id}
 }
