@@ -25,7 +25,7 @@ select acs_sc_binding.exists_p(:contract,:impl) from dual
 <querytext>
 	select 
 	    operation_desc,
-	    nvl(operation_iscachable_p,'f'),
+	    nvl(operation_iscachable_p,'f') as operation_iscachable_p,
 	    operation_nargs,
 	    operation_inputtype_id,
 	    operation_outputtype_id
