@@ -222,7 +222,7 @@ ad_proc -public template::widget::textarea { element_reference tag_attributes } 
       append output "<br>[_ acs-templating.Spellcheck]: 
 [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) {}]"
   }   
-  
+
   return $output
 }
 
