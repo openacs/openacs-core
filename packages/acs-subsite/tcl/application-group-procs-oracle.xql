@@ -114,7 +114,7 @@
 	            object_type    => :group_type,
 	            group_name    => :group_name,
                     package_id    => :package_id,
-	            context_id    => :context_id,
+	            context_id    => :parent_group_id,
 	            creation_user => :creation_user,
 	            creation_ip   => :creation_ip,
 		    email         => :email,
@@ -125,22 +125,4 @@
       </querytext>
 </fullquery>
 
- 
-<fullquery name="application_group::new.add_composition_rel">      
-      <querytext>
-      
-		    begin
-		    :1 := composition_rel.new (
-		            rel_type => 'composition_rel',
-		            object_id_one => :parent_group_id,
-		            object_id_two => :group_id,
-		            creation_user => :creation_user,
-                            creation_ip   => :creation_ip
-		    );
-		    end;
-		
-      </querytext>
-</fullquery>
-
- 
 </queryset>

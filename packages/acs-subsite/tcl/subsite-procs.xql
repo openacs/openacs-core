@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="subsite::configure.subsite_name_query">      
+<fullquery name="subsite::after_mount.subsite_name_query">      
       <querytext>
       
 	    select instance_name
@@ -12,18 +12,16 @@
 </fullquery>
 
  
-<fullquery name="subsite::configure.parent_subsite_query">      
+<fullquery name="subsite::after_mount.parent_subsite_query">      
       <querytext>
       
-		select m.group_id as supersite_group_id,
-                       p.instance_name as supersite_name
-		from application_group_element_map m,
-                     apm_packages p
-		where p.package_id = m.package_id
-                  and container_id = group_id
-                  and element_id = :subsite_group_id
-                  and rel_type = 'composition_rel'
-	    
+         select m.group_id as supersite_group_id, p.instance_name as supersite_name
+         from application_groups m, apm_packages p, site_nodes s1, site_nodes s2
+         where s1.node_id = :node_id
+           and s2.node_id = s1.parent_id
+           and p.package_id = s2.object_id
+	   and m.package_id = s2.object_id 
+
       </querytext>
 </fullquery>
 

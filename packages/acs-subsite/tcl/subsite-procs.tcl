@@ -15,23 +15,62 @@ namespace eval subsite {
 }
 
 
-ad_proc -public acs_subsite_post_instantiation { 
-    package_id
+ad_proc -public subsite::after_mount { 
+    {-package_id:required}
+    {-node_id:required}
 } {
     This is the TCL proc that is called automatically by the APM
-    whenever a new instance of the subsites application is created.
+    whenever a new instance of the subsites application is mounted.
 
-    @author Michael Bryzek (mbryzek@arsdigita.com)
-    @creation-date 2000-03-05
+    We do three things:
 
-    @param package_id The package_id of the newly mounted subsites
-    application
+    <ul>
+      <li> Create application group
+      <li> Create segment "Subsite Users"
+      <li> Create relational constraint to make subsite registration 
+           require supersite registration.
+    </ul>
+
+    @author Don Baccus (dhogaza@pacifier.com)
+    @creation-date 2003-03-05
 
 } {
-    subsite::configure_if_necessary -package_id $package_id
+
+    set subsite_name [db_string subsite_name_query {}]
+
+    set truncated_subsite_name [string range $subsite_name 0 89]
+
+#    db_transaction {
+
+    # Create subsite application group
+    set group_name "$truncated_subsite_name Parties"
+    set subsite_group_id [application_group::new \
+                              -package_id $package_id \
+                              -group_name $group_name]
+
+    # Create segment of registered users
+    set segment_name "$truncated_subsite_name Members"
+    set segment_id [rel_segments_new $subsite_group_id membership_rel $segment_name]
+
+    # Create constraint that says "to be a member of this
+    # subsite, you have to be a member of the parent subsite"
+
+    set supersite_group_id ""
+
+    db_0or1row parent_subsite_query {}
+
+    # First get parent application group's id and instance name
+    if { ![empty_string_p $supersite_group_id] } {
+
+         set constraint_name "Members of [string range $subsite_name 0 30] must be members of [string range $supersite_name 0 30]"
+
+         set user_id [ad_conn user_id]
+	 set creation_ip [ad_conn peeraddr]
+		
+         db_exec_plsql add_constraint {}
+    }
+#    }
 }
-
-
 
     ad_proc subsite::configure_if_necessary {
 	{-package_id ""}
@@ -93,97 +132,6 @@ ad_proc -public acs_subsite_post_instantiation {
     ad_proc subsite::configure {
 	{-package_id ""}
     } {
-	Configures a subsite.  This involves 3 steps:
-
-	<ul>
-        <li> Create application group
-        <li> Create segment "Subsite Users"
-        <li> Create relational constraint to make subsite registration 
-             require supersite registration.
-	</ul>
-
-	@author Oumi Mehrotra (oumi@arsdigita.com)
-	@creation-date 2000-02-05
-
-	@param package_id The package_id of the subsite application instance
-	to configure.  If package_id is not specified, then 
-	<code>[ad_conn package_id]</code> will be used.
-
-    } {
-
-	if {[ad_conn isconnected]} {
-	    if {[empty_string_p $package_id]} {
-		set package_id [ad_conn package_id]
-	    }
-	}
-
-	if {[empty_string_p $package_id]} {
-	    error "subsite::configure - package_id not specified"
-	}
-
-	set subsite_name [db_string subsite_name_query {
-	    select instance_name
-	    from apm_packages
-	    where package_id = :package_id
-	}]
-
-	set truncated_subsite_name [string range $subsite_name 0 89]
-
-	db_transaction {
-
-	    # Create subsite application group
-	    set group_name "$truncated_subsite_name Parties"
-	    set subsite_group_id [application_group::new \
-		    -package_id $package_id \
-		    -group_name $group_name]
-
-	    # Create segment of registered users
-	    set segment_name "$truncated_subsite_name Members"
-	    set segment_id [rel_segments_new $subsite_group_id membership_rel $segment_name]
-
-	    # Create constraint that says "to be a member of this
-	    # subsite, you have to be a member of the parent subsite"
-
-	    set supersite_group_id ""
-
-	    db_0or1row parent_subsite_query {
-		select m.group_id as supersite_group_id,
-                       p.instance_name as supersite_name
-		from application_group_element_map m,
-                     apm_packages p
-		where p.package_id = m.package_id
-                  and container_id = group_id
-                  and element_id = :subsite_group_id
-                  and rel_type = 'composition_rel'
-	    } 
-
-	    # First get parent application group's id and instance name
-	    if { ![empty_string_p $supersite_group_id] } {
-
-		set constraint_name "Members of [string range $subsite_name 0 30] must be members of [string range $supersite_name 0 30]"
-	    
-		if {[ad_conn isconnected]} {
-		    set user_id [ad_conn user_id]
-		    set creation_ip [ad_conn peeraddr]
-		} else {
-		    set user_id ""
-		    set creation_ip ""
-		}
-		
-		set constraint_id [db_exec_plsql add_constraint {
-		    BEGIN
-			:1 := rel_constraint.new(
-			constraint_name => :constraint_name,
-			rel_segment => :segment_id,
-			rel_side => 'two',
-			required_rel_segment => rel_segment.get(:supersite_group_id, 'membership_rel'),
-			creation_user => :user_id,
-			creation_ip => :creation_ip
-			);
-		    END;
-		}]
-	    }
-	}
 
     }
 

@@ -183,7 +183,6 @@ namespace eval application_group {
         { -parent_group_id "" }
         { -package_id "" }
 	{ -group_name "" }
-	{ -context_id "" } 
 	{ -creation_user "" }
 	{ -creation_ip "" }
 	{ -email "" }
@@ -192,12 +191,10 @@ namespace eval application_group {
 	Creates an application group 
 	(i.e., group of "users/parties of this application")
 
-	NOTE: Doesn't deal with specializing membership and composition yet.
-	TO DO: Fix this.
-
 	Returns the group_id of the new application group.
     } {
 
+ns_log Notice "Huh? starting"
 	if { [ad_conn isconnected] } {
 	    # Since we have a connection, default user_id / peeraddr
 	    # if they're not specified
@@ -215,11 +212,16 @@ namespace eval application_group {
 		# by default, this application group will be a subgroup
 		# of the first parent application group based on the site map.
 
+ns_log Notice "Huh? before db_string ..."
 		set parent_node_id [db_string parent_node_id ""]
+ns_log Notice "Huh? before db_0or1row ..."
 
 		db_0or1row parent_group_id_query ""
+ns_log Notice "Huh? after db_0or1row ..."
 	    }
 	}
+
+ns_log Notice "Huh? got here"
 
 	if {[empty_string_p $package_id]} {
 	    error "application_group::new - package_id not specified"
@@ -233,10 +235,7 @@ namespace eval application_group {
 	    }]
 	    append group_name " Parties"
 	}
-
-	if {[empty_string_p $context_id]} {
-	    set context_id $parent_group_id
-	}
+ns_log Notice "Huh? group_name: $group_name"
 
 	db_transaction {
 
@@ -256,22 +255,6 @@ namespace eval application_group {
 		);
 		end;
 	    }]
-
-	    if {![empty_string_p $parent_group_id]} {
-
-		set rel_id [db_exec_plsql add_composition_rel {
-		    begin
-		    :1 := composition_rel.new (
-		            rel_type => 'composition_rel',
-		            object_id_one => :parent_group_id,
-		            object_id_two => :group_id,
-		            creation_user => :creation_user,
-                            creation_ip   => :creation_ip
-		    );
-		    end;
-		}]
-
-	    }
 	}
 
 	return $group_id

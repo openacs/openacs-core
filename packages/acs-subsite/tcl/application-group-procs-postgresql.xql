@@ -114,27 +114,10 @@
 		    :url,
 	            :group_name,
                     :package_id,
-	            :context_id
+	            :parent_group_id
 		)
 	    
       </querytext>
 </fullquery>
-
- 
-<fullquery name="application_group::new.add_composition_rel">      
-      <querytext>
-
-		    select composition_rel__new (
-			    null,
-		            'composition_rel',
-		            :parent_group_id,
-		            :group_id,
-		            :creation_user,
-                            :creation_ip
-		    )
-		
-      </querytext>
-</fullquery>
-
  
 </queryset>

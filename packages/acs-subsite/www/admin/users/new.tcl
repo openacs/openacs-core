@@ -182,7 +182,13 @@ if { [template::form is_valid add_user] } {
 		    $member_state \
 		    $user_id]
 
-	    relation_add -form_id add_user -variable_prefix rel -member_state $rel_member_state $add_with_rel_type $add_to_group_id $user_id
+            # Hack for adding users to the main subsite, whose application group is the registered users group.
+
+            if { $add_to_group_id != [acs_lookup_magic_object "registered_users"] ||
+                 ![string equal $add_with_rel_type "membership_rel"] } {
+	        relation_add -form_id add_user -variable_prefix rel -member_state $rel_member_state $add_with_rel_type $add_to_group_id $user_id
+            }
+
 	} on_error {
 	    	ad_return_error "User Creation Failed" "We were unable to create the user record in the database."
 	}
