@@ -3,10 +3,17 @@
 <queryset>
     <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
+    <fullquery name="site_node::delete.delete_site_node">
+        <querytext>
+            begin site_node.delete(:node_id); end;
+        </querytext>
+    </fullquery>
+
     <fullquery name="site_node::init_cache.select_site_nodes">
         <querytext>
             select site_node.url(site_nodes.node_id) as url,
                    site_nodes.node_id,
+                   site_nodes.parent_id,
                    site_nodes.directory_p,
                    site_nodes.pattern_p,
                    site_nodes.object_id,
@@ -25,6 +32,7 @@
         <querytext>
             select site_node.url(site_nodes.node_id) as url,
                    site_nodes.node_id,
+                   site_nodes.parent_id,
                    site_nodes.directory_p,
                    site_nodes.pattern_p,
                    site_nodes.object_id,
@@ -40,17 +48,17 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="site_node::get_url.select_url">
+        <querytext>
+            select site_node.url(:node_id) from dual
+        </querytext>
+    </fullquery>
+
     <fullquery name="site_node_closest_ancestor_package_url.select_url">
         <querytext>
             select site_node.url(node_id)
             from site_nodes
             where object_id = :subsite_pkg_id
-        </querytext>
-    </fullquery>
-
-    <fullquery name="site_map_unmount_application.node_delete">
-        <querytext>
-            begin site_node.delete(:node_id); end;
         </querytext>
     </fullquery>
 

@@ -55,6 +55,14 @@ namespace eval site_node {
         return $package_id
     }
 
+    ad_proc -public delete {
+        {-node_id:required}
+    } {
+        delete the site node
+    } {
+        db_exec_plsql delete_site_node {}
+    }
+
     ad_proc -public mount {
         {-node_id:required}
         {-object_id:required}
@@ -82,6 +90,7 @@ namespace eval site_node {
         db_foreach select_site_nodes {} {
             set node(url) $url
             set node(node_id) $node_id
+            set node(parent_id) $parent_id
             set node(directory_p) $directory_p
             set node(pattern_p) $pattern_p
             set node(object_id) $object_id
@@ -106,6 +115,7 @@ namespace eval site_node {
         if {[db_0or1row select_site_node {}]} {
             set node(url) $url
             set node(node_id) $node_id
+            set node(parent_id) $parent_id
             set node(directory_p) $directory_p
             set node(pattern_p) $pattern_p
             set node(object_id) $object_id
@@ -125,6 +135,36 @@ namespace eval site_node {
     }
 
     ad_proc -public get {
+        {-url ""}
+        {-node_id ""}
+    } {
+        returns an array representing the site node that matches the given url
+
+        either url or node_id is required, if both are passed url is ignored
+    } {
+        if {[empty_string_p $url] && [empty_string_p $node_id]} {
+            error "site_node::get \"must pass in either url or node_id\""
+        }
+
+        if {![empty_string_p $node_id]} {
+            return [get_from_node_id -node_id $node_id]
+        }
+
+        if {![empty_string_p $url]} {
+            return [get_from_url -url $url]
+        }
+
+    }
+
+    ad_proc -public get_from_node_id {
+        {-node_id:required}
+    } {
+        returns an array representing the site node for the given node_id
+    } {
+        return [get_from_url -url [get_url -node_id $node_id]]
+    }
+
+    ad_proc -public get_from_url {
         {-url:required}
     } {
         returns an array representing the site node that matches the given url
@@ -158,6 +198,32 @@ namespace eval site_node {
         }
 
         error "site node not found at url $url"
+    }
+
+    ad_proc -public get_url {
+        {-node_id:required}
+    } {
+        return the url of this node_id
+    } {
+        return [db_string select_url {} -default ""]
+    }
+
+    ad_proc -public get_node_id {
+        {-url:required}
+    } {
+        return the node_id for this url
+    } {
+        array set node [get -url $url]
+        return $node(node_id)
+    }
+
+    ad_proc -public get_parent_id {
+        {-node_id:required}
+    } {
+        return the parent_id for this node
+    } {
+        array set node [get -node_id $node_id]
+        return $node(parent_id)
     }
 
 }
@@ -255,7 +321,10 @@ ad_proc -public site_node_mount_application {
 } {
     # if there is an object mounted at the parent_node_id then use that
     # object_id, instead of the parent_node_id, as the context_id
-    if {![db_0or1row get_context {}]} {
+    array set node [site_node::get -node_id $parent_node_id]
+    set context_id $node(object_id)
+
+    if {[empty_string_p $context_id]} {
         set context_id $parent_node_id
     }
 
@@ -288,7 +357,7 @@ ad_proc -public site_map_unmount_application {
         site_node::unmount -node_id $node_id
 
         if {[string equal $delete_p t]} {
-            db_exec_plsql node_delete {}	
+            site_node::delete -node_id $node_id
         }
     }
 }
@@ -297,7 +366,7 @@ ad_proc -deprecated site_node {url} {
     Returns an array in the form of a list. This array contains
     url, node_id, directory_p, pattern_p, and object_id for the
     given url. If no node is found then this will throw an error.
-} { 
+} {
     return [site_node::get -url $url]
 }
 
@@ -305,8 +374,7 @@ ad_proc -public site_node_id {url} {
     Returns the node_id of a site node. Throws an error if there is no
     matching node.
 } {
-    array set node [site_node::get -url $url]
-    return $node(node_id)
+    return [site_node::get_node_id -url $url]
 }
 
 ad_proc -public site_nodes_sync {args} {
