@@ -125,8 +125,7 @@ ad_proc -public tsearch2::search {
     # turn or into |
     # turn not into !
     set query [tsearch2::build_query -query $query]
-    # FIXME actually write the regsub to do that, string map will
-    # probably be too tricky to use
+
     set limit_clause ""
     set offset_clause ""
     if {[string is integer $limit]} {
@@ -135,7 +134,10 @@ ad_proc -public tsearch2::search {
     if {[string is integer $offset]} {
 	set offset_clause " offset :offset "
     }
-    set query_text "select object_id from txt where fti @@ to_tsquery('default',:query) order by rank(fti,to_tsquery('default',:query))  ${limit_clause} ${offset_clause}"
+    set query_text "select object_id from txt where fti @@ to_tsquery('default',:query) and exists (select 1 from                    from acs_object_party_privilege_map m
+                   where m.object_id = txt.object_id
+                     and m.party_id = :user_id
+                     and m.privilege = 'read')order by rank(fti,to_tsquery('default',:query))  ${limit_clause} ${offset_clause}"
     set results_ids [db_list search $query_text]
     set count [db_string count "select count(*) from txt where fti @@ to_tsquery('default',:query)"]
     set stop_words [list]
@@ -162,7 +164,7 @@ ad_proc -public tsearch2::summary {
     @error 
 } {
     set query [tsearch2::build_query -query $query]
-   return [db_string summary "select headline(:txt,to_tsquery('default',:query))"]
+   return [db_string summary "select headline('default',:txt,to_tsquery('default',:query))"]
 }
 
 ad_proc -public tsearch2::driver_info {
@@ -188,6 +190,9 @@ ad_proc tsearch2::build_query { -query } {
     @param string string to convert
     @return returns formatted query string for tsearch2 tsquery
 } {
+    # get rid of everything that isn't a letter or number
+    regsub -all {[^?\d\w\s]} $query {} query
+
     # replace boolean words with boolean operators
     set query [string map {" and " & " or " | " not " !} $query]
     # remove leading and trailing spaces so they aren't turned into |
@@ -195,8 +200,9 @@ ad_proc tsearch2::build_query { -query } {
     # remove any spaces between words and operators
     regsub -all {\s+([!&|])\s+} $query {\1} query
     # all remaining spaces between words turn into |
-    regsub -all {\s+} $query {|} query
+    regsub -all {\s+} $query {\&} query
     # if a ! is by itself then prepend &
     regsub {(\w)([!])} $query {\1\&!} query
+
     return $query
 }
