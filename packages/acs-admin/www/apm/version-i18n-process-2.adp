@@ -5,5 +5,5 @@
 @processing_html_result;noquote@
 
 <p>
-  <b>=&gt;</b> <a href="@proceed_url@">@proceed_label@</a>
+  <b>=&gt;</b> <a href="@proceed_url@">@proceed_label;noquote@</a>
 </p>

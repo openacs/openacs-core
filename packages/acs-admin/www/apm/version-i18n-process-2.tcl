@@ -8,7 +8,7 @@ ad_page_contract {
     version_id:integer,notnull    
     {files:multiple,notnull}
     {file_action:multiple}
-    {number_of_keys:integer,notnull}
+    {number_of_keys:integer,notnull ""}
     {replace_p:array ""}
     {message_keys:array ""}
 }
