@@ -52,9 +52,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SomeAmericanReadersP"  default="1" description="is it even worth bothering asking for state and zip code?"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="TmpDir"  default="/tmp /var/tmp" description="What tmp directories are used on this system? Note the leading / character."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="application"  default="default" description="Name of the ETP application to use (default, faq, wiki, or create your own with the etp::define_applicaton procedure)" section_name="EditThisPage"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="bgcolor"  default="white" description="this setting sets the background color for the default-master template that all HTML content is returned in."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="subtopic_application"  default="default" description="Name of the ETP application to use when creating a subtopic" section_name="EditThisPage"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="textcolor"  default="black" description="This setting sets the textcolor for the default master template that all HTML content is returned through."/>
         </parameters>
 
     </version>
