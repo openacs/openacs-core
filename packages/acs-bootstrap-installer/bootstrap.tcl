@@ -102,11 +102,11 @@ set errno [catch {
 	return
     }
 
-    # OpenACS
-    # Here we need to at least load up queries for the acs-tcl package
-    # NOT SURE YET if this is the best place to do it. (ben)
+    # Here we need to at least load up queries for the acs-tcl and
+    # acs-bootstrap-installer packages (ben)
 
     apm_bootstrap_load_queries acs-tcl
+    apm_bootstrap_load_queries acs-bootstrap-installer
 
     # Is ACS installation complete? If not, source the installer and bail.
     if { ![ad_verify_install] } {
@@ -127,19 +127,6 @@ set errno [catch {
     }] {
 	nsv_set apm_enabled_package $package_key 1
     }
-    
-    # DRB: everything from here through apm_load_queries is a crock
-    # of shit.  We have two places to find files and their type and
-    # db type at this point - the .info file or apm_package_files.
-
-    # There's absolutely *no* reason why library loading or query
-    # loading should have hard-wired information about metadata
-    # derived from the file name.
-
-    # This is simpler for development as you don't really have to 
-    # add files to your package as you add them to your file system.
-    # This may help explain why not all .info files and package
-    # file contents match up, though, mightn't it!
 
     # Load *-procs.tcl and *-init.tcl files for enabled packages.
     ns_log Notice "Loading Tcl library files..."
