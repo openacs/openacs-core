@@ -102,6 +102,7 @@ declare
   new__creation_ip            alias for $11; -- default null
   v_revision_id               integer;       
   v_content_type              acs_object_types.object_type%TYPE;
+  v_storage_type              cr_items.storage_type%TYPE;
 begin
 
   v_content_type := content_item__get_content_type(new__item_id);
@@ -115,6 +116,10 @@ begin
       new__item_id
   );
 
+  select storage_type into v_storage_type
+    from cr_items
+   where item_id = new__item_id;
+
   -- text data is stored directly in cr_revisions using text datatype.
 
   insert into cr_revisions (
@@ -124,7 +129,7 @@ begin
     v_revision_id, new__title, new__description,
      new__mime_type, 
     new__publish_date, new__nls_language, 
-    new__text, new__item_id, ''text'',
+    new__text, new__item_id, v_storage_type,
     length(new__text)
   );
 

@@ -191,6 +191,9 @@ create table cr_items (
   content_type    varchar(100)
                   constraint cr_items_rev_type_fk
                   references acs_object_types,
+  storage_type    varchar(10) default 'text' not null
+                  constraint cr_revisions_storage_type
+                  check (storage_type in ('lob','text','file')),
   tree_sortkey    varchar(4000)
 );  
 
@@ -392,10 +395,7 @@ create table cr_revisions (
 		  constraint cr_revisions_mime_type_ref
 		  references cr_mime_types,
   nls_language    varchar(50),
-  -- use Don's postgresql lob hack for now.
-  storage_type    varchar(10) default 'lob' not null
-                  constraint cr_revisions_storage_type
-                  check (storage_type in ('lob','text','file')),
+  storage_type    varchar(10) not null,
   -- lob_id if storage_type = lob.
   lob             integer,
   -- content holds the file name if storage type = file
