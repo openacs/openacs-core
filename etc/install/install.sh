@@ -321,7 +321,7 @@ fi
 #
 ######################################################################
 
-if parameter_true $do_checkout; then
+if parameter_true $do_checkout || [ $do_checkout == "up" ] ; then
 
     # The pre_checkout script can move away any files or changes
     # to the source tree that we want to keep (for example an
@@ -355,9 +355,15 @@ if parameter_true $do_checkout; then
         exit
     fi
 	
-    echo "$(date): Checking out OpenACS"
-    chmod +x checkout.sh
-    config_file=$config_file dotlrn=$dotlrn ./checkout.sh
+    if [ $do_checkout == "up" ] ; then
+        echo "$(date): Doing cvs update"
+        chmod +x updateserver.sh
+        ./updateserver.sh $serverroot
+    else
+        echo "$(date): Checking out OpenACS"
+        chmod +x checkout.sh
+        config_file=$config_file dotlrn=$dotlrn ./checkout.sh
+    fi
 
     #-----------------------------------------------------------------
     # The post_checkout script can copy back any files (AOLServer config files,
