@@ -533,11 +533,7 @@ ad_proc -public apm_package_installed_p {
     Returns 1 if there is an installed package version corresponding to the package_key,
     0 otherwise
 } {
-    return [db_string apm_package_installed_p {
-	select 1 from apm_package_versions
-	where package_key = :package_key
-	and installed_p = 't'
-    } -default 0]
+    return [db_string apm_package_installed_p {} -default 0]
 }
 
 ad_proc -public apm_version_installed_p {
@@ -545,11 +541,7 @@ ad_proc -public apm_version_installed_p {
 } {
     @return Returns 1 if the specified version_id is installed, 0 otherwise.
 } {
-    return [db_string apm_version_installed_p {
-	select 1 from apm_package_versions
-	where version_id = :version_id
-	and installed_p = 't'
-    } -default 0]
+    return [db_string apm_version_installed_p {} -default 0]
 }
 
 ad_proc -public apm_highest_version {package_key} {
@@ -899,11 +891,7 @@ ad_proc -public apm_package_version_installed_p {package_key version_name} {
     @return 1 if the indiciated package version is installed, 0 otherwise.
 
 } {
-    return [db_string apm_package_version_installed_p {
-	select decode(count(*), 0, 0, 1) from apm_package_versions
-	where package_key = :package_key
-	and version_name = :version_name
-    } -default 0]
+    return [db_string apm_package_version_installed_p {}]
 }
 
 ad_proc -public apm_package_version_enabled_p {version_id} {
@@ -911,11 +899,7 @@ ad_proc -public apm_package_version_enabled_p {version_id} {
     @return 1 if the indiciated package version is installed, 0 otherwise.
 
 } {
-    return [db_string apm_package_version_installed_p {
-	select decode(count(*), 0, 0, 1) from apm_package_versions
-	where version_id = :version_id
-	and enabled_p = 't'
-    } -default 0]
+    return [db_string apm_package_version_enabled_p {}]
 }
 
 
