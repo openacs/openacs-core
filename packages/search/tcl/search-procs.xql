@@ -18,7 +18,7 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="content_get.get_lob_data">
+    <fullquery name="search_content_get.get_lob_data">
         <querytext>
             select :content as content,
                    'lob' as storage_type
