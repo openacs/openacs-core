@@ -546,7 +546,7 @@ ad_proc -public db_multirow {
     upvar $level_up "$var_name:rowcount" counter
     upvar $level_up "$var_name:columns" columns
 
-    if { !$append_p } {
+    if { !$append_p || ![info exists counter]} {
 	set counter 0
     } 
 
@@ -561,7 +561,7 @@ ad_proc -public db_multirow {
                     lappend local_columns [ns_set key $selection $i]
                 }
                 set local_columns [concat $local_columns $extend]
-                if { !$append_p } {
+                if { !$append_p || ![info exists columns] } {
                     # store the list of columns in the var_name:columns variable
                     set columns $local_columns
                 } else {
