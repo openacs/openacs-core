@@ -45,6 +45,9 @@ element create message_editing original_message \
 element create message_editing message -label "Message" \
     -datatype text -widget textarea -html { rows 6 cols 40 }
 
+element create message_editing comment -optional -label "Comment" \
+    -datatype text -widget textarea -html { rows 6 cols 40 }
+
 # The hidden elements for passing package key, message key and locale
 
 element create message_editing message_key -datatype text -widget hidden
@@ -133,7 +136,7 @@ if { [form is_valid message_editing] } {
     form get_values message_editing return_url
 
     # Register message via acs-lang
-    lang::message::register $locale $package_key $message_key $message
+    lang::message::register $locale $package_key $message_key $message $comment
 
     # Even if the country code is 2 chars, we avoid problems...
     set escaped_locale [ns_urlencode $locale]
@@ -143,3 +146,5 @@ if { [form is_valid message_editing] } {
     error $message
 
 }
+
+set lookups_url "lookups?[export_vars { package_key { message_key_list $message_key } }]"

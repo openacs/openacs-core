@@ -1,9 +1,15 @@
 set trail_counter 0
-multirow create audit_trail message creation_user creation_date
-db_foreach audit_trail_select {
-    select a.message,
-           p.first_names || ' ' || p.last_name as overwrite_user,
-           to_char(a.overwrite_date, 'YYYY-MM-DD HH24:MI:SS') as overwrite_date
+
+multirow create audit_inv creation_user_id creation_user_name creation_date old_message new_message old_new_message comment_text
+
+set new_message [lang::message::lookup $current_locale "${package_key}.${message_key}"]
+
+db_foreach audit_inv_select {
+    select a.old_message,
+           p.first_names || ' ' || p.last_name as overwrite_user_name,
+           a.overwrite_user,
+           to_char(a.overwrite_date, 'YYYY-MM-DD HH24:MI:SS') as overwrite_date,
+           a.comment_text
     from lang_messages_audit a,
          persons p
     where locale = :current_locale
@@ -12,21 +18,43 @@ db_foreach audit_trail_select {
     and a.overwrite_user = p.person_id
     order by overwrite_date desc
 } {
+    multirow append audit_inv \
+        $overwrite_user \
+        $overwrite_user_name \
+        [lc_time_fmt $overwrite_date "%x %Xb"] \
+        $old_message \
+        $new_message \
+        "$old_message,$new_message" \
+        $comment_text
+    
+    set new_message $old_message
 
-    if { [string equal $trail_counter 0] } {
-        set current_message_author $overwrite_user
-        set current_message_date $overwrite_date
-
-    } else {
-        multirow append audit_trail $previous_message $overwrite_user $overwrite_date
-    }
-
-    set previous_message $message
-    set previous_overwrite_user $overwrite_user
-    set previous_overwrite_date $overwrite_date
     incr trail_counter
 }
 
 if { $trail_counter > 0 } {
-    set original_message $previous_message
+    set original_message $new_message
+}
+
+# invert the audit trail
+
+multirow create audit creation_user_id creation_user_name creation_date old_message new_message old_new_message comment_text
+
+for { set i [multirow size audit_inv] } { $i > 0 } { incr i -1 } {
+    multirow get audit_inv $i
+
+    multirow append audit \
+        $audit_inv(creation_user_id) \
+        $audit_inv(creation_user_name) \
+        $audit_inv(creation_date) \
+        $audit_inv(old_message) \
+        $audit_inv(new_message) \
+        $audit_inv(old_new_message) \
+        $audit_inv(comment_text)
+}
+
+multirow extend audit creation_user_url
+
+multirow foreach audit {
+    set creation_user_url [acs_community_member_url -user_id $creation_user_id]
 }
