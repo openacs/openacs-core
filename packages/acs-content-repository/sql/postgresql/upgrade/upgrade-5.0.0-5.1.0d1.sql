@@ -549,3 +549,137 @@ begin
                 ''f''
                 );
 end;' language 'plpgsql';
+
+select define_function_args('content_extlink__new','name,url,label,description,parent_id,extlink_id,creation_date;now,creation_user,creation_ip');
+
+select define_function_args('content_folder__new','name,label,description,parent_id,context_id,folder_id,creation_date;now,creation_user,creation_ip,security_inherit_p');
+
+select define_function_args('content_item__new','name,parent_id,item_id,locale,creation_date;now,creation_user,context_id,creation_ip,item_subtype;content_item,content_type;content_revision,title,description,mime_type;text/plain,nls_language,text,data,relation_tag,is_live;f,storage_type;lob');
+
+select define_function_args('content_keyword__new','heading,description,parent_id,keyword_id,creation_date;now,creation_user,creation_ip,object_type;content_keyword');
+
+select define_function_args('content_symlink__new','name,label,target_id,parent_id,symlink_id,creation_date;now,creation_user,creation_ip');
+
+select define_function_args('content_template__new','name,parent_id,template_id,creation_date,creation_user,creation_ip');
+
+select define_function_args('content_type__create_type','content_type,supertype;content_revision,pretty_name,pretty_plural,table_name,id_colum;XXX,name_method');
+
+select define_function_args('content_type__create_attribute','content_type,attribute_name,datatype,pretty_name,pretty_plural,sort_order,default_value,column_spec;text');
+
+-- DRB: PG version now verifies that the new content_type's supertype is indeed content_revision
+-- or one of its descendants.
+
+create or replace function content_type__create_type (varchar,varchar,varchar,varchar,varchar,varchar,varchar)
+returns integer as '
+declare
+  create_type__content_type           alias for $1;  
+  create_type__supertype              alias for $2;  -- default ''content_revision''  
+  create_type__pretty_name            alias for $3;  
+  create_type__pretty_plural          alias for $4;  
+  create_type__table_name             alias for $5;
+  create_type__id_column              alias for $6;  -- default ''XXX''
+  create_type__name_method            alias for $7;  -- default null
+  v_temp_p                            boolean;       
+  v_supertype_table                   acs_object_types.table_name%TYPE;
+                                        
+begin
+
+  if (create_type__supertype <> ''content_revision'')
+      and (create_type__content_type <> ''content_revision'') then
+    select count(*) > 0 into v_temp_p
+    from  acs_object_type_supertype_map
+    where object_type = create_type__supertype
+    and ancestor_type = ''content_revision'';
+
+    if not v_temp_p then
+      raise EXCEPTION ''-20000: supertype % must be a subtype of content_revision'', create_type__supertype;
+    end if;
+  end if;
+
+ -- create the attribute table if not already created
+
+  select count(*) > 0 into v_temp_p 
+    from pg_class
+   where relname = lower(create_type__table_name);
+
+  if NOT v_temp_p then
+    select table_name into v_supertype_table from acs_object_types
+      where object_type = create_type__supertype;
+
+    execute ''create table '' || create_type__table_name || '' ('' ||
+      create_type__id_column  || '' integer primary key references '' || 
+      v_supertype_table || '')'';
+  end if;
+
+  PERFORM acs_object_type__create_type (
+    create_type__content_type,
+    create_type__pretty_name,
+    create_type__pretty_plural,
+    create_type__supertype,
+    create_type__table_name,
+    create_type__id_column,
+    null,
+    ''f'',
+    null,
+    create_type__name_method
+  );
+
+  PERFORM content_type__refresh_view(create_type__content_type);
+
+  return 0; 
+end;' language 'plpgsql';
+
+select define_function_args('content_type__drop_type','content_type,drop_children_p;f,drop_table_p;f');
+
+select define_function_args('content_type__drop_attribute','content_type,attribute_name,drop_column;f');
+
+-- PG 7.3 now supports drop column ...
+
+create or replace function content_type__drop_attribute (varchar,varchar,boolean)
+returns integer as '
+declare
+  drop_attribute__content_type           alias for $1;  
+  drop_attribute__attribute_name         alias for $2;  
+  drop_attribute__drop_column            alias for $3;  -- default ''f''  
+  v_attr_id                              acs_attributes.attribute_id%TYPE;
+  v_table                                acs_object_types.table_name%TYPE;
+begin
+
+  -- Get attribute information 
+  select 
+    upper(t.table_name), a.attribute_id 
+  into 
+    v_table, v_attr_id
+  from 
+    acs_object_types t, acs_attributes a
+  where 
+    t.object_type = drop_attribute__content_type
+  and 
+    a.object_type = drop_attribute__content_type
+  and
+    a.attribute_name = drop_attribute__attribute_name;
+    
+  if NOT FOUND then
+    raise EXCEPTION ''-20000: Attribute %:% does not exist in content_type.drop_attribute'', drop_attribute__content_type, drop_attribute__attribute_name;
+  end if;
+
+  -- Drop the attribute
+  PERFORM acs_attribute__drop_attribute(drop_attribute__content_type, 
+                                        drop_attribute__attribute_name);
+
+  -- FIXME: postgresql does not support drop column.
+  -- Drop the column if neccessary
+  if drop_attribute__drop_column then
+      execute ''alter table '' || v_table || '' drop column '' ||
+	drop_attribute__attribute_name || ''cascade'';
+
+--    exception when others then
+--      raise_application_error(-20000, ''Unable to drop column '' || 
+--       v_table || ''.'' || attribute_name || '' in content_type.drop_attribute'');  
+  end if;  
+
+  PERFORM content_type__refresh_view(drop_attribute__content_type);
+
+  return 0; 
+end;' language 'plpgsql';
+
