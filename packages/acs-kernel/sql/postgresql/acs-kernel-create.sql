@@ -15,6 +15,7 @@
 \i acs-logs-create.sql
 \i acs-metadata-create.sql
 \i acs-objects-create.sql
+\i acs-object-util.sql
 \i acs-relationships-create.sql
 \i utilities-create.sql
 \i community-core-create.sql
