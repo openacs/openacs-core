@@ -63,7 +63,8 @@
                                        null,
                                        now(),
                                        :user_id,
-                                       :creation_ip
+                                       :creation_ip,
+                                       :n_bytes
                                        );
 
   update cr_items
