@@ -172,7 +172,7 @@ as
        impl_pl				acs_sc_impl_aliases.impl_pl%TYPE
    ) return acs_sc_impl_aliases.impl_id%TYPE
    is
-       v_impl_id			acs_sc_impls.impl_id%TYPE;
+       v_impl_id		acs_sc_impls.impl_id%TYPE;
    begin
 
        v_impl_id := acs_sc_impl.get_id(impl_contract_name,impl_name);
@@ -203,14 +203,14 @@ as
        impl_operation_name	acs_sc_operations.operation_name%TYPE
    ) return acs_sc_impls.impl_id%TYPE
    is
-       v_impl_id			acs_sc_impls.impl_id%TYPE;
+       v_impl_id		acs_sc_impls.impl_id%TYPE;
    begin
        v_impl_id := acs_sc_impl.get_id(impl_contract_name,impl_name);
 
        delete from acs_sc_impl_aliases
-       where impl_contract_name = delete_alias.impl_contract_name
-       and impl_name = delete_alias.impl_name
-       and impl_operation_name = delete_alias.impl_operation_name;
+       where impl_contract_name = acs_sc_impl_alias.delete.impl_contract_name
+       and impl_name = acs_sc_impl_alias.delete.impl_name
+       and impl_operation_name = acs_sc_impl_alias.delete.impl_operation_name;
 
        return v_impl_id;
 
@@ -219,7 +219,6 @@ as
 end acs_sc_impl_alias;
 /
 show errors
-
 
 -- UPGRADE ISSUE 2
 -- acs_sc_binding.exists_p was broken on Oracle if you installed
