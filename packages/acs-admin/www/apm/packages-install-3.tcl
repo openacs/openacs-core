@@ -53,12 +53,6 @@ foreach pkg_info $pkg_install_list {
                                  -package_path $package_path \
                                  $package_key]
 
-    if { !$upgrade_p } {
-        # Assuming here that ctl_file files are not upgrade scripts
-        # TODO: Make it possible to determine which ctl files are upgrade scripts and which aren't
-        set data_model_files [concat $data_model_files [apm_ctl_files_find $package_key]]
-    } 
-
     set sql_file_list [concat $sql_file_list $data_model_files]
 
     if {![empty_string_p $data_model_files]} {

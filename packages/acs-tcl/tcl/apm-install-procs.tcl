@@ -1319,7 +1319,7 @@ ad_proc -public apm_version_update {
 ad_proc -private apm_packages_full_install {
     {-callback apm_dummy_callback} 
     pkg_info_list 
-} {
+.} {
 
     Loads the data model, installs, enables, instantiates, and mounts all of the packages in pkg_list.
 } {
@@ -1436,40 +1436,6 @@ ad_proc -private apm_upgrade_script_compare {f1 f2} {
     }
 }
 
-ad_proc -private apm_ctl_files_find {
-    {-package_path ""}
-    package_key
-} {
-
-    Return SQL loader control files for a given package.  These will be executed in
-    alphabetical order so will typically have names with embedded sequence numbers
-    like  "00-foo.tcl" etc.
-
-    @package_key the package to search
-    @return A list of files and file types of form [list [list "00-foo.ctl" "ctl_file"] ...] 
-
-} {
-
-    set file_list [apm_get_package_files -file_types [list ctl_file] -package_path $package_path -package_key $package_key]
-    set files [list]
-
-    foreach path $file_list {
-        set file_type [apm_guess_file_type $package_key $path]
-        set file_db_type [apm_guess_db_type $package_key $path]
-
-	apm_log APMDebug "APM: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
-
-	if { [db_compatible_rdbms_p $file_db_type]} {
-            apm_log APMDebug "APM: Adding $path to the list of data model files."
-            lappend files [list $path $file_type $package_key ]
-	}
-    }
-    apm_log APMDebug "APM: SQL loader control files for $package_key: $files"
-    return $files
-
-}
-
-
 ad_proc -private apm_data_model_scripts_find {
     {-upgrade_from_version_name ""}
     {-upgrade_to_version_name ""}
@@ -1483,6 +1449,9 @@ ad_proc -private apm_data_model_scripts_find {
     set types_to_retrieve [list "sqlj_code"]
     if {[empty_string_p $upgrade_from_version_name]} {
 	lappend types_to_retrieve "data_model_create"
+        # Assuming here that ctl_file files are not upgrade scripts
+        # TODO: Make it possible to determine which ctl files are upgrade scripts and which aren't
+        lappend types_to_retrieve "ctl_file"
     } else {
 	lappend types_to_retrieve "data_model_upgrade"
     }
@@ -1496,7 +1465,7 @@ ad_proc -private apm_data_model_scripts_find {
 	apm_log APMDebug "APM: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
 
 	if {[lsearch -exact $types_to_retrieve $file_type] != -1 } {
-	    if { ![string compare $file_type "data_model_upgrade"] } {
+	    if { [string equal $file_type "data_model_upgrade"] } {
                 # Upgrade script
 		if {[apm_upgrade_for_version_p $path $upgrade_from_version_name \
 			$upgrade_to_version_name]} {
