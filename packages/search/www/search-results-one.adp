@@ -2,11 +2,11 @@
   <a href=@url@>Untitled</a><br>
 </if>
 <else>
-  <a href=@url@>@title_summary@</a><br>
+  <a href=@url@>@title_summary;noquote@</a><br>
 </else>
 <if @txt_summary@ nil>
 </if>
 <else>
-@txt_summary@<br>
+@txt_summary;noquote@<br>
 </else>
 <font color=green>@url@</font><br><br>
