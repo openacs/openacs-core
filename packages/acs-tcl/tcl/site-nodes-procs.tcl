@@ -256,16 +256,16 @@ ad_proc -public site_node::get_from_url {
     # chomp off part of the url and re-attempt
     if {!$exact_p} {
         while {![empty_string_p $url]} {
-    	set url [string trimright $url /]
-    	set url [string range $url 0 [string last / $url]]
+        set url [string trimright $url /]
+        set url [string range $url 0 [string last / $url]]
 
-    	if {[nsv_exists site_nodes $url]} {
-    	    array set node [nsv_get site_nodes $url]
+        if {[nsv_exists site_nodes $url]} {
+            array set node [nsv_get site_nodes $url]
 
-    	    if {[string equal $node(pattern_p) t] && ![empty_string_p $node(object_id)]} {
-    		return [array get node]
-    	    }
-    	}
+            if {[string equal $node(pattern_p) t] && ![empty_string_p $node(object_id)]} {
+                return [array get node]
+            }
+        }
         }
     }
 
@@ -410,25 +410,54 @@ ad_proc -public site_node::get_object_id {
 ad_proc -public site_node::get_children {
     {-all:boolean}
     {-package_type {}}
+    {-package_key {}}
+    {-filter_element {}}
+    {-filter_value {}}
     {-element {}}
     {-node_id:required}
 } {
+    This proc gives answers to questions such as: What are all the package_id's 
+    (or any of the other available elements) for all the instances of package_key or package_type mounted
+    under node_id xxx?
+
     @param node_id       The node for which you want to find the children.
 
     @option all          Set this if you want all children, not just direct children
     
     @option package_type If specified, this will limit the returned nodes to those with an
                          package of the specified package type (normally apm_service or 
-                         apm_application) mounted
+                         apm_application) mounted. Conflicts with the -package_key option.
     
-    @param element       The element of the site node you wish returned. Defaults to url, but you 
-                         can say 'node_id' instead.
+    @param package_key   If specified, this will limit the returned nodes to those with a
+                         package of the specified package key mounted. Conflicts with the
+                        -package_type option.
+                     
+    @param element       The element of the site node you wish returned. Defaults to url, but 
+                         the following elements are available: object_type, url, object_id,
+                         instance_name, package_type, package_id, name, node_id, directory_p.
     
     @return A list of URLs of the site_nodes immediately under this site node, or all children, 
     if the -all switch is specified.
     
     @author Lars Pind (lars@collaboraid.biz)
 } {
+    if { ![empty_string_p $filter_element] } {
+        if { ![empty_string_p $package_type] || ![empty_string_p $package_key] } {
+            error "You may specify either package_type, package_key, or filter_element, but not more than one."
+        }
+    } else {
+        if { ![empty_string_p $package_type] && ![empty_string_p $package_key] } {
+            error "You may specify either package_type, package_key, or filter_element, but not more than one."
+        }
+        if { ![empty_string_p $package_type] } {
+            set filter_element package_type
+            set filter_value $package_type
+        } elseif { ![empty_string_p $package_key] } {
+            set filter_element package_key
+            set filter_value $package_key
+        }
+    }
+    
     set node_url [get_url -node_id $node_id]
     
     set child_urls [nsv_array names site_nodes "${node_url}?*"]
@@ -443,14 +472,14 @@ ad_proc -public site_node::get_children {
         }
     }
 
-    if { ![empty_string_p $package_type] } {
+    if { ![empty_string_p $filter_element] } {
         set org_child_urls $child_urls
         set child_urls [list]
         foreach child_url $org_child_urls {
             array unset site_node
             array set site_node [get_from_url -exact -url $child_url]
 
-            if { [string equal $site_node(package_type) $package_type] } {
+            if { [string equal $site_node($filter_element) $filter_value] } {
                 lappend child_urls $child_url
             }
         }
@@ -706,40 +735,40 @@ ad_proc -public site_node_closest_ancestor_package {
 
 } {
     if {[empty_string_p $url]} {
-	  set url [ad_conn url]
+          set url [ad_conn url]
     }
 
     # Try the URL as is.
     if {[catch {nsv_get site_nodes $url} result] == 0} {
-	  array set node $result
-	  if { [lsearch -exact $package_keys $node(package_key)] != -1 } {
-	      return $node(package_id)
-	  }
+          array set node $result
+          if { [lsearch -exact $package_keys $node(package_key)] != -1 } {
+              return $node(package_id)
+          }
     }
     
     # Add a trailing slash and try again.
     if {[string index $url end] != "/"} {
-	  append url "/"
-	  if {[catch {nsv_get site_nodes $url} result] == 0} {
-	      array set node $result
-	      if { [lsearch -exact $package_keys $node(package_key)] != -1 } {
-		    return $node(package_id)
-	      }
-	  }
+          append url "/"
+          if {[catch {nsv_get site_nodes $url} result] == 0} {
+              array set node $result
+              if { [lsearch -exact $package_keys $node(package_key)] != -1 } {
+                    return $node(package_id)
+              }
+          }
     }
     
     # Try successively shorter prefixes.
     while {$url != ""} {
-	  # Chop off last component and try again.
-  	  set url [string trimright $url /]
-	  set url [string range $url 0 [string last / $url]]
-	
-	  if {[catch {nsv_get site_nodes $url} result] == 0} {
-	      array set node $result
-	      if {$node(pattern_p) == "t" && $node(object_id) != "" && [lsearch -exact $package_keys $node(package_key)] != -1 } {
-		    return $node(package_id)
-	      }
-	  }
+          # Chop off last component and try again.
+          set url [string trimright $url /]
+          set url [string range $url 0 [string last / $url]]
+        
+          if {[catch {nsv_get site_nodes $url} result] == 0} {
+              array set node $result
+              if {$node(pattern_p) == "t" && $node(object_id) != "" && [lsearch -exact $package_keys $node(package_key)] != -1 } {
+                    return $node(package_id)
+              }
+          }
     }
     
     return $default
@@ -762,8 +791,8 @@ ad_proc -public site_node_closest_ancestor_package_url {
 } {
     set subsite_pkg_id [site_node_closest_ancestor_package $package_key]
     if {[empty_string_p $subsite_pkg_id]} {
-	# No package was found... return the default
-	return $default
+        # No package was found... return the default
+        return $default
     }
 
     return [lindex [site_node::get_url_from_object_id -object_id $subsite_pkg_id] 0]
