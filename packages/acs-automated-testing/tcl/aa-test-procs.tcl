@@ -781,10 +781,12 @@ ad_proc aa_run_with_teardown {
   teardown_code will be executed even if error is thrown. Will catch
   errors in teardown_code as well and provide stack traces for both code blocks.
 
-  @param test_code Tcl code that sets up the test case and executes tests
+  @param test_code     Tcl code that sets up the test case and executes tests
+
   @param teardown_code Tcl code that tears down database data etc. that needs to execute
-  after testing even if error is thrown.
-  @param rollback If specified, any db transactions in test_code will be rolled back.
+                       after testing even if error is thrown.
+
+  @param rollback      If specified, any db transactions in test_code will be rolled back.
 
   @author Peter Marklund
 } {
