@@ -34,7 +34,7 @@ you will need to start your web server again.
 When the web server restarts, OpenACS will be fully functional and you can reload 
 this page to access the running web server.
 "
-    exit
+    ns_shutdown
   } else {
     install_return 200 "Error" "
 The installation program has encounted an error.  Please drop your OpenACS tablespace

@@ -156,4 +156,4 @@ ad_parameter -set "acs-admin/*" -package_id $main_site_id RestrictToSSL
 
 db_release_unused_handles
 ns_write "</ul><p><strong>Installation Complete.  Please restart your server.[install_footer]"
-exit
+ns_shutdown
