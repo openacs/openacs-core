@@ -1680,28 +1680,6 @@ begin
       return null;
 end get_parent_folder;
 
-procedure update_last_modified (
-    item_id in cr_items.item_id%TYPE,
-    last_modified in acs_objects.last_modified%TYPE default sysdate
-)
-is
-    v_parent_id cr_items.parent_id%TYPE;
-begin
-    update acs_objects
-    set acs_objects.last_modified = content_item.update_last_modified.last_modified
-    where acs_objects.object_id = content_item.update_last_modified.item_id;
-
-    select cr_items.parent_id
-    into v_parent_id
-    from cr_items
-    where cr_items.item_id = content_item.update_last_modified.item_id;
-
-    content_item.update_last_modified(v_parent_id, content_item.update_last_modified.last_modified);
-
-    exception when NO_DATA_FOUND then
-        null;
-end update_last_modified;
-
 end content_item;
 /
 show errors
