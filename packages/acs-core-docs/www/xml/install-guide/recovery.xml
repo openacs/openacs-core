@@ -5,11 +5,20 @@
 %myvars;
 ]>
   <sect1 id="backup-recovery">
-    <title>Backup and Recovery</title>
-    <authorblurb>
-      <para>By <ulink url="mailto:dhogaza@pacifier.com">Don Baccus</ulink> with additions
+  <title>Backup and Recovery</title>
+  <authorblurb>
+    <para>By <ulink url="mailto:dhogaza@pacifier.com">Don Baccus</ulink> with additions
       by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
   </authorblurb>
+  <para>We will cover some basic backup and recovery strategies.  These are intended to 
+    be robust but simple enough to set up.  For a large scale production site you would 
+    probably need to create your own backup strategies (in particular full dumps from 
+    oracle, while easy to set up, are far from the best solution).
+    </para>
+  
+  <para>There are three basic things which need to be backed up, the database data, the server 
+    source tree, and the acs-content-repository (which is in the server source tree).</para>
+
   <sect2 id="install-next-backups">
     <title>Backup Strategy</title>
     <para>
@@ -386,9 +395,9 @@ exit</action></screen>
 [service0 service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
 [service0 service0]$ <userinput>cvs up -r current</userinput>
 [service0 service0]$ <userinput>exit</userinput>
-<action><userinput>su - service0</userinput>
+<action>su - service0
 cd /var/lib/aolserver/<replaceable>service0</replaceable>
 cvs up -r current</action></screen>
   </sect2>
-    <para><phrase role="cvstag">($Id$)</phrase></para>
+  <para><phrase role="cvstag">($Id$)</phrase></para>
 </sect1>

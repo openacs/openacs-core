@@ -143,4 +143,5 @@ rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<replaceable>5.0.0a1</repl
 
     <programlisting><xi:include href="../../../../etc/install/build-release.sh" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>release script missing</xi:fallback></xi:include></programlisting>
 
+    <para><phrase role="cvstag">($Id$)</phrase></para>
   </appendix>

@@ -16,14 +16,14 @@
         <primary>cvs</primary>
         <secondary>setup</secondary>
       </indexterm>
-      These steps take an existing OpenACS directory and add
+      <para>These steps take an existing OpenACS directory and add
           it to a <link linkend="install-cvs">CVS
-          repository</link>.
-     </formalpara>
-      <orderedlist>
-        <listitem>
-          <para>Create and set permissions on a subdirectory in the local cvs repository.</para>
-          <screen>[root root]# <userinput>mkdir /cvsroot/<replaceable>service0</replaceable></userinput>
+          repository</link>.</para>
+    </formalpara>
+    <orderedlist>
+      <listitem>
+        <para>Create and set permissions on a subdirectory in the local cvs repository.</para>
+        <screen>[root root]# <userinput>mkdir /cvsroot/<replaceable>service0</replaceable></userinput>
 [root root]#<userinput> chown <replaceable>service0</replaceable>.web /cvsroot/<replaceable>service0</replaceable></userinput>
 [root root]#
 <action>mkdir /cvsroot/<replaceable>service0</replaceable>
