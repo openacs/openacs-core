@@ -533,6 +533,19 @@ ad_proc -public acs_user::update {
     db_dml user_update {}
 }
 
+ad_proc -public acs_user::get_user_id_by_screen_name {
+    {-screen_name:required}
+} {
+    Returns the user_id from a screen_name, or empty string if no user found.
+    Searches all users, including banned, deleted, unapproved, etc.
+} {
+    return [db_string select_user_id_by_screen_name { 
+        select user_id from users where screen_name = :screen_name 
+    } -default {}]
+}
+
+
+
 ad_proc -public acs_user::site_wide_admin_p {
     {-user_id ""}
 } {
