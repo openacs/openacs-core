@@ -1,7 +1,7 @@
 <master>
-<property name="context_bar">@context_bar;noquote@</property>
+<property name="context">@context_bar;noquote@</property>
 <property name="title">@title;noquote@</property>
-<h2>@title@</h2>
+<h2>@title@;noquote</h2>
 
 <ul>
  <li><a href="reference-data-list">List Reference Data</a></li>
