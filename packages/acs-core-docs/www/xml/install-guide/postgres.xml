@@ -1,5 +1,5 @@
 <sect1 id="postgres" xreflabel="Installing PostgreSQL">
-  <title>Install PostgreSQL 7.2.3</title>
+  <title>Install PostGreSQL 7.2.4</title>
 
   <authorblurb>
 	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
@@ -7,8 +7,12 @@
   
   <para>Skip this section if you will run only Oracle.</para>
 
+  <para>OpenACS &version; will run with PostGreSQL 7.2.x or 7.3.2.  It
+  has not been fully tested with 7.3.2; 7.2.4 is the recommended
+  version of PostgreSQL to use.</para>
+
   <para>This page assumes you have downloaded postgresql to 
-<computeroutput>/tmp/postgresql-7.2.3.tar.gz</computeroutput>.  If not,
+<computeroutput>/tmp/postgresql-7.2.4.tar.gz</computeroutput>.  If not,
 <link linkend="source-postgresql">get it</link>.
 </para>
 
@@ -16,10 +20,10 @@
     <listitem>
       <para>Unpack PostGreSQL.</para>
 <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
-[root@yourserver src]# <userinput>tar xzf /tmp/postgresql-7.2.3.tar.gz</userinput>
+[root@yourserver src]# <userinput>tar xzf /tmp/postgresql-7.2.4.tar.gz</userinput>
 [root@yourserver src]# 
 <action>cd /usr/local/src
-tar xzf /tmp/postgresql-7.2.3.tar.gz</action></screen>
+tar xzf /tmp/postgresql-7.2.4.tar.gz</action></screen>
     </listitem>
     <listitem>
       <formalpara>
@@ -34,13 +38,13 @@ tar xzf /tmp/postgresql-7.2.3.tar.gz</action></screen>
       <screen>[root@yourserver src]# <userinput>groupadd web</userinput>
 [root@yourserver src]# <userinput>useradd -g web -d /usr/local/pgsql postgres</userinput>
 [root@yourserver src]# <userinput>mkdir -p /usr/local/pgsql</userinput>
-[root@yourserver src]# <userinput>chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.2.3</userinput>
+[root@yourserver src]# <userinput>chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.2.4</userinput>
 [root@yourserver src]# <userinput>chmod 750 /usr/local/pgsql</userinput>
 [root@yourserver src]#
 <action>groupadd web
 useradd -g web -d /usr/local/pgsql postgres
 mkdir -p /usr/local/pgsql
-chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.2.3
+chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.2.4
 chmod 750 /usr/local/pgsql</action></screen>
     </listitem>
     <listitem id="install-postgres-env">
@@ -73,27 +77,27 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/
 	</para>
       </formalpara>
       <screen>[root@yourserver src]# <userinput>su - postgres</userinput>
-[postgres@yourserver pgsql]$<userinput> cd /usr/local/src/postgresql-7.2.3</userinput>
-[postgres@yourserver postgresql-7.2.3]$ <userinput>./configure</userinput>
+[postgres@yourserver pgsql]$<userinput> cd /usr/local/src/postgresql-7.2.4</userinput>
+[postgres@yourserver postgresql-7.2.4]$ <userinput>./configure</userinput>
 creating cache ./config.cache
 checking host system type... i686-pc-linux-gnu
 (many lines omitted>
 linking ./src/makefiles/Makefile.linux to src/Makefile.port
 linking ./src/backend/port/tas/dummy.s to src/backend/port/tas.s
-[postgres@yourserver postgresql-7.2.3]$ <userinput>make all</userinput>
+[postgres@yourserver postgresql-7.2.4]$ <userinput>make all</userinput>
 make -C doc all
-make[1]: Entering directory `/usr/local/src/postgresql-7.2.3/doc'
+make[1]: Entering directory `/usr/local/src/postgresql-7.2.4/doc'
 (many lines omitted)
-make[1]: Leaving directory `/usr/local/src/postgresql-7.2.3/src'
+make[1]: Leaving directory `/usr/local/src/postgresql-7.2.4/src'
 All of PostgreSQL successfully made. Ready to install.
-[postgres@yourserver postgresql-7.2.3]$ <userinput>make install</userinput>
+[postgres@yourserver postgresql-7.2.4]$ <userinput>make install</userinput>
 make -C doc install
-make[1]: Entering directory `/usr/local/src/postgresql-7.2.3/doc'
+make[1]: Entering directory `/usr/local/src/postgresql-7.2.4/doc'
 (many lines omitted)
 Thank you for choosing PostgreSQL, the most advanced open source database
 engine.
 <action>su - postgres
-cd /usr/local/src/postgresql-7.2.3
+cd /usr/local/src/postgresql-7.2.4
 ./configure
 make all
 make install</action></screen>
@@ -190,13 +194,13 @@ logout
       <itemizedlist>
         <listitem><para>Red Hat:</para>
           
-          <screen>[root@yourserver src]# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</userinput>
+          <screen>[root@yourserver src]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</userinput>
 [root@yourserver src]# <userinput>chown root.root /etc/rc.d/init.d/postgresql</userinput>
-[root@yourserver src]# <userinput>chmod 700 /etc/rc.d/init.d/postgresql</userinput>
+[root@yourserver src]# <userinput>chmod 755 /etc/rc.d/init.d/postgresql</userinput>
 [root@yourserver src]# 
-<action>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+<action>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/rc.d/init.d/postgresql
-chmod 700 /etc/rc.d/init.d/postgresql</action></screen>
+chmod 755 /etc/rc.d/init.d/postgresql</action></screen>
           
           <para>Test the script.</para>
           
@@ -222,11 +226,11 @@ chkconfig --list postgresql
 service postgresql start</action></screen>
         </listitem>
         <listitem><para>Debian:</para>
-          <screen>root:~# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</userinput>
+          <screen>root:~# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</userinput>
 root:~# <userinput>chown root.root /etc/init.d/postgresql</userinput>
 root:~# <userinput>chmod 700 /etc/init.d/postgresql</userinput>
 root:~# <action>
-cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/init.d/postgresql
 chmod 700 /etc/init.d/postgresql</action></screen>
           <para>Test the script</para>
@@ -270,7 +274,7 @@ root:~#</screen>
           </para>
           </note>
           
-          <screen>root:~# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</userinput>
+          <screen>root:~# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</userinput>
 root:~# <userinput>chown root.root /etc/rc.d/init.d/postgresql</userinput>
 root:~# <userinput>chmod 700 /etc/rc.d/init.d/postgresql</userinput></screen>
           <para>
@@ -329,6 +333,43 @@ root:~ # </screen>
 
     </para>
     </listitem>
+    <listitem>
+      <formalpara>
+        <title>Tune postgres.  OPTIONAL</title>
+        <para>The default values for PostGreSQL are very conservative; we can safely change some of them and improve performance.</para>  
+      </formalpara>
+      <orderedlist>
+        <listitem>
+          <para>Change the kernel parameter for maximum shared memory
+          segment size to 128Mb:</para>
+          <screen>[root@yourserver root]# <userinput>echo 134217728 &gt;/proc/sys/kernel/shmmax</userinput>
+[root@yourserver root]#</screen>
+          <para>Make that change permanent by editing
+          <computeroutput>emacs /etc/sysctl.conf</computeroutput> to
+          add these lines at the end:</para>
+<programlisting># increase shared memory limit for postgres
+kernel.shmmax = 134217728</programlisting>
+        </listitem>
+        <listitem>
+          <para>Edit the PostGreSQL config file, <computeroutput>/usr/local/pgsql/data/postgresql.conf</computeroutput> to use more memory.  These values should improve performance in most cases.  (<ulink url="http://openacs.org/forums/message-view?message_id=94071">More information</ulink>)</para>
+          <programlisting>#       Shared Memory Size
+#
+shared_buffers = 15200      # 2*max_connections, min 16
+
+#       Non-shared Memory Sizes
+#
+sort_mem = 32168            # min 32
+
+
+#       Write-ahead log (WAL)
+#
+wal_files = 3               # range 0-64
+checkpoint_segments = 3     # in logfile segments (16MB each), min 1
+</programlisting>
+          <para>Restart postgres (<computeroutput>service postgres restart</computeroutput>) so that the changes take effect.</para>
+        </listitem>
+      </orderedlist>
+    </listitem>
 
   </orderedlist>
   
@@ -344,6 +385,7 @@ root:~ # </screen>
         </para></listitem>
 
       <listitem><para>
+
 
           <ulink
           url="http://pascal.scheffers.net/openacs/pgupdate/">Migrating

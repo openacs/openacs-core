@@ -41,7 +41,9 @@ cd /usr/local/src/aolserver
           <computeroutput>postgresql</computeroutput> to
           <computeroutput>oracle</computeroutput>, or to the word
           <computeroutput>both</computeroutput> if you want both drivers
-          installed.
+          installed.  In order to get nsoracle to compile, you may
+          need to su - oracle, and then su (without the -) root to set
+          the environment variables properly.
         </para>
 
     <para><computeroutput>conf-inst</computeroutput> should contain the
@@ -52,22 +54,11 @@ cd /usr/local/src/aolserver
 
       <para><computeroutput>conf-make</computeroutput> should contain the
           name of the GNU Make command on your system. It defaults to
-          <computeroutput>gmake</computeroutput>.  Verify that gmake is installed:</para>
-      <screen>[root@yourserver aolserver]# <userinput>gmake -v</userinput>
-GNU Make version 3.79.1, by Richard Stallman and Roland McGrath.
-Built for i386-redhat-linux-gnu
-Copyright (C) 1988, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 2000
-        Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.
-There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.
-
-Report bugs to &lt;bug-make@gnu.org&gt;.
-
-[root@yourserver aolserver]# </screen>
-      <para>If you don't get similar results, including an equal or higher version number to 3.79.1, install gmake or check your aliases.</para>
+          <computeroutput>gmake</computeroutput>.</para>
       <para>Set an environment variable that the nspostgres driver
-      Makefile needs to compile correctly and run <computeroutput>conf</computeroutput>, which compiles AOLserver and the default modules and installs them.</para>
+      Makefile needs to compile correctly and run
+          <computeroutput>conf</computeroutput>, which compiles
+          AOLserver, the default modules, and the database driver, and installs them.</para>
       <screen>[root@yourserver aolserver]# <userinput>export POSTGRES=/usr/local/pgsql; ./conf</userinput>
 Building in /usr/local/aolserver
 with the following modules:
@@ -106,27 +97,40 @@ Done Building Sat Mar  8 10:31:35 PST 2003
             <listitem>
               <para>Oracle</para>
               <screen>[root@yourserver aolserver]# <userinput>cd /usr/local/aolserver/bin</userinput>
-[root@yourserver bin]# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</userinput>
+[root@yourserver bin]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</userinput>
 [root@yourserver bin]# <userinput>chmod 750 nsd-oracle</userinput>
 [root@yourserver bin]#
 <action>cd /usr/local/aolserver/bin
-cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
 chmod 750 nsd-oracle</action></screen>
             </listitem>
             <listitem>
               <para>PostGreSQL</para>
               <screen>[root@yourserver aolserver]# <userinput>cd /usr/local/aolserver/bin</userinput>
-[root@yourserver bin]# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</userinput>
+[root@yourserver bin]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</userinput>
 [root@yourserver bin]# <userinput>chmod 755 nsd-postgres</userinput>
 [root@yourserver bin]#
 <action>cd /usr/local/aolserver/bin
-cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
 chmod 755 nsd-postgres</action></screen>
             </listitem>
           </itemizedlist>
         </listitem>
         <listitem>
-          <para>OPTIONAL - install nsopenssl.  This AOLserver module is required if you want people to connect to your site via https.  These commands compile nsopenssl and install it, along with a tcl helper script to handle https connections.  You will also need ssl certificates.  Because those should be different for each server service, you won't need <link linkend="ssl-certificates">those instructions</link> until later.  You will need the <link linkend="nsopenssl-download">nsopenssl tarball</link> in <computeroutput>/tmp</computeroutput>.</para>
+          <para>OPTIONAL - install nsopenssl.  This AOLserver module
+          is required if you want people to connect to your site via
+          https.  These commands compile nsopenssl and install it,
+          along with a tcl helper script to handle https connections.
+          You will also need ssl certificates.  Because those should
+          be different for each server service, you won't need <link
+          linkend="ssl-certificates">those instructions</link> until
+          later.  You will need the <link
+          linkend="nsopenssl-download">nsopenssl tarball</link> in
+          <computeroutput>/tmp</computeroutput>.</para>
+      <para>(Red Hat 9 note: see <ulink
+          url="http://openacs.org/forums/message-view?message_id=92882">this
+          thread</ulink> for details on compiling nsopenssl.)</para>
+
       <screen>[root@yourserver bin]#<userinput> cd /usr/local/src/aolserver</userinput>
 [root@yourserver aolserver]# <userinput>tar xzf /tmp/nsopenssl-2.1.tar.gz</userinput>
 [root@yourserver aolserver]# <userinput>cd nsopenssl-2.1</userinput>
@@ -143,6 +147,11 @@ cd nsopenssl-2.1
 make OPENSSL=/usr/local/ssl 
 cp nsopenssl.so /usr/local/aolserver/bin 
 cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
+      <para>For Debian (<ulink
+      url="http://openacs.org/forums/message-view?message_id=93854">more
+      information</ulink>):</para>
+<screen><action>apt-get install libssl-dev
+make OPENSSL=/usr/lib/ssl</action></screen>
     </listitem>
 
         <listitem id="install-openfts" xreflabel="Install OpenFTS">
@@ -155,7 +164,7 @@ cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
               <para>Install Tsearch.  This is a PostGreSQL module that
 	  OpenFTS requires.</para>
               <screen>[root@yourserver root]# <userinput>su - postgres</userinput>
-[postgres@yourserver pgsql]$ <userinput>cd /usr/local/src/postgresql-7.2.3/contrib/tsearch/</userinput>
+[postgres@yourserver pgsql]$ <userinput>cd /usr/local/src/postgresql-7.2.4/contrib/tsearch/</userinput>
 [postgres@yourserver tsearch]$ <userinput>make</userinput>
 sed 's,MODULE_PATHNAME,$libdir/tsearch,g' tsearch.sql.in >tsearch.sql
 /usr/bin/flex  -8 -Ptsearch_yy -o'parser.c' parser.l
@@ -172,7 +181,7 @@ logout
 
 [root@yourserver root]#
 <action>su - postgres
-cd /usr/local/src/postgresql-7.2.3/contrib/tsearch
+cd /usr/local/src/postgresql-7.2.4/contrib/tsearch
 make
 make install
 exit</action></screen>
@@ -215,8 +224,8 @@ cp nsfts.so /usr/local/aolserver/bin
             <listitem>
               <para>Build some supplemental modules.</para>
 <screen>[root@yourserver aolserver]# <userinput>cd ..</userinput>
-[root@yourserver Search-OpenFTS-tcl-0.3.2]# <userinput>cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.3/contrib</userinput>
-[root@yourserver Search-OpenFTS-tcl-0.3.2]# <userinput>cd /usr/local/src/postgresql-7.2.3/contrib/pgsql_contrib_openfts</userinput>
+[root@yourserver Search-OpenFTS-tcl-0.3.2]# <userinput>cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.4/contrib</userinput>
+[root@yourserver Search-OpenFTS-tcl-0.3.2]# <userinput>cd /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts</userinput>
 [root@yourserver pgsql_contrib_openfts]#<userinput> make</userinput>
 sed 's,MODULE_PATHNAME,$libdir/openfts,g' openfts.sql.in >openfts.sql
 gcc -O2 -Wall -Wmissing-prototypes -Wmissing-declarations -fpic -I. -I../../src/include   -c -o openfts.o openfts.c
@@ -230,8 +239,8 @@ rm openfts.o
 [postgres@yourserver pgsql_contrib_openfts]$<userinput> exit</userinput>
 [root@yourserver pgsql_contrib_openfts]#
 <action>cd ..
-cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.3/contrib
-cd /usr/local/src/postgresql-7.2.3/contrib/pgsql_contrib_openfts
+cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.4/contrib
+cd /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts
 make
 su postgres
 make install

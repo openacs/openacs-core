@@ -1,16 +1,18 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install PostgreSQL 7.2.3</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="unix-install.html" title="Chapter 3. Installing on Unix/Linux"><link rel="previous" href="oracle.html" title="Install Oracle 8.1.7"><link rel="next" href="aolserver.html" title="Install AOLserver 3.3oacs1"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Installing on Unix/Linux</th><td width="20%" align="right"> <a accesskey="n" href="aolserver.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="postgres"></a>Install PostgreSQL 7.2.3</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install PostGreSQL 7.2.4</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="unix-install.html" title="Chapter 3. Installing on Unix/Linux"><link rel="previous" href="oracle.html" title="Install Oracle 8.1.7"><link rel="next" href="aolserver.html" title="Install AOLserver 3.3oacs1"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Installing on Unix/Linux</th><td width="20%" align="right"> <a accesskey="n" href="aolserver.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="postgres"></a>Install PostGreSQL 7.2.4</h2></div></div><div class="authorblurb"><p>
 	by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><p>Skip this section if you will run only Oracle.</p><p>This page assumes you have downloaded postgresql to 
-<tt>/tmp/postgresql-7.2.3.tar.gz</tt>.  If not,
+        </p></div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 4.6.3 will run with PostGreSQL 7.2.x or 7.3.2.  It
+  has not been fully tested with 7.3.2; 7.2.4 is the recommended
+  version of PostgreSQL to use.</p><p>This page assumes you have downloaded postgresql to 
+<tt>/tmp/postgresql-7.2.4.tar.gz</tt>.  If not,
 <a href="individual-programs.html#source-postgresql">get it</a>.
 </p><div class="orderedlist"><ol type="1"><li><p>Unpack PostGreSQL.</p><pre class="screen">[root@yourserver root]# <b><tt>cd /usr/local/src</tt></b>
-[root@yourserver src]# <b><tt>tar xzf /tmp/postgresql-7.2.3.tar.gz</tt></b>
+[root@yourserver src]# <b><tt>tar xzf /tmp/postgresql-7.2.4.tar.gz</tt></b>
 [root@yourserver src]# 
 <pre class="action">cd /usr/local/src
-tar xzf /tmp/postgresql-7.2.3.tar.gz</pre></pre></li><li><p><b>Create the Postgres user. </b>
+tar xzf /tmp/postgresql-7.2.4.tar.gz</pre></pre></li><li><p><b>Create the Postgres user. </b>
 	  Create a user and group (if you haven't done so before) for
 	  PostgreSQL. This is the account that PostgreSQL will run as
 	  since it will not run as root.  Since nobody will log in
@@ -18,13 +20,13 @@ tar xzf /tmp/postgresql-7.2.3.tar.gz</pre></pre></li><li><p><b>Create the Postgr
 	</p><pre class="screen">[root@yourserver src]# <b><tt>groupadd web</tt></b>
 [root@yourserver src]# <b><tt>useradd -g web -d /usr/local/pgsql postgres</tt></b>
 [root@yourserver src]# <b><tt>mkdir -p /usr/local/pgsql</tt></b>
-[root@yourserver src]# <b><tt>chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.2.3</tt></b>
+[root@yourserver src]# <b><tt>chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.2.4</tt></b>
 [root@yourserver src]# <b><tt>chmod 750 /usr/local/pgsql</tt></b>
 [root@yourserver src]#
 <pre class="action">groupadd web
 useradd -g web -d /usr/local/pgsql postgres
 mkdir -p /usr/local/pgsql
-chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.2.3
+chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.2.4
 chmod 750 /usr/local/pgsql</pre></pre></li><li><p><a name="install-postgres-env"></a>Set up postgres's environment variables.  They are
 	necessary for the executable to find its supporting
 	libraries.  For convenience, we'll simply append the necessary
@@ -42,29 +44,29 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/
 	  Change to the postgres user and run <tt>./configure</tt> to set the compilation options automatically. This is the point at which you can
 	  configure PostgreSQL in various ways. For example, if you want to
 	  enable
-	  Unicode<a class="indexterm" name="id2886798"></a> support, add the flags <tt>--enable-locale</tt> and <tt>--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt>./configure --help</tt>.
+	  Unicode<a class="indexterm" name="id2889130"></a> support, add the flags <tt>--enable-locale</tt> and <tt>--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt>./configure --help</tt>.
 	</p><pre class="screen">[root@yourserver src]# <b><tt>su - postgres</tt></b>
-[postgres@yourserver pgsql]$<b><tt> cd /usr/local/src/postgresql-7.2.3</tt></b>
-[postgres@yourserver postgresql-7.2.3]$ <b><tt>./configure</tt></b>
+[postgres@yourserver pgsql]$<b><tt> cd /usr/local/src/postgresql-7.2.4</tt></b>
+[postgres@yourserver postgresql-7.2.4]$ <b><tt>./configure</tt></b>
 creating cache ./config.cache
 checking host system type... i686-pc-linux-gnu
 (many lines omitted&gt;
 linking ./src/makefiles/Makefile.linux to src/Makefile.port
 linking ./src/backend/port/tas/dummy.s to src/backend/port/tas.s
-[postgres@yourserver postgresql-7.2.3]$ <b><tt>make all</tt></b>
+[postgres@yourserver postgresql-7.2.4]$ <b><tt>make all</tt></b>
 make -C doc all
-make[1]: Entering directory `/usr/local/src/postgresql-7.2.3/doc'
+make[1]: Entering directory `/usr/local/src/postgresql-7.2.4/doc'
 (many lines omitted)
-make[1]: Leaving directory `/usr/local/src/postgresql-7.2.3/src'
+make[1]: Leaving directory `/usr/local/src/postgresql-7.2.4/src'
 All of PostgreSQL successfully made. Ready to install.
-[postgres@yourserver postgresql-7.2.3]$ <b><tt>make install</tt></b>
+[postgres@yourserver postgresql-7.2.4]$ <b><tt>make install</tt></b>
 make -C doc install
-make[1]: Entering directory `/usr/local/src/postgresql-7.2.3/doc'
+make[1]: Entering directory `/usr/local/src/postgresql-7.2.4/doc'
 (many lines omitted)
 Thank you for choosing PostgreSQL, the most advanced open source database
 engine.
 <pre class="action">su - postgres
-cd /usr/local/src/postgresql-7.2.3
+cd /usr/local/src/postgresql-7.2.4
 ./configure
 make all
 make install</pre></pre></li><li><p><a name="install-postgres-startup"></a><b>Start PostgreSQL. </b>
@@ -138,13 +140,13 @@ logout
         changes runlevels, postgresql goes to the appropriate
         state. Red Hat and Debian and SuSE each work a little
         differently so three sets of instructions are provided.
-	</p><div class="itemizedlist"><ul type="disc"><li><p>Red Hat:</p><pre class="screen">[root@yourserver src]# <b><tt>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
+	</p><div class="itemizedlist"><ul type="disc"><li><p>Red Hat:</p><pre class="screen">[root@yourserver src]# <b><tt>cp /tmp/openacs-4.6.3/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
 [root@yourserver src]# <b><tt>chown root.root /etc/rc.d/init.d/postgresql</tt></b>
-[root@yourserver src]# <b><tt>chmod 700 /etc/rc.d/init.d/postgresql</tt></b>
+[root@yourserver src]# <b><tt>chmod 755 /etc/rc.d/init.d/postgresql</tt></b>
 [root@yourserver src]# 
-<pre class="action">cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+<pre class="action">cp /tmp/openacs-4.6.3/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/rc.d/init.d/postgresql
-chmod 700 /etc/rc.d/init.d/postgresql</pre></pre><p>Test the script.</p><pre class="screen">[root@yourserver root]# <b><tt>service postgresql stop</tt></b>
+chmod 755 /etc/rc.d/init.d/postgresql</pre></pre><p>Test the script.</p><pre class="screen">[root@yourserver root]# <b><tt>service postgresql stop</tt></b>
 Stopping PostgreSQL: ok
 [root@yourserver root]# </pre><p>If PostgreSQL successfully stopped, then use the following
 		  command to make sure that the script is run appropriately at boot
@@ -159,11 +161,11 @@ Starting PostgreSQL: ok
 [root@yourserver root]#
 <pre class="action">chkconfig --add postgresql
 chkconfig --list postgresql
-service postgresql start</pre></pre></li><li><p>Debian:</p><pre class="screen">root:~# <b><tt>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
+service postgresql start</pre></pre></li><li><p>Debian:</p><pre class="screen">root:~# <b><tt>cp /tmp/openacs-4.6.3/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
 root:~# <b><tt>chown root.root /etc/init.d/postgresql</tt></b>
 root:~# <b><tt>chmod 700 /etc/init.d/postgresql</tt></b>
 root:~# <pre class="action">
-cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+cp /tmp/openacs-4.6.3/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/init.d/postgresql
 chmod 700 /etc/init.d/postgresql</pre></pre><p>Test the script</p><pre class="screen">root:~# <b><tt>/etc/init.d/postgresql stop</tt></b>
 Stopping PostgreSQL: ok
@@ -191,7 +193,7 @@ root:~#</pre></li><li><p>SuSE:</p><div class="note" style="margin-left: 0.5in; m
             <tt>rc.d/</tt> part in each of the
             following commands.
 
-          </p></div><pre class="screen">root:~# <b><tt>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</tt></b>
+          </p></div><pre class="screen">root:~# <b><tt>cp /tmp/openacs-4.6.3/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</tt></b>
 root:~# <b><tt>chown root.root /etc/rc.d/init.d/postgresql</tt></b>
 root:~# <b><tt>chmod 700 /etc/rc.d/init.d/postgresql</tt></b></pre><p>
 
@@ -233,12 +235,31 @@ root:~ # </pre></li></ul></div><p>
       start on runlevel 2 unless you alter the above commands a
       little. This usually isn't a problem as Red Hat defaults to runlevel 3)
 
-    </p></li></ol></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-postgres-moreinfo"></a>Learn more about PostgreSQL</h3></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+    </p></li><li><p><b>Tune postgres.  OPTIONAL. </b>The default values for PostGreSQL are very conservative; we can safely change some of them and improve performance.</p><div class="orderedlist"><ol type="a"><li><p>Change the kernel parameter for maximum shared memory
+          segment size to 128Mb:</p><pre class="screen">[root@yourserver root]# <b><tt>echo 134217728 &gt;/proc/sys/kernel/shmmax</tt></b>
+[root@yourserver root]#</pre><p>Make that change permanent by editing
+          <tt>emacs /etc/sysctl.conf</tt> to
+          add these lines at the end:</p><pre class="programlisting"># increase shared memory limit for postgres
+kernel.shmmax = 134217728</pre></li><li><p>Edit the PostGreSQL config file, <tt>/usr/local/pgsql/data/postgresql.conf</tt> to use more memory.  These values should improve performance in most cases.  (<a href="http://openacs.org/forums/message-view?message_id=94071" target="_top">More information</a>)</p><pre class="programlisting">#       Shared Memory Size
+#
+shared_buffers = 15200      # 2*max_connections, min 16
+
+#       Non-shared Memory Sizes
+#
+sort_mem = 32168            # min 32
+
+
+#       Write-ahead log (WAL)
+#
+wal_files = 3               # range 0-64
+checkpoint_segments = 3     # in logfile segments (16MB each), min 1
+</pre><p>Restart postgres (<tt>service postgres restart</tt>) so that the changes take effect.</p></li></ol></div></li></ol></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-postgres-moreinfo"></a>Learn more about PostgreSQL</h3></div></div><div class="itemizedlist"><ul type="disc"><li><p>
 
           <a href="http://www.postgresql.org/idocs/" target="_top">Official PostgreSQL
           Docs</a>
 
         </p></li><li><p>
+
 
           <a href="http://pascal.scheffers.net/openacs/pgupdate/" target="_top">Migrating
           from 7.0 to 7.1</a>
