@@ -161,9 +161,9 @@ ad_proc -public template_tag_if_interp_expr {} {
         append condition "\[empty_string_p $arg1\]"
       } else {
         # substitute array variables
-        regsub {^"@([a-zA-z0-9_]+)\.([a-zA-z0-9_]+)@"$} $arg1 {\1(\2)} arg1
+        regsub {^"@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_.]+)@"$} $arg1 {\1(\2)} arg1
         # substitute regular variables
-        regsub {^"@([a-zA-z0-9_:]+)@"$} $arg1 {\1} arg1
+        regsub {^"@([a-zA-Z0-9_:]+)@"$} $arg1 {\1} arg1
         append condition "\[template::util::is_nil $arg1\]"
       }
       set next $i
@@ -171,8 +171,8 @@ ad_proc -public template_tag_if_interp_expr {} {
 
     defined {
       # substitute variable references
-      regsub {^"@([a-zA-z0-9_]+)\.([a-zA-z0-9_]+)@"$} $arg1 {\1(\2)} arg1
-      regsub {^"@([a-zA-z0-9_:]+)@"$} $arg1 {\1} arg1
+      regsub {^"@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_.]+)@"$} $arg1 {\1(\2)} arg1
+      regsub {^"@([a-zA-Z0-9_:]+)@"$} $arg1 {\1} arg1
       append condition "\[info exists $arg1\]"
       set next $i
     }

@@ -656,7 +656,7 @@ ad_proc -public template::util::multirow_foreach { name code_text } {
 	  regsub -all "($name).($column_name)" $running_code "$name:${i}($column_name)" running_code
       }
 
-     regsub -all {@([A-z0-9_:\(\)]+)@} $running_code {${\1}} running_code
+     regsub -all {@([a-zA-Z0-9_:\(\)]+)@} $running_code {${\1}} running_code
 
      uplevel {
        eval $running_code
