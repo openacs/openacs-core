@@ -66,13 +66,13 @@ ad_proc apm_guess_file_type { package_key path } {
     level of the package, are considered documentation files.
     <li>Files with a path component named <code>www</code> or <code>admin-www</code>
     are considered content-page files.
-    <li>Files ending in <code>-procs(-)+()*.tcl)</code> or <code>-init.tcl</code> are considered
+    <li>Files under package-key/tcl ending in <code>-procs(-)+()*.tcl)</code> or <code>-init.tcl</code> are considered
     Tcl procedure or Tcl initialization files, respectively.
     <li>File ending in <code>.tcl</code> are considered Tcl utility script files (normally
     found only in the bootstrap installer).
     <li>Files with extension <code>.xml</code> in the directory catalog are
         considered message catalog files.
-    <li>Tcl procs or init files in a test directory are of type test_procs and test_init
+    <li>Tcl procs or init files under package-key/tcl in a test directory are of type test_procs and test_init
         respectively.
     </ol>
 
@@ -143,7 +143,8 @@ ad_proc apm_guess_file_type { package_key path } {
 
     } elseif { [lsearch $components_lesser "www"] >= 0 || [lsearch $components_lesser "admin-www"] >= 0 } {
 	set type "content_page"
-    } elseif { [string equal $extension ".tcl"] } {
+    } elseif { [string equal $extension ".tcl"] && [string equal [lindex $components_lesser 0] "tcl"] } {
+        # A .tcl file residing under dir .../package_key/tcl/
         if { [regexp -- {-(procs|init)(-[0-9a-zA-Z]*)?\.tcl$} [file tail $path] "" kind] } {
             if { [string equal [lindex $components end-1] test] } {
                 set type "test_$kind"
