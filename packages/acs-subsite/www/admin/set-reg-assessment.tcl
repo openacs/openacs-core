@@ -15,10 +15,6 @@ if {$install_p == 0 || $mount_p == ""} {
     ad_script_abort
 }
 set url ""
-if { ![string eq $assessment_id 0]} {
-set package_id [db_string package_id {}]
-set url [apm_package_url_from_id $package_id]
-}
 
 set instance_id [ db_list_of_lists get_instance_id {}]
 set new_url [apm_package_url_from_id [lindex $instance_id 0]]
@@ -39,13 +35,27 @@ set asm_p [llength $assessments]
 
 ad_form -name get_assessment  -form {
     {assessment_id:text(select)
-    {label "[_ acs-subsite.choose_assessment]"}
-    {options $assessments}
-    {help_text "[_ acs-subsite.choose_assessment_help]"}
-    {value $value}} 
-} -on_submit {
-    parameter::set_value -package_id [ad_conn package_id] -parameter AsmForRegisterId -value $assessment_id
-    ad_returnredirect "set-reg-assessment"
+	{label "[_ acs-subsite.choose_assessment]"}
+	{options $assessments}
+	{help_text "[_ acs-subsite.choose_assessment_help]"}
+	{value $value}}
+    {submit:text(submit)
+	{label "   OK   "}}
+        {edit:text(submit)
+	{label "[_ acs-subsite.edit_asm]"}}
+} -after_submit {
+    if {![empty_string_p $edit]} {
+	if { $assessment_id != 0} {
+	    if { ![string eq $assessment_id 0]} {
+		set package_id [db_string package_id {}]
+		set url [apm_package_url_from_id $package_id]
+	    }
+	    ad_returnredirect "${url}asm-admin/one-a?assessment_id=$assessment_id"
+	}
+    }  else {
+	parameter::set_value -package_id [ad_conn package_id] -parameter AsmForRegisterId -value $assessment_id
+	ad_returnredirect "set-reg-assessment"
+    }
 }
 
 ad_return_template
