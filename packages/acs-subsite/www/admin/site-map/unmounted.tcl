@@ -21,20 +21,24 @@ by clicking the \"delete\" option.
 set user_id [ad_conn user_id]
 
 db_foreach packages_normal_select {} {
-    doc_body_append "<li>$name \[<a href=instance-delete?[export_url_vars package_id]>delete</a>\]"
+    doc_body_append "<li>$name \[<a href=\"instance-delete?[export_url_vars package_id]\" onclick=\"return confirm('Are you sure you want to delete package $name');\">delete</a>\]"
+} if_no_rows {
+    doc_body_append "<i>There are no unmounted packages</li>"
 }
 
 doc_body_append "</ul> <p />
 
-The following services are singleton packages and are not meant to
-be mounted anywhere.  Be careful not to delete a service that is in use.
+The following services are singleton packages and are usually not meant to
+be mounted anywhere.  Be careful not to delete a service that is in use as this
+can potentially break the system.
 
 <ul>"
 
 db_foreach packages_singleton_select {} {
-    doc_body_append "<li>$name \[<a href=instance-delete?[export_url_vars package_id]>delete</a>\]"
+    doc_body_append "<li>$name \[<a href=\"instance-delete?[export_url_vars package_id]\" onclick=\"return confirm('Are you sure you want to delete package $name');\">delete</a>\]"
+} if_no_rows {
+    doc_body_append "<i>There are no unmounted singleton packages</li>"
 }
-
 
 doc_body_append "
 </ul>
