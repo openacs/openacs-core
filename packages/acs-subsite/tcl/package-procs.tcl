@@ -826,7 +826,7 @@ ad_proc -public package_instantiate_object {
 	}
     }
 
-    if {!$creation_user} {
+    if {$creation_user == 0} {
         set creation_user ""
     }
 
