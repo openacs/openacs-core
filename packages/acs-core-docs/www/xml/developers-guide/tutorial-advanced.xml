@@ -605,6 +605,32 @@ ad_form -extend \
       o.tree_sortkey"
     </programlisting>
 
+    <para>Here's an example, pulling all of the children for a given
+  parent:</para> 
+
+    <programlisting>
+      SELECT 
+      children.*
+      FROM 
+      some_table parent, 
+      some_table children
+      WHERE 
+      children.tree_sorktey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
+      and parent.tree_sortkey <> children.tree_sortkey
+      and parent.key = :the_parent_key;
+      </programlisting>
+
+    <para>This example does not include the parent. To return the entire subtree including the parent, leave out the non-equals clause:</para>
+
+    <programlisting>
+      SELECT
+      subtree.*
+      FROM some_table parent, some_table subtree
+      WHERE 
+      subtree.tree_sorktey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
+      and parent.key = :the_parent_key;
+    </programlisting>
+
     <para>If you are using the Content Repository, you get a similar
       facility, but the <computeroutput>parent_id</computeroutput>
       column is already there. Note you can do joins with
