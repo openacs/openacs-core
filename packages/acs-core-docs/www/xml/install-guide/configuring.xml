@@ -26,7 +26,7 @@
           <para>Click on Admin > Install Software > Install from OpenACS Repository / Install new application</para>
         </listitem>
         <listitem>
-          Choose Edit This Page and install
+          <para>Choose Edit This Page and install</para>
         </listitem>
         <listitem>
           <para>Follow the instructions within <ulink url="/doc/edit-this-page/install">Edit This Page</ulink> (the link will only work after Edit This Page is installed).</para>

@@ -879,11 +879,11 @@ ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
       <para>Once installed you can enable this by configuring your config file. Make sure your config file supports php (it should have a php section with it). Furthermore add <userinput>index.php</userinput> as the last element to your <computeroutput>directoryfile</computeroutput> directive.</para>
     </sect1>
     <sect1 id="install-squirrelmail">
+      <title>Install Squirrelmail for use as a webmail system for OpenACS</title>
       <authorblurb>
         <para>By <ulink url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink></para>
       </authorblurb>
       
-      <title>Install Squirrelmail for use as a webmail system for OpenACS</title>
       <para>This section is work in progress. It will detail how you can install Squirrelmail as a webmail frontend for OpenACS, thereby neglecting the need to have a seperate webmail package within OpenACS</para>
       <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]# <userinput>cd www</userinput>
 [$OPENACS_SERVICE_NAME www]# <userinput>wget http://cesnet.dl.sourceforge.net/sourceforge/squirrelmail/squirrelmail-1.4.2.tar.gz</userinput>

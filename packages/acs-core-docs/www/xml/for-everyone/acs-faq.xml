@@ -87,19 +87,6 @@ keep your system running properly:</para>
 <listitem><para><ulink url="http://uptime.openacs.org/uptime/about.adp">Uptime
 Installation</ulink>
 </para></listitem>
- <!--
-<listitem><para><ulink url="http://www.arsdigita.com/free-tools/keepalive.html">Keepalive
-Installation</ulink></para></listitem>
-
-  <li><a target=faq_example href=http://arsdigita.com/free-tools/watchdog>WatchDog 
-    Installation</a> 
-
-<listitem><para><ulink url="http://arsdigita.com/free-tools/reporte">Reporte Installation</ulink>
-
-  <li><ulink url="http://www.arsdigita.com/free-tools/cassandrix">Cassandrix</ulink> 
--->
-</para></listitem>
-
 <listitem><para><ulink url="http://photo.net/wtr/asa-audit">ArsDigita
 Server Architecture Audit</ulink> (mainly for OpenACS 3.x)</para></listitem>
 </itemizedlist>

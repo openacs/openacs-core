@@ -143,7 +143,7 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
         </para>
       </formalpara>
     </listitem>
-    <listitem id="aolserver-db-wrapper">
+    <listitem id="aolserver4-db-wrapper">
       <formalpara>
         <title>Add a database-specific wrapper script.</title>
 <para>This script
