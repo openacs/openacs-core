@@ -31,7 +31,9 @@ create index cr_rev_content_index on cr_revisions ( content )
   indextype is ctxsys.context
   parameters ('FILTER content_filter_pref' );
 
-alter index cr_rev_content_index rebuild online parameters ('sync');
+-- DRB: Use the "online" version if you have Oracle Enterprise Edition
+-- alter index cr_rev_content_index rebuild online parameters ('sync');
+alter index cr_rev_content_index rebuild  parameters ('sync');
 
 ------------------------------------------------------------
 -- Set up an XML index for searching attributes
@@ -104,5 +106,7 @@ end;
 /
 show errors
 
-alter index cr_rev_attribute_index rebuild online parameters ('sync');
+-- DRB: Use the "online" version if you have Oracle Enterprise Edition
+-- alter index cr_rev_attribute_index rebuild online parameters ('sync');
+alter index cr_rev_attribute_index rebuild parameters ('sync');
 
