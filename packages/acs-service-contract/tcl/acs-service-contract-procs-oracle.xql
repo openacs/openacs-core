@@ -12,14 +12,11 @@ select acs_sc_binding.exists_p(:contract,:impl) from dual
 
 <fullquery name="acs_sc_get_alias.get_alias">
 <querytext>
-	select 
-	    element_name, 
-	    acs_sc_msg_type.get_name(element_msg_type_id) as element_msg_type_name,
-	    element_msg_type_isset_p,
-	    element_pos
-	from acs_sc_msg_type_elements
-	where msg_type_id = :operation_outputtype_id
-	order by element_pos asc
+   select impl_alias, impl_pl 	 
+         from   acs_sc_impl_aliases 	 
+         where  impl_contract_name = :contract 	 
+         and    impl_operation_name = :operation 	 
+         and    impl_name = :impl
 </querytext>
 </fullquery>
 
