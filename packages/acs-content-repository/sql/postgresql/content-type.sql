@@ -531,7 +531,7 @@ insert into cr_dummy (val) values (null);
 
 create function cr_dummy_ins_del_tr () returns opaque as '
 begin
-        raise execption ''Only updates are allowed on cr_dummy'';
+        raise exception ''Only updates are allowed on cr_dummy'';
         return null;
 end;' language 'plpgsql';
 
