@@ -3,4 +3,4 @@
   <property name="context">@context@</property>
   <property name="focus">application.package_key</property>
 
-<formtemplate id="application" style="standard-lars"></formtemplate>
+<formtemplate id="application"></formtemplate>
