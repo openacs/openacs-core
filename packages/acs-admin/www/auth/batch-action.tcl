@@ -9,21 +9,18 @@ ad_page_contract {
 
 auth::sync::entry::get -entry_id $entry_id -array batch_action
 
-set page_title "Batch Action \"$batch_action(entry_id)\""
+set page_title "One batch action"
 
 set context [list [list "." "Authentication"] \
                   [list [export_vars -base authority { {authority_id $batch_action(authority_id)} }] \
-                        "Authority\"$batch_action(authority_pretty_name)\""] \
-                  [list [export_vars -base batch-job {{job_id $batch_action(job_id)}}] "One Job"] \
+                        "$batch_action(authority_pretty_name)"] \
+                  [list [export_vars -base batch-job {{job_id $batch_action(job_id)}}] "One batch job"] \
                  $page_title]
 
 ad_form -name batch_action_form \
         -mode display \
         -display_buttons {} \
         -form {
-            {entry_id:text(inform)
-                {label "Entry ID"}                
-            }
             {entry_time:text(inform)
                 {label "Timestamp"}
             }

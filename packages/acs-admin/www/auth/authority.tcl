@@ -8,9 +8,9 @@ ad_page_contract {
     {ad_form_mode display}
 }
 
+set page_title ""
 if { [exists_and_not_null authority_id] } {
     # Initial request in display or edit mode or a submit of the form
-    set page_title "One Authority"
     set authority_exists_p [db_string authority_exists_p {
         select count(*)
         from auth_authorities
@@ -22,8 +22,6 @@ if { [exists_and_not_null authority_id] } {
     set ad_form_mode edit
     set authority_exists_p 0
 }
-
-set context [list [list "." "Authentication"] $page_title]
 
 set form_widgets_full {
 
@@ -133,21 +131,37 @@ if { $local_authority_p } {
 ad_form -name authority \
         -mode $ad_form_mode \
         -form $form_widgets \
--on_request {
-} -edit_request {
+        -edit_request {
 
     auth::authority::get -authority_id $authority_id -array element_array
+
+    set page_title $element_array(pretty_name)
 
     foreach element_name [array names element_array] {
         set $element_name $element_array($element_name)
     }
-
+    
     if { !$local_authority_p } {
         set help_contact_text [template::util::richtext::create]
         set help_contact_text [template::util::richtext::set_property contents $help_contact_text $element_array(help_contact_text)]
+
+        if { [empty_string_p $element_array(help_contact_text_format)] } {
+            set element_array(help_contact_text_format) "text/enhanced"
+        }
+
         set help_contact_text [template::util::richtext::set_property format $help_contact_text  $element_array(help_contact_text_format)]
+        
+        # Parameter links for implementations
+        foreach element_name [auth::authority::get_sc_impl_columns] {
+            # Only offer link if there is an implementation chosen
+            if { [exists_and_not_null element_array($element_name)] } {
+                set old_label [element get_property authority $element_name label]
+                set configure_url [export_vars -base authority-parameters { authority_id {column_name $element_name}}]
+                element set_properties authority $element_name -label "$old_label <a href=\"$configure_url\">set parameters</a>"
+            }
+        }
     }
-    
+
 } -new_data {
 
     foreach var_name [template::form::get_elements -no_api authority] {
@@ -206,12 +220,16 @@ list::create \
             label "Problems"
             html { align right }
         }
+        interactive_pretty {
+            label "Interactive"
+            html { align center }
+        }
     }
 
 set display_batch_history_p [expr $authority_exists_p && [string equal $ad_form_mode "display"]]
 if { $display_batch_history_p } {
     
-    db_multirow -extend { job_url start_time_pretty end_time_pretty } batch_jobs select_batch_jobs {
+    db_multirow -extend { job_url start_time_pretty end_time_pretty interactive_pretty } batch_jobs select_batch_jobs {
         select job_id,
                to_char(job_start_time, 'YYYY-MM-DD HH24:MI:SS') as start_time_ansi,
                to_char(job_end_time, 'YYYY-MM-DD HH24:MI:SS') as end_time_ansi,
@@ -222,7 +240,8 @@ if { $display_batch_history_p } {
                 (select count(e2.entry_id)
                  from   auth_batch_job_entries e2
                  where  e2.job_id = auth_batch_jobs.job_id
-                 and    e2.success_p = 'f') as num_problems
+                 and    e2.success_p = 'f') as num_problems,
+               interactive_p
         from auth_batch_jobs
         where authority_id = :authority_id
     } {
@@ -230,5 +249,21 @@ if { $display_batch_history_p } {
 
         set start_time_pretty [lc_time_fmt $start_time_ansi "%x %X"]
         set end_time_pretty [lc_time_fmt $end_time_ansi "%x %X"]
+
+        set interactive_pretty [ad_decode $interactive_p "t" "Yes" "No"]
     }
+}
+
+set context [list [list "." "Authentication"] $page_title]
+
+set batch_sync_run_url [export_vars -base batch-job-run { authority_id }]
+
+if { $authority_exists_p && !$local_authority_p && [empty_string_p [element get_property authority help_contact_text value]] } {
+    error hello
+    # TODO: Ask Lars how we can avoid the problem with the empty format field
+    # without this kludge
+    set help_contact_text [template::util::richtext::create]
+    set help_contact_text [template::util::richtext::set_property format $help_contact_text "text/enhanced"]
+
+    element set_properties authority help_contact_text -value $help_contact_text
 }
