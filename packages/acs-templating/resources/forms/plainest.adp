@@ -77,22 +77,13 @@
 
 </td></tr>
 
+<if @buttons:rowcount@ gt 0>
 <if @form_properties.has_submit@ nil>
   <tr>
     <td align="center">
-      <if @form_properties.mode@ not nil and @form_properties.mode@ ne "edit">
-        <input type=submit name="__edit" value="     Edit     ">
-      </if>
-      <else>
-        <multiple name="buttons">
-          <if @buttons.name@ eq "ok">
-            <input type="submit" name="@buttons.name@" value="      @buttons.label@      ">
-          </if>
-          <else>
-            <input type="submit" name="@buttons.name@" value="@buttons.label@">
-          </else>
-        </multiple>
-      </else>
+      <multiple name="buttons">
+        <input type="submit" name="@buttons.name@" value="@buttons.label@">
+      </multiple>
     </td>
   </tr>
 </if>

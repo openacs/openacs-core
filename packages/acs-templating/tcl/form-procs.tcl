@@ -26,6 +26,9 @@ ad_proc -public template::form { command args } {
     their arguments.
     
     @see template::form::create
+    @see template::form::get_button
+    @see template::form::get_action
+    @see template::form::set_properties
     @see template::form::exists
     @see template::form::export
     @see template::form::get_combined_values
@@ -70,14 +73,6 @@ ad_proc -public template::form::create { id args } {
 
   template::util::get_opts $args
 
-  if { [exists_and_not_null opts(cancel_url)] && ![exists_and_not_null opts(cancel_label)] } {
-    set opts(cancel_label) "Cancel"
-  }
-
-  if { [exists_and_not_null opts(cancel_url)] } {
-    lappend opts(buttons) [list $opts(cancel_label) cancel]
-  }
-
   set elements [list]
 
   # check whether this form is being submitted
@@ -87,19 +82,25 @@ ad_proc -public template::form::create { id args } {
     # request is the magic ID for the form holding query parameters
     set submission 1
   } else {
+    # If there's a form:id argument, and it's the ID of this form,
+    # we're being submitted
     set submission [string equal $id [ns_queryget form:id]]
   }
 
-  if { $submission && ![empty_string_p [ns_queryget "cancel"]] && [exists_and_not_null opts(cancel_url)]} {
-    # If the user hit a button named "cancel", 
+  set formbutton [get_button $id]
+
+  # If the user hit a button named "cancel", redirect and about
+  if { $submission && [string equal $formbutton "cancel"] && [exists_and_not_null opts(cancel_url)]} {
     ad_returnredirect $opts(cancel_url)
     ad_script_abort
   }
 
-  if { ![empty_string_p [ns_queryget "__edit"]] } {
-    # The magic button named __edit means we should now be in edit mode
-    set submission 0
+  set formaction [get_action $id]
+
+  # If we were in display mode, and a button was clicked, we should be in edit mode now
+  if { $submission && [string equal [ns_queryget "form:mode"] "display"] } {
     set opts(mode) "edit"
+    set submission 0
   }
 
   # add elements specified at the time the form is created
@@ -118,6 +119,100 @@ ad_proc -public template::form::create { id args } {
   }
 }
  
+ad_proc -public template::form::set_properties { id args } {
+    Set properties for a form
+
+    @param id  The ID of an ATS form object.
+    @param args Properties to set 
+} {
+  set level [template::adp_level]
+
+  # form properties 
+  upvar #$level $id:properties opts
+
+  template::util::get_opts $args
+}
+
+ad_proc -public template::form::get_button { id } {
+    Find out which button was clicked
+
+    @param id  The ID of an ATS form object.
+    @return the name of the button clicked
+} {
+  set level [template::adp_level]
+
+  # keep form properties and a list of the element items
+  upvar #$level $id:button formbutton
+    
+  # If we've already found the button, just return that
+  if { [info exists formbutton] } {
+    return $formbutton
+  }
+
+  # Otherwise, find out now
+
+  set formbutton {}
+
+  # If the form isn't being submitted at all, no button was clicked
+  if { ![string equal $id [ns_queryget form:id]] } {
+    return {}
+  }
+
+  # Search the submit form for the button
+  set form [ns_getform]
+
+  if { ![empty_string_p $form] } {
+      set size [ns_set size $form]
+      for { set i 0 } { $i < $size } { incr i } {
+          if { [string match "formbutton:*" [ns_set key $form $i]] } {
+              set formbutton [string range [ns_set key $form $i] [string length "formbutton:"] end]
+              break
+          }
+      }
+  }
+
+  return $formbutton
+}
+
+ad_proc -public template::form::get_action { id } {
+    Find out which action is in progress
+
+    @param id  The ID of an ATS form object.
+    @return the name of the action in progress
+} {
+  set level [template::adp_level]
+
+  # keep form properties and a list of the element items
+  upvar #$level $id:action formaction
+    
+  # If we've already found the action, just return that
+  if { [info exists formaction] } {
+    return $formaction
+  }
+
+  # Otherwise, find out now
+
+  set formaction {}
+
+  # If the form isn't being submitted at all, there's no action
+  if { ![string equal $id [ns_queryget "form:id"]] } {
+    return {}
+  }
+
+  set formbutton [get_button $id]
+
+  # If we were in display mode, and a button was clicked, we should be in edit mode now
+  if { [string equal [ns_queryget "form:mode"] "display"] && ![empty_string_p $formbutton] } {
+    set formaction $formbutton
+    return $formaction
+  }
+
+  # Otherwise, there should be a form:action variable in the form
+  set formaction [ns_queryget "form:action"]
+
+  return $formaction
+}
+
 ad_proc -public template::form::exists { id } {
     Determine whether a form exists by checking for its data structures.
 
@@ -143,6 +238,11 @@ ad_proc -private template::form::template { id { style "" } } {
 } {
   get_reference 
 
+  #
+  # Elements
+  #
+
+
   set elements:rowcount 0
 
   foreach element_ref $elements {
@@ -154,11 +254,45 @@ ad_proc -private template::form::template { id { style "" } } {
     set "elements:${elements:rowcount}(rownum)" ${elements:rowcount}
   }
 
+  #
+  # Buttons
+  #
+
+  if { [exists_and_not_null form_properties(cancel_url)] && ![exists_and_not_null form_properties(cancel_label)] } {
+    set form_properties(cancel_label) "Cancel"
+  }
+
+  if { [exists_and_not_null form_properties(cancel_url)] } {
+    lappend form_properties(edit_buttons) [list $form_properties(cancel_label) cancel]
+  }
+
+  if { ![template::util::is_nil form_properties(has_submit)] && [template::util::is_true $form_properties(has_submit)] } {
+      set form_properties(edit_buttons) {}
+  }
+
+  if { ![template::util::is_nil form_properties(has_edit)] && [template::util::is_true $form_properties(has_edit)] } {
+      set form_properties(display_buttons) {}
+  }
+
+  if { ![template::util::is_nil form_properties(actions)] && [template::util::is_true $form_properties(actions)] } {
+      set form_properties(display_buttons) $form_properties(actions)
+  }
+
   set buttons:rowcount 0
-  foreach button $form_properties(buttons) {
+
+  foreach button $form_properties(${form_properties(mode)}_buttons) {
       incr buttons:rowcount
-      set "buttons:${buttons:rowcount}(label)" [lindex $button 0]
-      set "buttons:${buttons:rowcount}(name)" [lindex $button 1]
+
+      set label [lindex $button 0]
+      set name [lindex $button 1]
+
+      if { [string equal $name "ok"] } {
+          # We hard-code the OK button to be wider than it otherwise would
+          set "buttons:${buttons:rowcount}(label)" "       $label       "
+      } else {
+          set "buttons:${buttons:rowcount}(label)" $label
+      }
+      set "buttons:${buttons:rowcount}(name)" "formbutton:$name"
   }
   
   if { [string equal $style {}] } { set style standard }
@@ -302,7 +436,15 @@ ad_proc -private template::form::render { id tag_attributes } {
 
   append output ">"
 
-  append output "<input type=\"hidden\" name=\"form:id\" value=\"$id\" />"
+  # Export form ID and current form mode
+  append output [export_vars -form { { form\:id $id } { form\:mode $properties(mode) } }]
+  
+  # If we're in edit mode, output the action
+  upvar #$level $id:action form_action
+  if { [string equal $properties(mode) "edit"] && [exists_and_not_null form_action] } {
+    upvar #$level $id:action action
+    append output [export_vars -form { { form\:action $form_action } }]
+  }
 
   return $output
 }
