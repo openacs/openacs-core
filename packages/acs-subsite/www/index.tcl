@@ -17,9 +17,13 @@ ad_page_contract {
     user_id:onevalue
 }
 
+set main_site_p [string equal [ad_conn package_url] "/"]
+
 # We may have to redirect to some application page
 set redirect_url [parameter::get -parameter IndexRedirectUrl -default {}]
-
+if { [empty_string_p $redirect_url] && $main_site_p } {
+    set redirect_url [parameter::get_from_package_key -package_key acs-kernel -parameter IndexRedirectUrl]
+}
 if { ![empty_string_p $redirect_url] } {
     ad_returnredirect $redirect_url
     ad_script_abort
@@ -49,8 +53,6 @@ set group_join_policy [group::join_policy -group_id $group_id]
 
 set group_member_p [group::member_p -group_id $group_id -user_id $user_id]
 set group_admin_p [group::admin_p -group_id $group_id -user_id $user_id]
-
-set main_site_p [string equal [ad_conn package_url] "/"]
 
 set can_join_p [expr !$group_admin_p && $group_member_p == 0 && $user_id != 0 && ![string equal $group_join_policy "closed"]]
 
