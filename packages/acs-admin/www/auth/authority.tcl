@@ -33,6 +33,13 @@ set form_widgets_full {
         {section "General"}
     }        
 
+    {short_name:text,optional
+        {html {size 50}}
+        {label "Short Name"}
+        {mode {[ad_decode $local_authority_p 1 "display" ""]}}
+        {help_text "This is used when referring to the authority in parameters etc. Even if you need to change the display name above, this should stay unchanged."}
+    }        
+
     {enabled_p:text(radio)
         {label "Enabled"}
         {options {{Yes t} {No f}}}
@@ -108,12 +115,14 @@ set local_authority_p 0
 if { $authority_exists_p && [string equal $authority_id [auth::authority::local]] } {
     set local_authority_p 1
 }
+
 if { $local_authority_p } {
     # Local authority
     # The form elements we use for local authority
     set local_editable_elements {
         authority_id
         pretty_name
+        short_name
         forgotten_pwd_url
         change_pwd_url
         register_url
@@ -168,7 +177,6 @@ ad_form -name authority \
     }
 
     set element_array(sort_order) ""
-    set element_array(short_name) ""
 
     if { !$local_authority_p } {
         set element_array(help_contact_text) [template::util::richtext::get_property contents $help_contact_text]
@@ -190,6 +198,9 @@ ad_form -name authority \
     if { !$local_authority_p } {
         set element_array(help_contact_text) [template::util::richtext::get_property contents $help_contact_text]
         set element_array(help_contact_text_format) [template::util::richtext::get_property format $help_contact_text]
+        if { [info exists element_array(short_name)] } {
+            unset element_array(short_name)
+        }
     }
 
     auth::authority::edit \
