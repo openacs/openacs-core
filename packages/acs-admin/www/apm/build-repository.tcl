@@ -54,7 +54,7 @@ for { } { $i < [llength $lines] } { incr i } {
     if { ![regexp {^\s+([^:]+):\s+([0-9.]+)} [lindex $lines $i] match tag_name version_name] } {
         break
     }
-    if { [regexp {^oacs-(.*)-final$} $tag_name match oacs_version] } {
+    if { [regexp {^(oacs|openacs)-(.*)-final$} $tag_name match ignore oacs_version] } {
         
         set major_version [lindex [split $oacs_version "-"] 0]
         set minor_version [lindex [split $oacs_version "-"] 1]
@@ -82,7 +82,6 @@ set channel_tag($head_channel) HEAD
 
 
 ns_write "<li>Channels are: [array get channel_tag]\n"
-
 
 
 #----------------------------------------------------------------------
