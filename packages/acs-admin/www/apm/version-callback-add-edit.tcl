@@ -12,10 +12,7 @@ ad_page_contract {
 
 db_1row package_version_info "select pretty_name, version_name from apm_package_version_info where version_id = :version_id"
 
-set page_title "Add Tcl Callback for $pretty_name $version_name"
-set context_bar [ad_context_bar $page_title]
-set return_url "version-callbacks?version_id=$version_id"
-
+set return_url "version-callbacks?[export_vars { version_id }]"
 
 # Set default values for type and proc name
 if { [empty_string_p $type] } {
@@ -28,13 +25,17 @@ if { [empty_string_p $type] } {
     }
     set type_value [lindex $type_options 0]
     set proc_value ""
+    set page_title "Add Tcl Callback"
 } else {
     # We are in edit mode
     set edit_mode_p 1
-    set type_options ""
+    set type_options [list [list $type $type]]
     set type_value $type
     set proc_value [apm_get_callback_proc -type $type -version_id $version_id]
+    set page_title "Edit Tcl Callback"
 }
+
+set context_bar [ad_context_bar [list "version-view?[export_vars { version_id }]" "$pretty_name $version_name"] [list $return_url "Tcl Callbacks"] $page_title]
 
 set type_label "Tcl procedure name"
 ad_form -name callback -cancel_url $return_url -form {
@@ -76,8 +77,7 @@ ad_form -name callback -cancel_url $return_url -form {
 }
 
 if { $edit_mode_p } {
-    element set_properties callback type -value $type_value -widget hidden
-    element create callback type_inform -widget inform -value $type -label $type_label
+    element set_properties callback type -mode display
 }
 
 ad_return_template
