@@ -536,7 +536,6 @@ ad_proc -private template::list::get_url {
 
     return [uplevel $list_properties(ulevel) \
                 [list export_vars \
-                     -no_empty \
                      -base [ad_conn url] \
                      -exclude $exclude \
                      -override $override \
@@ -906,8 +905,10 @@ ad_proc -private template::list::prepare_for_rendering {
                 if { [exists_and_not_null __element_properties(aggregate)] } {
                     # Update totals
                     incr __agg_counter($__element_properties(name))
-                    set __agg_sum($__element_properties(name)) \
-                        [expr $__agg_sum($__element_properties(name)) + [set $__element_properties(name)]]
+                    if { ![string equal $__element_properties(aggregate) "count"] } {
+                        set __agg_sum($__element_properties(name)) \
+                            [expr $__agg_sum($__element_properties(name)) + [set $__element_properties(name)]]
+                    }
 
                     # Check if the value of the groupby column has changed
                     if { [exists_and_not_null $__list_properties(groupby)] } {
