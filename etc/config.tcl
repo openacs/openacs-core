@@ -328,6 +328,11 @@ if { $database == "oracle" } {
     ns_param   postgres       ${bindir}/nspostgres.so  ;# Load PostgreSQL driver
 }
 
+if { $database == "oracle" } {
+    ns_section "ns/db/driver/ora8"
+    ns_param  maxStringLogLength -1
+}
+
 # 
 # Database Pools: This is how AOLserver  ``talks'' to the RDBMS. You need 
 # three for OpenACS: main, log, subquery. Make sure to replace ``yourdb'' 
