@@ -804,6 +804,8 @@ where o.object_id = pa.party_id
   and m.container_id = m.group_id
   and m.rel_type = 'membership_rel';
 
+drop function acs__add_user(int4,varchar,timestamptz,int4,varchar,varchar,varchar,varchar,varchar,bpchar,bpchar,varchar,varchar,varchar,bool,varchar);
+
 create or replace function acs__add_user (
     integer,      -- user_id
     varchar,      -- object_type
