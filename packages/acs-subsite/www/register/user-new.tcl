@@ -1,49 +1,82 @@
 ad_page_contract {
+    Page for users to register themselves on the site.
 
-    Registration form for a new user.  The password property should be set using 
-    <code>ad_set_client_property register</code>.
-
-    @cvs-id  $Id$
-
-} {
-    email:notnull
-    return_url:optional,nohtml
-    { persistent_cookie_p 0 }
-} -properties {
-    system_name:onevalue
-    export_vars:onevalue
-    password:onevalue
-    email:onevalue
+    @cvs-id $Id$
+} -validate {
+    password_1 {
+	if {![string equal $password_1 $password_2]} {
+	    ad_complain "[_ acs-subsite.lt_The_passwords_youve_e]"
+	}
+    }
 }
 
-set password [ad_get_client_property register password]
+ad_form -name register -form [auth::get_registration_form_elements] -on_submit {
 
-# Check if the email address makes sense.
-# We check it here, because this is the last chance the user has to change it
+    array set creation_info [auth::create_user \
+                            -first_names $first_names \
+                            -last_name $last_name \
+                            -email $email \
+                            -url $url \
+                            -username $username \
+                            -password $password_1 \
+                            -secret_question $secret_question \
+                            -secret_answer $secret_answer]
 
-if { ![util_email_valid_p $email] } {
-    ad_return_complaint 1 "<li>The email address that you typed doesn't look right to us.  Examples of valid email addresses are 
-<ul>
-<li>Alice1234@aol.com
-<li>joe_smith@hp.com
-<li>pierre@inria.fr
-</ul>"
-    return
+    # Handle registration problems
+
+    switch $creation_info(creation_status) {
+        ok {
+            # Continue below
+        }
+        default {
+            # Adding the error to just some element, not sure where it makes sense
+            # AFAIK, we can't add errors to the form in general ...
+            ad_form_complain -element first_names -error creation_info(auth_message)
+            
+            # Element messages
+            foreach { elm_name elm_error } $creation_info(element_messages) {
+                ad_form_complain -element $elm_name -error $elm_error
+            }
+            continue
+        }
+    }
+
+    switch $creation_info(account_status) {
+        ok {
+            # Continue below
+        }
+        default {
+            error $creation_info(account_message)
+            # Display the message on a separate page
+            set message $creation_info(account_message)
+            ad_return_template "display-message"
+            # TODO: Double-check that this actually causes us to break out of ad_form and have the template display
+            return
+        }
+    }
+
+} -after_submit {
+    # User is registered and logged in
+
+    if { ![exists_and_not_null return_url] } {
+        # Redirect to subsite home page.
+        set return_url [subsite::get_element -element url]
+    }
+
+    # TODO: 
+    # SIMON: Handle creation_message
+
+    # Handle account_message
+    if { ![empty_string_p $creation_info(account_message)] } {
+        set message creation_info(account_message)
+        set continue_url $return_url
+        set continue_label "Continue working with [ad_system_name]"
+        ad_return_template "display-message"
+        return    
+    } else {
+        # No messages
+        ad_returnredirect $return_url
+        ad_script_abort
+   }
 }
 
-# we're going to ask this guy to register
-if { ! [db_0or1row find_person "" ] } {
-    set user_id [db_nextval acs_object_id_seq]
-    set first_names ""
-    set last_name ""
-} 
-
-db_release_unused_handles
-
-set system_name [ad_system_name]
-set export_vars [export_form_vars email return_url user_id]
-set no_require_password_p [ad_parameter RegistrationProvidesRandomPasswordP user-login 0]
-set custom_question_p [ad_parameter UseCustomQuestionForPasswordReset user-login 1]
-set require_question_p [ad_parameter RequireQuestionForPasswordResetP user-login 1]
-
-ad_return_template

@@ -238,7 +238,7 @@ ad_proc -public auth::create_user {
 
      set authority_id [auth::authority::local]
 
-     set create_info [auth::registration::Register \
+     array set create_info [auth::registration::Register \
                           -authority_id $authority_id \
                           -username $username \
                           -password $password \
@@ -248,6 +248,8 @@ ad_proc -public auth::create_user {
                           -url $url \
                           -secret_question $secret_question \
                           -secret_answer $secret_answer]
+
+     return [array get create_info]
 
      # TODO: Check that return codes are correct
 
@@ -262,7 +264,7 @@ ad_proc -public auth::get_registration_elements {
     Get the list of required/optional elements for user registration.
     
     @return Array-list with two entries, both being a subset of 
-            (username, password, first_names, last_name, email, url, secret_question, secret_answer).
+            (username, password_1, password_2, first_names, last_name, email, url, secret_question, secret_answer).
             
     <ul>
       <li> required: a list of required elements
@@ -294,32 +296,34 @@ ad_proc -public auth::get_registration_form_elements {
         first_names text
         last_name text
         url text
-        password text
+        password_1 text
+        password_2 text
         secret_question text
         secret_answer text
     }
 
     array set widgets {
         username text 
-        email test
+        email text
         first_names text
         last_name text
         url text
-        password text 
+        password_1 password
+        password_2 password
         secret_question text
         secret_answer text
     }
     
     array set labels [list \
-        username [_ acs-subsite.Username] \
-        email [_ acs-subsite.Your_email_address] \
-        first_names [_ acs-subsite.First_names] \
-        last_name [_ acs-subsite.Last_name] \
-        url [_ acs-subsite.lt_Personal_Home_Page_UR] \
-        password [_ acs-subsite.Your_password] \
-        secret_question [_ acs-subsite.Question] \
-        secret_answer [_ acs-subsite.Answer] \
-    ]
+                          username [_ acs-subsite.Username] \
+                          email [_ acs-subsite.Your_email_address] \
+                          first_names [_ acs-subsite.First_names] \
+                          last_name [_ acs-subsite.Last_name] \
+                          url [_ acs-subsite.lt_Personal_Home_Page_UR] \
+                          password_1 [_ acs-subsite.Your_password] \
+                          password_2 [_ acs-subsite.lt_Password_Confirmation] \
+                          secret_question [_ acs-subsite.Question] \
+                          secret_answer [_ acs-subsite.Answer]]
 
     array set html {
         username {size 30}
@@ -327,7 +331,8 @@ ad_proc -public auth::get_registration_form_elements {
         first_names {size 20}
         last_name {size 25}
         url {size 50 value "http://"}
-        password {size 20}
+        password_1 {size 20}
+        password_2 {size 20}
         secret_question {size 30}
         secret_answer {size 30}
     }
