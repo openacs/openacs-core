@@ -131,12 +131,12 @@
 <fullquery name="cr_import_content.content_revision_new">
       <querytext>
          begin
-           :1 := image.new_revision (
-             item_id       => :item_id,
-             revision_id   => :revision_id,
+           :1 := content_revision.new (
              title         => :title,
              description   => :description,
              mime_type     => :mime_type,
+             item_id       => :item_id,
+             revision_id   => :revision_id,
              creation_user => :creation_user,
              creation_ip   => :creation_ip
            );
