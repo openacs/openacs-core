@@ -188,7 +188,7 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
   }
 
   # Make sure that a live revision exists
-  if [empty_string_p $rev_id] {
+  if { [empty_string_p $rev_id] } {
       set live_revision [db_string get_live_revision ""]
 
       if { [template::util::is_nil live_revision] } {
@@ -203,11 +203,11 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
   variable template_path
 
   # Get the template 
-  db_1row get_template_url "" -column_array info
+  set template_found_p [db_0or1row get_template_url "" -column_array info]
 
-  if { [string equal $info(template_url) {}] } { 
-    ns_log notice "content::init: No template found to render content item $item_id in context '$context'"
-    return 0
+  if { !$template_found_p || [string equal $info(template_url) {}] } { 
+      ns_log notice "content::init: No template found to render content item $item_id in context '$context'"
+      return 0
   }
 
   set url $info(template_url)
@@ -218,7 +218,7 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
   # (OpenACS - DanW, dcwickstrom@earthlink.net)
 
   set file ${root_path}/${url}.adp
-  if ![file exists $file] {
+  if { ![file exists $file] } {
 
       file mkdir [file dirname $file]
       set text [content::get_content_value $info(template_id)]
@@ -226,7 +226,7 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
   }
 
   set file ${root_path}/${url}.tcl
-  if ![file exists $file] {
+  if { ![file exists $file] } {
 
       file mkdir [file dirname $file]
       set text "\# Put the current revision's attributes in a onerow datasource named \"content\".
@@ -254,8 +254,6 @@ ad_return_template
 
       template::util::write_file $file $text
   }
-
-
 
   return 1
 }
