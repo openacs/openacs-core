@@ -1,6 +1,6 @@
   <master>
-    <property name="title">Cache Control</property>
-    <property name="context">"Cache data"</property>
+    <property name="title">@page_title;noquote@</property>
+    <property name="context">@context;noquote@</property>
     <h4>util_memoize caches</h4>
 
     <blockquote>

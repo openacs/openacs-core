@@ -6,6 +6,9 @@ ad_page_contract {
     raw_date
 }
 
+set page_title "One Entry"
+set context [list [list "../developer" "Developer's Administration"] [list "." "Cache Control"] $page_title]
+
 if {[catch {set pair [ns_cache get util_memoize $key]} errmsg]} {
     # backup plan, find it again because the key doesn't always 
     # pass through cleanly

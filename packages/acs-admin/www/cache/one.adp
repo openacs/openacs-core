@@ -1,6 +1,6 @@
   <master>
-    <property name="title">util_memoize: @pattern;noquote@</property>
-    <property name="context">{./ "Cache data"} "one entry"</property>
+    <property name="title">@page_title;noquote@</property>
+    <property name="context">@context;noquote@</property>
 
     <form action="flush" method="post">
       <input type="hidden" name="type" value="one">
@@ -21,4 +21,3 @@
       @value@
     </blockquote>
 
-    <p align=right><font size=-1><code>$Id$</code></font></p>

@@ -6,6 +6,8 @@ ad_page_contract {
     {full "f"}
 }
 
+set page_title "Search"
+set context [list [list "../developer" "Developer's Administration"] [list "." "Cache Control"] $page_title]
 
 set cached_names [ns_cache names util_memoize]
 #      ns_log notice "ep_flush_list_cache found [llength $cached_names] names cached"

@@ -2,6 +2,9 @@ ad_page_contract {
 } {
 }
 
+set page_title "Cache Control"
+set context [list [list "../developer" "Developer's Administration"] $page_title]
+
 template::multirow create caches name entries size max flushed hit_rate
 
 foreach cache [lsort -dictionary [ns_cache_names]] {
