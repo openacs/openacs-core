@@ -4,9 +4,9 @@
 
     <fullquery name="search_indexer.search_observer_queue_entry">
         <querytext>
-            select object_id, date, event
+            select object_id, event_date, event
             from search_observer_queue
-            order by date asc
+            order by event_date asc
         </querytext>
     </fullquery>
 

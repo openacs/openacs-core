@@ -9,7 +9,7 @@
             begin
                 search_observer.dequeue(
                     object_id => :object_id,
-                    date => :date,
+                    event_date => :date,
                     event => :event
                 );
             end;
