@@ -3,14 +3,14 @@
 # Expects:
 #   subsite_id - optional, defaults to nearest subsite
 #   return_url - optional, defaults to Your Account
-#   
+# Optional:
+#   authority_id
+#   username
+#
 
 if { ![exists_and_not_null package_id] } {
     set subsite_id [subsite::get_element -element object_id]
 }
-
-
-
 
 # Persistent login
 # The logic is: 
@@ -43,17 +43,11 @@ set token_id [sec_get_random_cached_token_id]
 set token [sec_get_token $token_id]
 set hash [ns_sha1 "$time$token_id$token"]
 
+set authority_options [auth::authority::get_authority_options]
 
-# TODO: Move this into a library proc
-set authority_options [db_list_of_lists select_authorities {
-    select pretty_name, authority_id
-    from   auth_authorities
-    where  enabled_p = 't'
-    and    auth_impl_id is not null
-    order  by sort_order
-}]
+set forgotten_pwd_url [export_vars -base [auth::password::get_forgotten_url] { username authority_id }]
 
-set forgotten_pwd_url [auth::password::get_forgotten_url]
+set register_url "[subsite::get_element -element url]register/user-new"
 
 ad_form -name login -html { style "margin: 0px;" } -form {
     {return_url:text(hidden)}
