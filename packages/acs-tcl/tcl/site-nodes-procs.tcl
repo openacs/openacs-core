@@ -155,8 +155,13 @@ ad_proc -public site_node::unmount {
 ad_proc -private site_node::init_cache {} {
     initialize the site node cache
 } {
-    set root_node_id [db_string get_root_node_id {}]
-    site_node::update_cache -sync_children -node_id $root_node_id
+    nsv_array reset site_nodes [list]
+    nsv_array reset site_node_urls [list]
+
+    set root_node_id [db_string get_root_node_id {} -default {}]
+    if { ![empty_string_p $root_node_id] } {
+        site_node::update_cache -sync_children -node_id $root_node_id
+    }
 }
 
 ad_proc -private site_node::update_cache {
