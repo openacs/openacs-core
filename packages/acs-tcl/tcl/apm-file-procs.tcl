@@ -54,13 +54,46 @@ ad_proc -public apm_workspace_install_dir {} {
     }
 }
 
+ad_proc -public apm_file_type_names {} {
+    Returns an array list with filetypes as keys and
+    filetype pretty names as values.
+
+    @author Peter Marklund
+} {
+    return {
+        documentation "Documentation"
+        tcl_procs "Tcl procedure library"
+        tcl_init "Tcl initialization"
+        tcl_util "Tcl utility script"
+        content_page "Content page"
+        package_spec "Package specification"
+        sql_data "SQL Data"
+        ctl_file "SQL data loader control"
+        data_model "Data model"
+        data_model_create "Data model installation"
+        data_model_drop "Data model deinstallation"
+        data_model_upgrade "Data model upgrade"
+        java_code "Java code"
+        java_archive "Java archive"
+        query_file "Query file"
+        template "Template file"
+        shell "Shell utility"
+        sqlj_code "SQLJ library"
+        message_catalog "Message Catalog"
+    }
+}
 
 ad_proc -public apm_file_type_keys {} {
 
     Returns a list of valid file type keys.
 
+    @see apm_file_type_names
+    @see apm_pretty_name_for_file_type
+    
+    @author Peter Marklund
 } {
-    return [util_memoize [list db_list file_type_keys "select file_type_key from apm_package_file_types"]]
+    array set file_type_names [apm_file_type_names]
+    return [array names file_type_names]
 }
 
 

@@ -473,14 +473,15 @@ ad_proc -private apm_subdirs { path } {
 ad_proc -private apm_pretty_name_for_file_type { type } {
 
     Returns the pretty name corresponding to a particular file type key
-    (memoizing to save a database hit here and there).
 
+    @see apm_file_type_names
+    @see apm_file_type_keys
+
+    @author Peter Marklund
 } {
-    return [util_memoize [list db_string pretty_name_select "
-        select pretty_name
-        from apm_package_file_types
-        where file_type_key = :type
-    " -default "Unknown" -bind [list type $type]]]
+    array set file_type_names [apm_file_type_names]
+    
+    return $file_type_names($type)
 }
 
 ad_proc -private apm_pretty_name_for_db_type { db_type } {

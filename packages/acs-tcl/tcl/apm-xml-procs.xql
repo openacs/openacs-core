@@ -44,21 +44,7 @@
     
       </querytext>
 </fullquery>
-
  
-<fullquery name="apm_generate_package_spec.version_path">      
-      <querytext>
-
-        select path, 
-               file_type, 
-               db_type 
-        from   apm_package_files 
-        where  version_id = :version_id 
-        order  by path
-
-      </querytext>
-</fullquery>
-
 <fullquery name="apm_generate_package_spec.callback_info">      
       <querytext>
         select type,
