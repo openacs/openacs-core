@@ -807,6 +807,9 @@ ad_proc -public apm_package_url_from_key {package_key} {
 
 ad_proc -public apm_package_url_from_key_mem {package_key} {
     set package_id [apm_package_id_from_key $package_key]
+    if {!$package_id} { 
+        return -code error -errorinfo "Package $package_key was not found.  May not be mounted."
+    } 
     return [apm_package_url_from_id $package_id]
 }
 
