@@ -69,7 +69,7 @@ if { [info exists property(conn)] } {
 		    set value [ns_fmttime $conn($key)]
 		}
 		user_id {
-		    if { [db_0or1row "
+		    if { [db_0or1row user_info "
                         select first_names, last_name, email
                         from users
                         where user_id = $conn(user_id)
