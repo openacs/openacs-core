@@ -177,7 +177,7 @@ ad_proc -public cr_import_content {
                 set what_aolserver_told_us ""
                 if { [string equal $mime_type "image/jpeg"] } {
                     catch { set what_aolserver_told_us [ns_jpegsize $tmp_filename] }
-                } elseif { [string equal $mime_type "gif"] } {
+                } elseif { [string equal $mime_type "image/gif"] } {
                     catch { set what_aolserver_told_us [ns_gifsize $tmp_filename] }
                 } else {
                     ad_return -code error "Unknown image type"
