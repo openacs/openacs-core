@@ -7,14 +7,13 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0d6" url="http://openacs.org/repository/download/apm/acs-kernel-5.0d6.apm">
-
+    <version name="5.0d7" url="http://openacs.org/repository/download/apm/acs-kernel-5.0d7.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
         <release-date>2003-02-18</release-date>
         <vendor url="http://openacs.org/">OpenACS</vendor>
 
-        <provides url="acs-kernel" version="5.0d6"/>
+        <provides url="acs-kernel" version="5.0d7"/>
 
         <callbacks>
         </callbacks>
@@ -43,7 +42,8 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="IndexRedirectUrl"  description="If non-blank, serve the given template rather than the default index template.  Example: /dotlrn/index"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="InfoFilePermissionsMode"  default="0775" description="The default UNIX permissions to assign to the .info file when it is created." section_name="apm"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="LogDebugP"  default="0" description="log request-processor debug messages to the error log? very verbose." section_name="request-processor"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="LoginExpirationTime"  default="600" description="The expiration time for the login page. This is needed to protect against browser cached passwords." section_name="security"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="LoginPageExpirationTime"  default="600" description="The expiration time in seconds for the login page. This is needed to protect against browser cached passwords." section_name="security"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="LoginTimeout"  default="28800" description="The maximum number of seconds to let users stay logged in without requiring them to refresh their password. 0 for infinite." section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MaxSize"  default="200000" description="The size of the util_memoize cache, if using the ns_cache module." section_name="memoize"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="OutgoingSender"  default="somenerd@yourdomain.com" description="The email address that will sign outgoing alerts." section_name="system-information"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PerformanceModeP"  default="0" description="Setting this to 1 will tell the request processor to make the assumption that once a url is mapped to a file, that mapping never changes. This obviously would cause problems on a development system, but will improve performance on a production server." section_name="request-processor"/>
@@ -62,10 +62,11 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemName"  default="yourdomain Network" description="the name of your system" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemOwner"  default="webmaster@yourdomain.com" description="who signs the average user-visible pages" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemURL"  default="http://yourdomain.com" description="URL to tell users to go to" section_name="system-information"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseEmailForUsername"  default="1" description="Say 1 if we should use email as the username for login purposes, and hide any mention of a username separate from email address from the users." section_name="Security"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UsePasswordWidgetForUsername"  default="0" description="Should we hide what the user types in the username field, the way we do with the password field? Set this to 1 if you are using sensitive information such as social security number for username." section_name="Security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseEmailForLoginP"  default="1" description="Say 1 if we should login with email instead of username." section_name="Security"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="EmailAccountOwnerOnPasswordChangeP"  default="1" description="Say 1 if you want us to send an email to the account owner when changing password for local accounts." section_name="Security"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UsePasswordWidgetForUsername"  default="0" description="Should we hide what the user types in the username field, the way we do with the password field? Set this to 1 if you are using sensitive information such as social security number for username." section_name="Security"/>
+
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="EmailAccountOwnerOnPasswordChangeP"  default="1" description="Say 1 if you want us to send an email to the account owner when changing password for local accounts." section_name="Local Accounts"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ScreenName"  default="solicit" description="Can be 'none', 'solicit', or 'require'. If you say none, we will not ask users to provide a screen_name. If you say 'solicit', we will ask for one, but not require it. If you say 'require', we will not let users register or login without setting up a screen_name." section_name="Local Accounts"/>
         </parameters>
 
     </version>

@@ -517,6 +517,8 @@ create table users (
         password_question       varchar(1000),
         password_answer         varchar(1000),
         password_changed_date   timestamptz,
+        -- used for the authentication cookie
+        auth_token              varchar(100),
         -- table constraints
         constraint users_authority_username_un
         unique (authority_id, username)

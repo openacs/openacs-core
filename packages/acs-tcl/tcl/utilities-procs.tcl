@@ -2408,9 +2408,9 @@ ad_proc -public ad_schedule_proc {
     procedure defaults to run on only the canonical server unless the
     all_servers flag is set to true.
 
-    @param thread If true run scheduled proc in its own thread
-    @param once If true only run the scheduled proc once
-    @param debug If true log debugging information
+    @param thread t/f If true run scheduled proc in its own thread
+    @param once t/f. If true only run the scheduled proc once
+    @param debug t/f If true log debugging information
     @param all_servers If true run on all servers in a cluster
     @param schedule_proc ns_schedule_daily, ns_schedule_weekly or blank
     @param interval If schedule_proc is empty, the interval to run the proc
@@ -3946,4 +3946,349 @@ aa_equals &quot;properties -&gt; datetime&quot; \
         }
     }
     return $result
+}
+
+ad_proc ad_generate_random_string {{length 8}} {
+    Generates a random string made of numbers and letters
+} {
+    return [string range [sec_random_token] 0 $length]
+}
+
+
+
+
+#####
+#
+# This is some old security crud from before we had ad_page_contract
+#
+#####
+
+
+# michael@arsdigita.com: A better name for this proc would be
+# "ad_block_sql_fragment_form_data", since "form data" is the
+# official term for query string (URL) variables and form input
+# variables.
+#
+ad_proc -public -deprecated ad_block_sql_urls {
+    conn
+    args
+    why
+} {
+
+    A filter that detect attempts to smuggle in SQL code through form data
+    variables. The use of bind variables and ad_page_contract input 
+    validation to prevent SQL smuggling is preferred.
+
+    @see ad_page_contract
+} {
+    set form [ns_getform]
+    if { [empty_string_p $form] } { return filter_ok }
+
+    # Check each form data variable to see if it contains malicious
+    # user input that we don't want to interpolate into our SQL
+    # statements.
+    #
+    # We do this by scanning the variable for suspicious phrases; at
+    # this time, the phrases we look for are: UNION, UNION ALL, and
+    # OR.
+    #
+    # If one of these phrases is found, we construct a test SQL query
+    # that incorporates the variable into its WHERE clause and ask
+    # the database to parse it. If the query does parse successfully,
+    # then we know that the suspicious user input would result in a
+    # executing SQL that we didn't write, so we abort processing this
+    # HTTP request.
+    #
+    set n_form_vars [ns_set size $form]
+    for { set i 0 } { $i < $n_form_vars } { incr i } {
+        set key [ns_set key $form $i]
+        set value [ns_set value $form $i]
+
+	# michael@arsdigita.com:
+	#
+	# Removed 4000-character length check, because that allowed
+	# malicious users to smuggle SQL fragments greater than 4000
+	# characters in length.
+	#
+        if {
+	    [regexp -nocase {[^a-z_]or[^a-z0-9_]} $value] ||
+	    [regexp -nocase {union([^a-z0-9_].*all)?[^a-z0-9_].*select} $value]
+	} {
+	    # Looks like the user has added "union [all] select" to
+	    # the variable, # or is trying to modify the WHERE clause
+	    # by adding "or ...".
+	    #
+            # Let's see if Oracle would accept this variables as part
+	    # of a typical WHERE clause, either as string or integer.
+	    #
+	    # michael@arsdigita.com: Should we grab a handle once
+	    # outside of the loop?
+	    #
+            set parse_result_integer [db_string sql_test_1 "select test_sql('select 1 from dual where 1=[DoubleApos $value]') from dual"]
+
+            if { [string first "'" $value] != -1 } {
+		#
+		# The form variable contains at least one single
+		# quote. This can be a problem in the case that
+		# the programmer forgot to QQ the variable before
+		# interpolation into SQL, because the variable
+		# could contain a single quote to terminate the
+		# criterion and then smuggled SQL after that, e.g.:
+		#
+		#   set foo "' or 'a' = 'a"
+		#
+		#   db_dml "delete from bar where foo = '$foo'"
+		#
+		# which would be processed as:
+		#
+		#   delete from bar where foo = '' or 'a' = 'a'
+		#
+		# resulting in the effective truncation of the bar
+		# table.
+		#
+                set parse_result_string [db_string sql_test_2 "select test_sql('select 1 from dual where 1=[DoubleApos "'$value'"]') from dual"]
+            } else {
+                set parse_result_string 1
+            }
+
+            if {
+		$parse_result_integer == 0 ||
+		$parse_result_integer == -904  ||
+		$parse_result_integer == -1789 ||
+		$parse_result_string == 0 ||
+		$parse_result_string == -904 ||
+		$parse_result_string == -1789
+	    } {
+                # Code -904 means "invalid column", -1789 means
+		# "incorrect number of result columns". We treat this
+		# the same as 0 (no error) because the above statement
+		# just selects from dual and 904 or 1789 only occur
+		# after the parser has validated that the query syntax
+		# is valid.
+
+                ns_log Error "ad_block_sql_urls: Suspicious request from [ad_conn peeraddr]. Parameter $key contains code that looks like part of a valid SQL WHERE clause: [ad_conn url]?[ad_conn query]"
+
+		# michael@arsdigita.com: Maybe we should just return a
+		# 501 error.
+		#
+                ad_return_error "Suspicious Request" "Parameter $key looks like it contains SQL code. For security reasons, the system won't accept your request."
+
+                return filter_return
+            }
+        }
+    }
+
+    return filter_ok
+}
+
+ad_proc -public -deprecated ad_set_typed_form_variable_filter {
+    url_pattern
+    args
+} {
+    <pre>
+    #
+    # Register special rules for form variables.
+    #
+    # Example:
+    #
+    #    ad_set_typed_form_variable_filter /my_module/* {a_id number} {b_id word} {*_id integer}
+    #
+    # For all pages under /my_module, set_form_variables would set 
+    # $a_id only if it was number, and $b_id only if it was a 'word' 
+    # (a string that contains only letters, numbers, dashes, and 
+    # underscores), and all other variables that match the pattern
+    # *_id would be set only if they were integers.
+    #
+    # Variables not listed have no restrictions on them.
+    #
+    # By default, the three supported datatypes are 'integer', 'number',
+    # and 'word', although you can add your own type by creating
+    # functions named ad_var_type_check_${type_name}_p which should
+    # return 1 if the value is a valid $type_name, or 0 otherwise.
+    #
+    # There's also a special datatype named 'nocheck', which will
+    # return success regardless of the value. (See the docs for 
+    # ad_var_type_check_${type_name}_p to see how this might be
+    # useful.)
+    #
+    # The default data_type is 'integer', which allows you shorten the
+    # command above to:
+    #
+    #    ad_set_typed_form_variable_filter /my_module/* a_id {b_id word}
+    #
+
+    ad_page_contract is the preferred mechanism to do automated
+    validation of form variables.
+    </pre>
+    @see ad_page_contract
+} {
+    ad_register_filter postauth GET  $url_pattern ad_set_typed_form_variables $args
+    ad_register_filter postauth POST $url_pattern ad_set_typed_form_variables $args
+}
+
+proc ad_set_typed_form_variables {conn args why} {
+
+    global ad_typed_form_variables
+
+    eval lappend ad_typed_form_variables [lindex $args 0]
+
+    return filter_ok
+}
+
+#
+# All the ad_var_type_check* procs get called from 
+# check_for_form_variable_naughtiness. Read the documentation
+# for ad_set_typed_form_variable_filter for more details.
+
+proc_doc ad_var_type_check_integer_p {value} {
+    <pre>
+    #
+    # return 1 if $value is an integer, 0 otherwise.
+    #
+    <pre>
+} {
+
+    if { [regexp {[^0-9]} $value] } {
+        return 0
+    } else {
+        return 1
+    }
+}
+
+proc_doc ad_var_type_check_safefilename_p {value} {
+    <pre>
+    #
+    # return 0 if the file contains ".."
+    #
+    <pre>
+} {
+
+    if { [string match *..* $value] } {
+        return 0
+    } else {
+        return 1
+    }
+}
+
+proc_doc ad_var_type_check_dirname_p {value} {
+    <pre>
+    #
+    # return 0 if $value contains a / or \, 1 otherwise.
+    #
+    <pre>
+} {
+
+    if { [regexp {[/\\]} $value] } {
+        return 0
+    } else {
+        return 1
+    }
+}
+
+proc_doc ad_var_type_check_number_p {value} {
+    <pre>
+    #
+    # return 1 if $value is a valid number
+    #
+    <pre>
+} {
+    if { [catch {expr 1.0 * $value}] } {
+        return 0
+    } else {
+        return 1
+    }
+}
+
+proc_doc ad_var_type_check_word_p {value} {
+    <pre>
+    #
+    # return 1 if $value contains only letters, numbers, dashes, 
+    # and underscores, otherwise returns 0.
+    #
+    </pre>
+} {
+
+    if { [regexp {[^-A-Za-z0-9_]} $value] } {
+        return 0
+    } else {
+        return 1
+    }
+}
+
+proc_doc ad_var_type_check_nocheck_p {{value ""}} {
+    <pre>
+    #
+    # return 1 regardless of the value. This useful if you want to 
+    # set a filter over the entire site, then create a few exceptions.
+    #
+    # For example:
+    #
+    #   ad_set_typed_form_variable_filter /my-dangerous-page.tcl {user_id nocheck}
+    #   ad_set_typed_form_variable_filter /*.tcl user_id
+    #
+    </pre>
+} {
+    return 1
+}
+
+proc_doc ad_var_type_check_noquote_p {value} {
+    <pre>
+    #
+    # return 1 if $value contains any single-quotes
+    #
+    <pre>
+} {
+
+    if { [string match *'* $value] } {
+        return 0
+    } else {
+        return 1
+    }
+}
+
+proc_doc ad_var_type_check_integerlist_p {value} {
+    <pre>
+    #
+    # return 1 if list contains only numbers, spaces, and commas.
+    # Example '5, 3, 1'. Note: it doesn't allow negative numbers,
+    # because that could let people sneak in numbers that get
+    # treated like math expressions like '1, 5-2'
+    #
+    #
+    <pre>
+} {
+
+    if { [regexp {[^ 0-9,]} $value] } {
+        return 0
+    } else {
+        return 1
+    }
+}
+
+proc_doc ad_var_type_check_fail_p {value} {
+    <pre>
+    #
+    # A check that always returns 0. Useful if you want to disable all access
+    # to a page.
+    #
+    <pre>
+} {
+    return 0
+}
+
+proc_doc ad_var_type_check_third_urlv_integer_p {{args ""}} {
+    <pre>
+    #
+    # Returns 1 if the third path element in the URL is integer.
+    #
+    <pre>
+} {
+
+    set third_url_element [lindex [ad_conn urlv] 3]
+
+    if { [regexp {[^0-9]} $third_url_element] } {
+        return 0
+    } else {
+        return 1
+    }
 }
