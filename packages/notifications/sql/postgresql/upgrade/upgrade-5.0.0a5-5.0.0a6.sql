@@ -6,6 +6,7 @@ alter table notifications rename to notifications_bak;
 
 -- Before we create the new table we need to drop constraints
 -- to avoid naming conflicts
+alter table notification_user_map drop constraint notif_user_map_notif_id_fk;
 alter table notifications_bak drop constraint notif_notif_id_pk;
 
 create table notifications (
@@ -40,3 +41,6 @@ create table notifications (
 );
 
 insert into notifications select * from notifications_bak;
+
+alter table notification_user_map add constraint notif_user_map_notif_id_fk FOREIGN KEY (notification_id) REFERENCES notifications(notification_id) ON delete cascade;
+
