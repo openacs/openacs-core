@@ -344,6 +344,9 @@ ad_proc -private apm_package_install {
 	} else {
 	    set version_id [apm_package_install_version -callback $callback $package_key $version_name \
 				$version_uri $summary $description $description_format $vendor $vendor_uri $release_date]
+
+	    ns_log Notice "INSTALL-HACK-LOG-BEN: version_id is $version_id"
+
 	    if { !$version_id } {
 		# There was an error.
 		apm_callback_and_log $callback "The package version could not be created."

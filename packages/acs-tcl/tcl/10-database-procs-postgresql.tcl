@@ -23,14 +23,24 @@ proc_doc db_exec_plsql { statement_name sql args } {
     OpenACS requires the caller to perform a select query that returns
     the value of the function.
 
+    We are no longer calling db_string, which screws up the bind variable
+    stuff otherwise because of calling environments. (ben)
+
 } {
     ad_arg_parser { bind_output } $args
+
+    # I'm not happy about having to get the fullname here, but right now
+    # I can't figure out a cleaner way to do it. I will have to
+    # revisit this ASAP. (ben)
+    set full_statement_name [db_fullquery_get_fullname $statement_name]
+
     if { [info exists bind_output] } {
 	return -code error "the -bind_output switch is not currently supported"
     }
 
     db_with_handle db {
-	return [db_string $statement_name $sql]
+	set selection [db_exec 0or1row $db $full_statement_name $sql]
+	return [ns_set value $selection 0]
     }
 }
 

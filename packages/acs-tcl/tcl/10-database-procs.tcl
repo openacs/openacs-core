@@ -233,6 +233,9 @@ proc_doc db_foreach { statement_name sql args } {
     }</pre></blockquote>
 
 } {
+    # Query Dispatcher (OpenACS - ben)
+    set full_statement_name [db_fullquery_get_fullname $statement_name]
+
     ad_arg_parser { bind column_array column_set args } $args
 
     # Do some syntax checking.
@@ -264,7 +267,7 @@ proc_doc db_foreach { statement_name sql args } {
     }
 
     db_with_handle db {
-	set selection [db_exec select $db $statement_name $sql]
+	set selection [db_exec select $db $full_statement_name $sql]
 
 	set counter 0
 	while { [db_getrow $db $selection] } {
@@ -434,6 +437,9 @@ ad_proc db_0or1row { statement_name sql args } {
 } {
     ad_arg_parser { bind column_array column_set } $args
 
+    # Query Dispatcher (OpenACS - ben)
+    set full_statement_name [db_fullquery_get_fullname $statement_name]
+
     if { [info exists column_array] && [info exists column_set] } {
 	return -code error "Can't specify both column_array and column_set"
     }
@@ -450,7 +456,7 @@ ad_proc db_0or1row { statement_name sql args } {
     }
 
     db_with_handle db {
-	set selection [db_exec 0or1row $db $statement_name $sql]
+	set selection [db_exec 0or1row $db $full_statement_name $sql]
     }
     
     if { [empty_string_p $selection] } {

@@ -241,9 +241,10 @@ create table apm_package_versions (
                        constraint apm_package_vers_ver_uri_nn not null
                        constraint apm_package_vers_ver_uri_un unique,
     summary 	       varchar(3000) default '' not null,
-    description_format varchar(100)
+    description_format varchar(100) 
+		       constraint apm_package_vers_desc_for_nn not null
 		       constraint apm_package_vers_desc_for_ck
-		         check (description_format in ('text/html', 'text/plain')),
+		         check (description_format in ('', 'text/html', 'text/plain')),
     description        text default '' not null,
     release_date       timestamp,
     vendor             varchar(500) default '' not null,
@@ -2255,7 +2256,7 @@ declare
       apm_pkg_ver__data_model_loaded_p	alias for $12;	
       v_version_id                      apm_package_versions.version_id%TYPE;
 begin
-      if apm_pkg_ver__version_id is null then
+      if apm_pkg_ver__version_id='''' then
          select acs_object_id_seq.nextval
 	 into v_version_id
 	 from dual;

@@ -5,11 +5,9 @@
 #
 # Ben Adida (ben@mit.edu)
 #
-# STATE OF THIS FILE (3/17/2001) - BMA:
-# Just function prototypes and some initial simple implementations to start clearing the field.
-# Don't expect any of this to work just yet!
-# 
-
+# STATE OF THIS FILE (3/29/2001) - BMA:
+# This is starting to work, but isn't yet ready for actual dev work
+#
 
 # The Query Dispatcher is documented at http://openacs.org/
 
@@ -37,6 +35,9 @@ proc db_rdbms_get_version {rdbms} {
 }
 
 proc db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
+    ns_log Notice "QD/COMPATIBILITY = The RDBMS_TEST is [db_rdbms_get_type $rdbms_test] - [db_rdbms_get_version $rdbms_test]"
+    ns_log Notice "QD/COMPATIBILITY = The RDBMS_PATTERN is [db_rdbms_get_type $rdbms_pattern] - [db_rdbms_get_version $rdbms_pattern]"
+
     # If the pattern is for all RDBMS, then yeah, compatible
     if {[empty_string_p [db_rdbms_get_type $rdbms_pattern]]} {
 	return 1
@@ -44,6 +45,7 @@ proc db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
 
     # If the RDBMS types are not the same, we have a problem
     if {[db_rdbms_get_type $rdbms_test] != [db_rdbms_get_type $rdbms_pattern]} {
+	ns_log Notice "QD - compatibility - RDBMS types are different!"
 	return 0
     }
 
@@ -58,6 +60,7 @@ proc db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
 	return 1
     }
 
+    ns_log Notice "QD - compatibility - version numbers are bad!"
     return 0
 }
 
@@ -78,27 +81,27 @@ proc db_fullquery_create {queryname querytext bind_vars_lst query_type rdbms loa
 # The Accessor procs
 
 proc db_fullquery_get_name {fullquery} {
-    return [list $fullquery 0]
+    return [lindex $fullquery 0]
 }
 
 proc db_fullquery_get_querytext {fullquery} {
-    return [list $fullquery 1]
+    return [lindex $fullquery 1]
 }
 
 proc db_fullquery_get_bind_vars {fullquery} {
-    return [list $fullquery 2]
+    return [lindex $fullquery 2]
 }
 
 proc db_fullquery_get_query_type {fullquery} {
-    return [list $fullquery 3]
+    return [lindex $fullquery 3]
 }
 
 proc db_fullquery_get_rdbms {fullquery} {
-    return [list $fullquery 4]
+    return [lindex $fullquery 4]
 }
 
 proc db_fullquery_get_load_location {fullquery} {
-    return [list $fullquery 5]
+    return [lindex $fullquery 5]
 }
 
 
@@ -142,8 +145,15 @@ proc db_fullquery_pick_most_specific_query {rdbms query_1 query_2} {
 
 # Find the fully qualified name of the query
 proc db_fullquery_get_fullname {local_name {added_stack_num 1}} {
+    # We do a check to see if we already have a fullname.
+    # Since the DB procs are a bit incestuous, this might get
+    # called more than once. DAMMIT! (ben)
+    if {[regexp {^acs\.} $local_name all]} {
+	return $local_name
+    }
+
     # Get the proc name being executed.
-    set proc_name [info level [expr "$added_stack_num + 1"]]
+    set proc_name [info level [expr "-1 - $added_stack_num"]]
 
     # We check if we're running the special ns_ proc that tells us
     # whether this is an URL or a Tcl proc.
@@ -167,10 +177,19 @@ proc db_fullquery_get_fullname {local_name {added_stack_num 1}} {
 	# Let's find out where this Tcl proc is defined!!
 	# Get the first word, which is the Tcl proc
 	regexp {^([^ ]*).*} $proc_name all proc_name
-	# ns_log Notice "QD = proc_name is -$proc_name-"
+	ns_log Notice "QD = proc_name is -$proc_name-"
 
 	# We use the ad_proc construct!! 
 	# (woohoo, can't believe that was actually useful!)
+	
+	# First we check if the proc is there. If not, then we're
+	# probably dealing with one of the bootstrap procs, and so we just
+	# return a bogus proc name
+	if {![nsv_exists api_proc_doc $proc_name]} {
+	    ns_log Notice "QD: there is no documented proc with name $proc_name -- we used default SQL"
+	    return "acs.NULL"
+	}
+
 	array set doc_elements [nsv_get api_proc_doc $proc_name]
 	set url $doc_elements(script)
 
@@ -185,6 +204,9 @@ proc db_fullquery_get_fullname {local_name {added_stack_num 1}} {
 	# We get something like packages.acs-tcl.tcl.acs-kernel-procs
 	# We need to remove packages.
 	regexp {^packages\.(.*)} $url all rest
+
+	ns_log Notice "TEMP - QD: proc_name is $proc_name"
+	ns_log Notice "TEMP - QD: local_name is $local_name"
 
 	set full_name "acs.$rest.${proc_name}.${local_name}"
     }
@@ -268,10 +290,9 @@ proc db_fullquery_internal_load_queries {file_pointer file_tag} {
 	}
 
 	set one_query [lindex $result 0]
-	set one_query_name [lindex $result 1]
-	set parsing_state [lindex $result 2]
+	set parsing_state [lindex $result 1]
 
-	ns_log Notice "QD = loaded one query - $one_query_name"
+	ns_log Notice "QD = loaded one query - [db_fullquery_get_name $one_query]"
 
 	# Store the query
 	db_fullquery_internal_store_cache $one_query
@@ -306,6 +327,7 @@ proc db_fullquery_internal_store_cache {fullquery} {
 
     # Check if it's compatible at all!
     if {![db_rdbms_compatible_p [db_fullquery_get_rdbms $fullquery] [db_current_rdbms]]} {
+	ns_log Notice "QD = Query [db_fullquery_get_name $fullquery] is *NOT* compatible"
 	return
     }
 
@@ -406,8 +428,8 @@ proc db_fullquery_internal_parse_one_query {parsing_state} {
     # Parse the actual query from XML
     set one_query [db_fullquery_internal_parse_one_query_from_xml_node $one_query_xml]
 
-    # Return the query, the query name, and the parsing state
-    return [list [lindex $one_query 0] [lindex $one_query 1] $parsing_state]
+    # Return the query and the parsing state
+    return [list $one_query $parsing_state]
 
 }
 
@@ -437,12 +459,15 @@ proc db_fullquery_internal_parse_one_query_from_xml_node {one_query_node} {
 proc db_rdbms_parse_from_xml_node {rdbms_node} {
     # Check that it's RDBMS
     if {[ns_xml node name $rdbms_node] != "rdbms"} {
+	ns_log Notice "QD/PARSER = BAD RDBMS NODE!"
 	return ""
     }
 
     # Get the type and version tags
     set type [ns_xml node getcontent [lindex [xml_find_child_nodes $rdbms_node type] 0]]
     set version [ns_xml node getcontent [lindex [xml_find_child_nodes $rdbms_node version] 0]]
+
+    ns_log Notice "QD/PARSER = RDBMS parser - $type - $version"
 
     return [db_rdbms_create $type $version]
 }
