@@ -1,9 +1,7 @@
--- Drop the ACS Reference Language data
--- Postgres version
+-- Drop the ACS Reference Country data
+--
 -- @author jon@jongriffin.com
 -- @cvs-id $Id$
-
-set serveroutput on
 
 -- drop all associated tables and packages
 -- I am not sure this is a good idea since we have no way to register
@@ -12,23 +10,17 @@ set serveroutput on
 -- This will probably fail if their is a child table using this.
 -- I can probably make this cleaner also, but ... no time today
 
+create function inline_0() returns integer as '
 declare
-    cursor refsrc_cur is
-	 select   table_name,
-                  package_name,
-                  repository_id
-	 from     acs_reference_repositories
-	 where table_name = 'language_codes'
+    rec        acs_reference_repositories%ROWTYPE;
 begin
-    for rec in refsrc_cur loop
-	 dbms_output.put_line('Dropping ' || rec.table_name);
-	 execute immediate 'drop table ' || rec.table_name;
-	 if rec.package_name is not null then
-	     execute immediate 'drop package ' || rec.package_name;
-         end if;
-         acs_reference.delete(rec.repository_id);
+    for rec in select * from acs_reference_repositories where upper(table_name) = ''LANGUAGE_CODES'' loop
+	 execute ''drop table '' || rec.table_name;
+         perform acs_reference__delete(rec.repository_id);
     end loop;
-end;
-/
-show errors
+    return 0;
+end;' language 'plpgsql';
+
+select inline_0();
+drop function inline_0();
 
