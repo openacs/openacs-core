@@ -374,9 +374,15 @@ ad_proc -public template::util::date::compare { date1 date2 } {
 ad_proc -public template::util::date::set_property { what date value } {
     mutate properties of the Date object
 } {
+
   # Erase leading zeroes from the value, but make sure that 00
-  # is not completely erased
-  set value [template::util::leadingTrim $value]
+  # is not completely erased - but only for single-element properties
+
+  switch $value {
+    year - month - day - hour - minutes - seconds - short_year - short_hours - ampm {
+      set value [template::util::leadingTrim $value]
+    }
+  }
 
   switch $what {
     year       { return [lreplace $date 0 0 $value] }
