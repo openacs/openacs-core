@@ -224,8 +224,7 @@ ad_proc -public ad_change_password { user_id new_password } { Changed the user's
     # this and still support old users by changing the salt below.
     set salt [sec_random_token]
     set new_password [ns_sha1 "$new_password$salt"]
-    db_dml password_update "update users set password = :new_password, salt = :salt where user_id = :user_id"
-    
+    db_dml password_update {}
 }
 
 ad_proc -private sec_setup_session { new_user_id } {
