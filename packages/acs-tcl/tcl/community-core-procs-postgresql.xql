@@ -28,6 +28,12 @@
       </querytext>
 </fullquery>
 
+<fullquery name="acs_user::delete.permanent_delete">
+      <querytext>
+          select acs_user__delete(:user_id);
+      </querytext>
+</fullquery>
+
 <fullquery name="person::delete.delete_person">      
       <querytext>
 

@@ -271,10 +271,19 @@ namespace eval acs_user {
 
     ad_proc -public delete {
         {-user_id:required}
+        {-permanent:boolean}
     } {
         Delete a user
+        
+        @param permanent If provided the user will be deleted permanently
+                           from the database. Otherwise the user
+                           state will merely be set to "deleted".
     } {
-        change_state -user_id $user_id -state "deleted"
+        if { ! $permanent_p } {
+            change_state -user_id $user_id -state "deleted"
+        } else {
+            db_exec_plsql permanent_delete {}
+        }
     }
 
     ad_proc -public unapprove {
@@ -285,4 +294,28 @@ namespace eval acs_user {
         change_state -user_id $user_id -state "needs approval"
     }
 
+    ad_proc -public get_by_username {
+        {-authority_id ""}
+        {-username:required}
+    } {
+        Returns user_id from authority and username.
+        
+        @param authority_id The authority. Defaults to local authority.
+
+        @param username The username of the user you're trying to find.
+
+        @return user_id of the user, or the empty string if no user found.
+    }  {
+        # Default to local authority
+        if { [empty_string_p $authority_id] } {
+            set authority_id [auth::authority::local]
+        }
+
+        return [db_string user_id_from_name {
+            select user_id
+            from users
+            where username = :username
+              and authority_id =:authority_id
+        } -default ""]
+    }    
 }
