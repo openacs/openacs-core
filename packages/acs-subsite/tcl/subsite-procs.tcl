@@ -526,28 +526,25 @@ ad_proc subsite::get_pageflow_struct {} {
         label "Home"
         url ""
     }
-    lappend subsections members {
-        label "Members"
-        folder "members"
-        selected_patterns {*}
-    }
 
-    lappend subsections groups [list \
-                                    label [ad_decode [ad_conn package_url] "/" "Communities" "Subcommunities"] \
-                                    url "subsites"]
-    
-    set home {
+
+    set pageflow [list]
+    lappend pageflow home {
         label "Home"
         folder ""
         url ""
         selected_patterns {
             ""
             "subsites"
-            "members/*"
         }
     }
-    lappend home subsections $subsections
-    set pageflow [list home $home]
+
+    lappend pageflow members {
+        label "Members"
+        folder "members"
+        selected_patterns {*}
+    }
+
 
     set subsite_url [subsite::get_element -element url]
     array set subsite_sitenode [site_node::get -url $subsite_url]

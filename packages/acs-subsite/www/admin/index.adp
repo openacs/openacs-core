@@ -1,8 +1,7 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">@subsite_name;noquote@ Administration</property>
 
-<h3>@subsite_name@ Administration</h3>
+<h2>@subsite_name@ Administration</h2>
 <ul>
   <li><a href="applications/"/>Applications</a>
   <li><a href="configure">Configure</a>

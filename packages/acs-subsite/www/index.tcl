@@ -50,4 +50,8 @@ set group_join_policy [group::join_policy -group_id $group_id]
 set group_member_p [group::member_p -group_id $group_id -user_id $user_id]
 set group_admin_p [group::admin_p -group_id $group_id -user_id $user_id]
 
+set main_site_p [string equal [ad_conn package_url] "/"]
+
 set can_join_p [expr !$group_admin_p && $group_member_p == 0 && $user_id != 0 && ![string equal $group_join_policy "closed"]]
+
+set communities_label [ad_decode $main_site_p 1 "Communities" "Subcommunities"]
