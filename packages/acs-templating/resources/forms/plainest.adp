@@ -40,7 +40,7 @@
           </if>
 	  </td>
         </if>
-	<if @elements.widget@ in radio checkbox>
+        <if @elements.widget@ eq radio or @elements.widget@ eq checkbox>
             <if @elements.label@ nil><td colspan=2>></if>
 	    <else><td></else>
 	    <noparse>

@@ -42,7 +42,7 @@
                       </if>
   	            </td>
                   </if>
-  	          <if @elements.widget@ in radio checkbox>
+                  <if @elements.widget@ eq radio or @elements.widget@ eq checkbox>
                      <if @elements.label@ nil><td colspan="3" align="center" class="textstyle1"></if>
   	             <else>
                        <td width="2%" align="center" valign="middle" class="textstyle1">: </td> 
