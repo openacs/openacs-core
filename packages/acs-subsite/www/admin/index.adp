@@ -9,6 +9,7 @@
   <li><a href=rel-segments/>Relational Segments</a>
   <li><a href=rel-types/>Relationship Types</a>
   <li><a href=host-node-map/>Host-Node Map</a>
+  <li><a href=object-types/>Object Types</a>
 </ul>
 
 <if @acs_admin_available_p@ eq "t">
