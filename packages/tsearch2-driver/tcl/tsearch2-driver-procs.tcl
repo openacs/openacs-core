@@ -167,8 +167,7 @@ ad_proc -public tsearch2::summary {
 
 ad_proc -public tsearch2::driver_info {
 } {
-    
-    
+   
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-05
     
@@ -179,7 +178,7 @@ ad_proc -public tsearch2::driver_info {
     return [list package_key tsearch2-driver version 2 automatic_and_queries_p 0  stopwords_p 1]
 }
 
-ad_proc tsearch2::build_query { s } {
+ad_proc tsearch2::build_query { -query } {
     Convert conjunctions to query characters for tsearch2
     and => &
     not => !
@@ -190,13 +189,14 @@ ad_proc tsearch2::build_query { s } {
     @return returns formatted query string for tsearch2 tsquery
 } {
     # replace boolean words with boolean operators
-    set s [string map {" and " & " or " | " not " !} $s]
+    set query [string map {" and " & " or " | " not " !} $query]
     # remove leading and trailing spaces so they aren't turned into |
-    set s [string trim $s]
+    set query [string trim $query]
     # remove any spaces between words and operators
-    regsub -all {\s+([!&|])\s+} $s {\1} s
+    regsub -all {\s+([!&|])\s+} $query {\1} query
     # all remaining spaces between words turn into |
-    regsub -all {\s+} $s {|} s
-  
-    return $s
+    regsub -all {\s+} $query {|} query
+    # if a ! is by itself then prepend &
+    regsub {(\w)([!])} $query {\1\&!} query
+    return $query
 }
