@@ -84,7 +84,7 @@ cvs -d :pserver:anonymous@openacs.org:/cvsroot export \
 cd /tmp/dotlrn-tarball/openacs-4/packages
 cvs -d :pserver:anonymous@openacs.org:/cvsroot export \
   -r <replaceable>openacs-5-0-0a1</replaceable> dotlrn-prereq
-cvs -d :pserver:anonymous@dotlrn.openacs.org:/dotlrn-cvsroot export \ 
+cvs -d :pserver:anonymous@dotlrn.openacs.org:/dotlrn-cvsroot export \
   -r <replaceable>dotlrn-2-0-0a1</replaceable> dotlrn-core
 cd /tmp/dotlrn-tarball
 mv openacs-4 openacs

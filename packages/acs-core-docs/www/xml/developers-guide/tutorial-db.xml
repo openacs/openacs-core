@@ -90,36 +90,16 @@ select content_type__create_type(
       <programlisting>-- packages/myfirstpackage/sql/myfirstpackage-drop.sql
 -- drop script
 --
--- @author rhs@mit.edu
+-- @author joel@aufrecht.org
 -- @cvs-id &#36;Id:$
 --
--- THIS SCRIPT IS BROKEN AT THE MOMENT
-create function inline_0 ()
-returns integer as '
-declare
-    rec                 record;      
-begin
-    for rec in (select folder_id 
-                  from cr_folders 
-                 where package_id in (select package_id 
-                                        from apm_packages 
-                                       where package_key = ''myfirstpackage''))
-        loop
-            perform content_folder__unregister_content_type(rec.folder_id, ''mfp_note'',''t'');
-        end loop;
-    return 0;
-end;' language 'plpgsql';
-select inline_0();
-drop function inline_0 ();
-
 select content_type__drop_type(
-	   'mfp_notes',
+	   'mfp_note',
 	   't',
 	   't'
     );
 </programlisting>
       </figure>
-    <para>The drop script is a bit hairier than the create script.</para>
       <para>Run the create script manually to add your tables and functions.</para>
       <screen>[service0@yourserver postgresql]$ <userinput>psql -f myfirstpackage-create.sql</userinput>
 psql:myfirstpackage-create.sql:14: NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index 'mfp_notes_pkey' for table 'mfp_notes'
