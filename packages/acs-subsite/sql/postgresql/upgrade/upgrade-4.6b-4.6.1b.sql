@@ -12,9 +12,9 @@ alter table host_node_map rename to host_node_map_old;
 
 create table host_node_map (
    host       varchar(200)
-              constraint host_node_map_pk primary key,
+              constraint host_node_map_new_pk primary key,
    node_id    integer not null
-              constraint host_node_map_fk references acs_objects (object_id)
+              constraint host_node_map_new_fk references acs_objects (object_id)
 );
 
 insert into host_node_map ( host, node_id )
