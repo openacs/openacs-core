@@ -1,6 +1,10 @@
 <sect1 id="openacs" xreflabel="Install OpenACS &version;">
 <title>Install OpenACS &version;</title>
 
+  <authorblurb>
+	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+  </authorblurb>
+
   <sect2 id="install-openacs-download">
 	<title>Downloading OpenACS</title>
 
@@ -11,19 +15,20 @@
         </para></listitem>
 
       <listitem><para> 
-		  Login as <computeroutput>nsadmin</computeroutput> and untar the
-		  downloaded components into <computeroutput>/web</computeroutput>
-		  directory. The alpha-2 tarball is currently named
-		  <computeroutput>alpha2.tgz</computeroutput>. Replace
-		  <computeroutput>alpha2.tgz</computeroutput> in the commands below
-		  with whatever the current tarball is named.
+		  Login as <computeroutput>nsadmin</computeroutput>
+		  and untar the downloaded components into
+		  <computeroutput>/web</computeroutput> directory. The OpenACS
+		  &version; tarball is currently named
+		  <computeroutput>openacs-4-5-release.tgz</computeroutput>. Replace
+		  <computeroutput>openacs-4-5-release.tgz</computeroutput> in the
+		  commands below with whatever the current tarball is named.
 		</para>
 
 		<programlisting>
 joeuser:~$ su - nsadmin
 Password: ***********
 nsadmin:~$ cd /web
-nsadmin:/web$ tar xzf /tmp/alpha2.tgz</programlisting>
+nsadmin:/web$ tar xzf /tmp/openacs-4-5-release.tgz</programlisting>
       </listitem>
 
       <listitem><para> 
@@ -175,7 +180,14 @@ nsadmin:~$</programlisting>
 nsadmin:~$ svrmgrl
 
 SVRMGR&gt; connect internal;
-SVRMGR&gt; create tablespace <emphasis>birdnotes</emphasis> datafile &#39;/ora8/m02/oradata/ora8/<emphasis>birdnotes</emphasis>01.dbf&#39; size 50m autoextend on default storage (pctincrease 1);</programlisting>
+SVRMGR&gt; create tablespace <emphasis>birdnotes</emphasis> 
+             datafile &#39;/ora8/m02/oradata/ora8/<emphasis>birdnotes</emphasis>01.dbf&#39; 
+             size 50M 
+             autoextend on 
+             next 10M
+             maxsize 300M
+             extent management local
+             uniform size 32K;</programlisting>
       </listitem>
 
       <listitem><para> 
@@ -546,7 +558,7 @@ root:~# exit</programlisting>
 		<programlisting>
 nsadmin:~$ killall nsd
 nsd: no process killed
-nsadmin:~$ /usr/local/aolserver/bin/nsd-postgres -it /usr/local/aolserver/<emphasis>birdnotes</emphasis>.tcl
+nsadmin:~$ /usr/local/aolserver/bin/nsd-postgres -t /usr/local/aolserver/<emphasis>birdnotes</emphasis>.tcl
 nsadmin:~$ restart-aolserver <emphasis>birdnotes</emphasis>
 Killing 23727 
 nsadmin:~$ killall nsd
@@ -776,7 +788,7 @@ nsadmin:~$ svc -t /web/birdnotes</programlisting>
 
 	  <para>
 		Most of this information comes from Tom Jackson's <ulink
-		  url="http://zmbh.com/discussion/svc/aolserver+daemontools.html">AOLServer+Daemontools
+		  url="http://zmbh.com/daemontools-aolserver/aolserver+daemontools.html">AOLServer+Daemontools
 		  Mini-HOWTO</ulink>.
 	  </para>
 	</sect3>
@@ -837,7 +849,7 @@ SVRMGR&gt; drop user <emphasis>birdnotes</emphasis> cascade;</programlisting>
 		this user. If it still does not work, do:</para>
 
 	  <programlisting>
-SVRMGR&gt; select username, sid, serial# from v$session where username=&#39;<emphasis>birdnotes</emphasis>&#39;;</programlisting>
+SVRMGR&gt; select username, sid, serial# from v$session where lower(username)=&#39;<emphasis>birdnotes</emphasis>&#39;;</programlisting>
 
 	  <para>and then</para>
 	  <programlisting>
@@ -878,4 +890,8 @@ DROP DATABASE</programlisting>
 
   <para><phrase role="cvstag">($Id$)</phrase></para>
 </sect1>
-
+<!--
+   Local Variables:
+   sgml-parent-document: ("../index.xml" "book" "sect1")
+   End:
+-->
