@@ -130,12 +130,12 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
             <listitem id="aolserver4-nssha1-install">
               <para>Install nssha1</para>
               <screen>[root nspostgres]# <userinput>cd ../nssha1</userinput>
-[root nssha1]# <userinput>make</userinput></screen>
+[root nssha1]# 
+              <para>Now install nssha1:</para>
+              <screen>[root nssha1]# <userinput>make install AOLSERVER=/usr/local/aolserver40r9</userinput></screen>
               <para>If the make fails you will have to edit nssha1.c. Comment out the following 2 lines (lines 139-140):        </para>
               <programlisting><emphasis role="bold">//</emphasis> typedef unsigned int u_int32_t;
 <emphasis role="bold">//</emphasis> typedef unsigned char u_int8_t;</programlisting>
-              <para>Now install nssha1:</para>
-              <screen>[root nssha1]# <userinput>make install AOLSERVER=/usr/local/aolserver40r9</userinput></screen>
             </listitem>
             <listitem id="aolserver4-tdom-install">
               <para>Install tDOM</para>
