@@ -293,6 +293,7 @@ create table apm_package_versions (
     content_length     integer,
     distribution_uri   varchar(1500),
     distribution_date  timestamp,
+    auto_mount         varchar(50),
     constraint apm_package_vers_id_name_un unique(package_key, version_name)
 );
 
@@ -408,6 +409,12 @@ comment on column apm_package_versions.distribution_uri is '
 
 comment on column apm_package_versions.distribution_date is '
  When was the distribution tarball downloaded.
+';
+
+comment on column apm_package_versions.auto_mount is '
+ A dir under the main site site node where an instance of the package will be mounted
+ automatically upon installation. Useful for site-wide services that need mounting
+ such as general-comments and notifications.
 ';
 
 -- Metadata for the apm_package_versions object.
