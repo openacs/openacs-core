@@ -790,19 +790,34 @@ ad_proc -public ad_return_url {
     {extra_args {}}
 } {
 
-    @author Don Baccus (dhogaza@pacifier.com)
-
-    @param url_encode If true url_encode the result.
-    @param args A list of (name,value) pairs to append to the query string
-
     Build a return url suitable for passing to a page you expect to return back
     to the current page.
 
-    Examples:
+    <p>
 
+    Example for direct inclusion in a link:
+
+    <pre>
     ad_returnredirect "foo?return_url=[ad_return_url -url_encode]"
+    </pre>
 
-    set return_url [ad_return_url { {foo bar} {bar foo}}]
+    Example setting a variable to be used by export_vars:
+
+    <pre>
+    set return_url [ad_return_url]
+    set edit_link "edit?[export_vars item_id return_url]"
+    </pre>
+
+    Example setting a variable with extra_vars:
+    
+    <pre>
+    set return_url [ad_return_url [list some_id $some_id] [some_other_id $some_other_id]]
+    </pre>
+
+    @author Don Baccus (dhogaza@pacifier.com)
+
+    @param urlencode If true url-encode the result
+    @param extra_args A list of {name value} lists to append to the query string
 
 } {
 
