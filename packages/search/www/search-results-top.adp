@@ -4,7 +4,7 @@
 </head>
 <body bgcolor=ffffff text=000000 leftmargin=15 topmargin=5 marginwidth=15 marginheight=5>
 <h2>@title@</h2>
-@context_bar@
+@context_bar;noquote@
 <hr>
 
 <form method=GET action=search>
