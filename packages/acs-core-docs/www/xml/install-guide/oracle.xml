@@ -1375,40 +1375,44 @@ root:~# chmod 700 /etc/rc.d/init.d/oracle8i</programlisting>
 root:~# /etc/rc.d/init.d/oracle8i stop
 Oracle 8i auto start/stop
 Shutting Oracle8i:
-Oracle Server Manager Release 3.1.6.0.0 - Production
+Oracle Server Manager Release 3.1.7.0.0 - Production
 
-Copyright (c) 1997, 1999, Oracle Corporation.  All Rights Reserved.
+Copyright (c) 1997, 1999, Oracle Corporation.  All
+Rights Reserved.
 
-Oracle8i Enterprise Edition Release 8.1.6.1.0 - Production
+Oracle8i Enterprise Edition Release 8.1.7.0.1 -
+Production
 With the Partitioning option
-JServer Release 8.1.6.0.0 - Production
+JServer Release 8.1.7.0.1 - Production
 
-SVRMGR&gt; Connected.
-SVRMGR&gt; Database closed.
+SVRMGR> Connected.
+SVRMGR> Database closed.
 Database dismounted.
 ORACLE instance shut down.
-SVRMGR&gt; 
+SVRMGR>
 Server Manager complete.
 Database &quot;ora8&quot; shut down.
       
 root:~# /etc/rc.d/init.d/oracle8i start
 Oracle 8i auto start/stop
 Starting Oracle8i: 
-SQL*Plus: Release 8.1.6.0.0 - Production on Sat Jun 10 17:56:02 2000
+SQL*Plus: Release 8.1.7.0.0 - Production on Wed Mar 6 17:56:02 2002
 
-(c) Copyright 1999 Oracle Corporation.  All rights reserved.
+(c) Copyright 2000 Oracle Corporation.  All rights reserved.
 
 SQL&gt; Connected to an idle instance.
 SQL&gt; ORACLE instance started.
 
-Total System Global Area   85004272 bytes
-Fixed Size            69616 bytes
-Variable Size          76374016 bytes
-Database Buffers        8388608 bytes
-Redo Buffers             172032 bytes
+Total System Global Area   84713632 bytes
+Fixed Size                    73888 bytes
+Variable Size              76079104 bytes
+Database Buffers            8388608 bytes
+Redo Buffers                 172032 bytes
 Database mounted.
 Database opened.
-SQL&gt; Disconnected
+SQL> Disconnected
+
+Database "ora8" warm started.
 
 Database &quot;ora8&quot; warm started.</programlisting>
 	  </listitem>
@@ -1440,6 +1444,50 @@ root:~# update-rc.d oracle8i defaults
    /etc/rc4.d/S20oracle8i -> ../init.d/oracle8i
    /etc/rc5.d/S20oracle8i -> ../init.d/oracle8i</programlisting>
 			</listitem>
+
+		  <listitem><para>SuSE users:</para>
+			<programlisting>
+root:~# cd /etc/rc.d/init.d
+root:/etc/rc.d/init.d# ln -s /etc/rc.d/init.d/oracle8i K20oracle8i
+root:/etc/rc.d/init.d# ln -s /etc/rc.d/init.d/oracle8i S20oracle8i
+root:/etc/rc.d/init.d# cp K20oracle8i rc0.d
+root:/etc/rc.d/init.d# cp S20oracle8i rc0.d
+root:/etc/rc.d/init.d# cp K20oracle8i rc1.d
+root:/etc/rc.d/init.d# cp S20oracle8i rc1.d 
+root:/etc/rc.d/init.d# cp K20oracle8i rc6.d
+root:/etc/rc.d/init.d# cp S20oracle8i rc6.d
+root:/etc/rc.d/init.d# cp K20oracle8i rc2.d
+root:/etc/rc.d/init.d# cp S20oracle8i rc2.d
+root:/etc/rc.d/init.d# cp K20oracle8i rc3.d
+root:/etc/rc.d/init.d# cp S20oracle8i rc3.d 
+root:/etc/rc.d/init.d# cp K20oracle8i rc4.d  
+root:/etc/rc.d/init.d# cp S20oracle8i rc4.d  
+root:/etc/rc.d/init.d# cp K20oracle8i rc5.d
+root:/etc/rc.d/init.d# cp S20oracle8i rc5.d
+root:/etc/rc.d/init.d# rm K20oracle8i
+root:/etc/rc.d/init.d# rm S20oracle8i
+root:/etc/rc.d/init.d# cd
+root:~# SuSEconfig
+Started the SuSE-Configuration Tool.
+Running in full featured mode.
+Reading /etc/rc.config and updating the system...
+Executing /sbin/conf.d/SuSEconfig.gdm...   
+Executing /sbin/conf.d/SuSEconfig.gnprint...
+Executing /sbin/conf.d/SuSEconfig.groff...   
+Executing /sbin/conf.d/SuSEconfig.java...    
+Executing /sbin/conf.d/SuSEconfig.kdm...   
+Executing /sbin/conf.d/SuSEconfig.pcmcia...
+Executing /sbin/conf.d/SuSEconfig.perl...
+Executing /sbin/conf.d/SuSEconfig.postfix...
+Executing /sbin/conf.d/SuSEconfig.sendmail...
+Executing /sbin/conf.d/SuSEconfig.susehilf...
+Executing /sbin/conf.d/SuSEconfig.susehilf.add...
+Executing /sbin/conf.d/SuSEconfig.susewm...
+Executing /sbin/conf.d/SuSEconfig.tetex...
+Executing /sbin/conf.d/SuSEconfig.ypclient...
+Processing index files of all manpages...
+Finished.</programlisting>
+		  </listitem>
 		</itemizedlist>
 
 	  </listitem>
@@ -1496,24 +1544,24 @@ root:/etc/rc.d/init.d# chmod 700 listener8i</programlisting>
 root:/etc/rc.d/init.d# ./listener8i stop
 Oracle 8i listener start/stop
 Shutting down Listener for 8i: 
-LSNRCTL for Linux: Version 8.1.6.0.0 - Production on 10-JUN-2000 18:28:49
+LSNRCTL for Linux: Version 8.1.7.0.0 - Production on 06-MAR-2002 18:28:49
 
-(c) Copyright 1998, 1999, Oracle Corporation.  All rights reserved.
+(c) Copyright 1998, Oracle Corporation.  All rights reserved.
 
 Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost.localdomain)(PORT=1521)))
 The command completed successfully
 
     
-# ./listener8i start
+root:/etc/rc.d/init.d# ./listener8i start
 Oracle 8i listener start/stop
 Starting the Listener for 8i: 
-LSNRCTL for Linux: Version 8.1.6.0.0 - Production on 10-JUN-2000 18:28:52
+LSNRCTL for Linux: Version 8.1.7.0.0 - Production on 06-MAR-2002 18:28:52
 
-(c) Copyright 1998, 1999, Oracle Corporation.  All rights reserved.
+(c) Copyright 1998, Oracle Corporation.  All rights reserved.
 
 Starting /ora8/m01/app/oracle/product/8.1.7/bin/tnslsnr: please wait...
 
-TNSLSNR for Linux: Version 8.1.6.0.0 - Production
+TNSLSNR for Linux: Version 8.1.7.0.0 - Production
 System parameter file is /ora8/m01/app/oracle/product/8.1.7/network/admin/listener.ora
 Log messages written to /ora8/m01/app/oracle/product/8.1.7/network/log/listener.log
 Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost.localdomain)(PORT=1521)))
@@ -1523,8 +1571,8 @@ Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost.localdomain)(P
 STATUS of the LISTENER
 ------------------------
 Alias                     LISTENER
-Version                   TNSLSNR for Linux: Version 8.1.6.0.0 - Production
-Start Date                10-JUN-2000 18:28:53
+Version                   TNSLSNR for Linux: Version 8.1.7.0.0 - Production
+Start Date                06-MAR-2002 18:28:53
 Uptime                    0 days 0 hr. 0 min. 0 sec
 Trace Level               off
 Security                  OFF
@@ -1555,7 +1603,7 @@ SQL&gt; select sysdate from dual;
 
 SYSDATE
 ----------
-2000-06-10
+2002-02-22
 
 SQL&gt; exit
 oracle:~$ exit

@@ -224,9 +224,10 @@ Done.</programlisting>
 
 		  Put the name of the driver(s) that you want into
 		  <computeroutput>conf-db</computeroutput>. This can be
-		  <computeroutput>postgresql</computeroutput>,
-		  <computeroutput>oracle</computeroutput>, or
-		  <computeroutput>both</computeroutput>.
+		  <computeroutput>"postgresql"</computeroutput>,
+		  <computeroutput>"oracle"</computeroutput>, or the word
+		  <computeroutput>"both"</computeroutput> if you want both drivers
+		  installed.
 		</para>
 
 		<programlisting>
@@ -253,6 +254,26 @@ nsadmin:/usr/local/src/aolserver$ echo "postgresql" > conf-db</programlisting>
 		<programlisting>
 nsadmin:/usr/local/src/aolserver$ echo "make" > conf-make</programlisting>
 	  </listitem>
+
+	  <listitem><para>
+		  If you're going to be installing the Postgresql driver, you'll
+		  have to adjust the makefile first. This will hopefully be cleaned
+		  up in future versions of this distribution.
+		</para>
+
+		<programlisting>
+nsadmin:/usr/local/src/aolserver$ emacs pgdriver/makefile</programlisting>
+
+		<para>
+		  Edit the lines containing PGLIB and PGINC so they look like this:
+		</para>
+		  
+		<programlisting>
+PGINC=/usr/local/pgsql/include
+
+PGLIB=/usr/local/pgsql/lib</programlisting>
+
+		</listitem>
 
       <listitem><para>Compile and install AOLserver and modules</para>
 		<programlisting>

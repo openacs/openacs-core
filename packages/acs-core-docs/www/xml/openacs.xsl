@@ -7,6 +7,8 @@
 <!-- I'll add customization later                                       -->
 
   <xsl:import href="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl"/>
+  <xsl:output media-type="text/html" encoding="iso-8859-1"/>
+
 
   <xsl:variable name="toc.section.depth">1</xsl:variable>
   <xsl:variable name="using.chunker">1</xsl:variable>
@@ -36,18 +38,18 @@
 				  <xsl:call-template name="gentext.nav.prev"/>
 				</a>
 			  </xsl:if>
-			  <xsl:text>&#160;</xsl:text>
+			  <xsl:text><![CDATA[&nbsp;]]></xsl:text>
 			</td>
 			<th width="60%" align="center">
 			  <xsl:choose>
 				<xsl:when test="count($up) > 0 and $up != $home">
 				  <xsl:apply-templates select="$up" mode="object.title.markup"/>
 				</xsl:when>
-				<xsl:otherwise>&#160;</xsl:otherwise>
+				<xsl:otherwise><![CDATA[&nbsp;]]></xsl:otherwise>
 			  </xsl:choose>
 			</th>
 			<td width="20%" align="right">
-			  <xsl:text>&#160;</xsl:text>
+			  <xsl:text><![CDATA[&nbsp;]]></xsl:text>
 			  <xsl:if test="count($next)>0">
 				<a accesskey="n">
 				  <xsl:attribute name="href">
@@ -89,7 +91,7 @@
 				  <xsl:call-template name="gentext.nav.prev"/>
 				</a>
 			  </xsl:if>
-			  <xsl:text>&#160;</xsl:text>
+			  <xsl:text><![CDATA[&nbsp;]]></xsl:text>
 			</td>
 			<td width="20%" align="center">
 			  <xsl:choose>
@@ -103,11 +105,11 @@
 					<xsl:call-template name="gentext.nav.home"/>
 				  </a>
 				</xsl:when>
-				<xsl:otherwise>&#160;</xsl:otherwise>
+				<xsl:otherwise><![CDATA[&nbsp;]]></xsl:otherwise>
 			  </xsl:choose>
 			</td>
 			<td width="40%" align="right">
-			  <xsl:text>&#160;</xsl:text>
+			  <xsl:text><![CDATA[&nbsp;]]></xsl:text>
 			  <xsl:if test="count($next)>0">
 				<a accesskey="n">
 				  <xsl:attribute name="href">
@@ -124,7 +126,7 @@
 		  <tr>
 			<td width="40%" align="left">
 			  <xsl:apply-templates select="$prev" mode="object.title.markup"/>
-			  <xsl:text>&#160;</xsl:text>
+			  <xsl:text><![CDATA[&nbsp;]]></xsl:text>
 			</td>
 			<td width="20%" align="center">
 			  <xsl:choose>
@@ -138,11 +140,11 @@
 					<xsl:call-template name="gentext.nav.up"/>
 				  </a>
 				</xsl:when>
-				<xsl:otherwise>&#160;</xsl:otherwise>
+				<xsl:otherwise><![CDATA[&nbsp;]]></xsl:otherwise>
 			  </xsl:choose>
 			</td>
 			<td width="40%" align="right">
-			  <xsl:text>&#160;</xsl:text>
+			  <xsl:text><![CDATA[&nbsp;]]></xsl:text>
 			  <xsl:apply-templates select="$next" mode="object.title.markup"/>
 			</td>
 		  </tr>
