@@ -1033,7 +1033,7 @@ ad_proc -public ad_page_contract {
 	    
 	    # no value supplied for this arg spec
 	    
-	    if { [info exists apc_default_value($formal_name)] && ![info exists var] } {
+	    if { [info exists apc_default_value($formal_name)] } {
 		
 		# Only use the default value if there has been no complaints so far
 		# Why? Because if there are complaints, the page isn't going to serve anyway,
@@ -1047,7 +1047,7 @@ ad_proc -public ad_page_contract {
 		    }
 		}
 		
-	    } elseif { ![info exists apc_internal_filter($formal_name:optional)] && ![info exists var] } {
+	    } elseif { ![info exists apc_internal_filter($formal_name:optional)] } {
 		ad_complain -key $formal_name "You must supply a value for $formal_name"
 	    }
 	}
