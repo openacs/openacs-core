@@ -3,7 +3,7 @@
 <table border="0" cellpadding="8" cellspacing="0" width="80%">
 
 <tr><td valign="top">
-<a href="index.html">Top Level index</a>
+<a href="index.html">Full index</a>
 
 <br>
 <a href="http://openacs.org/projects/openacs/doc-project">Errata and Corrections</a>
