@@ -227,6 +227,7 @@
   <msg key="Reject">Ablehnen</msg>
   <msg key="Remember_my_login">Anmeldedaten auf diesem Computer speichern</msg>
   <msg key="Remove">Entfernen</msg>
+  <msg key="Remove_All">Alle Entfernen</msg>
   <msg key="Req_membership_comm">Zugang zu dieser Gruppe beantragen</msg>
   <msg key="Req_membership_subs">Mitgliedschaft für diese Subsite beantragen</msg>
   <msg key="Request_membership">Zugang beantragen</msg>

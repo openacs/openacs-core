@@ -4,7 +4,7 @@
     <listtemplate name="permissions"></listtemplate>
   </p>
   <p>
-    <input type="submit" value="Save changes">
+    <input type="submit" value="#acs-subsite.Confirm#">
   </p>
 </form>
 

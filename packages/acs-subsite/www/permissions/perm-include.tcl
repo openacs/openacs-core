@@ -20,7 +20,7 @@ db_1row object_info {}
 
 set elements [list]
 lappend elements grantee_name { 
-    label "Name" 
+    label "[_ acs-subsite.Name]" 
     link_url_col name_url
     display_template {
         <if @permissions.any_perm_p_@ true>
@@ -57,7 +57,7 @@ foreach priv $privs {
 # Remove all
 lappend elements remove_all {
     html { align center } 
-    label "Remove All"
+    label "[_ acs-subsite.Remove_All]"
     display_template {<input type="checkbox" name="perm" value="@permissions.grantee_id@,remove">}
 }
 
@@ -71,8 +71,9 @@ if { ![exists_and_not_null user_add_url] } {
 set user_add_url [export_vars -base $user_add_url { object_id expanded {return_url "[ad_return_url]"}}]
 
 
-set actions [list "Add user" $user_add_url "Grant permissions to a new user"]
-
+set actions [list "[_ acs-subsite.Grant_Permission]" "${perm_url}grant?[export_vars {return_url application_url object_id}]" "[_ acs-subsite.Grant_Permission]" \
+				"[_ acs-subsite.Search_For_Exist_User]" $user_add_url "[_ acs-subsite.Search_For_Exist_User]"]
+				
 if { ![empty_string_p $context_id] } {
     set inherit_p [permission::inherit_p -object_id $object_id]
 
