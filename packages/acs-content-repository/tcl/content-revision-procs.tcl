@@ -14,7 +14,7 @@ namespace eval ::content::revision {}
 
 ad_proc -public ::content::revision::new {
     {-revision_id ""}
-    {-item_id ""}
+    {-item_id:required}
     {-title ""}
     {-description ""}
     {-content ""}
