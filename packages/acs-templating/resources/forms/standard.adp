@@ -1,15 +1,4 @@
-
-<table cellspacing="1" cellpadding="0" border="0">
-  <tr>
-    <td>
-
-      <table cellspacing="0" cellpadding="6" border="0" width="100%">
-        <tr>
-          <td>
-
-
-<!-- Form elements -->
-<table cellspacing="2" cellpadding="2" border="0" width="100%">
+<table cellspacing="2" cellpadding="2" border="0">
   <multiple name=elements>
 
     <if @elements.section@ not nil>
@@ -115,19 +104,10 @@
 
 </table>
 
-  <multiple name="elements">
-    <if @form_properties.show_required_p@ true>
-      <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform" and @elements.widget@ ne "select" and @elements.widget@ ne "hidden" and @elements.widget@ ne "submit">
-         <span class="form-required-mark">*</span> required <% break %>
-      </if>
+<multiple name="elements">
+  <if @form_properties.show_required_p@ true>
+    <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform" and @elements.widget@ ne "select" and @elements.widget@ ne "hidden" and @elements.widget@ ne "submit">
+       <span class="form-required-mark">*</span> required <% break %>
     </if>
-  </multiple>
-
-          </td>
-        </tr>
-
-      </table>
-
-    </td>
-  </tr>
-</table>
+  </if>
+</multiple>
