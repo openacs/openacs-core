@@ -13,11 +13,11 @@
     <hr>
     <b>Key:</b>
     <blockquote>
-      <pre>@key@</pre>
+      <pre>@key;noquote@</pre>
     </blockquote>
     <hr>
     <b>Value:</b>
     <blockquote>
-      @value@
+      @value;noquote@
     </blockquote>
 
