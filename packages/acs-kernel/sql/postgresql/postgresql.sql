@@ -722,19 +722,19 @@ create table acs_function_args (
 -- Add entries to acs_function_args for one function
 -- Usage: select define_function_args('function_name','arg1,arg2;default,arg3,arg4;default')
 
-create function define_function_args(varchar,varchar)
+create or replace function define_function_args(varchar,varchar)
 returns integer as '
 declare
-  p_function		alias for $1;
-  p_arg_list		alias for $2;
+  p_function            alias for $1;
+  p_arg_list            alias for $2;
 
-  v_arg_seq		integer default 1;
-  v_arg_name		varchar;
-  v_arg_default		varchar;
-  v_elem		varchar;
-  v_pos			integer;
+  v_arg_seq             integer default 1;
+  v_arg_name            varchar;
+  v_arg_default         varchar;
+  v_elem                varchar;
+  v_pos                 integer;
 begin
-  delete from acs_function_args where function = upper(p_function);
+  delete from acs_function_args where function = upper(trim(p_function));
 
   v_elem = split(p_arg_list, '','', v_arg_seq);
   while v_elem is not null loop
@@ -749,7 +749,7 @@ begin
     end if;
 
     insert into acs_function_args (function, arg_seq, arg_name, arg_default)
-	   values (upper(p_function), v_arg_seq, upper(v_arg_name), v_arg_default);
+	   values (upper(trim(p_function)), v_arg_seq, upper(trim(v_arg_name)), v_arg_default);
 
     v_arg_seq := v_arg_seq + 1;
     v_elem = split(p_arg_list, '','', v_arg_seq);
