@@ -75,8 +75,4 @@ if { [template::util::is_nil no_context_p] } {
 
 # Curriculum bar
 
-if { [apm_package_installed_p curriculum] } {
-    set curriculum_bar_p 1
-} else {
-    set curriculum_bar_p 0
-}
+set curriculum_bar_p [expr [apm_package_installed_p curriculum] && [llength [namespace eval :: info procs curriculum::get_bar]] == 1]
