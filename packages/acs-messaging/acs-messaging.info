@@ -36,15 +36,14 @@
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.0.1-4.1.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.0.1a-4.0.1.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.1-4.1.1.sql"/>
-            <file type="data_model" path="sql/postgres/acs-create.sql"/>
-            <file type="data_model_create" path="sql/postgres/acs-messaging-create.sql"/>
-            <file type="data_model_drop" path="sql/postgres/acs-messaging-drop.sql"/>
-            <file type="data_model" path="sql/postgres/acs-messaging-packages.sql"/>
-            <file type="data_model" path="sql/postgres/acs-messaging-views.sql"/>
-            <file type="data_model_upgrade" path="sql/postgres/upgrade/upgrade-4.0-4.0.1a.sql"/>
-            <file type="data_model_upgrade" path="sql/postgres/upgrade/upgrade-4.0.1-4.1.sql"/>
-            <file type="data_model_upgrade" path="sql/postgres/upgrade/upgrade-4.0.1a-4.0.1.sql"/>
-            <file type="data_model_upgrade" path="sql/postgres/upgrade/upgrade-4.1-4.1.1.sql"/>
+            <file type="data_model_create" db_type="postgresql" path="sql/postgresql/acs-messaging-create.sql"/>
+            <file type="data_model_drop" db_type="postgresql" path="sql/postgresql/acs-messaging-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-messaging-packages.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-messaging-views.sql"/>
+            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.0-4.0.1a.sql"/>
+            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.0.1-4.1.sql"/>
+            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.0.1a-4.0.1.sql"/>
+            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.1-4.1.1.sql"/>
             <file type="tcl_init" path="tcl/acs-messaging-init.tcl"/>
             <file type="query_file" db_type="oracle" path="tcl/acs-messaging-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/acs-messaging-procs-postgresql.xql"/>
