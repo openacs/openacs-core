@@ -50,13 +50,16 @@
                          acs_object.name(object_id) as object_name,
                          directory_p,
                          parent_id
-                  from site_nodes n,site_nodes_selection sn
+                  from site_nodes n
                   where (object_id is null
                          or exists (
                             select 1 from acs_object_party_privilege_map ppm 
                              where ppm.object_id = n.object_id 
                                and ppm.party_id = :user_id 
-                               and ppm.privilege = 'read')) and sn.node_id=n.node_id
+                               and ppm.privilege = 'read'))
+                        and exists (
+                            select 1 from site_nodes_selection sn
+                            where sn.node_id = n.node_id)
             start with node_id = nvl(:root_id, site_node.node_id('/'))
             connect by prior node_id = parent_id and parent_id in ([join $expand ", "])) site_map
             where site_map.object_id = p.package_id (+)
