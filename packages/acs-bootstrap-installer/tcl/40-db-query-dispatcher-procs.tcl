@@ -325,6 +325,13 @@ proc db_qd_replace_sql {statement_name sql} {
     return $sql
 }
 
+# fetch a query snippet
+proc db_map {snippet_name} {
+    set fullname [db_qd_get_fullname $snippet_name]
+    set fullquery [db_qd_fetch $fullname]
+    return [db_fullquery_get_querytext $fullquery]
+}
+
 # Check compatibility of a FullQuery against an RDBMS
 #
 # This procedure returns true or false. The RDBMS argument
@@ -671,8 +678,8 @@ proc db_qd_make_absolute_path {relative_root suffix} {
 proc db_qd_internal_prepare_queryfile_content {file_content} {
     
     set new_file_content ""
-    set rest_of_file_content $file_content
-
+    #set rest_of_file_content $file_content
+    regsub -all {(</?)partialquery([ >])} $file_content {\1fullquery\2} rest_of_file_content
     set querytext_open "<querytext>"
     set querytext_close "</querytext>"
 
