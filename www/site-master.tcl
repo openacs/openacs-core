@@ -92,8 +92,11 @@ if { $num_of_locales > 1 } {
 }
 
 # Curriculum bar
-set curriculum_bar_p [util_memoize [list llength [site_node::get_children -all -filters { package_key "curriculum" } -node_id $subsite_node_id]]]
-
+if { [empty_string_p [site_node::get_package_url -package_key curriculum]] } {
+    set curriculum_bar_p 0
+} else {
+    set curriculum_bar_p 1
+}
 
 # Who's Online
 set num_users_online [lc_numeric [whos_online::num_users]]
