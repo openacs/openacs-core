@@ -99,6 +99,9 @@ ad_proc -public template::element::create { form_id element_id args } {
                       1 or 0, and message is to be displayed to the user when 
                       the validation step fails.
 
+    @option sign      specify for a hidden widget that its value should be
+                      signed
+
     @option help_text Text displayed with the element 
 
     @option help      Display helpful hints (date widget only?)
@@ -179,7 +182,23 @@ ad_proc -public template::element::create { form_id element_id args } {
     if { [llength $opts(values)] || ! [info exists opts(value)] } {
       set opts(value) [lindex $opts(values) 0]
     }
+  } 
+
+  if { [string equal $opts(widget) hidden] 
+       && [info exists opts(sign)] 
+       && $opts(sign)
+   } { 
+      if {[info exists opts(value)] } {
+          set val $opts(value)
+      } else { 
+          set val {}
+      }
+      template::element::create $opts(form_id) $opts(id):sig \
+          -datatype text \
+          -widget hidden \
+          -value [ad_sign $val]
   }
+
 }
 
 ad_proc -public template::element::set_properties { form_id element_id args } {
@@ -198,6 +217,22 @@ ad_proc -public template::element::set_properties { form_id element_id args } {
   upvar 0 element opts
 
   template::util::get_opts $args
+
+    if { [string equal $opts(widget) hidden] 
+         && [info exists opts(sign)] 
+         && $opts(sign) 
+         && [info exists opts(value)] } {
+        if { [template::element::exists $form_id $element_id:sig] } {
+            template::element::set_properties $form_id $element_id:sig \
+                -value [ad_sign $opts(value)]
+
+        } else {
+            template::element::create $opts(form_id) $opts(id):sig \
+                -datatype text \
+                -widget hidden \
+                -value [ad_sign $opts(value)]
+        }
+    }
 
   copy_value_to_values_if_defined
 }

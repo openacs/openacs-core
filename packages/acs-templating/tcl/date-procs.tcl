@@ -400,7 +400,7 @@ ad_proc -public template::util::date::defaultInterval { what } {
     Get the default ranges for all the numeric fields of a Date object
 } {
   switch $what {
-    year        { return [list 2000 2010 1 ] }
+    year        { return [list 2002 2012 1 ] }
     month       { return [list 1 12 1] }
     day         { return [list 1 31 1] }
     hours       { return [list 0 23 1] }

@@ -55,7 +55,7 @@ ad_proc -public template::widget::search { element_reference tag_attributes } {
     # include an extra hidden element to indicate that the 
     # value is being selected as opposed to entered
 
-    set output "<input type=\"hidden\" name=\"$element(id):select\" value=\"t\" />"
+    set output "\n<input type=\"hidden\" name=\"$element(id):select\" value=\"t\" />"
     append output [select element $tag_attributes]
 
   }
@@ -130,9 +130,9 @@ ad_proc -public template::widget::inform { element_reference tag_attributes } {
   upvar $element_reference element
 
   if { [info exists element(value)] } {
-    return $element(value)
+      return "$element(value)[input hidden element $tag_attributes]"
   } else {
-    return ""
+      return [input hidden element $tag_attributes]
   }
 }
 
@@ -304,16 +304,20 @@ ad_proc -public template::widget::menu {
     append output ">\n"
   
     foreach option $options_list {
-  
+
       set label [lindex $option 0]
       set value [lindex $option 1]
-  
-      append output "  <option value=\"[template::util::quote_html $value]\" "
-  
-      if { [info exists values($value)] } {
-        append output "selected=\"selected\""
+
+      if {![string equal $label $value]} {
+        append output " <option value=\"[template::util::quote_html $value]\""
+      } else { 
+        append output " <option"
       }
-  
+        
+      if { [info exists values($value)] } {
+        append output " selected=\"selected\""
+      }
+
       append output ">$label</option>\n"
     }
   
