@@ -7,12 +7,17 @@ namespace eval template::util {}
 namespace eval template::util::file {}
 
 
-ad_proc -public template::data::transform::file { element_ref } {
+ad_proc -private template::data::transform::file { element_ref } {
     @return the list { file_name temp_file_name content_mime_type }.
 } {
     upvar $element_ref element
-    set element_id $element(id)
+    return [list [template::util::file_transform $element(id)]]
+}
 
+ad_proc -public template::util::file_transform { element_id } {
+    Helper proc, which gets AOLserver's variables from the query/form, and returns it as a 'file' datatype value.
+    @return the list { file_name temp_file_name content_mime_type }.
+} {
     # Work around Windows bullshit
     set filename [ns_queryget $element_id]
 
@@ -23,7 +28,7 @@ ad_proc -public template::data::transform::file { element_ref } {
     regsub -all {\\+} $filename {/} filename
     regsub -all { +} $filename {_} filename
     set filename [lindex [split $filename "/"] end]
-    return [list [list $filename [ns_queryget $element_id.tmpfile] [ns_queryget $element_id.content-type]]]
+    return [list $filename [ns_queryget $element_id.tmpfile] [ns_queryget $element_id.content-type]]
 
 }
 
