@@ -931,7 +931,7 @@ aa_register_case sync_http_get_document {
                           -contract "auth_sync_retrieve" \
                           -impl "HTTPGet" \
                           -operation "GetDocument" \
-                          -call_args [list [list snapshot_url {} incremental_url "[ad_url]/SYSTEM/dbtest.tcl"]]]
+                          -call_args [list [list SnapshotURL {} IncrementalURL "[ad_url]/SYSTEM/dbtest.tcl"]]]
     
 
     aa_equals "result.doc_status is ok" $result(doc_status) "ok"
