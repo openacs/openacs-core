@@ -15,7 +15,7 @@
     <fullquery name="auth::test::get_password_vars.select_vars">
         <querytext>
             select q.* from
-            (select u.user_id
+            (select u.user_id,
                     aa.authority_id,
                     u.username 
             from users u,

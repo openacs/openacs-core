@@ -82,11 +82,5 @@ ad_proc -public auth::driver::set_parameter_value {
     @author Simon Carstensen (simon@collaboraid.biz)
     @creation-date 2003-08-27
 } {
-    db_dml set_parameter {
-        update auth_driver_params
-        set    value = :value
-        where  key = :parameter
-        and    impl_id = :impl_id
-        and    authority_id = :authority_id
-    }
+    db_dml set_parameter {} -clobs [list $value]
 }
