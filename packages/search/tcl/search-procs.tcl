@@ -65,6 +65,7 @@ ad_proc -private search::indexer {} {
     if {[empty_string_p $driver]
         || ! [acs_sc_binding_exists_p FtsEngineDriver $driver]} {
         # Nothing to do if no driver
+        ns_log Debug "search::indexer: driver=$driver binding exists? [acs_sc_binding_exists_p FtsEngineDriver $driver]"
         return
     }
 
@@ -77,8 +78,8 @@ ad_proc -private search::indexer {} {
                     set object_type [acs_object_type $object_id]
                     if {[acs_sc_binding_exists_p FtsContentProvider $object_type]} {
                         array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
-                        if {$syndicate} { 
-                            search::syndicate -array datasource
+                        if {$syndicate} {
+                            search::syndicate -datasource datasource
                         }
                         search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
                         acs_sc_call FtsEngineDriver index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
