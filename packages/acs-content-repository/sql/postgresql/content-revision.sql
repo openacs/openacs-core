@@ -253,7 +253,7 @@ begin
        select 
          v_copy_id as object_id, 
          object_type, 
-         context_id, 
+         v_target_item_id, 
          security_inherit_p, 
          copy__creation_user as creation_user, 
          now() as creation_date, 

@@ -3,3 +3,6 @@
 -- folder.
 
 @@ ../content-item.sql
+
+-- fix error in setting context_id in content_revision__copy
+@@ ../content-revision.sql
