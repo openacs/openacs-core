@@ -1,9 +1,7 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS 5.0.0b1 Packages</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 8. Development Reference"><link rel="previous" href="dev-guide.html" title="Chapter 8. Development Reference"><link rel="next" href="objects.html" title="OpenACS Data Models and the Object System"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="packages"></a>OpenACS 5.0.0b1 Packages</h2></div></div><div></div></div><div class="authorblurb"><p>
-    By Pete Su and Bryan Quinn
-  <br>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS 5.0.0b1 Packages</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 8. Development Reference"><link rel="previous" href="dev-guide.html" title="Chapter 8. Development Reference"><link rel="next" href="objects.html" title="OpenACS Data Models and the Object System"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="packages"></a>OpenACS 5.0.0b1 Packages</h2></div></div><div></div></div><div class="authorblurb"><p>By Pete Su and Bryan Quinn</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-overview"></a>Overview</h3></div></div><div></div></div><p>
+        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-overview"></a>Overview</h3></div></div><div></div></div><p>
       This document is a guide on how to write a software package for
       OpenACS. OpenACS packages are installed and maintained
       with the OpenACS Package Manager (APM).  This document presents reasons
@@ -26,19 +24,19 @@ ROOT/
         core tcl libraries here
      www/
          admin/
-             bboard/
-                 site wide admin for bboard
+             forums/
+                 site wide admin for forums
              intranet/
                  site wide admin for intranet
 
              ... and so on for all modules ...
 
-         bboard/
-             pages for bboard
+         forums/
+             pages for forums
              admin/
-                 other admin pages for bboard
+                 other admin pages for forums
          intranet/
-             pages for bboard
+             pages for intranet
              admin/
                  other admin pages for intranet
          doc/
@@ -79,8 +77,8 @@ ROOT/
         acs-test-harness/
         acs-util/
         acs-workflow/
-        bboard/
-               bboard.info
+        forums/
+               forums.info
                sql/
                     oracle/
                          oracle data model
@@ -104,7 +102,7 @@ ROOT/
             misc pages
     </pre><p>
       Note that a major reorganization has happened here. The diagram only
-      expands the structure of the <tt class="computeroutput">bboard/</tt> package directory,
+      expands the structure of the <tt class="computeroutput">forums/</tt> package directory,
       but all the others are basically the same. Each package encapsulates
       all of its data model, library code, logic, adminstration pages and
       user pages in a single part of the file tree. This organization has
@@ -235,9 +233,9 @@ ROOT/
           files and then have the scripts source the other data model
           files. In Oracle this can be done by including 
           <span class="emphasis"><em>@@ filename</em></span> in the creation or drop
-          scripts. See the <a href="http://oradoc.photo.net/ora816/sqlplus.816/a75664/ch83.htm#1011677" target="_top">
-        Oracle SQL*Plus documentation</a> for examples. In
-          PostgreSQL the same is acomplished by including <span class="emphasis"><em>\i</em></span>.
+          scripts. See the <a href="http://www.orafaq.com/faqplus.htm#AT" target="_top">
+        Oracle FAQ</a> for examples. In
+          PostgreSQL the same is acomplished by including <span class="emphasis"><em>\i filename</em></span>.
         </td><td><tt class="computeroutput">sql/&lt;database&gt;/*.sql</tt></td></tr><tr><td>Data Model Upgrade Scripts</td><td>
               Contain changes to the data model between versions. The APM
               can automatically load the appropriate upgrade scripts when
@@ -277,9 +275,9 @@ ROOT/
           Tcl initialization files are sourced once on server startup
           after all of the Tcl library files are sourced.
         </td><td><tt class="computeroutput">tcl/notes-init.tcl</tt></td></tr><tr><td>Administration UI</td><td>The administration UI is used to administer the instances of
-          the package.  For example, the bboard administration UI is
+          the package.  For example, the forums administration UI is
           used to create new forums, moderate postings, and create new
-          categories for bboard postings.</td><td><tt class="computeroutput">www/admin/*</tt></td></tr><tr><td>Administration UI Index Page</td><td>Every package administration UI must have an index page.  In
+          categories for forums postings.</td><td><tt class="computeroutput">www/admin/*</tt></td></tr><tr><td>Administration UI Index Page</td><td>Every package administration UI must have an index page.  In
           most cases, this is <tt class="computeroutput">index.tcl</tt> but it can be
           any file with the name <tt class="computeroutput">index</tt>, such as
           index.html or index.adp.</td><td><tt class="computeroutput">www/admin/index.tcl</tt></td></tr><tr><td>Regression Tests</td><td>Every package should have a set of regression tests that
@@ -317,7 +315,7 @@ ROOT/
           distinguish it from all the others. It is used as a database key to
           keep track of the package and as the name of the directory in the file
           system where all the files related to your package will live. Example
-          package keys in the current system include: <tt class="computeroutput">bboard</tt>,
+          package keys in the current system include: <tt class="computeroutput">forums</tt>,
           <tt class="computeroutput">acs-kernel</tt> and so on. For the example application, we
           will use the package key <tt class="computeroutput">notes</tt>.
         </p></dd><dt><span class="term">Package Name
@@ -336,7 +334,7 @@ ROOT/
           Generally we think of packages as either being <span class="emphasis"><em>applications</em></span>,
           meaning that the package is meant primarily for use by end-users, or
           <span class="emphasis"><em>services</em></span> meaning that the package is meant to be a reusable
-          library of code, to be used by other packages. <tt class="computeroutput">bboard</tt> is
+          library of code, to be used by other packages. <tt class="computeroutput">forums</tt> is
           a good example of an application, while <tt class="computeroutput">acs-templating</tt> is
           a good example of a service. Our example is an application, so pick
           that.
@@ -397,7 +395,7 @@ ROOT/
       this point, you should add your package files to your CVS repository.
       I'll assume that you have set up your development repository according
       to the standards described in 
-      <a href="http://acs40.arsdigita.com/acs40-project-central/client-build.html" target="_top">these instructions</a>. If so, then you just do this:
+      <a href="cvs-service-import.html" title="Add the Service to CVS - OPTIONAL">this appendix</a>. If so, then you just do this:
     </p><pre class="programlisting">
 
 % cd ROOT/packages
@@ -412,7 +410,7 @@ ROOT/
 
     </pre></li><li><p>
       Now you can start developing the package. In addition to writing code,
-      you should also consider the tasks outlined in the <a href="http://acs40.arsdigita.com/acs40-project-central/package-submission.html" target="_top">package submission guidelines</a>.
+      you should also consider the tasks outlined in the <a href="tutorial-newpackage.html" title="Creating a Package">package development tutorial</a>.
     </p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-subsites"></a>The Site Map and Package Instances</h3></div></div><div></div></div><p>
       At this point, you are probably excited to see your new package in
       action. But, we haven't added any user visible pages yet. By
@@ -492,4 +490,4 @@ http://your-server.your-domain.com/notes/hello.html
     </p></li><li><p>
       Writes out package distribution files for other people to download and
       install. We'll cover this later.
-    </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-add-reading"></a>Additional Reading</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="apm-design.html">OpenACS 5.0.0b1 Package Manager Design</a></p></li><li><p><a href="apm-requirements.html">OpenACS 5.0.0b1 Package Manager Requirements</a></p></li><li><p><a href="http://acs40.arsdigita.com/acs40-project-central/package-submission.html" target="_top">Package submission guidelines</a></p></li></ul></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 8. Development Reference </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> OpenACS Data Models and the Object System</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/packages.html#comments">View comments on this page at openacs.org</a></center></body></html>
+    </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-add-reading"></a>Additional Reading</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="apm-design.html">OpenACS 5.0.0b1 Package Manager Design</a></p></li><li><p><a href="apm-requirements.html">OpenACS 5.0.0b1 Package Manager Requirements</a></p></li><li><p><a href="tutorial-newpackage.html" title="Creating a Package">package development tutorial</a></p></li></ul></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 8. Development Reference </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> OpenACS Data Models and the Object System</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/packages.html#comments">View comments on this page at openacs.org</a></center></body></html>

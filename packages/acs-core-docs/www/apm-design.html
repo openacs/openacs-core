@@ -1,8 +1,7 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS 5.0.0b1 Package Manager Design</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 10. Kernel Documentation"><link rel="previous" href="apm-requirements.html" title="OpenACS 5.0.0b1 Package Manager Requirements"><link rel="next" href="db-api-detailed.html" title="Database Access API"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="apm-requirements.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="db-api-detailed.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="apm-design"></a>OpenACS 5.0.0b1 Package Manager Design</h2></div></div><div></div></div><div class="authorblurb"><p>
-by <a href="mailto:bquinn@arsdigita.com" target="_top">Bryan Quinn</a><br>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS 5.0.0b1 Package Manager Design</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 10. Kernel Documentation"><link rel="previous" href="apm-requirements.html" title="OpenACS 5.0.0b1 Package Manager Requirements"><link rel="next" href="db-api-detailed.html" title="Database Access API"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="apm-requirements.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="db-api-detailed.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="apm-design"></a>OpenACS 5.0.0b1 Package Manager Design</h2></div></div><div></div></div><div class="authorblurb"><p>By Bryan Quinn</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="apm-design-essentials"></a>Essentials</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="/acs-admin/apm" target="_top">OpenACS Administrator directory</a></p></li><li><p><a href="apm-requirements.html">OpenACS 5.0.0b1 Package Manager Requirements</a></p></li><li><p><a href="packages.html">Packages</a></p></li><li><p><a href="images/apm.pdf" target="_top">ER diagram</a></p></li><li><p>Tcl API </p><div class="itemizedlist"><ul type="circle"><li><p><a href="/api-doc/procs-file-view?path=packages%2facs%2dkernel%2ftcl%2fapm%2dprocs%2etcl" target="_top">
+        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="apm-design-essentials"></a>Essentials</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="/acs-admin/apm" target="_top">OpenACS Administrator directory</a></p></li><li><p><a href="apm-requirements.html">OpenACS 5.0.0b1 Package Manager Requirements</a></p></li><li><p><a href="packages.html">Packages</a></p></li><li><p><a href="images/apm.pdf" target="_top">ER diagram</a></p></li><li><p>Tcl API </p><div class="itemizedlist"><ul type="circle"><li><p><a href="/api-doc/procs-file-view?path=packages%2facs%2dkernel%2ftcl%2fapm%2dprocs%2etcl" target="_top">
 apm-procs.tcl</a></p></li><li><p><a href="/api-doc/procs-file-view?path=packages%2facs%2dkernel%2ftcl%2fapm%2dinstall%2dprocs%2etcl" target="_top">
 apm-install-procs.tcl</a> (Supports installation of packages)</p></li><li><p><a href="/api-doc/procs-file-view?path=packages%2facs%2dkernel%2ftcl%2f20%2dapm%2dload%2dprocs%2etcl" target="_top">
 20-apm-load-procs.tcl</a> (Bootstraps APM for server startup)</p></li><li><p><a href="/api-doc/procs-file-view?path=packages%2facs%2dkernel%2ftcl%2fapm%2dadmin%2dprocs%2etcl" target="_top">
@@ -18,7 +17,7 @@ into one of two categories:
 </p><div class="itemizedlist"><ul type="disc"><li><p><span class="strong">OpenACS Applications:</span> a "program or group of programs
 designed for end users" (the <a href="http://www.pcwebopaedia.com/TERM/a/application.html" target="_top">Webopedia
 definition</a>); also known as <span class="emphasis"><em>modules</em></span>, for historical reasons.
-Examples of applications include <a href="/doc/bboard" target="_top">Bboard</a> and <a href="/doc/news" target="_top">News</a>. 
+Examples of applications include <a href="/doc/forums" target="_top">Forums</a> and <a href="/doc/news" target="_top">News</a>. 
 
 
 </p></li><li><p><span class="strong">OpenACS Services:</span> the aforementioned building blocks.
@@ -31,11 +30,11 @@ end-users. Packages function as individual pieces of <a href="subsites-design.ht
 application and service instances that provide the end-user with capabilities
 and content customized to the particular subsite.</p><p>This architecture supports the growth of collaborative commerce. For
 example, Jane User starts a forum focusing on the merits of View Cameras by
-creating an instance of the Bboard application for her personal subsite on an
+creating an instance of the Forum application for her personal subsite on an
 OpenACS Installation. Jack User discovers Jane's forum and includes a link to
 it in his subsite. As interest in Jane's forum grows, she creates a
 subsite specializing in providing information about View cameras. This
-subsite now includes several package instances beyond Bboard; it could
+subsite now includes several package instances beyond Forum; it could
 potentially include its own Ecommerce capabilities (ala <a href="http://shopping.yahoo.com" target="_top">Yahoo! Shopping</a>). This could include a
 knowledge management application that allows users to spread expertise about
 view cameras and a portal application that links to reliable camera models
@@ -88,7 +87,7 @@ where both ArsDigita and third-party developers will be able publish their
 packages for other ACS users to download and install.</p><p>For a simple illustration of the difference between ACS without APM
 (pre-3.3) and ACS with APM (3.3 and beyond), consider a hypothetical ACS
 installation that uses only two of the thirty-odd modules available circa ACS
-3.2 (say, bboard and e-commerce):</p><div class="mediaobject" align="center"><img src="images/acs-without-apm-vs-with-apm.png" align="middle" longdesc="ld-id2884056.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-id2884056.html" target="longdesc">D</a>]</span></div></div><p>APM itself is part of a package, the <span class="strong">OpenACS Kernel</span>, an OpenACS
+3.2 (say, bboard and e-commerce):</p><div class="mediaobject" align="center"><img src="images/acs-without-apm-vs-with-apm.png" align="middle" longdesc="ld-id2950760.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-id2950760.html" target="longdesc">D</a>]</span></div></div><p>APM itself is part of a package, the <span class="strong">OpenACS Kernel</span>, an OpenACS
 service that is the only mandatory component of an OpenACS installation.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="apm-design-competitors"></a>Competitive Analysis</h3></div></div><div></div></div><p>The OpenACS is a platform for web-based application software, and any software
 platform has the potential to develop problems like those described above.
 Fortunately, there are many precedents for systematic solutions,
@@ -466,7 +465,7 @@ procedure set_value (
 </pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="apm-design-data-model"></a>Data Model Discussion</h3></div></div><div></div></div><p>The central piece of the data model is the <tt class="computeroutput">apm_package_types</tt>
 table where each package is registered. When a new application or service is
 installed on an OpenACS instance, a corresponding row in this table is inserted
-with information about the type of package, e.g. if the <a href="/doc/bboard" target="_top">bboard package</a> is installed on your OpenACS server, a row
+with information about the type of package, e.g. if the <a href="/doc/forum" target="_top">forum package</a> is installed on your OpenACS server, a row
 in <tt class="computeroutput">apm_package_types</tt> will be created, noting that it's an
 application package type.</p><p>The <tt class="computeroutput">apm_packages</tt> table is used to contain information about
 the <span class="emphasis"><em>instances</em></span> of packages currently created in the system. The
