@@ -562,15 +562,18 @@ ad_proc -public apm_load_any_changed_libraries {} {
                 
                 switch $file_ext {
                     .tcl { 
-                        ns_log Notice "APM: Reloading $file..."
-                        apm_source $file_path
+                        # Make sure this is not a -init.tcl file as those should only be sourced on server startup
+                        if { ![regexp {\-init\.tcl$} $file_path] } {
+                            ns_log Notice "APM: Reloading $file..."
+                            apm_source $file_path
+                        }
                     }
                     .xql { 
                         ns_log Notice "APM: Reloading $file..."
                         db_qd_load_query_file $file_path
                     }
                     default {
-                        ns_log Notice "APM: $file has unknown file type, '$file_type': Not reloading."
+                        ns_log Notice "APM: File $file_path has unknown extension. Not reloading."
                     }
                 }
 
