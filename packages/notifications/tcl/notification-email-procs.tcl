@@ -177,7 +177,12 @@ namespace eval notification::email {
                 } else {
                     # we only want messages a person typed in themselves - nothing
                     # from any sort of auto-responder.
-                    if { [string compare -nocase $name "Auto-Submitted"] == 0 } {                       set is_auto_reply_p 1
+                    if { [string compare -nocase $name "Auto-Submitted"] == 0 } {
+                        set is_auto_reply_p 1
+                        break
+                    } elseif { [string compare -nocase $name "Subject"] == 0 && [string match -nocase $value "Out of Office AutoReply:"] == 0 } {
+                        # added for BP
+                        set is_auto_reply_p 1
                         break
                     } else {
                         lappend headers [string tolower $name] $value
@@ -206,7 +211,7 @@ namespace eval notification::email {
             # a break above just exited the while loop;  now we need to skip
             # the rest of the foreach as well
             if { $is_auto_reply_p } {
-                ns_log Notice "NOTIF-INCOMING-EMAIL: message contains Auto-Submitted header, skipping"
+                ns_log Notice "NOTIF-INCOMING-EMAIL: message is from an auto-responder, skipping"
                 if {[catch {ns_unlink $msg} errmsg]} {
                     ns_log Notice "NOTIF-INCOMING-EMAIL: couldn't remove message $msg:  $errmsg"
                 }
