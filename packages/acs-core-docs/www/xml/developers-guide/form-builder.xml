@@ -70,6 +70,16 @@
     db_1row get_task_values { }
     ad_form -extend -name form_name -form { ... }
     </programlisting>
+    
+    <para>Note that you will get strange results when you try to set
+    the values for the form. You'll need to set them explicitly in an
+    -on_refresh section of your ad_form. In that section, you'll get
+    the values from the database, and set the values as so:</para>
+
+    <programlisting>    db_1row get_task_values { }
+    template::element set_value form_name estimated_hours_work $estimated_hours_work
+    </programlisting>
+
   </sect2>
 
   <sect2 id="form-troubleshooting">
