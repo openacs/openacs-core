@@ -15,10 +15,10 @@
 <fullquery name="update_role">      
       <querytext>
       
-	update acs_rel_roles r
-	   set r.pretty_name = :pretty_name,
-	       r.pretty_plural = :pretty_plural
-	 where r.role = :role
+	update acs_rel_roles
+	   set pretty_name = :pretty_name,
+	       pretty_plural = :pretty_plural
+	 where role = :role
     
       </querytext>
 </fullquery>
