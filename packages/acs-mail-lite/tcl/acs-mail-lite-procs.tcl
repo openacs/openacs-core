@@ -461,7 +461,9 @@ namespace eval acs_mail_lite {
                     if {[string match . [string trim $line]]} {
                         append data .
                     }
-                    append data "$line\r\n"
+		    #AG: ensure no \r\r\n terminations.
+		    set trimmed_line [string trimright $line \r]
+		    append data "$trimmed_line\r\n"
                 }
                 append data .
                 
