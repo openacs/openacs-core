@@ -155,7 +155,9 @@
 		<para>
 		  Make sure that you keep track of what commands you are running
 		  and their output. I like to do my installations in a shell inside
-		  of emacs (M-x shell) so that I can save the output if needed.
+		  of emacs (M-x shell) so that I can save the output if needed. An
+		  alternative would be to use the
+		  <computeroutput>script</computeroutput> command.
 		</para>
 	  </listitem>
 

@@ -8,7 +8,6 @@
 <link rel="up" href="unix-install.html" title="Chapter 2. Installing on Unix/Linux">
 <link rel="previous" href="install-overview.html" title="Overview">
 <link rel="next" href="oracle.html" title="Install Oracle 8.1.7">
-<link rel="stylesheet" href="openacs.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="navheader">
@@ -60,7 +59,11 @@
 		</p>
 <p>
 		  This was written for ACS and has not yet been updated for
-		  OpenACS.</p>
+		  OpenACS. (Note: AOLServer is no longer supporting Windows 
+		  - it may be possible to run AOLServer under 
+		  <a href="http://www.cygwin.com" target="_top">Cygwin</a>, but I 
+		  haven't seen any success reports yet).
+		</p>
 </li>
 </ul></div>
 </div>
@@ -164,9 +167,10 @@
 		</p></li>
 </ul></div>
 <p>
-	  Historically, OpenACS documentation has described using
-	  <tt>/home/nsadmin</tt> as the home for
-	  aolserver. Either location is fine as long as you are consistent.
+	  None of these locations are set in stone - they're simply the values
+	  that we've chosen. You are free to install your software in other
+	  locations, but you'll need to adjust the instructions in this
+	  document to point to those locations.
 	</p>
 </div>
 <div class="sect2">
@@ -212,7 +216,7 @@
 		  </p></li>
 </ul></div>
 </div>
-<p><div class="cvstag">($Id$)</div></p>
+<p><span class="cvstag">($Id$)</span></p>
 </div>
 <div class="navfooter">
 <hr>
@@ -231,12 +235,9 @@
 </tr>
 </table>
 <hr>
-<address><a href="mailto:rmello@cc.usu.edu">
-			rmello@cc.usu.edu
-		  </a></address>
-<address><a href="mailto:vinod@kurup.com">
-			vinod@kurup.com
-		  </a></address>
+<center><a href="http://greenspun.com/com/kurup/acs/openacs4/operating-system.html">
+			Comments?
+		  </a></center>
 </div>
 </body>
 </html>
