@@ -380,7 +380,9 @@ ad_proc -public template::data::transform::search { element_ref } {
   if { [string equal $value {}] } { return [list] } 
 
   if { [string equal $value ":search:"] } { 
-      unset element(options)
+      if { [info exists element(options)] } {
+          unset element(options)
+      }
       template::element::set_error $element(form_id) $element_id "
         Please enter a search string."
       return [list]
@@ -404,7 +406,9 @@ ad_proc -public template::data::transform::search { element_ref } {
 
       # no search results so return text entry back to the user
 
-      unset element(options)
+      if { [info exists element(options)] } {
+          unset element(options)
+      }
 
       template::element::set_error $element(form_id) $element_id "
         No matches were found for \"$value\".<br>Please
