@@ -946,3 +946,18 @@ ad_proc -public apm_package_instance_delete {
     db_exec_plsql apm_package_instance_delete {}
 }
 
+##
+## Logging
+##
+
+ad_proc -public apm_log {
+    level
+    msg
+} {
+    Centralized APM logging. If you want to debug the APM, change
+    APMDebug to Debug and restart the server.  
+} {
+    if {![string equal "APMDebug" $level]} {
+        ns_log $level "$msg"
+    }
+}
