@@ -27,11 +27,16 @@
 
 <fullquery name="get_instance_id">
       <querytext>
-      select package_id from apm_packages where package_key='assessment'
+      select package_id from apm_packages where package_key='assessment' and package_id in (select object_id from site_nodes)
       </querytext>
 </fullquery>
  
 </queryset>
+
+
+
+
+
 
 
 

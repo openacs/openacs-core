@@ -22,6 +22,7 @@ set url [apm_package_url_from_id $package_id]
 
 set instance_id [ db_list_of_lists get_instance_id {}]
 set new_url [apm_package_url_from_id [lindex $instance_id 0]]
+
 set page_title "[ad_conn instance_name] Set the assessment for registration"
 
 set context [list "Set the assessment for registration"]
