@@ -7,8 +7,6 @@ for @first_names@ @last_name@ in @site_link@
 
 <hr>
 
-<p>@locals@</p>
-
 <form method="post" action="password-update-2">
   <input type="hidden" name="user_id" value="@user_id@">
   <input type="hidden" name="return_url" value="@return_url@">
