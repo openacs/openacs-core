@@ -720,17 +720,12 @@ ad_form -extend -name note \ </userinput>
     <para>You also need a drop script. This is untested for
     comptability with the above script.</para>
     <programlisting>
---
--- Project Manager
---
--- @author jader@bread.com
--- @author gwong@orchardlabs.com,ben@openforce.biz
--- @creation-date 2002-05-16
---
--- This code is newly concocted by Ben, but with significant concepts and code
--- lifted from Gilbert's UBB forums. Thanks Orchard Labs.
--- Jade in turn lifted this from gwong and ben.
---
+      -- @author gwong@orchardlabs.com,ben@openforce.biz
+      -- @creation-date 2002-05-16
+      --
+      -- This code is newly concocted by Ben, but with significant concepts and code
+      -- lifted from Gilbert's UBB forums. Thanks Orchard Labs.
+      -- Lars and Jade in turn lifted this from gwong and ben.
 
 create function inline_0 ()
 returns integer as '
@@ -739,7 +734,7 @@ declare
 begin
     for row in select nt.type_id
                from notification_types nt
-               where nt.short_name in (''lars_blogger_notif'')
+               where nt.short_name in (''lars_blogger_notif_type'',''lars_blogger_notif'')
     loop
         perform notification_type__delete(row.type_id);
     end loop;
@@ -762,8 +757,8 @@ begin
 
         -- the notification type impl
         impl_id := acs_sc_impl__get_id (
-                      ''NotificationType'',             -- impl_contract_name
-                      ''lars_blogger_notif_type'' -- impl_name
+                      ''NotificationType'',		-- impl_contract_name
+                      ''lars_blogger_notif_type''	-- impl_name
         );
 
         PERFORM acs_sc_binding__delete (
@@ -772,47 +767,46 @@ begin
         );
 
         v_foo := acs_sc_impl_alias__delete (
-                    ''NotificationType'',               -- impl_contract_name   
-                    ''lars_blogger_notif_type'',        -- impl_name
-                    ''GetURL''                          -- impl_operation_name
+                    ''NotificationType'',		-- impl_contract_name	
+                    ''lars_blogger_notif_type'',	-- impl_name
+                    ''GetURL''				-- impl_operation_name
         );
 
         v_foo := acs_sc_impl_alias__delete (
-                    ''NotificationType'',               -- impl_contract_name   
-                    ''lars_blogger_notif_type'',        -- impl_name
-                    ''ProcessReply''                    -- impl_operation_name
+                    ''NotificationType'',		-- impl_contract_name	
+                    ''lars_blogger_notif_type'',	-- impl_name
+                    ''ProcessReply''			-- impl_operation_name
         );
 
-        select into v_foo type_id 
-          from notification_types
-         where sc_impl_id = impl_id
-          and short_name = ''lars_blogger_notif'';
+	select into v_foo type_id 
+	  from notification_types
+	 where sc_impl_id = impl_id
+	  and short_name = ''lars_blogger_notif'';
 
-        perform notification_type__delete (v_foo);
+	perform notification_type__delete (v_foo);
 
-        delete from notification_types_intervals
-         where type_id = v_foo 
-           and interval_id in ( 
-                select interval_id
-                  from notification_intervals 
-                 where name in (''instant'',''hourly'',''daily'')
-        );
+	delete from notification_types_intervals
+	 where type_id = v_foo 
+	   and interval_id in ( 
+		select interval_id
+		  from notification_intervals 
+		 where name in (''instant'',''hourly'',''daily'')
+	);
 
-        delete from notification_types_del_methods
-         where type_id = v_foo
-           and delivery_method_id in (
-                select delivery_method_id
-                  from notification_delivery_methods 
-                 where short_name in (''email'')
-        );
+	delete from notification_types_del_methods
+	 where type_id = v_foo
+	   and delivery_method_id in (
+		select delivery_method_id
+		  from notification_delivery_methods 
+		 where short_name in (''email'')
+	);
 
-        return (0);
+	return (0);
 end;
 ' language 'plpgsql';
 
 select inline_0();
 drop function inline_0();
-
     </programlisting>
 
     <para>The next step is to setup our notification creation. A new notification must 
@@ -829,10 +823,17 @@ drop function inline_0();
             -notif_text $new_content
     </programlisting>
 
-    <para>This code is placed in the tcl procedure that creates blog entries, right after
-    the entry gets created in the code. The <computeroutput>$blog(package_id)</computeroutput> 
-    is the OpenACS object_id of the Weblogger instance to which the entry has been posted to 
-    and the <computeroutput>$new_content</computeroutput> is the content of the entry.</para>
+    <para>This code is placed in the tcl procedure that creates blog
+    entries, right after the entry gets created in the code. The
+    <computeroutput>$blog(package_id)</computeroutput> is the OpenACS
+    object_id of the Weblogger instance to which the entry has been
+    posted to and the <computeroutput>$new_content</computeroutput> is
+    the content of the entry. This example uses the package_id for the
+    object_id, which results in setting up notifications for all
+    changes for blogger entries in this package. However, if you
+    instead used the blog_entry_id or something like that, you could
+    set up per-item notifications. The forums packages does this --
+    you can look at it for an example.</para>
 
     <para>The final step is to setup the notification subscription process. In this 
     example we want to let a user find out when a new entry has been posted to the blog. To 
