@@ -272,7 +272,7 @@ select 1;
       </querytext>
 </fullquery>
 
-<fullquery name="package_exec_plsql.exec_plsql_func">      
+<fullquery name="package_exec_plsql.exec_func_plsql">      
       <querytext>
 
 	select ${package_name}__${object_name}([plpgsql_utility::generate_attribute_parameter_call \
