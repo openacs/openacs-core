@@ -528,7 +528,7 @@ ad_proc -public template::widget::dateFragment {
      # Display text entry for some elements, or if the type is text
      if { [string equal $type t] ||
           [regexp "year|short_year" $fragment] } {
-       return "<input type=\"text\" name=\"$element(name).$fragment\" size=\'$size\"
+       return "<input type=\"text\" name=\"$element(name).$fragment\" size=\"$size\"
      maxlength=\"$size\" value=\"[template::util::leadingPad $value $size]\"/>\n"
      } else {
      # Use a default range for others
