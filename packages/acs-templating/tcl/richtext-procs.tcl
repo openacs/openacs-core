@@ -135,7 +135,7 @@ ad_proc -public template::util::richtext::get_property { what richtext_list } {
     <li>contents - returns the actual contents of the textarea field</li>
     <li>format - returns the mimetype, e.g. 'text/plain'</li>
     <li>html_value - returns the content converted to html format, regardless of the format the content is actually in. In case it is already text/html no conversion will be applied.</li></ul>
-    @param richtext_list the name of a richtext widget list, usually created with ad_form
+    @param richtext_list a richtext widget list, usually created with ad_form
     
 
 } {
