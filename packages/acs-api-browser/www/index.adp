@@ -1,4 +1,4 @@
-<master>
+<master src="master">
 <property name=title>@title@</property>
 <property name=context_bar>@context_bar@</property>
 
@@ -11,49 +11,50 @@
      <td valign="top">
       <h4>ACS Tcl API Search:</h4>
 
-      <input type="text" name="query_string"><br>
-      <input type="submit" value="Search" name="search_type">
-      <input type="submit" value="Feeling Lucky" name="search_type"><p>
-      <a href="proc-browse">Browse OpenACS Tcl API</a>
+      <input type="text" name="query_string" /><br />
+      <input type="submit" value="Search" name="search_type" />
+      <input type="submit" value="Feeling Lucky" name="search_type" />
+      <p><a href="proc-browse">Browse OpenACS Tcl API</a></p>
 
      </td>
      <td>
       <table cellspacing="0" cellpadding="0">
-        <tr><td align=right>Name:</td>
-          <td><input type="checkbox" name="name_weight" value="5" checked> </td>
-        <tr><td align=right>Parameters:</td>
-          <td><input type="checkbox" name="param_weight" value="3" checked></td>
-        <tr><td align=right>Documentation:</td>
-          <td><input type="checkbox" name="doc_weight" value="2" checked></td>
-        <tr><td align=right>Source:</td>
-          <td><input type="checkbox" name="source_weight" value="1"></td>
-        </tr>
+        <tr><td align="right">Name:</td>
+          <td><input type="checkbox" name="name_weight" value="5" checked="checked" /> </td></tr>
+        <tr><td align="right">Parameters:</td>
+          <td><input type="checkbox" name="param_weight" value="3" checked="checked" /></td></tr>
+        <tr><td align="right">Documentation:</td>
+          <td><input type="checkbox" name="doc_weight" value="2" checked="checked" /></td></tr>
+        <tr><td align="right">Source:</td>
+          <td><input type="checkbox" name="source_weight" value="1" /></td></tr>
       </table>
+
      </td>
     </tr>
    </table>
    </form>
 
-   <hr>
-    <h4>ACS PL/SQL API Search:</h4>
-    <a href="plsql-subprograms-all">Browse OpenACS PL/SQL API</a>
-    <p>
+   <hr />
+     <h4>ACS PL/SQL API Search:</h4>
+     <p><a href="plsql-subprograms-all">Browse OpenACS PL/SQL API</a></p>
 
-    <form action="tcl-proc-view" method="get">
-     <h4>AOLserver API Search:</h4><br>
-     <input type="text" name="tcl_proc">
-     <input type="submit" value="Go"><br>
-     (enter <em>exact</em> procedure name)<br>
-     <a href="@aolserver_tcl_api_root@">Browse AOLserver Tcl API</a>
-    </form>
 
-    <p>
+
+     <h4>AOLserver API Search:</h4><br />
+     <form action="tcl-proc-view" method="get">
+      <input type="text" name="tcl_proc" />
+      <input type="submit" value="Go" /><br />
+      (enter <em>exact</em> procedure name)<br />
+      <a href="@aolserver_tcl_api_root@">Browse AOLserver Tcl API</a>
+     </form>
+
+
 
     <h4>Tcl Documentation Search:</h4>
     <form action="tcl-doc-search" method="get">
-     <input type="text" name="tcl_proc">
-     <input type="submit" value="Go"><br>
-     (enter <em>exact</em> procedure name)<br>
+     <input type="text" name="tcl_proc" />
+     <input type="submit" value="Go" /><br />
+     (enter <em>exact</em> procedure name)<br />
      <a href="@tcl_docs_root@">Browse the Tcl documentation</a>
     </form>
 
@@ -68,7 +69,7 @@
 <multiple name="installed_packages">
   <li><a
    href="package-view?version_id=@installed_packages.version_id@">@installed_packages.pretty_name@
-   @installed_packages.version_name@</a>
+   @installed_packages.version_name@</a></li>
 </multiple>
 
 </ul>
