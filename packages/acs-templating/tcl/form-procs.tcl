@@ -112,8 +112,6 @@ ad_proc -public template::form::template { id { style "" } } {
 
   get_reference 
 
-  ns_log notice "REFERENCE****************"
-
   set elements:rowcount 0
 
   foreach element_ref $elements {

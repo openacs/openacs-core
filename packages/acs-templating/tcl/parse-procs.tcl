@@ -33,7 +33,6 @@ ad_proc -public template::adp_parse { __adp_stub __args } {
       } else {
 	set __name $__value
       }
-      ns_log debug "REFERENCE: '$__name' from '$__value'"
       upvar \#[adp_level] $__value $__name \
 	  $__value:rowcount $__name:rowcount \
 	  $__value:columns  $__name:columns
