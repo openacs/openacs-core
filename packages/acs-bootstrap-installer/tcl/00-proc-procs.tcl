@@ -378,17 +378,81 @@ ad_proc -public ad_proc {
     [doc_string]
     body 
 } {
-    Declare a procedure.
+    <p>
+    Declare a procedure with the following enhancements
+    over regular Tcl "<tt>proc</tt>":
+    </p>
+    
+    <p>
+    <ul>
+      <li> A procedure can be declared as public, private, deprecated, and warn.</li>
+      <li> Procedures can be declared with regular <i>positional</i> parameters (where
+           you pass parameters in the order they were declared), or with <i>named</i>
+	   parameters, where the order doesn't matter because parameter names are 
+	   specified explicitely when calling the parameter. Named parameters are 
+	   preferred.</li>
+      <li> If you use named parameters, you can specify which ones are required, optional,
+           (including default values), and boolean (which act like an on/off switch). 
+	   See the examples below.</li>
+      <li> When a parameter is declared as :boolean, it creates a variable $param_name_p.
+           For example: -foo:boolean will create a variable $foo_p. If the parameter is
+	   passed, $foo_p will have value 1. Otherwise, $foo_p will have value 0.</li>
+      <li> With named parameters, the same rule as the Tcl <tt>switch</tt> statement apply,
+           meaning that <tt>--</tt> marks the end of the parameters. This is important if
+	   your named parameter contains a value of something starting with a "-".</li>
+      <li> The declaration can (and <b>should!</b>) include documentation. This documentation 
+           may contain tags which will be parsed for display in the api browser.  Some tags are 
+	   <tt>@param</tt>, <tt>@return</tt>, <tt>@error</tt>, <tt>@see</tt>, <tt>@author</tt>
+           (probably this should be better documented).</li>
+    </ul>
+    </p>
 
-    Documentation may contain tags which will be parsed for display in 
-    the api browser.  Some tags are @param, @return, @error, @see, @author
-    (probably this should be better documented).
+    <p>
+    Here's an example with named parameters, and namespaces (notice the preferred way of
+    declaring namespaces and namespaced procedures). Disconsider the "\" in "\@param",
+    I had to use it so the api-browser wouldn't think the parameter docs were for ad_proc
+    itself:
+    </p>
 
+    <p>
+    <pre>
+namespace eval ::foobar {}
+
+ad_proc -public ::foobar::new {
+	{-oacs_user:boolean}
+	{-shazam}
+	{-user_id ""}
+} {
+	The documentation for this procedure should have a brief description of the 
+	purpose of the procedure (the WHAT), but most importantly, WHY it does what it 
+	does. One can read the code and see what it does (but it's quicker to see a
+	description), but one cannot read the mind of the original programmer to find out 
+	what s/he had in mind.
+
+	\@author Roberto Mello <rmello at fslc.usu.edu>
+	\@creation-date 2002-01-21
+	
+	\@param oacs_user If this user is already an openacs user. oacs_user_p will be defined.
+	\@param shazam Magical incantation that calls Captain Marvel.
+	\@param user_id The id for the user to process. Default will be "" 
+	                (api-browser will show the default automatically)
+} {
+	if { [empty_string_p $user_id] } {
+		# Do something if this is not an empty string
+	}
+
+	if { $oacs_user_p } {
+		# Do something if this is an openacs user
+	}
+}
+    </pre>
+    </p>
+	
     @param public specifies that the procedure is part of a public API.
     @param private specifies that the procedure is package-private.
     @param deprecated specifies that the procedure should not be used.
-    @param warn specifies that the procedure should generate a warning when invoked (requires that 
-           -deprecated also be set)
+    @param warn specifies that the procedure should generate a warning 
+                when invoked (requires that -deprecated also be set)
     @param arg_list the list of switches and positional parameters which can be
         provided to the procedure.
     @param [doc_string] documentation for the procedure (optional, but greatly desired).
