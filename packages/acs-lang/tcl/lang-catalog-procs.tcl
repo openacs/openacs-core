@@ -646,6 +646,7 @@ ad_proc -private lang::catalog::import_from_file {
 ad_proc -public lang::catalog::import {
     {-package_key {}}
     {-locales {}}
+    {-initialize:boolean}
     {-cache:boolean}
 } {
     Import messages from catalog files to the database. By default all messages
@@ -654,6 +655,7 @@ ad_proc -public lang::catalog::import {
 
     @param package_key Restrict the import to the package with this key
     @param locales     A list of locales to restrict the import to
+    @param initialize  Only load messages from packages that have never before had any message imported
     @param cache       Provide this switch if you want the proc to cache all the imported messages
 
     @author Peter Marklund
@@ -664,7 +666,16 @@ ad_proc -public lang::catalog::import {
         set package_key_list [apm_enabled_packages]
     }
 
+    if { $initialize_p } {
+        set uninitialized_packages [db_list select_uninitialized {}]
+    }
+
     foreach package_key $package_key_list {
+        if {$initialize_p && [lsearch -exact $uninitialized_packages $package_key] == -1} {
+            # The package is already initialized
+            continue
+        }
+
         # Skip the package if it has no catalog files at all
         if { ![file exists [package_catalog_dir $package_key]] } {
             continue
