@@ -133,7 +133,7 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
             <para>
 
         Most of this information comes from Tom Jackson's <ulink
-          url="http://zmbh.com/daemontools-aolserver/aolserver+daemontools.html">AOLserver+Daemontools
+          url="http://zmbh.com/daemontools-aolserver/daemontools-aolserver.html">AOLserver+Daemontools
           Mini-HOWTO</ulink>.
 </para>
         </listitem>
