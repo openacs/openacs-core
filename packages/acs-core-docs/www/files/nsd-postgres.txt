@@ -3,4 +3,6 @@
 export PATH=$PATH:/usr/local/pgsql/bin
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib
 
+# may need to add /usr/local/aolserver/lib to the LD_LIBRARY_PATH
+
 exec /usr/local/aolserver/bin/nsd $*
