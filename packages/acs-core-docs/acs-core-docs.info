@@ -24,6 +24,7 @@
 
         <files>
             <file type="package_spec" path="acs-core-docs.info"/>
+            <file type="tcl_procs" path="tcl/acs-core-docs-procs.tcl"/>
             <file type="content_page" path="www/acs-admin.html"/>
             <file type="content_page" path="www/acs-dev.html"/>
             <file type="content_page" path="www/aolserver.html"/>
