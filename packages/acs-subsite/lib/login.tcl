@@ -76,10 +76,14 @@ if { [llength $authority_options] > 1 } {
     }
 }
 
+if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id [ad_acs_kernel_id]] } {
+    set username_widget password
+} else {
+    set username_widget text
+}
+ad_form -extend -name login -form [list [list username:text($username_widget) [list label "Username"]]]
+
 ad_form -extend -name login -form {
-    {username:text
-        {label "Username"}
-    }
     {password:text(password) 
         {label "Password"}
     }
