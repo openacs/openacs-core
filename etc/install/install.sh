@@ -292,14 +292,15 @@ if [ $database == "postgres" ]; then
     # Postgres
     pg_bindir=`get_config_param pg_bindir`
     pg_port=`get_config_param pg_port`
+    pg_db_user=`get_config_param pg_db_user`
     db_name=`get_config_param db_name`
-    su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/dropuser -p $pg_port $db_name"
+    su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/dropuser -p $pg_port $pg_db_user"
     # dropdb may be redundant becasue dropping the user should drop the db, 
     # but only if our assumption that db_user owns db_name is true
     su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/dropdb -p $pg_port $db_name"
 
-    su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/createuser -d -a -p $pg_port $db_name"
-    su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/createdb -p $pg_port $db_name"
+    su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/createuser -d -a -p $pg_port $pg_db_user"
+    su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/createdb -E UNICODE -p $pg_port $db_name"
 
     # createlang was part of this command but is not necessary 
     # (and causes an error) for newer installs
