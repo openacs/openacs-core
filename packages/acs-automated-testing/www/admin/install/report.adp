@@ -13,3 +13,7 @@
     </li>
   </multiple>
 </ul>
+
+<if @xml_report_dir@ nil>
+  The XMLReportDir parameter is empty so a server listing cannot be generated.
+</if>
