@@ -87,3 +87,15 @@ ad_proc content_extlink::extlink_p {
 } {
     return [db_string extlink_check {}]
 }
+
+ad_proc content_extlink::extlink_name {
+    -item_id:required
+} {
+
+    Returns the name of an extlink
+
+    @item_id  The object id of the item to check.
+
+} {
+    return [db_string extlink_name {}]
+}

@@ -13,4 +13,12 @@
       </querytext>
    </fullquery>
 
+   <fullquery name="content_extlink::extlink_name.extlink_name">      
+      <querytext>
+          select label
+          from cr_extlinks
+          where extlink_id = :item_id
+      </querytext>
+   </fullquery>
+
 </queryset>
