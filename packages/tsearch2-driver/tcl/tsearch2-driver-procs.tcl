@@ -135,12 +135,16 @@ ad_proc -public tsearch2::search {
 	set offset_clause " offset :offset "
     }
     set query_text "select object_id from txt where fti @@ to_tsquery('default',:query) and exists (select 1
-                  from acs_object_party_privilege_map m
+                   from acs_object_party_privilege_map m
                    where m.object_id = txt.object_id
                      and m.party_id = :user_id
-                     and m.privilege = 'read')order by rank(fti,to_tsquery('default',:query))  ${limit_clause} ${offset_clause}"
+                     and m.privilege = 'read') order by rank(fti,to_tsquery('default',:query))  ${limit_clause} ${offset_clause}"
     set results_ids [db_list search $query_text]
-    set count [db_string count "select count(*) from txt where fti @@ to_tsquery('default',:query)"]
+    set count [db_string count "select count(*) from txt where fti @@ to_tsquery('default',:query)  and exists
+                  (select 1 from acs_object_party_privilege_map m
+                   where m.object_id = txt.object_id
+                     and m.party_id = :user_id
+                     and m.privilege = 'read')"]
     set stop_words [list]
     # lovely the search package requires count to be returned but the
     # service contract definition doesn't specify it! 
