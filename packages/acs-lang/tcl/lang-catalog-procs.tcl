@@ -112,7 +112,7 @@ namespace eval lang::catalog {
         array set msg_catalog_array {}
 
         # Parse the xml document
-        set tree [xml_parse $xml_data]
+        set tree [xml_parse $catalog_file_contents]
 
         # Get the message catalog root node
         set root_node [xml_doc_get_first_node_by_name $tree ${MESSAGE_CATALOG_TAG}]
