@@ -201,7 +201,7 @@ ad_return_complaint 1 "Error: A [parameter::get -parameter classes_pretty_name]
 set msg_subst_list [list subject [parameter::get -localize -parameter classes_pretty_name] 
                          class_instances [parameter::get -localize -parameter class_instances_pretty_plural]]
 
-ad_return_complaint 1 [_ [ad_conn locale] dotlrn.class_may_not_be_deleted "" $msg_subst_list]
+ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
 </pre>
 
 <p>
