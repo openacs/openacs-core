@@ -79,7 +79,7 @@ namespace eval notification::sweep {
                     if {![empty_string_p $batched_content]} {
                         ns_log Debug "NOTIF-BATCHED: content to send!"
                         db_transaction {
-                            ns_log Notice "NOTIF-BATCHED: sending content"
+                            ns_log Debug "NOTIF-BATCHED: sending content"
                             # System name is used in the subject
                             set system_name [ad_system_name]
                             notification::delivery::send \
@@ -112,7 +112,7 @@ namespace eval notification::sweep {
                 
 
                 # append content to built-up content
-                ns_log Notice "NOTIF-BATCHED: appending one notif!"
+                ns_log Debug "NOTIF-BATCHED: appending one notif!"
                 append batched_content "[_ notifications.SUBJECT] [ns_set get $notif notif_subject]\n[ns_set get $notif notif_text]\n\n\n=====================\n\n\n"
                 lappend list_of_notification_ids [ns_set get $notif notification_id]
 
