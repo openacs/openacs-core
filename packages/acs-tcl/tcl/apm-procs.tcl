@@ -1445,13 +1445,7 @@ ad_proc -private apm_application_new_checkbox {} {
 } {
     set html_string "<select name=package_key>"
 
-    db_foreach package_types {
-      select package_key, pretty_name
-      from apm_package_types
-      where not (apm_package.singleton_p(package_key) = 1 and
-            apm_package.num_instances(package_key) >= 1)
-      order by pretty_name
-    } {
+    db_foreach package_types {} {
       append html_string "<option value=$package_key>$pretty_name</option>\n"
     }
 
