@@ -251,7 +251,7 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
       global errorInfo
       ad_call_proc_if_exists ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] $startclicks [clock clicks] "error" $errorInfo]
       # make sure you report catching the error!
-      rp_debug -debug t "error in filter $proc for [ns_conn method] [ns_conn url]?[ns_conn query] errno is $errno message is $errorInfo"
+      rp_debug "error in filter $proc for [ns_conn method] [ns_conn url]?[ns_conn query] errno is $errno message is $errorInfo"
       rp_report_error
       set result "filter_return"
     } elseif { [string compare $result "filter_ok"] && [string compare $result "filter_break"] && \
@@ -259,7 +259,7 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
        set error_msg "error in filter $proc for [ns_conn method] [ns_conn url]?[ns_conn query].  Filter returned invalid result \"$result\""
        ad_call_proc_if_exists ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] $startclicks [clock clicks] "error" $error_msg]
         # report the bad filter_return message
-        rp_debug -debug t error $error_msg
+        rp_debug error $error_msg
        rp_report_error -message $error_msg
 	set result "filter_return"
     } else {
@@ -309,7 +309,7 @@ ad_proc -private rp_invoke_proc { conn argv } {
       # Uh-oh - an error occurred.
       global errorInfo
       ad_call_proc_if_exists ds_add rp [list registered_proc [list $proc $arg] $startclicks [clock clicks] "error" $errorInfo]
-      rp_debug -debug t "error in $proc for [ns_conn method] [ns_conn url]?[ns_conn query] errno is $errno message is $errorInfo"
+      rp_debug "error in $proc for [ns_conn method] [ns_conn url]?[ns_conn query] errno is $errno message is $errorInfo"
       rp_report_error
     } else {
       ad_call_proc_if_exists ds_add rp [list registered_proc [list $proc $arg] $startclicks [clock clicks]]
@@ -546,7 +546,7 @@ ad_proc -private rp_filter { why } {
       }
     } errmsg] {
         # log and do nothing
-        rp_debug -debug t "error within rp_filter [ns_conn method] [ns_conn url] [ns_conn query].  $errmsg"
+        rp_debug "error within rp_filter [ns_conn method] [ns_conn url] [ns_conn query].  $errmsg"
     } else {
 	if {[string equal $node(url) "[ad_conn url]/"]} {
 	    ad_returnredirect $node(url)
@@ -760,7 +760,7 @@ ad_proc -private rp_handler {} {
 	rp_serve_concrete_file $file
 	return
       }
-      rp_debug -debug t "error in rp_handler: $errmsg"
+      rp_debug "cache miss in rp_handler: $errmsg"
     }
 
     set paths [list]
@@ -862,7 +862,7 @@ ad_proc -private rp_handler {} {
         } else {
             set q ""
         }
-        rp_debug -debug t "error in rp_handler: serving [ns_conn method] [ns_conn url]$q[ns_conn query] \n\tad_url \"[ad_conn url]\" maps to file \"[ad_conn file]\"\nerrmsg is $errmsg"
+        rp_debug "error in rp_handler: serving [ns_conn method] [ns_conn url]$q[ns_conn query] \n\tad_url \"[ad_conn url]\" maps to file \"[ad_conn file]\"\nerrmsg is $errmsg"
         rp_report_error
     }
   }
