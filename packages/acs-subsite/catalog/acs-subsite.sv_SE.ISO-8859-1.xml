@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d5" locale="sv_SE" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.0d6" locale="sv_SE" charset="ISO-8859-1">
 
   <msg key="About_You">Om dig</msg>
   <msg key="Answer">Svar</msg>
@@ -51,6 +51,7 @@
   <msg key="lt_Your_email_has_been_c_1">Din epost har bekräftats. Du avvaktar nu godkännande från administratören på %system_name%.</msg>
   <msg key="lt_Your_email_is_confirm">Din epost är bekräftad</msg>
   <msg key="lt_Your_URL_doesnt_have_">Din URL har inte en korrekt form. En godkänd URL skall vara något liknande \&quot;%valid_url_example%\&quot;.&quot; </msg>
+  <msg key="Name">Namn:</msg>
   <msg key="New_Password">Nytt lösenord:</msg>
   <msg key="no_portrait_title_message">ditt porträtt</msg>
   <msg key="none">ingenting</msg>

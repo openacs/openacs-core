@@ -56,6 +56,7 @@
   <msg key="lt_Your_email_has_been_c_1">Din e-mailadresse er blevet bekræftet. Der ventes nu på godkendelse fra administratoren af %system_name%.</msg>
   <msg key="lt_Your_email_is_confirm">Din e-mailadresse er blevet bekræftet.</msg>
   <msg key="lt_Your_URL_doesnt_have_">Din URL har ikke den korrekte form. En gyldig URL vil se ud i retningen af \&quot;%valid_url_example%\&quot;.&quot;</msg>
+  <msg key="Name">Navn:</msg>
   <msg key="New_Password">Ny adgangskode:</msg>
   <msg key="no_portrait_title_message">dit portræt</msg>
   <msg key="none">ingen</msg>

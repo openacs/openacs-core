@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d5" locale="fr_FR" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.0d6" locale="fr_FR" charset="ISO-8859-1">
 
   <msg key="About_You">A propos de vous</msg>
   <msg key="Answer">Réponse:</msg>
@@ -53,6 +53,7 @@
   <msg key="lt_Your_email_has_been_c_1">Votre adresse email a été vérifiée. Vous devez attendre maintenant l'aprobation de l'administrateur de %system_name%.</msg>
   <msg key="lt_Your_email_is_confirm">Votre adresse email a été vérifiée.</msg>
   <msg key="lt_Your_URL_doesnt_have_">URL incorrecte. Exemple d'URL valide: \&quot;%valid_url_example%\&quot;.</msg>
+  <msg key="Name">Nom:</msg>
   <msg key="New_Password">Nouveau mot de passe:</msg>
   <msg key="no_portrait_title_message">votre photo</msg>
   <msg key="none">aucun</msg>
