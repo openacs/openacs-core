@@ -103,7 +103,7 @@ if {$installed_count < 1} {
 
 ns_write "</ul><p>
 Done installing packages.
-<p>You should restart the server now to make installed and upgraded packages available.</p>
+<p>You should restart the server now to make installed and upgraded packages available. <a href=\"packages-install-5\">Click here</a> to restart the server now.</p>
 [ad_footer]
 "
 }
