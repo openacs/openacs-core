@@ -5,14 +5,14 @@
 
 <fullquery name="subsite_callback.select_callbacks">      
       <querytext>
-      FIX ME CONNECT BY
 
 	select distinct callback, callback_type
 	  from subsite_callbacks
-	 where object_type in (select t.object_type
-	                        from acs_object_types t
-	                     connect by prior t.supertype = t.object_type
-	                       start with t.object_type = :object_type)
+	 where object_type in (select t2.object_type
+	                         from acs_object_types t1, acs_object_types t2
+	                        where t2.tree_sortkey <= t1.tree_sortkey
+				  and t1.tree_sortkey like (t2.tree_sortkey || '%')
+				  and t1.object_type = :object_type)
 	   and event_type = :event_type
     
       </querytext>
