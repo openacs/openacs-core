@@ -18,16 +18,23 @@ ad_proc search_indexer {} {
 		    search_content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
 		    acs_sc_call FtsEngineDriver index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
 		}
+		# Remember seeing this object so we can avoid reindexing it later
+		set seen($object_id) 1
 	    } 
 	    DELETE {
 		acs_sc_call FtsEngineDriver unindex [list $object_id] $driver
 	    } 
 	    UPDATE {
-		set object_type [db_exec_plsql get_object_type "select acs_object_util__get_object_type($object_id)"]
-		if [acs_sc_binding_exists_p FtsContentProvider $object_type] {
-		    array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type] 
-		    search_content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
-		    acs_sc_call FtsEngineDriver update_index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
+		# Don't bother reindexing if we've already inserted/updated this object in this run
+		if { ![info exists seen($object_id)] } {
+		    set object_type [db_exec_plsql get_object_type "select acs_object_util__get_object_type($object_id)"]
+		    if [acs_sc_binding_exists_p FtsContentProvider $object_type] {
+			array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type] 
+			search_content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
+			acs_sc_call FtsEngineDriver update_index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
+		    }
+		    # Remember seeing this object so we can avoid reindexing it later
+		    set seen($object_id) 1
 		}
 	    }
 	}
