@@ -344,7 +344,7 @@ ad_proc -private auth::local::registration::GetElements {
     service contract for the local account implementation.
 } {
     set result(required) { username email first_names last_name }
-    set result(optional) { url }
+    set result(optional) { screen_name url }
 
     if { ![parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] } {
         lappend result(optional) password
@@ -364,6 +364,7 @@ ad_proc -private auth::local::registration::Register {
     authority_id
     first_names
     last_name
+    screen_name
     email
     url
     password
