@@ -22,8 +22,7 @@ multirow create packages package_key package_name version_name package_type upgr
 
 set upgrades_p 0
 
-# For testing without caching
-#nsv_unset apm_version_properties
+array set package [list]
 
 foreach spec_file [apm_scan_packages "[acs_root_dir]/packages"] {
     with_catch errmsg {
@@ -47,12 +46,13 @@ foreach spec_file [apm_scan_packages "[acs_root_dir]/packages"] {
 
                 # If in upgrade mode, only add to list if it's an upgrade
                 if { !$installed_p && (!$upgrade_p || ![empty_string_p $upgrade_text]) } {
-                    multirow append packages \
-                        $version(package.key) \
-                        $version(package-name) \
-                        $version(name) \
-                        $version(package.type) \
-                        $upgrade_text
+                    
+                    set package([string toupper $version(package-name)]) [list \
+                                                                              $version(package.key) \
+                                                                              $version(package-name) \
+                                                                              $version(name) \
+                                                                              $version(package.type) \
+                                                                              $upgrade_text]
                 }
             }
         }
@@ -61,6 +61,18 @@ foreach spec_file [apm_scan_packages "[acs_root_dir]/packages"] {
         ns_log Error "Error while checking package info file $spec_file: $errmsg\n$errorInfo"
     }
 }
+
+# Sort the list alphabetically (in case package_name and package_key doesn't sort the same)
+foreach name [lsort -ascii [array names package]] {
+    set row $package($name)
+    multirow append packages \
+        [lindex $row 0] \
+        [lindex $row 1] \
+        [lindex $row 2] \
+        [lindex $row 3] \
+        [lindex $row 4]
+}
+
 
 template::list::create \
     -name packages \

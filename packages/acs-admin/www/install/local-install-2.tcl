@@ -102,7 +102,7 @@ foreach pkg_info $install_pkg_info_list {
         $key \
         $package_name($key) \
         $problem_p \
-        [join $comment "<br>"] \
+        [join $comment "\n"] \
         $extra_p
 }
 

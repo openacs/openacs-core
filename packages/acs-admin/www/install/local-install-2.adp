@@ -10,7 +10,7 @@
 </if>
 <else>
   <if @extras_p@ true >
-    <p> The packages you wanted to install require some other
+    <p> The packages you want to install require some other
     packages. These have been added to the list, and are marked
     below. </p>
  </if>
