@@ -10,5 +10,16 @@
 	    
       </querytext>
 </fullquery>
+
+<fullquery name="application_group::delete.delete_perms">      
+      <querytext>
+    
+            delete from acs_permissions
+            where  grantee_id = :group_id
+            or     grantee_id in (select segment_id from rel_segments where group_id = :group_id)
+            or     grantee_id in (select rel_id from acs_rels where object_id_one = :group_id or object_id_two = :group_id)
+
+      </querytext>
+</fullquery>
  
 </queryset>
