@@ -20,13 +20,21 @@ namespace eval acs_sc::impl::binding {}
 ad_proc -public acs_sc::impl::new {
     {-contract_name:required}
     {-name:required}
-    {-pretty_name:required}
+    {-pretty_name ""}
     {-owner:required}
 } {
     Add new service contract implementation.
+
+    @param name         The internal name of the implementation. Referred to when invoking the implementation.
+                        Alphanumeric characters and underscores only.
+
+    @param pretty_name  The name of the implementation when display to users. Defaults to 'name'.
     
     @return the ID of the new implementation
 } {
+    if { [empty_string_p $pretty_name] } {
+        set pretty_name $name
+    }
     return [db_exec_plsql impl_new {}]
 }
 
