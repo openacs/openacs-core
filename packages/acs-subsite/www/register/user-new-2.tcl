@@ -61,7 +61,7 @@ if {[ad_parameter RegistrationProvidesRandomPasswordP security 0]} {
 
 if {$exception_count > 0} {
     ad_return_complaint $exception_count $exception_text
-    return
+    ad_script_abort
 }
 
 # Get whether they requre some sort of approval
@@ -86,9 +86,11 @@ if { [db_string user_exists "select count(*) from registered_users where user_id
     set user_id [ad_user_new $email $first_names $last_name $password $question $answer $url $email_verified_p $member_state $user_id]
     if { !$user_id } {
 	ad_return_error "User Creation Failed" "We were unable to create your user record in the database."
+        ad_script_abort
     }
 }
 
+set script_abort 0
 if { $member_state == "approved" && $email_verified_p == "t"} {
     # user is ready to go    
     if { [ad_check_password $user_id $password] } {
@@ -97,8 +99,10 @@ if { $member_state == "approved" && $email_verified_p == "t"} {
     }
 
     ad_returnredirect $return_url
-    ad_script_abort
-
+#   JCD: DO NOT return or ad_script_abort since we may need to fall through 
+#   to notify admin of a new registration. Instead set a flag to abort at end...
+    set script_abort 1
+    
 } elseif { $email_verified_p == "f" }  { 
 
     # this user won't be able to use the system until he has answered his email
@@ -121,14 +125,7 @@ if { $member_state == "approved" && $email_verified_p == "t"} {
 } 
 
 set notification_address [ad_parameter NewRegistrationEmailAddress "security" [ad_system_owner]]
-
-if {[ad_parameter NotifyAdminOfNewRegistrationsP "security" 0]} {
-    # we're supposed to notify the administrator when someone new registers
-    ns_sendmail $notification_address $email "New registration at [ad_url]" "
-$first_names $last_name ($email) registered as a user of 
-[ad_url]
-"
-}
+set errmsg {}
 
 if { !$double_click_p } {
     
@@ -151,5 +148,17 @@ Password:  $password
 	    ns_log Warning "Error sending registration confirmation to $email in user-new-2"
 	}
     }
+
+    if {[ad_parameter NotifyAdminOfNewRegistrationsP "security" 0]} {
+        # we're supposed to notify the administrator when someone new registers
+        ns_sendmail $notification_address $email "New registration at [ad_url]" "
+$first_names $last_name ($email) registered as a user of 
+[ad_url]
+$errmsg
+"
+    }
 }
 
+if {$script_abort} {
+    ad_script_abort
+}
