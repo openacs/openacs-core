@@ -13,7 +13,7 @@
                                    notification_user_map
                               where notifications.type_id = notification_requests.type_id
                               and notifications.object_id = notification_requests.object_id
-                              and notifications.notification_id = notification_user_map.notification_id (+)
+                              and notifications.notification_id = notification_user_map.notification_id(+)
                               and sent_date is null)
         </querytext>
     </fullquery>
@@ -32,7 +32,7 @@
             where notifications.type_id = notification_requests.type_id
             and interval_id = :interval_id
             and notifications.object_id = notification_requests.object_id
-            and notifications.notification_id = notification_user_map.notification_id (+)
+            and notifications.notification_id = notification_user_map.notification_id(+)
             and sent_date is null
         </querytext>
     </fullquery>
