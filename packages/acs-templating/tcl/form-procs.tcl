@@ -406,13 +406,6 @@ ad_proc -private template::form::render { id tag_attributes } {
 } {
   get_reference
 
-  global af_parts
-
-    if { [info exists af_parts(${id}__form)] && ![info exists af_parts(${id}__extend)] } {
-      error "Form '$id' declared using ad_form doesn't have any action blocks, e.g. on_submit."
-  }
-    
-
   #----------------------------------------------------------------------
   # Check for errors on form
   #----------------------------------------------------------------------
