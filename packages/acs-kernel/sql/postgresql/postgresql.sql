@@ -290,7 +290,7 @@ select get_func_header(proname,proargtypes) as definition,
 
 -- 2. Storage is one byte per level for each level in the tree that
 --    has fewer than 128 nodes.  If more nodes exist at a given level
---    two bytes are occupied.  The old scheme used three bytes per
+--    two bytes are required.  The old scheme used three bytes per
 --    level.  Along with saving space in data tables, this will speed
 --    key comparisons during index scans and increases the number of
 --    keys stored in any given index page.
@@ -541,8 +541,12 @@ create function create_tree_ancestor_keys() returns boolean as '
 -- Rather than use the general solution I have just hacked up a PL/pgSQL function to
 -- create the one recursive function we need: tree_ancestor_keys(varbit, integer).
 
+-- tree_ancestor_keys(varbit, integer) returns the set of ancestor keys starting at
+-- the level passed in as the second parameter down to the key passed in as the first
+
 -- This function should probably only be called from its overloaded cousin
--- tree_ancestor_keys(varbit).
+-- tree_ancestor_keys(varbit), which returns the set of tree_sortkeys for all of the
+-- given tree_sortkey's ancestors..
 
 begin
 
@@ -579,16 +583,14 @@ select create_tree_ancestor_keys();
 
 create function tree_ancestor_keys(varbit) returns setof varbit as '
 
--- tree_ancestor_keys returns the set of ancestor keys starting at the level passed
--- in as the second parameter down to the key passed in as the first parameter.  Normally
--- this will be one - its intended use is to drive the recursive building of the set of
--- ancestor keys.
+-- Return the set of tree_sortkeys for all of the given tree_sortkey's
+-- ancestors.
 
 -- Here is an example on acs_objects:
 
 -- select o.*
 -- from acs_objects o,
---   (select tree_ancestor_keys(acs_objects_get_tree_sortkey(:object_id), 1) as tree_sortkey) parents
+--   (select tree_ancestor_keys(acs_objects_get_tree_sortkey(:object_id)) as tree_sortkey) parents
 -- where o.tree_sortkey = parents.tree_sortkey;
 
 -- This query will use the index on tree_sortkey to scan acs_objects.  The function to grab
@@ -603,7 +605,7 @@ create function tree_ancestor_keys(varbit) returns setof varbit as '
 -- select o.*
 -- from acs_objects o,
 --     (select tree_sortkey from acs_objects where object_id = :root_id) as root
---   (select tree_ancestor_keys(acs_objects_get_tree_sortkey(:object_id), 1) as tree_sortkey) parents
+--   (select tree_ancestor_keys(acs_objects_get_tree_sortkey(:object_id)) as tree_sortkey) parents
 -- where o.tree_sortkey = parents.tree_sortkey
 --   and o.tree_sortkey >= root.tree_sortkey;
 
@@ -621,8 +623,8 @@ create function tree_ancestor_keys(varbit) returns setof varbit as '
 -- performance.   
 
 -- WARNING: subselects in where clauses that call this function and join on an outer table appear
--- to reliably kill PG 7.1.2.   Not tested for PG 7.2.  If it fails there a bug report will be
--- filed.
+-- to reliably kill PG 7.1.2, at least if "exists" is involved.   Not tested for PG 7.2.  If it
+-- fails there a bug report will be filed.
 
   select tree_ancestor_keys($1, 1)
 
