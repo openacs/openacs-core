@@ -343,9 +343,6 @@ ad_proc -private template::form::template { id { style "" } } {
 
   template::code::adp::$file_stub
 
-  # unprotect registered tags and variable references
-  set __adp_output [string map { ~ < + @ } $__adp_output]
-
   return $__adp_output
 }
 

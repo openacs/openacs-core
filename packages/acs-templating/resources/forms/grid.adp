@@ -35,22 +35,26 @@
         <if @elements.widget@ in radio checkbox>
           <table cellpadding=4 cellspacing=0 border=0>
             <tr>
-            ~formgroup id=@elements.id@>
-              <td>+formgroup.widget+</td><td><label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">+formgroup.label+</label></td>
-            </formgroup>
+              <noparse>
+                <formgroup id=@elements.id@>
+                  <td>\@formgroup.widget\@</td><td><label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option\@">\@formgroup.label\@</label></td>
+                </formgroup>
+              </noparse>
             </tr>
           </table>
-          ~formerror id=@elements.id@><br><font color="red"><b>+formerror.@elements.id@+<b></font>~/formerror>
+          <noparse><formerror id=@elements.id@><br><font color="red"><b>\@formerror.@elements.id@\@<b></font></formerror></noparse>
         </if>
           
         <else>         
           <if @elements.widget@ eq inform>
-            ~formwidget id=@elements.id@>
+            <noparse><formwidget id=@elements.id@></noparse>
           </if>
           <else>
-            ~formwidget id=@elements.id@>
-            ~formerror id=@elements.id@><br><font color="red"><b>
-                +formerror.@elements.id@+<b></font>~/formerror>
+            <noparse>
+              <formwidget id=@elements.id@>
+              <formerror id=@elements.id@><br><font color="red"><b>
+                \@formerror.@elements.id@\@<b></font></formerror>
+            </noparse>
           </else>
         </else>
 
@@ -83,11 +87,6 @@
 
 <multiple name=elements>
   <if @elements.widget@ eq "hidden">
-     ~formwidget id=@elements.id@>
+     <noparse><formwidget id=@elements.id@></noparse>
   </if>
 </multiple> 
-
-
-
-
-
