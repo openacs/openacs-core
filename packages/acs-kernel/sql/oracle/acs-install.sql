@@ -1,33 +1,19 @@
 --
 -- /packages/acs-kernel/sql/acs-install.sql
 --
--- Complete the install of the system by setting up some default URL mappings.
+-- Mount the main site. Start schema stats job.
 --
--- @author Bryan Quinn (bquinn@arsdigita.com
+-- @author Peter Marklund
 -- @creation-date 2000/10/01
 -- @cvs-id $Id$
 --
 
 declare
-    kernel_id  apm_packages.package_id%TYPE;
     node_id    site_nodes.node_id%TYPE;
     main_site_id site_nodes.node_id%TYPE;
-    admin_id	apm_packages.package_id%TYPE;
-    lang_id     apm_packages.package_id%TYPE;
-    docs_id    apm_packages.package_id%TYPE;
-    api_doc_id apm_packages.package_id%TYPE;
-    cr_id apm_packages.package_id%TYPE;
     schema_user   varchar2(100);
     jobnum        integer;
 begin 
-  kernel_id := apm_service.new(
-		    package_key => 'acs-kernel',
-		    instance_name => 'ACS Kernel',
-                    context_id => acs.magic_object_id('default_context')
-	       );
-  commit;
-
-  apm_package.enable(kernel_id);
 
   main_site_id := apm_service.new(
 		    package_key => 'acs-subsite',
