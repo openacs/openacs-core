@@ -39,3 +39,4 @@ for @first_names@ @last_name@ in @site_link@
 <center>
   <input type="submit" value="Update">
 </center>
+</form>
