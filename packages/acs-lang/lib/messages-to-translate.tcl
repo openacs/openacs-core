@@ -1,0 +1,53 @@
+set display_p [expr [lang::util::translator_mode_p] && ![string equal [ad_conn locale] "en_US"]]
+
+template::list::create \
+    -name messages \
+    -multirow messages \
+    -elements {
+        message_key {
+            label "Message key"
+        }
+        orig_text {
+            label "English text"
+        }
+        translated_text {
+            label "Translation"
+            display_template {
+               <if @messages.translated_text@ eq @messages.orig_text@>
+                 <a href="@messages.translate_url@" title="Translate"><font color="red">Translate</font></a>
+               </if>
+               <else>
+                 @messages.translated_text@ 
+               </else>
+            }
+        }        
+        edit {
+            label ""
+            display_template {
+                <if @messages.translated_text@ ne @messages.orig_text@>
+                  <a href="@messages.translate_url@" title="Edit the translation">
+                    <img src="/shared/images/Edit16.gif" height="16" width="16" alt="Edit" border="0">
+                  </a>
+                </if>
+            }
+            sub_class narrow
+        }
+    }
+
+if { $display_p } {
+    multirow create messages message_key orig_text translated_text translate_url
+
+    foreach message_key [lang::util::get_message_lookups] {
+
+        set locale [ad_conn locale]
+        set orig_text [lang::message::lookup "en_US" $message_key]
+        set translated_text [lang::message::lookup $locale $message_key]
+
+        set key_split [split $message_key "."]
+        set package_key_part [lindex $key_split 0]
+        set message_key_part [lindex $key_split 1]
+        set translate_url "/acs-lang/admin/edit-localized-message?[export_vars {{message_key $message_key_part} {package_key $package_key_part} locale}]"
+        
+        multirow append messages $message_key $orig_text $translated_text $translate_url
+    }
+}

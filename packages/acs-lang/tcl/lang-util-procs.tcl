@@ -645,7 +645,40 @@ ad_proc -public lang::util::translator_mode_set {
     ad_set_client_property acs-lang translator_mode_p $translator_mode_p
 }
     
+ad_proc -private lang::util::record_message_lookup {
+    message_key
+} {
+    Record a message lookup in translator mode. In translator mode
+    we collect all message lookups at the bottom of the page for translation.
 
+    @author Peter Marklund
+} {
+    global __lang_message_lookups
+
+    # Only makes sense to offer translation list if we're not in en_US locale
+    if { ![string equal [ad_conn locale] "en_US"] } {
+        if { ![info exists __lang_message_lookups] } {
+            lappend __lang_message_lookups $message_key
+        } elseif { [lsearch -exact $__lang_message_lookups $message_key] == -1 } {
+            lappend __lang_message_lookups $message_key
+        }
+    }
+}
+
+ad_proc -private lang::util::get_message_lookups {} {
+    Get the list of all message keys looked up so far during the current
+    request.
+
+    @author Peter Marklund
+} {
+    global __lang_message_lookups
+    
+    if { [info exists __lang_message_lookups] } {
+        return $__lang_message_lookups
+    } else {
+        return {}
+    }
+}
 
 #####
 #

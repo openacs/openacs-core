@@ -362,18 +362,8 @@ ad_proc -public lang::message::lookup {
     } 
 
     if { [lang::util::translator_mode_p] } {
-        # Translator mode - set up translate_url
-        
-        set key_split [split $key "."]
-        set package_key_part [lindex $key_split 0]
-        set message_key_part [lindex $key_split 1]
-        set return_url [ad_conn url]
-        if { [ns_getform] != "" } {
-            append return_url "?[export_entire_form_as_url_vars]"
-        }
-        
-        # return_url is already encoded and HTML quoted
-        set translate_url "/acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } locale { package_key $package_key_part } return_url }]"
+        # Translator mode - record the message lookup
+        lang::util::record_message_lookup $key
     }
 
     # We remember the passed-in locale, because we want the translator mode to show which 
@@ -417,18 +407,6 @@ ad_proc -public lang::message::lookup {
     # Set upvar_level to 0 and substitution_list empty to prevent substitution from happening
     if { [llength $substitution_list] > 0 || ($upvar_level >= 1 && [string first "%" $message] != -1) } {
         set message [lang::message::format $message $substitution_list [expr $upvar_level + 1]]
-    }
-    
-    if { [lang::util::translator_mode_p] } {
-        # Translator mode - return a translation link
-        if { [string equal $locale $org_locale] } {
-            # The message has been translated in the desired locale
-            append message "<a href=\"$translate_url\" title=\"Edit translation of $message_key_part in $locale\"><font color=\"green\"><b>o</b></font></a>"
-        } else {
-            # The translation is missing in the desired locale, make it yellow
-            set message "<span style=\"background-color: yellow;\">$message</span><a href=\"$translate_url\" title=\"Translate $message_key_part to $locale\"><font color=\"red\"><b>*</b></font></a>"
-            
-        }
     }
 
     return $message
