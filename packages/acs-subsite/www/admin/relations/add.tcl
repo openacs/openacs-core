@@ -148,6 +148,7 @@ set user_id [ad_conn user_id]
 set package_id [ad_conn package_id]
 
 attribute::add_form_elements -form_id add_relation -start_with relationship -object_type $rel_type
+element::create add_relation rel_id -widget hidden -value [db_nextval "acs_object_id_seq"]
 
 if { [template::form is_valid add_relation] } {
 
