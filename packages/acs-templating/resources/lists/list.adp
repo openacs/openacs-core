@@ -61,8 +61,12 @@
 
   <table class="list-tiny" cellpadding="3" cellspacing="1">
 
-  <form name="@list_properties.name@" method="@list_properties.bulk_action_method@">
-
+  <if @list_properties.bulk_action_method@ not nil>
+  <form name="@list_properties.name@" method="@list_properties.bulk_action_method@">  
+  </if>
+  <else>
+  <form name="@list_properties.name@" method="GET">
+  </else>
     <noparse>
       <multiple name="@list_properties.multirow@">
     </noparse>
