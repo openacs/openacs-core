@@ -15,7 +15,7 @@
         <owner url="mailto:jon@jongriffin.com">Jon Griffin</owner>
         <summary>ISO 639-1 language reference data for acs-reference.</summary>
         <vendor url="http://www.mayuli.com">Mayuli Enterprises, LLC</vendor>
-        <description format="text/plain">This is the ISO 639-1 language reference data (with languages names in english).</description>
+        <description format="text/plain">This is the ISO 639-1 language reference data (with languages names in English).</description>
 
         <provides url="ref-language" version="0.1d"/>
         <requires url="acs-kernel" version="4.6.2"/>
