@@ -726,19 +726,28 @@ ad_proc rp_report_error {
         # We need 'message' to be a copy, because errorInfo will get overridden by some of the template parsing below
         set message $errorInfo
     }
-
     set error_url [ad_conn url]
+    #    set error_file [template::util::url_to_file $error_url]
+    set error_file [ad_conn file]
+    set package_key []
+    set prev_url  [ns_urldecode [ns_set get [ns_conn headers] Referer]?[export_entire_form_as_url_vars]]
+    set feedback_id  [db_nextval acs_object_id_seq]
+    set user_id [ad_conn user_id]
+    set bug_package_id [ad_conn package_id]
+    set error_info $message
+    set vars_to_export [export_vars -form { error_url error_info user_id prev_url error_file feedback_id bug_package_id }]
     
     ad_call_proc_if_exists ds_add conn error $message
     
     set params [list]
-
+    
+    #Serve the stacktrace
+    set params [list [list stacktrace $message] [list user_id $user_id] [list error_file $error_file] [list prev_url $prev_url] [list feedback_id $feedback_id] [list error_url $error_url] [list bug_package_id $bug_package_id] [list vars_to_export $vars_to_export]]
+    
     if {![ad_parameter -package_id [ad_acs_kernel_id] "RestrictErrorsToAdminsP" dummy 0] || \
             [permission::permission_p -object_id [ad_conn package_id] -privilege admin] } {
-        # Serve the stacktrace
-        set params [list [list stacktrace $message]]
     }
-
+    
     with_catch errmsg {
         set rendered_page [ad_parse_template -params $params "/packages/acs-tcl/lib/page-error"]
     } {
