@@ -485,7 +485,6 @@ begin
   
 end;' language 'plpgsql';
 
-
 -- dummy table provides a target for updates in dynamically generated trigger
 -- statements.  If type is cr_revisions then rule would end up having only a 
 -- select statement which causes an error to be thrown by the dml command.
@@ -982,7 +981,7 @@ begin
 
   -- register the new template as the default template of the content type
   if v_template_id != rotate_template__template_id then
-    content_type__register_template(
+    PERFORM content_type__register_template(
         rotate_template__v_content_type,
         rotate_template__template_id,
         rotate_template__use_context,

@@ -41,7 +41,7 @@
     from 
       cr_items
     where
-      item_id = content_item__get_id(:url, :content_root)
+      item_id = content_item__get_id(:url, :content_root, 'f')
 
       </querytext>
 </fullquery>

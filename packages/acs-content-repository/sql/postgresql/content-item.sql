@@ -430,8 +430,8 @@ declare
   is_published__item_id                alias for $1;  
 begin
 
-  select
-    1
+  return
+    count(*) > 0
   from
     cr_items
   where
@@ -440,12 +440,6 @@ begin
     publish_status = ''live''
   and
     item_id = is_published__item_id;
-
-  if NOT FOUND then 
-     return ''f'';
-  else 
-     return ''t'';
-  end if;
  
 end;' language 'plpgsql';
 
@@ -493,10 +487,6 @@ begin
 
   end LOOP;
 
-  if NOT FOUND then 
-     return ''f'';
-  end if;
-
   -- validate relations
   -- make sure the # of ext links of each type fall between min_n and max_n
   for v_rel_type in select
@@ -528,10 +518,6 @@ begin
       return ''f'';
     end if;
   end loop;
-
-  if NOT FOUND then 
-     return ''f'';
-  end if;
 
   -- validate publishing workflows
   -- make sure any ''publishing_wf'' associated with this item are finished
