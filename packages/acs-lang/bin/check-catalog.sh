@@ -74,8 +74,6 @@ else
     exit 1
 fi
 
-echo "$0: Starting check of package $package_key"
-
 # Check that the catalog file exists
 catalog_file_path="${packages_dir}${package_key}/catalog/${package_key}.en_US.ISO-8859-1.xml"
 if [ ! -e $catalog_file_path ]; then
@@ -86,8 +84,11 @@ fi
 package_path="${script_path}/../../${package_key}"
 cd $package_path
 
+echo "$0: $package_key - checking catalog keys are in lookups"
 check_catalog_keys_have_lookups $package_key
 
+echo "$0: $package_key - checking tcl lookups are in catalog file"
 check_tcl_file_lookups_are_in_catalog $package_key
 
+echo "$0: $package_key - checking adp lookups are in catalog file"
 check_adp_file_lookups_are_in_catalog $package_key
