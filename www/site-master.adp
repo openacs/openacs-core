@@ -29,34 +29,37 @@
     </td>
 
     <td align="center" class="subsite-header">
-      <if @user_id@ ne 0>
-        Welcome, @user_name@
-      </if>
+      <if @user_id@ ne 0>#acs-subsite.Welcome_user#</if>
       <else>
-        Not logged in
+        #acs-subsite.Not_logged_in#
       </else>
     </td>
 
     <td align="right" class="subsite-header" style="padding-right: 8px;">
       <if @admin_url@ not nil>
         &nbsp;
-        <a href="@admin_url@" title="Site-wide administration" class="button">Admin</a>
+        <a href="@admin_url@" title="#acs-subsite.Site_wide_administration#"
+          class="button">#acs-subsite.Admin#</a>
       </if>
       <if @devhome_url@ not nil>
         &nbsp;
-        <a href="@devhome_url@" title="Developer's Administration" class="button">DevAdmin</a>
+        <a href="@devhome_url@" title="#acs-subsite.Developers_Admin#"
+          class="button">#acs-subsite.DevAdmin#</a>
       </if>
       <if @pvt_home_url@ not nil>
         &nbsp;
-        <a href="@pvt_home_url@" title="Change password, email, portrait" class="button">@pvt_home_name@</a>
+        <a href="@pvt_home_url@" title="#acs-subsite.Change_pass_email_por#"
+          class="button">@pvt_home_name@</a>
       </if>
       <if @logout_url@ not nil>
         &nbsp;
-        <a href="@logout_url@?return_url=@subsite_url@" title="Logout from @system_name@" class="button">Logout</a>
+        <a href="@logout_url@?return_url=@subsite_url@" title="#acs-subsite.Logout_from_system#"
+          class="button">#acs-subsite.Logout#</a>
       </if>
       <if @login_url@ not nil>
         &nbsp;
-        <a href="@login_url@" title="Log in to @system_name@" class="button">Log in</a>
+        <a href="@login_url@" title="#acs-subsite.Log_in_to_system#"
+          class="button">#acs-subsite.Log_In#</a>
       </if>
     </td>
   </tr>
