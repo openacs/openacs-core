@@ -310,7 +310,6 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
 }   
 
 ad_proc -public lang::util::localize { 
-    {-locale ""}
     string_with_hashes
 } {
     Takes a string with embedded message keys on the format #message_key_name#
@@ -325,9 +324,7 @@ ad_proc -public lang::util::localize {
     if { ![string match "*#*" $string_with_hashes] } {
         return $string_with_hashes
     }
-    if {[string equal "" $locale]} {
-        set locale [ad_conn locale]
-    }
+
     set indices_list [get_hash_indices $string_with_hashes]
     
     set subst_string ""
@@ -339,7 +336,7 @@ ad_proc -public lang::util::localize {
         set message_key [string range $replacement_string 1 [expr [string length $replacement_string] - 2]]
 
         # Attempt a message lookup
-        set message_value [lang::message::lookup $locale $message_key "" "" 2]
+        set message_value [lang::message::lookup [ad_conn locale] $message_key "" "" 2]
         
         # Replace the string
         # LARS: We don't use regsub here, because regsub interprets certain characters
