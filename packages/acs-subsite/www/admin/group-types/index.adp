@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context@</property>
+<property name="context">@context;noquote@</property>
 <property name="title">Group type administration</property>
 
 Currently, the system is able to handle the following types of groups: 

@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context@</property>
+<property name="context">@context;noquote@</property>
 <property name="title">Subtypes exist!</property>
 
 You must remove all subtypes of the relationship type

@@ -1,6 +1,6 @@
 <master>
-<property name="title">@title@</property>
-<property name="context">@context@</property>
+<property name="title">@title;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <if @search_type@ eq "keyword">
   for name or email matching "@keyword@"

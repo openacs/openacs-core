@@ -1,6 +1,6 @@
 <master>
 <property name="title">#acs-subsite.lt_Saving_email_address_#</property>
-<property name="context_bar">#acs-subsite.at# @home_link@</property>
+<property name="context_bar">#acs-subsite.at# @home_link;noquote@</property>
 
 <p>
 #acs-subsite.lt_Our_server_can_tell_y#

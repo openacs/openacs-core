@@ -1,6 +1,6 @@
   <master>
     <property name="title">Permissions</property>
-    <property name="context">@context@</property>
+    <property name="context">@context;noquote@</property>
 
     <if @objects:rowcount@ gt 0> 
       You have admin rights on the following objects:

@@ -1,6 +1,6 @@
 <master src="master">
   <property name="title">Localized Messages</property>
-  <property name="context_bar">@context_bar@</property>
+  <property name="context_bar">@context_bar;noquote@</property>
 
 <p>You are editing locale: <strong>@locale_label@</strong> [ <tt>@current_locale@</tt> ]</p>
 
@@ -26,4 +26,4 @@
 
 <formtemplate id="batch_editor"></formtemplate>
 
-<include src="lookups-include" package_key="@package_key@" message_key_list="@displayed_keys@">
+<include src="lookups-include" package_key="@package_key;noquote@" message_key_list="@displayed_keys;noquote@">

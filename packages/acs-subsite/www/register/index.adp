@@ -1,13 +1,13 @@
 <master>
 <property name="title">#acs-subsite.Log_In#</property>
 <property name="focus">login.email</property>
-<property name="context_bar">#acs-subsite.to# <a href="/">@system_name@</a></property>
+<property name="context_bar">#acs-subsite.to# <a href="/">@system_name;noquote@</a></property>
 
 <p><strong>#acs-subsite.Current_users#</strong> #acs-subsite.lt_Please_enter_your_ema#</p>
 <p><strong>#acs-subsite.New_users#</strong> #acs-subsite.lt_welcome_please_register#</p>
 
 <form method="post" action="user-login" name="login">
-@export_vars@
+@export_vars;noquote@
 <table>
 <tr><td>#acs-subsite.Your_email_address#</td><td><input type="text" name="email" value="@email@" /></td></tr>
 

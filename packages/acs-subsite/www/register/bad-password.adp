@@ -1,6 +1,6 @@
 <master>
 <property name="title">#acs-subsite.Bad_Password#</property>
-<property name="context_bar">#acs-subsite.in# <a href="/index">@system_name@</a></property>
+<property name="context_bar">#acs-subsite.in# <a href="/index">@system_name;noquote@</a></property>
 
 <p>#acs-subsite.lt_The_password_you_type#</p>
 

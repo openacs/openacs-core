@@ -1,6 +1,6 @@
 <master>
 <property name=title>Add a user</property>
-<property name="context">@context@</property>
+<property name="context">@context;noquote@</property>
 
 
 <p>
@@ -12,7 +12,7 @@ notify this user.
 <p>
 <form method="post" action="user-add-3">
 <input type="hidden" name="referer" value="@referer@"></input>
-@export_vars@
+@export_vars;noquote@
 Message:
 <textarea name=message rows=10 cols=70 wrap=hard>
 @first_names@ @last_name@, 

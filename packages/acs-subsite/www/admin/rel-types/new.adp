@@ -1,11 +1,11 @@
 <master>
-<property name="context">@context@</property>
+<property name="context">@context;noquote@</property>
 <property name="title">Create relation type</property>
 
 First, select the supertype for the new relationship type:
 
 <form method=get action=new-2>
-@export_vars@
+@export_vars;noquote@
 
 Supertype: <select name=supertype>
 <multiple name="supertypes">

@@ -1,6 +1,6 @@
 <master>
-<property name=title>@title@</property>
-<property name="context">@context@</property>
+<property name=title>@title;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <table align="right" border="0" cellspacing="12" cellpadding="4"> 
  <tr bgcolor="#DDDDDD">

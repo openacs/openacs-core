@@ -1,5 +1,5 @@
 <form method=get action=@action@>
-@export_vars@
+@export_vars;noquote@
 
 <table>
  <tr>

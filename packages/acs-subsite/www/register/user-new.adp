@@ -6,7 +6,7 @@
 #acs-subsite.lt_Register_as_a_user_of# <a href="index">@system_name@</a>
 
 <form method=post action="user-new-2">
-@export_vars@
+@export_vars;noquote@
 
 <if @no_require_password_p@ eq 0>
 

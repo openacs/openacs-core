@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context@</property>
+<property name="context">@context;noquote@</property>
 <property name="title">Add permissible relationship type</property>
 				   
 <if @primary_rels:rowcount@ eq "0">
@@ -8,7 +8,7 @@
 </if>
 <else>
 <form method=get action=rel-type-add-2>
-@export_vars@
+@export_vars;noquote@
 
 Select relation type:
 

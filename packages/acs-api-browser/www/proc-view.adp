@@ -1,13 +1,13 @@
 <master>
-<property name=title>@title@</property>
-<property name="context">@context@</property>
+<property name=title>@title;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <if @error_msg@ ne "">
 @error_msg@
 </if>
 <else>
 <table width="100%">
-  <tr><td bgcolor="#eeeeee">@documentation@</td></tr>
+  <tr><td bgcolor="#eeeeee">@documentation;noquote@</td></tr>
 </table>
 
 <if @source_p@ eq 0>

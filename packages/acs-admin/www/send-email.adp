@@ -1,5 +1,5 @@
 <master>
-<property name=title>Sent: @sent_subject@</property>
+<property name=title>Sent: @sent_subject;noquote@</property>
 
 @sent_message@
 <br /><br />

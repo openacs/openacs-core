@@ -35,7 +35,7 @@ See also: @info.see@
 
 <a name="api"><h3>API</h3></a>
 <multiple name=methods>
-  <include src=method package=@package_name@ method=@methods.name@>
+  <include src=method package=@package_name;noquote@ method=@methods.name;noquote@>
   <p>&nbsp;</p>
 </multiple>
 

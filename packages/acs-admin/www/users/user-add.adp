@@ -1,10 +1,10 @@
 <master>
 <property name=title>Add a user</property>
 <property name="focus">user.email</property>
-<property name="context">@context@</property>
+<property name="context">@context;noquote@</property>
 
 <form action="user-add-2" method="post" name="user">
-@export_vars@
+@export_vars;noquote@
 <input type="hidden" name="referer" value="@referer@" />
 <table>
 <tr><td>Email:</td><td><input type="text" name="email" size="20" maxlength="40" /></td></tr>
