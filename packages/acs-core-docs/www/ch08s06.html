@@ -1,0 +1,146 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Categories</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial-advanced.html" title="Chapter 8. Advanced Topics"><link rel="previous" href="tutorial-categories.html" title="Categories"><link rel="next" href="tutorial-distribute.html" title="Prepare the package for distribution."><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-categories.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Advanced Topics</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-distribute.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id2479263"></a>Categories</h2></div></div><div></div></div><p>You can associate any ACS Object with one or more categories.
+    In this tutorial we'll show how to equip your application with user
+    interface to take advantage of the Categories service.
+    </p><p>
+    We'll start by installing the Categories service.  Go to
+    <tt class="computeroutput">/acs/admin</tt> and install it.  This step
+    won't be necessary for the users of your applications because you'll create
+    a dependency with the Package Manager which will take care that the
+    Categories service always gets installed when your application gets
+    installed.
+    </p><p>
+    Now that we have installed the Categories service we can proceed to
+    modifying our application so that it can take advantage of it.  We'll do it
+    in three steps:
+    </p><div class="orderedlist"><ol type="1"><li><p>
+          The Categories service provides a mechanism to associate one or
+          more <span class="emphasis"><em>category trees</em></span> that are relevant to
+          a particular application instance.  One example of such tree is a tree of
+          geographical locations.  Continents are on the top of such tree,
+          each continent containing countries etc.  Another tree might
+          contain market segments etc.  Before users of your application
+          can take advantage of the Categories service there needs to be a
+          way for administrators of your application to choose which
+          category trees are applicable for the application.</p><p>
+          The way to achieve this is is to provide a link
+          to the Category Management pages.  Add the following snippet to your
+            <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/myfirstpackage/www/admin/index.tcl</tt>
+          file:
+          </p><pre class="programlisting">
+set category_map_url [export_vars -base \
+    "[site_node::get_package_url -package_key categories]cadmin/one-object" \
+        { { object_id $package_id } }]
+          </pre><p>
+          and the following snippet to your
+            <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/myfirstpackage/www/admin/index.adp</tt>
+          file:
+          </p><pre class="programlisting">
+&lt;li&gt;&lt;a href="@category_map_url@"
+      class="action_link"&gt;Site-Wide Categories&lt;/a&gt;
+          </pre><p>The link created by the above code will take the admin to the generic
+          admin UI where he can pick category trees that make sense for this
+          application.  The same UI also includes facilities to build and edit
+          category trees.  Notice that the only parameter in this example is
+          <tt class="computeroutput">package_id</tt> so that category trees
+          will be associated with the object identified by this
+          <tt class="computeroutput">package_id</tt>.  The categorization
+          service is actually more general than that: instead of
+          <tt class="computeroutput">package_id</tt> you could use an ID of
+          some other object that serves as a "container" in your application.
+          For example, if your discussion forums application supports multiple
+          forums you would use <tt class="computeroutput">forum_id</tt> to
+          associate category trees with just that one forum rather than the
+          entire application instance.
+        </p></li><li><p>
+          Once the category trees have been selected users need a way
+          to categorize items.  The easiest way to do this is by adding the
+          <tt class="computeroutput">category</tt> widget type of the
+          form builder to <tt class="computeroutput">note-edit.tcl</tt>.
+          To achieve this we'll need to use the <tt class="computeroutput">-extend</tt>
+          switch to the <tt class="computeroutput">ad_form</tt> command. Here's the
+          <tt class="computeroutput">note-edit.tcl</tt> page with added sections
+          emphasized.
+</p><pre class="programlisting">ad_page_contract {
+    This is the view-edit page for notes.
+
+    @author Your Name (you@example.com)
+    @cvs-id $Id$
+
+    @param item_id If present, assume we are editing that note.  Otherwise, we
+    are creating a new note.
+
+} { 
+    item_id:integer,optional
+}
+
+ad_form -name note -form {
+    {item_id:key}
+    {title:text {label Title}}
+<b class="userinput"><tt>}
+
+category::ad_form::add_widgets \
+  -form_name note \
+  -container_object_id [ad_conn package_id] \
+  -categorized_object_id [value_if_exists item_id]
+
+ad_form -extend -name note \ </tt></b>
+  -new_request {
+    permission::require_permission -object_id [ad_conn package_id] -privilege create
+    set page_title "Add a Note"
+    set context [list $page_title]
+} -edit_request {
+    permission::require_write_permission -object_id $item_id
+    mfp::note::get \
+    -item_id $item_id \
+    -array note_array
+
+    set title $note_array(title)
+
+    set page_title "Edit a Note"
+    set context [list $page_title]
+<b class="userinput"><tt>} -on_submit {
+    set category_ids [category::ad_form::get_categories \
+      -container_object_id [ad_conn package_id]]</tt></b>
+} -new_data {
+    mfp::note::add \
+    -title $title \
+    -item_id $item_id
+<b class="userinput"><tt>
+    category::map_object \
+      -remove_old \
+      -object_id $item_id \
+       $category_ids
+</tt></b>
+    set message "Note $title added"
+} -edit_data {
+    mfp::note::edit \
+    -item_id $item_id \
+    -title $title
+<b class="userinput"><tt>
+    category::map_object \
+      -remove_old \
+      -object_id $item_id \
+       $category_ids
+</tt></b>
+
+     set message "Note $title changed"
+} -after_submit {
+    ad_returnredirect -message $message "."
+    ad_script_abort
+}</pre><p>
+</p><p>
+  Note how we have replaced what was a single
+  <tt class="computeroutput">ad_form</tt> invocation with two.  The
+  <tt class="computeroutput">-extend</tt> flag is used to build a form
+  incrementally.  We had to do it so that we can insert the call to
+  <tt class="computeroutput">category::ad_form::add_widgets</tt>.  This
+  procedure will add as many category widgets as there are trees associated with
+  our <tt class="computeroutput">package_id</tt>.  The complementary proc
+  <tt class="computeroutput">category::ad_form::get_categories</tt> will take
+  care of collecting the values after the form has been submitted.  The block
+  <tt class="computeroutput">-on_submit</tt> will get executed at this time,
+  followed by execution of either <tt class="computeroutput">-new_data</tt> or
+  <tt class="computeroutput">-edit_data</tt>, depending on whether we are adding
+  a new note or editing an existing one.
+</p><p>
+      </p></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-categories.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-distribute.html">Next</a></td></tr><tr><td width="40%" align="left">Categories </td><td width="20%" align="center"><a accesskey="u" href="tutorial-advanced.html">Up</a></td><td width="40%" align="right"> Prepare the package for distribution.</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/ch08s06.html#comments">View comments on this page at openacs.org</a></center></body></html>

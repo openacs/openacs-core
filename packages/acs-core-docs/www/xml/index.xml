@@ -208,10 +208,10 @@
       <xi:include href="developers-guide/tutorial-debug.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
-      <xi:include href="developers-guide/tutorial-advanced.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-        <xi:fallback>Section missing</xi:fallback>
-      </xi:include>
     </chapter>
+    <xi:include href="developers-guide/tutorial-advanced.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>Section missing</xi:fallback>
+    </xi:include>
 
     <chapter id="dev-guide">
       <title>Development Reference</title>

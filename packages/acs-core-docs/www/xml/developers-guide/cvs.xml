@@ -24,13 +24,13 @@
       <listitem>
         <para>Create and set permissions on a subdirectory in the local cvs repository.</para>
         <screen>[root root]# <userinput>mkdir /cvsroot/<replaceable>service0</replaceable></userinput>
-[root root]#<userinput> chown <replaceable>service0</replaceable>.web /cvsroot/<replaceable>service0</replaceable></userinput>
+[root root]#<userinput> chown <replaceable>service0.service0</replaceable> /cvsroot/<replaceable>service0</replaceable></userinput>
 [root root]#
 <action>mkdir /cvsroot/<replaceable>service0</replaceable>
-chown <replaceable>service0</replaceable>.web /cvsroot/<replaceable>service0</replaceable></action></screen>
+chown <replaceable>service0.service0</replaceable> /cvsroot/<replaceable>service0</replaceable></action></screen>
         </listitem>
         <listitem>
-          <para>Add the repository location to the user environment.</para>
+          <para>Add the repository location to the user environment.  On some systems, you may get better results with .bash_profile instead of .bashrc.</para>
           <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
 [service0 service0]$<userinput> emacs .bashrc</userinput></screen>
             <para>Put this string into <computeroutput>/home/<replaceable>service0</replaceable>/.bashrc</computeroutput>:</para>
@@ -54,7 +54,7 @@ logout
             release tag.  These tags will be useful in upgrading and
             branching.  -m sets the version comment.</para>
             <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0 service0]$ <userinput>cd /web/<replaceable>service0</replaceable></userinput>
+[service0 service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
 [service0 service0]$ <userinput>cvs import -m "initial install" <replaceable>service0</replaceable> OpenACS &cvsversiontag;</userinput>
 N <replaceable>service0</replaceable>/license.txt
 N <replaceable>service0</replaceable>/readme.txt
@@ -63,29 +63,40 @@ N <replaceable>service0</replaceable>/www/SYSTEM/flush-memoized-statement.tcl
 
 No conflicts created by this import
 
-[service0 service0]$
+[service0 service0]$ exit
+[root root]#
 <action>su - <replaceable>service0</replaceable>
-cd /web/<replaceable>service0</replaceable>
-cvs import -m "initial install" <replaceable>service0</replaceable> OpenACS &cvsversiontag;</action></screen>
-            <para>Move the original directory to a temporary location, and check out the cvs repository in its place.  If the service starts correctly, come back and remove the temporary copy of the uploaded files.</para>
-            <screen>[service0 service0]$ <userinput>cd ..</userinput>
-[service0 web]$<userinput> mv <replaceable>service0</replaceable> <replaceable>service0</replaceable>.orig</userinput>
-[service0 web]$ <userinput>cvs checkout <replaceable>service0</replaceable></userinput>
+cd /var/lib/aolserver/<replaceable>service0</replaceable>
+cvs import -m "initial install" <replaceable>service0</replaceable> OpenACS &cvsversiontag;
+exit</action></screen>
+            <para>Move the original directory to a temporary location, and check out the cvs repository in its place.</para>
+        <screen>[root root]# <userinput>mv /var/lib/aolserver/<replaceable>service0</replaceable> /var/tmp</userinput>
+[root root]# <userinput>mkdir /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
+[root root]# <userinput>chown <replaceable>service0</replaceable>.<replaceable>service0</replaceable> /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
+[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+[service0 service0]$ <userinput>cd /var/lib/aolserver</userinput>
+[service0 aolserver]$ <userinput>cvs checkout <replaceable>service0</replaceable></userinput>
 cvs checkout: Updating <replaceable>service0</replaceable>
 U <replaceable>service0</replaceable>/license.txt
 <emphasis>(many lines omitted)</emphasis>
 U <replaceable>service0</replaceable>/www/SYSTEM/dbtest.tcl
 U <replaceable>service0</replaceable>/www/SYSTEM/flush-memoized-statement.tcl
-[service0 web]$ <userinput>exit</userinput>
+[service0 aolserver]$ <userinput>exit</userinput>
 logout
 
-[root web]#
-<action>cd ..
-mv <replaceable>service0</replaceable> <replaceable>service0</replaceable>.orig
+[root root]#
+
+<action>mv /var/lib/aolserver/<replaceable>service0</replaceable> /var/tmp
+mkdir /var/lib/aolserver/<replaceable>service0</replaceable>
+chown <replaceable>service0</replaceable>.<replaceable>service0</replaceable> /var/lib/aolserver/<replaceable>service0</replaceable>
+su - <replaceable>service0</replaceable>
+cd /var/lib/aolserver
 cvs checkout <replaceable>service0</replaceable>
 exit</action></screen>
-          
         </listitem>
+      <listitem>
+        <para>  If the service starts correctly, come back and remove the temporary copy of the uploaded files.</para>
+      </listitem>
       </orderedlist>
 
   </appendix>

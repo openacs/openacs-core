@@ -112,7 +112,8 @@ admin password: xxxx
 [service0 service0]$ <userinput>cd /var/lib/aolserver</userinput>
 [service0 aolserver]$ <userinput>tar xzf /tmp/&tarballpath;.tgz</userinput>
 [service0 aolserver]$ <userinput>mv &tarballpath; <replaceable>service0</replaceable></userinput>
-[service0 aolserver]$ <userinput>chmod -R 700 <replaceable>service0</replaceable></userinput>
+[service0 aolserver]$ <userinput>chmod -R 775 <replaceable>service0</replaceable></userinput>
+[service0 aolserver]$ <userinput>chown -R <replaceable>service0</replaceable>.<replaceable>service0</replaceable> <replaceable>service0</replaceable></userinput>
 [service0 aolserver]$ <userinput>ls -al</userinput>
 total 3
 drwxrwx---    3 root     web          1024 Mar 29 16:41 .
@@ -125,7 +126,8 @@ logout
 cd /var/lib/aolserver
 tar xzf /tmp/&tarballpath;.tgz
 mv &tarballpath; service0
-chmod -R 700 service0/
+chmod -R 755 service0
+chgrp -R service0.service0 service0
 exit</action></screen>
       </listitem>
       <listitem>
@@ -333,8 +335,8 @@ createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
                   <secondary>Vacuuming</secondary>
                 </indexterm>
                 <screen>[service0 service0]$ <userinput>export EDITOR=emacs;crontab -e</userinput></screen>
-                <para>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</para>
-                <programlisting>0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <replaceable>service0</replaceable>
+                <para>Add these lines to the file.  The vacuum command cleans up temporary structures within a PostGreSQL database, and can improve performance.  We vacuum gently every hour and completely every day.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day, and every (*) day of month, month, and day of week.  Type <computeroutput>man 5 crontab</computeroutput> for more information.</para>
+                <programlisting>0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --analyze <replaceable>service0</replaceable>
 0 0 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <replaceable>service0</replaceable></programlisting>
               </listitem>
               <listitem>
@@ -442,13 +444,9 @@ createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
       <listitem id="start-aolserver">
         <para>
 	  Kill any current running AOLserver processes and start a new
-	  one.  If you are using Oracle, rather than PostgreSQL, replace
-	  <computeroutput>nsd-postgres</computeroutput> with
-	  <computeroutput>nsd-oracle</computeroutput>).</para>
-        <para>If you want to use port 80, there are complications.
-	  First, AOLserver must be root to use system ports such as
-	  80, but refuses to run as root for security reasons.  Thus
-	  you must start as root and specify a non-root user ID and
+	  one.  The recommended way to start an AOLserver process is by running the included script, <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/etc/daemontools/run</computeroutput>.  If you are not using the default file paths and names, you will need to edit <computeroutput>run</computeroutput>.</para>
+            <para>If you want to use port 80, there are complications.  AOLserver must be root to use system ports such as
+	  80, but refuses to run as root for security reasons. So, we call the run script as root and specify a non-root user ID and
 	  Group ID which AOLserver will switch to after claiming the
 	  port.  To do so, find the UID and GID of the
 	  <replaceable>service0</replaceable> user via
@@ -456,7 +454,8 @@ createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
 	  /etc/passwd</computeroutput> and then put those numbers into
 	  the command line via <computeroutput>-u
 	  <replaceable>501</replaceable> -g
-	  <replaceable>502</replaceable></computeroutput>.  Second, if you are root then killall will affect all OpenACS services on the machine, so if there's more than one you'll have to do <computeroutput>ps -auxw | grep
+	  <replaceable>502</replaceable></computeroutput>.    In AOLserver 4, you must also send a <computeroutput>-b</computeroutput> flag.  Do this by editing the <computeroutput>run</computeroutput> file as indicated in the comments.  </para>
+          <para>If you are root then killall will affect all OpenACS services on the machine, so if there's more than one you'll have to do <computeroutput>ps -auxw | grep
 	  nsd</computeroutput> and selectively kill by job number.</para>
         <screen>[service0 etc]$ <userinput>killall nsd</userinput>
 nsd: no process killed
@@ -617,7 +616,7 @@ Loading package .info files ... this will take a few minutes</programlisting>
       </listitem>
       <listitem>
         <para>Set up database environment variables for the site
-	user.  These settings are necessary for working with the
+	user.  Depending on how you installed Oracle or PostGreSQL, these settings may be necessary for working with the
 	database while logged in as the service user.  They do not
 	directly affect the service's run-time connection with the
 	database, because those environmental variables are set by the

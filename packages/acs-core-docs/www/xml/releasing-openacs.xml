@@ -195,4 +195,33 @@ rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<replaceable>5.0.0a1</repl
     </orderedlist>
     </section>
 
+    <section id="update-translations">
+        <title>How to Update the translations</title>
+        <orderedlist>
+          <listitem>
+            <para>
+              Update the translation server.  (Approach 1: upgrade to the last release; approach 2: upgrade to head or to an alpha or beta release.)  Use CVS up.
+            </para>
+          </listitem>
+          <listitem>
+            <para>Go to <ulink url="/acs-lang/admin">ACS Lang admin page</ulink> and click "Import All Messages"</para>
+          </listitem>
+          <listitem>
+            <para>Resolve conflicts, if any, on the provided page, if any.
+            </para>
+          </listitem>
+          <listitem>
+            <para>Back on the admin page, click the export link.  If there are conflicts, the messages will be exported anyway and errors will be shown.</para>
+          </listitem>
+          <listitem>
+            <para>
+              Run the acs-lang/bin/check-catalog.sh script.  (This checks for keys no longer in use and some other things.  Until it is rolled into the UI, do it manually and check the results and take whatever steps you can intuit you should do.)
+            </para>
+          </listitem>
+          <listitem>
+        <para>CVS commit the catalog files.  Done</para>
+          </listitem>
+        </orderedlist>
+    </section>
   </appendix>
+  
