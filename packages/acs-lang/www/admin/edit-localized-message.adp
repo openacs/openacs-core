@@ -1,11 +1,7 @@
 <master>
  <property name="title">Edit a message</property>
  <property name="header_stuff">@header_stuff@</property>
-
-<h2>Edit Localized Messages</h2>
-@context_bar@
-
-<hr />
+ <property name="context_bar">@context_bar@</property>
 
 <div>
 

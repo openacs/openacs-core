@@ -10,12 +10,6 @@
     </style>    
   </property>
 
-<h2>@instance_name@</h2>
-
-@context_bar@
-
-<hr />
-
 <div>
 
 <include src="locales-tabs" tab="@tab@" show_locales_p="@show_locales_p@">

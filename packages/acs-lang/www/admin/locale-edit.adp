@@ -1,9 +1,6 @@
 <master>
-<property name="title">Administration of Localized Messages</property>
-
-<h2>Edit locale</h2>
-@context_bar@
-<hr />
+<property name="title">Edit locale</property>
+<property name="context_bar">@context_bar@</property>
 
 <p>Please update the necesary fields and press &quot;Submit&quot;</p>
 <p />

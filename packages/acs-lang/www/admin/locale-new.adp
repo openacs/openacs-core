@@ -1,9 +1,6 @@
 <master>
-<property name="title">Administration of Localized Messages</property>
-
-<h2>Create new locale</h2>
-@context_bar@
-<hr />
+<property name="title">Create new locale</property>
+<property name="context_bar">@context_bar@</property>
 
 <p>Please, fill in the fields to create a new locale.</p>
 <p />

@@ -1,11 +1,6 @@
 <master>
-<property name="title">Edit a message</property>
-
-<h2>New Localized Messages - Upload a file</h2>
-
-@context_bar@
-
-<hr />
+<property name="title">New Localized Messages - Upload a file</property>
+<property name="context_bar">@context_bar@</property>
 
 <div>
 

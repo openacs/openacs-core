@@ -1,11 +1,7 @@
 <master>
-<property name="title">Administration of Localized Messages</property>
-
-<h2>Delete locale</h2>
-@context_bar@
-<hr />
+<property name="title">Delete locale</property>
+<property name="context_bar">@context_bar@</property>
 
 <p />
 <p>Deleting locale <strong>@locale_label@</strong> [ <tt>@locales@</tt> ]</p>
 <formtemplate id="locale_deleting"></formtemplate>
-

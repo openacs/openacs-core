@@ -1,9 +1,6 @@
 <master>
-<property name="title">Administration of Localized Messages</property>
-
-<h2>Delete locale</h2>
-@context_bar@
-<hr />
+<property name="title">Delete locale confirmation</property>
+<property name="context_bar">@context_bar@</property>
 
 <p style="color: red; font-weight: bold">Are you sure you want to proceed?</p>
 <p />
