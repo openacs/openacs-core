@@ -20,6 +20,21 @@ cd $script_path
 
 source functions.sh
 
+# TODO: add config variables for service owner and group
+# we should check for the existence of the specified user
+#   if the user doesn't exist, 
+#     if the user was specified in the command line
+#       create the user
+#     fi
+#     interactive prompt to create user or terminate script
+#   fi
+#
+# Meanwhile, however, we're just going to assume that service user
+# is the same as servername and that the user exists.  Documented
+# in README
+
+
+# Parse options
 export config_file="config.tcl"
 interactive="no"
 usage="$0 [OPTIONS]
@@ -115,19 +130,16 @@ fi
 echo "$0: Starting installation with config_file $config_file. Using serverroot=$serverroot, server_url=$server_url, do_checkout=$do_checkout, do_install=${do_install}, dotlrn=$dotlrn, and database=$database."
 prompt_continue $interactive
 
-# See if a daemontools directory should exist.
-if parameter_true $use_daemontools && [ ! -d "${svscanroot}" ]; then
-    # if we are supposed to use daemontools but there is no control
-    # directory, link the default directory from the cvs tree
-    echo "$0: Creating daemontools directory"
-    # TODO: should put error handling here
-    ln -s $serverroot/etc/daemontools $svscanroot
-fi
-
 # stop the server
-echo "$0: Taking down $serverroot at $(date)"
+echo "$0: Taking down $serverroot at $(date) with command ${stop_server_command}"
 $stop_server_command
 # Wait for the server to come down
+# TODO - this prints an error message in a default install because the 
+# symlink exists but the target directory won't be created until the
+# cvs checkout later
+# maybe we should do the daemontools check here and not run the stop command
+# if daemontools is true and directory is missing
+
 echo "$0: Waiting $shutdown_seconds seconds for server to shut down at $(date)"
 sleep $shutdown_seconds
 
@@ -154,19 +166,33 @@ fi
 
 # Move away the old sources and checkout new ones check do_checkout
 if [ $do_checkout == "yes" ]; then
-    echo "$0: Checking out .LRN at $(date)"
+    echo "$0: Checking out OpenACS at $(date)"
     config_file=$config_file dotlrn=$dotlrn ./checkout.sh
-
-    # If we are using supervise - give group web permissions to control the server
-    if echo $start_server_command | grep -q "svc"; then
-        # allow svscan to start
-        echo "$0: Waiting for $startup_seconds seconds for svscan to come up at $(date)"
-        sleep $startup_seconds
-        echo "$0: Giving group 'web' control over the server: svgroup web ${serverroot}"
+    
+    # If we are using daemontools, set up the supervise directory
+    if parameter_true $use_daemontools; then
+	
+    # Create a daemontools directory if needed
+    	if ! [ -L "${svscanroot}" ] && ! [ -d "${svscanroot}" ] ; then
+            # if we are supposed to use daemontools but there is no control
+            # directory, link the default directory from the cvs tree
+	    # TODO: currently this leaves us with a stranded supervise
+	    # because it was using control files that we moved away.
+	    # The new supervise works fine, but the old one is still
+	    # floating around.  We should either kill the old one directly
+	    # as part of shutdown, or preserve the control files so we can 
+	    # continue using any previous supervise command
+	    echo "$0: Creating daemontools directory"
+	    ln -s $serverroot/etc/daemontools $svscanroot
+            # allow svscan to start
+	    echo "$0: Waiting for $startup_seconds seconds for svscan to come up at $(date)"
+	    sleep $startup_seconds
+	    echo "$0: Giving group 'web' control over the server: svgroup web ${svscanroot}"
         # svgroup may not be on the system, check the PATH
-        if which svgroup &> /dev/null; then
-            svgroup web ${serverroot}
-        fi
+	    if which svgroup &> /dev/null; then
+		svgroup web ${svscanroot}
+	    fi
+	fi
     fi
 fi
 
@@ -178,8 +204,16 @@ if [ -n "$post_checkout_script" ]; then
 fi
 
 # Bring up the server again
-echo "$0: Bringing the server $serverroot back up at $(date)"
+echo "$0: Bringing the server $serverroot back up at $date with command $command"
+
+# TODO - if we did checkout, we may have created and linked a 
+# daemontools directory, in which case we already started the 
+# server and this next command is redundant.  Should see if there's
+# an easy way to create a disabled supervise directory that doesn't
+# complicate later startup
+
 $start_server_command
+
 # Give the server some time to come up
 echo "$0: Waiting for $startup_seconds seconds for server to come up at $(date)"
 sleep $startup_seconds
@@ -238,7 +272,7 @@ if parameter_true $do_install; then
   if [ -r ${error_log_file} ]; then
       seconds_since_installation_start=$(expr $(date +%s) - $installation_start_time)
       minutes_since_installation_start=$(expr $seconds_since_installation_start / 60 + 1)
-      log_error_file=server-output/${server}/log-file-errors
+      log_error_file=${serverroot}/log/error.log
       ./aolserver-errors.pl -${minutes_since_installation_start}m ${error_log_file} > $log_error_file
       error_line_count=$(wc -l $log_error_file | awk '{print $1}')
       if expr $error_line_count \> 1 &> /dev/null; then
