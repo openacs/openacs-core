@@ -73,7 +73,7 @@ ad_proc -public auth::authority::create {
     db_transaction {
 
         if { [empty_string_p $authority_id] } {
-            set authority_id [db_nextval "auth_authority_id_seq"]
+            set authority_id [db_nextval "acs_object_id_seq"]
         }
 
         set names [array names row]
