@@ -18,12 +18,10 @@ if { ![exists_and_not_null privs] } {
 
 db_1row object_info {}
 
-multirow create privileges name label
-
 set elements [list]
 lappend elements grantee_name { 
     label "Name" 
-    link_url_eval {[ad_decode $object_type "user" [acs_community_member_url -user_id $grantee_id] ""]} 
+    link_url_col name_url
     display_template {
         <if @permissions.any_perm_p_@ true>
           @permissions.grantee_name@
@@ -88,7 +86,7 @@ if { ![empty_string_p $context_id] } {
 
 # TODO: Inherit/don't inherit
 
-list::create \
+template::list::create \
     -name permissions \
     -multirow permissions \
     -actions $actions \
@@ -118,7 +116,11 @@ set application_group_id [application_group::group_id_from_package_id -package_i
 # NOTE:
 # We do not include site-wide admins in the list
 
-db_multirow permissions permissions {}
+db_multirow -extend { name_url } permissions permissions {} {
+    if { [string equal $object_type "user"] && $grantee_id != 0 } {
+        set name_url [acs_community_member_url -user_id $grantee_id]
+}
+}
 
 
 ad_return_template
