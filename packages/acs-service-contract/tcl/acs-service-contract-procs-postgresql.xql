@@ -24,7 +24,7 @@ select acs_sc_binding__exists_p(:contract,:impl)
 <querytext>
 	select 
 	    operation_desc,
-	    operation_iscachable_p,
+            coalesce(operation_iscachable_p,'f') as operation_iscachable_p,
 	    operation_nargs,
 	    operation_inputtype_id,
 	    operation_outputtype_id
