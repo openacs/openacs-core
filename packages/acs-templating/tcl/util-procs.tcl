@@ -361,7 +361,7 @@ ad_proc -public template::util::multirow_to_list { name } {
 
   for { set i 1 } { $i <= $rowcount } { incr i } {
 
-    upvar $name:$rownum row
+    upvar $name:$i row
     lappend rows [array get row]
   }
 
