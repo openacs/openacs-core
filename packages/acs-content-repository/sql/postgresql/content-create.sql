@@ -723,7 +723,10 @@ create table cr_folders (
   label		    varchar(1000),
   description	    text,
   has_child_folders boolean default 'f',
-  has_child_symlinks boolean default 'f'
+  has_child_symlinks boolean default 'f',
+  package_id integer 
+  constraint cr_fldr_pkg_id_fk
+  references apm_packages
 );  
 
 comment on table cr_folders is '
@@ -1319,8 +1322,6 @@ drop function inline_2 ();
 
 -- this was added for edit-this-page and others
 -- 05-Nov-2001 Jon Griffin jon@mayuli.com
-
-alter table cr_folders
 
 alter table cr_folders
 add constraint cr_flder_pkg_id_fk foreign key (package_id) references apm_packages (package_id);
