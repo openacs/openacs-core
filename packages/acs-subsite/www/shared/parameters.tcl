@@ -24,7 +24,7 @@ set page_title "Parameters"
 if { [string equal $package_url [subsite::get_element -element url]] } {
     set context [list $page_title]
 } else {
-    set context [list [list $package_url $instance_name] $page_title]
+    set context [list [list $package_url $instance_name] [list "${package_url}admin/" "Administration"] $page_title]
 }
 
 ad_require_permission $package_id admin
@@ -36,6 +36,7 @@ set form {
 
 set display_warning_p 0
 set counter 0
+set focus_elm {}
 db_foreach select_params {} {
     if { [empty_string_p $section_name] } {
         set section_name "Main"
@@ -44,6 +45,10 @@ db_foreach select_params {} {
         set section_name "[string toupper [string index $section_name 0]][string range $section_name 1 end]"
     }
     
+    if { $counter == 0 } {
+        set focus_elm $parameter_name
+    }
+
     set elm [list ${parameter_name}:text,optional \
                  [list label $parameter_name] \
                  [list help_text $description] \
@@ -61,6 +66,8 @@ db_foreach select_params {} {
     
     incr counter
 }
+
+set focus "parameters.$focus_elm"
 
 if { $counter > 0 } {
     ad_form -name parameters -cancel_url $return_url -form $form -on_request {
