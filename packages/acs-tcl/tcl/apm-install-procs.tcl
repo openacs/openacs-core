@@ -655,6 +655,9 @@ ad_proc -private apm_package_delete {
 	}
     }
 
+    # Flush the installed_p cache
+    util_memoize_flush [list apm_package_installed_p_not_cached $package_key]
+
     apm_callback_and_log $callback "<p>Done."
 }
 
@@ -1357,12 +1360,12 @@ ad_proc -public apm_upgrade_logic {
     <blockquote><pre>
 
     ad_proc my_upgrade_callback {
-        from
-        to
+        {-from_version_name:required}
+        {-to_version_name:required}
     } {
         apm_upgrade_logic \ 
-                -from_version_name $from \ 
-                -to_version_name $to \ 
+                -from_version_name $from_version_name \ 
+                -to_version_name $to_version_name \ 
                 -spec {
             1.1 1.2 {
                 ...
