@@ -7,7 +7,7 @@ ad_page_contract {
     {user_id ""}
     {return_url ""}
 } -properties {
-    firsT_names:onevalue
+    first_names:onevalue
     last_name:onevalue
     admin_enabled_p:onevalue
     export_vars:onevalue
@@ -25,11 +25,9 @@ if [empty_string_p $user_id] {
     ad_require_permission $user_id "admin"
 }
 
-
-    
 set bind_vars [ad_tcl_vars_to_ns_set user_id]
 
-db_1row user_information "select first_names, 
+db_1row user_information "select first_names,
 last_name, email, url from cc_users where user_id=:user_id" -bind $bind_vars
 
 if {$admin_enabled_p} {
