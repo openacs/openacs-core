@@ -33,6 +33,28 @@
       </querytext>
 </fullquery>
 
+<fullquery name="content::get_content_value.gcv_get_revision_id">
+	<querytext>
+
+        select 1
+
+	</querytext>
+</fullquery>
+
+<fullquery name="content::get_content_value.gcv_get_previous_content">      
+      <querytext>
+      
+    select 
+      content
+    from 
+      cr_revisions
+    where 
+      revision_id = :revision_id
+  
+      </querytext>
+</fullquery>
+
+
 <fullquery name="content::init.get_item_info">      
       <querytext>
 
@@ -63,6 +85,7 @@
       <querytext>
 
         select 
+        (select live_revision from cr_items where item_id = content_item__get_template(:item_id, :context)) as template_id,
           content_template__get_path(
           content_item__get_template(:item_id, :context),:template_root) as template_url 
         from 

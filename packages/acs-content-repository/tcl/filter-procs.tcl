@@ -189,6 +189,30 @@ ad_proc -public get_folder_labels { { varname "folders" } } {
   }
 }
 
+ad_proc -public get_content_value { revision_id } {
+
+  db_transaction {
+      db_exec_plsql gcv_get_revision_id {
+	  begin
+	    content_revision.to_temporary_clob(:revision_id);
+	  end;
+      }
+
+      # Query for values from a previous revision
+
+      template::query gcv_get_previous_content content onevalue "
+      select 
+        content
+      from 
+        cr_content_text
+      where 
+        revision_id = :revision_id"
+
+  }
+
+  return $content
+}
+
 
 ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {context "public"} {rev_id ""}} {
 
@@ -261,7 +285,10 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
       :template_root) as template_url 
   from   dual"
 
-  set query "select 
+  template::query get_template_url info onerow "select 
+    (select live_revision 
+       from cr_items 
+      where item_id = content_item.get_template(:item_id, :context)) as template_id,
     content_template.get_path(
       content_item.get_template(:item_id, :context),
       :template_root) as template_url 
@@ -269,15 +296,25 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
     dual"
 
 
-  template::query get_template_url template_url onevalue $query
-
-  if { [string equal $template_url {}] } { 
+  if { [string equal $info(template_url) {}] } { 
     ns_log Notice "No template found to render content item $item_id in context '$context'"
     return 0
   }
 
-  set url $template_url
+  set url $info(template_url)
   set root_path [get_template_root]
+
+  # Added so that published templates are regenerated if they are missing.
+  # This is useful for default templates.  
+  # (OpenACS - DanW, dcwickstrom@earthlink.net)
+
+  set file ${root_path}/${url}.adp
+  if ![file exists $file] {
+
+      file mkdir [file dirname $file]
+      set text [content::get_content_value $info(template_id)]
+      template::util::write_file $file $text
+  }
 
   return 1
 }
