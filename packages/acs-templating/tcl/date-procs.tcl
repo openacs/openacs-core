@@ -228,6 +228,9 @@ ad_proc -public template::util::date::get_property { what date } {
         set piece [lindex $date $index]
         if { ![string equal $piece {}] } {
           append value $space
+          if { [string length $piece] == 1 } {
+            append value "0"
+          }
           append value $piece 
           append format $space
           append format $sql_form
@@ -243,7 +246,9 @@ ad_proc -public template::util::date::get_property { what date } {
       set ret [list]
       foreach fragment $clipped_date {
         if { [string equal $fragment {}] } {
-          lappend ret 0
+          lappend ret "00"
+        } elseif {[string length $fragment] == 1} {
+          lappend ret "0$fragment"
 	} else {
           lappend ret $fragment
 	}
