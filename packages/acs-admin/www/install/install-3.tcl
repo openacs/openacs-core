@@ -95,6 +95,8 @@ foreach package_key $install {
                                    -package_path "$package_path/$package_key" \
                                    $package_key]
 
+    ns_log Debug "Data model scripts: \nupgrade_from_version_name = $initial_version_name\nupgrade_to_version_name=$final_version_name\npackage_path=$package_path\npackage_key=$package_key\n => $data_model_files"
+
     # Install the packages -- this actually copies the files into the right place in the file system and backs up any old files
     set version_id [apm_package_install \
                         -enable \
