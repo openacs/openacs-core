@@ -13,11 +13,14 @@ ad_page_contract {
     subsite_name:onevalue
     nodes:multirow
     admin_p:onevalue
+    user_id:onevalue
 }
 
 set context [list]
 set package_id [ad_conn package_id]
 set admin_p [ad_permission_p $package_id admin]
+
+set user_id [ad_conn user_id]
 
 set subsite_name [db_string name {
     select acs_object.name(:package_id) from dual
