@@ -42,6 +42,8 @@ if { ![db_0or1row select_segment_properties {
     return
 }
 
+set name_edit_url [export_vars -base edit { segment_id }]
+
 # Pull out the number of elements that the current user can see. We do
 # this separately to avoid the join above. This query may need to
 # removed or changed to handle the permissions check more efficiently
