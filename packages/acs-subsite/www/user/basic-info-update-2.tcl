@@ -8,9 +8,9 @@ ad_page_contract {
     first_names
     last_name
     email
-    url
-    screen_name
-    bio
+    {url ""}
+    {screen_name ""}
+    {bio ""}
     {return_url ""}
     {user_id ""}
 }
