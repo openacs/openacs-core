@@ -35,19 +35,19 @@
       we are using Docbook XML instead of Docbook SGML:
     </para>
     <itemizedlist>
-      <listitem>
+      <listitem><para>
 	<emphasis>Consistency</emphasis>. We already have a bunch of
 	.xml files that ArsDigita wrote. Trying to re-write them to
 	conform to the SGML DTD would be unnecessary work (I tried).
-      </listitem>
-      <listitem>
+	</para></listitem>
+      <listitem><para>
 	<emphasis>It does not require extra
 	  effort</emphasis>. Writing in XML is almost identical to
 	SGML, with a couple extra rules. More details in the
 	<ulink
                url="http://en.tldp.org/LDP/LDP-Author-Guide/docbookxml.html">LDP 
 	  Author Guide</ulink>.
-      </listitem>
+	</para></listitem>
     </itemizedlist>
   </sect2>
   
@@ -118,33 +118,41 @@
 
     <itemizedlist>
       <listitem>
+	<para>
 	<ulink url="http://docbook.org/xml/index.html">Docbook XML
 	DTD</ulink> - The document type definition for XML. You can
 	find an RPM or DEB package or you can download a zip file from
 	the site linked from here.
+	</para>
       </listitem>
 
       <listitem>
+	<para>
 	<ulink url="http://sourceforge.net/projects/docbook/">XSL
 	Stylesheets</ulink> (docbook-xsl) - The stylesheets to convert
 	to HTML. We have been using a stylesheet based upon
 	NWalsh's chunk.xsl.
+	</para>
       </listitem>
       
       <listitem>
+	<para>
 	<computeroutput>xsltproc</computeroutput> - The processor that
 	will take an XML document and, given a xsl stylesheet, convert
 	it to HTML. It needs libxml2 and libxslt (available in RPM and
 	DEB formats or from <ulink
 	url="http://xmlsoft.org/">xmlsoft.org</ulink>.	
+	</para>
       </listitem>
 
       <listitem>
+	<para>
 	Some editing tool. A popular one is Emacs with the psgml
 	mode. We have a <link linkend="psgml-mode">intro to the PSGML
 	Mode in Emacs</link> as part of our documentation. You can
 	read about other editing tools in the <ulink
 	url="http://en.tldp.org/LDP/LDP-Author-Guide/">LDP Author Guide</ulink>.
+	</para>
       </listitem>
     </itemizedlist>
   </sect2>
@@ -702,11 +710,13 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
     <itemizedlist>
 
       <listitem>
+	<para>
 	The <ulink
 	url="http://en.tldp.org/LDP/LDP-Author-Guide/">LDP Author
 	Guide</ulink> has a lot of good information, a table of
 	docbook elements and their "look" in HTML and lots of good links
 	for tools.
+	</para>
       </listitem>
       
       <listitem><para>
