@@ -2203,8 +2203,8 @@ declare
   upgrade_p__final_version_name     alias for $3;  
   v_pos1                            integer;       
   v_pos2                            integer;       
-  v_tmp                             apm_package_files.path%TYPE;
-  v_path                            apm_package_files.path%TYPE;
+  v_tmp                             varchar(1500);
+  v_path                            varchar(1500);
   v_version_from                    apm_package_versions.version_name%TYPE;
   v_version_to                      apm_package_versions.version_name%TYPE;
 begin
