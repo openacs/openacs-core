@@ -182,7 +182,38 @@ proc_doc ds_collect_connection_info {} { Collects information about the current 
 
 proc_doc ds_collect_db_call { db command statement_name sql start_time errno error } {
     if { [ds_enabled_p] && [ds_collection_enabled_p] && [ds_database_enabled_p] } {
-	ds_add db $db $command $statement_name $sql $start_time [clock clicks] $errno $error
+
+        set bound_sql $sql
+
+        # It is very useful to be able to see the bind variable values displayed in the
+        # ds output. For postgresql we have a way of doing this with the proc db_bind_var_substitution
+        # but this proc does not work for Oracle
+        if { [string equal [db_type] "postgresql"] } {
+            upvar bind bind
+            set errno [catch {
+            if { [info exists bind] && [llength $bind] != 0 } {
+                if { [llength $bind] == 1 } {
+                    set bind_vars [list]
+                    set len [ns_set size $bind]
+                    for {set i 0} {$i < $len} {incr i} {
+                        lappend bind_vars [ns_set key $bind $i] \
+                                [ns_set value $bind $i]
+                    }
+                    set bound_sql [db_bind_var_substitution $sql $bind_vars]
+                } else {
+                    set bound_sql [db_bind_var_substitution $sql $bind]
+                }
+            } else {
+                set bound_sql [uplevel 4 [list db_bind_var_substitution $sql]]
+            }
+           } error]
+
+           if { $errno } {
+              ns_log Error "ds_collect_db_call: $error"
+           }
+        }
+
+	ds_add db $db $command $statement_name $bound_sql $start_time [clock clicks] $errno $error
     }
 }
 
