@@ -41,12 +41,7 @@ end;' language 'plpgsql';
 create trigger cr_type_template_map_tr before insert on cr_type_template_map
 for each row execute procedure cr_type_template_map_tr ();
 
--- show errors
-
--- create or replace package body content_type is
--- procedure create_type
-
-select define_function_args('content_type__create_type','content_type,super_type;content_revision,pretty_name,pretty_plural,table_name;null,id_colum;XXX,name_method;null');
+select define_function_args('content_type__create_type','content_type,supertype;content_revision,pretty_name,pretty_plural,table_name,id_column;XXX,name_method');
 
 create or replace function content_type__create_type (varchar,varchar,varchar,varchar,varchar,varchar,varchar)
 returns integer as '
@@ -55,21 +50,33 @@ declare
   create_type__supertype              alias for $2;  -- default ''content_revision''  
   create_type__pretty_name            alias for $3;  
   create_type__pretty_plural          alias for $4;  
-  create_type__table_name             alias for $5;  -- default null  
+  create_type__table_name             alias for $5;
   create_type__id_column              alias for $6;  -- default ''XXX''
   create_type__name_method            alias for $7;  -- default null
-  table_exists                        boolean;       
+  v_temp_p                            boolean;       
   v_supertype_table                   acs_object_types.table_name%TYPE;
                                         
 begin
 
+  if (create_type__supertype <> ''content_revision'')
+      and (create_type__content_type <> ''content_revision'') then
+    select count(*) > 0 into v_temp_p
+    from  acs_object_type_supertype_map
+    where object_type = create_type__supertype
+    and ancestor_type = ''content_revision'';
+
+    if not v_temp_p then
+      raise EXCEPTION ''-20000: supertype % must be a subtype of content_revision'', create_type__supertype;
+    end if;
+  end if;
+
  -- create the attribute table if not already created
 
-  select count(*) > 0 into table_exists 
+  select count(*) > 0 into v_temp_p 
     from pg_class
    where relname = lower(create_type__table_name);
 
-  if NOT table_exists then
+  if NOT v_temp_p then
     select table_name into v_supertype_table from acs_object_types
       where object_type = create_type__supertype;
 
@@ -96,6 +103,7 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
+select define_function_args('content_type__drop_type','content_type,drop_children_p;f,drop_table_p;f');
 
 create or replace function content_type__drop_type (varchar,boolean,boolean)
 returns integer as '
@@ -198,7 +206,7 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
-select define_function_args('content_type__create_attribute','content_type,attribute_name,datatype,pretty_name,pretty_plural;null,sort_order;null,default_value;null,column_spec;text');
+select define_function_args('content_type__create_attribute','content_type,attribute_name,datatype,pretty_name,pretty_plural,sort_order,default_value,column_spec;text');
 
 -- function create_attribute
 create or replace function content_type__create_attribute (varchar,varchar,varchar,varchar,varchar,integer,varchar,varchar)
@@ -262,6 +270,9 @@ end;' language 'plpgsql';
 
 
 -- procedure drop_attribute
+
+select define_function_args('content_type__drop_attribute','content_type,attribute_name,drop_column;f');
+
 create or replace function content_type__drop_attribute (varchar,varchar,boolean)
 returns integer as '
 declare
@@ -296,9 +307,9 @@ begin
 
   -- FIXME: postgresql does not support drop column.
   -- Drop the column if neccessary
-  if drop_attribute__drop_column and ''f''::boolean then
+  if drop_attribute__drop_column then
       execute ''alter table '' || v_table || '' drop column '' ||
-	drop_attribute__attribute_name;
+	drop_attribute__attribute_name || ''cascade'';
 
 --    exception when others then
 --      raise_application_error(-20000, ''Unable to drop column '' || 
