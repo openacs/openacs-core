@@ -109,6 +109,9 @@ ad_proc -public template::data::validate::user { value_ref message_ref } {
     if { [info exists value] && [string equal $value ":other:"] } { 
         set result 0
         set message "Please search for user by name, email, or screen name."
+    } elseif { [info exists value] && [string equal $value ":noresult:"] } { 
+        set result 0
+        set message "Your search didn't find any users, please search again."
     } elseif { [info exists value] && ![regexp {^[0-9]*$} $value] } {
         set result 0
         set message "Please pick a user from the result of your search."
