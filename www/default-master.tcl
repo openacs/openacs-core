@@ -86,7 +86,7 @@ if { [llength [namespace eval :: info procs ds_link]] == 1 } {
 
 # Curriculum bar
 
-if { [llength [namespace eval :: info procs curriculum::get_bar]] == 1 } {
+if { [apm_package_installed_p curriculum] } {
     set curriculum_bar_p 1
 } else {
     set curriculum_bar_p 0
