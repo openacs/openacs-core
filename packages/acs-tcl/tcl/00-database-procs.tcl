@@ -366,7 +366,7 @@ ad_proc -public db_nullify_empty_string { string } {
     }
 }
 
-ad_proc db_boolean { bool } {
+ad_proc -public db_boolean { bool } {
     Converts a Tcl boolean (1/0) into a SQL boolean (t/f)
 } {
     if { $bool } {
