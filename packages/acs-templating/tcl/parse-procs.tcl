@@ -695,7 +695,7 @@ ad_proc -private -deprecated template::get_enclosing_tag { tag } {
   return $name
 }
 
-ad_proc -private template::get_attribute { tag params name { default "" } } {
+ad_proc -private template::get_attribute { tag params name { default "ERROR" } } {
     Retrieves a named attribute value from the parameter set passed to a
     tag handler.  If a default is not specified, assumes the attribute
     is required and throws an error.
@@ -704,14 +704,16 @@ ad_proc -private template::get_attribute { tag params name { default "" } } {
     @param params   The ns_set passed to the tag handler.
     @param name     The name of the attribute.
     @param default  A default value to return if the the attribute is
-                    not specified in the template.
+                    not specified in the template. A default value of 
+                    "ERROR" will cause the proc
+                    to throw an error if the attribute wasn't supplied.
 
     @return The value of the attribute.
 } {
   set value [ns_set iget $params $name]
 
   if { [string equal $value {}] } {
-    if { [string equal $default {}] } {
+    if { [string equal $default {ERROR}] } {
       error "Missing [string toupper $name] property\
              in [string toupper $tag] tag"
     } else {
