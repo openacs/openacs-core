@@ -531,19 +531,18 @@ ad_proc subsite::get_pageflow_struct {} {
     if { [permission::permission_p -object_id [ad_conn subsite_id] -privilege admin] } {
         lappend pageflow admin {
             label "Administration"
-            folder "admin"
-            url "configure"
+            url "admin/configure"
             selected_patterns {
                 *
             }
             subsections {
                 configuration {
                     label "Configuration"
-                    url "configure"
+                    url "admin/configure"
                 }
                 applications {
                     label "Applications"
-                    folder "applications"
+                    folder "admin/applications"
                     url ""
                     selected_patterns {
                         *
@@ -551,18 +550,18 @@ ad_proc subsite::get_pageflow_struct {} {
                 }
                 permissions {
                     label "Permissions"
-                    url "permissions"
+                    url "admin/permissions"
                     selected_patterns {
                         permissions*
                     }
                 }
                 parameters {
                     label "Parameters"
-                    url "parameters"
+                    url "shared/parameters"
                 }
                 advanced {
                     label "Advanced"
-                    url "."
+                    url "admin/."
                     selected_patterns {
                         site-map/*
                         groups/*
