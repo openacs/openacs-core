@@ -1,6 +1,7 @@
 <master>
-  <property name="title">@page_title@</property>
+  <property name="title">@page_title;noquote@</property>
   <property name="context">@context;noquote@</property>
+  <property name="displayed_object_id">@user_id;noquote@</property>
 
 <if @inline_portrait_state@ eq "inline">
   <a href="portrait?@portrait_export_vars@"><img src="portrait-bits?@portrait_export_vars@"
@@ -39,14 +40,10 @@
   <b>#acs-subsite.Name#:</b> @first_names@ @last_name@
 </p>
 
-<if @allow_email_p@ true>
-	<if @show_email_p@ true>
-	  <p>
-	    <if @show_email@ true>
-	       <b>#acs-subsite.E_mail#:</b> <a href="mailto:@email@">@email@</a>
-	    </if>
-	  </p>
-	</if>
+<if @show_email_p@ true>
+  <p>
+    <b>#acs-subsite.E_mail#:</b> <a href="mailto:@email@">@email@</a>
+  </p>
 </if>
 
 <if @url@ not nil>
