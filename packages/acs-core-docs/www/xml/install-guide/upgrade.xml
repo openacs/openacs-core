@@ -423,7 +423,7 @@ exit</action></screen>
         upgrade to OpenACS 5.2, you'll need to check out another
         branch.</para>
               
-              <para>The <replaceable>openacs-5-1-compat</replaceable> tag identifies the latest released version of OpenACS 5.1 (ie, 5.1.3 or 5.1.4) and the latest compatible version of each package.  Each minor release of OpenACS since 5.0 has this tagging structure.  For example, OpenACS 5.1.x has <computeroutput>openacs-5-1-compat</computeroutput>.
+              <para>The <replaceable>openacs-5-1-compat</replaceable> tag identifies the latest released version of OpenACS 5.1 (ie, 5.1.3 or 5.1.4) and the latest compatible version of each package.  Each minor release of OpenACS since 5.0 has this tagging structure.  For example, OpenACS 5.1.x has <computeroutput>openacs-5-1-compat</computeroutput>.</para>
 
               <para>You will want to separately check out all the
                 packages you are using.
@@ -455,8 +455,10 @@ exit</action></screen>
               <itemizedlist>
                 <listitem>
                   <formalpara>
-                  <para>Update your local CVS working checkout (unless
-                  you just set it up). </para>
+                    <title>Update CVS</title>
+                    <para>Update your local CVS working checkout (unless
+                      you just set it up). </para>
+                    </formalpara>
                   <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd /var/lib/aolserver/<replaceable>openacs-5-1</replaceable></userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>cvs up -Pd ChangeLog *.txt bin etc tcl www packages/*</userinput></screen>
