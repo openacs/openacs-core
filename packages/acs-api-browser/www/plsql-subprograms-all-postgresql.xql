@@ -8,7 +8,7 @@
 
 	select proname as name, 'FUNCTION' as type 
 	from pg_proc 
-	where proowner=(select usesysid from pg_shadow 
+	where proowner=(select usesysid from pg_user
 	                where usename = current_user) 
 	order by proname
     
