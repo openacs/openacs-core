@@ -24,14 +24,14 @@ locale <b>@locale@</b>
 <if @conflict_count@ gt 0>
   <font color="red">There are @conflict_count@ message conflicts in the database.</font> 
 
-<p>
-  <b>&raquo;</b> <a href="@conflict_url@">Proceed to resolve conflicts</a>
-</p>
+  <ul class="action-links">
+    <li><a href="@conflict_url@">Proceed to resolve conflicts</a></li>
+  </ul>
 </if>
 <else>
   There are currently no conflicts in the database.
 </else>
 
-<p>
-  <b>&raquo;</b> <a href="@return_url@">Return</a>
-</p>
+<ul class="action-links">
+  <li><a href="@return_url@">Return</a></li>
+</ul>

@@ -6,6 +6,6 @@
   Import finished.
 </p>
 
-<p>
-  <b>&raquo;</b> <a href="@return_url@">Return to the locale page</a>
-</p>
+<ul class="action-links">
+  <li><a href="@return_url@">Return to the locale page</a></li>
+</ul>

@@ -11,9 +11,9 @@ Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="subm
   <h2>Search Results</h2>
 
   <if @other_search_url@ not nil>
-    <p>
-      <b>&raquo;</b> <a href="@other_search_url@">Search for '@q@' in @other_locale@</a>
-    </p>
+    <ul class="action-links">
+      <li><a href="@other_search_url@">Search for '@q@' in @other_locale@</a></li>
+    </ul>
   </if>
    
   <if @messages:rowcount@ gt 0>        
