@@ -5,14 +5,16 @@
 # next_url        - Any url to redirect to after the form has been submitted. The
 #                   variables user_id, password, and account_messages will be added to the URL. Optional.
 # email           - Prepopulate the register form with given email. Optional.
+# return_url      - URL to redirect to after creation, will not get any query vars added
 
 # Set default parameter values
 array set parameter_defaults {
     self_register_p 1
     next_url {}
+    return_url {}
 }
 foreach parameter [array names parameter_defaults] { 
-    if { [template::util::is_nil $parameter] } { 
+    if { ![exists_and_not_null $parameter] } { 
         set $parameter $parameter_defaults($parameter)
     }
 }
@@ -31,7 +33,7 @@ if { $self_register_p } {
 # Pre-generate user_id for double-click protection
 set user_id [db_nextval acs_object_id_seq]
 
-ad_form -name register -export {next_url user_id} -form [auth::get_registration_form_elements] -on_request {
+ad_form -name register -export {next_url user_id return_url} -form [auth::get_registration_form_elements] -on_request {
     # Populate elements from local variables
 } -on_submit {
 
@@ -89,7 +91,7 @@ ad_form -name register -export {next_url user_id} -form [auth::get_registration_
         
         ad_returnredirect [export_vars -base $next_url {user_id password {account_message $creation_info(account_message)}}]
         ad_script_abort
-    }
+    } 
 
 
     # User is registered and logged in

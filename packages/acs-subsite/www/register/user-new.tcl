@@ -3,12 +3,6 @@ ad_page_contract {
 
     @cvs-id $Id$
 } {
-    username:optional
     {email ""}
-    first_names:optional
-    last_name:optional
-    password:optional
-    url:optional
-    secret_question:optional
-    secret_answer:optional
+    {return_url ""}
 }
