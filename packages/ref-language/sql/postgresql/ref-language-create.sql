@@ -39,8 +39,3 @@ select acs_reference__new(
     'http://www.iso.ch',
     now()
 );
-
--- data
-begin;
-\i ../common/ref-language-data.sql
-end;

@@ -1,4 +1,4 @@
-load data infile '[acs_root_dir]/packages/ref-timezones/sql/common/timezone-rules.csv'
+load data infile '[acs_root_dir]/packages/ref-timezones/sql/common/timezone-rules.dat'
 into table timezone_rules
 replace
 fields terminated by "," optionally enclosed by "'"

@@ -9,14 +9,6 @@
 -- probably ought to add a note about analyze for efficiency on non-integer primary keys
 
 create table countries (
-    iso char(2)
-        constraint countries_iso_pk
-        primary key,
-    -- this is the three letter abbreviation - hardly used
-    a3  char(3),
-    -- this is the numeric code - hardly used
-    -- it is a char because of leading zeros so it isn't really a number
-    n3 char(3),
     -- this violates 3nf but is used for 2 reasons
     -- 1. to help efficiency
     -- 2. to make querys not fail if no translation exists yet
@@ -24,7 +16,10 @@ create table countries (
         constraint countries_default_name_nn
         not null
         constraint countries_default_name_uq
-        unique
+        unique,
+    iso char(2)
+        constraint countries_iso_pk
+        primary key
 );
 
 comment on table countries is '
@@ -34,14 +29,6 @@ comment on table countries is '
 comment on column countries.default_name is '
     This is admittedly a violation of 3NF but it is more efficient and helps with non-translated values.
 See country.sql for more comments.
-';
- 
-comment on column countries.a3 is '
-   This is the three letter abbreviation - hardly used.
-';
-
-comment on column countries.n3 is ' 
-    This is the numeric code - hardly used.
 ';
 
 -- add this table into the reference repository
@@ -97,8 +84,3 @@ begin
 commit;
 end;
 /
--- ISO country codes
-@ '../common/ref-country-data.sql'
-
-
-
