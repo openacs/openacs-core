@@ -64,6 +64,7 @@ set errno [catch {
     }
 
     foreach file [lsort $files] {
+	ns_log Notice "Bootstrap: sourcing $file"
 	source $file
     }
 
