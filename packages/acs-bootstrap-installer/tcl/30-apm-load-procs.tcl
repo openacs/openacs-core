@@ -191,6 +191,8 @@ ad_proc -public apm_get_package_files {
 } {
     set package_path [acs_package_root_dir $package_key]
     set files [lsort [ad_find_all_files -check_file_func apm_include_file_p $package_path]]
+    # We don't assume db_type proc is defined yet
+    set system_db_type [nsv_get ad_database_type .]
 
     set matching_files [list]
     foreach file $files {
@@ -203,7 +205,7 @@ ad_proc -public apm_get_package_files {
         if { $all_db_types_p } {
             set db_match_p 1
         } else {
-            set db_match_p [expr [empty_string_p $file_db_type] || [string equal $file_db_type [db_type]]]
+            set db_match_p [expr [empty_string_p $file_db_type] || [string equal $file_db_type $system_db_type]]
         }
 
         if { $type_match_p && $db_match_p } {
@@ -384,11 +386,9 @@ ad_proc apm_source { __file } {
 ad_proc apm_bootstrap_load_file { root_directory file } {
     Source a single file during initial bootstrapping and set APM data.
 } {
-    set relative_path [string range $file \
-        [expr { [string length "$root_directory/packages"] + 1 }] end]
-    ns_log "Notice" "Loading packages/$relative_path..."
+    ns_log "Notice" "Loading packages/$file"
 
-    apm_source $file
+    apm_source "${root_directory}/${file}"
 }
 
 ad_proc apm_bootstrap_load_libraries {
@@ -397,62 +397,45 @@ ad_proc apm_bootstrap_load_libraries {
     {-procs:boolean}
     package_key
 } {
-    Scan all the files in the package and load those asked for by the init
+    Scan all the files in the tcl dir of the package and load those asked for by the init
     and procs flags.
 
-    This proc is an analog of apm_load_libraries.  We can't call
-    apm_load_libraries during the initial portion of the bootstrap process
-    because the acs-kernal datamodel may not exist.
+    This proc is an analog of apm_load_libraries.  In addition though
+    this proc sets apm_first_time_loading_p nsv variable.
 
     @author Don Baccus (dhogaza@pacifier.com)
-
+    @author Peter Marklund
 
     @param package_key The package to load (normally acs-tcl)
     @param init Load initialization files
     @param procs Load the proc library files
 } {
-
-    set root_directory [nsv_get acs_properties root_directory]
-    set db_type [nsv_get ad_database_type .]
+    set file_types [list]
+    if { $procs_p } {
+        lappend file_types tcl_procs
+    }
+    if { $init_p } {
+        lappend file_types tcl_init
+    }
+    if { $load_tests_p } {
+        lappend file_types test_procs
+    }
 
     # This is the first time each of these files is being loaded (see
     # the documentation for the apm_first_time_loading_p proc).
     global apm_first_time_loading_p
     set apm_first_time_loading_p 1
 
-    set files [ad_find_all_files $root_directory/packages/$package_key]
-    if { [llength $files] == 0 } {
-		error "Unable to locate $root_directory/packages/$package_key/*."
-    }
+    set package_root_dir [acs_package_root_dir $package_key]
+    foreach file [apm_get_package_files -package_key $package_key -file_types $file_types] {
 
-    foreach file [lsort $files] {
+        apm_bootstrap_load_file $package_root_dir $file
 
-        set file_db_type [apm_guess_db_type $package_key $file]
-        set file_type [apm_guess_file_type $package_key $file]
-
-        if {([empty_string_p $file_db_type] || \
-             [string equal $file_db_type $db_type]) &&
-            ([string equal $file_type tcl_procs] && $procs_p ||
-             [string equal $file_type tcl_init] && $init_p)} {
-
-                 # Don't source acs-automated-testing tests before that package has been
-                 # loaded
-                 if { ! $load_tests_p && [regexp {tcl/test/[^/]+$} $file match] } {
-                     continue
-                 } 
-
-		 apm_bootstrap_load_file $root_directory $file
-
-            # Call db_release_unused_handles, only if the library defining it
-            # (10-database-procs.tcl) has been sourced yet.
-            if { [llength [info procs db_release_unused_handles]] != 0 } {
-                db_release_unused_handles
-            }
-        } elseif { ( [empty_string_p $file_db_type] ||
-	             [string equal $file_db_type $db_type] ) &&
-	           ( [string equal $file_type tcl_util] ) } {
-	    ns_log warning "apm_boostrap_load_file skipping $file because it isn't either a -procs.tcl or -init.tcl file"
-	}
+        # Call db_release_unused_handles, only if the library defining it
+        # (10-database-procs.tcl) has been sourced yet.
+        if { [llength [info procs db_release_unused_handles]] != 0 } {
+            db_release_unused_handles
+        }
     }
 
     unset apm_first_time_loading_p
@@ -512,4 +495,44 @@ ad_proc -private apm_install_xml_file_path {} {
     @author Peter Marklund
 } {
     return "[acs_root_dir]/install.xml"
+}
+
+ad_proc -private apm_ignore_file_p { path } {
+
+    Return 1 if $path should, in general, be ignored for package operations.
+    Currently, a file is ignored if it is a backup file or a CVS directory.
+
+} {
+    set tail [file tail $path]
+    if { [apm_backup_file_p $tail] } {
+	return 1
+    }
+    if { [string equal $tail "CVS"] } {
+	return 1
+    }
+    return 0
+}
+
+ad_proc -private apm_backup_file_p { path } {
+
+    Returns 1 if $path is a backup file, or 0 if not. We consider it a backup file if
+    any of the following apply:
+
+    <ul>
+    <li>its name begins with <code>#</code>
+    <li>its name is <code>bak</code>
+    <li>its name begins with <code>bak</code> and one or more non-alphanumeric characters
+    <li>its name ends with <code>.old</code>, <code>.bak</code>, or <code>~</code>
+    </ul>
+
+} {
+    return [regexp {(\.old|\.bak|~)$|^#|^bak([^a-zA-Z]|$)} [file tail $path]]
+}
+
+ad_proc -private apm_include_file_p { filename } {    
+    Check if the APM should consider a file found by ad_find_all_files.
+    Files for which apm_ignore_file_p returns true will be ignored.
+    Backup files are ignored.
+} {
+    return [expr ![apm_ignore_file_p $filename]]
 }
