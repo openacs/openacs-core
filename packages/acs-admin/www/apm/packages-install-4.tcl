@@ -78,7 +78,10 @@ foreach pkg_info $pkg_install_list {
 	    file delete -force $install_path/$package_key
 	}
     } else {
+        set enable_p [expr [lsearch -exact $pkg_enable_list $package_key] != -1]
+
 	set version_id [apm_package_install \
+                -enable=$enable_p \
                 -install_path $install_path \
 		-callback apm_ns_write_callback \
                 -load_data_model \
@@ -86,18 +89,14 @@ foreach pkg_info $pkg_install_list {
                 -message_catalog_files $message_catalog_files \
                 $spec_file]
     }
-    if { ($version_id != 0) && ([lsearch -exact $pkg_enable_list $package_key] != -1) } {
-        nsv_set apm_enabled_package $package_key 1    
 
-	apm_version_enable -callback apm_ns_write_callback $version_id
-    }
     incr installed_count
 }
 
-# Reload Tcl libraries and queries etc. for all enabled packages so that a restart
-# isn't needed
-apm_load_packages -force_reload -packages $pkg_enable_list
-    
+# Load init Tcl files and test Tcl files for all enable packages. Tcl -proc files and queries
+# have already been loaded by apm_package_install
+apm_mark_packages_for_bootstrap $pkg_enable_list
+
 if {$installed_count < 1} {
     ns_write "</ul>
     All packages in this directory have already been installed.

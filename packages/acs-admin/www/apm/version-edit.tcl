@@ -10,13 +10,7 @@ ad_page_contract {
     {version_id:integer}
 }
 
-db_1row apm_all_version_info {
-    select version_id, package_key, package_uri, pretty_name, version_name, version_uri,
-    summary, description_format, description, release_date, vendor, vendor_uri,
-    enabled_p, installed_p, tagged_p, imported_p, data_model_loaded_p, activation_date, tarball_length, 
-    deactivation_date, distribution_uri, distribution_date, singleton_p, initial_install_p
-    from apm_package_version_info where version_id = :version_id
-}
+db_1row apm_all_version_info {}
 
 doc_body_append "[apm_header -form "action=\"version-edit-2\" method=post" [list "version-view?version_id=$version_id" "$pretty_name $version_name"] "Edit a Version"]
 
@@ -80,6 +74,11 @@ function checkMailto(element) {
 <tr>
   <th align=right nowrap>Singleton:</th>
   <td>$singleton_p</td>
+</tr>
+
+<tr>
+  <th align=right nowrap>Auto-mount:</th>
+  <td><input name=auto_mount size=30 value=\"$auto_mount\" /></td>
 </tr>
 
 <tr>
