@@ -1345,6 +1345,45 @@ ad_proc -public apm_supported_callback_types {} {
     return [list after-install after-instantiate after-mount before-uninstantiate before-uninstall before-unmount]
 }
 
+ad_proc -private apm_callback_has_valid_args {
+    {-type:required}
+    {-proc_name:required}
+} {
+    Returns 1 if the specified callback proc of a certain
+    type has a valid argument list in its definition and 0
+    otherwise. Assumes that the callback proc is defined with
+    ad_proc.
+
+    @author Peter Marklund
+} {
+
+    if { [empty_string_p [info procs ::${proc_name}]] } {
+        return 0
+    }
+
+    set test_arg_list ""
+    foreach arg_name [apm_arg_names_for_callback_type -type $type] {
+        append test_arg_list " -${arg_name} value"
+    }
+
+    if { [empty_string_p $test_arg_list] } {
+        # The callback proc should take no args
+        return [empty_string_p [info args ::${proc_name}]]
+    }
+
+    # The callback proc should have required arg switches. Check
+    # that the ad_proc arg parser doesn't throw an error with
+    # test arg list
+    if { [catch { 
+           set args $test_arg_list
+           ::${proc_name}__arg_parser 
+       } errmsg] } {
+        return 0
+    } else {
+        return 1
+    }
+}
+
 ad_proc -public apm_package_instance_new {
     {-package_id 0}
     instance_name 
