@@ -126,3 +126,14 @@ span.list-filter-selected {
   margin-bottom: 8px;
 }
 
+div.list-inline-filter { 
+  font-size: 70%; 
+  font-family: tahoma,verdana,arial,helvetica; 
+}
+span.list-inline-filter { 
+}
+span.list-inline-filter-selected { 
+  font-weight: bold;
+}
+a.list-inline-filter { 
+}
