@@ -349,9 +349,9 @@ ad_proc -public ad_form {
         return -code error "No arguments to ad_form"
     } 
 
-    set valid_args { form method action html name select_query select_query_name new_data on_refresh
+    set valid_args { form method action mode html name select_query select_query_name new_data on_refresh
                      edit_data validate on_submit after_submit confirm_template new_request edit_request
-                     export};
+                     export cancel_url cancel_label };
 
     ad_arg_parser $valid_args $args
 
@@ -501,6 +501,18 @@ ad_proc -public ad_form {
             lappend create_command "-method" $method
         }
 
+        if { [info exists mode] } {
+            lappend create_command "-mode" $mode
+        }
+
+        if { [info exists cancel_url] } {
+            lappend create_command "-cancel_url" $cancel_url
+        }
+
+        if { [info exists cancel_label] } {
+            lappend create_command "-cancel_label" $cancel_label
+        }
+
         if { [info exists html] } {
             lappend create_command "-html" $html
         }
@@ -633,6 +645,7 @@ ad_proc -public ad_form {
                     label -
                     format -
                     value -
+		    section -
                     before_html -
                     after_html {
                         if { [llength $extra_arg] > 2 || [llength $extra_arg] == 1 } {
