@@ -684,7 +684,10 @@ aa_register_case util__subset_p {
     aa_true "List is a subset" [util_subset_p [list c b] [list c a a b b a]]
     aa_true "List is a subset" [util_subset_p [list a b c] [list c a b]]
     aa_false "List is not a subset" [util_subset_p [list a a a b b c] [list c c a b b a]]
-    aa_true "List is a subset" [util_subset_p -ignore_duplicates [list a a a b b c] [list c c a b b a]]
     aa_false "List is not a subset" [util_subset_p [list a b c d] [list a b c]]
+
+    aa_equals "List is a subset" [util_get_subset_missing [list a a a b b c] [list c c a b b a]] [list]
+    aa_equals "List is a subset" [util_get_subset_missing [list a a a b b c] [list c c a b b a]] [list]
+    aa_equals "List is not a subset" [util_get_subset_missing [list a b c d] [list a b c]] [list d]
 }
 

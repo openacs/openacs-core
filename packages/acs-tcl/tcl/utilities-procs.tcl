@@ -2873,13 +2873,10 @@ ad_proc -public util_sets_equal_p { list1 list2 } {
 }
 
 ad_proc -public util_subset_p { 
-    -ignore_duplicates:boolean
     list1
     list2
 } {
     Tests whether list1 is a subset of list2. 
-
-    @param ignore_duplicates Set this to ignore duplicates in lists
 
     @return 1 if list1 is a subset of list2.
 
@@ -2890,16 +2887,7 @@ ad_proc -public util_subset_p {
         return 1
     }
 
-    if { $ignore_duplicates_p } {
-        set sorted_list1 [list]
-        foreach elm [lsort $list1] {
-            if { [llength $sorted_list1] == 0 || ![string equal [lindex $sorted_list1 end] $elm] } {
-                lappend sorted_list1 $elm
-            }
-        }
-    } else {
-        set sorted_list1 [lsort $list1]
-    }
+    set sorted_list1 [lsort $list1]
     set sorted_list2 [lsort $list2]
         
     set len1 [llength $sorted_list1]
@@ -2942,6 +2930,75 @@ ad_proc -public util_subset_p {
     } else {
         # One or more elements in list1 not found in list2
         return 0
+    }
+}
+
+ad_proc -public util_get_subset_missing { 
+    list1
+    list2
+} {
+    Returns the elements in list1 that are not in list2. Ignores duplicates.
+
+    @return The list of elements from list1 that could not be found in list2.
+
+    @author Peter Marklund
+} {
+    if { [llength $list1] == 0 } {
+        # The empty list is always a subset of any list
+        return [list]
+    }
+
+    set sorted_list1 [list]
+    foreach elm [lsort $list1] {
+        if { [llength $sorted_list1] == 0 || ![string equal [lindex $sorted_list1 end] $elm] } {
+            lappend sorted_list1 $elm
+        }
+    }
+    set sorted_list2 [lsort $list2]
+        
+    set len1 [llength $sorted_list1]
+    set len2 [llength $sorted_list2]
+
+    set missing_elms [list]
+
+    # Loop over list1 and list2 in sort order, comparing the elements
+    
+    set index1 0
+    set index2 0
+    while { $index1 < $len1 && $index2 < $len2 } { 
+        set elm1 [lindex $sorted_list1 $index1]
+        set elm2 [lindex $sorted_list2 $index2]
+        set compare [string compare $elm1 $elm2]
+        
+        switch -exact -- $compare {
+            -1 { 
+                # elm1 < elm2
+                # The first element in list1 is smaller than any element in list2, 
+                # therefore this element cannot exist in list2, and therefore list1 is not a subset of list2
+                lappend missing_elms $elm1
+                incr index1
+            }
+            0 {
+                # A match, great, next element
+                incr index1
+                incr index2
+                continue
+            }
+            1 {
+                # elm1 > elm2
+                # Move to the next element in list2, knowing that this will be larger, and therefore 
+                # potentially equal to the element in list1
+                incr index2
+            }
+        }
+    }
+
+    if { $index1 == $len1 } {
+        # We've reached the end of list1, finding all elements along the way, we're done
+        return [list]
+    } else {
+        # One or more elements in list1 not found in list2
+        return [concat $missing_elms [lrange $sorted_list1 $index1 end]]
     }
 }
 
