@@ -15,8 +15,8 @@ ad_page_contract {
 
 
 ad_progress_bar_begin \
-    -title "Installing packages..." \
-    -message_1 "Installing packages, please wait ..." \
+    -title "Installing Packages" \
+    -message_1 "Installing selected packages, please wait ..." \
     -message_2 "We will continue automatically when installation is complete."
 
 
