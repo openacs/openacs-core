@@ -966,6 +966,9 @@ ad_proc -private template::list::prepare_for_rendering {
                             error "Unknown aggregate function '$__element_properties(aggregate)'"
                         }
                     }
+                    
+                    set $__element_properties(aggregate_group_col) [lc_numeric [set $__element_properties(aggregate_group_col)]] 
+                    set $__element_properties(aggregate_col) [lc_numeric [set $__element_properties(aggregate_col)]] 
                 }
             }
 
