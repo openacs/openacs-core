@@ -1,0 +1,64 @@
+<?xml version='1.0' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
+<chapter id="configuring-new-site">
+    <title>Configuring a new OpenACS Site</title>
+
+    <authorblurb>
+      <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
+    </authorblurb>
+
+  <para>In this chapter, <emphasis role="strong">Configuring</emphasis> refers to making changes to a new OpenACS site through the web interface.  In crude terms, these changes happen in the database, and are upgrade-safe.  <emphasis role="strong">Customizing</emphasis> refers to changes that touch the file system, and require some planning if easy upgradability is to be maintained.</para>
+
+  <sect1 id="how-do-I">
+    <title>How Do I?</title>
+    <sect2>
+      <title>How do I change the front page of a new site?</title>
+      <para>Every page within an OpenACS site is part of a <emphasis role="strong">subsite</emphasis> <ulink url="/doc/acs-subsite">More information)</ulink>.  The home page of the entire site is the front page is a special, default instance of a subsite, served from <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/www</computeroutput>.  If an index page is not found there, the default index page for all subsites is used.  To customize the code on the front page, copy the default index page from the Subsite package to the Main site and edit it:</para>
+<orderedlist>
+  <listitem>
+    <screen><userinput>cp <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-subsite/www/index*</computeroutput> <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/www</computeroutput></userinput></screen>
+        </listitem>
+        <listitem>
+          <para>Edit the new <computeroutput>index.adp</computeroutput> to change the text; you shouldn't need to edit <computeroutput>index.tcl</computeroutput> unless you are adding new functionality.</para>
+        </listitem>
+      </orderedlist>
+    </sect2>
+    <sect2>
+      <title>How do I change the site-wide style?</title>
+      <para>Almost all pages on an OpenACS site use <ulink url="/doc/acs-templating">ACS Templating</ulink>, and so their appearance is driven by a layer of different files.  Let's examine how this works:</para>
+      <itemizedlist>
+        <listitem>
+          <para>
+          A templated page uses an ADP/TCL pair.  The first line in the ADP file is usually:
+          </para>
+          <programlisting>&lt;master&gt;</programlisting>  
+          <para>If it appears exactly like this, without any arguments, the template processer uses <computeroutput>default-master</computeroutput> for that subsite.  For pages in <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/www</computeroutput>, this is <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/www/default-master.adp</computeroutput> and the associated .tcl file.
+          </para>
+        </listitem>
+        <listitem>
+          <para>The <computeroutput>default-master</computeroutput> is itself a normal ADP page.  It draws the subsite navigation elements and invokes <computeroutput>site-master</computeroutput> (<computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/www/site-master.adp</computeroutput> and .tcl)</para>
+        </listitem>
+        <listitem>
+          <para>The <computeroutput>site-master</computeroutput> draws site-wide navigation elements and invokes <computeroutput>blank-master</computeroutput> (<computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/www/blank-master.adp</computeroutput> and .tcl).  </para>
+        </listitem>
+        <listitem>
+          <para><computeroutput>Blank-master</computeroutput> does HTML housekeeping and provides a framework for special sitewide navigation "meta" elements such as Translator widgets and Admin widgets.</para>
+        </listitem>
+      </itemizedlist>
+      <figure>
+        <title>Site Templates</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/site-templates.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </sect2>
+
+  </sect1>
+</chapter>
+
