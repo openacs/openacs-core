@@ -537,7 +537,7 @@ ad_proc -public site_nodes_sync {args} {
 ad_proc -public site_node_closest_ancestor_package {
     { -default "" }
     { -url "" }
-    package_key
+    package_keys
 } {
     Finds the package id of a package of specified type that is
     closest to the node id represented by url (or by ad_conn url).Note
@@ -558,7 +558,7 @@ ad_proc -public site_node_closest_ancestor_package {
 
     @param default The value to return if no package can be found
     @param current_node_id The node from which to start the search
-    @param package_key The type of the package for which we are looking
+    @param package_keys The type(s) of the package(s) for which we are looking
 
     @return <code>package_id</code> of the nearest package of the
     specified type (<code>package_key</code>). Returns $default if no
@@ -566,42 +566,42 @@ ad_proc -public site_node_closest_ancestor_package {
 
 } {
     if {[empty_string_p $url]} {
-	set url [ad_conn url]
+	  set url [ad_conn url]
     }
 
     # Try the URL as is.
     if {[catch {nsv_get site_nodes $url} result] == 0} {
-	array set node $result
-	if { [string eq $node(package_key) $package_key] } {
-	    return $node(package_id)
-	}
+	  array set node $result
+	  if { [lsearch -exact $package_keys $node(package_key)] != -1 } {
+	      return $node(package_id)
+	  }
     }
-
+    
     # Add a trailing slash and try again.
     if {[string index $url end] != "/"} {
-	append url "/"
-	if {[catch {nsv_get site_nodes $url} result] == 0} {
-	    array set node $result
-	    if { [string eq $node(package_key) $package_key] } {
-		return $node(package_id)
-	    }
-	}
+	  append url "/"
+	  if {[catch {nsv_get site_nodes $url} result] == 0} {
+	      array set node $result
+	      if { [lsearch -exact $package_keys $node(package_key)] != -1 } {
+		    return $node(package_id)
+	      }
+	  }
     }
-
+    
     # Try successively shorter prefixes.
     while {$url != ""} {
-	# Chop off last component and try again.
-	set url [string trimright $url /]
-	set url [string range $url 0 [string last / $url]]
+	  # Chop off last component and try again.
+  	  set url [string trimright $url /]
+	  set url [string range $url 0 [string last / $url]]
 	
-	if {[catch {nsv_get site_nodes $url} result] == 0} {
-	    array set node $result
-	    if {$node(pattern_p) == "t" && $node(object_id) != "" && [string eq $node(package_key) $package_key] } {
-		return $node(package_id)
-	    }
-	}
+	  if {[catch {nsv_get site_nodes $url} result] == 0} {
+	      array set node $result
+	      if {$node(pattern_p) == "t" && $node(object_id) != "" && [lsearch -exact $package_keys $node(package_key)] != -1 } {
+		    return $node(package_id)
+	      }
+	  }
     }
-
+    
     return $default
 }
 
