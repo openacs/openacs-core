@@ -243,9 +243,6 @@ ad_proc -private auth::local::password::ChangePassword {
         return [array get result]
     }
 
-    # Invalidate existing login tokens sitting on random other browsers, just in case
-    sec_change_user_auth_token $user_id
-
     set result(password_status) "ok"
 
     if { [parameter::get -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -default 1] } {
