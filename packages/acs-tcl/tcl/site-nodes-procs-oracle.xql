@@ -9,52 +9,47 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="site_node::init_cache.select_site_nodes">
+    <fullquery name="site_node::update_cache.select_child_site_nodes">
         <querytext>
-            select site_node.url(site_nodes.node_id) as url,
-                   site_nodes.node_id,
-                   site_nodes.parent_id,
-                   site_nodes.name,
-                   site_nodes.directory_p,
-                   site_nodes.pattern_p,
-                   site_nodes.object_id,
-                   (select acs_objects.object_type
-                    from acs_objects
-                    where acs_objects.object_id = site_nodes.object_id) as object_type,
-                   apm_packages.package_key,
-                   apm_packages.package_id,
-                   apm_packages.instance_name,
-                   apm_package_types.package_type
-            from site_nodes,
-                 apm_packages,
-                 apm_package_types
-            where site_nodes.object_id = apm_packages.package_id(+)
-            and apm_package_types.package_key (+) = apm_packages.package_key
+	    select n.node_id,
+		   n.parent_id,
+		   n.name,
+		   n.directory_p,
+		   n.pattern_p,
+		   n.object_id,
+		   p.package_key,
+		   p.package_id,
+		   p.instance_name,
+		   t.package_type
+	    from apm_packages p,
+		 apm_package_types t,
+		 (select node_id, parent_id, name, directory_p, pattern_p, object_id, 
+		         rownum as nodes_rownum
+		  from site_nodes
+		  connect by parent_id = prior node_id
+		  start with node_id = :node_id) n
+	    where n.object_id = p.package_id(+)
+	    and t.package_key (+) = p.package_key
+	    order by n.nodes_rownum
         </querytext>
     </fullquery>
 
     <fullquery name="site_node::update_cache.select_site_node">
         <querytext>
-            select site_node.url(site_nodes.node_id) as url,
-                   site_nodes.node_id,
-                   site_nodes.parent_id,
-                   site_nodes.name,
-                   site_nodes.directory_p,
-                   site_nodes.pattern_p,
-                   site_nodes.object_id,
-                   (select acs_objects.object_type
-                    from acs_objects
-                    where acs_objects.object_id = site_nodes.object_id) as object_type,
-                   apm_packages.package_key,
-                   apm_packages.package_id,
-                   apm_packages.instance_name,
-                   apm_package_types.package_type
-            from site_nodes,
-                 apm_packages,
-                 apm_package_types
-            where site_nodes.node_id = :node_id
-            and site_nodes.object_id = apm_packages.package_id (+)
-            and apm_package_types.package_key (+) = apm_packages.package_key
+	    select n.node_id,
+		   n.parent_id,
+		   n.name,
+		   n.directory_p,
+		   n.pattern_p,
+		   n.object_id,
+		   p.package_key,
+		   p.package_id,
+		   p.instance_name,
+		   t.package_type
+	    from apm_packages p, apm_package_types t, site_nodes n
+	    where n.node_id = :node_id
+	    and n.object_id = p.package_id(+)
+	    and t.package_key (+) = p.package_key
         </querytext>
     </fullquery>
 

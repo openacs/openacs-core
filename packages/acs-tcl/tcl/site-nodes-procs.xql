@@ -25,4 +25,12 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="site_node::init_cache.get_root_node_id">
+        <querytext>
+            select node_id
+            from site_nodes
+            where parent_id is null
+        </querytext>
+    </fullquery>
+
 </queryset>

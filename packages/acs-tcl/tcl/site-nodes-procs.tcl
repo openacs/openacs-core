@@ -65,14 +65,7 @@ ad_proc -public site_node::rename {
 
     db_dml rename_node {}
 
-    # Unset all cache entries under the old path
-    foreach name [nsv_array names site_nodes "${node_url}*"] {
-        nsv_unset site_nodes $name
-    }
-
-    foreach node_id [concat $node_id $child_node_ids] {
-        update_cache -node_id $node_id
-    }
+    update_cache -sync_children -node_id $node_id
 }
 
 ad_proc -public site_node::instantiate_and_mount {
@@ -162,33 +155,82 @@ ad_proc -public site_node::unmount {
 ad_proc -private site_node::init_cache {} {
     initialize the site node cache
 } {
-    nsv_array reset site_nodes [list]
-    nsv_array reset site_node_urls [list]
-
-    db_foreach select_site_nodes {} -column_array node {
-        nsv_set site_nodes $node(url) [array get node]
-        nsv_set site_node_urls $node(node_id) $node(url)
-    }
-
+    set root_node_id [db_string get_root_node_id {}]
+    site_node::update_cache -sync_children -node_id $root_node_id
 }
 
 ad_proc -private site_node::update_cache {
+    {-sync_children:boolean}
     {-node_id:required}
 } {
-    if { [db_0or1row select_site_node {} -column_array node] } {
-        nsv_set site_nodes $node(url) [array get node]
-        nsv_set site_node_urls $node(node_id) $node(url)
+    Brings the in memory copy of the site nodes hierarchy in sync with the
+    database version. Only updates the given node and its children.
+} {
+    # don't let any other thread try to do a concurrent update
+    # until cache is fully updated
+    ns_mutex lock [nsv_get site_nodes_mutex mutex]
 
-    } else {
-        set url [get_url -node_id $node_id]
+    with_finally -code {
 
-        if {[nsv_exists site_nodes $url]} {
-            nsv_unset site_nodes $url
-        }
+	array set nodes [nsv_array get site_nodes]
+	array set urls [nsv_array get site_node_urls]
 
-        if {[nsv_exists site_node_urls $node_id]} {
-            nsv_unset site_node_urls $node_id
-        }
+	if {[catch {set old_url $urls($node_id)}]} {
+	    set old_url ""
+	}
+
+	if { ![empty_string_p $old_url] } {
+	    # unset old nodes-subtree
+	    if { $sync_children_p } {
+		array unset nodes "${old_url}*"
+	    } else {
+		array unset nodes $old_url
+	    }
+	}
+
+	# Note that in the queries below, we use connect by instead of site_node.url
+	# to get the URLs. This is less expensive.
+
+	if { $sync_children_p } {
+	    set query_name select_child_site_nodes
+	} else {
+	    set query_name select_site_node
+	}
+
+	db_foreach $query_name {} {
+	    if {[empty_string_p $parent_id]} {
+		# url of root node
+		set url "/"
+	    } else {
+		# append directory to url of parent node
+		set url $urls($parent_id)
+		append url $name
+		if { $directory_p == "t" } { append url "/" }
+	    }
+	    # save new url
+	    set urls($node_id) $url
+
+	    if { [empty_string_p package_id] } {
+		set object_type ""
+	    } else {
+		set object_type "apm_package"
+	    }
+
+	    # save new node
+	    set nodes($url) \
+		[list url $url node_id $node_id parent_id $parent_id name $name \
+		     directory_p $directory_p pattern_p $pattern_p \
+		     object_id $object_id object_type $object_type \
+		     package_key $package_key package_id $package_id \
+		     instance_name $instance_name package_type $package_type]
+	}
+
+	# update arrays
+	nsv_array reset site_nodes [array get nodes]
+	nsv_array reset site_node_urls [array get urls]
+
+    } -finally {
+	ns_mutex unlock [nsv_get site_nodes_mutex mutex]
     }
 }
 
