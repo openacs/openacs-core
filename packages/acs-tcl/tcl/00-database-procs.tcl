@@ -839,8 +839,9 @@ ad_proc db_transaction { transaction_code args } {
 	# An error was triggered or the transaction has been aborted.  
 	db_abort_transaction
 	if { [info exists on_error] && ![empty_string_p $on_error] } {
-	    # An on_error block exists, so execute it.
+
             if {[string equal postgresql [db_type]]} { 
+
                 # JCD: with postgres we abort the transaction prior to 
                 # executing the on_error block since there is nothing 
                 # you can do to "fix it" and keeping it meant things like 
@@ -848,12 +849,30 @@ ad_proc db_transaction { transaction_code args } {
                 # 
                 # Note that the semantics described in the proc doc 
                 # are not possible to support on postresql.
+
+                # DRB: I removed the db_release_unused_handles call that
+                # this patch included because additional aborts further
+                # down triggered an illegal db handle error.  I'm going to
+                # have the code start a new transaction as well.  If we
+                # don't, if a transaction fails and the on_error block
+                # fails, the on_error block DML will have been committed.
+                # Starting a new transaction here means that DML by both
+                # the transaction and on_error clause will be rolled back.
+                # On the other hand, if the on_error clause doesn't fail,
+                # any DML in that block will be committed.  This seems more
+                # useful than simply punting ...
+
                 ns_db dml $dbh "abort transaction"
-                db_release_unused_handles
+                ns_db dml $dbh "begin transaction"
+
             }
+
+	    # An on_error block exists, so execute it.
+
 	    set errno  [catch {
 		uplevel 1 $on_error
 	    } on_errmsg]
+
 	    # Determine what do with the error.
 	    set err_p 0
 	    switch $errno {

@@ -114,7 +114,6 @@ namespace eval oacs_util {
             for {set i 0} {$i < $n_fields} {incr i} {
                 set varname [string tolower [lindex $headers $i]]
                 set varvalue [lindex $one_line $i]
-                
                 set row_array($varname) $varvalue
             }
 
