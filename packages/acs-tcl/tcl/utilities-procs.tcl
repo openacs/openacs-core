@@ -1301,25 +1301,6 @@ ad_proc -public export_entire_form_as_url_vars {
 
 
 
-ad_proc -public util_get_current_url {} {
-    Returns a URL for re-issuing the current request, with query variables.
-    If a form submission is present, that is converted into query vars as well.
-
-    @return URL for the current page
-
-    @author Lars Pind (lars@pinds.com)
-    @creation-date February 11, 2003
-} {
-    set url [ad_conn url]
-
-    set query [ns_getform]
-    if { $query != "" } {
-        append url "?[export_entire_form_as_url_vars]"
-    }
-
-    return $url
-}
-
 proc with_catch {error_var body on_error} { 
     upvar 1 $error_var $error_var 
     global errorInfo errorCode 

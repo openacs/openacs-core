@@ -687,7 +687,7 @@ ad_proc -public ad_form {
                         lappend form_command [uplevel [list subst [lindex $extra_arg 1]]]
                     }
                     default {
-                        ns_log Error "Unknown switch '[lindex $extra_arg 0]' to ad_form on url [util_get_current_url]"
+                        ns_log Error "Unknown switch '[lindex $extra_arg 0]' to ad_form on url [ad_return_url]"
                     }
                 }
             }
