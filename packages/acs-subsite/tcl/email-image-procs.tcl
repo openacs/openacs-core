@@ -87,8 +87,7 @@ ad_proc -public email_image::get_user_email {
 		    # The user has an email image stored in the content repository
 		    set revision_id [content::item::get_latest_revision -item_id $email_image_id]
 		    set export_vars "user_id=$user_id&revision_id=$revision_id"
-		    set email_image "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\">\
-                                     <img border=0 align=middle src=/shared/email-image-bits.tcl?$export_vars></a>"
+		    set email_image "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\"><img border=0 align=middle src=/shared/email-image-bits.tcl?$export_vars></a>"
     
 		} else {
 		    # Create a new email_image
@@ -99,14 +98,12 @@ ad_proc -public email_image::get_user_email {
 		# an image replacing the "@" symbol
 		set email_user [lindex [split $email '@'] 0]
 		set email_domain [lindex [split $email '@'] 1]
-		set email_image "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\">${email_user}\
-                                 <img border=0 align=middle src=/shared/images/at.gif>${email_domain}</a>"
+		set email_image "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\">${email_user}<img border=0 align=middle src=/shared/images/at.gif>${email_domain}</a>"
 	    }
 	    return $email_image
 	}
 	"2" {
-	    return "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\">\
-                            \#acs-subsite.Send_email_to_this_user\#</a>"
+	    return "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\">\#acs-subsite.Send_email_to_this_user\#</a>"
 	}
 	"1" { 
 	    #Do not show e-mail
@@ -144,14 +141,18 @@ ad_proc -public email_image::new_item {
     # First we create a type and a folder in the content repository 
     # with label Email_Images where only items of type email_image 
     # will be stored.
-	
+
+    set font_size 14
+    set font_type helvetica
     set folder_id [email_image::get_folder_id]
     set email [email_image::get_email -user_id $user_id]
     set image_name "email${user_id}.gif"
     set email_length [string length $email]
     set dest_path "/tmp/$image_name"
-    set width [expr $email_length * 10]
-    set size "${width}x20"
+    set width [expr [expr $email_length * [expr $font_size / 2]] + 2]
+    set height $font_size
+    set ypos [expr [expr $height / 2] + 3 ]
+    set size "${width}x$height"
 
     if { [string equal $bgcolor ""]} {
 	set bgcolor "\#ffffff"
@@ -163,7 +164,7 @@ ad_proc -public email_image::new_item {
     exec convert -size $size $bg $dest_path
     
     # Creating the image with the email of the user on it
-    exec convert -font helvetica -fill blue -pointsize 16 -draw "text 1,15 $email" \
+    exec convert -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $email" \
 	$dest_path $dest_path
 
     if { [string equal $transparent ""] || [string equal $transparent "1"] } {
@@ -225,12 +226,16 @@ ad_proc -public email_image::edit_email_image {
 	# Email didn't change
 	return
     }
+    set font_size 14
+    set font_type helvetica
     set folder_id [email_image::get_folder_id]
     set image_name "email${user_id}.gif"
     set email_length [string length $new_email]
     set dest_path "/tmp/$image_name"
-    set width [expr $email_length * 10]
-    set size "${width}x20"
+    set width [expr [expr $email_length * [expr $font_size / 2]] + 2]
+    set height $font_size
+    set ypos [expr [expr $height / 2] + 3 ]
+    set size "${width}x$height"
 
     if { [string equal $bgcolor ""]} {
 	set bgcolor "\#ffffff"
@@ -242,7 +247,7 @@ ad_proc -public email_image::edit_email_image {
     exec convert -size $size $bg $dest_path
     
     # Creating the image with the email of the user on it
-    exec convert -font helvetica -fill blue -pointsize 16 -draw "text 1,15 $new_email" \
+    exec convert -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $new_email" \
 	$dest_path $dest_path
 
     if { [string equal $transparent ""] || [string equal $transparent "1"] } {
@@ -260,9 +265,9 @@ ad_proc -public email_image::edit_email_image {
 	    set revision_id [content::revision::new -item_id $item_id -title $image_name \
 				 -mime_type $mime_type  \
 				 -description "User email image" -creation_ip $creation_ip ]
-	    db_dml update_cr_items { *SQL* }
-	    db_dml lob_content { *SQL* } -blob_files [list ${dest_path}]
-	    db_dml lob_size { *SQL* }
+	    db_dml edit_update_cr_items { }
+	    db_dml lob_content { } -blob_files [list ${dest_path}]
+	    db_dml lob_size { }
 	}
     } else {
 	db_transaction {
