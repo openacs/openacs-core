@@ -249,6 +249,24 @@ proc_doc db_dml { statement_name sql args } {
     if {[info exists blob_files]} {
 
         db_with_handle db {
+            # another ugly hack to avoid munging tcl files.
+            # __lob_id needs to be set inside of a query (.xql) file for this
+            # to work.  Say for example that you need to create a lob. In 
+            # Oracle, you would do something like:
+
+            # db_dml update_photo  "update foo set bar = empty_blob() 
+            #                       where bar = :bar 
+            #                       returning foo into :1" -blob_files [list $file]
+            # for postgresql we can do the equivalent by placing the following
+            # in a query file:
+            # update foo set bar = [set __lob_id [db_string get_id "select empty_lob()"]]
+            # where bar = :bar
+
+            # __lob_id acts as a flag that signals that blob_dml_file is 
+            # required, and it is also used to pass along the lob_id.  It
+            # is unsert afterwards to avoid name clashes with other invocations
+            # of this routine.
+            # (DanW - Openacs)
             db_exec dml $db $full_statement_name $sql
             if {[uplevel {info exists __lob_id}]} {
                 ns_pg blob_dml_file $db [uplevel {set __lob_id}] $blob_files
