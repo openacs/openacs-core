@@ -3,19 +3,17 @@
 
 <p>
   We had
-  <if @complaints:rowcount@ gt 1>some problems</if>
+  <if @exception_count@ gt 1>some problems</if>
   <else>a problem</else>
   with your input:
 </p>
 
 <ul>
-  <multiple name="complaints">
-    <li>@complaints.text@</li>
-  </multiple>
+  @exception_text;noquote@
 </ul>
 
 <p>
-  Please back up using your browser, correct the above problem<if @complaints:rowcount@ gt 1>s</if>, and resubmit your entry.
+  Please back up using your browser, correct the above <if @exception_count@ gt 1>s</if>, and resubmit your entry.
 </p>
 
 <p>
