@@ -48,7 +48,7 @@
   <msg key="cannot_retrieve_password">Retrieving password from local authority is not supported.</msg>
   <msg key="Cannot_see_memb_list">Cannot see the members list</msg>
   <msg key="Change_locale_label">Change language</msg>
-  <msg key="Change_my_email_P">Change my email private level</msg>
+  <msg key="Change_my_email_P">Change my email privacy level</msg>
   <msg key="Change_my_Password">Change my Password</msg>
   <msg key="Change_pass_email_por">Change password, email, portrait</msg>
   <msg key="Check_Your_Inbox">Check Your Inbox</msg>
