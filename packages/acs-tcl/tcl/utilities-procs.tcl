@@ -3280,7 +3280,6 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
-# RCS: @(#) $Id$
 
 # Version 1.0 implemented Base64_Encode, Bae64_Decode
 # Version 2.0 uses the base64 namespace

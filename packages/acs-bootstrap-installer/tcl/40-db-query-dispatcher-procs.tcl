@@ -414,7 +414,7 @@ ad_proc db_qd_replace_sql {statement_name sql} {
 	db_qd_log Debug "NO FULLQUERY FOR $statement_name --> using default SQL"
         if { [empty_string_p $sql] } {
             # The default SQL is empty, that implies a bug somewhere in the code.
-            error "No fullquery for $statement_name and default SQL is empty."
+            error "No fullquery for $statement_name and default SQL empty - query for statement missing"
         }
     }
 

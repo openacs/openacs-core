@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="4.6" url="http://openacs.org/repository/download/apm/acs-kernel-4.6.apm">
+    <version name="4.6.1" url="http://openacs.org/repository/download/apm/acs-kernel-4.6.1.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
@@ -83,6 +83,7 @@
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.2.1-4.2.2.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.5-4.5.1.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.5.1-4.6.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.6-4.6.1.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-beta-1-beta-2.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/utilities-create.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/utilities-drop.sql"/>
@@ -139,6 +140,7 @@
             <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.2-4.5.sql"/>
             <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.5-4.5.1.sql"/>
             <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.5.1-4.6.sql"/>
+            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.6-4.6.1.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/utilities-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/utilities-drop.sql"/>
             <file type="data_model" db_type="oracle" path="sql/test/rel-constraints-test.sql"/>

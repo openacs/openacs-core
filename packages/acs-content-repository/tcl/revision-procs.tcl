@@ -67,17 +67,19 @@ ad_proc -public cr_write_content {
         ad_return -code error "Storage type '$storage_type' is invalid."
     }
 
-    ReturnHeaders $mime_type
 
     switch $storage_type {
         text { 
+            ReturnHeaders $mime_type
             ns_write [db_string write_text_content ""]
         }
         file {
             set path [cr_fs_path $storage_area_key]
-            db_write_blob write_file_content ""         
+            set filename [db_string write_file_content ""]
+            ns_returnfile 200 $mime_type $filename
         }
         lob  {
+            ReturnHeaders $mime_type
             db_write_blob write_lob_content ""
         }
     }

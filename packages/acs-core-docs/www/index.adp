@@ -28,7 +28,7 @@
 
 <tr><td valign="top">
 <pre><strong>For Everyone</strong>
-        - <a href="release-notes.html">OpenACS 4.5 Release Notes</a>
+        - <a href="release-notes.html">OpenACS 4.6 Release Notes</a>
         - Older Release Notes
 
 <a href="acs-admin.html"><strong>For OpenACS-admins</strong></a>
@@ -115,7 +115,7 @@ and licensed under the
 Questions or comments about the documentation? 
 <br>
 Please visit the
-<a href="http://openacs.org/bboard/">OpenACS bboards</a>
+<a href="http://openacs.org/forums/">OpenACS forums</a>
 or shoot email at <a href="mailto:vinod@kurup.com">vinod@kurup.com</a> or rmello at fslc.usu.edu.
 </p>
 </blockquote>

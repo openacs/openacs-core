@@ -68,6 +68,17 @@
 
             </para></listitem>
 
+          <listitem><para>
+
+              See <ulink
+              url="http://openacs.org/forums/message-view?message_id=33004">these
+              instructions</ulink> to download the 8.1.7.4 patchset. Note
+              that you can't back out of an Oracle patchset once it's
+              installed. You have to reinstall the whole thing from scratch.
+
+            </para>
+          </listitem>
+
           <listitem><para> 
 
               After the download is complete, untar the file
@@ -110,7 +121,10 @@ $ tar xvf oracle81701.tar</programlisting>
     <para>
 
       For additional resources/documentation, please see this <ulink
-      url="http://openacs.org/bboard/q-and-a-fetch-msg.tcl?msg_id=0003o2&amp;topic_id=11&amp;topic=OpenACS">thread</ulink>.
+      url="http://openacs.org/bboard/q-and-a-fetch-msg.tcl?msg_id=0003o2&amp;topic_id=11&amp;topic=OpenACS">thread</ulink>
+      and <ulink
+      url="http://openacs.org/forums/message-view?message_id=67108">Andrew
+      Piskorski's mini-guide</ulink>..
 
     </para>
 
@@ -505,15 +519,6 @@ oracle:/where/oracle/Disk1$ ./runInstaller</programlisting>
 
           </para>
           <orderedlist>
-            <listitem>
-              <para>
-
-                Install the compat-glibc, compat-egcs, compat-libs RPM for
-                2.1.3.
-              
-              </para>
-            </listitem>
-
             <listitem>
               <para>
 

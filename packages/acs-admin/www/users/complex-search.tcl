@@ -29,6 +29,7 @@ ad_page_contract {
     @author Mark Thomas (mthomas@arsdigita.com)
 } {
     {email ""}
+    {ip ""}
     {last_name_starts_with ""}
     {first_names ""}
     keyword:optional
@@ -112,6 +113,12 @@ if { [exists_and_not_null email] } {
     lappend where_clause "email like :sql_email"
     incr rowcount
     set criteria:[set rowcount](data) "Email contains '$email'"
+}
+
+if { [exists_and_not_null ip] } {
+    lappend where_clause "creation_ip = :ip"
+    incr rowcount
+    set criteria:[set rowcount](data) "Creation IP is $ip"
 }
 
 if { [exists_and_not_null last_name_starts_with] } {
@@ -217,7 +224,7 @@ db_foreach user_search_admin $query {
     set user_search:[set rowcount](member_state) $member_state
     
     if { $member_state != "approved" } {
-	set user_search:[set rowcount](user_finite_state_links) [join [ad_registration_finite_state_machine_admin_links $member_state $email_verified_p $user_id_from_search "search?[export_url_vars email last_name keyword target passthrough limit_users_in_group_id only_authorized_p]"] " | "]
+	set user_search:[set rowcount](user_finite_state_links) [join [ad_registration_finite_state_machine_admin_links $member_state $email_verified_p $user_id_from_search "complex-search?[export_url_vars email last_name keyword target passthrough limit_users_in_group_id only_authorized_p]"] " | "]
     } else {
 	set user_search:[set rowcount](user_finite_state_links) ""
     }

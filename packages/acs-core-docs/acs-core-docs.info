@@ -144,24 +144,24 @@
             <file type="content_page" path="www/xml/index.xml"/>
             <file type="content_page" path="www/xml/install-guide/aolserver.xml"/>
             <file type="content_page" path="www/xml/install-guide/credits.xml"/>
-            <file type="content_page" path="www/xml/install-guide/files/acceptance-sql.txt"/>
-            <file type="content_page" path="www/xml/install-guide/files/acs-pgbackup-init.txt"/>
-            <file type="content_page" path="www/xml/install-guide/files/acs-start.html"/>
-            <file type="content_page" path="www/xml/install-guide/files/dbstart.txt"/>
-            <file type="content_page" path="www/xml/install-guide/files/export-oracle.txt"/>
-            <file type="content_page" path="www/xml/install-guide/files/listener8i.txt"/>
-            <file type="content_page" path="www/xml/install-guide/files/nsd-oracle.txt"/>
-            <file type="content_page" path="www/xml/install-guide/files/nsd-postgres.txt"/>
-            <file type="content_page" path="www/xml/install-guide/files/openacs-start.html"/>
-            <file type="content_page" path="www/xml/install-guide/files/openacs4.tcl.txt"/>
-            <file type="content_page" path="www/xml/install-guide/files/oracle8i.txt"/>
-            <file type="content_page" path="www/xml/install-guide/files/postgresql.txt"/>
-            <file type="content_page" path="www/xml/install-guide/files/restart-aolserver.txt"/>
-            <file type="content_page" path="www/xml/install-guide/files/startlsnr.txt"/>
-            <file type="content_page" path="www/xml/install-guide/files/stoplsnr.txt"/>
-            <file type="content_page" path="www/xml/install-guide/files/svgroup.txt"/>
-            <file type="content_page" path="www/xml/install-guide/files/template-ini.ini"/>
-            <file type="content_page" path="www/xml/install-guide/files/winnsd.txt"/>
+            <file type="content_page" path="www/xml/files/acceptance-sql.txt"/>
+            <file type="content_page" path="www/xml/files/acs-pgbackup-init.txt"/>
+            <file type="content_page" path="www/xml/files/acs-start.html"/>
+            <file type="content_page" path="www/xml/files/dbstart.txt"/>
+            <file type="content_page" path="www/xml/files/export-oracle.txt"/>
+            <file type="content_page" path="www/xml/files/listener8i.txt"/>
+            <file type="content_page" path="www/xml/files/nsd-oracle.txt"/>
+            <file type="content_page" path="www/xml/files/nsd-postgres.txt"/>
+            <file type="content_page" path="www/xml/files/openacs-start.html"/>
+            <file type="content_page" path="www/xml/files/openacs4.tcl.txt"/>
+            <file type="content_page" path="www/xml/files/oracle8i.txt"/>
+            <file type="content_page" path="www/xml/files/postgresql.txt"/>
+            <file type="content_page" path="www/xml/files/restart-aolserver.txt"/>
+            <file type="content_page" path="www/xml/files/startlsnr.txt"/>
+            <file type="content_page" path="www/xml/files/stoplsnr.txt"/>
+            <file type="content_page" path="www/xml/files/svgroup.txt"/>
+            <file type="content_page" path="www/xml/files/template-ini.ini"/>
+            <file type="content_page" path="www/xml/files/winnsd.txt"/>
             <file type="content_page" path="www/xml/install-guide/next-steps.xml"/>
             <file type="content_page" path="www/xml/install-guide/openacs.xml"/>
             <file type="content_page" path="www/xml/install-guide/oracle.xml"/>
