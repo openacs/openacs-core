@@ -46,8 +46,14 @@ ad_proc -public ad_text_to_html {
 	regsub -nocase -all {([^a-zA-Z0-9]+)(ftp://[^\(\)"<>\s]+)} $text "\\1\tsTaRtUrL\\2eNdUrL\t" text
 	
 	# email links have the form xxx@xxx.xxx
-	regsub -nocase -all {([^a-zA-Z0-9]+)([^\(\)\s:;,@<>]+@[^\(\)\s.:;,@<>]+[.][^\(\)\s:;,@<>]+)} $text \
-		"\\1\tsTaRtEmAiL\\2eNdEmAiL\t" text
+        # JCD: don't treat things =xxx@xxx.xxx as email since most
+        # common occurance seems to be in urls (although VPATH bounce
+        # emails like bounce-user=domain.com@sourcehost.com will then not
+        # work correctly).  It's all quite ugly.
+ 
+        regsub -nocase -all {([^a-zA-Z0-9=]+)(mailto:)?([^=\(\)\s:;,@<>]+@[^\(\)\s.:;,@<>]+[.][^\(\)\s:;,@<>]+)} $text \
+                "\\1\tsTaRtEmAiL\\3eNdEmAiL\t" text
+
 
     }    
 
@@ -56,7 +62,7 @@ ad_proc -public ad_text_to_html {
     set text [ad_quotehtml $text]
 
     # Convert _single_ CRLF's to <br>'s to preserve line breaks
-    regsub -all {\r*\n} $text "<br>" text
+    regsub -all {\r*\n} $text "<br>\n" text
 
     # Convert every two spaces to an nbsp
     regsub -all {  } $text "\\\&nbsp; " text
@@ -82,6 +88,11 @@ ad_proc -public ad_text_to_html {
     # Convert every tab to 4 nbsp's
     regsub -all {\t} $text {\&nbsp;\&nbsp;\&nbsp;\&nbsp;} text
     
+    # JCD: Remove all the eNd sTaRt stuff and warn if we do it since its bad
+    # to have these left (means something is broken in our regexps above)
+    if {[regsub -all {(sTaRtUrL|eNdUrL|sTaRtEmAiL|eNdEmAiL)} $text {} text]} {
+        ns_log warning "Replaced sTaRt/eNd magic tags in ad_text_to_html"
+    }
     return $text
 }
 
