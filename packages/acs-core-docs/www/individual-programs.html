@@ -1,15 +1,15 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Individual Programs</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="software-versions.html" title="Chapter 2. Prerequisite Software"><link rel="previous" href="software-versions.html" title="Chapter 2. Prerequisite Software"><link rel="next" href="unix-install.html" title="Chapter 3. Installing on Unix/Linux"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="software-versions.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Prerequisite Software</th><td width="20%" align="right"> <a accesskey="n" href="unix-install.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="individual-programs"></a>Individual Programs</h2></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><a name="openacs-download"></a><p><b><a href="http://openacs.org/projects/openacs/download/one-revision?revision_id=92178" target="_top">OpenACS 4.6.3</a>. </b>The OpenACS tarball comprises the core packages and
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Individual Programs</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="software-versions.html" title="Chapter 2. Prerequisite Software"><link rel="previous" href="software-versions.html" title="Chapter 2. Prerequisite Software"><link rel="next" href="unix-install.html" title="Chapter 3. Installing on Unix/Linux"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="software-versions.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Prerequisite Software</th><td width="20%" align="right"> <a accesskey="n" href="unix-install.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="individual-programs"></a>Individual Programs</h2></div></div><div class="itemizedlist"><ul type="disc"><li><a name="openacs-download"></a><p><b><a href="http://openacs.org/projects/openacs/download/" target="_top">OpenACS 4.6.3</a>. </b>The OpenACS tarball comprises the core packages and
             many useful additional packages.  This includes a full set
             of documentation.  The tarball works with both PostGreSQL
             and Oracle.</p></li><li><p><b>Operating System. </b>OpenACS is designed for a Unix-like system.  It is
           developed primarily in Linux.  It can be run on Mac OS X,
-          and in Windows within VMWare.</p><div class="itemizedlist"><ul type="circle"><li><p><b>Linux. </b><a href="linux-installation.html" title="Install Linux and supporting software">Section , &#8220;Install Linux and supporting software&#8221;</a>.  The installation assumes a linux kernel of 2.2.22 or newer, or 2.4.14 or newer.</p></li><li><p><b>FreeBSD. </b><a href="http://www.orchardlabs.com/freebsd/" target="_top">FreeBSD
+          and in Windows within VMWare.</p><div class="itemizedlist"><ul type="circle"><li><p><b>Linux. </b><a href="linux-installation.html" title="Install Linux and supporting software">the section called &#8220;Install Linux and supporting software&#8221;</a>.  The installation assumes a linux kernel of 2.2.22 or newer, or 2.4.14 or newer.</p></li><li><p><b>FreeBSD. </b><a href="http://www.orchardlabs.com/freebsd/" target="_top">FreeBSD
                 guide</a>.  The Reference Platform uses bash, which is the
               standard Linux shell.  If you are using a different
               shell, you will need to substitute your shell's
               conventions for setting environment variables when
-              appropriate.</p></li><li><p><b>Mac OS X. </b><a href="mac-installation.html" title="OpenACS Installation Guide for Mac OS X">Section , &#8220;OpenACS Installation Guide for Mac OS X&#8221;</a></p></li><li><p><b>Windows/VMWare. </b><a href="win2k-installation.html">OpenACS Installation Guide for Windows 2000</a>  The only
+              appropriate.</p></li><li><p><b>Mac OS X. </b><a href="mac-installation.html" title="OpenACS Installation Guide for Mac OS X">the section called &#8220;OpenACS Installation Guide for Mac OS X&#8221;</a></p></li><li><p><b>Windows/VMWare. </b><a href="win2k-installation.html">OpenACS Installation Guide for Windows 2000</a>  The only
               way to run OpenACS on Windows is through the VMWare
               emulator.  (Please let me know if you have OpenACS
               running directly in Windows.)</p></li></ul></div></li><li><p><b>Build Environment. </b>The Reference Platform installation compiles most programs from
@@ -19,20 +19,20 @@
               operating system distribution.</p></li><li><p><b>GNU Make 3.76.1 or newer, REQUIRED. </b>PostgreSQL and AOLserver require gmake to
 			  compile. Note that on most linux
 			  distributions, GNU Make is simply named
-			  <tt class="computeroutput">make</tt> and
+			  <tt>make</tt> and
 			  there is no
-			  <tt class="computeroutput">gmake</tt>,
+			  <tt>gmake</tt>,
 			  whereas on BSD distributions,
-			  <tt class="computeroutput">make</tt> and
-			  <tt class="computeroutput">gmake</tt> are
+			  <tt>make</tt> and
+			  <tt>gmake</tt> are
 			  different.</p></li></ul></div></li><li><p><b>TCL 8.3. </b></p><div class="itemizedlist"><ul type="circle"><li><p><b>TCL 8.3 development headers and libraries, OPTIONAL. </b>  The site-wide-search service, OpenFTS, requires these to
-			  compile. (Debian users: <tt class="computeroutput">apt-get install
+			  compile. (Debian users: <tt>apt-get install
 			  tcl8.3-dev</tt>).  You need this
               to install OpenFTS.</p></li></ul></div></li><li><p><b>libxml2 and libxml2-devel, REQUIRED. </b>			  OpenACS 4.6.3 stores
           queries in XML files, so we use an AOLserver module called
           nsxml to parse these files.  libxml2-devel is required to
           compile nsxml.  Libxml2 is available from <a href="http://xmlsoft.org" target="_top">http://xmlsoft.org</a>). On Debian,
-      this can be installed by doing <tt class="computeroutput">apt-get install
+      this can be installed by doing <tt>apt-get install
         libxml2-dev</tt>. Users of other distributions can
       download rpms from <a href="http://rpmfind.net/linux/rpm2html/search.php?query=libxml2" target="_top">rpmfind.net</a>.</p></li><li><p><b>Web Server. </b>The web server handles incoming HTTP requests, provides
         a runtime environment for OpenACS's tcl code, connects to the
@@ -65,14 +65,14 @@
         </p></li><li><p>
           nsxml is available at <a href="http://acs-misc.sourceforge.net/dl/nsxml.tgz" target="_top">http://acs-misc.sourceforge.net</a>. 
         </p></li><li><p>
-          The patch that makes <tt class="computeroutput">exec</tt> work
+          The patch that makes <tt>exec</tt> work
           on BSD is available at <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=415475&amp;group_id=3152&amp;atid=303152" target="_top">sourceforge.net</a>
         </p></li><li><p>
-          The patch that makes <tt class="computeroutput">ns_uuencode</tt>
+          The patch that makes <tt>ns_uuencode</tt>
           work for binary files is available at <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=474259&amp;group_id=3152&amp;atid=303152" target="_top">sourceforge.net</a>
         </p></li><li><p>
           The patch that makes AOLserver respect the
-          <tt class="computeroutput">-g</tt> flag is available at
+          <tt>-g</tt> flag is available at
           <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=509413&amp;group_id=3152&amp;atid=303152" target="_top">sourceforge.net</a>
         </p></li></ul></div></li><li><p><b><a href="files/nsd-postgres.txt" target="_top">AolServer
               startup wrapper Version 1</a>, REQUIRED. </b>This file automates the startup of AOLserver.  You need
