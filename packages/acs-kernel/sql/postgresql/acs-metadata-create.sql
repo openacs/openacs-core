@@ -30,15 +30,15 @@
 -- table?  
 
 create table acs_object_types (
-	object_type	varchar(100) not null
+	object_type	varchar(1000) not null
 			constraint acs_object_types_pk primary key,
 	supertype	varchar(100) constraint acs_object_types_supertype_fk
 			references acs_object_types (object_type),
 	abstract_p	boolean default 'f' not null,
-	pretty_name	varchar(100) not null
+	pretty_name	varchar(1000) not null
 			constraint acs_obj_types_pretty_name_un
 			unique,
-	pretty_plural	varchar(100) not null
+	pretty_plural	varchar(1000) not null
 			constraint acs_obj_types_pretty_plural_un
 			unique,
 	table_name	varchar(30) not null

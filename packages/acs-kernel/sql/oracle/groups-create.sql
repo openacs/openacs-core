@@ -127,7 +127,7 @@ create table groups (
                         constraint groups_group_id_fk
                         references parties (party_id)
                         constraint groups_pk primary key,
-        group_name      varchar2(100) not null,
+        group_name      varchar2(1000) not null,
         join_policy     varchar2(30) default 'open' not null
                         constraint groups_join_policy_ck
                         check (join_policy in 

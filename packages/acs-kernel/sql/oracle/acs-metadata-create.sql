@@ -24,17 +24,17 @@
 ------------------
 
 create table acs_object_types (
-	object_type	varchar2(100) not null
+	object_type	varchar2(1000) not null
 			constraint acs_object_types_pk primary key,
 	supertype	constraint acs_object_types_supertype_fk
 			references acs_object_types (object_type),
 	abstract_p	char(1) default 'f' not null
 			constraint acs_obj_types_abstract_p_ck
 			check (abstract_p in ('t', 'f')),
-	pretty_name	varchar2(100) not null
+	pretty_name	varchar2(1000) not null
 			constraint acs_obj_types_pretty_name_un
 			unique,
-	pretty_plural	varchar2(100) not null
+	pretty_plural	varchar2(1000) not null
 			constraint acs_obj_types_pretty_plural_un
 			unique,
 	table_name	varchar2(30) not null
