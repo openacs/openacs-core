@@ -2125,7 +2125,7 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
-select define_function_args('content_item__set_live_revision','item_id,publish_status;ready');
+select define_function_args('content_item__set_live_revision','revision_id,publish_status;ready');
 create or replace function content_item__set_live_revision (integer,varchar)
 returns integer as '
 declare
