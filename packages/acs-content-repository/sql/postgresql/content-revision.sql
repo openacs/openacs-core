@@ -386,12 +386,13 @@ end;' language 'plpgsql';
 
 -- function get_number
 create function content_revision__get_number (integer)
-returns number as '
+returns integer as '
 declare
   get_number__revision_id            alias for $1;  
   v_number                           integer;       
   v_revision                         cr_revisions.revision_id%TYPE;
-  row_count                          integer default 0;
+  v_row_count                        integer default 0;
+  rev_cur                            record;
 begin
   for rev_cur in select
                    revision_id
@@ -405,9 +406,9 @@ begin
                  order by
                    o.creation_date
   LOOP
-    row_count := row_count + 1;
+    v_row_count := v_row_count + 1;
     if v_revision = get_number__revision_id then 
-       v_number := row_count;
+       v_number := v_row_count;
        exit;
     end if;
   end LOOP;
@@ -570,15 +571,13 @@ returns integer as '
 declare
   content_copy__revision_id            alias for $1;  
   content_copy__revision_id_dest       alias for $2;  -- default null  
-  lobs                                 blob;          
-  lobd                                 blob;          
   v_item_id                            cr_items.item_id%TYPE;
   v_content_length                     cr_revisions.content_length%TYPE;
   v_revision_id_dest                   cr_revisions.revision_id%TYPE;
   v_content                            cr_revisions.content%TYPE;
   v_lob                                cr_revisions.lob%TYPE;
   v_new_lob                            cr_revisions.lob%TYPE;
-  v_content_type                       cr_revisions.content_type%TYPE;
+  v_storage_type                       varchar;
 begin
 
   select
@@ -616,7 +615,7 @@ begin
       into v_content, v_content_length, v_lob, v_storage_type
       from cr_revisions r, cr_items i 
      where r.item_id = i.item_id 
-       and r.revision_id = content_copy__revision_id
+       and r.revision_id = content_copy__revision_id;
 
     if v_storage_type = ''lob'' then
         v_new_lob := empty_lob();
