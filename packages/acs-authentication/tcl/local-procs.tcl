@@ -102,7 +102,7 @@ ad_proc -private auth::local::authentication::Authenticate {
     password
     {parameters {}}
 } {
-    Implements the GetParameters operation of the auth_authentication 
+    Implements the Authenticate operation of the auth_authentication 
     service contract for the local account implementation.
 } {
     array set auth_info [list]
@@ -123,6 +123,7 @@ ad_proc -private auth::local::authentication::Authenticate {
         set auth_info(auth_status) "ok"
     } else {
         set auth_info(auth_status) "bad_password"
+        set auth_info(auth_message) "Invalid username or password"
         return [array get auth_info]
     }
 
