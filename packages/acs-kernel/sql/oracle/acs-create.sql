@@ -237,11 +237,12 @@ begin
 
   -- Make the "Unregistered Visitor" be object 0, which corresponds
   -- with the user_id assigned throughout the toolkit Tcl code
+  -- LARS: Make object_id 0 be a user, not a person
 
   insert into acs_objects
     (object_id, object_type)
   values
-    (0, 'person');
+    (0, 'user');
 
   insert into parties
     (party_id)
@@ -252,6 +253,11 @@ begin
     (person_id, first_names, last_name)
   values
     (0, 'Unregistered', 'Visitor');
+
+  insert into users
+    (user_id)
+  values
+    (0);
 
   insert into acs_magic_objects
     (name, object_id)

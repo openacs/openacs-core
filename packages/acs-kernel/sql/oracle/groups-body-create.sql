@@ -677,6 +677,53 @@ show errors
 
 
 
+create or replace package body admin_rel
+as
+
+  function new (
+    rel_id              in admin_rels.rel_id%TYPE default null,
+    rel_type            in acs_rels.rel_type%TYPE default 'admin_rel',
+    object_id_one       in acs_rels.object_id_one%TYPE,
+    object_id_two       in acs_rels.object_id_two%TYPE,
+    member_state        in membership_rels.member_state%TYPE default 'approved',
+    creation_user       in acs_objects.creation_user%TYPE default null,
+    creation_ip         in acs_objects.creation_ip%TYPE default null
+  ) return admin_rels.rel_id%TYPE
+  is
+    v_rel_id integer;
+  begin
+    v_rel_id := membership_rel.new (
+      rel_id => rel_id,
+      rel_type => rel_type,
+      object_id_one => object_id_one,
+      object_id_two => object_id_two,
+      member_state => member_state,
+      creation_user => creation_user,
+      creation_ip => creation_ip
+    );
+
+    insert into admin_rels
+     (rel_id)
+    values
+     (v_rel_id);
+
+    return v_rel_id;
+  end;
+
+  procedure delete (
+    rel_id      in admin_rels.rel_id%TYPE
+  )
+  is
+  begin
+    membership_rel.delete(rel_id);
+  end;
+
+end admin_rel;
+/
+show errors
+
+
+
 create or replace package body acs_group
 is
  function new (

@@ -34,6 +34,13 @@ create table membership_rels (
                                               'banned', 'rejected', 'deleted'))
 );
 
+create table admin_rels (
+        rel_id          integer constraint admin_rel_rel_id_fk
+                        references membership_rels (rel_id)
+                        constraint admin_rel_rel_id_pk
+                        primary key
+);
+
 create function inline_0 ()
 returns integer as '
 declare
@@ -102,21 +109,44 @@ begin
  attr_id := acs_rel_type__create_role (''member'', ''Member'', ''Members'');
 
  attr_id := acs_rel_type__create_type (
-   ''membership_rel'',
-   ''Membership Relation'',
-   ''Membership Relationships'',
-   ''relationship'',
-   ''membership_rels'',
-   ''rel_id'',
-   ''membership_rel'',
-   ''group'',
-   null,
-   0, 
-   null,
-   ''person'',
-   ''member'',
-   0, 
-   null
+   ''membership_rel'',                 -- rel_type
+   ''Membership Relation'',            -- pretty_name
+   ''Membership Relationships'',       -- pretty_plural
+   ''relationship'',                   -- supertype
+   ''membership_rels'',                -- table_name
+   ''rel_id'',                         -- id_column
+   ''membership_rel'',                 -- package_name
+   ''group'',                          -- object_type_one
+   null,                               -- role_one
+   0,                                  -- min_n_rels_one
+   null,                               -- max_n_rels_one
+   ''person'',                         -- object_type_two
+   ''member'',                         -- role_two
+   0,                                  -- min_n_rels_two
+   null                                -- max_n_rels_two
+   );
+
+ --
+ -- Administrator Relationship
+ --
+ attr_id := acs_rel_type__create_role (''admin'', ''Administrator'', ''Administrators'');
+
+ attr_id := acs_rel_type__create_type (
+   ''admin_rel'',                      -- rel_type
+   ''Administrator Relation'',         -- pretty_name
+   ''Administrator Relationships'',    -- pretty_plural
+   ''membership_rel'',                 -- supertype
+   ''admin_rels'',                     -- table_name
+   ''rel_id'',                         -- id_column
+   ''admin_rel'',                      -- package_name
+   ''group'',                          -- object_type_one
+   null,                               -- role_one
+   0,                                  -- min_n_rels_one
+   null,                               -- max_n_rels_one
+   ''person'',                         -- object_type_two
+   ''admin'',                          -- role_two
+   0,                                  -- min_n_rels_two
+   null                                -- max_n_rels_two   
    );
 
   return 0;
