@@ -14,12 +14,27 @@ namespace eval membership_rel {
     } {
         Change the state of a membership relation
     } {
-        switch -exact $state {
-            "approved" { db_exec_plsql approve {} }
-            "banned" { db_exec_plsql ban {} }
-            "rejected" { db_exec_plsql reject {} }
-            "deleted" { db_exec_plsql delete {} }
-            "needs approval" { db_exec_plsql unapprove {} }
+        db_transaction {
+            switch -exact $state {
+                "approved" { db_exec_plsql approve {} }
+                "banned" { db_exec_plsql ban {} }
+                "rejected" { db_exec_plsql reject {} }
+                "deleted" { db_exec_plsql delete {} }
+                "needs approval" { db_exec_plsql unapprove {} }
+            }
+
+            # Record who changed the state
+            # This will trigger an update of the acs_objects.modified_date column.
+            # We use this in the ApprovalExpiration feature to make sure that a user isn't 
+            # bumped back to needs_approval right after an administrator has approved them,
+            # even if the user doesn't log in in the meantime.
+
+            if { [ad_conn isconnected] } {
+                set user_id [ad_conn user_id]
+            } else {
+                set user_id [db_null]
+            }
+            db_dml update_modifying_user {}
         }
     }
 
