@@ -57,7 +57,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="person::name.get_person_name">      
+<fullquery name="person::name_not_cached.get_person_name">      
       <querytext>
       
           select first_names||' '||last_name as person_name
