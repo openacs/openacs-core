@@ -382,7 +382,7 @@ ad_proc -public ad_form {
 
     set valid_args { form method action mode html name select_query select_query_name new_data on_refresh
                      edit_data validate on_submit after_submit confirm_template on_request new_request edit_request
-                     export cancel_url cancel_label has_edit actions show_required_p };
+                     export cancel_url cancel_label has_submit has_edit actions show_required_p };
 
     ad_arg_parser $valid_args $args
 
@@ -420,7 +420,7 @@ ad_proc -public ad_form {
             # and validation block to be extended, for now at least until I get more experience
             # with this ...
 
-            if { [lsearch { name form method action html validate export mode cancel_url has_edit actions } $valid_arg ] == -1 } {
+            if { [lsearch { name form method action html validate export mode cancel_url has_edit has_submit actions } $valid_arg ] == -1 } {
                 set af_parts(${form_name}__extend) ""
             }
         }
@@ -550,6 +550,10 @@ ad_proc -public ad_form {
 
         if { [info exists has_edit] } {
             lappend create_command "-has_edit" $has_edit
+        }
+
+        if { [info exists has_submit] } {
+            lappend create_command "-has_submit" $has_submit
         }
 
         if { [info exists actions] } {
