@@ -24,3 +24,14 @@ if { [security::https_available_p]
     
     db_release_unused_handles
 }
+
+# if the kernel param is on, then these filters will be registered.  after that,
+# a subsite param controls whether that subsite is restricted or not
+if { [parameter::get -package_id [ad_acs_kernel_id] -parameter RegisterRestrictEntireServerToRegisteredUsersFilters -default 0]} {
+  db_foreach path_select {} {
+    ns_log Notice "admin-init.tcl:  Registering ad_restrict_entire_server_to_registered_users for ${url}*"
+    ad_register_filter preauth GET "${url}*" ad_restrict_entire_server_to_registered_users
+    ad_register_filter preauth POST "${url}*" ad_restrict_entire_server_to_registered_users
+    ad_register_filter preauth HEAD "${url}*" ad_restrict_entire_server_to_registered_users
+  }
+}

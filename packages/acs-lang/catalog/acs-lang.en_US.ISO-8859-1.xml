@@ -4,7 +4,7 @@
   <msg key="available-in-this-language">Available in English</msg>
   <description key="available-in-this-language">The language referred to in the message body should be the language of the locale, not a localized version of &quot;English&quot;.</description>
 
-  <msg key="change-locale">Change Locale</msg>
+  <msg key="change-locale">Change locale</msg>
   <msg key="English">English</msg>
   <msg key="French">French</msg>
   <msg key="German">German</msg>
@@ -54,6 +54,7 @@
   <msg key="Resolve_message_conflicts">Resolve message conflicts</msg>
   <msg key="Spanish">Spanish</msg>
   <msg key="this-language">English</msg>
+  <description key="this-language">The label of the locale, in the locale's language.  This should be different for each locale.  This should not be English unless the locale is &quot;en&quot;.</description>
   <msg key="Translated_messages_on_this_page">Translated messages on this page (%locale%)</msg>
   <msg key="Your_locale_for_package">Your locale setting for $package_name. If set, this will override the site-wide setting in this particular application.</msg>
   <msg key="Your_locale_site_wide">Your locale setting for the whole site</msg>

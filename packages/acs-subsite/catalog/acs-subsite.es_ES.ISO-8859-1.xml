@@ -2,6 +2,7 @@
 <message_catalog package_key="acs-subsite" package_version="5.1.0" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="_or">, o</msg>
+  <msg key="_Update_Basic_Information">Actualizar Información Básica</msg>
   <msg key="A_member_of_the_system">Miembro de %system_name% desde</msg>
   <msg key="About_You">Mi información</msg>
   <msg key="Account_at_system_closed">Su cuenta en %system_name% ha sido cancelada.</msg>
@@ -45,7 +46,9 @@
   <msg key="communities">comunidades</msg>
   <msg key="community">comunidad</msg>
   <msg key="Confirm">Confirmar:</msg>
+  <msg key="confirmation_password_changed">Usted a seleccionado una nueva contraseña con éxito</msg>
   <msg key="Continue">Continuar</msg>
+  <msg key="Continue_to_your_account">Continuar a %pvt_home_name%</msg>
   <msg key="Country_Name">País</msg>
   <msg key="Create_new_community">Crear nuevo %pretty_name%</msg>
   <msg key="Create_new_subsite">Crear un nuevo subsitio</msg>
@@ -275,6 +278,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Whos_Online_link_label">Usuarios conectados en este momento</msg>
   <msg key="Whos_Online_title">Quién está conectado</msg>
   <msg key="Yes_I_am_sure">Sí, estoy seguro</msg>
+  <msg key="You_are_in_the_follow">Usted esta en los siguientes grupos:</msg>
   <msg key="You_can_also_browse_from">También puede navegar desde el</msg>
   <msg key="You_can_always_re_open">Usted siembre puede reabrirlo con</msg>
   <msg key="You_do_not_have_admin_on">No tiene derechos de administración en el objeto %root% o cualquier de sus hijos</msg>

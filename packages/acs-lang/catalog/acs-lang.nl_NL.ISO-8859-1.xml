@@ -2,6 +2,7 @@
 <message_catalog package_key="acs-lang" package_version="5.1.0" locale="nl_NL" charset="ISO-8859-1">
 
   <msg key="available-in-this-language">Nederlandse versie is beschikbaar</msg>
+  <msg key="change-locale">Taal instellen</msg>
   <msg key="English">Engels</msg>
   <msg key="French">Frans</msg>
   <msg key="German">Duits</msg>
@@ -38,4 +39,5 @@
   <msg key="localization-t_fmt">%H:%M</msg>
   <msg key="localization-thousands_sep">.</msg>
   <msg key="Spanish">Spaans</msg>
+  <msg key="this-language">Nederlands</msg>
 </message_catalog>

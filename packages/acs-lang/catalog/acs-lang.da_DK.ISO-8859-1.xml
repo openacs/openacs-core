@@ -2,12 +2,13 @@
 <message_catalog package_key="acs-lang" package_version="5.1.0" locale="da_DK" charset="ISO-8859-1">
 
   <msg key="available-in-this-language">Findes på dansk</msg>
+  <msg key="change-locale">Ændre sprog</msg>
   <msg key="English">Engelsk</msg>
   <msg key="French">Fransk</msg>
   <msg key="German">Tysk</msg>
   <msg key="localization-abday">{søn} {man} {tir} {ons} {tor} {fre} {lør}</msg>
   <msg key="localization-abmon">{jan} {feb} {mar} {apr} {maj} {jun} {jul} {aug} {sep} {okt} {nov} {dec}</msg>
-  <msg key="localization-am_str"></msg>
+  <msg key="localization-am_str">AM</msg>
   <msg key="localization-currency_symbol">kr</msg>
   <msg key="localization-d_fmt">%d/%m-%y</msg>
   <msg key="localization-d_t_fmt">%a %e. %B %Y %r %Z</msg>
@@ -32,10 +33,11 @@
   <msg key="localization-p_cs_precedes">1</msg>
   <msg key="localization-p_sep_by_space">0</msg>
   <msg key="localization-p_sign_posn">1</msg>
-  <msg key="localization-pm_str"></msg>
+  <msg key="localization-pm_str">PM</msg>
   <msg key="localization-positive_sign"></msg>
   <msg key="localization-t_fmt">%H:%M</msg>
   <msg key="localization-thousands_sep">.</msg>
   <msg key="this-language">dansk</msg>
   <msg key="Spanish">Spansk</msg>
+  <msg key="this-language">Dansk</msg>
 </message_catalog>

@@ -115,39 +115,25 @@ was instead redirected to you.
 	    return [ro::email::sendmail_log $to $from $subject $body $extraheaders $bcc]
 	}
     }
+
+    ad_proc -private rename_ns_sendmail {} {
+
+        Renames ns_sendmail to _old_ns_sendmail if _old_ns_sendmail
+        doesn't already exist.  Returns 1 if successful, 0 otherwise.
+
+        @author Andrew Grumet <aegrumet@alum.mit.edu>
+        @date 6 June 2003
+
+    } {
+        ns_log Notice "rollout-email-procs.tcl: renaming ns_sendmail to _old_ns_sendmail."
+        if { [catch {
+            #We have to execute this code in the global namespace
+            #because otherwise _old_ns_sendmail will land in ro::email.
+            namespace eval :: { rename ns_sendmail _old_ns_sendmail }
+        } errMsg] } {
+            ns_log Notice "rollout-email-procs.tcl: rename failed!  Error message: '$errMsg'"
+            return 0
+        }
+        return 1
+    }
 }
-
-switch [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode] {
-
-    log {
-
-	ns_log Notice "rollout-email-procs.tcl: renaming ns_sendmail to _old_ns_sendmail."
-	rename ns_sendmail _old_ns_sendmail
-
-	ns_log Notice "rollout-email-procs.tcl: renaming ro::email::sendmail_log to ns_sendmail.  Email messages will be written to the error log instead of getting sent."
-	rename ro::email::sendmail_log ns_sendmail
-
-    }
-
-    redirect {
-
-	ns_log Notice "rollout-email-procs.tcl: renaming ns_sendmail to _old_ns_sendmail."
-	rename ns_sendmail _old_ns_sendmail
-
-	ns_log Notice "rollout-email-procs.tcl: renaming ro::email::sendmail_redirect to ns_sendmail.  Email messages will be redirected to addresses specified by the EmailRedirectTo parameter of acs/acs-rollout-support ('[ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailRedirectTo]') or else logged if that parameter is not set ."
-	rename ro::email::sendmail_redirect ns_sendmail
-
-    }
-
-    filter {
-
-	ns_log Notice "rollout-email-procs.tcl: renaming ns_sendmail to _old_ns_sendmail."
-	rename ns_sendmail _old_ns_sendmail
-
-	ns_log Notice "rollout-email-procs.tcl: renaming ro::email::sendmail_filter to ns_sendmail.  Email messages will be logged unless this recipient's address is listed in the EmailAllow parameter of acs/acs-rollout-support ('[ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailAllow]') ."
-	rename ro::email::sendmail_filter ns_sendmail
-
-    }
-
-}
-

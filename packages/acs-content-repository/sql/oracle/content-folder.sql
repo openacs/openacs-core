@@ -163,7 +163,7 @@ begin
 
 end del;
 
--- edit_names a folder, making sure the new name is not already in use
+-- renames a folder, making sure the new name is not already in use
 procedure edit_name (
   folder_id	 in cr_folders.folder_id%TYPE,
   name	         in cr_items.name%TYPE default null,

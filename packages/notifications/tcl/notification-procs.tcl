@@ -159,6 +159,7 @@ namespace eval notification {
         @author Ben Adida
         @author Lars Pind
     } {
+
         set requests_p [notification::request::request_exists -object_id $object_id -type_id $type_id]
         
         # We're only going to do anything if there are people who have requests, 
@@ -268,7 +269,7 @@ namespace eval notification {
             if { [empty_string_p $notif_user] && [ad_conn isconnected] } {
                 set notif_user [ad_conn user_id]
             }
-            
+           
             # Actually carry out inserting the notification
             db_transaction {
                 if { $subset_arg_p || $already_notified_arg_p } {
@@ -306,6 +307,13 @@ namespace eval notification {
                 
                 # Create the notification
                 package_instantiate_object -extra_vars $extra_vars notification
+
+                # teadams@alum.mit.edu - pl/sql has a 32K limit for paramaters.
+
+                # Updating the clob columns directly
+                # to avoid this limitation.
+                db_dml update_message {} -clobs [list $notif_html $notif_text]
+
             }
         }
         

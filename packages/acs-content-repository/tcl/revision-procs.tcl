@@ -70,20 +70,29 @@ ad_proc -public cr_write_content {
         file {
             set path [cr_fs_path $storage_area_key]
             set filename [db_string write_file_content ""]
-            # JCD: for webdavfs there needs to be a content-length 0 header 
-            # but ns_returnfile does not send one.   Also, we need to 
-            # ns_return size 0 files since if fastpath is enabled ns_returnfile 
-            # simply closes the connection rather than send anything (including 
-            # any headers).  Almost certainly a bug in fastpath.c.
-            set size [file size $filename]
-            if {!$size} { 
-                ns_set put [ns_conn outputheaders] "Content-Length" 0
-                ns_return 200  text/plain {}
-            } else {
-                ns_returnfile 200 $mime_type $filename
+            if { $string_p } {
+		set fd [open $filename "r"]
+		set text [read $fd]
+		close $fd
+		return $text
+	    } else {
+                # JCD: for webdavfs there needs to be a content-length 0 header 
+                # but ns_returnfile does not send one.   Also, we need to 
+                # ns_return size 0 files since if fastpath is enabled ns_returnfile 
+                # simply closes the connection rather than send anything (including 
+                # any headers).  This bug is fixed in AOLServer 4.0.6 and later
+                # but work around it for now.
+                set size [file size $filename]
+                if {!$size} { 
+                    ns_set put [ns_conn outputheaders] "Content-Length" 0
+                    ns_return 200 text/plain {}
+                } else {
+                    ns_returnfile 200 $mime_type $filename
+                }
             }
         }
         lob  {
+
             if { $string_p } {
                 return [db_blob_get write_lob_content ""]
             }
@@ -182,14 +191,12 @@ ad_proc -public cr_import_content {
         set item_id [db_nextval acs_object_id_seq]
     }
 
-
     # use content_type of existing item
     if $old_item_p {
 	set content_type [db_string get_content_type ""]
     } else {
 	set content_type [cr_registered_type_for_mime_type $mime_type]
     }
-
     set revision_id [db_nextval acs_object_id_seq]
 
     db_transaction {

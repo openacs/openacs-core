@@ -1502,13 +1502,7 @@ as
   ) return apm_parameters.parameter_id%TYPE
   is
     v_parameter_id apm_parameters.parameter_id%TYPE;
-    cursor all_parameters is
-       select ap.package_id, p.parameter_id, p.default_value 
-       from apm_parameters p, apm_parameter_values v, apm_packages ap
-       where p.package_key = ap.package_key
-       and p.parameter_id = v.parameter_id (+)
-       and v.attr_value is null
-       and p.package_key = register_parameter.package_key;       
+    v_value_id apm_parameter_values.value_id%TYPE;
   begin
     -- Create the new parameter.    
     v_parameter_id := acs_object.new(
@@ -1526,12 +1520,12 @@ as
     register_parameter.default_value, register_parameter.section_name, 
 	register_parameter.min_n_values, register_parameter.max_n_values);
     -- Propagate parameter to new instances.	
-    for cur_val in all_parameters
+    for pkg in (select package_id from apm_packages where package_key = register_parameter.package_key)
       loop
-      	apm.set_value(
-	    package_id => cur_val.package_id,
-	    parameter_id => cur_val.parameter_id, 
-	    attr_value => cur_val.default_value
+      	v_value_id := apm_parameter_value.new(
+	    package_id => pkg.package_id,
+	    parameter_id => v_parameter_id, 
+	    attr_value => register_parameter.default_value
 	    ); 	
       end loop;		
     return v_parameter_id;

@@ -621,19 +621,20 @@ ad_proc -public ds_profile { command {tag {}} } {
             set ds_profile__start_clock($tag) [clock clicks -milliseconds]
         }
         stop {
-            if { [empty_string_p $tag] } {
-                error "Tag parameter is required"
+            if { ![empty_string_p $ds_profile__start_clock($tag)] } {
+                set num_ms [expr [clock clicks -milliseconds] - $ds_profile__start_clock($tag)]
+                set ds_profile__start_clock($tag) {}
+                
+                if { ![info exists ds_profile__total_ms($tag)] } {
+                    set ds_profile__total_ms($tag) 0
+                    set ds_profile__iterations($tag) 0
+                }
+                
+                set ds_profile__total_ms($tag) [expr [set ds_profile__total_ms($tag)] + $num_ms]
+                set ds_profile__iterations($tag) [expr [set ds_profile__iterations($tag)] + 1]
+            } else {
+                ns_log Error "ds_profile stop called without a corresponding call to ds_profile start, with tag $tag"
             }
-            set num_ms [expr [clock clicks -milliseconds] - $ds_profile__start_clock($tag)]
-            set ds_profile__start_clock($tag) {}
-
-            if { ![info exists ds_profile__total_ms($tag)] } {
-                set ds_profile__total_ms($tag) 0
-                set ds_profile__iterations($tag) 0
-            }
-
-            set ds_profile__total_ms($tag) [expr [set ds_profile__total_ms($tag)] + $num_ms]
-            set ds_profile__iterations($tag) [expr [set ds_profile__iterations($tag)] + 1]
         }
         log {
             if { ![empty_string_p $tag] } {
