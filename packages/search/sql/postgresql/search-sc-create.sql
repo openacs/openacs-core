@@ -107,7 +107,6 @@ select acs_sc_operation__new (
 );
 
 
-
 select acs_sc_msg_type__new (
            'FtsEngineDriver.Info.InputType',
 	   ''
@@ -125,8 +124,6 @@ select acs_sc_operation__new (
 	   'FtsEngineDriver.Info.InputType',		-- operation_inputtype
 	   'FtsEngineDriver.Info.OutputType'		-- operation_outputtype
 );
-
-
 
 
 --
@@ -175,12 +172,3 @@ select acs_sc_operation__new (
 	   'FtsContentProvider.Url.InputType',		-- operation_inputtype
 	   'FtsContentProvider.Url.OutputType'		-- operation_outputtype
 );
-
-
-
-
-
-
-
-
-
