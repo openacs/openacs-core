@@ -1319,7 +1319,7 @@ ad_proc -public apm_version_update {
 ad_proc -private apm_packages_full_install {
     {-callback apm_dummy_callback} 
     pkg_info_list 
-.} {
+} {
 
     Loads the data model, installs, enables, instantiates, and mounts all of the packages in pkg_list.
 } {
