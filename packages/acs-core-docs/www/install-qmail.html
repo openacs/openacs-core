@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install qmail (OPTIONAL)</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="install-more-software.html" title="Appendix B. Install additional supporting software"><link rel="previous" href="install-daemontools.html" title="Install Daemontools (OPTIONAL)"><link rel="next" href="install-full-text-search.html" title=""><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-daemontools.html">Prev</a> </td><th width="60%" align="center">Appendix B. Install additional supporting software</th><td width="20%" align="right"> <a accesskey="n" href="install-full-text-search.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="install-qmail"></a>Install qmail (OPTIONAL)</h2></div></div><p>Qmail is a Mail Transfer Agent.  It handles incoming and outgoing mail.  Install qmail if you want your OpenACS server to send and receive mail, and you don't want to use an alternate MTA.</p><div class="orderedlist"><ol type="1"><li><p><b>Install ucspi. </b>This program handles incoming tcp connections.
+              <a href="individual-programs.html#ucspi-download">Download ucspi</a> and install it.</p><pre class="screen">[root@yourserver root]# <b><tt>cd /usr/local/src</tt></b>
+[root@yourserver src]# <b><tt>tar xzf /tmp/ucspi-tcp-0.88.tar.gz</tt></b>
+[root@yourserver src]# <b><tt>cd ucspi-tcp-0.88</tt></b>
+[root@yourserver ucspi-tcp-0.88]#<b><tt> make</tt></b>
+( cat warn-auto.sh; \
+echo 'main=&quot;$1&quot;; shift'; \
+(many lines omitted)
+./compile instcheck.c
+./load instcheck hier.o auto_home.o unix.a byte.a
+[root@yourserver ucspi-tcp-0.88]# <b><tt>make setup check</tt></b>
+./install
+./instcheck
+[root@yourserver ucspi-tcp-0.88]#
+<pre class="action">cd /usr/local/src 
+tar xzf /tmp/ucspi-tcp-0.88.tar.gz 
+cd ucspi-tcp-0.88 
+make 
+make setup check</pre></pre><p>Verify that ucspi-tcp was installed successfully by
+running the tcpserver program which is part of ucspi-tcp:</p><pre class="screen">[root@yourserver ucspi-tcp-0.88]# <b><tt>tcpserver</tt></b>
+tcpserver: usage: tcpserver [ -1UXpPhHrRoOdDqQv ] [ -c limit ] [ -x rules.cdb ] [ -B banner ] [ -g gid ] [ -u uid
+] [ -b backlog ] [ -l localname ] [ -t timeout ] host port program
+[root@yourserver ucspi-tcp-0.88]#
+</pre><p><a class="indexterm" name="id2911956"></a>
+(I'm not sure if this next step is 100% necessary, but when I skip it
+I get problems.  If you get the error <tt>553 sorry, that domain isn't in my list of allowed rcpthosts (#5.7.1)</tt> then you need to do this.)  AOLServer sends outgoing mail via the ns_sendmail
+command, which pipes a command to the sendmail executable.  Or, in our
+case, the qmail replacement wrapper for the sendmail executable.  In
+some cases, though, the outgoing mail requset is apparently sent
+through tcp/ip, so that it comes to qmail from 127.0.0.1 (a special IP
+address that means the local machine - the &quot;loopback&quot; interface).
+Unless this mail is addressed to the same machine, qmail thinks that
+it's an attempt to relay mail, and rejects it.  So these two commands
+set up an exception so that any mail sent from 127.0.0.1 is allowed to
+send outgoing mail.</p><pre class="screen">[root@yourserver ucspi-tcp-0.88]# <b><tt>cp /tmp/openacs-5.0.0/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</tt></b>
+[root@yourserver ucspi-tcp-0.88]# <b><tt>tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</tt></b>
+<pre class="action">cp /tmp/openacs-5.0.0/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
+tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </pre></pre></li><li><p><b>Install Qmail. </b><a class="indexterm" name="id2912039"></a></p><p><a href="individual-programs.html#ucspi-download">Download qmail</a>,
+            set up the standard supporting users and build the binaries:</p><p>(If you are using Red Hat 9.0, you need to put <tt>#include &lt;errno.h&gt;</tt> as the first line of <tt>/usr/local/src/qmail-1.03/error.h</tt>.  <a href="http://www.riverside.org/archive/html/djbdns/2003-01/msg00307.html" target="_top">More information</a>)</p><pre class="screen">[root@yourserver root]# <b><tt>cd /usr/local/src</tt></b>
+[root@yourserver src]# <b><tt>tar xzf /tmp/qmail-1.03.tar.gz</tt></b>
+[root@yourserver src]# <b><tt>mkdir /var/qmail</tt></b>
+[root@yourserver src]#<b><tt> groupadd nofiles</tt></b>
+[root@yourserver src]# <b><tt>useradd -g nofiles -d /var/qmail/alias alias</tt></b>
+[root@yourserver src]# <b><tt>useradd -g nofiles -d /var/qmail qmaild</tt></b>
+[root@yourserver src]# <b><tt>useradd -g nofiles -d /var/qmail qmaill</tt></b>
+[root@yourserver src]# <b><tt>useradd -g nofiles -d /var/qmail qmailp</tt></b>
+[root@yourserver src]# <b><tt>groupadd qmail</tt></b>
+[root@yourserver src]# <b><tt>useradd -g qmail -d /var/qmail qmailq</tt></b>
+[root@yourserver src]# <b><tt>useradd -g qmail -d /var/qmail qmailr</tt></b>
+[root@yourserver src]# <b><tt>useradd -g qmail -d /var/qmail qmails</tt></b>
+[root@yourserver src]# <b><tt>cd qmail-1.03</tt></b>
+[root@yourserver qmail-1.03]# <b><tt>make setup check</tt></b>
+( cat warn-auto.sh; \
+echo CC=\'`head -1 conf-cc`\'; \
+(many lines omitted)
+./install
+./instcheck
+[root@yourserver qmail-1.03]#
+<pre class="action">cd /usr/local/src 
+tar xzf /tmp/qmail-1.03.tar.gz 
+mkdir /var/qmail 
+groupadd nofiles 
+useradd -g nofiles -d /var/qmail/alias alias 
+useradd -g nofiles -d /var/qmail qmaild 
+useradd -g nofiles -d /var/qmail qmaill 
+useradd -g nofiles -d /var/qmail qmailp 
+groupadd qmail 
+useradd -g qmail -d /var/qmail qmailq 
+useradd -g qmail -d /var/qmail qmailr 
+useradd -g qmail -d /var/qmail qmails
+cd qmail-1.03 
+make setup check</pre></pre><p>Replace sendmail with qmail's wrapper.</p><a class="indexterm" name="id2912231"></a><pre class="screen">[root@yourserver qmail-1.03]# <b><tt>rm -f /usr/bin/sendmail</tt></b>
+[root@yourserver qmail-1.03]# <b><tt>ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</tt></b>
+[root@yourserver qmail-1.03]#
+<pre class="action">rm -f /usr/bin/sendmail 
+ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</pre></pre><p>Configure qmail - specifically, run the config script to set up files in <tt>/var/qmail/control</tt> specifying the computer's identity and which addresses it should accept mail for.  This command will automatically set up qmail correctly if you have correctly set a valid host nome.  If not, you'll want to read <tt>/var/qmail/doc/INSTALL.ctl</tt> to find out how to configure qmail.</p><pre class="screen">[root@yourserver qmail-1.03]# <b><tt>./config-fast <span class="replaceable">yourserver.test</span></tt></b>
+Your fully qualified host name is yourserver.test.
+Putting yourserver.test into control/me...
+Putting yourserver.test into control/defaultdomain...
+Putting yourserver.test into control/plusdomain...
+Putting yourserver.test into control/locals...
+Putting yourserver.test into control/rcpthosts...
+Now qmail will refuse to accept SMTP messages except to yourserver.test.
+Make sure to change rcpthosts if you add hosts to locals or virtualdomains!
+[root@yourserver qmail-1.03]#
+<pre class="action">./config-fast <span class="replaceable">yourserver.test</span></pre></pre><p>All incoming mail that isn't for a specific user is handled by the <tt>alias</tt> user.  This includes all root mail.  These commands prepare the alias user to receive mail.</p><pre class="screen">[root@yourserver qmail-1.03]# <b><tt>cd ~alias; touch .qmail-postmaster .qmail-mailer-daemon .qmail-root</tt></b>
+[root@yourserver alias]# <b><tt>chmod 644 ~alias/.qmail*</tt></b>
+[root@yourserver alias]# <b><tt>/var/qmail/bin/maildirmake ~alias/Maildir/</tt></b>
+[root@yourserver alias]# <b><tt>chown -R alias.nofiles /var/qmail/alias/Maildir</tt></b>
+[root@yourserver alias]#
+<pre class="action">cd ~alias; touch .qmail-postmaster .qmail-mailer-daemon .qmail-root 
+chmod 644 ~alias/.qmail* 
+/var/qmail/bin/maildirmake ~alias/Maildir/ 
+chown -R alias.nofiles /var/qmail/alias/Maildir</pre></pre><a class="indexterm" name="id2912396"></a><p>Configure qmail to use the Maildir delivery format
+          (instead of mbox), and install a version of the qmail startup script modified to use Maildir.</p><pre class="screen">[root@yourserver alias]# <b><tt>echo &quot;./Maildir&quot; &gt; /var/qmail/bin/.qmail</tt></b>
+[root@yourserver alias]# <b><tt>cp /tmp/openacs-5.0.0/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</tt></b>
+[root@yourserver alias]# <b><tt>chmod 755 /var/qmail/rc</tt></b>
+[root@yourserver alias]# 
+<pre class="action">echo &quot;./Maildir&quot; &gt; /var/qmail/bin/.qmail 
+cp /tmp/openacs-5.0.0/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc 
+chmod 755 /var/qmail/rc 
+</pre></pre><p>Set up the skeleton directory so that new users will
+          be configured for qmail.</p><pre class="screen">[root@localhost root]# <b><tt>/var/qmail/bin/maildirmake /etc/skel/Maildir</tt></b>
+[root@localhost root]# <b><tt>echo &quot;./Maildir/&quot; &gt; /etc/skel/.qmail</tt></b>
+[root@localhost root]# 
+<pre class="action">/var/qmail/bin/maildirmake /etc/skel/Maildir
+echo &quot;./Maildir/&quot; &gt; /etc/skel/.qmail</pre></pre><p>Qmail runs in two parts.  First, several different
+          qmail daemons are started by the qmail rc file.  Second, a
+          process is started in within tcpserver to listen for incoming smtp traffic.  Run both of these commands to start qmail.  Be very careful about line breaks - there should be a total of two commands here.  Note also that the tcpserver command takes the uid and guid of <tt>qmaild</tt>, which will only be 502 and 501 if you have followed all of these instructions exactly and in order.  Otherwise, <b><tt>grep qmaild /etc/passwd</tt></b> to find uid and guid, in that order.</p><pre class="screen">[root@yourserver alias]# <b><tt>/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <span class="replaceable">502</span> -g <span class="replaceable">501</span> 0 smtp /var/qmail/bin/qmail-smtpd 2&gt;&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp;</tt></b>
+[1] 15863
+[root@yourserver alias]# <b><tt>csh -cf '/var/qmail/rc &amp;'</tt></b>
+[1] 15865
+[root@yourserver alias]#
+<pre class="action">/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <span class="replaceable">502</span> -g <span class="replaceable">501</span> 0 smtp /var/qmail/bin/qmail-smtpd 2&gt;&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp; 
+csh -cf '/var/qmail/rc &amp;'</pre></pre><p>Verify that seven different qmail threads are running:</p><pre class="screen">[root@yourserver alias]# <b><tt>ps -auxw | grep
+          qmail</tt></b>
+qmaild    4269  0.0  0.3  1384  452 pts/0    S    21:21   0:00 [tcpserver]
+root      4270  0.0  0.3  1340  412 pts/0    S    21:21   0:00 /var/qmail/bin/splogger smtpd 3
+qmails    4272  0.1  0.2  1364  320 pts/0    S    21:21   0:00 [qmail-send]
+qmaill    4273  0.0  0.3  1332  408 pts/0    S    21:21   0:00 [splogger]
+root      4274  0.0  0.2  1332  272 pts/0    S    21:21   0:00 qmail-lspawn ./Maildir/
+qmailr    4275  0.0  0.2  1328  272 pts/0    S    21:21   0:00 [qmail-rspawn]
+qmailq    4276  0.0  0.2  1324  280 pts/0    S    21:21   0:00 [qmail-clean]
+root      4278  0.0  0.5  3280  632 pts/0    S    21:21   0:00 grep qmail
+[root@yourserver alias]#</pre><p>Further verify by sending and receiving email.  Incoming mail for root is stored in <tt>/var/qmail/alias/Maildir</tt>.  If it worked, make it permanent by putting the same commands in your startup scripts.  (These instructions put the commands in rc.local, which means that they'll be run once, on boot.  There will be no monitoring and no interface to start and stop and check status.  We ought instead to either use full init scripts or daemontools.)</p><pre class="screen">[root@yourserver alias]# <b><tt>echo &quot;/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <span class="replaceable">502</span> -g <span class="replaceable">501</span> 0 smtp /var/qmail/bin/qmail-smtpd \ &quot; &gt;&gt; /etc/rc.local</tt></b>
+[root@yourserver alias]# <b><tt>echo &quot;2&gt;&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp;  &quot; &gt;&gt; /etc/rc.local</tt></b>
+[root@yourserver alias]# <b><tt>echo &quot;csh -cf '/var/qmail/rc &amp;' &quot; &gt;&gt; /etc/rc.local</tt></b>
+[root@yourserver alias]# 
+<pre class="action">echo &quot;/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <span class="replaceable">502</span> -g <span class="replaceable">501</span> 0 smtp /var/qmail/bin/qmail-smtpd \ &quot; &gt;&gt; /etc/rc.local
+echo &quot;2&gt;&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp;  &quot; &gt;&gt; /etc/rc.local
+echo &quot;csh -cf '/var/qmail/rc &amp;' &quot; &gt;&gt; /etc/rc.local</pre></pre></li><li><p><a name="analog-install"></a>Analog web file analyser.  You should
+have the <a href="individual-programs.html#analog-download">source tarball</a> in
+<tt>/tmp</tt>.  Unpack, compile, and install analog.</p><pre class="screen">[root@yourserver aolserver]# <b><tt>cd /usr/local/src</tt></b>
+[root@yourserver src]# <b><tt>tar xzf /tmp/analog-5.31.tar.gz</tt></b>
+[root@yourserver src]# <b><tt>cd analog-5.31</tt></b>
+[root@yourserver analog-5.31]# <b><tt>make</tt></b>
+cd src &amp;&amp; make
+make[1]: Entering directory `/usr/local/src/analog-5.31/src'
+<span class="emphasis"><em>(many lines omitted)</em></span>
+***IMPORTANT: You must read the licence before using analog
+***
+make[1]: Leaving directory `/usr/local/src/analog-5.31/src'
+[root@yourserver analog-5.31]# <b><tt>cd ..</tt></b>
+[root@yourserver src]#<b><tt> mv analog-5.31 /usr/share/</tt></b>
+[root@yourserver src]#
+<pre class="action">cd /usr/local/src
+tar xzf /tmp/analog-5.31.tar.gz
+cd analog-5.31
+make
+cd ..
+mv analog-5.31 /usr/share/</pre></pre><p>See also <a href="maintenance-web.html#analog-setup" title="Set up Log Analysis Reports - OPTIONAL">the section called &#8220;Set up Log Analysis Reports - OPTIONAL&#8221;</a></p></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="install-daemontools.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="install-full-text-search.html">Next</a></td></tr><tr><td width="40%" align="left">Install Daemontools (OPTIONAL) </td><td width="20%" align="center"><a accesskey="u" href="install-more-software.html">Up</a></td><td width="40%" align="right"> </td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/install-qmail.html#comments">View comments on this page at openacs.org</a></center></body></html>
