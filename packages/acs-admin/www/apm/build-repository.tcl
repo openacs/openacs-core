@@ -30,7 +30,7 @@ set exclude_package_list {}
 set head_channel "5-1"
 
 # Set this to 1 to only checkout sample packages -- useful for debugging and testing
-set debug_p 0
+set debug_p 1
 
 #----------------------------------------------------------------------
 # Prepare output
@@ -123,10 +123,8 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
     if { $debug_p } {
         # Smaller list for debugging purposes
         set checkout_list [list \
-                               $work_dir $cvs_root openacs-4/packages/acs-kernel \
-                               $work_dir $cvs_root openacs-4/contrib/packages/bcms \
-                               $work_dir $cvs_root openacs-4/packages/spam \
-                               ${work_dir}dotlrn/packages/ $dotlrn_cvs_root dotlrn]
+                               $work_dir $cvs_root openacs-4/packages/acs-core-docs
+                           ]
     } else {
         # Full list for real use
         set checkout_list [list \
