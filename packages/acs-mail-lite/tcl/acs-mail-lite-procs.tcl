@@ -229,7 +229,7 @@ namespace eval acs_mail_lite {
 	    # get list of all incoming mail
             set messages [glob "$queue_dir/new/*"]
         } errmsg]} {
-            ns_log Notice "queue dir = $queue_dir/new/*, no messages"
+            ns_log Debug "queue dir = $queue_dir/new/*, no messages"
             return [list]
         }
 	
@@ -238,7 +238,7 @@ namespace eval acs_mail_lite {
 
 	# loop over every incoming mail
         foreach msg $messages {
-            ns_log Notice "opening file: $msg"
+            ns_log Debug "opening file: $msg"
             if [catch {set f [open $msg r]}] {
                 continue
             }
@@ -294,7 +294,7 @@ namespace eval acs_mail_lite {
             }
 	    
             set to [parse_email_address -email $to]
-	    ns_log Notice "acs-mail-lite: To: $to"
+	    ns_log Debug "acs-mail-lite: To: $to"
             util_unlist [parse_bounce_address -bounce_address $to] user_id package_id signature
 	    
             # If no user_id found or signature invalid, ignore message
@@ -320,7 +320,7 @@ namespace eval acs_mail_lite {
 	    # bounce since it was sent before the user's email was
 	    # disabled.
 
-	    ns_log Notice "Bounce checking: $to, $user_id"
+	    ns_log Debug "Bounce checking: $to, $user_id"
 
 	    if { ![bouncing_user_p -user_id $user_id] } {
                 ns_log Notice "acs-mail-lite: Bouncing email from user $user_id"
@@ -345,7 +345,7 @@ namespace eval acs_mail_lite {
 	}
 
 	with_finally -code {
-	    ns_log Notice "acs-mail-lite: about to load qmail queue"
+	    ns_log Debug "acs-mail-lite: about to load qmail queue"
 	    load_mail_dir -queue_dir [mail_dir]
 	} -finally {
 	    nsv_incr acs_mail_lite check_bounce_p -1
