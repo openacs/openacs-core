@@ -154,7 +154,7 @@ insert into ad_locales
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
- values ('tl_PH', 'Tagalog (PH)', 'tl', 'PH', 'AMERICAN', 'ALGERIA', 'WE8ISO8859P1', 'ISO-8859-1', 't', 'f');
+ values ('tl_PH', 'Tagalog (PH)', 'tl', 'PH', 'TAGALOG', 'PHILIPPINES', 'WE8ISO8859P1', 'ISO-8859-1', 't', 'f');
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
@@ -250,3 +250,8 @@ insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
  values ('RO_RO', 'Romainian', 'RO ', 'RO', 'ROMAINIAN', 'ROMAINIA', 'EE8ISO8859P2', 'UTF-8', 't', 'f');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p, enabled_p)
+ values ('HR_HR', 'Croatian', 'HR', 'HR', 'CROATIAN', 'CROATIA','UTF8','UTF-8','t','t');
