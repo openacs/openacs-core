@@ -18,7 +18,34 @@
 XSLTPROC=/usr/bin/xsltproc
 HTMLDOC=/usr/bin/htmldoc
 
+
 all: html pdf
+
+XSL:
+	if [ ! -d XSL -a ! -L XSL ]; then \
+		echo -e "\n\nNo XSL directory here.  I am looking for one...\n"; \
+		for d in \
+			/usr/share/sgml/docbook/stylesheet/xsl/nwalsh \
+			/usr/share/sgml/docbook/xsl-stylesheets-* \
+			/usr/share/sgml/docbook/xsl-stylesheets; do \
+			if [ -d $$d ]; then \
+				echo "Found $$d"; \
+				EXISTS=$$d; \
+			fi; \
+		done; \
+		if [ "$$EXISTS" = "" ]; then \
+			echo -e "\
+\nNo xsl stylesheets found in /usr/share/sgml/docbook/\n\
+You need to install them on your system or if they exist already,\n\
+symlink them here so that XSL/html/chunk.xsl exists\n\
+see http://sourceforge.net/projects/docbook/ for the docbook-xsl stylesheets\n"; \
+			exit 1; \
+		else \
+			echo "I think $$EXISTS is the best one\n\n"; \
+			ln -s $$EXISTS XSL; \
+		fi; \
+	fi;
+
 
 prelim:
 	cp -u images/*.{pdf,png,gif,jpg} ../images/
@@ -29,9 +56,9 @@ prelim:
 
 	cp -u openacs.css ..
 
-html: prelim
+html: prelim XSL
 # adding --nonet --novalid is much faster but generates a bunch of bogus error messages
 	cd .. ; $(XSLTPROC) --novalid --nonet --xinclude xml/openacs.xsl xml/index.xml
 
-pdf: html
+pdf: html XSL
 #	$(HTMLDOC) --batch ../for-everyone.book ../for-admins.book ../for-developers.book

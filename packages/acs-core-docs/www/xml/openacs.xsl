@@ -3,12 +3,11 @@
         version="1.1"
                 exclude-result-prefixes="doc">
 
-<!-- Import chunk.xsl  
-
-  <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets/html/chunk.xsl"/>
+<!-- Import chunk.xsl, assumes XSL is a symlink to the docbook xsl-stylesheets 
+     see http://sourceforge.net/projects/docbook/ 
+     the makefile will try to create the link but may not find it.
 -->
-<!-- Debian 3.0 use this path for chunk.xsl instead: -->
-  <xsl:import href="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl"/>
+  <xsl:import href="XSL/html/chunk.xsl"/>
 
 <!-- override default cellspacing value -->
 
