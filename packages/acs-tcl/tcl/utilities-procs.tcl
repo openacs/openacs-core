@@ -3954,6 +3954,106 @@ ad_proc ad_generate_random_string {{length 8}} {
     return [string range [sec_random_token] 0 $length]
 }
 
+ad_proc util_background_exec {
+    {-pass_vars ""}
+    {-name:required}
+    code_chunk
+} {
+    Executes a chunk of code in the background. The code is run exclusively, 
+    meaning that no two threads with the same name can run at the same time.
+    
+    @param name The name of the thread. No two chunks with the same name can run at the same time.
+
+    @param pass_vars Names of variables which you want passed to the code chunk
+
+    @param code_chunk The chunk you want executed
+} {
+    ns_log Debug "util_background_exec: Starting, waiting for mutex"
+
+#    ns_mutex lock [nsv_get util_background_exec_mutex .]
+
+    ns_log Debug "util_background_exec: Got mutex"
+
+    set running_p [nsv_exists util_background_exec $name]
+    if { !$running_p } {
+        nsv_set util_background_exec [list $name] 1
+    }
+
+#    ns_mutex unlock [nsv_get util_background_exec_mutex .]
+    ns_log Debug "util_background_exec: Released mutex"
+
+    if { $running_p } {
+        ns_log Notice "util_background_exec: $name is already running, exiting"
+        return
+    }
+
+    set code {}
+    foreach var $pass_vars {
+        upvar 1 $var the_var
+        if { [array exists the_var] } {
+            append code "array set [list $var] [list [array get the_var]]\n"
+        } else {
+            append code "set [list $var] [list $the_var]\n"
+        }
+    }
+
+    append code "
+        set errno \[catch {
+            $code_chunk
+        } errmsg\]
+
+        set errinfo {}
+        set errcode {}
+        if { \$errno == 1 } {
+            global errorInfo errorCode
+            set errinfo \$errorInfo
+            set errcode \$errorCode
+        }
+
+        if { \$errno == 1 } {
+            \# This is an error
+            ns_log Error \"util_background_exec: Error in thread named '$name': \$errorInfo\"
+        }
+
+        \# errno = 0 (TCL_OK) or 2 (TCL_RETURN) is considered normal, i.e. first elm is true
+        set success_p \[expr { \$errno == 0 || \$errno == 2 }\]
+        set result \[list \$success_p \$errmsg \$errno \$errinfo \$errcode]
+
+        ns_log Notice \"util_background_exec: Thread named '$name' returned \$result\"
+
+        nsv_unset util_background_exec [list $name]
+        nsv_set util_background_exec_result [list $name] \$result
+
+    "
+    ns_log Debug "util_background_exec: Scheduling code\n$code"
+
+    ns_schedule_proc -thread -once 1 $code
+}
+
+ad_proc util_background_running_p {
+    {-name:required}
+} {
+    
+} { 
+    set running_p [nsv_exists util_background_exec $name]
+    return $running_p
+}
+
+ad_proc util_background_get_result {
+    {-name:required}
+} {
+    Gets the result of a completed background thread execution.
+} { 
+    return [nsv_get util_background_exec_result $name]
+}
+
+ad_proc util_background_reset {
+    {-name:required}
+} {
+    Gets the result of a completed background thread execution.
+} { 
+    nsv_unset util_background_exec $name
+}
 
 
 
