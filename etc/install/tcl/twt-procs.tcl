@@ -27,6 +27,11 @@ ad_proc ::twt::do_request { page_url } {
     the request a number of times if it fails because of a socket
     connect problem.
 } {
+    # Qualify page_url if necessary
+    if { [regexp {^/} $page_url] } {
+        set page_url "[::twt::config::server_url]${page_url}"
+    }
+
     set retry_count 0
     set retry_max 10
     set error_p 0
@@ -78,6 +83,17 @@ ad_proc ::twt::get_url_list { page_url link_url_pattern } {
     
 
     return $urls_list
+}
+
+ad_proc ::twt::oacs_eval { tcl_command } {
+    Execute an OpenACS Tcl API command and return the result.
+
+    @param tcl_command A list where the first item is the the
+           proc name and the remaining ones are proc arguments
+} {
+    ::twt::do_request "/eval-command?[::http::formatQuery tcl_command $tcl_command]"
+
+    return [response body]
 }
 
 ad_proc ::twt::get_random_items_from_list { list number } {
@@ -191,4 +207,23 @@ ad_proc ::twt::crawl_links {} {
             }
          }
    }
+}
+
+ad_proc ::twt::multiple_select_value { value } {
+    Selects the option with the given value in the current
+    form widget (workaround since I can only get tclwebtest
+    to select based on label).
+} {
+    # Get the label from the value
+    array set current_field [field current]
+    set field_choices $current_field(choices)
+    set index 0
+    foreach field_choice $field_choices {
+        if { [string equal $value [lindex $field_choice 0]] } {
+            break
+        }
+        incr index
+    }
+    
+    ::tclwebtest::field_select -index $index
 }

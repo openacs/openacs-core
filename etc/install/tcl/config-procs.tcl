@@ -15,6 +15,9 @@ namespace eval ::twt::config {}
 
 # TODO: put variables in twt namespace
 
+global __serverroot
+set __serverroot $serverroot
+
 global __server_url
 set __server_url $server_url
 
@@ -60,4 +63,10 @@ ad_proc ::twt::config::admin_password { } {
     global __admin_password
 
     return $__admin_password
+}
+
+ad_proc ::twt::config::serverroot { } {
+    global __serverroot
+
+    return $__serverroot
 }
