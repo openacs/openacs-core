@@ -32,7 +32,6 @@ WIPE_OLD_AFTER_SCP_FULL=false        # if true, then whenever a full backup file
                                      # similar backups except for the full backup file
                                      # rationale is, keep last good full + incrementals
                                      # on this box, keep everything on other box
-                                     # UNTESTED!
 
 OTHERUSER=backup                     # the user on the recipient server
                                      # must have silent authentication, ie,
@@ -84,7 +83,6 @@ DATE=`date +"%Y-%m-%d"`     # Year, Month, Date, e.g. 20020401
 case $1 in
     --full)
         TYPE="full"
-        NEWER=""
         ;;
     --help | -help | -h | --h)
         echo "Usage: $0 --full to force full backup, or $0 to run automated.  All other variables are set in the script."
@@ -97,17 +95,17 @@ if [ ! -s $TIMEDIR/$COMPUTER-full-date ];
     TYPE="full";
 fi
 
-if [[ $DOM -eq "01" || $DOW -eq "Sun" ]];
+if [[ $DOM = "01" || $DOW = "Sun" ]];
     then
     TYPE="full";
 fi
 
 if [ $TYPE -eq "full" ];
     then
-    NEWER=""
+    NEW_FLAG=""
 else
     TYPE="incremental"
-    NEWER="--newer-mtime `cat $TIMEDIR/$COMPUTER-full-date`";
+    NEW_FLAG="--newer-mtime `cat $TIMEDIR/$COMPUTER-full-date`";
 fi
 
 
@@ -178,21 +176,21 @@ for directory in $DIRECTORIES
   FULLNAME=$BACKUPDIR/$DATE-$COMPUTER-${directory//\//-}-backup-$TYPE.tar.gz
   # to use bzip2 instead of gzip, change z to j in the tar flags
   cd $directory
-  tar -zcpsh . --file $FULLNAME $NEWER
+  tar -zcpsh . --file $FULLNAME $NEW_FLAG
   $CHOWN $BACKUPUSER $FULLNAME
   $CHMOD 660 $FULLNAME
-  if [[ -n $OTHERHOST ]]
+  if [ -n $OTHERHOST ]
       then 
       
       scp_success=1
       sc_success=`$SCP -q $FULLNAME $OTHERUSER@$OTHERHOST:$BACKUPDIR`
       
      # if scp returns success, see if we should wipe
-      if [ scp_success -eq 0 && $WIPE_OLD_AFTER_SCP_FULL -eq "true"];
+      if [[ scp_success -eq 0 && $WIPE_OLD_AFTER_SCP_FULL -eq "true" && $TYPE = "full" ]];
           # wipe out all similar backups except for the just-copied one
           for file in `ls $BACKUPDIR/*-$COMPUTER-${directory//\//-}-backup-*.tgz`
             do
-            if [ $file -ne $FULLNAME]
+            if [ $file != $FULLNAME]
                 then
                 rm $file
             fi
