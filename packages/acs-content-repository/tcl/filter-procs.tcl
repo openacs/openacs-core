@@ -182,18 +182,24 @@ ad_proc -public content::init {
         return 0
     }
 
-    # cache this query persistently for 1 hour
-    db_0or1row get_item_info "" -column_array item_info
-
-    # No item found, so do not handle this request
-    if { ![info exists item_info] } {
-        db_0or1row get_template_info "" -column_array item_info
-
-        if { ![info exists item_info] } {
-            ns_log notice "content::init: no content found for url $url"
-            return 0 
-        }
-    }
+  set item_info(item_id) [::content::item::get_id -item_path $url \
+                   -root_folder_id $content_root \
+                   -resolve_index "f"]
+  set item_info(content_type) [::content::item::get_content_type \
+                        -item_id $item_id]
+  
+  # No item found, so do not handle this request
+  if { [string equal "" $item_info(item_id)] } { 
+      set item_info(item_id) [::content::item::get_id -item_path $url \
+                   -root_folder_id $content_root \
+                   -resolve_index "f"]
+      set item_info(content_type) [::content::item::get_content_type \
+                        -item_id $item_id]
+      if { [string equal "" $item_info(item_id)] } { 
+          ns_log notice "content::init: no content found for url $url"
+          return 0 
+      }
+  }
 
     variable item_url
     set item_url $url
