@@ -84,7 +84,7 @@ if { [info exists utc_epoch] } {
         
         set try_offsets [list]
         foreach offset [list $recommended_offset [expr $recommended_offset -24]] {
-            lappend try_offsets [expr int($offset*60*60)]
+            lappend try_offsets "'[db_quote [expr int($offset*60*60)]]'"
         }
 
         set query "
