@@ -59,5 +59,17 @@
       </querytext>
 </fullquery>
 
+    <fullquery name="subsite::get_application_options.package_types">
+        <querytext>
+
+    select pretty_name, package_key
+    from   apm_package_types
+    where  not (apm_package.singleton_p(package_key) = 1 and
+                apm_package.num_instances(package_key) >= 1)
+    and    package_key != 'acs-subsite'
+    order  by upper(pretty_name)
+
+        </querytext>
+    </fullquery>
  
 </queryset>
