@@ -27,6 +27,7 @@ ad_proc -public relation_permission_p {
 
 ad_proc -public relation_add {
     { -form_id "" }
+    { -extra_vars "" }
     { -variable_prefix "" }
     { -creation_user "" }
     { -creation_ip "" }
@@ -40,9 +41,12 @@ ad_proc -public relation_add {
     constraint.
 
     @author Michael Bryzek (mbryzek@arsdigita.com)
+    @author Ben Adida (ben@openforce)
     @creation-date 1/5/2001
 
     @param form_id         The form id from templating form system
+
+    @param extra_vars      An ns_set of extra variables
 
     @param variable_prefix Only form elements that begin with the 
                            specified prefix will be processed.
@@ -75,11 +79,14 @@ ad_proc -public relation_add {
 
     db_transaction {
 
+	ns_log Notice "DOTLRN: relation_add: var_list is $var_list"
+
 	set rel_id [package_instantiate_object \
 		-creation_user $creation_user \
 		-creation_ip $creation_ip \
 		-start_with "relationship" \
 		-form_id $form_id \
+		-extra_vars $extra_vars \
 		-variable_prefix $variable_prefix \
 		-var_list $var_list \
 		$rel_type]
