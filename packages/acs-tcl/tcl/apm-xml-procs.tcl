@@ -17,7 +17,7 @@ ad_proc -private apm_required_attribute_value { element attribute } {
 } {
     set value [apm_attribute_value $element $attribute]
     if { [empty_string_p $value] } {
-	error "Required attribute \"$attribute\" missing from <[ns_xml node get name $element]>"
+	error "Required attribute \"$attribute\" missing from <[xml_node_get_name $element]>"
     }
     return $value
 }
@@ -31,7 +31,7 @@ ad_proc -private apm_attribute_value {
     Parses the XML element to return the value for the specified attribute.
 
 } {
-    set value [ns_xml node get attr $element $attribute]
+    set value [xml_node_get_attribute $element $attribute]
 
     if { [empty_string_p $value] } {
 	return $default
@@ -51,13 +51,13 @@ ad_proc -private apm_tag_value {
     set node [lindex [xml_node_get_children_by_name $root $property_name] 0]
 
     if { ![empty_string_p $node] } {
-        set child [lindex [ns_xml node children $node] 0]
+        set child [lindex [xml_node_get_children $node] 0]
 
         # JCD 20020914 ns_xml when given something like <pretty-name></pretty-name> (i.e. empty content)
         # will have the node but the node will not have a child node and the 
         # getcontent will then fail.
         if { ![empty_string_p $child] } {
-            return [ns_xml node get content $child]
+            return [xml_node_get_content $child]
         }
     }    
     return $default
@@ -273,7 +273,7 @@ ad_proc -public apm_read_package_info_file { path } {
 
     set tree [xml_parse $xml_data]
     set root_node [xml_doc_get_first_node_by_name $tree package]
-    apm_log APMDebug "XML: root node is [ns_xml node name $root_node]"
+    apm_log APMDebug "XML: root node is [xml_node_get_name $root_node]"
     set package $root_node
 
     set root_name [xml_node_get_name $package]

@@ -25,14 +25,18 @@ proc xml_support_ok {varname} {
 	set ok_p 0
     } else {
 	if {![_nsxml_comments_ok_p]} {
-	    append xml_status_msg "Your ns_xml doesn't support XML comments correctly. This issue is currently handled smoothly by some internal work-arounds, but you might want to upgrade ns_xml to the latest version ASAP.<p>"
+	    append xml_status_msg "Your ns_xml doesn't support XML comments correctly. This issue is currently handled smoothly by some internal work-arounds, but you might want to upgrade ns_xml to the latest version.<p>"
 	    set ok_p 0
 	}
 
 	if {![_nsxml_root_node_ok_p]} {
-	    append xml_status_msg "Your ns_xml doesn't correctly return the root XML node. This issue is currently handled smoothly by some internal work-arounds, but you might want to upgrade ns_xml to the latest version ASAP.<p>"
+	    append xml_status_msg "Your ns_xml doesn't correctly return the root XML node. This issue is currently handled smoothly by some internal work-arounds, but you might want to upgrade ns_xml to the latest version.<p>"
 	    set ok_p 0
 	}
+
+        if {![_nsxml_version_2_p]} {
+            append xml_status_msg "Your ns_xml doesn't support the most recent command syntax.  This issue is currently handled smoothly by some internal work-arounds, but you might want to upgrade ns_xml to the latest version.<p>"
+        }
     }
 
     return $ok_p
@@ -145,12 +149,21 @@ proc xml_node_get_name {node_id} {
 
 # Get Node Attribute
 proc xml_node_get_attribute {node_id attribute_name} {
-    return [ns_xml node get attr $node_id $attribute_name]
+
+    if { [_nsxml_version_2_p] } {
+        return [ns_xml node get attr $node_id $attribute_name]
+    } else {
+        return [ns_xml node getattr $node_id $attribute_name]
+    }
 }
 
 # Get Content
 proc xml_node_get_content {node_id} {
-    return [ns_xml node get content $node_id]
+    if { [_nsxml_version_2_p] } {
+        return [ns_xml node get content $node_id]
+    } else {
+        return [ns_xml node getcontent $node_id]
+    }
 }
 
 ##
@@ -191,7 +204,6 @@ proc _nsxml_root_node_ok_p {} {
     return $result
 }
 
-
 # Check if comments are okay
 proc _nsxml_comments_ok_p {} {
 
@@ -221,3 +233,28 @@ proc _nsxml_comments_ok_p {} {
     nsv_set NSXML comments_ok_p $result
     return $result
 }
+
+# Check if comments are okay
+proc _nsxml_version_2_p {} {
+
+    # Check cache
+    if {[nsv_exists NSXML version_2_p]} {
+	return [nsv_get NSXML version_2_p]
+    }
+
+    # try to parse a sample XML document with content
+    set sample_xml "<?xml version=\"1.0\"?><root>text</root>"
+    set doc_id [ns_xml parse $sample_xml]
+
+    if { [catch {ns_xml node get attr $doc_id root} errmsg] &&
+         [string equal $errmsg "unknown command"] } {
+        set result 0
+    } else {
+        set result 1
+    }
+
+    # store in cache and return
+    nsv_set NSXML version_2_p $result
+    return $result
+}
+
