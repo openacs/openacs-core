@@ -287,6 +287,7 @@ ad_proc apm_bootstrap_load_file { root_directory file } {
 }
 
 ad_proc apm_bootstrap_load_libraries {
+    {-load_tests:boolean 0}
     {-init:boolean}
     {-procs:boolean}
     package_key
@@ -329,7 +330,13 @@ ad_proc apm_bootstrap_load_libraries {
             ([string equal $file_type tcl_procs] && $procs_p ||
              [string equal $file_type tcl_init] && $init_p)} {
 
-		    apm_bootstrap_load_file $root_directory $file
+                 # Don't source acs-automated-testing tests before that package has been
+                 # loaded
+                 if { ! $load_tests_p && [regexp {tcl/test/[^/]+$} $file match] } {
+                     continue
+                 } 
+
+		 apm_bootstrap_load_file $root_directory $file
 
             # Call db_release_unused_handles, only if the library defining it
             # (10-database-procs.tcl) has been sourced yet.
