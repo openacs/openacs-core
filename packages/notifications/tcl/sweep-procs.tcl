@@ -120,7 +120,7 @@ namespace eval notification::sweep {
                     # Send it
                     notification::delivery::send -to_user_id [ns_set get $notif user_id] \
                             -notification_type_id [ns_set get $notif type_id] \
-                            -subject "\[[ad_system_name] - [ns_set get $notif object_name]\] [ns_set get $notif notif_subject]" \
+                            -subject "\[[ns_set get $notif object_name]\] [ns_set get $notif notif_subject]" \
                             -content [ns_set get $notif notif_text] \
                             -reply_object_id [ns_set get $notif response_id] \
                             -delivery_method_id [ns_set get $notif delivery_method_id]

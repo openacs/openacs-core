@@ -32,7 +32,7 @@ namespace eval notification::email {
     ad_proc -private qmail_mail_queue_dir {} {
         return [get_parameter -name "EmailQmailQueue"]
     }
-    
+
     ad_proc -private parse_email_address {email} {
         if {![regexp {<([^>]*)>} $email all clean_email]} {
             return $email
@@ -68,7 +68,6 @@ namespace eval notification::email {
         return [list $object_id $type_id]
     }
 
-
     ad_proc -public send {
         to_user_id
         reply_object_id
@@ -91,12 +90,12 @@ namespace eval notification::email {
     ad_proc -private load_qmail_mail_queue {
         {-queue_dir:required}
     } {
-        Scans qmail incoming email queue and queues up messages 
-        using acs-mail.  
+        Scans qmail incoming email queue and queues up messages
+        using acs-mail.
 
         @Author dan.wickstrom@openforce.net, ben@openforce
         @creation-date 22 Sept, 2001
-    
+
         @param queue_dir The location of the qmail mail queue in
         the file-system.
     } {
@@ -109,7 +108,7 @@ namespace eval notification::email {
 
         set list_of_reply_ids [list]
         set new_messages_p 0
-        
+
         foreach msg $messages {
             ns_log Notice "opening file: $msg"
             if [catch {set f [open $msg r]}] {
@@ -118,13 +117,13 @@ namespace eval notification::email {
             set file [read $f]
             close $f
             set file [split $file "\n"]
-            
+
             set new_messages 1
             set end_of_headers_p 0
             set i 0
             set line [lindex $file $i]
             set headers [list]
-            
+
             # walk through the headers and extract each one
             while ![empty_string_p $line] {
                 set next_line [lindex $file [expr $i + 1]]
@@ -134,31 +133,31 @@ namespace eval notification::email {
                 if {[regexp {^([^:]+):[ ]+(.+)$} $line match name value]} {
                     # join headers that span more than one line (e.g. Received)
                     if { ![regexp {^([^:]+):[ ]+(.+)$} $next_line match] && !$end_of_headers_p} {
-		        append line $next_line
-		        incr i
+                append line $next_line
+                incr i
                     }
                     lappend headers [string tolower $name] $value
-                    
+
                     if {$end_of_headers_p} {
-		        incr i
-		        break
+                incr i
+                break
                     }
                 } else {
                     # The headers and the body are delimited by a null line as specified by RFC822
                     if {[regexp {^[ ]*$} $line match]} {
-		        incr i
-		        break
+                incr i
+                break
                     }
                 }
                 incr i
-                set line [lindex $file $i]	    
+                set line [lindex $file $i]
             }
             set body "\n[join [lrange $file $i end] "\n"]"
-            
-            # okay now we have a list of headers and the body, let's 
+
+            # okay now we have a list of headers and the body, let's
             # put it into notifications stuff
             array set email_headers $headers
-            
+
             if [catch {set from $email_headers(from)}] {
                 set from ""
             }
@@ -180,7 +179,7 @@ namespace eval notification::email {
                 }
                 continue
             }
-            
+
             set to_stuff [parse_reply_address -reply_address $to]
 
             # We don't accept a bad incoming email address
@@ -202,15 +201,15 @@ namespace eval notification::email {
                         -from_user $from_user \
                         -subject $email_headers(subject) \
                         -content $body]
-                
-                catch {ns_unlink $msg}	
+
+                catch {ns_unlink $msg}
 
                 lappend list_of_reply_ids $reply_id
             } on_error {
                 ns_log Error "Error inserting incoming email into the queue"
             }
         }
-        
+
         return $list_of_reply_ids
     }
 
