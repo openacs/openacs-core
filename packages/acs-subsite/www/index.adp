@@ -1,5 +1,6 @@
 <master>
-<property name="context">@context;noquote@</property>
+  <property name="context">@context;noquote@</property>
+  <property name="title">@subsite_name;noquote@</property>
 
 <if @user_id@ ne 0>
   <div style="float: right;">
