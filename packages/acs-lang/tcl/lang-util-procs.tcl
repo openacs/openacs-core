@@ -182,7 +182,7 @@ namespace eval lang::util {
             regexp {\.([^.]+)$} $file match file_ending
     
             # Attempt a backup of the file first. Do not overwrite an old backup file.
-            if { [catch "file copy $full_file_path \"${full_file_path}.orig\"" errmsg] } {
+            if { [catch "file -- copy $full_file_path \"${full_file_path}.orig\"" errmsg] } {
                 ns_log Warning [list lang::util::replace_temporary_tags_with_lookups - The file $full_file_path \
                                 could not be backed up before message key extraction since backup file \
                                 ${full_file_path}.orig already exists]
@@ -574,7 +574,7 @@ namespace eval lang::util {
             if { $n > 0 } {
                 # backup original file - fail silently if backup already exists
 
-                if { [catch {file copy $file_name $file_name.orig}] } { }
+                if { [catch {file copy -- $file_name $file_name.orig}] } { }
             
                 set fp [open $file_name "w"]
                 puts $fp $out

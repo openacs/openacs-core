@@ -309,7 +309,7 @@ namespace eval lang::catalog {
        set backup_path "${file_path}.orig"
        if { [file exists $file_path] && ![file exists $backup_path] } {
            ns_log Notice "lang::catalog::export_messages_to_file - Backing up catalog file $file_path"
-           file copy $file_path $backup_path
+           file copy -- $file_path $backup_path
        } else {
            ns_log Notice "lang::catalog::export_messages_to_file - Not backing up $file_path as backup file already exists"
        }
