@@ -218,6 +218,63 @@ ad_proc -public subsite::auto_mount_application {
 
 }
 
+
+ad_proc -public subsite::get {
+    {-subsite_id {}}
+    {-array:required}
+} {
+    Get information about a subsite.
+
+    @param subsite_id The id of the subsite for which info is requested.
+    If no id is provided, then the id of the closest ancestor subsite will
+    be used.
+    @param array The name of an array in which information will be returned.
+
+    @author Frank Nikolajsen (frank@warpspace.com)
+    @creation-date 2003-03-08
+} {
+    upvar $array subsite_info
+
+    if { [empty_string_p $subsite_id] } {
+	set subsite_id [site_node_closest_ancestor_package "acs-subsite"]
+    }
+
+    array unset subsite_info
+    array set subsite_info [site_node::get_from_object_id -object_id $subsite_id]
+}
+
+ad_proc -public subsite::get_element {
+    {-subsite_id {}}
+    {-element:required}
+    {-notrailing:boolean}
+} {
+    Return a single element from the information about a subsite.
+
+    @param subsite_id The node id of the subsite for which info is requested.
+    If no id is provided, then the id of the closest ancestor subsite will
+    be used.
+    @param element The element you want, one of:
+    directory_p object_type package_key package_id name pattern_p
+    instance_name node_id parent_id url object_id
+    @notrailing If true and the element requested is an url, then strip any
+    trailing slash ('/'). This means the empty string is returned for the root.
+    @return The element you asked for
+
+    @author Frank Nikolajsen (frank@warpspace.com)
+    @creation-date 2003-03-08
+} {
+    get -subsite_id $subsite_id -array subsite_info
+
+    if { $notrailing_p && [string match $element "url"]} {
+        set returnval [string trimright $subsite_info($element) "/"]
+    } else {
+	set returnval $subsite_info($element)
+    }
+
+    return $returnval
+}
+
+
 ad_proc subsite::util::sub_type_exists_p {
     object_type
 } {
