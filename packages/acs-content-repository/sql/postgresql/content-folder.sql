@@ -428,13 +428,14 @@ end;' language 'plpgsql';
 -- 3) update the parent_id for the folder
 
 -- procedure move
-select define_function_args('content_folder__move','folder_id,target_folder_id');
+select define_function_args('content_folder__move','folder_id,target_folder_id,name;NULL');
 
-create or replace function content_folder__move (integer,integer)
+create or replace function content_folder__move (integer,integer,varchar)
 returns integer as '
 declare
   move__folder_id              alias for $1;  
-  move__target_folder_id       alias for $2;  
+  move__target_folder_id       alias for $2;
+  move__name                   alias for $3;
   v_source_folder_id           integer;       
   v_valid_folders_p            integer;
 begin
@@ -476,7 +477,8 @@ begin
 
    -- update the parent_id for the folder
    update cr_items 
-     set parent_id = move__target_folder_id
+     set parent_id = move__target_folder_id,
+         name = coalesce ( move_name, name )
      where item_id = move__folder_id;
 
   -- update the has_child_folders flags
@@ -495,6 +497,20 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
+create or replace function content_folder__move (integer,integer)
+returns integer as '
+declare
+  move__folder_id              alias for $1;  
+  move__target_folder_id       alias for $2;  
+begin
+
+  perform content_folder__move (
+                                move__folder_id,
+                                move__target_folder_id,
+                                NULL
+                               );
+  return null;
+end;' language 'plpgsql';
 
 -- procedure copy
 create or replace function content_folder__copy (integer,integer,integer,varchar)
