@@ -93,15 +93,13 @@ list::create \
     -page_query $pagination_sql \
     -page_size 100 \
     -elements {
-        entry_id {
-            label "Action ID"
-            link_url_eval {$entry_url}
-        }
         entry_time {
             label "Timestamp"
+            link_url_eval {$entry_url}
+            link_html { title "View log entry" }
         }
         operation {
-            label "Type of operation"
+            label "Operation"
         }
         username {
             label "Username"
