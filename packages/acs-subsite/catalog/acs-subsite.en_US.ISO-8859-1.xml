@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.0.4" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.1.0a2" locale="en_US" charset="ISO-8859-1">
 
   <msg key="_or">, or</msg>
+  <msg key="_Update_Basic_Information">Update Basic Information</msg>
   <msg key="A_member_of_the_system">A member of the %system_name% community since</msg>
   <msg key="About_You">About You</msg>
   <msg key="Account_at_system_closed">Your account at %system_name% has been closed.</msg>
@@ -358,6 +359,7 @@ You can always change your password by doing the following:
   <msg key="Whos_Online_link_label">Users currently online</msg>
   <msg key="Whos_Online_title">Who's Online</msg>
   <msg key="Yes_I_am_sure">Yes, I'm sure</msg>
+  <msg key="You_are_in_the_follow">You are in the following groups:</msg>
   <msg key="You_can_also_browse_from">You can also browse from the</msg>
   <msg key="You_can_always_re_open">You can always re-open it by</msg>
   <msg key="You_do_not_have_admin_on">You do not have admin rights on object %root% or any of it's children</msg>

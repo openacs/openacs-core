@@ -217,41 +217,7 @@ if {![empty_string_p $party_id]} {
     # easy for us to find all the queries that we know may be unscalable.
     # This query has been tuned as well as possible given development 
     # time constraints, but more tuning may be necessary.
-    set party_option_list [db_list_of_lists select_parties "
-            select DISTINCT
-                   decode(groups.group_id,
-                          null, decode(persons.person_id, 
-                                       null, 'INVALID',
-                                       persons.first_names || ' ' || persons.last_name),
-                          groups.group_name) as party_name,
-                   p.party_id
-            from (select o.object_id as party_id
-                  from acs_objects o,
-                       (select object_type from acs_object_types
-                        start with $start_with
-                        connect by prior object_type = supertype) t
-                  where o.object_type = t.object_type) p,
-                 (select element_id
-                  from group_element_map
-                  where group_id = :group_id and rel_type = :rel_type
-                  UNION ALL
-                  select to_number(:group_id) from dual) m,
-                 (select object_id
-                  from all_object_party_privilege_map
-                  where party_id = :user_id and privilege = 'read') perm,
-                 (select party_id
-                  from rc_parties_in_required_segs
-                  where group_id = :group_id 
-                    and rel_type = :rel_type) pirs $scope_query,
-                 groups,
-                 persons
-            where p.party_id = m.element_id(+)
-              and m.element_id is null
-              and p.party_id = perm.object_id
-              and p.party_id = pirs.party_id $scope_clause
-              and p.party_id = groups.group_id(+)
-              and p.party_id = persons.person_id(+)
-    "]
+    set party_option_list [db_list_of_lists select_parties {}]
 
     if { [llength $party_option_list] == 0 } {
 	ad_return_template add-no-valid-parties

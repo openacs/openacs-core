@@ -583,13 +583,13 @@ ad_proc -private lang::message::format {
             # A quoted percent sign
             append formated_message "%"
         } else {
-            set variable_key [string range $percent_match 1 end-1]
+            set variable_string [string range $percent_match 1 end-1]
 
             if { [llength $value_array_list] > 0 } {
                 # A substitution list is provided, the key should be in there
                 
-                if { [lsearch -exact $value_array_keys $variable_key] == -1 } {
-                    ns_log Warning "lang::message::format: The value_array_list \"$value_array_list\" does not contain the variable name $variable_key found in the message: $localized_message"
+                if { [lsearch -exact $value_array_keys $variable_string] == -1 } {
+                    ns_log Warning "lang::message::format: The value_array_list \"$value_array_list\" does not contain the variable name $variable_string found in the message: $localized_message"
                     
                     # There is no value available to do the substitution with
                     # so don't substitute at all
@@ -597,17 +597,25 @@ ad_proc -private lang::message::format {
                 } else {
                     # Do the substitution
                 
-                    append formated_message [lindex [array get value_array $variable_key] 1]
+                    append formated_message [lindex [array get value_array $variable_string] 1]
                 }
             } else {
+                regexp {^([^.]+)(?:\.([^.]+))?$} $variable_string match variable_name array_key
+
                 # No substitution list provided - attempt to fetch variable value
                 # from scope calling lang::message::lookup
-                upvar $upvar_level $variable_key variable_value
+                upvar $upvar_level $variable_name local_variable
 
-                if { [info exists variable_value] } {
-                    append formated_message $variable_value
+                if { [info exists local_variable] } {
+                    if { ![exists_and_not_null array_key] } {
+                        # Normal Tcl variable
+                        append formated_message $local_variable
+                    } else {
+                        # Array variable
+                        append formated_message $local_variable($array_key)
+                    }
                 } else {
-                    error "Message contains a variable named '$variable_key' which doesn't exist in the caller's environment: message $localized_message"
+                    error "Message contains a variable named '$variable_name' which doesn't exist in the caller's environment: message $localized_message"
                 }
             }
         }
@@ -626,7 +634,7 @@ ad_proc -private lang::message::embedded_vars_regexp {} {
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 12 November 2002
 } {
-    return {^(.*?)(%%|%[-a-zA-Z0-9_:\.]+%)(.*)$}
+    return {^(.*?)(%%|%[-a-zA-Z0-9_:\.]+(?:;noquote)?%)(.*)$}
 }
 
 ad_proc -public lang::message::message_exists_p { locale key } {

@@ -128,9 +128,9 @@ namespace eval acs_mail_lite {
     } {
 	Checks if email address is bouncing mail
 	@option email email address to be checked for bouncing
-	@returns boolean 1 or 0
+	@returns boolean 1 if bouncing 0 if ok.
     } {
-	return [db_string can_send_p {} -default 0]
+	return [db_string bouncing_p {} -default 0]
     }
 
     ad_proc -public bouncing_user_p {
@@ -138,9 +138,9 @@ namespace eval acs_mail_lite {
     } {
 	Checks if email address of user is bouncing mail
 	@option user_id user to be checked for bouncing
-	@returns boolean 1 or 0
+	@returns boolean 1 if bouncing 0 if ok.
     } {
-	return [db_string can_send_p {} -default 0]
+	return [db_string bouncing_p {} -default 0]
     }
 
     ad_proc -private log_mail_sending {

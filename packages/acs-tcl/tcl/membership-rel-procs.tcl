@@ -15,11 +15,36 @@ namespace eval membership_rel {
         Change the state of a membership relation
     } {
         db_transaction {
+
+            # We need the id of the user that we are changing state for
+            set rel_user_id [db_string select_rel_user_id { 
+                select u.user_id
+                from   acs_rels r,
+                users u
+                where  r.rel_id = :rel_id 
+                and    u.user_id = r.object_id_two
+            } -default {}]
+
+            # If user is being undeleted - remove him from the public group
+            acs_user::get -user_id $rel_user_id -array user
+            if { [string equal $user(member_state) "deleted"] && [string equal $state "approved"] } {
+                group::remove_member \
+                    -group_id [acs_magic_object the_public] \
+                    -user_id $rel_user_id
+            }
+
             switch -exact $state {
                 "approved" { db_exec_plsql approve {} }
                 "banned" { db_exec_plsql ban {} }
                 "rejected" { db_exec_plsql reject {} }
-                "deleted" { db_exec_plsql delete {} }
+                "deleted" { 
+                    db_exec_plsql delete {} 
+                    
+                    # Add user to public group - see bug 1468
+                    group::add_member \
+                        -group_id [acs_magic_object the_public] \
+                        -user_id $rel_user_id                    
+                }
                 "needs approval" { db_exec_plsql unapprove {} }
             }
 
@@ -36,14 +61,6 @@ namespace eval membership_rel {
             }
             db_dml update_modifying_user {}
         }
-
-        set rel_user_id [db_string select_rel_user_id { 
-            select u.user_id
-            from   acs_rels r,
-                   users u
-            where  r.rel_id = :rel_id 
-            and    u.user_id = r.object_id_two
-        } -default {}]
 
         if { ![empty_string_p $rel_user_id] } {
             acs_user::flush_cache -user_id $rel_user_id

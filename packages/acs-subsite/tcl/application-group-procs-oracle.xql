@@ -111,7 +111,7 @@
       <querytext>
       
 		begin
-		:1 := application_group.del (
+		application_group.del (
 	                group_id      => :group_id,
 		);
 		end;

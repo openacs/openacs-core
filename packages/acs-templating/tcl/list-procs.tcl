@@ -398,7 +398,7 @@ ad_proc -public template::list::create {
                                        -spec $format_spec \
                                        -ulevel 2]
         }
-        set filter_spec [list label "Formats" values $filter_values has_default_p 1]
+        set filter_spec [list label [_ acs-templating.Formats] values $filter_values has_default_p 1]
         
         template::list::filter::create \
             -list_name $name \
@@ -496,7 +496,7 @@ ad_proc -public template::list::prepare {
         # so the paginator cahing works properly
         set paginator_name $list_properties(name)
         foreach filter $list_properties(filters) {
-            if { [info exists list_properties(filter,$filter)] } {
+            if { ![string equal $filter "page"] && [info exists list_properties(filter,$filter)] } {
                 append paginator_name ",$filter=$list_properties(filter,$filter)"
             }
         }
@@ -2362,9 +2362,7 @@ ad_proc -public template::list::orderby::create {
         template::list::filter::create \
             -list_name $list_name \
             -filter_name $list_properties(orderby_name) \
-            -spec { 
-                label "Sort order" 
-            } \
+            -spec [list label [_ acs-templating.Sort_order]] \
             -ulevel 2
     }
     
@@ -2501,18 +2499,19 @@ template_tag listtemplate { chunk params } {
 
     set list_name [template::get_attribute listtemplate $params name]
     
-    # Get an upvar'd reference to list_properties
-    template::list::get_reference -name $list_name
-    
     set style [ns_set iget $params style]
     
+    template::adp_append_code "set list_properties(name) [list $list_name]"
+
     template::adp_append_string \
-        "\[[list template::list::render -name $list_name -style $style]\]"
+        "\[template::list::render -name \"$list_name\" -style \"$style\"\]"
 }
 
 template_tag listelement { params } {
     
     set element_name [template::get_attribute listelement $params name]
+
+    # list_properties will be available, because 
 
     template::adp_append_string \
         "\[template::list::element::render -list_name \${list_properties(name)} -element_name $element_name\]"
@@ -2530,12 +2529,8 @@ template_tag listfilters { chunk params } {
     set level [template::adp_level]
     
     set list_name [template::get_attribute listfilters $params name]
-    
-    # Get an upvar'd reference to list_properties
-    template::list::get_reference -name $list_name
-    
     set style [ns_set iget $params style]
     
     template::adp_append_string \
-        "\[[list template::list::render_filters -name $list_name -style $style]\]"
+        "\[template::list::render_filters -name \"$list_name\" -style \"$style\"\]"
 }

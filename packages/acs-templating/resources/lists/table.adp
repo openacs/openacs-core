@@ -72,7 +72,7 @@
         <th class="@elements.class@"@elements.cell_attributes;noquote@>
           <if @elements.orderby_url@ not nil>
             <if @elements.ordering_p@ true>
-              <a href="@elements.orderby_url@">@elements.label@</a>
+              <a href="@elements.orderby_url@">@elements.label;noquote@</a>
               <a href="@elements.orderby_url@" title="@elements.orderby_html_title@"><if @elements.orderby_direction@ eq "desc"><img src="/resources/acs-templating/sort-descending.png" border="0"></if><else><img src="/resources/acs-templating/sort-ascending.png" border="0"></else></a>
             </if>
             <else>

@@ -396,8 +396,8 @@ ad_proc -private template::element::validate { form_id element_id } {
   if { ! $is_inform  && ! $is_optional && ! [llength $values] } {
 
     # no value was submitted for a required element
-    set formerror($element_id) "$label is required"
-    set formerror($element_id:required) "$label is required"
+    set formerror($element_id) [_ acs-templating.Element_is_required]
+    set formerror($element_id:required) [_ acs-templating.Element_is_required]
 
     if { [lsearch -exact {hidden submit} $element(widget)] > -1 } {
        ns_log Warning "template::element::validate: No value for hidden/submit element $label"
@@ -442,7 +442,11 @@ ad_proc -private template::element::validate { form_id element_id } {
       set value_bytelength [string bytelength $value]
       if {  $value_bytelength > $element(maxlength) } {
         set excess_no_bytes [expr { $value_bytelength - $element(maxlength) }]
-        set message "$label is [ad_decode $excess_no_bytes "1" "one character" "$excess_no_bytes characters"] too long."
+      if { $excess_no_bytes == 1 } {
+        set message [_ acs-templating.Element_is_too_long_Singular]
+      } else {
+        set message [_ acs-templating.Element_is_too_long_Plural]
+      }
         lappend v_errors $message
         set formerror($element_id:maxlength) $message
       }

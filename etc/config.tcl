@@ -276,7 +276,7 @@ ns_param ServerCertFile            certfile.pem
 ns_param ServerKeyFile             keyfile.pem
 ns_param ServerProtocols           "SSLv2, SSLv3, TLSv1"
 ns_param ServerCipherSuite         "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
-ns_param ServerSessionCache        false
+ns_param ServerSessionCache        true
 ns_param ServerSessionCacheID      1
 ns_param ServerSessionCacheSize    512
 ns_param ServerSessionCacheTimeout 300
@@ -291,7 +291,7 @@ ns_param SockServerCertFile              certfile.pem
 ns_param SockServerKeyFile               keyfile.pem
 ns_param SockServerProtocols             "SSLv2, SSLv3, TLSv1"
 ns_param SockServerCipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
-ns_param SockServerSessionCache          false
+ns_param SockServerSessionCache          true
 ns_param SockServerSessionCacheID        2
 ns_param SockServerSessionCacheSize      512
 ns_param SockServerSessionCacheTimeout   300
@@ -339,6 +339,7 @@ if { $database == "oracle" } {
 if { $database == "oracle" } {
     ns_section "ns/db/driver/ora8"
     ns_param  maxStringLogLength -1
+    ns_param  LobBufferSize      32768
 }
 
 # 
@@ -468,8 +469,8 @@ ns_param   classpath          /usr/local/jdk/jdk118_v1/lib/classes.zip:${bindir}
 #---------------------------------------------------------------------
 
 #ns_section "ns/server/${server}/module/nscgi" 
-#       ns_param   map "GET  /cgi-bin/ /web/$server/cgi-bin"
-#       ns_param   map "POST /cgi-bin/ /web/$server/cgi-bin" 
+#       ns_param   map "GET  /cgi-bin/ ${serverroot}/cgi-bin"
+#       ns_param   map "POST /cgi-bin/ ${serverroot}/cgi-bin" 
 #       ns_param   Interps CGIinterps
 
 #ns_section "ns/interps/CGIinterps" 
@@ -492,8 +493,8 @@ ns_param   PamDomain          "pam_domain"
 #---------------------------------------------------------------------
 
 ns_section ns/server/${server}/tdav
-ns_param propdir /web/${server}/data/dav/properties
-ns_param lockdir /web/${server}/data/dav/locks
+ns_param propdir ${serverroot}/data/dav/properties
+ns_param lockdir ${serverroot}/data/dav/locks
 
 ns_section ns/server/${server}/tdav/shares
 ns_param share1 "OpenACS"
@@ -502,7 +503,7 @@ ns_param share1 "OpenACS"
 ns_section ns/server/${server}/tdav/share/share1
 ns_param uri "/*"
 # all WebDAV options
-ns_param options "OPTIONS COPY GET PUT MOVE DELETE HEAD MKCOL POST PROPFIND PROPPATCH"
+ns_param options "OPTIONS COPY GET PUT MOVE DELETE HEAD MKCOL POST PROPFIND PROPPATCH LOCK UNLOCK"
 
 #ns_section ns/server/${server}/tdav/share/share2
 #ns_param uri "/share2/path/*"

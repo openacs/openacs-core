@@ -81,8 +81,16 @@ ad_proc -public cr_write_content {
             if { $string_p } {
                 return [db_blob_get write_lob_content ""]
             }
+	    # need to set content_length header here
+	    ns_set put [ns_conn outputheaders] "Content-Length" $content_length
             ReturnHeaders $mime_type
-            db_write_blob write_lob_content ""
+	    # also need to check for HEAD method and skip sending
+	    # actual content
+	    if {![string equal -nocase "head" [ns_conn method]]} {
+		db_write_blob write_lob_content ""
+	    } else {
+		ns_conn close
+	    }
         }
     }
 
@@ -168,6 +176,14 @@ ad_proc -public cr_import_content {
         set item_id [db_nextval acs_object_id_seq]
     }
 
+
+    # use content_type of existing item
+    if $old_item_p {
+	set content_type [db_string get_content_type ""]
+    } else {
+	set content_type [cr_registered_type_for_mime_type $mime_type]
+    }
+
     set revision_id [db_nextval acs_object_id_seq]
 
     db_transaction {
@@ -177,7 +193,7 @@ ad_proc -public cr_import_content {
             db_exec_plsql mime_type_register ""
         }
 
-        switch [cr_registered_type_for_mime_type $mime_type] {
+        switch $content_type {
             image {
 
                 if { [db_string image_subclass ""] == "f" } {

@@ -74,7 +74,7 @@ namespace eval group_type {
 	if { [empty_string_p $group_type] } {
 	    # generate a unique group type name. Note that we expect
 	    # the while loop to finish immediately
-	    while { [empty_string_p $group_type] || ![plsql_utility::object_type_exists_p $group_type] } {
+	    while { [empty_string_p $group_type] || [plsql_utility::object_type_exists_p $group_type] } {
 		set group_type "GROUP_[db_nextval "acs_object_id_seq"]"
 	    }
 	} else {

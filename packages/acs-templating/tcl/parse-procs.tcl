@@ -368,11 +368,20 @@ ad_proc -public template::expand_percentage_signs { message } {
       set substitution "%"
     } else {
       # An embedded variable
-    
+
+      # Remove any noquote instruction
+      set quote_p 1
+      if { [regsub {;noquote} $percent_match {} substitution] } {
+        # We removed a noquote instruction so don't quote
+        set quote_p 0
+      }
+
       # Convert syntax to TCL syntax:
       # It's either an array variable or a tcl variable
       #   array variables
-      regsub {^%([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)%$} $percent_match {$\1(\2)} substitution
+      # TODO: ad_quotehtml
+      # TODO: lang::util::localize    
+      regsub {^%([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)%$} $substitution {$\1(\2)} substitution
       #   ordinary variables
       regsub {^%([a-zA-Z0-9_:]+)%$} $substitution {$\1} substitution
 

@@ -803,6 +803,47 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
     return -code $errno -errorinfo $errinfo -errorcode $errcode $error
 }
 
+ad_proc -private db_get_quote_indices { sql } {
+    Given a piece of SQL, return the indices of single quotes.
+    This is useful when we do bind var substitution because we should
+    not attempt bind var substitution inside quotes. Examples:
+
+    <pre>
+        sql          return value
+       {'a'}           {0 2}      
+       {'a''}           {}
+      {'a'a'a'}       {0 2 4 6}
+      {a'b'c'd'}      {1 3 5 7}
+    </pre>
+
+    @see db_bind_var_subsitution
+} {
+    set quote_indices [list]
+
+    # Returns a list on the format
+    # Example - for sql={'a'a'a'} returns
+    # {0 2} {0 0} {2 2} {3 6} {4 4} {6 6}
+    set all_indices [regexp -inline -indices -all -- {(?:^|[^'])(')(?:[^']|'')+(')(?=$|[^'])} $sql]
+
+    for {set i 0} { $i < [llength $all_indices] } { incr i 3 } {
+        lappend quote_indices [lindex [lindex $all_indices [expr $i + 1]] 0]
+        lappend quote_indices [lindex [lindex $all_indices [expr $i + 2]] 0]
+    }
+
+    return $quote_indices
+}
+
+ad_proc -private db_bind_var_quoted_p { sql bind_start_idx bind_end_idx} {
+
+} {
+    foreach {quote_start_idx quote_end_idx} [db_get_quote_indices $sql] {
+        if { [expr $bind_start_idx > $quote_start_idx] && [expr $bind_end_idx < $quote_end_idx]} {
+            return 1
+        }
+    }
+
+    return 0
+}
 
 ad_proc -private db_bind_var_substitution { sql { bind "" } } {
 
@@ -820,8 +861,8 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
             for {set __db_i [expr [llength $__db_lst] - 1]} {$__db_i >= 0} {incr __db_i -1} {
                 set __db_ws [lindex [lindex $__db_lst $__db_i] 0]
                 set __db_we [lindex [lindex $__db_lst $__db_i] 1]
-                set __db_bind_var [string range $__db_sql $__db_ws $__db_we]
-                if {![string match "::*" $__db_bind_var]} {
+                set __db_bind_var [string range $__db_sql $__db_ws $__db_we]                
+                if {![string match "::*" $__db_bind_var] && ![db_bind_var_quoted_p $__db_sql $__db_ws $__db_we]} {
                     set __db_tcl_var [string range $__db_bind_var 1 end]
                     set __db_tcl_var [set $__db_tcl_var]
                     if {[string equal $__db_tcl_var ""]} {
@@ -843,7 +884,7 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
             set ws [lindex [lindex $lst $i] 0]
             set we [lindex [lindex $lst $i] 1]
             set bind_var [string range $sql $ws $we]
-            if {![string match "::*" $bind_var]} {
+            if {![string match "::*" $bind_var] && ![db_bind_var_quoted_p $lsql $ws $we]} {
                 set tcl_var [string range $bind_var 1 end]
                 set val $bind_vars($tcl_var)
                 if {[string equal $val ""]} {
@@ -1272,6 +1313,10 @@ ad_proc -public db_multirow {
     args 
 } {
     @param dbn The database name to use.  If empty_string, uses the default database.
+    
+    @param unclobber If set, will cause the proc to not overwrite local variables. Actually, what happens
+    is that the local variables will be overwritten, so you can access them within the code block. However, 
+    if you specify -unclobber, we will revert them to their original state after execution of this proc.
 
    Usage:
     <blockquote>
@@ -2327,7 +2372,7 @@ ad_proc db_source_sql_file {{
             cd [file dirname $file]
             
             if { $tcl_platform(platform) == "windows" } {
-                set fp [open "|[file join [db_get_pgbin] psql] -h [ns_info hostname] $pgport $pguser -f $file_name [db_get_database]" "r"]
+                set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database]" "r"]
             } else {
                 set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
             }
@@ -2462,7 +2507,7 @@ ad_proc db_load_sql_data {{
             close $fd
             
             if { $tcl_platform(platform) == "windows" } {
-                set fp [open "|[file join [db_get_pgbin] psql] -f $copy_file -h [ns_info hostname] $pgport $pguser  [db_get_database]" "r"]
+                set fp [open "|[file join [db_get_pgbin] psql] -f $copy_file $pghost $pgport $pguser  [db_get_database]" "r"]
             } else {
                 set fp [open "|[file join [db_get_pgbin] psql] -f $copy_file $pghost $pgport $pguser [db_get_database] $pgpass" "r"]
             }

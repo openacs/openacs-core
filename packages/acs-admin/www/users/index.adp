@@ -16,7 +16,7 @@
         </p>
   <li><a href="complex-search?target=one&only_authorized_p=0&only_needs_approval_p=1">Find all users needing approval</a></li>
   <li><a href="user-add">Add a user</a></li>
-  <li><a href="user-batch-add">Add a batch of users</a></li>
+  <li><a href="/members/user-batch-add">Add a batch of users</a></li>
 
   <form method='get' action='complex-search'>
     <input type='hidden' name='target' value="one">

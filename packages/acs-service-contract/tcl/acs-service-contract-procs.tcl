@@ -125,6 +125,8 @@ ad_proc -private acs_sc_proc {
     contract
     operation
     impl
+    {impl_alias {}}
+    {impl_pl {}}
 } {
     Builds the proc used by acs_sc_call, generally only called 
     in acs-service-contract-init.tcl at startup.
@@ -132,16 +134,18 @@ ad_proc -private acs_sc_proc {
     @return 0 on failure, 1 on success.
     @author Neophytos Demetriou
 } {
-
     set arguments [list]
     set docblock {}
 
     set proc_name [acs_sc_generate_name $contract $impl $operation]
 
     acs_sc_log SCDebug "ACS_SC_PROC: proc_name = $proc_name"
-    foreach {impl_alias impl_pl} [acs_sc_get_alias $contract $operation $impl] break 
+    
+    if { [empty_string_p $impl_alias] } {
+        foreach {impl_alias impl_pl} [acs_sc_get_alias $contract $operation $impl] break 
+    }
 
-    if ![info exists impl_alias] {
+    if { [empty_string_p $impl_alias] } {
 	error "ACS-SC: Cannot find alias for $proc_name"
     }
 
@@ -270,7 +274,7 @@ ad_proc -private -deprecated acs_sc_call {
 # Private logging proc
 proc acs_sc_log {level msg} {
     # If you want to debug the SC, uncomment the Debug log below
-    if {![string equal "SCDebug" $level]} {
+    if { ![string equal "SCDebug" $level] } {
         ns_log $level "$msg"
     } else { 
         # ns_log Debug "$msg"

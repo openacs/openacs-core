@@ -1823,7 +1823,8 @@ ad_proc -private apm_get_package_repository {
             set version(package-name) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "pretty-name"]]
             set version(package.type) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "package-type"]]
             set version(download_url) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "download-url"]]
-
+            set version(summary)      [xml_node_get_content [xml_node_get_first_child_by_name $package_node "summary"]]
+            
             foreach dependency_type { provides requires } {
                 set version($dependency_type) {}
                 foreach dependency_node [xml_node_get_children_by_name $package_node "$dependency_type"] {

@@ -497,11 +497,14 @@ ad_proc -public acs_user::flush_cache {
 
     @author Peter Marklund
 } {
-    # First get username and authority_id so we can flush the get_from_username_not_cached proc
-    acs_user::get -user_id $user_id -array user
-
     util_memoize_flush [list acs_user::get_from_user_id_not_cached $user_id]
-    util_memoize_flush [list acs_user::get_from_username_not_cached $user(username) $user(authority_id)]
+    
+    # get username and authority_id so we can flush the get_from_username_not_cached proc
+    if { ![catch { 
+        acs_user::get -user_id $user_id -array user
+    }] } {
+        util_memoize_flush [list acs_user::get_from_username_not_cached $user(username) $user(authority_id)]
+    }
 }
 
 ad_proc -public acs_user::get_element {

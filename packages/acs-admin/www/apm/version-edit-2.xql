@@ -10,7 +10,7 @@
 </fullquery>
 
  
-<fullquery name="old_version_name">      
+<fullquery name="old_version_info">      
       <querytext>
       
 	    select version_name as old_version_name, version_uri as old_version_uri 

@@ -52,9 +52,6 @@ cross join (select element_id from application_group_element_map
                   where group_id = :group_id and rel_type = :rel_type
                   UNION ALL
                   select :group_id::integer ) m on (p.party_id = m.element_id) cross join
-                 (select object_id
-                  from all_object_party_privilege_map
-                  where party_id = :user_id and privilege = 'read') perm cross join
                  (select party_id
                   from rc_parties_in_required_segs
                   where group_id = :group_id 
@@ -63,7 +60,6 @@ cross join (select element_id from application_group_element_map
 		left join persons on (p.party_id = persons.person_id)
             where 
               m.element_id is null
-              and p.party_id = perm.object_id
               and p.party_id = pirs.party_id $scope_clause
     
       </querytext>
