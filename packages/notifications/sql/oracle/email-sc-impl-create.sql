@@ -27,7 +27,7 @@ begin
 
    foo := acs_sc_impl.new_alias (
               'NotificationDeliveryMethod',
-              'notification_email'
+              'notification_email',
               'Send',
               'notification::email::send',
               'TCL'
@@ -35,13 +35,13 @@ begin
 
    foo := acs_sc_impl.new_alias (
               'NotificationDeliveryMethod',
-              'notification_email'
+              'notification_email',
               'ScanReplies',
               'notification::email::scan_replies',
               'TCL'
           );
 
-   foo := acs_sc_binding.new (
+   acs_sc_binding.new (
               contract_name => 'NotificationDeliveryMethod',
               impl_name => 'notification_email'
           );                             
