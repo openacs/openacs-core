@@ -9,4 +9,14 @@
     </querytext>
   </fullquery>
 
+ <fullquery name="lang::message::register.lang_message_update">
+     <querytext>
+       update lang_messages
+       set    message = :message
+       where  locale = :locale
+       and    message_key = :message_key
+       and    package_key = :package_key
+     </querytext>
+ </fullquery>
+
 </queryset>
