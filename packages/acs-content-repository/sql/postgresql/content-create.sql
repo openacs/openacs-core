@@ -1317,6 +1317,11 @@ select inline_2 ();
 
 drop function inline_2 ();
 
+-- this was added for edit-this-page and others
+-- 05-Nov-2001 Jon Griffin jon@mayuli.com
+
+alter table cr_folders
+add package_id integer references apm_packages;
 
 -- show errors
 
