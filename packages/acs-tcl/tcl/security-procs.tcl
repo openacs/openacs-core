@@ -117,7 +117,7 @@ ad_proc -private sec_handler {} {
         ns_log Debug "Security: Insecure session OK: session_id = $session_id, untrusted_user_id = $untrusted_user_id, auth_level = $auth_level, user_id = $user_id"
 
         # We're okay, insofar as the insecure session, check if it's also secure
-        if { [string equal $auth_level "ok"] && [ad_secure_conn_p] } {
+        if { [string equal $auth_level "ok"] && [security::secure_conn_p] } {
             catch { 
                 set sec_token [split [ad_get_signed_cookie "ad_secure_token"] {,}] 
                 if { [string equal [lindex $sec_token 0] $session_id] } {
@@ -165,7 +165,7 @@ ad_proc -private sec_login_handler {} {
     catch {
         # If over HTTPS, we look for a secure cookie, otherwise we look for the normal one
         set login_list [list]
-        if { [ad_secure_conn_p] } {
+        if { [security::secure_conn_p] } {
             catch {
                 set login_list [split [ad_get_signed_cookie "ad_user_login_secure"] ","]
             }
@@ -187,7 +187,7 @@ ad_proc -private sec_login_handler {} {
             # Then check auth_token
             if { [string equal $auth_token [sec_get_user_auth_token $untrusted_user_id]] } {
                 # Are we secure?
-                if { [ad_secure_conn_p] } {
+                if { [security::secure_conn_p] } {
                     # We retrieved the secure login cookie over HTTPS, we're secure
                     set auth_level secure
                 } else {
@@ -227,7 +227,7 @@ ad_proc -public ad_user_login {
     set auth_level "ok"
 
     # If you're logged in over a secure connection, you're secure
-    if { [ad_secure_conn_p] } {
+    if { [security::secure_conn_p] } {
         ad_set_signed_cookie \
             -max_age $max_age \
             -secure t \
@@ -399,7 +399,7 @@ ad_proc -private sec_setup_session {
 
     # ns_log Notice "OACS= done generating session id cookie"
 
-    if { [string equal $auth_level "secure"] && [ad_secure_conn_p] && $new_user_id != 0 } {
+    if { [string equal $auth_level "secure"] && [security::secure_conn_p] && $new_user_id != 0 } {
         # this is a secure session, so the browser needs
         # a cookie marking it as such
 	sec_generate_secure_token_cookie
@@ -450,10 +450,12 @@ ad_proc -private sec_generate_secure_token_cookie { } {
     ad_set_signed_cookie -secure t "ad_secure_token" "[ad_conn session_id],[ad_conn user_id],[ns_time]"
 }
 
-ad_proc -public ad_secure_conn_p {} { 
-    Returns true if the connection [ad_conn] is secure (HTTPS), or false otherwise. 
+ad_proc -public -deprecated ad_secure_conn_p {} { 
+    Use security::secure_conn_p instead.
+    
+    @see security::secure_conn_p
 } {
-    return [string match "https:*" [util_current_location]]
+    return [security::secure_conn_p]
 }
 
 
@@ -561,8 +563,16 @@ ad_proc -public ad_get_login_url {
         lappend export_vars username
         
     }
-    if { $return_p } {
-        lappend export_vars { return_url {[ad_return_url -qualified]} }
+
+    # We don't add a return_url if you're currently under /register, because that will frequently
+    # interfere with normal login procedure
+    if { [ad_conn isconnected] && $return_p && ![string match "register/*" [ad_conn extra_url]] } {
+        if { [security::secure_conn_p] || ![security::RestrictLoginToSSLP] } {
+            set return_url [ad_return_url]
+        } else {
+            set return_url [ad_return_url -qualified]
+        }
+        lappend export_vars { return_url }
     }
 
     if { [llength $export_vars] > 0 } {
@@ -1106,7 +1116,7 @@ ad_proc -public ad_get_client_property {
     set value [lindex $property 0]
     set secure_p [lindex $property 1]
     
-    if { $secure_p != "f" && ![ad_secure_conn_p] } {
+    if { $secure_p != "f" && ![security::secure_conn_p] } {
 	return ""
     }
 
@@ -1135,7 +1145,7 @@ ad_proc -public ad_set_client_property {
 
 } {
 
-    if { $secure != "f" && ![ad_secure_conn_p] } {
+    if { $secure != "f" && ![security::secure_conn_p] } {
 	error "Unable to set secure property in insecure or invalid session"
     }
 
