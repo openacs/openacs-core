@@ -30,4 +30,4 @@ if { ![nsv_exists ds_properties enabled_p] } {
     ds_set_user_switching_enabled [ad_parameter -package_id [ds_instance_id] UserSwitchingEnabledP acs-developer-support 0]
 }
 
-
+ds_watch_packages

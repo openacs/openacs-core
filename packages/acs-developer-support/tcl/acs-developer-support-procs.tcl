@@ -440,3 +440,23 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
 	}
     }
 }
+
+ad_proc -private ds_watch_packages {} {
+    Watch tcl libraries and xql files for packages listed
+    in the PackageWatchList parameter on server startup.
+
+    @author Peter Marklund
+} {
+    set package_watch_string [parameter::get_from_package_key \
+                                  -package_key acs-developer-support \
+                                  -parameter PackageWatchList]
+
+    foreach package_key [split $package_watch_string] {
+        if { [apm_package_enabled_p $package_key] } {
+            ns_log Notice "Developer-support - watching all files for package $package_key"
+            apm_watch_all_files $package_key        
+        } else {
+            ns_log Notice "developer support - not watching file for package $package_key as package is not enabled"
+        }
+    }
+}
