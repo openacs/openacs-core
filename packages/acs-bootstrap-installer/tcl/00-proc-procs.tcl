@@ -745,7 +745,7 @@ ad_proc -public callback {
         set c [catch {::eval $procname $args} ret]
         switch -exact $c {
             0 { # code ok
-                if {[llength $ret] > 0} { 
+                if {[llength $ret] > 0} {
                     lappend returns $ret
                 }
             }
@@ -772,6 +772,11 @@ ad_proc -public callback {
             }
         }
     }
+
+    if {![string equal impl *] && ![info exists c]} {
+        error "callback $callback implementation $impl does not exist"
+    }
+
     return $returns
 }
 
