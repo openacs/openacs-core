@@ -18,7 +18,7 @@ set server              "service0"
 set db_name             $server
 set servername          "New OpenACS Installation - Development"
 
-set serverroot          "/web/${server}"
+set serverroot          "/var/lib/aolserver/${server}"
 
 # if debug is false, all debugging will be turned off
 set debug false
