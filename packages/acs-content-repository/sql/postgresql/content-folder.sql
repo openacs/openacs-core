@@ -120,8 +120,8 @@ returns integer as '
 declare
   delete__folder_id              alias for $1;  
   v_count                        integer;       
-  v_parent_id                    integer;       
-  v_path                         varchar;
+  v_parent_id                    integer;  
+  v_path                         varchar;     
 begin
 
   -- check if the folder contains any items
