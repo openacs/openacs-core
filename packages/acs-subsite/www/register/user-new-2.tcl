@@ -66,7 +66,7 @@ if {$exception_count > 0} {
 
 # Get whether they requre some sort of approval
 if {[ad_parameter RegistrationRequiresApprovalP "security" 0]} {
-    set member_state ""
+    set member_state "needs approval"
 } else {
     set member_state "approved"
 }
@@ -107,7 +107,7 @@ if { $member_state == "approved" && $email_verified_p == "t"} {
     set title "Please read your email"
 
     ad_return_template
-} elseif { $member_state == "" } {
+} elseif { $member_state == "needs approval" } {
 
     # this user won't be able to use the system until an admin has
     # approved him, so don't give an auth cookie, but instead tell him 

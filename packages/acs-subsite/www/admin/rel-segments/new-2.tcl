@@ -37,7 +37,7 @@ set subsite_group_id [application_group::group_id_from_package_id]
 
 ad_require_permission $group_id "read"
 
-set context_bar [list [list "" "Relational segments"] "Add segment"]
+set context_bar [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] "Add segment"]
 
 set export_vars [ad_export_vars -form {group_id rel_type return_url}]
 

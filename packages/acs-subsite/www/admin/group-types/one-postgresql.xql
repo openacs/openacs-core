@@ -6,7 +6,7 @@
 <fullquery name="groups_select">      
       <querytext>
 
-    select my_view.group_name, my_view.group_id, 1 as num 
+    select my_view.group_name, my_view.group_id
     from (select DISTINCT g.group_name, g.group_id
            from acs_objects o, groups g,
                 application_group_element_map app_group, 

@@ -713,9 +713,14 @@ begin
     -- because the table names appear to be stored in upper case.  Quoting
     -- causes them to not match the actual lower or potentially mixed-case
     -- table names.  We will just forbid squirrely names that include quotes.
+-- daveB
+-- ETP is creating a new object, but not a table, although it does specify a
+-- table name, so we need to check if the table exists. Wp-slim does this too
 
-    execute ''delete from '' || obj_type.table_name ||
-        '' where '' || obj_type.id_column || '' =  '' || delete__object_id;
+    if table_exists(obj_type.table_name) then
+      execute ''delete from '' || obj_type.table_name ||
+          '' where '' || obj_type.id_column || '' =  '' || delete__object_id;
+    end if;
   end loop;
 
   return 0; 

@@ -10,7 +10,7 @@
   </if>
   <else>
     <multiple name="groups">
-      <if @groups.num@ gt 25>
+      <if @groups.rownum@ gt 25>
         <li> <a href="groups-display?group_type=@group_type_enc@">View all groups of this type</a> </li>
       </if>
       <else>

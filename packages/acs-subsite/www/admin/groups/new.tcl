@@ -31,7 +31,7 @@ ad_page_contract {
     }
 }
 
-set context_bar [list [list "" "Groups"] "Add a group"]
+set context_bar [list [list "[ad_conn package_url]admin/groups/" "Groups"] "Add a group"]
 
 if {[empty_string_p $add_to_group_id]} {
     set add_to_group_id [application_group::group_id_from_package_id]

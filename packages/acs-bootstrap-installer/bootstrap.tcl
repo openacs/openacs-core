@@ -90,7 +90,7 @@ set errno [catch {
         db_bootstrap_checks database_problem error_p
     }
 
-	ns_log notice "Loading acs-tcl"
+    ns_log notice "Loading acs-tcl"
     apm_bootstrap_load_libraries -procs acs-tcl
 
     if { [info exists database_problem] } {

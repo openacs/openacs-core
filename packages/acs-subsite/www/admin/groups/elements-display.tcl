@@ -49,6 +49,6 @@ db_1row group_and_rel_info {
      where rel_types.rel_type = :rel_type
 }
 
-set context_bar [list [list "" "Groups"] [list one?[ad_export_vars group_id] "One Group"] "All $role_pretty_plural"]
+set context_bar [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[ad_export_vars group_id] "One Group"] "All $role_pretty_plural"]
 
 ad_return_template

@@ -18,7 +18,7 @@ ad_page_contract {
     
 }
 
-set context_bar [list [list "../" "Relationship types"] [list "" "Roles"] "Create role"]
+set context_bar [list [list "../" "Relationship types"] [list "[ad_conn package_url]admin/rel-types/roles/" "Roles"] "Create role"]
 
 template::form create role_form
 

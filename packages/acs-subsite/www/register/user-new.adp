@@ -44,7 +44,7 @@ name to generate certain kinds of user interface.
 
 <p>
 
-Full Name:    <input type=text name=first_names size=20> <input type=text name=last_name size=25>
+Full Name:    <input type=text name=first_names size=20 value="@first_names@"> <input type=text name=last_name size=25 value="@last_name@">
 <p>
 
 <if @require_question_p@ eq 1>

@@ -9,7 +9,7 @@ ReturnHeaders "image/gif"
 
 set_the_usual_form_variables
 
-set file [open "[acs_package_root_dir "acs-subsite"]/www/shared/1pixel.header"]
+set file [open "[ns_info pageroot]/graphics/1pixel.header"]
 ns_writefp $file
 close $file
 
@@ -35,6 +35,6 @@ if { [util_aolserver_2_p] } {
     ns_unlink $file_name
 }
 
-set file [open "[acs_package_root_dir "acs-subsite"]/www/shared/1pixel.footer"]
+set file [open "[ns_info pageroot]/graphics/1pixel.footer"]
 ns_writefp $file
 close $file

@@ -22,7 +22,7 @@ ad_page_contract {
 }
 
 set context_bar [list \
-	[list "" "Group types"] \
+        [list "[ad_conn package_url]admin/group-types/" "Group types"] \
 	[list "one?[ad_export_vars group_type]" "One type"] \
 	"Edit default join policy"]
 
