@@ -27,7 +27,7 @@ if {$delete} {
     file delete -force [apm_workspace_install_dir]
 }
 
-ns_write "[apm_header -form "package-load" [list "package-load" "Load a New Package"] "View Package Contents"]
+ad_return_top_of_page "[apm_header -form "package-load" [list "package-load" "Load a New Package"] "View Package Contents"]
 "
 
 if {[empty_string_p $file_path]} {
