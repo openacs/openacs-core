@@ -250,6 +250,7 @@ ad_proc -private apm_version_load_status { version_id } {
 }
 
 ad_proc -private apm_load_libraries { 
+    {-packages {}}
     {-callback apm_dummy_callback}
     {-procs:boolean} 
     {-init:boolean}
@@ -264,16 +265,18 @@ ad_proc -private apm_load_libraries {
     to in *all* active interpreters).
 
 } {
-    
-    # DRB: query extractor's dumb about repeated query
-    # names so I changed these to be unique.  We should
-    # really be sharing these at some level rather than
-    # duping them anyway.
-    set packages [db_list apm_enabled_packages_l {
-	select distinct package_key
-	from apm_package_versions
-	where enabled_p='t'
-    }]
+
+    if { [empty_string_p $packages] } {
+        # DRB: query extractor's dumb about repeated query
+        # names so I changed these to be unique.  We should
+        # really be sharing these at some level rather than
+        # duping them anyway.
+        set packages [db_list apm_enabled_packages_l {
+            select distinct package_key
+            from apm_package_versions
+            where enabled_p='t'
+        }]
+    }
 
     # Scan the package directory for files to source.    
     set files [list]    
@@ -317,20 +320,56 @@ ad_proc -private apm_load_libraries {
     apm_files_load -callback $callback $files
 }
 
-# OpenACS query loading (ben@mit.edu)
-# Load up the queries for all packages
-#
-# This follows the pattern of the load_libraries proc,
-# but is only loading query information
+ad_proc -public apm_load_package {
+    {-load_tests_p 0}
+    package_key
+} {
+    Load libraries and queries for the package with given key.
+
+    @author Peter Marklund
+} {
+    # Load *-procs.tcl and *-init.tcl files for enabled packages.
+    apm_load_libraries -packages $package_key -procs
+
+    # Load up the Queries (OpenACS, ben@mit.edu)
+    apm_load_queries -packages $package_key
+
+    # Load up the Automated Tests and associated Queries if necessary
+    if {$load_tests_p} {
+      apm_load_libraries -packages $package_key -test_procs
+      apm_load_queries -packages $package_key -test_queries
+    }
+
+    apm_load_libraries -packages $package_key -init
+
+    # Load up the Automated Tests initialisation scripts is necessary
+    if {$load_tests_p} {
+      apm_load_libraries -packages $package_key -test_init
+    }
+
+    nsv_set apm_enabled_package $package_key 1    
+}
+
 ad_proc -private apm_load_queries {
+    {-packages {}}
     {-callback apm_dummy_callback}
     {-test_queries:boolean}
 } {
-    set packages [db_list apm_enabled_packages_q {
-	select distinct package_key
-	from apm_package_versions
-	where enabled_p='t'
-    }]
+    Load up the queries for all enabled packages
+    (or all specified packages). Follows the pattern 
+    of the load_libraries proc, but only loads query information
+
+    @param packages Optional list of keys for packages to load queries for.
+
+    @author ben@mit.edu
+} {
+    if { [empty_string_p $packages] } {
+        set packages [db_list apm_enabled_packages_q {
+            select distinct package_key
+            from apm_package_versions
+            where enabled_p='t'
+        }]
+    }
 
     # Scan the package directory for files to source.    
     set files [list]    
