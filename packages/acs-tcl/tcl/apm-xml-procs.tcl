@@ -74,10 +74,16 @@ ad_proc -private apm_tag_value {
 
     if { ![empty_string_p $node] } {
 	# return [dom::node cget [dom::node cget $node -firstChild] -nodeValue]
-	return [ns_xml node getcontent [lindex [ns_xml node children $node] 0]]
-    } else {
-	return $default
+        set child [lindex [ns_xml node children $node] 0]
+
+        # JCD 20020914 ns_xml when given something like <pretty-name></pretty-name> (i.e. empty content)
+        # will have the node but the node will not have a child node and the 
+        # getcontent will then fail.
+        if { ![empty_string_p $child] } {
+            return [ns_xml node getcontent $child]
+        }
     }    
+    return $default
 }
 
 ad_proc -private apm_generate_package_spec { version_id } {
