@@ -15,13 +15,4 @@
 </fullquery>
 
  
-<fullquery name="">      
-      <querytext>
-      
-    } on_error {
-	if 
-      </querytext>
-</fullquery>
-
- 
 </queryset>
