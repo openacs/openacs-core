@@ -23,6 +23,8 @@
         |
         <a href="/acs-admin/apm/?reload_links_p=1" title="Scan for changed library files">Changed files</a>
         |
+        <a href="@flush_url@" title="Flush entire util_memoize cache">Flush</a>
+        |
         <a href="/acs-admin/users/" title="Add/edit/become users">Users</a>
         |
         <a href="/acs-lang/admin/" title="Add/edit message keys">I18n</a>

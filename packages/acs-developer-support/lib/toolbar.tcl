@@ -37,6 +37,8 @@ if { $show_p } {
     set db_num_cmds [lindex $db_info 0]
     set db_num_ms [lc_numeric [lindex $db_info 1]]
 
+    set flush_url [export_vars -base "/acs-admin/cache/flush-cache" { { suffix util_memoize } { return_url [ad_return_url] } }]
+
     if { [empty_string_p $page_ms] } {
         set request_info_label "Request info"
     } else {
