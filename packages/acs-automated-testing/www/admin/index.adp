@@ -1,8 +1,5 @@
 <master>
 <property name="title">@title;noquote@</property>
-
-<html>
-  <body>
   <table border=0 cellspacing=0 cellpadding=3 width="100%">
     <tr>
       <th bgcolor="#ECECEC">Category</th>
@@ -177,6 +174,5 @@
     <b>&raquo;</b>
     <a href="clear?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@&stress=@stress@&security_risk=@security_risk@"> Clear test result data</a> </li>
   </blockquote>
+<p><a href="doc/">Documentation</a>
 
-  </body>
-</html>
