@@ -1296,30 +1296,26 @@ ad_proc -private apm_mount_core_packages {} {
 
     @author Peter Marklund
 } {
-    ns_log Notice "Starting instantiation and mounting of core packages"
+    ns_log Notice "Starting mounting of core packages"
 
     # Mount acs-lang
     ns_log Notice "Mounting acs-lang"    
-    set acs_lang_id [site_node::instantiate_and_mount -package_key acs-lang \
-                                                      -package_name "Internationalization"]
+    set acs_lang_id [site_node::instantiate_and_mount -package_key acs-lang]
     permission::grant -party_id [acs_magic_object the_public] \
                       -object_id $acs_lang_id \
                       -privilege read
 
     # Mount acs-admin
     ns_log Notice "Mounting acs-admin"
-    site_node::instantiate_and_mount -package_key acs-admin \
-                                     -package_name "System Administration"
+    site_node::instantiate_and_mount -package_key acs-admin
 
     # Mount acs-service-contract
     ns_log Notice "Mounting acs-service-contract"    
-    site_node::instantiate_and_mount -package_key acs-service-contract \
-                                     -package_name "Service Contracts"
+    site_node::instantiate_and_mount -package_key acs-service-contract
 
     # Mount the acs-content-repository
     ns_log Notice "Mounting acs-content-repository"    
-    site_node::instantiate_and_mount -package_key acs-content-repository \
-                                     -package_name "Content Repository"
+    site_node::instantiate_and_mount -package_key acs-content-repository
 
     # Mount acs-core-docs
     ns_log Notice "Mounting acs-core-docs"    
@@ -1330,8 +1326,7 @@ ad_proc -private apm_mount_core_packages {} {
     ns_log Notice "Mounting acs-api-browser"    
     set api_browser_id \
         [site_node::instantiate_and_mount -node_name api-doc \
-                                          -package_key acs-api-browser \
-                                          -package_name "API Documentation"]
+                                          -package_key acs-api-browser]
     # Only registered users should have permission to access the
     # api-browser
     permission::grant -party_id [acs_magic_object registered_users] \
@@ -1344,7 +1339,7 @@ ad_proc -private apm_mount_core_packages {} {
     site_node::instantiate_and_mount -node_name test \
                                      -package_key acs-automated-testing
 
-    ns_log Notice "Core packages instantiated and mounted"
+    ns_log Notice "Finished mounting of core packages"
 }
 
 ad_proc -private apm_version_name_compare {
