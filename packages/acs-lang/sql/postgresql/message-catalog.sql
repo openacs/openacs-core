@@ -1,3 +1,4 @@
+
 --
 -- packages/acs-lang/sql/postgresql/message-catalog.sql
 --
@@ -23,6 +24,7 @@ create table lang_message_keys (
     package_key        varchar(100)
                        constraint lang_message_keys_fk
                        references apm_package_types(package_key)
+                       on delete cascade
                        constraint lang_message_keys_package_key_nn
                        not null,
     upgrade_status     varchar(30)
