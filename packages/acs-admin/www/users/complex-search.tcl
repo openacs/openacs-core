@@ -201,7 +201,7 @@ from cc_users"
         append query "\nwhere [join $where_clause "\n$where_conjunction "]"
     }
 }
-append query "\norder by upper(first_names), upper(last_name)"
+append query "\norder by first_names, last_name"
 
 set i 0
 
