@@ -284,6 +284,36 @@ proc_doc db_list_of_lists { statement_name sql args } {
     return $result
 }
 
+ad_proc -public db_list_of_ns_sets {
+    statement_name
+    sql
+    {args ""}
+} {
+    Returns a list of ns_sets with the values of each column of each row
+    returned byt he sql query specified.
+
+    @param statement_name The name of the query.
+    @param sql The SQL to be executed.
+    @param args Any additional arguments, such as a 'if_no_rows'
+
+    @return list of ns_sets, one per each row return by the SQL query
+} {
+    ad_arg_parser { bind } $args
+
+    set full_statement_name [db_qd_get_fullname $statement_name]
+
+    db_with_handle db {
+        set result [list]
+        set selection [db_exec select $db $full_statement_name $sql]
+
+        while {[db_getrow $db $selection]} {
+            lappend result [ns_set copy $selection]
+        }
+    }
+
+    return $result
+}
+
 proc_doc db_foreach { statement_name sql args } {
     Usage: db_foreach statement_name sql [-bind ns_set | list of bind variables] code_block [if_no_rows if_no_rows_code_block]
 
