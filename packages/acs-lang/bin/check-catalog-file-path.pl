@@ -22,7 +22,7 @@ open(FILE_INPUT, "< $file_path");
 # Undefine the record separator to read the whole file in one go
 undef $/;
 my $file_contents = <FILE_INPUT>;
-$file_contents =~ m#<message_catalog\s+package_key="(.+?)"\s+locale="(.+?)"\s+charset="(.+?)">#
+$file_contents =~ m#<message_catalog\s+package_key="(.+?)".+locale="(.+?)"\s+charset="(.+?)">#
     or die "catalog file $file_path does not have a root xml node on parsable format";
 my ($xml_package, $xml_locale, $xml_charset) = ($1, $2, $3);
 
