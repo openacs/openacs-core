@@ -4,8 +4,8 @@
 <partialquery name="acs_object_type_hierarchy.object_type_not_null">      
       <querytext>
 
-	select object_type,
-	       pretty_name,
+	select o2.object_type,
+	       o2.pretty_name,
                '' as indent,
                tree_level(o2.tree_sortkey) as level
 	  from (select * 
