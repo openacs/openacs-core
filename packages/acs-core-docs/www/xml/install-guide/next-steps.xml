@@ -428,13 +428,13 @@ root:/usr/local/src/Search-OpenFTS-tcl-0.3.2/aolserver# cd ..</programlisting>
         <programlisting>
 root:/usr/local/src/Search-OpenFTS-tcl-0.3.2# cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.3/contrib
 root:/usr/local/src/Search-OpenFTS-tcl-0.3.2# cd /usr/local/src/postgresql-7.2.3/contrib/pgsql_contrib_openfts
-root:/usr/local/postgresql-7.2.3/contrib/pgsql_contrib_openfts# make
-root:/usr/local/postgresql-7.2.3/contrib/pgsql_contrib_openfts# su postgres
-postgres:/usr/local/postgresql-7.2.3/contrib/pgsql_contrib_openfts$ make install
-postgres:/usr/local/postgresql-7.2.3/contrib/pgsql_contrib_openfts$ /usr/local/pgsql/bin/psql birdnotes -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql
-postgres:/usr/local/postgresql-7.2.3/contrib/pgsql_contrib_openfts$ /usr/local/pgsql/bin/psql birdnotes -f openfts.sql
-postgres:/usr/local/postgresql-7.2.3/contrib/pgsql_contrib_openfts$ exit
-root:/usr/local/postgresql-7.2.3/contrib/pgsql_contrib_openfts# exit</programlisting>
+root:/usr/local/src/postgresql-7.2.3/contrib/pgsql_contrib_openfts# make
+root:/usr/local/src/postgresql-7.2.3/contrib/pgsql_contrib_openfts# su postgres
+postgres:/usr/local/src/postgresql-7.2.3/contrib/pgsql_contrib_openfts$ make install
+postgres:/usr/local/src/postgresql-7.2.3/contrib/pgsql_contrib_openfts$ /usr/local/pgsql/bin/psql birdnotes -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql
+postgres:/usr/local/src/postgresql-7.2.3/contrib/pgsql_contrib_openfts$ /usr/local/pgsql/bin/psql birdnotes -f openfts.sql
+postgres:/usr/local/src/postgresql-7.2.3/contrib/pgsql_contrib_openfts$ exit
+root:/usr/local/src/postgresql-7.2.3/contrib/pgsql_contrib_openfts# exit</programlisting>
       </listitem>
 
       <listitem>
