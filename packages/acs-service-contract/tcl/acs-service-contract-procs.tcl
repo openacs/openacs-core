@@ -95,7 +95,7 @@ ad_proc acs_sc_proc {
 	    acs_sc_msg_type__get_name(element_msg_type_id) as element_msg_type_name,
 	    element_msg_type_isset_p,
 	    element_pos
-	from acs_sc_msg_type_element
+	from acs_sc_msg_type_elements
 	where msg_type_id = :operation_inputtype_id
 	order by element_pos asc
     } {
@@ -112,7 +112,7 @@ ad_proc acs_sc_proc {
 	    acs_sc_msg_type__get_name(element_msg_type_id) as element_msg_type_name,
 	    element_msg_type_isset_p,
 	    element_pos
-	from acs_sc_msg_type_element
+	from acs_sc_msg_type_elements
 	where msg_type_id = :operation_outputtype_id
 	order by element_pos asc
     } {
