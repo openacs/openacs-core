@@ -14,17 +14,36 @@ set context [list $page_title]
 set focus ""
 
 # Display form to collect username and authority
-set list_of_authorities [auth::authority::get_authority_options]
+set authority_options [auth::authority::get_authority_options]
 
-ad_form -name recover_password -form {
-    {authority_id:integer(select)
-            {label "Authority"}
-        {options $list_of_authorities}
+if { [llength $authority_options] > 1 } {
+    ad_form -name recover_password -form {
+        {authority_id:integer(select) 
+            {label "Authority"} 
+            {options $authority_options}
+            {value $authority_id}
+        }
     }
+} else {
+    ad_form -name recover_password -form {
+        {authority_id:integer(hidden) 
+            {value $authority_id}
+        }
+    }
+
+}
+
+ad_form -extend -name recover_password -form { 
     {username:text
         {label "Username"}
-        }
+        {value $username}
+    }
 } -on_submit {
+
+    if { ![exists_and_not_null authority_id] } {
+        # Will be defaulted to local authority
+        set authority_id ""
+    }
 
     array set recover_info [auth::password::recover_password \
                                 -authority_id $authority_id \
@@ -37,7 +56,7 @@ ad_form -name recover_password -form {
     }
 }
 
-if { [llength $list_of_authorities] > 1 } {
+if { [llength $authority_options] > 1 } {
     set focus "recover_password.authority_id"
 } else {
     set focus "recover_password.username"
@@ -46,7 +65,8 @@ if { [llength $list_of_authorities] > 1 } {
 set form_valid_p [form is_valid recover_password]
 set form_submitted_p [form is_submission recover_password]
 
-if { [exists_and_not_null authority_id] && [exists_and_not_null username] && !$form_submitted_p } {
+
+if { [exists_and_not_null username] && !$form_submitted_p } {
     array set recover_info [auth::password::recover_password \
                                 -authority_id $authority_id \
                                 -username $username]

@@ -3,7 +3,7 @@
   <property name="context">@context@</property>
   <property name="focus">@focus@</property>
 
-  <if @authority_id@ not nil and @username@ not nil>
+  <if @username@ not nil>
     <if @form_submitted_p@ false or @form_valid_p@ true>
       @recover_info.password_message@
     </if>
