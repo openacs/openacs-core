@@ -5,8 +5,7 @@
 
     <fullquery name="services_select">
         <querytext>
-            select q.*
-            from   (select package_id,
+                    select package_id,
                            ap.package_key,
                            acs_object__name(package_id) as instance_name,
                            apm_package_type__num_parameters(ap.package_key) as parameter_count
@@ -18,9 +17,7 @@
                             acs_permission__permission_p(package_id, :user_id, 'read') = 't'
                          or acs_permission__permission_p(package_id, acs__magic_object_id('the_public'), 'read') = 't'
                         )
-                   ) q
-            where  parameter_count > 0 
-            order by instance_name
+                    order by instance_name
         </querytext>
     </fullquery>
 

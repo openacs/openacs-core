@@ -23,7 +23,7 @@
   </ul>
 </if>
 
-<h3>Package Parameters</h3>
+<h3>Service Administration</h3>
 
 <include src="/packages/acs-admin/lib/service-parameters">
 
