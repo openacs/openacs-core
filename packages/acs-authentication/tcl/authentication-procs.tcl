@@ -76,10 +76,11 @@ ad_proc -public auth::refresh_login {} {
 ad_proc -public auth::self_registration {} {
    #Check AllowSelfRegister parameter
 
-    if { ![parameter::get_from_package_key \
-                      -package_key acs-authentication \
-	              -parameter AllowSelfRegister] } {
-          ad_maybe_redirect_for_registration
+    if { [string is false [parameter::get_from_package_key \
+			       -package_key acs-authentication \
+			       -parameter AllowSelfRegister]] } {
+	util_user_message -message "Self registration is not allowed"
+	ad_maybe_redirect_for_registration
     }
 }          
 
