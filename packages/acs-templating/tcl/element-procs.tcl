@@ -47,68 +47,78 @@ ad_proc -public template::element::create { form_id element_id args } {
     Append an element to a form object.  If a submission is in progress,
     values for the element are prepared and validated.
 
-    @param form_id    The identifier of the form to which the element is to
-                      be added.  The form must have been previously created
-                      with a <tt>form create</tt> statement.
+    @param form_id        The identifier of the form to which the element is to
+                          be added.  The form must have been previously created
+                          with a <tt>form create</tt> statement.
 
+    @param element_id     A keyword identifier for the element that is unique
+                          in the context of the form.
 
-    @param element_id A keyword identifier for the element that is unique
-                      in the context of the form.
+    @option widget        The name of an input widget for the element.  Valid
+                          widgets must have a rendering procedure defined in 
+                          the <tt>template::widget</tt> namespace.
 
+    @option datatype      The name of a datatype for the element values.  Valid
+                          datatypes must have a validation procedure defined in
+                          the <tt>template::data::validate</tt> namespace.
 
-    @option widget    The name of an input widget for the element.  Valid
-                      widgets must have a rendering procedure defined in 
-                      the <tt>template::widget</tt> namespace.
-
-    @option datatype  The name of a datatype for the element values.  Valid
-                      datatypes must have a validation procedure defined in
-                      the <tt>template::data::validate</tt> namespace.
-
-    @option label     The label for the form element.
+    @option label         The label for the form element.
     
-    @option section   The section name for the element.
+    @option section       The section name for the element.
 
-    @option html      A list of name-value attribute pairs to include in
-                      the HTML tag for widget.  Typically used for additional
-                      formatting options, such as <tt>cols</tt> or 
-                      <tt>rows</tt>, or for JavaScript handlers.
+    @option html          A list of name-value attribute pairs to include in
+                          the HTML tag for widget.  Typically used for additional
+                          formatting options, such as <tt>cols</tt> or 
+                          <tt>rows</tt>, or for JavaScript handlers.
 
+    @option maxlength     The maximum allowable length in bytes. Will be checked using
+                          'string bytelength'. Will also cause 'input' widgets (text, integer, etc.)
+                          to get a maxlength="..." attribute.
 
-    @option maxlength The maximum allowable length in bytes. Will be checked using
-                      'string bytelength'. Will also cause 'input' widgets (text, integer, etc.)
-                      to get a maxlength="..." attribute.
+    @option options       A list of options for select lists and button groups 
+                          (check boxes or radio buttons).  The list contains 
+                          two-element lists in the form 
+                          { {label value} {label value} {label value} ...}
 
-    @option options   A list of options for select lists and button groups 
-                      (check boxes or radio buttons).  The list contains 
-                      two-element lists in the form 
-                      { {label value} {label value} {label value} ...}
+    @option value         The default value of the element
 
+    @option values        The default values of the element, where multiple values
+                          are allowed (checkbox groups and multiselect widgets)
 
-    @option value     The default value of the element
+    @option validate      A list of custom validation blocks in the form
+                          { name { expression } { message } \
+                            name { expression } { message } ...}
+                          where name is a unique identifier for the validation
+                          step, expression is a block to Tcl code that evaluates to
+                          1 or 0, and message is to be displayed to the user when 
+                          the validation step fails.
 
+    @option sign          specify for a hidden widget that its value should be
+                          signed
 
-    @option values    The default values of the element, where multiple values
-                      are allowed (checkbox groups and multiselect widgets)
+    @option help_text     Text displayed with the element 
 
+    @option help          Display helpful hints (date widget only?)
 
-    @option validate  A list of custom validation blocks in the form
-                      { name { expression } { message } \
-                        name { expression } { message } ...}
-                      where name is a unique identifier for the validation
-                      step, expression is a block to Tcl code that evaluates to
-                      1 or 0, and message is to be displayed to the user when 
-                      the validation step fails.
+    @option optional      A flag indicating that no value is required for this
+                          element.  If a default value is specified, the default
+                          is used instead.
 
-    @option sign      specify for a hidden widget that its value should be
-                      signed
+    @option mode          Valid values are 'display', 'edit', and the empty string.
+                          If set to 'display', the element will render as static HTML
+                          which doesn't allow editing of the value, instead of the 
+                          HTML form element (e.g. &lt;input&gt;) which would otherwise
+                          get used. If set to 'edit', the element is as normal, allowing
+                          the user to edit the contents. If set to the empty string or
+                          not specified at all, the form's 'mode' setting is used instead.
 
-    @option help_text Text displayed with the element 
+    @option before_html   A chunk of HTML displayed immediately before the rendered element.
 
-    @option help      Display helpful hints (date widget only?)
+    @option after_html    A chunk of HTML displayed immediately after the rendered element.
 
-    @option optional  A flag indicating that no value is required for this
-                      element.  If a default value is specified, the default
-                      is used instead.
+    @option display_value Alternative value used when the element is in display mode.
+                          If specified, this value is used when the mode is set to 'display',
+                          instead of asking the element widget to render itself in display mode.
 
     @see template::widget
     @see template::data::validate
