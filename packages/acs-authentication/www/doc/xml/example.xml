@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<enterprise>
+  <properties>
+    <datasource>FOO</datasource>
+    <target>dotLRN</target>
+    <type>DB Increment</type>
+    <datetime>28-oct-2003#16:06:02</datetime>
+  </properties>
+  <person recstatus = "1">
+    <sourcedid>
+      <source>FOO</source>
+      <id>karlf</id>
+    </sourcedid>
+    <name>
+      <n>
+        <given>Karl</given>
+        <family>Fritz</family>
+        <prefix></prefix>
+      </n>
+    </name>
+    <email>karlf@example.net</email>
+  </person>
+  <person recstatus = "2">    <!--modified person-->
+    ...
+  </person>
+  <person recstatus = "3">    <!--deleted person-->
+  <sourcedid>
+    <id>LL1</id>      <!--only requires username-->
+  </sourcedid>
+  </person>
+</enterprise>
