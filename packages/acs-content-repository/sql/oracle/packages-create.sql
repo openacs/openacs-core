@@ -1035,7 +1035,7 @@ function new (
   creation_user	in acs_objects.creation_user%TYPE
 			   default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
-  package_id    in acs_objects.package_id%TYPE
+  package_id    in acs_objects.package_id%TYPE default null
 ) return cr_symlinks.symlink_id%TYPE;
 
 
@@ -1135,7 +1135,7 @@ function new (
   creation_user	in acs_objects.creation_user%TYPE
 			   default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
-  package_id    in acs_objects.package_id%TYPE
+  package_id    in acs_objects.package_id%TYPE default null
 ) return cr_extlinks.extlink_id%TYPE;
 
 

@@ -23,7 +23,7 @@ function new (
   creation_date	in acs_objects.creation_date%TYPE default sysdate,
   creation_user	in acs_objects.creation_user%TYPE default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
-  package_id	in acs_objects.package_id%TYPE default null,
+  package_id	in acs_objects.package_id%TYPE default null
 ) return cr_folders.folder_id%TYPE is
   v_folder_id	cr_folders.folder_id%TYPE;
   v_context_id	acs_objects.context_id%TYPE;
@@ -47,7 +47,7 @@ begin
 
     v_package_id := package_id;
 
-    if parent_id is not null and package_id is null then
+    if parent_id is not null and parent_id ^= 0 and package_id is null then
         v_package_id := acs_object.package_id(content_item.get_root_folder(parent_id));
     end if;
 
