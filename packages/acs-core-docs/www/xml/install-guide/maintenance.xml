@@ -474,12 +474,12 @@ cvs up index.adp</programlisting>
   </sect2>
 </sect1>
     <sect1 id="install-ssl">
-      <title>Installing SSL Support</title>
-        <para>nsopenssl is an open-sounce module for AOLserver which
-        adds support for the ssl encryption layer.  To use it, you
-        must <link linkend="install-nsopenssl">install</link> the software, create or purchase certificates,
-        and configure your OpenACS instance to use it.</para>
+      <title>Installing SSL Support for an OpenACS service</title>
+    <para>Debian Users: <computeroutput>apt-get install openssl</computeroutput> before proceeding.</para>
         <orderedlist>
+          <listitem>
+            <para>Make sure nsopenssl.so is <link linkend="install-nsopenssl">installed</link> for AOLserver.</para>
+          </listitem>
           <listitem>
             <para>Uncomment this line from <computeroutput>config.tcl</computeroutput>.</para>
             <programlisting>#ns_param   nsopenssl       ${bindir}/nsopenssl.so

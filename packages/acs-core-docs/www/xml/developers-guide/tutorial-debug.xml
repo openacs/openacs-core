@@ -110,7 +110,7 @@ G goes to the end.
 }
 </screen>
         <para>To create a test case you call
-<computeroutput>aa_register_case test_case_name.</computeroutput>. 
+<computeroutput><ulink url="/api-doc/proc-view?proc=aa%5fregister%5fcase">aa_register_case</ulink> test_case_name.</computeroutput>.   
 Once you've created the test case you start writing the needed logic.
 We'll use the tutorial package, "myfirstpackage," as an example.
 Let's say you just wrote an <ulink url="/api-doc">API</ulink> for adding and deleting notes in the
@@ -147,11 +147,18 @@ goes inside <computeroutput>-test_code {}</computeroutput>.  We want to implemen
       set name [ad_generate_random_string]
       set new_id [mfp::note::add -title $name]
       aa_true "Note add succeeded" [exists_and_not_null new_id]</programlisting>
-      <para>To test our simple case, we must load the test file into the system (just as with the /tcl file in the basic tutorial, since the file didn't exist when the system started, the system doesn't know about it.)  To make this file take effect, go to the <ulink url="/acs-admin/apm">APM</ulink> and choose "Reload changed" for "MyFirstPackage".  Since we'll be changing it frequently, select "watch this file" on the next page.  This will cause the system to check this file every time any page is requested, which is bad for production systems but convenient for developing.</para>
+    <para>To test our simple case, we must load the test file into the system (just as with the /tcl file in the basic tutorial, since the file didn't exist when the system started, the system doesn't know about it.)  To make this file take effect, go to the <ulink url="/acs-admin/apm">APM</ulink> and choose "Reload changed" for "MyFirstPackage".  Since we'll be changing it frequently, select "watch this file" on the next page.  This will cause the system to check this file every time any page is requested, which is bad for production systems but convenient for developing.  We can also add some aa_register_case flags to make it easier to run the test.  The <computeroutput>-procs</computeroutput> flag, which indicates which procs are tested by this test case, makes it easier to find procs in your package that aren't tested at all.  The <computeroutput>-cats</computeroutput> flag, setting categories, makes it easier to control which tests to run.  The <computeroutput>smoke</computeroutput> test setting means that this is a basic test case that can and should be run any time you are doing any test. (<ulink url="http://www.nedbatchelder.com/blog/20030408T062805.html">a definition of "smoke test"</ulink>)</para>
       <para>Once the file is loaded, go to <ulink url="/test">ACS Automated Testing</ulink> and click on myfirstpackage.  You should see your test case.  Run it and examine the results.</para>
-      <para>Now we can add the rest of the API tests.  The complete test looks like:</para>
+    <sect3>
+      <title>TCLWebtest tests</title>
+      <para>API testing can only test part of our package - it doesn't test the code in our adp/tcl pairs.  For this, we can use TCLwebtest.  TCLwebtest must be <link linkend="install-tclwebtest">installed</link> for this test to work.  This provides a <ulink url="http://tclwebtest.sourceforge.net/doc/api_public.html">library of functions</ulink> that make it easy to call a page through HTTP, examine the results, and drive forms.  TCLwebtest's functions overlap slightly with acs-automated-testing; see the example provided for one approach on integrating them.</para>
+    </sect3>
+    <sect3>
+      <title>Example</title>
+      <para>Now we can add the rest of the API tests, including a test with deliberately bad data.  The complete test looks like:</para>
       <programlisting><xi:include href="../../files/tutorial/myfirstpackage-procs.tcl" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>example missing</xi:fallback></xi:include></programlisting>
       <para>See also <xref linkend="automated-testing-best-practices"/>.</para>
+    </sect3>
   </sect2>
 </sect1>
 

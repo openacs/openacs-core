@@ -1,5 +1,5 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
@@ -286,7 +286,7 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
           <listitem>
             <formalpara>
               <title>Upgrading a Custom or CVS site</title>
-              <para>If you have no custom code, and your site is not in a CVS repository, upgrade with these steps:</para>
+              <para>If you have custom code, and your site is in a CVS repository, upgrade with these steps:</para>
             </formalpara>
             <orderedlist>
               <listitem>
@@ -322,16 +322,16 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
           <para>Unpack the tarball into a new directory and copy its contents on top of your working directory.</para>
         </formalpara>
         <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-        [service0 aolserver]$ <userinput>cd /var/lib/aolserver</userinput>
-        [service0 web]$ <userinput>tar xzf /tmp/openacs-4-6.tgz</userinput>
-        [service0 web]$ <userinput>cp -r openacs-4-6/* openacs-4</userinput>
-        [service0 openacs-upgrade]$ <userinput>exit</userinput>
-        [root root]#
-        <action>su - <replaceable>service0</replaceable>
-        cd /var/lib/aolserver
-        tar xzf /tmp/openacs-4-6.tgz
-        cp -r openacs-4-6/* openacs-4
-        exit</action></screen>
+[service0 aolserver]$ <userinput>cd /var/lib/aolserver</userinput>
+[service0 web]$ <userinput>tar xzf /tmp/openacs-4-6.tgz</userinput>
+[service0 web]$ <userinput>cp -r openacs-4-6/* openacs-4</userinput>
+[service0 openacs-upgrade]$ <userinput>exit</userinput>
+[root root]#
+<action>su - <replaceable>service0</replaceable>
+cd /var/lib/aolserver
+tar xzf /tmp/openacs-4-6.tgz
+cp -r openacs-4-6/* openacs-4
+exit</action></screen>
       </listitem>
       <listitem>
         <para>
@@ -345,69 +345,155 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
             </imageobject>
           </mediaobject>
         </figure>
-        <orderedlist>
+        <itemizedlist>
           <listitem>
-            <para>Unpack the new files into a working directory.</para>
+              <formalpara>
+                <title>Step 1: Import new CVS code</title>
+                <para>There are two common ways to get new OpenACS code into your local CVS repository - via tarball or with a working CVS checkout of OpenACS.  Both methods work well for starting your local repository; the second method is better for incremental additions or upgrades.</para>
+              </formalpara>
+              <itemizedlist>
+                <listitem>
+                  <formalpara>
+                    <title>(a): via tarball</title>
+            <para>Download a <ulink url="http://openacs.org/projects/openacs/download">current tarball</ulink> and unpack the new files into a working directory.</para>
+                  </formalpara>
             <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-            [service0 aolserver]$ <userinput>cd /tmp</userinput>
-            [service0 tmp]$ <userinput>tar xzf openacs-4-6.tgz</userinput>
-            [service0 tmp]$ <userinput>cd openacs-4.6</userinput></screen>
+[service0 aolserver]$ <userinput>cd /tmp</userinput>
+[service0 tmp]$ <userinput>tar xzf openacs-4-6.tgz</userinput>
+[service0 tmp]$ <userinput>cd openacs-4.6</userinput></screen>
+                </listitem>
+                <listitem>
+                  <formalpara>
+                    <title>(b): via cvs working checkout</title>
+                    <para>Create a CVS checkout from OpenACS.  The first time you do this, you will need to create the checkout directory.  We use one dedicated directory for each branch of OpenACS - if you are using OpenACS 5.0,x, you only need an OpenACS 5.0 branch.  The <replaceable>openacs-5-0-compat</replaceable> tag identifies the latest released version of OpenACS 5.0 (ie, 5.0.3 or 5.0.4) and the latest compatible version of each package, including .LRN.  Each minor release of OpenACS since 5.0 has this tagging structure.  (Ie., OpenACS 5.1.x has <computeroutput>openacs-5-1-compat</computeroutput>.)</para>
+                  </formalpara>
+                  <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+[service0 aolserver]$ <userinput>cd /var/lib/aolserver</userinput>
+[service0 aolserver]$ <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot checkout -r <replaceable>openacs-5-0-compat</replaceable> openacs-4</userinput>
+[service0 aolserver]$ <userinput>mv openacs-4 <replaceable>openacs-5-0</replaceable></userinput></screen>
+                  <para>If this checkout already exists, you can simply update it instead of recreating it.</para>
+                  <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+[service0 aolserver]$ <userinput>cd /var/lib/aolserver/<replaceable>openacs-5-0</replaceable></userinput>
+[service0 aolserver]$ <userinput>cvs up -Pd</userinput></screen>
+                </listitem>
+              <listitem>
+                <formalpara>
+                  <title>(c) A single package via cvs working checkout</title>
+                  <para>You can add or upgrade a single package at a time, if you already have a cvs working directory.</para>
+                </formalpara>
+                <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+[service0 aolserver]$ <userinput>cd /var/lib/aolserver/<replaceable>openacs-5-0</replaceable></userinput>
+[service0 openacs-5-0]$ <userinput>cvs up -d <replaceable>myfirstpackage</replaceable></userinput></screen>
+              <para>In the next section, the import must be tailored to just this package.</para>
+              </listitem>
+              </itemizedlist>
+            </listitem>
+            <listitem>
+              <formalpara>
+                <title>Step 2: Merge New OpenACS code</title>
+                <para>Now that you have a local copy of the new OpenACS code, you need to import it into your local CVS repository and resolve any conflicts that occur.</para>
+              </formalpara>
             <para>Import the new files into your cvs repository; where they match existing files, they will become the new version of the file.</para>
-            <screen>[service0 openacs-4.6]$ <userinput> cvs import -m "upgrade to OpenACS 4.6" openacs 
-            OpenACS openacs-4-6</userinput></screen>
+            <screen>[service0 openacs-4.6]$ <userinput> cvs -d /var/lib/cvs import -m "upgrade to OpenACS 4.6" openacs OpenACS openacs-4-6</userinput></screen>
+            <tip>
+              <para>If adding or upgrading a single package, run the cvs import from within the base directory of that package, and adjust the cvs command accordingly.  In this example, we are adding the <computeroutput>myfirstpackage</computeroutput> package.</para>
+              <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+[service0 aolserver]$ <userinput>cd /var/lib/aolserver/<replaceable>openacs-5-0</replaceable>/packagse/<replaceable>myfirstpackage</replaceable></userinput>
+[service0 myfirstpackage]$ <userinput>cvs -d /var/lib/cvs/ import -m "importing package" <replaceable>service0</replaceable>/packages/<replaceable>myfirstpackage</replaceable></userinput></screen>
+            </tip>
+
             <para>Create a new directory as temporary working space to reconcile conflicts between the new files and your current work.  The example uses the cvs keyword yesterday, making the assumption that you haven't checked in new code to your local tree in the last day.</para>
             <screen>[service0 openacs-4.6]$ <userinput> cd /var/lib/aolserver</userinput>
-            [service0 tmp]$ <userinput>mkdir openacs-upgrade</userinput>
-            [service0 tmp]$ <userinput>cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS openacs &gt; cvs.txt 2&gt;&amp;1</userinput>
-            (CVS feedback here)
-            <action>su - <replaceable>service0</replaceable>
-            cd /tmp
-            tar xzv openacs-4-6.tgz
-            cd openacs-4.6
-            cvs import -m "upgrade to OpenACS 4.6" openacs OpenACS openacs-4-6
-            cd /tmp
-            mkdir openacs-upgrade
-            cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS openacs &gt; cvs.txt 2&gt;&amp;1</action></screen>
-          </listitem>
-          <listitem>
-            <para>The file /tmp/openacs-upgrade/cvs.txt contains the results of the upgrade.  If you changed files that are part of the OpenACS tarball and those changes conflict with the 4.5-4.6 upgrade, you'll have to manually reconcile them.  Use the emacs command <computeroutput>M-x sort-lines</computeroutput> and then, for each line that starts with a C, open that file and manually resolve the conflict by deleting the excess lines.  When you're finished, or if there aren't any conflicts, save and exit.</para>
-          </listitem>
-          <listitem>
+[service0 tmp]$ <userinput>mkdir <replaceable>service0</replaceable>-upgrade</userinput>
+[service0 tmp]$ <userinput>cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS openacs &gt; cvs.txt 2&gt;&amp;1</userinput>
+(CVS feedback here)
+</screen>
+          <para>The file /tmp/openacs-upgrade/cvs.txt contains the results of the upgrade.  If you changed files that are part of the OpenACS tarball and those changes conflict with the 4.5-4.6 upgrade, you'll have to manually reconcile them.  Use the emacs command <computeroutput>M-x sort-lines</computeroutput> and then, for each line that starts with a C, open that file and manually resolve the conflict by deleting the excess lines.  When you're finished, or if there aren't any conflicts, save and exit.</para>
             <para>Once you've fixed any conflicts, commit the new code
             to your local tree.  </para>
             <screen>[service0 tmp]$ <userinput>cd openacs-upgrade</userinput>
-            [service0 openacs-upgrade]$ <userinput>cvs commit -m "Upgraded to 4.6"</userinput>
-            <action>cd openacs-upgrade
-            cvs commit -m "Upgraded to 4.6"</action></screen>
-          </listitem>
+[service0 openacs-upgrade]$ <userinput>cvs commit -m "Upgraded to 4.6"</userinput></screen>          </listitem>
           <listitem>
+              <formalpara>
+                <title>Step 3: Upgrade your local staging site</title>
             <para>Update your working tree with the new files.  The CVS flags ensure that new directories are created and pruned directories destroyed.</para>
-            <screen>[service0 openacs-upgrade]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
-            [service0 service0]$ <userinput>cvs up -Pd</userinput>
-            (CVS feedback)
-            [service0 service0]$ <userinput>exit</userinput>
-            [root root]#
-            <action>cd /var/lib/aolserver/<replaceable>service0</replaceable>
-            cvs up -Pd
-            exit</action></screen>
+              </formalpara>
+<screen>[service0 openacs-upgrade]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
+[service0 service0]$ <userinput>cvs up -Pd</userinput>
+(CVS feedback)
+[service0 service0]$ <userinput>exit</userinput>
+[root root]# </screen>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+      <para>
+        <emphasis role="strong">Upgrading files for a site using the OpenACS.org CVS repository</emphasis>
+      </para>
+      <orderedlist>
+        <listitem>
+          <screen>[service0 ~]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
+[service0 service0]$ <userinput>cvs up -Pd</userinput>
+(CVS feedback)
+[service0 service0]$</screen>
           </listitem>
-        </orderedlist>
-      </listitem>
-      <listitem>
-        <para>
-          <emphasis role="strong">Upgrading files for a site using the OpenACS.org CVS repository</emphasis>
-        </para>
+      </orderedlist>
+    <sect2>
+      <title>Upgrading a Production Site Safely</title>
+      <para>If you are upgrading a production OpenACS site which is on a private CVS tree, this process lets you do the upgrade without risking extended downtime or an unusable site:</para>
+      <orderedlist>
+        <listitem>
+          <para>Declare a freeze on new cvs updates - ie, you cannot run cvs update
+   on the production site</para>
+        </listitem>
+        <listitem>
+          <para>
+            Make a manual backup of the production site in addition to the
+   automated backups</para>
+        </listitem>
+        <listitem>
+          <para>Import the new code (for example, OpenACS 5.0.4, openacs-5-0-compat versions of
+   ETP, blogger, and other applications) into a "vendor branch" of the
+   <replaceable>service0</replaceable> CVS tree, as described in "Upgrading a local CVS repository", step 1, above. 
+   As soon as we do this, any cvs update command on production might bring new code onto the production site, which
+   would be bad.</para>
+          <para>Do step 2 above (merging conflicts in a <replaceable>service0</replaceable>-upgrade working tree).</para>
+        </listitem>
+        <listitem>
+          <para>
+            Manually resolve any conflicts in the working upgrade tree
+          </para>
+        </listitem>
+        <listitem>
+          <para>Use the upgrade script and a recent backup of the production database, to ake
+  a new upgraded database called <replaceable>service0</replaceable>-upgrade.  Now we
+   have a new website called <replaceable>service0</replaceable>-upgrade.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Test the <replaceable>service0</replaceable>-upgrade site
+          </para>
+        </listitem>
+        <listitem>
+          <para>If <replaceable>service0</replaceable>-upgrade is fully functional, do the real upgrade.</para>
           <orderedlist>
             <listitem>
-            <screen>[service0 ~]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
-            [service0 service0]$ <userinput>cvs up -Pd</userinput>
-            (CVS feedback)
-            [service0 service0]$</screen>
+              <para>Take down the <replaceable>service0</replaceable> site and put up a "down for maintenance" page.</para>
+            </listitem>
+            <listitem>
+              <para>Repeat the upgrade with the most recent database</para>
+            </listitem>
+            <listitem>
+              <para>Test the that the new site is functional.  If so, change the upgraded site to respond to
+               <replaceable>yourserver.net</replaceable> requests. If not, bring the original production site back up and return to the merge.</para>
             </listitem>
           </orderedlist>
-      </listitem>
-    </itemizedlist>
+        </listitem>
+      </orderedlist>
+    </sect2>
   </sect1>
+
   <sect1 id="upgrade-supporting">
     <title>Upgrading Platform components</title>
     <sect2 id="upgrade-openfts-0.2-to-0.3.2">
@@ -463,9 +549,9 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
           [service0 dev]$ <userinput>exit</userinput>
           [root root]# 
           <action>su - <replaceable>service0</replaceable>
-          psql <replaceable>service0</replaceable> -f /usr/local/pgsql/share/contrib/openfts.sql
-          psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql
-          exit</action></screen>
+psql <replaceable>service0</replaceable> -f /usr/local/pgsql/share/contrib/openfts.sql
+psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql
+exit</action></screen>
         </listitem>
         <listitem>
           <formalpara>
