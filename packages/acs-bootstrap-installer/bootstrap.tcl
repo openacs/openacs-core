@@ -124,18 +124,8 @@ set errno [catch {
     # Load the Tcl package init files.
     apm_bootstrap_load_libraries -init acs-tcl
 
-    #
-    # Check for the presence of the automated testing package.
-    #
-    set load_tests_p [apm_load_tests_p]
-
-    foreach package_key [db_list package_keys_select {
-	select package_key from apm_enabled_package_versions
-    }] {
-        nsv_set apm_enabled_package $package_key 1    
-
-        apm_load_package -load_tests=$load_tests_p $package_key
-    }
+    # Load libraries, queries etc. for remaining packages
+    apm_load_packages
 
     if { ![nsv_exists rp_properties request_count] } {
 	# security-init.tcl has not been invoked, so it's safe to say that the
