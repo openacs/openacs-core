@@ -376,6 +376,148 @@ ad_proc -public template::util::date::unpack { date } {
   }
 }
 
+ad_proc -public template::util::date::now_min_interval {} {
+    Create a new Date object for the current date and time 
+    with the default interval for minutes
+
+    @author Walter McGinnis (wtem@olywa.net)
+    @creation_date 2002-01-06
+} {
+  set now [clock format [clock seconds] -format "%Y %m %d %H %M %S"]
+  set today [list]
+    
+  # manipulate the minute value so it rounds up to nearest minute interval
+  set minute [lindex $now 4]
+  # there is a definition for minute interval: 0 59 5
+  set interval_def [defaultInterval minutes]
+  for { set i [lindex $interval_def 0] } \
+      { $i <= [lindex $interval_def 1] } \
+      { incr i [lindex $interval_def 2] } {
+      if {$minute == $i} {
+	  break
+      } elseif {$minute < $i} {
+	  set minute $i
+          break
+      }
+  }
+
+  # replaace the minute value in the now list with new value
+  set now [lreplace $now 4 4 $minute]
+  set today [list]
+  foreach v $now {
+      lappend today [template::util::leadingTrim $v]
+  }
+
+  return [eval create $today]
+}
+
+ad_proc -public template::util::date::now_min_interval_plus_hour {} {
+    Create a new Date object for the current date and time 
+    plus one hour
+    with the default interval for minutes
+
+    @author Walter McGinnis (wtem@olywa.net)
+    @creation_date 2002-01-06
+} {
+  set now [clock format [clock seconds] -format "%Y %m %d %H %M %S"]
+  set today [list]
+    
+  # manipulate the minute value so it rounds up to nearest minute interval
+  set minute [lindex $now 4]
+  # there is a definition for minute interval: 0 59 5
+  set interval_def [defaultInterval minutes]
+  for { set i [lindex $interval_def 0] } \
+      { $i <= [lindex $interval_def 1] } \
+      { incr i [lindex $interval_def 2] } {
+      if {$minute == $i} {
+	  break
+      } elseif {$minute < $i} {
+	  set minute $i
+          break
+      }
+  }
+
+  # get the hour value
+  set hour [lindex $now 3]
+  # replace the hour and minute values in the now list with new values
+  set now [lreplace $now 3 4 [incr hour] $minute]
+  set today [list]
+  foreach v $now {
+      lappend today [template::util::leadingTrim $v]
+  }
+
+  return [eval create $today]
+}
+
+ad_proc -public template::util::date::add_time { {-time_array_name:required} {-date_array_name:required} } {
+    set the time and date and new format properties 
+    into one date object (list) which is returned
+    not sure this proc should live here...
+    
+    @author Walter McGinnis (wtem@olywa.net, 2001-01-05)
+    @creation_date 2002-01-04
+} {
+    # grab the form arrays
+    upvar 1 $time_array_name time_in $date_array_name date_in
+
+    # combine the two formats...
+    # date first
+    set new_format "$date_in(format) $time_in(format)"
+
+    # create an empty date object with the new format
+    set the_date [template::util::date::create \
+	    "" "" "" "" "" "" ""]
+   
+    set the_date [template::util::date::set_property format $the_date $new_format]
+
+    set have_values 0
+
+    # the following two foreachs might be cleaner if combined into one
+    # but two is pretty simple and there are larger battles out there to fight
+
+    # add time properties
+    foreach field [array names time_in] {
+	# skip format
+	if ![string equal $field "format"] {
+	    # Coerce values to non-negative integers
+	    if { ![string equal $field ampm] } {
+		if { ![regexp {[0-9]+} $time_in($field) value] } {
+		    set value {}
+		}
+	    }
+	    # If the value is not null, set it
+	    if { ![string equal $value {}] } {
+		set the_date [template::util::date::set_property $field $the_date $value]
+		if { ![string equal $field ampm] } {
+		    set have_values 1
+		}
+	    }
+	}
+    }
+
+    # add date properties
+    foreach field [array names date_in] {
+	# skip format
+	if ![string equal $field "format"] {
+	    # Coerce values to non-negative integers
+	    if { ![regexp {[0-9]+} $date_in($field) value] } {
+		set value {}
+	    }
+	    # If the value is not null, set it
+	    if { ![string equal $value {}] } {
+		set the_date [template::util::date::set_property $field $the_date $value]
+		set have_values 1
+	    }
+	}
+    }
+
+    if { $have_values } {
+	return [list $the_date]
+    } else {
+	return {}
+    } 
+}
+
 # Check if a value is less than zero, but return false
 # if the value is an empty string
 ad_proc -public template::util::negative { value } {
