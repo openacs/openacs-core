@@ -4,7 +4,7 @@
 <fullquery name="user_login_user_id_from_email">      
       <querytext>
       
-    select user_id, member_state, email_verified_p
+    select user_id, member_state, email_verified_p, password_changed_date
     from cc_users
     where email = lower(:email)
       </querytext>
