@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-  <fullquery name="apm_package_version_enabled_p.apm_package_version_installed_p">
+  <fullquery name="apm_package_version_enabled_p.apm_package_version_enabled_p">
     <querytext>
       select case when count(*) = 0 then 0 else 1 end from apm_package_versions
       where version_id = :version_id
