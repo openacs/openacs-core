@@ -415,9 +415,8 @@ ad_proc -public auth::sync::job::action {
                                     -can_browse=$can_browse_p \
                                     -user_id $user_id
                                 
-                                acs_privacy::set_user_read_private_data \
+                                dotlrn_privacy::set_user_is_non_guest \
                                     -user_id $user_id \
-                                    -object_id [dotlrn::get_package_id] \
                                     -value $read_private_data_p
 
                             }
