@@ -230,9 +230,6 @@ ad_proc -public auth::password::recover_password {
                     -password $result(password) \
                     -subject_msg_key "acs-subsite.email_subject_Forgotten_password" \
                     -body_msg_key "acs-subsite.email_body_Forgotten_password" 
-
-                # Successfully informed user of email
-                set result(password_message) [_ acs-subsite.Check_Your_Inbox]
             } {
                 # We could not inform the user of his email - we failed
                 set result(password_status) "failed_to_connect"
@@ -240,6 +237,9 @@ ad_proc -public auth::password::recover_password {
                 global errorInfo
                 ns_log Error "We had an error sending out email with new password to username $username, authority $authority_id:\n$errorInfo"
             }
+        } 
+        if { ![exists_and_not_null result(password_message)] } {
+            set result(password_message) [_ acs-subsite.Check_Your_Inbox]
         }
     }
 
