@@ -735,9 +735,16 @@ ad_proc -public ad_html_to_text {
 	# append everything up to and not including the tag-opening <
 	ad_html_to_text_put_text output [string range $html $last_tag_end [expr {$i - 1}]]
 
-        # Check that tag doesn't start with whitespace, in which case it's just a lone < that
-        # was errorneously left unquoted
-        if { $i >= [expr $length-1] || ![string is alpha [string index $html [expr $i + 1]]] } {
+        # Check that:
+        #  - we're not past the end of the string
+        #  - and that the tag starts with either
+        #     - alpha or
+        #     - a slash, and then alpha
+        # Otherwise, it's probably just a lone < character
+        if { $i >= [expr $length-1] || \
+                 (![string is alpha [string index $html [expr $i + 1]]] && \
+                      (![string equal "/" [string index $html [expr $i + 1]]] || \
+                           ![string is alpha [string index $html [expr $i + 2]]])) } {
             # Output the < and continue with next character
             ad_html_to_text_put_text output "<"
             set last_tag_end [incr i]
@@ -840,29 +847,31 @@ ad_proc -public ad_html_to_text {
 		    ad_html_to_text_put_text output "_"
 		}
 		a {
-                    if { [empty_string_p $slash] && !$no_format_p} {
- 			if { [info exists attribute_array(href)] } {
-			    if { [info exists attribute_array(title)] } {
-				set title ": '$attribute_array(title)'"
-			    } else {
-				set title ""
-			    }
-			    set href_no [expr [llength $href_urls] + 1]
-			    lappend href_urls "\[$href_no\] $attribute_array(href) "
-			    lappend href_stack "\[$href_no$title\]"
-			} elseif { [info exists attribute_array(title)] } {
-			    lappend href_stack "\[$attribute_array(title)\]"
-			} else {
-			    lappend href_stack {}
-			}
-		    } else {
-			if { [llength $href_stack] > 0 } {
-			    if { ![empty_string_p [lindex $href_stack end]] } {
-				ad_html_to_text_put_text output [lindex $href_stack end]
-			    }
-			    set href_stack [lreplace $href_stack end end]
-			}
-		    }
+                    if { !$no_format_p } {
+                        if { [empty_string_p $slash]} {
+                            if { [info exists attribute_array(href)] } {
+                                if { [info exists attribute_array(title)] } {
+                                    set title ": '$attribute_array(title)'"
+                                } else {
+                                    set title ""
+                                }
+                                set href_no [expr [llength $href_urls] + 1]
+                                lappend href_urls "\[$href_no\] $attribute_array(href) "
+                                lappend href_stack "\[$href_no$title\]"
+                            } elseif { [info exists attribute_array(title)] } {
+                                lappend href_stack "\[$attribute_array(title)\]"
+                            } else {
+                                lappend href_stack {}
+                            }
+                        } else {
+                            if { [llength $href_stack] > 0 } {
+                                if { ![empty_string_p [lindex $href_stack end]] } {
+                                    ad_html_to_text_put_text output " [lindex $href_stack end]"
+                                }
+                                set href_stack [lreplace $href_stack end end]
+                            }
+                        }
+                    }
 		}
 		pre {
 		    set output(p) 1

@@ -370,6 +370,13 @@ anybody have any ideas?
     } else {
         aa_log "Text version: $text_version"
     }
+
+    # Test placement of [1] reference
+    set html {Here is <a href="http://openacs.org">http://openacs.org</a> my friend}
+
+    set text_version [ad_html_to_text -- $html]
+
+    aa_log "Text version: $text_version"
 }
 
 aa_register_case ad_page_contract_filters {
