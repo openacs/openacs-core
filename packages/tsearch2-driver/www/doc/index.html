@@ -13,7 +13,21 @@
   cotent. I had to manually load lars-blogger-sc-create.sql to get
   Weblogger to register the service contract implementation to index
   the content. After that it worked fine.
-  
+
+<h2>Index old content</h2>
+If your old content has not been indexed before (e.g. because you had no
+search package mounted before), all is fine. Otherwise you have to inform the
+search package to reindex.<br>
+insert into search_observer_queue ( select my_id, now(),'INSERT' from
+my_table);<br>
+For forums and ETP this looks like:
+<blockquote>
+<pre>
+insert into search_observer_queue (select message_id, now(), 'INSERT' from forums_messages);
+insert into search_observer_queue (select live_revision, now(), 'INSERT' from ( 
+  select live_revision from cr_items where content_type = 'etp_page_revision') etp);
+</pre>
+</blockquote>
   <h2>Features</h2>
   This version includes only the most basic features to prove that
   tsearch2 can be used for indexing. There are many configuration
