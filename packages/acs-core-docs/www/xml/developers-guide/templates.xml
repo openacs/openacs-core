@@ -241,7 +241,7 @@ data sources.
 
 </sect2>
 
-<sect2 id="templates-summary">
+<sect2 id="templates-documentation">
 <title>Documentation</title>
 
 <ulink url="/doc/acs-templating/">Templating system documentation</ulink>

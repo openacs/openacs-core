@@ -8,8 +8,18 @@
         creates additional files and directories to track status and
         log.  A daemontools directory is included in the OpenACS
         tarball at
-        <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/daemontools</tt>.  To use it, first ill any existing AOLserver instances.  As root, link the <tt class="computeroutput">daemontools</tt> directory into the <tt class="computeroutput">/service</tt> directory.  Daemontools' <tt class="computeroutput">svscan</tt> process checks this directory every five seconds, and will quickly execute <tt class="computeroutput">run</tt>.</p><pre class="screen">[service0 etc]$ <b class="userinput"><tt>killall nsd</tt></b>
+        <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/daemontools</tt>.
+        To use it, first ill any existing AOLserver instances.  As
+        root, link the <tt class="computeroutput">daemontools</tt>
+        directory into the <tt class="computeroutput">/service</tt>
+        directory.  Daemontools'
+        <tt class="computeroutput">svscan</tt> process checks this
+        directory every five seconds, and will quickly execute
+        <tt class="computeroutput">run</tt>. Note that the run script
+        will need to be edited beforehand, to change
+        <span class="replaceable"><span class="replaceable">service0</span></span> with your service name.</p><pre class="screen">[service0 etc]$ <b class="userinput"><tt>killall nsd</tt></b>
 nsd: no process killed
+[service0 etc]$ <b class="userinput"><tt>emacs /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/daemontools/run</tt></b>
 [service0 etc]$ <b class="userinput"><tt>exit</tt></b>
 
 [root root]# <b class="userinput"><tt>ln -s /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/daemontools/ /service/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b></pre><p>Verify that AOLserver is running.</p><pre class="screen">[root root]#<b class="userinput"><tt> ps -auxw | grep nsd</tt></b>
@@ -159,7 +169,7 @@ Killing 23750</pre></li></ul></div><p>
       able to exploit your web server to execute a command on your server,
       they would not be able to gain <tt class="computeroutput">root</tt>
       access.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-next-add-server"></a>Running multiple services on one machine</h3></div></div><div></div></div><p><b>Services on different ports. </b>To run a different service on another port but the same
-        ip, simply repeat <a href="openacs.html">Install OpenACS 5.0.2</a> replacing
+        ip, simply repeat <a href="openacs.html">Install OpenACS 5.0.4</a> replacing
         <span class="replaceable"><span class="replaceable">service0</span></span>, and change the
 </p><pre class="programlisting">set httpport              8000
 set httpsport             8443 </pre><p>

@@ -342,7 +342,7 @@ createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
                 email when the crontab items are executed. If you
                 don't want to receive email for those crontab items,
                 you can add <computeroutput>&gt; /dev/null
-                2>&1</computeroutput> to the end of each crontab
+                2>&amp;1</computeroutput> to the end of each crontab
                 line</para>
 
               </listitem>

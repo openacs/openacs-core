@@ -48,6 +48,16 @@ BEGINNING OF TEMPLATE
   </sect2>
 END OF TEMPLATE -->
 
+  <sect2 id="release-notes-5-0-4">
+    <title>Version 5.0.4</title>
+
+      <itemizedlist>
+        <listitem>
+        <para>New translations, including for .LRN 2.0.2.</para>
+        </listitem>
+    </itemizedlist>
+    </sect2>
+
   <sect2 id="release-notes-5-0-3">
     <title>Version 5.0.3</title>
 

@@ -4,7 +4,7 @@
         </div><p>This tutorial covers topics which are not essential to
     creating a minimal working package.  Each section can be used
     independently of all of the others; all sections assume that
-    you've completed the basic tutorial.</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2476332"></a>Write the Requirements and Design Specs</h3></div></div><div></div></div><p>It's time to document.  For the tutorial we'll use
+    you've completed the basic tutorial.</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2503672"></a>Write the Requirements and Design Specs</h3></div></div><div></div></div><p>It's time to document.  For the tutorial we'll use
       pre-written documentation.  When creating a package
       from scratch, start by copying the documentation template from
 	<tt class="computeroutput">/var/lib/aolserver/openacs-dev/packages/acs-core-docs/xml/docs/xml/package-documentation-template.xml</tt>
@@ -54,7 +54,7 @@ Writing admin-guide.html for chapter(admin-guide)
 Writing bi01.html for bibliography
 Writing index.html for book
 [service0 xml]$</pre><p>Verify that the documentation was generated and reflects
-      your changes by browsing to <tt class="computeroutput">http://<span class="replaceable"><span class="replaceable">yoursite</span></span>:8000/myfirstpackage/doc</tt></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2476492"></a>Add the new package to CVS</h3></div></div><div></div></div><p>Before you do any more work, make sure that your work is
+      your changes by browsing to <tt class="computeroutput">http://<span class="replaceable"><span class="replaceable">yoursite</span></span>:8000/myfirstpackage/doc</tt></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2539509"></a>Add the new package to CVS</h3></div></div><div></div></div><p>Before you do any more work, make sure that your work is
       protected by putting it all into cvs.  The <tt class="computeroutput">cvs
       add</tt> command is not recursive, so you'll have to
       traverse the directory tree manually and add as you go.  (<a href="http://www.piskorski.com/docs/cvs-conventions.html" target="_top">More on
@@ -114,7 +114,7 @@ Checking in www/doc/admin-guide.html;
 initial revision: 1.1
 done
 <span class="emphasis"><em>(many lines omitted)</em></span>
-[service0 myfirstpackage]$</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2476650"></a>Adding Comments</h3></div></div><div></div></div><p>You can track comments for any ACS Object.  Here we'll track
+[service0 myfirstpackage]$</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2532697"></a>Adding Comments</h3></div></div><div></div></div><p>You can track comments for any ACS Object.  Here we'll track
      comments for notes.  On the note-edit.tcl/adp pair, which is used to
      display individual notes, we want to put a link to add comments at
      the bottom of the screen.  If there are any comments, we want to
@@ -135,7 +135,7 @@ done
      there are comments. Then you pass the note id, which is also the
      acs_object id.</p><p>We put our two new variables in the note-edit.adp
      page.</p><pre class="programlisting">&lt;a href="@comment_add_url@"&gt;Add a comment&lt;/a&gt;
- @comments_html@</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2476716"></a>Admin Pages</h3></div></div><div></div></div><p>
+ @comments_html@</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2532756"></a>Admin Pages</h3></div></div><div></div></div><p>
      There are at least two flavors of admin user interface:
      </p><div class="itemizedlist"><ul type="disc"><li><p>Admins use same pages as all other users, except
        that they are offered admin links and buttons where appropriate.
@@ -212,7 +212,7 @@ In
 &lt;if @admin_p@ ne nil&gt;
   &lt;a href="@admin_url@"&gt;@admin_title@&lt;/a&gt;
 &lt;/if&gt;
-</pre></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2478848"></a>Categories</h3></div></div><div></div></div><p>You can associate any ACS Object with one or more categories.
+</pre></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2540900"></a>Categories</h3></div></div><div></div></div><p>You can associate any ACS Object with one or more categories.
     In this tutorial we'll show how to equip your application with user
     interface to take advantage of the Categories service.
     </p><p>
@@ -320,13 +320,13 @@ ad_form -extend \
     ad_script_abort
 }
           </pre><p>
-      </p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2479038"></a>Profile your code</h3></div></div><div></div></div><p>There are several facilities for profiling your code in
+      </p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2537492"></a>Profile your code</h3></div></div><div></div></div><p>There are several facilities for profiling your code in
       OpenACS. The first thing to do is to install the
       developer-support package and play around with it. But there
       is also support in the API for profiling your code:
       <a href="http://openacs.org/forums/message-view?message_id=161324" target="_top">profiling
       your code using ds_profile</a>
-      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2479062"></a>Prepare the package for distribution.</h3></div></div><div></div></div><p>Browse to the package manager.  Click on
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2537511"></a>Prepare the package for distribution.</h3></div></div><div></div></div><p>Browse to the package manager.  Click on
         <tt class="computeroutput"><span class="guilabel"><span class="guilabel">tutorialapp</span></span></tt>.</p><p>Click on <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Generate a distribution file
         for this package from the
         filesystem</span></span></tt>.
@@ -334,8 +334,8 @@ ad_form -extend \
         (<tt class="computeroutput"><span class="guilabel"><span class="guilabel">37.1KB</span></span></tt>)
         after the label <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Distribution
         File:</span></span></tt> and save the file to
-        /tmp.</p><p><a class="indexterm" name="id2479108"></a>
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2479119"></a>Notifications</h3></div></div><div></div></div><div class="authorblurb"><p>by <a href="mailto:dave@student.usyd.edu.au" target="_top">David Bell</a> and <a href="mailto:simon@collaboraid.net" target="_top">Simon Carstensen</a></p>
+        /tmp.</p><p><a class="indexterm" name="id2537546"></a>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2537555"></a>Notifications</h3></div></div><div></div></div><div class="authorblurb"><p>by <a href="mailto:dave@student.usyd.edu.au" target="_top">David Bell</a> and <a href="mailto:simon@collaboraid.net" target="_top">Simon Carstensen</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><p>The notifications package allows you to send notifications through any 
@@ -442,14 +442,20 @@ ad_form -extend \
     parameter is what appears at the end of the text returned (i.e. "... request notification&lt;/a&gt; for pretty_name"), 
     The <tt class="computeroutput">url</tt> parameter should be set to the address we want the user 
     to be redirected to after they have finished the subscription process.</p><p>This should be all you need to implement a notification system. For more examples
-    look at the forums package.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2479296"></a>Hierarchical data</h3></div></div><div></div></div><div class="authorblurb"><p>by <a href="http://rubick.com:8002" target="_top">Jade Rubick</a>
+    look at the forums package.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2537709"></a>Hierarchical data</h3></div></div><div></div></div><div class="authorblurb"><p>by <a href="http://rubick.com:8002" target="_top">Jade Rubick</a>
       with help from many people in the OpenACS community</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><p>One of the nice things about using the OpenACS object system
     is that it has a built-in facility for tracking hierarchical data
     in an efficient way. The algorithm behind this is called
-    <tt class="computeroutput">tree_sortkey.</tt></p><p>Any time your tables are subclasses of the acs_objects
+    <tt class="computeroutput">tree_sortkey.</tt>. This is built into
+    the PostgreSql portion of the
+    <tt class="computeroutput">acs_objects</tt> table. (If you are
+    using Oracle, then you should just use CONNECT BY to build your
+    hierarchical queries, using context_id as the parent_id
+    column). Note that packages based on acs_objects use and/or abuse
+    context_id inconsistently to maintain a hierarchy.</p><p>Any time your tables are subclasses of the acs_objects
     table, then you automatically get the ability to structure them
     hierarchically. The way you do this is currently via the
     <tt class="computeroutput">context_id</tt> column of
