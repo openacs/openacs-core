@@ -9,6 +9,7 @@
  
 <authorblurb>
 <para>By Ron Henderson</para>
+<para>Revised by Joel Aufrecht</para>
 </authorblurb>
 
 <para> 
@@ -18,55 +19,62 @@ particular release and what has changed since the last release. A
 </para>
 
 <blockquote>
-<para><emphasis>major</emphasis>-<emphasis>minor</emphasis>-<emphasis>release</emphasis></para>
+<para><emphasis>major</emphasis>.<emphasis>minor</emphasis>.<emphasis>dot</emphasis>[ <emphasis>milestone</emphasis> ]</para>
 </blockquote>
 
-<para>
-A change in the <emphasis>major</emphasis> version number indicates a fundamental
-change in the architecture of the system, e.g. OpenACS 3 to ACS 4.  A
-change in the <emphasis>minor</emphasis> version number signifies the addition of
-new modules and minor data model changes, e.g. OpenACS 3.1 to OpenACS 3.2.
-The final <emphasis>release</emphasis> number indicates the relative maturity of a
-release and marks things like bug fixes; it follows the ordered
-progression:
-</para>
- 
-
-<programlisting>
-alpha
-beta
-0 (production release)
-1
-2
-...
-</programlisting>
-
-<para>
-So typical release version numbers would be:
-</para>
- 
-
-<programlisting>
-openacs-3.2.5
-openacs-4.0.beta
-</programlisting>
-
-<para>
-The first is a relatively mature release of the OpenACS 3.2 base code
-and the second is a non-public release of OpenACS 4.0 that probably still
-has lots of bugs.
-</para>
+  <itemizedlist>
+    <listitem>
+      <para>A <emphasis>major</emphasis> number change indicates a fundamental change in the architecture of the system, e.g. OpenACS 3 to ACS 4.  A major change is required if core backwards compatibility is broken, if upgrade is non-trivial, or if the platform changes substantially.</para>
+    </listitem>
+    <listitem>
+      <para>A <emphasis>minor</emphasis> change represents the addition of new functionality or changed UI.</para>
+    </listitem>
+    <listitem>
+      <para>A <emphasis>dot</emphasis> holds only bug fixes and security patches.  Dot releases are always recommended and safe.
+      </para>
+    </listitem>
+    <listitem>
+      <para>A <emphasis>milestone</emphasis> marker indicates the state of the release:</para>
+<itemizedlist>
+          <listitem>
+            <para><emphasis>d</emphasis>, for development, means the release is in active development and is not in its intended released form.</para>
+          </listitem>
+          <listitem>
+            <para><emphasis>a</emphasis>, for alpha, means new development is complete and code checkins are frozen.  Alpha builds should work well enough to be testable.</para>
+          </listitem>
+          <listitem>
+            <para><emphasis>b</emphasis>, for beta, means most severe bugs are fixed and end users can start trying the release.</para>
+          </listitem>
+          <listitem>
+            <para>Release Candidate builds (<emphasis>rc</emphasis>) are believed to meet all of the criteria for release and can be installed on test instances of production systems.</para>
+          </listitem>
+          <listitem>
+            <para>Final releases have no milestone marker.  (Exception: In CVS, they are tagged with -final to differentiate them from branch tags.)
+            </para>
+          </listitem>
+        </itemizedlist>
+        <para>Milestone markers are numbered: d1, d2, ..., a1, b1, rc1, etc.</para>
+    </listitem>
+  </itemizedlist>
+<para>A complete sequence of milestones between two releases: </para>
+<programlisting>5.0.0
+5.0.0rc2
+5.0.0rc1
+5.0.0b4
+5.0.0b1
+5.0.0a4
+5.0.0a3
+5.0.0a1
+5.0.0d1
+4.6.3</programlisting>
 
 <para>
 Version numbers are also recorded in the CVS repository so that the
 code tree can be restored to the exact state it was in for a
 particular release.  To translate between a distribution tar file
-(acs-3.2.2.tar.gz) and a CVS tag, just swap '.' for '-' and add the
-release date.  The entire release history of the toolkit is recorded
-in the tags for the top-level <computeroutput>readme.txt</computeroutput> file:
+(acs-3.2.2.tar.gz) and a CVS tag, just swap '.' for '-'.The entire release history of the toolkit is recorded in the tags for the top-level <computeroutput>readme.txt</computeroutput> file:
 </para>
  
-
 <programlisting>
 > cvs log readme.txt
 RCS file: /usr/local/cvsroot/acs/readme.txt,v
@@ -114,60 +122,11 @@ convention on version numbers.
 <para>So what distinguishes an <emphasis>alpha</emphasis> release from a <emphasis>beta</emphasis>
 release?  Or from a production release?  We follow a specific set of
 rules for how OpenACS makes the transition from one state of maturity to
-the next.</para>
-
-<para> Every release must pass the minimum requirements that it cleanly
-installs and cleanly upgrades from the previous version of OpenACS.  In
-addition to this the <emphasis>release</emphasis> label implies:</para>
-
-<blockquote>
-<variablelist>
-
-<varlistentry>
-<term><emphasis>development</emphasis>
-</term>
- 
-<listitem><para>This is the default state for the head of the current release branch.  We
-make no guarantees about this code.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><emphasis>alpha</emphasis>
-</term>
- 
-<listitem><para>All tickets of severity <emphasis>critical</emphasis> have been closed and the
-distribution has no known installation or upgrade problems.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><emphasis>beta</emphasis>
-</term>
- 
-<listitem><para>All tickets of severity <emphasis>serious</emphasis> or greater have been closed
-and all documentation is up to date (version history, release notes,
-new module docs, etc.).</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><emphasis>production</emphasis> [0, 1, ...]
-</term>
- 
-<listitem><para>All tickets of severity <emphasis>medium</emphasis> or greater have been closed,
-including issues reported from outside users.</para></listitem>
-</varlistentry> 
-
-</variablelist>
-</blockquote>
-
-<para> In the future we will guarantee that more mature releases
-incorporate all the fixes for earlier problems by developing a
-detailed set of regression tests.  For now we try to enforce this by
-restricting work on the release branch to fixing reported problem in
-the current release, e.g. no new features or big changes to
-fundamental behavior.</para>
+the next.  These rules are fine-tuned with each release; an example is <ulink url="http://openacs.org/projects/openacs/5.0/milestones">5.0.0 Milestones and Milestone Criteria</ulink></para>
 
 <para><phrase role="cvstag">($Id$)</phrase></para>
 
 </sect2>
 
 </sect1>
+

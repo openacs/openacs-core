@@ -305,7 +305,7 @@
 
     </sect3>
 
-    <sect3 id="i18n-message-catalog-params" xreflabel="Multilingual APM Parameters">
+    <sect3 id="i18n-message-catalog-params">
 
       <title>Checking the Consistency of Catalog Files</title>
 
@@ -333,7 +333,7 @@
 
     </sect3>
 
-    <sect3 id="i18n-message-catalog-params" xreflabel="Multilingual APM Parameters">
+    <sect3 id="i18n-message-apm-params" xreflabel="Multilingual APM Parameters">
 
       <title>APM Parameters</title>
 

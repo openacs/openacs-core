@@ -165,7 +165,7 @@
           </formalpara>
         </listitem>
             <listitem>
-              <para>Upgrade the kernel manually:</para>
+              <para>Upgrade the kernel manually. (There is a script to do most of the rest: <ulink url="http://cvs.openacs.org/cvs/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?only_with_tag=HEAD">/contrib/misc/upgrade_4.6_to_5.0.sh on HEAD</ulink>).  You'll still have to do a lot of stuff manually, but automated trial and error is much more fun.)</para>
               <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
 [service0 aolserver]$ <userinput>cd /var/lib/aolserver/ <replaceable>service0</replaceable>/packages/acs-kernel/sql/postgresql/upgrade</userinput></screen>
               <para>

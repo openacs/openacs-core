@@ -6,43 +6,13 @@
 ]>
 <sect1 id="tutorial-advanced">
   <title>Advanced Topics</title>
-  <important>
-    <para>This section is a work in progress.</para>
-  </important>
   <authorblurb>
     <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
   </authorblurb>
-  
-  <sect2>
-    <title>Overview</title>
     <para>This tutorial covers topics which are not essential to
     creating a minimal working package.  Each section can be used
     independently of all of the others; all sections assume that
     you've completed the basic tutorial.</para>
-
-    <itemizedlist>
-      <listitem><para>How to enforce security so that users can't
-      change other users records</para>
-      </listitem>
-      <listitem><para>How to use the content management tables so that
-      ... what?</para></listitem>
-      <listitem><para>How to change the default stylesheets for Form
-      Builder HTML forms.</para></listitem>
-      <listitem><para>How to make your package searchable with OpenFTS/Oracle</para></listitem>
-      <listitem><para>How to make your package send email notifications</para></listitem>
-      <listitem><para>How to prepare pagelets for inclusion in other pages</para></listitem>
-      <listitem><para>How and when to put procedures in a tcl procedure library</para></listitem>
-      <listitem><para>How to add general_comments to your pages</para></listitem>
-      <listitem><para>More on ad_form - data validation, other stuff.
-      (plan to draw from Jon Griffin's doc)</para></listitem>
-      <listitem><para>How and when to implement caching</para></listitem>
-      <listitem><para>partialquery in xql</para></listitem>
-      <listitem><para>How to use the html/text entry widget to get the
-      "does this look right" confirm page </para></listitem>
-      <listitem><para>APM package dependencies</para></listitem>
-    </itemizedlist>
-
-  </sect2>
     <sect2>
       <title>Write the Requirements and Design Specs</title>
       <para>It's time to document.  For the tutorial we'll use
@@ -50,7 +20,7 @@
       from scratch, start by copying the documentation template from
 	<computeroutput>/var/lib/aolserver/openacs-dev/packages/acs-core-docs/xml/docs/xml/package-documentation-template.xml</computeroutput>
 	to
-	<computeroutput>yourpackage/www/docs/xml/index.xml</computeroutput>.</para>
+	<computeroutput>myfirstpackage/www/docs/xml/index.xml</computeroutput>.</para>
       <para>You then edit that file with emacs to write the 
 	requirements and design sections, generate the html, and start
 	coding.  Store any supporting files, like page maps or schema
@@ -61,11 +31,11 @@
 	pre-written documentation files for the tutorial app.  Log in
       as <replaceable>service0</replaceable>, create the standard
       directories, and copy the prepared documentation:</para>
-      <screen>[service0@yourserver service0]$ <userinput>cd /var/lib/aolserver/service0/packages/samplenote/</userinput>
-[service0@yourserver samplenote]$ <userinput>mkdir -p www/doc/xml</userinput>
-[service0@yourserver samplenote]$ <userinput>cd www/doc/xml</userinput>
-[service0@yourserver xml]$ <userinput>cp /var/lib/aolserver/service0/packages/acs-core-docs/www/files/samplenote/* .</userinput>
-[service0@yourserver xml]$</screen>
+      <screen>[service0 service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable>/packages/myfirstpackage/</userinput>
+[service0 myfirstpackage]$ <userinput>mkdir -p www/doc/xml</userinput>
+[service0 myfirstpackage]$ <userinput>cd www/doc/xml</userinput>
+[service0 xml]$ <userinput>cp /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/myfirstpackage/* .</userinput>
+[service0 xml]$</screen>
       <para> OpenACS uses DocBook for documentation.  DocBook is
 	an XML standard for semantic markup of documentation.  That
 	means that the tags you use indicate meaning, not intended
@@ -86,7 +56,7 @@
       directory.  A Makefile is provided to generate html from the xml, and copy all of the
       supporting files.  If Docbook is set up correctly, all you need
       to do is:</para>
-      <screen>[service0@yourserver xml]$<userinput> make</userinput>
+      <screen>[service0 xml]$<userinput> make</userinput>
 cd .. ; /usr/bin/xsltproc ../../../acs-core-docs/www/xml/openacs.xsl xml/index.xml
 Writing requirements-introduction.html for sect1(requirements-introduction)
 Writing requirements-overview.html for sect1(requirements-overview)
@@ -102,9 +72,9 @@ Writing user-guide.html for chapter(user-guide)
 Writing admin-guide.html for chapter(admin-guide)
 Writing bi01.html for bibliography
 Writing index.html for book
-[service0@yourserver xml]$</screen>
+[service0 xml]$</screen>
       <para>Verify that the documentation was generated and reflects
-      your changes by browsing to <computeroutput>http://<replaceable>yoursite</replaceable>:8000/samplenote/doc</computeroutput></para>
+      your changes by browsing to <computeroutput>http://<replaceable>yoursite</replaceable>:8000/myfirstpackage/doc</computeroutput></para>
     </sect2>
     <sect2>
       <title>Add the new package to CVS</title>
@@ -114,20 +84,20 @@ Writing index.html for book
       traverse the directory tree manually and add as you go.  (<ulink
       url="http://www.piskorski.com/docs/cvs-conventions.html">More on
       CVS</ulink>)</para>
-      <screen>[service0@yourserver xml]$ <userinput>cd ..</userinput>
-[service0@yourserver doc]$ <userinput>cd ..</userinput>
-[service0@yourserver www]$ <userinput>cd ..</userinput>
-[service0@yourserver samplenote]$ <userinput>cd ..</userinput>
-[service0@yourserver packages]$ <userinput>cvs add samplenote/</userinput>
-Directory /cvsroot/service0/packages/samplenote added to the repository
-[service0@yourserver packages]$ <userinput>cd samplenote/</userinput>
-[service0@yourserver samplenote]$ <userinput>cvs add www</userinput>
-Directory /cvsroot/service0/packages/samplenote/www added to the repository
-[service0@yourserver samplenote]$ <userinput>cd www</userinput>
-[service0@yourserver www]$ <userinput>cvs add doc</userinput>
-Directory /cvsroot/service0/packages/samplenote/www/doc added to the repository
-[service0@yourserver www]$ <userinput>cd doc</userinput>
-[service0@yourserver doc]$ <userinput>cvs add *</userinput>
+      <screen>[service0 xml]$ <userinput>cd ..</userinput>
+[service0 doc]$ <userinput>cd ..</userinput>
+[service0 www]$ <userinput>cd ..</userinput>
+[service0 myfirstpackage]$ <userinput>cd ..</userinput>
+[service0 packages]$ <userinput>cvs add myfirstpackage/</userinput>
+Directory /cvsroot/<replaceable>service0</replaceable>/packages/myfirstpackage added to the repository
+[service0 packages]$ <userinput>cd myfirstpackage/</userinput>
+[service0 myfirstpackage]$ <userinput>cvs add www</userinput>
+Directory /cvsroot/<replaceable>service0</replaceable>/packages/myfirstpackage/www added to the repository
+[service0 myfirstpackage]$ <userinput>cd www</userinput>
+[service0 www]$ <userinput>cvs add doc</userinput>
+Directory /cvsroot/<replaceable>service0</replaceable>/packages/myfirstpackage/www/doc added to the repository
+[service0 www]$ <userinput>cd doc</userinput>
+[service0 doc]$ <userinput>cvs add *</userinput>
 cvs add: cannot add special file `CVS'; skipping
 cvs add: scheduling file `admin-guide.html' for addition
 cvs add: scheduling file `bi01.html' for addition
@@ -150,139 +120,287 @@ cvs add: scheduling file `sample.png' for addition
 cvs add: scheduling file `user-guide.html' for addition
 cvs add: scheduling file `user-interface.dia' for addition
 cvs add: scheduling file `user-interface.png' for addition
-Directory /cvsroot/service0/packages/samplenote/www/doc/xml added to the repository
+Directory /cvsroot/<replaceable>service0</replaceable>/packages/myfirstpackage/www/doc/xml added to the repository
 cvs add: use 'cvs commit' to add these files permanently
-[service0@yourserver doc]$ <userinput>cd xml</userinput>
-[service0@yourserver xml]$ <userinput>cvs add Makefile index.xml</userinput>
+[service0 doc]$ <userinput>cd xml</userinput>
+[service0 xml]$ <userinput>cvs add Makefile index.xml</userinput>
 cvs add: scheduling file `Makefile' for addition
 cvs add: scheduling file `index.xml' for addition
 cvs add: use 'cvs commit' to add these files permanently
-[service0@yourserver xml]$<userinput> cd ../../..</userinput>
-[service0@yourserver samplenote]$ <userinput>cvs commit -m "new package"</userinput>
+[service0 xml]$<userinput> cd ../../..</userinput>
+[service0 myfirstpackage]$ <userinput>cvs commit -m "new package"</userinput>
 cvs commit: Examining .
 cvs commit: Examining www
 cvs commit: Examining www/doc
 cvs commit: Examining www/doc/xml
-RCS file: /cvsroot/service0/packages/samplenote/www/doc/admin-guide.html,v
+RCS file: /cvsroot/<replaceable>service0</replaceable>/packages/myfirstpackage/www/doc/admin-guide.html,v
 done
 Checking in www/doc/admin-guide.html;
-/cvsroot/service0/packages/samplenote/www/doc/admin-guide.html,v  &lt;--  admin-guide.html
+/cvsroot/<replaceable>service0</replaceable>/packages/myfirstpackage/www/doc/admin-guide.html,v  &lt;--  admin-guide.html
 initial revision: 1.1
 done
 <emphasis>(many lines omitted)</emphasis>
-[service0@yourserver samplenote]$</screen>
+[service0 myfirstpackage]$</screen>
     </sect2>
-  <sect2>
-    <title>Delete with confirmation</title>
-    <para>We need a way to delete records.  We'll create a
-    recursive confirmation page.</para>
-    <para>Add this column to the table_def in index.tcl</para>
-    <programlisting>{delete "" {} {&lt;td&gt;&lt;a href="note-delete?note_id=$note_id"&gt;Delete&lt;/a&gt;&lt;/td&gt;}}</programlisting>
-    <para>Create the delete confirmation/execution page.</para>
-    <screen>[service0@yourserver www]$ <userinput>emacs note-delete.tcl</userinput></screen>
-      <programlisting>ad_page_contract {
-    A page that gets confirmation and then delete notes.
+   <sect2>
+     <title>Adding Comments</title>
+     <para>You can track comments for any ACS Object.  Here we'll track
+     comments for notes.  On the note-edit.tcl/adp pair, which is used to
+     display individual notes, we want to put a link to add comments at
+     the bottom of the screen.  If there are any comments, we want to
+     show them.</para>
+     <para>First, we need to generate a url for adding comments.  In note-edit.tcl:</para>
+     <programlisting>
+ set comment_add_url "[general_comments_package_url]comment-add?[export_vars {
+  { object_id $note_id } 
+  { object_name $title } 
+  { return_url "[ad_conn url]?[ad_conn query]"} 
+ }]"
+ </programlisting>
+     <para>This calls a global, public tcl function that the
+     general_comments package registered, to get its url. You then
+     embed in that url the id of the note and its title, and set the
+     return_url to the current url so that the user can return after
+     adding a comment.</para>
+     <para>We need to create html that shows any existing comments.
+     We do this with another general_comments function:</para>
+     <programlisting>set comments_html [general_comments_get_comments
+     -print_content_p 1 $note_id]</programlisting>
+     <para>First, we pass in an optional parameter that that says to actually
+     show the contents of the comments, instead of just the fact that
+     there are comments. Then you pass the note id, which is also the
+     acs_object id.</para>
+     <para>We put our two new variables in the note-edit.adp
+     page.</para>
+     <programlisting>&lt;a href="@comment_add_url@"&gt;Add a comment&lt;/a&gt;
+ @comments_html@</programlisting>
+   </sect2>
+   <sect2>
+     <title>Admin Pages</title>
+     <para>
+     There are at least two flavors of admin user interface:
+     </para>
+     <itemizedlist>
+       <listitem><para>Admins use same pages as all other users, except
+       that they are offered admin links and buttons where appropriate.
+       For example, if admins have privilege to bulk-delete items you
+       could provide checkboxes next to every item seen on a list and the
+       Delete Selected button on the bottom of the list.
+       </para></listitem>
+       <listitem><para>Dedicated admin pages.  If you want admins to have
+       access to data that users aren't interested in or aren't allowed
+       to see you will need dedicated admin pages.  The conventional
+       place to put those dedicated admin pages is in the
+ <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/myfirstpackage/www/admin</computeroutput>
+ directory.
+      </para>
+<screen>[service0 www]$ <userinput>mkdir admin</userinput></screen>
+<screen>[service0 www]$ <userinput>cd admin</userinput></screen>
+      <para>
+      Even if your application doesn't need any admin pages of its own you will
+      usually need at least one simple page with a bunch of links to existing
+      administration UI such as Category Management or standard Parameters UI.
+      Adding the link to Category Management is described in the section on
+      categories.  The listing below adds a link to the Parameters UI of our
+      package.
+      </para>
+<screen>[service0 admin]$ <userinput>vi index.adp</userinput></screen>
+<programlisting>
+&lt;master&gt;
+&lt;property name="title"&gt;@title;noquote@&lt;/property&gt;
+&lt;property name="context"&gt;@context;noquote@&lt;/property&gt;
 
-    @author joel@aufrecht.org
-    @creation-date 2003-02-12
-    @cvs-id $Id$
-} {
-    note_id:integer
-    confirm_p:optional
+&lt;ul class="action-links"&gt;
+  &lt;li&gt;&lt;a href="@parameters_url@" title="Set parameters" class="action_link"&gt;Set parameters&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</programlisting>
+<screen>[service0 admin]$ <userinput>vi index.tcl</userinput></screen>
+<programlisting>
+ad_page_contract {} {
+} -properties {
+    context_bar
 }
 
-set title "Delete Note"
+set package_id [ad_conn package_id]
 
-if {![exists_and_not_null confirm_p]} {
-    # first pass, not confirmed.  Display a form for confirmation
-    set note_name [db_string get_name { *SQL }]
-    set title "Delete $note_name"
-    template::form::create note-del-confirm
-    template::element::create note-del-confirm note_id -value $note_id -widget hidden
-    template::element::create note-del-confirm confirm_p -value 1 -widget hidden
-    template::element::create note-del-confirm submit \
-      -label "Confirm deletion of $note_name" \
-      -widget submit
-} else {
-    # second pass, confirmed.  Call the database to delete the record
-    db_1row do_delete { *SQL* }
-    ad_returnredirect "index"
-    ad_script_abort
-}</programlisting>
-    <para>This page requires a
-<computeroutput>note_id</computeroutput> to determine which record
-should be deleted.  It also looks for a confirmation variable, which
-should initially be absert.  If it is absent, we create a form to
-allow the user to confirm the deletion.  Note that in
-<computeroutput>entry-edit.tcl</computeroutput> we used <computeroutput>ad_form</computeroutput> to access the Form Template
-commands; here, we call them directly because we don't need the extra
-features of ad_form.  The form calls itself, but
-with hidden variables carrying both
-<computeroutput>note_id</computeroutput> and
-<computeroutput>confirm_p</computeroutput>.  If confirm_p is present,
-we delete the record, set redirection back to the index, and abort
-script execution.</para>
+set admin_p [ad_require_permission $package_id admin]
 
-      <para>The database commands:</para>
-      <screen>[service0@yourserver www]$ <userinput>emacs note-delete.xql</userinput></screen>
-      <programlisting>&lt;?xml version="1.0"?&gt;
-&lt;queryset&gt;
-  &lt;fullquery name="do_delete"&gt;
-    &lt;querytext&gt;
-      select samplenote__delete(:note_id)
-    &lt;/querytext&gt;
-  &lt;/fullquery&gt;
-  &lt;fullquery name="get_name"&gt;
-    &lt;querytext&gt;
-      select samplenote__name(:note_id)
-    &lt;/querytext&gt;
-  &lt;/fullquery&gt;
-&lt;/queryset&gt;</programlisting>
-      <para>And the adp page:</para>
-      <screen>[service0@yourserver www]$ <userinput>emacs note-delete.adp</userinput></screen>
-      <programlisting>&lt;master&gt;
-&lt;property name="title"&gt;@title@&lt;/property&gt;
-&lt;property name="context"&gt;{@title@}&lt;/property&gt;
-&lt;h2&gt;@title@&lt;/h2&gt;
-&lt;formtemplate id="note-del-confirm"&gt;&lt;/formtemplate&gt;
-&lt;/form&gt;</programlisting>
-    <para>The ADP is very simple.  The
-<computeroutput>formtemplate</computeroutput> tag outputs the HTML
-form generated by the ad_form command with the matching name.  Test it by adding the new files in the APM and then deleting a few samplenotes.</para>
-  </sect2>
-  <sect2>
-    <title>General_comments</title>
-    <para>You can track comments for any ACS Object.  Here we'll track
-    comments for notes.  On the notes.tcl/adp pair, which is used to
-    display individual notes, we want to put a link to add comments at
-    the bottom of the screen.  If there are any comments, we want to
-    show them.</para>
-    <para>First, we need to generate a url for adding comments.  In notes.tcl:</para>
-    <programlisting>
-set comment_add_url "[general_comments_package_url]comment-add?[export_vars {
- { object_id $note_id } 
- { object_name $title } 
- { return_url "[ad_conn url]?[ad_conn query]"} 
-}]"
+set context [list]
+
+set title "Administration"
+
+set parameters_url [export_vars -base "/shared/parameters" {
+  package_id { return_url [ad_return_url] }
+}]
+
 </programlisting>
-    <para>This calls a global, public tcl function that the
-    general_comments package registered, to get its url. You then
-    embed in that url the id of the note and its title, and set the
-    return_url to the current url so that the user can return after
-    adding a comment.</para>
-    <para>We need to create html that shows any existing comments.
-    We do this with another general_comments function:</para>
-    <programlisting>set comments_html [general_comments_get_comments
-    -print_content_p 1 $note_id]</programlisting>
-    <para>First, we pass in an optional parameter that that says to actually
-    show the contents of the comments, instead of just the fact that
-    there are comments. Then you pass the note id, which is also the
-    acs_object id.</para>
-    <para>We put our two new variables in the notes.adp
-    page.</para>
-    <programlisting>&lt;a href="@comment_add_url@"&gt;Add a comment&lt;/a&gt;
-@comments_html@</programlisting>
+
+<para>
+Now that you have the first admin page it would be nice to have a link to it
+somewhere in the system so that admins don't have to type in the
+<computeroutput>/admin</computeroutput> every time they need to reach it.  You
+could put a static link to the toplevel
+<computeroutput>index.adp</computeroutput> but that might be distracting for
+people who are not admins.  Besides, some people consider it impolite to first
+offer a link and then display a nasty "You don't have permission to access this
+page" message.
+</para>
+<para>
+In order to display the link to the admin page only to users that have admin
+privileges add the following code near the top of
+<computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/myfirstpackage/www/admin/index.tcl</computeroutput>:
+</para>
+<programlisting>
+
+set package_id [ad_conn package_id]
+
+set admin_p [permission::permission_p -object_id $package_id \
+  -privilege admin -party_id [ad_conn untrusted_user_id]]
+
+if { $admin_p } {
+    set admin_url "admin"
+    set admin_title Administration
+}
+</programlisting>
+<para>
+In 
+<computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/myfirstpackage/www/admin/index.adp</computeroutput> put:
+</para>
+<programlisting>
+&lt;if @admin_p@ ne nil&gt;
+  &lt;a href="@admin_url@"&gt;@admin_title@&lt;/a&gt;
+&lt;/if&gt;
+</programlisting>
+
+      </listitem>
+    </itemizedlist>
+
   </sect2>
+
+  <sect2>
+    <title>Categories</title>
+
+    <para>You can associate any ACS Object with one or more categories.
+    In this tutorial we'll show how to equip your application with user
+    interface to take advantage of the Categories service.
+    </para>
+    <para>
+    We'll start by installing the Categories service.  Go to
+    <computeroutput>/acs/admin</computeroutput> and install it.  This step
+    won't be necessary for the users of your applications because you'll create
+    a dependency with the Package Manager which will take care that the
+    Categories service always gets installed when your application gets
+    installed.
+    </para>
+    <para>
+    Now that we have installed the Categories service we can proceed to
+    modifying our application so that it can take advantage of it.  We'll do it
+    in three steps:
+    </para>
+    <orderedlist>
+        <listitem><para>
+          The Categories service provides a mechanism to associate one or
+          more <emphasis>category trees</emphasis> that are relevant to
+          your application.  One example of such tree is a tree of
+          geographical locations.  Continents are on the top of such tree,
+          each continent containing countries etc.  Another tree might
+          contain market segments etc.  Before users of your application
+          can take advantage of the Categories service there needs to be a
+          way for administrators of your application to choose which
+          category trees are applicable for the application.
+          <para>
+          </para>
+          <para>
+          The way to achieve this is is to provide a link
+          to the Category Management pages.  Add the following snippet to your
+            <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/myfirstpackage/www/admin/index.tcl</computeroutput>
+          file:
+          </para>
+          <programlisting>
+set category_map_url [export_vars -base \
+    "[site_node::get_package_url -package_key categories]cadmin/one-object" \
+        { { object_id $package_id } }]
+          </programlisting>
+          <para>
+          and the following snippet to your
+            <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/myfirstpackage/www/admin/index.adp</computeroutput>
+          file:
+          </para>
+          <programlisting>
+&lt;li&gt;&lt;a href="@category_map_url@"
+      class="action_link"&gt;Site-Wide Categories&lt;/a&gt;
+          </programlisting>
+          The link created by the above code will take the admin to the generic
+          admin UI where he can pick category trees that make sense for this
+          application.  The same UI also includes facilities to build and edit
+          category trees.  Notice that the only parameter in this example is
+          <computeroutput>package_id</computeroutput> so that category trees
+          will be associated with the object identified by this
+          <computeroutput>package_id</computeroutput>.  The categorization
+          service is actually more general than that: instead of
+          <computeroutput>package_id</computeroutput> you could use an ID of
+          some other object that serves as a "container" in your application.
+          For example, if your discussion forums application supports multiple
+          forums you would use <computeroutput>forum_id</computeroutput> to
+          associate category trees with just that one forum rather than the
+          entire application instance.
+        </para></listitem>
+      <listitem><para>
+          Once the category trees have been selected users need a way
+          to categorize items.  The easiest way to do this is by adding the
+          <computeroutput>category</computeroutput> widget type of the
+          form builder to <computeroutput>note-edit.tcl</computeroutput>.
+          To achieve this we'll need to use the <computeroutput>-extend</computeroutput>
+          switch to the <computeroutput>ad_form</computeroutput> command. Here's the "meat" of the
+          <computeroutput>note-edit.tcl</computeroutput> page:
+          <programlisting>
+ad_form -name note -form {
+    {item_id:key}
+    {title:text {label Title}}
+}
+
+set package_id [ad_conn package_id]
+
+set category_trees [category_tree::get_mapped_trees $package_id]
+
+foreach tree $category_trees {
+    foreach { tree_id name subtree_id } $tree {}
+    ad_form -extend -name note -form \
+        [list [list category_id_${tree_id}:integer(category),optional \
+                   {label $name} \
+                   {html {single single}} \
+                   {category_tree_id $tree_id} \
+                   {category_subtree_id $subtree_id} \
+                   {category_object_id {[value_if_exists entry_id]}}]]
+}
+
+ad_form -extend \
+  -name note \
+  -new_request {
+    permission::require_permission -object_id [ad_conn package_id] -privilege create
+    set page_title "Add a Note"
+    set context [list $page_title]
+} -edit_request {
+    permission::require_write_permission -object_id $item_id
+    mfp::note::get \
+    -item_id $item_id \
+    -array note_array
+
+    set title $note_array(title)
+
+    set page_title "Edit a Note"
+    set context [list $page_title]
+} -new_data {
+    mfp::note::add \
+    -title $title
+} -after_submit {
+    ad_returnredirect "."
+    ad_script_abort
+}
+          </programlisting>
+      </para></listitem>
+    </orderedlist>
+    </sect2>
 
       <sect2>
         <title>Prepare the package for distribution.</title>
@@ -437,4 +555,25 @@ set comment_add_url "[general_comments_package_url]comment-add?[export_vars {
     look at the forums package.</para>
   </sect2>
 
+  <para>Future Topics:</para>
+    <itemizedlist>
+      <listitem><para>How to enforce security so that users can't
+      change other users records</para>
+      </listitem>
+      <listitem><para>How to use the content management tables so that
+      ... what?</para></listitem>
+      <listitem><para>How to change the default stylesheets for Form
+      Builder HTML forms.</para></listitem>
+      <listitem><para>How to make your package searchable with OpenFTS/Oracle</para></listitem>
+      <listitem><para>How to prepare pagelets for inclusion in other pages</para></listitem>
+      <listitem><para>How and when to put procedures in a tcl procedure library</para></listitem>
+      <listitem><para>More on ad_form - data validation, other stuff.
+      (plan to draw from Jon Griffin's doc)</para></listitem>
+      <listitem><para>How and when to implement caching</para></listitem>
+      <listitem><para>partialquery in xql</para></listitem>
+      <listitem><para>How to use the html/text entry widget to get the
+      "does this look right" confirm page </para></listitem>
+      <listitem><para>APM package dependencies</para></listitem>
+    </itemizedlist>
+  <para>See also the <ulink url="http://openacs.org/faq/one-faq?faq_id=43841">OpenACS Programming FAQ</ulink></para>
 </sect1>

@@ -16,9 +16,46 @@
   <sect1 id="how-do-I">
     <title>How Do I?</title>
     <sect2>
-      <title>How do I change the front page of a new site?</title>
+      <title>How do I edit the front page of a new site through a web interface?</title>
+      <para>The easiest way is to install the Edit-This-Page package.</para>
+      <orderedlist>
+        <listitem>
+          <para>Log in to the web site as an administrator.</para>
+        </listitem>
+        <listitem>
+          <para>Click on Admin > Install Software > Install from OpenACS Repository / Install new application</para>
+        </listitem>
+        <listitem>
+          Choose Edit This Page and install
+        </listitem>
+        <listitem>
+          <para>Follow the instructions within <ulink url="/doc/edit-this-page/install">Edit This Page</ulink> (the link will only work after Edit This Page is installed).</para>
+        </listitem>
+      </orderedlist>
+    </sect2>
+    <sect2>
+      <title>How do I let anybody who registers post to a weblog?</title>
+      <para>Go to <computeroutput><ulink url="/admin/permissions">/admin/permissions</ulink></computeroutput> and grant Create to Registered Users</para>
+    </sect2>
+    <sect2>
+      <title>How do I replace the front page of a new site with the front page of an application on that site</title>
+      <para>Suppose you install a new site and install Weblogger, and you want all visitors to see weblogger automatically.</para>
+      <orderedlist>
+        <listitem>
+          <para>On the front page, click the <computeroutput><ulink url="/admin">Admin</ulink></computeroutput> button.</para>
+        </listitem>
+        <listitem>
+          <para>On the administration page, click <computeroutput>Parameters</computeroutput> link.</para>
+        </listitem>
+        <listitem>
+          <para>Change the parameter <computeroutput>IndexRedirectUrl</computeroutput> to be the URI of the desired application.  For a default weblogger installation, this would be <computeroutput><userinput>weblogger/</userinput></computeroutput>.  Note the trailing slash.</para>
+        </listitem>
+      </orderedlist>
+    </sect2>
+    <sect2>
+      <title>How do I put custom functionality on front page of a new site?</title>
       <para>Every page within an OpenACS site is part of a <emphasis role="strong">subsite</emphasis> <ulink url="/doc/acs-subsite">More information)</ulink>.  The home page of the entire site is the front page is a special, default instance of a subsite, served from <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/www</computeroutput>.  If an index page is not found there, the default index page for all subsites is used.  To customize the code on the front page, copy the default index page from the Subsite package to the Main site and edit it:</para>
-<orderedlist>
+      <orderedlist>
   <listitem>
     <screen><userinput>cp <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-subsite/www/index*</computeroutput> <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/www</computeroutput></userinput></screen>
         </listitem>

@@ -611,7 +611,7 @@ Loading package .info files ... this will take a few minutes</programlisting>
       </listitem>
       <listitem><para>Follow the instruction on the home page to
       change the appearance of your service or add more
-      packages. (<link linkend="configure">more information</link>)</para>
+      packages. (<link linkend="configuring-new-site">more information</link>)</para>
       </listitem>
       <listitem><para>Proceed to the <link linkend="tutorial">tutorial</link> to learn how to develop your own packages.</para>
       </listitem>
