@@ -7,9 +7,6 @@
 -- Seems PG 7.2 doesn't support this
 alter table apm_packages drop enabled_p;
 
--- *** Get rid of file-related data no longer used
-drop table apm_package_file_types;
-drop table apm_package_files;
 -- View was dropped by previous drop
 drop view apm_file_info;
 drop function apm_package_version__add_file (integer,integer,varchar,varchar, varchar);
@@ -63,3 +60,7 @@ begin
 	-- return 0;
    
 end;' language 'plpgsql';
+
+-- *** Get rid of file-related data no longer used
+drop table apm_package_file_types;
+drop table apm_package_files;
