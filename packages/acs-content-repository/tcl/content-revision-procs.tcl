@@ -87,24 +87,31 @@ ad_proc -public ::content::revision::new {
     if { [exists_and_not_null attributes] } {
 	set type_attributes [package_object_attribute_list $content_type]
 	set valid_attributes [list]
+	set lob_values [list]
 	# add in extended attributes for this type, ingore
 	# content_revision as those are already captured as named
 	# parameters to this procedure
 	
 	foreach type_attribute $type_attributes {
 	    if {![string equal "cr_revisions" [lindex $type_attribute 1]]} {
-		lappend valid_attributes [lindex $type_attribute 2]
+		if {[db_type] == "oracle" && [string equal "text" [lindex $type_attribute 4]]} {
+		    set lob_attributes([lindex $type_attribute 2]) [list [lindex $type_attribute 7] [lindex $type_attribute 8]]
+		} else {
+		    lappend valid_attributes [lindex $type_attribute 2]
+		}
 	    }
 	}
 	foreach attribute_pair $attributes {
             foreach {attribute_name attribute_value} $attribute_pair {break}
-	    if {[lsearch $valid_attributes $attribute_name] > -1}  {
-
+	    if {[lsearch $valid_attributes $attribute_name] > -1} {
                 # first add the column name to the list
 		append attribute_names  ", ${attribute_name}"		
 		# create local variable to use for binding
 		set $attribute_name $attribute_value
 		append attribute_values ", :${attribute_name}"
+	    }
+	    if {[info exists lob_attributes($attribute_name)]} {
+		lappend lob_values $attribute_name $attribute_value [lindex $lob_attributes($attribute_name) 0] [lindex $lob_attributes($attribute_name) 1]
 	    }
 	}
     }
@@ -123,6 +130,9 @@ ad_proc -public ::content::revision::new {
         update_content \
             -revision_id $revision_id \
             -content $content
+	foreach {lob_attribute lob_value lob_table lob_id_column} $lob_values {
+	    db_dml update_lob_attribute {} -clobs [list $lob_value]
+	}
     }
 ns_log notice "
 DB --------------------------------------------------------------------------------
