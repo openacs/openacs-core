@@ -64,13 +64,16 @@ namespace eval lang::message {
         } 
 
         if { $key_exists_p } {
-            # The message key exists so we are assuming the en_US version
-            # of the message has already been registered, also it looks like
-            # the message contains variables - check that any suc variables are
-            # unchanged from the existing en_US message
+            # The message key exists so register has been invoked before with
+            # this key. Check that embedded variables are unchanged in the new message.
 
-            # Get the current en_US message from the cache
-            set existing_en_us_message [nsv_get lang_message_en_US $key]
+            # Attempt to get the en_US message from the cache, or get a message
+            # in any locale from the database for variable comparison
+            if { [nsv_exists lang_message_en_us $key] } { 
+                set existing_en_us_message [nsv_get lang_message_en_US $key]
+            } else {
+                set existing_en_us_message [db_string select_an_existing_message {}]
+            }
 
             set missing_vars_list [get_missing_embedded_vars $existing_en_us_message $message]
             if { [llength $missing_vars_list] != 0 } {
@@ -286,8 +289,7 @@ namespace eval lang::message {
         if { [empty_string_p $locale] } {
             # No locale provided
 
-            global ad_conn
-            if { [info exists ad_conn] } {
+            if { [ad_conn isconnected] } {
                 # We are in an HTTP connection (request) so use that locale
                 set locale [ad_conn locale]
             } else {
@@ -305,7 +307,7 @@ namespace eval lang::message {
         } 
     
         if { [lang::util::translator_mode_p] } {
-            # Translator mode - set uo translate_url
+            # Translator mode - set up translate_url
             
             set key_split [split $key "."]
             set package_key_part [lindex $key_split 0]
@@ -315,7 +317,8 @@ namespace eval lang::message {
                 append return_url "?[export_entire_form_as_url_vars]"
             }
             
-            set translate_url /acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } { locales $locale } { package_key $package_key_part } return_url }]
+            # return_url is already encoded and HTML quoted
+            set translate_url "/acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } { locales $locale } { package_key $package_key_part } return_url }]"
         }
 
         if { [nsv_exists lang_message_$locale $key] } {
@@ -329,7 +332,7 @@ namespace eval lang::message {
             
             if { [lang::util::translator_mode_p] } {
                 # Translator mode - return a translation link
-                append return_value "<a href=\"$translate_url\" title=\"edit translation of $message_key_part in $locale\"><font color=\"green\"><b>o</b></font></a>"
+                append return_value "<a href=\"$translate_url\" title=\"Edit translation of $message_key_part in $locale\"><font color=\"green\"><b>o</b></font></a>"
             }
 
         } else {
@@ -356,9 +359,7 @@ namespace eval lang::message {
                     }
             
 
-                    set return_value "$us_text<a href=\"$translate_url\" title=\"translate $message_key_part to $locale\"><font color=\"red\"><b>*</b></font></a>"
-                    # set return_value "&nbsp;<a href=\"/acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } { locales $locale } { package_key $package_key_part } return_url }]\"><span style=\"background-color: yellow\"><font size=\"-2\">$message_key_part - TRANSLATE</font></span></a>&nbsp;"
-
+                    set return_value "<span style=\"background-color: yellow;\">$us_text</span><a href=\"$translate_url\" title=\"translate $message_key_part to $locale\"><font color=\"red\"><b>*</b></font></a>"
                 }
 
             } {
