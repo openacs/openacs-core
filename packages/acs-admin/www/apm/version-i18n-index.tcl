@@ -23,4 +23,6 @@ set context [list [list "/acs-admin/apm/" "Package Manager"] [list [export_vars 
 
 set num_cat_files [llength [glob -nocomplain "[acs_package_root_dir $package_key]/catalog/*.cat"]]
 
-ad_return_template
+
+set localize_url [export_vars -base "[apm_package_url_from_key "acs-lang"]admin/message-list" { package_key {locale {[ad_conn locale]}}}]
+
