@@ -9,7 +9,8 @@
 <listtemplate name="nodes"></listtemplate>
 
 <b>&raquo;</b><a href=\"application-new\">Create new application</a><br>
-<b>&raquo;</b><a href="unmounted">Manage unmounted applications</a>
+<b>&raquo;</b><a href="unmounted">Manage unmounted applications</a><br>
+<b>&raquo;</b><a href="site-map">Build Site Map</a>
 
 <h2>Services</h2>
 <ul>@services;noquote@</ul>
