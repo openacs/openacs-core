@@ -177,7 +177,8 @@ proc ad_proc args {
             # We are creating an callback contract...
             if {!( $n_args_remaining == 3 || $n_args_remaining == 2 ) } {
                 return -code error "ad_proc callback contract must have: arguments docs \[empty_code_body\]"
-            } elseif {![string equal [lindex $args end] ""]
+            } elseif {$n_args_remaining == 3
+                      && ![string equal [lindex $args end] ""]
                       && ![string equal [lindex $args end] "-"]} {
                 return -code error "ad_proc callback contract must have an empty code_body"
             }
