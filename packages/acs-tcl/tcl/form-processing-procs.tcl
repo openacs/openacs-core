@@ -27,7 +27,7 @@ ad_proc -public ad_form {
 
     In general the full functionality of the form builder is exposed by ad_form, but with a
     much more user-friendly and readable syntax and with state management handled automatically.
-    
+
     <p>
 
     In order to make it possible to use ad_form to build common form snippets within procs, code
@@ -114,7 +114,7 @@ ad_proc -public ad_form {
     If the validation check returns true, one of the new_data or edit_data code blocks will be executed depending
     on whether or not "my_table_key" was defined during the initial request.  "my_table_key" is passed as a hidden
     form variable and is signed and verified, reducing the opportunity for key spoofing by malicious outsiders.
-    
+
     <p>
 
     This example includes dummy redirects to a script named "somewhere" to make clear the fact that after
@@ -298,7 +298,7 @@ ad_proc -public ad_form {
     ad_form.  If the sequence name is not specified, the sequence acs_object_id_seq is used to generate new keys.
 
     Examples:
-    
+
     <blockquote><pre>
     my_key:key
     </pre><p>
@@ -307,7 +307,7 @@ ad_proc -public ad_form {
 
     <p>
     </blockquote>
-    
+
     <blockquote><pre>
     my_key:key(some_sequence_name)
     </pre><p>
@@ -316,7 +316,7 @@ ad_proc -public ad_form {
 
     <p>
     </blockquote>
-    
+
     <blockquote><pre>
     {my_key:text(multiselect),multiple       {label "select some values"}
                                               {options {first second third fourth fifth}}
@@ -328,7 +328,7 @@ ad_proc -public ad_form {
 
     <p>
     </blockquote>
-    
+
     <blockquote><pre>
     {hide_me:text(hidden)                     {value 3}}
     </pre><p>
@@ -337,7 +337,7 @@ ad_proc -public ad_form {
 
     <p>
     </blockquote>
-    
+
     <blockquote><pre>
     start_date:date,to_sql(sql_date),from_html(sql_date),optional
     </pre><p>
@@ -730,92 +730,99 @@ ad_proc -public ad_form {
         return
     }
 
-    if { [template::form is_request $form_name] && [info exists af_key_name($form_name)] } {
+    if { [template::form is_request $form_name] } {
 
-        set key_name $af_key_name($form_name)
-        upvar #$level $key_name $key_name
         upvar #$level __ad_form_values__ values
 
-        if { [info exists on_request] } {
+        if { [template::form is_request $form_name] && [info exists on_request] } {
             ad_page_contract_eval uplevel #$level $on_request
             foreach element_name $af_element_names($form_name) {
                 if { [llength $element_name] == 1 } {
                     if { [uplevel \#$level [list info exists $element_name]] } {
                         set values($element_name) [uplevel \#$level [list set $element_name]]
-                    }
-                }
-            }            
-        }
-
-        # Check to see if we're editing an existing database value
-        if { [info exists $key_name] } {
-            if { [info exists edit_request] } {
-                if { [info exists select_query] || [info exists select_query_name] } {
-                    return -code error "Edit request block conflicts with select query"
-                }
-                ad_page_contract_eval uplevel #$level $edit_request
-                foreach element_name $af_element_names($form_name) {
-                    if { [llength $element_name] == 1 } {
-                        if { [uplevel \#$level [list info exists $element_name]] } {
-                            set values($element_name) [uplevel \#$level [list set $element_name]]
-                        }
-                    }
-                }            
-
-            } else {
-
-                # The key exists, grab the existing values if we have an select_query clause
-
-                if { ![info exists select_query] && ![info exists select_query_name] } {
-                    return -code error "Key \"$key_name\" has the value \"[set $key_name]\" but no select_query or select_query_name clause exists"
-                }
-
-                if { [info exists select_query_name] } {
-                    set select_query ""
-                } else {
-                    set select_query_name ""
-                }
-
-                if { ![uplevel #$level [list db_0or1row $select_query_name [join $select_query " "] -column_array __ad_form_values__]] } {
-                    return -code error "Error when selecting values"
-                }
-
-                foreach element_name $af_element_names($form_name) {
-                    if { [llength $element_name] == 1 } {
                         if { [info exists af_from_sql(${form_name}__$element_name)] } {
                             set values($element_name) [template::util::$af_type(${form_name}__$element_name)::acquire \
                                                        $af_from_sql(${form_name}__$element_name) $values($element_name)]
                         }
                     }
                 }
-            }
-
-            set values($key_name) [set $key_name]
-            set values(__new_p) 0
-
-        } else {
-
-            # Make life easy for the OACS 4.5 hacker by automagically generating a value for
-            # our new database row.  Set a local so the query can use bindvar notation (the driver
-            # doesn't support array bind vars)
-
-            if { [info exists af_sequence_name($form_name)] } {
-                set sequence_name $af_sequence_name($form_name)
-            } else {
-                set sequence_name "acs_object_id_seq"
-            }
-
-            if { [catch {set values($key_name) [db_nextval $sequence_name]} errmsg]} {
-                return -code error "Couldn't get the next value from sequence: $errmsg\""
-            }
-            set values(__new_p) 1
-
-            if { [info exists new_request] } {
-                ad_page_contract_eval uplevel #$level $new_request
-            }
+            }            
         }
 
-        set values(__key_signature) [ad_sign "$values($key_name):$form_name"]
+        if { [info exists af_key_name($form_name)] } {
+
+            set key_name $af_key_name($form_name)
+            upvar #$level $key_name $key_name
+
+            # Check to see if we're editing an existing database value
+            if { [info exists $key_name] } {
+                if { [info exists edit_request] } {
+                    if { [info exists select_query] || [info exists select_query_name] } {
+                        return -code error "Edit request block conflicts with select query"
+                    }
+                    ad_page_contract_eval uplevel #$level $edit_request
+                    foreach element_name $af_element_names($form_name) {
+                        if { [llength $element_name] == 1 } {
+                            if { [uplevel \#$level [list info exists $element_name]] } {
+                                set values($element_name) [uplevel \#$level [list set $element_name]]
+                            }
+                        }
+                    }            
+
+                } else {
+
+                    # The key exists, grab the existing values if we have an select_query clause
+
+                    if { ![info exists select_query] && ![info exists select_query_name] } {
+                        return -code error "Key \"$key_name\" has the value \"[set $key_name]\" but no select_query or select_query_name clause exists"
+                    }
+
+                    if { [info exists select_query_name] } {
+                        set select_query ""
+                    } else {
+                        set select_query_name ""
+                    }
+
+                    if { ![uplevel #$level [list db_0or1row $select_query_name [join $select_query " "] -column_array __ad_form_values__]] } {
+                        return -code error "Error when selecting values"
+                    }
+
+                    foreach element_name $af_element_names($form_name) {
+                        if { [llength $element_name] == 1 } {
+                            if { [info exists af_from_sql(${form_name}__$element_name)] } {
+                                set values($element_name) [template::util::$af_type(${form_name}__$element_name)::acquire \
+                                                           $af_from_sql(${form_name}__$element_name) $values($element_name)]
+                            }
+                        }
+                    }
+                }
+
+                set values($key_name) [set $key_name]
+                set values(__new_p) 0
+
+            } else {
+
+                # Make life easy for the OACS 4.5 hacker by automagically generating a value for
+                # our new database row.  Set a local so the query can use bindvar notation (the driver
+                # doesn't support array bind vars)
+
+                if { [info exists af_sequence_name($form_name)] } {
+                    set sequence_name $af_sequence_name($form_name)
+                } else {
+                    set sequence_name "acs_object_id_seq"
+                }
+
+                if { [catch {set values($key_name) [db_nextval $sequence_name]} errmsg]} {
+                    return -code error "Couldn't get the next value from sequence: $errmsg\""
+                }
+                set values(__new_p) 1
+
+                if { [info exists new_request] } {
+                    ad_page_contract_eval uplevel #$level $new_request
+                }
+            }
+            set values(__key_signature) [ad_sign "$values($key_name):$form_name"]
+        }
 
         foreach element_name $properties(element_names) {
             if { [info exists values($element_name)] } {
@@ -997,7 +1004,7 @@ ad_proc -public ad_form_new_p {
     This is for pages built with ad_form that handle edit and add requests in one file.
     It returns 1 if the current form being built for the entry of new data, 0 if for
     the editing of existing data.
-    
+
     <p>
 
     It does not make sense to use this in pages that don't use ad_form.
@@ -1024,7 +1031,7 @@ ad_proc -public ad_form_new_p {
 } {
 
     set form [ns_getform]
-    
+
     return [expr {[empty_string_p $form] || [ns_set find $form $key] == -1 || [ns_set get $form __new_p] == 1 }]
 
 }
