@@ -61,16 +61,9 @@ switch $kind {
     procs_files {
         array set procs [list]
 
-        multirow create procs_files file_id path full_path first_sentence
+        multirow create procs_files path full_path first_sentence
 
-        db_foreach package_procs_files_select {
-            select file_id, 
-                   path
-              from apm_package_files
-             where version_id = :version_id
-               and file_type = 'tcl_procs'
-          order by path
-        } {
+        foreach path [apm_get_package_files -package_key $package_key -file_types tcl_procs] {
             set full_path "packages/$package_key/$path"
             
             if { [nsv_exists api_library_doc $full_path] } {
@@ -80,7 +73,7 @@ switch $kind {
                 set first_sentence ""
             }
 
-            multirow append procs_files $file_id $path $full_path $first_sentence
+            multirow append procs_files $path $full_path $first_sentence
         }
     }
     procs {
@@ -107,23 +100,15 @@ switch $kind {
         }
     }
     sql_files {
-        multirow create sql_files file_id path relative_path first_sentence
+        multirow create sql_files path relative_path
 
-        db_foreach package_sql_files_select {
-            select file_id, path
-              from apm_package_files
-             where version_id = :version_id
-               and (file_type = 'data_model' or 
-                    file_type = 'data_model_create' or
-                    file_type = 'data_model_drop' or
-                    file_type = 'data_model_upgrade')
-          order by path
-        } {
+        set file_types [list data_model data_model_create data_model_drop data_model_upgrade]
+        foreach path [apm_get_package_files -package_key $package_key -file_types $file_types] {
            # Set relative path to everything after sql/ (just using
            # file tail breaks when you've got subdirs of sql)
            regexp {^sql/(.*)} $path match relative_path
 
-            multirow append sql_files $file_id $path $relative_path ""
+           multirow append sql_files $path $relative_path
         }
     }
     content {

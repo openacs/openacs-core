@@ -37,7 +37,7 @@
   <tr valign=top>
     <td><b><a href="display-sql?package_key=@package_key@&amp;url=@sql_files.relative_path@&amp;version_id=@version_id@">@sql_files.path@</a></b></td>
     <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>@sql_files.first_sentence@&nbsp;</td>
+    <td>&nbsp;</td>
   </tr>
   </multiple>
 </table>
