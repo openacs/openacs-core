@@ -104,7 +104,7 @@
   <tr class="list-button-bar">
     <td colspan="@elements:rowcount@" class="list-button-bar">
       <multiple name="actions">
-        <span class="list-button-header"><a href="@actions.url@" class="list-button" title="@actions.title@">@actions.label@</a></span>
+        <a href="@actions.url@" title="@actions.title@" class="button">@actions.label@</a>
       </multiple>
     </td>
   </tr>
@@ -117,8 +117,8 @@
           <th class="@elements.class@"@elements.cell_attributes;noquote@>
             <if @elements.orderby_url@ not nil>
               <if @elements.ordering_p@ true>
-                <b>@elements.label@</b>
-                <a href="@elements.orderby_url@" title="@elements.orderby_html_title@"><if @elements.orderby_direction@ eq "desc">v</if><else>^</else></a>
+                <a href="@elements.orderby_url@">@elements.label@</a>
+                <a href="@elements.orderby_url@" title="@elements.orderby_html_title@"><if @elements.orderby_direction@ eq "desc"><img src="/resources/acs-templating/sort-descending.png" border="0"></if><else><img src="/resources/acs-templating/sort-ascending.png" border="0"></else></a>
               </if>
               <else>
                 <a href="@elements.orderby_url@" title="@elements.orderby_html_title@">@elements.label;noquote@</a>
@@ -134,7 +134,7 @@
 
   <noparse>
     <if \@@list_properties.multirow@:rowcount@ eq 0>
-      <tr class="list-odd">
+      <tr class="list-odd last">
         <td class="list" colspan="@elements:rowcount@">
           @list_properties.no_data@
         </td>
@@ -145,12 +145,6 @@
   </noparse>
         
     <if @list_properties.groupby@ not nil>
-
-        <tr class="list-spacer">
-          <td colspan="@elements:rowcount@">
-            &nbsp;
-          </td>
-        </tr>
 
         <tr class="list-subheader">
           <td colspan="@elements:rowcount@">
@@ -165,12 +159,22 @@
 
           <multiple name="elements">
     <noparse>
+            <if \@@list_properties.multirow@.rownum@ lt \@@list_properties.multirow@:rowcount@>
               <if \@@list_properties.multirow@.rownum@ odd>
                 <tr class="list-odd">
               </if>
               <else>
                 <tr class="list-even">
               </else>
+            </if>
+            <else>
+              <if \@@list_properties.multirow@.rownum@ odd>
+                <tr class="list-odd last">
+              </if>
+              <else>
+                <tr class="list-even last">
+              </else>
+            </else>
     </noparse>
 
               <group column="subrownum">
@@ -206,15 +210,8 @@
 
     <if @list_properties.aggregates_p@ true>
       <noparse><if \@@list_properties.multirow@.rownum@ eq \@@list_properties.multirow@:rowcount@></noparse>
-        <if @list_properties.groupby@ not nil>
-          <tr class="list-spacer">
-            <td colspan="@elements:rowcount@">
-              &nbsp;
-            </td>
-          </tr>
-        </if>
         <multiple name="elements">
-          <tr class="list-subheader">
+          <tr class="list-subheader last">
             <group column="subrownum">
               <td class="@elements.class@"@elements.cell_attributes;noquote@>
                 <if @elements.aggregate_label@ not nil>
@@ -241,8 +238,8 @@
       <tr class="list-button-bar">
         <td colspan="@elements:rowcount@" class="list-button-bar">
           <multiple name="bulk_actions">
-            <span class="list-button-header"><a href="#" class="list-button" title="@bulk_actions.title@" 
-            onclick="ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@')">@bulk_actions.label@</a></span>
+            <a href="#" title="@bulk_actions.title@" class="button"
+            onclick="ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@')">@bulk_actions.label@</a>
           </multiple>
         </td>
       </tr>
