@@ -32,6 +32,7 @@
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SyncDotLrnReadPrivateDataP"  default="1" description=".LRN user is guest (if .LRN is installed). 1 = Not a guest , 0 = Guest" section_name="Batch Synchronization"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SyncDotLrnUserType"  default="student" description=".LRN user type for new user (if .LRN is installed)" section_name="Batch Synchronization"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SyncEmailConfirmationP"  default="0" description="Send out email confirmation when batch sync is complete. 1 = Yes, 0 = No." section_name="Batch Synchronization"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="AllowSelfRegister"  default="1" description="Does the user can self register? 1 = Yes, 0 = No." section_name="acs-authentication"/>
         </parameters>
 
     </version>
