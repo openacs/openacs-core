@@ -3,39 +3,40 @@
 -- Drop the ACS Reference packages
 --
 -- @author jon@jongriffin.com
--- @created 2001-07-16
+-- @dropd 2001-07-16
 --
 -- @cvs-id $Id$
 --
 
-set serveroutput on
+-- drop all associated tables and functions
 
--- drop all associated tables and packages
+-- DRB: in PG we could do this dynamically as JonG has done in Oracle.  The
+-- proc name can easily be picked up from pg_proc since we use unique package
+-- keys as prefaces.   The params can be picked up as well but I don't know
+-- how off the top of my head.  It would be a nice to write a general function
+-- to do this in both Oracle and PG - "drop_package_functions(package_key)".
 
-declare
-    cursor refsrc_cur is
-	 select   table_name,
-                  package_name
-	 from     acs_reference_repositories
-         order by creation_date desc;
-begin
-    for rec in refsrc_cur loop
-	 dbms_output.put_line('Dropping ' || rec.table_name);
-	 execute immediate 'drop table ' || rec.table_name;
-	 if rec.package_name is not null then
-	     execute immediate 'drop package ' || rec.package_name;
-         end if;
-    end loop;
-end;
-/
-show errors
+    
+select acs_privilege__remove_child('create','acs_reference_create');
+select acs_privilege__remove_child('write', 'acs_reference_write');
+select acs_privilege__remove_child('read',  'acs_reference_read');
+select acs_privilege__remove_child('delete','acs_reference_delete');
 
-begin
-    acs_object_type.drop_type('acs_reference_repository','t');
-end;
-/
-show errors
-  
-drop package acs_reference_repository;
+select acs_privilege__drop_privilege('acs_reference_create');
+select acs_privilege__drop_privilege('acs_reference_write');
+select acs_privilege__drop_privilege('acs_reference_read');
+select acs_privilege__drop_privilege('acs_reference_delete');
+
+select acs_object__delete(repository_id)
+from acs_reference_repositories;
+
+select acs_object_type__drop_type ('acs_reference_repository', 't');
+
+drop function acs_reference__new (varchar,timestamp, varchar,varchar,timestamp);
+drop function acs_reference__new (integer,varchar,boolean,varchar,timestamp,
+varchar,varchar,timestamp,timestamp,integer,integer,varchar,varchar,
+integer,varchar,integer);
+drop function acs_reference__delete (integer);
+drop function acs_reference__is_expired_p (integer);
 drop table   acs_reference_repositories;
 
