@@ -734,7 +734,7 @@ begin
     -- Native Dynamic SQL, to ascertain the name of this object.
     --
     --execute ''select '' || object_type.name_method || ''(:1) from dual''
-    for obj in execute ''select '' || obj_type.name_method || ''('' || name_object_id || '') as object_name'' loop
+    for obj in execute ''select '' || obj_type.name_method || ''('' || name__object_id || '') as object_name'' loop
         object_name := obj.object_name;
         exit;
     end loop;
