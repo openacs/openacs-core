@@ -74,16 +74,15 @@ ad_proc ad_system_name {} {
 
 ad_proc ad_pvt_home {} {
     This is the URL of a user's private workspace on the system, usually
-    /pvt/home.tcl
+    [subsite]/pvt/home.tcl
 } {
-    return [ad_parameter -package_id [ad_acs_kernel_id] HomeURL]
+    return "[subsite::get_element -element url -notrailing][ad_parameter -package_id [ad_acs_kernel_id] HomeURL]"
 }
 
 ad_proc ad_admin_home {} {
-   Returns the directory for the admin home. Currently hard-coded to /admin
-   (should this be changed?). 
+   Returns the directory for the admin home.
 } {
-    return "/admin"
+    return "[subsite::get_element -element url]admin"
 }
 
 # is this accurate? (rbm, aug 2002)
@@ -109,10 +108,10 @@ ad_proc ad_site_home_link {} {
     @return a link to the user's workspace if the user is logged in. Otherwise, a link to the page root.
 } {
     if { [ad_get_user_id] != 0 } {
-	return "<a href=\"[ad_pvt_home]\">[ad_system_name]</a>"
+	return "<a href=\"[ad_pvt_home]\">[subsite::get_element -element name]</a>"
     } else {
 	# we don't know who this person is
-	return "<a href=\"/\">[ad_system_name]</a>"
+	return "<a href=\"[subsite::get_element -element url]\">[subsite::get_element -element name]</a>"
     }
 }
 
@@ -143,7 +142,8 @@ ad_proc -public acs_community_member_url {
 } {
     @return the url for the community member page of a particular user
 } {
-    return "[ad_parameter -package_id [ad_acs_kernel_id] CommunityMemberURL]?[export_vars user_id]"
+    return "[subsite::get_element -element url -notrailing][ad_parameter \
+	    -package_id [ad_acs_kernel_id] CommunityMemberURL]?[export_vars user_id]"
 }
 
 ad_proc -public acs_community_member_link {
@@ -186,7 +186,8 @@ ad_proc -public acs_community_member_admin_url {
 } {
     @return the url for the community member admin page of a particular user
 } {
-    return "[ad_parameter -package_id [ad_acs_kernel_id] CommunityMemberAdminURL]?[export_vars user_id]"
+    return "[subsite::get_element -element url -notrailing][ad_parameter \
+	    -package_id [ad_acs_kernel_id] CommunityMemberAdminURL]?[export_vars user_id]"
 }
 
 ad_proc -public acs_community_member_admin_link {
@@ -379,11 +380,13 @@ ad_proc ad_return_complaint {
 	set please_correct "them"
     }
 	    
+    subsite::get -array subsite_info
+
     doc_return 200 text/html "[ad_header_with_extra_stuff "Problem with Your Input" "" ""]
     
 <h2>Problem with Your Input</h2>
 
-to <a href=/>[ad_system_name]</a>
+to <a href=\"$subsite_info(url)\">$subsite_info(instance_name)</a>
 
 <hr>
 
