@@ -493,7 +493,7 @@ ad_proc subsite::add_section_row {
     }
     
     set info(url) [file join $info(folder) $info(url)]
-    regsub {/.$} $info(url) / info(url)
+    regsub {/\.$} $info(url) / info(url)
 
     # Default to not selected
     set selected_p 0
