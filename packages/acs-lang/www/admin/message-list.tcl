@@ -64,7 +64,7 @@ db_1row counts {
              where package_key = :package_key 
              and locale = :locale 
              and deleted_p = 't') as num_deleted
-
+    from dual
 }
 set num_untranslated [expr $num_messages - $num_translated]
 set num_messages_pretty [lc_numeric $num_messages]
