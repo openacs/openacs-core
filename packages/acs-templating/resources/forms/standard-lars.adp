@@ -38,18 +38,16 @@
             <if @elements.label@ not nil>
               <noparse>
                 <if \@formerror.@elements.id@\@ not nil>
-                  <td bgcolor="#ffaaaa" width="120">
+                  <td bgcolor="#ffaaaa" width="120" align="right" style="padding-left: 4px; padding-right: 12px;">
                 </if>
                 <else>
-                  <td bgcolor="#ddddff" width="120">
+                  <td bgcolor="#e0e0f9" width="120" align="right" style="padding-left: 4px; padding-right: 12px;">
                 </else>
               </noparse>
-                <b>
-                  <font face="tahoma,verdana,arial,helvetica,sans-serif" size="-1">
-                    @elements.label@
-                  </font>
-                </b>
-                &nbsp;&nbsp;
+                <font face="tahoma,verdana,arial,helvetica,sans-serif" size="-1">
+                  @elements.label@
+                  <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform"><font color="red">*</font></if>
+                </font>
               </td>
             </if>
             <else>
@@ -60,7 +58,7 @@
 
               <noparse>
                 <if \@formerror.@elements.id@\@ not nil>
-                  <td style="border: 2px solid red;">
+                  <td style="border: 1px dotted red;">
                 </if>
                 <else>
                   <td>
@@ -97,19 +95,16 @@
               <noparse>
                 <formerror id="@elements.id@">
                   <br>
-                  <font face="tahoma,verdana,arial,helvetica,sans-serif" color="red">
-                    <b>\@formerror.@elements.id@\@<b>
-                  </font>
+                  <span style="font-family: tahoma,verdana,arial,helvetica,sans-serif; color: red; font-size: 100%;">
+                    \@formerror.@elements.id@\@
+                  </span>
                 </formerror>
               </noparse>
 
               <if @elements.help_text@ not nil>
-                <p style="margin-top: 4px; margin-bottom: 2px;">
-                  <font face="tahoma,verdana,arial,helvetica,sans-serif" size="-1">
-                    <noparse>
-                      <i><formhelp id="@elements.id@"></i>
-                    </noparse>
-                  </font>
+                <p style="margin-top: 4px; margin-bottom: 2px; color: #666666; font-family: tahoma,verdana,arial,helvetica,sans-serif; font-size: 75%;">
+                  <img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" border="0">
+                  <noparse><formhelp id="@elements.id@"></noparse>
                 </p>
               </if>
 
