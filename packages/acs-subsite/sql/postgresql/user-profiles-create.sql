@@ -137,7 +137,7 @@ create table user_profiles (
 --     return v_profile_id;
 --   end new;
 
-select define_function_args('user_profile__new','profile_id,rel_type:user_profile,object_id_one,object_id_two,member_state,creation_user,creation_ip');
+select define_function_args('user_profile__new','profile_id,rel_type;user_profile,object_id_one,object_id_two,member_state,creation_user,creation_ip');
 
 create function user_profile__new(integer,varchar,integer,integer,varchar,integer,varchar)
 returns integer as '

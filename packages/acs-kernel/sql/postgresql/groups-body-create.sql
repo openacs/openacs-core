@@ -485,7 +485,7 @@ end;' language 'plpgsql';
 
 -- create or replace package body membership_rel
 -- function new
-select define_function_args('membership_rel__new','rel_id,rel_type:membership_rel,object_id_one,object_id_two,member_state:approved,creation_user,creation_ip');
+select define_function_args('membership_rel__new','rel_id,rel_type;membership_rel,object_id_one,object_id_two,member_state;approved,creation_user,creation_ip');
 
 create function membership_rel__new (integer,varchar,integer,integer,varchar,integer,varchar)
 returns integer as '
