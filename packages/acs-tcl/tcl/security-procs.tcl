@@ -351,15 +351,15 @@ ad_proc -public ad_get_client_property {
 }
 
 ad_proc -public ad_set_client_property {
-    {
-	-secure f
-	-persistent t
-        -session_id ""
-    }
+    {-clob f}
+    {-secure f}
+    {-persistent t}
+    {-session_id ""}
     module name value
 
 } { 
     @param session_id controls which session is used
+    @param clob tells us to use a large object to store the value
 
     Sets a client (session-level) property. If $persistent is true,
     the new value will be written through to the database. If
@@ -370,6 +370,7 @@ ad_proc -public ad_set_client_property {
     secure (HTTPS) connection.
 
 } {
+
     if { $secure != "f" && ![ad_secure_conn_p] } {
 	error "Unable to set secure property in insecure or invalid session"
     }
@@ -392,10 +393,12 @@ ad_proc -public ad_set_client_property {
 		and    property_name = :name
 	    }
 
-	    db_dml prop_insert_dml {
-		insert into sec_session_properties
-		(session_id, module, property_name, property_value, secure_p, last_hit)
-		values ( :session_id, :module, :name, :value, :secure, :last_hit )
+            set clob_dml [db_map prop_insert_dml_clob]
+
+            if { $clob == "t" && ![empty_string_p $clob_dml] } {
+                db_dml dummy $clob_dml -clobs [list $value]
+            } else {
+	        db_dml prop_insert_dml ""
 	    }
 	}
     }
@@ -1252,7 +1255,7 @@ ad_proc -private populate_secret_tokens_db {} {
 	set random_token [sec_random_token]
 
 	db_dml insert_random_token {
-	    insert /*+ APPEND */ into secret_tokens(token_id, token, token_timestamp)
+	    insert /*+ APPEND */ into secret_tokens(token_id, token, timestamp)
 	    values(sec_security_token_id_seq.nextval, :random_token, sysdate)
 	}
 	incr counter

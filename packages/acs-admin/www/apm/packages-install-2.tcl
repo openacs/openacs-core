@@ -15,8 +15,8 @@ ad_page_contract {
 set spec_files [ad_get_client_property apm spec_files]
 
 # Clear out previous client properties.
-ad_set_client_property apm pkg_install_list ""
-ad_set_client_property apm pkg_enable_list ""
+ad_set_client_property -clob t apm pkg_install_list ""
+ad_set_client_property -clob t apm pkg_enable_list ""
 
 foreach install_key $install {
     foreach spec_file $spec_files {
@@ -50,8 +50,8 @@ if { ([lindex $dependency_results 0] == 1) || ![string compare $force_p "t"]} {
     ### Check passed!  Initiate install.
 
     # We use client properties to pass along this information as it is fairly large.
-    ad_set_client_property apm pkg_install_list [lindex $dependency_results 1]
-    ad_set_client_property apm pkg_enable_list $enable
+    ad_set_client_property -clob t apm pkg_install_list [lindex $dependency_results 1]
+    ad_set_client_property -clob t apm pkg_enable_list $enable
 
     ad_returnredirect packages-install-3.tcl
     return

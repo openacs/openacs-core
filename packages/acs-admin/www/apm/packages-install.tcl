@@ -95,7 +95,9 @@ function checkAll() {
     ns_write "<form action=packages-install-2 method=post>"
 
     # Client properties do not deplete the limited URL variable space.
-    ad_set_client_property apm spec_files $spec_files
+    # But they are limited to the maximum length of a varchar ...
+
+    ad_set_client_property -clob t apm spec_files $spec_files
     ad_set_client_property apm install_path $actual_install_path
 
     set errors [list]
