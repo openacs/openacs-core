@@ -3,10 +3,10 @@ set admin_p [permission::permission_p -object_id [ad_conn package_id] -privilege
 list::create \
     -name services \
     -multirow services \
-    -no_data "No services" \
+    -no_data "[_ acs-subsite.No_services]" \
     -elements {
         instance_name {
-            label "Name"
+            label "[_ acs-subsite.Name]"
             link_url_eval {$name/}
         }
     }

@@ -71,7 +71,8 @@ if { [string equal $authority_id [auth::get_register_authority]] || [auth::UseEm
     set register_url [export_vars -no_empty -base $register_url { username email }]
 }
 
-ad_form -name login -html { style "margin: 0px;" } -show_required_p 0 -edit_buttons { { "Login" ok } } -action "/register/" -form {
+set login_button [list [list [_ acs-subsite.Log_In] ok]]
+ad_form -name login -html { style "margin: 0px;" } -show_required_p 0 -edit_buttons $login_button -action "/register/" -form {
     {return_url:text(hidden)}
     {time:text(hidden)}
     {token_id:text(hidden)}
@@ -85,7 +86,7 @@ if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id [ad_acs
 
 set focus {}
 if { [auth::UseEmailForLoginP] } {
-    ad_form -extend -name login -form [list [list email:text($username_widget),nospell [list label "Email"]]]
+    ad_form -extend -name login -form [list [list email:text($username_widget),nospell [list label [_ acs-subsite.Email]]]]
     set user_id_widget_name email
     if { ![empty_string_p $email] } {
         set focus "password"
@@ -96,13 +97,13 @@ if { [auth::UseEmailForLoginP] } {
     if { [llength $authority_options] > 1 } {
         ad_form -extend -name login -form {
             {authority_id:integer(select) 
-                {label "Authority"} 
+                {label "[_ acs-subsite.Authority]"} 
                 {options $authority_options}
             }
         }
     }
 
-    ad_form -extend -name login -form [list [list username:text($username_widget),nospell [list label "Username"]]]
+    ad_form -extend -name login -form [list [list username:text($username_widget),nospell [list label [_ acs-subsite.Username]]]]
     set user_id_widget_name username
     if { ![empty_string_p $username] } {
         set focus "password"
@@ -114,19 +115,21 @@ set focus "login.$focus"
 
 ad_form -extend -name login -form {
     {password:text(password) 
-        {label "Password"}
+        {label "[_ acs-subsite.Password]"}
     }
 }
 
+set options_list [list [list [_ acs-subsite.Remember_my_login] "t"]]
 if { $allow_persistent_login_p } {
     ad_form -extend -name login -form {
         {persistent_p:text(checkbox),optional
             {label ""}
-            {options { { "Remember my login on this computer" "t" } }}
+            {options $options_list}
         }
     }
 }
 
+set expired_message [list [list message [_ acs-subsite.Login_has_expired]]]
 ad_form -extend -name login -on_request {
     # Populate fields from local vars
 
@@ -150,7 +153,7 @@ ad_form -extend -name login -on_request {
     
     if { [string compare $hash $computed_hash] != 0 || \
              $time < [ns_time] - [ad_parameter -package_id [ad_acs_kernel_id] LoginExpirationTime security 600] } {
-        ad_returnredirect [export_vars -base [ad_conn url] { { message "The login page has expired. Please log in again." } }]
+        ad_returnredirect [export_vars -base [ad_conn url] $expired_message]
         ad_script_abort
     }
 
