@@ -79,4 +79,13 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="lang::catalog::import_messages_from_file.mark_message_key_as_deleted">
+    <querytext>
+        update lang_message_keys
+           set upgrade_status = 'deleted'
+           where package_key = :package_key
+             and message_key = :message_key
+    </querytext>
+  </fullquery>
+
 </queryset>
