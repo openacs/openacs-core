@@ -1,0 +1,57 @@
+ad_page_contract {
+    Internationalize a certain adp file.
+
+    @author Peter Marklund (peter@collaboraid.biz)
+    @creation-date 8 October 2002
+    @cvs-id $Id$  
+} {
+    version_id:integer,notnull    
+    {adp_files:multiple}
+    {adp_action:multiple}
+    {message_keys:multiple ""}
+}
+
+# Process the next adp file in the list
+set adp_file [lindex $adp_files 0]
+
+set page_title "Internationalizing ADP File $adp_file"
+set context_bar [ad_context_bar $page_title]
+
+# Figure out which actions to take on the selected adp:s
+set replace_text_p [ad_decode [lsearch -exact $adp_action replace_text] "-1" "0" "1"]
+set replace_tags_p [ad_decode [lsearch -exact $adp_action replace_tags] "-1" "0" "1"]
+
+if { $replace_text_p } {
+    ns_log Notice "Replacing text in file $adp_file with message tags"
+    append processing_html_result "<h3>Text replacements</h3>"
+    set adp_text_result_list [lang::util::replace_adp_text_with_tags "[acs_root_dir]/$adp_file" write $message_keys]
+    set number_of_text_snippets [lindex $adp_text_result_list 0]
+    if { ![empty_string_p [lindex $adp_text_result_list 1]] } {
+        set text_report ", here is the report: <br /> [lindex $adp_text_result_list 1]"
+    } else {
+        set text_report ""
+    }
+
+    append processing_html_result "Replaced $number_of_text_snippets texts $text_report"
+}
+
+if { $replace_tags_p } {
+    ns_log Notice "Replacing tags in file $adp_file with keys and doing insertion into message catalog"
+    append processing_html_result "<h3>Message tag replacements</h3>"
+
+    set number_of_replacements [lang::util::extract_keys_from_adps $adp_file]
+
+    append processing_html_result "Did $number_of_replacements replacements, any further details are in the log file"
+}    
+
+# Remove the processed file from the file list. If there are more adp files to process
+set adp_files [lrange $adp_files 1 end]
+
+if {} {
+    set process_next_link "<a href=\"version-i18n-process?[export_vars -url {version_id adp_files adp_action}]\">Process next ADP file</a>"
+} else {
+    
+}
+
+
+ad_return_template

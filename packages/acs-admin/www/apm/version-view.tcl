@@ -218,7 +218,7 @@ doc_body_append "
 <li><a href=\"version-files?version_id=$version_id\">Manage file information</a>
 <li><a href=\"version-parameters?version_id=$version_id\">Manage parameter information</a>
 <li><a href=\"version-generate-info?version_id=$version_id\">Display an XML package specification file for this version</a>
-<li><a href=\"version-extract-message-keys?version_id=$version_id\">Extract message catalog Keys (used for multilinguality) from adp pages and generate message catalog files.</a> Lets you choose which adp files to extract from.
+<li><a href=\"version-i18n?version_id=$version_id\">Manage Internationalization</a>
 "
 
 if { ![info exists installed_version_id] || $installed_version_id == $version_id && \
