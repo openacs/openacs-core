@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-kernel" package_version="5.1.2d4" locale="tr_TR" charset="utf-8">
-
-  <msg key="member_role_pretty_name">Üye</msg>
-  <msg key="member_role_pretty_plural">Üyeler</msg>
-</message_catalog>
