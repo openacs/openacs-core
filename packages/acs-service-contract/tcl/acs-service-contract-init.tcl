@@ -1,19 +1,14 @@
-
+# Loop over actual bindings, finding every impl alias for each contract operation
 db_foreach impl_operation {
-    select 
-        impl_contract_name, 
-        impl_operation_name,
-        impl_name
-    from acs_sc_impl_aliases
+    select ia.impl_contract_name, 
+           ia.impl_operation_name,
+           ia.impl_name,
+           ia.impl_alias,
+           ia.impl_pl
+    from   acs_sc_bindings b,
+           acs_sc_impl_aliases ia
+    where  ia.impl_id = b.impl_id
 } {
-
-    acs_sc_log SCDebug "ACS_SC_PROC: checking binding exists for contract $impl_contract_name impl $impl_name"
-
-    set binding_exists_p [db_string binding_exists_p {*SQL*}]
-
-    if $binding_exists_p {
-	acs_sc_proc $impl_contract_name $impl_operation_name $impl_name
-    } else { 
-        acs_sc_log SCDebug "ACS_SC_PROC: binding not found for contract $impl_contract_name impl $impl_name"
-    }
+    # This creates the AcsSc.Contract.Operation.Impl wrapper proc for this implementation
+    acs_sc_proc $impl_contract_name $impl_operation_name $impl_name $impl_alias $impl_pl
 }
