@@ -112,11 +112,15 @@ ad_proc rp_form_put { name value } {
     when you do an rp_internal_redirect to a new page, and you want to
     feed that page with certain query variables.
 
+    Note that the variable will just be appended to the form ns_set
+    which may not be what you want, if it exists already you will
+    now have two entries in the ns_set which may cause ad_page_contract to
+    break.  Also, only simple variables may be added, not arrays.
+
     @author Lars Pind (lars@pinds.com)
     @creation-date August 20, 2002
 
-    @return the form ns_set, in case you're interested. Mostly you'll
-    probably want to discard the result.
+    @return the form ns_set, in case you're interested. Mostly you will want to discard the result.
 
  } {
     set form [rp_getform]
