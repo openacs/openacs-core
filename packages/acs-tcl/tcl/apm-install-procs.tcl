@@ -568,7 +568,8 @@ ad_proc -private apm_package_install {
             # This is a singleton package.  Instantiate it automatically, but don't mount.
 
             # Using empty context_id
-            apm_package_instance_new $version(package-name) "" $package_key
+            apm_package_instance_new -instance_name $version(package-name) \
+                                     -package_key $package_key
         }
     } else {
         # After upgrade Tcl proc callback

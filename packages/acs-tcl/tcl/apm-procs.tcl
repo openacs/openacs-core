@@ -1349,18 +1349,21 @@ ad_proc -private apm_callback_has_valid_args {
 }
 
 ad_proc -public apm_package_instance_new {
-    {-package_id 0}
-    instance_name 
-    context_id 
-    package_key
+    {-package_key:required}
+    {-instance_name ""}
+    {-package_id ""}
+    {-context_id ""}
 } {
 
     Creates a new instance of a package and calls the post instantiation proc, if any. If the 
     package is a singleton and already exists then this procedure will silently do nothing.
 
+    @param package_key   The package_key of the package to instantiate.
     @param instance_name The name of the package instance, defaults to the pretty name of the
                          package type.
-
+    @param package_id    The id of the new package. Optional.
+    @param context_id    The context_id of the new package. Optional.
+ 
     @return The id of the instantiated package
 } {
     if { [empty_string_p $instance_name] } {
@@ -1369,7 +1372,7 @@ ad_proc -public apm_package_instance_new {
                                                           where package_key = :package_key}]
     }
 
-    if {$package_id == 0} {
+    if { [empty_string_p $package_id] } {
 	set package_id [db_null]
     } 
 
