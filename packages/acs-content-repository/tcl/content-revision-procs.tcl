@@ -128,13 +128,16 @@ DB -----------------------------------------------------------------------------
     set table_name "${table_name}i"
 
     set query_text "insert into ${table_name}
-                    (revision_id, object_type, creation_user, creation_date, creation_ip, title, description, item_id, text, mime_type $attribute_names)
-            values (:revision_id, :content_type, :creation_user, :creation_date, :creation_ip, :title, :description, :item_id, :content, :mime_type $attribute_values)"
+                    (revision_id, object_type, creation_user, creation_date, creation_ip, title, description, item_id, mime_type $attribute_names)
+            values (:revision_id, :content_type, :creation_user, :creation_date, :creation_ip, :title, :description, :item_id, :mime_type $attribute_values)"
     db_transaction {
         if {[string equal "" $revision_id]} {
 	    set revision_id [db_nextval "acs_object_id_seq"]
 	}
         db_dml insert_revision $query_text
+        update_content \
+            -revision_id $revision_id \
+            -content $content
     }
 ns_log notice "
 DB --------------------------------------------------------------------------------
@@ -148,6 +151,27 @@ DB revision_id = '${revision_id}'"
     return $revision_id
 }
 
+ad_proc -public content::revision::update_content {
+    -revision_id
+    -content
+} {
+    
+    Update content column seperately. Oracle does not allow insert
+    into a BLOB.
+    
+    @author Dave Bauer (dave@thedesignexperience.org)
+    @creation-date 2005-02-09
+    
+    @param revision_id Content revision to update
+
+    @param content Content to add to resivsion
+
+    @return 
+    
+    @error 
+} {
+    db_dml update_content "" -blobs [list $content]
+}
 
 ad_proc -public content::revision::content_copy {
     -revision_id:required
