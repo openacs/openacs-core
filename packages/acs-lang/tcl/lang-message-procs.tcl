@@ -112,8 +112,6 @@ namespace eval lang::message {
                     ns_log Notice "lang::message::register - Giving message for key $message_key in locale $locale an upgrade status of $message_upgrade_status"
                 }
 
-                lang::audit::created_message $package_key $message_key $locale
-
                 # avoiding bug#2011927 from Oracle.
                 if { [empty_string_p [string trim $message]] } {
                     db_dml lang_message_insert_null_msg {}
