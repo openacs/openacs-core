@@ -98,14 +98,5 @@
       
     </querytext>
   </fullquery>
-
-  <fullquery name="package_plsql_args.select_type_info ">
-    <querytext>
-      select t.package_name
-      from acs_object_types t 
-      where t.object_type = :object_type
-    </querytext>
-  </fullquery>
-
   
 </queryset>

@@ -134,6 +134,19 @@
 </fullquery>
 
  
+<fullquery name="package_plsql_args.select_package_func_param_list">      
+      <querytext>
+
+	select args.argument_name
+        from user_arguments args
+        where args.position > 0
+	  and args.object_name = upper(:function_name)
+	  and args.package_name = upper(:package_name)
+    
+      </querytext>
+</fullquery>
+
+ 
 <fullquery name="package_table_columns_for_type.select_object_type_param_list">      
       <querytext>
       
@@ -245,6 +258,20 @@ END ${package_name};
 <partialquery name="package_attribute_default.last_modified">      
       <querytext>sysdate</querytext>
 </partialquery>
+
+<fullquery name="package_exec_plsql.exec_plsql">      
+      <querytext>
+      
+    BEGIN
+      :1 := ${package_name}.${plsql_name}([plsql_utility::generate_attribute_parameter_call \
+	      -prepend ":" \
+	      -indent [expr [string length $package_name] + 29] \
+	      $pieces]
+      );
+    END; 
+    
+      </querytext>
+</fullquery>
 
  
 </queryset>

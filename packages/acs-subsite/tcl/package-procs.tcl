@@ -10,7 +10,6 @@ ad_library {
 
 }
 
-
 ad_proc -public package_type_dynamic_p {
     object_type 
 } {
@@ -635,40 +634,22 @@ ad_proc package_object_attribute_list {
 
 ad_proc -private package_plsql_args {
     { -function_name "NEW" }
-    object_type
+    package_name
 } {
-    Generates a list of parameters expected to a plsql function
+    Generates a list of parameters expected to a plsql function defined within
+    a given package.
 
     <p>
-
-    This replaces the annoying package_table_columns_for_type proc
-    which combines field names and arguments to PL/SQL, which 
-    makes no sense when you're trying to abstract out the actual fields.
 
     @author Ben Adida (ben@openforce.net)
     @creation-date 11/2001
 
-    @param object_type The object type for which we are generating a list
+    @param package_name The package which owns the function
 
     @param function_name The function name which we're looking up
 } {
-
-    db_1row select_type_info {
-	select t.package_name
-	  from acs_object_types t 
-	 where t.object_type = :object_type
-    }
-
     # Get just the args
-    return [db_list select_object_type_param_list {
-	select args.argument_name
-                     from user_arguments args
-                    where args.position > 0
-	              and args.object_name = upper(:function_name)
-	              and args.package_name = upper(:package_name)
-    }]
-
-    
+    return [db_list select_package_func_param_list {}]
 }
     
 
@@ -733,8 +714,6 @@ ad_proc -private package_table_columns_for_type {
     }]
 
 }
-
-
 
 ad_proc -public package_instantiate_object {
     { -creation_user "" }
@@ -837,16 +816,8 @@ ad_proc -public package_instantiate_object {
     # the parameters that can be passed to this object type's new function.
     # This will prevent us from passing in any parameters that are
     # not defined
-    
-    # Change by Ben (OpenACS)
-    # This really should be more PL/SQL driven than table-field driven.
-    # Thus the change
-    
-    #foreach row [util_memoize "package_table_columns_for_type \"$object_type\""] {
-	#set real_params([string toupper [lindex $row 1]]) 1
-    #}
 
-    foreach arg [util_memoize "package_plsql_args \"$object_type\""] {
+    foreach arg [util_memoize "package_plsql_args \"$package_name\""] {
 	set real_params([string toupper $arg]) 1
     }
     
@@ -922,3 +893,66 @@ ad_proc -public package_instantiate_object {
     return $object_id
 
 }
+ad_proc -public package_exec_plsql {
+    { -var_list "" }
+    package_name 
+    plsql_name 
+} {
+
+    Calls a pl/[pg]sql proc/func defined within the object type's package.  Use of
+    this Tcl APi proc avoids the need for the developer to write separate SQL for each
+    RDBMS we support.
+
+    @author Don Baccus (dhogaza@pacifier.com)
+    @creation-date 12/31/2003
+
+    @param package_name The PL/SQL package 
+
+    @param var_list A list of pairs of additional attributes and their
+    values to pass to the constructor. Each pair is a list of two
+    elements: key => value
+
+    @return empty string for procs, function return value for funcs
+
+    <p><b>Example:</b>
+    <pre>
+
+    set var_list [list \
+	    [list group_id $group_id]]
+
+    package_exec_plsql -var_list $var_list group delete
+
+    </pre>
+    
+} {
+    
+    foreach arg [util_memoize "package_plsql_args \"$package_name\""] {
+	set real_params([string toupper $arg]) 1
+    }
+    
+    # Use pieces to generate the parameter list to the new
+    # function. Pieces is just a list of lists where each list contains only
+    # one item - the name of the parameter. We keep track of
+    # parameters we've already added in the array param_array (all keys are
+    # in upper case)
+    
+    set pieces [list]
+    
+    foreach pair $var_list {
+	set key [lindex $pair 0]
+	set value [lindex $pair 1]
+	if { ![info exists real_params([string toupper $key])] } {
+	    # The parameter is not accepted as a parameter to the
+	    # pl/sql function. Ignore it.
+	    continue;
+	} 
+	lappend pieces [list $key]
+	set param_array([string toupper $key]) 1
+	# Set the value for binding
+	set $key $value
+    }
+
+    return [db_exec_plsql exec_plsql {}]
+
+}
+
