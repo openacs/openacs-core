@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <queryset>
+<rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
 <fullquery name="acs.acs-tcl.tcl.apm-file-procs.apm_file_add.apm_file_add">
 <querytext>
@@ -11,7 +12,6 @@ select apm_package_version__add_file(
         :db_type
 )
 </querytext>
-<rdbms><type>postgresql</type><version>7.1</version></rdbms>
 </fullquery>
 
 <fullquery name="acs.acs-tcl.tcl.apm-file-procs.apm_file_remove.apm_file_remove">
@@ -21,7 +21,6 @@ select apm_package_version__remove_file (
       :version_id
 )
 </querytext>
-<rdbms><type>postgresql</type><version>7.1</version></rdbms>
 </fullquery>
 
 </queryset>

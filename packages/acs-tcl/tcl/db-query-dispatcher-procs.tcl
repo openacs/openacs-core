@@ -152,17 +152,36 @@ proc db_fullquery_get_fullname {local_name {added_stack_num 1}} {
 	return $local_name
     }
 
+    # Test stuff (ben)
+    for {set i 0} {$i < 5} {incr i} {
+	if {[catch {ns_log Notice "QD = LEVEL $i = [info level [expr "0 - $i"]]"} errmsg]} {
+	    break
+	}
+    }
+
     # Get the proc name being executed.
     set proc_name [info level [expr "-1 - $added_stack_num"]]
 
     # We check if we're running the special ns_ proc that tells us
     # whether this is an URL or a Tcl proc.
-    if {[regexp {^ns_sourceproc} $proc_name all]} {
+    if {[regexp {^ns_sourceproc} $proc_name all] || \
+	    [regexp {^acs_source} $proc_name all]} {
 
 	# Means we are running inside an URL
 
+	# Now we do a check to see if this is a directly accessed URL or a sourced URL
+	if {[regexp {^ns_sourceproc} $proc_name all]} {
+	    set real_url_p 1
+	    set url [ns_conn url]
+	} else {
+	    set real_url_p 0
+	    set url [lindex $proc_name 1]
+	    set url [ad_make_relative_path $url]
+	    regsub {^/?packages} $url {} url
+	}
+
 	# Get the URL and remove the .tcl
-	set url [ns_conn url]
+	regsub {^/} $url {} url
 	regsub {\.tcl$} $url {} url
 
 	# Change all dots to colons, and slashes to dots
@@ -170,9 +189,15 @@ proc db_fullquery_get_fullname {local_name {added_stack_num 1}} {
 	regsub -all {/} $url {.} url
 
 	# We insert the "www" after the package key
-	regexp {^([^\.]*)(.*)} url all package_key rest
+	regexp {^([^\.]*)(.*)} $url all package_key rest
 
-	set full_name "acs.${package_key}.www.${rest}.${local_name}"
+	ns_log Notice "QD = package key is $package_key and rest is $rest"
+
+	if {$real_url_p} {
+	    set full_name "acs.${package_key}.www${rest}.${local_name}"
+	} else {
+	    set full_name "acs.${package_key}${rest}.${local_name}"
+	}
     } else {
 	# Let's find out where this Tcl proc is defined!!
 	# Get the first word, which is the Tcl proc

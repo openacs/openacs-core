@@ -30,6 +30,14 @@ proc ad_make_relative_path { path } {
     error "$path is not under the path root ([acs_root_dir])"
 }
 
+# A "safe" way to source a Tcl file. This is mainly so we can trace sourcing in the call stack,
+# which is fairly important in the QD, and generally a better idea for figuring out what the
+# heck is going on. (ben)
+proc acs_source { path } {
+    # That's right, that's all we're doing. Wrapping source so we can do call stack traces.
+    source $path
+}
+
 proc ad_parse_documentation_string { doc_string elements_var } {
     upvar $elements_var elements
     if { [info exists elements] } {

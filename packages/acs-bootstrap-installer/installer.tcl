@@ -121,7 +121,7 @@ proc install_handler { conn arg why } {
 	]} {
 	    set system_file "$system_file.tcl"
 	}
-	source "[acs_root_dir]/www/SYSTEM/$system_file"
+	acs_source "[acs_root_dir]/www/SYSTEM/$system_file"
 	return "filter_return"
     }
 
@@ -145,7 +145,7 @@ your URL and try again.
     ns_mutex lock [nsv_get acs_installer mutex]
     if { [catch {
 	# Source the page and then unlock the mutex.
-	source $path
+	acs_source $path
 	ns_mutex unlock [nsv_get acs_installer mutex]
     } error] } {
 	# In case of an error, don't forget to unlock the mutex.
