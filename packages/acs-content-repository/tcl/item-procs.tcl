@@ -78,8 +78,8 @@ ad_proc -public item::get_template_url { item_id {context public} } {
   
 
 ad_proc -public item::get_url {
-    item_id
     {-root_folder_id "null"}
+    item_id
 } {
 
   @public get_url
