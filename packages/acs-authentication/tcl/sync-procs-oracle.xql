@@ -6,8 +6,8 @@
     <fullquery name="auth::sync::job::get.select_job">
         <querytext>
             select job_id,
-                   job_start_time,
-                   job_end_time,
+                   to_char(job_start_time, 'YYYY-MM-DD HH24:MI:SS') as job_start_time,
+                   to_char(job_end_time, 'YYYY-MM-DD HH24:MI:SS') as job_end_time,
                    interactive_p,
                    snapshot_p,
                    authority_id,

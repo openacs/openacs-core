@@ -11,9 +11,9 @@ namespace eval auth::sync {}
 namespace eval auth::sync::job {}
 namespace eval auth::sync::get_doc {}
 namespace eval auth::sync::get_doc::http {}
+namespace eval auth::sync::entry {}
 namespace eval auth::sync::process_doc {}
 namespace eval auth::sync::process_doc::ims {}
-
 
 #####
 #
@@ -580,7 +580,28 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
     return [array get result]
 }
 
+#####
+#
+# auth::sync::entry namespace
+#
+#####
 
+ad_proc -public auth::sync::entry::get {
+    {-entry_id:required}
+    {-array:required}
+} {
+    Get information about a batch entry in an array.
+
+    @param entry_id        The ID of the batch entry you're ending.
+    
+    @param array         Name of an array into which you want the information.
+    
+    @author Peter Marklund
+} {
+    upvar 1 $array row
+
+    db_1row select_entry {} -column_array row
+}
 
 
 #####
@@ -681,4 +702,3 @@ ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
             -url $url
     }
 }
-
