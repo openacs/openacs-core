@@ -172,6 +172,22 @@ proc install_admin_widget {} {
 
 }
 
+proc install_redefine_ad_conn {} {
+
+    # Peter Marklund
+    # We need to be able to invoke ad_conn in the installer. However
+    # We cannot use the rp_filter that sets up ad_conn
+    proc ad_conn {attribute} {
+        if { [string equal $attribute "-connected_p"] } {
+            set return_value 1
+        } elseif { [catch {set return_value [ns_conn $attribute] } error] } {
+            set return_value ""
+        }
+
+        return $return_value
+    }
+}
+
 ad_proc -public ad_windows_p {} {
     # DLB - this used to check the existence of the WINDIR environment
     # variable, rather than just asking AOLserver.
