@@ -3,7 +3,6 @@
   <head>
     <meta name="generator" content="OpenACS version @openacs_version@">
     <title>@title;noquote@</title>
-    @header_stuff;noquote@
     <multiple name="header_links">
       <link rel="@header_links.rel@" type="@header_links.type@" href="@header_links.href@" media="@header_links.media@">
     </multiple>
@@ -11,6 +10,7 @@
     <script src="/resources/acs-subsite/core.js" language="javascript"></script>
     <textarea id="holdtext" style="display: none;"></textarea>
 
+    @header_stuff;noquote@
   </head>
   <body<multiple name=attribute> @attribute.key@="@attribute.value@"</multiple>>
     <if @developer_support_p@ true>
