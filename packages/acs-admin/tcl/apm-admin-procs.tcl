@@ -200,6 +200,6 @@ ad_proc -private apm_higher_version_installed_p {package_key version_name} {
 
     # DRB: I turned this into a simple select by rearranging the code and
     # stuck the result into queryfiles.
-    return [db_string apm_higher_version_installed_p {}]
+    return [db_string apm_higher_version_installed_p {} -default 0]
 }
 
