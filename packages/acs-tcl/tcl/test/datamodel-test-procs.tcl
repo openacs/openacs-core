@@ -8,7 +8,7 @@ ad_library {
 
 
 aa_register_case -cats {db smoke production_safe} datamodel__named_constraints {
-    Check that there are no tables with unnamed constraints
+    Check that all the contraints meet the constraint naming standards.
 
     @author Jeff Davis davis@xarg.net
 } {
@@ -30,7 +30,8 @@ aa_register_case -cats {db smoke production_safe} datamodel__named_constraints {
 
 
 aa_register_case -cats {db smoke production_safe} datamodel__acs_object_type_check {
-    Check that the object type tables exist and that th
+    Check that the object type tables exist and that the id column is present and the 
+    name method works.
 
     @author Jeff Davis davis@xarg.net
 } {
@@ -83,7 +84,8 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_object_type_che
 
 
 aa_register_case -cats {db smoke production_safe} datamodel__acs_attribute_check {
-    Check that the object type tables exist and that th
+    Check that the acs_attribute column is present and the datatype is vaguely 
+    consistent with the db datatype.
 
     @author Jeff Davis davis@xarg.net
 } {
