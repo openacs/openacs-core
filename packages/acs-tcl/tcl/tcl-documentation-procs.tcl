@@ -885,7 +885,15 @@ ad_proc -public ad_page_contract {
 	    }
 	}
 	
-	# Remember that we've found the spec so we don't complain that argument is missing
+	if { [info exists apc_internal_filter($formal_name:multiple)] && [empty_string_p $actual_value] } {
+            # LARS:
+            # If you lappend an emptry_string, it'll actually add the empty string to the list as an element
+            # which is not what we want
+            continue
+        }
+
+
+	# Remember that we've found the spec so we don't complain that this argument is missing
 	ad_page_contract_set_validation_passed $formal_name
 
 	#
@@ -933,7 +941,7 @@ ad_proc -public ad_page_contract {
 	upvar 1 $formal_name var
 	
 	if { [info exists apc_internal_filter($formal_name:multiple)] } {
-	    lappend $variable_to_set $actual_value
+            lappend $variable_to_set $actual_value
 	} else {
 	    if { [info exists $variable_to_set] } {
 		ad_complain -key $formal_name:-doublevalue "You've supplied two values for '$formal_name'"
