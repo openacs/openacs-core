@@ -27,7 +27,8 @@ namespace eval lang::message {
         Inserts the message key into the database if it
         doesn't already exists. Inserts the message itself
         in the given locale into the database if it doesn't
-        exist and updates it if it does.
+        exist and updates it if it does. Also updates the
+        cache with the message.
     
         @author Jeff Davis (davis@arsdigita.com)
         @author Bruno Mattarollo (bruno.mattarollo@ams.greenpeace.org)
@@ -53,9 +54,6 @@ namespace eval lang::message {
             db_dml insert_message_key {}
         }
 
-        # First we check if the given key already exists
-        # or if this is different than what we have saved.
-        
         # Check if the $lang parameter is a language or a locale
         if { [string length $locale] == 2 } {
             # It seems to be a language (iso codes are 2 characters)
@@ -64,10 +62,25 @@ namespace eval lang::message {
             # let's get the default locale for that language
             set locale [util_memoize [list ad_locale_locale_from_lang $locale]]
         } 
+
+        if { $key_exists_p } {
+            # The message key exists so we are assuming the en_US version
+            # of the message has already been registered, also it looks like
+            # the message contains variables - check that any suc variables are
+            # unchanged from the existing en_US message
+
+            # Get the current en_US message from the cache
+            set existing_en_us_message [nsv_get lang_message_en_US $key]
+
+            set missing_vars_list [get_missing_embedded_vars $existing_en_us_message $message]
+            if { [llength $missing_vars_list] != 0 } {
+                error "The following variables are in the en_US message for key $message_key but not in the new message \"$message\" in locale $locale : $missing_vars_list"
+            }
+        }
     
         # Check the cache
         if { [nsv_exists lang_message_$locale $key] } { 
-
+            # Update existing message
             set old_message [nsv_get lang_message_$locale $key]
 
             if { ![string equal $message $old_message] } {
@@ -84,6 +97,7 @@ namespace eval lang::message {
                 nsv_set lang_message_$locale $key $message
             }
         } else { 
+            # Insert new message
             ns_log Debug "lang::message::register - Inserting into database message: $locale $key" 
             db_transaction {
                 # As above, avoiding the bug#2011927 from Oracle.
@@ -99,6 +113,48 @@ namespace eval lang::message {
                 nsv_set lang_message_$locale $key $message
             }
         }
+    }
+
+    ad_proc -private get_missing_embedded_vars {
+        existing_message
+        new_message
+    } {
+        Returns a list of variables that are in an existing message and should
+        also be in a new message with the same key but a different locale.
+        The set of embedded variables in the messages for a certain key
+        should be identical across locales.
+
+        @param existing_message The existing message with vars that should
+                                also be in the new message
+        @param new_message      The new message that we are checking for
+                                consistency.
+
+        @return The list of variables in the existing en_US message
+                that are missing in the new message.
+
+        @author Peter Marklund (peter@collaboraid.biz)
+        @creation-date 12 November 2002
+    } {
+        # Loop over the vars in the en_US message
+        set missing_variable_list [list]
+        set remaining_message $existing_message
+        while { [regexp [embedded_vars_regexp] $remaining_message match before_percent \
+                                                                              percent_match \
+                                                                              remaining_message] } {
+            if { [string equal $percent_match "%%"] } {
+                # A quoted percentage sign - ignore
+                continue
+            } else {
+                # A variable - check that it is in the new message
+                if { ![regexp "(?:^|\[^%]\)${percent_match}" $new_message match] } {
+                    # The variable is missing
+                    set variable_name [string range $percent_match 1 end-1]                    
+                    lappend missing_variable_list $variable_name
+                }
+            }
+        }
+
+        return $missing_variable_list
     }
 
     ad_proc -private format {
@@ -129,7 +185,7 @@ namespace eval lang::message {
         set value_array_keys [array names value_array]
         set remaining_message $localized_message
         set formated_message ""
-        while { [regexp {^(.*?)(%%|%[a-zA-Z_]+%)(.*)$} $remaining_message match before_percent percent_match remaining_message] } {
+        while { [regexp [embedded_vars_regexp] $remaining_message match before_percent percent_match remaining_message] } {
     
             append formated_message $before_percent
     
@@ -169,6 +225,16 @@ namespace eval lang::message {
         return $formated_message
     }
     
+    ad_proc -private embedded_vars_regexp {} {
+        The regexp pattern used to loop over variables embedded in 
+        message catalog texts.
+
+        @author Peter Marklund (peter@collaboraid.biz)
+        @creation-date 12 November 2002
+    } {
+        return {^(.*?)(%%|%[a-zA-Z_\.]+%)(.*)$}
+    }
+
     ad_proc -public lookup {
         locale
         key
@@ -217,14 +283,6 @@ namespace eval lang::message {
         
         @return A localized piece of text.
     } { 
-        # If the cache hasn't been loaded - do so now
-        # Peter: should we go to the database on first hit and cache the messages as they are used
-        # instead of loading the whole cache up-front?
-        global message_cache_loaded_p
-        if { ![info exists message_cache_loaded_p] } {
-            lang::message::cache
-        }
-        
         if { [empty_string_p $locale] } {
             # No locale provided
 
@@ -246,6 +304,20 @@ namespace eval lang::message {
             set locale [util_memoize [list ad_locale_locale_from_lang $locale]]    
         } 
     
+        if { [lang::util::translator_mode_p] } {
+            # Translator mode - set uo translate_url
+            
+            set key_split [split $key "."]
+            set package_key_part [lindex $key_split 0]
+            set message_key_part [lindex $key_split 1]
+            set return_url [ad_conn url]
+            if { [ns_getform] != "" } {
+                append return_url "?[export_entire_form_as_url_vars]"
+            }
+            
+            set translate_url /acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } { locales $locale } { package_key $package_key_part } return_url }]
+        }
+
         if { [nsv_exists lang_message_$locale $key] } {
             # Message exists in the given locale
 
@@ -253,6 +325,11 @@ namespace eval lang::message {
             # Do any variable substitutions (interpolation of variables)
             if { [llength $substitution_list] > 0 || ($upvar_level >= 1 && [string first "%" $return_value] != -1) } {
                 set return_value [lang::message::format $return_value $substitution_list [expr $upvar_level + 1]]
+            }
+            
+            if { [lang::util::translator_mode_p] } {
+                # Translator mode - return a translation link
+                append return_value "<a href=\"$translate_url\" title=\"edit translation of $message_key_part in $locale\"><font color=\"green\"><b>o</b></font></a>"
             }
 
         } else {
@@ -272,16 +349,16 @@ namespace eval lang::message {
                 } else {
                     # Translator mode - return a translation link
 
-                    set key_split [split $key "."]
-                    set package_key_part [lindex $key_split 0]
-                    set message_key_part [lindex $key_split 1]
-                    
-                    set return_url [ad_conn url]
-                    if { [ns_getform] != "" } {
-                        append return_url "?[export_entire_form_as_url_vars]"
+                    set us_text [nsv_get lang_message_en_US $key]
+                    # Do any variable substitutions (interpolation of variables)
+                    if { [llength $substitution_list] > 0 || ($upvar_level >= 1 && [string first "%" $us_text] != -1) } {
+                        set us_text [lang::message::format $us_text $substitution_list [expr $upvar_level + 1]]
                     }
-                    
-                    set return_value "&nbsp;<a href=\"/acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } { locales $locale } { package_key $package_key_part } return_url }]\"><span style=\"background-color: yellow\"><font size=\"-2\">$message_key_part - TRANSLATE</font></span></a>&nbsp;"
+            
+
+                    set return_value "$us_text<a href=\"$translate_url\" title=\"translate $message_key_part to $locale\"><font color=\"red\"><b>*</b></font></a>"
+                    # set return_value "&nbsp;<a href=\"/acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } { locales $locale } { package_key $package_key_part } return_url }]\"><span style=\"background-color: yellow\"><font size=\"-2\">$message_key_part - TRANSLATE</font></span></a>&nbsp;"
+
                 }
 
             } {

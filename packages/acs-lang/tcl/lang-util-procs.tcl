@@ -350,6 +350,8 @@ namespace eval lang::util {
         @param locale  Name of a locale, as language_COUNTRY using ISO 639 and ISO 3166
         @return        IANA MIME character set name
     } {
+        # LARS:
+        # This should probably be cached
         return [db_string charset_for_locale {}]
     }
     
@@ -491,7 +493,7 @@ namespace eval lang::util {
                     && ![string is space $text_wo_variables] 
                     && [string length $text] > 1
                     && [string match -nocase {*[A-Z]*} $text]
-                    && ![regexp {(?:\s*&nbsp;\s*)+} $text_wo_variables match]
+                    && ![regexp {^(?:\s*&nbsp;\s*)+$} $text_wo_variables match]
                     && ![regexp {^\s*#[a-zA-Z\._-]+#\s*$} $text_wo_variables match]
                 } {
                     # Peter: texts with a hash or curly brace used to be excluded, my thinking
@@ -500,7 +502,6 @@ namespace eval lang::util {
                     #&& ![string match {*\#*} $text]
                     #&& ![string match {*\{*} $text]
                     #&& ![string match {*\}*} $text]                    
-
                     regexp {^(\s*)(.*?)(\s*)$} $text match lead text lag
 
                     set text_w_percentages [convert_adp_variables_to_percentage_signs $text]
@@ -627,9 +628,9 @@ namespace eval lang::util {
     } {
         ad_set_client_property acs-lang translator_mode_p $translator_mode_p
     }
+}
     
 
-}
 
 #####
 #
