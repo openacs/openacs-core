@@ -30,7 +30,7 @@
     from dual
     where not exists (select 1
                       from parties
-                      where email = :email)
+                      where upper(email) = upper(:email))
   </querytext>
 </fullquery>
 
