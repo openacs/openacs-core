@@ -1,26 +1,10 @@
-ad_page_contract {
-    Carries out the full OpenACS install.
+##############
+#
+# Get configuration parameters
+#
+#############
 
-    @author Peter Marklund
-    @cvs-id $Id$
-
-} {
-    email:notnull
-    {username ""}
-    first_names:notnull
-    last_name:notnull
-    password:notnull
-    password_confirmation:notnull
-
-    system_url:notnull
-    system_name:notnull
-    publisher_name:notnull
-    {system_owner ""}
-    {admin_owner ""}
-    {host_administrator ""}
-    {outgoing_sender ""}
-    {new_registrations ""}
-}
+install_page_contract [install_mandatory_params] [install_optional_params]
 
 # Default all system emails to the administrators email
 foreach var_name {system_owner admin_owner host_administrator outgoing_sender new_registrations} {

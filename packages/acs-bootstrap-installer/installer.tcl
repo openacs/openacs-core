@@ -12,6 +12,140 @@
 # Return a header for an installation page, suitable for ns_writing.
 # This procedure engages the installer mutex, as every installer page is a critical section.
 
+ad_proc -private install_input_widget { 
+    {-type ""}
+    {-size 40}
+    {-extra_attributes ""}
+    param_name 
+} {
+    Return an HTML input widget for a parameter with an
+    indication of whether the param is mandatory.
+} {
+    set type_attribute [ad_decode $type "" "" "type=\"$type\""]
+
+    set input_widget "<input name=\"$param_name\" size=\"$size\" $type_attribute $extra_attributes>"
+
+    if { [install_param_mandatory_p $param_name] } {
+        append input_widget " <span style=\"color: red;\">\[*\]</span>"
+    }
+
+    return $input_widget
+} 
+
+ad_proc -private install_param_mandatory_p { param_name } {
+    Return 1 if the given parameter with given name is
+    mandatory for OpenACS install and 0 otherwise.
+
+    @author Peter Marklund
+} {
+    array set mandatory_params_array [install_mandatory_params]
+    set mandatory_names [array names mandatory_params_array]
+    return [expr [lsearch -exact $mandatory_names $param_name] != -1]
+}
+
+ad_proc -private install_mandatory_params {} {
+    Return information about parameters that are mandatory
+    for OpenACS installation.
+
+    @return An array list with variable names as values
+            and pretty names as keys.
+} {
+    return {
+        email "Email"
+        first_names "First names"
+        last_name "Last name"
+        password "Password"
+        password_confirmation "Password confirmation"
+        system_url "System URL"
+        system_name "System name"
+        publisher_name "Publisher name"
+    }
+}
+
+ad_proc -private install_optional_params {} {
+    Return information about parameters that are optional
+    for OpenACS installation.
+
+    @return An array list with variable names as values
+            and default values as keys.
+} {
+    return  {
+        username ""
+        system_owner ""
+        admin_owner ""
+        host_administrator ""
+        outgoing_sender ""
+        new_registrations ""
+    }
+}
+
+ad_proc -private install_page_contract { mandatory_params optional_params } {
+    Instead of using ad_page_contract that relies on certain acs-subsite libraries
+    that may not be available at all times during installation we use this
+    more primitive proc instead.
+
+    @param mandatory_params An array list where keys are param names and values
+                            are pretty names.
+    @param optional_params An array list with param names as keys and default
+                           values as keys.
+
+    @author Peter Marklund
+} {
+    array set mandatory_params_array $mandatory_params
+    array set optional_params_array $optional_params
+
+    set form [ns_getform]
+    set missing_params [list]
+
+    if { [empty_string_p $form] } {
+        # Form is empty
+        set missing_params $mandatory_params
+    } else {
+        # Form is non-empty
+
+        # Loop over all params
+        set all_param_names [concat [array names mandatory_params_array] \
+                                 [array names optional_params_array]]
+        foreach param_name $all_param_names {
+            set param_value [ns_set iget $form $param_name]
+            set mandatory_p [expr [lsearch -exact $mandatory_params $param_name] != -1]
+
+            if { ![empty_string_p $param_value] } {
+                # Param in form - set value in callers scope
+                uplevel [list set $param_name $param_value]
+            } else {
+                # Param not in form
+                if { $mandatory_p } {
+                    # Mandatory param - complain
+                    lappend missing_params $mandatory_params_array($param_name)
+                } else {
+                    # Optional param - set default
+                    uplevel [list set $param_name $optional_params_array($param_name)]
+                }
+            }
+        }
+    }
+
+    # If there are missing mandatory params - return a complaint
+    # page and exit
+    if { [llength $missing_params] > 0 } {
+        ns_write "[install_header 200 "Missing parameters"]
+
+The following mandatory parameters are missing:
+<ul>
+<li>[join $missing_params "</li>\n<li>"]</li>
+</ul>
+
+<p>
+Please back up your browser and provide those parameters. Thank you.
+</p>
+
+[install_footer]
+"
+        return -code return
+    }
+}
+
 proc install_header { status title } {
 
     # Prefix the page title

@@ -275,6 +275,9 @@ if { ![db_table_exists apm_packages] } {
         set system_url "http://yourdomain.com"
     }
 
+    set email_input_widget [install_input_widget \
+                                -extra_attributes "onChange=\"updateSystemEmails()\"" \
+                                email]
     append body "
 
 <h2>System Configuration</h2>
@@ -304,27 +307,27 @@ function updateSystemEmails() {
 
 <tr>
   <th align=right>Email:</th>
-  <td><input name=email size=40 onChange=\"updateSystemEmails()\"></td>
+<td>$email_input_widget</td>
 </tr>
 <tr>
   <th align=right>Username:</th>
-  <td><input name=username size=40> <span style=\"color: red;\">\[*\]</span></td>
+  <td>[install_input_widget username]</td>
 </tr>
 <tr>
   <th align=right>First Name:</th>
-  <td><input name=first_names size=40></td>
+  <td>[install_input_widget first_names]</td>
 </tr>
 <tr>
   <th align=right>Last Name:</th>
-  <td><input name=last_name size=40></td>
+  <td>[install_input_widget last_name]</td>
 </tr>
 <tr>
   <th align=right>Password:</th>
-  <td><input type=password name=password size=12></td>
+  <td>[install_input_widget -size 12 -type password password]</td>
 </tr>
 <tr>
   <th align=right>Password (again):</th>
-  <td><input type=password name=password_confirmation size=12></td>
+  <td>[install_input_widget -size 12 -type password password_confirmation]</td>
 </tr>
 
 <tr>
@@ -333,42 +336,42 @@ function updateSystemEmails() {
 
 <tr>
   <th align=right>System URL:</th>
-  <td><input name=system_url size=40 value=\"$system_url\"><br>
+<td>[install_input_widget system_url]<br>
 The canonical URL of your system.<br><br>
 </tr>
 <tr>
   <th align=right>System Name:</th>
-  <td><input name=system_name size=40 value=\"yourdomain Network\"><br>
+  <td>[install_input_widget system_name]<br>
 The name of your system.<br><br>
 </tr>
 <tr>
   <th align=right>Publisher Name:</th>
-  <td><input name=publisher_name size=40 value=\"Yourdomain Network, Inc.\"><br>
+  <td>[install_input_widget publisher_name]<br>
 The legal name of the person or corporate entity responsible for the site.<br><br>
 </tr>
 <tr>
   <th align=right>System Owner:</th>
-  <td><input name=system_owner size=40 value=\"\"><br>
+  <td>[install_input_widget system_owner]<br>
 The email address signed at the bottom of user-visible pages.<br><br>
 </tr>
 <tr>
   <th align=right>Admin Owner:</th>
-  <td><input name=admin_owner size=40 value=\"\"><br>
+  <td>[install_input_widget admin_owner]<br>
 The email address signed on administrative pages.<br><br>
 </tr>
 <tr>
   <th align=right>Host Administrator:</th>
-  <td><input name=host_administrator size=40 value=\"\"><br>
+  <td>[install_input_widget admin_owner]<br>
 A person whom people can contact if they experience technical problems.<br><br>
 </tr>
 <tr>
   <th align=right>Outgoing Email Sender:</th>
-  <td><input name=outgoing_sender size=40 value=\"\"><br>
+  <td>[install_input_widget outgoing_sender]<br>
 The email address that will sign outgoing alerts.
 </tr>
 <tr>
   <th align=right>New Registration Email:</th>
-  <td><input name=new_registrations size=40 value=\"\"><br>
+  <td>[install_input_widget new_registrations]<br>
 The email address to send New registration notifications.<br><br>
 </tr>
 </table>
