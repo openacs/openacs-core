@@ -53,16 +53,16 @@ info patchlevel
       <para>Remember that you have to be root if you want to follow these instructions. On Mac OS X type <userinput>sudo su -</userinput> to become root.</para>
       <para>Alternatively use <userinput>curl -L -O</userinput> instead of <userinput>wget</userinput> (especially on Mac OS X).</para>
       <screen>[root root]# <userinput>cd /usr/local/src</userinput>
-[root src]# <userinput>wget http://heanet.dl.sourceforge.net/sourceforge/tcl/tcl8.4.7-src.tar.gz</userinput>
-[root src]# <userinput>tar xfz tcl8.4.7-src.tar.gz</userinput>
-[root src]# <userinput>cd tcl8.4.7/unix</userinput>
+[root src]# <userinput>wget http://heanet.dl.sourceforge.net/sourceforge/tcl/tcl8.4.9-src.tar.gz</userinput>
+[root src]# <userinput>tar xfz tcl8.4.9-src.tar.gz</userinput>
+[root src]# <userinput>cd tcl8.4.9/unix</userinput>
 [root unix]# <userinput>./configure --enable-threads</userinput>
 [root unix]# <userinput>make install</userinput>
 [root root]# 
 <action>cd /usr/local/src
-wget http://heanet.dl.sourceforge.net/sourceforge/tcl/tcl8.4.7-src.tar.gz
-tar xfz tcl8.4.7-src.tar.gz
-cd tcl8.4.7/unix
+wget http://heanet.dl.sourceforge.net/sourceforge/tcl/tcl8.4.9-src.tar.gz
+tar xfz tcl8.4.9-src.tar.gz
+cd tcl8.4.9/unix
 ./configure --enable-threads
 make install</action>
       </screen>
@@ -73,10 +73,10 @@ make install</action>
         <para>Download the aolserver from CVS.</para>
       </formalpara>
       <screen>[root root]# <userinput>cd /usr/local/src</userinput>
-[root src]# <userinput>mkdir aolserver40r9</userinput>
-[root src]# <userinput>cd aolserver40r9</userinput>
+[root src]# <userinput>mkdir aolserver40r10</userinput>
+[root src]# <userinput>cd aolserver40r10</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver login</userinput>
-[root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co  -r aolserver_v40_r9 aolserver</userinput>
+[root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co  -r aolserver_v40_r10 aolserver</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1</userinput>
@@ -85,30 +85,30 @@ make install</action>
 [root aolserver]# <userinput>tar xvfz tDOM-0.7.8.tar.gz</userinput>
 [root root]# 
 <action>cd /usr/local/src
-mkdir aolserver40r9
-cd aolserver40r9
-cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r aolserver_v40_r9 aolserver
+mkdir aolserver40r10
+cd aolserver40r10
+cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r aolserver_v40_r10 aolserver
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r v2_7 nsoracle
-wget http://www.tdom.org/tDOM-0.7.8.tar.gz
-tar xvfz tDOM-0.7.8.tar.gz</action></screen>
+wget http://www.tdom.org/files/tDOM-0.8.0.tar.gz
+tar xvfz tDOM-0.8.0.tar.gz</action></screen>
     </listitem>
     <listitem id="aolserver4-install">
       <formalpara>
         <title>Configure, compile and install AOLserver</title>
         <para>Many people need to run more than one version of AOLserver in parallel.  This section accomodates future upgrades by installing AOLserver 4 in <computeroutput>/usr/local/aolserver40r9</computeroutput>.</para>
       </formalpara>
-        <screen>[root aolserver]# <userinput>cd /usr/local/src/aolserver40r9/aolserver</userinput>
-[root aolserver]# <userinput>./configure --prefix=/usr/local/aolserver40r9 --with-tcl=/usr/local/lib/</userinput>
+        <screen>[root aolserver]# <userinput>cd /usr/local/src/aolserver40r10/aolserver</userinput>
+[root aolserver]# <userinput>./configure --prefix=/usr/local/aolserver40r10 --with-tcl=/usr/local/lib/</userinput>
 [root aolserver]# <userinput>make install</userinput>
-<action>cd /usr/local/src/aolserver40r9/aolserver
-./configure --prefix=/usr/local/aolserver40r9 --with-tcl=/usr/local/lib/
+<action>cd /usr/local/src/aolserver40r10/aolserver
+./configure --prefix=/usr/local/aolserver40r10 --with-tcl=/usr/local/lib/
 make install
 </action></screen>
-      <para>If this is the only version of AOLserver in use, or is the default version, create a symlink.  If not, then be sure to use <computeroutput>/usr/local/aolserver40r9</computeroutput> instead of <computeroutput>/usr/local/aolserver</computeroutput> in future steps and check any scripts and makefiles you run to ensure they use the correct path.</para>
-      <screen>[root aolserver]# <userinput>ln -s /usr/local/aolserver40r9 /usr/local/aolserver</userinput></screen>
+      <para>If this is the only version of AOLserver in use, or is the default version, create a symlink.  If not, then be sure to use <computeroutput>/usr/local/aolserver40r10</computeroutput> instead of <computeroutput>/usr/local/aolserver</computeroutput> in future steps and check any scripts and makefiles you run to ensure they use the correct path.</para>
+      <screen>[root aolserver]# <userinput>ln -s /usr/local/aolserver40r10 /usr/local/aolserver</userinput></screen>
     </listitem>
     <listitem id="aolserver4-modules-install">
       <formalpara>
@@ -117,13 +117,13 @@ make install
           <orderedlist>
             <listitem id="aolserver4-nscache-install">
               <para>Install nscache</para>
-              <screen>[root aolserver]# <userinput>cd /usr/local/src/aolserver40r9/nscache</userinput>
-[root nscache]# <userinput>make install AOLSERVER=/usr/local/aolserver40r9</userinput></screen>
+              <screen>[root aolserver]# <userinput>cd /usr/local/src/aolserver40r10/nscache</userinput>
+[root nscache]# <userinput>make install AOLSERVER=/usr/local/aolserver40r10</userinput></screen>
             </listitem>
             <listitem id="aolserver4-nsoracle-install">
               <para>Install nsoracle (if you want to use Oracle)</para>
               <screen>[root nscache]# <userinput>cd ../nsoracle</userinput>
-[root nsoracle]# <userinput>make install AOLSERVER=/usr/local/aolserver40r9</userinput></screen>
+[root nsoracle]# <userinput>make install AOLSERVER=/usr/local/aolserver40r10</userinput></screen>
             </listitem>
             <para>OpenACS looks for the Oracle driver at
             /usr/local/aolserver/bin/ora8.so, but some versions of
@@ -133,7 +133,7 @@ make install
             <listitem id="aolserver4-nspostgres-install">
               <para>Install nspostgres (if you want to use Postgres)</para>
               <screen>[root nscache]# <userinput>cd ../nspostgres</userinput>
-[root nspostgres]# <userinput>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib</userinput>[root nspostgres]# <userinput>make install POSTGRES=LSB ACS=1 INST=/usr/local/aolserver40r9  AOLSERVER=/usr/local/aolserver40r9</userinput>
+[root nspostgres]# <userinput>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib</userinput>[root nspostgres]# <userinput>make install POSTGRES=LSB ACS=1 INST=/usr/local/aolserver40r10  AOLSERVER=/usr/local/aolserver40r10</userinput>
               </screen>
               <para>If you get errors like:</para>
               <programlisting>nspostgres.c: In function `Ns_PgTableList':
@@ -162,7 +162,7 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
               <screen>[root nspostgres]# <userinput>cd ../nssha1</userinput>
 [root nssha1]# 
               <para>Now install nssha1:</para>
-              <screen>[root nssha1]# <userinput>make install AOLSERVER=/usr/local/aolserver40r9</userinput></screen>
+              <screen>[root nssha1]# <userinput>make install AOLSERVER=/usr/local/aolserver40r10</userinput></screen>
               <para>If the make fails you will have to edit nssha1.c. Comment out the following 2 lines (lines 139-140):        </para>
               <programlisting><emphasis role="bold">//</emphasis> typedef unsigned int u_int32_t;
 <emphasis role="bold">//</emphasis> typedef unsigned char u_int8_t;</programlisting>
@@ -172,7 +172,7 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
               <screen>[root nssha1]# <userinput>cd ../tDOM-0.7.8/unix</userinput></screen>
               <para>Edit the <computeroutput>CONFIG</computeroutput> file. Uncomment the instructions meant for AOLserver 4, but edit it to look like this:</para>
               <screen>../configure --enable-threads --disable-tdomalloc
-          --prefix=/usr/local/aolserver40r9 --with-tcl=/usr/local/lib</screen>
+          --prefix=/usr/local/aolserver40r10 --with-tcl=/usr/local/lib</screen>
               <para>Now you can compile and configure tDOM</para>
               <screen>[root unix]# <userinput>sh CONFIG</userinput>
 [root unix]# <userinput>make install</userinput></screen>
@@ -207,17 +207,17 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
 [root bin]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</userinput>
 [root bin]# <userinput>chmod 750 nsd-oracle</userinput>
 [root bin]#
-<action>cd /usr/local/aolserver40r9/bin
+<action>cd /usr/local/aolserver40r10/bin
 cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
 chmod 750 nsd-oracle</action></screen>
             </listitem>
             <listitem>
               <para>PostgreSQL</para>
-              <screen>[root aolserver]# <userinput>cd /usr/local/aolserver40r9/bin</userinput>
+              <screen>[root aolserver]# <userinput>cd /usr/local/aolserver40r10/bin</userinput>
 [root bin]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</userinput>
 [root bin]# <userinput>chmod 755 nsd-postgres</userinput>
 [root bin]#
-<action>cd /usr/local/aolserver40r9/bin
+<action>cd /usr/local/aolserver40r10/bin
 cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
 chmod 755 nsd-postgres</action></screen>
         </listitem>
