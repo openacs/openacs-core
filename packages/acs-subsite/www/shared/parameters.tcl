@@ -24,9 +24,12 @@ set page_title "Parameters"
 
 if { [string equal $package_url [subsite::get_element -element url]] } {
     set context [list [list "${package_url}admin/" "Administration"] $page_title]
+} elseif { ![empty_string_p $package_url] } {
+        set context [list [list $package_url $instance_name] [list "${package_url}admin/" "Administration"] $page_title]
 } else {
-    set context [list [list $package_url $instance_name] [list "${package_url}admin/" "Administration"] $page_title]
+    set context [list $page_title]
 }
+
 
 ad_require_permission $package_id admin
 
