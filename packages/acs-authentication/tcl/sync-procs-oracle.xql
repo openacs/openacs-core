@@ -18,7 +18,7 @@
                    to_char(doc_end_time, 'YYYY-MM-DD HH24:MI:SS') as doc_end_time,
                    doc_status,
                    doc_message,
-                   (j.job_end_time - j.job_start_time) * 24*60*60 as run_time_seconds,
+                   round((j.job_end_time - j.job_start_time) * 24*60*60) as run_time_seconds,
                    (select count(e1.entry_id)
                     from   auth_batch_job_entries e1
                     where  e1.job_id = j.job_id) as num_actions,
