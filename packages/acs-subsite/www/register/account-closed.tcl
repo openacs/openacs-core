@@ -3,9 +3,9 @@ ad_page_contract {
     
     @cvs-id $Id$
 } {
-    {message:allhtml ""}
+    {message:html ""}
 }
 
 set page_title [ad_convert_to_text -html_p t -- $message]
-set context [list $page_title]
+set context [list [_ "acs-kernel.common_Register"]]
 
