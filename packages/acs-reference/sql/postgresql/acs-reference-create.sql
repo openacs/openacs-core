@@ -151,7 +151,7 @@ end;
 
 -- made initially for PG 
 create function acs_reference__new (varchar,timestamp,
-varchar,varchar,timestamp)
+varchar,varchar,timestamp with time zone)
 returns integer as '
 declare
     p_table_name      alias for $1; -- 
@@ -166,6 +166,7 @@ begin
                               ''acs_reference_repository'', null);
 end;
 ' language 'plpgsql';
+
 
 create function acs_reference__delete (integer)
 returns integer as '
