@@ -64,9 +64,9 @@ ad_proc -public template::widget::textarea { element_reference tag_attributes } 
   return $output
 }
 
-# A static information widget that does not submit any data
-
 ad_proc -public template::widget::inform { element_reference tag_attributes } {
+    A static information widget that does not submit any data
+} {
 
   upvar $element_reference element
 
