@@ -387,13 +387,15 @@ ad_proc -private apm_load_catalog_files {
 
 
 ad_proc -private apm_package_install { 
+    {-enable:boolean}
     {-callback apm_dummy_callback}
     {-copy_files:boolean}
     {-load_data_model:boolean}
     {-data_model_files 0}
     {-message_catalog_files {}}
     {-install_path ""}
-    spec_file_path } {
+    spec_file_path 
+} {
 
     Registers a new package and/or version in the database, returning the version_id.
     If $callback is provided, periodically invokes this procedure with a single argument
@@ -428,6 +430,7 @@ ad_proc -private apm_package_install {
 	set pretty_plural $version(pretty-plural)
 	set initial_install_p $version(initial-install-p)
 	set singleton_p $version(singleton-p)
+        set auto_mount $version(auto-mount)
 	set version_name $version(name)
 	set version_uri $version(url)
 	set summary $version(summary)
@@ -441,7 +444,14 @@ ad_proc -private apm_package_install {
 
 	# Register the package if it is not already registered.
 	if { ![apm_package_registered_p $package_key] } {
-	    apm_package_register $package_key $package_name $pretty_plural $package_uri $package_type $initial_install_p $singleton_p $relative_path
+	    apm_package_register -spec_file_path $relative_path \
+                                 $package_key \
+                                 $package_name \
+                                 $pretty_plural \
+                                 $package_uri \
+                                 $package_type \
+                                 $initial_install_p \
+                                 $singleton_p
 	}
 
 	# If an older version already exists in apm_package_versions, update it;
@@ -458,7 +468,7 @@ ad_proc -private apm_package_install {
             apm_load_catalog_files -upgrade $package_key $message_catalog_files
 
 	    set version_id [apm_package_install_version -callback $callback $package_key $version_name \
-		    $version_uri $summary $description $description_format $vendor $vendor_uri $release_date]
+		    $version_uri $summary $description $description_format $vendor $vendor_uri $auto_mount $release_date]
 	    apm_version_upgrade $version_id
 	    apm_package_upgrade_parameters -callback $callback $version(parameters) $package_key
 
@@ -469,7 +479,7 @@ ad_proc -private apm_package_install {
             apm_load_catalog_files -upgrade $package_key $message_catalog_files
 
 	    set version_id [apm_package_install_version -callback $callback $package_key $version_name \
-				$version_uri $summary $description $description_format $vendor $vendor_uri $release_date]
+				$version_uri $summary $description $description_format $vendor $vendor_uri $auto_mount $release_date]
 
 	    ns_log Notice "INSTALL-HACK-LOG-BEN: version_id is $version_id"
 
@@ -495,41 +505,55 @@ ad_proc -private apm_package_install {
 </blockquote></pre>"
 	return 0
     }
-    if { [string equal $package_type "apm_service"] && [string equal $singleton_p "t"]} {
-	# This is a singleton package.  Instantiate it automatically.
-	if {[catch {
-	    db_exec_plsql package_instantiate_mount {
-	        declare
-  	            instance_id   apm_packages.package_id%TYPE;
-	        begin
-	            instance_id := apm_package.new(
-	                          instance_name => :package_name,
-			  	  package_key => :package_key,
-				  context_id => acs.magic_object_id('default_context')
-				  );
-	        end;
-	    }
-	} errmsg]} {
-	    apm_callback_and_log $callback "[string totitle $package_key] not instantiated.<p> Error:
-	    <pre><blockquote>[ad_quotehtml $errmsg]</blockquote></pre>"
-	} else {
-	    apm_callback_and_log $callback "[string totitle $package_key] instantiated as $package_key.<p>"
 
-            apm_invoke_callback_proc -version_id $version_id -type after-instantiate
-	}
+    # Source Tcl procs and queries to be able
+    # to invoke any Tcl callbacks after mounting and instantiation. Note that this reloading is only in this interpreter.
+    # The proc apm_mark_packages_for_bootstrap is used later to reload libraries in all interpreters.
+    apm_load_libraries -procs -force_reload -packages $package_key
+    apm_load_queries -packages $package_key
+
+    # Enable the package
+    if { $enable_p } {
+        nsv_set apm_enabled_package $package_key 1    
+
+	apm_version_enable -callback $callback $version_id
+    }
+    
+
+    if { ![empty_string_p $version(auto-mount)] } {
+        # This is a package that should be auto mounted
+
+        set parent_id [site_node::get_node_id -url "/"]
+
+        if { [catch {
+            db_transaction {            
+                set node_id [site_node::new -name $version(auto-mount) -parent_id $parent_id]
+            }
+        } error] } {
+            ns_log Error "Package $version(package-name) could not be mounted at /$version(auto-mount) , there may already me a package mounted there, the error is: $error"
+        } else {
+            site_node::instantiate_and_mount -node_id $node_id \
+                                             -node_name $version(auto-mount) \
+                                             -package_name $version(package-name) \
+                                             -package_key $package_key
+        }
+    } elseif { [string equal $package_type "apm_service"] && [string equal $singleton_p "t"] } {
+	# This is a singleton package.  Instantiate it automatically, but don't mount.
+
+        # Using empty context_id
+        apm_package_instance_new $version(package-name) "" $package_key
     }
 
+    # After install Tcl proc callback
     apm_invoke_callback_proc -version_id $version_id -type after-install
 
     return $version_id
 }
 
 ad_proc -private apm_package_install_version {
-    {
-	-callback apm_dummy_callback
-	-version_id ""
-    }
-    package_key version_name version_uri summary description description_format vendor vendor_uri {release_date ""} 
+    {-callback apm_dummy_callback}
+    {-version_id ""}
+    package_key version_name version_uri summary description description_format vendor vendor_uri auto_mount {release_date ""} 
 } {
     Installs a version of a package into the ACS.
     @return The assigned version id.
@@ -541,24 +565,7 @@ ad_proc -private apm_package_install_version {
 	set release_date [db_null]
     }
 
-    return [db_exec_plsql version_insert {
-		begin
-		:1 := apm_package_version.new(
-			version_id => :version_id,
-			package_key => :package_key,
-			version_name => :version_name,
-			version_uri => :version_uri,
-			summary => :summary,
-			description_format => :description_format,
-			description => :description,
-			release_date => :release_date,
-			vendor => :vendor,
-			vendor_uri => :vendor_uri,
-			installed_p => 't',
-			data_model_loaded_p => 't'
-	              );
-		end;
-	    }]
+    return [db_exec_plsql version_insert {}]
 
    # Every package provides by default the service that is the package itself
    # This spares the developer from having to visit the dependency page
@@ -1029,9 +1036,16 @@ proc_doc -public apm_version_disable { {-callback apm_dummy_callback} version_id
     apm_callback_and_log $callback  "<p>Package disabled."
 }
 
-
 ad_proc -public apm_package_register {
-    package_key pretty_name pretty_plural package_uri package_type initial_install_p singleton_p {spec_file_path ""} {spec_file_mtime ""}
+    {-spec_file_path ""} 
+    {-spec_file_mtime ""}
+    package_key 
+    pretty_name 
+    pretty_plural 
+    package_uri 
+    package_type 
+    initial_install_p 
+    singleton_p
 } {
     Register the package in the system.
 } {
@@ -1045,35 +1059,9 @@ ad_proc -public apm_package_register {
     }
 
     if { ![string compare $package_type "apm_application"] } {
-	db_exec_plsql application_register {
-	    begin
-	    apm.register_application (
-		        package_key => :package_key,
-			package_uri => :package_uri,
-			pretty_name => :pretty_name,
-			pretty_plural => :pretty_plural,
-			initial_install_p => :initial_install_p,
-			singleton_p => :singleton_p,
-			spec_file_path => :spec_file_path,
-			spec_file_mtime => :spec_file_mtime
-          		);
-	    end;					  
-	}
+	db_exec_plsql application_register {}
     } elseif { ![string compare $package_type "apm_service"] } {
-	db_exec_plsql service_register {
-	    begin
-	    apm.register_service (
-			package_key => :package_key,
-			package_uri => :package_uri,
-			pretty_name => :pretty_name,
-			pretty_plural => :pretty_plural,
-			initial_install_p => :initial_install_p,
-			singleton_p => :singleton_p,
-			spec_file_path => :spec_file_path,
-			spec_file_mtime => :spec_file_mtime
-			);
-	    end;					  
-	}
+	db_exec_plsql service_register {}
     } else {
 	error "Unrecognized package type: $package_type"
     }
@@ -1083,7 +1071,7 @@ ad_proc -public apm_version_update {
     {
 	-callback apm_dummy_callback
     }
-    version_id version_name version_uri summary description description_format vendor vendor_uri {release_date ""} 
+    version_id version_name version_uri summary description description_format vendor vendor_uri auto_mount {release_date ""} 
 } {
 
     Update a version in the system to new information.
@@ -1091,23 +1079,8 @@ ad_proc -public apm_version_update {
     if { [empty_string_p $release_date] } {
  	set release_date [db_null]
     }
-    return [db_exec_plsql apm_version_update {
-	begin
-	:1 := apm_package_version.edit(
-				 version_id => :version_id, 
-				 version_name => :version_name, 
-				 version_uri => :version_uri,
-				 summary => :summary,
-				 description_format => :description_format,
-				 description => :description,
-				 release_date => :release_date,
-				 vendor => :vendor,
-				 vendor_uri => :vendor_uri,
-				 installed_p => 't',
-				 data_model_loaded_p => 't'				 
-				 );
-	end;
-    }]
+
+    return [db_exec_plsql apm_version_update {}]
 }
 
 
@@ -1135,46 +1108,6 @@ ad_proc -private apm_packages_full_install {
 <p> Error:
 <pre><blockquote>[ad_quotehtml $errmsg]</blockquote><blockquote>[ad_quotehtml $errorInfo]</blockquote></pre>"
 	} 
-    }
-}
-
-ad_proc -private apm_package_instantiate_and_mount {
-    {
-	-callback apm_dummy_callback
-    } package_key} {
-
-    Automatically instantiate and mount a package of the indicated type.
-
-} {
-# Instantiate and mount the package.
-    if { [catch { 
-	db_exec_plsql package_instantiate_and_mount {
-	    declare
-	            main_site_id  site_nodes.node_id%TYPE;
-  	            instance_id   apm_packages.package_id%TYPE;
-	            node_id       site_nodes.node_id%TYPE;
-	    begin
-	            main_site_id := site_node.node_id('/');
-	        
-	            instance_id := apm_package.new(
-			  	  package_key => :package_key,
-				  context_id => main_site_id
-				  );
-
-		    node_id := site_node.new(
-			     parent_id => main_site_id,
-			     name => :package_key,
-			     directory_p => 't',
-			     pattern_p => 't',
-			     object_id => instance_id
-			  );
-	    end;
-	    }
-    } errmsg]} {
-	apm_callback_and_log $callback "[string totitle $package_key] not mounted.<p> Error:
-<pre><blockquote>[ad_quotehtml $errmsg]</blockquote></pre>"
-    } else {
-	apm_callback_and_log $callback "[string totitle $package_key] mounted at /$package_key/.<p>"
     }
 }
 
@@ -1357,4 +1290,23 @@ ad_proc -private apm_query_files_find {
     }
     ns_log Notice "APM: Query files for $package_key: $query_file_list"
     return $query_file_list
+}
+
+##############
+#
+# Deprecated Procedures
+#
+#############
+
+ad_proc -private -deprecated -warn apm_package_instantiate_and_mount {
+    {-callback apm_dummy_callback} 
+    package_key
+} { 
+    Instantiate and mount a package of the indicated type. This proc
+    has been deprecated and will be removed. Please change to using
+    site_node::instantiate_and_mount instead.
+ 
+    @see site_node::instantiate_and_mount
+} {
+    site_node::instantiate_and_mount -package_key $package_key
 }

@@ -3,23 +3,6 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="apm_package_install.package_instantiate_mount">      
-      <querytext>
-      
-	        declare
-  	            instance_id   apm_packages.package_id%TYPE;
-	        begin
-	            instance_id := apm_package.new(
-	                          instance_name => :package_name,
-			  	  package_key => :package_key,
-				  context_id => acs.magic_object_id('default_context')
-				  );
-	        end;
-	    
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="apm_package_install_version.version_insert">      
       <querytext>
       
@@ -35,6 +18,7 @@
 			release_date => :release_date,
 			vendor => :vendor,
 			vendor_uri => :vendor_uri,
+                        auto_mount => :auto_mount,
 			installed_p => 't',
 			data_model_loaded_p => 't'
 	              );
@@ -159,6 +143,7 @@
 				 release_date => :release_date,
 				 vendor => :vendor,
 				 vendor_uri => :vendor_uri,
+                                 auto_mount => :auto_mount,
 				 installed_p => 't',
 				 data_model_loaded_p => 't'				 
 				 );
@@ -167,35 +152,6 @@
       </querytext>
 </fullquery>
 
- 
-<fullquery name="apm_package_instantiate_and_mount.package_instantiate_and_mount">      
-      <querytext>
-      
-	    declare
-	            main_site_id  site_nodes.node_id%TYPE;
-  	            instance_id   apm_packages.package_id%TYPE;
-	            node_id       site_nodes.node_id%TYPE;
-	    begin
-	            main_site_id := site_node.node_id('/');
-	        
-	            instance_id := apm_package.new(
-			  	  package_key => :package_key,
-				  context_id => main_site_id
-				  );
-
-		    node_id := site_node.new(
-			     parent_id => main_site_id,
-			     name => :package_key,
-			     directory_p => 't',
-			     pattern_p => 't',
-			     object_id => instance_id
-			  );
-	    end;
-	    
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="apm_version_upgrade.apm_version_upgrade">      
       <querytext>
       

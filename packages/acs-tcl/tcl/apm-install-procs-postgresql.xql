@@ -3,24 +3,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="apm_package_install.package_instantiate_mount">      
-      <querytext>
-
-	        select apm_package__new(
-                                  null,
-	                          :package_name,
-			  	  :package_key,
-                                  'apm_package',
-                                  now(),
-                                  null,
-                                  null,
-				  acs__magic_object_id('default_context')
-				  );
-	    
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="apm_package_install_version.version_insert">      
       <querytext>
 		select apm_package_version__new(
@@ -34,6 +16,7 @@
 			:release_date,
 			:vendor,
 			:vendor_uri,
+                        :auto_mount,
 			't',
 			't'
 	              );
@@ -134,49 +117,11 @@
 				 :release_date,
 				 :vendor,
 				 :vendor_uri,
+                                 :auto_mount,
 				 't',
 				 't'				 
 				 );
     
-      </querytext>
-</fullquery>
-
- 
-<fullquery name="apm_package_instantiate_and_mount.package_instantiate_and_mount">      
-      <querytext>
-
-	    declare
-	            main_site_id  site_nodes.node_id%TYPE;
-  	            instance_id   apm_packages.package_id%TYPE;
-	            node_id       site_nodes.node_id%TYPE;
-	    begin
-	            main_site_id := site_node__node_id('/',null);
-	        
-	            instance_id := apm_package__new(
-                                  null,
-                                  null,
-			  	  :package_key,
-                                  'apm_package',
-                                  now(),
-                                  null,
-                                  null,
-				  main_site_id
-				  );
-
-		    node_id := site_node__new(
-                             null,
-			     main_site_id,
-			     :package_key,
-			     instance_id,
-			     't',
-			     't',
-                             null,
-                             null
-			  );
-
-                    return null;
-	    end;
-	    
       </querytext>
 </fullquery>
 
