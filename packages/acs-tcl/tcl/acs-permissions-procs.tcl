@@ -106,8 +106,6 @@ namespace eval permission {
                     "Permission Denied" \
                     "<blockquote>
   You don't have permission to $privilege [db_string name {}].
-  <br>
-  This incident has been logged.
 </blockquote>"
             }
 
