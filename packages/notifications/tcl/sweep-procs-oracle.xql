@@ -43,7 +43,7 @@
               and notification_user_map.sent_date is null
               and acs_objects.object_id = nnr.request_id
               and acs_objects.creation_date <= nnr.notif_date
-            order by nnr.user_id, nnr.type_id
+            order by nnr.user_id, nnr.type_id, nnr.notif_date
         </querytext>
     </fullquery>
 
