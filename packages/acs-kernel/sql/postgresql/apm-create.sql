@@ -2002,8 +2002,7 @@ begin
 
     if NOT FOUND
       then
-      	raise EXCEPTION ''-20000: %'', ''The specified package '' 
-        || set_value__package_id || '' does not exist in the system.'';
+      	raise EXCEPTION ''-20000: The specified package % does not exist in the system.'', set_value__package_id;
     end if;
 
     PERFORM apm__set_value(

@@ -657,6 +657,14 @@ begin
   
 end;' language 'plpgsql';
 
+create function acs_object__new (integer,varchar) returns integer as '
+declare
+        object_id       alias for $1;
+        object_type     alias for $2;
+begin
+        return acs_object__new(object_id,object_type,now(),null,null,null);
+end;' language 'plpgsql';
+
 
 -- procedure delete
 create function acs_object__delete (integer)
@@ -819,9 +827,7 @@ begin
      a.object_type = t.object_type;
 
    if NOT FOUND then 
-      raise EXCEPTION ''-20000: %'',
-     ''No such attribute '' || v_object_type || ''::'' || 
-     attribute_name_in || '' in acs_object.get_attribute_storage.'';
+      raise EXCEPTION ''-20000: No such attribute %::% in acs_object.get_attribute_storage.'', v_object_type, attribute_name_in'';
    end if;
 
    -- This should really be done in a trigger on acs_attributes,
@@ -860,16 +866,10 @@ begin
          where 
            object_type = v_object_type;
          if NOT FOUND then 
-            raise EXCEPTION ''-20000: %'', 
-                            ''No data found for attribute '' || 
-                            v_object_type || ''::'' || attribute_name_in || 
-                            '' in acs_object.get_attribute_storage'';
+            raise EXCEPTION ''-20000: No data found for attribute %::% in acs_object.get_attribute_storage'', v_object_type, attribute_name_in;
          end if;
        else
-         raise EXCEPTION ''-20000: %'', 
-          ''No table name specified for storage specific static attribute '' 
-          || v_object_type || ''::'' || attribute_name_in || 
-          '' in acs_object.get_attribute_storage.'';
+         raise EXCEPTION ''-20000: No table name specified for storage specific static attribute %::% in acs_object.get_attribute_storage.'',v_object_type, attribute_name_in;
        end if;
   
      end if;
@@ -881,9 +881,7 @@ begin
        where object_type = v_object_type 
        and table_name = v_table_name;
        if NOT FOUND then 
-          raise EXCEPTION ''-20000: %'', ''No data found for attribute '' 
-                          || v_object_type || ''::'' || attribute_name_in || 
-                          '' in acs_object.get_attribute_storage'';
+          raise EXCEPTION ''-20000: No data found for attribute %::% in acs_object.get_attribute_storage'', v_object_type, attribute_name_in;
        end if;
    end if;
 
@@ -1200,14 +1198,17 @@ begin
      return ''t'';
    end if;
 
-   if check_path__object_id = 0 then 
-      return ''f'';
-   end if;
-
    select context_id, security_inherit_p 
    into check_path__context_id, check_path__security_inherit_p
    from acs_objects
    where object_id = check_path__object_id;
+
+   -- we should be able to handle the case where check_path fails 
+   -- should we not?
+
+   if check_path__object_id = 0 and check_path__context_id is null then 
+      return ''f'';
+   end if;
 
    if check_path__context_id is null or check_path__security_inherit_p = ''f'' 
    then

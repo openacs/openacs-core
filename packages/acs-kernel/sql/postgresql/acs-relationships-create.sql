@@ -446,7 +446,7 @@ begin
         and o1.object_id = new.object_id_one
         and o2.object_id = new.object_id_two;
 
-      raise EXCEPTION ''-20001: %  violation: Invalid object types. Object % (%) must be of type % Object % (%) must be of type %'',                new.rel_type, 
+      raise EXCEPTION ''-20001: %  violation: Invalid object types. Object % (%) must be of type % Object % (%) must be of type %'', new.rel_type, 
                                          new.object_id_one,
                                          actual_object_type_one,
                                          target_object_type_one,

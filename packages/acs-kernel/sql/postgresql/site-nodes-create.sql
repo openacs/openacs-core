@@ -203,8 +203,7 @@ begin
       where node_id = new__parent_id;
 
       if v_directory_p = ''f'' then
-        raise EXCEPTION ''-20000: %'',
-          ''Node '' || new__parent_id || '' is not a directory'';
+        raise EXCEPTION ''-20000: Node % is not a directory'', new__parent_id;
       end if;
     end if;
 

@@ -163,7 +163,7 @@ begin
   delete from group_element_index
   where rel_id = old.rel_id;
 
-  return new;
+  return old;
 
 end;' language 'plpgsql';
 
@@ -253,7 +253,7 @@ begin
 
   end loop;
 
-  return new;
+  return old;
 
 end;' language 'plpgsql';
 
@@ -787,10 +787,7 @@ begin
                  from rel_segments 
                 where group_id = delete__group_id 
    LOOP
-      raise notice '' rel_segment_delete %'', row.package_name;
-
        PERFORM rel_segment__delete(row.segment_id);
-
    end loop;
 
    -- Delete all the relations of any type to this group
@@ -800,7 +797,6 @@ begin
                   and (r.object_id_one = delete__group_id
                        or r.object_id_two = delete__group_id) 
    LOOP
-      raise notice '' delete %'', row.package_name;
       execute ''select '' ||  row.package_name || ''__delete('' || row.rel_id || '')'';
    end loop;
  
