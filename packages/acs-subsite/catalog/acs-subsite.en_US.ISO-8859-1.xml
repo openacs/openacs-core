@@ -232,5 +232,6 @@ can</msg>
   <msg key="Your_email_address">Your email address:</msg>
   <msg key="Your_password">Your password:</msg>
   <msg key="Recover_Password">Recover Password</msg>
+  <msg key="Recover_Password_Button">Continue</msg>
   <msg key="Your_Portrait">Your Portrait</msg>
 </message_catalog>
