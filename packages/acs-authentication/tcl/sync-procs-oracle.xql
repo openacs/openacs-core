@@ -59,6 +59,15 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="auth::sync::purge_jobs.purge_jobs">
+        <querytext>
+
+            delete from auth_batch_jobs
+            where  job_end_time < sysdate - :num_days
+
+        </querytext>
+    </fullquery>
+
 </queryset>
 
 

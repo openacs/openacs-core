@@ -11,6 +11,11 @@ namespace eval auth::sync {}
 namespace eval auth::sync::job {}
 
 
+#####
+#
+# auth::sync::job namespace
+#
+#####
 
 ad_proc -public auth::sync::job::get {
     {-job_id:required}
@@ -355,22 +360,27 @@ ad_proc -public auth::sync::job::snapshot_delete_remaining {
 }
 
 
+#####
+#
+# auth::sync namespace
+#
+#####
 
-
-
-
-ad_proc -public auth::sync::purge_jobs {} {
+ad_proc -public auth::sync::purge_jobs {
+    {-num_days ""}
+} {
     Purge jobs that are older than KeepBatchLogDays days.
 } {
-    # Don't forget to also delete the cr_item referenced by the auth_batch_jobs.document column.
+    if { ![exists_and_not_null num_days] } {
+        set num_days [parameter::get_from_package_key -parameter KeepBatchLogDays -package_key "acs-authentication" -default 0]
+    }
+    
+    validate_integer num_days $num_days
 
-    # Parameter: KeepBatchLogDays - number of days to keep batch job log around. 0 = forever.
+    if { $num_days > 0 } { 
+        # TODO: Don't forget to also delete the cr_item referenced by the auth_batch_jobs.document column.
 
-    # TODO
+        db_dml purge_jobs {}
+    }
 }
-
-
-
-
-
 
