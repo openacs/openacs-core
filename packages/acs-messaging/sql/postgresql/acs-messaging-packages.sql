@@ -57,7 +57,7 @@ begin
 	end if;
 
     -- test for auto approval of revision   
-    if p_is_live = ''t'' then 
+    if p_is_live then 
         perform content_item__set_live_revision(v_revision_id);
     end if;
 
@@ -260,7 +260,7 @@ end;' language 'plpgsql';
     -- by direct calls to CR code in the near future.
 
 create function acs_message__new_file (integer,integer,varchar,varchar,
-text,varchar,text,timestamp,integer,varchar,boolean)
+text,varchar,integer,timestamp,integer,varchar,boolean,varchar)
 returns integer as '
 declare
     p_message_id    alias for $1;
@@ -269,11 +269,12 @@ declare
     p_title         alias for $4;    -- default null
     p_description   alias for $5;    -- default null
     p_mime_type     alias for $6;    -- default ''text/plain''
-    p_content       alias for $7;    -- default null
+    p_data          alias for $7;    -- default null
     p_creation_date alias for $8;    -- default sysdate
     p_creation_user alias for $9;    -- default null
     p_creation_ip   alias for $10;   -- default null
     p_is_live       alias for $11;   -- default ''t''
+    p_storage_type  alias for $12;   -- default ''file''
     v_file_id      cr_items.item_id%TYPE;
     v_revision_id  cr_revisions.revision_id%TYPE;
 begin
@@ -293,7 +294,7 @@ begin
         ''text/plain'',			   -- mime_type
         null,					   -- nls_language
         null,					   -- text
-	''file''				   -- storage_type
+	p_storage_type				   -- storage_type
     );
 
     -- create an initial revision for the new attachment
@@ -302,7 +303,7 @@ begin
          p_title,				-- title          
          p_description,			-- description    
          p_mime_type,			-- mime_type      
-         p_content,				-- content        
+         p_data,				-- data        
          p_creation_date,		-- creation_date  
          p_creation_user,		-- creation_user  
          p_creation_ip,			-- creation_ip    
@@ -313,14 +314,14 @@ begin
 end;' language 'plpgsql';
 
 create function acs_message__edit_file (integer,varchar,text,varchar,
-text,timestamp,integer,varchar,boolean)
+integer,timestamp,integer,varchar,boolean)
 returns integer as '
 declare
     p_file_id       alias for $1;
     p_title         alias for $2;    -- default null
     p_description   alias for $3;    -- default null
     p_mime_type     alias for $4;    -- default ''text/plain''
-    p_content       alias for $5;    -- default null
+    p_data          alias for $5;    -- default null
     p_creation_date alias for $6;    -- default sysdate
     p_creation_user alias for $7;    -- default null
     p_creation_ip   alias for $8;    -- default null
@@ -333,7 +334,7 @@ begin
         current_timestamp,
         p_mime_type,			-- mime_type     
         NULL,
-        p_content,				-- data          
+        p_data,				-- data          
         p_file_id,				-- item_id       
         NULL,
         p_creation_date,		-- creation_date 
@@ -342,7 +343,7 @@ begin
     );
 
     -- test for auto approval of revision
-    if p_is_live = ''t'' then 
+    if p_is_live then 
         perform content_item__set_live_revision(v_revision_id);
     end if;
 
@@ -359,7 +360,7 @@ begin
 end;' language 'plpgsql';
 
 create function acs_message__new_image (integer,integer,varchar,varchar,
-text,varchar,text,integer,integer,timestamp,integer,varchar,boolean)
+text,varchar,integer,integer,integer,timestamp,integer,varchar,boolean,varchar)
 returns integer as '
 declare
     p_message_id     alias for $1;
@@ -368,13 +369,14 @@ declare
     p_title          alias for $4;    -- default null
     p_description    alias for $5;    -- default null
     p_mime_type      alias for $6;    -- default ''text/plain''
-    p_content        alias for $7;    -- default null
+    p_data           alias for $7;    -- default null
     p_width          alias for $8;    -- default null
     p_height         alias for $9;    -- default null
     p_creation_date  alias for $10;   -- default sysdate
     p_creation_user  alias for $11;   -- default null
     p_creation_ip    alias for $12;   -- default null
     p_is_live        alias for $13;   -- default ''t''
+    p_storage_type   alias for $14;   -- default ''file''
     v_image_id     cr_items.item_id%TYPE;
     v_revision_id  cr_revisions.revision_id%TYPE;
 begin
@@ -403,7 +405,7 @@ begin
          p_title,					-- title         
          p_description,				-- description   
          p_mime_type,				-- mime_type     
-         p_content,					-- content       
+         p_data,					-- data       
          p_width,					-- width         
          p_height,					-- height        
          p_creation_date,			-- creation_date 
@@ -416,14 +418,14 @@ begin
 end;' language 'plpgsql';
 
 create function acs_message__edit_image (integer,varchar,text,varchar,
-text,integer,integer,timestamp,integer,varchar,boolean)
+integer,integer,integer,timestamp,integer,varchar,boolean)
 returns integer as '
 declare
     p_image_id       alias for $1;
     p_title          alias for $2;    -- default null
     p_description    alias for $3;    -- default null
     p_mime_type      alias for $4;    -- default ''text/plain''
-    p_content        alias for $5;    -- default null
+    p_data           alias for $5;    -- default null
     p_width          alias for $6;    -- default null
     p_height         alias for $7;    -- default null
     p_creation_date  alias for $8;    -- default sysdate
@@ -434,13 +436,17 @@ declare
 begin
 		-- not sure which __new to use
     v_revision_id := content_revision__new (
-         p_title,					-- title         
-         p_mime_type,				-- mime_type     
-         p_content,					-- data          
-         p_image_id,				-- item_id       
-         p_creation_date,			-- creation_date 
-         p_creation_user,			-- creation_user 
-         p_creation_ip				-- creation_ip   
+         p_title,             -- title         
+         NULL,                -- description
+         current_timestamp,   -- publish_date
+         p_mime_type,         -- mime_type     
+         NULL,                -- nls_language
+         p_data,              -- data          
+         p_image_id,          -- item_id       
+         NULL,                -- revision_id
+         p_creation_date,     -- creation_date 
+         p_creation_user,     -- creation_user 
+         p_creation_ip        -- creation_ip   
     );      
 
     -- insert new width and height values
@@ -451,8 +457,8 @@ begin
         (v_revision_id, p_width, p_height);
 
     -- test for auto approval of revision   
-    if p_is_live = ''t'' then 
-        content_item__set_live_revision(v_revision_id);
+    if p_is_live then 
+        perform content_item__set_live_revision(v_revision_id);
     end if;
 
     return v_revision_id;
