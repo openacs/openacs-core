@@ -17,7 +17,7 @@
 <fullquery name="apm_generate_package_spec.supported_databases">      
       <querytext>
       
-        select unique db_type
+        select distinct db_type
         from apm_package_files
         where db_type is not null
     
