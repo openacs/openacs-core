@@ -37,8 +37,6 @@
          privilege
   from acs_permissions
   where object_id = :object_id
-	$extra_where_clause
-
       </querytext>
 </fullquery>
 
