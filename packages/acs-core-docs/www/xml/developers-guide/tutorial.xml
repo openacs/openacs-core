@@ -1,0 +1,63 @@
+<sect1 id="tutorial">
+  <title>OpenACS &version; Package Tutorial</title>
+
+  <authorblurb>
+    by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+  </authorblurb>
+  
+  <sect2>
+    <title>Overview</title>
+    <para>How to create a package.  Includes</para>
+    <itemizedlist>
+      <listitem><para>
+        Using the APM
+      </para></listitem>
+      <listitem><para>
+        Package create scripts, including using acs_objects and
+        standard __new, __delete, and __name stored procedures.
+      </para></listitem>
+      <listitem><para>
+        Integrating with the content management system
+      </para></listitem>
+      <listitem><para>
+        Integrating with OpenFTS/Oracle full text search
+      </para></listitem>
+      <listitem><para>
+        Integrating with notifications
+      </para></listitem>
+      <listitem><para>
+        Creating .tcl/adp pairs, including ad_page_contract and the
+        template system
+      </para></listitem>
+      <listitem><para>
+        Integrating with general_comments
+      </para></listitem>
+      <listitem><para>
+        Ad_form (draw from http://jongriffin.com/static/openacs/ad_form/using-ad-form)
+      </para></listitem>
+      <listitem><para>
+        Automated testing
+      </para></listitem>
+      <listitem><para>
+        caching
+      </para></listitem>
+      <listitem><para>
+        writing procs, ad_proc, tcl namespaces
+      </para></listitem>
+      <listitem><para>
+        putting all sql code in .xql, including using partialquery
+      </para></listitem>
+      <listitem><para>
+        using the html/text entry widget
+      </para></listitem>
+    </itemizedlist>
+
+  </sect2>
+
+
+</sect1>
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "book" "sect1")
+       End:
+-->

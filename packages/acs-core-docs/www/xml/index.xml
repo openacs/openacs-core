@@ -21,6 +21,8 @@
 <!ENTITY templates SYSTEM "developers-guide/templates.xml">
 <!ENTITY object-identity SYSTEM "developers-guide/object-identity.xml">
 <!ENTITY parties SYSTEM "developers-guide/parties.xml">
+<!ENTITY tutorial SYSTEM "developers-guide/tutorial.xml">
+<!ENTITY submissions SYSTEM "developers-guide/submissions.xml">
 <!ENTITY i18n-devel SYSTEM "developers-guide/i18n.xml">
 
 <!ENTITY objects-design SYSTEM "kernel/object-system-design.xml">
@@ -68,6 +70,9 @@
 
 <!-- Installing on Windoze -->
 <!ENTITY win2k SYSTEM "install-guide/win2kinstall.xml">
+<!ENTITY mac SYSTEM "install-guide/macinstall.xml">
+<!ENTITY upgrade SYSTEM "install-guide/upgrade.xml">
+
 
 
 <!-- "For Everyone" documents -->
@@ -78,50 +83,59 @@
 <book>
   <title>OpenACS Documentation</title>
 
-  <part label="Part I" id="for-everyone">
+  <part id="for-everyone">
     <title>OpenACS For Everyone</title>
-    <partintro>
-      <para>High level information: What is OpenACS?</para>
-    </partintro>
 
-    <chapter id="general-documents" xreflabel="High level information: What is OpenACS?">
+    <chapter id="general-documents">
       <title>High level information: What is OpenACS?</title>
       <sect1 id="openacs-overview" xreflabel="OpenACS Overview">
         <title>Overview</title>
 	  <para>
-	    OpenACS (Open Architecture Community System) is an advanced
-	    toolkit for building scalable, community-oriented web applications. 
-	    If you're thinking of building an enterprise-level web application, 
-	    OpenACS is a solid, proven foundation that will give you a 3-6 month headstart.
+	    OpenACS (Open Architecture Community System) is an
+	    advanced toolkit for building scalable, community-oriented
+	    web applications.  If you're thinking of building an
+	    enterprise-level web application, OpenACS is a solid,
+	    proven foundation that will give you a 3-6 month
+	    headstart.
 	  </para>
 
 	  <para>
-	    OpenACS is also a collection of pre-built applications and services that
-	    you can use to build your web site/application. Through a modular architecture,
-	    OpenACS has packages for user/groups management, content management, e-commerce,
-	    news, FAQ, calendar, forums, bug tracking, full-text searching, and 
-	    <ulink url="http://dev.openacs.org/packages/package-list">much more</ulink>.
+	    OpenACS is also a collection of pre-built applications and
+	    services that you can use to build your web
+	    site/application. Through a modular architecture, OpenACS
+	    has packages for user/groups management, content
+	    management, e-commerce, news, FAQ, calendar, forums, bug
+	    tracking, full-text searching, and <ulink
+	    url="http://dev.openacs.org/packages/package-list">much
+	    more</ulink>.
 	  </para>
 
 	  <para>
-	    OpenACS relies on <ulink url="http://www.aolserver.com/">AOLserver</ulink>, 
-	    the free, multithreaded, scalable, Tcl-enabled, web/application server used by 
-	    America On-Line for most of its web sites, and a true acid-compliant 
-	    Relational Database Management System (RDBMS). Currently OpenACS supports 
-	    PostgreSQL, an open source RDBMS, and Oracle. (<ulink url="http://openacs.org/about/what-is-openacs">read more</ulink>)
+	    OpenACS relies on <ulink
+	    url="http://www.aolserver.com/">AOLserver</ulink>, the
+	    free, multithreaded, scalable, Tcl-enabled,
+	    web/application server used by America On-Line for most of
+	    its web sites, and a true acid-compliant Relational
+	    Database Management System (RDBMS). Currently OpenACS
+	    supports PostgreSQL, an open source RDBMS, and
+	    Oracle. (<ulink
+	    url="http://openacs.org/about/what-is-openacs">read
+	    more</ulink>)
 	  </para>
 
           <para>
-	    The OpenACS toolkit is based on the ArsDigita Community System. ArsDigita 
-	    (now part of Red Hat, Inc.) kindly made their work available under the
-	    <ulink url="http://dev.openacs.org/about/licensing/">GPL</ulink>, 
-	    making all of this possible. 
+	    The OpenACS toolkit is based on the ArsDigita Community
+	    System. ArsDigita (now part of Red Hat, Inc.) kindly made
+	    their work available under the <ulink
+	    url="http://dev.openacs.org/about/licensing/">GPL</ulink>,
+	    making all of this possible.
 	  </para>
 
 	  <para>
-	    The OpenACS community would like to hear your comments and help you
-	    in your endeavors with the system. Stop by our <ulink url="http://openacs.org">web site</ulink> 
-	    and feel free to ask a question, post ideas or whatever.
+	    The OpenACS community would like to hear your comments and
+	    help you in your endeavors with the system. Stop by our
+	    <ulink url="http://openacs.org">web site</ulink> and feel
+	    free to ask a question, post ideas or whatever.
 	  </para>
       </sect1>
 
@@ -131,12 +145,11 @@
 
   </part>
 
-  <part label="Part II" id="acs-admin">
-    <title>For OpenACS Admins</title>
+  <part id="acs-admin">
+    <title>Administrator's Guide</title>
     <partintro>
-      <para>Help to the folks keeping an OpenACS installation up and running.</para>
+      <para>Guide to installation, upgrade, and maintenance.</para>
     </partintro>
-
 
     <chapter id="unix-install" xreflabel="Installing on Unix/Linux">
       <title>Installing on Unix/Linux</title>
@@ -155,22 +168,32 @@
     <chapter id="win-install" xreflabel="Installing on Windows">
       <title>Installing on Windows</title>
 
-      <sect1 id="win-overview" xreflabel="Windows Installation Overview">
-        <title>Overview</title>
-        <para>This walks you through an OpenACS installation under Windows.</para>
-      </sect1>
-
       &win2k;
+
+    </chapter>
+
+    <chapter id="mac-install">
+      <title>Installing on a Macintosh</title>
+
+      &mac;
+
+    </chapter>
+
+    <chapter id="upgrade">
+      <title>Upgrading</title>
+      <para>How to upgrade an installation of OpenACS to a new version.</para>
+
+      &upgrade;
 
     </chapter>
 
   </part>
 
-  <part label="Part III" id="acs-dev">
+  <part id="acs-dev">
     <title>For OpenACS Developers</title>
     <partintro>
-      <para>This is the place to look if you want to extend OpenACS and build on top
-	of what's already here. Here you can find out about the guts of the system.</para>
+      <para>How to extend and customize OpenACS.  How to create your
+	own package.  How to contribute your work back to the community.</para>
     </partintro>
 
     <chapter id="dev-guide">
@@ -181,6 +204,7 @@
         <para>A tour of what you need to know in order to extend OpenACS.</para>
       </sect1>
 
+      &tutorial;
       &packages;
       &objects;
       &rp;
@@ -188,6 +212,7 @@
       &templates;
       &permissions;
       &subsites;
+      &submissions;
       &i18n-devel;
 
     </chapter>
@@ -267,13 +292,14 @@
       &objects-design;
       &permissions-req;
       &permissions-design;
+      &i18n-req;
       &groups-req;
       &groups-design;
       &subsites-req;
       &subsites-design;
       &apm-req;
       &apm-design;
-      &i18n-req;
+
 
       &security-req;
       &security-design;
@@ -287,5 +313,7 @@
     </chapter>
 
   </part>
+
+  <index/>
 
 </book>

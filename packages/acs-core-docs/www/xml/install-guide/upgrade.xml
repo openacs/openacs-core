@@ -1,10 +1,10 @@
 <sect1 id="upgrade-detail">
-    <title>Community support for upgrades.</title>
+    <title>Support for upgrades.</title>
   <authorblurb>
     by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
   </authorblurb>
-  <para>As of OpenACS 4.5, the community has committed to fully
-    support an upgrade path.  That means that, if you have OpenACS 4.5
+  <para>Starting with Version 4.5, all OpenACS core packages support
+    automatic upgrade.  That means that, if you have OpenACS 4.5
     or better, you should always be able to upgrade all of your core
     packages automatically.  If you haven't changed anything, no
     manual intervention should be required.  If you are running
@@ -14,17 +14,15 @@
 <sect1 id="upgrade-4.5-to-4.6">
   <title>Upgrading OpenACS 4.5 to 4.6</title>
     <sect2><title>Checklist</title>
-    <para>The prerequisite platform for OpenACS 4.6 is the same as
+    <para>The required platform for OpenACS 4.6 is the same as
     4.5, with the excepion of OpenFTS.  You now need OpenFTS 0.3.2, not 0.2.
     OpenACS 4.6 does not support PostGreSQL 7.3.</para>
     <itemizedlist mark="circle">
       <listitem><para>A computer with OpenACS 4.5.</para>
       </listitem>
-      <listitem><para><ulink
-      href="http://openacs.org/projects/openacs/download/">OpenACS 4.6
-      tarball</ulink></para>
+      <listitem><para><ulink url="http://openacs.org/projects/openacs/download/">OpenACS 4.6 tarball</ulink></para>
       </listitem>
-      <listitem><para>Required for Full Text Search on PostGreSQL: <ulink href="">OpenFTS 0.3.2</ulink></para>
+      <listitem><para>Required for Full Text Search on PostGreSQL: <ulink url="http://openfts.sourceforge.net">OpenFTS 0.3.2</ulink></para>
       </listitem>
     </itemizedlist>
   </sect2>
@@ -81,13 +79,13 @@
               <para>Create a backup file and verify that it was created and has a reasonable size (several megabytes).</para>
             </formalpara>
             <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost aolserver]$ <userinput>pg_dump -f /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp openacs-dev</userinput>
+[nsadmin@localhost aolserver]$ <userinput>pg_dump -f /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp <replaceable>openacs-dev</replaceable></userinput>
 [nsadmin@localhost aolserver]$ <userinput>ls -al /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp </userinput>
 -rw-rw-r--    1 nsadmin  nsadmin   4005995 Feb 21 18:28 /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp
 [nsadmin@localhost aolserver]$ <userinput>exit</userinput>
 [root@localhost root]#
 <action>su - nsadmin
-pg_dump -f /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp openacs-dev
+pg_dump -f /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp <replaceable>openacs-dev</replaceable>
 ls -al /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp
 exit</action></screen>
           </listitem>
@@ -109,7 +107,7 @@ exit</action></screen>
               files.</para>
             </formalpara>
             <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost aolserver]$ <userinput>cd /web/openacs-dev</userinput>
+[nsadmin@localhost aolserver]$ <userinput>cd /web/<replaceable>openacs-dev</replaceable></userinput>
 [nsadmin@localhost openacs-dev]$ <userinput>cvs commit -m "last-minute commits before upgrade to 4.6"</userinput>
 cvs commit: Examining .
 cvs commit: Examining bin
@@ -122,7 +120,7 @@ T bin/ad-context-server.pl
 [nsadmin@localhost openacs-dev]$ <userinput>exit</userinput>
 [root@localhost root]# 
 <action>su - nsadmin
-cd /web/openacs-dev
+cd /web/<replaceable>openacs-dev</replaceable>
 cvs commit -m "last-minute commits before upgrade to 4.6"
 cvs tag before_upgrade_to_4_6
 exit</action></screen>
@@ -133,11 +131,11 @@ exit</action></screen>
               <para>If you don't use cvs, you may want to back up the working directory.  The simplest way is just to copy it.</para>
             </formalpara>
             <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost aolserver]$ <userinput>cp -r /web/openacs-dev /web/openacs-dev-before-upgrade-to-4.6</userinput>
+[nsadmin@localhost aolserver]$ <userinput>cp -r /web/<replaceable>openacs-dev</replaceable> /web/<replaceable>openacs-dev</replaceable>-before-upgrade-to-4.6</userinput>
 [nsadmin@localhost aolserver]$ <userinput>exit</userinput>
 [root@localhost root]# 
 <action>su - nsadmin
-cp -r /web/openacs-dev /web/openacs-dev-before-upgrade-to-4.6
+cp -r /web/<replaceable>openacs-dev</replaceable> /web/<replaceable>openacs-dev</replaceable>-before-upgrade-to-4.6
 exit</action></screen>
           </listitem>
         </itemizedlist>
@@ -189,18 +187,18 @@ make install
 exit</screen>
             <para>In order for the OpenACS 4.6 OpenFTS Engine to use the OpenFTS 0.3.2 driver, we need some commands added to the database.</para>
             <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost dev]$ <userinput>psql openacs-dev -f /usr/local/pgsql/share/contrib/openfts.sql</userinput>
+[nsadmin@localhost dev]$ <userinput>psql <replaceable>openacs-dev</replaceable> -f /usr/local/pgsql/share/contrib/openfts.sql</userinput>
 CREATE
 CREATE
-[nsadmin@localhost dev]$ <userinput>psql openacs-dev -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql</userinput>
+[nsadmin@localhost dev]$ <userinput>psql <replaceable>openacs-dev</replaceable> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql</userinput>
 BEGIN
 CREATE
 (~30 more lines)
 [nsadmin@localhost dev]$ <userinput>exit</userinput>
 [root@localhost root]# 
 <action>su - nsadmin
-psql openacs-dev -f /usr/local/pgsql/share/contrib/openfts.sql
-psql openacs-dev -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql
+psql <replaceable>openacs-dev</replaceable> -f /usr/local/pgsql/share/contrib/openfts.sql
+psql <replaceable>openacs-dev</replaceable> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql
 exit</action></screen>
           </listitem>
         </orderedlist>
@@ -209,7 +207,7 @@ exit</action></screen>
         <formalpara>
           <title>Stop the server</title>
         </formalpara>
-        <screen>[root@localhost root]# <userinput>svc -d /service/openacs-dev</userinput></screen>
+        <screen>[root@localhost root]# <userinput>svc -d /service/<replaceable>openacs-dev</replaceable></userinput></screen>
       </listitem>
       <listitem>
         <formalpara>
@@ -280,12 +278,12 @@ cvs commit -m "Upgraded to 4.6"</action></screen>
                 <para>Update your working tree with the new
                 files.  The CVS flags ensure that new directories are created and pruned directories destroyed.</para>
                 <screen>
-[nsadmin@localhost openacs-upgrade]$ <userinput>cd /web/openacs-dev</userinput>
+[nsadmin@localhost openacs-upgrade]$ <userinput>cd /web/<replaceable>openacs-dev</replaceable></userinput>
 [nsadmin@localhost openacs-dev]$ <userinput>cvs up -Pd</userinput>
 (CVS feedback)
 [nsadmin@localhost openacs-dev]$ <userinput>exit</userinput>
 [root@localhost root]#
-<action>cd /web/openacs-dev
+<action>cd /web/<replaceable>openacs-dev</replaceable>
 cvs up -Pd
 exit</action></screen>
               </listitem>
@@ -297,7 +295,7 @@ exit</action></screen>
         <formalpara>
           <title>Start the server</title>
         </formalpara>
-        <screen>[root@localhost root]# <userinput>svc -u /service/openacs-dev</userinput></screen>
+        <screen>[root@localhost root]# <userinput>svc -u /service/<replaceable>openacs-dev</replaceable></userinput></screen>
       </listitem>
       <listitem>
         <formalpara>
@@ -319,7 +317,7 @@ exit</action></screen>
           </listitem>
           <listitem>
             <para>When prompted, restart the server:</para>
-            <screen>[root@localhost root]# <userinput>restart-aolserver openacs-dev</userinput></screen>
+            <screen>[root@localhost root]# <userinput>restart-aolserver <replaceable>openacs-dev</replaceable></userinput></screen>
           </listitem>
           <listitem>
             <para>Wait a minute, then browse to the package manager, <computeroutput>http://<replaceable>yourserver</replaceable>/acs-admin/apm</computeroutput>.</para>
@@ -350,7 +348,7 @@ exit</action></screen>
             <para>Click <computeroutput><guibutton>Set Parameters</guibutton></computeroutput></para>
           </listitem>
           <listitem>
-            <screen>[root@localhost root]# restart-aolserver openacs-dev</screen>
+            <screen>[root@localhost root]# restart-aolserver <replaceable>openacs-dev</replaceable></screen>
           </listitem>
           <listitem>
             <para>Browse to <computeroutput>http://<replaceable>yourserver</replaceable>/openfts</computeroutput></para>
@@ -368,39 +366,39 @@ exit</action></screen>
         again.</para>
         </formalpara>
         <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost aolserver]$ <userinput>svc -d /service/openacs-dev</userinput>
-[nsadmin@localhost aolserver]$ <userinput>dropdb openacs-dev</userinput>
+[nsadmin@localhost aolserver]$ <userinput>svc -d /service/<replaceable>openacs-dev</replaceable></userinput>
+[nsadmin@localhost aolserver]$ <userinput>dropdb <replaceable>openacs-dev</replaceable></userinput>
 DROP DATABASE
-[nsadmin@localhost aolserver]$ <userinput>createdb openacs-dev</userinput>
+[nsadmin@localhost aolserver]$ <userinput>createdb <replaceable>openacs-dev</replaceable></userinput>
 CREATE DATABASE
-[nsadmin@localhost aolserver]$ <userinput>psql -f /web/openacs-dev/packages/acs-kernel/sql/postgresql/postgresql.sql openacs-dev</userinput></screen>
+[nsadmin@localhost aolserver]$ <userinput>psql -f /web/<replaceable>openacs-dev</replaceable>/packages/acs-kernel/sql/postgresql/postgresql.sql <replaceable>openacs-dev</replaceable></userinput></screen>
 <para>PostGreSQL's dump command does not guarantee to back up all of the
 procedures and things in the right order for them to be reassembled.
 In practice, OpenACS users have found that rebuilding some of the
 common procedures before running the restore usually addresses this.  You will see a number of "already exists" errors when you run the database restore; these can be ignored.  This <a href="http://openacs.org/forums/message-view?message_id=70759">forum thread</a> has more information.</para>
-<screen>[nsadmin@localhost <userinput>aolserver]$ <userinput>psql openacs-dev &lt; /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp</userinput></userinput>
-[nsadmin@localhost aolserver]$ <userinput>svc -u /service/openacs-dev</userinput>
-[nsadmin@localhost aolserver]$ exit</screen>
+<screen>[nsadmin@localhost aolserver]$ <userinput>psql <replaceable>openacs-dev</replaceable> &lt; /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp</userinput>
+[nsadmin@localhost aolserver]$ <userinput>svc -u /service/<replaceable>openacs-dev</replaceable></userinput>
+[nsadmin@localhost aolserver]$ <userinput>exit</userinput></screen>
           <para>At this point, you can try go back to the APM and try
 to upgrade the database again.  Alternately, if you want to roll back
 all the way and stop the upgrade, you need to roll back the file
 system as well.</para>
         <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost aolserver]$<userinput> mv /web/openacs-dev /web/openacs-failed-upgrade</userinput>
-[nsadmin@localhost aolserver]$<userinput> mv /web/openacs-dev-before-upgrade-to-4.6 /web/openacs-dev</userinput>
-[nsadmin@localhost aolserver]$ <userinput>svc -u /web/openacs-dev</userinput>
+[nsadmin@localhost aolserver]$<userinput> mv /web/<replaceable>openacs-dev</replaceable> /web/openacs-failed-upgrade</userinput>
+[nsadmin@localhost aolserver]$<userinput> mv /web/<replaceable>openacs-dev</replaceable>-before-upgrade-to-4.6 /web/<replaceable>openacs-dev</replaceable></userinput>
+[nsadmin@localhost aolserver]$ <userinput>svc -u /web/<replaceable>openacs-dev</replaceable></userinput>
 [nsadmin@localhost aolserver]$ <userinput>exit</userinput>
 [root@localhost root]#</screen>
 <screen>All commands for this section:
 <action>su - nsadmin
-svc -d /service/openacs-dev
-dropdb openacs-dev
-createdb openacs-dev
-psql -f /web/openacs-dev/packages/acs-kernel/sql/postgresql/postgresql.sql openacs-dev
-psql openacs-dev &lt; /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp
+svc -d /service/<replaceable>openacs-dev</replaceable>
+dropdb <replaceable>openacs-dev</replaceable>
+createdb <replaceable>openacs-dev</replaceable>
+psql -f /web/<replaceable>openacs-dev</replaceable>/packages/acs-kernel/sql/postgresql/postgresql.sql <replaceable>openacs-dev</replaceable>
+psql <replaceable>openacs-dev</replaceable> &lt; /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp
 
-svc -u /service/openacs-dev
-cd /web/openacs-dev
+svc -u /service/<replaceable>openacs-dev</replaceable>
+cd /web/<replaceable>openacs-dev</replaceable>
 cvs up -r current
 exit</action></screen>
       </listitem>

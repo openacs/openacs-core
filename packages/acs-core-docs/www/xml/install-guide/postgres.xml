@@ -1,42 +1,41 @@
 <sect1 id="postgres" xreflabel="Installing PostgreSQL">
   <title>Install PostgreSQL 7.2.3</title>
-
+  
   <authorblurb>
-	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+    by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
   </authorblurb>
-
+  
   <para>
 	Skip this page if you're not interested in PostgreSQL.
   </para>
-
+  
   <sect2 id="install-postgres-download">
-	<title>Download the PostgreSQL source</title>
-
-	<para>	  
+    <title>Download the PostgreSQL source</title>
+    
+    <para>	  
 
 	  Download PostgreSQL 7.2.3 from the mirror closest to you. The list of
-	  mirrors is at <ulink
-	  url="http://www.postgresql.org/">http://www.postgresql.org</ulink>.
+	  mirrors is at <ulink url="http://www.postgresql.org/">http://www.postgresql.org</ulink>.
 	  Download it to <computeroutput>/tmp</computeroutput>.
 
-	</para>
-
-	<para>
+    </para>
+    
+    <para>
 	  As <computeroutput>root</computeroutput>, unpack it into
 	  <computeroutput>/usr/local/src</computeroutput>
-	</para>
-
-	<programlisting>
+  	</para>
+    
+    <programlisting>
 joeuser:~$ su -
 Password: ***********
 root:~# cd /usr/local/src
 root:/usr/local/src# tar xzf /tmp/postgresql-7.2.3.tar.gz</programlisting>
-
+    
   </sect2>
-
+  
   <sect2 id="install-postgres-user">
-	<title>Create the Postgres user</title>
-	<para>
+    <title>Create the Postgres user</title>
+    <para>
 	  Still as <computeroutput>root</computeroutput>, create a user and
 	  group (if you haven't done so before) for PostgreSQL. This is the
 	  account that PostgreSQL will run as since it will not run as
@@ -97,7 +96,8 @@ postgres:~$ echo $PATH
 	  First, we run <computeroutput>./configure</computeroutput> to set the
 	  compilation options automatically. This is the point at which you can
 	  configure PostgreSQL in various ways. For example, if you want to
-	  enable Unicode support, add the flags
+	  enable <indexterm>
+        <primary>Unicode</primary></indexterm> support, add the flags
 	  <computeroutput>--enable-locale</computeroutput> and
 	  <computeroutput>--enable-multibyte</computeroutput>. If you want to
 	  see what the other possibilities are, run <computeroutput>./configure
