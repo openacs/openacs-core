@@ -1014,120 +1014,121 @@ ad_proc -public ad_form {
 
     if { [template::form is_submission $form_name] } {
         if { [uplevel #$level {set __refreshing_p}] } {
-          
             uplevel array unset ${form_name}:error
 
             if { [info exists on_refresh] } {
                 ad_page_contract_eval uplevel #$level $on_refresh
             }
-        }
+        } else {
+            # Not __refreshing_p 
 
-        if { [template::form is_valid $form_name] } {
+            if { [template::form is_valid $form_name] } {
 
-            # Run confirm and preview templates before we do final processing of the form
+                # Run confirm and preview templates before we do final processing of the form
 
-            if { [info exists confirm_template] && ![uplevel #$level {set __confirmed_p}] } {
+                if { [info exists confirm_template] && ![uplevel #$level {set __confirmed_p}] } {
 
-                # Pass the form variables to the confirm template, applying the to_html filter if present
+                    # Pass the form variables to the confirm template, applying the to_html filter if present
 
-                set args [list]
+                    set args [list]
+                    foreach element_name $af_element_names($form_name) {
+                        if { [llength $element_name] == 1 } {
+                            if { [info exists af_to_html(${form_name}__$element_name)] } {
+                                uplevel #$level [list set $element_name \
+                                    [uplevel #$level [list template::util::$af_type(${form_name}__$element_name)::get_property \
+                                        $af_to_html(${form_name}__$element_name) \
+                                        [uplevel #$level [list set $element_name]]]]]
+                            }
+                            lappend args [list $element_name [uplevel #$level [list set $element_name]]]
+                        }
+                    }
+
+                    # This is serious abuse of ad_return_exception_template, but hell, I wrote it so I'm entitled ...
+                    ad_return_exception_template -status 200 -params $args $confirm_template
+
+                }
+
+                # We have three possible ways to handle the form
+
+                # 1. an on_submit block (useful for forms that don't touch the database or can share smart Tcl API
+                #    for both add and edit forms)
+                # 2. an new_data block (when __new_p is true)
+                # 3. an edit_data block (when __new_p is false)
+                # 4. an after_submit block (for ad_returnredirect and the like that is the same for new and edit)
+
+                # We don't need to interrogate the af_parts structure because we know we're in the last call to
+                # to ad_form at this point and that this call contained the "action blocks".
+
+                # Execute our to_sql filters, if any, before passing control to the caller's
+                # on_submit, new_data, edit_data or after_submit blocks
+
                 foreach element_name $af_element_names($form_name) {
                     if { [llength $element_name] == 1 } {
-                        if { [info exists af_to_html(${form_name}__$element_name)] } {
+                        if { [info exists af_to_sql(${form_name}__$element_name)] } {
                             uplevel #$level [list set $element_name \
                                 [uplevel #$level [list template::util::$af_type(${form_name}__$element_name)::get_property \
-                                    $af_to_html(${form_name}__$element_name) \
-                                    [uplevel #$level [list set $element_name]]]]]
+                                     $af_to_sql(${form_name}__$element_name) \
+                                     [uplevel #$level [list set $element_name]]]]]
                         }
-                        lappend args [list $element_name [uplevel #$level [list set $element_name]]]
                     }
                 }
 
-                # This is serious abuse of ad_return_exception_template, but hell, I wrote it so I'm entitled ...
-                ad_return_exception_template -status 200 -params $args $confirm_template
+                # Lars: We're wrapping this in a catch to allow people to throw a "break" inside
+                # the code block, causing submission to be canceled
+                # In order to make this work, I had to eliminate the ad_page_contract_eval's below
+                # and replace them with simple uplevel's. Otherwise, we'd get an error saying
+                # 'break used outside of a loop'.
+                set errno [catch {
+                    if { [info exists on_submit] } {
+                        uplevel #$level $on_submit
+                    }
 
-            }
+                     upvar #$level __new_p __new_p
 
-            # We have three possible ways to handle the form
+                    if { [info exists new_data] && $__new_p } {
+                        uplevel #$level $new_data
+                        template::element::set_value $form_name __new_p 0
+                    } elseif { [info exists edit_data] && !$__new_p } {
+                        uplevel #$level $edit_data
+                    }
 
-            # 1. an on_submit block (useful for forms that don't touch the database or can share smart Tcl API
-            #    for both add and edit forms)
-            # 2. an new_data block (when __new_p is true)
-            # 3. an edit_data block (when __new_p is false)
-            # 4. an after_submit block (for ad_returnredirect and the like that is the same for new and edit)
+                    if { [info exists after_submit] } {
+                        uplevel #$level $after_submit
+                    }
+                } error]
 
-            # We don't need to interrogate the af_parts structure because we know we're in the last call to
-            # to ad_form at this point and that this call contained the "action blocks".
-
-            # Execute our to_sql filters, if any, before passing control to the caller's
-            # on_submit, new_data, edit_data or after_submit blocks
-
-            foreach element_name $af_element_names($form_name) {
-                if { [llength $element_name] == 1 } {
-                    if { [info exists af_to_sql(${form_name}__$element_name)] } {
-                        uplevel #$level [list set $element_name \
-                            [uplevel #$level [list template::util::$af_type(${form_name}__$element_name)::get_property \
-                                 $af_to_sql(${form_name}__$element_name) \
-                                 [uplevel #$level [list set $element_name]]]]]
+                # Handle or propagate the error. Can't use the usual
+                # "return -code $errno..." trick due to the db_with_handle
+                # wrapped around this loop, so propagate it explicitly.
+                switch $errno {
+                    0 {
+                        # TCL_OK
+                    }
+                    1 {
+                        # TCL_ERROR
+                        global errorInfo errorCode
+                        error $error $errorInfo $errorCode
+                    }
+                    2 {
+                        # TCL_RETURN
+                        error "Cannot return from inside an ad_form block"
+                    }
+                    3 {
+                        # TCL_BREAK
+                        # nothing -- this is what we want to support
+                    }
+                    4 {
+                        # TCL_CONTINUE
+                        continue
+                    }
+                    default {
+                        error "Unknown return code: $errno"
                     }
                 }
+           
+            } elseif { [info exists on_validation_error] } {
+                uplevel #$level $on_validation_error
             }
-
-            # Lars: We're wrapping this in a catch to allow people to throw a "break" inside
-            # the code block, causing submission to be canceled
-            # In order to make this work, I had to eliminate the ad_page_contract_eval's below
-            # and replace them with simple uplevel's. Otherwise, we'd get an error saying
-            # 'break used outside of a loop'.
-            set errno [catch {
-                if { [info exists on_submit] } {
-                    uplevel #$level $on_submit
-                }
-
-                 upvar #$level __new_p __new_p
-
-                if { [info exists new_data] && $__new_p } {
-                    uplevel #$level $new_data
-                    template::element::set_value $form_name __new_p 0
-                } elseif { [info exists edit_data] && !$__new_p } {
-                    uplevel #$level $edit_data
-                }
-
-                if { [info exists after_submit] } {
-                    uplevel #$level $after_submit
-                }
-            } error]
-
-            # Handle or propagate the error. Can't use the usual
-            # "return -code $errno..." trick due to the db_with_handle
-            # wrapped around this loop, so propagate it explicitly.
-            switch $errno {
-                0 {
-                    # TCL_OK
-                }
-                1 {
-                    # TCL_ERROR
-                    global errorInfo errorCode
-                    error $error $errorInfo $errorCode
-                }
-                2 {
-                    # TCL_RETURN
-                    error "Cannot return from inside an ad_form block"
-                }
-                3 {
-                    # TCL_BREAK
-                    # nothing -- this is what we want to support
-                }
-                4 {
-                    # TCL_CONTINUE
-                    continue
-                }
-                default {
-                    error "Unknown return code: $errno"
-                }
-            }
-       
-        } elseif { [info exists on_validation_error] } {
-            uplevel #$level $on_validation_error
         }
     }
 
