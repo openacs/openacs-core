@@ -10,7 +10,7 @@
   <title>How to package and release OpenACS</title>
     <orderedlist>
       <listitem>
-        <para>Update documentation version numbers:</para>
+        <para>Update version numbers:</para>
         <orderedlist>
           <listitem>
             <para>Update /packages/acs-core-docs/www/xml/variables.ent with the new version number.
@@ -27,6 +27,29 @@
             <para>Update /readme.txt with the new version number</para>
           </listitem>
           <listitem>
+            <para>Update version number in all of the core packages.  Here's a bash/perl script which works but could be made easier to use:</para>
+          <programlisting>#!/bin/sh
+# run this file from ../packages to renumber all .info version numbers
+
+#---------------------------------------------------------------------
+# here's what we're looking for
+#---------------------------------------------------------------------
+#   &lt;version name="5.1.0d1" url="http:blahblah/acs-kernel-5.1.0d1.apm"&gt;
+#      &lt;provides url="acs-kernel" version="5.1.0d1"/&gt;
+#---------------------------------------------------------------------
+# here's what we don't want to touch
+#---------------------------------------------------------------------
+#      &lt;requires url="acs-kernel" version="5.0.0b4"/&gt;
+#---------------------------------------------------------------------
+
+for dir in `find -name *.info`
+  do
+  perl -p -i -e 's/name="5\.0\.0"/name="5\.1\.0d1"/' $dir
+  perl -p -i -e 's/-5\.0\.0.apm"/-5\.1\.0d1.apm"/' $dir
+  perl -p -i -e 's/(provides.*version)="5\.0\.0"/\1="5\.1\.0d1"/' $dir
+done</programlisting>
+        </listitem>
+          <listitem>
             <para>Rebuild the Changelog.  Using cvs2cl:</para>
             <screen>perl /var/tmp/cvs2cl/cvs2cl.pl -F oacs-5-0 --delta openacs-5-0-0-final:oacs-5-0</screen>
           </listitem>
@@ -38,13 +61,13 @@
         </orderedlist>
       </listitem>
       <listitem>
-        <para>Check out the whole cvs tree.  The files must be checked
+        <para>Check out OpenACS Core.  The files must be checked
           out through a cvs account with write access and should be a
           checkout from the release branch.  In this example, we are assuming
           this is being done as a local user on openacs.org (which make the 
           checkout and tagging operations much faster).</para>
         <screen><action>cd /var/tmp
-cvs -d /cvsroot checkout -r <replaceable>oacs-5-0</replaceable> openacs-core</action></screen>
+cvs -d /cvsroot checkout -r <replaceable>oacs-5-0</replaceable> acs-core</action></screen>
         <para>Repeat with the dotlrn cvs tree.</para>
         <screen><action>cd /var/tmp
 mkdir dotlrn-packages
@@ -53,9 +76,10 @@ cvs -d /dotlrn-cvsroot checkout -r <replaceable>dotlrn-2-0</replaceable> dotlrn-
 </action></screen>
       </listitem>
       <listitem>
-        <para>Tag the tree.</para>
+        <para>Tag the tree.  If it's a final release of core, move or create the appropriate openacs-major-minor-compat tag.  (Ie, if releasing 5.0.3 final, move the openacs-5-0-compat flag.)</para>
         <screen><action>cd /var/tmp/openacs-4
 cvs tag -F <replaceable>openacs-5-0-0a1</replaceable>
+cvs tag -F <replaceable>openacs-5-0-compat</replaceable>
 </action></screen>
         <tip>
           <title>Branching</title>
@@ -87,8 +111,7 @@ for dir in *; do ( cd $dir &amp;&amp; cvs tag -F <replaceable>dotlrn-2-0-0a1</re
                 <para>Go to a new working space and export the tagged files.</para>
             <screen><action>mkdir /var/tmp/tarball
 cd /var/tmp/tarball
-cvs -d :pserver:anonymous@openacs.org:/cvsroot export -r <replaceable>openacs-5-0-0a1</replaceable> acs-core
-mv openacs-4 openacs</action></screen>
+cvs -d /cvsroot export -r <replaceable>openacs-5-0-0a1</replaceable> acs-core</action></screen>
               </listitem>
               <listitem>
                 <para>Generate the tarball.</para>
