@@ -3,5 +3,6 @@ create table notification_email_hold (
     				references  notification_replies(reply_id)
 				primary key,
     to_addr			text,
+    headers 			text,
     body			text
 );

@@ -159,8 +159,7 @@ namespace eval notification::email {
         append l "<$from_addr>:\n"
 	append l "$reason\n\n"
 	append l "--- Below is this line is a copy of the message.\n\n"
-	#append l "Return-Path: <$from_addr>\n"
-	#append l "$message_headers\n\n"
+	append l "$message_headers\n\n"
 	append l "$body\n"
 	acs_mail_lite::send \
 	    -to_addr $bounce_to \
@@ -207,6 +206,7 @@ namespace eval notification::email {
             set i 0
             set line [lindex $file $i]
             set headers [list]
+            set orig_headers ""
 
             # walk through the headers and extract each one
             set is_auto_reply_p 0
@@ -232,6 +232,7 @@ namespace eval notification::email {
                         break
                     } else {
                         lappend headers [string tolower $name] $value
+			append orig_headers "$line\n"
                     }
                 }
 
@@ -287,7 +288,7 @@ namespace eval notification::email {
             if {[empty_string_p $from_user]} {
                 ns_log Notice "load_qmail_mail_queue: no user $from"
 		# bounce message here
-		bounce_mail_message  -to_addr $email_headers(from) -from_addr $email_headers(to) -body $body  -message_headers $headers -reason "invalid sender.  You must be a member of the site."
+		bounce_mail_message  -to_addr $email_headers(from) -from_addr $email_headers(to) -body $body  -message_headers $orig_headers -reason "invalid sender.  You must be a member of the site."
                 if {[catch {ns_unlink $msg} errmsg]} {
                     ns_log Warning "load_qmail_mail_queue: couldn't remove message $msg:  $errmsg"
                 }
@@ -300,7 +301,7 @@ namespace eval notification::email {
             if {[empty_string_p $to_stuff]} {
                 ns_log Notice "load_qmail_mail_queue: bad to address $to"
 		# bounce message here
-		bounce_mail_message -to_addr $email_headers(from) -from_addr $email_headers(to)  -body $body  -message_headers $headers -reason "Invalid Address"
+		bounce_mail_message -to_addr $email_headers(from) -from_addr $email_headers(to)  -body $body  -message_headers $orig_headers -reason "Invalid Address"
 
                 if {[catch {ns_unlink $msg} errmsg]} {
                     ns_log Warning "load_qmail_mail_queue: couldn't remove message $msg:  $errmsg"
@@ -319,6 +320,7 @@ namespace eval notification::email {
                         -from_user $from_user \
                         -subject $email_headers(subject) \
                         -content $body]
+	        set headers $orig_headers
                 db_dml holdinsert {}
                 catch {ns_unlink $msg}
 
