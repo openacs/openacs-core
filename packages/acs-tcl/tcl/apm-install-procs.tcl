@@ -504,7 +504,7 @@ ad_proc -private apm_package_install {
 	apm_package_install_owners -callback $callback $version(owners) $version_id
         apm_package_install_callbacks -callback $callback $version(callbacks) $version_id
 
-	apm_callback_and_log $callback "<p>Installed $version(package-name), version $version(name).<p>"
+	apm_callback_and_log $callback "<h3>Installing $version(package-name), version $version(name).</h3>"
     } {
 	apm_callback_and_log -severity Error $callback "<p>Failed to install $version(package-name), version $version(name).  The following error was generated:
 <pre><blockquote>
