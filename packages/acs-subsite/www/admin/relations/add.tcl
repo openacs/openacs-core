@@ -122,7 +122,7 @@ set party_type $object_type_two
 set party_type_exact_p f
 set add_to_group_id $group_id
 set add_with_rel_type $rel_type
-set add_party_url "[ad_conn package_url]admin/parties/new?[ad_export_vars {add_to_group_id add_with_rel_type party_type party_type_exact_p}]"
+set add_party_url "[ad_conn package_url]admin/parties/new?[ad_export_vars {add_to_group_id add_with_rel_type party_type party_type_exact_p return_url}]"
 
 # Build a url used to select an existing party from the system (as opposed
 # to limiting the selection to parties on the current subsite).
