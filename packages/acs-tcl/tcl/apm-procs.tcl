@@ -187,7 +187,7 @@ ad_proc -private apm_mark_files_for_reload {
     return $changed_files
 }
 
-ad_proc -private apm_mark_version_for_reload { version_id { file_info_var "" } } {
+ad_proc -private apm_mark_version_for_reload { version_id { changed_files_var "" } } {
 
     Examines all tcl_procs files in package version $version_id; if any have
     changed since they were loaded, marks (in the apm_reload array) that
@@ -201,30 +201,27 @@ ad_proc -private apm_mark_version_for_reload { version_id { file_info_var "" } }
     <blockquote><pre>[list $file_id $path]</pre></blockquote>
 
 } {
-    if { ![empty_string_p $file_info_var] } {
-	upvar $file_info_var file_info
+    if { ![empty_string_p $changed_files_var] } {
+	upvar $changed_files_var changed_files
     }
 
     set package_key [apm_package_key_from_version_id $version_id]
 
     set changed_files [list]
-    set file_info [list]
 
-    db_foreach file_info {
-        select file_id, path
-        from   apm_package_files
-        where  version_id = :version_id
-        and    file_type in ('tcl_procs', 'query_file')
-        and    (db_type is null or db_type = '[db_type]')
-        order by path
-    } {
+    set file_types [list tcl_procs query_file]
+    if { [apm_load_tests_p] } {
+        lappend file_types test_procs
+    }
+
+    foreach path [apm_get_package_files -package_key $package_key -file_types $file_types] {
 	set full_path "[acs_package_root_dir $package_key]/$path"
 	set relative_path "packages/$package_key/$path"
 
-        set changed_files [apm_mark_files_for_reload $relative_path]
-        if { [llength $changed_files] > 0 } {
+        set reload_file [apm_mark_files_for_reload $relative_path]
+        if { [llength $reload_file] > 0 } {
             # The file marked for reload
-            lappend file_info [list $file_id $path $relative_path]
+            lappend changed_files $relative_path
         }
     }
 }
@@ -243,8 +240,11 @@ ad_proc -private apm_version_load_status { version_id } {
     }
 
     set package_key [apm_package_key_from_version_id $version_id]
-
-    foreach file [apm_version_file_list -type "tcl_procs" -db_type [db_type] $version_id] {
+    set procs_types [list tcl_procs]
+    if { [apm_load_tests_p] } {
+        lappend procs_types test_procs
+    }
+    foreach file [apm_get_package_files -package_key $package_key -file_types $procs_types] {
 	# If $file has never been loaded, i.e., it has been added to the version
 	# since the version was initially loaded, return needs_reload.
 	if { ![nsv_exists apm_library_mtime "packages/$package_key/$file"] } {
@@ -260,7 +260,7 @@ ad_proc -private apm_version_load_status { version_id } {
 	}
     }
 
-    foreach file [apm_version_file_list -type "query_file" -db_type [db_type] $version_id] {
+    foreach file [apm_get_package_files -package_key $package_key -file_types "query_file"] {
 	# If $file has never been loaded, i.e., it has been added to the version
 	# since the version was initially loaded, return needs_reload.
 	if { ![nsv_exists apm_library_mtime "packages/$package_key/$file"] } {
@@ -289,13 +289,26 @@ ad_proc -private apm_load_libraries {
     {-test_init:boolean}
 } {
 
-    Loads all -procs.tcl (if $procs_or_init is "procs") or -init.tcl (if $procs_or_init is
-    "init") files into the current interpreter for installed, enabled packages. Only loads
+    Loads all -procs.tcl (if $procs_or_init is "procs") or -init.tcl  files into the 
+    current interpreter for installed, enabled packages. Only loads
     files which have not yet been loaded. This is intended to be called only during server
     initialization (since it loads libraries only into the running interpreter, as opposed
     to in *all* active interpreters).
 
 } {
+    set file_types [list]
+    if { $procs_p } {
+        lappend file_types tcl_procs
+    }
+    if { $init_p } {
+        lappend file_types tcl_init
+    }
+    if { $test_procs_p } {
+        lappend file_types test_procs
+    }
+    if { $test_init_p } {
+        lappend file_types test_init
+    }
  
     if { [empty_string_p $packages] } {
         set packages [apm_enabled_packages]
@@ -305,35 +318,10 @@ ad_proc -private apm_load_libraries {
     set files [list]    
     foreach package $packages {
 
-	set base "[acs_root_dir]/packages/$package/"
-	set base_len [string length $base]
-	set dirs [list \
-		$base \
-		${base}tcl ]
-	set paths [list]
-      
-	foreach dir $dirs {
-	    if {$procs_p} {
-		set paths [concat $paths [glob -nocomplain "$dir/*procs.tcl"]]
-                set paths [concat $paths [glob -nocomplain "$dir/*procs-[db_type].tcl"]]
-	    } 
-	    if {$init_p} {
-		set paths [concat $paths [glob -nocomplain "$dir/*init.tcl"]]
-                set paths [concat $paths [glob -nocomplain "$dir/*init-[db_type].tcl"]]
-	    }    
-	    if {$test_procs_p} {
-		set paths [concat $paths [glob -nocomplain "$dir/test/*procs.tcl"]]
-                set paths [concat $paths [glob -nocomplain "$dir/test/*procs-[db_type].tcl"]]
-	    }    
-	    if {$test_init_p} {
-		set paths [concat $paths [glob -nocomplain "$dir/test/*init.tcl"]]
-                set paths [concat $paths [glob -nocomplain "$dir/test/*init-[db_type].tcl"]]
-	    }    
-	}
+        set paths [apm_get_package_files -package_key $package -file_types $file_types]
 
 	foreach path [lsort $paths] {
-	    set rel_path [string range $path $base_len end]
-	    lappend files [list $package $rel_path]
+	    lappend files [list $package $path]
 	}
     }
       
