@@ -15,6 +15,11 @@ ad_page_contract {
     root_id:integer,optional
 }
 
+if { [string equal $package_key "/new"] } {
+    ad_returnredirect "/acs-admin/apm/packages-install"
+    ad_script_abort
+}
+
 set context_id [ad_conn package_id]
 
 db_transaction {
