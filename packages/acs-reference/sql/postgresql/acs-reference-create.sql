@@ -22,20 +22,17 @@ end;
 show errors
 
 -- Create the basic object type used to represent a reference database
-
-begin
-    acs_object_type.create_type (
-        supertype     => 'acs_object',
-        object_type   => 'acs_reference_repository',
-        pretty_name   => 'ACS Reference Repository',
-        pretty_plural => 'ACS Reference Repositories', 
-        table_name    => 'acs_reference_repositories',
-        id_column     => 'repository_id',
-        name_method   => 'acs_object.default_name'
+select acs_object_type__create_type (
+        'acs_object',
+        'acs_reference_repository',
+        'ACS Reference Repository',
+        'ACS Reference Repositories', 
+        'acs_reference_repositories',
+        'repository_id',
+        'f',
+	null,
+	'acs_object.default_name'
 );
-end;
-/
-show errors
 
 -- A table to store metadata for each reference database
 -- add functions to do exports and imports to selected tables.
@@ -45,7 +42,7 @@ create table acs_reference_repositories (
 			constraint arr_repository_id_fk references acs_objects (object_id)
 			constraint arr_repository_id_pk primary key,
     -- what is the table name we are monitoring
-    table_name		varchar2(100)  
+    table_name		varchar(100)  
 			constraint arr_table_name_nn not null
 			constraint arr_table_name_uq unique,
     -- is this external or internal data
@@ -53,20 +50,21 @@ create table acs_reference_repositories (
 			constraint arr_internal_data_p_ck
         		check (internal_data_p in ('t','f')),
     -- Does this source include pl/sql package?
-    package_name	varchar2(100)
+    package_name	varchar(100)
 			constraint arr_package_name_uq unique,
     -- last updated
-    last_update		date,
+    last_update		timestamp,
     -- where is this data from
-    source		varchar2(1000),
-    source_url		varchar2(255),
+    source		varchar(1000),
+    source_url		varchar(255),
     -- should default to today
-    effective_date	date default sysdate,
-    expiry_date		date,
+    effective_date	timestamp -- default sysdate
+    expiry_date		timestamp,
     -- a text field to hold the maintainer
     maintainer_id	integer
 			constraint arr_maintainer_id_fk references persons(person_id),
     -- this could be ancillary docs, pdf's etc
+    -- needs to be fixed for PG
     notes blob
 );
 
@@ -74,146 +72,120 @@ create table acs_reference_repositories (
 
 create or replace package acs_reference
 as
-    function new (
-        repository_id   in acs_reference_repositories.repository_id%TYPE default null,
-        table_name      in acs_reference_repositories.table_name%TYPE,
-        internal_data_p in acs_reference_repositories.internal_data_p%TYPE default 'f',
-        package_name    in acs_reference_repositories.package_name%TYPE default null,
-        last_update     in acs_reference_repositories.last_update%TYPE default sysdate,
-        source          in acs_reference_repositories.source%TYPE default null,
-        source_url      in acs_reference_repositories.source_url%TYPE default null,
-        effective_date  in acs_reference_repositories.effective_date%TYPE default sysdate,
-        expiry_date     in acs_reference_repositories.expiry_date%TYPE default null,
-        notes           in acs_reference_repositories.notes%TYPE default empty_blob(), 
-        creation_date   in acs_objects.creation_date%TYPE default sysdate,
-        creation_user   in acs_objects.creation_user%TYPE default null,
-        creation_ip     in acs_objects.creation_ip%TYPE default null,
-        object_type     in acs_objects.object_type%TYPE default 'acs_reference_repository',
-        first_names     in persons.first_names%TYPE default null,
-        last_name       in persons.last_name%TYPE default null
-    ) return acs_objects.object_id%TYPE;
+create function acs_reference__new (integer,varchar,char,varchar,timestamp,
+varchar,varchar,timestamp,timestamp,integer,blob,timestamp,
+integer,varchar,integer)
+returns integer as '
+declare
+    repository_id   alias for $1; -- default null
+    table_name      alias for $2; -- 
+    internal_data_p alias for $3; -- default 'f'
+    package_name    alias for $4; -- default null
+    last_update     alias for $5; -- default sysdate
+    source          alias for $6; -- default null
+    source_url      alias for $7; -- default null
+    effective_date  alias for $8; -- default sysdate
+    expiry_date     alias for $9; -- default null
+    maintainer_id   alias for $10; -- default null
+    notes           alias for $11; -- default empty_blob()
+-- I really see no need for these as parameters
+--    creation_date   alias for $12; -- default sysdate
+    first_names     alias for $12; -- default null
+    last_names      alias for $13; -- default null
+    creation_ip     alias for $14; -- default null
+    object_type     alias for $15; -- default 'acs_reference_repository'
+    creation_user   alias for $16; -- default null
+)
+    if object_type is null then
+        v_object_type := 'acs_reference_repository';
+    else
+        v_object_type := object_type;
+    end if;
 
-    procedure delete (
-        repository_id in acs_reference_repositories.repository_id%TYPE
+    v_repository_id := acs_object__new (
+         object_id,    
+         sysdate(),
+         creation_user,
+         creation_ip,
+         v_object_type  
     );
 
-    function is_expired_p (
-	repository_id integer
-    ) return char;
+    -- This logic isn't correct as the maintainer could already exist
+    -- The way around this is a little clunky as you can search persons
+    -- then pick an existing person or add a new one, to many screens!
+    -- I really doubt the need for person anyway.
+    --
+    -- It probably needs to just be a UI function and pass
+    -- in the value for maintainer.
+    --
+    -- IN OTHER WORDS
+    -- Guaranteed to probably break in the future if you depend on
+    -- first_names and last_name to still exist as a param
+    -- This needs to be updated in the Oracle version also
+    -- NEEDS TO BE FIXED - jag
 
- end acs_reference;
-/
-show errors
-
-
-create or replace package body acs_reference
-as
-    function new (
-        repository_id   in acs_reference_repositories.repository_id%TYPE default null,
-        table_name      in acs_reference_repositories.table_name%TYPE,
-        internal_data_p in acs_reference_repositories.internal_data_p%TYPE default 'f',
-        package_name    in acs_reference_repositories.package_name%TYPE default null,
-        last_update     in acs_reference_repositories.last_update%TYPE default sysdate,
-        source          in acs_reference_repositories.source%TYPE default null,
-        source_url      in acs_reference_repositories.source_url%TYPE default null,
-        effective_date  in acs_reference_repositories.effective_date%TYPE default sysdate,
-        expiry_date     in acs_reference_repositories.expiry_date%TYPE default null,
-        notes           in acs_reference_repositories.notes%TYPE default empty_blob(), 
-        creation_date   in acs_objects.creation_date%TYPE default sysdate,
-        creation_user   in acs_objects.creation_user%TYPE default null,
-        creation_ip     in acs_objects.creation_ip%TYPE default null,
-        object_type     in acs_objects.object_type%TYPE default 'acs_reference_repository',
-        first_names     in persons.first_names%TYPE default null,
-        last_name       in persons.last_name%TYPE default null
-    ) return acs_objects.object_id%TYPE
-    is
-        v_repository_id acs_reference_repositories.repository_id%TYPE;
-        v_maintainer_id persons.person_id%TYPE;
-    begin
-        v_repository_id := acs_object.new (
-             object_id     => repository_id,
-             creation_date => creation_date,
-             creation_user => creation_user,
-             creation_ip   => creation_ip,
-             object_type   => object_type
-        );
-
-	if first_names is not null and last_name is not null then
-            v_maintainer_id := person.new (
-	         first_names   => first_names,
-	         last_name     => last_name,
-		 email         => null
+    if first_names is not null and last_name is not null and maintainer_id is null then
+        v_maintainer_id := person__new (
+	    first_names,
+            last_name,  
+            null  -- email       
             );
-	else
+	else if maintainer_id is not null
+           v_maintainer_id := maintainer_id;
+        else 
 	    v_maintainer_id := null;
 	end if;
 
         insert into acs_reference_repositories
-            (repository_id, 
-             table_name,
-             internal_data_p,
-             last_update,
-             package_name,
-             source, 
-             source_url,
-             effective_date,
-             expiry_date,
-             maintainer_id,
-             notes)
+            (repository_id,table_name,internal_data_p,
+             last_update,package_name,source, 
+             source_url,effective_date,expiry_date,
+             maintainer_id,notes)
         values 
-            (v_repository_id, 
-             table_name,
-             internal_data_p,
-             last_update,
-             package_name,
-             source, 
-             source_url,
-             effective_date,
-             expiry_date,
-             v_maintainer_id,
-             notes);
+            (v_repository_id,table_name,internal_data_p,
+             last_update,package_name,source,source_url,
+             effective_date,expiry_date,v_maintainer_id,notes);
         return v_repository_id;    
-    end new;
+end;
+' language 'plpgsql';
 
-    procedure delete (
-        repository_id in acs_reference_repositories.repository_id%TYPE
-    )
-    is
-	v_maintainer_id integer;
-    begin
-	select maintainer_id into v_maintainer_id
-	from   acs_reference_repositories
-	where  repository_id = acs_reference.delete.repository_id;
 
-        delete from acs_reference_repositories
-        where  repository_id = acs_reference.delete.repository_id;
+create function acs_reference__delete (integer)
+returns integer as '
+declare
+    repository_id alias for $1;
+begin
+    select maintainer_id into v_maintainer_id
+    from   acs_reference_repositories
+    where  repository_id = acs_reference__delete.repository_id;
 
-        acs_object.delete(repository_id);
-	person.delete(v_maintainer_id);
+    delete from acs_reference_repositories
+    where repository_id = acs_reference__delete.repository_id;
 
-    end delete;
+    acs_object__delete(repository_id);
+    -- Who added this it is ridiculous
+    -- a person could exist from something else
+--  person__delete(v_maintainer_id);
+end;
+' language 'plpgsql';
 
-    function is_expired_p (
-	repository_id integer
-    ) return char
-    is
-	v_expiry_date date;
-    begin
-	select expiry_date into v_expiry_date
-	from   acs_reference_repositories
-	where  repository_id = is_expired_p.repository_id;
+create function acs_reference__is_expired_p (integer)
+returns char as '
+declare
+    repository_id alias for $1;
+begin
+    select expiry_date into v_expiry_date
+    from   acs_reference_repositories
+    where  repository_id = is_expired_p.repository_id;
 
-	if nvl(v_expiry_date,sysdate+1) < sysdate then
-	    return 't';
-	else
-	    return 'f';
-	end if;
-    end;	    
-
-end acs_reference;
-/
-show errors
+    if nvl(v_expiry_date,sysdate()+1) < sysdate() then
+        return 't';
+    else
+        return 'f';
+    end if;
+end;
+' language 'plpgsql';
 
 -- now load the reference data packages
 
-@@acs-reference-data
+/@acs-reference-data
