@@ -19,6 +19,22 @@ a column name from the enclosing multiple tag as its only attribute.
 It repeats a template section as long as the value of the column
 does not change from row to row.</p>  
 
+<p> The <tt>group</tt> tag alsos sets two additional values in your
+multirow: </p>
+
+<ul>
+
+  <li> <tt>groupnum</tt> is the rownum within the innermost group tag,
+starting from 1, 2, 3, etc. </li>
+
+  <li> <tt>groupnum_last_p</tt> is a boolean saying whether this is
+  the last row inside the current group tag, before the value of
+  <tt>column</tt> changes. <b>Note</b>, however, that this <b>only</b>
+  works inside the <b>inner-most</b> <tt>group</tt> if you have
+  multiple <tt>group</tt> tags nested within each other. </li>
+
+</ul>
+
 <h3>Usage</h3>
 
 <pre>&lt;table&gt;
@@ -36,7 +52,13 @@ does not change from row to row.</p>
   &lt;!-- List colors for the same style in a single cell --&gt;
 
   &lt;group column="style"&gt;
-    @shirts.color@&lt;br&gt;
+    @shirts.color@
+
+    &lt;!-- @shirts.groupnum@ will be the number of the color within the style --&gt;
+
+    &lt;if @shirts.groupnum_last_p@ false&gt;, &lt;/if&gt;
+    &lt;else&gt;, or &lt;/if&gt;
+
   &lt;/group&gt;
 
   &lt;!-- End the row if the style is going to change on the next row
