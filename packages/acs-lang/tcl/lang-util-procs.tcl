@@ -439,6 +439,11 @@ ad_proc -private lang::util::convert_adp_variables_to_percentage_signs { text } 
     Convert ADP variables to percentage_signs - the notation used to
     interpolate variable values into acs-lang messages.
 
+    <p>
+      We don't currently support having noquote vars in messages (i.e. we don't
+      substitute @var_name;noquote@).
+    </p>
+
     @author Peter Marklund
 } {
     # substitute array variable references
@@ -512,7 +517,14 @@ ad_proc -public lang::util::replace_adp_text_with_message_tags {
 
             # Remove parts from the text that we know are not translatable
             # such as adp variables, message key lookups, and &nbsp;
-            regsub -all {@[a-zA-Z0-9_\.]+@} $text "" translatable_remainder
+            set translatable_remainder $text
+            set adp_var_patterns [list [template::adp_array_variable_regexp] \
+                                       [template::adp_array_variable_regexp_noquote] \
+                                       [template::adp_variable_regexp] \
+                                       [template::adp_variable_regexp_noquote]]
+            foreach adp_var_pattern $adp_var_patterns {
+                regsub -all $adp_var_pattern $translatable_remainder "" translatable_remainder
+            }
             regsub -all {#[a-zA-Z0-9\._-]+#} $translatable_remainder "" translatable_remainder
             regsub -all {&nbsp;} $translatable_remainder "" translatable_remainder
 
