@@ -22,6 +22,12 @@ namespace eval notification::display {
     } {
         Produce a widget for requesting notifications of a given type.
     } {
+        # Check that we're mounted
+        if { [empty_string_p [apm_package_url_from_key [notification::package_key]]] } {
+            return {}
+        }
+
+        
         if {[empty_string_p $user_id]} {
             set user_id [ad_conn user_id]
         }
