@@ -1,7 +1,6 @@
 # TCLWebTest configuration
 set tclwebtest_dir "/usr/local/tclwebtest"
 
-
 set server "service0"
 
 # Choose database - oracle or postgres
