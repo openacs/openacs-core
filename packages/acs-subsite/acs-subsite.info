@@ -483,7 +483,6 @@
             <file type="query_file" db_type="oracle" path="www/permissions/toggle-inherit-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="www/permissions/toggle-inherit-postgresql.xql"/>
             <file type="content_page" path="www/permissions/toggle-inherit.tcl"/>
-            <file type="query_file" path="www/permissions/toggle-inherit.xql"/>
             <file type="query_file" db_type="oracle" path="www/pvt/alerts-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="www/pvt/alerts-postgresql.xql"/>
             <file type="content_page" path="www/pvt/alerts.adp"/>
