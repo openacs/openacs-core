@@ -8,6 +8,7 @@ ad_page_contract {
 } {
     { orderby "package_key" }
     { owned_by "me" }
+    { supertype "all" }
 }
 
 doc_body_append [apm_header]
@@ -20,7 +21,7 @@ set my_email [db_string email_by_user_id {
 
 set dimensional_list {
     {
-        supertype "Package Type:" apm_application {
+        supertype "Package Type:" all {
 	    { apm_application "Applications" { where "[db_map apm_application]" } }
 	    { apm_service "Services" { where "t.package_type = 'apm_service'"} }
 	    { all "All" {} }
@@ -75,20 +76,20 @@ set table_def {
     {
 	action "" "" {<td bgcolor=white>&nbsp;&nbsp;[eval {
 
+            set file_link_list [list]
+            lappend file_link_list "<a href=\"version-files?version_id=$version_id\">view files</a>"
+
 	    if { $installed_p == "t" && $enabled_p == "t" } {
 	        if { ! [ad_parameter -package_id [ad_acs_kernel_id] PerformanceModeP request-processor 1] } {
-                    set watch_all_link "<a href=\"package-watch?package_key=$package_key\">watch all files</a>"
-                } else {
-                    set watch_all_link ""
-                }
-                set format_string $watch_all_link
+                    lappend file_link_list "<a href=\"package-watch?package_key=$package_key\">watch all files</a>"
+                } 
 
                 if {[string equal [apm_version_load_status $version_id] "needs_reload"]} {
-                    set format_string "$watch_all_link | <a href=\"version-reload?version_id=$version_id\">reload changed</a>"
+                    lappend file_link_list "<a href=\"version-reload?version_id=$version_id\">reload changed</a>"
                 } 
-            } else {
-                set format_string ""
-            }
+            } 
+
+            set format_string [join $file_link_list " | "]
             format $format_string
             
 	}]&nbsp;&nbsp;</td>}
