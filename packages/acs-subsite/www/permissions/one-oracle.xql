@@ -68,5 +68,16 @@
       </querytext>
 </fullquery>
 
+<fullquery name="children_count">      
+      <querytext>
+
+	select count(*) as num_children
+	from acs_objects o
+	where context_id = :object_id and
+            acs_permission.permission_p(o.object_id, :user_id, 'admin') = 't'
+
+      </querytext>
+</fullquery>
+
  
 </queryset>
