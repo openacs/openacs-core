@@ -7,12 +7,14 @@
 <div id="body">
   <div id="navbar-body">
     <div class="subsite-context-bar">
-      @context_bar;noquote@&nbsp;
+      <div style="float: left">@context_bar;noquote@</div>
+      <div style="float: right">@subnavbar_link;noquote@</div>
+      <div style="clear: both;"></div>
     </div>
     <div id="subnavbar-body">
       <div id="subsite-name">
         <if @title@ not nil>
-          <h1 class="subsite-page-title">@title@</h1>
+          <h1 class="subsite-page-title">@title;noquote@</h1>
         </if>
       </div>
       <slave>
