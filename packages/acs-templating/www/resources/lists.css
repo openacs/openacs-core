@@ -1,6 +1,7 @@
 table.list {
   font-family: tahoma, verdana, helvetica; 
   border-collapse: collapse;
+  font-size: 85%;
 }
 table.list-tiny {
   font-family: tahoma, verdana, helvetica; 
@@ -80,6 +81,8 @@ tr.list-paginator {
 
 td.list-button-bar { 
   padding-bottom: 12px;
+  font-size: 115%;
+
 }
 
 .list-filter { 
