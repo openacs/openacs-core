@@ -698,13 +698,41 @@ is
  end name;
 
  function member_p (
-  party_id      in parties.party_id%TYPE
+  party_id      in parties.party_id%TYPE,
+  group_id	in groups.group_id%TYPE,
+  cascade_membership char
  )
  return char
  is
+ m_result integer;
  begin
-  -- TO DO: implement this for real
-  return 't';
+
+  if cascade_membership = 't' then
+    select count(*)
+      into m_result
+      from group_member_map
+      where group_id = member_p.group_id and
+            member_id = member_p.party_id;
+
+    if m_result > 0 then
+      return 't';
+    end if;
+  else
+    select count(*)
+      into m_result
+      from acs_rels rels, all_object_party_privilege_map perm
+    where perm.object_id = rels.rel_id
+           and perm.privilege = 'read'
+           and rels.rel_type = 'membership_rel'
+	   and rels.object_id_one = member_p.group_id
+           and rels.object_id_two = member_p.party_id;
+
+    if m_result > 0 then
+      return 't';
+    end if;
+  end if;
+
+  return 'f';
  end member_p;
 
  function check_representation (

@@ -253,4 +253,55 @@ namespace eval group {
 
 	return ""
     }
+
+
+    ad_proc -public member_p {
+	{ -user_id "" }
+	{ -group_name "" }
+	{ -group_id "" }
+	-cascade:boolean
+    } {
+	Return 1 if the user is a member of the group specified.
+	You can specify a group name or group id.
+	If cascade is true, check to see if the user is
+	  a member of the group by virtue of any other component group.
+	  (e.g. if group B is a component of group A then if a user
+	   is a member of group B then he is automatically a member of A
+	   also.)
+        If cascade is false, then the user must have specifically
+	  been granted membership on the group in question.
+    } {
+
+    if {[empty_string_p $user_id]} {
+	set user_id [ad_verify_and_get_user_id]
+    }
+
+    if {[empty_string_p $group_name] && [empty_string_p $group_id]} {
+	return 0
+    }
+
+    if {$cascade_p} {
+	set cascade 'f'
+    } else {
+	set cascade 't'
+    }
+    
+
+    if {![empty_string_p $group_name]} {
+	set group_id [db_string group_id_from_name "
+	  select group_id from groups where group_name=:group_name" -default ""]
+	if {[empty_string_p $group_id]} {
+	    return 0
+	}
+    }
+
+    set result [db_string user_is_member "
+	  select acs_group.member_p(:user_id,:group_id, :cascade) 
+            from dual" -default "f"]
+
+    if { [string equal $result "f"] } { return 0 }
+    if { [string equal $result "t"] } { return 1 }
 }
+}
+
+
