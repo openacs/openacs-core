@@ -87,17 +87,16 @@ if { [empty_string_p $password] } {
     set password [ad_generate_random_string]
 }
 
-set user_id [ad_user_new $email $first_names $last_name $password "" "" "" "t" "approved" $user_id]
+if { [db_string double_click {}] != 0 } {
+    # This was a double-click. Ignore.
+} else {
+    set user_id [ad_user_new $email $first_names $last_name $password "" "" "" "t" "approved" $user_id]
 
-if { !$user_id && [db_string unused "select count(user_id) from users where user_id = :user_id"] == 0} {
-    # not a double click, and it failed
-    ad_return_error "Insert Failed" "We were unable to create your user record in the database.  Here's what the error looked like:
-<blockquote>
-<pre>
-$errmsg
-</pre>
-</blockquote>"
-return 
+    if { !$user_id } {
+        # not a double click, and it failed
+        ad_return_error "Insert Failed" "We were unable to create your user record in the database."
+        ad_script_abort
+    }
 }
 
 
