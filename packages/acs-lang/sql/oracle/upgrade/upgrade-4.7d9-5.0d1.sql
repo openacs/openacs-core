@@ -7,6 +7,8 @@
 --
 -- 3. Renames the lang_messages_audit.message column to 'old_message' in order to make the meaning more clear.
 --
+-- 4. Adds a description column to lang_message_keys.
+--
 -- @author Simon Carstensen (simon@collaboraid.biz)
 -- @author Lars Pind (lars@collaboraid.biz)
 --
@@ -49,3 +51,8 @@ alter table lang_messages_audit add old_message clob;
 update lang_messages_audit set old_message = message;
 commit;
 alter table lang_messages_audit drop (message);
+
+
+-- 4. Adds a description column to lang_message_keys.
+
+alter table lang_message_keys add description clob;
