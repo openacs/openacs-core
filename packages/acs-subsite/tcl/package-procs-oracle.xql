@@ -21,7 +21,7 @@
       <querytext>
       
 	select upper(nvl(attr.table_name,t.table_name)) as attr_table_name, 
-	       nvl(attr.column_name, attr.attribute_name) as attr_column_name, 
+	       upper(nvl(attr.column_name, attr.attribute_name)) as attr_column_name, 
 	       attr.ancestor_type, attr.min_n_values, attr.default_value
 	  from acs_object_type_attributes attr, 
 	       (select t.object_type, t.table_name, level as type_level

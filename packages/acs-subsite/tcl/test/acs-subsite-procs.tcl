@@ -6,6 +6,30 @@ ad_library {
     @cvs-id $Id$
 }
 
+aa_register_case acs_subsite_expose_bug_775 {
+    Exposes Bug 775.
+
+    @author Don Baccus
+} {
+
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+
+        set group_id [group::new -group_name group_775]
+        set rel_id [rel_segments_new $group_id membership_rel segment_775]
+        relation_add membership_rel $group_id 0
+        permission::grant -object_id $group_id -party_id 0 -privilege read
+
+        if { [catch {group::delete $group_id} errmsg] } {
+            aa_error "Delete of group \"group_775\" failed."
+        } else {
+            aa_true "Delete of group \"group_775\" succeeded." 1
+        }
+    }
+
+}
+
 aa_register_case acs_subsite_expose_bug_1144 {
     Exposes Bug 1144.
 
