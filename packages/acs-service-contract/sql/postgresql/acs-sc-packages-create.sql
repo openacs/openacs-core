@@ -338,7 +338,7 @@ end;' language 'plpgsql';
 
 
 
-create function acs_sc_impl_alias__delete(varchar,varchar)
+create function acs_sc_impl_alias__delete(varchar,varchar,varchar)
 returns integer as '
 declare
     p_impl_contract_name	alias for $1;
@@ -347,7 +347,7 @@ declare
     v_impl_id			integer;
 begin
 
-    v_impl_id := acs_sc_impl__get_id(p_impl_name);
+    v_impl_id := acs_sc_impl__get_id(p_impl_contract_name, p_impl_name);
 
     delete from acs_sc_impl_aliases 
     where impl_contract_name = p_impl_contract_name 
