@@ -104,8 +104,8 @@ SVRMGR&gt;  select file_name from dba_data_files;</pre>
 		  <tt>m02</tt>. This enables your Oracle
 		  system and database files to be on separate disks for optimized
 		  performance. For more information on such a configuration, see
-		  <a href="http://www.arsdigita.com/books/panda/databases-choosing" target="_top">Chapter
-		  12</a> of <a href="http://www.arsdigita.com/books/panda/" target="_top">Philip's
+		  <a href="http://philip.greenspun.com/panda/databases-choosing" target="_top">Chapter
+		  12</a> of <a href="http://philip.greenspun.com/panda/" target="_top">Philip's
 		  book</a>.  For this example, we'll use
 		  <tt>/ora8/m02/oradata/ora8/</tt>.
 		</p></li><li><p> 
@@ -179,7 +179,9 @@ SQL&gt; exit</pre><p>
 		  <tt>/tmp/nsd-oracle.txt</tt> : 
 		</p><pre class="programlisting">
 nsadmin:~$ cp /tmp/nsd-oracle.txt ./bin/nsd-oracle
-nsadmin:~$ chmod 700 ./bin/nsd-oracle</pre></li></ul></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="install-openacs-prepare-postgres"></a>Prepare PostgreSQL for OpenACS</h3></div></div><p>
+nsadmin:~$ chmod 700 ./bin/nsd-oracle</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>RedHat 7.3 and 8.0 users: set the the LD_ASSUME_KERNEL environment 
+                variable in your nsd-oracle script: 
+<pre class="programlisting">export LD_ASSUME_KERNEL=2.2.5		</pre></p></div></li></ul></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="install-openacs-prepare-postgres"></a>Prepare PostgreSQL for OpenACS</h3></div></div><p>
 	  Preparing PostgreSQL is just a little bit simpler than preparing
 	  Oracle. We simply need to create a database with the name of our
 	  <span class="emphasis"><em>service-name</em></span>
@@ -383,7 +385,7 @@ root:~# emacs -nw /etc/inittab</pre></li><li><p>
 			making sure that the first field
 			<tt>nss1</tt> is unique.
 		  </p><pre class="programlisting">
-nss1:2345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nsadmin -g web -t /usr/local/aolserver/<span class="emphasis"><em>birdnotes</em></span>.tcl</pre></li><li><p>
+nss1:345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nsadmin -g web -t /usr/local/aolserver/<span class="emphasis"><em>birdnotes</em></span>.tcl</pre></li><li><p>
 			<span class="strong"><em>Important:</em></span> Make sure there is a
 			newline at the end of the file. If there is not a newline at
 			the end of the file, the system may suffer catastrophic

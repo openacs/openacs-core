@@ -408,7 +408,7 @@ oracle:/where/oracle/Disk1$ ./runInstaller</programlisting>
 
 		<note>
 		  <para>
-			Some people have had trouble with this step on RedHat 7.3. If
+			Some people have had trouble with this step on RedHat 7.3 and 8.0. If
 			so, try the following steps before calling
 			<command>./runInstaller</command>:
 		  </para>
@@ -941,7 +941,7 @@ joeuser:~$ exit</programlisting>
 	</para>
 
 	<note>
-	  <para>RedHat 7.3 users: Before running <command>dbassist</command>, do the following.</para>
+	  <para>RedHat 7.3 and 8.0 users: Before running <command>dbassist</command>, do the following.</para>
 	  <orderedlist>
 		<listitem><para>
 			Download the <ulink

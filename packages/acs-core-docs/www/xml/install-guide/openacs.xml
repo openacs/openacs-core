@@ -249,6 +249,12 @@ SQL&gt; exit</programlisting>
 		<programlisting>
 nsadmin:~$ cp /tmp/nsd-oracle.txt ./bin/nsd-oracle
 nsadmin:~$ chmod 700 ./bin/nsd-oracle</programlisting>
+	<note>
+	  <para>RedHat 7.3 and 8.0 users: set the the LD_ASSUME_KERNEL environment 
+                variable in your nsd-oracle script: 
+<programlisting>export LD_ASSUME_KERNEL=2.2.5		</programlisting></para>
+	</note>
+
 	  </listitem>
 	</itemizedlist>
   </sect2>
