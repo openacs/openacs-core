@@ -33,7 +33,7 @@
 
 <fullquery name="rel_types::new.drop_type">
 <querytext>
-	select acs_rel_type__drop_type(:rel_type)
+	select acs_rel_type__drop_type(:rel_type, 'f')
 </querytext>
 </fullquery>
 
