@@ -223,7 +223,9 @@ ad_proc -public auth::password::recover_password {
                 auth::password::email_password \
                     -authority_id $authority_id \
                     -username $username \
-                    -password $result(password)
+                    -password $result(password) \
+                    -subject_msg_key "acs-subsite.email_subject_Forgotten_password" \
+                    -body_msg_key "acs-subsite.email_body_Forgotten_password" 
 
                 # Successfully informed user of email
                 set result(password_message) [_ acs-subsite.Check_Your_Inbox]
@@ -481,9 +483,8 @@ ad_proc -private auth::password::email_password {
     {-username:required}
     {-authority_id:required}
     {-password:required}
-    {-message_type "Forgotten"}
-    {-subject_msg_key ""}
-    {-body_msg_key ""}
+    {-subject_msg_key "acs-subsite.email_subject_Forgotten_password"}
+    {-body_msg_key "acs-subsite.email_body_Forgotten_password"}
     {-from ""}
 } {
     Send an email to ther user with given username and authority with the new password.
@@ -491,15 +492,9 @@ ad_proc -private auth::password::email_password {
     @param from             The email's from address. Can be in email@foo.com <Your Name> format.
                             Defaults to ad_system_owner.
     
-    @param message_type     Forgotten, Registration, or Admin_creation. Will be expanded into full message keys
-                            such as "acs-subsite.email_subject_Forgotten_password" and 
-                            "acs-subsite.email_body_Forgotten_password".
+    @param subject_msg_key  The message key you wish to use for the email subject.
 
-    @param subject_msg_key  For even more control over the message going out, you can set this to the message key
-                            you wish to use for the subject. Overrides message_type.
-
-    @param body_msg_key     For even more control over the message going out, you can set this to the message key
-                            you wish to use for the body. Overrides message_type.
+    @param body_msg_key     The message key you wish to use for the email body.
 
     @return Does not return anything. Any errors caused by ns_sendmail are propagated
 
@@ -542,13 +537,6 @@ ad_proc -private auth::password::email_password {
         set admin_last_name {}
     }
         
-    if { [empty_string_p $subject_msg_key] } {
-        set subject_msg_key "acs-subsite.email_subject_${message_type}_password"
-    }
-    if { [empty_string_p $body_msg_key] } {
-        set body_msg_key "acs-subsite.email_body_${message_type}_password"
-    }
-
     set subject [_ $subject_msg_key]
     set body [_ $body_msg_key]
         
