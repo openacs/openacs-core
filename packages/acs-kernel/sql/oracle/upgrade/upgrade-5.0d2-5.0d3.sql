@@ -214,9 +214,13 @@ alter table users add username  varchar2(100) default '-'
 
 -- set all current users' username to equal their email
 -- and their authority to be the local authority
+-- Exclude the unregistered visitor as he/she has a null email
 update users 
-set    username = (select email from parties where party_id = user_id),
-       authority_id = (select authority_id from auth_authorities where short_name = 'local');
+set    username = (select email 
+                   from parties 
+                   where party_id = user_id),
+       authority_id = (select authority_id from auth_authorities where short_name = 'local')
+where user_id <> 0;
 
 -- add a unique constraint
 alter table users add constraint users_authority_username_un unique (authority_id, username);
