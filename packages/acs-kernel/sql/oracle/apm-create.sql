@@ -336,7 +336,7 @@ comment on column apm_package_versions.deactivation_date is '
  XXX (bquinn): do we really care about this enough to keep the information around?
 ';
 
-comment on column apm_package_versions.distribution_tarball is '
+comment on column apm_package_versions.item_id is '
  The archive of the distribution.
  XXX (bquinn):   This should definitely be moved
  to the content repository and renamed distribution_archive, or simply 
