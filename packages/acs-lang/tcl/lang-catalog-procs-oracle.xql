@@ -36,7 +36,7 @@
         where  lma1.package_key = :package_key
         and    lma1.locale = :locale
         and    lma1.sync_time is not null
-        and    lma1.overwrite_date = (select max(lma2.overwrite_date)
+        and    lma1.audit_id = (select max(lma2.audit_id)
                                       from lang_messages_audit lma2
                                       where lma2.package_key = lma1.package_key
                                         and lma2.message_key = lma1.message_key
