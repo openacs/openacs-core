@@ -6,6 +6,10 @@
   <msg key="Answer">Answer:</msg>
   <msg key="answer">answer:</msg>
   <msg key="at">at</msg>
+  <msg key="Account_closed">
+    &lt;p&gt;Your account is currently closed.&lt;/p&gt;
+    &lt;p&gt;If you wish, we can &lt;a href=&quot;%restore_url%&quot;&gt;reopen your account&lt;/a&gt;.&lt;/p&gt;
+  </msg>
   <msg key="Account_reopened_message">Your account at %system_name% has been reopened. Welcome back.</msg>
   <msg key="Account_reopened_title">Account Reopened</msg>
   <msg key="Awaiting_Approval">Awaiting Approval</msg>
@@ -231,8 +235,8 @@ You can always change your password by doing the following:
   <msg key="Recover_Password">Recover Password</msg>
   <msg key="Register">Register</msg>
   <msg key="Registration_Approval_Notice">
-    <p> Thank you for registering for %system_name%. An administrator has been notified of your request. </p>
-    <p> Once you're approved, you'll get an email message and you can return to start using %system_name%. </p>
+    &lt;p&gt; Thank you for registering for %system_name%. An administrator has been notified of your request. &lt;/p&gt;
+    &lt;p&gt; Once you're approved, you'll get an email message and you can return to start using %system_name%. &lt;/p&gt;
   </msg>
   <msg key="Revoke_Checked">Revoke Checked</msg>
   <msg key="Screen_name">Screen name</msg>
@@ -255,10 +259,6 @@ You can always change your password by doing the following:
   <msg key="User_Creation_Failed">User Creation Failed</msg>
   <msg key="Username">Username</msg>
   <msg key="Welcome_Back">Welcome Back</msg>
-  <msg key="Account_closed">
-    &lt;p&gt;Your account is currently closed.&lt;/p&gt;
-    &lt;p&gt;If you wish, we can &lt;a href=&quot;%restore_url%&quot;&gt;reopen your account&lt;/a&gt;.&lt;/p&gt;
-  </msg>
   <msg key="Your_email">Your email:</msg>
   <msg key="Your_email_address">Your email address:</msg>
   <msg key="Your_Portrait">Your Portrait</msg>
