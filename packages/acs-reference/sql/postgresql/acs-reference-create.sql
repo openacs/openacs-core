@@ -170,19 +170,18 @@ end;
 create function acs_reference__delete (integer)
 returns integer as '
 declare
-    repository_id alias for $1;
+    p_repository_id alias for $1;
+    v_maintainer_id		acs_objects.object_id%TYPE;
 begin
     select maintainer_id into v_maintainer_id
     from   acs_reference_repositories
-    where  repository_id = acs_reference__delete.repository_id;
+    where  repository_id = p_repository_id;
 
     delete from acs_reference_repositories
-    where repository_id = acs_reference__delete.repository_id;
+    where repository_id = p_repository_id;
 
-    acs_object__delete(repository_id);
-    -- Who added this it is ridiculous
-    -- a person could exist from something else
---  person__delete(v_maintainer_id);
+    perform acs_object__delete(p_repository_id);
+    return 0;
 end;
 ' language 'plpgsql';
 
