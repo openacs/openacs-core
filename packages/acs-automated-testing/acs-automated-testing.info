@@ -7,14 +7,14 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.0.0" url="http://openacs.org/repository/download/apm/acs-automated-testing-5.0.0.apm">
+    <version name="5.0.1" url="http://openacs.org/repository/download/apm/acs-automated-testing-5.0.1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The interface to the automated testing facilities within OpenACS.</summary>
         <release-date>2004-01-21</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides a UI for viewing and running automated tests provided by each package within the OpenACS system.</description>
 
-        <provides url="acs-automated-testing" version="5.0.0"/>
+        <provides url="acs-automated-testing" version="5.0.1"/>
 
         <callbacks>
         </callbacks>
