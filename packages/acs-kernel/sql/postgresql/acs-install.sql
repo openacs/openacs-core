@@ -77,7 +77,7 @@ begin
       now(),
       null,
       null,
-      null
+      main_site_id
       );
 
   PERFORM apm_package__enable (lang_id);

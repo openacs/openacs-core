@@ -53,7 +53,7 @@ begin
   lang_id := apm_service.new (
       instance_name => 'OpenACS Localization Utils',
       package_key => 'acs-lang'
-      context_id => 
+      context_id => main_site_id
   );
   apm_package.enable(lang_id);
 
