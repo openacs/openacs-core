@@ -34,14 +34,13 @@ ad_proc apm_parameter_section_slider {package_key} {
 }
 
 ad_proc apm_header { { -form "" } args } {
-    set context_bar_cmd ad_admin_context_bar
 
     if { [llength $args] == 0 } {
-	set context_bar [ad_context_bar "ACS Package Manager"]
+	set context_bar [ad_admin_context_bar "ACS Package Manager"]
 	set title "ACS Package Manager Administration"
     } else {
 	
-	set context_bar [eval [concat [list ad_context_bar [list "/acs-admin/apm/" "ACS Package Manager"]] $args]]
+	set context_bar [eval [concat [list ad_admin_context_bar [list "/acs-admin/apm/" "ACS Package Manager"]] $args]]
 	set title [lindex $args end]
     }
     set header [ad_header $title ""]
