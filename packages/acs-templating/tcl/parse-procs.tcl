@@ -302,7 +302,7 @@ ad_proc -private template::adp_init { type file_stub } {
 
   set pkg_id [apm_package_id_from_key acs-templating]
   set refresh_cache [ad_parameter -package_id $pkg_id RefreshCache dummy\
-			 "when needed"]
+			 "as needed"]
 
   if {[string equal $proc_name {}] || [string compare $refresh_cache "never"]} {
     set mtime [file mtime $file_stub.$type]
