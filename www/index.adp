@@ -9,14 +9,15 @@
   <tr>
     <td valign="top">
 
-      You have successfully installed <b>ArsDigita Community System</b>
+      You have successfully installed the 
+      <A HREF="http://openacs.org/"><b>OpenACS Community System</b></A>
       version @acs_version@.
 
       <p>
 
-      Thank you for using our software. Please write us at the <a
-      href="http://www.arsdigita.com/bboard/q-and-a?topic_id=21">web/db bboard</a> to let
-      us know of your experience with installing and using ACS. 
+      Thank you for using our software. Please write to us at the <a
+      href="http://openacs.org/bboard/q-and-a?topic_id=11">OpenACS bboard</a> to let
+      us know of your experience with installing and using OpenACS. 
       
       <p>
       
@@ -52,9 +53,9 @@
       
       <h3>How to Add Functionality to Your Site</h3>
       
-      To <b>download application packages</b> that you can install on your system, visit
-      the <a href="http://www.arsdigita.com/acs-repository/" 
-      title="ACS Repository on arsdigita.com">ACS Repository</a>. 
+      To <b>download application packages</b> that you can install on
+      your system, visit the <a href="http://openacs.org/software/" 
+      title="Software Page on openacs.org">OpenACS Software Page</a>. 
       To make them available to users of your site, use the <a
       href="/admin/site-map/" title="The Site Map on your
       server">Sitemap</a>.
@@ -62,29 +63,30 @@
       <p>
       
       To <b>manage the packages on your system</b>, visit the <a href="/acs-admin/apm/"
-      title="ACS Package Manager on your server">Package Manager</a>
+      title="OpenACS Package Manager on your server">Package Manager</a>
       on your own server. 
       
       <p>
       
       
-      Should you develop an ACS package that you want to share with the rest
-      of the community, upload it to the <a
-      href="http://www.arsdigita.com/acs-repository/"
-      title="ACS Repository on arsdigita.com">ACS Repository</a> and we will
+      Should you develop an OpenACS package that you want to share with the rest
+      of the community, upload it to <a
+      href="http://openacs.org/new-file-storage/"
+      title="OpenACS New File Storage on openacs.org">OpenACS Repository</a> and we will
       evaluate it and publish it.
       
       <p>
       
       For more administrative options, visit <a href="/acs-admin/"
-      title="Package and User administration">ACS-Administration pages</a> for packages and users, 
-      or <a href="/admin/" 
+
+      title="Package and User administration">OpenACS-Administration pages</a> 
+      for packages and users, or <a href="/admin/" 
       title="Sitemap and Groups administration">Main site admin pages</a>
       for groups and sitemap.
       
       <h3>How to Learn More</h3>
       
-      Your ACS installation comes with <a href="/doc/" 
+      Your OpenACS installation comes with <a href="/doc/" 
       title="Documentation Home on your server"><b>documentation</b></a>. When you start
       programming, you will also find the <a href="/api-doc/" 
       title="API Documentation">API documentation</a> useful.
@@ -92,21 +94,21 @@
       <p>
       
       Should you ever <b>get stuck</b>, or if you just want to <b>hang out</b> with other
-      ACS users, visit the <a href="http://www.arsdigita.com/bboard/"
-      title="ArsDigita Discussion Forums">discussion forums</a> on arsdigita.com, in
+      OpenACS users, visit the <a href="http://openacs.org/bboard/"
+      title="OpenACS Discussion Forums">discussion forums</a> on openacs.org, in
       particular the <a
-      href="http://www.arsdigita.com/bboard/q-and-a?topic_id=21"
-      title="Web/DB discussion forum on arsdigita.com">web/db forum</a>.
-      The home of the <b>ACS community</b> is
-      at <a href="http://developer.arsdigita.com/" 
-      title="ACS Developer Community">http://developer.arsdigita.com</a>.
+      href="http://openacs.org/bboard/q-and-a?topic_id=11"
+      title="OpenACS discussion forum on openacs.org">OpenACS forum</a>.
+      The home of the <b>OpenACS community</b> is
+      at <a href="http://openacs.org/" 
+      title="OpenACS Developer Community">http://openacs.org</a>.
       
       
       <p>
       
       If you <b>find bugs</b> or have <b>feature requests</b>, post them in
-      our <a href="http://www.arsdigita.com/sdm/" 
-      title="Software Development Manager on arsdigita.com">Software
+      our <a href="http://openacs.org/sdm/" 
+      title="Software Development Manager on openacs.org">Software
       Development Manager</a> (SDM). If you have bugfixes or patches
       yourself, post them in the SDM, too. 
       
@@ -220,28 +222,28 @@
               </tr>
               <tr bgcolor="#eeeeee">
                 <td>
-                  <a href="http://www.arsdigita.com/acs-repository/">Downloads</a>
+                  <a href="http://openacs.org/software/">Software Downloads</a>
                 </td>
               </tr>
               <tr bgcolor="#eeeeee">
                 <td>
-                  <a href="http://developer.arsdigita.com/">Developer Community</a>
+                  <a href="http://openacs.org/">Developer Community</a>
                 </td>
               </tr>
               <tr bgcolor="#eeeeee">
                 <td>
                   <a
-   href="http://www.arsdigita.com/bboard/q-and-a?topic_id=21">Web/DB bboard</a>
+   href="http://openacs.org/bboard/q-and-a?topic_id=11">OpenACS bboard</a>
                 </td>
               </tr>
               <tr bgcolor="#eeeeee">
                 <td>
-                  <a href="http://www.arsdigita.com/bboard/">Other bboards</a>
+                  <a href="http://openacs.org/bboard/">Other bboards</a>
                 </td>
               </tr>
              <tr bgcolor="#eeeeee">
                 <td>
-                  <a href="http://www.arsdigita.com/sdm/">Report a bug</a>
+                  <a href="http://openacs.org/sdm/">Report a bug</a>
                 </td>
               </tr>
             </table>

@@ -327,12 +327,15 @@ declare
     p_is_live       alias for $9;    -- default ''t''
     v_revision_id  cr_revisions.revision_id%TYPE;
 begin
-		--hmmm not sure which function to use
     v_revision_id := content_revision__new (
         p_title,				-- title         
+        p_description,
+        current_timestamp,
         p_mime_type,			-- mime_type     
+        NULL,
         p_content,				-- data          
         p_file_id,				-- item_id       
+        NULL,
         p_creation_date,		-- creation_date 
         p_creation_user,		-- creation_user 
         p_creation_ip			-- creation_ip   
@@ -340,7 +343,7 @@ begin
 
     -- test for auto approval of revision
     if p_is_live = ''t'' then 
-        content_item__set_live_revision(v_revision_id);
+        perform content_item__set_live_revision(v_revision_id);
     end if;
 
     return v_revision_id;
@@ -533,7 +536,7 @@ create function acs_message__name (integer)
 returns varchar as '
 declare
     p_message_id   alias for $1;
-    v_message_name   acs_messages_all.title%TYPE;
+    v_message_name   cr_revisions.title%TYPE;
 begin
     select title into v_message_name
         from acs_messages_all
