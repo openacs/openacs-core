@@ -31,6 +31,11 @@ db_transaction {
             -package_key acs-subsite \
             -element url]
 
+    # node_id was null so we're not deleting a mounted subsite instance
+    if {[empty_string_p $parent] } {
+	set parent [ad_conn subsite_url]
+    }
+
     if { ![empty_string_p $node_id] } {
         # The package is mounted
         site_node::unmount -node_id $node_id
