@@ -27,6 +27,26 @@ ad_proc -public ad_form {
 
     In general the full functionality of the form builder is exposed by ad_form, but with a
     much more user-friendly and readable syntax and with state management handled automatically.
+    
+    <p>
+
+    In order to make it possible to use ad_form to build common form snippets within procs, code
+    blocks are executed at the current template parse level.   This is necessary if validate and
+    similar blocks are to have access to the form's contents but may cause surprises for the
+    unwary.  So be wary.
+
+    <p>
+
+    On the other hand when subst is called, for instance when setting values in the form, the
+    caller's level is used.  Why do this?  A proc building a common form snippet may need to
+    build a list of valid select elements or similarly compute values that need to be set in
+    the form, and these should be computed locally.
+
+    <p>
+
+    Yes, this is a bit bizarre and not necessarily well thought out.  The semantics were decided
+    upon when I was writing a fairly complex package for Greenpeace, International and worked well
+    there so for now, I'm leaving them the way they are.
 
     <p>
 
@@ -42,7 +62,7 @@ ad_proc -public ad_form {
         my_table_key:optional
     }
 
-    ad_form -name form_name -form {
+    ad_form -name form_name -export {foo {bar none}} -form {
 
         my_table_key:key(my_table_sequence)
 
@@ -110,6 +130,13 @@ ad_proc -public ad_form {
     <p>
 
     <dl>
+    <p><dt><b>-extend</b></dt><p>
+    <dd>Extend an existing form.  This allows one to build forms incrementally.  Forms are built at the
+        template level.  As a consequence one can write utility procs that use -extend to build form
+        snippets common to several data entry forms.  
+        <p>This must be the first switch passed into ad_form
+    </dd>
+
     <p><dt><b>-name</b></dt><p>
     <dd>Declares the name of the form.  Defaults to the name of the script being served.</dd>
 
@@ -123,10 +150,16 @@ ad_proc -public ad_form {
         define multipart file handling forms.
     </dd>
 
-    <p><dt><b>-extend</b></dt><p>
-    <dd>Extend an existing form.  This allows one to build forms incrementally.  Forms are built at the
-        template level.  As a consequence one can write utility procs that use -extend to build form
-        snippets common to several data entry forms.  
+    <p><dt><b>-action</b></dt><p>
+    <dd>The name of the script to be called when the form is submitted.  Defaults to the name of the script
+        being served.  
+    </dd>
+
+    <p><dt><b>-export</b></dt><p>
+    <dd>Similar to the utility <b>export_vars</b>.  Takes a list of values to insert in the form as 
+        "hidden" elements.   Each value is either a name, in which case the Tcl variable at the caller's
+        level is passed to the form if it exists, or a name-value pair.   "multiple", "array", "sign" and
+        similar flags are not allowed though it would be good to do so in the future.
     </dd>
         
     <p><dt><b>-form</b></dt><p>
@@ -312,7 +345,7 @@ ad_proc -public ad_form {
     } 
 
     set valid_args { form method action html name select_query select_query_name new_data on_refresh
-                     edit_data validate on_submit confirm_template new_request edit_request }; 
+                     edit_data validate on_submit confirm_template new_request edit_request export}; 
 
     ad_arg_parser $valid_args $args
 
@@ -340,7 +373,7 @@ ad_proc -public ad_form {
     foreach valid_arg $valid_args {
         if { [info exists $valid_arg] } {
             if { [info exists af_parts(${form_name}__$valid_arg)] &&
-                 ![lsearch { form name validate } $valid_arg] == -1 } {
+                 ![lsearch { form name validate export } $valid_arg] == -1 } {
                 return -code error "Form \"$form_name\" already has a \"$valid_arg\" section"
             }
 
@@ -350,7 +383,7 @@ ad_proc -public ad_form {
             # and validation block to be extended, for now at least until I get more experience
             # with this ...
 
-            if { [lsearch { name form method action html validate } $valid_arg ] == -1 } {
+            if { [lsearch { name form method action html validate export } $valid_arg ] == -1 } {
                 set af_parts(${form_name}__extend) ""
             }
         }
@@ -477,6 +510,17 @@ ad_proc -public ad_form {
 
         template::element create $form_name __refreshing_p -datatype integer -widget hidden -value 0
 
+    }
+
+    if { [info exists export] } {
+        foreach value $export {
+            set name [lindex $value 0]
+            if { [llength $value] == 1 } {
+                template::element create $form_name $name -datatype text -widget hidden -value [uplevel [list set $name]]
+            } else {
+                template::element create $form_name $name -datatype text -widget hidden -value [uplevel [list subst [lindex $value 1]]]
+            }
+        }
     }
 
     # We need to track these for submission time and for error checking
