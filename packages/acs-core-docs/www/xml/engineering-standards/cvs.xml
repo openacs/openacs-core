@@ -579,7 +579,7 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
           <listitem>
             <para>
               When a package is released in final form, the developer
-              shall tag it "packagename-x-y-z-final" and "oacs-x-y-compat". x-y
+              shall tag it "packagename-x-y-z-final" and "openacs-x-y-compat". x-y
               should correspond to the current branch. If the package is
               compatible with several different core versions, several compat
               tags should be applied.
