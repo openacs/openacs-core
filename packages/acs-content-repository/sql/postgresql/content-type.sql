@@ -152,12 +152,11 @@ begin
 
   -- we''ll remove the associated table if it exists
   select 
-    count(*) > 0 into table_exists 
+    table_exists(lower(table_name)) into table_exists 
   from 
-    user_tables u, acs_object_types objet
+    acs_object_types
   where 
-    objet.object_type = drop_type__content_type and
-    u.table_name = upper(objet.table_name);
+    object_type = drop_type__content_type;
 
   if table_exists and content_type__drop_table_p then
     select 
