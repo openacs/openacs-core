@@ -568,7 +568,7 @@ ad_proc -public db_html_select_options {
 
 ad_proc -public db_html_select_value_options {
     { -bind "" }
-    { -select_option "" }
+    { -select_option [list] }
     { -value_index 0 }
     { -option_index 1 }
     stmt_name
@@ -577,7 +577,9 @@ ad_proc -public db_html_select_value_options {
 
     Generate html option tags with values for an html selection widget. if
     select_option is passed and there exists a value for it in the values
-    list, this option will be marked as selected. 
+    list, this option will be marked as selected. select_option can be passed 
+    a list, in which case all options matching a value in the list will be 
+    marked as selected. 
 
     @author yon [yon@arsdigita.com]
 
@@ -591,7 +593,7 @@ ad_proc -public db_html_select_value_options {
     }
 
     foreach option $options {
-	if { [string compare $select_option [lindex $option $value_index]] == 0 } {
+	if { [lsearch -exact $select_option [lindex $option $value_index]] >= 0 } {
 	    append select_options "<option value=\"[util_quote_double_quotes [lindex $option $value_index]]\" selected=\"selected\">[lindex $option $option_index]</option>\n"
 	} else {
 	    append select_options "<option value=\"[util_quote_double_quotes [lindex $option $value_index]]\">[lindex $option $option_index]</option>\n"
