@@ -324,32 +324,6 @@ ad_proc -public apm_read_package_info_file { path } {
 
     set properties(files) [list]
 
-<<<<<<< apm-xml-procs.tcl
-    set files [xml_node_get_children_by_name $version files]
-
-    foreach node $files {
-	set file_nodes [xml_node_get_children_by_name $node file]
-	
-	foreach file_node $file_nodes {
-	    set file_path [apm_required_attribute_value $file_node path]
-	    set type [apm_attribute_value $file_node type]
-	    set db_type [apm_attribute_value $file_node db_type]
-	    # Validate the file type: it must be null (unknown type) or
-	    # some value in [apm_file_type_keys].
-	    if { ![empty_string_p $type] && [lsearch -exact [apm_file_type_keys] $type] < 0 } {
-		ns_log Warning "Unrecognized file type \"$type\" of file $file_path"
-	    }
-	    # Validate the database type: it must be null (unknown type) or
-	    # some value in [apm_db_type_keys].
-	    if { ![empty_string_p $db_type] && [lsearch -exact [apm_db_type_keys] $db_type] < 0 } {
-		error "Invalid database type \"$db_type\""
-	    }
-	    lappend properties(files) [list $file_path $type $db_type]
-	}
-    }
-
-=======
->>>>>>> 1.16
     # Build a list of package callbacks
     array set callback_array {}
 
