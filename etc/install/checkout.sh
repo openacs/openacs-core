@@ -13,6 +13,9 @@
 #
 # @author Peter Marklund (peter@collaboraid.biz)
 
+set -e
+set -x
+
 export CVS_RSH=ssh
 script_path=$(dirname $(which $0))
 
@@ -21,11 +24,12 @@ cd $script_path
 # Sometimes script path will be the dot so I need this workaround
 script_path=$PWD
 
-source functions.sh
+source ./functions.sh
 
 # Fetch config parameters
 serverroot=`get_config_param serverroot`
 aolserver_user=`get_config_param aolserver_user`
+aolserver_group=`get_config_param aolserver_group`
 
 echo "$0: Starting checkout for server path $serverroot with config_file $config_file and dotlrn=$dotlrn"
 
@@ -48,7 +52,7 @@ fi
 mkdir -p ${serverroot}-tmp
 cd ${serverroot}-tmp
 oacs_branch=`get_config_param oacs_branch`
-if [ "$oacs_branch" == "HEAD"]; then
+if [ "$oacs_branch" == "HEAD" ]; then
     oacs_branch_switch=""
 else
     oacs_branch_switch="-r $oacs_branch"
@@ -81,6 +85,6 @@ fi
 echo $(date) > ${serverroot}/www/SYSTEM/checkout-date
 # Set proper privileges
 
-# TODO - get service name and group from config file
-chown -R ${aolsever_user}.web ${serverroot}
+# Change owner and permissions on checked out files
+chown -R ${aolsever_user}.${aolserver_group} ${serverroot}
 chmod -R go+rwX ${serverroot}
