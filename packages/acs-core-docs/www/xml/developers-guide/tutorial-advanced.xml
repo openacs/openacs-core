@@ -1559,7 +1559,7 @@ db_multirow \
   <sect1 id="tutorial-upgrade-scripts">
     <title>Writing upgrade scripts</title>
     <authorblurb>
-      <para>by Jade Rubick</ulink>.</para>
+      <para>by <ulink url="mailto:jade@rubick.com">Jade Rubick</ulink></para>
     </authorblurb>
     <para>If your package changes its data model, you have to write an
     upgrade script. This is very easy in OpenACS. </para>
