@@ -45,12 +45,11 @@ if { ! [string equal $user_id {}] } {
     # query for users (obviously not a very scalable query)
 
     set user_search [string tolower $user_search]
-    set query "select user_id, first_name, last_name 
-      from ad_template_sample_users where 
-        lower(first_name) like '%$user_search%' 
-        or lower(last_name) like '%$user_search%'"
-
-    query users multirow $query
+    query get_users users multirow "
+        select user_id, first_name, last_name 
+        from ad_template_sample_users 
+      where lower(first_name) like '%' || :user_search || '%' 
+         or lower(last_name) like '%' || :user_search || '%'"
     set user_count [multirow size users]
 
     if { $user_count == 1 } {
@@ -103,14 +102,10 @@ form create user_edit -elements {
 
 if { [form is_request user_edit] } {
 
-  set query "select 
-    user_id, first_name, last_name, address1, address2, city, state
-  from
-    ad_template_sample_users
-  where
-    user_id = :user_id"
-
-  if { ! [query info onerow $query] } {
+  if { ! [query get_info info onerow "
+              select user_id, first_name, last_name, address1, address2, city, state
+              from ad_template_sample_users
+              where user_id = :user_id"] } {
     request error invalid_user_id "Invalid User ID"
   }
   
