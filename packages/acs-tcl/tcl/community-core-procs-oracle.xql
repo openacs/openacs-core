@@ -118,7 +118,7 @@
                  trunc(sysdate - password_changed_date) as password_age_days
           from   cc_users 
           where  authority_id = :authority_id
-          and    username = :username
+          and    upper(username) = upper(:username)
 
       </querytext>
 </fullquery>
