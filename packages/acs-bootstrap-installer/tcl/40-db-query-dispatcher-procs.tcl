@@ -190,7 +190,14 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	    if {[catch {ns_log Notice "QD= the ad_conn file is [ad_conn file]"} errmsg]} {}
 	}
 
-	# Now we do a check to see if this is a directly accessed URL or a sourced URL
+	# Now we do a check to see if this is a directly accessed URL or a 
+        # sourced URL
+
+        # added case for handling .vuh files which are sourced from 
+        # rp_handle_tcl_request.  Otherwise, QD was forming fullquery path 
+        # with the assumption that the query resided in the 
+        # rp_handle_tcl_request proc itself. (Openacs - DanW)
+
         switch $proc_name {
 
             ns_sourceproc {
@@ -241,6 +248,20 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	# Let's find out where this Tcl proc is defined!!
 	# Get the first word, which is the Tcl proc
 	regexp {^([^ ]*).*} $proc_name all proc_name
+
+        # check to see if a package proc is being called without 
+        # namespace qualification.  If so, add the package qualification to the
+        # proc_name, so that the correct query can be looked up. 
+        # (Openacs - DanW)
+
+        set calling_namespace [string range [uplevel [expr 1 + $added_stack_num] {namespace current}] 2 end]
+        ns_log Notice "QD= calling namespace = $calling_namespace"
+
+        if {![string equal $calling_namespace ""] && 
+            ![regexp {::} $proc_name all]} {
+
+            set proc_name ${calling_namespace}::${proc_name}
+        }
 	ns_log Notice "QD = proc_name is -$proc_name-"
 
 	# We use the ad_proc construct!! 
