@@ -89,7 +89,7 @@ set table_def {
 
                 set reload_links_p [ad_decode [ns_set iget [rp_getform] reload_links_p] \
                                               "" 0 [ns_set iget [rp_getform] reload_links_p]]
-                if { $reload_links_p && [string equal [apm_version_load_status $version_id] "needs_reload"]} {
+                if { !$reload_links_p || [string equal [apm_version_load_status $version_id] "needs_reload"]} {
                     lappend file_link_list "<a href=\"version-reload?version_id=$version_id\">reload changed</a>"
                 } 
             } 
@@ -111,9 +111,9 @@ db_release_unused_handles
 # The reload links make the page slow, so make them optional
 set page_url "[ad_conn url]?[export_vars -url {orderby owned_by supertype}]"
 if { $reload_links_p } {
-    set reload_filter "<a href=\"$page_url&reload_links_p=0\">hide reload links</a>"
+    set reload_filter "<a href=\"$page_url&reload_links_p=0\">Do not check for changed files</a>"
 } else {
-    set reload_filter "<a href=\"$page_url&reload_links_p=1\">display reload links</a>"
+    set reload_filter "<a href=\"$page_url&reload_links_p=1\">Check for changed files</a>"
 }
 
 append body "<h3>Packages</h3>

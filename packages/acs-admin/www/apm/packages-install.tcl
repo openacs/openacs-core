@@ -149,8 +149,7 @@ function checkAll() {
 	    $errors
 	</ul>
 	"
-    }
-    
+    }    
 }
 
 if { [llength $not_compatible_list] > 0 } {
