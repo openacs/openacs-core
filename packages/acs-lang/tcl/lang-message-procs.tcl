@@ -167,6 +167,9 @@ namespace eval lang::message {
         interface. This allows a translator to work from the context of a web page.
 
         @param locale             Locale (e.g., "en_US") or language (e.g., "en") string.
+                                  If locale is the empty string ad_conn locale will be used
+                                  if we are in an HTTP connection, otherwise the system locale
+                                  (SiteWideLocale) will be used.
         @param key                Unique identifier for this message. Will be the same 
                                   identifier for each locale. All keys belong to a certain 
                                   package and should be prefixed with the package key of that package 
@@ -192,7 +195,20 @@ namespace eval lang::message {
         # Peter TODO: add translation links
         # Peter TODO/FIXME: Should we prefix with ad_conn package_key if the lookup fails?
     
-        set default_locale [parameter::get -package_id [apm_package_id_from_key acs-lang] -parameter SiteWideLocale]
+        set system_locale [parameter::get -package_id [apm_package_id_from_key acs-lang] -parameter SiteWideLocale]
+
+        # Set default locale if none was provided
+        if { [empty_string_p $locale] } {
+
+            global ad_conn
+            if { [info exists ad_conn] } {
+                # We are in an HTTP connection (request) so use that locale
+                set locale [ad_conn locale]
+            } else {
+                # There is no HTTP connection - resort to system locale
+                set locale $system_locale
+            }
+        }
         
         if { [string length $locale] == 2 } {
     
@@ -341,7 +357,7 @@ ad_proc -public _ {
     @see lang::message::lookup
 } {
     switch [llength $args] {
-        1 { return [lang::message::lookup [ad_conn locale] [lindex $args 0] "TRANSLATION MISSING"] }
+        1 { return [lang::message::lookup ""               [lindex $args 0] "TRANSLATION MISSING"] }
         2 { return [lang::message::lookup [lindex $args 0] [lindex $args 1] "TRANSLATION MISSING"] }
         3 { return [lang::message::lookup [lindex $args 0] [lindex $args 1] [lindex $args 2]] }
         4 { return [lang::message::lookup [lindex $args 0] [lindex $args 1] [lindex $args 2] [lindex $args 3]] }
