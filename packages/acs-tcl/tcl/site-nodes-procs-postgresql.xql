@@ -11,7 +11,7 @@
 
     <fullquery name="site_node::init_cache.select_site_nodes">
         <querytext>
-            select site_node.url(site_nodes.node_id) as url,
+            select site_node__url(site_nodes.node_id) as url,
                    site_nodes.node_id,
                    site_nodes.parent_id,
                    site_nodes.directory_p,
@@ -28,7 +28,7 @@
 
     <fullquery name="site_node::update_cache.select_site_node">
         <querytext>
-            select site_node.url(site_nodes.node_id) as url,
+            select site_node__url(site_nodes.node_id) as url,
                    site_nodes.node_id,
                    site_nodes.parent_id,
                    site_nodes.directory_p,
