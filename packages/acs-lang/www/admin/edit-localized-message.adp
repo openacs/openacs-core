@@ -22,3 +22,9 @@
     <a href="@usage_show_url@">Show</a> | <b>Hide</b> files that use this message key.
   </p>
 </else>
+
+<if @create_p@ true>
+  <p>
+    <b>&raquo;</b> <a href="@delete_url@">Delete this message</a>
+  </p>
+</if>
