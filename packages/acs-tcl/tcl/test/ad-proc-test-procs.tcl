@@ -62,17 +62,28 @@ aa_register_case -cats {api smoke} ad_proc_fire_callback {
     Tests a callback with two implementations .
 
 } {
-    ad_proc -callback a_callback { 
-        -arg1:required arg2 
-    } { 
-        this is a test callback 
+    ad_proc -callback a_callback {
+        -arg1:required arg2
+    } {
+        this is a test callback
     } -
 
-    aa_true "throws error for invalid arguments with no implementations" \
-        [catch {callback a_callback bar} error]
+    ad_proc -callback b_callback {
+        -arg1:required arg2
+    } {
+        this is a test callback
+    } -
+    ad_proc -callback c_callback {
+        -arg1:required arg2
+    } {
+        this is a test callback
+    } -
+
+    aa_true "throws error for invalid arguments even if no implementations" \
+        [catch {callback c_callback bar} error]
 
     aa_true "callback returns empty list with no implementations" \
-        [expr {[llength [callback a_callback -arg1 foo bar]] == 0}]
+        [expr {[llength [callback b_callback -arg1 foo bar]] == 0}]
 
     ad_proc -callback a_callback -impl an_impl1 {} { 
         this is a test callback implementation 
@@ -85,9 +96,14 @@ aa_register_case -cats {api smoke} ad_proc_fire_callback {
     } {
         return 2
     }
+    ad_proc -callback a_callback -impl fail_impl {} { 
+        this is a test callback implementation 
+    } {
+        error "should fail"
+    }
 
-    aa_true "callback returns value for each defined callback" \
-        [expr {[llength [callback a_callback -arg1 foo bar]] == 2}]
+    aa_true "callback returns value for each defined callback and catches the error callback" \
+        [expr {[llength [callback -catch a_callback -arg1 foo bar]] == 2}]
 
     aa_true "callback returns correct value for specified implementation" \
         [expr {[callback -impl an_impl1 a_callback -arg1 foo bar] == 1}]
@@ -97,4 +113,8 @@ aa_register_case -cats {api smoke} ad_proc_fire_callback {
 
     aa_true "throws error when a non-existent implementation is specified" \
         [catch {callback -impl non_existent a_callback -arg1 foo bar} error]
+
+    aa_true "throws error without -catch when an error occurs in a callback" \
+        [catch {callback a_callback -arg1 foo bar} error]
+
 }
