@@ -18,7 +18,7 @@ ad_proc -private subsite::package_install {} {} {
 
 }
 
-ad_proc -public asubsite::after_upgrade {
+ad_proc -public subsite::after_upgrade {
     {-from_version_name:required}
     {-to_version_name:required}
 } {
