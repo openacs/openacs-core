@@ -1,5 +1,5 @@
 <master>
-<property name="title">Congratulations</property>
+<property name="title">@system_name@</property>
 <property name="focus">@focus@</property>
 
 <table cellspacing="4" cellpadding="4" border="0">
