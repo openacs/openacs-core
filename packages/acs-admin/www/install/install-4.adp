@@ -9,7 +9,7 @@
 </if>
 <else>
   <p>
-    <b>&raquo;</b> <a href="../server-restart">Please restart your server</a>
+    <b>&raquo;</b> <a href="../server-restart">Click here to restart your server now</a>
   </p>
 </else>
 
