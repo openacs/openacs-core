@@ -1007,18 +1007,15 @@ proc apm_package_id_from_key_mem {package_key} {
 #
 
 ad_proc -public apm_package_url_from_id {package_id} {
+    Will return the first url found for a given package_id
+
     @return The package url of the instance of the package.
-    only valid for singleton packages.
 } {
-    return [util_memoize "apm_package_url_from_id_mem $package_id"]
+    return [util_memoize [list apm_package_url_from_id_mem $package_id]]
 }
 
 ad_proc -private apm_package_url_from_id_mem {package_id} {
-    return [db_string apm_package_url_from_id {
-	select site_node.url(node_id) 
-          from site_nodes 
-         where object_id = :package_id
-    } -default ""]
+    return [db_string apm_package_url_from_id {*SQL*} -default {}]
 }
 
 #

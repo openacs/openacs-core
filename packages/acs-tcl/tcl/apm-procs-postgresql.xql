@@ -161,7 +161,7 @@
 <fullquery name="apm_package_url_from_id_mem.apm_package_url_from_id">      
       <querytext>
       
-	select site_node__url(node_id) 
+	select site_node__url(min(node_id))
           from site_nodes 
          where object_id = :package_id
     
