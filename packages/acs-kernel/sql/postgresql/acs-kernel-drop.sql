@@ -16,6 +16,7 @@
 \i rel-constraints-drop.sql
 \i rel-segments-drop.sql
 \i groups-drop.sql
+\i site-node-object-map-drop.sql
 \i site-nodes-drop.sql
 \i community-core-drop.sql
 \i acs-relationships-drop.sql

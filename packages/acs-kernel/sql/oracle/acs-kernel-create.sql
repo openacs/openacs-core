@@ -28,6 +28,7 @@
 @@ security-create
 @@ journal-create
 @@ site-nodes-create
+@@ site-node-object-map-create
 @@ apm-create
 @@ acs-create
 
