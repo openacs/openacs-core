@@ -44,11 +44,7 @@ ad_page_contract {
 # Must have a valid user_id. The Unregistered User can't join groups.
 ad_maybe_redirect_for_registration
 
-db_1row group_info {
-    select group_name, join_policy
-    from groups
-    where group_id = :group_id
-}
+db_1row group_info {}
 
 if {![empty_string_p $return_url]} {
     set ret_link "<a href=\"$return_url\">Return to previous page.</a>"
