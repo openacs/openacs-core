@@ -24,7 +24,7 @@
 	  </if>
 	  <else>
 	    <if @servers.error_total_count@ eq "n/a">
-              <td>@servers.error_total_count@</td>
+              <td style="background-color:yellow">@servers.error_total_count@</td>
             </if>
 	    <else>
             <td style="background-color:red"><b>@servers.error_total_count@</b></td>
@@ -35,7 +35,9 @@
     </multiple>
   </table>
 </if>
+
 <p>Errors cannot be automatically reported for versions of OpenACS prior to 5.1d2.
+
 <if @xml_report_dir@ nil>
   The XMLReportDir parameter is empty so a server listing cannot be generated.
 </if>
