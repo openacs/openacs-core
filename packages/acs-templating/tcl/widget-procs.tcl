@@ -25,7 +25,7 @@ ad_proc -public template::widget::search { element_reference tag_attributes } {
     # include an extra hidden element to indicate that the 
     # value is being selected as opposed to entered
 
-    set output "<input type=hidden name=$element(id):select value=t>"
+    set output "<input type=\"hidden\" name=\"$element(id):select\" value=\"t\" />"
     append output [select element $tag_attributes]
   }
 
@@ -42,7 +42,7 @@ ad_proc -public template::widget::textarea { element_reference tag_attributes } 
 
   array set attributes $tag_attributes
 
-  set output "<textarea name=$element(name)"
+  set output "<textarea name=\"$element(name)\""
 
   foreach name [array names attributes] {
     if { [string equal $attributes($name) {}] } {
@@ -83,7 +83,7 @@ ad_proc -public template::widget::input { type element_reference tag_attributes 
 
   array set attributes $tag_attributes
 
-  set output "<input type=$type name=$element(name)"
+  set output "<input type=\"$type\" name=\"$element(name)\""
 
   if { [info exists element(value)] } {
     append output " value=\"[template::util::quote_html $element(value)]\""
@@ -97,7 +97,7 @@ ad_proc -public template::widget::input { type element_reference tag_attributes 
     }
   }
 
-  append output ">"
+  append output " />"
 
   return $output
 }
@@ -173,7 +173,7 @@ ad_proc -public template::widget::menu { widget_name options_list values_list \
 
   upvar $attribute_reference attributes
 
-  set output "<select name=$widget_name "
+  set output "<select name=\"$widget_name\" "
 
   foreach name [array names attributes] {
     if { [string equal $attributes($name) {}] } {
@@ -196,10 +196,10 @@ ad_proc -public template::widget::menu { widget_name options_list values_list \
     append output "  <option value=\"[template::util::quote_html $value]\" "
 
     if { [info exists values($value)] } {
-      append output "selected"
+      append output "selected=\"selected\""
     }
 
-    append output ">$label\n"
+    append output ">$label</option>\n"
   }
 
   append output "</select>"
@@ -286,7 +286,7 @@ ad_proc -public template::widget::currency { element_reference tag_attributes } 
 	    if { [string equal $format_property 0] } {
 		append output $value
 	    } else {
-		append output "<input text size=$format_property value=$value>"
+		append output "<input type=\"text\" size=\"$format_property\" value=\"$value\" />"
 	    }
 	    ns_log Notice "Values $i: [lindex $values $i]"
 	}
@@ -417,7 +417,7 @@ ad_proc -public template::widget::textarea { element_reference tag_attributes } 
 
   array set attributes $tag_attributes
 
-  set output "<textarea name=$element(name)"
+  set output "<textarea name=\"$element(name)\""
 
   foreach name [array names attributes] {
     if { [string equal $attributes($name) {}] } {
