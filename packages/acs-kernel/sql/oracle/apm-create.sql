@@ -1118,6 +1118,10 @@ function new (
    package_key		in apm_package_types.package_key%TYPE
   ) return apm_package_versions.version_id%TYPE;
   
+    function parent_id (
+        package_id in apm_packages.package_id%TYPE
+    ) return apm_packages.package_id%TYPE;
+
 end apm_package;
 /
 show errors
@@ -1994,6 +1998,26 @@ end new;
          then
          return 0;
    end highest_version;
+
+    function parent_id (
+        package_id in apm_packages.package_id%TYPE
+    ) return apm_packages.package_id%TYPE
+    is
+        v_package_id apm_packages.package_id%TYPE;
+    begin
+        select sn1.object_id
+        into v_package_id
+        from site_nodes sn1
+        where sn1.node_id = (select sn2.parent_id
+                             from site_nodes sn2
+                             where sn2.object_id = apm_package.parent_id.package_id);
+
+        return v_package_id;
+
+        exception when NO_DATA_FOUND then
+            return -1;
+    end parent_id;
+
 end apm_package;
 /
 show errors

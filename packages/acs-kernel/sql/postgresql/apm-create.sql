@@ -1844,6 +1844,24 @@ begin
       end if;
 end;' language 'plpgsql';
 
+create function apm_package__parent_id (integer) returns integer as '
+declare
+    apm_package__parent_id__package_id alias foreign key $1;
+    v_package_id apm_packages.package_id%TYPE;
+begin
+    select sn1.object_id
+    into v_package_id
+    from site_nodes sn1
+    where sn1.node_id = (select sn2.parent_id
+                         from site_nodes sn2
+                         where sn2.object_id = apm_package__parent_id__package_id);
+
+    if NOT FOUND then
+        return -1;
+    else
+        return v_package_id;
+    end if;
+end;' language 'plpgsql';
 
 -- create or replace package body apm_package_version 
 create function apm_package_version__new (integer,varchar,varchar,varchar,varchar,varchar,varchar,timestamp,varchar,varchar,boolean,boolean) returns integer as '
