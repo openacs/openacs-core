@@ -6,6 +6,7 @@
 # @author Peter Marklund
 
 namespace eval ::twt::dotlrn {}
+namespace eval ::twt::dotlrn::test {}
 
 ad_proc ::twt::dotlrn::add_term { server_url term_name start_month start_year end_month end_year } {
 
@@ -207,4 +208,30 @@ ad_proc ::twt::dotlrn::add_site_wide_admin { server_url } {
     # Use defaults (external with full access)
     form find ~a "user-new-2"
     form submit
+}
+
+###################
+#
+# Namespace ::twt::dotlrn::test - no demo data setup, pure testing
+#
+###################
+
+ad_proc ::twt::dotlrn::test::manage_my_memberships {} {
+    return [::twt::oacs::eval {
+        db_string select_non_member_classes
+    }]
+}
+
+ad_proc ::twt::dotlrn::test::manage_my_memberships {} {
+    Test that user can manage (join/drop) his own class and community memberships.
+} {
+    ::twt::do_request "/dotlrn/manage-memberships"
+
+    # Join a class
+    link follow ~u "^register?community_id=$community_id"
+
+    # Request membership for a class
+
+    # Drop a class
+    
 }

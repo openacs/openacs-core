@@ -163,8 +163,6 @@ ad_proc ::twt::user::upload_users { server_url } {
 ad_proc ::twt::user::set_passwords { server_url } {
     
     foreach user_email [get_users] {
-        #puts "setting guest password for user $user_email"
-
         # User admin page
         ::twt::do_request "/dotlrn/admin/users"
 
