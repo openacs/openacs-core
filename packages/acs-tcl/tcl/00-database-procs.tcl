@@ -1968,9 +1968,9 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
         }
     }
 
-    if { $err_p || [db_abort_transaction_p]} {
+    if { $err_p || [db_abort_transaction_p -dbn $dbn]} {
         # An error was triggered or the transaction has been aborted.  
-        db_abort_transaction
+        db_abort_transaction -dbn $dbn
         if { [info exists on_error] && ![empty_string_p $on_error] } {
 
             if {[string equal postgresql [db_type]]} { 
@@ -2043,7 +2043,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
                 error $on_errmsg $errorInfo $errorCode
             } else {
                 # Good, no error thrown by the on_error block.
-                if { [db_abort_transaction_p] } {
+                if { [db_abort_transaction_p -dbn $dbn] } {
                     # This means we should abort the transaction.
                     if { $level == 1 } {
                         set db_state(db_abort_p,$dbh) 0
@@ -2071,14 +2071,14 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
                 global errorInfo errorCode
                 error "Transaction aborted: $errmsg" $errorInfo $errorCode
             } else {            
-                db_abort_transaction
+                db_abort_transaction -dbn $dbn
                 global errorInfo errorCode
                 error $errmsg $errorInfo $errorCode
             }
         }
     } else {
         # There was no error from the transaction code.   
-        if { [db_abort_transaction_p] } {
+        if { [db_abort_transaction_p -dbn $dbn] } {
             # The user requested the transaction be aborted.
             if { $level == 1 } {
                 set db_state(db_abort_p,$dbh) 0
