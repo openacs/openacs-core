@@ -312,6 +312,7 @@ proc ad_proc args {
         if { [llength $arg_split] == 2 } {
             set arg [lindex $arg_split 0]
             foreach flag [split [lindex $arg_split 1] ","] {
+                set flag [string trim $flag]
                 if { ![string equal $flag "required"] && ![string equal $flag "boolean"] } {
                     return -code error "Invalid flag \"$flag\""
                 }
