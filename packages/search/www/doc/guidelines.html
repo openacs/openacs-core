@@ -27,6 +27,17 @@ is a subclass of the "content_revision" class. You should also make sure
 all content is created using that subclass, rather than simply create
 content with the "content_revision" type.
 
+<ul> 
+<li>Object types that don't use the CR,  can be specified using 
+<code>acs_object_type__create_type</code>,
+but those that use the CR need to use <code>content_type__create_type</code>. 
+<code>content_type__create_type</code> overloads <code>acs_object_type__create_type</code> 
+and provides two views for inserting and viewing content data, and the CR depends on these views. 
+<li>Whenever you call content_item__new, call it with
+'content_revision' as the item_subtype and 'your_content_type' as the content_type. 
+</ul>
+
+
 <h3>Implement FtsContentProvider</h3>
 
 FtsContentProvider is comprised of two abstract operations, namely 
@@ -131,6 +142,30 @@ for each row execute procedure notes__dtrg ();
 create trigger notes__utrg after update on notes
 for each row execute procedure notes__utrg (); 
 </pre></code>
+
+
+<h3>Questions & Answers</h3>
+
+<ol>
+<li>
+Q: If content is some binary file (like a pdf file stored in file storage, for example), 
+will the content still be indexable/searchable? <br><br>
+A: For each mime type we require some type of handler. Once the handler is available, i.e. pdf2txt, 
+it is very easy to incorporate support for that mime type into the search package. Content items
+with unsupported mime types will be ignored by the indexer.
+<br><br>
+<li>
+Q: Can the search package handle lobs and files?<br><br>
+A: Yes, the search package will convert everything into text
+based on the content and storage_type attributes. Here is the
+convention to use while writing the implementation of datasource:<br><br>
+<ul>
+<li>Content is a filename when storage_type='file'.
+<li>Content is a lob id when storage_type='lob'.
+<li>Content is text when storage_type='text'.
+</ul>
+</ol>
+
 
 
 </blockquote>
