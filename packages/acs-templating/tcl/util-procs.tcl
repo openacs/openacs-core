@@ -621,8 +621,10 @@ ad_proc -public template::util::multirow_quote_html {multirow_ref column_ref} {
 }
 
 
-ad_proc -public template::util::multirow_foreach { name code_text } {
-    runs a block of code foreach row in a multirow 
+ad_proc -deprecated -public template::util::multirow_foreach { name code_text } {
+    runs a block of code foreach row in a multirow.
+
+    Using "template::multirow foreach" is recommended over this routine.
 
     @param name the name of the multirow over which the block of 
                 code is iterated
@@ -633,13 +635,14 @@ ad_proc -public template::util::multirow_foreach { name code_text } {
                      "fake_multirow" containing columns named "spanky" 
                      and "foobar",to set the column spanky to the value 
                      of column foobar use:<br> 
-                     <code>set fake_multirow.spanky 
-                           @fake_multirow.foobar@</code>
+                     <code>set fake_multirow.spanky @fake_multirow.foobar@</code>
                      <p>
                      note: this block of code is evaluated in the same 
                      scope as the .tcl page that uses this procedure
 
     @author simon
+
+    @see template::multirow
 } {
 
   upvar $name:rowcount rowcount $name:columns columns i i
