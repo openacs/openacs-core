@@ -255,7 +255,8 @@ ad_proc -private auth::local::password::RetrievePassword {
     service contract for the local account implementation.
 } {
     set result(password_status) "not_supported"
-    set result(password_message) [_ acs-susbite.cannot_retrieve_password]
+    set result(password_message) [_ acs-subsite.cannot_retrieve_password]
+
     return [array get result]
 }
 
