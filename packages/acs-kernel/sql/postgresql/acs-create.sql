@@ -148,7 +148,7 @@ as
 
 -- faster simpler view
 -- does not check for registered user/banned etc
-create or replace view all_users
+create view all_users
 as
 select pa.*, pe.*, u.*
 from  parties pa, persons pe, users u
