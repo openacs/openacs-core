@@ -967,3 +967,46 @@ aa_register_case upgrade {
         lang::test::teardown_test_package
     }
 }
+
+aa_register_case localize {
+    Test the lang::util::localize proc.
+
+    @author Peter Marklund
+} {
+    set package_key "acs-lang"
+    set message_key "__test-key"
+    set message "Test message"
+
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+
+            # Create a temporary test message to test with
+            lang::message::register en_US $package_key $message_key $message
+
+            # Create some random character strings to surround the embedded key
+            set pre_text "a;<ls#;#kdfj'...,mlkjoiu><wgon"
+            set post_text "a;lskd<fj'...,mlkjo>iuwgon#"
+            set message_key_embedded "#${package_key}.${message_key}#"
+
+            # Test replacements
+            set text1 $message_key_embedded
+            aa_equals "One message key with no surrounding text" [lang::util::localize $text1] "${message}"
+
+            set text1 "${pre_text}${message_key_embedded}${post_text}"
+            aa_equals "One message key with surrounding text" [lang::util::localize $text1] "${pre_text}${message}${post_text}"
+
+            set text1 "${pre_text}${message_key_embedded}"
+            aa_equals "One message key with text before" [lang::util::localize $text1] "${pre_text}${message}"
+
+            set text1 "${message_key_embedded}${post_text}"
+            aa_equals "One message key with text after" [lang::util::localize $text1] "${message}${post_text}"
+
+            set text1 "${pre_text}${message_key_embedded}${post_text}${pre_text}${message_key_embedded}${post_text}"
+            aa_equals "Two message keys with surrounding text" [lang::util::localize $text1] \
+                "${pre_text}${message}${post_text}${pre_text}${message}${post_text}"
+        } -teardown_code {
+            # We need to clear the cache
+            lang::message::unregister $package_key $message_key
+        }
+}
