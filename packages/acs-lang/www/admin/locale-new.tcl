@@ -7,13 +7,13 @@ ad_page_contract {
     @author Bruno Mattarollo <bruno.mattarollo@ams.greenpeace.org>
     @creation-date 15 march 2002
     @cvs-id $Id$
-} {
-} -properties {
 }
+
 
 set locale_user [ad_conn locale]
 
-set context_bar [ad_context_bar "Creation of Locales"]
+set page_title "Create Locale"
+set context [list $page_title]
 
 form create locale_creation 
 
@@ -114,9 +114,9 @@ if { [form is_valid locale_creation] } {
 
         db_dml insert_locale "insert into ad_locales (
             locale, language, country, variant, label, nls_language,
-            nls_territory, nls_charset, mime_charset, default_p) values (
+            nls_territory, nls_charset, mime_charset, default_p, enabled_p) values (
             :locale, :language, :country, NULL, :label, :nls_language,
-            :nls_territory, :nls_charset, :mime_charset, :default_p)"
+            :nls_territory, :nls_charset, :mime_charset, :default_p, 'f')"
 
     }
     forward "index?tab=locales"

@@ -1,6 +1,7 @@
-<master src="master">
-<property name="title">Edit locale</property>
-<property name="context_bar">@context_bar;noquote@</property>
+<master>
+  <property name="title">@page_title@</property>
+  <property name="context">@context;noquote@</property>
+  <property name="focus">locale_editing.country</property>
 
 <p>Please update the necesary fields and press &quot;Submit&quot;</p>
 <p />

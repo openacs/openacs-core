@@ -1,20 +1,8 @@
-<master src="master">
- <property name="title">New Localized Messages</property>
- <property name="context_bar">@context_bar;noquote@</property>
+<master>
+ <property name="title">Edit a message</property>
+ <property name="context">@context;noquote@</property>
+ <property name="focus">message_new.message_key</property>
 
-<div>
+<formtemplate id="message_new"></formtemplate>
 
-<if @locale_label@ nil>
 
-  <p class="error">Please, submit a valid locale.</p>
-
-</if>
-<else>
-
-  <p>Locale: <strong>@locale_label@</strong> [ <tt>@locale_user@</tt> ]</p>
-
-  <formtemplate id="message_new"></formtemplate>
-
-</else>
-
-</div>

@@ -1,6 +1,6 @@
-<master src="master">
-  <property name="title">@page_title;noquote@</property>
-  <property name="context">System Timzeone</property>
+<master>
+  <property name="title">@page_title@</property>
+  <property name="context">@context;noquote@</property>
 
 <p>
   Here's what the configuration looks like at this point:
@@ -56,7 +56,7 @@
   </if>
 
   <if @correct_p@ not nil>
-    <tr bgcolor="red">
+    <tr bgcolor=<if @correct_p@ true>"#00bb00"</if><else>"red"</else>>
       <td>
         <font color="white">
           Does it look like the OpenACS timezone setting above is correct:
@@ -88,53 +88,42 @@
 <hr>
 
 <p>
-  You can use the form below to tell ACS what timezone Oracle is
+  You can use the form below to tell ACS what timezone your database is
   operating in.  (There does not appear to be a nice way to ask the
   database this question automatically).
 </p>
 
-
-<if @suggested_timezones:rowcount@ not nil and @suggested_timezones:rowcount@ gt 0>
-  <p>
-   <b>Based on the UTC time retrieved from timeanddate.com, we believe that your server is set to one of the following timezones:</b>
-  </p>
-  <p>
-    <form action="set-system-timezone" method="get">
-      <select name="timezone">
+<form action="set-system-timezone" method="post">
+  <if @suggested_timezones:rowcount@ not nil and @suggested_timezones:rowcount@ gt 0>
+    <p>
+     <b>Your server appears to be @recommended_offset_pretty@ which includes the following timezones:</b>
+    </p>
+    <p>
+      <select name="timezone_recommended">
+        <option value="">--Select timezone--</option>
         <multiple name="suggested_timezones">
-          <if @suggested_timezones.selected_p@ true>
-            <option value="@suggested_timezones.value@" selected="selected">@suggested_timezones.label@</option>
-          </if>
-          <else>
-            <option value="@suggested_timezones.value@">@suggested_timezones.label@</option>
-          </else>
+          <option value="@suggested_timezones.value@">@suggested_timezones.label@</option>
         </multiple>
       </select>
-    <input type="submit" value="Set Server Timezone">
-    </form>
-  </p>
+    </p>
+    <p>
+      <b>Or select from all zones:</b>
+    </p>
+  </if>
+  <else>
+      <p>
+        <b>Set Timezone:</b>
+      </p>
+  </else>
   <p>
-    <b>In case we're wrong, you can pick another timezone here:</b>
-  </p>
-</if>
-<else>
-  <p>
-    <b>Set Timezone:</b>
-  </p>
-</else>
-<p>
-  <form action="set-system-timezone" method="get">
-    <select name="timezone">
+    <select name="timezone_all">
+      <option value="">--Select timezone--</option>
       <multiple name="timezones">
-        <if @timezones.selected_p@ true>
-          <option value="@timezones.value@" selected="selected">@timezones.label@</option>
-        </if>
-        <else>
-          <option value="@timezones.value@">@timezones.label@</option>
-        </else>
+        <option value="@timezones.value@">@timezones.label@</option>
       </multiple>
-    </select>
-    <input type="submit" value="Set Server Timezone">
-  </form>
-</p>
-
+    </select> 
+  </p>
+  <p>
+    <input type="submit" value="Set Server Timezone">  
+  </p>
+</form>

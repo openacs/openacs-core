@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
+
 <queryset>
 <rdbms><type>postgresql</type><version>7.1</version></rdbms>
  
-<fullquery name="get_messages">
+<fullquery name="select_messages">
     <querytext>
 
     select lm1.message_key,
-           lm1.package_key,
            lm1.message as default_message,
            lm2.message as translated_message,
            lmk.description
@@ -19,8 +19,7 @@
     and    lm1.package_key = lmk.package_key
     $where_clause
     order  by upper(lm1.message_key), lm1.message_key
-    offset $page_start
-    limit  10
+
 
     </querytext>
 </fullquery>

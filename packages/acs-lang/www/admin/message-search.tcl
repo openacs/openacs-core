@@ -5,10 +5,19 @@ ad_page_contract {
 
 } {
     locale
+    search_locale:optional
+    q:optional
 }
 
+# We rename to avoid conflict in queries
+set current_locale $locale
+set default_locale en_US
+
+set locale_label [ad_locale_get_label $current_locale]
+set default_locale_label [ad_locale_get_label $default_locale]
+
 set page_title "Search Messages"
-set context_bar [ad_context_bar [list "display-grouped-messages?[export_vars { locale }]" "Listing"] $page_title]
+set context [list [list "package-list?[export_vars { locale }]" $locale_label] $page_title]
 
 set default_locale en_US
 
@@ -18,26 +27,57 @@ lappend search_locales [list "Master locale - [ad_locale_get_label $default_loca
 
 set submit_p 0
 
-ad_form -name search -form {
-    {locale:text(hidden)}
-    {q:text 
-        {label "Search message for"}
+ad_form -name search -action message-search -form {
+    {locale:text(hidden) {value $locale}}
+}
+
+if { ![string equal $default_locale $current_locale] } {
+    ad_form -extend -name search -form {
+        {search_locale:text(select)
+            {options $search_locales}
+            {label "Search locale"}
+        }
     }
-    {search_locale:text(select)
-        {options $search_locales}
-        {label "In locale"}
+} else {
+    ad_form -extend -name search -form {
+        {search_locale:text(hidden)
+            {value $current_locale}
+        }
+    }
+}
+
+ad_form -extend -name search -form {
+    {q:text 
+        {label "Search for"}
     }
 } -on_request {
     # locale will be set now
-} -on_submit {
+} 
+
+if { [exists_and_not_null search_locale] && [exists_and_not_null q] } {
     set submit_p 1
-    # q and seach_locale will now be set as local variables.
 
     set search_string "%$q%"
 
-    db_multirow -extend { package_url edit_url } messages select_messages {} {
-        set edit_url "edit-localized-message?[export_vars { message_key locale package_key {return_url {[ad_return_url]} } }]"
-        set package_url "batch-editor?[export_vars { package_key locale }]"
+    db_multirow -extend { 
+        package_url
+        edit_url
+        message_key_pretty
+    } messages select_messages {} {
+        set edit_url "edit-localized-message?[export_vars { locale package_key message_key {return_url {[ad_return_url]} } }]"
+        set package_url "message-list?[export_vars { locale package_key }]"
+        set message_key_pretty "$package_key.$message_key"
+    }
+
+    if { ![string equal $current_locale $default_locale] } {
+        if { [string equal $default_locale $search_locale] } {
+            set other_locale $locale_label
+            set other_search_url "[ad_conn url]?[export_vars { locale q {search_locale $current_locale} }]"
+        } else {
+            set other_locale $default_locale_label
+            set other_search_url "[ad_conn url]?[export_vars { locale q {search_locale $default_locale} }]"
+        }
     }
 }
+
 

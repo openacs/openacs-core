@@ -10,7 +10,6 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     locale
-} -properties {
 }
 
 # Get the locale for the user so that we 'spit' the content back in the
@@ -23,7 +22,8 @@ set locale_user [ad_conn locale]
 #  ns_setformencoding $encoding_charset
 #  ns_set put [ns_conn outputheaders] "content-type" "text/html; charset=$encoding_charset"
 
-set context_bar [ad_context_bar "Editing Locale"]
+set page_title "Edit Locale"
+set context [list $page_title]
 
 form create locale_editing
 

@@ -28,4 +28,7 @@ db_transaction {
 
 }
 
+# Flush caches
+util_memoize_flush_regexp {^lang::system::default_locale_not_cached}
+
 template::forward "index?tab=locales"
