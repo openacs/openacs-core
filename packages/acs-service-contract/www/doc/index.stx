@@ -1,0 +1,160 @@
+ACS Service Contract Documentation
+
+  Why
+
+    To facilitate greater code reuse, application integration, 
+    and package extensibility within the OpenACS.
+
+    To do this acs-service-contract defines an api for the creation
+    of interfaces and discovery of interface implementations.
+
+  Background
+
+    Most component systems are based on the use of interfaces. Interfaces
+    allow components to create contracts which define their functional
+    level of reuse and customization. It also provides the infrastructure
+    for runtime discovery of which implemented interfaces are available.
+      
+    The ACS4 is based on a thin object system, that is primarily relational
+    but the acs_objects system allows a veneer of object orientedness
+    by providing globally unique object ids, object metadata, and bundling
+    of data and methods as an object. While this permits a level of
+    reuse on an object or package basis, it requires hardcoding the unit 
+    of reuse.
+
+    ACS Service contract allows these objects and packages to also 
+    define and register their implementation of interfaces, so the level
+    of reuse is defined at the contract level. 
+   
+    In addition ACS Service contract provides mean to dispatch method
+    calls on an interface implementation. The dispatch means
+    is only available through tcl. 
+
+    Interface Discovery is available programmatically as well as via
+    documentation through ad_proc.
+
+    The Service Contract interface specification was inspired by
+    WDSL, the interface specfication for web services.
+
+  Hitchiker's Guide to Service Contract Definitions
+
+    - contract - analagous to interface, contracts serve as logical 
+		  containers for operations.
+
+    - operation - a method of an interface. defines a method signature,
+		  including both input and outputs as well as metadata
+		  such as caching.
+ 	         
+    - implementation - an implementation is a set of concrete functions
+       		  that fufills an interface.
+  
+    - implementation alias - is the method of an implementation that
+	 	  fufills a given operation of the contract.
+
+    - bindings - association between an interface and an implementation.
+
+    - types - define the kind of input and outputs a operation recieves.
+
+  Usage
+
+    Design the Contract
+
+       First Off design the interface for your contract, keeping in mind
+     that all implementations need to implement it and that extension of
+     the contract after deployment is often not practical. In other words
+     take the time to do a little future proofing and thinking about 
+     possible uses that you weren't planning on.
+
+    Defining Operations
+
+       Next define the logical operations that will make up your contract
+     
+    Register the Contract
+
+       with acs contracts.
+
+    Implement the Contract
+
+  FAQ
+
+     Why Does an implementation reference an interface?
+
+       This might seem a little strange since a binding is the official
+     reference between an implementation and an interface. However
+     it is quite possible that an implementation for interface might
+     exist prior to the interface being defined, ie the interface
+     defining package is not installed. By retaining this information
+     the interface defining package can be installed and the implementations
+     already installed on the system can be bound to it.
+
+  Api Reference
+ 
+     [for oracle please syntax replace __ with .]
+
+     Creating Message Types
+
+	- (sql)::
+		 acs_sc_msg_type__new (name, spec):
+
+	   defines a type based on spec. Spec should
+	   be a string (possibly emtpy) that defines the
+	   names and types that compose this type.
+	   example 'ObjectDisplay.Name.InputType' as name
+           'object_id:integer' as spec.
+
+     Creating Interfaces 
+
+	- (sql)::
+
+		 acs_sc_contract__new (contract_name, contract_desc):
+
+	   creates a new contract to serve as a logical 
+ 	   container for operations. contract_desc is a text
+	   description of the contract.
+
+	- (sql)::
+
+		 acs_sc_operation__new (contract_name, operation_name,
+				       operation_desc, operation_iscachable_p,
+				       operation_inputtype, operation_outputtype
+				      ):
+
+	   creates a new operation as part of a contract.
+
+     Creating Implementations
+
+	- (tcl) acs_sc_proc (contract, operation, impl):
+		registers an implementations. ?? why operation
+
+     Discovery
+
+	- (tcl) acs_sc_binding_exists_p (contract, impl): 
+		returns boolean whether a binding exists between
+		a given contract name and implmentation.
+
+     Dispatching    
+
+	- (tcl) acs_sc_call (contract, operation, [arguments, impl]):
+		calls an operation
+
+  Examples
+
+    Included in the service contract package are examples for oracle
+    and postgresql of a trivial contract.
+  
+    Also the search contract functions as a non-trivial core contract
+    used by openacs4.
+
+  Further Reading
+
+     Abstract Factory Pattern - GOF 
+ 
+     Component Systems - Clemens Syzperski
+
+     WSDL Spec
+
+  Credits
+
+     Most content was provided by Neophytos Demetriou. Most of the 
+     errors were provided by Kapil Thangavelu.
+
