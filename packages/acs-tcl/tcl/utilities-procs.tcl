@@ -2563,7 +2563,11 @@ ad_proc -public ad_cache_returnredirect { url { persistent "f" } { excluded_vars
 #    util_current_directory   
 # See: http://www.arsdigita.com/bboard/q-and-a-fetch-msg.tcl?msg_id=0003eV
 
-ad_proc -public ad_returnredirect {{} target_url} {
+ad_proc -public ad_returnredirect {
+    {-message {}}
+    {-abort:boolean}
+    target_url
+} {
   A replacement for ns_returnredirect.  It uses ns_returnredirect but is better in
   two important aspects:
   <ul>
@@ -2572,35 +2576,104 @@ ad_proc -public ad_returnredirect {{} target_url} {
      <li>If an URL relative to the current directory is supplied (e.g. foo.tcl)
          it prepends location and directory.
   </ul>
+
+    @param message A message to display to the user.
+    
+    @param abort If set, we will call ad_script_abort after sending the redirect.
+
+    @see util_user_message
+    @see ad_script_abort
 } {
-  if {[util_complete_url_p $target_url]} {
-      # http://myserver.com/foo/bar.tcl style - just pass to ns_returnredirect
-      set url $target_url
-  } elseif {[util_absolute_path_p $target_url]} {
-      # /foo/bar.tcl style - prepend the current location:
-      set url [util_current_location]$target_url
-  } else {
-      # URL is relative to current directory.
-      if {[string equal $target_url "."]} {
-	  set url [util_current_location][util_current_directory]
-      } else {
-	  set url [util_current_location][util_current_directory]$target_url
-      }
-  }
-  #Ugly workaround to deal with IE5.0 bug handling multipart/form-data using 
-  #Meta Refresh page instead of a redirect. 
-  # jbank@arsdigita.com 6/7/2000
-  set use_metarefresh_p 0
-  set type [ns_set iget [ad_conn headers] content-type]
-  if {[string match *multipart/form-data* [string tolower $type]]} {
-      set user_agent [ns_set get [ad_conn headers] User-Agent]
-      set use_metarefresh_p [regexp -nocase "msie 5.0" $user_agent match]
-  }
-  if {$use_metarefresh_p != 0} {
-      util_ReturnMetaRefresh $url 
-  } else {
-      ns_returnredirect $url
-  }
+    if { [util_complete_url_p $target_url] } {
+        # http://myserver.com/foo/bar.tcl style - just pass to ns_returnredirect
+        set url $target_url
+    } elseif { [util_absolute_path_p $target_url] } {
+        # /foo/bar.tcl style - prepend the current location:
+        set url [util_current_location]$target_url
+    } else {
+        # URL is relative to current directory.
+        if {[string equal $target_url "."]} {
+            set url [util_current_location][util_current_directory]
+        } else {
+            set url [util_current_location][util_current_directory]$target_url
+        }
+    }
+    #Ugly workaround to deal with IE5.0 bug handling multipart/form-data using 
+    #Meta Refresh page instead of a redirect. 
+    # jbank@arsdigita.com 6/7/2000
+    set use_metarefresh_p 0
+    set type [ns_set iget [ad_conn headers] content-type]
+    if { [string match *multipart/form-data* [string tolower $type]] } {
+        set user_agent [ns_set get [ad_conn headers] User-Agent]
+        set use_metarefresh_p [regexp -nocase "msie 5.0" $user_agent match]
+    }
+    if { $use_metarefresh_p != 0 } {
+        util_ReturnMetaRefresh $url 
+    } else {
+        ns_returnredirect $url
+    }
+    
+    util_user_message -message $message
+
+    if { $abort_p } {
+        ad_script_abort
+    }
+}
+
+ad_proc -public util_user_message { 
+    {-replace:boolean}
+    {-html:boolean}
+    {-message {}}
+} {
+    Sets a message to be displayed on the next page request.
+
+    @param message The message to display.
+
+    @param replace Set this if you want to replace existing messages. Default behavior is to append to a list of messages.
+
+    @param html Set this flag if your message contains HTML. If specified, you're responsible for proper quoting 
+    of everything in your message. Otherwise, we quote it for you.
+    
+    @see util_get_user_messages
+} {
+    if { ![empty_string_p $message] } {
+        if { !$html_p } {
+            set message [ad_quotehtml $message]
+        }
+        if { !$replace_p } {
+            set new_messages [ad_get_client_property -default {} -cache_only t "acs-kernel" "general_messages"]
+            lappend new_messages $message
+        } else {
+            set new_messages [list $message]
+        }
+        ad_set_client_property "acs-kernel" "general_messages" $new_messages
+    } elseif { $replace_p } {
+        ad_set_client_property "acs-kernel" "general_messages" {}
+    }
+}
+
+ad_proc -public util_get_user_messages { 
+    {-keep:boolean}
+    {-multirow:required}
+} {
+    Gets and clears the message to be displayed on the next page load.
+
+    @param multirow Name of a multirow in the current template namespace where you want the user messages set. 
+    The multirow will have one column, which is 'message'.
+
+    @param keep If set, then we will not clear the list of messages after getting them. Normal behavior is to 
+    clear them, so we only display the same messages once.
+
+    @see util_user_message
+} {
+    set messages [ad_get_client_property -default {} -cache_only t "acs-kernel" "general_messages"]
+    if { !$keep_p && ![empty_string_p $messages] } {
+        ad_set_client_property "acs-kernel" "general_messages" {}
+    }
+    template::multirow create $multirow message
+    foreach message $messages {
+        template::multirow append $multirow $message
+    }
 }
 
 ad_proc -public util_complete_url_p {{} string} {
