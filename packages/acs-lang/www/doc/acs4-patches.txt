@@ -1,0 +1,204 @@
+================================================================
+charset-related parameters in .tcl AOLserver init file
+
+ns_section ns/parameters
+ns_param HackContentType 1
+ns_param URLCharset shift_jis
+ns_param OutputCharset shift_jis
+ns_param HttpOpenCharset shift_jis
+
+ns_section ns/server/kiki/adp
+ns_param Map /*.adp
+ns_param DefaultParser fancy
+
+#ns_section ns/server/kiki/mimetypes
+ns_section ns/mimetypes
+ns_param Default text/plain
+ns_param NoExtension text/plain
+ns_param .pcd image/x-photo-cd
+ns_param .prc application/x-pilot
+ns_param .html "text/html"
+ns_param .tcl "text/html; charset=shift_jis"
+ns_param .adp "text/html; charset=shift_jis"
+ns_param .html_ej "text/html; charset=euc-jp"
+
+
+================================================================
+nsd-oracle: settings to make sure your Oracle client (i.e. AOLserver
+oracle driver) is using UTF8
+================================================================
+
+#!/bin/bash
+
+export ORACLE_HOME="/ora8/m01/app/oracle/product/8.1.6"
+export ORACLE_BASE="/ora8/m01/app/oracle"
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$ORACLE_HOME/ctx/lib:/usr/lib:/lib:/usr/X11R6/lib::$ORACLE_HOME/jdbc/lib:/usr/local/lib
+export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/ctx/lib:$PATH
+export ORACLE_SID='ora8'
+export ORACLE_TERM='vt100'
+export ORAENV_ASK=NO
+export NLS_DATE_FORMAT="YYYY-MM-DD"
+
+export ORACLE_OWNER=oracle
+export ORACLE_TERM='vt100'
+export CLASSPATH=$ORACLE_HOME/jdbc/lib/classes111.zip:$ORACLE_HOME/jdbc/lib/classes12.zip:$ORACLE_HOME/jdbc/lib/nls_charset12.zip
+
+
+export NLS_CHARACTER_SET=UTF8
+PATH="$PATH:/usr/local/bin"
+export PATH
+
+export TCL_LIBRARY=/home/aol30/aolserver-18n
+export NLS_LANG=.UTF8
+
+export TZ=GMT
+
+exec /home/aol30/bin/nsd $*
+
+
+================================================================
+/home/web/kiki/packages/acs-templating/tcl/util-procs.tcl:
+================================================================
+proc template::util::read_file { path } {
+
+    set type [ns_guesstype $path]
+    set encoding [ns_encodingfortype $type]
+    set fd [open $path r]
+    fconfigure $fd -encoding $encoding
+    set text [read $fd]
+    close $fd
+
+    return $text
+}
+
+
+================================================================
+/web/kiki/packages/acs-tcl/tcl/request-processor-procs.tcl:
+================================================================
+
+ad_proc -private rp_handle_tcl_request {} {
+
+  Handles a request for a .tcl file.
+  Sets up the stack of datasource frames, in case the page is templated.
+
+} {
+    namespace eval template variable parse_level [info level]
+    ns_log Notice "calling rp_handle_tcl_request with [ad_conn file]"
+    source_with_encoding [ad_conn file]
+}
+
+ad_proc -private rp_handle_adp_request {} {
+
+  Handles a request for an .adp file.
+
+} {
+    doc_init
+
+     set mimetype [ns_guesstype [ad_conn file]]
+
+     set encoding [ns_encodingfortype $mimetype]
+
+     set fd [open [ad_conn file] r]
+     fconfigure $fd -encoding $encoding
+     set template [read $fd]
+     close $fd
+ 
+    set adp [ns_adp_parse -string $template]
+
+    if { [doc_exists_p] } {
+	doc_set_property body $adp
+	doc_serve_document
+    } else {
+        set content_type [ns_set iget [ns_conn outputheaders] "content-type"]
+        if { $content_type == "" } {
+	    set content_type  [ns_guesstype [ad_conn file]]
+        } else {
+            ns_set idelkey [ns_conn outputheaders] "content-type"
+        }
+	doc_return 200 $content_type $adp
+    }
+}
+
+
+
+proc_doc source_with_encoding {filename} { loads filename, using a charset encoding
+looked up via the ns_encodingforcharset command, based on the ns_guesstype MIME
+type of the filename. } {
+    set type [ns_guesstype $filename]
+    set encoding [ns_encodingfortype $type]
+    set fd [open $filename r]
+    fconfigure $fd -encoding $encoding
+    set code [read $fd]
+    close $fd
+    # set the default output encoding to the file mime type
+    ns_startcontent -type $type
+    uplevel 1 $code
+}
+
+
+
+
+================================================================
+/web/kiki/packages/acs-templating/tcl/acs-integration-procs.tcl
+================================================================
+  You only need this if you are trying to output adp files
+  which use a different character set than the site default
+  as specified by these init file params:
+  ns_param URLCharset shift_jis
+  ns_param OutputCharset shift_jis
+  ns_param HttpOpenCharset shift_jis
+================================================================
+
+
+ad_proc adp_parse_ad_conn_file {} {
+    handle a request for an adp and/or tcl file in the template system.
+} {
+    namespace eval template variable parse_level ""
+    #ns_log debug "adp_parse_ad_conn_file => file '[file root [ad_conn file]]'"
+    set parsed_template [template::adp_parse [file root [ad_conn file]] {}]
+    db_release_unused_handles
+    if {![empty_string_p $parsed_template]} {
+        set content_type [ns_set iget [ns_conn outputheaders] "content-type"]
+        if { $content_type == "" } {
+	    set content_type  [ns_guesstype [ad_conn file]]
+        } else {
+            ns_set idelkey [ns_conn outputheaders] "content-type"
+        }
+	ns_return 200 $content_type $parsed_template
+    }
+}
+
+
+================================================================
+/web/kiki/packages/acs-templating/tcl/tag-init.tcl
+================================================================
+
+template_tag trn { chunk params } {
+
+    set key [ns_set iget $params key]
+    set lang [ns_set iget $params lang]
+    set type [ns_set iget $params type]
+
+    if [empty_string_p $type] {
+        set type user
+    }
+
+    if {[empty_string_p $lang]} {
+	set lang [ad_locale $type locale]
+    }
+
+    # Is the "static" attribute present?
+    set static_p [expr [ns_set find $params static] >= 0]
+
+    # If "static" attribute is present, do the call now
+    if {$static_p} {
+	set msg [lang_message_lookup $lang $key $chunk]
+	# quote dollar signs, square bracket and quotes
+	regsub -all {[\]\[""\\$]} $msg {\\&} quoted_msg
+	template::adp_append_code "append __adp_output {$quoted_msg}"
+    } else {
+	# emit code to call lang_message_lookup at runtime
+	template::adp_append_code "append __adp_output \[lang_message_lookup \[ad_locale $type language\] {$key}\]"
+    }
+
+}

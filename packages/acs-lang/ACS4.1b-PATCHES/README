@@ -1,0 +1,48 @@
+
+Sun Jan 21 23:20:56 2001
+
+This will apply a couple of patches to help handle multiple
+languages and character sets.
+
+To apply the patch run the script "./install.sh path_to_your_acs"
+so for example of your acs installation is in /web/myserver do
+
+./install.sh /web/myserver
+
+================================================================
+
+This installs the following patches:
+
++ Allow you to author tcl and adp files in an alternate character set
+besides the AOLserver Tcl system default.
+
+The system will assume the script file is authored in the character
+set which corresponds to the mime type of the file, which you can 
+modify in your .ini or .tcl AOLSERVER config file. For example, to author
+tcl and adp files in ShiftJIS, you would use the following settings
+in your .tcl file:
+
+ ns_section ns/mimetypes
+ ns_param .html "text/html"
+ ns_param .tcl "text/html; charset=shift_jis"
+ ns_param .adp "text/html; charset=shift_jis"
+
+The files will be output in the character set specified in the
+MIME type, unless you override it by setting the content-type
+header explicitly in the script or adp file, using the following tcl code:
+
+.tcl file:
+ ns_set put [ns_conn outputheaders] "content-type" "text/html; charset=iso-8859-7"	
+
+.adp file: (sets the output to iso-8859-7)
+
+<%
+ ns_set put [ns_conn outputheaders] "content-type" "text/html; charset=iso-8859-7"	
+%>
+
+
++ A new adp tag, TRN is defined, which will call the message catalog
+lookup function. This is documented in the acs-lang package design
+document (packages/acs-lang/www/doc/i18n-design.html) or developers
+guide.
+

@@ -1,0 +1,44 @@
+*** ./packages/acs-templating/tcl/tag-init.tcl	Fri Jan 12 05:55:03 2001
+--- /web/acs41b/packages/acs-templating/tcl/tag-init.tcl	Sun Jan 21 22:52:51 2001
+***************
+*** 407,409 ****
+--- 407,444 ----
+  
+    template::adp_append_string "</form>"
+  }
++ 
++ 
++ # Compile a call to the  the translation message catalog.
++ # If the "static" attribute is present in the tag, then
++ # do the lookup at compile time, otherwise emit a call to
++ # do the lookup  at runtime.
++ template_tag trn { chunk params } {
++ 
++     set key [ns_set iget $params key]
++     set lang [ns_set iget $params lang]
++     set type [ns_set iget $params type]
++ 
++     if [empty_string_p $type] {
++         set type user
++     }
++ 
++     if {[empty_string_p $lang]} {
++ 	set lang [ad_locale $type locale]
++     }
++ 
++     # Is the "static" attribute present?
++     set static_p [expr [ns_set find $params static] >= 0]
++ 
++     # If "static" attribute is present, do the call now
++     if {$static_p} {
++ 	set msg [lang_message_lookup $lang $key $chunk]
++ 	# quote dollar signs, square bracket and quotes
++ 	regsub -all {[\]\[""\\$]} $msg {\\&} quoted_msg
++ 	template::adp_append_code "append __adp_output {$quoted_msg}"
++     } else {
++ 	# emit code to call lang_message_lookup at runtime
++ 	template::adp_append_code "append __adp_output \[lang_message_lookup \[ad_locale $type language\] {$key}\]"
++     }
++ 
++ }
+\ No newline at end of file

@@ -1,0 +1,86 @@
+*** ./packages/acs-tcl/tcl/request-processor-procs.tcl	Thu Jan 11 07:52:40 2001
+--- /web/acs41b/packages/acs-tcl/tcl/request-processor-procs.tcl	Sun Jan 21 22:43:49 2001
+***************
+*** 879,905 ****
+  
+  } {
+      namespace eval template variable parse_level [info level]
+!     source [ad_conn file]
+  }
+  
+  ad_proc -private rp_handle_adp_request {} {
+  
+    Handles a request for an .adp file.
+  
+  } {
+      doc_init
+!     set adp [ns_adp_parse -file [ad_conn file]]
+  
+      if { [doc_exists_p] } {
+  	doc_set_property body $adp
+  	doc_serve_document
+      } else {
+! 	set content_type [ns_set iget [ad_conn outputheaders] "content-type"]
+! 	if { $content_type == "" } {
+! 	    set content_type "text/html"
+! 	}
+  	doc_return 200 $content_type $adp
+      }
+  }
+  
+  ad_proc -private rp_handle_html_request {} {
+--- 879,932 ----
+  
+  } {
+      namespace eval template variable parse_level [info level]
+!     source_with_encoding [ad_conn file]
+  }
+  
++ 
+  ad_proc -private rp_handle_adp_request {} {
+  
+    Handles a request for an .adp file.
+  
+  } {
+      doc_init
+! 
+!      set mimetype [ns_guesstype [ad_conn file]]
+! 
+!      set encoding [ns_encodingfortype $mimetype]
+! 
+!      set fd [open [ad_conn file] r]
+!      fconfigure $fd -encoding $encoding
+!      set template [read $fd]
+!      close $fd
+!  
+!     set adp [ns_adp_parse -string $template]
+  
+      if { [doc_exists_p] } {
+  	doc_set_property body $adp
+  	doc_serve_document
+      } else {
+!         set content_type [ns_set iget [ns_conn outputheaders] "content-type"]
+!         if { $content_type == "" } {
+! 	    set content_type  [ns_guesstype [ad_conn file]]
+!         } else {
+!             ns_set idelkey [ns_conn outputheaders] "content-type"
+!         }
+  	doc_return 200 $content_type $adp
+      }
++ }
++ 
++ ad_proc -private source_with_encoding {filename} { loads filename, using a charset encoding
++ looked up via the ns_encodingforcharset command, based on the ns_guesstype MIME
++ type of the filename. } {
++     set type [ns_guesstype $filename]
++     set encoding [ns_encodingfortype $type]
++     set fd [open $filename r]
++     fconfigure $fd -encoding $encoding
++     set code [read $fd]
++     close $fd
++     # set the default output encoding to the file mime type
++     ns_startcontent -type $type
++     uplevel 1 $code
+  }
+  
+  ad_proc -private rp_handle_html_request {} {
