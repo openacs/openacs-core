@@ -146,20 +146,14 @@ element create grant privilege \
 
 
 if { [form is_valid grant] } {
-    # A valid submission, grant and revoke accordingly.
+    # A valid submission - grant accordingly.
 
     form get_values grant
     set privileges [element get_values grant privilege]
 
-    # loop through all privileges, grant checked and revoke un-checked
-    # (assuming that there are not too many privs in total, otherwise
-    # this would be slow)
-    foreach privilege $existing_privs {
-        if { [lsearch $privileges $privilege] > -1 } {
-            permission::grant -party_id $party_id -object_id $object_id -privilege $privilege
-        } else {
-            permission::revoke -party_id $party_id -object_id $object_id -privilege $privilege
-        }
+    # grant all selected privs
+    foreach privilege $privileges {
+        permission::grant -party_id $party_id -object_id $object_id -privilege $privilege
     }
     
     ad_returnredirect "one?[export_vars [list object_id application_url]]"
