@@ -24,6 +24,11 @@ ad_progress_bar_begin \
 
 
 set pkg_install_list [ad_get_client_property apm pkg_install_list]
+ns_log Debug "local-install-3.tcl: pkg_install_list=$pkg_install_list"
+
+if { [llength $pkg_install_list] == 0 } {
+    ns_log Notice "local-install-3.tcl: Nothing to install. Is this a double-click?"
+}
 
 # We unset the client property so we won't install these packages twice
 ad_set_client_property apm pkg_install_list {}
