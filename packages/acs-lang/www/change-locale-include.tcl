@@ -3,54 +3,31 @@
 # a user
 # @author Peter Marklund (peter@collaboraid.biz)
 
-set user_id [ad_conn user_id]
-
-form create locale_form -action "/acs-lang/change-locale"
-
-set locale_option_list [list]
-db_foreach locale_loop { select locale, label from ad_locales } {
-    lappend locale_option_list [list $label $locale]
+if { ![exists_and_not_null return_url] } {
+    # Use referer header
+    set return_url [ns_set iget [ns_conn headers] referer]
 }
 
-set user_locale [lang::user::locale]
+form create locale
 
-set site_wide_locale [lang::system::locale]
-
-element create locale_form return_url \
+element create locale return_url \
         -datatype text \
         -widget hidden \
-        -value "[ad_conn url]?[ad_conn query]"
+        -optional \
+        -value $return_url
 
-element create locale_form site_wide_locale \
+element create locale user_locale \
         -datatype text \
         -widget select \
-        -label "Site Wide Locale" \
-        -options $locale_option_list \
-        -value $site_wide_locale
+        -label "Your Preferred Locale" \
+        -options [db_list_of_lists locale_loop { select label, locale from ad_locales }] \
+        -value [lang::user::locale]
 
-if { $user_id != "0" } {
-    element create locale_form user_locale \
-        -datatype text \
-        -widget select \
-        -label "User Locale Preference" \
-        -options $locale_option_list \
-        -value $user_locale
-} else {
-    element create locale_form user_preference_inform \
-            -datatype text \
-            -widget inform \
-            -label  "User Locale Preference" \
-            -value "Please log in to specify a user preference"
+if { [form is_valid locale] } {
+    form get_values locale user_locale return_url
+
+    lang::user::set_locale $user_locale
+
+    ad_returnredirect $return_url
+    ad_script_abort
 }
-
-#global message_debug_map
-
-set message_debug_html ""
-#if { [info exists message_debug_map] } {
-
-#    set message_debug_html "<ul>"
-#    foreach item $message_debug_map {
-#        append message_debug_html "<li>[lindex $item 0] - [lindex $item 1]</li>"
-#    }
-#    append message_debug_html "</ul>"
-#}

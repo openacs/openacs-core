@@ -32,4 +32,11 @@
       </querytext>
    </fullquery>
 
+
+   <fullquery name="lang::user::set_locale.delete_user_locale">
+      <querytext>
+        delete from ad_locale_user_prefs where user_id = :user_id
+      </querytext>
+   </fullquery>
+
 </queryset>

@@ -5,6 +5,18 @@ ad_library {
     @creation-date 18 October 2002
 }
 
+namespace eval lang::test {
+
+    ad_proc get_dir {} {
+        The test directory of the acs-lang package (where this file resides).
+
+        @author Peter Marklund (peter@collaboraid.biz)
+        @creation-date 28 October 2002
+    } {
+        return "[acs_package_root_dir acs-lang]/tcl/test"
+    }
+}
+
 aa_register_case util__replace_temporary_tags_with_lookups {
     Primarily tests lang::util::replace_temporary_tags_with_lookups,
     Also tests the procs lang::catalog::export_messages_to_file, lang::catalog::parse,
@@ -18,7 +30,7 @@ aa_register_case util__replace_temporary_tags_with_lookups {
     @creation-date 18 October 2002
 } {
     # The files involved in the test
-    set test_dir "[acs_package_root_dir acs-lang]/tcl/test"    
+    set test_dir [lang::test::get_dir]
     set catalog_file "${test_dir}/acs-lang.en_US.ISO-8859-1.xml"
     set backup_file_suffix ".orig"
     set catalog_backup_file "${catalog_file}${backup_file_suffix}"
@@ -113,6 +125,68 @@ aa_register_case util__get_hash_indices {
   }
 }
 
+aa_register_case util__convert_adp_variables_to_percentage_signs {
+    Tests the lang::util::convert_adp_variables_to_percentage_signs proc.
+
+    @author Peter Marklund (peter@collaboraid.biz)
+    @creation-date 25 October 2002
+} {
+    set adp_chunk "<property name=\"title\">@array.variable_name@ @variable_name2@ peter@collaboraid.biz</property>"
+
+    set adp_chunk_converted [lang::util::convert_adp_variables_to_percentage_signs $adp_chunk]
+    set adp_chunk_expected "<property name=\"title\">%array.variable_name% %variable_name2% peter@collaboraid.biz</property>"
+
+    aa_true "adp vars should be subsituted with percentage sings" [string equal $adp_chunk_converted \
+                                                                                $adp_chunk_expected]
+
+    # Test that a string can start with adp vars
+    set adp_chunk "@first_names@ @last_name@&nbsp;peter@collaboraid.biz"
+    set adp_chunk_converted [lang::util::convert_adp_variables_to_percentage_signs $adp_chunk]
+    set adp_chunk_expected "%first_names% %last_name%&nbsp;peter@collaboraid.biz"
+    aa_true "adp vars should be subsituted with percentage sings" [string equal $adp_chunk_converted \
+                                                                                $adp_chunk_expected]
+}
+
+aa_register_case util__replace_adp_text_with_message_tags {
+    Test the lang::util::replace_adp_text_with_message_tags proc.
+
+    @author Peter Marklund (peter@collaboraid.biz)
+    @creation-date 28 October 2002
+} {
+    # File paths used
+    set adp_file_path "[lang::test::get_dir]/adp_tmp_file.adp"
+
+    # Write the adp test file
+    set adp_file_id [open $adp_file_path w]
+    puts $adp_file_id "<master src=\"master\">
+<property name=\"title\">@first_names@ @last_name@&nbsp;peter@collaboraid.biz</property>
+<property name=\"context_bar\">@context_bar@</property>
+Test text"
+    close $adp_file_id
+
+    # Do the substitutions
+    lang::util::replace_adp_text_with_message_tags $adp_file_path "write"
+
+    # Read the changed test file
+    set adp_file_id [open $adp_file_path r]
+    set adp_contents [read $adp_file_id]
+    close $adp_file_id
+
+    set expected_adp_pattern {<master src=\"master\">
+<property name=\"title\"><#[a-zA-Z_]+ %first_names% %last_name%&nbsp;peter@collaboraid.biz#></property>
+<property name=\"context_bar\">@context_bar@</property>
+<#[a-zA-Z_]+ Test text\s*}
+
+    ns_log Notice "adp_contents $adp_contents"
+
+    # Assert proper replacements have been done
+    aa_true "replacing adp text with tags" \
+            [regexp $expected_adp_pattern $adp_contents match]
+
+    # Remove the adp test file
+    file delete $adp_file_path
+}
+
 aa_register_case message__format {
     Tests the lang::message::format proc
 
@@ -129,4 +203,3 @@ aa_register_case message__format {
     aa_true "the frog should jump across the fence" [string equal $subst_message \
                                                                   $expected_message]
 }
-
