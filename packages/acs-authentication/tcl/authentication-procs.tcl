@@ -349,7 +349,6 @@ ad_proc -public auth::create_user {
     {-first_names ""}
     {-last_name ""}
     {-screen_name ""}
-    {-email ""}
     {-password ""}
     {-password_confirm ""}
     {-url ""}
@@ -796,8 +795,9 @@ ad_proc -public auth::create_local_account {
     # Admin approval
     if { [parameter::get -parameter RegistrationRequiresApprovalP -default 0] } {
         set member_state "needs approval"
+        set system_name [ad_system_name]
         set result(account_status) "closed"
-        set result(account_message) [_ acs-subsite.lt_Your_registration_is_]
+        set result(account_message) [_ acs-subsite.Registration_Approval_Notice]
     } else {
         set member_state "approved"
     }
@@ -853,6 +853,7 @@ ad_proc -public auth::create_local_account {
     set result(creation_status) "ok"
 
     if { [parameter::get -parameter RegistrationRequiresEmailVerificationP -default 0] } {
+        set email $user_info(email)
         set result(account_status) "closed"
         set result(account_message) "<p>[_ acs-subsite.lt_Registration_informat_1]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
 
