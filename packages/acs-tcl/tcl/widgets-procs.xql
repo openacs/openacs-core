@@ -4,7 +4,7 @@
 <fullquery name="all_states">      
       <querytext>
       
-	select state_name, usps_abbrev from states order by state_name
+	select state_name, abbrev from states order by state_name
     
       </querytext>
 </fullquery>
@@ -13,7 +13,7 @@
 <fullquery name="all_countries">      
       <querytext>
       
-	select country_name, iso from country_codes order by country_name 
+	select default_name, iso from countries order by default_name 
     
       </querytext>
 </fullquery>
