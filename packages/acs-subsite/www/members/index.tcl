@@ -24,17 +24,24 @@ set rel_type "membership_rel"
 
 set user_id [ad_conn user_id]
 
+set show_member_list_to [parameter::get -parameter "ShowMembersListTo" -default 2]
+# 0 = anyone
+# 1 = members
+# 2 = admins
+
+if { $show_member_list_to != 0 || [permission::permission_p -party_id [ad_conn untrusted_user_id] -object_id $group_id -privilege "admin"] } {
+    # Refresh login
+    auth::require_login
+}
+
 # We need to know both: 
 #    - does user have admin on group?
 #    - does user have delete on group?
-set admin_p [ad_permission_p -user_id $user_id $group_id "admin"]
+set admin_p [permission::permission_p -party_id $user_id -object_id $group_id -privilege "admin"]
 
-set show_member_list_to [parameter::get -parameter "ShowMembersListTo" -default 2]
-if { $admin_p || ($user_id != 0 && $show_member_list_to == 1) || \
-    $show_member_list_to == 0} {
-    set show_members_list_p 1
-} else {
-    set show_members_list_p 0
+set show_member_list_p [expr { $show_member_list_to == 0 || $admin_p || ($show_member_list_to == 1 && [group::member_p -group_id $group_id]) }]
+
+if { !$show_member_list_p } { 
     set title [_ acs-subsite.Cannot_see_memb_list]
 }
 
