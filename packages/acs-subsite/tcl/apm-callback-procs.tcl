@@ -14,8 +14,6 @@ ad_proc -private subsite::package_install {} {} {
 
     content::folder::register_content_type -folder_id $folder_id -content_type "email_image" 
 
-    rel_types::new email_image_rel "Email Image" "Email Images" user 0 1 content_item 0 1
-
 }
 
 ad_proc -public subsite::after_upgrade {
@@ -33,8 +31,7 @@ ad_proc -public subsite::after_upgrade {
 		set folder_id [content::folder::new -name "Email_Images" -label "Email_Images"]
 
 		content::folder::register_content_type -folder_id $folder_id -content_type "email_image" 
-		
-		rel_types::new email_image_rel "Email Image" "Email Images" user 0 1 content_item 0 1
+
 	    }
 	}
 }
