@@ -63,7 +63,7 @@ if { $untrusted_user_id != 0 } {
     }
 } 
 
-if { $user_id == 0 } {
+if { $untrusted_user_id == 0 } {
     set login_url [ad_get_login_url -return]
 }
 

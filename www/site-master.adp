@@ -31,9 +31,6 @@
     <td align="center">
       <if @untrusted_user_id@ ne 0>
         #acs-subsite.Welcome_user#
-        <if @user_id@ eq 0>
-          (<a href="@login_url@" class="refresh">#acs-subsite.Refresh_login#</a>)
-        </if>
       </if>
       <else>
         #acs-subsite.Not_logged_in#
@@ -47,9 +44,6 @@
     <td align="right" style="padding-right: 8px;" class="button-bar">
       <if @admin_url@ not nil>
         <a href="@admin_url@" title="#acs-subsite.Site_wide_administration#">#acs-subsite.Admin#</a>
-      </if>
-      <if @devhome_url@ not nil>
-        <a href="@devhome_url@" title="#acs-subsite.Developers_Admin#">#acs-subsite.DevAdmin#</a>
       </if>
       <if @pvt_home_url@ not nil>
         <a href="@pvt_home_url@" title="#acs-subsite.Change_pass_email_por#">@pvt_home_name@</a>
