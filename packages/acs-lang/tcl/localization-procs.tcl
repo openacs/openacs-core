@@ -8,7 +8,7 @@ ad_library {
     http://www.fsf.org/copyleft/gpl.html
 
     @creation-date 30 September 2000
-    @author Jeff Davis (davis@arsdigita.com) 
+    @author Jeff Davis (davis@xarg.net) 
     @author Ashok Argent-Katwala (akatwala@arsdigita.com)
     @cvs-id $Id$
 }

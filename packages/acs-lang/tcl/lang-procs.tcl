@@ -8,7 +8,7 @@ ad_library {
     http://www.fsf.org/copyleft/gpl.html
 
     @creation-date 10 September 2000
-    @author Jeff Davis (davis@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net)
     @cvs-id $Id$
 }
 
@@ -19,7 +19,7 @@ ad_proc -public _mr { lang key message } {
     Inserts the message into the table lang_messages
     if it does not exist and updates if it does.
 
-    @author Jeff Davis (davis@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net)
     
     @param lang    Abbreviation for language of the message. Taken from ad_locales table.
     @param key     Unique identifier for this message. Will be the same identifier
@@ -38,7 +38,7 @@ ad_proc -private lang_message_register { lang key message } {
     Inserts the message into the table lang_messages
     if it does not exist and updates if it does.
 
-    @author Jeff Davis (davis@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net)
     @see _mr
     
     @param lang    Locale or language of the message. If a language is supplied,
@@ -91,7 +91,7 @@ ad_proc -public _ {locale key {default "TRANSLATION MISSING"}} {
     If the user is a translator, inserts tags to link to the translator
     interface. This allows a translator to work from the context of a web page.
 
-    @author Jeff Davis (davis@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net)
     
     @param locale    Abbreviation for language of the message. Taken from ad_locales table.
     @param key     Unique identifier for this message. Will be the same identifier
@@ -120,7 +120,7 @@ ad_proc -private lang_message_lookup {locale key {default "TRANSLATION MISSING"}
 
     4. Lookup is tried with language and key without package prefix.
 
-    @author Jeff Davis (davis@arsdigita.com), Henry Minsky (hqm@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net), Henry Minsky (hqm@arsdigita.com)
     @see _
     
     @param locale  Locale (e.g., "en_US") or language (e.g., "en") string.
@@ -181,7 +181,7 @@ ad_proc -public lang_catalog_load {{package_key "acs-lang"} } {
 
 
 
-    @author Jeff Davis (davis@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net)
     @return        Number of files loaded
 
 } { 
@@ -237,7 +237,7 @@ ad_proc -public lang_sort {field {locale {}}} {
     insert into lang_testsort values ('lzim');  
     </pre>
 
-    @author Jeff Davis (davis@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net)
 
     @param field       Name of Oracle column
     @param locale      Locale for sorting. 
@@ -371,7 +371,7 @@ ad_proc -private lang_tag_translate { text params } {
     &lt;trn key=&quot;hello&quot; type=&quot;user&quot;&gt;Hello&lt;/trn&gt;
     </pre>
 
-    @author Jeff Davis (davis@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net)
     @see lang_message_lookup
     @see lang_message_register
     @see ad_locale

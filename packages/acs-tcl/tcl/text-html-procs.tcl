@@ -133,7 +133,7 @@ ad_proc -private util_close_html_tags {
     @param break_hard the number of characters you want the html fragment 
     truncated to. Will truncate, regardless of what tag is currently in action.
 
-    @author Jeff Davis (davis@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net)
     
 } {
     set frag $html_fragment 

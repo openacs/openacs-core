@@ -1,7 +1,7 @@
 --
 -- packages/language/sql/language-create.sql
 --
--- @author Jeff Davis (davis@arsdigita.com)
+-- @author Jeff Davis (davis@xarg.net)
 -- @creation-date 2000-09-10
 -- @cvs-id $Id$
 --
