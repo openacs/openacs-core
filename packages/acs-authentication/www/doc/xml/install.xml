@@ -1,5 +1,5 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 ]>
 
@@ -7,7 +7,9 @@
     <title>Installation</title>
 
     <authorblurb>
+      <para>
       by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+      </para>
     </authorblurb>
 
     <sect1 id="ext-auth-pam-install">
@@ -224,52 +226,13 @@ cp pam_radius_auth.so /lib/security/pam_radius_auth.so</action></screen>
             supply XML files to the URLs IncrementalURL and
             SnapshotURL.  A typical set of incremental file record
             looks like:</para>
-<programlisting>
-&lt;enterprise&gt;
-  &lt;person recstatus = "1"&gt;  <emphasis>added person</emphasis>
-    &lt;sourcedid&gt;
-      &lt;id&gt;[username]&lt;/id&gt;
-    &lt;/sourcedid&gt;
-    &lt;name&gt;
-      &lt;family&gt;[last_name]&lt;/family&gt;
-      &lt;given&gt;[first_names]&lt;/given&gt;
-    &lt;/name&gt;
-    &lt;email&gt;[email]&lt;/email&gt;
-    &lt;url&gt;[homepage_url]&lt;/url&gt;
-  &lt;/person&gt;
-  &lt;person recstatus = "2"&gt;    <emphasis>modified person</emphasis>
-    ...
-  &lt;/person&gt;
-  &lt;person recstatus = "3"&gt;    <emphasis>deleted person</emphasis>
-    &lt;sourcedid&gt;
-      &lt;id&gt;LL1&lt;/id&gt;      <emphasis>only requires username</emphasis>
-    &lt;/sourcedid&gt;
-  &lt;/person&gt;
-&lt;/enterprise&gt;</programlisting>
+<programlisting><xi:include href="example.xml" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>example missing</xi:fallback></xi:include></programlisting>
           <para>A snapshot file is similar but doesn't have recstatus,
-  since it's not a delta but a list of valid records.
+  since it's not a delta but a list of valid records.  See the larger example in the design document for more details.
 </para>
-          <programlisting>
-&lt;enterprise&gt;
-  &lt;person&gt;
-    &lt;sourcedid&gt;
-      &lt;id&gt;[username]&lt;/id&gt;
-    &lt;/sourcedid&gt;
-    &lt;name&gt;
-      &lt;family&gt;[last_name]&lt;/family&gt;
-      &lt;given&gt;[first_names]&lt;/given&gt;
-    &lt;/name&gt;
-    &lt;email&gt;[email]&lt;/email&gt;
-    &lt;url&gt;[homepage_url]&lt;/url&gt;
-  &lt;/person&gt;
-  ...
-&lt;/enterprise&gt;
-</programlisting>
               <para>(More information: <xref linkend="ims-sync-driver-design"/>, <ulink url="http://www.imsproject.org/enterprise/">The IMS 1.1 spec</ulink>)</para>
           </listitem>
       </orderedlist>
+      <para><phrase role="cvstag">($Id$)</phrase></para>
     </sect1>
-
-
-              <para><phrase role="cvstag">($Id$)</phrase></para>
   </article>
