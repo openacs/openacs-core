@@ -50,8 +50,11 @@ ad_proc -public template_tag_if_condition { chunk params condition_type } {
     set chunk $errorMsg
   }
 
-  append condition "\} \{"
-  template::adp_append_code $condition
+  append condition "} {"
+  switch $condition_type {
+      if     {template::adp_append_code $condition}
+      elseif {template::adp_append_code $condition -nobreak}
+  }
 
   # Done evaluating condition; evaluate body
   template::adp_compile_chunk $chunk
