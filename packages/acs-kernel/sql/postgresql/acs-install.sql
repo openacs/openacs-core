@@ -169,6 +169,7 @@ create table inline_data (
 
 select inline_0 ();
 
+select id from inline_data where name = 'api_doc_id';
 update acs_objects
      set security_inherit_p = 'f'
    where object_id = (select id from inline_data where name = 'api_doc_id');

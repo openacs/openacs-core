@@ -269,7 +269,8 @@ declare
         clr_keys_p      boolean default ''t'';
 begin
         if new.object_id = old.object_id and 
-           new.context_id = old.context_id then
+           ((new.context_id = old.context_id) or
+            (new.context_id is null and old.context_id is null)) then
 
            return new;
 
