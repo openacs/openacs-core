@@ -24,13 +24,8 @@
 
     set context [list "Users"]
 
-    # XXX This query should be optimized
-    db_1row users_n_users "select 
-    count(*) as n_users, 
-    sum(decode(member_state,'deleted',1,0)) as n_deleted_users, 
-    max(creation_date) as last_registration
-    from cc_users
-    where email not in ('anonymous', 'system')"
+    db_1row users_n_users {}
+    db_1row users_deleted_users {}
 
     set n_users [util_commify_number $n_users]
     set last_registration [lc_time_fmt $last_registration "%q"]
