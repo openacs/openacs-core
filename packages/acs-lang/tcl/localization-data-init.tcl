@@ -379,6 +379,39 @@ nsv_set locale nl_NL,t_fmt "%H:%M"
 nsv_set locale nl_NL,thousands_sep "."
 nsv_set locale nl_NL,formbuilder_time_format "HH24:MI"
 
+# pt_BR (Português do Brasil) - Translated by Roberto Mello.
+nsv_set locale pt_BR,abday {{Dom} {Seg} {Ter} {Qua} {Qui} {Sex} {Sáb}}
+nsv_set locale pt_BR,abmon {{Jan} {Fev} {Mar} {Abr} {Mai} {Jun} {Jul} {Ago} {Set} {Out} {Nov} {Dez}}
+nsv_set locale pt_BR,am_str "AM"
+nsv_set locale pt_BR,currency_symbol "R$"
+nsv_set locale pt_BR,day {{Domingo} {Segunda} {Terça} {Quarta} {Quinta} {Sexta} {Sábado}}
+nsv_set locale pt_BR,firstdayofweek 0
+nsv_set locale pt_BR,decimal_point ","
+nsv_set locale pt_BR,d_fmt "%d/%m/%y"
+nsv_set locale pt_BR,d_t_fmt "%a, %d de %B de %Y, %r %Z"
+nsv_set locale pt_BR,dlong_fmt "%d de %B de %Y"
+nsv_set locale pt_BR,dlongweekday_fmt "%A, %d de %B de %Y"
+nsv_set locale pt_BR,frac_digits 2
+nsv_set locale pt_BR,grouping {3 3 }
+nsv_set locale pt_BR,int_curr_symbol "BRL "
+nsv_set locale pt_BR,int_frac_digits 2
+nsv_set locale pt_BR,mon_decimal_point ","
+nsv_set locale pt_BR,mon_grouping {3 3 }
+nsv_set locale pt_BR,mon {{Janeiro} {Fevereiro} {Março} {Abril} {Maio} {Junho} {Julho} {Agosto} {Setembro} {Outubro} {Novembro} {Dezembro}}
+nsv_set locale pt_BR,mon_thousands_sep "."
+nsv_set locale pt_BR,n_cs_precedes 1
+nsv_set locale pt_BR,negative_sign "-"
+nsv_set locale pt_BR,n_sep_by_space 0
+nsv_set locale pt_BR,n_sign_posn             1
+nsv_set locale pt_BR,p_cs_precedes 1
+nsv_set locale pt_BR,pm_str "PM"
+nsv_set locale pt_BR,positive_sign ""
+nsv_set locale pt_BR,p_sep_by_space 0
+nsv_set locale pt_BR,p_sign_posn 1
+nsv_set locale pt_BR,t_fmt_ampm "%I:%M:%S %p"
+nsv_set locale pt_BR,t_fmt "%r"
+nsv_set locale pt_BR,thousands_sep ","
+nsv_set locale pt_BR,formbuilder_time_format "HH12:MI AM"
 
 # Monetary amounts
 nsv_set locale money:000  {($num$sym)}
