@@ -180,7 +180,6 @@ namespace eval application_group {
     ad_proc new {
 	{ -group_id "" } 
 	{ -group_type "application_group"}
-        { -parent_group_id "" }
         { -package_id "" }
 	{ -group_name "" }
 	{ -creation_user "" }
@@ -194,7 +193,6 @@ namespace eval application_group {
 	Returns the group_id of the new application group.
     } {
 
-ns_log Notice "Huh? starting"
 	if { [ad_conn isconnected] } {
 	    # Since we have a connection, default user_id / peeraddr
 	    # if they're not specified
@@ -207,21 +205,7 @@ ns_log Notice "Huh? starting"
 	    if { [empty_string_p $package_id] } {
 		set package_id [ad_conn package_id]
 	    }
-
-	    if {[empty_string_p $parent_group_id]} {
-		# by default, this application group will be a subgroup
-		# of the first parent application group based on the site map.
-
-ns_log Notice "Huh? before db_string ..."
-		set parent_node_id [db_string parent_node_id ""]
-ns_log Notice "Huh? before db_0or1row ..."
-
-		db_0or1row parent_group_id_query ""
-ns_log Notice "Huh? after db_0or1row ..."
-	    }
 	}
-
-ns_log Notice "Huh? got here"
 
 	if {[empty_string_p $package_id]} {
 	    error "application_group::new - package_id not specified"
@@ -235,30 +219,24 @@ ns_log Notice "Huh? got here"
 	    }]
 	    append group_name " Parties"
 	}
-ns_log Notice "Huh? group_name: $group_name"
 
 	db_transaction {
-
 	    # creating the new group
-	    set group_id [db_exec_plsql add_group {
-		begin
-		:1 := application_group.new (
-	            group_id      => :group_id,
-	            object_type    => :group_type,
-	            group_name    => :group_name,
-                    package_id    => :package_id,
-	            context_id    => :context_id,
-	            creation_user => :creation_user,
-	            creation_ip   => :creation_ip,
-		    email         => :email,
-		    url           => :url
-		);
-		end;
-	    }]
+	    set group_id [db_exec_plsql add_group {}]
 	}
 
 	return $group_id
 
     }
+
+    ad_proc delete {
+        -group_id:required
+    } {
+        Delete the given application group and all relational segments and constraints dependent
+        on it (handled by the PL/[pg]SQL API
+    } {
+        db_exec_plsql delete {}
+    }
+
 }
 

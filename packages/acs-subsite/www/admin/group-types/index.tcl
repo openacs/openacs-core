@@ -13,8 +13,6 @@ ad_page_contract {
     group_types:multirow
 }
 
-subsite::configure_if_necessary
-
 set context [list "Group types"]
 
 # we may want to move the inner count to get the number of groups of

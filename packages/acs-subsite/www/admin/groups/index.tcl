@@ -24,8 +24,6 @@ ad_page_contract {
     view_by:onevalue
 }
 
-subsite::configure_if_necessary
-
 set context [list "Groups"]
 
 set this_url [ad_conn url]

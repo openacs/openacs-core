@@ -14,7 +14,6 @@ namespace eval subsite {
     namespace eval util {}
 }
 
-
 ad_proc -public subsite::after_mount { 
     {-package_id:required}
     {-node_id:required}
@@ -36,106 +35,46 @@ ad_proc -public subsite::after_mount {
 
 } {
 
-    set subsite_name [db_string subsite_name_query {}]
+    if { [empty_string_p [application_group::group_id_from_package_id -package_id $package_id]] } {
 
-    set truncated_subsite_name [string range $subsite_name 0 89]
+        set subsite_name [db_string subsite_name_query {}]
 
-#    db_transaction {
+        set truncated_subsite_name [string range $subsite_name 0 89]
 
-    # Create subsite application group
-    set group_name "$truncated_subsite_name Parties"
-    set subsite_group_id [application_group::new \
-                              -package_id $package_id \
-                              -group_name $group_name]
+        db_transaction {
 
-    # Create segment of registered users
-    set segment_name "$truncated_subsite_name Members"
-    set segment_id [rel_segments_new $subsite_group_id membership_rel $segment_name]
+            # Create subsite application group
+            set group_name "$truncated_subsite_name Parties"
+            set subsite_group_id [application_group::new \
+                                      -package_id $package_id \
+                                      -group_name $group_name]
 
-    # Create constraint that says "to be a member of this
-    # subsite, you have to be a member of the parent subsite"
+            # Create segment of registered users
+            set segment_name "$truncated_subsite_name Members"
+            set segment_id [rel_segments_new $subsite_group_id membership_rel $segment_name]
 
-    set supersite_group_id ""
+            # Create a constraint that says "to be a member of this subsite you must be a member
+            # of the parent subsite.
 
-    db_0or1row parent_subsite_query {}
+            db_1row parent_subsite_query {}
+            set constraint_name "Members of [string range $subsite_name 0 30] must be members of [string range $supersite_name 0 30]"
+            set user_id [ad_conn user_id]
+            set creation_ip [ad_conn peeraddr]
+            db_exec_plsql add_constraint {}
 
-    # First get parent application group's id and instance name
-    if { ![empty_string_p $supersite_group_id] } {
-
-         set constraint_name "Members of [string range $subsite_name 0 30] must be members of [string range $supersite_name 0 30]"
-
-         set user_id [ad_conn user_id]
-	 set creation_ip [ad_conn peeraddr]
-		
-         db_exec_plsql add_constraint {}
+        }
     }
-#    }
 }
 
-    ad_proc subsite::configure_if_necessary {
-	{-package_id ""}
-    } {
-	Performs post-install configuration if necessary.
-	See subsite::configured_p to learn how we determine if a subsite has 
-	already been configured.  See subsite::configure to learn what
-	is involved in configuring a subsite.
+ad_proc -public subsite::before_uninstantiate { 
+    {-package_id:required}
+} {
 
-	<p>
+    Delete the application group associated with this subsite.
 
-	NOTE: this proc might not work without a connection (i.e., 
-        [ad_conn isconnected]==1). I haven't tested it without a connection,
-	but I think the code would work right now (assuming the caller passes
-	in a valid package_id). However, in the future, this proc may redirect
-	the administrator to a configuration "wizard" in case we need or want
-	some input from the admin to properly configure the subsite.
-
-	@author Oumi Mehrotra (oumi@arsdigita.com)
-	@creation-date 2000-02-05
-
-	@param package_id The package_id of the subsite application instance
-	to configure.  If package_id is not specified, then 
-	<code>[ad_conn package_id]</code> will be used.
-
-    } {
-	if {![configured_p -package_id $package_id]} {
-	    configure -package_id $package_id
-	}
-
-    }
-
-
-    ad_proc subsite::configured_p {
-	{-package_id ""}
-    } {
-	Determines whether a subsite has been configured.  Returns 1 if
-	configured, or 0 otherwise.  Right now, a subsite is considered
-	to be configured if its application group exists.  In the future,
-	we may store an explicit "configured_p" setting in the DB.
-
-	@author Oumi Mehrotra (oumi@arsdigita.com)
-	@creation-date 2000-02-05
-
-	@param package_id The package_id of the subsite application instance
-	to configure.  If package_id is not specified, then 
-	<code>[ad_conn package_id]</code> will be used.
-    } {
-	if {[empty_string_p [application_group::group_id_from_package_id \
-		-no_complain \
-		-package_id $package_id]]} {
-	    return 0
-	}
-	return 1
-    }
-
-
-
-    ad_proc subsite::configure {
-	{-package_id ""}
-    } {
-
-    }
-
-
+} {
+    application_group::delete -group_id [application_group::group_id_from_package_id -package_id $package_id]
+}
 
 ad_proc -private subsite::instance_name_exists_p {
     node_id
@@ -156,7 +95,6 @@ ad_proc -private subsite::instance_name_exists_p {
     }]
 }
 
-
 ad_proc -public subsite::auto_mount_application { 
     { -instance_name "" }
     { -pretty_name "" }
@@ -165,14 +103,14 @@ ad_proc -public subsite::auto_mount_application {
 } {
     Mounts a new instance of the application specified by package_key
     beneath node_id
-    
+
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 2001-02-28
 
     @param instance_name The name to use for the url in the
     site-map. Defaults to the package_key plus a possible digit to
     serve as a unique identifier (e.g. news-2)
-    
+
     @param pretty_name The english name to use for the site-map and
     for things like context bars. Defaults to the name of the object
     mounted at this node + the package pretty name (e.g. Intranet News)
@@ -282,7 +220,7 @@ ad_proc subsite::util::sub_type_exists_p {
 
     @author Oumi Mehrotra (oumi@arsdigita.com)
     @creation-date 2000-02-07
-    
+
     @param object_type
 
 } {
@@ -334,7 +272,7 @@ ad_proc subsite::util::object_type_pretty_name {
 
     @author Oumi Mehrotra (oumi@arsdigita.com)
     @creation-date 2000-02-07
-    
+
     @param object_type
 } {
     return [db_string select_pretty_name {
