@@ -763,7 +763,6 @@ ad_proc -public template::paginator::get_query { name id_column page } {
 ad_proc -public template::paginator::reset { name query } {
     Resets the cache for a query.
 } {
-    # LARS TODO
     cache flush $name:$query:context_ids
     cache flush $name:$query:row_ids
 }
