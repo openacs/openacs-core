@@ -61,7 +61,7 @@
 
   <table class="list-tiny" cellpadding="3" cellspacing="1">
 
-  <form name="@list_properties.name@" method="get">
+  <form name="@list_properties.name@" method="@list_properties.bulk_action_method@">
 
     <noparse>
       <multiple name="@list_properties.multirow@">
