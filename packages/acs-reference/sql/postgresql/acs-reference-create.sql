@@ -221,6 +221,3 @@ begin
 end;
 ' language 'plpgsql';
 
--- now load the reference data packages
-
-\i acs-reference-data
