@@ -290,3 +290,84 @@ aa_register_case -cats {
     
 }
 
+aa_register_case text_to_html {
+    Test code the supposedly causes ad_html_to_text to break
+} {
+    
+    # Test bad <<<'s
+
+    set offending_post {><<<}
+    set errno [catch { set text_version [ad_html_to_text -- $offending_post] } errmsg]
+
+    if { ![aa_equals "Does not bomb" $errno 0] } {
+        global errorInfo
+        aa_log "errmsg: $errmsg"
+        aa_log "errorInfo: $errorInfo"
+    } else {
+        aa_equals "Expected identical result" $text_version $offending_post
+    }
+
+    # Test offending post sent by Dave Bauer
+
+    set offending_post {
+I have a dynamically assigned ip address, so I use dyndns.org to
+change
+addresses for my acs server.
+Mail is sent to any yahoo address fine. Mail sent to aol fails. I am
+not running a dns server on my acs box. What do I need to do to
+correct this problem?<br>
+Here's my error message:<blockquote>
+            Mail Delivery Subsystem<br>
+<MAILER-DAEMON@testdsl.homeip.net>  | Block
+            Address | Add to Address Book<br>
+       To:
+            gmt3rd@yahoo.com<br>
+ Subject:
+            Returned mail: Service unavailable
+<p>
+
+
+The original message was received at Sat, 17 Mar 2001 11:48:57 -0500
+from IDENT:nsadmin@localhost [127.0.0.1]
+<br>
+   ----- The following addresses had permanent fatal errors -----
+gmt3rd@aol.com
+<br>
+   ----- Transcript of session follows -----<p>
+... while talking to mailin-04.mx.aol.com.:
+<<< 550-AOL no longer accepts connections from dynamically assigned 
+<<< 550-IP addresses to our relay servers.  Please contact your ISP
+<<< 550 to have your mail redirected through your ISP's SMTP servers.
+... while talking to mailin-02.mx.aol.com.:
+>>> QUIT
+<p>
+
+                              Attachment: Message/delivery-status
+
+Reporting-MTA: dns; testdsl.homeip.net
+Received-From-MTA: DNS; localhost
+Arrival-Date: Sat, 17 Mar 2001 11:48:57 -0500
+
+Final-Recipient: RFC822; gmt3rd@aol.com
+Action: failed
+Status: 5.5.0
+Remote-MTA: DNS; mailin-01.mx.aol.com
+Diagnostic-Code: SMTP; 550-AOL no longer accepts connections from 
+dynamically assigned 
+Last-Attempt-Date: Sat, 17 Mar 2001 11:48:57 -0500
+
+</blockquote>
+<p>
+anybody have any ideas?
+    }
+
+    set errno [catch { set text_version [ad_html_to_text -- $offending_post] } errmsg]
+
+    if { ![aa_equals "Does not bomb" $errno 0] } {
+        global errorInfo
+        aa_log "errmsg: $errmsg"
+        aa_log "errorInfo: $errorInfo"
+    } else {
+        aa_log "Text version: $text_version"
+    }
+}
