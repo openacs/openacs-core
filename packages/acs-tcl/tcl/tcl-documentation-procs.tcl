@@ -1118,7 +1118,11 @@ ad_proc -public ad_page_contract {
 	    upvar 1 $return_errors error_list
 	    set error_list [ad_complaints_get_list]
 	} else {
-	    ad_return_complaint [ad_complaints_count] "<li>[join [ad_complaints_get_list] "</li>\n<li>"]</li>\n"
+            template::multirow create complaints text
+            foreach elm [ad_complaints_get_list] {
+                template::multirow append complaints $elm
+            }
+            ns_return 200 text/html [ad_parse_template -params [list complaints] "/packages/acs-tcl/lib/complain"]
 	    ad_script_abort
 	}
     }
