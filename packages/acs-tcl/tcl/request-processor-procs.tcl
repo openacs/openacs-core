@@ -454,24 +454,24 @@ ad_proc -private rp_resources_filter { why } {
 
     If that fails, we map to root/www/resources/*
 
-    If the file doesn't exist we'll log an error and return nothing, which will cause
-    normal browsers to display their "?" not found icon for images, who knows what for
-    .css files.
+    If the file doesn't exist we'll log an error and return filter_ok, which will allow
+    packages mounted at "/resources" in a legacy site to work correctly.  This is a
+    horrible kludge which may disappear after discussion with the gang.
+
+    @author Don Baccus (dhogaza@pacifier.com)
 
 } {
-
     set path "[acs_package_root_dir [lindex [ns_conn urlv] 1]]/www/resources/[lrange [ns_conn urlv] 2 end]"
-
     if { ![file exists $path] } {
         set path "[acs_root_dir]/www/resources/[lrange [ns_conn urlv] 1 end]"
     }
     if { [file exists $path] } {
         ns_returnfile 200 [ns_guesstype $path] $path
+        return filter_return
     } else {
-        ns_log Error "rp_sources_filter: file \"$path\" does not exists"
+        ns_log Error "rp_sources_filter: file \"$path\" does not exists trying to serve as a normal request"
+        return filter_ok
     }
-
-    return filter_return
 }
 
 ad_proc -private rp_filter { why } {
