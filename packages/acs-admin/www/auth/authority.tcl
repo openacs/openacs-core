@@ -71,7 +71,7 @@ set form_widgets_full {
         {help_text "URL where users register for a new account."}
     }        
 
-    {help_contact_text:richtext(richtext),optional
+    {help_contact_text:richtext,optional
         {html {cols 60 rows 13}} 
         {label "Help contact text"}
         {help_text "Contact information (phone, email, etc.) to be displayed as a last resort when people are having problems with an authority."}
@@ -142,9 +142,11 @@ ad_form -name authority \
         set $element_name $element_array($element_name)
     }
 
-    set help_contact_text [template::util::richtext::create]
-    set help_contact_text [template::util::richtext::set_property contents $help_contact_text $element_array(help_contact_text)]
-    set help_contact_text [template::util::richtext::set_property format $help_contact_text  $element_array(help_contact_text_format)]
+    if { !$local_authority_p } {
+        set help_contact_text [template::util::richtext::create]
+        set help_contact_text [template::util::richtext::set_property contents $help_contact_text $element_array(help_contact_text)]
+        set help_contact_text [template::util::richtext::set_property format $help_contact_text  $element_array(help_contact_text_format)]
+    }
     
 } -new_data {
 
@@ -154,8 +156,11 @@ ad_form -name authority \
 
     set element_array(sort_order) ""
     set element_array(short_name) ""
-    set element_array(help_contact_text) [template::util::richtext::get_property contents $help_contact_text]
-    set element_array(help_contact_text_format) [template::util::richtext::get_property format $help_contact_text]
+
+    if { !$local_authority_p } {
+        set element_array(help_contact_text) [template::util::richtext::get_property contents $help_contact_text]
+        set element_array(help_contact_text_format) [template::util::richtext::get_property format $help_contact_text]
+    }
 
     auth::authority::create \
         -authority_id $authority_id \
@@ -169,8 +174,10 @@ ad_form -name authority \
         }
     }
 
-    set element_array(help_contact_text) [template::util::richtext::get_property contents $help_contact_text]
-    set element_array(help_contact_text_format) [template::util::richtext::get_property format $help_contact_text]
+    if { !$local_authority_p } {
+        set element_array(help_contact_text) [template::util::richtext::get_property contents $help_contact_text]
+        set element_array(help_contact_text_format) [template::util::richtext::get_property format $help_contact_text]
+    }
 
     auth::authority::edit \
         -authority_id $authority_id \
