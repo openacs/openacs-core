@@ -94,6 +94,18 @@ ad_proc -public lang::message::register {
         }
     }
 
+    # Check that non-en_US messages don't have invalid embedded variables
+    if { ![string equal $locale "en_US"] } {
+        set en_us_message [lang::message::lookup en_US $key {} {} 0]
+        # Note that we only check for invalid variables here, not for missing ones.
+        # A translator may choose to omit a variable if this yields a better translation
+        set invalid_vars [get_missing_embedded_vars $message $en_us_message]
+
+        if { ![empty_string_p $invalid_vars] } {
+            error "The following variables are in the \"$locale\" message but not in the en_US message: \"$invalid_vars\". Cannot register/update message for key=\"$key\" and locale=\"$locale\""
+        }
+    }
+
     # Different logic for update and insert
     if { [nsv_exists lang_message_$locale $key] } { 
         # Update existing message if the message has changed
