@@ -261,8 +261,13 @@ create table apm_package_versions (
     cvs_import_results text,
     activation_date    timestamp,
     deactivation_date  timestamp,
-    -- FIXME: use this as the blob_id
-    distribution_tarball integer,
+    -- FIXME: store the tarball in the content-repository
+    -- distribution_tarball blob,
+    item_id            integer,
+    -- This constraint can't be adde yet, as the cr_items table 
+    -- has not been created yet.
+                       -- constraint apm_package_ver_item_id_fk 
+                       -- references cr_items(item_id),
     distribution_uri   varchar(1500),
     distribution_date  timestamp,
     constraint apm_package_vers_id_name_un unique(package_key, version_name)
@@ -369,11 +374,9 @@ comment on column apm_package_versions.deactivation_date is '
  XXX (bquinn): do we really care about this enough to keep the information around?
 ';
 
-comment on column apm_package_versions.distribution_tarball is '
- The archive of the distribution.
- XXX (bquinn):   This should definitely be moved
- to the content repository and renamed distribution_archive, or simply 
- stored in the file system.
+comment on column apm_package_versions.item_id is '
+ item_id is a reference to the distribution_tarball which is stored in the content
+ repository.
 ';
 
 comment on column apm_package_versions.distribution_uri is '
@@ -649,7 +652,7 @@ create view apm_package_version_info as
            v.activation_date, v.deactivation_date,
 --           dbms_lob.getlength(distribution_tarball) tarball_length,
 -- FIXME:
-           0 as tarball_length,
+           case when item_id is not null then 1 else 0 end as tarball_length,
            distribution_uri, distribution_date
     from   apm_package_types t, apm_package_versions v
     where  v.package_key = t.package_key;

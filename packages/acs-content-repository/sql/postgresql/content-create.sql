@@ -205,6 +205,13 @@ create unique index cr_items_unique_name on cr_items(parent_id, name);
 create unique index cr_items_unique_id on cr_items(parent_id, item_id);
 create index cr_items_by_parent_id on cr_items(parent_id);
 
+-- DCW, this can't be defined in the apm_package_versions table defintion,
+-- because cr_items is created afterwards.
+
+alter table apm_package_versions add
+  constraint apm_package_ver_item_id_fk
+  foreign key (item_id) references cr_items(item_id);
+
 
 create function cr_items_tree_insert_tr () returns opaque as '
 declare

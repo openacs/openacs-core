@@ -13,7 +13,7 @@
              and   v2.installed_p
              and   apm_package_version__sortable_version_name(v2.version_name) >
                    apm_package_version__sortable_version_name(v.version_name)) as  superseded_p,
-            (select count(*) where distribution_tarball is not null) as tarball_p
+            (select count(*) where item_id is not null) as tarball_p
         from    apm_package_versions v, apm_package_types t
         where  t.package_key = v.package_key
         [ad_dimensional_sql $dimensional_list where and]

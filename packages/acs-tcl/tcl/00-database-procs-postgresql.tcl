@@ -385,6 +385,12 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
 
                 if {[regexp {^[0-9]+$} $val match]} {
                     ns_pg blob_select_file $db $val $file
+                } elseif {[file exists $val]} {
+                    set ifp [open $val r]
+                    set ofp [open $file w]
+                    ns_cpfp $ifp $ofp
+                    close $ifp
+                    close $ofp
                 } else {
                     error "lob id is not an integer"
                 }
