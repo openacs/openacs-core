@@ -753,9 +753,18 @@ begin
    (v_group_id, new__group_name, v_join_policy);
 
   -- setup the permissible relationship types for this group
+
+  -- DRB: we have to call nextval() directly because the select may
+  -- return more than one row.  The sequence hack will only compute
+  -- one nextval value causing the insert to fail ("may" in PG, which
+  -- is actually broken.  It should ALWAYS return exactly one value for
+  -- the view.  In PG it may or may not depending on the optimizer''s
+  -- mood.  PG group seems uninterested in acknowledging the fact that
+  -- this is a bug)
+
   insert into group_rels
   (group_rel_id, group_id, rel_type)
-  select acs_object_id_seq.nextval, v_group_id, g.rel_type
+  select nextval(''t_acs_object_id_seq''), v_group_id, g.rel_type
     from group_type_rels g
    where g.group_type = new__object_type;
 
