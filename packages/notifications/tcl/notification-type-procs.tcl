@@ -12,6 +12,7 @@ namespace eval notification::type {
 
     ad_proc -public new {
         {-type_id ""}
+        {-sc_impl_id:required}
         {-short_name:required}
         {-pretty_name:required}
         {-description ""}
@@ -19,7 +20,7 @@ namespace eval notification::type {
         create a new notification type
     } {
         set extra_vars [ns_set create]
-        oacs_util::vars_to_ns_set -ns_set $extra_vars -var_list {type_id short_name pretty_name description}
+        oacs_util::vars_to_ns_set -ns_set $extra_vars -var_list {type_id sc_impl_id short_name pretty_name description}
 
         set type_id [package_instantiate_object -extra_vars $extra_vars notification_type]
 
@@ -80,6 +81,17 @@ namespace eval notification::type {
     } { 
         # perform the delete if necessary
         db_dml delete_delivery_method_map {}
+    }
+
+    ad_proc -public process_reply {
+        {-type_id:required}
+        {-reply_id:required}
+    } {
+        # Get the impl key
+        set impl_key [get_impl_key -type_id $type_id]
+
+        # Dispatch to the notification type specific reply processing
+        acs_sc_call NotificationType ProcessReply [list $reply_id] $impl_key
     }
     
 }

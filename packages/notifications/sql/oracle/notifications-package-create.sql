@@ -82,6 +82,7 @@ create or replace package notification_delivery_method
 as
    function new (
       delivery_method_id                in notification_delivery_methods.delivery_method_id%TYPE default null,
+      sc_impl_id                        in notification_delivery_methods.sc_impl_id%TYPE,
       short_name                        in notification_delivery_methods.short_name%TYPE,
       pretty_name                       in notification_delivery_methods.pretty_name%TYPE,
       creation_date                     in acs_objects.creation_date%TYPE default sysdate,
@@ -104,6 +105,7 @@ create or replace package body notification_delivery_method
 as
    function new (
       delivery_method_id                in notification_delivery_methods.delivery_method_id%TYPE default null,
+      sc_impl_id                        in notification_delivery_methods.sc_impl_id%TYPE,
       short_name                        in notification_delivery_methods.short_name%TYPE,
       pretty_name                       in notification_delivery_methods.pretty_name%TYPE,
       creation_date                     in acs_objects.creation_date%TYPE default sysdate,
@@ -124,8 +126,8 @@ as
                               );
 
       insert into notification_delivery_methods
-      (delivery_method_id, short_name, pretty_name) values
-      (v_delivery_method_id, short_name, pretty_name);
+      (delivery_method_id, sc_impl_id, short_name, pretty_name) values
+      (v_delivery_method_id, sc_impl_id, short_name, pretty_name);
 
       return v_delivery_method_id;
    end new;
@@ -149,6 +151,7 @@ create or replace package notification_type
 as
    function new (
       type_id                           in notification_types.type_id%TYPE default null,
+      sc_impl_id                        in notification_types.sc_impl_id%TYPE,
       short_name                        in notification_types.short_name%TYPE,
       pretty_name                       in notification_types.pretty_name%TYPE,
       description                       in notification_types.description%TYPE,
@@ -172,6 +175,7 @@ create or replace package body notification_type
 as
    function new (
       type_id                           in notification_types.type_id%TYPE default null,
+      sc_impl_id                        in notification_types.sc_impl_id%TYPE,
       short_name                        in notification_types.short_name%TYPE,
       pretty_name                       in notification_types.pretty_name%TYPE,
       description                       in notification_types.description%TYPE,
@@ -193,8 +197,8 @@ as
                    );
       
       insert into notification_types
-      (type_id, short_name, pretty_name, description) values
-      (v_type_id, short_name, pretty_name, description);
+      (type_id, sc_impl_id, short_name, pretty_name, description) values
+      (v_type_id, sc_impl_id, short_name, pretty_name, description);
       
       return v_type_id;
    end new;

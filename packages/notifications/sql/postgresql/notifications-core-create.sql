@@ -35,6 +35,9 @@ create table notification_delivery_methods (
                                     references acs_objects (object_id)
                                     constraint notif_deliv_meth_pk
                                     primary key,
+    sc_impl_id                      integer not null
+                                    constraint notif_deliv_meth_impl_id_fk
+                                    references acs_sc_impls(impl_id),
     short_name                      varchar(100)
                                     constraint notif_deliv_short_name_nn
                                     not null
@@ -50,7 +53,10 @@ create table notification_types (
                                     references acs_objects (object_id)
                                     constraint notif_type_type_id_pk
                                     primary key,
-    short_name                      varchar(100)
+       sc_impl_id                   integer not null
+                                    constraint notif_deliv_meth_impl_id_fk
+                                    references acs_sc_impls(impl_id),
+       short_name                   varchar(100)
                                     constraint notif_type_short_name_nn
                                     not null
                                     constraint notif_type_short_name_un

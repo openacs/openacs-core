@@ -10,30 +10,6 @@ ad_library {
 
 namespace eval notification::reply {
 
-    ad_proc -public reply_address_domain {} {
-        return "openforce.net"
-    }
-
-    ad_proc -public reply_address {
-        {-object_id:required}
-        {-type_id:required}
-    } {
-        return "notification-$object_id-$type_id@[reply_address_domain]"
-    }
-
-    ad_proc -public parse_reply_address {
-        {-reply_address:required}
-    } {
-        This takes a reply address, checks it for consistency, and returns a list of object_id and type_id
-    } {
-        # Check the format and extract type_id and object_id at the same time
-        if {![regexp {^notification-([0-9]*)-([0-9]*)@} $reply_address all object_id type_id]} {
-            return ""
-        }
-
-        return [list $object_id $type_id]
-    }
-
     ad_proc -public new {
         {-reply_id ""}
         {-object_id:required}
