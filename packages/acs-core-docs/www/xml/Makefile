@@ -54,10 +54,11 @@ see http://sourceforge.net/projects/docbook/ for the docbook-xsl stylesheets\n";
 prelim:
 	cp images/*.{pdf,png,gif,jpg} ../images/
 
-# put all non-regenerated html in a sub-dir so that we can delete html
-# in the main directory and regenerate
-	cp non-xml/*.html ../
-
+# all non-regenerated html is kept in a sub-dir so that we can delete html
+# in the main directory before regenerating
+# this helps avoid meaningless cvs conflicts in second-hand files
+	rm ../*html
+	cp -u non-xml/*.html ../
 	cp openacs.css ..
 
 html: prelim XSL
