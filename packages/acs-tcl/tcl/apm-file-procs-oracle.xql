@@ -5,7 +5,6 @@
  
 <fullquery name="apm_generate_tarball.apm_tarball_insert">      
       <querytext>
-      
         update apm_package_versions
            set distribution_tarball = empty_blob(),
                distribution_uri = null,

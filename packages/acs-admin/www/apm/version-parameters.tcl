@@ -25,16 +25,12 @@ set table_def [list \
 		   [list datatype "Type"] \
 		   [list description "Description" {} {<td>[ad_quotehtml $description]</td>}]]
 
-set sql "
-    select parameter_name, nvl(description, 'No Description') description, datatype, 
-    default_value, parameter_id, nvl(section_name, 'No Section') section_name
-      from apm_parameters
-     where package_key = :package_key
-"
+#DRB: sql_clauses must not contain RDBMS-specific query clauses.
+set sql_clauses ""
 
 if { [exists_and_not_null dimensional_list] } {
     lappend table_def [list section_name "Section:"]
-    append sql [ad_dimensional_sql $dimensional_list]
+    append sql_clauses [ad_dimensional_sql $dimensional_list]
 }
 
 lappend table_def [list parameter_id "Actions" no_sort \
@@ -43,7 +39,7 @@ lappend table_def [list parameter_id "Actions" no_sort \
 			  <a href=parameter-edit?[export_url_vars version_id parameter_id]>edit</a></font>\] 
 			   </td>}]
 
-append sql [ad_order_by_from_sort_spec $orderby $table_def]
+append sql_clauses [ad_order_by_from_sort_spec $orderby $table_def]
 
 doc_body_append "[apm_header [list "version-view?version_id=$version_id" "$pretty_name $version_name"] "Parameters"]
 <blockquote>
@@ -57,7 +53,7 @@ doc_body_append "[ad_table -Torderby $orderby \
      -bind [ad_tcl_vars_to_ns_set version_id package_key] \
      -Textra_vars {version_id} \
      -Tmissing_text "No parameters registered in this section." \
-		     parameter_table $sql $table_def]
+		     parameter_table "" $table_def]
 <br><a href=parameter-add?[export_url_vars version_id]>Add a new parameter</a>
 
 </blockquote>
