@@ -789,6 +789,7 @@ ad_proc doc_return {args} {
 
 ad_proc -public ad_return_url {
     -urlencode:boolean
+    -qualified:boolean
     {extra_args {}}
 } {
 
@@ -819,6 +820,7 @@ ad_proc -public ad_return_url {
     @author Don Baccus (dhogaza@pacifier.com)
 
     @param urlencode If true url-encode the result
+    @param qualified If provided the return URL will be fully qualified including http or https.
     @param extra_args A list of {name value} lists to append to the query string
 
 } {
@@ -834,6 +836,16 @@ ad_proc -public ad_return_url {
     } else {
         set url "[ns_conn url]?[join $query_list "&"]"
     }
+    
+    if { $qualified_p } {
+        # Make the return_url fully qualified
+        if { [security::secure_conn_p] } {
+            set url [security::get_secure_qualified_url $url]
+        } else {
+            set url [security::get_insecure_qualified_url $url]
+        }
+    }
+
     if { $urlencode_p } {
         return [ns_urlencode $url]
     } else {

@@ -10,6 +10,8 @@ ad_library {
     @cvs-id security-procs.tcl,v 1.13.2.5 2003/06/06 08:48:50 lars Exp
 }
 
+namespace eval security {}
+
 # cookies (all are signed cookies):
 #   cookie                value                          max-age         secure
 #   ad_session_id         session_id,user_id             SessionTimeout  no
@@ -80,7 +82,7 @@ proc_doc sec_handler {} {
 
         set new_user_id 0
 	# check for permanent login cookie
-	if { ![ad_secure_conn_p] } {
+	if { ![security::secure_conn_p] } {
             catch {
                 set new_user_id [ad_get_signed_cookie "ad_user_login"]
             }
@@ -111,7 +113,7 @@ proc_doc sec_handler {} {
 	# issued their secure tokens until after they pass through)
 	# It is important to note that the entire secure login
 	# system depends on these two functions
-  	if { [ad_secure_conn_p] && ![ad_login_page] } {
+  	if { [security::secure_conn_p] && ![ad_login_page] } {
 
 	    # ns_log notice "OACS= sec_handler:secure but not login page"
 
@@ -177,7 +179,7 @@ ad_proc -public ad_user_login {
     # deal with the permanent login cookies (ad_user_login and ad_user_login_secure)
     if { $forever_p } {
 	# permanent login
-	if { [ad_secure_conn_p] } {
+	if { [security::secure_conn_p] } {
 	    ad_set_signed_cookie -max_age inf -secure t ad_user_login_secure "$user_id,[ns_time]"
 	    ad_set_signed_cookie -max_age inf -secure f ad_user_login "$user_id"
 	} else {
@@ -188,7 +190,7 @@ ad_proc -public ad_user_login {
 		ad_set_cookie -max_age 0 ad_user_login_secure ""
 	    }
 	}
-    } elseif { $prev_user_id == $user_id && [ad_secure_conn_p] } {
+    } elseif { $prev_user_id == $user_id && [security::secure_conn_p] } {
 	# nonpermanent secure login requested
 	ad_set_cookie -max_age 0 ad_user_login_secure ""
     } else {
@@ -306,7 +308,7 @@ ad_proc -private sec_setup_session {
 
     # ns_log Notice "OACS= done generating session id cookie"
 
-    if { [ad_secure_conn_p] && $new_user_id != 0 } {
+    if { [security::secure_conn_p] && $new_user_id != 0 } {
         # this is a secure session, so the browser needs
         # a cookie marking it as such
 	sec_generate_secure_token_cookie
@@ -404,7 +406,7 @@ ad_proc -public ad_get_client_property {
     set value [lindex $property 0]
     set secure_p [lindex $property 1]
     
-    if { $secure_p != "f" && ![ad_secure_conn_p] } {
+    if { $secure_p != "f" && ![security::secure_conn_p] } {
 	return ""
     }
 
@@ -433,7 +435,7 @@ ad_proc -public ad_set_client_property {
 
 } {
 
-    if { $secure != "f" && ![ad_secure_conn_p] } {
+    if { $secure != "f" && ![security::secure_conn_p] } {
 	error "Unable to set secure property in insecure or invalid session"
     }
 
@@ -476,12 +478,6 @@ ad_proc -public ad_set_client_property {
 
     # Remember the new value, seeding the memoize cache with the proper value.
     util_memoize_seed [list sec_lookup_property $session_id $module $name] [list $value $secure]
-}
-
-ad_proc -public ad_secure_conn_p {} { 
-    Returns true if the connection [ad_conn] is secure (HTTPS), or false otherwise. 
-} {
-    return [string match "https:*" [ad_conn location]]
 }
 
 ad_proc -private sec_generate_secure_token_cookie { } { 
@@ -613,7 +609,7 @@ ad_proc -public ad_get_login_url {
         
     }
     if { $return_p } {
-        lappend export_vars { return_url [ad_return_url] }
+        lappend export_vars { return_url {[ad_return_url -qualified]} }
     }
 
     if { [llength $export_vars] > 0 } {
@@ -644,7 +640,7 @@ ad_proc -public ad_get_logout_url {
     append url "register/logout"
 
     if { $return_p } {
-        set url [export_vars -base $url { { return_url [ad_return_url] } }]
+        set url [export_vars -base $url { { return_url [ad_return_url -qualified] } }]
     }
 
     return $url
@@ -1444,4 +1440,193 @@ ad_proc -private populate_secret_tokens_db {} {
 
     db_release_unused_handles
 
+}
+
+#####
+#
+# security namespace public procs
+#
+#####
+
+ad_proc -public security::secure_conn_p {} { 
+    Returns true if the connection [ad_conn] is secure (HTTPS), or false otherwise. 
+} {
+    return [string match "https:*" [util_current_location]]
+}
+
+ad_proc -public security::RestrictLoginToSSLP {} {
+    Return 1 if login pages and other pages taking user password
+    should be restricted to a secure (HTTPS) connection and 0 otherwise.
+    Based on acs-kernel parameter with same name.
+    
+    @author Peter Marklund
+} {
+    return [parameter::get_from_package_key -boolean -parameter RestrictLoginToSSLP -package_key acs-kernel]
+}
+
+ad_proc -public security::require_secure_conn {} {
+    Redirect back to the current page in secure mode (HTTPS) if
+    we are not already in secure mode.
+
+    @author Peter Marklund
+} {
+    if { ![security::secure_conn_p] } {
+        security::redirect_to_secure [ad_return_url -qualified]
+    }
+}
+
+ad_proc -public security::redirect_to_secure {
+    url 
+} {
+    Redirect to the given URL and enter secure (HTTPS) mode.    
+
+    @author Peter Marklund
+} {
+    set secure_url [get_secure_qualified_url $url]
+
+    ad_returnredirect $secure_url
+    ad_script_abort
+}
+
+ad_proc -public security::redirect_to_insecure {
+    url 
+} {
+    Redirect to the given URL and enter insecure (HTTP) mode.    
+
+    @author Peter Marklund
+} {
+    set_insecure_url [get_insecure_qualified_url $url]
+    
+    ad_returnredirect $insecure_url
+    ad_script_abort
+}
+
+#####
+#
+# security namespace private procs
+#
+#####
+
+ad_proc -private security::get_https_port {} {
+    Return the HTTPS port specified in the AOLserver config file.
+    
+    @return The HTTPS port or the empty string if none is configured.
+
+    @author Peter Marklund
+} {
+    set ssl_port ""
+    if { [ns_config ns/server/[ns_info server]/modules nsssl] != "" } {
+        set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsssl" Port 443]
+    } elseif { [ns_config ns/server/[ns_info server]/modules nsopenssl] != "" } {
+	set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsopenssl" ServerPort 443]
+    } elseif { [ns_config ns/server/[ns_info server]/modules nsssle] != "" } {
+        set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsssle" Port 443]
+    }
+
+    return $ssl_port
+}
+
+ad_proc -private security::get_secure_qualified_url { url } {
+    Given a relative or qualified url, return the fully qualified
+    HTTPS version.
+
+    @author Peter Marklund
+} {
+    # Get part of URL after location
+    set qualified_uri [get_qualified_uri $url]
+
+    set secure_url [get_secure_location]${qualified_uri}
+
+    return $secure_url
+}
+
+ad_proc -private security::get_insecure_qualified_url { url } {
+    Given a relative or qualified url, return the fully qualified
+    HTTP version.
+
+    @author Peter Marklund
+} {
+    # Get part of URL after location
+    set qualified_uri [get_qualified_uri $url]
+
+    set insecure_url [get_insecure_location]${qualified_uri}
+
+    return $insecure_url    
+}
+
+ad_proc -private security::get_uri_part { url } {
+    Get the URI following the location of the given URL. Assumes
+    the given URL has the http or https protocol or is a relative
+    URL.
+
+    @author Peter Marklund
+} {
+    regexp {^(?:http://[^/]+)?(.*)} $url match uri
+
+    return $uri
+}
+
+ad_proc -private security::get_qualified_uri { url } {
+    
+} {
+    set uri [get_uri_part $url]
+
+    if { ![regexp {^/} $uri] } {
+        # Make relative URI qualified
+        set qualified_uri [ad_conn url]/$uri
+    } else {
+        set qualified_uri $uri
+    }
+
+    return $qualified_uri
+}
+
+ad_proc -private security::get_secure_location {} {
+    Return the current location in secure (https) mode.
+    
+    @author Peter Marklund
+} {
+    set current_location [util_current_location]
+    set https_prefix {https://}
+
+    if { [regexp $https_prefix $current_location] } {
+        # Current location is already secure - do nothing
+        set secure_location $current_location
+    } else {
+        # Current location is insecure - get location from config file
+        set secure_location [ad_conn location]
+        # Prefix with https
+        regsub {^(?:http://)?} $secure_location {https://} secure_location
+
+        # Add port number if non-standard
+        set https_port [get_https_port]
+        if { ![string equal $https_port 443] } {
+            set secure_location ${secure_location}:$https_port
+        }
+    }
+
+    return $secure_location
+}
+
+ad_proc -private security::get_insecure_location {} {
+    Return the current location in insecure mode (http).
+
+    @author Peter Marklund
+} {
+    set current_location [util_current_location]
+    set http_prefix {http://}
+
+    if { [regexp $http_prefix $current_location] } {
+        # Current location is already insecure - do nothing
+        set insecure_location $current_location
+    } else {
+        # Current location is secure - use location from config file
+        set insecure_location [ad_conn location]
+        if { ![regexp $http_prefix $insecure_location] } {
+            # Prepend http://
+            set insecure_location ${http_prefix}${insecure_location}
+        }
+    }
+
+    return $insecure_location
 }

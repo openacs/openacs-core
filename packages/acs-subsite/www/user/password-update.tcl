@@ -9,6 +9,12 @@ ad_page_contract {
     {old_password ""}
 }
 
+# Redirect to HTTPS if so configured
+if { [security::RestrictLoginToSSLP] } {
+    # TODO: Lars - this needs to change
+    #security::require_secure_conn
+}
+
 if { $user_id == 0 } {
     ad_redirect_for_registration
 }

@@ -9,6 +9,11 @@
 #   email
 #
 
+# Redirect to HTTPS if so configured
+if { [security::RestrictLoginToSSLP] } {
+    security::require_secure_conn
+}
+
 if { ![exists_and_not_null package_id] } {
     set subsite_id [subsite::get_element -element object_id]
 }
