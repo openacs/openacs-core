@@ -2565,22 +2565,29 @@ ad_proc -public ad_cache_returnredirect { url { persistent "f" } { excluded_vars
 
 ad_proc -public ad_returnredirect {
     {-message {}}
-    {-abort:boolean}
     target_url
 } {
-  A replacement for ns_returnredirect.  It uses ns_returnredirect but is better in
-  two important aspects:
-  <ul>
-     <li>When the supplied target_url isn't complete, (e.g. /foo/bar.tcl or foo.tcl)
-         the prepended location part is constructed by looking at the HTTP 1.1 Host header.
-     <li>If an URL relative to the current directory is supplied (e.g. foo.tcl)
-         it prepends location and directory.
-  </ul>
+    Write the HTTP response required to get the browser to redirect to a different page, 
+    to the current connection. This does not cause execution of the current page, including serving 
+    an ADP file, to stop. If you want to stop execution of the page, you should call ad_script_abort
+    immediately following this call.
 
-    @param message A message to display to the user.
+    <p>
+
+    This proc is a replacement for ns_returnredirect, but improved in two important respects:
+    <ul>
+      <li>
+        When the supplied target_url isn't complete, (e.g. /foo/bar.tcl or foo.tcl)
+        the prepended location part is constructed by looking at the HTTP 1.1 Host header.
+      </li>
+      <li>
+        If an URL relative to the current directory is supplied (e.g. foo.tcl)
+        it prepends location and directory.
+      </li>
+    </ul>
+
+    @param message A message to display to the user. See util_user_message.
     
-    @param abort If set, we will call ad_script_abort after sending the redirect.
-
     @see util_user_message
     @see ad_script_abort
 } {
@@ -2614,10 +2621,6 @@ ad_proc -public ad_returnredirect {
     }
     
     util_user_message -message $message
-
-    if { $abort_p } {
-        ad_script_abort
-    }
 }
 
 ad_proc -public util_user_message { 
