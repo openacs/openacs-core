@@ -12,6 +12,6 @@ ad_page_contract {
 set page_title "Import of messages for locale $locale"
 set context [list $page_title]
 
-lang::catalog::import_from_files_for_locale $locale
+lang::catalog::import -locales [list $locale]
 
 set locale_page_url [export_vars -base package-list { locale }]

@@ -24,11 +24,4 @@ set context [list \
                  [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] \
                  [list $return_url "Internationalization"] $page_title]
 
-set catalog_dir [lang::catalog::package_catalog_dir $package_key]
-
-if { [string equal $format "xml"] } {
-    lang::catalog::import_from_files $package_key
-} else {
-    lang::catalog::import_from_tcl_files $package_key
-}
-
+lang::catalog::import -package_key $package_key

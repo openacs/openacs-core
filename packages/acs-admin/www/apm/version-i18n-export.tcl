@@ -24,4 +24,4 @@ set context [list \
 
 set catalog_dir [lang::catalog::package_catalog_dir $package_key]
 
-lang::catalog::export_package_to_files [apm_package_key_from_version_id $version_id]
+lang::catalog::export -package_key [apm_package_key_from_version_id $version_id]

@@ -142,6 +142,32 @@ ad_proc -public lang::message::register {
     }
 }
 
+ad_proc -public lang::message::unregister { 
+    package_key
+    message_key
+} {
+    Unregisters a message key, i.e. deletes it along with all its messages
+    from the database and deleted entries in the cache.
+
+    @author Peter Marklund
+} {
+    # Deletes messages as well
+    db_dml delete_key {
+        delete from lang_message_keys
+        where message_key = :message_key
+          and package_key = :package_key
+    }
+
+    # Delete from the cache for all enabled locales
+    foreach locale [lang::system::get_locales] {
+        set nsv_array lang_message_$locale
+        set nsv_key "${package_key}.${message_key}"
+        if { [nsv_exists $nsv_array $nsv_key] } {
+            nsv_unset $nsv_array $nsv_key
+        }
+    }
+}
+
 ad_proc -private lang::message::get_missing_embedded_vars {
     existing_message
     new_message
@@ -267,9 +293,7 @@ ad_proc -public lang::message::message_exists_p { locale key } {
 
     @author Peter Marklund
 } {
-    # Make sure the catalog files have been loaded
-    # lang::catalog::import_from_all_files_and_cache
-    # LARS: Replaced with below:
+    # Make sure messages are in the cache
     cache
 
     return [nsv_exists lang_message_$locale $key]        
@@ -341,9 +365,7 @@ ad_proc -public lang::message::lookup {
     
     @return A localized piece of text.
 } { 
-    # Make sure the catalog files have been loaded
-    # lang::catalog::import_from_all_files_and_cache
-    # LARS: Replaced with below:
+    # Make sure messages are in the cache
     cache
 
     if { [empty_string_p $locale] } {

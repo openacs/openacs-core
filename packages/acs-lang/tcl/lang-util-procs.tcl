@@ -305,7 +305,7 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
         }
 
         # Generate a new catalog file
-        lang::catalog::export_package_to_files -locales [list $locale] $package_key
+        lang::catalog::export -locales [list $locale] -package_key $package_key
     }
 
     return $number_of_replacements
