@@ -46,8 +46,44 @@
         </tgroup>
     </table>
   </sect2>
+
+  <sect2 id="upgrade-postgres">
+    <title>Upgrading from PostGreSQL 7.2 to 7.3</title>
+    <para>An OpenACS database created in PostGreSQL 7.2 will not work correctly in PostGreSQL 7.3.  This is because 7.2 truncates function names to 31 characters, but 7.3 does not.  This does not cause problems in 7.2, because truncation occurs both at function creation and at function calling, so they still match.  But if you use a database created in 7.2 in 7.3, the function names in the database remain truncated but the function calls are not, and so they don't match.  Also some functions use casting commands that no longer work in 7.3 and these functions must be recreated.</para>
+    <para>
+To upgrade an OpenACS site from PostGreSQL 7.2 to 7.3, first upgrade the kernel to 4.6.3.  Then, dump the database, run the upgrade script <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/bin/pg_7.2to7.3_upgrade_helper.pl</computeroutput> on the dump file, and reply the dump.  See <ulink url="http://openacs.org/forums/message-view?message_id=109337">Forum OpenACS Q&amp;A: PG 7.2->7.3 upgrade gotcha?</ulink>.  Example:</para>
+    <orderedlist>
+      <listitem>
+        <para>Back up the database as per <xref linkend="postgres-snapshot-backup"/>.</para>
+      </listitem>
+      <listitem>
+        <para>Run the upgrade script on the backup file.</para>
+    <screen>[root@yourserver root]# <userinput>su - service0</userinput>
+[service0@yourserver service0]# <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable>/bin</userinput>
+[service0@yourserver bin]$ <userinput>./pg_7.2to7.3_upgrade_helper.pl \
+                           ../database-backup/nightly.dmp \
+                           ../database-backup/upgrade-7.3.dmp \
+                           /var/lib/aolserver/service0</userinput>
+==================================================================
+looking for function acs_object__check_object_ancest in oacs
+grep result: /var/lib/aolserver/aufrecht-dev/packages/acs-kernel/sql/postgresql/acs-objects-create.sql:create function acs_object__check_object_ancestors (integer,integer,integer)
+
+replacing acs_object__check_object_ancest with acs_object__check_object_ancestors
+
+<emphasis>(many lines omitted)</emphasis>
+[service0@yourserver bin]$
+</screen>
+      </listitem>
+      <listitem>
+        <para>Use perl to replace timestamp with timestamptz.</para>
+<programlisting>find . -type f -name "*sql" | xargs perl -p -i.tmp -e "s/timestamp with time zone/timestamptz/g"
+find . -type f -name "*sql" | xargs perl -p -i.tmp -e "s/\\wtimestamp[^t]/ timestamptz/g"</programlisting>
+        <para>Restore the database from dump as per the recovery instructions.</para>
+      </listitem>
+    </orderedlist>
+  </sect2>
   <sect2 id="upgrade-4.6.3-to-5">
-    <title>Upgrading 4.6.3 to 5.0</title>
+    <title>Upgrading OpenACS 4.6.3 to 5.0</title>
     <para>Current working notes in <ulink url="http://openacs.org/forums/message-view?message_id=143497">Forum OpenACS Development: 4.6.3 upgrade to 5-HEAD: final results</ulink>.</para>
   </sect2>
 
