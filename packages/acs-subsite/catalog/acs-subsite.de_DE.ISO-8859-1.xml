@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d3" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.0d4" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="About_You">Benutzerinformation</msg>
+  <msg key="Account_closed">&lt;p&gt;Ihr Benutzerkonto ist derzeit deaktiviert.&lt;/p&gt; &lt;p&gt;Falls gewünscht, können Sie es &lt;a href=&quot;%restore_url%&quot;&gt;wieder aktivieren lassen&lt;/a&gt;.&lt;/p&gt;</msg>
   <msg key="again">erneut</msg>
   <msg key="Answer">Antwort:</msg>
   <msg key="answer">Antwort:</msg>
@@ -19,6 +20,7 @@
   <msg key="Customize_Question">Frage ändern</msg>
   <msg key="Direct_Permissions">Explizite Berechtigungen</msg>
   <msg key="edit_your_alerts">Benachrichtigungsoptionen bearbeiten</msg>
+  <msg key="Email">E-Mail-Adresse</msg>
   <msg key="email_address">E-Mail-Adresse:</msg>
   <msg key="Email_Confirmation">E-Mail-Adresse bestätigen:</msg>
   <msg key="Email_not_Requested">E-Mail nicht angefordert</msg>
@@ -26,12 +28,14 @@
   <msg key="email_password">&quot;Passwort per E-Mail zusenden&quot;</msg>
   <msg key="Error_sending_mail">Fehler beim Versenden der Mail</msg>
   <msg key="Feature_disabled">Funktion deaktiviert</msg>
+  <msg key="First_names">Vorname(n)</msg>
   <msg key="Full_Name">Vollständiger Name:</msg>
   <msg key="Grant">Erteilen</msg>
   <msg key="Grant_Permission">Berechtigungen erteilen</msg>
   <msg key="help">Hilfe</msg>
   <msg key="in">in</msg>
   <msg key="Join_group_name">%group_name% hinzufügen</msg>
+  <msg key="Last_name">Nachname</msg>
   <msg key="Log_In">Anmelden</msg>
   <msg key="Log_Out">Abmelden</msg>
   <msg key="Login">Anmelden</msg>
@@ -150,6 +154,7 @@ Gruppensoftware, dass Benutzer mit gleichen Interessen miteinander in Kontakt tr
   <msg key="on">für</msg>
   <msg key="or">oder</msg>
   <msg key="Password">Passwort:</msg>
+  <msg key="Password_changed_subject">Passwort geändert</msg>
   <msg key="Permissions">Berechtigungen</msg>
   <msg key="Permissions_for_name">Zugriffsberechtigungen für %name%</msg>
   <msg key="personal_URL">persönliche Homepage</msg>
@@ -178,6 +183,5 @@ Gruppensoftware, dass Benutzer mit gleichen Interessen miteinander in Kontakt tr
   <msg key="Welcome_Back_1">Ihr Benutzerkonto befindet sich gegenwärtig im Status 'gelöscht'. Falls gewünscht, kann </msg>
   <msg key="Your_email">Ihre E-Mail-Adresse:</msg>
   <msg key="Your_email_address">Ihre E-Mail-Adresse:</msg>
-  <msg key="Your_password">Ihr Passwort:</msg>
   <msg key="Your_Portrait">Ihr Bild:</msg>
 </message_catalog>

@@ -1,13 +1,18 @@
 <?xml version="1.0"?>
-<message_catalog package_key="acs-lang" package_version="5.0d1" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="acs-lang" package_version="5.0d3" locale="nl_NL" charset="ISO-8859-1">
 
+  <msg key="Auto_Key">Auto Key</msg>
   <msg key="English">Engels</msg>
   <msg key="French">Frans</msg>
   <msg key="German">Duits</msg>
+  <msg key="key_1">tekst_1</msg>
+  <msg key="key_1_1">tekst_1_anders</msg>
+  <msg key="key_2">tekst_2</msg>
+  <msg key="key_3">tekst_3</msg>
   <msg key="localization-abday">{Zon} {Maan} {Dins} {Woens} {Donder} {Vrij} {Zater}</msg>
   <msg key="localization-abmon">{Jan} {Feb} {Mrt} {Apr} {Mei} {Jun} {Jul} {Aug} {Sep} {Okt} {Nov} {Dec}</msg>
-  <msg key="localization-am_str"></msg>
-  <msg key="localization-currency_symbol">€</msg>
+  <msg key="localization-am_str">Voormiddag</msg>
+  <msg key="localization-currency_symbol">?</msg>
   <msg key="localization-d_fmt">%d.%m.%Y</msg>
   <msg key="localization-d_t_fmt">%a %d %B %Y %H:%M %Z</msg>
   <msg key="localization-day">{Zondag} {Maandag} {Dinsdag} {Woensdag} {Donderdag} {Vrijdag} {Zaterdag}</msg>
@@ -31,10 +36,10 @@
   <msg key="localization-p_cs_precedes">1</msg>
   <msg key="localization-p_sep_by_space">0</msg>
   <msg key="localization-p_sign_posn">1</msg>
-  <msg key="localization-pm_str"></msg>
-  <msg key="localization-positive_sign"></msg>
+  <msg key="localization-pm_str">Namiddag</msg>
+  <msg key="localization-positive_sign">+</msg>
   <msg key="localization-t_fmt">%H:%M</msg>
-  <msg key="localization-t_fmt_ampm"></msg>
+  <msg key="localization-t_fmt_ampm">%I:%M:%S %p</msg>
   <msg key="localization-thousands_sep">.</msg>
   <msg key="Spanish">Spaans</msg>
 </message_catalog>

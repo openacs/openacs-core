@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<message_catalog package_key="acs-tcl" package_version="4.7.2d" locale="gl_ES" charset="utf-8">
+
+  <msg key="approve">aprobar</msg>
+  <msg key="approve_email">aprobar correo-e</msg>
+  <msg key="ban">banir</msg>
+  <msg key="delete">eliminar</msg>
+  <msg key="lt_require_email_verific">requerir verificación por correo-e</msg>
+  <msg key="reject">rexeitar</msg>
+  <msg key="undelete">recuperar</msg>
+</message_catalog>

@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d3" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.0d4" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="About_You">Mi información</msg>
+  <msg key="Account_closed">&lt;p&gt;Su cuenta se encuentra cerrada por el momento.&lt;/p&gt;&lt;p&gt;Si usted lo desea, podemos &lt;a href=&quot;%restore_url%&quot;&gt;re-abrir su cuenta&lt;/a&gt;.&lt;/p&gt;</msg>
   <msg key="again">de nuevo</msg>
   <msg key="Answer">Respuesta:</msg>
   <msg key="answer">respuesta:</msg>
@@ -10,6 +11,7 @@
   <msg key="Bad_Password">Contraseña errónea</msg>
   <msg key="Basic_Information">Información básica</msg>
   <msg key="bio">biografía:</msg>
+  <msg key="cannot_retrieve_password">No se soporta la obtención de contraseñas de una autoridad local.</msg>
   <msg key="Change_my_Password">Cambiar mi contraseña</msg>
   <msg key="Check_Your_Inbox">Revisar correo entrante</msg>
   <msg key="Children">Hijos</msg>
@@ -19,6 +21,7 @@
   <msg key="Customize_Question">Personalizar pregunta</msg>
   <msg key="Direct_Permissions">Permisos directos</msg>
   <msg key="edit_your_alerts">Editar avisos</msg>
+  <msg key="Email">correo electrónico</msg>
   <msg key="email_address">correo electrónico:</msg>
   <msg key="Email_Confirmation">Confirmación de correo</msg>
   <msg key="Email_not_Requested">Correo electrónico no solicitado</msg>
@@ -26,12 +29,15 @@
   <msg key="email_password">&quot;enviar contraseña por email&quot;</msg>
   <msg key="Error_sending_mail">Error al enviar el correo</msg>
   <msg key="Feature_disabled">Opción desactivada</msg>
+  <msg key="First_names">Nombres</msg>
+  <msg key="Forgotten_password_body">Esta es su nueva información de ingreso: %account_id_label%: %account_id% %password_label%: %password% Por favor visite el siguiente enlace para cambiar su contraseña: %reset_password_url%</msg>
   <msg key="Full_Name">Nombre completo:</msg>
   <msg key="Grant">Otorgar</msg>
   <msg key="Grant_Permission">Autorizar</msg>
   <msg key="help">ayuda</msg>
   <msg key="in">en</msg>
   <msg key="Join_group_name">Unirse a %group_name%</msg>
+  <msg key="Last_name">Apellido</msg>
   <msg key="Log_In">Ingresar</msg>
   <msg key="Log_Out">Salir</msg>
   <msg key="Login">Ingresar</msg>
@@ -145,17 +151,22 @@
   <msg key="on">sobre</msg>
   <msg key="or">o bien</msg>
   <msg key="Password">Contraseña:</msg>
+  <msg key="Password_changed_body">Su información de ingreso en %system_name%: %account_id_label%: %account_id% Su contraseña para esta cuenta ha sido modificiada recientemente. Usted no necesita hacer nada, ésta es simplemente una notificación para proteger la seguridad de su cuenta. --------------- Usted puede cambiar su contraseña realizando los siguientes pasos: 1. Ingrese a %system_name% 2. Haga click en el link &quot;%pvt_home_name%&quot; 3. Escoja &quot;%password_update_link_text%&quot;</msg>
+  <msg key="Password_changed_subject">Contraseña modificada</msg>
   <msg key="Permissions">Permisos</msg>
   <msg key="Permissions_for_name">Permisos para %name%</msg>
   <msg key="personal_URL">Página web personal:</msg>
   <msg key="Question">Pregunta:</msg>
   <msg key="question">pregunta:</msg>
+  <msg key="Recover_Password">Recuperar Contraseña</msg>
   <msg key="Register">Registro</msg>
   <msg key="Revoke_Checked">Revocar</msg>
+  <msg key="Screen_name">Alias</msg>
   <msg key="screen_name">Nick:</msg>
   <msg key="Security">Seguridad</msg>
   <msg key="Show">Mostrar</msg>
   <msg key="Sorry">Lo sentimos</msg>
+  <msg key="sorry_forgotten_pwd">Lo sentimos, no podemos ayudarlo con su contraseña olvidada.</msg>
   <msg key="Subject">Asunto:</msg>
   <msg key="Thank_you">Gracias.</msg>
   <msg key="to">a</msg>
@@ -169,6 +180,7 @@
   <msg key="Update_Password">Actualizar contraseña</msg>
   <msg key="upload_a_portrait">subir una foto</msg>
   <msg key="User_Creation_Failed">Alta de usuario fallida</msg>
+  <msg key="Username">Nombre de usuario</msg>
   <msg key="Welcome_Back">Bienvenido de nuevo</msg>
   <msg key="Welcome_Back_1">Su cuenta está marcada como &quot;borrada&quot;. Si lo desea, puede</msg>
   <msg key="Your_email">Su correo:</msg>

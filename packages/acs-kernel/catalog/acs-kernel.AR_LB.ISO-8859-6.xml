@@ -1,6 +1,28 @@
 <?xml version="?.?"?>
 <message_catalog package_key="acs-kernel" package_version="?.?d?" locale="AR_LB" charset="ISO-????-?">
 
+  <msg key="authentication_authority">ÇהÓה×É</msg>
+  <msg key="common_apply">×Èסג</msg>
+  <msg key="common_cancel">ÃהÚך</msg>
+  <msg key="common_close">ÃÚהג</msg>
+  <msg key="common_continue">ÊÇÈÙ</msg>
+  <msg key="common_default">ÇÓÊÙוה ÇהÃÕה</msg>
+  <msg key="common_delete">ÃÍÐב</msg>
+  <msg key="common_discard">המגכי</msg>
+  <msg key="common_edit">ÍÑÑ</msg>
+  <msg key="common_finish">Ãזחך</msg>
+  <msg key="common_help">וÓÇÙÏÉ</msg>
+  <msg key="common_login">ÏÎטה</msg>
+  <msg key="common_next">ÇהÊÇהך</msg>
+  <msg key="common_no">הÇ</msg>
+  <msg key="common_previous">ÇהÓÇÈג</msg>
+  <msg key="common_register">ÓÌהע</msg>
+  <msg key="common_reset">ÃÙÇÏ ÖÈ×</msg>
+  <msg key="common_save">ÇÍבØע</msg>
+  <msg key="common_stop">Ãטגבע</msg>
+  <msg key="common_update">ÌÏנÏע</msg>
+  <msg key="common_view">ÔÇחÏ</msg>
+  <msg key="common_yes">זÙו</msg>
   <msg key="member_role_pretty_name">ÙÖטנ</msg>
   <msg key="member_role_pretty_plural">ÃÙÖÇÁ</msg>
 </message_catalog>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<message_catalog package_key="acs-lang" package_version="5.0d3" locale="hu_HU" charset="ISO-8859-2">
+
+  <msg key="localization-decimal_point">,</msg>
+  <msg key="localization-thousands_sep">.</msg>
+</message_catalog>

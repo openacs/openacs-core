@@ -1,8 +1,45 @@
 <?xml version="?.?"?>
 <message_catalog package_key="acs-lang" package_version="?.?d?" locale="AR_LB" charset="ISO-????-?">
 
+  <msg key="Auto_Key">«деб «Ќ «д¬дк</msg>
   <msg key="English">≈жћдк“кс</msg>
   <msg key="French">бо—ожт”ркс</msg>
   <msg key="German">√одте«жркс</msg>
+  <msg key="key_?">ж’с ?</msg>
+  <msg key="key_?_?">ж’с ? _ еќ дб</msg>
+  <msg key="key_?">ж’с ?</msg>
+  <msg key="key_?">ж’с ?</msg>
+  <msg key="localization-abday">{√Ќ} {≈Ћ} {Ћд} {√—} {ќе} {ће} {”»}</msg>
+  <msg key="localization-abmon">{г?} {‘»«} {¬–«} {жк”} {√к«} {Ќ“к} { еи} {¬»} {√кд} { ?} { ?} {г?}</msg>
+  <msg key="localization-am_str">’</msg>
+  <msg key="localization-currency_symbol">д.д.</msg>
+  <msg key="localization-d_fmt">%d/%m/%y </msg>
+  <msg key="localization-d_t_fmt">%a %d %B %Y %H:%M %Z</msg>
+  <msg key="localization-day">{√Ќѕ} {≈Ћжкж} {«дЋд«Ћ«Ѕ} {«д√—»ў«Ѕ} {«дќек”} {«дћеў…} {«д”» } </msg>
+  <msg key="localization-decimal_point">,</msg>
+  <msg key="localization-dlong_fmt">%d %B %Y </msg>
+  <msg key="localization-dlongweekday_fmt">%A %d %B %Y </msg>
+  <msg key="localization-firstdayofweek">?</msg>
+  <msg key="localization-formbuilder_time_format">HH??:MI AM </msg>
+  <msg key="localization-frac_digits">?</msg>
+  <msg key="localization-grouping">? ?</msg>
+  <msg key="localization-int_curr_symbol">д.д.</msg>
+  <msg key="localization-int_frac_digits">?</msg>
+  <msg key="localization-mon">{г«жиж «дЋ«жк} {‘»«„} {¬–«—} {жк”«ж} {√к«—} {Ќ“к—«ж} { еи“} {¬»} {√кдид} { ‘—кж «д«ид} { ‘—кж «дЋ«жк} {г«жиж «д«ид} </msg>
+  <msg key="localization-mon_decimal_point">.</msg>
+  <msg key="localization-mon_grouping">? ?</msg>
+  <msg key="localization-mon_thousands_sep">ђ</msg>
+  <msg key="localization-n_cs_precedes">?</msg>
+  <msg key="localization-n_sep_by_space">?</msg>
+  <msg key="localization-n_sign_posn">?</msg>
+  <msg key="localization-negative_sign">-</msg>
+  <msg key="localization-p_cs_precedes">?</msg>
+  <msg key="localization-p_sep_by_space">?</msg>
+  <msg key="localization-p_sign_posn">?</msg>
+  <msg key="localization-pm_str">е</msg>
+  <msg key="localization-positive_sign"></msg>
+  <msg key="localization-t_fmt">%r</msg>
+  <msg key="localization-t_fmt_ampm">%I:%M:%S %p</msg>
+  <msg key="localization-thousands_sep">,</msg>
   <msg key="Spanish">≈р”т»«жркс</msg>
 </message_catalog>

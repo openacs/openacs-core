@@ -1,10 +1,134 @@
 <?xml version="1.0"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d3" locale="ast_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.0d4" locale="ast_ES" charset="ISO-8859-1">
 
-  <msg key="Check_Your_Inbox">Mira'l Buzón</msg>
+  <msg key="About_You">Sobre ti</msg>
+  <msg key="Account_closed">&lt;p&gt;La to cuenta actualmente ta zarrada.&lt;/p&gt;  &lt;p&gt;Si quies, podemos &lt;a href=&quot;%restore_url%&quot;&gt;volver a abrila&lt;/a&gt;.&lt;/p&gt;</msg>
+  <msg key="again">otra vuelta</msg>
+  <msg key="Answer">Rempuesta</msg>
+  <msg key="answer">rempuesta:</msg>
+  <msg key="at">en</msg>
+  <msg key="Awaiting_Approval">Pendiente d'aprovar</msg>
+  <msg key="Bad_Password">Clave equivocada</msg>
+  <msg key="Basic_Information">Información Básica</msg>
+  <msg key="bio">biografía:</msg>
+  <msg key="cannot_retrieve_password">Nun se puede recuperar clave dende autoridá local</msg>
+  <msg key="Change_my_Password">Cambiar la mio Clave</msg>
+  <msg key="Check_Your_Inbox">Mira'l Buzón de Correo</msg>
   <msg key="Children">Neños</msg>
   <msg key="Confirm">Confirmar</msg>
+  <msg key="Current_Password">Clave Actual</msg>
+  <msg key="Current_users">Usuarios actuales:</msg>
+  <msg key="Customize_Question">Personalizar la Pregunta</msg>
+  <msg key="Direct_Permissions">Permisos Directos</msg>
   <msg key="edit_your_alerts">edita los tos avisos</msg>
+  <msg key="Email">Corréu Lletrónicu</msg>
   <msg key="email_address">Señes lletróniques:</msg>
-  <msg key="Email_Confirmation">Correo de Confirmación</msg>
+  <msg key="Email_Confirmation">Confirmación de Corréu</msg>
+  <msg key="Email_not_Requested">Corréu non solicitáu</msg>
+  <msg key="Email_Password">Mandar Clave per Corréu Lletrónicu</msg>
+  <msg key="email_password">&quot;Mandar Clave per Corréu Lletrónicu&quot;</msg>
+  <msg key="Error_sending_mail">Error al mandar corréu</msg>
+  <msg key="Feature_disabled">Opción desactivada</msg>
+  <msg key="First_names">Nome</msg>
+  <msg key="Forgotten_password_body">Esta ye la to nueva información d'entrada: &quot;%account_id_label%: %account_id% %password_label%: %password%&quot; Por favor, visita'l siguiente enllaz pa cambiar la to clave: &quot;%reset_password_url%&quot;</msg>
+  <msg key="Full_Name">Nome Completu:</msg>
+  <msg key="Grant">Dar</msg>
+  <msg key="Grant_Permission">Dar Permisu</msg>
+  <msg key="help">Ayuda</msg>
+  <msg key="in">en</msg>
+  <msg key="Join_group_name">Axuntase a &quot;%group_name%&quot;</msg>
+  <msg key="Last_name">Apellíu</msg>
+  <msg key="Log_In">Entrada</msg>
+  <msg key="Log_Out">Salida</msg>
+  <msg key="Login">Entrar</msg>
+  <msg key="login">entrada</msg>
+  <msg key="Login_Expired">Conexón finada</msg>
+  <msg key="Login_Expired_1">La conexón al web finó. Por favor</msg>
+  <msg key="lt_Awaiting_email_verifi">Esperando confirmación de corréu</msg>
+  <msg key="lt_Cannot_join_this_grou">Nun te puedes axuntar a esti grupu</msg>
+  <msg key="lt_Couldnt_find_user_use">Nun s'alcontró usuariu &quot;%user_id%&quot;</msg>
+  <msg key="lt_Couldnt_find_user_use_1">Nun s'alcontró usuariu &quot;%user_id%&quot;. Sicasí ye un error del nuestru códigu.</msg>
+  <msg key="lt_Couldnt_find_your_rec">Nun s'alcontró'l to rexistru </msg>
+  <msg key="lt_Couldnt_find_your_rec_1">Nun s'alcontró'l rexistru &quot;La Id. d'Usuariu %user_id%&quot; nun ta na nuestra base de datos. Sicasí ye un error del nuestru programa.</msg>
+  <msg key="lt_Customized_question_a">Pregunta personalizada yá esistente</msg>
+  <msg key="lt_Customized_question_i">La pregunta personalizada yá foi introducida</msg>
+  <msg key="lt_Customized_QuestionAn">Personalizar Pregunta/Rempuesta introducida</msg>
+  <msg key="lt_enable_cookies">Nel Netscape 4.0, puedes activar cookies dende Editar -&amp;gt; Preferencies -&amp;gt; Avanzáu. Nel Micro$oft Internet Explorer 4.0, puedes activar cookies dende Ver -&amp;gt; Opciones d'Internet -&amp;gt; Avanzáu -&amp;gt; Seguridá.</msg>
+  <msg key="lt_Error_creating_the_re">Error al crear la relación</msg>
+  <msg key="lt_first_names_last_name">&quot;%first_names% %last_name% (%email%)&quot; rexistráu como usuariu de(d') &quot;%system_url%&quot;</msg>
+  <msg key="lt_for_a_period_of_vacat">por un tiempu de vacaciones o permanente</msg>
+  <msg key="lt_for_first_names_last_">pa(p') &quot;%first_names% %last_name%&quot; en &quot;%site_link%&quot;</msg>
+  <msg key="lt_for_future_reference_">pal futuru, por favor introduza una pregunta y una rempuesta pa usar como comprobante.</msg>
+  <msg key="lt_For_security_reasons_">For temes de seguridá, la conexón al web fina depués d'un tiempu pa evitar ataques malintencionaos puedan conectar usando les sos claves.</msg>
+  <msg key="lt_Forgotten_Password__E">Escaecisti la Clave/Introducir les tos Señes Lletróniques</msg>
+  <msg key="lt_Grant_Permission_on_n">Dar Permisu en &quot;%name%&quot;</msg>
+  <msg key="lt_Have_you_a_hrefemail-">&lt;a href=&quot;email-for-password&quot;&gt;¿Escaecisti la to clave?&lt;/a&gt;</msg>
+  <msg key="lt_If_you_have_a_Web_sit">Si tienes un Web, podemos facer búsquedes dende ellí.</msg>
+  <msg key="lt_If_you_want_to_check_">Pa comprobar lo qu'otros usuarios pueden ver, visita &quot;%member_link%&quot;</msg>
+  <msg key="lt_If_youre_getting_too_">Si tas recibiendo munchos correos nuestros</msg>
+  <msg key="lt_If_youve_forgotten_yo">Si escaecisti la to clave, puedes &lt;a href=&quot;%email_password_url%&quot;&gt;mandar al servidor que elimine la to clave y te mande per corréu lletrónicu una nueva xenerada aldevalu&lt;/a&gt;.</msg>
+  <msg key="lt_In_general_we_identif">En xeneral identificamos los conteníos qu'asoleyasti col to nome completu. Ye la manera de protexete de corréu basoria (spam), les tos señes lletróniques tan ocultes menos pal restu d'usuarios rexistraos. La Privacidá total ye técnicamente posible pero un pegoyu importante d'una comunidá online ye que les persones puedan deprender unes d'otres. Ye por ello qu'intentamos que sea posible qu'usuarios con intereses comunes puedan contactar ente ellos.</msg>
+  <msg key="lt_Inherited_Permissions">Permisos heredaos</msg>
+  <msg key="lt_It_would_be_a_very_ba">Nun ye una bona idega escoyer esta opción si tas usando una computadora compartida nuna biblioteca o escuela. El prósimu usuariu d'esta máquina podría usar el nuestru serviciu faciendose pasarpor ti.</msg>
+  <msg key="lt_Leading_or_trailing_s">Los espacios en blanco van ser eliminaos pol servidor. Nun te mates escoyiendo la clave; si la escaeces, el servidor puede mandátela per corréu lletrónicu</msg>
+  <msg key="lt_New_registration_at_s">Rexistru nuevu en &quot;%system_url%&quot;</msg>
+  <msg key="lt_no_cookies">Si te manden pa equí de seguío, casi que'l to restolador nun acepta cookies. Pidímoste disculpes pol inconveniente pero ye abondo difícil programar un sistema asemeyáu a esti ensin rexistrar quién asoleya qué.</msg>
+  <msg key="lt_Note_If_youve_forgott">Avisu: Si escaeces la to clave, &lt;a href=&quot;@email_password_url@&quot;&gt;pidi al servidor que te la mande a @email@</msg>
+  <msg key="lt_Note_If_youve_forgott_1">Avisu: Si escaeces la clave, &lt;a href=&quot;email-password?user_id=%user_id%&quot;&gt;pidi al servidor que te la mande a @email@</msg>
+  <msg key="lt_Note_that_you_can_era">Repara en que puedes eliminar les tos señes lletróniques y clave guardaos nel to ordenador escoyendo &quot;Salir&quot; nel to espaciu web de trabayu.</msg>
+  <msg key="lt_Now_were_really_in_tr">Agora tamos en problemes porque obtenemos esti error:</msg>
+  <msg key="lt_num_children_Children">&quot;%num_children%&quot; Fíos ocultos</msg>
+  <msg key="lt_On_portrait_publish_d">El %portrait_publish_date%, xubisti &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;&quot;%portrait_title%&quot;&lt;/a&gt;</msg>
+  <msg key="lt_Our_server_can_tell_y">El nuestru servidor puede dicí-y al to restolador que recuerde delles coses, ye'l casu de les tos señes lletróniques y la to clave. Esto ta bien porque si yes la única persona que fae usu del to computador, nun tienes que repetinos les tos señes nin la to clave.</msg>
+  <msg key="lt_Password_Confirmation">Confirma la to Clave</msg>
+  <msg key="lt_Personal_Home_Page_UR">URL del to Web:</msg>
+  <msg key="lt_Please_check_your_inb">Por favor, comprueba'l to Buzón d'Entrada. D'equí a dos minutos, deberíes tener un mensaxe de(d') &quot;%system_owner%&quot; cola to Clave.</msg>
+  <msg key="lt_Please_enter_your_ema">Por favor pon les tos Señes Lletróniques y la to Clave de siguío.</msg>
+  <msg key="lt_Please_follow_the_fol">Por favor sigui l'enllaz pa reescribir la to Clave: &quot;%reset_password_url%&quot;</msg>
+  <msg key="lt_Please_read_and_follo">Por favor llee y sigui les instrucciones del corréu.</msg>
+  <msg key="lt_Please_read_your_emai">Por favor, llee'l to corréu</msg>
+  <msg key="lt_Please_try_to_a_hrefi">Por favor intenta &lt;a href=&quot;index&quot;&gt;conectar&lt;/a&gt; otra vuelta</msg>
+  <msg key="lt_Please_verify_your_id">Por favor, comprueba la to identidá confirmando la información d'abaxo:</msg>
+  <msg key="lt_Please_Wait_for_our_E">Por favor, espera'l nuestru corréu</msg>
+  <msg key="lt_Problem_with_authenti">Problemes cola autentificación</msg>
+  <msg key="lt_Problem_with_user_aut">Problemes cola autentificación d'usuariu</msg>
+  <msg key="lt_Register_as_a_user_of">Rexistráu como usuariu de</msg>
+  <msg key="lt_Registration_informat">La información del rexistru pa esti serviciu ta acabante de mandase a &quot;%email%&quot;.</msg>
+  <msg key="lt_Registration_informat_1">La información del rexistru pa esti serviciu mandóse a &quot;%email%&quot;.</msg>
+  <msg key="lt_registration_request_submitted">La to pitición de rexistru mandóse al alministrador de(d') &quot;%system_name%&quot;. Inda tas pendiende d'aprovación.</msg>
+  <msg key="lt_Remember_this_address">¿Recordar eses señes y esta clave?</msg>
+  <msg key="lt_Row_id_row_id_is_not_">La filera col Id. &quot;%row_id%&quot; nun s'alcuentra na nuesta base de datos. Por favor, comprueba'l to corréu y confirma que curtasti y pegasti la url correctamente.</msg>
+  <msg key="lt_Saving_email_address_">Guardando Señes lletróniques y Clave</msg>
+  <msg key="lt_Show_everyone_else_at">Enseñar a tol mundiu &quot;%system_name%&quot; lo prestosu que yes:</msg>
+  <msg key="lt_Sorry_but_it_seems_th">Sentímoslo pero fuisti espulsáu de(d') &quot;%system_name%&quot;. </msg>
+  <msg key="lt_Thank_you_for_visitin">Gracies por visitar &quot;%system_name%&quot;. Pa conectate a &quot;%system_url%&quot;: Nome d'Usuariu: &quot;%email%&quot; Clave: &quot;%password%&quot;</msg>
+  <msg key="lt_The_full_name_given_d">El nome completu nun ye correctu. Tien qu'haber dalgún error.</msg>
+  <msg key="lt_The_password_you_type">La Clave que punxisti nun coincidi cola qu'hai na base de datos. Si te paez que t'equivocasti, vuelve atrás col botón del to restolador, y inténtalo otra vuelta.</msg>
+  <msg key="lt_The_passwords_youve_e">Les Claves nun coinciden.</msg>
+  <msg key="lt_The_validation_didnt_">La validación nun coincide. Calca nel botón de volver y reescríbela, o &lt;a href=&quot;/register&quot;&gt;volver a la páxina d'entrada&lt;/a&gt;.</msg>
+  <msg key="lt_Then_come_back_to_a_h">Depués torna a &lt;a href=&quot;index?email=%email%&quot;&gt;páxina d'entrada&lt;/a&gt; y fae usu de(d') &quot;%system_name%&quot;.</msg>
+  <msg key="lt_Then_you_should_eithe">Depués deberíes</msg>
+  <msg key="lt_There_was_a_problem_w">Hebo un problema cola autentificación de la to cuenta</msg>
+  <msg key="lt_This_feature_is_disab">Esta opción nun ta operativa nel servidor.</msg>
+  <msg key="lt_To_confirm_your_regis">Pa confirmar el to rexistru, por favor vete a &quot;%confirmation_url%&quot;</msg>
+  <msg key="lt_User_id_user_id_is_no">La ID d'usuariu &quot;%user_id%&quot; nun tapendiente d'aprovación. Casi que va ser un error de programación.</msg>
+  <msg key="lt_User_id_user_id_is_no_1">La ID d'usuariu &quot;%user_id%&quot; nun ta como &quot;Esperando de confirmación de señes lletróniques&quot;.</msg>
+  <msg key="lt_User_id_user_id_is_no_2">La ID d'usuariu &quot;%user_id%&quot; nun ta na base de datos. Igual ye un error de programación.</msg>
+  <msg key="lt_User_id_user_id_is_no_3">La ID d'usuariu &quot;%user_id%&quot; nun ta na base de datos.  non está na base de dados. Igual ye un error de programación.</msg>
+  <msg key="lt_Validation_Check_Fail">Fallu na comprobación de validación.</msg>
+  <msg key="lt_We_also_need_a_custom">Necesitamos personalizar la pregunta y la rempuesta pa borrar la clave si la escaeces.</msg>
+  <msg key="lt_We_got_the_following_">Ocurrió'l siguiente error al intentar facer esta relación:</msg>
+  <msg key="lt_We_know_your_email_ad">Yá sabemos les tos señeslletróniques: &quot;%email%&quot;. Pero necesitamos el to nome completu pa personalizar delles partes de l'apariencia d'usuariu.</msg>
+  <msg key="lt_We_need_a_password_fr">Necesitamos una clave pa protexer la to identidá a la hora de les Preguntes y rempuestes, Tableros de discusión, y otres actividaes comunitaries d'esti web.</msg>
+  <msg key="lt_We_were_not_awaiting_">Nun tamos a la espera del to corréu. Debe haber un error.</msg>
+  <msg key="lt_We_were_unable_to_cre">Nun fuimos a crear la to rexistru d'usuariu na base de datos.</msg>
+  <msg key="lt_We_will_generate_and_">Xenerará y mandara a les tos señes una clave aldevalu cuando el to rexistru se confirme. Cuando entres, puedes modificala.</msg>
+  <msg key="lt_welcome_please_register">Bienllegáu a &quot;%system_name%&quot;. Por favor, entama'l procesu de rexistru poniendo unes señes lletróniques válides y una clave pa que puedas acceder al sistema. Mandarémoste a otru formulariu pa que completes el to rexistru.</msg>
+  <msg key="lt_Welcome_to_system_nam">Bienllegáu/da a &quot;%system_name%&quot;</msg>
+  <msg key="lt_What_we_tell_other_us">¿Qué podemos dicir al restu d'usuarios de ti?</msg>
+  <msg key="lt_when_trying_to_send_y">Al intentar mandate'l siguiente corréu:</msg>
+  <msg key="lt_When_you_get_your_ema">Cuando recibas el nuestru corréu, vuelve a &lt;a href=&quot;index?email=%email%&quot;&gt;páxina d'entrada&lt;/a&gt; e usa &quot;%system_name%&quot;.</msg>
+  <msg key="lt_Your_Account_at_site_">La so Cuenta en &quot;%site_link%&quot; foi restaurada.</msg>
+  <msg key="lt_Your_Account_is_Resto">La to Cuenta foi Restaurada</msg>
+  <msg key="lt_Your_email_has_been_c">El Corréu foi confirmáu. Puedes entrar agora en &quot;%system_name%&quot;.</msg>
 </message_catalog>

@@ -1,12 +1,17 @@
 <?xml version="1.0"?>
-<message_catalog package_key="acs-lang" package_version="5.0d1" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-lang" package_version="5.0d3" locale="es_ES" charset="ISO-8859-1">
 
+  <msg key="Auto_Key">Clave automática</msg>
   <msg key="English">Inglés</msg>
   <msg key="French">Francés</msg>
   <msg key="German">Alemán</msg>
+  <msg key="key_1">texto_1</msg>
+  <msg key="key_1_1">texto_1_diferente</msg>
+  <msg key="key_2">texto_2</msg>
+  <msg key="key_3">texto_3</msg>
   <msg key="localization-abday">{dom} {lun} {mar} {mié} {jue} {vie} {sáb}</msg>
   <msg key="localization-abmon">{ene} {feb} {mar} {abr} {may} {jun} {jul} {ago} {sep} {oct} {nov} {dic}</msg>
-  <msg key="localization-am_str"></msg>
+  <msg key="localization-am_str">AM</msg>
   <msg key="localization-currency_symbol">€</msg>
   <msg key="localization-d_fmt">%d/%m/%y</msg>
   <msg key="localization-d_t_fmt">%a %d %B %Y %H:%M %Z</msg>
@@ -31,10 +36,10 @@
   <msg key="localization-p_cs_precedes">1</msg>
   <msg key="localization-p_sep_by_space">1</msg>
   <msg key="localization-p_sign_posn">1</msg>
-  <msg key="localization-pm_str"></msg>
-  <msg key="localization-positive_sign"></msg>
+  <msg key="localization-pm_str">PM</msg>
+  <msg key="localization-positive_sign">+</msg>
   <msg key="localization-t_fmt">%H:%M</msg>
-  <msg key="localization-t_fmt_ampm"></msg>
-  <msg key="localization-thousands_sep"></msg>
+  <msg key="localization-t_fmt_ampm">%H:%M:%S</msg>
+  <msg key="localization-thousands_sep">.</msg>
   <msg key="Spanish">Español</msg>
 </message_catalog>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d3" locale="fr_FR" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.0d4" locale="fr_FR" charset="ISO-8859-1">
 
   <msg key="About_You">A propos de vous</msg>
   <msg key="again">encore</msg>
@@ -19,6 +19,7 @@
   <msg key="Customize_Question">Question personnalisée</msg>
   <msg key="Direct_Permissions">Autorisation directe</msg>
   <msg key="edit_your_alerts">editer les notifications</msg>
+  <msg key="Email">Adresse email</msg>
   <msg key="email_address">adresse email:</msg>
   <msg key="Email_Confirmation">Confirmation email</msg>
   <msg key="Email_not_Requested">Courrier non solicité</msg>
@@ -26,12 +27,14 @@
   <msg key="email_password">&quot;mot de passe email&quot;</msg>
   <msg key="Error_sending_mail">Erreur durant l'envoi de courrier</msg>
   <msg key="Feature_disabled">Option désactivée</msg>
+  <msg key="First_names">Prénoms</msg>
   <msg key="Full_Name">Nom complet:</msg>
   <msg key="Grant">Autoriser</msg>
   <msg key="Grant_Permission">Autorisation</msg>
   <msg key="help">aide</msg>
   <msg key="in">en</msg>
   <msg key="Join_group_name">Se joindre à %group_name%</msg>
+  <msg key="Last_name">Nom</msg>
   <msg key="Log_In">Connecter</msg>
   <msg key="Log_Out">Déconnecter</msg>
   <msg key="Login">Connecter</msg>
@@ -146,13 +149,16 @@ Nom d'utilisateur: %email% Mot de passe: %password%</msg>
   <msg key="on">sur</msg>
   <msg key="or">ou</msg>
   <msg key="Password">Mot de passe:</msg>
+  <msg key="Password_changed_subject">Mot de passe changé</msg>
   <msg key="Permissions">Privilèges</msg>
   <msg key="Permissions_for_name">Privilèges pour %name%</msg>
   <msg key="personal_URL">URL personnelle:</msg>
   <msg key="Question">Question:</msg>
   <msg key="question">question:</msg>
+  <msg key="Recover_Password">Récupérer mot de passe</msg>
   <msg key="Register">S'inscrire</msg>
   <msg key="Revoke_Checked">Effacer sélection</msg>
+  <msg key="Screen_name">Pseudo</msg>
   <msg key="screen_name">pseudo:</msg>
   <msg key="Security">Sécurité</msg>
   <msg key="Show">Montrer</msg>
@@ -170,6 +176,7 @@ Nom d'utilisateur: %email% Mot de passe: %password%</msg>
   <msg key="Update_Password">Changer le mot de passe</msg>
   <msg key="upload_a_portrait">envoyer une photo</msg>
   <msg key="User_Creation_Failed">Erreur de création d'utilisateur</msg>
+  <msg key="Username">Nom d'utilisateur</msg>
   <msg key="Welcome_Back">Bienvenu de nouveau</msg>
   <msg key="Welcome_Back_1">Votre compte a été marqué comme &quot;effacé&quot;. Si vous le désirez, vous pouvez</msg>
   <msg key="Your_email">Votre adresse email:</msg>
