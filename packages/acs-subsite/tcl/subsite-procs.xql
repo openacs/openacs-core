@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="subsite::after_mount.group_exists">      
+<fullquery name="subsite::default::create_app_group.group_exists">      
       <querytext>
       
 	    select 1
@@ -13,7 +13,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="subsite::after_mount.subsite_name_query">      
+<fullquery name="subsite::default::create_app_group.subsite_name_query">      
       <querytext>
       
 	    select instance_name
@@ -24,7 +24,7 @@
 </fullquery>
 
  
-<fullquery name="subsite::after_mount.parent_subsite_query">      
+<fullquery name="subsite::default::create_app_group.parent_subsite_query">      
       <querytext>
       
          select m.group_id as supersite_group_id, p.instance_name as supersite_name
