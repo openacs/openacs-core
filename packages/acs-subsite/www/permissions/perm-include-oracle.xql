@@ -59,7 +59,11 @@
            ) ptab,
            acs_objects o
     where  o.object_id = ptab.grantee_id
-    and    acs_permission.permission_p(0, ptab.grantee_id, 'admin') = 'f'
+    and    not exists (select 1
+                       from acs_object_party_privilege_map m
+                       where m.object_id = 0
+                         and m.party_id = ptab.grantee_id
+                         and m.privilege = 'admin')
     group  by ptab.grantee_id, acs_object.name(ptab.grantee_id), o.object_type
     order  by object_type desc, grantee_name
       </querytext>
