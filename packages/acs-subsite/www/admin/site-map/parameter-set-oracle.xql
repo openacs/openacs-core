@@ -17,7 +17,7 @@
 <fullquery name="parameter_table">      
       <querytext>
 
-select p.parameter_id, p.parameter_name, nvl(p.description, 'No Description') description,
+select p.parameter_id, p.parameter_name, p.package_key, nvl(p.description, 'No Description') description,
          nvl(v.attr_value, 'No Value') attr_value, nvl(p.section_name, 'No Section Name') section_name
         from apm_parameters p, (select parameter_id, attr_value
 				from apm_parameter_values v

@@ -469,6 +469,34 @@ ad_proc -public ad_parameter {
     }
 }
 
+ad_proc -public ad_parameter_from_file {
+    name
+    {package_key ""}
+} {
+    This proc returns the value of a parameter that has been set in the
+    parameters/ad.ini file.
+
+    Note: <strong>The use of the parameters/ad.ini file is discouraged.</strong>  Some sites
+    need it to provide instance-specific parameter values that are independent of the contents of the
+    apm_parameter tables.
+
+    @param name The name of the parameter.
+    @return The parameter of the object or if it doesn't exist, the default.
+} {
+    set ns_param ""
+
+    # The below is really a hack because none of the calls to ad_parameter in the system
+    # actually call 'ad_parameter param_name acs-kernel'.
+
+    if { [empty_string_p $package_key] || $package_key == "acs-kernel"} {
+	set ns_param [ns_config "ns/server/[ns_info server]/acs" $name]
+    } else {
+	set ns_param [ns_config "ns/server/[ns_info server]/acs/$package_key" $name]
+    }
+    return $ns_param
+}
+
+
 ad_proc -private ad_parameter_cache {
     {
 	-set ""
