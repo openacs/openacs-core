@@ -1,11 +1,6 @@
 <master>
 <property name=title>@title@</property>
-
-<h2>@title@</h2>
-
-@context_bar@
-
-<hr>
+<property name="context_bar">@context_bar@</property>
 
 @dimensional_slider@
 
@@ -22,7 +17,7 @@
 </if>
 <else>
   <multiple name="proc_list">
-  <li><a href=@proc_list.url@>@proc_list.proc@</a> (defined in @proc_list.file@)
+  <li><a href=\"@proc_list.url@\">@proc_list.proc@</a> (defined in @proc_list.file@)
   </multiple>
 </else>
 </ul>
