@@ -31,7 +31,9 @@
         <if @elements.widget@ eq "submit"> 
           <tr>
             <td colspan="2">
-              <noparse><formwidget id=@elements.id@></noparse>
+              <group column="widget">
+                <noparse><formwidget id=@elements.id@></noparse>
+              </group>
             </td>
           </tr>
         </if>
@@ -92,10 +94,3 @@
     </group>
   </multiple>
 </table>
-
-<if @buttons:rowcount@ gt 0>
-  <multiple name="buttons">
-    <input type="submit" name="@buttons.name@" value="@buttons.label@">
-  </multiple>
-</if>
-

@@ -295,23 +295,8 @@ ad_proc -private template::form::template { id { style "" } } {
 
     @return A string containing a template for the body of the form.
 } {
+
   get_reference 
-
-  #
-  # Elements
-  #
-
-
-  set elements:rowcount 0
-
-  foreach element_ref $elements {
-
-    incr elements:rowcount
-
-    # get a reference by index for the multirow data source
-    upvar #$level $element_ref elements:${elements:rowcount} 
-    set "elements:${elements:rowcount}(rownum)" ${elements:rowcount}
-  }
 
   #
   # Buttons
@@ -340,20 +325,35 @@ ad_proc -private template::form::template { id { style "" } } {
   set buttons:rowcount 0
 
   foreach button $form_properties(${form_properties(mode)}_buttons) {
-      incr buttons:rowcount
-
       set label [lindex $button 0]
       set name [lindex $button 1]
 
       if { [string equal $name "ok"] } {
           # We hard-code the OK button to be wider than it otherwise would
-          set "buttons:${buttons:rowcount}(label)" "       $label       "
-      } else {
-          set "buttons:${buttons:rowcount}(label)" $label
+	  set label "       $label       "
       }
-      set "buttons:${buttons:rowcount}(name)" "formbutton:$name"
+      set name "formbutton:$name"
+
+      template::element create $id $name -widget submit -label $label
   }
-  
+
+  #
+  # Elements
+  # RAL: moved this below so we could take advantage of the template::element
+  # API in the button loop above.  The buttons multirow in standard.adp is
+  # no longer necessary.
+  #
+  set elements:rowcount 0
+
+  foreach element_ref $elements {
+
+    incr elements:rowcount
+
+    # get a reference by index for the multirow data source
+    upvar #$level $element_ref elements:${elements:rowcount} 
+    set "elements:${elements:rowcount}(rownum)" ${elements:rowcount}
+  }
+
   if { [string equal $style {}] } { 
       set style [parameter::get \
                      -package_id [ad_conn subsite_id] \
@@ -397,7 +397,12 @@ ad_proc -private template::form::generate { id { style "" } } {
 
     @return A string containing the HTML for the body of the form.
 } {
-  set __adp_output [template $id $style]
+  if { [catch {
+      set __adp_output [template $id $style]
+  }] } {
+      set style "standard"
+      set __adp_output [template $id $style]
+  }
   
   set level [template::adp_level]
 
