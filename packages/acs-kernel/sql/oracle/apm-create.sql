@@ -492,6 +492,31 @@ comment on table apm_package_owners is '
  manages the order of the authors.
 ';
 
+create table apm_package_callbacks (
+    version_id         integer 
+                       constraint apm_package_callbacks_vid_fk 
+                       references apm_package_versions(version_id)
+                       on delete cascade,
+    type               varchar(40),
+    proc               varchar(300),
+    constraint apm_package_callbacks_vt_un
+    unique (version_id, type)
+);
+
+comment on table apm_package_callbacks is '
+  This table holds names of Tcl procedures to invoke at the time (before or after) the package is
+  installed, instantiated, or mounted.        
+';
+
+comment on column apm_package_callbacks.proc is '
+  Name of the Tcl proc.
+';
+
+comment on column apm_package_callbacks.type is '
+  Indicates when the callback proc should be invoked, for example after-install. Valid
+  values are given by the Tcl proc apm_supported_callback_types.
+';
+
 -- Ths view faciliates accessing information about package versions by joining
 -- the apm_package_types information and acs_object_types information (which is
 -- invariant across versions) with the specific version information.
