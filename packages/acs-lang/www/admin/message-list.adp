@@ -25,7 +25,7 @@
     <li><a href="@batch_edit_url@">Batch edit these messages</a></li>
     <if @site_wide_admin_p@>
       <li><a href="@import_messages_url@">Import messages for this package and locale from catalog files</a></li>
-      <li><a href="@import_messages_from_tsurl@">Import messages for this package and
+      <li><a href="@import_messages_from_ts_url@">Import messages for this package and
     locale from translation server</a></li>
       <li><a href="@export_messages_url@">Export messages for this package and locale to catalog files</a></li>
       <li><a href="@download_messages_url@">Download messages for this package and locale</a></li>

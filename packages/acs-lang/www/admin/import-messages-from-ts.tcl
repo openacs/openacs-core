@@ -20,7 +20,7 @@ set message_count(updated) 0
 set message_count(deleted) 0
 set message_count(errors) [list]
 
-set translation_server "http://translate.openacs.org"
+set translation_server "http://cognovis.theservice.de:8002"
 array set catalog_array [lang::catalog::parse [ad_httpget -url [export_vars -base "$translation_server/acs-lang/download-messages"  {package_key locale}]]]
 
 # Get the messages array, and the list of message keys to iterate over

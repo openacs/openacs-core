@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.1.6a1" url="http://openacs.org/repository/download/apm/acs-lang-5.1.6a1.apm">
+    <version name="5.1.6a2" url="http://openacs.org/repository/download/apm/acs-lang-5.1.6a2.apm">
         <owner url="mailto:peter@collaboraid.biz">Peter Marklund</owner>
         <summary>OpenACS Internationalization Support.</summary>
         <release-date>2004-02-28</release-date>
@@ -27,6 +27,7 @@ locale-specific formatting functions for localizing dates, times, monetary amoun
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SiteWideLocale"  default="en_US" description="The site-wide default locale"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemTimezone"  default="UTC" description="The timezone that Oracle is set to use. Use a name from the acs-reference package, e.g., America/Los_Angeles or Asia/Tokyo"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UsePackageLevelLocalesP"  default="0" description="Specify whether you want to allow different system/user locales per package, or only one site-wide locale system setting/user preference."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="BehaveLikeTranslationServerP"  default="0" description="Specify whether you want to allow other systems to download translations from your site."/>
         </parameters>
 
     </version>
