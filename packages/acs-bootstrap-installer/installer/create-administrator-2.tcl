@@ -7,13 +7,16 @@ ad_page_contract {
 
 } {
     email:notnull
-    username:notnull
+    {username ""}
     first_names:notnull
     last_name:notnull
     password:notnull
     password_confirmation:notnull
 }
 
+if { [empty_string_p $username] } {
+    set username $email
+}
 
 if { [string compare $password $password_confirmation] } {
     install_return 200 "Passwords Don't Match" "
