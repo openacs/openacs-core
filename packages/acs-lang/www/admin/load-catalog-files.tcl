@@ -6,6 +6,9 @@ ad_page_contract {
     @cvs-id $Id$
 }
 
-lang::catalog::load_all
+#lang::catalog::export_to_files dotlrn
+
+#lang::catalog::load_old dotlrn
+#lang::catalog::load_all
 
 ad_returnredirect "index"

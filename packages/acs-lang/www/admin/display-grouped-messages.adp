@@ -9,7 +9,7 @@
 
 <div>
 
-<p>Your locale is <strong>@locale_label@</strong> [ <tt>@locale_user@</tt> ]</p>
+<p>Your locale is <strong>@locale_label@</strong> [ <tt>@current_locale@</tt> ]</p>
 
 <if @missing_translation_group:rowcount@ eq 0>
 
@@ -37,16 +37,16 @@
            <td style="background: #CCCCCC">
             <table cellpadding="4" cellspacing="1" border="0">
              <tr valign="middle" style="background: #FFFFE4">
-              <th>Grouping (category)</th>
+              <th>Package</th>
               <th>Action</th>
              </tr>
              <multiple name="missing_translation_group">
              <tr style="background: #EEEEEE">
-              <td>@missing_translation_group.grouper_key@</td>
+              <td>@missing_translation_group.package_key@</td>
               <td>
-               (<span class="edit-anchor"><a href="display-localized-messages?grouper_key=@missing_translation_group.grouper_key_encoded@&amp;locales=@missing_translation_group.locale_encoded@&translated_p=0">edit</a></span>)
+               (<span class="edit-anchor"><a href="display-localized-messages?package_key=@missing_translation_group.package_key_encoded@&amp;locales=@missing_translation_group.locale_encoded@&translated_p=0">edit</a></span>)
                <if @new_allowed_p@ eq 1>
-                (<span class="edit-anchor"><a href="localized-message-new?grouper_key=@missing_translation_group.grouper_key_encoded@&amp;locales=@missing_translation_group.locale_encoded@">new</a></span>)
+                (<span class="edit-anchor"><a href="localized-message-new?package_key=@missing_translation_group.package_key_encoded@&amp;locales=@missing_translation_group.locale_encoded@">new</a></span>)
                </if>
               </td>
              </tr>
@@ -80,16 +80,16 @@
            <td style="background: #CCCCCC">
             <table cellpadding="4" cellspacing="1" border="0">
              <tr valign="middle" style="background: #FFFFE4">
-              <th>Grouping (category)</th>
+              <th>Package</th>
               <th>Action</th>
              </tr>
              <multiple name="translated_messages_group">
              <tr style="background: #EEEEEE">
-              <td>@translated_messages_group.grouper_key@</td>
+              <td>@translated_messages_group.package_key@</td>
               <td>
-               (<span class="edit-anchor"><a href="display-localized-messages?grouper_key=@translated_messages_group.grouper_key_encoded@&amp;locales=@translated_messages_group.locale_encoded@&translated_p=1">edit</a></span>)
+               (<span class="edit-anchor"><a href="display-localized-messages?package_key=@translated_messages_group.package_key_encoded@&amp;locales=@translated_messages_group.locale_encoded@&translated_p=1">edit</a></span>)
                <if @new_allowed_p@ eq 1>
-                (<span class="edit-anchor"><a href="localized-message-new?grouper_key=@translated_messages_group.grouper_key_encoded@&amp;locales=@translated_messages_group.locale_encoded@">new</a></span>)
+                (<span class="edit-anchor"><a href="localized-message-new?package_key=@translated_messages_group.package_key_encoded@&amp;locales=@translated_messages_group.locale_encoded@">new</a></span>)
                </if>
               </td>
              </tr>

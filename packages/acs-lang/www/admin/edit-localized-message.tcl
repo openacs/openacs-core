@@ -4,37 +4,25 @@ ad_page_contract {
     an individual message)
 
     @author Bruno Mattarollo <bruno.mattarollo@ams.greenpeace.org>
+    @author Christian Hvid
     @creation-date 30 October 2001
     @cvs-id $Id$
 
 } {
     locales
+    message_key
+    package_key
     {translated_p}
-    key
 } -properties {
 }
 
-request create
-request set_param key -datatype keyword -optional
-request set_param locales -datatype keyword -optional
-
-if { [exists_and_not_null locales] } {
-    set locale_user $locales
+if {[info exists locales]} {
+    set current_locale $locales
 } else {
-    set locale_user [ad_locale_locale_from_lang [ad_locale user language]]
+    set current_locale [ad_conn locale]
 }
-#  AS - doesn't work
-#  set encoding_charset [ad_locale charset $locale_user]
-#  ns_setformencoding $encoding_charset
-#  ns_set put [ns_conn outputheaders] "content-type" "text/html; charset=$encoding_charset"
 
-set return_url "display-localized-messages?grouper_key="
-
-# we get the grouper (the first string before the first '.' in the key)
-set grouper_key [string range $key 0 [expr ([string first "." $key] - 1)]]
-
-append return_url [ns_urlencode $grouper_key]
-append return_url "&locales=[ns_urlencode $locales]&translated_p=$translated_p"
+set return_url "display-localized-messages?package_key=[ns_urlencode $package_key]&locales=[ns_urlencode $locales]&translated_p=$translated_p"
 
 set tab [ns_urlencode "localized-messages"]
 
@@ -58,31 +46,38 @@ template::element create message_editing original_message \
 template::element create message_editing message -label "Message" \
     -datatype text -widget textarea -html { rows 6 cols 40 }
 
-# The two hidden tags that we need to pass on the key and language to the
-# processing of the form
+# The hidden elements for passing package key, message key and locale
 
-template::element create message_editing key -label "key" -datatype text -widget hidden
+template::element create message_editing message_key -datatype text -widget hidden
 
-template::element create message_editing locales -label "locale" -datatype text -widget hidden
+template::element create message_editing package_key -datatype text -widget hidden
+
+template::element create message_editing locales -datatype text -widget hidden
 
 template::element create message_editing translated_p -label "translated_p" -datatype text -widget hidden -value $translated_p
 
- set locale_label [ad_locale_get_label $locale_user]
+set locale_label [ad_locale_get_label $current_locale]
 
 # Header Stuff ... We make sure that this page doesn't get cached.
 set header_stuff "<meta http-equiv=\"Pragma\" content=\"no-cache\" />" 
 
 if { [template::form is_request message_editing] } {
 
-    set sql_select_original_message "
+    set sql_select_original_message {
         select message
         from lang_messages
-        where key = :key and locale = :default_locale "
+        where message_key = :message_key and 
+              package_key = :package_key and
+              locale = :default_locale
+    }
 
-    set sql_select_translated_message "
+    set sql_select_translated_message {
         select message as translated_message
-        from lang_messages
-        where key = :key and locale = :locale_user"
+        from   lang_messages
+        where  message_key = :message_key and 
+               package_key = :package_key and
+               locale = :current_locale
+    }
 
     # Let's get the original message (in english)
     db_1row select_original_message $sql_select_original_message
@@ -101,8 +96,9 @@ if { [template::form is_request message_editing] } {
 
     }
    
-    template::element set_properties message_editing key -value $key
-    template::element set_properties message_editing locales -value $locale_user
+    template::element set_properties message_editing message_key -value $message_key
+    template::element set_properties message_editing package_key -value $package_key
+    template::element set_properties message_editing locales -value $current_locale
     template::element set_properties message_editing original_message -value $message
 
 } else {
@@ -114,10 +110,14 @@ if { [template::form is_request message_editing] } {
     if { $message == "" } {
 
         template::element set_error message_editing message "Message is required"
-        set sql_select_original_message "
+        set sql_select_original_message {
             select message
-            from lang_messages
-            where key = :key and locale = :default_locale "
+            from   lang_messages
+            where  message_key = :message_key and 
+                   package_key = :package_key and
+                   locale = :default_locale
+        }
+
         db_1row select_original_message $sql_select_original_message
 
         template::element set_properties message_editing original_message -value $message
@@ -126,21 +126,22 @@ if { [template::form is_request message_editing] } {
 
 }
 
-if { [template::form is_valid message_editing] } {
 
+if { [template::form is_valid message_editing] } {
     # We get the values from the form
-    template::form get_values message_editing key
+    template::form get_values message_editing message_key
+    template::form get_values message_editing package_key
     template::form get_values message_editing locales
     template::form get_values message_editing message
 
-    # We use the gp-lang registration of a translation. Simple, eh?
-    _mr $locales $key $message
+    # Register message via acs-lang
+    lang::message::register $locales $package_key $message_key $message
 
     # Even if the country code is 2 chars, we avoid problems...
     set escaped_locale [ns_urlencode $locales]
 
     template::forward $return_url
+    
+    error $message
 
 }
-
-db_release_unused_handles

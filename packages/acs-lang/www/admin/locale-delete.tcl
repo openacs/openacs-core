@@ -1,4 +1,4 @@
-# /packages/gp-lang/www/gpadmin/locale-delete.tcl
+# /packages/acs-lang/www/admin/locale-delete.tcl
 
 ad_page_contract {
 
@@ -15,11 +15,6 @@ ad_page_contract {
 # Get the locale for the user so that we 'spit' the content back in the
 # proper locale
 set locale_user [ad_locale_locale_from_lang [ad_locale user language]]
-
-#  AS - doesn't work
-#  set encoding_charset [ad_locale charset $locale_user]
-#  ns_setformencoding $encoding_charset
-#  ns_set put [ns_conn outputheaders] "content-type" "text/html; charset=$encoding_charset"
 
 set context_bar [ad_context_bar "Deleting Locales"]
 
@@ -96,5 +91,3 @@ if { [form is_valid locale_deleting] } {
     set_file "[file dir $__adp_stub]/locale-delete-confirm"
 
 }
-
-db_release_unused_handles

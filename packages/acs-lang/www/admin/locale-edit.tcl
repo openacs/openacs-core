@@ -156,5 +156,3 @@ if { [form is_valid locale_editing] } {
     forward "index?tab=locales"
 
 }
-
-db_release_unused_handles

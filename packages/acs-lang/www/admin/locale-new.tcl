@@ -1,4 +1,4 @@
-# /packages/gp-lang/www/gpadmin/locale-new.tcl
+# /packages/acs-lang/www/admin/locale-new.tcl
 
 ad_page_contract {
 
@@ -11,17 +11,7 @@ ad_page_contract {
 } -properties {
 }
 
-# Get the users locale
-if { [exists_and_not_null locales] } {
-    set locale_user $locales
-} else {
-    set locale_user [ad_locale_locale_from_lang [ad_locale user language]]
-}
-
-#  AS - doesn't work
-#  set encoding_charset [ad_locale charset $locale_user]
-#  ns_setformencoding $encoding_charset
-#  ns_set put [ns_conn outputheaders] "content-type" "text/html; charset=$encoding_charset"
+set locale_user [ad_conn locale]
 
 set context_bar [ad_context_bar "Creation of Locales"]
 
@@ -132,5 +122,3 @@ if { [form is_valid locale_creation] } {
     forward "index?tab=locales"
 
 }
-
-db_release_unused_handles

@@ -1,4 +1,4 @@
-# /packages/gp-lang/www/gpadmin/locale-make-default.tcl
+# /packages/acs-lang/www/admin/locale-make-default.tcl
 
 ad_page_contract {
 
@@ -29,5 +29,3 @@ db_transaction {
 }
 
 template::forward "index?tab=locales"
-
-db_release_unused_handles

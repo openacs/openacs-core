@@ -1,4 +1,4 @@
-# /packages/gp-lang/www/gpadmin/index.tcl
+# /packages/acs-lang/www/admin/index.tcl
 
 ad_page_contract {
 
@@ -20,5 +20,3 @@ if { [ad_permission_p 0 admin] } {
 } else {
     set show_locales_p "f"
 }
-
-db_release_unused_handles

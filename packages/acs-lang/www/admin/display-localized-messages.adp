@@ -8,7 +8,7 @@
 
 <div>
 
-<p>You are editing locale: <strong>@locale_label@</strong> [ <tt>@locale_user@</tt> ]</p>
+<p>You are editing locale: <strong>@locale_label@</strong> [ <tt>@current_locale@</tt> ]</p>
 
 <if @missing_translation:rowcount@ eq 0>
 
@@ -30,11 +30,11 @@
     </tr>
     <multiple name="missing_translation">
     <tr style="background: #EEEEEE">
-     <td>@missing_translation.key@</td>
-     <td>@missing_translation.message@</td>
+     <td>@missing_translation.message_key@</td>
+     <td>@missing_translation.default_message@</td>
      <td>Translation Missing</td>
      <td>
-      (<span class="edit-anchor"><a href="edit-localized-message?key=@missing_translation.escaped_key@&locales=@missing_translation.escaped_language@&translated_p=0">edit</a></span>)
+      (<span class="edit-anchor"><a href="edit-localized-message?message_key=@missing_translation.escaped_key@&locales=@missing_translation.escaped_language@&package_key=@escaped_package_key@&translated_p=0">edit</a></span>)
      </td>
     </tr>
     </multiple>
@@ -65,10 +65,10 @@
     </tr>
     <multiple name="translated_messages">
     <tr style="background: #EEEEEE">
-     <td>@translated_messages.key@</td>
+     <td>@translated_messages.message_key@</td>
      <td>@translated_messages.default_message@</td>
      <td>@translated_messages.translated_message@</td>
-     <td>(<span class="edit-anchor"><a href="edit-localized-message?key=@translated_messages.escaped_key@&locales=@translated_messages.escaped_language@&translated_p=1">edit</a></span>)</td>
+     <td>(<span class="edit-anchor"><a href="edit-localized-message?message_key=@translated_messages.escaped_key@&locales=@translated_messages.escaped_language@&package_key=@package_key@&translated_p=1">edit</a></span>)</td>
     </tr>
     </multiple>
    </table>
