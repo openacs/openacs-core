@@ -245,3 +245,24 @@ aa_register_case xml_get_child_node_content_by_path {
 
 
 }
+
+aa_register_case -cats {
+    script
+} -on_error {
+    site_node::get_children returns root node!
+} test_for_root_node_inclusion {
+    Shows bug in site_node::get_children - reurns passed node
+} {
+    # Start with a known site-map entry
+    set node_id [site_node::get_node_id -url "/"]
+
+    set child_node_ids [site_node::get_children \
+			    -all \
+			    -element node_id \
+			    -node_id $node_id]
+
+    # lsearch returns '-1' if not found
+    aa_equals "site_node::get_children" [lsearch -exact $child_node_ids $node_id] -1
+}
+
+
