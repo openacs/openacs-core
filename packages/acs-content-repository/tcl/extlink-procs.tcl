@@ -44,7 +44,7 @@ ad_proc -deprecated content_extlink::new {
 
 }
 
-ad_proc content_extlink::edit {
+ad_proc -deprecated content_extlink::edit {
     -extlink_id:required
     -url:required
     -label:required
@@ -60,6 +60,7 @@ ad_proc content_extlink::edit {
     @label Label for the extlink (defaults to the URL)
     @description An extended description of the link (defaults to NULL)
 
+    @see update-directly
 } {
 
     set modifying_user [ad_conn user_id]
@@ -69,7 +70,6 @@ ad_proc content_extlink::edit {
         db_dml extlink_update_object {}
         db_dml extlink_update_extlink {}
     }
-
 }
 
 ad_proc -deprecated content_extlink::delete {
@@ -98,7 +98,7 @@ ad_proc -deprecated content_extlink::extlink_p {
     return [db_string extlink_check {}]
 }
 
-ad_proc content_extlink::extlink_name {
+ad_proc -deprecated content_extlink::extlink_name {
     -item_id:required
 } {
 
@@ -106,6 +106,7 @@ ad_proc content_extlink::extlink_name {
 
     @item_id  The object id of the item to check.
 
+    @see content::extlink::name
 } {
     return [db_string extlink_name {}]
 }
