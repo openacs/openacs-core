@@ -108,7 +108,8 @@ create table auth_driver_params(
                       not null,
       key             varchar2(200),
       value           clob,
-      unique (authority_id, impl_id)
+      constraint auth_driver_params_pk
+      primary key (authority_id, impl_id, key)
 );
 
 -- Create PLSQL package
