@@ -126,7 +126,7 @@ begin
              where tree_sortkey like nkey || ''/%''
                and tree_sortkey not like  nkey || ''/%/%'';
 
-            new_key := nkey || ''/'' new_key;
+            new_key := nkey || ''/'' || new_key;
 
             -- insert the new child node.
 
