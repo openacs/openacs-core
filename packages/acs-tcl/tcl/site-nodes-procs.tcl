@@ -573,55 +573,67 @@ ad_proc -public site_node::get_children {
     if { ![empty_string_p $package_type] && ![empty_string_p $package_key] } {
         error "You may specify either package_type, package_key, or filter_element, but not more than one."
     }
+
     if { ![empty_string_p $package_type] } {
         lappend filters package_type $package_type
     } elseif { ![empty_string_p $package_key] } {
         lappend filters package_key $package_key
     }
-    
-    set node_url [get_url -node_id $node_id]
-    
-    set child_urls [nsv_array names site_nodes "${node_url}?*"]
 
-    if { !$all_p } {
-        set org_child_urls $child_urls
+    set node_url [site_node::get_url -node_id $node_id]
+
+    if { !$all_p } { 
         set child_urls [list]
-        foreach child_url $org_child_urls {
-            if { [regexp "^${node_url}\[^/\]*/\$" $child_url] } {
+        set s [string length "$node_url"]
+        # find all child_urls who have only one path element below node_id
+        # by clipping the node url and last character and seeing if there 
+        # is a / in the string.  about 2x faster than the RE version.
+        foreach child_url [nsv_array names site_nodes "${node_url}?*"] {
+            if { [string first / [string range $child_url $s end-1]] < 0 } {
                 lappend child_urls $child_url
             }
         }
+    } else {
+        set child_urls [nsv_array names site_nodes "${node_url}?*"]
     }
+
 
     if { [llength $filters] > 0 } {
-        set org_child_urls $child_urls
-        set child_urls [list]
-        foreach child_url $org_child_urls {
-            array unset site_node
-            array set site_node [get_from_url -exact -url $child_url]
-
-            set passed_p 1
-            foreach { elm val } $filters {
-                if { ![string equal $site_node($elm) $val] } {
-                    set passed_p 0
-                    break
-                }
-            }
-            if { $passed_p } {
-                lappend child_urls $child_url
-            }
-        }
-    }
-
-    if { ![empty_string_p $element] } {
-        # We need to update the cache for all the child nodes as well
         set return_val [list]
         foreach child_url $child_urls {
             array unset site_node
-            array set site_node [site_node::get_from_url -url $child_url]
+            if {![catch {array set site_node [nsv_get site_nodes $child_url]}]} {
 
-            lappend return_val $site_node($element)
+                set passed_p 1
+                foreach { elm val } $filters {
+                    if { ![string equal $site_node($elm) $val] } {
+                        set passed_p 0
+                        break
+                    }
+                }
+                if { $passed_p } {
+                    if { ![empty_string_p $element] } {
+                        lappend return_val $site_node($element)
+                    } else {
+                        lappend return_val $child_url
+                    }
+                }
+            }
         }
+    } elseif { ![empty_string_p $element] } {
+        set return_val [list]
+        foreach child_url $child_urls {
+            array unset site_node
+            if {![catch {array set site_node [nsv_get site_nodes $child_url]}]} {
+                lappend return_val $site_node($element)
+            }
+        }
+    }
+
+    # if we had filters or were getting a particular element then we 
+    # have our results in return_val otherwise it's just urls
+    if { ![empty_string_p $element]
+         || [llength $filters] > 0} {
         return $return_val
     } else {
         return $child_urls
