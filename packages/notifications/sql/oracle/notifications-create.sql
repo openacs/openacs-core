@@ -16,5 +16,6 @@
 -- @ notifications-interval-sc-create.sql
 -- @ notifications-delivery-sc-create.sql
 
+@ delivery-method-sc-create.sql
 @ notifications-init.sql
 @ email-sc-impl-create.sql
