@@ -25,7 +25,7 @@ ad_proc -public ds_permission_p {} {
 	# non logged users, if not it will enter into a infinite loop with
 	# ad_conn in any new unknown request (roc)
 	set party_id "-99"
-}
+    }
     return [permission::permission_p -party_id $party_id -object_id [ds_instance_id] -privilege "admin"]
 }
 
