@@ -42,7 +42,7 @@ begin
  
 end;' language 'plpgsql' stable;
 
--- new 19 param version of content_item__new
+-- new 19 param version of content_item__new (now its 20 with package_id)
 
 select define_function_args('content_item__new','name,parent_id,item_id,locale,creation_date;now,creation_user,context_id,creation_ip,item_subtype;content_item,content_type;content_revision,title,description,mime_type;text/plain,nls_language,text,data,relation_tag,is_live;f,storage_type;lob,package_id');
 
@@ -1265,9 +1265,8 @@ end;' language 'plpgsql' stable;
  7) delete all associated comments */
 
 
-select define_function_args('content_item__delete','item_id');
-
-create or replace function content_item__delete (integer)
+select define_function_args('content_item__del','item_id');
+create or replace function content_item__del (integer)
 returns integer as '
 declare
   delete__item_id                alias for $1;  
@@ -1391,6 +1390,15 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
+select define_function_args('content_item__delete','item_id');
+create or replace function content_item__delete (integer)
+returns integer as '
+declare
+  delete__item_id                alias for $1;  
+begin
+        PERFORM content_item__del (delete__item_id);
+  return 0; 
+end;' language 'plpgsql';
 
 select define_function_args('content_item__edit_name','item_id,name');
 

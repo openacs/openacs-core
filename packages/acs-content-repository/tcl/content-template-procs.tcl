@@ -59,7 +59,7 @@ ad_proc -public content::template::delete {
 } {
     return [package_exec_plsql -var_list [list \
         [list template_id $template_id ] \
-    ] content_template delete]
+    ] content_template del]
 }
 
 

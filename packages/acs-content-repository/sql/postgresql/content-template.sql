@@ -176,7 +176,8 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-create or replace function content_template__delete (integer)
+select define_function_args('content_template__del','template_id');
+create or replace function content_template__del (integer)
 returns integer as '
 declare
   delete__template_id            alias for $1;  
@@ -192,6 +193,17 @@ begin
     where template_id = delete__template_id;
 
   PERFORM content_item__delete(delete__template_id);
+
+  return 0; 
+end;' language 'plpgsql';
+
+create or replace function content_template__delete (integer)
+returns integer as '
+declare
+  delete__template_id            alias for $1;  
+begin
+
+  PERFORM content_template__delete(delete__template_id);
 
   return 0; 
 end;' language 'plpgsql';
