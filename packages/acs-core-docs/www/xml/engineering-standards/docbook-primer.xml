@@ -285,7 +285,7 @@
       <listitem><para>
         Include how to get help. How and where to find answers,
         contact others, what to do if one gets an AOLserver or other
-        error when using the system. Include types of avaiable
+        error when using the system. Include types of available
         support (open-source, private commercial etc.) including
         references.
       </para></listitem>
@@ -320,8 +320,8 @@
         url="http://openacs.org/bboard/q-and-a-fetch-msg.tcl?msg_id=
         00058H&topic_id=11&topic=OpenACS">Slides on OACS
         features</ulink>...a set of slides on OACS features that can
-        be used for begineers who want to know OACS is about and
-        what they can do with it. Screen captures that hilight
+        be used for beginners who want to know OACS is about and
+        what they can do with it. Screen captures that highlight
         features. Example shows BBoard, calendar, news, file
         storage, wimpy point, ticket tracking.  An OpenACS tour; an
         abbreviated, interactive set of demo pages.
@@ -387,7 +387,7 @@
       <listitem><para>
         End-user docs should not be duplicative. The package
         description information and almost everything about a
-        pacakge for administrators and developers is already
+        package for administrators and developers is already
         described in the package itself through two basic
         development document templates: a <a
         href="http://openacs.org/doc/current/requirements-template.
