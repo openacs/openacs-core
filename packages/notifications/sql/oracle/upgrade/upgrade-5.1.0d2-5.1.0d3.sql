@@ -14,12 +14,12 @@
 
 alter table notification_requests drop constraint notif_request_id_fk;
 alter table notification_requests add constraint notif_request_id_fk
-                              foreign key (object_id)
+                              foreign key (request_id)
                               references acs_objects (object_id)
                               on delete cascade;
 
 alter table notifications drop constraint notif_notif_id_fk;
 alter table notifications add constraint notif_notif_id_fk
-                              foreign key (object_id)
+                              foreign key (notification_id)
                               references acs_objects (object_id)
                               on delete cascade;
