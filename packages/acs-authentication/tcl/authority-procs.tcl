@@ -347,9 +347,25 @@ ad_proc -public auth::authority::batch_sync {
                                  -job_id $job_id \
                                  -document $doc_result(document)]
                 
-                template::util::write_file \
-                    "[acs_root_dir]/batch-sync-acknolwedgement.xml" \
-                    $ack_doc
+                set ack_file_name [parameter::get_from_package_key \
+                                       -parameter AcknowledgementFileName \
+                                       -package_key acs-authentication \
+                                       -default {}]
+                                       
+                if { ![empty_string_p $ack_file_name] } {
+                    # Interpolate
+                    set pairs [list \
+                                   acs_root_dir [acs_root_dir] \
+                                   ansi_date [clock format [clock seconds] -format %Y-%m-%d] \
+                                   authority $authority(short_name)]
+                    foreach { var value } $pairs {
+                        regsub -all "{$var}" $ack_file_name $value ack_file_name
+                    }
+
+                    template::util::write_file \
+                        $ack_file_name \
+                        $ack_doc
+                }
             } {
                 global errorInfo
                 ns_log Error "Error processing sync document:\n$errorInfo"
