@@ -580,6 +580,9 @@ ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
     set file_name [file tail $file]
 
     set pguser [db_get_username]
+    if { ![string equal $pguser ""] } {
+	set pguser "-U $pguser"
+    }
 
     set pgport [db_get_port]
     if { ![string equal $pgport ""] } {
@@ -587,7 +590,7 @@ ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
     }
 
     cd [file dirname $file]
-    set fp [open "|[file join [db_get_pgbin] psql] $pgport -U $pguser -f $file_name [db_get_database]" "r"]
+    set fp [open "|[file join [db_get_pgbin] psql] $pgport $pguser -f $file_name [db_get_database]" "r"]
 
     while { [gets $fp line] >= 0 } {
  	# Don't bother writing out lines which are purely whitespace.
