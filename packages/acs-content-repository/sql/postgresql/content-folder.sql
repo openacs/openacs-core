@@ -120,14 +120,11 @@ begin
                );
 end;' language 'plpgsql';
 
--- function new -- accepts security_inherit_p DaveB
-select define_function_args('content_folder__new','name,label,description,parent_id,context_id,folder_id,creation_date;now,creation_user,creation_ip,security_inherit_p;t,package_id');
-
-create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar,boolean,integer)
+create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar,boolean)
 returns integer as '
 declare
-  new__name                   alias for $1;  
-  new__label                  alias for $2;  
+  new__name                   alias for $1;
+  new__label                  alias for $2;
   new__description            alias for $3;  -- default null
   new__parent_id              alias for $4;  -- default null
   new__context_id             alias for $5;  -- default null
@@ -135,8 +132,7 @@ declare
   new__creation_date          alias for $7;  -- default now()
   new__creation_user          alias for $8;  -- default null
   new__creation_ip            alias for $9;  -- default null
-  new__security_inherit_p     alias for $10;  -- default true	
-  new__package_id             alias for $11;  -- default null
+  new__security_inherit_p     alias for $10;  -- default true
   v_package_id                acs_objects.package_id%TYPE;
   v_folder_id                 cr_folders.folder_id%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
@@ -158,6 +154,7 @@ begin
 
 end;' language 'plpgsql';
 
+-- function new -- accepts security_inherit_p DaveB
 select define_function_args('content_folder__new','name,label,description,parent_id,context_id,folder_id,creation_date;now,creation_user,creation_ip,security_inherit_p;t,package_id');
 
 create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar, boolean,integer)
@@ -532,7 +529,7 @@ begin
 			copy__folder_id,
 			copy__target_folder_id,
 			copy__creation_user,
-			copy_creation_ip,
+			copy__creation_ip,
 			NULL
 			);
 	return v_new_folder_id;
@@ -603,11 +600,12 @@ begin
 	  v_label,
 	  v_description,
 	  copy__target_folder_id,
-          null,
+	  copy__target_folder_id,
           null,
           now(),
 	  copy__creation_user,
 	  copy__creation_ip,
+          ''t'',
           null
       );
 

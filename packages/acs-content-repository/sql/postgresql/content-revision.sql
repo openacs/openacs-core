@@ -372,25 +372,37 @@ begin
   end if;
 
   -- create the basic object
-  insert into acs_objects 
-       select 
-         v_copy_id as object_id, 
-         object_type, 
-         v_target_item_id, 
-         security_inherit_p, 
-         copy__creation_user as creation_user, 
-         now() as creation_date, 
+  insert into acs_objects (
+                 object_id,
+                 object_type,
+                 context_id,
+                 security_inherit_p,
+                 creation_user,
+                 creation_date,
+                 creation_ip,
+                 last_modified,
+                 modifying_user,
+                 modifying_ip,
+                 title,
+                 package_id)
+       select
+         v_copy_id as object_id,
+         object_type,
+         v_target_item_id,
+         security_inherit_p,
+         copy__creation_user as creation_user,
+         now() as creation_date,
          copy__creation_ip as creation_ip,
-         now() as last_modified, 
-         copy__creation_user as modifying_user, 
+         now() as last_modified,
+         copy__creation_user as modifying_user,
          copy__creation_ip as modifying_ip,
          title,
          package_id
        from
-         acs_objects 
-       where 
+         acs_objects
+       where
          object_id = copy__revision_id;
-  
+
   -- create the basic revision (using v_target_item_id)
   insert into cr_revisions 
       select 
@@ -408,23 +420,6 @@ begin
         cr_revisions 
       where
         revision_id = copy__revision_id;
-
---                  select 
---                    object_type
---                  from                                                
---                    acs_object_types                                  
---                  where                                               
---                    object_type <> ''acs_object''                       
---                  and                                                 
---                    object_type <> ''content_revision''                 
---                  connect by                                          
---                    prior supertype = object_type                     
---                  start with                                          
-----                    object_type = (select object_type 
---                                     from acs_objects 
---                                    where object_id = copy__revision_id)
---                  order by
---                    level desc 
 
   -- iterate over the ancestor types and copy attributes
   for type_rec in select ot2.object_type, tree_level(ot2.tree_sortkey) as level

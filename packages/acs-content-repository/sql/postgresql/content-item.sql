@@ -2366,17 +2366,6 @@ declare
   copy2__target_folder_id       alias for $2;  
   copy2__creation_user          alias for $3;  
   copy2__creation_ip            alias for $4;  -- default null  
-  v_current_folder_id           cr_folders.folder_id%TYPE;
-  v_num_revisions               integer;       
-  v_name                        cr_items.name%TYPE;
-  v_content_type                cr_items.content_type%TYPE;
-  v_locale                      cr_items.locale%TYPE;
-  v_item_id                     cr_items.item_id%TYPE;
-  v_revision_id                 cr_revisions.revision_id%TYPE;
-  v_is_registered               boolean;       
-  v_old_revision_id             cr_revisions.revision_id%TYPE;
-  v_new_revision_id             cr_revisions.revision_id%TYPE;
-  v_storage_type                cr_items.storage_type%TYPE;
 begin
 
 	perform content_item__copy (
@@ -2411,9 +2400,11 @@ declare
   v_locale                      cr_items.locale%TYPE;
   v_item_id                     cr_items.item_id%TYPE;
   v_revision_id                 cr_revisions.revision_id%TYPE;
-  v_is_registered               boolean;       
+  v_is_registered               boolean;
   v_old_revision_id             cr_revisions.revision_id%TYPE;
   v_new_revision_id             cr_revisions.revision_id%TYPE;
+  v_old_live_revision_id             cr_revisions.revision_id%TYPE;
+  v_new_live_revision_id             cr_revisions.revision_id%TYPE;
   v_storage_type                cr_items.storage_type%TYPE;
 begin
 
@@ -2426,6 +2417,7 @@ begin
         copy__creation_ip,
 	copy__name
     ); 
+
   -- call content_symlink.copy if the item is a symlink
   else if content_symlink__is_symlink(copy__item_id) = ''t'' then
     PERFORM content_symlink__copy(
@@ -2435,6 +2427,7 @@ begin
         copy__creation_ip,
 	copy__name
     );
+
   -- call content_extlink.copy if the item is an url
   else if content_extlink__is_extlink(copy__item_id) = ''t'' then
     PERFORM content_extlink__copy(
@@ -2444,6 +2437,7 @@ begin
         copy__creation_ip,
 	copy__name
     );
+
   -- make sure the target folder is really a folder
   else if content_folder__is_folder(copy__target_folder_id) = ''t'' then
 
@@ -2499,7 +2493,7 @@ begin
         );
 
 	select
-          latest_revision into v_old_revision_id
+          latest_revision, live_revision into v_old_revision_id, v_old_live_revision_id
         from
        	  cr_items
         where
@@ -2517,12 +2511,32 @@ begin
           );
         end if;
 
+        -- copy the live revision (if there is one and it differs from the latest) to the new item
+	if v_old_live_revision_id is not null then
+          if v_old_live_revision_id <> v_old_revision_id then
+            v_new_live_revision_id := content_revision__copy (
+              v_old_live_revision_id,
+              null,
+              v_item_id,
+              copy__creation_user,
+              copy__creation_ip
+            );
+          else
+            v_new_live_revision_id := v_new_revision_id;
+          end if;
+        end if;
+
+        update cr_items set live_revision = v_new_live_revision, latest_revision = v_new_revision_id where item_id = v_item_id;
+
     end if;
+
   end if; end if; end if; end if;
 
   return v_item_id;
- 
+
 end;' language 'plpgsql';
+
+
 
 select define_function_args('content_item__get_latest_revision','item_id');
 create or replace function content_item__get_latest_revision (integer)
