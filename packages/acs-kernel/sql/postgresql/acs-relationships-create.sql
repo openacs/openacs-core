@@ -267,7 +267,7 @@ returns integer as '
 declare
   drop_type__rel_type               alias for $1;  
   drop_type__cascade_p              alias for $2;  -- default ''f''  
-  v_cascade                         boolean;
+  v_cascade_p                       boolean;
 begin
     -- XXX do cascade_p.
     -- JCD: cascade_p seems to be ignored in acs_o_type__drop_type anyway...
