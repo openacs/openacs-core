@@ -73,9 +73,9 @@ ad_proc -public template::parse_directives { code } {
   return $directives
 }
 
-# Assemble directives into data source(s) for presentation.
-
 ad_proc -public template::get_datasources { code } {
+    Assemble directives into data source(s) for presentation.
+} {
 
   upvar datasources:rowcount rowcount
   set rowcount 0

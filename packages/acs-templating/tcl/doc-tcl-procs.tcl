@@ -11,23 +11,18 @@
 
 namespace eval doc::util {}
 
-# @namespace doc::util
-
-# @private doc::util::dbl_colon_fix 
-
-ad_proc -public doc::util::dbl_colon_fix { text } {
+ad_proc -private doc::util::dbl_colon_fix { text } {
 
   regsub -all {::} $text {__} text
   return $text
 }
 
-# @private sort_see 
-# used to sort the see list, which has structure [name {name} type {type} url {url}]
-# @param element1 the first of the two list elements to be compared
-# @param element2 {default actually, no default value for this because it is required} the 
-# second of the two elements to be compared
-
-ad_proc -public doc::util::sort_see { element1 element2 } {
+ad_proc -private doc::util::sort_see { element1 element2 } {
+    used to sort the see list, which has structure [name {name} type {type} url {url}]
+    @param element1 the first of the two list elements to be compared
+    @param element2 {default actually, no default value for this because it is required} the 
+    second of the two elements to be compared
+} {
   
     if { [lindex $element1 3 ] < [lindex $element2 3] } {
 	return -1 
@@ -40,10 +35,9 @@ ad_proc -public doc::util::sort_see { element1 element2 } {
     return [string compare -nocase [lindex $element1 1] [lindex $element2 1]]
 }
 
-# @private sort_@see
-# procedure to deal with @see comments
-
-ad_proc -public doc::sort_@see { list_ref directive_comments } {
+ad_proc -private doc::sort_@see { list_ref directive_comments } {
+    procedure to deal with @see comments
+} {
   upvar $list_ref see_list
   set type [lindex $directive_comments 0]
   set see_name [lindex $directive_comments 1]
@@ -89,7 +83,22 @@ ad_proc -public doc::sort_@see { list_ref directive_comments } {
 # @see proc doc::parse_namespace doc.html#doc::parse_namespace
 # @see proc doc::util::text_divider
 
-ad_proc -public doc::util::find_marker_indices { text marker } {
+ad_proc -private doc::util::find_marker_indices { text marker } {
+    given a body of text and a text marker, returns a list of position indices
+    for each occurrence of the text marker
+
+    @param text body of text to be searched through
+    @param marker the text-divider mark
+
+    @return list of indices of the position immediately preceding each
+    occurrence of the text marker; if there are no occurrences
+    of the text marker, returns a zero-element list
+
+    @see namespace doc
+    @see proc doc::parse_file
+    @see proc doc::parse_namespace doc.html#doc::parse_namespace
+    @see proc doc::util::text_divider
+} {
 
   set indices_list [list]
   set last_index -1
@@ -108,16 +117,15 @@ ad_proc -public doc::util::find_marker_indices { text marker } {
   return $indices_list
 }
 
-# @private text_divider
-# divides a string variable into a list of strings, all but the first element beginning
-# with the indicated text marker; the first element of the created list contains all of
-# the string preceding the first occurrence of the text marker
-# @param text name of string variable (not the string value itself)
-# @param marker the string indicating text division
+ad_proc -private doc::util::text_divider { text_ref marker } {
+    divides a string variable into a list of strings, all but the first element beginning
+    with the indicated text marker; the first element of the created list contains all of
+    the string preceding the first occurrence of the text marker
+    @param text name of string variable (not the string value itself)
+    @param marker the string indicating text division
 
-# @see proc doc::util::find_marker_indices
-
-ad_proc -public doc::util::text_divider { text_ref marker } {
+    @see proc doc::util::find_marker_indices
+} {
     upvar $text_ref text
     
     set indices_list [doc::util::find_marker_indices $text $marker]
@@ -142,28 +150,24 @@ ad_proc -public doc::util::text_divider { text_ref marker } {
     return 1
 }
 
-# @namespace util
-
-# @private server_root
-# uses ns_library to find the server root, may not always be accurate
-# because it essentially asks for the tcl library path and
-# strips off the last /tcl directory
-
-ad_proc -public template::util::server_root {} {
+ad_proc -private template::util::server_root {} {
+    uses ns_library to find the server root, may not always be accurate
+    because it essentially asks for the tcl library path and
+    strips off the last /tcl directory
+} {
 
   set path_length [expr [llength [file split [ns_library private]]] - 1]
   set svr_root "/[join [lreplace [file split [ns_library private]] $path_length $path_le\ngth] / ]"
   return $svr_root
 }
 
-# @private write_from_template
-# takes a .adp template name and the name of the file to
-# be written and creates the file; also puts out a notice before
-#
-# @param template the name of the template to be used in making the file
-# @param file_name the name of the file to be created
-
-ad_proc -public template::util::write_from_template { template file_name} {
+ad_proc -private template::util::write_from_template { template file_name} {
+    takes a .adp template name and the name of the file to
+    be written and creates the file; also puts out a notice before
+    
+    @param template the name of the template to be used in making the file
+    @param file_name the name of the file to be created
+} {
 
   upvar template_name template_name
   set template_name $template
@@ -177,10 +181,9 @@ ad_proc -public template::util::write_from_template { template file_name} {
 
 }
 
-# @private display_value
-# a proc used for debugging, just prints out a value to the error log
-
-ad_proc -public template::util::display_value { ref } {
+ad_proc -private template::util::display_value { ref } {
+    a proc used for debugging, just prints out a value to the error log
+} {
     upvar $ref value
     ns_log notice "
 $ref:
@@ -188,89 +191,83 @@ $value
 "
 }
 
-# @private proper_noun
-# capitalizes the first letter of a string
-# @return returns formatted string
 
-ad_proc -public template::util::proper_noun { string_ref } {
+ad_proc -private template::util::proper_noun { string_ref } {
+    @private proper_noun
+    capitalizes the first letter of a string
+    @return returns formatted string (UNFINISHED. FIXME.)
+} {
 
 }
 
 
-# @private string_range
-ad_proc -public template::util::string_range { string indices } {
+ad_proc -private template::util::string_range { string indices } {
     return [string range $string [lindex $indices 0] [lindex $indices 1]]
 }
 
-# @private quote_space
-# just takes a body of text and puts a space behind every double quote;
-# this is done so that the text body can be treated as a list
-# without causing problems resulting from list elements 
-# being separated by characters other than a space
+ad_proc -private template::util::quote_space {text} {
+    just takes a body of text and puts a space behind every double quote;
+    this is done so that the text body can be treated as a list
+    without causing problems resulting from list elements 
+    being separated by characters other than a space
 
-# @param text req/none the body of text to be worked on
+    @param text req/none the body of text to be worked on
 
-# @return same text but with a space behind each quote; double quotes
-# that are already trailed by a space are unaffected
-
-ad_proc -public template::util::quote_space {text} {
+    @return same text but with a space behind each quote; double quotes
+    that are already trailed by a space are unaffected
+} {
     regsub -all {"} $text {" } text
     regsub -all {"  } $text {" } text
     return $text
 }
 
-# @namespace doc::util
-
-# @private bracket_space puts a space after all closing curly brackets, does not
-# add a space when brackets are already followed by a space
-
-ad_proc -public doc::util::bracket_space {text} {
+ad_proc -private doc::util::bracket_space {text} {
+    puts a space after all closing curly brackets, does not
+    add a space when brackets are already followed by a space
+} {
     regsub -all {(\})} $text {\1 } text
     regsub -all {(\})  } $text {\1 } text
     return $text
 }
 
-# @private escape_square_brackets escapes out all square brackets
-ad_proc -public doc::util::escape_square_brackets {text} {
+ad_proc -private doc::util::escape_square_brackets {text} {
+    escapes out all square brackets
+} {
     regsub -all {(\[)} $text {\\\1} text
     regsub -all {(\])} $text {\\\1} text
     return $text
 }
 
 
-# @private make_text_listable 
-
-ad_proc -public doc::util::make_text_listable {text_ref} {
+ad_proc -private doc::util::make_text_listable {text_ref} {
     upvar $text_ref text
     set text [doc::util::bracket_space $text]
     set text [template::util::quote_space $text]
     set text [doc::util::escape_square_brackets $text]
 }
 
-# @namespace util
 
-# @private comment_text_normalize escapes quotes and removes comment tags
-# from a body of commented text
-# @param text
-# @return text
-
-ad_proc -public template::util::comment_text_normalize {text} { 
+ad_proc -private template::util::comment_text_normalize {text} {
+    escapes quotes and removes comment tags
+    from a body of commented text
+    @param text
+    @return text
+} { 
     regsub -all {"} $text {\"} text
     regsub -all {(\n)\s*#\s*} $text {\1 } text
     regsub {(\A)\s*#\s*} $text {\1 } text
     return $text
 }
 
-# @private alphabetized_insert
-# takes an alphabetized list and an entry
+ad_proc -private template::util::alphabetized_index {list entry} {
+    takes an alphabetized list and an entry
+    
+    @param list {let's see how this parses out} the alphabetized list
+    @param entry req the value to be inserted
 
-# @param list {let's see how this parses out} the alphabetized list
-# @param entry req the value to be inserted
-
-# @return either the proper list index for an alphabetized insertion or -1 if the entry is
-# already in the list
-
-ad_proc -public template::util::alphabetized_index {list entry} {
+    @return either the proper list index for an alphabetized insertion or -1 if the entry is
+    already in the list
+} {
 
     set result [lsearch -exact $list $entry]
     if { $result != -1 } {
@@ -288,21 +285,23 @@ ad_proc -public template::util::alphabetized_index {list entry} {
 }
 
 
-# @private proc_element_compare
-# used to compare two different elements in a list of parsed data for public or private procs
 
-ad_proc -public template::util::proc_element_compare { element1 element2 } {
+ad_proc -private template::util::proc_element_compare { element1 element2 } {
+    used to compare two different elements in a list of parsed data for public or private procs
+} {
 
     return [string compare -nocase [lindex [lindex [lindex element2 1] 0] 1] [lindex [lindex [lindex element1 1] 0] 1]]
 
 }
 
-# @namespace doc
-
-# @private set_proc_name_source_txt called by parse_comment_text
+# @private set_proc_name_source_txt 
+# called by parse_comment_text
 # @param comment_text this should include the source text
 
-ad_proc -public doc::set_proc_name_source_text_comment_text { proc_block } {
+ad_proc -private doc::set_proc_name_source_text_comment_text { proc_block } {
+    called by parse_comment_text
+    @param comment_text this should include the source text
+} {
     upvar source_txt source_txt
     upvar proc_name proc_name
     upvar comment_text comment_text
@@ -317,11 +316,12 @@ ad_proc -public doc::set_proc_name_source_text_comment_text { proc_block } {
 }
 
 
-# @private parse_comment_text called by parse_namespace
-# @param comment_text body of comment text to be parsed through
-# @param source_text source text of the procedure
+ad_proc -private doc::parse_comment_text { proc_block } {
+    called by parse_namespace
 
-ad_proc -public doc::parse_comment_text { proc_block } {
+    @param comment_text body of comment text to be parsed through
+    @param source_text source text of the procedure
+} {
 
     doc::set_proc_name_source_text_comment_text $proc_block
 
@@ -405,15 +405,14 @@ ad_proc -public doc::parse_comment_text { proc_block } {
 
 }
 
-# @private parse_namespace called by parse_file, this procedure is given the body of 
-# text between two namespace markers in a tcl library file and parses out procedure
-# source and comments
+ad_proc -private doc::parse_namespace { text_lines }  {
+    text between two namespace markers in a tcl library file and 
+    parses out procedure source and comments
 
-# @author simon
+    @author simon
 
-# @param text_lines namespace text body
-
-ad_proc -public doc::parse_namespace { text_lines }  {
+    @param text_lines namespace text body
+}  {
 
     # total_result_listing will contain our complete data set,
     # namespace_list is just a temp variable used for easy bookkeeping;
@@ -540,44 +539,41 @@ ad_proc -public doc::parse_namespace { text_lines }  {
 
 }
 
-# @private parse_file
 
-# Parse API documentation from a Tcl page
-# API documentation is parsed as follows:
-# Document is scanned until a @namespace directive is encountered.
-# The remainder of the file is scanned for @private or @public
-# directives.
-# When one of these directives is encountered, the file is scanned up
-# to a proc declaration and the text in between is parsed as documentation
-# for a single procedure.  The text between the initial @private or @public
-# directive and the next directive is considered a general comment on
-# the procedure
-# Valid directives in a procedure doc include:
-# - @author
-# - @param (for hard parameters)
-# - @see (should have the form namespace::procedure.  A reference to an
-#       entire namespace should be namespace::.  By convention the
-#       API for each namespace should be in a file of the same name, so that
-#       a link can be generated automatically).
-# - @option (for switches such as -foo)
-# - @return
-
-
-# Reads the text for a file and scans for a namespace directive.  When
-# one is encountered, reads until the next namespace or EOF and calls
-# doc::parse_namespace on the accumulated lines to get procedure
-# documentation.
-
-# creates a multirow variable in the variable name designated by result_ref
-# with columns namespace_name, proc_name, public_private, author, param, option, see
-# return and source_text
-
-# Note that this format is suitable for passing to array set for
-# creating a lookup on namespace name.
+ad_proc -private doc::parse_file { path } {
+    Parse API documentation from a Tcl page
+    API documentation is parsed as follows:
+    Document is scanned until a @namespace directive is encountered.
+    The remainder of the file is scanned for @private or @public
+    directives.
+    When one of these directives is encountered, the file is scanned up
+    to a proc declaration and the text in between is parsed as documentation
+    for a single procedure.  The text between the initial @private or @public
+    directive and the next directive is considered a general comment on
+    the procedure
+    Valid directives in a procedure doc include:
+    - @author
+    - @param (for hard parameters)
+    - @see (should have the form namespace::procedure.  A reference to an
+	    entire namespace should be namespace::.  By convention the
+	    API for each namespace should be in a file of the same name, 
+	    so that a link can be generated automatically).
+    - @option (for switches such as -foo)
+    - @return
 
 
-ad_proc -public doc::parse_file { path } {
+    Reads the text for a file and scans for a namespace directive.  When
+    one is encountered, reads until the next namespace or EOF and calls
+    doc::parse_namespace on the accumulated lines to get procedure
+    documentation.
 
+    creates a multirow variable in the variable name designated by result_ref
+    with columns namespace_name, proc_name, public_private, 
+    author, param, option, see, return and source_text
+
+    Note that this format is suitable for passing to array set for
+    creating a lookup on namespace name.
+} {
   set text [template::util::read_file $path]
 
   if { [doc::util::text_divider text {\n#\s*@namespace\s+} ] } {
@@ -598,18 +594,19 @@ ad_proc -public doc::parse_file { path } {
 
 }
 
-# @private doc::parse_tcl_library
-# takes the absolute path of the tcl library directory and parses through it
+ad_proc -private doc::parse_tcl_library { dir_list } {
+    takes the absolute path of the tcl library directory and parses through it
 
-# @see proc doc::parse_file doc.html#doc::parse_file
-# @see namespace util util.html
-# @see proc template::util::comment_text_normalize util.html#template::util::comment_text_normalize
+    @see proc doc::parse_file doc.html#doc::parse_file
+    @see namespace util util.html
+    @see proc template::util::comment_text_normalize util.html#template::util::comment_text_normalize
 
 
-# @return a long lists of lists of lists, each list element contains a three-element list of 
-# the format { {info} {public procedures listing } {private procedures listing}}
+    @return a long lists of lists of lists, each list element contains 
+    a three-element list of the format 
 
-ad_proc -public doc::parse_tcl_library { dir_list } {
+    - { {info} {public procedures listing } {private procedures listing}}
+} {
 
   # namespace_list will be a list containing namespace names only, and should be ordered
   # with respect to namespaces in the same order as the list result
