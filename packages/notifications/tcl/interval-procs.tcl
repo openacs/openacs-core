@@ -1,6 +1,11 @@
 ad_library {
 
-    Notification Intervals
+    Notification Intervals.
+
+    Procs to manage notification intervals. Intervals are the duration of time between notifications.
+    Possible intervals range from "instantaneous" to "weekly".
+
+    CURRENTLY DEPRECATED AND USELESS.
 
     @creation-date 2002-05-24
     @author Ben Adida <ben@openforce.biz>

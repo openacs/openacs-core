@@ -87,7 +87,7 @@
             <file type="content_page" path="www/object-goto.tcl"/>
         </files>
         <parameters>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailDomain"  default="openacs.org" description="The domain for the notification email address" section_name="email"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailDomain"  default="" description="The domain for the notification email address" section_name="email"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailReplyAddressPrefix"  default="notification" description="The prefix for email replies" section_name="email"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailQmailQueue"  description="The location of the qmail queue for incoming email" section_name="email"/>
         </parameters>

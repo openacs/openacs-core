@@ -12,7 +12,7 @@
 
     <fullquery name="search_content_get.get_file_data">
         <querytext>
-	    select ':content' as content,
+	    select :content as content,
                    'file' as storage_type
             from dual
         </querytext>
