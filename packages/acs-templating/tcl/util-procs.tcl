@@ -434,10 +434,30 @@ ad_proc -public template::util::read_file { path } {
 } {
 
   set fd [open $path]
+
+  template::util::set_file_encoding $fd
+
   set text [read $fd]
   close $fd
 
   return $text
+}
+
+ad_proc -public template::util::set_file_encoding { file_channel_id } {
+    Set encoding of the given file channel based on the OutputCharset
+    parameter of AOLserver. All adp, tcl, and txt files are assumed
+    to be in the same charset.
+
+    @param file_channel_id The id of the file to set encoding for.
+    
+    @author Peter Marklund
+} {
+  set output_charset [ns_config "ns/parameters" OutputCharset]
+  set tcl_charset [ns_encodingforcharset $output_charset]
+
+  if { ![empty_string_p $tcl_charset] } {
+      fconfigure $file_channel_id -encoding $tcl_charset
+  }
 }
 
 ad_proc -public template::util::write_file { path text } {
@@ -450,6 +470,9 @@ ad_proc -public template::util::write_file { path text } {
   file mkdir [file dirname $path]
 
   set fd [open $path w]
+
+  template::util::set_file_encoding $fd
+
   puts $fd $text
   close $fd
 }
