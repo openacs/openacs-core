@@ -10,6 +10,13 @@ create table auth_batch_jobs (
   interactive_p              boolean
                              constraint auth_batch_jobs_interactive_nn
                              not null,
+  snapshot_p                 boolean
+                             constraint auth_batch_jobs_snapshot_nn
+                             not null,
+  authority_id               integer
+                             constraint auth_batch_jobs_auth_fk
+                             references auth_authorities(authority_id),
+  message                    text,
   -- if interactive, by which user
   creation_user              integer 
                              constraint auth_batch_job_user_fk
