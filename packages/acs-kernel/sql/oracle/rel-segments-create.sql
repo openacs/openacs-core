@@ -352,21 +352,22 @@ create or replace package body party_approved_member is
     p_rel_type in acs_rels.rel_type%TYPE
   )
   is
-    v_segment_id rel_segments.segment_id%TYPE;
   begin
 
     add_one(p_party_id, p_member_id);
 
     -- if the relation type is mapped to a relational segment map that too
 
-    select segment_id into v_segment_id
-    from rel_segments s
-    where s.rel_type = p_rel_type
-      and s.group_id = p_party_id;
-
-    exception when no_data_found then return;
-
-    add_one(v_segment_id, p_member_id);
+    for v_segments in (select segment_id
+                       from rel_segments
+                       where group_id = p_party_id
+                         and rel_type in (select object_type
+                                          from acs_object_types
+                                          start with object_type = p_rel_type
+                                          connect by prior supertype = object_type))
+    loop
+      add_one(v_segments.segment_id, p_member_id);
+    end loop;
 
   end add;
 
@@ -395,21 +396,22 @@ create or replace package body party_approved_member is
     p_rel_type in acs_rels.rel_type%TYPE
   )
   is
-    v_segment_id rel_segments.segment_id%TYPE;
   begin
 
     remove_one(p_party_id, p_member_id);
 
     -- if the relation type is mapped to a relational segment unmap that too
 
-    select segment_id into v_segment_id
-    from rel_segments s
-    where s.rel_type = p_rel_type
-      and s.group_id = p_party_id;
-
-    exception when no_data_found then return;
-
-    remove_one(v_segment_id, p_member_id);
+    for v_segments in (select segment_id
+                       from rel_segments
+                       where group_id = p_party_id
+                         and rel_type in (select object_type
+                                          from acs_object_types
+                                          start with object_type = p_rel_type
+                                          connect by prior supertype = object_type))
+    loop
+      remove_one(v_segments.segment_id, p_member_id);
+    end loop;
 
   end remove;
 
