@@ -177,6 +177,8 @@ cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-po
 chmod 755 nsd-postgres</action></screen>
         </listitem>
       </itemizedlist>
+      <para>You may need to edit these scripts if you are not using
+      /usr/local/aolserver as the directory of Aolserver4.</para>
     </listitem>
     <listitem>
       <formalpara>
