@@ -3,9 +3,17 @@
         version="1.1"
                 exclude-result-prefixes="doc">
 
-<!-- vinodk: Imports chunk.xsl                   -->
+<!-- Import chunk.xsl  -->
 
+  <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets/html/chunk.xsl"/>
+
+<!-- Red Hat 8/xsl-stylesheets 1.50.0-3 commented out
   <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets-1.50.0-3/html/chunk.xsl"/>
+-->
+
+<!-- Red Hat 9/xsl-stylesheets 1.58.1-2 commented out
+  <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets-1.58.1-2/html/chunk.xsl"/>
+-->
 
 <!-- vinodk: Not sure if this is needed                   -->
   <xsl:output media-type="text/html" encoding="iso-8859-1"/>
@@ -41,18 +49,18 @@
                   <xsl:call-template name="gentext.nav.prev"/>
                 </a>
               </xsl:if>
-              <xsl:text><![CDATA[&nbsp;]]></xsl:text>
+              <xsl:text> </xsl:text>
             </td>
             <th width="60%" align="center">
               <xsl:choose>
                 <xsl:when test="count($up) > 0 and $up != $home">
                   <xsl:apply-templates select="$up" mode="object.title.markup"/>
                 </xsl:when>
-                <xsl:otherwise><![CDATA[&nbsp;]]></xsl:otherwise>
+                <xsl:otherwise> </xsl:otherwise>
               </xsl:choose>
             </th>
             <td width="20%" align="right">
-              <xsl:text><![CDATA[&nbsp;]]></xsl:text>
+              <xsl:text> </xsl:text>
               <xsl:if test="count($next)>0">
                 <a accesskey="n">
                   <xsl:attribute name="href">
@@ -95,7 +103,7 @@
                   <xsl:call-template name="gentext.nav.prev"/>
                 </a>
               </xsl:if>
-              <xsl:text><![CDATA[&nbsp;]]></xsl:text>
+              <xsl:text> </xsl:text>
             </td>
             <td width="20%" align="center">
               <xsl:choose>
@@ -109,11 +117,11 @@
                     <xsl:call-template name="gentext.nav.home"/>
                   </a>
                 </xsl:when>
-                <xsl:otherwise><![CDATA[&nbsp;]]></xsl:otherwise>
+                <xsl:otherwise> </xsl:otherwise>
               </xsl:choose>
             </td>
             <td width="40%" align="right">
-              <xsl:text><![CDATA[&nbsp;]]></xsl:text>
+              <xsl:text> </xsl:text>
               <xsl:if test="count($next)>0">
                 <a accesskey="n">
                   <xsl:attribute name="href">
@@ -130,7 +138,7 @@
           <tr>
             <td width="40%" align="left">
               <xsl:apply-templates select="$prev" mode="object.title.markup"/>
-              <xsl:text><![CDATA[&nbsp;]]></xsl:text>
+              <xsl:text> </xsl:text>
             </td>
             <td width="20%" align="center">
               <xsl:choose>
@@ -144,25 +152,22 @@
                     <xsl:call-template name="gentext.nav.up"/>
                   </a>
                 </xsl:when>
-                <xsl:otherwise><![CDATA[&nbsp;]]></xsl:otherwise>
+                <xsl:otherwise> </xsl:otherwise>
               </xsl:choose>
             </td>
             <td width="40%" align="right">
-              <xsl:text><![CDATA[&nbsp;]]></xsl:text>
+              <xsl:text> </xsl:text>
               <xsl:apply-templates select="$next" mode="object.title.markup"/>
             </td>
           </tr>
         </table>
         <hr/>
         <address>
-            <xsl:text>rmello at fslc.usu.edu</xsl:text>
-        </address>
-        <address>
           <a>
             <xsl:attribute name="href">
-              <xsl:text>mailto:vinod@kurup.com</xsl:text>
+              <xsl:text>mailto:docs@openacs.org</xsl:text>
             </xsl:attribute>
-            <xsl:text>vinod@kurup.com</xsl:text>
+            <xsl:text>docs@openacs.org</xsl:text>
           </a>
         </address>
       </div>
@@ -179,7 +184,7 @@
       <center>
         <a>
           <xsl:attribute name="href">
-            <xsl:text>http://openacs.org/doc/openacs-4/</xsl:text>
+            <xsl:text>http://openacs.org/doc/openacs-4-6-3/</xsl:text>
                     <xsl:call-template name="href.target">
                       <xsl:with-param name="object" select="."/>
                     </xsl:call-template>
@@ -199,7 +204,7 @@
       <xsl:apply-templates/>
         <br />
         <xsl:text>
-          OpenACS docs are written by the named authors, but may be edited
+          OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </xsl:text>
       </p>
@@ -303,9 +308,9 @@
 </xsl:template>
 
 <xsl:template match="action">
-  <div class="action">
+  <pre class="action">
     <xsl:call-template name="inline.charseq"/>
-  </div>	
+  </pre>	
 </xsl:template>
 
 <xsl:template match="replaceable">
