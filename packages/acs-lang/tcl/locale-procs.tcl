@@ -803,6 +803,6 @@ ad_proc -deprecated -public ad_locale_get_label { locale } {
     return [db_string select_locale_label {
         select label 
           from ad_locales
-         where locale = :locale
+         where lower(locale) = lower(:locale)
     }]
 }

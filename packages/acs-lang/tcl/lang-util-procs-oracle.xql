@@ -8,7 +8,7 @@
       
         select nls_language
         from   ad_locales 
-        where  language = :language
+	where  lower(trim(language)) = lower(:language)
         and    rownum = 1
     
       </querytext>
