@@ -627,7 +627,7 @@ begin
     '' where acs_objects.object_id = cr.revision_id 
       and cr.item_id = i.item_id'' || joins;
 
-  PERFORM refresh_trigger(refresh_view__content_type);
+  PERFORM content_type__refresh_trigger(refresh_view__content_type);
 
 -- exception
 --   when others then
