@@ -57,8 +57,8 @@
       packages with additional functionality.  Install these packages
       with the <a href="/acs-admin/apm/" title="OpenACS Package Manager on your server">Package Manager</a>.</li>
 
-      <li>Use the <a href="/admin/site-map/" title="The Site Map on
-      your server">Site Map</a> to <b>mount and configure packages</b>. </li>
+      <li>Use the <a href="/admin/site-map/" 
+      title="The Site Map on your server">Site Map</a> to <b>mount and configure packages</b>. </li>
       </ul>
 </ul> 
       
