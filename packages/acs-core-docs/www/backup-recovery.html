@@ -33,31 +33,31 @@
         OpenACS installations comprise files and database contents.
         If you follow the reference install and put all files,
         including configuration files, in
-        <tt class="computeroutput">/web/<span class="replaceable"><span class="replaceable">service0</span></span>/</tt>,
+        <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/</tt>,
         and back up the database nightly to a file in
-        <tt class="computeroutput">/web/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup</tt>,
+        <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup</tt>,
         then you can apply standard file-based backup strategies to
-        <tt class="computeroutput">/web/<span class="replaceable"><span class="replaceable">service0</span></span></tt>
+        <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span></tt>
 </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="snapshot-backup"></a>Snapshot backup and recovery</h3></div></div><div></div></div><p>This section describes how to make a one-time backup of
       the files and database.  This is useful for rolling back to
       known-good versions of a service, such as at initial
       installation and just before an upgrade.</p><div class="itemizedlist"><ul type="disc"><li><p><b>PostGreSQL. </b>Create a backup file and verify that it was created and has a reasonable size (several megabytes).</p><pre class="screen">[root@localhost root]# <b class="userinput"><tt>su - service0</tt></b>
-[service0@localhost service0]$ <b class="userinput"><tt>pg_dump -f /web/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup/before_upgrade_to_4.6.dmp <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
-[service0@localhost service0]$ <b class="userinput"><tt>ls -al /web/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup/before_upgrade_to_4.6.dmp </tt></b>
--rw-rw-r-x    1 service0  service0   4005995 Feb 21 18:28 /web/service0/database-backup/before_upgrade_to_4.6.dmp
+[service0@localhost service0]$ <b class="userinput"><tt>pg_dump -f /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup/before_upgrade_to_4.6.dmp <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+[service0@localhost service0]$ <b class="userinput"><tt>ls -al /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup/before_upgrade_to_4.6.dmp </tt></b>
+-rw-rw-r-x    1 service0  service0   4005995 Feb 21 18:28 /var/lib/aolserver/service0/database-backup/before_upgrade_to_4.6.dmp
 [service0@localhost service0]$ <b class="userinput"><tt>exit</tt></b>
 [root@localhost root]#
 <pre class="action"><span class="action">su - service0
-pg_dump -f /web/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup/before_upgrade_to_4.6.dmp <span class="replaceable"><span class="replaceable">openacs-dev</span></span>
-ls -al /web/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup/before_upgrade_to_4.6.dmp
+pg_dump -f /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup/before_upgrade_to_4.6.dmp <span class="replaceable"><span class="replaceable">openacs-dev</span></span>
+ls -al /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup/before_upgrade_to_4.6.dmp
 exit</span></pre></pre></li><li><p><b>File tree with CVS. </b>If you are already using CVS, you probably don't
               need to do anything to back up your data.  Just make
               sure that your current work is checked into the system.
               You can then roll back based on date - note the
               current system time, down to the minute.  For maximum
               safety, you can apply a tag to your current
-              files.  Note that, if you did the CVS options in this document, the <tt class="computeroutput">/web/service0/etc</tt> directory is not included in cvs and you may want to add it.</p><pre class="screen">[root@localhost root]# <b class="userinput"><tt>su - service0</tt></b>
-[service0@localhost service0]$ <b class="userinput"><tt>cd /web/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+              files.  Note that, if you did the CVS options in this document, the <tt class="computeroutput">/var/lib/aolserver/service0/etc</tt> directory is not included in cvs and you may want to add it.</p><pre class="screen">[root@localhost root]# <b class="userinput"><tt>su - service0</tt></b>
+[service0@localhost service0]$ <b class="userinput"><tt>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [service0@localhost service0]$ <b class="userinput"><tt>cvs commit -m "last-minute commits before upgrade to 4.6"</tt></b>
 cvs commit: Examining .
 cvs commit: Examining bin
@@ -70,24 +70,24 @@ T bin/ad-context-server.pl
 [service0@localhost service0]$ <b class="userinput"><tt>exit</tt></b>
 [root@localhost root]# 
 <pre class="action"><span class="action">su - service0
-cd /web/<span class="replaceable"><span class="replaceable">service0</span></span>
+cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>
 cvs commit -m "last-minute commits before upgrade to 4.6"
 cvs tag before_upgrade_to_4_6
 exit</span></pre></pre><p>To restore files from a cvs tag such as the one used above:</p><pre class="screen">[root@localhost root]# <b class="userinput"><tt>su - service0</tt></b>
-[service0@localhost service0]$ <b class="userinput"><tt>cd /web/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+[service0@localhost service0]$ <b class="userinput"><tt>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [service0@localhost service0]$ <b class="userinput"><tt>cvs up -r current</tt></b>
 [service0@localhost service0]$ <b class="userinput"><tt>exit</tt></b>
 <pre class="action"><span class="action"><b class="userinput"><tt>su - service0</tt></b>
-cd /web/<span class="replaceable"><span class="replaceable">service0</span></span>
+cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>
 cvs up -r current</span></pre></pre></li><li><p><b>File tree without CVS. </b>If you don't use cvs, you may want to back up the working directory.  The simplest way is just to copy it.</p><pre class="screen">[root@localhost root]# <b class="userinput"><tt>su - service0</tt></b>
-[service0@localhost service0]$ <b class="userinput"><tt>cp -r /web/<span class="replaceable"><span class="replaceable">service0</span></span> /web/<span class="replaceable"><span class="replaceable">service0</span></span>-before-upgrade-to-4.6</tt></b>
+[service0@localhost service0]$ <b class="userinput"><tt>cp -r /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span> /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>-before-upgrade-to-4.6</tt></b>
 [service0@localhost service0]$ <b class="userinput"><tt>exit</tt></b>
 [root@localhost root]# 
 <pre class="action"><span class="action">su - service0
-cp -r /web/<span class="replaceable"><span class="replaceable">service0</span></span> /web/<span class="replaceable"><span class="replaceable">service0</span></span>-before-upgrade-to-4.6
+cp -r /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span> /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>-before-upgrade-to-4.6
 exit</span></pre></pre><p>To restore the files, copy the directory back (do this while the service is stopped):</p><pre class="screen">[root@localhost root]# <b class="userinput"><tt>su - service0</tt></b>
-[service0@localhost service0]$<b class="userinput"><tt> mv /web/<span class="replaceable"><span class="replaceable">service0</span></span> /web/openacs-failed-upgrade</tt></b>
-[service0@localhost service0]$<b class="userinput"><tt> mv /web/<span class="replaceable"><span class="replaceable">service0</span></span>-before-upgrade-to-4.6 /web/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+[service0@localhost service0]$<b class="userinput"><tt> mv /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span> /var/lib/aolserver/openacs-failed-upgrade</tt></b>
+[service0@localhost service0]$<b class="userinput"><tt> mv /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>-before-upgrade-to-4.6 /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [service0@localhost service0]$ <b class="userinput"><tt>exit</tt></b>
 [root@localhost root]#</pre></li><li><p><a name="rollback-database"></a><b>Database Rollback. </b>Restore the database to its backed-up state.</p><pre class="screen">[root@localhost root]# <b class="userinput"><tt>su - service0</tt></b>
 [service0@localhost service0]$ <b class="userinput"><tt>svc -d /service/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
@@ -100,7 +100,7 @@ procedures and things in the right order for them to be reassembled.
 In practice, OpenACS users have found that rebuilding some of the
 common procedures before running the restore usually addresses this.
 You will see a number of "already exists" errors when you run the
-database restore; these can be ignored.  This <a href="http://openacs.org/forums/message-view?message_id=70759" target="_top">forum thread</a> has more information.</p><pre class="screen">[service0@localhost service0]$ <b class="userinput"><tt>psql -f /web/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/acs-kernel/sql/postgresql/postgresql.sql <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+database restore; these can be ignored.  This <a href="http://openacs.org/forums/message-view?message_id=70759" target="_top">forum thread</a> has more information.</p><pre class="screen">[service0@localhost service0]$ <b class="userinput"><tt>psql -f /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/acs-kernel/sql/postgresql/postgresql.sql <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [service0@localhost service0]$ <b class="userinput"><tt>psql <span class="replaceable"><span class="replaceable">service0</span></span> &lt; /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp</tt></b>
 [service0@localhost service0]$ <b class="userinput"><tt>svc -u /service/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [service0@localhost service0]$ <b class="userinput"><tt>exit</tt></b></pre><pre class="screen">All commands for a database rollback:
@@ -108,8 +108,8 @@ database restore; these can be ignored.  This <a href="http://openacs.org/forums
 svc -d /service/<span class="replaceable"><span class="replaceable">service0</span></span>
 dropdb <span class="replaceable"><span class="replaceable">service0</span></span>
 createdb <span class="replaceable"><span class="replaceable">service0</span></span>
-psql -f /web/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/acs-kernel/sql/postgresql/postgresql.sql <span class="replaceable"><span class="replaceable">service0</span></span>
-psql <span class="replaceable"><span class="replaceable">service0</span></span> &lt; /web/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup/before_upgrade_to_4.6.dmp
+psql -f /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/acs-kernel/sql/postgresql/postgresql.sql <span class="replaceable"><span class="replaceable">service0</span></span>
+psql <span class="replaceable"><span class="replaceable">service0</span></span> &lt; /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup/before_upgrade_to_4.6.dmp
 svc -u /service/<span class="replaceable"><span class="replaceable">service0</span></span>
 exit</span></pre></pre></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="backup-file-system"></a>Back up the file system</h3></div></div><div></div></div><p>Here's a quick manual way to back up a reference install -
       it should be replaced by an automated script within
@@ -117,7 +117,7 @@ exit</span></pre></pre></li></ul></div></div><div class="sect2" lang="en"><div c
       <tt class="computeroutput">supervise</tt> directory, which is
       unneccesary and has complicated permissions.  Make sure that you
       are using the cron job to back up the database to a file in
-      <tt class="computeroutput">/web/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup</tt>
+      <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup</tt>
       so that the tar command will include the database.</p><p>In the tar command,</p><div class="itemizedlist"><ul type="disc"><li><p><tt class="computeroutput">c</tt> create a
           new tar archive</p></li><li><p><tt class="computeroutput">p</tt> preserves permissions.</p></li><li><p><tt class="computeroutput">s</tt> preserves file sort order</p></li><li><p><tt class="computeroutput">j</tt> compresses the output with bz2.</p></li><li><p>The <tt class="computeroutput">--exclude</tt> clauses skips some daemontools files that
           are owned by root and thus cannot be backed up by the
@@ -125,13 +125,13 @@ exit</span></pre></pre></li></ul></div></div><div class="sect2" lang="en"><div c
           break anything by omitting them.</p></li><li><p>The <tt class="computeroutput">--file</tt> clause
           specifies the name of the output file to be generated; we
           manually add the correct extensions.</p></li><li><p>The last clause,
-          <tt class="computeroutput">/web/<span class="replaceable"><span class="replaceable">service0</span></span>/</tt>,
+          <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/</tt>,
           specifies the starting point for backup.  Tar defaults to
           recursive backup.</p></li></ul></div><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
-[service0@yourserver service0]$ <b class="userinput"><tt>tar -cpsj --exclude /web/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/daemontools/supervise --file /tmp/<span class="replaceable"><span class="replaceable">service0</span></span>-backup.tar.bz2 /web/<span class="replaceable"><span class="replaceable">service0</span></span>/ </tt></b>
+[service0@yourserver service0]$ <b class="userinput"><tt>tar -cpsj --exclude /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/daemontools/supervise --file /tmp/<span class="replaceable"><span class="replaceable">service0</span></span>-backup.tar.bz2 /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/ </tt></b>
 tar: Removing leading `/' from member names
 [service0@yourserver service0]$</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="automated-backup"></a>Automated Backup (OPTIONAL)</h3></div></div><div></div></div><p>Backup can encompass all files in
-    <tt class="computeroutput">/web/service0</tt>.  For a development
+    <tt class="computeroutput">/var/lib/aolserver/service0</tt>.  For a development
     server, putting the files in cvs, and backing up the database nightly, is sufficient.  (It's important then to back up the cvs repository!)</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="postgres-quick-backup"></a>Postgres automatic backup</h4></div></div><div></div></div><p>Backing up the database consists of creating a file
         which is a picture of the database at a particular moment.
         Postgres can be backed up while running.  A quick way to automate database backup is a cron job.  This
@@ -143,8 +143,8 @@ tar: Removing leading `/' from member names
         single nightly backup file which is then collected into a
         bigger backup file that includes the other parts of the
         service (web pages, content, code).  To make a new file every
-        night, edit the crontab file for <span class="replaceable"><span class="replaceable">service0</span></span>:</p><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>export EDITOR=emacs;crontab -e</tt></b></pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/pg_dump -f /web/service0/database-backup/service0_$(date +%Y-%m-%d).dmp service0</pre><p>If you plan to back up the whole <tt class="computeroutput">/web/<span class="replaceable"><span class="replaceable">service0</span></span></tt> directory, then it would be redundant to keep a history of database backups.  In that case, set up the cron job to overwrite the previous backup each time:</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/pg_dump -f /web/service0/database-backup/service0_nightly.dmp service0</pre></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2833898"></a>A full Backup/Recovery cycle</h3></div></div><div></div></div><p><span class="emphasis"><em>On a test service</em></span>, make sure that your backup-recovery process work.  After backing up the database and file system, delete the service as detailed below and then recover it.</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2833915"></a>Delete the Service</h4></div></div><div></div></div><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>svc -d /service/service0</tt></b>
-[root@yourserver root]# <b class="userinput"><tt>mv /web/service0/ /web/service0.lost</tt></b>
+        night, edit the crontab file for <span class="replaceable"><span class="replaceable">service0</span></span>:</p><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>export EDITOR=emacs;crontab -e</tt></b></pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/pg_dump -f /var/lib/aolserver/service0/database-backup/service0_`date +\%Y-\%m-\%d`.dmp service0</pre><p>If you plan to back up the whole <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span></tt> directory, then it would be redundant to keep a history of database backups.  In that case, set up the cron job to overwrite the previous backup each time:</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/pg_dump -f /var/lib/aolserver/service0/database-backup/service0_nightly.dmp service0</pre></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2833921"></a>A full Backup/Recovery cycle</h3></div></div><div></div></div><p><span class="emphasis"><em>On a test service</em></span>, make sure that your backup-recovery process work.  After backing up the database and file system, delete the service as detailed below and then recover it.</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2833939"></a>Delete the Service</h4></div></div><div></div></div><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>svc -d /service/service0</tt></b>
+[root@yourserver root]# <b class="userinput"><tt>mv /var/lib/aolserver/service0/ /var/lib/aolserver/service0.lost</tt></b>
 [root@yourserver root]#<b class="userinput"><tt> rm /service/service0</tt></b>
 rm: remove symbolic link `/service/service0'? y
 [root@yourserver root]# <b class="userinput"><tt>ps -auxw | grep service0</tt></b>
@@ -170,24 +170,24 @@ CREATE USER
 logout
 
 [root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
-[service0@yourserver service0]$ <b class="userinput"><tt>cd /web</tt></b>
+[service0@yourserver service0]$ <b class="userinput"><tt>cd /var/lib/aolserver</tt></b>
 [service0@yourserver web]$<b class="userinput"><tt> tar xjf /tmp/service0-backup.tar.bz2</tt></b>
 [service0@yourserver web]$ <b class="userinput"><tt>chmod -R 700 service0</tt></b>
 [service0@yourserver web]$ <b class="userinput"><tt>createdb <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 CREATE DATABASE
-[service0@yourserver web]$<b class="userinput"><tt> psql -f /web/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/acs-kernel/sql/postgresql/postgresql.sql <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+[service0@yourserver web]$<b class="userinput"><tt> psql -f /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/acs-kernel/sql/postgresql/postgresql.sql <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 <span class="emphasis"><em>(many lines omitted)</em></span>
-[service0@yourserver web]$ <b class="userinput"><tt>psql <span class="replaceable"><span class="replaceable">service0</span></span> &lt; /web/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup/<span class="replaceable"><span class="replaceable">database-backup.dmp</span></span></tt></b>
+[service0@yourserver web]$ <b class="userinput"><tt>psql <span class="replaceable"><span class="replaceable">service0</span></span> &lt; /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup/<span class="replaceable"><span class="replaceable">database-backup.dmp</span></span></tt></b>
 <span class="emphasis"><em>(many lines omitted)</em></span>
 [service0@yourserver web]$ <b class="userinput"><tt>exit</tt></b>
-[root@yourserver root]# <b class="userinput"><tt>ln -s /web/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/daemontools /service/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+[root@yourserver root]# <b class="userinput"><tt>ln -s /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/daemontools /service/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [root@yourserver root]# <b class="userinput"><tt>sleep 10</tt></b>
 [root@yourserver root]# <b class="userinput"><tt>svgroup web /service/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [root@yourserver root]#</pre></li></ol></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="other-backup-strategies"></a>Other Backup Strategies</h3></div></div><div></div></div><p>Earlier strategies, included here because this section
         hasn't been fully updated yet.</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="install-export-oracle"></a>Set Up Nightly Oracle Exports</h4></div></div><div></div></div><p>
       (This has not yet been updated to fit with the Reference
       install.  To do so, edit the backup script to save the backup
-      file in <tt class="computeroutput">/web/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup</tt>).
+      file in <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup</tt>).
       While you're working with Oracle, you should configure it to do
       automatic exports. An export is a separate backup copy of the
       database.  This copy includes all of the database's state at the
@@ -275,7 +275,7 @@ root:~# crontab -e</pre><p>Now add the following line on a line by itself </p><p
 root:~# crontab -l | grep export-oracle
 0 23 * * * /usr/sbin/export-oracle
 root:~# exit
-; Logout</pre><p>If you see the line, go ahead and log out.</p></li></ul></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="install-export-postgres"></a>Set up nightly Postgres exports</h4></div></div><div></div></div><p>This is an alternate method to the crontab backup.
+; Logout</pre><p>If you see the line, go ahead and log out.</p></li></ul></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="install-export-postgres"></a>Set up nightly Postgres exports</h4></div></div><div></div></div><p>This is an alternate method to the crontabls - backup.
       Dowload <a href="files/acs-pgbackup-init.txt" target="_top">this script</a>
       to <tt class="computeroutput">/tmp</tt>. At the top of the script
       are several variables that you'll need to customize:
@@ -304,7 +304,7 @@ root:~# exit
       midnight. Note that this script only backs up the database - not the
       OpenACS scripts and file content.
     </p><pre class="programlisting">
-joeuser:~$ cp /tmp/acs-pgbackup-init.txt ~/web/birdnotes/tcl/acs-pgbackup-init.tcl
+joeuser:~$ cp /tmp/acs-pgbackup-init.txt ~/var/lib/aolserver/birdnotes/tcl/acs-pgbackup-init.tcl
 joeuser:~$ restart-aolserver birdnotes</pre><p>
       That's it! The script will email you with each successful backup (or
       if it fails, it will send you an email with the reason)

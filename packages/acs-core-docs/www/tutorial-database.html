@@ -2,7 +2,7 @@
       by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2833194"></a>Code the data model</h3></div></div><div></div></div><p>We create all database objects with scripts in the
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2838908"></a>Code the data model</h3></div></div><div></div></div><p>We create all database objects with scripts in the
       <tt class="computeroutput">samplenote/sql/</tt> directory.  All
       database scripts are database-specific and are thus in either
       the <tt class="computeroutput">samplenote/sql/oracle</tt> or
@@ -39,7 +39,7 @@ Directory /cvsroot/service0/packages/samplenote/sql/postgresql added to the repo
       <tt class="computeroutput">@author</tt> which will be picked up
       by the API browser.  The string
       <tt class="computeroutput">$Id$</tt> will automatically be
-      expanded when the file is checked in to cvs.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs samplenote-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2838584"></a><p class="title"><b>Figure 10.2. Database Creation Script - master create file</b></p><pre class="programlisting">--
+      expanded when the file is checked in to cvs.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs samplenote-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2835341"></a><p class="title"><b>Figure 10.2. Database Creation Script - master create file</b></p><pre class="programlisting">--
 -- packages/samplenote/sql/postgresql/samplenote-create.sql
 --
 -- @author rhs@mit.edu
@@ -49,7 +49,7 @@ Directory /cvsroot/service0/packages/samplenote/sql/postgresql added to the repo
 --
 
 \i samplenote-table-create.sql
-\i samplenote-functions-create.sql</pre></div><p>Create the file to create the database table.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs samplenote-table-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2827935"></a><p class="title"><b>Figure 10.3. Database Creation Script - table</b></p><pre class="programlisting">--
+\i samplenote-functions-create.sql</pre></div><p>Create the file to create the database table.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs samplenote-table-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2835198"></a><p class="title"><b>Figure 10.3. Database Creation Script - table</b></p><pre class="programlisting">--
 -- packages/samplenote/sql/postgresql/samplenote-table-create.sql
 --
 -- @author rhs@mit.edu
@@ -92,7 +92,7 @@ select acs_object_type__create_type (
 	null,				        -- type_extension_table
 	''samplenote__name'' 			-- name_method
 	);
-</pre></div><p>Create the file to create the functions used to manipulate records.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs samplenote-functions-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2838534"></a><p class="title"><b>Figure 10.4. Database Creation Script - functions</b></p><pre class="programlisting">--
+</pre></div><p>Create the file to create the functions used to manipulate records.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs samplenote-functions-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2838636"></a><p class="title"><b>Figure 10.4. Database Creation Script - functions</b></p><pre class="programlisting">--
 -- packages/samplenote/sql/postgresql/samplenote-functions-create.sql
 --
 -- @author rhs@mit.edu
@@ -187,7 +187,7 @@ begin
 end;
 ' language 'plpgsql';
 </pre></div><p>Create a database file to drop everything if the package
-        is uninstalled.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs samplenote-drop.sql</tt></b></pre><div class="figure"><a name="id2835266"></a><p class="title"><b>Figure 10.5. Database deletion script</b></p><pre class="programlisting">-- packages/samplenote/sql/samplenote-drop.sql
+        is uninstalled.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs samplenote-drop.sql</tt></b></pre><div class="figure"><a name="id2833054"></a><p class="title"><b>Figure 10.5. Database deletion script</b></p><pre class="programlisting">-- packages/samplenote/sql/samplenote-drop.sql
 -- drop script
 --
 -- @author rhs@mit.edu
