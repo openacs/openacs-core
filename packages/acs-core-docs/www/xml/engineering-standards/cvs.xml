@@ -772,7 +772,7 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
       <listitem>
         <para>
           The 
-            <ulink url="http://www.openacs.org/cvs">
+            <ulink url="http://cvs.openacs.org/cvs/">
               OpenACS cvs web</ulink>
             and
             <ulink url="http://xarg.net/tools/cvs/">
