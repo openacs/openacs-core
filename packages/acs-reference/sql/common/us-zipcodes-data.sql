@@ -5,8 +5,6 @@
 --
 -- $Id$
 
-set feedback off;
-
 insert into us_zipcodes values ('00210','PORTSMOUTH','33','015',+43.005895,-071.013202);
 insert into us_zipcodes values ('00211','PORTSMOUTH','33','015',+43.005895,-071.013202);
 insert into us_zipcodes values ('00212','PORTSMOUTH','33','015',+43.005895,-071.013202);
@@ -42200,6 +42198,5 @@ insert into us_zipcodes values ('99928','WARD COVE','02','130',+55.395359,-131.6
 insert into us_zipcodes values ('99929','WRANGELL','02','280',+56.449893,-132.364407);
 insert into us_zipcodes values ('99950','KETCHIKAN','02','130',+55.542007,-131.432682);
 
-set feedback on;
-
+commit;
 -- End of US Zipcode Database (42192 records)

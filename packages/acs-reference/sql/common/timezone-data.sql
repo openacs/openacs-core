@@ -4,8 +4,6 @@
 -- 
 -- @cvs-id $Id$
 
-set feedback off;
-
 begin
     timezone.new('Africa/Abidjan','+000000');
     timezone.new('Africa/Accra','+000000');
@@ -532,4 +530,3 @@ end;
 /
 show errors
 
-set feedback on;

@@ -4,48 +4,6 @@
 -- @creation-date 2000-11-28
 -- @cvs-id $Id$
 
-create table us_states (
-    abbrev          char(2)
-                    constraint us_states_abbrev_pk primary key,
-    state_name      varchar2(100)
-	            constraint us_states_state_name_nn not null
-                    constraint us_states_state_name_uq unique,
-    fips_state_code char(2)
-                    constraint us_states_fips_state_code_uq unique
-);
-
-comment on table us_states is '
-This is the US states table.
-';
-
-comment on column us_states.abbrev is '
-This is the 2 letter abbreviation for states.
-';
-
-comment on column us_states.fips_state_code is '
-The FIPS code used by the USPS for certain delivery types.
-';
-
--- add this table into the reference repository
-declare
-    v_id integer;
-begin
-    v_id := acs_reference.new(
-        table_name      => 'US_STATES',
-        source          => 'Internal',
-        source_url      => '',
-        last_update     => sysdate,
-        internal_data_p => 't',
-        effective_date  => sysdate
-    );
-commit;
-end;
-/
-
--- Some data
-
-set feedback off;
-
 insert into us_states values ('AL','ALABAMA','01');
 insert into us_states values ('AK','ALASKA','02');
 insert into us_states values ('AZ','ARIZONA','04');
@@ -115,8 +73,6 @@ insert into us_states values ('84','HOWLAND ISLAND','84');
 insert into us_states values ('86','JARVIS ISLAND','86');
 insert into us_states values ('89','KINGMAN REEF','89');
 insert into us_states values ('95','PALMYRA ATOLL','95');
-
-set feedback on;
 
 commit;
 
