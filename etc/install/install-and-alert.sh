@@ -19,20 +19,41 @@ if [ -f ~/.bashrc ]; then
     source ~/.bashrc
 fi
 
-# Clumsy argument handling, can't use shift as I'm passing
-# the arguments to install.sh
-config_file_next=0
-for arg in $@;
-do
-    if [ "$config_file_next" == "1" ]; then
-        export config_file="$arg"
-        config_file_next=0
-    fi
-
-    if [ "$arg" == "--config-file" ]; then        
-        config_file_next="1"
-    fi
+# Look for two-part command line arguments
+# Also, we need to look for command-line setting for config file
+# before we load the config file
+config_val_next=0
+server_next=0
+export config_file="config.tcl"
+server_overridden="no"
+for arg in "$@"
+  do
+  if [ $config_val_next == "1" ]; then
+      export config_file=$arg
+      config_val_next=0
+  fi
+  if [ $server_next == "1" ]; then
+      # Overrides server setting in config file
+      export server=$arg
+      server_next=0
+      server_overridden="yes"
+  fi
+  if [ $arg == "--config-file" ]; then
+      config_val_next=1
+  fi
+  if [ $arg == "--server" ]; then
+      server_next=1
+  fi
 done
+
+# Create a config file with overridden server name if it was
+# provided on the command line
+if parameter_true "$server_overridden"; then
+    echo "$0: Overriding config server setting with $server"
+    create_override_config_file $server $config_file
+else
+    export source_config_file=$config_file
+fi
 
 alert_keyword=`get_config_param alert_keyword`
 send_alert_script=`get_config_param send_alert_script`
