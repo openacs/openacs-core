@@ -6,7 +6,7 @@
 <querytext>
 select acs__add_user(
 	:user_id,
-	'person',
+	'user',
 	now(),
 	NULL,
 	:peeraddr,

@@ -21,4 +21,13 @@
     where token_id >= r.first and r.first+15 > token_id;
     </querytext>
    </fullquery>
+  <fullquery name="sec_update_user_session_info.update_last_visit">
+    <querytext>
+        update users
+        set second_to_last_visit = last_visit,
+            last_visit = now(),
+            n_sessions = n_sessions + 1
+        where user_id = :user_id
+    </querytext>
+   </fullquery>
 </queryset>

@@ -582,12 +582,12 @@ end;' language 'plpgsql';
 
 
 -- function permission_p
-create function acs_permission__permission_p ()
+create function acs_permission__permission_p (integer,integer,varchar)
 returns boolean as '
 declare
-    permission_p__object_id           integer;
-    permission_p__party_id            integer;
-    permission_p__privilege           integer;
+    permission_p__object_id           alias for $1;
+    permission_p__party_id            alias for $2;
+    permission_p__privilege           alias for $3;
     exists_p                          boolean;       
 begin
     -- We should question whether we really want to use the

@@ -119,7 +119,11 @@ switch $kind {
                     file_type = 'data_model_upgrade')
           order by path
         } {
-            multirow append sql_files $file_id $path [file tail $path] ""
+           # Set relative path to everything after sql/ (just using
+           # file tail breaks when you've got subdirs of sql)
+           regexp {^sql/(.*)} $path match relative_path
+
+            multirow append sql_files $file_id $path $relative_path ""
         }
     }
     content {
