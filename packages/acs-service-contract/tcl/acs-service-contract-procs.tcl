@@ -44,7 +44,7 @@ ad_proc -public acs_sc::invoke {
         }
         acs_sc::impl::get -impl_id $impl_id -array impl_info
         set impl $impl_info(impl_name)
-        if { ![string equal $contract $impl_info(impl_contract_name)] } {
+        if { ![empty_string_p $contract] && ![string equal $contract $impl_info(impl_contract_name)] } {
             error "The cotnract of implementation with id $impl_id does not match contract passed in. Expected contract to be '$contract', but contract of impl_id was '$impl_info(impl_contract_name)'"
         }
         set contract $impl_info(impl_contract_name)
