@@ -169,28 +169,36 @@ ad_proc -public ad_form {
     <dd>Declare form elements (described in detail below)
     </dd>
 
+    <p><dt><b>-on_request</b></dt><p>
+    <dd>A code block which sets the values for each element of the form meant to be modifiable by
+        the user when the built-in key management feature is being used or to define options for
+        select lists etc.  
+    </dd>
+
     <p><dt><b>-select_query</b></dt><p>
     <dd>Defines a query that returns a single row containing values for each element of the form meant to be
-        modifiable by the user.
+        modifiable by the user.  Can only be used if an element of type key has been declared.
     </dd>
 
     <p><dt><b>-select_query_name</b></dt><p>
     <dd>The name of a query to be looked up in the appropriate query file that returns a single row containing
         values for each element of the form meant to be modifiable by the user.  In the OpenACS 4 environment this
         should normally be used rather than -select_query, as query files are the mechanism used to make the
-        support of multiple RDMBS systems possible.
+        support of multiple RDMBS systems possible.  Can only be used if an element of type key has been
+        declared
     </dd>
 
     <p><dt><b>-edit_request</b></dt><p>
     <dd>A code block which sets the values for each element of the form meant to be modifiable by the user.  Use
-        this when a single query to grab database values is insufficient. You just need to set the values as local
-        variables in the code block, and they'll get fetched and used as element values for you.
+        this when a single query to grab database values is insufficient.  Can only be used if an element of
+        type key is defined.  This block is only executed if the page is called with a valid key, i.e. a
+        self-submit form to add or edit an item called to edit the data.
     </dd>
 
     <p><dt><b>-new_request</b></dt><p>
-    <dd>A code block which initializes elements for a new row. Use this to set default values. 
-        You just need to set the values as local
-        variables in the code block, and they'll get fetched and used as element values for you.
+    <dd>A code block which sets the values for each element of the form meant to be modifiable by the user.  Use
+        this when a single query to grab database values is insufficient.  Can only be used if an element of
+        type key is defined.  This block complements the -edit_request block.
     </dd>
 
     <p><dt><b>-confirm_template</b></dt><p>
@@ -331,11 +339,11 @@ ad_proc -public ad_form {
     </blockquote>
     
     <blockquote><pre>
-    start_date:date,to_sql(sql_date),to_html(sql_date),optional
+    start_date:date,to_sql(sql_date),from_html(sql_date),optional
     </pre><p>
 
     Define the optional element "start_date" of type "date", get the sql_date property before executing
-    any new_data, edit_data or on_submit block, set the sql_date property after performing any
+    any new_date, edit_date or on_submit block, set the sql_date property after performing any
     select_query. 
 
     <p>
@@ -361,7 +369,7 @@ ad_proc -public ad_form {
     } 
 
     set valid_args { form method action mode html name select_query select_query_name new_data on_refresh
-                     edit_data validate on_submit after_submit confirm_template new_request edit_request
+                     edit_data validate on_submit after_submit confirm_template on_request new_request edit_request
                      export cancel_url cancel_label has_edit actions };
 
     ad_arg_parser $valid_args $args
@@ -668,7 +676,6 @@ ad_proc -public ad_form {
 		    section -
                     before_html -
                     after_html -
-                    result_datatype -
                     search_query -
                     search_query_name {
                         if { [llength $extra_arg] > 2 || [llength $extra_arg] == 1 } {
@@ -729,6 +736,17 @@ ad_proc -public ad_form {
         upvar #$level $key_name $key_name
         upvar #$level __ad_form_values__ values
 
+        if { [info exists on_request] } {
+            ad_page_contract_eval uplevel #$level $on_request
+            foreach element_name $af_element_names($form_name) {
+                if { [llength $element_name] == 1 } {
+                    if { [uplevel \#$level [list info exists $element_name]] } {
+                        set values($element_name) [uplevel \#$level [list set $element_name]]
+                    }
+                }
+            }            
+        }
+
         # Check to see if we're editing an existing database value
         if { [info exists $key_name] } {
             if { [info exists edit_request] } {
@@ -736,8 +754,6 @@ ad_proc -public ad_form {
                     return -code error "Edit request block conflicts with select query"
                 }
                 ad_page_contract_eval uplevel #$level $edit_request
-
-		# set form vars from edit_request block
                 foreach element_name $af_element_names($form_name) {
                     if { [llength $element_name] == 1 } {
                         if { [uplevel \#$level [list info exists $element_name]] } {
@@ -789,21 +805,13 @@ ad_proc -public ad_form {
                 set sequence_name "acs_object_id_seq"
             }
 
-            if { ![db_0or1row get_key "" -column_array values] } {
-                return -code error "Couldn't get the next value from sequence \"$af_sequence_name($form_name)\""
+            if { [catch {set values($key_name) [db_nextval $sequence_name]} errmsg]} {
+                return -code error "Couldn't get the next value from sequence: $errmsg\""
             }
             set values(__new_p) 1
 
             if { [info exists new_request] } {
                 ad_page_contract_eval uplevel #$level $new_request
-                # LARS: Set form values based on local vars in the new_request block
-                foreach element_name $af_element_names($form_name) {
-                    if { [llength $element_name] == 1 } {
-                        if { [uplevel \#$level [list info exists $element_name]] } {
-                            set values($element_name) [uplevel \#$level [list set $element_name]]
-                        }
-                    }
-                }            
             }
         }
 
