@@ -84,6 +84,7 @@ set translator_mode_p [lang::util::translator_mode_p]
 
 # Toggle translator mode link
 
+set acs_lang_url [apm_package_url_from_key "acs-lang"]
 if { [empty_string_p $acs_lang_url] } {
     set lang_admin_p 0
 } else {
