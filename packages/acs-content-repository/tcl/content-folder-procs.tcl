@@ -91,8 +91,7 @@ ad_proc -public ::content::folder::delete {
 			       folder_id $folder_id \
 			       cascape_p $cascade_p
 			  ] \
-		"content_folder" "delete" \
-	       ]
+		content_folder delete ]
 }
 
 ad_proc -public ::content::folder::register_content_type {

@@ -1,5 +1,3 @@
-
-
 ad_library {
 
     Tcl API for cr_items in the content repository
@@ -65,7 +63,7 @@ ad_proc -public ::content::item::new {
 } {
     set var_list [list]
     lappend var_list \
-	[list name $name ] \
+        [list name $name] \
         [list parent_id $parent_id ] \
         [list item_id $item_id ] \
         [list locale $locale ] \
@@ -109,9 +107,9 @@ ad_proc -public ::content::item::delete {
     Delete a content item
     @param item_id
 } {
-    package_exec_plsql \
-        -var_list [list [list item_id $item_id]] \
-        content_item delete
+    return [package_exec_plsql \
+                -var_list [list [list item_id $item_id]] \
+                content_item delete]
 }
 
 ad_proc -public ::content::item::rename {
@@ -125,12 +123,12 @@ ad_proc -public ::content::item::rename {
     @param item_id
     @param name
 } {
-    set var_list [list [list item_id $item_id] \
-		      [list name $name]
-		 ]
-    package_exec_plsql \
-	-var_list $var_list \
-	"content_item" "rename"
+    return [package_exec_plsql \
+                -var_list [list \
+                               [list item_id $item_id] \
+                               [list name $name]
+                          ] \
+                content_item rename]
 }
 
 ad_proc -public ::content::item::move {
@@ -145,13 +143,15 @@ ad_proc -public ::content::item::move {
     @param new_parent_id new parent item
     @param name new name, allows move with rename
 } {
-    set var_list [list item_id $item_id target_folder_id $target_folder_id]
+    set var_list [list \
+                      [list item_id $item_id] \
+                      [list target_folder_id $target_folder_id] ]
     if {[exists_and_not_null name]} {
-	lappend var_list name $name
+	lappend var_list [list name $name]
     }
-    package_exec_plsql \
-	-var_list [list item_id $item_id] \
-	"content_item" "move"
+    return [package_exec_plsql \
+                -var_list $var_list \
+                content_item move]
 }
 
 ad_proc -public ::content::item::get {
@@ -170,6 +170,7 @@ ad_proc -public ::content::item::get {
 
     @error
 } {
+    error "not implemented"
 
     # get attributes of the content_item use the content_typex view
 }
@@ -192,7 +193,6 @@ ad_proc -public ::content::item::update {
 
     @error
 } {
-
     # do not allow update of item_id, storage_location, storage_type,
     # content_type, or tree_sortkey
 
@@ -238,7 +238,7 @@ ad_proc -public ::content::item::content_type {
 } {
     return [package_exec_plsql \
 		-var_list [list [list item_id $item_id]] \
-		"content_item" "get_content_type"]
+		content_item get_content_type]
 }
 
 
