@@ -15,8 +15,6 @@
 		last_name => :last_name,
 		password => :hashed_password,
 	        salt => :salt,
-	        password_question => :password_question,
-	        password_answer => :password_answer,
 	        creation_ip => :peeraddr,
 	        email_verified_p => :email_verified_p,
 	        member_state => :member_state
