@@ -273,17 +273,6 @@ END ${package_name};
       <querytext>sysdate</querytext>
 </partialquery>
 
-<fullquery name="package_function_p.function_p">
-  <querytext>
-    select count(*)
-    from user_arguments
-    where package_name = upper(:package_name)
-      and object_name = upper(:function_name)
-      and position = 0
-  </querytext>
-</fullquery>
-
-
 <fullquery name="package_exec_plsql.exec_func_plsql">
       <querytext>
       

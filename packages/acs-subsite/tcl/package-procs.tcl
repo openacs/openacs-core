@@ -660,6 +660,7 @@ ad_proc -private package_function_p {
 } {
     return [db_0or1row function_p ""]
 }
+
 ad_proc -private package_table_columns_for_type {
     object_type
 } {
