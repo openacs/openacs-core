@@ -147,7 +147,7 @@ aa_register_case spellcheck__get_element_formtext {
 
 aa_register_case spellcheck__spellcheck_properties {
     Test the proc that knows if spell-checking is activated, if it should be performed,
-    and whether the radio buttons should default to "Yes" or "No".
+    and which value the pull-down menu should default to.
 } {    
     array set element {
 	id test_element
@@ -160,9 +160,9 @@ aa_register_case spellcheck__spellcheck_properties {
     aa_log "--- Spell-checking enabled on widget \"$element(widget)\"? --- $command"
 
     array set spellcheck [eval $command]
-    aa_false "Spell-checking disabled" $spellcheck(perform_p)
+    aa_false "Spell-checking disabled" $spellcheck(render_p)
 
-    if { $spellcheck(perform_p) } {
+    if { $spellcheck(render_p) } {
 	aa_log "$spellcheck(selected_option) is the default"
     }
     
@@ -172,9 +172,9 @@ aa_register_case spellcheck__spellcheck_properties {
     aa_log "--- Spell-checking enabled on widget \"$element(widget)\"? --- $command"
 
     array set spellcheck [eval $command]
-    aa_true "Spell-checking enabled" $spellcheck(perform_p)
+    aa_true "Spell-checking enabled" $spellcheck(render_p)
     
-    if { $spellcheck(perform_p) } {
+    if { $spellcheck(render_p) } {
 	aa_log "$spellcheck(selected_option) is the default"
     }
 
@@ -184,9 +184,9 @@ aa_register_case spellcheck__spellcheck_properties {
     aa_log "--- Spell-checking enabled on widget \"$element(widget)\"? --- $command"
 
     array set spellcheck [eval $command]
-    aa_true "Spell-checking enabled" $spellcheck(perform_p)
+    aa_true "Spell-checking enabled" $spellcheck(render_p)
 
-    if { $spellcheck(perform_p) } {
+    if { $spellcheck(render_p) } {
 	aa_log "$spellcheck(selected_option) is the default"
     }
     
