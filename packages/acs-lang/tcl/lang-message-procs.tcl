@@ -284,11 +284,8 @@ ad_proc -public _mr { locale key message } {
     return [lang::message::register $locale $key $message]
 }
 
-
 ad_proc -public _ {
-    locale 
-    key 
-    {default "TRANSLATION MISSING"}
+    args
 } {
     Returns a translated string for the given language and message key.
     If the user is a translator, inserts tags to link to the translator
@@ -304,11 +301,12 @@ ad_proc -public _ {
     
     @see lang::message::lookup
 } {
-    return [lang::message::lookup $locale $key $default]
+    switch [llength $args] {
+        1 { return [lang::message::lookup [ad_conn locale] [lindex $args 0] "TRANSLATION MISSING"] }
+        2 { return [lang::message::lookup [lindex $args 0] [lindex $args 1] "TRANSLATION MISSING"] }
+        3 { return [lang::message::lookup [lindex $args 0] [lindex $args 1] [lindex $args 2]] }
+    }
 }
-    
-
-
 
 #####
 #
