@@ -18,7 +18,8 @@ declare
     workflow_id         apm_packages.package_id%TYPE;
     docs_id             apm_packages.package_id%TYPE;
     api_doc_id          apm_packages.package_id%TYPE;
-    acs_sc_id		apm_packages.package_id%type;
+    acs_sc_id		apm_packages.package_id%TYPE;
+    cr_id		apm_packages.package_id%TYPE;
     schema_user         varchar(100);
     jobnum              integer;
 begin   
@@ -117,7 +118,29 @@ begin
   );
 
 
+  cr_id := apm_service__new (
+      null,
+      ''ACS Content Repository'',
+      ''acs-content-repository'',
+      ''apm_service'',
+      now(),
+      null,
+      null,
+      null
+      );
 
+  PERFORM apm_package__enable (cr_id);
+
+  node_id := site_node__new (
+    null,
+    site_node__node_id(''/'', null),
+    ''acs-content-repository'',
+    cr_id,
+    ''t'',
+    ''t'',
+    null,
+    null
+  );
 
   workflow_id := apm_service__new (
       null,
