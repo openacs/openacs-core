@@ -456,6 +456,9 @@ mv analog-5.32 /usr/share/</action></screen>
 
     <sect1 id="install-full-text-search">
       <title>Install Full Text Search</title>
+      <authorblurb>
+      <para>By <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink> and <ulink url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink></para>
+      </authorblurb>
       <sect2 id="install-openfts">
       <title>Install OpenFTS module</title>
         <indexterm>
@@ -470,7 +473,7 @@ mv analog-5.32 /usr/share/</action></screen>
               <para>Install Tsearch.  This is a PostgreSQL module that
 	  OpenFTS requires.</para>
               <screen>[root root]# <userinput>su - postgres</userinput>
-[postgres pgsql]$ <userinput>cd /usr/local/src/postgresql-7.2.4/contrib/tsearch/</userinput>
+[postgres pgsql]$ <userinput>cd /usr/local/src/postgresql-7.3.4/contrib/tsearch/</userinput>
 [postgres tsearch]$ <userinput>make</userinput>
 sed 's,MODULE_PATHNAME,$libdir/tsearch,g' tsearch.sql.in >tsearch.sql
 /usr/bin/flex  -8 -Ptsearch_yy -o'parser.c' parser.l<emphasis>(many lines omitted)</emphasis>
@@ -486,7 +489,7 @@ logout
 
 [root root]#
 <action>su - postgres
-cd /usr/local/src/postgresql-7.2.4/contrib/tsearch
+cd /usr/local/src/postgresql-7.3.4/contrib/tsearch
 make
 make install
 exit</action></screen>
@@ -529,8 +532,8 @@ cp nsfts.so /usr/local/aolserver/bin
         <listitem>
           <para>Build some supplemental modules.</para>
           <screen>[root aolserver]# <userinput>cd /usr/local/src/Search-OpenFTS-tcl-0.3.2</userinput>
-[root Search-OpenFTS-tcl-0.3.2]# <userinput>cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.4/contrib</userinput>
-[root Search-OpenFTS-tcl-0.3.2]# <userinput>cd /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts</userinput>
+[root Search-OpenFTS-tcl-0.3.2]# <userinput>cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.3.4/contrib</userinput>
+[root Search-OpenFTS-tcl-0.3.2]# <userinput>cd /usr/local/src/postgresql-7.3.4/contrib/pgsql_contrib_openfts</userinput>
 [root pgsql_contrib_openfts]#<userinput> make</userinput>
 sed 's,MODULE_PATHNAME,$libdir/openfts,g' openfts.sql.in >openfts.sql
 gcc -O2 -Wall -Wmissing-prototypes -Wmissing-declarations -fpic -I. -I../../src/include   -c -o openfts.o openfts.c
@@ -544,8 +547,8 @@ rm openfts.o
 [postgres pgsql_contrib_openfts]$<userinput> exit</userinput>
 [root pgsql_contrib_openfts]#
 <action>cd /usr/local/src/Search-OpenFTS-tcl-0.3.2
-cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.4/contrib
-cd /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts
+cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.3.4/contrib
+cd /usr/local/src/postgresql-7.3.4/contrib/pgsql_contrib_openfts
 make
 su postgres
 make install
@@ -565,18 +568,18 @@ exit</action></screen>
         to work, you must also <link
         linkend="install-openfts">install</link> the PostgreSQL
         OpenFTS module and prerequisites.)</para>
-        <screen>[service0 service0]$ <userinput>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.4/contrib/tsearch/tsearch.sql</userinput>
+        <screen>[service0 service0]$ <userinput>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.3.4/contrib/tsearch/tsearch.sql</userinput>
 BEGIN
 CREATE
 <emphasis>(many lines omitted)</emphasis>
 INSERT 0 1
 COMMIT
-[service0 service0]$ <userinput>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts/openfts.sql</userinput>
+[service0 service0]$ <userinput>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.3.4/contrib/pgsql_contrib_openfts/openfts.sql</userinput>
 CREATE
 CREATE
 [service0 service0]$
-<action>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.4/contrib/tsearch/tsearch.sql
-/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts/openfts.sql</action></screen>
+<action>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.3.4/contrib/tsearch/tsearch.sql
+/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.3.4/contrib/pgsql_contrib_openfts/openfts.sql</action></screen>
       </sect2>
       
       <sect2 id="enable-openfts">
@@ -589,17 +592,20 @@ CREATE
         <title>Install Full Text Search Engine</title>
         <orderedlist>
           <listitem>
-            <para>Click <computeroutput><guilabel>Package Manager</guilabel></computeroutput> on the right side of the default home page.  If prompted, log in with the account and password you entered during install.</para>
+            <para>Click <computeroutput><guilabel>Admin</guilabel></computeroutput> on the top of the default home page.  If prompted, log in with the account and password you entered during install.</para>
           </listitem>
 
           <listitem><para>Click on the <computeroutput><guilabel>Install
-packages</guilabel></computeroutput> link.</para>
+software</guilabel></computeroutput> link.</para>
           </listitem>
 
-	<listitem><para>On the next screen, after it loads, click on <computeroutput><guilabel>Uncheck all boxes</guilabel></computeroutput>, then click the checkbox next to <computeroutput><guilabel>OpenFTS Driver 4.2</guilabel></computeroutput>.  Then click <computeroutput><guibutton><accel>N</accel>ext</guibutton></computeroutput>. </para></listitem>
-          
-          <listitem><para>Click <computeroutput><guibutton>Install Packages</guibutton></computeroutput></para></listitem>
-          
+          <listitem><para>Click on the <computeroutput><guilabel>Install
+new service</guilabel></computeroutput> link.</para>
+          </listitem>
+
+          <listitem><para>Click on the <computeroutput><guilabel>Install</guilabel></computeroutput> link next to OpenFTS Driver.</para>
+          </listitem>
+
           <listitem><para>Restart the service.</para>
 <screen>[service0 service0]$ <userinput>svc -t /service/<replaceable>service0</replaceable></userinput>
 [service0 service0]$</screen></listitem>
@@ -607,7 +613,13 @@ packages</guilabel></computeroutput> link.</para>
           <listitem><para>Wait a minute, then browse back to the home page.</para>
           </listitem>
 
-          <listitem><para>Click on <computeroutput><guilabel>Site Map</guilabel></computeroutput> on the top right side of the screen.</para>
+          <listitem><para>Click on <computeroutput><guilabel>Admin</guilabel></computeroutput> on the top of the screen.</para>
+          </listitem>
+
+          <listitem><para>Click on <computeroutput><guilabel>Main Site Administration</guilabel></computeroutput> in the "Subsite Administration" section.</para>
+          </listitem>
+
+          <listitem><para>Click on <computeroutput><guilabel>Site Map</guilabel></computeroutput> in the "Advanced Features" section.</para>
           </listitem>
           
           <listitem>
@@ -662,10 +674,8 @@ Click <computeroutput><guibutton>Initialize OpenFTS Engine</guibutton></computer
           <listitem>
             <para>Add the FTS Engine service contract</para>
             <orderedlist>
-              <listitem><para>Click on the <computeroutput><guilabel>Main
-Site</guilabel></computeroutput>. </para></listitem>
-              <listitem><para>Click on the <computeroutput><guilabel>ACS
-Service Contract</guilabel></computeroutput> link near the bottom of the home page. </para></listitem>
+              <listitem><para>Click on the <computeroutput><guilabel>DevAdmin</guilabel></computeroutput>. </para></listitem>
+              <listitem><para>Click on the <computeroutput><guilabel>Service Contract</guilabel></computeroutput> link. </para></listitem>
               <listitem><para>On the <computeroutput><guilabel>FtsEngineDriver</guilabel></computeroutput>
 line, click
 <computeroutput><guilabel>Install</guilabel></computeroutput>.
@@ -677,10 +687,48 @@ line, click
             <screen>[service0 service0]$ <userinput>svc -t /service/<replaceable>service0</replaceable></userinput>
 [service0 service0]$</screen>
           </listitem>
-          <listitem>
-            <para>Test FTS.  (INCOMPLETE).  Add a package that supports search,like "note," add some content, and search for it.</para>
-          </listitem>
         </orderedlist>
+      </sect2>
+      <sect2 id="install-fts-content-provider">
+        <title>Enable Full Text Search in packages</title>
+            <para>Enabling Full Text Search in packages at the moment is not trivial. It involves a couple of steps, which I will illustrate taking lars-blogger as an example package</para>
+            <orderedlist>
+              <listitem>
+                <para>Install the package.
+                <orderedlist>
+                  <listitem>
+                    <para>Click <computeroutput><guilabel>Admin</guilabel></computeroutput> on the top of the default home page.  If prompted, log in with the account and password you entered during install.</para>
+                  </listitem>
+                  
+                  <listitem><para>Click on the <computeroutput><guilabel>Install
+                  software</guilabel></computeroutput> link.</para>
+                  </listitem>
+
+                  <listitem><para>Click on the <computeroutput><guilabel>Install
+                  new application</guilabel></computeroutput> link.</para>
+                  </listitem>
+                  
+                  <listitem><para>Click on the <computeroutput><guilabel>Install</guilabel></computeroutput> link next to Weblogger.</para>
+                  </listitem>
+                  <listitem>
+                    <para>Install all required packages as well (always say okay until you shall restart the server)</para>
+                  </listitem>
+                </orderedlist>
+                </para>
+              </listitem>
+              <listitem>
+                <para>Load the service contracts datamodell and enable the service contract</para>
+                <screen>[service0 service0]$ <userinput>cd packages/lars-blogger/sql/postgresql</userinput>
+[service0 postgresql]$ psql <replaceable>service0</replaceable> -f lars-blogger-sc-create.sql</screen>
+<para>Note: Usually this script is called <replaceable>package_name</replaceable>-sc-create.sql</para>
+              </listitem>
+              <listitem>
+                <para>Restart the service.</para>
+                <screen>[service0 postgresql]$ <userinput>svc -t /service/<replaceable>service0</replaceable></userinput>
+                [service0 postgresl]$</screen>
+              </listitem>
+            </orderedlist>
+            <para>If you are lucky, Full Text Search is enabled now, if not consult <ulink url="http://openacs.org/forums/message-view?message_id=154759">http://openacs.org/forums/message-view?message_id=154759</ulink>. This link also contains some hints on how to make sure it is enabled.</para>
       </sect2>
     </sect1>
 
