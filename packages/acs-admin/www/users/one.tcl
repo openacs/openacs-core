@@ -87,6 +87,7 @@ db_multirow all_group_membership all_group_membership "
 
 if { [auth::password::can_reset_p -authority_id $user_info(authority_id)] } {
     set password_reset_url [export_vars -base "password-reset" { user_id { return_url [ad_return_url] } }]
+    set password_update_url [export_vars -base "password-update" { user_id { return_url [ad_return_url] } }]
 }
 
 set portrait_manage_url [export_vars -base /user/portrait/ { user_id { return_url [ad_return_url] } }]
