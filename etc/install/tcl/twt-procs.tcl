@@ -191,11 +191,19 @@ ad_proc ::twt::crawl_links {
 
     @author Peter Marklund
 } {
+    if { ![empty_string_p $previous_url] } {
+        # For relative links to work, when we come back from the recursive crawling of a link, we need to make
+        # Tclwebtest understand that we are now relative to a different URL than the one last requested, namely
+        # relative to the URL of the page the link is on.
+        #::twt::log "pm debug setting previous_url $previous_url"
+        set ::tclwebtest::url $previous_url
+    }
+
     # Return if given start URL is external
     set server_url [::twt::config::server_url]    
-    ::twt::log "pm debug about to generate absolute_url start_url=$start_url"
+    #::twt::log "pm debug about to generate absolute_url start_url=$start_url"
     set start_url_absolute [tclwebtest::absolute_link $start_url]
-    ::twt::log "pm debug after generating absolute_url start_url_absolute=$start_url_absolute"
+    #::twt::log "pm debug after generating absolute_url start_url_absolute=$start_url_absolute"
     if { [string first $server_url $start_url_absolute] == -1 } {
         #::twt::log "pm debug returning because link $start_url_absolute is external"
         return
@@ -218,7 +226,7 @@ ad_proc ::twt::crawl_links {
     lappend __url_history $start_url_absolute
 
     # Request the page
-    ::twt::log "pm debug about to invoke \"do_request $start_url_absolute\" start_url=$start_url previous_url=$previous_url"
+    #::twt::log "pm debug about to invoke \"do_request $start_url_absolute\" start_url=$start_url previous_url=$previous_url"
     if { [catch {::twt::do_request $start_url_absolute} errmsg] } {
         if { ![string equal "$previous_url" ""] } {
             set previous_page_message " (link found on page $previous_url)"
@@ -252,8 +260,8 @@ ad_proc ::twt::crawl_links {
         }
         set under_start_url_p [expr [string first $start_url_absolute $absolute_url] != -1]
         if { $new_url_p && !$anchor_link_p && $under_start_url_p } {
-            ::twt::log "pm debug crawl_links -previous_url $start_url $url"
-            crawl_links -previous_url $start_url $url
+            #::twt::log "pm debug crawl_links -previous_url $start_url_absolute $url"
+            crawl_links -previous_url $start_url_absolute $url
         } else {
             #::twt::log "pm debug skipping url $url $new_url_p $anchor_link_p $under_start_url_p"
         }
