@@ -179,3 +179,8 @@ if { ![form is_valid user_info] } {
     }
 }
 
+db_multirow groups groups "
+  select distinct groups.group_id, lower(groups.group_name), groups.group_name
+     from groups, group_member_map gm
+     where groups.group_id = gm.group_id and gm.member_id=:user_id
+  order by lower(groups.group_name)"
