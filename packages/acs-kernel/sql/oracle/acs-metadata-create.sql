@@ -42,7 +42,7 @@ create table acs_object_types (
 	id_column	varchar2(30) not null,
 	package_name	varchar2(30) not null
 			constraint acs_object_types_pkg_name_un unique,
-	name_method	varchar2(30),
+	name_method	varchar2(100),
 	type_extension_table varchar2(30),
         dynamic_p       char(1) default 'f' 
                         constraint acs_obj_types_dynamic_p_ck

@@ -422,6 +422,16 @@ begin
  
 end;' language 'plpgsql';
 
+create function content_revision__revision_name(integer)
+returns text as '
+declare
+        p_revision_id   alias for $1;
+begin
+        return ''Revision '' || content_revision__get_number(revision_id) || 
+               '' of '' || (select count(*) from cr_revisions where item_id = r.item_id) || '' for item: '' 
+               || content_item__get_title(item_id)
+               from cr_revisions r where r.revision_id = p_revision_id;
+end;' language 'plpgsql';
 
 -- procedure index_attributes
 create function content_revision__index_attributes (integer)
