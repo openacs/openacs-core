@@ -3,15 +3,15 @@
 #
 # @author Peter Marklund
 
-namespace eval twt::user {}
+namespace eval ::twt::user {}
 
-ad_proc twt::user::get_users { {type ""} } {
+ad_proc ::twt::user::get_users { {type ""} } {
     Return a list of emails for .LRN users of a certain type. If type
     is not specified, returns all .LRN users.
 } {
     set user_emails [list]
 
-    foreach user_data [get_users_data] {
+    foreach user_data [get_test_data] {
         if { [empty_string_p $type] || \
                 [string equal -nocase [lindex $user_data 4] $type] } {
             
@@ -22,23 +22,23 @@ ad_proc twt::user::get_users { {type ""} } {
     return $user_emails
 }
 
-ad_proc twt::user::get_random_users { type number } {
+ad_proc ::twt::user::get_random_users { type number } {
     Get emails for a random set of .LRN users of a certain type.
 } {
-    set email_list [user::get_emails $type]
+    set email_list [get_users $type]
 
     return [get_random_items_from_list $email_list $number]
 }
 
-ad_proc twt::user::get_password { email } {
+ad_proc ::twt::user::get_password { email } {
     global __demo_users_password
 
     return $__demo_users_password
 }
 
-ad_proc twt::user::login { user_email user_password} {
+ad_proc ::twt::user::login { user_email user_password} {
 
-    logout_user
+    ::twt::user::logout
 
     global __server_url
 
@@ -54,21 +54,21 @@ ad_proc twt::user::login { user_email user_password} {
     form submit
 }
 
-ad_proc twt::user::logout {} {
+ad_proc ::twt::user::logout {} {
     global __server_url
 
     do_request "${__server_url}/register/logout"
 }
 
-ad_proc twt::user::login_site_wide_admin {} {
+ad_proc ::twt::user::login_site_wide_admin {} {
     global __server_url
     global __admin_email
     global __admin_password
 
-    user::login $__admin_email $__admin_password
+    ::twt::user::login $__admin_email $__admin_password
 }
 
-ad_proc twt::user::add { 
+ad_proc ::twt::user::add { 
     server_url 
     first_names 
     last_name 
@@ -89,9 +89,9 @@ ad_proc twt::user::add {
     field find ~n "last_name"
     field fill $last_name
     field find ~n "password"
-    field fill [user::get_password $email]
+    field fill [::twt::user::get_password $email]
     field find ~n "password_confirm"
-    field fill [user::get_password $email]
+    field fill [::twt::user::get_password $email]
     form submit
 
     form find ~n add_user
@@ -106,7 +106,7 @@ ad_proc twt::user::add {
     form submit    
 }
 
-ad_proc twt::user::get_test_data {} {
+ad_proc ::twt::user::get_test_data {} {
 
     # Let's cache the data
     global __users_data
@@ -163,22 +163,13 @@ ad_proc twt::user::get_test_data {} {
     return $return_list
 }
 
-ad_proc twt::user::upload_users { server_url } {
+ad_proc ::twt::user::upload_users { server_url } {
 
-# File upload
-# Does not work - TclWebTest does not support file upload yet
-#    do_request "$server_url/dotlrn/admin/users-bulk-upload"
-
-#    form find ~a "users-bulk-upload-2"
-#    field find ~n "users_csv_file"
-#    field fill "$users_csv_file"
-#    form submit
-
-    set users_data_list [user::get_test_data]
+    set users_data_list [get_test_data]
 
     foreach user_data $users_data_list {
 
-	    user::add $server_url \
+	    ::twt::user::add $server_url \
 		    [lindex $user_data 0] \
 		    [lindex $user_data 1] \
 		    [lindex $user_data 2] \
@@ -194,9 +185,9 @@ ad_proc twt::user::upload_users { server_url } {
     
 }
 
-ad_proc twt::user::set_passwords { server_url } {
+ad_proc ::twt::user::set_passwords { server_url } {
     
-    foreach user_email [user::get_users] {
+    foreach user_email [get_users] {
         #puts "setting guest password for user $user_email"
 
         # User admin page
@@ -213,8 +204,8 @@ ad_proc twt::user::set_passwords { server_url } {
         link follow ~u {password-update\?}
 
         form find ~a password-update-2
-        field fill [user::get_password $user_email] ~n password_1
-        field fill [user::get_password $user_email] ~n password_2
+        field fill [get_password $user_email] ~n password_1
+        field fill [get_password $user_email] ~n password_2
         form submit
     }
 }

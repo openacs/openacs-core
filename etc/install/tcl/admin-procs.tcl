@@ -6,9 +6,9 @@
 #
 # @author Peter Marklund
 
-namespace eval twt::admin {}
+namespace eval ::twt::admin {}
 
-ad_proc twt::admin::install_all_packages { server_url } {
+ad_proc ::twt::admin::install_all_packages { server_url } {
 
     do_request "$server_url/acs-admin/apm/packages-install?checked_by_default_p=1"
     #assert text "Package Installation"
@@ -30,7 +30,7 @@ ad_proc twt::admin::install_all_packages { server_url } {
     form submit
 }
 
-ad_proc twt::admin::add_main_site_folder { server_url folder_name } {
+ad_proc ::twt::admin::add_main_site_folder { server_url folder_name } {
 
 	do_request "$server_url/admin/site-map"
 
@@ -41,7 +41,7 @@ ad_proc twt::admin::add_main_site_folder { server_url folder_name } {
 	form submit
 }
 
-ad_proc twt::admin::mount_main_site_package { server_url folder_name instance_name package_key } {
+ad_proc ::twt::admin::mount_main_site_package { server_url folder_name instance_name package_key } {
 
     do_request "$server_url/admin/site-map"
 
@@ -62,7 +62,7 @@ ad_proc twt::admin::mount_main_site_package { server_url folder_name instance_na
 # the site-map uses parameter_id to identify parameters
 # We should put a db-exec.tcl file on the server instead to be able to retrieve
 # the parameter_id of the parameter.
-ad_proc twt::admin::submit_acs_param_internal { old_parameter_value new_parameter_value } {
+ad_proc ::twt::admin::submit_acs_param_internal { old_parameter_value new_parameter_value } {
 
     form find ~a "parameter-set-2"
     field find ~v "$old_parameter_value"
@@ -70,7 +70,7 @@ ad_proc twt::admin::submit_acs_param_internal { old_parameter_value new_paramete
     form submit
 }
 
-ad_proc twt::admin::set_acs_subsite_param { server_url old_parameter_value parameter_value } {
+ad_proc ::twt::admin::set_acs_subsite_param { server_url old_parameter_value parameter_value } {
 
     do_request "$server_url/admin/site-map"
     link follow ~u {parameter-set\?package%5fid=[0-9]+&package%5fkey=acs%2dsubsite&instance%5fname=Main%20Site}
@@ -78,7 +78,7 @@ ad_proc twt::admin::set_acs_subsite_param { server_url old_parameter_value param
     submit_acs_param_internal $old_parameter_value $parameter_value
 }
 
-ad_proc twt::admin::set_acs_kernel_param { server_url param_section old_parameter_value parameter_value } {
+ad_proc ::twt::admin::set_acs_kernel_param { server_url param_section old_parameter_value parameter_value } {
 
     do_request "$server_url/admin/site-map"
     link follow ~u {parameter-set\?package%5fid=[0-9]+&package%5fkey=acs%2dkernel}

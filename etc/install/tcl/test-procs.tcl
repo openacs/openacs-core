@@ -5,11 +5,15 @@
 #
 # @author Peter Marklund
 
-namespace eval twt {}
+namespace eval ::twt {}
 
-source global-vars.tcl
-source util-procs.tcl
-source admin-procs.tcl
-source dotlrn-procs.tcl
-source class-procs.tcl
-source forums-procs.tcl
+set script_dir [file dirname [info script]]
+
+source $script_dir/global-vars.tcl
+source $script_dir/util-procs.tcl
+source $script_dir/user-procs.tcl
+source $script_dir/admin-procs.tcl
+source $script_dir/dotlrn-procs.tcl
+source $script_dir/class-procs.tcl
+source $script_dir/forums-procs.tcl
+source $script_dir/news-procs.tcl
