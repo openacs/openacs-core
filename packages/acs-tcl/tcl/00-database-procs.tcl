@@ -55,7 +55,7 @@ ad_library {
 # databases, you need to put something like this in your nsd.tcl
 # AOLserver config file:
 #
-#   ns_section ns/server/$server_name/acs/database
+#   ns_section ns/server/${server}/acs/database
 #
 #     ns_param database_names [list ora pg foo]
 #     ns_param pools_ora  [list main subquery log]
@@ -80,6 +80,10 @@ ad_library {
 # implemented yet!
 #
 # --atp@piskorski.com, 2003/03/16 21:30 EST
+
+# NOTE: don't forget to add your new pools into the 
+# ns_section ns/db/pools  
+
 
 # The "driverkey" indirection layer:
 #
