@@ -65,8 +65,6 @@ if { $admin_p || [parameter::get -parameter "MembersCanInviteMembersP" -default 
     lappend actions { member-invite }
 }
 
-# TODO: Pagination
-
 set member_state_options [list]
 db_foreach select_member_states {
     select mr.member_state as state, 
@@ -81,7 +79,7 @@ db_foreach select_member_states {
         [list \
              [group::get_member_state_pretty -member_state $state] \
              $state \
-             $num_members]
+             [lc_numeric $num_members]]
 }
 
 template::list::create \
@@ -89,7 +87,7 @@ template::list::create \
     -multirow "members" \
     -key rel_id \
     -row_pretty_plural "members" \
-    -page_size 3 \
+    -page_size 50 \
     -page_query_name members_pagination \
     -actions $actions \
     -elements {
