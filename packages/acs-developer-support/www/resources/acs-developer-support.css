@@ -61,6 +61,7 @@ div.developer-support-adp-box-on {
   border-style: solid;
   border-color: #f33;
   border-width: 1px 1px 1px 1px;
+  line-height: 1.2em;
 }
 
 div.developer-support-adp-box-off {
@@ -70,6 +71,7 @@ div.developer-support-adp-box-off {
 
 span.developer-support-adp-file-on {
   font-size: 80%;
+  line-height: 1.2em;
 }
 
 span.developer-support-adp-file-off {
@@ -82,6 +84,7 @@ div.developer-support-adp-output-on {
   border-color: #777;
   border-width: 1px 0px 0px 0px;
   padding: 3px;
+  line-height: 1.2em;
 }
 
 div.developer-support-adp-output-off {
