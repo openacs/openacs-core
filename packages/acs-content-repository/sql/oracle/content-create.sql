@@ -158,34 +158,35 @@ comment on table cr_type_relations is '
 -- Define the cr_items table
 
 create table cr_items (
-  item_id	  integer 
-                  constraint cr_items_item_id_fk references
-		  acs_objects on delete cascade
-		  constraint cr_items_pk primary key,
-  parent_id	  integer 
-                  constraint cr_items_parent_id_nil 
-                  not null
-                  constraint cr_items_parent_id_fk references
-		  acs_objects on delete cascade,
-  name		  varchar2(400)
-		  constraint cr_items_name_nil
-                  not null,
-  locale	  varchar2(4)
-		  constraint cr_items_locale_fk references
-		  cr_locales,
-  live_revision   integer,
-  latest_revision integer,
-  publish_status  varchar2(40) 
-                  constraint cr_items_pub_status_chk
-                  check (publish_status in 
-                    ('production', 'ready', 'live', 'expired')
-                  ),
-  content_type    varchar2(100)
-                  constraint cr_items_rev_type_fk
-                  references acs_object_types,
-  storage_type    varchar2(10) default 'lob' not null
-                  constraint cr_revisions_storage_type
-                  check (storage_type in ('lob','file'))
+  item_id             integer 
+                      constraint cr_items_item_id_fk references
+                      acs_objects on delete cascade
+                      constraint cr_items_pk primary key,
+  parent_id           integer 
+                      constraint cr_items_parent_id_nil 
+                      not null
+                      constraint cr_items_parent_id_fk references
+                      acs_objects on delete cascade,
+  name                varchar2(400)
+                      constraint cr_items_name_nil
+                      not null,
+  locale              varchar2(4)
+                      constraint cr_items_locale_fk references
+                      cr_locales,
+  live_revision       integer,
+  latest_revision     integer,
+  publish_status      varchar2(40) 
+                      constraint cr_items_pub_status_chk
+                      check (publish_status in 
+                            ('production', 'ready', 'live', 'expired')
+                      ),
+  content_type        varchar2(100)
+                      constraint cr_items_rev_type_fk
+                      references acs_object_types,
+  storage_type        varchar2(10) default 'lob' not null
+                      constraint cr_revisions_storage_type
+                      check (storage_type in ('lob','file')),
+  storage_area_key    varchar2(100) default 'CR_FILES' not null
 );  
 
 create index cr_items_by_locale on cr_items(locale);
@@ -207,6 +208,19 @@ comment on column cr_items.content_type is '
   added to this item (an item should have revisions of only one type).
   If null, then no revisions should be allowed.
 ';
+
+-- content-create.sql patch
+--
+-- adds standard mechanism for deleting revisions from the file-system
+--
+-- Walter McGinnis (wtem@olywa.net), 2001-09-23
+-- based on original photo-album package code by Tom Baginski
+--
+
+create table cr_files_to_delete (
+  path                  varchar2(250),
+  storage_area_key      varchar2(100)
+);
 
 create table cr_child_rels (
   rel_id             integer
@@ -341,6 +355,25 @@ comment on table cr_content_text is '
   Provides a workaround for the fact that blob_to_string(content) has
   4000 character limit.
 ';
+
+
+-- (DanW - OpenACS) Added cleanup trigger to log file items that need 
+-- to be cleaned up from the CR.
+
+create or replace trigger cr_cleanup_cr_files_del_trg
+before delete on cr_revisions
+for each row
+begin
+        insert into cr_files_to_delete
+        select r.content as path, i.storage_area_key
+          from cr_items i, cr_revisions r
+         where i.item_id = r.item_id
+           and r.revision_id = :old.revision_id
+           and i.storage_type = 'file';
+
+end;
+/
+show errors
 
 --------------------------------------------------------------
 -- CONTENT PUBLISHING
