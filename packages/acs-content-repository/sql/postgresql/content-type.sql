@@ -488,7 +488,7 @@ end;' language 'plpgsql';
 -- dummy table provides a target for updates in dynamically generated trigger
 -- statements.  If type is cr_revisions then rule would end up having only a 
 -- select statement which causes an error to be thrown by the dml command.
--- dml command checks for NS_ROWS result and throws and error if found.  
+-- dml command checks for NS_ROWS result and throws an error if found.  
 -- Using a dummy update causes NS_OK to be returned which satisfies the dml
 -- result checking.
 
