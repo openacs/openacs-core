@@ -186,7 +186,7 @@ ad_proc -public content::init {
                    -root_folder_id $content_root \
                    -resolve_index "f"]
   set item_info(content_type) [::content::item::get_content_type \
-                        -item_id $item_id]
+                        -item_id $item_info(item_id)]
   
   # No item found, so do not handle this request
   if { [string equal "" $item_info(item_id)] } { 
