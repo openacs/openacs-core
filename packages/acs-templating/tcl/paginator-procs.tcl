@@ -272,7 +272,7 @@ ad_proc -public template::paginator::get_pages { name group } {
 
   set pages [list]
 
-  for { set i $start } { $i < $end } { incr i } {
+  for { set i $start } { $i <= $end } { incr i } {
     lappend pages $i
   }
 
