@@ -22,7 +22,7 @@ set adp_preselect_list [list]
 set package_key [apm_package_key_from_version_id $version_id]
 foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {	
 
-    set file_regexp [ad_decode $file_type adp {\.adp$} {\.tcl$}]
+    set file_regexp ".${file_type}\$"
     
     if { [regexp $file_regexp $file match] } {
         set relative_path [ad_make_relative_path $file]
@@ -35,19 +35,23 @@ foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {
 
             set number_of_message_tags [llength [lang::util::get_temporary_tags_indices $file_contents]]
 
-            if { [string equal $file_type adp] } {
-                # We are dealing with adp files
-                set number_of_message_keys [llength [lang::util::get_hash_indices $file_contents]]
-                set adp_text_result_list [lang::util::replace_adp_text_with_message_tags $file report]
-                set number_of_text_snippets [llength [lindex $adp_text_result_list 0]]
+            switch -- $file_type {
+                adp {
+                    set number_of_message_keys [llength [lang::util::get_hash_indices $file_contents]]
+                    set adp_text_result_list [lang::util::replace_adp_text_with_message_tags $file report]
+                    set number_of_text_snippets [llength [lindex $adp_text_result_list 0]]
                 
-                set status_string "$number_of_text_snippets texts, $number_of_message_tags tags, $number_of_message_keys keys"
-            } else {
-                # We are dealing with tcl files
-
-                set status_string "$number_of_message_tags tags"
+                    set status_string "$number_of_text_snippets texts, $number_of_message_tags tags, $number_of_message_keys keys"
+                }
+                tcl {
+                    set status_string "$number_of_message_tags tags"
+                }
+                sql {
+                    set number_of_message_keys [llength [lang::util::get_hash_indices $file_contents]]
+                    set status_string "$number_of_message_tags tags, $number_of_message_keys keys"
+                }
             }
-                
+
             close $file_id
 
         } else {
@@ -88,7 +92,7 @@ if { [string equal $file_type adp] } {
         -values {replace_text} \
         -section action_section
 } else {
-    # TCL files
+    # TCL files or SQL files
     element create file_list_form tcl_action_inform \
             -datatype text \
             -widget inform \
@@ -114,10 +118,16 @@ if { $show_status_p } {
     set status_filter "<a href=\"version-i18n?[export_vars -url -override {{show_status_p 1}} {version_id file_type pre_select_files_p}]\">Show I18N status of files</a>"
 }
 
-if { [string equal $file_type adp] } {
-    set file_type_filter "<b>Show adp files</b> | <a href=\"version-i18n?[export_vars -url -override {{file_type tcl}} {version_id pre_select_files_p show_status_p}]\">Show tcl files</a>"
-} else {
-    set file_type_filter "<a href=\"version-i18n?[export_vars -url -override {{file_type adp}} {version_id pre_select_files_p show_status_p}]\">Show adp files</a> | <b>Show tcl files</b>"
+switch -- $file_type {
+    adp {
+        set file_type_filter "<b>Show adp files</b> | <a href=\"version-i18n?[export_vars -url -override {{file_type tcl}} {version_id pre_select_files_p show_status_p}]\">Show tcl files</a> | <a href=\"version-i18n?[export_vars -url -override {{file_type sql}} {version_id pre_select_files_p show_status_p}]\">Show sql files</a>"
+    }
+    tcl {
+        set file_type_filter "<a href=\"version-i18n?[export_vars -url -override {{file_type adp}} {version_id pre_select_files_p show_status_p}]\">Show adp files</a> | <b>Show tcl files</b> | <a href=\"version-i18n?[export_vars -url -override {{file_type sql}} {version_id pre_select_files_p show_status_p}]\">Show sql files</a>"
+    }
+    sql {
+        set file_type_filter "<a href=\"version-i18n?[export_vars -url -override {{file_type adp}} {version_id pre_select_files_p show_status_p}]\">Show adp files</a> | <a href=\"version-i18n?[export_vars -url -override {{file_type tcl}} {version_id pre_select_files_p show_status_p}]\">Show tcl files</a> | <b>Show sql files</b>"
+    }
 }
 
 ad_return_template

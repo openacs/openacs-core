@@ -26,8 +26,8 @@
 <ul>
   <p>
     <li>
-      <a href="version-i18n?version_id=@version_id@"><b>Convert</b> ADP and
-      Tcl files to use the message catalog</a>.
+      <a href="version-i18n?version_id=@version_id@"><b>Convert</b> ADP, 
+       Tcl, and SQL files to using the message catalog</a>.
     </li>
   </p>
 </ul>
