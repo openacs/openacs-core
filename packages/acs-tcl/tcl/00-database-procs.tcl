@@ -264,7 +264,7 @@ ad_proc -private -private db_driverkey {{
 }
 
 
-proc_doc db_type { } {
+ad_proc db_type { } {
     Returns the RDBMS type (i.e. oracle, postgresql) this OpenACS installation is
     using.  The nsv ad_database_type is set up during the bootstrap process.
 } {
@@ -311,20 +311,20 @@ ad_proc db_legacy_package_p { db_type_list } {
     return 0
 }
 
-proc_doc db_version { } {
+ad_proc db_version { } {
     Returns the RDBMS version (i.e. 8.1.6 is a recent Oracle version; 7.1 a
     recent PostgreSQL version.
 } {
     return [nsv_get ad_database_version .]
 }
 
-proc_doc db_current_rdbms { } {
+ad_proc db_current_rdbms { } {
     Returns the current rdbms type and version.
 } {
     return [db_rdbms_create [db_type] [db_version]]
 }
 
-proc_doc db_known_database_types { } {
+ad_proc db_known_database_types { } {
     Returns a list of three-element lists describing the database engines known
     to OpenACS.  Each sublist contains the internal database name (used in file
     paths, etc), the driver name, and a "pretty name" to be used in selection
@@ -342,7 +342,7 @@ proc_doc db_known_database_types { } {
 # can't hurt anything to have them defined in when OpenACS is using
 # Postgres too.  --atp@piskorski.com, 2003/04/08 05:34 EDT
 
-proc_doc db_null { } {
+ad_proc db_null { } {
     Returns an empty string, which Oracle thinks is null.  This routine was
     invented to provide an RDBMS-specific null value but doesn't actually
     work.  I (DRB) left it in to speed porting - we should really clean up
@@ -351,7 +351,7 @@ proc_doc db_null { } {
     return ""
 }
 
-proc_doc db_quote { string } { Quotes a string value to be placed in a SQL statement. } {
+ad_proc db_quote { string } { Quotes a string value to be placed in a SQL statement. } {
     regsub -all {'} "$string" {''} result
     return $result
 }
