@@ -305,58 +305,25 @@ ad_proc -private apm_load_queries {
 	where enabled_p='t'
     }]
 
-    # DRB: We only want to load those files that match our database
-    # type or no type at all (i.e. works for any database).  I'm doing
-    # this mostly because it is how things will be done when we do
-    # them RIGHT (i.e. using the package file info in the RDBMS).
-
-    set exclude_strings [list]
-    foreach known_database_type [nsv_get ad_known_database_types .] {
-        if { ![string match [lindex $known_database_type 0] [db_type]] } {
-            lappend exclude_strings "*-[lindex $known_database_type 0].*"
-        }
-    }
-
     # Scan the package directory for files to source.    
     set files [list]    
     foreach package $packages {
-	set base "[acs_root_dir]/packages/$package/"
-	set base_len [string length $base]
 
-	# For now we expect the SQL files to be in parallel with the Tcl files
+        set files [ad_find_all_files [acs_root_dir]/packages/$package]
+        if { [llength $files] == 0 } {
+    	    error "Unable to locate [acs_root_dir]/packages/$package/*."
+        }
 
-        # DRB: without the quotes ${base}www turns into the two element list
-        # {${base} www}, not what was wanted...
- 
-        # SDW: look in www and all it's subdirectories
-        set dirs [apm_subdirs "${base}www"]
-	set paths [list]
+        foreach file [lsort $files] {
 
-        # DRB: For now just slurp all .xql files
-	foreach dir $dirs {
-	    set paths [concat $paths [glob -nocomplain [file join $dir *.xql]]]
-	}
-	
-	foreach path [lsort $paths] {
-	    set rel_path [string range $path $base_len end]
-            # DRB: db_fullquery_internal_load_cache expects the full pathname...
-            set load_query_file 1
-            foreach exclude_string $exclude_strings {
-                if { [string match $exclude_string $path] } {
-                    set load_query_file 0
-                    break
-                }
-            }
-            if { $load_query_file } {
-	        lappend files "$base/$rel_path"
-            }
-	}
-    }
-      
-    # Load up each file
-    ns_log Notice "APM/QD = looping through files to load queries from"
-    foreach file $files {
-	db_qd_load_query_file $file
+            set file_db_type [apm_guess_db_type $package $file]
+            set file_type [apm_guess_file_type $package $file]
+
+            if {[string equal $file_type query_file] &&
+                ([empty_string_p $file_db_type] || [string equal $file_db_type [db_type]])} {
+	        db_qd_load_query_file $file
+            } 
+        }
     }
     ns_log Notice "APM/QD = DONE looping through files to load queries from"
 }
