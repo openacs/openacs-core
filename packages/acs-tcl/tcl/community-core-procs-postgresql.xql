@@ -45,7 +45,7 @@
 <fullquery name="user_search">
   <querytext>
       select distinct u.first_names || ' ' || u.last_name || ' (' || u.email || ')' as name, u.user_id
-      from   acs_users_all u
+      from   cc_users u
       where  lower(coalesce(u.first_names || ' ', '')  ||
              coalesce(u.last_name || ' ', '') ||
              u.email || ' ' ||
