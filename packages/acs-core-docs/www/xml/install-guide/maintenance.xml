@@ -363,6 +363,7 @@ set address                127.0.0.1 </programlisting>
 
   <sect1 id="high-avail">
     <title>High Availability/High Performance Configurations</title>
+    <para>See also <xref linkend="remote-postgres"/>.</para>
     <figure>
       <title>Multiple-server configuration</title>
       <mediaobject>
@@ -401,7 +402,7 @@ set address                127.0.0.1 </programlisting>
       </mediaobject>
     </figure>
      <figure>
-      <title>Simple Deployment - Step 1</title>
+      <title>Simple Deployment - Step 2</title>
       <mediaobject>
         <imageobject>
           <imagedata fileref="images/simple-deploy-2.png" format="png" align="center"/>
@@ -409,7 +410,7 @@ set address                127.0.0.1 </programlisting>
       </mediaobject>
     </figure>
      <figure>
-      <title>Simple Deployment - Step 1</title>
+      <title>Simple Deployment - Step 3</title>
       <mediaobject>
         <imageobject>
           <imagedata fileref="images/simple-deploy-3.png" format="png" align="center"/>
@@ -428,7 +429,7 @@ set address                127.0.0.1 </programlisting>
       </mediaobject>
     </figure>
      <figure>
-      <title>Complex Deployment - Step 1</title>
+      <title>Complex Deployment - Step 2</title>
       <mediaobject>
         <imageobject>
           <imagedata fileref="images/complex-deploy-2.png" format="png" align="center"/>
@@ -436,7 +437,7 @@ set address                127.0.0.1 </programlisting>
       </mediaobject>
     </figure>
      <figure>
-      <title>Complex Deployment - Step 1</title>
+      <title>Complex Deployment - Step 3</title>
       <mediaobject>
         <imageobject>
           <imagedata fileref="images/complex-deploy-3.png" format="png" align="center"/>
@@ -501,7 +502,7 @@ S/Sd2MYA0JVmQuIt5bYowXR1KYKDka1d3DUgtoVTiFepIRUrMkZlCli08mWVjE6T
     </sect1>
 
     <sect1 id="analog-setup">
-    <title>Set up Log Analysis Reports - OPTIONAL</title>
+    <title>Set up Log Analysis Reports</title>
     
     <para>Analog is a program with processes webserver access logs,
       performs DNS lookup, and outputs HTML reports.  Analog should

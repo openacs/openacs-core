@@ -353,7 +353,7 @@ logout</screen>
   </sect1>
 
   <sect1 id="automated-backup">
-    <title>Automated Backup (OPTIONAL)</title>
+    <title>Automated Backup</title>
     <para>The recommended backup strategy for a production sit is to use an automated script which first backs up the database to a file in <filename>/var/lib/aolserver/<replaceable>service0</replaceable>/database-backup</filename> and then backs up all of <filename>/var/lib/aolserver/<replaceable>service0</replaceable></filename> to a single zip file, and then copies that zip file to another computer.</para>
     <orderedlist>
       <listitem>
