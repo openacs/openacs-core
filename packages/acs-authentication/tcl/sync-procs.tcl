@@ -9,6 +9,8 @@ ad_library {
 namespace eval auth {}
 namespace eval auth::sync {}
 namespace eval auth::sync::job {}
+namespace eval auth::sync::get_doc {}
+namespace eval auth::sync::get_doc::http {}
 
 
 #####
@@ -20,7 +22,6 @@ namespace eval auth::sync::job {}
 ad_proc -public auth::sync::job::get {
     {-job_id:required}
     {-array:required}
-    {-include_document:boolean}
 } {
     Get information about a batch job in an array.
 
@@ -28,9 +29,6 @@ ad_proc -public auth::sync::job::get {
     
     @param array         Name of an array into which you want the information.
     
-    @param include_document
-                         Set this switch if you also want the document returned in the array.
-
     @author Lars Pind (lars@collaboraid.biz)
 } {
     upvar 1 $array row
@@ -39,17 +37,13 @@ ad_proc -public auth::sync::job::get {
 
     # TODO: This is temporary, make sure this is where the UI ends up
     set row(log_url) [export_vars -base "[ad_url]/acs-admin/package/acs-authentication/sync-log" { job_id }]
-
-    if { $include_document_p } {
-        # TODO: Return the document once we know how we'll store it
-        set job(document) "Not implemented"
-    }
 }
 
 ad_proc -public auth::sync::job::start {
     {-job_id ""}
     {-authority_id:required}
     {-interactive:boolean}
+    {-snapshot:boolean}
     {-creation_user ""}
 } {
     Record the beginning of a job.
@@ -57,6 +51,8 @@ ad_proc -public auth::sync::job::start {
     @param authority_id      The ID of the authority you're trying to sync
     
     @param interactive       Set this if this is an interactive job, i.e. it's initiated by a user.
+
+    @param snapshot          Set this if this is a snapshot job, as opposed to an incremental ('event driven') job.
 
     @return job_id           An ID for the new batch job. Used when calling other procs in this API.
     
@@ -73,9 +69,9 @@ ad_proc -public auth::sync::job::start {
         
         db_dml job_insert {
             insert into auth_batch_jobs
-            (job_id, interactive_p, creation_user)
+            (job_id, interactive_p, snapshot_p, creation_user, authority_id)
             values
-            (:job_id, :interactive_p, :creation_user)
+            (:job_id, :interactive_p, :snapshot_p, :creation_user, :authority_id)
         }
     }
     
@@ -84,6 +80,7 @@ ad_proc -public auth::sync::job::start {
 
 ad_proc -public auth::sync::job::end {
     {-job_id:required}
+    {-message ""}
 } {
     Record the end of a batch job. Closes out the transaction 
     log and sends out notifications.
@@ -98,7 +95,8 @@ ad_proc -public auth::sync::job::end {
 } {
     db_dml set_end_time {
         update auth_batch_jobs
-        set    job_end_time = current_timestamp
+        set    job_end_time = current_timestamp,
+               message = :message
         where  job_id = :job_id
     }
     
@@ -112,8 +110,16 @@ ad_proc -public auth::sync::job::end {
             ns_sendmail \
                 [ad_system_owner] \
                 [ad_system_owner] \
-                "Batch sync completed" \
-                "Batch user synchronization is complete.\n\nRunning time: $job(run_time_seconds) seconds\nNumber of actions: $job(num_actions)\nNumber of problems: $job(num_problems)\n\nTo view the log, please visit\n$job(log_url)"
+                "Batch user synchronization for $job(authority_pretty_name) complete" \
+                "Batch user synchronization for $job(authority_pretty_name) is complete.
+
+Authority         : $job(authority_pretty_name)
+Running time      : $job(run_time_seconds) seconds
+Number of actions : $job(num_actions)
+Number of problems: $job(num_problems)
+Job message       : $job(message)
+
+To view the complete log, please visit\n$job(log_url)"
         } {
             # We don't fail hard here, just log an error
             global errorInfo
@@ -144,10 +150,7 @@ ad_proc -public auth::sync::job::end_get_document {
 
     @param job_id The ID of the batch job you're ending.
 } {
-    # TODO: Create cr_item containing document. Talk to Jun Kyamog about a CR API
-    set document_id {}
-
-    db_dml update_doc_end {}
+    db_dml update_doc_end {} -clobs [list $document]
 }
 
 ad_proc -public auth::sync::job::create_entry {
@@ -354,7 +357,7 @@ ad_proc -public auth::sync::job::snapshot_delete_remaining {
         auth::sync::job::action \
             -job_id $job_id \
             -operation "delete" \
-            -authority_id [auth::authority::local] \
+            -authority_id $authority_id \
             -username $username
     }
 }
@@ -378,9 +381,133 @@ ad_proc -public auth::sync::purge_jobs {
     validate_integer num_days $num_days
 
     if { $num_days > 0 } { 
-        # TODO: Don't forget to also delete the cr_item referenced by the auth_batch_jobs.document column.
-
         db_dml purge_jobs {}
     }
 }
+
+ad_proc -private auth::sync::sweeper {} {
+    db_foreach select_authorities {
+        select authority_id,
+               snapshot_p
+        from   auth_authorities
+        where  enabled_p = 't'
+        and    batch_sync_enabled_p = 't'
+    } {
+        auth::authority::batch_sync \
+            -authority_id $authority_id \
+            -snapshot=[template::util::is_true $snapshot_p]
+    }
+}
+
+ad_proc -private auth::sync::GetDocument {
+    {-authority_id:required}
+} {
+    Wrapper for the GetDocument operation of the GetDocument service contract.
+} {
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "get_doc_impl_id"]
+
+    if { [empty_string_p $impl_id] } {
+        # No implementation of GetDocument
+        set authority_pretty_name [auth::authority::get_element -authority_id $authority_id -element "pretty_name"]
+        error "The authority '$authority_pretty_name' doesn't support GetDocument"
+    }
+
+    set parameters [auth::driver::get_parameter_values \
+                        -authority_id $authority_id \
+                        -impl_id $impl_id]
+
+    return [acs_sc::invoke \
+                -error \
+                -impl_id $impl_id \
+                -operation GetDocument \
+                -call_args [list $parameters]]
+}
+
+ad_proc -private auth::sync::ProcessDocument {
+    {-authority_id:required}
+    {-job_id:required}
+    {-document:required}
+} {
+    Wrapper for the ProcessDocument operation of the auth_sync_process service contract.
+} {
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "process_doc_impl_id"]
+
+    if { [empty_string_p $impl_id] } {
+        # No implementation of auth_sync_process
+        set authority_pretty_name [auth::authority::get_element -authority_id $authority_id -element "pretty_name"]
+        error "The authority '$authority_pretty_name' doesn't support auth_sync_process"
+    }
+
+    set parameters [auth::driver::get_parameter_values \
+                        -authority_id $authority_id \
+                        -impl_id $impl_id]
+
+    return [acs_sc::invoke \
+                -error \
+                -impl_id $impl_id \
+                -operation ProcessDocument \
+                -call_args [list $job_id $document $parameters]]
+}
+
+
+
+
+
+#####
+#
+# auth::sync::get_doc::http namespace
+#
+#####
+
+ad_proc -private auth::sync::get_doc::http::register_impl {} {
+    Register this implementation
+} {
+    set spec {
+        contract_name "GetDocument"
+        owner "acs-authentication"
+        name "HTTPGet"
+        aliases {
+            GetDocument auth::sync::get_doc::http::GetDocument
+            GetParameters auth::sync::get_doc::http::GetParameters
+        }
+    }
+
+    return [acs_sc::impl::new_from_spec -spec $spec]
+
+}
+
+ad_proc -private auth::sync::get_doc::http::unregister_impl {} {
+    Unregister this implementation
+} {
+    acs_sc::impl::delete -contract_name "GetDocument" -impl_name "HTTPGet"
+}
+
+ad_proc -private auth::sync::get_doc::http::GetParameters {} {
+    Parameters for HTTP GetDocument implementation.
+} {
+    return {
+        URL {The URL from which to retrieve the document}
+    }
+}
+
+ad_proc -private auth::sync::get_doc::http::GetDocument {
+    parameters
+} {
+    Retrieve the document by HTTP
+} {
+    array set result {
+        doc_status failed_to_conntect
+        doc_message {}
+        document {}
+    }
+
+    array set param $parameters
+    
+    set result(document) [util_httpget $param(URL)]
+
+    set result(doc_status) "ok"
+
+    retun [array get result]
+}
+
 

@@ -26,12 +26,18 @@ ad_proc -private auth::package_install {} {} {
 
         # Register local authentication implementations and update the local authority
         auth::local::install
+
+        # Register HTTP method for GetDocument
+        auth::sync::get_doc::http::register_impl
     }
 }
 
 ad_proc -private auth::package_uninstall {} {} {
 
     db_transaction {
+
+        # Unregister HTTP method for GetDocument
+        auth::sync::get_doc::http::unregister_impl
 
         # Unregister local authentication implementations and update the local authority
         auth::local::uninstall
@@ -368,7 +374,7 @@ ad_proc -private auth::process_doc::create_contract {} {
                 input {
                     job_id:integer
                     document:string
-                    paraemters:string,multiple
+                    parameters:string,multiple
                 }
             }
             GetParameters {

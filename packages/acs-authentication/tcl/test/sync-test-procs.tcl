@@ -450,3 +450,20 @@ aa_register_case job_snapshot {
             
         }    
 }
+
+
+aa_register_case job_batch_for_local {
+    Test a batch job for the local authority
+} {
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+            
+            set job_id [auth::authority::batch_sync -authority_id [auth::authority::local]]
+            
+            auth::sync::job::get -job_id $job_id -array job
+
+            aa_log "job.message = '$job(message)'"
+
+        }
+}
