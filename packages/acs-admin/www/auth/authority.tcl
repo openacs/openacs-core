@@ -79,6 +79,13 @@ set form_widgets_full {
         {help_text "URL where users register for a new account."}
     }        
 
+    {user_info_impl_id:integer(select),optional
+        {label "User Info"}
+        {section "On-Demand Sync"}
+        {options {[acs_sc::impl::get_options -empty_label "--Disabled--" -contract_name auth_user_info]}}
+        {help_text "The implementation for getting user information from the authority in real-time"}
+    }
+
     {batch_sync_enabled_p:text(radio)
         {label "Batch sync enabled"}
         {options {{Yes t} {No f}}}
@@ -155,7 +162,7 @@ ad_form -name authority \
     set page_title $pretty_name
 
     foreach var_name [template::form::get_elements -no_api authority] {
-            set element_array($var_name) [set $var_name]
+        set element_array($var_name) [set $var_name]
     }
 
     set element_array(sort_order) ""
@@ -276,9 +283,9 @@ if { ($initial_request_p || $submit_p) && !$local_authority_p } {
         # parameters to configure
         if { [exists_and_not_null element_array($element_name)] && 
              ![empty_string_p [auth::driver::get_parameters -impl_id $element_array($element_name)]]} {
-
-            set configure_url [export_vars -base authority-parameters { authority_id {column_name $element_name}}]
-            element set_properties authority $element_name -after_html "(<a href=\"$configure_url\">Configure</a>)"
+            
+            set configure_url [export_vars -base authority-parameters { authority_id }]
+            break
         }
     }    
 }
