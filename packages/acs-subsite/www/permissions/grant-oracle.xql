@@ -5,7 +5,7 @@
 
 <fullquery name="name">      
       <querytext>
-      select acs_object.name(:object_id) 
+      select acs_object.name(:object_id) from dual
       </querytext>
 </fullquery>
 
