@@ -1156,7 +1156,6 @@ ad_proc -public ad_conn {args} {
 	object_url ""
 	object_type ""
 	package_id ""
-        subsite_id ""
 	package_url ""
         instance_name ""
 	package_key ""
@@ -1167,6 +1166,8 @@ ad_proc -public ad_conn {args} {
 	system_p 0
         recursion_count 0
       }
+        array unset ad_conn subsite_id
+        array unset ad_conn locale
     }
 
     -get {
