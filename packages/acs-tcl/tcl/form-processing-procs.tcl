@@ -793,7 +793,7 @@ ad_proc -public ad_form {
             foreach {element_name validate_expr error_message} $validate_element {
                 if { ![template::element error_p $form_name $element_name] && \
                     ![uplevel #$level [list expr $validate_expr]] } {
-                    template::element set_error $form_name $element_name [subst $error_message]
+                    template::element set_error $form_name $element_name [uplevel [subst $error_message]]
                 }
             }
         }
