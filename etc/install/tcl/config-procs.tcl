@@ -1,7 +1,17 @@
-# Global variables used by the test procs to reduce the number
-# of parameters we need to pass around to the procs.
+# Procs to support testing OpenACS with Tclwebtest.
+#
+# Procs for getting config info. If those tests were to run
+# from within OpenACS some of these procs could go away.
 #
 # @author Peter Marklund
+
+namespace eval ::twt::config {}
+
+####################
+#
+# Global variables
+#
+####################
 
 # TODO: put variables in twt namespace
 
@@ -33,3 +43,21 @@ if { [info exists dotlrn_users_data_file] } {
 } else {
     set __dotlrn_users_data_file users-data.csv
 } 
+
+ad_proc ::twt::config::server_url { } {
+    global __server_url
+
+    return $__server_url
+}
+
+ad_proc ::twt::config::admin_email { } {
+    global __admin_email
+
+    return $__admin_email
+}
+
+ad_proc ::twt::config::admin_password { } {
+    global __admin_password
+
+    return $__admin_password
+}

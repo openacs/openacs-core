@@ -1,14 +1,14 @@
 if { [catch {
     # Source procedures
-    source tclwebtest-functions.tcl
+    source tcl/test-procs.tcl
 
     # Test Execution START
 
-    # Login the site wide admin
-    login_site_wide_admin
+    ::twt::log "Login the site wide admin"
+    ::twt::user::login_site_wide_admin
 
     # Run all tests
-    do_request "${server_url}/test/admin/rerun?package_key=&category=&view_by=package&quiet=0"
+    ::twt::do_request "test/admin/rerun?package_key=&category=&view_by=package&quiet=0"
 
     # Grep for packages with failed tests
     if { [regexp -nocase {fail} [response body]] } {

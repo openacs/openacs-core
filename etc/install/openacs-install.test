@@ -4,7 +4,7 @@ source tcl/test-procs.tcl
 # Test Execution START
 
 # Request the root page
-do_request "$server_url"
+::twt::do_request $server_url
 
 # Check that database connection is there and configuration is ok
 assert ![regexp -nocase "At least one misconfiguration was discovered" "[response text]"]
@@ -41,6 +41,6 @@ field fill "$new_registrations_email"
 
 form submit
 
-twt::util::write_response_to_file $install_output_file
+::twt::write_response_to_file $install_output_file
 
 # Test Execution END

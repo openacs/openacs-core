@@ -27,45 +27,46 @@ ad_proc ::twt::user::get_random_users { type number } {
 } {
     set email_list [get_users $type]
 
-    return [::twt::util::get_random_items_from_list $email_list $number]
+    return [::twt::get_random_items_from_list $email_list $number]
 }
 
 ad_proc ::twt::user::get_password { email } {
-    global __demo_users_password
 
-    return $__demo_users_password
+    if { [string equal $email  [::twt::config::admin_email]] } {
+        return [::twt::config::admin_password]
+    } else {
+        global __demo_users_password
+        return $__demo_users_password
+    }
 }
 
-ad_proc ::twt::user::login { user_email user_password} {
+ad_proc ::twt::user::login { email } {
 
     ::twt::user::logout
 
     global __server_url
 
     # Request the start page
-    do_request "${__server_url}/register"
+    ::twt::do_request "${__server_url}/register"
 
     # Login the user
     form find ~n login
     field find ~n email
-    field fill "$user_email"
+    field fill "$email"
     field find ~n password
-    field fill "$user_password"
+    field fill [get_password $email]
     form submit
 }
 
 ad_proc ::twt::user::logout {} {
     global __server_url
 
-    do_request "${__server_url}/register/logout"
+    ::twt::do_request "${__server_url}/register/logout"
 }
 
 ad_proc ::twt::user::login_site_wide_admin {} {
-    global __server_url
-    global __admin_email
-    global __admin_password
 
-    ::twt::user::login $__admin_email $__admin_password
+    ::twt::user::login [::twt::config::admin_email]
 }
 
 ad_proc ::twt::user::add { 
@@ -78,7 +79,7 @@ ad_proc ::twt::user::add {
     full_access
     guest
 } {
-    do_request "$server_url/dotlrn/admin/users"
+    ::twt::do_request "$server_url/dotlrn/admin/users"
     link follow ~u "user-add"
 
     form find ~a "/dotlrn/user-add"
@@ -89,9 +90,9 @@ ad_proc ::twt::user::add {
     field find ~n "last_name"
     field fill $last_name
     field find ~n "password"
-    field fill [::twt::user::get_password $email]
+    field fill [get_password $email]
     field find ~n "password_confirm"
-    field fill [::twt::user::get_password $email]
+    field fill [get_password $email]
     form submit
 
     form find ~n add_user
@@ -182,7 +183,10 @@ ad_proc ::twt::user::upload_users { server_url } {
 
     # We want the users to have a known password so people can log in with them
     set_passwords $server_url
-    
+
+    # Since Einstein will be posting in all classes
+    # we make him site-wide-admin
+    ::twt::user::make_site_wide_admin albert_einstein@dotlrn.test
 }
 
 ad_proc ::twt::user::set_passwords { server_url } {
@@ -191,7 +195,7 @@ ad_proc ::twt::user::set_passwords { server_url } {
         #puts "setting guest password for user $user_email"
 
         # User admin page
-        do_request "${server_url}/dotlrn/admin/users"
+        ::twt::do_request "${server_url}/dotlrn/admin/users"
 
         form find ~a "users-search"
         field fill $user_email ~n name    
@@ -208,4 +212,11 @@ ad_proc ::twt::user::set_passwords { server_url } {
         field fill [get_password $user_email] ~n password_2
         form submit
     }
+}
+
+ad_proc ::twt::user::make_site_wide_admin { email } {
+    ::twt::do_request [::twt::dotlrn::get_user_admin_url $email]
+
+    # Do nothing if the user is already site-wide-admin
+    catch {link follow ~u {site-wide-admin-toggle.*value=grant}}
 }

@@ -9,8 +9,8 @@ namespace eval ::twt {}
 
 set script_dir [file dirname [info script]]
 
-source $script_dir/global-vars.tcl
-source $script_dir/util-procs.tcl
+source $script_dir/config-procs.tcl
+source $script_dir/twt-procs.tcl
 source $script_dir/user-procs.tcl
 source $script_dir/admin-procs.tcl
 source $script_dir/dotlrn-procs.tcl
