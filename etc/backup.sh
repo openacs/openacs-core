@@ -47,6 +47,7 @@ ORACLE8I_DBS="service0"              # space-separated list of Oracle8i database
 
                                      # space-separated list of directories to be backed up
 
+KEEP_DAYS=7                          # Number of days to keep backups in $BACKUPDIR
 #---------------------------------------------------------------------
 # a space-delimited list of directories to back up
 # A minimal backup  
@@ -221,5 +222,8 @@ if [ $TYPE == "full" ];
     NOW=`date +%Y-%m-%d`
     echo $NOW> $TIMEDIR/$COMPUTER-full-date;
 fi
+
+# Delete old files
+/usr/bin/find $BACKUPDIR -atime +$KEEP_DAYS -exec /bin/rm -f {} \;
 
 echo "Done."
