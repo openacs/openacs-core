@@ -7,7 +7,7 @@
 
 
   <sect1 id="tutorial-newpackage">
-    <title>Creating a Package</title>
+    <title>Creating an Application Package</title>
     
     <authorblurb>
       <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
@@ -22,21 +22,16 @@
   </mediaobject>
 </sect2>
 
-
     <sect2>
       <title>Overview</title>
-      <para>To start developing new code in OpenACS, we build a new
-    package.  A package is a a discrete collection of web
-    pages, tcl code, and database tables and procedures.  A package
-      with user interface is called an <emphasis
-      role="strong">application</emphasis>; a package which provides
-      functions to other packages and has no direct interface, a
-      <emphasis role="strong">service</emphasis>.  A package
-    can be installed, upgraded, and removed.  It communicates with
-    other packages through an API.  This chapter walks you through the
-    minimum steps to create a useful package, including writing
-      documentation, setting up database tables and procedures,
-      writing web pages, debugging, and automatic regression testing.
+      <para>To start developing new code in OpenACS, we build a new package. A package 
+      is a a discrete collection of web pages, tcl code, and database tables and procedures.
+      A package with user interface is called an <emphasis role="strong">application</emphasis>; 
+      a package which provides functions to other packages and has no direct interface, a
+      <emphasis role="strong">service</emphasis>.  A package can be installed, upgraded, and 
+      removed.  It communicates with other packages through an API.  This chapter walks you through 
+      the minimum steps to create a useful package, including writing documentation, setting up 
+      database tables and procedures, writing web pages, debugging, and automatic regression testing.
       </para>
       
       <para>
@@ -45,7 +40,6 @@
         around the content repository's limitations, including an
         incomplete TCL API.  So the tutorial is messier than we'd like
         right now.  Code that is temporary hackage is clearly marked.
-
       </para>
       
     <para>In this tutorial, we will make an application package for
@@ -112,7 +106,7 @@ standard OpenACS &version; distribution.
       </listitem>
       <listitem>
         <para>Click <computeroutput>Create a New Package</computeroutput>.</para>
-        <para>Fill in the fields listed below.  Tab through the rest.
+        <para>Fill in the fields listed below.   <emphasis role="strong">Ignore the rest (and leave the check boxes alone).</emphasis>
         (Some will change automatically.  Don't mess with those.)
 </para>
         <itemizedlist>
@@ -127,6 +121,10 @@ standard OpenACS &version; distribution.
             <listitem><para>
               <computeroutput>Package Plural</computeroutput>:
               <userinput>My First Package</userinput></para></listitem>
+            <listitem><para>
+              <computeroutput>Package Type</computeroutput>:
+              <userinput>Application</userinput>
+            </para></listitem>
             <listitem><para>	  
               <computeroutput>Initial Version</computeroutput>:
               <userinput>0.1d</userinput>
@@ -146,15 +144,14 @@ standard OpenACS &version; distribution.
           files in the package will be within this directory.</para>
     </sect2>
     <sect2>
-      <title>Mount the package in the site map</title>
+      <title>Add an Application Instance to the Server</title>
       <para>In order to see your work in progress, you must create a
-      map between the URL space of incoming requests and the package.
-      You do this by mounting the package in the Site Map.  This
-      creates a link between the incoming URL and an
-      <emphasis>instance</emphasis> of the package.  (<ulink
-      url="rp-design.html">More on Site Maps and nodes</ulink>)</para>
-      <para>You can have
-      multiple instances of a package on one site, each with a
+      map between the URL space of incoming requests and the package application instance.
+      You do this by adding the application in the main site administration).  This
+      creates a link between the incoming URL requests and an
+      <emphasis>instance</emphasis> of the application.  (<ulink
+      url="rp-design.html">More on applications and nodes</ulink>)</para>
+      <para>You can have instances of a package on one site, each with a
       different URL and different permissions, all sharing the same
       code and tables.  This requires that a package be developed
       <emphasis>package-aware</emphasis>.  You'll see how to do that
