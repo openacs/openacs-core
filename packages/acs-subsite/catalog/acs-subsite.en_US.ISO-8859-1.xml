@@ -11,6 +11,7 @@
   <msg key="Bad_Password">Bad Password</msg>
   <msg key="Basic_Information">Basic Information</msg>
   <msg key="bio">bio:</msg>
+  <msg key="cannot_retrieve_password">Retrieving password from local authority is not supported.</msg>
   <msg key="Change_my_Password">Change my Password</msg>
   <msg key="Check_Your_Inbox">Check Your Inbox</msg>
   <msg key="Children">Children</msg>
@@ -209,6 +210,7 @@ approved, you'll get an email message and you can return to
   <msg key="Security">Security</msg>
   <msg key="Show">Show</msg>
   <msg key="Sorry">Sorry</msg>
+  <msg key="sorry_forgotten_pwd">Sorry, we can't help you with your forgotten password.</msg>
   <msg key="Subject">Subject:</msg>
   <msg key="Thank_you">Thank you.</msg>
   <msg key="to">to</msg>
