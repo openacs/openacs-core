@@ -714,8 +714,11 @@ ad_proc -private apm_package_install {
         # Source Tcl procs and queries to be able
         # to invoke any Tcl callbacks after mounting and instantiation. Note that this reloading 
         # is only done in the Tcl interpreter of this particular request.
-        apm_load_libraries -procs -force_reload -packages $package_key
-        apm_load_queries -packages $package_key
+        # Note that acs-tcl is a special case as its procs are always sourced on startup from boostrap.tcl
+        if { ![string equal $package_key "acs-tcl"] } {
+            apm_load_libraries -procs -force_reload -packages $package_key
+            apm_load_queries -packages $package_key
+        }
 
         if { $upgrade_p } {
             # Run before-upgrade
