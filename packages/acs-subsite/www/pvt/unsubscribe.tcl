@@ -10,7 +10,7 @@ ad_page_contract {
     dont_spam_me_p:onevalue
 }
 
-set user_id [ad_get_user_id]
+set user_id [ad_maybe_redirect_for_registration]
 
 db_1row vacation_time "select no_alerts_until, acs_user.receives_alerts_p(:user_id) as on_vacation_p 
 from users
