@@ -35,7 +35,37 @@ ad_proc -public ad_template_return {{file_stub ""}} {
     uplevel 1 "ad_return_template $file_stub"
 }
 
+ad_proc -public ad_return_exception_template {
+    {-status 500}
+    {-params ""}
+    template
+} {
+    Return an exception template and abort the current script.
 
+    @param status The HTTP status to return, by default HTTP 500 (Error)
+    @param params The parameters to pass to the template.
+    @param template The template file.
+
+    Example:
+
+    <code>ad_return_exception_template -params {errmsg {custom_message "My Message"}}</code>
+
+} {
+    set template_params [list]
+    foreach param $params {
+        switch [llength $param] {
+            1 { lappend template_params "&"
+                lappend template_params [lindex $param 0]
+              }
+            2 { lappend template_params [lindex $param 0]
+                lappend template_params [lindex $param 1]
+              }
+            default { return -code error "Error in parameter list" }
+        }
+    }
+    ns_return $status text/html [template::adp_parse [template::util::url_to_file $template [ad_conn file]] $template_params]
+    ad_script_abort
+}
 
 # Get the server root directory (supposing we run under ACS)
 ad_proc -public get_server_root {} {
