@@ -16,6 +16,3 @@
 -- prompt ** Creating translation catalog tables ...
 \i message-catalog.sql
 
--- prompt ** Creatng currency codes
-\i currency.sql
-

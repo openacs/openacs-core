@@ -15,7 +15,3 @@ prompt ** Creating locales table ...
 
 prompt ** Creating translation catalog tables ...
 @@ message-catalog.sql
-
-prompt ** Creatng currency codes
-@@ currency.sql
-
