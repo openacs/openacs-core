@@ -7,6 +7,12 @@ ad_page_contract {
 } {
     {member_state "approved"}
     {orderby "name,asc"}
+} -validate {
+    member_state_valid -requires { member_state } {
+        if { [lsearch [group::possible_member_states] $member_state] == -1 } {
+            ad_complain "Invalid member_state"
+        }
+    }
 }
 
 set page_title "Members"
@@ -41,51 +47,99 @@ if { $admin_p } {
 }
 
 set actions {}
-set bulk_actions {}
-
-if { $admin_p } {
-    set bulk_actions { 
-        "Remove" member-remove "Remove the checked members from this group" 
-        "Make administrator" make-admin "Make checked members administrators of this group"
-        "Make normal member" make-member "Make checked administrators normal of this group"
-    }
-}
 
 if { $admin_p || [parameter::get -parameter "MembersCanInviteMembersP" -default 0] } {
     set actions { "Invite" member-invite }
 }
 
 # TODO: Pagination
-set show_partial_email_p [expr $user_id == 0]
+
+set member_state_options [list]
+db_foreach select_member_states {
+    select mr.member_state as state, 
+           count(mr.rel_id) as num_members
+    from   membership_rels mr,
+           acs_rels r
+    where  r.rel_id = mr.rel_id
+    and    r.object_id_one = :group_id
+    group  by mr.member_state
+} {
+    lappend member_state_options \
+        [list \
+             [group::get_member_state_pretty -member_state $state] \
+             $state \
+             $num_members]
+}
 
 list::create \
     -name "members" \
     -multirow "members" \
     -key rel_id \
     -row_pretty_plural "members" \
-    -bulk_actions $bulk_actions \
     -actions $actions \
     -elements {
         name {
             label "Name"
             link_url_eval {[acs_community_member_url -user_id $user_id]}
+        }
+        email {
+            label "Email"
+            link_url_col email_url
+            link_html { title "Send email to this user" }
+        }
+        rel_role {
+            label "Role"
+            display_template {
+                @members.rel_role_pretty@
+                <if @members.make_admin_url@ not nil>
+                  (<a href="@members.make_admin_url@">Make administrator</a>)
+                </if>
+                <if @members.make_member_url@ not nil>
+                  (<a href="@members.make_member_url@">Make member</a>)
+                </if>
+            }
+        }
+        member_state_pretty {
+            label "Member State"
+            display_template {
+                @members.member_state_pretty@
+                <if @members.approve_url@ not nil>
+                  (<a href="@members.approve_url@">Approve</a>)
+                </if>
+                <if @members.reject_url@ not nil>
+                  (<a href="@members.reject_url@">Reject</a>)
+                </if>
+                <if @members.ban_url@ not nil>
+                  (<a href="@members.ban_url@">Ban</a>)
+                </if>
+                <if @members.delete_url@ not nil>
+                  (<a href="@members.delete_url@">Delete</a>)
+                </if>
+                <if @members.remove_url@ not nil>
+                  (<a href="@members.remove_url@">Remove</a>)
+                </if>
+            }
+        }
+    } -filters {
+        member_state {
+            label "Member State"
+            values $member_state_options
+            where_clause {
+                mr.member_state = :member_state
+            }
+            has_default_p 1
+        }
+    } -orderby {
+        name {
+            label "Name"
             orderby "lower(u.first_names || ' ' || u.last_name)"
         }
         email {
             label "Email"
-            link_url_eval {mailto:$email}
-            link_html { title "Send email to this user" }
             orderby "u.email"
-            hide_p {$show_partial_email_p}
-        }
-        email_partial {
-            label "Email"
-            orderby "u.email"
-            hide_p {[expr $show_partial_email_p == 0]}
         }
         rel_role {
             label "Role"
-            display_col rel_role_pretty
             orderby "role.pretty_name"
         }
     }
@@ -93,14 +147,27 @@ list::create \
 
 # Pull out all the relations of the specified type
 
-db_multirow -extend { email_partial } members relations_query "
+set show_partial_email_p [expr $user_id == 0]
+
+db_multirow -extend { 
+    email_url
+    member_state_pretty
+    remove_url
+    approve_url
+    reject_url
+    ban_url
+    delete_url
+    make_admin_url
+    make_member_url
+} -unclobber members relations_query "
     select r.rel_id, 
            u.user_id,
            u.first_names || ' ' || u.last_name as name,
            u.email,
            r.rel_type,
            rt.role_two as rel_role,
-           role.pretty_name as rel_role_pretty
+           role.pretty_name as rel_role_pretty,
+           mr.member_state
     from   acs_rels r,
            membership_rels mr,
            cc_users u,
@@ -108,14 +175,44 @@ db_multirow -extend { email_partial } members relations_query "
            acs_rel_roles role
     where  r.object_id_one = :group_id
     and    mr.rel_id = r.rel_id
-    and    mr.member_state = 'approved'
     and    u.user_id = r.object_id_two
     and    rt.rel_type = r.rel_type
     and    role.role = rt.role_two
+    [template::list::filter_where_clauses -and -name "members"]
     [template::list::orderby_clause -orderby -name "members"]
 " {
     set rel_role_pretty [lang::util::localize $rel_role_pretty]
-    set email_partial [string replace $email \
-	    [expr [string first "@" $email]+3] end "..."]
+    set member_state_pretty [group::get_member_state_pretty -member_state $member_state]
+
+    if { $admin_p } {
+        switch $member_state {
+            approved {
+                switch $rel_role {
+                    member {
+                        set make_admin_url [export_vars -base make-admin { rel_id }]
+                    }
+                    admin {
+                        set make_member_url [export_vars -base make-member { rel_id }]
+                    }
+                }
+                set remove_url [export_vars -base member-remove { rel_id }]
+            }
+            "needs approval" {
+                set approve_url [export_vars -base member-state-change { rel_id { member_state approved } }]
+                set remove_url [export_vars -base member-remove { rel_id }]
+            }
+            "rejected" - "deleted" - "banned" {
+                set approve_url [export_vars -base member-state-change { rel_id { member_state approved } }]
+                set remove_url [export_vars -base member-remove { rel_id }]
+            }
+        }
+    }
+
+    if { [ad_conn user_id] == 0 } {
+        set email [string replace $email \
+                       [expr [string first "@" $email]+3] end "..."]
+    } else {
+        set email_url "mailto:$email"
+    }
 }
 

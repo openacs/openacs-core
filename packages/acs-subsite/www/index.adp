@@ -10,10 +10,10 @@
       <else>
         <if @can_join_p@ true>
           <if @group_join_policy@ eq "open">
-            <a href="group-join" class="button" title="Join this community">Join community</a>
+            <a href="register/user-join" class="button" title="Join this community">Join community</a>
           </if>
           <else>
-            <a href="group-join" class="button" title="Request membership of this community">Request membership</a>
+            <a href="register/user-join" class="button" title="Request membership of this community">Request membership</a>
           </else>
         </if>
       </else>

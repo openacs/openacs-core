@@ -248,6 +248,15 @@ ad_proc -public group::possible_member_states {} {
     return [list approved "needs approval" banned rejected deleted]
 }
 
+ad_proc -public group::get_member_state_pretty {
+    {-member_state:required}
+} {
+    Returns the pretty-name of a member state.
+} {
+    regsub -all { } $member_state {_} member_state
+    return [_ acs-kernel.member_state_$member_state]
+}
+
 ad_proc -public group::get_join_policy_options {} {
     Returns a list of valid join policies in a format suitable for a form builder drop-down.
 } {
