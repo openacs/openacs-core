@@ -141,15 +141,15 @@ begin
   if label is not null and description is not null then 
 
     update cr_folders
-      set label = label,
-      description = description
-      where folder_id = folder_id;
+      set label = rename.label,
+      description = rename.description
+      where folder_id = rename.folder_id;
 
   elsif label is not null and description is null then 
 
     update cr_folders
-      set label = label
-      where folder_id = folder_id;
+      set label = rename.label
+      where folder_id = rename.folder_id;
 
   end if;
 
