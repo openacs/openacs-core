@@ -1637,6 +1637,9 @@ ad_proc -public util_report_successful_library_load {{extra_message ""}} {
 ad_proc -public exists_and_not_null { varname } {
     Returns 1 if the variable name exists in the caller's environment and 
     is not the empty string.
+
+    Note you should enter the variable name, and not the variable value 
+    (varname not $varname which will pass variable varnames value into this function).
 } {
     upvar 1 $varname var 
     return [expr { [info exists var] && ![empty_string_p $var] }] 
