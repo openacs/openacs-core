@@ -25,7 +25,7 @@ ns_write "[install_header 200 "Installing OpenACS Core Services"]
 
 # Load the acs-tcl init files that might be needed when installing, instantiating and mounting packages
 # We shouldn't source request-processor-init.tcl as it might interfere with the installer request handler
-foreach { init_file } { utilities-init.tcl site-nodes-init.tcl } {
+foreach { init_file } { utilities-init.tcl site-nodes-init.tcl 20-memoize-init.tcl } {
     ns_log Notice "Loading acs-tcl init file $init_file"
     apm_source "[acs_package_root_dir acs-tcl]/tcl/$init_file"
 }
