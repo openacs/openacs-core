@@ -52,10 +52,10 @@ a.button:hover {
 
 #body  { 
   font-family: tahoma, arial, helvetica, sans-serif;
-  padding-left: 8px;
-  padding-right: 4px;
-  padding-top: 4px;
-  padding-bottom: 2px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 #subsite-name { 
@@ -81,10 +81,10 @@ a.subsite-name:hover {
   border-bottom: 1px solid #016799;
   background-color: #dddddd;
   clear: both;
-  padding-top: 6px;
-  padding-bottom: 12px;
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
 div.navbar-selected { 
   background-color: #016799; 
@@ -121,10 +121,10 @@ a.navbar-selected:hover {
   border-bottom: 1px solid #016799;
   background-color: white;
   clear: both;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 6px;
+  padding-right: 6px;
 }
 div.subnavbar-selected { 
   background-color: #016799; 
