@@ -336,6 +336,8 @@ if { [ns_info version] < 4} {
     #---------------------------------------------------------------------
     # OpenSSL for Aolserver 4
     #---------------------------------------------------------------------
+
+    ns_section "ns/server/${server}/module/nsopenssl"
     
     # We explicitly tell the server which SSL contexts to use as defaults when an
     # SSL context is not specified for a particular client or server SSL
