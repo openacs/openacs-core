@@ -505,7 +505,7 @@ ad_proc -private rp_filter { why } {
 	    if { $query != "" } {
 		set query "?[export_entire_form_as_url_vars]"
 	    }
-	    ns_returnredirect "[ns_conn location][ns_conn url]$query"
+	    ad_returnredirect "[ns_conn location][ns_conn url]$query"
 	    return "filter_return"
 	}
     }

@@ -82,17 +82,15 @@ ad_proc -public ad_form {
             values
               (:key, :value)"
         ad_returnredirect "somewhere"
-        return
+        ad_script_abort
     } -edit_data {
         db_dml do_update "
             update my_table
             set value = :value
             where my_table_key = :key"
         ad_returnredirect "somewhere"
-        return
+        ad_script_abort
     }
-
-    ad_return_template
 
     </pre></blockquote>
 
