@@ -54,7 +54,7 @@
       developers had to learn the system through experience with
       working with it and discussion in the forums.  Informal sharing
       of experiential and tacit knowledge has become the OpenACS
-      community's main method sharing knowledge.
+      community's main method of sharing knowledge.
     </para>
     <para>
       This document attempts to shape ongoing documentation efforts by
@@ -528,6 +528,70 @@
       </para></listitem>
     </itemizedlist>
   </sect2>
+
+  <sect2 id="docs-developer-tutorial-reqs" xreflabel="Developer Tutorial Documentation Requirements">
+    <title>OpenACS Developer Tutorial Documentation Requirements</title>
+    <para>
+      By the OpenACS Community. This section is a collection of
+      documentation requirements that have been expressed in the
+      OpenACS forums to 4th July 2003.
+    </para>    
+    <para>
+      OpenACS developer tutorial documentation should meet the following requirements. No
+      significance has been given to the order presented, topic breadth or depth here.
+    </para>
+    <itemizedlist>
+      <listitem><para>
+        list learning prerequisites to customize, fix, and improve
+        OACS modules, and create new ones. You are expected to have
+        read and understand the information [minimum requirements
+        similar to adept at  Using OpenACS Administrating Guide]
+        before reading this guide.
+      </para><itemizedlist>
+      <listitem><para> 
+        Refer to development documentation instead of duplicating here
+      </para><itemizedlist>
+      <listitem><para>
+        List suggestions for installing and setting up a development
+        environment; these can be annotated links to the
+        installation documentation
+      </para><itemizedlist>
+      <listitem><para>
+        Provide working examples that highlight the various
+        subsystems, tcl environment, OpenACS protocols, aolserver
+        template and ns_* commands, OpenACS templating, sql queries,
+        db triggers, scheduling protocols etc
+      </para><itemizedlist>
+      <listitem><para>
+        Show how to construct basic SQL queries using the db API 
+      </para><itemizedlist>
+      <listitem><para>
+        The life of an http request to a dynamic, templated page
+      </para><itemizedlist>
+      <listitem><para>
+        General rules to follow for stability, scalability
+      </para><itemizedlist>
+      <listitem><para>
+        Show the step by step customizing of an existing package
+        that meets current recommended coding styles of OpenACS
+        package development, by referring to developer resources.
+      </para><itemizedlist>
+      <listitem><para>
+        Use the ArsDigita problem sets as inspiration for a
+        PostgreSQLl equivalent tutorial about developing a new
+        OpenACS package including discussion of the significance of
+        the package documentation templates
+      </para><itemizedlist>
+      <listitem><para>
+        Include a summary of important links used by developers
+      </para><itemizedlist>
+      <listitem><para>
+        Note any deprecated tools and methods by linking to prior
+        versions instead of describing them in current docs
+      </para></listitem>
+    </itemizedlist>
+  </sect2>
+
 
   <sect2 id="dbprimer-why" xreflabel="Why DocBook?">
     <title>OpenACS Documentation Strategy: Why DocBook?</title>
