@@ -260,7 +260,9 @@ if { [info exists property(db)] } {
             }
             default_value t
         }
-        request {}
+        request {
+            hide_p t
+        }
     }
             
 }
