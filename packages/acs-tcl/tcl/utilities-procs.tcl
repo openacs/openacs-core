@@ -2772,6 +2772,22 @@ ad_proc -public value_if_exists { var_name } {
     }
 }
 
+ad_proc -public min { args } {
+    Returns the minimum of a list of numbers. Example: <code>min 2 3 1.5</code> returns 1.5.
+    
+    @author Ken Mayer (kmayer@bitwrangler.com)
+    @creation-date 26 September 2002
+} {
+    set min [lindex $args 0]
+    foreach arg $args {
+	if { $arg < $min } {
+	    set min $arg
+	}
+    }
+    return $min
+}
+
+
 ad_proc -public max { args } {
     Returns the maximum of a list of numbers. Example: <code>max 2 3 1.5</code> returns 3.
     
