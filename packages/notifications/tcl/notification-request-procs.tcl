@@ -52,6 +52,15 @@ namespace eval notification::request {
         return [db_string select_request_id {} -default {}]
     }
 
+    ad_proc -public request_exists {
+        {-type_id:required}
+        {-object_id:required}
+    } {
+        returns true if at least one request exists for this object and type
+    } {
+        return [expr { [db_string request_count {}] > 0 }]
+    }
+
     ad_proc -public delete {
         {-request_id:required}
     } {

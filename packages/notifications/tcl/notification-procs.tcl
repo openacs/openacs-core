@@ -78,16 +78,16 @@ namespace eval notification {
         {-notif_text ""}
         {-notif_html ""}
     } {
-        create a new notification
+        create a new notification if any notification requests exist for the object and type
     } {
-        # Set up the vars
-        set extra_vars [ns_set create]
-        oacs_util::vars_to_ns_set -ns_set $extra_vars -var_list {notification_id type_id object_id response_id notif_subject notif_text notif_html}
+        if { [notification::request::request_exists -object_id $object_id -type_id $type_id] } {
+            # Set up the vars
+            set extra_vars [ns_set create]
+            oacs_util::vars_to_ns_set -ns_set $extra_vars -var_list {notification_id type_id object_id response_id notif_subject notif_text notif_html}
 
-        # Create the request
-        set notification_id [package_instantiate_object -extra_vars $extra_vars notification]
-
-        return $notification_id
+            # Create the request
+            package_instantiate_object -extra_vars $extra_vars notification
+        }
     }
 
     ad_proc -public delete {

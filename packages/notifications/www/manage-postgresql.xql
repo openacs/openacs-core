@@ -10,7 +10,7 @@
 	   from notification_types
 	   where notification_types.type_id =
 	         notification_requests.type_id) as type,
-                 acs_object__name(notification_requests.object_id) as object_name,
+           acs_object__name(notification_requests.object_id) as object_name,
 	   (select name
 	   from notification_intervals
 	   where notification_intervals.interval_id =
