@@ -9,7 +9,7 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-ad_proc -public template::forward { url args} {
+ad_proc -public template::forward { url args } {
     Redirect and abort processing
 
     if "template::forward your_url t" is used.  The url will be cached
