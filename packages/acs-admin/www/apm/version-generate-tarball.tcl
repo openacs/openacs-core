@@ -9,7 +9,6 @@ ad_page_contract {
     {version_id:integer}
 }
 db_transaction {
-    apm_filelist_update $version_id
     apm_generate_tarball $version_id
 } on_error {
     ad_return_complaint "APM Generation Error" "The database returned the following error message:

@@ -895,26 +895,6 @@ ad_proc -private apm_package_install_owners { {-callback apm_dummy_callback} own
     }
 }
 
-ad_proc -private apm_package_install_files { {-callback apm_dummy_callback} files version_id } {
-
-    Install all files related to the package.
-
-} {
-    db_dml files_delete {
-	delete from apm_package_files where version_id = :version_id
-    }
-    
-    db_transaction {
-        foreach item $files {
-	
-	    set path [lindex $item 0]
-	    set file_type [lindex $item 1]
-            set db_type [lindex $item 2]
-	    apm_file_add $version_id $path $file_type $db_type
-        }
-    }
-}
-
 ad_proc -private apm_package_install_callbacks {
     {-callback apm_dummy_callback}
     callback_list
@@ -962,29 +942,12 @@ ad_proc -private apm_package_install_spec { version_id } {
 
     db_transaction {
 	ns_log Debug "APM: Determining path of .info file."
-	set info_file_name "$package_key.info"
-	# Make sure we have a .info file set up in the data model.
-	if { [db_0or1row package_spec_path_select {
-            select path
-            from apm_package_files
-            where version_id = :version_id
-            and file_type = 'package_spec'
-	    and path = :info_file_name
-        }] } {
-	    # The .info file was already there. The path to is is now in $path.
-	} else {
-	    # Nothing there! We need to add a .info file.
-	    set path "$package_key.info"
-	    apm_file_add $version_id $path package_spec ""
-	}
+	set path "[acs_package_root_dir $package_key]/$package_key.info"
+
 	ns_log Debug "APM: Writing APM .info file to the database."
-	db_dml apm_spec_file_register {
-	    update apm_package_types
-		set spec_file_path = :path
-	        where package_key = :package_key
-	}
+	db_dml apm_spec_file_register {}
 	ns_log Debug "APM: Writing .info file."
-	set path "$root/$package_key.info"
+
 	set file [open $path "w"]
 	puts -nonewline $file $spec
 	close $file
