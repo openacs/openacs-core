@@ -30,6 +30,13 @@ set default_locale_label [ad_locale_get_label $default_locale]
 set page_title $package_key
 set context [list [list "package-list?[export_vars { locale }]" $locale_label] $page_title]
 
+set site_wide_admin_p [permission::permission_p \
+                           -party_id [ad_conn user_id] \
+                           -object_id [acs_lookup_magic_object security_context_root] \
+                           -privilege "admin"]
+
+set version_id [apm_version_id_from_package_key $package_key]
+set export_messages_url "/acs-admin/apm/version-i18n-export?[export_vars { version_id { return_url {[ad_return_url]} } }]"
 
 # We let you create new messages keys if you're in the default locale
 set create_p [string equal $current_locale $default_locale]
