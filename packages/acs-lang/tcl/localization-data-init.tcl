@@ -221,6 +221,7 @@ nsv_set locale fi_FI,abmon {{tammi} {helmi} {maalis} {huhti} {touko} {kesä}{hein
 nsv_set locale fi_FI,am_str ""
 nsv_set locale fi_FI,currency_symbol "E"
 nsv_set locale fi_FI,day {{sunnuntai} {maanantai} {tiistai} {keskiviikko} {torstai} {perjantai} {lauantai}}
+nsv_set locale fi_FI,firstdayofweek 1
 nsv_set locale fi_FI,decimal_point ","
 nsv_set locale fi_FI,d_fmt "%d.%m.%Y"
 nsv_set locale fi_FI,d_t_fmt "%a, %d. %Bta %Y %H:%M %Z"
@@ -244,6 +245,9 @@ nsv_set locale fi_FI,p_sign_posn 1
 nsv_set locale fi_FI,t_fmt_ampm ""
 nsv_set locale fi_FI,t_fmt "%H:%M"
 nsv_set locale fi_FI,thousands_sep " "
+nsv_set locale fi_FI,dlong_fmt "%d. %Bta %Y"
+nsv_set locale fi_FI,dlongweekday_fmt "%A, %d. %Bta %Y"
+nsv_set locale fi_FI,formbuilder_time_format "HH24:MI"
 
 # Monetary amounts
 nsv_set locale money:000  {($num$sym)}
