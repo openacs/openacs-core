@@ -17,7 +17,8 @@ set httpsport                 8443
 
 # The hostname and address should be set to actual values.
 set hostname                  [ns_info hostname]
-set address                   [ns_info address]
+#set address                   [ns_info address]
+set address                   0.0.0.0
 
 # Note: If port is privileged (usually < 1024), OpenACS must be
 # started by root, and, in AOLserver 4, the run script have a 
