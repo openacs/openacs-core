@@ -11,6 +11,15 @@
       </querytext>
 </fullquery>
 
+<fullquery name="user_is_admin">
+      <querytext>
+      select privilege
+      from acs_permissions
+      where object_id = 0
+            and grantee_id = :user_id
+            and privilege = 'admin'
+      </querytext>
+</fullquery>
  
 <fullquery name="get_item_id">      
       <querytext>
