@@ -50,9 +50,13 @@ returns integer as '
 declare
   new__segment_name      alias for $1;  
   new__group_id          alias for $2;  
-  new__rel_type          alias for $3; 
+  new__rel_type          alias for $3;
+  v_segment_id           rel_segments.segment_id%TYPE;
 begin
-	return rel_segment__new(null, ''rel_segment'', now(), null, null, null, null new__segment_name, new__group_id, new_rel_type, null);
+
+   v_segment_id := rel_segment__new(null, ''rel_segment'', now(), null, null, null, null, new__segment_name, new__group_id, new__rel_type, null);
+
+   return v_segment_id;
 
 end;' language 'plpgsql';
 
