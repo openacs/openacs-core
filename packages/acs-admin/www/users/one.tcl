@@ -31,8 +31,8 @@ where user_id = :user_id"] {
 }
 
 set public_link [acs_community_member_url -user_id $user_id]
-
-if [db_0or1row user_is_admin "select privilege from acs_permissions where object_id = 0 and grantee_id = :user_id and privilege = 'admin'"] {
+set sec_context_root [acs_magic_object "security_context_root"] 
+if [db_0or1row user_is_admin "select privilege from acs_permissions where object_id = :sec_context_root and grantee_id = :user_id and privilege = 'admin'"] {
     set admin_p 1
 } else {
     set admin_p 0
