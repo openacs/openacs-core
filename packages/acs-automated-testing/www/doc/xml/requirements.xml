@@ -1,0 +1,77 @@
+<?xml version='1.0' ?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<sect1 id="requirements">
+  <title>Requirements</title>
+  <authorblurb>
+    <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
+  </authorblurb>
+
+  <sect2 id="requirements-introduction">
+    <title>Introduction</title>
+    <para>Automated Testing provides a framework for executing tests of all varieties and for storing and viewing the results.</para>
+  </sect2>
+
+  <sect2 id="gatekeeper-functional-requirements">
+      <title>Functional Requirements</title>
+
+      <informaltable>
+        <tgroup cols="4">
+          <thead>
+            <row>
+              <entry><emphasis role="strong">Req #</emphasis></entry>
+              <entry><emphasis role="strong">Priority</emphasis></entry>
+              <entry><emphasis role="strong">Status in 5.0</emphasis></entry>
+              <entry><emphasis role="strong">Description</emphasis></entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>10.0</entry>
+              <entry>A</entry>
+              <entry>?</entry>
+              <entry><emphasis role="strong">Seamless
+              Viewing</emphasis>. The gatekeeper should provide seamless viewing of URLs.  This means
+              that the URLs should look like they belong to the ACS site, not the
+              original site.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+<programlisting> Pri A integration of tclwebtest into acs-automated-testing
+  A: simplify tclwebtest installation
+  A: better test categorization
+        use category package?
+        see related forum posting http://openacs.org/forums/message-view?message_id=150581 for some categories
+  B: define a test as a collection of other tests, in sequence
+  B: macro test recording
+      B: UI to turn on macro mode
+      B: basic recording: when you fill out a form while macro mode is on, the submit is caught and displayed as tclwebtest code, and then executed
+      B: UI for creating aa_true tests automatically, based on the content of the page.  (For example, a form that says "the returned page must contain [ type regexp here] that spits out aa_true "test X" [string regexp blah blah]
+</programlisting>
+</sect2>      
+    <sect2 id="revisions-history">
+      <title>Revision History</title>
+      <informaltable>
+        <tgroup cols="4">
+          <thead>
+            <row>
+              <entry><emphasis role="strong">Document Revision #</emphasis></entry>
+              <entry><emphasis role="strong">Action Taken, Notes</emphasis></entry>
+              <entry><emphasis role="strong">When?</emphasis></entry>
+              <entry><emphasis role="strong">By Whom?</emphasis></entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>1</entry>
+              <entry>Creation</entry>
+              <entry>17 Jan 2004</entry>
+              <entry>Joel Aufrecht</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+  </sect1>
