@@ -11,7 +11,7 @@
            p.package_id,
            p.instance_name,
            pt.pretty_name as package_pretty_name,
-           0 as level,
+           0 as treelevel,
            (select count(*) from apm_parameters par where par.package_key = pt.package_key) as num_parameters
     from   site_nodes n,
            apm_packages p,

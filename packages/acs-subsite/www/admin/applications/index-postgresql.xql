@@ -10,7 +10,7 @@
            n.name, 
            p.package_id,
            p.instance_name,
-           tree_level(n.tree_sortkey) - tree_level(np.tree_sortkey) as level,
+           tree_level(n.tree_sortkey) - tree_level(np.tree_sortkey) as treelevel,
            pt.pretty_name as package_pretty_name,
            (select count(*) from apm_parameters par where par.package_key = pt.package_key) as num_parameters
     from   site_nodes n,
