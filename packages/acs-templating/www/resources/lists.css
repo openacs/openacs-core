@@ -52,6 +52,9 @@ th.list-narrow {
 th.list a {
   color: black;
 }
+th.list img {
+  border-style: none;
+}
 th.list-narrow a {
   color: black;
 }
