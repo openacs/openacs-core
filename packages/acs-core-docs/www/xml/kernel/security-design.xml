@@ -112,8 +112,6 @@ authentication system by forcing all logins to occur over HTTPS.</para>
 <para>The authentication system issues up to four signed cookies (see below),
 with each cookie serving a different purpose. These cookies are:</para>
 
-<blockquote>
- 
 <informaltable>
 <tgroup cols="4">
 <tbody>
@@ -152,7 +150,6 @@ with each cookie serving a different purpose. These cookies are:</para>
 <entry>yes</entry>
 </row>
 </tbody></tgroup></informaltable>
-</blockquote>
 
 <itemizedlist>
 <listitem><para>ad_session_id</para>
@@ -296,8 +293,6 @@ immediately</para></listitem>
 The current state of the permanent login cookies is not taken into account
 when determining the appropriate action. 
 </para>
-<blockquote>
- 
 <informaltable>
 <tgroup cols="5">
 <tbody>
@@ -373,7 +368,6 @@ when determining the appropriate action.
 <entry>delete</entry>
 </row>
 </tbody></tgroup></informaltable>
-</blockquote>
 
 <para><computeroutput>ad_user_login</computeroutput>
 calls<computeroutput>sec_setup_session</computeroutput> which actually calls
