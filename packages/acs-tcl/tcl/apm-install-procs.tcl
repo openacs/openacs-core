@@ -197,7 +197,9 @@ ad_proc -private pkg_info_comment {pkg_info} {
 # something that really should be done separately, at least for bootstrap installation.
 # I'm leaving it alone for now, though, and kludging it further by passing in a
 # boolean to determine whether to process all spec files or just those needed for
-# initial bootstrap installation.
+# initial bootstrap installation.  I've also modified it to screen out packages that
+# don't support the currently running RDBMS - a bit of a hack to do it here but it
+# needed doing somewhere...
 
 ad_proc -private apm_dependency_check {
     {-callback apm_dummy_callback}
@@ -223,7 +225,8 @@ ad_proc -private apm_dependency_check {
     foreach spec_file $spec_files {
 	if { [catch {
 	    array set package [apm_read_package_info_file $spec_file]
-	    if { [string equal $package(initial-install-p) "t"] || !$initial_install_p } {
+	    if { ([string equal $package(initial-install-p) "t"] || !$initial_install_p) && \
+                 [db_package_supports_rdbms_p $package(database_support)] } {
 	        lappend install_pend [pkg_info_new $package(package.key) $spec_file $package(provides) $package(requires) ""]
             }
 	} errmsg]} {

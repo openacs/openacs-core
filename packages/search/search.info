@@ -9,7 +9,6 @@
 
     <version name="4.2" url="http://www.arsdigita.com/acs-repository/download/apm/search-4.2.apm">
     <database-support>
-        <database>oracle</database>
         <database>postgresql</database>
     </database-support>
         <owner url="mailto:k2pts@yahoo.com">Neophytos Demetriou</owner>
