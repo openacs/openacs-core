@@ -4,5 +4,5 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {email ""}
-    {return_url ""}
+    {return_url [ad_pvt_home]}
 }
