@@ -21,7 +21,7 @@
 
         <provides url="ref-timezones" version="0.4"/>
         <requires url="acs-kernel" version="5.0d13"/>
-        <requires url="acs-reference" version="0.2d"/>
+        <requires url="acs-reference" version="0.3d"/>
 
         <parameters>
         <!-- No version parameters -->
