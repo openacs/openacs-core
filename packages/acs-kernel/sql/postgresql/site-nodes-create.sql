@@ -110,12 +110,12 @@ begin
 
         for v_rec in select node_id
                        from site_nodes 
-                      where tree_sortkey like new.tree_sortkey || ''%''
+                      where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey)
                    order by tree_sortkey
         LOOP
             if clr_keys_p then
                update site_nodes set tree_sortkey = null
-               where tree_sortkey like new.tree_sortkey || ''%'';
+               where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
                clr_keys_p := ''f'';
             end if;
             

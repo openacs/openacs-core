@@ -97,12 +97,12 @@ begin
 
         for v_rec in select object_type
                        from acs_object_types 
-                      where tree_sortkey like new.tree_sortkey || ''%''
+                      where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey)
                    order by tree_sortkey
         LOOP
             if clr_keys_p then
                update acs_object_types set tree_sortkey = null
-               where tree_sortkey like new.tree_sortkey || ''%'';
+               where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
                clr_keys_p := ''f'';
             end if;
             
@@ -232,8 +232,7 @@ as select ot1.object_type, ot2.object_type as ancestor_type
      from acs_object_types ot1,
 	  acs_object_types ot2
     where ot1.object_type <> ot2.object_type
-      and ot2.tree_sortkey <= ot1.tree_sortkey
-      and ot1.tree_sortkey like (ot2.tree_sortkey || '%');
+      and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey);
 
 create table acs_object_type_tables (
 	object_type	varchar(100) not null 
@@ -698,12 +697,10 @@ begin
 
     select count(*) into v_result
      where exists (select 1 
-                     from acs_object_types t 
+                     from acs_object_types t, acs_object_types t2
                     where t.object_type = is_subtype_p__object_type_2
-                      and tree_sortkey like
-                        (select tree_sortkey || ''%'' 
-                           from acs_object_types 
-                           where object_type = is_subtype_p__object_type_1 ));
+                      and t2.object_type = is_subtype_p__object_type_1
+                      and t.tree_sortkey between t2.tree_sortkey and tree_right(t2.tree_sortkey));
 
     if v_result > 0 then
        return ''t'';
