@@ -651,7 +651,7 @@ ad_proc -private template::element::options { form_id element_id tag_attributes 
     if { ![info exists values($value)] } {
       set checked ""
     } else {
-      set checked "checked"
+      set checked "checked=\"checked\""
     }
 
     set formgroup(label)   [lindex $option 0]
