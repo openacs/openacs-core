@@ -340,8 +340,10 @@ ad_proc -public lc_get  {
 } {
     # All localization message keys have a certain prefix
     set message_key "acs-lang.localization-$key"
-    
-    return [lang::message::lookup $locale $message_key]
+
+    # Set upvar level to -1 so that no attempt is made to interpolate variables
+    # into the string
+    return [lang::message::lookup $locale $message_key {} {} -1]
 }
 
 ad_proc -public lc_time_fmt {
@@ -349,19 +351,19 @@ ad_proc -public lc_time_fmt {
     fmt 
     {locale ""}
 } {
-    Formats a time for the specified locale.
+    Formats a time for the specified locale.  
 
     @param datetime        Strictly in the form &quot;YYYY-MM-DD HH24:MI:SS&quot;.
                            Formulae for calculating day of week from the Calendar FAQ 
                            (<a href="http://www.tondering.dk/claus/calendar.html">http://www.tondering.dk/claus/calendar.html</a>)
-    @param fmt             An ISO 14652 LC_TIME style formatting string:
+    @param fmt             An ISO 14652 LC_TIME style formatting string.  The <b>highlighted</b> functions localize automatically based on the user's locale; other strings will use locale-specific text but not necessarily locale-specific formatting.
     <pre>    
       %a           FDCC-set's abbreviated weekday name.
       %A           FDCC-set's full weekday name.
       %b           FDCC-set's abbreviated month name.
       %B           FDCC-set's full month name.
-      %c           FDCC-set's appropriate date and time
-                   representation.
+      <b>%c           FDCC-set's appropriate date and time
+                   representation.</b>
       %C           Century (a year divided by 100 and truncated to
                    integer) as decimal number (00-99).
       %d           Day of the month as a decimal number (01-31).
@@ -381,10 +383,10 @@ ad_proc -public lc_time_fmt {
       %M           Minute as a decimal number (00-59).
       %n           A <newline> character.
       %p           FDCC-set's equivalent of either AM or PM.
-      %r           12-hour clock time (01-12) using the AM/PM
-                   notation.
-      %q           Long date without weekday (OpenACS addition to the standard)
-      %Q           Long date with weekday (OpenACS addition to the standard)
+      %r           Hours and minutes using 12-hour clock AM/PM
+                   notation, e.g. '06:12 AM'. 
+      <b>%q           Long date without weekday (OpenACS addition to the standard)</b>
+      <b>%Q           Long date with weekday (OpenACS addition to the standard)</b>
       %S           Seconds as a decimal number (00-61).
       %t           A <tab> character.
       %T           24-hour clock time in the format HH:MM:SS.
@@ -396,12 +398,11 @@ ad_proc -public lc_time_fmt {
       %w           Weekday as a decimal number (0(Sunday)-6).
       %W           Week number of the year (Monday as the first day of
                    the week) as a decimal number (00-53).
-      %x           FDCC-set's appropriate date representation.
-      %X           FDCC-set's appropriate time representation.
+      <b>%x           FDCC-set's appropriate date representation.</b>
+      <b>%X           FDCC-set's appropriate time representation.</b>
       %y           Year (offset from %C) as a decimal number (00-99).
       %Y           Year with century as a decimal number.
-      %Z           Time-zone name, or no characters if no time zone is
-                   determinable.
+      %Z           The connection's timezone, e.g. 'America/New_York'.
       %%           A <percent-sign> character.
     </pre>
     See also <pre>man strftime</pre> on a UNIX shell prompt for more of these abbreviations.
@@ -480,7 +481,7 @@ ad_proc -public lc_time_fmt {
     set percent_match(I) {[lc_leading_zeros [lc_time_drop_meridian $lc_time_hours] 2]}
     set percent_match(w) {[expr $lc_time_day_no]}
     set percent_match(y) {[lc_leading_zeros [expr $lc_time_year%100] 2]}
-    set percent_match(Z) {}
+    set percent_match(Z) [lang::conn::timezone]
 
     # Straight (localian) lookups
     set percent_match(a) {[lindex [lc_get -locale $locale "abday"] $lc_time_day_no]}
