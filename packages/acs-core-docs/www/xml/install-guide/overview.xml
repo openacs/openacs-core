@@ -44,11 +44,10 @@
     href="http://openacs.org/faq/one-faq?faq_id=130897#130917">Installing
     OpenACS</ulink></para>
 
+    <para>You can see a list of <ulink href="http://openacs.org/projects/openacs/installer">current installers</ulink>.
+    </para>
+
     <orderedlist>
-      <listitem>
-        <para>The patched version of AOLserver we use is not currently
-          available in a precompiled binary.  </para>
-      </listitem>
       <listitem>
         <para>
           The packaged version of
