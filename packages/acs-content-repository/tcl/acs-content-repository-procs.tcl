@@ -35,3 +35,30 @@ ad_proc -private cr_delete_scheduled_files {} {
     }
 }
 
+
+
+##
+## Scan AOLserver mime types and insert them into cr_mime_types
+##
+## ben@openforce
+##
+
+ad_proc -private cr_scan_mime_types {} {
+    # Get the config file ns_set
+    set mime_types [ns_configsection "ns/mimetypes"]
+    set n_mime_types [ns_set size $mime_types]
+
+    for {set i 0} {$i < $n_mime_types} {incr i} {
+	set extension [ns_set key $mime_types $i]
+	set mime_type [ns_set value $mime_types $i]
+	
+	# special case
+	if {$extension == "NoExtension" || $extension == "Default"} {
+	    continue
+	}
+
+	ns_log Notice "inserting MIME TYPE - $extension maps to $mime_type"
+	# Insert the mime type
+	db_dml insert_mime_type {}
+    }
+}
