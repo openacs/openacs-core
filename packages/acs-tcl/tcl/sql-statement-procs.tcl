@@ -1,38 +1,37 @@
-#
-# Procs for manipulating SQL statements
-#
-# lars@pinds.com, May 2000
-#
-# $Id$
-#
+ad_library { 
+    Procs for manipulating SQL statements
 
-#
-# How to use this:
-#
-# You simply call ad_sql_append any number of times, then ad_sql_get to feed to the database.
-#
-# What you gain from using these two procs is that the parts of the sql statement will
-# always be output in the right sequence.
-#
+    @author lars@pinds.com, May 2000
+    @cvs-id $Id$
 
-#
-# How this works:
-#
-# We represent a SQL statement as a Tcl array of the form
-#
-# stmt(select) { t1.column1 t2.column2 t2.column3 ... } join by ,
-# stmt(from) { { table1 t1} {table2 t2} } join by ,
-# stmt(where) { condition1 condition2 } join by and
-# stmt(groupby) { groupcol1 groupcol2 } join by ,
-# stmt(orderby) { {ordercol1 asc} {ordercol2 desc}} join by ,
-#
+    How to use this:
 
-ad_proc ad_sql_get { 
+    You simply call ad_sql_append any number of times, then ad_sql_get to feed to the database.
+    What you gain from using these two procs is that the parts of the sql statement will
+    always be output in the right sequence.
+
+
+    How this works:
+
+    We represent a SQL statement as a Tcl array of the form
+
+    stmt(select) { t1.column1 t2.column2 t2.column3 ... } join by ,
+    stmt(from) { { table1 t1} {table2 t2} } join by ,
+    stmt(where) { condition1 condition2 } join by and
+    stmt(groupby) { groupcol1 groupcol2 } join by ,
+    stmt(orderby) { {ordercol1 asc} {ordercol2 desc}} join by ,
+}
+
+ad_proc -public ad_sql_get { 
     { 
     }
     sqlarrayname
 } {
-    Returns the SQL statement as a string
+    @param sqlarrayname array reference
+
+    @return a sql statement constructed from the pieces provided via ad_sql_append
+
+    @see ad_sql_append
 } {
     upvar $sqlarrayname sql
 
@@ -44,23 +43,23 @@ ad_proc ad_sql_get {
     }
 
     set sql_string "select [join $sql(select) ", "]\nfrom [join $sql(from) ", "]\n"
-    
+
     if { [info exists sql(where)] && [llength $sql(where)] > 0 } {
 	append sql_string "where [join $sql(where) "\nand "]\n"
     }
-    
+
     if { [info exists sql(groupby)] && [llength $sql(groupby)] > 0 } {
 	append sql_string "group by [join $sql(groupby) ", "]\n"
     }
-    
-    if { [info exists sql(orderby)] && [llength $sql(orderby)] > 0 } { 
+
+    if { [info exists sql(orderby)] && [llength $sql(orderby)] > 0 } {
 	append sql_string "order by [join $sql(orderby) ", "]\n"
     }
 
     return $sql_string
 }
 
-ad_proc ad_sql_append { 
+ad_proc -public ad_sql_append { 
     {
 	-select {}
 	-from {}
