@@ -68,7 +68,7 @@ set system_name [ad_system_name]
 set subject "Your forgotten password on $system_name"
 set body "Please follow the following link to reset your password:
 
-[ad_url]/user/password-update?[export_vars {user_id {password_old $password}}]
+[ad_url]/user/password-update?return_url=/&[export_vars {user_id {password_old $password}}]
 
 "
 
