@@ -23,7 +23,7 @@ doc_body_append "[ad_header "Grant Permission on $name"]
 <form method=get action=grant-2>
 [export_form_vars object_id]
 
-<input type=submit value=Grant>
+Grant: 
 
 <select name=privilege>
 "
@@ -43,6 +43,8 @@ db_foreach parties {} {
 
 doc_body_append "
 </select>
+
+<input type=submit value=\"      OK      \">
 
 </form>
 

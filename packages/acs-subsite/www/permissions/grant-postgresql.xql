@@ -16,7 +16,7 @@
   select p.party_id, 
          acs_object__name(p.party_id)|| coalesce(' ('||p.email||')', '') as name
   from   parties p
-  order  by name
+  order  by upper(acs_object__name(p.party_id))
 
       </querytext>
 </fullquery>

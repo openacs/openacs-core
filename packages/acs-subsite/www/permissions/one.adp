@@ -17,11 +17,13 @@
     <if @acl:rowcount@ gt 0>
       <form method="get" action="revoke">
         <input type=hidden name="object_id" value="@object_id@">
-          <ul>
+          <blockquote style="margin-left: 16px;">
             <multiple name="acl">
-              <li> @acl.grantee_name@, @acl.privilege@ <input type="checkbox" name="revoke_list" value="@acl.grantee_id@ @acl.privilege@"></li>
+              <input type="checkbox" name="revoke_list" value="@acl.grantee_id@ @acl.privilege@" 
+                id="check_@acl.grantee_id@_@acl.privilege">
+              <label for="check_@acl.grantee_id@_@acl.privilege">@acl.grantee_name@, @acl.privilege@<label><br />
             </multiple>
-          </ul>
+          </blockquote>
     </if>
     <else>
       <p><em>None</em></p>

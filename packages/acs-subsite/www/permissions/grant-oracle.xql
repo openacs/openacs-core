@@ -16,7 +16,7 @@
   select p.party_id, 
          acs_object.name(p.party_id) || nvl2(p.email, ' ('||p.email||')', '') as name
   from   parties p
-  order  by name
+  order  by upper(acs_object.name(p.party_id))
 
       </querytext>
 </fullquery>
