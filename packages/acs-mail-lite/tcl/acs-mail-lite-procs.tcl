@@ -497,7 +497,7 @@ namespace eval acs_mail_lite {
 		ns_log Notice "acs-mail-lite: Email bouncing from $rcpt, mail not sent and deleted from queue"
 	    }
 	    # log mail sending time
-	    if {![empty_string_p $user_id]} { log_mail_sending -user_id $rcpt_id }
+	    if {![empty_string_p $rcpt_id]} { log_mail_sending -user_id $rcpt_id }
 	}
     }
     
@@ -577,7 +577,7 @@ namespace eval acs_mail_lite {
 		ns_log Notice "acs-mail-lite: Email bouncing from $rcpt, mail not sent and deleted from queue"
 	    }
 	    # log mail sending time
-	    	    if {![empty_string_p $user_id]} { log_mail_sending -user_id $rcpt_id }
+	    if {![empty_string_p $rcpt_id]} { log_mail_sending -user_id $rcpt_id }
 	}
     }
 
