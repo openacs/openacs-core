@@ -160,6 +160,8 @@
               shell, you will need to substitute your shell's
               conventions for setting environment variables when
               appropriate, and install bash to work with the scripts.</para>
+                <para>Substitute <userinput>fetch</userinput> when the instructions suggest you use 
+              <userinput>wget</usrinput> to download software.</para>
               </formalpara>
             </listitem>
             <listitem>
