@@ -116,12 +116,12 @@ set errno [catch {
 	return
     }
 
+    # Load all parameters for enabled package instances.
+    ad_parameter_cache_all  
+    
     # Load the Tcl package init files.
     apm_bootstrap_load_libraries -init acs-tcl
 
-    # Cache all parameters for enabled package instances.  
-    ad_parameter_cache_all  
-    
     foreach package_key [db_list package_keys_select {
 	select package_key from apm_enabled_package_versions
     }] {
