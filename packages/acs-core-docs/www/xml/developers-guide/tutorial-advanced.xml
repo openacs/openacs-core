@@ -720,20 +720,19 @@ ad_form -extend -name note \ </userinput>
     ad_script_abort
 }</programlisting>
 <para>
-Note how we have replaced what was a single
-<computeroutput>ad_form</computeroutput> invocation with two.  The
-<computeroutput>-extend</computeroutput> flag is used to build a form
-incrementally.  We had to do it so that we can insert the call to
-<computeroutput>category::ad_form::add_widgets</computeroutput>.  This
-procedure will add as many category widgets as there are trees associated with
-our <computeroutput>package_id</computeroutput>.  The complementary proc
-<computeroutput>category::ad_form::get_categories</computeroutput> will take
-care of collecting the values after the form has been submitted.  The block
-<computeroutput>-on_submit</computeroutput> will get executed at this time,
-followed by execution of either <computeroutput>-new_data</computeroutput> or
-<computeroutput>-edit_data</computeroutput>, depending on whether we are adding
-a new note or editing an existing one.
-
+  Note how we have replaced what was a single
+  <computeroutput>ad_form</computeroutput> invocation with two.  The
+  <computeroutput>-extend</computeroutput> flag is used to build a form
+  incrementally.  We had to do it so that we can insert the call to
+  <computeroutput>category::ad_form::add_widgets</computeroutput>.  This
+  procedure will add as many category widgets as there are trees associated with
+  our <computeroutput>package_id</computeroutput>.  The complementary proc
+  <computeroutput>category::ad_form::get_categories</computeroutput> will take
+  care of collecting the values after the form has been submitted.  The block
+  <computeroutput>-on_submit</computeroutput> will get executed at this time,
+  followed by execution of either <computeroutput>-new_data</computeroutput> or
+  <computeroutput>-edit_data</computeroutput>, depending on whether we are adding
+  a new note or editing an existing one.
 </para>
       </para></listitem>
     </orderedlist>
