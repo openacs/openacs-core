@@ -57,7 +57,7 @@ set forgotten_pwd_url [auth::password::get_forgotten_url -authority_id $authorit
 
 set register_url "[subsite::get_element -element url]register/user-new"
 
-ad_form -name login -html { style "margin: 0px;" } -form {
+ad_form -name login -html { style "margin: 0px;" } -show_required_p 0 -edit_buttons { { "Login" ok } } -form {
     {return_url:text(hidden)}
     {time:text(hidden)}
     {token_id:text(hidden)}
