@@ -112,8 +112,7 @@ as
     height		in images.height%TYPE default null,
     width		in images.width%TYPE default null,
     file_size		in cr_revisions.content_length%TYPE default null,
-    storage_type        in cr_items.storage_type%TYPE default 'file',
-    package_id          in acs_objects.package_id%TYPE
+    storage_type        in cr_items.storage_type%TYPE default 'file'
   ) return cr_items.item_id%TYPE;
 
   function new_revision (
@@ -132,8 +131,7 @@ as
     filename		in cr_revisions.filename%TYPE default null,
     height		in images.height%TYPE default null,
     width		in images.width%TYPE default null,
-    file_size		in cr_revisions.content_length%TYPE default null,
-    package_id          in acs_objects.package_id%TYPE
+    file_size		in cr_revisions.content_length%TYPE default null
   ) return cr_revisions.revision_id%TYPE;
 
   --/**
@@ -184,26 +182,17 @@ as
     height		in images.height%TYPE default null,
     width		in images.width%TYPE default null,
     file_size		in cr_revisions.content_length%TYPE default null,
-    storage_type        in cr_items.storage_type%TYPE default 'file',
-    package_id          in acs_objects.package_id%TYPE
+    storage_type        in cr_items.storage_type%TYPE default 'file'
   ) return cr_items.item_id%TYPE
   is
     v_item_id	      cr_items.item_id%TYPE;
     v_revision_id     cr_revisions.revision_id%TYPE;
-    v_package_id      acs_objects.package_id%TYPE;
   begin
     
-    if package_id is null then
-      v_package_id := acs_object.package_id(new.parent_id);
-    else
-      v_package_id := package_id;
-    end if;
-
     v_item_id := content_item.new (
       name           => name,
       item_id	     => item_id,
       parent_id	     => parent_id,
-      package_id     => v_package_id,
       relation_tag   => relation_tag,
       content_type   => content_type,
       creation_date  => creation_date,
@@ -219,7 +208,6 @@ as
       description   => description,
       item_id	    => v_item_id,
       revision_id   => revision_id,
-      package_id    => v_package_id,
       publish_date  => publish_date,
       mime_type	    => mime_type,
       nls_language  => nls_language,
@@ -269,26 +257,17 @@ as
     filename		in cr_revisions.filename%TYPE default null,
     height		in images.height%TYPE default null,
     width		in images.width%TYPE default null,
-    file_size		in cr_revisions.content_length%TYPE default null,
-    package_id          in acs_objects.package_id%TYPE
+    file_size		in cr_revisions.content_length%TYPE default null
   ) return cr_revisions.revision_id%TYPE
   is
     v_revision_id     cr_revisions.revision_id%TYPE;
-    v_package_id      acs_objects.package_id%TYPE;
 
   begin
-    if package_id is null then
-      v_package_id := acs_object.package_id(new_revision.item_id);
-    else
-      v_package_id := package_id;
-    end if;
-
     v_revision_id := content_revision.new (
       title => title,
       description   => description,
       item_id	    => item_id,
       revision_id   => revision_id,
-      package_id    => v_package_id,
       publish_date  => publish_date,
       mime_type	    => mime_type,
       nls_language  => nls_language,

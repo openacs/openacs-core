@@ -49,10 +49,6 @@ begin
   where
     keyword_id = set_heading.keyword_id;
 
-  update acs_objects
-  set title = set_heading.heading
-  where object_id = set_heading.keyword_id;
-
 end set_heading;
 
 procedure set_description (
@@ -104,25 +100,15 @@ function new (
   creation_user	in acs_objects.creation_user%TYPE
 			   default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
-  object_type   in acs_object_types.object_type%TYPE default 'content_keyword',
-  package_id    in acs_objects.package_id%TYPE
+  object_type   in acs_object_types.object_type%TYPE default 'content_keyword'
 ) return cr_keywords.keyword_id%TYPE
 is
   v_id integer;
-  v_package_id acs_objects.package_id%TYPE;
 begin
-
-  if package_id is null then
-    v_package_id := acs_object.package_id(new.parent_id);
-  else
-    v_package_id := package_id;
-  end if;
 
   v_id := acs_object.new (object_id => keyword_id,
                           context_id => parent_id,
                           object_type => object_type,
-                          title => heading,
-                          package_id => v_package_id,
                           creation_date => creation_date, 
                           creation_user => creation_user, 
                           creation_ip => creation_ip);

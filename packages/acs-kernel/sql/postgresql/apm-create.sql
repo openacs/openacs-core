@@ -227,8 +227,6 @@ create table apm_packages (
 
 create index apm_packages_package_key_idx on apm_packages (package_key);
 
-alter table acs_objects add foreign key (package_id) references apm_packages(package_id);
-
 comment on table apm_packages is '
    This table maintains the list of all package instances in the sytem. 
 ';
@@ -1342,9 +1340,6 @@ begin
        now(),
        null,
        null,
-       null,
-       ''t'',
-       register_parameter__package_key || '': Parameter '' || register_parameter__parameter_name,
        null
     );
     
@@ -1400,12 +1395,6 @@ begin
             min_n_values   = coalesce(update_parameter__min_n_values, min_n_values),
             max_n_values   = coalesce(update_parameter__max_n_values, max_n_values)
       where parameter_id = update_parameter__parameter_id;
-
-    update acs_objects
-       set title = (select package_key || '': Parameter '' || parameter_name
-                    from apm_parameters
-                    where parameter_id = update_parameter__parameter_id)
-     where object_id = update_parameter__parameter_id;
 
     return parameter_id;
      
@@ -1639,11 +1628,6 @@ begin
 	 v_instance_name := new__instance_name;
        end if;
 
-       update acs_objects
-       set title = v_instance_name,
-           package_id = v_package_id
-       where object_id = v_package_id;
-
        select package_type into v_package_type
        from apm_package_types
        where package_key = new__package_key;
@@ -1825,9 +1809,6 @@ begin
                 now(),
                 null,
                 null,
-                null,
-                ''t'',
-                apm_pkg_ver__package_key || '', Version '' || apm_pkg_ver__version_name,
                 null
         );
 
@@ -1923,12 +1904,6 @@ begin
 	    from apm_package_versions
 	    where version_id = copy__version_id;
     
-        update acs_objects
-        set title = (select v.package_key || '', Version '' || v.version_name
-                     from apm_package_versions v
-                     where v.version_id = copy__version_id)
-        where object_id = copy__version_id;
-
 	insert into apm_package_dependencies(dependency_id, version_id, dependency_type, service_uri, service_version)
 	    select nextval(''t_acs_object_id_seq''), v_version_id, dependency_type, service_uri, service_version
 	    from apm_package_dependencies

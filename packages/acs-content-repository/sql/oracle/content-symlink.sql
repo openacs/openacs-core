@@ -21,11 +21,9 @@ function new (
   symlink_id	in cr_symlinks.symlink_id%TYPE default null,
   creation_date	in acs_objects.creation_date%TYPE default sysdate,
   creation_user	in acs_objects.creation_user%TYPE default null,
-  creation_ip	in acs_objects.creation_ip%TYPE default null,
-  package_id    in acs_objects.package_id%TYPE
+  creation_ip	in acs_objects.creation_ip%TYPE default null
 ) return cr_symlinks.symlink_id%TYPE is
   v_symlink_id		cr_symlinks.symlink_id%TYPE;
-  v_package_id		acs_objects.package_id%TYPE;
   v_name		cr_items.name%TYPE;
   v_label		cr_symlinks.label%TYPE;
 begin
@@ -87,16 +85,9 @@ begin
     v_label := content_symlink.new.label;
   end if;
 
-  if package_id is null then
-    v_package_id := acs_object.package_id(new.parent_id);
-  else
-    v_package_id := package_id;
-  end if;
-
   v_symlink_id := content_item.new(
       item_id       => content_symlink.new.symlink_id,
-      name          => v_name,
-      package_id    => v_package_id,
+      name          => v_name, 
       content_type  => 'content_symlink', 
       creation_date => content_symlink.new.creation_date, 
       creation_user => content_symlink.new.creation_user, 
@@ -108,10 +99,6 @@ begin
     (symlink_id, target_id, label)
   values
     (v_symlink_id, content_symlink.new.target_id, v_label);
-
-  update acs_objects
-  set title = v_label
-  where object_id = v_symlink_id;
 
   return v_symlink_id;
 

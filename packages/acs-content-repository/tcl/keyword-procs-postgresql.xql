@@ -12,8 +12,7 @@
                 current_timestamp,
                 :user_id,      
                 :creation_ip,  
-                :object_type,
-                :package_id
+                :object_type  
             )
         </querytext>
     </fullquery>

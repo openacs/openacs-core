@@ -14,8 +14,7 @@
                 sysdate(),
                 :user_id,      
                 :creation_ip,  
-                :object_type,
-                :package_id
+                :object_type  
               );
             end;
         </querytext>

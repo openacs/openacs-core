@@ -12,7 +12,7 @@
 
 select define_function_args('content_extlink__new','name,url,label,description,parent_id,extlink_id,creation_date;now,creation_user,creation_ip');
 
-create or replace function content_extlink__new (varchar,varchar,varchar,varchar,integer,integer,timestamptz,integer,varchar,integer)
+create or replace function content_extlink__new (varchar,varchar,varchar,varchar,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
   new__name                   alias for $1;  -- default null  
@@ -24,9 +24,7 @@ declare
   new__creation_date          alias for $7;  -- default now()
   new__creation_user          alias for $8;  -- default null
   new__creation_ip            alias for $9;  -- default null
-  new__package_id             alias for $10; -- default null
   v_extlink_id                cr_extlinks.extlink_id%TYPE;
-  v_package_id                acs_objects.package_id%TYPE;
   v_label                     cr_extlinks.label%TYPE;
   v_name                      cr_items.name%TYPE;
 begin
@@ -42,12 +40,6 @@ begin
     v_name := ''link'' || v_extlink_id;
   else
     v_name := new__name;
-  end if;
-
-  if new__package_id is null then
-    v_package_id := acs_object__package_id(new__parent_id);
-  else
-    v_package_id := new__package_id;
   end if;
 
   v_extlink_id := content_item__new(
@@ -66,8 +58,7 @@ begin
       ''text/plain'',
       null,
       null,
-      ''text'',
-      v_package_id
+      ''text''
   );
 
   insert into cr_extlinks
@@ -75,38 +66,7 @@ begin
   values
     (v_extlink_id, new__url, v_label, new__description);
 
-  update acs_objects
-  set title = v_label
-  where object_id = v_extlink_id;
-
   return v_extlink_id;
-
-end;' language 'plpgsql';
-
-create or replace function content_extlink__new (varchar,varchar,varchar,varchar,integer,integer,timestamptz,integer,varchar)
-returns integer as '
-declare
-  new__name                   alias for $1;  -- default null  
-  new__url                    alias for $2;  
-  new__label                  alias for $3;  -- default null
-  new__description            alias for $4;  -- default null
-  new__parent_id              alias for $5;  
-  new__extlink_id             alias for $6;  -- default null
-  new__creation_date          alias for $7;  -- default now()
-  new__creation_user          alias for $8;  -- default null
-  new__creation_ip            alias for $9;  -- default null
-begin
-  return content_extlink__new(new__name,
-                              new__url,
-                              new__label,
-                              new__description,
-                              new__parent_id,
-                              new__extlink_id,
-                              new__creation_date,
-                              new__creation_user,
-                              new__creation_ip,
-                              null
-  );
 
 end;' language 'plpgsql';
 
@@ -226,8 +186,7 @@ begin
             null,
             current_timestamp,
 	    copy__creation_user,
-	    copy__creation_ip,
-            null
+	    copy__creation_ip
         );
 
       end if;

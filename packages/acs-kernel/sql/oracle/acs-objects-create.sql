@@ -90,26 +90,6 @@ begin
 	max_n_values => 1
       );
 
- attr_id := acs_attribute.create_attribute (
-        object_type => 'acs_object',
-        attribute_name => 'package_id',
-        datatype => 'integer',
-        pretty_name => 'Package ID',
-        pretty_plural => 'Package IDs',
-	min_n_values => 0,
-	max_n_values => 1
-      );
-
- attr_id := acs_attribute.create_attribute (
-        object_type => 'acs_object',
-        attribute_name => 'title',
-        datatype => 'string',
-        pretty_name => 'Title',
-        pretty_plural => 'Titles',
-	min_n_values => 0,
-	max_n_values => 1
-      );
-
  commit;
 end;
 /
@@ -131,8 +111,6 @@ create table acs_objects (
 	object_type		not null
 				constraint acs_objects_object_type_fk
 				references acs_object_types (object_type),
-        title			varchar2(1000) default null,
-        package_id		integer default null,
         context_id		constraint acs_objects_context_id_fk
 				references acs_objects(object_id),
 	security_inherit_p	char(1) default 't' not null,
@@ -155,9 +133,6 @@ alter table acs_objects modify constraint acs_objects_context_object_un enable;
 
 create index acs_objects_creation_user_idx on acs_objects (creation_user);
 create index acs_objects_modify_user_idx on acs_objects (modifying_user);
-
-create index acs_objects_package_object_idx on acs_objects (package_id, object_id);
-create index acs_objects_title_idx on acs_objects(title);
 
 -- create bitmap index acs_objects_object_type_idx on acs_objects (object_type);
 create index acs_objects_object_type_idx on acs_objects (object_type);
@@ -201,18 +176,6 @@ comment on column acs_objects.creation_user is '
 
 comment on column acs_objects.modifying_user is '
  Who last modified the object
-';
-
-comment on column acs_objects.package_id is '
- Which package instance this object belongs to.
- Please note that in mid-term this column will replace all
- package_ids of package specific tables.
-';
-
-comment on column acs_objects.title is '
- Title of the object if applicable.
- Please note that in mid-term this column will replace all
- titles or object_names of package specific tables.
 ';
 
 -----------------------
@@ -421,9 +384,7 @@ as
   creation_user	in acs_objects.creation_user%TYPE
 			   default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
-  context_id    in acs_objects.context_id%TYPE default null,
-  title		in acs_objects.title%TYPE default null,
-  package_id    in acs_objects.package_id%TYPE default null
+  context_id    in acs_objects.context_id%TYPE default null
  ) return acs_objects.object_id%TYPE;
 
  procedure del (
@@ -439,10 +400,6 @@ as
  function default_name (
   object_id	in acs_objects.object_id%TYPE
  ) return varchar2;
-
- function package_id (
-  object_id	in acs_objects.object_id%TYPE
- ) return acs_objects.package_id%TYPE;
 
  -- Determine where the attribute is stored and what sql needs to be
  -- in the where clause to retreive it
@@ -536,15 +493,11 @@ as
   creation_user	in acs_objects.creation_user%TYPE
 		   default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
-  context_id    in acs_objects.context_id%TYPE default null,
-  title		in acs_objects.title%TYPE default null,
-  package_id    in acs_objects.package_id%TYPE default null
+  context_id    in acs_objects.context_id%TYPE default null
  )
  return acs_objects.object_id%TYPE
  is
   v_object_id acs_objects.object_id%TYPE;
-  v_title acs_objects.title%TYPE;
-  v_object_type_pretty_name acs_object_types.pretty_name%TYPE;
  begin
   if object_id is null then
    select acs_object_id_seq.nextval
@@ -554,22 +507,11 @@ as
     v_object_id := object_id;
   end if;
 
-  if title is null then
-   select pretty_name
-   into v_object_type_pretty_name
-   from acs_object_types
-   where object_type = new.object_type;
-
-   v_title := v_object_type_pretty_name || ' ' || v_object_id;
-  else
-    v_title := title;
-  end if;
-
   insert into acs_objects
-   (object_id, object_type, title, package_id, context_id,
+   (object_id, object_type, context_id,
     creation_date, creation_user, creation_ip)
   values
-   (v_object_id, object_type, v_title, package_id, context_id,
+   (v_object_id, object_type, context_id,
     creation_date, creation_user, creation_ip);
 
   acs_object.initialize_attributes(v_object_id);
@@ -628,7 +570,7 @@ as
  )
  return varchar2
  is
-  object_name acs_objects.title%TYPE;
+  object_name varchar2(500);
   v_object_id integer := object_id;
  begin
   -- Find the name function for this object, which is stored in the
@@ -636,14 +578,6 @@ as
   -- object's actual type, traverse the type hierarchy upwards until
   -- a non-null name_method value is found.
   --
-  select title into object_name
-  from acs_objects
-  where object_id = name.object_id;
-
-  if (object_name is not null) then
-    return object_name;
-  end if;
-
   for object_type
   in (select name_method
       from acs_object_types
@@ -684,23 +618,6 @@ as
 
   return object_type_pretty_name || ' ' || object_id;
  end default_name;
-
- function package_id (
-  object_id	in acs_objects.object_id%TYPE
- ) return acs_objects.package_id%TYPE
- is
-  v_package_id acs_objects.package_id%TYPE;
- begin
-  if object_id is null then
-    return null;
-  end if;
-
-  select package_id into v_package_id
-  from acs_objects
-  where object_id = package_id.object_id;
-
-  return v_package_id;
- end package_id;
 
  procedure get_attribute_storage ( 
    object_id_in      in  acs_objects.object_id%TYPE,

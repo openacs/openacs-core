@@ -56,16 +56,6 @@
       </querytext>
 </fullquery>
 
-<fullquery name="person::update.update_object_title">      
-      <querytext>
-      
-	update acs_objects
-	set title = :first_names || ' ' || :last_name
-	where object_id = :person_id
-    
-      </querytext>
-</fullquery>
-
 <fullquery name="person::name_not_cached.get_person_name">      
       <querytext>
       
@@ -142,17 +132,6 @@
 	update parties
         set    [join $cols ", "]
         where  party_id = :party_id
-
-      </querytext>
-</fullquery>
-
-<fullquery name="party::update.object_title_update">      
-      <querytext>
-      
-	    update acs_objects
-	    set title = :email
-	    where object_id = :party_id
-	    and object_type = 'party'
 
       </querytext>
 </fullquery>

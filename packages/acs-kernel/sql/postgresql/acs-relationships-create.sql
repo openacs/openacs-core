@@ -462,10 +462,7 @@ begin
       now(),
       creation_user,
       creation_ip,
-      context_id,
-      ''t'',
-      new__rel_type || '': '' || new__object_id_one || '' - '' || new__object_id_two,
-      null
+      context_id
     );
 
     insert into acs_rels
