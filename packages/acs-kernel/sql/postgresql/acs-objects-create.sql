@@ -691,6 +691,9 @@ begin
   -- Delete dynamic/generic attributes
   delete from acs_attribute_values where object_id = delete__object_id;
 
+  -- Delete direct permissions records.
+  delete from acs_permissions where object_id = delete__object_id;
+
   -- select table_name, id_column
   --  from acs_object_types
   --  start with object_type = (select object_type
