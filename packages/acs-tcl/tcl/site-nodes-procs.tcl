@@ -214,6 +214,14 @@ namespace eval site_node {
         error "site node not found at url $url"
     }
 
+    ad_proc -public get_from_object_id {
+        {-object_id:required}
+    } {
+        return the site node associated with the given object_id
+    } {
+        return [get -url [get_url_from_object_id -object_id $object_id]]
+    }
+
     ad_proc -public get_url {
         {-node_id:required}
     } {
@@ -227,6 +235,14 @@ namespace eval site_node {
         return $url
     }
 
+    ad_proc -public get_url_from_object_id {
+        {-object_id:required}
+    } {
+        return the url of the site node associated with the given object
+    } {
+        return [db_string select_url_from_object_id {} -default ""]
+    }
+
     ad_proc -public get_node_id {
         {-url:required}
     } {
@@ -236,13 +252,39 @@ namespace eval site_node {
         return $node(node_id)
     }
 
+    ad_proc -public get_node_id_from_object_id {
+        {-object_id:required}
+    } {
+        return the site node id associated with the given object_id
+    } {
+        return [get_node_id -url [get_url_from_object_id -object_id $object_id]]
+    }
+
     ad_proc -public get_parent_id {
         {-node_id:required}
     } {
-        return the parent_id for this node
+        return the parent_id of this node
     } {
         array set node [get -node_id $node_id]
         return $node(parent_id)
+    }
+
+    ad_proc -public get_parent {
+        {-node_id:required}
+    } {
+        return the parent node of this node
+    } {
+        array set node [get -node_id $node_id]
+        return [get -node_id $node(parent_id)]
+    }
+
+    ad_proc -public get_object_id {
+        {-node_id:required}
+    } {
+        return the object_id for this node
+    } {
+        array set node [get -node_id $node_id]
+        return $node(object_id)
     }
 
 }
@@ -305,7 +347,7 @@ ad_proc -public site_node_delete_package_instance {
     @creation-date 2002-05-02
 } {
     db_transaction {
-        set package_id [site_nodes::get_package_id_from_node_id -node_id $node_id]
+        set package_id [site_node::get_object_id -node_id $node_id]
         site_node::unmount -node_id $node_id
         apm_package_instance_delete $package_id
     }
@@ -495,5 +537,5 @@ ad_proc -public site_node_closest_ancestor_package_url {
 	return $default
     }
 
-    return [db_string select_url {} -default ""]
+    return [site_node::get_url_from_object_id -object_id $subsite_pkg_id]
 }

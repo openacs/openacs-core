@@ -48,11 +48,11 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="site_node_closest_ancestor_package_url.select_url">
+    <fullquery name="site_node::get_url_from_object_id.select_url_from_object_id">
         <querytext>
             select site_node.url(node_id)
             from site_nodes
-            where object_id = :subsite_pkg_id
+            where object_id = :object_id
         </querytext>
     </fullquery>
 
