@@ -103,4 +103,3 @@ if { $registered < 1 } {
 }
         
 doc_body_append "</center>\n[ad_footer]\n"
-

@@ -441,6 +441,7 @@ ad_proc -public db_multirow {
     -local:boolean
     -append:boolean
     {-extend {}}
+    {-upvar_level 1}
     var_name
     statement_name
     sql
@@ -471,8 +472,9 @@ ad_proc -public db_multirow {
     <p>
     If the <code>-local</code> is passed, the variables defined                                                            
     by db_multirow will be set locally (useful if you're compiling dynamic templates                                                           
-    in a function or similar situations).
-
+    in a function or similar situations). By default the multirow will be set
+    one level up but you can specify the number of levels up you want it set with the
+    upvar_level switch.
     <p>
 
     You may supply a code block, which will be executed for each row in 
@@ -526,7 +528,7 @@ ad_proc -public db_multirow {
     set full_statement_name [db_qd_get_fullname $statement_name]
 
     if { $local_p } {
-        set level_up 1
+        set level_up $upvar_level
     } else {
         set level_up \#[template::adp_level]
     }

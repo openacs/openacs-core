@@ -288,18 +288,42 @@ ad_proc -private apm_dependency_check {
     return [list 1 $install_in]
 }
 
+ad_proc -private apm_load_catalog_files {
+    -upgrade:boolean
+    package_key
+    message_catalog_files
+} {
+    Load catalog files for a package that is either installed or upgraded.
+    If the package is upgraded message key upgrade status is reset before
+    loading the files.
+
+    @author Peter Marklund
+} {
+    if { $upgrade_p } {
+        # Reset the upgrade status of message catalog keys before we load the catalog files
+        lang::catalog::reset_upgrade_status_message_keys $package_key
+    }
+
+    # Load message catalog files
+    foreach catalog_rel_path $message_catalog_files {
+        lang::catalog::import_messages_from_file "[acs_package_root_dir $package_key]/${catalog_rel_path}"
+    }	    
+}
+
 
 ad_proc -private apm_package_install { 
     {-callback apm_dummy_callback}
     {-copy_files:boolean}
     {-load_data_model:boolean}
     {-data_model_files 0}
+    {-message_catalog_files {}}
     {-install_path ""}
     spec_file_path } {
 
     Registers a new package and/or version in the database, returning the version_id.
     If $callback is provided, periodically invokes this procedure with a single argument
     containing a human-readable (English) status message.
+
     @param spec_file_path The path to an XML .info file relative to
     @return The version_id if successfully installed, 0 otherwise.
 } {
@@ -339,11 +363,12 @@ ad_proc -private apm_package_install {
 	set vendor_uri $version(vendor.url)
 	set split_path [split $spec_file_path /]
 	set relative_path [join [lreplace $split_path 0 [lsearch -exact $package_key $split_path]] /] 
+
 	# Register the package if it is not already registered.
 	if { ![apm_package_registered_p $package_key] } {
 	    apm_package_register $package_key $package_name $pretty_plural $package_uri $package_type $initial_install_p $singleton_p $relative_path
 	}
-	    
+
 	# If an older version already exists in apm_package_versions, update it;
 	# otherwise, insert a new version.
 	if { [db_0or1row version_exists_p {
@@ -352,11 +377,22 @@ ad_proc -private apm_package_install {
 	    where package_key = :package_key
 	    and version_id = apm_package.highest_version(:package_key)
 	} ]} {
+            # We are upgrading a package
+
+            # Load catalog files with upgrade switch before package version is changed in db
+            apm_load_catalog_files -upgrade $package_key $message_catalog_files
+
 	    set version_id [apm_package_install_version -callback $callback $package_key $version_name \
 		    $version_uri $summary $description $description_format $vendor $vendor_uri $release_date]
 	    apm_version_upgrade $version_id
 	    apm_package_upgrade_parameters -callback $callback $version(parameters) $package_key
+
 	} else {
+            # We are installing a new package
+
+            # Load catalog files without the upgrade switch before package version is changed in db
+            apm_load_catalog_files -upgrade $package_key $message_catalog_files
+
 	    set version_id [apm_package_install_version -callback $callback $package_key $version_name \
 				$version_uri $summary $description $description_format $vendor $vendor_uri $release_date]
 
@@ -369,6 +405,7 @@ ad_proc -private apm_package_install {
 	    # Install the paramters for the version.
 	    apm_package_install_parameters -callback $callback $version(parameters) $package_key
 	}
+
 	# Update all other package information.
 	apm_package_install_dependencies -callback $callback $version(provides) $version(requires) $version_id
 	apm_package_install_owners -callback $callback $version(owners) $version_id
@@ -1109,6 +1146,32 @@ ad_proc -private apm_upgrade_script_compare {f1 f2} {
     } else {
 	error "Invalid upgrade script syntax.  Should be \"upgrade-major.minor-major.minor.sql\"."
     }
+}
+
+ad_proc -private apm_message_catalog_files_find { package_key file_list } {
+    Given a list of files belonging to a certain package, return those
+    files that are message catalog files. Note that the input list and the
+    list returned have items on different formats, see the parameter documentation.
+
+    @param package_key The package_key of the files
+    @param file_list   A list of file items on format [list path file_type file_db_type]
+    @return            A list of message catalog file items on format [list path package_key]
+
+    @see apm_data_model_scripts_find
+    @author Peter Marklund
+} {
+    set catalog_file_list [list]
+
+    foreach file_info $file_list {
+        
+        set file_path [lindex $file_info 0]
+	set file_type [lindex $file_info 1]
+        if { [string equal [apm_guess_file_type $package_key $file_path] "message_catalog"] } {
+            lappend catalog_file_list $file_info [list $file_path $package_key]
+        }
+    }
+
+    return $catalog_file_list
 }
 
 ad_proc -private apm_data_model_scripts_find {

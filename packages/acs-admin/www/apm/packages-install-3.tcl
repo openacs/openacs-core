@@ -20,7 +20,8 @@ Check all the files you want to be loaded into the database.<p>
 <form action=\"packages-install-4\" method=\"post\">
 "
 
-set file_list [list]
+set sql_file_list [list]
+set catalog_file_list [list]
 set file_count 0
 
 foreach pkg_info $pkg_install_list {
@@ -48,7 +49,7 @@ foreach pkg_info $pkg_install_list {
     set table_rows ""
     set data_model_files [apm_data_model_scripts_find -upgrade_from_version_name \
 	    $initial_version_name -upgrade_to_version_name $final_version_name $package_key $version(files)]
-    set file_list [concat $file_list $data_model_files]
+    set sql_file_list [concat $sql_file_list $data_model_files]
     if {![empty_string_p $data_model_files]} {
 	foreach file $data_model_files {
 	    set path [lindex $file 0]
@@ -73,11 +74,16 @@ foreach pkg_info $pkg_install_list {
 	$table_rows
 	</table></blockquote> <p>"
     }
+
+    # I18N: Get the list of message catalog files to source
+    set catalog_file_list [concat $catalog_file_list [apm_message_catalog_files_find $package_key $version(files)]]
 }
 
-ad_set_client_property -clob t apm sql_file_paths $file_list
+ad_set_client_property -clob t apm sql_file_paths $sql_file_list
 
-if {[empty_string_p $file_list]} {
+ad_set_client_property -clob t apm catalog_file_paths $catalog_file_list
+
+if {[empty_string_p $sql_file_list]} {
     ad_returnredirect packages-install-4
     ad_script_abort
 }
