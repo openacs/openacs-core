@@ -300,10 +300,10 @@ ad_proc -public template::util::date::get_property { what date } {
       unpack $date
       if { ![string equal $hours {}] && \
            ![string equal $minutes {}] } {
-        append value " ${hours}:${minutes}"
-        if { ![string equal $seconds {}] } {
-          append value ":$seconds"
-	}
+	  append value " [string range $pad [string length $hours] end]${hours}:[string range $pad [string length $minutes] end]$minutes"
+	  if { ![string equal $seconds {}] } {
+	      append value ":[string range $pad [string length $seconds] end]$second"
+	  }
       }
       return $value
     }
@@ -722,12 +722,18 @@ ad_proc -public template::widget::numericRange { name interval_def size {value "
 } {
   array set attributes $tag_attributes
   
+  set interval_size [lindex $interval_def 2]
   set options [list [list "--" {}]]
 
   for { set i [lindex $interval_def 0] } \
       { $i <= [lindex $interval_def 1] } \
-      { incr i [lindex $interval_def 2] } {
+      { incr i $interval_size } {
     lappend options [list [template::util::leadingPad $i $size] $i]
+  }
+
+  if {$interval_size > 1} {
+    # round minutes or seconds to nearest interval
+    set value [expr $value-$value%$interval_size]
   }
 
   return [template::widget::menu $name $options [list $value] attributes]
