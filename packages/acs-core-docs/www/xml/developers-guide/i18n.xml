@@ -1,0 +1,105 @@
+<sect1 id="i18n" xreflabel="Internationalization">
+  <title></title>
+
+  <authorblurb>
+    <para>By <ulink url="">Peter Marklund</ulink></para>
+  </authorblurb>
+
+  <sect2 id="i18n-introduction">
+    <title>Introduction</title>
+
+    <para>
+      This document describes how to develop internationalized OpenACS packages.
+    </para>
+  </sect2>
+
+  <sect2 id="i18n-message-catalog">
+    <title>Multilingual Text - Using the Message Catalog</title>
+
+    <para>
+      In this section we present the mechanisms that OpenACS provide that allows your
+      OpenACS packages to handle text in multiple languages.
+    </para>
+
+    <sect3 id="i18n-message-catalog-params" xreflabel="Multilingual APM Parameters">
+      <title>Multilingual OpenACS Parameters</title>
+
+      <para>
+        The syntax for storing multilingual pieces of text in APM parameters is identical
+        to the one used for adp templates. Any message catalog keys in APM parameters should
+        be surrounded by hash marks and will be replaced by the parameter::get procedure if
+        it is invoked with the -localize flag. The following three examples illustrate:
+      </para>
+
+    <table frame="all">
+      <tgroup cols="4" align="center" colsep="1" rowsep="1">
+        <colspec colname="c1"/>
+        <colspec colname="c2"/>
+        <colspec colname="c3"/>
+        <colspec colname="c4"/>
+        <thead>
+          <row>
+            <entry>Parameter Name</entry>
+            <entry>Parameter Value</entry>
+            <entry>Command used to retrieve Value</entry>
+	    <entry>Retrieved Value</entry>
+	  </row>
+	</thead>
+	<tbody>
+          <row>
+	     <entry>class_instance_pages_csv</entry>
+             <entry>#dotlrn.class_page_home_title#,Simple 2-Column;#dotlrn.class_page_calendar_title#,Simple 1-Column;#dotlrn.class_page_file_storage_title#,Simple 1-Column</entry>
+             <entry>parameter::get -localize -parameter class_instances_pages_csv</entry>
+             <entry>Kurs Startseite,Simple 2-Column;Kalender,Simple 1-Column;Dateien,Simple 1-Column</entry>
+          </row>
+          <row>
+             <entry>departments_pretty_name</entry>
+             <entry>#departments_pretty_name#</entry>
+             <entry>parameter::get -localize -parameter departments_pretty_name</entry>
+	     <entry>Abteilung</entry>
+	  </row>
+          <row>
+             <entry namest="c1" nameend="c3" align="center">...</entry>
+          </row>
+          <row>
+             <entry>departments_pretty_name</entry>
+             <entry>#departments_pretty_name#</entry>
+             <entry>parameter::get -parameter departments_pretty_name</entry>
+	     <entry>#departments_pretty_name#</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>
+      The value in the rightmost column in the table above is the value returned by an invocation
+      of parameter::get. Not that for localization to happen you must use the -localize flag. 
+        The locale used for the message lookup will be
+        the locale of the current request, or if there is no current request, the site-wide default locale 
+        (set by the parameter SiteWideLocale of the acs-lang package). 
+    </para>
+
+    </sect3>
+
+    <sect3 id="i18n-message-catalog-adps" xreflabel="Multilingual Page Templates (.adp Files)">
+      <title>Multilingual Page Templates (.adp Files)</title>
+
+      <para>
+        There are two syntaxes to choose from for doing message catalog lookups in adp templates.        
+        Any message catalog keys surrounded by hash marks (i.e. #message_key#) will be replaced
+        with the corresponding text in the message catalog (the procedure
+        lang::message::lookup is used for the lookup) using the locale of the request (given by 
+        ad_conn locale). If there is no message can be retrieved from the message catalog then
+        a translation missing message will be used instead.
+      </para>
+
+     <para>
+       The other syntax for message lookups in adp pages is &lt;trn key="message_key"&gt;default text&lt;/trn&gt;.
+       Use the trn tag if you want to provide a default message
+       in the template. The default message is in the body of the trn tag and is mandatory.
+       The default message is only used if no message could be retrieved from the message catalog.
+     </para>
+    </sect3>
+  </sect2>
+
+</sect1>
