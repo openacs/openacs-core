@@ -559,7 +559,8 @@ ad_proc -public apm_load_any_changed_libraries {} {
 		# File is usually of form packages/package_key
 		set file_path "[acs_root_dir]/$file"
                 switch [apm_guess_file_type "" $file] {
-                    tcl_procs { apm_source [acs_root_dir]/$file }
+                    tcl_procs -
+                    test_procs { apm_source [acs_root_dir]/$file }
                     query_file { db_qd_load_query_file [acs_root_dir]/$file }
                 }
 
