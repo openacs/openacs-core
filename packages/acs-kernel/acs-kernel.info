@@ -7,13 +7,13 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0d10" url="http://openacs.org/repository/download/apm/acs-kernel-5.0d10.apm">
+    <version name="5.0d11" url="http://openacs.org/repository/download/apm/acs-kernel-5.0d11.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
         <release-date>2003-09-25</release-date>
         <vendor url="http://openacs.org/">OpenACS</vendor>
 
-        <provides url="acs-kernel" version="5.0d10"/>
+        <provides url="acs-kernel" version="5.0d11"/>
 
         <callbacks>
         </callbacks>
@@ -59,6 +59,7 @@
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="RestrictLoginToSSLP"  default="1" description="Should login, register, and password update pages be restricted to HTTPS?" section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ScreenName"  default="solicit" description="Can be 'none', 'solicit', or 'require'. If you say none, we will not ask users to provide a screen_name. If you say 'solicit', we will ask for one, but not require it. If you say 'require', we will not let users register or login without setting up a screen_name." section_name="Local Accounts"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ServeXQLFiles"  default="0" description="Should we serve .xql files (database query files) to browsers? Say 0 to not serve them, 1 to serve them. Typically you do not want to serve these files. Requires a server restart to take effect." section_name="request-processor"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ExcludedFiles"  default="*/CVS/* *~" description="string match patterns for files which the request processor should never serve" section_name="request-processor"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SessionLifetime"  default="604800" description="how long after the last hit should we save information in the SessionLifetime table?" section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SessionRenew"  default="300" description="How much time do we let elapse before renewing a session cookie? This should be less than SessionTimeout." section_name="security"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SessionSweepInterval"  default="3600" description="how often should we sweep for old stale sessions?" section_name="security"/>
