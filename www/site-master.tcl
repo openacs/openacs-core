@@ -43,12 +43,11 @@ if { [ad_conn untrusted_user_id] != 0 } {
 # Site-wide admin link
 set admin_url {}
 if { [ad_conn user_id] != 0 } {
-    array set swadmin_node [site_node::get -url [apm_package_url_from_key "acs-admin"]]
-    set swadmin_object_id $swadmin_node(object_id)
-    set sw_admin_p [permission::permission_p -object_id $swadmin_object_id -privilege admin]
+    set sw_admin_p [acs_user::site_wide_admin_p]
     if { $sw_admin_p } {
         set admin_url "/acs-admin/"
-    } elseif { [permission::permission_p -object_id [ad_conn subsite_id] -privilege admin] } {
+        set devhome_url "/acs-admin/developer"
+    } elseif { [permission::permission_p -object_id [subsite::get_element -element object_id] -privilege admin] } {
         set admin_url "[subsite::get_element -element url]admin/"
     }
 }

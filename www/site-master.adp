@@ -42,6 +42,10 @@
         &nbsp;
         <span class="button-header"><a href="@admin_url@" title="Site-wide administration" class="button">Admin</a></span>
       </if>
+      <if @admin_url@ not nil>
+        &nbsp;
+        <span class="button-header"><a href="@devhome_url@" title="Developer's Administration" class="button">DevAdmin</a></span>
+      </if>
       <if @pvt_home_url@ not nil>
         &nbsp;
         <span class="button-header"><a href="@pvt_home_url@" title="Change password, email, portrait" class="button">@pvt_home_name@</a></span>

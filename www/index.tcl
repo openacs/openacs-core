@@ -25,26 +25,17 @@ if { ![string equal $redirect_url ""] } {
 
 set user_id [ad_conn user_id]
 
+set sw_admin_p [acs_user::site_wide_admin_p]
+
 db_multirow nodes site_nodes {}
 
 if { $user_id != 0 } {
     # The user is loged in.
-    if {[db_0or1row user_name_select {
-	select first_names || ' ' || last_name as name, email
-	from persons, parties
-	where person_id = :user_id
-	and person_id = party_id
-    }]} {
-	set home_url [ad_pvt_home]
-	set home_url_name [ad_pvt_home_name]	
-    }
-    set requires_registration_p_clause ""
+    acs_user::get -array user
 }
 
 set system_name [ad_system_name]
 
 set acs_version [ad_acs_version]
-
-set acs_root_dir [acs_root_dir]
 
 set focus {}
