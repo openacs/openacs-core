@@ -348,7 +348,7 @@ ad_proc subsite::define_pageflow {
     # TODO: add an image
     # TODO: add link_p/selected_p for subsections
 
-    set base_url [site_node_closest_ancestor_package_url]
+    set base_url [subsite::get_element -element url]
 
     template::multirow create $sections_multirow name label title url selected_p link_p
 
@@ -409,7 +409,7 @@ ad_proc subsite::add_section_row {
         set info(url) "[string range $info(url) 0 [string last / $info(url)]]."
     }
     
-    if { [ad_conn node_id] == [ad_conn subsite_id] } {
+    if { [ad_conn node_id] == [site_node_closest_ancestor_package "acs-subsite"] } {
         set current_url [ad_conn extra_url]
     } else {
         # Need to prepend the path from the subsite to this package
@@ -513,7 +513,7 @@ ad_proc subsite::get_pageflow_struct {} {
         }
     }
 
-    set subsite_url [site_node_closest_ancestor_package_url]
+    set subsite_url [subsite::get_element -element url]
     array set subsite_sitenode [site_node::get -url $subsite_url]
     set subsite_node_id $subsite_sitenode(node_id)
 
@@ -528,7 +528,7 @@ ad_proc subsite::get_pageflow_struct {} {
                                                 selected_patterns *]
     }
 
-    if { [permission::permission_p -object_id [ad_conn subsite_id] -privilege admin] } {
+    if { [permission::permission_p -object_id [site_node_closest_ancestor_package "acs-subsite"] -privilege admin] } {
         lappend pageflow admin {
             label "Administration"
             url "admin/configure"

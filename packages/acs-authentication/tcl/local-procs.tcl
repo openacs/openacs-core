@@ -373,7 +373,7 @@ ad_proc -private auth::local::registration::GetElements {
     }
 
     set result(required) [concat $result(required) { email first_names last_name }]
-    set result(optional) { screen_name url }
+    set result(optional) { url }
 
     if { ![parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] } {
         lappend result(optional) password

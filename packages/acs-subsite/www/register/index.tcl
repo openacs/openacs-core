@@ -8,4 +8,7 @@ ad_page_contract {
     {return_url ""}
 }
 
-set focus [auth::get_login_focus]
+set expired_p 0
+if { [string equal [ad_conn auth_level] "expired"] } {
+    set expired_p 1
+}

@@ -17,7 +17,10 @@ namespace eval auth::registration {}
 #
 #####
 
-ad_proc -public auth::require_login {} {
+ad_proc -public auth::require_login {
+    {-level ok}
+    {-account_status ok}
+} {
     If the current session is not authenticated, redirect to the 
     login page, and aborts the current page script.
     Otherwise, returns the user_id of the user logged in.
@@ -29,7 +32,10 @@ ad_proc -public auth::require_login {} {
 
     @see ad_script_abort
 } {
-    set user_id [ad_conn user_id]
+    set user_id [auth::get_user_id \
+                     -level $level \
+                     -account_status $account_status]
+
     if { $user_id != 0 } {
 	# user is in fact logged in, return user_id
 	return $user_id
@@ -40,14 +46,44 @@ ad_proc -public auth::require_login {} {
     ad_script_abort
 }
 
-ad_proc -public auth::get_login_focus {} {
-    Get the relevant focus for the login box.
+ad_proc -public auth::get_user_id {
+    {-level ok}
+    {-account_status ok}
 } {
-    if { [auth::UseEmailForLoginP] } {
-        return "login.email"
-    } else {
-        return "login.username"
+    Get the current user_id with at least the level of security specified. 
+    If no user is logged in, or the user is not logged in at a sufficiently 
+    high security level, return 0.
+
+    @return user_id of user, if the user is logged in, 0 otherwise.
+            
+
+    @see ad_script_abort
+} {
+    set untrusted_user_id [ad_conn untrusted_user_id]
+    
+    # Do we have any user_id at all?
+    if { $untrusted_user_id == 0 } {
+        return 0
     }
+    
+    # Check account status
+    if { [string equal $account_status "ok"] && ![string equal [ad_conn account_status] "ok"] } {
+        return 0
+    }
+    
+    array set levelv {
+        none 0
+        expired 1
+        ok 2
+        secure 3
+    }
+
+    # Check if auth_level is sufficiently high
+    if { $levelv([ad_conn auth_level]) < $levelv($level) } {
+        return 0
+    }
+
+    return $untrusted_user_id
 }
 
 ad_proc -public auth::UseEmailForLoginP {} {
@@ -58,6 +94,7 @@ ad_proc -public auth::UseEmailForLoginP {} {
 }
 
 ad_proc -public auth::authenticate {
+    {-return_url ""}
     {-authority_id ""}
     {-username ""}
     {-email ""}
@@ -68,6 +105,7 @@ ad_proc -public auth::authenticate {
     Try to authenticate and login the user forever by validating the username/password combination, 
     and return authentication and account status codes.    
     
+    @param return_url   If specified, this can be included in account status messages.
     @param authority_id The ID of the authority to ask to verify the user. Defaults to local authority.
     @param username     Authority specific username of the user.
     @param email        User's email address. You must supply either username or email.
@@ -120,8 +158,6 @@ ad_proc -public auth::authenticate {
         }
     }
     
-    ns_log Notice "LARS: authority_id = $authority_id, username = $username"
-
     with_catch errmsg {
         array set result [auth::authentication::Authenticate \
                                  -username $username \
@@ -206,8 +242,9 @@ ad_proc -public auth::authenticate {
     
     # Map to row in local users table
     array set result [auth::get_local_account \
-                             -username $username \
-                             -authority_id $authority_id]
+                          -return_url $return_url \
+                          -username $username \
+                          -authority_id $authority_id]
     # Returns: 
     #   result(account_status)
     #   result(account_message)  
@@ -249,8 +286,11 @@ ad_proc -public auth::authenticate {
     }
         
     # Issue login cookie if login was successful
-    if { [string equal $result(auth_status) "ok"] && [string equal $result(account_status) "ok"] && !$no_cookie_p } {
-        auth::issue_login -user_id $result(user_id) -persistent=$persistent_p
+    if { [string equal $result(auth_status) "ok"] && !$no_cookie_p } {
+        auth::issue_login \
+            -user_id $result(user_id) \
+            -persistent=$persistent_p \
+            -account_status $result(account_status)
     }
     
     return [array get result]
@@ -259,10 +299,14 @@ ad_proc -public auth::authenticate {
 ad_proc -private auth::issue_login {
     {-user_id:required}
     {-persistent:boolean}
+    {-account_status "ok"}
 } {
     Issue the login cookie.
 } {
-    ad_user_login -forever=$persistent_p $user_id
+    ad_user_login \
+        -account_status $account_status \
+        -forever=$persistent_p \
+        $user_id
 }
 
 ad_proc -private auth::get_register_authority {
@@ -528,9 +572,20 @@ ad_proc -public auth::get_registration_elements {
         set element_info(optional) {}
     }
 
+    set local_required_elms { first_names last_name email }
+    set local_optional_elms {}
+    
+    switch [acs_user::ScreenName] {
+        require {
+            lappend local_required_elms "screen_name"
+        }
+        solicit {
+            lappend local_optional_elms "screen_name"
+        }
+    }
+
     # Handle required elements for local account
-    # TODO: This will depend on a parameter
-    foreach elm { first_names last_name email } {
+    foreach elm $local_required_elms {
         # Add to required
         if { [lsearch $element_info(required) $elm] == -1 } {
             lappend element_info(required) $elm
@@ -540,6 +595,13 @@ ad_proc -public auth::get_registration_elements {
         set index [lsearch $element_info(optional) $elm]
         if { $index != -1 } {
             set element_info(optional) [lreplace $element_info(optional) $index $index]
+        }
+    }
+
+    foreach elm $local_optional_elms {
+        # Add to required
+        if { [lsearch $element_info(required) $elm] == -1 && [lsearch $element_info(optional) $elm] == -1 } {
+            lappend element_info(optional) $elm
         }
     }
 
@@ -559,7 +621,6 @@ ad_proc -public auth::get_all_registration_elements {
 }
 
 ad_proc -public auth::get_registration_form_elements {
-    {-authority_id ""}
 } {
     Returns a list of elements to be included in the -form chunk of an ad_form form.
     All possible elements will always be present, but those that shouldn't be displayed 
@@ -615,7 +676,7 @@ ad_proc -public auth::get_registration_form_elements {
         secret_question {size 30}
         secret_answer {size 30}
     }
-    
+
     array set element_info [auth::get_registration_elements]
 
     if { [lsearch $element_info(required) password] != -1 } {
@@ -973,6 +1034,211 @@ ad_proc -public auth::delete_local_account {
 }
 
 
+ad_proc -public auth::set_email_verified {
+    {-user_id:required}
+} {
+    Update an OpenACS record with the fact that the email address on
+    record was verified.
+} {
+    acs_user::update \
+        -user_id $user_id \
+        -email_verified_p "t"
+}
+
+ad_proc -private auth::verify_account_status {} {
+    Verify the account status of the current user, 
+    and set [ad_conn account_status] appropriately.
+} {
+    # Just recheck the authentication cookie, and it'll do the verification for us
+    sec_login_handler
+}
+
+
+
+
+#####
+#
+# auth namespace private procs
+#
+#####
+
+ad_proc -private auth::get_local_account {
+    {-return_url ""}
+    {-username:required}
+    {-authority_id ""}
+} {
+    Get the user_id of the local account for the given 
+    username and domain combination.
+
+    @param username The username to find
+
+    @param authority_id The ID of the authority to ask to verify the user. Leave blank for local authority.
+} {
+    array set auth_info [list]
+    
+    # Will return:
+    #   auth_info(account_status)
+    #   auth_info(account_message)  
+    #   auth_info(user_id)
+
+    if { [empty_string_p $authority_id] } {
+        set authority_id [auth::authority::local]
+    }
+
+    set account_found_p [db_0or1row select_user_info { 
+        select user_id,
+               email,
+               member_state,
+               email_verified_p,
+               screen_name
+        from   cc_users 
+        where  username = :username
+        and    authority_id = :authority_id
+    }]
+
+    if { !$account_found_p } {
+        # Local user account doesn't exist
+        set auth_info(account_status) "closed"
+        auth::authority::get -authority_id $authority_id -array authority
+
+        set auth_info(account_message) "You have successfully authenticated, but you do not have an account on [ad_system_name] yet.<p>"
+
+        if { ![empty_string_p $authority(help_contact_text)] } {
+            append auth_info(account_message) "<h3>Help Information</h3>"
+            append auth_info(account_message) [ad_html_text_convert \
+                                                   -from $authority(help_contact_text_format) \
+                                                   -to "text/html" -- $authority(help_contact_text)]
+        }
+
+        
+        return [array get auth_info]
+    }
+
+    # Check local account status
+    array set auth_info [auth::check_local_account_status \
+                             -user_id $user_id \
+                             -return_url $return_url \
+                             -member_state $member_state \
+                             -email_verified_p $email_verified_p \
+                             -screen_name $screen_name]
+
+    # Return user_id
+    set auth_info(user_id) $user_id
+
+   return [array get auth_info]    
+}
+
+ad_proc -private auth::check_local_account_status {
+    {-return_url ""}
+    {-no_dialogue:boolean}
+    {-user_id:required}
+    {-member_state:required}
+    {-email_verified_p:required}
+    {-screen_name:required}
+} {
+    Check the account status of a user with the given parameters.
+
+    @param no_dialogue If specified, will not send out email or in other ways converse with the user
+
+    @return An array-list with account_status and account_message
+
+} {
+    # Initialize to 'closed', because most cases below mean the account is closed
+    set result(account_status) "closed"
+
+    # system_name is used in some of the I18N messages
+    set system_name [ad_system_name]    
+
+    switch $member_state {
+        approved {
+            if { $email_verified_p == "f" } {
+                if { !$no_dialogue_p } {
+                    set result(account_message) "<p>[_ acs-subsite.lt_Registration_informat]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
+                    
+                    with_catch errmsg {
+                        auth::send_email_verification_email -user_id $user_id
+                    } {
+                        global errorInfo
+                        ns_log Error "auth::get_local_account: Error sending out email verification email to email $email:\n$errorInfo"
+                        set result(account_message) "We got an error sending out the email for email verification"
+                    }
+                }
+            } else {
+                if { [string equal [acs_user::ScreenName] "require"] && [empty_string_p $screen_name] } {
+                    set update_url [export_vars -no_empty -base "[subsite::get_element -element url]user/basic-info-update" { return_url {edit_p 1} }]
+                    set result(account_message) "<p>Before we can let you in, you must setup a screen name.</p><p><b>&raquo;</b><a href=\"$update_url\">Update your profile now</a></p>"
+                } else {
+                    set result(account_status) "ok"
+                }
+            }
+        }
+        banned { 
+            set result(account_message) [_ acs-subsite.lt_Sorry_but_it_seems_th]
+        }
+        deleted {  
+            set result(account_message) \
+                "[_ acs-subsite.Welcome_Back_1] <a href=\"[export_vars -base "restore-user" { user_id }]\">[_ acs-subsite.to_site_link_1]</a>."
+        }
+        rejected - "needs approval" {
+            set result(account_message) \
+                "<p>[_ acs-subsite.lt_registration_request_submitted]</p><p>[_ acs-subsite.Thank_you]</p>"
+        }
+        default {
+            set result(account_message) \
+                "There was a problem authenticating the account. Most likely, the database contains users with no member_state."
+            ns_log Error "Problem with registration state machine: user_id $user_id has member_state '$member_state'"
+        }
+    }
+    
+    return [array get result]
+}
+
+ad_proc -public auth::local_account_ok_p {
+    {-user_id:required}
+} {
+    Return true or false (1 or 0) to whether the given user's account is ok.
+} {
+    set ok_p 0
+    catch {
+        acs_user::get -user_id $user_id -array user
+        array set result [auth::check_local_account_status \
+                              -user_id $user_id \
+                              -member_state $user(member_state) \
+                              -email_verified_p $user(email_verified_p) \
+                              -screen_name $user(screen_name)]
+        
+        set ok_p [expr [string equal $result(account_status) "ok"]]
+    }
+    return $ok_p
+}
+
+ad_proc -private auth::get_user_secret_token {
+    -user_id:required
+} {
+    Get a secret token for the user. Can be used for email verification purposes. 
+} {
+    return [db_string select_secret_token {}]
+}
+
+ad_proc -private auth::send_email_verification_email {
+    -user_id:required
+} {
+    Sends out an email to the user that lets them verify their email.
+    Throws an error if we couldn't send out the email.
+} {
+    # These are used in the messages below
+    set token [auth::get_user_secret_token -user_id $user_id]
+    acs_user::get -user_id $user_id -array user
+    set confirmation_url [export_vars -base "[ad_url]/register/email-confirm" { token user_id }]
+    set system_name [ad_system_name]    
+
+    ns_sendmail \
+        $user(email) \
+        [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]] \
+        [_ acs-subsite.lt_Welcome_to_system_nam] \
+        [_ acs-subsite.lt_To_confirm_your_regis]
+}
+
 ad_proc -private auth::validate_account_info {
     {-update:boolean}
     {-authority_id:required}
@@ -1097,17 +1363,6 @@ ad_proc -private auth::validate_account_info {
     }
 }
 
-ad_proc -public auth::set_email_verified {
-    {-user_id:required}
-} {
-    Update an OpenACS record with the fact that the email address on
-    record was verified.
-} {
-    acs_user::update \
-        -user_id $user_id \
-        -email_verified_p "t"
-}
-
 ad_proc -private auth::can_admin_system_without_authority_p {
     {-authority_id:required}
 } {
@@ -1133,138 +1388,6 @@ ad_proc -private auth::can_admin_system_without_authority_p {
 
     return [ad_decode $number_of_admins_left "0" "0" "1"]
 }
-
-#####
-#
-# auth namespace private procs
-#
-#####
-
-ad_proc -private auth::get_local_account {
-    {-username:required}
-    {-authority_id ""}
-} {
-    Get the user_id of the local account for the given 
-    username and domain combination.
-
-    @param username The username to find
-
-    @param authority_id The ID of the authority to ask to verify the user. Leave blank for local authority.
-} {
-    array set auth_info [list]
-    
-    # Will return:
-    #   auth_info(account_status)
-    #   auth_info(account_message)  
-    #   auth_info(user_id)
-
-    if { [empty_string_p $authority_id] } {
-        set authority_id [auth::authority::local]
-    }
-
-    set account_found_p [db_0or1row select_user_info { 
-        select user_id,
-               email,
-               member_state,
-               email_verified_p
-        from   cc_users 
-        where  username = :username
-        and    authority_id = :authority_id
-    }]
-
-    if { !$account_found_p } {
-        # Local user account doesn't exist
-        set auth_info(account_status) "closed"
-        auth::authority::get -authority_id $authority_id -array authority
-
-        set auth_info(account_message) "You have successfully authenticated, but you do not have an account on [ad_system_name] yet.<p>"
-
-        if { ![empty_string_p $authority(help_contact_text)] } {
-            append auth_info(account_message) "<h3>Help Information</h3>"
-            append auth_info(account_message) [ad_html_text_convert \
-                                                   -from $authority(help_contact_text_format) \
-                                                   -to "text/html" -- $authority(help_contact_text)]
-        }
-
-        
-        return [array get auth_info]
-    }
-
-    # Check local account status
-
-    # Initialize to 'closed', because most cases below mean the account is closed
-    set auth_info(account_status) "closed"
-
-    set notification_address [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]]
-
-    # system_name is used in some of the I18N messages
-    set system_name [ad_system_name]    
-    switch $member_state {
-        approved {
-            if { $email_verified_p == "f" } {
-                set auth_info(account_message) "<p>[_ acs-subsite.lt_Registration_informat]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
-                
-                with_catch errmsg {
-                    auth::send_email_verification_email -user_id $user_id
-                } {
-                    global errorInfo
-                    ns_log Error "auth::get_local_account: Error sending out email verification email to email $email:\n$errorInfo"
-                    set auth_info(account_message) "We got an error sending out the email for email verification"
-                }
-                
-            } else {
-                set auth_info(account_status) "ok"
-            }
-        }
-        banned { 
-            set auth_info(account_message) [_ acs-subsite.lt_Sorry_but_it_seems_th]
-        }
-        deleted {  
-            set auth_info(account_message) \
-                "[_ acs-subsite.Welcome_Back_1] <a href=\"restore-user?[export_vars { user_id }]\">[_ acs-subsite.to_site_link_1]</a>."
-        }
-        rejected - needs_approval {
-            set auth_info(account_message) \
-                "<p>[_ acs-subsite.lt_registration_request_submitted]</p><p>[_ acs-subsite.Thank_you]</p>"
-        }
-        default {
-            set auth_info(account_message) \
-                "There was a problem authenticating the account: $user_id. Most likely, the database contains users with no member_state."
-            ns_log Error "Problem with registration state machine: user_id $user_id has member_state '$member_state'"
-        }
-    }
-    set auth_info(user_id) $user_id
-
-   return [array get auth_info]    
-}
-
-ad_proc -private auth::get_user_secret_token {
-    -user_id:required
-} {
-    Get a secret token for the user. Can be used for email verification purposes. 
-} {
-    return [db_string select_secret_token {}]
-}
-
-ad_proc -private auth::send_email_verification_email {
-    -user_id:required
-} {
-    Sends out an email to the user that lets them verify their email.
-    Throws an error if we couldn't send out the email.
-} {
-    # These are used in the messages below
-    set token [auth::get_user_secret_token -user_id $user_id]
-    acs_user::get -user_id $user_id -array user
-    set confirmation_url [export_vars -base "[ad_url]/register/email-confirm" { token user_id }]
-    set system_name [ad_system_name]    
-
-    ns_sendmail \
-        $user(email) \
-        [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]] \
-        [_ acs-subsite.lt_Welcome_to_system_nam] \
-        [_ acs-subsite.lt_To_confirm_your_regis]
-}
-
 
 #####
 #
