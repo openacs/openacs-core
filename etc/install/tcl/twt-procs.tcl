@@ -247,3 +247,25 @@ ad_proc ::twt::count_links { pattern } {
 
     return $count
 }
+
+# No longer needed as the problem was due to malformed HTML and is
+# better handled within tclwebtest
+#  ad_proc ::twt::all_urls {} {
+#      Returns all urls on the page last requested.
+
+#      This proc is a workaround to the problem
+#      with Tclwebtest not always finding all links with the [link all]
+#      command.
+
+#      @return A list of URLs of the last requested page
+
+#      @author Peter Marklund
+#  } {
+#      set all_urls [list]
+#      set remaining_body [response body]
+#      while { [regexp -all {^(.*?)<a href="?([^">]+)(.*)$} $remaining_body match before_match link_url remaining_body] } {
+#          lappend all_urls $link_url
+#      }    
+    
+#      return $all_urls
+#  }

@@ -5,6 +5,7 @@
 # @author Peter Marklund
 
 namespace eval ::twt::class {}
+namespace eval ::twt::class::test {}
 
 ad_proc ::twt::class::get_admin_urls { } {
     Returns a list with the fully qualified URLs of the admin pages of
@@ -168,4 +169,19 @@ ad_proc ::twt::class::add_member_applets { server_url } {
             link follow ~u {applet-add.*applet_key=dotlrn_members}
         }
     }
+}
+
+###################
+#
+# Namespace ::twt::class::test - no demo data setup, pure testing
+#
+###################
+
+ad_proc ::twt::class::test::manage_memberships {} {
+    Test removing users and changing their roles in a class
+    using the class_url/members page.
+
+    @author Peter Marklund
+} {
+    
 }
