@@ -37,6 +37,7 @@ ad_proc -public template::form { command args } {
     @see template::form::export
     @see template::form::get_combined_values
     @see template::form::get_values
+    @see template::form::get_elements
     @see template::form::get_errors
     @see template::form::set_error
     @see template::form::is_request
