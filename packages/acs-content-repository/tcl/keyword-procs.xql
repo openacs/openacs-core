@@ -46,5 +46,15 @@
         </querytext>
     </fullquery>
     
+    <fullquery name="cr::keyword::get_options_flat.select_keyword_options">
+        <querytext>
+            select heading,
+                   keyword_id
+            from   cr_keywords
+            where  [ad_decode $parent_id "" "parent_id is null" "parent_id = :parent_id"]
+            order  by lower(heading)
+        </querytext>
+    </fullquery>
+
 
 </queryset>
