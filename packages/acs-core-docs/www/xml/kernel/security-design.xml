@@ -821,14 +821,14 @@ to work.</para>
 
 <itemizedlist>
 
-<listitem>URL sharing could be dangerous. If I happen to be browsing Amazon
+<listitem><para>URL sharing could be dangerous. If I happen to be browsing Amazon
 while logged in and I email a friend, he could conceivably receive it and follow
 it before my session has expired, gaining all of the privileges I
-had.</listitem>
+had.</para></listitem>
 
-<listitem>User-entered URLs are harder to handler. If a user is in the middle of
+<listitem><para>User-entered URLs are harder to handler. If a user is in the middle of
 a session and then types in the URL of some page, he could be kicked out of his
-session.</listitem>
+session.</para></listitem>
 
 </itemizedlist>
 

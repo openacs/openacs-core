@@ -487,9 +487,8 @@ nsd: no process killed
       </listitem>
       <listitem id="connect-to-aolserver">
         <para>
-	  Attempt to connect to the service from a web browser.  You should specify a URL like:
-	</para>
-	<computeroutput>http://<replaceable>yourserver.test</replaceable>:8000</computeroutput>
+	  Attempt to connect to the service from a web browser.  You should specify a URL like: <computeroutput>http://<replaceable>yourserver.test</replaceable>:8000</computeroutput></para>
+
 	<para>
 	  You should see a page that looks like <ulink
         url="files/openacs-start.html">this</ulink>.  If you <link

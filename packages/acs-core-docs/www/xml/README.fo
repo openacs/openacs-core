@@ -11,7 +11,18 @@ I was able to generate PDFs using:
 
 (all this except Jimi was installed unchanged via emerge on gentoo)
 
-FOP generates a number of non-intuitive errors for docbook problems.
+I did have to change the fop executable script to increase the JVM
+memory.  On the last line of /usr/bin/fop (or whereever yours ends
+up) add -Xms64m -Xmx256m; smaller might work too...
+
+104c104
+< $JAVACMD -classpath "$LOCALCLASSPATH" $FOP_OPTS org.apache.fop.apps.Fop "$@"
+---
+> $JAVACMD -Xms64m -Xmx256m -classpath "$LOCALCLASSPATH" $FOP_OPTS org.apache.fop.apps.Fop "$@"
+
+
+
+FOP generates a number of non-intuitive errors for docbook problems...
 
 * If you <blockquote><table>...</table></blockquote> it can end up in an
   infinite loop trying to place the table.
@@ -27,4 +38,9 @@ is not great (and it's table handling is iffy).
 
 It does make a pdf with a TOC and page numbers though.
 
-Jeff Davis davis@xarg.net
+
+I would be interested in seeing the output produced by PassiveTeX and
+XEP.
+
+
+Jeff Davis davis@xarg.ne

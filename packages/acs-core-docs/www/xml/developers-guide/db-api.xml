@@ -133,14 +133,18 @@ and some_table.condition_p = 'foo'
     </para>
     <orderedlist>
       <listitem>
+	<para>
 	If the literal value is a
 	huge string, then we waste a lot of time in the database server doing
 	useless parsing.
+	</para>
       </listitem>
       <listitem>
+	<para>
 	Second, if the literal value contains characters like
 	single quotes, we have to be careful to double-quote them, because not
 	quoting them will lead to surprising errors.
+	</para>
       </listitem>
       <listitem>
 	<para>

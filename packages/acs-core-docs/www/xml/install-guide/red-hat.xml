@@ -276,7 +276,7 @@ Make the following changes:
 <programlisting>#PermitEmptyPasswords no</programlisting> to <programlisting>PermitEmptyPasswords no</programlisting> (this blocks passwordless accounts)
 
  and save and exit by typing C-x C-s C-x C-c</literallayout></listitem>
-          <listitem>Restart sshd so that the change takes effect.<screen role='screen'><userinput>service sshd restart</userinput></screen>
+          <listitem><para>Restart sshd so that the change takes effect.<screen role='screen'><userinput>service sshd restart</userinput></screen></para>
           </listitem>
         </orderedlist>
       </listitem>
