@@ -15,7 +15,7 @@
 </if>
 
 <form method="post" action="password-update-2" name="pwd">
-  @export_vars@
+  @export_vars;noquote@
 
 <table>
 
