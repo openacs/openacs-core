@@ -54,7 +54,18 @@ ad_proc -public aa_stub {
       proc ${proc_name}_unstubbed [info args $proc_name] [info body $proc_name]
     }
     set aa_stub_sequence($proc_name) 1
-    proc $proc_name [info args $proc_name] "
+    
+    set args [list]
+    set counter 0
+    foreach arg [info args $proc_name] {
+        if { [info default $proc_name $arg default_value] } {
+            lappend args [list $arg $default_value]
+        } else {
+            lappend args $arg
+        }
+    }
+
+    proc $proc_name $args "
       global aa_stub_sequence
       global aa_testcase_id
       set sequence_id \$aa_stub_sequence\($proc_name\)
@@ -79,7 +90,17 @@ ad_proc aa_unstub {
   @author Peter Harper
   @creation-date 24 July 2001
 } {
-  proc $proc_name [info args $proc_name] [info body ${proc_name}_unstubbed]
+    set args [list]
+    set counter 0
+    foreach arg [info args $proc_name] {
+        if { [info default $proc_name $arg default_value] } {
+            lappend args [list $arg $default_value]
+        } else {
+            lappend args $arg
+        }
+    }
+
+  proc $proc_name $args [info body ${proc_name}_unstubbed]
   return
 }
 
