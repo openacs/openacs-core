@@ -1751,8 +1751,7 @@ as
     exception
       when NO_DATA_FOUND
       then
-      	RAISE_APPLICATION_ERROR(-20000, 'The specified package ' || set_value.package_id || 
-	' does not exist in the system.');	
+      	RAISE_APPLICATION_ERROR(-20000, 'The parameter named ' || set_value.parameter_name || ' that you attempted to set does not exist AND/OR the specified package ' || set_value.package_id || ' does not exist in the system.');	
   end set_value;	
 end apm;
 /
