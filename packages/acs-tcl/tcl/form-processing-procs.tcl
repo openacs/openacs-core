@@ -483,11 +483,11 @@ ad_proc -public ad_form {
                 return -code error "Validate block must have three arguments: element name, expression, error message"
             }
 
-	    if { [lsearch $af_element_names($form_name) [lindex $validate_element 0]] == -1 } {
-	        return -code error "Element \"[lindex $validate_element 0]\" is not a form element"
+            if { [lsearch $af_element_names($form_name) [lindex $validate_element 0]] == -1 } {
+                return -code error "Element \"[lindex $validate_element 0]\" is not a form element"
             }
             lappend af_validate_elements($form_name) $validate_element
-	}
+        }
     }
 
     if { !$extend_p } {
@@ -801,7 +801,7 @@ ad_proc -public ad_form {
             foreach {element_name validate_expr error_message} $validate_element {
                 if { ![template::element error_p $form_name $element_name] && \
                     ![uplevel #$level [list expr $validate_expr]] } {
-                    template::element set_error $form_name $element_name [subst $error_message]
+                    template::element set_error $form_name $element_name [uplevel [list subst $error_message]]
                 }
             }
         }
