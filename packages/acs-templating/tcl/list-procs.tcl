@@ -730,6 +730,9 @@ ad_proc -public template::list::page_get_ids {
     if { $tcl_list_p } {
         return $ids
     } else {
+        if { [llength $ids] == 0 } {
+            return NULL
+        }
 	set quoted_ids [list]
 	foreach one_id $ids {
 	    lappend quoted_ids "'[DoubleApos $one_id]'"
