@@ -4,12 +4,12 @@
     <small>Result page:</small>
 
     <if @from_result_page@ lt @current_result_page@>
-      <small><a href=search?q=@urlencoded_query@<if @offset_previous@ ne 0>&offset=@offset_previous@</if>><font color=0000cc><b>Previous</b></font></a></small>
+      <small><a href=@url_previous@><font color=0000cc><b>Previous</b></font></a></small>
     </if>
     &nbsp;@choice_bar@&nbsp;
     
     <if @current_result_page@ lt @to_result_page@>
-	<small><a href=search?q=@urlencoded_query@&offset=@offset_next@><font color=0000cc><b>Next</b></font></a></small>
+	<small><a href=@url_next@><font color=0000cc><b>Next</b></font></a></small>
     </if>
   </center>
 </if>
