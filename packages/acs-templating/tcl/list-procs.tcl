@@ -65,6 +65,7 @@ ad_proc -public template::list::create {
         -actions [list "Add item" [export_vars -base item-add {order_id}] "Add item to this order"] \ 
         -bulk_actions {
             "Remove" "item-remove" "Remove checked items"
+            "Copy" "item-copy" "Copy checked items to clipboard"
         } \ 
         -bulk_action_export_vars {
             order_id
