@@ -13,4 +13,5 @@
 
 \i notifications-package-drop.sql
 \i notifications-core-drop.sql
+\i notifications-replies-drop.sql
 \i notifications-replies-extra-drop.sql
