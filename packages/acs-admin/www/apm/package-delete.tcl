@@ -41,7 +41,6 @@ set body "[apm_header -form "action=\"package-delete-2\" method=\"post\"" [list 
 $file_list
 
 <p>
-<input type=\"checkbox\" name=\"remove_files\" value=\"1\"> Also delete package files from the filesystem.</p>
 <input type=submit value=\"Delete Package\">
 </form>
 [ad_footer]"
