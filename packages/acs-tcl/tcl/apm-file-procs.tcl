@@ -385,9 +385,11 @@ ad_proc -public pkg_home {package_key} {
 }
 
 ad_proc -public apm_version_file_list { 
-    { 
-	-type "" -db_type ""
-    } version_id } {
+    {-type ""} 
+    {-db_type ""}
+    {-path_prefix ""}
+    version_id 
+} {
 
     Returns a list of paths to files of a given type (or all files, if
     $type is not specified) which support a given database (if specified) in a version.
@@ -396,6 +398,9 @@ ad_proc -public apm_version_file_list {
     "postgresql".  All files of the given type that are used by the given database version are
     returned (i.e. all database-agnostic as well as the proper database-specific files).
     @param version_id The version to retrieve the file list from.
+    @param path_prefix A prefix that will be used for all the returned paths. By default
+                       the prefix will be the empty string which means that the returned paths
+                       will be relative to the package root.
 
 } {
     if { ![empty_string_p $type] } {
@@ -408,11 +413,16 @@ ad_proc -public apm_version_file_list {
     } else {
 	set db_type_sql ""
     }
-    return [db_list path_select "
+    set path_list [list]
+    db_foreach path_select "
         select path from apm_package_files
         where  version_id = :version_id
         $type_sql $db_type_sql order by path
-    "]
+    " {
+        lappend path_list "${path_prefix}${path}"
+    }
+
+    return $path_list
 }
 
 ad_proc -private apm_ignore_file_p { path } {
