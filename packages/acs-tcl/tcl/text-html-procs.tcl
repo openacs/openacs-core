@@ -1299,7 +1299,7 @@ ad_proc -public ad_enhanced_text_to_plain_text {
     @creation-date 2003-01-27
 } {
     # Convert the HTML version to plaintext.
-    return [ad_html_to_text -- [ad_enhanced_text_to_html -- $text]]
+    return [ad_html_to_text -- [ad_enhanced_text_to_html $text]]
 }
 
 
