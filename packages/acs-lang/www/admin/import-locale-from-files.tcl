@@ -9,9 +9,11 @@ ad_page_contract {
     locale
 }
 
-set page_title "Import of messages for locale $locale"
-set context [list $page_title]
+set locale_label [ad_locale_get_label $locale]
+set page_title "Import all messages for locale $locale"
+set return_url [export_vars -base package-list { locale }]
+set context [list [list $return_url $locale_label] $page_title]
 
 lang::catalog::import -locales [list $locale]
 
-set locale_page_url [export_vars -base package-list { locale }]
+
