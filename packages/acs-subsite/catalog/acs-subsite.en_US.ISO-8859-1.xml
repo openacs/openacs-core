@@ -311,7 +311,7 @@ You can always change your password by doing the following:
   <msg key="Reject">Reject</msg>
   <msg key="Remember_my_login">Remember my login on this computer</msg>
   <msg key="Remove">Remove</msg>
-  <msg key="Remove">Remove_All</msg>
+  <msg key="Remove_All">Remove All</msg>
   <msg key="Req_membership_comm">Request membership of this community</msg>
   <msg key="Req_membership_subs">Request membership of this subsite</msg>
   <msg key="Request_membership">Request membership</msg>
