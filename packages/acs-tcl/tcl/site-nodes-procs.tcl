@@ -195,8 +195,24 @@ namespace eval site_node {
         {-object_id:required}
     } {
         return the site node associated with the given object_id
+
+        WARNING: Returns only the first site node associated with this object.
     } {
         return [get -url [lindex [get_url_from_object_id -object_id $object_id] 0]]
+    }
+
+    ad_proc -public get_all_from_object_id {
+        {-object_id:required}
+    } {
+        return a list of site nodes associated with the given object_id
+    } {
+        set node_id_list [list]
+
+        foreach url [get_url_from_object_id -object_id $object_id] {
+            lappend node_id_list [get -url $url]
+        }
+
+        return $node_id_list
     }
 
     ad_proc -public get_url {
