@@ -7,12 +7,23 @@
       <link rel="@header_links.rel@" type="@header_links.type@" href="@header_links.href@" media="@header_links.media@">
     </multiple>
 
+    <if @acs_blank_master__htmlareas@ not nil>
+      <script type="text/javascript" src="/resources/acs-templating/htmlarea/htmlarea.js"></script>
+      <script type="text/javascript" src="/resources/acs-templating/htmlarea/lang/en.js"></script>
+      <script type="text/javascript" src="/resources/acs-templating/htmlarea/dialog.js"></script>
+
+      <style type="text/css">
+      @import url(/resources/acs-templating/htmlarea/htmlarea.css);
+      </style>
+    </if>
+
     <script src="/resources/acs-subsite/core.js" language="javascript"></script>
+
     <textarea id="holdtext" style="display: none;"></textarea>
 
     @header_stuff;noquote@
   </head>
-  <body<multiple name=attribute> @attribute.key@="@attribute.value@"</multiple>>
+  <body<multiple name="attribute"> @attribute.key@="@attribute.value@"</multiple>>
     <if @developer_support_p@ true>
       <include src="/packages/acs-developer-support/lib/toolbar">
     </if>
