@@ -205,7 +205,7 @@ begin
 
   perform party_approved_member__add_one(p_party_id, p_member_id, p_rel_id);
 
-  -- if the relation type is mapped to relational segments unmap them too
+  -- if the relation type is mapped to relational segments map them too
 
   for v_segments in select segment_id
                   from rel_segments s, acs_object_types o1, acs_object_types o2

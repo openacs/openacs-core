@@ -526,6 +526,16 @@ as
   -- Delete dynamic/generic attributes
   delete from acs_attribute_values where object_id = acs_object.delete.object_id;
 
+  -- Delete directly assigned permissions
+  --
+  -- JCD: We do this as an execute rather than just a direct query since 
+  -- the acs_permissions table is not created when this file is
+  -- sourced. We need to clean up the creates and once that is done
+  -- we can turn this into a simple delete statement.
+  --
+  execute immediate 'delete from acs_permissions where object_id = :object_id'
+  using in object_id;
+
   for object_type
   in (select table_name, id_column
       from acs_object_types

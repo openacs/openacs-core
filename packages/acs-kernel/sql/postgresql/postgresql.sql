@@ -629,21 +629,8 @@ begin
   return position(p_potential_ancestor in p_potential_child) = 1;
 end;' language 'plpgsql' with(iscachable);
 
-create function create_tree_ancestor_keys() returns boolean as '
-
--- PG 7.1 does not allow recursive SQL functions, but David Walker figured out how to
--- get around this with a truly inspired hack he posted to the OpenACS 4 Design Forum.
-
--- His solution involves a general "create and replace function" function written in
--- Tcl.
-
--- Rather than use the general solution I have just hacked up a PL/pgSQL function to
--- create the one recursive function we need: tree_ancestor_keys(varbit, integer).
-
--- PG 7.2 still does not allow recursive SQL functions during CREATE, but you can
--- fool it easily with CREATE OR REPLACE, a new feature in this version.  Perhaps
--- someday the PG development group will see the light and just let us CREATE such
--- functions.
+-- PG does not allow recursive SQL functions during CREATE, but you can fool it easily
+-- with CREATE OR REPLACE, a feature added in 7.2.
 
 -- tree_ancestor_keys(varbit, integer) returns the set of ancestor keys starting at
 -- the level passed in as the second parameter down to the key passed in as the first
@@ -652,55 +639,19 @@ create function create_tree_ancestor_keys() returns boolean as '
 -- tree_ancestor_keys(varbit), which returns the set of tree_sortkeys for all of the
 -- ancestors of the given tree_sortkey...
 
-begin
+create function tree_ancestor_keys(varbit, integer) returns setof varbit as '
+  select $1
+' language 'sql';
 
-  -- create tree_ancestor_keys with a dummy body
+-- The bootstrap installer has made certain that we are running a version >= 7.2 so it is safe
+-- at this point to assume create or replace is supported.
 
-  execute ''create function tree_ancestor_keys(varbit, integer) returns setof varbit as ''''
-             select $1
-          '''' language ''''sql'''' '';
-
-  if version() like ''%7.1%'' then
-
-    -- create another function with the body we want
-
-    execute ''create function __tree_ancestor_keys(varbit, integer) returns setof varbit as ''''
-                select tree_ancestor_key($1, $2)
-                union
-                select tree_ancestor_keys($1, $2 + 1)
-                where $2 < tree_level($1)
-            '''' language ''''sql'''' with (isstrict) '';
-
-    -- replace the body for tree_ancestor_keys with the body we want.  Slick, eh?
-
-    update pg_proc
-    set prosrc = hack.prosrc, probin = hack.probin
-    from (select prosrc, probin
-          from pg_proc
-          where proname = ''__tree_ancestor_keys'') hack
-    where proname = ''tree_ancestor_keys'';
-
-    execute ''drop function __tree_ancestor_keys(varbit, integer)'';
-
-  else
-
-    -- The bootstrap installer has made certain that we are running a version >= 7.1 so it is safe
-    -- at this point to assume create or replace is supported.
-
-    execute ''create or replace function tree_ancestor_keys(varbit, integer) returns setof varbit as ''''
-                select tree_ancestor_key($1, $2)
-                union
-                select tree_ancestor_keys($1, $2 + 1)
-                where $2 < tree_level($1)
-            '''' language ''''sql'''' with (isstrict) '';
-  end if;
-
-  return true;
-end;' language 'plpgsql';
-
-select create_tree_ancestor_keys();
-
-drop function create_tree_ancestor_keys();
+create or replace function tree_ancestor_keys(varbit, integer) returns setof varbit as '
+  select tree_ancestor_key($1, $2)
+  union
+  select tree_ancestor_keys($1, $2 + 1)
+  where $2 < tree_level($1)
+' language 'sql' with (isstrict);
 
 create function tree_ancestor_keys(varbit) returns setof varbit as '
 
@@ -766,76 +717,25 @@ create view user_tab_columns as
 
 -- PG substitute for Oracle user_col_comments view
 
-create function create_user_col_comments() returns boolean as '
-begin
-  -- in version 7.1 col_description was missing but is present in 7.2
-  -- does it exist in 7.0?
-  if version() like ''%7.1%'' then
-    execute ''
-      create view user_col_comments as
-        select upper(c.relname) as table_name,
-         upper(a.attname) as column_name,
-         d.description as comments
-          from pg_class c,
-               pg_attribute a
-                 left outer join pg_description d on (a.oid = d.objoid)
-         where c.oid = a.attrelid
-           and a.attnum > 0'';
-  else 
-    execute ''
-      create view user_col_comments as
-        select upper(c.relname) as table_name, 
-               upper(a.attname) as column_name, 
-               col_description(a.attrelid, a.attnum) as comments
-        from pg_class c
-          left join pg_attribute a 
-          on a.attrelid = c.oid 
-        where a.attnum > 0'';
-  end if;
-  return ''t'';
-end;' language 'plpgsql';
-
-select create_user_col_comments();
-
-drop function create_user_col_comments();
+create view user_col_comments as
+  select upper(c.relname) as table_name, 
+    upper(a.attname) as column_name, 
+    col_description(a.attrelid, a.attnum) as comments
+  from pg_class c left join pg_attribute a on a.attrelid = c.oid 
+  where a.attnum > 0;
 
 -- PG substitute for Oracle user_col_comments view
 
-create function create_user_tab_comments() returns boolean as '
-begin
-  if version() like ''%7.2%'' then
-    execute ''
-    create view user_tab_comments as
-      select upper(c.relname) as table_name,
-	 case
-	   when c.relkind = ''''r'''' then ''''TABLE''''
-	   when c.relkind = ''''v'''' then ''''VIEW''''
-	   else c.relkind::text
-	 end as table_type,
-	 d.description as comments
-    from pg_class c
-           left outer join pg_description d on (c.oid = d.objoid)
-       where d.objsubid = 0'';
-  else
-    execute ''
-    create view user_tab_comments as
-      select upper(c.relname) as table_name,
-	 case
-	   when c.relkind = ''''r'''' then ''''TABLE''''
-	   when c.relkind = ''''v'''' then ''''VIEW''''
-	   else c.relkind::text
-	 end as table_type,
-	 d.description as comments
-    from pg_class c
-           left outer join pg_description d on (c.oid = d.objoid)'';
-  end if;
-  return ''t'';
-end;' language 'plpgsql';
-
-select create_user_tab_comments();
-
-drop function create_user_tab_comments();
-
+create view user_tab_comments as
+  select upper(c.relname) as table_name,
+    case
+      when c.relkind = 'r' then 'TABLE'
+      when c.relkind = 'v' then 'VIEW'
+      else c.relkind::text
+    end as table_type,
+    d.description as comments
+  from pg_class c left outer join pg_description d on (c.oid = d.objoid)
+  where d.objsubid = 0;
 
 -- Table for storing PL/PGSQL function arguments
 
