@@ -14,6 +14,12 @@ if { [security::RestrictLoginToSSLP] } {
     security::require_secure_conn
 }
 
+
+set self_registration [parameter::get_from_package_key \
+                                  -package_key acs-authentication \
+                                -parameter AllowSelfRegister]   
+
+
 if { ![exists_and_not_null package_id] } {
     set subsite_id [subsite::get_element -element object_id]
 }
@@ -35,6 +41,9 @@ if { [empty_string_p $email] && [empty_string_p $username] && [ad_conn untrusted
         set username $untrusted_user(username)
     }
 }
+
+
+
 
 # Persistent login
 # The logic is: 
