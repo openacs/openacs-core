@@ -21,7 +21,6 @@ ad_proc -public content::template::new {
     {-creation_date ""}
     {-creation_user ""}
     {-creation_ip ""}
-    {-package_id ""}
 } {
     @param name
     @param text
@@ -31,7 +30,6 @@ ad_proc -public content::template::new {
     @param creation_date
     @param creation_user
     @param creation_ip
-    @param package_id
 
     @return template_id of created template
 } {
@@ -44,7 +42,6 @@ ad_proc -public content::template::new {
         [list creation_date $creation_date ] \
         [list creation_user $creation_user ] \
         [list creation_ip $creation_ip ] \
-        [list package_id $package_id ] \
     ] content_template new]
 }
 

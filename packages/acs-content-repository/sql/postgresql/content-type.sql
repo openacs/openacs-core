@@ -323,6 +323,7 @@ end;' language 'plpgsql';
 
 
 -- procedure register_template
+select define_function_args('content_type__register_template','content_type,template_id,use_context,is_default;f');
 create or replace function content_type__register_template (varchar,integer,varchar,boolean)
 returns integer as '
 declare
@@ -375,6 +376,7 @@ end;' language 'plpgsql';
 
 
 -- procedure set_default_template
+select define_function_args('content_type__set_default_template','content_type,template_id,use_context');
 create or replace function content_type__set_default_template (varchar,integer,varchar)
 returns integer as '
 declare
@@ -404,6 +406,7 @@ end;' language 'plpgsql';
 
 
 -- function get_template
+select define_function_args('content_type__get_template','content_type,use_context');
 create or replace function content_type__get_template (varchar,varchar)
 returns integer as '
 declare
@@ -430,6 +433,7 @@ end;' language 'plpgsql' stable strict;
 
 
 -- procedure unregister_template
+select define_function_args('content_type__unregister_template','content_type,template_id,use_context');
 create or replace function content_type__unregister_template (varchar,integer,varchar)
 returns integer as '
 declare
@@ -470,6 +474,7 @@ end;' language 'plpgsql';
 
 
 -- function trigger_insert_statement
+select define_function_args('content_type__trigger_insert_statement','content_type');
 create or replace function content_type__trigger_insert_statement (varchar)
 returns varchar as '
 declare
@@ -552,6 +557,7 @@ cr_dummy for each row execute procedure cr_dummy_ins_del_tr ();
 -- revisions for any content type
 
 -- procedure refresh_trigger
+select define_function_args('content_type__refresh_trigger','content_type');
 create or replace function content_type__refresh_trigger (varchar)
 returns integer as '
 declare
@@ -633,6 +639,7 @@ end;' language 'plpgsql';
 
 
 -- procedure refresh_view
+select define_function_args('content_type__refresh_view','content_type');
 create or replace function content_type__refresh_view (varchar)
 returns integer as '
 declare
@@ -723,6 +730,7 @@ end;' language 'plpgsql';
 
 
 -- procedure register_child_type
+select define_function_args('content_type__register_child_type','content_type,child_type,relation_tag;generic,min_n;0,max_n');
 create or replace function content_type__register_child_type (varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
@@ -770,6 +778,7 @@ end;' language 'plpgsql';
 
 
 -- procedure unregister_child_type
+select define_function_args('content_type__unregister_child_type','content_type,child_type,relation_tag');
 create or replace function content_type__unregister_child_type (varchar,varchar,varchar)
 returns integer as '
 declare
@@ -792,6 +801,7 @@ end;' language 'plpgsql';
 
 
 -- procedure register_relation_type
+select define_function_args('content_type__register_relation_type','content_type,target_type,relation_tag;generic,min_n;0,max_n');
 create or replace function content_type__register_relation_type (varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
@@ -844,6 +854,7 @@ end;' language 'plpgsql';
 
 
 -- procedure unregister_relation_type
+select define_function_args('content_type__unregister_relation_type','content_type,target_type,relation_tag;generic');
 create or replace function content_type__unregister_relation_type (varchar,varchar,varchar)
 returns integer as '
 declare
@@ -867,6 +878,7 @@ end;' language 'plpgsql';
 
 
 -- procedure register_mime_type
+select define_function_args('content_type__register_mime_type','content_type,mime_type');
 create or replace function content_type__register_mime_type (varchar,varchar)
 returns integer as '
 declare
@@ -904,6 +916,7 @@ end;' language 'plpgsql';
 
 
 -- procedure unregister_mime_type
+select define_function_args('content_type__unregister_mime_type','content_type,mime_type');
 create or replace function content_type__unregister_mime_type (varchar,varchar)
 returns integer as '
 declare
@@ -920,6 +933,7 @@ end;' language 'plpgsql';
 
 
 -- function is_content_type
+select define_function_args('content_type__is_content_type','content_type'); 
 create or replace function content_type__is_content_type (varchar)
 returns boolean as '
 declare
@@ -944,6 +958,7 @@ end;' language 'plpgsql' stable;
 
 
 -- procedure rotate_template
+select define_function_args('content_type__rotate_template','template_id,content_type,use_context');
 create or replace function content_type__rotate_template (integer,varchar,varchar)
 returns integer as '
 declare

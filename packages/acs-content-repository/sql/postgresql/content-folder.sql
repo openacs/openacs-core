@@ -199,6 +199,7 @@ where
 end;' language 'plpgsql';
 
 -- procedure delete
+select define_function_args('content_folder__delete','folder_id,cascade_p;f');
 
 create or replace function content_folder__delete (integer, boolean)
 returns integer as '
@@ -280,6 +281,7 @@ end;' language 'plpgsql';
 
 
 -- procedure rename
+select define_function_args('content_folder__edit_name','folder_id,name,label,description');
 create or replace function content_folder__edit_name (integer,varchar,varchar,varchar)
 returns integer as '
 declare
@@ -322,6 +324,8 @@ end;' language 'plpgsql';
 -- 3) update the parent_id for the folder
 
 -- procedure move
+select define_function_args('content_folder__move','folder_id,target_folder_id');
+
 create or replace function content_folder__move (integer,integer)
 returns integer as '
 declare
@@ -525,6 +529,7 @@ end;' language 'plpgsql';
 
 
 -- function is_folder
+select define_function_args('content_folder__is_folder','folder_id');
 create or replace function content_folder__is_folder (integer)
 returns boolean as '
 declare
@@ -538,6 +543,7 @@ end;' language 'plpgsql' stable;
 
 
 -- function is_sub_folder
+select define_function_args('content_folder__is_sub_folder','folder_id,target_folder_id');
 create or replace function content_folder__is_sub_folder (integer,integer)
 returns boolean as '
 declare
@@ -579,10 +585,11 @@ begin
 
   return v_sub_folder_p;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql'; 
 
 
 -- function is_empty
+select define_function_args('content_folder__is_empty','folder_id');
 create or replace function content_folder__is_empty (integer)
 returns boolean as '
 declare
@@ -603,6 +610,8 @@ end;' language 'plpgsql' stable;
 
 
 -- procedure register_content_type
+select define_function_args('content_folder__register_content_type','folder_id,content_type,include_subtypes;f');
+
 create or replace function content_folder__register_content_type (integer,varchar,boolean)
 returns integer as '
 declare
@@ -668,6 +677,7 @@ end;' language 'plpgsql';
 
 
 -- procedure unregister_content_type
+select define_function_args('content_folder__unregister_content_type','folder_id,content_type,include_subtypes;f');
 create or replace function content_folder__unregister_content_type (integer,varchar,boolean)
 returns integer as '
 declare
@@ -706,6 +716,7 @@ end;' language 'plpgsql';
 
 
 -- function is_registered
+select define_function_args('content_folder__is_registered','folder_id,content_type,include_subtypes;f');
 create or replace function content_folder__is_registered (integer,varchar,boolean)
 returns boolean as '
 declare
@@ -765,6 +776,7 @@ end;' language 'plpgsql' stable;
 
 
 -- function get_label
+select define_function_args('content_folder__get_label','folder_id');
 create or replace function content_folder__get_label (integer)
 returns varchar as '
 declare
@@ -785,6 +797,7 @@ end;' language 'plpgsql' stable strict;
 
 
 -- function get_index_page
+select define_function_args('content_folder__get_index_page','folder_id');
 create or replace function content_folder__get_index_page (integer)
 returns integer as '
 declare
@@ -827,6 +840,7 @@ end;' language 'plpgsql' stable strict;
 
 
 -- function is_root
+select define_function_args('content_folder__is_root','folder_id');
 create or replace function content_folder__is_root (integer)
 returns boolean as '
 declare

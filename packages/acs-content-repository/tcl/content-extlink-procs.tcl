@@ -39,7 +39,6 @@ ad_proc -public content::extlink::new {
     {-name ""}
     {-label ""}
     {-description ""}
-    {-package_id ""}
 } {
     @param Create a new external link.
     @return 0
@@ -50,8 +49,7 @@ ad_proc -public content::extlink::new {
         [list parent_id $parent_id ] \
         [list name $name ] \
         [list label $label ] \
-        [list description $description ] \
-        [list package_id $package_id ] \
+        [list description $description ]
     ] content_extlink new]
 }
 
