@@ -1029,8 +1029,120 @@ begin
  
 end;' language 'plpgsql';
 
+create sequence content_item_gp_session_id;
 
--- function get_path
+create table get_path_cursors (
+       rel_cursor_pos         integer,
+       abs_cursor_pos         integer
+);
+
+insert into get_path_cursors values (0,0);
+
+create table get_path_abs_cursor (
+       sid              integer,
+       pos              integer,
+       name             text,
+       parent_id        integer,
+       tree_level       integer
+);
+
+create table get_path_rel_cursor (
+       sid              integer,
+       pos              integer,
+       parent_id        integer,
+       tree_level       integer
+);
+
+create function content_item__create_rel_cursor(integer,integer) 
+returns integer as '
+declare
+        v_item_id       alias for $1;
+        v_sid           alias for $2;
+        v_rec           record;
+        v_cur_pos       integer default 0;
+begin
+        update get_path_cursors set rel_cursor_pos = 0;
+        for v_rec in select i2.name, 
+                            i2.parent_id, 
+                            tree_level(i2.tree_sortkey) as tree_level
+                     from (select * from cr_items where item_id = v_item_id) i1,
+                          cr_items i2
+                     where i2.parent_id <> 0
+                       and i2.tree_sortkey <= i1.tree_sortkey
+                       and i1.tree_sortkey like (i2.tree_sortkey || ''%'')
+                  order by i2.tree_sortkey
+                     
+        LOOP
+                insert into get_path_rel_cursor 
+                (sid,pos,parent_id,tree_level)
+                values
+                (v_sid,v_cur_pos,v_rec.parent_id,v_rec.tree_level);
+                v_cur_pos := v_cur_pos + 1;
+        end LOOP;
+
+        return null;
+end;' language 'plpgsql';
+
+create function content_item__create_abs_cursor(integer,integer) 
+returns integer as '
+declare
+        v_item_id       alias for $1;
+        v_sid           alias for $2;
+        v_rec           record;
+        v_cur_pos       integer default 0;
+begin
+        update get_path_cursors set abs_cursor_pos = 0;
+        for v_rec in select i2.name, 
+                            i2.parent_id, 
+                            tree_level(i2.tree_sortkey) as tree_level
+                     from (select * from cr_items where item_id = v_item_id) i1,
+                          cr_items i2
+                     where i2.parent_id <> 0
+                       and i2.tree_sortkey <= i1.tree_sortkey
+                       and i1.tree_sortkey like (i2.tree_sortkey || ''%'')
+                  order by i2.tree_sortkey
+                     
+        LOOP
+                insert into get_path_abs_cursor 
+                (sid,pos,name,parent_id,tree_level)
+                values
+                (v_sid,v_cur_pos,v_rec.name,v_rec.parent_id,v_rec.tree_level);
+                v_cur_pos := v_cur_pos + 1;
+        end LOOP;
+
+        return null;
+end;' language 'plpgsql';
+
+create function content_item__abs_cursor_next_pos() returns integer as '
+declare 
+        v_pos   integer;
+begin
+        select abs_cursor_pos into v_pos from get_path_cursors;
+        update get_path_cursors set abs_cursor_pos = abs_cursor_pos + 1;
+
+        return v_pos;        
+end;' language 'plpgsql';
+
+create function content_item__rel_cursor_next_pos() returns integer as '
+declare 
+        v_pos   integer;
+begin
+        select rel_cursor_pos into v_pos from get_path_cursors;
+        update get_path_cursors set rel_cursor_pos = rel_cursor_pos + 1;
+
+        return v_pos;        
+end;' language 'plpgsql';
+
+create function content_item__cleanup_cursors(integer) returns integer as '
+declare
+        v_sid   alias for $1;
+begin
+        delete from get_path_abs_cursor where sid = v_sid;
+        delete from get_path_rel_cursor where sid = v_sid;
+        
+        return null;
+end;' language 'plpgsql';
+
 create function content_item__get_path (integer,integer)
 returns varchar as '
 declare
@@ -1038,18 +1150,20 @@ declare
   get_path__root_folder_id         alias for $2;  -- default null  
   v_count                          integer;       
   v_name                           varchar;  
+  v_saved_name                     varchar;  
   v_parent_id                      integer default 0;        
   v_tree_level                     integer;       
   v_resolved_root_id               integer;       
   v_rel_parent_id                  integer default 0;        
   v_rel_tree_level                 integer default 0;        
   v_path                           text    default '''';  
-  v_apath                          text    default '''';  
   v_rec                            record;
   v_item_id                        integer;
   v_rel_item_id                    integer;
-  v_exit_p                         boolean default ''f'';
-  v_rel_exit_p                     boolean default ''f'';
+  v_session_id                     integer;
+  v_rel_found_p                    boolean;
+  v_abs_found_p                    boolean;
+  v_tmp                            integer;
 begin
 
   -- check that the item exists
@@ -1070,110 +1184,98 @@ begin
 
     v_resolved_root_id := content_symlink__resolve(get_path__root_folder_id);
 
+    v_session_id := nextval(''content_item_gp_session_id'');
+    PERFORM content_item__create_abs_cursor(get_path__item_id, v_session_id);
+    PERFORM content_item__create_rel_cursor(v_resolved_root_id, v_session_id);
+
     -- begin walking down the path to the root folder.  Discard
     -- elements of the item path as long as they are the same as the root
     -- folder
 
-    for v_rec in 
-       select i3.name as name, 
-              i3.item_id as item_id,
-              i3.parent_id as parent_id, 
-              tree_level(i3.tree_sortkey) as level,
-              i4.parent_id as rel_parent_id,
-              tree_level(i4.tree_sortkey) as rel_tree_level,
-              i4.item_id as rel_item_id
-         from (select * from cr_items where item_id = get_path__item_id) i1,
-              (select * from cr_items where item_id = v_resolved_root_id) i2,
-              cr_items i3,
-              cr_items i4
-        where i3.tree_sortkey <= i1.tree_sortkey
-          and i1.tree_sortkey like (i3.tree_sortkey || ''%'')
-          and i4.tree_sortkey <= i2.tree_sortkey
-          and i2.tree_sortkey like (i4.tree_sortkey || ''%'')
-          and i4.parent_id <> 0
-          and i3.parent_id <> 0
-          and i4.item_id = i3.item_id
-     order by i3.tree_sortkey
+    while v_parent_id = v_rel_parent_id loop
+        v_tmp := content_item__abs_cursor_next_pos();
+        select name, parent_id, tree_level 
+        into v_name, v_parent_id, v_tree_level
+        from get_path_abs_cursor
+        where sid = v_session_id
+        and pos = v_tmp;
 
-      LOOP
-        v_name := v_rec.name;
-        v_parent_id := v_rec.parent_id;
-        v_tree_level := v_rec.level;
-        v_item_id := v_rec.item_id;
-        v_rel_parent_id := v_rec.rel_parent_id;
-        v_rel_tree_level := v_rec.rel_tree_level;
-        v_rel_item_id := v_rec.rel_item_id;
-        exit when v_parent_id <> v_rel_parent_id;        
-      end LOOP;
+        if NOT FOUND then 
+           v_name := v_saved_name;
+           v_abs_found_p := ''f'';
+        else 
+           v_saved_name := v_name;
+           v_abs_found_p := ''t'';
+        end if;
+
+        v_tmp := content_item__rel_cursor_next_pos();
+        select parent_id, tree_level 
+        into v_rel_parent_id, v_rel_tree_level
+        from get_path_rel_cursor
+        where sid = v_session_id
+        and pos = v_tmp;
+
+        if NOT FOUND then 
+           v_rel_found_p := ''f'';
+        else 
+           v_rel_found_p := ''t'';
+        end if;
+
+        exit when NOT v_rel_found_p or NOT v_abs_found_p;         
+    end loop;
 
 
-    -- walk the remainder of the relative path, add a .. for each 
+    -- walk the remainder of the relative path, add a ''..'' for each 
     -- additional step
 
-    for v_rec in  select
-                    i2.parent_id,
-                    tree_level(i2.tree_sortkey) as tree_level
-                  from
-                    (select * from cr_items 
-                     where item_id = v_resolved_root_id) i1, 
-                    cr_items i2,
-                    (select * from cr_items
-                    where item_id = v_rel_item_id) i3
-                  where 
-                    i2.parent_id <> 0
-                  and 
-                    i2.tree_sortkey <= i1.tree_sortkey
-                  and
-                    i2.tree_sortkey > i3.tree_sortkey
-                  and
-                    i1.tree_sortkey like (i2.tree_sortkey || ''%'')
-                  order by i2.tree_sortkey      
     LOOP
+      exit when NOT v_rel_found_p;
       v_path := v_path || ''../'';
-    end LOOP;
 
+      v_tmp := content_item__rel_cursor_next_pos();
+      select parent_id, tree_level 
+      into v_rel_parent_id, v_rel_tree_level
+      from get_path_rel_cursor
+      where sid = v_session_id
+      and pos = v_tmp;
+      
+      if NOT FOUND then 
+         v_rel_found_p := ''f'';
+      else 
+         v_rel_found_p := ''t'';
+      end if;
+    end loop;
     -- an item relative to itself is ''../item''
     if v_resolved_root_id = get_path__item_id then
 	v_path := ''../'';
-    end if;    
-
-    v_path := rtrim(v_path,''/'');
-
-    -- loop over the remainder of the absolute path
-
-    for v_rec in select 
-                       i2.name, i2.parent_id, 
-                       tree_level(i2.tree_sortkey) as tree_level
-                     from
-                       (select * from cr_items 
-                        where item_id = get_path__item_id) i1, 
-                       cr_items i2,
-                       (select * from cr_items
-                        where item_id = v_item_id) i3
-                     where 
-                       i2.parent_id <> 0
-                     and 
-                       i2.tree_sortkey <= i1.tree_sortkey
-                     and
-                       i2.tree_sortkey > i3.tree_sortkey
-                     and
-                       i1.tree_sortkey like (i2.tree_sortkey || ''%'')
-                     order by i2.tree_sortkey    
- 
-    LOOP
-      v_path := v_path || ''/'' || v_rec.name;
-    end LOOP;
-
-    v_path := ltrim(v_path,''/'');
-    if substr(v_path,length(v_path) - 1,2) = ''..'' then
-       v_path := v_path || ''/'';
     end if;
 
+    -- loop over the remainder of the absolute path
+    LOOP
+
+      v_path := v_path || v_name;
+      v_tmp := content_item__abs_cursor_next_pos();
+      select name, parent_id, tree_level 
+      into v_name, v_parent_id, v_tree_level
+      from get_path_abs_cursor
+      where sid = v_session_id
+      and pos = v_tmp;
+
+      if NOT FOUND then 
+         v_abs_found_p := ''f'';
+      else 
+         v_abs_found_p := ''t'';
+      end if;
+
+      exit when NOT v_abs_found_p;
+      v_path := v_path || ''/'';
+
+    end LOOP;
+    PERFORM content_item__cleanup_cursors(v_session_id);
   else
 
     -- this is an absolute path so prepend a ''/''
-    -- prime the pump to be consistent with relative path execution plan
-    -- loop over the remainder of the absolute path
+    -- loop over the absolute path
 
     for v_rec in select
                    i2.name, tree_level(i2.tree_sortkey) as tree_level
