@@ -1,8 +1,9 @@
-
 --
 -- The Notifications Package
 --
--- ben@openforce.net
+-- @author Ben Adida (ben@openforce.net)
+-- @version $Id$
+--
 -- Copyright OpenForce, 2002.
 --
 -- GNU GPL v2
@@ -15,4 +16,4 @@
 -- @ notifications-interval-sc-create.sql
 -- @ notifications-delivery-sc-create.sql
 
-@notifications-init.sql
+@ notifications-init.sql
