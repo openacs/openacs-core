@@ -684,7 +684,9 @@ begin
   delete from acs_attribute_values where object_id = delete__object_id;
 
   -- Delete direct permissions records.
-  delete from acs_permissions where object_id = delete__object_id;
+  delete from acs_permissions 
+  where object_id = delete__object_id
+    or  grantee_id = delete__object_id;
 
   -- select table_name, id_column
   --  from acs_object_types
