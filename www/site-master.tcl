@@ -12,6 +12,10 @@ if { ![info exists header_stuff] } {
     set header_stuff {}
 }
 
+if { [template::util::is_nil subnavbar_link] } {
+    set subnavbar_link ""
+}
+
 # This will set 'sections' and 'subsections' multirows
 subsite::define_pageflow -section $section
 subsite::get_section_info -array section_info
@@ -28,6 +32,9 @@ set css_url "/resources/acs-subsite/site-master.css"
 # Get system name
 set system_name [ad_system_name]
 set system_url [ad_url]
+if { [string equal [ad_conn url] "/"] } {
+    set system_url ""
+}
 
 # Get user information
 set sw_admin_p 0
@@ -67,6 +74,14 @@ if { $untrusted_user_id == 0 } {
     set login_url [ad_get_login_url -return]
 }
 
+# Context bar
+if { [info exists context] } {
+    set context_tmp $context
+    unset context
+} else {
+    set context_tmp {}
+}
+ad_context_bar_multirow -- $context_tmp
 
 
 # change locale
@@ -76,15 +91,15 @@ if { $num_of_locales > 1 } {
         "/acs-lang/?[export_vars { { package_id "[ad_conn package_id]" } }]"
 }
 
-
-
 # Curriculum bar
 set curriculum_bar_p [llength [site_node::get_children -all -filters { package_key "curriculum" } -node_id $subsite_node_id]]
 
 
+# Who's Online
 set num_users_online [lc_numeric [whos_online::num_users]]
 
 set whos_online_url "[subsite::get_element -element url]shared/whos-online"
+
 
 #----------------------------------------------------------------------
 # Display user messages

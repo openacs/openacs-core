@@ -16,43 +16,48 @@
 
 <!-- Header -->
 
-<table cellspacing="0" cellpadding="0" width="100%" class="subsite-header" border="0">
-  <tr>
-    <td class="system-name">
-      <a href="@system_url@">@system_name@</a>
-    </td>
+<div id="site-header">
+  <div class="system-name">
+    <if @system_url@ not nil><a href="@system_url@">@system_name@</a></if>
+    <else>@system_name@</else>
+  </div>
 
-    <td align="center">
-      <if @untrusted_user_id@ ne 0>
-        #acs-subsite.Welcome_user#
-      </if>
-      <else>
-        #acs-subsite.Not_logged_in#
-      </else>
-    </td>
-
-    <td align="center" class="button-bar">
-      <a href="@whos_online_url@">@num_users_online@ <if @num_users_online@ eq 1>user</if><else>users</else> online</a>
-    </td>
-
-    <td align="right" style="padding-right: 8px;" class="button-bar">
+  <div class="action-list permanent-navigation">
+    <ul>
       <if @admin_url@ not nil>
-        <a href="@admin_url@" title="#acs-subsite.Site_wide_administration#">#acs-subsite.Admin#</a>
+        <li><a href="@admin_url@" title="#acs-subsite.Site_wide_administration#">#acs-subsite.Admin#</a></li>
       </if>
       <if @pvt_home_url@ not nil>
-        <a href="@pvt_home_url@" title="#acs-subsite.Change_pass_email_por#">@pvt_home_name@</a>
+        <li><a href="@pvt_home_url@" title="#acs-subsite.Change_pass_email_por#">@pvt_home_name@</a></li>
       </if>
       <if @login_url@ not nil>
-        <a href="@login_url@" title="#acs-subsite.Log_in_to_system#">#acs-subsite.Log_In#</a>
+        <li><a href="@login_url@" title="#acs-subsite.Log_in_to_system#">#acs-subsite.Log_In#</a></li>
       </if>
       <if @logout_url@ not nil>
-        <a href="@logout_url@" title="#acs-subsite.Logout_from_system#">#acs-subsite.Logout#</a>
+        <li><a href="@logout_url@" title="#acs-subsite.Logout_from_system#">#acs-subsite.Logout#</a></li>
       </if>
-    </td>
-  </tr>
-</table>
+    </ul>
+  </div>
+
+  <div class="action-list users-online">
+    <ul>
+      <li><a href="@whos_online_url@">@num_users_online@ <if @num_users_online@ eq 1>user</if><else>users</else> online</a></li>
+    </ul>
+  </div>
+
+  <div class="user-greeting">
+    <if @untrusted_user_id@ ne 0>
+      #acs-subsite.Welcome_user#
+    </if>
+    <else>
+      #acs-subsite.Not_logged_in#
+    </else>
+  </div>
+
+</div>
+
 <if @user_messages:rowcount@ gt 0>
-  <div id="general-message">
+  <div id="user-message">
     <ul>
       <multiple name="user_messages">
         <li>@user_messages.message;noquote@</li>
@@ -61,18 +66,47 @@
   </div>
 </if>
 
+<div id="context-bar">
+  <if @context_bar@ not nil>
+    <div id="breadcrumbs">@context_bar;noquote@</div>
+  </if>
+  <else>
+    <if @context:rowcount@ not nil>
+      <div id="breadcrumbs">
+        <ul>
+          <multiple name="context">
+            <if @context.url@ not nil>
+              <li><a href="@context.url@">@context.label@</a> &#187;</li>
+            </if>
+            <else>
+              <li>@context.label@</li>
+            </else>
+          </multiple>
+        </ul>
+      </div>
+    </if>
+  </else>
+  <div id="navlinks">@subnavbar_link;noquote@</div>
+  <div style="clear: both;"></div>
+</div>
 
 <slave>
 
-<if @num_of_locales@ gt 1>
-    <p><a href="@change_locale_url@">Change Locale</a>
-</if>
-<else>
-  <if @locale_admin_url@ not nil>
-    <a href="@locale_admin_url@">Install Locales</a>
-  </if>
-</else>
+<div id="site-footer">
+  <div class="action-list">
+    <ul>
+      <if @num_of_locales@ gt 1>
+        <li><a href="@change_locale_url@">Change locale</a></li>
+      </if>
+      <else>
+        <if @locale_admin_url@ not nil>
+          <li><a href="@locale_admin_url@">Install locales</a></li>
+        </if>
+      </else>
+    </ul>
+  </div>
+</div>
 
 <if @curriculum_bar_p@ true>
-<p><include src="/packages/curriculum/lib/bar" />
+  <p><include src="/packages/curriculum/lib/bar" />
 </if>
