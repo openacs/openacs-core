@@ -2,15 +2,21 @@
 <message_catalog package_key="acs-subsite" package_version="5.0d6" locale="ms_my" charset="utf-8">
 
   <msg key="About_You">Tentang Anda</msg>
-  <msg key="Answer">Jawapan:</msg>
+  <msg key="Account_closed">&lt;p&gt;Akaun anda ketika ini ditutup.&lt;/p&gt;&lt;p&gt;Jika anda mahu, kami boleh &lt;a href=&quot;%restore_url%&quot;&gt;buka kembali akaun anda&lt;/a&gt;.&lt;/p&gt;</msg>
+  <msg key="Account_reopened_message">Akaun anda di %system_name% telah dibuka kembali. Selamat datang semula!</msg>
+  <msg key="Answer">Jawapan</msg>
   <msg key="at">di</msg>
   <msg key="Bad_Password">Salah Kata Laluan</msg>
   <msg key="Basic_Information">Informasi Asas</msg>
+  <msg key="cannot_retrieve_password">Tidak dibenarkan mendapatkan semula kata laluan dari pengendali ini.</msg>
   <msg key="Change_my_Password">Ubah Kata Laluan Saya</msg>
   <msg key="Check_Your_Inbox">Semak Inbox Anda</msg>
   <msg key="Children">Anak</msg>
-  <msg key="Current_Password">Kata Laluan Kini:</msg>
+  <msg key="Current_Password">Kata Laluan Kini</msg>
   <msg key="Customize_Question">Ubahsuai Soalan</msg>
+  <msg key="Elements_not_editable">Elemen-elemen tertentu tidak boleh diedit kerana ia diuruskan oleh %authority_name%.</msg>
+  <msg key="Email">Emel</msg>
+  <msg key="Error">Ralat</msg>
   <msg key="Error_sending_mail">Ralat menghantar e-mel</msg>
   <msg key="Log_In">Log Masuk</msg>
   <msg key="lt_Cannot_join_this_grou">Tidak boleh memasuki kumpulan ini.</msg>
@@ -21,4 +27,5 @@
   <msg key="Question">Soalan:</msg>
   <msg key="Thank_you">Terima kasih.</msg>
   <msg key="Update_Password">Kemaskini Kata Laluan</msg>
+  <msg key="Your_system_alerts">%gc_system_name% anda memberi amaran</msg>
 </message_catalog>

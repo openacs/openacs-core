@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.0.0a2" locale="fr_FR" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.0.0" locale="fr_FR" charset="ISO-8859-1">
 
+  <msg key="common_discard">Jeter</msg>
+  <msg key="common_edit">Modifier</msg>
+  <msg key="common_save">Enregistrer</msg>
   <msg key="member_role_pretty_name">Membre</msg>
   <msg key="member_role_pretty_plural">Membres</msg>
 </message_catalog>

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-kernel" package_version="5.0.0a2" locale="ch_zh" charset="utf-8">
+<message_catalog package_key="acs-kernel" package_version="5.0.0" locale="ch_zh" charset="utf-8">
 
-  <msg key="common_edit">園辞</msg>
+  <msg key="common_default">使用缺省值</msg>
+  <msg key="common_edit">编辑</msg>
+  <msg key="common_go">到</msg>
+  <msg key="common_no">不是</msg>
+  <msg key="common_view">查看</msg>
+  <msg key="member_state_approved">批准的</msg>
+  <msg key="member_state_banned">禁止的</msg>
+  <msg key="member_state_deleted">删除的</msg>
+  <msg key="member_state_rejected">拒绝的</msg>
 </message_catalog>

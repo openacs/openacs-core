@@ -28,9 +28,6 @@
   <msg key="Action">Action</msg>
   <msg key="Add_new_app">Add new application</msg>
   <msg key="Admin">Admin</msg>
-  <msg key="Subsites">Subsites</msg>
-  <msg key="subsites">subsites</msg>
-  <msg key="subsite">subsite</msg>
   <msg key="Administer_subsite">Administer %subsite_name%</msg>
   <msg key="Administrative_options">Administrative options for this user</msg>
   <msg key="Alert_Type">Alert Type</msg>
@@ -77,6 +74,8 @@ logging in again. &lt;/p&gt;
   <msg key="default_context">default context</msg>
   <msg key="Delete">Delete</msg>
   <msg key="DevAdmin">DevAdmin</msg>
+  <description key="DevAdmin">Can we please have a description about the purpose of this key?</description>
+
   <msg key="Developers_Admin">Developer's Administration</msg>
   <msg key="Direct_Permissions">Direct Permissions</msg>
   <msg key="Disable">Disable</msg>
@@ -135,14 +134,14 @@ Please visit the following link to change your password now:
   <msg key="ISO_Code_List">ISO Code List</msg>
   <msg key="ISO_Codes_Not_Loaded">ISO Codes Not Loaded</msg>
   <msg key="ISO_Codes_not_loaded">ISO Codes not loaded</msg>
-  <msg key="Join_subsite">Join subsite</msg>
   <msg key="Join_group_name">Join %group_name%</msg>
+  <msg key="Join_subsite">Join subsite</msg>
   <msg key="Join_this_subsite">Join this subsite</msg>
   <msg key="Keyword">Keyword</msg>
   <msg key="Last_name">Last name</msg>
   <msg key="later">later.</msg>
-  <msg key="Leave_this_subsite">Leave this subsite</msg>
   <msg key="Leave_subsite">Leave subsite</msg>
+  <msg key="Leave_this_subsite">Leave this subsite</msg>
   <msg key="lGo_back_without_adding">Go back without adding any users</msg>
   <msg key="Log_In">Log In</msg>
   <msg key="log_in">log in</msg>
@@ -314,6 +313,9 @@ You can always change your password by doing the following:
   <msg key="Status">Status</msg>
   <msg key="Story_Behind_Photo">Story Behind Photo</msg>
   <msg key="Story_behind_photo">Story Behind Photo</msg>
+  <msg key="subsite">subsite</msg>
+  <msg key="Subsites">Subsites</msg>
+  <msg key="subsites">subsites</msg>
   <msg key="Thank_you">Thank you.</msg>
   <msg key="The_ISO_codes_were_not">The ISO codes were not loaded on this server.</msg>
   <msg key="this_subsite">this subsite</msg>
@@ -322,6 +324,8 @@ You can always change your password by doing the following:
   <msg key="Topic">Topic</msg>
   <msg key="type_specific_info">type-specific info</msg>
   <msg key="UP">UP</msg>
+  <description key="UP">Can we please have a description of this key??</description>
+
   <msg key="up_to_context_name">up to %context_name%</msg>
   <msg key="Update">Update</msg>
   <msg key="Update_Password">Update Password</msg>

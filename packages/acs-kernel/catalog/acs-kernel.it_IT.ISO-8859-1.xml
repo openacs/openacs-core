@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.0.0a2" locale="it_IT" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.0.0" locale="it_IT" charset="ISO-8859-1">
 
-  <msg key="common_finish">termina</msg>
+  <msg key="common_finish">Termina</msg>
   <msg key="common_no">No</msg>
   <msg key="common_yes">S&amp;igrave;</msg>
   <msg key="member_role_pretty_name">Membro</msg>
