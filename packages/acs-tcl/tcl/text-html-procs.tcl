@@ -28,6 +28,7 @@ ad_proc -public ad_text_to_html {
     @param no_quote will prevent it from HTML-quoting output, so this can be run on 
     semi-HTML input and preserve that formatting. This will also cause spaces/tabs to not be
     replaced with nbsp's, because this can too easily mess up HTML tags.
+    @param includes_html Set this if the text parameter already contains some HTML which should be preserved.
 
     @author Branimir Dolicki (branimir@arsdigita.com)
     @author Lars Pind (lars@pinds.com)
@@ -54,8 +55,11 @@ ad_proc -public ad_text_to_html {
         regsub -nocase -all {([^a-zA-Z0-9]+)(https://[^\(\)"<>\s]+)} $text "\\1\x001sTaRtUrL\\2eNdUrL\x001" text
         regsub -nocase -all {([^a-zA-Z0-9]+)(ftp://[^\(\)"<>\s]+)} $text "\\1\x001sTaRtUrL\\2eNdUrL\x001" text
 
-        # Don't dress URLs that are already links
-        regsub -nocase -all {(href\s*=\s*['"]?)\x001sTaRtUrL([^\x001]*)eNdUrL\x001} $text {\1\2} text
+        # Don't dress URLs that are already HREF=... or SRC=... chunks
+        if { $includes_html_p } {
+            regsub -nocase -all {(href\s*=\s*['"]?)\x001sTaRtUrL([^\x001]*)eNdUrL\x001} $text {\1\2} text
+            regsub -nocase -all {(src\s*=\s*['"]?)\x001sTaRtUrL([^\x001]*)eNdUrL\x001} $text {\1\2} text
+        }
 	
 	# email links have the form xxx@xxx.xxx
         # JCD: don't treat things =xxx@xxx.xxx as email since most
