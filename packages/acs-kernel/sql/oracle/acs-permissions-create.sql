@@ -364,7 +364,7 @@ as
     and grantee_id = revoke_permission.grantee_id
     and privilege = revoke_permission.privilege;
   end revoke_permission;
-  --
+
   function permission_p (
     object_id	 acs_objects.object_id%TYPE,
     party_id	 parties.party_id%TYPE,
@@ -374,8 +374,46 @@ as
     exists_p char(1);
   begin
     --
-    -- Check group permmissions
-    select decode( count(*), 0,'f', 't') into exists_p
+    -- direct permissions
+    select decode(count(*),0,'f','t') into exists_p
+    from dual where exists (
+        select 'x'
+          from acs_object_grantee_priv_map
+         where object_id = permission_p.object_id
+           and grantee_id = permission_p.party_id
+           and privilege = permission_p.privilege);
+    if exists_p = 't' then
+        return 't';
+    end if;
+    --
+    -- public-like permissions
+    select decode(count(*),0,'f','t') into exists_p
+    from dual where exists (
+        select 'x'
+          from acs_object_grantee_priv_map
+         where object_id = permission_p.object_id
+           and 0 = permission_p.party_id
+           and privilege = permission_p.privilege
+           and grantee_id = -1);
+    if exists_p = 't' then
+        return 't';
+    end if;
+    --
+    -- public permissions
+    select decode(count(*),0,'f','t') into exists_p
+    from dual where exists (
+        select 'x'
+          from acs_object_grantee_priv_map m, users u
+         where object_id = permission_p.object_id
+           and u.user_id = permission_p.party_id
+           and privilege = permission_p.privilege
+           and m.grantee_id = -1);
+    if exists_p = 't' then
+        return 't';
+    end if;
+    --
+    -- group permmissions
+    select decode(count(*),0,'f','t') into exists_p
     from dual where exists (
           select 'x'
           from acs_object_grantee_priv_map ogpm,
@@ -389,7 +427,7 @@ as
     end if;
     --
     -- relational segment approved group
-    select decode( count(*), 0,'f', 't') into exists_p
+    select decode(count(*),0,'f','t') into exists_p
     from dual where exists (
         select 'x'
           from acs_object_grantee_priv_map ogpm,
@@ -401,42 +439,6 @@ as
     if exists_p = 't' then
         return 't';
     end if;
-    --
-    -- Check direct permissions
-    select decode( count(*), 0,'f', 't') into exists_p
-    from dual where exists (
-        select 'x'
-          from acs_object_grantee_priv_map
-         where object_id = permission_p.object_id
-           and grantee_id = permission_p.party_id
-           and privilege = permission_p.privilege);
-    if exists_p = 't' then
-        return 't';
-    end if;
-    --
-    -- Check public permissions
-    select decode( count(*), 0,'f', 't') into exists_p
-    from dual where exists (
-        select 'x'
-          from acs_object_grantee_priv_map m, users u
-         where object_id = permission_p.object_id
-           and u.user_id = permission_p.party_id
-           and privilege = permission_p.privilege
-           and m.grantee_id = -1);
-    if exists_p = 't' then
-        return 't';
-    end if;
-    --
-    -- Check public-like permissions
-    select decode( count(*), 0,'f', 't') into exists_p
-    from dual where exists (
-        select 'x'
-          from acs_object_grantee_priv_map
-         where object_id = permission_p.object_id
-           and 0 = permission_p.party_id
-           and privilege = permission_p.privilege
-           and grantee_id = -1);
-    --
     return exists_p;
   end;
   --
