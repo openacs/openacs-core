@@ -794,7 +794,7 @@ ad_proc -private apm_package_install_data_model {
                 set ul_p 1
             }
             apm_callback_and_log $callback "<li>Loading data file $path/$file_path...
-<blockqu    ote><pre>"
+<blockquote><pre>"
             db_load_sql_data -callback $callback $path/$file_path
 	    apm_callback_and_log $callback "</pre></blockquote>\n"
         }
