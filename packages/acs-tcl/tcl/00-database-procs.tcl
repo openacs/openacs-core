@@ -14,6 +14,23 @@ proc_doc db_type { } {
     return [nsv_get ad_database_type .]
 }
 
+ad_proc db_compatible_rdbms_p { db_type } {
+    Returns 1 if the given db_type is compatible with the current RDBMS.  
+} {
+    return [expr { [empty_string_p $db_type] || [string equal [db_type] $db_type] }]
+}
+
+ad_proc db_package_supports_rdbms_p { db_type_list } {
+    Returns 1 if db_type_list is empty (needs no database support) or 
+    contains the current RDBMS type.  The list is typically built from
+    the XML database-support node in a packages .info file.
+} {
+    if { [llength $db_type_list] == 0 || [lsearch $db_type_list [db_type]] != -1 } {
+        return 1
+    }
+    return 0
+}
+
 proc_doc db_version { } {
     Returns the RDBMS version (i.e. 8.1.6 is a recent Oracle version; 7.1 a
     recent PostgreSQL version.

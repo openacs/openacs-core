@@ -88,6 +88,7 @@
             <file type="content_page" path="www/apm/version-edit.tcl"/>
             <file type="query_file" path="www/apm/version-edit.xql"/>
             <file type="content_page" path="www/apm/version-enable.tcl"/>
+            <file type="query_file" db_type="oracle" path="www/apm/version-files-oracle.xql"/>
             <file type="content_page" path="www/apm/version-files.tcl"/>
             <file type="query_file" path="www/apm/version-files.xql"/>
             <file type="content_page" path="www/apm/version-fs-scan.tcl"/>

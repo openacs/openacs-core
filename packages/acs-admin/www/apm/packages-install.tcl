@@ -29,13 +29,15 @@ if { [empty_string_p $spec_files] } {
 	set version_name $version(name)
 	set package_name $version(package-name)
 	set package_key $version(package.key)
-	if { [apm_package_registered_p $package_key] } {
-	    if { [apm_higher_version_installed_p $package_key $version_name] } {
-		lappend spec_files $spec_file
-	    }
-	} else {
-	    lappend spec_files $spec_file
-	}
+        if { [db_package_supports_rdbms_p $version(database_support)] } {
+            if { [apm_package_registered_p $package_key] } {
+                if { [apm_higher_version_installed_p $package_key $version_name] } {
+                    lappend spec_files $spec_file
+                }
+            } else {
+                lappend spec_files $spec_file
+            }
+        }
     }
 } else {
     ad_set_client_property apm copy_files_p 1 
