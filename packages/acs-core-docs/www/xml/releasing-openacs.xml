@@ -70,7 +70,7 @@ done</programlisting>
       </listitem>
       <listitem>
         <formalpara>
-          <title>Rubuild the Changelog</title>
+          <title>Rebuild the Changelog</title>
             <para>Rebuild the Changelog.  I use a tool called cvs2cl.  Run this command from the package root to automatically generate a Changelog file  in the same dir:</para>
         </formalpara>
         <screen>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME

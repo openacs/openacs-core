@@ -20,7 +20,7 @@ for dir in `find -name *.info`
   perl -p -i -e 's/name="5\.0\.0"/name="5\.1\.0d1"/' $dir
   perl -p -i -e 's/-5\.0\.0.apm"/-5\.1\.0d1.apm"/' $dir
   perl -p -i -e 's/(provides.*version)="5\.0\.0"/\1="5\.1\.0d1"/' $dir
-done</pre></li><li><p>Commit changes to CVS</p></li></ol></div></li><li><p><b>Rubuild the Changelog. </b>Rebuild the Changelog.  I use a tool called cvs2cl.  Run this command from the package root to automatically generate a Changelog file  in the same dir:</p><pre class="screen">cd /var/lib/aolserver/$OPENACS_SERVICE_NAME
+done</pre></li><li><p>Commit changes to CVS</p></li></ol></div></li><li><p><b>Rebuild the Changelog. </b>Rebuild the Changelog.  I use a tool called cvs2cl.  Run this command from the package root to automatically generate a Changelog file  in the same dir:</p><pre class="screen">cd /var/lib/aolserver/$OPENACS_SERVICE_NAME
 perl /var/tmp/cvs2cl/cvs2cl.pl -F <span class="replaceable"><span class="replaceable">oacs-5-0</span></span> --delta <span class="replaceable"><span class="replaceable">openacs-5-0-0-final</span></span>:<span class="replaceable"><span class="replaceable">oacs-5-0</span></span></pre><p>
           Commit changes
         </p></li><li><p><b>Tag the files in CVS. </b>The steps to this point should have ensured that the head of the current branch contains the full set of code to release.  Now we need to tag it as the code to be released.</p><div class="orderedlist"><ol type="a"><li><p>Check out OpenACS Core.  The files must be checked
