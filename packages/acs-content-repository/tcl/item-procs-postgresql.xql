@@ -96,7 +96,7 @@
 
 <fullquery name="item::unpublish.unset_live">
     <querytext>
-            content_item__unset_live_revision(
+            select content_item__unset_live_revision(
                  :item_id
             );
     </querytext>
