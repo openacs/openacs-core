@@ -77,4 +77,20 @@
       </querytext>
    </fullquery>
 
+   <fullquery name="lang::user::set_timezone.set_user_timezone">
+      <querytext>
+        update user_preferences
+        set    timezone = :timezone
+        where  user_id = :user_id
+      </querytext>
+   </fullquery>
+
+   <fullquery name="lang::user::timezone.select_user_timezone">
+      <querytext>
+        select timezone
+        from   user_preferences
+        where  user_id = :user_id
+      </querytext>
+   </fullquery>
+
 </queryset>
