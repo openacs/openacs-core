@@ -15,6 +15,8 @@
       <querytext>
 
         select o.object_id,
+               o.title,
+               o.package_id,
                o.object_type,
                o.context_id,
                o.security_inherit_p,
@@ -28,9 +30,8 @@
                acs_object__name(o.object_id) as object_name
         from   acs_objects o
         where  o.object_id = :object_id
-    
+
       </querytext>
 </fullquery>
 
- 
 </queryset>
