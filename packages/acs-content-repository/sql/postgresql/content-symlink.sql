@@ -12,7 +12,7 @@
 -- create or replace package body content_symlink
 -- function new
 
-select define_function_args('content_symlink__new','name;null,label;null,target_id,parent_id,symlink_id;null,creation_date;current_timestamp,creation_user;null,creation_ip;null');
+select define_function_args('content_symlink__new','name,label,target_id,parent_id,symlink_id,creation_date;now,creation_user,creation_ip');
 
 create or replace function content_symlink__new (varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
 returns integer as '
