@@ -156,7 +156,10 @@ proc_doc check_for_form_variable_naughtiness {
 }
 
 
-proc set_form_variables {{error_if_not_found_p 1}} {
+ad_proc -deprecated -warn set_form_variables {{error_if_not_found_p 1}} {
+    use ad_page_contract for this functionality
+    @see ad_page_contract 
+} { 
     if { $error_if_not_found_p == 1} {
 	uplevel { if { [ns_getform] == "" } {
 	    ns_returnerror 500 "Missing form data"
@@ -188,25 +191,38 @@ proc set_form_variables {{error_if_not_found_p 1}} {
     }
 }
 
-proc DoubleApos {string} {
+ad_proc -private DoubleApos {string} {
+    if the user types "O'Malley" and you try to insert that into an SQL
+    database, you will lose big time because the single quote is magic
+    in SQL and the insert has to look like 'O''Malley'.
+    <p>
+    You should be using bind variables rather than 
+    calling DoubleApos
+    
+    @return string with single quotes converted to a pair of single quotes
+} { 
     regsub -all ' "$string" '' result
     return $result
 }
 
-# if the user types "O'Malley" and you try to insert that into an SQL
-# database, you will lose big time because the single quote is magic
-# in SQL and the insert has to look like 'O''Malley'.  This function
-# also trims white space off the ends of the user-typed data.
 
-# if the form looked like
-# <input type=text name=yow> and <input type=text name=bar> 
-# then after you run this function you'll have Tcl vars 
-# $QQfoo and $QQbar set to whatever the user typed in the form
-# plus an extra single quote in front of the user's single quotes
-# and maybe some missing white space
 
-proc set_form_variables_string_trim_DoubleAposQQ {} {
-    # The variable names are prefixed with a V to avoid confusion with the form variables while checking for naughtiness.
+ad_proc -deprecated -warn set_form_variables_string_trim_DoubleAposQQ {} {
+    if the user types "O'Malley" and you try to insert that into an SQL
+    database, you will lose big time because the single quote is magic
+    in SQL and the insert has to look like 'O''Malley'.  This function
+    also trims white space off the ends of the user-typed data.
+
+    if the form looked like
+    &lt;input type=text name=yow&gt; and &lt;input type=text name=bar&gt;
+    then after you run this function you'll have Tcl vars 
+    $QQfoo and $QQbar set to whatever the user typed in the form
+    plus an extra single quote in front of the user's single quotes
+    and maybe some missing white space
+
+    @see ad_page_contract
+} { 
+    #The variable names are prefixed with a V to avoid confusion with the form variables while checking for naughtiness.
     uplevel {
 	set Vform [ns_getform] 
 	if {$Vform == ""} {
@@ -227,7 +243,11 @@ proc set_form_variables_string_trim_DoubleAposQQ {} {
 
 # this one does both the regular and the QQ
 
-proc set_the_usual_form_variables {{error_if_not_found_p 1}} {
+ad_proc -deprecated -warn set_the_usual_form_variables {{error_if_not_found_p 1}} {
+    use ad_page_contract for this functionality
+
+    @see ad_page_contract 
+} { 
     if { [ns_getform] == "" } {
 	if $error_if_not_found_p {
 	    uplevel { 
@@ -255,7 +275,10 @@ proc set_the_usual_form_variables {{error_if_not_found_p 1}} {
     }
 }
 
-proc set_form_variables_string_trim_DoubleApos {} {
+ad_proc -deprecated -warn set_form_variables_string_trim_DoubleApos {} {
+    use ad_page_contract for this functionality
+    @see ad_page_contract 
+} { 
     # The variable names are prefixed with a V to avoid confusion with the form variables while checking for naughtiness.
     uplevel {
 	set Vform [ns_getform] 
@@ -275,7 +298,10 @@ proc set_form_variables_string_trim_DoubleApos {} {
     }
 }
 
-proc set_form_variables_string_trim {} {
+ad_proc -deprecated -warn set_form_variables_string_trim {} {
+    use ad_page_contract for this functionality
+    @see ad_page_contract 
+} { 
     # The variable names are prefixed with a V to avoid confusion with the form variables while checking for naughtiness.
     uplevel {
 	set Vform [ns_getform] 
@@ -297,7 +323,9 @@ proc set_form_variables_string_trim {} {
 
 # debugging kludges
 
-proc NsSettoTclString {set_id} {
+ad_proc -public NsSettoTclString {set_id} {
+    returns a plain text version of the passed ns_set id
+} { 
     set result ""
     for {set i 0} {$i<[ns_set size $set_id]} {incr i} {
 	append result "[ns_set key $set_id $i] : [ns_set value $set_id $i]\n"
@@ -305,29 +333,10 @@ proc NsSettoTclString {set_id} {
     return $result
 }
 
-proc get_referrer {} {
+ad_proc -public get_referrer {} {
+    gets the Referer for the headers
+} { 
     return [ns_set get [ad_conn headers] Referer]
-}
-
-proc post_args_to_query_string {} {
-    set arg_form [ns_getform]
-    if {$arg_form!=""} {
-	set form_counter_i 0
-	while {$form_counter_i<[ns_set size $arg_form]} {
-	    append query_return "[ns_set key $arg_form $form_counter_i]=[ns_urlencode [ns_set value $arg_form $form_counter_i]]&"
-	    incr form_counter_i
-	}
-	set query_return [string trim $query_return &]
-    }
-}    
-
-proc get_referrer_and_query_string {} {
-    if {[ad_conn method]!="GET"} {
-	set query_return [post_args_to_query_string]
-	return "[get_referrer]?${query_return}"
-    } else {
-	return [get_referrer]
-    }
 }
 
 ##
@@ -395,24 +404,9 @@ ad_proc ad_dbclick_check_dml {
     return
 }
 
-proc nmc_IllustraDatetoPrettyDate {sql_date} {
-
-    regexp {(.*)-(.*)-(.*)$} $sql_date match year month day
-
-    set allthemonths {January February March April May June July August September October November December}
-
-    # we have to trim the leading zero because Tcl has such a 
-    # brain damaged model of numbers and decided that "09-1"
-    # was "8.0"
-
-    set trimmed_month [string trimleft $month 0]
-    set pretty_month [lindex $allthemonths [expr $trimmed_month - 1]]
-
-    return "$pretty_month $day, $year"
-
-}
-
-proc_doc util_AnsiDatetoPrettyDate {sql_date} "Converts 1998-09-05 to September 5, 1998" {
+ad_proc -public util_AnsiDatetoPrettyDate {sql_date} { 
+    Converts 1998-09-05 to September 5, 1998
+} {
     set sql_date [string range $sql_date 0 9]
     if ![regexp {(.*)-(.*)-(.*)$} $sql_date match year month day] {
 	return ""
@@ -432,8 +426,11 @@ proc_doc util_AnsiDatetoPrettyDate {sql_date} "Converts 1998-09-05 to September 
     }
 }
 
-proc remove_nulls_from_ns_set {old_set_id} {
+ad_proc -public remove_nulls_from_ns_set {old_set_id} {
+    Creates and returns a new ns_set without any null value fields
 
+    @return new ns_set 
+} {
     set new_set_id [ns_set new "no_nulls$old_set_id"]
 
     for {set i 0} {$i<[ns_set size $old_set_id]} {incr i} {
@@ -449,16 +446,6 @@ proc remove_nulls_from_ns_set {old_set_id} {
 
 }
 
-proc merge_form_with_ns_set {form set_id} {
-
-    for {set i 0} {$i<[ns_set size $set_id]} {incr i} {
-	set form [ns_formvalueput $form [ns_set key $set_id $i] [ns_set value $set_id $i]]
-    }
-
-    return $form
-
-}
-
 ad_proc -public merge_form_with_query {
     {
 	-bind {}
@@ -466,6 +453,7 @@ ad_proc -public merge_form_with_query {
     form statement_name sql_qry 
 } {
     Merges a form with a query string.
+
     @param form the form to be stuffed.
     @param statement_name An identifier for the sql_qry to be executed.
     @param sql_qry The sql that must be executed.
@@ -490,116 +478,7 @@ ad_proc -public merge_form_with_query {
 }
 
 
-proc util_prepare_update {table_name primary_key_name primary_key_value form} {
 
-    set form_size [ns_set size $form]
-    set form_counter_i 0
-    set column_list [db_columns $table_name]
-    set bind_vars [ad_tcl_list_list_to_ns_set [list [list $primary_key_name $primary_key_value]]]
-
-    while {$form_counter_i<$form_size} {
-
-	set form_var_name [ns_set key $form $form_counter_i]
-	set value [string trim [ns_set value $form $form_counter_i]]
-
-	if { ($form_var_name != $primary_key_name) && ([lsearch $column_list $form_var_name] != -1) } {
-
-	    ad_tcl_list_list_to_ns_set -set_id $bind_vars [list [list $form_var_name $value]]
-	    lappend the_sets "$form_var_name = :$form_var_name"
-
-	}
-
-	incr form_counter_i
-    }
-
-    return [list "update $table_name\nset [join $the_sets ",\n"] \n where $primary_key_name = :$primary_key_name" $bind_vars]
-   
-}
-
-proc util_prepare_update_multi_key {table_name primary_key_name_list primary_key_value_list form} {
-
-    set form_size [ns_set size $form]
-    set form_counter_i 0
-    set bind_vars [ns_set create]
-
-    while {$form_counter_i<$form_size} {
-
-	set form_var_name [ns_set key $form $form_counter_i]
-	set value [string trim [ns_set value $form $form_counter_i]]
-
-	if { [lsearch -exact $primary_key_name_list $form_var_name] == -1 } {
-
-	    # this is not one of the keys
-	    ad_tcl_list_list_to_ns_set -set_id $bind_vars [list [list $form_var_name $value]]
-	    lappend the_sets "$form_var_name = :$form_var_name"
-
-	}
-
-	incr form_counter_i
-    }
-
-    for {set i 0} {$i<[llength $primary_key_name_list]} {incr i} {
-
-	set this_key_name [lindex $primary_key_name_list $i]
-	set this_key_value [lindex $primary_key_value_list $i]
-
-	ad_tcl_list_list_to_ns_set -set_id $bind_vars [list [list $this_key_name $this_key_value]]
-	lappend key_eqns "$this_key_name = :$this_key_name"
-
-    }
-
-    return [list "update $table_name\nset [join $the_sets ",\n"] \n where [join $key_eqns " AND "]" $bind_vars]
-}
-
-proc util_prepare_insert {table_name form} {
-
-    set form_size [ns_set size $form]
-    set form_counter_i 0
-    set bind_vars [ns_set create]
-
-    while { $form_counter_i < $form_size } {
-
- 	ns_set update $bind_vars [ns_set key $form $form_counter_i] [string trim [ns_set value $form $form_counter_i]]
- 	incr form_counter_i
-
-    }
-
-    return [list "insert into $table_name\n([join [ad_ns_set_keys $bind_vars] ", "])\n values ([join [ad_ns_set_keys -colon $bind_vars] ", "])" $bind_vars]
-}
-
-proc util_PrettySex {m_or_f { default "default" }} {
-    if { $m_or_f == "M" || $m_or_f == "m" } {
-	return "Male"
-    } elseif { $m_or_f == "F" || $m_or_f == "f" } {
-	return "Female"
-    } else {
-	# Note that we can't compare default to the empty string as in 
-	# many cases, we are going want the default to be the empty
-	# string
-	if { [string compare $default "default"] == 0 } {
-	    return "Unknown (\"$m_or_f\")"
-	} else {
-	    return $default
-	}
-    }
-}
-
-proc util_PrettySexManWoman {m_or_f { default "default"} } {
-    if { $m_or_f == "M" || $m_or_f == "m" } {
-	return "Man"
-    } elseif { $m_or_f == "F" || $m_or_f == "f" } {
-	return "Woman"
-    } else {
-	# Note that we can't compare default to the empty string as in 
-	# many cases, we are going want the default to be the empty
-	# string
-	if { [string compare $default "default"] == 0 } {
-	    return "Person of Unknown Sex"
-	} else {
-	    return $default
-	}
-    }
-}
 
 proc util_PrettyBoolean {t_or_f { default  "default" } } {
     if { $t_or_f == "t" || $t_or_f == "T" } {
@@ -626,26 +505,27 @@ proc_doc util_PrettyTclBoolean {zero_or_one} "Turns a 1 (or anything else that m
     }
 }
 
-proc randomInit {seed} {
+ad_proc -public randomInit {seed} {
+    seed the random number generator.
+} {
     nsv_set rand ia 9301
     nsv_set rand ic 49297
     nsv_set rand im 233280
     nsv_set rand seed $seed
 }
 
-# initialize the random number generator
 
-randomInit [ns_time]
-
-ad_proc random {} {
+ad_proc -public random {} {
     Return a pseudo-random number between 0 and 1.
 } {
     nsv_set rand seed [expr ([nsv_get rand seed] * [nsv_get rand ia] + [nsv_get rand ic]) % [nsv_get rand im]]
     return [expr [nsv_get rand seed]/double([nsv_get rand im])]
 }
 
-ad_proc randomRange {range} {
-    Return a pseudo-random number between 0 and range.
+ad_proc -public randomRange {range} {
+    Returns a pseudo-random number between 0 and range.
+
+    @return integer
 } {
     return [expr int([random] * $range)]
 }
@@ -1163,7 +1043,7 @@ doc_body_append [ad_export_vars -override { order_by $new_order_by } $my_vars]</
 
 
 
-ad_proc export_form_vars { 
+ad_proc -deprecated export_form_vars { 
     -sign:boolean
     args 
 } {
@@ -1172,7 +1052,8 @@ ad_proc export_form_vars {
     to grab the value of the variables. Variables that are not defined are silently ignored.
     You can append :multiple to the name of a variable. In this case, the value will be treated as a list,
     and each of the elements output separately.
-
+    <p>
+    export_vars is now the prefered interface.
     <p>
 
     Example usage: <code>[export_form_vars -sign foo bar:multiple baz]</code>
@@ -1186,6 +1067,7 @@ ad_proc export_form_vars {
     href="/api-doc/proc-view?proc=ad_verify_signature"><code>ad_verify_signature</code></a>. This
     ensures that the value hasn't been tampered with at the user's end.
 
+    @see export_vars
 } { 
     set hidden ""
     foreach var_spec $args {
@@ -1212,10 +1094,15 @@ ad_proc export_form_vars {
     return $hidden
 }
 
-ad_proc export_entire_form {} {
-    Exports everything in ns_getform to the ns_set.
-    This should generally not be used. It's much better to explicitly
-    name the variables you want to export.  
+ad_proc -public export_entire_form {} {
+
+    Exports everything in ns_getform to the ns_set.  This should 
+    generally not be used. It's much better to explicitly name 
+    the variables you want to export.  
+
+    export_vars is now the prefered interface.
+
+    @see export_vars
 } {
     set hidden ""
     set the_form [ns_getform]
@@ -1229,11 +1116,19 @@ ad_proc export_entire_form {} {
     return $hidden
 }
 
-ad_proc export_ns_set_vars {{format "url"} {exclusion_list ""}  {setid ""}} {
+ad_proc export_ns_set_vars {{format "url"} {exclusion_list ""} {setid ""}} {
     Returns all the params in an ns_set with the exception of those in
-    exclusion_list. If no setid is provide, ns_getform is used. If format
-    = url, a url parameter string will be returned. If format = form, a
+    exclusion_list. If no setid is provide, ns_getform is used. If
+    format = url, a url parameter string will be returned. If format = form, a
     block of hidden form fragments will be returned.  
+
+    export_vars is now the prefered interface.
+    
+    @param format either url or form 
+    @param exclusion_list list of fields to exclude 
+    @param setid if null then it is ns_getform
+
+    @see export_vars
 }  {
 
     if [empty_string_p $setid] {
@@ -1268,6 +1163,7 @@ ad_proc export_url_vars {
     -sign:boolean
     args 
 } {
+    export_vars is now the prefered interface.
 
     Returns a string of key=value pairs suitable for inclusion in a
     URL; you can pass it any number of variables as arguments.  If any are
@@ -1299,6 +1195,8 @@ ad_proc export_url_vars {
     which in turn uses <a
     href="/api-doc/proc-view?proc=ad_verify_signature"><code>ad_verify_signature</code></a>. This
     ensures that the value hasn't been tampered with at the user's end.
+
+    @see export_vars
 } { 
     set params {} 
     foreach var_spec $args { 
@@ -1338,13 +1236,17 @@ ad_proc export_url_vars {
   return [join $params "&"]
 }
 
-ad_proc export_entire_form_as_url_vars { 
+ad_proc -public export_entire_form_as_url_vars { 
     {vars_to_passthrough ""}
 } {
+    export_vars is now the prefered interface.
+
     Returns a URL parameter string of name-value pairs of all the form
     parameters passed to this page. If vars_to_passthrough is given, it
     should be a list of parameter names that will be the only ones passed
     through.
+    
+    @see export_vars
 } {
     set params [list]
     set the_form [ns_getform]
@@ -1359,54 +1261,14 @@ ad_proc export_entire_form_as_url_vars {
 		lappend params "[ns_urlencode $varname]=[ns_urlencode $varvalue]" 
 	    }
 	}
-	return [join $params "&"]
+	return [join $params "&amp;"]
     }
 }
 
 
 
 
-# Perform the dml statements in sql_list in a transaction.
-# Aborts the transaction and returns an error message if
-# an error occurred for any of the statements, otherwise
-# returns null string. -jsc
-proc do_dml_transactions {dml_stmt_list} {
-    db_transaction {
-	foreach dml_stmt $dml_stmt_list {
-	    if { [catch {db_dml $dml_stmt} errmsg] } {
-		db_abort_transaction
-		return $errmsg
-	    }
-	}
-    }
-    return ""
-}
 
-# Perform body within a database transaction.
-# Execute on_error if there was some error caught
-# within body, with errmsg bound.
-# This procedure will clobber errmsg in the caller.
-# -jsc
-proc with_transaction {body on_error} {
-    upvar errmsg errmsg
-    global errorInfo errorCode
-    if { [catch {db_transaction { uplevel $body }} errmsg] } {
-        db_abort_transaction
-        set code [catch {uplevel $on_error} string]
-        # Return out of the caller appropriately.
-        if { $code == 1 } {
-            return -code error -errorinfo $errorInfo -errorcode $errorCode $string
-        } elseif { $code == 2 } {
-            return -code return $string
-        } elseif { $code == 3 } {
-            return -code break
-	} elseif { $code == 4 } {
-	    return -code continue
-        } elseif { $code > 4 } {
-            return -code $code $string
-        }
-    }        
-}
 
 proc with_catch {error_var body on_error} { 
     upvar 1 $error_var $error_var 
@@ -1428,33 +1290,15 @@ proc with_catch {error_var body on_error} {
     }         
 } 
 
-proc_doc string_contains_p {small_string big_string} {Returns 1 if the BIG_STRING contains the SMALL_STRING, 0 otherwise; syntactic sugar for string first != -1} {
-    if { [string first $small_string $big_string] == -1 } {
-	return 0
-    } else {
-	return 1
-    }
-}
 
-proc remove_whitespace {input_string} {
-    if [regsub -all "\[\015\012\t \]" $input_string "" output_string] {
-	return $output_string 
-    } else {
-	return $input_string
-    }
-}
-
-proc util_just_the_digits {input_string} {
-    if [regsub -all {[^0-9]} $input_string "" output_string] {
-	return $output_string 
-    } else {
-	return $input_string
-    }
-}
 
 # putting commas into numbers (thank you, Michael Bryzek)
 
-proc_doc util_commify_number { num } {Returns the number with commas inserted where appropriate. Number can be positive or negative and can have a decimal point. e.g. -1465.98 => -1,465.98} {
+ad_proc -public util_commify_number { num } {
+    Returns the number with commas inserted where appropriate. Number can be 
+    positive or negative and can have a decimal point. 
+    e.g. -1465.98 => -1,465.98
+} {
     while { 1 } {
 	# Regular Expression taken from Mastering Regular Expressions (Jeff Friedl)
 	# matches optional leading negative sign plus any
@@ -1466,11 +1310,9 @@ proc_doc util_commify_number { num } {Returns the number with commas inserted wh
     return $num
 }
 
-proc leap_year_p {year} {
-    expr ( $year % 4 == 0 ) && ( ( $year % 100 != 0 ) || ( $year % 400 == 0 ) )
-}
-
-proc_doc util_search_list_of_lists {list_of_lists query_string {sublist_element_pos 0}} "Returns position of sublist that contains QUERY_STRING at SUBLIST_ELEMENT_POS." {
+ad_proc -public util_search_list_of_lists {list_of_lists query_string {sublist_element_pos 0}} { 
+    Returns position of sublist that contains QUERY_STRING at SUBLIST_ELEMENT_POS.
+} {
     set sublist_index 0
     foreach sublist $list_of_lists {
 	set comparison_element [lindex $sublist $sublist_element_pos]
@@ -1485,7 +1327,14 @@ proc_doc util_search_list_of_lists {list_of_lists query_string {sublist_element_
 
 # --- network stuff 
 
-proc_doc util_get_http_status {url {use_get_p 1} {timeout 30}} "Returns the HTTP status code, e.g., 200 for a normal response or 500 for an error, of a URL.  By default this uses the GET method instead of HEAD since not all servers will respond properly to a HEAD request even when the URL is perfectly valid.  Note that this means AOLserver may be sucking down a lot of bits that it doesn't need." { 
+ad_proc -public util_get_http_status {url {use_get_p 1} {timeout 30}} {
+    Returns the HTTP status code, e.g., 200 for a normal response 
+    or 500 for an error, of a URL.  By default this uses the GET method 
+    instead of HEAD since not all servers will respond properly to a 
+    HEAD request even when the URL is perfectly valid.  Note that 
+    this means AOLserver may be sucking down a lot of bits that it 
+    doesn't need.
+} { 
     if $use_get_p {
 	set http [ns_httpopen GET $url "" $timeout] 
     } else {
@@ -1502,7 +1351,14 @@ proc_doc util_get_http_status {url {use_get_p 1} {timeout 30}} "Returns the HTTP
     return $status
 }
 
-proc_doc util_link_responding_p {url {list_of_bad_codes "404"}} "Returns 1 if the URL is responding (generally we think that anything other than 404 (not found) is okay)." {
+ad_proc -public util_link_responding_p {
+    url 
+    {list_of_bad_codes "404"}
+} {
+    Returns 1 if the URL is responding (generally we think that anything other than 404 (not found) is okay).
+
+    @see util_get_http_status 
+} {
     if [catch { set status [util_get_http_status $url] } errmsg] {
 	# got an error; definitely not valid
 	return 0
@@ -1519,43 +1375,51 @@ proc_doc util_link_responding_p {url {list_of_bad_codes "404"}} "Returns 1 if th
 # system by Tracy Adams (teadams@arsdigita.com) to permit AOLserver to POST 
 # to another Web server; sort of like ns_httpget
 
-proc_doc util_httpopen {method url {rqset ""} {timeout 30} {http_referer ""}} "Like ns_httpopen but works for POST as well; called by util_httppost" {
+ad_proc -public util_httpopen {
+    method 
+    url 
+    {rqset ""} 
+    {timeout 30} 
+    {http_referer ""}
+} { 
+    Like ns_httpopen but works for POST as well; called by util_httppost
+} { 
     
-	if ![string match http://* $url] {
-		return -code error "Invalid url \"$url\":  _httpopen only supports HTTP"
-	}
-	set url [split $url /]
-	set hp [split [lindex $url 2] :]
-	set host [lindex $hp 0]
-	set port [lindex $hp 1]
-	if [string match $port ""] {set port 80}
-	set uri /[join [lrange $url 3 end] /]
-	set fds [ns_sockopen -nonblock $host $port]
-	set rfd [lindex $fds 0]
-	set wfd [lindex $fds 1]
-	if [catch {
-		_ns_http_puts $timeout $wfd "$method $uri HTTP/1.0\r"
-		if {$rqset != ""} {
-			for {set i 0} {$i < [ns_set size $rqset]} {incr i} {
-				_ns_http_puts $timeout $wfd \
-					"[ns_set key $rqset $i]: [ns_set value $rqset $i]\r"
-			}
-		} else {
-			_ns_http_puts $timeout $wfd \
-				"Accept: */*\r"
+    if ![string match http://* $url] {
+        return -code error "Invalid url \"$url\":  _httpopen only supports HTTP"
+    }
+    set url [split $url /]
+    set hp [split [lindex $url 2] :]
+    set host [lindex $hp 0]
+    set port [lindex $hp 1]
+    if [string match $port ""] {set port 80}
+    set uri /[join [lrange $url 3 end] /]
+    set fds [ns_sockopen -nonblock $host $port]
+    set rfd [lindex $fds 0]
+    set wfd [lindex $fds 1]
+    if [catch {
+        _ns_http_puts $timeout $wfd "$method $uri HTTP/1.0\r"
+        if {$rqset != ""} {
+            for {set i 0} {$i < [ns_set size $rqset]} {incr i} {
+                _ns_http_puts $timeout $wfd \
+                    "[ns_set key $rqset $i]: [ns_set value $rqset $i]\r"
+            }
+        } else {
+            _ns_http_puts $timeout $wfd \
+                "Accept: */*\r"
 
-		    	_ns_http_puts $timeout $wfd "User-Agent: Mozilla/1.01 \[en\] (Win95; I)\r"    
-		    	_ns_http_puts $timeout $wfd "Referer: $http_referer \r"    
+            _ns_http_puts $timeout $wfd "User-Agent: Mozilla/1.01 \[en\] (Win95; I)\r"    
+            _ns_http_puts $timeout $wfd "Referer: $http_referer \r"    
 	}
 
     } errMsg] {
-		global errorInfo
-		#close $wfd
-		#close $rfd
-		if [info exists rpset] {ns_set free $rpset}
-		return -1
-	}
-	return [list $rfd $wfd ""]
+        global errorInfo
+        #close $wfd
+        #close $rfd
+        if [info exists rpset] {ns_set free $rpset}
+        return -1
+    }
+    return [list $rfd $wfd ""]
     
 }
 
@@ -1566,7 +1430,7 @@ proc_doc util_httpopen {method url {rqset ""} {timeout 30} {http_referer ""}} "L
 
 # in the event of an error or timeout, -1 is returned
 
-proc_doc util_httppost {url formvars {timeout 30} {depth 0} {http_referer ""}} {
+ad_proc -public util_httppost {url formvars {timeout 30} {depth 0} {http_referer ""}} {
     Returns the result of POSTing to another Web server or -1 if there is an error or timeout.  
     formvars should be in the form \"arg1=value1&arg2=value2\".  
     <p> 
@@ -1633,7 +1497,11 @@ proc_doc util_httppost {url formvars {timeout 30} {depth 0} {http_referer ""}} {
 	return $page
 }
 
-proc_doc util_report_successful_library_load {{extra_message ""}} "Should be called at end of private Tcl library files so that it is easy to see in the error log whether or not private Tcl library files contain errors." {
+ad_proc -public util_report_successful_library_load {{extra_message ""}} {
+    Should be called at end of private Tcl library files so that it is 
+    easy to see in the error log whether or not private Tcl library 
+    files contain errors.
+} {
     set tentative_path [info script]
     regsub -all {/\./} $tentative_path {/} scrubbed_path
     if { [string compare $extra_message ""] == 0 } {
@@ -1644,12 +1512,20 @@ proc_doc util_report_successful_library_load {{extra_message ""}} "Should be cal
     ns_log Notice $message
 }
 
-proc_doc exists_and_not_null { varname } {Returns 1 if the variable name exists in the caller's environment and is not the empty string.} {
+ad_proc -public exists_and_not_null { varname } {
+    Returns 1 if the variable name exists in the caller's environment and 
+    is not the empty string.
+} {
     upvar 1 $varname var 
     return [expr { [info exists var] && ![empty_string_p $var] }] 
 } 
 
-proc_doc util_httpget {url {headers ""} {timeout 30} {depth 0}} "Just like ns_httpget, but first optional argument is an ns_set of headers to send during the fetch." {
+ad_proc -public util_httpget {
+    url {headers ""} {timeout 30} {depth 0}
+} {
+    Just like ns_httpget, but first optional argument is an ns_set of 
+    headers to send during the fetch.
+} {
     if {[incr depth] > 10} {
 	return -code error "util_httpget:  Recursive redirection:  $url"
     }
@@ -1694,34 +1570,15 @@ proc_doc util_httpget {url {headers ""} {timeout 30} {depth 0}} "Just like ns_ht
 # added by philg@mit.edu on October 30, 1999
 
 proc_doc util_escape_quotes_for_csv {string} "Returns its argument with double quote replaced by backslash double quote" {
-    regsub -all {"} $string {\"}  result
+    regsub -all \" $string {\"}  result
+
     return $result
 }
 
-proc_doc set_csv_variables_after_query {} {
 
-    You can call this after an ns_db getrow or ns_db 1row to set local
-    Tcl variables to values from the database.  You get $foo, $EQfoo
-    (the same thing but with double quotes escaped), and $QEQQ
-    (same thing as $EQfoo but with double quotes around the entire
-    she-bang).
+ad_proc -deprecated -warn ad_page_variables {variable_specs} {
+    use ad_page_contract now.
 
-} {
-    uplevel {
-	    set set_variables_after_query_i 0
-	    set set_variables_after_query_limit [ns_set size $selection]
-	    while {$set_variables_after_query_i<$set_variables_after_query_limit} {
-		set [ns_set key $selection $set_variables_after_query_i] [ns_set value $selection $set_variables_after_query_i]
-		set EQ[ns_set key $selection $set_variables_after_query_i] [util_escape_quotes_for_csv [string trim [ns_set value $selection $set_variables_after_query_i]]]
-		set QEQQ[ns_set key $selection $set_variables_after_query_i] "\"[util_escape_quotes_for_csv [string trim [ns_set value $selection $set_variables_after_query_i]]]\""
-		incr set_variables_after_query_i
-	    }
-    }
-}
-
-#"
-
-proc_doc ad_page_variables {variable_specs} {
 <pre>
 Current syntax:
 
@@ -1764,6 +1621,7 @@ ad_page_variables {
     {end {[expr $start + 20]}}
 }
 </pre>
+    @see ad_page_contract
 } {
     set exception_list [list]
     set form [ns_getform]
@@ -1888,7 +1746,9 @@ ad_page_variables {
     }
 }
 
-proc_doc page_validation {args} {
+ad_proc -deprecated -warn page_validation {args} {
+    use ad_page_contract.
+    <p>
     This proc allows page arg, etc. validation.  It accepts a bunch of
     code blocks.  Each one is executed, and any error signalled is
     appended to the list of exceptions.
@@ -1907,6 +1767,8 @@ proc_doc page_validation {args} {
     nesting of procs which do the validation tests.  In addition, validation
     functions can return useful values, such as trimmed or otherwise munged
     versions of the input.
+
+    @see ad_page_contract
 } {
     if { [info exists {%%exception_list}] } {
 	error "Something's wrong"
@@ -1934,9 +1796,13 @@ proc_doc page_validation {args} {
     }
 }
 
-proc_doc sub_page_validation {args} {
+ad_proc -public -deprecated sub_page_validation {args} {
+    use ad_page_contract.
+    <p>
     Use this inside a page_validation block which needs to check more than one thing.
     Put this around each part that might signal an error.
+
+    @see ad_page_contract
 } {
     # to allow this to be at any level, we search up the stack for {%%exception_list}
     set depth [info level]
@@ -1956,10 +1822,14 @@ proc_doc sub_page_validation {args} {
     }
 }
 
-proc_doc validate_integer {field_name string} {
+ad_proc -deprecated validate_integer {field_name string} {
     Throws an error if the string isn't a decimal integer; otherwise
     strips any leading zeros (so this won't work for octals) and returns
     the result.  
+    <p>
+    validate via ad_page_contract
+
+    @see ad_page_contract
 } {
     if { ![regexp {^[0-9]+$} $string] } {
 	error "$field_name is not an integer"
@@ -1973,9 +1843,12 @@ proc_doc validate_integer {field_name string} {
     return $string
 }
 
-proc_doc validate_zip_code {field_name zip_string country_code} {
-
+ad_proc -deprecated validate_zip_code {field_name zip_string country_code} {
     Given a string, signals an error if it's not a legal zip code
+    <p>
+    validate via ad_page_contract
+
+    @see ad_page_contract
 
 } {
     if { $country_code == "" || [string toupper $country_code] == "US" } {
@@ -2003,7 +1876,11 @@ proc_doc validate_zip_code {field_name zip_string country_code} {
     return $zip_string
 }
 
-proc_doc validate_ad_dateentrywidget {field_name column form {allow_null 0}} {
+ad_proc -deprecated validate_ad_dateentrywidget {field_name column form {allow_null 0}} {
+    <p>
+    validate via ad_page_contract
+
+    @see ad_page_contract
 } {
     set col $column
     set day [ns_set get $form "$col.day"]
@@ -2028,7 +1905,13 @@ proc_doc validate_ad_dateentrywidget {field_name column form {allow_null 0}} {
     return $date
 }
 
-proc_doc util_WriteWithExtraOutputHeaders {headers_so_far {first_part_of_page ""}} "Takes in a string of headers to write to an HTTP connection, terminated by a newline.  Checks \[ad_conn outputheaders\] and adds those headers if appropriate.  Adds two newlines at the end and writes out to the connection.  May optionally be used to write the first part of the page as well (saves a packet)" {
+ad_proc -private util_WriteWithExtraOutputHeaders {headers_so_far {first_part_of_page ""}} {
+    Takes in a string of headers to write to an HTTP connection,
+    terminated by a newline.  Checks \[ad_conn outputheaders\] and adds
+    those headers if appropriate.  Adds two newlines at the end and writes
+    out to the connection.  May optionally be used to write the first part
+    of the page as well (saves a packet).
+} {
     ns_set put [ad_conn outputheaders] Server "[ns_info name]/[ns_info version]"
     set set_headers_i 0
     set set_headers_limit [ns_set size [ad_conn outputheaders]]
@@ -2040,11 +1923,12 @@ proc_doc util_WriteWithExtraOutputHeaders {headers_so_far {first_part_of_page ""
     ns_write $entire_string_to_write
 }
 
-# we use this when we want to send out just the headers 
-# and then do incremental ns_writes.  This way the user
-# doesn't have to wait like if you used a single ns_return
 
-proc ReturnHeaders {{content_type text/html}} {
+ad_proc -public ReturnHeaders {{content_type text/html}} {
+    we use this when we want to send out just the headers 
+    nd then do incremental ns_writes.  This way the user
+    doesn't have to wait like if you used a single ns_return
+} { 
     set all_the_headers "HTTP/1.0 200 OK
 MIME-Version: 1.0
 Content-Type: $content_type\r\n"
@@ -2052,10 +1936,11 @@ Content-Type: $content_type\r\n"
      ns_startcontent -type $content_type
 }
 
-# All the following ReturnHeaders versions are obsolete;
-# just set [ad_conn outputheaders].
 
-proc ReturnHeadersNoCache {{content_type text/html}} {
+ad_proc -deprecated -warn ReturnHeadersNoCache {{content_type text/html}} { 
+    Deprecated. just set [ad_conn outputheaders].
+    @see ad_conn
+} { 
 
     ns_write "HTTP/1.0 200 OK
 MIME-Version: 1.0
@@ -2065,8 +1950,10 @@ pragma: no-cache\r\n"
      ns_startcontent -type $content_type
 }
 
-proc ReturnHeadersWithCookie {cookie_content {content_type text/html}} {
-
+ad_proc -deprecated -warn ReturnHeadersWithCookie {cookie_content {content_type text/html}} {
+    Deprecated. just set [ad_conn outputheaders].
+    @see ad_conn
+} {    
     ns_write "HTTP/1.0 200 OK
 MIME-Version: 1.0
 Content-Type: $content_type
@@ -2075,7 +1962,10 @@ Set-Cookie:  $cookie_content\r\n"
      ns_startcontent -type $content_type
 }
 
-proc ReturnHeadersWithCookieNoCache {cookie_content {content_type text/html}} {
+ad_proc -deprecated -warn ReturnHeadersWithCookieNoCache {cookie_content {content_type text/html}} {
+    Deprecated. just set [ad_conn outputheaders].
+    @see ad_conn
+} {    
 
     ns_write "HTTP/1.0 200 OK
 MIME-Version: 1.0
@@ -2086,11 +1976,15 @@ pragma: no-cache\r\n"
      ns_startcontent -type $content_type
 }
 
-proc_doc ad_return_top_of_page {first_part_of_page {content_type text/html}} "Returns HTTP headers plus the top of the user-ivisible page.  Saves a TCP packet (and therefore some overhead) compared to using ReturnHeaders and an ns_write." {
+ad_proc -public ad_return_top_of_page {first_part_of_page {content_type text/html}} { 
+    Returns HTTP headers plus the top of the user-visible page.  Saves a
+    TCP packet (and therefore some overhead) compared to using
+    ReturnHeaders and an ns_write.
+} {
     set all_the_headers "HTTP/1.0 200 OK
 MIME-Version: 1.0
 Content-Type: $content_type\r\n"
-     util_WriteWithExtraOutputHeaders $all_the_headers
+    util_WriteWithExtraOutputHeaders $all_the_headers
 
     ns_startcontent -type $content_type
 
@@ -2099,7 +1993,7 @@ Content-Type: $content_type\r\n"
     }
 }
 
-proc_doc apply {func arglist} {
+ad_proc -public apply {func arglist} {
     Evaluates the first argument with ARGLIST as its arguments, in the
     environment of its caller. Analogous to the Lisp function of the same name.
 } {
@@ -2107,9 +2001,9 @@ proc_doc apply {func arglist} {
     return [uplevel $func_and_args]
 }
 
-proc_doc safe_eval args {
-    Version of eval that checks its arguments for brackets that may be
-used to execute unsafe code.
+ad_proc -public safe_eval args {
+    Version of eval that checks its arguments for brackets 
+    that may be used to execute unsafe code.
 } {
     foreach arg $args {
 	if { [regexp {[\[;]} $arg] } {
@@ -2119,7 +2013,10 @@ used to execute unsafe code.
     return [apply uplevel $args]
 }
 
-proc_doc lmap {list proc_name} {Applies proc_name to each item of the list, appending the result of each call to a new list that is the return value.} {
+ad_proc -public lmap {list proc_name} {
+    Applies proc_name to each item of the list, appending the result of 
+    each call to a new list that is the return value.
+} {
     set lmap [list]
     foreach item $list {
 	lappend lmap [safe_eval $proc_name $item]
@@ -2127,7 +2024,14 @@ proc_doc lmap {list proc_name} {Applies proc_name to each item of the list, appe
     return $lmap
 }
 
-proc_doc ad_decode { args } "this procedure is analogus to sql decode procedure. first parameter is the value we want to decode. this parameter is followed by a list of pairs where first element in the pair is convert from value and second element is convert to value. last value is default value, which will be returned in the case convert from values matches the given value to be decoded" {
+ad_proc -public ad_decode { args } {
+    this procedure is analogus to sql decode procedure. first parameter is
+    the value we want to decode. this parameter is followed by a list of
+    pairs where first element in the pair is convert from value and second
+    element is convert to value. last value is default value, which will
+    be returned in the case convert from values matches the given value to
+    be decoded
+} {
     set num_args [llength $args]
     set input_value [lindex $args 0]
 
@@ -2155,17 +2059,21 @@ proc_doc ad_decode { args } "this procedure is analogus to sql decode procedure.
     }
 }
 
-proc_doc ad_urlencode { string } "same as ns_urlencode except that dash and underscore are left unencoded." {
+ad_proc -public ad_urlencode { string } {
+    same as ns_urlencode except that dash and underscore are left unencoded.
+} {
     set encoded_string [ns_urlencode $string]
     regsub -all {%2d} $encoded_string {-} encoded_string
     regsub -all {%5f} $encoded_string {_} ad_encoded_string
     return $ad_encoded_string
 }
 
-ad_proc ad_get_cookie {
+ad_proc -public ad_get_cookie {
     { -include_set_cookies t }
     name { default "" }
-} { "Returns the value of a cookie, or $default if none exists." } {
+} { 
+    Returns the value of a cookie, or $default if none exists.
+} {
     if { $include_set_cookies == "t" } {
 	set headers [ad_conn outputheaders]
 	for { set i 0 } { $i < [ns_set size $headers] } { incr i } {
@@ -2192,7 +2100,7 @@ ad_proc ad_get_cookie {
     return $default
 }
 
-ad_proc ad_set_cookie {
+ad_proc -public ad_set_cookie {
     {
 	-replace f
 	-secure f
@@ -2231,6 +2139,7 @@ ad_proc ad_set_cookie {
 
     @param value is autmatically URL encoded.
 
+    @see ad_get_cookie
 } {
     set headers [ad_conn outputheaders]
     if { $replace != "f" } {
@@ -2279,7 +2188,9 @@ ad_proc ad_set_cookie {
     ns_set put $headers "Set-Cookie" $cookie
 }
 
-proc_doc ad_run_scheduled_proc { proc_info } { Runs a scheduled procedure and updates monitoring information in the shared variables. } {
+ad_proc -private ad_run_scheduled_proc { proc_info } { 
+    Runs a scheduled procedure and updates monitoring information in the shared variables. 
+} {
     # Grab information about the scheduled procedure.
     set thread [lindex $proc_info 0]
     set once [lindex $proc_info 1]
@@ -2333,7 +2244,7 @@ if { [apm_first_time_loading_p] } {
     nsv_set ad_procs . ""
 }
 
-ad_proc ad_schedule_proc {
+ad_proc -public ad_schedule_proc {
     {
 	-thread f
 	-once f
@@ -2343,7 +2254,12 @@ ad_proc ad_schedule_proc {
     interval
     proc
     args
-} { Replacement for ns_schedule_proc, allowing us to track what's going on. Can be monitored via /admin/monitoring/schedule-procs.tcl. The procedure defaults to run on only the canonical server unless the all_servers flag is set to true. } {
+} { 
+    Replacement for ns_schedule_proc, allowing us to track what's going
+    on. Can be monitored via /admin/monitoring/schedule-procs.tcl. The
+    procedure defaults to run on only the canonical server unless the
+    all_servers flag is set to true.
+} {
     # we don't schedule a proc to run if we have enabled server clustering,
     # we're not the canonical server, and the procedure was not requested to run on all servers.
     if { [server_cluster_enabled_p] && ![ad_canonical_server_p] && $all_servers == "f" } {
@@ -2373,7 +2289,7 @@ ad_proc ad_schedule_proc {
     eval [concat [list ns_schedule_proc] $my_args [list $interval ad_run_scheduled_proc [list $proc_info]]]
 }
 
-proc util_ReturnMetaRefresh { url { seconds_delay 0 }} {
+ad_proc -deprecated util_ReturnMetaRefresh { url { seconds_delay 0 }} {
     ReturnHeaders
     ns_write "
     <head>
@@ -2389,7 +2305,7 @@ proc util_ReturnMetaRefresh { url { seconds_delay 0 }} {
 #    util_current_directory   
 # See: http://www.arsdigita.com/bboard/q-and-a-fetch-msg.tcl?msg_id=0003eV
 
-ad_proc ad_returnredirect {{} target_url} {
+ad_proc -public ad_returnredirect {{} target_url} {
   A replacement for ns_returnredirect.  It uses ns_returnredirect but is better in
   two important aspects:
   <ul>
@@ -2429,7 +2345,7 @@ ad_proc ad_returnredirect {{} target_url} {
   }
 }
 
-ad_proc util_complete_url_p {{} string} {
+ad_proc -public util_complete_url_p {{} string} {
   Determine whether string is a complete URL, i.e.
   wheteher it begins with protocol: where protocol
   consists of letters only.
@@ -2441,7 +2357,7 @@ ad_proc util_complete_url_p {{} string} {
   }
 }
 
-ad_proc util_absolute_path_p {{} path} {
+ad_proc -public util_absolute_path_p {{} path} {
    Check whether the path begins with a slash
 } {
    set firstchar [string index $path 0]
@@ -2452,7 +2368,7 @@ ad_proc util_absolute_path_p {{} path} {
    }
 }
 
-ad_proc util_current_location {{}} {
+ad_proc -public util_current_location {{}} {
    Like ad_conn location - Returns the location string of the current
    request in the form protocol://hostname[:port] but it looks at the
    Host header, that is, takes into account the host name the client
@@ -2523,7 +2439,7 @@ ad_proc util_current_location {{}} {
    }
 }
 
-ad_proc util_current_directory {{}} {
+ad_proc -public util_current_directory {{}} {
     Returns the directory of the current URL.
     <p>
     We can't just use [file dirname [ad_conn url]] because
@@ -2549,23 +2465,9 @@ ad_proc util_current_directory {{}} {
    }
 }
 
-proc util_aolserver_2_p {} {
-    if {[string index [ns_info version] 0] == "2"} {
-	return 1
-    } else {
-	return 0
-    }
-}
 
-proc_doc ad_chdir_and_exec { dir arg_list } { chdirs to $dir and executes the command in $arg_list. We'll probably want to improve this to be thread-safe. } {
-    cd $dir
-    eval exec $arg_list
-}
-
-proc_doc ad_call_proc_if_exists { proc args } {
-
-Calls a procedure with particular arguments, only if the procedure is defined.
-
+ad_proc -public ad_call_proc_if_exists { proc args } {
+    Calls a procedure with particular arguments, only if the procedure is defined.
 } {
     if { [llength [info procs $proc]] == 1 } {
 	eval $proc $args
@@ -2856,7 +2758,7 @@ ad_proc -public util_url_valid_p { query_url } {
 
     @author Philip Greenspun (philg@mit.edu)
 } {
-    return [regexp {https?://[^ ].+} $query_url]
+    return [regexp {https?://[^ ].+} [string trim $query_url]]
 }
 
 ad_proc -public value_if_exists { var_name } {
@@ -2885,7 +2787,7 @@ ad_proc -public max { args } {
     return $max
 }
 
-proc_doc -deprecated ad_check_for_naughty_html {user_submitted_html} {
+ad_proc -deprecated -warn ad_check_for_naughty_html {user_submitted_html} {
 
 This proc is deprecated. Please use <a
 href="/api-doc/proc-view?proc=ad_html_security_check">ad_html_security_check</a>
@@ -2934,7 +2836,7 @@ proc ad_dateentrywidget {column {default_date "1940-11-03"}} {
     return [ns_dbformvalueput $output $column date $default_date]
 }
 
-proc ad_dateentrywidget_default_to_today {column} {
+ad_proc -deprecated -warn ad_dateentrywidget_default_to_today {column} {
     set today [lindex [split [ns_localsqltimestamp] " "] 0]
     return [ad_dateentrywidget $column $today]
 }
@@ -2975,10 +2877,11 @@ ad_proc -public util_list_to_ns_set { aList } {
 }
 
 
-ad_proc util_http_file_upload {-file -data -binary:boolean -filename 
+ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename 
                                -name {-mime_type */*} {-mode formvars} 
                                {-rqset ""} url {formvars {}} {timeout 30} 
-                               {depth 10} {http_referer ""}} {
+                               {depth 10} {http_referer ""}
+} {
     Implement client-side HTTP file uploads as multipart/form-data as per 
     RFC 1867.
     <p>
@@ -3264,7 +3167,7 @@ if {![catch {package require Trf 2.0}]} {
     #	A Base64 encoded version of $string, wrapped at $maxlen characters
     #	by $wrapchar.
     
-    ad_proc ::base64::encode {args} {
+    ad_proc -public ::base64::encode {args} {
         Tcl implementation of base64::encode from tcllib 1.1.  
         (Tcllib is distributed under the same terms as the Tcl core, i.e., 
         the BSD license).  See http://tcllib.sourceforge.net for the latest.
@@ -3344,7 +3247,7 @@ if {![catch {package require Trf 2.0}]} {
     # Results:
     #	The decoded value.
 
-    ad_proc ::base64::decode {string} {
+    ad_proc -public ::base64::decode {string} {
         Tcl implementation of base64::encode from tcllib 1.1.  
         (Tcllib is distributed under the same terms as the Tcl core, i.e., 
         the BSD license).  See http://tcllib.sourceforge.net for the latest.
@@ -3417,7 +3320,7 @@ if {![catch {package require Trf 2.0}]} {
     #	A Base64 encoded version of $string, wrapped at $maxlen characters
     #	by $wrapchar.
     
-    ad_proc ::base64::encode {args} {
+    ad_proc -public ::base64::encode {args} {
         Tcl implementation of base64::encode from tcllib 1.1.  
         (Tcllib is distributed under the same terms as the Tcl core, i.e., 
         the BSD license).  See http://tcllib.sourceforge.net for the latest.
@@ -3518,7 +3421,7 @@ if {![catch {package require Trf 2.0}]} {
     # Results:
     #	The decoded value.
 
-    ad_proc ::base64::decode {string} {
+    ad_proc -public ::base64::decode {string} {
         Tcl implementation of base64::encode from tcllib 1.1.  
         (Tcllib is distributed under the same terms as the Tcl core, i.e., 
         the BSD license).  See http://tcllib.sourceforge.net for the latest.
