@@ -428,11 +428,153 @@ comment on column cr_revisions.nls_language  is '
   for multi-lingual searching in Intermedia.
 ';
 
-alter table cr_items add constraint cr_items_live_fk 
-  foreign key (live_revision) references cr_revisions(revision_id);
+-- postgresql RI bug causes multiple failures with regards to deletion of
+-- content_revisions (DanW dcwickstrom@earthlink.net)
 
-alter table cr_items add constraint cr_items_latest_fk 
-  foreign key (latest_revision) references cr_revisions(revision_id);
+-- alter table cr_items add constraint cr_items_live_fk 
+--   foreign key (live_revision) references cr_revisions(revision_id);
+
+-- alter table cr_items add constraint cr_items_latest_fk 
+--   foreign key (latest_revision) references cr_revisions(revision_id);
+
+
+create function cr_revision_del_ri_trg() returns opaque as '
+declare
+        dummy           integer;
+        v_latest        integer;
+        v_live          integer;
+begin
+        select 1 into dummy
+        from 
+          cr_revisions           
+        where 
+          revision_id = old.live_revision;
+        
+        if FOUND then
+          raise EXCEPTION ''Referential Integrity: live_revision still exists: %'', old.live_revision;
+        end if;
+        
+        select 1 into dummy
+        from 
+          cr_revisions 
+        where 
+          revision_id = old.latest_revision;
+        
+        if FOUND then
+          raise EXCEPTION ''Referential Integrity: latest_revision still exists: %'', old.latest_revision;
+        end if;
+        
+        return old;
+end;' language 'plpgsql';
+
+create function cr_revision_ins_ri_trg() returns opaque as '
+declare
+        dummy           integer;
+        v_latest        integer;
+        v_live          integer;
+begin
+        select 1 into dummy
+        from 
+          cr_revisions           
+        where 
+          revision_id = new.live_revision;
+        
+        if NOT FOUND and new.live_revision is NOT NULL then
+          raise EXCEPTION ''Referential Integrity: live_revision does not exist: %'', new.live_revision;
+        end if;
+        
+        select 1 into dummy
+        from 
+          cr_revisions 
+        where 
+          revision_id = new.latest_revision;
+        
+        if NOT FOUND and new.latest_revision is NOT NULL then
+          raise EXCEPTION ''Referential Integrity: latest_revision does not exist: %'', new.latest_revision;
+        end if;
+
+        return new;
+end;' language 'plpgsql';
+
+create function cr_revision_up_ri_trg() returns opaque as '
+declare
+        dummy           integer;
+        v_latest        integer;
+        v_live          integer;
+begin
+        select 1 into dummy
+        from 
+          cr_revisions           
+        where 
+          revision_id = new.live_revision;
+        
+        if NOT FOUND and new.live_revision <> old.live_revision and new.live_revision is NOT NULL then
+          raise EXCEPTION ''Referential Integrity: live_revision does not exist: %'', new.live_revision;
+        end if;
+        
+        select 1 into dummy
+        from 
+          cr_revisions 
+        where 
+          revision_id = new.latest_revision;
+        
+        if NOT FOUND and new.latest_revision <> old.latest_revision and new.latest_revision is NOT NULL then
+          raise EXCEPTION ''Referential Integrity: latest_revision does not exist: %'', new.latest_revision;
+        end if;
+        
+        return new;
+end;' language 'plpgsql';
+
+create function cr_revision_del_rev_ri_trg() returns opaque as '
+declare
+        dummy           integer;
+begin
+        select 1 into dummy
+        from 
+          cr_items
+        where 
+          item_id = old.item_id
+        and
+          live_revision = old.revision_id;
+        
+        if FOUND then
+          raise EXCEPTION ''Referential Integrity: attempting to delete live_revision: %'', old.revision_id;
+        end if;
+        
+        select 1 into dummy
+        from 
+          cr_items
+        where 
+          item_id = old.item_id
+        and
+          latest_revision = old.revision_id;
+        
+        if FOUND then
+          raise EXCEPTION ''Referential Integrity: attempting to delete latest_revision: %'', old.revision_id;
+        end if;
+        
+        return old;
+end;' language 'plpgsql';
+
+
+-- reimplementation of RI triggers. (DanW dcwickstrom@earthlink.net)
+
+create trigger cr_revision_del_ri_trg 
+after delete on cr_items
+for each row execute procedure cr_revision_del_ri_trg();
+
+create trigger cr_revision_up_ri_trg 
+after update on cr_items
+for each row execute procedure cr_revision_up_ri_trg();
+
+create trigger cr_revision_ins_ri_trg 
+after insert on cr_items
+for each row execute procedure cr_revision_ins_ri_trg();
+
+create trigger cr_revision_del_rev_ri_trg 
+after delete on cr_revisions
+for each row execute procedure cr_revision_del_rev_ri_trg();
+
 
 create table cr_revision_attributes (
   revision_id    integer
