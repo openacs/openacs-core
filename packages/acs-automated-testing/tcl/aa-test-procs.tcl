@@ -719,13 +719,13 @@ ad_proc aa_log_result {
 
   incr aa_testcase_test_id
   if {$test_result == "pass"} {
-    ns_log Notice "PASSED: $aa_testcase_id, $test_notes"
+    ns_log Debug "PASSED: $aa_testcase_id, $test_notes"
     incr aa_testcase_passes
   } elseif {$test_result == "fail"} {
     ns_log Error "FAILED: $aa_testcase_id, $test_notes"
     incr aa_testcase_fails
   } else {
-    ns_log Notice "LOG: $aa_testcase_id, $test_notes"
+    ns_log Debug "LOG: $aa_testcase_id, $test_notes"
     set test_result "log"
   }
   # Notes in database can only hold so many characters
@@ -750,7 +750,7 @@ ad_proc aa_log_final {
 
   if {$test_fails == 0} {
   } else {
-    ns_log Notice "FAILED: $aa_testcase_id, $test_fails tests failed"
+    ns_log Error "FAILED: $aa_testcase_id, $test_fails tests failed"
   }
 
   db_dml testcase_result_insert {
@@ -882,8 +882,9 @@ ad_proc -private aa_execute_rollback_tests {} {
 
     if { [info exists aa_rollback_test_statements] } {
         foreach test_statement $aa_rollback_test_statements {
-            ns_log Notice "pm debug test_statement \"$test_statement\""
             eval [join $test_statement " "]
         }
     }
+
+    unset aa_rollback_test_statements
 }
