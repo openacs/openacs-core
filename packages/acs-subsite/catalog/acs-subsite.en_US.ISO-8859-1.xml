@@ -77,6 +77,7 @@ logging in again. &lt;/p&gt;
   <msg key="Continue">Continue</msg>
   <msg key="Continue_to_your_account">Continue to %pvt_home_name%</msg>
   <msg key="Country_Name">Country Name</msg>
+  <msg key="create_asm">Create New</msg>
   <msg key="Create_new_community">Create new %pretty_name%</msg>
   <msg key="Create_new_subsite">Create new subsite</msg>
   <msg key="Current_Password">Current Password</msg>
@@ -95,6 +96,7 @@ logging in again. &lt;/p&gt;
   <msg key="Disabled">Disabled</msg>
   <msg key="Domain">Domain</msg>
   <msg key="E_mail">E-mail</msg>
+  <msg key="edit_asm">Edit Assessment</msg>
   <msg key="edit_comment">edit comment</msg>
   <msg key="Elements_not_editable">Certain elements are not editable, because they are managed by %authority_name%.</msg>
   <msg key="Email">Email</msg>
@@ -337,6 +339,7 @@ You can always change your password by doing the following:
   <msg key="Re_enable">Re-enable</msg>
   <msg key="Recover_Password">Recover Password</msg>
   <msg key="Refresh_login">Refresh login</msg>
+  <msg key="reg_asm_link">Custom User Registration Form</msg>
   <msg key="Register">Register</msg>
   <msg key="Registration_Approval_Notice">
     &lt;p&gt; Thank you for registering for %system_name%. An administrator has been notified of your request. &lt;/p&gt;
