@@ -65,11 +65,14 @@ as
    ) return acs_sc_impls.impl_id%TYPE
    is
        v_impl_id		acs_sc_impls.impl_id%TYPE;
+       v_impl_pretty_name       varchar(4000);
    begin
        v_impl_id := acs_object.new (object_type => 'acs_sc_implementation');
 
-        if impl_pretty_name is null theen
-            impl_pretty_name := impl_name;
+        if impl_pretty_name is null then
+            v_impl_pretty_name := impl_name;
+        else
+            v_impl_pretty_name := impl_pretty_name;
         end if;
 
        insert into acs_sc_impls (
@@ -81,7 +84,7 @@ as
        ) values (
 	      v_impl_id,
 	      impl_name,
-              impl_pretty_name,
+              v_impl_pretty_name,
 	      impl_owner_name,
 	      impl_contract_name
        );
@@ -185,7 +188,6 @@ as
 end acs_sc_impl;
 /
 show errors
-
 
 create or replace view valid_uninstalled_bindings as
     select c.contract_id, c.contract_name, i.impl_id, i.impl_name, i.impl_owner_name, i.impl_pretty_name
