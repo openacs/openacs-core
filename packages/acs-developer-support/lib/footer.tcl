@@ -69,4 +69,17 @@ if { $show_p } {
         set unfake_url [export_vars -base $set_user_url { { user_id $real_user_id } { return_url [ad_return_url] } }]
     }
 
+    # Profiling information
+    global ds_profile__total_ms ds_profile__iterations 
+
+    multirow create profiling tag num_iterations total_ms ms_per_iteration
+
+    if { [info exists ds_profile__total_ms] } {
+        foreach tag [lsort [array names ds_profile__total_ms]] {
+            multirow append profiling $tag [set ds_profile__iterations($tag)] [lc_numeric [set ds_profile__total_ms($tag)]] \
+                    [ad_decode [set ds_profile__iterations($tag)] 0 {} \
+                    [lc_numeric [expr [set ds_profile__total_ms($tag)]/[set ds_profile__iterations($tag)]]]]
+        }
+    }
+
 }

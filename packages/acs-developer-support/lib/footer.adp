@@ -26,4 +26,25 @@
       </div>
     </form>
   </if>
+  <if @profiling:rowcount@ gt 0>
+    <div id="developer-support-footer">
+      <h3>Profiling Information</h3>
+      <table>
+        <tr>
+          <th>Tag</th>
+          <th># Iterations</th>
+          <th>Total time </th>
+          <th>Avg. time per iteration</th>
+        </tr>
+        <multiple name="profiling">
+          <tr>
+            <td>@profiling.tag@</td>
+            <td align="right">@profiling.num_iterations@</td>
+            <td align="right">@profiling.total_ms@ ms</td>
+            <td align="right">@profiling.ms_per_iteration@ ms</td>
+          </tr>
+        </multiple>
+      </table>
+    </div>
+  </if>
 </if>

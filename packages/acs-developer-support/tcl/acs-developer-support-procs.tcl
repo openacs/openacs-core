@@ -531,3 +531,36 @@ ad_proc -public ds_get_comments {} {
     }
     return $comments
 }
+
+ad_proc -public ds_profile { command tag } {
+    Helper proc for performance profiling. 
+    This will count the number of invocations of the given tag, the total time spent within all invocations
+    (between the corresponding 'ds_profile start' and 'ds_profile stop' invocations).
+    The results will be output at the bottom of the page, and include the average time spent per invocation.
+
+    @param command start or stop.
+    
+    @param tag The name of the operation you're timing. Could be the name of a procedure, or some other unique identifier.
+} {
+    global ds_profile__total_ms ds_profile__iterations ds_profile__start_clock
+    switch $command {
+        start {
+            set ds_profile__start_clock($tag) [clock clicks -milliseconds]
+        }
+        stop {
+            set num_ms [expr [clock clicks -milliseconds] - $ds_profile__start_clock($tag)]
+            set ds_profile__start_clock($tag) {}
+
+            if { ![info exists ds_profile__total_ms($tag)] } {
+                set ds_profile__total_ms($tag) 0
+                set ds_profile__iterations($tag) 0
+            }
+
+            set ds_profile__total_ms($tag) [expr [set ds_profile__total_ms($tag)] + $num_ms]
+            set ds_profile__iterations($tag) [expr [set ds_profile__iterations($tag)] + 1]
+        }
+        default {
+            error "Invalid command. Valid commands are 'start' and 'stop'."
+        }
+    }
+}
