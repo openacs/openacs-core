@@ -29,48 +29,49 @@ list::create \
         }
         enabled {
             label "Enabled"
+            html { align center }
             display_template {
-                <if @authorities.short_name@ ne "local">
-                  <if @authorities.enabled_p@ true>
-                    <a href="@authorities.enabled_p_url@" title="Disable this authority"><img src="/shared/images/checkboxchecked" height="13" width="13" border="0"></a>
-                  </if>
-                  <else>
-                    <a href="@authorities.enabled_p_url@" title="Enable this authority"><img src="/shared/images/checkbox" height="13" width="13" border="0"></a>
-                  </else>
+                <if @authorities.enabled_p@ true>
+                  <a href="@authorities.enabled_p_url@" title="Disable this authority"><img src="/shared/images/checkboxchecked" height="13" width="13" border="0" style="background-color: white;"></a>
                 </if>
                 <else>
-                  Yes
+                  <a href="@authorities.enabled_p_url@" title="Enable this authority"><img src="/shared/images/checkbox" height="13" width="13" border="0" style="background-color: white;"></a>
                 </else>
             }
         }
         move {
             label "Order*"
+            html { align center }
             display_template {
                 <if @authorities.sort_order@ ne @authorities.highest_sort_order@>
-                  <a href="@authorities.sort_order_url_up@" title="Move this authority up"><img src="/shared/images/arrow-up.gif" border="0" width="15" height="15"></a></if>
+                  <a href="@authorities.sort_order_url_up@" title="Move this authority up"><img src="/resources/acs-subsite/arrow-up.gif" border="0" width="15" height="15"></a>
                 </if>
+                <else><img src="/resources/spacer.gif" width="15" height="15"></else>
                 <if @authorities.sort_order@ ne  @authorities.lowest_sort_order@>
-                  <a href="@authorities.sort_order_url_down@" title="Move this authority down"><img src="/shared/images/arrow-down.gif" border="0" width="15" height="15"></a>
+                  <a href="@authorities.sort_order_url_down@" title="Move this authority down"><img src="/resources/acs-subsite/arrow-down.gif" border="0" width="15" height="15"></a>
                 </if>
+                <else><img src="/resources/spacer.gif" width="15" height="15"></else>
           }
         }
         auth_impl {
-            label "Authentication"
+            label "Authentication Driver"
         }
         pwd_impl {
-            label "Password"
+            label "Password Driver"
         }
         reg_impl {
-            label "Registration"
+            label "Registration Driver"
         }
         delete {
             label ""
             display_template {
-                <a href="@authorities.delete_url@"
-                   title="Delete this authority"
-                   onclick="return confirm('Are you sure you want to delete authority @authorities.pretty_name@?');">
-                  <img src="/shared/images/Delete16.gif" height="16" width="16" alt="Delete" border="0">
-                </a>
+                <if @authorities.short_name@ ne local>
+                  <a href="@authorities.delete_url@"
+                     title="Delete this authority"
+                     onclick="return confirm('Are you sure you want to delete authority @authorities.pretty_name@?');">
+                    <img src="/shared/images/Delete16.gif" height="16" width="16" alt="Delete" border="0">
+                  </a>
+                </if>
             }
             sub_class narrow
         }

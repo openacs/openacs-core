@@ -29,15 +29,9 @@ set form_widgets_full {
 
     authority_id:key(acs_object_id_seq)
 
-    {short_name:text
-        {html {size 50}}
-        {label "Short name"}
-        {help_text "This is a string which can be used to identify this authority. Use lower-case, and no spaces."}
-    }
-
     {pretty_name:text
         {html {size 50}}
-        {label "Pretty name"}
+        {label "Name"}
     }        
 
     {enabled_p:text(radio)
@@ -77,7 +71,7 @@ set form_widgets_full {
         {help_text "URL where users register for a new account."}
     }        
 
-    {help_contact_text:text(textarea),optional
+    {help_contact_text:richtext(richtext),optional
         {html {cols 60 rows 13}} 
         {label "Help contact text"}
         {help_text "Contact information (phone, email, etc.) to be displayed as a last resort when people are having problems with an authority."}
@@ -136,10 +130,12 @@ if { $local_authority_p } {
     set form_widgets $form_widgets_full
 }
 
-ad_form -name authority_form \
+ad_form -name authority \
         -mode $ad_form_mode \
         -form $form_widgets \
-        -edit_request {
+-on_request {
+    
+} -edit_request {
 
     auth::authority::get -authority_id $authority_id -array element_array
 
@@ -149,11 +145,13 @@ ad_form -name authority_form \
 
 } -new_data {
 
-    foreach var_name [template::form::get_elements -no_api authority_form] {
+    foreach var_name [template::form::get_elements -no_api authority] {
             set element_array($var_name) [set $var_name]
     }
 
     set element_array(sort_order) ""
+    set element_array(short_name) ""
+    set element_array(help_contact_text_format) $help_contact_text.format
 
     auth::authority::create \
         -authority_id $authority_id \
@@ -161,7 +159,7 @@ ad_form -name authority_form \
 
 } -edit_data {
 
-    foreach var_name [template::form::get_elements -no_api authority_form] {
+    foreach var_name [template::form::get_elements -no_api authority] {
         if { ![string equal $var_name "authority_id"] } {
             set element_array($var_name) [set $var_name]
         }
@@ -173,36 +171,36 @@ ad_form -name authority_form \
 } 
 
 # Show recent batch jobs for existing authorities
+
+list::create \
+    -name batch_jobs \
+    -multirow batch_jobs \
+    -key job_id \
+    -elements {
+        start_time_pretty {
+            label "Start time"
+            link_url_eval {$job_url}
+        }
+        end_time_pretty {
+            label "End time"
+        }            
+        num_actions {
+            label "Actions"
+            html { align right }
+        }
+        num_problems {
+            label "Problems"
+            html { align right }
+        }
+    }
+
 set display_batch_history_p [expr $authority_exists_p && [string equal $ad_form_mode "display"]]
 if { $display_batch_history_p } {
     
-    list::create \
-        -name batch_jobs \
-        -multirow batch_jobs \
-        -key job_id \
-        -elements {
-            job_id {
-                label "Job ID"
-                link_url_eval {$job_url}
-            }
-            pretty_start_time {
-                label "Start time"
-            }
-            pretty_end_time {
-                label "End time"
-            }            
-            num_actions {
-                label "Number of actions"
-            }
-            num_problems {
-                label "Number of problems"
-            }
-        }
-
-    db_multirow -extend { job_url } batch_jobs select_batch_jobs {
+    db_multirow -extend { job_url start_time_pretty end_time_pretty } batch_jobs select_batch_jobs {
         select job_id,
-               to_char(job_start_time, 'YYYY-MM-DD HH24:MI:SS') as pretty_start_time,
-               to_char(job_end_time, 'YYYY-MM-DD HH24:MI:SS') as pretty_end_time,
+               to_char(job_start_time, 'YYYY-MM-DD HH24:MI:SS') as start_time_ansi,
+               to_char(job_end_time, 'YYYY-MM-DD HH24:MI:SS') as end_time_ansi,
                snapshot_p,
                (select count(e1.entry_id)
                 from   auth_batch_job_entries e1
@@ -215,5 +213,8 @@ if { $display_batch_history_p } {
         where authority_id = :authority_id
     } {
         set job_url [export_vars -base batch-job { job_id }]
+
+        set start_time_pretty [lc_time_fmt $start_time_ansi "%x %X"]
+        set end_time_pretty [lc_time_fmt $end_time_ansi "%x %X"]
     }
 }
