@@ -23,7 +23,7 @@
 <tr>
 <td class="codeblock"><strong>Basic OpenACS</strong>
 </td>
-<td class="codeblock"><strong>Installed Packages</strong></td>
+<td class="codeblock"><strong>Package Documentation</strong></td>
 </tr>
 
 <tr><td valign="top">
@@ -58,8 +58,11 @@
 set found_p 0
 
 if {[db_table_exists apm_package_types]} {
-    db_foreach get_installed_pkgs "select package_key, pretty_name from apm_package_types" {
-        set found_p 1
+    db_foreach get_installed_pkgs "select package_key, pretty_name from apm_package_types order by upper(pretty_name) " {
+        if { ! $found_p } { 
+           set found_p 1
+           adp_puts "<strong>Installed Packages</strong>\n\n"
+        }
 	set index_page [lindex [glob -nocomplain \
 				  "[acs_package_root_dir $package_key]/www/doc/index.*"] 0]
   	
@@ -79,6 +82,13 @@ if {!$found_p} {
     adp_puts "- No installed packages.\n"
 }
 
+set packages [core_docs_uninstalled_packages]
+if { ! [empty_string_p $packages] } { 
+  adp_puts "\n<strong>Uninstalled packages</strong>\n\n"
+  foreach {key name} $packages { 
+    adp_puts "- <a href=\"$key\">$name</a>\n"
+  }
+}
 %>
 </pre>
 </td>
