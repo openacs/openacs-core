@@ -128,12 +128,6 @@ namespace eval site_node {
             nsv_set site_node_urls $node(node_id) $node(url)
         }
 
-        ns_eval {
-            global tcl_site_nodes
-            if {[info exists tcl_site_nodes]} {
-                unset tcl_site_nodes
-            }
-        }
     }
 
     ad_proc -private update_cache {
@@ -143,12 +137,6 @@ namespace eval site_node {
             nsv_set site_nodes $node(url) [array get node]
             nsv_set site_node_urls $node(node_id) $node(url)
 
-            ns_eval {
-                global tcl_site_nodes
-                if { [info exists tcl_site_nodes] } {
-                    array unset tcl_site_nodes "${node(url)}*"
-                }
-            }
         } else {
             set url [get_url -node_id $node_id]
 

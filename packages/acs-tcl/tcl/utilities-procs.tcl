@@ -2491,6 +2491,7 @@ ad_proc -public ad_returnredirect {{} target_url} {
   if {$use_metarefresh_p != 0} {
       util_ReturnMetaRefresh $url 
   } else {
+	  ns_log Notice "Huh? redirecting: $url"
       ns_returnredirect $url
   }
 }
