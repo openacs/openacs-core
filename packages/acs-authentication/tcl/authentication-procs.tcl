@@ -99,7 +99,7 @@ ad_proc -public auth::authenticate {
         }
     } {
         set auth_info(auth_status) failed_to_connect
-        set auth_info(auth_message) "Error invoking the authentication driver."
+        set auth_info(auth_message) $errmsg
         global errorInfo
         ns_log Error "Error invoking authentication driver for authority_id = $authority_id: $errorInfo"
     }
@@ -378,7 +378,7 @@ ad_proc -public auth::create_user {
                                      -secret_answer $secret_answer]
     } {
         set auth_info(auth_status) failed_to_connect
-        set auth_info(auth_message) "Error invoking the account registration driver."
+        set auth_info(auth_message) $errmsg
         global errorInfo
         ns_log Error "Error invoking account registratino driver for authority_id = $authority_id: $errorInfo"
     }
