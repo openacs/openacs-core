@@ -29,7 +29,11 @@
         from lang_messages
         where package_key = :package_key
         and locale = :locale
-        and upgrade_status <> 'deleted'
+        and not exists (select 1 from lang_message_keys
+                        where message_key = lang_messages.message_key
+                        and package_key = lang_messages.package_key
+                        and upgrade_status = 'deleted'
+                       )
     </querytext>
   </fullquery>
 

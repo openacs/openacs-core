@@ -21,6 +21,25 @@ namespace eval lang::audit {
     } {
         # Save the old message in the audit table
         set overwrite_user [ad_conn user_id]
-        db_dml lang_message_audit {} -clobs [list $old_message]
+        db_dml lang_message_audit {
+          insert into lang_messages_audit (package_key, message_key, locale, message, overwrite_user) 
+            values (:package_key, :message_key, :locale, empty_clob(), :overwrite_user) 
+          returning message into :1
+        } -clobs [list $old_message]
+    }    
+
+    ad_proc -public created_message { 
+        package_key
+        message_key
+        locale
+    } {
+      Keep track of who added a translation and when
+      @author Peter Marklund
+    } {
+        set user_id [ad_conn user_id]
+        db_dml lang_message_audit_create {
+            insert into lang_messages_created (package_key, message_key, locale, creation_user)
+               values (:package_key, :message_key, :locale, :user_id)
+        }
     }    
 }
