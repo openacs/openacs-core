@@ -19,7 +19,7 @@ if { [template::util::is_nil signatory] } {
 }
 
 if { ![template::util::is_nil context] } {
-    set context_bar [eval ad_context_bar $context]
+    set context_bar [eval ad_context_bar -- $context]
 }
 
 if { [template::util::is_nil context_bar] } {
