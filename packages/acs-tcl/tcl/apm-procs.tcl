@@ -774,7 +774,7 @@ ad_proc -public apm_package_url_from_key {package_key} {
     return [util_memoize "apm_package_url_from_key_mem $package_key"]
 }
 
-proc apm_package_url_from_key_mem {package_key} {
+ad_proc -public apm_package_url_from_key_mem {package_key} {
     set package_id [apm_package_id_from_key $package_key]
     return [db_string apm_package_url_from_key {
 	select site_node.url(node_id) 
