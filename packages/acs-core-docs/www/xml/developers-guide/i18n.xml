@@ -503,8 +503,10 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
           <imagedata fileref="images/i18n-2.png" format="png" align="center"/>
         </imageobject>
       </mediaobject>
-        <note>
-          <para>The automatic process can easily get confused by tags within message texts, so that it tries to create two or three message keys for one long string with a tag in the middle.  In these cases, uncheck those keys during the conversion and then edit the files directly.  For example, this code:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The automatic process can easily get confused by tags within message texts, so that it tries to create two or three message keys for one long string with a tag in the middle.  In these cases, uncheck those keys during the conversion and then edit the files directly.  For example, this code:</para>
 <programlisting>  &lt;p class="form-help-text"&gt;&lt;b&gt;Invitations&lt;/b&gt; are sent,
     when this wizard is completed and casting begins.&lt;/p&gt;</programlisting>
     <para>has a bold tag which confuses the converter into thinking there are two message keys for the text beginning "Invitations ..." where there should be one:</para>
@@ -513,13 +515,13 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
           <imagedata fileref="images/i18n-3.png" format="png" align="center"/>
         </imageobject>
       </mediaobject>
-      <para>Instead, we cancel those keys, edit the file manually, and put in a single temporory message tag:</para>
+      <para>Instead, we cancel those keys, edit the file manually, and put in a single temporary message tag:</para>
       <programlisting>  &lt;p class="form-help-text"&gt; &lt;#Invitations_are_sent &lt;b&gt;Invitations&lt;/b&gt; are sent,
     when this wizard is completed and casting begins.#&gt;
   &lt;/p&gt;</programlisting>
-        </note>
-        <note>
-          <para>Complex if statements may produce convoluted message keys that are very hard to localize.  Rewrite these if statements.  For example:</para>
+          </listitem>
+        <listitem>
+            <para>Complex if statements may produce convoluted message keys that are very hard to localize.  Rewrite these if statements.  For example:</para>
         <programlisting>
 Select which case &lt;if @simulation.casting_type@ eq "open"&gt;and
 role&lt;/if&gt; to join, or create a new case for yourself.  If you do not
@@ -544,7 +546,28 @@ be automatically assigned to a case when the simulation
 begins.
 
 &lt;/else&gt;</programlisting>
-        </note>
+          </listitem>
+          <listitem>
+            <para>Check for duplicate keys.  For common words such as
+            Yes and No, you can use a library of keys at <ulink
+            url="/acs-lang/admin/message-list?package%5fkey=acs%2dkernel&amp;locale=en%5fUS">acs-kernel</ulink>.
+            For example, instead of using
+            <computeroutput>myfirstpackage.Yes</computeroutput>, you
+            can use <computeroutput>acs-kernel.Yes</computeroutput>.
+            You can also use the <ulink
+            url="/acs-lang/admin/package-list?locale=en%5fUS">Message Key Search</ulink> facility to find duplicates.
+            Be careful, however, building up sentences from keys
+            because grammar and other elements may not be consistent
+            across different locales.</para>
+            <para>Additional discussion: <ulink
+            url="http://openacs.org/forums/message-view?message_id=164973">Re:
+            Bug 961 ("Control Panel" displayed instead of
+            "Administer")</ulink>, <ulink
+            url="http://openacs.org/forums/message-view?message_id=125235">Translation
+            server upgraded</ulink>, and <ulink url="http://openacs.org/forums/message-view?message_id=158580">Localization questions</ulink>.</para>
+          </listitem>
+
+        </itemizedlist>
       </listitem>
       <listitem>
         <formalpara>
