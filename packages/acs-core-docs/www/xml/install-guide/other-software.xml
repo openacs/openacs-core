@@ -723,13 +723,15 @@ cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
 
     <sect1 id="install-tclwebtest">
       <title>Install tclwebtest.</title>
-      <para>Download the <link linkend="tclwebtest-source">tclwebtest
+      <para>Download the <link linkend="source-tclwebtest">tclwebtest
       source</link>, unpack it, and put it an appropriate
-      place.</para>
-      <screen><action>cd /usr/local/src
-tar xvzf /tmp/tclwebtest-0.3.tar.gz
+      place.  As root:</para>
+      <screen><action>cd /tmp
+wget http://prdownloads.sourceforge.net/tclwebtest/tclwebtest-0.3.tar.gz?use_mirror=unc
+tar xvzf tclwebtest-0.3.tar.gz
 mv tclwebtest /usr/local/
-ln -s /usr/local/tclwebtest-0.3/tclwebtest /usr/local/bin
+ln -s /usr/local/tclwebtest-0.3 /usr/local/tclwebtest
+ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
 </action></screen>
     </sect1>
 

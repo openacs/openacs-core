@@ -63,7 +63,8 @@ chmod 770 /var/lib/aolserver</action></screen>
   <sect2 id="install-with-script">
     <title>Install with automated script (EXPERIMENTAL)</title>
     <para>Starting with OpenACS 5.0, an experimental script is
-    available to automate all of the steps for the rest of this section.  Requires tclwebtest.  If you are not feeling lucky, skip to <xref
+    available to automate all of the steps for the rest of this
+    section.  Requires <link linkend="install-tclwebtest">tclwebtest</link>.  If you are not feeling lucky, skip to <xref
         linkend="install-from-tarball"/>.</para>
         <para>Get the install script from CVS.  It is located within
         the main cvs tree, at /etc/install.  Use anonymous CVS
