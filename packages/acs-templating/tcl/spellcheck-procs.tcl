@@ -194,7 +194,10 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 	set language "--lang=$language"
     }
 
-    if { [catch { set ispell_proc [open "|$spelling_wrapper [ns_info home] $spellchecker_path $language $dictionaryfile $tmpfile" r] } errmsg] } {
+    # Caveat: The "open" arg must be a list (not a string) to allow the wrapper args to be the empty string
+    # (which $language will be when ispell is used, for instance)
+
+    if { [catch { set ispell_proc [open [list |$spelling_wrapper [ns_info home] $spellchecker_path $language $dictionaryfile $tmpfile] r] } errmsg] } {
 	ad_return_error "Webspell could not be executed" "Spell-checking is enabled but the spell-check wrapper ([acs_root_dir]/bin/webspell) could not be executed. Check that the wrapper exists, and that its permissions are correct. <p>Here is the error message: <pre>$errmsg</pre>"
 	ad_script_abort
     }
@@ -255,7 +258,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 		incr error_num
 	    }
 	    &* {
-		regexp "^& (\[^ \]+) (\[0-9\]+) (\[0-9\]+): (.*)$" $ispell_line dummy word n_options pos options
+		regexp {^& ([^ ]+) ([0-9]+) ([0-9]+): (.*)$} $ispell_line dummy word n_options pos options
 		regsub $word $line "\#$error_num\#" line
 		lappend errors [list nearmiss $error_num $word $options]
 		incr error_num
