@@ -146,6 +146,16 @@ as
   and mr.member_state = 'approved'
   and u.email_verified_p = 't';
 
+-- faster simpler view
+-- does not check for registered user/banned etc
+create or replace view all_users
+as
+select pa.*, pe.*, u.*
+from  parties pa, persons pe, users u
+where  pa.party_id = pe.person_id
+and pe.person_id = u.user_id;
+
+
 create view cc_users
 as
 select o.*, pa.*, pe.*, u.*, mr.member_state, mr.rel_id
