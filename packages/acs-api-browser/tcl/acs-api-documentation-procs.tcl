@@ -30,7 +30,7 @@ ad_proc -public api_read_script_documentation {
     Reads the contract from a Tcl content page.
 
     @param path the path of the Tcl file to examine, relative to the
-        ACS root directory.
+        OpenACS root directory.
     @return a list representation of the documentation element array, or
         an empty list if the file does not contain a <code>doc_page_contract</code>
         block.
@@ -151,7 +151,7 @@ ad_proc -public api_script_documentation {
     @param format the type of documentation to generate. Currently, only
         <code>text/html</code> is supported.
     @param path the path of the Tcl file to examine, relative to the
-        ACS root directory.
+        OpenACS root directory.
     @return the formatted documentation string.
     @error if the file does not exist.
 
@@ -248,7 +248,7 @@ ad_proc -public api_library_documentation {
     Generates formatted documentation for a Tcl library file (just the header,
     describing what the library does).
 
-    @param path the path to the file, relative to the ACS path root.
+    @param path the path to the file, relative to the OpenACS path root.
 
 } {
     if { ![string equal $format "text/html"] } {

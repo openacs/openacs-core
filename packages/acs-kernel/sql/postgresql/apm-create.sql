@@ -1,7 +1,7 @@
 --
 -- /packages/acs-kernel/sql/apm-create.sql
 --
--- Data model for the ACS Package Manager (APM)
+-- Data model for the OpenACS Package Manager (APM)
 --
 -- @author Bryan Quinn (bquinn@arsdigita.com)
 -- @author Jon Salz (jsalz@mit.edu)
@@ -651,7 +651,7 @@ drop function inline_2 ();
 -- Who owns a version?
 create table apm_package_owners (
     version_id         integer constraint apm_package_owners_ver_id_fk references apm_package_versions on delete cascade,
-    -- if the uri is an email address, it should look like 'mailto:alex@arsdigita.com'
+    -- if the uri is an email address, it should look like 'mailto:someguy@openacs.org'
     owner_uri          varchar(1500),
     owner_name         varchar(200)
                        constraint apm_package_owners_name_nn not null,
@@ -1116,7 +1116,7 @@ create table apm_applications (
 );
 
 comment on table apm_applications is '
-This table records data on all of the applications registered in the ACS.
+This table records data on all of the applications registered in OpenACS.
 ';
 
 
@@ -1128,7 +1128,7 @@ create table apm_services (
 );
 
 comment on table apm_services is '
-This table records data on all of the services registered in the ACS. 
+This table records data on all of the services registered in OpenACS. 
 ';
 
 

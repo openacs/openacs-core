@@ -1,6 +1,6 @@
 ad_page_contract {
 
-    Installs the ACS kernel data model, using the <code>sql/acs-kernel-create</code>
+    Installs the OpenACS kernel data model, using the <code>sql/acs-kernel-create</code>
     script.
 
     @author Jon Salz (jsalz@arsdigita.com)
@@ -24,7 +24,7 @@ return
 }
 
 ns_write "
-Now installing the ACS kernel data model...
+Now installing the OpenACS kernel data model...
 <blockquote><pre>
 "
 cd [file join [acs_root_dir] packages acs-kernel sql [db_type]]
@@ -56,7 +56,7 @@ if { !$apm_db_types_exists } {
 
 ns_write "</pre></blockquote>
 
-Done installing the ACS kernel data model.<p>
+Done installing the OpenACS kernel data model.<p>
 
 "
 

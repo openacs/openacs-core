@@ -2,7 +2,7 @@
 
 ad_page_contract {
 
-    View an ACS Object Type
+    View an OpenACS Object Type
 
     @author Yonantan Feldman (yon@arsdigita.com)
     @creation-date August 13, 2000

@@ -59,7 +59,7 @@ ns_write "
 
 <h2>Input Filter Acceptance Tests</h2>
 
-for the ArsDigita Community System
+for the OpenACS Community System
 <hr>
 
 <p>This page applies a suite of tests for the ad_page_contract filters.</p>
@@ -98,12 +98,12 @@ ns_write "
 
 <p>Done.  If any of the above tests failed, please submit a bug report
 to the <a
-href=http://www.arsdigita.com/sdm/>ACS Software Development Manager</a>.  
-Note that you are running ACS [ad_acs_version] released
+href=http://openacs.org/sdm/>OpenACS Software Development Manager</a>.  
+Note that you are running OpenACS [ad_acs_version] released
 on [ad_acs_release_date].</p> 
 
 <hr>
-<address>bugs@arsdigita.com</address>
+<address>bugs@openacs.org</address>
 </body>
 </html>
 

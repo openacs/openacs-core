@@ -19,10 +19,10 @@ Content-Type: text/html
 
 <html>
   <head>
-    <title>ACS Installation: $title</title>
+    <title>OpenACS Installation: $title</title>
   </head>
   <body bgcolor=white>
-    <h2>ACS Installation: $title</h2>
+    <h2>OpenACS Installation: $title</h2>
     <hr>
 "
 }
@@ -31,7 +31,7 @@ Content-Type: text/html
 # This procedure must be called at the end of every installer page to end the critical section.
 proc install_footer {} {
     return "<hr>
-<a href=\"mailto:acs@arsdigita.com\"><address>acs@arsdigita.com</address></a>
+<a href=\"mailto:gatekeepers@openacs.org\"><address>gatekeepers@openacs.org</address></a>
 
   </body>
 </html>

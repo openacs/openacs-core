@@ -20,7 +20,7 @@ proc ad_acs_kernel_id {} {
     }
 }
 
-ns_write "[install_header 200 "Installing ACS Core Services"]
+ns_write "[install_header 200 "Installing OpenACS Core Services"]
 "
 
 # Attempt to install all packages.

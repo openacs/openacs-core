@@ -1,6 +1,6 @@
 # /packages/acs-tcl/bootstrap/bootstrap.tcl
 #
-# Code to bootstrap ACS, invoked by /tcl/0-acs-init.tcl.
+# Code to bootstrap OpenACS, invoked by /tcl/0-acs-init.tcl.
 #
 # @creation-date 12 May 2000
 # @author Jon Salz [jsalz@arsdigita.com]
@@ -71,8 +71,8 @@ set errno [catch {
 
     #####
     #
-    # Perform some checks to make sure that (a) a recent version of the Oracle driver
-    # is installed and (b) the ACS data model is properly loaded.
+    # Perform some checks to make sure that (a) a recent version of the Oracle or PG driver
+    # is installed and (b) the OpenACS data model is properly loaded.
     #
     #####
 
@@ -108,7 +108,7 @@ set errno [catch {
     apm_bootstrap_load_queries acs-tcl
     apm_bootstrap_load_queries acs-bootstrap-installer
 
-    # Is ACS installation complete? If not, source the installer and bail.
+    # Is OpenACS installation complete? If not, source the installer and bail.
     if { ![ad_verify_install] } {
 	ns_log "Notice" "Installation is not complete - sourcing the installer."
 	source "$root_directory/packages/acs-bootstrap-installer/installer.tcl"
@@ -146,7 +146,7 @@ set errno [catch {
 	bootstrap_fatal_error "The request processor routines have not been loaded."
     }
 
-    ns_log "Notice" "Done loading ACS."
+    ns_log "Notice" "Done loading OpenACS."
 }]
 
 if { $errno && $errno != 2 } {
