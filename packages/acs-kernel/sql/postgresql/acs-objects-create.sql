@@ -187,17 +187,18 @@ create table acs_objects (
 	last_modified		timestamptz default current_timestamp not null,
 	modifying_user		integer,
 	modifying_ip		varchar(50),
-        tree_sortkey            varbit,
+        tree_sortkey            varbit
+				constraint acs_objects_tree_sortkey_un unique
+				constraint acs_objects_tree_sortkey_nn not null,
+        max_child_sortkey       varbit,
         constraint acs_objects_context_object_un
 	unique (context_id, object_id)
 );
 
-create index acs_objects_context_object_idx on
-       acs_objects (context_id, object_id);
-
-create index acs_objs_tree_skey_idx on acs_objects (tree_sortkey);
-
--- alter table acs_objects modify constraint acs_objects_context_object_un enable;
+-- The unique constriant about will force create of this index...
+-- create index acs_objects_context_object_idx onacs_objects (context_id, object_id);
+-- The unique constraint should generate an index automatically so this is not needed
+-- create index acs_objs_tree_skey_idx on acs_objects (tree_sortkey);
 
 create index acs_objects_creation_user_idx on acs_objects (creation_user);
 create index acs_objects_modify_user_idx on acs_objects (modifying_user);
@@ -230,106 +231,94 @@ for each row execute procedure acs_objects_last_mod_update_tr ();
 
 -- tree query support for acs_objects
 
-create function acs_objects_get_tree_sortkey(integer) returns varbit as '
+create or replace function acs_objects_get_tree_sortkey(integer) returns varbit as '
 declare
   p_object_id    alias for $1;
 begin
   return tree_sortkey from acs_objects where object_id = p_object_id;
-end;' language 'plpgsql';
+end;' language 'plpgsql' with (isstrict, iscachable);
 
-create function acs_objects_insert_tr () returns opaque as '
+create function acs_objects_insert_tr() returns opaque as '
 declare
-        v_parent_sk     varbit default null;
-        v_max_value     integer;
+        v_parent_sk    		varbit default null;
+        v_max_child_sortkey	varbit;
 begin
-        if new.context_id is null then 
-            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
-              from acs_objects 
-             where context_id is null;
-        else 
-            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
-              from acs_objects 
-             where context_id = new.context_id;
+        if new.context_id is null then
+ 	    new.tree_sortkey := int_to_tree_key(new.object_id+1000);
+        else
+            SELECT tree_sortkey, tree_increment_key(max_child_sortkey)
+	    INTO v_parent_sk, v_max_child_sortkey
+            FROM acs_objects
+            WHERE object_id = new.context_id 
+            FOR UPDATE;
 
-            select tree_sortkey into v_parent_sk 
-              from acs_objects 
-             where object_id = new.context_id;
+	    UPDATE acs_objects 
+	    SET max_child_sortkey = v_max_child_sortkey
+	    WHERE object_id = new.context_id;
+
+            new.tree_sortkey := v_parent_sk || v_max_child_sortkey;
         end if;
 
-
-        new.tree_sortkey := tree_next_key(v_parent_sk, v_max_value);
-
+	new.max_child_sortkey := null;
         return new;
-
 end;' language 'plpgsql';
 
 create trigger acs_objects_insert_tr before insert 
 on acs_objects for each row 
 execute procedure acs_objects_insert_tr ();
 
+
 create function acs_objects_update_tr () returns opaque as '
 declare
         v_parent_sk     varbit default null;
-        v_max_value     integer;
-        ctx_id          integer;
-        v_rec           record;
-        clr_keys_p      boolean default ''t'';
+        v_max_child_sortkey	varbit;
+        v_old_parent_length	integer;
 begin
-        if new.object_id = old.object_id and 
-           ((new.context_id = old.context_id) or
-            (new.context_id is null and old.context_id is null)) then
+        if new.object_id = old.object_id
+           and ((new.context_id = old.context_id)
+                or (new.context_id is null 
+	            and old.context_id is null)) then
 
            return new;
 
         end if;
 
-        for v_rec in select object_id
-                       from acs_objects 
-                      where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey)
-                   order by tree_sortkey
-        LOOP
-            if clr_keys_p then
-               update acs_objects set tree_sortkey = null
-               where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
-               clr_keys_p := ''f'';
-            end if;
-            
-            select context_id into ctx_id
-              from acs_objects 
-             where object_id = v_rec.object_id;
+	-- the tree sortkey is going to change so get the new one and update it and all its
+	-- children to have the new prefix...
+	v_old_parent_length := length(new.tree_sortkey) + 1;
 
-            if ctx_id is null then 
-                select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
-                  from acs_objects 
-                 where context_id is null;
-            else 
-                select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
-                  from acs_objects 
-                 where context_id = ctx_id;
+	if new.context_id is null then
+            v_parent_sk := int_to_tree_key(new.object_id+1000);
+        else
+	    SELECT tree_sortkey, tree_increment_key(max_child_sortkey)
+	    INTO v_parent_sk, v_max_child_sortkey
+            FROM acs_objects
+            WHERE object_id = new.context_id
+            FOR UPDATE;
 
-                select tree_sortkey into v_parent_sk 
-                  from acs_objects 
-                 where object_id = ctx_id;
-            end if;
+	    UPDATE acs_objects
+            SET max_child_sortkey = v_max_child_sortkey
+  	    WHERE object_id = new.context_id;
 
-            update acs_objects 
-               set tree_sortkey = tree_next_key(v_parent_sk, v_max_value)
-             where object_id = v_rec.object_id;
+  	    v_parent_sk := v_parent_sk || v_max_child_sortkey;
+	end if;
 
-        end LOOP;
+	UPDATE acs_objects
+	SET tree_sortkey = v_parent_sk || substring(tree_sortkey, v_old_parent_length)
+        WHERE tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
 
         return new;
-
 end;' language 'plpgsql';
 
-create trigger acs_objects_update_tr after update 
+create trigger acs_objects_update_tr after update
 on acs_objects
-for each row 
+for each row
 execute procedure acs_objects_update_tr ();
 
 -- show errors
 
 comment on table acs_objects is '
+The root table for the acs object heirarchy.  It all starts here folks.
 ';
 
 comment on column acs_objects.context_id is '
@@ -422,9 +411,10 @@ declare
         inner record;
         security_context_root integer;
 begin
-  if new.object_id = old.object_id and
-     new.context_id = old.context_id and
-     new.security_inherit_p = old.security_inherit_p then
+  if new.object_id = old.object_id
+     and ((new.context_id = old.context_id)
+	  or (new.context_id is null and old.context_id is null))
+     and new.security_inherit_p = old.security_inherit_p then
     return new;
   end if;
 
@@ -592,7 +582,7 @@ end;' language 'plpgsql';
 
 
 -- function new
-create function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean)
+create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean)
 returns integer as '
 declare
   new__object_id              alias for $1;  -- default null
@@ -633,7 +623,7 @@ begin
 end;' language 'plpgsql';
 
 -- function new
-create function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer)
+create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
   new__object_id              alias for $1;  -- default null
