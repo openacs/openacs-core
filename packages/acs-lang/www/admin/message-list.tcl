@@ -12,8 +12,8 @@ ad_page_contract {
     {show "all"}
 } -validate {
     show_valid -requires { show } {
-        if { [lsearch { all translated untranslated } $show] == -1 } {
-            ad_complain "Show must be one of 'all', 'translated', or 'untranslated'."
+        if { [lsearch { all deleted translated untranslated } $show] == -1 } {
+            ad_complain "Show must be one of 'all', 'deleted', 'translated', or 'untranslated'."
         }
     }
 }
@@ -50,8 +50,9 @@ set new_message_url "localized-message-new?[export_vars { locale package_key }]"
 
 db_1row counts {
     select (select count(*) from lang_messages where package_key = :package_key and locale = :locale) as num_translated,
-           (select count(*) from lang_message_keys where package_key = :package_key) as num_messages
-    from   dual
+           (select count(*) from lang_message_keys where package_key = :package_key) as num_messages,
+    (select count(*) from lang_messages where package_key = :package_key and locale = :locale and deleted_p = 't') as num_deleted
+
 }
 set num_untranslated [expr $num_messages - $num_translated]
 
@@ -77,9 +78,16 @@ set where_clauses [list]
 switch -exact $show {
     translated {
         lappend where_clauses {lm2.message is not null}
+        lappend where_clauses {(lm2.deleted_p = 'f' or lm2.deleted_p is null)}
+        lappend where_clauses {lm1.deleted_p = 'f'}
     }
     untranslated {
+        lappend where_clauses {(lm2.deleted_p = 'f' or lm2.deleted_p is null)}
+        lappend where_clauses {lm1.deleted_p = 'f'}
         lappend where_clauses {lm2.message is null}
+    }
+    deleted {
+        lappend where_clauses {lm1.deleted_p = 't'}
     }
 }
 
@@ -117,6 +125,7 @@ multirow create show_opts value label count
 multirow append show_opts "all" "All" $num_messages_pretty
 multirow append show_opts "translated" "Translated" $num_translated_pretty
 multirow append show_opts "untranslated" "Untranslated" $num_untranslated_pretty
+multirow append show_opts "deleted" "Deleted" $num_deleted
 
 multirow extend show_opts url selected_p 
 

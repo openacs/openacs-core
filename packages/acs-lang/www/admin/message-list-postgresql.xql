@@ -17,8 +17,6 @@
     and    lm1.package_key = :package_key
     and    lm1.message_key = lmk.message_key
     and    lm1.package_key = lmk.package_key
-    and    (lm2.deleted_p = 'f' or lm2.deleted_p is null)
-    and    lm1.deleted_p = 'f'
     $where_clause
     order  by upper(lm1.message_key), lm1.message_key
 
