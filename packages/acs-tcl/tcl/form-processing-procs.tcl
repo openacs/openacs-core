@@ -137,7 +137,9 @@ ad_proc -public ad_form {
     <p><dt><b>-extend</b></dt><p>
     <dd>Extend an existing form.  This allows one to build forms incrementally.  Forms are built at the
         template level.  As a consequence one can write utility procs that use -extend to build form
-        snippets common to several data entry forms.  
+        snippets common to several data entry forms. Note that the full form block must be built up
+        (extended) and completed before any action blocks such as select_query, new_request, edit_request etc.
+        are defined.
         <p>This must be the first switch passed into ad_form
     </dd>
 
