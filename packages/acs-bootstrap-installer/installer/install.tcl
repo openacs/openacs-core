@@ -15,11 +15,18 @@ ad_page_contract {
     system_url:notnull
     system_name:notnull
     publisher_name:notnull
-    system_owner:notnull
-    admin_owner:notnull
-    host_administrator:notnull
-    outgoing_sender:notnull
-    new_registrations:notnull
+    {system_owner ""}
+    {admin_owner ""}
+    {host_administrator ""}
+    {outgoing_sender ""}
+    {new_registrations ""}
+}
+
+# Default all system emails to the administrators email
+foreach var_name {system_owner admin_owner host_administrator outgoing_sender new_registrations} {
+    if { [empty_string_p [set $var_name]] } {
+        set $var_name $email
+    }
 }
 
 ##############
