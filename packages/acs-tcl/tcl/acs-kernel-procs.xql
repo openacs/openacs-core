@@ -4,13 +4,14 @@
 <fullquery name="ad_acs_administrator_exists_p.admin_exists_p">      
       <querytext>
       
-	select 1 as admin_exists_p
-	from dual
-	where exists (select 1
-		      from all_object_party_privilege_map m, users u
-		      where m.object_id = 0
-		      and m.party_id = u.user_id
-		      and m.privilege = 'admin')
+        select 1 as admin_exists_p
+        from dual
+        where exists (select 1
+                      from all_object_party_privilege_map m, users u, acs_magic_objects amo
+                      where m.object_id = amo.object_id
+                        and amo.name = 'security_context_root'
+                        and m.party_id = u.user_id
+                        and m.privilege = 'admin')
     
       </querytext>
 </fullquery>
