@@ -280,14 +280,20 @@ proc add_user {
     link follow ~u "user-add"
 
     form find ~a "/dotlrn/user-add"
-    field find ~n "id"
-    field fill $id
     field find ~n "email"
     field fill $email
     field find ~n "first_names"
     field fill $first_names
     field find ~n "last_name"
     field fill $last_name
+    field find ~n "password"
+    field fill [get_user_password $email]
+    field find ~n "password_confirm"
+    field fill [get_user_password $email]
+    field find ~n "secret_question"
+    field fill 1
+    field find ~n "secret_answer"
+    field fill 1
     form submit
 
     form find ~n add_user
