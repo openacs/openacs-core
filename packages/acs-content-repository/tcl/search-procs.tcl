@@ -4,7 +4,7 @@ ad_proc content_search__datasource {
     Provides data source for search interface.  Used to access content items
     after search.
 } {
-    db_0or1row revisions_datasource {
+    db_0or1row revisions_datasource "
 	select r.revision_id as object_id, 
 	       r.title,
                case i.storage_type
@@ -19,7 +19,7 @@ ad_proc content_search__datasource {
 	from cr_revisions r, cr_items i
 	where revision_id = :object_id
         and i.item_id = r.item_id
-    } -column_array datasource
+    " -column_array datasource
 
     return [array get datasource]
 }
@@ -94,7 +94,7 @@ ad_proc template_search__datasource {
     Provides data source for search interface.  Used to access content items
     after search.
 } {
-    db_0or1row revisions_datasource {
+    db_0or1row revisions_datasource "
 	select r.revision_id as object_id, 
 	       r.title as title, 
                case i.storage_type
@@ -109,7 +109,7 @@ ad_proc template_search__datasource {
 	from cr_revisions r, cr_items i
 	where revision_id = :object_id
         and i.item_id = r.item_id
-    } -column_array datasource
+    " -column_array datasource
 
     return [array get datasource]
 }
