@@ -290,10 +290,6 @@ proc add_user {
     field fill [get_user_password $email]
     field find ~n "password_confirm"
     field fill [get_user_password $email]
-    field find ~n "secret_question"
-    field fill 1
-    field find ~n "secret_answer"
-    field fill 1
     form submit
 
     form find ~n add_user
