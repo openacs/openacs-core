@@ -22,7 +22,7 @@
  
 <fullquery name="ds_support_url.ds_support_url">      
       <querytext>
-	select site_node.url(node_id) 
+	select site_node__url(node_id) 
 	from site_nodes s, apm_packages p
 	where p.package_id = s.object_id
 	and p.package_key ='acs-developer-support'
