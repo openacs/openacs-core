@@ -90,6 +90,13 @@ foreach pkg_info $pkg_install_list {
                 $spec_file]
     }
 
+    if { $version_id == 0 } {
+        # Installation of the package failed and we shouldn't continue with installation
+        # as there might be packages depending on the failed package. Ideally we should
+        # probably check for such dependencies and continue if there are none.
+        ad_script_abort
+    }
+
     incr installed_count
 }
 
