@@ -30,6 +30,7 @@ create table lang_message_keys (
     upgrade_status     varchar(30)
                        constraint lang_message_keys_us_ck
                        check (upgrade_status in ('no_upgrade', 'added','deleted')),
+    description        text,
     constraint lang_message_keys_pk
     primary key (message_key, package_key)
 );
