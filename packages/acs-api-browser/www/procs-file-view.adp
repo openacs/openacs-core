@@ -18,7 +18,7 @@
 
 <multiple name="proc_doc_list">
 <table width="100%">
-  <tr><td bgcolor=#e4e4e4>@proc_doc_list.doc@</td></tr>
+  <tr><td bgcolor="#e4e4e4">@proc_doc_list.doc@</td></tr>
 </table>
 &nbsp;<p>
 </multiple>
