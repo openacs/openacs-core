@@ -38,12 +38,16 @@ We'll need to create a site-wide administrator for your server (like the root
 user in UNIX). Please type in the email address, first and last name, and password
 for this user.
 
-<form action=create-administrator-2>
+<form action=\"create-administrator-2\">
 <blockquote>
 <table>
 <tr>
   <th align=right>Email:</th>
   <td><input name=email size=20></td>
+</tr>
+<tr>
+  <th align=right>Username:</th>
+  <td><input name=username size=20></td>
 </tr>
 <tr>
   <th align=right>First Name:</th>
@@ -60,21 +64,6 @@ for this user.
 <tr>
   <th align=right>Password (again):</th>
   <td><input type=password name=password_confirmation size=12></td>
-</tr>
-<tr valign=baseline>
-  <th align=right>Password Question:</th>
-  <td><select name=password_question>
-<option>What is your mother's maiden name?
-<option>Is it better to be loved or feared?
-<option>How much wood could a woodchuck chuck?
-<option>Hello - is there anybody out there?
-<option>Hvad skal vi have til frokost?
-</select><br>(To be asked if you forget your password.)
-</td>
-</tr>
-<tr>
-  <th align=right>Password Answer:</th>
-  <td><input name=password_answer size=30></td>
 </tr>
 
 <tr><td colspan=2 align=center><br><input type=submit value=\"Create User ->\"></td></tr>
