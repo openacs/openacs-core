@@ -104,7 +104,7 @@ if {$view_by == "package"} {
     set testcase_desc      [lindex $results("$testcase_id,$package_key") 0]
     regexp {^(.+?\.)\s} $testcase_desc "" testcase_desc
     set categories         [lindex $results("$testcase_id,$package_key") 2]
-    set categories_str     [string map {" " ", "} $categories]
+    set categories_str     [join $categories ", "]
     set testcase_timestamp [lindex $results("$testcase_id,$package_key") 3]
     set testcase_passes    [lindex $results("$testcase_id,$package_key") 4]
     set testcase_fails     [lindex $results("$testcase_id,$package_key") 5]
