@@ -133,22 +133,7 @@ set errno [catch {
     #
     # Check for the presence of the automated testing package.
     #
-    set load_tests_p 0
-    foreach enabled_p [db_list automated_test_enabled_select {
-      select attr_value as enabled_p
-      from apm_parameter_values, apm_parameters
-      where apm_parameter_values.parameter_id = apm_parameters.parameter_id and
-            apm_parameters.parameter_name = 'enabled_p' and
-            apm_parameter_values.package_id in
-        (select package_id from apm_packages, site_nodes
-         where package_key = 'acs-automated-testing' and
-               apm_packages.package_id = site_nodes.object_id)
-    }] {
-	    if {$enabled_p} {
-        set load_tests_p 1
-      }
-    }
-
+    set load_tests_p [apm_package_enabled_p "acs-automated-testing"]
 
     # Load *-procs.tcl and *-init.tcl files for enabled packages.
     apm_load_libraries -procs
