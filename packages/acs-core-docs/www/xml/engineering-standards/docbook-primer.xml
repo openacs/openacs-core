@@ -463,8 +463,8 @@
 	  <programlisting>
 	    &lt;itemizedlist&gt;
 	    
-	    &lt;listitem&gt;&lt;para&gt;Stuff goes here&lt;/para&gt;&lt;listitem&gt;
-	    &lt;listitem&gt;&lt;para&gt;More stuff goes here&lt;/para&gt;&lt;listitem&gt;
+	    &lt;listitem&gt;&lt;para&gt;Stuff goes here&lt;/para&gt;&lt;/listitem&gt;
+	    &lt;listitem&gt;&lt;para&gt;More stuff goes here&lt;/para&gt;&lt;/listitem&gt;
 
 	    &lt;/itemizedlist&gt;
 	  </programlisting>
@@ -482,8 +482,8 @@
 	  <programlisting>
 	    &lt;orderedlist&gt;
 	    
-	    &lt;listitem&gt;&lt;para&gt;Stuff goes here&lt;/para&gt;&lt;listitem&gt;
-	    &lt;listitem&gt;&lt;para&gt;More stuff goes here&lt;/para&gt;&lt;listitem&gt;
+	    &lt;listitem&gt;&lt;para&gt;Stuff goes here&lt;/para&gt;&lt;/listitem&gt;
+	    &lt;listitem&gt;&lt;para&gt;More stuff goes here&lt;/para&gt;&lt;/listitem&gt;
 
 	    &lt;/orderedlist&gt;
 	  </programlisting>
@@ -507,12 +507,12 @@
 	    
 	    &lt;varlistentry&gt;
 	    &lt;term&gt;Heading (&lt;dt&gt;) goes here&lt;/term&gt;
-	    &lt;listitem&gt;&lt;para&gt;And stuff (&lt;dd&gt;)goes here&lt;/para&gt;&lt;listitem&gt;
+	    &lt;listitem&gt;&lt;para&gt;And stuff (&lt;dd&gt;)goes here&lt;/para&gt;&lt;/listitem&gt;
 	    &lt;/varlistentry&gt;
 
 	    &lt;varlistentry&gt;
 	    &lt;term&gt;Another heading goes here&lt;/term&gt;
-	    &lt;listitem&gt;&lt;para&gt;And more stuff goes here&lt;/para&gt;&lt;listitem&gt;
+	    &lt;listitem&gt;&lt;para&gt;And more stuff goes here&lt;/para&gt;&lt;/listitem&gt;
 	    &lt;/varlistentry&gt;
 
 	    &lt;/variablelist&gt;
