@@ -72,10 +72,15 @@ if {[db_table_exists apm_package_types]} {
 	    } else {
 	       adp_puts "- <a href=\"/doc/$package_key/\">$package_key</a>\n"
 	    }
-     }
-  }
+        } else { 
+            if {![empty_string_p $pretty_name]} {
+	       adp_puts "- $pretty_name\n"
+	    } else {
+	       adp_puts "- $package_key\n"
+            }
+        }
+    }
 }
-
 
 
 if {!$found_p} {
@@ -86,7 +91,13 @@ set packages [core_docs_uninstalled_packages]
 if { ! [empty_string_p $packages] } { 
   adp_puts "\n<strong>Uninstalled packages</strong>\n\n"
   foreach {key name} $packages { 
-    adp_puts "- <a href=\"$key\">$name</a>\n"
+    set index_page [lindex [glob -nocomplain \
+				  "[acs_package_root_dir $key]/www/doc/index.*"] 0]
+    if { [file exists $index_page] } {
+       adp_puts "- <a href=\"$key\">$name</a>\n"
+    } else { 
+       adp_puts "- $name\n"
+    }
   }
 }
 %>

@@ -16,12 +16,21 @@ ad_proc -private core_docs_uninstalled_packages_internal {} {
     foreach spec_file [apm_scan_packages "[acs_root_dir]/packages"] {
         if { ! [catch {array set version [apm_read_package_info_file $spec_file]} errMsg] } { 
             if { ! [apm_package_registered_p $version(package.key)] } {
-                lappend uninstalled $version(package.key) $version(package-name)
+                if {[empty_string_p $version(package-name)]} { 
+                    set version(package-name) $version(package.key)
+                }
+                lappend uninstalled [list $version(package.key) $version(package-name)]
             }
         }
     }
-    
-    return $uninstalled
+
+    # sort the list and return in array set form
+    set out [list]
+    foreach pkg [lsort -dictionary -index 1 $uninstalled] { 
+        set out [concat $out $pkg]
+    }
+    return  $out
+
 }
 
 ad_proc -public core_docs_uninstalled_packages {} { 
