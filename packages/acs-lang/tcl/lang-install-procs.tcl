@@ -8,6 +8,8 @@ ad_library {
 
 ad_proc -private ::install::xml::action::set-system-locale { node } {
    set the systewide locale
+
+    <code>&lt;set-system-locale locale="en_US"&gt;</code>
 } {
     set locale [apm_required_attribute_value $node locale]
     lang::system::set_locale $locale
@@ -15,8 +17,19 @@ ad_proc -private ::install::xml::action::set-system-locale { node } {
 
 
 ad_proc -private ::install::xml::action::enable-locale { node } {
-   set the systewide locale
+    Enable a locale
+
+    <code>&lt;enable-locale locale="en_US"&gt;</code>
 } {
     set locale [apm_required_attribute_value $node locale]
     lang::system::locale_set_enabled -locale $locale -enabled_p t
+}
+
+ad_proc -private ::install::xml::action::disble-locale { node } {
+    Disable a locale
+
+    <code>&lt;disable-locale locale="en_US"&gt;</code>
+} {
+    set locale [apm_required_attribute_value $node locale]
+    lang::system::locale_set_enabled -locale $locale -enabled_p f
 }
