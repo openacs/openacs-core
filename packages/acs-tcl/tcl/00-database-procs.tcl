@@ -460,10 +460,11 @@ ad_proc db_list_of_lists {{ -dbn "" } statement_name sql args } {
 }
 
 
-ad_proc -public db_list_of_ns_sets {{ -dbn "" }
+ad_proc -public db_list_of_ns_sets {
+    { -dbn "" }
     statement_name
     sql
-    {args ""}
+    args
 } {
     Usage: <b>db_list_of_ns_sets</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
 
