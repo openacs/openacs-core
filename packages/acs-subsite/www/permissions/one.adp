@@ -1,8 +1,8 @@
   <master>
-    <property name="title">Permissions for @name@</property>
+    <property name="title">#acs-subsite.Permissions_for_name#</property>
     <property name="context">@context@</property>
 
-    <h3>Inherited Permissions</h3>
+    <h3>#acs-subsite.lt_Inherited_Permissions#</h3>
     <if @inherited:rowcount@ gt 0>
       <ul>
         <multiple name="inherited">
@@ -11,9 +11,9 @@
       </ul>
     </if>
     <else>
-      <p><em>No inherited permissions</em></p>
+      <p><em>#acs-subsite.none#</em></p>
     </else>
-    <h3>Direct Permissions</h3>
+    <h3>#acs-subsite.Direct_Permissions#</h3>
     <if @acl:rowcount@ gt 0>
       <form method="get" action="revoke">
         <input type=hidden name="object_id" value="@object_id@">
@@ -24,15 +24,15 @@
           </ul>
     </if>
     <else>
-      <p><em>None</em></p>
+      <p><em>#acs-subsite.none#</em></p>
     </else>
     <if @acl:rowcount@ gt 0>
-    <input type=submit value="Revoke Checked">
+    <input type=submit value="#acs-subsite.Revoke_Checked#">
     </form>
     </if>
     @controls@
 
-    <h3>Children</h3>
+    <h3>#acs-subsite.Children#</h3>
     <if @children_p@>
       <if @children:rowcount@ gt 0>
         <ul>
@@ -42,13 +42,13 @@
         </ul>
       </if>
       <else>
-        <p><em>No children</em></p>
+        <p><em>#acs-subsite.none#</em></p>
       </else>
     </if>
     <if @children_p@ eq "f">
-      <if @num_children@ gt 0> @num_children@ Children Hidden [<a href="one?object_id=@object_id@&amp;children_p=t">Show</a>]</if>
+      <if @num_children@ gt 0> #acs-subsite.lt_num_children_Children# [<a href="one?object_id=@object_id@&amp;children_p=t">#acs-subsite.Show#</a>]</if>
       <else>
-        <em>No children</em>
+        <em>#acs-subsite.none#</em>
       </else>
     </if>
-    <if @context_id@ not nil><p>[<a href="one?object_id=@context_id@">up to @context_name@</a>]</p></if>      
+    <if @context_id@ not nil><p>[<a href="one?object_id=@context_id@">#acs-subsite.up_to_context_name#</a>]</p></if>
