@@ -35,7 +35,7 @@ proc server_responds_p { server_url } {
         file delete -force $wget_file
     }
 
-    if { [catch {exec /usr/local/bin/wget --timeout 6 --output-document $wget_file --tries=3 ${server_url}/SYSTEM/dbtest} errmsg] } {
+    if { [catch {exec wget --timeout 6 --output-document $wget_file --tries=3 ${server_url}/SYSTEM/dbtest} errmsg] } {
         #puts "wget threw error $errmsg"
     }
 
