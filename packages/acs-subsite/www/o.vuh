@@ -8,11 +8,10 @@ ad_page_contract {
     @cvs-id $Id$
 } {}
 
-if {![regexp {^/([0-9]+)(-(.+))?$} [ad_conn path_info] match object_id dummy anchor]} {
-    ad_return_warning "Invalid object_id" [subst {
-	We could not find this object. This probably means that
-	the link you have clicked is broken.
-	We are sorry for this inconvenience.  [ad_conn path_info]
+if {![regexp {^/([0-9]{1,8})(-(.+))?$} [ad_conn path_info] match object_id dummy anchor]} {
+    ad_return_warning "Invalid object id" [subst {
+        The identifier given for this object is invalid.  Please check your url 
+        or contact the webmaster if you think it should work.
     }]
     return
 }
@@ -21,10 +20,13 @@ if {![empty_string_p $anchor]} {
     set anchor "#$anchor"
 }
 
-db_0or1row object_data {
+if {![ db_0or1row object_data {
     select o.object_type, o.title, o.package_id
     from acs_objects o
     where o.object_id = :object_id
+}]} { 
+    ns_returnnotfound
+    return
 }
 
 # Users are handled as a special case since we want to preserve the subsite 
