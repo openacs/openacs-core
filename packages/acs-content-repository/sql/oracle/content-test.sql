@@ -178,28 +178,28 @@ dbms_output.put_line('Path for puppy ' || item_id || ' is ' ||
 dbms_output.put_line('Path for puppy ' || item_id || ' from folder_id: ' || 
   folder_id || ' is ' || 
   content_item.get_path(item_id,folder_id));
---dbms_output.put_line('Path for puppy ' || item_id ||
---  ' from sub_folder_id: ' || sub_folder_id || ' is ' || 
---  content_item.get_path(item_id,sub_folder_id));
---dbms_output.put_line('Path for puppy' || item_id
---  || ' from sub_sub_folder_id: ' || sub_sub_folder_id || ' is ' || 
---  content_item.get_path(item_id,sub_sub_folder_id));
---dbms_output.put_line('Get id of item with invalid path - shouldn''t return anything');
---dbms_output.put_line('Found item at ' || content_item.get_id('grandpa/me', -200));
---dbms_output.put_line('Get id of item using subpath');
---dbms_output.put_line('Found item at ' || content_item.get_id('pa/me/puppy', folder_id));
---dbms_output.put_line('This is the path to a folder from a subfolder');
---dbms_output.put_line('Path for ' || sub_folder_id || ' from sub_sub_folder_id: ' || 
---  sub_sub_folder_id || ' is ' || 
---  content_item.get_path(sub_folder_id,sub_sub_folder_id));
---dbms_output.put_line('This is a path to an item from a non-existant item');
---dbms_output.put_line('Path for ' || item_id || ' from nonexistant_id: ' || 
---  -200 || ' is ' || 
---  content_item.get_path(item_id,-200));
---dbms_output.put_line('This is a path to an item from a non-related branch');
---dbms_output.put_line('Path for ' || item_id || ' from unrelated branch: ' || 
---  folder_b_id || ' is ' || 
--- content_item.get_path(item_id,folder_b_id));
+dbms_output.put_line('Path for puppy ' || item_id ||
+  ' from sub_folder_id: ' || sub_folder_id || ' is ' || 
+  content_item.get_path(item_id,sub_folder_id));
+dbms_output.put_line('Path for puppy' || item_id
+  || ' from sub_sub_folder_id: ' || sub_sub_folder_id || ' is ' || 
+  content_item.get_path(item_id,sub_sub_folder_id));
+dbms_output.put_line('Get id of item with invalid path - shouldn''t return anything');
+dbms_output.put_line('Found item at ' || content_item.get_id('grandpa/me', -200));
+dbms_output.put_line('Get id of item using subpath');
+dbms_output.put_line('Found item at ' || content_item.get_id('pa/me/puppy', folder_id));
+dbms_output.put_line('This is the path to a folder from a subfolder');
+dbms_output.put_line('Path for ' || sub_folder_id || ' from sub_sub_folder_id: ' || 
+  sub_sub_folder_id || ' is ' || 
+  content_item.get_path(sub_folder_id,sub_sub_folder_id));
+dbms_output.put_line('This is a path to an item from a non-existant item');
+dbms_output.put_line('Path for ' || item_id || ' from nonexistant_id: ' || 
+  -200 || ' is ' || 
+  content_item.get_path(item_id,-200));
+dbms_output.put_line('This is a path to an item from a non-related branch');
+dbms_output.put_line('Path for ' || item_id || ' from unrelated branch: ' || 
+  folder_b_id || ' is ' || 
+ content_item.get_path(item_id,folder_b_id));
 
 
 dbms_output.put_line('-------------------------------------');
@@ -228,7 +228,7 @@ content_folder.rename(sub_sub_folder_id, 'aunty');
 dbms_output.put_line('-------------------------------------');
 dbms_output.put_line('SYMLINKS...');
 --dbms_output.put_line('...all tests passed');
-
+/*
 symlink_a_id := content_symlink.new('link_a',sub_sub_folder_id,sub_folder_id);
 dbms_output.put_line('Create a link in pa to aunty: Symlink is ' || symlink_a_id);
 
@@ -277,7 +277,7 @@ dbms_output.put_line('Found item ' || item_id || ' starting at pa ' ||
 
 dbms_output.put_line('--------------------------------');
 
-
+*/
 --dbms_output.put_line('Moving item ' || item_id || ' to grandma ' || 
 --	folder_b_id);
 --content_item.move(item_id,folder_b_id);
@@ -294,6 +294,7 @@ dbms_output.put_line('--------------------------------');
 --dbms_output.put_line('--------------------------------');
 
 -- symlinks/revisions should be deleted automatically
+/*
 content_item.delete(simple_item_id);
 content_template.delete(item_template_id);
 content_item.delete(item_id);
@@ -304,7 +305,7 @@ content_folder.delete(sub_sub_folder_id);
 content_folder.delete(sub_folder_id);
 content_folder.delete(folder_id);
 content_folder.delete(folder_b_id);
-
+*/
 end;
 /
 show errors

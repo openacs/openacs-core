@@ -680,14 +680,13 @@ end;' language 'plpgsql';
 
 \t
 select content_test__create();
+select content_test__dump();
 select content_test__check1();
 select content_test__check2();
-select content_test__dump();
 
 select content_test__check3();
 select content_test__check4();
 select content_test__check5();
-select content_test__dump();
 \t
 drop function content_test__create();
 drop function content_test__check1();
