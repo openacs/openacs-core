@@ -5,7 +5,7 @@ ad_library {
 
     @author Jon Salz (jsalz@arsdigita.com)
     @creation-date 15 May 2000
-    @cvs-id $Id$
+    @cvs-id request-processor-procs.tcl,v 1.25.2.7 2003/03/07 00:29:57 jeffd Exp
 }
 
 #####
@@ -31,11 +31,15 @@ ad_proc -public rp_internal_redirect {
     Parameters will stay the same as in the initial request.
 
     Keep in mind that if you do an internal redirect to something other than
-    the current directory that relative links returned to the clients
+    the current directory, relative links returned to the clients
     browser may be broken (since the client will have the original URL).
 
+    Use rp_form_put if you want to feed query variables to the redirected page.
+    
     @param absolute_path If set the path is an absolute path within the host filesystem
     @param path path to the file to serve
+
+    @see rp_form_put
 
 } {
 
@@ -480,6 +484,7 @@ ad_proc -private rp_filter { why } {
   session security.
 
 } {
+
     #####
     #
     # Initialize the environment: reset ad_conn, and populate it with
@@ -1098,7 +1103,6 @@ ad_proc -public ad_conn {args} {
 
   Added recursion_count to properly deal with internalredirects.
 
-  added recursion_count to properly deal with internalredirects.
 } {
   global ad_conn
 
