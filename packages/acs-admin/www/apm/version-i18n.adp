@@ -38,7 +38,10 @@ of the translation and leave you with little manual work to do.
 
 <p>
 To the best of our knowledge there is no harm in running those
-actions multiple times on files. 
+actions multiple times on files. Before an adp file is modified it will be backed up to
+a file with the name of the original file with the ending .orig appended to it (i.e.
+www/a-file.adp is backed up to www/a-file.adp.orig). However
+if such an .orig file already exists no backup is done. 
 </p>
 
 <p>
@@ -56,10 +59,25 @@ untouched (since it should not be subject to translation, for example Javascript
 </p>
 
 <p>
-Any pieces of text that our script could not automatically extract, for example pieces of text with embedded adp variables (i.e. \@var_name\@), will be listed on the result page. Make sure to take note of these texts and translate them manually. Suppose for example
+Any pieces of text that our script finds that it could not automatically extract, for example pieces of text with embedded adp variables (i.e. \@var_name\@), will be listed on the result page. Make sure to take note of these texts and translate them manually. Suppose for example
 that our script tells you that it left the text "Forum \@forum_name\@" untouched. What you should do then is to edit the corresponding
 adp file and manually replace that text with something like "<#Forum Forum#> \@forum_name\@". After you have made all such manual edits
 you can simply run the second action labeled "Replace tags with keys and insert into catalog".
+</p>
+
+<p>
+<b>Note:</b> running this action will not find translatable text within HTML or adp tags on
+adp pages (i.e. text in alt tags of images), nor will it find translatable text in tcl files. Such texts will have to be found manually.
+If those texts are in adp files they are best replaced with the <#message_key text#> tags that
+can be extracted by the action described below. Here are some commands that we used on Linux to look for texts in
+adp pages not found by the script:
+
+<pre>
+# List image tags, look for alt attributes with literal text
+find -iname '*.adp'|xargs egrep -i '&lt;img'
+# List submit buttons, look for text in the value attribute 
+find -iname '*.adp'|xargs egrep -i '&lt;input[^&gt;]*type="?submit'
+</pre>
 </p>
 
 <h4>Replace tags with keys and insert into catalog</h4>
