@@ -32,6 +32,7 @@ namespace eval parameter {
     }
 
     ad_proc -public get {
+        -localize:boolean
         {-package_id ""}
         {-parameter:required}
         {-default ""}
@@ -77,6 +78,10 @@ namespace eval parameter {
             ::set value $default
         }
 
+        if { $localize_p } {
+           # Replace message keys in hash marks with localized texts
+           set value [lang::util::localize $value]
+        }
 
         return $value
     }
@@ -93,6 +98,7 @@ namespace eval parameter {
     }
 
     ad_proc -public get_from_package_key {
+        -localize:boolean
         {-package_key:required}
         {-parameter:required}
         {-default ""}
@@ -115,6 +121,7 @@ namespace eval parameter {
         if {[empty_string_p $value]} {
             with_catch errmsg {
                 ::set value [get \
+                    -localize=$localize_p \
                     -package_id [apm_package_id_from_key $package_key] \
                     -parameter $parameter \
                     -default $default \
