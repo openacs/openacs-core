@@ -327,24 +327,11 @@ end;' language 'plpgsql';
 create function image__delete (integer)
 returns integer as '
 declare
-  v_item_id		alias $1;
-  v_revision_id		integer;
-      -- order by used in cursur so latest revision will be deleted last
-      -- save resetting latest revision multiple times during delete process
+  v_item_id		alias for $1;
 begin
-    for v_revision_id in select
-        revision_id
-      from
-        cr_revisions
-      where
-        item_id = v_item_id
-      order by revision_id asc
-    loop
-      PERFORM content_revision__delete (
-        v_revision_id
-      );
-    end loop;
 
+    -- This should take care of deleting revisions, too.
     PERFORM content_item__delete (v_item_id);
-    return 1;
+    return 0;
+
 end; ' language 'plpgsql';
