@@ -152,18 +152,14 @@ ad_proc -deprecated ad_user_new {
     return $user_id
 }
 
-ad_proc -public ad_user_remove {
+ad_proc -deprecated -warn ad_user_remove {
     -user_id:required
 } {
-    remove a user from the ACS
+    completely remove a user from the system.
+    Use <code>acs_user::delete -permanent</code> instead
+    @see acs_user::delete
 } {
-    db_exec_plsql user_remove {
-        begin
-            acs.remove_user(
-                user_id => :user_id
-            );
-        end;
-    }
+    acs_user::delete -user_id $user_id -permanent
 }
 
     
@@ -371,10 +367,10 @@ ad_proc -public acs_user::delete {
 } {
     if { ! $permanent_p } {
         change_state -user_id $user_id -state "deleted"
+        acs_user::flush_cache -user_id $user_id
     } else {
         db_exec_plsql permanent_delete {}
     }
-    acs_user::flush_cache -user_id $user_id
 }
 
 ad_proc -public acs_user::unapprove {
