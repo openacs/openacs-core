@@ -75,8 +75,9 @@ foreach path [apm_get_package_files -package_key $package_key] {
                              <td width=40>&nbsp;</td>"
 
 		if { $installed_p == "t" } {
-		    if { $file_type == "tcl_procs" || ($file_type == "query_file" && [db_compatible_rdbms_p $db_type]) } {
-			if { [nsv_exists apm_reload_watch "packages/$package_key/$path"] } {
+                    set server_rel_path "packages/$package_key/$path"
+		    if { [apm_file_watchable_p $server_rel_path] } {
+			if { [nsv_exists apm_reload_watch $server_rel_path] } {
 			    # This procs file is already being watched.
 			    doc_body_append "<td>&nbsp;watch&nbsp;</td>"
 			} else {
