@@ -68,20 +68,19 @@ if { [file exists [apm_install_xml_file_path]] } {
         error "Installer: Could not find root node application in install.xml file"
     }
 
-    nsv_set acs_application name [apm_required_attribute_value $root_node name]
-    nsv_set acs_application pretty_name \
-        [apm_attribute_value -default [nsv_get acs_application name] $root_node pretty-name]
-    nsv_set acs_application home [apm_attribute_value -default "" $root_node home]
+    set acs_application(name) [apm_required_attribute_value $root_node name]
+    set acs_application(pretty_name) [apm_attribute_value -default $acs_application(name) $root_node pretty-name]
+    set acs_application(home) [apm_attribute_value -default "" $root_node home]
 
     append body "<p>
-The installer will automatically install the [nsv_get acs_application pretty_name]
+The installer will automatically install the $acs_application(pretty_name)
 application after the basic OpenACS tookit has been installed.
 "
 
-    if { ![string equal [nsv_get acs_application home] ""] } {
+    if { ![string equal $acs_application(home)] ""] } {
         append body "<p>
-For more information about the [nsv_get acs_application pretty_name] application visit the
-<a href=\"[nsv_get acs_application home]\">[nsv_get acs_application pretty_name] home page</a>
+For more information about the $acs_application(pretty_name) application visit the
+<a href=\"$acs_application(home)\">$acs_application(pretty_name) home page</a>
 "
     }
 }
