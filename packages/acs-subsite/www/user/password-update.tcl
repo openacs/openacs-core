@@ -169,11 +169,12 @@ ad_form -extend -name update -form {
 } -after_submit {
     if { [empty_string_p $return_url] } {
         set return_url [ad_pvt_home]
-        set continue_label "Return to [ad_pvt_home_name]"
+        set pvt_home_name [ad_pvt_home_name]
+        set continue_label [_ acs-subsite.Continue_to_your_account]
     } else {
-        set continue_label "Continue"
+        set continue_label [_ acs-subsite.Continue]
     }
-    set message "You have successfully chosen a new Password."
+    set message [_ acs-subsite.confirmation_password_changed]
     set continue_url $return_url
 
     ad_return_template /packages/acs-subsite/www/register/display-message
