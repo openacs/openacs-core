@@ -411,7 +411,7 @@ ad_proc -public api_quote_file {
 
 
 ad_proc -public api_proc_documentation {
-	{ -format text/html }
+	{-format text/html}
 	-script:boolean
 	-source:boolean
 	-xql:boolean
@@ -428,7 +428,6 @@ ad_proc -public api_proc_documentation {
 	@param proc_name the name of the procedure for which to generate documentation.
 	@return the formatted documentation string.
 	@error if the procedure is not defined.	   
-
 } {
 	if { ![string equal $format "text/html"] && \
 			![string equal $format "text/plain"] } {
@@ -576,7 +575,8 @@ ad_proc -public api_proc_documentation {
 		append out "<dt><b>Source code:</b></dt><dd>
 <pre>[ns_quotehtml [info body $proc_name]]<pre>
 </dd><p>\n"
-	}
+	        }
+        }
 
 	set xql_base_name [get_server_root]/
 	append xql_base_name [file rootname $doc_elements(script)]
