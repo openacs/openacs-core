@@ -4,15 +4,15 @@
 <if @user_id@ ne 0 and @main_site_p@ false>
   <div style="float: right;">
     <if @group_member_p@ true>
-      <span class="button"><a href="group-leave" class="button" title="Leave this group">Leave group</a></span>
+      <span class="button"><a href="group-leave" class="button" title="Leave this community">Leave community</a></span>
     </if>
     <else>
       <if @can_join_p@ true>
         <if @group_join_policy@ eq "open">
-          <span class="button"><a href="group-join" class="button" title="Join this group">Join group</a></span>
+          <span class="button"><a href="group-join" class="button" title="Join this community">Join community</a></span>
         </if>
         <else>
-          <span class="button"><a href="group-join" class="button" title="Request membership of this group">Request membership</a></span>
+          <span class="button"><a href="group-join" class="button" title="Request membership of this community">Request membership</a></span>
         </else>
       </if>
     </else>
