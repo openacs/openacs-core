@@ -289,11 +289,7 @@ ad_proc -public auth::sync::job::action {
     {-job_id:required}
     {-operation:required}
     {-username:required}
-    {-first_names ""}
-    {-last_name ""}
-    {-email ""}
-    {-url ""}
-    {-portrait_url ""}
+    {-array ""}
 } {
     Inserts/updates/deletes a user, depending on the operation.
 
@@ -303,8 +299,15 @@ ad_proc -public auth::sync::job::action {
     
     @param username      The username which this action refers to. 
     
+    @param array         Name of an array containing the relevant registration elements. Not required if this is a delete operation.
+    
     @return entry_id of newly created entry
 } {
+    if { ![string equal $operation "delete"] && [empty_string_p $array] } {
+        error "Switch -array is required when operation is not delete"
+    }
+    upvar 1 $array user_info
+    
     set entry_id {}
     set user_id {}
 
@@ -340,11 +343,7 @@ ad_proc -public auth::sync::job::action {
                     array set result [auth::create_local_account \
                                           -authority_id $authority_id \
                                           -username $username \
-                                          -first_names $first_names \
-                                          -last_name $last_name \
-                                          -email $email \
-                                          -email_verified_p "t" \
-                                          -url $url]
+                                          -array user_info]
 
                     if { ![string equal $result(creation_status) "ok"] } {
                         set result(message) $result(creation_message)
@@ -360,11 +359,7 @@ ad_proc -public auth::sync::job::action {
                     array set result [auth::update_local_account \
                                           -authority_id $authority_id \
                                           -username $username \
-                                          -first_names $first_names \
-                                          -last_name $last_name \
-                                          -email $email \
-                                          -email_verified_p "t" \
-                                          -url $url]
+                                          -array user_info]
                     
                     if { ![string equal $result(update_status) "ok"] } {
                         set result(message) $result(update_message)
@@ -671,24 +666,23 @@ ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
             }
         }
 
-        # Initialize variables for this record
-        foreach elm { username first_names last_name email url } {
-            set $elm {}
-        }
-        
+        # Initialize this record
+        array unset user_info
+
         set username [xml_get_child_node_content_by_path $person_node { { userid } { sourcedid id } }]
-        set email [xml_get_child_node_content_by_path $person_node { { email } }]
-        set url [xml_get_child_node_content_by_path $person_node { { url } }]
+
+        set user_info(email) [xml_get_child_node_content_by_path $person_node { { email } }]
+        set user_info(url) [xml_get_child_node_content_by_path $person_node { { url } }]
 
         # We need a little more logic to deal with first_names/last_name, since they may not be split up in the XML
-        set first_names [xml_get_child_node_content_by_path $person_node { { name given } }]
-        set last_name [xml_get_child_node_content_by_path $person_node { { name family } }]
+        set user_info(first_names) [xml_get_child_node_content_by_path $person_node { { name given } }]
+        set user_info(last_name) [xml_get_child_node_content_by_path $person_node { { name family } }]
 
-        if { [empty_string_p $first_names] || [empty_string_p $last_name] } {
+        if { [empty_string_p $user_info(first_names)] || [empty_string_p $user_info(last_name)] } {
             set formatted_name [xml_get_child_node_content_by_path $person_node { { name fn } }]
             if { ![empty_string_p $formatted_name] || [string first " " $formatted_name] > -1 } {
                 # Split, so everything up to the last space goes to first_names, the rest to last_name
-                regexp {^(.+) ([^ ]+)$} $formatted_name match first_names last_name
+                regexp {^(.+) ([^ ]+)$} $formatted_name match user_info(first_names) user_info(last_name)
             }
         }
 
@@ -696,9 +690,6 @@ ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
             -job_id $job_id \
             -operation $operation \
             -username $username \
-            -first_names $first_names \
-            -last_name $last_name \
-            -email $email \
-            -url $url
+            -array user_info
     }
 }

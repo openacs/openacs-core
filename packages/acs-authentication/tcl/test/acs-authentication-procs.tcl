@@ -19,26 +19,31 @@ aa_register_case auth_authenticate {
         -rollback \
         -test_code {
 
-            array set user_info [auth::create_user \
-                                     -username $username \
-                                     -email "auth_create_user1@test_user.com" \
-                                     -first_names "Test" \
-                                     -last_name "User" \
-                                     -password $password \
-                                     -secret_question "no_question" \
-                                     -secret_answer "no_answer"]
+            array set result [auth::create_user \
+                                  -username $username \
+                                  -email "auth_create_user1@test_user.com" \
+                                  -first_names "Test" \
+                                  -last_name "User" \
+                                  -password $password \
+                                  -secret_question "no_question" \
+                                  -secret_answer "no_answer"]
             
-            aa_equals "creation_status for successful creation" $user_info(creation_status) "ok"
+            if { ![aa_equals "creation_status for successful creation" $result(creation_status) "ok"] } {
+                aa_log "Creation result: [array get result]"
+            }
 
             set user_id [acs_user::get_by_username -username $username]
 
             # Successful authentication
-            array set auth_info [auth::authenticate \
-                                     -no_cookie \
-                                     -username $username \
-                                     -password $password]
+            array unset result
+            array set result [auth::authenticate \
+                                  -no_cookie \
+                                  -username $username \
+                                  -password $password]
+
+            aa_log "Result: [array get result]"
     
-            aa_equals "auth_status for successful authentication" $auth_info(auth_status) "ok"
+            aa_equals "auth_status for successful authentication" $result(auth_status) "ok"
 
             # Failed authentications
             # Incorrect password

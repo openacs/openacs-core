@@ -244,6 +244,7 @@ ad_proc -public auth::create_user {
     {-email ""}
     {-first_names ""}
     {-last_name ""}
+    {-screen_name ""}
     {-email ""}
     {-password ""}
     {-password_confirm ""}
@@ -251,13 +252,10 @@ ad_proc -public auth::create_user {
     {-secret_question ""}
     {-secret_answer ""}
     {-email_verified_p ""} 
-    {-member_state "approved"}
 } {
     Create a user, and return creation status and account status.
     
     @param email_verified_p Whether the local account considers the email to be verified or not.
-
-    @param member_state     Whether the local account has been approved.
 
     @param verify_password_confirm
                             Set this flag if you want the proc to verify that password and password_confirm match for you.
@@ -270,7 +268,7 @@ ad_proc -public auth::create_user {
                              creation_message or element_messages is guaranteed to be non-empty, and both are 
                              guaranteed to be in the array list.  May contain HTML.
       <li> element_messages: list of (element_name, message, element_name, message, ...) of 
-                             errors on the individual elements (username, password, first_names, ...), 
+                             errors on the individual registration elements.
                              to be relayed on to the user. If creation_status is not ok, then either 
                              creation_message or element_messages is guaranteed to be non-empty, and both are 
                              guaranteed to be in the array list. Cannot contain HTML.
@@ -280,6 +278,8 @@ ad_proc -public auth::create_user {
       <li> account_message:  A human-readable explanation of why the account was closed. May include HTML, and thus shouldn't
                              be quoted. Guaranteed to be non-empty if account_status is not ok.
     </ul>
+
+    @see auth::get_all_registration_elements
 } {
     set authority_id [auth::get_register_authority]
 
@@ -324,16 +324,16 @@ ad_proc -public auth::create_user {
     #
     #####
 
+    foreach elm [get_all_registration_elements] {
+        if { [info exists $elm] } {
+            set user_info($elm) [set $elm]
+        }
+    }
     array set creation_info [auth::create_local_account \
                                  -user_id $user_id \
                                  -authority_id $authority_id \
                                  -username $username \
-                                 -first_names $first_names \
-                                 -last_name $last_name \
-                                 -email $email \
-                                 -url $url \
-                                 -member_state $member_state \
-                                 -email_verified_p $email_verified_p]
+                                 -array user_info]
 
     # Returns: 
     #   creation_info(creation_status)
@@ -378,6 +378,7 @@ ad_proc -public auth::create_user {
                                      -password $password \
                                      -first_names $first_names \
                                      -last_name $last_name \
+                                     -screen_name $screen_name \
                                      -email $email \
                                      -url $url \
                                      -secret_question $secret_question \
@@ -386,7 +387,7 @@ ad_proc -public auth::create_user {
         set auth_info(auth_status) failed_to_connect
         set auth_info(auth_message) $errmsg
         global errorInfo
-        ns_log Error "Error invoking account registratino driver for authority_id = $authority_id: $errorInfo"
+        ns_log Error "Error invoking account registration driver for authority_id = $authority_id: $errorInfo"
     }
     
     
@@ -477,14 +478,14 @@ ad_proc -public auth::get_registration_elements {
 } {
     Get the list of required/optional elements for user registration.
     
-    @return Array-list with two entries, both being a subset of 
-            (username, password, first_names, last_name, email, url, secret_question, secret_answer).
+    @return Array-list with two entries
             
     <ul>
       <li> required: a list of required elements
       <li> optional: a list of optional elements
     </ul>
-            
+    
+    @see auth::get_all_registration_elements
 } {
     set authority_id [auth::get_register_authority]
 
@@ -498,6 +499,7 @@ ad_proc -public auth::get_registration_elements {
     }
 
     # Handle required elements for local account
+    # TODO: This will depend on a parameter
     foreach elm { first_names last_name email } {
         # Add to required
         if { [lsearch $element_info(required) $elm] == -1 } {
@@ -514,6 +516,12 @@ ad_proc -public auth::get_registration_elements {
     return [array get element_info]
 }
 
+ad_proc -public auth::get_all_registration_elements {} {
+    Get the list of possible registration elements.
+} {
+    return { username password first_names last_name screen_name email url secret_question secret_answer }
+}
+
 ad_proc -public auth::get_registration_form_elements {
     {-authority_id ""}
 } {
@@ -526,6 +534,7 @@ ad_proc -public auth::get_registration_form_elements {
         email text
         first_names text
         last_name text
+        screen_name text
         url text
         password text
         password_confirm text
@@ -538,18 +547,20 @@ ad_proc -public auth::get_registration_form_elements {
         email text
         first_names text
         last_name text
+        screen_name text
         url text
         password password
         password_confirm password
         secret_question text
         secret_answer text
     }
-    
+
     array set labels [list \
                           username [_ acs-subsite.Username] \
                           email [_ acs-subsite.Your_email_address] \
                           first_names [_ acs-subsite.First_names] \
                           last_name [_ acs-subsite.Last_name] \
+                          screen_name [_ acs-subsite.Screen_name] \
                           url [_ acs-subsite.lt_Personal_Home_Page_UR] \
                           password [_ acs-subsite.Password] \
                           password_confirm [_ acs-subsite.lt_Password_Confirmation] \
@@ -559,8 +570,9 @@ ad_proc -public auth::get_registration_form_elements {
     array set html {
         username {size 30}
         email {size 30}
-        first_names {size 20}
-        last_name {size 25}
+        first_names {size 30}
+        last_name {size 30}
+        screen_name {size 30}
         url {size 50 value "http://"}
         password {size 20}
         password_confirm {size 20}
@@ -587,7 +599,7 @@ ad_proc -public auth::get_registration_form_elements {
     }
 
     set form_elements [list]
-    foreach element { username email first_names last_name password password_confirm url secret_question secret_answer } {
+    foreach element [concat [auth::get_all_registration_elements] password_confirm] {
         if { [info exists required_p($element)] } {
             set form_element [list]
 
@@ -619,16 +631,11 @@ ad_proc -public auth::create_local_account {
     {-user_id ""}
     {-authority_id:required}
     {-username ""}
-    {-first_names ""}
-    {-last_name ""}
-    {-email ""}
-    {-url ""}
-    {-secret_question ""}
-    {-secret_answer ""}
-    {-member_state "approved"}
-    {-email_verified_p ""}
+    {-array:required}
 } {
     Create the local account for a user.
+
+    @param array Name of an array containing the registration elements to update.
 
     @return Array list containing the following entries:
 
@@ -638,7 +645,7 @@ ad_proc -public auth::create_local_account {
                              creation_message or element_messages is guaranteed to be non-empty, and both are 
                              guaranteed to be in the array list.  May contain HTML.
       <li> element_messages: list of (element_name, message, element_name, message, ...) of 
-                             errors on the individual elements (username, password, first_names, ...), 
+                             errors on the individual registration elements.
                              to be relayed on to the user. If creation_status is not ok, then either 
                              creation_message or element_messages is guaranteed to be non-empty, and both are 
                              guaranteed to be in the array list. Cannot contain HTML.
@@ -651,6 +658,8 @@ ad_proc -public auth::create_local_account {
 
     All entries are guaranteed to always be set, but may be empty.
 } {
+    upvar 1 $array user_info
+
     array set result {
         creation_status reg_error
         creation_message {}
@@ -660,19 +669,22 @@ ad_proc -public auth::create_local_account {
         user_id {}
     }
 
-    # PHASE II: This needs to be controlled by a parameter
-    if { [empty_string_p $username] } {
-        set username $email
-    }
-
-    # Validate data
-    set user_vars { authority_id username first_names last_name email url secret_question secret_answer }
-    foreach varname $user_vars {
-        if { [info exists $varname] } {
-            set user_info($varname) [set $varname]
+    # Default all elements to the empty string
+    foreach elm [get_all_registration_elements] {
+        if { ![info exists user_info($elm)] } {
+            set user_info($elm) {}
         }
     }
 
+    # PHASE II: This needs to be controlled by a parameter
+    if { [empty_string_p $username] } {
+        # What if email doesn't exist?
+        set username $user_info(email)
+    }
+
+    # Validate data
+    set user_info(username) $username
+    set user_info(authority_id) $authority_id
     auth::validate_user_info \
         -user_array user_info \
         -message_array element_messages
@@ -686,14 +698,6 @@ ad_proc -public auth::create_local_account {
                    ]
     }
 
-    # Suck user info variables back out, they may have been modified by the validate helper proc
-    foreach varname $user_vars {
-        if { [info exists user_info($varname)] } {
-            set $varname $user_info($varname)
-        }
-    }
-
-
     # Admin approval
     if { [parameter::get -parameter RegistrationRequiresApprovalP -default 0] } {
         set member_state "needs approval"
@@ -703,11 +707,11 @@ ad_proc -public auth::create_local_account {
         set member_state "approved"
     }
 
-    if { [empty_string_p $email_verified_p] } {
+    if { ![exists_and_not_null user_info(email_verified_p)] } {
         if { [parameter::get -parameter RegistrationRequiresEmailVerificationP -default 0] } {
-            set email_verified_p "f"
+            set user_info(email_verified_p) "f"
         } else {
-            set email_verified_p "t"
+            set user_info(email_verified_p) "t"
         }
     }
     
@@ -716,18 +720,19 @@ ad_proc -public auth::create_local_account {
         # We create the user without a password
         # If it's a local account, that'll get set later
         set user_id [ad_user_new \
-                         $email \
-                         $first_names \
-                         $last_name \
+                         $user_info(email) \
+                         $user_info(first_names) \
+                         $user_info(last_name) \
                          {} \
-                         $secret_question \
-                         $secret_answer \
-                         $url \
-                         $email_verified_p \
+                         $user_info(secret_question) \
+                         $user_info(secret_answer) \
+                         $user_info(url) \
+                         $user_info(email_verified_p) \
                          $member_state \
                          $user_id \
                          $username \
-                         $authority_id]
+                         $user_info(authority_id) \
+                         $user_info(screen_name)]
     } {
         set error_p 1
     } 
@@ -765,16 +770,11 @@ ad_proc -public auth::create_local_account {
 ad_proc -public auth::update_local_account {
     {-authority_id:required}
     {-username:required}
-    {-first_names ""}
-    {-last_name ""}
-    {-email ""}
-    {-url ""}
-    {-secret_question ""}
-    {-secret_answer ""}
-    {-member_state "approved"}
-    {-email_verified_p ""}
+    {-array:required}
 } {
     Update the local account for a user.
+
+    @param array Name of an array containing the registration elements to update.
 
     @return Array list containing the following entries:
 
@@ -784,7 +784,7 @@ ad_proc -public auth::update_local_account {
                              update_message or element_messages is guaranteed to be non-empty, and both are 
                              guaranteed to be in the array list.  May contain HTML.
       <li> element_messages: list of (element_name, message, element_name, message, ...) of 
-                             errors on the individual elements (username, password, first_names, ...), 
+                             errors on the individual registration elements.
                              to be relayed on to the user. If update_status is not ok, then either 
                              udpate_message or element_messages is guaranteed to be non-empty, and both are 
                              guaranteed to be in the array list. Cannot contain HTML.
@@ -792,6 +792,8 @@ ad_proc -public auth::update_local_account {
 
     All entries are guaranteed to always be set, but may be empty.
 } {
+    upvar 1 $array user_info
+
     array set result {
         update_status update_error
         update_message {}
@@ -800,15 +802,8 @@ ad_proc -public auth::update_local_account {
     }
 
     # Validate data
-
-    # Updating: Find the existing account    
-    set user_vars { authority_id username first_names last_name email url secret_question secret_answer }
-    foreach varname $user_vars {
-        if { [info exists $varname] } {
-            set user_info($varname) [set $varname]
-        }
-    }
-
+    set user_info(username) $username
+    set user_info(authority_id) $authority_id
     auth::validate_user_info \
         -update \
         -user_array user_info \
@@ -823,13 +818,6 @@ ad_proc -public auth::update_local_account {
                    ]
     }
 
-    # Suck user info variables back out, they may have been modified by the validate helper proc
-    foreach varname $user_vars {
-        if { [info exists user_info($varname)] } {
-            set $varname $user_info($varname)
-        }
-    }
-    
     # We get user_id from validate_user_info above, and set it in the result array so our caller can get it
     set user_id $user_info(user_id)
     set result(user_id) $user_id
@@ -839,28 +827,40 @@ ad_proc -public auth::update_local_account {
 
         db_transaction {
             # Update persons: first_names, last_name
-            person::update \
-                -person_id $user_id \
-                -first_names $first_names \
-                -last_name $last_name
+            if { [info exists user_info(first_names)] } {
+                # We know that validate_user_info will not let us update only one of the two
+                person::update \
+                    -person_id $user_id \
+                    -first_names $user_info(first_names) \
+                    -last_name $user_info(last_name)
+            }
             
             # Update parties: email, url
-            if { [empty_string_p $email] } {
-                set success_p 0
-                set message "Email is required"
+            if { [info exists user_info(email)] } {
+                party::update \
+                    -party_id $user_id \
+                    -email $user_info(email)
             }
-            party::update \
-                -party_id $user_id \
-                -email $email \
-                -url $url
+            if { [info exists user_info(url)] } {
+                party::update \
+                    -party_id $user_id \
+                    -url $user_info(url)
+            }
             
             # Update users: email_verified_p
-            if { ![empty_string_p $email_verified_p] } {
+            if { [info exists user_info(email_verified_p)] } {
                 acs_user::update \
                     -user_id $user_id \
-                    -email_verified_p $email_verified_p
+                    -email_verified_p $user_info(email_verified_p) 
             }
                 
+            # Update users: screen_name
+            if { [info exists user_info(screen_name)] } {
+                acs_user::update \
+                    -user_id $user_id \
+                    -screen_name $user_info(screen_name)
+            }
+
             # TODO: Portrait
         }
     } {
@@ -932,15 +932,18 @@ ad_proc -private auth::validate_user_info {
     
     @param update        Set this flag if you're updating an existing record, meaning we shouldn't check for duplicates.
 
-    @param user_array    Name of an array in the caller's namespace which contains the user info 
-                         (authority_id, username, email, first_names, last_name, url, secret_question, secret_answer). 
+    @param user_array    Name of an array in the caller's namespace which contains the registration elements.
 
     @param message_array Name of an array where you want the validation errors stored, keyed by element name.
 } {
     upvar 1 $user_array user
     upvar 1 $message_array element_messages
 
-    foreach elm { authority_id username first_names last_name email } {
+    set required_elms { authority_id username }
+    if { !$update_p } {
+        set required_elms [concat $required_elms { first_names last_name email }]
+    }
+    foreach elm $required_elms {
         if { ![exists_and_not_null user($elm)] } {
             set element_messages($elm) "Required"
         }
@@ -955,7 +958,8 @@ ad_proc -private auth::validate_user_info {
             set element_messages(username) "No user with username '$user(username)' found for authority [auth::authority::get_element -authority_id $user(authority_id) -element pretty_name]"
         }
     }
-
+    
+    # TODO: When doing RBM's parameter, make sure that we still require both first_names and last_names, or none of them
     if { [exists_and_not_null user(first_names)] && [string first "<" $user(first_names)] != -1 } {
         set element_messages(first_names) [_ acs-subsite.lt_You_cant_have_a_lt_in]
     }
@@ -964,18 +968,22 @@ ad_proc -private auth::validate_user_info {
         set element_messages(last_name) [_ acs-subsite.lt_You_cant_have_a_lt_in_1]
     }
 
-    if { [exists_and_not_null user(email)] && ![util_email_valid_p $user(email)] } {
-        set element_messages(email) "This is not a valid email address"
-    } else {
-        set user(email) [string tolower $user(email)]
+    if { [exists_and_not_null user(email)] } { 
+        if { ![util_email_valid_p $user(email)] } {
+            set element_messages(email) "This is not a valid email address"
+        } else {
+            set user(email) [string tolower $user(email)]
+        }
     }
     
-    if { ![exists_and_not_null user(url)] || ([info exists user(url)] && [string equal $user(url) "http://"]) } {
-        # The user left the default hint for the url
-        set user(url) {}
-    } elseif { ![util_url_valid_p $user(url)] } {
-        set valid_url_example "http://openacs.org/"
-        set element_messages(url) [_ acs-subsite.lt_Your_URL_doesnt_have_]
+    if { [info exists user(url)] } {
+        if { [empty_string_p $user(url)] || [string equal $user(url) "http://"] } {
+            # The user left the default hint for the url
+            set user(url) {}
+        } elseif { ![util_url_valid_p $user(url)] } {
+            set valid_url_example "http://openacs.org/"
+            set element_messages(url) [_ acs-subsite.lt_Your_URL_doesnt_have_]
+        }
     }
 
     if { [exists_and_not_null user(email)] } {
@@ -1250,6 +1258,7 @@ ad_proc -private auth::registration::Register {
     {-password ""}
     {-first_names ""}
     {-last_name ""}
+    {-screen_name ""}
     {-email ""}
     {-url ""}
     {-secret_question ""}
@@ -1283,6 +1292,7 @@ ad_proc -private auth::registration::Register {
                                  $authority_id \
                                  $first_names \
                                  $last_name \
+                                 $screen_name \
                                  $email \
                                  $url \
                                  $password \

@@ -100,20 +100,21 @@ aa_register_case sync_actions {
             #
             #####
 
+            array unset user_info
             set username1 [ad_generate_random_string]
             set email1 "[ad_generate_random_string]@foo.bar"
-            set first_names1 [ad_generate_random_string]
-            set last_name1 [ad_generate_random_string]
-            set url1 "http://[ad_generate_random_string].com"
+            set screen_name1 [ad_generate_random_string]
+            set user_info(email) $email1
+            set user_info(first_names) [ad_generate_random_string]
+            set user_info(last_name) [ad_generate_random_string]
+            set user_info(url) "http://[ad_generate_random_string].com"
+            set user_info(screen_name) $screen_name1
             aa_log "--- Valid insert --- auth::sync::job::action -opration insert -username $username1 -email $email1"
             set entry_id [auth::sync::job::action \
                               -job_id $job_id \
                               -operation "insert" \
                               -username $username1 \
-                              -first_names $first_names1 \
-                              -last_name $last_name1 \
-                              -email $email1 \
-                              -url $url1]
+                              -array user_info]
 
             array unset entry
             auth::sync::job::get_entry \
@@ -131,12 +132,13 @@ aa_register_case sync_actions {
                 array unset user
                 acs_user::get -user_id $entry(user_id) -array user
                 
-                aa_equals "user.first_names" $user(first_names) $first_names1
-                aa_equals "user.last_name" $user(last_name) $last_name1
+                aa_equals "user.first_names" $user(first_names) $user_info(first_names)
+                aa_equals "user.last_name" $user(last_name) $user_info(last_name)
                 aa_equals "user.email" $user(email) [string tolower $email1]
                 aa_equals "user.authority_id" $user(authority_id) [auth::authority::local]
                 aa_equals "user.username" $user(username) $username1
-                aa_equals "user.url" $user(url) $url1
+                aa_equals "user.url" $user(url) $user_info(url)
+                aa_equals "user.screen_name" $user(screen_name) $user_info(screen_name)
             }
             
             #####
@@ -146,14 +148,16 @@ aa_register_case sync_actions {
             #####
 
             aa_log "--- Invalid insert: reusing username, email --- auth::sync::job::action -opration insert -username $username1 -email $email1"
+            array unset user_info
+            set user_info(first_names) [ad_generate_random_string]
+            set user_info(last_name) [ad_generate_random_string]
+            set user_info(email) $email1
+            set user_info(url) "http://"
             set entry_id [auth::sync::job::action \
                               -job_id $job_id \
                               -operation "insert" \
                               -username $username1 \
-                              -first_names [ad_generate_random_string] \
-                              -last_name [ad_generate_random_string] \
-                              -email $email1 \
-                              -url "http://"]
+                              -array user_info]
 
             array unset entry
             auth::sync::job::get_entry \
@@ -179,18 +183,17 @@ aa_register_case sync_actions {
             #####
 
             set email2 "[ad_generate_random_string]@foo.bar"
-            set first_names2 [ad_generate_random_string]
-            set last_name2 [ad_generate_random_string]
-            set url2 "http://[ad_generate_random_string].com"
+            array unset user_info
+            set user_info(first_names) [ad_generate_random_string]
+            set user_info(last_name) [ad_generate_random_string]
+            set user_info(url) "http://[ad_generate_random_string].com"
+            set user_info(email) $email2
             aa_log "--- Valid update --- auth::sync::job::action -opration update -username $username1"
             set entry_id [auth::sync::job::action \
                               -job_id $job_id \
                               -operation "update" \
                               -username $username1 \
-                              -first_names $first_names2 \
-                              -last_name $last_name2 \
-                              -email $email2 \
-                              -url $url2]
+                              -array user_info]
 
             array unset entry
             auth::sync::job::get_entry \
@@ -208,12 +211,52 @@ aa_register_case sync_actions {
                 array unset user
                 acs_user::get -user_id $entry(user_id) -array user
                 
-                aa_equals "user.first_names" $user(first_names) $first_names2
-                aa_equals "user.last_name" $user(last_name) $last_name2
+                aa_equals "user.first_names" $user(first_names) $user_info(first_names)
+                aa_equals "user.last_name" $user(last_name) $user_info(last_name)
                 aa_equals "user.email" $user(email) [string tolower $email2]
                 aa_equals "user.authority_id" $user(authority_id) [auth::authority::local]
                 aa_equals "user.username" $user(username) $username1
-                aa_equals "user.url" $user(url) $url2
+                aa_equals "user.url" $user(url) $user_info(url)
+            }
+
+            #####
+            #
+            # Valid update action, not changing any columns
+            #
+            #####
+
+            # copy the old user_info array
+            array set user_info2 [array get user_info]
+            array unset user_info
+            aa_log "--- Valid update, no changes --- auth::sync::job::action -opration update -username $username1"
+            set entry_id [auth::sync::job::action \
+                              -job_id $job_id \
+                              -operation "update" \
+                              -username $username1 \
+                              -array user_info]
+
+            array unset entry
+            auth::sync::job::get_entry \
+                -entry_id $entry_id \
+                -array entry
+
+            aa_equals "entry.success_p" $entry(success_p) "t"
+            aa_equals "entry.message" $entry(message) {}
+            aa_equals "entry.element_messages" $entry(element_messages) {}
+            aa_log "entry.user_id = '$entry(user_id)'"
+            aa_log "entry.message = '$entry(message)'"
+            aa_log "entry.element_messages = '$entry(element_messages)'"
+
+            if { [aa_true "Entry has user_id set" [exists_and_not_null entry(user_id)]] } {
+                array unset user
+                acs_user::get -user_id $entry(user_id) -array user
+                
+                aa_equals "user.first_names" $user(first_names) $user_info2(first_names)
+                aa_equals "user.last_name" $user(last_name) $user_info2(last_name)
+                aa_equals "user.email" $user(email) $user_info2(email)
+                aa_equals "user.authority_id" $user(authority_id) [auth::authority::local]
+                aa_equals "user.username" $user(username) $username1
+                aa_equals "user.url" $user(url) $user_info2(url)
             }
 
             #####
@@ -223,15 +266,16 @@ aa_register_case sync_actions {
             #####
 
             set username2 [ad_generate_random_string]
+            array unset user_info
+            set user_info(last_name) {<b>Foobar</b>}
+            set user_info(email) "not_an_email"
+            set user_info(url) "NotAURL"
             aa_log "--- Invalid insert --- auth::sync::job::action -opration update -username $username2"
             set entry_id [auth::sync::job::action \
                               -job_id $job_id \
                               -operation "insert" \
                               -username $username2 \
-                              -first_names {} \
-                              -last_name {<b>Foobar</b>} \
-                              -email "not_an_email" \
-                              -url "NotAURL"]
+                              -array user_info]
 
             array unset entry
             auth::sync::job::get_entry \
@@ -287,7 +331,7 @@ aa_register_case sync_actions {
 
             aa_false "Not interactive" [template::util::is_true $job(interactive_p)]
 
-            aa_equals "Number of actions" $job(num_actions) 5
+            aa_equals "Number of actions" $job(num_actions) 6
 
             aa_equals "Number of problems" $job(num_problems) 2
            
@@ -318,18 +362,17 @@ aa_register_case sync_snapshot {
 
             set username1 [ad_generate_random_string]
             set email1 "[ad_generate_random_string]@foo.bar"
-            set first_names1 [ad_generate_random_string]
-            set last_name1 [ad_generate_random_string]
-            set url1 "http://[ad_generate_random_string].com"
+            array unset user_info
+            set user_info(email) $email1
+            set user_info(first_names) [ad_generate_random_string]
+            set user_info(last_name) [ad_generate_random_string]
+            set user_info(url) "http://[ad_generate_random_string].com"
             aa_log "--- Valid insert --- auth::sync::job::action -opration insert -username $username1 -email $email1"
             set entry_id [auth::sync::job::action \
                               -job_id $job_id \
                               -operation "snapshot" \
                               -username $username1 \
-                              -first_names $first_names1 \
-                              -last_name $last_name1 \
-                              -email $email1 \
-                              -url $url1]
+                              -array user_info]
 
             array unset entry
             auth::sync::job::get_entry \
@@ -348,12 +391,12 @@ aa_register_case sync_snapshot {
                 array unset user
                 acs_user::get -user_id $entry(user_id) -array user
                 
-                aa_equals "user.first_names" $user(first_names) $first_names1
-                aa_equals "user.last_name" $user(last_name) $last_name1
+                aa_equals "user.first_names" $user(first_names) $user_info(first_names)
+                aa_equals "user.last_name" $user(last_name) $user_info(last_name)
                 aa_equals "user.email" $user(email) [string tolower $email1]
                 aa_equals "user.authority_id" $user(authority_id) [auth::authority::local]
                 aa_equals "user.username" $user(username) $username1
-                aa_equals "user.url" $user(url) $url1
+                aa_equals "user.url" $user(url) $user_info(url)
             }
             
             #####
@@ -362,19 +405,17 @@ aa_register_case sync_snapshot {
             #
             #####
 
-            set email2 "[ad_generate_random_string]@foo.bar"
-            set first_names2 [ad_generate_random_string]
-            set last_name2 [ad_generate_random_string]
-            set url2 "http://[ad_generate_random_string].com"
+            array unset user_info
+            set user_info(email) "[ad_generate_random_string]@foo.bar"
+            set user_info(first_names) [ad_generate_random_string]
+            set user_info(last_name) [ad_generate_random_string]
+            set user_info(url) "http://[ad_generate_random_string].com"
             aa_log "--- Valid update --- auth::sync::job::action -opration update -username $username1"
             set entry_id [auth::sync::job::action \
                               -job_id $job_id \
                               -operation "snapshot" \
                               -username $username1 \
-                              -first_names $first_names2 \
-                              -last_name $last_name2 \
-                              -email $email2 \
-                              -url $url2]
+                              -array user_info]
 
             array unset entry
             auth::sync::job::get_entry \
@@ -393,12 +434,12 @@ aa_register_case sync_snapshot {
                 array unset user
                 acs_user::get -user_id $entry(user_id) -array user
                 
-                aa_equals "user.first_names" $user(first_names) $first_names2
-                aa_equals "user.last_name" $user(last_name) $last_name2
-                aa_equals "user.email" $user(email) [string tolower $email2]
+                aa_equals "user.first_names" $user(first_names) $user_info(first_names)
+                aa_equals "user.last_name" $user(last_name) $user_info(last_name)
+                aa_equals "user.email" $user(email) [string tolower $user_info(email)]
                 aa_equals "user.authority_id" $user(authority_id) [auth::authority::local]
                 aa_equals "user.username" $user(username) $username1
-                aa_equals "user.url" $user(url) $url2
+                aa_equals "user.url" $user(url) $user_info(url)
             }
 
             

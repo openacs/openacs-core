@@ -273,6 +273,7 @@ ad_proc -private auth::registration::create_contract {} {
                     authority_id:integer
                     first_names:string
                     last_name:string
+                    screen_name:string
                     email:string
                     url:string
                     password:string
