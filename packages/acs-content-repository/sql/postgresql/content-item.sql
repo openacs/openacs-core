@@ -663,7 +663,7 @@ begin
                         where
                           item_id = delete__item_id 
   LOOP
-    PERFORM content_revision__delete(v_revision_val.revision_id);
+    PERFORM acs_object__delete(v_revision_val.revision_id);
   end loop;
   
   raise NOTICE ''Deleting associated item templates...'';
