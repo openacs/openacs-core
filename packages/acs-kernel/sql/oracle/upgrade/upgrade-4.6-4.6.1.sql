@@ -1,7 +1,20 @@
+-- Add two new datatypes (supported by templating already).
+-- 
+ insert into acs_datatypes
+  (datatype, max_n_values)
+ values
+  ('url', null);
+
+ insert into acs_datatypes
+  (datatype, max_n_values)
+ values
+  ('email', null);
+
 -- This giant package body is here since we are adding 
 -- two lines to acs_object.delete() to delete direct permissions 
 -- granted on the object which we are deleting
 --
+
 create or replace package body acs_object
 as
 

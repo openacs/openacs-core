@@ -4,6 +4,18 @@
 -- @creation-date 2002-12-17
 -- @cvs-id $Id$
 
+-- Add two new datatypes (supported by templating already).
+--
+
+insert into acs_datatypes
+  (datatype, max_n_values)
+values
+  ('url', null);
+
+insert into acs_datatypes
+  (datatype, max_n_values)
+values
+  ('email', null);
 
 -- declaring this function isstrict,iscachable can make a significant
 -- performance difference since this is used in some potentially
