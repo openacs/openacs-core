@@ -28,7 +28,7 @@ list::create \
 
 set subsite_node_id [subsite::get_element -element node_id]
 
-set user_id [ad_conn user_id]
+set untrusted_user_id [ad_conn untrusted_user_id]
 
 db_multirow subsites select_subsites {
     select p.package_id,
@@ -50,7 +50,7 @@ db_multirow subsites select_subsites {
                    from   all_object_party_privilege_map perm 
                    where  perm.object_id = p.package_id
                    and    perm.privilege = 'read'
-                   and    perm.party_id = :user_id)
+                   and    perm.party_id = :untrusted_user_id)
     order  by upper(instance_name)
 }
 
