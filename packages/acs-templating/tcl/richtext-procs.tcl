@@ -93,7 +93,7 @@ ad_proc -public template::util::richtext::set_property { what richtext_list valu
 
     switch $what {
         contents {
-            $ Replace contents with value
+            # Replace contents with value
             return [list $value $format]
         }
         format {
@@ -158,10 +158,10 @@ function insertLink () {
 if (document.selection) {
     document.write('<table border="0" cellspacing="0" cellpadding="0" width="107">');
     document.write('<tr>');
-    document.write('<td width="24"><a href="javascript:formatStr(\'b\')"><img src="/shared/bold-button.gif" alt="bold" width="24" height="18" border="0"></a></td>');
-    document.write('<td width="24"><a href="javascript:formatStr(\'i\')"><img src="/shared/italic-button.gif" alt="italic" width="24" height="18" border="0"></a></td>');
-    document.write('<td width="24"><a href="javascript:formatStr(\'u\')"><img src="/shared/underline-button.gif" alt="underline" width="24" height="18" border="0"></a></td>');
-    document.write('<td width="26"><a href="javascript:insertLink()"><img src="/shared/url-button.gif" alt="link" width="26" height="18" border="0"></a></td>');
+    document.write('<td width="24"><a href="javascript:formatStr(\'b\')" tabIndex="-1"><img src="/shared/bold-button.gif" alt="bold" width="24" height="18" border="0"></a></td>');
+    document.write('<td width="24"><a href="javascript:formatStr(\'i\')" tabIndex="-1"><img src="/shared/italic-button.gif" alt="italic" width="24" height="18" border="0"></a></td>');
+    document.write('<td width="24"><a href="javascript:formatStr(\'u\')" tabIndex="-1"><img src="/shared/underline-button.gif" alt="underline" width="24" height="18" border="0"></a></td>');
+    document.write('<td width="26"><a href="javascript:insertLink()" tabIndex="-1"><img src="/shared/url-button.gif" alt="link" width="26" height="18" border="0"></a></td>');
     document.write('</tr>');
     document.write('</table>');
 }
