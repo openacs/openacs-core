@@ -1313,7 +1313,7 @@ ad_proc -private template::list::prepare_filters {
         # Handle 'other_label'
         if { [exists_and_not_null current_filter_value] && \
                  !$found_selected_p && \
-                 ![empty_string_p filter_properties(other_label)] } {
+                 ![empty_string_p $filter_properties(other_label)] } {
 
             # Add filter entry with the 'other_label'.
             lappend filter_properties(values) [list $filter_properties(other_label) {}]
