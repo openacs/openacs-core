@@ -1592,7 +1592,7 @@ begin
 
     if NOT FOUND
       then
-      	raise EXCEPTION ''-20000: The specified package % does not exist in the system.'', set_value__package_id;
+      	raise EXCEPTION ''-20000: The specified package % AND/OR parameter % do not exist in the system'', set_value__package_id, set_value__parameter_name;
     end if;
 
     PERFORM apm__set_value(
