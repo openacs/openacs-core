@@ -18,49 +18,6 @@ namespace eval auth::authority {}
 #####
 
 
-ad_proc -private auth::authority::get_columns {} {
-    Get a list of the columns in the auth_authorities table.
-    
-    @author Lars Pind (lars@collaboraid.biz)
-} {
-    return { 
-        authority_id
-        short_name
-        pretty_name
-        help_contact_text
-        enabled_p
-        sort_order
-        auth_impl_id
-        pwd_impl_id
-        forgotten_pwd_url
-        change_pwd_url
-        register_impl_id
-        register_url
-    }
-}
-
-
-ad_proc -private auth::authority::get_required_columns {} {
-    Get a list of the required columns in the auth_authorities table.
-    
-    @author Lars Pind (lars@collaboraid.biz)
-} {
-    return { 
-        authority_id
-        short_name
-        pretty_name
-    }
-}
-
-ad_proc -private auth::authority::get_select_columns {} {
-    Get a list of the columns which can be selected from auth_authorities table.
-    
-    @author Lars Pind (lars@collaboraid.biz)
-} {
-    return [concat [get_columns] auth_impl_name pwd_impl_name register_impl_name]
-}
-
-
 ad_proc -public auth::authority::create {
     {-authority_id ""}
     {-array:required}
@@ -155,9 +112,7 @@ ad_proc -public auth::authority::create {
 
 
 ad_proc -public auth::authority::get {
-    {-authority_id {}}
-    {-user_id {}}
-    {-short_name {}}
+    {-authority_id:required}
     {-array:required}
 } {
     Get info about an authority, either by authority_id, user_id, or authority short_name.
@@ -172,36 +127,7 @@ ad_proc -public auth::authority::get {
 } {
     upvar $array row
 
-    set columns [get_columns]
-
-    lappend columns "(select impl_name from acs_sc_impls where impl_id = auth_impl_id) as auth_impl_name"
-    lappend columns "(select impl_name from acs_sc_impls where impl_id = pwd_impl_id) as pwd_impl_name"
-    lappend columns "(select impl_name from acs_sc_impls where impl_id = register_impl_id) as register_impl_name"
-
-    if { [exists_and_not_null authority_id] } {
-        if { ![empty_string_p "$short_name$user_id"] } {
-            error "Only one of authority_id, short_name, or user_id may be specified"
-        }
-        lappend where_clauses "authority_id = :authority_id"
-    } elseif { [exists_and_not_null short_name] } {
-        if { ![empty_string_p "$authority_id$user_id"] } {
-            error "Only one of authority_id, short_name, or user_id may be specified"
-        }
-        lappend where_clauses "short_name = :short_name"
-    } elseif { [exists_and_not_null user_id] } {
-        if { ![empty_string_p "$authority_id$short_name"] } {
-            error "Only one of authority_id, short_name, or user_id may be specified"
-        }
-        lappend where_clauses "authority_id = (select authority_id from users where user_id = :user_id)"
-    } else {
-        error "You must supply either authority_id, short_name, or user_id"
-    }
-
-    db_1row select_authority "
-        select     [join $columns ",\n                   "]
-        from       auth_authorities
-        where      [join $where_clauses " and "]
-    " -column_array row
+    array set row [util_memoize [list auth::authority::get_not_cached $authority_id]]
 
     return $authority_id
 }
@@ -239,32 +165,6 @@ ad_proc -public auth::authority::get_id {
     return [util_memoize [list auth::authority::get_id_not_cached -short_name $short_name]]
 }
 
-ad_proc -public auth::authority::get_id_flush {
-    {-short_name ""}
-} {
-    Flush the cache for gett authority_id by short_name.
-} {
-    if { [empty_string_p $short_name] } {
-        util_memoize_flush_regexp [list auth::authority::get_id_not_cached .*]
-    } else {
-        util_memoize_flush [list auth::authority::get_id_not_cached -short_name $short_name]
-    }
-}
-
-ad_proc -private auth::authority::get_id_not_cached {
-    {-short_name:required}
-} {
-    Get authority_id by short_name. Not cached.
-} {
-    return [db_string select_authority_id {} -default {}]
-}
-ad_proc -public auth::authority::local {} {
-    Returns the authority_id of the local authority.
-} {
-    return [auth::authority::get_id -short_name "local"]
-}
-
-
 ad_proc -public auth::authority::edit {
     {-authority_id:required}
     {-array:required}
@@ -277,6 +177,9 @@ ad_proc -public auth::authority::edit {
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
+    # We need this to flush the cache later
+    set old_short_name [get_element -authority_id $authority_id -element short_name]
+
     upvar $array row
     
     set names [array names row]
@@ -311,6 +214,9 @@ ad_proc -public auth::authority::edit {
         set    [join $set_clauses ", "]
         where  authority_id = :authority_id
     "
+
+    get_flush -authority_id $authority_id
+    get_id_flush -short_name $old_short_name
 }
 
 ad_proc -public auth::authority::delete {
@@ -328,3 +234,117 @@ ad_proc -public auth::authority::get_authority_options {} {
 } {
     return [db_list_of_lists select_authorities {}]
 }
+
+
+
+#####
+#
+# Private
+#
+#####
+
+ad_proc -private auth::authority::get_columns {} {
+    Get a list of the columns in the auth_authorities table.
+    
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    return { 
+        authority_id
+        short_name
+        pretty_name
+        help_contact_text
+        enabled_p
+        sort_order
+        auth_impl_id
+        pwd_impl_id
+        forgotten_pwd_url
+        change_pwd_url
+        register_impl_id
+        register_url
+    }
+}
+
+
+ad_proc -private auth::authority::get_required_columns {} {
+    Get a list of the required columns in the auth_authorities table.
+    
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    return { 
+        authority_id
+        short_name
+        pretty_name
+    }
+}
+
+ad_proc -private auth::authority::get_select_columns {} {
+    Get a list of the columns which can be selected from auth_authorities table.
+    
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    return [concat [get_columns] auth_impl_name pwd_impl_name register_impl_name]
+}
+
+
+ad_proc -private auth::authority::get_flush {
+    {-authority_id ""}
+} {
+    Flush the cache for auth::authority::get.
+    
+    @see auth::authority::get
+} {
+    if { ![empty_string_p $authority_id] } {
+        util_memoize_flush [list auth::authority::get_not_cached $authority_id]
+    } else {
+        util_memoize_flush_regexp [list auth::authority::get_not_cached .*]
+    }
+}
+
+ad_proc -private auth::authority::get_not_cached {
+    authority_id
+} {
+    Get info about an authority, either by authority_id, user_id, or authority short_name. Not cached
+
+    @see auth::authority::get
+} {
+    set columns [get_columns]
+
+    lappend columns "(select impl_name from acs_sc_impls where impl_id = auth_impl_id) as auth_impl_name"
+    lappend columns "(select impl_name from acs_sc_impls where impl_id = pwd_impl_id) as pwd_impl_name"
+    lappend columns "(select impl_name from acs_sc_impls where impl_id = register_impl_id) as register_impl_name"
+
+    db_1row select_authority "
+        select     [join $columns ",\n                   "]
+        from       auth_authorities
+        where      authority_id = :authority_id
+    " -column_array row
+
+    return [array get row]
+}
+
+ad_proc -private auth::authority::get_id_flush {
+    {-short_name ""}
+} {
+    Flush the cache for gett authority_id by short_name.
+} {
+    if { [empty_string_p $short_name] } {
+        util_memoize_flush_regexp [list auth::authority::get_id_not_cached .*]
+    } else {
+        util_memoize_flush [list auth::authority::get_id_not_cached -short_name $short_name]
+    }
+}
+
+ad_proc -private auth::authority::get_id_not_cached {
+    {-short_name:required}
+} {
+    Get authority_id by short_name. Not cached.
+} {
+    return [db_string select_authority_id {} -default {}]
+}
+ad_proc -public auth::authority::local {} {
+    Returns the authority_id of the local authority.
+} {
+    return [auth::authority::get_id -short_name "local"]
+}
+
+
