@@ -357,14 +357,14 @@ begin
           v_latest_revision := v_rec.revision_id;
           exit;
       end LOOP;
+      if NOT FOUND then
+         v_latest_revision := null;        
+      end if;
+      if v_latest_revision != delete__revision_id then 
+            update cr_items set latest_revision = v_latest_revision
+            where item_id = v_item_id;
+      end if;
   end if; 
-
-  if NOT FOUND then
-     v_latest_revision := null;        
-  end if;
-
-  update cr_items set latest_revision = v_latest_revision
-  where item_id = v_item_id;
  
   -- Clear live revision
   if v_live_revision = delete__revision_id then
