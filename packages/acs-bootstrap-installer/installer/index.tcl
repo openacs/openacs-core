@@ -361,7 +361,7 @@ The email address signed on administrative pages.<br><br>
 </tr>
 <tr>
   <th align=right>Host Administrator:</th>
-  <td>[install_input_widget admin_owner]<br>
+  <td>[install_input_widget host_administrator]<br>
 A person whom people can contact if they experience technical problems.<br><br>
 </tr>
 <tr>
