@@ -125,10 +125,6 @@ begin
     where
       item_id = copy.extlink_id;
 
-    if copy.name = '' then
-        copy.name := NULL;
-    end if;
-
     select
       i.name, e.url, e.label, e.description
     into

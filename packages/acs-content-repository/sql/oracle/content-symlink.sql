@@ -168,7 +168,7 @@ begin
 
 
       select
-        i.name content_symlink.resolve(i.item_id), s.label
+        i.name, content_symlink.resolve(i.item_id), s.label
       into
         v_name, v_target_id, v_label
       from
@@ -178,12 +178,8 @@ begin
       and
         s.symlink_id = copy.symlink_id;
 
-    if copy.name = '' then
-      copy.name := NULL;
-    end if;
-
 -- can't copy to the same folder
-    if copy.target_folder_id ^= v_current_folder_id or (v.name != copy.name and copy.name is not null) then
+    if copy.target_folder_id ^= v_current_folder_id or (v_name != copy.name and copy.name is not null) then
 
     if copy.name is not null then
       v_name := copy.name;
