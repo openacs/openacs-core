@@ -99,10 +99,6 @@ create or replace function authority__new (
     integer, -- register_impl_id
     varchar, -- register_url
     varchar, -- help_contact_text
-    integer, -- get_doc_impl_id
-    integer, -- process_doc_impl_id
-    boolean, -- snapshot_p
-    boolean, -- batch_sync_enabled_p
     integer, -- creation_user
     varchar, -- creation_ip
     integer  -- context_id
@@ -122,13 +118,9 @@ declare
     p_register_impl_id alias for $11; -- default null
     p_register_url alias for $12; -- default null
     p_help_contact_text alias for $13; -- default null,
-    p_get_doc_impl_id alias for $14; -- default null
-    p_process_doc_impl_id alias for $15; -- default null
-    p_snapshot_p alias for $16; -- default ''f''
-    p_batch_sync_enabled_p alias for $17; -- default ''f''
-    p_creation_user alias for $18; -- default null
-    p_creation_ip alias for $19; -- default null
-    p_context_id alias for $20; -- default null
+    p_creation_user alias for $14; -- default null
+    p_creation_ip alias for $15; -- default null
+    p_context_id alias for $16; -- default null
   
     v_authority_id           integer;
     v_object_type            varchar;    
@@ -162,13 +154,11 @@ begin
     insert into auth_authorities (authority_id, short_name, pretty_name, enabled_p, 
                                   sort_order, auth_impl_id, pwd_impl_id, 
                                   forgotten_pwd_url, change_pwd_url, register_impl_id,
-                                  help_contact_text, get_doc_impl_id, process_doc_impl_id,
-                                  snapshot_p, batch_sync_enabled_p)
+                                  help_contact_text)
     values (v_authority_id, p_short_name, p_pretty_name, p_enabled_p, 
                                   v_sort_order, p_auth_impl_id, p_pwd_impl_id, 
                                   p_forgotten_pwd_url, p_change_pwd_url, p_register_impl_id,
-                                  p_help_contact_text, p_get_doc_impl_id, p_process_doc_impl_id,
-                                  p_snapshot_p, p_batch_sync_enabled_p);
+                                  p_help_contact_text);
 
    return v_authority_id;
 end;
