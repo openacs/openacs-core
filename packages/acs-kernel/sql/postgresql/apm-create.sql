@@ -1482,7 +1482,7 @@ begin
     where parameter_id = unregister_parameter__parameter_id;
     delete from apm_parameters 
     where parameter_id = unregister_parameter__parameter_id;
-    PERFORM acs_object__delete(unregister_parameter_id);
+    PERFORM acs_object__delete(unregister_parameter__parameter_id);
 
     return 0; 
 end;' language 'plpgsql';
