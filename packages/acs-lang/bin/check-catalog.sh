@@ -53,7 +53,7 @@ check_one_key_in_catalog_file() {
 
         echo "$0: $package_key - Warning: key $message_key not in $catalog_package_key catalog file. Please inspect key usage:" 
         # This may be a false alarm, so show key usage for manual inspection
-        key_usage=$(find $packages_dir -type f | xargs grep "${package_key}.${message_key}")
+        key_usage=$(find $find_dirs -type f | xargs grep "${package_key}.${message_key}")
         echo ""
         echo $key_usage
         echo ""
@@ -101,9 +101,9 @@ check_catalog_keys_have_lookups() {
         date_time_key=$(get_date_time_key $catalog_key)
         if [ -n "$date_time_key" ]; then
             # Need special regexp for date time message keys
-            lookup_lines=$(find $packages_dir -regex '.*\.\(info\|adp\|sql\|tcl\)' | xargs egrep "lc_get[^]]+$date_time_key")
+            lookup_lines=$(find $find_dirs -regex '.*\.\(info\|adp\|sql\|tcl\)' | xargs egrep "lc_get[^]]+$date_time_key")
         else
-            lookup_lines=$(find $packages_dir -regex '.*\.\(info\|adp\|sql\|tcl\)' | xargs egrep "${package_key}\.$catalog_key")
+            lookup_lines=$(find $find_dirs -regex '.*\.\(info\|adp\|sql\|tcl\)' | xargs egrep "${package_key}\.$catalog_key")
         fi
         
         if [ -z "$lookup_lines" ]; then
@@ -119,7 +119,7 @@ check_tcl_file_lookups_are_in_catalog() {
     message_key_pattern=$(get_message_key_pattern)
     # We are using the widest possible regexp here that could in rare cases lead to false alarms
     # However, that's better than risk removing keys used in tcl scripts
-    for tcl_message_key in $(find $packages_dir -iname '*.tcl'|xargs ${script_path}/mygrep \
+    for tcl_message_key in $(find $find_dirs -iname '*.tcl'|xargs ${script_path}/mygrep \
     "(?:\[_\s+[{\"]?${package_key}|\[lang::message::lookup.*${package_key}|\#${package_key})\.($message_key_pattern)")
     do        
         check_one_key_in_catalog_file $tcl_message_key $package_key
@@ -127,7 +127,7 @@ check_tcl_file_lookups_are_in_catalog() {
 
     # Date time message lookups are special cases as they use lc_get
     #echo "$0: $package_key - checking datetime tcl lookups"
-    for tcl_message_key in $(find $packages_dir -iname '*.tcl'|xargs ${script_path}/mygrep \
+    for tcl_message_key in $(find $find_dirs -iname '*.tcl'|xargs ${script_path}/mygrep \
                              "(?ms)\[lc_get[^]]+?($message_key_pattern)\"?\]")
     do 
         check_one_key_in_catalog_file "localization-$tcl_message_key" acs-lang
@@ -140,7 +140,7 @@ check_adp_file_lookups_are_in_catalog() {
 
     # Check that all message lookups in adp and info files are in the catalog file
     message_key_pattern=$(get_message_key_pattern)
-    for adp_message_key in $(find $packages_dir -regex '.*\.\(info\|adp\|sql\)'|xargs ${script_path}/mygrep \
+    for adp_message_key in $(find $find_dirs -regex '.*\.\(info\|adp\|sql\)'|xargs ${script_path}/mygrep \
                             "#${package_key}\.($message_key_pattern)#")
     do 
         check_one_key_in_catalog_file $adp_message_key $package_key
@@ -150,6 +150,8 @@ check_adp_file_lookups_are_in_catalog() {
 
 script_path=$(dirname $(which $0))
 packages_dir="${script_path}/../../"
+
+find_dirs="$packages_dir ${packages_dir}../www"
 
 # Process arguments
 if [ "$#" == "0" ]; then
