@@ -2400,7 +2400,7 @@ ad_proc ad_returnredirect {{} target_url} {
   set type [ns_set iget [ad_conn headers] content-type]
   if {[string match *multipart/form-data* [string tolower $type]]} {
       set user_agent [ns_set get [ad_conn headers] User-Agent]
-      set use_metarefresh_p [regexp -nocase "msie" $user_agent match]
+      set use_metarefresh_p [regexp -nocase "msie 5.0" $user_agent match]
   }
   if {$use_metarefresh_p != 0} {
       util_ReturnMetaRefresh $url 
