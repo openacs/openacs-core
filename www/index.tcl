@@ -26,6 +26,15 @@ ad_page_contract {
     focus:onevalue
 }
 
+# DRB: vertical applications like dotLRN can set the IndexRedirectUrl parameter to force the user
+# to an index page of its choice.
+
+set redirect_url [parameter::get_from_package_key -package_key acs-kernel -parameter IndexRedirectUrl]
+if { ![string equal $redirect_url ""] } {
+    ad_returnredirect $redirect_url
+    ad_script_abort
+}
+
 set user_id [ad_get_user_id]
 if { $user_id == 0 } {
     set user_id ""
