@@ -60,6 +60,7 @@ namespace eval site_node {
         {-package_name ""}
         {-context_id ""}
         {-package_key:required}
+        {-package_id ""}
     } {
         Instantiate and mount a package of given type.
 
@@ -73,6 +74,7 @@ namespace eval site_node {
         @param context_id     The context_id of the package. Defaults to the closest ancestor package
                               in the site map.
         @param package_key    The key of the package type to instantiate.
+        @param package_id    The id of the new package. Optional.
 
         @return The id of the instantiated package
                           
@@ -80,6 +82,7 @@ namespace eval site_node {
     } {
         # Create a new node if none was provided
         if { [empty_string_p $node_id] } {
+            # Default parent node to the main site
             if { [empty_string_p $parent_node_id ] } {
                 set parent_node_id [site_node::get_node_id -url "/"]
             }
@@ -90,13 +93,14 @@ namespace eval site_node {
             set node_id [site_node::new -name $node_name -parent_id $parent_node_id]
         }
 
-        # Default context_id to the closest ancestor package_id
+        # Default context id to the closest ancestor package_id
         if {[empty_string_p $context_id]} {
             set context_id [site_node::closest_ancestor_package -node_id $node_id]
         }
 
         # Instantiate the package
-        set package_id [apm_package_instance_new -package_key $package_key \
+        set package_id [apm_package_instance_new -package_id $package_id \
+                                                 -package_key $package_key \
                                                  -instance_name $package_name \
                                                  -context_id $context_id]
 
