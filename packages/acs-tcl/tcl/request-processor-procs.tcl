@@ -700,15 +700,21 @@ $message"
 ad_proc -private rp_path_prefixes {path} {
   Returns all the prefixes of a path ordered from most to least specific.
 } {
-  set path [string trimright $path /]
   if {[string index $path 0] != "/"} {
     set path "/$path"
   }
+  set path [string trimright $path /]
+  if { [string length $path] == 0 } {
+    return "/"
+  }
+
   set components [split $path "/"]
   set prefixes [list]
-  for {set i [expr [llength $components] -1]} {$i >= 0} {incr i -1} {
+  for {set i [expr [llength $components] -1]} {$i > 0} {incr i -1} {
     lappend prefixes "[join [lrange $components 0 $i] "/"]/"
+    lappend prefixes "[join [lrange $components 0 $i] "/"]"
   }
+  lappend prefixes "/"
 
   return $prefixes
 }
