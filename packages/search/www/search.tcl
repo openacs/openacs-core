@@ -60,7 +60,7 @@ set tend [clock clicks -milliseconds]
 
 if { $t == "Feeling Lucky" && $result(count) > 0} {
     set object_id [lindex $result(ids) 0]
-    set object_type [db_exec_plsql get_object_type "select acs_object_util__get_object_type($object_id)"]
+    set object_type [acs_object_type $object_id]
     set url [acs_sc_call FtsContentProvider url [list $object_id] $object_type]
     ad_returnredirect $url
     return
@@ -101,7 +101,7 @@ ns_write $template_top
     for { set __i 0 } { $__i < [expr $high - $low +1] } { incr __i } {
 
 	set object_id [lindex $result(ids) $__i]
-	set object_type [db_exec_plsql get_object_type "select acs_object_util__get_object_type($object_id)"]
+	set object_type [acs_object_type $object_id]
 	array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
 	search_content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
 	set title_summary [acs_sc_call FtsEngineDriver summary [list $q $datasource(title)] $driver]
@@ -174,9 +174,3 @@ set template_bottom [template::adp_parse $template_bottom_file [list \
 	  ]]
 
 ns_write $template_bottom
-
-
-
-
-
-

@@ -25,14 +25,14 @@ create function search_observer__dequeue(integer,timestamp,varchar)
 returns integer as '
 declare
     p_object_id			alias for $1;
-    p_date			alias for $2;
+    p_event_date		alias for $2;
     p_event			alias for $3;
 begin
 
     delete from search_observer_queue 
     where object_id = p_object_id 
-    and date =p_date
-    and event = p_event;
+    and event = p_event
+    and event_date = p_event_date;
 
     return 0;
 

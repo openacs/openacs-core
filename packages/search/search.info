@@ -9,6 +9,7 @@
 
     <version name="4.2" url="http://www.arsdigita.com/acs-repository/download/apm/search-4.2.apm">
     <database-support>
+        <database>oracle</database>
         <database>postgresql</database>
     </database-support>
         <owner url="mailto:k2pts@yahoo.com">Neophytos Demetriou</owner>
@@ -17,6 +18,14 @@
 
         <files>
             <file type="package_spec" path="search.info"/>
+            <file type="data_model_create" db_type="oracle" path="sql/oracle/search-create.sql"/>
+            <file type="data_model_drop" db_type="oracle" path="sql/oracle/search-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/search-packages-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/search-packages-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/search-sc-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/search-sc-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/search-tables-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/search-tables-drop.sql"/>
             <file type="data_model_create" db_type="postgresql" path="sql/postgresql/search-create.sql"/>
             <file type="data_model_drop" db_type="postgresql" path="sql/postgresql/search-drop.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/search-packages-create.sql"/>
@@ -26,7 +35,10 @@
             <file type="data_model" db_type="postgresql" path="sql/postgresql/search-tables-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/search-tables-drop.sql"/>
             <file type="tcl_init" path="tcl/search-init.tcl"/>
+            <file type="query_file" db_type="oracle" path="tcl/search-procs-oracle.xql"/>
+            <file type="query_file" db_type="postgresql" path="tcl/search-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/search-procs.tcl"/>
+            <file type="query_file" path="tcl/search-procs.xql"/>
             <file path="www/advanced-search.adp"/>
             <file type="tcl_util" path="www/advanced-search.tcl"/>
             <file path="www/help/basics.html"/>
