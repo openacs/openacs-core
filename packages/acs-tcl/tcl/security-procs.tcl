@@ -236,7 +236,7 @@ ad_proc -private sec_setup_session { new_user_id } {
         # the empty string
         set prev_user_id [ad_conn user_id]
 
-        if { $prev_user_id != 0 } {
+        if { $prev_user_id != 0 && $prev_user_id != $new_user_id } {
             # this is a change in identity so we should create
             # a new session so session-level data is not shared
             set session_id [sec_allocate_session]
