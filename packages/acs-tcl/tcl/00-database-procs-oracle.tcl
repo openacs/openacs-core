@@ -149,18 +149,6 @@ proc_doc db_resultrows {} { Returns the number of rows affected by the last DML 
     return [ns_ora resultrows $db_state(last_used)]
 }
 
-ad_proc db_continue_transaction {} {
-    
-    If a transaction is set to be aborted, this procedure allows it to continue.
-    Intended for use only within a db_transaction on_error code block.  
-} {
-    global db_state
-    db_with_handle db {
-	# The error has been handled, set the flag to false.
-	set db_state(db_abort_p,$db) 0
-    }
-}
-
 ad_proc db_write_clob { statement_name sql args } {
     ad_arg_parser { bind } $args
 

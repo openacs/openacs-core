@@ -100,20 +100,6 @@ catch {
 
 if { $count != 2 } { report_error "db_transaction did not propagate error with on_error block present" }
 
-set count 0 
-db_transaction {
-    db_transaction {
-	error "db_transaction inside transactions 2"
-    } on_error {
-	if [info exists errmsg] {
-	    db_continue_transaction
-	}
-    }
-    incr count
-}
-
-if { $count != 1 } { report_error "db_transaction did not continue processing with db_continue_transaction present." }
-
 set count 0
 db_dml db_api_acceptance_test_delete_footest "delete from footest"
 
