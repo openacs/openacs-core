@@ -413,7 +413,11 @@ begin
 
     v_impl_id := acs_sc_impl__get_id(p_contract_name,p_impl_name);
 
-    perform acs_sc_binding__new(v_contract_id,v_impl_id);
+    if v_contract_id is null or v_impl_id is null then
+        raise exception ''Binding of % to % failed.'', p_contract_name, p_impl_name;
+    else
+        perform acs_sc_binding__new(v_contract_id,v_impl_id);
+    end if;
 
     return 0;
 
