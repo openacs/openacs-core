@@ -692,18 +692,20 @@ create view user_tab_columns as
 
 create function create_user_col_comments() returns boolean as '
 begin
+  -- in version 7.1 col_description was missing but is present in 7.2
+  -- does it exist in 7.0?
   if version() like ''%7.1%'' then
     execute ''
       create view user_col_comments as
         select upper(c.relname) as table_name,
-      	 upper(a.attname) as column_name,
-      	 d.description as comments
+         upper(a.attname) as column_name,
+         d.description as comments
           from pg_class c,
                pg_attribute a
                  left outer join pg_description d on (a.oid = d.objoid)
          where c.oid = a.attrelid
            and a.attnum > 0'';
-  else
+  else 
     execute ''
       create view user_col_comments as
         select upper(c.relname) as table_name, 
@@ -723,16 +725,41 @@ drop function create_user_col_comments();
 
 -- PG substitute for Oracle user_col_comments view
 
-create view user_tab_comments as
-  select upper(c.relname) as table_name,
+create function create_user_tab_comments() returns boolean as '
+begin
+  if version() like ''%7.2%'' then
+    execute ''
+    create view user_tab_comments as
+      select upper(c.relname) as table_name,
 	 case
-	   when c.relkind = 'r' then 'TABLE'
-	   when c.relkind = 'v' then 'VIEW'
+	   when c.relkind = ''''r'''' then ''''TABLE''''
+	   when c.relkind = ''''v'''' then ''''VIEW''''
 	   else c.relkind::text
 	 end as table_type,
 	 d.description as comments
     from pg_class c
-           left outer join pg_description d on (c.oid = d.objoid);
+           left outer join pg_description d on (c.oid = d.objoid)
+       where d.objsubid = 0'';
+  else
+    execute ''
+    create view user_tab_comments as
+      select upper(c.relname) as table_name,
+	 case
+	   when c.relkind = ''''r'''' then ''''TABLE''''
+	   when c.relkind = ''''v'''' then ''''VIEW''''
+	   else c.relkind::text
+	 end as table_type,
+	 d.description as comments
+    from pg_class c
+           left outer join pg_description d on (c.oid = d.objoid)'';
+  end if;
+  return ''t'';
+end;' language 'plpgsql';
+
+select create_user_tab_comments();
+
+drop function create_user_tab_comments();
+
 
 -- Table for storing PL/PGSQL function arguments
 
