@@ -18,7 +18,7 @@
                  and    e2.success_p = 'f') as num_problems,
                interactive_p,
                message,
-               (nvl(job_end_time, sysdate) - job_start_time) * 24*60*60 as run_time_seconds
+               round((nvl(job_end_time, sysdate) - job_start_time) * 24*60*60) as run_time_seconds
         from   auth_batch_jobs
         where  authority_id = :authority_id
 	
