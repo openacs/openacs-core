@@ -427,6 +427,18 @@ namespace eval lang::catalog {
                if { [lsearch -exact $messages_array_names $message_key] < 0 } {
                    ns_log Notice "lang::catalog::import_messages_from_file - Marking message $message_key in locale $locale as deleted"
                    db_dml mark_message_as_deleted {}
+
+                   # One approach to deleted message keys after upgrade is to consider those
+                   # keys deleted whose messages in all locales have an upgrade status
+                   # of deleted in the lang_messages table.
+                   # However in the somewhat unusual case where the package we are upgrading
+                   # to doesn't have all locales that the old package version does, upgrade
+                   # status won't be set to deleted for all locales. 
+                   # The workable solution seems to be to consider a key as deleted if its
+                   # en_US message has the deleted upgrade status.
+                   if { [string equal $locale "en_US"] } {
+                       db_dml mark_message_key_as_deleted {}
+                   }
                }
            }
        }       
