@@ -3579,3 +3579,25 @@ if {![catch {package require Trf 2.0}]} {
 
 # don't want to barf if, per chance, a newer version is already available
 catch { package provide base64 2.2 }
+
+
+ad_proc -public util_list_of_ns_sets_to_list_of_lists {
+    {-list_of_ns_sets:required}
+} {
+    Transform a list of ns_sets (most likely produced by db_list_of_ns_sets)
+    into a list of lists that match the array set format in the sublists
+    (key value key value ...) 
+    
+    @param -list_of_ns_sets A list of ns_set ids
+    
+    @author Ola Hansson (ola@polyxena.net)
+    @creation-date September 27, 2002
+} {
+    set result [list]
+    
+    foreach ns_set $list_of_ns_sets {
+	lappend result [util_ns_set_to_list -set $ns_set]
+    }
+    
+    return $result
+}
