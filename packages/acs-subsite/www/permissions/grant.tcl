@@ -14,7 +14,7 @@ ad_page_contract {
 ad_require_permission $object_id admin
 
 # The object name is used in various localized messages below
-set name [db_string name {select acs_object.name(:object_id) from dual}]
+set name [acs_object_name $object_id]
 
 set title [_ acs-subsite.lt_Grant_Permission_on_n]
 
@@ -163,13 +163,12 @@ if { [form is_valid grant] } {
     # this would be slow)
     foreach privilege $existing_privs {
         if { [lsearch $privileges $privilege] > -1 } {
-            db_exec_plsql grant { }
+            permission::grant -party_id $party_id -object_id $object_id -privilege $privilege
         } else {
-            db_exec_plsql revoke { }
+            permission::revoke -party_id $party_id -object_id $object_id -privilege $privilege
         }
     }
     
     ad_returnredirect "one?[export_vars [list object_id application_url]]"
     ad_script_abort
 }
-
