@@ -589,7 +589,7 @@ root:~# emacs -nw /etc/inittab</programlisting>
 			<computeroutput>nss1</computeroutput> is unique.
 		  </para>
 		  <programlisting>
-nss1:2345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nsadmin -g web -t /usr/local/aolserver/<emphasis>birdnotes</emphasis>.tcl</programlisting>
+nss1:345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nsadmin -g web -t /usr/local/aolserver/<emphasis>birdnotes</emphasis>.tcl</programlisting>
 		</listitem>
 
 		<listitem><para>
