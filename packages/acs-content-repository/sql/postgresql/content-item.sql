@@ -1816,7 +1816,7 @@ begin
                          acs_object_types  
                        where
                          tree_sortkey 
-                            like (select object_type || ''%'' 
+                            like (select tree_sortkey || ''%'' 
                                     from acs_object_types 
                                    where object_type = is_subclass__supertype)
                        order by tree_sortkey
