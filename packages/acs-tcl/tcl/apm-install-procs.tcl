@@ -559,7 +559,7 @@ ad_proc -private apm_package_install {
            } {
                 # Another package is mounted at the path so we cannot mount
                 global errorInfo
-                set error_text "Package $version(package-name) could not be mounted at /$version(auto-mount) , there may already me a package mounted there, the error is: $error"
+                set error_text "Package $version(package-name) could not be mounted at /$version(auto-mount) , there may already be a package mounted there, the error is: $error"
                 ns_log Error "$error_text \n\n$errorInfo"
                 apm_callback_and_log $callback "<p> $error_text </p>"
             } 
