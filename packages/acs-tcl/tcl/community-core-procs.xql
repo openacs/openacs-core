@@ -185,10 +185,19 @@
       <querytext>
       
 	update parties
-        set    email = :email,
-               url = :url
+        set    [join $cols ", "]
         where  party_id = :party_id
-    
+
+      </querytext>
+</fullquery>
+
+<fullquery name="party::get_by_email.select_party_id">
+      <querytext>
+      
+        select party_id 
+        from   parties 
+        where  email = :email 
+
       </querytext>
 </fullquery>
 

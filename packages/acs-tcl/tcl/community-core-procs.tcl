@@ -512,6 +512,7 @@ ad_proc -public acs_user::update {
     {-screen_name}
     {-password_question}
     {-password_answer}
+    {-email_verified_p}
 } {
     Update information about a user. 
     Feel free to expand this with more switches later as needed, as long as they're optional.
@@ -522,11 +523,12 @@ ad_proc -public acs_user::update {
     @option screen_name        The new screen_name for the user
     @option password_question  The new password_question for the user
     @option password_answer    The new password_question for the user
+    @option email_verified_p   Whether the email address has been verified
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
     set cols [list]
-    foreach var { authority_id username screen_name password_question password_answer  } {
+    foreach var { authority_id username screen_name password_question password_answer email_verified_p } {
         if { [info exists $var] } {
             lappend cols "$var = :$var"
         }
@@ -555,8 +557,8 @@ ad_proc -public acs_user::site_wide_admin_p {
 
 ad_proc -public party::update {
     {-party_id:required}
-    {-email:required}
-    {-url:required}
+    {-email}
+    {-url}
 } {
     Update information about a party.
 
@@ -566,5 +568,22 @@ ad_proc -public party::update {
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
+    set cols [list]
+    foreach var { email url } {
+        if { [info exists $var] } {
+            lappend cols "$var = :$var"
+        }
+    }
     db_dml party_update {}
 }
+
+ad_proc -public party::get_by_email {
+    {-email:required}
+} {
+    Return the party_id of the party with the given email. Returns empty string if no party found.
+
+    @return party_id
+} {
+    return [db_string select_party_id {} -default {}]
+}
+
