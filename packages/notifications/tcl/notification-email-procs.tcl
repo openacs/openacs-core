@@ -1,9 +1,6 @@
 ad_library {
 
-    Notifications Email Delivery Method.
-
-    The delivery method service contract implementation for "email."
-    These procs define how things are delivered and scanned back for email.
+    Notifications Email Delivery Method
 
     @creation-date 2002-06-20
     @author Ben Adida <ben@openforce.biz>
@@ -14,8 +11,6 @@ ad_library {
 namespace eval notification::email {
 
     ad_proc -public get_package_id {} {
-	Helper procedure to help find the package ID for notifications, which should be a singleton.
-    } {
         return [apm_package_id_from_key notifications]
     }
 
@@ -23,41 +18,26 @@ namespace eval notification::email {
         {-name:required}
         {-default ""}
     } {
-	A helper proc to get a notification parameter, given that noficiations is a singleton.
-    } {
         return [parameter::get -package_id [get_package_id] -parameter $name -default $default]
     }
 
     ad_proc -public address_domain {} {
-	Email Notifications are sent from a particular domain, with the "From" being used
-	to trace the notification that a user is replying to if they choose to reply to the email notification.
-	This procedure returns the email address domain that is used.
-    } {
         set domain [get_parameter -name "EmailDomain"]
         if { [empty_string_p $domain] } {
             # No domain set up, let's use the default from the system info
             # This may not find anything, but at least it's worth a try
-	The URL for managing all notifications for the logged-in user.
-    } {
             if { ![regexp {^(https?://)?(www\.)?([^/]*)} [ad_url] match ignore ignore domain] } {
                 ns_log Warning "notification::email::address_domain: Couldn't find an email domain for notifications."
             }
         }
-	Email notifications are sent from the address "<prefix><id_info>@<address_domain>".
-	This proc returns the prefix that is generic to all notifications.
-    } {
         return $domain
     }
 
     ad_proc -public manage_notifications_url {} {
-	Sweeping replies happens through qmail queues. This returns the location of the qmail queue.
-    } {
         return "[ad_url][apm_package_url_from_key [notification::package_key]]manage"
     }
 
     ad_proc -public reply_address_prefix {} {
-	Given a pretty email address (e.g. "Ben Adida <ben@mit.edu>"), this returns purely the email address.
-    } {
         return [get_parameter -name "EmailReplyAddressPrefix"]
     }
 
@@ -69,8 +49,6 @@ namespace eval notification::email {
         if {![regexp {<([^>]*)>} $email all clean_email]} {
             return $email
         } else {
-	Generates the full return email address for a given object and notification type.
-    } {
             return $clean_email
         }
     }
@@ -82,7 +60,6 @@ namespace eval notification::email {
         if {[empty_string_p $object_id] || [empty_string_p $type_id]} {
             return "[address_domain] mailer <[reply_address_prefix]@[address_domain]>"
         } else {
-	that the address refers to.
             return "[address_domain] mailer <[reply_address_prefix]-$object_id-$type_id@[address_domain]>"
         }
     }
@@ -110,8 +87,7 @@ namespace eval notification::email {
         subject
         content
     } {
-        Send the actual email. This doesn't used named arguments because this is the implementation
-	of the service contract.
+        Send the actual email
     } {
         # Get email
         set email [cc_email_from_party $to_user_id]
@@ -253,7 +229,7 @@ namespace eval notification::email {
     }
 
     ad_proc -public scan_replies {} {
-        scan for replies. Implementation of the service contract for loading replies.
+        scan for replies
     } {
         ns_log Notice "NOTIF-EMAIL: about to load qmail queue"
         return [load_qmail_mail_queue -queue_dir [qmail_mail_queue_dir]]
