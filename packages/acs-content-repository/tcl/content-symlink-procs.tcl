@@ -62,7 +62,7 @@ ad_proc -public content::symlink::new {
     -target_id:required
     -parent_id:required
     {-symlink_id ""}
-    {-creation_date ""}
+    -creation_date
     {-creation_user ""}
     {-creation_ip ""}
 } {
@@ -77,16 +77,19 @@ ad_proc -public content::symlink::new {
 
     @return NUMBER(38)
 } {
-    return [package_exec_plsql -var_list [list \
+    set var_list [list \
         [list name $name ] \
         [list label $label ] \
         [list target_id $target_id ] \
         [list parent_id $parent_id ] \
         [list symlink_id $symlink_id ] \
-        [list creation_date $creation_date ] \
         [list creation_user $creation_user ] \
         [list creation_ip $creation_ip ] \
-    ] content_symlink new]
+    ]
+    if {[exists_and_not_null creation_date]} {
+        lappend var_list [list creation_date $creation_date ]
+    }
+    return [package_exec_plsql -var_list $var_list content_symlink new]
 }
 
 
