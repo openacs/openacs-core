@@ -36,7 +36,18 @@ namespace eval membership_rel {
             }
             db_dml update_modifying_user {}
         }
-        acs_user::flush_cache -user_id $user_id
+
+        set rel_user_id [db_string select_rel_user_id { 
+            select u.user_id
+            from   acs_rels r,
+                   users u
+            where  r.rel_id = :rel_id 
+            and    u.user_id = r.object_id_two
+        } -default {}]
+
+        if { ![empty_string_p $rel_user_id] } {
+            acs_user::flush_cache -user_id $rel_user_id
+        }
     }
 
     ad_proc -public approve {
