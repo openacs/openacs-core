@@ -199,24 +199,46 @@ where
 end;' language 'plpgsql';
 
 -- procedure delete
-create or replace function content_folder__delete (integer)
+
+create or replace function content_folder__delete (integer, boolean)
 returns integer as '
 declare
   delete__folder_id              alias for $1;  
+  p_cascade_p      alias for $2;
   v_count                        integer;       
+  v_child_row                    record;
   v_parent_id                    integer;  
   v_path                         varchar;     
+  v_folder_sortkey               varbit;
 begin
 
-  -- check if the folder contains any items
+  if p_cascade_p = ''f'' then
+    select count(*) into v_count from cr_items 
+     where parent_id = delete__folder_id;
+    -- check if the folder contains any items
+    if v_count > 0 then
+      v_path := content_item__get_path(delete__folder_id, null);
+      raise EXCEPTION ''-20000: Folder ID % (%) cannot be deleted because it is not empty.'', delete__folder_id, v_path;
+    end if;  
+  else 
+  -- delete children
+    select into v_folder_sortkey tree_sortkey
+    from cr_items where item_id=delete__folder_id;
 
-  select count(*) into v_count from cr_items 
-   where parent_id = delete__folder_id;
-
-  if v_count > 0 then
-    v_path := content_item__get_path(delete__folder_id, null);
-    raise EXCEPTION ''-20000: Folder ID % (%) cannot be deleted because it is not empty.'', delete__folder_id, v_path;
-  end if;  
+    for v_child_row in select
+        item_id, tree_sortkey, name
+        from cr_items
+        where tree_sortkey between v_folder_sortkey and tree_right(v_folder_sortkey)   
+	and tree_sortkey != v_folder_sortkey
+        order by tree_sortkey desc
+    loop
+	if content_folder__is_folder(v_child_row.item_id) then
+	  perform content_folder__delete(v_child_row.item_id);
+        else
+         perform content_item__delete(v_child_row.item_id);
+	end if;
+    end loop;
+  end if;
 
   PERFORM content_folder__unregister_content_type(
       delete__folder_id,
@@ -229,7 +251,7 @@ begin
 
   select parent_id into v_parent_id from cr_items 
     where item_id = delete__folder_id;
-
+  raise notice ''deleteing folder %'',delete__folder_id;
   PERFORM content_item__delete(delete__folder_id);
 
   -- check if any folders are left in the parent
@@ -239,6 +261,21 @@ begin
         where parent_id = v_parent_id and content_type = ''content_folder'');
 
   return 0; 
+end;' language 'plpgsql';
+
+
+create or replace function content_folder__delete (integer)
+returns integer as '
+declare
+  delete__folder_id              alias for $1;  
+  v_count                        integer;       
+  v_parent_id                    integer;  
+  v_path                         varchar;     
+begin
+	return content_folder__delete(
+		delete__folder_id,
+		''f''
+		);
 end;' language 'plpgsql';
 
 
@@ -367,6 +404,32 @@ declare
   v_new_folder_id              cr_folders.folder_id%TYPE;
   v_folder_contents_val        record;
 begin
+	v_new_folder_id := content_folder__copy (
+			copy__folder_id,
+			copy__target_folder_id,
+			copy__creation_user,
+			copy_creation_ip,
+			NULL
+			);
+	return v_new_folder_id;
+end;' language 'plpgsql';
+
+create function content_folder__copy (integer,integer,integer,varchar,varchar)
+returns integer as '
+declare
+  copy__folder_id              alias for $1;  
+  copy__target_folder_id       alias for $2;  
+  copy__creation_user          alias for $3;  
+  copy__creation_ip            alias for $4;  -- default null
+  copy__name              alias for $5; -- default null
+  v_valid_folders_p            integer        
+  v_current_folder_id          cr_folders.folder_id%TYPE;
+  v_name                       cr_items.name%TYPE;
+  v_label                      cr_folders.label%TYPE;
+  v_description                cr_folders.description%TYPE;
+  v_new_folder_id              cr_folders.folder_id%TYPE;
+  v_folder_contents_val        record;
+begin
 
   select 
     count(*)
@@ -391,29 +454,28 @@ begin
   if copy__folder_id = content_item__get_root_folder(null) 
      or copy__folder_id = content_template__get_root_folder() 
      or copy__target_folder_id = copy__folder_id 
-     or v_current_folder_id = copy__target_folder_id then
-
     v_valid_folders_p := 0;
   end if;
 
-  if v_valid_folders_p = 2 then 
-    if content_folder__is_sub_folder(copy__folder_id, copy__target_folder_id) != ''t'' then
+    -- get the source folder info
+    select
+      name, label, description
+    into
+      v_name, v_label, v_description
+    from 
+      cr_items i, cr_folders f
+    where
+      f.folder_id = i.item_id
+    and
+      f.folder_id = copy__folder_id;
 
-      -- get the source folder info
-      select
-        name, label, description
-      into
-        v_name, v_label, v_description
-      from 
-        cr_items i, cr_folders f
-      where
-        f.folder_id = i.item_id
-      and
-        f.folder_id = copy__folder_id;
+  if v_valid_folders_p = 2 then 
+
+    if content_folder__is_sub_folder(copy__folder_id, copy__target_folder_id) != ''t'' or v_current_folder_id != copy__target_folder_id or (v_name != copy__name and copy__name is not null) then 
 
       -- create the new folder
       v_new_folder_id := content_folder__new(
-          v_name,
+          coalesce (copy__name, v_name),
 	  v_label,
 	  v_description,
 	  copy__target_folder_id,
