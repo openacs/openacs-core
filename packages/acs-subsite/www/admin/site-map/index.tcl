@@ -11,6 +11,7 @@ ad_page_contract {
     {new_type ""}
     {root_id:integer ""}
     {new_application:integer ""}
+    {rename_application:integer {}}
 }
 
 if {[empty_string_p $root_id]} {
@@ -35,6 +36,8 @@ if {![empty_string_p $new_parent]} {
   set javascript "onLoad=\"javascript:document.new_parent.name.focus();document.new_parent.name.select()\""
 } elseif {![empty_string_p $new_application]} {
   set javascript "onLoad=\"javascript:document.new_application.instance_name.focus();document.new_application.instance_name.select()\""
+} elseif {![empty_string_p $rename_application]} {
+  set javascript "onLoad=\"javascript:document.rename_application.instance_name.focus();document.rename_application.instance_name.select()\""
 } else {
   set javascript ""
 }
@@ -166,6 +169,7 @@ db_foreach nodes_select {} {
       # Add a link to control permissioning
       if {$object_admin_p} {
 	lappend controls "<a href=\"../../permissions/one?[export_url_vars object_id]\">set permissions</a>"
+	lappend controls "<a href=\"?[export_url_vars expand:multiple root_id rename_application=$node_id]\">rename</a>"
       }
     }
   }
@@ -206,6 +210,14 @@ db_foreach nodes_select {} {
     } else {
       doc_body_append "(none)"
     }
+  } elseif {$rename_application == $node_id} {
+      doc_body_append "<form name=rename_application action=rename>
+        [export_form_vars expand:multiple root_id node_id rename_package_id]
+        <font size=-1>
+        <input name=instance_name type=text size=\"[string length $object_name]\" value=\"$object_name\">
+        </font>
+        </form>
+      "
   } else {
     doc_body_append "<a href=\"$url\">$object_name</a>"
   }
@@ -295,7 +307,7 @@ To <strong>copy</strong> an application instance to another URL,
 simply create a new folder as above, then select <em>mount</em>.  Select
 the application to be copied from the list of available packages.<p />
 
-To <strong>move</strong> or <strong>rename</strong> an application,
+To <strong>move</strong> an application,
 copy it as above to the new location, then just select
 <em>unmount</em> at the old location.  Selecting <em>delete</em> on
 the empty folder will remove it from the site node.<p />
