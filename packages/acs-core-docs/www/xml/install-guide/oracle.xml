@@ -15,7 +15,7 @@
     If you are installing PostGreSQL instead of Oracle, skip this section.
   </para>
   <para>
-    OpenACS &version; will install with Oracle 9i but has not been extensively tested so may still have bugs or tuning issues.
+    OpenACS &version; will install with Oracle 9i but has not been extensively tested so may still have bugs or tuning issues.  See <ulink url="http://www.piskorski.com/docs/oracle.html">Andrew Piskorski's Oracle 9i notes</ulink> for guidance.
   </para>
   
   <para>
