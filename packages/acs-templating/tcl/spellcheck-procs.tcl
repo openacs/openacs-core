@@ -59,7 +59,8 @@ ad_proc -public template::data::transform::spellcheck {
 	# special treatment for the "richtext" datatype.
     	set format [template::util::richtext::get_property format [lindex $values 0]]
 	if { ![empty_string_p $merge_text] } {
-	    return [template::util::richtext::set_property contents [lindex $values 0] $merge_text]
+            set richtext_value [lindex [template::data::transform::richtext element] 0]
+            return [list [template::util::richtext::set_property contents $richtext_value $merge_text]]
 	} 
     	set contents [template::util::richtext::get_property contents [lindex $values 0]]
     } else {
