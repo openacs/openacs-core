@@ -256,7 +256,7 @@ explained by example: consider some hypothetical rows in the
 <computeroutput>address_book</computeroutput> table:
 </para>
 
-<blockquote>
+
 <informaltable frame="all">
 <tgroup cols="5">
 <thead>
@@ -294,7 +294,6 @@ explained by example: consider some hypothetical rows in the
 </tbody>
 </tgroup>
 </informaltable>
-</blockquote>
 
 <para>
 The first row represents an entry in User 123's personal address book,

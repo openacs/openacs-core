@@ -119,7 +119,6 @@ model.</para>
 <para>&quot;Scope&quot; is a term best explained by example. Consider some
 hypothetical rows in the <computeroutput>address_book</computeroutput> table:</para>
 
-<blockquote>
  
 <informaltable>
 <tgroup cols="4">
@@ -156,7 +155,6 @@ hypothetical rows in the <computeroutput>address_book</computeroutput> table:</p
 <entry>...</entry>
 </row>
 </tbody></tgroup></informaltable>
-</blockquote>
 
 <para>The first row represents an entry in User 123&#39;s personal address book,
 the second row represents an entry in User Group 456&#39;s shared address
