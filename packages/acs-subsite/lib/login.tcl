@@ -60,7 +60,7 @@ if { [string equal $authority_id [auth::get_register_authority]] } {
     set register_url [export_vars -no_empty -base $register_url { username }]
 }
 
-ad_form -name login -html { style "margin: 0px;" } -show_required_p 0 -edit_buttons { { "Login" ok } } -form {
+ad_form -name login -html { style "margin: 0px;" } -show_required_p 0 -edit_buttons { { "Login" ok } } -action "/register/" -form {
     {return_url:text(hidden)}
     {time:text(hidden)}
     {token_id:text(hidden)}
@@ -136,11 +136,8 @@ ad_form -extend -name login -on_request {
         }
         default {
             # Display the message on a separate page
-            set page_title "Login denied"
-            set context [list [list "." [_ acs-subsite.Log_In]] "Login denied"]
-            set message $auth_info(account_message)
-            ad_return_template "display-message"
-            break
+            ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-closed" { { message $auth_info(account_message) } }]
+            ad_script_abort
         }
     }
 } -after_submit {
@@ -149,13 +146,8 @@ ad_form -extend -name login -on_request {
 
     # Handle account_message
     if { [exists_and_not_null auth_info(account_message)] } {
-        set page_title "Logged In"
-        set context [list [list "." [_ acs-subsite.Log_In]] "Logged in"]
-        set message $auth_info(account_message)
-        set continue_url $return_url
-        set continue_label "Continue working with [ad_system_name]"
-        ad_return_template "display-message"
-        return    
+        ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-message" { { message $auth_info(account_message) } return_url }]
+        ad_script_abort
     } else {
         # No message
         ad_returnredirect $return_url

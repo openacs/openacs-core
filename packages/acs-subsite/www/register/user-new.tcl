@@ -65,31 +65,22 @@ ad_form -name register -form [auth::get_registration_form_elements] -on_request 
         default {
             error $creation_info(account_message)
             # Display the message on a separate page
-            set message $creation_info(account_message)
-            ad_return_template "display-message"
-            # TODO: Double-check that this actually causes us to break out of ad_form and have the template display
-            return
+            ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-closed" { { message $creation_info(account_message) } }]
+            ad_script_abort
         }
     }
 
 } -after_submit {
     # User is registered and logged in
-
     if { ![exists_and_not_null return_url] } {
         # Redirect to subsite home page.
         set return_url [subsite::get_element -element url]
     }
 
-    # TODO: 
-    # SIMON: Handle creation_message
-
     # Handle account_message
     if { ![empty_string_p $creation_info(account_message)] } {
-        set message creation_info(account_message)
-        set continue_url $return_url
-        set continue_label "Continue working with [ad_system_name]"
-        ad_return_template "display-message"
-        return    
+        ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-message" { { message $creation_info(account_message) } return_url }]
+        ad_script_abort
     } else {
         # No messages
         ad_returnredirect $return_url
