@@ -2,6 +2,17 @@
 <property name="title">ACS Service Contract</property>
 <property name="context">@context@</property>
 
+<h2>Defined Contracts</h2>
+<ul>
+<if @defined_contracts:rowcount@ eq 0>
+  <li><i>None</i></li>
+</if>
+<else>
+<multiple name=defined_contracts>
+<li> <a href="contract-display?id=@defined_contracts.contract_id@">@defined_contracts.contract_name@</a> @defined_contracts.contract_desc@</li>
+</multiple>
+</else>
+</ul>
 <h2>Installed Bindings</h2>
 <ul>
 <if @valid_installed_binding:rowcount@ eq 0>
@@ -49,7 +60,6 @@
 @invalid_uninstalled_binding.contract_name@,
 @invalid_uninstalled_binding.impl_id@
 @invalid_uninstalled_binding.impl_name@
-[<a href=>What's wrong?</a>]
 </multiple>
 </else>
 </ul>

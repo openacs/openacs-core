@@ -1,13 +1,23 @@
 ad_library {
-
+    Support library for acs service contracts.  
+    
     @author Neophytos Demetriou
-
+    @creation-date 2001-09-01
+    @cvs-id $Id$
 }
 
-ad_proc acs_sc_binding_exists_p {
+ad_proc -public acs_sc_binding_exists_p {
     contract
     impl
 } {
+    Returns a boolean depending on whether or not the binding between 
+    the contract and implementation exists.
+
+    @param contract the contract name 
+    @param impl the implementation name 
+
+    @return 0 or 1
+    
     @author Neophytos Demetriou
 } {
 
@@ -15,23 +25,29 @@ ad_proc acs_sc_binding_exists_p {
 
 }
 
-ad_proc acs_sc_generate_name {
+ad_proc -private acs_sc_generate_name {
     contract
     impl
     operation
 
 } {
+    generate the internal proc name.
+
     @author Neophytos Demetriou
 } {
     return AcsSc.${contract}.${operation}.${impl}
 }
 
 
-ad_proc acs_sc_get_alias {
+ad_proc -private acs_sc_get_alias {
     contract
     operation
     impl
 } {
+    Returns the implementation alias (the 
+    proc defined to handle a given operation 
+    for a given implementation).                                      
+    
     @author Neophytos Demetriou
 } {
 
@@ -54,17 +70,20 @@ ad_proc acs_sc_get_alias {
 
 
 
-ad_proc acs_sc_proc {
+ad_proc -private acs_sc_proc {
     contract
     operation
     impl
 } {
+    Builds the proc used by acs_sc_call, generally only called 
+    in acs-service-contract-init.tcl at startup.
+
+    @return 0 on failure, 1 on success.
     @author Neophytos Demetriou
 } {
 
     set arguments [list]
-    set docblock [list]
-
+    set docblock {}
 
     set proc_name [acs_sc_generate_name $contract $impl $operation]
 
@@ -72,10 +91,10 @@ ad_proc acs_sc_proc {
     foreach {impl_alias impl_pl} [acs_sc_get_alias $contract $operation $impl] break 
 
     if ![info exists impl_alias] {
-	error "Cannot find alias for $proc_name"
+	error "ACS-SC: Cannot find alias for $proc_name"
     }
 
-    db_0or1row get_operation_definition {
+    if {![db_0or1row get_operation_definition {
 	select 
 	    operation_desc,
 	    operation_iscachable_p,
@@ -85,9 +104,12 @@ ad_proc acs_sc_proc {
 	from acs_sc_operations
 	where contract_name = :contract
 	and operation_name = :operation
+    }]} { 
+        ns_log warning "ACS-SC: operation definition not found for contract $contract operation $operation"
+        return 0
     }
 
-    lappend docblock "$operation_desc"
+    append docblock "\n<b>acs-service-contract operation.  Call via acs_sc_call.</b>\n\n$operation_desc\n\n"
 
     db_foreach operation_inputtype_element {
 	select 
@@ -100,9 +122,9 @@ ad_proc acs_sc_proc {
 	order by element_pos asc
     } {
 	lappend arguments "$element_name"
-	lappend docblock "@param $element_name $element_msg_type_name"
+	append docblock "\n@param $element_name $element_msg_type_name"
 	if { $element_msg_type_isset_p } {
-	    lappend docblock "\[\]"
+	    append docblock " \[\]"
 	}
     }
 
@@ -116,12 +138,13 @@ ad_proc acs_sc_proc {
 	where msg_type_id = :operation_outputtype_id
 	order by element_pos asc
     } {
-	lappend docblock "@return <b>$element_name</b> - $element_msg_type_name"
+	append docblock "\n@return <b>$element_name</b> - $element_msg_type_name"
 	if { $element_msg_type_isset_p } {
-	    lappend docblock "\[\]"
+	    append docblock " \[\]"
 	}
     }
 
+    append docblock "\n@see $impl_alias\n@see acs_sc_call"
 
     set full_statement [acs_sc_get_statement $impl_alias $impl_pl $arguments]
 
@@ -132,20 +155,26 @@ ad_proc acs_sc_proc {
 #FIX ME: CALL BY NAME USING UPVAR
     set body "return \[$full_statement\]"
 
-    set docblock [join $docblock "\n\r"]
     set arguments [join $arguments]
-    acs_sc_log SCDebug "sc_proc: $proc_name, $arguments"
-    ad_proc $proc_name $arguments $docblock $body
-
+    acs_sc_log SCDebug "ACS-SC: ad_proc $proc_name $arguments\n$docblock\n$body\n"
+    ad_proc -private $proc_name $arguments $docblock $body
+    
+    return 1
 }
 
 
 
-ad_proc acs_sc_get_statement {
+ad_proc -private acs_sc_get_statement {
     impl_alias
     impl_pl
     arguments
 } {
+    Builds the statement to call from the provided metadata.
+
+    @param impl_alias tcl or plpgsql proc to call
+    @param impl_pl programmimg language of the proc to call (TCL or PLPGSQL)
+    @param arguments list of argument names
+
     @author Neophytos Demetriou
 } {
 
@@ -167,7 +196,7 @@ ad_proc acs_sc_get_statement {
 	    set full_statement "db_exec_plsql full_statement \"select ${impl_alias}(${args_final})\""
 	}
 	default {
-	    error "Unknown impl_pl: $impl_pl"
+	    error "ACS-SC: Unknown impl_pl: $impl_pl"
 	}
     }
 
@@ -177,12 +206,17 @@ ad_proc acs_sc_get_statement {
 
 
 
-ad_proc acs_sc_call {
+ad_proc -public acs_sc_call {
     contract
     operation
     {arguments ""}
     {impl ""}
 } {
+    @param contract the contract name 
+    @param operation the method to invoke
+    @param arguments list of arguments to pass to the method
+    @param impl the implementation name.
+
     @author Neophytos Demetriou
 } {
 
@@ -195,7 +229,7 @@ ad_proc acs_sc_call {
 	# SHOULD WE PRODUCE AN ERROR HERE? 
 	# MAYBE NOT, THE SEMANTICS MIGHT REQUIRE TO CALL 
 	# THE FUNCTION ONLY IF THE IMPLEMENTATION IS SUPPORTED.
-	ns_log warning "ACS-SC: Function Not Found: $proc_name"
+	ns_log warning "ACS-SC: Function Not Found: $proc_name [info procs $proc_name]"
 	return
     }
 }
@@ -206,9 +240,11 @@ ad_proc acs_sc_call {
 ##
 
 proc acs_sc_log {level msg} {
-    # If you want to debug the SC, change SCDebug to Debug below
+    # If you want to debug the SC, uncomment the Debug log below
     if {![string equal "SCDebug" $level]} {
         ns_log $level "$msg"
+    } else { 
+        # ns_log Debug "$msg"
     }
 }
 
