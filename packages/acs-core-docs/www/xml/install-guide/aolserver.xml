@@ -16,16 +16,25 @@
       <formalpara>
         <title>Unpack the Aolserver tarball</title>
         <para>Download the <link
-linkend="source-aolserver">aolserver tarball</link> to <computeroutput>/tmp/aolserver3.3oacs1.tar.gz</computeroutput>.  As <computeroutput>root</computeroutput>, untar
-      <computeroutput>aolserver3.3oacs1.tar.gz</computeroutput>
-      into <computeroutput>/usr/local/src</computeroutput>.
-    </para>
+linkend="source-aolserver">aolserver tarball</link> and unpack it.</para>
       </formalpara>
       <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
-[root@yourserver src]# <userinput>tar xzf /tmp/aolserver3.3oacs1.tar.gz</userinput>
+[root@yourserver src]# <userinput>wget --passive http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar.gz</userinput>
+--15:38:08--  http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar.gz
+           => `aolserver3.3oacs1.tar.gz'
+Resolving uptime.openacs.org... done.
+Connecting to uptime.openacs.org[207.166.200.199]:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 3,858,074 [application/x-compressed]
+
+100%[====================================>] 3,858,074     66.56K/s    ETA 00:00
+
+15:39:05 (66.56 KB/s) - `aolserver3.3oacs1.tar.gz' saved [3858074/3858074]
+[root@yourserver src]# <userinput>tar xzf aolserver3.3oacs1.tar.gz</userinput>
 [root@yourserver src]#
 <action>cd /usr/local/src
-tar xzf /tmp/aolserver3.3oacs1.tar.gz</action></screen>
+wget --passive http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar.gz
+tar xzf aolserver3.3oacs1.tar.gz</action></screen>
     </listitem>
     
     <listitem id="install-aolserver-compile">
@@ -135,18 +144,29 @@ chmod 755 nsd-postgres</action></screen>
       <formalpara>
         <title>Install tDOM</title>
         <para>Download the <link linkend="source-tdom">tDOM
-        tarball</link> to
-        <computeroutput>/tmp/tDOM-0.7.7.tar.gz</computeroutput>,
-        unpack it, adjust the configuration file to match our patched
+        tarball</link>, unpack it, adjust the configuration file to match our patched
         distribution of aolserver, and compile it.</para>
       </formalpara>
       <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
-[root@yourserver src]# <userinput>tar xzf /tmp/tDOM-0.7.7.tar.gz</userinput>
-[root@yourserver src]# <userinput>cd tDOM-0.7.7/unix</userinput>
+[root@yourserver src]# <userinput>wget --passive http://www.tdom.org/tDOM-0.7.8.tar.gz</userinput>
+--16:40:58--  http://www.tdom.org/tDOM-0.7.8.tar.gz
+           => `tDOM-0.7.8.tar.gz'
+Resolving www.tdom.org... done.
+Connecting to www.tdom.org[212.14.81.4]:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 826,613 [application/x-compressed]
+
+100%[====================================>] 826,613      138.06K/s    ETA 00:00
+
+16:41:04 (138.06 KB/s) - `tDOM-0.7.8.tar.gz' saved [826613/826613]
+
+[root@yourserver src]# <userinput>tar xzf tDOM-0.7.8.tar.gz</userinput>
+[root@yourserver src]# <userinput>cd tDOM-0.7.8/unix</userinput>
 [root@yourserver unix]#
 <action>cd /usr/local/src
-tar xzf /tmp/tDOM-0.7.7.tar.gz
-cd unix</action> </screen>
+wget --passive http://www.tdom.org/tDOM-0.7.8.tar.gz
+tar xzf tDOM-0.7.8.tar.gz
+cd tDOM-0.7.8/unix</action> </screen>
       <para>Edit the file CONFIG and change this section: 
 <programlisting># ----------------------------------------------------
 # aolsrc="/usr/src/aolserver-3.4"
@@ -172,10 +192,16 @@ gcc -pipe -DHAVE_UNISTD_H=1 -DHAVE_LIMITS_H=1 -DTCL_THREADS=1
   <emphasis>(many lines omitted)</emphasis>
           -Wl,-rpath,/usr/local/lib -o tcldomsh;\
 fi
-[root@yourserver unix]# <userinput>cp libtdom0.7.7.so /usr/local/aolserver/bin/</userinput>
+[root@yourserver unix]# <userinput>cp libtdom0.7.8.so /usr/local/aolserver/bin/</userinput>
+[root@yourserver unix]# <userinput>cd /usr/local/aolserver/bin/</userinput>
+[root@yourserver bin]# <userinput>ln -s libtdom0.7.8.so libtdom.so</userinput>
+[root@yourserver bin]#
+
 <action>sh CONFIG
 make
-cp libtdom0.7.7.so /usr/local/aolserver/bin/</action></screen>
+cp libtdom0.7.8.so /usr/local/aolserver/bin/
+cd /usr/local/aolserver/bin
+ln -s libtdom0.7.8.so libtdom.so</action></screen>
 </para>
     </listitem>
     <listitem>

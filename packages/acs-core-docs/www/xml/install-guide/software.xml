@@ -138,9 +138,19 @@
           queries in XML files, so we use an AOLserver module called
           tDOM to parse these files.  (This replaces libxml2, which
           was used prior to 4.6.4.)  tDOM is available from <ulink
-          url="http://tdom.org">http://tdom.org</ulink>).</para>
+          url="http://www.tdom.org">http://www.tdom.org</ulink>).</para>
           </formalpara>
         </listitem>
+
+        <listitem id="source-tclwebtest">
+          <formalpara>
+            <title>tclwebtest, OPTIONAL</title>
+            <para>tclwebtest 0.3 is a tool for testing web interfaces
+            via tcl scripts. <ulink
+          url="http://sourceforge.net/project/showfiles.php?group_id=31075">http://sourceforge.net/project/showfiles.php?group_id=31075</ulink>.</para>
+          </formalpara>
+    </listitem>
+
         <listitem>
           <formalpara>
             <title>Web Server</title>
@@ -279,7 +289,7 @@
             <listitem>
               <formalpara id="analog-download">
                 <title><ulink
-	    url="http://www.analog.cx/analog-5.31.tar.gz">Analog 5.31</ulink>, OPTIONAL</title>
+	    url="http://www.analog.cx/analog-5.32.tar.gz">Analog 5.32</ulink>, OPTIONAL</title>
                 <para>This program examines web server request logs, looks up
 	    DNS values, and produces a report.  You need this if you
 	    want to see how much traffic your site is getting.</para>
@@ -349,10 +359,9 @@
                 <listitem>
                   <formalpara id="qmail-download">
                     <title><ulink
-              url="http://cr.yp.to/software/qmail-1.03.tar.gz">Qmail 1.03</ulink>, OPTIONAL</title>
+              url="http://www.qmail.org/netqmail/">Netqmail 1.04</ulink>, OPTIONAL</title>
                     <para>You need this (or a different Mail Transport
-              Agent) if you want your webserver to send and
-              receive email.</para>
+              Agent) if you want your webserver to send and receive email.</para>
                   </formalpara>
                 </listitem>
                 <listitem>

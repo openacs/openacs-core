@@ -2,14 +2,23 @@
     by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="orderedlist"><ol type="1"><li><a name="aolserver-tarball"></a><p><b>Unpack the Aolserver tarball. </b>Download the <a href="individual-programs.html#source-aolserver">aolserver tarball</a> to <tt class="computeroutput">/tmp/aolserver3.3oacs1.tar.gz</tt>.  As <tt class="computeroutput">root</tt>, untar
-      <tt class="computeroutput">aolserver3.3oacs1.tar.gz</tt>
-      into <tt class="computeroutput">/usr/local/src</tt>.
-    </p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
-[root@yourserver src]# <b class="userinput"><tt>tar xzf /tmp/aolserver3.3oacs1.tar.gz</tt></b>
+        </p></div><div class="orderedlist"><ol type="1"><li><a name="aolserver-tarball"></a><p><b>Unpack the Aolserver tarball. </b>Download the <a href="individual-programs.html#source-aolserver">aolserver tarball</a> and unpack it.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>wget --passive http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar.gz</tt></b>
+--15:38:08--  http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar.gz
+           =&gt; `aolserver3.3oacs1.tar.gz'
+Resolving uptime.openacs.org... done.
+Connecting to uptime.openacs.org[207.166.200.199]:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 3,858,074 [application/x-compressed]
+
+100%[====================================&gt;] 3,858,074     66.56K/s    ETA 00:00
+
+15:39:05 (66.56 KB/s) - `aolserver3.3oacs1.tar.gz' saved [3858074/3858074]
+[root@yourserver src]# <b class="userinput"><tt>tar xzf aolserver3.3oacs1.tar.gz</tt></b>
 [root@yourserver src]#
 <pre class="action"><span class="action">cd /usr/local/src
-tar xzf /tmp/aolserver3.3oacs1.tar.gz</span></pre></pre></li><li><a name="install-aolserver-compile"></a><p><b>Compile AOLserver. </b>Compile and install AOLserver.  First, prepare the installation directory and the source code.  The message about BUILD-MODULES can be ignored.</p><pre class="screen">root@yourserver root]# <b class="userinput"><tt>mkdir -p /usr/local/aolserver</tt></b>
+wget --passive http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar.gz
+tar xzf aolserver3.3oacs1.tar.gz</span></pre></pre></li><li><a name="install-aolserver-compile"></a><p><b>Compile AOLserver. </b>Compile and install AOLserver.  First, prepare the installation directory and the source code.  The message about BUILD-MODULES can be ignored.</p><pre class="screen">root@yourserver root]# <b class="userinput"><tt>mkdir -p /usr/local/aolserver</tt></b>
 [root@yourserver root]# <b class="userinput"><tt>cd /usr/local/src/aolserver</tt></b>
 [root@yourserver aolserver]# <b class="userinput"><tt>./conf-clean</tt></b>
 cat: BUILD-MODULES: No such file or directory
@@ -78,16 +87,27 @@ chmod 750 nsd-oracle</span></pre></pre></li><li><p>PostGreSQL</p><pre class="scr
 <pre class="action"><span class="action">cd /usr/local/aolserver/bin
 cp /tmp/openacs-5.0.0a4/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
 chmod 755 nsd-postgres</span></pre></pre></li></ul></div></li><li><a name="install-tdom"></a><p><b>Install tDOM. </b>Download the <a href="individual-programs.html#source-tdom">tDOM
-        tarball</a> to
-        <tt class="computeroutput">/tmp/tDOM-0.7.7.tar.gz</tt>,
-        unpack it, adjust the configuration file to match our patched
+        tarball</a>, unpack it, adjust the configuration file to match our patched
         distribution of aolserver, and compile it.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
-[root@yourserver src]# <b class="userinput"><tt>tar xzf /tmp/tDOM-0.7.7.tar.gz</tt></b>
-[root@yourserver src]# <b class="userinput"><tt>cd tDOM-0.7.7/unix</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>wget --passive http://www.tdom.org/tDOM-0.7.8.tar.gz</tt></b>
+--16:40:58--  http://www.tdom.org/tDOM-0.7.8.tar.gz
+           =&gt; `tDOM-0.7.8.tar.gz'
+Resolving www.tdom.org... done.
+Connecting to www.tdom.org[212.14.81.4]:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 826,613 [application/x-compressed]
+
+100%[====================================&gt;] 826,613      138.06K/s    ETA 00:00
+
+16:41:04 (138.06 KB/s) - `tDOM-0.7.8.tar.gz' saved [826613/826613]
+
+[root@yourserver src]# <b class="userinput"><tt>tar xzf tDOM-0.7.8.tar.gz</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>cd tDOM-0.7.8/unix</tt></b>
 [root@yourserver unix]#
 <pre class="action"><span class="action">cd /usr/local/src
-tar xzf /tmp/tDOM-0.7.7.tar.gz
-cd unix</span></pre> </pre><p>Edit the file CONFIG and change this section: 
+wget --passive http://www.tdom.org/tDOM-0.7.8.tar.gz
+tar xzf tDOM-0.7.8.tar.gz
+cd tDOM-0.7.8/unix</span></pre> </pre><p>Edit the file CONFIG and change this section: 
 </p><pre class="programlisting"># ----------------------------------------------------
 # aolsrc="/usr/src/aolserver-3.4"
 # ../configure --enable-threads --disable-tdomalloc \
@@ -112,10 +132,16 @@ gcc -pipe -DHAVE_UNISTD_H=1 -DHAVE_LIMITS_H=1 -DTCL_THREADS=1
   <span class="emphasis"><em>(many lines omitted)</em></span>
           -Wl,-rpath,/usr/local/lib -o tcldomsh;\
 fi
-[root@yourserver unix]# <b class="userinput"><tt>cp libtdom0.7.7.so /usr/local/aolserver/bin/</tt></b>
+[root@yourserver unix]# <b class="userinput"><tt>cp libtdom0.7.8.so /usr/local/aolserver/bin/</tt></b>
+[root@yourserver unix]# <b class="userinput"><tt>cd /usr/local/aolserver/bin/</tt></b>
+[root@yourserver bin]# <b class="userinput"><tt>ln -s libtdom0.7.8.so libtdom.so</tt></b>
+[root@yourserver bin]#
+
 <pre class="action"><span class="action">sh CONFIG
 make
-cp libtdom0.7.7.so /usr/local/aolserver/bin/</span></pre></pre><p>
+cp libtdom0.7.8.so /usr/local/aolserver/bin/
+cd /usr/local/aolserver/bin
+ln -s libtdom0.7.8.so libtdom.so</span></pre></pre><p>
 </p></li><li><p><a href="install-nsopenssl.html" title="Install nsopenssl">Install nsopenssl</a>
       (OPTIONAL)</p></li><li><p><a href="install-full-text-search.html#install-openfts" title="Install OpenFTS module">Install Full Text Search with OpenFTS</a> (OPTIONAL)</p></li><li><p><a href="install-nspam.html" title="Install nspam">Install nspam</a> (OPTIONAL)</p></li><li><a name="install-aolserver-permissions"></a><p><b>Test AOLserver. </b>In order to test AOLserver, we'll run it using the
       sample-config.tcl file provided in the AOLserver distribution,

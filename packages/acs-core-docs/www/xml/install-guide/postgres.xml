@@ -21,15 +21,15 @@
     <listitem>
       <formalpara id="install-postgres-rpm">
         <title>Using the Red Hat RPM</title>
-  <para>Red Hat users: If you install PostGreSQL 7.3.4 from the Red Hat 9 RPM, you
-  can skip a few steps.  These shell commands add a link so that the
-  data directory appears to be in the same place as in a source
-  install; start the service; create a new group for web service
+  <para>Red Hat users: If you install PostGreSQL 7.3.2 from the Red Hat 9 RPM, you
+  can skip a few steps.  These shell commands add some links for compatibility with the directories from a source-based install; start the service; create a new group for web service
   users, and modify the postgres user's
   environment (<link linkend="install-postgres-env">more
   information</link>):</para>
       </formalpara>
-  <screen>[root@yourserver root]# <userinput>ln -s /var/lib/pgsql/data /usr/local/pgsql/data</userinput>
+  <screen>[root@yourserver root]# <userinput>ln -s /usr/lib/pgsql/ /var/lib/pgsql/lib</userinput>
+[root@yourserver root]# <userinput>ln -s /var/lib/pgsql /usr/local/pgsql</userinput>
+[root@yourserver root]# <userinput>ln -s /etc/init.d/postgresql /etc/init.d/postgres</userinput>
 [root@yourserver root]# <userinput>service postgresql start</userinput>
 Initializing database:
                                                            [  OK  ]
@@ -40,7 +40,8 @@ Starting postgresql service:                               [  OK  ]
 [root@yourserver root]# <userinput>su - postgres</userinput>
 -bash-2.05b$
 <action>
-ln -s /var/lib/pgsql/data /usr/local/pgsql/data
+ln -s /usr/lib/pgsql/ /var/lib/pgsql/lib
+ln -s /var/lib/pgsql /usr/local/pgsql
 service postgresql start
 echo "export LD_LIBRARY_PATH=/usr/local/pgsql/lib" >> ~postgres/.bash_profile
 echo "export PATH=$PATH:/usr/local/pgsql/bin" >> ~postgres/.bash_profile

@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Appendix A. Install Red Hat 8.0</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="acs-admin.html" title="Part II. Administrator's Guide"><link rel="previous" href="backup-recovery.html" title="Backup and Recovery"><link rel="next" href="install-more-software.html" title="Appendix B. Install additional supporting software"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="backup-recovery.html">Prev</a> </td><th width="60%" align="center">Part II. Administrator's Guide</th><td width="20%" align="right"> <a accesskey="n" href="install-more-software.html">Next</a></td></tr></table><hr></div><div class="appendix" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="install-redhat"></a>Appendix A. Install Red Hat 8.0</h2></div></div><div></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Appendix A. Install Red Hat 8/9</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="acs-admin.html" title="Part II. Administrator's Guide"><link rel="previous" href="backup-recovery.html" title="Backup and Recovery"><link rel="next" href="install-more-software.html" title="Appendix B. Install additional supporting software"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="backup-recovery.html">Prev</a> </td><th width="60%" align="center">Part II. Administrator's Guide</th><td width="20%" align="right"> <a accesskey="n" href="install-more-software.html">Next</a></td></tr></table><hr></div><div class="appendix" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="install-redhat"></a>Appendix A. Install Red Hat 8/9</h2></div></div><div></div></div><div class="authorblurb"><p>
       by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
@@ -8,7 +8,8 @@
     works and is secure; it should take about an hour.  (In my
     experience, it's almost always a net time savings of several hours
     to install a new machine from scratch compared to installing each
-    of these packages installed independently.)</p><p>The installation guide assumes you can do the following on
+    of these packages installed independently.)</p><p>The installation guide assumes you have:</p><div class="itemizedlist"><ul type="disc"><li><p>A PC with hard drive you can reinstall</p></li><li><p>Red Hat 8.0 or 9.0 install discs</p></li><li><p>A CD with the current <a href="http://www.redhat.com/apps/support/errata/" target="_top">Security
+      Patches</a> for your version of Red Hat.</p></li></ul></div><p>The installation guide assumes that you can do the following on
     your platform:
 	</p><div class="itemizedlist"><ul type="disc"><li><p> 
 		  Adding users, groups, setting passwords  
@@ -26,12 +27,12 @@
 	</p><div class="orderedlist"><ol type="1"><li><p><a name="install-first-step"></a>Unplug the network cable from your
           computer.  We don't want to connect to the network
           until we're sure the computer is secure.  
-<a class="indexterm" name="id2831174"></a>
+<a class="indexterm" name="id2834320"></a>
   (Wherever you see
           the word secure, you should always read it as, "secure
           enough for our purposes, given the amount of work we're
           willing to exert and the estimated risk and
-          consequences.")</p></li><li><p>Insert Red Hat 8.0 Disk 1 into the  
+          consequences.")</p></li><li><p>Insert Red Hat 8.0 or 9.0 Disk 1 into the  
 	  CD-ROM and reboot the computer</p></li><li><p>At the
           <tt class="computeroutput"><span class="guilabel"><span class="guilabel">boot:</span></span></tt>
           prompt, press Enter for a
@@ -54,7 +55,7 @@
 <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Re<u><span class="accel">v</span></u>iew (and modify if needed) the partitions created</span></span></tt> and click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt></p></li><li><p>On the pop-up window asking "Are you sure
 	  you want to do this?" click
 	  <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">Y</span></u>es</span></span></tt>
-	  IF YOU ARE WIPING YOUR HARD DRIVE.</p></li><li><p>Click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt> on the boot loader screen</p></li></ol></div></li><li><p>Configure Networking.  <a class="indexterm" name="id2832983"></a>
+	  IF YOU ARE WIPING YOUR HARD DRIVE.</p></li><li><p>Click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt> on the boot loader screen</p></li></ol></div></li><li><p>Configure Networking.  <a class="indexterm" name="id2833971"></a>
 Again, if you know what you're doing, do this step
           yourself, being sure to note the firewall holes. Otherwise,
           follow the instructions in this step to set up a computer directly connected to the internet with a dedicated IP address.</p><div class="orderedlist"><ol type="a"><li><p>DHCP is a system by which a computer that
@@ -75,19 +76,10 @@ security level. Check
 <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Mail (SMTP)</span></span></tt>.  In the <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Other <u><span class="accel">p</span></u>orts</span></span></tt>
 box, enter <b class="userinput"><tt>443, 8000, 8443</tt></b>.  Click
 <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt>.
-Port 443 is for https (http over ssl), and 8000 and 8443 are http and https access to the development server we'll be setting up.</p></li></ol></div></li><li><p><a class="indexterm" name="id2832549"></a>Select any additional languages you want the
+Port 443 is for https (http over ssl), and 8000 and 8443 are http and https access to the development server we'll be setting up.</p></li></ol></div></li><li><p><a class="indexterm" name="id2834112"></a>Select any additional languages you want the
 	  computer to support and then click
 	  <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt></p></li><li><p>Choose your time zone and click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt>.</p></li><li><p>Type in a root
-password, twice.  To
-            improve security, we're going to prevent anyone from
-            connecting to the computer directly as root.  Instead,
-            we'll create a different user, called
-            <tt class="computeroutput">remadmin</tt>, used solely to
-            connect to the computer for administration.  Click
-<tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">A</span></u>dd</span></span></tt>
-and enter username <b class="userinput"><tt>remadmin</tt></b> and a password,
-twice, then click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">O</span></u>K</span></span></tt>.  Then click
-<tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt>.</p></li><li><p>On the Package selection page, we're going to
+password, twice.</p></li><li><p>On the Package selection page, we're going to
 uncheck a lot of packages that install software we don't need, and add
 packages that have stuff we do need.  You should install everything
 we're installing here or the guide may not work for you; you can
@@ -96,12 +88,14 @@ stuff, with relative impunity - at worst, you'll introduce a security
 risk that's still screened by the firewall, or a resource hog.  Just
 don't install a database or web server, because that would conflict
 with the database and web server we'll install later.
-</p><div class="literallayout"><p>check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Editors</span></span></tt> (this installs emacs<a class="indexterm" name="id2832657"></a>),<br>
+</p><div class="literallayout"><p>check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Editors</span></span></tt> (this installs emacs<a class="indexterm" name="id2834180"></a>),<br>
 click <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Details</span></span></tt> next to <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Text-based Internet</span></span></tt>, check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">lynx</span></span></tt>, and click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">O</span></u>K</span></span></tt>;<br>
-check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Authoring and Publishing</span></span></tt> (<a class="indexterm" name="id2832698"></a>this installs docbook),<br>
+check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Authoring and Publishing</span></span></tt> (<a class="indexterm" name="id2834665"></a>this installs docbook),<br>
 uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Server Configuration Tools</span></span></tt>,<br>
 uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Web Server</span></span></tt>,<br>
 uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Windows File Server</span></span></tt>,<br>
+check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">SQL Database<br>
+Server</span></span></tt> (this installs PostGreSQL,<br>
 check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Development Tools</span></span></tt> (this installs gmake and other build tools),<br>
 uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Administration Tools</span></span></tt>, and<br>
 uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Printing Support</span></span></tt>. </p></div><p>At the bottom, check <tt class="computeroutput"><span class="guilabel"><span class="guilabel"><u><span class="accel">S</span></u>elect Individual Packages</span></span></tt> and click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt></p></li><li><p>We need to fine-tune the exact list of packages.
@@ -111,13 +105,15 @@ through all the packages in one big list, so select
 <tt class="computeroutput"><span class="guilabel"><span class="guilabel"><u><span class="accel">F</span></u>lat
 View</span></span></tt> and wait. In a minute, a
 list of packages will appear.</p><div class="literallayout"><p>uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">apmd</span></span></tt> (monitors power, not very useful for servers), <br>
-check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">ImageMagick</span></span></tt> (required for the <a class="indexterm" name="id2833246"></a>photo-album packages, <br>
+check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">ImageMagick</span></span></tt> (required for the <a class="indexterm" name="id2834774"></a>photo-album packages, <br>
 uncheck<tt class="computeroutput"><span class="guilabel"><span class="guilabel">isdn4k-utils</span></span></tt> (unless you are using isdn, this installs a useless daemon), <br>
 check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">mutt</span></span></tt> (a mail program that reads Maildir),<br>
 uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">nfs-utils</span></span></tt> (nfs is a major security risk), <br>
 uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">pam-devel</span></span></tt> (I don't remember why, but we don't want this), <br>
 uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">portmap</span></span></tt>, <br>
 uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">postfix</span></span></tt> (this is an MTA, but we're going to install qmail later), <br>
+check<br>
+<tt class="computeroutput"><span class="guilabel"><span class="guilabel">postgresql-devel</span></span></tt>,<br>
 uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">rsh</span></span></tt> (rsh is a security hole), <br>
 uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">sendmail</span></span></tt> (sendmail is an insecure MTA; we're going to install qmail instead later),<br>
 check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">tcl</span></span></tt> (we need tcl), and <br>
@@ -139,7 +135,15 @@ computer reboot.
 </p></li><li><p>After it finishes rebooting and shows the login
 	  prompt, log in:</p><pre class="screen">yourserver login: <b class="userinput"><tt>root</tt></b>
 Password:
-[root@yourserver root]#</pre></li><li><p>Lock down SSH</p><div class="orderedlist"><ol type="a"><li><p><a class="indexterm" name="id2833463"></a>
+[root@yourserver root]#</pre></li><li><p>Install any security patches.  For example, insert your CD with
+        patches, mount it with <tt class="computeroutput">mount
+        /dev/cdrom</tt>, then <tt class="computeroutput">cd
+        /mnt/cdrom</tt>, then <tt class="computeroutput">rpm -UVH
+        *rpm</tt>.  Both Red Hat 8.0 and 9.0 have had both
+        kernel and openssl/openssh root exploits, so you should be
+        upgrading all of that.  Since you are upgrading the kernel,
+        reboot after this step.
+</p></li><li><p>Lock down SSH</p><div class="orderedlist"><ol type="a"><li><p><a class="indexterm" name="id2835025"></a>
 SSH is the protocol we use to connect
             securely to the computer (replacing telnet, which is
             insecure).  sshd is the daemon that listens for incoming
@@ -148,8 +152,15 @@ SSH is the protocol we use to connect
 	computer as root.  Type this into the shell:
     </p><pre class="screen"><b class="userinput"><tt>emacs /etc/ssh/sshd_config</tt></b></pre></li><li><div class="literallayout"><p>Search for the word "root" by typing C-s (that's emacs-speak for control-s) and then <b class="userinput"><tt>root</tt></b>.   <br>
 Make the following changes:<br>
-<pre class="programlisting">#Protocol 2,1</pre> to <pre class="programlisting">Protocol 2</pre> (this prevents any connections via SSH 1, which is insecure)<br>
-<pre class="programlisting">#PermitRootLogin yes</pre> to <pre class="programlisting">PermitRootLogin no</pre> (this prevents the root use from logging in via ssh)<br>
+<pre class="programlisting">#Protocol 2,1</pre> to<br>
+            <pre class="programlisting">Protocol 2</pre> <br>
+            (this prevents any connections via SSH 1, which is insecure)<br>
+<pre class="programlisting">#PermitRootLogin yes</pre> to<br>
+            <pre class="programlisting">PermitRootLogin no</pre> <br>
+            (this prevents the root user from logging in remotely via<br>
+            ssh.  If you do this, be sure to create a remote access<br>
+            account, such as "remadmin", which you can use to get ssh<br>
+            before using "su" to become root.)<br>
 <pre class="programlisting">#PermitEmptyPasswords no</pre> to <pre class="programlisting">PermitEmptyPasswords no</pre> (this blocks passwordless accounts)<br>
 <br>
  and save and exit by typing C-x C-s C-x C-c</p></div></li><li>Restart sshd so that the change takes effect.<pre class="screen"><b class="userinput"><tt>service sshd restart</tt></b></pre></li></ol></div></li><li><p>Red Hat still installed a few services we
@@ -161,7 +172,8 @@ don't need, and which can be security holes.  Use the service command to turn th
 <pre class="action"><span class="action">service pcmcia stop
 service netfs stop
 chkconfig --del pcmcia
-chkconfig --del netfs</span></pre></pre></li><li><p>Plug in the network cable.</p></li><li><p>Verify that you have connectivity by going to another
+chkconfig --del netfs</span></pre></pre><p>If you installed PostGreSQL, do also
+<tt class="computeroutput">service postgresql start</tt> and <tt class="computeroutput">chkconfig --add postgresql</tt>.</p></li><li><p>Plug in the network cable.</p></li><li><p>Verify that you have connectivity by going to another
           computer and ssh'ing to
           <span class="replaceable"><span class="replaceable">yourserver</span></span>, logging in as
           remadmin, and promoting yourself to root:</p><pre class="screen">[joeuser@someotherserver]$ <b class="userinput"><tt> ssh <span class="replaceable"><span class="replaceable">remadmin@yourserver.test</span></span></tt></b>
@@ -173,7 +185,10 @@ Password:
 Last login: Mon Mar  3 21:15:27 2003 from host-12-01.dsl-sea.seanet.com
 [remadmin@yourserver remadmin]$ <b class="userinput"><tt>su -</tt></b>
 Password: 
-[root@yourserver root]#</pre></li><li><p>Upgrade the kernel to fix a security hole.  The default
+[root@yourserver root]#</pre></li><li><p>If you didn't burn a CD of patches and use it, can still
+          download and install the necessary patches.  Here's how to
+          do it for the kernel; you should also check for other
+          critical packages.</p><p>Upgrade the kernel to fix a security hole.  The default
           Red Hat 8.0 system kernel (2.4.18-14, which you can check
           with <b class="userinput"><tt>uname -a</tt></b>) has several <a href="https://rhn.redhat.com/errata/RHSA-2003-098.html" target="_top">security problems</a>.  Download the new kernel, install it, and reboot.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>cd /tmp</tt></b>
 [root@yourserver tmp]# <b class="userinput"><tt>wget http://updates.redhat.com/7.1/en/os/i686/kernel-2.4.18-27.7.x.i686.rpm</tt></b>

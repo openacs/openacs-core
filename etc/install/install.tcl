@@ -16,7 +16,7 @@ set server                    "service0"
 # Server root directory. This is where all of the files for your server 
 # will live.
 
-set serverroot                "/web/${server}"
+set serverroot                "/var/lib/aolserver/${server}"
 
 #---------------------------------------------------------------------
 # The host name (DNS) the server will be listening on
@@ -40,12 +40,12 @@ set server_url                "http://${server_ip}:${server_port}"
 # OS user and group that AOLserver runs as. We recommend that you
 # create a new user for your server.
 # If you do not want to do that, change the user name below
-set aolserver_user            "nsadmin"
+set aolserver_user            ${server}
 set aolserver_group           "web"
 
 #---------------------------------------------------------------------
 # OpenACS configuration
-set admin_email               "admin@yourserver.test"
+set admin_email               "admin@${serverhost}"
 set admin_username            "admin"
 set admin_first_names         "Admin"
 set admin_last_name           "User"
