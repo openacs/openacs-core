@@ -9,7 +9,7 @@ ad_page_contract {
     version_name
     version_uri
     summary
-    description
+    description:html
     {description_format ""}
     { owner_name:multiple}
     { owner_uri:multiple}
@@ -19,7 +19,7 @@ ad_page_contract {
     { upgrade_p 0 }
 } -validate {
     version_uri_unique -requires {version_uri} {
-	if { [db_string apm_version_uri_unique_ck {
+	if { $upgrade_p && [db_string apm_version_uri_unique_ck {
 	    select decode(count(*), 0, 0, 1) from apm_package_versions 
 	    where version_uri = :version_uri
 	} -default 0] } {
@@ -66,4 +66,3 @@ I was unable to update your version for the following reason:
 }
 
 ad_returnredirect "version-view?version_id=$version_id"
-
