@@ -86,6 +86,7 @@ template::list::create \
             label "URL"
             html "align left"
 	    display_template {
+		<if @nodes.node_id@ ne -99999>
 		<a name="@nodes.node_id@">
 		@nodes.tree_indent;noquote@
 		</a>
@@ -109,6 +110,10 @@ template::list::create \
 		<input type=submit value=New>
 		</form>
 		</if>
+		</if>
+		<else>
+		@nodes.name;noquote@
+		</else>
 	    }
         } instance {
             label "Instance"
@@ -284,11 +289,11 @@ db_foreach nodes_select {} {
 
 }
 
-set new_app_form_part_1 "<p align=\"top\"><form name=new_application action=package-new><input type=hidden name=node_id value=$node(node_id) /><input type=hidden name=root_id value=$node(node_id) /><input type=hidden name=new_node_p value=t />[export_form_vars expand:multiple]<input name=node_name type=text size=8></p>"
+set new_app_form_part_1 "<p align=\"top\"><form name=new_application action=package-new><input type=hidden name=node_id value=$node(node_id) /><input type=hidden name=root_id value=$node(node_id) /><input type=hidden name=new_node_p value=t />[export_form_vars expand:multiple]<input name=node_name type=text size=8>"
 
-set new_app_form_part_2 "<p align=\"top\">[apm_application_new_checkbox]</p>"
-set new_app_form_part_3 "<p align=\"top\"><input type=submit value=\"Mount Package\"></form></p>"
-    multirow append nodes "" "" "" "" $new_app_form_part_1 "" "" "none" $new_app_form_part_2 "" "" "" "" "" "" "" "" "" "" $new_app_form_part_3
+set new_app_form_part_2 "[apm_application_new_checkbox]"
+set new_app_form_part_3 "<input type=submit value=\"Mount Package\"></form></p>"
+    multirow append nodes -99999 "" "" "" $new_app_form_part_1 "" "" "" $new_app_form_part_2 "" "" "" "" "" "" "" "" "" "" $new_app_form_part_3
 
 set services ""
 
