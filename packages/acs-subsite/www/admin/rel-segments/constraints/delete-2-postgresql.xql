@@ -5,9 +5,8 @@
 
 <fullquery name="delete_constraint">      
       <querytext>
-      FIX ME PLSQL
 
-	begin rel_constraint__delete(constraint_id => :constraint_id); end;
+	begin perform rel_constraint__delete(:constraint_id); return null; end;
     
       </querytext>
 </fullquery>
