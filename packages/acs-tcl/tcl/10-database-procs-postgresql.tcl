@@ -50,6 +50,11 @@ proc_doc db_exec_plsql { statement_name sql args } {
     }
 }
 
+# emulation of plsql calls from oracle.  This routine takes the plsql 
+# statements and wraps them in a function call, calls the function, and then
+# drops the function. Future work might involve converting this to cache the 
+# function calls
+
 ad_proc -private db_exec_plpgsql { db statement_name sql fname } {
 
     A helper procedure to execute a SQL statement, potentially binding

@@ -19,7 +19,8 @@ declare
     api_doc_id          apm_packages.package_id%TYPE;
     schema_user         varchar(100);
     jobnum              integer;
-begin 
+begin   
+
   kernel_id := apm_service__new (
                     null,
                     ''ACS Kernel'',
@@ -30,7 +31,6 @@ begin
                     null,
                     acs__magic_object_id(''default_context'')
                     );
-
 
   PERFORM apm_package__enable (kernel_id);
 
@@ -102,7 +102,7 @@ begin
 
   node_id := site_node__new (
     null,
-    site_node__node_id(''/''),
+    site_node__node_id(''/'',null),
     ''doc'',
     docs_id,
     ''t'',
@@ -124,12 +124,22 @@ begin
 
   PERFORM apm_package__enable (api_doc_id);
 
+  insert into inline_data (id,name) values (api_doc_id, ''api_doc_id'');
+
+  return null;
+
+end;' language 'plpgsql';
+
+  
   -- Set default permissions for ACS API Browser so 
   -- that only users logged in can view it
+create function inline_1 () returns integer as '
+declare
+        api_doc_id      integer;
+begin
 
-  update acs_objects
-     set security_inherit_p = ''f''
-   where object_id = api_doc_id;
+  select id into api_doc_id 
+  from inline_data where name = ''api_doc_id'';
 
   PERFORM acs_permission__grant_permission (
     api_doc_id, 
@@ -139,7 +149,7 @@ begin
 
   api_doc_id := site_node__new (
     null,
-    site_node__node_id(''/''),
+    site_node__node_id(''/'',null),
     ''api-doc'',
     api_doc_id,
     ''t'',
@@ -148,15 +158,25 @@ begin
     null
     );
 
-  );
+    return null;
 
-
-  return null;
 end;' language 'plpgsql';
+
+create table inline_data (
+       id        integer,
+       name      varchar
+);
 
 select inline_0 ();
 
-drop function inline_0 ();
+update acs_objects
+     set security_inherit_p = 'f'
+   where object_id = (select id from inline_data where name = 'api_doc_id');
 
+select inline_1 ();
+
+drop function inline_0 ();
+drop function inline_1 ();
+drop table inline_data;
 
 -- show errors

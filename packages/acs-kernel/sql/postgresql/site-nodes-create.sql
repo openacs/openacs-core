@@ -267,7 +267,7 @@ declare
   v_pattern_p                   site_nodes.pattern_p%TYPE;
   v_parent_id                   site_nodes.node_id%TYPE;
 begin
-    if node_id is null then
+    if find_pattern__node_id is null then
 --      raise no_data_found;
         raise exception ''NO DATA FOUND'';
     end if;
