@@ -632,6 +632,11 @@ ad_proc -public template::form::get_values { id args } {
     Typically used when processing the form submission to prepare for DML
     or other type of transaction.
 
+    NB! This proc must always be called through "form get_values" 
+    or "template::form get_values", or it won't be able to find 
+    the variable.
+
+
     @param id            The form identifier
     @param args          A list of element identifiers. If the list is empty,
                          retrieve all form elements
@@ -729,6 +734,10 @@ ad_proc -public template::form::set_values { id array_ref } {
     simple update forms).  Typical usage is to query a onerow data
     source from database and pass the resulting array reference to
     set_values for setting default values in an update form.
+
+    NB! This proc must always be called through "form set_values" 
+    or "template::form set_values", or it won't be able to find 
+    the variable.
 
     @param id               The form identifier
     @param array_ref        The name of a local array variable whose
