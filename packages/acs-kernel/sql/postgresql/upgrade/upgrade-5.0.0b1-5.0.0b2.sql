@@ -99,7 +99,6 @@ CREATE TABLE tmp_maxchild as
      GROUP BY context_id;
 
 create index tmp_maxchild_idx on tmp_maxchild(object_id);
-analyze table tmp_newtree;
 
 -- we are going to use a unique constraint on this column now
 drop index acs_objs_tree_skey_idx; 
