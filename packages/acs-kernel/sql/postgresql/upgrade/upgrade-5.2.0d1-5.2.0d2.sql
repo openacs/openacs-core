@@ -46,7 +46,7 @@ alter table acs_objects add column title varchar(1000);
 alter table acs_objects alter column title set default null;
 alter table acs_objects add column package_id integer
   constraint acs_objects_package_id_fk
-  references apm_packages(package_id);
+  references apm_packages(package_id) on delete set null;
 alter table acs_objects alter column package_id set default null;
 
 create index acs_objects_package_object_idx on acs_objects (package_id, object_id);

@@ -228,7 +228,7 @@ create table apm_packages (
 create index apm_packages_package_key_idx on apm_packages (package_key);
 
 -- This cant be added at table create time since acs_objects is created before apm_packages;
-alter table acs_objects add constraint acs_objects_package_id_fk foreign key (package_id) references apm_packages(package_id);
+alter table acs_objects add constraint acs_objects_package_id_fk foreign key (package_id) references apm_packages(package_id) on delete set null;
 
 comment on table apm_packages is '
    This table maintains the list of all package instances in the sytem. 
@@ -859,7 +859,7 @@ begin
    ''apm_parameter'',
    ''f'',
    null,
-   null
+   ''apm_parameter__name''
    );
 
  attr_id := acs_attribute__create_attribute (
@@ -1375,6 +1375,9 @@ begin
        now(),
        null,
        null,
+       null,
+       ''t'',
+       register_parameter__package_key || '' - '' || register_parameter__parameter_name,
        null
     );
     
@@ -1544,8 +1547,9 @@ begin
      where parameter_id = set_value__parameter_id 
      and package_id = set_value__package_id;
     update apm_parameter_values set attr_value = set_value__attr_value
-     where parameter_id = set_value__parameter_id 
-     and package_id = set_value__package_id;    
+     where value_id = v_value_id;
+    update acs_objects set last_modified = now() 
+     where object_id = v_value_id;
    --  exception 
      if NOT FOUND
        then
@@ -2441,22 +2445,29 @@ declare
   new__parameter_id           alias for $3;  
   new__attr_value             alias for $4;  
   v_value_id                  apm_parameter_values.value_id%TYPE;
+  v_title                     acs_objects.title%TYPE;
 begin
+   select pkg.package_key || '': '' || pkg.instance_name || '' - '' || par.parameter_name into v_title from apm_packages pkg, apm_parameters par where pkg.package_id = new__package_id and par.parameter_id = new__parameter_id;
+
    v_value_id := acs_object__new(
      new__value_id,
      ''apm_parameter_value'',
      now(),
      null,
      null,
-     null
+     null,
+     ''t'',
+     v_title,
+     new__package_id
    );
-   insert into apm_parameter_values 
+
+   insert into apm_parameter_values
     (value_id, package_id, parameter_id, attr_value)
      values
     (v_value_id, new__package_id, new__parameter_id, new__attr_value);
 
    return v_value_id;
-    
+
 end;' language 'plpgsql';
 
 
