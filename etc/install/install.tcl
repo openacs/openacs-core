@@ -4,32 +4,46 @@
 #
 #######################################################################
 
-# This is the name of your server (website).
-# It will be used as the name of directories, the name of database users and/or tablespaces, etc.
-set server "service0"
 
-# Server root directory. This is where all of the files for your server will live.
-# Some people like this to be at /web/${server}, but we recommend the below standard setting.
+#---------------------------------------------------------------------
+# the name of your service (site).
+# It will be used as the name of directories, the name of database
+# users and/or tablespaces, etc.
+
+set server                    "service0"
+
+#---------------------------------------------------------------------
+# Server root directory. This is where all of the files for your server 
+# will live.
+
 set serverroot                "/web/${server}"
 
+#---------------------------------------------------------------------
 # The host name (DNS) the server will be listening on
 set server_host               yourserver.test
 
+#---------------------------------------------------------------------
 # The IP address the server will be listening on
 set server_ip                 127.0.0.1
 
+#---------------------------------------------------------------------
 # The port number the server will be listening on
 set server_port               8000
 
-# The URL where your server will be accessible. This is used by the installation scripts to complete the installation.
+#---------------------------------------------------------------------
+# The URL where your server will be accessible. 
+# This is used by the installation scripts to complete the installation.
 # Don't forget to include the port number above
 set server_url                "http://${server_ip}:${server_port}"
 
-# OS user and group that AOLserver runs as. We recommend that you create a new user for your server.
+#---------------------------------------------------------------------
+# OS user and group that AOLserver runs as. We recommend that you
+# create a new user for your server.
 # If you do not want to do that, change the user name below
 set aolserver_user            "nsadmin"
 set aolserver_group           "web"
 
+#---------------------------------------------------------------------
 # OpenACS configuration
 set admin_email               "admin@yourserver.test"
 set admin_username            "admin"
@@ -39,35 +53,49 @@ set admin_password            "1"
 set system_name               "An OpenACS Development Server"
 set publisher_name            "An OpenACS Developer"
 
+#---------------------------------------------------------------------
 # Should we automatically grab the OpenACS code from CVS?
-# If not, you must have already unpacked a tar-ball in the server root directory specified above
+# If not, you must have already unpacked a tar-ball in the server root
+# directory specified above
+
 set do_checkout               "yes"
 
+#---------------------------------------------------------------------
 # Which branch or symbolic tag should we use for the checkout
-# For example, say "HEAD" to get the latest code, oacs-5-0-0 to get the 5.0.0 release.
+# For example, say "HEAD" to get the latest code, oacs-5-0-0 to get
+# the 5.0.0 release.
+
 set oacs_branch               "HEAD"
 
+#---------------------------------------------------------------------
 # Choose which database you will use - Say 'oracle' or 'postgres'
+
 set database                  "postgres"
+
 
 #----------------------------------------------------------------------
 # Database configuration - PostgreSQL
 #----------------------------------------------------------------------
 
+#---------------------------------------------------------------------
 # Name of the user to use when connecting to the database
-set pg_db_user "postgres"
+set pg_db_user                "postgres"
 
+#---------------------------------------------------------------------
 # Name of the PostgreSQL database. Will be created.
-set db_name ${server}
+set db_name                   ${server}
 
+#---------------------------------------------------------------------
 # The host running PostgreSQL
-set pg_host localhost
+set pg_host                   localhost
 
+#---------------------------------------------------------------------
 # The port PostgreSQL is running on. Default PostgreSQL port is 5432.
-set pg_port 5432
+set pg_port                   5432
 
+#---------------------------------------------------------------------
 # The home directory of your PostgreSQL server. Type 'which psql' to find this.
-set pg_bindir "/usr/local/pgsql-7.3/bin"
+set pg_bindir                 "/usr/local/pgsql/bin"
 
 
 #----------------------------------------------------------------------
@@ -75,16 +103,14 @@ set pg_bindir "/usr/local/pgsql-7.3/bin"
 #----------------------------------------------------------------------
 
 # The name of the Oracle user and tablespace. Will get created.
-set db_name ${server}
+set db_name                   ${server}
 
 # Password for the Oracle user
-set oracle_password ${db_name}
+set oracle_password           ${db_name}
 
 # The system user account and password. We need this to create the tablespace and user above.
-set system_user "system"
-set system_user_password "manager"
-
-
+set system_user               "system"
+set system_user_password      "manager"
 
 
 
