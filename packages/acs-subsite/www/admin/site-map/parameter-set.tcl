@@ -28,21 +28,20 @@ set table_sql "select p.parameter_id, p.parameter_name, nvl(p.description, 'No D
 	and p.package_key = (select package_key from apm_packages where package_id = :package_id)"
 
 set dimensional_list [apm_parameter_section_slider $package_key]
+set additional_sql ""
 
 if {[exists_and_not_null dimensional_list] } {
     lappend table_def [list section_name "Section:"]
-    append table_sql [ad_dimensional_sql $dimensional_list]
+    append additional_sql [ad_dimensional_sql $dimensional_list]
     ns_log Notice [ad_dimensional_sql $dimensional_list]
 }
-
-ns_log Notice $table_sql
 
 lappend table_def [list attr_value "Value" no_sort \
 	{<td>
 	   <input name=params.$parameter_id value=\"$attr_value\" size=50>
 	    </td>}]
 
-append table_sql [ad_order_by_from_sort_spec $orderby $table_def]
+append additional_sql [ad_order_by_from_sort_spec $orderby $table_def]
 
 set body "[ad_header "Parameters for $instance_name"]
 <h2>Parameters for $instance_name</h2>
@@ -54,18 +53,23 @@ if { ![empty_string_p $dimensional_list] } {
     append body "[ad_dimensional $dimensional_list]<p>"
 }
 
-ns_return 200 text/html "$body
+append table_sql $additional_sql
 
-<blockquote>
-<form method=post action=parameter-set-2>
-[export_form_vars package_key package_id instance_name]
-[ad_table -Torderby $orderby \
+ns_log Notice "table_sql = $table_sql"
+
+set table [ad_table -Torderby $orderby \
      -bind [ad_tcl_vars_to_ns_set package_id] \
      -Tmissing_text "No parameters registered in this section." \
      -Textra_rows "<tr>
 <td></td><td></td>
 <td><input type=submit value=\"Set Parameters\">
 </td></tr>" parameter_table $table_sql $table_def]
+
+ns_return 200 text/html "$body
+<blockquote>
+<form method=post action=parameter-set-2>
+[export_form_vars package_key package_id instance_name]
+$table
 </blockquote>
 </form>
 [ad_footer]
