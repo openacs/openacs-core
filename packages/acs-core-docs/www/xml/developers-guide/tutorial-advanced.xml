@@ -600,7 +600,7 @@ In
         <listitem><para>
           The Categories service provides a mechanism to associate one or
           more <emphasis>category trees</emphasis> that are relevant to
-          your application.  One example of such tree is a tree of
+          a particular application instance.  One example of such tree is a tree of
           geographical locations.  Continents are on the top of such tree,
           each continent containing countries etc.  Another tree might
           contain market segments etc.  Before users of your application
@@ -648,31 +648,33 @@ set category_map_url [export_vars -base \
           <computeroutput>category</computeroutput> widget type of the
           form builder to <computeroutput>note-edit.tcl</computeroutput>.
           To achieve this we'll need to use the <computeroutput>-extend</computeroutput>
-          switch to the <computeroutput>ad_form</computeroutput> command. Here's the "meat" of the
-          <computeroutput>note-edit.tcl</computeroutput> page:
-          <programlisting>
+          switch to the <computeroutput>ad_form</computeroutput> command. Here's the
+          <computeroutput>note-edit.tcl</computeroutput> page with added sections
+          emphasized.
+<programlisting>ad_page_contract {
+    This is the view-edit page for notes.
+
+    @author Your Name (you@example.com)
+    @cvs-id $Id$
+
+    @param item_id If present, assume we are editing that note.  Otherwise, we
+    are creating a new note.
+
+} { 
+    item_id:integer,optional
+}
+
 ad_form -name note -form {
     {item_id:key}
     {title:text {label Title}}
-}
+<userinput>}
 
-set package_id [ad_conn package_id]
+category::ad_form::add_widgets \
+  -form_name note \
+  -container_object_id [ad_conn package_id] \
+  -categorized_object_id [value_if_exists item_id]
 
-set category_trees [category_tree::get_mapped_trees $package_id]
-
-foreach tree $category_trees {
-    foreach { tree_id name subtree_id } $tree {}
-    ad_form -extend -name note -form \
-        [list [list category_id_${tree_id}:integer(category),optional \
-                   {label $name} \
-                   {html {single single}} \
-                   {category_tree_id $tree_id} \
-                   {category_subtree_id $subtree_id} \
-                   {category_object_id {[value_if_exists entry_id]}}]]
-}
-
-ad_form -extend \
-  -name note \
+ad_form -extend -name note \ </userinput>
   -new_request {
     permission::require_permission -object_id [ad_conn package_id] -privilege create
     set page_title "Add a Note"
@@ -687,14 +689,52 @@ ad_form -extend \
 
     set page_title "Edit a Note"
     set context [list $page_title]
+<userinput>} -on_submit {
+    set category_ids [category::ad_form::get_categories \
+      -object_id [ad_conn package_id]]</userinput>
 } -new_data {
     mfp::note::add \
+    -title $title \
+    -item_id $item_id
+<userinput>
+    category::map_object \
+      -remove_old \
+      -object_id $item_id \
+       $category_ids
+</userinput>
+    set message "Note $title added"
+} -edit_data {
+    mfp::note::edit \
+    -item_id $item_id \
     -title $title
+<userinput>
+    category::map_object \
+      -remove_old \
+      -object_id $item_id \
+       $category_ids
+</userinput>
+
+     set message "Note $title changed"
 } -after_submit {
-    ad_returnredirect "."
+    ad_returnredirect -message $message "."
     ad_script_abort
-}
-          </programlisting>
+}</programlisting>
+<para>
+Note how we have replaced what was a single
+<computeroutput>ad_form</computeroutput> invocation with two.  The
+<computeroutput>-extend</computeroutput> flag is used to build a form
+incrementally.  We had to do it so that we can insert the call to
+<computeroutput>category::ad_form::add_widgets</computeroutput>.  This
+procedure will add as many category widgets as there are trees associated with
+our <computeroutput>package_id</computeroutput>.  The complementary proc
+<computeroutput>category::ad_form::get_categories</computeroutput> will take
+care of collecting the values after the form has been submitted.  The block
+<computeroutput>-on_submit</computeroutput> will get executed at this time,
+followed by execution of either <computeroutput>-new_data</computeroutput> or
+<computeroutput>-edit_data</computeroutput>, depending on whether we are adding
+a new note or editing an existing one.
+
+</para>
       </para></listitem>
     </orderedlist>
     </sect2>
