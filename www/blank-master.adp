@@ -17,7 +17,7 @@
       </style>
     </if>
 
-    <script src="/resources/acs-subsite/core.js" language="javascript"></script>
+    <script type="text/javascript" src="/resources/acs-subsite/core.js" language="javascript"></script>
 
     @header_stuff;noquote@
   </head>
