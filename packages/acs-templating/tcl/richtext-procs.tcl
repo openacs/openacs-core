@@ -104,6 +104,9 @@ ad_proc -public template::util::richtext::set_property { what richtext_list valu
             # Replace format with value
             return [list $contents $value]
         }
+        default {
+            error "Unknown property, '$what'. Valid options are 'contents' and 'format'."
+        }
     }
 }
 
@@ -123,6 +126,9 @@ ad_proc -public template::util::richtext::get_property { what richtext_list } {
         }
         html_value {
             return [ad_html_text_convert -from $format -to "text/html" -- $contents]
+        }
+        default {
+            error "Unknown property, '$what'. Valid options are 'contents' and 'format', and 'html_value'."
         }
     }
 }
