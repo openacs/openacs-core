@@ -28,7 +28,7 @@
   </div>
 </if>
 
-<table width="100%">
+<table>
   <tr>
     <td valign="top">
       <h2>#acs-subsite.Applications#</h2>
