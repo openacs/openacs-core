@@ -534,6 +534,9 @@ create table rc_segment_required_seg_map (
 	unique (rel_segment, rel_side, required_rel_segment)
 );
 
+create index rc_segment_required_seg_idx on 
+rc_segment_required_seg_map(required_rel_segment);
+
 create function rel_constraints_ins_tr () returns opaque as '
 declare
         v_rec   record;
