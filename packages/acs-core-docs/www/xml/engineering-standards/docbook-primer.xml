@@ -245,7 +245,7 @@
           </para></listitem>
           <listitem><para>
             Table of Contents (TOC)s for each book: the end-users, content and site
-            administrators, marketing, beginning developers, and
+            administrators, marketing, developer tutorial, and
             developers.
           </para></listitem>
           <listitem><para>
@@ -325,6 +325,53 @@
         features. Example shows BBoard, calendar, news, file
         storage, wimpy point, ticket tracking.  An OpenACS tour; an
         abbreviated, interactive set of demo pages.
+     </para></listitem>
+      <listitem><para>
+        From a marketing perspective, 
+        <itemizedlist>
+          <listitem><para>
+            differentiate "product" by highlighting features,
+            performance quality, conformance to standards,
+            durability (handling of technological obsolescence),
+            reliability, repairability, style of use, design
+            (strategy in design, specifications, integrated,
+            well-matched systems etc).
+          </para></listitem>
+          <listitem><para>
+            differentiate "service" by highlighting software
+            availability (licensing and completeness from mature to early
+            adopters or development versions), community incident
+            support, project collaborative opportunities, and
+            contractor support availability
+          </para></listitem>
+          <listitem><para>
+            differentiate price (economic considerations of
+            opensource and features)
+          </para></listitem>
+          <listitem><para>
+            Discussion and details should rely on meeting criteria
+            of design, completeness of implementation, and related
+            system strengths and weaknesses. Marketing should not
+            rely on comparing to other technologies. Competitive
+            analysis involves mapping out strengths, weaknesses,
+            opportunities and threats when compared to other systems
+            for a specific purpose, and thus is inappropriate (and
+            becomes stale quickly) for general documentation.
+          </para></listitem>
+          <listitem><para>
+            When identifying subsystems, such as tcl, include links
+            to their marketing material if available.
+          </para></listitem>
+          <listitem><para>
+            create an example/template comparison table that shows
+            versions of OpenACS and other systems (commonly
+            competing against OpenACS) versus a summary feature list
+            and how well each meets the feature criteria.  Each
+            system should be marked with a date to indicate time
+            information was gathered, since information is likely
+            volatile. 
+          </para></listitem>          
+        </itemizedlist>
      </para></listitem>
       <listitem><para>
         To build awareness about OpenACS, consider product
@@ -487,6 +534,7 @@
     </itemizedlist>
   </sect2>
 
+
   <sect2 id="docs-install-reqs" xreflabel="Installation Documentation Requirements">
     <title>OpenACS Installation Documentation Requirements</title>
     <para>
@@ -606,11 +654,11 @@
     </para>
     <itemizedlist>
       <listitem><para>
-        list documenation assumptions, such as familiarity with
+        list documentation assumptions, such as familiarity with
         modifying OpenACS packages. All kernel docs are here etc.
       </para><listitem>
       <listitem><para>
-        This documenation should be written for ongoing use by
+        This documentation should be written for ongoing use by
         developers, not as a tutorial.
       </para><listitem>
       <listitem><para>
@@ -665,7 +713,7 @@
             OpenACS objects
           </para></listitem>
           <listitem><para>
-            scheduled procs
+            scheduled protocols
           </para></listitem>
           <listitem><para>
             call backs
