@@ -614,6 +614,7 @@ ad_proc -public export_vars {
     -quotehtml:boolean
     -entire_form:boolean
     -no_empty:boolean
+    {-base}
     {-exclude {}}
     {-override {}}
     {vars {}}
@@ -749,6 +750,10 @@ ad_proc -public export_vars {
 
     @option no_empty If specified, variables with an empty string value will be suppressed from being exported.
                      This avoids cluttering up the URLs with lots of unnecessary variables.
+    
+    @option base The base URL to make a link to. This will be prepended to the query string 
+                 along with a question mark (?), if the query is non-empty. so the returned
+                 string can be used directly in a link. This is only relevant to URL export.
 
     @author Lars Pind (lars@pinds.com)
     @creation-date December 7, 2000
@@ -955,6 +960,15 @@ ad_proc -public export_vars {
 
     if { $quotehtml_p } {
 	set export_string [ad_quotehtml $export_string]
+    }
+
+    # Prepend with the base URL
+    if { [exists_and_not_null base] } {
+        if { ![empty_string_p $export_string] } {
+            set export_string "$base?$export_string"
+        } else {
+            set export_string $base
+        }
     }
     
     return $export_string
