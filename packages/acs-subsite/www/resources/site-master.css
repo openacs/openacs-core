@@ -180,7 +180,10 @@ html>body #navbar { bottom: 0px }
   border-bottom: 1px solid #016799;
   background-color: white;
   clear: both;
-  padding: 12px;
+  padding-top: 4px;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-bottom: 12px;
 }
 
 
