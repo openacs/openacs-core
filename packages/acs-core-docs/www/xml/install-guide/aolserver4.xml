@@ -12,6 +12,15 @@
     <para>by <ulink url="mailto:sussdorff@sussdorff.de">Malte Sussdorff</ulink></para>
   </authorblurb>
 
+  <para>
+    (Debian users: we do not recommend installing Debian packages for
+    Aolserver or Postgres. Several people have
+    reported problems while trying to install using apt-get
+    instead of from source. If you have the time to debug these
+    and submit what you did, that's great, but if not, you
+    should stick to installing from source. 
+  </para>
+
   <orderedlist>
     <listitem id="tcl-download">
       <formalpara>
