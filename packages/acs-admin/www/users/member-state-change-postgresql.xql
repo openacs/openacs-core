@@ -5,12 +5,16 @@
 
 <fullquery name="get_states">      
       <querytext>
-      select email_verified_p as email_verified_p_old,
-          member_state as member_state_old,
-          first_names || ' ' || last_name as name,
-          email, rel_id, oid as rowid
-      from cc_users
-      where user_id = :user_id
+      select u.email_verified_p as email_verified_p_old,
+          mr.member_state as member_state_old,
+          per.first_names || ' ' || per.last_name as name,
+          part.email, mr.rel_id, u.oid as row_id
+      from users u
+      JOIN parties part on (part.party_id = u.user_id)
+        JOIN persons per on (per.person_id = u.user_id)
+      LEFT JOIN membership_rels mr on (mr.rel_id = u.user_id)
+      where u.user_id = :user_id
+      
       </querytext>
 </fullquery>
 
