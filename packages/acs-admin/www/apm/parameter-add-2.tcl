@@ -26,6 +26,7 @@ ad_page_contract {
 	    select decode(count(*), 0, 0, 1) 
 	    from apm_parameters
 	    where parameter_name = :parameter_name
+            and package_key= :package_key
 	}]} {
 	    ad_complain "The parameter name $parameter_name already exists for this package"	    
 	}
