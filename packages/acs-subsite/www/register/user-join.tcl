@@ -169,5 +169,6 @@ if { [form size join] == 0 || [template::form is_valid join] } {
     }
 
 
-    ad_returnredirect -message $message -abort $return_url
+    ad_returnredirect -message $message $return_url
+    ad_script_abort
 }
