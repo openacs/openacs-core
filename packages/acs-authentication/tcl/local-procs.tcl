@@ -450,7 +450,7 @@ ad_proc -private auth::local::registration::Register {
 
     # LARS TODO: Move this out of the local driver and into the auth framework
     # Notify admin on new registration
-    if { [ad_parameter NotifyAdminOfNewRegistrationsP "security" 0] } {
+    if { [parameter::get -parameter  NotifyAdminOfNewRegistrationsP -default 0] } {
 	with_catch errmsg {
             ns_sendmail \
                 [parameter::get -parameter NewRegistrationEmailAddress -package_id [ad_conn subsite_id] -default [ad_system_owner]] \
