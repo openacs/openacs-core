@@ -1,0 +1,71 @@
+<sect1 id="compatibility">
+  <title>Compatibility for required software</title>
+  <authorblurb>
+    by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+  </authorblurb>
+  <figure>
+    <title>Assumptions in this section</title>
+    <informaltable>
+      <tgroup cols="8">
+        <colspec colname="c1"/>
+        <colspec colname="c3"/>
+        <colspec colname="3.2.5"/>
+        <colspec colname="4.5"/>
+        <colspec colname="4.6"/>
+        <colspec colname="4.6.1"/>
+        <colspec colname="4.6.2"/>
+        <colspec colname="4.6.3"/>
+        <spanspec align="center" colsep="0" rowsep="0" spanname="version" namest="c1" nameend="c2"/>
+        <tbody>
+          <row>
+            <entry spanname="version">OpenACS Version</entry>
+            <entry colname="3.2.5">3.2.5</entry>
+            <entry colname="4.5">4.5</entry>
+            <entry colname="4.6">4.6</entry>
+            <entry colname="4.6.1">4.6.1</entry>
+            <entry colname="4.6.2">4.6.2</entry>
+            <entry colname="4.6.3">4.6.3</entry>
+          </row>
+          <row>
+            <entry morerows="3">AolServer</entry>
+          </row>
+          <row>
+            <entry>3</entry>
+            <entry namest="3.2.5" nameend="3.2.5" align="center">Verified</entry>
+          </row>
+          <row>
+            <entry>3.3+ad13</entry>
+            <entry namest="4.5" nameend="4.6.3" align="center">Verified</entry>
+          </row>
+          <row>
+            <entry>3.3oacs1</entry>
+            <entry namest="4.6.2" nameend="4.6.3" align="center">Verified</entry>
+          </row>  
+          <row>
+            <entry morerows="3">PostGreSQL</entry>
+          </row>
+          <row>
+            <entry>7.0</entry>
+            <entry namest="3.2.5" nameend="3.2.5" align="center">Verified</entry>
+          </row>
+          <row>
+            <entry>7.2.x</entry>
+            <entry namest="4.5" nameend="4.6.3" align="center">Verified</entry>
+          </row>
+          <row>
+            <entry>7.3.2</entry>
+            <entry namest="3.2.5" nameend="4.6.2" align="center">No</entry>
+            <entry namest="4.6.3" nameend="4.6.3" align="center">Untested</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+  </figure>
+  <para><phrase role="cvstag">($Id$)</phrase></para>
+
+</sect1>
+<!--
+   Local Variables:
+   sgml-parent-document: ("../index.xml" "book" "sect1")
+   End:
+-->
