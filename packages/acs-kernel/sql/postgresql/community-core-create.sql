@@ -355,6 +355,22 @@ begin
 end;' language 'plpgsql';
 
 
+-- function email
+create function party__email (integer)
+returns varchar as '
+declare
+  email__party_id	alias for $1;  
+  party_email           varchar(200);  
+begin
+  select email
+  into party_email
+  from parties
+  where party_id = email__party_id;
+
+  return party_email;
+  
+end;' language 'plpgsql';
+
 
 -- show errors
 
@@ -475,6 +491,39 @@ begin
   
 end;' language 'plpgsql';
 
+
+-- function first_names
+create function person__first_names (integer)
+returns varchar as '
+declare
+  first_names__person_id        alias for $1;  
+  person_first_names     varchar(200);  
+begin
+  select first_names
+  into person_first_names
+  from persons
+  where person_id = first_names__person_id;
+
+  return person_first_names;
+  
+end;' language 'plpgsql';
+
+
+-- function last_name
+create function person__last_name (integer)
+returns varchar as '
+declare
+  last_name__person_id        alias for $1;  
+  person_last_name      varchar(200);  
+begin
+  select last_name
+  into person_last_name
+  from persons
+  where person_id = last_name__person_id;
+
+  return person_last_name;
+  
+end;' language 'plpgsql';
 
 
 -- show errors
