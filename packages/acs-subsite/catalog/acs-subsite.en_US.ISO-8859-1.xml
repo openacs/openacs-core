@@ -340,7 +340,8 @@ You can always change your password by doing the following:
   <msg key="This_group_is_closed">This group is closed. New members can only get access by invitation.</msg>
   <msg key="this_subsite">this subsite</msg>
   <msg key="This_user_has_left_the">This user has left the community.</msg>
-  <msg key="To_log_in_visit_the">To log in, visit the</msg>
+  <msg key="To_log_in_visit_the"> Please check your inbox. Within the next few minutes, you should find a message from %system_owner% with instructions on
+</msg>
   <msg key="Topic">Topic</msg>
   <msg key="type_specific_info">type-specific info</msg>
   <msg key="UP">UP</msg>

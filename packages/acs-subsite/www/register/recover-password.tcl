@@ -75,3 +75,4 @@ if { [form is_valid recover] || (![form is_submission recover] && ([exists_and_n
     set login_url [ad_get_login_url -authority_id $authority_id -username $username]
 }
 
+set system_owner [ad_system_owner]
