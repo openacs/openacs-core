@@ -39,7 +39,7 @@ if { $database == "oracle" } {
 } else {
     set db_host               localhost
     set db_port               ""
-    set db_user               $server
+    set db_user               joel
 }
 
 #---------------------------------------------------------------------
@@ -512,7 +512,9 @@ if { $database == "oracle" } {
 # password for it, if needed.  
 #
 # AOLserver can have different pools connecting to different databases 
-# and even different different database servers. 
+# and even different different database servers.  See
+# http://openacs.org/doc/openacs-5-1/tutorial-second-database.html
+
 ns_section ns/db/pools 
     ns_param   pool1              "Pool 1"
     ns_param   pool2              "Pool 2"
