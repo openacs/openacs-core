@@ -136,7 +136,7 @@ if { !$double_click_p } {
 	set row_id [db_string user_new_2_rowid_for_email "select rowid from users where user_id = :user_id"]
 	# the user has to come back and activate their account
 
-	ns_sendmail $email $notification_address "Welcome to [ad_system_name]" "To confirm your registration, please go to [ad_parameter SystemURL]/register/email-confirm.tcl?[export_url_vars row_id]"
+	ns_sendmail $email $notification_address "Welcome to [ad_system_name]" "To confirm your registration, please go to [ad_parameter -package_id [ad_acs_kernel_id] SystemURL]/register/email-confirm.tcl?[export_url_vars row_id]"
 	
     } elseif { [ad_parameter RegistrationProvidesRandomPasswordP "security" 0] ||  [ad_parameter EmailRegistrationConfirmationToUserP "security" 0] } {
 	with_catch errmsg {
