@@ -479,7 +479,7 @@ namespace eval acs_mail_lite {
         foreach rcpt $rcpts(email) rcpt_id $rcpts(user_id) rcpt_name $rcpts(name) {
 	    if { $valid_email_p || ![bouncing_email_p -email $rcpt] } {
 		with_finally -code {
-		    set sendmail [list [bounce_sendmail] "-f[bounce_address -user_id $rcpt_id -package_id $package_id -message_id $message_id]" "-t"]
+		    set sendmail [list [bounce_sendmail] "-f[bounce_address -user_id $rcpt_id -package_id $package_id -message_id $message_id]" "-t" "-i"]
 
 		    # add username if it exists
 		    if {![empty_string_p $rcpt_name]} {
@@ -487,6 +487,9 @@ namespace eval acs_mail_lite {
 		    } else {
 			set pretty_to $rcpt
 		    }
+
+                    # substitute all "\r\n" with "\n", because piped text should only contain "\n"
+                    regsub -all "\r\n" $msg "\n" msg
 
 		    set f [open "|$sendmail" "w"]
 		    puts $f "From: $from_addr\nTo: $pretty_to\n$msg"
