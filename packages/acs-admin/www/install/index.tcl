@@ -55,16 +55,17 @@ db_multirow -extend { package_type_pretty } packages packages "
 }
 
 
-set local_install_url "install"
+set local_install_url [export_vars -base "install" { { package_type apm_application } }]
 
 set local_service_install_url [export_vars -base "install" { { package_type apm_service } }]
 
-set local_upgrade_url [export_vars -base "install" { { package_type all } { upgrade_p 1 } }]
+set local_upgrade_url [export_vars -base "install" { { upgrade_p 1 } }]
+
 
 set repository_url "http://openacs.org/repository/[apm_get_repository_channel]/"
 
-set remote_install_url [export_vars -base "install" { repository_url }]
+set remote_install_url [export_vars -base "install" { repository_url { package_type apm_application } }]
 
 set remote_service_install_url [export_vars -base "install" { { package_type apm_service } repository_url }]
 
-set remote_upgrade_url [export_vars -base "install" { { package_type all } { upgrade_p 1 } repository_url }]
+set remote_upgrade_url [export_vars -base "install" { { upgrade_p 1 } repository_url }]
