@@ -25,6 +25,12 @@
     <b>&raquo;</b> <a href="@batch_edit_url@">Batch edit these messages</a>
   </p>
 
+  <if @site_wide_admin_p@>
+    <p>
+      <b>&raquo;</b> <a href="@export_messages_url@">Export messages</a>
+    </p>
+  </if>
+
   <table cellpadding="0" cellspacing="0" border="0">
     <tr>
       <td style="background: #CCCCCC">
