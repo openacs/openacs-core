@@ -48,6 +48,7 @@ namespace eval lang::message {
         # Insert the message key into the database if it doesn't
         # already exist
         set key_exists_p [db_string message_key_exists_p {}]
+
         if { ! $key_exists_p } {
             db_dml insert_message_key {}
         }
@@ -239,7 +240,7 @@ namespace eval lang::message {
                         append return_url "?[export_entire_form_as_url_vars]"
                     }
 
-                    set return_value "<a href=\"/acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } { locales $locale } { package_key $package_key_part } return_url }]\"><span style=\"background-color: yellow\">TRANSLATE NOW</span></a>"
+                    set return_value "&nbsp;<a href=\"/acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } { locales $locale } { package_key $package_key_part } return_url }]\"><span style=\"background-color: yellow\"><font size=\"-2\">$message_key_part - TRANSLATE</font></span></a>&nbsp;"
                 } else {
                     append return_value " - " $key
                 }
@@ -302,8 +303,6 @@ namespace eval lang::message {
     }
 
 }
-
-
 
 #####
 #
