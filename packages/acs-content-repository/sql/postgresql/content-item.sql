@@ -27,16 +27,30 @@ begin
     v_folder_id := content_item_globals.c_root_folder_id;
 
   else
+
+--    select
+--      item_id into v_folder_id
+--    from
+--      cr_items
+--    where 
+--      parent_id = 0
+--    connect by
+--      prior parent_id = item_id
+--    start with
+--      item_id = get_root_folder__item_id;    
+
     select
-      item_id into v_folder_id
+      i2.item_id into v_folder_id
     from
-      cr_items
+      cr_items i1, cr_items i2
     where 
-      parent_id = 0
-    connect by
-      prior parent_id = item_id
-    start with
-      item_id = get_root_folder__item_id;    
+      i2.parent_id = 0
+    and 
+      i1.item_id = get_root_folder__item_id
+    and
+      i2.tree_sortkey <= i1.tree_sortkey
+    and
+      i1.tree_sortkey like (i2.tree_sortkey || ''%'');
 
     if NOT FOUND then
        raise EXCEPTION '' -20000: Could not find a root folder for item ID %. Either the item does not exist or its parent value is corrupted.'', get_root_folder__item_id;
@@ -1494,14 +1508,25 @@ begin
 
   v_subclass_p := ''f'';
 
+--                       select
+--                         object_type
+--                       from
+--                         acs_object_types  
+--                       connect by
+--                         prior object_type = supertype
+--                       start with 
+--                         object_type = is_subclass__supertype
+
   for v_inherit_val in select
                          object_type
                        from
                          acs_object_types  
-                       connect by
-                         prior object_type = supertype
-                       start with 
-                         object_type = is_subclass__supertype
+                       where
+                         tree_sortkey 
+                            like (select object_type || ''%'' 
+                                    from acs_object_types 
+                                   where object_type = is_subclass__supertype)
+                       order by tree_sortkey
   LOOP
     if v_inherit_val.object_type = is_subclass__object_type then
          v_subclass_p := ''t'';

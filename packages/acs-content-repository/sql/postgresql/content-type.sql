@@ -499,6 +499,7 @@ begin
 create function '' || v_table_name || ''t()  returns opaque as \\\'
 declare
   new_revision_id integer;
+  
 begin
 
   if new.item_id is null then
@@ -539,20 +540,37 @@ begin
 
   end if;'';
 
+--                  select                                                
+--                    object_type
+--                  from                                                
+--                    acs_object_types                                  
+--                  where                                               
+--                    object_type <> ''acs_object''                       
+--                  and                                                 
+--                    object_type <> ''content_revision''                 
+--                  connect by                                          
+--                    prior supertype = object_type                     
+--                  start with                                          
+--                    object_type = refresh_trigger.content_type
+--                  order by
+--                    level desc
+
   -- add an insert statement for each subtype in the hierarchy for this type
 
   for type_rec in select                                                
-                    object_type
+                    ot2.object_type, tree_level(ot2.tree_sortkey) as level
                   from                                                
-                    acs_object_types                                  
+                    acs_object_types ot1, acs_object_types ot2
                   where                                               
-                    object_type <> ''acs_object''                       
+                    ot2.object_type <> ''acs_object''                       
                   and                                                 
-                    object_type <> ''content_revision''                 
-                  connect by                                          
-                    prior supertype = object_type                     
-                  start with                                          
-                    object_type = refresh_trigger.content_type
+                    ot2.object_type <> ''content_revision''
+                  and 
+                    ot1.object_type = refresh_trigger__content_type
+                  and 
+                    ot2.object_type <= ot1.object_type
+                  and 
+                    ot1.object_type like (ot2.object_type || ''%'')
                   order by
                     level desc
   LOOP
@@ -583,19 +601,37 @@ declare
   v_table_name                         varchar;
   join_rec                             record;
 begin
+--                  select 
+--                    table_name, id_column, level
+--                  from
+--                    acs_object_types
+--                  where
+--                    object_type <> 'acs_object'
+--                  and
+--                    object_type <> 'content_revision'
+--                  start with
+--                    object_type = refresh_view__content_type
+--                  connect by
+--                    object_type = prior supertype 
 
   for join_rec in select
-                    table_name, id_column, level
-                  from
-                    acs_object_types
-                  where
-                    object_type <> 'acs_object'
-                  and
-                    object_type <> 'content_revision'
-                  start with
-                    object_type = refresh_view__content_type
-                  connect by
-                    object_type = prior supertype 
+                    ot2.table_name, 
+                    ot2.id_column, 
+                    tree_level(ot2.tree_sortkey) as level
+                  from                                                
+                    acs_object_types ot1, acs_object_types ot2
+                  where                                               
+                    ot2.object_type <> ''acs_object''                       
+                  and                                                 
+                    ot2.object_type <> ''content_revision''
+                  and 
+                    ot1.object_type = refresh_view__content_type
+                  and 
+                    ot2.object_type <= ot1.object_type
+                  and 
+                    ot1.object_type like (ot2.object_type || ''%'')
+                  order by
+                    ot2.tree_sortkey desc
   LOOP
     cols := cols || '', '' || join_rec.table_name || ''.*'';
     tabs := tabs || '', '' || join_rec.table_name;
@@ -938,10 +974,17 @@ declare
         type_rec        record;
 begin
 
-  for type_rec in select object_type 
-                   from acs_object_types 
-                   connect by supertype = prior object_type 
-                   start with object_type = ''content_revision'' 
+--                 select object_type 
+--                   from acs_object_types 
+--                   connect by supertype = prior object_type 
+--                   start with object_type = ''content_revision''
+
+  for type_rec in select ot.object_type 
+                    from acs_object_types ot
+                   where tree_sortkey 
+                         like (select tree_sortkey || ''%''
+                                 from acs_object_types 
+                                where object_type = ''content_revision'')
   LOOP
     PERFORM content_type__refresh_view (type_rec.object_type);
   end LOOP;

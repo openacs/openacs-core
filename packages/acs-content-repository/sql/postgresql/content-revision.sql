@@ -199,23 +199,42 @@ begin
       where
         revision_id = copy__revision_id;
 
+--                  select 
+--                    object_type
+--                  from                                                
+--                    acs_object_types                                  
+--                  where                                               
+--                    object_type <> ''acs_object''                       
+--                  and                                                 
+--                    object_type <> ''content_revision''                 
+--                  connect by                                          
+--                    prior supertype = object_type                     
+--                  start with                                          
+----                    object_type = (select object_type 
+--                                     from acs_objects 
+--                                    where object_id = copy__revision_id)
+--                  order by
+--                    level desc 
+
   -- iterate over the ancestor types and copy attributes
   for type_rec in select                                                
-                    object_type
+                    ot2.object_type, tree_level(ot2.tree_sortkey) as level
                   from                                                
-                    acs_object_types                                  
+                    acs_object_types ot1, acs_object_types ot2
                   where                                               
-                    object_type <> ''acs_object''                       
+                    ot2.object_type <> ''acs_object''                       
                   and                                                 
-                    object_type <> ''content_revision''                 
-                  connect by                                          
-                    prior supertype = object_type                     
-                  start with                                          
-                    object_type = (select object_type 
-                                     from acs_objects 
-                                    where object_id = copy__revision_id)
+                    ot2.object_type <> ''content_revision''
+                  and 
+                    ot1.object_type = (select object_type 
+                                         from acs_objects 
+                                        where object_id = copy__revision_id)
+                  and 
+                    ot2.object_type <= ot1.object_type
+                  and 
+                    ot1.object_type like (ot2.object_type || ''%'')
                   order by
-                    level desc 
+                    level desc
   LOOP
     PERFORM content_revision__copy_attributes(type_rec.object_type, 
                                               copy__revision_id, v_copy_id);

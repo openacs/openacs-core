@@ -190,7 +190,8 @@ create table cr_items (
                   ),
   content_type    varchar(100)
                   constraint cr_items_rev_type_fk
-                  references acs_object_types
+                  references acs_object_types,
+  tree_sortkey    varchar(4000)
 );  
 
 create index cr_items_by_locale on cr_items(locale);
@@ -200,6 +201,100 @@ create unique index cr_items_by_latest_revision on cr_items(latest_revision);
 create unique index cr_items_unique_name on cr_items(parent_id, name);
 create unique index cr_items_unique_id on cr_items(parent_id, item_id);
 create index cr_items_by_parent_id on cr_items(parent_id);
+
+
+create function cr_items_insert_tr () returns opaque as '
+declare
+        v_parent_sk     varchar;
+        max_key         varchar;
+begin
+        if new.parent_id is null then 
+            select max(tree_sortkey) into max_key 
+              from cr_items 
+             where parent_id is null;
+
+            v_parent_sk := '''';
+        else 
+            select max(tree_sortkey) into max_key 
+              from cr_items 
+             where parent_id = new.parent_id;
+
+            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+              from cr_items 
+             where item_id = new.parent_id;
+        end if;
+
+
+        new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
+
+        return new;
+
+end;' language 'plpgsql';
+
+create trigger cr_items_insert_tr before insert 
+on cr_items for each row 
+execute procedure cr_items_insert_tr ();
+
+create function cr_items_update_tr () returns opaque as '
+declare
+        v_parent_sk     varchar;
+        max_key         varchar;
+        p_id            integer;
+        v_rec           record;
+        clr_keys_p      boolean default ''t'';
+begin
+        if new.item_id = old.item_id and 
+           new.parent_id = old.parent_id then
+
+           return new;
+
+        end if;
+
+        for v_rec in select item_id
+                       from cr_items 
+                      where tree_sortkey like new.tree_sortkey || ''%''
+                   order by tree_sortkey
+        LOOP
+            if clr_keys_p then
+               update cr_items set tree_sortkey = null
+               where tree_sortkey like new.tree_sortkey || ''%'';
+               clr_keys_p := ''f'';
+            end if;
+            
+            select parent_id into p_id
+              from cr_items 
+             where item_id = v_rec.item_id;
+
+            if p_id is null then 
+                select max(tree_sortkey) into max_key
+                  from cr_items 
+                 where parent_id is null;
+
+                v_parent_sk := '''';
+            else 
+                select max(tree_sortkey) into max_key
+                  from cr_items 
+                 where parent_id = p_id;
+
+                select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+                  from cr_items 
+                 where item_id = p_id;
+            end if;
+
+            update cr_items 
+               set tree_sortkey = v_parent_sk || ''/'' || tree_next_key(max_key)
+             where item_id = v_rec.item_id;
+
+        end LOOP;
+
+        return new;
+
+end;' language 'plpgsql';
+
+create trigger cr_items_update_tr after update 
+on cr_items
+for each row 
+execute procedure cr_items_update_tr ();
 
 comment on table cr_items is '
   Each content item has a row in this table, as well as a row in

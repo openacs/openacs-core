@@ -387,14 +387,25 @@ begin
     v_sub_folder_p := ''t'';
   end if;
 
+--               select
+--                 parent_id
+--               from 
+--                 cr_items
+--               connect by
+--                 prior parent_id = item_id
+--               start with
+--                 item_id = is_sub_folder__target_folder_id
+
   for v_rec in select
-                 parent_id
-               from 
-                 cr_items
-               connect by
-                 prior parent_id = is_sub_folder__item_id
-               start with
-                 item_id = is_sub_folder__target_folder_id
+                 i2.parent_id
+               from
+                 cr_items i1, cr_items i2
+               where 
+                 i1.item_id = is_sub_folder__target_folder_id
+               and
+                 i2.tree_sortkey <= i1.tree_sortkey
+               and
+                 i1.tree_sortkey like (i2.tree_sortkey || ''%'')
   LOOP
     v_parent_id := v_rec.parent_id;
     exit when v_parent_id = is_sub_folder__folder_id;
@@ -459,6 +470,23 @@ begin
     end if;
 
   else
+
+--    insert into cr_folder_type_map
+--      select 
+--        register_content_type__folder_id as folder_id, 
+--        object_type as content_type
+--      from
+--        acs_object_types
+--      where
+--        object_type <> ''acs_object''
+--      and
+--        not exists (select 1 from cr_folder_type_map
+--                    where folder_id = register_content_type__folder_id
+--                    and content_type = acs_object_types.object_type)
+--      connect by 
+--        prior object_type = supertype
+--      start with 
+--        object_type = register_content_type__content_type;
     
     insert into cr_folder_type_map
       select 
@@ -472,11 +500,11 @@ begin
         not exists (select 1 from cr_folder_type_map
                     where folder_id = register_content_type__folder_id
                     and content_type = acs_object_types.object_type)
-      connect by 
-        prior object_type = supertype
-      start with 
-        object_type = register_content_type__content_type;
-
+      and 
+         tree_sortkey 
+             like (select tree_sortkey || ''%''
+                     from acs_object_types 
+                    where object_type = register_content_type__content_type);
   end if;
 
   return 0; 
@@ -497,14 +525,25 @@ begin
       where folder_id = unregister_content_type__folder_id
       and content_type = unregister_content_type__content_type;
   else
+
+--    delete from cr_folder_type_map
+--    where folder_id = unregister_content_type__folder_id
+--    and content_type in (select object_type
+--           from acs_object_types    
+--	   where object_type <> ''acs_object''
+--	   connect by prior object_type = supertype
+--	   start with 
+--             object_type = unregister_content_type__content_type);
+
     delete from cr_folder_type_map
     where folder_id = unregister_content_type__folder_id
     and content_type in (select object_type
-           from acs_object_types    
-	   where object_type <> ''acs_object''
-	   connect by prior object_type = supertype
-	   start with 
-             object_type = unregister_content_type__content_type);
+                           from acs_object_types    
+	                  where object_type <> ''acs_object''
+                            and tree_sortkey 
+                                like (select tree_sortkey || ''%''
+                                        from acs_object_types
+                                        where object_type = unregister_content_type__content_type)
 
   end if;
 
