@@ -587,6 +587,11 @@ ad_proc -public aa_equals {
   global aa_testcase_id
   global aa_package_key
 
+  if { [aa_in_rollback_block_p] } {
+      aa_add_rollback_test [list aa_equals $affirm_name $affirm_actual $affirm_value]
+      return
+  }
+
   if {$affirm_actual != $affirm_value} {
     aa_log_result "fail" \
        "$affirm_name \
@@ -609,6 +614,11 @@ ad_proc -public aa_true {
 } {
   global aa_testcase_id
   global aa_package_key
+
+  if { [aa_in_rollback_block_p] } {
+      aa_add_rollback_test [list aa_true $affirm_name $affirm_expr]
+      return
+  }
 
   set result [uplevel 1 [list expr $affirm_expr]]
   if {$result} {
@@ -633,6 +643,11 @@ ad_proc -public aa_false {
 } {
   global aa_testcase_id
   global aa_package_key
+
+  if { [aa_in_rollback_block_p] } {
+      aa_add_rollback_test [list aa_false $affirm_name $affirm_expr]
+      return
+  }
 
   set result [uplevel 1 [list expr $affirm_expr]]
   if {!$result} {
@@ -747,7 +762,8 @@ ad_proc aa_log_final {
 
 ad_proc aa_run_with_teardown {
     {-test_code:required}
-    {-teardown_code:required}
+    {-teardown_code ""}
+    -rollback:boolean
 } {
     Execute code in test_code and guarantee that code in 
     teardown_code will be executed even if error is thrown. Will catch
@@ -756,20 +772,47 @@ ad_proc aa_run_with_teardown {
     @param test_code Tcl code that sets up the test case and executes tests
     @param teardown_code Tcl code that tears down database data etc. that needs to execute
                           after testing even if error is thrown.
+    @param rollback If specified, any db transactions in test_code will be rolled back.
 
     @author Peter Marklund
 } {
+    if { $rollback_p } {
+        set test_code "
+            db_transaction {
+               aa_start_rollback_block
+ 
+               $test_code
+
+                aa_end_rollback_block
+                error \"rollback tests\"
+            } on_error {
+                aa_end_rollback_block
+
+                if { !\[string equal \$errmsg \"rollback tests\"\] } {
+                    global errorInfo
+            
+                    error \"\$errmsg \n\n \$errorInfo\"
+                }
+            }
+                    
+            aa_execute_rollback_tests
+        "
+    }
+
     # Testing
-    set setup_error_p [catch $test_code setup_error]
+    set setup_error_p [catch {uplevel $test_code} setup_error]
     global errorInfo
     set setup_error_stack $errorInfo
 
     # Teardown
-    set teardown_error_p [catch $teardown_code teardown_error]
-    global errorInfo
-    set teardown_error_stack $errorInfo
+    set teardown_error_p 0
+    if { ![empty_string_p $teardown_code] } {
+        set teardown_error_p [catch {uplevel $teardown_code} teardown_error]
+        global errorInfo
+        set teardown_error_stack $errorInfo
+    }
 
-    # Provide meaningful error messages and stack traces
+    # Provide complete error message and stack trace
     set error_text ""
     if { $setup_error_p } {
         append error_text "Setup failed with error $setup_error\n\n$setup_error_stack"
@@ -782,10 +825,65 @@ ad_proc aa_run_with_teardown {
     }
 }
 
-#
-# Set the valid testcase categories list, and testcase/component lists.
-#
-nsv_set aa_test cases {}
-nsv_set aa_test components {}
-nsv_set aa_test init_classes {}
-nsv_set aa_test categories {config db script web}
+ad_proc -private aa_start_rollback_block {} {
+    Start a block of code that is to be rolled back in the db
+
+    @author Peter Marklund
+} {
+    global aa_in_rollback_block_p
+    set aa_in_rollback_block_p 1
+}
+
+ad_proc -private aa_end_rollback_block {} {
+    End a block of code that is to be rolled back in the db
+
+    @author Peter Marklund
+} {
+    global aa_in_rollback_block_p
+    set aa_in_rollback_block_p 0
+}
+
+ad_proc -private aa_in_rollback_block_p {} {
+    Return 1 if we are in a block of code that is to be rolled back in the db
+    and 0 otherwise.
+
+    @author Peter Marklund
+} {
+    global aa_in_rollback_block_p
+    if { [info exists aa_in_rollback_block_p] } {
+        return $aa_in_rollback_block_p
+    } else {
+        return 0
+    }
+}
+
+ad_proc -private aa_add_rollback_test {args} {
+    Add a test statement that is to be executed after a rollback block.
+    If it were to be executed during the rollback block it would be
+    rolled back and this is what we want to avoid.
+
+    @author Peter Marklund
+} {
+    global aa_rollback_test_statements
+
+    if { ![info exists aa_rollback_test_statements] } {
+        set aa_rollback_test_statements [list]
+    }
+
+    lappend aa_rollback_test_statements $args
+}
+
+ad_proc -private aa_execute_rollback_tests {} {
+    Execute all test statements from a rollback block.
+
+    @author Peter Marklund
+} {
+    global aa_rollback_test_statements
+
+    if { [info exists aa_rollback_test_statements] } {
+        foreach test_statement $aa_rollback_test_statements {
+            ns_log Notice "pm debug test_statement \"$test_statement\""
+            eval [join $test_statement " "]
+        }
+    }
+}
