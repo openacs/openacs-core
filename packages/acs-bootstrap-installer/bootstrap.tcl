@@ -97,9 +97,18 @@ set errno [catch {
     apm_bootstrap_load_libraries -procs acs-tcl
 
     if { [info exists database_problem] } {
-	# Yikes - database problems. Remember what the problem is, and run the
-	# installer.
+	# Yikes - database problems.
 	ns_log Error "$proc_name: $database_problem"
+
+        # Check if the admin enabled the site-failure message, display
+        # it if enabled.
+        if { [file exists "$root_directory/www/global/site-failure.html"] } {
+            ns_log Notice "$proc_name: database problem found; enabling www/global/site-failure.html. Rename this html page if you want to run the installer instead."
+            source "$root_directory/packages/acs-bootstrap-installer/site-failure-message.tcl"
+            return
+        }
+
+        # Remember what the problem is, and run the installer.
 	nsv_set acs_properties database_problem $database_problem
 	ns_log Notice "$proc_name: database problem found; Sourcing the installer."
 	source "$root_directory/packages/acs-bootstrap-installer/installer.tcl"
