@@ -769,6 +769,7 @@ ad_proc aa_run_with_teardown {
 } {
   if { $rollback_p } {
     set test_code "
+            set errmsg {}
             db_transaction {
                aa_start_rollback_block
  
@@ -778,15 +779,14 @@ ad_proc aa_run_with_teardown {
                 error \"rollback tests\"
             } on_error {
                 aa_end_rollback_block
-
-                if { !\[string equal \$errmsg \"rollback tests\"\] } {
-                    global errorInfo
-            
-                    error \"\$errmsg \n\n \$errorInfo\"
-                }
             }
-                    
+
             aa_execute_rollback_tests
+
+            if { !\[empty_string_p \$errmsg\] && !\[string equal \$errmsg \"rollback tests\"\] } {
+                global errorInfo
+                error \"\$errmsg \n\n \$errorInfo\"
+            }
         "
   }
 

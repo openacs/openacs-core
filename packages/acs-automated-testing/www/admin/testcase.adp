@@ -37,12 +37,17 @@
        hide testcase source
      </a>]
   </else>
-  <p>
 
-  <ul>
-    <li> <a href="rerun?testcase_id=@testcase_id@&package_key=@package_key@&quiet=@quiet@">Rerun</a> this test case </li>
-    <li> <a href="@resource_file_url@">Re-source test definition file</a> </li>
-  </ul>
+  <blockquote>
+    <b>&raquo;</b>
+    <a href="rerun?testcase_id=@testcase_id@&package_key=@package_key@&quiet=@quiet@">Rerun this test case</a>
+    <br>
+    <b>&raquo;</b>
+    <a href="@resource_file_url@">Resource test definition file</a>
+    <br>
+    <b>&raquo;</b>
+    <a href="@return_url@">Back to testcase list</a>
+  </blockquote>
 
 <b>Results</b>
   <table>
@@ -86,9 +91,15 @@
     </multiple>
   </else>
   </table>
-  <ul>
-    <li> <a href="rerun?testcase_id=@testcase_id@&package_key=@package_key@&quiet=@quiet@">Rerun</a> this test case </li>
-    <li> <a href="index?view_by=testcase&quiet=@quiet@">Back</a> to index </li>
-  </ul>
+  <blockquote>
+    <b>&raquo;</b>
+    <a href="rerun?testcase_id=@testcase_id@&package_key=@package_key@&quiet=@quiet@">Rerun this test case</a>
+    <br>
+    <b>&raquo;</b>
+    <a href="@resource_file_url@">Resource test definition file</a>
+    <br>
+    <b>&raquo;</b>
+    <a href="@return_url@">Back to testcase list</a>
+  </blockquote>
 
 </html>
