@@ -160,7 +160,9 @@ create table apm_packages (
 			        constraint apm_packages_inst_name_nn not null,
     enabled_p			char(1) default 'f' 
 			        constraint apm_packages_enabled_p_ck
-				check (enabled_p in ('t', 'f'))
+				check (enabled_p in ('t', 'f')),
+    -- default system locale for this package
+    default_locale              varchar2(30)
 );
 
 -- create bitmap index apm_packages_package_key_idx on apm_packages (package_key);

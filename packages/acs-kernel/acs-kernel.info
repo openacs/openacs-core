@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0d" url="http://openacs.org/repository/download/apm/acs-kernel-5.0d.apm">
+    <version name="5.0d2" url="http://openacs.org/repository/download/apm/acs-kernel-5.0d2.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
@@ -17,7 +17,7 @@
         <release-date>2003-02-18</release-date>
         <vendor url="http://openacs.org/">OpenACS</vendor>
 
-        <provides url="acs-kernel" version="5.0d"/>
+        <provides url="acs-kernel" version="5.0d2"/>
 
         <callbacks>
         </callbacks>

@@ -548,7 +548,9 @@ create table user_preferences (
 	dont_spam_me_p		char(1) default 'f'
 				constraint user_prefs_dont_spam_me_p_ck
 				check (dont_spam_me_p in ('t','f')),
-	email_type		varchar2(64)
+	email_type		varchar2(64),
+        locale                  varchar2(30),
+        timezone                varchar2(100)
 );
 
 begin
