@@ -42,7 +42,7 @@
         &nbsp;
         <a href="@admin_url@" title="Site-wide administration" class="button">Admin</a>
       </if>
-      <if @admin_url@ not nil>
+      <if @devhome_url@ not nil>
         &nbsp;
         <a href="@devhome_url@" title="Developer's Administration" class="button">DevAdmin</a>
       </if>
