@@ -533,7 +533,8 @@ ad_proc subsite::get_pageflow_struct {} {
             label "Administration"
             url "admin/configure"
             selected_patterns {
-                *
+                admin/*
+                shared/parameters
             }
             subsections {
                 configuration {
