@@ -601,7 +601,7 @@ end;' language 'plpgsql';
 
 
 -- procedure refresh_view
-create function content_type__refresh_view (varchar)
+create or replace function content_type__refresh_view (varchar)
 returns integer as '
 declare
   refresh_view__content_type           alias for $1;  
@@ -640,6 +640,10 @@ begin
 
   select table_name into v_table_name from acs_object_types
     where object_type = refresh_view__content_type;
+
+  if length(v_table_name) > 25 then
+      raise exception ''Table name cannot be longer than 25 characters, because that causes conflicting rules when we create the views.'';
+  end if;
 
   -- create the input view (includes content columns)
 

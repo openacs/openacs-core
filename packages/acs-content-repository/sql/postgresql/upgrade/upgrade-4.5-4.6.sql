@@ -191,22 +191,8 @@ end;' language 'plpgsql';
 -- we need new triggers on cr_items to index when a live revision
 -- changes
 
-create or replace function content_item_search__utrg ()
-returns opaque as '
-begin
-    if new.live_revision is not null and coalesce(old.live_revision,0) <> new.live_revision then
-	perform search_observer__enqueue(new.live_revision,''INSERT'');		
-    end if;
 
-    if old.live_revision is not null and old.live_revision <> coalesce(new.live_revision,0) then
-	perform search_observer__enqueue(old.live_revision,''DELETE'');
-    end if;
-
-    return new;
-end;' language 'plpgsql';
-
-create trigger content_item_search__utrg before update on cr_items
-for each row execute procedure content_item_search__utrg (); 
+-- LARS: REMOVED
 
 
 -- content-type.sql

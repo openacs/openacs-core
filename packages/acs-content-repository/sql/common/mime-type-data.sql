@@ -157,6 +157,9 @@ insert into cr_mime_types (label,mime_type,file_extension) values ( 'Video SGI m
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Conference Cooltalk'     , 'x-conference/x-cooltalk'       , 'ice');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'VRML'                    , 'x-world/x-vrml'                , 'vrml');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Xuda'                    , 'xuda/gen-cert'                 , 'xuda');
+insert into cr_mime_types (label,mime_type,file_extension) values ('Enhanced text'            , 'text/enhanced'                 , 'etxt');
+insert into cr_mime_types (label,mime_type,file_extension) values ('Fixed-width text'         , 'text/fixed-width'              , 'ftxt');
+
 
 -- Extension to mime type maps.
 
