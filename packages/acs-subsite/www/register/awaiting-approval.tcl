@@ -25,15 +25,13 @@ if {![ad_parameter RegistrationRequiresApprovalP "security" 0]} {
     if {$email_verified_p == "t"} {
 	# we don't require email verification
         ad_returnredirect "index?[export_url_vars email]"
-        return
+        ad_script_abort
     } else {
         ad_returnredirect "awaiting-email-verification?[export_url_vars user_id]"
-        return
+        ad_script_abort
     }
 
     # try to login again with this new state
 }
 
 set system_name [ad_system_name]
-
-ad_return_template

@@ -41,7 +41,7 @@ if { [string eq $operation "Yes, I really want to delete this constraint"] } {
     }] } {
 	# The constraint is already deleted or not in scope
 	ad_returnredirect $return_url
-	return
+        ad_script_abort
     }
     
     db_exec_plsql delete_constraint {

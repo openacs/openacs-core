@@ -26,7 +26,7 @@ if { ![db_0or1row select_pretty_name {
 }] } {
     # Already deleted
     ad_returnredirect $return_url
-    return
+    ad_script_abort
 }
 
 set context [list [list one?[ad_export_vars attribute_id] "One attribute"] "Delete value"]

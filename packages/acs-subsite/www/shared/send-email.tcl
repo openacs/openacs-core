@@ -26,13 +26,11 @@ ad_page_contract {
 if [catch {ns_sendmail $email $email_from $subject $message} errmsg] {
     ad_return_error $error_subject "$error_message:
     <blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote>"
-    return
+    ad_script_abort
 }
 
 if { $show_sent_message_p != "t" } {
     # Do not show any message. Just go to return url
     ad_returnredirect $return_url
-    return
+    ad_script_abort
 }
-
-ad_return_template

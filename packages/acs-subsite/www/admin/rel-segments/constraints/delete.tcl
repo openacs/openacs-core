@@ -34,9 +34,7 @@ if { ![db_0or1row select_constraint_props {
 }] } {
     # The constraint is already deleted.... return
     ad_returnredirect $return_url
-    return
+    ad_script_abort
 }
 
 set export_vars [ad_export_vars -form {constraint_id return_url}]
-
-ad_return_template
