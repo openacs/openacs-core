@@ -187,13 +187,11 @@ if (document.selection) {
       append output [textarea_internal "$element(id)" attributes $contents]
       append output "<br>Format: [menu "$element(id).format" [template::util::richtext::format_options] $format {}]"
 
-      set spellcheck_properties [template::util::spellcheck::spellcheck_properties -element_ref element]
-      set spellcheck [lindex $spellcheck_properties 0]
+      # Spell-checker
+      array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
 
-      if { ![string equal ":nospell:" $spellcheck] } {
-          set selected_option [lindex $spellcheck_properties 1]
-
-          append output " Spellcheck: [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $selected_option {}]"
+      if { $spellcheck(render_p) } {
+          append output " Spellcheck: [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) {}]"
       }   
 
   } else {

@@ -527,9 +527,10 @@ ad_proc -public template::element::querygetall { element_ref } {
     set values [template::data::transform::$datatype element]
   }
     
-  set spellcheck [lindex [template::util::spellcheck::spellcheck_properties -element_ref element] 0]
+  # Spell-checker
+  array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
 
-  if { ![string equal ":nospell:" $spellcheck] } {
+  if { $spellcheck(perform_p) } {
 	
     set values [template::data::transform::spellcheck -element_ref element -values $values]
   }
