@@ -124,7 +124,6 @@ drwxr-xr-x   25 root     root         1024 Mar 29 16:24 ..
 drwx------    7 service0 web          1024 Jan  6 14:36 service0
 [service0 aolserver]$ <userinput>exit</userinput>
 logout
-
 [root root]#
 <action>su - service0
 cd /var/lib/aolserver
@@ -155,23 +154,20 @@ exit</action></screen>
 		  Verify membership by typing
 		  <computeroutput>groups</computeroutput> when you login:
 
-		  <programlisting>
-<replaceable>service0</replaceable>:~$ groups
+		  <programlisting>[service0 ~]$ groups
 dba web</programlisting>
 
 		  If you do not see these groups, take the following action: 
 
-		  <programlisting>
-<replaceable>service0</replaceable>:~$ su -      
+		  <programlisting>[service0 ~]$ <userinput>su -</userinput>
 Password: ************
-[root ~]# adduser <emphasis><replaceable>service0</replaceable></emphasis> dba</programlisting>
+[root ~]# <userinput>adduser <replaceable>service0</replaceable> dba</userinput></programlisting>
 
 		  If you get an error about an undefined group, then add that group
 		  manually:
 
-<programlisting>
-[root ~]# groupadd dba
-[root ~]# groupadd web</programlisting>
+<programlisting>[root ~]# <userinput>groupadd dba</userinput>
+[root ~]# <userinput>groupadd web</userinput></programlisting>
 
 		  Make sure to logout as <computeroutput>root</computeroutput> when
 		  you are finished with this step and log back in as
@@ -182,22 +178,17 @@ Password: ************
 		  Connect to Oracle using
 		  <computeroutput>svrmgrl</computeroutput> and login:
         
-		  <programlisting>
-<replaceable>service0</replaceable>:~$ svrmgrl
-
-SVRMGR&gt; connect internal
+		  <programlisting>[service0 ~]$ <userinput>svrmgrl</userinput>
+SVRMGR&gt; <userinput>connect internal</userinput>
 Connected.</programlisting>
 		</para></listitem>
 
               <listitem><para>
 		  Determine where the system tablespaces are stored: 
 
-		  <programlisting>
-SVRMGR&gt;  select file_name from dba_data_files;</programlisting>
+		  <programlisting>SVRMGR&gt; <userinput>select file_name from dba_data_files;</userinput></programlisting>
         Example results: 
-
-		  <programlisting>
-/ora8/m01/app/oracle/oradata/ora8/system01.dbf
+		  <programlisting>/ora8/m01/app/oracle/oradata/ora8/system01.dbf
 /ora8/m01/app/oracle/oradata/ora8/tools01.dbf
 /ora8/m01/app/oracle/oradata/ora8/rbs01.dbf
 /ora8/m01/app/oracle/oradata/ora8/temp01.dbf
@@ -230,14 +221,14 @@ SVRMGR&gt;  select file_name from dba_data_files;</programlisting>
 		  <computeroutput>root</computeroutput> for this step: </para>
 
 		<programlisting>
-SVRMGR&gt; exit
-<replaceable>service0</replaceable>:~$ su -
+SVRMGR&gt; <userinput>exit</userinput>
+[service0 ~]$ <userinput>su -</userinput>
 Password: ************
-[root ~]# mkdir -p /ora8/m02/oradata/ora8/
-[root ~]# chown <emphasis><replaceable>service0</replaceable></emphasis>.web /ora8/m02/oradata/ora8
-[root ~]# chmod 775 /ora8/m02/oradata/ora8
-[root ~]# exit
-<replaceable>service0</replaceable>:~$</programlisting>
+[root ~]# <userinput>mkdir -p /ora8/m02/oradata/ora8/</userinput>
+[root ~]# <userinput>chown <replaceable>service0</replaceable>:web /ora8/m02/oradata/ora8</userinput>
+[root ~]# <userinput>chmod 775 /ora8/m02/oradata/ora8</userinput>
+[root ~]# <userinput>exit</userinput>
+[service0 ~]$</programlisting>
               </listitem>
 
               <listitem><para> 
@@ -252,41 +243,40 @@ Password: ************
 		  tablespace.
 
 		</para>
-		<programlisting>
-<replaceable>service0</replaceable>:~$ svrmgrl
-
-SVRMGR&gt; connect internal;
-SVRMGR&gt; create tablespace <emphasis><replaceable>service0</replaceable></emphasis> 
-             datafile &#39;/ora8/m02/oradata/ora8/<emphasis><replaceable>service0</replaceable></emphasis>01.dbf&#39; 
-             size 50M 
-             autoextend on 
-             next 10M
-             maxsize 300M
-             extent management local
-             uniform size 32K;</programlisting>
+		<programlisting>[service0 ~]$ <userinput>svrmgrl</userinput>
+SVRMGR&gt; <userinput>connect internal;</userinput>
+SVRMGR&gt; <userinput>create tablespace <replaceable>service0</replaceable>
+      datafile &#39;/ora8/m02/oradata/ora8/<replaceable>service0</replaceable>01.dbf&#39; 
+      size 50M 
+      autoextend on 
+      next 10M
+      maxsize 300M
+      extent management local
+      uniform size 32K;</userinput></programlisting>
               </listitem>
 
               <listitem><para> 
 		  Create a database user for this service. Give the
 		  user access to the tablespace and rights to connect. We'll use
-		  <computeroutput><replaceable>service0</replaceable>password</computeroutput> as our password.</para>
+		  <computeroutput><replaceable>service0password</replaceable></computeroutput> as our password.</para>
 
                 <para>
-		  Write down what you specify as <emphasis>service_name</emphasis>
-			(i.e. <computeroutput><replaceable>service0</replaceable></computeroutput>) and
-			<emphasis>database_password</emphasis>
-			(i.e. <computeroutput><replaceable>service0</replaceable>password</computeroutput>). You
-			will need this information for configuring exports and
-			AOLserver.
+		  Write down what you specify as
+                  <emphasis>service_name</emphasis>
+                  (i.e. <computeroutput><replaceable>service0</replaceable></computeroutput>)
+                  and <emphasis>database_password</emphasis>
+                  (i.e. <computeroutput><replaceable>service0password</replaceable></computeroutput>). You
+                  will need this information for configuring exports
+                  and AOLserver.
 		</para>
 
 		<programlisting>
-SVRMGR&gt; create user <emphasis><replaceable>service0</replaceable></emphasis> identified by <emphasis><replaceable>service0</replaceable>password</emphasis> default tablespace <emphasis><replaceable>service0</replaceable></emphasis>
-temporary tablespace temp quota unlimited on <emphasis><replaceable>service0</replaceable></emphasis>;
-SVRMGR&gt; grant connect, resource, ctxapp, javasyspriv, query rewrite to <emphasis><replaceable>service0</replaceable></emphasis>;
-SVRMGR&gt; revoke unlimited tablespace from <emphasis><replaceable>service0</replaceable></emphasis>;
-SVRMGR&gt; alter user <emphasis><replaceable>service0</replaceable></emphasis> quota unlimited on <emphasis><replaceable>service0</replaceable></emphasis>;
-SVRMGR&gt; exit;</programlisting>
+SVRMGR&gt; <userinput>create user <replaceable>service0</replaceable> identified by <replaceable>service0password</replaceable> default tablespace <replaceable>service0</replaceable>
+    temporary tablespace temp quota unlimited on <replaceable>service0</replaceable>;</userinput>
+SVRMGR&gt; <userinput>grant connect, resource, ctxapp, javasyspriv, query rewrite to <replaceable>service0</replaceable>;</userinput>
+SVRMGR&gt; <userinput>revoke unlimited tablespace from <replaceable>service0</replaceable>;</userinput>
+SVRMGR&gt; <userinput>alter user <replaceable>service0</replaceable> quota unlimited on <replaceable>service0</replaceable>;</userinput>
+SVRMGR&gt; <userinput>exit;</userinput></programlisting>
 
                 <para>
 		  Your table space is now ready. In case you are trying to delete a
@@ -298,15 +288,12 @@ SVRMGR&gt; exit;</programlisting>
         Make sure that you can login to Oracle using your
         <emphasis>service_name</emphasis> account: </para>
 
-		<programlisting>
-<replaceable>service0</replaceable>:~$ sqlplus <emphasis><replaceable>service0</replaceable></emphasis>/<emphasis><replaceable>service0</replaceable>password</emphasis>
-SQL&gt; select sysdate from dual;
-
+		<programlisting>[service0 ~]$ <userinput>sqlplus <replaceable>service0</replaceable>/<replaceable>service0password</replaceable></userinput>
+SQL&gt; <userinput>select sysdate from dual;</userinput>
 SYSDATE
 ----------
 2001-12-20
-
-SQL&gt; exit</programlisting>
+SQL&gt; <userinput>exit;</userinput></programlisting>
 
                 <para>
 		  You should see today&#39;s date in a format &#39;YYYY-MM-DD.&#39;
@@ -332,7 +319,6 @@ SQL&gt; exit</programlisting>
 CREATE USER
 [postgres pgsql]$ <userinput>exit</userinput>
 logout
-
 [root root]#</screen>
               </listitem>
               <listitem id="create-database">
@@ -359,10 +345,7 @@ createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
                 <para><link linkend="install-openfts-postgres">Add Full Text Search Support</link> (OPTIONAL)</para>
               </listitem>
               <listitem id="db-setup-exit">
-                <screen>[service0 service0]$ <userinput>exit</userinput>
-logout
-
-[root root]# </screen>
+                <para> At this point the database should be ready for installing OpenACS.</para>
               </listitem>
             </itemizedlist>
           </listitem>
@@ -671,30 +654,29 @@ export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data</programlisting>
         <screen>[service0 service0]$ <userinput>exit</userinput>
 logout
 [root src]# <userinput>su - <userinput><replaceable>service0</replaceable></userinput></userinput>
-[postgres pgsql]$ <userinput>env | grep PATH</userinput>
+[service0 ~]$ <userinput>env</userinput>
 </screen>
         <itemizedlist>
           <listitem>
             <para>For PostgreSQL, you should see:</para>
         <screen>
-LD_LIBRARY_PATH=LD_LIBRARY_PATH=:/usr/local/pgsql/lib
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:/root/bin:/usr/local/pgsql/bin:/usr/local/pgsql/bin</screen>
+LD_LIBRARY_PATH=:/usr/local/pgsql/lib
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:\
+  /root/bin:/usr/local/pgsql/bin:/usr/local/pgsql/bin</screen>
           </listitem>
           <listitem>
             <para>For Oracle:</para>
         <screen>ORACLE_BASE=/ora8/m01/app/oracle
 ORACLE_HOME=/ora8/m01/app/oracle/product/8.1.7
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:/root/bin:/ora8/m01/app/oracle/product/8.1.7/bin
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:\
+  /root/bin:/ora8/m01/app/oracle/product/8.1.7/bin
 LD_LIBRARY_PATH=/ora8/m01/app/oracle/product/8.1.7/lib:/lib:/usr/lib
 ORACLE_SID=ora8
 ORACLE_TERM=vt100
 ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data</screen>
           </listitem>
         </itemizedlist>
-        <screen>[service0 service0]$ <userinput>exit</userinput>
-logout
 
-[root root]#</screen>
       </listitem>
       <listitem><para>Test your <link linkend="backup-recovery">backup and recovery</link> procedure.</para>
       </listitem>

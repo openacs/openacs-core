@@ -22,9 +22,8 @@
     in a new tarball include database upgrade scripts.  To start the
     upgrade, replace your existing files with the new files and then browse to the APM, which will detect the new packages and offer to run the appropriate database upgrade scripts.  After restarting the server again, the upgrade is
     complete.</para>
-    <figure>
+    <table>
       <title>Assumptions in this section</title>
-      <informaltable>
         <tgroup cols="2">
           <tbody>
             <row>
@@ -45,8 +44,7 @@
             </row>
           </tbody>
         </tgroup>
-      </informaltable>
-    </figure>
+    </table>
   </sect2>
   <sect2 id="upgrade-4.6.3-to-5">
     <title>Upgrading 4.6.3 to 5.0</title>
