@@ -185,7 +185,7 @@ ad_proc -public template::form::get_action { id } {
   set level [template::adp_level]
 
   # keep form properties and a list of the element items
-  upvar #$level $id:action formaction
+  upvar #$level $id:formaction formaction
     
   # If we've already found the action, just return that
   if { [info exists formaction] } {
@@ -209,8 +209,8 @@ ad_proc -public template::form::get_action { id } {
     return $formaction
   }
 
-  # Otherwise, there should be a form:action variable in the form
-  set formaction [ns_queryget "form:action"]
+  # Otherwise, there should be a form:formaction variable in the form
+  set formaction [ns_queryget "form:formaction"]
 
   return $formaction
 }
@@ -442,10 +442,10 @@ ad_proc -private template::form::render { id tag_attributes } {
   append output [export_vars -form { { form\:id $id } { form\:mode $properties(mode) } }]
   
   # If we're in edit mode, output the action
-  upvar #$level $id:action form_action
-  if { [string equal $properties(mode) "edit"] && [exists_and_not_null form_action] } {
-    upvar #$level $id:action action
-    append output [export_vars -form { { form\:action $form_action } }]
+  upvar #$level $id:formaction formaction
+  if { [string equal $properties(mode) "edit"] && [exists_and_not_null formaction] } {
+    upvar #$level $id:formaction action
+    append output [export_vars -form { { form\:formaction $formaction } }]
   }
 
   return $output
