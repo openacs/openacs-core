@@ -357,6 +357,9 @@ proc_doc db_multirow { var_name statement_name sql args } {
     programmer, may wish to work with row numbers.
 
 } {
+    # Query Dispatcher (OpenACS - ben)
+    set full_statement_name [db_qd_get_fullname $statement_name]
+
     ad_arg_parser { bind args } $args
 
     # Do some syntax checking.
@@ -382,7 +385,7 @@ proc_doc db_multirow { var_name statement_name sql args } {
     upvar \#[template::adp_level] "$var_name:rowcount" counter
 
     db_with_handle db {
-	set selection [db_exec select $db $statement_name $sql]
+	set selection [db_exec select $db $full_statement_name $sql]
 
 	set counter 0
 	while { [db_getrow $db $selection] } {

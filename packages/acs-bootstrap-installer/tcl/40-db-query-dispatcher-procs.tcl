@@ -161,18 +161,24 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
     # Get the proc name being executed.
     set proc_name [info level [expr "-1 - $added_stack_num"]]
 
+    set list_of_source_procs {ns_sourceproc apm_source template::adp_parse}
+
     # We check if we're running the special ns_ proc that tells us
     # whether this is an URL or a Tcl proc.
-    if {[regexp {^ns_sourceproc} $proc_name all] || \
-	    [regexp {^apm_source} $proc_name all]} {
+    if {[lsearch $list_of_source_procs [lindex $proc_name 0]] != -1} {
 
 	# Means we are running inside an URL
 
+	# Check the ad_conn stuff
+	if {[catch {ns_log Notice "QD= the ad_conn file is [ad_conn file]"} errmsg]} {}
+
 	# Now we do a check to see if this is a directly accessed URL or a sourced URL
 	if {[regexp {^ns_sourceproc} $proc_name all]} {
+	    ns_log Notice "QD= We are in a WWW page, woohoo!"
 	    set real_url_p 1
 	    set url [ns_conn url]
 	} else {
+	    ns_log Notice "QD= We are in a WWW page sourced by apm_source, woohoo!"
 	    set real_url_p 0
 	    set url [lindex $proc_name 1]
 	    set url [ad_make_relative_path $url]

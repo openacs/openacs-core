@@ -350,7 +350,7 @@ ad_proc -private apm_load_queries {
     # Load up each file
     ns_log Notice "APM/QD = looping through files to load queries from"
     foreach file $files {
-	db_fullquery_internal_load_cache $file
+	db_qd_load_query_file $file
     }
     ns_log Notice "APM/QD = DONE looping through files to load queries from"
 }
