@@ -70,6 +70,14 @@ ad_proc -public template::form::create { id args } {
 
   template::util::get_opts $args
 
+  if { [exists_and_not_null opts(cancel_url)] && ![exists_and_not_null opts(cancel_label)] } {
+    set opts(cancel_label) "Cancel"
+  }
+
+  if { [exists_and_not_null opts(cancel_url)] } {
+    lappend opts(buttons) [list $opts(cancel_label) cancel]
+  }
+
   set elements [list]
 
   # check whether this form is being submitted
@@ -80,6 +88,12 @@ ad_proc -public template::form::create { id args } {
     set submission 1
   } else {
     set submission [string equal $id [ns_queryget form:id]]
+  }
+
+  if { $submission && ![empty_string_p [ns_queryget "cancel"]] && [exists_and_not_null opts(cancel_url)]} {
+    # If the user hit a button named "cancel", 
+    ad_returnredirect $opts(cancel_url)
+    ad_script_abort
   }
 
   if { ![empty_string_p [ns_queryget "__edit"]] } {
