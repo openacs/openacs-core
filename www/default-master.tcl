@@ -19,7 +19,11 @@ if { [template::util::is_nil signatory] } {
 }
 
 if { ![template::util::is_nil context] } {
-    set context_bar [eval ad_context_bar -- $context]
+    set cmd [list ad_context_bar --]
+    foreach elem $context {
+        lappend cmd $elem
+    }
+    set context_bar [eval $cmd]
 }
 
 if { [template::util::is_nil context_bar] } {
