@@ -11,9 +11,9 @@
 --
 
 create function acs_message__edit (integer,varchar,varchar,varchar,
-text,timestamp,integer,varchar,boolean)
+text,integer,timestamp,integer,varchar,boolean)
 returns integer as '
-declaration
+declare
     p_message_id    alias for $1;
     p_title         alias for $2;    -- default null
     p_description   alias for $3;    -- default null
@@ -28,33 +28,39 @@ declaration
 begin
     -- create a new revision using whichever call is appropriate
     if p_data is not null then
+		-- need to take care of blob?
         v_revision_id := content_revision__new (
-            item_id        => p_message_id,
-            title          => p_title,
-            description    => p_description,
-            data           => p_data,
-            mime_type      => p_mime_type,
-            creation_date  => p_creation_date,
-            creation_user  => p_creation_user,
-            creation_ip    => p_creation_ip
+            p_message_id,			-- item_id        
+            p_title,				-- title          
+            p_description,			-- description    
+            p_data,					-- data           
+            p_mime_type,			-- mime_type      
+            p_creation_date,		-- creation_date  
+            p_creation_user,		-- creation_user  
+            p_creation_ip			-- creation_ip    
         );
     else if p_title is not null or p_text is not null then
-        v_revision_id := content_revision.new (
-            item_id        => p_message_id,
-            title          => p_title,
-            description    => p_description,
-            text           => p_text,
-            mime_type      => p_mime_type,
-            creation_date  => p_creation_date,
-            creation_user  => p_creation_user,
-            creation_ip    => p_creation_ip
+        v_revision_id := content_revision__new (
+            p_title,				-- title          
+            p_description,			-- description    
+			now(),					-- publish_date
+            p_mime_type,			-- mime_type      
+			null,					-- nls_language
+            p_text,					-- text           
+            p_message_id,			-- item_id        
+			null,					-- revision_id
+            p_creation_date,		-- creation_date  
+            p_creation_user,		-- creation_user  
+            p_creation_ip			-- creation_ip    
         );      
     end if;
+	end if;
 
     -- test for auto approval of revision   
     if p_is_live = ''t'' then 
-        content_item__set_live_revision(v_revision_id);
+        perform content_item__set_live_revision(v_revision_id);
     end if;
+
     return v_revision_id;
 end;' language 'plpgsql';
    
@@ -70,7 +76,7 @@ end;' language 'plpgsql';
 
 create function acs_message__new (integer,integer,timestamp,integer,
 varchar,varchar,varchar,varchar,varchar,text,integer,integer,integer,
-varchar,integer,boolean)
+varchar,varchar,boolean)
 returns integer as '
 declare
         p_message_id    alias for $1;  --default null,
@@ -93,8 +99,10 @@ declare
         v_message_id   acs_messages.message_id%TYPE;
         v_rfc822_id    acs_messages.rfc822_id%TYPE;
         v_revision_id  cr_revisions.revision_id%TYPE;
+		v_system_url   varchar;
+		v_domain_name  varchar;
+		v_idx		   integer;
     begin
- 
         -- generate a message id now so we can get an rfc822 message-id
         if p_message_id is null then
             select acs_object_id_seq.nextval into v_message_id;
@@ -103,25 +111,39 @@ declare
         end if;
 
         -- need to make this mandatory also - jg
-        -- this needs to be fixed up, but Oracle doesn't give us a way
+        -- this needs to be fixed up, but Oracle doesn''t give us a way
         -- to get the FQDN
-        -- if rfc822_id is null then
-        --    v_rfc822_id := now || ''.'' || v_message_id || ''@'' ||
-        --        utl_inaddr.get_host_name || ''.hate'';
-        --else
+
+		-- vk: get SystemURL parameter and use it to extract domain name
+		select apm__get_value(package_id, ''SystemURL'') into v_system_url
+          from apm_packages where package_key=''acs-kernel'';
+		v_idx := position(''http://'' in v_system_url);
+		v_domain_name := trim (substr(v_system_url, v_idx + 7));
+
+        if p_rfc822_id is null then
+           v_rfc822_id := current_date || ''.'' || v_message_id || ''@'' ||
+               v_domain_name || ''.hate'';
+        else
             v_rfc822_id := p_rfc822_id;
-        --end if;
+        end if;
 
         v_message_id := content_item__new (
-            name           => v_rfc822_id,
-            parent_id      => p_parent_id,
-            content_type   => ''acs_message_revision'',
-            item_id        => p_message_id,
-            context_id     => p_context_id,
-            creation_date  => p_creation_date,
-            creation_user  => p_creation_user,
-            creation_ip    => p_creation_ip,
-            item_subtype   => p_object_type
+            v_rfc822_id,				  -- name           
+            p_parent_id,				  -- parent_id      
+            p_message_id,				  -- item_id        
+            null,						  -- locale
+            p_creation_date,			  -- creation_date  
+            p_creation_user,			  -- creation_user  
+            p_context_id,				  -- context_id     
+            p_creation_ip,				  -- creation_ip    
+            p_object_type,				  -- item_subtype   
+            ''acs_message_revision'',	  -- content_type   
+            null,						  -- title
+            null,						  -- description
+            ''text/plain'',				  -- mime_type
+            null,						  -- nls_language
+            null,						  -- text
+            ''text''					  -- storage_type
         );
 
         insert into acs_messages 
@@ -131,16 +153,16 @@ declare
 
         -- create an initial revision for the new message
         v_revision_id := acs_message__edit (
-            message_id     => v_message_id,
-            title          => p_title,
-            description    => p_description,
-            mime_type      => p_mime_type,
-            text           => p_text,
-            data           => p_data,
-            creation_date  => p_creation_date,
-            creation_user  => p_creation_user,
-            creation_ip    => p_creation_ip,
-            is_live        => p_is_live
+            v_message_id,				   -- message_id     
+            p_title,					   -- title          
+            p_description,				   -- description    
+            p_mime_type,				   -- mime_type      
+            p_text,						   -- text           
+            p_data,						   -- data           
+            p_creation_date,			   -- creation_date  
+            p_creation_user,			   -- creation_user  
+            p_creation_ip,				   -- creation_ip    
+            p_is_live					   -- is_live        
         );
 
         return v_message_id;
@@ -148,24 +170,23 @@ end;' language 'plpgsql';
 
 create function acs_message__delete (integer)
 returns integer as '
-declaration
-    p_message_id    in acs_messages.message_id%TYPE;
+declare
+    p_message_id    alias for $1;
 begin
-    delete from acs_messages
-        where p_message_id = acs_message.delete.message_id;
-    content_item.delete(p_message_id);
+    delete from acs_messages where message_id = p_message_id;
+    perform content_item__delete(p_message_id);
     return 1;
 end;' language 'plpgsql';
 
 create function acs_message__message_p (integer)
 returns boolean as '
-declaration
+declare
     p_message_id          alias for $1;
     v_check_message_id  integer;
 begin
-    select (case when count(message_id) = 0 then 0 else 1 end) into v_check_message_id
-        from acs_messages
-            where message_id = p_message_id;
+    select count(message_id) into v_check_message_id
+        from acs_messages where message_id = p_message_id;
+
     if v_check_message_id <> 0 then
         return ''t'';
     else
@@ -175,7 +196,7 @@ end;' language 'plpgsql';
 
 create function acs_message__send (integer,varchar,integer,timestamp)
 returns integer as '
-declaration
+declare
     p_message_id    alias for $1;
     p_to_address    alias for $2;
     p_grouping_id   alias for $3;    -- default null
@@ -192,7 +213,7 @@ end;' language 'plpgsql';
 
 create function acs_message__send (integer,integer,integer,timestamp)
 returns integer as '
-declaration
+declare
     p_message_id    alias for $1;
     p_recipient_id  alias for $2;
     p_grouping_id   alias for $3;    -- default null
@@ -202,9 +223,9 @@ begin
     v_wait_until := coalesce (p_wait_until, current_timestamp);
     insert into acs_messages_outgoing
         (message_id, to_address, grouping_id, wait_until)
-    select send.message_id, p.email, send.grouping_id, v_wait_until
+    select p_message_id, p.email, p_grouping_id, v_wait_until
         from parties p
-        where p.party_id = send.recipient_id;
+        where p.party_id = p_recipient_id;
     return 1;
 end;' language 'plpgsql';
 
@@ -213,15 +234,15 @@ end;' language 'plpgsql';
 
 create function acs_message__first_ancestor (integer)
 returns integer as '
-declaration
-    message_id alias for $1;
+declare
+    p_message_id alias for $1;
     v_message_id acs_messages.message_id%TYPE;
 begin
     select message_id into v_message_id
     from (select message_id, reply_to
           from acs_messages
           connect by message_id = prior reply_to
-          start with message_id = first_ancestor.message_id) ancestors
+          start with message_id = p_message_id) ancestors
           where reply_to is null;
 
     return v_message_id;
@@ -252,25 +273,35 @@ returns integer as '
     v_revision_id  cr_revisions.revision_id%TYPE;
 begin
     v_file_id := content_item__new (
-        name           => p_file_name,
-        parent_id      => p_message_id,
-        item_id        => p_file_id,
-        creation_date  => p_creation_date,
-        creation_user  => p_creation_user,
-        creation_ip    => p_creation_ip
+        p_file_name,			   -- name           
+        p_message_id,			   -- parent_id      
+        p_file_id,				   -- item_id        
+        null,					   -- locale
+        p_creation_date,		   -- creation_date  
+        p_creation_user,		   -- creation_user  
+        null,					   -- context_id
+        p_creation_ip,			   -- creation_ip    
+        ''content_item'',		   -- item_subtype
+        ''content_revision,		   -- content_type
+        null,					   -- title
+        null,					   -- description
+        ''text/plain'',			   -- mime_type
+        null,					   -- nls_language
+        null,					   -- text
+		''file'',				   -- storage_type
     );
 
     -- create an initial revision for the new attachment
     v_revision_id := acs_file__edit_file (
-        file_id         => v_file_id,
-        title           => p_title,
-        description     => p_description,
-        mime_type       => p_mime_type,
-        content         => p_content,
-        creation_date   => p_creation_date,
-        creation_user   => p_creation_user,
-        creation_ip     => p_creation_ip,
-        is_live         => p_is_live
+         v_file_id,				-- file_id        
+         p_title,				-- title          
+         p_description,			-- description    
+         p_mime_type,			-- mime_type      
+         p_content,				-- content        
+         p_creation_date,		-- creation_date  
+         p_creation_user,		-- creation_user  
+         p_creation_ip,			-- creation_ip    
+         p_is_live				-- is_live        
     );
 
     return v_file_id;
@@ -291,18 +322,19 @@ declare
     p_is_live       alias for $9;    -- default ''t''
     v_revision_id  cr_revisions.revision_id%TYPE;
 begin
-    v_revision_id := content_revision.new (
-        title         => p_title,
-        mime_type     => p_mime_type,
-        data          => p_content,
-        item_id       => p_file_id,
-        creation_date => p_creation_date,
-        creation_user => p_creation_user,
-        creation_ip   => p_creation_ip
+		--hmmm not sure which function to use
+    v_revision_id := content_revision__new (
+        p_title,				-- title         
+        p_mime_type,			-- mime_type     
+        p_content,				-- data          
+        p_file_id,				-- item_id       
+        p_creation_date,		-- creation_date 
+        p_creation_user,		-- creation_user 
+        p_creation_ip			-- creation_ip   
     );
 
     -- test for auto approval of revision
-    if is_live = ''t'' then 
+    if p_is_live = ''t'' then 
         content_item__set_live_revision(v_revision_id);
     end if;
 
@@ -311,17 +343,17 @@ end;' language 'plpgsql';
 
 create function acs_message__delete_file (integer)
 returns integer as '
-declaration
+declare
     p_file_id  alias for $1;
 begin
-    content_item__delete(p_file_id);       
+    perform content_item__delete(p_file_id);       
     return 1;
 end;' language 'plpgsql';
 
 create function acs_message__new_image (integer,integer,varchar,varchar,
 text,varchar,text,integer,integer,timestamp,integer,varchar,boolean)
 returns integer as '
-declaration
+declare
     p_message_id     alias for $1;
     p_image_id       alias for $2;    -- default null
     p_file_name      alias for $3;
@@ -339,27 +371,37 @@ declaration
     v_revision_id  cr_revisions.revision_id%TYPE;
 begin
     v_image_id := content_item__new (
-        name           => p_file_name,
-        parent_id      => p_message_id,
-        item_id        => p_image_id,
-        creation_date  => p_creation_date,
-        creation_user  => p_creation_user,
-        creation_ip    => p_creation_ip
+         p_file_name,				-- name          
+         p_message_id,				-- parent_id     
+         p_image_id,				-- item_id       
+         null,						-- locale
+         p_creation_date,			-- creation_date 
+         p_creation_user,			-- creation_user 
+         null,						-- context_id
+         p_creation_ip,				-- creation_ip
+		 ''content_item'',			-- item_subtype
+		 ''content_revision'',		-- content_type
+		 null,						-- title
+		 null,						-- description
+		 ''text/plain'',			-- mime_type
+		 null,						-- nls_language
+		 null,						-- text
+		 ''file''					-- storage_type   
     );
 
     -- create an initial revision for the new attachment
     v_revision_id := acs_message__edit_image (
-        image_id       => v_image_id,
-        title          => p_title,
-        description    => p_description,
-        mime_type      => p_mime_type,
-        content        => p_content,
-        width          => p_width,
-        height         => p_height,
-        creation_date  => p_creation_date,
-        creation_user  => p_creation_user,
-        creation_ip    => p_creation_ip,
-        is_live        => p_is_live
+         v_image_id,				-- image_id      
+         p_title,					-- title         
+         p_description,				-- description   
+         p_mime_type,				-- mime_type     
+         p_content,					-- content       
+         p_width,					-- width         
+         p_height,					-- height        
+         p_creation_date,			-- creation_date 
+         p_creation_user,			-- creation_user 
+         p_creation_ip,				-- creation_ip   
+         p_is_live					-- is_live       
     );
 
     return v_image_id;
@@ -368,7 +410,7 @@ end;' language 'plpgsql';
 create function acs_message__edit_image (integer,varchar,text,varchar,
 text,integer,integer,timestamp,integer,varchar,boolean)
 returns integer as '
-declaration
+declare
     p_image_id       alias for $1;
     p_title          alias for $2;    -- default null
     p_description    alias for $3;    -- default null
@@ -382,14 +424,15 @@ declaration
     p_is_live        alias for $11;   -- default ''t''
     v_revision_id  cr_revisions.revision_id%TYPE;
 begin
+		-- not sure which __new to use
     v_revision_id := content_revision__new (
-        title          => p_title,
-        mime_type      => p_mime_type,
-        data           => p_content,
-        item_id        => p_image_id,
-        creation_date  => p_creation_date,
-        creation_user  => p_creation_user,
-        creation_ip    => p_creation_ip       
+         p_title,					-- title         
+         p_mime_type,				-- mime_type     
+         p_content,					-- data          
+         p_image_id,				-- item_id       
+         p_creation_date,			-- creation_date 
+         p_creation_user,			-- creation_user 
+         p_creation_ip				-- creation_ip   
     );      
 
     -- insert new width and height values
@@ -409,13 +452,13 @@ end;' language 'plpgsql';
 
 create function acs_message__delete_image (integer)
 returns integer as '
-declaration
+declare
     p_image_id  alias for $1;
 begin
     -- XXX fix after image.delete exists
     delete from images
         where image_id = p_image_id;
-    content_item__delete(p_image_id);
+    perform content_item__delete(p_image_id);
     return 1;
 end;' language 'plpgsql';
 
@@ -423,7 +466,7 @@ end;' language 'plpgsql';
 create function acs_message__new_extlink (varchar,integer,varchar,
 varchar,text,integer,timestamp,integer,varchar)
 returns integer as '
-declaration
+declare
     p_name           alias for $1;    -- default null
     p_extlink_id     alias for $2;    -- default null
     p_url            alias for $3;   
@@ -435,28 +478,30 @@ declaration
     p_creation_ip    alias for $9;    -- default null
     v_extlink_id  cr_extlinks.extlink_id%TYPE;
 begin
-    v_extlink_id := content_extlink.new (
-        name           => p_name,
-        url            => p_url,
-        label          => p_label,
-        description    => p_description,
-        parent_id      => p_parent_id,
-        extlink_id     => p_extlink_id,   
-        creation_date  => p_creation_date,
-        creation_user  => p_creation_user,
-        creation_ip    => p_creation_ip 
+    v_extlink_id := content_extlink__new (
+         p_name,				-- name          
+         p_url,					-- url           
+         p_label,				-- label         
+         p_description,			-- description   
+         p_parent_id,			-- parent_id     
+         p_extlink_id,			-- extlink_id    
+         p_creation_date,		-- creation_date 
+         p_creation_user,		-- creation_user 
+         p_creation_ip			-- creation_ip   
     );
+
+	return v_extlink_id;
 end;' language 'plpgsql';
     
 -- XXX should just edit extlink
 create function acs_message__edit_extlink (integer,varchar,varchar,text)
 returns integer as '
-declaration
+declare
     p_extlink_id   alias for $1;
     p_url          alias for $2;
     p_label        alias for $3;    -- default null
     p_description  alias for $4;    --  default null
-    v_is_extlink  char;
+    v_is_extlink   boolean;
 begin
     v_is_extlink := content_extlink__is_extlink(p_extlink_id);
     if v_is_extlink = ''t'' then
@@ -466,15 +511,17 @@ begin
             description = p_description
         where extlink_id = p_extlink_id;
     end if;
-    return v_is_extlink;
+    return 0;
 end;' language 'plpgsql';
 
 create function acs_message__delete_extlink (integer)
 returns integer as '
-declaration
+declare
     p_extlink_id    alias for $1;
 begin
-    content_extlink__delete(p_extlink_id);
+    perform content_extlink__delete(p_extlink_id);
+
+	return 0;
 end;' language 'plpgsql';
 
 create function acs_message__name (integer)
