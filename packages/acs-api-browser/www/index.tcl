@@ -17,10 +17,6 @@ ad_page_contract {
 set title "API Browser"
 set context [list]
 
-set aolserver_tcl_api_root "http://www.aolserver.com/docs/devel/tcl/api/"
-
-set tcl_docs_root "http://dev.scriptics.com/man/tcl[info tclversion]/TclCmd/contents.htm"
-
 db_multirow installed_packages installed_packages_select {
     select version_id, pretty_name, version_name
       from apm_package_version_info
