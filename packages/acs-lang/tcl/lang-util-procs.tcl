@@ -303,7 +303,7 @@ namespace eval lang::util {
         and returns the same string but with the message keys (and their surrounding hash
         marks) replaced with the corresponding value in the message catalog. Message lookup
         is done with the locale of the request. If message lookup fails for a certain key
-        then that key is not replaced.
+        then a translation missing message will be used instead.
     
         @author Peter marklund (peter@collaboraid.biz)
     } {
@@ -317,12 +317,9 @@ namespace eval lang::util {
             set message_key [string range $replacement_string 1 [expr [string length $replacement_string] - 2]]
             
             # Attempt a message lookup
-            set message_value [_ [ad_locale request locale] $message_key "not_found"]
+            set message_value [_ [ad_locale request locale] $message_key]
             
-            # Do substitution if message lookup succeeded
-            if { ![string equal $message_value "not_found"] } {                
-                regsub $replacement_string $subst_string $message_value subst_string
-            }
+            regsub $replacement_string $subst_string $message_value subst_string
         }        
         
         return $subst_string
