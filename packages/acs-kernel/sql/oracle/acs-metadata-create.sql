@@ -246,6 +246,16 @@ begin
  values
   ('enumeration', null);
 
+ insert into acs_datatypes
+  (datatype, max_n_values)
+ values
+  ('url', null);
+
+ insert into acs_datatypes
+  (datatype, max_n_values)
+ values
+  ('email', null);
+
  commit;
 end;
 /

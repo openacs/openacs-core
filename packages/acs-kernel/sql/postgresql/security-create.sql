@@ -35,7 +35,7 @@ create table secret_tokens (
     token_id                    integer
                                 constraint secret_tokens_token_id_pk primary key,
     token                       char(40),
-    token_timestamp             timestamp
+    token_timestamp             timestamptz
 );
 
 create sequence t_sec_security_token_id_seq cache 100;

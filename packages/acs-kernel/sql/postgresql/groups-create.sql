@@ -130,7 +130,7 @@ drop function inline_0 ();
 -- show errors
 
 create table group_types (
-        group_type              varchar(100) not null
+        group_type              varchar(400) not null
                                 constraint group_types_pk primary key
                                 constraint group_types_obj_type_fk
                                 references acs_object_types (object_type),
@@ -386,7 +386,7 @@ for each row  execute procedure membership_rels_in_tr ();
 create function composition_rels_in_tr () returns opaque as '
 declare
 begin
-  raise EXCEPTION ''-20000: Insert to membership rels not yet supported'';
+  raise EXCEPTION ''-20000: Insert to composition rels not yet supported'';
 
   return new;
 
