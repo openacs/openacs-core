@@ -146,7 +146,7 @@ done
           <title>Upgrading a local CVS repository</title>
           <mediaobject>
             <imageobject>
-              <imagedata fileref="images/development-with-cvs.png" format="png" align="center"/>
+              <imagedata fileref="images/development-with-cvs.png" format="PNG" align="center"/>
             </imageobject>
           </mediaobject>
         </figure>

@@ -54,7 +54,7 @@
       <title>Tutorial Data Model</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/tutorial-data-model.png" format="png" align="center"/>
+          <imagedata fileref="images/tutorial-data-model.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
 </figure>
@@ -84,7 +84,7 @@
         <title>Database Deletion Script</title>
     <programlisting><xi:include href="../../files/tutorial/myfirstpackage-drop.sql" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>example missing</xi:fallback></xi:include></programlisting>
       </figure>
-   (like the creation script the drop script calls a PL/pgSQL function: <computeroutput><ulink url="/api-doc/plsql-subprogram-one?type=FUNCTION&amp;name=content%5ftype%5f%5fdrop%5ftype">content_type__drop_type</ulink></computeroutput>
+    <para>(like the creation script the drop script calls a PL/pgSQL function: <computeroutput><ulink url="/api-doc/plsql-subprogram-one?type=FUNCTION&amp;name=content%5ftype%5f%5fdrop%5ftype">content_type__drop_type</ulink></computeroutput></para>
       <para>Run the create script manually to add your tables and functions.</para>
       <screen>[$OPENACS_SERVICE_NAME postgresql]$ <userinput>psql -f myfirstpackage-create.sql</userinput>
 psql:myfirstpackage-create.sql:15: NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index 'mfp_notes_pkey' for table 'mfp_notes'

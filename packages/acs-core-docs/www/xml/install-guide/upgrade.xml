@@ -45,7 +45,7 @@
         <title>Upgrading with the APM</title>
         <mediaobject>
           <imageobject>
-            <imagedata fileref="images/upgrade-apm.png" format="png" align="center"/>
+            <imagedata fileref="images/upgrade-apm.png" format="PNG" align="center"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -65,11 +65,11 @@
           </row>
           <row>
             <entry>Root of OpenACS file tree</entry>
-            <entry><replaceable>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable></replaceable></entry>
+            <entry><replaceable>/var/lib/aolserver/$OPENACS_SERVICE_NAME</replaceable></entry>
           </row>
           <row>
             <entry>Database backup directory</entry>
-            <entry><replaceable>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/database-backup</replaceable></entry>
+            <entry><replaceable>/var/lib/aolserver/$OPENACS_SERVICE_NAME/database-backup</replaceable></entry>
           </row>
         </tbody>
       </tgroup>
@@ -350,7 +350,7 @@ exit</action></screen>
           <title>Upgrading a local CVS repository</title>
           <mediaobject>
             <imageobject>
-              <imagedata fileref="images/upgrade-cvs.png" format="png" align="center"/>
+              <imagedata fileref="images/upgrade-cvs.png" format="PNG" align="center"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -374,8 +374,7 @@ exit</action></screen>
                 <listitem>
                   <formalpara>
                     <title>(b): via cvs working checkout</title>
-                    <para>Create a CVS checkout from OpenACS.  The first time you do this, you will need to create the checkout directory.  We use one dedicated directory for each branch of OpenACS - if you are using OpenACS 5.0,x, you only need an OpenACS 5.0 branch.  The <replaceable>openacs-5-1-compat</replaceable> tag identifies the latest released version of OpenACS 5.1 (ie, 5.1.3 or 5.1.4) and the latest compatible version of each package, including .LRN.  Each minor release of OpenACS since 5.0 has this tagging structure.  (Ie., OpenACS 5.1.x has <computeroutput>openacs-5-1-compat</computeroutput>.)</para>
-                <para>
+                    <para>Create a CVS checkout from OpenACS.  The first time you do this, you will need to create the checkout directory.  We use one dedicated directory for each branch of OpenACS - if you are using OpenACS 5.0,x, you only need an OpenACS 5.0 branch.  The <replaceable>openacs-5-1-compat</replaceable> tag identifies the latest released version of OpenACS 5.1 (ie, 5.1.3 or 5.1.4) and the latest compatible version of each package, including .LRN.  Each minor release of OpenACS since 5.0 has this tagging structure.  For example, OpenACS 5.1.x has <computeroutput>openacs-5-1-compat</computeroutput>.
                   You will want to separately check out all the
                   packages you are using.
                 </para>

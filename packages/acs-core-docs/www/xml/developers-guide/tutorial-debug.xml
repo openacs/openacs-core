@@ -129,7 +129,7 @@ been executed. A very useful feature. Instead of inserting bogus data
 like:        <computeroutput>set name "Simon"</computeroutput>, I tend to generate a random script in order avoid inserting a value that's already in the database:</para>
 <screen>set name [ad_generate_random_string]
 </screen>
-<parameter>Here's how the test case looks so far:</parameter>
+<para>Here's how the test case looks so far:</para>
 
 <screen>aa_register_case mfp_basic_test {
     My test
