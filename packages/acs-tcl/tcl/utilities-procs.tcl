@@ -910,7 +910,7 @@ ad_proc -public export_vars {
 	for { set i 0 } { $i < $export_size } { incr i } {
 	    lappend export_list "[ns_urlencode [ns_set key $export_set $i]]=[ns_urlencode [ns_set value $export_set $i]]"
 	}
-	set export_string [join $export_list "&amp;"]
+	set export_string [join $export_list "&"]
     } else {
 	for { set i 0 } { $i < $export_size } { incr i } {
 	    append export_string "<input type=\"hidden\" name=\"[ad_quotehtml [ns_set key $export_set $i]]\" value=\"[ad_quotehtml "[ns_set value $export_set $i]"]\" />\n"
