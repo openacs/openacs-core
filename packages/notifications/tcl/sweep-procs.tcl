@@ -11,12 +11,13 @@ ad_library {
 namespace eval notification::sweep {
 
     ad_proc -public schedule_all {} {
-        This schedules all the notification procs
+        This schedules all the notification procs.
+	DEPRECATED.
     } {
     }
 
     ad_proc -public cleanup_notifications {} {
-        Clean up the notifications that are done
+        Clean up the notifications that have been sent out.
     } {
         # Get the list of the ones to kill
         set notification_id_list [db_list select_notification_ids {}]

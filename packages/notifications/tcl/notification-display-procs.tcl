@@ -1,6 +1,9 @@
 ad_library {
 
-    Notifications Display Procs
+    Notifications Display Procs.
+
+    Notifications is mostly a service package, but it does have some level of user interface.
+    These procs enable other packages to simply display information about notifications.
 
     @creation-date 2002-05-24
     @author Ben Adida <ben@openforce.biz>
@@ -17,7 +20,7 @@ namespace eval notification::display {
         {-url:required}
         {-user_id ""}
     } {
-        Produce a widget for requesting notifications
+        Produce a widget for requesting notifications of a given type.
     } {
         if {[empty_string_p $user_id]} {
             set user_id [ad_conn user_id]
@@ -47,6 +50,8 @@ namespace eval notification::display {
         {-user_id:required}
         {-pretty_name}
     } {
+	Returns the URL that allows one to subscribe to a notification type on a particular object.
+    } {
         set type_id [notification::type::get_type_id -short_name $type]
 
         set root_path [apm_package_url_from_key [notification::package_key]]
@@ -58,6 +63,8 @@ namespace eval notification::display {
     ad_proc -public unsubscribe_url {
         {-request_id:required}
         {-url:required}
+    } {
+	Returns the URL that allows one to unsubscribe from a particular request.	
     } {
         set root_path [apm_package_url_from_key [notification::package_key]]
         set unsubscribe_url "${root_path}request-delete?request_id=$request_id&return_url=[ns_urlencode $url]"

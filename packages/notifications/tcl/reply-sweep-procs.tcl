@@ -1,6 +1,8 @@
 ad_library {
 
-    Notification Reply Sweeps
+    Notification Reply Sweeps.
+
+    Procs that make sure that replies are being processed.
 
     @creation-date 2002-06-02
     @author Ben Adida <ben@openforce.biz>
@@ -11,7 +13,7 @@ ad_library {
 namespace eval notification::reply::sweep {
     
     ad_proc -public scan_all_replies {} {
-        # Go through all the delivery methods and do the right thing
+        Go through all the delivery methods and scan replies for that delivery method.
     } {
         ns_log Notice "NOTIF- scan_all_replies starting"
 
@@ -26,7 +28,7 @@ namespace eval notification::reply::sweep {
     }
 
     ad_proc -public process_all_replies {} {
-        # Go through the replies in the DB and dispatch correctly
+        Go through the replies in the DB and dispatch correctly to the right processor.
     } {
         ns_log Notice "NOTIF- process_all_replies starting"
 

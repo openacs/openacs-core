@@ -1,0 +1,1 @@
+ad_returnredirect manage

@@ -22,11 +22,19 @@ namespace eval notification::email {
     }
 
     ad_proc -public address_domain {} {
-        return [get_parameter -name "EmailDomain"]
+        set domain [get_parameter -name "EmailDomain"]
+        if { [empty_string_p $domain] } {
+            # No domain set up, let's use the default from the system info
+            # This may not find anything, but at least it's worth a try
+            if { ![regexp {^(https?://)?(www\.)?([^/]*)} [ad_url] match ignore ignore domain] } {
+                ns_log Warning "notification::email::address_domain: Couldn't find an email domain for notifications."
+            }
+        }
+        return $domain
     }
 
     ad_proc -public manage_notifications_url {} {
-        return "[ad_url]/[apm_package_url_from_key [notification::package_key]]manage"
+        return "[ad_url][apm_package_url_from_key [notification::package_key]]manage"
     }
 
     ad_proc -public reply_address_prefix {} {
