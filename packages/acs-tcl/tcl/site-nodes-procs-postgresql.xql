@@ -3,10 +3,17 @@
 <queryset>
     <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
+    <fullquery name="site_node::delete.delete_site_node">
+        <querytext>
+            select site_node__delete(:node_id);
+        </querytext>
+    </fullquery>
+
     <fullquery name="site_node::init_cache.select_site_nodes">
         <querytext>
             select site_node.url(site_nodes.node_id) as url,
                    site_nodes.node_id,
+                   site_nodes.parent_id,
                    site_nodes.directory_p,
                    site_nodes.pattern_p,
                    site_nodes.object_id,
@@ -23,6 +30,7 @@
         <querytext>
             select site_node.url(site_nodes.node_id) as url,
                    site_nodes.node_id,
+                   site_nodes.parent_id,
                    site_nodes.directory_p,
                    site_nodes.pattern_p,
                    site_nodes.object_id,
@@ -36,17 +44,17 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="site_node::get_url.select_url">
+        <querytext>
+            select site_node__url(:node_id)
+        </querytext>
+    </fullquery>
+
     <fullquery name="site_node_closest_ancestor_package_url.select_url">
         <querytext>
             select site_node__url(node_id)
             from site_nodes
             where object_id = :subsite_pkg_id
-        </querytext>
-    </fullquery>
-
-    <fullquery name="site_map_unmount_application.node_delete">
-        <querytext>
-            select site_node__delete(:node_id);
         </querytext>
     </fullquery>
 
