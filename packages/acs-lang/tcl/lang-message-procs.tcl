@@ -217,13 +217,16 @@ namespace eval lang::message {
         
         @return A localized piece of text.
     } { 
-        # Peter TODO: add translation links
-        # Peter TODO/FIXME: Should we prefix with ad_conn package_key if the lookup fails?
-    
-        set system_locale [parameter::get -package_id [apm_package_id_from_key acs-lang] -parameter SiteWideLocale]
-
-        # Set default locale if none was provided
+        # If the cache hasn't been loaded - do so now
+        # Peter: should we go to the database on first hit and cache the messages as they are used
+        # instead of loading the whole cache up-front?
+        global message_cache_loaded_p
+        if { ![info exists message_cache_loaded_p] } {
+            lang::message::cache
+        }
+        
         if { [empty_string_p $locale] } {
+            # No locale provided
 
             global ad_conn
             if { [info exists ad_conn] } {
@@ -231,51 +234,62 @@ namespace eval lang::message {
                 set locale [ad_conn locale]
             } else {
                 # There is no HTTP connection - resort to system locale
+                set system_locale [parameter::get -package_id [apm_package_id_from_key acs-lang] -parameter SiteWideLocale]
                 set locale $system_locale
             }
-        }
-        
-        if { [string length $locale] == 2 } {
-    
-            # it's a language and not a locale
+        } elseif { [string length $locale] == 2 } {
+            # Only language provided
+
             # let's get the default locale for this language
             # The cache is flushed if the default locale for this language is
-            # is changed.
+            # changed.
             set locale [util_memoize [list ad_locale_locale_from_lang $locale]]    
         } 
     
         if { [nsv_exists lang_message_$locale $key] } {
-            # Message catalog lookup succeeded
+            # Message exists in the given locale
+
             set return_value [nsv_get lang_message_$locale $key]
+            # Do any variable substitutions (interpolation of variables)
+            if { [llength $substitution_list] > 0 || ($upvar_level >= 1 && [string first "%" $return_value] != -1) } {
+                set return_value [lang::message::format $return_value $substitution_list [expr $upvar_level + 1]]
+            }
 
         } else {
             # There is no entry in the message catalog for the given locale
 
-            # is there any thing under this message key in the default locale
-
             if { [nsv_exists lang_message_en_US $key] != 0 } {
-                set return_value "$default: $key"
-            } {
-                set return_value "NO KEY: $key"
-            }
+                # The key exists but there is no translation in the current locale
 
-            if { [lang::util::translator_mode_p] } {
-                set key_split [split $key "."]
-                set package_key_part [lindex $key_split 0]
-                set message_key_part [lindex $key_split 1]
-                
-                set return_url [ad_conn url]
-                if { [ns_getform] != "" } {
-                    append return_url "?[export_entire_form_as_url_vars]"
+                if { ![lang::util::translator_mode_p] } {
+                    # We are not in translator mode
+
+                    if { [string equal $default "TRANSLATION MISSING"] } {
+                        set return_value "$default: $key"
+                    } else {
+                        set return_value $default
+                    }
+                } else {
+                    # Translator mode - return a translation link
+
+                    set key_split [split $key "."]
+                    set package_key_part [lindex $key_split 0]
+                    set message_key_part [lindex $key_split 1]
+                    
+                    set return_url [ad_conn url]
+                    if { [ns_getform] != "" } {
+                        append return_url "?[export_entire_form_as_url_vars]"
+                    }
+                    
+                    set return_value "&nbsp;<a href=\"/acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } { locales $locale } { package_key $package_key_part } return_url }]\"><span style=\"background-color: yellow\"><font size=\"-2\">$message_key_part - TRANSLATE</font></span></a>&nbsp;"
                 }
-                
-                set return_value "&nbsp;<a href=\"/acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } { locales $locale } { package_key $package_key_part } return_url }]\"><span style=\"background-color: yellow\"><font size=\"-2\">$message_key_part - TRANSLATE</font></span></a>&nbsp;"
-            }
-        }
 
-        # Do any variable substitutions (interpolation of variables)
-        if { [llength $substitution_list] > 0 || ($upvar_level >= 1 && [string first "%" $return_value] != -1) } {
-            set return_value [lang::message::format $return_value $substitution_list [expr $upvar_level + 1]]
+            } {
+                # The key doesn't exist - this is a programming error
+
+                set return_value "NO KEY: $key"
+                ns_log Error "lang::message::lookup key doesn't exist: $key"
+            }
         }
 
         return $return_value
@@ -316,6 +330,8 @@ namespace eval lang::message {
     } {
         # We segregate messages by language. It might reduce contention
         # if we segregage instead by package. Check for problems with ns_info locks.
+        global message_cache_loaded_p
+        set message_cache_loaded_p 1
         
         set i 0 
         db_foreach select_locale_keys {} {

@@ -12,4 +12,7 @@ ad_library {
 ad_schedule_proc -once t 5 lang::catalog::import_from_all_files
 
 # Cache the message catalog from the database
-lang::message::cache
+global message_cache_loaded_p
+if { ![info exists message_cache_loaded_p] } {
+    lang::message::cache
+}
