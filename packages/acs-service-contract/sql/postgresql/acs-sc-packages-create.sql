@@ -259,7 +259,7 @@ begin
     v_impl_id := acs_sc_impl__new(
         p_impl_contract_name,
         p_impl_name,
-        null,
+        p_impl_name,
         p_impl_owner_name
     );
 

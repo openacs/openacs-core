@@ -11,7 +11,8 @@
                   b.impl_id,
                   acs_sc_contract__get_name(contract_id) as contract_name,
                   acs_sc_impl__get_name(b.impl_id) as impl_name,
-                  impl.impl_owner_name
+                  impl.impl_owner_name,
+                  impl.impl_pretty_name
               from
                   acs_sc_bindings b, 
                   acs_sc_impls impl

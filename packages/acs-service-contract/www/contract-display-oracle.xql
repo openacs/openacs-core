@@ -9,7 +9,8 @@
             b.contract_id,
             b.impl_id,
             acs_sc_impl.get_name(b.impl_id) as impl_name,
-            impl.impl_owner_name
+            impl.impl_owner_name,
+            impl.impl_pretty_name
         from
             acs_sc_bindings b, 
             acs_sc_impls impl
