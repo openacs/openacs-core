@@ -87,7 +87,7 @@
 
 <fullquery name="item::publish.set_live">
     <querytext>
-      select content_item__set_live(
+      select content_item__set_live_revision(
           :revision_id,
           'live'
       )
