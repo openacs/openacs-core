@@ -125,8 +125,7 @@ ad_proc -public tsearch2::search {
     # turn or into |
     # turn not into !
     set query [tsearch2::build_query -query $query]
-    # FIXME actually write the regsub to do that, string map will
-    # probably be too tricky to use
+
     set limit_clause ""
     set offset_clause ""
     if {[string is integer $limit]} {
@@ -135,7 +134,10 @@ ad_proc -public tsearch2::search {
     if {[string is integer $offset]} {
 	set offset_clause " offset :offset "
     }
-    set query_text "select object_id from txt where fti @@ to_tsquery('default',:query) order by rank(fti,to_tsquery('default',:query))  ${limit_clause} ${offset_clause}"
+    set query_text "select object_id from txt where fti @@ to_tsquery('default',:query) and exists (select 1 from                    from acs_object_party_privilege_map m
+                   where m.object_id = txt.object_id
+                     and m.party_id = :user_id
+                     and m.privilege = 'read')order by rank(fti,to_tsquery('default',:query))  ${limit_clause} ${offset_clause}"
     set results_ids [db_list search $query_text]
     set count [db_string count "select count(*) from txt where fti @@ to_tsquery('default',:query)"]
     set stop_words [list]
