@@ -616,3 +616,40 @@ ad_proc doc_return {args} {
     db_release_unused_handles
     eval "ns_return $args"
 }
+
+ad_proc -public ad_return_url {
+    -urlencode:boolean
+    {extra_args {}}
+} {
+
+    @author Don Baccus
+    @param url_encode If true url_encode the result.
+    @param args A list of (name,value) pairs to append to the query string
+
+    Build a return url suitable for passing to a page you expect to return back
+    to the current page.
+
+    Examples:
+
+    ad_returnredirect "foo?return_url=[ad_return_url -url_encode]"
+
+    set return_url [ad_return_url { {foo bar} {bar foo}}]
+
+} {
+
+    set query_list [ns_conn query]
+
+    foreach {extra_arg} $extra_args {
+        lappend query_list [join $extra_arg "="]
+    }
+
+    if { [llength $query_list] == 0 } {
+        return [ns_conn url]
+    } else {
+        if { $urlencode_p } {
+            return [ns_urlencode "[ns_conn url]?[join $query_list "&"]"]
+        } else {
+            return "[ns_conn url]?[join $query_list "&"]"
+        }
+    }
+}
