@@ -6,6 +6,7 @@
     <pretty-plural>Notifications</pretty-plural>
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
+    <auto-mount>notifications</auto-mount>
 
     <version name="0.3d" url="http://openacs.org/repository/download/apm/notifications-0.3d.apm">
     <database-support>
