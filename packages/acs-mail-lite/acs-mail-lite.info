@@ -16,7 +16,7 @@
         <summary>Simplified reliable email transmission.</summary>
         <description format="text/html">This package provides a simple ns_sendmail-like interface for sending messages, but queues messages in the database to ensure reliable sending and make sending a message 'transactional'.</description>
 
-        <!-- No dependency information -->
+        <provides url="acs-mail-lite" version="0.1d"/>
 
         <files>
             <file type="package_spec" path="acs-mail-lite.info"/>
