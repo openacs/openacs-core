@@ -419,6 +419,7 @@ ad_proc -public group::admin_p {
 
 
 ad_proc -public group::add_member {
+    {-no_perm_check:boolean}
     {-group_id:required}
     {-user_id:required}
     {-rel_type ""}
@@ -431,16 +432,20 @@ ad_proc -public group::add_member {
     
     # Only admins can add non-membership_rel members
     if { [empty_string_p $rel_type] || \
-             (![empty_string_p $rel_type] && ![string equal $rel_type "membership_rel"] && \
+             (!$no_perm_check_p && ![empty_string_p $rel_type] && ![string equal $rel_type "membership_rel"] && \
                   ![permission::permission_p -object_id $group_id -privilege "admin"]) } {
         set rel_type "membership_rel"
     }
     
     group::get -group_id $group_id -array group
-    set create_p [group::permission_p -privilege create $group_id]
     
-    if { [string equal $group(join_policy) "closed"] && !$create_p } {
-        error "You do not have permission to add members to the group '$group(group_name)'"
+    if { !$no_perm_check_p } {
+        set create_p [group::permission_p -privilege create $group_id]
+        if { [string equal $group(join_policy) "closed"] && !$create_p } {
+            error "You do not have permission to add members to the group '$group(group_name)'"
+        }
+    } else {
+        set create_p 1
     }
 
     if { [empty_string_p $member_state] } {
