@@ -843,11 +843,13 @@ ad_proc -public ad_progress_bar_begin {
 
 ad_proc -public ad_progress_bar_end {
     {-url:required}
+    {-message_after_redirect ""}
 } {
     Ends the progress bar by causing the browser to redirect to a new URL.
 
     @see ad_progress_bar_begin
 } { 
+    util_user_message -message $message_after_redirect
     ns_write "<script language=\"javascript\">window.location='$url';</script>"
     ns_conn close
 }
