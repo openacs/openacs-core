@@ -3,7 +3,7 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="attribute">      
+<fullquery name="attribute_comment">      
       <querytext>
       
 	select utc.column_name,

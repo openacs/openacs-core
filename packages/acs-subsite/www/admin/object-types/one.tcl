@@ -137,7 +137,7 @@ if { [exists_and_not_null table_name] } {
      </tr>"
 
     set i 0
-    db_foreach attribute "
+    db_foreach attribute_comment "
 	select utc.column_name,
 	       utc.data_type,
                ucc.comments
