@@ -2632,7 +2632,7 @@ declare
   version_name           alias for $1;  
   a_start                integer;       
   a_end                  integer;       
-  a_order                varchar(1000); 
+  a_order                varchar(1000) default ''''; 
   a_char                 char(1);       
   a_seen_letter          boolean default ''f'';        
 begin
