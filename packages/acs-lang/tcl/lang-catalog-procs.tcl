@@ -331,14 +331,12 @@ ad_proc -private lang::catalog::export_to_file {
         file mkdir $catalog_dir
     }
 
-    # Create a backup file first if there isn't one already
+    # Create a backup file first if a file already exists
     set backup_path "${file_path}.orig"
-    if { [file exists $file_path] && ![file exists $backup_path] } {
-        ns_log Notice "Backing up catalog file $file_path"
-        file copy -- $file_path $backup_path
-    } else {
-        ns_log Notice "Not backing up $file_path as backup file already exists"
-    }
+    if { [file exists $file_path] } {
+        ns_log Notice "Creating backup catalog file $backup_path"
+        file copy -force -- $file_path $backup_path
+    } 
 
     # Since the output charset, and thus the filename, may have changed since
     # last time that we wrote the catalog file we remove old files with the same locale
