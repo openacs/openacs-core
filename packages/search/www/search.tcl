@@ -13,7 +13,6 @@ ad_page_contract {
     q:notnull {You must specify some keywords.}
 }
 
-
 set page_title "Search Results"
 
 set package_id [ad_conn package_id]
@@ -31,7 +30,7 @@ array set info [acs_sc_call FtsEngineDriver info [list] $driver]
 if { [array get info] == "" } {
     ReturnHeaders
     ns_write "FtsEngineDriver not available!"
-    return
+    ad_script_abort
 } 
 if { $num <= 0} {
     set limit [ad_parameter -package_id $package_id LimitDefault]

@@ -3,7 +3,7 @@
 <property name="context">@context;noquote@</property>
 <form method=GET action=search>
   <small>
-    <a href=@url_advanced_search@>Advanced Search</a>
+    <a href="@url_advanced_search@">Advanced Search</a>
     <br>
     <input type=text name=q size=31 maxlength=256 value="@query@">
     <input type=submit value="Search" name=t>
