@@ -1200,7 +1200,7 @@ ad_proc -private template::list::prepare_filters {
             # because then the foreach loop would run more than once
             foreach { label value count } [lrange $elm 0 2] {}
 
-            if { [empty_string_p $label] } {
+            if { [empty_string_p [string trim $label]] } {
                 set label $filter_properties(null_label)
             }
 
@@ -1314,7 +1314,7 @@ ad_proc -private template::list::render_filters {
                 # because then the foreach loop would run more than once
                 foreach { label value count } [lrange $elm 0 2] {}
                 
-                if { [empty_string_p $label] } {
+                if { [empty_string_p [string trim $label]] } {
                     set label $filter_properties(null_label)
                 }
 
