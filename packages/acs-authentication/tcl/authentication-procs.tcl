@@ -656,10 +656,11 @@ ad_proc -public auth::password::recover_password {
     {-authority_id:required}
     {-username:required}
 } { 
-    Handles forgotten passwords.  Attempts to retrieve a password; if not possibe, attempts to reset a password.  If it succeeds, it emails the user.  For all outcomes, it returns a message to be displayed.
+    Handles forgotten passwords.  Attempts to retrieve a password; if not possibe, 
+    attempts to reset a password.  If it succeeds, it emails the user.  For all 
+    outcomes, it returns a message to be displayed.
 
     @param authority_id The ID of the authority that the user is trying to log into.
-
     @param username The username that the user's trying to log in with.
 
     @return Array list with the following entries:
@@ -671,6 +672,7 @@ ad_proc -public auth::password::recover_password {
 } {
 
     set forgotten_url [auth::password::get_forgotten_url \
+                           -remote_only \
                            -authority_id $authority_id \
                            -username $username]
 
@@ -759,7 +761,7 @@ ad_proc -public auth::password::get_forgotten_url {
                 set can_retrieve_p [auth::password::can_retrieve_p -authority_id $authority_id]
                 set can_reset_p [auth::password::can_reset_p -authority_id $authority_id]
                 if { $can_retrieve_p || $can_reset_p } {
-                    set forgotten_pwd_url "[subsite::get_element -element url]register/forgotten-password?[export_vars { authority_id username }]"
+                    set forgotten_pwd_url "[subsite::get_element -element url]register/recover-password?[export_vars { authority_id username }]"
                 }
             }
         }
@@ -865,15 +867,6 @@ ad_proc -public auth::password::reset {
                           -authority_id $authority_id \
                           -username $username]
 
-    if { [catch {auth::password::email_password \
-                     -username $username \
-                     -authority_id $authority_id \
-                     -password $result(password)} errmsg] } {
-
-        set result(password_status) "reset_error"
-        set result(password_message) [auth::password::get_email_error_msg $errmsg]
-    }
-
     return [array get result]
 }
 
@@ -913,7 +906,7 @@ ad_proc -private auth::password::email_password {
     }]
         
     # Send email
-    ns_sendmail $email $system_owner $subject $body
+    ns_sendmail $user_email $system_owner $subject $body
 }
 
 ad_proc -private auth::password::get_email_error_msg { errmsg } {
