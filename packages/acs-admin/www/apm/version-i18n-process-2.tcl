@@ -13,7 +13,7 @@ ad_page_contract {
 
 set next_file [lindex $files 0]
 
-set page_title "Internationalizing ADP File $next_file"
+set page_title "Internationalizing file $next_file"
 set context_bar [ad_context_bar $page_title]
 
 # Figure out which actions to take on the selected adp:s
@@ -28,7 +28,7 @@ if { (! $replace_text_p) && (! $replace_tags_p) } {
 
 # Do text replacement
 if { $replace_text_p } {
-    # Process the next adp file in the list
+    # Process the next file in the list
     set text_file $next_file
     set number_of_processed_files 1
 
@@ -54,13 +54,14 @@ if { $replace_text_p } {
 }
 
 # Do tag replacement
+set total_number_of_replacements "0"
 if { $replace_tags_p } {
     if { $replace_text_p } {
         # We are also replacing text, so only process one adp file
         set tags_files $next_file
         set number_of_processed_files 1
     } else {
-        # We are only doing tag replacement, so process all adp files
+        # We are only doing tag replacement, so process all files
         set tags_files $files
         set number_of_processed_files [llength $files]
     }
@@ -70,6 +71,7 @@ if { $replace_tags_p } {
         append processing_html_result "<h3>Message tag replacements for $file</h3>"
 
         set number_of_replacements [lang::util::replace_temporary_tags_with_lookups $file]
+        set total_number_of_replacements [expr $total_number_of_replacements + $number_of_replacements]
 
         append processing_html_result "Did $number_of_replacements replacements, any further details are in the log file"
     }
@@ -94,10 +96,9 @@ if { [llength $files] > 0 } {
 
     # If we are done with message tag replacement, that means we have added new messages
     # so reload the cache
-    if { $replace_tags_p } {
+    if { $replace_tags_p && $total_number_of_replacements > 0 } {
         lang::message::cache
     }
 }
 
 ad_return_template
-
