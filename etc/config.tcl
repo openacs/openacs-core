@@ -352,6 +352,11 @@ if { [ns_info version] < 4} {
     # ---------------------------------------------------------
     ns_param ServerPort                $httpsport
     
+    ns_section "ns/server/${server}/module/nsopenssl/sslcontexts"
+    ns_param users        "SSL context used for regular user access"
+    # ns_param admins       "SSL context used for administrator access"
+    ns_param client       "SSL context used for outgoing script socket connections"
+
     ns_section "ns/server/${server}/module/nsopenssl/defaults"
     ns_param server               users
     ns_param client               client
