@@ -2,19 +2,25 @@
 <property name="context">@context;noquote@</property>
 <property name="title">@subsite_name;noquote@ Administration</property>
 
-<h3>Subsite Administration</h3>
+<h3>@subsite_name@ Administration</h3>
 <ul>
-  <li>@subsite_name@
-    <ul>
-      <li><a href=site-map/>Site Map</a>
-      <li><a href=groups/>Groups</a>
-      <li><a href=group-types/>Group Types</a>
-      <li><a href=rel-segments/>Relational Segments</a>
-      <li><a href=rel-types/>Relationship Types</a>
-      <li><a href=host-node-map/>Host-Node Map</a>
-      <li><a href=object-types/>Object Types</a>
-    </ul>
-  </li> 
+  <li><a href="applications/"/>Applications</a>
+  <li><a href="configure">Configure</a>
+  <li><a href="permissions">Permissions</a>
+  <li><a href="../members/">Members</a>
+  <li><a href="../shared/parameters">Parameters</a>
+</ul>
+
+<h2>Advanced Features</h2>
+
+<ul>
+  <li><a href=site-map/>Site Map</a>
+  <li><a href=groups/>Groups</a>
+  <li><a href=group-types/>Group Types</a>
+  <li><a href=rel-segments/>Relational Segments</a>
+  <li><a href=rel-types/>Relationship Types</a>
+  <li><a href=host-node-map/>Host-Node Map</a>
+  <li><a href=object-types/>Object Types</a>
 </ul>
 
 <if @sw_admin_p@ true>
