@@ -53,10 +53,14 @@ chmod 770 /var/lib/aolserver</action></screen>
       developers for that specific instance.  Add this user, and put
       it in the <computeroutput><replaceable>$OPENACS_SERVICE_NAME</replaceable></computeroutput> group so that it
       can use database and server commands associated with that group.
+      (If you don't know how to do this, type 
+      <userinput>man usermod</userinput>. You can type
+      <userinput>groups</userintput> to find out which groups a user
+      is a part of)
     </para>
 <screen>
 [root root]# <userinput>useradd <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
-[root root]#</screen>
+</screen>
   </sect2>
   
   <sect2 id="install-with-script">
