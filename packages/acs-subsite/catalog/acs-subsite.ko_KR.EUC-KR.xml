@@ -3,8 +3,8 @@
 
   <msg key="About_You">당신에 관해</msg>
   <msg key="again">다시</msg>
-  <msg key="Answer">응답</msg>
-  <msg key="answer">응답</msg>
+  <msg key="Answer">응답:</msg>
+  <msg key="answer">응답:</msg>
   <msg key="at">에서</msg>
   <msg key="Awaiting_Approval">인증대기중</msg>
   <msg key="Bad_Password">잘못된 비밀번호</msg>
@@ -15,10 +15,10 @@
   <msg key="Children">아이들</msg>
   <msg key="Confirm">확인:</msg>
   <msg key="Current_Password">현재 비밀번호:</msg>
-  <msg key="Current_users">현재 사용자들</msg>
+  <msg key="Current_users">현재 사용자들:</msg>
   <msg key="Customize_Question">개별화 질문</msg>
   <msg key="Direct_Permissions">직접 사용권한</msg>
-  <msg key="edit_your_alerts">당신의 정보를 수정</msg>
+  <msg key="edit_your_alerts">당신의 경보를 수정</msg>
   <msg key="email_address">전자우편주소</msg>
   <msg key="Email_Confirmation">전자우편 확인</msg>
   <msg key="Email_not_Requested">전자우편이 요청되지 않음</msg>
