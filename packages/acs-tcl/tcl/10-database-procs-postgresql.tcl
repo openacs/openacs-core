@@ -116,6 +116,9 @@ ad_proc -private db_exec_plpgsql { db statement_name sql fname } {
 
     } error]
 
+    # error in the plsql anonymous function - try and drop it.
+    catch {ns_db dml $db "drop function $function_name ()"}
+
     global errorInfo errorCode
     set errinfo $errorInfo
     set errcode $errorCode

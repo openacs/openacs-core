@@ -244,7 +244,8 @@ declare
         clr_keys_p      boolean default ''t'';
 begin
         if new.item_id = old.item_id and 
-           new.parent_id = old.parent_id then
+           ((new.parent_id = old.parent_id) or
+            (new.parent_id is null and old.parent_id is null)) then
 
            return new;
 

@@ -82,7 +82,8 @@ declare
         clr_keys_p      boolean default ''t'';
 begin
         if new.object_type = old.object_type and 
-           new.supertype = old.supertype then
+           ((new.supertype = old.supertype) or 
+            (new.supertype is null and old.supertype is null)) then
 
            return new;
 
