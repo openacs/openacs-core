@@ -134,7 +134,7 @@ ad_proc -public ::content::revision::new {
 	    db_dml update_lob_attribute {} -clobs [list $lob_value]
 	}
     }
-ns_log notice "
+ns_log debug "
 DB --------------------------------------------------------------------------------
 DB DAVE debugging /var/lib/aolserver/openacs-5-1/packages/acs-content-repository/tcl/content-revision-procs.tcl
 DB --------------------------------------------------------------------------------
