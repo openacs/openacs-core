@@ -1,5 +1,5 @@
 --
--- The Notifications Package
+-- The Notifications
 --
 -- @author Ben Adida (ben@openforce.net)
 -- @version $Id$
@@ -155,6 +155,9 @@ create table notifications (
     -- this is to allow responses to notifications
     response_id                     constraint notif_reponse_id_fk
                                     references acs_objects (object_id),
+    notif_user                      integer
+                                    constraint notif_user_id_fk
+                                    references users(user_id),
     notif_subject                   varchar(1000),
     notif_text                      clob,
     notif_html                      clob

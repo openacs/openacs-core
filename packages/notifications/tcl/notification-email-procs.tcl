@@ -81,24 +81,44 @@ namespace eval notification::email {
     }
 
     ad_proc -public send {
+        from_user_id
         to_user_id
         reply_object_id
         notification_type_id
         subject
         content
     } {
-        Send the actual email
+        Send the actual email.
+
+        @param from_user_id The user_id of the user that the email should be sent as. Leave empty for the standard mailer from address.
     } {
         # Get email
         set email [cc_email_from_party $to_user_id]
 
-       append content "\nGetting too much email? Manage your notifications at: [manage_notifications_url]"
+        append content "\nGetting too much email? Manage your notifications at: [manage_notifications_url]"
+
+        set extra_headers [ns_set new]
+        
+        if { ![empty_string_p $from_user_id] && [db_0or1row get_person {}]} {
+            set from_email "\"$first_names $last_name\" <[cc_email_from_party $from_user_id]>"
+
+            # Set the Reply-To and Mail-Followup-To addresses to the
+            # address of the notifications handler.
+            set reply_to [reply_address -object_id $reply_object_id -type_id $notification_type_id]
+            ns_set put $extra_headers Reply-To $reply_to
+            ns_set put $extra_headers Mail-Followup-To $reply_to
+        } else {
+            set from_email [reply_address -object_id $reply_object_id -type_id $notification_type_id]
+        }
+
+        ns_set put $extra_headers Precedence list
 
         acs_mail_lite::send \
             -to_addr $email \
-            -from_addr [reply_address -object_id $reply_object_id -type_id $notification_type_id] \
+            -from_addr $from_email \
             -subject $subject \
-            -body $content
+            -body $content \
+            -extraheaders $extra_headers
     }
 
     ad_proc -private load_qmail_mail_queue {

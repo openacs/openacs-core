@@ -32,7 +32,8 @@
                     notification_requests.delivery_method_id,
                     notification_requests.request_id,
                     notifications.response_id,
-                    notifications.notif_date
+                    notifications.notif_date,
+                    notifications.notif_user
                   from notifications, notification_requests
                   where notifications.type_id = notification_requests.type_id
                     and notifications.object_id = notification_requests.object_id
