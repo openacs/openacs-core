@@ -9,5 +9,8 @@
   </if>
   <li><a href="@acs_api_browser_url@">API Browser</a>
   <li><a href="@acs_core_docs_url@">Documentation</a>
+  <if @acs_developer_support_url@ not nil>
+    <li><a href="@acs_developer_support_url@">Developer Support</a>
+  </if>
 </ul>
 <p>
