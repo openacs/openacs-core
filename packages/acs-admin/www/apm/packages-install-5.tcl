@@ -7,6 +7,8 @@ ad_page_contract {
     @cvs-id $Id$
 }
 
+# This page cannot be templated, because it needs to make AOLserver exit after serving the page.
+
 ReturnHeaders
 ns_write "[apm_header  "Server Restart"]
 
@@ -16,7 +18,15 @@ ns_write "[apm_header  "Server Restart"]
 </p>
 
 <p>
-  <a href=\"/acs-admin/apm\">Return to the APM index page</a>
+  Please wait for your server to get back up, then ...
+</p>
+
+<p>
+  <b>&raquo;</b> <a href=\"/acs-admin/apm\">Return to the APM index page</a>
+</p>
+
+<p>
+  <b>&raquo;</b> <a href=\"/admin/site-map/\">Visit the site-map on the main site to mount your packages</a>.
 </p>
 
 [ad_footer]
