@@ -528,7 +528,12 @@ ad_proc -private apm_package_install {
 	apm_callback_and_log -severity Error $callback "<p>Failed to install $version(package-name), version $version(name).  The following error was generated:
 <pre><blockquote>
 [ad_quotehtml $errmsg]
-</blockquote></pre>"
+</blockquote></pre>
+
+<p>
+<b><font color=\"red\">NOTE:</font></b> If the error comes from a sql script you may try to source it manually. When you are done with that you should revisit the APM and try again but remember to leave the manually souced sql scipts unchecked on the previous page. 
+</p>
+"
 	return 0
     }
 

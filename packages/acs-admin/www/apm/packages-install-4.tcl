@@ -84,6 +84,9 @@ foreach pkg_info $pkg_install_list {
         # Installation of the package failed and we shouldn't continue with installation
         # as there might be packages depending on the failed package. Ideally we should
         # probably check for such dependencies and continue if there are none.
+        ns_write "</ul>
+[ad_footer]"
+
         ad_script_abort
     }
 
