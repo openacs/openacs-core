@@ -14,13 +14,13 @@ ad_page_contract {
 
 set user_id [ad_maybe_redirect_for_registration]
 
+set context "Permissions"
+
 if {![exists_and_not_null root]} { 
     set root [ad_conn package_id]
 }
 
 db_multirow objects adminable_objects { *SQL* }
-
-set context "Permissions"
 
 set security_context_root [acs_magic_object security_context_root]
 set default_context [acs_magic_object default_context]
