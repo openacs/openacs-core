@@ -468,7 +468,7 @@ ad_proc -public template::adp_array_variable_regexp {} {
   @author Peter Marklund (peter@collaboraid.biz)
   @creation-date 25 October 2002
 } {
-  return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:]+)@}
+  return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:\.]+)@}
 }
 
 ad_proc -public template::adp_array_variable_regexp_noquote {} {
@@ -477,7 +477,7 @@ ad_proc -public template::adp_array_variable_regexp_noquote {} {
   @author Dirk Gomez (openacs@dirkgomez.de)
   @creation-date 12 February 2003
 } {
-  return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:]+);noquote@}
+  return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:\.]+);noquote@}
 }
 
 ad_proc -public template::adp_variable_regexp {} {
