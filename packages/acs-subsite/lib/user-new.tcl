@@ -63,29 +63,6 @@ if { [exists_and_not_null rel_group_id] } {
     }
 }
 
-ad_form -extend -name register -form {
-    {organization:text
-        {label "Organization"}
-        {html "size 30"}
-    }
-    {institution_short_name:text,optional
-        {label "Short Name"}
-        {html {size 30}}
-    }
-    {position:text
-        {label "Position"}
-        {html {size 50}}
-    }
-    {responsibilities:text,optional
-        {label "Responsibilities"}
-        {html {size 50}}
-    }
-    {role:text(select)
-        {label "Role"}
-        {options {{Academic academic} {Corporate corporate} {Student student} {Staff staff} {Other other}}}
-    }
-}
-
 ad_form -extend -name register -on_request {
     # Populate elements from local variables
 
