@@ -58,7 +58,7 @@ create function notification_delivery_method__new (integer, integer, varchar, va
 returns integer as '
 declare
     p_delivery_method_id            alias for $1;
-    p_sc_impl_id		    alias for $2;
+    p_sc_impl_id                    alias for $2;
     p_short_name                    alias for $3;
     p_pretty_name                   alias for $4;
     p_creation_date                 alias for $5;
@@ -90,10 +90,10 @@ end;
 create function notification_delivery_method__delete(integer)
 returns integer as '
 DECLARE
-	p_delivery_method_id		alias for $1;
+        p_delivery_method_id            alias for $1;
 BEGIN
-	perform acs_object__delete(p_delivery_method_id);
-	return 0;
+        perform acs_object__delete(p_delivery_method_id);
+        return 0;
 END;
 ' language 'plpgsql';
 
@@ -109,24 +109,24 @@ select define_function_args ('notification_type__delete','type_id');
 create function notification_type__new (integer,integer,varchar,varchar,varchar,timestamp,integer,varchar,integer)
 returns integer as '
 DECLARE
-	p_type_id			alias for $1;
+        p_type_id                       alias for $1;
         p_sc_impl_id                    alias for $2;
-	p_short_name			alias for $3;
-	p_pretty_name			alias for $4;
-	p_description			alias for $5;
-	p_creation_date			alias for $6;
-	p_creation_user			alias for $7;
-	p_creation_ip			alias for $8;
-	p_context_id			alias for $9;
-	v_type_id			integer;
+        p_short_name                    alias for $3;
+        p_pretty_name                   alias for $4;
+        p_description                   alias for $5;
+        p_creation_date                 alias for $6;
+        p_creation_user                 alias for $7;
+        p_creation_ip                   alias for $8;
+        p_context_id                    alias for $9;
+        v_type_id                       integer;
 BEGIN
-	v_type_id:= acs_object__new (
-				    p_type_id,
-				    ''notification_type'',
-				    p_creation_date,
-				    p_creation_user,
-				    p_creation_ip,
-				    p_context_id);
+        v_type_id:= acs_object__new (
+                                    p_type_id,
+                                    ''notification_type'',
+                                    p_creation_date,
+                                    p_creation_user,
+                                    p_creation_ip,
+                                    p_context_id);
 
       insert into notification_types
       (type_id, sc_impl_id, short_name, pretty_name, description) values
@@ -150,30 +150,30 @@ end;
 
 select define_function_args ('notification_request__new','request_id,object_type;notification_request,type_id,user_id,object_id,interval_id,delivery_method_id,format,creation_date,creation_user,creation_ip,context_id');
 
-create function notification_request__new (integer,varchar,integer,integer,integer,integer,varchar,timestamp,integer,varchar,integer)
+create function notification_request__new (integer,varchar,integer,integer,integer,integer,integer,varchar,timestamp,integer,varchar,integer)
 returns integer as '
 DECLARE
-	p_request_id				alias for $1;
-	p_object_type				alias for $2;
-	p_type_id				alias for $3;
-	p_user_id				alias for $4;
-	p_object_id				alias for $5;
-	p_interval_id				alias for $6;
-	p_delivery_method_id			alias for $7;
-	p_format				alias for $8;
-	p_creation_date				alias for $9;
-	p_creation_user				alias for $10;
-	p_creation_ip				alias for $11;
-	p_context_id				alias for $12;
-	v_request_id				integer;
+        p_request_id                            alias for $1;
+        p_object_type                           alias for $2;
+        p_type_id                               alias for $3;
+        p_user_id                               alias for $4;
+        p_object_id                             alias for $5;
+        p_interval_id                           alias for $6;
+        p_delivery_method_id                    alias for $7;
+        p_format                                alias for $8;
+        p_creation_date                         alias for $9;
+        p_creation_user                         alias for $10;
+        p_creation_ip                           alias for $11;
+        p_context_id                            alias for $12;
+        v_request_id                            integer;
 BEGIN
-	v_request_id:= acs_object__new (
-				       p_request_id,
-				       p_object_type,
-				       p_creation_date,
-				       p_creation_user,
-				       p_creation_ip,
-				       p_context_id);
+        v_request_id:= acs_object__new (
+                                       p_request_id,
+                                       p_object_type,
+                                       p_creation_date,
+                                       p_creation_user,
+                                       p_creation_ip,
+                                       p_context_id);
 
       insert into notification_requests
       (request_id, type_id, user_id, object_id, interval_id, delivery_method_id, format) values

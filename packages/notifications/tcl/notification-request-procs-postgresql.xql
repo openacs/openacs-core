@@ -9,4 +9,10 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="notification::request::delete_all.delete_all_requests">
+        <querytext>
+            select notification_request__delete_all(:object_id);
+        </querytext>
+    </fullquery>
+
 </queryset>
