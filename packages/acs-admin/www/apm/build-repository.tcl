@@ -23,13 +23,14 @@ set repository_url "http://openacs.org/repository/"
 set channel_index_template "/packages/acs-admin/www/apm/repository-channel-index"
 set index_template "/packages/acs-admin/www/apm/repository-index"
 
-set exclude_package_list { cms cms-news-demo glossary site-wide-search spam library }
-
+# this shouldn't be necessary because I removed the openacs-5-0-compat tags
+# from these packages
+#set exclude_package_list { cms cms-news-demo glossary site-wide-search spam library }
+set exclude_package_list {}
 set head_channel "5-1"
 
 # Set this to 1 to only checkout sample packages -- useful for debugging and testing
 set debug_p 0
-
 
 #----------------------------------------------------------------------
 # Prepare output
@@ -37,7 +38,7 @@ set debug_p 0
 
 ReturnHeaders
 ns_write [ad_header "Building repository"]
-ns_write "<h1>Building OpenACS Package Repository</h1><hr>"
+ns_write "<h1>Building Package Repository</h1><hr>"
 ns_write <ul>
 
 #----------------------------------------------------------------------
@@ -124,6 +125,7 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
         set checkout_list [list \
                                $work_dir $cvs_root openacs-4/packages/acs-kernel \
                                $work_dir $cvs_root openacs-4/contrib/packages/bcms \
+                               $work_dir $cvs_root openacs-4/packages/spam \
                                ${work_dir}dotlrn/packages/ $dotlrn_cvs_root dotlrn]
     } else {
         # Full list for real use
@@ -136,9 +138,13 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
     foreach { cur_work_dir cur_cvs_root cur_module } $checkout_list {
         cd $cur_work_dir
         if { ![string equal $channel_tag($channel) HEAD] } {
+            ns_write "<li>Checking out $cur_module from CVS:"
             catch { exec $cvs_command -d $cur_cvs_root -z3 co -r $channel_tag($channel) $cur_module } output
+            ns_write " [llength $output] files\n"
         } else {
+            ns_write "<li>Checking out $cur_module from CVS:"
             catch { exec $cvs_command -d $cur_cvs_root -z3 co $cur_module } output
+            ns_write " [llength $output] files\n"
         }
     }
     cd $work_dir
@@ -254,6 +260,9 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
 
     ns_write "<li>Writing $channel index page to ${channel_dir}index.html"
     set fw [open "${channel_dir}index.html" w]
+
+    # sort by package name
+    set packages [lsort $packages]
     puts $fw [ad_parse_template -params [list channel packages] -- $channel_index_template]
     close $fw
 
@@ -279,7 +288,7 @@ set work_repository_dirname "${work_dir}repository"
 set repository_dirname [string range $repository_dir 0 end-1]
 set repository_bak "[string range $repository_dir 0 end-1].bak"
 
-ns_write "<li>Moving work repository $work_repository_dirname to live repository dir at $repository_dir\n"
+ns_write "<li>Moving work repository $work_repository_dirname to live repository dir at <a href=\"/repository\/>$repository_dir</a>\n"
 
 if { [file exists $repository_bak] } {
     file delete -force $repository_bak
