@@ -18,7 +18,7 @@ ad_page_contract {
 } -validate {
     rel_type_valid_p {
 	if {![relation_type_is_valid_to_group_p -group_id $group_id $rel_type]} {
-	    ad_complain "Cannot join this group."
+	    ad_complain "[_ acs-subsite.lt_Cannot_join_this_grou]"
 	}
     }
 }
@@ -31,14 +31,14 @@ db_1row group_info {
 }
 
 if {[string equal $join_policy closed]} {
-    ad_complain "Cannot join this group."
+    ad_complain "[_ acs-subsite.lt_Cannot_join_this_grou]"
 }
 
 set export_var_list [list group_id rel_type return_url]
 
 set party_id [ad_conn user_id]
 
-set context [list "Join $group_name"]
+set context [list "[_ acs-subsite.Join_group_name]"]
 
 template::form create join
 
@@ -91,7 +91,7 @@ if {$just_do_it_p || [template::form is_valid join]} {
 	    set required_seg [template::multirow get required_segments $rownum]
 	    
 	    if {[string equal $required_segments(join_policy) closed]} {
-		ad_complain "Cannot join this group."
+		ad_complain "[_ acs-subsite.lt_Cannot_join_this_grou]"
 		return
 	    }
 	    
@@ -122,7 +122,7 @@ if {$just_do_it_p || [template::form is_valid join]} {
 	}
 	
     } on_error {
-	ad_return_error "Error creating the relation" "We got the following error message while trying to create this relation: <pre>$errmsg</pre>"
+	ad_return_error "[_ acs-subsite.lt_Error_creating_the_re]" "[_ acs-subsite.lt_We_got_the_following_] <pre>$errmsg</pre>"
 	ad_script_abort
     }
 

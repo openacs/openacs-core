@@ -1,8 +1,7 @@
 <master>
-<property name=title>Check Your Inbox</property>
+<property name=title>#acs-subsite.Check_Your_Inbox#</property>
 
-Please check your inbox. Within the next few minutes, you should find
-a message from @system_owner@ containing your password.
+#acs-subsite.lt_Please_check_your_inb#
 
 <br />
 
@@ -14,21 +13,20 @@ a message from @system_owner@ containing your password.
     <input type="hidden" name="user_id" value="@user_id@" />
     <input type="hidden" name="email" value="@email@" />
 
-    for future reference, please type in a question and an answer to use as
-    verification.
+    #acs-subsite.lt_for_future_reference_#
 
     <br /><br />
 
-    question: <input type="text" name="question" size="40" /><br />
-    answer: <input type="text" name="answer" size="40" /><br />
+    #acs-subsite.question# <input type="text" name="question" size="40" /><br />
+    #acs-subsite.answer# <input type="text" name="answer" size="40" /><br />
 
-    <input type="submit" value="Customize Question" />
+    <input type="submit" value="#acs-subsite.Customize_Question#" />
   </form>
 
 </if>
 <else>
 
-  Then come back to <a href="index?email=@email@">the login page</a> and use
-  @system_name@.
+  #acs-subsite.lt_Then_come_back_to_a_h#
 
 </else>
+

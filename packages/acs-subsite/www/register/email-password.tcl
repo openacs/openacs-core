@@ -12,7 +12,7 @@ ad_page_contract {
 }
 
 if {![ad_parameter EmailForgottenPasswordP security 1]} {
-    ad_return_error "Feature disabled" "This feature is disabled on this server."
+    ad_return_error "[_ acs-subsite.Feature_disabled]" "[_ acs-subsite.lt_This_feature_is_disab]"
     return
 }
 

@@ -22,13 +22,13 @@ ad_page_contract {
 }
 
 if {![ad_parameter EmailForgottenPasswordP security 1]} {
-    ad_return_error "Feature disabled" "This feature is disabled on this server."
+    ad_return_error "[_ acs-subsite.Feature_disabled]" "[_ acs-subsite.lt_This_feature_is_disab]"
     return
 }
 
 if {![db_0or1row select_email {}]} {
     db_release_unused_handles
-    ad_return_error "Couldn't find user $user_id" "Couldn't find user $user_id. This is probably a bug in our code."
+    ad_return_error "[_ acs-subsite.lt_Couldnt_find_user_use]" "[_ acs-subsite.lt_Couldnt_find_user_use_1]"
     return
 }
 
@@ -51,8 +51,8 @@ if {!$validated_p} {
 
 if {!$validated_p} {
     ad_return_error \
-        "Unauthorized Access" \
-        "The validation didn't match what we had. Either press back on the browser and retype it in, or <a href=\"/register\">go back to the login page</a>."
+        "[_ acs-subsite.Unauthorized_Access]" \
+        "[_ acs-subsite.lt_The_validation_didnt_]"
     return
 }
 
@@ -64,28 +64,25 @@ ad_change_password $user_id $password
 
 set system_owner [ad_system_owner]
 set system_name [ad_system_name]
+set reset_password_url "[ad_url]/user/password-update?[export_vars {user_id {password_old $password}}]" 
 
-set subject "Your forgotten password on $system_name"
-set body "Please follow the following link to reset your password:
-
-[ad_url]/user/password-update?[export_vars {user_id {password_old $password}}]
-
-"
+set subject "[_ acs-subsite.lt_Your_forgotten_passwo]"
+set body "[_ acs-subsite.lt_Please_follow_the_fol]"
 
 # Send email
 if [catch {ns_sendmail $email $system_owner $subject $body} errmsg] {
     ad_return_error \
-        "Error sending mail" \
-        "Now we're really in trouble because we got this error:
+        "[_ acs-subsite.Error_sending_mail]" \
+        "[_ acs-subsite.lt_Now_were_really_in_tr]
 <blockquote>
   <pre>
     $errmsg
   </pre>
 </blockquote>
-when trying to send you the following email:
+[_ acs-subsite.lt_when_trying_to_send_y]
 <blockquote>
   <pre>
-Subject: $subject
+[_ acs-subsite.Subject] $subject
 
 $body
   </pre>

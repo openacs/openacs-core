@@ -1,8 +1,8 @@
 <master>
-<property name="title">Awaiting email verification</property>
+<property name="title">#acs-subsite.lt_Awaiting_email_verifi#</property>
 
-<p>Registration information for this service has just been
-sent to @email@.</p>
-<p>Please read and follow the instructions in this email.</p>
+<p>#acs-subsite.lt_Registration_informat#</p>
+<p>#acs-subsite.lt_Please_read_and_follo#</p>
+
 
 

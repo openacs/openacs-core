@@ -16,4 +16,6 @@ set email_forgotten_password_p [ad_parameter EmailForgottenPasswordP security 1]
 
 set system_name [ad_system_name]
 
+set email_password_url "email-password?user_id=$user_id"
+
 ad_return_template

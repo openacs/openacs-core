@@ -11,19 +11,20 @@ ad_page_contract {
 
 ad_require_permission $object_id admin
 
+# The object name is used in various localized messages below
 set name [db_string name {select acs_object.name(:object_id) from dual}]
 
-doc_body_append "[ad_header "Grant Permission on $name"]
+doc_body_append "[ad_header "[_ acs-subsite.lt_Grant_Permission_on_n]"]
 
-<h2>Grant Permission on $name</h2>
+<h2>[_ acs-subsite.lt_Grant_Permission_on_n]</h2>
 
-[ad_context_bar [list ./?[export_url_vars object_id] "Permissions for $name"] "Grant"]
+[ad_context_bar [list ./?[export_url_vars object_id] "[_ acs-subsite.Permissions_for_name]"] "[_ acs-subsite.Grant]"]
 <hr>
 
 <form method=get action=grant-2>
 [export_form_vars object_id]
 
-<input type=submit value=Grant>
+<input type=submit value=\"[_ acs-subsite.Grant]\">
 
 <select name=privilege>
 "
@@ -37,7 +38,7 @@ db_foreach privileges {
 
 doc_body_append "
 </select>
-on $name to
+[_ acs-subsite.on] $name [_ acs-subsite.to]
 <select name=party_id>
 "
 

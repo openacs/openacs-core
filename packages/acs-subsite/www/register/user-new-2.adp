@@ -3,26 +3,23 @@
 
 <if @email_verified_p@ eq f>
 
-<h2>Please read your email</h2>
+<h2>#acs-subsite.lt_Please_read_your_emai#</h2>
 
 <p>
-Registration information for this service has been
-sent to @email@.
+#acs-subsite.lt_Registration_informat_1#
 </p>
 <p>
-Please read and follow the instructions in this email.
+#acs-subsite.lt_Please_read_and_follo#
 </p>
 
 </if>
 <else>
 
-<h2>Awaiting Approval</h2>
+<h2>#acs-subsite.Awaiting_Approval#</h2>
 
 <hr>
 
-Your registration is in the database now.  A site administrator has
-been notified of your request to use the system.  Once you're
-approved, you'll get an email message and you can return to
-@site_link@ to use the service.
+#acs-subsite.lt_Your_registration_is_#
 
 </else>
+

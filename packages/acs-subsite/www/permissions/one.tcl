@@ -16,14 +16,14 @@ set user_id [ad_maybe_redirect_for_registration]
 
 set name [db_string name {select acs_object.name(:object_id) from dual}]
 
-doc_body_append "[ad_header "Permissions for $name"]
+doc_body_append "[ad_header [_ acs-subsite.Permissions_for_name]]
 
-<h2>Permissions for $name</h2>
+<h2>[_ acs-subsite.Permissions_for_name]</h2>
 
-[ad_context_bar [list "./" "Permissions"] "Permissions for $name"]
+[ad_context_bar [list "./" [_ acs-subsite.Permissions]] [_ acs-subsite.Permissions_for_name]]
 <hr>
 
-<h3>Inherited Permissions</h3>
+<h3>[_ acs-subsite.lt_Inherited_Permissions]</h3>
 
 <ul>
 "
@@ -44,7 +44,7 @@ db_foreach inherited_permissions {
 } {
   doc_body_append "  <li>$grantee_name, $privilege</li>\n"
 } if_no_rows {
-  doc_body_append "  <li>(none)</li>\n"
+  doc_body_append "  <li>([_ acs-subsite.none])</li>\n"
 }
 
 doc_body_append "
@@ -54,7 +54,7 @@ doc_body_append "
 
 [export_form_vars object_id]
 
-<h3>Direct Permissions</h3>
+<h3>[_ acs-subsite.Direct_Permissions]</h3>
 
 <ul>
 "
@@ -67,12 +67,12 @@ db_foreach acl {
 } {
   doc_body_append "  <li>$grantee_name, $privilege (<font size=-1><input type=checkbox name=revoke_list value=\"$grantee_id $privilege\"></font>)</li>\n"
 } if_no_rows {
-  doc_body_append "  <li>(none)</li>\n"
+  doc_body_append "  <li>([_ acs-subsite.none])</li>\n"
 }
 
 set controls [list]
 
-lappend controls "<a href=grant?[export_url_vars object_id]>Grant Permission</a>"
+lappend controls "<a href=grant?[export_url_vars object_id]>[_ acs-subsite.Grant_Permission]</a>"
 
 set context [db_string context {
   select acs_object.name(context_id)
@@ -89,9 +89,9 @@ if {![empty_string_p $context]} {
 
 
   if {$security_inherit_p == "t"} {
-    lappend controls "<a href=toggle-inherit?[export_url_vars object_id]>Don't Inherit Permissions from $context</a>"
+    lappend controls "<a href=toggle-inherit?[export_url_vars object_id]>[_ acs-subsite.lt_Dont_Inherit_Permissi]</a>"
   } else {
-    lappend controls "<a href=toggle-inherit?[export_url_vars object_id]>Inherit Permissions from $context</a>"
+    lappend controls "<a href=toggle-inherit?[export_url_vars object_id]>[_ acs-subsite.lt_Inherit_Permissions_f]</a>"
   }
 }
 
@@ -104,11 +104,11 @@ doc_body_append "
 
 </blockquote>
 
-<input type=submit value=\"Revoke Checked\">
+<input type=submit value=\"[_ acs-subsite.Revoke_Checked]\">
 
 </form>"
 
-doc_body_append "<h3>Children</h3>
+doc_body_append "<h3>[_ acs-subsite.Children]</h3>
 <blockquote>"
 
 if [string equal $children_p "t"] {
@@ -127,7 +127,7 @@ if [string equal $children_p "t"] {
     } {
 	doc_body_append "  <li><a href=one?object_id=$c_object_id>$c_name</a></li>\n"
     } if_no_rows {
-	doc_body_append "  <em>(none)</em>\n"
+	doc_body_append "  <em>([_ acs-subsite.none])</em>\n"
     }
 
     doc_body_append "</ul>"
@@ -145,9 +145,9 @@ if [string equal $children_p "t"] {
     }
 
     set children_p "t"
-    doc_body_append "<em>$num_children Children Hidden</em> "
+    doc_body_append "<em>[_ acs-subsite.lt_num_children_Children]</em> "
     if {$num_children > 0} {
-	doc_body_append "\[<a href=\"one?[export_url_vars object_id children_p]\">Show</a>\] "
+	doc_body_append "\[<a href=\"one?[export_url_vars object_id children_p]\">[_ acs-subsite.Show]</a>\] "
     }
 }
 

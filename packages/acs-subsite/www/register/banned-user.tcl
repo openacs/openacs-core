@@ -13,16 +13,16 @@ if { ![db_0or1row register_banned_member_state {
     select member_state from cc_users 
     where user_id = :user_id }
       ]} {
-    ad_return_error "Couldn't find your record" "User id $user_id is not in the database.  This is probably our programming bug."
+    ad_return_error "[_ acs-subsite.lt_Couldnt_find_your_rec_1]"
     return
 }
 
 if { ![string equal $member_state "banned"] } {
-    ad_return_error "Problem with user authentication" "You have encountered a problem with authentication."
+    ad_return_error "[_ acs-subsite.lt_Problem_with_user_aut]" "[_ acs-subsite.lt_You_have_encountered_]"
     return
 }
 
-# User is truely banned
+# User is truly banned
 db_release_unused_handles
 
 set system_name [ad_system_name]

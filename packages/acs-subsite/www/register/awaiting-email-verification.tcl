@@ -15,7 +15,7 @@ if {![db_0or1row register_user_state_properties {
     where user_id = :user_id and
     email_verified_p = 'f' }]} { 
     ns_log Notice "Couldn't find $user_id in /register/awaiting-email-verification"
-    ad_return_error "Couldn't find your record" "User id $user_id is not found in the need email verification state."
+    ad_return_error "[_ acs-subsite.lt_Couldnt_find_your_rec]" "[_ acs-subsite.lt_User_id_user_id_is_no_1]"
     ad_script_abort
 }
 
@@ -44,5 +44,7 @@ db_release_unused_handles
 ad_return_template
 
 # Send them the mail for them to come back and activate their account
-ns_sendmail  "$email" "[ad_parameter NewRegistrationEmailAddress "security"]" "Welcome to [ad_system_name]" "To confirm your registration, please go to [ad_parameter -package_id [ad_acs_kernel_id] SystemURL]/register/email-confirm?[export_url_vars row_id]"
-
+# Variables used in the email message
+set system_name [ad_system_name]
+set confirmation_url "[ad_parameter -package_id [ad_acs_kernel_id] SystemURL]/register/email-confirm?[export_url_vars row_id]"
+ns_sendmail  "$email" "[ad_parameter NewRegistrationEmailAddress "security"]" "[_ acs-subsite.lt_Welcome_to_system_nam]" "[_ acs-subsite.lt_To_confirm_your_regis]"

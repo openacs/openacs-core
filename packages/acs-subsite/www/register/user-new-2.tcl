@@ -29,12 +29,12 @@ set exception_text ""
 
 if {[info exists first_names] && [string first "<" $first_names] != -1} {
     incr exception_count
-    append exception_text "<li> You can't have a &lt; in your first name because it will look like an HTML tag and confuse other users."
+    append exception_text "<li> [_ acs-subsite.lt_You_cant_have_a_lt_in]"
 }
 
 if {[info exists last_name] && [string first "<" $last_name] != -1} {
     incr exception_count
-    append exception_text "<li> You can't have a &lt; in your last name because it will look like an HTML tag and confuse other users."
+    append exception_text "<li> [_ acs-subsite.lt_You_cant_have_a_lt_in_1]"
 }
 
 if { [info exists url] && [string compare $url "http://"] == 0 } {
@@ -43,17 +43,11 @@ if { [info exists url] && [string compare $url "http://"] == 0 } {
 } elseif { ![util_url_valid_p $url] } {
     # there is a URL but it doesn't match our REGEXP
     incr exception_count
-    append exception_text "<li>You URL doesn't have the correct form.  A valid URL would be something like \"http://photo.net/philg/\"."
-}
-
-if {[ad_parameter RegistrationProvidesRandomPasswordP security 0]} {
-    set password [ad_generate_random_string]
-} elseif { ![info exists password] || [empty_string_p $password] } {
-    incr exception_count
-    append exception_text "<li>You haven't provided a password.\n"
+    set valid_url_example "http://photo.net/philg/"
+    append exception_text "<li>[_ acs-subsite.lt_Your_URL_doesnt_have_]\n"
 } elseif { [string compare $password $password_confirmation] } {
     incr exception_count
-    append exception_text "<li>The passwords you've entered don't match.\n"
+    append exception_text "<li>[_ acs-subsite.lt_The_passwords_youve_e]\n"
 }
 
 # We've checked everything.
@@ -85,7 +79,7 @@ if { [db_string user_exists "select count(*) from registered_users where user_id
 } else {
     set user_id [ad_user_new $email $first_names $last_name $password $question $answer $url $email_verified_p $member_state $user_id]
     if { !$user_id } {
-	ad_return_error "User Creation Failed" "We were unable to create your user record in the database."
+	ad_return_error "[_ acs-subsite.User_Creation_Failed]" "[_ acs-subsite.lt_We_were_unable_to_cre]"
         ad_script_abort
     }
 
@@ -112,7 +106,7 @@ if { $member_state == "approved" && $email_verified_p == "t"} {
     # so don't give an auth cookie, but instead tell him 
     # to read your email
 
-    set title "Please read your email"
+    set title "[_ acs-subsite.lt_Please_read_your_emai]"
 
     ad_return_template
 } elseif { $member_state == "needs approval" } {
@@ -121,7 +115,7 @@ if { $member_state == "approved" && $email_verified_p == "t"} {
     # approved him, so don't give an auth cookie, but instead tell him 
     # to wait
 
-    set title "Awaiting Approval"
+    set title "[_ acs-subsite.Awaiting_Approval]"
     set site_link [ad_site_home_link]
 
     ad_return_template
@@ -129,6 +123,10 @@ if { $member_state == "approved" && $email_verified_p == "t"} {
 
 set notification_address [ad_parameter NewRegistrationEmailAddress "security" [ad_system_owner]]
 set errmsg {}
+
+# Variables needed in various messages to the user below
+set system_name [ad_system_name]
+set system_url [ad_url]
 
 if { !$double_click_p } {
     
@@ -141,11 +139,7 @@ if { !$double_click_p } {
 	
     } elseif { [ad_parameter RegistrationProvidesRandomPasswordP "security" 0] ||  [ad_parameter EmailRegistrationConfirmationToUserP "security" 0] } {
 	with_catch errmsg {
-	    ns_sendmail $email $notification_address "Thank you for visiting [ad_system_name]" "Here's how you can log in at [ad_url]:
-	    
-Username:  $email
-Password:  $password
-"
+	    ns_sendmail $email $notification_address "[_ acs-subsite.lt_Thank_you_for_visitin]"
 	} {
 	    ns_returnerror "error" "$error"
 	    ns_log Warning "Error sending registration confirmation to $email in user-new-2"
@@ -154,11 +148,9 @@ Password:  $password
 
     if {[ad_parameter NotifyAdminOfNewRegistrationsP "security" 0]} {
         # we're supposed to notify the administrator when someone new registers
-        ns_sendmail $notification_address $email "New registration at [ad_url]" "
-$first_names $last_name ($email) registered as a user of 
-[ad_url]
+        ns_sendmail $notification_address $email "[_ acs-subsite.lt_New_registration_at_s]" "[_ acs-subsite.lt_first_names_last_name]
 $errmsg
-"
+#>"
     }
 }
 

@@ -17,17 +17,17 @@ ad_page_contract {
 }
 
 if {![db_0or1row select_person_name {}]} {
-    ad_return_error "Couldn't find user $user_id" "Couldn't find user $user_id. This is probably a bug in our code."
+    ad_return_error "[_ acs-subsite.lt_Couldnt_find_user_use]" "[_ acs-subsite.lt_Couldnt_find_user_use_1]"
     return
 }
 
 if {![string equal -nocase $first_names $db_first_names] && ![string equal -nocase $last_name $db_last_name]} {
-    ad_return_error "Validation Check Failed" "The full name given didn't match. There must be something wrong."
+    ad_return_error "[_ acs-subsite.lt_Validation_Check_Fail]" "[_ acs-subsite.lt_The_full_name_given_d]"
     return
 }
 
 if {![empty_string_p $password_question]} {
-    ad_return_error "Customized question already there" "Customized question is already entered"
+    ad_return_error "[_ acs-subsite.lt_Customized_question_a]" "[_ acs-subsite.lt_Customized_question_i]"
     return
 }
 

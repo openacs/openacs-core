@@ -1,16 +1,17 @@
 <master>
-<property name=title>Login Expired</property>
+<property name=title>#acs-subsite.Login_Expired#</property>
 
-<p>The login page has expired. Please <a href="./index?">login</a> again.</p>
+<p>#acs-subsite.Login_Expired_1# <a href="./index?">#acs-subsite.login#</a> #acs-subsite.again#.</p>
 
 <table cellpadding=5 cellspacing=1 border=1>
   <tr>
-    <td bgcolor="#ffffcc"><strong>Note:</strong> For security reasons, the login page expires
-    after a certain interval to prevent malicious attackers from
-    logging in as you using previously entered passwords.
+    <td bgcolor="#ffffcc"><strong>#acs-subsite.Note#</strong> #acs-subsite.lt_For_security_reasons_#
     </td>
   </tr>
 </table>
+
+
+
 
 
 

@@ -1,22 +1,21 @@
 <master>
-<property name="title">Your Account is Restored</property>
+<property name="title">#acs-subsite.lt_Your_Account_is_Resto#</property>
 
 
-<p>Your Account at @site_link@ is restored.</p>
+<p>#acs-subsite.lt_Your_Account_at_site_#</p>
 
-<p>You can log in now using your old
-password:
+<p>#acs-subsite.lt_You_can_log_in_now_us#
 
 <form action="user-login" method="post">
 @export_vars@
-Password:  <input type="password" name="password" size="20" />
-<input type="submit" value="Login" />
+#acs-subsite.Password#  <input type="password" name="password" size="20" />
+<input type="submit" value="#acs-subsite.Login#" />
 </form>
 </p>
 
 <p>
-Note: If you've forgotten your password, <a href="email-password.tcl?user_id=@user_id@">ask this server to email it
-to @email@</a>.
+#acs-subsite.lt_Note_If_youve_forgott#</a>.
 </p>
+
 
 

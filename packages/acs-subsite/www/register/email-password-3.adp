@@ -1,8 +1,8 @@
 <master>
-<property name="title">Customized Question/Answer Entered</property>
+<property name="title">#acs-subsite.lt_Customized_QuestionAn#</property>
 
-<p>Please Wait for our Email</p>
+<p>#acs-subsite.lt_Please_Wait_for_our_E#</p>
 
-<p>When you get your email, go back
-to <a href="index?email=@email@">the login page</a> and use
-@system_name@.</p>
+<p>#acs-subsite.lt_When_you_get_your_ema#</p>
+
+

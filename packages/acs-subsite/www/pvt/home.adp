@@ -6,65 +6,58 @@
 
 <p>
 
-<li><a href="/register/logout">Log Out</a>
+<li><a href="/register/logout">#acs-subsite.Log_Out#</a>
 
 <p>
 
-<li><a href="/user/password-update">Change my Password</a>
+<li><a href="/user/password-update">#acs-subsite.Change_my_Password#</a>
 
 
 </ul>
 
-<h3>What we tell other users about you</h3>
+<h3>#acs-subsite.lt_What_we_tell_other_us#</h3>
 
-In general we identify content that you've posted by your full name.
-In an attempt to protect you from unsolicited bulk email (spam), we
-keep your email address hidden except from other registered users.
-Total privacy is technically feasible but an important element of an
-online community is that people can learn from each other.  So we try
-to make it possible for users with common interests to contact each
-other.
+#acs-subsite.lt_In_general_we_identif#
 
 <p>
 
-If you want to check what other users of this service are shown, visit
-@member_link@
+#acs-subsite.lt_If_you_want_to_check_#
 
-<h4>Basic Information</h4>
+<h4>#acs-subsite.Basic_Information#</h4>
 
 <ul>
-<li>Name:  @full_name@</li>
-<li>email address:  @email@</li>
-<li>personal URL:  <a target=new_window href="@url@">@url@</a></li>
-<li>screen name:  @screen_name@</li>
-<li>bio: @bio@</li>
+<li>#acs-subsite.Name#  @full_name@</li>
+<li>#acs-subsite.email_address#  @email@</li>
+<li>#acs-subsite.personal_URL#  <a target=new_window href="@url@">@url@</a></li>
+<li>#acs-subsite.screen_name#  @screen_name@</li>
+<li>#acs-subsite.bio# @bio@</li>
 </ul>
-<p>(<a href="/user/basic-info-update">update</a>)</p>
+<p>(<a href="/user/basic-info-update">#acs-subsite.update#</a>)</p>
 
 
 <if @portrait_state@ eq upload>
 
-<h4>Your Portrait</h4>
-Show everyone else at @system_name@ how great looking you are:  <a href="/user/portrait/upload">upload a portrait</a>
+<h4>#acs-subsite.Your_Portrait#</h4>
+#acs-subsite.lt_Show_everyone_else_at#  <a href="/user/portrait/upload">#acs-subsite.upload_a_portrait#</a>
 
 </if>
 <if @portrait_state@ eq show>
 
-<h4>Your Portrait</h4>
-On @portrait_publish_date@, you uploaded <a href="/user/portrait/">@portrait_title@</a>.
+<h4>#acs-subsite.Your_Portrait#</h4>
+#acs-subsite.lt_On_portrait_publish_d#.
 
 </if>
 
 
 
-<h3>If you're getting too much email from us</h3>
+<h3>#acs-subsite.lt_If_youre_getting_too_#</h3>
 
-Then you should either 
+#acs-subsite.lt_Then_you_should_eithe# 
 
 <ul>
-<li><a href="alerts">edit your alerts</a></li>
+<li><a href="alerts">#acs-subsite.edit_your_alerts#</a></li>
 </ul>
-<p>or</p>
+<p>#acs-subsite.or#</p>
 <ul>
-<li><a href="unsubscribe">Unsubscribe</a> (for a period of vacation or permanently)</li>
+<li><a href="unsubscribe">#acs-subsite.Unsubscribe#</a> (#acs-subsite.lt_for_a_period_of_vacat#)</li>
 </ul>
