@@ -31,6 +31,7 @@
             <file type="tcl_procs" path="tcl/30-xml-utils-procs.tcl"/>
             <file type="tcl_procs" path="tcl/acs-kernel-procs.tcl"/>
             <file type="query_file" path="tcl/acs-kernel-procs.xql"/>
+            <file type="tcl_procs" path="tcl/openacs-kernel-procs.tcl"/>
             <file type="query_file" db_type="oracle" path="tcl/acs-permissions-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/acs-permissions-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/acs-permissions-procs.tcl"/>
