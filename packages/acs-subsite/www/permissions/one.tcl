@@ -44,14 +44,14 @@ db_multirow acl acl { *SQL* } {
 
 set controls [list]
 
-lappend controls "<a href=grant?[export_vars {application_url object_id}]>[_ acs-subsite.Grant_Permission]</a>"
+lappend controls "<a href=\"grant?[export_vars {application_url object_id}]\">[_ acs-subsite.Grant_Permission]</a>"
 
 db_1row context { *SQL* }
 
 if { $security_inherit_p == "t" && ![empty_string_p $context_id] } {
-    lappend controls "<a href=toggle-inherit?[export_vars {application_url object_id}]>Don't Inherit Permissions from $context_name</a>"
+    lappend controls "<a href=\"toggle-inherit?[export_vars {application_url object_id}]\">Don't Inherit Permissions from $context_name</a>"
 } else {
-    lappend controls "<a href=toggle-inherit?[export_vars {application_url object_id}]>Inherit Permissions from $context_name</a>"
+    lappend controls "<a href=\"toggle-inherit?[export_vars {application_url object_id}]\">Inherit Permissions from $context_name</a>"
 }
 
 set controls "\[ [join $controls " | "] \]"
