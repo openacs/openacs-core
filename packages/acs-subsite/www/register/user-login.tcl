@@ -75,7 +75,7 @@ switch $member_state {
 	ad_returnredirect "awaiting-approval?user_id=$user_id"
 	return
     }
-    "" {
+    "needs approval" {
 	ad_returnredirect "awaiting-approval?user_id=$user_id"
 	return
     }

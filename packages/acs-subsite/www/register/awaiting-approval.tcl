@@ -10,7 +10,7 @@ set bind_vars [ad_tcl_vars_to_ns_set user_id]
 
 if {![db_0or1row register_member_state_information "select member_state, email, email_verified_p, rel_id
 from cc_users where user_id = :user_id 
-and  (member_state is null or member_state = 'rejected')"]} {
+and  (member_state is null or member_state = 'rejected' or member_state = 'needs approval')"]} {
     ad_return_error "Couldn't find your record" "User id $user_id is not in the awaiting approval state.  This is probably our programming bug."
     return
 }
