@@ -15,8 +15,8 @@
 # I'm a Makefile newbie, so feel free to comment/slash/change.
 
 # Paths
-XSLTPROC=/usr/bin/xsltproc
-HTMLDOC=/usr/bin/htmldoc
+XSLTPROC=xsltproc
+HTMLDOC=htmldoc
 
 all: html 
 
@@ -24,6 +24,7 @@ XSL:
 	if [ ! -d XSL -a ! -L XSL ]; then \
 		echo -e "\n\nNo XSL directory here.  I am looking for one...\n"; \
 		for d in \
+	 		/sw/share/xml/xsl/docbook-xsl \
 			/usr/share/sgml/docbook/xsl-stylesheets-* \
 			/usr/share/sgml/docbook/xsl-stylesheets \
 			/usr/share/sgml/docbook/stylesheet/xsl/nwalsh; \
@@ -48,13 +49,13 @@ see http://sourceforge.net/projects/docbook/ for the docbook-xsl stylesheets\n";
 
 
 prelim:
-	cp -u images/*.{pdf,png,gif,jpg} ../images/
+	cp images/*.{pdf,png,gif,jpg} ../images/
 
 # put all non-regenerated html in a sub-dir so that we can delete html
 # in the main directory and regenerate
-	cp -u non-xml/*.html ../
+	cp non-xml/*.html ../
 
-	cp -u openacs.css ..
+	cp openacs.css ..
 
 html: prelim XSL
 # adding --nonet --novalid is much faster but generates a bunch of bogus error messages
