@@ -844,13 +844,15 @@ ad_proc -private apm_post_instantiation_tcl_proc_from_key { package_key } {
 }
 
 
-ad_proc -public apm_package_instance_new {
-    {-package_id 0}
-    instance_name
-    context_id
-    package_key
+ad_proc -public apm_package_create_instance {
+    {
+	-package_id 0
+    }
+    instance_name context_id package_key
 } {
+
     Creates a new instance of a package.
+
 } {
     if {$package_id == 0} {
 	set package_id [db_null]
@@ -892,7 +894,6 @@ ad_proc -public apm_package_call_post_instantiation_proc {
 	}
     }
     
-    return $package_id
 }
 
 ad_proc -public apm_package_instance_new {
@@ -914,7 +915,6 @@ ad_proc -public apm_package_instance_new {
     set package_id [apm_package_create_instance -package_id $package_id $instance_name $context_id $package_key]
     apm_package_call_post_instantiation_proc $package_id $package_key
 }
-
 
 ad_proc apm_parameter_sync {package_key package_id} {
     
