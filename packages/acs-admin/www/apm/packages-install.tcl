@@ -36,6 +36,7 @@ foreach spec_file $all_spec_files {
     set version_name $version(name)
     set package_name $version(package-name)
     set package_key $version(package.key)
+ns_log Notice "Huh? key: $version(package.key) name: $version(package-name) version: $version(name) [db_package_supports_rdbms_p $version(database_support)]"
     if { [db_package_supports_rdbms_p $version(database_support)] } {
         if { [apm_package_registered_p $package_key] } {
             if { [apm_higher_version_installed_p $package_key $version_name] } {

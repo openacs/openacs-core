@@ -129,14 +129,11 @@ set errno [catch {
     }
 
     # Load *-procs.tcl and *-init.tcl files for enabled packages.
-    ns_log Notice "Loading Tcl library files..."
     apm_load_libraries -procs
 
     # Load up the Queries (OpenACS, ben@mit.edu)
-    ns_log Notice "Loading QUERIES!! OpenACS - ben"
     apm_load_queries
 
-    ns_log Notice "Loading Tcl Initialization files..."
     apm_load_libraries -init
 
     if { ![nsv_exists rp_properties request_count] } {

@@ -28,6 +28,24 @@ ad_proc db_package_supports_rdbms_p { db_type_list } {
     if { [llength $db_type_list] == 0 || [lsearch $db_type_list [db_type]] != -1 } {
         return 1
     }
+
+    # DRB: Legacy package check - we allow installation of old aD Oracle 4.2 packages,
+    # though we don't guarantee that they work.
+
+    if { [db_type] == "oracle" && [lsearch $db_type_list "oracle-8.1.6"] != -1 } {
+        return 1
+    }
+
+    return 0
+}
+
+ad_proc db_legacy_package_p { db_type_list } {
+    Returns 1 if the package is a legacy package.  We can only tell for certain if
+    it explicitly supports Oracle 8.1.6 rather than the OpenACS more general oracle.
+} {
+    if { [lsearch $db_type_list "oracle-8.1.6"] != -1 } {
+        return 1
+    }
     return 0
 }
 
