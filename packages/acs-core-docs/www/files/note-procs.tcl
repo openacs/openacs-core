@@ -32,13 +32,14 @@ ad_proc -public mfp::note::get {
 
 ad_proc -public mfp::note::add {
     -title:required
+    -item_id:required
 } { 
     This proc adds a note.  
 } {
     db_transaction {
-	set item_id [db_exec_plsql note_insert {
-	    select content_item__new(:title,-100,null,null,null,null,null,null,'content_item','mfp_note',:title,null,null,null,null)
-	}]
+	db_exec_plsql note_insert {
+	    select content_item__new(:title,-100,:item_id,null,null,null,null,null,'content_item','mfp_note',:title,null,null,null,null)
+	}
 
 	set revision_id [db_nextval acs_object_id_seq]
 	
