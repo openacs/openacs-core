@@ -20,7 +20,6 @@ set context [list "Set the assessment for registration"]
 
 set subsite_id [ad_conn subsite_id]
 
-set package_id [apm_package_id_from_key "assessment"]
 
 set value [parameter::get -parameter AsmForRegisterId]
 
