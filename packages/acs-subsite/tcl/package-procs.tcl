@@ -840,12 +840,10 @@ ad_proc -public package_instantiate_object {
     
     #foreach row [util_memoize "package_table_columns_for_type \"$object_type\""] {
 	#set real_params([string toupper [lindex $row 1]]) 1
-  	#ns_log Notice "DOTLRN: package_instantiate_object: real_params([string toupper [lindex $row 1]]) = 1"
     #}
 
     foreach arg [util_memoize "package_plsql_args \"$object_type\""] {
 	set real_params([string toupper $arg]) 1
-	ns_log Notice "DOTLRN: package_instantiate_object: real_params([string toupper $arg]) = 1"
     }
     
     # Use pieces to generate the parameter list to the new
@@ -862,14 +860,12 @@ ad_proc -public package_instantiate_object {
 	if { ![info exists real_params([string toupper $key])] } {
 	    # The parameter is not accepted as a parameter to the
 	    # pl/sql function. Ignore it.
-	    ns_log Notice "DOTLRN: package_instantiate_object: [string toupper $key] is ignored"
 	    continue;
 	} 
 	lappend pieces [list $key]
 	set param_array([string toupper $key]) 1
 	# Set the value for binding
 	set $key $value
-	ns_log Notice "DOTLRN: package_instantiate_object: set $key to $value"
     }
 
     # Go through the extra_vars (ben - OpenACS)
@@ -881,14 +877,12 @@ ad_proc -public package_instantiate_object {
 	    if { ![info exists real_params([string toupper $key])] } {
 		# The parameter is not accepted as a parameter to the
 		# pl/sql function. Ignore it.
-		ns_log Notice "DOTLRN: package_instantiate_object: [string toupper $key] is ignored"
 		continue;
 	    } 
 	    lappend pieces [list $key]
 	    set param_array([string toupper $key]) 1
 	    # Set the value for binding
 	    set $key $value
-	    ns_log Notice "DOTLRN: package_instantiate_object: set $key to $value"
 	}
     }
 	    
@@ -897,9 +891,7 @@ ad_proc -public package_instantiate_object {
 	# Append the values from the template form for each attribute
 	foreach row [package_object_attribute_list -start_with $start_with $object_type] {
 	    set attribute [lindex $row 2]
-	    ns_log Notice "DOTLRN: package_instantiate_object: getting attribute $attribute"
 	    if { [info exists real_params([string toupper $attribute])] && ![info exists param_array([string toupper $attribute])] } {
-		ns_log Notice "DOTLRN: package_instantiate_object: $attribute is a real param, and not a param_array"
 		set param_array([string toupper $attribute]) 1
 		set $attribute [template::element::get_value $form_id "$variable_prefix$attribute"]
 
@@ -907,8 +899,6 @@ ad_proc -public package_instantiate_object {
 	    }
 	}
     }	
-
-    ns_log Notice "DOTLRN: package_instantiate_object: pieces are $pieces"
 
     set object_id [db_exec_plsql create_object "
     BEGIN
