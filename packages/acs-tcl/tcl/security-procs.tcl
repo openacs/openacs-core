@@ -42,7 +42,7 @@ ad_proc -private sec_random_token {} {
 	set start_clicks [ad_conn start_clicks]
     } else {
 	set request "yoursponsoredadvertisementhere"
-	set start_clicks "developer.arsdigita.com"
+	set start_clicks "cvs.openacs.org"
     }
     
     if { ![info exists tcl_sec_seed] } {
@@ -803,7 +803,7 @@ ad_proc -private __ad_verify_signature {
 	set hash_ok_p 1
     } else {
 	# check to see if IE is lame (and buggy!) and is expanding \n to \r\n
-	# See: http://www.arsdigita.com/bboard/q-and-a-fetch-msg?msg_id=000bfF
+	# See: http://rhea.redhat.com/bboard-archive/webdb/000bfF.html
 	set value [string map [list \r ""] $value]
 	set org_computed_hash $computed_hash
 	set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
@@ -996,9 +996,8 @@ ad_proc -private sec_get_token {
 	    set token [db_string get_token {select token from secret_tokens
                        	                 where token_id = :token_id} -default 0]
 	    db_release_unused_handles
-	    
+
 	    # Very important to throw the error here if $token == 0
-	    # see: http://www.arsdigita.com/sdm/one-ticket?ticket_id=10760
 
             if { $token == 0 } {
 	        error "Invalid token ID"

@@ -2567,7 +2567,7 @@ ad_proc -public ad_cache_returnredirect { url { persistent "f" } { excluded_vars
 # branimir 2000/04/25 ad_returnredirect and helper procs :
 #    util_complete_url_p util_absolute_path_p util_current_location
 #    util_current_directory   
-# See: http://www.arsdigita.com/bboard/q-and-a-fetch-msg.tcl?msg_id=0003eV
+# See: http://rhea.redhat.com/bboard-archive/acs_design/0003eV.html
 
 ad_proc -public ad_returnredirect {
     {-message {}}
