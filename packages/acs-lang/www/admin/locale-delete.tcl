@@ -8,15 +8,11 @@ ad_page_contract {
     @creation-date 19 march 2002
     @cvs-id $Id$
 } {
-    locales
+    locale
 } -properties {
 }
 
-# Get the locale for the user so that we 'spit' the content back in the
-# proper locale
-set locale_user [ad_locale_locale_from_lang [ad_locale user language]]
-
-set context_bar [ad_context_bar "Deleting Locales"]
+set context_bar [ad_context_bar "Deleting Locale"]
 
 form create locale_deleting
 
@@ -45,8 +41,8 @@ element create locale_deleting mime_charset \
 element create locale_deleting default_p -label "Default" \
     -datatype text -widget hidden  
 
-element create locale_deleting locales -p label "Locales" \
-    -datatype text -widget hidden -value $locales
+element create locale_deleting locale -p label "Locale" \
+    -datatype text -widget hidden -value $locale
 
 if { [form is_request locale_deleting] } {
 
@@ -57,7 +53,7 @@ if { [form is_request locale_deleting] } {
             nls_territory as locale_nls_territory, nls_charset as locale_nls_charset,
             mime_charset as locale_mime_charset, default_p as locale_default_p
         from ad_locales
-        where locale = :locales"
+        where locale = :locale"
     element set_properties locale_deleting label -value $locale_label
     element set_properties locale_deleting language -value $locale_language
     element set_properties locale_deleting country -value $locale_country
@@ -73,7 +69,11 @@ if { [ns_queryexists form:confirm] } {
 
     db_transaction {
 
-        db_dml delete_locale "delete from ad_locales where locale = :locales"
+        db_dml delete_messages { delete from lang_messages where locale = :locale }
+
+        db_dml delete_audit { delete from lang_messages_audit where locale = :locale }
+
+        db_dml delete_locale { delete from ad_locales where locale = :locale }
 
     }
 

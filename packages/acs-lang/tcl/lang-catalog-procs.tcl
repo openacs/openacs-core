@@ -132,7 +132,7 @@ namespace eval lang::catalog {
         array set key_text_array {}
         foreach message_node $message_node_list {
             set key [get_required_xml_attribute $message_node ${KEY_ATTR}]
-            set text [get_required_xml_content $message_node]
+            set text [xml_node_get_content $message_node ]
             set key_text_array($key) $text
         }        
 
@@ -155,21 +155,6 @@ namespace eval lang::catalog {
         }
 
         return $value
-    }
-
-    ad_proc -private get_required_xml_content { element } {
-        Get the content of the given element and raise an error
-        if the content is empty.
-
-        @author Peter Marklund (peter@collaboraid.biz)
-    } {
-        set content [xml_node_get_content $element]
-
-        if { [empty_string_p $content] } {
-            error "Required content missing from element <[xml_node_get_name $element]>"
-        }
-
-        return $content
     }
 
     ad_proc -public export_package_to_files { package_key } {

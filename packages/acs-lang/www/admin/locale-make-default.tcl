@@ -8,23 +8,23 @@ ad_page_contract {
     @creation-date 19 march 2002
     @cvs-id $Id$
 } {
-    locales
+    locale
 } -properties {
 }
 
-# If have first to revert the other locales to default_p = f
+# If have first to revert the other locale to default_p = f
 db_transaction {
 
     set language_from_locale [db_string select_lang_from_locale "select
-        language from ad_locales where locale = :locales"]
+        language from ad_locales where locale = :locale"]
 
-    db_dml make_locales_not_default "update ad_locales set default_p = 'f'
+    db_dml make_locale_not_default "update ad_locales set default_p = 'f'
         where language = :language_from_locale and default_p = 't'"
 
-    db_dml make_locales_default "update ad_locales set default_p = 't'
-        where locale = :locales"
+    db_dml make_locale_default "update ad_locales set default_p = 't'
+        where locale = :locale"
 
-    util_memoize_flush [list ad_locale_locale_from_lang $locales]
+    util_memoize_flush [list ad_locale_locale_from_lang $locale]
 
 }
 

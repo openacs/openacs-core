@@ -12,46 +12,28 @@
 
 <div>
 
-<include src="locales-tabs" tab="@tab;noquote@" show_locales_p="@show_locales_p;noquote@">
+<p>Here you can edit locales and internationalize messages in the user interface of the system.</p>
 
-<if @tab;noquote@ eq "home">
-  <p>Here you can edit locales and internationalize messages in the user interface of the system.</p>
-  <ul>
-    <p>
-      <li>
-        <a href=".?tab=locales">Edit locales</a>
-      </li>
-    </p>
-    <p>
-      <li>
-        <a href=".?tab=localized-messages">Edit Messages</a>
-      </li>
-    </p>
-    <if @timezone_p@>
-    <p>
-      <li>
-        <a href="set-system-timezone">Set system timezone</a>
-      </li>
-    </p>
-    </if>
-    <p>
-      <li>
-        <a href="translator-mode-toggle">Toggle translator mode</a> (Currently 
-        <if @translator_mode_p@ true><font color="red"><b>ON</b></font></if>
-        <else>off</else>)
-        
-      </li>
-    </p>
+<p>
+  <b>&raquo;</b>
+  <a href="translator-mode-toggle">Toggle translator mode</a> (Currently 
+  <if @translator_mode_p@ true><font color="red"><b>ON</b></font></if>
+  <else>off</else>)
+</p>
 
-  </ul>
-</if>
 
-<if @tab@ eq "locales">
-  <include src="locales" tab="@tab;noquote@">
-</if>
+<h2>System Locales</h2>
 
-<if @tab@ eq "localized-messages">
- <include src="localized-messages" tab="@tab;noquote@">
-</if>
+<include src="locales" tab="@tab;noquote@">
 
 </div>
+
+<if @timezone_p@>
+  <h2>Timezone</h2>
+
+  <p>
+    <b>&raquo;</b>
+    <a href="set-system-timezone">Set system timezone</a>
+  </p>
+</if>
+

@@ -30,7 +30,7 @@
      <td>@missing_translation.default_message@</td>
      <td>TRANSLATION MISSING</td>
      <td>
-      (<span class="edit-anchor"><a href="edit-localized-message?message_key=@missing_translation.escaped_key@&locales=@missing_translation.escaped_language@&package_key=@escaped_package_key@&translated_p=0">edit</a></span>)
+      (<span class="edit-anchor"><a href="edit-localized-message?message_key=@missing_translation.escaped_key@&locale=@missing_translation.escaped_language@&package_key=@escaped_package_key@&translated_p=0">edit</a></span>)
      </td>
     </tr>
     </multiple>
@@ -64,7 +64,7 @@
      <td>@translated_messages.message_key@</td>
      <td>@translated_messages.default_message@</td>
      <td>@translated_messages.translated_message@</td>
-     <td>(<span class="edit-anchor"><a href="edit-localized-message?message_key=@translated_messages.escaped_key@&locales=@translated_messages.escaped_language@&package_key=@package_key@&translated_p=1">edit</a></span>)</td>
+     <td>(<span class="edit-anchor"><a href="edit-localized-message?message_key=@translated_messages.escaped_key@&locale=@translated_messages.escaped_language@&package_key=@package_key@&translated_p=1">edit</a></span>)</td>
     </tr>
     </multiple>
    </table>
