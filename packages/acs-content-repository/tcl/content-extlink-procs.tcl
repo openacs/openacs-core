@@ -22,6 +22,7 @@ ad_proc -public content::extlink::copy {
     @param target_folder_id folder to copy extlink into
     @param creation_user 
     @param creation_ip
+    @return 0
 } {
     return [package_exec_plsql -var_list [list \
         [list extlink_id $extlink_id ] \
@@ -32,10 +33,11 @@ ad_proc -public content::extlink::copy {
 }
 
 
-ad_proc -public content::extlink::del {
+ad_proc -public content::extlink::delete {
     -extlink_id:required
 } {
     @param extlink_id item_id of extlink to delete
+    @return 0
 } {
     return [package_exec_plsql -var_list [list \
         [list extlink_id $extlink_id ] \
