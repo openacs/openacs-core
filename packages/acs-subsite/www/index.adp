@@ -13,9 +13,11 @@
  </else>
 
  <if @admin_p@ eq 1> 
-  <li> <a href="admin/">Administration</a></li>
+  <p>
+   <li> <a href="admin/">@subsite_name@ Administration</a></li>
+  </p>
  </if>
 </ul>
 
-<if @user_id@ eq 0><a href="/register/?return_url=/">login</a></if>
-<else><a href="register/logout">logout</a></else>
+<if @user_id@ eq 0><a href="@login_url@">Login</a></if>
+<else><a href="register/logout">Logout</a></else>
