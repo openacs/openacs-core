@@ -1,7 +1,11 @@
-form create pay_bill -elements {
-  payee -label "Payee" -datatype text -widget text
-  amount -label "Amount" -datatype integer -widget text
-}
+form create pay_bill -section required -elements {
+  payee -label "Payee" -datatype text -widget text 
+  amount -label "Amount" -datatype integer -widget text 
+} 
+template::form::section pay_bill optional
+template::element::create pay_bill note -label "Note" -datatype text -widget text -optional
+
+    
 
 # check if this is the initial submission or the confirmation page
 if { [ns_queryexists form:confirm] } {
