@@ -156,6 +156,30 @@ patch -p1 &lt; ../daemontools-0.76.errno.patch
 package/install</action></screen>
             </listitem>
             <listitem>
+              <para>FreeBSD (follow standard install)</para>
+              <para>Make sure you have the source tarball in
+          <computeroutput>/tmp</computeroutput>, or <link
+          linkend="daemontools-download">download it</link>.
+</para>
+              <screen>[root root]# <userinput>mkdir -p /package</userinput>
+[root root]# <userinput>chmod 1755 /package/</userinput>
+[root root]# <userinput>cd /package/</userinput>
+[root package]# <userinput>tar xzf /tmp/daemontools-0.76.tar.gz</userinput>
+[root package]# <userinput>cd admin/daemontools-0.76</userinput>
+[root daemontools-0.76]# <userinput>package/install</userinput>
+Linking ./src/* into ./compile...<emphasis>(many lines omitted)</emphasis>
+Creating /service...
+Adding svscanboot to inittab...
+init should start svscan now.
+[root root]#
+<action>mkdir -p /package 
+chmod 1755 /package 
+cd /package 
+tar xzf /tmp/daemontools-0.76.tar.gz 
+cd admin/daemontools-0.76
+package/install</action></screen>
+            </listitem>
+            <listitem>
               <para>Debian</para>
               <screen>[root ~]# <userinput>apt-get install daemontools-installer</userinput>
 [root ~]# <userinput>build-daemontools</userinput></screen>
@@ -798,6 +822,8 @@ cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
       <sect2 id="install-nsopenssl-aolserver4">
         <title>Install on AOLserver4</title>
         <para> You will need the AOLserver4 source in <computeroutput>/usr/local/src/aolserver/aolserver</computeroutput> and OpenSSL installed in <computeroutput>/usr/local/ssl</computeroutput> (or at least symlinked there).</para>
+        <para><title>FreeBSD note:</title> build openssl with <userinput>gmake install OPENSSL=/usr/local/openssl INST=/usr/local/aolserver</userinput>
+        </para>
 
       <screen>[root bin]#<userinput> cd /usr/local/src/aolserver</userinput>
 [root aolserver]# <userinput>cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver login</userinput>
