@@ -45,7 +45,7 @@ apm_file_watch "packages/$package_key/$path"
 doc_body_append "Marking the following file to be watched:<ul><li>$path</ul>
 
 <a href=\"version-files?version_id=$version_id\">Return to the list of files for $pretty_name $version_name</a><br>
-<a href=\"\">Return to the Package Manager</a>
+<a href=\".\">Return to the Package Manager</a>
 
 [ad_footer]
 "
