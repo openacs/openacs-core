@@ -9,11 +9,16 @@
 -- add timestamp datatype
 
 declare
+    v_count       integer;
     v_msg_type_id	acs_sc_msg_types.msg_type_id%TYPE;
 begin
-	if acs_sc_msg_type.get_id('timestamp') is null then
-	   v_msg_type_id := acs_sc_msg_type.new('timestamp','');
-	end if;
+
+        select count(*) into v_count from acs_sc_msg_types
+        where msg_type_name = 'timestamp';
+
+        if v_count = 0 then
+           v_msg_type_id := acs_sc_msg_type.new('timestamp','');
+        end if;
 end;
 /
 show errors
