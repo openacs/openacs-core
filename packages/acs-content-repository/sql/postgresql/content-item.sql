@@ -2028,7 +2028,7 @@ begin
 
     PERFORM content_folder__move(move__item_id, move__target_folder_id,move__name);
 
-  else if content_folder__is_folder(move__target_folder_id) = ''t'' then
+  elseif content_folder__is_folder(move__target_folder_id) = ''t'' then
    
 
     if content_folder__is_registered(move__target_folder_id,
