@@ -104,7 +104,7 @@ procedure copy (
   extlink_id		in cr_extlinks.extlink_id%TYPE,
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
-  creation_ip		in acs_objects.creation_ip%TYPE default null
+  creation_ip		in acs_objects.creation_ip%TYPE default null,
   name                  in cr_items.name%TYPE default null
 ) is
   v_current_folder_id   cr_folders.folder_id%TYPE;
