@@ -268,7 +268,7 @@ if { $display_batch_history_p } {
 
         set interactive_pretty [ad_decode $interactive_p "t" "Yes" "No"]
         
-        set short_message [string_truncate -len 30 $message]
+        set short_message [string_truncate -len 30 -- $message]
 
         set actions_per_minute {}
         if { $run_time_seconds > 0 && $num_actions > 0 } {

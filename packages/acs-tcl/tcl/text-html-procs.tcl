@@ -1401,7 +1401,7 @@ ad_proc util_remove_html_tags { html } {
 #
 #####
 
-ad_proc string_truncate { 
+ad_proc -public string_truncate { 
     {-len 200}
     {-format html}
     {-no_format:boolean}
@@ -1413,6 +1413,9 @@ ad_proc string_truncate {
     string was truncated. If format is html (default), any open
     HTML tags are closed. Otherwise, it's converted to text using
     ad_html_to_text.
+
+    Should always be called as string_truncate [-flags ...] -- string 
+    since otherwise strings which start with a - will treated as missing arguments.
 
     @param len The lenght to truncate to. Defaults to parameter TruncateDescriptionLength.
     @param format html or text.
