@@ -1035,14 +1035,20 @@ ad_proc root_of_host {host} {
         return ""
     }
     # Other hostnames map to subsites.
-    db_1row node_id {
+    set found_node_id [db_0or1row node_id {
 	select node_id 
 	from host_node_map
 	where host = :host
+    }]
+
+    if { $found_node_id == 1 } {
+       db_1row root_get {
+           select site_node.url(:node_id) as url
+           from dual
+       }
+       return [string range $url 0 [expr [string length $url]-2]]
+    } else {
+       # Hack to provide a useful default
+       return ""
     }
-    db_1row root_get {
-	select site_node.url(:node_id) as url
-	from dual
-    }
-    string range $url 0 [expr [string length $url]-2]
 }
