@@ -3,13 +3,11 @@
 
 <fullquery name="select_pretty_name">      
       <querytext>
-      FIX ME OUTER JOIN
 
     select t.dynamic_p,
            case when gt.group_type = null then 0 else 1 end as group_type_exists_p
-      from acs_object_types t, group_types gt
+      from acs_object_types t left outer join group_types gt on (t.object_type = gt.group_type)
      where t.object_type = :group_type
-       and t.object_type = gt.group_type(+)
 
       </querytext>
 </fullquery>
