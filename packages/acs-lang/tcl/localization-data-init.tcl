@@ -66,6 +66,7 @@ nsv_set locale money:141  {$sym$sign$num}
 nsv_set locale money:142  {$sym$sign$num} 
 
 namespace eval ::lang::util {
+    variable percent_match
 
     # Date format codes.  This was brought over from lc_time_fmt, to avoid having to rebuild the
     # array each time the procedure is called, which is often.
