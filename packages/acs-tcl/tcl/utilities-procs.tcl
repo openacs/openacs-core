@@ -3957,7 +3957,7 @@ aa_equals &quot;properties -&gt; datetime&quot; \
     return $result
 }
 
-ad_proc ad_generate_random_string {{length 8}} {
+ad_proc -public ad_generate_random_string {{length 8}} {
     Generates a random string made of numbers and letters
 } {
     return [string range [sec_random_token] 0 $length]
