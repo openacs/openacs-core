@@ -1,5 +1,5 @@
-<?xml version="1.0"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d6" locale="en_US" charset="ISO-8859-1">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="acs-subsite" package_version="5.0d5" locale="en_US" charset="ISO-8859-1">
 
   <msg key="About_You">About You</msg>
   <msg key="Account_close_confirm_no_label">No, take me back to %pvt_home_name%</msg>
@@ -18,21 +18,13 @@
   </msg>
   <msg key="Account_reopened_message">Your account at %system_name% has been reopened. Welcome back.</msg>
   <msg key="Account_reopened_title">Account Reopened</msg>
-  <msg key="Add_new_app">Add new application</msg>
-  <msg key="Admin">Admin</msg>
-  <msg key="Administer_subsite">Administer %subsite_name%</msg>
   <msg key="Answer">Answer</msg>
-  <msg key="Applications">Applications</msg>
-  <msg key="Approve">Approve</msg>
   <msg key="at">at</msg>
   <msg key="Bad_Password">Bad Password</msg>
-  <msg key="Ban">Ban</msg>
   <msg key="Basic_Information">Basic Information</msg>
   <msg key="cannot_retrieve_password">Retrieving password from local authority is not supported.</msg>
-  <msg key="Cannot_see_memb_list">Cannot see the members list</msg>
   <msg key="Change_locale_label">Change language</msg>
   <msg key="Change_my_Password">Change my Password</msg>
-  <msg key="Change_pass_email_por">Change password, email, portrait</msg>
   <msg key="Check_Your_Inbox">Check Your Inbox</msg>
   <msg key="Children">Children</msg>
   <msg key="Close_account_explanation">
@@ -47,18 +39,11 @@ preserved, as they're part of the community's history. &lt;/p&gt;
 logging in again. &lt;/p&gt;
   </msg>
   <msg key="Close_your_account">Close your account</msg>
-  <msg key="Communities">Communities</msg>
-  <msg key="communities">communities</msg>
-  <msg key="community">community</msg>
   <msg key="Confirm">Confirm</msg>
-  <msg key="Create_new_community">Create new %pretty_name%</msg>
   <msg key="Current_Password">Current Password</msg>
   <msg key="Currently_invisible_msg">&lt;p&gt; Your online status is currently not visible to other users. &lt;/p&gt;</msg>
   <msg key="Currently_visible_msg">&lt;p&gt; Your online status is currently visible to other users. &lt;/p&gt;</msg>
   <msg key="Customize_Question">Customize Question</msg>
-  <msg key="Delete">Delete</msg>
-  <msg key="DevAdmin">DevAdmin</msg>
-  <msg key="Developers_Admin">Developer's Administration</msg>
   <msg key="Direct_Permissions">Direct Permissions</msg>
   <msg key="Email">Email</msg>
   <msg key="email_body_Forgotten_password">Here is your new login information:
@@ -89,18 +74,9 @@ Please visit the following link to change your password now:
   <msg key="First_names">First names</msg>
   <msg key="Grant">Grant</msg>
   <msg key="Grant_Permission">Grant Permission</msg>
-  <msg key="Invite">Invite</msg>
-  <msg key="Join_community">Join community</msg>
   <msg key="Join_group_name">Join %group_name%</msg>
-  <msg key="Join_this_community">Join this community</msg>
   <msg key="Last_name">Last name</msg>
-  <msg key="Leave_community">Leave community</msg>
-  <msg key="Leave_this_community">Leave this community</msg>
   <msg key="Log_In">Log In</msg>
-  <msg key="Log_in_to_system">Log in to %system_name%</msg>
-  <msg key="Login_or_register">Login or register</msg>
-  <msg key="Logout">Logout</msg>
-  <msg key="Logout_from_system">Logout from %system_name%</msg>
   <msg key="lt_Cannot_join_this_grou">Cannot join this group.</msg>
   <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) registered as a user of 
 %system_url%</msg>
@@ -146,21 +122,14 @@ waiting approval.</msg>
     from the %system_name% administrator.</msg>
   <msg key="lt_Your_email_is_confirm">Your email is confirmed</msg>
   <msg key="lt_Your_URL_doesnt_have_">Your URL doesn't have the correct form.  A valid URL would be something like &quot;%valid_url_example%&quot;.</msg>
-  <msg key="Make_administrator">Make administrator</msg>
-  <msg key="Make_member">Make member</msg>
   <msg key="Make_yourself_invisible_label">Make yourself invisible</msg>
   <msg key="Make_yourself_visible_label">Make yourself visible</msg>
   <msg key="Manage_your_notifications">Manage your notifications</msg>
-  <msg key="Mem_list_not_allowed">Sorry, but you are not allowed to view the members list.</msg>
-  <msg key="Member_State">Member State</msg>
-  <msg key="Members">Members</msg>
-  <msg key="Name">Name</msg>
   <msg key="New_Password">New Password</msg>
-  <msg key="No_applications">No applications</msg>
   <msg key="no_portrait_title_message">your portrait</msg>
-  <msg key="No_pretty_plural">No %pretty_plural%</msg>
   <msg key="none">none</msg>
-  <msg key="Not_logged_in">Not logged in</msg>
+  <description key="none">Used to indicate that a list of permissions or objects is empty.</description>
+
   <msg key="Password">Password</msg>
   <msg key="Password_changed_body">Your login information on %system_name%:
 
@@ -189,29 +158,17 @@ You can always change your password by doing the following:
     &lt;p&gt; Thank you for registering for %system_name%. An administrator has been notified of your request. &lt;/p&gt;
     &lt;p&gt; Once you're approved, you'll get an email message and you can return to start using %system_name%. &lt;/p&gt;
   </msg>
-  <msg key="Reject">Reject</msg>
-  <msg key="Remove">Remove</msg>
-  <msg key="Req_membership_comm">Request membership of this community</msg>
-  <msg key="Request_membership">Request membership</msg>
   <msg key="Revoke_Checked">Revoke Checked</msg>
-  <msg key="Role">Role</msg>
   <msg key="Screen_name">Screen name</msg>
-  <msg key="Send_email_to_this_user">Send email to this user</msg>
   <msg key="Show">Show</msg>
-  <msg key="Site_wide_administration">Site-wide administration</msg>
   <msg key="sorry_forgotten_pwd">Sorry, we can't help you with your forgotten password.</msg>
-  <msg key="Subcommunities">Subcommunities</msg>
-  <msg key="subcommunities">subcommunities</msg>
-  <msg key="subcommunity">subcommunity</msg>
   <msg key="Thank_you">Thank you.</msg>
   <msg key="up_to_context_name">up to %context_name%</msg>
   <msg key="Update">Update</msg>
   <msg key="Update_Password">Update Password</msg>
   <msg key="upload_a_portrait">upload a portrait</msg>
   <msg key="Username">Username</msg>
-  <msg key="Welcome_user">Welcome, %user_name%</msg>
   <msg key="Whos_Online_link_label">Users currently online</msg>
   <msg key="Whos_Online_title">Who's Online</msg>
-  <msg key="Your_Account">Your Account</msg>
   <msg key="Your_Portrait">Your Portrait</msg>
 </message_catalog>

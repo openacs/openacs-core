@@ -1,5 +1,5 @@
-<?xml version="1.0"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d4" locale="es_ES" charset="ISO-8859-1">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="acs-subsite" package_version="5.0d5" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="About_You">Mi información</msg>
   <msg key="Account_closed">&lt;p&gt;Su cuenta se encuentra cerrada por el momento.&lt;/p&gt;&lt;p&gt;Si usted lo desea, podemos &lt;a href=&quot;%restore_url%&quot;&gt;re-abrir su cuenta&lt;/a&gt;.&lt;/p&gt;</msg>
