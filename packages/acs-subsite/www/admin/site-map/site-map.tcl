@@ -47,7 +47,7 @@ set javascript "onload=\"javascript:document.check_checkbox()\""
 set parent_link ".?[export_url_vars expand:multiple root_id=$parent_id]"
 
 set page_title "Build Your Site Map "
-set context [list $page_title]
+set context [list [list "." "Site Map"] $page_title]
 
 set user_id [ad_conn user_id]
 
@@ -86,7 +86,7 @@ template::list::create \
     -key node_id \
     -has_checkboxes \
     -bulk_actions {
-	"Allow for view" "allow-for-view" 
+	"Allow for view (Publish)" "allow-for-view" 
     } \
     -bulk_action_method post \
     -bulk_action_export_vars { return_url } \
