@@ -242,7 +242,11 @@ ad_proc -public lang::user::site_wide_locale_not_cached {
     Get the user's preferred site wide locale.
 } {
     if { [ad_conn untrusted_user_id] == 0 } {
-	return [ad_get_cookie "ad_locale"]
+	set locale [ad_get_cookie "ad_locale"]
+	if { [empty_string_p $locale] } {
+	    set locale [lang::system::site_wide_locale]
+	}
+	return $locale
     } else {
         set user_id [ad_conn untrusted_user_id]
         return [db_string get_user_site_wide_locale {} -default ""]
@@ -288,7 +292,7 @@ ad_proc -public lang::user::set_locale {
 
     if { $user_id == 0 } {
         # Not logged in, use a cookie-based client locale
-	ad_set_cookie -expire never "ad_locale" $locale
+	ad_set_cookie -replace t -max_age inf "ad_locale" $locale
         return
     }
 
