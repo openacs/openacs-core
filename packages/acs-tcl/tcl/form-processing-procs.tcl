@@ -477,7 +477,7 @@ ad_proc -public ad_form {
     foreach valid_arg $valid_args {
         if { [info exists $valid_arg] } {
             if { [info exists af_parts(${form_name}__$valid_arg)] &&
-                 ![lsearch { form name validate export } $valid_arg] == -1 } {
+                 [lsearch { form name validate export } $valid_arg] == -1 } {
                 return -code error "Form \"$form_name\" already has a \"$valid_arg\" section"
             }
 
@@ -923,7 +923,6 @@ ad_proc -public ad_form {
 
         # Get all the form elements.  We can't call form get_values because it doesn't handle multiples
         # in a reasonable way.
-
         foreach element_name $properties(element_names) {
             if { [info exists af_flag_list(${form_name}__$element_name)] && \
                  [lsearch $af_flag_list(${form_name}__$element_name) multiple] >= 0 } {
@@ -989,7 +988,6 @@ ad_proc -public ad_form {
             }
 
             # This is serious abuse of ad_return_exception_template, but hell, I wrote it so I'm entitled ...
-
             ad_return_exception_template -status 200 -params $args $confirm_template
 
         }
