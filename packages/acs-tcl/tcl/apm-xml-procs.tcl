@@ -124,22 +124,6 @@ ad_proc -private apm_generate_package_spec { version_id } {
         append spec "        <!-- No dependency information -->\n"
     }
 
-
-    append spec "\n        <files>\n"
-    apm_log APMDebug "APM: Writing Files." 
-    db_foreach version_path {} {
-        append spec "            <file"
-        if { ![empty_string_p $file_type] } {
-            append spec " type=\"$file_type\""
-        }
-        if { ![empty_string_p $db_type] } {
-            append spec " db_type=\"$db_type\""
-        }
-        append spec " path=\"[ad_quotehtml $path]\"/>\n"
-    } else {
-        append spec "            <!-- No files -->\n"
-    }
-    append spec "        </files>"
     append spec "\n        <callbacks>\n"
     apm_log APMDebug "APM: Writing callbacks"
     db_foreach callback_info {} {
