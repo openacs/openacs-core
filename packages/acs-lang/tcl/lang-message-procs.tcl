@@ -103,14 +103,17 @@ namespace eval lang::message {
 
     ad_proc -private format {
         localized_message
-        value_array_list
+        {value_array_list {}}
+        {upvar_level 3}
     } {
         Substitute all occurencies of %array_key%
         in the given localized message with the value from a lookup in the value_array_list
-        with array_key (what's between the percentage sings). Occurencies of %% 
-        (quoted percent signs) in the localized message
-        will be replaced with %. If an %array_key% in the localized message is not given in
-        the value_array_list then it will be left untouched. Here is an example:
+        with array_key (what's between the percentage sings). If value_array_list is not
+        provided then attempt to fetch variable values the number of levels up given by
+        upvar_level (defaults to 3 because this proc is typically invoked from the underscore
+        lookup proc). 
+
+        Here is an example:
 
         set localized_message "The %frog% jumped across the %fence%. About 50% of the time, he stumbled, or maybe it was %%20 %times%."
         set value_list {frog frog fence fence}
@@ -136,15 +139,26 @@ namespace eval lang::message {
             } else {
                 set variable_key [string range $percent_match 1 end-1]
 
-                if { [lsearch -exact $value_array_keys $variable_key] == -1 } {
-                    ns_log Warning "lang::message::format: The value_array_list \"$value_array_list\" does not contain the variable name $variable_key found in the message: $localized_message"
+                if { [llength $value_array_list] > 0 } {
+                    # A substitution list is provided, the key should be in there
                     
-                    # There is no value available to do the substitution with
-                    # so don't substitute at all
-                    append formated_message $percent_match
+                    if { [lsearch -exact $value_array_keys $variable_key] == -1 } {
+                        ns_log Warning "lang::message::format: The value_array_list \"$value_array_list\" does not contain the variable name $variable_key found in the message: $localized_message"
+                    
+                        # There is no value available to do the substitution with
+                        # so don't substitute at all
+                        append formated_message $percent_match
+                    } else {
+                        # Do the substitution
+                    
+                        append formated_message [lindex [array get value_array $variable_key] 1]
+                    }
                 } else {
-                    # Do the substitution
-                    append formated_message [lindex [array get value_array $variable_key] 1]
+                    # No substitution list provided - attempt to fetch variable value
+                    # from scope calling lang::message::lookup
+                    upvar $upvar_level $variable_key variable_value
+
+                    append formated_message $variable_value
                 }
             }
         }
@@ -160,6 +174,7 @@ namespace eval lang::message {
         key
         {default "TRANSLATION MISSING"}
         {substitution_list {}}
+        {upvar_level 2}
     } {
         This proc is normally accessed through the _ procedure.
     
@@ -186,6 +201,15 @@ namespace eval lang::message {
         @param substitution_list  A list of values to substitute into the message. This argument should
                                   only be given for certain messages that contain place holders (on the syntax
                                   %var_name%) for embedding variable values, see lang::message::format.
+                                  If this list is not provided and the message has embedded variables,
+                                  then the variable values can be fetched with upvar from the scope
+                                  calling this proc (see upvar_level).
+
+        @param upvar_level        If there are embedded variables and no substitution list provided, this
+                                  parameter specifies how many levels up to fetch the values of the variables
+                                  in the message. The reason the default is 2 is that the lookup proc is
+                                  usually invoked by the underscore proc (_). Set upvar level to less than
+                                  1 if you don't want variable interpolation to be done.
     
         @author Jeff Davis (davis@arsdigita.com), Henry Minsky (hqm@arsdigita.com)
         @author Peter Marklund (peter@collaboraid.biz)
@@ -250,8 +274,8 @@ namespace eval lang::message {
         }
 
         # Do any variable substitutions (interpolation of variables)
-        if { [llength $substitution_list] > 0 } {
-            set return_value [lang::message::format $return_value $substitution_list]
+        if { [llength $substitution_list] > 0 || ($upvar_level >= 1 && [string first "%" $return_value] != -1) } {
+            set return_value [lang::message::format $return_value $substitution_list [expr $upvar_level + 1]]
         }
 
         return $return_value
