@@ -32,7 +32,7 @@ namespace eval site_node_apm_integration {
         Returns 1 if there exists a child package with the given package_key, 
         or 0 if not.
     } {
-        set child_package_id [get_child_package_id \
+        set child_package_id [site_node_apm_integration::get_child_package_id \
             -package_id $package_id \
             -package_key $package_key
         ]
@@ -43,5 +43,4 @@ namespace eval site_node_apm_integration {
             return 1 
         }
     }
-
 }
