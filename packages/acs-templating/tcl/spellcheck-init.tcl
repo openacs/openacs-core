@@ -34,26 +34,28 @@ set dialects_p [parameter::get_from_package_key \
 		    -default 0]
 
 # aspell or ispell?
+set dicts ""
+set default_lang ""
 if { [regexp aspell $bin] } {
     # aspell
-    set dicts [exec $bin dump dicts]
-    set default_lang [exec $bin config lang]
-    if { !$dialects_p } {
-	# If no dialects, the the default_lang locale returned from aspell
-	# must be shortened to the first two letters, so that it matches
-	# the one of the names in the pull-down menu.
-	set default_lang [string range $default_lang 0 1]
+    with_catch errmsg {
+        set dicts [exec $bin dump dicts]
+        set default_lang [exec $bin config lang]
+        if { !$dialects_p } {
+            # If no dialects, the the default_lang locale returned from aspell
+            # must be shortened to the first two letters, so that it matches
+            # the one of the names in the pull-down menu.
+            set default_lang [string range $default_lang 0 1]
+        }
+    } {
+        ns_log Error "Gettings dicts and default_lang for aspell failed with error message: \"$errmsg\""
     }
 } elseif { [regexp ispell $bin] } {
     # ispell - if someone knows how to get the availagle dictionaries and the
     # default language from ispell, please add it here :-)
     set dicts ""
     set default_lang ""
-} else {
-    set dicts ""
-    set default_lang ""
-}
-
+} 
 
 # Build the select options list and filter out unwanted dictionaries.
 set wanted_dicts [list {"No, thanks" :nospell:}]
