@@ -3,6 +3,7 @@
 #   focus
 #   header_stuff
 #   section
+#   subnavbar_link
 
 if { ![info exists section] } {
     set section {}
@@ -10,6 +11,10 @@ if { ![info exists section] } {
 
 if { ![info exists header_stuff] } {
     set header_stuff {}
+}
+
+if { ![info exists subnavbar_link] } {
+    set subnavbar_link {}
 }
 
 # This will set 'sections' and 'subsections' multirows
