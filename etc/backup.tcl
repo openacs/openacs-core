@@ -233,8 +233,11 @@ foreach directory $DIRECTORIES {
     puts "setting permissions for file."
     exec $CHMOD 660 $FULLNAME
 
-# consider using http://curl.haxx.se (curl), standard on Mac os X systems
-# as an alternate to ftp
+# use tcllib's ftp package instead of scp.. TO BE CONVERTED.
+# not sure if tcllib works on Macs..
+# if not, try using http://curl.haxx.se (curl), standard on Mac os X systems
+# as an alternate to ftp, and modifying ftp package accordingly.
+
 # set ftp_url: $OTHERUSER:$OTHERPASS@OTHERHOST
 
 #    if \[ -n "$OTHERHOST" \]
