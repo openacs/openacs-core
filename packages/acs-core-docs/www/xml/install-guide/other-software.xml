@@ -478,11 +478,246 @@ mv analog-5.32 /usr/share/</action></screen>
       url="/doc/acs-authentication/ext-auth-install.html"></ulink></para>
       </sect1>
 
-    <sect1 id="install-full-text-search">
-      <title>Install Full Text Search</title>
+    <sect1 id="install-full-text-search-tsearch2" xreflabel="Install
+      Full Text Search using Tsearch2">
+      <title>Install Full Text Search using Tsearch2</title>
+      <authorblurb>
+      <para>By <ulink url="mailto:dave@thedesignexperience.org">Dave
+      Bauer</ulink>, <ulink url="mailto:joel@aufrecht.org">Joel
+      Aufrecht</ulink> and <ulink
+      url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink> with
+      help from <ulink
+      url="http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/docs/tsearch-V2-intro.html">Tsearch
+      V2 Introduction by Andrew J. Kopciuch</ulink></para>
+      </authorblurb>
+      <sect2 id="install-tsearch2">
+      <title>Install Tsearch2 module</title>
+        <indexterm>
+          <primary>full text search</primary>
+          <secondary>installation</secondary>
+        </indexterm>
+      <para>If you want full text search, and you are running PostgreSQL, install this module to support FTS.  Do this step after you have installed both PostgreSQL and
+      AOLserver.  You will need the tseach2 module form PostgreSQL
+      contrib. This is included with the PostgreSQL full source
+      distribution. It is also available with the PostgreSQL contrib
+      package provided by most distribution packages. On debian it is
+      called postgresql-contrib.</para>
+          <orderedlist>
+        <listitem>
+          <para>For PostgreSQL 7.3 or 7.4, download the
+          http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/regprocedure_7.4.patch.gz
+          tsearch2 patch
+          to correctly restore from a pg_dump backup. If you installed
+          tsearch2 from a package, you can use the
+          http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/regprocedure_update.sql
+          regprocedure script to update the database after tsearch2 is
+          installed into it. TODO link to section decribing how to fix
+          an existing tsearch2 database with this patch.</para>
+          </listitem>
+        <listitem>
+          <para>As of May 9, 2004 there is a source patch available
+          for
+              tsearch2. The patch provides changes to the pg_ts_
+          configuration
+              tables to allow for easy dump and restore of a database
+          containing
+              tsearch2. The patch is available here : <ulink url="
+                http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/regprocedure_7.4.patch.gz">
+                [http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/regprocedure_7.4.patch.gz]</ulink></para>
+
+            <para>To apply this patch, download the mentioned file and
+            place it in your postgreSQL source tree ($PGSQL_SRC). This
+            patch makes the backup and restore procedures very
+            simple.</para>
+            <screen>
+            [postgres pgsql]$ <userinput>cd /tmp</userinput>
+            [postgres tmp]$ <userinput>wget http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/regprocedure_7.4.patch.gz</userinput>
+            [postgres pgsql]$ <userinput>cd /usr/local/src/postgresql-7.4.5/</userinput>
+            [postgres postgresql-7.4.5] <userinput>gunzip /tmp/regprocedure_7.4.patch.gz</userinput>
+            [postgres postgresql-7.4.5] <userinput>patch -b -p1 &lt; regprocedure_7.4.patch</userinput>
+              </screen>
+            <para>If you have a working version of tsearch2 in your
+            database, you
+              do not need to re-install the tsearch2 module. Just
+            apply the patch
+              and run make. This patch only affects the tsearch2.sql
+            file. You
+              can run the SQL script found : <ulink url="
+                http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/regprocedure_update.sql">
+                [right here]</ulink> This script will make the
+            modifications found in
+              the patch, and update the fields from the existing
+            data. From this
+              point on, you can dump and restore the database in a
+            normal
+              fashion. Without this patch, you must follow the
+            instructions later
+              in this document for backup and restore.</para>
+            <para>This patch is only needed for tsearch2 in PostgreSQL
+            versions
+              7.3.x and 7.4.x. The patch has been applied to the
+            sources for
+              8.0.</para>
+        </listitem>
+        <listitem>
+              <para>Install Tsearch2.  This is a PostgreSQL module
+              that the tsearch2-driver OpenACS package requires. These
+              instructions assume you are using the latest point
+              release of PostgreSQL 7.4.5.</para>
+              <screen>[root root]# <userinput>su - postgres</userinput>
+[postgres pgsql]$ <userinput>cd /usr/local/src/postgresql-7.4.5/contrib/tsearch2/</userinput>
+[postgres tsearch2]$ <userinput>make</userinput>
+[postgres tsearch2]$ <userinput>make install</userinput>
+mkdir /usr/local/pgsql/share/contrib
+mkdir /usr/local/pgsql/doc/contrib
+(2 lines omitted)
+/bin/sh ../../config/install-sh -c -m 755 libtsearch.so.0.0 /usr/local/pgsql/lib/tsearch.so
+[postgres tsearch]$ <userinput>exit</userinput>
+logout
+
+[root root]#
+<action>su - postgres
+cd /usr/local/src/postgresql-7.4.5/contrib/tsearch2
+make
+make install
+exit</action></screen>
+            </listitem>
+      </orderedlist>
+      </sect2>
+
+      <sect2 id="install-fts-engine">
+        <title>Install Full Text Search Engine Package in OpenACS</title>
+        <orderedlist>
+          <listitem>
+            <para>Click <computeroutput><guilabel>Admin</guilabel></computeroutput> on the top of the default home page.  If prompted, log in with the account and password you entered during install.</para>
+          </listitem>
+
+          <listitem><para>Click on the <computeroutput><guilabel>Install
+software</guilabel></computeroutput> link.</para>
+          </listitem>
+
+          <listitem><para>Click on the <computeroutput><guilabel>Install
+new service</guilabel></computeroutput> link.</para>
+          </listitem>
+
+          <listitem><para>Click on the
+          <computeroutput><guilabel>Install</guilabel></computeroutput>
+          link next to Tsearch2 Driver. If you have installed tsearch2
+          into your PostgreSQL database, the installer will
+          automatically enable tsearch in your OpenACS database instance.</para>
+          </listitem>
+
+          <listitem><para>Restart the service.</para>
+<screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>svc -t /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$</screen></listitem>
+          
+          <listitem><para>Wait a minute, then browse back to the home page.</para>
+          </listitem>
+
+          <listitem><para>Click on <computeroutput><guilabel>Admin</guilabel></computeroutput> on the top of the screen.</para>
+          </listitem>
+
+          <listitem><para>Click on <computeroutput><guilabel>Main Site Administration</guilabel></computeroutput> in the "Subsite Administration" section.</para>
+          </listitem>
+
+          <listitem><para>Click on <computeroutput><guilabel>Site Map</guilabel></computeroutput> in the "Advanced Features" section.</para>
+          </listitem>
+          
+          <listitem>
+            <para>Mount the Search interface in the site map.</para>
+            <orderedlist>
+              <listitem><para>Click the
+<computeroutput><guilabel>new sub folder</guilabel></computeroutput> link on the
+Main Site line. </para></listitem>
+              <listitem><para>Type <userinput>search</userinput>
+and click <computeroutput><guibutton>New</guibutton></computeroutput>. </para></listitem>
+              <listitem><para>Click the <computeroutput><guilabel>new
+application</guilabel></computeroutput> link on the <computeroutput><guilabel>search</guilabel></computeroutput>
+	  line. </para></listitem>
+              <listitem><para>Type <userinput>search</userinput>
+where it says
+<computeroutput><guilabel>untitled</guilabel></computeroutput>, choose
+<computeroutput><guilabel>search</guilabel></computeroutput> from the
+drop-down list, and click
+<computeroutput><guibutton>New</guibutton></computeroutput>.
+</para></listitem>
+              <listitem><para>Click the 
+<computeroutput><guilabel>Parameters</guilabel></computeroutput> link
+                next to the Search package istance.</para></listitem>
+            <listitem><para>Type <userinput>tsearch2-driver</userinput>
+where it says
+<computeroutput><guilabel>openfts-driver</guilabel></computeroutput>
+                in the
+                <computeroutput><guilabel>FtsEngineDriver</guilabel></computeroutput> parameter.
+</para></listitem>
+
+            
+            </orderedlist>
+          </listitem>
+          <listitem>
+            <para>Restart the service.</para>
+            <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>svc -t /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$</screen>
+          </listitem>
+          <listitem><para>Wait a minute, then click on <computeroutput><guilabel>Main Site</guilabel></computeroutput> at the top of the page.</para>
+          </listitem>
+
+        </orderedlist>
+      </sect2>
+      <sect2 id="install-fts-content-provider">
+        <title>Enable Full Text Search in packages</title>
+            <para>Enabling Full Text Search in packages at the moment is not trivial. It involves a couple of steps, which I will illustrate taking lars-blogger as an example package</para>
+            <orderedlist>
+              <listitem>
+                <para>Install the package.
+                <orderedlist>
+                  <listitem>
+                    <para>Click <computeroutput><guilabel>Admin</guilabel></computeroutput> on the top of the default home page.  If prompted, log in with the account and password you entered during install.</para>
+                  </listitem>
+                  
+                  <listitem><para>Click on the <computeroutput><guilabel>Install
+                  software</guilabel></computeroutput> link.</para>
+                  </listitem>
+
+                  <listitem><para>Click on the <computeroutput><guilabel>Install
+                  new application</guilabel></computeroutput> link.</para>
+                  </listitem>
+                  
+                  <listitem><para>Click on the <computeroutput><guilabel>Install</guilabel></computeroutput> link next to Weblogger.</para>
+                  </listitem>
+                  <listitem>
+                    <para>Install all required packages as well (always say okay until you shall restart the server)</para>
+                  </listitem>
+                </orderedlist>
+                </para>
+              </listitem>
+              <listitem>
+                <para>Load the service contracts datamodell and enable the service contract</para>
+                <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd packages/lars-blogger/sql/postgresql</userinput>
+[$OPENACS_SERVICE_NAME postgresql]$ psql <replaceable>$OPENACS_SERVICE_NAME</replaceable> -f lars-blogger-sc-create.sql</screen>
+<para>Note: Usually this script is called <replaceable>package_name</replaceable>-sc-create.sql</para>
+              </listitem>
+              <listitem>
+                <para>Restart the service.</para>
+                <screen>[$OPENACS_SERVICE_NAME postgresql]$ <userinput>svc -t /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+                [$OPENACS_SERVICE_NAME postgresl]$</screen>
+              </listitem>
+            </orderedlist>
+            <para>If you are lucky, Full Text Search is enabled now, if not consult <ulink url="http://openacs.org/forums/message-view?message_id=154759">http://openacs.org/forums/message-view?message_id=154759</ulink>. This link also contains some hints on how to make sure it is enabled.</para>
+      </sect2>
+    </sect1>
+  
+  <sect1 id="install-full-text-search-openfts">
+      <title>Install Full Text Search using OpenFTS (deprecated see tsearch2)</title>
       <authorblurb>
       <para>By <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink> and <ulink url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink></para>
       </authorblurb>
+      <para>OpenFTS and tsearch1 use is deprecated in favor of
+      Tsearch2. See 
+      <xref linkend="install-full-text-search-tsearch2">Tsearch2</xref>. Tsearch2 is much easier to install, requiring only
+      compilation of one module from PostgreSQL contrib, with an
+      automated install process using the tsearch2-driver package.</para>
+      
       <sect2 id="install-openfts">
       <title>Install OpenFTS module</title>
         <indexterm>
@@ -621,7 +856,7 @@ CREATE
         <programlisting>#ns_param   nsfts           ${bindir}/nsfts.so</programlisting>
       </sect2>
 
-      <sect2 id="install-fts-engine">
+      <sect2 id="install-fts-engine-openfts">
         <title>Install Full Text Search Engine</title>
         <orderedlist>
           <listitem>
@@ -722,7 +957,7 @@ line, click
           </listitem>
         </orderedlist>
       </sect2>
-      <sect2 id="install-fts-content-provider">
+      <sect2 id="install-fts-content-provider-openfts">
         <title>Enable Full Text Search in packages</title>
             <para>Enabling Full Text Search in packages at the moment is not trivial. It involves a couple of steps, which I will illustrate taking lars-blogger as an example package</para>
             <orderedlist>
