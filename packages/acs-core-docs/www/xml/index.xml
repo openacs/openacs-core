@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [ 
 
-<!ENTITY version "4.6">
+<!ENTITY version "4.6.2">
 <!ENTITY majorversion "4">
 <!-- 
      OpenACS Version. 
@@ -22,6 +22,8 @@
 <!ENTITY object-identity SYSTEM "developers-guide/object-identity.xml">
 <!ENTITY parties SYSTEM "developers-guide/parties.xml">
 
+<!ENTITY submissions SYSTEM "developers-guide/submissions.xml">
+<!ENTITY i18n-devel SYSTEM "developers-guide/i18n.xml">
 <!ENTITY objects-design SYSTEM "kernel/object-system-design.xml">
 <!ENTITY objects-req SYSTEM "kernel/object-system-req.xml">
 <!ENTITY permissions-req SYSTEM "kernel/permissions-requirements.xml">
@@ -32,7 +34,6 @@
 <!ENTITY subsites-design SYSTEM "kernel/subsites-design.xml">
 <!ENTITY apm-req SYSTEM "kernel/apm-requirements.xml">
 <!ENTITY apm-design SYSTEM "kernel/apm-design.xml">
-
 <!ENTITY security-req SYSTEM "kernel/security-requirements.xml">
 <!ENTITY security-design SYSTEM "kernel/security-design.xml">
 <!ENTITY security-notes SYSTEM "kernel/security-notes.xml">
@@ -41,8 +42,13 @@
 <!ENTITY db-api SYSTEM "kernel/db-api.xml">
 <!ENTITY tcl-doc SYSTEM "kernel/tcl-doc.xml">
 <!ENTITY bootstrap-acs SYSTEM "kernel/bootstrap-acs.xml">
-
 <!ENTITY programming-aolserver SYSTEM "developers-guide/programming-with-aolserver.xml">
+
+<!ENTITY tutorial-newpackage SYSTEM "developers-guide/tutorial.xml">
+<!ENTITY tutorial-database SYSTEM "developers-guide/tutorial-db.xml">
+<!ENTITY tutorial-pages SYSTEM "developers-guide/tutorial-pages.xml">
+<!ENTITY tutorial-debug SYSTEM "developers-guide/tutorial-debug.xml">
+<!ENTITY tutorial-advanced SYSTEM "developers-guide/tutorial-advanced.xml">
 
 <!-- Engineering Standards -->
 <!ENTITY dbprimer SYSTEM "engineering-standards/docbook-primer.xml">
@@ -56,17 +62,22 @@
 
 <!-- Installation Guide -->
 <!ENTITY install-overview SYSTEM "install-guide/overview.xml">
+<!ENTITY software SYSTEM "install-guide/software.xml">
 <!ENTITY operating-system SYSTEM "install-guide/os.xml">
 <!ENTITY oracle SYSTEM "install-guide/oracle.xml">
 <!ENTITY postgres SYSTEM "install-guide/postgres.xml">
 <!ENTITY aolserver SYSTEM "install-guide/aolserver.xml">
-<!ENTITY nextsteps SYSTEM "install-guide/next-steps.xml">
+<!ENTITY redhat SYSTEM "install-guide/red-hat.xml">
 <!ENTITY openacs SYSTEM "install-guide/openacs.xml">
 <!ENTITY credits SYSTEM "install-guide/credits.xml">
+<!ENTITY maintenance SYSTEM "install-guide/maintenance.xml">
+<!ENTITY database-maintenance SYSTEM "install-guide/database-maintenance.xml">
+<!ENTITY recovery SYSTEM "install-guide/recovery.xml">
+<!ENTITY upgrade SYSTEM "install-guide/upgrade.xml">
 
 <!-- Installing on Windoze -->
 <!ENTITY win2k SYSTEM "install-guide/win2kinstall.xml">
-
+<!ENTITY mac SYSTEM "install-guide/macinstall.xml">
 
 <!-- "For Everyone" documents -->
 
@@ -75,110 +86,125 @@
 
 <book>
   <title>OpenACS Documentation</title>
-
-  <part label="Part I" id="for-everyone">
+  
+  <part id="for-everyone">
     <title>OpenACS For Everyone</title>
     <partintro>
       <para>High level information: What is OpenACS?</para>
     </partintro>
 
-    <chapter id="general-documents" xreflabel="High level information: What is OpenACS?">
+    <chapter id="general-documents">
       <title>High level information: What is OpenACS?</title>
       <sect1 id="openacs-overview" xreflabel="OpenACS Overview">
         <title>Overview</title>
 	  <para>
-	    OpenACS (Open Architecture Community System) is an advanced
-	    toolkit for building scalable, community-oriented web applications. 
-	    If you're thinking of building an enterprise-level web application, 
-	    OpenACS is a solid, proven foundation that will give you a 3-6 month headstart.
+	    OpenACS (Open Architecture Community System) is an
+	    advanced toolkit for building scalable, community-oriented
+	    web applications.  If you're thinking of building an
+	    enterprise-level web application, OpenACS is a solid,
+	    proven foundation that will give you a 3-6 month
+	    headstart.
 	  </para>
 
 	  <para>
-	    OpenACS is also a collection of pre-built applications and services that
-	    you can use to build your web site/application. Through a modular architecture,
-	    OpenACS has packages for user/groups management, content management, e-commerce,
-	    news, FAQ, calendar, forums, bug tracking, full-text searching, and 
-	    <ulink url="http://dev.openacs.org/packages/package-list">much more</ulink>.
+	    OpenACS is also a collection of pre-built applications and
+	    services that you can use to build your web
+	    site/application. Through a modular architecture, OpenACS
+	    has packages for user/groups management, content
+	    management, e-commerce, news, FAQ, calendar, forums, bug
+	    tracking, full-text searching, and <ulink
+	    url="http://dev.openacs.org/packages/package-list">much
+	    more</ulink>.
 	  </para>
 
+
 	  <para>
-	    OpenACS relies on <ulink url="http://www.aolserver.com/">AOLserver</ulink>, 
-	    the free, multithreaded, scalable, Tcl-enabled, web/application server used by 
-	    America On-Line for most of its web sites, and a true acid-compliant 
-	    Relational Database Management System (RDBMS). Currently OpenACS supports 
-	    PostgreSQL, an open source RDBMS, and Oracle. (<ulink url="http://openacs.org/about/what-is-openacs">read more</ulink>)
+	    OpenACS relies on <ulink
+	    url="http://www.aolserver.com/">AOLserver</ulink>, the
+	    free, multithreaded, scalable, Tcl-enabled,
+	    web/application server used by America On-Line for most of
+	    its web sites, and a true acid-compliant Relational
+	    Database Management System (RDBMS). Currently OpenACS
+	    supports PostgreSQL, an open source RDBMS, and
+	    Oracle. (<ulink
+	    url="http://openacs.org/about/what-is-openacs">read
+	    more</ulink>)
 	  </para>
 
           <para>
-	    The OpenACS toolkit is based on the ArsDigita Community System. ArsDigita 
-	    (now part of Red Hat, Inc.) kindly made their work available under the
-	    <ulink url="http://dev.openacs.org/about/licensing/">GPL</ulink>, 
+	    The OpenACS toolkit is based on the ArsDigita Community
+	    System. ArsDigita (now part of Red Hat, Inc.) kindly made
+	    their work available under the <ulink
+	    url="http://dev.openacs.org/about/licensing/">GPL</ulink>,
 	    making all of this possible. 
 	  </para>
 
 	  <para>
-	    The OpenACS community would like to hear your comments and help you
-	    in your endeavors with the system. Stop by our <ulink url="http://openacs.org">web site</ulink> 
-	    and feel free to ask a question, post ideas or whatever.
+	    The OpenACS community would like to hear your comments and
+	    help you in your endeavors with the system. Stop by our
+	    <ulink url="http://openacs.org">web site</ulink> and feel
+	    free to ask a question, post ideas or whatever.
 	  </para>
       </sect1>
-
       &release-notes;
-
     </chapter>
-
   </part>
 
-  <part label="Part II" id="acs-admin">
-    <title>For OpenACS Admins</title>
-    <partintro>
-      <para>Help to the folks keeping an OpenACS installation up and running.</para>
-    </partintro>
-
-
-    <chapter id="unix-install" xreflabel="Installing on Unix/Linux">
+  <part id="acs-admin">
+    <title>Administrator's Guide</title>
+    &software;
+    <chapter id="unix-install">
       <title>Installing on Unix/Linux</title>
-
-	   &install-overview;
-	   &operating-system;
-	   &oracle;
-	   &postgres;
-	   &aolserver;
-	   &openacs;
-	   &nextsteps;
-           &credits;
-
+      &install-overview;
+      &operating-system;
+      &oracle;
+      &postgres;
+      &aolserver;
+      &openacs;
+      &credits;
     </chapter>
-
-    <chapter id="win-install" xreflabel="Installing on Windows">
+    <chapter id="win-install">
       <title>Installing on Windows</title>
-
-      <sect1 id="win-overview" xreflabel="Windows Installation Overview">
-        <title>Overview</title>
-        <para>This walks you through an OpenACS installation under Windows.</para>
-      </sect1>
-
       &win2k;
-
     </chapter>
-
+    <chapter id="mac-install">
+      <title>Installing on a Macintosh</title>
+      &mac;
+    </chapter>
+    <chapter id="upgrade">
+      <title>Upgrading</title>
+      &upgrade;
+    </chapter>
+    <chapter id="maintenance">
+      <title>Maintenance</title>
+      &maintenance;
+      &database-maintenance;
+      &recovery;
+    </chapter>
+    &redhat;
   </part>
 
-  <part label="Part III" id="acs-dev">
+  <part id="acs-dev">
     <title>For OpenACS Developers</title>
     <partintro>
-      <para>This is the place to look if you want to extend OpenACS and build on top
-	of what's already here. Here you can find out about the guts of the system.</para>
+      <para>
+        This is the place to look if you want to extend OpenACS and build on
+	top of what's already here. Here you can find out about the
+	guts of the system.
+      </para>
     </partintro>
 
+    <chapter id="tutorial">
+      <title>Development Tutorial</title>
+      &tutorial-newpackage;
+      &tutorial-database;
+      &tutorial-pages;
+      &tutorial-debug;
+      &tutorial-advanced;
+    </chapter>
+
     <chapter id="dev-guide">
-      <title>OpenACS Developer's Guide</title>
-
-      <sect1 id="developers-overview" xreflabel="OpenACS Developer's Guide">
-        <title>Overview</title>
-        <para>A tour of what you need to know in order to extend OpenACS.</para>
-      </sect1>
-
+      <title>Development Reference</title>
       &packages;
       &objects;
       &rp;
@@ -186,22 +212,10 @@
       &templates;
       &permissions;
       &subsites;
-
-    </chapter>
-
-    <chapter id="more-developer-info">
-      <title>Other Developer Resources</title>
-
-      <sect1 id="other-developer-overview" xreflabel="Other Developer Resources">
-        <title>Overview</title>
-        <para>Developer information that doesn't really fit anywhere else.</para>
-      </sect1>
-
       &parties;
       &permissions-tedious;
       &object-identity;
       &programming-aolserver;
-
     </chapter>
 
     <chapter id="eng-standards">
@@ -221,7 +235,7 @@
     <chapter id="kernel-doc">
       <title>Kernel Documentation</title>
 
-      <sect1 id="kernel-overview" xreflabel="OpenACS &version; Kernel Overview">
+      <sect1 id="kernel-overview">
         <title>Overview</title>
         <para>
 	  Compared to its predecessors, version &version; of OpenACS has a much
@@ -229,34 +243,42 @@
 	  significant change is found at the system architecture level,
 	  reflected in the following hierarchy:
         </para>
-
+        
 	<itemizedlist>
-	  <listitem><para>The <emphasis>OpenACS &version; Kernel</emphasis>, which handles system-wide necessities
-	      such as metadata, security, users and groups, subsites, and
-	      package management and deployment.
-	    </para></listitem>
-	  
-	  
-
-	  <listitem><para>The <emphasis>OpenACS &version; Core</emphasis>, which comprises all the other packages
-	      that ship with the kernel and are most frequently needed by users,
-	      such as templating, bboard, and user registration/management. The
-	      packages tend to be developed and distributed with the kernel.
-	    </para></listitem>
-	  
-	  
-	  
-	  <listitem><para><emphasis>OpenACS &version; Application packages</emphasis>, which typically provide
-	      user-level web services built on top of the Kernel and Core.  Such
-	      packages include those built by ArsDigita as well as external
-	      contributors.  Application packages are developed separately from
-	      the Kernel, and are typically released independently of it.
-	    </para></listitem>
+	  <listitem>
+            <para>
+              The <emphasis>OpenACS &version; Kernel</emphasis>, which
+	      handles system-wide necessities such as metadata,
+	      security, users and groups, subsites, and package
+	      management and deployment.
+	    </para>
+          </listitem>
+	  <listitem>
+            <para>
+              The <emphasis>OpenACS &version; Core</emphasis>, which
+	      comprises all the other packages that ship with the
+	      kernel and are most frequently needed by users, such as
+	      templating, bboard, and user
+	      registration/management. The packages tend to be
+	      developed and distributed with the kernel.
+	    </para>
+          </listitem>
+	  <listitem>
+            <para>
+              <emphasis>OpenACS &version; Application
+	      packages</emphasis>, which typically provide user-level
+	      web services built on top of the Kernel and Core.  Such
+	      packages include those built by ArsDigita as well as
+	      external contributors.  Application packages are
+	      developed separately from the Kernel, and are typically
+	      released independently of it.
+	    </para>
+          </listitem>
 	</itemizedlist>
-
 	<para>
 	  This document provides a high level overview of the kernel
-	  package. Documentation for the other packages can be found <ulink url="index.html">elsewhere</ulink>.
+	  package. Documentation for the other packages can be found
+	  <ulink url="index.html">elsewhere</ulink>.
 	</para>
       </sect1>
 
@@ -270,18 +292,15 @@
       &subsites-design;
       &apm-req;
       &apm-design;
-
+      &db-api;
       &security-req;
       &security-design;
       &security-notes;
       &rp-req;
       &rp-design;
-      &db-api;
       &tcl-doc;
       &bootstrap-acs;
 
     </chapter>
-
   </part>
-
 </book>
