@@ -929,27 +929,26 @@ ad_proc -public package_exec_plsql {
     package_exec_plsql -var_list $var_list group delete
 
     </pre>
-    
 } {
-    
-    foreach arg [util_memoize "package_plsql_args -function_name $function_name \"$package_name\""] {
+    foreach arg [util_memoize [list package_plsql_args -function_name $function_name $package_name]] {
 	set real_params([string toupper $arg]) 1
     }
-    
+
     # Use pieces to generate the parameter list to the new
     # function. Pieces is just a list of lists where each list contains only
     # one item - the name of the parameter. We keep track of
     # parameters we've already added in the array param_array (all keys are
     # in upper case)
-    
+
     set pieces [list]
-    
+
     foreach pair $var_list {
 	set __key [lindex $pair 0]
 	set __value [lindex $pair 1]
 	if { ![info exists real_params([string toupper $__key])] } {
 	    # The parameter is not accepted as a parameter to the
 	    # pl/sql function. Ignore it.
+            ns_log Warning "package_exec_plsql: skipping $__key not found in params for $package_name $function_name"
 	    continue;
 	} 
 	lappend pieces [list $__key]
