@@ -137,6 +137,65 @@ ad_proc -public ad_user_remove {
     }
 }
 
+namespace eval person {
+    
+    ad_proc -public new {
+        {-first_names:required}
+        {-last_name:required}
+    } {
+        create a new person
+    } {
+       
+        set extra_vars [ns_set create]
+        ns_set put $extra_vars first_names $first_names
+        ns_set put $extra_vars last_name $last_name
+
+        set object_type "person"
+        return [package_instantiate_object -extra_vars $extra_vars $object_type]
+    }
+
+    ad_proc -public delete {
+        {-person_id:required}
+    } {
+        delete a person
+    } {
+        db_exec_plsql delete_person {}
+    }
+
+    ad_proc -public get {
+        {-person_id:required} 
+    } {
+        get info for a person as a tcl array in list form
+    } {
+        db_1row get_person {}
+        
+        set person(person_id) $person_id
+        set person(first_names) $first_names
+        set person(last_name) $last_names
+
+        return [array get person]
+    }
+
+    ad_proc -public name {
+        {-person_id:required}
+    } {
+        get the name of a person
+    } {
+        db_1row get_person_name {}
+        return $person_name
+    }
+
+    ad_proc -public update {
+        {-person_id:required}
+        {-first_names:required}
+        {-last_name:required}
+    } {
+        update the name of a person
+    } {
+        db_dml update_person {}
+    }
+}
+
 namespace eval acs_user {
 
     ad_proc -public change_state {

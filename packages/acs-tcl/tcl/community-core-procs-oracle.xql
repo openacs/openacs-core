@@ -24,5 +24,13 @@
       </querytext>
 </fullquery>
 
+<fullquery name="person::delete.delete_person">      
+      <querytext>
+
+	    select person.delete(:person_id);
+	
+      </querytext>
+</fullquery>
+
  
 </queryset>
