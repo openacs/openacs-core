@@ -600,6 +600,9 @@ ad_proc -public aa_runseries {
         }
     }
     set aa_in_init_class ""
+
+    # Generate the XML report file
+    aa_test::write_test_file
 }
 
 
@@ -1080,6 +1083,78 @@ ad_proc -public aa_test::parse_install_file {
     set service(auto_test_url) "$service(url)test/admin"
 
     set service(rebuild_cmd) "sh [file join $service(script_path) recreate.sh]"
+}
+
+ad_proc -private aa_test::get_test_doc {} {
+    Returns an XML doc with statistics for the most recent test results
+    on the server.
+
+    @author Peter Marklund
+} {
+    # Open XML document
+    set xml_doc "<?xml version=\"1.0\"?>
+    <test_report>\n"
+
+    set testcase_count [llength [nsv_get aa_test cases]]
+    append xml_doc "    <testcase_count>$testcase_count</testcase_count>\n"
+
+    db_foreach result_counts {
+        select result,
+               count(*) as result_count
+        from aa_test_results
+        group by result
+    } {
+        set result_counts($result) $result_count
+    }
+
+    foreach result [array names result_counts] {
+        append xml_doc "    <result_count result=\"$result\">$result_counts($result)</result_count>\n"
+    }
+
+    db_foreach failure_counts {
+        select testcase_id,
+               count(*) as failure_count
+        from aa_test_results
+        where result = 'fail'
+        group by testcase_id
+    } {
+        set failure_counts($testcase_id) $failure_count
+    }
+
+    foreach testcase_id [array names failure_counts] {
+        append xml_doc "    <testcase_failure testcase_id=\"$testcase_id\">$failure_counts($testcase_id)</testcase_failure>\n"
+    }
+
+    # Close XML document
+    append xml_doc "</test_report>\n"
+
+    return $xml_doc
+}
+
+ad_proc -private aa_test::write_test_file {} {
+    Writes an XML file with statistics for the most recent test results
+    on the server.
+
+    @author Peter Marklund
+    
+} {
+    set xml_doc [get_test_doc]
+
+    set hostname [exec hostname]
+    set server [ns_info server]
+
+    set report_dir [aa_test::xml_report_dir]
+
+    if { ![file isdirectory $report_dir] } {
+        if { [catch {exec mkdir -p $report_dir} errmsg] } {
+            ns_log Error "Could not create directory $report_dir to write xml test report to. Not generating report"
+            return ""
+        }
+    }
+
+    template::util::write_file "$report_dir/${hostname}-${server}-testreport.xml" $xml_doc
+
+    return $xml_doc
 }
 
 ad_proc -public aa_test::parse_test_file {
