@@ -7,13 +7,13 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="4.6.4" url="http://openacs.org/repository/download/apm/acs-kernel-4.6.4.apm">
+    <version name="4.6.6" url="http://openacs.org/repository/download/apm/acs-kernel-4.6.6.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
         <release-date>2002-10-27</release-date>
         <vendor url="http://openacs.org/">OpenACS</vendor>
 
-        <provides url="acs-kernel" version="4.6.4"/>
+        <provides url="acs-kernel" version="4.6.6"/>
 
         <callbacks>
         </callbacks>
