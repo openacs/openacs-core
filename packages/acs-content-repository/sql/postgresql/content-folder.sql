@@ -513,8 +513,8 @@ end;' language 'plpgsql';
 
 
 -- function is_registered
-create function content_folder__is_registered (integer,varchar,varchar)
-returns integer as '
+create function content_folder__is_registered (integer,varchar,boolean)
+returns boolean as '
 declare
   is_registered__folder_id              alias for $1;  
   is_registered__content_type           alias for $2;  

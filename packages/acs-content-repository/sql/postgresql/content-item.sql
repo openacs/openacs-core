@@ -250,7 +250,7 @@ end;' language 'plpgsql';
 
 -- function is_published
 create function content_item__is_published (integer)
-returns char as '
+returns boolean as '
 declare
   is_published__item_id                alias for $1;  
 begin
@@ -394,7 +394,7 @@ returns boolean as '
 declare
   is_valid_child__item_id                alias for $1;  
   is_valid_child__content_type           alias for $2;  
-  v_is_valid_child                       char(1);       
+  v_is_valid_child                       boolean;       
   v_max_children                         cr_type_children.max_n%TYPE;
   v_n_children                           integer;       
 begin
@@ -612,7 +612,7 @@ end;' language 'plpgsql';
 
 
 -- function get_id
-create function content_item__get_id (varchar,integer,char)
+create function content_item__get_id (varchar,integer,boolean)
 returns integer as '
 declare
   get_id__item_path              alias for $1;  
@@ -831,10 +831,13 @@ returns integer as '
 declare
   item_id                alias for $1;  
   root_path              alias for $2;  
-  blob_loc               cr_revisions.content%TYPE;
-  v_revision             cr_items.live_revision%TYPE;
+  -- blob_loc               cr_revisions.content%TYPE;
+  -- v_revision             cr_items.live_revision%TYPE;
 begin
   
+  -- FIXME:
+  raise NOTICE ''not implemented for postgresql'';
+/*
   v_revision := content_item__get_live_revision(item_id);
 
   select content into blob_loc from cr_revisions 
@@ -845,7 +848,7 @@ begin
   end if;
   
   PERFORM blob_to_file(root_path || content_item__get_path(item_id), blob_loc);
-
+*/
   return 0; 
 end;' language 'plpgsql';
 
@@ -1236,7 +1239,7 @@ declare
   v_locale                      cr_items.locale%TYPE;
   v_item_id                     cr_items.item_id%TYPE;
   v_revision_id                 cr_revisions.revision_id%TYPE;
-  v_is_registered               char(1);       
+  v_is_registered               boolean;       
   v_old_revision_id             cr_revisions.revision_id%TYPE;
   v_new_revision_id             cr_revisions.revision_id%TYPE;
 begin

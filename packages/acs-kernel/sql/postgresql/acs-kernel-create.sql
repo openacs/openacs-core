@@ -11,6 +11,7 @@
 -- set feedback off
 
 \i postgresql.sql
+\i lob.sql
 \i acs-logs-create.sql
 \i acs-metadata-create.sql
 \i acs-objects-create.sql

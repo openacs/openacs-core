@@ -42,12 +42,16 @@ begin
       new__item_id
   );
 
+  -- binary data is stored in cr_revisions using Don's lob hack.
+  -- This routine only inserts the lob id.  It would need to be followed by 
+  -- ns_pg blob_dml from within a tcl script to actually insert the lob data.
+
   insert into cr_revisions (
     revision_id, title, description, mime_type, publish_date,
-    nls_language, content, item_id
+    nls_language, lob, item_id, storage_type
   ) values (
     v_revision_id, new__title, new__description, new__mime_type, 
-    new__publish_date, new__nls_language, new__data, new__item_id     
+    new__publish_date, new__nls_language, new__data, new__item_id, ''lob''     
   );
 
   return v_revision_id;
@@ -59,46 +63,42 @@ end;' language 'plpgsql';
 create function content_revision__new (varchar,varchar,timestamp,varchar,varchar,text,integer,integer,timestamp,integer,varchar)
 returns integer as '
 declare
-  title                  alias for $1;  
-  description            alias for $2;  
-  publish_date           alias for $3;  
-  mime_type              alias for $4;  
-  nls_language           alias for $5;  
-  text                   alias for $6;  
-  item_id                alias for $7;  
-  revision_id            alias for $8;  
-  creation_date          alias for $9;  
-  creation_user          alias for $10; 
-  creation_ip            alias for $11; 
-  v_revision_id          integer;       
-  blob_loc               cr_revisions.content%TYPE;
+  new__title                  alias for $1;  
+  new__description            alias for $2;  
+  new__publish_date           alias for $3;  
+  new__mime_type              alias for $4;  
+  new__nls_language           alias for $5;  
+  new__text                   alias for $6;  
+  new__item_id                alias for $7;  
+  new__revision_id            alias for $8;  
+  new__creation_date          alias for $9;  
+  new__creation_user          alias for $10; 
+  new__creation_ip            alias for $11; 
+  v_revision_id               integer;       
+  v_content_type              acs_object_types.object_type%TYPE;
 begin
 
-  blob_loc := empty_blob();
+  v_content_type := content_item__get_content_type(new__item_id);
 
-  v_revision_id := content_revision__new(
-      title,
-      description,
-      publish_date,
-      mime_type,
-      nls_language,
-      blob_loc,
-      item_id, 
-      revision_id,
-      creation_date,
-      creation_user,
-      creation_ip
+  v_revision_id := acs_object__new(
+      new__revision_id,
+      v_content_type, 
+      new__creation_date, 
+      new__creation_user, 
+      new__creation_ip, 
+      new__item_id
   );
 
-  select 
-    content into blob_loc
-  from 
-    cr_revisions 
-  where 
-    revision_id = v_revision_id
-  for update;
+  -- text data is stored directly in cr_revisions using text datatype.
 
-  PERFORM string_to_blob(text, blob_loc);
+  insert into cr_revisions (
+    revision_id, title, description, mime_type, publish_date,
+    nls_language, content, item_id, storage_type, content_length
+  ) values (
+    v_revision_id, new__title, new__description, new__mime_type, 
+    new__publish_date, new__nls_language, new__text, new__item_id, ''text'',
+    length(new__text)
+  );
 
   return v_revision_id;
  
@@ -369,7 +369,7 @@ create function content_revision__export_xml (integer)
 returns integer as '
 declare
   revision_id            alias for $1;  
-  clob_loc               clob;          
+  clob_loc               text;          
   v_doc_id               cr_xml_docs.doc_id%TYPE;
   v_revision_id          cr_revisions.revision_id%TYPE;
 begin
@@ -377,7 +377,7 @@ begin
   v_doc_id := cr_xml_doc_seq.nextval;
 
   insert into cr_xml_docs (doc_id, doc) 
-    values (v_doc_id, empty_clob());
+    values (v_doc_id, '''');
 
   -- FIXME: need a way to deal with this xml call.
   v_revision_id := write_xml(revision_id, clob_loc);  
@@ -436,10 +436,9 @@ end;' language 'plpgsql';
 
 -- function is_latest
 create function content_revision__is_latest (integer)
-returns varchar as '
+returns boolean as '
 declare
   is_latest__revision_id            alias for $1;  
-  v_ret                             varchar(1);    
 begin
 
   select 1 from cr_items
@@ -459,10 +458,15 @@ create function content_revision__to_temporary_clob (integer)
 returns integer as '
 declare
   to_temporary_clob__revision_id            alias for $1;  
-  b                                         blob;          
-  c                                         text;          
+  -- b                                         blob;          
+  -- c                                         text;          
 begin
-  -- FIXME
+  -- FIXME:  I can't find an instance in the 4.2 beta code where this
+  --         is used so I'm not worrying about porting it for now.
+  --         DCW - 2001-03-28.
+
+  raise EXCEPTION ''not implemented content_revision.to_temporary_clob'';
+/*
   insert into cr_content_text (
     revision_id, content
   ) values (
@@ -473,7 +477,7 @@ begin
     where revision_id = to_temporary_clob__revision_id;
 
   PERFORM blob_to_clob(b, c);
-
+*/
   return 0; 
 end;' language 'plpgsql';
 
@@ -487,12 +491,16 @@ declare
   lobs                                 blob;          
   lobd                                 blob;          
   v_item_id                            cr_items.item_id%TYPE;
-  v_content_length                     integer;       
+  v_content_length                     cr_revisions.content_length%TYPE;
   v_revision_id_dest                   cr_revisions.revision_id%TYPE;
+  v_content                            cr_revisions.content%TYPE;
+  v_lob                                cr_revisions.lob%TYPE;
+  v_new_lob                            cr_revisions.lob%TYPE;
+  v_content_type                       cr_revisions.content_type%TYPE;
 begin
   -- FIXME
   select
-    dbms_lob.getlength( content ), item_id
+    content_length, item_id
   into
     v_content_length, v_item_id
   from
@@ -521,15 +529,61 @@ begin
        When a BLOB, CLOB, or NCLOB is copied from one row to another row in 
        the same table or in a different table, the actual LOB value is
        copied, not just the LOB locator. */
-    update cr_revisions
-      set content = ( select content from cr_revisions
-                        where revision_id = content_copy__revision_id )
-      where revision_id = v_revision_id_dest;
+
+    select content, content_length, lob, storage_type 
+      into v_content, v_content_length, v_lob, v_storage_type
+      from cr_revisions where revision_id = content_copy__revision_id;
+
+    if v_storage_type = ''lob'' then
+       v_new_lob := empty_lob();
+       PERFORM lob_copy(v_lob, v_new_lob);
+
+        update cr_revisions
+           set content = v_content,
+               content_length = v_content_length,
+               storage_type = ''lob''
+               lob = v_new_lob
+         where revision_id = v_revision_id_dest;
+    else 
+        update cr_revisions
+           set content = v_content,
+               content_length = v_content_length,
+               storage_type = ''text'',
+               lob = null
+         where revision_id = v_revision_id_dest;
+    end if;
+
   end if;
 
   return 0; 
 end;' language 'plpgsql';
 
+
+-- procedure content_copy
+create function content_revision__get_content (integer)
+returns text as '
+declare
+  get_content__revision_id            alias for $1;  
+  v_storage_type                      varchar;
+  v_lob_id
+  v_data                              text;
+begin
+       select storage_type, lob, 
+         into v_storage_type, v_lob_id
+         from cr_revisions
+        where revision_id = get_content__revision_id;
+        
+        if v_storage_type = ''lob'' then
+           return lob_get_data (v_lob_id);
+        else 
+           select content into v_data
+             from cr_revisions
+            where revision_id = get_content_revision_id;
+
+           return v_data;
+        end if;
+
+end;' language 'plpgsql';
 
 
 -- show errors

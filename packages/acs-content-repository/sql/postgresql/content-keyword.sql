@@ -77,7 +77,7 @@ end;' language 'plpgsql';
 
 -- function is_leaf
 create function content_keyword__is_leaf (integer)
-returns varchar as '
+returns boolean as '
 declare
   is_leaf__keyword_id             alias for $1;  
 begin

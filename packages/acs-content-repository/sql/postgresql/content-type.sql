@@ -610,7 +610,7 @@ begin
 
   execute ''create view '' || v_table_name ||
     ''i as select acs_objects.*, cr.revision_id, cr.title, cr.item_id,
-    cr.content as data, cr_text.text,
+    content_revision__get_content(cr.revision_id) as data, cr_text.text,
     cr.description, cr.publish_date, cr.mime_type, cr.nls_language'' || 
     cols || 
     '' from acs_objects, cr_revisions cr, cr_text'' || tabs || '' where 

@@ -142,7 +142,7 @@ end;' language 'plpgsql';
 
 -- function has_revoke_authority
 create function content_permission__has_revoke_authority (integer,integer,varchar,integer)
-returns varchar as '
+returns boolean as '
 declare
   has_revoke_authority__object_id              alias for $1;  
   has_revoke_authority__holder_id              alias for $2;  
@@ -220,7 +220,7 @@ end;' language 'plpgsql';
 
 
 -- procedure grant_permission
-create function content_permission__grant_permission (integer,integer,varchar,integer,varchar,varchar)
+create function content_permission__grant_permission (integer,integer,varchar,integer,boolean,varchar)
 returns integer as '
 declare
   grant_permission__object_id              alias for $1;  
@@ -255,7 +255,7 @@ begin
       exit when grant_permission__is_recursive = ''f'';    
     end loop;
          
-  return 0; 
+    return 0; 
 end;' language 'plpgsql';
 
 
@@ -292,7 +292,7 @@ end;' language 'plpgsql';
 
 
 -- procedure revoke_permission
-create function content_permission__revoke_permission (integer,integer,varchar,integer,varchar,varchar)
+create function content_permission__revoke_permission (integer,integer,varchar,integer,boolean,varchar)
 returns integer as '
 declare
   revoke_permission__object_id              alias for $1;  

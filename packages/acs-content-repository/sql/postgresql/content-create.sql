@@ -289,18 +289,24 @@ create table cr_revisions (
                   not null
                   constraint cr_revisions_item_id_fk references
 		  cr_items on delete cascade,
-  title		  varchar(1000),
-  description	  varchar(4000),
+  title		  varchar(1000) default '' not null,
+  description	  text,
   publish_date	  timestamp,
   mime_type	  varchar(200) default 'text/plain'
 		  constraint cr_revisions_mime_type_ref
 		  references cr_mime_types,
   nls_language    varchar(50),
-  -- blob id
-  content         integer
-  -- content	  blob
+  -- use Don's postgresql lob hack for now.
+  storage_type    varchar(10) default 'lob'
+                  constraint cr_revisions_storage_type
+                  check (storage_type in ('lob','text')),
+  lob             integer,
+  content	  text default '' not null,
+  content_length  integer
 );
 
+create trigger cr_revisions_lob_trig before delete or update or insert
+on cr_revisions for each row execute procedure on_lob_ref();
 
 create index cr_revisions_by_mime_type on cr_revisions(mime_type);
 create index cr_revisions_title_idx on cr_revisions(title);
@@ -336,8 +342,6 @@ comment on column cr_revision_attributes.attributes is '
   An XML document representing the compiled attributes for a revision
 ';
 
--- what's up with this?  We probably need a trigger or something to emulate 
--- this behavior.
 
 -- create global temporary table cr_content_text (
 --     revision_id        integer primary key,
@@ -427,16 +431,10 @@ create table cr_folders (
 		    cr_items on delete cascade
 		    constraint cr_folders_pk 
                     primary key,
-  label		    varchar(1000),
-  description	    varchar(4000),
-  has_child_folders char(1)
-                    default 'f'
-                    constraint cr_folder_child_chk
-                    check (has_child_folders in ('t','f')),
-  has_child_symlinks char(1)
-                     default 'f'
-                     constraint cr_folder_symlink_chk
-                     check (has_child_symlinks in ('t', 'f'))
+  label		    varchar(1000) default '' not null,
+  description	    text default '' not null,
+  has_child_folders boolean default 'f',
+  has_child_symlinks boolean default 'f'
 );  
 
 comment on table cr_folders is '
@@ -511,10 +509,7 @@ create table cr_type_template_map (
                    not null
                    constraint cr_type_template_map_ctx_fk
                    references cr_template_use_contexts,
-  is_default	   char(1)
-                   default 'f'
-                   constraint cr_type_template_map_def_ck
-                   check (is_default in ('t','f')),
+  is_default	   boolean default 'f',
   constraint cr_type_template_map_pk
     primary key (content_type, template_id, use_context)
 );
@@ -604,7 +599,7 @@ create table cr_extlinks (
   label           varchar(1000)
 		  constraint cr_extlink_label_nil
 		  not null,
-  description	  varchar(4000)
+  description	  text default '' not null
 );
 
 comment on table cr_extlinks is '
@@ -626,10 +621,8 @@ create table cr_keywords (
   heading		 varchar(600)
 			 constraint cr_keywords_name_nil
 			 not null,
-  description            varchar(4000),
-  has_children           char(1)
-                         constraint cr_keywords_child_chk
-                         check (has_children in ('t', 'f'))
+  description            text,
+  has_children           boolean
 );
 
 comment on table cr_keywords is '
@@ -670,7 +663,7 @@ create table cr_item_keyword_map (
 --------------------------------------------------------------
 
 create table cr_text (
-  text varchar(4000)
+  text text default '' not null
 );
 
 comment on table cr_text is '

@@ -83,10 +83,8 @@ begin
        on i.item_id = s.symlink_id'';
 
     execute ''alter table cr_folders add
-      has_child_folders char(1)
-			default \\\'\\\'f\\\'\\\'
-			constraint cr_folder_child_chk
-			check (has_child_folders in (\\\'\\\'t\\\'\\\',\\\'\\\'f\\\'\\\'))'';
+      has_child_folders boolean
+			default \\\'\\\'f\\\'\\\''';
 
     execute ''update cr_folders f set has_child_folders =
       coalesce((select \\\'\\\'t\\\'\\\' from dual where exists
@@ -116,7 +114,7 @@ begin
 
     raise NOTICE ''Creating CR_TEXT table for incoming text submissions...'';
 
-    execute ''create table cr_text ( text varchar(4000) )'';
+    execute ''create table cr_text ( text text default \\\'\\\' not null )'';
 
     -- For some reason a simple insert statement throws an error but this works
     execute ''insert into cr_text values (NULL)'';
