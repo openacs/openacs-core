@@ -13,7 +13,7 @@ ad_page_contract {
 
 ad_require_permission $object_id admin
 
-db_dml grant {
+db_exec_plsql grant {
   begin
     acs_permission.grant_permission(:object_id, :party_id, :privilege);
   end;

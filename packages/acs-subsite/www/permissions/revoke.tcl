@@ -32,7 +32,7 @@ from dual}]?
 foreach item $revoke_list {
   set party_id [lindex $item 0]
   set privilege [lindex $item 1]
-  doc_body_append "  <li>[db_string name {select acs_object.name(:party_id) from dual}]</li>\n"
+  doc_body_append "  <li>[db_string party_name {select acs_object.name(:party_id) from dual}]</li>\n"
 }
 
 doc_body_append "</ul>

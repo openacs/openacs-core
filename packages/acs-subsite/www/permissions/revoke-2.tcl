@@ -18,7 +18,7 @@ if { [string eq $operation "Yes"] } {
 	foreach item $revoke_list {
 	    set party_id [lindex $item 0]
 	    set privilege [lindex $item 1]
-	    db_dml revoke {
+	    db_exec_plsql revoke {
 		begin
 		    acs_permission.revoke_permission(:object_id, :party_id, :privilege);
 		end;
