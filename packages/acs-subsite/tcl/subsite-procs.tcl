@@ -540,8 +540,8 @@ ad_proc subsite::get_pageflow_struct {} {
     }
 
     set user_id [ad_conn user_id]
-    set group_id [application_group::group_id_from_package_id]
-    set admin_p [ad_permission_p -user_id $user_id $group_id "admin"]
+    set admin_p [permission::permission_p -object_id \
+	    [site_node_closest_ancestor_package "acs-subsite"] -privilege admin]
     set show_member_list_to [parameter::get -parameter "ShowMembersListTo" -default 2]
 
     if { $admin_p || ($user_id != 0 && $show_member_list_to == 1) || \
@@ -569,7 +569,7 @@ ad_proc subsite::get_pageflow_struct {} {
                                                 selected_patterns *]
     }
 
-    if { [permission::permission_p -object_id [site_node_closest_ancestor_package "acs-subsite"] -privilege admin] } {
+    if { $admin_p } {
         lappend pageflow admin {
             label "Administration"
             url "admin/configure"
