@@ -51,7 +51,7 @@ create table notification_types (
                                     constraint notif_type_type_id_pk
                                     primary key,
        sc_impl_id                   integer not null
-                                    constraint notif_deliv_meth_impl_id_fk
+                                    constraint notif_type_impl_id_fk
                                     references acs_sc_impls(impl_id),
        short_name                   varchar(100)
                                     constraint notif_type_short_name_nn
