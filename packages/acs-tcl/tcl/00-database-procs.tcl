@@ -208,9 +208,12 @@ proc_doc db_list { statement_name sql args } {
 } {
     ad_arg_parser { bind } $args
 
+    # Query Dispatcher (OpenACS - SDW)
+    set full_statement_name [db_qd_get_fullname $statement_name]
+
     # Can't use db_foreach here, since we need to use the ns_set directly.
     db_with_handle db {
-	set selection [db_exec select $db $statement_name $sql]
+	set selection [db_exec select $db $full_statement_name $sql]
 	set result [list]
 	while { [db_getrow $db $selection] } {
 	    lappend result [ns_set value $selection 0]
@@ -226,9 +229,12 @@ proc_doc db_list_of_lists { statement_name sql args } {
 } {
     ad_arg_parser { bind } $args
 
+    # Query Dispatcher (OpenACS - SDW)
+    set full_statement_name [db_qd_get_fullname $statement_name]
+
     # Can't use db_foreach here, since we need to use the ns_set directly.
     db_with_handle db {
-	set selection [db_exec select $db $statement_name $sql]
+	set selection [db_exec select $db $full_statement_name $sql]
 
 	set result [list]
 
