@@ -142,6 +142,7 @@ for each row execute procedure content_search__dtrg ();
 create trigger content_search__utrg after update on cr_revisions
 for each row execute procedure content_search__utrg (); 
 
-drop trigger content_item_search__utrg on cr_items;
+-- JCD: on create this trigger should not exist so lets not drop it
+-- drop trigger content_item_search__utrg on cr_items;
 create trigger content_item_search__utrg before update on cr_items
 for each row execute procedure content_item_search__utrg ();
