@@ -135,4 +135,3 @@
 
 </ul>
 
-For fluidity of administrations, this page is cached in RAM for 15 minutes.  Thus the numbers you see above may be up to 15 minutes out of date.
