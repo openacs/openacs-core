@@ -19,6 +19,7 @@ ad_page_contract {
     {source_weight:optional 0}
     {search_type:optional 0}
     {show_deprecated_p 0}
+    {show_private_p 0}
     query_string
 } -properties {
     title:onevalue
@@ -60,6 +61,7 @@ if { [string equal $name_weight "exact"] } {
 set counter 0
 set matches [list]
 set deprecated_matches [list]
+set private_matches [list]
 
 # place a [list proc_name score positionals] into matches for every proc
 foreach proc [nsv_array names api_proc_doc] { 
@@ -130,7 +132,11 @@ foreach proc [nsv_array names api_proc_doc] {
         if { $doc_elements(deprecated_p) } {
             lappend deprecated_matches [list $proc $score $args]
         } else {
-            lappend matches [list $proc $score $args]
+            if { $doc_elements(public_p) } { 
+                lappend matches [list $proc $score $args]
+            } else {
+                lappend private_matches [list $proc $score $args]
+            }
         }
     }
 }
@@ -167,6 +173,22 @@ foreach output $deprecated_matches {
     multirow append deprecated_results $score $proc $args $url
 }
 
-set show_deprecated_url [export_vars -base [ad_conn url] -override { { show_deprecated_p 1 } } { name_weight doc_weight param_weight source_weight search_type query_string }]
+set show_deprecated_url [export_vars -base [ad_conn url] -override { { show_deprecated_p 1 } } { name_weight doc_weight param_weight source_weight search_type query_string show_private_p }]
 
-set hide_deprecated_url [export_vars -base [ad_conn url] -override { { show_deprecated_p 0 } } { name_weight doc_weight param_weight source_weight search_type query_string }]
+set hide_deprecated_url [export_vars -base [ad_conn url] -override { { show_deprecated_p 0 } } { name_weight doc_weight param_weight source_weight search_type query_string show_private_p }]
+
+
+multirow create private_results score proc args url
+
+foreach output $private_matches {
+    incr counter
+    set proc  [lindex $output 0]    
+    set score [lindex $output 1]
+    set args  [lindex $output 2]
+    set url   [api_proc_url $proc]
+    multirow append private_results $score $proc $args $url
+}
+
+set show_private_url [export_vars -base [ad_conn url] -override { { show_private_p 1 } } { name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p }]
+
+set hide_private_url [export_vars -base [ad_conn url] -override { { show_private_p 0 } } { name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p }]
