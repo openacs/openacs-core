@@ -149,7 +149,14 @@ ad_proc adp_parse_ad_conn_file {} {
                 if { [lang::message::message_exists_p [ad_conn locale] $key] } {
                     set edit_link "<a href=\"$edit_url\" title=\"$key\" style=\"color: green;\"><b>o</b></a>"
                 } else {
-                    set edit_link "<a href=\"$edit_url\" title=\"$key\" style=\"background-color: yellow; color: red;\"><b>*</b></a>"
+                    if { [lang::message::message_exists_p "en_US" $key] } {
+                        # Translation missing in this locale
+                        set edit_link "<a href=\"$edit_url\" title=\"$key\" style=\"background-color: yellow; color: red;\"><b>*</b></a>"
+                    } else {
+                        # Message key missing entirely
+                        set new_url [export_vars -base "[apm_package_url_from_key "acs-lang"]admin/localized-message-new" { { locale en_US } package_key message_key { return_url [ad_return_url] } }]
+                        set edit_link "<a href=\"$new_url\" title=\"$key\" style=\"background-color: red; color: white;\"><b>@</b></a>"
+                    }
                 }
 
                 set parsed_template "${before}${edit_link}${after}"
