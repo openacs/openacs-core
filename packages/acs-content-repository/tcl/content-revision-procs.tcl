@@ -83,11 +83,11 @@ ad_proc -public ::content::revision::new {
     }
     set attribute_names ""
     set attribute_values ""
+    set lob_values [list]
 
     if { [exists_and_not_null attributes] } {
 	set type_attributes [package_object_attribute_list $content_type]
 	set valid_attributes [list]
-	set lob_values [list]
 	# add in extended attributes for this type, ingore
 	# content_revision as those are already captured as named
 	# parameters to this procedure
