@@ -5,11 +5,22 @@ ad_library {
     @author Don Baccus (dhogaza@pacifier.net)
 }
 
-ad_proc -public ad_form {
+ad_proc -public ad_form_prototype {
     args
 } {
     We'll document this when it works and has been committed 
+
+    This version tracks the number of forms emitted for use with javascript widgets
+    and includes a hidden variable to determine if you're refreshing a form, not
+    really submitting it.
+
+    I've renamed this ad_form_prototype to re-emphasize the fact that it's going
+    to be changing in the future, though it's damned useful in its current form.
+
 } {
+
+    global gp_conn
+    incr gp_conn(form_count)
 
     ####################
     #
@@ -23,16 +34,32 @@ ad_proc -public ad_form {
     } 
 
     set valid_args { form method action html name select_query select_query_name add_data \
-                     edit_data from_sql to_sql validate on_submit confirm_template on_request }; 
+                     edit_data from_sql to_sql validate on_submit confirm_template extend}; 
 
     ad_arg_parser $valid_args $args
 
-    if { ![info exists form] } {
-        return -code error "No form argument to ad_form"
+    set extending_p 0
+    if { [info exists extend] } {
+        if { [llength args] == 2 && ![info exists name] || \
+             [llength args] > 2 } {
+            return -code error "\"name\" is the only additional parameter allowed when extending a form"
+           }
+        set form $extend
+        set extending_p 1
+    } elseif { ![info exists form] } {
+        return -code error "No \"form\" argument to ad_form"
     }
 
     if { [info exists on_submit] && ([info exists add_data] || [info exists edit_data]) } {
         return -code Error "\"on_submit\" not allowed in form with \"add_data\" or \"edit_data\""
+    }
+
+    # Set the form name, defaulting to the name of the template that called us
+
+    if { [info exists name] } {
+        set form_name $name
+    } else {
+        set form_name [file rootname [lindex [ad_conn urlv] end]]
     }
 
     ####################
@@ -54,7 +81,7 @@ ad_proc -public ad_form {
         # This can easily be generalized if we add more embeddable form commands ...
 
         if { [string equal $element_name_part "-section"] } {
-            lappend af_element_names "[list "-section" [lindex $element 1]]"
+            lappend af_element_names "[list "-section" [uplevel [list subst [lindex $element 1]]]]"
         } else {
             if { ![regexp {^([^ \t:]+)(?::([a-zA-Z0-9_,(|)]*))?$} $element_name_part match element_name flags] } {
                 return -code error "Form element '$element_name_part' doesn't have the right format. It must be var\[:flag\[,flag ...\]\]"
@@ -102,27 +129,33 @@ ad_proc -public ad_form {
 	}
     }
 
-    # Create the form
+    if { !$extending_p } {
+        set create_command [list template::form create $form_name]
 
-    if { [info exists name] } {
-        set form_name $name
-    } else {
-        set form_name [file rootname [lindex [ad_conn urlv] end]]
+        if { [info exists action] } {
+            lappend create_command "-action" $action
+        }
+
+        if { [info exists method] } {
+            lappend create_command "-method" $method
+        }
+
+        # Create the form
+
+        eval $create_command
+
+        # if a confirm template has been specified, it will be returned unless __confirmed_p is set
+        # true.  This is most easily done by including resources/forms/confirm-button in the confirm
+        # template.
+
+        template::element create $form_name __confirmed_p -datatype integer -widget hidden -value 0
+
+        # javascript widgets can change a form value and submit the result in order to allow the
+        # generating script to fill in a value such as an image.   The widget must set __refreshing_p
+        # true.
+
+        template::element create $form_name __refreshing_p -datatype integer -widget hidden -value 0
     }
-
-    set create_command [list template::form create $form_name]
-
-    if { [info exists action] } {
-        lappend create_command "-action" $action
-    }
-
-    if { [info exists method] } {
-        lappend create_command "-method" $method
-    }
-
-    eval $create_command
-
-    template::element create $form_name __confirmed_p -datatype integer -widget hidden -value 0
 
     foreach element_name $af_element_names {
         if { [llength $element_name] == 2 } {
@@ -195,18 +228,20 @@ ad_proc -public ad_form {
             foreach extra_arg $af_extra_args($element_name) {
                 lappend form_command "-[lindex $extra_arg 0]"
                 switch [lindex $extra_arg 0] {
+                    html -
                     values -
                     validate -
                     options {
-                        lappend form_command [subst [lrange $extra_arg 1 end]]
+                        lappend form_command [uplevel [list subst [lindex $extra_arg 1]]]
                     }
+                    help_text -
                     label -
                     format -
                     value {
                         if { [llength $extra_arg] > 2 || [llength $extra_arg] == 1 } {
                             return -code error "element $element_name: \"$extra_arg\" requires exactly one argument"
                         }
-                        lappend form_command [subst [lindex $extra_arg 1]]
+                        lappend form_command [uplevel [list subst [lindex $extra_arg 1]]]
                     }
                 }
             }
@@ -257,69 +292,58 @@ ad_proc -public ad_form {
 
     # Handle a request form that triggers database operations
 
-    if { [template::form is_request $form_name] } {
+    if { [template::form is_request $form_name] && [info exists key_name] } { 
+        upvar $key_name $key_name
+        upvar __ad_form_values__ values
 
-        # Execute the on_request block, if any.  This is normally used to query the database for
-        # menu values and similar things needed to build the form.
+        # Check to see if we're editing an existing database value
+        if { [info exists $key_name] } {
 
-        if { [info exists on_request] } {
-            ad_page_contract_eval uplevel 1 $on_request
-        }
+            # The key exists, grab the existing values if we have an select_query clause
 
-        if { [info exists key_name] } {
-
-            upvar $key_name $key_name
-            upvar __ad_form_values__ values
-
-            # Check to see if we're editing an existing database value
-            if { [info exists $key_name] } {
-
-                # The key exists, grab the existing values if we have an select_query clause
-
-                if { ![info exists select_query] && ![info exists select_query_name] } {
-                    return -code error "Key \"$key_name\" has the value \"[set $key_name]\" but no select_query or select_query_name clause exists"
-                }
-
-                if { [info exists select_query_name] } {
-                    set select_query ""
-                } else {
-                    set select_query_name ""
-                }
-
-                if { ![uplevel [list db_0or1row $select_query_name [join $select_query " "] -column_array __ad_form_values__]] } {
-                    return -code error "Error when selecting values"
-                }
-
-                foreach element_name $af_element_names {
-                    if { [llength $element_name] == 1 } {
-                        if { [info exists af_from_sql($element_name)] } {
-                            set values($element_name) [template::util::$af_type($element_name)::acquire \
-                                                       $af_from_sql($element_name) $values($element_name)]
-                        }
-                    }
-                }
-
-                set values($key_name) [set $key_name]
-                set values(__add_p) 0
-
-            } else {
-
-                # Make life easy for the OACS 4.5 hacker by automagically generating a value for
-                # our new database row.
-
-                if { ![info exists sequence_name] } {
-                    set sequence_name "acs_object_id_seq"
-                }
-
-                if { ![db_0or1row get_key "" -column_array values] } {
-                    return -code error "Couldn't get the next value from sequence \"$sequence_name\""
-                }
-                set values(__add_p) 1
+            if { ![info exists select_query] && ![info exists select_query_name] } {
+                return -code error "Key \"$key_name\" has the value \"[set $key_name]\" but no select_query or select_query_name clause exists"
             }
 
-            set values(__key_signature) [ad_sign "$values($key_name):$form_name"]
-            template::form set_values $form_name values
+            if { [info exists select_query_name] } {
+                set select_query ""
+            } else {
+                set select_query_name ""
+            }
+
+            if { ![uplevel [list db_0or1row $select_query_name [join $select_query " "] -column_array __ad_form_values__]] } {
+                return -code error "Error when selecting values"
+            }
+
+            foreach element_name $af_element_names {
+                if { [llength $element_name] == 1 } {
+                    if { [info exists af_from_sql($element_name)] } {
+                        set values($element_name) [template::util::$af_type($element_name)::acquire \
+                                                   $af_from_sql($element_name) $values($element_name)]
+                    }
+                }
+            }
+
+            set values($key_name) [set $key_name]
+            set values(__add_p) 0
+
+        } else {
+
+            # Make life easy for the OACS 4.5 hacker by automagically generating a value for
+            # our new database row.
+
+            if { ![info exists sequence_name] } {
+                set sequence_name "acs_object_id_seq"
+            }
+
+            if { ![db_0or1row get_key "" -column_array values] } {
+                return -code error "Couldn't get the next value from sequence \"$sequence_name\""
+            }
+            set values(__add_p) 1
         }
+
+        set values(__key_signature) [ad_sign "$values($key_name):$form_name"]
+        template::form set_values $form_name values
 
     } elseif { [template::form is_submission $form_name] } {
 
@@ -327,12 +351,14 @@ ad_proc -public ad_form {
         # expressions if they exist
 
         uplevel [list template::form get_values $form_name]
-        upvar $key_name __key
-        upvar __key_signature __key_signature
 
-        if { [info exists key_name] && ![ad_verify_signature "$__key:$form_name" $__key_signature] } {
-            ad_return_error "Bad key signature" "Verification of the database key value failed"
-            ad_script_abort
+        if { [info exists key_name] } {
+            upvar $key_name __key
+            upvar __key_signature __key_signature
+
+            if { [info exists __key] && ![ad_verify_signature "$__key:$form_name" $__key_signature] } {
+                ad_return_error "Bad key signature" "Verification of the database key value failed"
+            }
         }
 
         # Execute validation expressions.  We've already done some sanity checks so know the basic structure
@@ -350,7 +376,7 @@ ad_proc -public ad_form {
         }
     }
 
-    if { [template::form is_valid $form_name] } {
+    if { [template::form is_valid $form_name] && ![uplevel {set __refreshing_p}] } {
 
         # Run confirm and preview templates before we do final processing of the form
 
@@ -411,9 +437,8 @@ ad_proc -public ad_form {
             } elseif { [info exists edit_data] && !$__add_p } {
                 ad_page_contract_eval uplevel 1 $edit_data
             }
-            template::element::set_value $form_name __confirmed_p 0
         }
     }
+    template::element::set_value $form_name __refreshing_p 0
+    template::element::set_value $form_name __confirmed_p 0
 }
-
-
