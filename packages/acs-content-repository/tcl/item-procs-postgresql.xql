@@ -72,6 +72,14 @@
       </querytext>
 </fullquery>
 
+<fullquery name="item::delete.delete_item">
+      <querytext>
+
+        selete content_item__delete(:item_id)
+  
+      </querytext>
+</fullquery>
+
 <fullquery name="item::copy.copy_item">      
       <querytext>
       
