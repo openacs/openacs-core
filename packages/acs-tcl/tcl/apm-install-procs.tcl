@@ -355,7 +355,6 @@ ad_proc -private apm_dependency_check {
 ad_proc -private apm_load_catalog_files {
     -upgrade:boolean
     package_key
-    message_catalog_files
 } {
     Load catalog files for a package that is either installed or upgraded.
     If the package is upgraded message key upgrade status is reset before
@@ -367,7 +366,7 @@ ad_proc -private apm_load_catalog_files {
     @author Peter Marklund
 } {
     # If acs-lang hasn't been installed yet we simply return
-    if { [llength [info proc lang::catalog::import_messages_from_file]] == 0 || ![apm_package_installed_p acs-lang] } {
+    if { [llength [info proc lang::catalog::import_from_files]] == 0 || ![apm_package_installed_p acs-lang] } {
         return
     }
 
@@ -377,9 +376,7 @@ ad_proc -private apm_load_catalog_files {
     }
 
     # Load message catalog files
-    foreach catalog_rel_path $message_catalog_files {
-        lang::catalog::import_messages_from_file "[acs_package_root_dir $package_key]/${catalog_rel_path}"
-    }
+    lang::catalog::import_from_files $package_key
 
     # Cache the messages
     lang::message::cache -package_key $package_key
@@ -392,11 +389,10 @@ ad_proc -private apm_package_install {
     {-copy_files:boolean}
     {-load_data_model:boolean}
     {-data_model_files 0}
-    {-message_catalog_files {}}
     {-install_path ""}
+    {-mount_path ""}
     spec_file_path 
 } {
-
     Registers a new package and/or version in the database, returning the version_id.
     If $callback is provided, periodically invokes this procedure with a single argument
     containing a human-readable (English) status message.
@@ -408,19 +404,16 @@ ad_proc -private apm_package_install {
     array set version [apm_read_package_info_file $spec_file_path]
     set package_key $version(package.key)
 
+    # Determine if we are upgrading or installing.
+    set upgrade_from_version_name [apm_package_upgrade_from $package_key $version(name)]
+    set upgrade_p [expr ![empty_string_p $upgrade_from_version_name]]
+
     if { $copy_files_p } {
 	if { [empty_string_p $install_path] } {
 	    set install_path [apm_workspace_install_dir]/$package_key
 	}
 	ns_log Notice "Copying $install_path to [acs_package_root_dir $package_key]"
 	exec "cp" "-r" -- "$install_path/$package_key" [acs_root_dir]/packages/
-    }
-
-    # Install Queries (OpenACS Query Dispatcher - ben)
-    apm_package_install_queries $package_key $version(files)
-
-    if { $load_data_model_p } {
-	    apm_package_install_data_model -callback $callback -data_model_files $data_model_files $spec_file_path
     }
 
     with_catch errmsg {
@@ -444,29 +437,24 @@ ad_proc -private apm_package_install {
 
 	# Register the package if it is not already registered.
 	if { ![apm_package_registered_p $package_key] } {
-	    apm_package_register -spec_file_path $relative_path \
-                                 $package_key \
-                                 $package_name \
-                                 $pretty_plural \
-                                 $package_uri \
-                                 $package_type \
-                                 $initial_install_p \
-                                 $singleton_p
+	    apm_package_register \
+                -spec_file_path $relative_path \
+                $package_key \
+                $package_name \
+                $pretty_plural \
+                $package_uri \
+                $package_type \
+                $initial_install_p \
+                $singleton_p
 	}
 
 	# If an older version already exists in apm_package_versions, update it;
 	# otherwise, insert a new version.
-	if { [db_0or1row version_exists_p {
-	    select version_id 
-	    from apm_package_versions 
-	    where package_key = :package_key
-	    and version_id = apm_package.highest_version(:package_key)
-	} ]} {
+	if { $upgrade_p } {
             # We are upgrading a package
-            set upgrade_p 1
 
             # Load catalog files with upgrade switch before package version is changed in db
-            apm_load_catalog_files -upgrade $package_key $message_catalog_files
+            apm_load_catalog_files -upgrade $package_key
 
 	    set version_id [apm_package_install_version -callback $callback $package_key $version_name \
 		    $version_uri $summary $description $description_format $vendor $vendor_uri $auto_mount $release_date]
@@ -475,37 +463,54 @@ ad_proc -private apm_package_install {
 
 	} else {
             # We are installing a new package
-            set upgrade_p 0
 
             # Load catalog files without the upgrade switch before package version is changed in db
-            apm_load_catalog_files $package_key $message_catalog_files
+            apm_load_catalog_files $package_key
 
-	    set version_id [apm_package_install_version -callback $callback $package_key $version_name \
+	    set version_id [apm_package_install_version \
+                                -callback $callback \
+                                $package_key $version_name \
 				$version_uri $summary $description $description_format $vendor $vendor_uri $auto_mount $release_date]
-
-	    ns_log Notice "INSTALL-HACK-LOG-BEN: version_id is $version_id"
 
 	    if { !$version_id } {
 		# There was an error.
+                ns_log Error "Package $package_key could not be installed. Received version_id $version_id"
 		apm_callback_and_log $callback "The package version could not be created."
 	    }
-	    # Install the paramters for the version.
+	    # Install the parameters for the version.
 	    apm_package_install_parameters -callback $callback $version(parameters) $package_key
 	}
 
 	# Update all other package information.
 	apm_package_install_dependencies -callback $callback $version(provides) $version(requires) $version_id
 	apm_package_install_owners -callback $callback $version(owners) $version_id
-	apm_package_install_files -callback $callback $version(files) $version_id
         apm_package_install_callbacks -callback $callback $version(callbacks) $version_id
 
 	apm_callback_and_log $callback "<p>Installed $version(package-name), version $version(name).<p>"
     } {
-	apm_callback_and_log $callback "<p>Failed to install $version(package-name), version $version(name).  The following error was generated:
+	apm_callback_and_log -severity Error $callback "<p>Failed to install $version(package-name), version $version(name).  The following error was generated:
 <pre><blockquote>
 [ad_quotehtml $errmsg]
 </blockquote></pre>"
 	return 0
+    }
+
+    # Source Tcl procs and queries to be able
+    # to invoke any Tcl callbacks after mounting and instantiation. Note that this reloading 
+    # is only done in the Tcl interpreter of this particular request.
+    apm_load_libraries -procs -force_reload -packages $package_key
+    apm_load_queries -packages $package_key
+
+    if { $upgrade_p } {
+        # Run before-upgrade
+        apm_invoke_callback_proc -version_id $version_id -type before-upgrade -arg_list [list from_version_name $upgrade_from_version_name to_version_name $version(name)]
+    } else {
+        # Run before-install
+        apm_invoke_callback_proc -version_id $version_id -type before-install
+    }
+
+    if { $load_data_model_p } {
+        apm_package_install_data_model -callback $callback -data_model_files $data_model_files $spec_file_path
     }
 
     # Enable the package
@@ -517,38 +522,57 @@ ad_proc -private apm_package_install {
     
     # Instantiating, mounting, and after-install callback only invoked on initial install
     if { ! $upgrade_p } {
-        # Source Tcl procs and queries to be able
-        # to invoke any Tcl callbacks after mounting and instantiation. Note that this reloading 
-        # is only done in the Tcl interpreter of this particular request.
-        apm_load_libraries -procs -force_reload -packages $package_key
-        apm_load_queries -packages $package_key
+        # After install Tcl proc callback
+        apm_invoke_callback_proc -version_id $version_id -type after-install
 
-        if { ![empty_string_p $version(auto-mount)] } {
+        set priority_mount_path [ad_decode $version(auto-mount) "" $mount_path $version(auto-mount)]
+        if { ![empty_string_p $priority_mount_path] } {
             # This is a package that should be auto mounted
 
             set parent_id [site_node::get_node_id -url "/"]
 
             if { [catch {
                 db_transaction {            
-                    set node_id [site_node::new -name $version(auto-mount) -parent_id $parent_id]
+                    set node_id [site_node::new -name $priority_mount_path -parent_id $parent_id]
                 }
             } error] } {
-                ns_log Error "Package $version(package-name) could not be mounted at /$version(auto-mount) , there may already me a package mounted there, the error is: $error"
-            } else {
-                site_node::instantiate_and_mount -node_id $node_id \
-                                             -node_name $version(auto-mount) \
+                # There is already a node with that path, check if there is a package mounted there
+                array set node [site_node::get -url "/${priority_mount_path}"]
+                if { [empty_string_p $node(object_id)] } {
+                   # There is no package mounted there so go ahead and mount the new package
+                   set node_id $node(node_id)
+                } else {
+                   # Don't unmount already mounted packages
+                   set node_id ""
+                }
+           }
+
+           if { ![empty_string_p $node_id] } {
+
+                site_node::instantiate_and_mount \
+                                             -node_id $node_id \
+                                             -node_name $priority_mount_path \
                                              -package_name $version(package-name) \
                                              -package_key $package_key
-            }
+
+                apm_callback_and_log $callback "<p> Mounted an instance of the package at /${priority_mount_path} </p>"
+           } {
+                # Another package is mounted at the path so we cannot mount
+                global errorInfo
+                set error_text "Package $version(package-name) could not be mounted at /$version(auto-mount) , there may already me a package mounted there, the error is: $error"
+                ns_log Error "$error_text \n\n$errorInfo"
+                apm_callback_and_log $callback "<p> $error_text </p>"
+            } 
+
         } elseif { [string equal $package_type "apm_service"] && [string equal $singleton_p "t"] } {
             # This is a singleton package.  Instantiate it automatically, but don't mount.
 
             # Using empty context_id
             apm_package_instance_new $version(package-name) "" $package_key
         }
-
-        # After install Tcl proc callback
-        apm_invoke_callback_proc -version_id $version_id -type after-install
+    } else {
+        # After upgrade Tcl proc callback
+        apm_invoke_callback_proc -version_id $version_id -type after-upgrade -arg_list [list from_version_name $upgrade_from_version_name to_version_name $version(name)]
     }
 
     # Flush the installed_p cache
@@ -562,7 +586,8 @@ ad_proc -private apm_package_install_version {
     {-version_id ""}
     package_key version_name version_uri summary description description_format vendor vendor_uri auto_mount {release_date ""} 
 } {
-    Installs a version of a package into the ACS.
+    Installs a version of a package.
+
     @return The assigned version id.
 } {
     if { [empty_string_p $version_id] } {
@@ -700,7 +725,7 @@ ad_proc -private apm_package_install_data_model {
 	set data_model_files [apm_data_model_scripts_find \
 		-upgrade_from_version_name $upgrade_from_version_name \
 		-upgrade_to_version_name $upgrade_to_version_name \
-		$package_key $version(files)]
+		$package_key]
     }
 
     if { ![empty_string_p $data_model_files] } {
@@ -909,42 +934,6 @@ ad_proc -private apm_package_install_callbacks {
     }
 }
 
-ad_proc -private apm_package_install_queries {
-    {-callback apm_dummy_callback}
-    package_key
-    files
-} {
-    Given a spec file, reads in the data model files to load from it.
-
-    @param package_key The package key from the .info file.
-    @param files List of files for this package from the package's .info file
-    @author Don Baccus (dhogaza@pacifier.com)
-
-    This replaces the brute-force version originally provided by
-    Ben, which manually searched the package directories rather than
-    use the package information file.
-
-} {
-    set path "[acs_package_root_dir $package_key]"
-
-
-    ns_log Notice "APM/QD = loading up package query files for $package_key"
-    set ul_p 0
-
-    foreach query_file [apm_query_files_find $package_key $files] {
-	ns_log Debug "APM/QD: Now processing query file $query_file"
-        if { !$ul_p } {
-            apm_callback_and_log $callback "<ul>\n"
-            set ul_p 1
-        }
-        apm_callback_and_log $callback "<li>Loading query file $path/$query_file..."
-	db_qd_load_query_file $path/$query_file
-    }
-    if { $ul_p } {
-        apm_callback_and_log $callback "</ul>\n"
-    }
-}
-
 ad_proc -private apm_package_install_spec { version_id } {
 
     Writes the XML-formatted specification for a package to disk,
@@ -1117,10 +1106,8 @@ ad_proc -private apm_packages_full_install {
 }
 
 ad_proc -private apm_package_upgrade_p {package_key version_name} {
-
     @return 1 if a version of the indicated package_key of version lower than version_name \
 	    is already installed in the system, 0 otherwise.
-
 } {
     return [db_string apm_package_upgrade_p {
 	select apm_package_version.version_name_greater(:version_name, version_name) upgrade_p
@@ -1129,6 +1116,22 @@ ad_proc -private apm_package_upgrade_p {package_key version_name} {
 	and version_id = apm_package.highest_version (:package_key)
     } -default 0]
 }
+
+ad_proc -private apm_package_upgrade_from { package_key version_name } {
+    @param package_key The package you're installing
+    @param version_name The version of the package you're installing
+    @return the version of the package currently installed, which we're upgrading from, if it's 
+    different from the version_name passed in. If this is not an upgrade, returns the empty string.
+} {
+    return [db_string apm_package_upgrade_from {
+        select version_name 
+        from   apm_package_versions
+        where  package_key = :package_key
+        and    version_id = apm_package.highest_version(:package_key)
+        and    version_name != :version_name
+    } -default ""]
+}
+
 
 ad_proc -private apm_version_upgrade {version_id} {
 
@@ -1194,36 +1197,10 @@ ad_proc -private apm_upgrade_script_compare {f1 f2} {
     }
 }
 
-ad_proc -private apm_message_catalog_files_find { package_key file_list } {
-    Given a list of files belonging to a certain package, return those
-    files that are message catalog files. Note that the input list and the
-    list returned have items on different formats, see the parameter documentation.
-
-    @param package_key The package_key of the files
-    @param file_list   A list of file items on format [list path file_type file_db_type]
-    @return            A list of message catalog file items on format [list path package_key]
-
-    @see apm_data_model_scripts_find
-    @author Peter Marklund
-} {
-    set catalog_file_list [list]
-
-    foreach file_info $file_list {
-        
-        set file_path [lindex $file_info 0]
-	set file_type [lindex $file_info 1]
-        if { [string equal [apm_guess_file_type $package_key $file_path] "message_catalog"] } {
-            lappend catalog_file_list $file_info [list $file_path $package_key]
-        }
-    }
-
-    return $catalog_file_list
-}
-
 ad_proc -private apm_data_model_scripts_find {
     {-upgrade_from_version_name ""}
     {-upgrade_to_version_name ""}
-    package_key file_list
+    package_key
 } {
     @param version_id What version the files belong to.
     @param upgrade Set this switch if you want the scripts for upgrading.
@@ -1237,10 +1214,10 @@ ad_proc -private apm_data_model_scripts_find {
     }
     set data_model_list [list]
     set upgrade_file_list [list]
-    foreach file $file_list {
-	set path [lindex $file 0]
-	set file_type [lindex $file 1]
-        set file_db_type [lindex $file 2]
+    set file_list [apm_get_package_files -file_types $types_to_retrieve -package_key $package_key]
+    foreach path $file_list {
+        set file_type [apm_guess_file_type $package_key $path]
+        set file_db_type [apm_guess_db_type $package_key $path]
 	apm_log APMDebug "APM: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
 
         # DRB: we return datamodel files which match the given database type or for which no db_type
@@ -1265,6 +1242,7 @@ ad_proc -private apm_data_model_scripts_find {
     }
     set file_list [concat [apm_order_upgrade_scripts $upgrade_file_list] $data_model_list]
     apm_log APMDebug "APM: Data model scripts for $package_key: $file_list"
+    ns_log Notice "pm debug APM: Data model scripts for $package_key: $file_list"
     return $file_list
 }
 
@@ -1355,6 +1333,117 @@ ad_proc -private apm_mount_core_packages {} {
 
     ns_log Notice "Core packages instantiated and mounted"
 }
+
+ad_proc -private apm_version_name_compare {
+    version_name_1
+    version_name_2
+} {
+    Compare two version names (e.g. '1.2d3' and '3.5b') as for which comes before which. The example here would return -1.
+    @param version_name_1 the first version name
+    @param version_name_2 the second version name
+    @return 1 if version_name_1 comes after version_name_2, 0 if they are the same, -1 if version_name_1 comes before version_name_2.
+    @author Lars Pind
+} {
+    db_1row select_sortable_versions {}
+    return [string compare $sortable_version_1 $sortable_version_2]
+}
+
+ad_proc -public apm_version_names_compare {
+    version_name_1
+    version_name_2
+} {
+    Compare two version names (e.g. '1.2d3' and '3.5b') as for which comes before which. The example here would return -1.
+    @param version_name_1 the first version name
+    @param version_name_2 the second version name
+    @return 1 if version_name_1 comes after version_name_2, 0 if they are the same, -1 if version_name_1 comes before version_name_2.
+
+    @author Lars Pind
+} {
+    db_1row select_sortable_versions {}
+    return [string compare $sortable_version_1 $sortable_version_2]
+}
+
+ad_proc -private apm_upgrade_logic_compare {
+    from_to_key_1
+    from_to_key_2
+} {
+    Compare the from-versions in two of apm_upgrade_logic's array entries on the form 'from_version_name,to_version_name'. 
+
+    @param from_to_key the key from the array in apm_upgrade_logic
+    @return 1 if 1 comes after 2, 0 if they are the same, -1 if 1 comes before 2.
+
+    @author Lars Pind
+} {
+    return [apm_version_names_compare [lindex [split $from_to_key_1 ","] 0] [lindex [split $from_to_key_2 ","] 0]]
+}
+
+ad_proc -public apm_upgrade_logic { 
+    {-from_version_name:required}
+    {-to_version_name:required}
+    {-spec:required}
+} {
+    Logic to help upgrade a package.
+    The spec contains a list on the form \{ from_version to_version code_chunk from_version to_version code_chunk ... \}.
+    The list is compared against the from_version_name and to_version_name parameters supplied, and the code_chunks that 
+    fall within the from_version_name and to_version_name it'll get executed in the caller's namespace, ordered by the from_version.
+
+    <p>
+    
+    Example:
+    
+    <blockquote><pre>
+
+    apm_upgrade_logic \ 
+            -from_version_name $from \ 
+            -to_version_name $to \ 
+            -spec {
+        1.1 1.2 {
+            ...
+        }
+        1.2 1.3 {
+            ...
+        }
+        1.4d 1.4d1 {
+            ...
+        }
+        2.1 2.3 {
+            ...
+        }
+        2.3 2.4 {
+            ...
+        }
+    }
+    
+    </pre></blockquote>
+    
+    @param from_version_name The version you're upgrading from, e.g. '1.3'.
+    @param to_version_name The version you're upgrading to, e.g. '2.4'.
+    @param spec The code chunks in the format described above
+
+    @author Lars Pind
+} {
+    if { [expr [llength $spec] % 3] != 0 } {
+        error "The length of spec should be dividable by 3"
+    }
+    
+    array set chunks [list]
+    foreach { elm_from elm_to elm_chunk } $spec {
+
+        # Check that
+        # from_version_name < elm_from < elm_to < to_version_name
+
+        if { [apm_version_names_compare $from_version_name $elm_from] <= 0 && \
+                 [apm_version_names_compare $elm_from $elm_to] <= 0 && \
+                 [apm_version_names_compare $elm_to $to_version_name] <= 0 } {
+            set chunks($elm_from,$elm_to) $elm_chunk
+        }
+    }
+
+    foreach key [lsort -increasing -command apm_upgrade_logic_compare [array names chunks]] {
+        uplevel $chunks($key)
+    }
+}
+
 
 ##############
 #

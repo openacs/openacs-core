@@ -1182,15 +1182,17 @@ ad_proc -public apm_invoke_callback_proc {
 
     @return 1 if invocation
     was carried out successfully, 0 if no proc to invoke could
-    be found, and -1 if there was an error during invocation.
+    be found. Will propagate any error thrown by the callback.
 
     @author Peter Marklund
 } {
     array set arg_array $arg_list
 
-    set proc_name [apm_get_callback_proc -version_id $version_id \
-                                         -package_key $package_key \
-                                         -type $type]
+    set proc_name [apm_get_callback_proc \
+                       -version_id $version_id \
+                       -package_key $package_key \
+                       -type $type]
+    
     if { [empty_string_p $proc_name] } {
         if { [string equal $type "after-instantiate"] } {
             # We check for the old proc on format: package_key_post_instantiation package_id
@@ -1203,12 +1205,7 @@ ad_proc -public apm_invoke_callback_proc {
                 return 0
             }
 
-            with_catch errmsg {
-                $proc_name $arg_array(package_id)
-            } {
-                ns_log Error "APM: Post-instantiation procedure, $proc_name, failed: $errmsg"
-                return -1
-            }   
+            $proc_name $arg_array(package_id)
 
             return 1
             
@@ -1223,12 +1220,8 @@ ad_proc -public apm_invoke_callback_proc {
     set command "${proc_name} [apm_callback_format_args -type $type -arg_list $arg_list]"
 
     # We are ready for invocation
-    with_catch errmsg {
-	    eval $command
-    } {
-        ns_log Error "APM: Callback invocation \"$command\" failed: $errmsg"
-        return -1
-    }
+    ns_log Notice "Invoking callback $type with command $command"
+    eval $command
 
     return 1
 }
@@ -1285,31 +1278,35 @@ ad_proc -public apm_arg_names_for_callback_type {
 
     @author Peter Marklund
 } {
-    switch $type {
-        after-instantiate {
-            return [list package_id]
+    array set arguments {
+        after-instantiate { 
+            package_id 
         }
-        
-        after-mount {
-            return [list package_id node_id]
-        }
-
-        before-uninstall {
-            return [list version_id]
-        }
-
         before-uninstantiate {
-            return [list package_id]
+            package_id
         }
-
         before-unmount {
-            return [list package_id node_id]
+            package_id 
+            node_id
         }
-        
-        default {
-            # By default a callback proc takes no arguments
-            return [list]
+        after-mount {
+            package_id
+            node_id
         }
+        before-upgrade {
+            from_version_name
+            to_version_name
+        }
+        after-upgrade {
+            from_version_name 
+            to_version_name
+        }
+    }
+
+    if { [info exists arguments($type)] } {
+        return $arguments($type)
+    } else {
+        return {}
     }
 }
 
@@ -1321,7 +1318,7 @@ ad_proc -public apm_supported_callback_types {} {
 
     @author Peter Marklund
 } {
-    return [list after-install after-instantiate after-mount before-uninstantiate before-uninstall before-unmount]
+    return [list before-install after-install after-instantiate after-mount before-uninstantiate before-uninstall before-unmount before-upgrade after-upgrade]
 }
 
 ad_proc -private apm_callback_has_valid_args {
@@ -1371,12 +1368,6 @@ ad_proc -public apm_package_instance_new {
 } {
 
     Creates a new instance of a package and call the post instantiation proc, if any.
-
-    DRB: I split out the subpieces into two procs because the subsite post instantiation proc
-    needs to be able to find the package's node in the site node map, which results in a 
-    cart-before-the-horse scenario.  The code can't update the site node map until after the
-    package is created yet the original code called the post instantiation proc before the
-    site node code could update the table.
 
     @param instance_name The name of the package instance, defaults to the pretty name of the
                          package type.
@@ -1430,8 +1421,8 @@ ad_proc -public apm_package_instance_delete {
     Deletes an instance of a package
 } {    
     apm_invoke_callback_proc -package_key [apm_package_key_from_id $package_id] \
-                             -type before-uninstantiate \
-                             -arg_list [list package_id $package_id]
+                            -type before-uninstantiate \
+                            -arg_list [list package_id $package_id]
 
     db_exec_plsql apm_package_instance_delete {}
 }

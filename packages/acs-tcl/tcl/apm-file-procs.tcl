@@ -246,17 +246,7 @@ ad_proc -public apm_file_add {
     if { [empty_string_p $file_id] } {
 	set file_id [db_null]
     }
-    return [db_exec_plsql apm_file_add {
-	begin
-	:1 := apm_package_version.add_file(
-		file_id => :file_id,
-		version_id => :version_id,
-		path => :path,
-		file_type => :file_type,
-                db_type => :db_type
-		);
-	end;
-    }]
+    return [db_exec_plsql apm_file_add {}]
 }
 
 ad_proc -private apm_files_load {
@@ -310,19 +300,32 @@ ad_proc -public apm_file_watch {path} {
     nsv_set apm_reload_watch $path 1
 }
 
+ad_proc -private apm_watch_all_files { package_key } {
+    Watch all Tcl procs and xql query files in the given
+    package
+
+    @author Peter Marklund
+} {        
+    set files [ad_find_all_files [acs_root_dir]/packages/$package_key]
+    foreach file [lsort $files] {
+        set file_db_type [apm_guess_db_type $package_key $file]
+        set file_type [apm_guess_file_type $package_key $file]
+
+        set right_db_type [expr [empty_string_p $file_db_type] || \
+                               [string equal $file_db_type [db_type]]]
+
+        if { $right_db_type && [expr [string equal $file_type tcl_procs] || [string equal $file_type query_file]] } {
+            apm_file_watch [ad_make_relative_path $file]
+        }
+    }
+}
+
 ad_proc -public apm_file_remove {path version_id} {
     
     Removes a files from a version.
     
 } { 
-    return [db_exec_plsql apm_file_remove {
-	begin
-	apm_package_version.remove_file(
-				path => :path,
-				version_id => :version_id
-				);
-	end;
-    }]
+    return [db_exec_plsql apm_file_remove {}]
 }
 
 ad_proc -public apm_version_from_file {file_id} {
@@ -602,8 +605,5 @@ ad_proc -private apm_include_file_p { filename } {
     Files for which apm_ignore_file_p returns true will be ignored.
     Backup files are ignored.
 } {
-    if { [apm_ignore_file_p $filename] || [apm_backup_file_p $filename] } {
-  	return 0
-    }
-    return 1
+    return [expr ![apm_ignore_file_p $filename]]
 }
