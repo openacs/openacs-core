@@ -165,7 +165,7 @@ proc login_user { user_email user_password} {
 
     # Login the user
     form find ~n login
-    field find ~n username
+    field find ~n email
     field fill "$user_email"
     field find ~n password
     field fill "$user_password"

@@ -151,6 +151,7 @@ svscanroot=`get_config_param svscanroot`
 svscan_sourcedir=`get_config_param svscan_sourcedir`
 server_url=`get_config_param server_url`
 error_log_file=`get_config_param error_log_file`
+install_error_file=`get_config_param install_error_file`
 tclwebtest_dir=`get_config_param tclwebtest_dir`
 stop_server_command=`get_config_param stop_server_command`
 start_server_command=`get_config_param start_server_command`
@@ -346,12 +347,12 @@ if parameter_true $do_install; then
   if [ -r ${error_log_file} ]; then
       seconds_since_installation_start=$(expr $(date +%s) - $installation_start_time)
       minutes_since_installation_start=$(expr $seconds_since_installation_start / 60 + 1)
-      log_error_file=${serverroot}/log/error.log
-      ./aolserver-errors.pl -${minutes_since_installation_start}m ${error_log_file} > $log_error_file
-      error_line_count=$(wc -l $log_error_file | awk '{print $1}')
+
+      ./aolserver-errors.pl -${minutes_since_installation_start}m ${error_log_file} > ${install_error_file}
+      error_line_count=$(wc -l $install_error_file | awk '{print $1}')
       if expr $error_line_count \> 1 &> /dev/null; then
          alert_keyword=`get_config_param alert_keyword`
-         echo "$0: ${alert_keyword} - There are error messages in the log file, they are stored in $log_error_file"
+         echo "$0: ${alert_keyword} - There are error messages in the log file, they are stored in $install_error_file"
       fi
   else
       echo "$0: Log file ${error_log_file} not readable - cannot check for errors"
