@@ -5,6 +5,7 @@
 <switch @return_code@>
 
 <case value="no_error">
+<if @admin_p@ eq 1>
 <p>#acs-subsite.lt_This_is_the_image_that#:</p>
 </if>
 

@@ -2,15 +2,16 @@
 <message_catalog package_key="acs-subsite" package_version="5.1.0" locale="nl_NL" charset="ISO-8859-1">
 
   <msg key="_or">, of</msg>
+  <msg key="_Update_Basic_Information">Basisinformatie bijwerken</msg>
   <msg key="A_member_of_the_system">Lid van %system_name% sinds</msg>
   <msg key="About_You">Iets over mijzelf</msg>
-  <msg key="Account_at_system_closed">Deze account op %system_name% is gesloten.</msg>
+  <msg key="Account_at_system_closed">Dit registratienummer op %system_name% is gesloten.</msg>
   <msg key="Account_close_confirm_no_label">Nee, naar %pvt_home_name% teruggaan</msg>
-  <msg key="Account_close_confirm_yes_label">Ja, mijn account sluiten</msg>
-  <msg key="Account_closed">&lt;p&gt;Deze account is gesloten.&lt;/p&gt; &lt;p&gt;Volg deze &lt;a href=&quot;%restore_url%&quot;&gt;koppeling om de account te heropenen&lt;/a&gt;.&lt;/p&gt;</msg>
-  <msg key="Account_closed_workspace_msg">&lt;P&gt;&lt;FONT color='red'&gt;&lt;B&gt;Deze account is momenteel gesloten.&lt;/B&gt;&lt;/FONT&gt; Bij het&lt;A href='%login_url%'&gt;opnieuw aanmelden&lt;/a&gt; zal worden aangegeven hoe te handelen.&lt;P&gt;</msg>
-  <msg key="Account_reopened_message">Deze account op %system_name% is heropend. Welkom terug!</msg>
-  <msg key="Account_reopened_title">Account heropend</msg>
+  <msg key="Account_close_confirm_yes_label">Ja, mijn registratie opheffen</msg>
+  <msg key="Account_closed">&lt;p&gt;Dit registratienummer is gesloten.&lt;/p&gt; &lt;p&gt;Volg deze &lt;a href=&quot;%restore_url%&quot;&gt;koppeling om de registratie te heropenen&lt;/a&gt;.&lt;/p&gt;</msg>
+  <msg key="Account_closed_workspace_msg">&lt;P&gt;&lt;FONT color='red'&gt;&lt;B&gt;Dit  registratienummer is momenteel gesloten.&lt;/B&gt;&lt;/FONT&gt; Bij het&lt;A href='%login_url%'&gt;opnieuw aanmelden&lt;/a&gt; zal worden aangegeven hoe verder te handelen.&lt;P&gt;</msg>
+  <msg key="Account_reopened_message">De registratie op %system_name% is heropend. Welkom terug!</msg>
+  <msg key="Account_reopened_title">Registratienummer heropend</msg>
   <msg key="Action">Actie</msg>
   <msg key="Add_new_app">Nieuwe toepassing toevoegen</msg>
   <msg key="Admin">Beheren</msg>
@@ -35,15 +36,17 @@
   <msg key="Change_pass_email_por">Wachtwoord, e-mail, portretfoto veranderen</msg>
   <msg key="Check_Your_Inbox">Het wachtwoord is naar het bij ons bekende e-mailadres gestuurd</msg>
   <msg key="Children">onderliggende objecten</msg>
-  <msg key="Close_account_explanation">&lt;P&gt;Bevestig dat de account op %system_name% moet worden gesloten.&lt;P&gt;Het sluiten van de account betekent dat we niet langer kennisgevingen kunnen sturen en de account ook niet meer in de ledenlijst op %system_name% kunnen tonen. Alle bijdragen aan de gemeenschap, zullen daarentegen bewaard blijven; deze maken immers deel uit van de geschiedenis van deze gemeenschap.&lt;P&gt;Let op: de account kan op een willekeurig moment weer worden geopend.</msg>
-  <msg key="Close_your_account">Mijn account sluiten</msg>
+  <msg key="Close_account_explanation">&lt;P&gt;Bevestig dat de registratie op %system_name% moet worden gesloten.&lt;P&gt;Het sluiten van de registratie betekent dat we niet langer kennisgevingen kunnen sturen en we de registratie ook niet meer in de ledenlijst op %system_name% kunnen tonen. Alle bijdragen aan de gemeenschap, zullen daarentegen bewaard blijven; deze maken immers deel uit van de geschiedenis van deze gemeenschap.&lt;P&gt;Let op: Het registratienummer kan op een willekeurig moment weer worden geopend.</msg>
+  <msg key="Close_your_account">Mijn registratienummer sluiten</msg>
   <msg key="Closed_group">Besloten groep</msg>
   <msg key="Comment">Opmerking</msg>
   <msg key="Communities">Gemeenschappen</msg>
   <msg key="communities">Gemeenschappen</msg>
   <msg key="community">gemeenschap</msg>
   <msg key="Confirm">Bevestigen</msg>
+  <msg key="confirmation_password_changed">Het kiezen van een nieuw wachtwoord is succesvol afgerond. </msg>
   <msg key="Continue">Doorgaan</msg>
+  <msg key="Continue_to_your_account">Naar %pvt_home_name% doorgaan</msg>
   <msg key="Country_Name">Landnaam</msg>
   <msg key="Create_new_community">Nieuwe %pretty_name% aanmaken</msg>
   <msg key="Create_new_subsite">Nieuwe subsite aanmaken</msg>
@@ -138,11 +141,11 @@ Bezoek de volgende koppeling en verander het wachtwoord direct: %reset_password_
   <msg key="lt_Grant_Permission_on_n">Rechten voor %name% toekennen</msg>
   <msg key="lt_Heres_what_the_databa">Dit is het bericht van de database:</msg>
   <msg key="lt_How_would_you_like_the">Hoe dient de wereld %first_names% %last_name% te zien?</msg>
-  <msg key="lt_If_you_dont_think_the">Indien deze persoon hier zeker geen account heeft:</msg>
-  <msg key="lt_If_you_happen_to_know">Indien deze persoon hier wel of mogelijk wel een account heeft:</msg>
+  <msg key="lt_If_you_dont_think_the">Indien deze persoon hier zeker geen registratienummer heeft:</msg>
+  <msg key="lt_If_you_happen_to_know">Indien deze persoon hier wel of mogelijk wel een registratienummer heeft:</msg>
   <msg key="lt_If_you_need_this_func">Indien deze functie nodig is, dienen eerst acs-reference en ref-countries te worden geactiveerd.</msg>
   <msg key="lt_Inherited_Permissions">Geërfde rechten</msg>
-  <msg key="lt_It_would_be_a_very_ba">Het is een zeer slecht idee om deze optie te gebruiken indien deze computer wordt gedeeld met anderen; zoals in een bibliotheek of school. Elke volgende gebruiker van deze computer kan zich dan immers toegang tot uw account verschaffen.</msg>
+  <msg key="lt_It_would_be_a_very_ba">Het is een zeer slecht idee om deze optie te gebruiken indien deze computer wordt gedeeld met anderen; zoals in een bibliotheek of school. Elke volgende gebruiker van deze computer kan zich dan immers toegang tot uw registratiegegevens verschaffen.</msg>
   <msg key="lt_New_registration_at_s">Nieuwe inschrijving op %system_url%</msg>
   <msg key="lt_Note_text_in_red_below">Rode tekst onder de invoervelden van parameters geeft aan dat de waarde van deze parameter overschreven wordt door een waarde in het OpenACS parameterbestand. Het gebruik van het parameterbestand wordt afgeraden maar sommige sites hebben dit nodig voor het instellen van instance-specifieke parameterwaarden, die onafhankelijk zijn van waarden in de apm_parameter tabellen.</msg>
   <msg key="lt_Note_that_you_can_era">Het opgeslagen e-mailadres en het wachtwoord kunnen worden gewist door op &quot;afmelden&quot; te klikken.</msg>
@@ -163,11 +166,11 @@ Bezoek de volgende koppeling en verander het wachtwoord direct: %reset_password_
   <msg key="lt_registration_request_submitted">Het inschrijvingsverzoek is verzonden aan de beheerder van %system_name%. We wachten nu op toestemming.</msg>
   <msg key="lt_Saving_email_address_">e-mailadres en wachtwoord worden opgeslagen </msg>
   <msg key="lt_Show_everyone_else_at">Laat aan iedereen op %system_name% zien hoe goed je eruit ziet:</msg>
-  <msg key="lt_Sorry_but_it_seems_th">De toegang werd geweigerd. Waarschijnlijk is deze account uitgesloten van %system_name% en gedeactiveerd.</msg>
+  <msg key="lt_Sorry_but_it_seems_th">De toegang werd geweigerd. Waarschijnlijk is dit registratienummer uitgesloten van %system_name% en gedeactiveerd.</msg>
   <msg key="lt_Sure_erase_user_por">De portretfoto van deze gebruiker echt verwijderen?</msg>
   <msg key="lt_Sure_erase_your_por">De eigen portretfoto echt verwijderen?</msg>
   <msg key="lt_The_picture_of_you_in">Deze foto kan niet worden getoond.</msg>
-  <msg key="lt_There_was_a_problem_w">De identiteitscontrole bij deze account geeft problemen</msg>
+  <msg key="lt_There_was_a_problem_w">De identiteitscontrole bij dit registratienummer geeft problemen</msg>
   <msg key="lt_This_is_the_image_that">Dit is de foto die we aan andere gebruikers op %system_name% tonen</msg>
   <msg key="lt_This_user_doesnt_have">Deze gebruiker heeft nog geen portretfoto. Er kan</msg>
   <msg key="lt_This_user_is_deleted">Deze gebruiker is uitgesloten en verwijderd uit deze gemeenschap.</msg>
@@ -176,7 +179,7 @@ Bezoek de volgende koppeling en verander het wachtwoord direct: %reset_password_
   <msg key="lt_Uploaded_pretty_date">Opgeslagen: %pretty_date%</msg>
   <msg key="lt_Uploaded_publish_date">Opgeslagen: %publish_date%</msg>
   <msg key="lt_Use_the_Browse_button">De knop \&quot;Bladeren\&quot; gebruiken om een bestand te vinden en dan op \&quot;Openen\&quot; klikken</msg>
-  <msg key="lt_We_cant_find_you">We kunnen account %user_id% niet in de gebruikerstabel vinden. Kan het zijn dat deze account is verwijderd?</msg>
+  <msg key="lt_We_cant_find_you">We kunnen registratienummer %user_id% niet in de gebruikerstabel vinden. Kan het zijn dat dit registratienummer is verwijderd?</msg>
   <msg key="lt_We_had_a_problem_proc">Er was een probleem bij het verwerken van de invoer.</msg>
   <msg key="lt_We_were_not_awaiting_">Wij hadden deze e-mail niet verwacht. Er moet een vergissing in het spel zijn.</msg>
   <msg key="lt_Welcome_to_system_nam">Welkom bij %system_name%</msg>
@@ -292,13 +295,14 @@ Het wachtwoord kan altijd worden gewijzigd door het volgende te doen:
   <msg key="Whos_Online_link_label">Gebruikers die nu online zijn</msg>
   <msg key="Whos_Online_title">Wie is er online?</msg>
   <msg key="Yes_I_am_sure">Ja, zeker</msg>
+  <msg key="You_are_in_the_follow">Mijn aansluitingen bij gebruikersgroepen: </msg>
   <msg key="You_can_also_browse_from">Bladeren kan ook uit de</msg>
   <msg key="You_can_always_re_open">Heropenen kan altijd door</msg>
   <msg key="You_do_not_have_admin_on">Er zijn geen rechten om het object %root% of onderliggende objecten te beheren.</msg>
   <msg key="You_dont_have_a_portrait">Mijn portretfoto is nog niet beschikbaar.</msg>
   <msg key="You_have_admin_rights_on">Er zijn rechten aanwezig om de volgende objecten te beheren:</msg>
   <msg key="You_have_no_email_alerts">Er staan geen kennisgevingen ingesteld.</msg>
-  <msg key="Your_Account">Mijn account</msg>
+  <msg key="Your_Account">Mijn registratie</msg>
   <msg key="Your_discussion_alerts">Mijn forum-kennisgevingen</msg>
   <msg key="Your_Portrait">Mijn portretfoto:</msg>
   <msg key="Your_system_alerts">Mijn %gc_system_name%-kennisgevingen</msg>

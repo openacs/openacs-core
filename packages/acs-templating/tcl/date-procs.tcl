@@ -90,6 +90,7 @@ ad_proc -public template::util::date::daysInMonth { month {year 0} } {
     @return the number of days in a month, accounting for leap years
     LOOKATME: IS THE LEAP YEAR CODE CORRECT ?
 } {
+  set month [string trimleft $month 0]
   variable month_data
   set month_desc $month_data($month)
   set days [lindex $month_desc 2]

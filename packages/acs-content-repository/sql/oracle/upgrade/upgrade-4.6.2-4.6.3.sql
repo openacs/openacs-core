@@ -437,7 +437,7 @@ insert into tmp_cr_extension_mime_type_map (extension, mime_type) values ( 'zip'
 -- Add the mime types that don't already exist.
 -- don't add extensions yet since we do that later to prevent
 -- duplicates in the 
-insert into cr_mime_types 
+insert into cr_mime_types (label, mime_type, file_extension)
        select label, mime_type, null
        from tmp_cr_mime_types n 
        where not exists (

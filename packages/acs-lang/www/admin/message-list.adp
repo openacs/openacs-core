@@ -24,8 +24,8 @@
   <else>
     <li><a href="@batch_edit_url@">Batch edit these messages</a></li>
     <if @site_wide_admin_p@>
-      <li><a href="@import_messages_url@">Import messages from catalog files</a></li>
-      <li><a href="@export_messages_url@">Export messages to catalog files</a></li>
+      <li><a href="@import_messages_url@">Import messages for this package and locale from catalog files</a></li>
+      <li><a href="@export_messages_url@">Export messages for this package and locale to catalog files</a></li>
     </if>
   </else>
 </ul>

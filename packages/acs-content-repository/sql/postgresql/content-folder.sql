@@ -395,36 +395,36 @@ end;' language 'plpgsql';
 create or replace function content_folder__edit_name (integer,varchar,varchar,varchar)
 returns integer as '
 declare
-  rename__folder_id              alias for $1;  
-  rename__name                   alias for $2;  -- default null  
-  rename__label                  alias for $3;  -- default null
-  rename__description            alias for $4;  -- default null
+  edit_name__folder_id              alias for $1;  
+  edit_name__name                   alias for $2;  -- default null  
+  edit_name__label                  alias for $3;  -- default null
+  edit_name__description            alias for $4;  -- default null
   v_name_already_exists_p        integer;
 begin
 
-  if rename__name is not null and rename__name != '''' then
-    PERFORM content_item__edit_name(rename__folder_id, rename__name);
+  if edit_name__name is not null and edit_name__name != '''' then
+    PERFORM content_item__edit_name(edit_name__folder_id, edit_name__name);
   end if;
 
-  if rename__label is not null and rename__label != '''' then
+  if edit_name__label is not null and edit_name__label != '''' then
     update acs_objects
-    set title = rename__label
-    where object_id = rename__folder_id;
+    set title = edit_name__label
+    where object_id = edit_name__folder_id;
   end if;
 
-  if rename__label is not null and rename__label != '''' and 
-     rename__description is not null and rename__description != '''' then 
+  if edit_name__label is not null and edit_name__label != '''' and 
+     edit_name__description is not null and edit_name__description != '''' then 
 
     update cr_folders
-      set label = rename__label,
-      description = rename__description
-      where folder_id = rename__folder_id;
+      set label = edit_name__label,
+      description = edit_name__description
+      where folder_id = edit_name__folder_id;
 
-  else if(rename__label is not null and rename__label != '''') and 
-         (rename__description is null or rename__description = '''') then  
+  else if(edit_name__label is not null and edit_name__label != '''') and 
+         (edit_name__description is null or edit_name__description = '''') then  
     update cr_folders
-      set label = rename__label
-      where folder_id = rename__folder_id;
+      set label = edit_name__label
+      where folder_id = edit_name__folder_id;
 
   end if; end if;
 

@@ -264,8 +264,9 @@ if { !\[string equal -length 4 \"text\" \$content(mime_type)\] } {
 template::util::array_to_vars content
 
 set text \[cr_write_content -string -revision_id \$revision_id\]
-
-set text \[ad_html_text_convert -from \$mime_type -to text/html \$text\]
+if { !\[string equal \"text/html\" \$content(mime_type\] } {
+    set text \[ad_html_text_convert -from \$mime_type -to text/html \$text\]
+}
 
 set context \[list \$title\]
 

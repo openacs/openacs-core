@@ -244,6 +244,11 @@ as
    procedure delete_all (
       object_id                        in notification_requests.object_id%TYPE default null
    );
+
+   procedure delete_all_for_user (
+      user_id                        in notification_requests.user_id%TYPE default null
+   );
+
 end notification_request;
 /
 show errors
@@ -311,6 +316,20 @@ as
               notification_request.del(v_request.request_id);
       END LOOP;
    end delete_all;
+
+   procedure delete_all_for_user (
+      user_id                        in notification_requests.user_id%TYPE default null
+   )
+   is
+      v_request                        notification_requests%ROWTYPE;
+   begin
+      for v_request in
+      (select request_id from notification_requests
+           where user_id= delete_all_for_user.user_id)
+      LOOP
+              notification_request.del(v_request.request_id);
+      END LOOP;
+   end delete_all_for_user;
 
 end notification_request;
 /

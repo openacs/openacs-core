@@ -71,7 +71,11 @@ db_transaction {
     foreach dict $dicts {
 	if { [string length $dict] == 2 } {
 	    # We have a lang (e.g., en)
-	    lappend wanted_dicts [list [string totitle [lang::util::nls_language_from_language $dict]] $dict]
+	    # Some 2-char aspell dicts (languages) are missing in ad_locales so we
+	    # need to catch those cases and use the language as the pretty name, ugh ...
+	    if { [catch { lappend wanted_dicts [list [string totitle [lang::util::nls_language_from_language $dict]] $dict] }] } {
+	        lappend wanted_dicts [list "Locale $dict" $dict]
+	    }
 	    set last_dict $dict
 	} elseif { $dialects_p && [string length $dict] == 5 && [regexp _ $dict] } {
 	    # We have a locale (e.g., en_US)
