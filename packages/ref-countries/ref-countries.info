@@ -18,7 +18,7 @@
         <description format="text/html">Countries supplies the ISO 3166 Country data.</description>
 
         <provides url="ref-countries" version="0.1d"/>
-        <requires url="acs-kernel" version="4.0"/>
+        <requires url="acs-kernel" version="4.6.2"/>
         <requires url="acs-reference" version="0.1d"/>
         <requires url="ref-language" version="0.1d"/>
 
