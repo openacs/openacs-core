@@ -1554,6 +1554,19 @@ ad_proc -public exists_and_not_null { varname } {
     return [expr { [info exists var] && ![empty_string_p $var] }] 
 } 
 
+ad_proc -public exists_and_equal { varname value } {
+    Returns 1 if the variable name exists in the caller's envirnoment
+    and is equal to the given value.
+
+    @see exists_and_not_null
+
+    @author Peter Marklund    
+} {
+    upvar 1 $varname var
+    
+    return [expr { [info exists var] && [string equal $var $value] } ]
+}
+
 ad_proc -public util_httpget {
     url {headers ""} {timeout 30} {depth 0}
 } {
