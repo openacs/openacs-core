@@ -10,7 +10,7 @@ select acs_sc_contract__new (
 
 select acs_sc_msg_type__new (
            'FtsEngineDriver.Search.InputType',
-	   'query:string,offset:integer,limit:integer'
+	   'query:string,offset:integer,limit:integer,user_id:integer,df:timestamp,dt:timestamp'
 );
 select acs_sc_msg_type__new (
            'FtsEngineDriver.Search.OutputType',
@@ -144,7 +144,7 @@ select acs_sc_msg_type__new (
 );
 select acs_sc_msg_type__new (
            'FtsContentProvider.Datasource.OutputType',
-	   'object_id:integer,title:string,content:string,mime:string,storage:string'
+	   'object_id:integer,title:string,content:string,mime:string,storage_type:string'
 );
 select acs_sc_operation__new (
            'FtsContentProvider',			-- contract_name
@@ -175,6 +175,8 @@ select acs_sc_operation__new (
 	   'FtsContentProvider.Url.InputType',		-- operation_inputtype
 	   'FtsContentProvider.Url.OutputType'		-- operation_outputtype
 );
+
+
 
 
 
