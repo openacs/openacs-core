@@ -145,9 +145,9 @@ proc_doc ds_link {} { Returns the "Developer Information" link in a right-aligne
 	
         if { [ad_parameter -package_id [ds_instance_id] ShowCommentsInlineP "developer-support" 0] } {
             if { [nsv_exists ds_request "$ad_conn(request).comment"] } {
-                append out "<tr><td><br>"
+                append out "<tr><td><br />"
                 foreach comment [nsv_get ds_request "$ad_conn(request).comment"] {
-                    append out "<b>Comment:</b> $comment<br>\n"
+                    append out "<b>Comment:</b> $comment<br />\n"
                 }
                 append out "</td></tr>"
             }
