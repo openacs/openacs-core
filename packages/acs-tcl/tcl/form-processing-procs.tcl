@@ -19,9 +19,6 @@ ad_proc -public ad_form_prototype {
 
 } {
 
-    global gp_conn
-    incr gp_conn(form_count)
-
     ####################
     #
     # Parse arguments
