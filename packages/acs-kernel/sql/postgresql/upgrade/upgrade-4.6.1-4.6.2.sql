@@ -52,7 +52,7 @@ create view apm_enabled_package_versions as
     where  enabled_p = 't';
 
 -- Recreate functions for auto-mount
-create or replace function apm_package_version__new (integer,varchar,varchar,varchar,varchar,varchar,varchar,timestamp with time zone,varchar,varchar,varchar,boolean,boolean) returns integer as '
+create function apm_package_version__new (integer,varchar,varchar,varchar,varchar,varchar,varchar,timestamptz,varchar,varchar,varchar,boolean,boolean) returns integer as '
 declare
       apm_pkg_ver__version_id           alias for $1;  -- default null
       apm_pkg_ver__package_key		alias for $2;
