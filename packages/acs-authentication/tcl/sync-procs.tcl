@@ -356,12 +356,14 @@ ad_proc -public auth::sync::job::action {
                     } else {
                         set user_id $result(user_id)
 
-                        set dotlrn_urls [site_node::get_children \
-                                             -package_key "dotlrn" \
-                                             -node_id [site_node::get_node_id -url /]]
+                        set add_to_dotlrn_p [parameter::get_from_package_key \
+                                                 -parameter SyncAddUsersToDotLrnP \
+                                                 -package_key "acs-authentication" \
+                                                 -default 0]
 
-                        if { [llength $dotlrn_urls] > 0  } {
-                            # .LRN is installed and mounted, add user to .LRN
+                        if { $add_to_dotlrn_p } {
+                            # Add user to .LRN
+                            # Beware that this creates a portal and lots of other things for each user
 
                             set type [parameter::get_from_package_key \
                                           -parameter SyncDotLrnUserType \
