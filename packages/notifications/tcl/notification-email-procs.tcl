@@ -95,13 +95,20 @@ namespace eval notification::email {
 
         @param from_user_id The user_id of the user that the email should be sent as. Leave empty for the standard mailer from address.
     } {
-        # Get email
-        set email [cc_email_from_party $to_user_id]
+
+       # Get email
+       set email [cc_email_from_party $to_user_id]
         
        # Variable used in the content
        set manage_notifications_url [manage_notifications_url]
+
        append content_text "\n[_ notifications.lt_Getting_too_much_emai]"
-       append content_html "\n[_ notifications.lt_Getting_too_much_emai]"
+       if { [string length $content_html] == 0 } {
+         set text_only_p 1
+       } else {
+         set text_only_p 0
+         append content_html "\n[_ notifications.lt_Getting_too_much_emai]"
+       }
 
         # Use this to build up extra mail headers        
         set extra_headers [ns_set new]
@@ -122,11 +129,15 @@ namespace eval notification::email {
             set from_email $reply_to
         }
 
+if { $text_only_p } {
+  set content $content_text
+} else {
         set message_data [build_mime_message $content_text $content_html]
         ns_set put $extra_headers MIME-Version [ns_set get $message_data MIME-Version]
         ns_set put $extra_headers Content-ID [ns_set get $message_data Content-ID]
         ns_set put $extra_headers Content-Type [ns_set get $message_data Content-Type]
         set content [ns_set get $message_data body]
+}
 
         acs_mail_lite::send \
             -to_addr $email \
