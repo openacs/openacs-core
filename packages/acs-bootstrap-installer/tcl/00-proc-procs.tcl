@@ -392,24 +392,49 @@ ad_proc -public ad_proc {
 	   specified explicitely when calling the parameter. Named parameters are 
 	   preferred.</li>
       <li> If you use named parameters, you can specify which ones are required, optional,
-           (including default values), and boolean (which act like an on/off switch). 
-	   See the examples below.</li>
-      <li> When a parameter is declared as :boolean, it creates a variable $param_name_p.
-           For example: -foo:boolean will create a variable $foo_p. If the parameter is
-	   passed, $foo_p will have value 1. Otherwise, $foo_p will have value 0.</li>
-      <li> With named parameters, the same rule as the Tcl <tt>switch</tt> statement apply,
-           meaning that <tt>--</tt> marks the end of the parameters. This is important if
-	   your named parameter contains a value of something starting with a "-".</li>
+           (including default values), and boolean. See the examples below.</li>
       <li> The declaration can (and <b>should!</b>) include documentation. This documentation 
-           may contain tags which will be parsed for display in the api browser.  Some tags are 
+           may contain tags which are parsed for display by the api browser.  Some tags are 
 	   <tt>@param</tt>, <tt>@return</tt>, <tt>@error</tt>, <tt>@see</tt>, <tt>@author</tt>
            (probably this should be better documented).</li>
     </ul>
     </p>
 
     <p>
+      When a parameter is declared as <tt>boolean</tt>, it creates a variable <tt>$param_name_p</tt>.
+      For example: <tt>-foo:boolean</tt> will create a variable <tt>$foo_p</tt>. 
+      If the parameter is passed, <tt>$foo_p</tt> will have value 1. Otherwise, 
+      <tt>$foo_p</tt> will have value 0.
+    </p>
+    <p>
+      Boolean named parameters can optionally take a boolean value than can 
+      make your code cleaner. The following example by Michael Cleverly shows why:
+      If you had a procedure declared as <tt>ad_proc foobar {-foo:boolean} { ... }</tt>,
+      it could be invoked as <tt>foobar -foo</tt>, which could yield some code like
+      the following in your procedure: 
+    </p>
+    <pre>
+if {$flush_p} {
+	some_proc -flush $key
+} else {
+	some_proc $key
+}
+    </pre>
+
+    <p>
+      However, you could invoke the procedure as <tt>foobar -foo=$some_boolean_value</tt>,
+      which could make your procedure cleaner because you could write instead: 
+      <tt>some_proc -flush=$foo_p $key</tt>.
+      
+    <p>
+      With named parameters, the same rule as the Tcl <tt>switch</tt> statement apply,
+      meaning that <tt>--</tt> marks the end of the parameters. This is important if
+      your named parameter contains a value of something starting with a "-".
+    </p>
+
+    <p>
     Here's an example with named parameters, and namespaces (notice the preferred way of
-    declaring namespaces and namespaced procedures). Disconsider the "\" in "\@param",
+    declaring namespaces and namespaced procedures). Ignore the "\" in "\@param",
     I had to use it so the api-browser wouldn't think the parameter docs were for ad_proc
     itself:
     </p>
@@ -433,8 +458,8 @@ ad_proc -public ::foobar::new {
 	\@creation-date 2002-01-21
 	
 	\@param oacs_user If this user is already an openacs user. oacs_user_p will be defined.
-	\@param shazam Magical incantation that calls Captain Marvel.
-	\@param user_id The id for the user to process. Default will be "" 
+	\@param shazam Magical incantation that calls Captain Marvel. Required parameter.
+	\@param user_id The id for the user to process. Optional with default "" 
 	                (api-browser will show the default automatically)
 } {
 	if { [empty_string_p $user_id] } {
