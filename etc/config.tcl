@@ -57,13 +57,15 @@ ns_param   libtdom         ${bindir}/libtdom.so
 #ns_param   nspam           ${bindir}/nspam.so
 
 # LDAP authentication
-#ns_param   nsldap           ${bindir}/nsldap.so
+#ns_param   nsldap          ${bindir}/nsldap.so
 
 # These modules aren't used in standard OpenACS installs
 #ns_param   nsperm          ${bindir}/nsperm.so 
 #ns_param   nscgi           ${bindir}/nscgi.so 
 #ns_param   nsjava          ${bindir}/libnsjava.so
 
+# Required for AOLserver 4
+#ns_param   nsdb            ${bindir}/nsdb.so
 
 ###################################################################### 
 #
