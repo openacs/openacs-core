@@ -13,7 +13,7 @@ ad_page_contract {
 }
 
 set page_title "Package Manager"
-set context [list $page_title]
+set context [list [list "../developer" "Developer's Administration"] $page_title]
 
 set user_id [ad_get_user_id]
 
