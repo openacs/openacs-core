@@ -405,10 +405,18 @@ namespace eval lang::catalog {
        #       and warn in logfile if there is a mismatch
 
        # Figure out if we are upgrading
-       set higher_version_p [apm_higher_version_installed_p $package_key $catalog_array(package_version)]
-       # higher_version_p value < 0 means downgrade, value 0 means versions are same, 1 is an upgrade
-       # A package downgrade is considered a form of upgrade
-       set upgrade_p [ad_decode $higher_version_p 0 0 1]
+       if { ![apm_package_installed_p $package_key] } {
+           # The package is not installed so we are not upgrading
+           set upgrade_p 0
+       } else {
+           # The package is installed so this is probably an upgrade 
+           set higher_version_p [apm_higher_version_installed_p $package_key $catalog_array(package_version)]
+           # higher_version_p value < 0 means downgrade, value 0 means versions are same, 1 is an upgrade
+           # A package downgrade could be considered a form of upgrade. However, in practice versions
+           # of the catalog files are sometimes not keeping up with the version in the info file and we don't
+           # want that to trigger an upgrade.
+           set upgrade_p [ad_decode $higher_version_p 1 1 0]
+       }
        ns_log Notice "lang::catalog::import_messages_from_file - Loading messages in file $file_path, [ad_decode $upgrade_p 0 "not upgrading" "upgrading"]"
 
        # Get the messages array, and the list of message keys to iterate over
