@@ -1,0 +1,1 @@
+<listtemplate name="notes"></listtemplate>

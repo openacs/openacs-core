@@ -172,6 +172,11 @@ chmod 755 nsd-postgres</action></screen>
       </itemizedlist>
     </listitem>
     <listitem>
+      <formalpara>
+        <title>Change startup script (optional).</title>
+      <para>If you want to run AOLserver on a port below 1024 (normally, for a webserver you will use 80), you will have to change the 	  <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/run</computeroutput> script according to the documentation found there (namely: Add the -b <replaceable>yourip:yourport</replaceable> switch)</para></formalpara>
+    </listitem>
+    <listitem>
       <para><link linkend="install-aolserver-permissions">Test AOLserver</link>.</para>
     </listitem>
   </orderedlist>

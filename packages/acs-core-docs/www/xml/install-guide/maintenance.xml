@@ -1,11 +1,12 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-<sect1 id="maintenance-web">
-  <title>Hosting Web Sites</title>
+    <sect1 id="maintenance-web">
+  <title>Running OpenACS in Production Environments</title>
+
 
     <authorblurb>
       <para>By <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
@@ -14,10 +15,10 @@
     <para>Maintenance tasks, optional software, and alternate configurations for AOLserver.</para>
     
     <sect2 id="install-openacs-keepalive" xreflabel="Keep AOLserver alive">
-	<title>Keep AOLserver Alive</title> 
+	<title>Starting and Stopping an OpenACS instance.</title> 
 
-      <para>Assuming AOLserver started cleanly in the previous step, we'll set it up so that it's always running, and automatically restarts whenever it dies or is stopped.  This step is strongly recommended, even for development sites, because it makes install and maintenance much simpler.  </para>
-      
+    <para>The simplest way to start and stop and OpenACS site is to run the startup shell script provided, <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/run</computeroutput>.  This runs as a regular task, and logs to the logfile.  To stop the site, kill the script.</para>
+    <para>A more stable way to run OpenACS is with a "keepalive" mechanism of some sort, so that whenever the server halts or is stopped for a reset, it restarts automatically.  This is recommended for development and production servers.</para>
       <para>The Reference Platform uses Daemontools to control AOLserver.  A simpler method, using <computeroutput>init</computeroutput>, is <link linkend="install-openacs-inittab">here</link>.</para>
       <orderedlist>
         <listitem>

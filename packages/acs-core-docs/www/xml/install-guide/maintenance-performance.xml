@@ -19,7 +19,7 @@
       <para>Isolating and solving database problems.</para>
     <itemizedlist>
       <listitem>
-        <para>Without daily internal maintenance, most databases slowly degrade in performance.  For PostGreSQL, see <xref linkend="install-next-nightly-vacuum"/>.  For Oracle, "gather schema stats" (more info?).</para>
+          <para>Without daily internal maintenance, most databases slowly degrade in performance.  For PostGreSQL, see <xref linkend="install-next-nightly-vacuum"/>.  For Oracle, use <computeroutput>exec dbms_stats.gather_schema_stats('SCHEMA_NAME')</computeroutput> (<ulink url="http://www.piskorski.com/docs/oracle.html">Andrew Piskorski's Oracle notes</ulink>).</para>
       </listitem>
       <listitem>
         <para>You can track the exact amount of time each database query on a page takes:</para>
