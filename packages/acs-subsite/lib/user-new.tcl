@@ -11,6 +11,9 @@
 #                   rel-types for the group.
 
 
+# Check if user can self register
+auth::self_registration
+
 # Set default parameter values
 array set parameter_defaults {
     self_register_p 1
