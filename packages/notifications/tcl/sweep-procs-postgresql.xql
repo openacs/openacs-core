@@ -24,14 +24,15 @@
                    user_id,
                    type_id,
                    delivery_method_id,
-                   response_id
+		   response_id,
+		   notif_date
             from notifications inner join notification_requests using (type_id, object_id)
               inner join acs_objects on (notification_requests.request_id = acs_objects.object_id)
               left outer join notification_user_map using (notification_id, user_id)
             where sent_date is null
               and creation_date <= notif_date
               and interval_id = :interval_id
-            order by user_id, type_id
+	      order by user_id, type_id, nnr.notif_date
         </querytext>
     </fullquery>
 
