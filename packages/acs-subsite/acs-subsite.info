@@ -646,7 +646,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="bgcolor"  default="white" description="this setting sets the background color for the default-master template that all HTML content is returned in."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RestrictEntireServerToRegisteredUsersP"  default="0" description="do we want to restrict the entire server to registered users (unused 09/18/2000)"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RestrictToSSL"  default="admin/*" description="URLs we want restricted to SSL. Note that this only takes effect if you have an SSL listener configured on your AOLserver and kernel parameter RegisterRestrictToSSLFilters is set to 1 (its default)."/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ShowContextBarP"  default="0" description="Should context bars appear on pages?"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ShowContextBarP"  default="1" description="Should context bars appear on pages?"/>
         </parameters>
 
     </version>
