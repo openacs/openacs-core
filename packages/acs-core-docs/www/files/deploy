@@ -1,0 +1,322 @@
+#!/bin/sh
+# hand off to tcl
+# The backslash makes the next line a comment in Tcl \
+exec tclsh "$0" ${1+"$@"}
+
+# program to control OpenACS servers with daemontools and balance
+# This script assumes:
+#   1. all affected OpenACS servers are listed as files in live_dir 
+#      or standby_dir
+#   a. The name of each file is the servername
+#   b. The content of each file is the port number of the server,
+#      which does not change
+#   3. all affected servers have config.tcl files that know to look
+#      in live_dir to adjust themselves accordingly
+#   4. daemontools controls each server at /service/servicename
+
+######################################################################
+# parameters
+######################################################################
+
+# TODO: this should become a passed-in parameter
+set system_name cnet
+set live_port 8080
+
+set stem $system_name
+set balance_bin /usr/sbin/balance
+set daemon_bin /usr/local/bin/svc
+set web_base /var/lib/aolserver
+set shared_dir $web_base/$stem
+set live_dir $shared_dir/etc/live
+set standby_dir $shared_dir/etc/standby
+
+######################################################################
+# initialization
+######################################################################
+
+set help_p false
+set status_p false
+set status_plus_p false
+set switch_p false
+set last_flag ""
+set promote ""
+set demote ""
+
+#----------------------------------------------------------------------
+# process command line arguments
+#----------------------------------------------------------------------
+
+# accepting only two arguments
+set switch [lindex $argv 0]
+set arg1 [lindex $argv 1]
+
+switch -glob -- $switch {
+    status  {
+	set status_p true
+    }
+    statusplus  {
+	set status_p true
+	set status_plus_p true
+    }
+    help    {set help_p true}
+    version {set help_p true}
+    switch  {set switch_p true}
+    demote  {if {[string length $arg1] >0 } {
+                     set demote $arg1
+                 } {
+		     set help_p true
+		 }
+    }
+    promote  {if {[string length $arg1] >0 } {
+                     set promote $arg1
+                 } {
+		     set help_p true
+		 }
+    }
+    default  {set help_p true}
+}
+
+#----------------------------------------------------------------------
+# Inspect the results of balance
+#----------------------------------------------------------------------
+
+if { ![catch {set balance_txt [exec $balance_bin -c show 80] } result] } {
+    # pluck out the channel data from balance:
+    #  0   RR  0 dis        127.0.0.1  8001
+    #         ^^ ^^^                  ^^^^^
+    #01234567890123456789012345678901234567890
+    #          1         2         3
+    set channel_data [list]
+    set channel_fodder $balance_txt
+    while {[regexp {(.[^\n]+)} $channel_fodder match_fodder row] } {
+	# remove each row as it's handled
+	set remove_count [string length $row]
+	set channel_fodder [string range $channel_fodder [expr $remove_count + 1] end]
+	set channel [string range $row 9 10]
+	set port [string range $row 33 37]
+	set status [string range $row 12 14]
+	lappend channel_data [list [string trim $port] [string trim $channel] [string trim $status]]
+    }
+} else {
+    puts "Error checking status: $result"
+    exit
+}
+    
+#----------------------------------------------------------------------
+# inspect list_dir and standby_dir
+#----------------------------------------------------------------------
+# get a list of files and their contents in each of the live and
+# standby dirs
+# serverlist: 
+#   0 servername (foo-a, foo-b, ...)
+#   1 port (8001, 8002, ...)
+#   2 channel (0, 1, ...)
+#   3 status  (dis, ENA)
+#   4 type (live, standby)
+
+set server_list [list]
+foreach type {live standby} {
+    set dir ${type}_dir
+    if { [catch {set files [exec ls [set $dir]] } result] } {
+	puts  "Error checking $type list: $result"
+	exit
+    }
+
+    foreach file $files {
+	if { [catch {set fileId [open "[set $dir]/$file"]} result] } {
+	    puts "Error reading $dir/$file"
+	    continue
+	} else {
+	    set file_contents [string trim [read $fileId] ]	
+	    close $fileId
+	}
+
+	if { ![string equal $file_contents ""]} {
+	    set channel_match [lsearch -regexp $channel_data $file_contents ]
+	    if { $channel_match >= 1 } {
+		set channel_info [lindex $channel_data $channel_match]
+		set channel [lindex $channel_info 1]
+		set status  [lindex $channel_info 2]
+	    } else {
+		set channel "unknown"
+	    }
+	    lappend server_list [list $file $file_contents $channel $status $type]
+	}
+    }
+}
+
+######################################################################
+# Procedure Library
+######################################################################
+
+#----------------------------------------------------------------------
+# Help
+#----------------------------------------------------------------------
+
+proc help {}  {
+    puts  {Usage: deploy
+	status         status report
+	help           this message
+	switch         if there is one live server and one standby server, exchange them 
+	demote server  move server from live to standby
+	promote server move server from standby to live
+    }
+}
+
+#----------------------------------------------------------------------
+# status report, Mr Sulu
+#----------------------------------------------------------------------
+proc status {plus_p} {
+    global server_list
+    global balance_txt
+
+    puts  ""
+    puts  "type    |   server      | port|channel|             status"
+    #      0123456789012345678901234567890123456789012345678901234567890123456789
+    puts  "---------------+--------+-----+-------+-------------------------------"
+
+    foreach file $server_list {
+	set balance_status [lindex $file 3]
+	set type [lindex $file 4]
+	set should_be [string map { 
+  	    live    ENA
+	    standby dis
+	} $type]
+
+	if { [string equal $balance_status $should_be] } {
+	    set status OK
+	} else {
+	    set status "PROBLEM: is $balance_status, should be $should_be"
+	}
+
+	set    output [format %-8.8s   $type]|
+ 	append output [format %15.15s  [lindex $file 0]]|
+	append output [format %5.5s    [lindex $file 1]]|
+	append output [format %7.7s    [lindex $file 2]]|
+	append output [format %30.30s $status]
+	puts $output
+    }
+
+    puts ""
+
+    if {$plus_p} {
+	puts "Additional information:"
+	puts  $balance_txt
+	puts  ""
+    }
+	
+}
+
+#----------------------------------------------------------------------
+# demote
+#----------------------------------------------------------------------
+
+proc demote {server} {
+    global server_list
+    global web_base
+    global stem
+    global standby_dir
+    global live_dir
+    global balance_bin
+
+    set demote_server [lindex $server_list [lsearch -regexp $server_list $server]]
+    if { ![string equal [lindex $demote_server 4] live] } {
+	puts "$server is not a live server - cannot demote"
+	exit
+    }
+    set channel [lindex $demote_server 2]
+
+    puts "Demoting $server"
+
+    if { [catch {
+	exec rm $web_base/${stem}-standby
+	exec ln -s $web_base/$server $web_base/${stem}-standby
+	exec mv $live_dir/$server $standby_dir
+	exec $balance_bin -c "disable $channel" 80
+    } result] } {
+	puts "Error demoting $server: $result"
+    } else {
+	puts "Successfully demoted $server"
+    }
+}
+
+#----------------------------------------------------------------------
+# promote
+#----------------------------------------------------------------------
+
+proc promote {server} {
+    global server_list
+    global web_base
+    global stem
+    global standby_dir
+    global live_dir
+    global balance_bin
+
+    set promote_server [lindex $server_list [lsearch -regexp $server_list $server]]
+    if { ![string equal [lindex $promote_server 4] standby] } {
+	puts "$server is not a standby server - cannot promote"
+	exit
+    }
+    set channel [lindex $promote_server 2]
+
+    puts "Promoting $server (channel $channel)"
+
+    if { [catch {
+	exec rm $web_base/${stem}-live
+	exec ln -s $web_base/$server $web_base/${stem}-live
+	exec mv $standby_dir/$server $live_dir
+	exec $balance_bin -c "enable $channel" 80 
+    } result] } {
+	puts "Error promoting $server: $result"
+    } else {
+	puts "Successfully promoted $server"
+    }
+}
+
+######################################################################
+# execution body
+######################################################################
+
+if { $help_p } {
+    help
+    exit
+}
+
+if { $status_p } {
+    status $status_plus_p
+    exit
+}
+
+if { [string length $demote] >0 } {
+    demote $demote
+    exit
+}
+
+if { [string length $promote] >0 } {
+    promote $promote
+    exit
+}
+
+if { $switch_p } {
+    # TODO: should check here to make sure there's one live and one standby
+
+    set standby_server [lindex $server_list [lsearch -regexp $server_list standby]]
+    set promote_channel [lindex $standby_server 2]
+    set promote [lindex $standby_server 0]
+    
+    set live_server [lindex $server_list [lsearch -regexp $server_list live]]
+    set demote_channel [lindex $live_server 2]
+    set demote [lindex $live_server 0]
+    
+    promote $promote
+    demote $demote
+    puts "Promoted $promote and demoted $demote"
+    exit
+}
+
+# not sure how we got here
+help
+exit
+
+
+
