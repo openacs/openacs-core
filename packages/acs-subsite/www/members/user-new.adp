@@ -1,6 +1,10 @@
 <master>
   <property name="context">@context@</property>
   <property name="title">@page_title@</property>
-  <property name="focus">user.first_names</property>
+  <property name="focus">register.first_names</property>
 
-<formtemplate id="user" style="standard-lars"></formtemplate>
+<include src="/packages/acs-subsite/lib/user-new" 
+    self_register_p="0" 
+    email="@email@" 
+    return_url="." 
+    rel_group_id="@group_id@" />
