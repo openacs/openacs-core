@@ -11,11 +11,13 @@ ad_page_contract {
     old_login_process:onevalue
     allow_persistent_login_p:onevalue
     persistent_login_p:onevalue
+    subsite_url:onevalue
 }
 
 set old_login_process [parameter::get -parameter SeparateEmailPasswordPagesP -default 0]
 set allow_persistent_login_p [parameter::get -parameter AllowPersistentLoginP -default 1]
 set persistent_login_p [parameter::get -parameter AllowPersistentLoginP -default 1]
+set subsite_url [subsite::get_element -element url]
 
 set email_forgotten_password_p [parameter::get -parameter EmailForgottenPasswordP -default 1]
 

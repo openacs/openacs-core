@@ -74,7 +74,7 @@
   <msg key="lt_Note_that_you_can_era">Legg merke til at du kan slette e-postadressen og passordet du har lagret ved å velge &quot;logg ut&quot; fra arbeidsområdet ditt.</msg>
   <msg key="lt_Now_were_really_in_tr">Nå har vi virkelig problemer fordi vi fikk denne feilmeldingen:</msg>
   <msg key="lt_num_children_Children">%num_children% Barn gjemt </msg>
-  <msg key="lt_On_portrait_publish_d">Den %portrait_publish_date%, lastet du opp &lt;a href=&quot;/user/portrait/&quot;&gt;%portrait_title%&lt;/a&gt; </msg>
+  <msg key="lt_On_portrait_publish_d">Den %portrait_publish_date%, lastet du opp &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt; </msg>
   <msg key="lt_Our_server_can_tell_y">Tjenesten vår kan be webleseren din å huske visse ting, som bruker-id og passord. Dette er praktisk for deg fordi, dersom du er den eneste personen som bruker denne maskinen, så trenger du ikke fortelle dem til oss hele tiden.</msg>
   <msg key="lt_Password_Confirmation">Bekreft passord:</msg>
   <msg key="lt_Personal_Home_Page_UR">URL for personlig webside:</msg>

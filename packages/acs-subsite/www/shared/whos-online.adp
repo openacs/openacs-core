@@ -4,7 +4,7 @@
 
 <if @chat_system_name@ not nil>
   This page is mostly useful in conjunction with 
-  <a href="/chat">@chat_system_name@</a>.
+  <a href="@subsite_url@chat">@chat_system_name@</a>.
 </if>
 
 <ul>
@@ -12,10 +12,10 @@
 <multiple name="users">
 
   <if @connected_user_id@ eq 0>
-    <li><a href="/shared/community-member?user_id=@users.user_id@">@users.first_names@ @users.last_name@</a>
+    <li><a href="@subsite_url@shared/community-member?user_id=@users.user_id@">@users.first_names@ @users.last_name@</a>
   </if>
   <else>
-    <li><a href="/shared/community-member?user_id=@users.user_id@">@users.first_names@ @users.last_name@</a> (@users.email@)
+    <li><a href="@subsite_url@shared/community-member?user_id=@users.user_id@">@users.first_names@ @users.last_name@</a> (@users.email@)
   </else>
 
 </multiple>

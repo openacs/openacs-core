@@ -75,7 +75,7 @@
   <msg key="lt_Note_that_you_can_era">Mo¿esz wymazaæ swoje zapisane email i has³o wybieraj±c &quot;wyloguj siê&quot; na Twoim Pulpicie.</msg>
   <msg key="lt_Now_were_really_in_tr">Mamy k³opoty poniewa¿ wyst±pi³ b³±d:</msg>
   <msg key="lt_num_children_Children">%num_children% Ukrytych Dzieci</msg>
-  <msg key="lt_On_portrait_publish_d">%portrait_publish_date% wgrano &lt;a href=&quot;/user/portrait/&quot;&gt;%portrait_title%&lt;/a&gt;</msg>
+  <msg key="lt_On_portrait_publish_d">%portrait_publish_date% wgrano &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt;</msg>
   <msg key="lt_Our_server_can_tell_y">Twoja przegl±darka mo¿e zapamiêtaæ Twój email i has³o. Jest to wygodne, bo nie musisz ci±gle ich wpisywaæ - ale bezpieczne TYLKO wtedy gdy JEDYNIE TY u¿ywasz komputera z którego odwiedzasz nasz system.</msg>
   <msg key="lt_Password_Confirmation">Potwierdzenie Has³a</msg>
   <msg key="lt_Personal_Home_Page_UR">URL Strony Domowej</msg>

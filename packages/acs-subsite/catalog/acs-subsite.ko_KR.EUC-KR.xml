@@ -73,7 +73,7 @@
   <msg key="lt_Note_that_you_can_era">작업영역에서 &quot;로그 아웃&quot;옵션을 선택함으로써 저장되었던 전자우편주소와 비밀번호를 삭제할 수 있습니다.</msg>
   <msg key="lt_Now_were_really_in_tr">오류로 인해 문제가 발생했습니다.</msg>
   <msg key="lt_num_children_Children">%num_children% 숨겨진 아이들</msg>
-  <msg key="lt_On_portrait_publish_d">%portrait_publish_date%에 업로드했습니다&lt;a href=&quot;/user/portrait/&quot;&gt;%portrait_title%&lt;/a&gt; </msg>
+  <msg key="lt_On_portrait_publish_d">%portrait_publish_date%에 업로드했습니다&lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt; </msg>
   <msg key="lt_Our_server_can_tell_y">여러분의 편의를 위해, 서버가 브라우저에게 전자우편주소나 비밀번호와 같은 사항을 기억하게 할 수 있습니다. 만일 여러분의 컴퓨터를 여러분 혼자서만 사용하는 것이라면,전자우편 주소나 비밀번호를 매번 입력할 필요가 없습니다. </msg>
   <msg key="lt_Password_Confirmation">비밀번호 확인:</msg>
   <msg key="lt_Personal_Home_Page_UR">개인 홈페이지 URL:</msg>

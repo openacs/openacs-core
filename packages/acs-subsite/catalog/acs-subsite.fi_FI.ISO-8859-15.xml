@@ -74,7 +74,7 @@ uudelleen:</msg>
   <msg key="lt_Note_that_you_can_era">Huomaa, että voit nollata tallentamasi sähköpostiosoitteen ja salasanan valitsemalla &quot;kirjaudu ulos&quot; järjestelmän omalta kotisivultasi. </msg>
   <msg key="lt_Now_were_really_in_tr">Nyt olemme todella lirissä, koska saimme seuraavan virheilmoituksen:</msg>
   <msg key="lt_num_children_Children">%num_children% piilotettu(a) lapsi/lasta</msg>
-  <msg key="lt_On_portrait_publish_d">%portrait_publish_date% tallensit tänne kuvan nimeltä &lt;a href=&quot;/user/portrait/&quot;&gt;%portrait_title%&lt;/a&gt; </msg>
+  <msg key="lt_On_portrait_publish_d">%portrait_publish_date% tallensit tänne kuvan nimeltä &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt; </msg>
   <msg key="lt_Our_server_can_tell_y">Palvelimemme voi pyytää selaintasi muistamaan tiettyjä asioita, kuten sähköpostiosoitteesi ja salasanasi. Tämä on kätevää, koska jos olet koneesi ainoa käyttäjä, sinun ei tarvitse jatkuvasti syöttää näitä tietoja uudelleen.</msg>
   <msg key="lt_Password_Confirmation">Salasnan varmistus:</msg>
   <msg key="lt_Personal_Home_Page_UR">Oman kotisivun osoite:</msg>

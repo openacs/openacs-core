@@ -17,9 +17,14 @@ ad_page_contract {
     export_user_id:onevalue
     ad_url:onevalue
     member_link:onevalue
+    subsite_url:onevalue
+    pvt_home_url:onevalue
 }
 
 set user_id [ad_verify_and_get_user_id]
+
+set subsite_url  [subsite::get_element -element url]
+set pvt_home_url [ad_pvt_home]
 
 set user_exists_p [db_0or1row pvt_home_user_info {
     select first_names, last_name, email, url,
@@ -84,11 +89,7 @@ if [ad_parameter SolicitPortraitP "user-info" 0] {
 
 set header [ad_header "$full_name's workspace at $system_name"]
 
-if {[ad_conn package_url] == "/"} {
-  set context [list "[ad_pvt_home_name]"]
-} else {
-  set context [list "Home"]
-}
+set context [list "[ad_pvt_home_name]"]
 
 set export_user_id [export_url_vars user_id]
 set ad_url [ad_url]

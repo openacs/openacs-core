@@ -1,5 +1,7 @@
 <master>
-
+<property name="title">Complete List of ISO Codes</property>
+<property name="context">ISO Code List</property>
+ 
 <h2>Complete List of ISO Codes</h2>
 
 Please locate your country's code among those listed below then use

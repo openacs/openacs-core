@@ -1,5 +1,6 @@
 <master>
-<property name=title>#acs-subsite.Login_Expired#</property>
+<property name="title">#acs-subsite.Login_Expired#</property>
+<property name="context">#acs-subsite.Login_Expired#</property>
 
 <p>#acs-subsite.Login_Expired_1# <a href="./index?">#acs-subsite.login#</a> #acs-subsite.again#.</p>
 

@@ -5,7 +5,7 @@
 <p>This is the image that we show to other users at @system_name@:</p>
 
 <center>
-<img @widthheight@ src="/shared/portrait-bits.tcl?@export_vars@">
+<img @widthheight@ src="@subsite_url@shared/portrait-bits.tcl?@export_vars@">
 </center>
 
 Data:

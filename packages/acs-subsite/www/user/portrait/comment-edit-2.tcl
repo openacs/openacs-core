@@ -38,5 +38,5 @@ where revision_id = (select live_revision
 if { ![empty_string_p $return_url] } {
     ad_returnredirect $return_url
 } else {
-    ad_returnredirect index
+    ad_returnredirect [ad_pvt_home]
 }

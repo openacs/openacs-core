@@ -1,6 +1,7 @@
 <master>
 <property name="title">Update Basic Information</property>
 <property name="context_bar">in @site_link;noquote@</property>
+<property name="context">Update Information</property>
 
 <form method="post" action="basic-info-update-2">
 @export_vars;noquote@

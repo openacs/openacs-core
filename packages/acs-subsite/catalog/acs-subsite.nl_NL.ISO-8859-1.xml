@@ -74,7 +74,7 @@
   <msg key="lt_Note_that_you_can_era">Een opgeslagen e-mailadres en wachtwoord kan worden gewist door de &quot;log uit&quot; optie te kiezen vanuit de &quot;Werkplek&quot;.</msg>
   <msg key="lt_Now_were_really_in_tr">Nu hebben we echt een probleem, omdat we de volgende fout hebben:</msg>
   <msg key="lt_num_children_Children">%num_children% verborgen onderliggende elementen</msg>
-  <msg key="lt_On_portrait_publish_d">&lt;a href=&quot;/user/portrait/&quot;&gt;%portrait_title%&lt;/a&gt; is op %portrait_publish_date% ingevoerd</msg>
+  <msg key="lt_On_portrait_publish_d">&lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt; is op %portrait_publish_date% ingevoerd</msg>
   <msg key="lt_Our_server_can_tell_y">Ons systeem kan uw browser helpen om dingen te onthouden, zoals uw e-mailadres en wachtwoord. Dit is handig als u de enige bent die op uw computer werkt. U hoeft uw e-mailadres en wachtwoord dan niet steeds in te typen.</msg>
   <msg key="lt_Password_Confirmation">Bevestig Wachtwoord:</msg>
   <msg key="lt_Personal_Home_Page_UR">URL van persoonlijke webpagina:</msg>

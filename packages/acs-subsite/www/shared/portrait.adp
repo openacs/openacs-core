@@ -3,7 +3,7 @@
 <property name="context">@context;noquote@</property>
 
 <p><center>
-<img @widthheight_param@ src="/shared/portrait-bits.tcl?@export_vars@">
+<img @widthheight_param@ src="@subsite_url@shared/portrait-bits.tcl?@export_vars@">
 </center>
 </p>
 

@@ -13,8 +13,11 @@ ad_page_contract {
     export_vars:onevalue
     widthheight_param:onevalue
     publish_date:onevalue
+    subsite_url:onevalue
 }
 
+set subsite_url [subsite::get_element -element url]
+ 
 if ![db_0or1row user_info "select 
   first_names, 
   last_name 
