@@ -3,7 +3,7 @@ ad_library {
     Object support for ACS.
 
     @author Jon Salz (jsalz@arsdigita.com)
-    @date 11 Aug 2000
+    @creation-date 11 Aug 2000
     @cvs-id $Id$
 
 }

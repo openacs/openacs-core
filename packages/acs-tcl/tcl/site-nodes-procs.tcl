@@ -5,7 +5,7 @@ ad_library {
     @author rhs@mit.edu
     @author yon (yon@openforce.net)
     @creation-date 2000-09-06
-    @version $Id$
+    @cvs-id $Id$
 
 }
 

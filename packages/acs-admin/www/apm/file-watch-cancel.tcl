@@ -3,7 +3,7 @@ ad_page_contract {
    
     @param watch_file The file to stop watching.
     @author Jon Salz [jsalz@arsdigita.com]
-    @date 17 April 2000
+    @creation-date 17 April 2000
     @cvs-id $Id$
 } {
     watch_file

@@ -1,5 +1,5 @@
 ad_page_contract {
-  @cvs_id
+  @cvs-id $Id$
 } {
   {quiet 0}
   {by_package_key ""}

@@ -2,7 +2,7 @@
 
 #      @creation-date 02 October 2000
 #      @author Bryan Quinn
-#      @cvs-id installer-init.tcl,v 1.2 2000/10/23 23:25:31 bquinn Exp
+#      @cvs-id $Id$
 
 
 # Create a mutex for the installer

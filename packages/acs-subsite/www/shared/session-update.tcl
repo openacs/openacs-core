@@ -3,7 +3,7 @@
 ad_page_contract {
 
     @author Don Baccus (dhogaza@pacifier.com)
-    @creation_date 2-Feb-2002
+    @creation-date 2-Feb-2002
 
     @param session_property The array which describes the new session
            property.  The required elements are package, key, value, and

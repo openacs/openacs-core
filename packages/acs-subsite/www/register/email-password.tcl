@@ -2,7 +2,7 @@ ad_page_contract {
     Sends the user their password.  Depending on the configuration,
     this password may be a new random password.
 
-    @version $Id$
+    @cvs-id $Id$
 } -query {
     user_id:integer,notnull
 } -properties {

@@ -1,3 +1,3 @@
 ad_page_contract {
-  @cvs_id $Id$
+  @cvs-id $Id$
 } -properties {}

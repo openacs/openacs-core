@@ -2,7 +2,7 @@ ad_page_contract {
     Adds a parameter to a version.
     @author Todd Nightingale (tnight@arsdigita.com)
     @author Bryan Quinn (bquinn@arsdigita.com)
-    @date 10 September 2000
+    @creation-date 10 September 2000
     @cvs-id $Id$
 } {
     version_id:naturalnum,notnull

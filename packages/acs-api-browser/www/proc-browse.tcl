@@ -4,8 +4,8 @@ ad_page_contract {
     in server memory
 
     @author Todd Nightingale
-    @date 2000-7-14
-    @cvs $Id$
+    @creation-date 2000-7-14
+    @cvs-id $Id$
 
 } {
     { type "Public" }

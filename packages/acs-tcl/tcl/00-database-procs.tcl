@@ -4,7 +4,7 @@ ad_library {
 
     @creation-date 15 Apr 2000
     @author Jon Salz (jsalz@arsdigita.com)
-    @cvs-id 10-database-procs.tcl,v 1.4.2.1 2000/11/20 18:23:12 brech Exp
+    @cvs-id $Id$
 }
 
 proc_doc db_type { } {

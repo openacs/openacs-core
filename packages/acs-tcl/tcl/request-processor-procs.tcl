@@ -4,7 +4,7 @@ ad_library {
     single HTTP request to an ACS server.
 
     @author Jon Salz (jsalz@arsdigita.com)
-    @date 15 May 2000
+    @creation-date 15 May 2000
     @cvs-id $Id$
 }
 

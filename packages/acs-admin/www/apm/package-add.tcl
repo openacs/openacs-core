@@ -1,7 +1,7 @@
 ad_page_contract {
     Adds a package to the package manager.
     @author Jon Salz (jsalz@arsdigita.com)
-    @date 17 April 2000
+    @creation-date 17 April 2000
     @cvs-id $Id$
 } {
 }

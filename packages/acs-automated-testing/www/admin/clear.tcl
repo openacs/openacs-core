@@ -1,5 +1,5 @@
 ad_page_contract {
-  @cvs_id
+  @cvs-id $Id$
 } {
   {package_key ""}
   {category:aa_test_category ""}

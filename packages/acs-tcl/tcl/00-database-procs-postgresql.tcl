@@ -735,7 +735,7 @@ ad_proc -public db_tables { -pattern } {
     
     @param pattern Will be used as LIKE 'pattern%' to limit the number of tables returned.
 
-    @author Don Baccus dhogaza@pacifier.com
+    @author Don Baccus (dhogaza@pacifier.com)
 
 } {
     set tables [list]
@@ -764,7 +764,7 @@ ad_proc -public db_tables { -pattern } {
 ad_proc -public db_table_exists { table_name } {
     Returns 1 if a table with the specified name exists in the database, otherwise 0.
 
-    @author Don Baccus dhogaza@pacifier.com
+    @author Don Baccus (dhogaza@pacifier.com)
     
 } {
     set n_rows [db_string table_count {

@@ -5,8 +5,8 @@ ad_page_contract {
     @param file_index       The files to be added.
     @param processed_files  The paths and types of the files to be added.
     @author Jon Salz (jsalz@arsdigita.com)
-    @date 17 April 2000
-    @cvs-id file-add-2.tcl,v 1.3 2000/10/18 17:25:38 bquinn Exp
+    @creation-date 17 April 2000
+    @cvs-id $Id$
 } {
     {version_id:integer}
     {file_index:multiple}

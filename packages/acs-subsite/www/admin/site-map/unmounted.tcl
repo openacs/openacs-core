@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author bquinn@arsdigita.com
     @creation-date 2000-09-12
-    @version $Id$
+    @cvs-id $Id$
 
 }
 

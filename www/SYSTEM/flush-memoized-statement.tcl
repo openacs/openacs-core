@@ -2,7 +2,7 @@ ad_page_contract {
     Performs util_memoize_flush_local on the statement parameter.
 
     @author Jon Salz [jsalz@mit.edu]
-    @date 29 Feb 2000
+    @creation-date 29 Feb 2000
     @cvs-id $Id$
 } { 
     statement

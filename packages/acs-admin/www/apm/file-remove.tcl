@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Bryan Quinn (bquinn@arsdigita.com)
 
-    @date 17 April 2000
+    @creation-date 17 April 2000
     @param file_id An array of file ids to remove.
     @cvs-id $Id$
 } {

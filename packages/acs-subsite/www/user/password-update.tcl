@@ -2,7 +2,7 @@ ad_page_contract {
     Let's the user change his/her password.  Asks
     for old password, new password, and confirmation.
 
-    @version $Id$
+    @cvs-id $Id$
 } {
     {user_id ""}
     {return_url ""}

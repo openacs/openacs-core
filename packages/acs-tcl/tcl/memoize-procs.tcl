@@ -4,7 +4,7 @@ ad_library {
 
     @author Various [acs@arsdigita.com]
     @author Rob Mayoff <mayoff@arsdigita.com>
-    @date 2000-10-19
+    @creation-date 2000-10-19
     @cvs-id $Id$
 }
 

@@ -4,7 +4,7 @@ ad_library {
 
     @author rhs@mit.edu
     @creation-date 2000-08-17
-    @version $Id$
+    @cvs-id $Id$
 
 }
 

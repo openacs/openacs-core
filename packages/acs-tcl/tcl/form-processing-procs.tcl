@@ -872,7 +872,7 @@ ad_proc -public ad_set_element_value {
     ad_form.
 
     @param element The name of the element
-    @parma value The value to set
+    @param value The value to set
 
 } {
     upvar #[template::adp_level] __ad_form_values__ values

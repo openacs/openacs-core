@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Fri Feb  9 20:27:26 2001
-    @version $Id$
+    @cvs-id $Id$
 
 } {
     package_key:notnull

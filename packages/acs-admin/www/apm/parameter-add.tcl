@@ -1,7 +1,7 @@
 ad_page_contract {
     Adds a parameter to a version.
     @author Todd Nightingale [tnight@arsdigita.com]
-    @date 17 April 2000
+    @creation-date 17 April 2000
     @cvs-id $Id$
 } {
     version_id:naturalnum,notnull

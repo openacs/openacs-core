@@ -3,8 +3,8 @@ ad_page_contract {
     Set parameters on a package instance.
 
     @author Bryan Quinn (bquinn@arsdigita.com)
-    @date 12 September 2000
-    @version $Id$
+    @creation-date 12 September 2000
+    @cvs-id $Id$
 
 } {
     package_key:notnull

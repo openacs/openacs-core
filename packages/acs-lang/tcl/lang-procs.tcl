@@ -120,7 +120,8 @@ ad_proc -private lang_message_lookup {locale key {default "TRANSLATION MISSING"}
 
     4. Lookup is tried with language and key without package prefix.
 
-    @author Jeff Davis (davis@xarg.net), Henry Minsky (hqm@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net)
+    @author Henry Minsky (hqm@arsdigita.com)
     @see _
     
     @param locale  Locale (e.g., "en_US") or language (e.g., "en") string.

@@ -2,7 +2,7 @@ ad_library {
     ACS-specific general utility routines.
     @author Philip Greenspun (philg@arsdigita.com)
     @author Many others at ArsDigita and at the OpenACS community.
-    @date 2 April 1998
+    @creation-date 2 April 1998
     @cvs-id $Id$
 }
 
@@ -167,8 +167,7 @@ ad_proc -deprecated ad_present_user {
     of the user if a blank is passed. That's why it's marked as deprecated.
 
     @author Unknown
-    @author Revised by Roberto Mello, Aug 2002
-    
+    @author Roberto Mello
 } {
     return [acs_community_member_link -user_id $user_id -label $name]
 }
@@ -209,7 +208,7 @@ ad_proc -deprecated ad_admin_present_user {
     of the user if a blank is passed. That's why it's marked as deprecated.
 
     @author Unknown
-    @author Revised by Roberto Mello, Aug 2002
+    @author Roberto Mello
     
 } {
     return [acs_community_member_admin_link -user_id $user_id -label $name]
@@ -409,6 +408,7 @@ ad_proc ad_return_exception_page {
     Returns an exception page.
 
     @author Unknown
+
     @param status HTTP status to be returned (e.g. 500, 404)
     @param title Title to be used for the error (will be shown to user)
     @param explanation Explanation for the exception.
@@ -509,7 +509,7 @@ ad_proc ad_record_query_string {
     I'm not sure what's that's for.
 
     @author Unknown
-    @author Revised by Roberto Mello, Aug 2002
+    @author Roberto Mello
 } {  
 
     if { $user_id == 0 } {
@@ -535,7 +535,7 @@ ad_proc ad_pretty_mailing_address_from_args {
     an address.
 
     @author Unknown
-    @author Revised by Roberto Mello, Aug 2002
+    @author Roberto Mello
 } {
     set lines [list]
     if [empty_string_p $line2] {
@@ -560,7 +560,7 @@ ad_proc ad_get_user_info {} {
     @return ad_return_error if user_id can't be found.
 
     @author Unknown
-    @author Revised by Roberto Mello, Aug 2002
+    @author Roberto Mello
 } {
     uplevel {
 	set user_id [ad_conn user_id]
@@ -767,7 +767,8 @@ ad_proc -public ad_return_url {
     {extra_args {}}
 } {
 
-    @author Don Baccus
+    @author Don Baccus (dhogaza@pacifier.com)
+
     @param url_encode If true url_encode the result.
     @param args A list of (name,value) pairs to append to the query string
 

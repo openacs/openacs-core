@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date Mon Oct 23 14:58:57 2000
-    @version $Id$
+    @cvs-id $Id$
 
 } {
     package_id:naturalnum

@@ -5,8 +5,8 @@ ad_page_contract {
 
 
     @author Todd Nightingale
-    @date 2000-7-14
-    @cvs $Id$
+    @creation-date 2000-7-14
+    @cvs-id $Id$
 
 } {
 } -properties {

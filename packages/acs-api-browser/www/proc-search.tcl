@@ -10,7 +10,7 @@ ad_page_contract {
     Note: api documentation information taken from nsv array
 
     @author Todd Nightingale (tnight@arsdigita.com)
-    @date Jul 14, 2000
+    @creation-date Jul 14, 2000
     @cvs-id $Id$
 } {
     {name_weight:optional 0}

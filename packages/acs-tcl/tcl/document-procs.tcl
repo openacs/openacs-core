@@ -4,7 +4,7 @@ ad_library {
 
     @creation-date 22 May 2000
     @author Jon Salz [jsalz@arsdigita.com]
-    @cvs-id $id$
+    @cvs-id $Id$
 
 }
 

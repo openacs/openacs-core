@@ -3,7 +3,7 @@ ad_page_contract {
 
     Remove a notification request
 
-    @author Ben Adida (ben@openforce)
+    @author Ben Adida (ben@openforce.net)
     @creation-date 2002-05-24
     @cvs-id $Id$
 } {

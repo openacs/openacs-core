@@ -1,7 +1,7 @@
 ad_page_contract {
     Views dependency information about a version.
     @author Jon Salz [jsalz@arsdigita.com]
-    @date 17 April 2000
+    @creation-date 17 April 2000
     @cvs-id $Id$
 } {
     {version_id:integer}

@@ -217,7 +217,7 @@ ad_proc ad_page_contract_eval { args } {
     proc invocation.
 
     @author Lars Pind (lars@pinds.com) 
-    @author 25 July 2000
+    @creation-date 25 July 2000
 } {
     uplevel 1 $args
 }

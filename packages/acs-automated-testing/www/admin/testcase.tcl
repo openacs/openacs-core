@@ -1,5 +1,5 @@
 ad_page_contract {
-  @cvs_id
+  @cvs-id $Id$
 } {
   testcase_id:nohtml
   package_key:nohtml

@@ -3,7 +3,7 @@ ad_page_contract {
 
     @param url The url of the package to load.
     @author Bryan Quinn (bquinn@arsdigita.com)
-    @date 10 October 2000
+    @creation-date 10 October 2000
     @cvs-id $Id$
 
 } {

@@ -4,7 +4,7 @@ ad_library {
 
     @cvs-id $Id$
     @author Richard Li
-    @date 12 August 2000
+    @creation-date 12 August 2000
 
 }
 

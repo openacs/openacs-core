@@ -4,7 +4,7 @@ ad_page_contract {
 
     @param file_id The id of the file to watch.
     @author Jon Salz [jsalz@arsdigita.com]
-    @date 17 April 2000
+    @creation-date 17 April 2000
     @cvs-id $Id$
 } {
     file_id:integer

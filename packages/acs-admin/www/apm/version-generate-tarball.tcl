@@ -3,7 +3,7 @@ ad_page_contract {
     
     @param version_id The package version to be processed.
     @author Bryan Quinn (bquinn@arsdigita.com)
-    @date 9 May 2000
+    @creation-date 9 May 2000
     @cvs-id $Id$
 } {
     {version_id:integer}
