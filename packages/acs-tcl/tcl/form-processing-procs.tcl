@@ -557,10 +557,6 @@ ad_proc -public ad_form {
 
     global af_parts
 
-    if { $extend_p && ![info exists af_parts(${form_name}__form)] } {
-        return -code error "You can't extend form \"$form_name\" until you've created the form"
-    }
-
     foreach valid_arg $valid_args {
         if { [info exists $valid_arg] } {
             if { [info exists af_parts(${form_name}__$valid_arg)] &&
@@ -615,6 +611,7 @@ ad_proc -public ad_form {
             if { [string equal $element_name_part "-section"] } {
                 lappend af_element_names($form_name) "[list "-section" [uplevel [list subst [lindex $element 1]]]]"
             } else {
+                set element_name_part [uplevel [list subst $element_name_part]]
                 if { ![regexp {^([^ \t:]+)(?::([a-zA-Z0-9_,(|)]*))?$} $element_name_part match element_name flags] } {
                     return -code error "Form element '$element_name_part' doesn't have the right format. It must be var\[:flag\[,flag ...\]\]"
                 }
