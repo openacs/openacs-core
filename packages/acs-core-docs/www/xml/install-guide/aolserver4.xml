@@ -13,6 +13,28 @@
   </authorblurb>
 
   <orderedlist>
+    <listitem id="tcl-download">
+      <formalpara>
+        <title>Retrieve TCL 8.4 (or higher)</title>
+        <para>Download and install TCL 8.4</para>
+      </formalpara>
+      <para>If you have not installed TCL already, download the latest TCL version from Sourceforge</para>
+      <screen>[root root]# <userinput>cd /usr/local/src</userinput>
+[root src]# <userinput>wget http://heanet.dl.sourceforge.net/sourceforge/tcl/tcl8.4.5-src.tar.gz</userinput>
+[root src]# <userinput>tar xfz tcl8.4.5-src.tar.gz</userinput>
+[root src]# <userinput>cd tcl8.4.5/unix</userinput>
+[root unix]# <userinput>./configure --enable-threads</userinput>
+[root unix]# <userinput>make install</userinput>
+[root root]# 
+<action>cd /usr/local/src
+wget http://heanet.dl.sourceforge.net/sourceforge/tcl/tcl8.4.5-src.tar.gz
+tar xfz tcl8.4.5-src.tar.gz
+cd tcl8.4.5/unix
+./configure --enable-threads
+make install
+</action>
+      </screen>
+    </listitem>
     <listitem id="aolserver4-download">
       <formalpara>
         <title>Retrieve AOLserver</title>
@@ -21,7 +43,7 @@
       <screen>[root root]# <userinput>cd /usr/local/src</userinput>
 [root src]# <userinput>mkdir aolserver</userinput>
 [root src]# <userinput>cd aolserver</userinput>
-[root /usr/local/src/aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co  -r aolserver_v40_r2 aolserver</userinput>
+[root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co  -r aolserver_v40_r2 aolserver</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsrewrite</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres</userinput>
@@ -30,8 +52,11 @@
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsxml</userinput>
 [root aolserver]# <userinput>wget http://www.tdom.org/tDOM-0.7.8.tar.gz</userinput>
 [root aolserver]# <userinput>tar xvfz tDOM-0.7.8.tar.gz</userinput>
-[root aolserver]# 
-<action>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r aolserver_v40_r2 aolserver
+[root root]# 
+<action>cd /usr/local/src
+mkdir aolserver
+cd aolserver
+cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r aolserver_v40_r2 aolserver
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsrewrite
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres
