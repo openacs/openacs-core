@@ -11,6 +11,7 @@ namespace eval auth::sync {}
 namespace eval auth::sync::job {}
 namespace eval auth::sync::get_doc {}
 namespace eval auth::sync::get_doc::http {}
+namespace eval auth::sync::get_doc::file {}
 namespace eval auth::sync::entry {}
 namespace eval auth::sync::process_doc {}
 namespace eval auth::sync::process_doc::ims {}
@@ -737,6 +738,83 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
     }
 
     set result(document) [util_httpget $url]
+
+    set result(doc_status) "ok"
+
+    return [array get result]
+}
+
+
+
+#####
+#
+# auth::sync::get_doc::file namespace
+#
+#####
+
+ad_proc -private auth::sync::get_doc::file::register_impl {} {
+    Register this implementation
+} {
+    set spec {
+        contract_name "auth_sync_retrieve"
+        owner "acs-authentication"
+        name "LocalFilesystem"
+        pretty_name "Local Filesystem"
+        aliases {
+            GetDocument auth::sync::get_doc::file::GetDocument
+            GetParameters auth::sync::get_doc::file::GetParameters
+        }
+    }
+
+    return [acs_sc::impl::new_from_spec -spec $spec]
+
+}
+
+ad_proc -private auth::sync::get_doc::file::unregister_impl {} {
+    Unregister this implementation
+} {
+    acs_sc::impl::delete -contract_name "auth_sync_retrieve" -impl_name "LocalFilesystem"
+}
+
+ad_proc -private auth::sync::get_doc::file::GetParameters {} {
+    Parameters for FILE GetDocument implementation.
+} {
+    return {
+        IncrementalPath {The path to the document for incremental update. Will retrieve this most of the time.}
+        SnapshotPath {The path to the document for snapshot update. If specified, will get this once per month.}
+    }
+}
+
+ad_proc -private auth::sync::get_doc::file::GetDocument {
+    parameters
+} {
+    Retrieve the document from local file system
+} {
+    array set result {
+        doc_status failed_to_conntect
+        doc_message {}
+        document {}
+        snapshot_p f
+    }
+    
+    array set param $parameters
+    
+    if { (![empty_string_p $param(SnapshotPath)] && [string equal [clock format [clock seconds] -format "%d"] "01"]) || \
+             [empty_string_p $param(IncrementalPath)] } {
+
+        # On the first day of the month, we get a snapshot
+        set path $param(SnapshotPath)
+        set result(snapshot_p) "t"
+    } else {
+        # All the other days of the month, we get the incremental
+        set path $param(IncrementalPath)
+    }
+
+    if { [empty_string_p $path] } {
+        error "You must specify at least one path to get."
+    }
+
+    set result(document) [template::util::read_file $path]
 
     set result(doc_status) "ok"
 
