@@ -7,19 +7,22 @@
 
 -- setup the basic admin privileges
 
-begin 
-    acs_privilege.create_privilege('acs_reference_create');
-    acs_privilege.create_privilege('acs_reference_write');
-    acs_privilege.create_privilege('acs_reference_read');
-    acs_privilege.create_privilege('acs_reference_delete');
+create function inline_0 ()
+returns integer as '
+begin
+    PERFORM acs_privilege__create_privilege(''acs_reference_create'');
+    PERFORM acs_privilege__create_privilege(''acs_reference_write'');
+    PERFORM acs_privilege__create_privilege(''acs_reference_read'');
+    PERFORM acs_privilege__create_privilege(''acs_reference_delete'');
     
-    acs_privilege.add_child('create','acs_reference_create');
-    acs_privilege.add_child('write', 'acs_reference_write');
-    acs_privilege.add_child('read',  'acs_reference_read');
-    acs_privilege.add_child('delete','acs_reference_delete');
-end;
-/
-show errors
+    PERFORM acs_privilege__add_child(''create'',''acs_reference_create'');
+    PERFORM acs_privilege__add_child(''write'', ''acs_reference_write'');
+    PERFORM acs_privilege__add_child(''read'',  ''acs_reference_read'');
+    PERFORM acs_privilege__add_child(''delete'',''acs_reference_delete'');
+    
+    return 0;
+end;' language 'plpgsql';
+
 
 -- Create the basic object type used to represent a reference database
 select acs_object_type__create_type (
@@ -188,4 +191,4 @@ end;
 
 -- now load the reference data packages
 
-/@acs-reference-data
+\i acs-reference-data
