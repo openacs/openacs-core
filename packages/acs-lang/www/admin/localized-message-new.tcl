@@ -12,6 +12,7 @@ ad_page_contract {
     locale
     package_key
     {message_key ""}
+    {return_url {[export_vars -base message-list { locale package_key }]}}
 }
 
 
@@ -39,8 +40,6 @@ if { ![string equal $current_locale $default_locale] } {
     ad_script_abort
 }
 
-append return_url "message-list?[export_vars { locale package_key }]"
-
 form create message_new
 
 element create message_new package_key_display -label "Package" -datatype text \
@@ -53,6 +52,8 @@ element create message_new message -label "Message" -datatype text \
 
 element create message_new package_key -datatype text -widget hidden
 
+element create message_new return_url -datatype text -widget hidden -optional
+
 # The two hidden tags that we need to pass on the key and language to the
 # processing of the form
 element create message_new locale -label "locale" -datatype text -widget hidden
@@ -62,6 +63,7 @@ if { [form is_request message_new] } {
     element set_value message_new package_key $package_key
     element set_value message_new locale $current_locale
     element set_value message_new message_key $message_key
+    element set_value message_new return_url $return_url
     if { [empty_string_p $message_key] } {
         set focus message_new.message_key
     } else {
