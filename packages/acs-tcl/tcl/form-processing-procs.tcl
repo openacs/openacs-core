@@ -547,6 +547,14 @@ ad_proc -public ad_form {
         return -code error "Can't extend form \"$form_name\" - a parameter block requiring the full form has already been declared"
     }
 
+    # Allow an empty form to work until we see an action block, useful for building up
+    # forms piecemeal.
+
+    global af_element_names
+    if { !$extend_p } {
+        set af_element_names($form_name) [list]
+    }
+
     global af_parts
 
     if { $extend_p && ![info exists af_parts(${form_name}__form)] } {
@@ -572,15 +580,6 @@ ad_proc -public ad_form {
         }
     }
 
-    if { ![info exists af_parts(${form_name}__form)] } {
-        return -code error "No \"form\" block has been specified for form \"$form_name\""
-    }
-
-    # If we're not extending - this needs integration with the ATS form builder ...
-    if { !$extend_p } {
-        # incr ad_conn(form_count)
-    }
-
     ####################
     #
     # Step 1: Parse the form specification
@@ -592,7 +591,6 @@ ad_proc -public ad_form {
     # and we should extend its data and use it directly, but there's not time to do this
     # right for Greenpeace so I'm hacking the hell out of it)
 
-    global af_element_names
     global af_flag_list
     global af_to_sql
     global af_from_sql
@@ -884,6 +882,10 @@ ad_proc -public ad_form {
 
     if { ![info exists af_parts(${form_name}__extend)] } {
         return
+    }
+
+    if { ![info exists af_parts(${form_name}__form)] } {
+        return -code error "No \"form\" block has been specified for form \"$form_name\""
     }
 
     if { [template::form is_request $form_name] } {
