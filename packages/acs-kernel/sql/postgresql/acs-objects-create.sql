@@ -586,7 +586,7 @@ end;' language 'plpgsql';
 
 
 -- function new
-create function acs_object__new (integer,varchar,timestamp,integer,varchar,integer,boolean)
+create function acs_object__new (integer,varchar,timestamp with time zone,integer,varchar,integer,boolean)
 returns integer as '
 declare
   new__object_id              alias for $1;  -- default null
@@ -626,10 +626,8 @@ begin
   
 end;' language 'plpgsql';
 
-
-
 -- function new
-create function acs_object__new (integer,varchar,timestamp,integer,varchar,integer)
+create function acs_object__new (integer,varchar,timestamp with time zone,integer,varchar,integer)
 returns integer as '
 declare
   new__object_id              alias for $1;  -- default null
@@ -1341,7 +1339,7 @@ begin
     return acs_object__update_last_modified(acs_object__update_last_modified__object_id, now());
 end;' language 'plpgsql';
 
-create function acs_object__update_last_modified (integer, timestamp)
+create function acs_object__update_last_modified (integer, timestamp with time zone)
 returns integer as '
 declare
     acs_object__update_last_modified__object_id     alias for $1; 

@@ -13,7 +13,7 @@
 -- create or replace package body content_revision
 
 -- function new
-create function content_revision__new (varchar,varchar,timestamp,varchar,varchar,integer,integer,integer,timestamp,integer,varchar)
+create function content_revision__new (varchar,varchar,timestamp with time zone,varchar,varchar,integer,integer,integer,timestamp with time zone,integer,varchar)
 returns integer as '
 declare
   new__title                  alias for $1;  
@@ -65,7 +65,7 @@ begin
 
 end;' language 'plpgsql';
 
-create function content_revision__new(varchar,varchar,timestamp,varchar,text,integer) returns integer as '
+create function content_revision__new(varchar,varchar,timestamp with time zone,varchar,text,integer) returns integer as '
 declare
         new__title              alias for $1;
         new__description        alias for $2;  -- default null
@@ -89,7 +89,7 @@ begin
 
 end;' language 'plpgsql';
 
-create function content_revision__new (varchar,varchar,timestamp,varchar,varchar,text,integer,integer,timestamp,integer,varchar)
+create function content_revision__new (varchar,varchar,timestamp with time zone,varchar,varchar,text,integer,integer,timestamp with time zone,integer,varchar)
 returns integer as '
 declare
   new__title                  alias for $1;  
@@ -120,7 +120,7 @@ begin
 end;' language 'plpgsql';
 
 -- function new
-create function content_revision__new (varchar,varchar,timestamp,varchar,varchar,text,integer,integer,timestamp,integer,varchar,integer)
+create function content_revision__new (varchar,varchar,timestamp with time zone,varchar,varchar,text,integer,integer,timestamp with time zone,integer,varchar,integer)
 returns integer as '
 declare
   new__title                  alias for $1;  

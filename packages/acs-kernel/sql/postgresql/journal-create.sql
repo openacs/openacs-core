@@ -88,7 +88,7 @@ comment on table journal_entries is '
 
 -- create or replace package body journal_entry
 -- function new
-create function journal_entry__new (integer,integer,varchar,varchar,timestamp,integer,varchar,varchar)
+create function journal_entry__new (integer,integer,varchar,varchar,timestamp with time zone,integer,varchar,varchar)
 returns integer as '
 declare
   new__journal_id             alias for $1;  -- default null  

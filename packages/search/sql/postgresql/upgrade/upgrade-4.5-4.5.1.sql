@@ -9,7 +9,7 @@
 
 drop function search_observer__dequeue(integer,timestamp,varchar);
 
-create function search_observer__dequeue(integer,timestamp,varchar)
+create function search_observer__dequeue(integer,timestamp with time zone,varchar)
 returns integer as '
 declare
     p_object_id                 alias for $1;

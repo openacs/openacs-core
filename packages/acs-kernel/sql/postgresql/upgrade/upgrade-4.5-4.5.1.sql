@@ -6,7 +6,7 @@
 
 
 -- acs-objects-create.sql
- create or replace function acs_object__update_last_modified (integer)
+ create function acs_object__update_last_modified (integer)
  returns integer as '
  declare
      acs_object__update_last_modified__object_id     alias for $1;
@@ -14,7 +14,7 @@
      return acs_object__update_last_modified(acs_object__update_last_modified__object_id, now());
  end;' language 'plpgsql';
 
- create or replace function acs_object__update_last_modified (integer, timestamp)
+ create function acs_object__update_last_modified (integer, timestamp with time zone)
  returns integer as '
  declare
      acs_object__update_last_modified__object_id     alias for $1;
@@ -46,7 +46,7 @@
 
 
 -- apm-create.sql
- create or replace function apm_package__parent_id (integer) returns integer as '
+ create function apm_package__parent_id (integer) returns integer as '
  declare
      apm_package__parent_id__package_id alias for $1;
      v_package_id apm_packages.package_id%TYPE;
@@ -67,7 +67,45 @@
 
 -- postgresql.sql
 
-create or replace function tree_increment_key(varbit)
+create function inline_0 () returns integer as '
+-- Create a bitfromint4(integer) function if it doesn''t exists.
+-- Due to a bug in PG 7.3 this function is absent in PG 7.3.
+declare
+    v_bitfromint4_count integer;
+begin
+    select into v_bitfromint4_count count(*) from pg_proc where proname = ''bitfromint4'';
+    if v_bitfromint4_count = 0 then
+	create or replace function bitfromint4 (integer) returns bit varying as ''
+	begin 
+    	    return "bit"($1);
+	end;'' language ''plpgsql'';
+   end if;
+   return 1;
+end;' language 'plpgsql';
+
+select inline_0();
+drop function inline_0();
+
+create function inline_1 () returns integer as '
+-- Create a bitfromint4(integer) function if it doesn''t exists.
+-- Due to a bug in PG 7.3 this function is absent in PG 7.3.
+declare
+    v_bittoint4_count integer;
+begin
+    select into v_bittoint4_count count(*) from pg_proc where proname = ''bittoint4'';
+    if v_bittoint4_count = 0 then
+	create or replace function bittoint4 (bit varying) returns integer as ''
+	begin 
+    	    return "int4"($1);
+	end;'' language ''plpgsql'';
+   end if;
+   return 1;
+end;' language 'plpgsql';
+
+select inline_1();
+drop function inline_1();
+
+create function tree_increment_key(varbit)
  returns varbit as '
  declare
      p_child_sort_key                alias for $1;
@@ -85,7 +123,7 @@ create or replace function tree_increment_key(varbit)
 --
 drop function int_to_tree_key(integer);
 
-create or replace function int_to_tree_key(integer) returns varbit as '
+create function int_to_tree_key(integer) returns varbit as '
 
 -- Convert an integer into the bit string format used to store
 -- tree sort keys.   Using 4 bytes for the long keys requires
@@ -125,7 +163,7 @@ end;' language 'plpgsql' with (isstrict, iscachable);
 
 drop view user_tab_comments;
 
-create or replace function create_user_tab_comments() returns boolean as '
+create function create_user_tab_comments() returns boolean as '
 begin
   if version() like ''%7.2%'' then
     execute ''
@@ -162,7 +200,7 @@ drop function create_user_tab_comments();
 
 -- rel-constraints-create.sql
 
-create or replace function rel_segment__new (varchar,integer,varchar)
+create function rel_segment__new (varchar,integer,varchar)
 returns integer as '
 declare
   new__segment_name      alias for $1;
