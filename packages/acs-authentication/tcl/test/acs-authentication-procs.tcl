@@ -167,31 +167,62 @@ aa_register_case auth_create_user {
             }
             
             
-            # Missing first_names
+            # Missing first_names, last_name, email
             array unset user_info
             array set user_info [auth::create_user \
                                      -username "auth_create_user2" \
-                                     -email "auth_create_user2@test_user.com" \
+                                     -email "" \
                                      -first_names "" \
-                                     -last_name "User" \
+                                     -last_name "" \
                                      -password "changeme" \
                                      -secret_question "no_question" \
                                      -secret_answer "no_answer"]
             
-            aa_equals "creation_status for missing first names" $user_info(creation_status) "data_error" 
+            aa_equals "creation_status is data_error" $user_info(creation_status) "data_error" 
             
             aa_true "element_messages exists" [exists_and_not_null user_info(element_messages)]
             if { [exists_and_not_null user_info(element_messages)] } {
                 array unset elm_msgs
                 array set elm_msgs $user_info(element_messages)
-                aa_true "element_message for first_names exists" [exists_and_not_null elm_msgs(first_names)]
-                
+
+                if { [aa_true "element_message(email) exists" [exists_and_not_null elm_msgs(email)]] } {
+                    aa_log "element_message(email) = $elm_msgs(email)"
+                }
+                if { [aa_true "element_message(first_names) exists" [exists_and_not_null elm_msgs(first_names)]] } {
+                    aa_log "element_message(first_names) = $elm_msgs(first_names)"
+                }
+                if { [aa_true "element_message(last_name) exists" [exists_and_not_null elm_msgs(last_name)]] } {
+                    aa_log "element_message(last_name) = $elm_msgs(last_name)"
+                }
             }
             
-            if { [info exists user_info(element_messages)] } {
-                array set element_message $user_info(element_messages)
-                aa_log "user_info(element_messages) = '$user_info(element_messages)'"
-                aa_true "Element message for first_names exists" [exists_and_not_null element_message(first_names)]
+            # Malformed email
+            array unset user_info
+            array set user_info [auth::create_user \
+                                     -username [ad_generate_random_string] \
+                                     -email "not an email" \
+                                     -first_names "[ad_generate_random_string]<[ad_generate_random_string]" \
+                                     -last_name "[ad_generate_random_string]<[ad_generate_random_string]" \
+                                     -password [ad_generate_random_string] \
+                                     -secret_question [ad_generate_random_string] \
+                                     -secret_answer [ad_generate_random_string]]
+            
+            aa_equals "creation_status is data_error" $user_info(creation_status) "data_error" 
+            
+            aa_true "element_messages exists" [exists_and_not_null user_info(element_messages)]
+            if { [exists_and_not_null user_info(element_messages)] } {
+                array unset elm_msgs
+                array set elm_msgs $user_info(element_messages)
+
+                if { [aa_true "element_message(email) exists" [exists_and_not_null elm_msgs(email)]] } {
+                    aa_log "element_message(email) = $elm_msgs(email)"
+                }
+                if { [aa_true "element_message(first_names) exists" [exists_and_not_null elm_msgs(first_names)]] } {
+                    aa_log "element_message(first_names) = $elm_msgs(first_names)"
+                }
+                if { [aa_true "element_message(last_name) exists" [exists_and_not_null elm_msgs(last_name)]] } {
+                    aa_log "element_message(last_name) = $elm_msgs(last_name)"
+                }
             }
 
             # Duplicate email and username
