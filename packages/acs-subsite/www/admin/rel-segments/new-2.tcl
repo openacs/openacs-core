@@ -48,4 +48,8 @@ db_1row select_basic_info {
      where t.rel_type = :rel_type
 }
 
+# The role pretty names can be message catalog keys that need
+# to be localized before they are displayed
+set role_pretty_plural [lang::util::localize $role_pretty_plural]    
+
 ad_return_template

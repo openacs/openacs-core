@@ -49,6 +49,11 @@ db_1row group_and_rel_info {
      where rel_types.rel_type = :rel_type
 }
 
+# The role pretty names can be message catalog keys that need
+# to be localized before they are displayed
+set role_pretty_name [lang::util::localize $role_pretty_name]
+set role_pretty_plural [lang::util::localize $role_pretty_plural]    
+
 set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[ad_export_vars group_id] "One Group"] "All $role_pretty_plural"]
 
 ad_return_template

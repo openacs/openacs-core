@@ -28,6 +28,12 @@ db_multirow roles select_roles {
      where r.role = num1.role(+)
        and r.role = num2.role(+)
      order by lower(r.role)
+} {
+    # The role pretty names can be message catalog keys that need
+    # to be localized before they are displayed
+    set pretty_name [lang::util::localize $pretty_name]
 }
 
 ad_return_template
+
+

@@ -32,6 +32,10 @@ db_1row select_segment_info {
        and s.rel_type = r.rel_type
 }
 
+# The role pretty names can be message catalog keys that need
+# to be localized before they are displayed
+set role_pretty_plural [lang::util::localize $role_pretty_plural]    
+
 set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] [list one?[ad_export_vars {segment_id}] "One segment"] "Elements"]
 
 # Expects segment_id, segment_name, group_id, role to be passed in 
