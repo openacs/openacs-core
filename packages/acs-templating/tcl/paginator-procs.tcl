@@ -35,7 +35,7 @@ proc template::paginator { command args } {
 #                     page number,, such as the first few
 #                     letters of a title or date.
 
-proc template::paginator::create { name query args } {
+proc template::paginator::create { statement_name name query args } {
 
   set level [template::adp_level]
   variable parse_level
@@ -52,7 +52,7 @@ proc template::paginator::create { name query args } {
   set row_ids [cache get $cache_key:row_ids]
 
   if { [string equal $row_ids {}] } {
-    init $name $query
+    init $statement_name $name $query
   } else {
     set opts(row_ids) $row_ids
     set opts(context_ids) [cache get $cache_key:context_ids]
@@ -67,7 +67,7 @@ proc template::paginator::create { name query args } {
 
 # Initialize a paginated query.  Only called by create.
 
-proc template::paginator::init { name query } {
+proc template::paginator::init { statement_name result_name query } {
 
   get_reference
 
@@ -79,7 +79,7 @@ proc template::paginator::init { name query } {
   if { [info exists properties(contextual)] } {
 
     # query contains two columns, one for ID and one for context cue
-    uplevel 3 "template::query __paginator_ids multilist \"$query\""
+    uplevel 3 "template::query $statement_name __paginator_ids multilist \"$query\""
 
     set i 0
     set page_size $properties(pagesize)
@@ -96,7 +96,7 @@ proc template::paginator::init { name query } {
     }
     
     set properties(context_ids) $context_ids
-    cache set $name:$query:context_ids $context_ids $properties(timeout)
+    cache set $result_name:$query:context_ids $context_ids $properties(timeout)
 
 
     if { [template::util::is_nil row_ids] } {
@@ -104,16 +104,16 @@ proc template::paginator::init { name query } {
     }
 
     set properties(row_ids) $row_ids
-    cache set $name:$query:row_ids $row_ids $properties(timeout)
+    cache set $result_name:$query:row_ids $row_ids $properties(timeout)
 
 
   } else {
 
     # no extra column specified for paging by contextual cues
-    uplevel 3 "template::query __paginator_ids onelist \"$query\""
+    uplevel 3 "template::query $statement_name __paginator_ids onelist \"$query\""
 
     set properties(row_ids) $ids
-    cache set $name:$query:row_ids $ids $properties(timeout)
+    cache set $result_name:$query:row_ids $ids $properties(timeout)
   }
 }
 
@@ -423,7 +423,7 @@ proc template::paginator::get_display_info { name datasource page } {
 # @param id_column  The name of the ID column in the display query (required
 #                   to order rows properly).
 
-proc template::paginator::get_data { name datasource query id_column page } {
+proc template::paginator::get_data { statement_name name datasource query id_column page } {
 
   set ids [get_row_ids $name $page]
 
@@ -456,7 +456,7 @@ proc template::paginator::get_data { name datasource query id_column page } {
 
   uplevel 2 "
 
-    template::query __page_data multirow \"$query\" -eval {
+    template::query $statement_name __page_data multirow \"$query\" -eval {
       set i \$__page_order(\$row($id_column))
       upvar 0 $datasource:\$i __page_sorted_row
       array set __page_sorted_row \[array get row\]

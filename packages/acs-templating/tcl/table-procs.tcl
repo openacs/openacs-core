@@ -45,23 +45,14 @@
 
 # Create the widget data structure
 
-proc template::widget::table::create { name args } {
+proc template::widget::table::create { statement_name name args } {
 
   upvar "tablewidget:${name}" widget
 
   set widget(name) $name
-
-  upvar 0 widget opts
-  template::util::get_opts $args
-
-  if { [info exists opts(db)] } {
-    set db $opts(db)
-  } else {
-    set db ""
-  }
    
   template::widget::table::get_params $name 2
-  template::widget::table::prepare $name $db 2
+  template::widget::table::prepare $statment_name $name 2
 }
 
 # Get the order by clause for the widget, other parameters (?)
@@ -93,9 +84,8 @@ proc template::widget::table::default_column_def { name { level 2} } {
 }
 
 # Compose the query, if neccessary, and define the datasources
-proc template::widget::table::prepare { name { db ""} {level 1} } {
+proc template::widget::table::prepare { statement_name name {level 1} } {
   
-  set free_db 0
   upvar $level "tablewidget:${name}" widget
  
   # Get the rows
@@ -104,6 +94,7 @@ proc template::widget::table::prepare { name { db ""} {level 1} } {
       error "No row datasource available for tablewidget $name"
     }
 
+    # fixme - need to get a statement name here
     set sql_query $widget(query)
 
     # Append the order by clause, if any
@@ -112,12 +103,6 @@ proc template::widget::table::prepare { name { db ""} {level 1} } {
         append sql_query "\n order by"
       }
       append sql_query " $widget(orderby)"
-    }
-
-    # Get database handle
-    if { [template::util::is_nil db] } {
-      set db [ns_db gethandle]
-      set free_db 1
     }
 
     if { ![template::util::is_nil widget(column_def)] } {
@@ -160,7 +145,7 @@ proc template::widget::table::prepare { name { db ""} {level 1} } {
     }
  
     uplevel $level "
-      template::query tw_${name}_rows multirow \{$sql_query\} -db \{$db\} \\
+      template::query $statement_name tw_${name}_rows multirow \{$sql_query\} \\
         -eval \{$eval_code\}
     "
   
@@ -225,7 +210,6 @@ proc template::widget::table::prepare { name { db ""} {level 1} } {
     uplevel $level "uplevel 0 tw_${name}_columns $template(columns_data)"
   }
 
-  if { $free_db } { ns_db releasehandle $db }
 }
 
 # Register the tag that actually renders the widget

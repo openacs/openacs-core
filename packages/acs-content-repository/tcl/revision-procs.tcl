@@ -2,21 +2,19 @@
 
 proc cr_revision_upload { title item_id path } {
 
-  set db [ns_db gethandle]
+    set revision_id [db_exec_plsql get_revision_id "begin
+    :1 := content_revision.new(title     => :title, 
+                               item_id   => :item_id, 
+                               v_content => null);
+     end;"]
 
-  ns_ora exec_plsql_bind $db "begin
-    :revision_id := content_revision.new(title => :title, 
-                                         item_id => :item_id, 
-                                         v_content => null);
-  end;" revision_id
-
-  ns_ora blob_dml_file_bind $db "update cr_revisions set
-                                  content = empty_blob()
-                                 where
-                                  revision_id = :revision_id
-                                 returning content into :1" [list 1] $path
-
-  ns_db releasehandle $db
+    dml_file dml_revision_from_file "update 
+                            cr_revisions 
+                          set
+                            content = empty_blob()
+                          where
+                            revision_id = :revision_id
+                          returning content into :1" -blob_files [list $path]
 
   return $revision_id
 }

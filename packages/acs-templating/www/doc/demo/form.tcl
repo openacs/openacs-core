@@ -16,28 +16,21 @@ form create add_user -elements {
 
 if { [form is_request add_user] } {
 
-  set db [ns_db gethandle]
-
   set query "select ad_template_sample_users_seq.nextval from dual"
-  template::query user_id onevalue $query -db $db
-
-  ns_db releasehandle $db
+  template::query get_user_id user_id onevalue $query
 
   element set_properties add_user user_id -value $user_id
 }
 
 if { [form is_valid add_user] } {
 
-  set db [ns_db gethandle]
   
-  ns_ora dml $db -bind [ns_getform] "
+  db_dml insert_sample -bind [ns_getform] "
     insert into 
       ad_template_sample_users 
     values (
       :user_id, :first_name, :last_name, :address1, :address2, :city, :state
     )"
-
-  ns_db releasehandle $db
 
   template::forward index.html
 }

@@ -97,9 +97,7 @@ if { [form is_valid add_entry] } {
 
     [template::form get_values add_entry birthday]
    
-    set db [ns_db gethandle]
-
-    ns_ora dml $db -bind [ns_getform] "
+    db_dml insert_form -bind [ns_getform] "
       insert into 
         address_book
       values (
@@ -111,13 +109,11 @@ if { [form is_valid add_entry] } {
 
     # can't seem to get orable to bind array variables birthday.day, birthday.month and birthday.year
     # okay, turns out oracle doesn't support arrays, will have to do this in tcl first
-
-    ns_db releasehandle $db
  
-  template::forward form-sample.acs
+    template::forward form-sample.acs
 }
 
-template::query address multirow "select * from address_book order by last_name"
+template::query get_address address multirow "select * from address_book order by last_name"
 
 set rowcount [set address:rowcount]
 

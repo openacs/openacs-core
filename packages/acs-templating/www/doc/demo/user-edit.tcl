@@ -121,15 +121,11 @@ if { [form is_valid user_edit] } {
 
   form get_values user_edit first_name last_name address1 address2 city state
 
-  set db [ns_db gethandle]
-
-  ns_ora dml $db "update ad_template_sample_users 
+  db_dml update_sample_users "update ad_template_sample_users 
     set first_name = :first_name, last_name = :last_name, 
         address1 = :address1, address2 = :address2, city = :city, 
         state = :state
     where user_id = :user_id"
-
-  ns_db releasehandle $db
 
   template::forward multiple
 }
