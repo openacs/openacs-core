@@ -2,6 +2,8 @@
 <message_catalog package_key="acs-subsite" package_version="5.0d6" locale="zh_TW" charset="utf-8">
 
   <msg key="About_You">關於你</msg>
+  <msg key="Account_at_system_closed">你在%system_name%的帳號已被關閉</msg>
+  <msg key="Account_closed">&lt;p&gt;你的帳號已被關閉.&lt;/p&gt; &lt;p&gt;我們可以為你&lt;a href=&quot;%restore_url%&quot;&gt;重新開啟.&lt;/p&gt;</msg>
   <msg key="Answer">解答:</msg>
   <msg key="at">在</msg>
   <msg key="Bad_Password">密碼錯誤</msg>

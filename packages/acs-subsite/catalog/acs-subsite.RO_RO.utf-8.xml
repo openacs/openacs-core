@@ -38,9 +38,13 @@
   <msg key="Close_account_explanation">&lt;p&gt; Vă rugăm să confirmaţi ca doriţi sa vă inchideţi contul pe %system_name%.&lt;/p&gt;&lt;p&gt; Dacă închideţi acest cont nu vă vom putea trimite notificări prin email şi nici nu veţi mai apare în lista membrilor pe %system_name%. Pe de altă parte, contribuţiile dumneavoastră vor fi păstrate, ele făcând parte din istoria comunităţii.&lt;/p&gt;&lt;p&gt;Reţineţi că puteţi să vă redeschideţi contul oricând - aceasta se face prin simpla reintrare în sistem folosind detaliile de autentificare ale acestui cont.</msg>
   <msg key="Close_your_account">Închide contul</msg>
   <msg key="Comment">Comentează</msg>
+  <msg key="Communities">Comunităţi</msg>
+  <msg key="communities">comunităţi</msg>
+  <msg key="community">comunitate</msg>
   <msg key="Confirm">Confirmă</msg>
   <msg key="Continue">Continuă</msg>
   <msg key="Country_Name">Numele Ţării</msg>
+  <msg key="Create_new_community">Creează un nou %pretty_name%</msg>
   <msg key="Current_Password">Parola curentă</msg>
   <msg key="Currently_invisible_msg">&lt;p&gt;Starea dumneavoastră online nu este momentan vizibilă celorlalţi utilizatori&lt;/p&gt;</msg>
   <msg key="Currently_visible_msg">&lt;p&gt; Starea dumneavoastră online este momentan vizibilă celorlalţi utilizatori&lt;/p&gt;</msg>
@@ -89,10 +93,14 @@
   <msg key="ISO_Code_List">Lista de Coduri ISO</msg>
   <msg key="ISO_Codes_Not_Loaded">Codurile ISO Nu au fost încărcate</msg>
   <msg key="ISO_Codes_not_loaded">Codurile ISO nu au fost încărcate</msg>
+  <msg key="Join_community">Înscrie-te în comunitate</msg>
   <msg key="Join_group_name">Înscrie-te în %group_name% </msg>
+  <msg key="Join_this_community">Înscrie-te în această comunitate</msg>
   <msg key="Keyword">Cuvănt cheie</msg>
   <msg key="Last_name">Nume de familie</msg>
   <msg key="later">mai târziu.</msg>
+  <msg key="Leave_community">Părăseşte comunitatea</msg>
+  <msg key="Leave_this_community">Părăseşte această comunitate</msg>
   <msg key="lGo_back_without_adding">Înapoi fără a mai adăuga utilizatori</msg>
   <msg key="Log_In">Intră</msg>
   <msg key="log_in">intră</msg>
@@ -204,6 +212,7 @@
   <msg key="Reject">Respinge</msg>
   <msg key="Remember_my_login">Aminteşte-ţi de autentificare mea pe acest calculator</msg>
   <msg key="Remove">Elimină</msg>
+  <msg key="Req_membership_comm">Cere să fii membru în această comunitate</msg>
   <msg key="Request_membership">Cere calitate de membru</msg>
   <msg key="return_to_application">întoarce-te la formularul de cerere</msg>
   <msg key="Revoke_Checked">Anularea este Selectată</msg>
@@ -220,6 +229,9 @@
   <msg key="Status">Situaţie curentă</msg>
   <msg key="Story_Behind_Photo">Subtextul Fotografiei</msg>
   <msg key="Story_behind_photo">Povestea Fotografiei</msg>
+  <msg key="Subcommunities">Subcomunităţi</msg>
+  <msg key="subcommunities">subcomunităţi</msg>
+  <msg key="subcommunity">subcomunitate</msg>
   <msg key="Thank_you">Mulţumim</msg>
   <msg key="The_ISO_codes_were_not">Codurile ISO nu au fost încărcate pe acest server</msg>
   <msg key="this_subsite">acest subsite</msg>

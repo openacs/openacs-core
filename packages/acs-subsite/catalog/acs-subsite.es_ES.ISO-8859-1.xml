@@ -1,27 +1,93 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="acs-subsite" package_version="5.0d6" locale="es_ES" charset="ISO-8859-1">
 
+  <msg key="A_member_of_the_system">Miembro de %system_name% desde</msg>
   <msg key="About_You">Mi información</msg>
+  <msg key="Account_at_system_closed">Su cuenta en %system_name% ha sido cancelada.</msg>
+  <msg key="Account_close_confirm_no_label">No, volver a %pvt_home_name%</msg>
+  <msg key="Account_close_confirm_yes_label">Sí, cancelar mi cuenta</msg>
   <msg key="Account_closed">&lt;p&gt;Su cuenta se encuentra cerrada por el momento.&lt;/p&gt;&lt;p&gt;Si usted lo desea, podemos &lt;a href=&quot;%restore_url%&quot;&gt;re-abrir su cuenta&lt;/a&gt;.&lt;/p&gt;</msg>
+  <msg key="Account_closed_workspace_msg">&lt;p&gt;&lt;font color=&quot;red&quot;&gt;&lt;b&gt;Su cuenta está actualmente cancelada.&lt;/b&gt;&lt;/font&gt;&lt;a href=&quot;%login_url%&quot;&gt;Conectese&lt;/a&gt; de nuevo para ver que puede hacer al respecto.&lt;/p&gt;</msg>
+  <msg key="Account_reopened_message">Su cuenta en %system_name% ha sido reactividad. Bienvenido de nuevo.</msg>
+  <msg key="Account_reopened_title">Cuenta reactivada</msg>
+  <msg key="Action">Acción</msg>
+  <msg key="Add_new_app">Añadir una nueva aplicación</msg>
+  <msg key="Admin">Admin</msg>
+  <msg key="Administer_subsite">Administrar %subsite_name%</msg>
+  <msg key="Administrative_options">Opciones de administración para este usuario</msg>
+  <msg key="Alert_Type">Tipo de aviso</msg>
+  <msg key="another_picture">otra imagen.</msg>
   <msg key="Answer">Respuesta:</msg>
+  <msg key="Application_Error">Error de la aplicación</msg>
+  <msg key="Applications">Aplicaciones</msg>
+  <msg key="Approve">Aprobar</msg>
   <msg key="at">en</msg>
+  <msg key="Authority">Autoridad</msg>
   <msg key="Bad_Password">Contraseña errónea</msg>
+  <msg key="Ban">Prohibir</msg>
   <msg key="Basic_Information">Información básica</msg>
+  <msg key="Biography">Biografía</msg>
   <msg key="cannot_retrieve_password">No se soporta la obtención de contraseñas de una autoridad local.</msg>
+  <msg key="Cannot_see_memb_list">No puede ver la lista de miembros</msg>
+  <msg key="Change_locale_label">Seleccionar idioma</msg>
   <msg key="Change_my_Password">Cambiar mi contraseña</msg>
+  <msg key="Change_pass_email_por">Cambiar contraseña, email, foto</msg>
   <msg key="Check_Your_Inbox">Revisar correo entrante</msg>
   <msg key="Children">Hijos</msg>
+  <msg key="Close_account_explanation">&lt;p&gt;Por favor, confirme que realmente desea cancelar su cuenta en %system_name%.&lt;/p&gt;
+&lt;p&gt;Cancelar una cuenta significa que no seguirá recibiendo notificaciones, ni formará parte de los miembros de %system_name%. No obstante, sus contribuciones a la comunidad se conservarán como parte del histórico de la comunidad.&lt;/p&gt;
+&lt;p&gt;Tenga en cuenta que puede reabrir su cuenta en cualquier momento, para ello simplemente vuelva a conectarse.&lt;/p&gt;</msg>
+  <msg key="Close_your_account">Cancelar cuenta</msg>
+  <msg key="Comment">Comentario</msg>
+  <msg key="Communities">Comunidades</msg>
+  <msg key="communities">comunidades</msg>
+  <msg key="community">comunidad</msg>
   <msg key="Confirm">Confirmar:</msg>
+  <msg key="Continue">Continuar</msg>
+  <msg key="Country_Name">País</msg>
+  <msg key="Create_new_community">Crear nuevo %pretty_name%</msg>
   <msg key="Current_Password">Contraseña Actual:</msg>
+  <msg key="Currently_invisible_msg">&lt;p&gt;Su nombre NO aparece en la lista de usuarios conectados.&lt;/p&gt;</msg>
+  <msg key="Currently_visible_msg">&lt;p&gt;Su nombre aparece en la lista de usuarios conectados.&lt;/p&gt;</msg>
   <msg key="Customize_Question">Personalizar pregunta</msg>
+  <msg key="Database_Error">Error de base de datos</msg>
+  <msg key="default_context">contexto por defecto</msg>
+  <msg key="Delete">Borrar</msg>
+  <msg key="DevAdmin">DevAdmin</msg>
+  <msg key="Developers_Admin">Administración de desarrolladores</msg>
   <msg key="Direct_Permissions">Permisos directos</msg>
+  <msg key="Disable">Desactivar</msg>
+  <msg key="Disabled">Desactivado</msg>
+  <msg key="Domain">Dominio</msg>
+  <msg key="E_mail">Email</msg>
+  <msg key="edit_comment">editar comentario</msg>
+  <msg key="Elements_not_editable">Algunos elementos no pueden ser editados ya que están siendo administrados por %authority_name%.</msg>
   <msg key="Email">correo electrónico</msg>
+  <msg key="email_body_Forgotten_password">Datos de su cuenta: 
+%account_id_label%: %account_id% 
+%password_label%: %password%
+Para cambiar su contraseña, visite %reset_password_url%</msg>
+  <msg key="email_body_Registration_password">Gracias por registrarse en %system_name%. Para conectarse, visite %system_url%: 
+%account_id_label%: %account_id%
+%password_label%: %password%
+Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Email_Confirmation">Confirmación de correo</msg>
   <msg key="Email_not_Requested">Correo electrónico no solicitado</msg>
+  <msg key="email_subject_Forgotten_password">Recordatorio de su contraseña en %system_name%</msg>
+  <msg key="email_subject_Registration_password">Bienvenido a %system_name%</msg>
+  <msg key="Enabled">Activado</msg>
+  <msg key="Enter_your_username_to">Introduzca su nombre de usuario para poder recuperar su contraseña.</msg>
+  <msg key="Erase_Portrait">Borrar foto</msg>
+  <msg key="erase_portrait">borrar foto</msg>
+  <msg key="Error">Error</msg>
   <msg key="Error_sending_mail">Error al enviar el correo</msg>
+  <msg key="Expires">Caduca</msg>
+  <msg key="Filename">Nombre de archivo</msg>
   <msg key="First_names">Nombres</msg>
+  <msg key="Forgot_your_password">¿Ha olvidado su contraseña?</msg>
   <msg key="Grant">Otorgar</msg>
   <msg key="Grant_Permission">Autorizar</msg>
+  <msg key="Home_page">Página web</msg>
   <msg key="Join_group_name">Unirse a %group_name%</msg>
   <msg key="Last_name">Apellido</msg>
   <msg key="Log_In">Ingresar</msg>
@@ -50,12 +116,16 @@
   <msg key="lt_To_confirm_your_regis">Para confirmar su registro, por favor, acuda a %confirmation_url%</msg>
   <msg key="lt_We_were_not_awaiting_">No estabamos esperando su email. Debe tratarse de un error.</msg>
   <msg key="lt_Welcome_to_system_nam">Bienvenido a %system_name%</msg>
+  <msg key="lt_What_other_people_see">Lo que verán los demás al pulsar sobre su nombre</msg>
   <msg key="lt_You_cant_have_a_lt_in">No puede introducir un signo &amp;lt; en su nombre ya que corresponde a una etiqueta HTML y podría crear confusión.</msg>
   <msg key="lt_You_cant_have_a_lt_in_1">No puede introducir un signo &amp;lt; en sus apellidos ya que corresponde a una etiqueta HTML y podría crear confusión.</msg>
   <msg key="lt_Your_email_has_been_c">Su correo ha sido confirmado. Ahora, puede ingresar a %system_name%.</msg>
   <msg key="lt_Your_email_has_been_c_1">Su correo ha sido confirmado. Ahora, debe esperar la aprobación del administrador de %system_name%.</msg>
   <msg key="lt_Your_email_is_confirm">Su correo ha sido confirmado</msg>
   <msg key="lt_Your_URL_doesnt_have_">La URL introducida no es válida. Un ejemplo de URL válida es \&quot;%valid_url_example%\&quot;.&quot;</msg>
+  <msg key="Make_yourself_invisible_label">Volverse invisible</msg>
+  <msg key="Make_yourself_visible_label">Volverse visible</msg>
+  <msg key="Manage_your_notifications">Administrar notificaciones</msg>
   <msg key="Name">Nombre y apellidos:</msg>
   <msg key="New_Password">Nueva contraseña:</msg>
   <msg key="no_portrait_title_message">su foto</msg>
@@ -78,5 +148,7 @@
   <msg key="Update_Password">Actualizar contraseña</msg>
   <msg key="upload_a_portrait">subir una foto</msg>
   <msg key="Username">Nombre de usuario</msg>
+  <msg key="Whos_Online_link_label">Usuarios conectados en este momento</msg>
+  <msg key="Whos_Online_title">Quién está conectado</msg>
   <msg key="Your_Portrait">Su foto</msg>
 </message_catalog>
