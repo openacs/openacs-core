@@ -78,6 +78,11 @@ ad_proc -public auth::get_user_id {
         ok 2
         secure 3
     }
+    
+    # If HTTPS isn't available, we can't require secure authentication
+    if { ![security::https_available_p] } {
+        set levelv(secure) 2
+    }
 
     # Check if auth_level is sufficiently high
     if { $levelv([ad_conn auth_level]) < $levelv($level) } {
