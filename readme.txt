@@ -1,12 +1,35 @@
 This is the OpenACS - the Open Architecture Community System.
 
-Version 4.6.2
+Version 4.6.3
+
+--------------
+
+Full documentation is located in the tarball at
+packages/acs-core-docs/www/index.html
+
+For installation instructions, please see
+packages/acs-core-docs/www/acs-admin.html
+
+The release notes for this release are available at
+packages/acs-core-docs/www/release-notes.html
+
+Once your service is up and running, this same documentation is
+available at http://yourserver/doc/
+
+Documentation for this system is at viewable via your favorite browser 
+at http://openacs.org/doc
+
+Please report bugs via http://openacs.org/bugtracker/openacs/
+and any questions and feedback at http://openacs.org/forums/.  Send 
+documentation questions and corrections to docs@openacs.org.
+
+--------------
 
 OpenACS is an advanced toolkit for building scalable,
 community-oriented web applications.
 
 The original ACS - the Arsdigita Community System, which formed the
-foundation of OpenACS is described in 
+foundation of OpenACS - is described in 
 http://philip.greenspun.com/panda/community
 
 The original ACS was Copyright (C) 1995-2000 ArsDigita Corporation
@@ -32,19 +55,3 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---------------
-
-For installation instructions, please see
-http://openacs.org/doc/openacs-4/acs-admin
-
-Documentation for this system is at viewable via your favorite browser 
-at http://openacs.org/doc
-
-Once your service is up and running, this same documenation is
-available at http://YOURSERVICENAME/doc/
-
-The release notes for this release are available at
-packages/acs-core-docs/www/release-notes.html
-
-Please report bugs via http://openacs.org/bugtracker/openacs/
-and any questions and feedback at http://openacs.org/forums/
