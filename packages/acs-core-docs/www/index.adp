@@ -45,7 +45,7 @@
 
 <strong>Primers and References</strong>
         - <a href="http://aolserver.com/docs/">AOLserver Documentation</a> 
-	  (the <a href="http://aolserver.com/docs/tcldev/tcldev.htm">Tcl Developer's Guide</a> in particular.)
+	  (the <a href="http://aolserver.com/docs/devel/tcl/tcl-api.adp">Tcl Developer's Guide</a> in particular.)
         - <a href="http://www.arsdigita.com/books/tcl/">Tcl for Web Nerds</a>
         - <a href="http://www.arsdigita.com/books/sql/">SQL for Web Nerds</a>
 </pre></td>
