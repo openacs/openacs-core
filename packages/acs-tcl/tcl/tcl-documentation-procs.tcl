@@ -235,7 +235,7 @@ ad_proc ad_page_contract_eval { args } {
 #   optional, specified in the ad_page_contract call error
 
 ad_proc -public ad_page_contract {
-    -type
+    {-form {}}
     -properties
     docstring
     args
@@ -512,11 +512,10 @@ ad_proc -public ad_page_contract {
     @param query the query arguments that this page accepts. The query
     argument takes form of a list of argument specs. See above.
 
-    @param type the document type that this page will deliver. Use
-    properties if the type is anonymous.
-
-    @param properties what properties the resulting document will contain, in case
-    you don't specify a predefined type.
+    @param properties what properties the resulting document will contain.
+    
+    @param form Optionally supply the parameters directly here instead of fetching them from the page's form (ns_getform). 
+    This should be a reference to an ns_set.
     
     @author Lars Pind (lars@pinds.com)
     @author Yonatan Feldman (yon@arsdigita.com)
@@ -549,10 +548,6 @@ ad_proc -public ad_page_contract {
 	}
 	
 	ad_arg_parser $valid_args $args
-    }
-
-    if {[info exists type] && [info exists properties]} {
-	return -code error "You can't have both a -type and a -properties argument with ad_page_contract"
     }
 
     ####################
@@ -704,7 +699,7 @@ ad_proc -public ad_page_contract {
 	ad_parse_documentation_string $docstring doc_elements
 
 	# copy all the standard elements over
-	foreach element { query type properties } {
+	foreach element { query properties } {
 	    if { [info exists $element] } {
 		set doc_elements($element) [set $element]
 	    }
@@ -825,7 +820,9 @@ ad_proc -public ad_page_contract {
     # 
     ####################
 
-    set form [ns_getform]
+    if { [empty_string_p $form] } {
+        set form [ns_getform]
+    }
     
     if { [empty_string_p $form] } {
 	set form_size 0
