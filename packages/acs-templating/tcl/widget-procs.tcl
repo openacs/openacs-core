@@ -38,41 +38,60 @@ ad_proc -public template::widget::textarea { element_reference tag_attributes } 
 
   upvar $element_reference element
 
-  if { ![string equal $element(mode) "edit"] } {
+  if { [info exists element(html)] } {
+    array set attributes $element(html)
+  }
+  array set attributes $tag_attributes
+    
+  if { [info exists element(value)] } {
+      set value $element(value)
+  } else {
+      set value {}
+  }
+
+  if { [info exists element(mode)] } {
+      set mode $element(mode)
+  } else {
+      set mode {}
+  }
+
+
+  set output [textarea_internal $element(name) attributes $value $mode]
+
+  return $output
+}
+
+ad_proc -public template::widget::textarea_internal { 
+    name 
+    attribute_reference
+    {value {}}
+    {mode edit}
+} {
+  upvar $attribute_reference attributes
+
+  if { ![string equal $mode "edit"] } {
     set output {}
-    if { [info exists element(value)] } {
-      append output [ad_quotehtml $element(value)]
-      append output "<input type=\"hidden\" name=\"$element(name)\" value=\"[ad_quotehtml $element(value)]\">"
+    if { ![empty_string_p value] } {
+      append output "[ad_quotehtml $value]<input type=\"hidden\" name=\"$name\" value=\"[ad_quotehtml $value]\">"
     }
   } else {
-    if { [info exists element(html)] } {
-      array set attributes $element(html)
-    }
+    set output "<textarea name=\"$name\""
     
-    array set attributes $tag_attributes
-    
-    set output "<textarea name=\"$element(name)\""
-    
-    foreach name [array names attributes] {
-      if { [string equal $attributes($name) {}] } {
-        append output " $name"
+    foreach attribute_name [array names attributes] {
+      if { [string equal $attributes($attribute_name) {}] } {
+        append output " $attribute_name"
       } else {
-        append output " $name=\"$attributes($name)\""
+        append output " $attribute_name=\"$attributes($attribute_name)\""
       }
     }
     
-    append output ">"
-    
-    if { [info exists element(value)] } {
-      # As per scottwseago's request
-      append output [ad_quotehtml $element(value)]
-    } 
-    
-    append output "</textarea>"
+    append output ">[ad_quotehtml $value]</textarea>"
   }
   
   return $output
 }
+
+
 
 ad_proc -public template::widget::inform { element_reference tag_attributes } {
     A static information widget that does not submit any data
@@ -208,8 +227,13 @@ ad_proc -public template::widget::button { element_reference tag_attributes } {
   return [input button element $tag_attributes]
 }
 
-ad_proc -public template::widget::menu { widget_name options_list values_list \
-                              attribute_reference {mode edit} } {
+ad_proc -public template::widget::menu { 
+    widget_name
+    options_list
+    values_list
+    attribute_reference
+    {mode edit}
+} {
 
   upvar $attribute_reference attributes
   
