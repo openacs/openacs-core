@@ -9,10 +9,9 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-# Redirect and abort processing
-
 ad_proc -public template::forward { url } {
-
+    Redirect and abort processing
+} {
   # DRB: The code that was here before didn't preserve the protocol, always
   # using HTTP even if HTTPS was used to establish the connection.  Besides
   # which ad_returnredirect has funky checks for even funkier browsers, and
@@ -23,13 +22,12 @@ ad_proc -public template::forward { url } {
   ad_script_abort
 }
 
-# Run any filter procedures that have been registered with the
-# templating system.  The signature of a filter procedure is 
-# a reference (not the value) to a variable containing the URL of
-# the template to parse.  The filter procedure may modify this.
-
 ad_proc -public template::filter { command args } {
-
+    Run any filter procedures that have been registered with the
+    templating system.  The signature of a filter procedure is 
+    a reference (not the value) to a variable containing the URL of
+    the template to parse.  The filter procedure may modify this.
+} {
   variable filter_list
 
   set arg1 [lindex $args 0]
@@ -55,10 +53,9 @@ ad_proc -public template::filter { command args } {
 # "/foo"-style URLs would require fixing it, too.   Also ACS 4.2 had these
 # debugging filters enabled by default.  I've turned them off by default.
 
-# Show the compiled template (for debugging)
-
 ad_proc -public cmp_page_filter { why } {
-
+    Show the compiled template (for debugging)
+} {
   if { [catch {
     set url [ns_conn url]
     regsub {.cmp} $url {} url_stub
@@ -83,10 +80,9 @@ ad_proc -public cmp_page_filter { why } {
   return filter_return
 }
 
-# Show the comments for the template (for designer)
-
 ad_proc -public dat_page_filter { why } {
-
+    Show the comments for the template (for designer)
+} {
   if { [catch {
     set url [ns_conn url]
     regsub {.dat} $url {} url_stub

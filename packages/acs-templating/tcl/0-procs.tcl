@@ -101,9 +101,9 @@ namespace eval template {
   namespace export form element request
 }
 
-# Generic wrapper for registered tag handlers.
-
 ad_proc -public template_tag { name arglist body } {
+    Generic wrapper for registered tag handlers.
+} {
 
   switch [llength $arglist] {
 

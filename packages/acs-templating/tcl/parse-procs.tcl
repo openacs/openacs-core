@@ -11,21 +11,19 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-# @private adp_parse
+ad_proc -private template::adp_parse { __adp_stub __args } {
+    Execute procedures to prepare data sources and then to output
+    template.
 
-# Execute procedures to prepare data sources and then to output
-# template.
-
-# @param __adp_stub   The root (without the file extension) of the
-#                     absolute path to the template and associated code.
-# @param __args       One list containing any number of key-value pairs passed 
-#                     to an included template from its container.  All
-#                     data sources may be passed by reference.
-
-ad_proc -public template::adp_parse { __adp_stub __args } {
-
+    @param __adp_stub   The root (without the file extension) of the
+                        absolute path to the template and associated code.
+    @param __args       One list containing any number of key-value pairs 
+                        passed to an included template from its container.  
+                        All data sources may be passed by reference.
+} {
   # declare any variables passed in to an include or master
   # TODO: call adp_set_vars instead.
+
   foreach {__key __value} $__args {
     if {[string match "&*" $__key]} {	# "&" triggers call by reference
       if {[string compare "&" $__key]} {
@@ -100,14 +98,11 @@ ad_proc -public template::adp_parse { __adp_stub __args } {
   return $__adp_output				; # empty in non-templated page
 }
 
-# @private adp_set_vars
-
-# Set variables passes from a container template, including onerow and
-# multirow data sources.  This code must be executed in the same stack frame
-# as adp_parse, but is in a separate proc to improve code readability.
-
-ad_proc -public template::adp_set_vars {} {
-
+ad_proc -private template::adp_set_vars {} {
+    Set variables passes from a container template, including onerow and
+    multirow data sources.  This code must be executed in the same stack frame
+    as adp_parse, but is in a separate proc to improve code readability.
+} {
   uplevel {
     set __adp_level [adp_level 2]
     foreach {__adp_key __adp_value} $args {
@@ -135,23 +130,21 @@ ad_proc -public template::adp_set_vars {} {
     }
   }
 }
-
-# @public adp_abort
-
 # Terminates processing of a template and throws away all output.
 
-ad_proc -public template::adp_abort {} { error ADP_ABORT }
-
-# @public adp_eval
-
-# Evaluates a chunk of compiled template code in the calling stack frame.
-# The resulting output is placed in __adp_output in the calling frame,
-# and also returned for convenience.
-
-# @return The output produced by the compiled template code.
+ad_proc -public template::adp_abort {} {
+  Terminates processing of a template and throws away all output.
+} { 
+  error ADP_ABORT 
+}
 
 ad_proc -public template::adp_eval { coderef } {
+    Evaluates a chunk of compiled template code in the calling stack frame.
+    The resulting output is placed in __adp_output in the calling frame,
+    and also returned for convenience.
 
+    @return The output produced by the compiled template code.
+} {
   upvar $coderef code
 
   eval "uplevel {
@@ -169,23 +162,20 @@ ad_proc -public template::adp_eval { coderef } {
   return $output
 }
 
-# @public adp_level
-
-# Get the stack frame level at which the template is being evaluated.
-# This is used extensively for obtaining references to data sources,
-# as well template objects such as forms and wizards
-
-# @param up A relative reference to the "parse level" of interest.
-# 	    Useful in the context of an included template to reach into the
-# 	    stack frame in which the container template is being parsed, for
-# 	    accessing data sources or other objects.  The default is the 
-#           highest parse level.
-
-# @return A number, as returned by [info level], representing the stack frame
-#         in which a template is being parsed.
-
 ad_proc -public template::adp_level { { up "" } } {
+    Get the stack frame level at which the template is being evaluated.
+    This is used extensively for obtaining references to data sources,
+    as well template objects such as forms and wizards
 
+    @param up A relative reference to the "parse level" of interest.
+    	    Useful in the context of an included template to reach into the
+    	    stack frame in which the container template is being parsed, for
+    	    accessing data sources or other objects.  The default is the 
+              highest parse level.
+
+    @return A number, as returned by [info level], representing the stack frame
+            in which a template is being parsed.
+} {
   set result ""
 
   variable parse_level
@@ -203,29 +193,25 @@ ad_proc -public template::adp_level { { up "" } } {
   return $result
 }
 
-# @public adp_levels
-# Get all stack frame levels
 
 ad_proc -public template::adp_levels {} {
+    @return all stack frame levels
+} {
   variable parse_level
   if { [info exists parse_level] } {return $parse_level}
   return ""
 }
 
+ad_proc -private template::adp_prepare {} {
+    Executes the code to prepare the data sources for a template.  The
+    code is executed in the stack frame of the calling procedure
+    (adp_parse) so that variables are accessible when the compiled
+    template code is executed.  If the preparation code executes the
+    set_file command, the procedure will recurse and execute the code
+    for the next template as well.
 
-# @private adp_prepare
-
-# Executes the code to prepare the data sources for a template.  The
-# code is executed in the stack frame of the calling procedure
-# (adp_parse) so that variables are accessible when the compiled
-# template code is executed.  If the preparation code executes the
-# set_file command, the procedure will recurse and execute the code
-# for the next template as well.
-
-# @return boolean (0 or 1): whether the (ultimate) script was found.
-
-ad_proc -public template::adp_prepare {} {
-
+    @return boolean (0 or 1): whether the (ultimate) script was found.
+} {
   uplevel {
 
     if { [file exists $__adp_stub.tcl] } {
@@ -256,43 +242,37 @@ ad_proc -public template::adp_prepare {} {
   }
 }
 
-# @public set_file
-
-# Set the path of the template to render.  This is typically used to
-# implement multiple "skins" on a common set of data sources.  The
-# initial code (which may be in a .tcl file not associated with a .adp
-# file) sets up any number of data sources, and then calls set_file to
-# specify the template to actually render.  Any code associated with
-# the specified template is executed in the same stack frame as the
-# initial code, so that each "skin" may reference additional specific
-# data or logic as necessary.
-
-# @param path The root (sans file extension) of the absolute path to the 
-#             next template to parse.
-
 ad_proc -public template::set_file { path } {
-  
+    Set the path of the template to render.  This is typically used to
+    implement multiple "skins" on a common set of data sources.  The
+    initial code (which may be in a .tcl file not associated with a .adp
+    file) sets up any number of data sources, and then calls set_file to
+    specify the template to actually render.  Any code associated with
+    the specified template is executed in the same stack frame as the
+    initial code, so that each "skin" may reference additional specific
+    data or logic as necessary.
+
+    @param path The root (sans file extension) of the absolute path to the 
+                next template to parse.
+} {
   set level [adp_level]
 
   upvar #$level __adp_stub file_stub
   set file_stub $path
 }
 
-# @private adp_init
+ad_proc -private template::adp_init { type file_stub } {
+    Ensures that both data source tcl files and compiled adp templates
+    are wrapped in procedures in the current interpreter.  Procedures
+    are cached in byte code form in the interpreter, so this is more
+    efficient than sourcing a tcl file or parsing the template every
+    time.  Also checks the modification time on the source file to
+    ensure that the procedure is up-to-date.
 
-# Ensures that both data source tcl files and compiled adp templates
-# are wrapped in procedures in the current interpreter.  Procedures
-# are cached in byte code form in the interpreter, so this is more
-# efficient than sourcing a tcl file or parsing the template every
-# time.  Also checks the modification time on the source file to
-# ensure that the procedure is up-to-date.
-
-# @param type       Either adp (template) or tcl (code)
-# @param file_stub  The root (sans file extension) of the absolute path
-#                   to the .adp or .tcl file to source.
-
-ad_proc -public template::adp_init { type file_stub } {
- 
+    @param type       Either adp (template) or tcl (code)
+    @param file_stub  The root (sans file extension) of the absolute path
+                      to the .adp or .tcl file to source.
+} { 
   # this will return the name of the proc if it exists
   set proc_name [info procs ::template::mtimes::${type}::$file_stub]
 
@@ -331,21 +311,18 @@ ad_proc -public template::adp_init { type file_stub } {
   }
 }
 
-# @public adp_compile
-
-# Converts an ADP template into a chunk of Tcl code.  Caching this code
-# avoids the need to reparse the ADP template with each request.
-
-# @param source_type Indicates the source of the Tcl code to compile.
-#                    Valid options are -string or -file
-# @param source      A string containing either the template itself (for
-#                    -string) or the path to the file containing the 
-#                    template (for -file)
-
-# @return The compiled code.
-
 ad_proc -public template::adp_compile { source_type source } {
+    Converts an ADP template into a chunk of Tcl code.  Caching this code
+    avoids the need to reparse the ADP template with each request.
 
+    @param source_type Indicates the source of the Tcl code to compile.
+                       Valid options are -string or -file
+    @param source      A string containing either the template itself (for
+                       -string) or the path to the file containing the 
+                       template (for -file)
+
+    @return The compiled code.
+} {
   variable parse_list
   # initialize the compiled code
   set parse_list [list "set __adp_output \"\""]
@@ -392,18 +369,15 @@ ad_proc -public template::adp_compile { source_type source } {
   return $code
 }
 
-# @private adp_compile_chunk
+ad_proc -private template::adp_compile_chunk { chunk } {
+    Parses a single chunk of a template.  A chunk is either the entire
+    template or the portion of a template contained within a balanced
+    tag.  This procedure does not return the compiled chunk; compiled
+    code is assembled in the template::parse_list variable.
 
-# Parses a single chunk of a template.  A chunk is either the entire
-# template or the portion of a template contained within a balanced
-# tag.  This procedure does not return the compiled chunk; compiled
-# code is assembled in the template::parse_list variable.
-
-# @param chunk   A string containing markup, potentially with embedded
-#                ATS tags.
-
-ad_proc -public template::adp_compile_chunk { chunk } {
-
+    @param chunk   A string containing markup, potentially with embedded
+                   ATS tags.
+} {
   # parse the template chunk inside the tag
   set remaining [ns_adp_parse -string $chunk]
 
@@ -418,33 +392,27 @@ ad_proc -public template::adp_compile_chunk { chunk } {
   }
 }
 
-# @private adp_append_string
+ad_proc -private template::adp_append_string { s } {
+    Adds a line of code that appends a string to the Tcl output
+    from the compiler.
 
-# Adds a line of code that appends a string to the Tcl output
-# from the compiler.
-
-# @param s   A string containing markup that does not contain any embedded
-#            ATS tags.  Variable references and procedure calls are
-#            interpreted as for any double-quoted string in Tcl.
-
-ad_proc -public template::adp_append_string { s } {
-
+    @param s   A string containing markup that does not contain any embedded
+               ATS tags.  Variable references and procedure calls are
+               interpreted as for any double-quoted string in Tcl.
+} {
   adp_append_code "append __adp_output \"$s\""
 }
 
-# @private adp_append_code
+ad_proc -private template::adp_append_code { code { nobreak "" } } {
+    Adds a line of code to the Tcl output from the compiler.
 
-# Adds a line of code to the Tcl output from the compiler.
+    @param code       A line of Tcl code
 
-# @param code       A line of Tcl code
-
-# @option nobreak   Flag indicating that code should be appended to the
-# 		    current last line rather than adding a new line, for 
-#                   cases where code must continue on the same line, such 
-#                   as the else tag
-
-ad_proc -public template::adp_append_code { code { nobreak "" } } {
-
+    @option nobreak   Flag indicating that code should be appended to the
+    		      current last line rather than adding a new line, for 
+                      cases where code must continue on the same line, such 
+                      as the else tag
+} {
   if { [string is space $code] } { return }
 
   variable parse_list
@@ -461,29 +429,23 @@ ad_proc -public template::adp_append_code { code { nobreak "" } } {
   }
 }
 
-# @private adp_puts
+ad_proc -private template::adp_puts { text } {
+    Add text to the ADP currently being rendered.  May be used within escaped
+    Tcl code in the template to add to the output.
 
-# Add text to the ADP currently being rendered.  May be used within escaped
-# Tcl code in the template to add to the output.
-
-# @param text A string containing text or markup.
-
-ad_proc -public template::adp_puts { text } {
-
+    @param text A string containing text or markup.
+} {
   upvar __adp_output __adp_output
 
   append __adp_output $text
 }
 
-# @private adp_tag_init
+ad_proc -private template::adp_tag_init { {tag_name ""} } {
+    Called at the beginning of every tag handler to flush the ADP buffer of
+    output accumulated from the last tag (or from the beginning of the file).
 
-# Called at the beginning of every tag handler to flush the ADP buffer of
-# output accumulated from the last tag (or from the beginning of the file).
-
-# @param tag_name  The name of the tag.  Used for debugging purposes only.
-
-ad_proc -public template::adp_tag_init { {tag_name ""} } {
-
+    @param tag_name  The name of the tag.  Used for debugging purposes only.
+} {
   # add everything either from the beginning of the template or from
   # the last balanced tag up to the current point in the template
 
@@ -563,20 +525,17 @@ ad_proc -private template::enclosing_tag {
   return $name
 }
 
-# @private get_enclosing_tag
+ad_proc -private -deprecated template::get_enclosing_tag { tag } {
+    Reach back into the tag stack for the last enclosing instance of a tag.  
+    Typically used where the usage of a tag depends on its context, such
+    as the "group" tag within a "multiple" tag.
+   
+    Deprecated, use:
+      set tag [template::enclosing_tag <tag-type>]
+      set attribute [template::tag_attribute tag <attribute>]
 
-# Reach back into the tag stack for the last enclosing instance of a tag.  
-# Typically used where the usage of a tag depends on its context, such
-# as the "group" tag within a "multiple" tag.
-#
-# Deprecated, use:
-#   set tag [template::enclosing_tag <tag-type>]
-#   set attribute [template::tag_attribute tag <attribute>]
-
-# @param tag  The name of the enclosing tag to look for.
-
-ad_proc -public -deprecated template::get_enclosing_tag { tag } {
-
+    @param tag  The name of the enclosing tag to look for.
+} {
   set name ""
 
   variable tag_stack
@@ -596,22 +555,19 @@ ad_proc -public -deprecated template::get_enclosing_tag { tag } {
   return $name
 }
 
-# @private get_attribute
+ad_proc -private template::get_attribute { tag params name { default "" } } {
+    Retrieves a named attribute value from the parameter set passed to a
+    tag handler.  If a default is not specified, assumes the attribute
+    is required and throws an error.
 
-# Retrieves a named attribute value from the parameter set passed to a
-# tag handler.  If a default is not specified, assumes the attribute
-# is required and throws an error.
+    @param tag      The name of the tag.
+    @param params   The ns_set passed to the tag handler.
+    @param name     The name of the attribute.
+    @param default  A default value to return if the the attribute is
+                    not specified in the template.
 
-# @param tag      The name of the tag.
-# @param params   The ns_set passed to the tag handler.
-# @param name     The name of the attribute.
-# @param default  A default value to return if the the attribute is
-#                 not specified in the template.
-
-# @return The value of the attribute.
-
-ad_proc -public template::get_attribute { tag params name { default "" } } {
-
+    @return The value of the attribute.
+} {
   set value [ns_set iget $params $name]
 
   if { [string equal $value {}] } {
