@@ -525,6 +525,31 @@ create view user_tab_columns as
      and a.atttypid = t.oid
      and a.attnum > 0;
 
+-- PG substitute for Oracle user_col_comments view
+
+create view user_col_comments as
+  select upper(c.relname) as table_name,
+	 upper(a.attname) as column_name,
+	 d.description as comments
+    from pg_class c,
+         pg_attribute a
+           left outer join pg_description d on (a.oid = d.objoid)
+   where c.oid = a.attrelid
+     and a.attnum > 0;
+
+-- PG substitute for Oracle user_col_comments view
+
+create view user_tab_comments as
+  select upper(c.relname) as table_name,
+	 case
+	   when c.relkind = 'r' then 'TABLE'
+	   when c.relkind = 'v' then 'VIEW'
+	   else c.relkind::text
+	 end as table_type,
+	 d.description as comments
+    from pg_class c
+           left outer join pg_description d on (c.oid = d.objoid);
+
 -- Table for storing PL/PGSQL function arguments
 
 create table acs_function_args (
