@@ -72,7 +72,7 @@ ad_proc -public ad_context_bar {
     -node_id
     args
 } {
-    Returns a Yahoo-style hierarchical navbar. Includes "Your Workspace" or "Administration"
+    Returns a Yahoo-style hierarchical navbar. Includes "Administration"
     if applicable, and the subsite if not global.
 
     @param node_id If provided work up from this node, otherwise the current node
@@ -119,7 +119,7 @@ ad_proc -deprecated -public ad_context_bar_ws args {
 
     @see ad_context_bar
 } {
-    return [ad_context_bar_html [concat [list [list "[ad_pvt_home]" "[ad_pvt_home_name]"]] $args]]
+    return [ad_context_bar_html $args
 }
 
 # a context bar, rooted at the workspace or index, depending on whether
@@ -139,7 +139,7 @@ ad_proc -deprecated -public ad_context_bar_ws_or_index args {
     if { [ad_conn user_id] == 0 && ![string match /pvt/home* [ad_conn url]] } { 
 	set choices [list [list "/" [ad_system_name]]]
     } else {
-	set choices [list [list [ad_pvt_home] [ad_pvt_home_name]]]
+	set choices [list]
     }
 
     return [ad_context_bar_html [concat $choices $args]]
@@ -155,15 +155,9 @@ ad_proc -public ad_admin_context_bar args {
 
     @see ad_context_bar
 } {
-    if {[llength $args]} { 
-        set choices [list [list [ad_pvt_home] [ad_pvt_home_name]] \
-                         [list /acs-admin/ "ACS System Wide Administration"]]
-    } else { 
-        set choices [list [list [ad_pvt_home] [ad_pvt_home_name]] \
-                         "ACS System Wide Administration"]
-    }
+    set context [ad_context_node_list [ad_conn node_id]]
 
-    return [ad_context_bar_html [concat $choices $args]]
+    return [ad_context_bar_html [concat $context $args]]
 }
 
 ad_proc -public ad_navbar args {
