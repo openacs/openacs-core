@@ -635,9 +635,17 @@ proc randomInit {seed} {
 
 randomInit [ns_time]
 
-proc random {} {
+ad_proc random {} {
+    Return a pseudo-random number between 0 and 1.
+} {
     nsv_set rand seed [expr ([nsv_get rand seed] * [nsv_get rand ia] + [nsv_get rand ic]) % [nsv_get rand im]]
     return [expr [nsv_get rand seed]/double([nsv_get rand im])]
+}
+
+ad_proc randomRange {range} {
+    Return a pseudo-random number between 0 and range.
+} {
+    return [expr int([random] * $range)]
 }
 
 ad_proc -public db_html_select_options { 
