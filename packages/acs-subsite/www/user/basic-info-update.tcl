@@ -30,11 +30,10 @@ ad_require_permission $user_id "write"
 
 db_1row general_info {}
 
-set bio [db_string biography {} -default ""]
+set bio [person::get_bio -person_id $user_id]
 
 db_release_unused_handles
 
 set site_link [ad_site_home_link]
 set export_vars [export_form_vars return_url user_id]
 
-ad_return_template
