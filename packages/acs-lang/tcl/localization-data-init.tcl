@@ -234,7 +234,7 @@ nsv_set locale no_NO,int_curr_symbol "NOK "
 nsv_set locale no_NO,int_frac_digits 2
 nsv_set locale no_NO,mon_decimal_point ","
 nsv_set locale no_NO,mon_grouping {3 3 }
-nsv_set locale no_NO,mon {{januar} {februar} {marts} {april} {mai} {juni} {juli} {august} {september} {oktober} {november} {desember}}
+nsv_set locale no_NO,mon {{januar} {februar} {mars} {april} {mai} {juni} {juli} {august} {september} {oktober} {november} {desember}}
 nsv_set locale no_NO,mon_thousands_sep "."
 nsv_set locale no_NO,n_cs_precedes 1
 nsv_set locale no_NO,negative_sign "-"
