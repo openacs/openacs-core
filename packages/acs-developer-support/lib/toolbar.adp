@@ -4,13 +4,13 @@
       <td style="padding-left: 8px;" >
         <a href="@ds_url@">Developer Support</a>
 
-        <a href="@comments_toggle_url@" class="@comments_on@">CMT</a>
+        <a href="@comments_toggle_url@" class="@comments_on@" title="Comments at page footer">CMT</a>
         
-        <a href="@user_switching_toggle_url@" class="@user_switching_on@">USR</a>
+        <a href="@user_switching_toggle_url@" class="@user_switching_on@" title="User switching">USR</a>
         
-        <a href="@db_toggle_url@" class="@db_on@">DB</a>
+        <a href="@db_toggle_url@" class="@db_on@" title="Database statistics">DB</a>
         
-        <a href="@translator_toggle_url@" class="@translator_on@">TRN</a>
+        <a href="@translator_toggle_url@" class="@translator_on@" title="Translator mode">TRN</a>
         
       </td>
 

@@ -1,7 +1,7 @@
 
 # TODO: Handle the case when developer-support is not mounted
 
-# TODO: Move the "Toggle translator mode" to developer-support (might as well lump them all together)
+# TODO: Flag the "CMT" (comments) button if there are comments and it's turned off (after we get rid of the always-there default 3 rp_handler comments)
 
 
 
