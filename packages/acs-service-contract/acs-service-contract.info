@@ -10,7 +10,7 @@
     <version name="5.0.4" url="http://openacs.org/repository/download/apm/acs-service-contract-5.0.4.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>API and UI for service contracts</summary>
-        <release-date>2004-01-21</release-date>
+        <release-date>2004-03-10</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Service contracts defines an API for the creation of interfaces and discovery of interface implementations.
         Examples are the contracts used for search which provide a means to get content on a given object and to translate an object_id to a 

@@ -10,7 +10,7 @@
     <version name="5.0.4" url="http://openacs.org/repository/download/apm/acs-tcl-5.0.4.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The Kernel Tcl API library.</summary>
-        <release-date>2004-01-21</release-date>
+        <release-date>2004-03-10</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Contains all the core Tcl API, including the request processor, security and session management, permissions, site-nodes, package management infrastructure, etc.</description>
 
