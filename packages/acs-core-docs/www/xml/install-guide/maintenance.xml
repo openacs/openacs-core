@@ -571,6 +571,11 @@ chmod 700 /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/et
           <listitem>
             <para>It takes two files to support an SSL connection.  The certificate is the public half of the key pair - the server sends the certificate to browser requesting ssl.  The key is the private half of the key pair.  In addition, the certificate must be signed by Certificate Authority or browsers will protest.  Each web browser ships with a built-in list of acceptable Certificate Authorities (CAs) and their keys.  Only a site certificate signed by a known and approved CA will work smoothly.  Any other certificate will cause browsers to produce some messages or block the site.  Unfortunately, getting a site certificate signed by a CA costs money.  In this section, we'll generate an unsigned certificate which will work in most browsers, albeit with pop-up messages.</para>
             <para>Use an OpenSSL perl script to generate a certificate and key.</para>
+
+        <para>
+          Debian users: use /usr/lib/ssl/misc/CA.pl instead of /usr/share/ssl/CA
+        </para>
+
             <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/certs</userinput>
 [$OPENACS_SERVICE_NAME certs]$ <userinput>perl /usr/share/ssl/misc/CA -newcert</userinput>
 Using configuration from /usr/share/ssl/openssl.cnf
