@@ -4,28 +4,28 @@
 
 <if @discussion_forum_alert_p@ eq 1>
 
-<h3>Your discussion forum alerts</h3>
+<h3>#acs-subsite.Your_discussion_alerts#</h3>
 
 <blockquote>
    <table>
-   <tr><th>Status</th>
-       <th>Action</th>
-       <th>Topic</th>
-       <th>Frequency</th>
+   <tr><th>#acs-subsite.Status#</th>
+       <th>#acs-subsite.Action#</th>
+       <th>#acs-subsite.Topic#</th>
+       <th>#acs-subsite.Frequency#</th>
      <if @bboard_keyword_p@ eq 1>
-       <th>Keyword</th>
+       <th>#acs-subsite.Keyword#</th>
      </if>
    </tr>
 
  <multiple name=bboard_rows>
    <tr>
       <if @status@ eq "enabled">
-       <td><font color="red">Enabled</font></td>
-       <td><a href="@action_url@">Disable</a></td>
+       <td><font color="red">#acs-subsite.Enabled#</font></td>
+       <td><a href="@action_url@">#acs-subsite.Disable#</a></td>
       </if>
       <else>
-       <td>Disabled</td>
-       <td><a href="@action_url@">Re-enable</a></td>
+       <td>#acs-subsite.Disabled#</td>
+       <td><a href="@action_url@">#acs-subsite.Re_enable#</a></td>
       </else>
        <td>@topic@</td>
        <td>@frequency@</td>
@@ -42,17 +42,17 @@
 
 <if @classified_email_alert_p@ eq 1>
 
-<h3>Your @gc_system_name@ alerts</h3>
+<h3>#acs-subsite.Your_system_alerts#</h3>
 
 <blockquote>
    <table border>
-   <tr><th>Status</th>
-       <th>Action</th>
-       <th>Domain</th>
-       <th>Expires</th>
-       <th>Frequency</th>
-       <th>Alert Type</th>
-       <th>type-specific info</th>
+   <tr><th>#acs-subsite.Status#</th>
+       <th>#acs-subsite.Action#</th>
+       <th>#acs-subsite.Domain#</th>
+       <th>#acs-subsite.Expires#</th>
+       <th>#acs-subsite.Frequency#</th>
+       <th>#acs-subsite.Alert_Type#</th>
+       <th>#acs-subsite.type_specific_info#</th>
    </tr>
    
  <multiple name=classified_rows>
@@ -73,5 +73,6 @@
 </if>
 
 <if @discussion_forum_alert_p@ eq 0 and @classified_email_alert_p@ eq 0>
- You currently have no email alerts registered.
+ #acs-subsite.You_have_no_email_alerts#
 </if>
+

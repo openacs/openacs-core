@@ -9,7 +9,7 @@
 
 <table>
   <tr valign="top">
-    <td>Grant: </td>
+    <td>#acs-subsite.Grant_1# </td>
 
     <td>&nbsp;</td>
 
@@ -19,7 +19,7 @@
 
     <td>&nbsp;</td>
 
-    <td>on @name@ to:</td>
+    <td>#acs-subsite.on_name_to#</td>
 
     <td>&nbsp;</td>
 
@@ -46,8 +46,9 @@
 
 <p>
 
-<i>Notes:</i>
+<i>#acs-subsite.Notes#</i>
 <br>
-<i>Privileges higher in the hierarchy imply all the privileges below, e.g. when you grant admin, then read, write etc. are implied automatically.</i>
+<i>#acs-subsite.lt_Privileges_higher_implied#</i>
 <br>
-<i>When you leave a checkbox empty here then that privilege will be revoked from the party you choose in case it has been granted to that party before.</i>
+<i>#acs-subsite.When_leaving_checkbox_empty#</i>
+

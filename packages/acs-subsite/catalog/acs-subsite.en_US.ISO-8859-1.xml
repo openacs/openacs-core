@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="acs-subsite" package_version="5.0d6" locale="en_US" charset="ISO-8859-1">
 
+  <msg key="_or">, or</msg>
   <msg key="About_You">About You</msg>
+  <msg key="Account_at_system_closed">Your account at %system_name% has been closed.</msg>
   <msg key="Account_close_confirm_no_label">No, take me back to %pvt_home_name%</msg>
   <msg key="Account_close_confirm_yes_label">Yes, please close my account</msg>
   <msg key="Account_closed">
@@ -18,9 +20,11 @@
   </msg>
   <msg key="Account_reopened_message">Your account at %system_name% has been reopened. Welcome back.</msg>
   <msg key="Account_reopened_title">Account Reopened</msg>
+  <msg key="Action">Action</msg>
   <msg key="Add_new_app">Add new application</msg>
   <msg key="Admin">Admin</msg>
   <msg key="Administer_subsite">Administer %subsite_name%</msg>
+  <msg key="Alert_Type">Alert Type</msg>
   <msg key="Answer">Answer</msg>
   <msg key="Applications">Applications</msg>
   <msg key="Approve">Approve</msg>
@@ -56,10 +60,15 @@ logging in again. &lt;/p&gt;
   <msg key="Currently_invisible_msg">&lt;p&gt; Your online status is currently not visible to other users. &lt;/p&gt;</msg>
   <msg key="Currently_visible_msg">&lt;p&gt; Your online status is currently visible to other users. &lt;/p&gt;</msg>
   <msg key="Customize_Question">Customize Question</msg>
+  <msg key="default_context">default context</msg>
   <msg key="Delete">Delete</msg>
   <msg key="DevAdmin">DevAdmin</msg>
   <msg key="Developers_Admin">Developer's Administration</msg>
   <msg key="Direct_Permissions">Direct Permissions</msg>
+  <msg key="Disable">Disable</msg>
+  <msg key="Disabled">Disabled</msg>
+  <msg key="Domain">Domain</msg>
+  <msg key="Elements_not_editable">Certain elements are not editable, because they are managed by %authority_name%.</msg>
   <msg key="Email">Email</msg>
   <msg key="email_body_Forgotten_password">Here is your new login information:
 
@@ -85,19 +94,30 @@ Please visit the following link to change your password now:
   <msg key="Email_not_Requested">Email not Requested</msg>
   <msg key="email_subject_Forgotten_password">Your forgotten password on %system_name%</msg>
   <msg key="email_subject_Registration_password">Welcome to %system_name%</msg>
+  <msg key="Enabled">Enabled</msg>
   <msg key="Error_sending_mail">Error sending mail</msg>
+  <msg key="Expires">Expires</msg>
   <msg key="First_names">First names</msg>
+  <msg key="Forgot_your_password">Forgot your password?</msg>
+  <msg key="Frequency">Frequency</msg>
   <msg key="Grant">Grant</msg>
+  <msg key="Grant_1">Grant:</msg>
   <msg key="Grant_Permission">Grant Permission</msg>
+  <msg key="Hide">Hide</msg>
+  <msg key="Information_Updated">Information Updated</msg>
   <msg key="Invite">Invite</msg>
   <msg key="Join_community">Join community</msg>
   <msg key="Join_group_name">Join %group_name%</msg>
   <msg key="Join_this_community">Join this community</msg>
+  <msg key="Keyword">Keyword</msg>
   <msg key="Last_name">Last name</msg>
+  <msg key="later">later.</msg>
   <msg key="Leave_community">Leave community</msg>
   <msg key="Leave_this_community">Leave this community</msg>
+  <msg key="lGo_back_without_adding">Go back without adding any users</msg>
   <msg key="Log_In">Log In</msg>
   <msg key="Log_in_to_system">Log in to %system_name%</msg>
+  <msg key="logging_back_in">logging back in</msg>
   <msg key="Login_or_register">Login or register</msg>
   <msg key="Logout">Logout</msg>
   <msg key="Logout_from_system">Logout from %system_name%</msg>
@@ -105,6 +125,9 @@ Please visit the following link to change your password now:
   <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) registered as a user of 
 %system_url%</msg>
   <msg key="lt_Grant_Permission_on_n">Grant Permission on %name%</msg>
+  <msg key="lt_If_you_dont_think_the">If you don't think the person has an account already:</msg>
+  <msg key="lt_If_you_happen_to_know">If you happen to know or believe that the person you would like to
+  invite already has an account on this system:</msg>
   <msg key="lt_Inherited_Permissions">Inherited Permissions</msg>
   <msg key="lt_It_would_be_a_very_ba">It would be a very bad idea to choose this option if you're using a
 shared computer in a library or school.  Any subsequent user of this
@@ -122,6 +145,7 @@ keep telling us your email address and password.</msg>
   <msg key="lt_Personal_Home_Page_UR">Personal Home Page URL:</msg>
   <msg key="lt_Please_read_and_follo">Please read and follow the instructions in this email.</msg>
   <msg key="lt_Please_try_to_a_hrefi">Please try to &lt;a href=&quot;index&quot;&gt;log in&lt;/a&gt; again</msg>
+  <msg key="lt_Privileges_higher_implied">Privileges higher in the hierarchy imply all the privileges below, e.g. when you grant admin, then read, write etc. are implied automatically.</msg>
   <msg key="lt_Problem_with_authenti">Problem with authentication</msg>
   <msg key="lt_Registration_informat">Registration information for this service has just been
 sent to %email%.</msg>
@@ -140,6 +164,7 @@ waiting approval.</msg>
   <msg key="lt_What_other_people_see">What other people see when they click your name</msg>
   <msg key="lt_You_cant_have_a_lt_in">You can't have a &amp;lt; in your first name because it will look like an HTML tag and confuse other users.</msg>
   <msg key="lt_You_cant_have_a_lt_in_1">You can't have a &amp;lt; in your last name because it will look like an HTML tag and confuse other users.</msg>
+  <msg key="lt_You_wont_get_any_email">You won't get any email until after %pretty_date%.</msg>
   <msg key="lt_Your_email_has_been_c">Your email has been confirmed. You may now log into
     %system_name%.</msg>
   <msg key="lt_Your_email_has_been_c_1">Your email has been confirmed. You are now awaiting approval
@@ -161,8 +186,12 @@ waiting approval.</msg>
   <msg key="No_pretty_plural">No %pretty_plural%</msg>
   <msg key="none">none</msg>
   <description key="none">Used to indicate that a list of permissions or objects is empty.</description>
-
   <msg key="Not_logged_in">Not logged in</msg>
+  <msg key="Notes">Notes:</msg>
+  <msg key="Notice">Notice:</msg>
+  <msg key="on_name_to">on %name% to:</msg>
+  <msg key="Or_add_a_new_user">Or add a new user</msg>
+  <msg key="or_the">or the</msg>
   <msg key="Password">Password</msg>
   <msg key="Password_changed_body">Your login information on %system_name%:
 
@@ -183,8 +212,11 @@ You can always change your password by doing the following:
 3. Choose &quot;%password_update_link_text%&quot;</msg>
   <msg key="Password_changed_subject">Password changed</msg>
   <msg key="Permissions">Permissions</msg>
+  <msg key="permissions">permissions</msg>
   <msg key="Permissions_for_name">Permissions for %name%</msg>
+  <msg key="Please_return_to_home">Please return to %home_link%.</msg>
   <msg key="Question">Question</msg>
+  <msg key="Re_enable">Re-enable</msg>
   <msg key="Recover_Password">Recover Password</msg>
   <msg key="Register">Register</msg>
   <msg key="Registration_Approval_Notice">
@@ -195,25 +227,45 @@ You can always change your password by doing the following:
   <msg key="Remove">Remove</msg>
   <msg key="Req_membership_comm">Request membership of this community</msg>
   <msg key="Request_membership">Request membership</msg>
+  <msg key="return_to_application">return to application</msg>
   <msg key="Revoke_Checked">Revoke Checked</msg>
   <msg key="Role">Role</msg>
   <msg key="Screen_name">Screen name</msg>
+  <msg key="Search_For_Exist_User">Search For An Existing User</msg>
+  <msg key="Security_context_root">Security context root</msg>
+  <msg key="Select_an_Object_by_Id">Select an Object by Id:</msg>
   <msg key="Send_email_to_this_user">Send email to this user</msg>
   <msg key="Show">Show</msg>
   <msg key="Site_wide_administration">Site-wide administration</msg>
   <msg key="sorry_forgotten_pwd">Sorry, we can't help you with your forgotten password.</msg>
+  <msg key="Status">Status</msg>
   <msg key="Subcommunities">Subcommunities</msg>
   <msg key="subcommunities">subcommunities</msg>
   <msg key="subcommunity">subcommunity</msg>
   <msg key="Thank_you">Thank you.</msg>
+  <msg key="this_subsite">this subsite</msg>
+  <msg key="Topic">Topic</msg>
+  <msg key="type_specific_info">type-specific info</msg>
+  <msg key="UP">UP</msg>
   <msg key="up_to_context_name">up to %context_name%</msg>
   <msg key="Update">Update</msg>
   <msg key="Update_Password">Update Password</msg>
   <msg key="upload_a_portrait">upload a portrait</msg>
   <msg key="Username">Username</msg>
+  <msg key="Vacation_Info_Updated">Vacation Information Updated</msg>
+  <msg key="Vacation_information_updated">Your vacation information at %site_link% has been updated.</msg>
   <msg key="Welcome_user">Welcome, %user_name%</msg>
+  <msg key="When_leaving_checkbox_empty">When you leave a checkbox empty here then that privilege will be revoked from the party you choose in case it has been granted to that party before.</msg>
   <msg key="Whos_Online_link_label">Users currently online</msg>
   <msg key="Whos_Online_title">Who's Online</msg>
+  <msg key="You_can_also_browse_from">You can also browse from the</msg>
+  <msg key="You_can_always_re_open">You can always re-open it by</msg>
+  <msg key="You_do_not_have_admin_on">You do not have admin rights on object %root% or any of it's children</msg>
+  <msg key="You_have_admin_rights_on">You have admin rights on the following objects:</msg>
+  <msg key="You_have_no_email_alerts">You currently have no email alerts registered.</msg>
   <msg key="Your_Account">Your Account</msg>
+  <msg key="Your_discussion_alerts">Your discussion forum alerts</msg>
   <msg key="Your_Portrait">Your Portrait</msg>
+  <msg key="Your_system_alerts">Your %gc_system_name% alerts</msg>
+  <msg key="Youre_marked_as_back">You're marked as back from vacation at %site_link%.</msg>
 </message_catalog>

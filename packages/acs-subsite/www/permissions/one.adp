@@ -43,7 +43,7 @@
           </multiple>
         </ul>
 
-        [<a href="@hide_children_url@">Hide</a>]
+        [<a href="@hide_children_url@">#acs-subsite.Hide#</a>]
       </if>
       <else>
         <p><em>#acs-subsite.none#</em></p>
@@ -58,9 +58,10 @@
     </if>
     <if @application_url@ not nil>
       <p>
-        [<a href="@application_url@">return to application</a>]
+        [<a href="@application_url@">#acs-subsite.return_to_application#</a>]
       </p>
     </if>
     <else>
       <if @context_id@ not nil><p>[<a href="one?object_id=@context_id@">#acs-subsite.up_to_context_name#</a>]</p></if>
     </else>      
+
