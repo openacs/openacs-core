@@ -26,6 +26,17 @@ if { ![info exists email] } {
     set email {}
 }
 
+set expired_p 0
+if { [empty_string_p $email] && [empty_string_p $username] && [ad_conn untrusted_user_id] != 0 } {
+    acs_user::get -user_id [ad_conn untrusted_user_id] -array untrusted_user
+    if { [auth::UseEmailForLoginP] } {
+        set email $untrusted_user(email)
+    } else {
+        set authority_id $untrusted_user(authority_id)
+        set username $untrusted_user(username)
+    }
+}
+
 # Persistent login
 # The logic is: 
 #  1. Allowed if allowed both site-wide (on acs-kernel) and on the subsite
@@ -82,9 +93,15 @@ if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id [ad_acs
     set username_widget password
 }
 
+set focus {}
 if { [auth::UseEmailForLoginP] } {
     ad_form -extend -name login -form [list [list email:text($username_widget) [list label "Email"]]]
     set user_id_widget_name email
+    if { ![empty_string_p $email] } {
+        set focus "password"
+    } else {
+        set focus "email"
+    }
 } else {
     if { [llength $authority_options] > 1 } {
         ad_form -extend -name login -form {
@@ -97,7 +114,13 @@ if { [auth::UseEmailForLoginP] } {
 
     ad_form -extend -name login -form [list [list username:text($username_widget) [list label "Username"]]]
     set user_id_widget_name username
+    if { ![empty_string_p $username] } {
+        set focus "password"
+    } else {
+        set focus "username"
+    }
 }
+set focus "login.$focus"
 
 ad_form -extend -name login -form {
     {password:text(password) 
@@ -107,16 +130,17 @@ ad_form -extend -name login -form {
 
 if { $allow_persistent_login_p } {
     ad_form -extend -name login -form {
-        {persistent_p:text(checkbox)
+        {persistent_p:text(checkbox),optional
             {label ""}
             {options { { "Remember my login on this computer" "t" } }}
-            {value {[ad_decode $default_persistent_login_p 1 "t" ""]}}
         }
     }
 }
 
 ad_form -extend -name login -on_request {
-    # Populate fields
+    # Populate fields from local vars
+
+    set persistent_p [ad_decode $default_persistent_login_p 1 "t" ""]
 } -on_submit {
     if { ![exists_and_not_null authority_id] } {
         # Will be defaulted to local authority
@@ -128,6 +152,7 @@ ad_form -extend -name login -on_request {
     }
     
     array set auth_info [auth::authenticate \
+                             -return_url $return_url \
                              -authority_id $authority_id \
                              -email $email \
                              -username $username \
