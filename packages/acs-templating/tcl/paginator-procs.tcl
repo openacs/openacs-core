@@ -78,7 +78,7 @@ ad_proc -private template::paginator::init { statement_name name query } {
   if { [info exists properties(contextual)] } {
 
       # query contains two columns, one for ID and one for context cue
-      uplevel 3 "set__paginator_ids [db_list_of_lists $statement_name \"$query\"]"
+      uplevel 3 "set __paginator_ids \[db_list_of_lists $statement_name \"$query\"\]"
 
       set i 0
       set page_size $properties(pagesize)
