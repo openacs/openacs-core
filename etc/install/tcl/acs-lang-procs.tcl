@@ -6,19 +6,24 @@
 
 namespace eval ::twt::acs_lang {}
 
-ad_proc ::twt::acs_lang::load_i18n_messages {} {
-    Enables all locales and loads all message catalogs.
+ad_proc ::twt::acs_lang::load_i18n_messages {
+    {-locales ""}
 } {
-    # First enable all locales
-    ::twt::oacs_eval {
-        set all_locales [db_list all_locales {select locale from ad_locales}]
-        
-        foreach locale $all_locales {
-            lang::system::locale_set_enabled -locale $locale -enabled_p t
-        }
+    Enables all locales, or a given list of locales, and 
+    loads all message catalogs for those locales.
+} {
+    if { [empty_string_p $locales] } {
+        set locales [::twt::oacs_eval {db_list all_locales {select locale from ad_locales}}]
     }
 
-    # Load all catalog files (also imports en_US, but never mind)
+    # First enable all locales
+    ::twt::oacs_eval "
+        foreach locale {$locales} {
+            lang::system::locale_set_enabled -locale \$locale -enabled_p t
+        }
+    "
+
+    # Load all catalog files for enabled locales
     ::twt::oacs_eval lang::catalog::import
 }
 
