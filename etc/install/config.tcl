@@ -94,4 +94,4 @@ set openacs_output_file "${serverroot}/log/install-openacs-data-model-output.htm
 set openacs_packages_output_file "${serverroot}/log/install-openacs-packages-install-output.html"
 set apm_output_file "${serverroot}/log/install-apm-packages-output.html"
 # Where all errors in the log file during installation are collected
-set log_error_file "${serverroot}/log/install-log-errors"
+set install_error_file "${serverroot}/log/install-log-errors"
