@@ -45,30 +45,32 @@ create table notification_delivery_methods (
 );
 
 create table notification_types (
-        type_id                     integer
+    type_id                         integer
                                     constraint notif_type_type_id_fk
                                     references acs_objects (object_id)
                                     constraint notif_type_type_id_pk
                                     primary key,
-       short_name                   varchar(100)
+    short_name                      varchar(100)
                                     constraint notif_type_short_name_nn
                                     not null
                                     constraint notif_type_short_name_un
                                     unique,
-       pretty_name                  varchar(200)
+    pretty_name                     varchar(200)
                                     constraint notif_type_pretty_name_nn
                                     not null,
-       description                  varchar(2000)
+    description                     varchar(2000)
 );
 
 -- what's allowed for a given notification type?
 create table notification_types_intervals (
     type_id                         integer
                                     constraint notif_type_int_type_id_fk
-                                    references notification_types (type_id),
+                                    references notification_types (type_id)
+                                    on delete cascade,
     interval_id                     integer
                                     constraint notif_type_int_int_id_fk
-                                    references notification_intervals (interval_id),
+                                    references notification_intervals (interval_id)
+                                    on delete cascade,
     constraint notif_type_int_pk
     primary key (type_id, interval_id)
 );
@@ -77,10 +79,12 @@ create table notification_types_intervals (
 create table notification_types_del_methods (
     type_id                         integer
                                     constraint notif_type_del_type_id_fk
-                                    references notification_types (type_id),
+                                    references notification_types (type_id)
+                                    on delete cascade,
     delivery_method_id              integer
                                     constraint notif_type_del_meth_id_fk
-                                    references notification_delivery_methods (delivery_method_id),
+                                    references notification_delivery_methods (delivery_method_id)
+                                    on delete cascade,
     constraint notif_type_deliv_pk
     primary key (type_id, delivery_method_id)
 );
@@ -94,7 +98,8 @@ create table notification_requests (
                                     primary key,
     type_id                         integer
                                     constraint notif_request_type_id_fk
-                                    references notification_types (type_id),
+                                    references notification_types (type_id)
+                                    on delete cascade,
     user_id                         integer
                                     constraint notif_request_user_id_fk
                                     references users (user_id)
