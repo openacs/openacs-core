@@ -355,7 +355,7 @@ ad_proc -public ad_form {
 
     set valid_args { form method action mode html name select_query select_query_name new_data on_refresh
                      edit_data validate on_submit after_submit confirm_template new_request edit_request
-                     export cancel_url cancel_label };
+                     export cancel_url cancel_label has_edit actions };
 
     ad_arg_parser $valid_args $args
 
@@ -393,7 +393,7 @@ ad_proc -public ad_form {
             # and validation block to be extended, for now at least until I get more experience
             # with this ...
 
-            if { [lsearch { name form method action html validate export } $valid_arg ] == -1 } {
+            if { [lsearch { name form method action html validate export mode cancel_url has_edit actions } $valid_arg ] == -1 } {
                 set af_parts(${form_name}__extend) ""
             }
         }
@@ -519,6 +519,14 @@ ad_proc -public ad_form {
 
         if { [info exists html] } {
             lappend create_command "-html" $html
+        }
+
+        if { [info exists has_edit] } {
+            lappend create_command "-has_edit" $has_edit
+        }
+
+        if { [info exists actions] } {
+            lappend create_command "-actions" $actions
         }
 
         # Create the form
@@ -648,10 +656,13 @@ ad_proc -public ad_form {
                     help_text -
                     label -
                     format -
+                    mode -
                     value -
 		    section -
                     before_html -
-                    after_html {
+                    after_html -
+                    search_query -
+                    search_query_name {
                         if { [llength $extra_arg] > 2 || [llength $extra_arg] == 1 } {
                             return -code error "element $element_name: \"$extra_arg\" requires exactly one argument"
                         }
