@@ -43,7 +43,7 @@
   </script>
 </if>
 
-  <table class="@list_properties.class@" cellpadding="3" cellspacing="1"@list_properties.table_attributes@>
+  <table class="@list_properties.class@" cellpadding="3" cellspacing="1"@list_properties.table_attributes;noquote@>
 
   <if @list_properties.bulk_actions@ not nil>
     <form name="@list_properties.name@" method="get">
@@ -114,7 +114,7 @@
     <multiple name="elements">
       <tr class="list-header">
         <group column="subrownum">
-          <th class="@elements.class@"@elements.cell_attributes@>
+          <th class="@elements.class@"@elements.cell_attributes;noquote@>
             <if @elements.orderby_url@ not nil>
               <if @elements.ordering_p@ true>
                 <b>@elements.label@</b>
@@ -174,7 +174,7 @@
     </noparse>
 
               <group column="subrownum">
-                <td class="@elements.class@"@elements.cell_attributes@>
+                <td class="@elements.class@"@elements.cell_attributes;noquote@>
                   <listelement name="@elements.name@">
                 </td>
               </group>
@@ -186,7 +186,7 @@
               <multiple name="elements">
                 <tr class="list-subheader">
                   <group column="subrownum">
-                    <td class="@elements.class@"@elements.cell_attributes@>
+                    <td class="@elements.class@"@elements.cell_attributes;noquote@>
                       <if @elements.aggregate_group_label@ not nil>
                         @elements.aggregate_group_label@
                       </if>
@@ -216,7 +216,7 @@
         <multiple name="elements">
           <tr class="list-subheader">
             <group column="subrownum">
-              <td class="@elements.class@"@elements.cell_attributes@>
+              <td class="@elements.class@"@elements.cell_attributes;noquote@>
                 <if @elements.aggregate_label@ not nil>
                   @elements.aggregate_label@
                 </if>
