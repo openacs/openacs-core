@@ -206,7 +206,7 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
                         $package_path $package_key $version(name) $version(package-name) \
                         $version(package.type) $version(summary) $version(description) \
                         $version(release-date) $version(vendor.url) $version(vendor) \
-                        $version(license_url) $version(license) $version(maturity) [apm_maturity_text $version(maturity)]
+                        $version(license_url) $version(license) $version(maturity) [apm::package_version::attributes::maturity_int_to_text $version(maturity)]
 
                     set apm_file "${channel_dir}${version(package.key)}-${version(name)}.apm"
 
