@@ -1,0 +1,130 @@
+ad_page_contract {
+    Redirects requests that are addressed to (Open)ACS 3 style url's
+    of bboard postings to their (Open)ACS 4 equivalents. Requires the
+    presence of the mappings tables that are created by the bboard-migr 
+    scripts.
+    
+    Place this under /www/bboard/index.vuh and adjust the mount point
+    of the new bboard package below.
+
+    @author Tilmann Singer (tils@tils.net)
+} {
+    { msg_id "" }
+    { topic_id "" }
+}
+# which package are we using
+#set bboard_package "bboard"
+set bboard_package "forums"
+
+# Mount point of new forum to redirect to, no trailing slash.
+set new_mount_point "/forums"
+
+
+
+if {[string equal $bboard_package "bboard"]} {
+    set mapped_message_sql "
+            select mm.new_message_id, fm.forum_id from migr_message_map mm
+            join bboard_forum_message_map fm 
+            on mm.new_message_id=fm.message_id
+            where mm.old_message_id=:msg_id
+"
+} else {
+    # assume it is the new "forums" package
+    set mapped_message_sql "
+            select new_message_id 
+	    from migr_message_map
+            where old_message_id=:msg_id
+"
+}
+
+set mapped_forum_sql "
+    select new_forum_id from migr_forum_map
+    where old_forum_id=:topic_id
+"
+
+
+set target [lindex [ad_conn urlv] end]
+
+regsub {\.tcl$} $target {} target
+
+
+# Check if this request seems to point at the old location directly,
+# without a specific message or forum, (e.g. /bboard/), if so redirect
+# to the new mountpoint directly.
+if { $target == "bboard" || $target == "index" } {
+    set new_link "$new_mount_point/"
+    ns_set put [ns_conn outputheaders] Location $new_link
+    ns_return 301 text/html "<html>
+<head><title>Redirection</title></head>
+<body>
+<h2>Redirection</h2>
+<a href=\"$new_link\">The requested URL has moved here permanently.</a>
+</body>
+</html>
+"
+    return
+}
+
+
+switch $target {
+    q-and-a-fetch-msg {
+        # a simple message
+        
+        if { [db_0or1row get_new_ids $mapped_message_sql] } {
+            # Found a mapping, return new link.
+
+            #set new_link "[ad_conn location]$new_mount_point/message?message_id=$new_message_id&forum_id=$forum_id"
+            set new_link "$new_mount_point/message-view?message_id=$new_message_id"
+            ns_set put [ns_conn outputheaders] Location $new_link
+            ns_return 301 text/html "<html>
+<head><title>Redirection</title></head>
+<body>
+<h2>Redirection</h2>
+<a href=\"$new_link\">The requested URL has moved here permanently.</a>
+</body>
+</html>
+"
+            return
+        }
+    }
+
+    q-and-a {
+        # a topic
+        if { [db_0or1row get_new_forum_id $mapped_forum_sql] } {
+            #set new_link "[ad_conn location]$new_mount_point/forum?forum_id=$new_forum_id"
+            set new_link "$new_mount_point/forum-view?forum_id=$new_forum_id"
+            ns_set put [ns_conn outputheaders] Location $new_link
+            ns_return 301 text/html "<html>
+<head><title>Redirection</title></head>
+<body>
+<h2>Redirection</h2>
+<a href=\"$new_link\">The requested URL has moved here permanently.</a>
+</body>
+</html>
+"
+            return
+        }
+    }
+    
+
+    default {
+        ns_log notice "A request for [ad_conn url]?[ad_conn query] occured - you might want to add it to /bboard/index.vuh"
+    }
+}
+
+
+# No success above.
+ns_return 404 text/html "
+<html>
+<head><title>Not Found</title></head>
+<body>
+<h2>Not Found</h2>
+You seem to refer to an old bboard posting that has been moved somewhere
+else or deleted from this server. Sorry.
+<br>
+<br>
+You might want to start searching from the <a href=\"/\">start page</a>.
+</body>
+</html>
+"
+
