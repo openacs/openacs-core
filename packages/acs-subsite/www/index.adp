@@ -3,7 +3,7 @@
   <property name="title">@subsite_name;noquote@</property>
 
 
-<table width="100%">
+<table>
   <tr>
     <td valign="top">
       <div class="portlet">

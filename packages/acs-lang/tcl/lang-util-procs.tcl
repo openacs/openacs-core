@@ -320,25 +320,34 @@ ad_proc -public lang::util::localize {
 
     @author Peter marklund (peter@collaboraid.biz)
 } {
+    # Return quickly for the fairly frequent case where there are no embedded message keys
+    if { ![string match "*#*" $string_with_hashes] } {
+        return $string_with_hashes
+    }
+
     set indices_list [get_hash_indices $string_with_hashes]
     
-    set subst_string $string_with_hashes
+    set subst_string ""
+    set start_idx 0
     foreach item_idx $indices_list {
         # The replacement string starts and ends with a hash mark
         set replacement_string [string range $string_with_hashes [lindex $item_idx 0] \
                 [lindex $item_idx 1]]
         set message_key [string range $replacement_string 1 [expr [string length $replacement_string] - 2]]
-        
+
         # Attempt a message lookup
         set message_value [lang::message::lookup [ad_conn locale] $message_key "" "" 2]
         
         # Replace the string
         # LARS: We don't use regsub here, because regsub interprets certain characters
         # in the replacement string specially.
-        set subst_string [string range $string_with_hashes 0 [expr [lindex $item_idx 0]-1]]
+        append subst_string [string range $string_with_hashes $start_idx [expr [lindex $item_idx 0]-1]]
         append subst_string $message_value
-        append subst_string [string range $string_with_hashes [expr [lindex $item_idx 1]+1] end]
+
+        set start_idx [expr [lindex $item_idx 1] + 1]
     }        
+
+    append subst_string [string range $string_with_hashes $start_idx end]
     
     return $subst_string
 }

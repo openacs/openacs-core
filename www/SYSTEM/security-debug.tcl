@@ -1,4 +1,3 @@
-
 # NOTE:
 # Comment out below two lines to use this page
 #
@@ -9,16 +8,16 @@ return
 sec_login_handler
 
 set session_id {}
-catch { set session_id [ad_get_signed_cookie_with_expr "ad_session_id"] }
+catch { set session_id [ad_get_signed_cookie_with_expr "ad_session_id"] } session_id
 
 set ad_user_login {}
-catch { set ad_user_login [ad_get_signed_cookie "ad_user_login"] }
+catch { set ad_user_login [ad_get_signed_cookie "ad_user_login"] } ad_user_login
 
 set ad_user_login_secure {}
-catch { set ad_user_login_secure [ad_get_signed_cookie "ad_user_login_secure"] }
+catch { set ad_user_login_secure [ad_get_signed_cookie "ad_user_login_secure"] } ad_user_login_secure
 
 set ad_secure_token {}
-catch { set ad_secure_token [ad_get_signed_cookie "ad_secure_token"] }
+catch { set ad_secure_token [ad_get_signed_cookie "ad_secure_token"] } ad_secure_token
 
 set auth_expires_in "N/A"
 
@@ -29,22 +28,27 @@ catch {
 }
 
 
-ns_return 200 text/html "<html><body>
+set page "<html><body>
 
 <h1>Debug Page For Security Cookies</h1>
 
 <h2>Cookies</h2>
 
-<p> session_id: <code>$session_id</code> </p>
+<table border=1>
+<tr><th>Cookie name</th><th>Value</th><th>Explanation</th></tr>
+<tr><td>session_id<td><code>$session_id</code><td>session_id, user_id, login_level expiration</tr>
+<tr><td>ad_user_login<td><code>$ad_user_login</code><td>user_id, issue_time, auth_token</tr>
+<tr><td>ad_user_login_secure<td><code>$ad_user_login_secure</code><td>...</tr>
+<tr><td>ad_secure_token<td><code>$ad_secure_token</code><td>...</tr>
+</table>
 
-<p> ad_user_login: <code>$ad_user_login</code> </p>
+<p> Cookie HTTP header: </p> <pre>"
 
-<p> ad_user_login_secure: <code>$ad_user_login_secure</code> </p>
+foreach elm [split [ns_set iget [ad_conn headers] Cookie] ";"] {
+    append page [string trim $elm] ";" \n
+}
 
-<p> ad_secure_token: <code>$ad_secure_token</code> </p>
-
-<p> Cookie HTTP header: <code>[ns_set iget [ad_conn headers] Cookie]</code></p>
-
+append page "
 <h2>ad_conn</h2>
 
 <p> user_id: <code>[ad_conn user_id]</code> </p>
@@ -67,3 +71,6 @@ ns_return 200 text/html "<html><body>
 
 </body></html>"
 
+
+
+ns_return 200 text/html $page

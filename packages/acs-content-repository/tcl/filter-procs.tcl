@@ -247,7 +247,7 @@ set text \[cr_write_content -string -revision_id \$revision_id\]
 
 set text \[ad_html_text_convert -from \$mime_type -to text/html \$text\]
 
-set context {\$title}
+set context \[list \$title\]
 
 ad_return_template
 "
