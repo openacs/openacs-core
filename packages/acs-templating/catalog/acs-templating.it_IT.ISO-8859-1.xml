@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-templating" package_version="5.1.0" locale="it_IT" charset="ISO-8859-1">
+<message_catalog package_key="acs-templating" package_version="5.1.2" locale="it_IT" charset="ISO-8859-1">
 
   <msg key="Invalid_choice">Scelta non valida</msg>
   <msg key="Invalid_currency">Valuta non valida</msg>
@@ -14,6 +14,7 @@
   <msg key="No_row_pretty_plural">righe</msg>
   <msg key="Previous_with_arrow">&lt;&lt; Precedente</msg>
   <msg key="required">obbligatorio</msg>
+  <msg key="Sort_order">Ordine</msg>
   <msg key="Spellcheck">Controllo grammaticale</msg>
   <msg key="Tag_handler_invalid_number_of_args">Numero di argomenti inviati al gestore di tag non valido</msg>
   <msg key="Template_parser_error_in_parameter_list">Errore nella lista dei parametri</msg>

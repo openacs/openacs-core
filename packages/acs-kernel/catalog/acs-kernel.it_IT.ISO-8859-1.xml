@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.1.0" locale="it_IT" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.1.2d4" locale="it_IT" charset="ISO-8859-1">
 
   <msg key="authentication_authority">Modalit&amp;agrave; di autentificazione</msg>
   <msg key="common_add">Aggiungi</msg>

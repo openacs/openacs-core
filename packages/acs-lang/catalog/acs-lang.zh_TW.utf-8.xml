@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-lang" package_version="5.1.0" locale="zh_TW" charset="utf-8">
+<message_catalog package_key="acs-lang" package_version="5.1.2d2" locale="zh_TW" charset="utf-8">
 
-  <msg key="available-in-this-language">繁体中文版</msg>
+  <msg key="available-in-this-language">繁體中文版</msg>
+  <msg key="change-locale">變更地區設定</msg>
   <msg key="English">英文</msg>
   <msg key="French">法文</msg>
   <msg key="German">德文</msg>
@@ -13,7 +14,7 @@
   <msg key="localization-d_t_fmt"> %a %B %d, %Y %r %Z</msg>
   <msg key="localization-day">週日 週一 週二 週三 週四 週五 週六</msg>
   <msg key="localization-decimal_point">.</msg>
-  <msg key="localization-dlong_fmt">%Y年%B月%d日</msg>
+  <msg key="localization-dlong_fmt">%Y年%B%d日</msg>
   <msg key="localization-dlongweekday_fmt">%A %B %d, %Y</msg>
   <msg key="localization-firstdayofweek">0</msg>
   <msg key="localization-formbuilder_time_format">上午 HH12:MI</msg>
@@ -37,4 +38,5 @@
   <msg key="localization-t_fmt">%r</msg>
   <msg key="localization-thousands_sep">,</msg>
   <msg key="Spanish">西班牙文</msg>
+  <msg key="this-language">英文</msg>
 </message_catalog>

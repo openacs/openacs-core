@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.1.0" locale="pt_BR" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.1.2" locale="pt_BR" charset="ISO-8859-1">
 
   <msg key="_or">, ou</msg>
+  <msg key="_Update_Basic_Information">Atualizar Informações Básicas</msg>
   <msg key="A_member_of_the_system">Um membro da comunidade %system_name% desde</msg>
   <msg key="About_You">Sobre você</msg>
   <msg key="Account_at_system_closed">Sua conta em %system_name% está fechada.</msg>
@@ -43,7 +44,9 @@
   <msg key="communities">comunidades</msg>
   <msg key="community">comunidade</msg>
   <msg key="Confirm">Confirmar:</msg>
+  <msg key="confirmation_password_changed">A senha foi alterada com sucesso.</msg>
   <msg key="Continue">Continuar</msg>
+  <msg key="Continue_to_your_account">Prossiga para %pvt_home_name%</msg>
   <msg key="Country_Name">Nome do País</msg>
   <msg key="Create_new_community">Criar novo %pretty_name%</msg>
   <msg key="Create_new_subsite">Criar novo subsite</msg>
@@ -164,6 +167,7 @@
   <msg key="lt_Uploaded_pretty_date">Enviado: %pretty_date%</msg>
   <msg key="lt_Uploaded_publish_date">Enviado: %publish_date%</msg>
   <msg key="lt_Use_the_Browse_button">Use o botão &quot;Navegar&quot; para localizar o arquivo, entõa click em &quot;Abrir&quot;</msg>
+  <msg key="lt_User_has_portrait_title">Este usuário incluiu uma biografia ou um retrato</msg>
   <msg key="lt_We_cant_find_you">Não conseguimos encontrar você (usuário user %user_id%) em nossa tabela de membros. Pode ser que sua conta tenha sido apagada.</msg>
   <msg key="lt_We_had_a_problem_proc">Nós tivemnos um problema processando os dados.</msg>
   <msg key="lt_We_were_not_awaiting_">Nós não estávamos esperando por seu email. Deve haver algum erro.</msg>
@@ -210,21 +214,24 @@
   <msg key="Permissions_for_name">Permissões para %name%</msg>
   <msg key="Please_return_to_home">Por favor, retrone à página %home_link%.</msg>
   <msg key="Portrait">Retrato</msg>
+  <msg key="Profile">Perfil</msg>
   <msg key="Question">Pergunta:</msg>
   <msg key="Re_enable">Reabilitar</msg>
   <msg key="Recover_Password">Recuperar Senha</msg>
+  <msg key="Refresh_login">Recarregar login</msg>
   <msg key="Register">Registrar</msg>
   <msg key="Registration_Approval_Notice">&lt;p&gt;Obrigado por se cadastrar no sistema %system_name%. O sistema notificou sua solicitação a um administrador. &lt;p&gt; &lt;p&gt;Uma vez aprovado, você receberá um e-mail e poderá então começar utilizar o sistema %system_name%. &lt;/p&gt;</msg>
   <msg key="Reject">Rejeitar</msg>
   <msg key="Remember_my_login">Lembrar meu login neste computador</msg>
   <msg key="Remove">Remover</msg>
   <msg key="Req_membership_comm">Solicitar adesão a esta comunidade</msg>
+  <msg key="Req_membership_subs">Solicite inscrição neste subsite</msg>
   <msg key="Request_membership">Solicitar adesão</msg>
   <msg key="return_to_application">retornar para a aplicação</msg>
   <msg key="Revoke_Checked">Cancelamento Verificado</msg>
   <msg key="Role">Regra</msg>
   <msg key="Save_comment">Salvar comentário</msg>
-  <msg key="Screen_name">Nome no ecrã</msg>
+  <msg key="Screen_name">Nome de Tela</msg>
   <msg key="Search_For_Exist_User">Procurar por um Usuário Existente</msg>
   <msg key="Security_context_root">Contexto de segurança raiz</msg>
   <msg key="Select_an_Object_by_Id">Selecionar um Objeto pelo Id:</msg>
@@ -243,6 +250,7 @@
   <msg key="subsites">subsites</msg>
   <msg key="Thank_you">Obrigado.</msg>
   <msg key="The_ISO_codes_were_not">Os códigos ISO não foram carregados neste servidor.</msg>
+  <msg key="This_group_is_closed">Este grupo é fechado. Novos membros só podem ter acesso se forem convidados.</msg>
   <msg key="this_subsite">este subsite</msg>
   <msg key="This_user_has_left_the">Este usuário deixou a comunidade.</msg>
   <msg key="To_log_in_visit_the">Para acessar o site, visite</msg>
@@ -264,6 +272,7 @@
   <msg key="Whos_Online_link_label">Usuários online</msg>
   <msg key="Whos_Online_title">Quem está online</msg>
   <msg key="Yes_I_am_sure">Sim, tenho certeza</msg>
+  <msg key="You_are_in_the_follow">Você está nos seguintes grupos:</msg>
   <msg key="You_can_also_browse_from">Você tambêm pode navegar pelo</msg>
   <msg key="You_can_always_re_open">Você sempre poderá reabrir</msg>
   <msg key="You_do_not_have_admin_on">Você não tem provilégios administrativos sobre o objeto %root% ou seus descendentes</msg>

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="acs-subsite" package_version="5.1.2" locale="eu_ES" charset="ISO-8859-1">
+
+  <msg key="_or">, edo</msg>
+  <msg key="_Update_Basic_Information">Informazio basikoa eguneratu</msg>
+  <msg key="A_member_of_the_system">%system_name% komunitatean erregistro data:</msg>
+  <msg key="About_You">Zuri buruz</msg>
+  <msg key="Account_at_system_closed">Zure kontua %system_name%-n itxita izan da</msg>
+  <msg key="Account_close_confirm_no_label">Ez, eraman nazazu %pvt_home_name%-ra</msg>
+  <msg key="Account_close_confirm_yes_label">Bai, nere kontu itxi</msg>
+  <msg key="Account_closed">&lt;p&gt;Zure kontua itxita dago.&lt;/p&gt;&lt;p&gt;Hala nahi baduzu, zure kontua &lt;a href=&quot;%restore_url%&quot;&gt;berrireki&lt;/a&gt; dezakegu.&lt;/p&gt;</msg>
+  <msg key="Account_closed_workspace_msg">&lt;p&gt;&lt;font color=&quot;red&quot;&gt;  &lt;b&gt; Zure kontua itxita dago. &lt;/b&gt; &lt;/font&gt;  &lt;a href=&quot;%login_url%&quot;&gt;Sar zaitez&lt;/a&gt; berriro ikusteko zer egin dezakezun.  &lt;/p&gt;</msg>
+  <msg key="Account_reopened_message">Zure kontua %system_name%-n berrireki da. Ongi etorri berrior.</msg>
+  <msg key="Account_reopened_title">Kontua berrirekia</msg>
+  <msg key="Action">Akzioa</msg>
+  <msg key="Add_new_app">Aplikazio berria gehitu</msg>
+  <msg key="Admin">Kontrol-panela</msg>
+  <msg key="Administer_subsite">%subsite_name% kudeatu</msg>
+  <msg key="Administrative_options">Erabiltzaile honetarako kudeaketa-aukerak</msg>
+  <msg key="Alert_Type">Abisu mota</msg>
+  <msg key="another_picture">beste argazki bat.</msg>
+  <msg key="Answer">Erantzuna</msg>
+  <msg key="Application_Error">Aplikazioaren errorea</msg>
+  <msg key="Applications">Aplikazioak</msg>
+  <msg key="Approve">Onartu</msg>
+  <msg key="at">ondokoan:</msg>
+  <msg key="Authority">Autoritatea</msg>
+  <msg key="Bad_Password">Pasahitz okerra</msg>
+  <msg key="Ban">Debekatu</msg>
+  <msg key="Basic_Information">Informazio Basikoa</msg>
+  <msg key="Biography">Biografia</msg>
+  <msg key="cannot_retrieve_password">Ezin da autoritate lokaletik pasahitza lortzea.</msg>
+  <msg key="Cannot_see_memb_list">Ezin da partaideen zerrenda ikusi</msg>
+  <msg key="Change_locale_label">Hizkuntza aldatu</msg>
+  <msg key="Change_my_Password">Nere pasahitza aldatu</msg>
+  <msg key="Change_pass_email_por">Pasahitza, e-posta, argazkia aldatu</msg>
+  <msg key="Check_Your_Inbox">Begira ezazu zure sarrera-erretilua</msg>
+  <msg key="Children">&quot;umeak&quot;</msg>
+  <msg key="Close_account_explanation">&lt;p&gt;Mesedez, konfirma ezazu zure kontua itxi nahi duzula %system_name%-en.&lt;/p&gt;&lt;p&gt;Zure kontuaren ixteak, email abisurik bidaliko ez dizugula  eta zure izena %system_name%-ko partaideen zerrendetan agertuko ez dela esan nahi du. Zuk sisteman egindako ekarpenak, aldiz, mantendu egingo dira komunitatearen historiaren parte bezela.&lt;/p&gt;&lt;p&gt;Kontuan izan zure kontua nahi duzunean berrireki ahal izango duzula, sisteman berriro sartuz.&lt;/p&gt;</msg>
+  <msg key="Close_your_account">Zure kontua itxi</msg>
+  <msg key="Closed_group">Itxitako taldea</msg>
+  <msg key="Comment">Iruzkina egin</msg>
+  <msg key="Communities">Komunitateak</msg>
+  <msg key="communities">komunitateak</msg>
+  <msg key="community">komunitatea</msg>
+  <msg key="Confirm">Konfirmatu</msg>
+  <msg key="confirmation_password_changed">Pasahitz berriaren hautaketa zuzena</msg>
+  <msg key="Continue">Jarraitu</msg>
+  <msg key="Continue_to_your_account">Jarraitu %pvt_home_name%-n</msg>
+  <msg key="Country_Name">Herrialdearen Izena</msg>
+  <msg key="Create_new_community">%pretty_name% berria eratu</msg>
+  <msg key="Create_new_subsite">Azpi-gune berria eratu</msg>
+  <msg key="Current_Password">Egungo Pasahitza</msg>
+  <msg key="Currently_invisible_msg">&lt;p&gt;Zure online egoera ez da momentu honetan beste erabiltzaileengatik ikusgarria&lt;/p&gt;</msg>
+  <msg key="Currently_visible_msg">&lt;p&gt;Zure online egoera momentu honeta beste erabiltzaileengatik ikusgarria da&lt;/p&gt;</msg>
+  <msg key="Customize_Question">Galdera pertsonalizatu</msg>
+  <msg key="Database_Error">Datu-base errorea</msg>
+  <msg key="default_context">&quot;testuinguru&quot; lehenetsia</msg>
+  <msg key="Delete">Ezabatu</msg>
+  <msg key="DevAdmin">GarKud</msg>
+  <msg key="Developers_Admin">Garatzailearen Kudeaketa</msg>
+  <msg key="Direct_Permissions">Zuzeneko Baimenak</msg>
+  <msg key="Disable">Desaktibatu</msg>
+  <msg key="Disabled">Desaktibatuta</msg>
+  <msg key="Domain">Domeinua</msg>
+  <msg key="E_mail">e-posta</msg>
+  <msg key="edit_comment">iruzkina aldatu</msg>
+  <msg key="Elements_not_editable">Elementu batzuk ezin dira aldatu, %authority_name%-ek kudeatzen bait ditu.</msg>
+  <msg key="Email">e-posta</msg>
+  <msg key="email_body_Forgotten_password">Hauxe da zure sartze-informazio berria: 
+%account_id_label%: %account_id% 
+%password_label%: %password% 
+
+Mesedez, bisita ezazu hurrengo esteka pasahitza orain aldatzeko:  
+%reset_password_url%</msg>
+  <msg key="email_body_Registration_password">Eskerrik asko %system_name%-en erregistratzeagatik. Hona hemen zure sartze-informazioa %system_url% -n: %account_id_label%: %account_id% %password_label%: %password% Mesedez, bisita ezazu hurrengo esteka pasahitza orain aldatzeko:  %reset_password_url%</msg>
+  <msg key="Email_Confirmation">E-posta konfirmazioa</msg>
+  <msg key="Email_not_Requested">e-Posta ez da eskatu</msg>
+  <msg key="email_subject_Forgotten_password">Ahaztu duzun pasahitza %system_name% -n</msg>
+  <msg key="email_subject_Registration_password">Ongi etorri %system_name% -ra</msg>
+  <msg key="Enabled">Aktibatuta</msg>
+  <msg key="Enter_your_username_to">Sar ezazu zure erabiltzaile-izena pasahitza berreskuratzeko</msg>
+  <msg key="Erase_Portrait">Argazkia Ezabatu</msg>
+  <msg key="erase_portrait">ezabatu argazkia</msg>
+  <msg key="Error">Errorea</msg>
+  <msg key="Error_sending_mail">Errorea e-posta bidaltzerakoan</msg>
+  <msg key="Expires">Iraungitzea</msg>
+  <msg key="Filename">Fitxategi-izena</msg>
+  <msg key="First_names">Izena</msg>
+  <msg key="Forgot_your_password">Pasahitza ahaztu al duzu?</msg>
+  <msg key="Frequency">Maiztasuna</msg>
+  <msg key="Go_back">Atzera jo</msg>
+  <msg key="go_upload_the_users_por">erabiltzailearen argazkia igo</msg>
+  <msg key="go_upload_your_portrait">zure argazkia igo</msg>
+  <msg key="Grant">Eman</msg>
+  <msg key="Grant_Permission">Baimena eman</msg>
+  <msg key="Hide">Izkutatu</msg>
+  <msg key="Home_page">Hasiera</msg>
+  <msg key="If_you_were_to">Nahi bazenu</msg>
+  <msg key="Information_Updated">Informazioa eguneratuta</msg>
+  <msg key="Invite">Gonbidatu</msg>
+  <msg key="ISO_Code">ISO Kodea</msg>
+  <msg key="ISO_Code_List">ISO Kodeen Zerrenda</msg>
+  <msg key="ISO_Codes_Not_Loaded">ISO Kodeak ez daude kargatuak</msg>
+  <msg key="ISO_Codes_not_loaded">ISO kodeak ez dira kargatu</msg>
+  <msg key="Join_community">Komunitatean sartu</msg>
+  <msg key="Join_group_name">%group_name%-n sartu</msg>
+  <msg key="Join_subsite">Azpi-gunean sartu</msg>
+  <msg key="Join_this_community">Komunitate honetan sartu</msg>
+  <msg key="Join_this_subsite">Azpi-gune honetan sartu</msg>
+  <msg key="Keyword">Hitz gakoa</msg>
+  <msg key="Last_name">Abizena</msg>
+  <msg key="later">beranduago.</msg>
+  <msg key="Leave_community">Komunitatea utzi</msg>
+  <msg key="Leave_subsite">Azpi-gunea utzi</msg>
+  <msg key="Leave_this_community">Komunitate hau utzi</msg>
+  <msg key="Leave_this_subsite">Azpi-gune hau utzi</msg>
+  <msg key="lGo_back_without_adding">Atzera bota erabiltzailerik gehitu gabe</msg>
+  <msg key="Log_In">Sartu</msg>
+  <msg key="log_in">sartu</msg>
+  <msg key="Log_in_to_system">%system_name%-n sartu</msg>
+  <msg key="logging_back_in">berriro sartu</msg>
+  <msg key="Login_has_expired">Sartze orria iraungitu egin da. Mesedez, sar zaitez berriro.</msg>
+  <msg key="Login_or_register">Sartu edo erregistratu</msg>
+  <msg key="login_page">sartze-orria</msg>
+  <msg key="Logout">Irten</msg>
+  <msg key="Logout_from_system">%system_name%-tik irten</msg>
+  <msg key="lt__youd_be_able_to_get">, informazio gehiago lortuko duzu komunitatearen partaideari buruz</msg>
+  <msg key="lt_Cannot_join_this_grou">Ezin duzu talde honetan parte hartu.</msg>
+  <msg key="lt_Complete_List_of_ISO_">ISO kodeen zerrenda osoa</msg>
+  <msg key="lt_Continue_working_with">%system_name%-n lan egiten jarraitu</msg>
+  <msg key="lt_Edit_comment_for_the_">%first_names% %last_name%-n argazkiaren iruzkina aldatu</msg>
+  <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) erregistratu da %system_url%-ko erabiltzaile gisa</msg>
+  <msg key="lt_For_Site-Wide_Adminis">Kudeatazaile orokorretarako</msg>
+  <msg key="lt_Grant_Permission_on_n">%name%-n baimena eman</msg>
+  <msg key="lt_Heres_what_the_databa">Hau da datu-baseak esandakoa:</msg>
+  <msg key="lt_How_would_you_like_the">Nola gustatuko litzaizuke munduak %first_names% %last_name% ikus dezan?</msg>
+  <msg key="lt_If_you_dont_think_the">Uste baduzu pertsonak oraindik konturk ez duela:</msg>
+  <msg key="lt_If_you_happen_to_know">Uste baduzu gonbidatu nahi duzun pertsonak jadanik sistema honetan kontu bat duela:</msg>
+  <msg key="lt_If_you_need_this_func">Funtzionalitate hau behar baduzu, mesedez kargatu ezazu acs-reference eta ref-countries.</msg>
+  <msg key="lt_Inherited_Permissions">Oinordetutako baimenak </msg>
+  <msg key="lt_It_would_be_a_very_ba">Aukera hau ez da egokia liburutegi edo eskola bateko ordenagailu partekatua erabiltzen ari bazara. Makina hori ondoren erabiliko zuen edozein erabiltzailek erabili ahal izango luke zerbitzu hori zure nortasunarekin.</msg>
+  <msg key="lt_New_registration_at_s">Erregistro berria %system_url%-n.</msg>
+  <msg key="lt_Note_that_you_can_era">Ohar zaitez gordetako e-posta eta pasahitza ezabatu ditzakezula zure lan ingurunearen &quot;irten&quot; aukeran sakatuz.</msg>
+  <msg key="lt_num_children_Children">%num_children%  &quot;ume&quot; izkutatuta</msg>
+  <msg key="lt_On_portrait_publish_d">%portrait_publish_date% -n, &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt; igo zenuen</msg>
+  <msg key="lt_Our_server_can_tell_y">Gure zerbitzariak zure arakatzaileari e-posta eta pasahitza bezalako informazioa gorde-arazi diezaioke. Hau komenigarria da, zu bazara zure ordenagailua erabiltzen duen pertsona bakarra, ez duzulako informazio hori behin eta berriro sartzen ardurako beharko.</msg>
+  <msg key="lt_Password_Confirmation">Pasahitzaren konfirmazioa</msg>
+  <msg key="lt_Personal_Home_Page_UR">URL pertsonala:</msg>
+  <msg key="lt_Please_locate_your_co">Mesedez, aukera ezazu zure herrialdearen kodea behean zerrendatutakoen artean. Jarraiean, sakatu ezazu zure arakatzailearen &quot;atzera&quot; botoia aurreko formulariora bueltatzeko</msg>
+  <msg key="lt_Please_read_and_follo">Mesedez, irakur itzazu e-posta honetako aginduak.</msg>
+  <msg key="lt_Please_try_to_a_hrefi">Mesedez, saia zaitez berriro &lt;a href=&quot;index&quot;&gt;sartzen&lt;/a&gt;</msg>
+  <msg key="lt_Portrait_of_first_last">%first_names% %last_name%-n argazkia</msg>
+  <msg key="lt_Privileges_higher_implied">Hierarkian gorago dauden pribilegioak, beherago daudenak barne dute, hau da, kudeaketarako baimena ematen duzunean, irakurtzeko eta idazteko baimenak automatikoki ematen dira.</msg>
+  <msg key="lt_Problem_with_authenti">Autentifikazioarekin arazoak</msg>
+  <msg key="lt_Registration_informat">Zerbitzu honetarako erregistrazio informazioa bidali berri da %email%-ra.</msg>
+  <msg key="lt_Registration_informat_1">Zerbitzu honetarako erregistrazio informazioa bidali da %email%-ra.</msg>
+  <msg key="lt_registration_request_submitted">Zure erregistrazio eskakizuna %system_name%-ko kudeatzaileari bidali zaio. Oraindik onarpenaren zai dago.</msg>
+  <msg key="lt_Saving_email_address_">E-posta helbidea eta pasahitza gordetzen</msg>
+  <msg key="lt_Show_everyone_else_at">Erakutziezu %system_name%-eko partaideei nolakoa zaren:</msg>
+  <msg key="lt_Sorry_but_it_seems_th">Sentitzen dugu, baina badirudi %system_name%-en debekatua izan zarela</msg>
+  <msg key="lt_Sure_erase_user_por">Ziur al zaude argazki pertsonal hau ezabatu nahi duzulaz?</msg>
+  <msg key="lt_Sure_erase_your_por">Ziur al zaude zure argazkia ezabatu nahi duzulaz?</msg>
+  <msg key="lt_The_picture_of_you_in">Sistema honetan dagoen zure argazkia ez da zuzena. Mesedez,</msg>
+  <msg key="lt_There_was_a_problem_w">Arazoren bat egon da zure kontua autentifikatzerakoan</msg>
+  <msg key="lt_This_is_the_image_that">Hau da %system_name%-ko beste erabiltzaileei erakusten diegun argazkia</msg>
+  <msg key="lt_This_user_doesnt_have">Erabiltzaile honek ez du oraindik argazkirik. Nahi baduzu</msg>
+  <msg key="lt_This_user_is_deleted">Erabiltzaile hau komunitatetik ezabatua eta debekatua izan da.</msg>
+  <msg key="lt_To_confirm_your_regis">Zure erregistrazioa konfirmatzeko, mesedez zoaz %confirmation_url%-ra</msg>
+  <msg key="lt_Upload_your_favorite">Igo ezazu zure fitxategi gogokoena, JPEG edo GIF eskaneatua, zure ordenagailu pertsonalatik (kontutan izan ezin duzula Interneten dagoen argazki bat igo; argazki hau zure disko gogorrean egon behar da).</msg>
+  <msg key="lt_Uploaded_pretty_date">Igota: %pretty_date%</msg>
+  <msg key="lt_Uploaded_publish_date">Igota: %publish_date%</msg>
+  <msg key="lt_Use_the_Browse_button">Erabil ezazu &quot;Browse...&quot; botoia zure fitxategia topatzeko, eta gero, &quot;Open&quot; aukeratu.</msg>
+  <msg key="lt_User_has_portrait_title">Erabiltzaile honek biografia sartu du edo argazkia igo du</msg>
+  <msg key="lt_We_cant_find_you">Ezin izan zaitugu topatu (user %user_id%) erabiltzaileen taulan. Seguraski zure kontua ezabatua izan da.</msg>
+  <msg key="lt_We_had_a_problem_proc">Arazoren bat izan dugu zure sarrera prozesatzen.</msg>
+  <msg key="lt_We_were_not_awaiting_">Ez genuen zure e-posta espero. Erroreren bat egon omen da.</msg>
+  <msg key="lt_Welcome_to_system_nam">Ongi etorri %system_name%-ra</msg>
+  <msg key="lt_What_other_people_see">Zer ikusten duten besteek zure izena klikatzean</msg>
+  <msg key="lt_You_cant_have_a_lt_in">Ezin duzu &amp;lt; izan zure izenean, horrek HTML etiketaren itxura duelako eta beste erabiltzaileak konfundiaraziko lukeelako.</msg>
+  <msg key="lt_You_cant_have_a_lt_in_1">Ezin duzu &amp;lt; izan zure abizenean, horrek HTML etiketaren itxura duelako eta beste erabiltzaileak konfundiaraziko lukeelako.</msg>
+  <msg key="lt_You_wont_get_any_email">Ez duzu posta electronikorik jasoko %pretty_date% arte.</msg>
+  <msg key="lt_Your_email_has_been_c">Zure e-posta konfirmatuta izan da. Orain %system_name%.-n sar zaitezke.</msg>
+  <msg key="lt_Your_email_has_been_c_1">Zure e-posta konfirmatuta izan da. Orain %system_name%-ko kudeatzailearen onarpenaren zai zaude</msg>
+  <msg key="lt_Your_email_is_confirm">Zure e-posta konfirmatuta dago</msg>
+  <msg key="lt_Your_login_has_expire">Zure sarrera inraungitu da. Mesedez, sar ezazu berriro zure pasahitza.</msg>
+  <msg key="lt_Your_URL_doesnt_have_">Zure URL-ak ez du formato zuzena. URL zuzen batek hurrengo itxura dauka: &quot;%valid_url_example%&quot;.
+</msg>
+  <msg key="Make_administrator">Kudeatzailea egin</msg>
+  <msg key="Make_member">Partaidea egin</msg>
+  <msg key="Make_yourself_invisible_label">Zure burua ikustezina egin</msg>
+  <msg key="Make_yourself_visible_label">Zure burua ikusgarria egin</msg>
+  <msg key="Manage_your_notifications">Zure abisuak kudeatu</msg>
+  <msg key="Mem_list_not_allowed">Sentitzen dugu baina ezin duzu partaideen zerrenda ikusi.</msg>
+  <msg key="Member_State">Partaide Egoera</msg>
+  <msg key="Members">Partaideak</msg>
+  <msg key="Name">Izena</msg>
+  <msg key="New_Password">Pasahitz berria</msg>
+  <msg key="No_applications">Aplikaziorik ez</msg>
+  <msg key="No_ISO_Codes">ISO koderik ez</msg>
+  <msg key="No_package_parameters">Pakete honek ez du parametrorik.</msg>
+  <msg key="no_portrait_title_message">zure argazkia</msg>
+  <msg key="No_pretty_plural">%pretty_plural%-rik ez</msg>
+  <msg key="No_services">Zerbitzurik ez</msg>
+  <msg key="none">hutsik</msg>
+  <msg key="Not_logged_in">Sartu gabe</msg>
+  <msg key="Notes">Oharrak:</msg>
+  <msg key="Notice">Oharra:</msg>
+  <msg key="on_name_to">%name%-n ondokora:</msg>
+  <msg key="optional">(aukerakoa)</msg>
+  <msg key="Options">Aukerak</msg>
+  <msg key="Or_add_a_new_user">Edo erabiltzaile berria eratu</msg>
+  <msg key="or_the">edo</msg>
+  <msg key="Password">Pasahitza</msg>
+  <msg key="Password_changed_body">Zure sartze-informazioa %system_name%-n:
+
+%account_id_label%: %account_id%
+
+Zure pasahitza kontu honetarako duela gutxi aldatuta izan da. Ez duzu ezer egin beharrik, mezu hau bakarrik notifikazio bat da zure kontuaren segurtasuna babesteko.
+
+---------------
+
+Nahi duzunean alda dezakezu zure pasahitza ondoko moduan:
+
+1. %system_name%-n sartu
+
+2. &quot;%pvt_home_name%&quot; estekan klikatu
+
+3. &quot;%password_update_link_text%&quot; aukeratu</msg>
+  <msg key="Password_changed_subject">Pasahitza aldatuta</msg>
+  <msg key="Permissions">Baimenak</msg>
+  <msg key="permissions">baimenak</msg>
+  <msg key="Permissions_for_name">%name%-rako baimenak</msg>
+  <msg key="Please_return_to_home">%home_link%-ra bueltatu.</msg>
+  <msg key="Portrait">Argazkia</msg>
+  <msg key="Profile">Perfila</msg>
+  <msg key="Question">Galdera</msg>
+  <msg key="Re_enable">Berraktibatu</msg>
+  <msg key="Recover_Password">Pasahitza berreskuratu</msg>
+  <msg key="Refresh_login">Sartzea &quot;freskatu&quot;</msg>
+  <msg key="Register">Erregistratu</msg>
+  <msg key="Registration_Approval_Notice">&lt;p&gt; Eskerrik asko erregistratzeagatik %system_name%-n. Kudeatzaile bati jakinarazi zaio zure eskaera&lt;/p&gt;.
+
+&lt;p&gt; Onartzen zaituenean, e-posta mezu bat jasoko duzu eta %system_name% erabiltzen hasi ahal izango duzu&lt;/p&gt;</msg>
+  <msg key="Reject">Ezetsi</msg>
+  <msg key="Remember_my_login">Nere sartzea gogoratu ordenagailu honetan</msg>
+  <msg key="Remove">Ezabatu</msg>
+  <msg key="Req_membership_comm">Komunitate honetan parte-hartzea eskatu.</msg>
+  <msg key="Req_membership_subs">Azpi-gune honetan parte-hartzea eskatu.</msg>
+  <msg key="Request_membership">Parte-hartzea eskatu</msg>
+  <msg key="return_to_application">aplikaziora bueltatu</msg>
+  <msg key="Revoke_Checked">Aukeratuak desaukeratu</msg>
+  <msg key="Role">Rola</msg>
+  <msg key="Save_comment">Iruzkina gorde</msg>
+  <msg key="Screen_name">ezizena</msg>
+  <msg key="Search_For_Exist_User">Sistemako erabiltzailea bilatu</msg>
+  <msg key="Select_an_Object_by_Id">Objetu bat aukeratu id-aren bidez</msg>
+  <msg key="Send_email_to_this_user">Erabiltzaile honi posta bidali</msg>
+  <msg key="Show">Erakutxi</msg>
+  <msg key="Site_wide_administration">Kudeaketa orokorra</msg>
+  <msg key="sorry_forgotten_pwd">Sentitzen dugu, ezin zaitugu lagundu ahaztutako pasahitzarekin</msg>
+  <msg key="Status">Egoera</msg>
+  <msg key="Story_Behind_Photo">Argazkiaren istorioa</msg>
+  <msg key="Story_behind_photo">Argazkiaren istorioa</msg>
+  <msg key="Subcommunities">Azpi-komunitateak</msg>
+  <msg key="subcommunities">azpi-komunitateak</msg>
+  <msg key="subcommunity">azpi-komunitatea</msg>
+  <msg key="subsite">azpi-gunea</msg>
+  <msg key="Subsites">Azpi-guneak</msg>
+  <msg key="subsites">azpi-guneak</msg>
+  <msg key="Thank_you">Eskerrik asko.</msg>
+  <msg key="The_ISO_codes_were_not">ISO kodeak ez daude kargatuak zerbitzari honetan</msg>
+  <msg key="This_group_is_closed">Talde hau itxita dago. Partaideek bakarrik ahal dute lortu sarrera gonbidapenaren bitartez</msg>
+  <msg key="this_subsite">azpi-gune hau</msg>
+  <msg key="This_user_has_left_the">Erabiltzaile honek komunitatea utzi du</msg>
+  <msg key="To_log_in_visit_the">Sartzeko, bisita ezazu</msg>
+  <msg key="Topic">Atala</msg>
+  <msg key="type_specific_info">motaren araberako informazioa</msg>
+  <msg key="UP">GORA</msg>
+  <msg key="up_to_context_name">igo %context_name%-ra</msg>
+  <msg key="Update">Eguneratu</msg>
+  <msg key="Update_Password">Pasahitza eguneratu</msg>
+  <msg key="upload">igo</msg>
+  <msg key="upload_a_portrait">igo argazkia</msg>
+  <msg key="upload_a_replacement_por">argazki ordezkaria igo </msg>
+  <msg key="Upload_Portrait">Argazkia Igo</msg>
+  <msg key="Username">Erabiltzaile izena</msg>
+  <msg key="Vacation_Info_Updated">Opor informazioa Eguneratuta</msg>
+  <msg key="Vacation_information_updated">Zure opor informazioa %site_link%-n eguneratuta izan da</msg>
+  <msg key="Welcome_user">Ongi etorri, %user_name%
+</msg>
+  <msg key="When_leaving_checkbox_empty">Kontrol-laukia aukeratzen ez duzunean, pribilegio hori kendu egiten zaio partaide horri, baldin eta aurretik eman bazaio.</msg>
+  <msg key="Whos_Online_link_label">Momentuan online dauden erabiltzaileak</msg>
+  <msg key="Whos_Online_title">Nor dago online</msg>
+  <msg key="Yes_I_am_sure">Bai, ziur nago</msg>
+  <msg key="You_are_in_the_follow">Ondoko taldeetan partaide zara:</msg>
+  <msg key="You_can_always_re_open">Nahi duzunean ber-ireki dezakezu honela:</msg>
+  <msg key="You_do_not_have_admin_on">Ez duzu kudeaketa baimenik %root% objetuan edo bere &quot;umeetako&quot; bateren batean</msg>
+  <msg key="You_dont_have_a_portrait">Ez duzu oraindik argazkirik. Ahal duzu</msg>
+  <msg key="You_have_admin_rights_on">Ondoko objetutan kudeaketa baimena duzu:</msg>
+  <msg key="You_have_no_email_alerts">Momentu honetan ez duzu e-posta abisuak erregistratuta.</msg>
+  <msg key="Your_Account">Zure kontua</msg>
+  <msg key="Your_discussion_alerts">Foroetan dituzun abisuak</msg>
+  <msg key="Your_Portrait">Zure Argazkia</msg>
+  <msg key="Your_system_alerts">Zure abisuak %gc_system_name%-n</msg>
+  <msg key="Youre_marked_as_back">Oporretatik bueltan bezela agertzen zara %site_link%-n.</msg>
+</message_catalog>

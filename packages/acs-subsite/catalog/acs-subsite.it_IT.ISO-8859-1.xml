@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.1.0" locale="it_IT" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.1.2" locale="it_IT" charset="ISO-8859-1">
 
   <msg key="About_You">Riguardo a te</msg>
   <msg key="Account_at_system_closed">La tua account su %system_name% &amp;egrave; stata chiusa.</msg>
   <msg key="Account_closed"> &lt;p&gt;La tua account &amp;egrave; attualmente chiusa.&lt;/p&gt;  &lt;p&gt;Se lo desideri, possiamo &lt;a href=&quot;%restore_url%&quot;&gt;riaprirla&lt;/a&gt;.&lt;/p&gt;</msg>
+  <msg key="Admin">Pannello di Controllo</msg>
   <msg key="Answer">Risposta:</msg>
   <msg key="at">su</msg>
   <msg key="Bad_Password">Password Inadatta</msg>
@@ -18,10 +19,11 @@
   <msg key="Email_Confirmation">Conferma Email</msg>
   <msg key="Email_not_Requested">Email non richiesta</msg>
   <msg key="Error_sending_mail">Errore nell'invio dell'email</msg>
+  <msg key="Forgot_your_password">Hai dimenticato la tua password?</msg>
   <msg key="Grant">Garantisci</msg>
   <msg key="Grant_Permission">Garantisci il permesso</msg>
   <msg key="Join_group_name">Partecipa al gruppo %group_name%</msg>
-  <msg key="Log_In">Log In</msg>
+  <msg key="Log_In">Entra</msg>
   <msg key="lt_Cannot_join_this_grou">Non &amp;egrave; possibile partecipare a questo gruppo.</msg>
   <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) registrato come utente di %system_url%</msg>
   <msg key="lt_Grant_Permission_on_n">Garantisci il permesso su %name%</msg>
@@ -62,6 +64,7 @@
   <msg key="Permissions_for_name">Permessi per %name%</msg>
   <msg key="Question">Domanda:</msg>
   <msg key="Register">Registrati</msg>
+  <msg key="Remember_my_login">Ricorda</msg>
   <msg key="Revoke_Checked">Rimuovi gli elementi selezionati</msg>
   <msg key="Show">Mostra</msg>
   <msg key="Thank_you">Grazie.</msg>
