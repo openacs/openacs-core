@@ -47,7 +47,7 @@ namespace eval notification::delivery {
         # Prepare the arguments
         set args [list]
 
-        ns_log Notice "NOTIF-DELIV-METHOD: about to call acs_sc on $impl_key"
+        # ns_log Notice "NOTIF-DELIV-METHOD: about to call acs_sc on $impl_key"
 
         # Make the generic call
         return [acs_sc_call NotificationDeliveryMethod ScanReplies $args $impl_key]

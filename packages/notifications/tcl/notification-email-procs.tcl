@@ -10,10 +10,29 @@ ad_library {
 
 namespace eval notification::email {
 
-    ad_proc -public address_domain {} {
-        return "ny03.openforce.net"
+    ad_proc -public get_package_id {} {
+        return [apm_package_id_from_key notifications]
     }
 
+    ad_proc -public get_parameter {
+        {-name:required}
+        {-default ""}
+    } {
+        return [parameter::get -package_id [get_package_id] -parameter $name -default $default]
+    }
+
+    ad_proc -public address_domain {} {
+        return [get_parameter -name "EmailDomain"]
+    }
+
+    ad_proc -public reply_address_prefix {} {
+        return [get_parameter -name "EmailReplyAddressPrefix"]
+    }
+
+    ad_proc -private qmail_mail_queue_dir {} {
+        return [get_parameter -name "EmailQmailQueue"]
+    }
+    
     ad_proc -private parse_email_address {email} {
         if {![regexp {<([^>]*)>} $email all clean_email]} {
             return $email
@@ -27,9 +46,9 @@ namespace eval notification::email {
         {-type_id:required}
     } {
         if {[empty_string_p $object_id] || [empty_string_p $type_id]} {
-            return "notification"
+            return [reply_address_prefix]
         } else {
-            return "notification-$object_id-$type_id@[address_domain]"
+            return "[reply_address_prefix]-$object_id-$type_id@[address_domain]"
         }
     }
 
@@ -38,8 +57,11 @@ namespace eval notification::email {
     } {
         This takes a reply address, checks it for consistency, and returns a list of object_id and type_id
     } {
+        # The pattern to match
+        set regexp_str "^[reply_address_prefix]-(\[0-9\]*)-(\[0-9\]*)\@"
+
         # Check the format and extract type_id and object_id at the same time
-        if {![regexp {^notification-([0-9]*)-([0-9]*)@} $reply_address all object_id type_id]} {
+        if {![regexp $regexp_str $reply_address all object_id type_id]} {
             return ""
         }
 
@@ -66,10 +88,6 @@ namespace eval notification::email {
             -body $content
     }
 
-    ad_proc -private qmail_mail_queue_dir {} {
-        return "/home/oracle/queues/forums"
-    }
-    
     ad_proc -private load_qmail_mail_queue {
         {-queue_dir:required}
     } {
