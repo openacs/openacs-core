@@ -613,6 +613,18 @@ ad_form -extend -name note \ </userinput>
     </orderedlist>
     </sect1>
 
+  <sect 1 id="profile-code">
+      <title>Profile your code</title>
+      <para>There are several facilities for profiling your code in
+      OpenACS. The first thing to do is to install the
+      developer-support package and play around with it. But there
+      is also support in the API for profiling your code:
+      <ulink 
+      url="http://openacs.org/forums/message-view?message_id=161324">profiling
+      your code using ds_profile</ulink>
+      </para>
+  </sect>
+
       <sect1 id="tutorial-distribute">
         <title>Prepare the package for distribution.</title>
         <para>Browse to the package manager.  Click on
