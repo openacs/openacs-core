@@ -43,15 +43,17 @@ begin
         null
     );
            
-    perform notification_delivery_method__new (
-        null,
-        ''email'',
-        ''Email'',
-        now(),
-        null,
-        null,
-        null
-    );
+-- This is now done by email-sc-impl-create.sql
+--
+--     perform notification_delivery_method__new (
+--         null,
+--         ''email'',
+--         ''Email'',
+--         now(),
+--         null,
+--         null,
+--         null
+--     );
 
     return null;
 

@@ -20,8 +20,6 @@
 
 \i notification-type-sc-create.sql
 
--- WORK HERE!! (ben)
-
 \i delivery-method-sc-create.sql
 \i notifications-init.sql
 \i email-sc-impl-create.sql
