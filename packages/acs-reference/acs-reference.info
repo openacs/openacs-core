@@ -7,10 +7,10 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="5.0.4" url="http://openacs.org/repository/download/apm/acs-reference-5.0.2.apm">
+    <version name="5.1.0" url="http://openacs.org/repository/download/apm/acs-reference-5.1.0.apm">
         <owner url="mailto:jon@jongriffin.com">Jon Griffin</owner>
         <summary>Tools and API for managing refrence data.</summary>
-        <release-date>2004-04-18</release-date>
+        <release-date>2004-04-29</release-date>
         <vendor url="http://www.mayuli.com">Mayuli Enterprises, LLC</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
 	<maturity>3</maturity>
@@ -20,8 +20,7 @@
 &lt;li&gt; Running standard reports on this data.
 &lt;li&gt; Monitoring the usage of reference data.
 &lt;/ul&gt;</description>
-
-        <provides url="acs-reference" version="5.1.0b1"/>
+        <provides url="acs-reference" version="5.1.0"/>
         <requires url="acs-kernel" version="5.0.0"/>
 
         <callbacks>
@@ -32,5 +31,7 @@
 
     </version>
 </package>
+
+
 
 

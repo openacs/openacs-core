@@ -10,7 +10,7 @@
     <version name="5.1.1" url="http://openacs.org/repository/download/apm/acs-templating-5.1.1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Templating library.</summary>
-        <release-date>2004-04-18</release-date>
+        <release-date>2004-04-29</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <maturity>3</maturity>
         <license url="http://www.gnu.org/copyleft/gpl.html">GPL version 2</license>
@@ -46,5 +46,7 @@ layout of a site can be more easily administered.
 
     </version>
 </package>
+
+
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-subsite" package_version="5.0.4" locale="hu_HU" charset="utf-8">
+<message_catalog package_key="acs-subsite" package_version="5.1.0" locale="hu_HU" charset="utf-8">
 
   <msg key="About_You">Infó rólad</msg>
   <msg key="Account_close_confirm_no_label">Nem, inkább visszamegyek az %pvt_home_name% (?)</msg>
@@ -8,6 +8,7 @@
   <msg key="Account_closed_workspace_msg">&lt;p&gt; &lt;font color=&quot;red&quot;&gt; &lt;b&gt; Az accountod legutóbb felfüggesztetted. &lt;/b&gt; &lt;/font&gt; &lt;a href=&quot;%login_url%&quot;&gt;Lépj be&lt;/a&gt; mégegyszer, és megtudod, mit tehetsz ezzel kapcsolatban.&lt;/p&amp;;gt;  </msg>
   <msg key="Account_reopened_message">A(z) %system_name% accountod újranyitottuk.  Üdvözlünk, hogy visszatértél!</msg>
   <msg key="Account_reopened_title">Az account újra lett élesztve</msg>
+  <msg key="Admin">Beállítások</msg>
   <msg key="Answer">Válasz</msg>
   <msg key="Bad_Password">Rossz jelszó</msg>
   <msg key="Basic_Information">Alapvető adatok</msg>

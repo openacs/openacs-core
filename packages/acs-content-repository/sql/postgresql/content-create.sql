@@ -341,7 +341,7 @@ begin
               from cr_items parent, 
                    cr_items child
              where child.item_id = v_rec.item_id
-             and   parent.item_id = chid.parent_id;
+             and   parent.item_id = child.parent_id;
 
             if p_id is null then 
 

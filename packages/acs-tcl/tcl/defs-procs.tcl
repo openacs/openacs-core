@@ -821,18 +821,18 @@ ad_proc -public ad_progress_bar_begin {
 } {
     Return a proress bar.
 
+    <p>Example:
+
+    <pre>ad_progress_bar_begin -title "Installing..." -message_1 "Please wait..." -message_2 "Will continue automatically"</pre>
+    
+    <pre>...</pre>
+    
+    <pre>ad_progress_bar_end -url $next_page</pre>
+
     @param title     The title of the page
     @param message_1 Message to display above the progress bar.
     @param message_2 Message to display below the progress bar.
     @param template  Name of template to use. Default value is recommended.
-
-    Example:
-
-    <code>ad_progress_bar_begin -title "Installing..." -message_1 "Please wait..." -message_2 "Will continue automatically"</code>
-    
-    <p><code>...</code></p>
-    
-    <code>ad_progress_bar_end -url $next_page</code>
 
     @see ad_progress_bar_end
 } {

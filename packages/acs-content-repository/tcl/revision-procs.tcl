@@ -52,6 +52,12 @@ ad_proc -public cr_write_content {
         ad_return -code error "Storage type '$storage_type' is invalid."
     }
 
+    # I set content length to 0 here because otherwise I need to do
+    # db-specific queries for get_revision_info
+    if {[empty_string_p $content_length]} {
+	set content_length 0
+    }
+
     switch $storage_type {
         text {
             set text [db_string write_text_content ""]

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-kernel" package_version="5.0.4" locale="AR_LB" charset="utf-8">
+<message_catalog package_key="acs-kernel" package_version="5.1.0" locale="AR_LB" charset="utf-8">
 
   <msg key="authentication_authority">السلطة</msg>
   <msg key="common_apply">طبّق</msg>
@@ -8,7 +8,7 @@
   <msg key="common_continue">تابع</msg>
   <msg key="common_default">استعمل الأصل</msg>
   <msg key="common_delete">أحذف</msg>
-  <msg key="common_discard">لَقًى</msg>
+  <msg key="common_discard">الَقًي</msg>
   <msg key="common_edit">حرر</msg>
   <msg key="common_finish">أنهي</msg>
   <msg key="common_help">مساعدة</msg>
@@ -17,7 +17,7 @@
   <msg key="common_no">لا</msg>
   <msg key="common_previous">السابق</msg>
   <msg key="common_register">سجلْ</msg>
-  <msg key="common_reset">أعاد ضبط</msg>
+  <msg key="common_reset">أعادة ضبط</msg>
   <msg key="common_save">احفظْ</msg>
   <msg key="common_stop">أوقفْ</msg>
   <msg key="common_update">جدِدْ</msg>

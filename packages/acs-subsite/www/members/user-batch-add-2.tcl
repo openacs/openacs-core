@@ -21,6 +21,8 @@ set exception_text ""
 set success_text ""
 set title "Adding new users in bulk"
 
+set group_id [application_group::group_id_from_package_id]
+
 # parse the userlist input a row at a time
 # most errors stop the processing of the line but keep going on the
 # bigger block
@@ -37,11 +39,18 @@ while {[regexp {(.[^\n]+)} $userlist match_fodder row] } {
 	append exception_text "<li>Couldn't find a valid email address in ($row).</li>\n"
 	continue
     } else {
-	set email_count [db_string unused "select count(email)
-from parties where email = lower(:email)"]
+	set user_exists_p [db_0or1row user_id "select party_id from parties where email = lower(:email)"]
 	
-	if {$email_count > 0} {
+	if {$user_exists_p > 0} {
+
+            # Add user to subsite as a member
+            
+            group::add_member \
+                -group_id $group_id \
+                -user_id $party_id
+            
 	    append exception_text "<li> $email was already in the database.</li>\n"
+
 	    continue
 	}
     }
@@ -65,13 +74,21 @@ from parties where email = lower(:email)"]
     set user_id $auth_status_array(user_id)
     
     append success_text "Created user $user_id for ($row)<br\>"
+
+
+    # Add user to subsite as a member
+    
+    group::add_member \
+        -group_id $group_id \
+        -user_id $user_id
     
     # if anything goes wrong here, stop the whole process
     if { !$user_id } {
 	ad_return_error "Insert Failed" "We were unable to create a user record for ($row)."
 	ad_script_abort
     }
-    
+
+
     # send email
 
     set key_list [list first_names last_name email password]

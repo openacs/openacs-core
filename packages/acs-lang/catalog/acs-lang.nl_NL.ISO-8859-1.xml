@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-lang" package_version="5.0.4" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="acs-lang" package_version="5.1.0" locale="nl_NL" charset="ISO-8859-1">
 
   <msg key="available-in-this-language">Nederlandse versie is beschikbaar</msg>
   <msg key="English">Engels</msg>
   <msg key="French">Frans</msg>
   <msg key="German">Duits</msg>
-  <msg key="localization-abday">{zon} {maa} {din} {woe} {don} {vri} {zat}</msg>
+  <msg key="localization-abday">{zon} {maa} {din} {woe} {don} {vr?} {zat}</msg>
   <msg key="localization-abmon">{jan} {feb} {mrt} {apr} {mei} {jun} {jul} {aug} {sep} {okt} {nov} {dec}</msg>
   <msg key="localization-am_str">Voormiddag</msg>
-  <msg key="localization-currency_symbol">?</msg>
+  <msg key="localization-currency_symbol">?
+</msg>
   <msg key="localization-d_fmt">%d.%m.%Y</msg>
   <msg key="localization-d_t_fmt">%a %d %B %Y %H:%M %Z</msg>
   <msg key="localization-day">{zondag} {maandag} {dinsdag} {woensdag} {donderdag} {vrijdag} {zaterdag}</msg>

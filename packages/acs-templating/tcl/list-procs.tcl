@@ -27,6 +27,7 @@ ad_proc -public template::list::create {
     {-pass_properties ""}
     {-actions ""}
     {-bulk_actions ""}
+    {-bulk_action_method "get"}
     {-bulk_action_export_vars ""}
     {-selected_format ""}
     {-has_checkboxes:boolean}
@@ -67,6 +68,7 @@ ad_proc -public template::list::create {
             "Remove" "item-remove" "Remove checked items"
             "Copy" "item-copy" "Copy checked items to clipboard"
         } \ 
+        -bulk_action_method post \
         -bulk_action_export_vars {
             order_id
         } \ 
@@ -136,7 +138,9 @@ ad_proc -public template::list::create {
                            page will get variables message_id=2&message_id=4&message_id=9. The receiving page
                            should declare message_id:integer,multiple in its ad_page_contract. Note that the 'message_id' 
                            local variable will the be a Tcl list.
-    
+
+    @param  bulk_action_method should a bulk action be a "get" or "post"
+
     @param  bulk_action_export_vars 
                            A list of additional variables to pass to the receving page, along with the other variables for 
                            the selected keys. This is typically useful if the rows in this list are all hanging off of 
@@ -283,6 +287,7 @@ ad_proc -public template::list::create {
         pass_properties
         actions
         bulk_actions
+        bulk_action_method
         bulk_action_export_vars
         row_pretty_plural
         no_data

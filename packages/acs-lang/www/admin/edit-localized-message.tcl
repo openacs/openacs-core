@@ -25,20 +25,20 @@ set locale_label [ad_locale_get_label $current_locale]
 set default_locale_label [ad_locale_get_label $default_locale]
 
 set page_title "Edit $package_key.$message_key"
-set context [list [list "package-list?[export_vars { locale }]" $locale_label] \
-                 [list "message-list?[export_vars { locale package_key show }]" $package_key] \
+set context [list [list [export_vars -base package-list { locale }] $locale_label] \
+                 [list [export_vars -base message-list { locale package_key show }] $package_key] \
                  "$package_key.$message_key"]
 
 
 # We let you create/delete messages keys if you're in the default locale
 set create_p [string equal $current_locale $default_locale]
 
-set description_edit_url "edit-description?[export_vars { locale package_key message_key show }]"
+set description_edit_url [export_vars -base edit-description { locale package_key message_key show }]
 
-set usage_hide_url "[ad_conn url]?[export_vars { locale package_key message_key show return_url }]"
-set usage_show_url "[ad_conn url]?[export_vars { locale package_key message_key show {usage_p 1} return_url }]"
+set usage_hide_url [export_vars -base [ad_conn url] { locale package_key message_key show return_url }]
+set usage_show_url [export_vars -base [ad_conn url] { locale package_key message_key show {usage_p 1} return_url }]
 
-set delete_url "message-delete?[export_vars { locale package_key message_key show {return_url {[ad_return_url]}} }]"
+set delete_url [export_vars -base message-delete { locale package_key message_key show {return_url {[ad_return_url]}} }]
 
 
 ad_form -name message -form {
@@ -106,6 +106,7 @@ ad_form -extend -name message -form {
         and    lm.locale = :current_locale
         and    cu.user_id = lm.creation_user
     }]
+
     
     set original_message [ad_quotehtml $original_message]
     if { [exists_and_not_null message] } {

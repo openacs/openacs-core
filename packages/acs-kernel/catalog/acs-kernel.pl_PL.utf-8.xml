@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-kernel" package_version="5.0.4" locale="pl_PL" charset="utf-8">
+<message_catalog package_key="acs-kernel" package_version="5.1.0" locale="pl_PL" charset="utf-8">
 
+  <msg key="common_add">Dodaj</msg>
+  <msg key="common_Administration">Administracja</msg>
+  <msg key="common_apply">Zastosuj</msg>
+  <msg key="common_cancel">Anuluj</msg>
+  <msg key="common_close">Zamknij</msg>
+  <msg key="common_closed">Zamknięty</msg>
+  <msg key="common_continue">Dalej</msg>
+  <msg key="common_default">Domyślne</msg>
+  <msg key="common_delete">Usuń</msg>
+  <msg key="common_discard">Anuluj</msg>
+  <msg key="common_edit">Edytuj</msg>
+  <msg key="common_finish">Zakończ</msg>
+  <msg key="common_go">Idź</msg>
+  <msg key="common_help">Pomoc</msg>
+  <msg key="common_login">Zaloguj się</msg>
+  <msg key="common_needs_approval">Wymaga zatwierdzenia</msg>
+  <msg key="common_next">Następny</msg>
+  <msg key="common_no">Nie</msg>
+  <msg key="common_ok">OK</msg>
+  <msg key="common_open">Otwórz</msg>
+  <msg key="common_previous">Poprzedni</msg>
+  <msg key="common_register">Zarejestruj</msg>
+  <msg key="common_repeat">Powtórz</msg>
+  <msg key="common_reset">Resetuj</msg>
+  <msg key="common_save">Zachowaj</msg>
+  <msg key="common_stop">Zatrzymaj</msg>
+  <msg key="common_update">Odśwież</msg>
+  <msg key="common_view">Widok</msg>
+  <msg key="common_yes">Tak</msg>
   <msg key="member_role_pretty_name">Członek</msg>
   <msg key="member_role_pretty_plural">Członkowie</msg>
+  <msg key="member_state_approved">Zatwierdzony</msg>
+  <msg key="member_state_banned">Zablokowany</msg>
+  <msg key="member_state_deleted">Usunięty(-a)</msg>
+  <msg key="member_state_needs_approval">Wymaga zatwierdzenia</msg>
+  <msg key="member_state_rejected">Odrzucony</msg>
 </message_catalog>

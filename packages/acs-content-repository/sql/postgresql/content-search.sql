@@ -88,14 +88,8 @@ end;' language 'plpgsql';
 
 create function content_search__dtrg ()
 returns opaque as '
-declare
-     v_live_revision integer;
 begin
-    select into v_live_revision live_revision from
-	cr_items where item_id=old.item_id;
-    if old.revision_id=v_live_revision then
-	perform search_observer__enqueue(old.revision_id,''DELETE'');
-    end if;
+    perform search_observer__enqueue(old.revision_id,''DELETE'');
     return old;
 end;' language 'plpgsql';
 
@@ -105,7 +99,7 @@ declare
     v_live_revision integer;
 begin
     select into v_live_revision live_revision from
-	cr_items where item_id=old.revision_id;
+	cr_items where item_id=old.item_id;
     if old.revision_id=v_live_revision then
 	insert into search_observer_queue (
             object_id,
@@ -145,7 +139,6 @@ for each row execute procedure content_search__dtrg ();
 create trigger content_search__utrg after update on cr_revisions
 for each row execute procedure content_search__utrg (); 
 
--- JCD: on create this trigger should not exist so lets not drop it
--- drop trigger content_item_search__utrg on cr_items;
+
 create trigger content_item_search__utrg before update on cr_items
 for each row execute procedure content_item_search__utrg ();

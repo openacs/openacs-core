@@ -77,7 +77,7 @@ set table_def {
     }
     { maintained "Maintained" "" {<td align=center>[ad_decode $distribution_uri "" "Locally" "Externally"]</td>} }
     {
-	action "" "" {<td bgcolor=white>&nbsp;&nbsp;[eval {
+	action "" "" {<td>&nbsp;&nbsp;[eval {
 
             set file_link_list [list]
             lappend file_link_list "<a href=\"version-files?version_id=$version_id\">view files</a>"

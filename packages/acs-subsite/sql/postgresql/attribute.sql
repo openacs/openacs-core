@@ -44,3 +44,19 @@ select acs_attribute__create_attribute (
     'generic',
     'f'
 );
+
+select acs_attribute__create_attribute (
+    'person',
+    'bio_mime_type',
+    'string',
+    'Biography Mime Type',
+    'Biography Mime Types',
+    null,
+    null,
+    null,
+    0,
+    1,
+    null,
+    'generic',
+    'f'
+);

@@ -3,4 +3,4 @@
  <property name="context">@context;noquote@</property>
  <property name="focus">description.description</property>
 
-<formtemplate id="description" style="standard-lars"></formtemplate>
+<formtemplate id="description"></formtemplate>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.0.4" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.1.0" locale="nl_NL" charset="ISO-8859-1">
 
-  <msg key="authentication_authority">Autoriteit</msg>
+  <msg key="authentication_authority">Identiteitscontroleur</msg>
   <msg key="common_add">Toevoegen</msg>
   <msg key="common_Administration">Administratie</msg>
   <msg key="common_apply">Toepassen</msg>
@@ -11,7 +11,7 @@
   <msg key="common_continue">Doorgaan</msg>
   <msg key="common_default">Standaard gebruiken</msg>
   <msg key="common_delete">Verwijderen</msg>
-  <msg key="common_discard">Wegwerpen</msg>
+  <msg key="common_discard">Wegdoen</msg>
   <msg key="common_edit">Bewerken</msg>
   <msg key="common_finish">Eindigen</msg>
   <msg key="common_go">Toon</msg>
@@ -34,7 +34,7 @@
   <msg key="member_role_pretty_name">Lid</msg>
   <msg key="member_role_pretty_plural">Leden</msg>
   <msg key="member_state_approved">Goedgekeurd</msg>
-  <msg key="member_state_banned">Geweerd</msg>
+  <msg key="member_state_banned">Uitgesloten</msg>
   <msg key="member_state_deleted">Verwijderd</msg>
   <msg key="member_state_needs_approval">Toestemming nodig</msg>
   <msg key="member_state_rejected">Geweigerd</msg>
