@@ -10,16 +10,20 @@ ad_library {
 
 namespace eval permission {}
 
-# define cache_p to be 0 here.  Note that it is redefined on init to be 
-# the value of the PermissionCacheP kernel parameter.
-# see request-processor-init.tcl
-ad_proc permission::cache_p {} {
+# define cache_p to be 0 here.  Note that it is redefined
+# to return the value of the PermissionCacheP kernel parameter
+# on the first call.  also the namespace eval is needed to 
+# make the redefinition work for ttrace.
+
+ad_proc -private permission::cache_p {} {
     returns 0 or 1 depending if permission_p caching is enabled or disabled.
     by default caching is disabled.
-} { 
-    return 0
+} {
+    set cache_p [ad_parameter -package_id [ad_acs_kernel_id] PermissionCacheP permissions 0]
+    namespace eval ::permission [list proc cache_p {} "return $cache_p"]
+    return $cache_p
 }
-    
+
 ad_proc -public permission::grant {
     {-party_id:required}
     {-object_id:required}
