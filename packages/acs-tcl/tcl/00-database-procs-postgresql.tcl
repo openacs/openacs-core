@@ -722,8 +722,9 @@ ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
     }
 
     if { $error_found } {
+        ns_log Error "db_source_sql_file: $file:\n$error_lines"
         global errorCode
-        return -code error -errorinfo $error_lines -errorcode $errorCode
+        return -code error -errorinfo $error_lines -errorcode $errorCode $error_lines
     }
 }
 
