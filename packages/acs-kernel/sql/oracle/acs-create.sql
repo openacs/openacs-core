@@ -267,7 +267,8 @@ begin
   -- Create the public group
   foo := acs_group.new (
     group_id => -1,
-    group_name => 'The Public'
+    group_name => 'The Public',
+    join_policy => 'closed'
   );
 
   insert into acs_magic_objects
@@ -288,7 +289,8 @@ begin
 
   foo := acs_group.new (
     group_id => -2,
-    group_name => 'Registered Users'
+    group_name => 'Registered Users',
+    join_policy => 'closed'
   );
 
  insert into acs_magic_objects

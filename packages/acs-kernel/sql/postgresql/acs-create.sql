@@ -238,7 +238,7 @@ begin
     null,
     null,
     ''The Public'',
-    null,
+    ''closed'',
     null
   );
 
@@ -285,7 +285,7 @@ begin
     null,
     null,
     ''Registered Users'',
-    null,
+    ''closed'',
     null
   );
 

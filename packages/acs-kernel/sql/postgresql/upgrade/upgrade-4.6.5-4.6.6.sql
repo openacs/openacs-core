@@ -1,13 +1,10 @@
 -- 
 -- @author Lars Pind (lars@collaboraid.biz)
 -- @creation-date 2003-07-03
--- 
--- Add 'admin_rel' relationship type for administrators of a group
---
--- Make object_id 0 ("Unregistered Visitor") a user, not a person.
---
 
+-- Make groups registered users and the public closed (security)
 
+update groups set join_policy = 'closed' where group_id in (-1,-2);
 
 -- Make object_id 0 ("Unregistered Visitor") a user, not a person.
 
