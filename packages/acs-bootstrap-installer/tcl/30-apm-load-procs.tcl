@@ -350,20 +350,11 @@ ad_proc apm_package_supports_rdbms_p {
 } {    
     set system_db_type [db_type]
 
-    set has_db_types_p 0
-
-    foreach file [apm_get_package_files -all_db_types -package_key $package_key] {
-       set db_type [apm_guess_db_type $package_key $file]
-       if { ![empty_string_p $db_type] } {
-            set has_db_types_p 1
-        }
-        
-        if { [string equal $system_db_type $db_type] } {
-            return 1
-        }
-     }
-
-    return [expr ! $has_db_types_p]
+    # LARS: This is a crude check, but there's really not any way of knowing for certain without the package telling us
+    # We need to add that information back into the .info files.
+    
+    set package_path [acs_package_root_dir $package_key]
+    return [expr ![file exists "${package_path}/sql"] || [file exists "${package_path}/sql/[db_type]"]]
 }
 
 ad_proc apm_source { __file } {
