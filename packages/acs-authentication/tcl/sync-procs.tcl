@@ -730,8 +730,8 @@ ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
         set user_info(url) [xml_get_child_node_content_by_path $person_node { { url } }]
 
         # We need a little more logic to deal with first_names/last_name, since they may not be split up in the XML
-        set user_info(first_names) [xml_get_child_node_content_by_path $person_node { { name given } }]
-        set user_info(last_name) [xml_get_child_node_content_by_path $person_node { { name family } }]
+        set user_info(first_names) [xml_get_child_node_content_by_path $person_node { { n given } }]
+        set user_info(last_name) [xml_get_child_node_content_by_path $person_node { { n family } }]
 
         if { [empty_string_p $user_info(first_names)] || [empty_string_p $user_info(last_name)] } {
             set formatted_name [xml_get_child_node_content_by_path $person_node { { name fn } }]
