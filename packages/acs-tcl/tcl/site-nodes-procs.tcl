@@ -60,9 +60,15 @@ namespace eval site_node {
         Rename the site node.
     } {
         # We need to update the cache for all the child nodes as well
+        set node_url [get_url -node_id $node_id]
         set child_node_ids [get_children -all -node_id $node_id -element node_id]
 
         db_dml rename_node {}
+
+        # Unset all cache entries under the old path
+        foreach name [nsv_array names site_nodes "${node_url}*"] {
+            nsv_unset site_nodes $name
+        }
 
         foreach node_id [concat $node_id $child_node_ids] {
             update_cache -node_id $node_id
