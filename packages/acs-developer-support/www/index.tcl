@@ -61,7 +61,7 @@ doc_body_append "
 <li>Information is being swept every [ad_parameter DataSweepInterval "developer-support" 900] sec
 and has a lifetime of [ad_parameter DataLifetime "developer-support" 900] sec
 
-<li><a href=\"/admin/site-map/parameter-set?[export_vars { package_id }]\">Set package parameters</a>
+<li><a href=\"/shared/parameters?[export_vars { package_id { return_url {[ad_return_url]} } }]\">Set package parameters</a>
 
 <p>
 
