@@ -33,10 +33,6 @@
        <tr bgcolor=white>
         <if @elements.label@ not nil>
 	<td bgcolor="#ddddff" width="120"><b><font face="tahoma,verdana,arial,helvetica,sans-serif" size="-1">@elements.label@</font></b>&nbsp;&nbsp;
-          <if @elements.help_text@ not nil>
-            <br>&nbsp;&nbsp;
-            <font face="tahoma,verdana,arial,helvetica,sans-serif" size=-1><noparse><formhelp id=@elements.id@></noparse></font><br>
-          </if>
 	  </td>
         </if>
 	<if @elements.widget@ in radio checkbox>
@@ -53,6 +49,15 @@
                 <font face="tahoma,verdana,arial,helvetica,sans-serif" color="red"><b>\@formerror.@elements.id@\@</b></font>
               </formerror>
             </noparse>
+            <if @elements.help_text@ not nil>
+              <p>
+                <font face="tahoma,verdana,arial,helvetica,sans-serif" size="-1">
+                  <noparse>
+                    <i><formhelp id=@elements.id@></i>
+                  </noparse>
+                </font>
+              </p>
+            </if>
 	    </td>	    
 	</if>
 	<else> 
@@ -68,7 +73,15 @@
 		<formerror id=@elements.id@><br><font face="tahoma,verdana,arial,helvetica,sans-serif"
 		   color="red"><b>\@formerror.@elements.id@\@<b></font>
                 </formerror></noparse>
-                
+                <if @elements.help_text@ not nil>
+                  <p>
+                    <font face="tahoma,verdana,arial,helvetica,sans-serif" size="-1">
+                      <noparse>
+                        <i><formhelp id=@elements.id@></i>
+                      </noparse>
+                    </font>
+                  </p>
+                </if>
 	      </td>
 	    </else>
 	</else>
