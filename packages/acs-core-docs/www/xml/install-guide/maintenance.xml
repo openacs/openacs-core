@@ -422,7 +422,10 @@ logout
       </listitem>
     </orderedlist>
   </sect2>
-
+  <sect2 id="uptime">
+    <title>External uptime validation</title>
+    <para>The <ulink url="http://uptime.openacs.org/uptime/">OpenACS uptime site</ulink> can monitor your site and send you an email whenever your site fails to respond.  If you test the url <computeroutput>http://<replaceable>yourserver.test</replaceable>/SYSTEM/dbtest.tcl</computeroutput>, you should get back the string <computeroutput>success</computeroutput>.</para>
+  </sect2>
 
 
     

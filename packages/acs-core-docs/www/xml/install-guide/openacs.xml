@@ -326,13 +326,9 @@ SQL&gt; exit</programlisting>
               <listitem id="create-service-db-user">
                 <para>PostGreSQL:</para>
                 <para>Create a user in the database matching the service
-            name.  With default PostGreSQL authentication the name of
-            the user of the process will be matched to this account
-            automatically.</para>
+            name.  With default PostGreSQL authentication, a system user connecting locally automatically authenticates as the postgres user of the same name, if one exists.  We currently use postgres "super-users" for everything, which means that anyone with access to any of the openacs system accounts on a machine has full access to all postgresql databases on that machine.</para>
                 <screen>[root@yourserver root]# <userinput>su - postgres</userinput>
-[postgres@yourserver pgsql]$ <userinput>createuser <replaceable>service0</replaceable></userinput>
-Shall the new user be allowed to create databases? (y/n) <userinput>y</userinput>
-Shall the new user be allowed to create more new users? (y/n) <userinput>y</userinput>
+[postgres@yourserver pgsql]$ <userinput>createuser -a -d <replaceable>service0</replaceable></userinput>
 CREATE USER
 [postgres@yourserver pgsql]$ <userinput>exit</userinput>
 logout
@@ -349,14 +345,15 @@ CREATE DATABASE
 createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
               </listitem>
               <listitem>
-                <para>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.</para>
+                <para>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.  Recommended: <computeroutput>VACUUM ANALYZE</computeroutput> every hour and <computeroutput>VACUUM FULL ANALYZE</computeroutput> every day.</para>
                 <indexterm>
                   <primary>Postgres</primary>
                   <secondary>Vacuuming</secondary>
                 </indexterm>
                 <screen>[service0@yourserver service0]$ <userinput>export EDITOR=emacs;crontab -e</userinput></screen>
                 <para>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</para>
-                <programlisting>0 1 * * * /usr/local/pgsql/bin/vacuumdb --analyze <replaceable>service0</replaceable></programlisting>
+                <programlisting>0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <replaceable>service0</replaceable>
+0 0 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <replaceable>service0</replaceable></programlisting>
               </listitem>
               <listitem>
                 <para><link linkend="install-openfts-postgres">Add Full Text Search Support</link> (OPTIONAL)</para>
@@ -701,6 +698,8 @@ logout
 [root@yourserver root]#</screen>
       </listitem>
       <listitem><para>Test your <link linkend="backup-recovery">backup and recovery</link> procedure.</para>
+      </listitem>
+      <listitem><para>Set up <xref linkend="uptime"/>.</para>
       </listitem>
     </itemizedlist>
 

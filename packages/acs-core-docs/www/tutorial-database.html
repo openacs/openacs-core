@@ -2,7 +2,7 @@
       by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2839448"></a>Code the data model</h3></div></div><div></div></div><p>We create all database objects with scripts in the
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2844166"></a>Code the data model</h3></div></div><div></div></div><p>We create all database objects with scripts in the
       <tt class="computeroutput">myfirstpackage/sql/</tt> directory.  All
       database scripts are database-specific and are thus in either
       the <tt class="computeroutput">myfirstpackage/sql/oracle</tt> or
@@ -37,7 +37,7 @@
       <tt class="computeroutput">@author</tt> which will be picked up
       by the API browser.  The string
       <tt class="computeroutput">$Id$</tt> will automatically be
-      expanded when the file is checked in to cvs.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs myfirstpackage-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2844882"></a><p class="title"><b>Figure 7.2. Database Creation Script - master create file</b></p><pre class="programlisting">--
+      expanded when the file is checked in to cvs.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs myfirstpackage-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2824956"></a><p class="title"><b>Figure 7.2. Database Creation Script - master create file</b></p><pre class="programlisting">--
 -- @author rhs@mit.edu
 -- @cvs-id $Id$
 --
@@ -61,7 +61,7 @@ select content_folder__register_content_type(-100,'mfp_note','t');
     object.  Notice the use of "mfp."  This token, derived from "My
     First Package," ensures that our object is unlikely to conflict
     with objects from other packages.</p><p>Create a database file to drop everything if the package
-        is uninstalled.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs myfirstpackage-drop.sql</tt></b></pre><div class="figure"><a name="id2842171"></a><p class="title"><b>Figure 7.3. Database deletion script</b></p><pre class="programlisting">-- packages/myfirstpackage/sql/myfirstpackage-drop.sql
+        is uninstalled.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs myfirstpackage-drop.sql</tt></b></pre><div class="figure"><a name="id2826782"></a><p class="title"><b>Figure 7.3. Database deletion script</b></p><pre class="programlisting">-- packages/myfirstpackage/sql/myfirstpackage-drop.sql
 -- drop script
 --
 -- @author joel@aufrecht.org

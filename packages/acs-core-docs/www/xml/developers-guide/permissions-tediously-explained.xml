@@ -10,6 +10,8 @@
     by Vadim Nasardinov. Modified and converted to Docbook XML by Roberto Mello
   </para>
   
+  <para>The code has been modified since this document was written so it is now obsolete.  See <ulink url="http://openacs.org/forums/message-view?message_id=121807">this forum thread</ulink>.</para>
+
   <sect2 id="permissions-tedious-overview">
 
     <title>Overview</title>

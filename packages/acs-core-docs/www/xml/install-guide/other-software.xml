@@ -73,6 +73,7 @@ cp: overwrite `/etc/skel/.emacs'? <userinput>y</userinput>
 [root@yourserver tmp]# </screen>
       <para>Debian users:</para>
       <screen><action>apt-get install psgml</action></screen>
+      <para>Note: The new nxml mode for emacs, when used in combination with psgml, provides a pretty good set of functionality that makes DocBook editing much less painless.  In particular, nxml does syntax testing in real-time so that you can see syntax errors immediately instead of in the output of the xsltproc hours or days later.  For debian, <computeroutput>apt-get install nxml</computeroutput>.</para>
     </sect1>
 
     <sect1 id="install-daemontools">
