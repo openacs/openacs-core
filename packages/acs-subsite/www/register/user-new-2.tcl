@@ -11,7 +11,7 @@ ad_page_contract {
     { last_name:notnull }
     { question "" }
     { answer "" }
-    { url }
+    { url "" }
     { user_id:integer,notnull }
     { return_url [ad_pvt_home] }
     { persistent_cookie_p 0 }
@@ -37,11 +37,19 @@ if {[info exists last_name] && [string first "<" $last_name] != -1} {
     append exception_text "<li> You can't have a &lt; in your last name because it will look like an HTML tag and confuse other users."
 }
 
-if { [info exists url] && [string compare $url "http://"] == 0 } {
-    # the user left the default hint for the url
+if { [info exists url] && \
+     ( [empty_string_p $url] || \
+       [string compare $url "http://"] == 0 ) } {
+
+    #
+    # The user left the default hint for the url, or it's empty.
+    #
     set url ""
+
 } elseif { ![util_url_valid_p $url] } {
+
     # there is a URL but it doesn't match our REGEXP
+
     incr exception_count
     append exception_text "<li>You URL doesn't have the correct form.  A valid URL would be something like \"http://photo.net/philg/\"."
 }
