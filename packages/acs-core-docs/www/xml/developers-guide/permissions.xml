@@ -416,8 +416,10 @@ set package_id [ad_conn package_id]
 set user_id [ad_conn user_id]
 
 set context_bar [ad_context_bar]
-# this line should use permission::permission_p instead of ad_permission_p
-set create_p [ad_permission_p $package_id create]
+set create_p [permission::permission_p \
+      -object_id $package_id \
+      -privilege create \
+      -party_id  $user_id]
 
 db_multirow notes notes {
   select note_id, owner_id, title, body,
