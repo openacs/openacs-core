@@ -92,7 +92,8 @@ ad_proc -public template::element::create { form_id element_id args } {
                           step, expression is a block to Tcl code that evaluates to
                           1 or 0, and message is to be displayed to the user when 
                           the validation step fails, that is, if the expression 
-                          evaluates to 0.
+                          evaluates to 0. Use the special variable <tt>$value</tt> 
+			  to refer to the value entered by the user in that field.
 
     @option sign          specify for a hidden widget that its value should be
                           signed
