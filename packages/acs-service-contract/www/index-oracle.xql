@@ -6,12 +6,16 @@
 <fullquery name="valid_installed_binding">      
       <querytext>
         select 
-            contract_id,
-            impl_id,
+            b.contract_id,
+            b.impl_id,
             acs_sc_contract.get_name(contract_id) as contract_name,
-            acs_sc_impl.get_name(impl_id) as impl_name
+            acs_sc_impl.get_name(b.impl_id) as impl_name,
+            impl.impl_owner_name
         from
-            acs_sc_bindings
+            acs_sc_bindings b, 
+            acs_sc_impls impl
+        where
+            impl.impl_id = b.impl_id
       </querytext>
 </fullquery>
 

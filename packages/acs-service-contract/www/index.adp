@@ -24,6 +24,7 @@
 @valid_installed_binding.contract_name@,
 @valid_installed_binding.impl_id@
 @valid_installed_binding.impl_name@
+(@valid_installed_binding.impl_owner_name@)
 [<a href="binding-uninstall?contract_id=@valid_installed_binding.contract_id@&impl_id=@valid_installed_binding.impl_id@">Uninstall</a>]</li>
 </multiple>
 </else>
