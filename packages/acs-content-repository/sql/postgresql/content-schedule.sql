@@ -31,8 +31,8 @@ for each row execute procedure cr_scheduled_release_tr ();
 
 create function cr_scheduled_release_exec () returns integer as '
 declare
-  exec__last_exec             timestamp;
-  exec__this_exec             timestamp default now();
+  exec__last_exec             timestamptz;
+  exec__this_exec             timestamptz default current_timestamp;
   exec__items_released        integer default 0;
   exec__items_expired         integer default 0;
   exec__err_num               integer;  -- sqlcode

@@ -463,7 +463,7 @@ if {$flush_p} {
 
     <p>
     Here's an example with named parameters, and namespaces (notice the preferred way of
-    declaring namespaces and namespaced procedures). Ignore the '\' in '\@param',
+    declaring namespaces and namespaced procedures). Ignore the "\" in "\@param",
     I had to use it so the api-browser wouldn't think the parameter docs were for ad_proc
     itself:
     </p>

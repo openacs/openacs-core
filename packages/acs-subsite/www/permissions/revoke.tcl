@@ -8,6 +8,7 @@ ad_page_contract {
 } {
   object_id:integer,notnull
   {revoke_list:multiple,optional {}}
+  {application_url ""}
 }
 
 ad_require_permission $object_id admin
@@ -38,7 +39,7 @@ foreach item $revoke_list {
 doc_body_append "</ul>
 
 <form method=get action=revoke-2>
-[export_form_vars object_id]
+[export_vars -form {object_id application_url}]
 
 "
 

@@ -79,8 +79,6 @@ ad_proc -public relation_add {
 
     db_transaction {
 
-	ns_log Notice "DOTLRN: relation_add: var_list is $var_list"
-
 	set rel_id [package_instantiate_object \
 		-creation_user $creation_user \
 		-creation_ip $creation_ip \

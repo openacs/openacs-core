@@ -10,6 +10,19 @@
 # http://www.fsf.org/copyleft/gpl.html
 
 ad_proc -public template::data::validate { type value_ref message_ref } {
+    This proc invokes the validation code for a given type.
+
+    @see template::data::validate::boolean 
+    @see template::data::validate::date 
+    @see template::data::validate::email 
+    @see template::data::validate::filename 
+    @see template::data::validate::integer 
+    @see template::data::validate::keyword 
+    @see template::data::validate::search 
+    @see template::data::validate::string 
+    @see template::data::validate::text 
+    @see template::data::validate::url  
+} { 
 
   return [validate::$type $value_ref $message_ref]
 }
@@ -79,6 +92,12 @@ ad_proc -public template::data::validate::text { value_ref message_ref } {
   return 1
 }
 
+ad_proc -public template::data::validate::string { value_ref message_ref } {
+
+  # anything is valid for string
+  return 1
+}
+
 ad_proc -public template::data::validate::keyword { value_ref message_ref } {
 
   upvar 2 $message_ref message $value_ref value
@@ -105,11 +124,24 @@ ad_proc -public template::data::validate::filename { value_ref message_ref } {
   return $result 
 }
 
+ad_proc -public template::data::validate::email { value_ref message_ref } {
+
+  upvar 2 $message_ref message $value_ref value
+
+  set result [util_email_valid_p $value]
+
+  if { ! $result } {
+    set message "Invalid email format \"$value\""
+  }
+   
+  return $result 
+}
+
 ad_proc -public template::data::validate::url { value_ref message_ref } {
 
   upvar 2 $message_ref message $value_ref value
 
-  set expr {^(http://)?([a-zA-Z0-9_\-\.]+(:[0-9]+)?)?[a-zA-Z0-9_.%/?=&-]+$}
+  set expr {^(https?://)?([a-zA-Z0-9_\-\.]+(:[0-9]+)?)?[a-zA-Z0-9_.%/?=&-]+$}
   set result [regexp $expr $value]
 
   if { ! $result } {

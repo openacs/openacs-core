@@ -6,7 +6,7 @@
    <fullquery name="lang::system::timezone_utc_offset.system_utc_offset">
       <querytext>
       
-	select ( (current_time - timezone__local_to_utc (:system_timezone, current_time)) * 24 )
+	select timezone__get_offset (timezone__get_id(:system_timezone), current_timestamp)
     
       </querytext>
    </fullquery>

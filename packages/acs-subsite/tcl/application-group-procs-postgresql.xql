@@ -83,23 +83,6 @@
 	
       </querytext>
 </fullquery>
-
- 
-<fullquery name="application_group::new.parent_group_id_query">      
-      <querytext>
-
-	    select ag.group_id as parent_group_id
-	    from (select tree_ancestor_keys(site_node_get_tree_sortkey(:parent_node_id)) as tree_sortkey) parents,
-                    application_groups ag, site_nodes s, apm_packages a
-                  where s.tree_sortkey = parents.tree_sortkey
-                    and s.object_id = a.package_id
-                    and a.package_id = ag.package_id
-            order by s.tree_sortkey desc
-            limit 1;
-		
-      </querytext>
-</fullquery>
-
  
 <fullquery name="application_group::new.add_group">      
       <querytext>
@@ -114,27 +97,20 @@
 		    :url,
 	            :group_name,
                     :package_id,
-	            :context_id
+	            :package_id
 		)
 	    
       </querytext>
 </fullquery>
-
  
-<fullquery name="application_group::new.add_composition_rel">      
+<fullquery name="application_group::delete.delete">      
       <querytext>
 
-		    select composition_rel__new (
-			    null,
-		            'composition_rel',
-		            :parent_group_id,
-		            :group_id,
-		            :creation_user,
-                            :creation_ip
-		    )
-		
+		select application_group__delete (
+	            :group_id
+		)
+	    
       </querytext>
 </fullquery>
-
  
 </queryset>

@@ -18,24 +18,8 @@
         <release-date>2001-01-24</release-date>
         <vendor url="http://www.arsdigita.com/">ArsDigita Corporation</vendor>
 
-        <requires url="acs-kernel" version="4.0"/>
+        <requires url="acs-kernel" version="4.6.2"/>
 
-        <files>
-            <file type="package_spec" path="acs-developer-support.info"/>
-            <file type="tcl_init" path="tcl/acs-developer-support-init.tcl"/>
-            <file type="query_file" db_type="oracle" path="tcl/acs-developer-support-procs-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="tcl/acs-developer-support-procs-postgresql.xql"/>
-            <file type="tcl_procs" path="tcl/acs-developer-support-procs.tcl"/>
-            <file type="query_file" path="tcl/acs-developer-support-procs.xql"/>
-            <file type="documentation" path="www/doc/developer-support-example.html"/>
-            <file type="documentation" path="www/doc/index.html"/>
-            <file type="content_page" path="www/index.tcl"/>
-            <file type="content_page" path="www/request-info.tcl"/>
-            <file type="query_file" path="www/request-info.xql"/>
-            <file type="content_page" path="www/set-enabled.tcl"/>
-            <file type="content_page" path="www/set-user-switching-enabled.tcl"/>
-            <file type="content_page" path="www/set-user.tcl"/>
-        </files>
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DatabaseEnabledP"  default="0" description="remember information about every database request?" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="UserSwitchingEnabledP"  default="0" description="will present a widget on every page that allows you to switch user" section_name="developer-support"/>

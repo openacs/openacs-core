@@ -60,10 +60,8 @@ namespace eval site_node {
         {-package_name ""}
         {-context_id ""}
         {-package_key:required}
-        {-package_id ""}
     } {
-        Instantiate and mount a package of given type. If the package is a singleton (should only have one instance)
-        and an instance already exists then this proc will attempt to mount that instance.
+        Instantiate and mount a package of given type.
 
         @param node_id        The id of the node in the site map where the package should be mounted.
                               If not specified a new node under the main site will be created.
@@ -72,11 +70,9 @@ namespace eval site_node {
         @param node_name      If node_id is not specified then this will be the name of the
                               new site node that is created. Defaults to package_key.
         @param package_name The name of the new package instance. Defaults to pretty name of package type.
-        @param context_id     The context_id of the package. Defaults to the package_id at the parent
-                              node in the site map. If there is no such package then context_id will be the
-                              id of the parent node itself.
+        @param context_id     The context_id of the package. Defaults to the closest ancestor package
+                              in the site map.
         @param package_key    The key of the package type to instantiate.
-        @param package_id     The id of the new package. Optional.
 
         @return The id of the instantiated package
                           
@@ -96,25 +92,12 @@ namespace eval site_node {
 
         # Get the context_id of the new package
         if {[empty_string_p $context_id]} {
-            # Attempt to use the package_id at the parent node
-            if { [empty_string_p $parent_node_id] } {
-                set parent_node_id [site_node::get_parent_id -node_id $node_id]
-            }
-            array set node [site_node::get -node_id $parent_node_id]
-            set context_id $node(object_id)
-
-            if {[empty_string_p $context_id]} {
-                # No package at parent node, so use the id of the node itself instead
-                # Should we use default_context here instead?
-                set context_id $parent_node_id
-            }
+            # Default to the closest ancestor package_id
+            set context_id [site_node::closest_ancestor_package -node_id $node_id]
         }
 
         # Instantiate the package
-        set package_id [apm_package_instance_new -instance_name $package_name \
-                                                 -context_id $context_id \
-                                                 -package_key $package_key \
-                                                 -package_id $package_id]
+        set package_id [apm_package_instance_new -- $package_name $context_id $package_key]
 
         # Mount the package
         site_node::mount -node_id $node_id -object_id $package_id
@@ -216,8 +199,14 @@ namespace eval site_node {
 
     ad_proc -public get_from_url {
         {-url:required}
+    	{-exact:boolean}
     } {
-        returns an array representing the site node that matches the given url
+        Returns an array representing the site node that matches the given url.<p>
+
+	A trailing '/' will be appended to $url if required and not present.<p>
+
+	If the '-exact' switch is not present and $url is not found, returns the
+	first match found by successively removing the trailing $url path component.<p>
 
         @see site_node::get
     } {
@@ -236,20 +225,22 @@ namespace eval site_node {
         }
 
         # chomp off part of the url and re-attempt
-        while {![empty_string_p $url]} {
-            set url [string trimright $url /]
-            set url [string range $url 0 [string last / $url]]
+	if {!$exact_p} {
+	    while {![empty_string_p $url]} {
+		set url [string trimright $url /]
+		set url [string range $url 0 [string last / $url]]
 
-            if {[nsv_exists site_nodes $url]} {
-                array set node [nsv_get site_nodes $url]
+		if {[nsv_exists site_nodes $url]} {
+		    array set node [nsv_get site_nodes $url]
 
-                if {[string equal $node(pattern_p) t] && ![empty_string_p $node(object_id)]} {
-                    return [array get node]
-                }
-            }
-        }
+		    if {[string equal $node(pattern_p) t] && ![empty_string_p $node(object_id)]} {
+			return [array get node]
+		    }
+		}
+	    }
+	}
 
-        error "site node not found at url $url"
+        error "site node not found at url \"$url\""
     }
 
     ad_proc -public get_from_object_id {
@@ -265,10 +256,12 @@ namespace eval site_node {
     ad_proc -public get_all_from_object_id {
         {-object_id:required}
     } {
-        return a list of site nodes associated with the given object_id
+        Return a list of site node info associated with the given object_id. 
+        The nodes will be ordered descendingly by url (children before their parents).
     } {
         set node_id_list [list]
 
+        set url_list [list]
         foreach url [get_url_from_object_id -object_id $object_id] {
             lappend node_id_list [get -url $url]
         }
@@ -293,7 +286,10 @@ namespace eval site_node {
         {-object_id:required}
     } {
         returns a list of urls for site_nodes that have the given object
-        mounted or the empty list if there are none
+        mounted or the empty list if there are none. The
+        url:s will be returned in descending order meaning any children will
+        come before their parents. This ordering is useful when deleting site nodes
+        as we must delete child site nodes before their parents.
     } {
         return [db_list select_url_from_object_id {}]
     }
@@ -342,7 +338,58 @@ namespace eval site_node {
         return $node(object_id)
     }
 
-    
+    ad_proc -public closest_ancestor_package {
+        {-url ""}
+        {-node_id ""}
+        {-package_key ""}
+    } {
+        Starting with the node at with given id, or at given url,
+        climb up the site map and return the id of the first not-null
+        mounted object. If no ancestor object is found the empty string is returned.
+        The id of the object at the given node itself will never be returned.
+
+        @param url          The url of the node to start from. You must provide either url or node_id.
+                            An empty url is taken to mean the main site.
+        @param node_id      The id of the node to start from. Takes precedence over any provided url.
+        @param package_key  Restrict search to objects of this package type.
+
+        @return The id of the first object found and an empty string if no object
+                is found. Throws an error if no node with given url can be found.
+
+        @author Peter Marklund
+    } {
+        # Make sure we have the id of the start node to work with
+        if { [empty_string_p $node_id] } {
+              if { [empty_string_p $url] } {
+                  set url "/"
+              } 
+
+              set node_id [site_node::get_node_id -url $url]
+        }
+
+        # Climb up the site map starting with node_id and stop when we have
+        # an object to use as context or when we have reached the root node
+        set loop_node_id $node_id
+        set main_node_id [site_node::get_node_id -url "/"]
+        set context_id ""
+        set context_package_key "___${package_key}"
+        while { [empty_string_p $context_id] && \
+                [expr [empty_string_p $package_key] || [string equal $package_key $context_package_key]]} {
+
+            set loop_node_id [site_node::get_parent_id -node_id $loop_node_id]
+        
+            if { [string equal $loop_node_id ""] } {
+                # There is no parent node - we reached the root of the site map
+                break
+            }
+        
+            array set node_array [site_node::get -node_id $loop_node_id]
+            set context_id $node_array(object_id)
+            set context_package_key $node_array(package_key)
+        }       
+
+        return $context_id
+    }    
 }
 
 ##############
@@ -438,10 +485,11 @@ ad_proc -public -deprecated -warn site_node_mount_application {
 
     @return The package id of the newly mounted package
 } {
-    return [site_node::instantiate_and_mount -parent_node_id $parent_node_id \
-                                             -node_name $url_path_component
-                                             -package_name $instance_name \
-                                             -package_key $package_key]
+    return [site_node::instantiate_and_mount \
+                -parent_node_id $parent_node_id \
+                -node_name $url_path_component \
+                -package_name $instance_name \
+                -package_key $package_key]
 }
 
 ad_proc -public site_map_unmount_application {

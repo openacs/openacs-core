@@ -37,10 +37,10 @@ drop function inline_0 ();
 
 
 
-
 --------------------------------------------------------------
 -- MIME TYPES
 --------------------------------------------------------------
+-- Mime data for the following table is in mime-type-data.sql
 
 create table cr_mime_types (
   label			varchar(200),
@@ -60,35 +60,26 @@ comment on table cr_mime_types is '
   a file extension to the file after its MIME type is specified.
 ';
 
--- Common mime types (administered from admin pages)
+-- Currently file_extension is the pk although it seems likely someone
+-- will want to support multiple mime types with the same extension.
+-- Would need UI work however
 
-insert into cr_mime_types(label, mime_type, file_extension) values ('Enhanced text', 'text/enhanced', 'etxt');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Plain text', 'text/plain', 'txt');
-insert into cr_mime_types(label, mime_type, file_extension) values ('HTML text', 'text/html', 'html');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Fixed-width text', 'text/fixed-width', 'ftxt');
+create table cr_extension_mime_type_map (
+   extension            varchar(200) 
+                        constraint cr_mime_type_extension_map_pk
+                        primary key,
+   mime_type            varchar(200) 
+                        constraint cr_mime_ext_map_mime_type_ref
+                        references cr_mime_types
+); 
+create index cr_extension_mime_type_map_idx on cr_extension_mime_type_map(mime_type);
 
-insert into cr_mime_types(label, mime_type, file_extension) values ('Rich Text Format (RTF)', 'text/richtext', 'rtf');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Binary', 'application/octet-stream', 'bin');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft Word', 'application/msword', 'doc');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft Excel', 'application/msexcel', 'xls');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft PowerPoint', 'application/powerpoint', 'ppt');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft Project', 'application/msproject', 'mpp');
-insert into cr_mime_types(label, mime_type, file_extension) values ('PostScript', 'application/postscript', 'ps');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Adobe Illustrator', 'application/x-illustrator', 'ai');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Adobe PageMaker', 'application/x-pagemaker', 'p65');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Filemaker Pro', 'application/filemaker', 'fm');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Image Pict', 'image/x-pict', 'pic');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Photoshop', 'application/x-photoshop', 'psd');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Acrobat', 'application/pdf', 'pdf');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Video Quicktime', 'video/quicktime', 'mov');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Video MPEG', 'video/mpeg', 'mpg');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Audio AIFF',  'audio/aiff', 'aif');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Audio Basic', 'audio/basic',      'au');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Audio Voice', 'audio/voice',      'voc');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Audio Wave', 'audio/wave', 'wav');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Archive Zip', 'application/zip', 'zip');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Archive Tar', 'application/z-tar', 'tar');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Unknown', '*/*', '');
+comment on table cr_extension_mime_type_map is '
+  a mapping table for extension to mime_type in db version of ns_guesstype data
+';
+
+-- Load the mime type data.
+\i ../common/mime-type-data.sql
 
 create table cr_content_mime_type_map (
   content_type  varchar(100)
@@ -106,7 +97,9 @@ comment on table cr_content_mime_type_map is '
   content type.
 ';
 
-
+-- RI Index 
+-- fairly static, could probably omit this one.
+create index cr_cont_mimetypmap_mimetyp_idx ON cr_content_mime_type_map(mime_type);
 
 --------------------------------------------------------------
 -- LOCALES
@@ -164,6 +157,10 @@ comment on table cr_type_children is '
   contain.
 ';
 
+-- RI Indexes
+create index cr_type_children_chld_type_idx ON cr_type_children(child_type);
+
+
 create table cr_type_relations (
   content_type  varchar(100)
 		constraint cr_type_relations_parent_fk
@@ -182,6 +179,10 @@ comment on table cr_type_relations is '
   Constrains the allowable object types to which a content type may
   relate (see above).
 ';
+
+-- RI Indexes 
+create index cr_type_relations_tgt_typ_idx ON cr_type_relations(target_type);
+
 
 --------------------------------------------------------------
 -- CONTENT ITEMS
@@ -415,6 +416,9 @@ create unique index cr_item_rel_unq on cr_item_rels (
   item_id, related_object_id, relation_tag
 );
 
+-- RI Indexes
+create index cr_item_rels_rel_obj_id_idx ON cr_item_rels(related_object_id);
+
 comment on table cr_item_rels is '
   Describes all relations from one item to any number of other
   objects.
@@ -448,7 +452,7 @@ create table cr_revisions (
 		  cr_items on delete cascade,
   title		  varchar(1000),
   description	  text,
-  publish_date	  timestamp,
+  publish_date	  timestamptz,
   mime_type	  varchar(200) default 'text/plain'
 		  constraint cr_revisions_mime_type_ref
 		  references cr_mime_types,
@@ -460,6 +464,10 @@ create table cr_revisions (
   content	  text,
   content_length  integer
 );
+
+-- RI Indexes 
+create index cr_revisions_lob_idx ON cr_revisions(lob);
+create index cr_revisions_item_id_idx ON cr_revisions(item_id);
 
 create trigger cr_revisions_lob_trig before delete or update or insert
 on cr_revisions for each row execute procedure on_lob_ref();
@@ -688,7 +696,7 @@ create table cr_item_publish_audit (
   new_revision       integer, 
   old_status         varchar(40),
   new_status         varchar(40),
-  publish_date       timestamp
+  publish_date       timestamptz
                      constraint cr_item_publish_audit_date_nil
                      not null
 );
@@ -706,12 +714,12 @@ create table cr_release_periods (
 		   references cr_items
                    constraint cr_release_periods_pk
 		   primary key,
-  start_when	   timestamp default now(),
-  end_when	   timestamp default now() + interval '20 years'
+  start_when	   timestamptz default current_timestamp,
+  end_when	   timestamptz default current_timestamp + interval '20 years'
 );
 
 create table cr_scheduled_release_log (
-  exec_date        timestamp default now() not null,
+  exec_date        timestamptz default current_timestamp not null,
   items_released   integer not null,
   items_expired    integer not null,
   err_num          integer,
@@ -725,7 +733,7 @@ comment on table cr_scheduled_release_log is '
 
 create table cr_scheduled_release_job (
   job_id     integer,
-  last_exec  timestamp
+  last_exec  timestamptz
 );
 
 comment on table cr_scheduled_release_job is '
@@ -762,6 +770,8 @@ comment on table cr_folders is '
   repository.
 ';
 
+--RI Indexes
+create index cr_folders_package_id_idx ON cr_folders(package_id);
 
 create function cr_folder_ins_up_ri_trg() returns opaque as '
 declare
@@ -821,8 +831,8 @@ comment on table cr_folder_type_map is '
   thos available for content types.  
 ';
 
-
-
+-- RI Indexes 
+create index cr_folder_typ_map_cont_typ_idx ON cr_folder_type_map(content_type);
 
 --------------------------------------------------------------
 -- CONTENT TEMPLATES
@@ -986,6 +996,8 @@ create table cr_keywords (
   tree_sortkey           varbit
 );
 
+-- RI Indexes 
+create index cr_keywords_parent_id_idx ON cr_keywords(parent_id);
 
 create function cr_keywords_get_tree_sortkey(integer) returns varbit as '
 declare
@@ -1116,6 +1128,8 @@ create table cr_item_keyword_map (
   primary key (item_id, keyword_id)
 );
 
+-- RI Indexes
+create index cr_item_keyword_map_kw_id_idx ON cr_item_keyword_map(keyword_id);
 
 --------------------------------------------------------------
 -- TEXT SUBMISSION
@@ -1209,7 +1223,7 @@ begin
   PERFORM content_type__register_mime_type(''content_revision'', 
                                            ''text/plain'');
   PERFORM content_type__register_mime_type(''content_revision'', 
-                                           ''text/richtext'');
+                                           ''application/rtf'');
 
   v_id := content_folder__new (
     ''pages'',
@@ -1359,7 +1373,6 @@ alter table cr_folders
 add constraint cr_flder_pkg_id_fk foreign key (package_id) references apm_packages (package_id);
 
 --constraint cr_fldr_pkg_id_fk
--- show errors
 
 -- prompt *** Preparing search indices...
 \i content-search.sql

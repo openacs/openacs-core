@@ -167,8 +167,8 @@ begin
 			 references cr_items
 			 constraint cr_release_periods_pk
 			 primary key,
-	start_when	 timestamp default now(),
-	end_when	 timestamp default now() + interval ''20 years''
+	start_when	 timestamptz default current_timestamp,
+	end_when	 timestamptz default current_timestamp + interval ''20 years''
       )'';
 
   end if;
@@ -179,7 +179,7 @@ begin
 
     execute ''
       create table cr_scheduled_release_log (
-	exec_date        timestamp default now() not null,
+	exec_date        timestamptz default current_timestamp not null,
 	items_released   integer not null,
 	items_expired    integer not null,
 	err_num          integer,
@@ -195,7 +195,7 @@ begin
     execute ''
       create table cr_scheduled_release_job (
         job_id     integer,
-        last_exec  timestamp
+        last_exec  timestamptz
       )'';
 
     execute ''

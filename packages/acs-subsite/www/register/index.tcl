@@ -13,11 +13,11 @@ ad_page_contract {
     persistent_login_p:onevalue
 }
 
-set old_login_process [ad_parameter "SeparateEmailPasswordPagesP" security "0"]
-set allow_persistent_login_p [ad_parameter AllowPersistentLoginP security 1]
-set persistent_login_p [ad_parameter AllowPersistentLoginP security 1]
+set old_login_process [parameter::get -parameter SeparateEmailPasswordPagesP -default 0]
+set allow_persistent_login_p [parameter::get -parameter AllowPersistentLoginP -default 1]
+set persistent_login_p [parameter::get -parameter AllowPersistentLoginP -default 1]
 
-set email_forgotten_password_p [ad_parameter EmailForgottenPasswordP security 1]
+set email_forgotten_password_p [parameter::get -parameter EmailForgottenPasswordP -default 1]
 
 if {![info exists return_url]} {
     set return_url [ad_pvt_home]
@@ -35,6 +35,6 @@ set token_id [sec_get_random_cached_token_id]
 set token [sec_get_token $token_id]
 set hash [ns_sha1 "$time$token_id$token"]
 
-set export_vars [export_form_vars return_url time token_id hash]
+set export_vars [export_vars -form {return_url time token_id hash}]
 
 ad_return_template

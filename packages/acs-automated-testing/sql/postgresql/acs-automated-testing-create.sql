@@ -27,7 +27,7 @@ create table aa_test_results (
   testcase_id        varchar(512),
   package_key        varchar(100),
   test_id            integer,
-  timestamp          timestamp,
+  timestamp          timestamptz,
   result             varchar(4),
   notes              varchar(2000)
 );
@@ -36,7 +36,7 @@ create table aa_test_results (
 create table aa_test_final_results (
   testcase_id        varchar(512),
   package_key        varchar(100),
-  timestamp          timestamp,
+  timestamp          timestamptz,
   passes             integer,
   fails              integer
 );

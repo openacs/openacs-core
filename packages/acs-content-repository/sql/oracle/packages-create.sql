@@ -416,7 +416,8 @@ function is_valid_child (
   --*/
 
   item_id	in cr_items.item_id%TYPE,
-  content_type  in acs_object_types.object_type%TYPE
+  content_type  in acs_object_types.object_type%TYPE,
+  relation_tag  in cr_child_rels.relation_tag%TYPE default null
 ) return char;
 
 procedure delete (
@@ -1142,6 +1143,12 @@ function is_extlink (
   item_id	   in cr_items.item_id%TYPE
 ) return char;
 
+procedure copy (
+  extlink_id		in cr_extlinks.extlink_id%TYPE,
+  target_folder_id	in cr_folders.folder_id%TYPE,
+  creation_user		in acs_objects.creation_user%TYPE,
+  creation_ip		in acs_objects.creation_ip%TYPE default null
+);
 
 end content_extlink;
 /

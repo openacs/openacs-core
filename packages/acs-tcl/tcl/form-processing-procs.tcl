@@ -27,7 +27,7 @@ ad_proc -public ad_form {
 
     In general the full functionality of the form builder is exposed by ad_form, but with a
     much more user-friendly and readable syntax and with state management handled automatically.
-    
+
     <p>
 
     In order to make it possible to use ad_form to build common form snippets within procs, code
@@ -114,7 +114,7 @@ ad_proc -public ad_form {
     If the validation check returns true, one of the new_data or edit_data code blocks will be executed depending
     on whether or not "my_table_key" was defined during the initial request.  "my_table_key" is passed as a hidden
     form variable and is signed and verified, reducing the opportunity for key spoofing by malicious outsiders.
-    
+
     <p>
 
     This example includes dummy redirects to a script named "somewhere" to make clear the fact that after
@@ -171,27 +171,38 @@ ad_proc -public ad_form {
     <dd>Declare form elements (described in detail below)
     </dd>
 
+    <p><dt><b>-on_request</b></dt><p>
+    <dd>A code block which sets the values for each element of the form meant to be modifiable by
+        the user when the built-in key management feature is being used or to define options for
+        select lists etc. You just need to set the values as local
+        variables in the code block, and they'll get fetched and used as element values for you.
+    </dd>
+
     <p><dt><b>-select_query</b></dt><p>
     <dd>Defines a query that returns a single row containing values for each element of the form meant to be
-        modifiable by the user.
+        modifiable by the user.  Can only be used if an element of type key has been declared.
     </dd>
 
     <p><dt><b>-select_query_name</b></dt><p>
     <dd>The name of a query to be looked up in the appropriate query file that returns a single row containing
         values for each element of the form meant to be modifiable by the user.  In the OpenACS 4 environment this
         should normally be used rather than -select_query, as query files are the mechanism used to make the
-        support of multiple RDMBS systems possible.
+        support of multiple RDMBS systems possible.  Can only be used if an element of type key has been
+        declared
     </dd>
 
     <p><dt><b>-edit_request</b></dt><p>
     <dd>A code block which sets the values for each element of the form meant to be modifiable by the user.  Use
-        this when a single query to grab database values is insufficient. You just need to set the values as local
+        this when a single query to grab database values is insufficient.  Can only be used if an element of
+        type key is defined.  This block is only executed if the page is called with a valid key, i.e. a
+        self-submit form to add or edit an item called to edit the data. You just need to set the values as local
         variables in the code block, and they'll get fetched and used as element values for you.
     </dd>
 
     <p><dt><b>-new_request</b></dt><p>
-    <dd>A code block which initializes elements for a new row. Use this to set default values. 
-        You just need to set the values as local
+    <dd>A code block which sets the values for each element of the form meant to be modifiable by the user.  Use
+        this when a single query to grab database values is insufficient.  Can only be used if an element of
+        type key is defined.  This block complements the -edit_request block. You just need to set the values as local
         variables in the code block, and they'll get fetched and used as element values for you.
     </dd>
 
@@ -205,10 +216,14 @@ ad_proc -public ad_form {
         block.
     </dd>
 
+    <p><dt><b>-on_refresh</b></dt><p>
+    <dd>Executed when the form comes back from being refreshed using javascript with the __refreshing_p flag set.
+    </dd>
+
     <p><dt><b>-on_submit</b></dt><p>
     <dd>When the form is submitted, this code block will be executed before any new_data or edit_data code block.
         Use this if your form doesn't interact with the database or if the database type involved includes a Tcl
-        API that works for both new and existing data.
+        API that works for both new and existing data. The values of the form's elements will be available as local variables.
     </dd>
 
     <p><dt><b>-new_data</b></dt><p>
@@ -292,7 +307,7 @@ ad_proc -public ad_form {
     ad_form.  If the sequence name is not specified, the sequence acs_object_id_seq is used to generate new keys.
 
     Examples:
-    
+
     <blockquote><pre>
     my_key:key
     </pre><p>
@@ -301,7 +316,7 @@ ad_proc -public ad_form {
 
     <p>
     </blockquote>
-    
+
     <blockquote><pre>
     my_key:key(some_sequence_name)
     </pre><p>
@@ -310,7 +325,7 @@ ad_proc -public ad_form {
 
     <p>
     </blockquote>
-    
+
     <blockquote><pre>
     {my_key:text(multiselect),multiple       {label "select some values"}
                                               {options {first second third fourth fifth}}
@@ -322,7 +337,7 @@ ad_proc -public ad_form {
 
     <p>
     </blockquote>
-    
+
     <blockquote><pre>
     {hide_me:text(hidden)                     {value 3}}
     </pre><p>
@@ -331,7 +346,7 @@ ad_proc -public ad_form {
 
     <p>
     </blockquote>
-    
+
     <blockquote><pre>
     start_date:date,to_sql(sql_date),to_html(sql_date),optional
     </pre><p>
@@ -363,7 +378,7 @@ ad_proc -public ad_form {
     } 
 
     set valid_args { form method action mode html name select_query select_query_name new_data on_refresh
-                     edit_data validate on_submit after_submit confirm_template new_request edit_request
+                     edit_data validate on_submit after_submit confirm_template on_request new_request edit_request
                      export cancel_url cancel_label has_edit actions };
 
     ad_arg_parser $valid_args $args
@@ -672,11 +687,15 @@ ad_proc -public ad_form {
                     after_html -
                     result_datatype -
                     search_query -
-                    search_query_name {
+                    search_query_name -
+                    maxlength {
                         if { [llength $extra_arg] > 2 || [llength $extra_arg] == 1 } {
                             return -code error "element $element_name: \"$extra_arg\" requires exactly one argument"
                         }
                         lappend form_command [uplevel [list subst [lindex $extra_arg 1]]]
+                    }
+                    default {
+                        ns_log Error "Unknown switch '[lindex $extra_arg 0]' to ad_form on url [ad_return_url]"
                     }
                 }
             }
@@ -725,89 +744,107 @@ ad_proc -public ad_form {
         return
     }
 
-    if { [template::form is_request $form_name] && [info exists af_key_name($form_name)] } {
+    if { [template::form is_request $form_name] } {
 
-        set key_name $af_key_name($form_name)
-        upvar #$level $key_name $key_name
         upvar #$level __ad_form_values__ values
 
-        # Check to see if we're editing an existing database value
-        if { [info exists $key_name] } {
-            if { [info exists edit_request] } {
-                if { [info exists select_query] || [info exists select_query_name] } {
-                    return -code error "Edit request block conflicts with select query"
-                }
-                ad_page_contract_eval uplevel #$level $edit_request
-                foreach element_name $af_element_names($form_name) {
-                    if { [llength $element_name] == 1 } {
-                        if { [uplevel \#$level [list info exists $element_name]] } {
-                            set values($element_name) [uplevel \#$level [list set $element_name]]
-                        }
-                    }
-                }            
-
-            } else {
-
-                # The key exists, grab the existing values if we have an select_query clause
-
-                if { ![info exists select_query] && ![info exists select_query_name] } {
-                    return -code error "Key \"$key_name\" has the value \"[set $key_name]\" but no select_query or select_query_name clause exists"
-                }
-
-                if { [info exists select_query_name] } {
-                    set select_query ""
-                } else {
-                    set select_query_name ""
-                }
-
-                if { ![uplevel #$level [list db_0or1row $select_query_name [join $select_query " "] -column_array __ad_form_values__]] } {
-                    return -code error "Error when selecting values"
-                }
-
-                foreach element_name $af_element_names($form_name) {
-                    if { [llength $element_name] == 1 } {
+        if { [template::form is_request $form_name] && [info exists on_request] } {
+            ad_page_contract_eval uplevel #$level $on_request
+            foreach element_name $af_element_names($form_name) {
+                if { [llength $element_name] == 1 } {
+                    if { [uplevel \#$level [list info exists $element_name]] } {
+                        set values($element_name) [uplevel \#$level [list set $element_name]]
                         if { [info exists af_from_sql(${form_name}__$element_name)] } {
                             set values($element_name) [template::util::$af_type(${form_name}__$element_name)::acquire \
                                                        $af_from_sql(${form_name}__$element_name) $values($element_name)]
                         }
                     }
                 }
-            }
-
-            set values($key_name) [set $key_name]
-            set values(__new_p) 0
-
-        } else {
-
-            # Make life easy for the OACS 4.5 hacker by automagically generating a value for
-            # our new database row.  Set a local so the query can use bindvar notation (the driver
-            # doesn't support array bind vars)
-
-            if { [info exists af_sequence_name($form_name)] } {
-                set sequence_name $af_sequence_name($form_name)
-            } else {
-                set sequence_name "acs_object_id_seq"
-            }
-
-            if { ![db_0or1row get_key "" -column_array values] } {
-                return -code error "Couldn't get the next value from sequence \"$af_sequence_name($form_name)\""
-            }
-            set values(__new_p) 1
-
-            if { [info exists new_request] } {
-                ad_page_contract_eval uplevel #$level $new_request
-                # LARS: Set form values based on local vars in the new_request block
-                foreach element_name $af_element_names($form_name) {
-                    if { [llength $element_name] == 1 } {
-                        if { [uplevel \#$level [list info exists $element_name]] } {
-                            set values($element_name) [uplevel \#$level [list set $element_name]]
-                        }
-                    }
-                }            
-            }
+            }            
         }
 
-        set values(__key_signature) [ad_sign "$values($key_name):$form_name"]
+        if { [info exists af_key_name($form_name)] } {
+
+            set key_name $af_key_name($form_name)
+            upvar #$level $key_name $key_name
+
+            # Check to see if we're editing an existing database value
+            if { [info exists $key_name] } {
+                if { [info exists edit_request] } {
+                    if { [info exists select_query] || [info exists select_query_name] } {
+                        return -code error "Edit request block conflicts with select query"
+                    }
+                    ad_page_contract_eval uplevel #$level $edit_request
+                    foreach element_name $af_element_names($form_name) {
+                        if { [llength $element_name] == 1 } {
+                            if { [uplevel \#$level [list info exists $element_name]] } {
+                                set values($element_name) [uplevel \#$level [list set $element_name]]
+                            }
+                        }
+                    }            
+
+                } else {
+
+                    # The key exists, grab the existing values if we have an select_query clause
+
+                    if { ![info exists select_query] && ![info exists select_query_name] } {
+                        return -code error "Key \"$key_name\" has the value \"[set $key_name]\" but no select_query or select_query_name clause exists"
+                    }
+
+                    if { [info exists select_query_name] } {
+                        set select_query ""
+                    } else {
+                        set select_query_name ""
+                    }
+
+                    if { ![uplevel #$level [list db_0or1row $select_query_name [join $select_query " "] -column_array __ad_form_values__]] } {
+                        return -code error "Error when selecting values"
+                    }
+
+                    foreach element_name $af_element_names($form_name) {
+                        if { [llength $element_name] == 1 } {
+                            if { [info exists af_from_sql(${form_name}__$element_name)] } {
+                                set values($element_name) [template::util::$af_type(${form_name}__$element_name)::acquire \
+                                                           $af_from_sql(${form_name}__$element_name) $values($element_name)]
+                            }
+                        }
+                    }
+                }
+
+                set values($key_name) [set $key_name]
+                set values(__new_p) 0
+
+            } else {
+
+                # Make life easy for the OACS 4.5 hacker by automagically generating a value for
+                # our new database row.  Set a local so the query can use bindvar notation (the driver
+                # doesn't support array bind vars)
+
+                if { [info exists af_sequence_name($form_name)] } {
+                    set sequence_name $af_sequence_name($form_name)
+                } else {
+                    set sequence_name "acs_object_id_seq"
+                }
+
+                if { [catch {set values($key_name) [db_nextval $sequence_name]} errmsg]} {
+                    return -code error "Couldn't get the next value from sequence: $errmsg\""
+                }
+                set values(__new_p) 1
+
+                if { [info exists new_request] } {
+                    ad_page_contract_eval uplevel #$level $new_request
+                    # LARS: Set form values based on local vars in the new_request block
+                    foreach element_name $af_element_names($form_name) {
+                        if { [llength $element_name] == 1 } {
+                            if { [uplevel \#$level [list info exists $element_name]] } {
+                                set values($element_name) [uplevel \#$level [list set $element_name]]
+                            }
+                        }
+                    }            
+                }
+            }
+            set values(__key_signature) [ad_sign "$values($key_name):$form_name"]
+        }
 
         foreach element_name $properties(element_names) {
             if { [info exists values($element_name)] } {
@@ -989,7 +1026,7 @@ ad_proc -public ad_form_new_p {
     This is for pages built with ad_form that handle edit and add requests in one file.
     It returns 1 if the current form being built for the entry of new data, 0 if for
     the editing of existing data.
-    
+
     <p>
 
     It does not make sense to use this in pages that don't use ad_form.
@@ -1016,7 +1053,7 @@ ad_proc -public ad_form_new_p {
 } {
 
     set form [ns_getform]
-    
+
     return [expr {[empty_string_p $form] || [ns_set find $form $key] == -1 || [ns_set get $form __new_p] == 1 }]
 
 }

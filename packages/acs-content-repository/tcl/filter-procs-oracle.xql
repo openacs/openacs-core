@@ -3,7 +3,7 @@
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
 
-<partialquery name="item::get_content.content_as_text">
+<partialquery name="content::get_content.content_as_text">
 	<querytext>
 
 	, content.blob_to_string(content) as text

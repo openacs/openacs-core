@@ -43,6 +43,7 @@
            x.*, 
           :item_id as item_id $text_sql, 
           :content_type as content_type
+          $text_sql
         from
           cr_revisions r, ${table_name}x x
         where

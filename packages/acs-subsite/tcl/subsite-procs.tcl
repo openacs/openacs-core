@@ -14,174 +14,67 @@ namespace eval subsite {
     namespace eval util {}
 }
 
-
-ad_proc -public acs_subsite_after_mount_callback { 
+ad_proc -public subsite::after_mount { 
     {-package_id:required}
     {-node_id:required}
 } {
     This is the TCL proc that is called automatically by the APM
     whenever a new instance of the subsites application is mounted.
 
-    @author Peter Marklund
+    We do three things:
+
+    <ul>
+      <li> Create application group
+      <li> Create segment "Subsite Users"
+      <li> Create relational constraint to make subsite registration 
+           require supersite registration.
+    </ul>
+
+    @author Don Baccus (dhogaza@pacifier.com)
+    @creation-date 2003-03-05
+
 } {
-    subsite::configure_if_necessary -package_id $package_id
+
+    if { [empty_string_p [application_group::group_id_from_package_id -no_complain -package_id $package_id]] } {
+
+        set subsite_name [db_string subsite_name_query {}]
+
+        set truncated_subsite_name [string range $subsite_name 0 89]
+
+        db_transaction {
+
+            # Create subsite application group
+            set group_name "$truncated_subsite_name Parties"
+            set subsite_group_id [application_group::new \
+                                      -package_id $package_id \
+                                      -group_name $group_name]
+
+            # Create segment of registered users
+            set segment_name "$truncated_subsite_name Members"
+            set segment_id [rel_segments_new $subsite_group_id membership_rel $segment_name]
+
+            # Create a constraint that says "to be a member of this subsite you must be a member
+            # of the parent subsite.
+
+            db_1row parent_subsite_query {}
+            set constraint_name "Members of [string range $subsite_name 0 30] must be members of [string range $supersite_name 0 30]"
+            set user_id [ad_conn user_id]
+            set creation_ip [ad_conn peeraddr]
+            db_exec_plsql add_constraint {}
+
+        }
+    }
 }
 
-    ad_proc subsite::configure_if_necessary {
-	{-package_id ""}
-    } {
-	Performs post-install configuration if necessary.
-	See subsite::configured_p to learn how we determine if a subsite has 
-	already been configured.  See subsite::configure to learn what
-	is involved in configuring a subsite.
+ad_proc -public subsite::before_uninstantiate { 
+    {-package_id:required}
+} {
 
-	<p>
+    Delete the application group associated with this subsite.
 
-	NOTE: this proc might not work without a connection (i.e., 
-        [ad_conn isconnected]==1). I haven't tested it without a connection,
-	but I think the code would work right now (assuming the caller passes
-	in a valid package_id). However, in the future, this proc may redirect
-	the administrator to a configuration "wizard" in case we need or want
-	some input from the admin to properly configure the subsite.
-
-	@author Oumi Mehrotra (oumi@arsdigita.com)
-	@creation-date 2000-02-05
-
-	@param package_id The package_id of the subsite application instance
-	to configure.  If package_id is not specified, then 
-	<code>[ad_conn package_id]</code> will be used.
-
-    } {
-	if {![configured_p -package_id $package_id]} {
-	    configure -package_id $package_id
-	}
-
-    }
-
-
-    ad_proc subsite::configured_p {
-	{-package_id ""}
-    } {
-	Determines whether a subsite has been configured.  Returns 1 if
-	configured, or 0 otherwise.  Right now, a subsite is considered
-	to be configured if its application group exists.  In the future,
-	we may store an explicit "configured_p" setting in the DB.
-
-	@author Oumi Mehrotra (oumi@arsdigita.com)
-	@creation-date 2000-02-05
-
-	@param package_id The package_id of the subsite application instance
-	to configure.  If package_id is not specified, then 
-	<code>[ad_conn package_id]</code> will be used.
-    } {
-	if {[empty_string_p [application_group::group_id_from_package_id \
-		-no_complain \
-		-package_id $package_id]]} {
-	    return 0
-	}
-	return 1
-    }
-
-
-
-    ad_proc subsite::configure {
-	{-package_id ""}
-    } {
-	Configures a subsite.  This involves 3 steps:
-
-	<ul>
-        <li> Create application group
-        <li> Create segment "Subsite Users"
-        <li> Create relational constraint to make subsite registration 
-             require supersite registration.
-	</ul>
-
-	@author Oumi Mehrotra (oumi@arsdigita.com)
-	@creation-date 2000-02-05
-
-	@param package_id The package_id of the subsite application instance
-	to configure.  If package_id is not specified, then 
-	<code>[ad_conn package_id]</code> will be used.
-
-    } {
-
-	if {[ad_conn isconnected]} {
-	    if {[empty_string_p $package_id]} {
-		set package_id [ad_conn package_id]
-	    }
-	}
-
-	if {[empty_string_p $package_id]} {
-	    error "subsite::configure - package_id not specified"
-	}
-
-	set subsite_name [db_string subsite_name_query {
-	    select instance_name
-	    from apm_packages
-	    where package_id = :package_id
-	}]
-
-	set truncated_subsite_name [string range $subsite_name 0 89]
-
-	db_transaction {
-
-	    # Create subsite application group
-	    set group_name "$truncated_subsite_name Parties"
-	    set subsite_group_id [application_group::new \
-		    -package_id $package_id \
-		    -group_name $group_name]
-
-	    # Create segment of registered users
-	    set segment_name "$truncated_subsite_name Members"
-	    set segment_id [rel_segments_new $subsite_group_id membership_rel $segment_name]
-
-	    # Create constraint that says "to be a member of this
-	    # subsite, you have to be a member of the parent subsite"
-
-	    set supersite_group_id ""
-
-	    db_0or1row parent_subsite_query {
-		select m.group_id as supersite_group_id,
-                       p.instance_name as supersite_name
-		from application_group_element_map m,
-                     apm_packages p
-		where p.package_id = m.package_id
-                  and container_id = group_id
-                  and element_id = :subsite_group_id
-                  and rel_type = 'composition_rel'
-	    } 
-
-	    # First get parent application group's id and instance name
-	    if { ![empty_string_p $supersite_group_id] } {
-
-		set constraint_name "Members of [string range $subsite_name 0 30] must be members of [string range $supersite_name 0 30]"
-	    
-		if {[ad_conn isconnected]} {
-		    set user_id [ad_conn user_id]
-		    set creation_ip [ad_conn peeraddr]
-		} else {
-		    set user_id ""
-		    set creation_ip ""
-		}
-		
-		set constraint_id [db_exec_plsql add_constraint {
-		    BEGIN
-			:1 := rel_constraint.new(
-			constraint_name => :constraint_name,
-			rel_segment => :segment_id,
-			rel_side => 'two',
-			required_rel_segment => rel_segment.get(:supersite_group_id, 'membership_rel'),
-			creation_user => :user_id,
-			creation_ip => :creation_ip
-			);
-		    END;
-		}]
-	    }
-	}
-
-    }
-
-
+} {
+    application_group::delete -group_id [application_group::group_id_from_package_id -package_id $package_id]
+}
 
 ad_proc -private subsite::instance_name_exists_p {
     node_id
@@ -202,7 +95,6 @@ ad_proc -private subsite::instance_name_exists_p {
     }]
 }
 
-
 ad_proc -public subsite::auto_mount_application { 
     { -instance_name "" }
     { -pretty_name "" }
@@ -210,16 +102,17 @@ ad_proc -public subsite::auto_mount_application {
     package_key
 } {
     Mounts a new instance of the application specified by package_key
-    beneath node_id. This proc makes sure that the instance_name (the
+    beneath node_id.  This proc makes sure that the instance_name (the
     name of the new node) is unique before invoking site_node::instantiate_and_mount.
-    
+
+
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 2001-02-28
 
     @param instance_name The name to use for the url in the
     site-map. Defaults to the package_key plus a possible digit to
     serve as a unique identifier (e.g. news-2)
-    
+
     @param pretty_name The english name to use for the site-map and
     for things like context bars. Defaults to the name of the object
     mounted at this node + the package pretty name (e.g. Intranet News)
@@ -269,6 +162,63 @@ ad_proc -public subsite::auto_mount_application {
                                              -package_key $package_key]
 }
 
+
+ad_proc -public subsite::get {
+    {-subsite_id {}}
+    {-array:required}
+} {
+    Get information about a subsite.
+
+    @param subsite_id The id of the subsite for which info is requested.
+    If no id is provided, then the id of the closest ancestor subsite will
+    be used.
+    @param array The name of an array in which information will be returned.
+
+    @author Frank Nikolajsen (frank@warpspace.com)
+    @creation-date 2003-03-08
+} {
+    upvar $array subsite_info
+
+    if { [empty_string_p $subsite_id] } {
+	set subsite_id [site_node_closest_ancestor_package "acs-subsite"]
+    }
+
+    array unset subsite_info
+    array set subsite_info [site_node::get_from_object_id -object_id $subsite_id]
+}
+
+ad_proc -public subsite::get_element {
+    {-subsite_id {}}
+    {-element:required}
+    {-notrailing:boolean}
+} {
+    Return a single element from the information about a subsite.
+
+    @param subsite_id The node id of the subsite for which info is requested.
+    If no id is provided, then the id of the closest ancestor subsite will
+    be used.
+    @param element The element you want, one of:
+    directory_p object_type package_key package_id name pattern_p
+    instance_name node_id parent_id url object_id
+    @notrailing If true and the element requested is an url, then strip any
+    trailing slash ('/'). This means the empty string is returned for the root.
+    @return The element you asked for
+
+    @author Frank Nikolajsen (frank@warpspace.com)
+    @creation-date 2003-03-08
+} {
+    get -subsite_id $subsite_id -array subsite_info
+
+    if { $notrailing_p && [string match $element "url"]} {
+        set returnval [string trimright $subsite_info($element) "/"]
+    } else {
+	set returnval $subsite_info($element)
+    }
+
+    return $returnval
+}
+
+
 ad_proc subsite::util::sub_type_exists_p {
     object_type
 } {
@@ -276,7 +226,7 @@ ad_proc subsite::util::sub_type_exists_p {
 
     @author Oumi Mehrotra (oumi@arsdigita.com)
     @creation-date 2000-02-07
-    
+
     @param object_type
 
 } {
@@ -328,7 +278,7 @@ ad_proc subsite::util::object_type_pretty_name {
 
     @author Oumi Mehrotra (oumi@arsdigita.com)
     @creation-date 2000-02-07
-    
+
     @param object_type
 } {
     return [db_string select_pretty_name {

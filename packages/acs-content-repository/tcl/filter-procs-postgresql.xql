@@ -2,7 +2,7 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<partialquery name="item::get_content.content_as_text">
+<partialquery name="content::get_content.content_as_text">
 	<querytext>
 
 	, content as text

@@ -177,7 +177,10 @@ ad_proc -public api_script_documentation {
 
     # If it's not a Tcl file, we can't do a heck of a lot yet. Eventually
     # we'll be able to handle ADPs, at least.
-    if { ![string equal [file extension $path] ".tcl"] } {
+    if { [string equal [file extension $path] ".xql"] } {
+	append out "<blockquote>DB Query file</blockquote>\n"
+	return $out
+    } elseif { ![string equal [file extension $path] ".tcl"] } {
 	append out "<blockquote><i>Delivered as [ns_guesstype $path]</i></blockquote>\n"
 	return $out
     }
@@ -393,10 +396,25 @@ ad_proc -private api_set_public {
     return $public_p
 }
 
+ad_proc -public api_quote_file {
+    filename 
+} { 
+    returns a quoted version of the given filename 
+} { 
+    if {![catch {set fp [open $filename r]} err]} { 
+        set content [ad_quotehtml [read $fp]]
+        close $fp
+        return $content
+    } 
+    return {}
+} 
+
+
 ad_proc -public api_proc_documentation {
 	{ -format text/html }
 	-script:boolean
 	-source:boolean
+	-xql:boolean
 	proc_name
 } {
 
@@ -405,6 +423,7 @@ ad_proc -public api_proc_documentation {
 	@param format the type of documentation to generate. Currently, only
 		<code>text/html</code> and <code>text/plain</code> are supported.
 	@param script include information about what script this proc lives in?
+	@param xql include the source code for the related xql files?
 	@param source include the source code for the script?
 	@param proc_name the name of the procedure for which to generate documentation.
 	@return the formatted documentation string.
@@ -558,8 +577,33 @@ ad_proc -public api_proc_documentation {
 <pre>[ns_quotehtml [info body $proc_name]]<pre>
 </dd><p>\n"
 	}
+
+	set xql_base_name [get_server_root]/
+	append xql_base_name [file rootname $doc_elements(script)]
+	if { $xql_p } {
+		if { [file exists ${xql_base_name}.xql] } {
+			append out "<dt><b>Generic XQL file:</b></dt>
+<blockquote>[api_quote_file ${xql_base_name}.xql]</blockquote>
+<p>\n"
+		} else {
+			append out "<dt><b>Generic XQL file:</b> ${xql_base_name}.xql does not exist</dt><p>\n"
+		}
+		if { [file exists ${xql_base_name}-postgresql.xql] } {
+			append out "<dt><b>Postgresql XQL file:</b></dt>
+<blockquote>[api_quote_file ${xql_base_name}-postgresql.xql]</blockquote>
+<p>\n"
+		} else {
+			append out "<dt><b>Postgresql XQL file:</b> ${xql_base_name}-postgresql.xql does not exist</dt><p>\n"
+		}
+		if { [file exists ${xql_base_name}-oracle.xql] } {
+			append out "<dt><b>Oracle XQL file:</b></dt>
+<blockquote>[api_quote_file ${xql_base_name}-oracle.xql]</blockquote>
+<p>\n"
+		} else {
+			append out "<dt><b>Oracle XQL file:</b> ${xql_base_name}-oracle.xql does not exist</dt><p>\n"
+		}
 	}
-	
+
 	# No "see also" yet.
 	
 	append out "</dl></blockquote>"
@@ -999,4 +1043,36 @@ ad_proc api_proc_link { proc } {
     @creation-date 14 July 2000
 } {
     return "<a href=\"[api_proc_url $proc]\">$proc</a>"
+}
+
+ad_proc -private api_xql_links_list { path } {
+    
+    Returns list of xql files related to tcl script file
+    @param path path and filename from [acs_root_dir]
+    
+    
+} {
+    
+    set linkList [list]
+    set filename "[acs_root_dir]/$path"
+    set path_dirname [file dirname $path]
+    set file_dirname [file dirname $filename]
+    set file_rootname [file rootname [file tail $filename]]
+    regsub {(-oracle|-postgresql)$} $file_rootname {} file_rootname
+    set files \
+        [lsort -decreasing \
+             [glob -nocomplain \
+                  -directory $file_dirname \
+                  "${file_rootname}{,-}{,oracle,postgresql}.{adp,tcl,xql}" ]]
+    
+    foreach file $files {
+        lappend linkList [list \
+                              filename $file \
+                              link "content-page-view?source_p=1&path=[ns_urlencode "$path_dirname/[file tail $file]"]" \
+                              ]
+                          
+    }
+
+    return $linkList
+    
 }

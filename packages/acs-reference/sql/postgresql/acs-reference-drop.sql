@@ -32,9 +32,9 @@ from acs_reference_repositories;
 
 select acs_object_type__drop_type ('acs_reference_repository', 't');
 
-drop function acs_reference__new (varchar,timestamp, varchar,varchar,timestamp);
-drop function acs_reference__new (integer,varchar,boolean,varchar,timestamp,
-varchar,varchar,timestamp,timestamp,integer,integer,varchar,varchar,
+drop function acs_reference__new (varchar,timestamptz, varchar,varchar,timestamptz);
+drop function acs_reference__new (integer,varchar,boolean,varchar,timestamptz,
+varchar,varchar,timestamptz,timestamptz,integer,integer,varchar,varchar,
 integer,varchar,integer);
 drop function acs_reference__delete (integer);
 drop function acs_reference__is_expired_p (integer);

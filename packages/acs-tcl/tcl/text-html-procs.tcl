@@ -18,6 +18,7 @@ ad_proc -public ad_text_to_html {
     -no_links:boolean
     -no_lines:boolean
     -no_quote:boolean
+    -includes_html:boolean
     text 
 } {
     Converts plaintext to html. Also translates any recognized 
@@ -71,7 +72,7 @@ ad_proc -public ad_text_to_html {
 
     # Convert line breaks
     if { !$no_lines_p } {
-        set text [util_convert_line_breaks_to_html $text]
+        set text [util_convert_line_breaks_to_html -includes_html=$includes_html_p -- $text]
     }
 
     if { !$no_quote_p } {
@@ -103,6 +104,7 @@ ad_proc -public ad_text_to_html {
 }
 
 ad_proc -public util_convert_line_breaks_to_html {
+    {-includes_html:boolean}
     text
 } {
     Convert line breaks to <p> and <br> tags, respectively.
@@ -115,8 +117,8 @@ ad_proc -public util_convert_line_breaks_to_html {
     regsub -all {\r\n} $text "\n" text
     regsub -all {\r} $text "\n" text
     
-    # Remove whitespace around \n's
-    regsub -all {\s+\n\s+} $text "\n" text
+    # Remove whitespace before \n's
+    regsub -all {[ \t]*\n} $text "\n" text
     
     # Wrap P's around paragraphs
     set text "<p>$text</p>"
@@ -125,6 +127,15 @@ ad_proc -public util_convert_line_breaks_to_html {
     # Convert _single_ CRLF's to <br>'s to preserve line breaks
     # Lars: This must be done after we've made P tags, because otherwise the line
     # breaks will already have been converted into BR's.
+
+    # remove line breaks right before and after HTML tags that will insert a paragraph break themselves
+    if { $includes_html_p } {
+        foreach tag { ul ol li blockquote p div table tr td th } {
+            regsub -all -nocase "\\n\\s*(</?${tag}\\s*\[^>\]*>)" $text {\1} text
+            regsub -all -nocase "(</?${tag}\\s*\[^>\]*>)\\s*\\n" $text {\1} text
+        }
+    }
+
     regsub -all {\n} $text "<br />\n" text
 
     # Add line breaks to P tags
@@ -685,6 +696,7 @@ ad_proc ad_html_security_check { html } {
 ad_proc -public ad_html_to_text {
     {-maxlen 70}
     {-showtags:boolean}
+    {-no_format:boolean}
     html 
 } {
     Returns a best-guess plain text version of an HTML fragment.
@@ -694,7 +706,8 @@ ad_proc -public ad_html_to_text {
     
     @param maxlen the line length you want your output wrapped to.
     @param showtags causes any unknown (and uninterpreted) tags to get shown in the output.
-    
+    @param no_format causes hyperlink tags not to get listed at the end of the output.
+
     @author Lars Pind (lars@pinds.com)
     @author Aaron Swartz (aaron@swartzfam.com)
     @creation-date 19 July 2000
@@ -815,8 +828,8 @@ ad_proc -public ad_html_to_text {
 		    ad_html_to_text_put_text output "_"
 		}
 		a {
-		    if { [empty_string_p $slash] } {
-			if { [info exists attribute_array(href)] } {
+                    if { [empty_string_p $slash] && !$no_format_p} {
+ 			if { [info exists attribute_array(href)] } {
 			    if { [info exists attribute_array(title)] } {
 				set title ": '$attribute_array(title)'"
 			    } else {
@@ -1282,7 +1295,7 @@ ad_proc -public ad_enhanced_text_to_html {
     @author Lars Pind (lars@pinds.com)
     @creation-date 2003-01-27
 } {
-    return [ad_text_to_html -no_quote -- [util_close_html_tags $text]]
+    return [ad_text_to_html -no_quote -includes_html -- [util_close_html_tags $text]]
 }
 
 ad_proc -public ad_enhanced_text_to_plain_text {
@@ -1377,6 +1390,7 @@ ad_proc util_remove_html_tags { html } {
 ad_proc string_truncate { 
     {-len 200}
     {-format html}
+    {-no_format:boolean}
     string 
 } {
     Truncates a string to len characters (defaults to the
@@ -1387,6 +1401,7 @@ ad_proc string_truncate {
 
     @param len The lenght to truncate to. Defaults to parameter TruncateDescriptionLength.
     @param format html or text.
+    @param no_format causes hyperlink tags not to get listed at the end of the output.
     @param string The string to truncate.
     @return The truncated string, with HTML tags cloosed or
             converted to text, depending on format.
@@ -1398,10 +1413,14 @@ ad_proc string_truncate {
         set string "[string range $string 0 $len]..."
     } 
     
-    if { [string equal $format "html"] } {
+    if { [string equal $format "html"] && !$no_format_p } {
         set string [util_close_html_tags $string]
     } else {
-        set string [ad_html_to_text -- $string]
+       if { $no_format_p } {
+           set string [ad_html_to_text -no_format $string]
+       } else {
+           set string [ad_html_to_text -- $string]
+       }
     }
     return $string
 }

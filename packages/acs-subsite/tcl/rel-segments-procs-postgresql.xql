@@ -27,7 +27,7 @@
 <fullquery name="rel_segments_delete.constraint_delete">      
       <querytext>
 
-	    select rel_segment__delete(:constraint_id)
+	    select rel_constraint__delete(:constraint_id)
 	
       </querytext>
 </fullquery>

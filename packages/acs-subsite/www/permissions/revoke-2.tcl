@@ -9,6 +9,7 @@ ad_page_contract {
   object_id:integer,notnull
   revoke_list:multiple
   { operation "" }
+  {application_url ""}
 }
 
 permission::require_permission -object_id $object_id -privilege admin
@@ -23,4 +24,4 @@ if { [string eq $operation "Yes"] } {
     }
 }
 
-ad_returnredirect "one?[export_url_vars object_id]"
+ad_returnredirect "one?[export_vars {object_id application_url}]"

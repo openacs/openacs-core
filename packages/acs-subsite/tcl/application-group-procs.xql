@@ -10,17 +10,5 @@
 	    
       </querytext>
 </fullquery>
-
-
-<fullquery name="application_group::new.parent_node_id">      
-      <querytext>
-      
-		select parent_id
-                from site_nodes
-                where object_id = :package_id
-	    
-      </querytext>
-</fullquery>
-
  
 </queryset>

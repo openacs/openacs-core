@@ -52,35 +52,26 @@ comment on table cr_mime_types is '
   a file extension to the file after its MIME type is specified.
 ';
 
--- Common mime types (administered from admin pages)
+-- Currently file_extension is the pk although it seems likely someone
+-- will want to support multiple mime types with the same extension.
+-- Would need UI work however
 
-insert into cr_mime_types(label, mime_type, file_extension) values ('Enhanced text', 'text/enhanced', 'etxt');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Plain text', 'text/plain', 'txt');
-insert into cr_mime_types(label, mime_type, file_extension) values ('HTML text', 'text/html', 'html');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Fixed-width text', 'text/fixed-width', 'ftxt');
+create table cr_extension_mime_type_map (
+   extension            varchar(200) 
+                        constraint cr_mime_type_extension_map_pk
+                        primary key,
+   mime_type            varchar(200) 
+                        constraint cr_mime_ext_map_mime_type_ref
+                        references cr_mime_types
+); 
+create index cr_extension_mime_type_map_idx on cr_extension_mime_type_map(mime_type);
 
-insert into cr_mime_types(label, mime_type, file_extension) values ('Rich Text Format (RTF)', 'text/richtext', 'rtf');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Binary', 'application/octet-stream', 'bin');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft Word', 'application/msword', 'doc');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft Excel', 'application/msexcel', 'xls');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft PowerPoint', 'application/powerpoint', 'ppt');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft Project', 'application/msproject', 'mpp');
-insert into cr_mime_types(label, mime_type, file_extension) values ('PostScript', 'application/postscript', 'ps');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Adobe Illustrator', 'application/x-illustrator', 'ai');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Adobe PageMaker', 'application/x-pagemaker', 'p65');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Filemaker Pro', 'application/filemaker', 'fm');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Image Pict', 'image/x-pict', 'pic');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Photoshop', 'application/x-photoshop', 'psd');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Acrobat', 'application/pdf', 'pdf');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Video Quicktime', 'video/quicktime', 'mov');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Video MPEG', 'video/mpeg', 'mpg');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Audio AIFF',  'audio/aiff', 'aif');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Audio Basic', 'audio/basic',      'au');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Audio Voice', 'audio/voice',      'voc');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Audio Wave', 'audio/wave', 'wav');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Archive Zip', 'application/zip', 'zip');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Archive Tar', 'application/z-tar', 'tar');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Unknown', '*/*', '');
+comment on table cr_extension_mime_type_map is '
+  a mapping table for extension to mime_type in db version of ns_guesstype data
+';
+
+prompt *** Loading mime type data ...
+@ '../common/mime-type-data.sql'
 
 create table cr_content_mime_type_map (
   content_type  varchar2(100)
@@ -98,6 +89,8 @@ comment on table cr_content_mime_type_map is '
   content type.
 ';
 
+--RI Indexes 
+create index cr_cont_mimetypmap_mimetyp_idx ON cr_content_mime_type_map(mime_type);
 
 
 --------------------------------------------------------------
@@ -151,6 +144,9 @@ create table cr_type_children (
   primary key (parent_type, child_type, relation_tag)
 );
 
+--RI Indexes 
+create index cr_type_children_chld_type_idx ON cr_type_children(child_type);
+
 comment on table cr_type_children is '
   Constrains the allowable content types which a content type may
   contain.
@@ -169,6 +165,9 @@ create table cr_type_relations (
   constraint cr_type_relations_pk
   primary key (content_type, target_type, relation_tag)
 );
+
+-- RI Indexes 
+create index cr_type_relations_tgt_typ_idx ON cr_type_relations(target_type);
 
 comment on table cr_type_relations is '
   Constrains the allowable object types to which a content type may
@@ -300,6 +299,9 @@ create unique index cr_item_rel_unq on cr_item_rels (
   item_id, related_object_id, relation_tag
 );
 
+-- RI Indexes 
+create index cr_item_rels_rel_obj_id_idx ON cr_item_rels(related_object_id);
+
 comment on table cr_item_rels is '
   Describes all relations from one item to any number of other
   objects.
@@ -346,6 +348,8 @@ create table cr_revisions (
 
 create index cr_revisions_by_mime_type on cr_revisions(mime_type);
 create index cr_revisions_title_idx on cr_revisions(title);
+create index cr_revisions_item_id_idx ON cr_revisions(item_id);
+
 -- create index cr_revisions_lower_title_idx on cr_revisions(lower(title));
 -- create index cr_revisions_title_ltr_idx on cr_revisions(substr(lower(title), 1, 1));
 
@@ -374,8 +378,8 @@ create table cr_revision_attributes (
   attributes     clob
 );
 
-comment on column cr_revision_attributes.attributes is '
-  An XML document representing the compiled attributes for a revision
+comment on table cr_revision_attributes is '
+  Table contains an XML document representing the compiled attributes for a revision.
 ';
 
 create global temporary table cr_content_text (
@@ -480,6 +484,8 @@ comment on table cr_folders is '
   repository.
 ';
 
+--RI Indexes 
+create index cr_folders_package_id_idx ON cr_folders(package_id);
 
 create table cr_folder_type_map (
   folder_id	integer
@@ -499,7 +505,8 @@ comment on table cr_folder_type_map is '
   thos available for content types.  
 ';
 
-
+-- RI Indexes 
+create index cr_folder_typ_map_cont_typ_idx ON cr_folder_type_map(content_type);
 
 
 --------------------------------------------------------------
@@ -668,6 +675,9 @@ create table cr_keywords (
                          check (has_children in ('t', 'f'))
 );
 
+-- RI Indexes 
+create index cr_keywords_parent_id_idx ON cr_keywords(parent_id);
+
 comment on table cr_keywords is '
   Stores a subject taxonomy for classifying content items, analogous
   to the system used by a library.
@@ -700,6 +710,8 @@ create table cr_item_keyword_map (
   primary key (item_id, keyword_id)
 );
 
+-- RI Indexes 
+create index cr_item_keyword_map_kw_id_idx ON cr_item_keyword_map(keyword_id);
 
 --------------------------------------------------------------
 -- TEXT SUBMISSION
@@ -795,7 +807,7 @@ prompt *** Compiling documentation package...
 prompt *** Creating image content type...
 @@ content-image
 
--- by default, map all MIME types to 'content_revision'
+-- map some MIME types to 'content_revision'
 
 begin
   content_type.register_mime_type(
@@ -803,7 +815,7 @@ begin
   content_type.register_mime_type(
     content_type => 'content_revision', mime_type => 'text/plain');
   content_type.register_mime_type(
-    content_type => 'content_revision', mime_type => 'text/richtext');
+    content_type => 'content_revision', mime_type => 'application/rtf');
 end;
 /
 show errors

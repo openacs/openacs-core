@@ -100,8 +100,62 @@ begin
   
 end is_extlink;
 
+procedure copy (
+  extlink_id		in cr_extlinks.extlink_id%TYPE,
+  target_folder_id	in cr_folders.folder_id%TYPE,
+  creation_user		in acs_objects.creation_user%TYPE,
+  creation_ip		in acs_objects.creation_ip%TYPE default null
+) is
+  v_current_folder_id   cr_folders.folder_id%TYPE;
+  v_name		cr_items.name%TYPE;
+  v_url		        cr_extlinks.url%TYPE;
+  v_label		cr_extlinks.label%TYPE;
+  v_description         cr_extlinks.description%TYPE;
+  v_extlink_id		cr_extlinks.extlink_id%TYPE;
+begin
+
+  if content_folder.is_folder(copy.target_folder_id) = 't' then
+    select
+      parent_id
+    into
+      v_current_folder_id
+    from
+      cr_items
+    where
+      item_id = copy.extlink_id;
+
+    -- can't copy to the same folder
+    if copy.target_folder_id ^= v_current_folder_id then
+
+      select
+        i.name, e.url, e.label, e.description
+      into
+        v_name, v_url, v_label, v_description
+      from
+        cr_extlinks e, cr_items i
+      where
+        e.extlink_id = i.item_id
+      and
+        e.extlink_id = copy.extlink_id;
+
+      if content_folder.is_registered(copy.target_folder_id, 'content_extlink') = 't' then
+
+        v_extlink_id := content_extlink.new(
+            parent_id     => copy.target_folder_id,
+            name          => v_name,
+            label         => v_label,
+            description   => v_description,
+            url           => v_url,
+	    creation_user => copy.creation_user,
+	    creation_ip   => copy.creation_ip
+        );
+
+      end if;
+    end if;
+  end if;
+end copy;
+
 end content_extlink;
 /
 show errors
-
 

@@ -229,7 +229,7 @@ ad_proc -public item::get_extended_url { item_id args } {
       if { ![template::util::is_nil template_revision_id] } {
         get_mime_info $template_revision_id mime_info   
 
-        if { [info exists mime_info] } {
+        if { [info exists mime_info(file_extension)] } {
           set file_extension $mime_info(file_extension)
         }
       }
@@ -252,10 +252,33 @@ ad_proc -public item::get_extended_url { item_id args } {
     }
 
     get_mime_info $revision_id mime_info   
-    set file_extension $mime_info(file_extension)
+    if { [info exists mime_info(file_extension)] } {
+        set file_extension $mime_info(file_extension)
+    } else { 
+        set file_extension "html"
+    }
   }
 
   append file_url ".$file_extension"
    
   return $file_url
 } 
+
+ad_proc item::copy {
+    -item_id:required
+    -target_folder_id:required
+} {
+
+    Copy the given item.
+
+    @param item_id The content item to copy
+    @param target_folder_id The folder which will hold the new copy
+
+} {
+
+    set creation_user [ad_conn user_id]
+    set creation_ip [ad_conn peeraddr]
+
+    db_exec_plsql copy_item {}
+
+}

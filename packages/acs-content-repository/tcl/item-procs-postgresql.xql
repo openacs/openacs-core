@@ -40,4 +40,18 @@
       </querytext>
 </fullquery>
 
+<fullquery name="item::copy.copy_item">      
+      <querytext>
+      
+         select content_item__copy(
+                  :item_id,
+                  :target_folder_id,
+                  :creation_user,
+                  :creation_ip
+                )
+  
+      </querytext>
+</fullquery>
+
+
 </queryset>
