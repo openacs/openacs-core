@@ -231,10 +231,30 @@ ad_proc -private auth::issue_login {
 
 ad_proc -private auth::get_register_authority {
 } {
-    Get the ID of the authority in which accounts get created.
+    Get the ID of the authority in which accounts get created. Is based on the RegisterAuthority parameter
+    but will default to the local authority if that parameter has an invalid value.
 } {
-    # HACK while waiting for real account creation
-    return [auth::authority::local]
+    set parameter_value [parameter::get_from_package_key -parameter RegisterAuthority -package_key "acs-authentication"]
+
+    # Catch the case where somebody has set the parameter to some non-existant authority
+    if { [lsearch [auth::authority::get_short_names] $parameter_value] != -1} {
+        # The authority exists
+        set authority_id [auth::authority::get_id -short_name $parameter_value]
+
+        # Check that the authority has a register implementation
+        auth::authority::get -authority_id $authority_id -array authority
+        
+        if { [empty_string_p $authority(register_impl_id)] } {
+            ns_log Error "parameter value for RegisterAuthority is an authority without registration driver, defaulting to local authority"
+            set authority_id [auth::authority::local]
+        }
+    } else {
+        # The authority doesn't exist - use the local authority
+        ns_log Error "parameter RegisterAuthority has the invalid value $parameter_value. Defaulting to local authority"
+        set authority_id [auth::authority::local]
+    }
+    
+    return $authority_id
 }
 
 ad_proc -public auth::create_user {
