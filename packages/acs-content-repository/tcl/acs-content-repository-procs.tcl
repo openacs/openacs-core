@@ -17,21 +17,15 @@ ad_proc -private cr_delete_scheduled_files {} {
 } {
      db_transaction {
 	# subselect makes sure there isn't a parent revision still lying around
-	db_foreach fetch_paths {
+	db_foreach fetch_paths "" {
 
-        select distinct crftd.path storage_area_key
-          from cr_files_to_delete crftd
-           and not exists (select 1 
-                             from cr_revisions r 
-                            where r.content = crftd.path) 
-         } {
              # try to remove file from filesystem
              set file "[cr_fs_path $storage_area_key]/${path}"
              ns_log Debug "cr_delete_scheduled_files: deleting $file"
              ns_unlink  -nocomplain "$file"
 	}
 	# now that all scheduled files deleted, clear table
-	db_dml delete_files "delete from cr_files_to_delete"
+	db_dml delete_files ""
     }
 }
 
