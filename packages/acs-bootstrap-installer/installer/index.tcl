@@ -301,7 +301,7 @@ function updateSystemEmails() {
 }
 </script>
 
-<form action=\"installer/install\">
+<form action=\"installer/install\" method=\"POST\">
 
 <table>
 <tr>
