@@ -56,11 +56,11 @@ ad_proc -public ad_text_to_html {
     set text [ad_quotehtml $text]
 
     # turn CRLFCRLF into <P>
-    if { [regsub -all {\r\n\r\n} $text "<p>" text] == 0 } {
+    if { [regsub -all {\r\n\s*\r\n} $text "<p>" text] == 0 } {
 	# try LFLF
-	if { [regsub -all {\n\n} $text "<p>" text] == 0 } {
+	if { [regsub -all {\n\s*\n} $text "<p>" text] == 0 } {
 		# try CRCR
-	    regsub -all {\r\r} $text "<p>" text
+	    regsub -all {\r\s*\r} $text "<p>" text
 	}
     }
     
