@@ -53,6 +53,27 @@ list::create \
                 <else><img src="/resources/spacer.gif" width="15" height="15"></else>
           }
         }
+        registration {
+            label "Account Registration"
+            html { align center }
+            display_template {
+                <switch @authorities.registration_status@>
+                  <case value="selected">
+                    <img src="/resources/acs-subsite/radiochecked.gif" height="13" width="13" border="0">
+                  </case>
+                  <case value="can_select">
+                    <a href="@authorities.registration_url@" 
+                       title="Make this the authority for registering new users"
+                       onclick="return confirm('You are changing all user registrations to be in authority @authorities.pretty_name@');">
+                      <img src="/resources/acs-subsite/radio.gif" height="13" width="13" border="0">
+                    </a> 
+                  </case>
+                  <case value="cannot_select">
+                    no driver 
+                  </case>
+                </switch>
+            }
+        }
         auth_impl {
             label "Authentication Driver"
         }
@@ -74,14 +95,19 @@ list::create \
                 </if>
             }
             sub_class narrow
-        }
+        }        
     }
+
+# The authority currently selected for registering users
+set register_authority_id [auth::get_register_authority]
 
 db_multirow -extend { 
     enabled_p_url 
     sort_order_url_up 
     sort_order_url_down 
-    delete_url 
+    delete_url
+    registration_url
+    registration_status
 } authorities authorities_select {
     select authority_id,
            short_name,
@@ -101,4 +127,16 @@ db_multirow -extend {
     set delete_url [export_vars -base authority-delete { authority_id }]
     set sort_order_url_up "authority-set-sort-order?[export_vars { authority_id {direction up} }]"
     set sort_order_url_down "authority-set-sort-order?[export_vars { authority_id {direction down} }]"
+
+    if { [string equal $authority_id $register_authority_id] } {
+        # The authority is selected as register authority
+        set registration_status "selected"
+    } elseif { ![empty_string_p $reg_impl] } {
+        # The authority can be selected as register authority
+        set registration_status "can_select"
+        set registration_url [export_vars -base authority-registration-select { authority_id }]
+    } else {
+        # This authority has no account creation driver
+        set registration_status "cannot_select"
+    }    
 }
