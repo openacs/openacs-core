@@ -553,7 +553,7 @@ ad_proc -private apm_load_apm_file {
 
     if { [catch {
 	set files [split [string trim \
-		[exec [apm_gunzip_cmd] -q -c $file_path | [apm_tar_cmd] tf - 2>/dev/null] "\n"]]
+		[exec [apm_gunzip_cmd] -q -c $file_path | [apm_tar_cmd] tf - 2>/dev/null]] "\n"]
 	apm_callback_and_log $callback  "<li>Done. Archive is [format "%.1f" [expr { [file size $file_path] / 1024.0 }]]KB, with [llength $files] files.<li>"
     } errmsg] } {
 	apm_callback_and_log $callback "The follow error occured during the uncompression process:
@@ -575,6 +575,7 @@ ad_proc -private apm_load_apm_file {
     # Find that .info file.
     foreach file $files {
 	set components [split $file "/"]
+
 	if { [string compare [lindex $components 0] $package_key] } {
 	    apm_callback_and_log $callback  "All files in the archive must be contained in the same directory 
 	    (corresponding to the package's key). This is not the case, so the archive is not 
