@@ -210,8 +210,12 @@ function get_latest_revision (
   <p>&nbsp;</p>
     <li><font size="+1">Function: </font>content_item.get_live_revision
 
-    <p>Retrieves the id of the live revision for the item
-</p>
+    <p>Retrieves the id of the live revision for the item</p>
+
+    <p>Note that this function does nothing else besides retrieving
+    the value of the column <code>cr_items.live_revision</code>. It is
+    thus more efficient in many cases to join against
+    <code>cr_items</code> and retrieve the value directly.</p>
 
     <table cellpadding=3 cellspacing=0 border=0>
       
