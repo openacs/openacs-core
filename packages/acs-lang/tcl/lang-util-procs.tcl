@@ -292,6 +292,11 @@ namespace eval lang::util {
     
         # Use the messages array to generate a new catalog file
         lang::catalog::export_messages_to_file $catalog_file_path [array get messages_array]
+
+        # Register the messages in the database so that it is in sync with the catalog file
+        foreach {message_key message_text} [array get messages_array] {
+            lang::message::register en_US $package_key $message_key $message_text
+        }
     
         return $number_of_replacements
     }   
