@@ -460,6 +460,11 @@ ad_proc -private rp_filter { why } {
     set db_state(handles) [list]
     set db_state(n_handles_used) 0
 
+    
+    ns_log Notice "Huh? Here we go!"
+    set form [ns_getform]
+    set size [ns_set size $form]
+
     #####
     #
     # Initialize the environment: reset ad_conn, and populate it with
@@ -546,13 +551,7 @@ ad_proc -private rp_filter { why } {
 
     rp_debug -ns_log_level debug -debug t "rp_filter: setting up request: [ns_conn method] [ns_conn url] [ns_conn query]"
 
-    global tcl_site_nodes
-    if [catch {
-      if [catch { array set node $tcl_site_nodes([ad_conn url]) }] {
-	array set node [site_node [ad_conn url]]
-	set tcl_site_nodes([ad_conn url]) [array get node]
-      }
-    } errmsg] {
+    if [catch { array set node [site_node::get -url [ad_conn url]] } errmsg] {
         # log and do nothing
         rp_debug -debug t "error within rp_filter [ns_conn method] [ns_conn url] [ns_conn query].  $errmsg"
     } else {
