@@ -29,20 +29,33 @@
       <h3>Profiling Information</h3>
       <table>
         <tr>
+          <th>Ops</th>
           <th>Tag</th>
           <th># Iterations</th>
           <th>Total time </th>
           <th>Avg. time per iteration</th>
+          <th>Size</th>
         </tr>
         <multiple name="profiling">
           <tr>
-            <td align="left"> @profiling.file_links;noquote@ @profiling.tag@</td>
+            <td align="left">@profiling.file_links;noquote@</td>
+            <td align="left">@profiling.tag@</td>
             <td align="right">@profiling.num_iterations@</td>
             <td align="right">@profiling.total_ms@ ms</td>
             <td align="right">@profiling.ms_per_iteration@ ms</td>
+            <td align="right">@profiling.size@</td>
           </tr>
         </multiple>
       </table>
+      <if @page_fragment_cache_p@ true>
+        <p>
+          <form name="searchfrags" action="/ds/search">
+            <input type="hidden" name="request" value="@request@"/>
+            <input type="text" name="expression" value="" />
+            <input type="submit" name="search" value="Search"/>
+          </form>
+        </p></if>
+
     </if>
   </div>
 </if>

@@ -2,6 +2,15 @@
   <property name="title">@page_title;noquote@</property>
   <property name="context">@context;noquote@</property>
 
+  <if @page_fragment_cache_p@ true>
+    <p>
+      <form name="searchfrags" action="/ds/search">
+        <input type="hidden" name="request" value="@request@"/>
+        <input type="text" name="expression" value="" />
+        <input type="submit" name="search" value="Search"/>
+      </form>
+    </p></if>
+
 @body;noquote@
 
 <if @dbreqs:rowcount@ gt 0>

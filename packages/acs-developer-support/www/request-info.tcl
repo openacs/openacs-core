@@ -23,6 +23,8 @@ foreach name [nsv_array names ds_request] {
     }
 }
 
+set page_fragment_cache_p [ds_page_fragment_cache_enabled_p]
+
 if { [info exists property(start)] } {
     append body "
 <h3>Parameters</h3>

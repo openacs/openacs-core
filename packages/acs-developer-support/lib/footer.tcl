@@ -3,8 +3,11 @@ set show_p [ds_show_p]
 # TODO: Go through request-processor to see what other information should be exposed to developer-support
 
 # TODO: Always show comments inline by default?
+set request [ad_conn request]
 
 if { $show_p } {
+
+    set page_fragment_cache_p [ds_page_fragment_cache_enabled_p]
 
     set ds_url [ds_support_url]
 
@@ -86,23 +89,48 @@ if { $show_p } {
     }
 
     # Profiling information
-    global ds_profile__total_ms ds_profile__iterations 
+    global ds_profile__total_ms ds_profile__iterations
 
-    multirow create profiling tag num_iterations total_ms ms_per_iteration file_links
+    multirow create profiling tag num_iterations total_ms ms_per_iteration file_links size
 
     if { [info exists ds_profile__total_ms] } {
-        foreach tag [lsort [array names ds_profile__total_ms]] {
-            if {[file exists $tag]} { 
-                set file_links "<a href=\"${ds_url}send?fname=[ns_urlencode $tag]\" title=\"edit\">e</a> <a href=\"${ds_url}send?code=[ns_urlencode $tag]\" title=\"compiled code\">c</a>"
-            } else { 
+        foreach tag [lsort [array names ds_profile__iterations]] {
+            if {[file exists $tag]} {
+                set file_links "<a href=\"${ds_url}send?fname=[ns_urlencode $tag]\" title=\"edit\">e</a>"
+                append file_links " <a href=\"${ds_url}send?code=[ns_urlencode $tag]\" title=\"compiled code\">c</a>"
+            } else {
                 set file_links {}
             }
 
-            multirow append profiling $tag [set ds_profile__iterations($tag)] [lc_numeric [set ds_profile__total_ms($tag)]] \
-                    [ad_decode [set ds_profile__iterations($tag)] 0 {} \
-                    [lc_numeric [expr [set ds_profile__total_ms($tag)]/[set ds_profile__iterations($tag)]]]] \
-                    $file_links
+            if { $page_fragment_cache_p } {
+                if { [string match *.adp $tag]} {
+                    append file_links " <a href=\"${ds_url}send?output=$request:[ns_urlencode $tag]\" title=\"output\">o</a>"
+                    if {[ns_cache get ds_page_bits "$request:$tag" dummy]} {
+                        set size [string length $dummy]
+                    } else {
+                        set size {?}
+                    }
+                } else {
+                    append file_links " x"
+                    set size -
+                }
+            } else { 
+                set size {}
+            }
+
+            if {[info exists ds_profile__total_ms($tag)]} {
+                set total_ms [lc_numeric [set ds_profile__total_ms($tag)]]
+                if {[info exists ds_profile__iterations($tag)]
+                    && $ds_profile__iterations($tag) > 0} {
+                        set ms_per_iteration [lc_numeric [expr {1.0*$ds_profile__total_ms($tag)/$ds_profile__iterations($tag)}]]
+                } else {
+                    set ms_per_iteration -
+                }
+            } else {
+                set total_ms -
+                set ms_per_iteration -
+            }
+            multirow append profiling $tag [set ds_profile__iterations($tag)] $total_ms $ms_per_iteration $file_links $size
         }
     }
-
 }

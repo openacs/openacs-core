@@ -90,6 +90,12 @@ ad_proc -public ds_database_enabled_p {} {
     return [nsv_get ds_properties database_enabled_p]
 }
 
+ad_proc -public ds_page_fragment_cache_enabled_p {} { o
+    Are we populating the page fragment cache?
+} {
+    return [nsv_get ds_properties page_fragment_cache_p]
+}
+
 ad_proc -public ds_adp_reveal_enabled_p {} { 
     Returns true if developer-support adp revealing facilities are enabled. 
 } {
@@ -629,19 +635,19 @@ ad_proc -public ds_profile { command {tag {}} } {
                 error "Tag parameter is required"
             }
             set ds_profile__start_clock($tag) [clock clicks -milliseconds]
+            set ds_profile__iterations($tag) 0
         }
         stop {
             if { ![empty_string_p $ds_profile__start_clock($tag)] } {
                 set num_ms [expr [clock clicks -milliseconds] - $ds_profile__start_clock($tag)]
-                set ds_profile__start_clock($tag) {}
+                unset ds_profile__start_clock($tag)
                 
                 if { ![info exists ds_profile__total_ms($tag)] } {
                     set ds_profile__total_ms($tag) 0
-                    set ds_profile__iterations($tag) 0
                 }
                 
                 set ds_profile__total_ms($tag) [expr [set ds_profile__total_ms($tag)] + $num_ms]
-                set ds_profile__iterations($tag) [expr [set ds_profile__iterations($tag)] + 1]
+                incr ds_profile__iterations($tag)
             } else {
                 ns_log Error "ds_profile stop called without a corresponding call to ds_profile start, with tag $tag"
             }

@@ -14,12 +14,12 @@ if { ![nsv_exists ds_properties enabled_p] } {
 
     # Take the IP list (space or comma seperated) and turn it into a tcl list.
     set IPs [list]
-    foreach ip [split [ad_parameter -package_id [ds_instance_id] EnabledIPs acs-developer-support *] { ,}] { 
-        if {[string equal $ip "*"]} { 
+    foreach ip [lsort -unique [split [ad_parameter -package_id [ds_instance_id] EnabledIPs acs-developer-support *] { ,}]] { 
+        if {[string equal $ip "*"]} {
             # a star means anything will match so just use the * instead
             set IPs "*"
             break
-        } elseif {![empty_string_p $ip]} { 
+        } elseif {![empty_string_p $ip]} {
             lappend IPs $ip
         }
     }
@@ -27,8 +27,15 @@ if { ![nsv_exists ds_properties enabled_p] } {
 
 
     nsv_set ds_properties database_enabled_p [ad_parameter -package_id [ds_instance_id] DatabaseEnabledP developer-support 0]
+
     nsv_set ds_properties adp_reveal_enabled_p [ad_parameter -package_id [ds_instance_id] AdpRevealEnabledP developer-support 0]
+
+    nsv_set ds_properties page_fragment_cache_p [ad_parameter -package_id [ds_instance_id] PageFragmentCacheP developer-support 0]
+
     ds_set_user_switching_enabled [ad_parameter -package_id [ds_instance_id] UserSwitchingEnabledP acs-developer-support 0]
+
+    # JCD: used to cache rendered page bits.  cap at 10mb for now.
+    ns_cache create ds_page_bits -size 10000000
 }
 
 ds_watch_packages
