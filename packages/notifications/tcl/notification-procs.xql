@@ -21,7 +21,8 @@
     <fullquery name="notification::get_all_intervals.select_all_intervals">
         <querytext>
             select name,
-                   interval_id
+                   interval_id,
+                   n_seconds
             from notification_intervals
             order by n_seconds
         </querytext>

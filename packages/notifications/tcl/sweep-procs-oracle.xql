@@ -37,6 +37,9 @@
             and notifications.object_id = notification_requests.object_id
             and notifications.notification_id = notification_user_map.notification_id(+)
             and sent_date is null
+            and notifications.notif_date <= 
+            (sysdate - (select n_seconds / 3600 / 24 from notification_intervals where interval_id= :interval_id))
+            order by notification_requests.user_id, notification_requests.type_id
         </querytext>
     </fullquery>
 
