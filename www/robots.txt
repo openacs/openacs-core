@@ -1,0 +1,5 @@
+UserAgent: *
+Disallow: /doc/
+Disallow: /api-doc/
+Disallow: /register/
+Disallow: /comments/
