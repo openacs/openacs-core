@@ -82,15 +82,3 @@ show errors
 -- Create PLSQL package
 @@ authentication-package-create
 
--- Create the local authority
-declare
-  v_authority_id integer;
-begin 
-    v_authority_id := authority.new(
-        short_name  => 'local',
-        pretty_name => 'OpenACS Local',
-        sort_order  => '1'
-    );
-end;
-/
-show errors
