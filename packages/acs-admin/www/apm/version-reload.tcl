@@ -43,15 +43,18 @@ if { [llength $files] == 0 } {
     append body "</ul>\n"
 }
 
+
 if { [info exists files_to_watch_p] } {
     append body "If you know you're going to be modifying one of the above files frequently,
     select the \"watch this file\" link next to a filename to cause the interpreters to
     reload the file immediately whenever it is changed.<p>
-    (<a href=\"file-watch?[export_vars { version_id { paths:multiple $files_to_watch } }]\">watch all above files</a>)
-    <p>
-"
+    <ul class=\"action-links\">
+    <li><a href=\"file-watch?[export_vars { version_id { paths:multiple $files_to_watch } }]\">Watch all above files</a></li>"
+} else {
+    append body "<ul class=\"action-links\">"
 }
 
 append body "
-<a href=\"$return_url\" class=\"action\">Return</a>"
+<li><a href=\"$return_url\">Return</a></li>
+</ul>"
 
