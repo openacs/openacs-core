@@ -13,73 +13,74 @@ auth::sync::job::get -job_id $job_id -array batch_job
 set page_title "One batch job"
 set context [list [list "." "Authentication"] [list [export_vars -base authority { {authority_id $batch_job(authority_id)} }] "$batch_job(authority_pretty_name)"] $page_title]
 
-ad_form -name batch_job_form \
-        -mode display \
-        -display_buttons {} \
-        -form {
-            {authority_pretty_name:text(inform)
-                {label "Authority name"}                
-            }            
-            {job_start_time:text(inform)
-                {label "Start time"}                
-            }
-            {job_end_time:text(inform)
-                {label "End time"}                
-            }
-            {run_time_seconds:text(inform)
-                {label "Running time"}
-                {after_html " seconds"}
-            }
-            {interactive_p:text(inform)
-                {label "Interactive"}
-            }
-            {snapshot_p:text(inform)
-                {label "Snapshot"}                
-            }            
-            {message:text(inform)
-                {label "Message"}                
-            }            
-            {creation_user:text(inform)
-                {label "Creation user"}                
-            }            
-            {doc_start_time:text(inform)
-                {label "Document start time"}
-            }            
-            {doc_end_time:text(inform)
-                {label "Document end time"}                
-            }            
-            {doc_status:text(inform)
-                {label "Document status"}                
-            }            
-            {doc_message:text(inform)
-                {label "Document message"}                
-            }            
-            {document_download:text(inform)
-                {label "Document"}
-            }
-            {num_actions:text(inform)
-                {label "Number of actions"}
-            }
-            {num_problems:text(inform)
-                {label "Number of problems"}
-            }
-        } -on_request {
-            foreach element_name [array names batch_job] {
-                # Make certain columns pretty for display
-                if { [regexp {_p$} $element_name] } {
-                    set $element_name [ad_decode $batch_job($element_name) "t" "Yes" "No"]
-                } elseif { [string equal $element_name "creation_user"] && ![empty_string_p $batch_job($element_name)] } {
-                    set $element_name [acs_community_member_link -user_id $batch_job($element_name)]
-                } else {
-                    set $element_name $batch_job($element_name)
-                }               
-            }
-
-            set job_start_time [lc_time_fmt $batch_job(job_start_time) "%x %X"]
-            set job_end_time [lc_time_fmt $batch_job(job_end_time) "%x %X"]
-
-            set document_download "<a href=\"[export_vars -base batch-document-download { job_id }]\">download</a>"
+ad_form \
+    -name batch_job_form \
+    -mode display \
+    -display_buttons {} \
+    -form {
+        {authority_pretty_name:text(inform)
+            {label "Authority name"}                
+        }            
+        {job_start_time:text(inform)
+            {label "Start time"}                
         }
+        {job_end_time:text(inform)
+            {label "End time"}                
+        }
+        {run_time_seconds:text(inform)
+            {label "Running time"}
+            {after_html " seconds"}
+        }
+        {interactive_p:text(inform)
+            {label "Interactive"}
+        }
+        {snapshot_p:text(inform)
+            {label "Snapshot"}                
+        }            
+        {message:text(inform)
+            {label "Message"}                
+        }            
+        {creation_user:text(inform)
+            {label "Creation user"}                
+        }            
+        {doc_start_time:text(inform)
+            {label "Document start time"}
+        }            
+        {doc_end_time:text(inform)
+            {label "Document end time"}                
+        }            
+        {doc_status:text(inform)
+            {label "Document status"}                
+        }            
+        {doc_message:text(inform)
+            {label "Document message"}                
+        }            
+        {document_download:text(inform)
+            {label "Document"}
+        }
+        {num_actions:text(inform)
+            {label "Number of actions"}
+        }
+        {num_problems:text(inform)
+            {label "Number of problems"}
+        }
+    } -on_request {
+        foreach element_name [array names batch_job] {
+            # Make certain columns pretty for display
+            if { [regexp {_p$} $element_name] } {
+                set $element_name [ad_decode $batch_job($element_name) "t" "Yes" "No"]
+            } elseif { [string equal $element_name "creation_user"] && ![empty_string_p $batch_job($element_name)] } {
+                set $element_name [acs_community_member_link -user_id $batch_job($element_name)]
+            } else {
+                set $element_name [ad_quotehtml $batch_job($element_name)]
+            }               
+        }
+
+        set job_start_time [lc_time_fmt $batch_job(job_start_time) "%x %X"]
+        set job_end_time [lc_time_fmt $batch_job(job_end_time) "%x %X"]
+
+        set document_download "<a href=\"[export_vars -base batch-document-download { job_id }]\">download</a>"
+    }
 
 set pagination_sql {
     select entry_id
