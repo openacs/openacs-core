@@ -253,7 +253,7 @@ end;' language 'plpgsql' stable;
 create or replace function timezone__get_abbrev (integer, timestamptz) returns varchar as '
 declare
   p_tz_id alias for $1;
-  p_time for $2;
+  p_time alias for $2;
   v_abbrev timezone_rules.abbrev%TYPE;
 begin
   v_abbrev := ''GMT'';
