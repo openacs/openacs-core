@@ -12,6 +12,10 @@ ad_proc search_indexer {} {
 } {
 
     set driver [ad_parameter -package_id [apm_package_id_from_key search] FtsEngineDriver]
+    if { [empty_string_p $driver] } {
+        # Nothing to do if no driver
+        return
+    }
 
     db_foreach search_observer_queue_entry {} {
 
