@@ -27,6 +27,7 @@ ad_proc -public ::content::revision::new {
     {-creation_ip}
     {-attributes}
     {-is_live "f"}
+    -context_id
 } {
     Adds a new revision of a content item. If content_type is not
     passed in, we determine it from the content item. This is needed
@@ -60,6 +61,10 @@ ad_proc -public ::content::revision::new {
 
     @param creation_ip
 
+    @param is_live
+
+    @param context_id defaults to item_id if not specified. Use empty string for NULL context_id
+
     @param attributes A list of lists of pairs of additional attributes and
     their values to pass to the constructor. Each pair is a list of two
      elements: key => value such as
@@ -81,18 +86,28 @@ ad_proc -public ::content::revision::new {
     if {![exists_and_not_null content_type]} {
 	set content_type [::content::item::content_type -item_id $item_id]
     }
+    if {![info exists context_id]} {
+        set context_id $item_id
+    }
     set attribute_names ""
     set attribute_values ""
 
     if { [exists_and_not_null attributes] } {
 	set type_attributes [package_object_attribute_list $content_type]
+        ns_log debug "
+DB --------------------------------------------------------------------------------
+DB DAVE debugging /var/lib/aolserver/openacs-5-2/packages/acs-content-repository/tcl/content-revision-procs.tcl
+DB --------------------------------------------------------------------------------
+DB type_attributes = '${type_attributes}' 
+DB --------------------------------------------------------------------------------"
 	set valid_attributes [list]
 	# add in extended attributes for this type, ingore
 	# content_revision as those are already captured as named
 	# parameters to this procedure
 	
 	foreach type_attribute $type_attributes {
-	    if {![string equal "cr_revisions" [lindex $type_attribute 1]]} {
+	    if {![string equal "cr_revisions" [lindex $type_attribute 1]] \
+                && ![string equal "acs_objects" [lindex $type_attribute 1]]} {
 		lappend valid_attributes [lindex $type_attribute 2]
 	    }
 	}
