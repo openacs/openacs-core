@@ -49,20 +49,63 @@ ad_proc -public template::form { command args } {
 ad_proc -public template::form::create { id args } {
     Initialize the data structures for a form.
 
-    @param id A keyword identifier for the form, such as "add_user" or
-              "edit_item".  The ID must be unique in the context of a 
-              single page.
+    @param id               A keyword identifier for the form, such as "add_user" or
+                            "edit_item".  The ID must be unique in the context of a 
+                            single page.
 
-    @option method The standard METHOD attribute to specify in the HTML FORM
-                   tag at the beginning of the rendered form. Defaults to POST.
+    @option method          The standard METHOD attribute to specify in the HTML FORM
+                            tag at the beginning of the rendered form. Defaults to POST.
 
-    @option html A list of additional name-value attribute pairs to
-                 include in the HTML FORM tag at the beginning of the 
-                 rendered form. Common attributes include JavaScript 
-                 event handlers and multipart form encoding.  For example, 
-                 "-html { enctype multipart/form-data onSubmit validate() }"
+    @option html            A list of additional name-value attribute pairs to
+                            include in the HTML FORM tag at the beginning of the 
+                            rendered form. Common attributes include JavaScript 
+                            event handlers and multipart form encoding.  For example, 
+                            "-html { enctype multipart/form-data onSubmit validate() }"
+    
+    @option mode            If set to 'display', the form is shown in display-only mode, where 
+                            the user cannot edit the fields. Each widget knows how to display its contents
+                            appropriately, e.g. a select widget will show the label, not the value. If set to
+                            'edit', the form is displayed as normal, for editing. Defaults to 'edit'. Switching
+                            to edit mode when a button is clicked in display mode is handled automatically.
+    
+    @option cancel_url      A url to redirect to when the user hits the Cancel button. 
+                            If you do not supply a cancel_url, there will be no Cancel button.
+    
+    @option cancel_label    The label of the Cancel button, if cancel_url is supplied.
+                            Default is "Cancel".
+    
+    @option display_buttons List of buttons to show when the form is in display mode. 
+                            The value should be a list of lists, with the first element being the form label
+                            and the second element being the name of the name of the form element. Defaults to
+                            { { "Edit" edit } }. The name of the button clicked can be retrieved using 
+                            template::form::get_button. The name of the button clicked while in display mode
+                            is called the 'action', and can be retrieved using template::form::get_action. 
+                            The action is automatically carried forward to the form submission, so that the value
+                            that you get from calling template::form::get_action on the final form submission
+                            is the name of the button which was called when the form changed from display 
+                            mode to edit mode.
 
-    @option elements A block of element specifications.
+    @option edit_buttons    List of buttons to show when the form is in display mode. 
+                            The value should be a list of lists, with the first element being the form label
+                            and the second element being the name of the name of the form element. Defaults to
+                            { { "Ok" ok } }. The name of the button clicked can be retrieved using 
+                            template::form::get_button. 
+    
+    @option actions         A list of actions available on the form. Equivalent to, and 
+                            overrides display_buttons.
+
+    @option has_submit      Set to 1 to suppress the OK or submit button automatically
+                            added by the form builder. Use this if your form already includes its own 
+                            submit button.
+
+    @option has_edit        Set to 1 to suppress the Edit button automatically added by the
+                            form builder. Use this if you include your own.
+
+    @option elements        A block of element specifications.
+
+    @see template::form::get_button
+    @see template::form::get_action
+
 } {
   set level [template::adp_level]
 
@@ -177,7 +220,8 @@ ad_proc -public template::form::get_button { id } {
 }
 
 ad_proc -public template::form::get_action { id } {
-    Find out which action is in progress
+    Find out which action is in progress. This is the name of the button
+    which was clicked when the form was in display mode.
 
     @param id  The ID of an ATS form object.
     @return the name of the action in progress
