@@ -29,15 +29,15 @@ if {![ db_0or1row object_data {
     return
 }
 
-# Users are handled as a special case since we want to preserve the subsite 
+# Users are handled as a special case since we want to preserve the subsite
 # we are loading from...
-if {[string eq $object_type user]} { 
+if {[string eq $object_type user]} {
     ad_returnredirect [acs_community_member_url -user_id $object_id]
     ad_script_abort
-} 
+}
 
 
-if {[string eq $object_type content_item]} { 
+if {[string eq $object_type content_item]} {
     db_0or1row object_data {
         select o.object_type, o.object_id, o.package_id
         from acs_objects o, cr_items i
@@ -52,7 +52,7 @@ if {[string eq $object_type content_item]} {
 
 }
 
-if {![info exists object_type]} { 
+if {![info exists object_type]} {
     ad_return_warning "Invalid object ID" [subst {
         The object ID $object_id doesn't exist.
         <p>We are sorry for this inconvenience.
@@ -60,5 +60,15 @@ if {![info exists object_type]} {
     return
 }
 
-set page_url [acs_sc::invoke -error -contract FtsContentProvider -operation url -impl $object_type -call_args [list $object_id]]
-ad_returnredirect $page_url$anchor
+set page_url [acs_sc::invoke -contract FtsContentProvider -operation url -impl $object_type -call_args [list $object_id]]
+if {![empty_string_p $page_url]} {
+    ad_returnredirect $page_url$anchor
+} else {
+    ad_return_warning "Invalid object ID" [subst {
+        The object ID $object_id is a $object_type but getting 
+        it's real url failed.
+        <p>We are sorry for this inconvenience.
+    }]
+}
+
+
