@@ -3,7 +3,8 @@
 
 <fullquery name="cr_write_content.get_revision_info">
       <querytext>
-          select i.storage_type, i.storage_area_key, r.mime_type, i.item_id
+          select i.storage_type, i.storage_area_key, r.mime_type, i.item_id,
+	         r.content_length
           from cr_items i, cr_revisions r
           where r.revision_id = :revision_id and i.item_id = r.item_id
       </querytext>
