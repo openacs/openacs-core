@@ -261,6 +261,46 @@ begin
  
 end;' language 'plpgsql';
 
+create function content_item__new(varchar,integer,varchar,text,text) 
+returns integer as '
+declare
+        new__name               alias for $1;
+        new__parent_id          alias for $2;
+        new__title              alias for $3;
+        new__description        alias for $4;
+        new__text               alias for $5;
+begin
+        return content_item__new(new__name,
+                                 new__parent_id,
+                                 null,
+                                 null,
+                                 now(),
+                                 null,
+                                 null,
+                                 null,
+                                 ''content_item'',
+                                 ''content_revision'',   
+                                 new__title,
+                                 new__description,
+                                 ''text/plain'',
+                                 null,
+                                 new__text,
+                                 null
+               );
+                                 
+end;' language 'plpgsql';
+
+create function content_item__new(varchar,integer) returns integer as '
+declare
+        new__name       alias for $1;
+        new__parent_id  alias for $2;
+begin
+        return content_item__new(new__name,
+                                 new__parent_id,
+                                 null,
+                                 null,
+                                 null);
+end;' language 'plpgsql';
 
 -- function is_published
 create function content_item__is_published (integer)

@@ -19,6 +19,21 @@ begin
 end;' language 'plpgsql';
 
 -- create or replace package body content_template
+
+create function content_template__new(varchar) returns integer as '
+declare
+        new__name       alias for $1;
+begin
+        return content_template__new(new__name,
+                                     null,
+                                     null,
+                                     now(),
+                                     null,
+                                     null
+        );
+
+end;' language 'plpgsql';
+
 -- function new
 create function content_template__new (varchar,integer,integer,timestamp,integer,varchar)
 returns integer as '

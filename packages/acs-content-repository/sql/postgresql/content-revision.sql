@@ -11,6 +11,7 @@
 -- http://www.fsf.org/copyleft/gpl.html
 
 -- create or replace package body content_revision
+
 -- function new
 create function content_revision__new (varchar,varchar,timestamp,varchar,varchar,integer,integer,integer,timestamp,integer,varchar)
 returns integer as '
@@ -58,6 +59,29 @@ begin
 
 end;' language 'plpgsql';
 
+create function content_revision__new(varchar,varchar,timestamp,varchar,text,integer) returns integer as '
+declare
+        new__title              alias for $1;
+        new__description        alias for $2;
+        new__publish_data       alias for $3;
+        new__mime_type          alias for $4;
+        new__text               alias for $5;
+        new__item_id            alias for $6;
+begin
+        return content_revision__new(new__title,
+                                     new__description,
+                                     new__publish_date,
+                                     new__mime_type,
+                                     null,
+                                     new__text,
+                                     new__item_id,
+                                     null,
+                                     now(),
+                                     null,
+                                     null
+               );
+
+end;' language 'plpgsql';
 
 -- function new
 create function content_revision__new (varchar,varchar,timestamp,varchar,varchar,text,integer,integer,timestamp,integer,varchar)
