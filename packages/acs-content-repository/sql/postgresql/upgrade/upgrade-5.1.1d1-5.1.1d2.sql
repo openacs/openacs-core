@@ -74,3 +74,19 @@ create trigger cr_items_tree_update_tr after update
 on cr_items
 for each row 
 execute procedure cr_items_tree_update_tr ();
+
+-- Fix typo in function and invalid parameter reference. Bug #1793
+
+create or replace function content_item__move (integer,integer)
+returns integer as '
+declare
+  move__item_id                alias for $1;  
+  move__target_folder_id       alias for $2;
+begin
+  perform content_item__move(
+	move__item_id,
+	move__target_folder_id,
+	NULL
+	);
+return null;
+end;' language 'plpgsql';

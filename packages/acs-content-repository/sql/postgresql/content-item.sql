@@ -2006,8 +2006,8 @@ declare
 begin
   perform content_item__move(
 	move__item_id,
-	move__targer_folder_id,
-	move__name
+	move__target_folder_id,
+	NULL
 	);
 return null;
 end;' language 'plpgsql';
