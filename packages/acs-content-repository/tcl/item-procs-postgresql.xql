@@ -85,5 +85,13 @@
       </querytext>
 </fullquery>
 
-
+<fullquery name="item::publish.set_live">
+    <querytext>
+      select content_item__set_live(
+          :revision_id,
+          'live'
+      )
+    </querytext>
+</fullquery>
+      
 </queryset>

@@ -680,7 +680,7 @@ ad_proc -public item::publish {
     @author Peter Marklund
 } {
     if { [empty_string_p $revision_id] } {
-        set revision_id [item::get_element -item_id $object_id -element latest_revision]
+        set revision_id [item::get_element -item_id $item_id -element latest_revision]
     }
 
     db_exec_plsql set_live {
