@@ -463,6 +463,7 @@ ad_proc -private apm_package_install {
 	    and version_id = apm_package.highest_version(:package_key)
 	} ]} {
             # We are upgrading a package
+            set upgrade_p 1
 
             # Load catalog files with upgrade switch before package version is changed in db
             apm_load_catalog_files -upgrade $package_key $message_catalog_files
@@ -474,6 +475,7 @@ ad_proc -private apm_package_install {
 
 	} else {
             # We are installing a new package
+            set upgrade_p 0
 
             # Load catalog files without the upgrade switch before package version is changed in db
             apm_load_catalog_files $package_key $message_catalog_files
@@ -506,12 +508,6 @@ ad_proc -private apm_package_install {
 	return 0
     }
 
-    # Source Tcl procs and queries to be able
-    # to invoke any Tcl callbacks after mounting and instantiation. Note that this reloading is only in this interpreter.
-    # The proc apm_mark_packages_for_bootstrap is used later to reload libraries in all interpreters.
-    apm_load_libraries -procs -force_reload -packages $package_key
-    apm_load_queries -packages $package_key
-
     # Enable the package
     if { $enable_p } {
         nsv_set apm_enabled_package $package_key 1    
@@ -519,33 +515,41 @@ ad_proc -private apm_package_install {
 	apm_version_enable -callback $callback $version_id
     }
     
+    # Instantiating, mounting, and after-install callback only invoked on initial install
+    if { ! $upgrade_p } {
+        # Source Tcl procs and queries to be able
+        # to invoke any Tcl callbacks after mounting and instantiation. Note that this reloading is only in this interpreter.
+        # The proc apm_mark_packages_for_bootstrap is used later to reload libraries in all interpreters.
+        apm_load_libraries -procs -force_reload -packages $package_key
+        apm_load_queries -packages $package_key
 
-    if { ![empty_string_p $version(auto-mount)] } {
-        # This is a package that should be auto mounted
+        if { ![empty_string_p $version(auto-mount)] } {
+            # This is a package that should be auto mounted
 
-        set parent_id [site_node::get_node_id -url "/"]
+            set parent_id [site_node::get_node_id -url "/"]
 
-        if { [catch {
-            db_transaction {            
-                set node_id [site_node::new -name $version(auto-mount) -parent_id $parent_id]
-            }
-        } error] } {
-            ns_log Error "Package $version(package-name) could not be mounted at /$version(auto-mount) , there may already me a package mounted there, the error is: $error"
-        } else {
-            site_node::instantiate_and_mount -node_id $node_id \
+            if { [catch {
+                db_transaction {            
+                    set node_id [site_node::new -name $version(auto-mount) -parent_id $parent_id]
+                }
+            } error] } {
+                ns_log Error "Package $version(package-name) could not be mounted at /$version(auto-mount) , there may already me a package mounted there, the error is: $error"
+            } else {
+                site_node::instantiate_and_mount -node_id $node_id \
                                              -node_name $version(auto-mount) \
                                              -package_name $version(package-name) \
                                              -package_key $package_key
+            }
+        } elseif { [string equal $package_type "apm_service"] && [string equal $singleton_p "t"] } {
+            # This is a singleton package.  Instantiate it automatically, but don't mount.
+
+            # Using empty context_id
+            apm_package_instance_new $version(package-name) "" $package_key
         }
-    } elseif { [string equal $package_type "apm_service"] && [string equal $singleton_p "t"] } {
-	# This is a singleton package.  Instantiate it automatically, but don't mount.
 
-        # Using empty context_id
-        apm_package_instance_new $version(package-name) "" $package_key
+        # After install Tcl proc callback
+        apm_invoke_callback_proc -version_id $version_id -type after-install
     }
-
-    # After install Tcl proc callback
-    apm_invoke_callback_proc -version_id $version_id -type after-install
 
     return $version_id
 }
