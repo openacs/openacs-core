@@ -62,7 +62,7 @@ ad_proc -public template::data::transform::spellcheck {
 	return [list]
     } 
 
-    set spellcheck_p [ad_decode [ns_queryget $element(id).spellcheck_p] 1 1 0]
+    set spellcheck_p [ad_decode [set language [ns_queryget $element(id).spellcheck]] ":nospell:" 0 1]
 
     # perform spellchecking or not?
     if { $spellcheck_p } { 
@@ -70,6 +70,7 @@ ad_proc -public template::data::transform::spellcheck {
 	template::util::spellcheck::get_element_formtext \
 	    -text $contents \
 	    -var_to_spellcheck $element(id) \
+	    -language $language \
 	    -error_num_ref error_num \
 	    -formtext_to_display_ref formtext_to_display \
 	    -just_the_errwords_ref {} \
@@ -133,6 +134,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     -text:required
     {-html:boolean 0}
     -var_to_spellcheck:required
+    {-language ""}
     -error_num_ref:required
     -formtext_to_display_ref:required
     {-just_the_errwords_ref ""}
@@ -173,11 +175,6 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 
     set spellchecker_path [nsv_get spellchecker path]
 
-    set language [parameter::get_from_package_key \
-			       -package_key acs-templating \
-			       -parameter SpellcheckLang \
-			       -default {}]
-
     # the --lang switch only works with aspell and if it is not present
     # aspell's (or ispell's) default language will have to do.
     if { ![empty_string_p $language] } {
@@ -197,7 +194,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     }
 
     if { [catch [close $ispell_proc] errmsg] } {
-	ad_return_error "No Dictionary Found" "Spell-checking is enabled but the spell-check program could not be executed. Check the <em>SpellcheckerPath</em> parameter in acs-templating. Also check the permissions on the spell-check program. <p>Here is the error message: <pre>$errmsg</pre>"
+	ad_return_error "No Dictionary Found" "Spell-checking is enabled but the spell-check program could not be executed. Check the permissions on the spell-check program (_server_root_/bin/webspell). <p>Here is the error message: <pre>$errmsg</pre>"
 	ad_script_abort
     }
 
@@ -315,7 +312,7 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 } {
     upvar $element_ref element
     
-    if { [empty_string_p [set spellcheck_p [ns_queryget $element(id).spellcheck_p]]] } {
+    if { [empty_string_p [set spellcheck [ns_queryget $element(id).spellcheck]]] } {
 	
 	# The user hasn't been able to state whether (s)he wants spellchecking to be performed or not.
 	# That's either because spell-checking is disabled for this element, or we're not dealing with a submit.
@@ -323,12 +320,14 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 	
 	if { [empty_string_p [nsv_get spellchecker path]] } {
 
-	    # The aspell or ispell bibary was not found during server startup - turn spell-checking off.
-	    set spellcheck_p 0    
+	    # The aspell or ispell binary was not found during server startup - turn spell-checking off.
+	    #set spellcheck ":nospell:"    
+	    set spellcheck_p 0
 
 	} else {
 
-	    array set widget_info [string trim [parameter::get_from_package_key -package_key acs-templating \
+	    array set widget_info [string trim [parameter::get_from_package_key \
+						    -package_key acs-templating \
 						    -parameter SpellcheckFormWidgets \
 						    -default ""]]
 	    
@@ -340,39 +339,34 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 	}
 	
 	if { $spellcheck_p } {
-	    # This is not a submit; we are rendering the form element for the first time.
-	    # Since the spellcheck "sub widget" is to be displayed we'll also want to know
-	    # whether it is the "Yes" or the "No" button that should be pressed by default.
+	    # This is not a submit; we are rendering the form element for the first time and
+	    # since the spellcheck "sub widget" is to be displayed we'll also want to know
+	    # which option that should be selected by default.
+
 	    if { $widget_info(${element(widget)}) } {
-		set yes_checked "checked"
-		set no_checked ""
+		set spellcheck [nsv_get spellchecker default_lang]
+		set selected_option $spellcheck
 	    } else {
-		set yes_checked ""
-		set no_checked "checked"
+		set spellcheck [nsv_get spellchecker default_lang]
+		set selected_option ":nospell:"
 	    }
+
 	} else {
-	    # set these to something so the script won't choke.
-	    set yes_checked "n/a"
-	    set no_checked "n/a"
+
+	    # set this to something so the script won't choke.
+	    set selected_option "n/a"
+	    set spellcheck ":nospell:"
 	}
 	
     } else {
 	
-	# The user has explicitly stated if (s)he wants spellchecking to be performed on the text or not.
-	# Hence we are in submit mode with spell-checking enabled (radio button true or false).
-	# Let's check which it is and keep record of the states of our radio buttons in case the error
-	# page is shown.
+	# The user has explicitly stated if (s)he wants spellchecking to be performed
+	# on the text or not. Hence we are in submit mode with spell-checking enabled.
+	# Let's check which it is and keep record of the states of our select menu in
+	# case the error page is shown.
 
-	if { $spellcheck_p } {
-	    set yes_checked "checked"
-	    set no_checked ""
-	} else {
-	    set yes_checked ""
-	    set no_checked "checked"
-	    set spellcheck_p 1
-	}
-	
+	set selected_option $spellcheck
     }
     
-    return [list $spellcheck_p $yes_checked $no_checked]
+    return [list $spellcheck $selected_option]
 }
