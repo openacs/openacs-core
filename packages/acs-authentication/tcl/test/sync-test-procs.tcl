@@ -459,8 +459,8 @@ aa_register_case job_batch_for_local {
 }
 
 
-aa_register_case job_batch_ims_dummy {
-    Test a batch job for the local authority
+aa_register_case job_batch_ims_example_doc { 
+    Test IMS Enterprise 1.1 batch sync with the XML document from the specification.
 } {
     aa_stub acs_sc::invoke {
         acs_sc::invoke__arg_parser
@@ -643,3 +643,250 @@ aa_register_case job_batch_ims_dummy {
 }
 
 
+aa_register_case job_batch_ims_test {
+    Test IMS Enterprise 1.1 batch sync with a constructed document which actually works
+} {
+    aa_stub acs_sc::invoke {
+        acs_sc::invoke__arg_parser
+
+        if { [string equal $contract GetDocument] && [string equal $operation GetDocument] } {
+            array set result {
+                doc_status ok
+                doc_message {}
+                document {}
+            }
+            
+            global ims_doc
+
+            set result(document) "<enterprise>
+  <person recstatus=\"$ims_doc(recstatus)\">
+    <sourcedid>
+      <id>$ims_doc(username)</id>
+    </sourcedid>
+    <name>
+      <given>$ims_doc(first_names)</given>
+      <family>$ims_doc(last_name)</family>
+    </name>
+    <email>$ims_doc(email)</email>
+    <url>$ims_doc(url)</url>
+  </person>
+</enterprise>"
+            
+            return [array get result]
+        } else {
+            acs_sc::invoke_unstubbed \
+                -contract $contract \
+                -operation $operation \
+                -impl $impl \
+                -impl_id $impl_id \
+                -call_args $call_args \
+                -error=$error_p
+        }
+    }
+
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+
+            # Create a new dummy authority with the dummy IMS get-document driver and the IMS Enterprise 1.1 process driver.
+            array set new_auth {
+                short_name dummy-test
+                pretty_name dummy-test
+                enabled_p t
+                sort_order 999
+                auth_impl_id {}
+                pwd_impl_id {}
+                forgotten_pwd_url {}
+                change_pwd_url {}
+                register_impl_id {}
+                register_url {}
+                help_contact_text {}
+                snapshot_p f
+                batch_sync_enabled_p f
+            }
+            set new_auth(get_doc_impl_id) 1
+            set new_auth(process_doc_impl_id) [acs_sc::impl::get_id -owner "acs-authentication" -name "IMS Enterprise 1.1"]
+            
+            set new_auth(get_doc_impl_id) [acs_sc::impl::get_id -owner "acs-authentication" -name "HTTPGet"]
+
+            set authority_id [auth::authority::create \
+                                  -array new_auth]
+            
+
+            global ims_doc
+
+            #####
+            #
+            # Insert
+            #
+            #####
+
+            # Setup dummy variables
+            set ims_doc(recstatus) 1
+            set ims_doc(username) [ad_generate_random_string]
+            set ims_doc(first_names) [ad_generate_random_string]
+            set ims_doc(last_name) [ad_generate_random_string]
+            set ims_doc(email) [string tolower "[ad_generate_random_string]@foo.bar"]
+            set ims_doc(url) "http://www.[ad_generate_random_string].com"
+
+            set job_id [auth::authority::batch_sync -authority_id $authority_id]
+            
+            auth::sync::job::get -job_id $job_id -array job
+            
+            aa_equals "Number of actions" $job(num_actions) 1
+            aa_equals "Number of problems" $job(num_problems) 0
+            aa_log "job.message = '$job(message)'"
+            aa_log "job.document = '$job(document)'"
+
+            set entry_id [auth::sync::job::get_entries -job_id $job_id]
+            aa_equals "One entry" [llength $entry_id] 1
+
+            array unset entry
+            auth::sync::job::get_entry -entry_id $entry_id -array entry
+            
+            aa_log "entry.message = '$entry(message)'"
+            aa_log "entry.element_messages = '$entry(element_messages)'"
+
+            array unset user
+            acs_user::get -user_id $entry(user_id) -array user
+
+            foreach varname { username first_names last_name email url } { 
+                aa_equals "$varname" $user($varname) $ims_doc($varname)
+            }
+            aa_equals "authority_id" $user(authority_id) $authority_id
+            aa_false "member_state not banned" [string equal $user(member_state) "banned"]
+            # saving this for later
+            set first_user_id $entry(user_id)
+
+
+            #####
+            #
+            # Update
+            #
+            #####
+
+            # Setup dummy variables
+            set ims_doc(recstatus) 2
+            # username is unchanged
+            set ims_doc(first_names) [ad_generate_random_string]
+            set ims_doc(last_name) [ad_generate_random_string]
+            set ims_doc(email) [string tolower "[ad_generate_random_string]@foo.bar"]
+            set ims_doc(url) "http://www.[ad_generate_random_string].com"
+
+            set job_id [auth::authority::batch_sync -authority_id $authority_id]
+            
+            auth::sync::job::get -job_id $job_id -array job
+            
+            aa_equals "Number of actions" $job(num_actions) 1
+            aa_equals "Number of problems" $job(num_problems) 0
+            aa_log "job.message = '$job(message)'"
+            aa_log "job.document = '$job(document)'"
+
+            set entry_id [auth::sync::job::get_entries -job_id $job_id]
+            aa_equals "One entry" [llength $entry_id] 1
+
+            array unset entry
+            auth::sync::job::get_entry -entry_id $entry_id -array entry
+            
+            aa_log "entry.message = '$entry(message)'"
+            aa_log "entry.element_messages = '$entry(element_messages)'"
+
+            array unset user
+            acs_user::get -user_id $entry(user_id) -array user
+
+            foreach varname { username first_names last_name email url } { 
+                aa_equals "$varname" $user($varname) $ims_doc($varname)
+            }
+            aa_false "member_state not banned" [string equal $user(member_state) "banned"]
+
+            #####
+            #
+            # Delete
+            #
+            #####
+
+            # Setup dummy variables
+            set ims_doc(recstatus) 3
+            # username is unchanged
+            set ims_doc(first_names) [ad_generate_random_string]
+            set ims_doc(last_name) [ad_generate_random_string]
+            # email is unchanged
+            set ims_doc(url) "http://www.[ad_generate_random_string].com"
+
+            set job_id [auth::authority::batch_sync -authority_id $authority_id]
+            
+            auth::sync::job::get -job_id $job_id -array job
+            
+            aa_equals "Number of actions" $job(num_actions) 1
+            aa_equals "Number of problems" $job(num_problems) 0
+            aa_log "job.message = '$job(message)'"
+            aa_log "job.document = '$job(document)'"
+
+            set entry_id [auth::sync::job::get_entries -job_id $job_id]
+            aa_equals "One entry" [llength $entry_id] 1
+
+            array unset entry
+            auth::sync::job::get_entry -entry_id $entry_id -array entry
+            
+            aa_log "entry.message = '$entry(message)'"
+            aa_log "entry.element_messages = '$entry(element_messages)'"
+
+            array unset user
+            acs_user::get -user_id $entry(user_id) -array user
+
+            foreach varname { username } { 
+                aa_equals "$varname" $user($varname) $ims_doc($varname)
+            }
+            aa_equals "member_state" $user(member_state) "banned"
+
+            #####
+            #
+            # Reuse username and email
+            #
+            #####
+
+            # Setup dummy variables
+            set ims_doc(recstatus) 1
+            # same username
+            set ims_doc(first_names) [ad_generate_random_string]
+            set ims_doc(last_name) [ad_generate_random_string]
+            # same email
+            set ims_doc(url) "http://www.[ad_generate_random_string].com"
+
+            set job_id [auth::authority::batch_sync -authority_id $authority_id]
+            
+            auth::sync::job::get -job_id $job_id -array job
+            
+            aa_equals "Number of actions" $job(num_actions) 1
+            aa_equals "Number of problems" $job(num_problems) 0
+            aa_log "job.message = '$job(message)'"
+            aa_log "job.document = '$job(document)'"
+
+            set entry_id [auth::sync::job::get_entries -job_id $job_id]
+            aa_equals "One entry" [llength $entry_id] 1
+
+            array unset entry
+            auth::sync::job::get_entry -entry_id $entry_id -array entry
+            
+            aa_log "entry.message = '$entry(message)'"
+            aa_log "entry.element_messages = '$entry(element_messages)'"
+
+            array unset user
+            acs_user::get -user_id $entry(user_id) -array user
+            foreach varname { username first_names last_name email url } { 
+                aa_equals "$varname" $user($varname) $ims_doc($varname)
+            }
+            aa_equals "authority_id" $user(authority_id) $authority_id
+            aa_false "member_state not banned" [string equal $user(member_state) "banned"]
+
+            # Check that first_user_id has had username/email changed
+        }
+}
+
+
+
+aa_register_case job_batch_reuse_username_email {
+    Test that we can reuse the username and email of deleted users.
+} {
+    # TODO!
+}

@@ -53,7 +53,7 @@ ad_proc -public auth::sync::job::get_entries {
     return [db_list select_entries { select entry_id from auth_batch_job_entries where job_id = :job_id order by entry_time }]
 }
 
-ad_proc -public auth::sync::job::get_authority_id_from_job_id {
+ad_proc -public auth::sync::job::get_authority_id {
     {-job_id:required}
 } {
     Get the authority_id from a job_id. Cached.
@@ -62,10 +62,10 @@ ad_proc -public auth::sync::job::get_authority_id_from_job_id {
     
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    return [util_memoize [list auth::sync::job::get_authority_id_from_job_id_not_cached $job_id]]
+    return [util_memoize [list auth::sync::job::get_authority_id_not_cached $job_id]]
 }
 
-ad_proc -private auth::sync::job::get_authority_id_from_job_id_flush {
+ad_proc -private auth::sync::job::get_authority_id_flush {
     {-job_id ""}
 } {
     Flush cache
@@ -75,13 +75,13 @@ ad_proc -private auth::sync::job::get_authority_id_from_job_id_flush {
     @author Lars Pind (lars@collaboraid.biz)
 } {
     if { ![empty_string_p $job_id] } {
-        util_memoize_flush [list auth::sync::job::get_authority_id_from_job_id_not_cached $job_id]
+        util_memoize_flush [list auth::sync::job::get_authority_id_not_cached $job_id]
     } else {
-        util_memoize_flush_regexp [list auth::sync::job::get_authority_id_from_job_id_not_cached .*]
+        util_memoize_flush_regexp [list auth::sync::job::get_authority_id_not_cached .*]
     }
 }
 
-ad_proc -private auth::sync::job::get_authority_id_from_job_id_seed {
+ad_proc -private auth::sync::job::get_authority_id_seed {
     {-job_id:required}
     {-authority_id:required}
 } {
@@ -91,10 +91,10 @@ ad_proc -private auth::sync::job::get_authority_id_from_job_id_seed {
     
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    util_memoize_seed [list auth::sync::job::get_authority_id_from_job_id_not_cached $job_id] $authority_id
+    util_memoize_seed [list auth::sync::job::get_authority_id_not_cached $job_id] $authority_id
 }
 
-ad_proc -private auth::sync::job::get_authority_id_from_job_id_not_cached {
+ad_proc -private auth::sync::job::get_authority_id_not_cached {
     job_id
 } {
     Get the authority_id from a job_id. Not cached.
@@ -103,7 +103,7 @@ ad_proc -private auth::sync::job::get_authority_id_from_job_id_not_cached {
     
     @author Lars Pind (lars@collaboraid.biz)
     
-    @see auth::sync::job::get_authority_id_from_job_id
+    @see auth::sync::job::get_authority_id
 } {
     return [db_string select_auth_id { select authority_id from auth_batch_jobs where job_id = :job_id }]
 }
@@ -145,10 +145,11 @@ ad_proc -public auth::sync::job::start {
             values
             (:job_id, :interactive_p, :snapshot_p, :creation_user, :authority_id)
         }
+
     }
     
     # See the cache, we're going to need it shortly
-    auth::sync::job::get_authority_id_from_job_id_seed -job_id $job_id -authority_id $authority_id
+    auth::sync::job::get_authority_id_seed -job_id $job_id -authority_id $authority_id
 
     return $job_id
 }
@@ -307,7 +308,7 @@ ad_proc -public auth::sync::job::action {
     set entry_id {}
     set user_id {}
 
-    set authority_id [get_authority_id_from_job_id -job_id $job_id]
+    set authority_id [get_authority_id -job_id $job_id]
 
     db_transaction {
         # We deal with insert/update in a snaphsot sync here
@@ -335,6 +336,7 @@ ad_proc -public auth::sync::job::action {
             switch $operation {
                 "insert" {
                     # We set email_verified_p to 't', because we trust the email we get from the remote system
+                    
                     array set result [auth::create_local_account \
                                           -authority_id $authority_id \
                                           -username $username \
@@ -411,7 +413,7 @@ ad_proc -public auth::sync::job::snapshot_delete_remaining {
 } {
     Deletes the users that weren't included in the snapshot.
 } {
-    set authority_id [get_authority_id_from_job_id -job_id $job_id]
+    set authority_id [get_authority_id -job_id $job_id]
 
     set usernames [db_list select_user_ids {
         select username

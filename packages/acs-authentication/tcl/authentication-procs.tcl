@@ -980,7 +980,7 @@ ad_proc -private auth::validate_user_info {
                         # A user with this email does exist, but he's banned, so we can 'steal' his email address
                         # by setting it to something dummy
                         party::update \
-                            -user_id $email_party_id \
+                            -party_id $email_party_id \
                             -email "dummy-email-$email_party_id"
                     }
                     default { 
@@ -1004,7 +1004,7 @@ ad_proc -private auth::validate_user_info {
                     # A user with this username does exist, but he's banned, so we can 'steal' his username
                     # by setting it to something dummy
                     acs_user::update \
-                        -user_id $usrename_user_id \
+                        -user_id $username_user_id \
                         -username "dummy-username-$username_user_id"
                 }
                 default { 
