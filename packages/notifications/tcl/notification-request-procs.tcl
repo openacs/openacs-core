@@ -31,6 +31,16 @@ namespace eval notification::request {
         return $request_id
     }
 
+    ad_proc -public get_request_id {
+        {-type_id:required}
+        {-object_id:required}
+        {-user_id:required}
+    } {
+        Checks if a particular notification request exists
+    } {
+        return [db_string select_request_id {} -default {}]
+    }
+
     ad_proc -public delete {
         {-request_id:required}
     } {
@@ -39,5 +49,14 @@ namespace eval notification::request {
         # do the delete
         db_exec_plsql delete_request {}
     }
-    
+
+    ad_proc -public delete_all {
+        {-object_id:required}
+    } {
+        remove all requests for a particular object ID
+        usually because the object is getting deleted
+    } {
+        # Do it
+        db_exec_plsql delete_all_requests {}
+    }
 }
