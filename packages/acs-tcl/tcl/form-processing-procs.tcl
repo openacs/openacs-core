@@ -210,16 +210,21 @@ ad_proc -public ad_form {
     </dd>
         
     <p><dt><b>-select_query</b></dt><p>
-    <dd>Defines a query that returns a single row containing values for each element of the form meant to be
-        modifiable by the user.  Can only be used if an element of type key has been declared.
+    <dd>
+    Defines a query that returns a single row containing values for each
+    element of the form meant to be modifiable by the user.  Can only be
+    used if an element of type key has been declared. Values returned from
+    the query are available in the form, but not the ADP template (for
+    that, use -edit_request instead).
     </dd>
 
     <p><dt><b>-select_query_name</b></dt><p>
-    <dd>The name of a query to be looked up in the appropriate query file that returns a single row containing
-        values for each element of the form meant to be modifiable by the user.  In the OpenACS 4 environment this
-        should normally be used rather than -select_query, as query files are the mechanism used to make the
-        support of multiple RDMBS systems possible.  Can only be used if an element of type key has been
-        declared
+    <dd>
+    Identical to -select_query, except instead of specifying the query
+    inline, specifies a query name. The query with that name from the
+    appropriate XQL file will be used. Use -select_query_name rather than
+    -select_query whenever possible, as query files are the mechanism used
+    to make the support of multiple RDMBS systems possible.
     </dd>
 
     <p><dt><b>-show_required_p { 0 | 1 }</b></dt><p>
@@ -237,11 +242,17 @@ ad_proc -public ad_form {
     </dd>
 
     <p><dt><b>-edit_request</b></dt><p>
-    <dd>A code block which sets the values for each element of the form meant to be modifiable by the user.  Use
-        this when a single query to grab database values is insufficient.  Can only be used if an element of
-        type key is defined.  This block is only executed if the page is called with a valid key, i.e. a
-        self-submit form to add or edit an item called to edit the data. Set the values as local
-        variables in the code block, and they'll get fetched and used as element values for you.
+    <dd>    
+    A code block which sets the values for each element of the form meant
+    to be modifiable by the user.  Use this when a single query to grab
+    database values is insufficient.  Any variables set in an -edit_request
+    block are available to the ADP template as well as the form, while
+    -select_query sets variables in the form only. Can only be used if an
+    element of type key is defined.  This block is only executed if the
+    page is called with a valid key, i.e. a self-submit form to add or edit
+    an item called to edit the data. Set the values as local variables in
+    the code block, and they'll get fetched and used as element values for
+    you.
     </dd>
 
     <p><dt><b>-new_request</b></dt><p>
