@@ -40,6 +40,24 @@ proc_doc ad_restrict_to_https {conn args why} {
     set host [ns_set iget [ad_conn headers] "host"]
     if { [regexp {^(.*?):(.*)$} $host match host port] == 0 || [string compare $port $http_port] == 0 } {
 	set url [ad_conn url]
+
+        # ArsDigita probably meant to pass along any form variables (I hope)...
+        set form [ns_getform]
+
+        if {$form != ""} {
+            set size [ns_set size $form]
+            set url_args [list]
+ 
+            for {set i 0} {$i < $size} {incr i} {
+                set key [ns_set key $form $i]
+                set val [ns_set value $form $i]
+                lappend url_args [ns_urlencode $key]=[ns_urlencode $val]
+            }
+ 
+           append url "?[join $url_args &]"
+        }
+        
+
 	if { $ssl_port == 443 } {
 	    set redir "https://$host$url"
 	} else {
