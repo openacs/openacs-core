@@ -5,7 +5,7 @@
 <fullquery name="output_portrait">
         <querytext>
 
-        select lob
+        select lob, storage_type
         from cr_revisions
         where revision_id = :revision_id
 

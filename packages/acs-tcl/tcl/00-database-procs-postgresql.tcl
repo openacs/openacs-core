@@ -375,40 +375,106 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
             set lob_sql [uplevel 2 [list db_bind_var_substitution $sql]]
 	}
 
-        # get the content
+        # get the content - asssume it is in column 0, or optionally it can
+        # be returned as "content" with the storage type indicated by the 
+        # "storage_type" column.
+
         set selection [ns_db 1row $db $lob_sql]
-        set val [ns_set value $selection 0]
+        set content [ns_set value $selection 0]
+        for {set i 0} {$i < [ns_set size $selection]} {incr i} {
+            set name [ns_set key $selection $i]
+            if {[string equal $name storage_type]} {
+                set storage_type [ns_set value $selection $i]
+            } elseif {[string equal $name content]} {
+                set content [ns_set value $selection $i]
+            }
+        }
+
+        # this is an ugly hack, but it allows content to be written
+        # to a file/connection if it is stored as a lob or if it is
+        # stored in the content-repository as a file. (DanW - Openacs)
 
         switch $type {
 
             blob_select_file {
 
-                if {[regexp {^[0-9]+$} $val match]} {
-                    ns_pg blob_select_file $db $val $file
-                } elseif {[file exists $val]} {
-                    set ifp [open $val r]
+                if {[info exists storage_type]} {
+                    switch $storage_type {
+                        file {
+                            if {[file exists $content]} {
+                                set ifp [open $content r]
+                                set ofp [open $file w]
+                                ns_cpfp $ifp $ofp
+                                close $ifp
+                                close $ofp
+                            } else {
+                                error "file: $content doesn't exist"
+                            }
+                        }
+
+                        lob {
+                            if {[regexp {^[0-9]+$} $content match]} {
+                                ns_pg blob_select_file $db $content $file
+                            } else {
+                                error "invalid lob_id: should be an integer"
+                            }
+                        }
+
+                        default {
+                            error "invalid storage type"
+                        }
+                    }
+                } elseif {[file exists $content]} {
+                    set ifp [open $content r]
                     set ofp [open $file w]
                     ns_cpfp $ifp $ofp
                     close $ifp
                     close $ofp
+                } elseif {[regexp {^[0-9]+$} $content match]} {
+                    ns_pg blob_select_file $db $content $file
                 } else {
-                    error "lob id is not an integer"
+                    error "invalid query"
                 }
             }
 
             write_blob {
 
-                # this is an ugly hack, but it allows content to be written
-                # to the connection if it is stored as a lob or if it is
-                # stored in the content-repository as a file. (DanW - Openacs)
-                if {[file exists $val]} {
-                    set ofp [open $val r]
+                if {[info exists storage_type]} {
+                    switch $storage_type {
+                        file {
+                            if {[file exists $content]} {
+                                set ofp [open $content r]
+                                ns_writefp $ofp
+                                close $ofp
+                            } else {
+                                error "file: $content doesn't exist"
+                            }
+                        }
+
+                        text {
+                            ns_write $content
+                        }
+
+                        lob {
+                            if {[regexp {^[0-9]+$} $content match]} {
+                                ns_pg blob_write $db $content
+                            } else {
+                                error "invalid lob_id: should be an integer"
+                            }
+                        }
+
+                        default {
+                            error "invalid storage type"
+                        }
+                    }
+                } elseif {[file exists $content]} {
+                    set ofp [open $content r]
                     ns_writefp $ofp
                     close $ofp
-                } elseif {[regexp {^[0-9]+$} $val match]} {
-                    ns_pg blob_write $db $val
+                } elseif {[regexp {^[0-9]+$} $content match]} {
+                    ns_pg blob_write $db $content
                 } else {
-                    error "file: $val doesn't exist"
+                    ns_write $content
                 }
             }
         }
