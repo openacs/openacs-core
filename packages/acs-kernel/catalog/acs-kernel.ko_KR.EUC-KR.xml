@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<message_catalog package_key="acs-kernel" package_version="5.0d12" locale="ko_KR" charset="EUC-KR">
-
-  <msg key="member_role_pretty_name">회원</msg>
-  <msg key="member_role_pretty_plural">회원들</msg>
-</message_catalog>

@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<message_catalog package_key="acs-lang" package_version="4.7d7" locale="TH_TH" charset="TIS-620">
-
-  <msg key="English">ภาษาอังกฤษ</msg>
-  <msg key="French">ภาษาฝรั่งเศส</msg>
-  <msg key="German">ภาษาเยอรมัน</msg>
-  <msg key="Spanish">ภาษาสเปน</msg>
-</message_catalog>
