@@ -11,7 +11,7 @@ ReturnHeaders
 ns_write "[apm_header  "Server Restart"]
 
 <p>
-  The server procoess has been killed. If your AOLServer is not set up to restart automatically you need to start it
+  The server process has been killed. If your AOLServer is not set up to restart automatically you need to start it
   manually now.
 </p>
 
