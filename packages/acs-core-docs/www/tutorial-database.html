@@ -1,7 +1,7 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Setting Up Database Objects</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial.html" title="Chapter 7. Development Tutorial"><link rel="previous" href="tutorial-newpackage.html" title="Creating a Package"><link rel="next" href="tutorial-pages.html" title="Creating Web Pages"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-newpackage.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Development Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-pages.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-database"></a>Setting Up Database Objects</h2></div></div><div></div></div><div class="authorblurb"><p><p>by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a></p><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2859719"></a>Code the data model</h3></div></div><div></div></div><p>We create all database objects with scripts in the
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2834349"></a>Code the data model</h3></div></div><div></div></div><p>We create all database objects with scripts in the
       <tt class="computeroutput">myfirstpackage/sql/</tt> directory.  All
       database scripts are database-specific and are thus in either
       the <tt class="computeroutput">myfirstpackage/sql/oracle</tt> or
@@ -36,9 +36,11 @@
       <tt class="computeroutput">@author</tt> which will be picked up
       by the API browser.  The string
       <tt class="computeroutput">$Id$</tt> will automatically be
-      expanded when the file is checked in to cvs.</p><pre class="screen">[service0 postgresql]$ <b class="userinput"><tt>emacs myfirstpackage-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2852129"></a><p class="title"><b>Figure 7.2. Database Creation Script - master create file</b></p><pre class="programlisting">--
--- @author rhs@mit.edu
--- @cvs-id $Id$
+      expanded when the file is checked in to cvs.</p><pre class="screen">[service0 ~]$ <b class="userinput"><tt>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/myfirstpackage/sql/postgresql</tt></b>
+[service0 postgresql]$ <b class="userinput"><tt>emacs myfirstpackage-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2855881"></a><p class="title"><b>Figure 7.2. Database Creation Script - master create file</b></p><pre class="programlisting">-- creation script
+--
+-- @author joel@aufrecht.org
+-- @cvs-id &amp;Id:$
 --
 
 select content_type__create_type(
@@ -53,18 +55,17 @@ select content_type__create_type(
 
 -- necessary to work around limitation of content repository:
 select content_folder__register_content_type(-100,'mfp_note','t');
-
 </pre></div><p>The creation script calls a function,
-    <tt class="computeroutput">content_type__create_type</tt>, which
+    <tt class="computeroutput"><a href="/api-doc/plsql-subprogram-one?type=FUNCTION&amp;name=content%5ftype%5f%5fcreate%5ftype" target="_top">content_type__create_type</a></tt>, which
     in turn creates the necessary database changes to support our data
     object.  Notice the use of "mfp."  This token, derived from "My
     First Package," ensures that our object is unlikely to conflict
     with objects from other packages.</p><p>Create a database file to drop everything if the package
-        is uninstalled.</p><pre class="screen">[service0 postgresql]$ <b class="userinput"><tt>emacs myfirstpackage-drop.sql</tt></b></pre><div class="figure"><a name="id2857138"></a><p class="title"><b>Figure 7.3. Database deletion script</b></p><pre class="programlisting">-- packages/myfirstpackage/sql/myfirstpackage-drop.sql
--- drop script
+        is uninstalled.</p><pre class="screen">
+[service0 postgresql]$ <b class="userinput"><tt>emacs myfirstpackage-drop.sql</tt></b></pre><div class="figure"><a name="id2856088"></a><p class="title"><b>Figure 7.3. Database deletion script</b></p><pre class="programlisting">-- drop script
 --
 -- @author joel@aufrecht.org
--- @cvs-id $Id$
+-- @cvs-id &amp;Id:$
 --
 select content_folder__unregister_content_type(-100,'mfp_note','t');
 
@@ -74,17 +75,27 @@ select content_type__drop_type(
 	   't'
     );
 </pre></div><p>Run the create script manually to add your tables and functions.</p><pre class="screen">[service0 postgresql]$ <b class="userinput"><tt>psql -f myfirstpackage-create.sql</tt></b>
-psql:myfirstpackage-create.sql:14: NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index 'mfp_notes_pkey' for table 'mfp_notes'
-psql:myfirstpackage-create.sql:14: NOTICE:  CREATE TABLE will create implicit trigger(s) for FOREIGN KEY check(s)
+psql:myfirstpackage-create.sql:15: NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index 'mfp_notes_pkey' for table 'mfp_notes'
+psql:myfirstpackage-create.sql:15: NOTICE:  CREATE TABLE will create implicit trigger(s) for FOREIGN KEY check(s)
  content_type__create_type
 ---------------------------
                          0
 (1 row)
 
+ content_folder__register_content_type
+---------------------------------------
+                                     0
+(1 row)
+
 [service0 postgresql]$</pre><p>If there are errors, use them to debug the sql file and try again.  If there are errors in the database table creation, you may need to run the drop script to drop the table so that you can recreate it.  The drop script will probably have errors since some of the things it's trying to drop may be missing.  They can be ignored.</p><p>Once you get the same output as shown above, test the drop script:</p><pre class="screen">[service0 postgresql]$ <b class="userinput"><tt>psql -f myfirstpackage-drop.sql</tt></b>
+ content_folder__unregister_content_type
+-----------------------------------------
+                                       0
+(1 row)
+
  content_type__drop_type
 -------------------------
                        0
 (1 row)
 
-[service0 postgresql]$</pre><p>Once both scripts are working without errors, <span class="emphasis"><em>run the create script one last time</em></span> and proceed.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-newpackage.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-pages.html">Next</a></td></tr><tr><td width="40%" align="left">Creating a Package </td><td width="20%" align="center"><a accesskey="u" href="tutorial.html">Up</a></td><td width="40%" align="right"> Creating Web Pages</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/tutorial-database.html#comments">View comments on this page at openacs.org</a></center></body></html>
+[service0 postgresql]$</pre><p>Once both scripts are working without errors, <span class="emphasis"><em>run the create script one last time</em></span> and proceed.</p><pre class="screen">[service0 postgresql]$ <b class="userinput"><tt>psql -f myfirstpackage-create.sql</tt></b></pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-newpackage.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-pages.html">Next</a></td></tr><tr><td width="40%" align="left">Creating a Package </td><td width="20%" align="center"><a accesskey="u" href="tutorial.html">Up</a></td><td width="40%" align="right"> Creating Web Pages</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/tutorial-database.html#comments">View comments on this page at openacs.org</a></center></body></html>

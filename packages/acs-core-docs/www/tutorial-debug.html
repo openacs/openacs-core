@@ -1,7 +1,7 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Debugging and Automated Testing</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial.html" title="Chapter 7. Development Tutorial"><link rel="previous" href="tutorial-pages.html" title="Creating Web Pages"><link rel="next" href="tutorial-advanced.html" title="Advanced Topics"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-pages.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Development Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-advanced.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-debug"></a>Debugging and Automated Testing</h2></div></div><div></div></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Important</h3><p>This section is a work in progress.</p></div><div class="authorblurb"><p><p>by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a></p><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2857335"></a>Debugging</h3></div></div><div></div></div><p><b>Developer Support. </b>The Developer Support package adds several goodies: debug
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2856525"></a>Debugging</h3></div></div><div></div></div><p><b>Developer Support. </b>The Developer Support package adds several goodies: debug
       information for every page; the ability to log comments to the
       page instead of the error log, and fast user switching so that you
       can test pages as anonymous and as dummy users without logging
@@ -23,17 +23,17 @@ G goes to the end.<br>
 ? searches backward <br>
 / searches forward. <br>
           </p></div><p>
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2859970"></a>Manual testing</h3></div></div><div></div></div><p>Make a list of basic tests to make sure it works</p><div class="segmentedlist"><table border="0"><thead><tr><th>Test Num</th><th>Action</th><th>Expected Result</th></tr></thead><tbody><tr><td>001</td><td>Browse to the index page while not logged in and
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2856638"></a>Manual testing</h3></div></div><div></div></div><p>Make a list of basic tests to make sure it works</p><div class="segmentedlist"><table border="0"><thead><tr><th>Test Num</th><th>Action</th><th>Expected Result</th></tr></thead><tbody><tr><td>001</td><td>Browse to the index page while not logged in and
             while one or more notes exist.</td><td>No edit or delete or add links should appear.</td></tr><tr><td>002</td><td>Browse to the index page while logged in.  An Edit
             link should appear.  Click on it.  Fill out the form and
             click Submit.</td><td>The text added in the form should be visible on the
             index page.</td></tr></tbody></table></div><p>Other things to test: try to delete someone else's
         note.  Try to delete your own note.  Edit your own note.
-        Search for a note.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2855232"></a>Write automated tests</h3></div></div><div></div></div><div class="authorblurb"><p><p>by <a href="mailto:simon@collaboraid.net" target="_top">Simon Carstensen</a></p><br>
+        Search for a note.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2856726"></a>Write automated tests</h3></div></div><div></div></div><div class="authorblurb"><p><p>by <a href="mailto:simon@collaboraid.net" target="_top">Simon Carstensen</a></p><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </p></div><p>
-      <a class="indexterm" name="id2855259"></a>
+      <a class="indexterm" name="id2856752"></a>
 It seems to me that a lot of
 people have been asking for some guidelines on how to write automated
 tests. I've done several tests by now and have found the process to be

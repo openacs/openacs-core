@@ -15,8 +15,8 @@
     <title>Install some API</title>
     <para>As a workaround for missing content-repository functionality, copy a provided file into the directory for tcl files:</para>
     <screen>
-    <action>cp <replaceable>/var/lib/aolserver/service1</replaceable>/packages/acs-core-docs/www/files/note-procs.tcl <replaceable>/var/lib/aolserver/service1</replaceable>/packages/myfirstpackage/tcl/</action></screen>
-    <para>To make this file take effect, go to the <ulink url="/acs-admin/apm">APM</ulink> and choose "Reload all files" for "MyFirstPackage".</para>
+    <action>cp <replaceable>/var/lib/aolserver/service0</replaceable>/packages/acs-core-docs/www/files/note-procs.tcl <replaceable>/var/lib/aolserver/service0</replaceable>/packages/myfirstpackage/tcl/</action></screen>
+    <para>To make this file take effect, go to the <ulink url="/acs-admin/apm">APM</ulink> and choose "Reload changed" for "MyFirstPackage".</para>
   </sect2>
   <sect2>
     <title>Build the "Index" page</title>
@@ -32,7 +32,7 @@
       <computeroutput>index</computeroutput>, so we'll build that
       first, starting with the tcl file:</para>
       <screen>[service0 postgresql]$<userinput> cd /var/lib/aolserver/service0/myfirstpackages/www</userinput>
-[service0@yourserver www <userinput>emacs index.tcl</userinput></screen>
+[service0 www]$ <userinput>emacs index.tcl</userinput></screen>
       <para>Paste this into the file.</para>      
       <programlisting>ad_page_contract {
     This is the main page for the package.  It displays all of the Notes and provides links to edit them and to create new Notes.

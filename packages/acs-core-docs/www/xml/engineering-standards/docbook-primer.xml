@@ -722,6 +722,9 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
     <itemizedlist>
 
       <listitem>
+        <para><ulink url="http://www.xml.com/lpt/a/2002/07/31/xinclude.html">Using Xinclude</ulink></para>
+      </listitem>
+      <listitem>
 	<para>
 	The <ulink
 	url="http://en.tldp.org/LDP/LDP-Author-Guide/">LDP Author

@@ -54,10 +54,8 @@ chmod 770 /var/lib/aolserver</action></screen>
       it in the <computeroutput><replaceable>service0</replaceable></computeroutput> group so that it
       can use database and server commands associated with that group.
     </para>
-
-        <screen>[root root]# <userinput>groupadd <replaceable>web</replaceable></userinput>
-[root root]# <userinput>groupadd <replaceable>service0</replaceable></userinput>
-[root root]# <userinput>useradd -g <replaceable>service0</replaceable> -G web <replaceable>service0</replaceable> -d /home/<replaceable>service0</replaceable></userinput>
+<screen>
+[root root]# <userinput>useradd <replaceable>service0</replaceable></userinput>
 [root root]#</screen>
   </sect2>
   

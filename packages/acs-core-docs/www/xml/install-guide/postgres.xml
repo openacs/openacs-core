@@ -49,6 +49,7 @@ su postgres -c "/usr/lib/postgresql/bin/createlang plpgsql template1"</userinput
   <screen>[root root]# <userinput>ln -s /usr/lib/pgsql/ /var/lib/pgsql/lib</userinput>
 [root root]# <userinput>ln -s /var/lib/pgsql /usr/local/pgsql</userinput>
 [root root]# <userinput>ln -s /etc/init.d/postgresql /etc/init.d/postgres</userinput>
+[root root]# <userinput>ln -s /usr/bin /usr/local/pgsql/bin</userinput>
 [root root]# <userinput>service postgresql start</userinput>
 Initializing database:
                                                            [  OK  ]
@@ -61,6 +62,7 @@ Starting postgresql service:                               [  OK  ]
 <action>
 ln -s /usr/lib/pgsql/ /var/lib/pgsql/lib
 ln -s /var/lib/pgsql /usr/local/pgsql
+ln -s /usr/bin /usr/local/pgsql/bin
 service postgresql start
 echo "export LD_LIBRARY_PATH=/usr/local/pgsql/lib" >> ~postgres/.bash_profile
 echo "export PATH=$PATH:/usr/local/pgsql/bin" >> ~postgres/.bash_profile
