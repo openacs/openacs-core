@@ -847,7 +847,7 @@ ad_proc -public auth::password::get_forgotten_url {
             # Remote recovery requires username and authority so we fail
             set forgotten_pwd_url ""
         } else {            
-            set forgotten_pwd_url "[subsite::get_element -element url]register/forgotten-password"
+            set forgotten_pwd_url "[subsite::get_element -element url]register/recover-password"
         }
     }
     

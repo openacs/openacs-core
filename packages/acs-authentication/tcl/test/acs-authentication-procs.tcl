@@ -307,7 +307,7 @@ aa_register_case auth_password_get_forgotten_url {
 
     # With user info
     set url [auth::password::get_forgotten_url -authority_id $test_vars(authority_id) -username $test_vars(username)]
-    aa_true "there is a local forgotten-password page with user info ($url)" [regexp {recover-password} $url]
+    aa_true "there is a local recover-password page with user info ($url)" [regexp {recover-password} $url]
 
     set url [auth::password::get_forgotten_url -authority_id $test_vars(authority_id) -username $test_vars(username) -remote_only]
     aa_equals "cannot get remote url with missing forgotten_pwd_url" $url ""
@@ -317,7 +317,7 @@ aa_register_case auth_password_get_forgotten_url {
     aa_equals "cannot get remote url without user info" $url ""
 
     set url [auth::password::get_forgotten_url -authority_id "" -username ""]
-    aa_true "there is a local forgotten-password page without user info" [regexp {forgotten-password} $url]
+    aa_true "there is a local recover-password page without user info" [regexp {recover-password} $url]
 }
 
 aa_register_case auth_password_retrieve {
