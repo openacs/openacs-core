@@ -58,4 +58,4 @@ foreach section $sections {
     }
 }
 
-ad_returnredirect version-parameters?[export_url_vars version_id section_name]
+ad_returnredirect [export_vars -base "version-parameters" { version_id section_name }]
