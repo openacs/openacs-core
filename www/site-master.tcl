@@ -30,6 +30,7 @@ set system_name [ad_system_name]
 set system_url [ad_url]
 
 # Get user information
+set sw_admin_p 0
 set user_id [ad_conn user_id]
 set untrusted_user_id [ad_conn untrusted_user_id]
 if { $untrusted_user_id != 0 } {
