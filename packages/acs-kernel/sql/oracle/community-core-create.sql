@@ -530,7 +530,8 @@ create table users (
 	second_to_last_visit	date,
 	n_sessions		integer default 1 not null,
 	password_question	varchar2(1000),
-	password_answer		varchar2(1000)
+	password_answer		varchar2(1000),
+	password_changed_date	date
 );
 
 create index users_email_verified_idx on users (email_verified_p);
