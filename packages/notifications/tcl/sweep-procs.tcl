@@ -74,9 +74,11 @@ namespace eval notification::sweep {
                         ns_log Notice "NOTIF-BATCHED: content to send!"
                         db_transaction {
                             ns_log Notice "NOTIF-BATCHED: sending content"
+                            # System name is used in the subject
+                            set system_name [ad_system_name]
                             notification::delivery::send -to_user_id $prev_user_id \
                                     -notification_type_id $prev_type_id \
-                                    -subject "\[[ad_system_name] - Batched Notification\]" \
+                                    -subject "[_ notifications.lt_system_name_-_Batched]" \
                                     -content $batched_content \
                                     -delivery_method_id $prev_deliv_method_id
                             
@@ -104,7 +106,7 @@ namespace eval notification::sweep {
 
                 # append content to built-up content
                 ns_log Notice "NOTIF-BATCHED: appending one notif!"
-                append batched_content "SUBJECT: [ns_set get $notif notif_subject]\n[ns_set get $notif notif_text]\n=====================\n"
+                append batched_content "[_ notifications.SUBJECT] [ns_set get $notif notif_subject]\n[ns_set get $notif notif_text]\n=====================\n"
                 lappend list_of_notification_ids [ns_set get $notif notification_id]
 
                 # Set the vars

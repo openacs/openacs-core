@@ -31,10 +31,10 @@ namespace eval notification::display {
         
         if {![empty_string_p $request_id]} {
             set sub_url [unsubscribe_url -request_id $request_id -url $url]
-            set sub_chunk "You have requested notification for $pretty_name. You may <a href=\"$sub_url\">unsubscribe</a>."
+            set sub_chunk "[_ notifications.lt_You_have_requested_no]"
         } else {
             set sub_url [subscribe_url -type $type -object_id $object_id -url $url -user_id $user_id -pretty_name $pretty_name]
-            set sub_chunk "You may <a href=\"$sub_url\">request notification</a> for $pretty_name."
+            set sub_chunk "[_ notifications.lt_You_may_a_hrefsub_url]"
         }
 
         return "<font size=-1>\[ $sub_chunk \]</font>"
