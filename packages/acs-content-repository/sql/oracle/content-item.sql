@@ -1211,11 +1211,12 @@ end get_context;
 procedure move (
   item_id		in cr_items.item_id%TYPE,
   target_folder_id	in cr_folders.folder_id%TYPE
+  name                  in cr_items.name%TYPE default null
 ) is
 begin
 
   if content_folder.is_folder(item_id) = 't' then
-    content_folder.move(item_id, target_folder_id);
+    content_folder.move(item_id, target_folder_id, name);
   elsif content_folder.is_folder(target_folder_id) = 't' then
    
 
@@ -1227,7 +1228,8 @@ begin
 
     -- update the parent_id for the item
     update cr_items 
-      set parent_id = move.target_folder_id
+      set parent_id = move.target_folder_id,
+	  name = nvl (move.name, cr_items.name)
       where item_id = move.item_id;
     end if;
 
@@ -1239,13 +1241,14 @@ procedure copy (
   target_folder_id      in cr_folders.folder_id%TYPE,
   creation_user         in acs_objects.creation_user%TYPE,
   creation_ip           in acs_objects.creation_ip%TYPE default null
+  name                  in cr_items.name%TYPE default null
 ) is
 
   copy_id cr_items.item_id%TYPE;
 
 begin
 
-  copy_id := copy2(item_id, target_folder_id, creation_user, creation_ip);
+  copy_id := copy2(item_id, target_folder_id, creation_user, creation_ip, name);
 
 end copy;
 
@@ -1263,6 +1266,7 @@ function copy2 (
   target_folder_id      in cr_folders.folder_id%TYPE,
   creation_user         in acs_objects.creation_user%TYPE,
   creation_ip           in acs_objects.creation_ip%TYPE default null
+  name                  in cr_items.name%TYPE default null
 ) return cr_items.item_id%TYPE is
   v_current_folder_id cr_folders.folder_id%TYPE;
   v_num_revisions     integer;
@@ -1283,7 +1287,8 @@ begin
         folder_id        => copy2.item_id,
         target_folder_id => copy2.target_folder_id,
         creation_user    => copy2.creation_user,
-        creation_ip      => copy2.creation_ip
+        creation_ip      => copy2.creation_ip,
+        name             => copy2.name
     );
   -- call content_symlink.copy if the item is a symlink
   elsif content_symlink.is_symlink(copy2.item_id) = 't' then
@@ -1291,7 +1296,17 @@ begin
         symlink_id       => copy2.item_id,
         target_folder_id => copy2.target_folder_id,
         creation_user    => copy2.creation_user,
-        creation_ip      => copy2.creation_ip
+        creation_ip      => copy2.creation_ip,
+        name             => copy2.name
+    );
+  -- call content_extlink.copy if the item is a extlink
+  elsif content_extlink.is_extlink(copy2.item_id) = 't' then
+    content_extlink.copy(
+        extlink_id       => copy2.item_id,
+        target_folder_id => copy2.target_folder_id,
+        creation_user    => copy2.creation_user,
+        creation_ip      => copy2.creation_ip,
+        name             => copy2.name
     );
   -- call content_extlink.copy if the item is a extlink
   elsif content_extlink.is_extlink(copy2.item_id) = 't' then
@@ -1313,19 +1328,27 @@ begin
     where
       item_id = copy2.item_id;
 
-    -- can't copy to the same folder
-    if copy2.target_folder_id ^= v_current_folder_id then
+    if copy.name = '' then
+	copy.name := null;
+    end if;
 
-      select
-        content_type, name, locale,
-        nvl(live_revision, latest_revision), storage_type
-      into
-        v_content_type, v_name, v_locale, v_revision_id, v_storage_type
-      from
-        cr_items
-      where
-        item_id = copy2.item_id;
 
+    select
+      content_type, name , locale,
+      nvl(live_revision, latest_revision), storage_type
+    into
+      v_content_type, v_name, v_locale, v_revision_id, v_storage_type
+    from
+      cr_items
+    where
+      item_id = copy2.item_id;
+
+    -- can't copy to the same folder unless name is different
+    if copy2.target_folder_id ^= v_current_folder_id or (v_name != copy.name and copy.name is not null) then
+
+      if copy.name is not null then
+        v_name := copy_name;
+      end if;
       -- make sure the content type of the item is registered to the folder
       v_is_registered := content_folder.is_registered(
           folder_id        => copy2.target_folder_id,
