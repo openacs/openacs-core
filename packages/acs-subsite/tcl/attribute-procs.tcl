@@ -133,7 +133,7 @@ ad_proc -public add {
 #      lappend attr_list [list "pretty_name" '$pretty_name']
 #      lappend attr_list [list "pretty_plural" '$pretty_plural']
     
-    # A note (by ben)
+    # A note (by ben, OpenACS)
     # the queries are empty because they are pulled out later in db_exec_plsql
     
     set plsql [list]
