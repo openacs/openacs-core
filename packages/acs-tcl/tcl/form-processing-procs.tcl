@@ -66,8 +66,8 @@ ad_proc -public ad_form {
 
         my_table_key:key(my_table_sequence)
 
-        {value:text(textarea)             {{label "Enter text"}
-                                           {html {rows 4 cols 50}}}}
+        {value:text(textarea)             {label "Enter text"}
+                                           {html {rows 4 cols 50}}}
     } -select_query {
         select value from my_table where my_table_key = :my_table_key
     } -validate {
@@ -294,9 +294,9 @@ ad_proc -public ad_form {
     </blockquote>
     
     <blockquote><pre>
-    {my_key:text(multiselect),multiple       {{label "select some values"}
+    {my_key:text(multiselect),multiple       {label "select some values"}
                                               {options {first second third fourth fifth}}
-                                              {html {size 4}}}}
+                                              {html {size 4}}}
                                   
     </pre><p>
 
@@ -306,7 +306,7 @@ ad_proc -public ad_form {
     </blockquote>
     
     <blockquote><pre>
-    {hide_me:text(hidden)                     {{value 3}}}
+    {hide_me:text(hidden)                     {value 3}}
     </pre><p>
 
     Define the hidden form element "hide_me" with the value 3
