@@ -110,8 +110,20 @@ function acs_RichText_Or_File_InputMethodChanged(form_name, richtext_name, radio
     }
 }
 
-/* HTMLArea (part of Richtext Widget) Support */
+/* RTE functions */ 
+function acs_rteSubmitForm() {
+        updateRTEs();
+	return true;
+}
 
+function acs_rteInit(form_name) {
+// sets onsubmit to function for the given form name
+    if (document.forms == null) return;
+    if (document.forms[form_name] == null) return;
+    document.forms[form_name].onsubmit = acs_rteSubmitForm;
+}
+
+/* HTMLArea (part of Richtext Widget) Support */
 function acs_initHtmlArea(editor_var, elementid) {
     editor_var.generate();
     return false;
