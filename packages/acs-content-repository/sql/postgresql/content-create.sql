@@ -494,8 +494,11 @@ on cr_revisions for each row execute procedure on_lob_ref();
 
 create index cr_revisions_by_mime_type on cr_revisions(mime_type);
 create index cr_revisions_title_idx on cr_revisions(title);
+create index cr_revisions_publish_date_idx on cr_revisions(publish_date);
+
 -- create index cr_revisions_lower_title_idx on cr_revisions(lower(title));
 -- create index cr_revisions_title_ltr_idx on cr_revisions(substr(lower(title), 1, 1));
+
 
 comment on table cr_revisions is '
   Each content item may be associated with any number of revisions.
