@@ -47,16 +47,10 @@ namespace eval parameter {
             ::set package_id [ad_requested_object_id]
         }
 
-        # 1. check to see if this parameter is being set in the server's
-        # configuration file; this value has highest precedence
-        ::set value [ad_parameter_from_file $parameter $package_id]
+        # 1. check the parameter cache
+        ::set value [ad_parameter_cache $package_id $parameter]
 
-        # 2. check the parameter cache
-        if {[empty_string_p $value]} {
-            ::set value [ad_parameter_cache $package_id $parameter]
-        }
-
-        # 3. use the default value
+        # 2. use the default value
         if {[empty_string_p $value]} {
             ::set value $default
         }
@@ -89,14 +83,22 @@ namespace eval parameter {
         @param parameter which parameter's value to get
         @param default what to return if we don't find a value
     } {
-        with_catch errmsg {
-            ::set value [get \
-                -package_id [apm_package_id_from_key $package_key] \
-                -parameter $parameter \
-                -default $default \
-            ]
-        } {
-            ::set value $default
+        # 1. check to see if this parameter is being set in the server's
+        # configuration file; this value has highest precedence
+        ::set value [ad_parameter_from_file $parameter $package_key]
+
+        # 2. try to get a package_id for this package_key and use the standard
+        # parameter::get function to get the value
+        if {[empty_string_p $value]} {
+            with_catch errmsg {
+                ::set value [get \
+                    -package_id [apm_package_id_from_key $package_key] \
+                    -parameter $parameter \
+                    -default $default \
+                ]
+            } {
+                ::set value $default
+            }
         }
 
         return $value
