@@ -58,7 +58,7 @@ proc ad_system_name {} {
 # /pvt/home.tcl
 
 proc ad_pvt_home {} {
-    return "/pvt/home"
+    return [ad_parameter -package_id [ad_acs_kernel_id] HomeURL]
 }
 
 proc ad_admin_home {} {
@@ -70,16 +70,16 @@ proc ad_package_admin_home { package_key } {
 }
 
 proc ad_pvt_home_name {} {
-    return "workspace"
+    return [ad_parameter -package_id [ad_acs_kernel_id] HomeName]
 }
 
 proc ad_pvt_home_link {} {
-    return "<a href=\"/pvt/home\">your workspace</a>"
+    return "<a href=\"[ad_pvt_home]\">[ad_pvt_home_name]</a>"
 }
 
 proc ad_site_home_link {} {
     if { [ad_get_user_id] != 0 } {
-	return "<a href=\"/pvt/home\">[ad_system_name]</a>"
+	return "<a href=\"[ad_pvt_home_link]\">[ad_system_name]</a>"
     } else {
 	# we don't know who this person is
 	return "<a href=\"/\">[ad_system_name]</a>"

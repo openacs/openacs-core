@@ -655,6 +655,7 @@ declare
   new__context_id             alias for $6;  -- default null
   new__security_inherit_p     alias for $7;  -- default ''t''
   v_object_id                 acs_objects.object_id%TYPE;
+  v_creation_date	      timestamp;
 begin
   if new__object_id is null then
    select acs_object_id_seq.nextval
@@ -663,12 +664,18 @@ begin
     v_object_id := new__object_id;
   end if;
 
+  if new__creation_date is null then
+   v_creation_date:= now();
+  else
+   v_creation_date := new__creation_date;
+  end if;
+
   insert into acs_objects
    (object_id, object_type, context_id,
     creation_date, creation_user, creation_ip, security_inherit_p)
   values
    (v_object_id, new__object_type, new__context_id,
-    new__creation_date, new__creation_user, new__creation_ip, 
+    v_creation_date, new__creation_user, new__creation_ip, 
     new__security_inherit_p);
 
   PERFORM acs_object__initialize_attributes(v_object_id);
@@ -690,6 +697,7 @@ declare
   new__creation_ip            alias for $5;  -- default null
   new__context_id             alias for $6;  -- default null
   v_object_id                 acs_objects.object_id%TYPE;
+  v_creation_date	      timestamp;
 begin
   if new__object_id is null then
    select acs_object_id_seq.nextval
@@ -698,12 +706,18 @@ begin
     v_object_id := new__object_id;
   end if;
 
+  if new__creation_date is null then
+   v_creation_date:= now();
+  else
+   v_creation_date := new__creation_date;
+  end if;
+
   insert into acs_objects
    (object_id, object_type, context_id,
     creation_date, creation_user, creation_ip)
   values
    (v_object_id, new__object_type, new__context_id,
-    new__creation_date, new__creation_user, new__creation_ip);
+    v_creation_date, new__creation_user, new__creation_ip);
 
   PERFORM acs_object__initialize_attributes(v_object_id);
 
