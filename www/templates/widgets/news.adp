@@ -17,3 +17,4 @@
 <if @news_items:rowcount@ gt @n_news_items@>
   <span class="more"><a href="/news/">more news</a>...</span>
 </if>
+<a href="/news/rss/rss.xml">Syndication Feed <img src="/resources/rss-support/xml.gif"></a>
