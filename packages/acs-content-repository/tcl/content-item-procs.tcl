@@ -111,8 +111,8 @@ ad_proc -public ::content::item::delete {
 } {
     set var_list [list [list item_id $item_id]]
     package_exec_plsql \
-	-var_list $var_list \
-	"content_item" "delete"
+        -var_list $var_list \
+        "content_item" "delete"
 }
 
 ad_proc -public ::content::item::rename {
@@ -634,3 +634,32 @@ ad_proc -public content::item::unset_live_revision {
     ] content_item unset_live_revision]
 }
 
+ad_proc -public content::item::copy {
+    -item_id:required
+    -target_folder_id:required
+    {-creation_user ""}
+    {-creation_ip ""}
+    {-name ""}
+} {
+    @author Jun Yamog
+    @creation-date 2004-06-27
+
+    copy a content item to a new content item
+
+    @param item_id - item id of the content to be copied from. source content item
+    @param target_folder_id - destination folder where the new content item is be passed
+    @param creation_user - 
+    @param creation_ip -
+    @param name - the name of the new item, useful if you are copying in the same folder.
+
+    @return item id of the new copied item
+} {
+    return [package_exec_plsql \
+                -var_list [list \
+                               [list item_id $item_id] \
+                               [list target_folder_id $target_folder_id] \
+                               [list creation_user $creation_user] \
+                               [list creation_ip $creation_ip] \
+                               [list name $name]] \
+                           content_item copy]
+}
