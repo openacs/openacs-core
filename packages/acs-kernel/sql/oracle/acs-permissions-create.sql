@@ -334,7 +334,6 @@ show errors
 
 create or replace package body acs_permission
 as
-
   procedure grant_permission (
     object_id	 acs_permissions.object_id%TYPE,
     grantee_id	 acs_permissions.grantee_id%TYPE,
@@ -350,7 +349,7 @@ as
     when dup_val_on_index then
       return;
   end grant_permission;
-
+  --
   procedure revoke_permission (
     object_id	 acs_permissions.object_id%TYPE,
     grantee_id	 acs_permissions.grantee_id%TYPE,
@@ -363,7 +362,7 @@ as
     and grantee_id = revoke_permission.grantee_id
     and privilege = revoke_permission.privilege;
   end revoke_permission;
-
+  --
   function permission_p (
     object_id	 acs_objects.object_id%TYPE,
     party_id	 parties.party_id%TYPE,
@@ -372,20 +371,74 @@ as
   as
     exists_p char(1);
   begin
-    -- We should question whether we really want to use the
-    -- acs_object_party_privilege_map since it unions the
-    -- difference queries. UNION ALL would be more efficient.
-    -- Also, we may want to test replacing the decode with
-    --  select count(*) from dual where exists ...
-    -- 1/12/2001, mbryzek
-    select decode(count(*),0,'f','t') into exists_p
-      from acs_object_party_privilege_map
-     where object_id = permission_p.object_id
-       and party_id = permission_p.party_id
-       and privilege = permission_p.privilege;
+    --
+    -- Check group permmissions
+    select decode( count(*), 0,'f', 't') into exists_p
+    from dual where exists (
+          select 'x'
+          from acs_object_grantee_priv_map ogpm,
+               group_approved_member_map gmm
+         where object_id = permission_p.object_id
+           and gmm.member_id = permission_p.party_id
+           and privilege = permission_p.privilege
+           and ogpm.grantee_id = gmm.group_id);
+    if exists_p = 't' then
+        return 't';
+    end if;
+    --
+    -- relational segment approved group
+    select decode( count(*), 0,'f', 't') into exists_p
+    from dual where exists (
+        select 'x'
+          from acs_object_grantee_priv_map ogpm,
+               rel_seg_approved_member_map rsmm
+         where object_id = permission_p.object_id
+           and rsmm.member_id = permission_p.party_id
+           and privilege = permission_p.privilege
+           and ogpm.grantee_id = rsmm.segment_id);
+    if exists_p = 't' then
+        return 't';
+    end if;
+    --
+    -- Check direct permissions
+    select decode( count(*), 0,'f', 't') into exists_p
+    from dual where exists (
+        select 'x'
+          from acs_object_grantee_priv_map
+         where object_id = permission_p.object_id
+           and grantee_id = permission_p.party_id
+           and privilege = permission_p.privilege);
+    if exists_p = 't' then
+        return 't';
+    end if;
+    --
+    -- Check public permissions
+    select decode( count(*), 0,'f', 't') into exists_p
+    from dual where exists (
+        select 'x'
+          from acs_object_grantee_priv_map m, users u
+         where object_id = permission_p.object_id
+           and u.user_id = permission_p.party_id
+           and privilege = permission_p.privilege
+           and m.grantee_id = -1);
+    if exists_p = 't' then
+        return 't';
+    end if;
+    --
+    -- Check public-like permissions
+    select decode( count(*), 0,'f', 't') into exists_p
+    from dual where exists (
+        select 'x'
+          from acs_object_grantee_priv_map
+         where object_id = permission_p.object_id
+           and 0 = permission_p.party_id
+           and privilege = permission_p.privilege
+           and grantee_id = -1);
+    --
     return exists_p;
   end;
-
+  --
 end acs_permission;
 /
 show errors
+
