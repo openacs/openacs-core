@@ -48,7 +48,7 @@
 </fullquery>
 
  
-<fullquery name="attribute">      
+<fullquery name="attribute_comment">      
       <querytext>
 
 	select utc.column_name,
