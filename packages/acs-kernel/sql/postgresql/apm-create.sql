@@ -221,7 +221,9 @@ create table apm_packages (
 				references apm_package_types(package_key),
     instance_name		varchar(300)
 			        constraint apm_packages_inst_name_nn not null,
-    enabled_p			boolean default 'f'
+    enabled_p			boolean default 'f',
+    -- default system locale for this package
+    default_locale              varchar(30)
 );
 
 create index apm_packages_package_key_idx on apm_packages (package_key);
