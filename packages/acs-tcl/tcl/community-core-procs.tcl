@@ -8,6 +8,8 @@ ad_library {
 
 }
 
+namespace eval party {}
+
 ad_proc -private cc_lookup_screen_name_user { screen_name } {
     return [db_string user_select {
         select user_id from cc_users where upper(screen_name) = upper(:screen_name)
@@ -213,6 +215,81 @@ namespace eval person {
     }
 }
 
+ad_proc -public person::get_bio {
+    {-person_id {}}
+    {-exists_var {}}
+} {
+    Get the value of the user's bio(graphy) field.
+
+    @option person_id    The person_id of the person to get the bio for. Leave blank for currently logged in user.
+    
+    @option exists_var The name of a variable in the caller's namespace, which will be set to 1 
+                       if a bio was found, or 0 if no bio was found. Leave blank if you're not
+                       interested in this information.
+    
+    @return The bio of the user as a text string.
+
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    if { [empty_string_p $person_id] } {
+        set person_id [ad_conn user_id]
+    }
+
+    if { ![empty_string_p $exists_var] } {
+        upvar $exists_var exists_p
+    }
+
+    set exists_p [db_0or1row select_bio {}]
+    
+    if { !$exists_p } {
+        set bio {}
+    }
+    
+    return $bio
+}
+
+ad_proc -public person::update_bio {
+    {-person_id:required}
+    {-bio:required}
+} {
+    Update the bio for a person.
+
+    @param person_id The ID of the person to edit bio for
+    @param bio       The new bio for the person
+
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    # This will set exists_p to whether or not a row for the bio existed
+    set bio_old [get_bio -person_id $person_id -exists_var exists_p]
+
+    # bio_change_to = 0 -> insert
+    # bio_change_to = 1 -> don't change
+    # bio_change_to = 2 -> update
+
+    if { !$exists_p } {
+        # There is no bio yet.
+        # If new bio is empty, that's a don't change (1)
+        # If new bio is non-empty, that's an insert (0)
+        set bio_change_to [empty_string_p $bio]
+    } else {
+        if { [string equal $bio $bio_old] } {
+            set bio_change_to 1
+        } else {
+            set bio_change_to 2
+        }
+    }
+    
+    if { $bio_change_to == 0 } {
+	# perform the insert
+	db_dml insert_bio {}
+    } elseif { $bio_change_to == 2 } {
+	# perform the update
+	db_dml update_bio {}
+    }
+}
+
+
+
 namespace eval acs_user {
 
     ad_proc -public change_state {
@@ -275,3 +352,97 @@ namespace eval acs_user {
     }
 
 }
+
+
+ad_proc -public acs_user::get {
+    {-user_id {}}
+    {-array:required}
+    {-include_bio:boolean}
+} {
+    Get basic information about a user.
+
+    @option user_id     The user_id of the user to get the bio for. Leave blank for current user.
+
+    @option include_bio Whether to include the bio in the user information
+
+    @param  array       The name of an array into which you want the information put. 
+    
+    The attributes returned are: 
+                 user_id, 
+                 first_names, 
+                 last_name, 
+                 name (first_names last_name),
+                 email, 
+                 url, 
+                 screen_name,
+                 priv_name,  
+                 priv_email,
+                 email_verified_p,
+                 email_bouncing_p,
+                 no_alerts_until,
+                 last_visit,
+                 second_to_last_visit,
+                 n_sessions,
+                 password_question,
+                 password_answer,
+                 password_changed_date,
+                 member_state,
+                 rel_id,
+                 bio (if -include_bio switch is present)
+
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    if { [empty_string_p $user_id] } {
+        set user_id [ad_conn user_id]
+    }
+
+    upvar $array row
+    db_1row select_user_info {} -column_array row
+
+    if { $include_bio_p } {
+        set row(bio) [person::get_bio -person_id $user_id]
+    }
+}
+
+ad_proc -public acs_user::update {
+    {-user_id:required}
+    {-screen_name}
+    {-password_question}
+    {-password_answer}
+} {
+    Update information about a user. 
+    Feel free to expand this with more switches later as needed, as long as they're optional.
+
+    @param  party_id           The ID of the party to edit
+    @option screen_name        The new screen_name for the user
+    @option password_question  The new password_question for the user
+    @option password_answer    The new password_question for the user
+
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    set cols [list]
+    foreach var { screen_name password_question password_answer  } {
+        if { [info exists $var] } {
+            lappend cols "$var = :$var"
+        }
+    }
+    db_dml user_update {}
+}
+
+ad_proc -public party::update {
+    {-party_id:required}
+    {-email:required}
+    {-url:required}
+} {
+    Update information about a party.
+
+    @param party_id The ID of the party to edit
+    @param email    The new email for the party
+    @param url      The new URL for the party
+
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    db_dml party_update {}
+}
+
+
