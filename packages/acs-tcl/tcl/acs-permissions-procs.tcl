@@ -6,7 +6,7 @@ ad_library {
     @cvs-id $Id$
 }
 
-ad_proc -public ad_permission_grant {
+ad_proc -deprecated ad_permission_grant {
     user_id
     object_id
     privilege
@@ -18,7 +18,7 @@ ad_proc -public ad_permission_grant {
     permission::grant -party_id $user_id -object_id $object_id -privilege $privilege
 }
 
-ad_proc -public ad_permission_revoke {
+ad_proc -deprecated ad_permission_revoke {
     user_id
     object_id
     privilege
@@ -30,7 +30,7 @@ ad_proc -public ad_permission_revoke {
     permission::revoke -party_id $user_id -object_id $object_id -privilege $privilege
 }
 
-ad_proc -public ad_permission_p {
+ad_proc -deprecated ad_permission_p {
     {-user_id ""}
     object_id
     privilege
@@ -38,7 +38,7 @@ ad_proc -public ad_permission_p {
     return [permission::permission_p -party_id $user_id -object_id $object_id -privilege $privilege]
 }
 
-ad_proc -public ad_require_permission {
+ad_proc -deprecated ad_require_permission {
   object_id
   privilege
 } {
