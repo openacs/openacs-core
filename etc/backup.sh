@@ -14,6 +14,7 @@
 #
 
 COMPUTER=yourserver.net              # name of this computer
+DBHOST=localhost                     # name of the computer running the database
 BACKUPUSER=backup                    # username to own the files
 BACKUPDIR=/backup/thisserver         # where to store the backups
 BACKUPPART=/dev/hda1                 # which partition are we backing up to
@@ -154,7 +155,7 @@ for dbname in $POSTGRES_DBS
 do
     dmp_file=$WEBDIR/$dbname/database-backup/$dbname-nightly-backup.dmp
     echo -n "-> Dumping $dbname to $dmp_file ... "
-    time $PG_BINDIR/pg_dump -f $dmp_file -Fp $dbname
+    time $PG_BINDIR/pg_dump -f $dmp_file -Fp $dbname -h $DBHOST
     /bin/ls -lh $dmp_file | awk '{print $5}'
     gzip -f $dmp_file
 done
