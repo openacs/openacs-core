@@ -72,7 +72,7 @@ Loading package .info files - this will take a few minutes.
 
 <p>
 
-This might <b>really take a few minutes</b>, depending on your machine. Have a cup of coffee or beer or whatever and be patient. Thanks.
+This might <b>really take a few minutes</b>, depending on your machine.   Please be patient.  Thanks.
 
 <p>
 

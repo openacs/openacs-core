@@ -263,3 +263,25 @@ ad_proc -public item::get_extended_url { item_id args } {
    
   return $file_url
 } 
+
+ad_proc item::copy {
+    -item_id:required
+    -target_folder_id:required
+} {
+
+    Copy the given item.
+
+    @param item_id The content item to copy
+    @param target_folder_id The folder which will hold the new copy
+
+} {
+
+    set creation_user [ad_conn user_id]
+    set creation_ip [ad_conn peeraddr]
+
+    db_exec_plsql copy_item {}
+
+}
+
+} {
+

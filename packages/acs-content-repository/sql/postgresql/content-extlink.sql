@@ -10,8 +10,6 @@
 -- License.  Full text of the license is available from the GNU Project:
 -- http://www.fsf.org/copyleft/gpl.html
 
--- create or replace package body content_extlink
--- function new
 create function content_extlink__new (varchar,varchar,varchar,varchar,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
@@ -70,8 +68,6 @@ begin
 
 end;' language 'plpgsql';
 
-
--- procedure delete
 create function content_extlink__delete (integer)
 returns integer as '
 declare
@@ -87,7 +83,6 @@ return 0;
 end;' language 'plpgsql';
 
 
--- function is_extlink
 create function content_extlink__is_extlink (integer)
 returns boolean as '
 declare
@@ -106,8 +101,66 @@ begin
  
 end;' language 'plpgsql';
 
+create function content_extlink__copy (integer,integer,integer,varchar)
+returns integer as '
+declare
+  copy__extlink_id             alias for $1;  
+  copy__target_folder_id       alias for $2;  
+  copy__creation_user          alias for $3;  
+  copy__creation_ip            alias for $4;  -- default null  
+  v_current_folder_id          cr_folders.folder_id%TYPE;
+  v_name                       cr_items.name%TYPE;
+  v_url                        cr_extlinks.url%TYPE;
+  v_description                cr_extlinks.description%TYPE;
+  v_label                      cr_extlinks.label%TYPE;
+  v_extlink_id                 cr_extlinks.extlink_id%TYPE;
+begin
 
+  if content_folder__is_folder(copy__target_folder_id) = ''t'' then
+    select
+      parent_id
+    into
+      v_current_folder_id
+    from
+      cr_items
+    where
+      item_id = copy__extlink_id;
 
--- show errors
+    -- can''t copy to the same folder
+    if copy__target_folder_id != v_current_folder_id then
+
+      select
+        i.name, e.url, e.description, e.label
+      into
+        v_name, v_url, v_description, v_label
+      from
+        cr_extlinks e, cr_items i
+      where
+        e.extlink_id = i.item_id
+      and
+        e.extlink_id = copy__extlink_id;
+
+      if content_folder__is_registered(copy__target_folder_id,
+        ''content_extlink'',''f'') = ''t'' then
+
+        v_extlink_id := content_extlink__new(
+            v_name,
+            v_url,
+            v_label,
+            v_description,
+            copy__target_folder_id,
+            null,
+            current_timestamp,
+	    copy__creation_user,
+	    copy__creation_ip
+        );
+
+      end if;
+    end if;
+  end if;
+
+  return 0; 
+end;' language 'plpgsql';
+
 
 

@@ -26,17 +26,6 @@ begin
 
   else
 
---    select
---      item_id into v_folder_id
---    from
---      cr_items
---    where 
---      parent_id = 0
---    connect by
---      prior parent_id = item_id
---    start with
---      item_id = get_root_folder__item_id;    
-
     select i2.item_id into v_folder_id
     from cr_items i1, cr_items i2
     where i2.parent_id = 0
@@ -52,8 +41,6 @@ begin
  
 end;' language 'plpgsql';
 
-
--- function new
 create function content_item__new (varchar,integer,integer,varchar,timestamptz,integer,integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar)
 returns integer as '
 declare
@@ -73,8 +60,6 @@ declare
   new__nls_language           alias for $14; -- default null
   new__text                   alias for $15; -- default null
   new__storage_type           alias for $16; -- check in (''text'',''file'')
---  relation_tag                alias for $17; 
---  is_live                     alias for $18; 
   new__relation_tag           varchar default null;
   new__is_live                boolean default ''f'';
 
@@ -231,8 +216,6 @@ declare
   new__nls_language           alias for $14; -- default null
 -- changed to integer for blob_id
   new__data                   alias for $15; -- default null
---  relation_tag                alias for $17; 
---  is_live                     alias for $18; 
   new__relation_tag           varchar default null;
   new__is_live                boolean default ''f'';
 
@@ -577,7 +560,6 @@ begin
 
 end;' language 'plpgsql';
 
--- function is_published
 create function content_item__is_published (integer)
 returns boolean as '
 declare
@@ -598,7 +580,6 @@ begin
 end;' language 'plpgsql';
 
 
--- function is_publishable
 create function content_item__is_publishable (integer)
 returns boolean as '
 declare
@@ -706,7 +687,6 @@ begin
 end;' language 'plpgsql';
 
 
--- function is_valid_child
 create function content_item__is_valid_child (integer,varchar)
 returns boolean as '
 declare
@@ -769,7 +749,7 @@ end;' language 'plpgsql';
  5) delete all permissions associated with this item
  6) delete keyword associations
  7) delete all associated comments */
--- procedure delete
+
 create function content_item__delete (integer)
 returns integer as '
 declare
@@ -895,7 +875,6 @@ begin
 end;' language 'plpgsql';
 
 
--- procedure rename
 create function content_item__rename (integer,varchar)
 returns integer as '
 declare
@@ -931,7 +910,6 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
--- function get_id
 create function content_item__get_id (varchar,integer,boolean)
 returns integer as '
 declare
@@ -1013,10 +991,6 @@ begin
 
   return child_id;
 
--- exception
---   when NO_DATA_FOUND then 
---     return null;
- 
 end;' language 'plpgsql';
 
 create sequence content_item_gp_session_id;
@@ -1284,7 +1258,6 @@ begin
 end;' language 'plpgsql';
 
 
--- function get_virtual_path
 create function content_item__get_virtual_path (integer,integer)
 returns varchar as '
 declare
@@ -1310,14 +1283,10 @@ begin
   end if;
 
   return v_path;
---  exception
---    when NO_DATA_FOUND then
---      return null;
  
 end;' language 'plpgsql';
 
 
--- procedure write_to_file
 create function content_item__write_to_file (integer,varchar)
 returns integer as '
 declare
@@ -1345,7 +1314,6 @@ begin
 end;' language 'plpgsql';
 
 
--- procedure register_template
 create function content_item__register_template (integer,integer,varchar)
 returns integer as '
 declare
@@ -1378,7 +1346,6 @@ begin
 end;' language 'plpgsql';
 
 
--- procedure unregister_template
 create function content_item__unregister_template (integer,integer,varchar)
 returns integer as '
 declare
@@ -1419,7 +1386,6 @@ begin
 end;' language 'plpgsql';
 
 
--- function get_template
 create function content_item__get_template (integer,varchar)
 returns integer as '
 declare
@@ -1467,7 +1433,6 @@ begin
 end;' language 'plpgsql';
 
 
--- function get_content_type
 create function content_item__get_content_type (integer)
 returns varchar as '
 declare
@@ -1491,7 +1456,6 @@ begin
 end;' language 'plpgsql';
 
 
--- function get_live_revision
 create function content_item__get_live_revision (integer)
 returns integer as '
 declare
@@ -1544,7 +1508,6 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
--- procedure set_live_revision
 create function content_item__set_live_revision (integer,varchar)
 returns integer as '
 declare
@@ -1576,7 +1539,6 @@ begin
 end;' language 'plpgsql';
 
 
--- procedure unset_live_revision
 create function content_item__unset_live_revision (integer)
 returns integer as '
 declare
@@ -1604,7 +1566,6 @@ begin
 end;' language 'plpgsql';
 
 
--- procedure set_release_period
 create function content_item__set_release_period (integer, timestamptz, timestamptz)
 returns integer as '
 declare
@@ -1637,7 +1598,6 @@ begin
 end;' language 'plpgsql';
 
 
--- function get_revision_count
 create function content_item__get_revision_count (integer)
 returns integer as '
 declare
@@ -1657,7 +1617,6 @@ begin
 end;' language 'plpgsql';
 
 
--- function get_context
 create function content_item__get_context (integer)
 returns integer as '
 declare
@@ -1689,7 +1648,6 @@ end;' language 'plpgsql';
 --   to the target folder
 -- 3) update the parent_id for the item
 
--- procedure move
 create function content_item__move (integer,integer)
 returns integer as '
 declare
@@ -1722,7 +1680,6 @@ begin
 end;' language 'plpgsql';
 
 
--- procedure copy
 create function content_item__copy (integer,integer,integer,varchar)
 returns integer as '
 declare
@@ -1747,7 +1704,6 @@ end;' language 'plpgsql';
 -- 3) create a new item with no revisions in the target folder
 -- 4) copy the latest revision from the original item to the new item (if any)
 
--- function copy2
 create function content_item__copy2 (integer,integer,integer,varchar)
 returns integer as '
 declare
@@ -1779,6 +1735,14 @@ begin
   -- call content_symlink.copy if the item is a symlink
   else if content_symlink__is_symlink(copy2__item_id) = ''t'' then
     PERFORM content_symlink__copy(
+        copy2__item_id,
+        copy2__target_folder_id,
+        copy2__creation_user,
+        copy2__creation_ip
+    );
+  -- call content_extlink.copy if the item is an url
+  else if content_extlink__is_extlink(copy2__item_id) = ''t'' then
+    PERFORM content_extlink__copy(
         copy2__item_id,
         copy2__target_folder_id,
         copy2__creation_user,
@@ -1859,14 +1823,13 @@ begin
 
 
     end if;
-  end if; end if; end if;
+  end if; end if; end if; end if;
 
   return v_item_id;
  
 end;' language 'plpgsql';
 
 
--- function get_latest_revision
 create function content_item__get_latest_revision (integer)
 returns integer as '
 declare
@@ -1899,7 +1862,6 @@ begin
 end;' language 'plpgsql' with (isstrict);
 
 
--- function get_best_revision
 create function content_item__get_best_revision (integer)
 returns integer as '
 declare
@@ -1925,7 +1887,6 @@ begin
 end;' language 'plpgsql';
 
 
--- function get_title
 create function content_item__get_title (integer,boolean)
 returns varchar as '
 declare
@@ -1982,7 +1943,6 @@ begin
 end;' language 'plpgsql';
 
 
--- function get_publish_date
 create function content_item__get_publish_date (integer,boolean)
 returns timestamptz as '
 declare
@@ -2021,7 +1981,6 @@ begin
 end;' language 'plpgsql';
 
 
--- function is_subclass
 create function content_item__is_subclass (varchar,varchar)
 returns boolean as '
 declare
@@ -2032,15 +1991,6 @@ declare
 begin
 
   v_subclass_p := ''f'';
-
---                       select
---                         object_type
---                       from
---                         acs_object_types  
---                       connect by
---                         prior object_type = supertype
---                       start with 
---                         object_type = is_subclass__supertype
 
   for v_inherit_val in select o.object_type
                        from acs_object_types o, acs_object_types o2
@@ -2058,7 +2008,6 @@ begin
 end;' language 'plpgsql';
 
 
--- function relate
 create function content_item__relate (integer,integer,varchar,integer,varchar)
 returns integer as '
 declare
@@ -2154,7 +2103,6 @@ begin
 end;' language 'plpgsql';
 
 
--- procedure unrelate
 create function content_item__unrelate (integer)
 returns integer as '
 declare
@@ -2171,7 +2119,6 @@ begin
 end;' language 'plpgsql';
 
 
--- function is_index_page
 create function content_item__is_index_page (integer,integer)
 returns boolean as '
 declare
@@ -2187,7 +2134,6 @@ begin
 end;' language 'plpgsql';
 
 
--- function get_parent_folder
 create function content_item__get_parent_folder (integer)
 returns integer as '
 declare
@@ -2217,7 +2163,6 @@ begin
  
 end;' language 'plpgsql';
 
--- show errors
 
 
 -- Trigger to maintain context_id in acs_objects
@@ -2235,7 +2180,6 @@ end;' language 'plpgsql';
 create trigger cr_items_update_tr after update on cr_items
 for each row execute procedure cr_items_update_tr ();
 
--- show errors
 
 -- Trigger to maintain publication audit trail
 create function cr_items_publish_update_tr () returns opaque as '
@@ -2260,7 +2204,4 @@ end;' language 'plpgsql';
 
 create trigger cr_items_publish_update_tr before update on cr_items
 for each row execute procedure cr_items_publish_update_tr ();
-
--- show errors
-
 
