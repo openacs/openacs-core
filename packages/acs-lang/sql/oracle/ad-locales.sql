@@ -94,6 +94,14 @@ insert into ad_locales (
   'JAPANESE', 'JAPAN', 'JA16SJIS', 'Shift_JIS', 't'
 );
 
+insert into ad_locales (
+  locale, label, language, country,
+  nls_language, nls_territory, nls_charset, mime_charset, default_p
+) values (
+  'da_DK', 'Danish', 'da', 'DK',
+  'DANISH', 'DENMARK', 'WE8ISO8859P1', 'ISO-8859-1', 't'
+);
+
 commit;
 
 create table ad_locale_user_prefs (
