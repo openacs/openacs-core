@@ -128,26 +128,26 @@ if { $only_authorized_p } {
 }
 
 if { $registration_before_days >= 0 } {
-    lappend where_clause "creation_date < sysdate - :registration_before_days"
+    lappend where_clause [db_map registration_before_days]
     incr rowcount
     set criteria:[set rowcount](data) \
         "Registered more than past $registration_before_days days ago"
 }
 if { $registration_after_days >= 0 } {
-    lappend where_clause "creation_date >= sysdate - :registration_after_days"
+    lappend where_clause [db_map registration_after_days]
     incr rowcount
     set criteria:[set rowcount](data) \
         "Registered within the past $registration_after_days days"
 }
 
 if { $last_visit_before_days >= 0 } {
-    lappend where_clause "last_visit < sysdate - :last_visit_before_days"
+    lappend where_clause [db_map last_visit_before_days]
     incr rowcount
     set criteria:[set rowcount](data) \
         "Most recent visit was more that $last_visit_before_days days ago"
 }
 if { $last_visit_after_days >= 0 } {
-    lappend where_clause "last_visit >= sysdate - :last_visit_after_days"
+    lappend where_clause [db_map last_visit_after_days]
     incr rowcount
     set criteria:[set rowcount](data) \
         "Visited within the past $last_visit_after_days days"
@@ -165,7 +165,6 @@ if { $number_visits_above >= 0 } {
     set criteria:[set rowcount](data) \
         "Has visited at least $number_visits_above times"
 }
-
 
 set criteria:rowcount $rowcount
 
@@ -186,8 +185,6 @@ from cc_users"
         append query "\nwhere [join $where_clause "\n$where_conjunction "]"
     }
 }
-
-
 
 set i 0
 
