@@ -46,7 +46,8 @@
             set    doc_end_time = current_timestamp,
                    doc_status = :doc_status,
                    doc_message = :doc_message,
-                   document = :document
+                   document = :document,
+                   snapshot_p = :snapshot_p 
             where  job_id = :job_id
         </querytext>
     </fullquery>

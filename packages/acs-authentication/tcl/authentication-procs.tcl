@@ -40,9 +40,39 @@ ad_proc -public auth::require_login {} {
     ad_script_abort
 }
 
+ad_proc -public auth::get_login_focus {} {
+    Get the relevant focus for the login box.
+} {
+    if { [auth::UseEmailForLoginP] } {
+        return "login.email"
+    } else {
+        return "login.username"
+    }
+}
+
+ad_proc -public auth::UseEmailForLoginP {} {
+    Do we use email address for login? code wrapped in a catch, so the 
+    proc will not break regardless of what the parameter value is.
+} {
+    if { [catch { 
+        if { [template::util::is_true [parameter::get -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id]]] } {
+            set p 1
+        } else {
+            set p 0
+        }
+    } errmsg] } {
+        global errorInfo
+        ns_log Error "Parameter acs-kernel.UseEmailForLoginP not a boolean:\n$errorInfo"
+        return 1
+    } else {
+        return $p
+    }
+}
+
 ad_proc -public auth::authenticate {
     {-authority_id ""}
-    {-username:required}
+    {-username ""}
+    {-email ""}
     {-password:required}
     {-persistent:boolean}
     {-no_cookie:boolean}
@@ -51,10 +81,11 @@ ad_proc -public auth::authenticate {
     and return authentication and account status codes.    
     
     @param authority_id The ID of the authority to ask to verify the user. Defaults to local authority.
-    @param username Authority specific username of the user.
-    @param passowrd The password as the user entered it.
-    @param persistent Set this if you want a permanent login cookie
-    @param no_cookie Set this if you don't want to issue a login cookie
+    @param username     Authority specific username of the user.
+    @param email        User's email address. You must supply either username or email.
+    @param passowrd     The password as the user entered it.
+    @param persistent   Set this if you want a permanent login cookie
+    @param no_cookie    Set this if you don't want to issue a login cookie
     
     @return Array list with the following entries:
     
@@ -75,43 +106,60 @@ ad_proc -public auth::authenticate {
     </ul>
 
 } {
-    # Default to local authority
-    if { [empty_string_p $authority_id] } {
-        set authority_id [auth::authority::local]
+    if { [empty_string_p $username] } {
+        if { [empty_string_p $email] } {
+            set result(auth_status) "auth_error"
+            if { [auth::UseEmailForLoginP] } {
+                set result(auth_message) "Email required"
+            } else {
+                set result(auth_message) "Username required"
+            }
+            return [array get result]
+        }
+        set user_id [cc_lookup_email_user $email]
+        if { [empty_string_p $user_id] } {
+            set result(auth_status) "no_account"
+            set result(auth_message) "Unknown email"
+            return [array get result]
+        }
+        acs_user::get -user_id $user_id -array user
+        set authority_id $user(authority_id)
+        set username $user(username)
+    } else {
+        # Default to local authority
+        if { [empty_string_p $authority_id] } {
+            set authority_id [auth::authority::local]
+        }
     }
-
-    # Implementation note: 
-    # Invoke the service contract
-    # Provide canned strings for auth_message and account_message if not returned by SC implementation.
-    # Concatenate remote account message and local account message into one logical understandable message.
-    # Same with account status: only ok if both are ok.
+    
+    ns_log Notice "LARS: authority_id = $authority_id, username = $username"
 
     with_catch errmsg {
-        array set auth_info [auth::authentication::Authenticate \
+        array set result [auth::authentication::Authenticate \
                                  -username $username \
                                  -authority_id $authority_id \
                                  -password $password]
 
         # We do this so that if there aren't even the auth_status and account_status that need be
         # in the array, that gets caught below
-        if { [string equal $auth_info(auth_status) "ok"] } {
-            set dummy $auth_info(account_status)
+        if { [string equal $result(auth_status) "ok"] } {
+            set dummy $result(account_status)
         }
     } {
-        set auth_info(auth_status) failed_to_connect
-        set auth_info(auth_message) $errmsg
+        set result(auth_status) failed_to_connect
+        set result(auth_message) $errmsg
         global errorInfo
         ns_log Error "Error invoking authentication driver for authority_id = $authority_id: $errorInfo"
     }
 
     # Returns:
-    #   auth_info(auth_status) 
-    #   auth_info(auth_message) 
-    #   auth_info(account_status) 
-    #   auth_info(account_message) 
+    #   result(auth_status) 
+    #   result(auth_message) 
+    #   result(account_status) 
+    #   result(account_message) 
 
-    # Verify auth_info/auth_message return codes
-    switch $auth_info(auth_status) {
+    # Verify result/auth_message return codes
+    switch $result(auth_status) {
         ok { 
             # Continue below
         }
@@ -119,105 +167,105 @@ ad_proc -public auth::authenticate {
         bad_password -
         auth_error -
         failed_to_connect {
-            if { ![exists_and_not_null auth_info(auth_message)] } {
+            if { ![exists_and_not_null result(auth_message)] } {
                 array set default_auth_message {
                     no_account {Unknown username}
                     bad_password {Bad password}
                     auth_error {Invalid username/password}
                     failed_to_connect {Error communicating with authentication server}
                 }
-                set auth_info(auth_message) $default_auth_message($auth_info(auth_status))
+                set result(auth_message) $default_auth_message($result(auth_status))
             }
-            return [array get auth_info]
+            return [array get result]
         }
         default {
-            ns_log Error "Illegal auth_status code '$auth_info(auth_status)' returned from authentication driver for authority_id $authority_id ([auth::authority::get_element -authority_id $authority_id -element pretty_name])"
+            ns_log Error "Illegal auth_status code '$result(auth_status)' returned from authentication driver for authority_id $authority_id ([auth::authority::get_element -authority_id $authority_id -element pretty_name])"
 
-            set auth_info(auth_status) "failed_to_connect"
-            set auth_info(auth_message) "Internal error during authentication"
-            return [array get auth_info]
+            set result(auth_status) "failed_to_connect"
+            set result(auth_message) "Internal error during authentication"
+            return [array get result]
         }
     }
 
     # Verify remote account_info/account_message return codes
-    switch $auth_info(account_status) {
+    switch $result(account_status) {
         ok { 
             # Continue below
-            if { ![info exists auth_info(account_message)] } {
-                set auth_info(account_message) {}
+            if { ![info exists result(account_message)] } {
+                set result(account_message) {}
             }
         }
         closed {
-            if { ![exists_and_not_null auth_info(account_message)] } {
-                set auth_info(account_message) "This account is not available at this time"
+            if { ![exists_and_not_null result(account_message)] } {
+                set result(account_message) "This account is not available at this time"
             }
         }
         default {
-            ns_log Error "Illegal account_status code '$auth_info(account_status)' returned from authentication driver for authority_id $authority_id ([auth::authority::get_element -authority_id $authority_id -element pretty_name])"
+            ns_log Error "Illegal account_status code '$result(account_status)' returned from authentication driver for authority_id $authority_id ([auth::authority::get_element -authority_id $authority_id -element pretty_name])"
 
-            set auth_info(account_status) "closed"
-            set auth_info(account_message) "Internal error during authentication"
+            set result(account_status) "closed"
+            set result(account_message) "Internal error during authentication"
         }
     }
 
     # Save the remote account information for later
-    set remote_account_status $auth_info(account_status)
-    set remote_account_message $auth_info(account_message)
+    set remote_account_status $result(account_status)
+    set remote_account_message $result(account_message)
 
     # Clear out remote account_status and account_message
-    array unset auth_info account_status
-    array unset auth_info account_message
+    array unset result account_status
+    array unset result account_message
     
     # Map to row in local users table
-    array set auth_info [auth::get_local_account \
+    array set result [auth::get_local_account \
                              -username $username \
                              -authority_id $authority_id]
     # Returns: 
-    #   auth_info(account_status)
-    #   auth_info(account_message)  
-    #   auth_info(user_id)
+    #   result(account_status)
+    #   result(account_message)  
+    #   result(user_id)
 
     # Verify local account_info/account_message return codes
-    switch $auth_info(account_status) {
+    switch $result(account_status) {
         ok { 
             # Continue below
-            if { ![info exists auth_info(account_message)] } {
-                set auth_info(account_message) {}
+            if { ![info exists result(account_message)] } {
+                set result(account_message) {}
             }
         }
         closed {
-            if { ![exists_and_not_null auth_info(account_message)] } {
-                set auth_info(account_message) "This account is not available at this time"
+            if { ![exists_and_not_null result(account_message)] } {
+                set result(account_message) "This account is not available at this time"
             }
         }
         default {
-            ns_log Error "Illegal account_status code '$auth_info(account_status)' returned from auth::get_local_account for authority_id $authority_id ([auth::authority::get_element -authority_id $authority_id -element pretty_name])"
+            ns_log Error "Illegal account_status code '$result(account_status)' returned from auth::get_local_account for authority_id $authority_id ([auth::authority::get_element -authority_id $authority_id -element pretty_name])"
 
-            set auth_info(account_status) "closed"
-            set auth_info(account_message) "Internal error during authentication"
+            set result(account_status) "closed"
+            set result(account_message) "Internal error during authentication"
         }
     }
     
     # If the remote account was closed, the whole account is closed, regardless of local account status
     if { [string equal $remote_account_status "closed"] } {
-        set auth_info(account_status) closed
+        set result(account_status) closed
     }
 
     if { [exists_and_not_null remote_account_message] } {
-        if { [exists_and_not_null auth_info(account_message)] } {
+        if { [exists_and_not_null result(account_message)] } {
             # Concatenate local and remote account messages
-            set auth_info(account_message) "<p>[auth::authority::get_element -authority_id $authority_id -element pretty_name]: $remote_account_message </p> <p>[ad_system_name]: $auth_info(account_message)</p>"
+            set result(account_message) "<p>[auth::authority::get_element -authority_id $authority_id -element pretty_name]: $remote_account_message </p> <p>[ad_system_name]: $result(account_message)</p>"
         } else {
-            set auth_info(account_message) $remote_account_message
+            set result(account_message) $remote_account_message
         }
     }
         
     # Issue login cookie if login was successful
-    if { [string equal $auth_info(auth_status) "ok"] && [string equal $auth_info(account_status) "ok"] && !$no_cookie_p } {
-        auth::issue_login -user_id $auth_info(user_id) -persistent=$persistent_p
+    if { [string equal $result(auth_status) "ok"] && [string equal $result(account_status) "ok"] && !$no_cookie_p } {
+        auth::issue_login -user_id $result(user_id) -persistent=$persistent_p
     }
     
-    return [array get auth_info]
+    return [array get result]
 }
 
 ad_proc -private auth::issue_login {
@@ -306,36 +354,10 @@ ad_proc -public auth::create_user {
     # This holds element error messages
     array set element_messages [list]
 
-    #####
-    #
-    # Check for missing required fields
-    #
-    #####
-
-    # We do this first, so that double-click protection works correctly
-
-    set missing_elements_p 0
-    array set reg_elms [auth::get_registration_elements]
-    foreach elm $reg_elms(required) {
-        if { [empty_string_p [set $elm]] } {
-            set element_messages($elm) "Required"
-            set missing_elements_p 1
-        }
+    # Initialize username to email
+    if { [auth::UseEmailForLoginP] && [empty_string_p $username] } {
+        set username $email
     }
-    if { $verify_password_confirm_p } {
-        if { ![empty_string_p "$password$password_confirm"] && ![string equal $password $password_confirm] } {
-            set element_messages(password) "Passwords don't match"
-            set missing_elements_p 1
-        }
-    }
-    if { $missing_elements_p } {
-        return [list \
-                    creation_status data_error \
-                    creation_message "Missing required fields" \
-                    element_messages [array get element_messages] \
-                   ]
-    }
-    
 
 
     #####
@@ -536,10 +558,16 @@ ad_proc -public auth::get_registration_elements {
     return [array get element_info]
 }
 
-ad_proc -public auth::get_all_registration_elements {} {
+ad_proc -public auth::get_all_registration_elements {
+    {-include_password_confirm:boolean}
+} {
     Get the list of possible registration elements.
 } {
-    return { username password first_names last_name screen_name email url secret_question secret_answer }
+    if { $include_password_confirm_p } {
+        return { email username first_names last_name password password_confirm screen_name url secret_question secret_answer }
+    } else {
+        return { email username first_names last_name password screen_name url secret_question secret_answer }
+    }
 }
 
 ad_proc -public auth::get_registration_form_elements {
@@ -586,7 +614,7 @@ ad_proc -public auth::get_registration_form_elements {
                           password_confirm [_ acs-subsite.lt_Password_Confirmation] \
                           secret_question [_ acs-subsite.Question] \
                           secret_answer [_ acs-subsite.Answer]]
-
+    
     array set html {
         username {size 30}
         email {size 30}
@@ -619,7 +647,7 @@ ad_proc -public auth::get_registration_form_elements {
     }
 
     set form_elements [list]
-    foreach element [concat [auth::get_all_registration_elements] password_confirm] {
+    foreach element [auth::get_all_registration_elements -include_password_confirm] {
         if { [info exists required_p($element)] } {
             set form_element [list]
 
@@ -694,12 +722,6 @@ ad_proc -public auth::create_local_account {
         if { ![info exists user_info($elm)] } {
             set user_info($elm) {}
         }
-    }
-
-    # PHASE II: This needs to be controlled by a parameter
-    if { [empty_string_p $username] } {
-        # What if email doesn't exist?
-        set username $user_info(email)
     }
 
     # Validate data
@@ -978,7 +1000,7 @@ ad_proc -private auth::validate_user_info {
             set element_messages(username) "No user with username '$user(username)' found for authority [auth::authority::get_element -authority_id $user(authority_id) -element pretty_name]"
         }
     }
-    
+
     # TODO: When doing RBM's parameter, make sure that we still require both first_names and last_names, or none of them
     if { [exists_and_not_null user(first_names)] && [string first "<" $user(first_names)] != -1 } {
         set element_messages(first_names) [_ acs-subsite.lt_You_cant_have_a_lt_in]

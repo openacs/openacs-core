@@ -60,8 +60,6 @@ ad_proc -public auth::authority::create {
 
       <li> process_doc_impl_id Id of the batch sync ProcessDocument service contract implementation
 
-      <li> snapshot_p          Whether batch jobs are snapshots or not
-
       <li> batch_sync_enabled_p Is batch sync enabled for the authority?
     </ul>
 
@@ -133,7 +131,7 @@ ad_proc -public auth::authority::create {
             set authority_id [db_exec_plsql create_authority {}]
 
             # Set the arguments not taken by the new function with an update statement
-            foreach column {get_doc_impl_id process_doc_impl_id snapshot_p batch_sync_enabled_p help_contact_text_format} {
+            foreach column {get_doc_impl_id process_doc_impl_id batch_sync_enabled_p help_contact_text_format} {
                 set edit_columns($column) [set $column]
             }        
             
@@ -278,7 +276,6 @@ ad_proc -public auth::authority::get_authority_options {} {
 
 ad_proc -public auth::authority::batch_sync {
     -authority_id:required
-    -snapshot:boolean
 } {
     Execute batch synchronization for this authority now.
 
@@ -289,8 +286,7 @@ ad_proc -public auth::authority::batch_sync {
     @return job_id
 } {
     set job_id [auth::sync::job::start \
-                   -authority_id $authority_id \
-                   -snapshot=$snapshot_p]
+                   -authority_id $authority_id]
 
     get -authority_id $authority_id -array authority
     
@@ -308,6 +304,7 @@ ad_proc -public auth::authority::batch_sync {
             doc_status failed_to_connect
             doc_message {}
             document {}
+            snapshot_p f
         }
         with_catch errmsg {
             array set doc_result [auth::sync::GetDocument -authority_id $authority_id]
@@ -318,11 +315,14 @@ ad_proc -public auth::authority::batch_sync {
             set doc_result(doc_message) $errmsg
         }
         
+        set snapshot_p [template::util::is_true $doc_result(snapshot_p)]
+
         auth::sync::job::end_get_document \
             -job_id $job_id \
             -doc_status $doc_result(doc_status) \
             -doc_message $doc_result(doc_message) \
-            -document $doc_result(document)
+            -document $doc_result(document) \
+            -snapshot=$snapshot_p
 
         if { [string equal $doc_result(doc_status) "ok"] && ![empty_string_p $doc_result(document)] } {
             with_catch errmsg {
@@ -409,7 +409,6 @@ ad_proc -private auth::authority::get_column_defaults {} {
         register_url ""
         get_doc_impl_id ""
         process_doc_impl_id ""
-        snapshot_p "f"
         batch_sync_enabled_p "f"
     }
 }

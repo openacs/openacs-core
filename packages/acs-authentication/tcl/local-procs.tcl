@@ -81,7 +81,7 @@ ad_proc -private auth::local::authentication::register_impl {} {
         contract_name "auth_authentication"
         owner "acs-authentication"
         name "local"
-        pretty_name "Local Authentication"
+        pretty_name "Local"
         aliases {
             Authenticate auth::local::authentication::Authenticate
             GetParameters auth::local::authentication::GetParameters
@@ -112,7 +112,6 @@ ad_proc -private auth::local::authentication::Authenticate {
     set username [string tolower $username]
     
     set authority_id [auth::authority::local]
-
 
     set user_id [acs_user::get_by_username -username $username]
     if { [empty_string_p $user_id] } {
@@ -162,7 +161,7 @@ ad_proc -private auth::local::password::register_impl {} {
         contract_name "auth_password"
         owner "acs-authentication"
         name "local"
-        pretty_name "Local Password"
+        pretty_name "Local"
         aliases {
             CanChangePassword auth::local::password::CanChangePassword
             ChangePassword auth::local::password::ChangePassword
@@ -246,6 +245,31 @@ ad_proc -private auth::local::password::ChangePassword {
 
     set result(password_status) "ok"
 
+    if { [parameter::get -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -default 1] } {
+        acs_user::get -username $username -array user
+
+        set system_name [ad_system_name]
+        set pvt_home_name [ad_pvt_home_name]
+        set password_update_link_text [_ acs-subsite.Change_my_Password]
+        
+        if { [auth::UseEmailForLoginP] } {
+            set account_id_label [_ acs-subsite.Email]
+            set account_id $user(email)
+        } else {
+            set account_id_label [_ acs-subsite.Username]
+            set account_id $user(username)
+        }
+
+        set subject [_ acs-subsite.Password_changed_subject]
+        set body [_ acs-subsite.Password_changed_body]
+
+        ns_sendmail \
+            $user(email) \
+            [ad_outgoing_sender] \
+            $subject \
+            $body
+    }
+    
     return [array get result]
 }
 
@@ -321,7 +345,7 @@ ad_proc -private auth::local::registration::register_impl {} {
         contract_name "auth_registration"
         owner "acs-authentication"
         name "local"
-        pretty_name "Local Registration"
+        pretty_name "Local"
         aliases {
             GetElements auth::local::registration::GetElements
             Register auth::local::registration::Register
@@ -343,7 +367,12 @@ ad_proc -private auth::local::registration::GetElements {
     Implements the GetElements operation of the auth_register
     service contract for the local account implementation.
 } {
-    set result(required) { username email first_names last_name }
+    set result(required) {}
+    if { ![auth::UseEmailForLoginP] } {
+        set result(required) username 
+    }
+
+    set result(required) [concat $result(required) { email first_names last_name }]
     set result(optional) { screen_name url }
 
     if { ![parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] } {
@@ -394,8 +423,9 @@ ad_proc -private auth::local::registration::Register {
 
     # Set user's password
     set user_id [acs_user::get_by_username -username $username]
+    ns_log Notice "LARS: Setting user_id $user_id's password to $password -- username = $username"
     ad_change_password $user_id $password
-    
+
     # Used in messages below
     set system_name [ad_system_name]
     set system_url [ad_url]

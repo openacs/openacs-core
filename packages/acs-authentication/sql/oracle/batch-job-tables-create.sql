@@ -13,9 +13,7 @@ create table auth_batch_jobs (
                              not null,
   snapshot_p                 char(1)
                              constraint auth_batch_jobs_snapshot_ck 
-                             check (snapshot_p in ('t', 'f'))
-                             constraint auth_batch_jobs_snapshot_nn
-                             not null,
+                             check (snapshot_p in ('t', 'f')),
   authority_id               integer
                              constraint auth_batch_jobs_auth_fk
                              references auth_authorities(authority_id)

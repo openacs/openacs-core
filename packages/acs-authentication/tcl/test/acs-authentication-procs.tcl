@@ -87,7 +87,7 @@ aa_register_case auth_authenticate {
                      -username "" \
                      -password $password]
 
-            aa_equals "auth_status for blank username authentication" $auth_info(auth_status) "no_account"
+            aa_equals "auth_status for blank username authentication" $auth_info(auth_status) "auth_error"
             aa_true "auth_message for blank username authentication" ![empty_string_p $auth_info(auth_message)]
 
             # Authority bogus
@@ -483,7 +483,6 @@ aa_register_case auth_authority_api {
                 register_url ""
                 get_doc_impl_id ""
                 process_doc_impl_id ""
-                snapshot_p "f"
                 batch_sync_enabled_p "f"
             }
             set columns(short_name) [ad_generate_random_string]
@@ -609,6 +608,134 @@ aa_register_case auth_driver_get_parameter_values {
 
             aa_true "Does it return the new value?" [util_sets_equal_p $values [list $parameter $new_value]]
             
+        }
+}
+
+aa_register_case auth_use_email_for_login_p {
+    Test auth::UseEmailForLoginP
+} {
+    aa_stub auth::get_register_authority {
+        return [auth::authority::local]
+    }
+
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+            # Test various values to see that it doesn't break
+
+            parameter::set_value -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -value 0
+            aa_false "Param UseEmailForLoginP 0 -> false" [auth::UseEmailForLoginP]
+
+            parameter::set_value -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -value {}
+            aa_false "Param UseEmailForLoginP {} -> false" [auth::UseEmailForLoginP]
+
+            array set elms [auth::get_registration_elements]
+            aa_false "Registration elements do contain username" [expr [lsearch [concat $elms(required) $elms(optional)] "username"] == -1]
+
+            parameter::set_value -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -value {foo}
+            aa_true "Param UseEmailForLoginP foo -> true" [auth::UseEmailForLoginP]
+            
+            # Test login/registration
+            
+            parameter::set_value -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -value 1
+            aa_true "Param UseEmailForLoginP 1 -> true" [auth::UseEmailForLoginP]
+
+            # GetElements
+            array set elms [auth::get_registration_elements]
+            aa_true "Registration elements do NOT contain username" [expr [lsearch [concat $elms(required) $elms(optional)] "username"] == -1]
+            
+            # Create a user with no username
+            set email [string tolower "[ad_generate_random_string]@foobar.com"]
+            set password [ad_generate_random_string]
+
+            array set result [auth::create_user \
+                                  -email $email \
+                                  -password $password \
+                                  -first_names [ad_generate_random_string] \
+                                  -last_name [ad_generate_random_string] \
+                                  -secret_question [ad_generate_random_string] \
+                                  -secret_answer [ad_generate_random_string] \
+                                  -screen_name [ad_generate_random_string]]
+
+            aa_equals "Registration OK" $result(creation_status) "ok"
+
+            # Authenticate as that user
+            array unset result
+            array set result [auth::authenticate \
+                                  -email $email \
+                                  -password $password \
+                                  -no_cookie]
+            
+            aa_equals "Authentication OK" $result(auth_status) "ok"
+            
+        }
+}
+
+aa_register_case auth_email_on_password_change {
+    Test acs-kernel.EmailAccountOwnerOnPasswordChangeP parameter
+} {
+    aa_stub ns_sendmail {
+        global ns_sendmail_to
+        set ns_sendmail_to $to
+    }
+
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+            parameter::set_value -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -value 1
+            
+            global ns_sendmail_to
+            set ns_sendmail_to {}
+           
+            # Create a dummy local user
+            set username [ad_generate_random_string]
+            set email [string tolower "[ad_generate_random_string]@foobar.com"]
+            set password [ad_generate_random_string]
+
+            array set result [auth::create_user \
+                                  -username $username \
+                                  -email $email \
+                                  -password $password \
+                                  -first_names [ad_generate_random_string] \
+                                  -last_name [ad_generate_random_string] \
+                                  -secret_question [ad_generate_random_string] \
+                                  -secret_answer [ad_generate_random_string] \
+                                  -screen_name [ad_generate_random_string]]
+            
+            aa_equals "Create user OK" $result(creation_status) "ok"
+
+            set user_id $result(user_id)
+
+            aa_log "auth_id = [db_string sel { select authority_id from users where user_id = :user_id }]"
+
+            
+            # Change password
+            array unset result
+            set new_password [ad_generate_random_string]
+            array set result [auth::password::change \
+                                  -user_id $user_id \
+                                  -old_password $password \
+                                  -new_password $new_password]
+            aa_equals "Password change OK" $result(password_status) "ok"
+            
+            # Check that we get email
+            aa_equals "Email sent to user" $ns_sendmail_to $email
+            set ns_sendmail_to {}
+
+            # Set parameter to false
+            parameter::set_value -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -value 0
+
+            # Change password
+            array unset result
+            set new_new_password [ad_generate_random_string]
+            array set result [auth::password::change \
+                                  -user_id $user_id \
+                                  -old_password $new_password \
+                                  -new_password $new_new_password]
+            aa_equals "Password change OK" $result(password_status) "ok"
+            
+            # Check that we do not get an email
+            aa_equals "Email NOT sent to user" $ns_sendmail_to {}
         }
 }
 

@@ -45,7 +45,8 @@
             set    doc_end_time = sysdate,
                    doc_status = :doc_status,
                    doc_message = :doc_message,
-                   document = empty_clob()
+                   document = empty_clob(),
+                   snapshot_p = :snapshot_p 
             where  job_id = :job_id
             returning document into :1
         </querytext>
