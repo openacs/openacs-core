@@ -319,6 +319,9 @@ ad_proc -public lang::user::set_locale {
     if { $user_id == 0 } {
         # Not logged in, use a cookie-based client locale
 	ad_set_cookie -replace t -max_age inf "ad_locale" $locale
+
+        # Flush the site-wide user preference cache
+        util_memoize_flush [list lang::user::site_wide_locale_not_cached $user_id]
         return
     }
 
