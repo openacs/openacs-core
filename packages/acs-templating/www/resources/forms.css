@@ -47,3 +47,7 @@ div.form-help-text {
 span.form-required-mark {
     color: red;
 }
+
+table.formgroup {
+  border-collapse: collapse;        
+}

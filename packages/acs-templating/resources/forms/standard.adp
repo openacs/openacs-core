@@ -56,7 +56,7 @@
 
               <if @elements.widget@ in radio checkbox>
                 <noparse>
-                  <table cellpadding="4" cellspacing="0" border="0">
+                  <table class="formgroup">
                     <formgroup id="@elements.id@">
                       <tr>
                         <td>\@formgroup.widget;noquote@</td>
