@@ -737,7 +737,7 @@ ad_proc -public ad_html_to_text {
 
         # Check that tag doesn't start with whitespace, in which case it's just a lone < that
         # was errorneously left unquoted
-        if { $i >= $length || ![regexp {^[^\s]$} [string index $html [expr $i + 1]]] } {
+        if { $i >= [expr $length-1] || ![string is alpha [string index $html [expr $i + 1]]] } {
             # Output the < and continue with next character
             ad_html_to_text_put_text output "<"
             set last_tag_end [incr i]
@@ -924,8 +924,8 @@ ad_proc -public ad_html_to_text {
     # Close any unclosed tags
     set output(pre) 0
     while { $output(blockquote) > 0 } {
-	incr $output(blockquote) -1
-	incr $output(maxlen) 4
+	incr output(blockquote) -1
+	incr output(maxlen) 4
     }
     
     # write out URLs, if necessary:
