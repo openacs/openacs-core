@@ -15,7 +15,7 @@ array set subsite_sitenode [site_node::get -url $subsite_url]
 set subsite_node_id $subsite_sitenode(node_id)
 
 db_multirow -extend { parameter_url } applications select_applications {} {
-    set instance_name "[string repeat .. $level]$instance_name"
+    set instance_name "[string repeat .. $treelevel]$instance_name"
     if { $num_parameters > 0 } {
         set parameter_url [export_vars -base ../../shared/parameters { package_id { return_url [ad_return_url] } }]
     }
