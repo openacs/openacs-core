@@ -91,10 +91,16 @@ template_tag include { params } {
   }
   append command "\]"
 
-  template::adp_append_code "if { \[catch { ad_try { append __adp_output \[$command\] } ad_script_abort val { } } errmsg\] } {"
-  template::adp_append_code "    global errorInfo"
-  template::adp_append_code "    append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\""
-  template::adp_append_code "    ns_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\n\$errorInfo\""
+  # We explicitly test for ad_script_abort, so we don't dump that as an error, and don't catch it, either
+  # (We do catch it, but then we re-throw it)
+  template::adp_append_code "if { \[catch { append __adp_output \[$command\] } errmsg\] } {"
+  template::adp_append_code "    global errorInfo errorCode"
+  template::adp_append_code "    if { \[string equal \[lindex \$errorCode 0\] \"AD\"\] && \[string equal \[lindex \$errorCode 1\] \"EXCEPTION\"\] && \[string equal \[lindex \$errorCode 2\] \"ad_script_abort\"\] } {"
+  template::adp_append_code "        ad_script_abort"
+  template::adp_append_code "    } else {"
+  template::adp_append_code "        append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\""
+  template::adp_append_code "        ns_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\n\$errorInfo\""
+  template::adp_append_code "    }"
   template::adp_append_code "}"
 }
 
