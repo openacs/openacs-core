@@ -35,7 +35,7 @@ if {![db_0or1row select_email {}]} {
 set ask_question_p 0
 if {!$validated_p} {
     if {[exists_and_not_null answer]} {
-        if {[db_string select_answer_matches_p {}} {
+        if {[db_string select_answer_matches_p {}]} {
             set validated_p 1
         }
     } else {
