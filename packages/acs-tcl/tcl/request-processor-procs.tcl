@@ -361,26 +361,30 @@ ad_proc -private rp_filter { why } {
     set url [ad_conn url]
     # 2. handle special case: if the root is a prefix of the URL, 
     #                         remove this prefix from the URL, and redirect.
-    if { ![empty_string_p $root] && [regexp "^${root}(.*)$" $url match url] } {
-	if [regexp {^GET [^\?]*\?(.*) HTTP} [ns_conn request] match vars] {
-	    append url ?$vars
-	}
-        if {[ad_secure_conn_p]} {
-            # it's a secure connection.
-            ad_returnredirect https://[ad_host][ad_port]$url
-	    return "filter_return"
-        } else {
-            ad_returnredirect http://[ad_host][ad_port]$url
-	    return "filter_return"
+    if { ![empty_string_p $root] } {
+        if { [regexp "^${root}(.*)$" $url match url] } {
+
+            if [regexp {^GET [^\?]*\?(.*) HTTP} [ns_conn request] match vars] {
+                append url ?$vars
+            }
+            if {[ad_secure_conn_p]} {
+                # it's a secure connection.
+                ad_returnredirect https://[ad_host][ad_port]$url
+                return "filter_return"
+            } else {
+                ad_returnredirect http://[ad_host][ad_port]$url
+                return "filter_return"
+            }
         }
+        # Normal case: Prepend the root to the URL.
+        # 3. set the intended URL
+        ad_conn -set url ${root}${url}
+
+        # 4. set urlv and urlc for consistency
+        set urlv [lrange [split $root /] 1 end]
+        ad_conn -set urlc [expr [ad_conn urlc]+[llength $urlv]]
+        ad_conn -set urlv [concat $urlv [ad_conn urlv]]
     }
-    # Normal case: Prepend the root to the URL.
-    # 3. set the intended URL
-    ad_conn -set url ${root}${url}
-    # 4. set urlv and urlc for consistency
-    set urlv [lrange [split $root /] 1 end]
-    ad_conn -set urlc [expr [ad_conn urlc]+[llength $urlv]]
-    ad_conn -set urlv [concat $urlv [ad_conn urlv]]
     # -------------------------------------------------------------------------
     # End of patch "hostname-based subsites"
     # -------------------------------------------------------------------------
@@ -574,6 +578,11 @@ ad_proc -private rp_handler {} {
 
 } {
   ad_call_proc_if_exists ds_collect_connection_info
+
+  # JCD: keep track of rp_handler call count to prevent dev support from recording 
+  # information twice when for example we get a 404 internal redirect. We should probably 
+  set recursion_count [ad_conn recursion_count] 
+  ad_conn -set recursion_count [incr recursion_count]
 
   set startclicks [clock clicks]
   rp_debug "rp_handler: handling request: [ns_conn method] [ns_conn url]?[ns_conn query]"
@@ -877,6 +886,7 @@ ad_proc -public ad_conn {args} {
   processor documentation</a> for a list of allowable values. If -set
   is passed then it sets a property.
 
+  added recursion_count to properly deal with internalredirects.
 } {
   global ad_conn
 
@@ -926,6 +936,8 @@ ad_proc -public ad_conn {args} {
 	file ""
 	system_p 0
 	path_info ""
+	system_p 0
+        recursion_count 0
       }
     }
 
