@@ -150,8 +150,9 @@ ad_proc -public template::widget::input { type element_reference tag_attributes 
       # This can be used in the form template in a <label for="id">...</label> tag.
       set attributes(id) "$element(form_id):elements:$element(name):$element(value)"
   }
-
-  if { ![string equal $element(mode) "edit"] && ![string equal $element(widget) "hidden"] && \
+  
+  # Handle display mode of visible normal form elements, i.e. not hidden, not submit, not button, not clear
+  if { ![string equal $element(mode) "edit"] && ![string equal $type "hidden"] && \
       ![string equal $type "submit"] && ![string equal $type "button"] && \
       ![string equal $type "clear"] } {
     
