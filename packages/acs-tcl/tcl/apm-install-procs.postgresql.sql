@@ -77,5 +77,21 @@ select apm_package_version__new(
 <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 </fullquery>
 
+<fullquery name="acs.acs-tcl.tcl.apm-install-procs.apm_package_install.package_instantiate_mount">
+<querytext>
+select apm_package__new(
+	  NULL,
+          :package_name,
+	  :package_key,
+	  'apm_package',
+	  now(),
+	  NULL,
+	  NULL,
+	  acs__magic_object_id('default_context')
+)
+</querytext>
+<rdbms><type>postgresql</type><version>7.1</version></rdbms>
+</fullquery>
+
 
 </queryset>
