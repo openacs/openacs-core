@@ -51,8 +51,8 @@
     encounter them:</para>
     <sect3>
       <title>Error when selecting values</title>
-          <para>This may mean that you have a problem with the key you
-          are using.</para>
+          <para>This generally happens when there is an error in your
+          query.</para>
     </sect3>
   </sect2>
 
