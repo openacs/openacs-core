@@ -2222,6 +2222,15 @@ ad_proc -public template::list::orderby::create {
         <b>orderby_desc</b>: The reverse ordering from 'orderby_asc'.
       </li>
       <li>
+        <b>orderby_name</b>: The name of a named query, same functionality as orderby property.
+      </li>
+      <li>
+        <b>orderby_asc_name</b>: The name of a named query, same functionality as orderby_asc property.
+      </li>
+      <li>
+        <b>orderby_desc_name</b>: The name of a named query, same functionality as orderby_desc property.
+      </li>
+      <li>
         <b>default_direction</b>: The default order direction, 'asc' or 'desc'. Defaults to 'asc'.
       </li>
     </ul>
@@ -2358,6 +2367,22 @@ ad_proc -public template::list::orderby::set_property {
         orderby {
             set value [uplevel $ulevel [list subst $value]]
             set orderby_properties($property) $value
+            set orderby_properties(orderby_asc) "$value asc"
+            set orderby_properties(orderby_desc) "$value desc"
+        }
+        orderby_asc_name {
+            set orderby_properties($property) $value
+            set value [uplevel $ulevel [list db_map $value]]
+            set orderby_properties(orderby_asc) $value
+        }
+        orderby_desc_name {
+            set orderby_properties($property) $value
+            set value [uplevel $ulevel [list db_map $value]]
+            set orderby_properties(orderby_desc) $value
+        }
+        orderby_name {
+            set orderby_properties($property) $value
+            set value [uplevel $ulevel [list db_map $value]]
             set orderby_properties(orderby_asc) "$value asc"
             set orderby_properties(orderby_desc) "$value desc"
         }
