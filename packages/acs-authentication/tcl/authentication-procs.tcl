@@ -928,14 +928,11 @@ ad_proc -private auth::validate_user_info {
         }
     }
 
-    ns_log Notice "LARS: update_p = $update_p ; user(authority_id) = $user(authority_id) ; user(username) = $user(username)"
     if { $update_p && [exists_and_not_null user(authority_id)] && [exists_and_not_null user(username)] } {
         set user(user_id) [acs_user::get_by_username \
                                -authority_id $user(authority_id) \
                                -username $user(username)]
         
-        ns_log Notice "LARS2: user(user_id) = $user(user_id)"
-
         if { [empty_string_p $user(user_id)] } {
             set element_messages(username) "No user with username '$username' found for authority [auth::authority::get_element -authority_id $authority_id -element pretty_name]"
         }
@@ -966,10 +963,8 @@ ad_proc -private auth::validate_user_info {
     if { [exists_and_not_null user(email)] } {
         # Check that email is unique
         set email $user(email)
-        ns_log Notice "LARS4: email = '$email' ; [db_list_of_lists count { select party_id, email from parties }]"
         set email_party_id [party::get_by_email -email $user(email)]
 
-        ns_log Notice "LARS3: email_party_id = $email_party_id"
         if { ![empty_string_p $email_party_id] && (!$update_p || $email_party_id != $user(user_id)) } {
             # We found a user with this email, and either we're not updating, or it's not the same user_id as the one we're updating
             
