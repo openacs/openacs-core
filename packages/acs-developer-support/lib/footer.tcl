@@ -2,6 +2,8 @@ set show_p [ds_show_p]
 
 # TODO: Go through request-processor to see what other information should be exposed to developer-support
 
+# TODO: Always show comments inline by default?
+
 if { $show_p } {
 
     set ds_url [ds_support_url]
@@ -61,6 +63,8 @@ if { $show_p } {
         
         set set_user_url "${ds_url}/set-user"
         set export_vars [export_vars -form { { return_url [ad_return_url] } }]
+
+        set unfake_url [export_vars -base $set_user_url { { user_id $real_user_id } { return_url [ad_return_url] } }]
     }
 
 }
