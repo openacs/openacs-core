@@ -103,7 +103,7 @@ create function rdbms_date(varchar) returns timestamp as '
 declare
   p_raw_date alias for $1;
 begin
-  return cast (p_raw_date || ''+00'' as timestamp);
+  return "timestamp" (p_raw_date || ''+00'');
 end;' language 'plpgsql';
 
 create function timezone__new (varchar, varchar) returns integer as '
@@ -168,15 +168,15 @@ declare
 foo varchar;
 begin
 
-  select cast (p_local_varchar || substr(gmt_offset,1,5) as timestamp) into v_base_time
+  select "timestamp" (p_local_varchar || substr(gmt_offset,1,5)) into v_base_time
   from timezones
   where tz_id = p_tz_id;
 
   if not found then
-    return cast (p_local_varchar || ''+00'' as timestamp);
+    return "timestamp" (p_local_varchar || ''+00'');
   end if;
 
-  return cast (p_local_varchar || ''+00'' as timestamp) - interval (gmt_offset || ''seconds'')
+  return "timestamp" (p_local_varchar || ''+00'') - interval (gmt_offset || ''seconds'')
   from   timezone_rules
   where  tz_id = p_tz_id and v_base_time between utc_start and utc_end;
 
