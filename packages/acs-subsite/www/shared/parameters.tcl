@@ -6,10 +6,10 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {package_id {[ad_conn package_id]}}
-    {return_url {}}
+    {return_url {[ad_conn url]}}
 }
 
-# TODO: Warn when file has stuff
+permission::require_permission -object_id $package_id -privilege admin
 
 db_1row select_instance_name {
     select instance_name, package_key
@@ -59,7 +59,7 @@ db_foreach select_params {} {
 }
 
 if { $counter > 0 } {
-    ad_form -name parameters -cancel_url [ad_conn url] -form $form -on_request {
+    ad_form -name parameters -cancel_url $return_url -form $form -on_request {
         foreach name [array names param] {
             set $name $param($name)
         }
@@ -73,9 +73,7 @@ if { $counter > 0 } {
             }
         }
     } -after_submit {
-        if { ![empty_string_p $return_url] } {
-            ad_returnredirect $return_url
-            ad_script_abort
-        }
+        ad_returnredirect $return_url
+        ad_script_abort
     }
 }
