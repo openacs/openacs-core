@@ -20,6 +20,7 @@ create table auth_authorities (
                              unique,
     pretty_name              varchar(4000),
     help_contact_text        varchar(4000),
+    help_contact_text_format varchar(200),
     enabled_p                boolean default 't' 
                              constraint auth_authority_enabled_p_nn
                              not null,
@@ -45,10 +46,6 @@ create table auth_authorities (
     get_doc_impl_id          integer references acs_objects(object_id),
     -- Id of service contract processing batch sync doc
     process_doc_impl_id      integer references acs_objects(object_id),
-    -- Are batch syncs snapshots or of incremental type
-    snapshot_p               boolean default 'f'
-                             constraint auth_authority_snapshot_p_nn
-                             not null,
     batch_sync_enabled_p     boolean default 'f'
                              constraint auth_authority_bs_enabled_p_nn
                              not null
@@ -173,7 +170,6 @@ begin
 
   return 0; 
 end;' language 'plpgsql';
-
 
 -- Create the local authority
 select authority__new(
