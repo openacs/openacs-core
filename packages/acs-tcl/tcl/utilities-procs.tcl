@@ -2378,14 +2378,11 @@ ad_proc -private ad_run_scheduled_proc { proc_info } {
 
     ns_mutex unlock [nsv_get ad_procs mutex]
 
-    if { $debug == "t" } {
-	ns_log "Notice" "Running scheduled proc $proc..."
-    }
+    ns_log Debug "Running scheduled proc $proc..."
+
     # Actually run the procedure.
     eval [concat [list $proc] $args]
-    if { $debug == "t" } {
-	ns_log "Notice" "Done running scheduled proc $proc."
-    }
+    ns_log Debug "Done running scheduled proc $proc."
 }
 
 # Initialize NSVs for ad_schedule_proc.
@@ -2398,7 +2395,7 @@ ad_proc -public ad_schedule_proc {
     {
 	-thread f
 	-once f
-	-debug t
+	-debug f
 	-all_servers f
         -schedule_proc ""
     }
