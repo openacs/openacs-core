@@ -6,7 +6,7 @@
 <fullquery name="acs_object_name.object_name_get">      
       <querytext>
 
-        select acs_object__name(:object_id); 
+        select acs_object__name(:object_id);
     
       </querytext>
 </fullquery>

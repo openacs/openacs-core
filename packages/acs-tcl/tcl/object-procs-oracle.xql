@@ -6,7 +6,7 @@
 <fullquery name="acs_object_name.object_name_get">      
       <querytext>
       
-	begin :1 := acs_object.name(:object_id); end;
+	select acs_object.name(:object_id) from dual
     
       </querytext>
 </fullquery>
