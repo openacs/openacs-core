@@ -529,7 +529,7 @@ oracle:/where/oracle/Disk1$ ./runInstaller</programlisting>
               <para>
 
                 Execute the following command:
-                <command>/usr/i386-glib21-linux/bin/i386-glibc21-linux-env.sh</command>
+                <command>/usr/i386-glibc21-linux/bin/i386-glibc21-linux-env.sh</command>
 
               </para>
             </listitem>
