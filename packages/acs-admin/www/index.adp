@@ -27,8 +27,6 @@
 
 <include src="/packages/acs-admin/lib/service-parameters">
 
-<h3>Tools For Developers</h3>
-
-<include src="/packages/acs-admin/lib/developer-services">
-
-
+<p>
+  <b>&raquo;</b> <a href="developer">Developer's Admin</a>
+</p>
