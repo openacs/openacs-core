@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.2.0d8" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.2.0d9" locale="en_US" charset="ISO-8859-1">
 
   <msg key="authentication_authority">Authority</msg>
   <description key="authentication_authority">The identifying label for an authentication server, such as an  LDAP or RADIUS server.</description>
 
   <msg key="common_Actions">Actions</msg>
   <description key="common_Actions">Header for a list of actions which may be taken on the displayed content</description>
+
   <msg key="common_actions">actions</msg>
   <msg key="common_Add">Add</msg>
   <msg key="common_add">add</msg>
@@ -69,6 +70,7 @@
   <msg key="common_search">search</msg>
   <msg key="common_Stop">Stop</msg>
   <msg key="common_stop">stop</msg>
+  <msg key="common_Submit">Submit</msg>
   <msg key="common_Update">Update</msg>
   <msg key="common_update">update</msg>
   <msg key="common_View">View</msg>
