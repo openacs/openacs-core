@@ -54,4 +54,3 @@ set group_member_p [group::member_p -group_id $group_id -user_id $user_id]
 set group_admin_p [group::admin_p -group_id $group_id -user_id $user_id]
 
 set can_join_p [expr !$group_admin_p && $group_member_p == 0 && $user_id != 0 && ![string equal $group_join_policy "closed"]]
-
