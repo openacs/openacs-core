@@ -255,8 +255,6 @@ ad_proc -public auth::authenticate {
                           -username $username \
                           -authority_id $authority_id]
 
-    ns_log Notice "LARS: [array get result]"
-
     # Returns: 
     #   result(account_status)
     #   result(account_message)  

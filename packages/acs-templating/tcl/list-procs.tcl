@@ -819,12 +819,8 @@ ad_proc -private template::list::template {
     # multirow data source.  The output of this procedure will be
     # placed in __adp_output in this stack frame.
    
-    #ns_log Notice "LARS: Code source: [info body template::code::adp::$file_stub]"
-
     template::code::adp::$file_stub
     
-    #ns_log Notice "LARS: template::list::template returns: $__adp_output"
-
     return $__adp_output
 }
 
@@ -1053,8 +1049,6 @@ ad_proc -private template::list::render {
     # evaluate the code and return the rendered HTML for the list
     set __output [template::adp_eval __list_code]
 
-    #ns_log Notice "LARS: template::list::render returning => $__output"
-    
     return $__output
 }
 
@@ -1067,8 +1061,6 @@ ad_proc -private template::list::render_row {
     get_reference -name $name
 
     set __adp_output $list_properties(row_template)
-
-    #ns_log Notice "LARS: render_row. __adp_output = $__adp_output"
 
     # compile the template (this is the second compilation, if we're using a dynamic template -- I think)
     set __list_code [template::adp_compile -string $__adp_output]
@@ -1350,8 +1342,6 @@ ad_proc -private template::list::render_filters {
     # multirow data source.  The output of this procedure will be
     # placed in __adp_output in this stack frame.
    
-    #ns_log Notice "LARS: Code source: [info body template::code::adp::$file_stub]"
-
     template::code::adp::$file_stub
     
     return $__adp_output
@@ -1695,8 +1685,6 @@ ad_proc -private template::list::element::render {
     # Get an upvar'd reference to list_properties
     template::list::get_reference -name $list_name
 
-    #ns_log Notice "LARS: element::render -list_name $list_name -element_name $element_name: upvar #$level $list_name:properties list_properties; list_properties = [array get list_properties], [info exists list_properties]"
-
     set multirow $list_properties(multirow)
 
     # Get the element properties
@@ -1732,8 +1720,6 @@ ad_proc -private template::list::element::render {
 
         set output "<if \"$link_url\" not nil><a href=\"$link_url\"[template::list::util_html_to_attributes_string $link_html]>$old_output</a></if><else>$old_output</else>"
     }
-
-    #ns_log Notice "LARS: element=$element_name, element_properties=[array get element_properties], output=$output"
 
     return $output
 }

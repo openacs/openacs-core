@@ -437,7 +437,7 @@ ad_proc -private apm_dependency_check_new {
     # Just to get us started
     set updated_p 1
 
-    ns_log Notice "LARS: STARTING DEPENDENCY CHECK"
+    ns_log Debug "STARTING DEPENDENCY CHECK"
 
     # Outer loop tries to find a package from the repository to add if 
     # we're stuck because of unsatisfied dependencies
@@ -462,7 +462,7 @@ ad_proc -private apm_dependency_check_new {
                     if { ![info exists provided($req_uri)] || \
                              [apm_version_names_compare $provided($req_uri) $req_version]== -1 } {
 
-                        ns_log Notice "LARS: $package_key requires $req_uri $req_version => failed"
+                        ns_log Debug "$package_key requires $req_uri $req_version => failed"
 
                         set satisfied_p 0
 
@@ -472,7 +472,7 @@ ad_proc -private apm_dependency_check_new {
                             set required($req_uri) $req_version
                         }
                     } else {
-                        ns_log Notice "LARS: $package_key requires $req_uri $req_version => OK"
+                        ns_log Debug "$package_key requires $req_uri $req_version => OK"
                     }
                 }
                 
@@ -534,7 +534,7 @@ ad_proc -private apm_dependency_check_new {
                 array unset version
                 array set version $repository($package_key)
 
-                ns_log Notice "LARS: Considering $package_key: [array get version]"
+                ns_log Debug "Considering $package_key: [array get version]"
 
                 # Let's see if this package provides anything we need
                 foreach prov $version(provides) {
@@ -544,7 +544,7 @@ ad_proc -private apm_dependency_check_new {
                     if { [info exists required($prov_uri)] && \
                              [apm_version_names_compare $required($prov_uri) $prov_version] <= 0 } {
 
-                        ns_log Notice "LARS: Adding $package_key, as it provides $prov_uri $prov_version"
+                        ns_log Debug "Adding $package_key, as it provides $prov_uri $prov_version"
 
                         # If this package provides something that's required in a version high enough
                         # add it to the pending list
@@ -591,9 +591,9 @@ ad_proc -private apm_dependency_check_new {
                          [apm_version_names_compare $provided($req_uri) $req_version] == -1 } {
                     lappend failed($package_key) [list $req_uri $req_version]
                     if { [info exists provided($req_uri)] } {
-                        ns_log Notice "LARS: Failed dependency: $package_key requires $req_uri $req_version, but we only provide $provided($req_uri)"
+                        ns_log Debug "Failed dependency: $package_key requires $req_uri $req_version, but we only provide $provided($req_uri)"
                     } else {
-                        ns_log Notice "LARS: Failed dependency: $package_key requires $req_uri $req_version, but we don't have it"
+                        ns_log Debug "Failed dependency: $package_key requires $req_uri $req_version, but we don't have it"
                     }
                 }
             }
@@ -619,7 +619,7 @@ ad_proc -private apm_load_catalog_files {
     @author Peter Marklund
 } {
     # If acs-lang hasn't been installed yet we simply return
-    if { [llength [info proc lang::catalog::import_from_files]] == 0 || ![apm_package_installed_p acs-lang] } {
+    if { [llength [info proc lang::catalog::import]] == 0 || ![apm_package_installed_p acs-lang] } {
         return
     }
 
@@ -745,7 +745,6 @@ ad_proc -private apm_package_install {
 	} else {
             # We are installing a new package
 
-            # Load catalog files without the upgrade switch before package version is changed in db
             apm_load_catalog_files $package_key
 
 	    set version_id [apm_package_install_version \
@@ -1791,7 +1790,7 @@ ad_proc -private apm_get_package_repository {
                 set version(install_type) upgrade
             }
 
-            ns_log Notice "LARS: $version(package.key) = $version(install_type) -- [array get installed_version]"
+            ns_log Debug "$version(package.key) = $version(install_type) -- [array get installed_version]"
             
             if { ![string equal $version(install_type) already_installed] } {
                 set repository($version(package.key)) [array get version]
