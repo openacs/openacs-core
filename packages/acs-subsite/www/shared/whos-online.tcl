@@ -17,6 +17,7 @@ set whos_online_interval [whos_online::interval]
 template::list::create \
     -name online_users \
     -multirow online_users \
+    -no_data "No registered users online" \
     -elements {
         name {
             label "User name"
