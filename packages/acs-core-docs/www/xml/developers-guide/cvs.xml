@@ -10,15 +10,16 @@
     <authorblurb>
 <para>      By <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
     </authorblurb>
-    <sect1 id="cvs-service-import">
+    <formalpara id="cvs-service-import">
       <title>Add the Service to CVS - OPTIONAL</title>
       <indexterm>
         <primary>cvs</primary>
         <secondary>setup</secondary>
       </indexterm>
-      <para>These steps take an existing OpenACS directory and add
+      These steps take an existing OpenACS directory and add
           it to a <link linkend="install-cvs">CVS
-          repository.</link>.</para>
+          repository</link>.
+     </formalpara>
       <orderedlist>
         <listitem>
           <para>Create and set permissions on a subdirectory in the local cvs repository.</para>
@@ -86,7 +87,6 @@ exit</action></screen>
           
         </listitem>
       </orderedlist>
-    </sect1>
 
   </appendix>
   

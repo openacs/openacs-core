@@ -70,7 +70,7 @@ installation</link> guide, even if you already have a working Unix and Oracle
 installtion.</para>
 
 <para>The guide contains up-to-date information on the default settings that
-ArsDigita uses to generate properly running sites. Deviations from these
+OpenACS developers use to generate properly running sites.  Deviations from these
 defaults are recommended only if you are an expert system administrator.</para>
 
 <para>Once you have a working OpenACS installation, there are several utilities

@@ -24,7 +24,8 @@
   <xsl:variable name="use.id.as.filename">1</xsl:variable>
 
   <xsl:variable name="chunk.first.sections">1</xsl:variable>
-  
+
+
 <!-- vinodk: Add our logo to header                   -->
   <xsl:template name="header.navigation">
     <xsl:param name="prev" select="/foo"/>

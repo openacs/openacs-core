@@ -300,12 +300,6 @@
 
   <part id="acs-plat-dev">
     <title>For OpenACS Platform Developers</title>
-    <preface id="platform-dev">
-      <title>Platform Development</title>
-      <para>Information about the internal workings of OpenACS, useful
-      both for modifying the core functionality and for developing new
-      packages.</para>
-    </preface>
     <chapter id="kernel-doc">
       <title>Kernel Documentation</title>
 
@@ -336,9 +330,8 @@
 
               <emphasis>OpenACS Application packages</emphasis>,
               which typically provide user-level
-	      web services built on top of the Kernel and Core.  Such
-	      packages include those built by ArsDigita as well as
-	      external contributors.  Application packages are
+	      web services built on top of the Kernel and Core.
+	      Application packages are
 	      developed separately from the Kernel, and are typically
 	      released independently of it.
 

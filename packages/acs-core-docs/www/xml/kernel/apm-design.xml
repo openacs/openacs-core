@@ -193,9 +193,9 @@ ACS was an error-prone and time-consuming process.</para></listitem>
 
 <para>Consistent use of the APM format and tools will go a long way toward
 solving the maintainability problems listed above. Moreover, APM is the
-substrate that will enable us to soon establish a central package repository,
-where both ArsDigita and third-party developers will be able publish their
-packages for other ACS users to download and install.</para>
+substrate that will enable us to establish a central package repository,
+where developers will be able publish their
+packages for other OpenACS users to download and install.</para>
 
 <para>For a simple illustration of the difference between ACS without APM
 (pre-3.3) and ACS with APM (3.3 and beyond), consider a hypothetical ACS
