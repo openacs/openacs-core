@@ -33,7 +33,9 @@
 
 <fullquery name="member_p.group_id_from_name">      
       <querytext>
-	  select group_id from groups where group_name=:group_name
+	  select group_id 
+          from   groups 
+          where  group_name = :group_name
       </querytext>
 </fullquery>
 

@@ -359,36 +359,25 @@ ad_proc -public group::member_p {
     If cascade is false, then the user must have specifically
     been granted membership on the group in question.
 } {
-    
-    if {[empty_string_p $user_id]} {
-	set user_id [ad_verify_and_get_user_id]
+    if { [empty_string_p $user_id] } {
+	set user_id [ad_conn user_id]
     }
 
-    if {[empty_string_p $group_name] && [empty_string_p $group_id]} {
+    if { [empty_string_p $group_name] && [empty_string_p $group_id] } {
 	return 0
     }
 
-    if {$cascade_p} {
-	set cascade t
-    } else {
-	set cascade f
-    }
-    
-
-    if {![empty_string_p $group_name]} {
-	set group_id [db_string group_id_from_name "
-	  select group_id from groups where group_name=:group_name" -default ""]
-	if {[empty_string_p $group_id]} {
+    if { ![empty_string_p $group_name] } {
+	set group_id [db_string group_id_from_name {} -default {}]
+	if { [empty_string_p $group_id] } {
 	    return 0
 	}
     }
 
-    set result [db_string user_is_member "
-	  select acs_group.member_p(:user_id,:group_id, :cascade) 
-            from dual" -default "f"]
-
-    if { [string equal $result "f"] } { return 0 }
-    if { [string equal $result "t"] } { return 1 }
+    set cascade [db_boolean $cascade_p]
+    set result [db_string user_is_member {} -default "f"]
+    
+    return [template::util::is_true $result]
 }
 
 
