@@ -10,6 +10,7 @@ ad_page_contract {
 
 set cvs_command "cvs"
 set cvs_root ":pserver:anonymous@openacs.org:/cvsroot"
+set dotlrn_cvs_root ":pserver:anonymous@dotlrn.openacs.org:/dotlrn-cvsroot"
 
 set work_dir "[acs_root_dir]/repository-builder/"
 
@@ -34,12 +35,12 @@ ns_write <ul>
 #----------------------------------------------------------------------
 
 # Prepare work dir
-publish::mkdirs $work_dir
+file mkdir $work_dir
 
 cd $work_dir
 catch { exec $cvs_command -d $cvs_root -z3 co openacs-4/readme.txt }
 
-catch { exec $cvs_command -d $cvs_root -z3 log -h openacs-4/ } output
+catch { exec $cvs_command -d $cvs_root -z3 log -h openacs-4/readme.txt } output
 
 set lines [split $output \n]
 for { set i 0 } { $i < [llength $lines] } { incr i } {
@@ -53,29 +54,25 @@ array set channel_tag [list]
 array set channel_bugfix_version [list]
 
 for { } { $i < [llength $lines] } { incr i } {
+    # Tag lines have the form   tag: cvs-version
+    #     openacs-5-0-0-final: 1.25.2.5
+
     if { ![regexp {^\s+([^:]+):\s+([0-9.]+)} [lindex $lines $i] match tag_name version_name] } {
         break
     }
-    if { [regexp {^(oacs|openacs)-(.*)-final$} $tag_name match ignore oacs_version] } {
+    
+    # Look for tags named 'openacs-x-y-compat'
+    if { [regexp {^openacs-([1-9][0-9]*-[0-9]+)-compat$} $tag_name match oacs_version] } {
         
         set major_version [lindex [split $oacs_version "-"] 0]
         set minor_version [lindex [split $oacs_version "-"] 1]
-        set bugfix_version [lindex [split $oacs_version "-"] 2]
-        if { ![regexp {^[0-9]*$} $bugfix_version] } {
-            set bugfix_version 0
-        }
 
         if { $major_version >= 5 } {
             set channel "${major_version}-${minor_version}"
 
-            ns_write "<li>Processing channel $channel - tag $tag_name\n"
+            ns_write "<li>Found channel $channel using tag $tag_name\n"
 
-            if { ![info exists channel_bugfix_version($channel)] || $channel_bugfix_version($channel) < $bugfix_version } {
-                set channel_tag($channel) $tag_name
-                set channel_bugfix_version($channel) $bugfix_version
-            } else {
-                ns_write "(skipping because we already have a later tag on this channel)"
-            }
+            set channel_tag($channel) $tag_name
         }
     }
 }
@@ -90,12 +87,9 @@ ns_write "<li>Channels are: [array get channel_tag]\n"
 # Read all package .info files, building manifest file
 #----------------------------------------------------------------------
 
-# Wipe the repository dir
-file delete -force "${work_dir}repository/"
-
 # Wipe and re-create the working directory
 file delete -force $work_dir
-publish::mkdirs $work_dir
+file mkdir ${work_dir}
 cd $work_dir
     
 foreach channel [lsort -decreasing [array names channel_tag]] {
@@ -103,10 +97,12 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
 
     # Wipe and re-create the checkout directory
     file delete -force "${work_dir}openacs-4"
+    file delete -force "${work_dir}dotlrn"
+    file mkdir -force "${work_dir}dotlrn/packages"
     
     # Prepare channel directory
     set channel_dir "${work_dir}repository/${channel}/"
-    publish::mkdirs $channel_dir
+    file mkdir $channel_dir
 
     # Store the list of packages we've seen for this channel, so we don't include the same package twice
     # Seems odd, but we have to do this given the forked packages sitting in /contrib
@@ -116,15 +112,25 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
     if { ![string equal $channel_tag($channel) HEAD] } {
         catch { exec $cvs_command -d $cvs_root -z3 co -r $channel_tag($channel) openacs-4/packages } output
         catch { exec $cvs_command -d $cvs_root -z3 co -r $channel_tag($channel) openacs-4/contrib/packages } output
+        cd ${work_dir}dotlrn/packages/
+        catch { exec $cvs_command -d $dotlrn_cvs_root -z3 co -r $channel_tag($channel) dotlrn-core } output
+        cd $work_dir
     } else {
         catch { exec $cvs_command -d $cvs_root -z3 co openacs-4/packages } output
         catch { exec $cvs_command -d $cvs_root -z3 co openacs-4/contrib/packages } output
+        cd ${work_dir}dotlrn/packages/
+        catch { exec $cvs_command -d $dotlrn_cvs_root -z3 co dotlrn-core } output
+        cd $work_dir
     }
-        
+
     set manifest {<manifest>}
     append manifest \n
     
-    foreach packages_dir [list "${work_dir}openacs-4/packages" "${work_dir}openacs-4/contrib/packages"] {
+    foreach packages_dir \
+        [list "${work_dir}openacs-4/packages" \
+             "${work_dir}openacs-4/contrib/packages" \
+             "${work_dir}dotlrn/packages"] {
+
         foreach spec_file [lsort [apm_scan_packages $packages_dir]] {
         
             set package_path [eval file join [lrange [file split $spec_file] 0 end-1]]
