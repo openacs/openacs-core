@@ -11,7 +11,7 @@
       <div style="float: right">@subnavbar_link;noquote@</div>
       <div style="clear: both;"></div>
     </div>
-    <div id="subnavbar-body">
+
       <div id="subsite-name">
         <if @title@ not nil>
           <h1 class="subsite-page-title">@title;noquote@</h1>
@@ -19,7 +19,7 @@
       </div>
       <slave>
       <div style="clear: both;"></div>
-    </div>
+
   </div>
 </div>
 
