@@ -429,6 +429,108 @@ aa_register_case auth_authority_api {
 }
 
 
+aa_register_case auth_driver_get_parameters {
+    Test the auth::driver::get_parameters proc.
+
+    @author Simon Carstensen (simon@collaboraid.biz)
+} {
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {        
+            set impl_id [db_string select_impl_id {
+                select auth_impl_id
+                from   auth_authorities
+                where  short_name = 'local'
+            }]
+    
+            set parameters [auth::driver::get_parameters -impl_id $impl_id]
+
+            aa_true "List of parameters should be empty for local authority" [empty_string_p $parameters]
+
+        }
+}
+
+aa_register_case auth_driver_get_parameter_values {
+    Test the auth::driver::set_parameter_values proc.
+
+    @author Simon Carstensen (simon@collaboraid.biz)
+} {
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+            db_1row select_vars {
+                select auth_impl_id as impl_id,
+                       authority_id
+                from   auth_authorities
+                where  short_name = 'local'
+            }
+
+            set key "foo"
+            set value "bar"
+
+            db_dml insert_test_parameter {
+                insert into auth_driver_params(
+                    impl_id, authority_id, key, value
+                 ) values (
+                    :impl_id, :authority_id, :key, :value
+                 )
+            }
+
+            set values [auth::driver::get_parameter_values \
+                            -impl_id $impl_id \
+                            -authority_id $authority_id]
+
+            aa_true "Did get_parameter return the correct value?" [string equal $values "bar"]
+        }
+}
+
+aa_register_case auth_driver_set_parameter_value {
+    Test the auth::driver::set_parameter_value proc.
+
+    @author Simon Carstensen (simon@collaboraid.biz)
+} {
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+            
+            db_1row select_vars {
+                select auth_impl_id as impl_id,
+                       authority_id
+                from   auth_authorities
+                where  short_name = 'local'
+            }
+
+            set key "foo"
+            set value "bar"
+
+            db_dml insert_test_parameter {
+                insert into auth_driver_params (
+                    impl_id, authority_id, key, value
+                 ) values (
+                    :impl_id, :authority_id, :key, :value
+                 )
+            }
+
+            set new_value "new_bar"
+
+            auth::driver::set_parameter_value \
+                -impl_id $impl_id \
+                -authority_id $authority_id \
+                -parameter $key \
+                -value $new_value
+        
+            set actual_value [db_string select_value {
+                select value 
+                from   auth_driver_params
+                where  impl_id = :impl_id
+                and    authority_id = :authority_id
+                and    key = :key
+            }]
+
+            aa_equals "Value should be $new_value after update" $new_value $actual_value
+        }
+}
+
 #####
 #
 # Helper procs

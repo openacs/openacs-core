@@ -440,20 +440,23 @@ ad_proc -private auth::authentication::Authenticate {
         }
     }
 
-    # TODO:
-    # Implement parameters
+    set impl_name [auth::authority::get_element -authority_id $authority_id -element "auth_impl_name"]
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "auth_impl_id"]
 
-    set impl_id [auth::authority::get_element -authority_id $authority_id -element "auth_impl_name"]
     if { [empty_string_p $impl_id] } {
         # Invalid authority
         return {}
     }
 
+    set parameters [auth::driver::get_parameter_values \
+                        -authority_id $authority_id \
+                        -impl_id $impl_id]
+
     return [acs_sc::invoke \
                 -contract "auth_authentication" \
-                -impl $impl_id \
+                -impl $impl_name \
                 -operation Authenticate \
-                -call_args [list $username $password [list]]]
+                -call_args [list $username $password $parameters]]
 }
 
 #####
@@ -484,14 +487,18 @@ ad_proc -private auth::registration::Register {
         set authority_id [auth::authority::local]
     }
 
-    # TODO:
-    # Implement parameters
+    set impl_name [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_name"]
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
+
+    set parameters [auth::driver::get_parameter_values \
+                        -authority_id $authority_id \
+                        -impl_id $impl_id]
 
     return [acs_sc::invoke \
                 -contract "auth_registration" \
-                -impl [auth::authority::get_element -authority_id $authority_id -element "auth_impl_name"] \
+                -impl $impl_name \
                 -operation Register \
-                -call_args [list [list] \
+                -call_args [list $parameters \
                                  $username \
                                  $authority_id \
                                  $first_names \
@@ -513,14 +520,19 @@ ad_proc -private auth::registration::GetElements {
         set authority_id [auth::authority::local]
     }
 
-    # TODO:
-    # Implement parameters
+    set impl_name [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_name"]
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
+
+
+    set parameters [auth::driver::get_parameter_values \
+                        -authority_id $authority_id \
+                        -impl_id $impl_id]
 
     return [acs_sc::invoke \
                 -contract "auth_registration" \
-                -impl [auth::authority::get_element -authority_id $authority_id -element "auth_impl_name"] \
+                -impl $impl_name \
                 -operation GetElements \
-                -call_args [list [list]]]
+                -call_args [list $parameters]]
 }
 
 
@@ -913,14 +925,19 @@ ad_proc -private auth::password::CanChangePassword {
         set authority_id [auth::authority::local]
     }
 
-    # TODO:
-    # Implement parameters
+    set impl_name [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_name"]
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
+
+
+    set parameters [auth::driver::get_parameter_values \
+                        -authority_id $authority_id \
+                        -impl_id $impl_id]
 
     return [acs_sc::invoke \
                 -contract "auth_password" \
-                -impl [auth::authority::get_element -authority_id $authority_id -element "auth_impl_name"] \
+                -impl $impl_name \
                 -operation CanChangePassword \
-                -call_args [list [list]]]
+                -call_args [list $parameters]]
 }
 
 ad_proc -private auth::password::CanRetrievePassword {
@@ -936,14 +953,19 @@ ad_proc -private auth::password::CanRetrievePassword {
         set authority_id [auth::authority::local]
     }
 
-    # TODO:
-    # Implement parameters
+    set impl_name [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_name"]
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
+
+
+    set parameters [auth::driver::get_parameter_values \
+                        -authority_id $authority_id \
+                        -impl_id $impl_id]
 
     return [acs_sc::invoke \
                 -contract "auth_password" \
-                -impl [auth::authority::get_element -authority_id $authority_id -element "auth_impl_name"] \
+                -impl $impl_name \
                 -operation CanRetrievePassword \
-                -call_args [list [list]]]
+                -call_args [list $parameters]]
 }
 
 ad_proc -private auth::password::CanResetPassword {
@@ -959,14 +981,18 @@ ad_proc -private auth::password::CanResetPassword {
         set authority_id [auth::authority::local]
     }
 
-    # TODO:
-    # Implement parameters
+    set impl_name [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_name"]
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
+
+    set parameters [auth::driver::get_parameter_values \
+                        -authority_id $authority_id \
+                        -impl_id $impl_id]
 
     return [acs_sc::invoke \
                 -contract "auth_password" \
-                -impl [auth::authority::get_element -authority_id $authority_id -element "auth_impl_name"] \
+                -impl $impl_name \
                 -operation CanResetPassword \
-                -call_args [list [list]]]
+                -call_args [list $parameters]]
 }
 
 ad_proc -private auth::password::ChangePassword {
@@ -988,17 +1014,21 @@ ad_proc -private auth::password::ChangePassword {
         set authority_id [auth::authority::local]
     }
 
-    # TODO:
-    # Implement parameters
+    set impl_name [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_name"]
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
+
+    set parameters [auth::driver::get_parameter_values \
+                        -authority_id $authority_id \
+                        -impl_id $impl_id]
 
     return [acs_sc::invoke \
                 -contract "auth_password" \
-                -impl [auth::authority::get_element -authority_id $authority_id -element "auth_impl_name"] \
+                -impl $impl_name \
                 -operation ChangePassword \
                 -call_args [list $username \
                                  $old_password \
                                  $new_password \
-                                 [list]]]
+                                 $parameters]]
 }
 
 ad_proc -private auth::password::RetrievePassword {
@@ -1016,15 +1046,19 @@ ad_proc -private auth::password::RetrievePassword {
         set authority_id [auth::authority::local]
     }
 
-    # TODO:
-    # Implement parameters
+    set impl_name [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_name"]
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
+
+    set parameters [auth::driver::get_parameter_values \
+                        -authority_id $authority_id \
+                        -impl_id $impl_id]
 
     return [acs_sc::invoke \
                 -contract "auth_password" \
-                -impl [auth::authority::get_element -authority_id $authority_id -element "auth_impl_name"] \
+                -impl $impl_name \
                 -operation RetrievePassword \
                 -call_args [list $username \
-                                 [list]]]
+                                 $parameters]]
 }
 
 ad_proc -private auth::password::ResetPassword {
@@ -1042,13 +1076,17 @@ ad_proc -private auth::password::ResetPassword {
         set authority_id [auth::authority::local]
     }
 
-    # TODO:
-    # Implement parameters
+    set impl_name [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_name"]
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
+
+    set parameters [auth::driver::get_parameter_values \
+                        -authority_id $authority_id \
+                        -impl_id $impl_id]
 
     return [acs_sc::invoke \
                 -contract "auth_password" \
-                -impl [auth::authority::get_element -authority_id $authority_id -element "auth_impl_name"] \
+                -impl $impl_name \
                 -operation ResetPassword \
                 -call_args [list $username \
-                                 [list]]]
+                                 $parameters]]
 }
