@@ -9,6 +9,12 @@
   <title>How to package and release OpenACS</title>
     <orderedlist>
       <listitem>
+        <para>update the version number in packages/acs-core-docs/www/xml/variables.ent, readme.txt,
+          and all core .info files.  Regenerate the html documentation and commit all the changes.
+        </para>
+      </listitem>
+
+      <listitem>
         <para>Check out the cvs tree.  The files must be checked out
         through a cvs account with write access.  In this example, the
         cvs user on openacs.org is implied from the ssh login information
