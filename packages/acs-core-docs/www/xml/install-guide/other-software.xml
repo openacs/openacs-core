@@ -765,14 +765,14 @@ line, click
 [root nsopenssl]# <userinput>make OPENSSL=/usr/local/ssl</userinput>
 gcc -I/usr/local/ssl/include (many items omitted)  -c -o sslcontext.o sslcontext.c
 <emphasis>(many lines omitted)</emphasis>
-[root nsopenssl-2.1]# <userinput>make install OPENSSL=/usr/local/ssl INST=/usr/local/aolserver</userinput>
+[root nsopenssl-2.1]# <userinput>make install OPENSSL=/usr/local/ssl INST=/usr/local/aolserver40r9</userinput>
 [root nsopenssl-2.1]#
 <action>cd /usr/local/src/aolserver
 cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver login
 cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsopenssl
 cd nsopenssl
 make OPENSSL=/usr/local/ssl 
-make install OPENSSL=/usr/local/ssl INST=/usr/local/aolserver</action></screen>
+make install OPENSSL=/usr/local/ssl INST=/usr/local/aolserver40r9</action></screen>
 <para>If you have problems starting your server with nsopenssl.so due to missing libssl.so.0.9.7 (or lower), you have to create symlinks
 <screen>
 [root nsopenssl]# <userinput>cd /usr/local/aolserver/lib</userinput>
