@@ -44,7 +44,8 @@ BEGIN
         insert into notification_replies
         (reply_id, object_id, type_id, from_user, subject, content, reply_date)
         values
-        (v_reply_id, object_id, type_id, from_user, subject, content, reply_date);
+        (v_reply_id, p_object_id, p_type_id, p_from_user, p_subject, p_content, p_reply_date);
+
 
         return v_reply_id;
 END;
