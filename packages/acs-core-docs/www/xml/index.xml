@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!-- Global variables are defined in variables.ent -->
 <!ENTITY % myvars SYSTEM "variables.ent">
 %myvars;
@@ -259,18 +259,11 @@
 
     <chapter id="eng-standards">
       <title>Engineering Standards</title>
-      <xi:include href="engineering-standards/docbook-primer.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+
+      <xi:include href="engineering-standards/style-guide.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
-      <xi:include href="engineering-standards/psgml-mode.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-        <xi:fallback>Section missing</xi:fallback>
-      </xi:include>
-      <xi:include href="engineering-standards/design-template.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-        <xi:fallback>Section missing</xi:fallback>
-      </xi:include>
-      <xi:include href="engineering-standards/requirements-template.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-        <xi:fallback>Section missing</xi:fallback>
-      </xi:include>
+
       <xi:include href="engineering-standards/eng-standards-versioning.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
@@ -284,18 +277,36 @@
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
       <xi:include href="engineering-standards/variables.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
+        <xi:fallback>Section missing</xi:fallback>
       </xi:include>
       <xi:include href="engineering-standards/auto-testing.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
+        <xi:fallback>Section missing</xi:fallback>
       </xi:include>
     </chapter>
+
+    <chapter id="doc-standards">
+      <title>Documentation Standards</title>
+      <xi:include href="engineering-standards/docbook-primer.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="engineering-standards/psgml-mode.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="engineering-standards/design-template.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="engineering-standards/requirements-template.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+    </chapter>
+
     <xi:include href="developers-guide/cvs.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>CVS Section missing</xi:fallback>
     </xi:include>
     <xi:include href="releasing-openacs.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>'Releasing OpenACS' missing</xi:fallback>
     </xi:include>
+
   </part>
 
   <part id="acs-plat-dev">
