@@ -49,13 +49,13 @@ gcc -I/usr/include/pam -I/usr/local/aolserver/include -D_REENTRANT=1
   -DUSE_FIONREAD=1 -DHAVE_COND_EINTR=1   -c -o pam_support.o pam_support.c
 /bin/rm -f nspam.so
 gcc -shared -nostartfiles -o nspam.so nspam.o pam_support.o -lpam
-[root@yourserver nspam]# <userinput>cp nspam.o /usr/local/aolserver/bin</userinput>
+[root@yourserver nspam]# <userinput>make install</userinput>
 [root@yourserver nspam]#
 <action>cd /usr/local/src/aolserver
 tar xzf /tmp/ns_pam-0.1.tar.gz
 cd nspam
 make
-cp nspam.so /usr/local/aolserver/bin</action></screen>
+make install</action></screen>
             </listitem>
             
             <listitem>
@@ -100,7 +100,13 @@ cp pam_radius_auth.so /lib/security/pam_radius_auth.so</action></screen>
                       <para>Debian users: <userinput>apt-get install libpam-radius-auth</userinput></para>
                     </listitem>
                     <listitem>
-                      <para>Set up the PAM domain by creating the file
+                      <para>Set up the PAM domain.  Recent PAM
+                distributions have a different file for each domain,
+                all in <computeroutput>/etc/pam.d</computeroutput>.
+                Previous PAM setups put all domain configuration lines
+                into a single file,
+                <computeroutput>/etc/pam.conf</computeroutput>.  On
+                Red Hat, create the file
                 <computeroutput>/etc/pam.d/<replaceable>service0</replaceable></computeroutput>
                 with these contents:</para>
                       <programlisting>auth       sufficient   /lib/security/pam_radius_auth.so
@@ -157,13 +163,52 @@ cp pam_radius_auth.so /lib/security/pam_radius_auth.so</action></screen>
               <para>Set Authentication to PAM.</para>
             </listitem>
             <listitem>
-              <para>If the PAM module contains a <computeroutput>password</computeroutput> command, you can set Password Management to PAM.  If not, the PAM module cannot change the user's password and you should leave this option Disabled.</para>
+              <para>If the PAM domain defines a <computeroutput>password</computeroutput> command, you can set Password Management to PAM.  If not, the PAM module cannot change the user's password and you should leave this option Disabled.</para>
             </listitem>
             <listitem>
               <para>Leave Account Registration disabed.</para>
             </listitem>
             <listitem>
-              <para>Set Batch sync enabled to Yes.  Set GetDocumentImplementation to HTTP GET.  Set ProcessDocumentImplementation to IMS Enterprise 1.1.  These settings will cause OpenACS to attempt to retrieve via HTTP a list of users in XML format from a location we will specify in a few steps.</para>
+              <para><link linkend="configure-batch-sync">Configure Batch Synchronization</link>
+</para>
+            </listitem>
+          </orderedlist>
+        </listitem>
+      </orderedlist>
+    </sect1>
+
+    <sect1 id="ext-auth-ldap-install">
+      <title>Installing LDAP support</title>
+      <para>...</para>
+      <orderedlist>
+        <listitem>
+          <formalpara id="ext-auth-ldap-setup">
+            <title>Installing AOLserver LDAP support</title>
+            <para>Forthcoming.  (<ulink
+        url="http://www.galileo.edu/obonilla/software/nsldap">more information</ulink>)</para>
+          </formalpara>
+        </listitem>
+        <listitem>
+          <formalpara>
+            <title>Install auth-ldap OpenACS service package</title>
+            <para><ulink url="/acs-admin/install/">Install</ulink> <computeroutput>auth-ldap</computeroutput> and restart the server.</para>
+          </formalpara>
+        </listitem>
+      </orderedlist>
+    </sect1>
+
+    <sect1 id="configure-batch-sync">
+      <title>Configure Batch Synchronization</title>
+      <orderedlist>
+            <listitem>
+              <para>Browse to the authentication administration page,
+            <computeroutput>http://<replaceable>yourserver</replaceable><ulink
+            url="/acs-admin/auth/">/acs-admin/auth/</ulink></computeroutput>
+            and choose an authority for batch sync.</para>
+            </listitem>
+            <listitem>
+              <para>Set Batch sync enabled to Yes.  Set GetDocument
+              Implementation to HTTP GET.  Set ProcessDocument Implementation to IMS Enterprise 1.1.  These settings will cause OpenACS to attempt to retrieve via HTTP a list of users in XML format from a location we will specify in a few steps.</para>
             </listitem>
             <listitem>
               <para>Click OK.</para>
@@ -172,10 +217,13 @@ cp pam_radius_auth.so /lib/security/pam_radius_auth.so</action></screen>
               <para>On the next page, click <computeroutput>Configure</computeroutput> on the GetDocument Implementation line.</para>
             </listitem>
             <listitem>
-              <para>Enter the IncrementalURL and SnapshotURL.  These are the URLs which the external Authority will supply with XML files in IMS Enterprise 1.1 format.</para>
+              <para>Enter either or both the IncrementalURL and SnapshotURL.  These are the URLs which the external Authority will supply with XML files in IMS Enterprise 1.1 format.</para>
             </listitem>
           <listitem>
-            <para>Configure your Authority (RADIUS server, etc) to supply XML files to the URLs IncrementalURL and SnapshotURL</para>
+            <para>Configure your Authority (RADIUS server, etc) to
+            supply XML files to the URLs IncrementalURL and
+            SnapshotURL.  A typical set of incremental file record
+            looks like:</para>
 <programlisting>
 &lt;enterprise&gt;
   &lt;person recstatus = "1"&gt;  <emphasis>added person</emphasis>
@@ -198,31 +246,30 @@ cp pam_radius_auth.so /lib/security/pam_radius_auth.so</action></screen>
     &lt;/sourcedid&gt;
   &lt;/person&gt;
 &lt;/enterprise&gt;</programlisting>
+          <para>A snapshot file is similar but doesn't have recstatus,
+  since it's not a delta but a list of valid records.
+</para>
+          <programlisting>
+&lt;enterprise&gt;
+  &lt;person&gt;
+    &lt;sourcedid&gt;
+      &lt;id&gt;[username]&lt;/id&gt;
+    &lt;/sourcedid&gt;
+    &lt;name&gt;
+      &lt;family&gt;[last_name]&lt;/family&gt;
+      &lt;given&gt;[first_names]&lt;/given&gt;
+    &lt;/name&gt;
+    &lt;email&gt;[email]&lt;/email&gt;
+    &lt;url&gt;[homepage_url]&lt;/url&gt;
+  &lt;/person&gt;
+  ...
+&lt;/enterprise&gt;
+</programlisting>
               <para>(More information: <xref linkend="ims-sync-driver-design"/>, <ulink url="http://www.imsproject.org/enterprise/">The IMS 1.1 spec</ulink>)</para>
           </listitem>
-        </orderedlist>
-      </listitem>
-    </orderedlist>
-    </sect1>
-
-    <sect1 id="ext-auth-ldap-install">
-      <title>Installing LDAP support</title>
-      <para>...</para>
-      <orderedlist>
-        <listitem>
-          <formalpara id="ext-auth-ldap-setup">
-            <title>Installing AOLserver LDAP support</title>
-            <para>Forthcoming.  (<ulink
-        url="http://www.galileo.edu/obonilla/software/nsldap">more information</ulink>)</para>
-          </formalpara>
-        </listitem>
-        <listitem>
-          <formalpara>
-            <title>Install auth-ldap OpenACS service package</title>
-            <para><ulink url="/acs-admin/install/">Install</ulink> <computeroutput>auth-ldap</computeroutput> and restart the server.</para>
-          </formalpara>
-        </listitem>
       </orderedlist>
     </sect1>
+
+
               <para><phrase role="cvstag">($Id$)</phrase></para>
   </article>
