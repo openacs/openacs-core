@@ -242,4 +242,24 @@
       </querytext>
 </fullquery>
 
+<fullquery name="apm_package_upgrade_from.apm_package_upgrade_from">      
+      <querytext>
+      
+	    select version_name from apm_package_versions
+	    where package_key = :package_key
+	    and version_id = apm_package.highest_version(:package_key)
+	
+      </querytext>
+</fullquery>
+
+<fullquery name="apm_version_names_compare.select_sortable_versions">      
+      <querytext>
+      
+	    select apm_package_version.sortable_version_name(:version_name_1) as sortable_version_1,
+                   apm_package_version.sortable_version_name(:version_name_2) as sortable_version_2
+            from   dual
+	
+      </querytext>
+</fullquery>
+
 </queryset>
