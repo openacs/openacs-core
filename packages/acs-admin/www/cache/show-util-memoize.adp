@@ -35,7 +35,7 @@
 	    </else>
 	    <tr bgcolor="@bg@">
 	      <td valign=top>@matches.key@</td>
-	      <td valign=top>@matches.value@</td>
+	      <td valign=top>@matches.value;noquote@</td>
 	      <td valign=middle rowspan=2>
 		<form action=one method=post>
 		  <input type=hidden name=key value="@matches.full_key@">
