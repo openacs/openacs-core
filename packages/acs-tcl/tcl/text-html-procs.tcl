@@ -1213,8 +1213,6 @@ ad_proc -public ad_html_text_convert {
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
 } {
-    ns_log Notice "LARS: Converting from $from to $to, text=$text"
-
     set valid_froms { text/enhanced text/plain text/fixed-width text/html }
     set valid_tos { text/plain text/html }
     
@@ -1228,9 +1226,6 @@ ad_proc -public ad_html_text_convert {
     if { [lsearch $valid_tos $to] == -1 } {
         error "Unknown text input format, '$to'. Valid formats are $valid_tos."
     }
-
-    ns_log Notice "LARS: Actually from $from to $to"
-
     
     # Do the conversion
     switch $from {
@@ -1275,8 +1270,6 @@ ad_proc -public ad_html_text_convert {
 	    }
 	} 
     }
-
-    ns_log Notice "LARS: Converted from $from to $to, result=$text"
 
     return $text
 }
