@@ -70,5 +70,14 @@ aa_register_case -cats {
                             -package_key acs-subsite]
         aa_equals "Folder's closest subsite ancestor is root" \
             $package_id $root_pkg_id
+
+        # 5) test -self parameter
+        #        find ancestors of doc, including doc in the search
+        set package_id [site_node::closest_ancestor_package \
+                            -node_id $doc_node_id \
+                            -package_key acs-core-docs \
+                            -include_self]
+        aa_equals "Doc found itself" $package_id $doc_pkg_id
+        
     }
 }

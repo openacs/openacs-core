@@ -526,43 +526,57 @@ ad_proc -public site_node::closest_ancestor_package {
     {-url ""}
     {-node_id ""}
     {-package_key ""}
+    {-include_self:boolean}
 } {
     Starting with the node at with given id, or at given url,
     climb up the site map and return the id of the first not-null
-    mounted object. If no ancestor object is found the empty string is returned.
-    The id of the object at the given node itself will never be returned.
+    mounted object. If no ancestor object is found the empty string is 
+    returned.
 
-    @param url          The url of the node to start from. You must provide either url or node_id.
-                        An empty url is taken to mean the main site.
-    @param node_id      The id of the node to start from. Takes precedence over any provided url.
-    @param package_key  Restrict search to objects of this package type. You may 
-                        supply a list of package_keys.
+    Will ignore itself and only return true ancestors unless 
+    <code>include_self</code> is set.
+
+    @param url          The url of the node to start from. You must provide 
+                        either url or node_id. An empty url is taken to mean 
+                        the main site.
+    @param node_id      The id of the node to start from. Takes precedence 
+                        over any provided url.
+    @param package_key  Restrict search to objects of this package type. You 
+                        may supply a list of package_keys.
+    @param include_self Return the package_id at the passed-in node if it is 
+                        of the desired package_key. Ignored if package_key is 
+                        empty.
 
     @return The id of the first object found and an empty string if no object
             is found. Throws an error if no node with given url can be found.
 
     @author Peter Marklund
 } {
-    # Make sure we have the id of the start node to work with
-    if { [empty_string_p $node_id] } {
-          if { [empty_string_p $url] } {
+    # Make sure we have a url to work with
+    if { [empty_string_p $url] } {
+          if { [empty_string_p $node_id] } {
               set url "/"
-          } 
+          } else {
+              set url [site_node::get_url -node_id $node_id]
+          }
+    }
 
-          set node_id [site_node::get_node_id -url $url]
+    # should we return the package at the passed-in node/url?
+    if { $include_self_p && ![empty_string_p $package_key]} {
+        array set node_array [site_node::get -url $url]
+
+        if { [lsearch -exact $package_key $node_array(package_key)] != -1 } {
+            return $node_array(object_id)
+        }
     }
 
     set object_id ""
-    while { [empty_string_p $object_id] } {
+    while { [empty_string_p $object_id] && $url != "/"} {
         # move up a level
-        set node_id [site_node::get_parent_id -node_id $node_id]
-
-        if { [empty_string_p $node_id] } {
-            # There is no parent node - we reached the root of the site map
-            break
-        }
-    
-        array set node_array [site_node::get -node_id $node_id]
+        set url [string trimright $url /]
+        set url [string range $url 0 [string last / $url]]
+        
+        array set node_array [site_node::get -url $url]
 
         # are we looking for a specific package_key?
         if { [empty_string_p $package_key] || \
@@ -799,11 +813,20 @@ ad_proc -public site_nodes_sync {args} {
     site_node::init_cache
 }
 
-ad_proc -public site_node_closest_ancestor_package {
+ad_proc -deprecated -warn site_node_closest_ancestor_package {
     { -default "" }
     { -url "" }
     package_keys
 } {
+    <p>
+    Use site_node::closest_ancestor_package. Note that 
+    site_node_closest_ancestor_package will include the passed-in node in the 
+    search, whereas the new proc doesn't by default. If you want to include 
+    the passed-in node, call site_node::closest_ancestor_package with the 
+    -include_self flag
+    </p>
+
+    <p>
     Finds the package id of a package of specified type that is
     closest to the node id represented by url (or by ad_conn url).Note
     that closest means the nearest ancestor node of the specified
@@ -829,9 +852,10 @@ ad_proc -public site_node_closest_ancestor_package {
     specified type (<code>package_key</code>). Returns $default if no
     such package can be found.
 
+    @see site_node::closest_ancestor_package
 } {
     if {[empty_string_p $url]} {
-          set url [ad_conn url]
+        set url [ad_conn url]
     }
 
     # Try the URL as is.
