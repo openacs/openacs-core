@@ -33,30 +33,30 @@
 
     <programlisting>
 
-<phrase>ROOT/</phrase>
-<phrase>   bin/</phrase>
-<phrase>   parameters/</phrase>
+ROOT/
+   bin/
+   parameters/
         ad.ini
-     <phrase>tcl/</phrase>
+     tcl/
         core tcl libraries here
-     <phrase>www/</phrase>
-         <phrase>admin/</phrase>
-             <phrase>bboard/</phrase>
+     www/
+         admin/
+             bboard/
                  site wide admin for bboard
-             <phrase>intranet/</phrase>
+             intranet/
                  site wide admin for intranet
 
              ... and so on for all modules ...
 
-         <phrase>bboard/</phrase>
+         bboard/
              pages for bboard
-             <phrase>admin/</phrase>
+             admin/
                  other admin pages for bboard
-         <phrase>intranet/</phrase>
+         intranet/
              pages for bboard
-             <phrase>admin/</phrase>
+             admin/
                  other admin pages for intranet
-         <phrase>doc/</phrase>
+         doc/
              documentation
              sql/
                 core and application data models here
@@ -94,41 +94,41 @@
 
     <programlisting>
 
-<phrase>ROOT/</phrase>
-    <phrase>bin/</phrase>
-    <phrase>packages/</phrase>
-        <phrase>acs-admin/</phrase>
-        <phrase>acs-api-browser/</phrase>
-        <phrase>acs-content-repository/</phrase>
-        <phrase>acs-core-docs/</phrase>
-        <phrase>acs-developer-support/</phrase>
-        <phrase>acs-kernel/</phrase>
-        <phrase>acs-ldap-authentication/</phrase>
-        <phrase>acs-messaging/</phrase>
-        <phrase>acs-subsite/</phrase>
-        <phrase>acs-templating/</phrase>
-        <phrase>acs-test-harness/</phrase>
-        <phrase>acs-util/</phrase>
-        <phrase>acs-workflow/</phrase>
-        <phrase>bboard/</phrase>
+ROOT/
+    bin/
+    packages/
+        acs-admin/
+        acs-api-browser/
+        acs-content-repository/
+        acs-core-docs/
+        acs-developer-support/
+        acs-kernel/
+        acs-ldap-authentication/
+        acs-messaging/
+        acs-subsite/
+        acs-templating/
+        acs-test-harness/
+        acs-util/
+        acs-workflow/
+        bboard/
                bboard.info
-               <phrase>sql/</phrase>
+               sql/
                     data model
-               <phrase>tcl/</phrase>
+               tcl/
                     tcl library code
-               <phrase>www/</phrase>
-                    <phrase>admin/</phrase>
+               www/
+                    admin/
                            administration pages
                     other pages
-                    <phrase>doc/</phrase>
+                    doc/
                           documentation
-        <phrase>message-catalog/</phrase>
-        <phrase>news/</phrase>
-        <phrase>notification/</phrase>
-        <phrase>page/</phrase>
-    <phrase>tcl/</phrase>
+        message-catalog/
+        news/
+        notification/
+        page/
+    tcl/
             bootstrap code
-    <phrase>www/</phrase>
+    www/
             misc pages
 
     </programlisting>
@@ -231,53 +231,53 @@
 
     <programlisting>
 
-<phrase>ROOT</phrase>/
-  +-- packages/    <phrase>APM Root</phrase>
+ROOT/
+  +-- packages/    APM Root
         |
-        +-- notes/	<phrase>Package Root</phrase> 
+        +-- notes/	Package Root 
         |     |
         |     |
         |     +-- sql/
         |     |     |
         |     |     +-- oracle/
         |     |     |        |
-        |     |	    |        +-- notes-create.sql         <phrase>Data Model Creation Script for Oracle</phrase>
-        |     |	    |        +-- notes-drop.sql           <phrase>Data Model Drop Script</phrase>
-        |     |	    |        +-- *.sql                    <phrase>Data Model Files</phrase>
+        |     |	    |        +-- notes-create.sql         Data Model Creation Script for Oracle
+        |     |	    |        +-- notes-drop.sql           Data Model Drop Script
+        |     |	    |        +-- *.sql                    Data Model Files
         |     |     +-- postgresql/
         |     |     |        |
-        |     |	    |        +-- notes-create.sql         <phrase>Data Model Creation Script for PostgreSQL</phrase>      
-        |     |	    |        +-- notes-drop.sql           <phrase>Data Model Drop Script</phrase>
-        |     |	    |        +-- *.sql                    <phrase>Data Model Files</phrase>
+        |     |	    |        +-- notes-create.sql         Data Model Creation Script for PostgreSQL      
+        |     |	    |        +-- notes-drop.sql           Data Model Drop Script
+        |     |	    |        +-- *.sql                    Data Model Files
         |     +-- tcl/
         |     |     |
-        |     |	    +-- notes-procs.tcl                   <phrase>Tcl Library</phrase>
-        |     |	    +-- notes-procs.xql                   <phrase>SQL92 Queries for notes-procs.tcl</phrase>
-        |     |	    +-- notes-procs-oracle.xql            <phrase>Oracle-specific queries for notes-procs.tcl</phrase>
-        |     |	    +-- notes-procs-postgresql.xql        <phrase>PostgreSQL-specific Queries for notes-procs.tcl</phrase>
-        |     |	    +-- notes-init.tcl                    <phrase>Tcl Initialization</phrase>
-        |     |	    +-- notes-init.xql                    <phrase>Queries for notes-init.tcl (work in all DBs)</phrase>      
-        |     |     +-- *.tcl                             <phrase>Tcl Library Files</phrase>
+        |     |	    +-- notes-procs.tcl                   Tcl Library
+        |     |	    +-- notes-procs.xql                   SQL92 Queries for notes-procs.tcl
+        |     |	    +-- notes-procs-oracle.xql            Oracle-specific queries for notes-procs.tcl
+        |     |	    +-- notes-procs-postgresql.xql        PostgreSQL-specific Queries for notes-procs.tcl
+        |     |	    +-- notes-init.tcl                    Tcl Initialization
+        |     |	    +-- notes-init.xql                    Queries for notes-init.tcl (work in all DBs)      
+        |     |     +-- *.tcl                             Tcl Library Files
         |     +-- www/
         |     |     |
-        |     |     +-- admin/                            <phrase>Administration UI</phrase>
-        |     |     |     +-- tests/                      <phrase>Regression Tests</phrase>
-        |     |     |     |     +-- index.tcl             <phrase>Regression Test Index Page</phrase>
-        |     |     |     |     +-- ...                   <phrase>Regression Tests</phrase>
-        |     |     |     +-- index.tcl                   <phrase>Administration UI Index Page</phrase>
-        |     |     |     +-- ...                         <phrase>Administration UI Pages</phrase>
+        |     |     +-- admin/                            Administration UI
+        |     |     |     +-- tests/                      Regression Tests
+        |     |     |     |     +-- index.tcl             Regression Test Index Page
+        |     |     |     |     +-- ...                   Regression Tests
+        |     |     |     +-- index.tcl                   Administration UI Index Page
+        |     |     |     +-- ...                         Administration UI Pages
         |     |     |
-        |     |     +-- doc/                              <phrase>Documentation</phrase>
-        |     |     |     +-- index.tcl                   <phrase>Documentation Index Page</phrase>
-        |     |     |     +-- ...                         <phrase>Administration Pages</phrase>
-        |     |     +-- index.tcl                         <phrase>UI Index Page</phrase>
-        |     |     +-- index.adp                         <phrase>UI Index Template</phrase>
-        |     |     +-- index.xql                         <phrase>Queries for UI Index page</phrase>      
-        |     |     +-- *.tcl                             <phrase>UI Logic Scripts</phrase>
-        |     |     +-- *.adp                             <phrase>UI Templates</phrase>
-        |     |     +-- *-oracle.xql                      <phrase>Oracle-specific Queries</phrase>
-        |     |     +-- *-postgresql.xql                  <phrase>PostgreSQL-specific Queries</phrase>
-        |     +-- notes.info                              <phrase>Package Specification File</phrase>
+        |     |     +-- doc/                              Documentation
+        |     |     |     +-- index.tcl                   Documentation Index Page
+        |     |     |     +-- ...                         Administration Pages
+        |     |     +-- index.tcl                         UI Index Page
+        |     |     +-- index.adp                         UI Index Template
+        |     |     +-- index.xql                         Queries for UI Index page      
+        |     |     +-- *.tcl                             UI Logic Scripts
+        |     |     +-- *.adp                             UI Templates
+        |     |     +-- *-oracle.xql                      Oracle-specific Queries
+        |     |     +-- *-postgresql.xql                  PostgreSQL-specific Queries
+        |     +-- notes.info                              Package Specification File
         +-- Other package directories.
 
     </programlisting>
@@ -291,12 +291,14 @@
     
     <informaltable frame="all">
       <tgroup cols="3" colsep="5" rowsep="5">
-	<tbody>
+	<thead>
 	  <row>
-	    <entry><phrase>File Type</phrase></entry>
-	    <entry><phrase>Its Use</phrase></entry>
-	    <entry><phrase>Naming Convention</phrase></entry>
+	    <entry>File Type</entry>
+	    <entry>Its Use</entry>
+	    <entry>Naming Convention</entry>
 	  </row>
+		</thead>
+		<tbody>
 	  <row>
 	    <entry>Data Model Creation Script</entry>
 	    <entry>
@@ -605,7 +607,7 @@
 	</para></listitem>
 
 
-      <listitem><para>Click the button <phrase>Create Package</phrase>.
+      <listitem><para>Click the button &quot;Create Package&quot;.
 	</para></listitem>
 
 
@@ -625,10 +627,10 @@
 	  data model.  </para>
 
 	<para>After you do this, go back to the main APM page. From there, click
-	  the link called <phrase>notes</phrase> to go to the management page for the new
-	  package. Now click the link called <phrase>Manage file information</phrase>,
-	  then the <phrase>Scan the <computeroutput>packages/notes</computeroutput> directory for
-	    additional files in this package</phrase> link on that page to scan the
+	  the link called &quot;notes&quot; to go to the management page for the new
+	  package. Now click the link called &quot;Manage file information&quot;,
+	  then the &quot;Scan the <computeroutput>packages/notes</computeroutput> directory for
+	    additional files in this package&quot; link on that page to scan the
 	  file system for new files.  This will bring you do a page that lists
 	  all the files you just added and lets you add them to the
 	  <computeroutput>notes</computeroutput> package.
@@ -644,8 +646,8 @@
 	</para></listitem>
 
       <listitem><para>Now go back to the main management page for the <computeroutput>notes</computeroutput>
-	  If your package has parameters, create them using the <phrase>Manage
-	    Parameter Information</phrase> link.</para></listitem>
+	  If your package has parameters, create them using the &quot;Manage
+	    Parameter Information&quot; link.</para></listitem>
       
       <listitem><para>The new package has been created and installed in the server. At
 	  this point, you should add your package files to your CVS repository.
@@ -736,7 +738,7 @@
       the <ulink url="/admin/site-map">Site Map</ulink> page, which is by
       default available at <computeroutput>/acs-admin/site-map</computeroutput>. Use the
       interface here to add a new sub-folder called <computeroutput>notes</computeroutput> to
-      the root of the site, then click <phrase>new application</phrase> to mount a new
+      the root of the site, then click &quot;new application&quot; to mount a new
       instance of the <computeroutput>notes</computeroutput> application to the site. Name the
       new instance <computeroutput>notes-1</computeroutput>.
     </para>

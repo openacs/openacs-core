@@ -1,5 +1,5 @@
-<sect1 id="parties" xreflabel="Parties in ACS 4">
-<title>Parties in ACS 4</title>
+<sect1 id="parties" xreflabel="Parties in OpenACS 4">
+<title>Parties in OpenACS 4</title>
 
 <authorblurb><para>
 by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> 
@@ -18,13 +18,13 @@ is this latter class of application that makes it extremely useful to model
 individuals and groups as specializations of one supertype. This concept is
 so commonly used throughout human language and thought that we don&#39;t even
 need to invent for it some bizarre and specialized terminology. This
-supertype is called a <phrase>party</phrase>.</para>
+supertype is called a &quot;party&quot;.</para>
 
-<para>A classic example use of the <phrase>party</phrase> supertype is evident
+<para>A classic example use of the &quot;party&quot; supertype is evident
 in a common address book. A typical person&#39;s address book might contain
 the address of his doctor, and his cable company. So what do we label the
 first field in an entry in his address book? It isn&#39;t a person, and it
-isn&#39;t a company. It is a <phrase>party</phrase>.</para>
+isn&#39;t a company. It is a &quot;party&quot;.</para>
 
 
 </sect2>
@@ -34,12 +34,12 @@ isn&#39;t a company. It is a <phrase>party</phrase>.</para>
 
 
 
-<para>Most developers who do significant work with the ACS will become
+<para>Most developers who do significant work with the OpenACS will become
 intimately familiar with the parties data model, and probably extend it on
 many occasions. For this reason the parties developer guide will begin with
 an introduction to the data model.</para>
 
-<para><phrase>Parties</phrase></para>
+<para><emphasis role="strong">Parties</emphasis></para>
 
 <para>The central table in the parties data model is the parties table itself.
 Every party has exactly one row in this table. Every party has an optional
@@ -71,7 +71,7 @@ most basic form of individual that is modeled by the parties data model. A
 row in the groups table represents the most basic form of an aggregation of
 individuals that is represented.</para>
 
-<para><phrase>Persons</phrase></para>
+<para><emphasis role="strong">Persons</emphasis></para>
 
 <para>If a party is an individual then there will be a row in the persons table
 containing first_names and last_name for that individual. Note that the
@@ -98,7 +98,7 @@ user is in fact a further specialized form of an individual.</para>
 </programlisting>
 
 
-<para><phrase>Users</phrase></para>
+<para><emphasis role="strong">Users</emphasis></para>
 
 <para>The users table is an even more specialized form of an individual. A row
 in the users table represents an individual that has login access to the
@@ -112,8 +112,8 @@ associated with a user into the four tables (acs_objects, parties, persons,
 users) is that it is now possible to &quot;nuke&quot; a user from a live
 system by removing his entry from the users table, but leaving the rest of
 his information present (i.e. turning him from a user into a person). This is
-because wherever possible the ACS 4 data model references the persons or
-parties table, <phrase>not</phrase> the users table. If this feature is
+because wherever possible the OpenACS 4 data model references the persons or
+parties table, <emphasis role="strong">not</emphasis> the users table. If this feature is
 desired when extending the system, then the developers should be careful to
 only references the users table in situations where it is clear that the
 references is to a user and not to an individual.</para>
@@ -152,7 +152,7 @@ references is to a user and not to an individual.</para>
 </programlisting>
 
 
-<para><phrase>Groups</phrase></para>
+<para><emphasis role="strong">Groups</emphasis></para>
 
 <para>The final piece of the parties data model is the groups data model. A
 group is a specialization of a party that represents an aggregation of other
@@ -177,11 +177,11 @@ parties and groups.</para>
 </programlisting>
 
 
-<para><phrase>Group Relations</phrase></para>
+<para><emphasis role="strong">Group Relations</emphasis></para>
 
 <para>One surprise here is that there are actually two relations involved. One
 is the normal membership relation between parties and groups. A party may be
-a <phrase>member</phrase> of a group. The other relation is a composition
+a &quot;member&quot; of a group. The other relation is a composition
 relation between two groups. To fully understand why two relations are
 necessary, and the situations in which each is appropriate, let&#39;s
 consider an example. Greenpeace is an organization that can have as members
@@ -192,14 +192,14 @@ member of Greenpeace, i.e., membership is not transitive with respect to
 itself. Now let&#39;s consider a multinational corporation. This corporation
 might have a U.S. division and a European division. A member of either the
 U.S. or European division is automatically a member of the company. In this
-situation the U.S. and European divisions are <phrase>components</phrase> of
+situation the U.S. and European divisions are &quot;components&quot; of
 the company, i.e., membership <emphasis>is</emphasis> transitive with respect to
 composition. Having a membership relation between groups and parties, and
 having a composition relation between groups and groups allows us to easily
 model the full range of sophisticated group structures that exist in the real
 world.</para>
 
-<para><phrase>Group Membership</phrase></para>
+<para><emphasis role="strong">Group Membership</emphasis></para>
 
 <para>Group memberships can be created and manipulated using the membership_rel
 package. Note that you can only create one membership object for a given
@@ -257,7 +257,7 @@ show errors
 </programlisting>
 
 
-<para><phrase>Group Composition</phrase></para>
+<para><emphasis role="strong">Group Composition</emphasis></para>
 
 <para>Composition relations can be created or destroyed using the
 composition_rel package. The only restriction on compositions is that there
@@ -434,7 +434,7 @@ application. It therefore seems likely that developers will want to extend
 the parties data model in a number of ways. This section will describe some
 of the more common ways.</para>
 
-<para><phrase>Specializing Users</phrase></para>
+<para><emphasis role="strong">Specializing Users</emphasis></para>
 
 <para>It is conceivable that some applications will want to collect more
 detailed information for people using the system. If it is the case that
@@ -448,7 +448,7 @@ each row in the mensa_users table has a corresponding row in each of the
 users, persons, parties, and acs_objects tables. This child table could then
 store any extra information relevant to the MENSA community.</para>
 
-<para><phrase>Specializing Groups</phrase></para>
+<para><emphasis role="strong">Specializing Groups</emphasis></para>
 
 <para>If one were to build an intranet application on top of the 4.0 party
 system, it is likely that one would want to take advantage of the systems
@@ -457,7 +457,7 @@ there would be much more specialized information associated with each group.
 In this case it would make sense to specialize the group party type into a
 company party type in the same manner as above.</para>
 
-<para><phrase>Specializing Membership Relations</phrase></para>
+<para><emphasis role="strong">Specializing Membership Relations</emphasis></para>
 
 <para>The final portion of the parties data model that is designed to be
 extended is the membership relationship. Consider the intranet example again.

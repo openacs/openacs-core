@@ -1,5 +1,5 @@
-<sect1 id="bootstrap-acs" xreflabel="Bootstrapping ACS">
-<title>Bootstrapping ACS</title>
+<sect1 id="bootstrap-acs" xreflabel="Bootstrapping OpenACS">
+<title>Bootstrapping OpenACS</title>
 
 <authorblurb><para>
 by <ulink url="mailto:jsalz@mit.edu">Jon Salz</ulink> 
@@ -10,7 +10,7 @@ by <ulink url="mailto:jsalz@mit.edu">Jon Salz</ulink>
 </itemizedlist>
 
 <para>This document describes the startup (bootstrapping) process for an AOLserver
-running ACS. 
+running OpenACS. 
 </para>
 
 
@@ -18,7 +18,7 @@ running ACS.
 <title>The Big Picture</title>
 
 <para>
-Before ACS 3.3, the ACS startup process was extremely simple: after AOLserver
+Before OpenACS 3.3, the OpenACS startup process was extremely simple: after AOLserver
 performed its internal initialization (reading the configuration file,
 loading shared libraries and module code, etc.) it scanned through the Tcl
 library directory (generally <computeroutput>/web/</computeroutput><emphasis><computeroutput>yourservername</computeroutput></emphasis><computeroutput>/tcl</computeroutput>),
@@ -30,8 +30,8 @@ management has thrown a wrench into the works - there are a few extra things
 to do during initialization, most notably:</para>
 
 <itemizedlist>
-<listitem><para>Examine the ACS file tree for files that should not be present in ACS
-(i.e., that were once part of the ACS distribution but have since been
+<listitem><para>Examine the OpenACS file tree for files that should not be present in OpenACS
+(i.e., that were once part of the OpenACS distribution but have since been
 removed).</para></listitem>
 
 <listitem><para>Scan the <computeroutput>/packages</computeroutput> directory for new packages.</para></listitem>
@@ -41,7 +41,7 @@ and <computeroutput>*-init.tcl</computeroutput> files.</para></listitem>
 </itemizedlist>
 
 <para>
-This document examines in detail each of the steps involved in AOLserver/ACS
+This document examines in detail each of the steps involved in AOLserver/OpenACS
 startup. 
 </para>
 
@@ -57,26 +57,26 @@ process (or otherwise), AOLserver reads its configuration file and
 indicated in the <computeroutput>.ini</computeroutput> file (e.g., the Oracle driver and
 <computeroutput>nssock</computeroutput>), and sources Tcl module files (generally in
 <computeroutput>/home/aol30/modules/tcl</computeroutput>). This step is, and has always been, the
-same for all AOLservers, regardless of whether they are running ACS. 
+same for all AOLservers, regardless of whether they are running OpenACS. 
 </para>
 
 <para>Next AOLserver sources, in lexicographical order, each file in the
 <computeroutput>/tcl</computeroutput> directory. The first such file is
 <computeroutput>0-acs-init.tcl</computeroutput>, which doesn&#39;t do much directly except to
-determine the ACS path root (e.g., <computeroutput>/web/</computeroutput><emphasis><computeroutput>yourservername</computeroutput></emphasis>)
+determine the OpenACS path root (e.g., <computeroutput>/web/</computeroutput><emphasis><computeroutput>yourservername</computeroutput></emphasis>)
 by trimming the final component from the path to the Tcl library directory
 (<computeroutput>/web/</computeroutput><emphasis><computeroutput>yourservername</computeroutput></emphasis><computeroutput>/tcl</computeroutput>). But
 <computeroutput>0-acs-init.tcl</computeroutput>&#39;s has an important function, namely sourcing
 <computeroutput>/packages/acs-core/bootstrap.tcl</computeroutput>, which does the following:</para>
 
 <orderedlist>
-<listitem><para><phrase>Initialize some NSVs used by the core</phrase>. These NSVs are
+<listitem><para><emphasis role="strong">Initialize some NSVs used by the core</emphasis>. These NSVs are
 documented in <computeroutput>/packages/acs-core/apm-procs.tcl</computeroutput> - no need to
-worry about them unless you&#39;re an ACS core hacker. 
+worry about them unless you&#39;re an OpenACS core hacker. 
 
 </para></listitem>
 
-<listitem><para><phrase>Verify the deletion of obsolete ACS files</phrase>. The
+<listitem><para><emphasis role="strong">Verify the deletion of obsolete OpenACS files</emphasis>. The
 <computeroutput>/tcl</computeroutput> directory has evolved quite a bit over the months and
 years, and a few files have come and gone. The
 <computeroutput>/www/doc/removed-files.txt</computeroutput> file contains a list of files which
@@ -87,26 +87,26 @@ the log if any of these files exist.
 
 </para></listitem>
 
-<listitem><para><phrase>Source <computeroutput>*-procs.tcl</computeroutput> files in the ACS core</phrase>.
+<listitem><para><emphasis role="strong">Source <computeroutput>*-procs.tcl</computeroutput> files in the OpenACS core</emphasis>.
 We source each file matching the <computeroutput>*-procs.tcl</computeroutput> glob in the
 <computeroutput>/packages/acs-kernel</computeroutput> directory, in lexicographical order. These
 procedure are needed to perform any of the following steps. 
 
 </para></listitem>
 
-<listitem><para><phrase>Ensure that the database is available</phrase> by grabbing and
+<listitem><para><emphasis role="strong">Ensure that the database is available</emphasis> by grabbing and
 releasing a handle. If we can&#39;t obtain a handle, we terminate
-initialization (since ACS couldn&#39;t possibly start up the server without
+initialization (since OpenACS couldn&#39;t possibly start up the server without
 access to the database). 
 
 </para></listitem>
 
-<listitem><para><phrase>Register any new packages in the <computeroutput>/packages</computeroutput>
-directory</phrase>. In each directory inside <computeroutput>/packages</computeroutput>, we look
+<listitem><para><emphasis role="strong">Register any new packages in the <computeroutput>/packages</computeroutput>
+directory</emphasis>. In each directory inside <computeroutput>/packages</computeroutput>, we look
 for a <computeroutput>.info</computeroutput> file; if we find a package that hasn&#39;t yet been
 registered with the package manager (i.e., it&#39;s been copied there
 manually), we insert information about it into the database. (The first time
-ACS starts up, <emphasis>no</emphasis> packages will have been registered in the database
+OpenACS starts up, <emphasis>no</emphasis> packages will have been registered in the database
 yet, so this step will registers every single package in the
 <computeroutput>/packages</computeroutput> directory.) Note that packages discovered here are
 initially disabled; they must be manually enabled in the package manager
@@ -114,25 +114,25 @@ before they can be used.
 
 </para></listitem>
 
-<listitem><para><phrase>Ensure that the <computeroutput>acs-kernel</computeroutput> package is
-enabled</phrase>. If the ACS core isn&#39;t initialized, the server
+<listitem><para><emphasis role="strong">Ensure that the <computeroutput>acs-kernel</computeroutput> package is
+enabled</emphasis>. If the OpenACS core isn&#39;t initialized, the server
 couldn&#39;t possibly be operational, so if there&#39;s no enabled version of
-the ACS core we simply mark the latest installed one as enabled. 
+the OpenACS core we simply mark the latest installed one as enabled. 
 
 </para></listitem>
 
-<listitem><para><phrase>Load <computeroutput>*-procs.tcl</computeroutput> files for enabled
-packages</phrase>, activating their APIs. 
+<listitem><para><emphasis role="strong">Load <computeroutput>*-procs.tcl</computeroutput> files for enabled
+packages</emphasis>, activating their APIs. 
 
 </para></listitem>
 
-<listitem><para><phrase>Load <computeroutput>*-init.tcl</computeroutput> files for enabled packages</phrase>,
+<listitem><para><emphasis role="strong">Load <computeroutput>*-init.tcl</computeroutput> files for enabled packages</emphasis>,
 giving packages a chance to register filters and procedures, initialize data
 structures, etc. 
 
 </para></listitem>
 
-<listitem><para><phrase>Verify that the core has been properly initialized</phrase> by
+<listitem><para><emphasis role="strong">Verify that the core has been properly initialized</emphasis> by
 checking for the existence of an NSV created by the request processor
 initialization code. If it&#39;s not present, the server won&#39;t be
 operational, so we log an error.</para></listitem>

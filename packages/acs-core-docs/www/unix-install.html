@@ -1,20 +1,66 @@
-<html xmlns:lxslt="http://xml.apache.org/xslt" xmlns:saxon="http://icl.com/saxon" xmlns:xalanredirect="org.apache.xalan.xslt.extensions.Redirect"><head>
-<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>2. Installing on Unix/Linux</title><link rel="stylesheet" href="ad.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.24"><link rel="home" href="index.html" title="ACS Core"><link rel="up" href="acs-admin.html" title="Part II. For ACS Admins"><link rel="previous" href="acs-admin.html" title="Part II. For ACS Admins"><link rel="next" href="getting-started.html" title="2. Getting Started and Getting Help"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><a href="http://www.openacs.org/"><img src="images/alex.jpg" border="0"></a><br><br><a class="topnav" href="/">Home</a><span class="topnav"> : </span><a class="topnav" href="index">Documentation</a><span class="topnav"> : </span><a class="topnav" href="acs-admin.html">Part II. For ACS Admins</a><span class="topnav"> : </span><strong class="topnav">2. Installing on Unix/Linux&nbsp;</strong><hr size="1" noshade><div id="unix-install" class="chapter"><div class="titlepage"><h2 class="title"><a name="unix-install">2. Installing on Unix/Linux</a></h2></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt>1. <a href="unix-install.html#N279">Overview</a></dt><dt>2. <a href="getting-started.html">Getting Started and Getting Help</a></dt><dt>3. <a href="requirements.html">Requirements</a></dt><dt>4. <a href="redhat.html">Installing Red Hat Linux 6.2</a></dt><dt>5. <a href="oracle.html">Installing Oracle 8.1.6</a></dt><dt>6. <a href="aolserver.html">Installing AOlserver 3.1</a></dt><dt>7. <a href="acs.html">Installing the ArsDigita Community System v 4.0</a></dt><dt>8. <a href="tests.html">Acceptance Tests</a></dt><dt>9. <a href="credits.html">Credits</a></dt></dl></div><div id="N279" class="sect1"><div class="titlepage"><h2 class="title" style="clear: all"><a name="N279"></a><span class="label">1.</span> <span class="title">Overview</span></h2></div><p> 
-This document is a guide to installing the ArsDigita Community
-System (ACS).  It is targeted for first time users who may not be
-familiar with Oracle and AOLServer, but who are familiar with UNIX -
-with an emphasis on Linux.  However, for the purposes of running the
-ACS, Linux is not substantially different from other UNIX systems,
-such as Solaris or HP-UX.
-</p><p> 
-Assuming you have a computer with a network connection, before
-starting installation of ACS please refer to the following:
-</p><div class="itemizedlist"><ul><li><a name="N287"></a><p> If it's a PC and you're going to use Linux, then read everything. </p></li><li><a name="N290"></a><p> If it's a UNIX box, skip the Linux chapter and read everything else. </p></li><li><a name="N293"></a><p> If it's a Windows box, read <a href="win-install.html">How to install ACS on Windows</a>
-    instead.  </p></li><li><a name="N300"></a><p> If you already have Oracle up and running, then skip to the
-    AOLServer 3.1 chapter and read from there.</p></li></ul></div><p>
-If you are interested in learning more about the ACS first, then
-please read Chapter Three: <a href="http://www.openacs.org/books/panda/community.html" target="_top">Scalable
-Systems for Online Communities</a> from <a href="http://www.openacs.org/books/panda/" target="_top">Philip &amp; Alex's Guide to
-Web Publishing</a>, and this document on <a href="http://philip.greenspun.com/wtr/using-the-acs.html" target="_top">Using the
-ArsDigita Community System</a>.
-</p></div></div><div class="navfooter"><hr size="1" noshade><table width="100%"><tr><td width="40%" align="left"><a class="bottomnav" href="acs-admin.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a href="mailto:acs-docs@arsdigita.com"><address class="nav">acs-docs@arsdigita.com</address></a></td><td width="40%" align="right">&nbsp;<a class="bottomnav" href="getting-started.html">Next</a></td></tr></table></div></body></html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type">
+<title>Chapter 2. Installing on Unix/Linux</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.45">
+<link rel="home" href="index.html" title="OpenACS Documentation">
+<link rel="up" href="acs-admin.html" title="Part Part II. For OpenACS Admins">
+<link rel="previous" href="acs-admin.html" title="Part Part II. For OpenACS Admins">
+<link rel="next" href="install-overview.html" title="Overview">
+<link rel="stylesheet" href="openacs.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr>
+<td width="20%" align="left">
+<a accesskey="p" href="acs-admin.html">Prev</a> </td>
+<th width="60%" align="center">Part Part II. For OpenACS Admins</th>
+<td width="20%" align="right"> <a accesskey="n" href="install-overview.html">Next</a>
+</td>
+</tr></table>
+<hr>
+</div>
+<div class="chapter">
+<div class="titlepage"><div><h2 class="title">
+<a name="unix-install"></a>Chapter 2. Installing on Unix/Linux</h2></div></div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl>
+<dt><a href="install-overview.html">Overview</a></dt>
+<dt><a href="operating-system.html">Install an Operating System</a></dt>
+<dt><a href="oracle.html">Install Oracle 8.1.7</a></dt>
+<dt><a href="postgres.html">Install PostgreSQL 7.1.3</a></dt>
+<dt><a href="aolserver.html">Install AOLserver 3.3+ad13</a></dt>
+<dt><a href="openacs.html">Install OpenACS 4</a></dt>
+<dt><a href="nextsteps.html">Next Steps</a></dt>
+<dt><a href="credits.html">Credits</a></dt>
+</dl>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="acs-admin.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="install-overview.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left">Part Part II. For OpenACS Admins </td>
+<td width="20%" align="center"><a accesskey="u" href="acs-admin.html">Up</a></td>
+<td width="40%" align="right"> Overview</td>
+</tr>
+</table>
+<hr>
+<address><a href="mailto:rmello@cc.usu.edu">
+			rmello@cc.usu.edu
+		  </a></address>
+<address><a href="mailto:vinod@kurup.com">
+			vinod@kurup.com
+		  </a></address>
+</div>
+</body>
+</html>

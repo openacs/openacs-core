@@ -2,8 +2,8 @@
 
 <html>
 <head>
-<title>ACS Documentation</title>
-<link rel="stylesheet" type="text/css" href="ad.css">
+<title>OpenACS Documentation</title>
+<link rel="stylesheet" type="text/css" href="openacs.css">
 </head>
 
 <body bgcolor="#ffffff">
@@ -11,27 +11,27 @@
 
 <table>
 <tr><td valign="bottom">
-<a href="http://www.arsdigita.com/"><img src="http://www.arsdigita.com/graphics/ad_logo_big.gif" align="left" border="0"></a>
+<a href="http://www.openacs.org/"><img src="images/alex.jpg" align="left" border="0"></a>
 </td>
 <td valign="bottom">
-<h1>The ArsDigita Community System (ACS)</h1>
+<h1>The OpenACS Community System</h1>
 </td></tr>
 </table>
 
 <table border="1" cellpadding="8" cellspacing="0" width="80%">
 
 <tr>
-<td class="codeblock"><strong>The Basic ACS</strong>
+<td class="codeblock"><strong>Basic OpenACS</strong>
 </td>
 <td class="codeblock"><strong>Installed Packages</strong></td>
 </tr>
 
 <tr><td valign="top">
 <pre><strong>For Everyone</strong>
-        - <a href="release-notes.html">ACS 4.2 beta Release Notes</a>
+        - <a href="release-notes.html">OpenACS 4.2 beta Release Notes</a>
         - <a href="http://developer.arsdigita.com/doc/release-notes/">Older Release Notes</a>
 
-<a href="acs-admin.html"><strong>For ACS-admins</strong></a>
+<a href="acs-admin.html"><strong>For OpenACS-admins</strong></a>
 	- <a href="unix-install.html">Unix Installation Guide</a>
         - <a href="win-install.html">Windows Installation Guide</a>
         - <a href="http://www.arsdigita.com/acs-repository/">ACS Repository</a>
@@ -40,7 +40,7 @@
 	- <a href="kernel-doc.html">Kernel Documentation</a>
 	- <a href="dev-guide.html">Developers Guide</a>
 	- <a href="eng-standards.html">Engineering Standards</a>
-        - <a href="/api-doc/">API Browser</a> for this ACS instance
+        - <a href="/api-doc/">API Browser</a> for this OpenACS instance
 	- <a href="more-developer-info.html">Other Developer Resources</a>
 
 <strong>Primers and References</strong>
@@ -95,8 +95,8 @@ and licensed under the
 Questions or comments about the documentation? 
 <br>
 Please visit the
-<a href="http://developer.arsdigita.com/docbook/">Documentation Central</a>
-or shoot at <a href="mailto:claus@arsdigita.com">claus@arsdigita.com</a>.
+<a href="http://openacs.org/bboard/">OpenACS bboards</a>
+or shoot email at <a href="mailto:vinod@kurup.com">vinod@kurup.com</a> or <a href="mailto:rmello@cc.usu.edu">rmello@cc.usu.edu</a>.
 </p>
 </blockquote>
 </body>

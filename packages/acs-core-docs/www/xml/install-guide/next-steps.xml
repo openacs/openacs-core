@@ -1,7 +1,7 @@
 <sect1 id="nextsteps" xreflabel="Next Steps">
   <title>Next Steps</title>
 
-  <sect2 id="install-backups">
+  <sect2 id="install-next-backups">
 	<title>Backup Strategy</title>
 
 	<para>Here are some tips from Don Baccus regarding backup strategy:</para>
@@ -56,14 +56,14 @@
 	  database.  This copy includes all of the database&#39;s state at the
 	  time that the export was initiated. If your database is corrupted,
 	  you can restore from one of these backups. You should do this step as
-	  <phrase>root</phrase>.
+	  <computeroutput>root</computeroutput>.
 	</para>
 
     <itemizedlist>
       <listitem><para> 
 		  Download the backup script. Save the file <ulink
 		  url="files/export-oracle.txt">export-oracle.txt</ulink> as
-		  <phrase>/tmp/export-oracle.txt</phrase>.
+		  <computeroutput>/tmp/export-oracle.txt</computeroutput>
 		</para></listitem>
 
       <listitem><para>
@@ -73,8 +73,7 @@
 nsadmin:~$ su -
 Password: ***********
 root:~# cp /tmp/export-oracle.txt /usr/sbin/export-oracle
-root:~# chmod 700 /usr/sbin/export-oracle
-		</programlisting>
+root:~# chmod 700 /usr/sbin/export-oracle</programlisting>
       </listitem>
 
       <listitem><para>
@@ -85,8 +84,7 @@ root:~# chmod 700 /usr/sbin/export-oracle
 		<programlisting>
 root:~# mkdir /ora8/m02/oracle-exports
 root:~# chown oracle.dba /ora8/m02/oracle-exports
-root:~# chmod 770 /ora8/m02/oracle-exports
-		</programlisting>
+root:~# chmod 770 /ora8/m02/oracle-exports</programlisting>
       </listitem>
 
       <listitem><para> 
@@ -140,9 +138,7 @@ About to export SERVICE_NAME&#39;s objects ...
 . exporting dimensions
 . exporting post-schema procedural objects and actions
 . exporting statistics
-Export terminated successfully without warnings.
-   
-		</programlisting>
+Export terminated successfully without warnings.</programlisting>
 
         <para>If you don&#39;t have any warnings, proceed to automate the
 		  backups.</para>
@@ -150,23 +146,23 @@ Export terminated successfully without warnings.
 
       <listitem><para>
 		  Automating backups is accomplished using the UNIX
-		  <phrase>crontab</phrase> facility.</para>
+		  <computeroutput>crontab</computeroutput> facility.</para>
 
-        <para>While still <phrase>root</phrase>, run the following
-		  command. You can replace the <computeroutput>EDITOR=&quot;emacs
-			-nw&quot;</computeroutput> portion with whatever editor your
-		  prefer, such as
-		  <computeroutput>EDITOR=vi</computeroutput>.</para>
+        <para>
+		  While still <computeroutput>root</computeroutput>, run the
+		  following command. You can replace the
+		  <computeroutput>EDITOR=&quot;emacs -nw&quot;</computeroutput>
+		  portion with whatever editor your prefer, such as
+		  <computeroutput>EDITOR=vi</computeroutput>.
+		</para>
 		<programlisting>
 root:~# export EDITOR=&quot;emacs -nw&quot;
-root:~# crontab -e
-		</programlisting>
+root:~# crontab -e</programlisting>
 
 		<para>Now add the following line on a line by itself </para>
 
 		<programlisting>
-0 23 * * * /usr/sbin/export-oracle   
-		</programlisting>
+0 23 * * * /usr/sbin/export-oracle</programlisting>
 
         <para>
 		  Save the file, exit the editor. Verify that the addition
@@ -176,15 +172,14 @@ root:~# crontab -e
 root:~# crontab -l | grep export-oracle
 0 23 * * * /usr/sbin/export-oracle
 root:~# exit
-; Logout
-		</programlisting>
+; Logout</programlisting>
 
 		<para>If you see the line, go ahead and log out.</para>
 	  </listitem>
     </itemizedlist>
    </sect2>
 
-  <sect2 id="export-postgres">
+  <sect2 id="install-export-postgres">
 	<title>Set up nightly Postgres exports</title>
 
 	<para>
@@ -235,8 +230,7 @@ root:~# exit
 
 	<programlisting>
 nsadmin:~$ cp /tmp/acs-pgbackup-init.txt /web/birdnotes/tcl/acs-pgbackup-init.tcl
-nsadmin:~$ restart-aolserver birdnotes
-	</programlisting>
+nsadmin:~$ restart-aolserver birdnotes</programlisting>
 
 	<para>
 	  That's it! The script will email you with each successful backup (or
@@ -244,7 +238,7 @@ nsadmin:~$ restart-aolserver birdnotes
 	</para>
   </sect2>
 
-  <sect2 id="nightly-vacuum">
+  <sect2 id="install-next-nightly-vacuum">
 	<title>Vacuum Postgres nightly</title>
 	<para>
 	  The "vacuum" command must be run periodically to reclaim space. The
@@ -263,17 +257,15 @@ nsadmin:~$ restart-aolserver birdnotes
 
 	<para>Edit your crontab:</para>
 	<programlisting>
-nsadmin:~$ crontab -e
-	</programlisting>
+nsadmin:~$ crontab -e</programlisting>
 
 	<para>We'll set vacuum up to run nightly at 1 AM. Add the following
 	line:</para>
 	<programlisting>
-0 1 * * * /usr/local/pgsql/bin/vacuumdb birdnotes
-	</programlisting>
+0 1 * * * /usr/local/pgsql/bin/vacuumdb birdnotes</programlisting>
   </sect2>
 
-  <sect2 id="add-server">
+  <sect2 id="install-next-add-server">
 	<title>How to add a second server on a different port</title>
 
 	<para>Starting another server is simply a matter of configuring another
@@ -290,8 +282,7 @@ nsadmin:~$ crontab -e
 		<programlisting>
 nsadmin:~$ cp /tmp/openacs4.tcl.txt ./<emphasis>birdnotes-dev</emphasis>.tcl
 nsadmin:~$ chmod 660 <emphasis>birdnotes-dev</emphasis>.tcl
-nsadmin:~$ emacs <emphasis>birdnotes-dev</emphasis>.tcl
-		</programlisting>
+nsadmin:~$ emacs <emphasis>birdnotes-dev</emphasis>.tcl</programlisting>
 
 		<para>Just like in <xref linkend="install-openacs-configure-aol"/>,
 		you'll need to set the server parameters appropriately. Be sure to
@@ -316,8 +307,7 @@ nsadmin:~$ emacs <emphasis>birdnotes-dev</emphasis>.tcl
 
 		<programlisting>
 nsadmin:~$ cd /web
-nsadmin:~$ cp -r birdnotes birdnotes-dev
-		</programlisting>
+nsadmin:~$ cp -r birdnotes birdnotes-dev</programlisting>
 
 		<para>
 		  Or Download the <ulink url="http://www.openacs.org/software">OpenACS
@@ -327,8 +317,7 @@ nsadmin:~$ cp -r birdnotes birdnotes-dev
 		<programlisting>
 nsadmin:~$ cd /web
 nsadmin:/web$ tar xzvf /tmp/alpha2.tgz
-nsadmin:/web$ mv openacs-4 birdnotes-dev
-		</programlisting>
+nsadmin:/web$ mv openacs-4 birdnotes-dev</programlisting>
 	  </listitem>
 
 	  <listitem>
@@ -337,8 +326,7 @@ nsadmin:/web$ mv openacs-4 birdnotes-dev
 		</para>
 		<programlisting>
 nsadmin:/web$ cd
-nsadmin:~$ /usr/local/aolserver/bin/nsd-postgres -t /usr/local/aolserver/<emphasis>birdnotes-dev</emphasis>.tcl
-		</programlisting>
+nsadmin:~$ /usr/local/aolserver/bin/nsd-postgres -t /usr/local/aolserver/<emphasis>birdnotes-dev</emphasis>.tcl</programlisting>
 
 		<para>
 		  Visit the site with a web browser (using the port that you set
@@ -350,14 +338,14 @@ nsadmin:~$ /usr/local/aolserver/bin/nsd-postgres -t /usr/local/aolserver/<emphas
 	</orderedlist>
   </sect2>
 
-  <sect2 id="openfts">
+  <sect2 id="install-next-openfts" xreflabel="Set Up OpenFTS">
 	<title>Set up site-wide search</title>
 	<para>
 	  OpenACS uses the <ulink
 	  url="http://openfts.sourceforge.net/">OpenFTS</ulink> package to
 	  implement site-wide-search. You'll need to have the Tcl development
 	  libraries and headers installed. (Debian users:
-	  <computeroutput>apt-get install tcl8.3-dev</computeroutput>
+	  <computeroutput>apt-get install tcl8.3-dev</computeroutput>)
 	</para>
 
 	<orderedlist>
@@ -374,8 +362,7 @@ root:/tmp# wget http://prdownloads.sourceforge.net/openfts/Search-OpenFTS-tcl-0.
 root:~# cd /usr/local/src
 root:/usr/local/src# tar xzf /tmp/Search-OpenFTS-tcl-0.2.tar.gz
 root:/usr/local/src# chown -R nsadmin.web Search-OpenFTS-tcl-0.2
-root:/usr/local/src# exit
-		</programlisting>
+root:/usr/local/src# exit</programlisting>
 	  </listitem>
 
 	  <listitem><para>
@@ -388,8 +375,7 @@ root:/usr/local/src# exit
 
 		<programlisting>
 nsadmin:~$ cd /usr/local/src/Search-OpenFTS-tcl-0.2
-nsadmin:/usr/local/src/Search-OpenFTS-tcl-0.2$ ./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver
-		</programlisting>
+nsadmin:/usr/local/src/Search-OpenFTS-tcl-0.2$ ./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver</programlisting>
 	  </listitem>
 
 	  <listitem><para>
@@ -400,16 +386,14 @@ nsadmin:/usr/local/src/Search-OpenFTS-tcl-0.2$ ./configure --with-aolserver-src=
 		</para>
 
 		<programlisting>
-INC          = ../include -I/usr/include/tcl8.3
-		</programlisting>
+INC          = ../include -I/usr/include/tcl8.3</programlisting>
 
 		<para>Then compile it:</para>
 
 		<programlisting>
 nsadmin:/usr/local/src/Search-OpenFTS-tcl-0.2$ make
 nsadmin:/usr/local/src/Search-OpenFTS-tcl-0.2$ cd aolserver
-nsadmin:/usr/local/src/Search-OpenFTS-tcl-0.2/aolserver$ make
-		</programlisting>
+nsadmin:/usr/local/src/Search-OpenFTS-tcl-0.2/aolserver$ make</programlisting>
 	  </listitem>
 
 	  <listitem><para>
@@ -424,8 +408,7 @@ Password: ***********
 root:~# cd /usr/local/src/Search-OpenFTS-tcl-0.2
 root:/usr/local/src/Search-OpenFTS-tcl-0.2# make install
 root:/usr/local/src/Search-OpenFTS-tcl-0.2# exit
-nsadmin:/usr/local/src/Search-OpenFTS-tcl-0.2/aolserver$ cp nsfts.so /usr/local/aolserver/bin/
-		</programlisting>
+nsadmin:/usr/local/src/Search-OpenFTS-tcl-0.2/aolserver$ cp nsfts.so /usr/local/aolserver/bin/</programlisting>
 	  </listitem>
 
 	  <listitem>
@@ -437,8 +420,7 @@ nsadmin:/usr/local/src/Search-OpenFTS-tcl-0.2/aolserver$ cp nsfts.so /usr/local/
 		</para>
 
 		<programlisting>
-        ns_param   nsfts           ${bindir}/nsfts.so 
-		</programlisting>
+        ns_param   nsfts           ${bindir}/nsfts.so</programlisting>
 	  </listitem>
 
 	  <listitem><para>
@@ -448,8 +430,7 @@ nsadmin:/usr/local/src/Search-OpenFTS-tcl-0.2/aolserver$ cp nsfts.so /usr/local/
 		<programlisting>
 nsadmin:/usr/local/src/Search-OpenFTS-tcl-0.2/aolserver$ cd
 nsadmin:~$ psql -f /web/<emphasis>birdnotes</emphasis>/packages/openfts-driver/sql/postgresql/load.sql <emphasis>birdnotes</emphasis>
-nsadmin:~$ restart-aolserver <emphasis>birdnotes</emphasis>
-		</programlisting>
+nsadmin:~$ restart-aolserver <emphasis>birdnotes</emphasis></programlisting>
 	  </listitem>
 
 	  <listitem><para>
@@ -467,8 +448,7 @@ nsadmin:~$ restart-aolserver <emphasis>birdnotes</emphasis>
 		  Restart your server.
 
 		  <programlisting>
-nsadmin:~$ restart-aolserver <emphasis>birdnotes</emphasis>
-		  </programlisting>
+nsadmin:~$ restart-aolserver <emphasis>birdnotes</emphasis></programlisting>
 		</para></listitem>
 
 	  <listitem><para> 

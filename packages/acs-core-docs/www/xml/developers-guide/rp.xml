@@ -9,7 +9,7 @@
 <sect2 id="rp-overview"><title>Overview</title>
 
 <para>
-This document is a brief introduction to the ACS 4 Request Processor;
+This document is a brief introduction to the OpenACS 4 Request Processor;
 more details can be found in the <xref linkend="rp-design"/>. Here we cover the high level concepts behind the
 system, and implications and usage for the application developer.
 </para>
@@ -18,14 +18,14 @@ system, and implications and usage for the application developer.
 <sect2 id="rp-theoldway"><title>The Old Way</title>
 
 <para>
-In older versions of the ACS, the mapping between URLs and pages was
-simple. AOLserver (the usual webserver for the ACS) would find the
+In older versions of the OpenACS, the mapping between URLs and pages was
+simple. AOLserver (the usual webserver for the OpenACS) would find the
 appropriate file by appending the server's page-root to the path in
 the URL and returning that file to the user.  For example, a user's
 request for a URL like "http://foo-service.com/bar.html" would cause
 the server to look in the filesystem for
 <computeroutput>/web/foo-service/www/bar.html</computeroutput>, and return that file.
-This was simple enough, but ACS did not provide a clean centralized
+This was simple enough, but OpenACS did not provide a clean centralized
 mechanism for the following requirements of larger web services:
 
 
@@ -39,10 +39,10 @@ mechanism for the following requirements of larger web services:
 </itemizedlist>
 
 
-To achieve this functionality above in ACS 3.x, developers used an ad
+To achieve this functionality above in OpenACS 3.x, developers used an ad
 hoc combination of AOLserver filters, the <computeroutput>ns_perm</computeroutput> call,
-special purpose code in pages, and other procedures.  In ACS 4, the
-Request Processor, along with the ACS Package Manager, centralizes and
+special purpose code in pages, and other procedures.  In OpenACS 4, the
+Request Processor, along with the OpenACS Package Manager, centralizes and
 unifies this functionality, making it more transparent and readily
 available to developers.
 </para>
@@ -107,7 +107,7 @@ extracts or sets up new session tokens for the user.
 
 <listitem><para>
 Next, the Request Processor checks if the user has appropriate access
-privileges to the requested part of the site. In ACS 4, access control
+privileges to the requested part of the site. In OpenACS 4, access control
 is dictated by the <ulink url="permissions">permissions system</ulink>. In
 this case, the RP checks if the user has "read" priviledges on the
 object in the site map specified by the URL. This object is typically

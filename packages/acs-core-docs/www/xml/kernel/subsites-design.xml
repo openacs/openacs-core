@@ -1,5 +1,5 @@
-<sect1 id="subsites-design" xreflabel="ACS 4 Subsites Design Document">
-<title>ACS 4 Subsites Design Document</title>
+<sect1 id="subsites-design" xreflabel="OpenACS 4 Subsites Design Document">
+<title>OpenACS 4 Subsites Design Document</title>
 
 <authorblurb><para>
 by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> 
@@ -26,7 +26,7 @@ demand.</emphasis></para>
 
 
 
-<para>An ACS 4 subsite is a managed suite of applications that work together for
+<para>An OpenACS 4 subsite is a managed suite of applications that work together for
 a particular user community. This definition covers a very broad range of
 requirements: from a Geocities style homepage where a user can install
 whatever available application he wants (e.g. a single user could have their
@@ -35,12 +35,12 @@ interdependent applications. Thus, flexibility in application deployment is
 the overarching philosophy of subsites.</para>
 
 <para>Meeting such broad requirements of flexibility demands architecture-level
-support, i.e. very low level support from the core ACS 4 data model. For
+support, i.e. very low level support from the core OpenACS 4 data model. For
 example, the subsites concept demands that any package can have multiple
 instances installed at different URLs - entailing support from the APM and
 the Request Processor. Since the design and implementation directly
 associated with subsites is actually minimal, a discussion of subsites design
-is, in fact, a discussion of how core ACS 4 components implicitly support
+is, in fact, a discussion of how core OpenACS 4 components implicitly support
 subsites as a whole.</para>
 
 
@@ -54,8 +54,8 @@ subsites as a whole.</para>
 <para>The subsites problem actually has several quite diverse origins. It was
 originally recognized as a toolkit feature in the form of
 &quot;scoping&quot;. The basic concept behind scoping was to allow one scoped
-ACS installation to behave as multiple unscoped ACS installations so that one
-ACS install could serve multiple communities. Each piece of application data
+OpenACS installation to behave as multiple unscoped OpenACS installations so that one
+OpenACS install could serve multiple communities. Each piece of application data
 was tagged with a &quot;scope&quot; consisting of the (user_id, group_id,
 scope) triple. In practice the highly denormalized data models that this
 method uses produced large amounts of very redundant code and in general made
@@ -69,7 +69,7 @@ details. Archnet?, iluvcamp?)</para>
 <para>The requirements of all these different projects vary greatly, but the one
 consistent theme among all of them is the concept that various areas of the
 web site have their own private version of a module. Because this theme is so
-dominant, this is the primary problem that the ACS4 implementation of
+dominant, this is the primary problem that the OpenACS4 implementation of
 subsites addresses.</para>
 
 
@@ -110,7 +110,7 @@ be feasible anymore.</para>
 <para>This section will cover all the APIs relevant to subsites, and so will
 consist of portions of the APIs of several systems.</para>
 
-<para><phrase>Packages</phrase></para>
+<para><emphasis role="strong">Packages</emphasis></para>
 
 <para>The following package is provided for instantiation of packages. The
 apm_package.new function can be used to create a package of any type known to
@@ -179,7 +179,7 @@ show errors
 </programlisting>
 
 
-<para><phrase>Site Nodes</phrase></para>
+<para><emphasis role="strong">Site Nodes</emphasis></para>
 
 <para>This data model keeps track of what packages are being served from what
 URLs. You can think of this as a kind of rp_register_directory_map on drugs.
@@ -276,7 +276,7 @@ show errors
 </programlisting>
 
 
-<para><phrase>Request Processor</phrase></para>
+<para><emphasis role="strong">Request Processor</emphasis></para>
 
 <para>Once the above APIs are used to create packages and mount them on a
 specific site node, the following request processor APIs can be used to allow

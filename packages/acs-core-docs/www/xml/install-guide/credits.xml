@@ -48,7 +48,8 @@
   <para>
 	<emphasis role="strong">All questions and comments</emphasis> regarding
 	this guide should be sent to <ulink
-	url="mailto:vinod@kurup.com">vinod@kurup.com</ulink>.
+	url="mailto:vinod@kurup.com">vinod@kurup.com</ulink> or on the <ulink
+	url="http://openacs.org/bboard">OpenACS bboards</ulink>.
   </para>
 
   <para><phrase role="cvstag">($Id$)</phrase></para>

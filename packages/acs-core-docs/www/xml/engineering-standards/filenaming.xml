@@ -285,7 +285,7 @@ the standard form with javadoc-style @author, @cvs-id, etc, and should contain a
 
 <listitem><para>The second argument specifies the page
 inputs. The syntax for switches/flags (e.g. multiple-list, array,
-etc.) uses a <phrase>colon</phrase> (:) followed by any number of <phrase>flags</phrase>
+etc.) uses a colon (:) followed by any number of flags
 separated by commas (,),
 e.g. <computeroutput>foo:integer,multiple,trim</computeroutput>. In particular, <computeroutput>multiple</computeroutput> and
 <computeroutput>array</computeroutput> are the flags that correspond to the old

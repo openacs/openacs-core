@@ -43,11 +43,13 @@ two characters to save room.
  
 <informaltable>
 <tgroup cols="2">
-<tbody>
+<thead>
 <row>
-  <entry><phrase>Constraint type</phrase></entry>
-  <entry><phrase>Abbreviation</phrase></entry>
+  <entry>Constraint type</entry>
+  <entry>Abbreviation</entry>
 </row>
+</thead>
+<tbody>
 <row>
   <entry>references (foreign key)</entry>
   <entry>fk</entry>
@@ -97,7 +99,7 @@ If the constraint name is still too long, you should consider rewriting your
 entire data model :)
 </para>
 
-<para><phrase>Notes:</phrase></para>
+<para><emphasis role="strong">Notes:</emphasis></para>
 
 <itemizedlist>
   <listitem><para> If you have to abbreviate the table name for one of the constraints, abbreviate it for all the constraints</para></listitem>

@@ -1,223 +1,546 @@
-<html xmlns:lxslt="http://xml.apache.org/xslt" xmlns:saxon="http://icl.com/saxon" xmlns:xalanredirect="org.apache.xalan.xslt.extensions.Redirect"><head>
-<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>6. ACS 4 Groups Requirements</title><link rel="stylesheet" href="ad.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.24"><link rel="home" href="index.html" title="ACS Core"><link rel="up" href="kernel-doc.html" title="7. Kernel Documentation"><link rel="previous" href="permissions-design.html" title="5. ACS 4 Permissions Design"><link rel="next" href="groups-design.html" title="7. ACS 4 Groups Design"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><a href="http://www.openacs.org/"><img src="images/alex.jpg" border="0"></a><br><br><a class="topnav" href="/">Home</a><span class="topnav"> : </span><a class="topnav" href="index">Documentation</a><span class="topnav"> : </span><a class="topnav" href="acs-dev.html">Part III. For ACS Developers</a><span class="topnav"> : </span><a class="topnav" href="kernel-doc.html">7. Kernel Documentation</a><span class="topnav"> : </span><strong class="topnav">6. ACS 4 Groups Requirements&nbsp;</strong><hr size="1" noshade><div id="groups-requirements" class="sect1"><div class="titlepage"><h2 class="title" style="clear: all"><a name="groups-requirements"></a><span class="label">6.</span> <span class="title">ACS 4 Groups Requirements</span></h2></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt>6.1. <a href="groups-requirements.html#groups-requirements-intro">Introduction</a></dt><dt>6.2. <a href="groups-requirements.html#groups-requirements-vision">Vision Statement</a></dt><dt>6.3. <a href="groups-requirements.html#groups-requirements-user-scenarios">User Scenarios</a></dt><dt>6.4. <a href="groups-requirements.html#groups-requirements-system-overview">System Overview</a></dt><dt>6.5. <a href="groups-requirements.html#groups-requirements-links">Related Links</a></dt><dt>6.6. <a href="groups-requirements.html#groups-requirements-data-model">Requirements: Data Model</a></dt><dt>6.7. <a href="groups-requirements.html#groups-requirements-api">Requirements: API</a></dt><dt>6.8. <a href="groups-requirements.html#groups-requirements-ui">Requirements: User Interface</a></dt><dt>6.9. <a href="groups-requirements.html#groups-requirements-rev-history">Revision History</a></dt></dl></div><p><p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type">
+<title>OpenACS 4 Groups Requirements</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.45">
+<link rel="home" href="index.html" title="OpenACS Documentation">
+<link rel="up" href="kernel-doc.html" title="Chapter 7. Kernel Documentation">
+<link rel="previous" href="permissions-design.html" title="OpenACS 4 Permissions Design">
+<link rel="next" href="groups-design.html" title="OpenACS 4 Groups Design">
+<link rel="stylesheet" href="openacs.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr>
+<td width="20%" align="left">
+<a accesskey="p" href="permissions-design.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 7. Kernel Documentation</th>
+<td width="20%" align="right"> <a accesskey="n" href="groups-design.html">Next</a>
+</td>
+</tr></table>
+<hr>
+</div>
+<div class="sect1">
+<div class="titlepage"><div><h2 class="title" style="clear: both">
+<a name="groups-requirements"></a>OpenACS 4 Groups Requirements</h2></div></div>
+<div class="authorblurb"><p>
 by <a href="http://planitia.org" target="_top">Rafael H. Schloming</a>, <a href="mailto:mthomas@arsdigita.com" target="_top">Mark Thomas</a> 
-</p></p><div id="groups-requirements-intro" class="sect2"><div class="titlepage"><h3 class="title"><a name="groups-requirements-intro"></a><span class="label">6.1.</span> <span class="title">Introduction</span></h3></div><p>Almost all database-backed websites have users, and need to model the
-grouping of users. The ACS 4 Parties and Groups system is intended to provide
+</p></div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="groups-requirements-intro"></a>Introduction</h3></div></div>
+<p>Almost all database-backed websites have users, and need to model the
+grouping of users. The OpenACS 4 Parties and Groups system is intended to provide
 the flexibility needed to model complex real-world organizational structures,
-particularly to support powerful subsite services; that is, where one ACS
+particularly to support powerful subsite services; that is, where one OpenACS
 installation can support what appears to the user as distinct web services
-for different user communities.</p></div><div id="groups-requirements-vision" class="sect2"><div class="titlepage"><h3 class="title"><a name="groups-requirements-vision"></a><span class="label">6.2.</span> <span class="title">Vision Statement</span></h3></div><p>A powerful web service that can meet the needs of large enterprises must
+for different user communities.</p>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="groups-requirements-vision"></a>Vision Statement</h3></div></div>
+<p>A powerful web service that can meet the needs of large enterprises must
 be able to model the the real world's very rich organizational structures
 and many ways of decomposing the same organization. For example, a
 corporation can be broken into structures (the corporation, its divisions,
 and their departments) or regions (the Boston office, the LA office); a
 person who is employed by (is a member of) a specific department is also a
 member of the division and the corporation, and works at (is a member of, but
-in a different sense) a particular office. ACS 4's Parties and Groups
-system will support such complex relations faithfully.</p><p><strong>Historical Motivations</strong></p><p>The primary limitation of the ACS 3.x user group system is that it
-restricts the application developer to representing a "flat group"
+in a different sense) a particular office. OpenACS 4's Parties and Groups
+system will support such complex relations faithfully.</p>
+<p><span class="strong"><i>Historical Motivations</i></span></p>
+<p>The primary limitation of the OpenACS 3.x user group system is that it
+restricts the application developer to representing a &quot;flat group&quot;
 that contains only users: The <tt>user_groups</tt> table may contain the
 <tt>group_id</tt> of a parent group, but parent-child relationship
 support is limited because it only allows one kind of relationship between
 groups to be represented. Moreover, the Oracle database's limited support
 for tree-like structures makes the queries over these relationships
-expensive.</p><p>In addition, the Module Scoping design in ACS 3.0 introduced a
-<i>party</i> abstraction - a thing that is a person or a group of people -
+expensive.</p>
+<p>In addition, the Module Scoping design in OpenACS 3.0 introduced a
+<span class="emphasis"><i>party</i></span> abstraction - a thing that is a person or a group of people -
 though not in the form of an explicit table. Rather, the triple of
 <tt>scope</tt>, <tt>user_id</tt>, and <tt>group_id</tt> columns
 was used to identify the party. One disadvantage of this design convention is
 that it increases a data model's complexity by requiring the programmer
-to:</p><div class="itemizedlist"><ul><li><a name="N13921"></a><p>add these three columns to each "scoped" table</p></li><li><a name="N13924"></a><p>define a multi-column check constraint to protect against data corruption
-(e.g., a row with a <tt>scope</tt> value of "group" but a null
-<tt>group_id</tt>)</p></li><li><a name="N13935"></a><p>perform extra checks in <tt>Tcl</tt> and <tt>PL/SQL</tt>
+to:</p>
+<div class="itemizedlist"><ul>
+<li><p>add these three columns to each &quot;scoped&quot; table</p></li>
+<li><p>define a multi-column check constraint to protect against data corruption
+(e.g., a row with a <tt>scope</tt> value of &quot;group&quot; but a null
+<tt>group_id</tt>)</p></li>
+<li><p>perform extra checks in <tt>Tcl</tt> and <tt>PL/SQL</tt>
 functions and procedures to check both the <tt>user_id</tt> and
-<tt>group_id</tt> values</p></li></ul></div><p>In sum, the goal of the <strong>Parties and Groups</strong> system is to
-provide ACS programmers and site administrators with simple tools that fully
+<tt>group_id</tt> values</p></li>
+</ul></div>
+<p>In sum, the goal of the <span class="strong"><i>Parties and Groups</i></span> system is to
+provide OpenACS programmers and site administrators with simple tools that fully
 describe the complex relationships that exist among groups in the real
-world.</p></div><div id="groups-requirements-user-scenarios" class="sect2"><div class="titlepage"><h3 class="title"><a name="groups-requirements-user-scenarios"></a><span class="label">6.3.</span> <span class="title">User Scenarios</span></h3></div><p>Pat Developer has a client project and wants to model the company, its
+world.</p>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="groups-requirements-user-scenarios"></a>User Scenarios</h3></div></div>
+<p>Pat Developer has a client project and wants to model the company, its
 offices, its divisions, and its departments as groups and the employees as
-users.</p></div><div id="groups-requirements-system-overview" class="sect2"><div class="titlepage"><h3 class="title"><a name="groups-requirements-system-overview"></a><span class="label">6.4.</span> <span class="title">System Overview</span></h3></div><p>We start with <strong>Groups</strong>, which contain members; the
-<strong>member can be either a person or another group</strong> (i.e. a
-member is a party).</p><p>In addition to membership, the party and groups system defines a
-<strong>composition</strong> relationship that may exist between groups: A
-group can be a <strong>component</strong> of another group. The child group
-is called a <i>component group</i>; the parent group is called a
-<i>composite group</i>.</p><p>A group <strong>G<sub>c</sub></strong> can be a member and/or a component
-of another group <strong>G<sub>p</sub></strong>; the difference is in the way
-the members of <strong>G<sub>c</sub></strong> are related to
-<strong>G<sub>p</sub></strong>:</p><div class="itemizedlist"><ul><li><a name="N14014"></a><p>If a party <strong>P</strong> is a member (or a component) of
-<strong>G<sub>c</sub></strong> and if <strong>G<sub>c</sub></strong> is a
-component of <strong>G<sub>p</sub></strong>, then <strong>P</strong> is also
-a member (or a component) of <strong>G<sub>p</sub></strong></p></li><li><a name="N14042"></a><p>If a party <strong>P</strong> is a member (or a component) of
-<strong>G<sub>c</sub></strong> and if <strong>G<sub>c</sub></strong> is a
-member of <strong>G<sub>p</sub></strong>, then <strong>no
-relationship</strong> between <strong>P</strong> and
-<strong>G<sub>p</sub></strong> exists as a result of the relationship between
-<strong>G<sub>p</sub></strong> and <strong>G<sub>p</sub></strong>.</p></li></ul></div><p>Consider an example to make this less abstract: Pretend that the Sierra
-Club is a <i>member</i> of Greenpeace. The Sierra Club has chapters; each
-chapter is a <i>component</i> of the Sierra Club. If Eddie Environmentalist
+users.</p>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="groups-requirements-system-overview"></a>System Overview</h3></div></div>
+<p>We start with <span class="strong"><i>Groups</i></span>, which contain members; the
+<span class="strong"><i>member can be either a person or another group</i></span> (i.e. a
+member is a party).</p>
+<p>In addition to membership, the party and groups system defines a
+<span class="strong"><i>composition</i></span> relationship that may exist between groups: A
+group can be a <span class="strong"><i>component</i></span> of another group. The child group
+is called a <span class="emphasis"><i>component group</i></span>; the parent group is called a
+<span class="emphasis"><i>composite group</i></span>.</p>
+<p>A group <span class="strong"><i>G<sub>c</sub></i></span> can be a member and/or a component
+of another group <span class="strong"><i>G<sub>p</sub></i></span>; the difference is in the way
+the members of <span class="strong"><i>G<sub>c</sub></i></span> are related to
+<span class="strong"><i>G<sub>p</sub></i></span>:</p>
+<div class="itemizedlist"><ul>
+<li><p>If a party <span class="strong"><i>P</i></span> is a member (or a component) of
+<span class="strong"><i>G<sub>c</sub></i></span> and if <span class="strong"><i>G<sub>c</sub></i></span> is a
+component of <span class="strong"><i>G<sub>p</sub></i></span>, then <span class="strong"><i>P</i></span> is also
+a member (or a component) of <span class="strong"><i>G<sub>p</sub></i></span>
+</p></li>
+<li><p>If a party <span class="strong"><i>P</i></span> is a member (or a component) of
+<span class="strong"><i>G<sub>c</sub></i></span> and if <span class="strong"><i>G<sub>c</sub></i></span> is a
+member of <span class="strong"><i>G<sub>p</sub></i></span>, then <span class="strong"><i>no
+relationship</i></span> between <span class="strong"><i>P</i></span> and
+<span class="strong"><i>G<sub>p</sub></i></span> exists as a result of the relationship between
+<span class="strong"><i>G<sub>p</sub></i></span> and <span class="strong"><i>G<sub>p</sub></i></span>.</p></li>
+</ul></div>
+<p>Consider an example to make this less abstract: Pretend that the Sierra
+Club is a <span class="emphasis"><i>member</i></span> of Greenpeace. The Sierra Club has chapters; each
+chapter is a <span class="emphasis"><i>component</i></span> of the Sierra Club. If Eddie Environmentalist
 is a member of the Massachusetts Chapter of the Sierra Club, Eddie is
 automatically a member of the Sierra Club, but being a Sierra Club member
-does not make Eddie a member of Greenpeace.</p><p>In the ACS, Greenpeace, Sierra Club, and the Sierra Club chapters would be
+does not make Eddie a member of Greenpeace.</p>
+<p>In the OpenACS, Greenpeace, Sierra Club, and the Sierra Club chapters would be
 modeled as groups, and Eddie would be a user. There would be a composition
 relationship between each Sierra Club chapter and the Sierra Club. Membership
 relationships would exist between Eddie and the Massachusetts Chapter,
 between Eddie and the Sierra Club (due to Eddie's membership in the
-Massachusetts chapter), and between the Sierra Club and Greenpeace.</p><p>Membership requirements can vary from group to group. The parties and
+Massachusetts chapter), and between the Sierra Club and Greenpeace.</p>
+<p>Membership requirements can vary from group to group. The parties and
 groups system must provide a base type that specifies the bare minimum
-necessary to join a group.</p><p>The parties and groups system must support constraints between a composite
-group <strong>G<sub>P</sub></strong> and any of its component groups,
-<strong>G<sub>C</sub></strong>. For example, the system should be able to
-enforce a rule like: Do not allow a party <strong>P</strong> to become a
-member of <strong>G<sub>C</sub></strong> unless <strong>P</strong> is already
-a member of <strong>G<sub>P</sub></strong>.</p></div><div id="groups-requirements-links" class="sect2"><div class="titlepage"><h3 class="title"><a name="groups-requirements-links"></a><span class="label">6.5.</span> <span class="title">Related Links</span></h3></div><div class="itemizedlist"><ul><li><a name="N14129"></a><p><a href="groups-design.html">ACS 4 Groups Design</a></p></li></ul></div></div><div id="groups-requirements-data-model" class="sect2"><div class="titlepage"><h3 class="title"><a name="groups-requirements-data-model"></a><span class="label">6.6.</span> <span class="title">Requirements: Data Model</span></h3></div><p>The data model for the parties and groups system must provide support for
-the following types of entities:</p><div class="variablelist"><dl><dt><a name="N14140"></a><span class="term"><strong>10.0 Parties</strong>
+necessary to join a group.</p>
+<p>The parties and groups system must support constraints between a composite
+group <span class="strong"><i>G<sub>P</sub></i></span> and any of its component groups,
+<span class="strong"><i>G<sub>C</sub></i></span>. For example, the system should be able to
+enforce a rule like: Do not allow a party <span class="strong"><i>P</i></span> to become a
+member of <span class="strong"><i>G<sub>C</sub></i></span> unless <span class="strong"><i>P</i></span> is already
+a member of <span class="strong"><i>G<sub>P</sub></i></span>.</p>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="groups-requirements-links"></a>Related Links</h3></div></div>
+<div class="itemizedlist"><ul><li><p><a href="groups-design.html">OpenACS 4 Groups Design</a></p></li></ul></div>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="groups-requirements-data-model"></a>Requirements: Data Model</h3></div></div>
+<p>The data model for the parties and groups system must provide support for
+the following types of entities:</p>
+<div class="variablelist"><dl>
+<dt><span class="term"><span class="strong"><i>10.0 Parties</i></span>
 
-</span></dt><dd><p>A <strong>party</strong> is an entity used to represent either a
-<i>group</i> or a <i>person</i>.</p><p>The data model should enforce these constraints:</p><p><strong>10.10</strong> A party has an email address, which can be
-empty.</p><p><strong>10.20</strong> A party may have multiple email addresses
-associated with it.</p><p><strong>10.30</strong> The email address of a party must be unique within
-an ACS system.</p></dd><dt><a name="N14171"></a><span class="term"><strong>20.0 Groups</strong>
+</span></dt>
+<dd>
+<p>A <span class="strong"><i>party</i></span> is an entity used to represent either a
+<span class="emphasis"><i>group</i></span> or a <span class="emphasis"><i>person</i></span>.</p>
+<p>The data model should enforce these constraints:</p>
+<p>
+<span class="strong"><i>10.10</i></span> A party has an email address, which can be
+empty.</p>
+<p>
+<span class="strong"><i>10.20</i></span> A party may have multiple email addresses
+associated with it.</p>
+<p>
+<span class="strong"><i>10.30</i></span> The email address of a party must be unique within
+an OpenACS system.</p>
+</dd>
+<dt><span class="term"><span class="strong"><i>20.0 Groups</i></span>
 
-</span></dt><dd><p>A <strong>group</strong> is a collection of zero or more parties.</p><p><strong>20.10</strong> The data model should support the subclassing of
-groups via ACS Objects.</p></dd><dt><a name="N14186"></a><span class="term"><strong>30.0 Persons</strong>
+</span></dt>
+<dd>
+<p>A <span class="strong"><i>group</i></span> is a collection of zero or more parties.</p>
+<p>
+<span class="strong"><i>20.10</i></span> The data model should support the subclassing of
+groups via OpenACS Objects.</p>
+</dd>
+<dt><span class="term"><span class="strong"><i>30.0 Persons</i></span>
 
-</span></dt><dd><p>A <strong>person</strong> represents an actual human being, past or
-present.</p><p><a name="groups-requirements-30-10"></a><strong>30.10.</strong> A person must have
-an associated name.</p></dd><dt><a name="N14203"></a><span class="term"><strong>40.0 Users</strong>
+</span></dt>
+<dd>
+<p>A <span class="strong"><i>person</i></span> represents an actual human being, past or
+present.</p>
+<p>
+<a name="groups-requirements-30-10"></a><span class="strong"><i>30.10.</i></span> A person must have
+an associated name.</p>
+</dd>
+<dt><span class="term"><span class="strong"><i>40.0 Users</i></span>
 
-</span></dt><dd><p>A <strong>user</strong> is a person who has registered with an ACS site. A
-user may have additional attributes, such as a screen name.</p><p>The data model should enforce these constraints:</p><p><strong>40.10</strong> A user must have a non-empty email address.</p><p><strong>40.20</strong> Two different users may not have the same email
-address on a single ACS installation; i.e., an email address identifies a
-single user on the system.</p><p><strong>40.30</strong> A user may have multiple email addresses; for
-example, two or more email addresses may identify a single user.</p><p><strong>40.40</strong> A user must have password field which can be
-empty.</p></dd></dl></div><p>The data model for the parties and groups system must provide support for
-the following types of relationships between entities:</p><div class="variablelist"><dl><dt><a name="N14235"></a><span class="term"><strong>50.0 Membership</strong>
+</span></dt>
+<dd>
+<p>A <span class="strong"><i>user</i></span> is a person who has registered with an OpenACS site. A
+user may have additional attributes, such as a screen name.</p>
+<p>The data model should enforce these constraints:</p>
+<p>
+<span class="strong"><i>40.10</i></span> A user must have a non-empty email address.</p>
+<p>
+<span class="strong"><i>40.20</i></span> Two different users may not have the same email
+address on a single OpenACS installation; i.e., an email address identifies a
+single user on the system.</p>
+<p>
+<span class="strong"><i>40.30</i></span> A user may have multiple email addresses; for
+example, two or more email addresses may identify a single user.</p>
+<p>
+<span class="strong"><i>40.40</i></span> A user must have password field which can be
+empty.</p>
+</dd>
+</dl></div>
+<p>The data model for the parties and groups system must provide support for
+the following types of relationships between entities:</p>
+<div class="variablelist"><dl>
+<dt><span class="term"><span class="strong"><i>50.0 Membership</i></span>
 
-</span></dt><dd><p>
-A party <strong>P</strong> is considered a <strong>member</strong> of a
-group <strong>G</strong></p><div class="itemizedlist"><ul><li><a name="N14252"></a><p>when a direct membership relationship exists between <strong>P</strong>
-and <strong>G</strong></p></li><li><a name="N14260"></a><p>or when there exists a direct membership relationship between
-<strong>P</strong> and some group <strong>G<sub>C</sub></strong> and
-<strong>G<sub>C</sub></strong> has a composition relationship (c.f., <a href="groups-requirements.html#groups-requirements-60-0">60.0</a>) with <strong>G</strong>.</p></li></ul></div><p><strong>50.10</strong> A party may be a member of multiple groups.</p><p><strong>50.20</strong> A party may be a member of the same group multiple
+</span></dt>
+<dd>
+<p>
+A party <span class="strong"><i>P</i></span> is considered a <span class="strong"><i>member</i></span> of a
+group <span class="strong"><i>G</i></span>
+</p>
+<div class="itemizedlist"><ul>
+<li><p>when a direct membership relationship exists between <span class="strong"><i>P</i></span>
+and <span class="strong"><i>G</i></span>
+</p></li>
+<li><p>or when there exists a direct membership relationship between
+<span class="strong"><i>P</i></span> and some group <span class="strong"><i>G<sub>C</sub></i></span> and
+<span class="strong"><i>G<sub>C</sub></i></span> has a composition relationship (c.f., <a href="groups-requirements.html#groups-requirements-60-0">60.0</a>) with <span class="strong"><i>G</i></span>.</p></li>
+</ul></div>
+<p>
+<span class="strong"><i>50.10</i></span> A party may be a member of multiple groups.</p>
+<p>
+<span class="strong"><i>50.20</i></span> A party may be a member of the same group multiple
 times only when all the memberships have different types; for example, Jane
 may be a member of The Company by being both an Employee and an
-Executive.</p><p><strong>50.30</strong> A party as a member of itself is not supported.</p><p><strong>50.40</strong> The data model must support membership
-constraints.</p><p><strong>50.50</strong>The data model should support the subclassing of
-membership via ACS Relationships.</p></dd></dl></div><div class="variablelist"><dl><dt><a name="N14304"></a><span class="term">
+Executive.</p>
+<p>
+<span class="strong"><i>50.30</i></span> A party as a member of itself is not supported.</p>
+<p>
+<span class="strong"><i>50.40</i></span> The data model must support membership
+constraints.</p>
+<p>
+<span class="strong"><i>50.50</i></span>The data model should support the subclassing of
+membership via OpenACS Relationships.</p>
+</dd>
+</dl></div>
+<div class="variablelist"><dl>
+<dt><span class="term">
 <a name="groups-requirements-60-0"></a>
-<strong>60.0 Composition</strong>
-</span></dt><dd><p>A group <strong>G<sub>C</sub></strong> is considered a
-<strong>component</strong> of a second group
-<strong>G<sub>P</sub></strong></p><div class="itemizedlist"><ul><li><a name="N14329"></a><p>when a direct composition relationship exists between
-<strong>G<sub>C</sub></strong> and <strong>G<sub>P</sub></strong></p></li><li><a name="N14341"></a><p>or when there exists a direct composition relationship between
-<strong>G<sub>C</sub></strong> and some group <strong>G<sub>i</sub></strong>
-and <strong>G<sub>i</sub></strong> has a composition relationship with
-<strong>G<sub>P</sub></strong>.</p></li></ul></div><p><strong>60.10</strong>A group may be a component of multiple groups.</p><p><strong>60.20</strong>A group as a component of itself is not
-supported.</p><p><strong>60.30</strong>The data model must support component
-constraints.</p><p><strong>60.40</strong>The data model should support the subclassing of
-composition via ACS Relationships.</p></dd></dl></div></div><div id="groups-requirements-api" class="sect2"><div class="titlepage"><h3 class="title"><a name="groups-requirements-api"></a><span class="label">6.7.</span> <span class="title">Requirements: API</span></h3></div><p>The API should let programmers accomplish the following tasks:</p><div class="variablelist"><dl><dt><a name="N14387"></a><span class="term"><strong>70.10 Create a group</strong>
+<span class="strong"><i>60.0 Composition</i></span>
+</span></dt>
+<dd>
+<p>A group <span class="strong"><i>G<sub>C</sub></i></span> is considered a
+<span class="strong"><i>component</i></span> of a second group
+<span class="strong"><i>G<sub>P</sub></i></span>
+</p>
+<div class="itemizedlist"><ul>
+<li><p>when a direct composition relationship exists between
+<span class="strong"><i>G<sub>C</sub></i></span> and <span class="strong"><i>G<sub>P</sub></i></span>
+</p></li>
+<li><p>or when there exists a direct composition relationship between
+<span class="strong"><i>G<sub>C</sub></i></span> and some group <span class="strong"><i>G<sub>i</sub></i></span>
+and <span class="strong"><i>G<sub>i</sub></i></span> has a composition relationship with
+<span class="strong"><i>G<sub>P</sub></i></span>.</p></li>
+</ul></div>
+<p>
+<span class="strong"><i>60.10</i></span>A group may be a component of multiple groups.</p>
+<p>
+<span class="strong"><i>60.20</i></span>A group as a component of itself is not
+supported.</p>
+<p>
+<span class="strong"><i>60.30</i></span>The data model must support component
+constraints.</p>
+<p>
+<span class="strong"><i>60.40</i></span>The data model should support the subclassing of
+composition via OpenACS Relationships.</p>
+</dd>
+</dl></div>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="groups-requirements-api"></a>Requirements: API</h3></div></div>
+<p>The API should let programmers accomplish the following tasks:</p>
+<div class="variablelist"><dl>
+<dt><span class="term"><span class="strong"><i>70.10 Create a group</i></span>
 
-</span></dt><dd><p>The parties and groups system provides a well defined API call that
+</span></dt>
+<dd><p>The parties and groups system provides a well defined API call that
 creates a new group by running the appropriate transactions on the parties
 and groups system data model. This API is subject to the constraints laid out
-in the data model.</p></dd><dt><a name="N14395"></a><span class="term"><strong>70.20 Create a person</strong>
+in the data model.</p></dd>
+<dt><span class="term"><span class="strong"><i>70.20 Create a person</i></span>
 
-</span></dt><dd><p>The parties and groups system provides a well defined API call that
+</span></dt>
+<dd><p>The parties and groups system provides a well defined API call that
 creates a new person by running the appropriate transactions on the parties
 and groups system data model. This API is subject to the constraints laid out
-in the data model.</p></dd><dt><a name="N14403"></a><span class="term"><strong>70.30 Create a user</strong>
+in the data model.</p></dd>
+<dt><span class="term"><span class="strong"><i>70.30 Create a user</i></span>
 
-</span></dt><dd><p>The parties and groups system provides a well defined API call that
+</span></dt>
+<dd><p>The parties and groups system provides a well defined API call that
 creates a new user by running the appropriate transactions on the parties and
 groups system data model. This API is subject to the constraints laid out in
-the data model.</p></dd><dt><a name="N14411"></a><span class="term"><strong>80.10 Refine a person to a user</strong>
+the data model.</p></dd>
+<dt><span class="term"><span class="strong"><i>80.10 Refine a person to a user</i></span>
 
-</span></dt><dd><p>The parties and groups system provides a well defined API call that
+</span></dt>
+<dd><p>The parties and groups system provides a well defined API call that
 creates a new user by running the appropriate transactions on an existing
 person entity. This API is subject to the constraints laid out in the data
-model.</p></dd><dt><a name="N14419"></a><span class="term"><strong>80.30 Demote a user to a person</strong>
+model.</p></dd>
+<dt><span class="term"><span class="strong"><i>80.30 Demote a user to a person</i></span>
 
-</span></dt><dd><p>The parties and groups system provides a well defined API call that
+</span></dt>
+<dd><p>The parties and groups system provides a well defined API call that
 demotes an existing user entity to a person entity by running the appropriate
 transactions on the existing user. This API is subject to the constraints
-laid out in the data model.</p></dd><dt><a name="N14427"></a><span class="term"><strong>90.10 Update a party</strong>
+laid out in the data model.</p></dd>
+<dt><span class="term"><span class="strong"><i>90.10 Update a party</i></span>
 
-</span></dt><dd><p>The programmer should be able to modify, add, and delete attributes on any
-party. This API is subject to the constraints laid out in the data model.</p></dd><dt><a name="N14435"></a><span class="term"><strong>95.10 Get the attributes of a party</strong>
+</span></dt>
+<dd><p>The programmer should be able to modify, add, and delete attributes on any
+party. This API is subject to the constraints laid out in the data model.</p></dd>
+<dt><span class="term"><span class="strong"><i>95.10 Get the attributes of a party</i></span>
 
-</span></dt><dd><p>The programmer should be able to view the attributes on any party. This
-API is subject to the constraints laid out in the data model.</p></dd><dt><a name="N14443"></a><span class="term"><strong>100.10 Delete a party</strong>
+</span></dt>
+<dd><p>The programmer should be able to view the attributes on any party. This
+API is subject to the constraints laid out in the data model.</p></dd>
+<dt><span class="term"><span class="strong"><i>100.10 Delete a party</i></span>
 
 
-</span></dt><dd><p>The system provides an API for deleting a party. This API is subject to
-the constraints laid out in the data model.</p><p><strong>100.30</strong> The system may provide a single API call to remove
-the party from all groups and then delete the party.</p><p><strong>100.40</strong> In the case of a group, the system may provide a
+</span></dt>
+<dd>
+<p>The system provides an API for deleting a party. This API is subject to
+the constraints laid out in the data model.</p>
+<p>
+<span class="strong"><i>100.30</i></span> The system may provide a single API call to remove
+the party from all groups and then delete the party.</p>
+<p>
+<span class="strong"><i>100.40</i></span> In the case of a group, the system may provide a
 single API call to remove all parties from a group and then delete the
-group.</p></dd><dt><a name="N14459"></a><span class="term"><strong>110.0 Add a party as a member of a group</strong>
+group.</p>
+</dd>
+<dt><span class="term"><span class="strong"><i>110.0 Add a party as a member of a group</i></span>
 
-</span></dt><dd><p>The parties and groups system provides an API for adding a party as a
+</span></dt>
+<dd><p>The parties and groups system provides an API for adding a party as a
 member of a group. This API is subject to the constraints laid out in the
-data model.</p></dd><dt><a name="N14467"></a><span class="term"><strong>115.0 Add a group as a component of a second group</strong>
+data model.</p></dd>
+<dt><span class="term"><span class="strong"><i>115.0 Add a group as a component of a second group</i></span>
 
-</span></dt><dd><p>The parties and groups system provides an API for adding a group as a
+</span></dt>
+<dd><p>The parties and groups system provides an API for adding a group as a
 component of a second group. This API is subject to the constraints laid out
-in the data model.</p></dd><dt><a name="N14475"></a><span class="term"><strong>120.0 Remove a party as a member of a group</strong>
+in the data model.</p></dd>
+<dt><span class="term"><span class="strong"><i>120.0 Remove a party as a member of a group</i></span>
 
-</span></dt><dd><p>The parties and groups system provides an API for deleting a party's
+</span></dt>
+<dd><p>The parties and groups system provides an API for deleting a party's
 membership in a group. This API is subject to the constraints laid out in the
-data model.</p></dd><dt><a name="N14483"></a><span class="term"><strong>125.0 Remove a group as a component of a second
-group</strong>
+data model.</p></dd>
+<dt><span class="term"><span class="strong"><i>125.0 Remove a group as a component of a second
+group</i></span>
 
-</span></dt><dd><p>The parties and groups system provides an API for deleting a group's
+</span></dt>
+<dd><p>The parties and groups system provides an API for deleting a group's
 composition in a second group. This API is subject to the constraints laid
-out in the data model.</p></dd><dt><a name="N14491"></a><span class="term"><strong>130.0 Membership check</strong>
+out in the data model.</p></dd>
+<dt><span class="term"><span class="strong"><i>130.0 Membership check</i></span>
 
 
-</span></dt><dd><p>The parties and groups system provides an API for answering the question:
-"Is party <strong>P</strong> a member of group
-<strong>G</strong>?"</p></dd><dt><a name="N14505"></a><span class="term"><strong>135.0 Composition check</strong>
+</span></dt>
+<dd><p>The parties and groups system provides an API for answering the question:
+&quot;Is party <span class="strong"><i>P</i></span> a member of group
+<span class="strong"><i>G</i></span>?&quot;</p></dd>
+<dt><span class="term"><span class="strong"><i>135.0 Composition check</i></span>
 
 
-</span></dt><dd><p>The parties and groups system provides an API for answering the question:
-"Is group <strong>G<sub>C</sub></strong> a component of group
-<strong>G<sub>P</sub></strong>?"</p></dd><dt><a name="N14523"></a><span class="term"><strong>140.0 Get members query</strong>
+</span></dt>
+<dd><p>The parties and groups system provides an API for answering the question:
+&quot;Is group <span class="strong"><i>G<sub>C</sub></i></span> a component of group
+<span class="strong"><i>G<sub>P</sub></i></span>?&quot;</p></dd>
+<dt><span class="term"><span class="strong"><i>140.0 Get members query</i></span>
 
 
-</span></dt><dd><p>The parties and groups system provides an API for answering the question:
-"Which parties are members of group <strong>G</strong>?"</p></dd><dt><a name="N14534"></a><span class="term"><strong>145.0 Get components query</strong>
+</span></dt>
+<dd><p>The parties and groups system provides an API for answering the question:
+&quot;Which parties are members of group <span class="strong"><i>G</i></span>?&quot;</p></dd>
+<dt><span class="term"><span class="strong"><i>145.0 Get components query</i></span>
 
 
-</span></dt><dd><p>The parties and groups system provides an API for answering the question:
-"Which groups are components of group <strong>G</strong>?"</p></dd><dt><a name="N14545"></a><span class="term"><strong>150.0 Member-of-groups query</strong>
+</span></dt>
+<dd><p>The parties and groups system provides an API for answering the question:
+&quot;Which groups are components of group <span class="strong"><i>G</i></span>?&quot;</p></dd>
+<dt><span class="term"><span class="strong"><i>150.0 Member-of-groups query</i></span>
 
 
-</span></dt><dd><p>The parties and groups system provides an API for answering the question:
-"Of which groups is party <strong>P</strong> a member?"</p></dd><dt><a name="N14556"></a><span class="term"><strong>155.0 Component-of-groups query</strong>
+</span></dt>
+<dd><p>The parties and groups system provides an API for answering the question:
+&quot;Of which groups is party <span class="strong"><i>P</i></span> a member?&quot;</p></dd>
+<dt><span class="term"><span class="strong"><i>155.0 Component-of-groups query</i></span>
 
 
-</span></dt><dd><p>The parties and groups system provides an API for answering the question:
-"Of which groups is group <strong>G</strong> a component?"</p></dd><dt><a name="N14567"></a><span class="term"><strong>160.0 Allowed membership check</strong>
+</span></dt>
+<dd><p>The parties and groups system provides an API for answering the question:
+&quot;Of which groups is group <span class="strong"><i>G</i></span> a component?&quot;</p></dd>
+<dt><span class="term"><span class="strong"><i>160.0 Allowed membership check</i></span>
 
 
-</span></dt><dd><p>The parties and groups system provides an API for answering the question:
-"Is party <strong>P</strong> allowed to become a member of group
-<strong>G</strong>?"</p></dd><dt><a name="N14581"></a><span class="term"><strong>165.0 Allowed composition check</strong>
+</span></dt>
+<dd><p>The parties and groups system provides an API for answering the question:
+&quot;Is party <span class="strong"><i>P</i></span> allowed to become a member of group
+<span class="strong"><i>G</i></span>?&quot;</p></dd>
+<dt><span class="term"><span class="strong"><i>165.0 Allowed composition check</i></span>
 
 
-</span></dt><dd><p>The parties and groups system provides an API for answering the question:
-"Is group <strong>G<sub>C</sub></strong> allowed to become a component
-of group <strong>G<sub>P</sub></strong>?"</p></dd><dt><a name="N14599"></a><span class="term"><strong>170.0 Efficiency</strong>
+</span></dt>
+<dd><p>The parties and groups system provides an API for answering the question:
+&quot;Is group <span class="strong"><i>G<sub>C</sub></i></span> allowed to become a component
+of group <span class="strong"><i>G<sub>P</sub></i></span>?&quot;</p></dd>
+<dt><span class="term"><span class="strong"><i>170.0 Efficiency</i></span>
 
 
-</span></dt><dd><p>Since many pages at a site may check membership in a group before serving
+</span></dt>
+<dd><p>Since many pages at a site may check membership in a group before serving
 a page (e.g., as part of a general permissions check), the data model must
 support the efficient storage and retrieval of party attributes and
-membership.</p></dd><dt><a name="N14607"></a><span class="term"><strong>180.0 Ease of Use</strong>
+membership.</p></dd>
+<dt><span class="term"><span class="strong"><i>180.0 Ease of Use</i></span>
 
 
-</span></dt><dd><p>Since many SQL queries will check membership in a group as part of the
+</span></dt>
+<dd><p>Since many SQL queries will check membership in a group as part of the
 <tt>where</tt> clause, whatever mechanism is used to check membership in SQL
-should be fairly small and simple.</p></dd></dl></div></div><div id="groups-requirements-ui" class="sect2"><div class="titlepage"><h3 class="title"><a name="groups-requirements-ui"></a><span class="label">6.8.</span> <span class="title">Requirements: User Interface</span></h3></div><p>The user interface is a set of HTML pages that are used to drive the
-underlying API. The user interface may provide the following functions:</p><div class="itemizedlist"><ul><li><a name="N14626"></a><p><strong>200.0</strong> Create a party</p></li><li><a name="N14631"></a><p><strong>210.0</strong> View the attributes of a party</p></li><li><a name="N14636"></a><p><strong>220.0</strong> Update the attributes of a party</p></li><li><a name="N14641"></a><p><strong>240.0</strong> Delete a party</p></li><li><a name="N14646"></a><p><strong>250.0</strong> Add a party to a group</p></li><li><a name="N14651"></a><p><strong>260.0</strong> Remove a party from a group</p></li><li><a name="N14656"></a><p><strong>270.0</strong> Perform the membership and composition checks
-outlined in 130.x to 165.x</p></li></ul></div></div><div id="groups-requirements-rev-history" class="sect2"><div class="titlepage"><h3 class="title"><a name="groups-requirements-rev-history"></a><span class="label">6.9.</span> <span class="title">Revision History</span></h3></div><div class="informaltable" id="N14665"><a name="N14665"></a><table cellpadding="5" cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><tbody><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional"><strong xmlns="">Document Revision #</strong></td><td xmlns="http://www.w3.org/TR/xhtml1/transitional"><strong xmlns="">Action Taken, Notes</strong></td><td xmlns="http://www.w3.org/TR/xhtml1/transitional"><strong xmlns="">When?</strong></td><td xmlns="http://www.w3.org/TR/xhtml1/transitional"><strong xmlns="">By Whom?</strong></td></tr><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional">0.1</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Creation</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">08/16/2000</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Rafael Schloming</td></tr><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional">0.2</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Initial revision</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">08/19/2000</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Mark Thomas</td></tr><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional">0.3</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Edited and reviewed, conforms to requirements template</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">08/23/2000</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Kai Wu</td></tr><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional">0.4</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Further revised, added UI requirements</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">08/24/2000</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Mark Thomas</td></tr><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional">0.5</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Final edits, pending freeze</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">08/24/2000</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Kai Wu</td></tr><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional">0.6</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">More revisions, added composition requirements</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">08/30/2000</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Mark Thomas</td></tr><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional">0.7</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">More revisions, added composition requirements</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">09/08/2000</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">Mark Thomas</td></tr></tbody></table></div></div></div><div class="navfooter"><hr size="1" noshade><table width="100%"><tr><td width="40%" align="left"><a class="bottomnav" href="permissions-design.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a href="mailto:acs-docs@arsdigita.com"><address class="nav">acs-docs@arsdigita.com</address></a></td><td width="40%" align="right">&nbsp;<a class="bottomnav" href="groups-design.html">Next</a></td></tr></table></div></body></html>
+should be fairly small and simple.</p></dd>
+</dl></div>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="groups-requirements-ui"></a>Requirements: User Interface</h3></div></div>
+<p>The user interface is a set of HTML pages that are used to drive the
+underlying API. The user interface may provide the following functions:</p>
+<div class="itemizedlist"><ul>
+<li><p>
+<span class="strong"><i>200.0</i></span> Create a party</p></li>
+<li><p>
+<span class="strong"><i>210.0</i></span> View the attributes of a party</p></li>
+<li><p>
+<span class="strong"><i>220.0</i></span> Update the attributes of a party</p></li>
+<li><p>
+<span class="strong"><i>240.0</i></span> Delete a party</p></li>
+<li><p>
+<span class="strong"><i>250.0</i></span> Add a party to a group</p></li>
+<li><p>
+<span class="strong"><i>260.0</i></span> Remove a party from a group</p></li>
+<li><p>
+<span class="strong"><i>270.0</i></span> Perform the membership and composition checks
+outlined in 130.x to 165.x</p></li>
+</ul></div>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="groups-requirements-rev-history"></a>Revision History</h3></div></div>
+<div class="informaltable"><table border="1">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><span class="strong"><i>Document Revision #</i></span></td>
+<td><span class="strong"><i>Action Taken, Notes</i></span></td>
+<td><span class="strong"><i>When?</i></span></td>
+<td><span class="strong"><i>By Whom?</i></span></td>
+</tr>
+<tr>
+<td>0.1</td>
+<td>Creation</td>
+<td>08/16/2000</td>
+<td>Rafael Schloming</td>
+</tr>
+<tr>
+<td>0.2</td>
+<td>Initial revision</td>
+<td>08/19/2000</td>
+<td>Mark Thomas</td>
+</tr>
+<tr>
+<td>0.3</td>
+<td>Edited and reviewed, conforms to requirements template</td>
+<td>08/23/2000</td>
+<td>Kai Wu</td>
+</tr>
+<tr>
+<td>0.4</td>
+<td>Further revised, added UI requirements</td>
+<td>08/24/2000</td>
+<td>Mark Thomas</td>
+</tr>
+<tr>
+<td>0.5</td>
+<td>Final edits, pending freeze</td>
+<td>08/24/2000</td>
+<td>Kai Wu</td>
+</tr>
+<tr>
+<td>0.6</td>
+<td>More revisions, added composition requirements</td>
+<td>08/30/2000</td>
+<td>Mark Thomas</td>
+</tr>
+<tr>
+<td>0.7</td>
+<td>More revisions, added composition requirements</td>
+<td>09/08/2000</td>
+<td>Mark Thomas</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="permissions-design.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="groups-design.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left">OpenACS 4 Permissions Design </td>
+<td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td>
+<td width="40%" align="right"> OpenACS 4 Groups Design</td>
+</tr>
+</table>
+<hr>
+<address><a href="mailto:rmello@cc.usu.edu">
+			rmello@cc.usu.edu
+		  </a></address>
+<address><a href="mailto:vinod@kurup.com">
+			vinod@kurup.com
+		  </a></address>
+</div>
+</body>
+</html>

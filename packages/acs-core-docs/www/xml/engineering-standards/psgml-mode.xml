@@ -31,11 +31,11 @@ you if it found it or not.</para>
 things you can do:</para>
 
 <orderedlist>
-<listitem><para><phrase>On Linux:</phrase> Get the <ulink url="ftp://sourceware.cygnus.com:/pub/docbook-tools/docware/RPMS/noarch/psgml-1.2.1-1.noarch.rpm">
+<listitem><para>On Linux: Get the <ulink url="ftp://sourceware.cygnus.com:/pub/docbook-tools/docware/RPMS/noarch/psgml-1.2.1-1.noarch.rpm">
 psgml rpm</ulink> from <ulink url="http://sources.redhat.com/docbook-tools/">RedHat&#39;s
 docbook-tools</ulink> and install it as usual.</para></listitem>
 
-<listitem><para><phrase>On other systems:</phrase> Get the tarball from the <ulink url="http://www.lysator.liu.se/~lenst/about_psgml/">PSGML Website.</ulink>
+<listitem><para>On other systems: Get the tarball from the <ulink url="http://www.lysator.liu.se/~lenst/about_psgml/">PSGML Website.</ulink>
 Unpack it and follow the install instructions.</para></listitem>
 </orderedlist>
 
@@ -134,7 +134,7 @@ into the <computeroutput>.emacs</computeroutput> file:</para>
 </sect2>
 
 <sect2 id="psgml-mode-doctype">
-<title>What is a <phrase><computeroutput>DOCTYPE</computeroutput></phrase> ?</title>
+<title>What is a <computeroutput>DOCTYPE</computeroutput> ?</title>
 
 
 <para>All SGML and XML documents that should conform to a DTD have to declare a
@@ -176,12 +176,14 @@ mode from start to finish. Barring that, here are some handy commands:</para>
  
 <informaltable frame="none">
 <tgroup cols="2">
-<tbody>
+<thead>
 <row>
-<entry><phrase>Key</phrase></entry>
-<entry><phrase>Command</phrase></entry>
+<entry>Key</entry>
+<entry>Command</entry>
 </row>
+</thead>
 
+<tbody>
 <row>
 <entry><computeroutput>C-c C-e</computeroutput></entry>
 <entry>Insert an element. Uses completion and only lets you insert elements that

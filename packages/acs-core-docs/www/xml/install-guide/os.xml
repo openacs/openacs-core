@@ -69,8 +69,8 @@
 	  <tgroup cols="2">
 		<thead>
 		  <row>
-			<entry><phrase>Requirement</phrase></entry>
-			<entry><phrase>Reason</phrase></entry>
+			<entry>Requirement</entry>
+			<entry>Reason</entry>
 		  </row>
 		</thead>
 

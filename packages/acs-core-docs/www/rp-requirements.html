@@ -1,25 +1,131 @@
-<html xmlns:lxslt="http://xml.apache.org/xslt" xmlns:saxon="http://icl.com/saxon" xmlns:xalanredirect="org.apache.xalan.xslt.extensions.Redirect"><head>
-<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>15. ACS 4 Request Processor Requirements</title><link rel="stylesheet" href="ad.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.24"><link rel="home" href="index.html" title="ACS Core"><link rel="up" href="kernel-doc.html" title="7. Kernel Documentation"><link rel="previous" href="security-notes.html" title="14. ACS 4 Security Notes"><link rel="next" href="rp-design.html" title="16. ACS 4 Request Processor Design"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><a href="http://www.openacs.org/"><img src="images/alex.jpg" border="0"></a><br><br><a class="topnav" href="/">Home</a><span class="topnav"> : </span><a class="topnav" href="index">Documentation</a><span class="topnav"> : </span><a class="topnav" href="acs-dev.html">Part III. For ACS Developers</a><span class="topnav"> : </span><a class="topnav" href="kernel-doc.html">7. Kernel Documentation</a><span class="topnav"> : </span><strong class="topnav">15. ACS 4 Request Processor Requirements&nbsp;</strong><hr size="1" noshade><div id="rp-requirements" class="sect1"><div class="titlepage"><h2 class="title" style="clear: all"><a name="rp-requirements"></a><span class="label">15.</span> <span class="title">ACS 4 Request Processor Requirements</span></h2></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt>15.1. <a href="rp-requirements.html#rp-requirements-intro">Introduction</a></dt><dt>15.2. <a href="rp-requirements.html#rp-requirements-vision">Vision Statement</a></dt><dt>15.3. <a href="rp-requirements.html#rp-requirements-system-overview">System Overview</a></dt><dt>15.4. <a href="rp-requirements.html#rp-requirements-links">Related Links</a></dt><dt>15.5. <a href="rp-requirements.html#rp-requirements-req">Requirements</a></dt></dl></div><p><p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type">
+<title>OpenACS 4 Request Processor Requirements</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.45">
+<link rel="home" href="index.html" title="OpenACS Documentation">
+<link rel="up" href="kernel-doc.html" title="Chapter 7. Kernel Documentation">
+<link rel="previous" href="security-notes.html" title="OpenACS 4 Security Notes">
+<link rel="next" href="rp-design.html" title="OpenACS 4 Request Processor Design">
+<link rel="stylesheet" href="openacs.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr>
+<td width="20%" align="left">
+<a accesskey="p" href="security-notes.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 7. Kernel Documentation</th>
+<td width="20%" align="right"> <a accesskey="n" href="rp-design.html">Next</a>
+</td>
+</tr></table>
+<hr>
+</div>
+<div class="sect1">
+<div class="titlepage"><div><h2 class="title" style="clear: both">
+<a name="rp-requirements"></a>OpenACS 4 Request Processor Requirements</h2></div></div>
+<div class="authorblurb"><p>
 by <a href="http://planitia.org" target="_top">Rafael H. Schloming</a> 
-</p></p><div id="rp-requirements-intro" class="sect2"><div class="titlepage"><h3 class="title"><a name="rp-requirements-intro"></a><span class="label">15.1.</span> <span class="title">Introduction</span></h3></div><p>The following is a requirements document for the ACS 4.0 request
+</p></div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="rp-requirements-intro"></a>Introduction</h3></div></div>
+<p>The following is a requirements document for the OpenACS 4.0 request
 processor. The major enhancements in the 4.0 version include a more
 sophisticated directory mapping system that allows package pageroots to be
 mounted at arbitrary urls, and tighter integration with the database to allow
-for flexible user controlled url structures, and subsites.</p></div><div id="rp-requirements-vision" class="sect2"><div class="titlepage"><h3 class="title"><a name="rp-requirements-vision"></a><span class="label">15.2.</span> <span class="title">Vision Statement</span></h3></div><p>Most web servers are designed to serve pages from exactly one static
+for flexible user controlled url structures, and subsites.</p>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="rp-requirements-vision"></a>Vision Statement</h3></div></div>
+<p>Most web servers are designed to serve pages from exactly one static
 pageroot. This restriction can become cumbersome when trying to build a web
-toolkit full of reusable and reconfigurable components.</p></div><div id="rp-requirements-system-overview" class="sect2"><div class="titlepage"><h3 class="title"><a name="rp-requirements-system-overview"></a><span class="label">15.3.</span> <span class="title">System Overview</span></h3></div><p>The request processor's functionality can be split into two main
-pieces.</p><div class="orderedlist"><ol type="1"><li><a name="N18932"></a><p>Set up the environment in which a server side script expects to run. This
-includes things like:</p><div class="itemizedlist"><ul><li><a name="N18936"></a><p>Initialize common variables associated with a request.</p></li><li><a name="N18939"></a><p>Authenticate the connecting party.</p></li><li><a name="N18942"></a><p>Check that the connecting party is authorized to proceed with the
-request.</p></li><li><a name="N18945"></a><p>Invoke any filters associated with the request URI.</p></li></ul></div></li><li><a name="N18948"></a><p>Determine to which entity the request URI maps, and deliver the content
+toolkit full of reusable and reconfigurable components.</p>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="rp-requirements-system-overview"></a>System Overview</h3></div></div>
+<p>The request processor's functionality can be split into two main
+pieces.</p>
+<div class="orderedlist"><ol type="1">
+<li>
+<p>Set up the environment in which a server side script expects to run. This
+includes things like:</p>
+<div class="itemizedlist"><ul>
+<li><p>Initialize common variables associated with a request.</p></li>
+<li><p>Authenticate the connecting party.</p></li>
+<li><p>Check that the connecting party is authorized to proceed with the
+request.</p></li>
+<li><p>Invoke any filters associated with the request URI.</p></li>
+</ul></div>
+</li>
+<li><p>Determine to which entity the request URI maps, and deliver the content
 provided by this entity. If this entity is a proc, then it is invoked. If
 this entitty is a file then this step involves determining the file type, and
 the manner in which the file must be processed to produce content appropriate
 for the connecting party. Eventually this may also require determining the
 capabilities of the connecting browser and choosing the most appropriate form
-for the delivered content.</p></li></ol></div><p>It is essential that any errors that occur during the above steps be
-reported to developers in an easily decipherable manner.</p></div><div id="rp-requirements-links" class="sect2"><div class="titlepage"><h3 class="title"><a name="rp-requirements-links"></a><span class="label">15.4.</span> <span class="title">Related Links</span></h3></div><p><a href="rp-design.html">ACS 4 Request Processor Design</a></p></div><div id="rp-requirements-req" class="sect2"><div class="titlepage"><h3 class="title"><a name="rp-requirements-req"></a><span class="label">15.5.</span> <span class="title">Requirements</span></h3></div><p><strong>10.0 Multiple Pageroots</strong></p><blockquote class="blockquote"><p><strong>10.10</strong> Pageroots may be combined into one URL space.</p><p><strong>10.20</strong> Pageroots may be mounted at more than one location in the URL
-space.</p></blockquote><p><strong>20.0 Application Context</strong></p><blockquote class="blockquote"><p><strong>20.10</strong> The request processor must be able to determine a primary context
+for the delivered content.</p></li>
+</ol></div>
+<p>It is essential that any errors that occur during the above steps be
+reported to developers in an easily decipherable manner.</p>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="rp-requirements-links"></a>Related Links</h3></div></div>
+<p><a href="rp-design.html">OpenACS 4 Request Processor Design</a></p>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="rp-requirements-req"></a>Requirements</h3></div></div>
+<p><span class="strong"><i>10.0 Multiple Pageroots</i></span></p>
+<blockquote class="blockquote">
+<p>
+<span class="strong"><i>10.10</i></span> Pageroots may be combined into one URL space.</p>
+<p>
+<span class="strong"><i>10.20</i></span> Pageroots may be mounted at more than one location in the URL
+space.</p>
+</blockquote>
+<p><span class="strong"><i>20.0 Application Context</i></span></p>
+<blockquote class="blockquote"><p>
+<span class="strong"><i>20.10</i></span> The request processor must be able to determine a primary context
 or state associated with a pageroot based on it's location within the URL
-space.</p></blockquote><p><strong>30.0 Authentication</strong></p><blockquote class="blockquote"><p><strong>30.10</strong> The request processor must be able to verify that the connecting
-browser actually represents the party it claims to represent.</p></blockquote><p><strong>40.0 Authorization</strong></p><blockquote class="blockquote"><p><strong>40.10</strong> The request processor must be able to verify that the party the
-connecting browser represents is allowed to make the request.</p></blockquote><p><strong>50.0 Scalability</strong></p></div></div><div class="navfooter"><hr size="1" noshade><table width="100%"><tr><td width="40%" align="left"><a class="bottomnav" href="security-notes.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a href="mailto:acs-docs@arsdigita.com"><address class="nav">acs-docs@arsdigita.com</address></a></td><td width="40%" align="right">&nbsp;<a class="bottomnav" href="rp-design.html">Next</a></td></tr></table></div></body></html>
+space.</p></blockquote>
+<p><span class="strong"><i>30.0 Authentication</i></span></p>
+<blockquote class="blockquote"><p>
+<span class="strong"><i>30.10</i></span> The request processor must be able to verify that the connecting
+browser actually represents the party it claims to represent.</p></blockquote>
+<p><span class="strong"><i>40.0 Authorization</i></span></p>
+<blockquote class="blockquote"><p>
+<span class="strong"><i>40.10</i></span> The request processor must be able to verify that the party the
+connecting browser represents is allowed to make the request.</p></blockquote>
+<p><span class="strong"><i>50.0 Scalability</i></span></p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="security-notes.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="rp-design.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left">OpenACS 4 Security Notes </td>
+<td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td>
+<td width="40%" align="right"> OpenACS 4 Request Processor Design</td>
+</tr>
+</table>
+<hr>
+<address><a href="mailto:rmello@cc.usu.edu">
+			rmello@cc.usu.edu
+		  </a></address>
+<address><a href="mailto:vinod@kurup.com">
+			vinod@kurup.com
+		  </a></address>
+</div>
+</body>
+</html>

@@ -1,51 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<body bgcolor=white>
-<table width=100%><tr><td valign="top" width=30%>
-<img src="images/alex.jpg" border="0">
-</td><td valign="middle">
-<font size=+2><b>OpenACS 4.2 Alpha</b></font>
-</td></tr></table><p>
-This is an alpha release of OpenACS 4.2.   This release has been subjected to an organized test
-effort, but please bear in mind that we are still in the process of developing testing tools,
-methodology, and scripts.
-<p>Please report bugs using our
-<a href="http://openacs.org/sdm/one-package.tcl?package_id=9">
-Software Development Manager</a> at the
-<a href="http://openacs.org/">OpenACS website</a>.  
-The latest information on installating this alpha release under Oracle 8.1.6/7 or
-PostgreSQL 7.1.* can be found there as well.   Currently the toolkit will not 
-install under Oracle 9i due to Oracle having made "delete" an illegal name for
-PL/SQL procedures and functions.
-<p>You may want to begin by reading Ars Digita's original documentation
-on installing under <a href="unix-install.html">Unix/Linux</a> or
-<a href="win-install.html">Windows</a>.  The basic process is unchanged, and we
-expect to update the documentation for our beta release.
-<p>After installation, the full documentation set for acs-core provided in the original
-aD release can be found by visiting
-http://[your-host]/doc.
-<h4>Note on installing packages</h4>
-The APM will die if you attempt to install more than a few
-packages at once in the Oracle version.  This is due to the list of required
-files being stored in a varchar which is limited in Oracle to being 4,000 bytes long.
-<h4>Site Wide Searching</h4>
-If you're using Oracle 8.1.6 or 8.1.7 Enterprise Edition you may want to uncomment
-the SQL that causes InterMedia to keep online searching online while indexing.
-The feature doesn't exist in Standard Edition and OpenACS 4 now defaults to being 
-loadable in SE.  Just grep for 'sync' to find the code.
-<p>Also be sure to read the documentation in the Site Wide Search package's
-sql/oracle directory.  The APM doesn't execute the SQL for this package, in
-part due to the fact that some steps need to be run as the Oracle user 
-'ctxsys'.
+<head>
+<meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type">
+<title>OpenACS 4.2-beta Release Notes</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.45">
+<link rel="home" href="index.html" title="OpenACS Documentation">
+<link rel="up" href="general-documents.html" title="Chapter 1. High level information: What is OpenACS?">
+<link rel="previous" href="ch01s01.html" title="Overview">
+<link rel="next" href="acs-admin.html" title="Part Part II. For OpenACS Admins">
+<link rel="stylesheet" href="openacs.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr>
+<td width="20%" align="left">
+<a accesskey="p" href="ch01s01.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 1. High level information: What is OpenACS?</th>
+<td width="20%" align="right"> <a accesskey="n" href="acs-admin.html">Next</a>
+</td>
+</tr></table>
+<hr>
+</div>
+<div class="sect1">
+<div class="titlepage"><div><h2 class="title" style="clear: both">
+<a name="release-notes"></a>OpenACS 4.2-beta Release Notes</h2></div></div>
+<div class="authorblurb"><p>
+	  by <a href="mailto:dhogaza@pacifier.com" target="_top">Don Baccus</a> and
+	  <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a>
+	</p></div>
 <p>
-If you're using PostgreSQL be sure to read the documentation on installing the
-Open FTS driver for OpenACS.  It's included in the package as a text file.  As
-with the Oracle version, there are steps you must take manually in order to
-get this feature working.
-<h4>Testing Notes</h4>
-Here are some notes from our testing group.  While not quite up to date it should
-give you some ideas of where things stand.  
-<blockquote><pre>
-Summarised Testing Status
+	This is a beta release of OpenACS 4.2.  This release has been subjected
+	to an organized test effort, but please bear in mind that we are still
+	in the process of developing testing tools, methodology, and scripts.
+  </p>
+<p>
+	Please report bugs using our
+	<a href="http://openacs.org/sdm/one-package.tcl&amp;package_id=9" target="_top">
+	  Software Development Manager</a> at the <a href="http://openacs.org/" target="_top">OpenACS website</a>.  The latest
+	information on installating this alpha release under Oracle 8.1.6/7
+	or PostgreSQL 7.1.* can be found there as well.  Currently the
+	toolkit will not install under Oracle 9i due to Oracle having made
+	&quot;delete&quot; an illegal name for PL/SQL procedures and functions.
+  </p>
+<p>
+	You may want to begin by reading our installation documentation for <a href="unix-install.html">Installing on Unix/Linux</a> or <a href="win-install.html">Installing on Windows</a>.  Note that the Windows
+	documentation is not current for OpenACS4.
+  </p>
+<p>
+	After installation, the full documentation set can be found by visiting
+	http://[your-host]/doc. Not all pieces are updated for OpenACS 4 at
+	this moment.
+  </p>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="release-notes-sws"></a>Site Wide Searching</h3></div></div>
+<p>
+	  If you're using Oracle 8.1.6 or 8.1.7 Enterprise Edition you may want
+	  to uncomment the SQL that causes InterMedia to keep online searching
+	  online while indexing.  The feature doesn't exist in Standard Edition
+	  and OpenACS 4 now defaults to being loadable in SE.  Just grep for
+	  'sync' to find the code.  
+	</p>
+<p>
+	  Also be sure to read the documentation in the Site Wide Search
+	  package's sql/oracle directory.  The APM doesn't execute the SQL for
+	  this package, in part due to the fact that some steps need to be run
+	  as the Oracle user 'ctxsys'.
+	</p>
+<p>
+	  If you're using PostgreSQL be sure to read the documentation on
+	  installing the Open FTS driver for OpenACS.  It's included in the
+	  package as a text file and is also summarized at the end of the
+	  installation documentation in the section, <a href="nextsteps.html#install-next-openfts">Set Up OpenFTS</a>.  As with the Oracle version, there
+	  are steps you must take manually in order to get this feature
+	  working.
+	</p>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="release-notes-testing"></a>Testing Notes</h3></div></div>
+<p>
+	  Here are some notes from our testing group.  While not quite up to
+	  date it should give you some ideas of where things stand.
+	</p>
+<pre class="programlisting">
+ Summarised Testing Status
 
 Skin
 Minimal
@@ -201,7 +240,33 @@ Package: calendar
 Test Coverage: Minimal
 Suggested Status: Alpha
 Comments: Don tested personally
-
-</pre></blockquote>
+	</pre>
+</div>
+<p><div class="cvstag">($Id$)</div></p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="ch01s01.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="acs-admin.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left">Overview </td>
+<td width="20%" align="center"><a accesskey="u" href="general-documents.html">Up</a></td>
+<td width="40%" align="right"> Part Part II. For OpenACS Admins</td>
+</tr>
+</table>
+<hr>
+<address><a href="mailto:rmello@cc.usu.edu">
+			rmello@cc.usu.edu
+		  </a></address>
+<address><a href="mailto:vinod@kurup.com">
+			vinod@kurup.com
+		  </a></address>
+</div>
 </body>
 </html>

@@ -1,185 +1,373 @@
-<html xmlns:lxslt="http://xml.apache.org/xslt" xmlns:saxon="http://icl.com/saxon" xmlns:xalanredirect="org.apache.xalan.xslt.extensions.Redirect"><head>
-<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>6. Installing AOlserver 3.1</title><link rel="stylesheet" href="ad.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.24"><link rel="home" href="index.html" title="ACS Core"><link rel="up" href="unix-install.html" title="2. Installing on Unix/Linux"><link rel="previous" href="oracle.html" title="5. Installing Oracle 8.1.6"><link rel="next" href="acs.html" title="7. Installing the ArsDigita Community System v 4.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><a href="http://www.openacs.org/"><img src="images/alex.jpg" border="0" ></a><br><br><a class="topnav" href="/">Home</a><span class="topnav"> : </span><a class="topnav" href="index">Documentation</a><span class="topnav"> : </span><a class="topnav" href="acs-admin.html">Part II. For ACS Admins</a><span class="topnav"> : </span><a class="topnav" href="unix-install.html">2. Installing on Unix/Linux</a><span class="topnav"> : </span><strong class="topnav">6. Installing AOlserver 3.1&nbsp;</strong><hr size="1" noshade><div id="aolserver" class="sect1"><div class="titlepage"><h2 class="title" style="clear: all"><a name="aolserver"></a><span class="label">6.</span> <span class="title">Installing AOlserver 3.1</span></h2></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt>6.1. <a href="aolserver.html#install-aolserver-user-accounts">Setup User Accounts and Paths.</a></dt><dt>6.2. <a href="aolserver.html#install-aolserver-download">Download the Distribution</a></dt><dt>6.3. <a href="aolserver.html#install-aolserver-compile">Compile AOLserver</a></dt><dt>6.4. <a href="aolserver.html#install-aolserver-compile-oradriver">Compile the Oracle Driver</a></dt><dt>6.5. <a href="aolserver.html#install-aolserver-installaol">Install AOLserver 3.1</a></dt><dt>6.6. <a href="aolserver.html#install-aolserver-troubleshooting">Troubleshooting the AOLserver Install</a></dt><dt>6.7. <a href="aolserver.html#install-aolserver-defaults">Defaults</a></dt></dl></div><div id="install-aolserver-user-accounts" class="sect2"><div class="titlepage"><h3 class="title"><a name="install-aolserver-user-accounts"></a><span class="label">6.1.</span> <span class="title">Setup User Accounts and Paths.</span></h3></div><p>You will need a special user account for running the ACS. We recommend
-    that you call this user <strong>nsadmin</strong>. This user will have a
-    special home directory for storing AOLserver,
-    <strong>/home/aol31</strong> and a special group for the server files,
-    <strong>web</strong> as well. You will also need to create directories
-    for AOLserver, <strong>/usr/local/aolserver</strong>, and for web
-    services, <strong>/web</strong> to reside in. You must execute this step
-    as root.</p><div class="itemizedlist"><ul><li><a name="N2567"></a><p>
-        Open up a terminal and run these commands: </p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
-$ su -
-; Enter ROOT password when prompted
-# groupadd nsadmin
-# groupadd web
-# mkdir /home/aol31
-# useradd -g nsadmin -G dba,web -d /home/aol31 nsadmin
-# passwd nsadmin
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type">
+<title>Install AOLserver 3.3+ad13</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.45">
+<link rel="home" href="index.html" title="OpenACS Documentation">
+<link rel="up" href="unix-install.html" title="Chapter 2. Installing on Unix/Linux">
+<link rel="previous" href="postgres.html" title="Install PostgreSQL 7.1.3">
+<link rel="next" href="openacs.html" title="Install OpenACS 4">
+<link rel="stylesheet" href="openacs.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr>
+<td width="20%" align="left">
+<a accesskey="p" href="postgres.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 2. Installing on Unix/Linux</th>
+<td width="20%" align="right"> <a accesskey="n" href="openacs.html">Next</a>
+</td>
+</tr></table>
+<hr>
+</div>
+<div class="sect1">
+<div class="titlepage"><div><h2 class="title" style="clear: both">
+<a name="aolserver"></a>Install AOLserver 3.3+ad13</h2></div></div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="install-aolserver-download"></a>Download the Distribution</h3></div></div>
+<p>
+	  Mat Kovach is graciously maintaining an AOLServer distribution that
+	  includes all the patches and modules needed to run OpenACS 4. These
+	  instructions will describe how to install using his source
+	  distribution. He also has binaries for SuSE 7.3 and OpenBSD 2.8 (and
+	  perhaps more to come), currently located at <a href="http://uptime.openacs.org/aolserver-openacs/" target="_top">uptime.openacs.org</a>.
+	</p>
+<p>
+	  It's also possible to download all the pieces and patches yourself:
+	</p>
+<div class="itemizedlist"><ul>
+<li><p>
+		  AOLServer is available at <a href="http://aolserver.com" target="_top">aolserver.com</a> 
+		</p></li>
+<li><p> 
+		  ArsDigita's AOLServer distribution (including
+		  internationalization patches, nscache, nsrewrite, nssha1 and the
+		  oracle driver) is available at <a href="http://www.arsdigita.com/acs-repository/download-verify?version_id=2081" target="_top">arsdigita.com</a>
+		  </p></li>
+<li><p>
+		  The OpenACS PostgreSQL driver is available from <a href="http://openacs.org/software" target="_top">OpenACS</a>
+		</p></li>
+<li><p>
+		  nsxml is available at <a href="http://acs-misc.sourceforge.net/dl/nsxml.tgz" target="_top">http://acs-misc.sourceforge.net</a>. 
+		</p></li>
+<li><p>
+		  The patch that makes <tt>exec</tt> work
+		  on BSD is available at <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=415475&amp;group_id=3152&amp;atid=303152" target="_top">sourceforge.net</a>
+		</p></li>
+<li><p>
+		  The patch that makes <tt>ns_uuencode</tt>
+		  work for binary files is available at <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=474259&amp;group_id=3152&amp;atid=303152" target="_top">sourceforge.net</a>
+		</p></li>
+<li><p>
+		  The patch that makes AOLServer respect the
+		  <tt>-g</tt> flag is available at <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=509413&amp;group_id=3152&amp;atid=303152" target="_top">sourceforge.net</a>
+		</p></li>
+</ul></div>
+<p>
+
+	  .... or just Download <a href="http://uptime.openacs.org/aolserver-openacs/aolserver3.3ad13-oacs1-beta-src.tar.gz" target="_top">Mat's
+	  AOLServer distribution</a> to
+	  <tt>/tmp</tt>
+
+	</p>
+<pre class="programlisting">
+joeuser:~$ cd /tmp
+joeuser:/tmp$ wget -c http://uptime.openacs.org/aolserver-openacs/aolserver3.3ad13-oacs1-beta-src.tar.gz
+joeuser:/tmp$ cd</pre>
+<p>
+
+	  As <tt>root</tt>, untar
+	  <tt>aolserver3.3ad13-oacs1-beta-src.tar.gz</tt>
+	  into <tt>/usr/local/src</tt>
+
+	</p>
+<pre class="programlisting">
+joeuser:~$ su -
+Password: **********
+root:~$ cd /usr/local/src
+root:/usr/local/src# tar xzf /tmp/aolserver3.3ad13-oacs1-beta-src.tar.gz</pre>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="install-aolserver-user-accounts"></a>Create the nsadmin user</h3></div></div>
+<p>
+	  You will need a special user account for running AOLServer. This user
+	  will be called <tt>nsadmin</tt> and belong
+	  top the special group <tt>web</tt>. 
+	  <tt>nsadmin</tt>'s home directory will
+	  be <tt>/usr/local/aolserver</tt>.You must
+	  execute these steps as <tt>root</tt>.
+	</p>
+<div class="itemizedlist"><ul><li>
+<p>
+		  Run these commands: 
+		</p>
+<pre class="programlisting">
+root:/usr/local/src# cd
+root:~# groupadd nsadmin
+root:~# groupadd web
+root:~# useradd -g nsadmin -G web -d /usr/local/aolserver nsadmin
+root:~# passwd nsadmin
 ; Set password for nsadmin
        
-# mkdir /web
-# mkdir /usr/local/aolserver
-# chown nsadmin.web /home/aol31 
-# chown nsadmin.web /web
-# chown nsadmin.web /usr/local/aolserver
-# chmod 775 /home/aol31
-# chmod 775 /web
-# chmod 775 /usr/local/aolserver
-
-# exit   
-   
-</pre></td></tr></table></blockquote></li><li><a name="N2573"></a><p>
-        At this point, you should customize the <strong>nsadmin</strong>
-        login scripts. Login as <strong>nsadmin</strong> and add the
-        following lines to your <strong>~nsadmin/.bash_profile</strong> </p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
+root:~# mkdir -p /web /usr/local/aolserver
+root:~# chown -R nsadmin.web /usr/local/aolserver /web /usr/local/src/aolserver
+root:~# chmod 775 /usr/local/aolserver /web
+root:~# exit</pre>
+</li></ul></div>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="install-aolserver-env"></a>Set up nsadmin's environment variables</h3></div></div>
+<div class="itemizedlist"><ul><li>
+<p> At this point, you should customize the
+		  <tt>nsadmin</tt> login scripts. Login as
+		  <tt>nsadmin</tt> and add the following
+		  lines to your
+		  <tt>/usr/local/aolserver/.bash_profile</tt>:
+		</p>
+<pre class="programlisting">
+joeuser:~$ su - nsadmin
+Password: ***********
+nsadmin:~$ emacs .bash_profile</pre>
+<p>
+		  Add the first set of lines, if you're using Oracle. The 2nd set
+		  of lines, if you're using PostgreSQL.  <span class="emphasis"><i>Oracle
+		  Note:</i></span> These environment variables are specific for a
+		  local Oracle installation communicating via IPC. If you are
+		  connecting to a remote Oracle installation, you'll need to adjust
+		  these appropriately. Also, make sure that the '8.1.7' matches
+		  your Oracle version.
+		</p>
+<pre class="programlisting">
+# For Oracle
 export ORACLE_BASE=/ora8/m01/app/oracle
-export ORACLE_HOME=$ORACLE_BASE/product/8.1.6
+export ORACLE_HOME=$ORACLE_BASE/product/8.1.7
 export PATH=$PATH:$ORACLE_HOME/bin
 export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib
 export ORACLE_SID=ora8
 export ORACLE_TERM=vt100
 export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
    
-</pre></td></tr></table></blockquote><p>Be absolutely certain that you have entered these lines correctly
-        and that you have saved the file - a slight error in these lines can
-        lead to many inscrutable error messages. Logout and log back in so
-        these settings will take effect.</p></li></ul></div></div><div id="install-aolserver-download" class="sect2"><div class="titlepage"><h3 class="title"><a name="install-aolserver-download"></a><span class="label">6.2.</span> <span class="title">Download the Distribution</span></h3></div><p>Login as <strong>nsadmin</strong> and save files to the
-    <strong>/tmp</strong> directory.</p><div class="itemizedlist"><ul><li><a name="N2603"></a><p>
-        Download the AOLserver distribution and the Oracle driver (needed for
-        db connectivity and the ACS). You must download the <i>source</i>
-        distribution of AOLserver in order to compile the Oracle driver. </p><div class="itemizedlist"><ul><li><a name="N2610"></a><p><a href="http://www.openacs.org/download/" target="_top">AOLserver 3.1
-          Source Distribution</a></p><p>
-          <i>Do not download a binary!</i></p></li><li><a name="N2619"></a><p><a href="http://www.openacs.org/download/" target="_top">Oracle Driver
-          2.x</a></p></li></ul></div><p>We recommend saving these archives in the <strong>/tmp</strong>
-        directory on your server.</p></li><li><a name="N2629"></a><p>
-        Uncompress the downloaded components; you may need to substitute
-        different files names and account for directory names different from
-        the ones below -- these were the files as of 9/2000 : </p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
-$ cd /tmp    <i>{or wherever the archives are}</i>
-$ tar -xzf aolserver-src-3.1ad8.tar.gz
-$ tar -xzf oracle-driver-2.3.tar.gz
- 
-</pre></td></tr></table></blockquote></li><li><a name="N2638"></a><p>
-        You should now have two directory trees in the current directory:
-        <strong>aolserver/</strong> and <strong>oracle-driver-2.3/</strong>.
-        Move the oracle directory under the aolserver directory to make
-        compiling the Oracle driver easier: </p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
-$ mv oracle-driver-2.3 aolserver
-  
-</pre></td></tr></table></blockquote></li></ul></div></div><div id="install-aolserver-compile" class="sect2"><div class="titlepage"><h3 class="title"><a name="install-aolserver-compile"></a><span class="label">6.3.</span> <span class="title">Compile AOLserver</span></h3></div><p>This step should be completed as the nsadmin user. You will compile
-    the AOLserver distribution and prepare for installation.</p><div class="itemizedlist"><ul><li><a name="N2657"></a><p>
-        Login as <strong>nsadmin</strong> and cd into the aolserver/
-        directory where you untarred the source. You should be able to
-        compile directly from that location: 
-<blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
-$ su - nsadmin
-; Enter nsadmin password
-$ cd /tmp/aolserver
-$ make all
-   
-</pre></td></tr></table></blockquote>
-      </p></li></ul></div></div><div id="install-aolserver-compile-oradriver" class="sect2"><div class="titlepage"><h3 class="title"><a name="install-aolserver-compile-oradriver"></a><span class="label">6.4.</span> <span class="title">Compile the Oracle Driver</span></h3></div><p>Now you need to compile the Oracle driver to enable database
-    connectivity.</p><div class="itemizedlist"><ul><li><a name="N2674"></a><p>
-        Change directories to the
-        <strong>aolserver/oracle-driver-2.3</strong> directory and start the
-        compilation:</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
-$ cd /tmp/aolserver/oracle-driver-2.3
-$ make all
-   
-</pre></td></tr></table></blockquote><p>The following compiler warning may be ignored:</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
-ld: warning: type and size of dynamic symbol `sskgslgf' are not defined
-</pre></td></tr></table></blockquote><p>If the compilation failed, make sure the environment variables
-        above actually point to where you installed the AOLserver source
-        code. If you followed our instructions, this should not be a problem.
-        You can check the directories by doing:</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
-$ ls /tmp/aolserver/include
-   
-</pre></td></tr></table></blockquote><p>If you don't see any files, then you have the wrong
-        directories. Verify your installation of Oracle and AOLserver and try
-        again.</p><p>If compilation was successful, you should now have two new files
-        in /tmp/aolserver/oracle-driver-2.3, <strong>ora8.so</strong> and
-        <strong>ora8cass.so</strong>.</p></li></ul></div></div><div id="install-aolserver-installaol" class="sect2"><div class="titlepage"><h3 class="title"><a name="install-aolserver-installaol"></a><span class="label">6.5.</span> <span class="title">Install AOLserver 3.1</span></h3></div><p>You are now ready to install AOLserver.</p><div class="itemizedlist"><ul><li><a name="N2710"></a><p>
-        Change directories to your AOLserver source distribution and run
-        <strong>make install</strong> to install the files: </p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
- 
-$ cd /tmp/aolserver
-$ make install
-    
-</pre></td></tr></table></blockquote><p>
-        The above will copy the compiled AOLserver files to
-        <strong>/usr/local/aolserver</strong> 
-</p></li><li><a name="N2724"></a><p>
-        You should now have a <strong>/usr/local/aolserver/bin</strong>
-        directory. Copy the previously compiled Oracle drivers into it: </p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
-$ cp /tmp/aolserver/oracle-driver-2.3/ora8.so /usr/local/aolserver/bin
-$ cp /tmp/aolserver/oracle-driver-2.3/ora8cass.so /usr/local/aolserver/bin
-     
-</pre></td></tr></table></blockquote></li><li><a name="N2733"></a><p>
-        The latest version of the ArsDigita Community System requires Tcl
-        8.3. Although this version of Tcl is included with AOLserver 3.1, it
-        is not activated by default. There is a symbolic link pointing from
-        <tt>nsd</tt> to <tt>nsd76</tt> in
-        <tt>/tmp/aolserver/bin</tt>. Change this to point to
-        <tt>nsd8x</tt>: </p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
-$ cd /usr/local/aolserver/bin
-$ rm nsd
-$ ln -s ./nsd8x ./nsd
-     
-</pre></td></tr></table></blockquote></li><li><a name="N2755"></a><p>
-        You will now test to ensure AOLserver is running correctly. You
-        should be able to cd into your aolserver directory and simply start
-        the server: </p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
-Login as nsadmin. (it helps to be in X at this point)
-$ cd /usr/local/aolserver
-$ ./bin/nsd -t nsd.tcl
-     
-</pre></td></tr></table></blockquote><p>As the AOLserver daemon starts up, you should see a few normal
-        warnings (listed below), which are safe to ignore. The first warning
-        means that the server is missing files for running
-        <strong>ssl</strong>, a necessary module for encrypted HTTPS. The
-        second warning means that the AOLserver control panel, a special
-        module for administering AOLserver, could not be loaded. If
-        you're interested in configuring and using either of these
-        modules, please see the <a href="http://www.aolserver.com/" target="_top">AOLserver
-        documentation</a>.</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
+# For PostgreSQL
+export PATH=$PATH:/usr/local/pgsql/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib</pre>
+<p>
+		  Be absolutely certain that you have entered these lines correctly
+		  and that you have saved the file - a slight error in these lines
+		  can lead to many inscrutable error messages. Logout and log back
+		  in so these settings will take effect. Use the
+		  <tt>echo</tt> command to be sure that the
+		  environment variables have been properly assigned.
+		</p>
+<pre class="programlisting">
+nsadmin:~$ exit
+joeuser:~$ su - nsadmin
+Password: *********
+nsadmin:~$ echo $PATH
+...some other directory paths...:/usr/local/pgsql/bin
+nsadmin:~$ echo $LD_LIBRARY_PATH
+:/usr/local/pgsql/lib</pre>
+<p>
+		  Note: The result should be different if you're using Oracle. 
+		  <tt>/ora8/m01/app/oracle/product/8.1.7</tt>
+		  should have been in <tt>$PATH</tt>.
+		</p>
+</li></ul></div>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="install-aolserver-libxml2"></a>Install libxml2 &amp; headers</h3></div></div>
+<p>
+
+	  In order for nsxml to compile, you need libxml2
+	  (available from <a href="http://xmlsoft.org" target="_top">http://xmlsoft.org</a>). On Debian,
+	  this can be installed by doing <tt>apt-get install
+		libxml2-dev</tt>. Users of other distributions can
+	  download rpms from <a href="ftp://ftp.gnome.org/pub/GNOME/stable/redhat/i386/libxml/" target="_top">ftp.gnome.org</a>. You'll
+	  need the <tt>libxml2</tt> and
+	  <tt>libxml2-devel</tt> packages.
+	</p>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="install-aolserver-compile"></a>Compile and install AOLserver</h3></div></div>
+<div class="itemizedlist"><ul>
+<li>
+<p>Prepare the distribution</p>
+<pre class="programlisting">
+nsadmin:~$ cd /usr/local/src/aolserver
+nsadmin:/usr/local/src/aolserver$ ./conf-clean
+cat: BUILD-MODULES: No such file or directory
+Done.</pre>
+</li>
+<li>
+<p>
+
+		  Put the name of the driver(s) that you want into
+		  <tt>conf-db</tt>. This can be
+		  <tt>postgresql</tt>,
+		  <tt>oracle</tt>, or
+		  <tt>both</tt>.
+		</p>
+<pre class="programlisting">
+nsadmin:/usr/local/src/aolserver$ echo &quot;postgresql&quot; &gt; conf-db</pre>
+</li>
+<li><p>
+
+		  <tt>conf-inst</tt> should contain the
+		  location where AOLserver is to be installed. This defaults to
+		  <tt>/usr/local/aolserver</tt>, so we
+		  don't need to change it.
+
+		</p></li>
+<li>
+<p>
+
+		  <tt>conf-make</tt> should contain the
+		  name of the GNU Make command on your system. It defaults to
+		  <tt>gmake</tt>. You may need to change
+		  this to <tt>make</tt>.
+		</p>
+<pre class="programlisting">
+nsadmin:/usr/local/src/aolserver$ echo &quot;make&quot; &gt; conf-make</pre>
+</li>
+<li>
+<p>Compile and install AOLserver and modules</p>
+<pre class="programlisting">
+nsadmin:/usr/local/src/aolserver$ ./conf</pre>
+<p>
+		  This takes about 5 minutes. All of the results are logged to
+		  files in
+		  <tt>/usr/local/src/aolserver/log</tt>. Make
+		  sure to check these files to see if any errors occurred.
+		</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="install-aolserver-test"></a>Test AOLserver</h3></div></div>
+<div class="itemizedlist"><ul>
+<li>
+<p> 
+		  You will now test to ensure AOLserver is running correctly. We'll
+		  use the sample config file provided with AOLserver. This file
+		  will attempt to guess your IP address and hostname. It will then
+		  set up the server at port 8000 of that IP address. 
+		</p>
+<pre class="programlisting">
+nsadmin:/usr/local/src/aolserver$ cd
+nsadmin:~$ ./bin/nsd -t sample-config.tcl</pre>
+<p>
+		  As the AOLserver daemon starts up, you should see a few normal
+		  warnings (listed below), which are safe to ignore. 
+		</p>
+<pre class="programlisting">
 Warning: nsd.tcl: nsssl not loaded -- key/cert files do not exist.
-Warning: nsd.tcl: nscp not loaded -- user/password is not set. 
-     
-</pre></td></tr></table></blockquote></li><li><a name="N2773"></a><p>
-        Test to see if AOLserver is working by starting <tt>Netscape</tt>
-        or <tt>Lynx</tt>, and surfing over to your web page: </p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
-$ lynx localhost:8000
-     
-</pre></td></tr></table></blockquote><p>You should see a <strong>Welcome to AOLserver</strong> page. If
-        this doesn't work, try going to
-        <strong>http://127.0.0.1:8000/</strong>.
-      </p></li><li><a name="N2795"></a><p>
-        Shutdown the test server: </p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
-$ killall nsd
-     
-</pre></td></tr></table></blockquote><p>The <tt>killall</tt> command will kill all processes with the
-        name <tt>nsd</tt>, but clearly this is not a good tool to use for
-        managing your services in general. We cover this topic in the <a href="acs.html#startup" target="_top">ACS documentation</a>.</p></li></ul></div><p>On to installing the <a href="acs.html" target="_top">ArsDigita Community
-    System</a>!</p></div><div id="install-aolserver-troubleshooting" class="sect2"><div class="titlepage"><h3 class="title"><a name="install-aolserver-troubleshooting"></a><span class="label">6.6.</span> <span class="title">Troubleshooting the AOLserver Install</span></h3></div><p>If you can't view the welcome page, it's likely there's a
-    problem with your server configuration. Start by viewing your AOLserver
-    log, which is in <strong>/usr/local/aolserver/log/server.log</strong>.
-    You should also try to find lines of the form:</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
+Warning: nsd.tcl: nscp not loaded -- user/password is not set.</pre>
+<p>		  
+		  The first warning means that the server is missing files for
+		  running <tt>ssl</tt>, a necessary module
+		  for encrypted HTTPS. See Scott Goodwin's <a href="http://scottg.net/webtools/opennsd/modules/nsopenssl/" target="_top">excellent
+		  documentation</a> if you want to set up SSL. The second
+		  warning means that the AOLserver control panel, a special module
+		  for administering AOLserver, could not be loaded. If you're
+		  interested in configuring nscp, please see the <a href="http://www.aolserver.com/docs" target="_top">AOLserver
+		  documentation</a>.
+		</p>
+</li>
+<li>
+<p>
+		  Test to see if AOLserver is working by starting
+		  <tt>Mozilla</tt> or
+		  <tt>Lynx</tt>, and surfing over to your
+		  web page: 
+		</p>
+<pre class="programlisting">
+nsadmin:~$ lynx localhost:8000</pre>
+<p>
+		  You should see a &quot;Welcome to AOLserver&quot; page. If this
+		  doesn't work, try going to
+		  <tt>http://127.0.0.1:8000/</tt>. If this
+		  still doesn't work, check out the <a href="aolserver.html#install-aolserver-troubleshooting">Troubleshooting AOLServer</a> section below.
+		  </p>
+</li>
+<li>
+<p>
+		  Shutdown the test server: </p>
+<pre class="programlisting">
+nsadmin:~$ killall nsd</pre>
+<p>
+		  The <tt>killall</tt> command will kill
+		  all processes with the name <tt>nsd</tt>,
+		  but clearly this is not a good tool to use for managing your
+		  services in general. We cover this topic in the <a href="openacs.html#install-openacs-keepalive">Keep AOLServer alive</a> section.
+		</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><h3 class="title">
+<a name="install-aolserver-troubleshooting"></a>Troubleshooting the AOLserver Install</h3></div></div>
+<p>If you can't view the welcome page, it's likely
+	  there's a problem with your server configuration. Start by
+	  viewing your AOLserver log, which is in
+	  <tt>/usr/local/aolserver/log/server.log</tt>.
+	  You should also try to find lines of the form:</p>
+<pre class="programlisting">
 [01/Jun/2000:12:11:20][5914.2051][-nssock-] Notice: nssock: listening on http://localhost.localdomain:8000 (127.0.0.1:8000)
-[01/Jun/2000:12:11:20][5914.2051][-nssock-] Notice: accepting connections
-</pre></td></tr></table></blockquote><p>If you can find these lines, try entering the URL the server is
-    listening on. If you cannot find these lines, there must be an error
-    somewhere in the file. Search for lines beginning with the word
-    <strong>Error</strong> instead of <strong>Notice</strong>.</p></div><div id="install-aolserver-defaults" class="sect2"><div class="titlepage"><h3 class="title"><a name="install-aolserver-defaults"></a><span class="label">6.7.</span> <span class="title">Defaults</span></h3></div><p>We used the following defaults while installing AOLserver:</p><div class="informaltable" id="N2847"><a name="N2847"></a><table cellpadding="5" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><tbody><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional"><strong xmlns="">Variable</strong></td><td xmlns="http://www.w3.org/TR/xhtml1/transitional"><strong xmlns="">Value</strong></td><td xmlns="http://www.w3.org/TR/xhtml1/transitional"><strong xmlns="">Reason</strong></td></tr><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional">AOLserver Username</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">nsadmin</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">AOLserver used to be NaviServer and this was the
-        standard username for the server.</td></tr><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional">AOLserver Directory</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">/usr/local/aolserver</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">When you use "make install" AOLserver 3.1
-        will be installed here. Note that this is different from previous
-        versions of AOLserver; the change conforms to Red Hat Package Manager
-        (RPM) specifications.</td></tr><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional">nsadmin Home Directory</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">/home/aol31</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">The various files needed and generated by running
-        AOLserver 3.1 processes should be located here, such as server .ini
-        and log files. This is described in depth in the next page of the
-        install guide.</td></tr><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional">AOLserver Groups</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">nsadmin,web,dba</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">You should have a UNIX group for the server files,
-        nsadmin, and a group for the web content, web. Note that in order to
-        connect to Oracle using <strong xmlns="">svrmgrl</strong>, your user must be
-        part of the <strong xmlns="">dba</strong> group and this capability is needed
-        to install the ACS.</td></tr><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional">AOLserver Source Directory</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">/tmp/aolserver</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">This is simply a convenient place to uncompress the
-        source.</td></tr><tr><td xmlns="http://www.w3.org/TR/xhtml1/transitional">ORACLE_HOME</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">/ora8/m01/app/oracle/product/8.1.6</td><td xmlns="http://www.w3.org/TR/xhtml1/transitional">This is the default Oracle installation
-        directory.</td></tr></tbody></table></div><p><div align="right" class="cvstag">($Id$)</div></p></div></div><div class="navfooter"><hr size="1" noshade><table width="100%"><tr><td width="40%" align="left"><a class="bottomnav" href="oracle.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a href="mailto:acs-docs@arsdigita.com"><address class="nav">acs-docs@arsdigita.com</address></a></td><td width="40%" align="right">&nbsp;<a class="bottomnav" href="acs.html">Next</a></td></tr></table></div></body></html>
+[01/Jun/2000:12:11:20][5914.2051][-nssock-] Notice: accepting connections</pre>
+<p>If you can find these lines, try entering the URL the server is
+	  listening on. If you cannot find these lines, there must be an error
+	  somewhere in the file. Search for lines beginning with the word
+	  <tt>Error</tt> instead of
+	  <tt>Notice</tt>.</p>
+<p>The <tt>sample-config.tcl</tt> file grabs
+	  your address and hostname from your OS settings. </p>
+<pre class="programlisting">
+set hostname        [ns_info hostname]
+set address         [ns_info address]</pre>
+<p>If you get an error that nssock can't get the requested address,
+	  you can set these manually:</p>
+<pre class="programlisting">
+#set hostname        [ns_info hostname]
+set hostname 127.0.0.1
+#set address         [ns_info address]
+set address 127.0.0.1</pre>
+<p>
+	  If you get an error that nssock can't assign the requested port,
+	  then that port may already be taken by another service. Try specifying
+	  a different port in the config file.
+	</p>
+</div>
+<p><div class="cvstag">($Id$)</div></p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="postgres.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="openacs.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left">Install PostgreSQL 7.1.3 </td>
+<td width="20%" align="center"><a accesskey="u" href="unix-install.html">Up</a></td>
+<td width="40%" align="right"> Install OpenACS 4</td>
+</tr>
+</table>
+<hr>
+<address><a href="mailto:rmello@cc.usu.edu">
+			rmello@cc.usu.edu
+		  </a></address>
+<address><a href="mailto:vinod@kurup.com">
+			vinod@kurup.com
+		  </a></address>
+</div>
+</body>
+</html>

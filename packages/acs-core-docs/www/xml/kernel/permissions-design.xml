@@ -1,5 +1,5 @@
-<sect1 id="permissions-design" xreflabel="ACS 4 Permissions Design">
-<title>ACS 4 Permissions Design</title>
+<sect1 id="permissions-design" xreflabel="OpenACS 4 Permissions Design">
+<title>OpenACS 4 Permissions Design</title>
 
 <authorblurb><para>
 by <ulink url="mailto:jmp@arsdigita.com">John Prevost</ulink> and <ulink url="http://planitia.org">Rafael H. Schloming</ulink> 
@@ -40,7 +40,7 @@ Permissions system will be seeing a lot of use - almost every page will make
 at least one permissions API call, and some will make several.</para>
 
 <para>For programmers, the Permissions API provides a means to work with access
-control in a consistent manner. If a programmer&#39;s ACS package defines new
+control in a consistent manner. If a programmer&#39;s OpenACS package defines new
 methods for itself, the Permissions API must provide simple calls to
 determine whether the current user is authorized to perform the given method.
 In addition, using the Permissions API, queries should easily select only
@@ -57,7 +57,7 @@ admin) that can be granted and revoked.</para>
 <title>Historical Considerations</title>
 
 
-<para>In earlier versions of the ACS, permissions and access control was handled
+<para>In earlier versions of the OpenACS, permissions and access control was handled
 on a module-by-module basis, often even on a page-by-page basis. For example,
 a typical module might allow any registered user to access its pages
 read-only, but only allow members of a certain group to make changes. The way
@@ -68,7 +68,7 @@ row based on the information in that row.</para>
 
 <para>Problems resulting from this piecemeal approach to permissions and access
 control were many, the two major ones being inconsistency, and
-repeated/redundant code. Thus the drive in ACS 4 to provide a unified,
+repeated/redundant code. Thus the drive in OpenACS 4 to provide a unified,
 consistent permissions system that both programmers and administrators can
 readily use.</para>
 
@@ -126,7 +126,7 @@ adequate performance. The core model consists of five tables:</para>
 
 </term>
  
-<listitem><para>A relation describing the set of methods <phrase>directly</phrase>
+<listitem><para>A relation describing the set of methods <emphasis role="strong">directly</emphasis>
 associated with each privilege.</para></listitem>
 </varlistentry>
 
@@ -135,7 +135,7 @@ associated with each privilege.</para></listitem>
 
 </term>
  
-<listitem><para>A relation describing which privileges <phrase>directly</phrase>
+<listitem><para>A relation describing which privileges <emphasis role="strong">directly</emphasis>
 &quot;contain&quot; other privileges.</para></listitem>
 </varlistentry>
 
@@ -145,7 +145,7 @@ associated with each privilege.</para></listitem>
 </term>
  
 <listitem><para>A table with one (<emphasis>party</emphasis>, <emphasis>object</emphasis>, <emphasis>privilege</emphasis>)
-row for every privilege <phrase>directly</phrase> granted on any object in
+row for every privilege <emphasis role="strong">directly</emphasis> granted on any object in
 the system - this is a denormalization of
 <computeroutput>acs_privilege_method_rules</computeroutput> and
 <computeroutput>acs_privilege_hierarchy</computeroutput></para></listitem>
@@ -202,7 +202,7 @@ tuple implied by the above trees.</para></listitem>
 </varlistentry>
 </variablelist>
 
-<para>In general, <phrase>only <computeroutput>acs_object_party_method_map</computeroutput></phrase>
+<para>In general, <emphasis role="strong">only <computeroutput>acs_object_party_method_map</computeroutput></emphasis>
 should be used for queries from other modules. The other views are
 intermediate steps in building that query.</para>
 
@@ -251,7 +251,7 @@ permissions system fall:</para>
 <listitem><para>Queries on permissions</para></listitem>
 </itemizedlist>
 
-<para><phrase>&quot;Modification of methods and privileges.&quot;</phrase> This
+<para><emphasis role="strong">&quot;Modification of methods and privileges.&quot;</emphasis> This
 refers to actions that happen mainly at package installation time - a package
 will create a number of methods for its own use, then associate them with the
 system&#39;s standard privileges, or new privileges which the package has
@@ -263,7 +263,7 @@ administrator chooses to change permissions policy.</para>
 web page for manipulating these features should be limited to site-wide
 administrators.</para>
 
-<para><phrase>&quot;Modification of permissions&quot;</phrase> - involves fairly
+<para><emphasis role="strong">&quot;Modification of permissions&quot;</emphasis> - involves fairly
 common operations. Users are typically able to administer permissions for
 objects they themselves create. The two basic operations here are
 &quot;grant&quot; and &quot;revoke&quot;. Granting permissions is done via
@@ -276,7 +276,7 @@ should not be in an admin area. In order to grant and revoke permissions on
 an object, the user must have the <computeroutput>administer_privileges</computeroutput> method
 permission on that object.</para>
 
-<para><phrase>&quot;Queries on permissions&quot;</phrase> - by far the most
+<para><emphasis role="strong">&quot;Queries on permissions&quot;</emphasis> - by far the most
 common operation is querying the permissions database. Several kinds of
 questions are commonly asked: First, and most commonly, &quot;Can this party
 perform this method on this object?&quot; Two Tcl functions are provided to
@@ -305,7 +305,7 @@ by querying against <computeroutput>acs_permissions</computeroutput>.</para>
 <para>The API to the permissions system consists of a few well-known tables,
 plus a pair of PL/SQL procedures and a pair of Tcl functions.</para>
 
-<para><phrase>Tables</phrase></para>
+<para><emphasis role="strong">Tables</emphasis></para>
 
 <para><computeroutput>acs_methods</computeroutput>, <computeroutput>acs_privileges</computeroutput>, and
 <computeroutput>acs_privilege_method_rules</computeroutput> manage the set of permissions in the
@@ -321,7 +321,7 @@ directly granted privileges. Neither <computeroutput>acs_object_party_method_map
 (which is a view) nor <computeroutput>acs_permissions</computeroutput> should be updated
 directly.</para>
 
-<para><phrase>PL/SQL Procedures</phrase></para>
+<para><emphasis role="strong">PL/SQL Procedures</emphasis></para>
 
 <para><computeroutput>acs_permissions.grant_permission</computeroutput> introduces new permissions for
 an object. It should be given an (<emphasis>object</emphasis>, <emphasis>party</emphasis>,
@@ -352,7 +352,7 @@ procedure revoke_permission (
 <para>These procedures are defined in <ulink url="http://acs40.arsdigita.com/doc/sql/display-sql?url=acs-permissions-create.sql&amp;package_key=acs-kernel">
 <computeroutput>permissions-create.sql</computeroutput></ulink></para>
 
-<para><phrase>Tcl Procedures</phrase></para>
+<para><emphasis role="strong">Tcl Procedures</emphasis></para>
 
 <para>Two tcl procedures provide a simple call for the query, &quot;Can this
 user perform this method on this object?&quot; One returns true or false, the
@@ -471,10 +471,10 @@ inheritance.</para></listitem>
 <tgroup cols="4">
 <tbody>
 <row>
-<entry><phrase>Document Revision #</phrase></entry>
-<entry><phrase>Action Taken, Notes</phrase></entry>
-<entry><phrase>When?</phrase></entry>
-<entry><phrase>By Whom?</phrase></entry>
+<entry><emphasis role="strong">Document Revision #</emphasis></entry>
+<entry><emphasis role="strong">Action Taken, Notes</emphasis></entry>
+<entry><emphasis role="strong">When?</emphasis></entry>
+<entry><emphasis role="strong">By Whom?</emphasis></entry>
 </row>
 
 <row>

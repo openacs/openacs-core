@@ -1,265 +1,238 @@
 <sect1 id="release-notes" xreflabel="ACS 4.1 Release Notes">
-<title>ACS 4.2-beta Release Notes</title>
+  <title>OpenACS 4.2-beta Release Notes</title>
 
-<authorblurb><para>
-by <ulink url="mailto:teeters@arsdigita.com">Jeff Teeters</ulink> 
-</para></authorblurb>
+  <authorblurb><para>
+	  by <ulink url="mailto:dhogaza@pacifier.com">Don Baccus</ulink> and
+	  <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+	</para></authorblurb>
 
-<para>
-This is the 4.2 beta release of the ArsDigita Community
-System (ACS).  The previous release was 4.1.1.  
-This release fixes a number of bugs
-and has some enhancements.
-For a complete list of bugs
-fixed in 4.2-beta, please visit <ulink
-url="http://www.arsdigita.com/sdm/one-package-release.tcl?release_id=9636">
-the SDM page for 4.2-beta</ulink> (also called 4.2b).
-</para>
+  <para>
+	This is a beta release of OpenACS 4.2.  This release has been subjected
+	to an organized test effort, but please bear in mind that we are still
+	in the process of developing testing tools, methodology, and scripts.
+  </para>
 
-<para>
-Note: In this and subsequent releases, the version numbers of packages will
-*not* necessarily be correlated with the ACS release number.  
-The release number of a package will be increased only in proportion to how
-significant the changes made to that package are.  For example, 
-in this release the acs-subsite package version 
-is increased from 4.1 to 4.2 because significant changes were made.  
-On the other hand, a package as acs-messaging brings
-only minor changes to this release and is therefore only labeled 4.1.1 (from 4.1).
-</para>
+  <para>
+	Please report bugs using our
+	<ulink url="http://openacs.org/sdm/one-package.tcl&amp;package_id=9">
+	  Software Development Manager</ulink> at the <ulink
+	  url="http://openacs.org/">OpenACS website</ulink>.  The latest
+	information on installating this alpha release under Oracle 8.1.6/7
+	or PostgreSQL 7.1.* can be found there as well.  Currently the
+	toolkit will not install under Oracle 9i due to Oracle having made
+	"delete" an illegal name for PL/SQL procedures and functions.
+  </para>
 
-<para>
-Similarly, the version of the ACS release will be increased according to
-the quantity and significance of the changes made.
-This release is designated as 4.2-beta because of there were significant
-changes made since the previous (4.1.1) release.
-</para>
+  <para>
+	You may want to begin by reading our installation documentation for <xref
+	linkend="unix-install"/> or <xref
+	linkend="win-install"/>.  Note that the Windows
+	documentation is not current for OpenACS4.
+  </para>
 
-<sect2 id="release-notes-features">
-<title>Features in ACS 4.2-beta.</title>
+  <para>
+	After installation, the full documentation set can be found by visiting
+	http://[your-host]/doc. Not all pieces are updated for OpenACS 4 at
+	this moment.
+  </para>
 
-<itemizedlist>
-<listitem><para><phrase>Enhanced subsite support. </phrase>
-This release scopes parties to
-individual subsites, rather than the entire site.
-</para></listitem>
+  <sect2 id="release-notes-sws">
+	<title>Site Wide Searching</title>
 
-<listitem><para><phrase>Improved group support. </phrase>
-Group administration pages have 
-been made more general.  They now can be used to administer parties (and persons)
-rather than just groups.   Group types now include a default join policy 
-('open', 'closed', or 'needs approval').  The group administration 
-pages have been made much faster.
-</para></listitem>
+	<para>
+	  If you're using Oracle 8.1.6 or 8.1.7 Enterprise Edition you may want
+	  to uncomment the SQL that causes InterMedia to keep online searching
+	  online while indexing.  The feature doesn't exist in Standard Edition
+	  and OpenACS 4 now defaults to being loadable in SE.  Just grep for
+	  'sync' to find the code.  
+	</para>
 
-<listitem><para><phrase>Improved permissions.</phrase>
-Permissions also now take into account the status of
-a member in a group (e.g. whether the membership is approved) when determining
-the permissions for the member.
-A new view
-was added (ALL_OBJECT_PARTY_PRIVILEGE_MAP) which can greatly reduce the time 
-required to do permission checks.  It is described in file 
-asc-packages/acs-kernel/sql/acs-permissions-create.sql.
-</para></listitem>
+	<para>
+	  Also be sure to read the documentation in the Site Wide Search
+	  package's sql/oracle directory.  The APM doesn't execute the SQL for
+	  this package, in part due to the fact that some steps need to be run
+	  as the Oracle user 'ctxsys'.
+	</para>
 
-<listitem><para><phrase>Improved documentation.</phrase>
-</para></listitem>
+	<para>
+	  If you're using PostgreSQL be sure to read the documentation on
+	  installing the Open FTS driver for OpenACS.  It's included in the
+	  package as a text file and is also summarized at the end of the
+	  installation documentation in the section, <xref
+	  linkend="install-next-openfts"/>.  As with the Oracle version, there
+	  are steps you must take manually in order to get this feature
+	  working.
+	</para>
+  </sect2>
 
-<listitem><para><phrase>Bug fixes.</phrase>
-See 
-<ulink
-url="http://www.arsdigita.com/sdm/one-package-release.tcl?release_id=9636">
-SDM for 4.2-beta</ulink>
-for a list.
-</para></listitem>
+  <sect2 id="release-notes-testing">
+	<title>Testing Notes</title>
 
-</itemizedlist>
-</sect2>
-
-<sect2 id="package-release-notes-features">
-<title>Individual package details for ACS 4.2-beta.</title>
-
-<itemizedlist>
-
-<listitem><para><phrase>ACS Kernel.</phrase>
-Release number increased from 4.1.1 to 4.2.  Enhanced
-group support, ALL_OBJECT_PARTY_PRIVILEGE_MAP view, 
-numerous other minor changes/fixes.
-</para></listitem>
-
-<listitem><para><phrase>ACS Subsite.</phrase>
-Release number increased from 4.1 to 4.2. Scoping parties to
-subsites, generalize administration pages, improved permissions.
-</para></listitem>
-
-<listitem><para><phrase>ACS Administration.</phrase>
-Release number increased from 4.1 to 4.1.1. Group related
-changes.  
-</para></listitem>
-
-<listitem><para><phrase>ACS API Browser.</phrase>
-Release number increased from 4.1 to 4.1.1.  Minor changes.
-</para></listitem>
-
-<listitem><para><phrase>ACS Content.</phrase>
-Release number increased from 4.1 to 4.1.1.
-Function new changed to procedure.
-</para></listitem>
-
-<listitem><para><phrase>ACS Content Repository.</phrase>
-Release number increased from 4.1 to 4.1.2.
-Numerous minor changes and enhancements.
-</para></listitem>
-
-<listitem><para><phrase>ACS Core Documentation.</phrase>
-Release number increased from 4.1 to 4.1.1.  Documentation updated and added.
-</para></listitem>
-
-<listitem><para><phrase>ACS Mail.</phrase>
-Release number increased from 4.1 to 4.1.1.  Minor changes.
-</para></listitem>
-
-<listitem><para><phrase>ACS Messaging.</phrase>
-Release number increased from 4.1 to 4.1.1.
-Function new added to package.
-</para></listitem>
-
-<listitem><para><phrase>ACS Tcl.</phrase>
-Release number increased from 4.1.1 to 4.1.2.
-Modifications to installation and site
-node related procedures.
-</para></listitem>
-
-<listitem><para><phrase>ACS Templating.</phrase>
-Release number increased from 4.1 to 4.1.2.
-Many changes.
-</para></listitem>
-
-<listitem><para><phrase>ACS Workflow.</phrase>
-Release number increased from 4.1 to 4.1.1.
-Minor changes.
-</para></listitem>
-
-<listitem><para><phrase>default-master.tcl</phrase>
-Default master template modified to display more information about
-how to use acs and customize the site.
-</para></listitem>
-
-<listitem><para><phrase>Other packages.</phrase>
-Packages included with this release and which did not change from 
-the previous release (4.1.1) are:
-ACS Notification (version 4.0), ACS Utilities (version 4.0.1) 
-and Page (version 4.0).  The only new package is Skin (version 0.1d).
-</para></listitem>
-
-</itemizedlist>
-
-</sect2>
-
-<sect2 id="release-notes-requirements">
-<title>Requirements.</title>
-
-<para>
-In order to run ACS 4.1, you must be running: 
-</para>
-
-<orderedlist>
-<listitem><para><ulink url="http://www.arsdigita.com/aol3/">AOLserver 3.2 + ad10</ulink></para></listitem>
-
-<listitem><para><ulink url="http://www.arsdigita.com/free-tools/oracle-driver">Oracle driver
-2.4</ulink></para></listitem>
-
-<listitem><para>Oracle 8.1.6 or 8.1.7.</para></listitem>
-
-<listitem><para>Tcl 8.3.x.</para></listitem>
-</orderedlist>
-
-<para>
-AOLserver and the Oracle driver are obtainable from <ulink url="http://www.arsdigita.com/download/">http://www.arsdigita.com/download/</ulink>.
-Developer versions of Oracle are available for download from <ulink url="http://technet.oracle.com">Oracle Technet</ulink>. A version of ACS 4.0
-that runs on <ulink url="http://www.postgresql.org/">PostgreSQL</ulink> is under
-development by <ulink url="http://openacs.org">the OpenACS team</ulink>.
-</para>
-
-
-
-</sect2>
-
-<sect2 id="release-notes-upgrade">
-<title>Upgrade Instructions for ACS 4.2-beta.</title>
-
-<para>
-Please make sure that you have fully upgraded your system to ACS 4.1.1
-before upgrading to ACS 4.2-beta.  For instructions on how to upgrade to
-4.1.1, please see the 4.1.1 release notes included in the 4.1.1
-distribution. In order to upgrade your server, you should:
-</para>
-
-<orderedlist>
-
-<listitem><para>Stop your server.</para></listitem>
-
-<listitem><para>Obtain the ACS 4.2-beta distribution from <ulink
-url="http://www.arsdigita.com/acs-repository">http://www.arsdigita.com/acs-repository</ulink>
-and replace all the files in your ACS 4.1.1 system. If you have
-customized any of the ACS 4.1.1 files, please make sure that your work
-is not lost when extracting the archive. The recommended approach in
-this situation is use a local cvs repository for your project,
-extract the tar.gz file to a temporary directory, then do a
-cvs vendor import to your repository from a the extracted files.
-Another approach is to
-to update your files using CVS through the public
-server
-<computeroutput>:pserver:anonymous@cvs.arsdigita:/usr/local/cvsroot</computeroutput>
-using the tag <computeroutput>acs-4-2-beta-R20010307</computeroutput>. 
-However getting the files by cvs using the
-tag at arsdigita.com will not include the html documentation because the html
-documentation is not stored in the arsdigita cvs repository but
-instead is generated outside the repository (from xml files) when a
-release is created.
-For
-further information on CVS, please consult <ulink
-url="http://acs40.arsdigita.com/acs40-project-central/client-build.html">CVS
-and 4.0 Client Development</ulink>.</para></listitem>
-
-<listitem><para>Run the content-repository upgrade script:</para>
+	<para>
+	  Here are some notes from our testing group.  While not quite up to
+	  date it should give you some ideas of where things stand.
+	</para>
 
 <programlisting>
-sqlplus @youracsdir/packages/acs-content-repository/sql/upgrade/upgrade-4.1-4.1.2.sql
-</programlisting>
-</listitem>
+ Summarised Testing Status
 
-<listitem><para>Restart your server.</para></listitem>
+Skin
+Minimal
+Release w/caution
+Comments:
 
-<listitem><para>Login as a System Administrator and go to 
-<ulink url="/acs-admin/apm">/acs-admin/apm</ulink>.  Click <phrase>Install
-Packages</phrase> and wait for the installer to load.</para></listitem>
+Package: Page
+Test Coverage: Minimal
+Release w/caution
+Comments:
 
-<listitem><para>A list of packages that need to be upgraded and
-enabled will appear.  Click on the Next button.</para></listitem>
+Package: Bboard
+Test Coverage: Reasonable
+Suggested Status: Alpha
+Comments:
 
-<listitem><para>A list of data model upgrade scripts will
-appear.  <phrase>Unclick</phrase> the Data model upgrade script for ACS Content
-Repository (file sql/upgrade/upgrade-4.1-4.1.2.sql).  Leave the other checkboxes selected.
-Click <phrase>Install Packages</phrase> and the upgrade will
-proceed.</para></listitem>
+Package: Static Pages
+Test Coverage: Minimal
+Suggested Status: Release w/caution
+Comments:
 
-<listitem><para>Restart the ACS server.</para></listitem>
+Package: Ticket Tracker
+Test Coverage: Reasonable
+Suggested Status: Alpha
+Comments: Don tested personally
 
-</orderedlist>
+Package: Ticket Tracker Lite
+Test Coverage: Unknown
+Suggested Status: 
+Comments:
 
-<para>
-Any feedback or comments about the ACS can be sent to
-<ulink url="mailto:acs@arsdigita.com">acs@arsdigita.com</ulink>. Please report all
-bugs with the ArsDigita <ulink url="http://www.arsdigita.com/sdm/">Software
-Development Manager (SDM)</ulink>. 
-</para>
+Package: Acs-lang
+Test Coverage: Reasonable
+Suggested Status: Alpha
+Comments: Oracle only
 
-<para><phrase role="cvstag">($Id$)</phrase></para>
+Package: Simple-survey
+Test Coverage: Reasonable
+Suggested Status: Alpha
+Comments:
+
+Package: Portal
+Test Coverage: Extensive
+Suggested Status: Alpha
+Comments:
+
+Package: Notes
+Test Coverage: Extensive
+Suggested Status: Alpha
+Comments:
+
+Package: Bookmarks
+Test Coverage: Extensive
+Suggested Status: Alpha
+Comments:
+
+Package: Clickthrough
+Test Coverage: Extensive
+Suggested Status: Alpha
+Comments:
+
+Package: Acs-mail
+Test Coverage: Reasonable
+Suggested Status: Release w/caution
+Comments:
+
+Package: Acs-messaging
+Test Coverage: Reasonable
+Suggested Status: Release w/caution
+Comments:
+
+Package: File manager
+Test Coverage: Minimal
+Suggested Status: Release w/caution
+Comments:
+
+Package: File Storage
+Test Coverage: Minimal
+Suggested Status: Release w/caution
+Comments:
+
+Package: Site-wide-search
+Test Coverage: Minimal
+Suggested Status: Release w/caution
+Comments:
+
+Package: General Comments
+Test Coverage: Extensive
+Suggested Status: Alpha
+Comments:
+
+Package: Acs-events
+Test Coverage: None
+Suggested Status: 
+Comments: Automated Testing
+
+Package: Acs-datetime
+Test Coverage: None
+Suggested Status: 
+Comments: Automated Testing
+
+Package: Acs-tcl
+Test Coverage: Reasonable
+Suggested Status: Release w/caution
+Comments: Automated Testing
+
+Package: Acs-templating
+Test Coverage: Reasonable
+Suggested Status: Release w/caution
+Comments: Automated Testing
+
+Package: Acs-util
+Test Coverage: Reasonable
+Suggested Status: Release w/caution
+Comments: Automated Testing
+
+Package: Acs-Content-repository
+Test Coverage: Minimal
+Suggested Status: Release w/caution
+Comments: Automated Testing
+
+Package: Acs-content
+Test Coverage: Minimal
+Suggested Status: Release w/caution
+Comments: Automated Testing
+
+Package: Acs-kernel
+Test Coverage: Reasonable
+Suggested Status: Alpha
+Comments: Automated Testing
+
+Package: Acs-subsite
+Test Coverage: Reasonable
+Suggested Status: Alpha
+Comments: 
+
+Package: Acs-bootstrap-installer
+Test Coverage: Extensive
+Suggested Status: Alpha
+Comments: Developers have used this extensively
+
+Package: Acs-api-browser
+Test Coverage: Minimal
+Suggested Status: Release w/caution
+Comments: Automated Testing
+
+Package: Acs-workflow
+Test Coverage: Minimal
+Suggested Status: Release w/caution
+Comments: 
+
+Package: calendar
+Test Coverage: Minimal
+Suggested Status: Alpha
+Comments: Don tested personally
+	</programlisting>
+  </sect2>
+
+  <para><phrase role="cvstag">($Id$)</phrase></para>
  
-</sect2>
-
-
 </sect1>
-
-
-

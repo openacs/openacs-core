@@ -1,5 +1,5 @@
-<sect1 id="rp-requirements" xreflabel="ACS 4 Request Processor Requirements">
-<title>ACS 4 Request Processor Requirements</title>
+<sect1 id="rp-requirements" xreflabel="OpenACS 4 Request Processor Requirements">
+<title>OpenACS 4 Request Processor Requirements</title>
 
 
 <authorblurb><para>
@@ -11,7 +11,7 @@ by <ulink url="http://planitia.org">Rafael H. Schloming</ulink>
 <title>Introduction</title>
 
 
-<para>The following is a requirements document for the ACS 4.0 request
+<para>The following is a requirements document for the OpenACS 4.0 request
 processor. The major enhancements in the 4.0 version include a more
 sophisticated directory mapping system that allows package pageroots to be
 mounted at arbitrary urls, and tighter integration with the database to allow
@@ -90,38 +90,38 @@ reported to developers in an easily decipherable manner.</para>
 <title>Requirements</title>
 
 
-<para><phrase>10.0 Multiple Pageroots</phrase></para>
+<para><emphasis role="strong">10.0 Multiple Pageroots</emphasis></para>
 
 <blockquote>
-<para><phrase>10.10</phrase> Pageroots may be combined into one URL space.</para>
+<para><emphasis role="strong">10.10</emphasis> Pageroots may be combined into one URL space.</para>
 
-<para><phrase>10.20</phrase> Pageroots may be mounted at more than one location in the URL
+<para><emphasis role="strong">10.20</emphasis> Pageroots may be mounted at more than one location in the URL
 space.</para>
 </blockquote>
 
-<para><phrase>20.0 Application Context</phrase></para>
+<para><emphasis role="strong">20.0 Application Context</emphasis></para>
 
 <blockquote>
-<para><phrase>20.10</phrase> The request processor must be able to determine a primary context
+<para><emphasis role="strong">20.10</emphasis> The request processor must be able to determine a primary context
 or state associated with a pageroot based on it&#39;s location within the URL
 space.</para>
 </blockquote>
 
-<para><phrase>30.0 Authentication</phrase></para>
+<para><emphasis role="strong">30.0 Authentication</emphasis></para>
 
 <blockquote>
-<para><phrase>30.10</phrase> The request processor must be able to verify that the connecting
+<para><emphasis role="strong">30.10</emphasis> The request processor must be able to verify that the connecting
 browser actually represents the party it claims to represent.</para>
 </blockquote>
 
-<para><phrase>40.0 Authorization</phrase></para>
+<para><emphasis role="strong">40.0 Authorization</emphasis></para>
 
 <blockquote>
-<para><phrase>40.10</phrase> The request processor must be able to verify that the party the
+<para><emphasis role="strong">40.10</emphasis> The request processor must be able to verify that the party the
 connecting browser represents is allowed to make the request.</para>
 </blockquote>
 
-<para><phrase>50.0 Scalability</phrase></para>
+<para><emphasis role="strong">50.0 Scalability</emphasis></para>
 
 
 </sect2>

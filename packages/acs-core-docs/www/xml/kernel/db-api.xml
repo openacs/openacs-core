@@ -17,17 +17,17 @@ by <ulink url="mailto:jsalz@mit.edu">Jon Salz</ulink>
 <title>The Big Picture</title>
 
 <para>
-One of ACS&#39;s great strengths is that code written for it is very close to
+One of OpenACS&#39;s great strengths is that code written for it is very close to
 the database. It is very easy to interact with the database from anywhere
-within ACS. Our goal is to develop a coherent API for database access which
+within OpenACS. Our goal is to develop a coherent API for database access which
 makes this even easier. 
 </para>
 
-<para>There were four significant problems with the way ACS previously used the
+<para>There were four significant problems with the way OpenACS previously used the
 database (i.e., directly through the <computeroutput>ns_db</computeroutput> interface):</para>
 
 <orderedlist>
-<listitem><para><phrase>Handle management</phrase>. We required code to pass database
+<listitem><para><emphasis role="strong">Handle management</emphasis>. We required code to pass database
 handles around, and for routines which needed to perform database access but
 didn&#39;t receive a database handle as input, it was difficult to know from
 which of the three &quot;magic pools&quot; (main, subquery, and log) to
@@ -36,7 +36,7 @@ allocate a new handle.
 
 </para></listitem>
 
-<listitem><para><phrase>Nested transactions</phrase>. In our Oracle driver, <computeroutput>begin
+<listitem><para><emphasis role="strong">Nested transactions</emphasis>. In our Oracle driver, <computeroutput>begin
 transaction</computeroutput> really means &quot;turn auto-commit mode off&quot; and
 <computeroutput>end transaction</computeroutput> means &quot;commit the current transaction and
 turn auto-commit mode on.&quot; Thus if transactional code needed to call a
@@ -73,7 +73,7 @@ already have been committed!. This is not a good thing.
 
 </para></listitem>
 
-<listitem><para><phrase>Unorthodox use of variables</phrase>. The standard mechanism for
+<listitem><para><emphasis role="strong">Unorthodox use of variables</emphasis>. The standard mechanism for
 mapping column values into variables involved the use of the
 <computeroutput>set_variables_after_query</computeroutput> routine, which relies on an uplevel
 variable named <computeroutput>selection</computeroutput> (likewise for
@@ -82,7 +82,7 @@ variable named <computeroutput>selection</computeroutput> (likewise for
 
 </para></listitem>
 
-<listitem><para><phrase>Hard-coded reliance on Oracle</phrase>. It&#39;s difficult to
+<listitem><para><emphasis role="strong">Hard-coded reliance on Oracle</emphasis>. It&#39;s difficult to
 write code supporting various different databases (dynamically using the
 appropriate dialect based on the type of database being used, e.g., using
 <computeroutput>DECODE</computeroutput> on Oracle and <computeroutput>CASE ... WHEN</computeroutput> on
@@ -102,14 +102,14 @@ Tcl control structures (this is, after all, what Tcl is good at!)</para></listit
 
 <para>
 It lays the groundwork for addressing the fourth problem by assigning each
-SQL statement a logical name. In a future version of the ACS Core, this API
+SQL statement a logical name. In a future version of the OpenACS Core, this API
 will translate logical statement names into actual SQL, based on the type of
 database in use. (To smooth the learning curve, we provide a facility for
 writing SQL inline for a &quot;default SQL dialect&quot;, which we assume to
 be Oracle for now.) 
 </para>
 
-<para>To be clear, SQL abstraction is <emphasis>not</emphasis> fully implemented in ACS
+<para>To be clear, SQL abstraction is <emphasis>not</emphasis> fully implemented in OpenACS
 3.3.1. The statement names supplied to each call are not used by the API at
 all. The API&#39;s design for SQL abstraction is in fact incomplete;
 unresolved issues include:</para>
@@ -255,7 +255,7 @@ handle is always automatically allocated the first time it&#39;s needed.</para>
 <title>Bind Variables</title>
 
 
-<para><phrase>Introduction</phrase></para>
+<para><emphasis role="strong">Introduction</emphasis></para>
 
 <para>
 Most SQL statements require that the code invoking the statement pass along
@@ -275,7 +275,7 @@ delete from wp_presentations where presentation_id = <emphasis>some_presentation
 where <emphasis><computeroutput>some_presentation_id</computeroutput></emphasis> is a number which is a valid
 presentation ID of the presentation I want to delete. It&#39;s easy to write
 code handling situations like this since SQL statements can include
-<phrase>bind variables</phrase>, which represent placeholders for actual
+<emphasis role="strong">bind variables</emphasis>, which represent placeholders for actual
 data. A bind variable is specified as a colon followed by an identifier, so
 the statement above can be coded as: 
 </para>
@@ -330,7 +330,7 @@ select * from :table_name
 </programlisting>
 
 
-<para><phrase>Why Bind Variables Are Useful</phrase></para>
+<para><emphasis role="strong">Why Bind Variables Are Useful</emphasis></para>
 
 <para>
 Why bother with bind variables at all - why not just write the Tcl statement
@@ -374,7 +374,7 @@ difficult for users to perform URL surgery to trick scripts into running
 dangerous queries and DML. 
 </para>
 
-<para><phrase>Usage</phrase></para>
+<para><emphasis role="strong">Usage</emphasis></para>
 
 <para>Every <computeroutput>db_*</computeroutput> command accepting a SQL command as an argument
 supports bind variables. You can either</para>
@@ -466,7 +466,7 @@ db_foreach user_group_memberships_by_role {
 </programlisting>
 
 
-<para><phrase><anchor id="dbapi_nulls_and_bind_vars"/>Nulls and Bind Variables</phrase></para>
+<para><emphasis role="strong"><anchor id="dbapi_nulls_and_bind_vars"/>Nulls and Bind Variables</emphasis></para>
 
 <para>
 When processing a DML statement, Oracle coerces empty strings into
@@ -518,7 +518,7 @@ its column values), which defeats the purpose of SQL abstraction.
 
 <para>Therefore, the Database Access API provides a database-independent way to
 represent <computeroutput>null</computeroutput> (instead of the Oracle-specific idiom of the
-empty string): <phrase><computeroutput>db_null</computeroutput></phrase>.</para>
+empty string): <emphasis role="strong"><computeroutput>db_null</computeroutput></emphasis>.</para>
 
 <para>Use it instead of the empty string whenever you want to set a column value
 explicitly to <computeroutput>null</computeroutput>, e.g.:</para>
@@ -669,12 +669,12 @@ release the database handle.
 
 <variablelist>
 <varlistentry>
-<term><phrase><computeroutput><anchor id="dbapi_db_abort_transaction"/>db_abort_transaction</computeroutput></phrase>
+<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_abort_transaction"/>db_abort_transaction</computeroutput></emphasis>
 </term>
 
 <listitem>
 <programlisting>
-<phrase>db_abort_transaction</phrase>
+<emphasis role="strong">db_abort_transaction</emphasis>
 </programlisting> 
 
 <para>Aborts all levels of a transaction. That is if this is called within
@@ -686,14 +686,14 @@ several nested transactions, all of them are terminated. Use this insetead of
 </varlistentry>
 
 <varlistentry>
-<term><phrase><computeroutput><anchor id="dbapi_db_null"/>db_null</computeroutput></phrase>
+<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_null"/>db_null</computeroutput></emphasis>
 
 </term>
  
 <listitem>
 
 <programlisting>
-<phrase><computeroutput>db_null</computeroutput></phrase>
+<emphasis role="strong"><computeroutput>db_null</computeroutput></emphasis>
 </programlisting>
 
 <para>Returns a value which can be used in a bind variable to represent the SQL
@@ -703,12 +703,12 @@ above.</para></listitem>
 
 <varlistentry>
 <term>
-<phrase><computeroutput><anchor id="dbapi_db_foreach"/>db_foreach</computeroutput></phrase>
+<emphasis role="strong"><computeroutput><anchor id="dbapi_db_foreach"/>db_foreach</computeroutput></emphasis>
 </term>
 
 <listitem>
 <programlisting>
-<phrase>db_foreach</phrase> <emphasis>statement-name sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
+<emphasis role="strong">db_foreach</emphasis> <emphasis>statement-name sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
     [ -column_array <emphasis>array_name</emphasis> | -column_set <emphasis>set_name</emphasis> ] \
     <emphasis>code_block</emphasis> [ if_no_rows <emphasis>if_no_rows_block ]</emphasis>
 </programlisting>
@@ -742,11 +742,11 @@ loop and flush the database handle) and <computeroutput>continue</computeroutput
 </varlistentry>
 
 <varlistentry>
-<term><phrase><computeroutput><anchor id="dbapi_db_1row"/>db_1row</computeroutput></phrase></term>
+<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_1row"/>db_1row</computeroutput></emphasis></term>
 
 <listitem>
 <programlisting>
-<phrase>db_1row</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
+<emphasis role="strong">db_1row</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
     [ -column_array <emphasis>array_name</emphasis> | -column_set <emphasis>set_name</emphasis> ]
 </programlisting>
 
@@ -769,11 +769,11 @@ db_1row select_foo &quot;select foo, bar from greeble where greeble_id = $greebl
 </varlistentry>
 
 <varlistentry>
-<term><phrase><computeroutput><anchor id="dbapi_db_0or1row"/>db_0or1row</computeroutput></phrase> </term>
+<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_0or1row"/>db_0or1row</computeroutput></emphasis> </term>
 
 <listitem>
 <programlisting>
-<phrase>db_0or1row</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
+<emphasis role="strong">db_0or1row</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
     [ -column_array <emphasis>array_name</emphasis> | -column_set <emphasis>set_name</emphasis> ]
 </programlisting>
 
@@ -785,11 +785,11 @@ returns 0. If more than one row is returned, throws an error. </para>
 </varlistentry>
 
 <varlistentry>
-<term><phrase><computeroutput><anchor id="dbapi_db_nextval"/>db_nextval</computeroutput></phrase> </term>
+<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_nextval"/>db_nextval</computeroutput></emphasis> </term>
 
 <listitem>
 <programlisting>
-<phrase>db_nextval</phrase> <emphasis>sequence-name</emphasis>
+<emphasis role="strong">db_nextval</emphasis> <emphasis>sequence-name</emphasis>
 </programlisting>
 
 <para>Returns the next value for the sequence <emphasis>sequence-name</emphasis> (using a
@@ -802,11 +802,11 @@ uses a value from the pool if available to save a round-trip to the database
 </varlistentry>
 
 <varlistentry>
-<term><phrase><computeroutput><anchor id="dbapi_db_register_pooled_sequence"/>db_register_pooled_sequence</computeroutput></phrase> </term>
+<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_register_pooled_sequence"/>db_register_pooled_sequence</computeroutput></emphasis> </term>
 
 <listitem>
 <programlisting>
-<phrase>db_register_pooled_sequence</phrase> <emphasis>sequence-name</emphasis> <emphasis>pool-size</emphasis>
+<emphasis role="strong">db_register_pooled_sequence</emphasis> <emphasis>sequence-name</emphasis> <emphasis>pool-size</emphasis>
 </programlisting>
 
 <para>Registers the sequence <emphasis>sequence-name</emphasis> to be pooled, with a pool
@@ -816,11 +816,11 @@ size of <emphasis>pool-size</emphasis> sequence values (see <emphasis><xref link
 </varlistentry>
 
 <varlistentry>
-<term><phrase><computeroutput><anchor id="dbapi_db_string"/>db_string</computeroutput></phrase> </term>
+<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_string"/>db_string</computeroutput></emphasis> </term>
 
 <listitem>
 <programlisting>
-<phrase>db_string</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -default <emphasis>default</emphasis> ] [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+<emphasis role="strong">db_string</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -default <emphasis>default</emphasis> ] [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
 </programlisting>
 
 <para>Returns the first column of the result of SQL query
@@ -834,11 +834,11 @@ row, returns <emphasis><computeroutput>default</computeroutput></emphasis> (or t
 </varlistentry>
 
 <varlistentry>
-<term><phrase><computeroutput><anchor id="dbapi_db_list"/>db_list</computeroutput></phrase></term>
+<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_list"/>db_list</computeroutput></emphasis></term>
 
 <listitem>
 <programlisting>
-<phrase>db_list</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+<emphasis role="strong">db_list</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
 </programlisting>
 
 <para>Returns a Tcl list of the values in the first column of the result of SQL
@@ -850,11 +850,11 @@ return any rows, returns an empty list. Analogous to
 </varlistentry>
 
 <varlistentry>
-<term><phrase><computeroutput><anchor id="dbapi_db_list_of_lists"/>db_list_of_lists</computeroutput></phrase></term>
+<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_list_of_lists"/>db_list_of_lists</computeroutput></emphasis></term>
 
 <listitem>
 <programlisting>
-<phrase>db_list_of_lists</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+<emphasis role="strong">db_list_of_lists</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
 </programlisting>
 
 <para>Returns a Tcl list, each element of which is a list of all column values
@@ -866,11 +866,11 @@ in a row of the result of SQL query <emphasis><computeroutput>sql</computeroutpu
 </varlistentry>
 
 <varlistentry>
-<term><phrase><computeroutput><anchor id="dbapi_db_dml"/>db_dml</computeroutput></phrase></term> 
+<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_dml"/>db_dml</computeroutput></emphasis></term> 
 
 <listitem>
 <programlisting>
-<phrase>db_dml</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> \
+<emphasis role="strong">db_dml</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> \
     [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
     [ -blobs <emphasis>blob_list</emphasis> | -clobs <emphasis>clob_list</emphasis> |
       -blob_files <emphasis>blob_file_list</emphasis> | -clob_files <emphasis>clob_file_list</emphasis> ]
@@ -915,18 +915,18 @@ of the files <computeroutput>/var/tmp/the_photo</computeroutput> and
 
 <varlistentry>
 <term>
-<phrase><computeroutput><anchor id="dbapi_db_write_clob"/>db_write_clob</computeroutput></phrase>,
-<phrase><computeroutput><anchor id="dbapi_db_write_blob"/>db_write_blob</computeroutput></phrase>,
-<phrase><computeroutput><anchor id="dbapi_db_blob_get_file"/>db_blob_get_file</computeroutput></phrase>
+<emphasis role="strong"><computeroutput><anchor id="dbapi_db_write_clob"/>db_write_clob</computeroutput></emphasis>,
+<emphasis role="strong"><computeroutput><anchor id="dbapi_db_write_blob"/>db_write_blob</computeroutput></emphasis>,
+<emphasis role="strong"><computeroutput><anchor id="dbapi_db_blob_get_file"/>db_blob_get_file</computeroutput></emphasis>
 </term>
 
 <listitem>
 <programlisting>
-<phrase>db_write_clob</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+<emphasis role="strong">db_write_clob</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
 
-<phrase>db_write_blob</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+<emphasis role="strong">db_write_blob</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
 
-<phrase>db_blob_get_file</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+<emphasis role="strong">db_blob_get_file</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
 </programlisting>
 
 <para>Analagous to <computeroutput>ns_ora write_clob/write_blob/blob_get_file</computeroutput>. 
@@ -936,10 +936,10 @@ of the files <computeroutput>/var/tmp/the_photo</computeroutput> and
 </varlistentry>
 
 <varlistentry>
-<term><phrase><computeroutput><anchor id="dbapi_db_release_unused_handles"/>db_release_unused_handles</computeroutput></phrase></term>
+<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_release_unused_handles"/>db_release_unused_handles</computeroutput></emphasis></term>
 <listitem>
 <programlisting>
-<phrase>db_release_unused_handles</phrase>
+<emphasis role="strong">db_release_unused_handles</emphasis>
 </programlisting>
  
 <para>Releases any allocated, unused database handles. </para>
@@ -948,11 +948,11 @@ of the files <computeroutput>/var/tmp/the_photo</computeroutput> and
 </varlistentry>
 
 <varlistentry>
-<term><phrase><computeroutput><anchor id="dbapi_db_transaction"/>db_transaction</computeroutput></phrase></term>
+<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_transaction"/>db_transaction</computeroutput></emphasis></term>
 <listitem>
 
 <programlisting>
-<phrase>db_transaction</phrase> <emphasis>code_block</emphasis> [ on_error { <emphasis>code_block</emphasis> } ]
+<emphasis role="strong">db_transaction</emphasis> <emphasis>code_block</emphasis> [ on_error { <emphasis>code_block</emphasis> } ]
 </programlisting>
 
 <para>Executes <emphasis><computeroutput>code_block</computeroutput></emphasis> transactionally. Nested
@@ -1003,12 +1003,12 @@ print_the_foo ; # Writes out &quot;foo is 8&quot;
 </varlistentry>
 
 <varlistentry>
-<term><phrase><computeroutput><anchor id="dbapi_db_resultrows"/>db_resultrows</computeroutput></phrase></term>
+<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_resultrows"/>db_resultrows</computeroutput></emphasis></term>
 
 
 <listitem>
 <programlisting>
-<phrase>db_resultrows</phrase>
+<emphasis role="strong">db_resultrows</emphasis>
 </programlisting>
 
  <para>Returns the number of rows affected or returned by the previous
@@ -1019,10 +1019,10 @@ statement.
 </varlistentry>
 
 <varlistentry>
-<term><phrase><computeroutput><anchor id="dbapi_db_with_handle"/>db_with_handle</computeroutput></phrase></term>
+<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_with_handle"/>db_with_handle</computeroutput></emphasis></term>
 <listitem>
 <programlisting>
-<phrase>db_with_handle</phrase> <emphasis>var</emphasis> <emphasis>code_block</emphasis>
+<emphasis role="strong">db_with_handle</emphasis> <emphasis>var</emphasis> <emphasis>code_block</emphasis>
 </programlisting>
 
 
@@ -1059,17 +1059,17 @@ db_with_handle db {
 </varlistentry>
 
 <varlistentry>
-<term><phrase><computeroutput><anchor id="dbapi_db_nullify_empty_string"/>db_nullify_empty_string</computeroutput></phrase></term>
+<term><emphasis role="strong"><computeroutput><anchor id="dbapi_db_nullify_empty_string"/>db_nullify_empty_string</computeroutput></emphasis></term>
 
 
 <listitem>
 <programlisting>
-<phrase>db_nullify_empty_string</phrase> <emphasis>string</emphasis>
+<emphasis role="strong">db_nullify_empty_string</emphasis> <emphasis>string</emphasis>
 </programlisting>
 
 
 <para>For true SQL purists, we provide the convenience function
-<phrase><computeroutput>db_nullify_empty_string</computeroutput></phrase>, which returns
+<emphasis role="strong"><computeroutput>db_nullify_empty_string</computeroutput></emphasis>, which returns
 [db_null] if its <emphasis><computeroutput>string</computeroutput></emphasis> argument is the empty string
 and can be used to encapsulate another Oracle quirk: </para>
 
@@ -1108,122 +1108,6 @@ db_dml foo_insert &quot;insert into foo(baz) values(:1)&quot; {[db_nullify_empty
 </listitem>
 </varlistentry>
 </variablelist>
-
-<para><phrase>Implementation Design (work in progress)</phrase></para>
-
-<para>
-<emphasis>The ideas here are preliminary, so please send feedback to <ulink url="mailto:michael@arsdigita.com">michael@arsdigita.com</ulink>. There may well
-be a much simpler, superior design that I (Michael) am just missing right
-now. If so, please let me know!</emphasis> 
-</para>
-
-<para>The basic idea is to translate the logical
-<emphasis><computeroutput>statement-name</computeroutput></emphasis> into an actual SQL statement, written in
-the appropriate SQL dialect for the RDBMS that is in use. The
-<emphasis><computeroutput>sql</computeroutput></emphasis> argument is essentially a convenience that enables
-the SQL for the &quot;default dialect&quot; to be written inline. For 3.4, we
-will probably use configuration parameters to tell the Database Access API
-what the default dialect is and what dialect is actually in use:</para>
-
- 
-
-<programlisting>
-
-[ns/server/<emphasis>server_name</emphasis>/acs]
-...
-DefaultSQLDialect=oracle8
-SQLDialect=postgres7
-
-</programlisting>
-
-<para>
-(An alternative approach would be to use the ACS Package Manager, i.e.,
-install a &quot;pseudo-package&quot; with no actual code to indicate what
-RDBMS is installed. Then, the Database Access API could query the APM to
-figure what SQL dialect to employ.) 
-</para>
-
-<para>For instructing the Database Access API to translate a named statement in
-a specific SQL dialect, we may define a new API call:</para>
-
- 
-
-<programlisting>
-
-db_implement_statement <emphasis>statement_location</emphasis> <emphasis>statement_name</emphasis> <emphasis>sql_dialect</emphasis> <emphasis>sql</emphasis>
-
-</programlisting>
-
-<para>
-which would be called at server initialization time. The Database Access API
-will then know to use the SQL statement appropriate for the specified
-<computeroutput>SQLDialect</computeroutput>. (The name <computeroutput>db_implement_statement</computeroutput> is
-very tentative.) </para>
-
-<para>Issues:</para>
-
-<itemizedlist>
-<listitem><para>Is making the caller of <computeroutput>db_implement_statement</computeroutput> explicitly
-specify the statement location (e.g., &quot;/bboard/q-and-a&quot;) too much
-of a pain? Can we make this more convenient somehow? 
-
-
-</para></listitem>
-
-<listitem><para>In the case that the inline SQL is not in the specified
-<computeroutput>SQLDialect</computeroutput>, reading the rewritten SQL into memory for the life
-of the server may not be a good idea. The three basic approaches I can think
-of to implement the <computeroutput>db_implement_statement</computeroutput> API are: </para>
-
-<orderedlist>
-<listitem><para>Cache the rewritten SQL for the appropriate SQL dialect in an
-<computeroutput>nsv</computeroutput> array</para></listitem>
-
-<listitem><para>Cache the rewritten SQL for the appropriate SQL dialect in a special
-database table that we keep pinned in memory</para></listitem>
-
-<listitem><para>Cache the rewritten SQL for the appropriate SQL dialect in a special
-file, maybe even a DBM file</para></listitem>
-</orderedlist>
-
-
-</listitem>
-
-<listitem><para>Given the above two issues, should we rethink the
-<computeroutput>db_implement_statement</computeroutput> API altogether? </para>
-
-<para>One possibility is a file-based approach, where the alternative SQL
-statements would live in conventionally named and located files, e.g.,
-<computeroutput>/bboard/q-and-a.postgres7</computeroutput> would contain Postgres 7 versions of
-the SQL statements in <computeroutput>/bboard/q-and-a.tcl</computeroutput>.) A potential con of
-this approach is that the Database Access API would have to perform file I/O
-for every SQL statement that&#39;s been rewritten. This may be a non-issue; I
-don&#39;t actually know. (We could augment this approach with caching too,
-perhaps a fixed-size LRU cache.)</para>
-
-<para>Another similar approach would be just to have one massive, magic file for
-each SQL dialect that maps each statement identifier (location plus name) to
-the corresponding statement.</para>
-
-</listitem>
-
-<listitem><para>Another larger problem is the fact that this design does not work for
-instances where we build a SQL statement based on control flow logic, e.g.,
-we sometimes join in an extra table based on the user input. This problem
-doesn&#39;t mean that the design as a whole is broken; it just means that
-this design alone does not get us all the way to full SQL abstraction.</para></listitem>
-</itemizedlist>
-
-<para>
-Version 2.1 of <ulink url="http://www.arsdigita.com/free-tools/oracle-driver">the ArsDigita Oracle
-Driver</ulink> adds a set of <computeroutput>ns_ora</computeroutput> analogs for the following
-<computeroutput>ns_db</computeroutput> calls: <computeroutput>0or1row</computeroutput>, <computeroutput>1row</computeroutput>,
-<computeroutput>select</computeroutput>, and <computeroutput>dml</computeroutput>. (It also adds <computeroutput>ns_ora
-array_dml</computeroutput>.) Thus, the groundwork for implementing the above API for
-ACS/Oracle is already established. </para>
-
-<para>We plan to defer to the OpenACS team for the Postgres implementation of
-the API.</para>
 
 
 <para><phrase role="cvstag">($Id$)</phrase></para>

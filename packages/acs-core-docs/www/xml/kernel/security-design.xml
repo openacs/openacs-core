@@ -1,5 +1,5 @@
-<sect1 id="security-design" xreflabel="ACS 4 Security Design">
-<title>ACS 4 Security Design</title>
+<sect1 id="security-design" xreflabel="OpenACS 4 Security Design">
+<title>OpenACS 4 Security Design</title>
 
 <authorblurb><para>
 
@@ -22,11 +22,11 @@ by <ulink url="mailto:richardl@arsdigita.com">Richard Li</ulink>, <ulink url="ma
 <title>Introduction</title>
 
 <para>
-This document explains security model design for ACS 4. The security system
-with the ACS core must authenticate users in both secure and insecure
+This document explains security model design for OpenACS 4. The security system
+with the OpenACS core must authenticate users in both secure and insecure
 environments. In addition, this subsystem provides sessions on top of the
 stateless HTTP protocol. This system also provides session level properties
-as a generic service to the rest of the ACS. 
+as a generic service to the rest of the OpenACS. 
 </para>
 
 <para>The atoms used in the implementation:</para>
@@ -114,10 +114,10 @@ with each cookie serving a different purpose. These cookies are:</para>
 <tgroup cols="4">
 <tbody>
 <row>
-<entry><phrase>name</phrase></entry>
-<entry><phrase>value</phrase></entry>
-<entry><phrase>max-age</phrase></entry>
-<entry><phrase>secure?</phrase></entry>
+<entry><emphasis role="strong">name</emphasis></entry>
+<entry><emphasis role="strong">value</emphasis></entry>
+<entry><emphasis role="strong">max-age</emphasis></entry>
+<entry><emphasis role="strong">secure?</emphasis></entry>
 </row>
 
 <row>
@@ -298,11 +298,11 @@ when determining the appropriate action.
 <tgroup cols="5">
 <tbody>
 <row>
-<entry><phrase>previous login state</phrase></entry>
-<entry><phrase>permanent login requested</phrase></entry>
-<entry><phrase>secure connection</phrase></entry>
-<entry><phrase>action on insecure</phrase></entry>
-<entry><phrase>action on secure</phrase></entry>
+<entry><emphasis role="strong">previous login state</emphasis></entry>
+<entry><emphasis role="strong">permanent login requested</emphasis></entry>
+<entry><emphasis role="strong">secure connection</emphasis></entry>
+<entry><emphasis role="strong">action on insecure</emphasis></entry>
+<entry><emphasis role="strong">action on secure</emphasis></entry>
 </row>
 
 <row>
@@ -564,18 +564,18 @@ per-thread basis.</para>
 minimum of 100 tokens in it. The cache has a dual purpose:</para>
 
 <itemizedlist>
-<listitem><para><phrase>LRU cache</phrase> Note that cache misses will only occur in the
+<listitem><para><emphasis role="strong">LRU cache</emphasis> Note that cache misses will only occur in the
 multiple server case, where a user agent may have a signature guaranteed by a
 secret token issued by another server in the cluster.</para></listitem>
 
-<listitem><para><phrase>signature cache</phrase> Since the cache always maintains a
+<listitem><para><emphasis role="strong">signature cache</emphasis> Since the cache always maintains a
 minimum of 100 (set by a parameter) tokens populated at startup, it can be
 used to provide a random token for signature purposes.</para></listitem>
 </itemizedlist>
 
 <para>
 The per-thread cache functions as an L1 cache that indiscriminately caches
-all secret tokens. Note that this is <phrase>not</phrase> an LRU cache
+all secret tokens. Note that this is <emphasis role="strong">not</emphasis> an LRU cache
 because there is no cache eviction policy per se -- the cache is cleared when
 the thread is destroyed by AOLserver. 
 </para>
@@ -634,17 +634,17 @@ produce 160 bits of output.
 <title>Login/Password</title>
 
 <para>
-<phrase>ad_user_login <emphasis>user_id</emphasis></phrase> Logs the user in as user
+<emphasis role="strong">ad_user_login <emphasis>user_id</emphasis></emphasis> Logs the user in as user
 <emphasis>user_id</emphasis>. Optional forever flag determines whether or not permanent
 cookies are issued. 
 </para>
 
-<para><phrase>ad_user_logout</phrase> Logs the user out.</para>
-<para><phrase>ad_check_password <emphasis>user_id</emphasis> <emphasis>password</emphasis></phrase>
+<para><emphasis role="strong">ad_user_logout</emphasis> Logs the user out.</para>
+<para><emphasis role="strong">ad_check_password <emphasis>user_id</emphasis> <emphasis>password</emphasis></emphasis>
 returns 0 or 1.</para>
 
-<para><phrase>ad_change_password <emphasis>user_id</emphasis> <emphasis>new
-password</emphasis></phrase></para>
+<para><emphasis role="strong">ad_change_password <emphasis>user_id</emphasis> <emphasis>new
+password</emphasis></emphasis></para>
 
 </sect3>
 
@@ -652,19 +652,19 @@ password</emphasis></phrase></para>
 <title>Digital Signatures and Signed Cookies</title>
 
 <para>
-<phrase>ad_sign <emphasis>value</emphasis></phrase> Returns the digital signature of this
+<emphasis role="strong">ad_sign <emphasis>value</emphasis></emphasis> Returns the digital signature of this
 value. Optional parameters allow for the specification of the <emphasis>secret</emphasis>
 used, the <emphasis>token_id</emphasis> used and the <emphasis>max_age</emphasis> for the signature.
-<phrase>ad_verify_signature <emphasis>value</emphasis> <emphasis>signature</emphasis></phrase>Returns
+<emphasis role="strong">ad_verify_signature <emphasis>value</emphasis> <emphasis>signature</emphasis></emphasis>Returns
 1 or 0 indicating whether or not the signature matches the value specified.
 The <emphasis>secret</emphasis> parameter allows for specification of a different secret
 token to be used. </para>
 
 <para>
-<phrase>ad_set_signed_cookie <emphasis>name</emphasis> <emphasis>data</emphasis></phrase> Sets a
+<emphasis role="strong">ad_set_signed_cookie <emphasis>name</emphasis> <emphasis>data</emphasis></emphasis> Sets a
 signed cookie <emphasis>name</emphasis> with value <emphasis>data</emphasis>. </para>
 
-<para><phrase>ad_get_signed_cookie <emphasis>name</emphasis></phrase> Gets the signed cookie
+<para><emphasis role="strong">ad_get_signed_cookie <emphasis>name</emphasis></emphasis> Gets the signed cookie
 <emphasis>name</emphasis>. It raises an error if the cookie has been tampered with, or if
 its expiration time has passed.</para>
 
@@ -673,15 +673,15 @@ its expiration time has passed.</para>
 <sect3 id="session-property-api">
 <title>Session Properties</title>
 
-<para><phrase>ad_set_client_property <emphasis>module</emphasis> <emphasis>name</emphasis>
-<emphasis>data</emphasis></phrase> Sets a session property with <emphasis>name</emphasis> to value
+<para><emphasis role="strong">ad_set_client_property <emphasis>module</emphasis> <emphasis>name</emphasis>
+<emphasis>data</emphasis></emphasis> Sets a session property with <emphasis>name</emphasis> to value
 <emphasis>data</emphasis> for the module <emphasis>module</emphasis>. The optional secure flag
 specifies the property should only be set if the client is authorized for
 secure access (<computeroutput>ad_secure_conn_p</computeroutput> is true). There is also an optional
 <emphasis>session_id</emphasis> flag to access data from sessions other than the current one.</para>
 
-<para><phrase>ad_get_client_property <emphasis>module</emphasis> <emphasis>name</emphasis>
-<emphasis>data</emphasis></phrase> Gets a session property with <emphasis>name</emphasis> to for the
+<para><emphasis role="strong">ad_get_client_property <emphasis>module</emphasis> <emphasis>name</emphasis>
+<emphasis>data</emphasis></emphasis> Gets a session property with <emphasis>name</emphasis> to for the
 module <emphasis>module</emphasis>. The optional secure flag specifies the property
 should only be retrieved if the client is authorized for secure access
 (<computeroutput>ad_secure_conn_p</computeroutput> is true). There is also an optional
@@ -693,20 +693,20 @@ should only be retrieved if the client is authorized for secure access
 <title>Parameters</title>
 
 <para>
-<phrase>SessionTimeout</phrase> the maximum time in seconds (default 1200)
+<emphasis role="strong">SessionTimeout</emphasis> the maximum time in seconds (default 1200)
 between requests that are part of the same session </para>
 
-<para><phrase>SessionRenew</phrase> the time in seconds (default 300) between
+<para><emphasis role="strong">SessionRenew</emphasis> the time in seconds (default 300) between
 reissue of the session cookie. The minimum time that can pass after a session
 cookie is issued and before it is rejected is (SessionTimeout -
 SessionRenew). This parameter is used so that only one session_id cookie is
 set on a single page even if there are multiple images that are being
 downloaded.</para>
 
-<para><phrase>SessionLifetime</phrase> the maximum possible lifetime of a
+<para><emphasis role="strong">SessionLifetime</emphasis> the maximum possible lifetime of a
 session in seconds (default 604800 = 7 days)</para>
 
-<para><phrase>NumberOfCachedSecretTokens</phrase> the number of secret tokens to
+<para><emphasis role="strong">NumberOfCachedSecretTokens</emphasis> the number of secret tokens to
 cache. (default 100)</para>
 
 </sect3>
@@ -720,7 +720,7 @@ cache. (default 100)</para>
 <title>PRNG implementation</title>
 
 <para>
-The pseudorandom number generator used in the ACS is cryptographically weak,
+The pseudorandom number generator used in the OpenACS is cryptographically weak,
 and depends primarily on the randomness of the <computeroutput>ns_rand</computeroutput> function
 for its randomness. The implementation of the PRNG could be substantially
 improved. 
@@ -766,7 +766,7 @@ a good way of preventing a lot of overhead processing for robots. If we do
 this, send cookie on first hit to test if cookies are accepted, then actually
 allocate on second hit. To preserve a record of the first hit of the session,
 just include any info about that first hit in the probe cookie sent. Look at
-how usca_p (user session cookie attempted) is used in ACS 3.x ecommerce. 
+how usca_p (user session cookie attempted) is used in OpenACS 3.x ecommerce. 
 </para>
 
 </sect3>
@@ -856,22 +856,22 @@ pseudorandom nature of the random number generators used in the system.
 
 <itemizedlist>
 
-<listitem><para><phrase>Cryptographically weak PRNG</phrase> see
+<listitem><para><emphasis role="strong">Cryptographically weak PRNG</emphasis> see
 above.</para></listitem>
 
-<listitem><para><phrase>Dependence on <computeroutput>sample</computeroutput>
-SQL command</phrase> The list of random token that are placed in the secret
+<listitem><para><emphasis role="strong">Dependence on <computeroutput>sample</computeroutput>
+SQL command</emphasis> The list of random token that are placed in the secret
 tokens cache is randomly chosen by the Oracle
 <computeroutput>sample</computeroutput> command. This command may not be
 entirely random, so predicting the contents of the secret tokens cache may not
 be as difficult as someone may anticipate.</para></listitem>
 
-<listitem><para><phrase>Dependence on
-<computeroutput>ns_rand</computeroutput></phrase> The actual token that is
+<listitem><para><emphasis role="strong">Dependence on
+<computeroutput>ns_rand</computeroutput></emphasis> The actual token that is
 chosen from the cache to be used is chosen by a call to
 <computeroutput>ns_rand</computeroutput>.</para></listitem>
 
-<listitem><para><phrase><computeroutput>ad_secure_conn_p</computeroutput></phrase>
+<listitem><para><emphasis role="strong"><computeroutput>ad_secure_conn_p</computeroutput></emphasis>
 As discussed above, the security of the secure sessions authentication system is
 dependent upon this function.</para></listitem> </itemizedlist>
 
