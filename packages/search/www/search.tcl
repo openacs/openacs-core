@@ -64,7 +64,7 @@ if { $t == "Feeling Lucky" && $result(count) > 0} {
     set object_type [acs_object_type $object_id]
     set url [acs_sc_call FtsContentProvider url [list $object_id] $object_type]
     ad_returnredirect $url
-    return
+    ad_script_abort
 }
 
 set elapsed [format "%.02f" [expr double(abs($tend - $t0)) / 1000.0]]
