@@ -222,15 +222,12 @@ comment on column acs_object_types.dynamic_p is '
 --                             connect by object_type = prior supertype);
 
 create view acs_object_type_supertype_map
-as select ot.object_type, ota.object_type as ancestor_type
-   from acs_object_types ot, acs_object_types ota
-   where ota.object_type in (select ot2.object_type
-                               from acs_object_types ot1, 
-                                    acs_object_types ot2
-                              where ot1.object_type = ot.supertype
-                                and ot2.tree_sortkey <= ot1.tree_sortkey
-                                and ot1.tree_sortkey like (ot2.tree_sortkey || '%'));
-
+as select ot1.object_type, ot2.object_type as ancestor_type
+     from acs_object_types ot1,
+	  acs_object_types ot2
+    where ot1.object_type <> ot2.object_type
+      and ot2.tree_sortkey <= ot1.tree_sortkey
+      and ot1.tree_sortkey like (ot2.tree_sortkey || '%');
 
 create table acs_object_type_tables (
 	object_type	varchar(100) not null 
