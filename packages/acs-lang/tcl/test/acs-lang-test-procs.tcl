@@ -233,21 +233,45 @@ aa_register_case message__format {
                                                                   $expected_message]
 }
 
-aa_register_case message__get_missing_embedded_vars {
-    Tests the lang::message::get_missing_embedded_vars proc
+aa_register_case message__get_embedded_vars {
+    Tests the lang::message::get_embedded_vars proc
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 12 November 2002
 } {
-    set en_us_message "this is a message with some %vars% and some more %variables%"
-    set new_message "this message contains no vars"
+    set en_us_message "This message contains no vars"
+    set new_message "This is a message with some %vars% and some more %variables%"
 
-    set missing_vars_list [lang::message::get_missing_embedded_vars $en_us_message $new_message]
+    set missing_vars_list [util_get_subset_missing \
+            [lang::message::get_embedded_vars $new_message] \
+            [lang::message::get_embedded_vars $en_us_message]]
 
-    aa_true "check the missing vars" [expr [string equal [lindex $missing_vars_list 0] "vars"] && \
-                                           [string equal [lindex $missing_vars_list 1] "variables"]]
+    if { ![aa_true "Find missing vars 'vars' and 'variables'" [util_sets_equal_p $missing_vars_list { vars variables }]] } {
+        aa_log "Missing variables returned was: '$missing_vars_list'"
+        aa_log "en_US Message: '$en_us_message' -> Variables: '[lang::message::get_embedded_vars $en_us_message]'"
+        aa_log "Other Message: '$new_message' -> Variables: '[lang::message::get_embedded_vars $new_message]'"
+    }
+
+    # This failed on the test servers
+    set en_us_message "Back to %ad_url%%return_url%"
+    set new_message "Tillbaka till %ad_url%%return_url%"
+    set missing_vars_list [util_get_subset_missing \
+            [lang::message::get_embedded_vars $new_message] \
+            [lang::message::get_embedded_vars $en_us_message]]
+    if { ![aa_equals "No missing vars" [llength $missing_vars_list] 0] } {
+        aa_log "Missing vars: $missing_vars_list"
+    }
+
+    # Testing variables with digits in the variable names
+    set en_us_message "Some variables %var1%%var2% again"
+    set new_message "Nogle variable %var1%%var2% igen"
+    set missing_vars_list [util_get_subset_missing \
+            [lang::message::get_embedded_vars $new_message] \
+            [lang::message::get_embedded_vars $en_us_message]]
+    if { ![aa_equals "No missing vars" [llength $missing_vars_list] 0] } {
+        aa_log "Missing vars: $missing_vars_list"
+    }    
 }
-
 
 aa_register_case locale__test_system_package_setting {
     Tests whether the system package level setting works
