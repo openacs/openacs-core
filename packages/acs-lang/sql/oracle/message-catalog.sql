@@ -50,6 +50,10 @@ create table lang_messages (
     upgrade_status     varchar2(30)
                        constraint lang_messages_us_ck
                        check (upgrade_status in ('no_upgrade', 'added', 'deleted', 'updated')),
+    creation_date      date default sysdate not null,
+    creation_user      integer
+                       constraint lang_messages_create_u_fk
+                       references users (user_id),
     constraint lang_messages_fk
     foreign key (message_key, package_key) 
     references lang_message_keys(message_key, package_key)

@@ -25,19 +25,4 @@ namespace eval lang::audit {
 
         db_dml lang_message_audit {} -clobs [list $old_message $comment]
     }    
-
-    ad_proc -public created_message { 
-        package_key
-        message_key
-        locale
-    } {
-      Keep track of who added a translation and when
-      @author Peter Marklund
-    } {
-        set user_id [ad_conn user_id]
-        db_dml lang_message_audit_create {
-            insert into lang_messages_created (package_key, message_key, locale, creation_user)
-               values (:package_key, :message_key, :locale, :user_id)
-        }
-    }    
 }
