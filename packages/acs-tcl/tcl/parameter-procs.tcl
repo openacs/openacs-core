@@ -55,6 +55,16 @@ namespace eval parameter {
         return $value
     }
 
+    ad_proc -public set_from_package_key {
+        {-package_key:required}
+        {-parameter:required}
+        {-value:required}
+    } {
+        set_value -package_id [apm_package_id_from_key $package_key] \
+                -parameter $parameter \
+                -value $value
+    }
+
     ad_proc -public get_from_package_key {
         {-package_key:required}
         {-parameter:required}
