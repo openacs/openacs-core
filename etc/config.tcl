@@ -468,8 +468,8 @@ ns_param   classpath          /usr/local/jdk/jdk118_v1/lib/classes.zip:${bindir}
 #---------------------------------------------------------------------
 
 #ns_section "ns/server/${server}/module/nscgi" 
-#       ns_param   map "GET  /cgi-bin/ /web/$server/cgi-bin"
-#       ns_param   map "POST /cgi-bin/ /web/$server/cgi-bin" 
+#       ns_param   map "GET  /cgi-bin/ ${serverroot}/cgi-bin"
+#       ns_param   map "POST /cgi-bin/ ${serverroot}/cgi-bin" 
 #       ns_param   Interps CGIinterps
 
 #ns_section "ns/interps/CGIinterps" 
@@ -492,8 +492,8 @@ ns_param   PamDomain          "pam_domain"
 #---------------------------------------------------------------------
 
 ns_section ns/server/${server}/tdav
-ns_param propdir /web/${server}/data/dav/properties
-ns_param lockdir /web/${server}/data/dav/locks
+ns_param propdir ${serverroot}/data/dav/properties
+ns_param lockdir ${serverroot}/data/dav/locks
 
 ns_section ns/server/${server}/tdav/shares
 ns_param share1 "OpenACS"
