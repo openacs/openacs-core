@@ -89,7 +89,6 @@ set form_widgets_full {
     {batch_sync_enabled_p:text(radio)
         {label "Batch sync enabled"}
         {options {{Yes t} {No f}}}
-        {value f}
         {section {Batch Synchronization}}
     }
 
