@@ -13,6 +13,7 @@
 create or replace view content_item_globals as 
 select -100 as c_root_folder_id;
 
+select define_function_args('content_item__get_root_folder','item_id');
 create or replace function content_item__get_root_folder (integer)
 returns integer as '
 declare
@@ -983,6 +984,7 @@ begin
 
 end;' language 'plpgsql';
 
+select define_function_args('content_item__is_published','item_id');
 create or replace function content_item__is_published (integer)
 returns boolean as '
 declare
@@ -1003,6 +1005,7 @@ begin
 end;' language 'plpgsql' stable;
 
 
+select define_function_args('content_item__is_publishable','item_id');
 create or replace function content_item__is_publishable (integer)
 returns boolean as '
 declare
@@ -1119,6 +1122,8 @@ begin
 end;' language 'plpgsql' stable;
 
 
+select define_function_args('content_item__is_valid_child','item_id,content_type,relation_tag');
+
 create or replace function content_item__is_valid_child (integer,varchar,varchar)
 returns boolean as '
 declare
@@ -1179,6 +1184,7 @@ begin
   return v_is_valid_child;
  
 end;' language 'plpgsql' stable;
+
 
 create or replace function content_item__is_valid_child (integer,varchar)
 returns boolean as '
@@ -1242,6 +1248,9 @@ end;' language 'plpgsql' stable;
  5) delete all permissions associated with this item
  6) delete keyword associations
  7) delete all associated comments */
+
+
+select define_function_args('content_item__delete','item_id');
 
 create or replace function content_item__delete (integer)
 returns integer as '
@@ -1368,6 +1377,8 @@ begin
 end;' language 'plpgsql';
 
 
+select define_function_args('content_item__edit_name','item_id,name');
+
 create or replace function content_item__edit_name (integer,varchar)
 returns integer as '
 declare
@@ -1406,6 +1417,8 @@ begin
 
   return 0; 
 end;' language 'plpgsql';
+
+select define_function_args('content_item__get_id','item_path,root_folder_id,resolve_index;f');
 
 create or replace function content_item__get_id (varchar,integer,boolean)
 returns integer as '
@@ -1755,6 +1768,8 @@ end;' language 'plpgsql' stable;
 --   return v_path;
  
 -- end;' language 'plpgsql';
+
+select define_function_args('content_item__get_path','item_id,root_folder_id');
 create or replace function content_item__get_path (integer,integer)
 returns varchar as '
 declare
@@ -1845,6 +1860,8 @@ begin
  
 end;' language 'plpgsql';
 
+-- I hard code the content_item_globals.c_root_folder_id here 
+select define_function_args('content_item__get_virtual_path','item_id,root_folder_id;-100');
 
 create or replace function content_item__get_virtual_path (integer,integer)
 returns varchar as '
@@ -1875,7 +1892,6 @@ begin
  
 end;' language 'plpgsql';
 
-
 create or replace function content_item__write_to_file (integer,varchar)
 returns integer as '
 declare
@@ -1902,6 +1918,7 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
+select define_function_args('content_item__register_template','item_id,template_id,use_context');
 
 create or replace function content_item__register_template (integer,integer,varchar)
 returns integer as '
@@ -1935,6 +1952,7 @@ begin
 end;' language 'plpgsql';
 
 
+select define_function_args('content_item__unregister_template','item_id,template_id,use_context');
 create or replace function content_item__unregister_template (integer,integer,varchar)
 returns integer as '
 declare
@@ -1974,6 +1992,7 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
+select define_function_args('content_item__get_template','item_id,use_context');
 
 create or replace function content_item__get_template (integer,varchar)
 returns integer as '
@@ -2021,7 +2040,7 @@ begin
  
 end;' language 'plpgsql' stable strict;
 
-
+select define_function_args('content_item__get_content_type','item_id');
 create or replace function content_item__get_content_type (integer)
 returns varchar as '
 declare
@@ -2040,6 +2059,8 @@ begin
  
 end;' language 'plpgsql' stable strict;
 
+
+select define_function_args('content_item__get_live_revision','item_id');
 
 create or replace function content_item__get_live_revision (integer)
 returns integer as '
@@ -2089,6 +2110,7 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
+select define_function_args('content_item__set_live_revision','item_id,publish_status;ready');
 create or replace function content_item__set_live_revision (integer,varchar)
 returns integer as '
 declare
@@ -2119,7 +2141,7 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
-
+select define_function_args('content_item__unset_live_revision','item_id');
 create or replace function content_item__unset_live_revision (integer)
 returns integer as '
 declare
@@ -2145,6 +2167,8 @@ begin
 
   return 0; 
 end;' language 'plpgsql';
+
+select define_function_args('content_item__set_release_period','item_id,start_when,end_when');
 
 create or replace function content_item__set_release_period (integer, timestamptz, timestamptz)
 returns integer as '
@@ -2178,6 +2202,8 @@ begin
 end;' language 'plpgsql';
 
 
+select define_function_args('content_item__get_revision_count','item_id');
+
 create or replace function content_item__get_revision_count (integer)
 returns integer as '
 declare
@@ -2197,6 +2223,7 @@ begin
 end;' language 'plpgsql' stable;
 
 
+select define_function_args('content_item__get_context','item_id');
 create or replace function content_item__get_context (integer)
 returns integer as '
 declare
@@ -2241,6 +2268,7 @@ begin
 return null;
 end;' language 'plpgsql';
 
+select define_function_args('content_item__move','item_id,target_folder_id,name');
 create or replace function content_item__move (integer,integer,varchar)
 returns integer as '
 declare
@@ -2340,6 +2368,7 @@ begin
 
 end;' language 'plpgsql';
 
+select define_function_args('content_item__copy','item_id,target_folder_id,creation_user,creation_ip,name');
 create or replace function content_item__copy (
 	integer,
 	integer,
@@ -2474,6 +2503,7 @@ begin
 end;' language 'plpgsql';
 
 
+select define_function_args('content_item__get_latest_revision','item_id');
 create or replace function content_item__get_latest_revision (integer)
 returns integer as '
 declare
@@ -2502,6 +2532,7 @@ begin
 end;' language 'plpgsql' strict stable;
 
 
+select define_function_args('content_item__get_best_revision','item_id');
 create or replace function content_item__get_best_revision (integer)
 returns integer as '
 declare
@@ -2523,6 +2554,7 @@ begin
 end;' language 'plpgsql' stable strict;
 
 
+select define_function_args('content_item__get_title','item_id,is_live;f');
 create or replace function content_item__get_title (integer,boolean)
 returns varchar as '
 declare
@@ -2581,6 +2613,7 @@ begin
 
 end;' language 'plpgsql' stable strict;
 
+select define_function_args('content_item__get_publish_date','item_id,is_live;f');
 
 create or replace function content_item__get_publish_date (integer,boolean)
 returns timestamptz as '
@@ -2616,6 +2649,7 @@ begin
 end;' language 'plpgsql' stable;
 
 
+select define_function_args('content_item__is_subclass','object_type,supertype');
 create or replace function content_item__is_subclass (varchar,varchar)
 returns boolean as '
 declare
@@ -2635,6 +2669,8 @@ begin
 
 end;' language 'plpgsql' stable;
 
+
+select define_function_args('content_item__relate','item_id,object_id,relation_tag;generic,order_n,relation_type;cr_item_rel');
 
 create or replace function content_item__relate (integer,integer,varchar,integer,varchar)
 returns integer as '
@@ -2742,6 +2778,8 @@ begin
 end;' language 'plpgsql';
 
 
+select define_function_args('content_item__unrelate','rel_id');
+
 create or replace function content_item__unrelate (integer)
 returns integer as '
 declare
@@ -2758,6 +2796,8 @@ begin
 end;' language 'plpgsql';
 
 
+select define_function_args('content_item__is_index_page','item_id,folder_id');
+
 create or replace function content_item__is_index_page (integer,integer)
 returns boolean as '
 declare
@@ -2771,6 +2811,8 @@ begin
   end if;
  
 end;' language 'plpgsql' stable;
+
+select define_function_args('content_item__get_parent_folder','item_id');
 
 create or replace function content_item__get_parent_folder (integer)
 returns integer as '

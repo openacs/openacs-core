@@ -13,6 +13,7 @@
 create view content_template_globals as 
 select -200 as c_root_folder_id;
 
+-- dont need a define_func_args for empty funcs...
 create or replace function content_template__get_root_folder() returns integer as '
 begin
   return content_template_globals.c_root_folder_id;
@@ -264,6 +265,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
+select define_function_args('content_template__delete','template_id');
 create or replace function content_template__delete (integer)
 returns integer as '
 declare
@@ -286,6 +288,7 @@ end;' language 'plpgsql';
 
 
 -- function is_template
+select define_function_args('content_template__is_template','template_id');
 create or replace function content_template__is_template (integer)
 returns boolean as '
 declare
@@ -299,6 +302,7 @@ end;' language 'plpgsql' stable;
 
 
 -- function get_path
+select define_function_args('content_template__get_path','template_id,root_folder_id;-200');
 create or replace function content_template__get_path (integer,integer)
 returns varchar as '
 declare
