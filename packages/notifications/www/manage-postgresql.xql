@@ -5,7 +5,8 @@
 
 <fullquery name="select_notifications">      
       <querytext>
-	select request_id, 
+	select request_id,
+	       type_id,
 	  (select pretty_name
 	   from notification_types
 	   where notification_types.type_id =
