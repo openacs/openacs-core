@@ -36,7 +36,6 @@ set form_widgets_full {
     {enabled_p:text(radio)
         {label "Enabled"}
         {options {{Yes t} {No f}}}
-        {value t}
     }
 
     {help_contact_text:richtext,optional
@@ -136,6 +135,10 @@ ad_form -name authority \
     -mode $ad_form_mode \
     -form $form_widgets \
     -cancel_url "." \
+    -new_request {
+        set enabled_p t
+        set batch_sync_enabled_p f
+    } \
     -edit_request {
             
     auth::authority::get -authority_id $authority_id -array element_array
