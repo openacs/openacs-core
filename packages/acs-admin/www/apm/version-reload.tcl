@@ -33,7 +33,7 @@ if { [llength $files] == 0 } {
             set local_path [eval [concat file join [lrange [file split $file] 2 end]]]
 
 	    doc_body_append " (<a href=\"file-watch?[export_vars { version_id { paths $local_path } }]\">watch this file</a>)"
-            lappend files_to_watch $file
+            lappend files_to_watch $local_path
 	}
 	doc_body_append "\n"
     }
