@@ -43,6 +43,7 @@
     <querytext>
       select locale, package_key, message_key, message 
       from   lang_messages
+      $package_where_clause
     </querytext>
   </fullquery>
 
