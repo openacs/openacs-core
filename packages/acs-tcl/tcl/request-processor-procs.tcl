@@ -588,6 +588,10 @@ ad_proc -private rp_filter { why } {
     sec_handler
     # ns_log Notice "OACS= RP end"
 
+    # Set locale and language of the request. We need ad_conn user_id to be set at this point
+    ad_conn -set locale [lang::conn::locale]
+    ad_conn -set language [lang::conn::language]
+
     #####
     #
     # Make sure the user is authorized to make this request. 
