@@ -1,0 +1,28 @@
+if { [catch {
+    # Source procedures
+    source tclwebtest-functions.tcl
+
+    # Test Execution START
+
+    # Login the site wide admin
+    login_site_wide_admin
+
+    # Run all tests
+    do_request "${server_url}/test/admin/rerun?package_key=&category=&view_by=package&quiet=0"
+
+    # Grep for packages with failed tests
+    if { [regexp -nocase {fail} [response body]] } {
+        puts "$alert_keyword - There are failed tests at $server_url"
+    }
+
+    # Test Execution END
+} result] } {
+    global errorInfo
+    puts stderr $result
+    puts stderr "*** Tcl TRACE ***"
+    puts stderr $errorInfo
+
+    puts "The response body is: [response body]"
+
+    error "Test failed: $result"
+}
