@@ -20,7 +20,7 @@
         <callbacks>
         </callbacks>
         <parameters>
-        <!-- No version parameters -->
+          <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="post_installation_message"  default="" description="If not blank, overrides the default post-installation message" section_name="installation"/>
         </parameters>
 
     </version>
