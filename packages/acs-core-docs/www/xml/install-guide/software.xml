@@ -313,13 +313,8 @@
             </listitem>
             <listitem>
               <formalpara id="source-postgresql">
-                <title><ulink
-              url="http://www.ca.postgresql.org/ftpsite/source/v7.2.4/postgresql-7.2.4.tar.gz">PostGreSQL 7.2.4</ulink> (Either this or Oracle is REQUIRED)</title>
-                <para>You need this if you want to use a PostGreSQL database.
-              PostGreSQL 7.3 is not backwards-compatible, and OpenACS
-              support for 7.3 has not been fully tested.  If you are
-              not in the United States, select a closer <ulink
-              url="http://www.postgresql.org">mirror</ulink></para>
+                <title><ulink url="http://sourceforge.net/projects/pgsql/">PostGreSQL 7.3.4</ulink> (Either this or Oracle is REQUIRED)</title>
+                <para>You need this if you want to use a PostGreSQL database.</para>
               </formalpara>
             </listitem>
           </itemizedlist>
