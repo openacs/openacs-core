@@ -26,7 +26,11 @@ namespace eval notification::email {
         {-object_id:required}
         {-type_id:required}
     } {
-        return "notification-$object_id-$type_id@[address_domain]"
+        if {[empty_string_p $object_id] || [empty_string_p $type_id]} {
+            return "notification"
+        } else {
+            return "notification-$object_id-$type_id@[address_domain]"
+        }
     }
 
     ad_proc -public parse_reply_address {
