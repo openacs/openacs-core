@@ -393,12 +393,18 @@ ad_proc -public template::widget::comment { element_reference tag_attributes } {
       append output "$element(history)"
   }
 
-  if { [info exists element(header)] } {
-      append output "<p><b>$element(header)</b></p>"
+  if { [string equal $element(mode) "edit"] } {
+      if { [info exists element(header)] } {
+          append output "<p><b>$element(header)</b></p>"
+      }
+      
+      append output [textarea $element_reference $tag_attributes]
+
+      if { [info exists element(format_element)] && [info exists element(format_options)] } {
+          append output "<br>Format: [menu $element(format_element) $element(format_options) {} {}]"
+      }
   }
-
-  append output [textarea $element_reference $tag_attributes]
-
+      
   return $output
 }
 

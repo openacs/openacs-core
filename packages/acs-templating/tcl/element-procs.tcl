@@ -503,7 +503,11 @@ ad_proc -private template::element::render { form_id element_id tag_attributes }
   # Remember that the element has been rendered already
   set element(is_rendered) t
 
-  return "$element(before_html) [template::widget::$element(widget) element $tag_attributes] $element(after_html)"
+  if { ![string equal $element(mode) "edit"] && [info exists element(display_value)] } {
+    return "$element(before_html) $element(display_value) $element(after_html)"  
+  } else {
+    return "$element(before_html) [template::widget::$element(widget) element $tag_attributes] $element(after_html)"
+  }
 }
 
 ad_proc -private template::element::render_help { form_id element_id tag_attributes } {
