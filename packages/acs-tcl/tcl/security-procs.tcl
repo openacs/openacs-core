@@ -298,6 +298,16 @@ ad_proc -private sec_lookup_property { id module name } {
     } {
 	return ""
     }
+
+    set new_last_hit [clock seconds]
+
+    db_dml update_last_hit_dml {
+        update sec_session_properties
+           set last_hit = :new_last_hit
+         where session_id = :id and
+               property_name = :name
+    }
+
     return [list $property_value $secure_p]
 }
 
