@@ -48,7 +48,7 @@
       which are static and mostly text, it may be easier to create a
       new ADP page for each language.  In this case, the pages are
       distinguished by a file naming convention.
-    </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2512266"></a>Separate Templates for each Locale</h4></div></div><div></div></div><p>If the request processor finds a file named <tt class="computeroutput">filename.locale.adp</tt>, where locale matches the user's locale, it will process that file instead of <tt class="computeroutput">filename.adp</tt>.  For example, for a user with locale <tt class="computeroutput">tl_PH</tt>, the file <tt class="computeroutput">index.tl_PH.adp</tt>, if found, will be used instead of <tt class="computeroutput">index.adp</tt>.  The locale-specific file should thus contain text in the language appropriate for that locale.  The code in the page, however, should still be in English.  Message keys are still processed.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="i18n-message-catalog-adps"></a>Message Keys in Template Files (ADP Files)</h4></div></div><div></div></div><p>
+    </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id1012808"></a>Separate Templates for each Locale</h4></div></div><div></div></div><p>If the request processor finds a file named <tt class="computeroutput">filename.locale.adp</tt>, where locale matches the user's locale, it will process that file instead of <tt class="computeroutput">filename.adp</tt>.  For example, for a user with locale <tt class="computeroutput">tl_PH</tt>, the file <tt class="computeroutput">index.tl_PH.adp</tt>, if found, will be used instead of <tt class="computeroutput">index.adp</tt>.  The locale-specific file should thus contain text in the language appropriate for that locale.  The code in the page, however, should still be in English.  Message keys are still processed.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="i18n-message-catalog-adps"></a>Message Keys in Template Files (ADP Files)</h4></div></div><div></div></div><p>
         Internationalizing templates is about replacing human readable
         text in a certain language with internal message keys, which
         can then be dynamically replaced with real human language in
@@ -107,31 +107,37 @@
           </li><li>
             Static key lookup with non-default locale: <tt class="computeroutput">[lang::message::lookup $locale package_key.message_key]</tt> - The message key and package key used here must be string literals, they can't result from variable evaluation.
           </li><li>
-            Dynamic key lookup: <tt class="computeroutput">[lang::util::localize $var_with_embedded_message_keys]</tt> - In this case the message keys in the variable <tt class="computeroutput">var_with_embedded_message_keys</tt> must appear as string literals <tt class="computeroutput">\#package_key.message_key\#</tt> somewhere in the code. Here is an example of a dynamic lookup:
-            
-            <tt class="computeroutput">
-              set message_key_array {
-                 dynamic_key_1  \#package_key.message_key1\#
-                 dynamic_key_2  \#package_key.message_key2\#
-              }
+            Dynamic key lookup: 
+<pre class="screen">
+<b class="userinput"><tt>[lang::util::localize $var_with_embedded_message_keys]</tt></b>
+- In this case the message keys in the variable <tt class="computeroutput">var_with_embedded_message_keys</tt> must appear as string literals <tt class="computeroutput">\#package_key.message_key\#</tt> somewhere in the code. Here is an example of a dynamic lookup:           
+<b class="userinput"><tt>set message_key_array {
+  dynamic_key_1  \#package_key.message_key1\#
+  dynamic_key_2  \#package_key.message_key2\#
+}
 
-              set my_text [lang::util::localize $message_key_array([get_dynamic_key])]
-            </tt></li></ul></div><p>  
+set my_text [lang::util::localize $message_key_array([get_dynamic_key])]
+</tt></b>
+</pre></li></ul></div><p>  
       </p><p>
         Translatable texts in page TCL scripts are often found in page titles,
         context bars, and form labels and options. Many times the texts are
         enclosed in double quotes. The following is an example of grep commands 
         that can be used on Linux to highlight translatable text in TCL files:
-      </p><tt class="computeroutput">
-      # Find text in double quotes
-      find -iname '*.tcl'|xargs egrep -i '"[a-z]'
-      # Find untranslated text in form labels, options and values
-      find -iname '*.tcl'|xargs egrep -i '\-(options|label|value)'|egrep -v '&lt;#'|egrep -v '\-(value|label|options)[[:space:]]+\$[a-zA-Z_]+[[:space:]]*\\?[[:space:]]*$'
-      # Find text in page titles and context bars
-      find -iname '*.tcl'|xargs egrep -i 'set (title|page_title|context_bar) '|egrep -v '&lt;#'
-      # Find text in error messages
-      find -iname '*.tcl'|xargs egrep -i '(ad_complain|ad_return_error)'|egrep -v '&lt;#'
-      </tt><p>
+      </p><pre class="screen">
+# Find text in double quotes
+<b class="userinput"><tt>find -iname '*.tcl'|xargs egrep -i '"[a-z]'</tt></b>
+
+# Find untranslated text in form labels, options and values
+<b class="userinput"><tt>find -iname '*.tcl'|xargs egrep -i '\-(options|label|value)'|egrep -v '&lt;#'|egrep -v '\-(value|label|options)[[:space:]]+\$[a-zA-Z_]+[[:space:]]*\\?[[:space:]]*$'</tt></b>
+
+# Find text in page titles and context bars
+<b class="userinput"><tt>find -iname '*.tcl'|xargs egrep -i 'set (title|page_title|context_bar) '|egrep -v '&lt;#'</tt></b>
+
+# Find text in error messages
+<b class="userinput"><tt>find -iname '*.tcl'|xargs egrep -i '(ad_complain|ad_return_error)'|egrep -v '&lt;#'</tt></b>
+
+      </pre><p>
         You may mark up translatable text in TCL library files and TCL pages
         with temporary tags on the &lt;#key text#&gt; syntax. 
         If you have a sentence or paragraph of text with
@@ -160,24 +166,26 @@
       </p><p>
       Alternatively, you may pass in an array list of the variable values to be interpolated into the message so that
       our example becomes:
-      </p><tt class="computeroutput">
-      set msg_subst_list [list subject [parameter::get -localize -parameter classes_pretty_name] 
-                               class_instances [parameter::get -localize -parameter class_instances_pretty_plural]]
+      </p><pre class="screen">
+<b class="userinput"><tt>set msg_subst_list [list subject [parameter::get -localize -parameter classes_pretty_name] class_instances [parameter::get -localize -parameter class_instances_pretty_plural]]
 
-      ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
-      </tt><p>
+ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
+</tt></b>
+</pre><p>
         When we were done going through the tcl files we ran the following
         commands to check for mistakes:
-      </p><tt class="computeroutput">
-      # Message tags should usually not be in curly braces since then the message lookup may not be
-      # executed then (you can usually replace curly braces with the list command). Find message tags 
-      # in curly braces (should return nothing, or possibly a few lines for inspection)
-      find -iname '*.tcl'|xargs egrep -i '\{.*&lt;#'
-      # Check if you've forgotten space between default key and text in message tags (should return nothing)
-      find -iname '*.tcl'|xargs egrep -i '&lt;#_[^ ]'
-      # Review the list of tcl files with no message lookups
-      for tcl_file in $(find -iname '*.tcl'); do egrep -L '(&lt;#|\[_)' $tcl_file; done
-      </tt><p>
+      </p><pre class="screen">
+# Message tags should usually not be in curly braces since then the message lookup may not be
+# executed then (you can usually replace curly braces with the list command). Find message tags 
+# in curly braces (should return nothing, or possibly a few lines for inspection)
+<b class="userinput"><tt>find -iname '*.tcl'|xargs egrep -i '\{.*&lt;#'</tt></b>
+
+# Check if you've forgotten space between default key and text in message tags (should return nothing)
+<b class="userinput"><tt>find -iname '*.tcl'|xargs egrep -i '&lt;#_[^ ]'</tt></b>
+
+# Review the list of tcl files with no message lookups
+<b class="userinput"><tt>for tcl_file in $(find -iname '*.tcl'); do egrep -L '(&lt;#|\[_)' $tcl_file; done</tt></b>
+</pre><p>
         When you feel ready you may vist your package in the
         <a href="/acs-admin/apm" target="_top">package manager</a>
         and run the action "Replace tags with keys
@@ -263,15 +271,15 @@
           Use the <tt class="computeroutput">*_pretty</tt> version in your ADP page.
         </p></li></ol></div><p>
       To internationalize numbers, use <tt class="computeroutput">lc_numeric $value</tt>, which formats the number using the appropriate decimal point and thousand separator for the locale.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-forms"></a>Internationalizing Forms</h3></div></div><div></div></div><p>When coding forms, remember to use message keys for each piece of text that is user-visible, including form option labels and button labels.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-convert"></a>Internationalizing Existing Packages</h3></div></div><div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2521021"></a>Internationalize Message text in ADP and TCL</h4></div></div><div></div></div><p>Acs-lang includes tools to automate some
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-forms"></a>Internationalizing Forms</h3></div></div><div></div></div><p>When coding forms, remember to use message keys for each piece of text that is user-visible, including form option labels and button labels.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-convert"></a>Internationalizing Existing Packages</h3></div></div><div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id1070522"></a>Internationalize Message text in ADP and TCL</h4></div></div><div></div></div><p>Acs-lang includes tools to automate some
         internationalization.  From
         <tt class="computeroutput">/acs-admin/apm/</tt>, select a
         package and then click on
         <tt class="computeroutput">Internationalization</tt>, then
         <tt class="computeroutput">Convert ADP, Tcl, and SQL files to using the
-        message catalog.</tt>.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2521050"></a>Internationalize Package Parameters with visible messages</h4></div></div><div></div></div><p>
+        message catalog.</tt>.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id1070545"></a>Internationalize Package Parameters with visible messages</h4></div></div><div></div></div><p>
       See <a href="i18n.html#i18n-message-catalog-params" title="Checking the Consistency of Catalog Files">the section called &#8220;Checking the Consistency of Catalog Files&#8221;</a>
-    </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2521068"></a>Internationalize Date and Time queries</h4></div></div><div></div></div><div class="orderedlist"><ol type="1"><li><p>Find datetime in .xql files.  Use command line tools to find suspect SQL code:</p><pre class="programlisting">grep -r "to_char.*H" *
+    </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id1070559"></a>Internationalize Date and Time queries</h4></div></div><div></div></div><div class="orderedlist"><ol type="1"><li><p>Find datetime in .xql files.  Use command line tools to find suspect SQL code:</p><pre class="programlisting">grep -r "to_char.*H" *
 grep -r "to_date.*H" *
 </pre></li><li><p>In SQL statements, replace the format string with the ANSI standard format, <tt class="computeroutput">YYYY-MM-DD HH24:MI:SS</tt> and change the field name to *_ansi so that it cannot be confused with previous, improperly formatting fields.  For example,</p><pre class="programlisting">to_char(timestamp,'MM/DD/YYYY HH:MI:SS') as foo_date_pretty</pre><p>becomes</p><pre class="programlisting">to_char(timestamp,'YYYY-MM-DD HH24:MI:SS') as foo_date_ansi</pre></li><li><p>In TCL files where the date fields are used, convert the datetime from local server timezone, which is how it's stored in the database, to the user's timezone for display.  Do this with the localizing function <tt class="computeroutput"><a href="/api-doc/proc-view?proc=lc_time_system_to_conn" target="_top">lc_time_system_to_conn</a></tt>:</p><pre class="programlisting">
 set foo_date_ansi [lc_time_system_to_conn $foo_date_ansi]</pre><p>When a datetime will be written to the database, first convert it from the user's local time to the server's timezone with <tt class="computeroutput"><a href="/api-doc/proc-view?proc=lc%5ftime%5fconn%5fto%5fsystem" target="_top">lc_time_conn_to_system</a></tt>.
