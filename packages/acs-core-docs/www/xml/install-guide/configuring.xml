@@ -90,7 +90,7 @@
         <title>Site Templates</title>
         <mediaobject>
           <imageobject>
-            <imagedata fileref="images/site-templates.png" format="PNG"/>
+            <imagedata fileref="../images/site-templates.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -150,7 +150,7 @@
         <title>Granting Permissions</title>
         <mediaobject>
           <imageobject>
-            <imagedata fileref="images/grant-perm-463.png" format="PNG"/>
+            <imagedata fileref="../images/grant-perm-463.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -162,7 +162,7 @@
         <title>Granting Permissions in 5.0</title>
         <mediaobject>
           <imageobject>
-            <imagedata fileref="images/grant-perm-50.png" format="PNG"/>
+            <imagedata fileref="../images/grant-perm-50.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure>

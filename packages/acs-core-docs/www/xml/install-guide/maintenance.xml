@@ -369,7 +369,7 @@ set address                127.0.0.1 </programlisting>
       <title>Multiple-server configuration</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/hpha.png" format="PNG" align="center"/>
+          <imagedata fileref="../images/hpha.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -498,7 +498,7 @@ cvs up -Pd index.adp</programlisting>
       <title>Simple A/B Deployment - Step 1</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/simple-deploy-1.png" format="PNG" align="center"/>
+          <imagedata fileref="../images/simple-deploy-1.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -506,7 +506,7 @@ cvs up -Pd index.adp</programlisting>
       <title>Simple A/B Deployment - Step 2</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/simple-deploy-2.png" format="PNG" align="center"/>
+          <imagedata fileref="../images/simple-deploy-2.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -514,7 +514,7 @@ cvs up -Pd index.adp</programlisting>
       <title>Simple A/B Deployment - Step 3</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/simple-deploy-3.png" format="PNG" align="center"/>
+          <imagedata fileref="../images/simple-deploy-3.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -525,7 +525,7 @@ cvs up -Pd index.adp</programlisting>
       <title>Complex A/B Deployment - Step 1</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/complex-deploy-1.png" format="PNG" align="center"/>
+          <imagedata fileref="../images/complex-deploy-1.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -533,7 +533,7 @@ cvs up -Pd index.adp</programlisting>
       <title>Complex A/B Deployment - Step 2</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/complex-deploy-2.png" format="PNG" align="center"/>
+          <imagedata fileref="../images/complex-deploy-2.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -541,7 +541,7 @@ cvs up -Pd index.adp</programlisting>
       <title>Complex A/B Deployment - Step 3</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/complex-deploy-3.png" format="PNG" align="center"/>
+          <imagedata fileref="../images/complex-deploy-3.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -712,7 +712,7 @@ logout
                 <title>Query Analysis example</title>
               <mediaobject>
                 <imageobject>
-                  <imagedata fileref="images/query-duration.png" format="PNG"/>
+                  <imagedata fileref="../images/query-duration.png" format="PNG"/>
                 </imageobject>
               </mediaobject>
               </figure>
