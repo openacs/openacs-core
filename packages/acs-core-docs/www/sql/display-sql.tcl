@@ -44,16 +44,18 @@ if {[empty_string_p $db]} {
 
     # if we were not passed a DB string get a list of matching files.
 
-    set text {}
+    set text {<ul>}
     set files [glob -nocomplain "[acs_package_root_dir $package_key]/sql/*/$url" "[acs_package_root_dir $package_key]/sql/$url"]
     foreach f $files { 
         regexp {([^/]*)/([^/]*)$} $f match db url
         append text "<li> <a href=\"display-sql?[export_url_vars db url package_key]\">$db</a></li>"
     }
-    if {[empty_string_p $text]} { 
-        set text "<li> No sql file found."
+    if {[empty_string_p $files]} { 
+        append text "<li> No sql file found."
     }
+    append text {</ul>}
     set context [list [list ../$package_key $package_key] "SQL Display"]
+
 } else { 
 
     # we have a db.  
