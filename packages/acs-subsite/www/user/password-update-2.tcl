@@ -28,8 +28,6 @@ ad_page_contract {
         }
     }
 } -properties {
-    return_url:onevalue
-    site_link:onevalue
 }
 
 if {[empty_string_p $user_id]} {
@@ -39,19 +37,14 @@ if {[empty_string_p $user_id]} {
     permission::require_permission -party_id $user_id -object_id $user_id -privilege "admin"
 }
 
-if [empty_string_p $return_url] {
-    set return_url [ad_parameter -package_id [ad_acs_kernel_id] "HomeURL"]
-    set return_link "return to [ad_pvt_home_link]"
-} else {
-    set return_link "<a href=\"$return_url\">return</a>"
-}
-
-if [catch {ad_change_password $user_id $password_1} errmsg] {
+if {[catch {ad_change_password $user_id $password_1} errmsg]} {
     ad_return_error "Wasn't able to change your password. Please contact the system administrator."
 }
 
-set site_link [ad_site_home_link]
-
 ad_user_login $user_id
+
+if {[empty_string_p $return_url]} {
+    set return_url [ad_parameter -package_id [ad_acs_kernel_id] "HomeURL"]
+}
 
 ad_returnredirect $return_url
