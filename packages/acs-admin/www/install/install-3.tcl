@@ -92,10 +92,10 @@ foreach package_key $install {
                               [apm_data_model_scripts_find \
                                    -upgrade_from_version_name $initial_version_name \
                                    -upgrade_to_version_name $final_version_name \
-                                   -package_path $package_path \
+                                   -package_path "$package_path/$package_key" \
                                    $package_key] \
-                              [apm_ctl_files_find -package_path $package_path $package_key]]
-    
+                              [apm_ctl_files_find -package_path "$package_path/$package_key" $package_key]]
+
     # Install the packages -- this actually copies the files into the right place in the file system and backs up any old files
     set version_id [apm_package_install \
                         -enable \
