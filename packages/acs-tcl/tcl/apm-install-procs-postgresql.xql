@@ -164,7 +164,7 @@
 				  );
 
 		    node_id := site_node__new(
-                             null
+                             null,
 			     main_site_id,
 			     :package_key,
 			     instance_id,
