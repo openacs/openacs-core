@@ -865,6 +865,116 @@ drop function inline_0();
     look at the forums package.</para>
   </sect1>
 
+<sect1>
+    <title>Hierarchical data</title>
+    <authorblurb>
+      <para>by <ulink url="http://rubick.com:8002">Jade Rubick</ulink>
+      with help from many people in the OpenACS community</para>
+    </authorblurb>
+
+    <para>One of the nice things about using the OpenACS object system
+    is that it has a built-in facility for tracking hierarchical data
+    in an efficient way. The algorithm behind this is called
+    <computeroutput>tree_sortkey.</computeroutput></para>
+
+    <para>Any time your tables are subclasses of the acs_objects
+    table, then you automatically get the ability to structure them
+    hierarchically. The way you do this is currently via the
+    <computeroutput>context_id</computeroutput> column of
+    acs_objects (Note that there is talk of adding in a
+    <computeroutput>parent_id</computeroutput> column instead, because
+    the use of <computeroutput>context_id</computeroutput> has been
+    ambiguous in the past). So when you want to build your hierarchy,
+    simply set the context_id values. Then, when you want to make
+    hierarchical queries, you can do them as follows:</para>
+
+    <programlisting>
+      db_multirow categories blog_categories "
+      SELECT
+      c.*,
+      o.context_id,
+      tree_level(o.tree_sortkey)
+      FROM
+      blog_categories c,
+      acs_objects o
+      WHERE
+      c.category_id = o.object_id
+      ORDER BY
+      o.tree_sortkey"
+    </programlisting>
+
+    <para>Note the use of the
+    <computeroutput>tree_level()</computeroutput> function, which
+    gives you the level, starting from 1, 2, 3... </para>
+
+    <para>Here's an example, pulling all of the children for a given
+  parent:</para> 
+
+    <programlisting>
+      SELECT 
+      children.*,
+      tree_level(children.tree_sortkey) -
+        tree_level(parent.tree_sortkey) as level
+      FROM 
+      some_table parent, 
+      some_table children
+      WHERE 
+      children.tree_sorktey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
+      and parent.tree_sortkey <> children.tree_sortkey
+      and parent.key = :the_parent_key;
+      </programlisting>
+
+    <para>The reason we substract the parent's tree_level from the
+    child's tree_level is that the tree_levels are global, so if you
+    want the parent's tree_level to start with 0, you'll want the
+    subtraction in there. This is a reason you'll commonly see magic
+    numbers in tree_sortkey SQL queries, like
+    <computeroutput>tree_level(children.tree_sortkey) -
+    4</computeroutput>. That is basically an incorrect way to do it,
+    and subtracting the parent's tree_level is the preferred method.<para>
+
+    <para>This example does not include the parent. To return the entire subtree including the parent, leave out the non-equals clause:</para>
+
+    <programlisting>
+      SELECT
+      subtree.*,
+      tree_level(children.tree_sortkey) -
+        tree_level(parent.tree_sortkey) as level
+      FROM some_table parent, some_table subtree
+      WHERE 
+      subtree.tree_sorktey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
+      and parent.key = :the_parent_key;
+    </programlisting>
+
+    <para>If you are using the Content Repository, you get a similar
+      facility, but the <computeroutput>parent_id</computeroutput>
+      column is already there. Note you can do joins with
+      <computeroutput>tree_sortkey</computeroutput>:</para>
+      
+    <programlisting>
+      SELECT
+      p.item_id,
+      repeat(:indent_pattern, (tree_level(p.tree_sortkey) - 5)* :indent_factor) as indent,
+      p.parent_id as folder_id,
+      p.project_name
+      FROM pm_projectsx p, cr_items i
+      WHERE p.project_id = i.live_revision
+      ORDER BY i.tree_sortkey
+    </programlisting>
+
+    <para>This rather long thread explains <ulink
+    url="http://openacs.org/forums/message-view?message_id=16799">How
+    tree_sortkeys work</ulink> and this paper <ulink
+    url="http://www.yafla.com/papers/sqlhierarchies/sqlhierarchies2.htm">describes
+    the technique for tree_sortkeys</ulink>, although the <ulink
+    url="http://openacs.org/forums/message-view?message_id=112943">OpenACS
+    implementation has a few differences in the
+    implementation</ulink>, to make it work for many languages and the
+    LIKE construct in Postgres.
+    </para>
+
+  </sect1>
+
   <sect1 id="tutorial-vuh">
     <title>Using .vuh files for pretty urls</title>
     <para>.Vuh files are special cases of .tcl files, used for rewriting incoming urls.  We can use a vuh file to prettify the uri for our notes.  Instead of <computeroutput>note-edit?item_id=495</computeroutput>, we can use <computeroutput>note/495</computeroutput>.  To do this, we will need a new .vuh file for redirection and we will need to change the referring links in note-list.  First, add the vuh:</para>
