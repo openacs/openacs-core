@@ -58,7 +58,7 @@
         <a href="@locales.msg_edit_url@" title="Edit localized messages for @locales.locale_label@">@locales.locale_label@</a>
       </td>
       <td align="right"><if @locales.num_translated_pretty@ ne 0>@locales.num_translated_pretty@</if></td>
-      <td align="right"><if @locales.num_untranslated_pretty@ ne 0>@locales.num_untranslated_pretty@</if></td>
+      <td align="right"><if @locales.enabled_p@ true or @locales.num_translated@ gt 0><if @locales.num_untranslated_pretty@ ne 0>@locales.num_untranslated_pretty@</if></if></td>
       <td align="center">
         <if @locales.enabled_p@ true>
           <a href="@locales.locale_enabled_p_url@" title="Disable this locale"><img src="/shared/images/checkboxchecked" height="13" width="13" border="0" style="background-color: white;"></a>
