@@ -326,11 +326,17 @@ ad_proc -public apm_load_tests_p {} {
 
 ad_proc -public apm_load_packages {
     {-force_reload:boolean 0}
+    {-load_libraries_p 1}
+    {-load_queries_p 1}
     {-packages {}}
 } {
-    Load Tcl libraries and queries for the packages with given keys.
+    Load Tcl libraries and queries for the packages with given keys. Will
+    load Tcl tests if the acs-automated-testing package is enabled.
 
     @param force_reload Reload Tcl libraries even if they are already loaded.
+    @param load_libraries Switch to indicate if Tcl libraries in (-procs.tcl and -init.tcl)
+                          files should be loaded. Defaults to true.
+    @param load_queries   Switch to indicate if xql query files should be loaded. Default true.
     @param packages     A list of package_keys for packages to be loaded. Defaults to 
                         all enabled packages
 
@@ -344,10 +350,14 @@ ad_proc -public apm_load_packages {
     set load_tests_p [apm_load_tests_p]
 
     # Load *-procs.tcl files
-    apm_load_libraries -force_reload=$force_reload_p -packages $packages -procs
-
+    if { $load_libraries_p } {
+        apm_load_libraries -force_reload=$force_reload_p -packages $packages -procs
+    }
+    
     # Load up the Queries (OpenACS, ben@mit.edu)
-    apm_load_queries -packages $packages
+    if { $load_queries_p } {
+        apm_load_queries -packages $packages
+    }
 
     # Load up the Automated Tests and associated Queries if necessary
     if {$load_tests_p} {
@@ -355,7 +365,9 @@ ad_proc -public apm_load_packages {
       apm_load_queries -packages $packages -test_queries
     }
 
-    apm_load_libraries -init -packages $packages
+    if { $load_libraries_p } {
+        apm_load_libraries -init -packages $packages
+    }
 
     # Load up the Automated Tests initialisation scripts if necessary
     if {$load_tests_p} {
@@ -1091,6 +1103,17 @@ ad_proc -public apm_package_instance_delete {
     Deletes an instance of a package
 } {
     db_exec_plsql apm_package_instance_delete {}
+}
+
+ad_proc -public apm_supported_callback_types {} {
+    Gets the list of package callback types
+    that are supported by the system.
+    Each callback type represents a certain event or time
+    when a Tcl procedure should be invoked, such as after-install
+
+    @author Peter Marklund
+} {
+    return [list after-install]
 }
 
 ##
