@@ -61,13 +61,89 @@ create table rel_constraints (
     required_rel_segment	integer not null
 				constraint rc_required_rel_segment
 					references rel_segments (segment_id),
+    tree_sortkey                varchar(4000),
     constraint rel_constraints_uq
 	unique (rel_segment, rel_side, required_rel_segment)
 );
 
 -- required_rel_segment has a foreign key reference - create an index
 create index rel_constraint_req_rel_seg_idx on rel_constraints(required_rel_segment);
+create index rel_constraint_tree_skey_idx on rel_constraints (tree_sortkey);
 
+create function rel_constraints_insert_tr () returns opaque as '
+declare
+        v_parent_sk     varchar;
+        max_key         varchar;
+begin
+        select max(tree_sortkey) into max_key 
+          from rel_constraints 
+         where required_rel_segment = new.required_rel_segment;
+
+        select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+          from rel_constraints 
+         where rel_segment = new.required_rel_segment;
+
+        new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
+
+        return new;
+
+end;' language 'plpgsql';
+
+create trigger rel_constraints_insert_tr before insert 
+on rel_constraints for each row 
+execute procedure rel_constraints_insert_tr ();
+
+create function rel_constraints_update_tr () returns opaque as '
+declare
+        v_parent_sk     varchar;
+        max_key         varchar;
+        v_rec           record;
+        clr_keys_p      boolean default ''t'';
+begin
+        if new.rel_segment = old.rel_segment and 
+           new.required_rel_segment = old.required_rel_segment then
+
+           return new;
+
+        end if;
+
+        for v_rec in select rel_segment
+                       from rel_constraints 
+                      where tree_sortkey like new.tree_sortkey || ''%''
+                   order by tree_sortkey
+        LOOP
+            if clr_keys_p then
+               update rel_constraints set tree_sortkey = null
+               where tree_sortkey like new.tree_sortkey || ''%'';
+               clr_keys_p := ''f'';
+            end if;
+            
+            select max(tree_sortkey) into max_key
+              from rel_constraints 
+             where required_rel_segment = (select required_rel_segment 
+                                             from rel_constraints 
+                                            where rel_segment = v_rec.rel_segment);
+
+            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+              from rel_constraints 
+             where rel_segment = (select required_rel_segment 
+                                    from rel_constraints 
+                                   where rel_segment = v_rec.rel_segment);
+
+            update rel_constraints 
+               set tree_sortkey = v_parent_sk || ''/'' || tree_next_key(max_key)
+             where rel_segment = v_rec.rel_segment;
+
+        end LOOP;
+
+        return new;
+
+end;' language 'plpgsql';
+
+create trigger rel_constraints_update_tr after update 
+on rel_constraints
+for each row 
+execute procedure rel_constraints_update_tr ();
 
 comment on table rel_constraints is '
   Defines relational constraints. The relational constraints system is
@@ -107,23 +183,23 @@ comment on column rel_constraints.required_rel_segment is '
 -- from the constraints and the associated relations of rel_segment
 -- where the relation's container_id (i.e., object_id_one) is not in the 
 -- relational segment required_rel_segment.
-/*
-create view rel_constraints_violated_one as
-select constrained_rels.*
-from (select rel_constraints.constraint_id, rel_constraints.constraint_name, 
-             r.rel_id, r.container_id, r.party_id, r.rel_type, 
-             rel_constraints.rel_segment,
-             rel_constraints.rel_side, 
-             rel_constraints.required_rel_segment
-      from rel_constraints, rel_segment_party_map r
-      where rel_constraints.rel_side = 'one'
-        and rel_constraints.rel_segment = r.segment_id
-     ) constrained_rels,
-     rel_segment_party_map rspm
-where rspm.segment_id(+) = constrained_rels.required_rel_segment
-  and rspm.party_id(+) = constrained_rels.container_id
-  and rspm.party_id is null;
-*/
+
+-- create view rel_constraints_violated_one as
+-- select constrained_rels.*
+-- from (select rel_constraints.constraint_id, rel_constraints.constraint_name, 
+--              r.rel_id, r.container_id, r.party_id, r.rel_type, 
+--              rel_constraints.rel_segment,
+--              rel_constraints.rel_side, 
+--              rel_constraints.required_rel_segment
+--       from rel_constraints, rel_segment_party_map r
+--       where rel_constraints.rel_side = 'one'
+--         and rel_constraints.rel_segment = r.segment_id
+--      ) constrained_rels,
+--      rel_segment_party_map rspm
+-- where rspm.segment_id(+) = constrained_rels.required_rel_segment
+--   and rspm.party_id(+) = constrained_rels.container_id
+--   and rspm.party_id is null;
+
 
 create view rel_constraints_violated_one as
 select constrained_rels.*
@@ -170,23 +246,22 @@ where rspm.party_id is null;
 -- from the constraints and the associated relations of rel_segment
 -- where the relation's party_id (i.e., object_id_two) is not in the 
 -- relational segment required_rel_segment.
-/*
-create view rel_constraints_violated_two as
-select constrained_rels.*
-from (select rel_constraints.constraint_id, rel_constraints.constraint_name, 
-             r.rel_id, r.container_id, r.party_id, r.rel_type, 
-             rel_constraints.rel_segment,
-             rel_constraints.rel_side, 
-             rel_constraints.required_rel_segment
-      from rel_constraints, rel_segment_party_map r
-      where rel_constraints.rel_side = 'two'
-        and rel_constraints.rel_segment = r.segment_id
-     ) constrained_rels,
-     rel_segment_party_map rspm
-where rspm.segment_id(+) = constrained_rels.required_rel_segment
-  and rspm.party_id(+) = constrained_rels.party_id
-  and rspm.party_id is null;
-*/
+
+-- create view rel_constraints_violated_two as
+-- select constrained_rels.*
+-- from (select rel_constraints.constraint_id, rel_constraints.constraint_name, 
+--              r.rel_id, r.container_id, r.party_id, r.rel_type, 
+--              rel_constraints.rel_segment,
+--              rel_constraints.rel_side, 
+--              rel_constraints.required_rel_segment
+--       from rel_constraints, rel_segment_party_map r
+--       where rel_constraints.rel_side = 'two'
+--         and rel_constraints.rel_segment = r.segment_id
+--      ) constrained_rels,
+--      rel_segment_party_map rspm
+-- where rspm.segment_id(+) = constrained_rels.required_rel_segment
+--   and rspm.party_id(+) = constrained_rels.party_id
+--   and rspm.party_id is null;
 
 create view rel_constraints_violated_two as
 select constrained_rels.*
@@ -536,16 +611,29 @@ select r.rel_type as viol_rel_type, r.rel_id as viol_rel_id,
 --             and rel_side = :rel_side
 --
 --
+-- create view rc_segment_required_seg_map as
+-- select rc.rel_segment, rc.rel_side, rc_required.required_rel_segment
+-- from rel_constraints rc, rel_constraints rc_required 
+-- where rc.rel_segment in (
+--           select rel_segment
+--           from rel_constraints
+--           start with rel_segment = rc_required.rel_segment
+--           connect by required_rel_segment = prior rel_segment
+--                  and prior rel_side = 'two'
+--       );
+
 create view rc_segment_required_seg_map as
 select rc.rel_segment, rc.rel_side, rc_required.required_rel_segment
 from rel_constraints rc, rel_constraints rc_required 
 where rc.rel_segment in (
           select rel_segment
-          from rel_constraints
-          start with rel_segment = rc_required.rel_segment
-          connect by required_rel_segment = prior rel_segment
-                 and prior rel_side = 'two'
-      );
+            from rel_constraints
+           where tree_sortkey 
+                 like 
+                 (select tree_sortkey || '%'
+                    from rel_constraints
+                   where rel_segment = rc_required.rel_segment 
+                     and rel_side = 'two'));
 
 -- View: rc_segment_dependency_levels
 --
@@ -576,14 +664,27 @@ where rc.rel_segment in (
 -- example query above (see "Answer:").  I could have embeded that logic into
 -- this view, but that would unnecessarily degrade performance.
 --
+-- create view rc_segment_dependency_levels as
+--       select rel_segment as segment_id,
+--              max(tree_level) as dependency_level
+--       from (select rel_segment, level as tree_level
+--             from rel_constraints
+--             connect by required_rel_segment = prior rel_segment
+--                 and prior rel_side = 'two')
+--       group by rel_segment;
+
+-- FIXME: need to verify this against acs classic to see if this is correct.
+-- It seems correct, but it might be bogus.
+-- DCW 2001-03-14.
+
 create view rc_segment_dependency_levels as
       select rel_segment as segment_id,
              max(tree_level) as dependency_level
-      from (select rel_segment, level as tree_level
-            from rel_constraints
-            connect by required_rel_segment = prior rel_segment
-                and prior rel_side = 'two')
-      group by rel_segment;
+       from (select rc1.rel_segment, tree_level(rc1.tree_sortkey) as tree_level
+               from rel_constraints rc1, rel_constraints rc2
+              where rc1.tree_sortkey like rc2.tree_sortkey || '%'
+                and rc2.rel_side = 'two')
+   group by segment_id;
 
 --------------
 -- PACKAGES --

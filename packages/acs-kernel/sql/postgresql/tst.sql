@@ -76,3 +76,34 @@ select object_type as rel_type
 start with object_type = 'membership_rel'
         or object_type = 'composition_rel'
    connect by supertype = prior object_type
+
+
+create view rc_segment_required_seg_map as
+select rc.rel_segment, rc.rel_side, rc_required.required_rel_segment
+from rel_constraints rc, rel_constraints rc_required 
+where rc.rel_segment in (
+          select rel_segment
+            from rel_constraints
+           where tree_sortkey 
+                 like 
+                 (select tree_sortkey || '%'
+                    from rel_constraints
+                   where rel_segment = rc_required.rel_segment 
+                     and rel_side = 'two'));
+
+
+create view rc_segment_dependency_levels as
+      select rel_segment as segment_id,
+             max(tree_level) as dependency_level
+       from (select rel_segment, tree_level(tree_sortkey) as tree_level
+               from rel_constraints rc1, rel_constraints rc2
+              where rc1.tree_sortkey like rc2.tree_sortkey || '%'
+                and rc1.rel_side = 'two')
+   group by segment_id;
+
+
+
+
+select ot1.object_type, ot1.supertype 
+from acs_object_types ot1, acs_object_types ot2
+where ot1.sortkey like ot2.sortkey || '%';
