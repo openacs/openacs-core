@@ -57,6 +57,12 @@ ad_proc -public ad_text_to_html {
 
     # Convert _single_ CRLF's to <br>'s to preserve line breaks
     regsub -all {\r*\n} $text "<br>" text
+
+    # Convert every two spaces to an nbsp
+    regsub -all {  } $text "\\\&nbsp; " text
+
+    # Convert every tab to 4 nbsp's
+    regsub -all {\t} $text {\&nbsp;\&nbsp;\&nbsp;\&nbsp;} text
     
     # turn CRLFCRLF into <P>
     if { [regsub -all {\r\n\s*\r\n} $text "<p>" text] == 0 } {
