@@ -2,6 +2,12 @@ ad_page_contract {
 
 } {
 
+} -validate {
+    dotlrn_cannot_become_wide_admin {
+	if { [acs_user::site_wide_admin_p -user_id $user_id] && ![acs_user::site_wide_admin_p] } {
+	    ad_complain "[_ acs-admin.lt_You_dont_have_permiss]"
+	}
+    }
 }
 
 set return_url [ad_pvt_home]
