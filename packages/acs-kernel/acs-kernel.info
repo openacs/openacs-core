@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.1.2d3" url="http://openacs.org/repository/download/apm/acs-kernel-5.1.2d3.apm">
+    <version name="5.1.2d4" url="http://openacs.org/repository/download/apm/acs-kernel-5.1.2d4.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
         <release-date>2004-04-29</release-date>
@@ -18,7 +18,7 @@
             <level descr="Mature">2</level>
           </platform>
         </maturity>
-        <provides url="acs-kernel" version="5.1.2d3"/>
+        <provides url="acs-kernel" version="5.1.2d4"/>
         <callbacks>
         </callbacks>
         <parameters>
