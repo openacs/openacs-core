@@ -661,6 +661,7 @@ ad_proc -public ad_form {
 		    section -
                     before_html -
                     after_html -
+                    result_datatype -
                     search_query -
                     search_query_name {
                         if { [llength $extra_arg] > 2 || [llength $extra_arg] == 1 } {
