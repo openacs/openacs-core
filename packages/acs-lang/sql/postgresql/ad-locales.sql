@@ -71,65 +71,116 @@ create table ad_locale_user_prefs (
 --
 --
 
-insert into ad_locales (
-  locale, label, language, country,
-  nls_language, nls_territory, nls_charset, mime_charset, default_p
-) values (
-  'en_US', 'American English', 'en', 'US',
-  'AMERICAN', 'AMERICA', 'WE8ISO8859P1', 'ISO-8859-1', 't'
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p) 
+  values ('en_US', 'English (US)', 'en', 'US', 'AMERICAN', 
+          'AMERICA', 'WE8ISO8859P1', 'ISO-8859-1', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('de_DE', 'German (DE)', 'de', 'DE', 'GERMAN', 
+         'GERMANY', 'WE8ISO8859P1', 'ISO-8859-1', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p) 
+values ('es_ES', 'Spanish (ES)', 'es', 'ES', 'SPANISH', 
+       'SPAIN', 'WE8DEC', 'ISO-8859-1', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('fr_FR', 'French (FR)', 'fr', 'FR', 'FRENCH', 
+        'FRANCE', 'WE8ISO8859P1', 'ISO-8859-1', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('ja_JP', 'Japanese (JP)', 'ja', 'JP', 'JAPANESE', 
+        'JAPAN', 'JA16SJIS', 'Shift_JIS', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('da_DK', 'Danish (DK)', 'da', 'DK', 'DANISH', 'DENMARK', 'WE8ISO8859P1', 'ISO-8859-1', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('sv_SE', 'Swedish (SE)', 'sv', 'SE', 'SWEDISH', 'SWEDEN', 'WE8ISO8859P1', 'ISO-8859-1', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('fi_FI', 'Finnish (FI)', 'fi', 'FI', 'FINNISH', 'FINLAND', 'WE8ISO8859P15', 'ISO-8859-15', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('nl_NL', 'Dutch (NL)', 'nl', 'NL', 'DUTCH', 'THE NETHERLANDS', 'WE8ISO8859P1', 'ISO-8859-1', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('ch_zh', 'Chinese (ZH)', 'CH', 'ZH', 'SIMPLIFIED CHINESE', 'CHINA', 'ZHT32EUC', 'ISO-2022-CN', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('pl_PL', 'Polish (PL)', 'pl', 'PL', 'POLISH', 'POLAND', 'EE8ISO8859P2', 'ISO-8859-2', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('no_NO', 'Norwegian  (NO)', 'no', 'NO', 'NORWEGIAN', 'NORWAY', 'WE8ISO8859P1', 'ISO-8859-1', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('tl_PH', 'Tagalog (PH)', 'tl', 'PH', 'AMERICAN', 'ALGERIA', 'WE8ISO8859P1', 'ISO-8859-1', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('el_GR', 'Greek (GR)', 'el', 'GR', 'GREEK', 'GREECE', 'EL8ISO8859P7', 'ISO-8859-7', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('it_IT', 'Italian (IT)', 'it', 'IT', 'ITALIAN', 'ITALY', 'WE8DEC', 'ISO-8859-1', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('ru_RU', 'Russian (RU)', 'ru', 'RU', 'RUSSIAN', 'CIS', 'RU8PC855', 'windows-1251', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('si_LK', 'Sinhalese (LK)','si', 'LK', 'ENGLISH', 'UNITED KINGDOM', 'UTF8', 'ISO-10646-UTF-1', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('sh_HR', 'Serbo-Croatian (SR/HR)', 'sr', 'YU', 'SLOVENIAN', 'SLOVENIA', 'YUG7ASCII', 'ISO-8859-5', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('nn_NO', 'Norwegian (NN)','nn', 'NO', 'NORWEGIAN', 'NORWAY', 'WE8ISO8859P1', 'ISO-8859-1', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('pt_BR', 'Portuguese (BR)', 'pt', 'BR', 'BRAZILIAN PORTUGUESE', 'BRAZIL', 'WE8ISO8859P1', 'ISO-8859-1', 't'
 );
 
-
-insert into ad_locales (
-  locale, label, language, country,
-  nls_language, nls_territory, nls_charset, mime_charset, default_p
-) values (
-  'de_DE', 'German', 'de', 'DE',
-  'GERMAN', 'GERMANY', 'WE8ISO8859P1', 'ISO-8859-1', 't'
-);
-
-
-insert into ad_locales (
-  locale, label, language, country,
-  nls_language, nls_territory, nls_charset, mime_charset, default_p
-) values (
-  'es_ES', 'Spanish', 'es', 'ES',
-  'SPANISH', 'SPAIN', 'WE8ISO8859P1', 'ISO-8859-1', 't'
-);
-
-
-insert into ad_locales (
-  locale, label, language, country,
-  nls_language, nls_territory, nls_charset, mime_charset, default_p
-) values (
-  'fr_FR', 'French', 'fr', 'FR',
-  'FRENCH', 'France', 'WE8ISO8859P1', 'ISO-8859-1', 't'
-);
-
-
-insert into ad_locales (
-  locale, label, language, country, 
-  nls_language, nls_territory, nls_charset, mime_charset, default_p
-) values (
-  'ja_JP', 'Japanese', 'ja', 'JP',
-  'JAPANESE', 'JAPAN', 'JA16SJIS', 'Shift_JIS', 't'
-);
-
-insert into ad_locales (
-  locale, label, language, country,
-  nls_language, nls_territory, nls_charset, mime_charset, default_p
-) values (
-  'da_DK', 'Danish', 'da', 'DK',
-  'DANISH', 'DENMARK', 'WE8ISO8859P1', 'ISO-8859-1', 't'
-);
-
-insert into ad_locales (
-  locale, label, language, country,
-  nls_language, nls_territory, nls_charset, mime_charset, default_p
-) values (
-  'sv_SE', 'Swedish', 'sv', 'SE',
-  'SWEDISH', 'SWEDEN', 'WE8ISO8859P1', 'ISO-8859-1', 't'
-);
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p)
+ values ('TH_TH', 'Thai (TH)', 'th', 'TH', 'THAI', 'THAILAND', 'TH8TISASCII', 'TIS-620', 't');
 
 end;
 
