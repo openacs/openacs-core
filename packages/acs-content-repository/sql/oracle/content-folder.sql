@@ -241,6 +241,7 @@ procedure copy (
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
   creation_ip		in acs_objects.creation_ip%TYPE default null
+  name                  in cr_items.name%TYPE default null
 ) is
   v_valid_folders_p     integer := 0;
   v_current_folder_id   cr_folders.folder_id%TYPE;
@@ -280,12 +281,15 @@ begin
   where
     item_id = copy.folder_id;  
 
-  if folder_id = content_item.get_root_folder or folder_id = content_template.get_root_folder or target_folder_id = folder_id or v_current_folder_id = target_folder_id then
+  if copy.name = '' then
+    copy.name := NULL;
+  end if;
+
+  if folder_id = content_item.get_root_folder or folder_id = content_template.get_root_folder or target_folder_id = folder_id then
     v_valid_folders_p := 0;
   end if;
 
   if v_valid_folders_p = 2 then 
-    if is_sub_folder(folder_id, target_folder_id) ^= 't' then
 
       -- get the source folder info
       select
@@ -299,6 +303,10 @@ begin
       and
         f.folder_id = copy.folder_id;
 
+  if is_sub_folder(folder_id, target_folder_id) ^= 't' or v_current_folder_id != copy.target_folder_id or (v_name != copy.name and copy.name is not null) then then
+      if copy.name is not null then
+	v_name := copy.name;
+      end if;
       -- create the new folder
       v_new_folder_id := content_folder.new(
 	  parent_id     => copy.target_folder_id,
