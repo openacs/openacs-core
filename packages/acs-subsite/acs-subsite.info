@@ -56,7 +56,6 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="textcolor"  default="black" description="This setting sets the textcolor for the default master template that all HTML content is returned through."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="TmpDir"  default="/tmp" description="What tmp directories are used on this system? Note the leading / character."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="UseCustomQuestionForPasswordReset"  default="0" description="Does the user get to choose their custom password question and answer" section_name="user-login"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseEmailForUsername"  default="1" description="Say 1 if we should use email as the username for login purposes, and hide any mention of a username separate from email address from the users." section_name="user-login"/>
         </parameters>
 
     </version>
