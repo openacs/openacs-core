@@ -600,6 +600,9 @@ template_tag trn { chunk params } {
 # use as follows:
 #
 # <switch flag=regexp @some_var@>
+#     <case in "foo" "bar" "baz">
+#         Foo, Bar or Baz was selected
+#     </case>
 #     <case value="a.+">
 #         A was selected
 #     </case>
@@ -651,10 +654,6 @@ template_tag switch { chunk params } {
 
 template_tag case { chunk params } {
 
-    # get the case value
-
-    set value [ns_set iget $params value]
-
     # Scan the parameter stack backward, looking for the tag name
 
     set tag_id [template::enclosing_tag switch]
@@ -662,13 +661,67 @@ template_tag case { chunk params } {
         error "No enclosing SWITCH tag for CASE tag on value $value"
     }    
 
+    # get the case value
+
+    set value [ns_set iget $params value]
+
     # insert the case statement and eval the chunk in between
 
-    template::adp_append_code "$value {" -nobreak
+    if ![string equal $value ""] {
 
-    template::adp_compile_chunk $chunk
+        # processing <case value= ...> form
 
-    template::adp_append_code "}"
+        template::adp_append_code "$value {" -nobreak        
+
+        template::adp_compile_chunk $chunk
+
+        template::adp_append_code "}"
+
+    } else {
+
+        # processing <case in ...> form
+
+        set switches ""
+        set size [ns_set size $params]
+        set size_1 [expr $size - 1]
+
+        for { set i 0 } { $i < $size } { incr i } {
+
+            set key [ns_set key $params $i]
+            set value [ns_set value $params $i]
+
+            # pass over the first arg (syntax sugar), but check format
+            if { $i == 0 } {
+
+                if ![string equal $key "in"] {
+                    error "Format error: should be <case in \"foo\" \"bar\" ...>"
+                }
+
+            } else {
+
+                if { [string equal $key $value] } {
+
+                    # last item in list so process the chunk
+                    if { $i == $size_1 } {
+
+                        template::adp_append_code "$switches $value {" -nobreak
+        
+                        template::adp_compile_chunk $chunk
+
+                        template::adp_append_code "}"
+
+                    } else {
+
+                        # previous items default to pass-through
+                        append switches " $key - "
+                    }
+                    
+                } else {
+                    error "Format error: should be <case in \"foo\" \"bar\" ...>"
+                }
+            }
+        }
+    }
 }
 
 # default value for case statement which is a sub-tag in switch tag
