@@ -281,7 +281,7 @@
 	
             <listitem id="nsopenssl-download">
               <formalpara>
-                <title><ulink url="http://www.scottg.net/webtools/aolserver/modules/nsopenssl/">nsopenssl</ulink> 3.0beta17 or newer, OPTIONAL</title>
+                <title><ulink url="http://www.scottg.net/webtools/aolserver/modules/nsopenssl/">nsopenssl</ulink> 3.0beta22 or newer, OPTIONAL</title>
                 <para>Provides SSL capabilities for AOLserver.  It requires
 	    OpenSSL.  You need this if you want users to make
 	    secure (https) connections to your webserver.</para>

@@ -14,7 +14,10 @@
   
   <para>Skip this section if you will run only Oracle.</para>
 
-  <para>OpenACS &version; will run with <link linkend="source-postgresql">PostgreSQL</link> 7.3.2, 7.3.3, and 7.3.4.  7.3.4 is the recommended version of PostgreSQL.  PostgreSQL 7.4 has been verified.</para>
+  <para>OpenACS &version; will run with <link
+  linkend="source-postgresql">PostgreSQL</link> 7.3.2, 7.3.3, and
+  7.3.4.  7.3.4 is the recommended version of PostgreSQL.  PostgreSQL
+  7.4 has been verified to work.</para>
 
   <itemizedlist>
     <listitem>
@@ -92,16 +95,16 @@ tar xzf /tmp/postgresql-7.3.4.tar.gz</action></screen>
     </listitem>
     <listitem>
       <formalpara>
-        <title>ALTERNATIVE: Unpack PostgreSQL 7.4.1</title>
+        <title>ALTERNATIVE: Unpack PostgreSQL 7.4.5</title>
         <para>If you have not downloaded the postgresql tarball to
-        <computeroutput>/tmp/postgresql-7.4.1.tar.bz2</computeroutput>,
+        <computeroutput>/tmp/postgresql-7.4.5.tar.bz2</computeroutput>,
         <link linkend="source-postgresql">get it</link>.</para>
       </formalpara>
       <screen>[root root]# <userinput>cd /usr/local/src</userinput>
-[root src]# <userinput>tar xfj /tmp/postgresql-7.4.1.tar.bz2</userinput>
+[root src]# <userinput>tar xfj /tmp/postgresql-7.4.5.tar.bz2</userinput>
 [root src]# 
 <action>cd /usr/local/src
-tar xfj /tmp/postgresql-7.4.1.tar.bz2</action></screen>
+tar xfj /tmp/postgresql-7.4.5.tar.bz2</action></screen>
     </listitem>
     <listitem>
       <formalpara>
@@ -149,7 +152,7 @@ sudo niutil -create / /users/<replaceable>$OPENACS_SERVICE_NAME</replaceable>
 sudo niutil -createprop / /users/<replaceable>$OPENACS_SERVICE_NAME</replaceable> gid  <replaceable>201</replaceable>
 sudo niutil -createprop / /users/<replaceable>$OPENACS_SERVICE_NAME</replaceable> uid <replaceable>201</replaceable>
 mkdir -p /usr/local/pgsql
-chown -R postgres:web /usr/local/pgsql /usr/local/src/postgresql-7.4.1
+chown -R postgres:web /usr/local/pgsql /usr/local/src/postgresql-7.4.5
 chmod 750 /usr/local/pgsql</userinput></screen>
         </listitem>
 </itemizedlist>
