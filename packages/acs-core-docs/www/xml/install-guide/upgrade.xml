@@ -251,7 +251,7 @@ OpenACS openacs-4-6</userinput></screen>
                 <para>Create a new directory as temporary working space to reconcile conflicts between the new files and your current work.  The example uses the cvs keyword yesterday, making the assumption that you haven't checked in new code to your local tree in the last day.</para>
 <screen>[nsadmin@localhost openacs-4.6]$ <userinput> cd /web</userinput>
 [nsadmin@localhost tmp]$ <userinput>mkdir openacs-upgrade</userinput>
-[nsadmin@localhost tmp]$ <userinput>cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS openacs &lt; cvs.txt 2&lt;&amp;1</userinput>
+[nsadmin@localhost tmp]$ <userinput>cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS openacs &gt; cvs.txt 2&gt;&amp;1</userinput>
 (CVS feedback here)
 <action>su - nsadmin
 cd /tmp
@@ -260,7 +260,7 @@ cd openacs-4.6
 cvs import -m "upgrade to OpenACS 4.6" openacs OpenACS openacs-4-6
 cd /tmp
 mkdir openacs-upgrade
-cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS openacs &lt; cvs.txt 2&lt;&amp;1
+cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS openacs &gt; cvs.txt 2&gt;&amp;1
 </action></screen>
               </listitem>
               <listitem>

@@ -2,15 +2,44 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [ 
 
-<!ENTITY version "4.6">
-<!ENTITY majorversion "4">
 <!-- 
      OpenACS Version. 
      Update this to propagate current version numbers to documents.
      In documents, use  &version;  
 -->
 
-<!-- For Developers -->
+<!ENTITY version "5.0.0dev">
+<!ENTITY tarballpath "openacs-5.0.0">
+<!ENTITY cvsversiontag "openacs-5-0-0">
+<!ENTITY majorversion "5">
+
+<!-- Include these files via these entity references-->
+
+<!-- "For Everyone" documents -->
+<!ENTITY release-notes SYSTEM "for-everyone/release-notes.xml">
+
+
+<!-- Installation Guide -->
+<!ENTITY install-overview SYSTEM "install-guide/overview.xml">
+<!ENTITY software SYSTEM "install-guide/software.xml">
+<!ENTITY operating-system SYSTEM "install-guide/os.xml">
+<!ENTITY oracle SYSTEM "install-guide/oracle.xml">
+<!ENTITY postgres SYSTEM "install-guide/postgres.xml">
+<!ENTITY aolserver SYSTEM "install-guide/aolserver.xml">
+<!ENTITY redhat SYSTEM "install-guide/red-hat.xml">
+<!ENTITY openacs SYSTEM "install-guide/openacs.xml">
+<!ENTITY credits SYSTEM "install-guide/credits.xml">
+<!ENTITY maintenance SYSTEM "install-guide/maintenance.xml">
+<!ENTITY database-maintenance SYSTEM "install-guide/database-maintenance.xml">
+<!ENTITY recovery SYSTEM "install-guide/recovery.xml">
+<!ENTITY upgrade SYSTEM "install-guide/upgrade.xml">
+<!ENTITY compatibility SYSTEM "install-guide/compatibility.xml">
+
+<!-- Installing on Windoze -->
+<!ENTITY win2k SYSTEM "install-guide/win2kinstall.xml">
+<!ENTITY mac SYSTEM "install-guide/macinstall.xml">
+
+<!-- Developer's Guide -->
 <!ENTITY api SYSTEM "developers-guide/db-api.xml">
 <!ENTITY rp SYSTEM "developers-guide/rp.xml">
 <!ENTITY objects SYSTEM "developers-guide/objects.xml">
@@ -24,7 +53,14 @@
 <!ENTITY tutorial SYSTEM "developers-guide/tutorial.xml">
 <!ENTITY submissions SYSTEM "developers-guide/submissions.xml">
 <!ENTITY i18n-devel SYSTEM "developers-guide/i18n.xml">
+<!ENTITY programming-aolserver SYSTEM "developers-guide/programming-with-aolserver.xml">
+<!ENTITY tutorial-newpackage SYSTEM "developers-guide/tutorial.xml">
+<!ENTITY tutorial-database SYSTEM "developers-guide/tutorial-db.xml">
+<!ENTITY tutorial-pages SYSTEM "developers-guide/tutorial-pages.xml">
+<!ENTITY tutorial-debug SYSTEM "developers-guide/tutorial-debug.xml">
+<!ENTITY tutorial-advanced SYSTEM "developers-guide/tutorial-advanced.xml">
 
+<!-- Kernel Documentation -->
 <!ENTITY objects-design SYSTEM "kernel/object-system-design.xml">
 <!ENTITY objects-req SYSTEM "kernel/object-system-req.xml">
 <!ENTITY permissions-req SYSTEM "kernel/permissions-requirements.xml">
@@ -36,7 +72,6 @@
 <!ENTITY apm-req SYSTEM "kernel/apm-requirements.xml">
 <!ENTITY apm-design SYSTEM "kernel/apm-design.xml">
 <!ENTITY i18n-req SYSTEM "kernel/i18n-requirements.xml">
-
 <!ENTITY security-req SYSTEM "kernel/security-requirements.xml">
 <!ENTITY security-design SYSTEM "kernel/security-design.xml">
 <!ENTITY security-notes SYSTEM "kernel/security-notes.xml">
@@ -45,8 +80,6 @@
 <!ENTITY db-api SYSTEM "kernel/db-api.xml">
 <!ENTITY tcl-doc SYSTEM "kernel/tcl-doc.xml">
 <!ENTITY bootstrap-acs SYSTEM "kernel/bootstrap-acs.xml">
-
-<!ENTITY programming-aolserver SYSTEM "developers-guide/programming-with-aolserver.xml">
 
 <!-- Engineering Standards -->
 <!ENTITY dbprimer SYSTEM "engineering-standards/docbook-primer.xml">
@@ -58,27 +91,8 @@
 <!ENTITY filenaming SYSTEM "engineering-standards/filenaming.xml">
 <!ENTITY plsql-standards SYSTEM "engineering-standards/plsql.xml">
 
-<!-- Installation Guide -->
-<!ENTITY install-overview SYSTEM "install-guide/overview.xml">
-<!ENTITY operating-system SYSTEM "install-guide/os.xml">
-<!ENTITY oracle SYSTEM "install-guide/oracle.xml">
-<!ENTITY postgres SYSTEM "install-guide/postgres.xml">
-<!ENTITY aolserver SYSTEM "install-guide/aolserver.xml">
-<!ENTITY nextsteps SYSTEM "install-guide/next-steps.xml">
-<!ENTITY openacs SYSTEM "install-guide/openacs.xml">
-<!ENTITY credits SYSTEM "install-guide/credits.xml">
-
-<!-- Installing on Windoze -->
-<!ENTITY win2k SYSTEM "install-guide/win2kinstall.xml">
-<!ENTITY mac SYSTEM "install-guide/macinstall.xml">
-<!ENTITY upgrade SYSTEM "install-guide/upgrade.xml">
-
-
-
-<!-- "For Everyone" documents -->
-
-<!ENTITY release-notes SYSTEM "for-everyone/release-notes.xml">
 ]>
+
 
 <book>
   <title>OpenACS Documentation</title>
@@ -137,21 +151,23 @@
 	    <ulink url="http://openacs.org">web site</ulink> and feel
 	    free to ask a question, post ideas or whatever.
 	  </para>
+
       </sect1>
-
-      &release-notes;
-
+      <sect1>
+        <title>Release Notes</title>
+        <para><ulink url="release-notes-old.html">Release Notes Prior
+        to 5.0.0.</ulink></para>
+        &release-notes;
+      </sect1>
     </chapter>
 
   </part>
 
   <part id="acs-admin">
     <title>Administrator's Guide</title>
-    <partintro>
-      <para>Guide to installation, upgrade, and maintenance.</para>
-    </partintro>
-
-    <chapter id="unix-install" xreflabel="Installing on Unix/Linux">
+    &software;
+    &compatibility;
+    <chapter id="unix-install">
       <title>Installing on Unix/Linux</title>
 
 	   &install-overview;
@@ -160,7 +176,6 @@
 	   &postgres;
 	   &aolserver;
 	   &openacs;
-	   &nextsteps;
            &credits;
 
     </chapter>
