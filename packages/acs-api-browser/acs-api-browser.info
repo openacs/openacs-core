@@ -58,7 +58,7 @@
             <file type="content_page" path="www/type-view.tcl"/>
         </files>
         <parameters>
-        <!-- No version parameters -->
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="FancySourceFormattingP"  default="1" description="Should we highlight syntax and hyperlink procedure names when showing procedure source code?  (1 for yes, 0 for no)"/>
         </parameters>
 
     </version>

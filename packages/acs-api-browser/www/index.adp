@@ -10,7 +10,7 @@
     <form action="proc-search" method="get">
      <tr>
       <td valign="top">
-       <h4>ACS Tcl API Search</h4>
+       <h4>OpenACS Tcl API Search</h4>
        <input type="text" name="query_string" /><br />
        <input type="submit" value="All matches" name="search_type" />
        <input type="submit" value="Only best match" name="search_type" />
@@ -39,7 +39,7 @@
  
  <tr bgcolor="#DDDDDD">
   <td colspan="2">
-   <h4>ACS PL/SQL API Search</h4>
+   <h4>OpenACS PL/SQL API Search</h4>
    <p><a href="plsql-subprograms-all">Browse OpenACS PL/SQL API</a></p>
   </td>
  </tr>
