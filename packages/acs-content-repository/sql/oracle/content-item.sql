@@ -111,7 +111,7 @@ begin
     v_parent_id := parent_id;
   end if;
 
-  if package_id is null then
+  if package_id is null and parent_id ^= 0 then
     v_package_id := acs_object.package_id(content_item.get_root_folder(v_parent_id));
   else
     v_package_id := package_id;
