@@ -1,11 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+@doc_type;noquote@
+<html>
   <head>
     <meta name="generator" content="OpenACS version @openacs_version@" />
     <title>@title;noquote@</title>
     <multiple name="header_links">
-      <link rel="@header_links.rel@" type="@header_links.type@"
-      href="@header_links.href@" media="@header_links.media@" />
+      <link rel="@header_links.rel@" type="@header_links.type@" href="@header_links.href@" media="@header_links.media@" />
     </multiple>
 
     <if @acs_blank_master__htmlareas@ not nil>
