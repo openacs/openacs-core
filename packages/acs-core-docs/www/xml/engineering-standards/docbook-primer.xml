@@ -259,7 +259,7 @@
           <listitem><para>
             Use generic DocBook syntax to maximize reader familiarity with the documents.
               <programlisting>
-                <book><title><part label="Part 1"><etc...>
+                &lt;book&gt;&lt;title&gt;&lt;part label="Part 1"&gt;&lt;etc...&gt;
               </programlisting>
           </para></listitem>
         </itemizedlist>
