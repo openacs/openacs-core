@@ -4,6 +4,9 @@
   <msg key="authentication_authority">Authority</msg>
   <description key="authentication_authority">The identifying label for an authentication server, such as an  LDAP or RADIUS server.</description>
 
+  <msg key="common_Actions">Actions</msg>
+  <description key="common_Actions">Header for a list of actions which may be taken on the displayed content</description>
+  <msg key="common_actions">actions</msg>
   <msg key="common_Add">Add</msg>
   <msg key="common_add">add</msg>
   <msg key="common_Administration">Administration</msg>
