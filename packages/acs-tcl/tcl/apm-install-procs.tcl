@@ -1095,8 +1095,6 @@ ad_proc -private apm_packages_full_install {
 } {
 
     Loads the data model, installs, enables, instantiates, and mounts all of the packages in pkg_list.
-    Each package is mounted at /package-key.
-
 } {
 
     foreach pkg_info $pkg_info_list {
@@ -1298,20 +1296,20 @@ ad_proc -private apm_query_files_find {
 
 ad_proc -private apm_mount_core_packages {} {
     <p>
-      On first startup (bootstrap) of OpenACS - instantiate, mount,
-      and grant appropriate permissions to packages part of all
-      OpenACS installations.
+    Mount, and set permissions for a number of packages
+    part of the OpenACS core. The packages are singletons that have
+    already been instantiated during installation. The main site
+    needs to have been set up prior to invoking this proc.
     </p>
 
     <p>
-      The reason this proc is not invoked from the installer is that
-      we don't currently have the full Tcl environment set up there (for
-      example ad_conn).
-      The reason acs-kernel and the main site are not set up in this
-      proc is that they are needed during the installation. They are
-      set up in acs-kernel/sql/postgresql/acs-install.sql.
+      The reason mounting is done here and not via the auto-mount
+      feature of the APM is that there is a circular dependency between
+      acs-subsite and acs-content-repository. The package acs-subsite
+      requires acs-content-repository and so we cannot install acs-subsite
+      before acs-content-repository in order to be able to mount acs-content-repository.
     </p>
-    
+
     @author Peter Marklund
 } {
     ns_log Notice "Starting instantiation and mounting of core packages"
