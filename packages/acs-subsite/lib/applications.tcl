@@ -1,12 +1,15 @@
 set admin_p [permission::permission_p -object_id [ad_conn package_id] -privilege admin -party_id [ad_conn untrusted_user_id]]
+
+set actions [list]
 if { $admin_p } {
-    set add_url [export_vars -base "[subsite::get_element -element url]admin/applications/application-add" { { return_url [ad_return_url] } }]
+    lappend actions [_ acs-subsite.Add_new_app] [export_vars -base "[subsite::get_element -element url]admin/applications/application-add" { { return_url [ad_return_url] } }] {}
 }
 
 list::create \
     -name applications \
     -multirow applications \
     -no_data "[_ acs-subsite.No_applications]" \
+    -actions $actions \
     -elements {
         instance_name {
             label "[_ acs-subsite.Name]"
