@@ -1520,50 +1520,88 @@ ad_proc -public exists_and_not_null { varname } {
     return [expr { [info exists var] && ![empty_string_p $var] }] 
 } 
 
-ad_proc -public util_httpget {
-    url {headers ""} {timeout 30} {depth 0}
+ad_proc -public ad_httpget {
+    -url 
+    {-headers ""} 
+    {-timeout 30}
+    {-depth 0}
 } {
-    Just like ns_httpget, but first optional argument is an ns_set of 
+    Just like ns_httpget, but first headers is an ns_set of
     headers to send during the fetch.
+
+    ad_httpget also makes use of Conditional GETs (if called with a 
+    Last-Modified header).
+
+    Returns the data in array get form with array elements page status modified.
 } {
+    ns_log "Notice" "Getting {$url} {$headers} {$timeout} {$depth}"
+
     if {[incr depth] > 10} {
-	return -code error "util_httpget:  Recursive redirection:  $url"
+        return -code error "ad_httpget:  Recursive redirection:  $url"
     }
-    ns_log Notice "Getting {$url} {$headers} {$timeout} {$depth}"
+
     set http [ns_httpopen GET $url $headers $timeout]
     set rfd [lindex $http 0]
     close [lindex $http 1]
     set headers [lindex $http 2]
     set response [ns_set name $headers]
     set status [lindex $response 1]
-    if {$status == 302} {
+    set last_modified [ns_set iget $headers last-modified]
+
+    if {$status == 302 || $status == 301} {
 	set location [ns_set iget $headers location]
-	if {$location != ""} {
-	    ns_set free $headers
-	    close $rfd
-	    return [util_httpget $location {} $timeout $depth]
+	if {![empty_string_p $location]} { 
+            ns_set free $headers
+            close $rfd
+	    return [ad_httpget -url $location -timeout $timeout -depth $depth]
 	}
+    } elseif { $status == 304 } {
+        # The requested variant has not been modified since the time specified
+        # A conditional get didn't return anything.  return an empty page and 
+        set page {}
+
+        ns_set free $headers
+        close $rfd
+    } else { 
+        set length [ns_set iget $headers content-length]
+        if [string match "" $length] {set length -1}
+    
+        set err [catch {
+            while 1 {
+                set buf [_ns_http_read $timeout $rfd $length]
+                append page $buf
+                if [string match "" $buf] break
+                if {$length > 0} {
+                    incr length -[string length $buf]
+                    if {$length <= 0} break
+                }
+            }
+        } errMsg]
+        ns_set free $headers
+        close $rfd
+
+        if $err {
+            global errorInfo
+            return -code error -errorinfo $errorInfo $errMsg
+        }
     }
-    set length [ns_set iget $headers content-length]
-    if [string match "" $length] {set length -1}
-    set err [catch {
-	while 1 {
-	    set buf [_ns_http_read $timeout $rfd $length]
-	    append page $buf
-	    if [string match "" $buf] break
-	    if {$length > 0} {
-		incr length -[string length $buf]
-		if {$length <= 0} break
-	    }
-	}
-    } errMsg]
-    ns_set free $headers
-    close $rfd
-    if $err {
-	global errorInfo
-	return -code error -errorinfo $errorInfo $errMsg
-    }
-    return $page
+
+    # order matters here since we depend on page content 
+    # being element 1 in this list in util_httpget 
+    return [list page $page \
+                status $status \
+                modified $last_modified]
+}
+
+ad_proc -public util_httpget {
+    url {headers ""} {timeout 30} {depth 0}
+} {
+    util_httpget simply calls ad_httpget which also returns 
+    status and last_modfied
+    
+    @see ad_httpget
+} {
+    return [lindex [ad_httpget -url $url -headers $headers -timeout $timeout -depth $depth] 1]
 }
 
 # some procs to make it easier to deal with CSV files (reading and writing)
