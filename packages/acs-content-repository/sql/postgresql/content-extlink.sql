@@ -64,7 +64,7 @@ begin
   insert into cr_extlinks
     (extlink_id, url, label, description)
   values
-    (v_extlink_id, new__url, v_label, coalesce(new__description,''''));
+    (v_extlink_id, new__url, v_label, new__description);
 
   return v_extlink_id;
 

@@ -43,11 +43,11 @@ drop function inline_0 ();
 --------------------------------------------------------------
 
 create table cr_mime_types (
-  label			varchar(200) default '' not null,
+  label			varchar(200),
   mime_type	        varchar(200)
 			constraint cr_mime_types_pk
 			primary key,
-  file_extension        varchar(200) default '' not null
+  file_extension        varchar(200)
 );
 
 
@@ -100,8 +100,8 @@ create table cr_locales (
   nls_language		varchar(30)
                         constraint cr_locale_nls_lang_nil
 			not null,
-  nls_territory		varchar(30) default '' not null,
-  nls_charset		varchar(30) default '' not null
+  nls_territory		varchar(30),
+  nls_charset		varchar(30)
 );
 
 comment on table cr_locales is '
@@ -321,7 +321,7 @@ create table cr_child_rels (
   child_id           integer
                      constraint cr_child_rels_child_nil
                      not null,
-  relation_tag       varchar(100) default '' not null,
+  relation_tag       varchar(100),
   order_n            integer
 );
 
@@ -346,7 +346,7 @@ create table cr_item_rels (
   related_object_id  integer
                      constraint cr_item_rels_rel_obj__fk
                      references acs_objects,
-  relation_tag       varchar(100) default '' not null,
+  relation_tag       varchar(100),
   order_n            integer
 );
 
@@ -385,13 +385,13 @@ create table cr_revisions (
                   not null
                   constraint cr_revisions_item_id_fk references
 		  cr_items on delete cascade,
-  title		  varchar(1000) default '' not null,
-  description	  text default '' not null,
+  title		  varchar(1000),
+  description	  text,
   publish_date	  timestamp,
   mime_type	  varchar(200) default 'text/plain'
 		  constraint cr_revisions_mime_type_ref
 		  references cr_mime_types,
-  nls_language    varchar(50) default '' not null,
+  nls_language    varchar(50),
   -- use Don's postgresql lob hack for now.
   storage_type    varchar(10) default 'lob' not null
                   constraint cr_revisions_storage_type
@@ -400,7 +400,7 @@ create table cr_revisions (
   lob             integer,
   -- content holds the file name if storage type = file
   -- otherwise it holds the text data if storage_type = text.
-  content	  text default '' not null,
+  content	  text,
   content_length  integer
 );
 
@@ -435,7 +435,7 @@ create table cr_revision_attributes (
                  primary key
                  constraint cr_revision_attributes_fk
                  references cr_revisions,
-  attributes     text default '' not null
+  attributes     text
 );
 
 comment on column cr_revision_attributes.attributes is '
@@ -473,8 +473,8 @@ create table cr_item_publish_audit (
   new_revision       integer
                      constraint cr_item_pub_audit_new_rev_fk
                      references cr_revisions, 
-  old_status         varchar(40) default '' not null,
-  new_status         varchar(40) default '' not null,
+  old_status         varchar(40),
+  new_status         varchar(40),
   publish_date       timestamp
                      constraint cr_item_publish_audit_date_nil
                      not null
@@ -502,7 +502,7 @@ create table cr_scheduled_release_log (
   items_released   integer not null,
   items_expired    integer not null,
   err_num          integer,
-  err_msg          varchar(500) default '' not null
+  err_msg          varchar(500)
 );
 
 comment on table cr_scheduled_release_log is '
@@ -531,8 +531,8 @@ create table cr_folders (
 		    cr_items on delete cascade
 		    constraint cr_folders_pk 
                     primary key,
-  label		    varchar(1000) default '' not null,
-  description	    text default '' not null,
+  label		    varchar(1000),
+  description	    text,
   has_child_folders boolean default 'f',
   has_child_symlinks boolean default 'f'
 );  
@@ -674,7 +674,7 @@ create table cr_symlinks (
 		  references cr_items
 		  constraint cr_symlink_target_id_nil
 		  not null,
-  label		  varchar(1000) default '' not null
+  label		  varchar(1000)
 );
 
 create index cr_symlinks_by_target_id on cr_symlinks(target_id);
@@ -699,7 +699,7 @@ create table cr_extlinks (
   label           varchar(1000)
 		  constraint cr_extlink_label_nil
 		  not null,
-  description	  text default '' not null
+  description	  text
 );
 
 comment on table cr_extlinks is '
@@ -721,7 +721,7 @@ create table cr_keywords (
   heading		 varchar(600)
 			 constraint cr_keywords_name_nil
 			 not null,
-  description            text default '' not null,
+  description            text,
   has_children           boolean,
   tree_sortkey           varchar(4000)
 );

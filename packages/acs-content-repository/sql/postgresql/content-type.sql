@@ -687,7 +687,7 @@ begin
       parent_type, child_type, relation_tag, min_n, max_n
     ) values (
       register_child_type__parent_type, register_child_type__child_type, 
-      coalesce(register_child_type__relation_tag,''''), 
+      register_child_type__relation_tag, 
       register_child_type__min_n, 
       register_child_type__max_n
     );
@@ -763,7 +763,7 @@ begin
     ) values (
       register_relation_type__content_type, 
       register_relation_type__target_type, 
-      coalesce(register_relation_type__relation_tag,''''), 
+      register_relation_type__relation_tag, 
       register_relation_type__min_n, register_relation_type__max_n
     );
 

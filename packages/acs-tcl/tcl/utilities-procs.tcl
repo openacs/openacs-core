@@ -411,6 +411,7 @@ proc nmc_IllustraDatetoPrettyDate {sql_date} {
 }
 
 proc_doc util_AnsiDatetoPrettyDate {sql_date} "Converts 1998-09-05 to September 5, 1998" {
+    set sql_date [string range $sql_date 0 9]
     if ![regexp {(.*)-(.*)-(.*)$} $sql_date match year month day] {
 	return ""
     } else {

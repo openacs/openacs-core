@@ -100,7 +100,7 @@ begin
   insert into cr_symlinks
     (symlink_id, target_id, label)
   values
-    (v_symlink_id, new__target_id, coalesce(v_label,''''));
+    (v_symlink_id, new__target_id, v_label);
 
   return v_symlink_id;
 
