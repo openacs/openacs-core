@@ -48,6 +48,29 @@ begin
 	       );
 
 
+  insert into application_groups
+    (group_id, package_id)
+  values
+    (-2, main_site_id);
+
+  update acs_objects
+  set object_type = ''application_group''
+  where object_id = -2;
+
+  perform rel_segment__new(
+                   null,
+                   ''rel_segment'',
+                   now(),
+                   null,
+                   null,
+                   null,
+                   null,
+                   ''Main Site Members'',
+                   -2,
+                   ''membership_rel'',
+                   null
+                 );
+
   PERFORM apm_package__enable (main_site_id); 
 
   node_id := site_node__new (
@@ -116,7 +139,6 @@ begin
     null
   );
 
-
   cr_id := apm_service__new (
       null,
       ''ACS Content Repository'',
@@ -176,23 +198,6 @@ begin
 
   PERFORM apm_package__enable (api_doc_id);
 
-  insert into inline_data (id,name) values (api_doc_id, ''api_doc_id'');
-
-  return null;
-
-end;' language 'plpgsql';
-
-  
-  -- Set default permissions for ACS API Browser so 
-  -- that only users logged in can view it
-create function inline_1 () returns integer as '
-declare
-        api_doc_id      integer;
-begin
-
-  select id into api_doc_id 
-  from inline_data where name = ''api_doc_id'';
-
   PERFORM acs_permission__grant_permission (
     api_doc_id, 
     acs__magic_object_id (''registered_users''), 
@@ -210,26 +215,15 @@ begin
     null
     );
 
-    return null;
+  update acs_objects
+  set security_inherit_p = ''f''
+  where object_id = api_doc_id;
+
+  return null;
 
 end;' language 'plpgsql';
 
-create table inline_data (
-       id        integer,
-       name      varchar
-);
-
 select inline_0 ();
 
-select id from inline_data where name = 'api_doc_id';
-update acs_objects
-     set security_inherit_p = 'f'
-   where object_id = (select id from inline_data where name = 'api_doc_id');
-
-select inline_1 ();
-
 drop function inline_0 ();
-drop function inline_1 ();
-drop table inline_data;
 
--- show errors

@@ -10,15 +10,7 @@ ad_proc -public ad_acs_administrator_exists_p {} {
     @return 1 if a user with admin privileges exists, 0 otherwise.
 
 } {
-    return [db_string admin_exists_p {
-	select 1 as admin_exists_p
-	from dual
-	where exists (select 1
-		      from acs_object_party_privilege_map m, users u
-		      where m.object_id = 0
-		      and m.party_id = u.user_id
-		      and m.privilege = 'admin')
-    } -default 0]
+    return [db_string admin_exists_p {} -default 0]
 }
 
 

@@ -381,7 +381,9 @@ as select object_id, ancestor_id, n_generations
    from acs_object_context_index
    where object_id != ancestor_id;
 
-create function acs_objects_context_id_in_tr () returns opaque as '
+create or replace function acs_objects_context_id_in_tr () returns opaque as '
+declare
+        security_context_root integer;
 begin
   insert into acs_object_context_index
    (object_id, ancestor_id, n_generations)
@@ -396,13 +398,15 @@ begin
      n_generations + 1 as n_generations
     from acs_object_context_index
     where object_id = new.context_id;
-  else if new.object_id != 0 then
-    -- 0 is the id of the security context root object
-    insert into acs_object_context_index
-     (object_id, ancestor_id, n_generations)
-    values
-     (new.object_id, 0, 1);
-  end if; end if;
+  else
+    security_context_root = acs__magic_object_id(''security_context_root'');
+    if new.object_id != security_context_root then
+      insert into acs_object_context_index
+        (object_id, ancestor_id, n_generations)
+      values
+        (new.object_id, security_context_root, 1);
+    end if;
+  end if;
 
   return new;
 
@@ -411,11 +415,10 @@ end;' language 'plpgsql';
 create trigger acs_objects_context_id_in_tr after insert on acs_objects
 for each row execute procedure acs_objects_context_id_in_tr ();
 
--- show errors
-
-create function acs_objects_context_id_up_tr () returns opaque as '
+create or replace function acs_objects_context_id_up_tr () returns opaque as '
 declare
         pair    record;
+        security_context_root integer;
 begin
   if new.object_id = old.object_id and
      new.context_id = old.context_id and
@@ -455,19 +458,22 @@ begin
       from acs_object_context_index
       where object_id = new.context_id;
     end loop;
-  else if new.object_id != 0 then
+  else
+    security_context_root = acs__magic_object_id(''security_context_root'');
+    if new.object_id != security_context_root then
     -- We need to make sure that new.OBJECT_ID and all of its
-    -- children have 0 as an ancestor.
+    -- children have security_context_root as an ancestor.
     for pair in  select *
 		 from acs_object_context_index
 		 where ancestor_id = new.object_id 
-    LOOP
-      insert into acs_object_context_index
-       (object_id, ancestor_id, n_generations)
-      values
-       (pair.object_id, 0, pair.n_generations + 1);
-    end loop;
-  end if; end if;
+      LOOP
+        insert into acs_object_context_index
+         (object_id, ancestor_id, n_generations)
+        values
+         (pair.object_id, security_context_root, pair.n_generations + 1);
+      end loop;
+    end if;
+  end if;
 
   return new;
 

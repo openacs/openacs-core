@@ -386,7 +386,7 @@ for each row  execute procedure membership_rels_in_tr ();
 create function composition_rels_in_tr () returns opaque as '
 declare
 begin
-  raise EXCEPTION ''-20000: Insert to membership rels not yet supported'';
+  raise EXCEPTION ''-20000: Insert to composition rels not yet supported'';
 
   return new;
 
