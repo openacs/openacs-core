@@ -199,7 +199,12 @@ alter table users add authority_id integer
                       references auth_authorities(authority_id);
 
 alter table users add username varchar(100);
-update users set username = (select email from parties where party_id = users.user_id);
+-- set all current users' username to equal their email
+-- and their authority to be the local authority
+update users 
+set    username = (select email from parties where party_id = user_id),
+       authority_id = (select authority_id from auth_authorities where short_name = 'local');
+
 -- Does not work with PG 7.2
 -- alter table users alter column username set not null;
 
