@@ -69,7 +69,12 @@ ad_form -name subsite -cancel_url . -form {
         group::update -group_id $member_group_id -array group
 
         # Add current user as admin
-	set rel_id [relation_add -member_state "approved" "admin_rel" $member_group_id [ad_conn user_id]]
+	group::add_member \
+            -no_perm_check \
+            -member_state "approved" \
+            -rel_type "admin_rel" \
+            -group_id $member_group_id \
+            -user_id [ad_conn user_id]
         
         # Set inheritance (called 'visibility' in form)
         if { ![string equal $visibility "any"] } {
