@@ -1,12 +1,18 @@
 -- added jon@jongriffin.com
+-- updated 2002-08-17 vinod@kurup.com
 
---include the new file
+-- acs-kernel-create.sql
 \i ../site-node-object-map-create.sql
 
 
--- acs-objects-create code
-
-drop function acs_object__update_last_modified (integer, timestamp);
+-- acs-objects-create.sql
+ create function acs_object__update_last_modified (integer)
+ returns integer as '
+ declare
+     acs_object__update_last_modified__object_id     alias for $1;
+ begin
+     return acs_object__update_last_modified(acs_object__update_last_modified__object_id, now());
+ end;' language 'plpgsql';
 
  create function acs_object__update_last_modified (integer, timestamp)
  returns integer as '
@@ -39,7 +45,7 @@ drop function acs_object__update_last_modified (integer, timestamp);
  end;' language 'plpgsql';
 
 
--- apm-create
+-- apm-create.sql
  create function apm_package__parent_id (integer) returns integer as '
  declare
      apm_package__parent_id__package_id alias for $1;
@@ -58,60 +64,6 @@ drop function acs_object__update_last_modified (integer, timestamp);
          return v_package_id;
      end if;
  end;' language 'plpgsql';
-
-
--- function upgrade_p
-
-drop function apm_package_version__upgrade_p (varchar,varchar,varchar);
-
-create function apm_package_version__upgrade_p (varchar,varchar,varchar)
-returns integer as '
-declare
-  upgrade_p__path                   alias for $1;
-  upgrade_p__initial_version_name   alias for $2;
-  upgrade_p__final_version_name     alias for $3;
-  v_pos1                            integer;
-  v_pos2                            integer;
-
-  v_tmp                             apm_package_files.path%TYPE;
-  v_path                            apm_package_files.path%TYPE;
-  v_version_from                    apm_package_versions.version_name%TYPE;
-  v_version_to                      apm_package_versions.version_name%TYPE;
-begin
-
-        -- Set v_path to the tail of the path (the file name).
-        v_path := substr(upgrade_p__path, instr(upgrade_p__path, ''/'', -1) + 1);
-
-        -- Remove the extension, if it is .sql.
-        v_pos1 := position(''.'' in v_path);
-        if v_pos1 > 0 and substr(v_path, v_pos1) = ''.sql'' then
-            v_path := substr(v_path, 1, v_pos1 - 1);
-        end if;
-
-        -- Figure out the from/to version numbers for the individual file.
-
-        v_pos1 := instr(v_path, ''-'', -1, 2);
-        v_pos2 := instr(v_path, ''-'', -1);
-        if v_pos1 = 0 or v_pos2 = 0 then
-            -- There aren''t two hyphens in the file name. Bail.
-            return 0;
-        end if;
-
-        v_version_from := substr(v_path, v_pos1 + 1, v_pos2 - v_pos1 - 1);
-        v_version_to := substr(v_path, v_pos2 + 1);
-
-        if apm_package_version__version_name_greater(upgrade_p__initial_version_name, v_version_from) <= 0 and
-           apm_package_version__version_name_greater(upgrade_p__final_version_name, v_version_to) >= 0 then
-            return 1;
-        end if;
-
-        return 0;
-        -- exception when others then
-        -- Invalid version number.
-        -- return 0;
-
-end;' language 'plpgsql';
-
 
 -- postgresql.sql
 
@@ -160,45 +112,19 @@ begin
 
 end;' language 'plpgsql' with (isstrict, iscachable);
 
---
+---
 
-drop function create_user_col_comments();
-create function create_user_col_comments() returns boolean as '
-begin
-  -- in version 7.1 col_description was missing but is present in 7.2
-  -- does it exist in 7.0?
-  if version() like ''%7.1%'' then
-    execute ''
-      create view user_col_comments as
-        select upper(c.relname) as table_name,
-         upper(a.attname) as column_name,
-         d.description as comments
-          from pg_class c,
-               pg_attribute a
-                 left outer join pg_description d on (a.oid = d.objoid)
-         where c.oid = a.attrelid
-           and a.attnum > 0'';
-  else
-    execute ''
-      create view user_col_comments as
-        select upper(c.relname) as table_name,
-               upper(a.attname) as column_name,
-               col_description(a.attrelid, a.attnum) as comments
-        from pg_class c
-          left join pg_attribute a
-          on a.attrelid = c.oid
-        where a.attnum > 0'';
-  end if;
-  return ''t'';
-end;' language 'plpgsql';
-
-select create_user_col_comments();
-
-drop function create_user_col_comments();
+-- vinodk: create_user_col_comments is changed, but only with comments
+-- also, the function is dropped after it creates the view, so the comments
+-- persist only in the SQL file
 
 ---
 
-drop function create_user_tab_comments();
+-- need to drop the view that the function is going to create
+-- otherwise, we'll get 'relation already exists' errors
+
+drop view user_tab_comments;
+
 create function create_user_tab_comments() returns boolean as '
 begin
   if version() like ''%7.2%'' then
@@ -234,7 +160,7 @@ select create_user_tab_comments();
 
 drop function create_user_tab_comments();
 
---
+-- rel-constraints-create.sql
 
 create function rel_segment__new (varchar,integer,varchar)
 returns integer as '
@@ -252,7 +178,7 @@ _id, new__rel_type, null);
 
 end;' language 'plpgsql';
 
--- site-nodes-create
+-- site-nodes-create.sql
 
 create index site_nodes_parent_id_idx on site_nodes(parent_id,object_id,node_id);
 
