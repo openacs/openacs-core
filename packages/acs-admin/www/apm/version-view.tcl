@@ -212,6 +212,7 @@ doc_body_append "
 <li><a href=\"version-dependencies?[export_vars { version_id }]\">Dependencies and Provides</a>
 <li><a href=\"version-parameters?[export_vars { version_id }]\">Parameters</a>
 <li><a href=\"version-callbacks?[export_vars { version_id }]\">Tcl Callbacks (install, instantiate, mount)</a>
+<li><a href=\"version-i18n-index?[export_vars { version_id }]\">Internationalization</a>
 </ul>
 <h4>XML .info package specification file</h4>
 <ul>
