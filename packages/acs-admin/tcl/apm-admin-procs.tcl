@@ -233,11 +233,22 @@ ad_proc -private apm_package_selection_widget {
 }
 
 
-ad_proc -private apm_higher_version_installed_p {package_key version_name} {
-    @return The return value of this procedure doesn't really fit with its name. What it returns is: -1 if there's already a higher version of the given package installed than the version_name you gave it. 0 if the same version is installed as the one you supplied. And 1 if the version you gave is higher than the highest version installed. If there's no version of this package installed, it returns 1, meaning your version is higher than any currently installed package.
-    
-    @param package_key The package in question.
+ad_proc -private apm_higher_version_installed_p {
+    package_key
+    version_name
+} {    
+    @param package_key  The package in question.
+
     @param version_name The name of the currently installed version.
+
+    @return The return value of this procedure doesn't really fit with its name. 
+            What it returns is: 
+    
+    <ul>
+      <li>-1 if there's already a higher version of the given package installed than the version_name you gave it. 
+      <li>0 if the same version is installed as the one you supplied. 
+      <li>1 if the version you gave is higher than the highest version installed, or no version of this package is installed.
+    </ul>
 } {
 
     # DRB: I turned this into a simple select by rearranging the code and
