@@ -43,7 +43,7 @@ ad_proc -public template::widget {} {
     @see template::widget::submit
     @see template::widget::text
     @see template::widget::textarea
-
+    @see template::widget::block
     @see template::element::create
 } -
 
@@ -611,5 +611,66 @@ ad_proc -public template::widget::comment { element_reference tag_attributes } {
   }
       
   return $output
+}
+
+ad_proc -public template::widget::block { element_reference tag_attributes } {
+    widget for blocks of radio-buttoned questions
+} {
+    upvar $element_reference element
+    
+    if { [info exists element(html)] } {
+	array set attributes $element(html)
+    }
+    
+    if { [info exists element(value)] } {
+	set value $element(value)
+    } else {
+	set value {}
+    }
+
+    array set attributes $tag_attributes
+    
+    set output ""
+    set options $element(options)
+    set count 0
+    foreach option $options {
+	if {$count == 0} {
+	    # answer descriptions in a list: {{desc1 no_of_answers} {desc2 no_of_answers} ...}
+	    append output "<tr align=center><td></td><td></td>"
+	    foreach answer_desc $option {
+		set answer_description [lindex $answer_desc 0]
+		set no_of_answers [lindex $answer_desc 1]
+		append output "<th colspan=\"[expr $no_of_answers + 1]\" align=\"center\">$answer_description</td>"
+	    }
+	    append output "</tr>"
+	} elseif {$count == 1} {
+	    append output "<tr><td><span style=\"font-weight: bold\">[lindex $option 0]</span></td>"
+	    foreach answer_set [lindex $option 1] {
+		append output "<td>required?</td>"
+		foreach answer $answer_set {
+		    append output "<td>$answer</td>"
+		}
+	    }
+	    append output "</tr>"
+	} else {
+	    append output "<tr><td><span style=\"font-weight: bold\">[lindex $option 0]</span></td>"
+	    foreach question [lindex $option 1] {
+		set name [lindex $question 0]
+		set required_p [lindex $question 1]
+		append output "<td>[ad_decode $required_p "t" "<span style=\"color: #f00;\">*</span>" "&nbsp;"]</td>"
+		foreach choice [lindex $question 2] {
+		    if {[lsearch -exact $value $choice]==-1} {
+			append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\"></td>"
+		    } else {
+			append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\" checked></td>"
+		    }
+		}
+	    }
+	    append output "</tr>"
+	}
+	incr count
+    }
+    return "<table>$output</table>"
+    
 }
 
