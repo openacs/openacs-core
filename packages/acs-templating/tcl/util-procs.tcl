@@ -136,10 +136,6 @@ ad_proc -public template::util::is_true { x } {
   expr [lsearch -exact {0 f false n no off ""} [string tolower $x]] == -1   
 }
 
-
-# @public lpop
-
-
 ad_proc -public template::util::lpop { ref } {
     Removes the last item from a list.  The operation is performed
     in-place, rather than returning the new list.
@@ -453,9 +449,6 @@ ad_proc -public template::util::write_file { path text } {
   puts $fd $text
   close $fd
 }
-
-# @public url_to_file
-
 
 ad_proc -public template::util::url_to_file { url {reference_url ""} } {
     Resolve a URL into an absolute file path.

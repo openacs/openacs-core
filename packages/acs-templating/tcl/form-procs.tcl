@@ -10,8 +10,6 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-# @namespace form
-
 # Commands for managing dynamic templated forms.
 
 ad_proc -public template::form { command args } {

@@ -33,52 +33,44 @@ nsv_set __template_query_persistent_cache . .
 nsv_set __template_query_persistent_timeout . .
 
 
-# @public query
-
-# Perform a database query
-
-# @option maxrows    Limits the query results of a multirow query
-#                    to a fixed number of rows.
-# @option cache      Cache the query results keyed on an identifier
-#                    that is unique for both the query and the bind variables
-#                    used in the query.  The cached result reflects
-#                    any initial specification of maxrows and startrows.
-# @option refresh    Force a query to be performed even if it is cached,
-#                    and refresh the cache.
-#                    Only applicable if the cache option is specified as well.
-#                    Does not affect a previously specified timeout period.
-# @option timeout    The maximum period of time for which the cached results
-#                    are valid in seconds.  Only applicable for
-#                    persistently cached results.
-# @option persistent Cache the query results persistently, so that
-#                    all subsequent requests use the results.
-
 ad_proc -public template::query { statement_name result_name type sql args } {
     Public interface to template query api.  This routine parses the arguements and
     dispatches to the query command specified by the type arguement.
 
- @option maxrows    Limits the query results of a multirow query
-                    to a fixed number of rows.
- @option cache      Cache the query results keyed on an identifier
-                    that is unique for both the query and the bind variables
-                    used in the query.  The cached result reflects
-                    any initial specification of maxrows and startrows.
- @option refresh    Force a query to be performed even if it is cached,
-                    and refresh the cache.
-                    Only applicable if the cache option is specified as well.
-                    Does not affect a previously specified timeout period.
- @option timeout    The maximum period of time for which the cached results
-                    are valid in seconds.  Only applicable for
-                    persistently cached results.
- @option persistent Cache the query results persistently, so that
-                    all subsequent requests use the results.
+    @option maxrows    Limits the query results of a multirow query
+                       to a fixed number of rows.
+
+    @option cache      Cache the query results keyed on an identifier
+                       that is unique for both the query and the bind variables
+                       used in the query.  The cached result reflects
+                       any initial specification of maxrows and startrows.
+
+    @option refresh    Force a query to be performed even if it is cached,
+                       and refresh the cache.
+                       <p>
+                       Only applicable if the cache option is specified as
+                       well. Does not affect a previously specified timeout 
+                       period.
+
+    @option timeout    The maximum period of time for which the cached results
+                       are valid in seconds.  Only applicable for
+                       persistently cached results.
+
+    @option persistent Cache the query results persistently, so that
+                       all subsequent requests use the results.
+
+    @param statement_name Standard db_api query name
+
+    @param result_name Tcl variable name when doing an uplevel to 
+           set the returned result
+
+    @param type The query type
+
+    @param sql The sql to be used for the query
+
+    @param args Optional args: uplevel, cache, maxrows
 
     @return 1 if query was a success, 0 if it failed
-    @param statement_name Standard db_api query name
-    @param result_name Tcl variable name when doing an uplevel to set the returned result
-    @param type The query type
-    @param sql The sql to be used for the query
-    @param args Optional args: uplevel, cache, maxrows
 } {
 
   set sql [string trim $sql]
@@ -121,14 +113,16 @@ ad_proc -public template::query { statement_name result_name type sql args } {
   return $ret_code
 }
 
-# @private onevalue
-
-# Process a onevalue query.  Use a single array to store the results.
-
 ad_proc -private template::query::onevalue { statement_name db result_name sql } {
-    @param statement_name Standard db_api statement name used to hook into query dispatcher
+    Process a onevalue query.  Use a single array to store the results.
+
+    @param statement_name Standard db_api statement name used to hook 
+                          into query dispatcher
+
     @param db Database handle
+
     @param result_name Tcl variable name to use when setting the result
+
     @param sql Query to use when processing this command
 
 } {
@@ -151,14 +145,16 @@ ad_proc -private template::query::onevalue { statement_name db result_name sql }
   }
 }
 
-# @private onerow
-
-# Process a onerow query.  Use a single array to store the results.
-
 ad_proc -private template::query::onerow { statement_name db result_name sql } {
-    @param statement_name Standard db_api statement name used to hook into query dispatcher
+    Process a onerow query.  Use a single array to store the results.
+
+    @param statement_name Standard db_api statement name used to hook 
+                          into query dispatcher
+
     @param db Database handle
+
     @param result_name Tcl variable name to use when setting the result
+
     @param sql Query to use when processing this command
 } {
 
@@ -191,16 +187,18 @@ ad_proc -private template::query::onerow { statement_name db result_name sql } {
   }
 }
 
-# @private multirow
-
-# Process a multirow query.  Use an array for each row row in the
-# result.  Arrays are named name0, name1, name2 etc.  The variable
-# name.rowcount is also defined for checking and iteration.
-
 ad_proc -private template::query::multirow { statement_name db result_name sql } {
-    @param statement_name Standard db_api statement name used to hook into query dispatcher
+    Process a multirow query.  Use an array for each row row in the
+    result.  Arrays are named name0, name1, name2 etc.  The variable
+    name.rowcount is also defined for checking and iteration.
+
+    @param statement_name Standard db_api statement name used to hook 
+                          into query dispatcher
+
     @param db Database handle
+
     @param result_name Tcl variable name to use when setting the result
+
     @param sql Query to use when processing this command
 } {
 
@@ -273,9 +271,15 @@ ad_proc -private template::query::multirow { statement_name db result_name sql }
 }
 
 ad_proc -private template::query::multilist { statement_name db result_name sql } {
-    @param statement_name Standard db_api statement name used to hook into query dispatcher
+    Process a multilist query.
+
+    @param statement_name Standard db_api statement name used to hook 
+                          into query dispatcher
+
     @param db Database handle
+
     @param result_name Tcl variable name to use when setting the result
+
     @param sql Query to use when processing this command
 } {
 
@@ -307,15 +311,20 @@ ad_proc -private template::query::multilist { statement_name db result_name sql 
   return $rows
 }
 
-# Creates a data source where the values for each row 
-# are returned as a list.  Rows are grouped according
-# to the column values specified in the -groupby option
-# See template::util::lnest for more details.
 
 ad_proc -private template::query::nestedlist { statement_name db result_name sql } {
-    @param statement_name Standard db_api statement name used to hook into query dispatcher
+    Creates a data source where the values for each row 
+    are returned as a list.  Rows are grouped according
+    to the column values specified in the -groupby option
+    See template::util::lnest for more details.
+
+    @param statement_name Standard db_api statement name used to hook 
+                          into query dispatcher
+
     @param db Database handle
+
     @param result_name Tcl variable name to use when setting the result
+
     @param sql Query to use when processing this command
 } {
 
@@ -356,9 +365,15 @@ ad_proc -private template::query::nestedlist { statement_name db result_name sql
 }
 
 ad_proc -private template::query::onelist { statement_name db result_name sql } {
-    @param statement_name Standard db_api statement name used to hook into query dispatcher
+    Process a onelist query.
+
+    @param statement_name Standard db_api statement name used to hook 
+                          into query dispatcher
+
     @param db Database handle
+
     @param result_name Tcl variable name to use when setting the result
+
     @param sql Query to use when processing this command
 } {
 
@@ -382,9 +397,15 @@ ad_proc -private template::query::onelist { statement_name db result_name sql } 
 }
 
 ad_proc -private template::query::dml { statement_name db name sql } {
-    @param statement_name Standard db_api statement name used to hook into query dispatcher
+    Process an SQL statement that is not a query; perhaps update or insert
+
+    @param statement_name Standard db_api statement name used to hook 
+                          into query dispatcher
+
     @param db Database handle
+
     @param result_name Tcl variable name to use when setting the result
+
     @param sql Query to use when processing this command
 } {
 
@@ -393,17 +414,17 @@ ad_proc -private template::query::dml { statement_name db name sql } {
   db_exec dml $db $statement_name "$sql" 3
 }
 
-# @private get_cached_result
-
-# Looks in the appropriate cache for the named query result
-# If a valid result is found, then sets the result in the returning
-# stack frame.
-
-# @return 1 if result was successfully retrieved, 0 if failed
 
 ad_proc -private get_cached_result { name type } {
+    Looks in the appropriate cache for the named query result
+    If a valid result is found, then sets the result in the returning
+    stack frame.
+
     @param name Name of cached result-set
+
     @param type Type of query
+
+    @return 1 if result was successfully retrieved, 0 if failed
 } {
 
   upvar opts opts
@@ -470,8 +491,6 @@ ad_proc -private get_cached_result { name type } {
   return $success
 }
 
-# @private set_cached_result
-
 ad_proc -private set_cached_result {} {
 
     Places a query result in the appropriate cache.
@@ -505,12 +524,14 @@ ad_proc -private set_cached_result {} {
   }
 }
 
-# Deprecated!
+ad_proc -public -deprecated template::query::iterate { statement_name sql body } {
+    @param statement_name Standard db_api statement name used to hook 
+                          into query dispatcher
 
-ad_proc -public template::query::iterate { statement_name sql body } {
-    @param statement_name Standard db_api statement name used to hook into query dispatcher
     @param sql Query to use when processing this command
-    @param body Code body to be execute for each result row of the returned query
+
+    @param body Code body to be execute for each result row of the 
+                returned query
 } {
 
     db_with_handle db {
@@ -537,9 +558,6 @@ ad_proc -public template::query::iterate { statement_name sql body } {
         }
     }
 }
-
-# Flush the cached queries where the query name matches the
-# specified string match
 
 ad_proc -private template::query::flush_cache { cache_match } {
 
@@ -569,8 +587,6 @@ ad_proc -private template::query::flush_cache { cache_match } {
 
 }
 
-# Perform get/set operations on a multirow datasource
-
 ad_proc -public template::multirow { 
   {-ulevel 1}
   {-local:boolean}
@@ -578,14 +594,25 @@ ad_proc -public template::multirow {
   name
   args
 } {
-  @param local If set, the multirow will be looked for in the scope the number of levels up
-         given by ulevel (normally the caller's scope), instead of the
-         [template::adp_level] scope, which is the default.
-  @param ulevel Used in conjunction with the "local" parameter to specify how many levels up
-         the multirow variable resides.
-  @param op Multirow datasource operation: create, extend, append, size, get, set, foreach
-  @param name Name of the multirow datasource
-  @param args optional args
+    Perform get/set operations on a multirow datasource
+
+    @param local 
+           If set, the multirow will be looked for in the scope the number 
+           of levels up given by ulevel (normally the caller's scope), 
+           instead of the <code>[template::adp_level]</code> scope, which 
+           is the default.
+
+    @param ulevel 
+           Used in conjunction with the "local" parameter to specify how 
+           many levels up the multirow variable resides.
+
+    @param op 
+           Multirow datasource operation: create, extend, append, 
+                                          size, get, set, foreach
+
+    @param name Name of the multirow datasource
+
+    @param args optional args
 } {  
   if { $local_p } {
     set multirow_level_up $ulevel
