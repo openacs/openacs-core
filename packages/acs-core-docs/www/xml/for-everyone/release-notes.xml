@@ -85,19 +85,21 @@
 
   <sect2 id="release-notes-testing">
 	<title>Testing Notes</title>
-
-	<para>
-
-	  <ulink url="http://open-msg.com">OpenMSG</ulink> has organized the
-	  OpenACS &version; testing process with test servers provided by
-	  <ulink url="http:hub.org">Hub.org</ulink>. Visit the <ulink
-	  url="http://213.107.207.131:8000/">acceptance test server</ulink> to
-	  see the current status of various packages. This may not be a
-	  permanent link. If it's not working, do a search of the <ulink
-	  url="http://openacs.org/forums/">OpenACS forums</ulink>.
-
-    </para>
-
+ 
+ 	<para>
+          dotLRN 1.0 is an e-learning solution
+          from MIT based on OpenACS 4.6.2 
+          The <ulink
+          url="http://openacs.org/projects/dotlrn/testing/">dotLRN 1.0
+          testing effort</ulink> was organized by Bart
+          Teeuwisse and made use of <ulink
+          url="http://openacs.org/bugtracker/openacs/">the OpenACS Bug
+          Tracker</ulink> and <ulink
+          url="http://dotlrn.collaboraid.net/test">OpenACS test
+          servers</ulink> hosted by <ulink
+          url="http://www.collaboraid.biz">Collaboraid</ulink>.
+        </para>
+ 
   </sect2>
 
   <para><phrase role="cvstag">($Id$)</phrase></para>
