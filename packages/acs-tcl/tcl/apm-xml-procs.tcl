@@ -101,13 +101,7 @@ ad_proc -private apm_generate_package_spec { version_id } {
     <initial-install-p>$initial_install_p</initial-install-p>
     <singleton-p>$singleton_p</singleton-p>
     ${auto_mount_tag}
-    <version name=\"$version_name\" url=\"[ad_quotehtml $version_uri]\">
-    <database-support>\n"
-
-    db_foreach supported_databases {} {
-        append spec "        <database>$db_type</database>\n"
-    }
-    append spec "    </database-support>\n"
+    <version name=\"$version_name\" url=\"[ad_quotehtml $version_uri]\">\n"
 
     db_foreach owner_info {} {
         append spec "        <owner"
@@ -148,22 +142,6 @@ ad_proc -private apm_generate_package_spec { version_id } {
         append spec "        <!-- No dependency information -->\n"
     }
 
-
-    append spec "\n        <files>\n"
-    apm_log APMDebug "APM: Writing Files." 
-    db_foreach version_path {} {
-        append spec "            <file"
-        if { ![empty_string_p $file_type] } {
-            append spec " type=\"$file_type\""
-        }
-        if { ![empty_string_p $db_type] } {
-            append spec " db_type=\"$db_type\""
-        }
-        append spec " path=\"[ad_quotehtml $path]\"/>\n"
-    } else {
-        append spec "            <!-- No files -->\n"
-    }
-    append spec "        </files>"
     append spec "\n        <callbacks>\n"
     apm_log APMDebug "APM: Writing callbacks"
     db_foreach callback_info {} {
@@ -219,7 +197,8 @@ ad_proc -public apm_read_package_info_file { path } {
     <code>[list $url $name]</code>
     <li><code>files</code>: a list of files in the package,
     containing elements of the form <code>[list $path
-    $type]</code>
+    $type]</code> NOTE: Files are no longer stored in info files but are always retrieved
+    directly from the file system. This element in the array will always be the empty list.
     <li><code>callbacks</code>: an array list of callbacks of the package
     on the form <code>[list callback_type1 proc_name1 callback_type2 proc_name2 ...] 
     <li>Element and attribute values directly from the XML specification:
@@ -370,50 +349,7 @@ ad_proc -public apm_read_package_info_file { path } {
 	}
     }
 
-    # Build a list of the files contained in the package.
-
-    #DRB: we accept info files with no database-support section for legacy reasons.  They
-    # should work with Oracle, Postgres users load them at their peril but the installer won't
-    # try to load the datamodel anyway.
-
-    set database_support_sections [xml_node_get_children_by_name $version "database-support"]
-    set properties(database_support) [list]
-    if { [llength $database_support_sections] > 1 } {
-	error "Package must contain exactly one <database-support> node"
-    } elseif { [llength $database_support_sections] != 0 } {
-        foreach database [xml_node_get_children_by_name [lindex $database_support_sections 0] "database"] {
-            lappend properties(database_support) [xml_node_get_content [lindex $database 0]]
-        }
-    }
-
     set properties(files) [list]
-
-    # set nodes [dom::element getElementsByTagName $version "files"]
-    set files [xml_node_get_children_by_name $version files]
-
-    foreach node $files {
-	# set file_nodes [dom::element getElementsByTagName $node "file"]
-	set file_nodes [xml_node_get_children_by_name $node file]
-	
-	foreach file_node $file_nodes {
-	    set file_path [apm_required_attribute_value $file_node path]
-	    # set type [dom::element getAttribute $file_node type]
-	    set type [apm_attribute_value $file_node type]
-	    # set db_type [dom::element getAttribute $file_node db_type]
-	    set db_type [apm_attribute_value $file_node db_type]
-	    # Validate the file type: it must be null (unknown type) or
-	    # some value in [apm_file_type_keys].
-	    if { ![empty_string_p $type] && [lsearch -exact [apm_file_type_keys] $type] < 0 } {
-		ns_log Warning "Unrecognized file type \"$type\" of file $file_path"
-	    }
-	    # Validate the database type: it must be null (unknown type) or
-	    # some value in [apm_db_type_keys].
-	    if { ![empty_string_p $db_type] && [lsearch -exact [apm_db_type_keys] $db_type] < 0 } {
-		error "Invalid database type \"$db_type\""
-	    }
-	    lappend properties(files) [list $file_path $type $db_type]
-	}
-    }
 
     # Build a list of package callbacks
     array set callback_array {}
