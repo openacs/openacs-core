@@ -26,7 +26,7 @@
             title name id" description="A space separated list of allowed attribute names, e.g. title, src, etc.. You probably want to avoid onMouseOver and the like. Add a * to always allow all attributes." section_name="antispam"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowedProtocol"  default="http https ftp mailto" description="A space separated list of protocols that are valid attributes of HTML tags in submitted content. Add a * to always all all protocols." section_name="antispam"/>
             <parameter datatype="string"  min_n_values="1"
-            max_n_values="1"  name="AllowedTag"  default="* B I P A LI
+            max_n_values="1"  name="AllowedTag"  default="B I P A LI
             OL UL EM BR TT STRONG BLOCKQUOTE CODE PRE FIRST_NAMES
             LAST_NAME EMAIL GROUP_NAME DL DT DD" description="A space separated list of all the HTML tags that people may use. Add a * to always allow all tags." section_name="antispam"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ApprovalExpirationDays"  default="0" description="The number of days after which registration approval expires, which will cause the user to change state to 'needs_approval'. Set to 0 to disable expiration of approval." section_name="security"/>
