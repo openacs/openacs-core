@@ -285,7 +285,7 @@ END ${package_name};
 </fullquery>
 
 
-<fullquery name="package_exec_plsql.exec_plsql_function">      
+<fullquery name="package_exec_plsql.exec_plsql_func">      
       <querytext>
       
     BEGIN
