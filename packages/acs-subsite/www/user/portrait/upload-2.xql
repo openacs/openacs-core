@@ -38,7 +38,7 @@
 
 	update images
 	set width = :original_width, height = :original_height
-	where image_id = :revision_id"
+	where image_id = :revision_id
 
         </querytext>
 </fullquery>

@@ -5,9 +5,9 @@
 <fullquery name="output_portrait">
         <querytext>
 
-        select content
+        select '[cr_fs_path]' || content
         from cr_revisions
-        where revision_id = $revision_id
+        where revision_id = :revision_id
 
         </querytext>
 </fullquery>

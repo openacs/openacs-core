@@ -38,8 +38,6 @@ proc cr_create_content_file { item_id revision_id client_filename } {
         append path "/"
     }
 
-    ns_log Notice "path = $path, revision_id = $revision_id"
-
     set content_file "${path}${revision_id}"
     set ifp [open $client_filename r]
     set ofp [open [cr_fs_path]$content_file w]
@@ -49,4 +47,15 @@ proc cr_create_content_file { item_id revision_id client_filename } {
     close $ofp
 
     return $content_file
+}
+
+proc cr_create_content_lob { client_filename } {
+
+    set lob_id [db_string new_lob_id "select empty_lob()"]
+
+    db_with_handle db {
+        ns_pg blob_dml_file $db $lob_id $client_filename
+    }
+
+    return $lob_id
 }
