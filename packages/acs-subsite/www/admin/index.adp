@@ -7,7 +7,7 @@
   <li><a href="permissions">Permissions</a>
   <li><a href="../members/">Members</a>
   <li><a href="../shared/parameters">Parameters</a>
-  <li><a href="subsite-add">Create new @subsite_label@</a>
+  <li><a href="subsite-add">Create new subsite</a>
 </ul>
 
 <h2>Advanced Features</h2>

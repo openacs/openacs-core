@@ -1,10 +1,5 @@
-if { [string equal [ad_conn package_url] "/"] } {
-    set pretty_name [_ acs-subsite.community]
-    set pretty_plural [_ acs-subsite.communities]
-} else {
-    set pretty_name [_ acs-subsite.subcommunity]
-    set pretty_plural [_ acs-subsite.subcommunities]
-}
+set pretty_name [_ acs-subsite.subsite]
+set pretty_plural [_ acs-subsite.subsites]
 
 set admin_p [permission::permission_p -object_id [ad_conn package_id] -privilege admin -party_id [ad_conn untrusted_user_id]]
 if { $admin_p } {

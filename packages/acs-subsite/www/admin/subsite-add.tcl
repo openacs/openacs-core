@@ -1,5 +1,5 @@
 ad_page_contract {
-    Create and mount a new Subsite/Community.
+    Create and mount a new Subsite
 
     @author Steffen Tiedemann Christensen (steffen@christensen.name)
     @creation-date 2003-09-26
@@ -9,13 +9,9 @@ ad_page_contract {
 
 auth::require_login
 
-if { [string equal [ad_conn package_url] "/"] } {
-    set page_title "New community"
-    set subsite_pretty_name "Community name"
-} else {
-    set page_title "New subcommunity"
-    set subsite_pretty_name "Subcommunity name"
-}
+set page_title "New subsite"
+set subsite_pretty_name "Subsite name"
+
 set context [list $page_title]
 
 
@@ -23,7 +19,7 @@ ad_form -name subsite -cancel_url . -form {
     {node_id:key}
     {instance_name:text
         {label $subsite_pretty_name}
-        {help_text "The name of the new community you're setting up."}
+        {help_text "The name of the new subsite you're setting up."}
         {html {size 30}}
     }
     {folder:url_element(text),optional
@@ -33,7 +29,7 @@ ad_form -name subsite -cancel_url . -form {
     }
     {master_template:text(select)
         {label "Template"}
-        {help_text "Choose the layout and navigation you want for your community."}
+        {help_text "Choose the layout and navigation you want for your subsite."}
         {options [subsite::get_template_options]}
     }
     {visibility:text(select)
@@ -81,7 +77,7 @@ ad_form -name subsite -cancel_url . -form {
         }
         
     } on_error {
-        ad_return_error "Problem Creating Application" "We had a problem creating the community."
+        ad_return_error "Problem Creating Application" "We had a problem creating the subsite."
     }
 } -after_submit {
     ad_returnredirect ../$folder

@@ -69,7 +69,7 @@ ad_form -extend -name user_search -on_submit {
                 -user_id $user_id \
                 -rel_type $rel_type
         } {
-            form set_error user_serach user_id "Error adding user to community: $errmsg"
+            form set_error user_search user_id "Error adding user to community: $errmsg"
             global errorInfo
             ns_log Error "Error adding user $user_id to community group $group_id: $errmsg\n$errorInfo"
             break
