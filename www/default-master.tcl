@@ -10,6 +10,11 @@
 
 # fall back on defaults
 
+if { [template::util::is_nil subnavbar_link] } {
+    set subnavbar_link ""
+}
+
+
 if { [template::util::is_nil title] } {
     set title [ad_conn instance_name]
 }
