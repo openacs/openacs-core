@@ -15,77 +15,348 @@
   <sect2 id="dbprimer-overview" xreflabel="OpenACS Documentation Overview">
     <title>Overview of OpenACS Documentation</title>
     <para>
-      ArsDigita created a good documentation ground for us to build
-      upon. Some sections of the documentation, however, lack details
-      and examples; others are simply nonexistant. Our goal is to give
-      OpenACS a superb documentation, so that users, developers and
-      administrators of OpenACS installations can enjoy the system.
+      <productname>OpenACS</productname> is a powerful system with
+      incredible possibilities and applications, but
+      this power comes with some complexity and a steep learning curve
+      that is only attenuated by good documentation.  Our goal is to write
+      superb documentation, so that users, developers and administrators
+      of OpenACS installations can enjoy the system.
+    </para>
+ 
+    <para>
+      <title>The history of OpenACS documentation</title>  ..began by
+      building on a good documentation base from ArsDigita's ACS in the
+      late 1990's. Some sections of the documentation, however, lacked
+      details and examples; others simply did not exist. The OpenACS
+      community began meeting the challenge by identifying needs and
+      writing documentation on an as needed basis.
+    </para>
+
+    <para>
+      By having documentation dependent on volunteers and code
+      developers, documentation updates lagged behind the evolving
+      system software.  As significant development changes were made
+      to the system, existing documentation became dated, and its
+      value significantly reduced. The valiant efforts that were made
+      to keep the documentation current proved too difficult as
+      changes to the system sometimes had far-reaching affects to
+      pages throughout the documentation.  System integration and
+      optimization quickly rendered documentation obsolete for
+      developers.  The code became the substitute and source for
+      documentation.
     </para>
     <para>
-      <productname>OpenACS</productname> is a powerful system, with
-      incredible possibilities and applications, but with this power
-      comes some complexity and a learning curve that will only be
-      atenuated by good documentation. This is what we are after.
+      With thousands of lines of code and few developers tracking
+      changes, features and advances to the OpenACS system went
+      unnoticed or were not well understood except by the code
+      authors.   Work was duplicated as a consequence of developers
+      not realizing the significant work completed by others. New
+      developers had to learn the system through experience with
+      working with it and discussion in the forums.  Informal sharing
+      of experiential and tacit knowledge has become the OpenACS
+      community's main method sharing knowledge.
     </para>
     <para>
-      The documentation for <productname>OpenACS</productname> is
-      written using DocBook XML. The reasons why we are using
-      DocBook	are explained in more details in the
-      next section. A few more reasons why
-      we are using Docbook XML instead of Docbook SGML:
+      This document attempts to shape ongoing documentation efforts by
+      using principles of continual improvement to re-engineer
+      documentation production.
+    </para>
+  </sect2>
+
+  <sect2 id="docs-managing" xreflabel="Managing OpenACS Documentation">
+    <title>Managing OpenACS Documentation</title>
+    <para>  
+      Documentation production shares many of the challenges of
+      software development, such as managing contributions, revisions
+      and the (editorial) release cycle. This is yet another
+      experiment in improving documentation --this time by using
+      principles of continual improvement to focus the on-going
+      efforts. These processes are outlined as project management 
+      phases:
+    </para>
+    <orderedlist>
+      <listitem><para>
+        <title>Requirements phase</title> is about setting goals and
+        specifications, and includes exploration of scenarios, use cases
+        etc.  As an example, see the <ulink
+        url="http://openacs.org/doc/openacs-4/requirements-template.html">
+        OpenACS Documentation Requirements Template</ulink> which focuses on
+        systems requirements for developers.
+      </para></listitem>
+      <listitem><para>
+        <title>Strategy phase</title> is about creating an approach
+        to doing work. It sets behavioral guidelines and boundaries
+        that help keep perspective on how efforts are directed.
+        OpenACS developers discuss strategy when coordinating
+        efforts such as code revisioning and new features.
+      </para></listitem>
+      <listitem><para>
+        <title>Planning phase</title> is about explicitly stating
+        the way to implement the strategy as a set of methods.
+        OpenACS system design requires planning. For example, see
+        <ulink
+        url="http://openacs.org/doc/openacs-4/filename.html">OpenACS
+        documentation template</ulink> planning relating to package
+        design. 
+      </para></listitem>
+      <listitem><para>
+        <title>Implementation phase</title> is about performing the
+        work according to the plan, where decisions on how to handle
+        unforseen circumstances are guided by the strategy and
+        requirements.
+      </para></listitem>
+      <listitem><para>
+        <title>Verification phase</title> measures how well the plan
+        was implemented. Success is measured by A) verifying if the
+        project has met the established goals, and B) reviewing for
+        ongoing problem areas etc.  OpenACS follows verification
+        through different means on different projects, but in all
+        cases, the OpenACS community verifies the project as a
+        success through feedback including bug reports, user and
+        administrator comments, and code changes.
+      </para></listitem>
+    </orderedlist>
+    <para>
+      OpenACS forum discussions on documentation requirements and strategies are
+      summarized in the following sections.  Production
+      phases are mainly organized and fulfilled by Joel Aufrecht.
+      Hopefully the following sections will help spur greater
+      direct participation by the OpenACS community.
+    </para>
+  </sect2>
+
+  <sect2 id="docs-requirements" xreflabel="OpenACS General Documentation Requirements">
+    <title>OpenACS General Documentation Requirements</title>
+    <para>
+      By the OpenACS Community. This section is a collection of
+      documentation requirements that have been expressed in the
+      OpenACS forums to 4th July 2003.
+    </para>    
+    <para>
+      OpenACS documentation should meet the following goals. No
+      significance has been given to the order presented, topic breadth or depth here.
     </para>
     <itemizedlist>
       <listitem><para>
-	<emphasis>Consistency</emphasis>. We started with a collection 
-	of DcoBook XML files that ArsDigita wrote. Trying to re-write them to
-	conform to the SGML DTD would be unnecessary work (I tried).
-	</para></listitem>
+        clarity in presentation. <ulink
+        url="http://www.lifewithqmail.org/lwq.html">Life with
+        qmail</ulink> is a recommended example of "rated high" online
+        documentation.
+      </para></listitem>
       <listitem><para>
-	<emphasis>It does not require extra
-	  effort</emphasis>. Writing in XML is almost identical to
-	SGML, with a couple extra rules. More details in the
-	<ulink
-               url="http://en.tldp.org/LDP/LDP-Author-Guide/docbookxml.html">LDP 
-	  Author Guide</ulink>.
-	</para></listitem>
+        Avoid requirements that significantly increase the labor
+        required to maintain documentation.
+      </para></listitem>
+      <listitem>
+        <para>
+          Use best practices learned from the print world, web, and
+          other media, about use of gamma, space, writing style etc.
+        </para>
+        <itemizedlist>
+          <listitem><para>
+            Consistency in publishing -Establishing and adhering to publishing standards
+          </para></listitem>
+          <listitem><para>
+            Use standardized language -Use international English
+            (without slang or colloquial terms) for ESL (English as
+            a second language) readers (and making translation
+            easier for those interested in translating the
+            documentation for internationalization efforts).
+          </para></listitem>
+          <listitem><para>
+            All jargon used in documentation needs to be defined. 
+            Use standardized terms when available, avoiding implicit
+            understanding of specific OpenACS terms. 
+          </para></listitem>
+          <listitem><para>
+            Document titles (for example on html pages) should
+            include whole document title (as in book title):
+            (chapter title) : (section), so that bookmarks etc.
+            indicate location in a manner similar to pages in books
+            (in print publishing world).
+          </para></listitem>
+          <listitem><para>
+            Organize document according to the needs of the reader
+            (which may be different than the wishes of the writers).
+          </para></listitem>
+          <listitem><para>
+            Do not make informal exclamations about difficulty/ease
+            for users to complete tasks or understand... for
+            example, "Simply...".  Readers come from many different
+            backgrounds --remember that the greater audience is
+            likely as varied as the readers on the internet--- If
+            important, state pre-conditions or knowledge
+            requirements etc. if different than the rest of the
+            context of the document. For example, "requires basic
+            competency with a text-based editor such as vi or emacs
+            via telnet"
+          </para></listitem>
+        </itemizedlist>
+      </listitem>
       <listitem><para>
-	<emphasis>The tool chain has matured</emphasis>. xsltproc and other XML 
-	based tools have improved to the point where they are about as good as 
-	the SGML tools and generation of both html and pdf output is straighforward.
-	</para></listitem>
+        Show where to find current information instead of writing
+        about current info that becomes obsolete. If the information
+        is not found elsewhere, then create one place for it, where
+        others can refer to it. This structure of information will
+        significantly reduce obsolescence in writing and labor burden
+        to maintain up-to-date documentation. In other words, state
+        facts in appropriately focused, designated areas only, then
+        refer to them by reference (with links). 
+      </para>
+      <para>
+        Note: Sometimes facts should be stated multiple ways, to
+        accommodate different reading style preferences. The should
+        still be in 1 area, using a common layout of perhaps
+        summary, introduction and discussion requiring increasing
+        expertise, complexity or specificity.
+      </para></listitem>
+      <listitem><para>
+        Consistency in link descriptions -When link urls refer to
+        whole documents, make the link (anchor wrapped title) that
+        points to a document with the same title and/or heading of
+        the document.
+      </para></listitem>
+      <listitem><para>
+        Consider OpenACS documentation as a set of books (an
+        encyclopedic set organized like an atlas) that contains
+        volumes (books).  Each book contains chapters and sections
+        much like how DocBook examples are shown, where each chapter
+        is a web page. This designation could help create an OpenACs
+        book in print, and help new readers visualize how the
+        documentation is organized. 
+      </para></listitem>
+      <listitem><para>
+        The use licenses between OpenACS and Arsdigita's ACS are not
+        compatible, thereby creating strict limits on how much
+        OpenACS developers should have access to Arsdigita code and
+        resources.  The OpenACS documentation has a new legal
+        requirement: to eliminate any dependency on learning about
+        the system from Arsdigita ACS examples to minimize any
+        inference of license noncompliance, while recognizing the
+        important work accomplished by Philip Greenspun, Arsdigita,
+        and the early ACS adopters.
+      </para></listitem>
+      <listitem><para>
+        Use a consistent general outline for each book.
+        <itemizedlist>
+          <listitem><para>
+            Introduction (includes purpose/goal), Glossary of terms,
+            Credits, License, Copyright, Revision History
+          </para></listitem>
+          <listitem><para>
+            Table of Contents (TOC)s for each book: the end-users, content and site
+            administrators, marketing, beginning developers, and
+            developers.
+          </para></listitem>
+          <listitem><para>
+            Priorities of order and content vary based on each of
+            the different readers mentioned. The developers guide
+            should be organized to be most useful to the priorities
+            of developers, while being consistent with the general
+            documentation requirements including publishing strategy,
+            style etc.
+          </para></listitem>
+          <listitem><para>
+            Use generic DocBook syntax to maximize reader familiarity with the documents.
+              <programlisting>
+                <book><title><part label="Part 1"><etc...>
+              </programlisting>
+          </para></listitem>
+        </itemizedlist>
+      </para></listitem>
     </itemizedlist>
   </sect2>
-  
+
   <sect2 id="dbprimer-why" xreflabel="Why DocBook?">
-    <title>Why DocBook?</title>
-
+    <title>OpenACS Documentation Strategy: Why DocBook?</title>
     <para>
-      In order to separate content and presentation, all OpenACS documentation will be marked up to conform to the 
-      <ulink url="http://docbook.org/xml/index.html">DocBook XML DTD</ulink> 
-      
-      <indexterm><primary>DocBook</primary><secondary>DTD</secondary></indexterm>
-      This enables us to publish in a variety
-      of formats and relieves each contributor of the burden of  presentation, freeing him to focus
-      on content and sharing knowledge.
+      All OpenACS documentation will be marked up to conform to the
+      <ulink url="http://docbook.org/xml/index.html">DocBook XML
+      DTD</ulink>. Theoretically, any strict DTD would have been
+      sufficient. We could even write our own, or just use the
+      OpenACS templating system via the Edit-This-Page package.
+      However,
+      <indexterm><primary>DocBook</primary><secondary>DTD</secondary></indexterm> 
+      is a publishing standard based on XML with
+      similar goals to the OpenACS Documentation project.  Some specific reasons why we are using DocBook:
     </para>
-
-    <para>
-      Theoretically any strict DTD would have been sufficient - we could even write our own. But DocBook has been around
-      for a while (since the <ulink url="http://docbook.org/tdg/en/html/ch01.html#d0e2132">early 90's</ulink>), 
-      it's well-tested, it's complete, it's designed for technical documentation
-      and best of all, it's open-source. A growing community surrounds DocBook (has 
+    <itemizedlist>
+      <listitem><para>      
+      It is open-source. 
+      </para></listitem>
+      <listitem><para>
+      A growing community surrounds DocBook (has 
       <ulink url="http://docbook.org/mailinglist/index.html">mailing lists</ulink>) 
-      and a number of free and commercial
+      </para></listitem>
+      <listitem><para>
+      A number of free and commercial 
       <ulink url="http://www.docbook.org/wiki/moin.cgi/DocBookTools">tools</ulink> are available
-      for editing and publishing DocBook documents.
+      for editing and publishing DocBook documents. 
+      </para></listitem>
+      <listitem><para>
+      It enables us to publish in a variety of formats.
+      </para></listitem>
+      <listitem><para>
+      XML separates content from presentation: It relieves each
+      contributor of the burden of presentation, freeing each writer
+      to focus on content and sharing knowledge.
+      </para></listitem>
+      <listitem><para>      
+      It is well tested technology. It has been in development
+      since the <ulink url="http://docbook.org/tdg/en/html/ch01.html#d0e2132">early 1990's</ulink>). 
+      </para></listitem>
+    </itemizedlist>
+   <para>
+      Reasons why we are using Docbook XML instead of Docbook SGML:
     </para>
-
+    <itemizedlist>
+      <listitem><para>
+    <emphasis>Consistency</emphasis> and history. We started with a collection 
+    of DocBook XML files that ArsDigita wrote. Trying to re-write them to
+    conform to the SGML DTD would be unnecessary work.
+    </para></listitem>
+      <listitem><para>
+    <emphasis>XML does not require extra
+      effort</emphasis>. Writing in XML is almost identical to
+    SGML, with a couple extra rules. More details in the
+    <ulink url="http://en.tldp.org/LDP/LDP-Author-Guide/docbookxml.html">LDP Author Guide</ulink>.
+    </para></listitem>
+      <listitem><para>
+    <emphasis>The tool chain has matured</emphasis>. xsltproc and other XML 
+    based tools have improved to the point where they are about as good as 
+    the SGML tools. Both can output html and pdf formats.
+    </para></listitem>
+    </itemizedlist>
     <para>
-      This primer walks you through the basics, and should cover the
+      Albeit, the road to using DocBook has had some trials. 
+      In 2002, Docbook still was not fully capable of representing
+      online books as practiced by book publishers and expected from
+      readers with regards to usability on the web. That meant
+      DocBook did not entirely meet OpenACS publishing requirements
+      at that time.
+    </para>
+    <para>
+      In 2004, Docbook released version 4.2, which complies with all 
+      the OpenACS publishing requirements.
+      Producing a web friendly book hierarchy arguably remains DocBooks'
+      weakest point. For example, a dynamically built document
+      should be able to extract details of a specific reference from
+      a bibliographic (table) and present a footnote  at the
+      point where referenced. DocBook 4.2 allows for this with
+      <computeroutput>bibliocoverage</computeroutput>,
+      <computeroutput>bibliorelation</computeroutput>, and
+      <computeroutput>bibliosource</computeroutput>. <ulink
+      url="http://www.docbook.org/tdg/en/html/docbook.html">DocBook:
+      The Definitive Guide</ulink> is a good start for learning how
+      to represent paper-based books online.
+    </para>
+    
+    <para>
+      The following DocBook primer walks you through the basics, and should cover the
       needs for 95 percent of the documentation we produce. However,
       you're always welcome to check out DocBook's
       <ulink url="http://docbook.org/tdg/en/html/part2.html">
-	list of elements</ulink> and use more exotic features in your
+    list of elements</ulink> and use more exotic features in your
       documents. The list is made up of SGML-elements but basically
       the same elements are valid in the XML DTD <emphasis
       role="strong">as long as you remember to</emphasis>:
@@ -94,21 +365,21 @@
 
     <itemizedlist>
       <listitem>
-	<para>
-	  Always close your tags with corresponding end-tags and to
-	  <emphasis role="strong">not use other tag minimization</emphasis>
-	</para>
+    <para>
+      Always close your tags with corresponding end-tags and to
+      <emphasis role="strong">not use other tag minimization</emphasis>
+    </para>
       </listitem>
 
       <listitem>
-	<para>
-	  Write all elements and attributes in lowercase
-	</para>
+    <para>
+      Write all elements and attributes in lowercase
+    </para>
       </listitem>
 
       <listitem><para>
-	  Quote all attributes
-	</para></listitem>
+      Quote all attributes
+    </para></listitem>
 
     </itemizedlist>
   </sect2>
@@ -123,41 +394,41 @@
 
     <itemizedlist>
       <listitem>
-	<para>
-	<ulink url="http://docbook.org/xml/index.html">Docbook XML
-	DTD</ulink> - The document type definition for XML. You can
-	find an RPM or DEB package or you can download a zip file from
-	the site linked from here.
-	</para>
+    <para>
+    <ulink url="http://docbook.org/xml/index.html">Docbook XML
+    DTD</ulink> - The document type definition for XML. You can
+    find an RPM or DEB package or you can download a zip file from
+    the site linked from here.
+    </para>
       </listitem>
 
       <listitem>
-	<para>
-	<ulink url="http://sourceforge.net/projects/docbook/">XSL
-	Stylesheets</ulink> (docbook-xsl) - The stylesheets to convert
-	to HTML. We have been using a stylesheet based upon
-	NWalsh's chunk.xsl.
-	</para>
+    <para>
+    <ulink url="http://sourceforge.net/projects/docbook/">XSL
+    Stylesheets</ulink> (docbook-xsl) - The stylesheets to convert
+    to HTML. We have been using a stylesheet based upon
+    NWalsh's chunk.xsl.
+    </para>
       </listitem>
       
       <listitem>
-	<para>
-	<computeroutput>xsltproc</computeroutput> - The processor that
-	will take an XML document and, given a xsl stylesheet, convert
-	it to HTML. It needs libxml2 and libxslt (available in RPM and
-	DEB formats or from <ulink
-	url="http://xmlsoft.org/">xmlsoft.org</ulink>.	
-	</para>
+    <para>
+    <computeroutput>xsltproc</computeroutput> - The processor that
+    will take an XML document and, given a xsl stylesheet, convert
+    it to HTML. It needs libxml2 and libxslt (available in RPM and
+    DEB formats or from <ulink
+    url="http://xmlsoft.org/">xmlsoft.org</ulink>.  
+    </para>
       </listitem>
 
       <listitem>
-	<para>
-	Some editing tool. A popular one is Emacs with the psgml
-	mode. We have a <link linkend="psgml-mode">intro to the PSGML
-	Mode in Emacs</link> as part of our documentation. You can
-	read about other editing tools in the <ulink
-	url="http://en.tldp.org/LDP/LDP-Author-Guide/">LDP Author Guide</ulink>.
-	</para>
+    <para>
+    Some editing tool. A popular one is Emacs with the psgml
+    mode. We have a <link linkend="psgml-mode">intro to the PSGML
+    Mode in Emacs</link> as part of our documentation. You can
+    read about other editing tools in the <ulink
+    url="http://en.tldp.org/LDP/LDP-Author-Guide/">LDP Author Guide</ulink>.
+    </para>
       </listitem>
     </itemizedlist>
   </sect2>
@@ -312,58 +583,58 @@
     <variablelist>
 
       <varlistentry>
-	<term><emphasis role="strong">1. Inside linking, cross-referencing other parts of your book</emphasis></term>
-	<listitem><para>
-	    By having unique <computeroutput>id</computeroutput>'s you can cross-reference any part of your book
-	    with a simple tag, regardless of where that part is.
-	  </para>
+    <term><emphasis role="strong">1. Inside linking, cross-referencing other parts of your book</emphasis></term>
+    <listitem><para>
+        By having unique <computeroutput>id</computeroutput>'s you can cross-reference any part of your book
+        with a simple tag, regardless of where that part is.
+      </para>
 
-	  <para><indexterm><primary>xref</primary><secondary>linkend</secondary></indexterm>Check out how I link to a subsection of the Developer's Guide:</para>
+      <para><indexterm><primary>xref</primary><secondary>linkend</secondary></indexterm>Check out how I link to a subsection of the Developer's Guide:</para>
 
 
-	  <para>Put this in your XML:</para>
+      <para>Put this in your XML:</para>
 
 <programlisting>
 - Find information about creating a package in
 &lt;xref linkend="packages-making-a-package"&gt;&lt;/xref&gt;.
 </programlisting>
 
-	  <para>And the output is:</para>
+      <para>And the output is:</para>
 
 <programlisting>
 - Find information about creating a package in 
 <xref linkend="packages-making-a-package"></xref>.
 </programlisting>
 
-	  <para>
-	    Note that even though this is an empty tag, you have to either:
-	  </para>
+      <para>
+        Note that even though this is an empty tag, you have to either:
+      </para>
 
-	  <orderedlist>
-	    <listitem>
-	      <para>
-		Provide the end-tag, <computeroutput>&lt;/xref&gt;</computeroutput>, or
-	      </para>
-	    </listitem>
+      <orderedlist>
+        <listitem>
+          <para>
+        Provide the end-tag, <computeroutput>&lt;/xref&gt;</computeroutput>, or
+          </para>
+        </listitem>
 
-	    <listitem>
-	      <para>
-		Put a slash before the ending-bracket: <computeroutput>&lt;xref linkend="blahblah"/&gt;</computeroutput>
-	      </para>
-	    </listitem>
-	  </orderedlist>
+        <listitem>
+          <para>
+        Put a slash before the ending-bracket: <computeroutput>&lt;xref linkend="blahblah"/&gt;</computeroutput>
+          </para>
+        </listitem>
+      </orderedlist>
 
-	  <para>If the section you link to hasn't a specified <computeroutput>xreflabel</computeroutput>-attribute,
-	    the link is going to look like this:</para>
+      <para>If the section you link to hasn't a specified <computeroutput>xreflabel</computeroutput>-attribute,
+        the link is going to look like this:</para>
 
 
-	   <para>Put this in your XML:</para>
+       <para>Put this in your XML:</para>
 <programlisting>
 -Find information about what a package looks like in 
 &lt;xref linkend="packages-looks"&gt;&lt;/xref&gt;.
 </programlisting>
 
-	<para>And the output is:</para>
+    <para>And the output is:</para>
 
 <programlisting>
 - Find information about what a package looks like in 
@@ -371,38 +642,38 @@
 </programlisting>
 
 
-	  <para>
-	    Note that since I haven't provided an <computeroutput>xreflabel</computeroutput> for the subsection, 
-	    <computeroutput>packages-looks</computeroutput>, the
-	    parser will try its best to explain where the link takes you.
-	  </para>
+      <para>
+        Note that since I haven't provided an <computeroutput>xreflabel</computeroutput> for the subsection, 
+        <computeroutput>packages-looks</computeroutput>, the
+        parser will try its best to explain where the link takes you.
+      </para>
 
 
-	</listitem>
+    </listitem>
       </varlistentry>
 
       <varlistentry>
-	<term><emphasis role="strong">2. Linking outside the documentation</emphasis></term>
-	<listitem><para>
-	    <indexterm><primary>ulink</primary></indexterm>
-	    If you're hyper-linking out of the documentation, it works almost the same way as HTML - the tag is just
-	    a little different
+    <term><emphasis role="strong">2. Linking outside the documentation</emphasis></term>
+    <listitem><para>
+        <indexterm><primary>ulink</primary></indexterm>
+        If you're hyper-linking out of the documentation, it works almost the same way as HTML - the tag is just
+        a little different
 
-	    (<ulink url="http://docbook.org/tdg/en/html/ulink.html"><computeroutput>&lt;ulink&gt;</computeroutput></ulink>):
+        (<ulink url="http://docbook.org/tdg/en/html/ulink.html"><computeroutput>&lt;ulink&gt;</computeroutput></ulink>):
 
-	  </para>
+      </para>
 
-	  <programlisting>&lt;ulink url="http://www.oracle.com/"&gt;Oracle Corporation&lt;/ulink&gt;</programlisting>
+      <programlisting>&lt;ulink url="http://www.oracle.com/"&gt;Oracle Corporation&lt;/ulink&gt;</programlisting>
 
-	  <para>
+      <para>
 
-	    ....will create a hyper-link to Oracle in the HTML-version of the documentation.
-	  </para>
+        ....will create a hyper-link to Oracle in the HTML-version of the documentation.
+      </para>
 
-	  <para><emphasis role="strong">NOTE:</emphasis> Do NOT use ampersands in your hyper links. These are reserved for referencing
-	    entities, which is exactly how you'll make an ampersand: <computeroutput>&amp;amp;</computeroutput>
+      <para><emphasis role="strong">NOTE:</emphasis> Do NOT use ampersands in your hyper links. These are reserved for referencing
+        entities, which is exactly how you'll make an ampersand: <computeroutput>&amp;amp;</computeroutput>
 
-	  </para></listitem>
+      </para></listitem>
       </varlistentry>
 
     </variablelist>
@@ -414,13 +685,13 @@
 
     <para>
       <emphasis><emphasis role="strong">NOTE:</emphasis> Currently this section currently only takes HTML-output into consideration -
-	not a printed version</emphasis>
+    not a printed version</emphasis>
     </para>
 
     <para>
       <emphasis>
-	<emphasis role="strong">Another Note:</emphasis> Also, it's still not a 100 percent sure that this is how we are going to 
-	do it, so if you want to start converting your documents right away, start out with the ones without graphics ;)
+    <emphasis role="strong">Another Note:</emphasis> Also, it's still not a 100 percent sure that this is how we are going to 
+    do it, so if you want to start converting your documents right away, start out with the ones without graphics ;)
       </emphasis>
     </para>
 
@@ -469,14 +740,14 @@
     <variablelist>
 
       <varlistentry>
-	<term><emphasis role="strong">1. How to make an &lt;ul&gt;</emphasis></term>
-	<listitem><para>
-	    Making an unordered list is pretty much like doing the same thing in HTML - if you close your <computeroutput>&lt;li&gt;</computeroutput>, that is. The only differences are that each list item has to be wrapped in something more, such as
-	    <computeroutput>&lt;para&gt;</computeroutput>, and that the tags are called
-	    <ulink url="http://docbook.org/tdg/en/html/itemizedlist.html"><computeroutput>&lt;itemizedlist&gt;</computeroutput></ulink>
-	    and
-	    <ulink url="http://docbook.org/tdg/en/html/listitem.html"><computeroutput>&lt;listitem&gt;</computeroutput></ulink>:
-	  </para>
+    <term><emphasis role="strong">1. How to make an &lt;ul&gt;</emphasis></term>
+    <listitem><para>
+        Making an unordered list is pretty much like doing the same thing in HTML - if you close your <computeroutput>&lt;li&gt;</computeroutput>, that is. The only differences are that each list item has to be wrapped in something more, such as
+        <computeroutput>&lt;para&gt;</computeroutput>, and that the tags are called
+        <ulink url="http://docbook.org/tdg/en/html/itemizedlist.html"><computeroutput>&lt;itemizedlist&gt;</computeroutput></ulink>
+        and
+        <ulink url="http://docbook.org/tdg/en/html/listitem.html"><computeroutput>&lt;listitem&gt;</computeroutput></ulink>:
+      </para>
 
 <programlisting>
 &lt;itemizedlist&gt;
@@ -487,17 +758,17 @@
 &lt;/itemizedlist&gt;
 </programlisting>
 
-	</listitem>
+    </listitem>
       </varlistentry>
 
 
       <varlistentry>
-	<term><emphasis role="strong">2. How to make an &lt;ol&gt;</emphasis></term>
-	<listitem><para>
-	    The ordered list is like the preceding, except that you use 
-	    <ulink url="http://docbook.org/tdg/en/html/orderedlist.html"><computeroutput>&lt;orderedlist&gt;</computeroutput></ulink> instead:</para>
+    <term><emphasis role="strong">2. How to make an &lt;ol&gt;</emphasis></term>
+    <listitem><para>
+        The ordered list is like the preceding, except that you use 
+        <ulink url="http://docbook.org/tdg/en/html/orderedlist.html"><computeroutput>&lt;orderedlist&gt;</computeroutput></ulink> instead:</para>
 
-	  <programlisting>
+      <programlisting>
 &lt;orderedlist&gt;
 
   &lt;listitem&gt;&lt;para&gt;Stuff goes here&lt;/para&gt;&lt;/listitem&gt;
@@ -506,21 +777,21 @@
 &lt;/orderedlist&gt;
 </programlisting>
 
-	</listitem>
+    </listitem>
       </varlistentry>
 
 
       <varlistentry>
-	<term><emphasis role="strong">3. How to make a &lt;dl&gt;</emphasis></term>
-	<listitem><para>
-	    This kind of list is called a <computeroutput>variablelist</computeroutput> and these are the tags you'll need to 
-	    make it happen:
-	    <ulink url="http://docbook.org/tdg/en/html/variablelist.html"><computeroutput>&lt;variablelist&gt;</computeroutput></ulink>,
-	    <ulink url="http://docbook.org/tdg/en/html/varlistentry.html"><computeroutput>&lt;varlistentry&gt;</computeroutput></ulink>, 
-	    <ulink url="http://docbook.org/tdg/en/html/term.html"><computeroutput>&lt;term&gt;</computeroutput></ulink> and
-	    <ulink url="http://docbook.org/tdg/en/html/listitem.html"><computeroutput>&lt;listitem&gt;</computeroutput></ulink>:</para>
+    <term><emphasis role="strong">3. How to make a &lt;dl&gt;</emphasis></term>
+    <listitem><para>
+        This kind of list is called a <computeroutput>variablelist</computeroutput> and these are the tags you'll need to 
+        make it happen:
+        <ulink url="http://docbook.org/tdg/en/html/variablelist.html"><computeroutput>&lt;variablelist&gt;</computeroutput></ulink>,
+        <ulink url="http://docbook.org/tdg/en/html/varlistentry.html"><computeroutput>&lt;varlistentry&gt;</computeroutput></ulink>, 
+        <ulink url="http://docbook.org/tdg/en/html/term.html"><computeroutput>&lt;term&gt;</computeroutput></ulink> and
+        <ulink url="http://docbook.org/tdg/en/html/listitem.html"><computeroutput>&lt;listitem&gt;</computeroutput></ulink>:</para>
 
-	  <programlisting>
+      <programlisting>
 &lt;variablelist&gt;
 
   &lt;varlistentry&gt;
@@ -536,7 +807,7 @@
 &lt;/variablelist&gt;
 </programlisting>
 
-	</listitem>
+    </listitem>
       </varlistentry>
 
     </variablelist>
@@ -587,29 +858,29 @@
     </para>
 
       <informaltable frame="all">
-	<tgroup cols="3">
-	  <tbody>
+    <tgroup cols="3">
+      <tbody>
 
-	    <row>
-	      <entry>a1</entry>
-	      <entry>b1</entry>
-	      <entry>c1</entry>
-	    </row>
+        <row>
+          <entry>a1</entry>
+          <entry>b1</entry>
+          <entry>c1</entry>
+        </row>
 
-	    <row>
-	      <entry>a2</entry>
-	      <entry>b2</entry>
-	      <entry>c2</entry>
-	    </row>
+        <row>
+          <entry>a2</entry>
+          <entry>b2</entry>
+          <entry>c2</entry>
+        </row>
 
-	    <row>
-	      <entry>a3</entry>
-	      <entry>b3</entry>
-	      <entry>c3</entry>
-	    </row>
+        <row>
+          <entry>a3</entry>
+          <entry>b3</entry>
+          <entry>c3</entry>
+        </row>
 
-	  </tbody>
-	</tgroup>
+      </tbody>
+    </tgroup>
       </informaltable>
 
 
@@ -678,7 +949,7 @@
     </para>
     
 
-	
+    
     <para>
       To generate a single HTML file from your DocBook XML file,
       use the command:
@@ -711,8 +982,8 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
 </programlisting>
 
     <para> 
-	You could also look at the <ulink url="http://cvs.openacs.org/cvs/openacs-4/packages/acs-core-docs/www/xml/Makefile?view=markup">acs-core-docs Makefile</ulink> 
-	for examples of how these documents are generated.
+    You could also look at the <ulink url="http://cvs.openacs.org/cvs/openacs-4/packages/acs-core-docs/www/xml/Makefile?view=markup">acs-core-docs Makefile</ulink> 
+    for examples of how these documents are generated.
     </para>
 
   </sect2>
@@ -725,51 +996,51 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
         <para><ulink url="http://www.xml.com/lpt/a/2002/07/31/xinclude.html">Using Xinclude</ulink></para>
       </listitem>
       <listitem>
-	<para>
-	The <ulink
-	url="http://en.tldp.org/LDP/LDP-Author-Guide/">LDP Author
-	Guide</ulink> has a lot of good information, a table of
-	docbook elements and their "look" in HTML and lots of good links
-	for tools.
-	</para>
+    <para>
+    The <ulink
+    url="http://en.tldp.org/LDP/LDP-Author-Guide/">LDP Author
+    Guide</ulink> has a lot of good information, a table of
+    docbook elements and their "look" in HTML and lots of good links
+    for tools.
+    </para>
       </listitem>
       
       <listitem><para>
-	  David Lutterkort
-	  wrote an <link linkend="psgml-mode">intro to the PSGML Mode in Emacs</link>
-	</para></listitem>
+      David Lutterkort
+      wrote an <link linkend="psgml-mode">intro to the PSGML Mode in Emacs</link>
+    </para></listitem>
 
       <listitem><para>
-	  For checking if your document is well-formed, James Clark's free Java parser,
-	  <ulink url="http://www.jclark.com/xml/xp/index.html">XP</ulink>, is recommended. (note that
-	  it is not a validating parser, but as long as you follow the guidelines set forth in this
-	  document, your XML will validate)</para></listitem>
+      For checking if your document is well-formed, James Clark's free Java parser,
+      <ulink url="http://www.jclark.com/xml/xp/index.html">XP</ulink>, is recommended. (note that
+      it is not a validating parser, but as long as you follow the guidelines set forth in this
+      document, your XML will validate)</para></listitem>
 
       <listitem><para>
-	  <ulink url="http://sources.redhat.com/docbook-tools/">DocBook Tool for Linux</ulink>: 
-	  Let's you convert your docbook documents to a number of formats. Sometimes it's nice to see
-	  how you stuff looks. <emphasis>NOTE: I only got these to
-	  work with Docbook SGML, NOT with Docbook XML. If you are
-	  able to make it work with our XML, please let us know.</emphasis>
-	</para>
+      <ulink url="http://sources.redhat.com/docbook-tools/">DocBook Tool for Linux</ulink>: 
+      Let's you convert your docbook documents to a number of formats. Sometimes it's nice to see
+      how you stuff looks. <emphasis>NOTE: I only got these to
+      work with Docbook SGML, NOT with Docbook XML. If you are
+      able to make it work with our XML, please let us know.</emphasis>
+    </para>
       </listitem>
 
       <listitem><para>
-	  AptConvert from <ulink url="http://www.pixware.fr/">PIXware</ulink> is a Java editor that will produce
-	  DocBook documents and let you transform them into HTML and PDF for a local preview before you submit.
-	</para>
+      AptConvert from <ulink url="http://www.pixware.fr/">PIXware</ulink> is a Java editor that will produce
+      DocBook documents and let you transform them into HTML and PDF for a local preview before you submit.
+    </para>
       </listitem>
 
       <listitem>
-	<para>
-	  In the process of transforming your HTML into XML, 
-	  <ulink url="http://tidy.sourceforge.net/">HTML tidy</ulink>
-	  can be a a handy tool to make your HTML "regexp'able".
-	  Brandoch Calef has made a 
-	  <ulink url="http://developer.arsdigita.com/working-papers/bcalef/html-to-docbook.html#html2docbook">Perl script</ulink>
-	  that gets you most of the way.
+    <para>
+      In the process of transforming your HTML into XML, 
+      <ulink url="http://tidy.sourceforge.net/">HTML tidy</ulink>
+      can be a handy tool to make your HTML "regexp'able".
+      Brandoch Calef has made a 
+      <ulink url="http://developer.arsdigita.com/working-papers/bcalef/html-to-docbook.html#html2docbook">Perl script</ulink>
+      that gets you most of the way.
 
-	</para>
+    </para>
       </listitem>
     </itemizedlist>
   </sect2>
@@ -779,50 +1050,50 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
     
     <informaltable>
       <tgroup cols="4">
-	<thead>
-	  <row>
-	    <entry>Document Revision #</entry>
-	    <entry>Action Taken, Notes</entry>
-	    <entry>When?</entry>
-	    <entry>By Whom?</entry>
-	  </row>
-	</thead>
+    <thead>
+      <row>
+        <entry>Document Revision #</entry>
+        <entry>Action Taken, Notes</entry>
+        <entry>When?</entry>
+        <entry>By Whom?</entry>
+      </row>
+    </thead>
 
-	<tbody>
-	  
-	  <row>
-	    <entry>0.4</entry>
-	    <entry>
-	      Fixed some typos.
-	    </entry>
-	    <entry>8/3/2002</entry>
-	    <entry>Vinod Kurup</entry>
-	  </row>
-	  	  
-	  <row>
-	    <entry>0.3</entry>
-	    <entry>
-	      Added OpenACS information, updated tools, added
-	      extra links and added info to the Publishing section.
-	    </entry>
-	    <entry>12/24/2001</entry>
-	    <entry>Roberto Mello</entry>
-	  </row>
-	  	  
-	  <row>
-	    <entry>0.2</entry>
-	    <entry>Changed recommendation from &lt;phrase&gt; to &lt;emphasis role="strong"&gt;</entry>
-	    <entry>01/19/2000</entry>
-	    <entry>Claus Rasmussen</entry>
-	  </row>
+    <tbody>
+      
+      <row>
+        <entry>0.4</entry>
+        <entry>
+          Fixed some typos.
+        </entry>
+        <entry>8/3/2002</entry>
+        <entry>Vinod Kurup</entry>
+      </row>
+          
+      <row>
+        <entry>0.3</entry>
+        <entry>
+          Added OpenACS information, updated tools, added
+          extra links and added info to the Publishing section.
+        </entry>
+        <entry>12/24/2001</entry>
+        <entry>Roberto Mello</entry>
+      </row>
+          
+      <row>
+        <entry>0.2</entry>
+        <entry>Changed recommendation from &lt;phrase&gt; to &lt;emphasis role="strong"&gt;</entry>
+        <entry>01/19/2000</entry>
+        <entry>Claus Rasmussen</entry>
+      </row>
 
-	  <row>
-	    <entry>0.1</entry>
-	    <entry>Creation</entry>
-	    <entry>12/2000</entry>
-	    <entry>Claus Rasmussen</entry>
-	  </row>
-	</tbody>
+      <row>
+        <entry>0.1</entry>
+        <entry>Creation</entry>
+        <entry>12/2000</entry>
+        <entry>Claus Rasmussen</entry>
+      </row>
+    </tbody>
       </tgroup>
     </informaltable>
 
