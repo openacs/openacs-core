@@ -10,5 +10,6 @@
 \i application-groups-drop.sql
 \i portraits-drop.sql
 \i attributes-drop.sql
+\i host-node-map-drop.sql
 
 drop view party_names;

@@ -10,3 +10,4 @@
 @@ user-profiles-drop
 @@ attributes-drop
 @@ portraits-drop
+@@ host-node-map-drop
