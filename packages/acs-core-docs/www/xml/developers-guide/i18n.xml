@@ -50,6 +50,23 @@
 
   </sect2>
 
+  <sect2 id="i18n-aolserver">
+
+    <title>AOLserver Configuration for Multilingual Sites</title>
+
+    <para>
+      For multilingual websites we recommend using the UTF8
+      charset. In order for AOLserver to use utf8 you need to set
+      the config parameters OutputCharset and
+      URLCharset to utf-8 in your AOLserver config file (use the etc/config.tcl
+      template file). For sites running on Oracle you need to make
+      sure that AOLserver is running with the NLS_LANG environment
+      variable set to .UTF8. You should set this variable in the
+      nsd-oracle run script (use the
+      acs-core-docs/www/files/nds-oracle.txt template file).
+    </para>
+  </sect2>
+
   <sect2 id="i18n-message-catalog">
 
     <title>Using the Message Catalog</title>
