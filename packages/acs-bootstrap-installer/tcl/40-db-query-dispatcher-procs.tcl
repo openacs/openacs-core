@@ -332,6 +332,7 @@ proc db_map {snippet_name} {
     set fullquery [db_qd_fetch $fullname]
     set sql [db_fullquery_get_querytext $fullquery]
 
+    ns_log Notice "QD=PARTIALQUERY FOR $fullname: $sql"
     return [uplevel 1 [list subst -nobackslashes $sql]]
 }
 
