@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+
+This html page will be displayed instead of the standard OpenACS error message
+if there is a database failure. Customize at your will, and don't forget to
+update the contact address below!
+
+When you are finished customizing it you need to enable it by renaming
+it from 'www/global/site-failure.html.disabled' to
+'www/global/site-failure.html'.
+
+Note that some broken IE browsers might show a 'friendly' error
+message instead if this file does not exceed 500 bytes.
+
+-->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<title></title>
+</head>
+
+<body>
+<h1>Site Failure</h1>
+<hr>
+This site is currently not working due to a technical problem.
+
+<p>
+
+Please contact <a href="mailto:admin@example.com">admin@example.com</a> if you think
+the problem is not known yet.
+
+
+
+<hr>
+</body>
+</html>
