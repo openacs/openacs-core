@@ -12,6 +12,7 @@ if { $num == 0 } {
 }
 
 set title "Advanced Search"
+set context "advanced search"
 set context_bar [ad_context_bar $title]
 
 

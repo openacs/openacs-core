@@ -10,7 +10,7 @@ ad_page_contract {
     {dfs:trim ""}
     {dts:trim ""}
 } -errors {
-    q:notnull {You must specify some keywords.}
+    q:notnull {[_ search.lt_You_must_specify_some].}
 }
 
 
@@ -30,7 +30,7 @@ array set info [acs_sc_call FtsEngineDriver info [list] $driver]
 
 if { [array get info] == "" } {
     ReturnHeaders
-    ns_write "FtsEngineDriver not available!"
+    ns_write "[_ search.lt_FtsEngineDriver_not_a]"
     return
 } 
 if { $num <= 0} {
@@ -95,6 +95,13 @@ for { set __i 0 } { $__i < [expr $high - $low +1] } { incr __i } {
     set title_summary [acs_sc_call FtsEngineDriver summary [list $q $datasource(title)] $driver]
     set txt_summary [acs_sc_call FtsEngineDriver summary [list $q $txt] $driver]
     set url_one [acs_sc_call FtsContentProvider url [list $object_id] $object_type]
+    
+    # Replace the "index" with ETP as this is not needed for accessing the page
+    if {[string equal $object_type "etp_page_revision"]} {
+	set url_one [string trimright $url_one "index"]
+    }
+
+    # Make sure that only items are displayed the user has access to.
     if {[permission::permission_p -object_id $object_id -privilege read]} {
 	template::multirow append searchresult $title_summary $txt_summary $url_one
     }
