@@ -266,11 +266,15 @@ ns_param   recvwait           [expr 5 * 60] ;# Maximum request time in minutes
 
 #---------------------------------------------------------------------
 #
-# OpenSSL for Aolserver 3.3
+# OpenSSL for Aolserver 3.3 and 4
 #
 #---------------------------------------------------------------------
 
 if { [ns_info version] < 4} {
+
+    #---------------------------------------------------------------------
+    # OpenSSL for Aolserver 3.3
+    #---------------------------------------------------------------------
 
     ns_section "ns/server/${server}/module/nsopenssl"
     
@@ -330,9 +334,7 @@ if { [ns_info version] < 4} {
 } else {
 
     #---------------------------------------------------------------------
-    #
     # OpenSSL for Aolserver 4
-    #
     #---------------------------------------------------------------------
     
     # We explicitly tell the server which SSL contexts to use as defaults when an
@@ -341,6 +343,16 @@ if { [ns_info version] < 4} {
     # specificied in the driver section. The Tcl API will use the defaults as there
     # is currently no provision to specify which SSL context to use for a
     # particular connection via an ns_openssl Tcl command.
+
+    # Note this portion of the configuration is not perfect, and you
+    # will get errors in the your error.log. However, it does
+    # work. Fixes welcome.
+
+    # ---------------------------------------------------------
+    # this is used by acs-tcl/tcl/security-procs.tcl to get the 
+    # https port.
+    # ---------------------------------------------------------
+    ns_param ServerPort                $httpsport
     
     ns_section "ns/server/${server}/module/nsopenssl/defaults"
     ns_param server               users
