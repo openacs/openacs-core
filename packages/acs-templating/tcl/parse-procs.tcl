@@ -89,7 +89,7 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
     # ensure that template output procedure exists and is up-to-date
     template::adp_init $template_extension $__adp_stub
 
-    # get result of template output procedure into __adp_output
+    # get result of template output procedure into __adp_output, and properties into __adp_properties
     template::code::${template_extension}::$__adp_stub
   
     # call the master template if one has been defined
