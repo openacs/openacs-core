@@ -1009,8 +1009,9 @@ aa_register_case \
     }
 }
 
-aa_register_case localize {
-    Test the lang::util::localize proc.
+aa_register_case -procs {
+    lang::util::localize
+} localize {
 
     @author Peter Marklund
 } {
