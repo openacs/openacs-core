@@ -12,11 +12,13 @@
   <li><a href=object-types/>Object Types</a>
 </ul>
 
-<if @acs_admin_available_p@ eq "t">
+<if @acs_admin_available_p@ true>
   To administer the site-wide services of OpenACS, use
   <a href="@acs_admin_url@">@instance_name@</a>.
-</if><else>
-  The OpenACS Administration service is not available.  If you are a site-wide administrator, 
-  use the <a href="site-map">Site Map</a> to mount the OpenACS Administration service.  This provides 
-  an interface for administering the site-wide services of OpenACS.
+</if>
+<else>
+  The Site-Wide Administration service is not available.  If you are a
+  site-wide administrator, use the <a href="site-map">Site Map</a> to
+  mount the Site-Wide Administration service.  This provides an
+  interface for administering the site-wide services of OpenACS.
 </else>
