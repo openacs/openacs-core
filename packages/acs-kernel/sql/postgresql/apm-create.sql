@@ -1443,7 +1443,7 @@ begin
        from apm_parameters p left outer join apm_parameter_values v 
              using (parameter_id), apm_packages ap
       where p.package_key = ap.package_key
-        and v.attr_value = null
+        and v.attr_value is null
         and p.package_key = register_parameter__package_key
       loop
       	PERFORM apm__set_value(
