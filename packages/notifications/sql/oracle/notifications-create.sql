@@ -16,7 +16,5 @@
 @ notifications-replies-create.sql
 @ notifications-replies-package-create.sql
 
-@ notification-type-sc-create.sql
-
 @ notifications-init.sql
 
