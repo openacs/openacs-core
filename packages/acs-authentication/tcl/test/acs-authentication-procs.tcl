@@ -12,27 +12,33 @@ aa_register_case auth_authenticate {
 
     @author Peter Marklund
 } {    
-    # Initialize variables
-    set user_id [ad_conn user_id]
-    set username [acs_user::get_element -element username]
 
-    # We need to use a known password and the existing one cannot
-    # be retrieved, so we're going to set it to something we know
-    # sorry, admin
-    set password "test_password"
+    # Initialize variables
+    set username "auth_create_user1"
+    set password "changeme"
 
     aa_run_with_teardown \
         -rollback \
         -test_code {
 
-            ad_change_password $user_id $password
+            array set user_info [auth::create_user \
+                                     -username $username \
+                                     -email "auth_create_user1@test_user.com" \
+                                     -first_names "Test" \
+                                     -last_name "User" \
+                                     -password $password \
+                                     -secret_question "no_question" \
+                                     -secret_answer "no_answer"]
+            
+            aa_equals "creation_status for successful creation" $user_info(creation_status) "ok"
+
+            set user_id [acs_user::get_by_username -username $username]
 
             # Successful authentication
-            array set auth_info \
-                [auth::authenticate \
-                     -no_cookie \
-                     -username $username \
-                     -password $password]
+            array set auth_info [auth::authenticate \
+                                     -no_cookie \
+                                     -username $username \
+                                     -password $password]
     
             aa_equals "auth_status for successful authentication" $auth_info(auth_status) "ok"
 
