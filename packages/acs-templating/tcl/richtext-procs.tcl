@@ -192,7 +192,7 @@ if (document.selection) {
   } else {
       # Display mode
       if { [info exists element(value)] } {
-          append output [template::util::richtext::get_property html_value $element(value)] $element(mode)]
+          append output [template::util::richtext::get_property html_value $element(value)]
       }
   }
       
