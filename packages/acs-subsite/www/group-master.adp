@@ -16,7 +16,7 @@
   </if>
   <property name="header_stuff">
     @header_stuff;noquote@
-    <link rel="stylesheet" type="text/css" href="@css_url@" media="all">
+    <!--<link rel="stylesheet" type="text/css" href="@css_url@" media="all">-->
   </property>
 
 <div id="body">
