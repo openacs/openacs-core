@@ -2,9 +2,9 @@
 <title>OpenACS 4 Request Processor Design</title>
 
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> 
-</para></authorblurb>
+</authorblurb>
 
 
 <sect2 id="rp-design-essentials">
@@ -374,15 +374,8 @@ authorization has been performed.</entry>
 </sect2>
 
 </sect1>
-
-
-
-
-
-
-
-
-
-
-
-
+<!--
+   Local Variables:
+   sgml-parent-document: ("../index.xml" "book" "sect1")
+   End:
+-->

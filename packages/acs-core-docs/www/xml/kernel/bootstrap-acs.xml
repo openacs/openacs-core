@@ -1,9 +1,9 @@
 <sect1 id="bootstrap-acs" xreflabel="Bootstrapping OpenACS">
 <title>Bootstrapping OpenACS</title>
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="mailto:jsalz@mit.edu">Jon Salz</ulink> 
-</para></authorblurb>
+</authorblurb>
 
 <itemizedlist>
 <listitem><para>Tcl code: /tcl/0-acs-init.tcl and /packages/acs-kernel/bootstrap.tcl</para></listitem>
@@ -149,4 +149,8 @@ proceeds to source the remaining files in the <computeroutput>/tcl</computeroutp
 <para><phrase role="cvstag">($Id$)</phrase></para>
 </sect2>
 </sect1>
-
+<!--
+   Local Variables:
+   sgml-parent-document: ("../index.xml" "book" "sect1")
+   End:
+-->

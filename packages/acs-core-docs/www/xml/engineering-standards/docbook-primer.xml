@@ -12,8 +12,8 @@
     <title>Overview of OpenACS &version; Documentation</title>
     <para>
       ArsDigita created a good documentation ground for us to build
-      upon. Some sections of the documentation however, lack details
-      and examples, others simply are inexistent.Our goal is to give
+      upon. Some sections of the documentation, however, lack details
+      and examples; others are simply nonexistant. Our goal is to give
       OpenACS a superb documentation, so that users, developers and
       administrators of OpenACS installations can enjoy the system.
     </para>
@@ -762,6 +762,15 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
 	<tbody>
 	  
 	  <row>
+	    <entry>0.4</entry>
+	    <entry>
+	      Fixed some typos.
+	    </entry>
+	    <entry>8/3/2002</entry>
+	    <entry>Vinod Kurup</entry>
+	  </row>
+	  	  
+	  <row>
 	    <entry>0.3</entry>
 	    <entry>
 	      Added OpenACS information, updated tools, added
@@ -792,9 +801,8 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
 
 
 </sect1>
-
 <!--
-   Local Variables:
-   sgml-parent-document: ("../index.xml" "book" "sect1")
-   End:
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "book" "sect1")
+       End:
 -->

@@ -2,9 +2,9 @@
 <title>OpenACS 4 Request Processor Requirements</title>
 
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> 
-</para></authorblurb>
+</authorblurb>
 
 
 <sect2 id="rp-requirements-intro">
@@ -127,4 +127,8 @@ connecting browser represents is allowed to make the request.</para>
 </sect2>
 
 </sect1>
-
+<!--
+   Local Variables:
+   sgml-parent-document: ("../index.xml" "book" "sect1")
+   End:
+-->
