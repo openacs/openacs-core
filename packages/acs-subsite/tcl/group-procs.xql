@@ -39,6 +39,17 @@
       </querytext>
 </fullquery>
 
+<fullquery name="group::get_rel_segment.select_segment_id">      
+      <querytext>
+      
+         select segment_id
+           from rel_segments
+          where group_id = :group_id
+            and rel_type = :type
+    
+      </querytext>
+</fullquery>
+
  
 
  
