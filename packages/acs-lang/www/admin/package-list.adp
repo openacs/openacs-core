@@ -3,7 +3,7 @@
  <property name="context">@context;noquote@</property>
 
 <formtemplate id="search">
-Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="submit" value="#acs-kernel.SearchButtonLabel#">
+Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="submit" value="Search">
 </formtemplate>
 
 <table cellpadding="0" cellspacing="0" border="0">

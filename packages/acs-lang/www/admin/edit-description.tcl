@@ -25,7 +25,6 @@ set context [list [list "package-list?[export_vars { locale }]" $locale_label] \
                  $page_title]
 
 
-
 ad_form -name description -form {
     {locale:text(hidden)}
     {package_key:text(hidden)}
@@ -40,7 +39,7 @@ ad_form -name description -form {
         {label "Description"}
         {html { rows 15 cols 60 }}
     }
-    {message:text(inform)
+    {org_message:text(inform)
         {label "$default_locale_label Message"}
     }
 
