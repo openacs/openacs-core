@@ -267,10 +267,6 @@ ad_proc -private site_node::update_cache {
 	    set url_by_node_id($node_id) $url
 	    if { ![empty_string_p $object_id] } {
                 lappend url_by_object_id($object_id) $url
-		set url_by_object_id($object_id) [lsort \
-                                                      -decreasing \
-                                                      -command util::string_length_compare \
-						      $url_by_object_id($object_id)]
 	    }
 	    if { ![empty_string_p $package_key] } {
                 lappend url_by_package_key($package_key) $url
@@ -289,6 +285,18 @@ ad_proc -private site_node::update_cache {
 		     object_id $object_id object_type $object_type \
 		     package_key $package_key package_id $package_id \
 		     instance_name $instance_name package_type $package_type]
+	}
+
+        # AG: This lsort used to live in the db_foreach loop above.  I moved it here
+	# to avoid redundant re-sorting on systems where multiple URLs are mapped to
+        # the same object_id.  This was causing a 40 minute startup delay on a .LRN site
+        # with 4000+ URLs mapped to one instance of the attachments package.
+        # The sort facilitates deleting child nodes before parent nodes.
+	foreach object_id [array names url_by_object_id] {
+		set url_by_object_id($object_id) [lsort \
+                                                      -decreasing \
+                                                      -command util::string_length_compare \
+						      $url_by_object_id($object_id)]
 	}
 
 	# update arrays
