@@ -26,9 +26,6 @@ begin
                     acs__magic_object_id(''default_context'')
 	       );
 
-
-  perform apm_package__enable (main_site_id); 
-
   insert into application_groups
     (group_id, package_id)
   values
