@@ -266,6 +266,138 @@
       </para></listitem>
     </itemizedlist>
   </sect2>
+  
+  <sect2 id="docs-end-user-reqs" xreflabel="End-user Documentation Requirements">
+    <title>OpenACS Documentation Requirements for End-users</title>
+    <para>
+      By the OpenACS Community. This section is a collection of
+      documentation requirements that have been expressed in the
+      OpenACS forums to 4th July 2003.
+    </para>    
+    <para>
+      OpenACS end-user documentation should meet the following goals. No
+      significance has been given to the order presented, topic breadth or depth here.
+    </para>
+    <itemizedlist>
+      <listitem><para>
+        End-users should not have to read docs to use the system. 
+      </para></listitem>
+      <listitem><para>
+        Include how to get help. How and where to find answers,
+        contact others, what to do if one gets an AOLserver or other
+        error when using the system. Include types of avaiable
+        support (open-source, private commercial etc.) including
+        references.
+      </para></listitem>
+      <listitem><para>      
+        Explain/foster understanding of the overall structure of the
+        system. This would be an overview of the system components,
+        how it works, and how to find out more or dig deeper...  To
+        promote the system by presenting the history of the system,
+        and writing about some tacit knowledge re: OpenACS.org and
+        the opensource culture.
+      </para></listitem>
+      <para><listitem>
+        Introduce and inspire readers about the uses, benefits, and
+        the possibilities this system brings (think customer
+        solution, customer cost, convenience, value). A
+        comprehensive community communications system; How this
+        system is valuable to users; Reasons others use OpenACS
+        (with quotes in their own words) "...the most important
+        thing that the ACS does is manage users, i.e. provide  a way
+        to group, view and manipulate members of the web community.
+        -- Talli Somekh, September 19, 2001"   using it to
+        communicate, cooperate, collaborate... OpenACS offers
+        directed content functionality with the OpenACS templating
+        system.   ... OpenACS is more than a data collection and
+        presentation tool. OpenACS has  management facilities that
+        are absent in other portals.  ...The beauty of OpenACS is
+        the simplicity (and scalability) of the platform on which it
+        is built and the library of tried and tested community
+        building tools that are waiting to be added. It seems that
+        most portals just add another layer of complexity to the
+        cake. See <ulink
+        url="http://openacs.org/bboard/q-and-a-fetch-msg.tcl?msg_id=
+        00058H&topic_id=11&topic=OpenACS">Slides on OACS
+        features</ulink>...a set of slides on OACS features that can
+        be used for begineers who want to know OACS is about and
+        what they can do with it. Screen captures that hilight
+        features. Example shows BBoard, calendar, news, file
+        storage, wimpy point, ticket tracking.  An OpenACS tour; an
+        abbreviated, interactive set of demo pages.
+     </para></listitem>
+      <listitem><para>
+        To build awareness about OpenACS, consider product
+        differentiation: form, features, performance quality,
+        conformance quality (to standards and requirements),
+        durability, reliability, repairability, style, design: the
+        deliberate planning of these product attributes.  
+      </para></listitem>
+      <listitem><para>
+        Include jargon definitions, glossary, FAQs, site map/index,
+        including where to find Instructions for using the packages.
+        FAQ should refer like answers to the same place for
+        consistency, brevity and maintainability.
+      </para></listitem>
+      <listitem><para>
+        Explain/tutorial on how the UI works (links do more than go
+        to places, they are active), Page flow, descriptions of form
+        elements; browser/interface strengths and limitations (cookies, other)
+      </para></listitem>
+      <listitem><para>
+        Discuss criteria used to decide which features are
+        important, and the quality of the implementation from a
+        users perspective.  Each project implementation places a
+        different emphasis on the various criteria, which is why
+        providing a framework to help decide is probably more useful
+        than an actual comparison.
+      </para></listitem>
+    </itemizedlist>
+    <para>
+      Package documentation requirements have additional requirements.
+    </para>
+    <itemizedlist>
+      <listitem><para>
+        A list of all packages, their names, their purposes, what
+        they can and cannot do (strengths, limitations), what
+        differentiates them from similar packages, minimal
+        description, current version, implementation status,
+        author/maintainers, link(s) to more info.  Current version
+        available at the <ulink
+        url="http://openacs.org/repository/5-2/">repository</ulink>.
+       </para></listitem>
+      <listitem><para>
+        Include dependencies/requirements, known conflicts, and
+        comments from the real world edited into a longer
+        description to quickly learn if a package is appropriate for
+        specific projects.
+       </para></listitem>
+      <listitem><para>
+        Create a long bulleted list of features. Feature list should
+        go deeper than high-level feature lists and look at the
+        quality of the implementations (from the user's perspective,
+        not the programmer's).  Example issues an end-user may have
+        questions about: Ticket Tracker and Ticket Tracker Lite, why
+        would I want one of them vs the other? And, before I specify
+        to download and install it, what credit card gateways are
+        supported by the current e-commerce module? There are some
+        packages where the name is clear enough, but what are the
+        limitations of the standard package?
+       </para></listitem>
+      <listitem><para>
+        End-user docs should not be duplicative. The package
+        description information and almost everything about a
+        pacakge for administrators and developers is already
+        described in the package itself through two basic
+        development document templates: a <a
+        href="http://openacs.org/doc/current/requirements-template.
+        html">Requirements Template</ulink> and <ulink
+        url="http://openacs.org/doc/current/filename.html">Detailed
+        Design Document</ulink>.
+      </para></listitem>
+    </itemizedlist>
+  </sect2>
+  
 
   <sect2 id="dbprimer-why" xreflabel="Why DocBook?">
     <title>OpenACS Documentation Strategy: Why DocBook?</title>
