@@ -3,4 +3,4 @@
   <property name="context">{#acs-subsite.Register#}</property>
   <property name="focus">register.email</property>
 
-<formtemplate id="register"></formtemplate>
+<include src="/packages/acs-subsite/lib/user-new"/>
