@@ -168,7 +168,7 @@ ad_proc -public site_node_closest_ancestor_package {
     if {[string index $url end] != "/"} {
 	append url "/"
 	if {[catch {nsv_get site_nodes $url} result] == 0} {
-	    array set node [site_node $result]
+	    array set node $result
 	    if { [string eq $node(package_key) $package_key] } {
 		return $node(package_id)
 	    }
