@@ -786,21 +786,17 @@ ad_proc -private apm_package_install_data_model {
 "
 	    db_source_sqlj_file -callback $callback "$path/$file_path"
 	    apm_callback_and_log $callback "</pre></blockquote>\n"
-	}
-    }
-
-    set data_files [apm_ctl_files_find $package_key]
-    foreach item $data_files {
-        set file_path [lindex $item 0]
-        ns_log Debug "APM: Now processing $file_path of type ctl_file"
-        if { !$ul_p } {
-            apm_callback_and_log $callback "<ul>\n"
-            set ul_p 1
+	} elseif { [string equal $file_type "ctl_file"] } {
+            ns_log Debug "APM: Now processing $file_path of type ctl_file"
+            if { !$ul_p } {
+                apm_callback_and_log $callback "<ul>\n"
+                set ul_p 1
+            }
+            apm_callback_and_log $callback "<li>Loading data file $path/$file_path...
+<blockqu    ote><pre>"
+            db_load_sql_data -callback $callback $path/$file_path
+	    apm_callback_and_log $callback "</pre></blockquote>\n"
         }
-        apm_callback_and_log $callback "<li>Loading data file $path/$file_path...
-<blockquote><pre>"
-        db_load_sql_data -callback $callback $path/$file_path
-	apm_callback_and_log $callback "</pre></blockquote>\n"
     }
 
     if {$ul_p} {
