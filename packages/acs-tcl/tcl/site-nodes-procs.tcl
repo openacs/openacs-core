@@ -310,7 +310,10 @@ ad_proc -public site_node_mount_application {
 	return $package_id
     } elseif { [string eq $return "node_id"] } {
 	return $node_id
-    } 
+    } elseif { [string eq $return "package_id,node_id"] } {
+	return [list $package_id $node_id]
+    }
+
     error "Unknown return key: $return. Must be either package_id, node_id"
 }
 

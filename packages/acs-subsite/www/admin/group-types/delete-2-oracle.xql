@@ -56,5 +56,12 @@ drop table $table_name
   </querytext>
 </partialquery>
 
- 
+<partialquery name="delete_group_type">
+<querytext>
+begin
+delete from group_types where group_type=:group_type;
+end;
+</querytext>
+</partialquery> 
+
 </queryset>

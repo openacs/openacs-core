@@ -58,6 +58,9 @@ if { [db_string package_exists {
 # Remove the specified rel_types
 lappend plsql [list "delete_rel_types" [db_map delete_rel_types]]
 
+# Remove the group_type
+lappend plsql [list "delete_group_type" [db_map delete_group_type]]
+
 if { [db_string type_exists {
     select case when exists (select 1 from acs_object_types t where t.object_type = :group_type)
                 then 1

@@ -26,5 +26,13 @@ values
 (acs_object_id_seq.nextval, :group_type, :rel_type)
 </querytext>
 </fullquery>
+
+<fullquery name="rel_types::remove_permissible.delete_rel_type">
+<querytext>
+delete from group_type_rels
+where group_type= :group_type
+and rel_type= :rel_type
+</querytext>
+</fullquery>
  
 </queryset>
