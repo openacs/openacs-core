@@ -36,7 +36,7 @@ ad_proc ad_acs_release_date {} {
       set year  [string range $release_date 0 3]
       set month [string range $release_date 4 5]
       set day   [string range $release_date 6 7]
-      return [util_AnsiDatetoPrettyDate "$year-$month-$day"]
+      return [lc_time_fmt "$year-$month-$day" "%q"]
     } else {
       return "not released"
     }

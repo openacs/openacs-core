@@ -94,7 +94,7 @@ if [ad_parameter SolicitPortraitP "user-info" 0] {
 	set portrait_state "upload"
     } else {
 	set portrait_state "show"
-	set portrait_publish_date [util_AnsiDatetoPrettyDate $publish_date]
+	set portrait_publish_date [lc_time_fmt $publish_date "%q"]
     }
 } else {
     set portrait_state "none"

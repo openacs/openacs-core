@@ -92,7 +92,7 @@ if {$admin_p} {
 
 set system_name [ad_system_name]
 set export_vars [export_url_vars user_id]
-set pretty_date [util_AnsiDatetoPrettyDate $publish_date]
+set pretty_date [lc_time_fmt $publish_date "%q"]
 set export_edit_vars [export_url_vars user_id return_url]
 
 ad_return_template

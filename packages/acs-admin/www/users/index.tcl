@@ -33,7 +33,7 @@
     where email not in ('anonymous', 'system')"
 
     set n_users [util_commify_number $n_users]
-    set last_registration [util_AnsiDatetoPrettyDate $last_registration]
+    set last_registration [lc_time_fmt $last_registration "%q"]
 
 set groups [db_html_select_value_options groups_select {
 select groups.group_id, 

@@ -169,7 +169,7 @@ ad_proc -private lc_sepfmt {
 ad_proc -public lc_numeric {
     num 
     {fmt {}} 
-    {locale en_US}
+    {locale ""}
 } { 
 
     Given a number and a locale return a formatted version of the number
@@ -182,6 +182,10 @@ ad_proc -public lc_numeric {
     @return         Localized form of the number
 
 } { 
+    if { ![exists_and_not_null locale] } {
+        set locale [ad_conn locale]
+    }
+    
     if {![empty_string_p $fmt]} { 
         set out [format $fmt $num]
     } else { 
@@ -319,10 +323,34 @@ ad_proc -private lc_monetary {
     return [subst [nsv_get locale "money:$cs_precedes$sign_pos$sep_by_space"]]
 }    
 
+ad_proc -public clock_to_ansi {
+    seconds
+} {
+    Convert a time in the Tcl internal clock seeconds format to ANSI format, usable by lc_time_fmt.
+    
+    @author Lars Pind (lars@pinds.com)
+    @return ANSI (YYYY-MM-DD HH24:MI:SS) formatted date.
+    @see lc_time_fmt
+} {
+    return [clock format $seconds -format "%Y-%m-%d %H:%M:%S"]
+}
+
+ad_proc -public lc_get  {
+    key
+} {
+    Get a certain format string for the current locale.
+    @param key the key of for the format string you want.
+    @return the format string for the current locale.
+    @see packages/acs-lang/tcl/localization-data-init.tcl
+    @author Lars Pind (lars@pinds.com)
+} {
+    return [nsv_get locale "[ad_conn locale],$key"]
+}
+
 ad_proc -public lc_time_fmt {
     datetime 
     fmt 
-    {locale en_US}
+    {locale ""}
 } {
     Formats a time for the specified locale.
 
@@ -356,6 +384,8 @@ ad_proc -public lc_time_fmt {
       %p           FDCC-set's equivalent of either AM or PM.
       %r           12-hour clock time (01-12) using the AM/PM
                    notation.
+      %q           Long date without weekday (OpenACS addition to the standard)
+      %Q           Long date with weekday (OpenACS addition to the standard)
       %S           Seconds as a decimal number (00-61).
       %t           A <tab> character.
       %T           24-hour clock time in the format HH:MM:SS.
@@ -375,6 +405,7 @@ ad_proc -public lc_time_fmt {
                    determinable.
       %%           A <percent-sign> character.
     </pre>
+    See also <pre>man strftime</pre> on a UNIX shell prompt for more of these abbreviations.
     @param locale          Locale identifier must be in the locale database
     @error                 Fails if given a non-existant locale or a malformed datetime
                            Doesn't check for impossible dates. Ask it for 29 Feb 1999 and it will tell you it was a Monday
@@ -383,7 +414,10 @@ ad_proc -public lc_time_fmt {
                            (or have an 'on this day in history' style page that goes back a good few hundred years).
     @return                A date formatted for a locale
 } {
-
+    if { ![exists_and_not_null locale] } {
+        set locale [ad_conn locale]
+    }
+    
     # Some initialisation...
     # Now, expect d_fmt, t_fmt and d_t_fmt to exist of the form in ISO spec
     # Rip $date into $lc_time_* as numbers, no leading zeroes
@@ -392,9 +426,14 @@ ad_proc -public lc_time_fmt {
     set matchfull "$matchdate $matchtime"
     
     if {![nsv_exists locale "$locale,d_t_fmt"]} {
-	error "Unsupported locale: $locale"
+	ns_log Error "Unsupported locale: $locale; using site-wide default."
+        set locale [lang::system::locale -site_wide]
+        if {![nsv_exists locale "$locale,d_t_fmt"]} {
+            error "Site-Wide locale $locale doesn't have date and time formats defined."
+        }
     }
-
+    
+    set lc_time_p 1
     if {![regexp -- $matchfull $datetime match lc_time_year lc_time_month lc_time_days lc_time_hours lc_time_minutes lc_time_seconds]} {
 	if {[regexp -- $matchdate $datetime match lc_time_year lc_time_month lc_time_days]} {
 	    set lc_time_hours 0
@@ -429,7 +468,7 @@ ad_proc -public lc_time_fmt {
     set percent_match(r) {[lc_leading_zeros [lc_time_drop_meridian $lc_time_hours] 2]:[lc_leading_zeros $lc_time_minutes 2] [lc_time_name_meridian $locale $lc_time_hours]}
 
     # Direct Subst
-    set percent_match(e) {[lc_leading_space $lc_time_month]}
+    set percent_match(e) {[lc_leading_space $lc_time_days]}
     set percent_match(f) {[lc_wrap_sunday $lc_time_day_no]}
     set percent_match(Y) {$lc_time_year}
 
@@ -475,6 +514,14 @@ ad_proc -public lc_time_fmt {
 	    c {
 		append transformed_string $done_portion
 		set to_process "[nsv_get locale "$locale,d_t_fmt"]$remaining"	
+	    }
+	    q {
+		append transformed_string $done_portion
+		set to_process "[nsv_get locale "$locale,dlong_fmt"]$remaining"	
+	    }
+	    Q {
+		append transformed_string $done_portion
+		set to_process "[nsv_get locale "$locale,dlongweekday_fmt"]$remaining"	
 	    }
 	    default {
 		append transformed_string "${done_portion}[subst $percent_match($percent_modifier)]"

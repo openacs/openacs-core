@@ -40,7 +40,7 @@ set return_url "/acs-admin/users/one?user_id=$user_id"
 
 set context [list [list "./" "Users"] "One User"]
 set export_edit_vars [export_url_vars user_id return_url]
-set registration_date [util_AnsiDatetoPrettyDate $creation_date] 
+set registration_date [lc_time_fmt $creation_date "%q"]
 
 set portrait_p 0
 if {[db_0or1row get_item_id "select live_revision as revision_id, nvl(title,'view this portrait') portrait_title

@@ -18,7 +18,7 @@ where user_id = :user_id"
 
 set site_link [ad_site_home_link]
 
-set pretty_no_alerts_until_date [util_AnsiDatetoPrettyDate $no_alerts_until]
+set pretty_no_alerts_until_date [lc_time_fmt $no_alerts_until "%q"]
 set date_entry_widget [ad_dateentrywidget_default_to_today on_vacation_until]
 
 if [db_0or1row nospam "select dont_spam_me_p
