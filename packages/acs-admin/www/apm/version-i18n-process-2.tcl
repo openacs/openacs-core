@@ -8,7 +8,27 @@ ad_page_contract {
     version_id:integer,notnull    
     {files:multiple,notnull}
     {file_action:multiple}
-    {message_keys:multiple ""}
+    {number_of_keys:integer,notnull}
+    {replace_p:array ""}
+    {message_keys:array ""}
+}
+
+# Create the message key list
+# The list is needed since replace_adp_tags_with_message_tags proc below takes a list of
+# keys to do replacements with where an empty key  means no replacement.
+set message_key_list [list]
+for { set counter 1 } { $counter <= $number_of_keys } { incr counter } {
+    if { [info exists replace_p($counter)] } {
+        if { [exists_and_not_null message_keys($counter)] } {
+            lappend message_key_list $message_keys($counter)
+        } else {
+            ad_return_complaint 1 "<li>Message key number $counter is empty. Cannot replace text with empty key</li>"
+            ad_script_abort
+        }
+    } else {
+        # Empty string indicates no replacement
+        lappend message_key_list ""
+    }
 }
 
 set next_file [lindex $files 0]
@@ -34,7 +54,7 @@ if { $replace_text_p } {
 
     ns_log Notice "Replacing text in file $text_file with message tags"
     append processing_html_result "<h3>Text replacements for $text_file</h3>"
-    set adp_text_result_list [lang::util::replace_adp_text_with_message_tags "[acs_root_dir]/$text_file" write $message_keys]
+    set adp_text_result_list [lang::util::replace_adp_text_with_message_tags "[acs_root_dir]/$text_file" write $message_key_list]
     set text_replacement_list [lindex $adp_text_result_list 0]
     set text_untouched_list [lindex $adp_text_result_list 1]
 
