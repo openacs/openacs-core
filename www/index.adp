@@ -1,6 +1,6 @@
 <master>
 <property name="title">@system_name;noquote@</property>
-<property name="focus">@focus;noquote@</property>
+<if @user_id@ eq 0><property name="focus">login.username</property></if>
 
 <table cellspacing="4" cellpadding="4" border="0">
   <tr>
@@ -94,7 +94,7 @@
       </if>
       <else>
         <div id="login-box">
-          <include src="/packages/acs-subsite/www/register/login-include" return_url="/">
+          <include src="/packages/acs-subsite/www/register/login-include" return_url="/" username="@username@" authority_id="@authority_id@">
         </div>
       </else>
 
