@@ -1356,24 +1356,29 @@ ad_proc -public apm_upgrade_logic {
     
     <blockquote><pre>
 
-    apm_upgrade_logic \ 
-            -from_version_name $from \ 
-            -to_version_name $to \ 
-            -spec {
-        1.1 1.2 {
-            ...
-        }
-        1.2 1.3 {
-            ...
-        }
-        1.4d 1.4d1 {
-            ...
-        }
-        2.1 2.3 {
-            ...
-        }
-        2.3 2.4 {
-            ...
+    ad_proc my_upgrade_callback {
+        from
+        to
+    } {
+        apm_upgrade_logic \ 
+                -from_version_name $from \ 
+                -to_version_name $to \ 
+                -spec {
+            1.1 1.2 {
+                ...
+            }
+            1.2 1.3 {
+                ...
+            }
+            1.4d 1.4d1 {
+                ...
+            }
+            2.1 2.3 {
+                ...
+            }
+            2.3 2.4 {
+                ...
+            }
         }
     }
     
