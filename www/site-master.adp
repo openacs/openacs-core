@@ -40,23 +40,23 @@
     <td align="right" class="subsite-header" style="padding-right: 8px;" width="50%">
       <if @admin_url@ not nil>
         &nbsp;
-        <span class="button-header"><a href="@admin_url@" title="Site-wide administration" class="button">Admin</a></span>
+        <a href="@admin_url@" title="Site-wide administration" class="button">Admin</a>
       </if>
       <if @admin_url@ not nil>
         &nbsp;
-        <span class="button-header"><a href="@devhome_url@" title="Developer's Administration" class="button">DevAdmin</a></span>
+        <a href="@devhome_url@" title="Developer's Administration" class="button">DevAdmin</a>
       </if>
       <if @pvt_home_url@ not nil>
         &nbsp;
-        <span class="button-header"><a href="@pvt_home_url@" title="Change password, email, portrait" class="button">@pvt_home_name@</a></span>
+        <a href="@pvt_home_url@" title="Change password, email, portrait" class="button">@pvt_home_name@</a>
       </if>
       <if @logout_url@ not nil>
         &nbsp;
-        <span class="button-header"><a href="@logout_url@?return_url=@subsite_url@" title="Logout from @system_name@" class="button">Logout</a></span>
+        <a href="@logout_url@?return_url=@subsite_url@" title="Logout from @system_name@" class="button">Logout</a>
       </if>
       <if @login_url@ not nil>
         &nbsp;
-        <span class="button-header"><a href="@login_url@" title="Log in to @system_name@" class="button">Log in</a></span>
+        <a href="@login_url@" title="Log in to @system_name@" class="button">Log in</a>
       </if>
     </td>
   </tr>
