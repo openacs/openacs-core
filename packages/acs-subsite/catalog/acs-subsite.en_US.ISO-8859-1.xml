@@ -307,6 +307,7 @@ You can always change your password by doing the following:
 
 3. Choose &quot;%password_update_link_text%&quot;</msg>
   <msg key="Password_changed_subject">Password changed</msg>
+  <msg key="perm_cannot_be_removed">This permission cannot be removed.</msg>
   <msg key="Permissions">Permissions</msg>
   <msg key="permissions">permissions</msg>
   <msg key="Permissions_for_name">Permissions for %name%</msg>
