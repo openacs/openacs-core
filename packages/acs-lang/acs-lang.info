@@ -26,6 +26,7 @@ and must be run manually from a shell. See the README file
 in that directory for details.</description>
 
         <requires url="acs-kernel" version="4.1"/>
+        <provides url="acs-lang" version="4.1b"/>
 
         <files>
             <file path="ACS4.1b-PATCHES/README"/>
