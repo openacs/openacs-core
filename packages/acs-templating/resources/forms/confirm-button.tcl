@@ -24,7 +24,7 @@ if { ![empty_string_p [set __form__ [ns_getform]]] } {
             multirow append __form_contents__ __confirmed_p 1
         } else {
             multirow append __form_contents__ [ns_set key $__form__ $__form_counter__] \
-                [template::util::quote_html [ns_set value $__form__ $__form_counter__]]
+                [ns_set value $__form__ $__form_counter__]
         }
         incr __form_counter__
     }
