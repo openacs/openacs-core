@@ -1956,7 +1956,7 @@ declare
   v_version_id                 integer;       
 begin
 	v_version_id := acs_object__new(
-		new_version_id,
+		copy__new_version_id,
 		''apm_package_version'',
                 now(),
                 null,
