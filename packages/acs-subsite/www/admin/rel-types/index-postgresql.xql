@@ -7,14 +7,12 @@
       <querytext>
     select t.object_type as rel_type, t.pretty_name, t.indent, 
            coalesce(num.number_relationships,0) as number_relationships
-      from (select t.pretty_name, t.object_type, tree_sortkey as inner_sortkey,
-                   lpad('&nbsp;', (tree_level(tree_sortkey) - 1) * 4) as indent
-              from acs_object_types t
-	     where (t.tree_sortkey like (select tree_sortkey || '%' from acs_object_types
-					where object_type='membership_rel')
-		or t.tree_sortkey like (select tree_sortkey || '%' from acs_object_types
-					where object_type='composition_rel'))
-             order by lower(t.pretty_name)) t left join
+      from (select t2.pretty_name, t2.object_type, t2.tree_sortkey as inner_sortkey,
+                   repeat('&nbsp;', (tree_level(t2.tree_sortkey) - tree_level(t1.tree_sortkey)) * 4) as indent
+              from acs_object_types t1,
+		   acs_object_types t2
+	     where t2.tree_sortkey like (t1.tree_sortkey || '%')
+	       and t1.object_type in ('membership_rel', 'composition_rel')) t left join
            (select r.rel_type, count(*) as number_relationships
               from acs_objects o, acs_rel_types r, 
                    app_group_distinct_rel_map m
