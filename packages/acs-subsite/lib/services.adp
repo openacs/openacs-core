@@ -1,1 +1,1 @@
-<p><listtemplate name="services"></listtemplate></p>
+<listtemplate name="services"></listtemplate>
