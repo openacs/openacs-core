@@ -63,7 +63,7 @@ create table lang_messages_audit (
                        constraint lang_messages_audit_l_nn
                        not null,
     message            text,
-    overwrite_date     date default sysdate not null,
+    overwrite_date     date default now() not null,
     overwrite_user     integer
                        constraint lang_messages_audit_ou_fk
                        references users (user_id),
