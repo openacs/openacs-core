@@ -22,6 +22,8 @@
   <msg key="common_default">use default</msg>
   <msg key="common_Delete">Delete</msg>
   <msg key="common_delete">delete</msg>
+  <msg key="common_Details">Details</msg>
+  <msg key="common_details">details</msg>
   <msg key="common_Discard">Discard</msg>
   <msg key="common_discard">discard</msg>
   <msg key="common_Display">Display</msg>
