@@ -170,6 +170,7 @@ db_foreach nodes_select {} {
       if {$object_admin_p} {
 	lappend controls "<a href=\"../../permissions/one?[export_url_vars object_id]\">set permissions</a>"
 	lappend controls "<a href=\"?[export_url_vars expand:multiple root_id rename_application=$node_id]\">rename</a>"
+        lappend controls "<a href=\"instance-delete?package_id=$object_id&root_id=$root_id\" onclick=\"return confirm('Are you sure you want to delete node $name and any package mounted there?');\">delete</a>"
       }
     }
   }
@@ -189,26 +190,7 @@ db_foreach nodes_select {} {
         <font size=-1>
         <input name=instance_name type=text size=8 value=\"\">
         </td><td>
-        <select name=package_key>
-      "
-
-      db_foreach package_types {
-	select package_key, pretty_name
-	from apm_package_types
-	where not (apm_package.singleton_p(package_key) = 1 and
-	      apm_package.num_instances(package_key) >= 1)
-	order by pretty_name
-      } {
-	doc_body_append "<option value=$package_key>$pretty_name</option>\n"
-      }
-
-      # If this is a site-wide admin, offer a link to the package manager
-      if { [ad_permission_p 0 admin] } {
-          doc_body_append "<option value=\"/new\">--Install new package--</option>\n"
-      }
-
-      doc_body_append "
-        </select>
+        [apm_application_new_checkbox]
         </td>
         <td>
         <input type=submit value=New>
@@ -264,11 +246,36 @@ doc_body_append "
           </ul>
     </tr>
 </table>
+"
 
-<p />
-<a href=\"unmounted\">Unmounted Applications</a> <p />
+doc_body_append "
+<p>
+<center><strong>Applications</strong></center>
+</p>
 
-<p />
+<form name=new_application action=package-new>
+  <input type=hidden name=node_id value=$node(node_id) />
+  <input type=hidden name=root_id value=$node(node_id) />
+  <input type=hidden name=new_node_p value=t />
+  [export_form_vars expand:multiple]
+  Mount new application of type </td><td>
+  [apm_application_new_checkbox]
+  </td>
+  <td>
+  with package name <input name=instance_name type=text size=8 value=\"\"> at node name <input name=node_name type=text size=8> <font size=-1> 
+  </td>
+  <td>
+  <input type=submit value=Go>
+  </font>
+</form>
+"
+
+doc_body_append "
+<p>
+<a href=\"unmounted\">Manage unmounted applications</a>
+</p>
+
+<p>
        <center><strong>Configurable Services</strong></center>
 
        <ul>

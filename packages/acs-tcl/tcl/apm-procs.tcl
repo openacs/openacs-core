@@ -1434,3 +1434,32 @@ ad_proc -public apm_log {
         ns_log $level "$msg"
     }
 }
+
+ad_proc -private apm_application_new_checkbox {} {
+    Return an HTML checkbox of package_key and package names
+    for applications that can be mounted in the site-map. Excludes
+    singletons that are already instantiated.
+
+    @author Peter Marklund
+} {
+    set html_string "<select name=package_key>"
+
+    db_foreach package_types {
+      select package_key, pretty_name
+      from apm_package_types
+      where not (apm_package.singleton_p(package_key) = 1 and
+            apm_package.num_instances(package_key) >= 1)
+      order by pretty_name
+    } {
+      append html_string "<option value=$package_key>$pretty_name</option>\n"
+    }
+
+    # If this is a site-wide admin, offer a link to the package manager
+    if { [ad_permission_p 0 admin] } {
+        append html_string "<option value=\"/new\">--Install new package--</option>\n"
+    }
+
+    append html_string "</select>"
+
+    return $html_string
+}

@@ -1,6 +1,8 @@
 ad_page_contract {
 
-    Delete an unmounted package instance.
+    Delete a package instance. If the package is 
+    mounted it will be unmounted before deletion and an
+    attempt will be made to delete the node.
 
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date Mon Oct 23 14:58:57 2000
@@ -8,23 +10,21 @@ ad_page_contract {
 
 } {
     package_id:naturalnum
-} -validate {
-    package_not_mounted_ck {
-	if {[db_string package_mounted_p {
-	    select decode(count(*),0, 0, 1)
-	    from apm_packages p, site_nodes s
-	    where package_id = :package_id
-	    and p.package_id = s.object_id
-	} -default 0]} {
-	    ad_complain
-	}
-    }
-} -errors {
-    package_not_mounted_ck {The package you are trying to delete must be unmounted first.}
+    {root_id ""}
 }
 
 db_transaction {
+    if { ![catch {set node_id [site_node::get_node_id_from_object_id -object_id $package_id]} errmsg] } {
+        # The package is mounted
+        site_node::unmount -node_id $node_id
+        site_node::delete -node_id $node_id
+    } else {
+        set node_id ""
+    }
+
+    # Delete the package
     apm_package_instance_delete $package_id
+
 } on_error {
     if {[db_string instance_delete_doubleclick_ck {
 	select decode(count(*), 0, 0, 1) from apm_packages
@@ -35,4 +35,4 @@ db_transaction {
     }
 }
 	
-ad_returnredirect unmounted
+ad_returnredirect [ad_decode $node_id "" unmounted "index?root_id=$root_id"]

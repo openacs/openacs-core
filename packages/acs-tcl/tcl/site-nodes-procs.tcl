@@ -60,6 +60,7 @@ namespace eval site_node {
         {-package_name ""}
         {-context_id ""}
         {-package_key:required}
+        {-package_id ""}
     } {
         Instantiate and mount a package of given type. If the package is a singleton (should only have one instance)
         and an instance already exists then this proc will attempt to mount that instance.
@@ -75,6 +76,7 @@ namespace eval site_node {
                               node in the site map. If there is no such package then context_id will be the
                               id of the parent node itself.
         @param package_key    The key of the package type to instantiate.
+        @param package_id     The id of the new package. Optional.
 
         @return The id of the instantiated package
                           
@@ -111,7 +113,8 @@ namespace eval site_node {
         # Instantiate the package
         set package_id [apm_package_instance_new -instance_name $package_name \
                                                  -context_id $context_id \
-                                                 -package_key $package_key]
+                                                 -package_key $package_key \
+                                                 -package_id $package_id]
 
         # Mount the package
         site_node::mount -node_id $node_id -object_id $package_id
