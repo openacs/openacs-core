@@ -162,9 +162,6 @@ create table apm_packages (
     default_locale              varchar2(30)
 );
 
-alter table acs_objects add constraint acs_objects_package_id_fk
-foreign key (package_id) references apm_packages(package_id);
-
 -- create bitmap index apm_packages_package_key_idx on apm_packages (package_key);
 create index apm_packages_package_key_idx on apm_packages (package_key);
 
