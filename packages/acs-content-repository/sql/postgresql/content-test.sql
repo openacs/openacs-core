@@ -4,6 +4,27 @@ create table tst_ids (
        name  varchar(400)
 );
 
+create function dump_cr_items() returns integer as '
+declare
+        v_rec   record;
+        v_str   varchar default ''\\n'';
+begin
+        for v_rec in select repeat('' '',(tree_level(tree_sortkey)*2 - 1)) || name as name,
+                            item_id, parent_id, 
+                            tree_level(tree_sortkey) as level,
+                            tree_sortkey
+                       from cr_items
+                     order by tree_sortkey
+        LOOP
+            v_str := v_str || rpad(v_rec.name,40) || rpad(v_rec.item_id,6) ||
+                     rpad(v_rec.parent_id,6) || rpad(v_rec.level,6) || rpad(v_rec.tree_sortkey,30) || ''\\n'';
+        end LOOP;
+
+        raise notice ''%'', v_str;
+        return null;
+
+end;' language 'plpgsql';
+
 create function content_test__put_line(text) returns integer as '
 begin
         raise NOTICE ''%'', $1;
@@ -431,8 +452,8 @@ begin
    PERFORM content_test__put_line(''SYMLINKS...'');
    PERFORM content_test__put_line(''...all tests passed'');
 
-   symlink_a_id := content_symlink__new(null,
-                                        ''link_a'',
+   symlink_a_id := content_symlink__new(''link_a'',
+                                        null,
                                         sub_sub_folder_id,
                                         sub_folder_id,
                                         null,
@@ -531,7 +552,7 @@ begin
                           content_item__get_id(''/grandpa/aunty/pa'',null,''f'')
            );
    PERFORM content_test__put_line(''Found item '' || item_id || '' at '' ||
-                           content_item__get_id(''/grandpa/pa/link_a/aunty'',null,''f'')
+                           content_item__get_id(''/grandpa/pa/link_a/pa'',null,''f'')
            );
    PERFORM content_test__put_line(''Found item '' || item_id || 
                                   '' starting at aunty '' ||
@@ -544,12 +565,12 @@ begin
    PERFORM content_test__put_line(''Found item '' || item_id || 
                                '' starting at symlink '' ||
                                symlink_a_id || '' at '' ||
-                               content_item__get_id(''aunty'',symlink_a_id,''f'')
+                               content_item__get_id(''pa'',symlink_a_id,''f'')
            );
    PERFORM content_test__put_line(''Found item '' || item_id || 
                                   '' starting at pa '' ||
                                   sub_folder_id || '' at '' ||
-                                  content_item__get_id(''link_a/aunty'',
+                                  content_item__get_id(''link_a/bunny'',
                                                        sub_folder_id,
                                                        ''f''
                                   )
@@ -673,6 +694,7 @@ end;' language 'plpgsql';
 select test_content_create();
 select test_content_check1();
 select test_content_check2();
+select dump_cr_items();
 select test_content_check3();
 select test_content_check4();
 select test_content_check5();
@@ -685,6 +707,7 @@ drop function test_content_check4();
 drop function test_content_check5();
 drop function content_test__put_line(text);
 drop function cast_char(boolean);
+drop function dump_cr_items();
 
 drop table tst_ids;
 
