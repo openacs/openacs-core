@@ -183,7 +183,7 @@ ns_write "<b>Installation finished</b>
 
 <p> If not, please check your server error log, or contact your system administrator. </p>
 
-<p> When the server is back up you can visit <a href=\"/\">the system homepage</a> </p>
+<p> When the server is back up you can visit <a href=\"/acs-admin/\">the site-wide administration pages</a> </p>
 
 [install_footer]
 "
