@@ -17,6 +17,8 @@ set old_login_process [ad_parameter "SeparateEmailPasswordPagesP" security "0"]
 set allow_persistent_login_p [ad_parameter AllowPersistentLoginP security 1]
 set persistent_login_p [ad_parameter AllowPersistentLoginP security 1]
 
+set email_forgotten_password_p [ad_parameter EmailForgottenPasswordP security 1]
+
 if {![info exists return_url]} {
     set return_url [ad_pvt_home]
 }
