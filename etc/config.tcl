@@ -139,9 +139,15 @@ ns_param   maxkeepalive       0
 ns_param   logroll            on
 ns_param   maxbackup          5
 ns_param   debug              $debug
-#ns_param  OutputCharset  utf-8    ;# Default output charset.  When none specified,
-                                   # no character encoding of output is performed.
-#ns_param  URLCharset     utf-8    ;# Default Charset for Url Encode/Decode.
+#ns_param   mailhost           localhost 
+
+# Unicode by default:
+# see http://dqd.com/~mayoff/encoding-doc.html
+ns_param   HackContentType    1     
+ns_param   DefaultCharset     utf-8
+ns_param   HttpOpenCharset    utf-8
+ns_param   OutputCharset      utf-8
+ns_param   URLCharset         utf-8
 
 #---------------------------------------------------------------------
 # Thread library (nsthread) parameters 
