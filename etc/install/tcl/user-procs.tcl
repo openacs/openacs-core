@@ -94,7 +94,7 @@ ad_proc ::twt::user::add {
     form find ~n add_user
     ::twt::multiple_select_value type $type
     ::twt::multiple_select_value can_browse_p $full_access
-    ::twt::multiple_select_value read_private_data_p $guest
+    ::twt::multiple_select_value guest_p $guest
     form submit    
 }
 
