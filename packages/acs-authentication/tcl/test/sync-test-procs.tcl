@@ -960,3 +960,22 @@ aa_register_case sync_http_get_document {
     aa_true "result.doc_message is empty" [empty_string_p $result(doc_message)]
     aa_equals "result.document is 'success'" $result(document) "success"
 }
+
+aa_register_case sync_file_get_document {
+    Test the HTTPGet implementation of GetDocument service contract.
+} {
+    set path "[acs_root_dir]/www/SYSTEM/dbtest.tcl"
+
+    aa_log "Getting path '$path'"
+
+    array set result [acs_sc::invoke \
+                          -error \
+                          -contract "auth_sync_retrieve" \
+                          -impl "LocalFilesystem" \
+                          -operation "GetDocument" \
+                          -call_args [list [list SnapshotPath {} IncrementalPath $path]]]
+    
+    aa_equals "result.doc_status is ok" $result(doc_status) "ok"
+    aa_true "result.doc_message is empty" [empty_string_p $result(doc_message)]
+    aa_equals "result.document is 'success'" $result(document) [template::util::read_file $path]
+}
