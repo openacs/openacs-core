@@ -436,6 +436,8 @@ create view acs_grantee_party_map as
 --    where oppm.object_id = my_table.my_id;
 --
 
+-- DRB: This view does seem to be quite fast in Postgres as well as Oracle.
+
 create view all_object_party_privilege_map as
 select         op.object_id,
                pdm.descendant as privilege,
@@ -526,8 +528,9 @@ begin
     return 0; 
 end;' language 'plpgsql';
 
-
 -- Speedy version of permission_p from Matthew Avalos
+-- Further improved to a minor degree by Don Baccus
+
 create function acs_permission__permission_p (integer,integer,varchar)
 returns boolean as '
 declare
@@ -537,73 +540,112 @@ declare
     exists_p                          boolean;
 begin
     --
+    -- Check public-like permissions
+    if (0 = permission_p__party_id or
+        exists (select 1 from users where user_id = permission_p__party_id)) and
+        exists (select 1
+                from acs_object_grantee_priv_map
+                where object_id = permission_p__object_id
+                  and privilege = permission_p__privilege
+                  and grantee_id = -1)
+    --
+    then
+       return ''t'';
+    end if;
+    --
+    -- Check direct permissions
+    if exists (
+        select 1
+          from acs_object_grantee_priv_map
+         where object_id = permission_p__object_id
+           and grantee_id = permission_p__party_id
+           and privilege = permission_p__privilege)
+    then
+        return ''t'';
+    end if;
+    --
     -- Check group permmissions
-    select 1 into exists_p
-     where exists (
+    if exists (
           select 1
           from acs_object_grantee_priv_map ogpm,
                group_approved_member_map gmm
          where object_id = permission_p__object_id
            and gmm.member_id = permission_p__party_id
            and privilege = permission_p__privilege
-           and ogpm.grantee_id = gmm.group_id);
-    if FOUND then
+           and ogpm.grantee_id = gmm.group_id)
+    then
         return ''t'';
     end if;
     --
     -- relational segment approved group
-    select 1 into exists_p
-     where exists (
+    if exists (
         select 1
           from acs_object_grantee_priv_map ogpm,
                rel_seg_approved_member_map rsmm
          where object_id = permission_p__object_id
            and rsmm.member_id = permission_p__party_id
            and privilege = permission_p__privilege
-           and ogpm.grantee_id = rsmm.segment_id);
-    if FOUND then
+           and ogpm.grantee_id = rsmm.segment_id)
+    then
         return ''t'';
     end if;
-    --
-    -- Check direct permissions
-    select 1 into exists_p
-     where exists (
-        select 1
-          from acs_object_grantee_priv_map
-         where object_id = permission_p__object_id
-           and grantee_id = permission_p__party_id
-           and privilege = permission_p__privilege);
-    if FOUND then
-        return ''t'';
-    end if;
-    --
-    -- Check public permissions
-    select 1 into exists_p
-     where exists (
-        select 1
-          from acs_object_grantee_priv_map m, users u
-         where object_id = permission_p__object_id
-           and u.user_id = permission_p__party_id
-           and privilege = permission_p__privilege
-           and m.grantee_id = -1);
-    if FOUND then
-        return ''t'';
-    end if;
-    --
-    -- Check public-like permissions
-    select 1 into exists_p
-     where exists (
-        select 1
-          from acs_object_grantee_priv_map
-         where object_id = permission_p__object_id
-           and 0 = permission_p__party_id
-           and privilege = permission_p__privilege
-           and grantee_id = -1);
-    --
-    if FOUND then
-       return ''t'';
-    else
-       return ''f'';
-    end if;
+    return ''f'';
 end;' language 'plpgsql';
 
+-- Returns true if at least one user exists with the given permission.  Used
+-- to avoid some queries on acs_object_party_privilege_map.
+
+create function acs_permission__user_with_perm_exists_p (integer,varchar)
+returns boolean as '
+declare
+    permission_p__object_id           alias for $1;
+    permission_p__privilege           alias for $2;
+begin
+    --
+    -- Check public-like permissions
+    if exists (select 1
+               from acs_object_grantee_priv_map
+                where object_id = permission_p__object_id
+                  and privilege = permission_p__privilege
+                  and grantee_id = -1)
+    --
+    then
+       return ''t'';
+    end if;
+    --
+    -- Check direct user permissions
+    if exists (
+        select 1
+          from acs_object_grantee_priv_map, users
+         where object_id = permission_p__object_id
+           and grantee_id = user_id
+           and privilege = permission_p__privilege)
+    then
+        return ''t'';
+    end if;
+    --
+    -- Check group permmissions
+    if exists (
+          select 1
+          from acs_object_grantee_priv_map ogpm,
+               group_approved_member_map gmm
+         where object_id = permission_p__object_id
+           and privilege = permission_p__privilege
+           and ogpm.grantee_id = gmm.group_id)
+    then
+        return ''t'';
+    end if;
+    --
+    -- relational segment approved group
+    if exists (
+        select 1
+          from acs_object_grantee_priv_map ogpm,
+               rel_seg_approved_member_map rsmm
+         where object_id = permission_p__object_id
+           and privilege = permission_p__privilege
+           and ogpm.grantee_id = rsmm.segment_id)
+    then
+        return ''t'';
+    end if;
+    return ''f'';
+end;' language 'plpgsql';
