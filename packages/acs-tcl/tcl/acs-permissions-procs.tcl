@@ -40,7 +40,7 @@ ad_proc -public permission::revoke {
     revoke privilege Y from party X on object Z
 } {
     db_exec_plsql revoke_permission {}
-    util_memoize_flush "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"
+    util_memoize_flush [list permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
     permission::permission_thread_cache_flush
 }
 
@@ -68,11 +68,12 @@ ad_proc -public permission::permission_p {
     }
 
     if { $no_cache_p || ![permission::cache_p] } {
-        util_memoize_flush "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"
+        util_memoize_flush [list permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
         set permission_p [permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
     } else { 
-        set permission_p [util_memoize "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege" \
-                    [parameter::get -package_id [ad_acs_kernel_id] -parameter PermissionCacheTimeout -default 300]]
+        set permission_p [util_memoize \
+                              [list permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege] \
+                              [parameter::get -package_id [ad_acs_kernel_id] -parameter PermissionCacheTimeout -default 300]]
     }
 
     if { $no_party_p && [ad_conn user_id] == 0 && [ad_conn untrusted_user_id] != 0 && ![template::util::is_true $permission_p] } {
@@ -82,7 +83,7 @@ ad_proc -public permission::permission_p {
                                         -privilege $privilege]
         if { $permission_p != $untrusted_permission_p } {
             # Bump to registration page
-            ns_log Notice "permission_p: party_id=$party_id ([acs_object_name $party_id]), object_id=$object_id ([acs_object_name $object_id]), privilege=$privilege. Result=>$permission_p. Untrusted-Result=>$untrusted_permission_p\n[ad_get_tcl_call_stack]"
+            ns_log Debug "permission_p: party_id=$party_id ([acs_object_name $party_id]), object_id=$object_id ([acs_object_name $object_id]), privilege=$privilege. Result=>$permission_p. Untrusted-Result=>$untrusted_permission_p\n[ad_get_tcl_call_stack]"
             if { ![ad_login_page] } {
                 auth::require_login
             }
