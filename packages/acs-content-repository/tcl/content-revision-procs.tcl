@@ -76,7 +76,7 @@ ad_proc -public ::content::revision::new {
     }
 
     if {![exists_and_not_null content_type]} {
-	set content_type [::content::item::content_type $item_id]
+	set content_type [::content::item::content_type -item_id $item_id]
     }
     set attribute_names ""
     set attribute_values ""
