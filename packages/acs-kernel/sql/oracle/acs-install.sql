@@ -16,6 +16,7 @@ declare
     workflow_id 	apm_packages.package_id%TYPE;
     docs_id    apm_packages.package_id%TYPE;
     api_doc_id apm_packages.package_id%TYPE;
+    cr_id apm_packages.package_id%TYPE;
     schema_user   varchar2(100);
     jobnum        integer;
 begin 
@@ -60,6 +61,20 @@ begin
     directory_p => 't',
     pattern_p => 't',
     object_id => admin_id
+  );
+
+
+  cr_id := apm_service.new (
+      instance_name => 'ACS Content Repository',
+      package_key => 'acs-content-repository'
+  );
+
+  node_id := site_node.new (
+    parent_id => site_node.node_id('/'),
+    name => 'acs-content-repository',
+    directory_p => 't',
+    pattern_p => 't',
+    object_id => cr_id
   );
 
   workflow_id := apm_service.new (
