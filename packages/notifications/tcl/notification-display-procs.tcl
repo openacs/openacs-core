@@ -15,10 +15,13 @@ namespace eval notification::display {
         {-object_id:required}
         {-pretty_name:required}
         {-url:required}
+        {-user_id ""}
     } {
         Produce a widget for requesting notifications
     } {
-        set user_id [ad_conn user_id]
+        if {[empty_string_p $user_id]} {
+            set user_id [ad_conn user_id]
+        }
 
         # Get the type id
         set type_id [notification::type::get_type_id -short_name $type]
