@@ -12,24 +12,36 @@
     <title>OpenACS Core and .LRN</title>
     <orderedlist>
       <listitem>
-        <para>Update version numbers:</para>
+        <formalpara>
+          <title>Update Translations</title>
+          <para><xref linkend="update-translations"/></para>
+        </formalpara>
+      </listitem>
+      <listitem>
+        <formalpara>
+          <title>Update Version Numbers</title>
+          <para>The version numbers in the documentation and in the packages must be updated.  This should only happen after a release candidate is approved.</para>
+        </formalpara>
+        <remark>.LRN: this must be repeated for .LRN modules (dotlrn-core in the dotlrn cvs tree) and for any modified modules in the .LRN prerequisites (dotlrn-prereq in openacs cvs tree).  My current working model is that I bulk-update .LRN and OpenACS core but that I don't touch dotlrn-prereq modules - I just use the most recent release and it's up to individual package developers to tag and <link linkend="releasing-package">release those packages</link> when they change.  This model is already broken because following it means that dotlrn-prereqs don't get new translations.</remark>
         <orderedlist>
           <listitem>
-            <para>Update /packages/acs-core-docs/www/xml/variables.ent with the new version number.
+            <para>Update /var/lib/aolserver/service0/packages/acs-core-docs/www/xml/variables.ent with the new version number.
             </para>
           </listitem>
           <listitem>
-            <para>Add new section in /packages/acs-core-docs/www/xml/for-everyone/release-notes.xml
+            <para>Add new section in /var/lib/aolserver/service0/packages/acs-core-docs/www/xml/for-everyone/release-notes.xml
 </para>
           </listitem>
           <listitem>
             <para>Regenerate all HTML docs</para>
+            <screen>cd /var/lib/aolserver/service0/packages/acs-core-docs/www/xml
+make</screen>
           </listitem>
           <listitem>
-            <para>Update /readme.txt with the new version number</para>
+            <para>Update /var/lib/aolserver/service0/readme.txt with the new version number</para>
           </listitem>
           <listitem>
-            <para>Update version number in all of the core packages.  Here's a bash/perl script which works but could be made easier to use.  Run it from the tarball root:</para>
+            <para>Update version number in all of the core packages.  Here's a bash/perl script which works but could be made easier to use.  Run it from /var/lib/aolserver/service0/packages:</para>
           <programlisting>#!/bin/sh
 # run this file from ../packages to renumber all .info version numbers
 
@@ -51,27 +63,37 @@ for dir in `find -name *.info`
   perl -p -i -e 's/(provides.*version)="5\.0\.0"/\1="5\.1\.0d1"/' $dir
 done</programlisting>
         </listitem>
-          <listitem>
-            <para>Rebuild the Changelog.  I use a tool called cvs2cl.  Run this command from the package root to automatically generate a Changelog file  in the same dir:</para>
-            <screen>cd /var/log/aolserver/service0
-perl /var/tmp/cvs2cl/cvs2cl.pl -F oacs-5-0 --delta openacs-5-0-0-final:oacs-5-0</screen>
-          </listitem>
-          <listitem>
-            <para>
-              Commit changes
-            </para>
+        <listitem>
+          <para>Commit changes to CVS</para>
           </listitem>
         </orderedlist>
       </listitem>
       <listitem>
-        <para>Check out OpenACS Core.  The files must be checked
+        <formalpara>
+          <title>Rubuild the Changelog</title>
+            <para>Rebuild the Changelog.  I use a tool called cvs2cl.  Run this command from the package root to automatically generate a Changelog file  in the same dir:</para>
+        </formalpara>
+        <screen>cd /var/lib/aolserver/service0
+perl /var/tmp/cvs2cl/cvs2cl.pl -F oacs-5-0 --delta openacs-5-0-0-final:oacs-5-0</screen>
+        <para>
+          Commit changes
+        </para>
+      </listitem>
+      <listitem>
+        <formalpara>
+          <title>Tag the files in CVS</title>
+          <para>The steps to this point should have ensured that the head of the current branch contains the full set of code to release.  Now we need to tag it as the code to be released.</para>
+        </formalpara>
+        <orderedlist>
+          <listitem>
+            <para>Check out OpenACS Core.  The files must be checked
           out through a cvs account with write access and should be a
           checkout from the release branch.  In this example, we are assuming
           this is being done as a local user on openacs.org (which make the 
           checkout and tagging operations much faster).</para>
         <screen><action>cd /var/tmp
 cvs -d /cvsroot checkout -r <replaceable>oacs-5-0</replaceable> acs-core</action></screen>
-        <para>Repeat with the dotlrn cvs tree.</para>
+        <para>If doing .LRN, repeat with the dotlrn cvs tree.</para>
         <screen><action>cd /var/tmp
 mkdir dotlrn-packages
 cd dotlrn-packages
@@ -89,20 +111,26 @@ cvs tag -F <replaceable>openacs-5-0-compat</replaceable>
           <para>When we feature-freeze on HEAD as part of the release process, we are blocking new development.  To avoid this, we branch the code at this point, so that new work can continue on HEAD while the branch is stabilized for release. However, branching means that bug fixes have to be synchronized between HEAD and the branch, and bug fixes tend to be more frequent right at this time.  Therefore, our actual branch point is as late as possible - essentially, we do not branch until and unless new feature work is actively blocked by the feature freeze.  Branching is almost the same as tagging, except for the flag and slightly different tag nomenclature.  To see the list of old branches, <computeroutput>cvs status -v somefile</computeroutput>.</para>
         <screen>cvs tag -b oacs-5-0</screen>
         </tip>
-        <para>Tag dotLRN.  Since the dotLRN packages aren't all in one
+        <para>If doing .LRN: Since the .LRN packages aren't all in one
           module, we iterate through all of the modules.  Log in first
           (cvs login) so that you don't have to log in for each
           module.</para>
         <screen><action>cd /var/tmp/dotlrn-packages
-for dir in *; do ( cd $dir &amp;&amp; cvs tag -F <replaceable>dotlrn-2-0-0a1</replaceable> ); done
+for dir in *; do ( cd $dir &amp;&amp; cvs tag <replaceable>dotlrn-2-0-2-final</replaceable> ); done
+for dir in *; do ( cd $dir &amp;&amp; cvs tag -F <replaceable>openacs-5-0-compat</replaceable> ); done
 </action></screen>
-        <para>Note that we use the <action>-F</action> flag which will force the tag to the new version (just in 
+        <para>Note that for the compat tag we use the <action>-F</action> flag which will force the tag to the new version (just in 
           case someone has created the tag already on another version).  Excercise care when doing this since 
           you don't want to inadvertently move a prior release tag.  Also if the tagging goes horribly wrong 
           for some reason you can delete the tag via "<command>cvs tag -d &lt;symbolic_tag&gt;</command>".</para>
       </listitem>
+        </orderedlist>
+      </listitem>
       <listitem>
-        <para>Make the tarball</para>
+        <formalpara>
+          <title>Make the tarball(s)</title>
+          <para></para>
+        </formalpara>
         <itemizedlist>
           <listitem>
             <formalpara>
@@ -166,20 +194,39 @@ tar cz -f <replaceable>dotlrn-2.0.0a1.tar.gz</replaceable> dotlrn-<replaceable>2
         </itemizedlist>
       </listitem>
       <listitem>
-        <para>Test the new tarball</para>
+        <formalpara>
+          <title>Test the new tarball(s)</title>
+          <para>Download the tarballs just created and install them and make sure everything looks okay and that automated tests pass.</para>
+        </formalpara>
       </listitem>
       <listitem>
-        <para>Update openacs.org frontpage, bug-tracker versions, project page, etc.</para>
+        <formalpara>
+          <title>Update Web site</title>
+          <para>Update the different places on OpenACS.org where we track status.</para>
+        </formalpara>
+        <itemizedlist>
+          <listitem><para>Release Status for the current version - something like http://openacs.org/projects/openacs/5.0/milestones</para>
+          </listitem> 
+            <listitem>
+              <para>Home page of openacs.org</para>
+            </listitem>
+            <listitem>
+              <para>Post a new news item</para>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
-        <para>Clean up after yourself.</para>
+        <formalpara>
+          <title>Clean Up</title>
+          <para>Clean up after yourself.</para>
+        </formalpara>
         <screen><action>cd /var/tmp
 rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<replaceable>5.0.0a1</replaceable></action></screen>
       </listitem>
     </orderedlist>
 
     <para>
-      Here is a shell script that automates packaging the tarball:
+      Here is a shell script that automates packaging the tarball (it's a bit out of date with the new steps - I've been doing everything manually or with little throwaway scripts as detailed above until the process is stabilized).
     </para>
 
     <programlisting><xi:include href="../../../../etc/install/build-release.sh" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>release script missing</xi:fallback></xi:include></programlisting>
@@ -236,7 +283,7 @@ rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<replaceable>5.0.0a1</repl
     <para>In this example, we are packaging and releasing <computeroutput>myfirstpackage</computeroutput> as version 1.0.0, which is compatible with OpenACS 5.0.x.</para>
     <orderedlist>
       <listitem>
-        <para>Update the version number of your packages in the <ulink url="/acs-admin/apm/">APM</ulink>.</para>
+        <para>Update the version number of your package in the <ulink url="/acs-admin/apm/">APM</ulink>.</para>
       </listitem>
       <listitem>
         <para>Make sure all changes are committed.</para>
@@ -260,20 +307,20 @@ cvs tag -F <replaceable>openacs-5-0-compat</replaceable>
             <para>
               Update the translation server.  (Approach 1: upgrade to the last release; approach 2: upgrade to head or to an alpha or beta release.)  Use CVS up.
             </para>
+        <remark>This approach puts the translation server at risk.  An alternate approach would be to create a whole new checkout on the appropriate branch (such as oacs-5-0), point that at the live production database, import keys (which is safe because keys on the translation server take precedence), then export keys back, and then commit.  This gets the keys committed to the right branch without changing the code running on the production site.  Updating the production site can then be a seperate exercise.</remark>
           </listitem>
           <listitem>
             <para>Go to <ulink url="/acs-lang/admin">ACS Lang admin page</ulink> and click "Import All Messages"</para>
           </listitem>
           <listitem>
-            <para>Resolve conflicts, if any, on the provided page, if any.
+            <para>Resolve conflicts, if any, on the provided page.
             </para>
           </listitem>
           <listitem>
-            <para>Back on the admin page, click the export link.  If there are conflicts, the messages will be exported anyway and errors will be shown.</para>
+            <para>Back on the admin page, click the export link.  If there are conflicts, the messages will be exported anyway and any errors will be shown in the web interface.</para>
           </listitem>
           <listitem>
-            <para>
-              Run the acs-lang/bin/check-catalog.sh script.  (This checks for keys no longer in use and some other things.  Until it is rolled into the UI, do it manually and check the results and take whatever steps you can intuit you should do.)
+            <para>From the packages dir, run the acs-lang/bin/check-catalog.sh script.  (This checks for keys no longer in use and some other things.  Until it is rolled into the UI, do it manually and check the results and take whatever steps you can intuit you should do.)
             </para>
           </listitem>
           <listitem>
