@@ -90,3 +90,31 @@ ad_proc -private ad_user_filter {} {
   ad_require_permission [ad_conn object_id] read
   return filter_ok
 }
+
+namespace eval permission {
+
+    ad_proc -public toggle_inherit {
+        {-object_id:required}
+    } {
+        toggle whether or not this object inherits permissions from it's parent
+    } {
+        db_dml toggle_inherit {}
+    }
+
+    ad_proc -public set_inherit {
+        {-object_id:required}
+    } {
+        set inherit to true
+    } {
+        db_dml set_inherit {}
+    }
+
+    ad_proc -public set_not_inherit {
+        {-object_id:required}
+    } {
+        set inherit to false
+    } {
+        db_dml set_not_inherit {}
+    }
+
+}
