@@ -48,7 +48,7 @@ cvs -d /cvsroot openacs-4/packages/myfirstpackage export -r 1-0-0</screen>
       <listitem>
         <para>Import it to the openacs.org cvs tree</para>
         <screen>cd openacs-4/packages/myfirstpackage
-cvs -d :pserver:you@openacs.org:/cvsroot import -m "initial upload" openacs-4/contrib/packages/myfirstpackage your_vendor_tag myfirstpackage-1-0-0
+cvs -d :ext:you@cvs.openacs.org:/cvsroot import -m "initial upload" openacs-4/contrib/packages/myfirstpackage your_vendor_tag myfirstpackage-1-0-0
 </screen>
       </listitem>
       <listitem>

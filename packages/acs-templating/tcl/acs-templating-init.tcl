@@ -86,7 +86,7 @@ namespace eval template {
 
     # Default values for paginator properties
     variable defaults
-    set defaults [list pagesize 20 timeout 600 groupsize 10]
+    set defaults [list pagesize 20 timeout 600 groupsize 10 page_offset 0]
   }
 
   namespace eval data {

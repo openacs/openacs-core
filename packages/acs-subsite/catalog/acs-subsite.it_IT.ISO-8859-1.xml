@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.1.0" locale="it_IT" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.1.2" locale="it_IT" charset="ISO-8859-1">
 
   <msg key="About_You">Riguardo a te</msg>
-  <msg key="Account_at_system_closed">La tua account su %system_name% &amp;egrave; stata chiusa.</msg>
-  <msg key="Account_closed"> &lt;p&gt;La tua account &amp;egrave; attualmente chiusa.&lt;/p&gt;  &lt;p&gt;Se lo desideri, possiamo &lt;a href=&quot;%restore_url%&quot;&gt;riaprirla&lt;/a&gt;.&lt;/p&gt;</msg>
+  <msg key="Account_at_system_closed">La tua account su %system_name% è stata chiusa.</msg>
+  <msg key="Account_closed"> &lt;p&gt;La tua account è attualmente chiusa.&lt;/p&gt;  &lt;p&gt;Se lo desideri, possiamo &lt;a href=&quot;%restore_url%&quot;&gt;riaprirla&lt;/a&gt;.&lt;/p&gt;</msg>
+  <msg key="Admin">Pannello di Controllo</msg>
   <msg key="Answer">Risposta:</msg>
   <msg key="at">su</msg>
   <msg key="Bad_Password">Password Inadatta</msg>
@@ -18,11 +19,12 @@
   <msg key="Email_Confirmation">Conferma Email</msg>
   <msg key="Email_not_Requested">Email non richiesta</msg>
   <msg key="Error_sending_mail">Errore nell'invio dell'email</msg>
+  <msg key="Forgot_your_password">Hai dimenticato la tua password?</msg>
   <msg key="Grant">Garantisci</msg>
   <msg key="Grant_Permission">Garantisci il permesso</msg>
   <msg key="Join_group_name">Partecipa al gruppo %group_name%</msg>
-  <msg key="Log_In">Log In</msg>
-  <msg key="lt_Cannot_join_this_grou">Non &amp;egrave; possibile partecipare a questo gruppo.</msg>
+  <msg key="Log_In">Entra</msg>
+  <msg key="lt_Cannot_join_this_grou">Non è possibile partecipare a questo gruppo.</msg>
   <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) registrato come utente di %system_url%</msg>
   <msg key="lt_Grant_Permission_on_n">Garantisci il permesso su %name%</msg>
   <msg key="lt_Inherited_Permissions">Eredita i pemessi</msg>
@@ -31,7 +33,7 @@
   <msg key="lt_Note_that_you_can_era">Nota che puoi cancellare il tuo indirizzo mail e la password registrate, scegliendo &amp;quot;log out&amp;quot; dal menu.</msg>
   <msg key="lt_num_children_Children">%num_children% Figli Nascosti</msg>
   <msg key="lt_On_portrait_publish_d">Il %portrait_publish_date%, hai caricato &lt;a href=&quot;/user/portrait/&quot;&gt;%portrait_title%&lt;/a&gt; </msg>
-  <msg key="lt_Our_server_can_tell_y">Il nostro server pu&amp;ograve; dire al tuo browser di ricordare alcune cose, come il tuo indirizzo email e la password. Questo &amp;egrave; utile per te, perch&amp;eacute;, se sei la sola persona ad usare questo computer, non dovrai fornirci i tuoi dati ogni volta.</msg>
+  <msg key="lt_Our_server_can_tell_y">Il nostro server può dire al tuo browser di ricordare alcune cose, come il tuo indirizzo email e la password. Questo è utile per te, perchè se sei la sola persona ad usare questo computer, non dovrai fornirci i tuoi dati ogni volta.</msg>
   <msg key="lt_Password_Confirmation">Conferma Password:</msg>
   <msg key="lt_Personal_Home_Page_UR">Indirzzo della Home Page personale:</msg>
   <msg key="lt_Please_read_and_follo">Per favore leggi e segui le istruzioni riportate in questo messaggio.</msg>
@@ -39,7 +41,7 @@
   <msg key="lt_Problem_with_authenti">Ci sono problemi con l'autentificazione</msg>
   <msg key="lt_Registration_informat">Le informazioni per la registrazione a questo sito sono appena state inviate all'indirizzo %email%.</msg>
   <msg key="lt_Registration_informat_1">Le informazioni per la registrazione a questo sito sono appena state inviate all'indirizzo %email%.</msg>
-  <msg key="lt_registration_request_submitted">La tua richiesdta di registrazione &amp;egrave; stata inoltrata all'amministratore di %system_name% ed &amp;egrave; in attesa di approvazione.</msg>
+  <msg key="lt_registration_request_submitted">La tua richiesdta di registrazione è stata inoltrata all'amministratore di %system_name% ed è in attesa di approvazione.</msg>
   <msg key="lt_Saving_email_address_">Sto salvando l'indirizzo email e la password</msg>
   <msg key="lt_Show_everyone_else_at">Mostra a tutti gli utenti di %system_name% quanto sei bello:</msg>
   <msg key="lt_Sorry_but_it_seems_th">Spiacente, ma sembra che tu sia stato bandito da %system_name%.</msg>
@@ -47,11 +49,11 @@
   <msg key="lt_To_confirm_your_regis">Per confermare la tua registrazione, vai alla pagina %confirmation_url%</msg>
   <msg key="lt_We_were_not_awaiting_">Non stavamo aspettando il tuo email. Ci deve essere qualche errore.</msg>
   <msg key="lt_Welcome_to_system_nam">Benvenuto su %system_name%</msg>
-  <msg key="lt_You_cant_have_a_lt_in">Non puoi avere un &amp;lt; nel tuo nome, perch&amp;eacute; sembrer&amp;agrave; un tag HTML, confondendo gli altri utenti.</msg>
+  <msg key="lt_You_cant_have_a_lt_in">Non puoi avere un &amp;lt; nel tuo nome, perchè sembrerà un tag HTML, confondendo gli altri utenti.</msg>
   <msg key="lt_You_cant_have_a_lt_in_1">Non puoi avere un &amp;lt; nel tuo nome, perchè sembrerà un tag HTML, confondendo gli altri utenti.</msg>
-  <msg key="lt_Your_email_has_been_c">Il tuo indirizzo email &amp;egrave; stato confermato. Ora puoi fare la login su %system_name%.</msg>
-  <msg key="lt_Your_email_has_been_c_1">Il tuo indirizzo email &amp;egrave; stato confermato. Ora sei in attesa di approvazione da parte dell'amministratore di %system_name%.</msg>
-  <msg key="lt_Your_email_is_confirm">Il tuo indirizzo email &amp;egrave; confermato</msg>
+  <msg key="lt_Your_email_has_been_c">Il tuo indirizzo email è stato confermato. Ora puoi fare la login su %system_name%.</msg>
+  <msg key="lt_Your_email_has_been_c_1">Il tuo indirizzo email è stato confermato. Ora sei in attesa di approvazione da parte dell'amministratore di %system_name%.</msg>
+  <msg key="lt_Your_email_is_confirm">Il tuo indirizzo email è confermato</msg>
   <msg key="lt_Your_URL_doesnt_have_">L'indirizzo che hai immesso non ha una forma corretta. Un indirizzo valido dovrebbe essere qualcosa del tipo \&quot;%valid_url_example%\&quot;.&quot;</msg>
   <msg key="Name">Nome:</msg>
   <msg key="New_Password">Nuova Password:</msg>
@@ -62,6 +64,7 @@
   <msg key="Permissions_for_name">Permessi per %name%</msg>
   <msg key="Question">Domanda:</msg>
   <msg key="Register">Registrati</msg>
+  <msg key="Remember_my_login">Ricorda</msg>
   <msg key="Revoke_Checked">Rimuovi gli elementi selezionati</msg>
   <msg key="Show">Mostra</msg>
   <msg key="Thank_you">Grazie.</msg>

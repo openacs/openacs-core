@@ -101,8 +101,8 @@ ad_proc -public auth::password::change {
         array set result [auth::password::ChangePassword \
                               -authority_id $user(authority_id) \
                               -username $user(username) \
-                              -old_password $old_password \
-                              -new_password $new_password]
+                              -new_password $new_password \
+			      -old_password $old_password ]
 
         # We do this so that if there aren't even a password_status in the array, that gets caught below
         set dummy $result(password_status)
@@ -666,7 +666,7 @@ ad_proc -private auth::password::CanResetPassword {
 
 ad_proc -private auth::password::ChangePassword {
     {-username:required}
-    {-old_password:required}
+    {-old_password ""}
     {-new_password:required}
     {-authority_id:required}
 } {
@@ -681,7 +681,7 @@ ad_proc -private auth::password::ChangePassword {
     @author Peter Marklund
 } {
     set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
-
+    
     if { [empty_string_p $impl_id] } {
         set authority_pretty_name [auth::authority::get_element -authority_id $authority_id -element "pretty_name"]
         error "The authority '$authority_pretty_name' doesn't support password management"
@@ -697,8 +697,8 @@ ad_proc -private auth::password::ChangePassword {
                 -impl_id $impl_id \
                 -operation ChangePassword \
                 -call_args [list $username \
-                                 $old_password \
                                  $new_password \
+                                 $old_password \
                                  $parameters \
 			         $authority_id]]
 }

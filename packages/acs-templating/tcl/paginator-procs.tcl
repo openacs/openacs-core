@@ -43,6 +43,9 @@ ad_proc -public template::paginator::create { statement_name name query args } {
     list of rows in the query result and caches the result for subsequent
     queries.
 
+    @param statement_name A query name.  This is overwritten by the contents of
+                        the "query" parameter if it is not the empty string.
+
     @param name         A unique name corresponding to the query being 
                         paginated, including specific values in the where 
                         clause and sorting specified in the order by clause.
@@ -70,6 +73,16 @@ ad_proc -public template::paginator::create { statement_name name query args } {
                         letters of a title or date.  By default, the second
                         column in the result set returned by query will be used
                         as the context.
+
+    @option page_offset The first page in a set of page groups to be created by
+                        this paginator.  This can be used to slice very large sets of
+                        page groups into paginators, cached separately (be sure to
+                        name each page group's paginator uniquely if you're caching
+                        pagination query results).  Very useful since filling the cache
+                        for an entire set of page groups can be very costly, and since
+                        often only the first few pages of items (for instance, forum threads)
+                        are visited through the pagination interface.  The list builder
+                        provides an example of how to do this.
 } {
   set level [template::adp_level]
   variable parse_level
@@ -142,7 +155,7 @@ ad_proc -public template::paginator::create { statement_name name query args } {
   }
 
   set opts(row_count) [llength $opts(row_ids)]
-  set opts(page_count) [get_page $name $opts(row_count)]
+  set opts(page_count) [expr {[get_page $name $opts(row_count)] + $opts(page_offset)}]
   set opts(group_count) [get_group $name $opts(page_count)]
 }
 
@@ -349,9 +362,10 @@ ad_proc -public template::paginator::get_row_ids { name pagenum } {
   get_reference
 
   set pagesize $properties(pagesize)
+  set page_offset $properties(page_offset)
 
   # get the set of ids for the current page
-  set start [expr ($pagenum - 1) * $pagesize]
+  set start [expr ($pagenum - $page_offset - 1) * $pagesize]
   set end [expr $start + $pagesize - 1]
   set ids [lrange $properties(row_ids) $start $end]
 
@@ -384,6 +398,7 @@ ad_proc -public template::paginator::get_pages { name group } {
 
   set group_count $properties(group_count)
   set group_size $properties(groupsize)
+ # set page_count [expr $properties(page_count) + $properties(page_offset)]
   set page_count $properties(page_count)
 
   if { $group > $group_count } {
@@ -396,7 +411,7 @@ ad_proc -public template::paginator::get_pages { name group } {
   set start [expr ($group - 1) * $group_size + 1]
   set end [expr $start + $group_size]
 
-    if { $end > $page_count } { set end [expr $page_count] }
+    if { $end > $page_count } { set end $page_count }
 
   set pages [list]
 

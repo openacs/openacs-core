@@ -31,8 +31,8 @@ switch [db_type] {
     postgresql {
         set db_pretty "PostgreSQL [db_version]"
         set db_doc_url "http://www.postgresql.org/docs/[db_version]/interactive/index.html"
-        set db_doc_search_url "http://www.postgresql.org/search.cgi"
-        set db_doc_search_export [export_vars -form { { ul "http://www.postgresql.org/docs/[db_version]/static/" } }]
+        set db_doc_search_url "http://search.postgresql.org/www.search"
+        set db_doc_search_export [export_vars -form { { ul "http://www.postgresql.org/docs/[db_version]/static/%" } }]
         set db_doc_search_query_name "q"
     }
     oracle {

@@ -24,7 +24,7 @@
   <div class="action-list permanent-navigation">
     <ul>
       <if @admin_url@ not nil>
-        <li><a href="@admin_url@" title="#acs-subsite.Site_wide_administration#">#acs-subsite.Admin#</a></li>
+        <span id="oacs-admin-url"><li><a href="@admin_url@" title="#acs-subsite.Site_wide_administration#">#acs-subsite.Admin#</a></li></span>
       </if>
       <if @pvt_home_url@ not nil>
         <li><a href="@pvt_home_url@" title="#acs-subsite.Change_pass_email_por#">@pvt_home_name@</a></li>

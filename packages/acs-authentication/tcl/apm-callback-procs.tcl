@@ -110,9 +110,30 @@ ad_proc -public auth::after_upgrade {
                     acs_sc::impl::delete -contract_name "auth_sync_process" -impl_name "IMS_Enterprise_v_1p1_old"
                 }
             }
-            5.1.1 5.1.2 {
+            5.1.1 5.1.2d1 {
                 db_transaction {
-		    auth::authentication::quick_sc_update
+
+		    # this is a direct update to the SC tables, we should expect a new
+		    # API for handling updates on SC, but since there's no one yet,
+		    # we'll do this way now .... (roc)
+
+		    set sc_change [list {auth_authentication.Authenticate.InputType} {auth_password.ChangePassword.InputType} {auth_password.ResetPassword.InputType}]
+		    set element_msg_type_name integer
+
+		    foreach msg_type_name $sc_change {
+			set msg_type_id [db_string get_msg_type_id { select msg_type_id from acs_sc_msg_types where msg_type_name = :msg_type_name }]
+			set element_pos [db_string get_pos { select max(element_pos) from acs_sc_msg_type_elements where msg_type_id = :msg_type_id }]
+			incr element_pos
+
+			acs_sc::msg_type::element::new \
+			    -msg_type_name $msg_type_name \
+			    -element_name authority_id \
+			    -element_msg_type_name $element_msg_type_name \
+			    -element_msg_type_isset_p f \
+			    -element_pos $element_pos
+	
+		    }
+
 		}
 	    }
 	}
@@ -546,29 +567,3 @@ ad_proc -private auth::user_info::delete_contract {} {
 }
 
 
-ad_proc -private auth::authentication::quick_sc_update {} {
-    SC update related to add authority_id new input
-} {
-
-    # this is a direct update to the SC tables, we should expect a new
-    # API for handling updates on SC, but since there's no one yet,
-    # we'll do this way now .... (roc)
-
-    set sc_change [list {auth_authentication.Authenticate.InputType} {auth_password.ChangePassword.InputType} {auth_password.ResetPassword.InputType}]
-    set element_msg_type_name integer
-
-    foreach msg_type_name $sc_change {
-	set msg_type_id [db_string get_msg_type_id { select msg_type_id from acs_sc_msg_types where msg_type_name = :msg_type_name }]
-	set element_pos [db_string get_pos { select max(element_pos) from acs_sc_msg_type_elements where msg_type_id = :msg_type_id }]
-	incr element_pos
-
-	acs_sc::msg_type::element::new \
-	    -msg_type_name $msg_type_name \
-	    -element_name authority_id \
-	    -element_msg_type_name $element_msg_type_name \
-	    -element_msg_type_isset_p f \
-	    -element_pos $element_pos
-	
-    }
-
-}

@@ -29,14 +29,6 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="permission::permission_p_not_cached.select_permission_p">
-        <querytext>
-            select 1
-            from dual
-            where 't' = acs_permission.permission_p(:object_id, :party_id, :privilege)
-        </querytext>
-    </fullquery>
-
     <fullquery name="permission::require_permission.name">      
         <querytext>
             select acs_object.name(:object_id)

@@ -18,6 +18,10 @@ if { [template::util::is_nil title] } {
     set title [ad_conn instance_name]  
 }
 
+#AG: Markup in <title> tags doesn't render well.
+set title [ns_striphtml $title]
+
+
 if { ![info exists header_stuff] } {
     set header_stuff {} 
 }
@@ -49,6 +53,16 @@ if {![empty_string_p $onload]} {
     multirow append attribute onload [join $onload " "]
 }
 
+# Additional Body Attributes
+
+if {[exists_and_not_null body_attributes]} {
+    foreach body_attribute $body_attributes {
+	multirow append attribute [lindex $body_attribute 0] [lindex $body_attribute 1]
+    }
+} else {
+    set body_attributes ""
+}
+
 # Header links (stylesheets, javascript)
 multirow create header_links rel type href media
 multirow append header_links "stylesheet" "text/css" "/resources/acs-templating/lists.css" "all"
@@ -63,6 +77,15 @@ if { [llength [info procs ::ds_show_p]] == 1
     set developer_support_p 1
 } else {
     set developer_support_p 0
+}
+
+# dotlrn toolbar : We include that here, so that master template authors don't have to worry about it
+
+if { [llength [namespace eval :: info procs dotlrn_toolbar::show_p]] == 1 } {
+    multirow append header_links "stylesheet" "text/css" "/resources/dotlrn/dotlrn-toolbar.css" "all"
+    set dotlrn_toolbar_p 1
+} else {
+    set dotlrn_toolbar_p 0
 }
 
 set translator_mode_p [lang::util::translator_mode_p]

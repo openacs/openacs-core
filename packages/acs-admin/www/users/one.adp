@@ -81,6 +81,10 @@ above.
   <li><a href="@password_reset_url@">Reset this user's password</a></li>
 </if>
 
+<if @password_update_url@ not nil>
+  <li><a href="@password_update_url@">Update this user's password</a></li>
+</if>
+
 <li><a href="@portrait_manage_url@">Manage this user's portrait</a></li>
 
 <li><a href="become?user_id=@user_id@">Login as this user</a></li>

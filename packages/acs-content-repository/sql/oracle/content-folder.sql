@@ -445,13 +445,14 @@ begin
   open c_tree_cur;
   while v_parent_id <> folder_id loop
     fetch c_tree_cur into v_parent_id;
+
+    if v_parent_id = folder_id then
+        v_sub_folder_p := 't';
+    end if;
+
     exit when c_tree_cur%NOTFOUND;
   end loop;
   close c_tree_cur;
-
-  if v_parent_id ^= 0 then 
-    v_sub_folder_p := 't';
-  end if;
 
   return v_sub_folder_p;
 

@@ -265,9 +265,19 @@ insert into ad_locales
         nls_charset, mime_charset, default_p, enabled_p)
  values ('hr_HR', 'Croatian (HR)', 'hr', 'HR', 'CROATIAN', 'CROATIA','UTF8','UTF-8','t','f');
 
-insert into ad_locales 
-       (locale, label, language, country, nls_language, nls_territory, 
-        nls_charset, mime_charset, default_p, enabled_p) 
+insert into ad_locales
+       (locale, label, language, country, nls_language, nls_territory,
+        nls_charset, mime_charset, default_p, enabled_p)
 values ('es_GT', 'Spanish (GT)', 'es', 'GT', 'SPANISH',  'GUATEMALA', 'WE8DEC', 'ISO-8859-1', 't', 'f');
+
+insert into ad_locales
+       (locale, label, language, country, nls_language, nls_territory,
+        nls_charset, mime_charset, default_p, enabled_p)
+values ('eu_ES', 'Basque (ES)', 'eu', 'ES', 'SPANISH',  'SPAIN', 'WE8DEC', 'ISO-8859-1', 't', 'f');
+
+insert into ad_locales
+       (locale, label, language, country, nls_language, nls_territory,
+        nls_charset, mime_charset, default_p, enabled_p)
+values ('ca_ES', 'Catalan (ES)', 'ca', 'ES', 'SPANISH',  'SPAIN','WE8DEC', 'ISO-8859-1', 't', 'f');
 
 end;

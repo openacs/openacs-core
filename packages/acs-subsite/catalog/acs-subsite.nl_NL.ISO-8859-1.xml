@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.1.0" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.1.2" locale="nl_NL" charset="ISO-8859-1">
 
   <msg key="_or">, of</msg>
   <msg key="_Update_Basic_Information">Basisinformatie bijwerken</msg>
@@ -35,7 +35,7 @@
   <msg key="Change_my_Password">Mijn wachtwoord veranderen</msg>
   <msg key="Change_pass_email_por">Wachtwoord, e-mail, portretfoto veranderen</msg>
   <msg key="Check_Your_Inbox">Het wachtwoord is naar het bij ons bekende e-mailadres gestuurd</msg>
-  <msg key="Children">onderliggende objecten</msg>
+  <msg key="Children">onderliggende elementen</msg>
   <msg key="Close_account_explanation">&lt;P&gt;Bevestig dat de registratie op %system_name% moet worden gesloten.&lt;P&gt;Het sluiten van de registratie betekent dat we niet langer kennisgevingen kunnen sturen en we de registratie ook niet meer in de ledenlijst op %system_name% kunnen tonen. Alle bijdragen aan de gemeenschap, zullen daarentegen bewaard blijven; deze maken immers deel uit van de geschiedenis van deze gemeenschap.&lt;P&gt;Let op: Het registratienummer kan op een willekeurig moment weer worden geopend.</msg>
   <msg key="Close_your_account">Mijn registratienummer sluiten</msg>
   <msg key="Closed_group">Besloten groep</msg>
@@ -149,7 +149,7 @@ Bezoek de volgende koppeling en verander het wachtwoord direct: %reset_password_
   <msg key="lt_New_registration_at_s">Nieuwe inschrijving op %system_url%</msg>
   <msg key="lt_Note_text_in_red_below">Rode tekst onder de invoervelden van parameters geeft aan dat de waarde van deze parameter overschreven wordt door een waarde in het OpenACS parameterbestand. Het gebruik van het parameterbestand wordt afgeraden maar sommige sites hebben dit nodig voor het instellen van instance-specifieke parameterwaarden, die onafhankelijk zijn van waarden in de apm_parameter tabellen.</msg>
   <msg key="lt_Note_that_you_can_era">Het opgeslagen e-mailadres en het wachtwoord kunnen worden gewist door op &quot;afmelden&quot; te klikken.</msg>
-  <msg key="lt_num_children_Children">%num_children% verborgen onderliggende objecten</msg>
+  <msg key="lt_num_children_Children">%num_children% verborgen onderliggende elementen</msg>
   <msg key="lt_On_portrait_publish_d">&lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt; is op %portrait_publish_date% in de database opgenomen.</msg>
   <msg key="lt_Our_server_can_tell_y">Onze server kan browsers opdragen om dingen te onthouden, zoals een e-mailadres en wachtwoord. Dit heeft als voordeel dat een e-mailadres en wachtwoord niet steeds hoeven te worden ingetypt. Dit is echter alleen veilig als men de computer niet met anderen deelt. </msg>
   <msg key="lt_Password_Confirmation">Wachtwoordbevestiging</msg>
@@ -179,6 +179,7 @@ Bezoek de volgende koppeling en verander het wachtwoord direct: %reset_password_
   <msg key="lt_Uploaded_pretty_date">Opgeslagen: %pretty_date%</msg>
   <msg key="lt_Uploaded_publish_date">Opgeslagen: %publish_date%</msg>
   <msg key="lt_Use_the_Browse_button">De knop \&quot;Bladeren\&quot; gebruiken om een bestand te vinden en dan op \&quot;Openen\&quot; klikken</msg>
+  <msg key="lt_User_has_portrait_title">Deze gebruiker heeft een biografie of portret opgeslagen</msg>
   <msg key="lt_We_cant_find_you">We kunnen registratienummer %user_id% niet in de gebruikerstabel vinden. Kan het zijn dat dit registratienummer is verwijderd?</msg>
   <msg key="lt_We_had_a_problem_proc">Er was een probleem bij het verwerken van de invoer.</msg>
   <msg key="lt_We_were_not_awaiting_">Wij hadden deze e-mail niet verwacht. Er moet een vergissing in het spel zijn.</msg>
@@ -204,7 +205,7 @@ Bezoek de volgende koppeling en verander het wachtwoord direct: %reset_password_
   <msg key="New_Password">Nieuw wachtwoord:</msg>
   <msg key="No_applications">Geen toepassingen beschikbaar</msg>
   <msg key="No_ISO_Codes">Geen ISO-codes beschikbaar</msg>
-  <msg key="No_package_parameters">Dit pakket heeft geen parameters</msg>
+  <msg key="No_package_parameters">Deze module heeft geen parameters</msg>
   <msg key="no_portrait_title_message">Mijn portretfoto</msg>
   <msg key="No_pretty_plural">Geen %pretty_plural% beschikbaar</msg>
   <msg key="No_services">Geen diensten beschikbaar</msg>
@@ -237,6 +238,7 @@ Het wachtwoord kan altijd worden gewijzigd door het volgende te doen:
   <msg key="Permissions_for_name">Rechten van %name%</msg>
   <msg key="Please_return_to_home">Keer terug naar %home_link%.</msg>
   <msg key="Portrait">Portretfoto</msg>
+  <msg key="Profile">Profiel</msg>
   <msg key="Question">Vraag:</msg>
   <msg key="Re_enable">Opnieuw inschakelen</msg>
   <msg key="Recover_Password">Wachtwoord achterhalen</msg>
@@ -298,7 +300,7 @@ Het wachtwoord kan altijd worden gewijzigd door het volgende te doen:
   <msg key="You_are_in_the_follow">Mijn aansluitingen bij gebruikersgroepen: </msg>
   <msg key="You_can_also_browse_from">Bladeren kan ook uit de</msg>
   <msg key="You_can_always_re_open">Heropenen kan altijd door</msg>
-  <msg key="You_do_not_have_admin_on">Er zijn geen rechten om het object %root% of onderliggende objecten te beheren.</msg>
+  <msg key="You_do_not_have_admin_on">Er zijn geen rechten om het object %root% of onderliggende elementen te beheren.</msg>
   <msg key="You_dont_have_a_portrait">Mijn portretfoto is nog niet beschikbaar.</msg>
   <msg key="You_have_admin_rights_on">Er zijn rechten aanwezig om de volgende objecten te beheren:</msg>
   <msg key="You_have_no_email_alerts">Er staan geen kennisgevingen ingesteld.</msg>

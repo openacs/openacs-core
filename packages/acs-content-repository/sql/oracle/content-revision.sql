@@ -80,6 +80,7 @@ function new (
   creation_user	in acs_objects.creation_user%TYPE default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
   package_id	in acs_objects.package_id%TYPE default null
+  filename	in cr_revisions.filename%TYPE default null
 ) return cr_revisions.revision_id%TYPE is
 
   v_revision_id integer;
@@ -102,6 +103,7 @@ begin
       creation_user => creation_user,
       creation_ip   => creation_ip,
       package_id    => package_id
+      filename      => filename
   );
 
   select 

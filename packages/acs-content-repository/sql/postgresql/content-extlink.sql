@@ -168,7 +168,6 @@ begin
 	return 0;
 end;' language 'plpgsql' stable;
 
-
 select define_function_args('content_extlink__copy','extlink_id,target_folder_id,creation_user,creation_ip,name');
 create or replace function content_extlink__copy (
 	integer,

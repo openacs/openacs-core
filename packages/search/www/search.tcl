@@ -10,7 +10,7 @@ ad_page_contract {
     {dfs:trim ""}
     {dts:trim ""}
 } -errors {
-    q:notnull {You must specify some keywords.}
+    q:notnull {[_ search.lt_You_must_specify_some].}
 }
 
 set page_title "Search Results"
@@ -29,9 +29,10 @@ array set info [acs_sc_call FtsEngineDriver info [list] $driver]
 
 if { [array get info] == "" } {
     ReturnHeaders
-    ns_write "FtsEngineDriver not available!"
+    ns_write "[_ search.lt_FtsEngineDriver_not_a]"
     ad_script_abort
-} 
+}
+
 if { $num <= 0} {
     set limit [ad_parameter -package_id $package_id LimitDefault]
 } else {
@@ -95,8 +96,11 @@ for { set __i 0 } { $__i < [expr $high - $low +1] } { incr __i } {
     set txt_summary [acs_sc_call FtsEngineDriver summary [list $q $txt] $driver]
     set url_one [acs_sc_call FtsContentProvider url [list $object_id] $object_type]
     
-    template::multirow append searchresult $title_summary $txt_summary $url_one
-
+    # Replace the "index" with ETP as this is not needed for accessing the page
+    if {[string equal $object_type "etp_page_revision"]} {
+	set url_one [string trimright $url_one "index"]
+    }
+	template::multirow append searchresult $title_summary $txt_summary $url_one
 }
 
 

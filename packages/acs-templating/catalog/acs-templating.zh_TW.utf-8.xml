@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-templating" package_version="5.1.0" locale="zh_TW" charset="utf-8">
+<message_catalog package_key="acs-templating" package_version="5.1.2" locale="zh_TW" charset="utf-8">
 
   <msg key="Invalid_choice">無效的選擇</msg>
   <msg key="Invalid_currency">無效的貨幣</msg>

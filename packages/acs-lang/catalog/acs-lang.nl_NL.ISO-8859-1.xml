@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-lang" package_version="5.1.0" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="acs-lang" package_version="5.1.2d2" locale="nl_NL" charset="ISO-8859-1">
 
   <msg key="available-in-this-language">Nederlandse versie is beschikbaar</msg>
   <msg key="change-locale">Taal instellen</msg>

@@ -13,8 +13,6 @@ create table acs_magic_objects (
                         references acs_objects(object_id)
 );
 
-create index acs_mo_object_id_idx on acs_magic_objects (object_id);
-
 comment on table acs_magic_objects is '
  This table allows us to provide semantic names for certain special
  objects like the site-wide organization, and the all users party.
@@ -129,15 +127,10 @@ create function acs__magic_object_id (varchar)
 returns integer as '
 declare
   magic_object_id__name                   alias for $1;  
-  magic_object_id__object_id              acs_objects.object_id%TYPE;
 begin
-    select object_id
-    into magic_object_id__object_id
+    return object_id
     from acs_magic_objects
     where name = magic_object_id__name;
-
-    return magic_object_id__object_id;
-   
 end;' language 'plpgsql' immutable strict;
 
 -- ******************************************************************
@@ -147,13 +140,12 @@ end;' language 'plpgsql' immutable strict;
 create view registered_users
 as
   select p.email, p.url, pe.first_names, pe.last_name, u.*, mr.member_state
-  from parties p, persons pe, users u, group_member_map m, membership_rels mr, acs_magic_objects amo
+  from parties p, persons pe, users u, group_member_map m, membership_rels mr
   where party_id = person_id
   and person_id = user_id
   and u.user_id = m.member_id
   and m.rel_id = mr.rel_id
-  and amo.name = 'registered_users'
-  and m.group_id = amo.object_id
+  and m.group_id = acs__magic_object_id('registered_users')
   and m.container_id = m.group_id
   and m.rel_type = 'membership_rel'
   and mr.member_state = 'approved'
@@ -172,13 +164,12 @@ and pe.person_id = u.user_id;
 create view cc_users
 as
 select o.*, pa.*, pe.*, u.*, mr.member_state, mr.rel_id
-from acs_objects o, parties pa, persons pe, users u, group_member_map m, membership_rels mr, acs_magic_objects amo
+from acs_objects o, parties pa, persons pe, users u, group_member_map m, membership_rels mr
 where o.object_id = pa.party_id
   and pa.party_id = pe.person_id
   and pe.person_id = u.user_id
   and u.user_id = m.member_id
-  and amo.name = 'registered_users'
-  and m.group_id = amo.object_id
+  and m.group_id = acs__magic_object_id('registered_users')
   and m.rel_id = mr.rel_id
   and m.container_id = m.group_id
   and m.rel_type = 'membership_rel';
@@ -380,7 +371,6 @@ insert into acs_magic_objects
   (name, object_id)
 values
   ('default_context', -3);
-
 
 
 --------------------------------------------------------

@@ -29,7 +29,7 @@
 tar xzf &tarballpath;.tgz</action></screen>
       <para>If you are installing from a different method and just need the configuration files, you can instead get them from CVS:</para>
 <screen>[root root]# <userinput>cd /var/tmp</userinput>
-[root tmp]# <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot co openacs-4/packages/acs-core-docs/www/files/</userinput>
+[root tmp]# <userinput>cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot co openacs-4/packages/acs-core-docs/www/files/</userinput>
 cvs checkout: warning: failed to open /root/.cvspass for reading: No such file or directory
 cvs server: Updating openacs-4/packages/acs-core-docs/www/files
 U openacs-4/packages/acs-core-docs/www/files/README.TXT
@@ -38,7 +38,7 @@ U openacs-4/packages/acs-core-docs/www/files/template-ini.ini
 U openacs-4/packages/acs-core-docs/www/files/winnsd.txt
 [root tmp]# <userinput>mv openacs-4 &tarballpath;</userinput>
 <action>cd /var/tmp
-cvs -d :pserver:anonymous@openacs.org:/cvsroot co openacs-4/packages/acs-core-docs/www/files/
+cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot co openacs-4/packages/acs-core-docs/www/files/
 mv openacs-4 openacs-5.0.0a4</action></screen>
       </sect1>
       <sect1 id="install-cvs">
@@ -153,6 +153,30 @@ cd admin
 wget http://moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch
 cd daemontools-0.76
 patch -p1 &lt; ../daemontools-0.76.errno.patch
+package/install</action></screen>
+            </listitem>
+            <listitem>
+              <para>FreeBSD (follow standard install)</para>
+              <para>Make sure you have the source tarball in
+          <computeroutput>/tmp</computeroutput>, or <link
+          linkend="daemontools-download">download it</link>.
+</para>
+              <screen>[root root]# <userinput>mkdir -p /package</userinput>
+[root root]# <userinput>chmod 1755 /package/</userinput>
+[root root]# <userinput>cd /package/</userinput>
+[root package]# <userinput>tar xzf /tmp/daemontools-0.76.tar.gz</userinput>
+[root package]# <userinput>cd admin/daemontools-0.76</userinput>
+[root daemontools-0.76]# <userinput>package/install</userinput>
+Linking ./src/* into ./compile...<emphasis>(many lines omitted)</emphasis>
+Creating /service...
+Adding svscanboot to inittab...
+init should start svscan now.
+[root root]#
+<action>mkdir -p /package 
+chmod 1755 /package 
+cd /package 
+tar xzf /tmp/daemontools-0.76.tar.gz 
+cd admin/daemontools-0.76
 package/install</action></screen>
             </listitem>
             <listitem>
@@ -757,6 +781,8 @@ line, click
       <sect2 id="install-nsopenssl-aolserver4">
         <title>Install on AOLserver4</title>
         <para> You will need the AOLserver4 source in <computeroutput>/usr/local/src/aolserver/aolserver</computeroutput> and OpenSSL installed in <computeroutput>/usr/local/ssl</computeroutput> (or at least symlinked there).</para>
+        <para>FreeBSD note: build openssl with <userinput>gmake install OPENSSL=/usr/local/openssl INST=/usr/local/aolserver</userinput>
+        </para>
 
       <screen>[root bin]#<userinput> cd /usr/local/src/aolserver</userinput>
 [root aolserver]# <userinput>cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver login</userinput>
@@ -873,7 +899,7 @@ ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
 [root src]# <userinput>tar xfz php-4.3.4.tar.gz</userinput>
 [root src]# <userinput>cd php-4.3.4</userinput>
 [root php-4.3.4]# <userinput>cd php-4.3.4</userinput>
-[root php-4.3.4]# <userinput> ./configure --with-aolserver=/usr/local/aolserver/ --with-pgsql=/usr/local/pg74 --without-mysql</userinput>
+[root php-4.3.4]# <userinput> ./configure --with-aolserver=/usr/local/aolserver/ --with-pgsql=/usr/local/pgsql --without-mysql</userinput>
 [root php-4.3.4]# <userinput>make install</userinput>
       </screen>
       <para>Once installed you can enable this by configuring your config file. Make sure your config file supports php (it should have a php section with it). Furthermore add <userinput>index.php</userinput> as the last element to your <computeroutput>directoryfile</computeroutput> directive.</para>
@@ -893,6 +919,142 @@ ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
 [$OPENACS_SERVICE_NAME www]# <userinput>./conf.pl</userinput>
       </screen>
       <para>Now you are about to configure Squirrelmail. The configuration heavily depends on your setup, so no instructions are given here.</para>
+    </sect1>
+    <sect1 id="install-pam-radius">
+      <title>Install PAM Radius for use as external authentication</title>
+      <authorblurb>
+        <para>By <ulink url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink></para>
+      </authorblurb>
+      
+      <para>This step by step guide is derived from the installation instructions which you can find at <replaceable>yourdomain.com</replaceable>/doc/acs-authentication/ext-auth-pam-install.html. It is build upon PAM 0.77 (tested) and does not work on RedHat Linux Enterprise 3 (using PAM 0.75). It makes use of the ns_pam module written by Mat Kovach. The instructions given in here do work with PAM LDAP accordingly and differences will be shown at the end of the file.</para>
+      <orderedlist>
+        <listitem id="install-ns_pam">
+          <formalpara>
+            <title>Install ns_pam</title>
+            <para>Download and install ns_pam</para>
+          </formalpara>
+          <screen>[root aolserver]# <userinput>cd /usr/local/src/aolserver/</userinput>
+          [root aolserver]# <userinput>wget http://braindamage.alal.com/software/ns_pam-0.1.tar.gz</userinput>
+          [root aolserver]# <userinput>tar xvfz ns_pam-0.1.tar.gz</userinput>
+          [root aolserver]# <userinput>cd ns_pam-0.1</userinput>
+          [root ns_pam-0.1]# <userinput>make install INST=/usr/local/aolserver</userinput>
+          [root ns_pam-0.1]#
+<action>cd /usr/local/src/aolserver/
+wget http://braindamage.alal.com/software/ns_pam-0.1.tar.gz
+tar xvfz ns_pam-0.1.tar.gz
+cd ns_pam-0.1
+make install INST=/usr/local/aolserver
+</action>
+          </screen>
+        </listitem>
+        <listitem id="configure-ns_pam">
+          <formalpara>
+            <title>Configure ns_pam</title>
+        <para>Configure AOLserver for ns_pam</para>
+          </formalpara>
+          <para>To enable ns_pam in AOLServer you will first have to edit your config.tcl file and enable the loading of the ns_pam module and configure the aolservers pam configuration file.</para>
+          <itemizedlist>
+            <listitem>Change <emphasis>config.tcl</emphasis>. Remove the <emphasis>#</emphasis> in front of <computeroutput>ns_param nspam ${bindir}/nspam.so</computeroutput> to enable the loading of the ns_pam module.</listitem>
+            <listitem>Change <emphasis>config.tcl</emphasis>. Replace <computeroutput>pam_domain</computeroutput> in the section <computeroutput>ns/server/${server}/module/nspam</computeroutput> with <userinput>aolserver</userinput></listitem>
+            <listitem>Create <emphasis>/etc/pam.d/aolserver</emphasis>.
+            <screen>
+              [root ns_pam]#<userinput>cp /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/pam-aolserver.txt /etc/pam.d/aolserver</userinput>
+            </screen>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem id="configure-pam-radius">
+          <formalpara>
+            <title>Configure PAM Radius</title>
+            <para>Configure and install PAM Radius</para>
+          </formalpara>
+          <para>You have to make sure that pam_radius v.1.3.16 or higher is installed, otherwise you will have to install it.</para>
+          <screen>[root ns_pam]# <userinput>cd /usr/local/src/</userinput>
+          [root src]# <userinput>wget ftp://ftp.freeradius.org/pub/radius/pam_radius-1.3.16.tar</userinput>
+          [root src]# <userinput>tar xvf pam_radius-1.3.16</userinput>
+          [root src]# <userinput>cd pam_radius</userinput>
+          [root pam_radius]# <userinput>make</userinput>
+          [root pam_radius]# <userinput>cp pam_radius_auth.so /lib/security/</userinput>
+          [root pam_radius]#
+<action>cd /usr/local/src
+wget ftp://ftp.freeradius.org/pub/radius/pam_radius-1.3.16.tar
+tar xvf pam_radius-1.3.16
+cd pam_radius
+make
+cp pam_radius_auth.so /lib/security/
+</action>
+          </screen>
+          <para>Next you have to add the configuration lines to your Radius configuration file (/etc/rddb/server). For AOLserver to be able to access this information you have to change the access rights to this file as well.</para>
+          <screen>[root pam_radius]# <userinput>echo "radius.<replaceable>yourdomain.com</replaceable>:1645 <replaceable>your_radius_password</replaceable> >>/etc/rddb/server</userinput>
+          [root src]# <userinput>chown <replaceable>service0</replaceable>:web /etc/rddb/server</userinput>
+          </screen>
+        </listitem>
+      </orderedlist>
+    </sect1>
+    <sect1 id="install-ldap-radius">
+      <title>Install LDAP for use as external authentication</title>
+      <authorblurb>
+        <para>By <ulink url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink></para>
+      </authorblurb>
+      
+      <para>This step by step guide on how to use LDAP for external authentication using the LDAP bind command, which differs from the approach usually taken by auth-ldap. Both will be dealt with in these section</para>
+      <orderedlist>
+        <listitem id="install-openldap">
+          <formalpara>
+            <title>Install openldap</title>
+            <para>Download and install ns_ldap</para>
+          </formalpara>
+          <screen>[root aolserver]# <userinput>cd /usr/local/src/</userinput>
+          [root src]# <userinput>wget ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-2.2.17.tgz</userinput>
+          [root src]# <userinput>tar xvfz openldap-2.2.17.tgz</userinput>
+          [root src]# <userinput>cd openldap-2.2.17</userinput>
+          [root src]# <userinput>./configure --prefix=/usr/local/openldap</userinput>
+          [root openldap]# <userinput>make install</userinput>
+          [root openldap]#
+<action>cd /usr/local/src/
+wget ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-2.2.17.tgz
+tar xvfz openldap-2.2.17.tgz
+cd openldap-2.2.17
+./configure --prefix=/usr/local/openldap --disable-slapd
+make install
+</action>
+          </screen>
+        </listitem>
+        <listitem id="install-ns_ldap">
+          <formalpara>
+            <title>Install ns_ldap</title>
+            <para>Download and install ns_ldap</para>
+          </formalpara>
+          <screen>[root aolserver]# <userinput>cd /usr/local/src/aolserver/</userinput>
+          [root aolserver]# <userinput>wget http://www.sussdorff.de/ressources/nsldap.tgz</userinput>
+          [root aolserver]# <userinput>tar xfz nsldap.tgz</userinput>
+          [root aolserver]# <userinput>cd nsldap</userinput>
+          [root ns_pam-0.1]# <userinput>make install LDAP=/usr/local/openldap INST=/usr/local/aolserver</userinput>
+          [root ns_pam-0.1]#
+<action>cd /usr/local/src/aolserver/
+wget http://www.sussdorff.de/resources/nsldap.tgz
+tar xfz nsldap.tgz
+cd nsldap
+make install LDAP=/usr/local/openldap INST=/usr/local/aolserver
+</action>
+          </screen>
+        </listitem>
+        <listitem id="configure-ns_ldap">
+          <formalpara>
+            <title>Configure ns_ldap for traditional use</title>
+          </formalpara>
+          <para>Traditionally OpenACS has supported ns_ldap for authentification by storing the OpenACS password in an encrypted field within the LDAP server called "userPassword". Furthermore a CN field was used for searching for the username, usually userID or something similar. This field is identical to the <emphasis>username</emphasis>stored in OpenACS. Therefore the login will only work if you change login method to make use of the username instead.</para>  
+          <itemizedlist>
+            <listitem>Change <emphasis>config.tcl</emphasis>. Remove the <emphasis>#</emphasis> in front of <computeroutput>ns_param nsldap ${bindir}/nsldap.so</computeroutput> to enable the loading of the ns_ldap module.</listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem id="configure-ns_ldap-bind">
+          <formalpara>
+            <title>Configure ns_ldap for use with LDAP bind</title>
+          </formalpara>
+          <para>LDAP authentication usually is done by trying to bind (aka. login) a user with the LDAP server. The password of the user is not stored in any field of the LDAP server, but kept internally. The latest version of ns_ldap supports this method with the <emphasis>ns_ldap bind</emphasis> command. All you have to do to enable this is to configure auth_ldap to make use of the BIND authentification instead. Alternatively you can write a small script on how to calculate the username out of the given input (e.g. if the OpenACS username is malte.fb03.tu, the LDAP request can be translated into "ou=malte,ou=fb03,o=tu" (this example is encoded in auth_ldap and you just have to comment it out to make use of it).</para>
+        </listitem>
+      </orderedlist>
     </sect1>
     <xi:include href="aolserver.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>Section Missing</xi:fallback>

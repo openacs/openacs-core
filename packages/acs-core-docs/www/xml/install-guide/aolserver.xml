@@ -257,6 +257,9 @@ chown -R root.web log servers
 chmod -R g+w log servers
 ls -l</action></screen>
 
+      <para>Note: AOLserver4.x does not include a default start page, so we create one for this test. Type 
+        <userinput>echo "Welcome to AOLserver" > /usr/local/aolserver40r8/servers/server1/pages/index.html</userinput>
+      </para>
       <para>Now, we'll run a quick test to ensure AOLserver is running
           correctly. We'll use the sample config file provided with
           AOLserver. This file will attempt to guess your IP address and

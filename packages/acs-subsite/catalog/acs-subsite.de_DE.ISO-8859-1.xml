@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.1.0" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.1.2" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="_or"> oder</msg>
+  <msg key="_Update_Basic_Information">Die Allgemeinen Informationen aktualisieren</msg>
   <msg key="A_member_of_the_system">Registriert bei %system_name% seit</msg>
   <msg key="About_You">Benutzerinformation</msg>
   <msg key="Account_at_system_closed">Ihr Benutzerkonto bei %system_name% wurde deaktiviert.</msg>
@@ -44,7 +45,9 @@
   <msg key="communities">Communities</msg>
   <msg key="community">Community</msg>
   <msg key="Confirm">Bestätigen:</msg>
+  <msg key="confirmation_password_changed">Die Änderung Ihres Passworts war erfolgreich.</msg>
   <msg key="Continue">Fortsetzen</msg>
+  <msg key="Continue_to_your_account">Weiter nach %pvt_home_name%</msg>
   <msg key="Country_Name">Land</msg>
   <msg key="Create_new_community">Neue %pretty_name% erstellen</msg>
   <msg key="Create_new_subsite">Neue Subsite erstellen</msg>
@@ -167,6 +170,7 @@
   <msg key="lt_Uploaded_pretty_date">Hochgeladen am: %pretty_date%</msg>
   <msg key="lt_Uploaded_publish_date">Hochgeladen am:</msg>
   <msg key="lt_Use_the_Browse_button">Klicken Sie auf 'Durchsuchen...', wählen Sie die gewünschte Datei aus und klicken Sie auf 'Öffnen'. </msg>
+  <msg key="lt_User_has_portrait_title">Dieser Benutzer hat seinen Lebenslauf oder sein Bild bereitgestellt.</msg>
   <msg key="lt_We_cant_find_you">Ihre Benutzeridentifikation (%user_id%) konnte nicht in der Benutzerdatenbank gefunden werden. Wahrscheinlich wurde Ihr Benutzerkonto gelöscht.</msg>
   <msg key="lt_We_had_a_problem_proc">Bei der Verarbeitung Ihrer Eingabe ist ein Fehler aufgetreten.</msg>
   <msg key="lt_We_were_not_awaiting_">Es wurde keine E-Mail von Ihnen erwartet. Es ist ein Fehler aufgetreten.</msg>
@@ -213,6 +217,7 @@
   <msg key="Permissions_for_name">Zugriffsberechtigungen für %name%</msg>
   <msg key="Please_return_to_home">Bitte gehen Sie zurück zu %home_link%.</msg>
   <msg key="Portrait">Bild</msg>
+  <msg key="Profile">Profil</msg>
   <msg key="Question">Frage:</msg>
   <msg key="Re_enable">Aktivieren</msg>
   <msg key="Recover_Password">Passwort zurücksetzen</msg>
@@ -222,6 +227,7 @@
   <msg key="Reject">Ablehnen</msg>
   <msg key="Remember_my_login">Anmeldedaten auf diesem Computer speichern</msg>
   <msg key="Remove">Entfernen</msg>
+  <msg key="Remove_All">Alle Entfernen</msg>
   <msg key="Req_membership_comm">Zugang zu dieser Gruppe beantragen</msg>
   <msg key="Req_membership_subs">Mitgliedschaft für diese Subsite beantragen</msg>
   <msg key="Request_membership">Zugang beantragen</msg>
@@ -270,6 +276,7 @@
   <msg key="Whos_Online_link_label">Benutzer, die derzeit online sind</msg>
   <msg key="Whos_Online_title">Wer ist online?</msg>
   <msg key="Yes_I_am_sure">Ja, löschen</msg>
+  <msg key="You_are_in_the_follow">Sie gehören folgenden Gruppen an:</msg>
   <msg key="You_can_also_browse_from">Weitere Möglichkeiten für die Navigation sind der</msg>
   <msg key="You_can_always_re_open">Sie können es jederzeit wieder aktivieren, indem Sie</msg>
   <msg key="You_do_not_have_admin_on">Sie haben keine Verwaltungsrechte für das Objekt %root% oder ihm untergeordnete Objekte.</msg>

@@ -9,7 +9,7 @@
   <title>Basic Steps</title>
 
   <para>
-    The basic steps for getting OpenACS installed are:
+    The basic steps for installing OpenACS are:
   </para>
 
   <orderedlist>
@@ -31,9 +31,9 @@
     </listitem>
   </orderedlist>
 
-  <para> There are specific instructions available for Mac OS X and
-    Windows2000 available (see <xref linkend="mac-installation"/> or
-    <xref linkend="win2k-installation"/> for those).</para>
+  <para> Specific instructions are available for Mac OS X and
+    Windows2000 (see <xref linkend="mac-installation"/> or
+    <xref linkend="win2k-installation"/>).</para>
 
   <sect2 id="install-rpms">
     <title>Binaries and other shortcuts</title>
@@ -52,7 +52,7 @@
       <listitem>
         <para>
           The packaged version of
-          PostgreSQL in Debian and Red Hat and FreeBSD ports works fine.</para>
+          PostgreSQL in Debian, Red Hat, and FreeBSD ports works fine.</para>
       </listitem>
       <listitem>
         <para>Once AOLserver and a database are installed, a bash script <link
@@ -68,7 +68,7 @@
     <title>System Requirements</title>
     <para>
       You will need a PC (or equivalent) with at least these minimum
-      requirements:
+      specifications:
     </para>
     <itemizedlist>
       <listitem><para>128MB RAM (much more if you want Oracle)</para></listitem> 
@@ -78,7 +78,7 @@
             linkend="individual-programs"/>)</para>
       </listitem>
     </itemizedlist><para>
-      All of the software mentioned is free and open-source,
+      All of the software mentioned is open-source and available without direct costs,
       except for Oracle. You can obtain a free copy of Oracle for
       development purposes. This is described in the <xref
         linkend="install-oracle-getit"/> section.
@@ -121,7 +121,7 @@ dropdb <replaceable>$OPENACS_SERVICE_NAME</replaceable>
 createdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></action></screen>
         <formalpara id="cut-and-paste-name-var">
           <title>Setting a global shell variable for cut and paste</title>
-          <para>In order to cut and paste the instructions into your shell, you must set the environment variable $OPENACS_SERVICE_NAME.  In order to set it globally so that it works for any new users or special service users you may create, edit the file <computeroutput>/etc/profile</computeroutput> and add this line:</para>
+          <para>In order to cut and paste the instructions into your shell, you must set the environment variable $OPENACS_SERVICE_NAME.  In order to set it globally so that it works for any new users or special service users you may create, edit the file <computeroutput>/etc/profile</computeroutput> ( <computeroutput>/etc/share/skel/dot.profile</computeroutput> for FreeBSD) and add this line:</para>
         </formalpara>
         <programlisting>export OPENACS_SERVICE_NAME=<replaceable>service0</replaceable></programlisting>
       </listitem>

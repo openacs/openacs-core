@@ -24,6 +24,7 @@
                    interval_id,
                    n_seconds
             from notification_intervals
+            where n_seconds>=0
             order by n_seconds
         </querytext>
     </fullquery>

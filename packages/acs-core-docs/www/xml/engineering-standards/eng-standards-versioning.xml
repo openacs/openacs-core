@@ -115,6 +115,7 @@ convention on version numbers.
 </para>
 
 
+
 <sect2 id="eng-standards-transition-rules">
 <title>Transition Rules</title>
 
@@ -124,10 +125,46 @@ release?  Or from a production release?  We follow a specific set of
 rules for how OpenACS makes the transition from one state of maturity to
 the next.  These rules are fine-tuned with each release; an example is <ulink url="http://openacs.org/projects/openacs/5.0/milestones">5.0.0 Milestones and Milestone Criteria</ulink></para>
 
-
-
-
 </sect2>
+
+
+<sect2 id="eng-standards-package-maturity">
+    <title>Package Maturity</title>
+    <para>
+      Each package has a maturity level. Maturity level is recorded in the .info file for each major-minor release of OpenACS,
+      and is set to the appropriate value for that release of the package.
+    </para>
+    <programlisting>
+    &lt;version ...&gt;
+        &lt;provides .../&gt;
+        &lt;requires .../&gt;
+        &lt;maturity&gt;1&lt;/maturity&gt;
+        &lt;callbacks&gt;
+            ...
+    </programlisting>
+    <itemizedlist>
+      <listitem><para>
+        <emphasis role="strong">Level -1: Incompatible.</emphasis> This package is not supported for this platform and should not be expected to work.
+      </para></listitem>
+      <listitem><para>
+        <emphasis role="strong">Level 0: New Submission.</emphasis> This is the default for packages that do not have maturity explicitly set, 
+        and for new contributions. The only criterion for level 0 is that at least one person asserts that it works on a given platform.
+      </para></listitem>
+      <listitem><para>
+        <emphasis role="strong">Level 1: Immature.</emphasis> Has no open priority 1 or priority 2 bugs. Has been installed by at least
+        10? different people, including 1 core developer. Has been available in a stable release for at least 1 month. Has API documentation.
+      </para></listitem>
+      <listitem><para>
+        <emphasis role="strong">Level 2: Mature.</emphasis> Same as Level 1, plus has install guide and user documentation; 
+        no serious deviations from general coding practices; no namespace conflicts with existing level 2 packages.
+      </para></listitem>
+      <listitem><para>
+        <emphasis role="strong">Level 3: Mature and Standard.</emphasis> Same as level 2, plus meets published coding standards; 
+        is fully internationalized; available on both supported databases.
+      </para></listitem>
+    </itemizedlist>
+</sect2>
+
 
   <sect2 id="naming-upgrade-scripts">
     <title>Naming Database Upgrade Scripts</title>

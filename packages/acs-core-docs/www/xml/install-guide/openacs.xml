@@ -61,6 +61,14 @@
       <screen>
 [root root]# <userinput>usermod -g web <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
       </screen>
+    <para>FreeBSD creates the user this way:</para>
+<screen>
+[root root]# <userinput>mkdir -p /home/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[root root]# <userinput>pw useradd -n <replaceable>$OPENACS_SERVICE_NAME</replaceable> -g web -d /home/<replaceable>$OPENACS_SERVICE_NAME</replaceable> -s /bin/bash</userinput>
+[root root]#
+<action>mkdir -p /home/<replaceable>$OPENACS_SERVICE_NAME</replaceable>
+pw useradd -n <replaceable>$OPENACS_SERVICE_NAME</replaceable> -g web -d /home/<replaceable>$OPENACS_SERVICE_NAME</replaceable> -s /bin/bash
+</action></screen>
 
   </sect2>
 
@@ -92,7 +100,7 @@ chmod 770 /var/lib/aolserver</action></screen>
         overwritten when we do the main CVS checkout to the target
         location.</para>
         <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot co -d install openacs-4/etc/install</userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot co -d install openacs-4/etc/install</userinput>
 cvs server: Updating install
 U install/README
 U install/TODO
@@ -130,7 +138,9 @@ admin password: xxxx
       <computeroutput>/var/tmp</computeroutput> and proceed:</para>
     <orderedlist>
       <listitem id="install-openacs-download">
-        <para>Unpack the OpenACS tarball and rename it to <computeroutput>$OPENACS_SERVICE_NAME</computeroutput>.  Secure the directory so that only the owner can access it.  Check the permissions by listing the directory.</para>       
+        <para>Unpack the OpenACS tarball and rename it to <computeroutput>$OPENACS_SERVICE_NAME</computeroutput>.  Secure the directory so that only the owner can access it.  Check the permissions by listing the directory.</para> 
+        <para>FreeBSD note: Change the period in <userinput>chown -R $OPENACS_SERVICE_NAME.$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME</userinput> to a colon: <userinput>chown -R $OPENACS_SERVICE_NAME:$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME</userinput>
+        </para>
         <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd /var/lib/aolserver</userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>tar xzf /var/tmp/&tarballpath;.tgz</userinput>
@@ -150,7 +160,7 @@ cd /var/lib/aolserver
 tar xzf /var/tmp/&tarballpath;.tgz
 mv &tarballpath; $OPENACS_SERVICE_NAME
 chmod -R 755 $OPENACS_SERVICE_NAME
-chgrp -R $OPENACS_SERVICE_NAME.$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME
+chown -R $OPENACS_SERVICE_NAME.$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME
 exit</action></screen>
       </listitem>
       <listitem>
@@ -624,7 +634,7 @@ Loading package .info files ... this will take a few minutes</programlisting>
     <title>Next Steps</title>
     <itemizedlist>
       <listitem>
-        <para>Use daemontools <computeroutput>supervice</computeroutput> and <computeroutput>svc</computeroutput>, or <computeroutput>inittab</computeroutput>, to <link linkend="install-openacs-inittab">automate server startup and shutdown.</link></para>
+        <para>Use daemontools <computeroutput>supervise</computeroutput> and <computeroutput>svc</computeroutput>, or <computeroutput>inittab</computeroutput>, to <link linkend="install-openacs-inittab">automate server startup and shutdown.</link></para>
       </listitem>
       <listitem>
         <para>Install Full Text Search (OPTIONAL).  If you have <link

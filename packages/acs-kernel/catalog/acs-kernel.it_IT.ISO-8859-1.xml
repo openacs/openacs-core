@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.1.0" locale="it_IT" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.1.2d4" locale="it_IT" charset="ISO-8859-1">
 
-  <msg key="authentication_authority">Modalit&amp;agrave; di autentificazione</msg>
+  <msg key="authentication_authority">Modalità di autenticazione</msg>
   <msg key="common_add">Aggiungi</msg>
   <msg key="common_apply">Applica</msg>
   <msg key="common_cancel">Cancella</msg>
@@ -29,7 +29,7 @@
   <msg key="common_stop">Stop</msg>
   <msg key="common_update">Aggiorna</msg>
   <msg key="common_view">Vedi</msg>
-  <msg key="common_yes">S&amp;igrave;</msg>
+  <msg key="common_yes">Sì</msg>
   <msg key="member_role_pretty_name">Membro</msg>
   <msg key="member_role_pretty_plural">Membri</msg>
   <msg key="member_state_approved">Approvato</msg>

@@ -142,6 +142,44 @@ declare
   v_context_id                acs_objects.context_id%TYPE;
 begin
 
+        perform content_folder__new (
+                new__name,
+                new__label,
+                new__description,
+                new__parent_id,
+                new__context_id,
+                new__folder_id,
+                new__creation_date,
+                new__creation_user,
+                new__creation_ip,
+                new__security_inherit_p,
+                null
+        );
+
+  return null; 
+end;' language 'plpgsql';
+
+select define_function_args('content_folder__new','name,label,description,parent_id,context_id,folder_id,creation_date;now,creation_user,creation_ip,security_inherit_p;t,package_id');
+
+create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar, boolean,integer)
+returns integer as '
+declare
+  new__name                   alias for $1;  
+  new__label                  alias for $2;  
+  new__description            alias for $3;  -- default null
+  new__parent_id              alias for $4;  -- default null
+  new__context_id             alias for $5;  -- default null
+  new__folder_id              alias for $6;  -- default null
+  new__creation_date          alias for $7;  -- default now()
+  new__creation_user          alias for $8;  -- default null
+  new__creation_ip            alias for $9;  -- default null
+  new__security_inherit_p     alias for $10;  -- default true
+  new__package_id             alias for $11; -- default null
+  v_package_id                acs_objects.object_id%TYPE;
+  v_folder_id                 cr_folders.folder_id%TYPE;
+  v_context_id                acs_objects.context_id%TYPE;
+begin
+
   -- set the context_id
   if new__context_id is null then
     v_context_id := new__parent_id;
@@ -643,7 +681,7 @@ begin
 
   return v_sub_folder_p;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql'; 
 
 
 -- function is_empty

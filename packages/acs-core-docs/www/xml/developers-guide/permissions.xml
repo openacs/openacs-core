@@ -385,7 +385,7 @@ checkout the module <computeroutput>notes</computeroutput>:
   <para>The notes code has been modified since this document was written so it is now out of date.  See <ulink url="http://openacs.org/forums/message-view?message_id=121807">this forum thread</ulink>.</para>
 
 
-<programlisting>% export CVSROOT=:pserver:anonymous@openacs.org:/cvsroot
+<programlisting>% export CVSROOT=:pserver:anonymous@cvs.openacs.org:/cvsroot
 % cvs login # just hit enter when prompted for a password
 % cvs co notes
 </programlisting>

@@ -7,10 +7,11 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.1.1" url="http://openacs.org/repository/download/apm/acs-lang-5.1.1.apm">
+    <version name="5.1.4" url="http://openacs.org/repository/download/apm/acs-lang-5.1.4.apm">
         <owner url="mailto:peter@collaboraid.biz">Peter Marklund</owner>
         <summary>OpenACS Internationalization Support.</summary>
-        <release-date>2004-04-29</release-date>
+        <release-date>2005-01-09</release-date>
+        <maturity>3</maturity>
         <vendor url="http://www.collaboraid.biz">Collaboraid</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
 	<maturity>3</maturity>
@@ -18,7 +19,7 @@
 request processor hooks, templating, accessing and managing the message catalog, and
 locale-specific formatting functions for localizing dates, times, monetary amounts etc.</description>
 
-        <provides url="acs-lang" version="5.1.1"/>
+        <provides url="acs-lang" version="5.1.4"/>
         <requires url="acs-kernel" version="5.0.0"/>
         <requires url="ref-timezones" version="4.0"/>
 

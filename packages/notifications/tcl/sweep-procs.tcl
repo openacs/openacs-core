@@ -125,11 +125,11 @@ namespace eval notification::sweep {
                 set notif_html [ns_set get $notif notif_html]
 
                 if {[empty_string_p $notif_text]} {
-                    set notif_text [ad_html_text_convert -from html -to text $notif_html]
+                    set notif_text [ad_html_text_convert -from html -to text -- $notif_html]
                 }
 
                 if {[empty_string_p $notif_html]} {
-                    set notif_html [ad_html_text_convert -from text -to html $notif_text]
+                    set notif_html [ad_html_text_convert -from text -to html -- $notif_text]
                 } else {
                     set html_content_p 1
                 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="notifications" package_version="5.0.0b4" locale="zh_CN" charset="utf-8">
+<message_catalog package_key="notifications" package_version="5.1.3" locale="zh_CN" charset="utf-8">
 
   <msg key="Action">操作</msg>
   <msg key="Change">更改</msg>
