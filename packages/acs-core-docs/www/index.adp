@@ -28,13 +28,12 @@
 
 <tr><td valign="top">
 <pre><strong>For Everyone</strong>
-        - <a href="release-notes.html">OpenACS 4.5 beta Release Notes</a>
-        - <a href="http://developer.arsdigita.com/doc/release-notes/">Older Release Notes</a>
+        - <a href="release-notes.html">OpenACS 4.5 Release Notes</a>
+        - Older Release Notes
 
 <a href="acs-admin.html"><strong>For OpenACS-admins</strong></a>
 	- <a href="unix-install.html">Unix Installation Guide</a>
         - <a href="win-install.html">Windows Installation Guide</a>
-        - <a href="http://www.arsdigita.com/acs-repository/">ACS Repository</a>
 
 <a href="acs-dev.html"><strong>For Developers</strong></a>
 	- <a href="kernel-doc.html">Kernel Documentation</a>
@@ -45,9 +44,9 @@
 
 <strong>Primers and References</strong>
         - <a href="http://aolserver.com/docs/">AOLserver Documentation</a> 
-	  (the <a href="http://aolserver.com/docs/devel/tcl/tcl-api.adp">Tcl Developer's Guide</a> in particular.)
-        - <a href="http://www.arsdigita.com/books/tcl/">Tcl for Web Nerds</a>
-        - <a href="http://www.arsdigita.com/books/sql/">SQL for Web Nerds</a>
+	  (the <a href="http://aolserver.com/docs/devel/tcl/api/">Tcl Developer's Guide</a> in particular.)
+        - <a href="http://philip.greenspun.com/tcl/">Tcl for Web Nerds</a>
+        - <a href="http://philip.greenspun.com/sql/">SQL for Web Nerds</a>
 </pre></td>
 
 <td valign="top">
@@ -90,13 +89,13 @@ if {!$found_p} {
 <br><br>
 <span class="force">This software is mostly Copyright 1995-2000 ArsDigita Corporation<br>
 and licensed under the
-<a href="license.text">GNU General Public License, version 2 (June 1991)</a></span>
+<a href="http://www.gnu.org/licenses/gpl.txt">GNU General Public License, version 2 (June 1991)</a></span>
 <p class="force">
 Questions or comments about the documentation? 
 <br>
 Please visit the
 <a href="http://openacs.org/bboard/">OpenACS bboards</a>
-or shoot email at <a href="mailto:vinod@kurup.com">vinod@kurup.com</a> or <a href="mailto:rmello@cc.usu.edu">rmello at fslc.usu.edu</a>.
+or shoot email at <a href="mailto:vinod@kurup.com">vinod@kurup.com</a> or rmello at fslc.usu.edu.
 </p>
 </blockquote>
 </body>
