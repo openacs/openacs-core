@@ -120,6 +120,12 @@ Package Version
               <entry>A</entry>
               <entry>Notification subscriptions are available for "email me whenever this test fails" and "notify me whenever a test in this category fails"</entry>
             </row>
+            <row>
+              <entry>7</entry>
+              <entry></entry>
+              <entry>A</entry>
+              <entry>The results of an automated test are optionally written to an xml file.</entry>
+          </row>
           </tbody>
         </tgroup>
       </informaltable>
