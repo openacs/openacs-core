@@ -1317,7 +1317,9 @@ ad_proc string_truncate {
 
 
 ad_proc -deprecated util_striphtml {html} {
-    Use <a href="/api-doc/proc-view?proc=ad_html_to_text"><code>ad_html_to_text</code></a> instead.
+    Deprecated. Use ad_html_to_text instead.
+
+    @see ad_html_to_text
 } {
     return [ad_html_to_text -- $html]
 }
@@ -1338,6 +1340,7 @@ ad_proc -deprecated util_convert_plaintext_to_html { raw_string } {
     plaintext. We'd rather let the user change our
     opinion about the text, e.g. html_p = 't'.
 
+    @see ad_text_to_html
 } {
     if { [regexp -nocase {<p>} $raw_string] || [regexp -nocase {<br>} $raw_string] } {
 	# user was already trying to do this as HTML
@@ -1353,6 +1356,8 @@ ad_proc -deprecated util_maybe_convert_to_html {raw_string html_p} {
     href="/api-doc/proc-view?proc=ad_convert_to_html"><code>ad_convert_to_html</code></a>
     instead.
 
+    @see ad_convert_to_html
+
 }  {
     if { $html_p == "t" } {
 	return $raw_string
@@ -1364,6 +1369,8 @@ ad_proc -deprecated util_maybe_convert_to_html {raw_string html_p} {
 ad_proc -deprecated util_quotehtml { arg } {
     This proc does exactly the same as <a href="/api-doc/proc-view?proc=ad_quotehtml"><code>ad_quotehtml</code></a>. 
     Use that instead. This one will be deleted eventually.
+
+    @see ad_quotehtml
 } {
     return [ad_quotehtml $arg]
 }
@@ -1371,6 +1378,8 @@ ad_proc -deprecated util_quotehtml { arg } {
 ad_proc -deprecated util_quote_double_quotes {arg} {
     This proc does exactly the same as <a href="/api-doc/proc-view?proc=ad_quotehtml"><code>ad_quotehtml</code></a>. 
     Use that instead. This one will be deleted eventually.
+
+    @see ad_quotehtml
 } {
     return [ad_quotehtml $arg]
 }
@@ -1378,6 +1387,8 @@ ad_proc -deprecated util_quote_double_quotes {arg} {
 ad_proc -deprecated philg_quote_double_quotes {arg} {
     This proc does exactly the same as <a href="/api-doc/proc-view?proc=ad_quotehtml"><code>ad_quotehtml</code></a>. 
     Use that instead. This one will be deleted eventually.
+
+    @see ad_quotehtml
 } {
     return [ad_quotehtml $arg]
 }

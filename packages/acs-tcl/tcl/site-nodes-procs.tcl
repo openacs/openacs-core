@@ -271,6 +271,7 @@ ad_proc -deprecated site_node_create {
     name
 } {
     Create a new site node.  Returns the node_id
+
     @see site_node::new
 } {
     return [site_node::new \
@@ -401,6 +402,8 @@ ad_proc -deprecated site_node {url} {
     Returns an array in the form of a list. This array contains
     url, node_id, directory_p, pattern_p, and object_id for the
     given url. If no node is found then this will throw an error.
+    
+    @see site_node::get 
 } {
     return [site_node::get -url $url]
 }

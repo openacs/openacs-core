@@ -531,10 +531,14 @@ ad_proc -private -deprecated template::get_enclosing_tag { tag } {
     as the "group" tag within a "multiple" tag.
    
     Deprecated, use:
-      set tag [template::enclosing_tag <tag-type>]
-      set attribute [template::tag_attribute tag <attribute>]
-
+    <pre>
+  set tag [template::enclosing_tag &lt;tag-type&gt;]
+  set attribute [template::tag_attribute tag &lt;attribute&gt;]
+    </pre>
     @param tag  The name of the enclosing tag to look for.
+
+  @see template::enclosing_tag
+  @see template::tag_attribute
 } {
   set name ""
 

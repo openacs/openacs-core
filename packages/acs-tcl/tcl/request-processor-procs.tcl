@@ -991,6 +991,7 @@ ad_proc -public -deprecated ad_acs_admin_id {} {
     You probably want ad_acs_kernel_id, that is what has all the
     useful parameters.
 
+    @see ad_acs_kernel_id
 } {
     return [db_string acs_admin_id_get {
         select package_id from apm_packages
