@@ -1,20 +1,15 @@
-<%= [ad_header "All PL/SQL Subprograms"] %>
-
-<h2>All PL/SQL Subprograms</h2>
-
-<%= [ad_context_bar {"" "API Browser"} "All PL/SQL Subprograms"] %>
-
-<hr>
+<master>
+<property name=title>All PL/SQL Subprograms</property>
+<property name=context_bar>@context_bar@</property>
 
 <multiple name="all_subprograms">
-<h3>@all_subprograms.type@</h3>
+<h2>@all_subprograms.type@</h2>
 
 <ul>
 <group column="type">
-<li><a href="plsql-subprogram-one?type=<%= [ns_urlencode @all_subprograms.type@] %>&name=<%= [ns_urlencode @all_subprograms.name@] %>"><code><%= [string tolower @all_subprograms.name@] %></code></a>
+<li><a href="plsql-subprogram-one?type=<%= [ns_urlencode @all_subprograms.type@] %>&name=<%= [ns_urlencode @all_subprograms.name@] %>"><code><%= [string tolower @all_subprograms.name@] %></code></a></li>
 </group>
 </ul>
 
 </multiple>
 
-<%= [ad_footer] %>
