@@ -2,7 +2,6 @@
 <message_catalog package_key="search" package_version="5.1.3" locale="en_US" charset="ISO-8859-1">
 
   <msg key="Advanced_Search">Advanced Search</msg>
-  <msg key="advanced_search">&quot;advanced search&quot;</msg>
   <msg key="and_not_needed">The &quot;&lt;b&gt;AND&lt;/b&gt;&quot; operator is unnecessary -- we include all search terms by default.</msg>
   <msg key="anytime">anytime</msg>
   <msg key="Date_Range">Date Range</msg>
@@ -20,7 +19,6 @@
   <msg key="Display">Display</msg>
   <msg key="Next">Next</msg>
   <msg key="no_driver_contact_webmaster">Search is not currently configured.  Please contact the webmaster to enable it.</msg>
-  <msg key="of_about">of about</msg>
   <msg key="past_3_months">past 3 months</msg>
   <msg key="past_6_months">past 6 months</msg>
   <msg key="past_year">past year</msg>
@@ -30,8 +28,6 @@
   <msg key="results">results</msg>
   <msg key="Search">Search</msg>
   <msg key="Searched_for_query">Searched for: &lt;b&gt;%query%&lt;/b&gt;</msg>
-  <msg key="seconds">seconds.</msg>
-  <msg key="selected">selected</msg>
   <msg key="Suggestions">Suggestions:</msg>
   <msg key="Tip_In_most_browsers_return">Tip: In most browsers you can just hit the return key instead of clicking on the search button.</msg>
   <msg key="Try_fewer_keywords">Try fewer keywords.</msg>
