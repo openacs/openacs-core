@@ -35,6 +35,8 @@ proc_doc ad_restrict_to_https {conn args why} {
     set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsssl" Port 443]
     } elseif { [ns_config ns/server/[ns_info server]/modules nsopenssl] != "" } {
 	set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsopenssl" ServerPort 443]
+    } elseif { [ns_config ns/server/[ns_info server]/modules nsssle] != "" } {
+    set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsssle" Port 443]
     }
     
     set host [ns_set iget [ad_conn headers] "host"]
