@@ -2736,6 +2736,80 @@ ad_proc -public util_wrap_list {
     return $out
 }
 
+ad_proc -public util_text_to_url { 
+    {-existing_urls {}}
+    {-resolve_conflicts_p:boolean 1}
+    {-replacement "-"}
+    text
+} {
+    Modify a string so that it is suited as a well formatted URL path element.
+    for example given "Foo Bar" and it will return "foo-bar".  Also, 
+    if given a list of existing urls it can catch duplicate or optionally 
+    create an unambiguous url by appending -N.
+
+    @param text the text to modify, e.g. "Foo Bar"
+
+    @param existing_urls a list of URLs that already exist on the same level and would cause a conflict
+
+    @param resolve_conflicts_p automatically generate "foo-bar-2" if "foo-bar" is already in existing_urls. If set to false it throws an error in case of a conflict.
+
+    @param replacement the character that is used to replace illegal characters
+
+    @author Tillman Singer
+} {
+    set original_text $text
+    set text [string trim [string tolower $original_text]]
+
+    # Save some german and french characters from removal by replacing
+    # them with their ascii counterparts.
+    set text [string map { \x00e4 ae \x00f6 oe \x00fc ue \x00df ss \x00f8 o \x00e0 a \x00e1 a \x00e8 e \x00e9 e } $text]
+
+    # substitute all non-word characters
+    regsub -all {([^a-z0-9])+} $text $replacement text
+
+    set text [string trim $text $replacement]
+
+    # throw an error when the resulting string is empty
+    if { [empty_string_p $text] } {
+        error "Cannot compute a URL of this string: \"$original_text\" because after removing all illegal characters it's an empty string."
+    }
+
+    # check if the resulting url is already present
+    if { [lsearch -exact $existing_urls $text] > -1 } {
+        
+        if { !$resolve_conflicts_p } {
+            # URL is already present in the existing_urls list and we
+            # are asked to not automatically resolve the collision
+            error "The url $text is already present"
+        } else {
+            # URL is already present in the existing_urls list -
+            # compute an unoccupied replacement using a pattern like
+            # this: if foo is taken, try foo-2, then foo-3 etc.
+
+            # Holes will not be re-occupied. E.g. if there's foo-2 and
+            # foo-4, a foo-5 will be created instead of foo-3. This
+            # way confusion through replacement of deleted content
+            # with new stuff is avoided.
+            
+            set number 2
+
+            foreach url $existing_urls {
+
+                if { [regexp "${text}${replacement}(\\d+)\$" $url match n] } {
+                    # matches the foo-123 pattern
+                    if { $n >= $number } { set number [expr $n + 1] }
+                }
+            }
+            
+            set text "$text$replacement$number"
+        }
+    }
+
+    return $text
+
+}
+
+
 
 ad_proc util_unlist { list args } {
 
