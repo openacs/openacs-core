@@ -918,8 +918,8 @@ ad_proc -private ad_html_to_text_put_text { output_var text } {
 	}
     } else {
 	# we're in a PRE: clean line breaks and tabs
-	regsub -all {\r\n} $text {\n} text
-	regsub -all {\r} $text {\n} text
+	regsub -all {\r\n} $text "\n" text
+	regsub -all {\r} $text "\n" text
 	# tabs become four spaces
 	regsub -all {[\v\t]} $text {    } text
     }
@@ -1009,7 +1009,7 @@ ad_proc util_expand_entities { html } {
 } {
     regsub -all {&lt;} $html {<} html
     regsub -all {&gt;} $html {>} html
-    regsub -all {&quot;} $html {"} html
+    regsub -all {&quot;} $html "\"" html
     regsub -all {&mdash;} $html {--} html
     regsub -all {&#151;} $html {--} html
     # Need to do the &amp; last, because otherwise it could interfere with the other expansions,
