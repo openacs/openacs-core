@@ -694,7 +694,7 @@ ad_proc -public lang::catalog::import_from_files {
     set catalog_file_list [list]
     foreach locale_list $all_locales_list {        
         set locale [lindex $locale_list 0]
-        set charset [lindex $locale_list 1]
+        set mime_charset [lindex $locale_list 1]
 
         # If we are only processing certain locales and this is not one of them - continue
         if { ![empty_string_p $restrict_to_locale] && ![string equal $restrict_to_locale $locale]} {
@@ -706,7 +706,7 @@ ad_proc -public lang::catalog::import_from_files {
             continue
         }
 
-        set charset [default_charset_if_unsupported $charset]
+        set charset [default_charset_if_unsupported $mime_charset]
         
         set file_path [get_catalog_file_path \
                 -package_key $package_key \
