@@ -17,7 +17,7 @@
 <querytext>
 	declare begin
 	acs_permission.revoke_permission(object_id => :object_id,
-					user_id => :user_id,
+					grantee_id => :user_id,
 					privilege => :privilege);
 	end;
 </querytext>
