@@ -87,19 +87,19 @@ insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p) 
   values ('en_GB', 'English (GB)', 'en', 'GB', 'ENGLISH', 
-          'GREAT BRITAIN', 'WE8ISO8859P1', 'ISO-8859-1', 'f', 't');
+          'GREAT BRITAIN', 'WE8ISO8859P1', 'ISO-8859-1', 'f', 'f');
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
  values ('de_DE', 'German (DE)', 'de', 'DE', 'GERMAN', 
-         'GERMANY', 'WE8ISO8859P1', 'ISO-8859-1', 't', 't');
+         'GERMANY', 'WE8ISO8859P1', 'ISO-8859-1', 't', 'f');
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p) 
 values ('es_ES', 'Spanish (ES)', 'es', 'ES', 'SPANISH', 
-       'SPAIN', 'WE8DEC', 'ISO-8859-1', 't', 't');
+       'SPAIN', 'WE8DEC', 'ISO-8859-1', 't', 'f');
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
@@ -117,7 +117,7 @@ insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
  values ('fr_FR', 'French (FR)', 'fr', 'FR', 'FRENCH', 
-        'FRANCE', 'WE8ISO8859P1', 'ISO-8859-1', 't', 't');
+        'FRANCE', 'WE8ISO8859P1', 'ISO-8859-1', 't', 'f');
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
@@ -128,22 +128,22 @@ insert into ad_locales
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
- values ('da_DK', 'Danish (DK)', 'da', 'DK', 'DANISH', 'DENMARK', 'WE8ISO8859P1', 'ISO-8859-1', 't', 't');
+ values ('da_DK', 'Danish (DK)', 'da', 'DK', 'DANISH', 'DENMARK', 'WE8ISO8859P1', 'ISO-8859-1', 't', 'f');
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
- values ('sv_SE', 'Swedish (SE)', 'sv', 'SE', 'SWEDISH', 'SWEDEN', 'WE8ISO8859P1', 'ISO-8859-1', 't', 't');
+ values ('sv_SE', 'Swedish (SE)', 'sv', 'SE', 'SWEDISH', 'SWEDEN', 'WE8ISO8859P1', 'ISO-8859-1', 't', 'f');
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
- values ('fi_FI', 'Finnish (FI)', 'fi', 'FI', 'FINNISH', 'FINLAND', 'WE8ISO8859P15', 'ISO-8859-15', 't', 't');
+ values ('fi_FI', 'Finnish (FI)', 'fi', 'FI', 'FINNISH', 'FINLAND', 'WE8ISO8859P15', 'ISO-8859-15', 't', 'f');
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
- values ('nl_NL', 'Dutch (NL)', 'nl', 'NL', 'DUTCH', 'THE NETHERLANDS', 'WE8ISO8859P1', 'ISO-8859-1', 't', 't');
+ values ('nl_NL', 'Dutch (NL)', 'nl', 'NL', 'DUTCH', 'THE NETHERLANDS', 'WE8ISO8859P1', 'ISO-8859-1', 't', 'f');
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
@@ -153,12 +153,12 @@ insert into ad_locales
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
- values ('pl_PL', 'Polish (PL)', 'pl', 'PL', 'POLISH', 'POLAND', 'EE8ISO8859P2', 'ISO-8859-2', 't', 't');
+ values ('pl_PL', 'Polish (PL)', 'pl', 'PL', 'POLISH', 'POLAND', 'EE8ISO8859P2', 'ISO-8859-2', 't', 'f');
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
- values ('no_NO', 'Norwegian  (NO)', 'no', 'NO', 'NORWEGIAN', 'NORWAY', 'WE8ISO8859P1', 'ISO-8859-1', 't', 't');
+ values ('no_NO', 'Norwegian  (NO)', 'no', 'NO', 'NORWEGIAN', 'NORWAY', 'WE8ISO8859P1', 'ISO-8859-1', 't', 'f');
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
