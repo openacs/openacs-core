@@ -1340,7 +1340,7 @@ begin
   
 end;' language 'plpgsql';
 
-create function acs_object__update_last_modified (integer, integer, integer)
+create function acs_object__update_last_modified (integer, integer, varchar)
 returns integer as '
 declare
     acs_object__update_last_modified__object_id          alias for $1;
@@ -1350,7 +1350,7 @@ begin
     return acs_object__update_last_modified(acs_object__update_last_modified__object_id, acs_object__update_last_modified__modifying_user, acs_object__update_last_modified__modifying_ip, now());
 end;' language 'plpgsql';
 
-create function acs_object__update_last_modified (integer, integer, integer, timestamptz)
+create function acs_object__update_last_modified (integer, integer, varchar, timestamptz)
 returns integer as '
 declare
     acs_object__update_last_modified__object_id          alias for $1; 
