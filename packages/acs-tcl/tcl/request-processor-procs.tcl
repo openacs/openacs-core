@@ -540,6 +540,7 @@ ad_proc -private rp_filter { why } {
 	ad_conn -set package_id $node(object_id)
 	ad_conn -set package_key $node(package_key)
 	ad_conn -set package_url $node(url)
+	ad_conn -set instance_name $node(instance_name)
 	ad_conn -set extra_url [string range [ad_conn url] [string length $node(url)] end]
     }
 
@@ -1051,6 +1052,7 @@ ad_proc -public ad_conn {args} {
 	object_type ""
 	package_id ""
 	package_url ""
+        instance_name ""
 	package_key ""
 	extra_url ""
 	file ""
