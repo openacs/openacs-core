@@ -242,8 +242,7 @@ ad_proc -public lang::user::site_wide_locale_not_cached {
     Get the user's preferred site wide locale.
 } {
     if { [ad_conn untrusted_user_id] == 0 } {
-        # TODO: Make this a cookie
-        return [ad_get_client_property -cache t "acs-lang" "user_locale"]
+	return [ad_get_cookie "ad_locale"]
     } else {
         set user_id [ad_conn untrusted_user_id]
         return [db_string get_user_site_wide_locale {} -default ""]
@@ -288,8 +287,8 @@ ad_proc -public lang::user::set_locale {
     set user_id [ad_conn user_id]
 
     if { $user_id == 0 } {
-        # Not logged in, use a session-based client property
-        ad_set_client_property -persistent t "acs-lang" "user_locale" $locale
+        # Not logged in, use a cookie-based client locale
+	ad_set_cookie -expire never "ad_locale" $locale
         return
     }
 
