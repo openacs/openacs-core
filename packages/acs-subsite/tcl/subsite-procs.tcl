@@ -734,3 +734,157 @@ ad_proc -private subsite::assert_user_may_add_member {} {
         }
     }
 }
+
+ad_proc -public subsite::get_url {
+    {-node_id ""}
+    {-absolute_p 0}
+    {-force_host ""}
+    {-strict_p 0}
+    {-protocol ""}
+    {-port ""}
+} {
+    Returns the url stub for the specified subsite.
+
+    If -absolute is supplied then this function will generate absolute urls.  
+
+    If the site is currently being accessed via a host node mapping or 
+    -force_host_node_map is also supplied then URLs will ommit the 
+    corresponding subsite url stub.  The host name will be used
+    for any appropriate subsite when absolute urls are generated.  
+
+    @param node_id the subsite's node_id (defaults to nearest subsite node).
+    @param absolute_p whether to include the host in the returned url.
+    @param force_host_node_map_p whether to produce host node mapped urls 
+        regardless of the current connection state
+} {
+    if {[ad_conn isconnected]} {
+        if {[string equal $node_id ""]} {
+            set node_id [ad_conn subsite_node_id]
+        }
+
+        array set subsite_node [site_node::get -node_id $node_id]
+
+        set main_host [ns_config \
+            "ns/server/[ns_info server]/module/nssock" \
+            Hostname]
+
+        util_driver_info -array request
+
+        set headers [ns_conn headers]
+        set host_addr [split [ns_set iget $headers host] :]
+        set request(vhost) [lindex $host_addr 0]
+
+        if {![string equal [lindex $host_addr 1] ""]} {
+            set request(port) [lindex $host_addr 1]
+        }
+
+        set request_vhost_p [expr {![string equal $main_host $request(vhost)]}]
+    } else {
+        if {[string equal $node_id ""]} {
+            error "You must supply node_id when not connected."
+        } else {
+            array set subsite_node [site_node::get -node_id $node_id]
+        }
+
+        set request_vhost_p 0
+    }
+
+    set default_port(http) 80
+    set default_port(https) 443
+
+    set force_host_p [expr {![string equal $force_host ""]}]
+
+    set force_protocol_p [expr {![string equal $protocol ""]}]
+    if {!$force_protocol_p} {
+        set protocol http
+    } 
+
+    set force_port_p [expr {![string equal $port ""]}]
+    if {!$force_port_p} {
+        set port 80
+    }
+
+    set result ""
+
+    if {$request_vhost_p || 
+        $force_host_p} {
+        set root_p [string equal $subsite_node(parent_id) ""]
+        set search_vhost $force_host
+        set mapped_vhost ""
+
+        set where_clause [db_map strict_search]
+
+        # Figure out which hostname to use
+        if {!$force_host_p} {
+            set search_vhost $request(vhost)
+        } elseif {[string equal $force_host "any"]} {
+            if {$request_vhost_p} {
+                set search_vhost $request(vhost)
+                set where_clause [db_map orderby]
+            } else {
+                set where_clause [db_map simple_search]
+            }
+        } 
+
+        # TODO: This should be cached
+        set site_node $subsite_node(node_id)
+        set mapped_vhost [db_string get_vhost {} -default ""]
+
+        if {$root_p && [string equal $mapped_vhost ""]} {
+            if {$strict_p} {
+                error "$search_vhost is not mapped to this subsite or any of its parents."
+            }
+
+            if {[string equal $search_vhost "any"]} {
+                set mapped_vhost $main_host
+            } else {
+                set mapped_vhost $search_vhost
+            }
+        }
+
+        if {[string equal $mapped_vhost ""]} {
+            set result "[subsite::get_url \
+                -node_id $subsite_node(parent_id) \
+                -absolute_p $absolute_p \
+                -strict_p $strict_p \
+                -force_host $force_host]$subsite_node(name)/"
+        } else {
+            if {[ad_conn isconnected] &&
+                [string equal $mapped_vhost $request(vhost)]} {
+                if {!$force_protocol_p} {
+                    set protocol $request(proto)
+                }
+
+                if {!$force_port_p} {
+                    set port $request(port)
+                }
+            }
+
+            if {$absolute_p} {
+                set result "${protocol}://${mapped_vhost}"
+
+                if {![string equal $port $default_port($protocol)]} {
+                    append result ":$port"
+                }
+
+                append result "/"
+            } else {
+                set result "/"
+            }
+        }
+    } else {
+        if {$absolute_p} {
+            set result "${protocol}://${main_host}"
+
+            if {![string equal $port $default_port($protocol)]} {
+                append result ":$port"
+            }
+
+            append result "/"
+        }
+
+        append result "$subsite_node(url)"
+    }
+
+    return $result
+}

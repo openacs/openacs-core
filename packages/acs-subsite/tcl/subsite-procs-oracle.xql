@@ -72,4 +72,17 @@
         </querytext>
     </fullquery>
  
+    <partialquery name="subsite::get_url.orderby">
+        <querytext>
+        and rownum < 2
+        order by decode(host, :search_vhost, 1, 0) desc
+        </querytext>
+    </partialquery>
+ 
+    <partialquery name="subsite::get_url.simple_search">
+        <querytext>
+        and rownum < 2
+        </querytext>
+    </partialquery>
+ 
 </queryset>
