@@ -92,7 +92,7 @@
       </querytext>
 </fullquery>
  
-<fullquery name="apm_package_install_spec.apm_package_version_disable">      
+<fullquery name="apm_version_disable.apm_package_version_disable">      
       <querytext>
       
 	begin

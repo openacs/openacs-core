@@ -39,8 +39,8 @@
 create table acs_privileges (
 	privilege	varchar(100) not null constraint acs_privileges_pk
 			primary key,
-	pretty_name	varchar(100) default '' not null,
-	pretty_plural	varchar(100) default '' not null
+	pretty_name	varchar(100),
+	pretty_plural	varchar(100)
 );
 
 create table acs_privilege_hierarchy (
@@ -317,8 +317,8 @@ begin
      (privilege, pretty_name, pretty_plural)
     values
      (create_privilege__privilege, 
-      coalesce(create_privilege__pretty_name,''''), 
-      coalesce(create_privilege__pretty_plural,''''));
+      create_privilege__pretty_name, 
+      create_privilege__pretty_plural);
       
     return 0; 
 end;' language 'plpgsql';

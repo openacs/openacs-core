@@ -3,7 +3,7 @@
 
 <fullquery name="apm_version_uri_unique_ck">      
       <querytext>
-	    select case when count(*) > 0 then 0 else 1 end from apm_package_versions 
+	    select case when count(*) = 0 then 0 else 1 end from apm_package_versions 
 	    where version_uri = :version_uri
 	
       </querytext>

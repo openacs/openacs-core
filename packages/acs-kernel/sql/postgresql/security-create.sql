@@ -20,7 +20,7 @@ create table sec_session_properties (
     property_name  varchar(50) 
                    constraint sec_session_prop_prop_name_nn
                    not null,
-    property_value text default '' not null,
+    property_value text,
     -- transmitted only across secure connections?
     secure_p       boolean,
     last_hit	   integer

@@ -29,8 +29,8 @@ create table membership_rels (
                         constraint membership_rel_rel_id_pk
                         primary key,
         -- null means waiting for admin approval
-        member_state    varchar(20) default '' not null constraint membership_rel_mem_ck
-                        check (member_state in ('', 'approved', 'needs approval',
+        member_state    varchar(20) constraint membership_rel_mem_ck
+                        check (member_state in ('approved', 'needs approval',
                                               'banned', 'rejected', 'deleted'))
 );
 

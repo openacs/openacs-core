@@ -47,9 +47,9 @@ create table journal_entries (
   object_id 		integer
 			constraint journal_entries_object_fk
 			references acs_objects on delete cascade,
-  action                varchar(100) default '' not null,
-  action_pretty         text default '' not null,
-  msg    		text default '' not null
+  action                varchar(100),
+  action_pretty         text,
+  msg    		text
 );
 
 create index journal_entries_object_idx on journal_entries (object_id);
@@ -113,8 +113,8 @@ begin
         insert into journal_entries (
             journal_id, object_id, action, action_pretty, msg
         ) values (
-            v_journal_id, new__object_id, coalesce(new__action,''''), 
-            coalesce(new__action_pretty,''''), coalesce(new__msg,'''')
+            v_journal_id, new__object_id, new__action, 
+            new__action_pretty, new__msg
         );
 
         return v_journal_id;

@@ -27,10 +27,10 @@ create table apm_package_types (
     package_uri			varchar(1500)
 				constraint apm_packages_types_p_uri_nn not null
 				constraint apm_packages_types_p_uri_un unique,
-    package_type		varchar(300) default '' not null
+    package_type		varchar(300)
 				constraint apm_packages_pack_type_ck 
-				check (package_type in ('', 'apm_application', 'apm_service')),
-    spec_file_path		varchar(1500) default '' not null,
+				check (package_type in ('apm_application', 'apm_service')),
+    spec_file_path		varchar(1500),
     spec_file_mtime		integer,
     singleton_p			boolean default 'f' not null
 );
@@ -240,14 +240,14 @@ create table apm_package_versions (
     version_uri        varchar(1500)
                        constraint apm_package_vers_ver_uri_nn not null
                        constraint apm_package_vers_ver_uri_un unique,
-    summary 	       varchar(3000) default '' not null,
-    description_format varchar(100) default '' not null
+    summary 	       varchar(3000),
+    description_format varchar(100)
 		       constraint apm_package_vers_desc_for_ck
-		         check (description_format in ('', 'text/html', 'text/plain')),
-    description        text default '' not null,
+		         check (description_format in ('text/html', 'text/plain')),
+    description        text,
     release_date       timestamp,
-    vendor             varchar(500) default '' not null,
-    vendor_uri         varchar(1500) default '' not null,
+    vendor             varchar(500),
+    vendor_uri         varchar(1500),
     enabled_p          boolean default 'f'
                        constraint apm_package_vers_enabled_p_nn not null,
     installed_p        boolean default 'f'
@@ -258,12 +258,12 @@ create table apm_package_versions (
                        constraint apm_package_vers_imp_p_nn not null,
     data_model_loaded_p boolean default 'f'
                        constraint apm_package_vers_dml_p_nn not null,
-    cvs_import_results text default '' not null,
+    cvs_import_results text,
     activation_date    timestamp,
     deactivation_date  timestamp,
     -- FIXME: use this as the blob_id
     distribution_tarball integer,
-    distribution_uri   varchar(1500) default '' not null,
+    distribution_uri   varchar(1500),
     distribution_date  timestamp,
     constraint apm_package_vers_id_name_un unique(package_key, version_name)
 );
@@ -626,7 +626,7 @@ drop function inline_2 ();
 create table apm_package_owners (
     version_id         integer constraint apm_package_owners_ver_id_fk references apm_package_versions on delete cascade,
     -- if the uri is an email address, it should look like 'mailto:alex@arsdigita.com'
-    owner_uri          varchar(1500) default '' not null,
+    owner_uri          varchar(1500),
     owner_name         varchar(200)
                        constraint apm_package_owners_name_nn not null,
     sort_key           integer
@@ -772,12 +772,12 @@ create table apm_parameters (
 			        references apm_package_types (package_key),
 	parameter_name		varchar(100) 
 				constraint apm_pack_params_name_nn not null,
-        description		varchar(2000) default '' not null,
-	section_name		varchar(200) default '' not null,
+        description		varchar(2000),
+	section_name		varchar(200),
 	datatype	        varchar(100) not null
 			        constraint apm_parameter_datatype_ck 
 				check(datatype in ('number', 'string')),
-	default_value		text default '' not null,
+	default_value		text,
 	min_n_values		integer default 1 not null
 			        constraint apm_paramters_min_n_ck
 			        check (min_n_values >= 0),
@@ -839,7 +839,7 @@ create table apm_parameter_values (
 				references apm_packages (package_id) on delete cascade,
 	parameter_id		integer constraint apm_pack_values_parm_id_fk
 				references apm_parameters (parameter_id),
-	attr_value		text default '' not null,
+	attr_value		text,
 	constraint apm_parameter_values_un 
 	unique (package_id, parameter_id)
 );
@@ -1832,9 +1832,9 @@ begin
     default_value, section_name, min_n_values, max_n_values)
     values
     (v_parameter_id, register_parameter__parameter_name, 
-     coalesce(register_parameter__description,''''), register_parameter__package_key, 
-     register_parameter__datatype, coalesce(register_parameter__default_value,''''), 
-     coalesce(register_parameter__section_name,''''), register_parameter__min_n_values, 
+     register_parameter__description, register_parameter__package_key, 
+     register_parameter__datatype, register_parameter__default_value, 
+     register_parameter__section_name, register_parameter__min_n_values, 
      register_parameter__max_n_values);
 
     -- Propagate parameter to new instances.	
@@ -2298,9 +2298,9 @@ begin
       release_date, vendor, vendor_uri, installed_p, data_model_loaded_p)
       values
       (v_version_id, apm_pkg_ver__package_key, apm_pkg_ver__version_name, 
-       apm_pkg_ver__version_uri, coalesce(apm_pkg_ver__summary,''''), 
-       coalesce(apm_pkg_ver__description_format,''''), coalesce(apm_pkg_ver__description,''''),
-       apm_pkg_ver__release_date, coalesce(apm_pkg_ver__vendor,''''), coalesce(apm_pkg_ver__vendor_uri,''''),
+       apm_pkg_ver__version_uri, apm_pkg_ver__summary, 
+       apm_pkg_ver__description_format, apm_pkg_ver__description,
+       apm_pkg_ver__release_date, apm_pkg_ver__vendor, apm_pkg_ver__vendor_uri,
        apm_pkg_ver__installed_p, apm_pkg_ver__data_model_loaded_p);
 
       return v_version_id;		
@@ -2312,7 +2312,7 @@ end;' language 'plpgsql';
 create function apm_package_version__delete (integer)
 returns integer as '
 declare
-  delete_version_id             alias for $1;  
+  delete__version_id             alias for $1;  
 begin
       delete from apm_package_owners 
       where version_id = delete__version_id; 
@@ -2349,7 +2349,7 @@ end;' language 'plpgsql';
 create function apm_package_version__disable (integer)
 returns integer as '
 declare
-  disable_version_id             alias for $1;  
+  disable__version_id             alias for $1;  
 begin
       update apm_package_versions 
       set enabled_p = ''f''
@@ -2669,7 +2669,6 @@ begin
 	    -- what''s the next character? if a period, just skip it
 	    a_char := substr(version_name, a_end, 1);
 	    if a_char = ''.'' then
-		return null;
 	    else
 		-- if the next character was a letter, append the appropriate characters
 		if a_char = ''d'' then
@@ -2925,7 +2924,7 @@ begin
    insert into apm_parameter_values 
     (value_id, package_id, parameter_id, attr_value)
      values
-    (v_value_id, new__package_id, new__parameter_id, coalesce(new__attr_value,''''));
+    (v_value_id, new__package_id, new__parameter_id, new__attr_value);
 
    return v_value_id;
     
