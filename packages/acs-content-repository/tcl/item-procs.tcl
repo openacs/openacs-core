@@ -229,7 +229,7 @@ ad_proc -public item::get_extended_url { item_id args } {
       if { ![template::util::is_nil template_revision_id] } {
         get_mime_info $template_revision_id mime_info   
 
-        if { [info exists mime_info] } {
+        if { [info exists mime_info(file_extension)] } {
           set file_extension $mime_info(file_extension)
         }
       }
@@ -252,7 +252,11 @@ ad_proc -public item::get_extended_url { item_id args } {
     }
 
     get_mime_info $revision_id mime_info   
-    set file_extension $mime_info(file_extension)
+    if { [info exists mime_info(file_extension)] } {
+        set file_extension $mime_info(file_extension)
+    } else { 
+        set file_extension "html"
+    }
   }
 
   append file_url ".$file_extension"
