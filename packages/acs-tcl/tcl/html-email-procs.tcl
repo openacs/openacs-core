@@ -33,7 +33,10 @@ ad_proc build_mime_message {
     #source $r_dir/md5.tcl
     #source $r_dir/mime.tcl
 
-    package require mime
+    # Files are included, therefore there is no need for the mime
+    # package anymore.
+
+    # package require mime
 
     # convert text to charset
     set encoding [ns_encodingforcharset $charset]
