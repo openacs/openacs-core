@@ -28,23 +28,33 @@
 
 <tr><td valign="top">
 <pre><strong>Getting Started</strong>
-        - <a href="release-notes.html">OpenACS 4.6.3 Release Notes</a>
+        - <a href="release-notes.html">Release Notes</a>
 	- <a href="individual-programs.html">Required Software</a>
 	- <a href="unix-install.html">Unix Installation Guide</a>
         - <a href="win2k-installation.html">Windows Installation Guide</a>
 	- <a href="mac-installation.html">Mac OS X Installation Guide</a>
 	- <a href="upgrade.html">Upgrading</a>
+	- <a href="backup-recovery.html">Backup and Recovery</a>
+	- <a href="configure.html">Configuring your new OpenACS Service</a>
 	- <a href="tutorial.html">Developer Tutorial</a>
         - <a href="/api-doc/">API Browser</a> for this OpenACS instance
 
 <strong><a href="index.html">Full Table of Contents</a>
 
 <strong>Primers and References</strong>
-
-        - <a href="http://aolserver.com/docs/">AOLserver Documentation</a> 
+        - <a href="http://openacs.org/faq/">OpenACS FAQs</a>
+        - <a href="http://cvs.openacs.org/">OpenACS CVS Browser</a>
+        - <a href="http://openacs.org/education/">Learning OpenACS</a>
+        - <a href="http://aolserver.com/docs/">AOLserver Documentation</a>
 	  (the <a href="http://aolserver.com/docs/devel/tcl/api/">Tcl Developer's Guide</a> in particular.)
         - <a href="http://philip.greenspun.com/tcl/">Tcl for Web Nerds</a>
         - <a href="http://philip.greenspun.com/sql/">SQL for Web Nerds</a>
+
+<strong>Documentation Improvement Project</strong>
+        - <a href="http://openacs.org/projects/openacs/doc-project/">Help improve OpenACS documentation</a>
+
+<strong>Archive</strong>
+        - <a href="http://openacs.org/doc/oldversions">Documentation for Earlier Versions of OpenACS</a>
 </pre></td>
 
 <td valign="top">
