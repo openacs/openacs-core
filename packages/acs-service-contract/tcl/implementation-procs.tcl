@@ -120,7 +120,20 @@ ad_proc -public acs_sc::impl::get_id {
     return [db_string select_impl_id {}]
 }
 
+ad_proc -public acs_sc::impl::get {
+    {-impl_id:required}
+    {-array:required}
+} {
+    Get information about a service contract implementation.
+    
+    @param array Name of an array into which you want the info. 
+                 Available columns are: impl_name, impl_owner_name, impl_contract_name.
 
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    upvar 1 $array row
+    db_1row select_impl {} -column_array row
+}
 
 #####
 #
