@@ -25,6 +25,9 @@ apm_version_info $version_id
 
 doc_body_append [apm_header [list "version-view?version_id=$version_id" "$pretty_name $version_name"] "Delete"]
 
+# Invoke the Tcl callback before the sql drop scripts
+apm_invoke_callback_proc -version_id $version_id -type before-uninstall -arg_list [list version_id $version_id]
+
 if {![empty_string_p $sql_drop_scripts]} {
     
     doc_body_append "Now executing drop scripts.
