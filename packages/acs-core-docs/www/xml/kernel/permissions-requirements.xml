@@ -229,15 +229,10 @@ on its own.</para>
 clause, whatever mechanism is used to make checks in SQL should be fairly
 small and simple.</para>
 
-<para>In particular, constraining a <computeroutput>SELECT</computeroutput> to return only rows the
-current user has access to should not add more than one line to a query.</para>
-
-
 </sect2>
 
 <sect2 id="permissions-requirements-history">
 <title>Revision History</title>
-
 
  
 <informaltable>
@@ -278,6 +273,14 @@ freeze.</entry>
 <entry>10/03/2000</entry>
 <entry>Kai Wu</entry>
 </row>
+
+<row>
+<entry>0.5</entry>
+<entry>Edited for OpenACS 4.6.3 release.</entry>
+<entry>05/04/2003</entry>
+<entry>Don Baccus</entry>
+</row>
+
 </tbody></tgroup></informaltable>
 
 
