@@ -267,6 +267,9 @@ namespace eval lang::message {
         
         @return A localized piece of text.
     } { 
+        # Make sure the catalog files have been loaded
+        lang::catalog::import_from_all_files_and_cache
+
         if { [empty_string_p $locale] } {
             # No locale provided
 

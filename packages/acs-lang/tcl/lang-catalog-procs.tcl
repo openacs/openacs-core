@@ -359,17 +359,23 @@ namespace eval lang::catalog {
     ad_proc -public import_from_all_files_and_cache {} {
         Loops over all installed and enabled packages that don't already have messages in the database
         and imports messages from the catalog files of each such package. When this process is done
-        the message cache is reloaded.
+        the message cache is reloaded. The proc checks if it has been executed before and will
+        only execute once.
 
         @author Peter Marklund (peter@collaboraid.biz)
     } {
-        db_foreach all_enabled_not_loaded_packages {} {
-            if { [file isdirectory [file join [acs_package_root_dir $package_key] catalog]] } {
-                lang::catalog::import_from_files $package_key
-            }
-        }
+        # Only executed this proc once
+        if { ![nsv_exists lang_catalog_import_from_all_files_and_cache executed_p] } {            
+            nsv_set lang_catalog_import_from_all_files_and_cache executed_p 1
 
-        lang::message::cache
+            db_foreach all_enabled_not_loaded_packages {} {
+                if { [file isdirectory [file join [acs_package_root_dir $package_key] catalog]] } {
+                    lang::catalog::import_from_files $package_key
+                }
+            }
+
+            lang::message::cache
+        }
     }
     
     ad_proc -private translate {} {
