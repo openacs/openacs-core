@@ -4,8 +4,8 @@
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-<sect1 id="apm-design" xreflabel="OpenACS &version; Package Manager Design">
-<title>OpenACS &version; Package Manager Design</title>
+<sect1 id="apm-design" xreflabel="Package Manager Design">
+<title>Package Manager Design</title>
 
 
 <authorblurb>
@@ -1077,7 +1077,7 @@ Salz, Michael Yoon, and Lars Pind.</para></listitem>
 
 <row>
 <entry>1.0</entry>
-<entry>Edited for OpenACS &version; Beta release</entry>
+<entry>Edited for OpenACS 4.5 Beta release</entry>
 <entry>03/02/2002</entry>
 <entry>Roberto Mello</entry>
 </row>

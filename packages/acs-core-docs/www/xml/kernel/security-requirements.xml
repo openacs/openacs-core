@@ -5,7 +5,7 @@
 %myvars;
 ]>
 <sect1 id="security-requirements" xreflabel="OpenACS 4 Security Requirements">
-<title>OpenACS 4 Security Requirements</title>
+<title>Security Requirements</title>
 
 <authorblurb>
 <para>By Richard Li</para>

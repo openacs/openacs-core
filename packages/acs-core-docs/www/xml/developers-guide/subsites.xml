@@ -5,7 +5,7 @@
 %myvars;
 ]>
  <sect1 id="subsites" xreflabel="Writing OpenACS Application Pages">
-<title>Writing OpenACS &version; Application Pages</title>
+<title>Writing OpenACS Application Pages</title>
 
  
 <authorblurb>
@@ -21,10 +21,10 @@
 <para>
 In this document, we'll examine the user interface pages of the Notes
 application in more detail, covering two separate aspects of page
-development in OpenACS &version;. First, we'll talk about the code needed to make
+development in OpenACS. First, we'll talk about the code needed to make
 your pages aware of which application instance they are running
 in. Second, we'll talk about using the form builder to develop
-form-based user interfaces in OpenACS &version;. While these seem like unrelated
+form-based user interfaces in OpenACS. While these seem like unrelated
 topics, they both come up in the example page that we are going to
 look at, so it makes sense to address them at the same time.
 </para>
@@ -37,7 +37,7 @@ look at, so it makes sense to address them at the same time.
 
 <para>
 As you will recall from the <link linkend="packages">packages</link> tutorial, the Request
-Processor (RP) and Package Manager (APM) in OpenACS &version; allow site
+Processor (RP) and Package Manager (APM) allow site
 administrators to define an arbitrary mapping from URLs in the site to
 objects representing content. These objects may represent single
 files, or entire applications. The APM uses the site map to map

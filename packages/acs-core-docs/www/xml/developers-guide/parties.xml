@@ -5,7 +5,7 @@
 %myvars;
 ]>
 <sect1 id="parties" xreflabel="Parties in OpenACS 4">
-<title>Parties in OpenACS &version;</title>
+<title>Parties in OpenACS</title>
 
 <authorblurb>
 <para>By <ulink url="http://planitia.org">Rafael H. Schloming</ulink></para>
@@ -118,7 +118,7 @@ associated with a user into the four tables (acs_objects, parties, persons,
 users) is that it is now possible to &quot;nuke&quot; a user from a live
 system by removing his entry from the users table, but leaving the rest of
 his information present (i.e. turning him from a user into a person). This is
-because wherever possible the OpenACS &version; data model references the persons or
+because wherever possible the OpenACS data model references the persons or
 parties table, <emphasis role="strong">not</emphasis> the users table. If this feature is
 desired when extending the system, then the developers should be careful to
 only references the users table in situations where it is clear that the
@@ -456,7 +456,7 @@ store any extra information relevant to the MENSA community.</para>
 
 <para><emphasis role="strong">Specializing Groups</emphasis></para>
 
-<para>If one were to build an intranet application on top of the &version; party
+<para>If one were to build an intranet application on top of the party
 system, it is likely that one would want to take advantage of the systems
 efficient representation of sophisticated organizational structures, but
 there would be much more specialized information associated with each group.

@@ -5,7 +5,7 @@
 %myvars;
 ]>
 <sect1 id="object-system-requirements" xreflabel="OpenACS 4 Object Model Requirements">
-<title>OpenACS 4 Object Model Requirements</title>
+<title>Object Model Requirements</title>
 
 <authorblurb>
 <para>By Pete Su</para>

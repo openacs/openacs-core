@@ -5,26 +5,26 @@
 %myvars;
 ]>
 <sect1 id="permissions-tediously-explained" xreflabel="OpenACS Permissions Tediously Explained"> 
-  <title>OpenACS 4.x Permissions Tediously Explained</title>
+  <title>OpenACS Permissions Tediously Explained</title>
   <para>
     by Vadim Nasardinov. Modified and converted to Docbook XML by Roberto Mello
   </para>
   
-  <para>The code has been modified since this document was written so it is now obsolete.  See <ulink url="http://openacs.org/forums/message-view?message_id=121807">this forum thread</ulink>.</para>
+  <para>The code has been modified since this document was written so it is now out of date.  See <ulink url="http://openacs.org/forums/message-view?message_id=121807">this forum thread</ulink>.</para>
 
   <sect2 id="permissions-tedious-overview">
 
     <title>Overview</title>
     <para>
-      The general permissions system has a relatively complex data model in OpenACS 4.x.
+      The general permissions system has a relatively complex data model in OpenACS.
       Developers who haven't had the time to learn the internals of the data model
       may end up writing seemingly correct code that crashes their system in
       weird ways. This writeup is the result of my running into such a piece
       of code and trying to understand exactly what went wrong.
       It is geared towards developers who understand the general permissions
       system to the extent that is described in the 
-      <ulink url="http://openacs.org/doc/openacs-4/permissions.html">
-      OpenACS 4.x Permissions documentation</ulink>,
+      <ulink url="permissions.html">
+      OpenACS Permissions documentation</ulink>,
       but who haven't had the opportunity to take a long, careful look at the
       system internals.
     </para>

@@ -4,8 +4,8 @@
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-<sect1 id="apm-requirements" xreflabel="OpenACS &version; Package Manager Requirements">
-<title>OpenACS &version; Package Manager Requirements</title>
+<sect1 id="apm-requirements" xreflabel="Package Manager Requirements">
+<title>Package Manager Requirements</title>
 
 <authorblurb>
 <para>By Bryan Quinn and Todd Nightingale</para>

@@ -5,7 +5,7 @@
 %myvars;
 ]>
 <sect1 id="rp-design" xreflabel="OpenACS 4 Request Processor Design">
-<title>OpenACS 4 Request Processor Design</title>
+<title>Request Processor Design</title>
 
 
 <authorblurb>

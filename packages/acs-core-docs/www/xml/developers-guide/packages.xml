@@ -5,7 +5,7 @@
 %myvars;
 ]>
 <sect1 id="packages" xreflabel="Packages">
-  <title>OpenACS &version; Packages</title>
+  <title>OpenACS Packages</title>
 
   <authorblurb>
     <para>By Pete Su and Bryan Quinn</para>
@@ -37,7 +37,6 @@
     
 
     <programlisting>
-
 ROOT/
    bin/
    parameters/
@@ -67,8 +66,7 @@ ROOT/
                 core and application data models here
 
          ... and so on for all modules ... 
-
-    </programlisting>
+</programlisting>
 
     <para>
       In previous versions of OpenACS, you wrote a new application like this:
@@ -98,7 +96,6 @@ ROOT/
     
 
     <programlisting>
-
 ROOT/
     bin/
     packages/
@@ -117,6 +114,10 @@ ROOT/
         acs-workflow/
         forums/
                forums.info
+               catalog/
+                    i18n message catalogs
+               lib/
+		    includable page fragments (.tcl/.adp pairs)
                sql/
                     oracle/
                          oracle data model
@@ -125,11 +126,11 @@ ROOT/
                tcl/
                     tcl library code
                www/
+                    user visible pages
                     admin/
-                           administration pages
-                    other pages
+                         administration pages
                     doc/
-                          documentation
+                         documentation
         message-catalog/
         news/
         notification/
@@ -138,7 +139,7 @@ ROOT/
             bootstrap code
     www/
             misc pages
-    </programlisting>
+</programlisting>
 
 
     <para>

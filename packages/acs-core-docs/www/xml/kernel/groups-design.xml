@@ -5,7 +5,7 @@
 %myvars;
 ]>
 <sect1 id="groups-design" xreflabel="OpenACS 4 Groups Design">
-<title>OpenACS 4 Groups Design</title>
+<title>Groups Design</title>
 
 <authorblurb>
 <para>By <ulink url="http://planitia.org">Rafael H. Schloming</ulink> and Mark Thomas</para>

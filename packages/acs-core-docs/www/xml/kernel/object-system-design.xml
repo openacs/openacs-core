@@ -5,7 +5,7 @@
 %myvars;
 ]>
 <sect1 id="object-system-design" xreflabel="OpenACS 4 Object Model Design">
-<title>OpenACS 4 Object Model Design</title>
+<title>Object Model Design</title>
 
 <authorblurb>
 <para>By Pete Su, Michael Yoon, Richard Li, Rafael Schloming</para>
