@@ -281,12 +281,7 @@ ad_proc -private auth::local::password::ResetPassword {
     # Reset the password
     set password [ad_generate_random_string]
 
-    if { [catch { ad_change_password $user_id $password } errmsg] } {
-        set result(password_status) "reset_error"
-        global errorInfo
-        ns_log Error "Error resetting local password for username $username, user_id $user_id: \n$errorInfo"
-        return [array get result]
-    }
+    ad_change_password $user_id $password
 
     # We return the new passowrd here and let the OpenACS framework send the email with the new password
     set result(password) $password
@@ -349,7 +344,7 @@ ad_proc -private auth::local::registration::GetElements {
     set result(optional) { url }
 
     if { ![parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] } {
-        lappend result(required) password_1 password_2
+        lappend result(optional) password
     }
 
     if { [parameter::get -parameter RequireQuestionForPasswordResetP -default 1] && 
@@ -376,112 +371,65 @@ ad_proc -private auth::local::registration::Register {
     service contract for the local account implementation.
 } {
     array set result {
-        creation_status "reg_error"
+        creation_status "ok"
         creation_message {}
         element_messages {}
         account_status "ok"
         account_message {}
     }
 
-    # TODO: email = username
-    if { [empty_string_p $email] } {
-        set email $username
-    }
-    # TODO: Add catch
-    if {[catch {set user_id [ad_user_new \
-                     $email \
-                     $first_names \
-                     $last_name \
-                     $password \
-                     $secret_question \
-                     $secret_answer \
-                     $url \
-                     "t" \
-                     "approved" \
-                     "" \
-                     $username \
-                                 $authority_id]} errmsg] || ! $user_id } {
+    # We don't create anything here, so creation always succeeds
+    # And we don't check local account, either
 
-        set result(creation_status) "fail"
-        set result(creation_message) "We experienced an error while trying to register an account for you."
-        return [array get result]
-    } else {
-        set result(user_id) $user_id
+    ns_log Notice "LARS: username=$username, email=$email"
+
+
+    # Generate random password?
+    set generated_pwd_p 0
+    if { [empty_string_p $password] || [parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] } {
+        set password [ad_generate_random_string]
+        set generated_pwd_p 1
     }
+
+    # Set user's password
+    set user_id [acs_user::get_by_username -username $username]
+    ad_change_password $user_id $password
     
-    # Creation succeeded
-    set result(creation_status) "ok"
-
-    # TODO: validate data (see user-new-2.tcl)
-    # TODO: double-click protection
-
-    # Get whether they requre some sort of approval
-    if { [parameter::get -parameter RegistrationRequiresApprovalP -default 0] } {
-        set member_state "needs approval"
-        set result(account_status) "closed"
-        set result(account_message) [_ acs-subsite.lt_Your_registration_is_]
-    } else {
-        set member_state "approved"
-    }
-
-    set notification_address [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]]
-
-    if { [parameter::get -parameter RegistrationRequiresEmailVerificationP -default 0] } {
-        set email_verified_p "f"
-        set result(account_status) "closed"
-        set result(account_message) "<p>[_ acs-subsite.lt_Registration_informat_1]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
-
-	set row_id [auth::get_user_secret_token -user_id $user_id]
-
-        # Lars TODO: Refactor with code in authentication-procs.tcl
-        
-        # Send email verification email to user
-        set confirmation_url [export_vars -base "[ad_url]/register/email-confirm" { row_id }]
-	with_catch errmsg {
-            ns_sendmail \
-                $email \
-                $notification_address \
-                "[_ acs-subsite.lt_Welcome_to_system_nam]" \
-                "[_ acs-subsite.lt_To_confirm_your_regis]"
-        } {
-            global errorInfo
-            ns_log Error "auth::get_local_account: Error sending out email verification email to email $email:\n$errorInfo"
-            set auth_info(account_message) "We got an error sending out the email for email verification"
-	}
-
-    } else {
-        set email_verified_p "t"
-    }
+    # Used in messages below
+    set system_name [ad_system_name]
+    set system_url [ad_url]
 
     # Send password confirmation email to user
-    if { [parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] || \
+    if { $generated_pwd_p || \
+             [parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] || \
              [parameter::get -parameter EmailRegistrationConfirmationToUserP -default 0] } {
 	with_catch errmsg {
 	    ns_sendmail \
                 $email \
-                $notification_address \
-                "[_ acs-subsite.lt_Welcome_to_system_nam]" \
-                "[_ acs-subsite.lt_Thank_you_for_visitin]"
+                [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]] \
+                [_ acs-subsite.lt_Welcome_to_system_nam] \
+                [_ acs-subsite.lt_Thank_you_for_visitin]
 	} {
-	    ns_returnerror "500" "$errmsg"
-	    ns_log Warning "Error sending registration confirmation to $email. Error: $errmsg"
+            # We don't fail hard here, just log an error
+            global errorInfo
+	    ns_log Error "Error sending registration confirmation to $email.\n$errorInfo"
 	}
     }
 
     # Notify admin on new registration
-    if {[ad_parameter NotifyAdminOfNewRegistrationsP "security" 0]} {
+    if { [ad_parameter NotifyAdminOfNewRegistrationsP "security" 0] } {
 	with_catch errmsg {
             ns_sendmail \
-                $notification_address \
+                [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]] \
                 $email \
-                "[_ acs-subsite.lt_New_registration_at_s]" \
-                "[_ acs-subsite.lt_first_names_last_name]"
+                [_ acs-subsite.lt_New_registration_at_s] \
+                [_ acs-subsite.lt_first_names_last_name]
 	} {
-	    ns_returnerror "500" "$errmsg"
-	    ns_log Warning "Error sending admin notification to $notification_address. Error: $errmsg"
+            # We don't fail hard here, just log an error
+            global errorInfo
+	    ns_log Error "Error sending admin notification to $notification_address.\n$errorInfo"
 	}
     }
-
 
     return [array get result]
 }

@@ -84,7 +84,7 @@ aa_register_case auth_authenticate {
                      -username $username \
                      -password $password]
 
-            aa_equals "auth_status for bad authority_id authentication" $auth_info(auth_status) "auth_error"
+            aa_equals "auth_status for bad authority_id authentication" $auth_info(auth_status) "failed_to_connect"
             aa_true "auth_message for bad authority_id authentication" ![empty_string_p $auth_info(auth_message)]
 
             # Closed account status
@@ -124,52 +124,88 @@ aa_register_case auth_create_user {
     aa_run_with_teardown \
         -rollback \
         -test_code {
+            
+            # Successful creation
+            array set user_info [auth::create_user \
+                                     -username "auth_create_user1" \
+                                     -email "auth_create_user1@test_user.com" \
+                                     -first_names "Test" \
+                                     -last_name "User" \
+                                     -password "changeme" \
+                                     -password_confirm "changeme" \
+                                     -secret_question "no_question" \
+                                     -secret_answer "no_answer"]
 
-         # Successful creation
-         array set user_info [auth::create_user \
-                                  -username "auth_create_user1" \
-                                  -email "auth_create_user1@test_user.com" \
-                                  -first_names "Test" \
-                                  -last_name "User" \
-                                  -password "changeme" \
-                                  -secret_question "no_question" \
-                                  -secret_answer "no_answer"]
+            aa_true "returns creation_status" [info exists user_info(creation_status)]
 
-         aa_true "returns user_id" [info exists user_info(user_id)]
+            if { [info exists user_info(creation_status)] } {
+                aa_equals "creation_status for successful creation" $user_info(creation_status) "ok"
+                
+                if { ![string equal $user_info(creation_status) "ok"] } {
+                    aa_log "Element messages: '$user_info(element_messages)'"
+                    aa_log "Element messages: '$user_info(creation_message)'"
+                }
+            }
 
-         if { [info exists user_info(user_id)] } {         
-             aa_true "returns integer user_id ([array get user_info])" [regexp {[1-9][0-9]*} $user_info(user_id)]
-         }
+            aa_false "No creation_message for successful creation" [exists_and_not_null user_info(creation_message)]
+            aa_true "returns user_id" [info exists user_info(user_id)]
+            
+            if { [info exists user_info(user_id)] } {         
+                aa_true "returns integer user_id ([array get user_info])" [regexp {[1-9][0-9]*} $user_info(user_id)]
+            }
+            
+            
+            # Missing first_names
+            array unset user_info
+            array set user_info [auth::create_user \
+                                     -username "auth_create_user2" \
+                                     -email "auth_create_user2@test_user.com" \
+                                     -first_names "" \
+                                     -last_name "User" \
+                                     -password "changeme" \
+                                     -password_confirm "changeme" \
+                                     -secret_question "no_question" \
+                                     -secret_answer "no_answer"]
+            
+            aa_equals "creation_status for missing first names" $user_info(creation_status) "data_error" 
+            
+            aa_true "element_messages exists" [exists_and_not_null user_info(element_messages)]
+            if { [exists_and_not_null user_info(element_messages)] } {
+                array unset elm_msgs
+                array set elm_msgs $user_info(element_messages)
+                aa_true "element_message for first_names exists" [exists_and_not_null elm_msgs(first_names)]
+                
+            }
+            
+            if { [info exists user_info(element_messages)] } {
+                array set element_message $user_info(element_messages)
+                aa_log "user_info(element_messages) = '$user_info(element_messages)'"
+                aa_true "Element message for first_names exists" [exists_and_not_null element_message(first_names)]
+            }
 
-         aa_true "returns creation_status" [info exists user_info(creation_status)]
-         if { [info exists user_info(creation_status)] } {
-             aa_equals "creation_status for successful creation" $user_info(creation_status) "ok"
-         }
-         
-         aa_false "No creation_message for successful creation" [exists_and_not_null user_info(creation_message)]
+            # Duplicate email and username
+            array unset user_info
+            array set user_info [auth::create_user \
+                                     -username "auth_create_user1" \
+                                     -email "auth_create_user1@test_user.com" \
+                                     -first_names "Test3" \
+                                     -last_name "User" \
+                                     -password "changeme" \
+                                     -password_confirm "changeme" \
+                                     -secret_question "no_question" \
+                                     -secret_answer "no_answer"]
 
-         # Missing first_names
-         array unset user_info
-         array set user_info [auth::create_user \
-                                  -username "auth_create_user2" \
-                                  -email "auth_create_user2@test_user.com" \
-                                  -first_names "" \
-                                  -last_name "User" \
-                                  -password "changeme" \
-                                  -secret_question "no_question" \
-                                  -secret_answer "no_answer"]
-
-         aa_equals "creation_status for missing first names" $user_info(creation_status) "data_error" 
-         
-         aa_true "element_messages exists" [exists_and_not_null user_info(element_messages)]
-         
-         if { [info exists user_info(element_messages)] } {
-             array set element_message $user_info(element_messages)
-             aa_log "user_info(element_messages) = '$user_info(element_messages)'"
-             aa_true "Element message for first_names exists" [exists_and_not_null element_message(first_names)]
-         }
-
-    } 
+            aa_equals "creation_status for duplicate email and username" $user_info(creation_status) "data_error"
+            
+            aa_true "element_messages exists" [exists_and_not_null user_info(element_messages)]
+            if { [exists_and_not_null user_info(element_messages)] } {
+                array unset elm_msgs
+                array set elm_msgs $user_info(element_messages)
+                aa_true "element_message for username exists" [exists_and_not_null elm_msgs(username)]
+                aa_true "element_message for email exists" [exists_and_not_null elm_msgs(email)]
+            }
+            
+        } 
 }
 
 aa_register_case auth_confirm_email {
@@ -198,8 +234,10 @@ aa_register_case auth_get_registration_elements {
 } {
     array set element_array [auth::get_registration_elements]
 
-    aa_true "there is more than one required element: ($element_array(required))" [expr [llength $element_array(required)] > 0]
-    aa_true "there is more than one optional element: ($element_array(optional))" [expr [llength $element_array(optional)] > 0]
+    aa_log "Elements array: '[array get element_array]'"
+
+    aa_true "there is more than one required element" [expr [llength $element_array(required)] > 0]
+    aa_true "there is more than one optional element" [expr [llength $element_array(optional)] > 0]
 }
 
 aa_register_case auth_get_registration_form_elements {
@@ -353,6 +391,7 @@ aa_register_case auth_password_reset {
         -test_code {
             array set test_user {
                 username "test_username"
+                email "test_username@test.test"
                 password "test_password"
                 first_names "test_first_names"
                 last_name  "test_last_name"
@@ -360,29 +399,37 @@ aa_register_case auth_password_reset {
 
             array set create_result [auth::create_user \
                                          -username $test_user(username) \
+                                         -email $test_user(email) \
                                          -password $test_user(password) \
                                          -first_names $test_user(first_names) \
-                                         -last_name $test_user(last_name)]
+                                         -last_name $test_user(last_name) \
+                                         -secret_question "foo" \
+                                         -secret_answer "bar"]
             aa_equals "status should be ok for creating user" $create_result(creation_status) "ok"
-            
+            if { ![string equal $create_result(creation_status) "ok"] } {
+                aa_log "Create-result: '[array get create_result]'"
+            }
                 
             array set reset_result [auth::password::reset \
                                         -authority_id [auth::authority::local] \
                                         -username $test_user(username)] 
             aa_equals "status should be ok for reseting password" $reset_result(password_status) "ok"
-
-            array set auth_result [auth::authentication::Authenticate \
-                                     -username $test_user(username) \
-                                     -authority_id [auth::authority::local] \
-                                     -password $reset_result(password)]
-            aa_equals "can authenticate with new password" $auth_result(auth_status) "ok"
+            aa_true "Result contains new password" [info exists reset_result(password)]
             
-            array unset auth_result
-            array set auth_result [auth::authentication::Authenticate \
-                                     -username $test_user(username) \
-                                     -authority_id [auth::authority::local] \
-                                     -password $test_user(password)]
-            aa_false "cannot authenticate with old password" [string equal $auth_result(auth_status) "ok"]
+            if { [info exists reset_result(password)] } {
+                array set auth_result [auth::authentication::Authenticate \
+                                           -username $test_user(username) \
+                                           -authority_id [auth::authority::local] \
+                                           -password $reset_result(password)]
+                aa_equals "can authenticate with new password" $auth_result(auth_status) "ok"
+                
+                array unset auth_result
+                array set auth_result [auth::authentication::Authenticate \
+                                           -username $test_user(username) \
+                                           -authority_id [auth::authority::local] \
+                                           -password $test_user(password)]
+                aa_false "cannot authenticate with old password" [string equal $auth_result(auth_status) "ok"]
+            }
         }
 }
 
@@ -490,78 +537,59 @@ aa_register_case auth_driver_get_parameter_values {
     aa_run_with_teardown \
         -rollback \
         -test_code {
-            db_1row select_vars {
-                select auth_impl_id as impl_id,
-                       authority_id
-                from   auth_authorities
-                where  short_name = 'local'
-            }
+            auth::authority::get -authority_id [auth::authority::local] -array authority
 
-            set key "foo"
-            set value "bar"
+            set parameter [ad_generate_random_string]
+            set value [ad_generate_random_string]
 
-            db_dml insert_test_parameter {
-                insert into auth_driver_params(
-                    impl_id, authority_id, key, value
-                 ) values (
-                    :impl_id, :authority_id, :key, :value
-                 )
-            }
-
-            set values [auth::driver::get_parameter_values \
-                            -impl_id $impl_id \
-                            -authority_id $authority_id]
-
-            aa_true "Did get_parameter return the correct value?" [string equal $values "bar"]
-        }
-}
-
-aa_register_case auth_driver_set_parameter_value {
-    Test the auth::driver::set_parameter_value proc.
-
-    @author Simon Carstensen (simon@collaboraid.biz)
-} {
-    aa_run_with_teardown \
-        -rollback \
-        -test_code {
-            
-            db_1row select_vars {
-                select auth_impl_id as impl_id,
-                       authority_id
-                from   auth_authorities
-                where  short_name = 'local'
-            }
-
-            set key "foo"
-            set value "bar"
-
-            db_dml insert_test_parameter {
-                insert into auth_driver_params (
-                    impl_id, authority_id, key, value
-                 ) values (
-                    :impl_id, :authority_id, :key, :value
-                 )
-            }
-
-            set new_value "new_bar"
-
+            # Set a parameter value
             auth::driver::set_parameter_value \
-                -impl_id $impl_id \
-                -authority_id $authority_id \
-                -parameter $key \
-                -value $new_value
-        
-            set actual_value [db_string select_value {
+                -authority_id $authority(authority_id) \
+                -impl_id $authority(auth_impl_id) \
+                -parameter $parameter \
+                -value $value
+
+            set authority_id $authority(authority_id)
+            set impl_id $authority(auth_impl_id)
+
+            set db_value [db_string select_value {
                 select value 
                 from   auth_driver_params
                 where  impl_id = :impl_id
                 and    authority_id = :authority_id
-                and    key = :key
+                and    key = :parameter
             }]
 
-            aa_equals "Value should be $new_value after update" $new_value $actual_value
+            aa_log "Parameter value in DB: '$db_value'"
+
+            set values [auth::driver::get_parameter_values \
+                            -authority_id $authority(authority_id) \
+                            -impl_id $authority(auth_impl_id)]
+
+            aa_log "auth::driver::get_parameter_values: '$values'"
+
+            aa_true "Did get_parameter return the correct value?" [util_sets_equal_p $values [list $parameter $value]]
+
+
+            set new_value [ad_generate_random_string]
+
+            auth::driver::set_parameter_value \
+                -authority_id $authority(authority_id) \
+                -impl_id $authority(auth_impl_id) \
+                -parameter $parameter \
+                -value $new_value
+        
+            set values [auth::driver::get_parameter_values \
+                            -authority_id $authority(authority_id) \
+                            -impl_id $authority(auth_impl_id)]
+
+            aa_log "auth::driver::get_parameter_values: '$values'"
+
+            aa_true "Does it return the new value?" [util_sets_equal_p $values [list $parameter $new_value]]
+            
         }
 }
+
 
 #####
 #
