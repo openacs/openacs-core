@@ -10,9 +10,6 @@
 -- updated for OpenACS by Jon Griffin
 --
 
--- this needs to be first as I don't see a way in 
--- plpgsql to have forward declarations or the like.
-
 create function acs_message__edit (integer,varchar,varchar,varchar,
 text,timestamp,integer,varchar,boolean)
 returns integer as '
