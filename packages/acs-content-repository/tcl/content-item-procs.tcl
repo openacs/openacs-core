@@ -40,7 +40,9 @@ ad_proc -public ::content::item::new {
     revision. There are procedures for each other base content
     item. This procdedure uses package_instantiate object. Under
     PostgreSQL the object_type new function must be registered with
-    define_function_args.
+    define_function_args. If title, description, text, or data are
+    specified a content revision will also be created.
+ 
 
     @param name
     @param item_id - item_id of this content_item. If this is not
@@ -54,7 +56,9 @@ ad_proc -public ::content::item::new {
     @param creation_date - defaults to current date and time
     @param storage_type - file, lob, or text (postgresql only)
     @param locale -
-
+    @param title - title of content_revision to be created
+    @param description of content_revision to be created
+    @param text - text of content revision to be created
     @param attributes - A list of pairs of additional attributes and their values to pass to the constructor. Each pair is a list of two elements: key => value
 
     @return item_id of the new content item

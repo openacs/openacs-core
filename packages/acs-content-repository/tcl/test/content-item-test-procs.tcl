@@ -45,9 +45,21 @@ aa_register_case content_item {
             set returned_first_item_id [content::item::new \
                                             -name "test_item_one" \
                                             -item_id $first_item_id \
-                                            -parent_id $first_folder_id]
+                                            -parent_id $first_folder_id \
+                                            -title "Title"
+                                       ]
 
             aa_true "First item created" [expr $first_item_id == $returned_first_item_id]
+            aa_true "First item exists" [expr $first_item_id == \
+                                         [db_string get_item \
+                                              "select item_id from
+                                               cr_items where item_id=:first_item_id"]]
+            aa_true "First item's revision exists" \
+                [expr \
+                     {![string equal "" \
+                            [db_string get_revision "select
+                                                     latest_revision
+ from cr_items, cr_revisions where latest_revision=revision_id and cr_items.item_id=:first_item_id" -default ""]]}]
 
             # check the folder is not empty now.
             set is_empty [content::folder::is_empty -folder_id $first_folder_id]
