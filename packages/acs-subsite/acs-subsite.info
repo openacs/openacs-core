@@ -7,14 +7,14 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.0d2" url="http://www.openacs.org/repository/download/apm/acs-subsite-5.0d2.apm">
+    <version name="5.0d3" url="http://www.openacs.org/repository/download/apm/acs-subsite-5.0d3.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Provides the ability to create subsite within the OpenACS Community System.</summary>
         <release-date>2003-09-12</release-date>
         <vendor url="http://www.openacs.org/">OpenACS</vendor>
         <description format="text/html">Aware of parties, groups, users, portraits, ...</description>
 
-        <provides url="acs-subsite" version="5.0d2"/>
+        <provides url="acs-subsite" version="5.0d3"/>
         <requires url="acs-content-repository" version="4.1"/>
         <requires url="acs-kernel" version="4.6.4"/>
         <requires url="acs-tcl" version="4.1"/>
@@ -24,6 +24,7 @@
             <callback type="before-uninstantiate"  proc="subsite::before_uninstantiate"/>
         </callbacks>
         <parameters>
+            <parameter datatype="string" min_n_values="1" max_n_values="1" name="ScreenNameP" default="0" description="Set this to 1 if you want to show screen names instead of real names." section_name="user-info" />
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AcceptablePortraitMIMETypes"  default="image/gif image/jpeg" description="Enter a set of acceptable MIME types for portrait submissions." section_name="user-info"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowPersistentLoginP"  default="1" description="do we allow persistent logins?" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="application"  default="default" description="Name of the ETP application to use (default, faq, wiki, or create your own with the etp::define_applicaton procedure)" section_name="EditThisPage"/>
