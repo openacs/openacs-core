@@ -331,7 +331,7 @@ ad_proc -private apm_load_queries {
 
         set files [ad_find_all_files [acs_root_dir]/packages/$package]
         if { [llength $files] == 0 } {
-    	    error "Unable to locate [acs_root_dir]/packages/$package/*."
+    	    ns_log Error "apm_load_queries: Unable to locate [acs_root_dir]/packages/$package/*. when scanning for SQL queries to load."
         }
 
         foreach file [lsort $files] {
