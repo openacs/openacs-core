@@ -1355,7 +1355,7 @@ ad_proc -private apm_mount_core_packages {} {
 
     # Mount acs-automated-testing
     ns_log Notice "Mounting acs-automated-testing"    
-    site_node::instantiate_and_mount -node_name acs-automated-testing \
+    site_node::instantiate_and_mount -node_name test \
                                      -package_key acs-automated-testing
 
     ns_log Notice "Core packages instantiated and mounted"
