@@ -22,7 +22,7 @@
       </else>
     </if>
     <if @admin_p@ true> 
-      <a href="admin/" class="button" title="#acs-subsite.Administer_subsite#">#acs-subsite.Admin#</a>
+      <a href="admin/" class="button" title="#acs-subsite.Administer_subsite#">#acs-kernel.common_Administration#</a>
     </if>
   </div>
 </if>
