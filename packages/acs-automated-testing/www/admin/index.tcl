@@ -41,9 +41,9 @@ foreach testcase [nsv_get aa_test cases] {
     set packages($package_key) [list 0 0 0]
 }
 
-db_foreach acs-automated-testing.results_query {
+db_foreach acs-automated-testing.results_queryx {
     select testcase_id, package_key,
-    to_char(timestamp,'DD-MM-YYYY HH24:MI:SS') timestamp, passes, fails
+    to_char(timestamp,'YYYY-MM-DD_HH24:MI:SS') as timestamp, passes, fails
     from aa_test_final_results
 } {
     if {[info exists results("$testcase_id,$package_key")]} {
