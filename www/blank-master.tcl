@@ -53,6 +53,7 @@ if { ![template::util::is_nil focus] } {
                 if (document.forms == null) return;
                 if (document.forms\[form_name\] == null) return;
                 if (document.forms\[form_name\].elements\[element_name\] == null) return;
+                if (document.forms\[form_name\].elements\[element_name\].type == 'hidden') return;
 
                 document.forms\[form_name\].elements\[element_name\].focus();
             }
@@ -67,6 +68,7 @@ if { ![template::util::is_nil focus] } {
 # Header links (stylesheets, javascript)
 multirow create header_links rel type href media
 multirow append header_links "stylesheet" "text/css" "/lists.css" "all"
+multirow append header_links "stylesheet" "text/css" "/default-master.css" "all"
 
 
 # Developer-support: We include that here, so that master template authors don't have to worry about it
