@@ -2177,6 +2177,11 @@ as
 	    select acs_object_id_seq.nextval, v_version_id, path, file_type, db_type
 	    from apm_package_files
 	    where version_id = copy.version_id;
+
+        insert into apm_package_callbacks (version_id, type, proc)
+                select v_version_id, type, proc
+                from apm_package_callbacks
+                where version_id = copy.version_id;
     
 	insert into apm_package_owners(version_id, owner_uri, owner_name, sort_key)
 	    select v_version_id, owner_uri, owner_name, sort_key

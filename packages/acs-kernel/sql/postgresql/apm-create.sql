@@ -2035,6 +2035,11 @@ begin
 	    select nextval(''t_acs_object_id_seq''), v_version_id, path, file_type, db_type
 	    from apm_package_files
 	    where version_id = copy__version_id;
+
+        insert into apm_package_callbacks (version_id, type, proc)
+                select v_version_id, type, proc
+                from apm_package_callbacks
+                where version_id = copy__version_id;
     
         if copy__copy_owners_p then
             insert into apm_package_owners(version_id, owner_uri, owner_name, sort_key)

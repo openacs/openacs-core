@@ -52,8 +52,7 @@ create view apm_enabled_package_versions as
     where  enabled_p = 't';
 
 -- Recreate functions for auto-mount
-drop function apm_package_version__new (integer,varchar,varchar,varchar,varchar,varchar,varchar,timestamp with time zone,varchar,varchar,boolean,boolean);
-create function apm_package_version__new (integer,varchar,varchar,varchar,varchar,varchar,varchar,timestamp with time zone,varchar,varchar,varchar,boolean,boolean) returns integer as '
+create or replace function apm_package_version__new (integer,varchar,varchar,varchar,varchar,varchar,varchar,timestamp with time zone,varchar,varchar,varchar,boolean,boolean) returns integer as '
 declare
       apm_pkg_ver__version_id           alias for $1;  -- default null
       apm_pkg_ver__package_key		alias for $2;
@@ -101,8 +100,7 @@ begin
   
 end;' language 'plpgsql';
 
-drop function apm_package_version__edit (integer,integer,varchar,varchar,varchar,varchar,varchar,timestamp with time zone,varchar,varchar,boolean,boolean);
-create function apm_package_version__edit (integer,integer,varchar,varchar,varchar,varchar,varchar,timestamp with time zone,varchar,varchar,varchar,boolean,boolean)
+create or replace function apm_package_version__edit (integer,integer,varchar,varchar,varchar,varchar,varchar,timestamp with time zone,varchar,varchar,varchar,boolean,boolean)
 returns integer as '
 declare
   edit__new_version_id         alias for $1;  -- default null  
@@ -155,8 +153,7 @@ begin
      
 end;' language 'plpgsql';
 
-drop function apm_package_version__copy (integer,integer,varchar,varchar,boolean);
-create function apm_package_version__copy (integer,integer,varchar,varchar,boolean)
+create or replace function apm_package_version__copy (integer,integer,varchar,varchar,boolean)
 returns integer as '
 declare
   copy__version_id             alias for $1;  
@@ -193,6 +190,11 @@ begin
 	    select nextval(''t_acs_object_id_seq''), v_version_id, path, file_type, db_type
 	    from apm_package_files
 	    where version_id = copy__version_id;
+
+        insert into apm_package_callbacks (version_id, type, proc)
+                select v_version_id, type, proc
+                from apm_package_callbacks
+                where version_id = copy__version_id;
     
         if copy__copy_owners_p then
             insert into apm_package_owners(version_id, owner_uri, owner_name, sort_key)
