@@ -217,6 +217,24 @@ ad_proc -public site_node::get {
 
 }
 
+ad_proc -public site_node::get_element {
+    {-node_id ""}
+    {-url ""}
+    {-element:required}
+} {
+    returns an element from the array representing the site node that matches the given url
+
+    either url or node_id is required, if both are passed url is ignored
+
+    The array elements are: package_id, package_key, object_type, directory_p, 
+    instance_name, pattern_p, parent_id, node_id, object_id, url.
+
+    @see site_node::get
+} {
+    array set node [site_node::get -node_id $node_id -url $url]
+    return $node($element)
+}
+
 ad_proc -public site_node::get_from_node_id {
     {-node_id:required}
 } {
@@ -595,13 +613,11 @@ ad_proc -public site_node::verify_folder_name {
                 # New node: Complain
                 return {}
             } else {
-                # Existing node: Check to see if it's this one
-                set errno [catch { array set existing_node [site_node::get_from_url -exact -url "[ad_conn package_url]$folder"] }]
-
-                # If errno != 0 it means we didn't find an existing site node with this URL, hence the conflict must
-                # be with a directory
-                # Otherwise, if the node with the folder name is not the node we're editing, we're also in trouble
-                if { $errno != 0 || $existing_node(node_id) != $current_node_id } {
+                # Renaming an existing node: Check to see if the node is merely conflicting with itself
+                set parent_url [site_node::get_url -node_id $parent_node_id]
+                set new_node_url "$parent_url$folder"
+                if { ![site_node::exists_p -url $new_node_url] || \
+                         $current_node_id != [site_node::get_node_id -url $new_node_url] } {
                     return {}
                 }
             }
