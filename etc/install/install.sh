@@ -211,6 +211,7 @@ admin_password=`get_config_param admin_password`
 aolserver_config_file=`get_config_param aolserver_config_file`
 install_xml_file=`get_config_param install_xml_file`
 tclwebtest_scripts=`get_config_param tclwebtest_scripts`
+do_tclapi_testing=`get_config_param do_tclapi_testing`
 
 # If pre/post checkout scripts have been provided, check that they can
 # be executed
@@ -565,11 +566,15 @@ if parameter_true $do_install; then
 
   #-------------------------------------------------------------------
   # Run the Tcl API tests
-  echo "$(date): Running tclwebtest tests"
-  ${tclwebtest_dir}/tclwebtest -config_file $config_file tcl-api-test.test
+  if parameter_true $do_tclapi_testing; then
+      echo "$(date): Running tclwebtest tests"
+      ${tclwebtest_dir}/tclwebtest -config_file $config_file tcl-api-test.test
 
+  fi
+
+  #-------------------------------------------------------------------
+  # Vacuum analyze for PG
   if [ $database == "postgres" ]; then
-      # Run vacuum analyze
       pg_bindir=`get_config_param pg_bindir`
       db_name=`get_config_param db_name`
       echo "$(date): Beginning 'vacuum analyze'."
