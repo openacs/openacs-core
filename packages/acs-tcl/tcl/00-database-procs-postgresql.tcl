@@ -316,6 +316,16 @@ ad_proc db_write_clob { statement_name sql args } {
     }
 }
 
+ad_proc db_blob_get { statement_name sql args } {
+    ad_arg_parser { bind } $args
+
+    set full_statement_name [db_qd_get_fullname $statement_name]
+
+    db_with_handle db { 
+	db_exec_lob blob_get $db $full_statement_name $sql
+    }
+}
+
 ad_proc db_write_blob { statement_name sql args } {
     ad_arg_parser { bind } $args
 
@@ -347,8 +357,6 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
 } {
     set start_time [clock clicks]
 
-    db_qd_log Notice "PRE-QD: the SQL is $pre_sql"
-
     # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
@@ -356,8 +364,6 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
     if {![string equal $sql $pre_sql]} {
         set sql [uplevel 2 [list subst -nobackslashes $sql]]
     }
-
-    db_qd_log Notice "POST-QD: the SQL is $sql"
 
     # create a function definition statement for the inline code 
     # binding is emulated in tcl. (OpenACS - Dan)
@@ -400,6 +406,55 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
         # stored in the content-repository as a file. (DanW - Openacs)
 
         switch $type {
+
+            blob_get {
+
+                if {[info exists storage_type]} {
+                    switch $storage_type {
+                        file {
+                            if {[file exists $content]} {
+                                set ifp [open $content r]
+
+                                # DRB: this could be made faster by setting the buffersize
+                                # to the size of the file, but for very large files allocating
+                                # that much more memory on top of that needed by Tcl for storage
+                                # of the data might not be wise.
+
+                                fconfigure $ifp -translation binary
+
+                                set data [read $ifp]
+                                close $ifp
+                                return $data
+                            } else {
+                                error "file: $content doesn't exist"
+                            }
+                        }
+
+                        lob {
+                            if {[regexp {^[0-9]+$} $content match]} {
+                                ns_pg blob_get $db $content
+                            } else {
+                                error "invalid lob_id: should be an integer"
+                            }
+                        }
+
+                        default {
+                            error "invalid storage type"
+                        }
+                    }
+                } elseif {[file exists $content]} {
+                    set ifp [open $content r]
+                    fconfigure $ifp -translation binary
+                    set data [read $ifp]
+                    close $ifp
+                    return $data
+                } elseif {[regexp {^[0-9]+$} $content match]} {
+                    ns_pg blob_get $db $content
+                } else {
+                    error "invalid query"
+                }
+            }
+
 
             blob_select_file {
 
