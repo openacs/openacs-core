@@ -81,13 +81,12 @@ ad_proc -public ad_form {
               (my_table_key, value)
             values
               (:key, :value)"
-        ad_returnredirect "somewhere"
-        ad_script_abort
     } -edit_data {
         db_dml do_update "
             update my_table
             set value = :value
             where my_table_key = :key"
+    } -after_submit {
         ad_returnredirect "somewhere"
         ad_script_abort
     }
@@ -205,11 +204,17 @@ ad_proc -public ad_form {
         the data.
     </dd>
 
-    <p><dt><b>-new_data</b></dt><p>
+    <p><dt><b>-edit_data</b></dt><p>
     <dd>This code block will be executed when a form for an existing database row is submitted.  This block should
         update the database or create a new content revision for the exisiting item if the data's stored in the
         content repository.
     </dd>
+
+    <p><dt><b>-after_submit</b></dt><p>
+    <dd>This code block will be executed after the three blocks on_submit, new_data or edit_data have been
+    executed. It is useful for putting in stuff like ad_returnredirect that is the same for new and edit.
+    </dd>
+
     </dl>
 
     Two hidden values of interest are available to the caller of ad_form when processing a submit:
@@ -259,7 +264,7 @@ ad_proc -public ad_form {
 
     <p>
 
-    Currently only the date and currency datatypes require conversion these conversion operations.
+    Currently only the date and currency datatypes require these conversion operations.
 
     <p>
 
@@ -345,7 +350,8 @@ ad_proc -public ad_form {
     } 
 
     set valid_args { form method action html name select_query select_query_name new_data on_refresh
-                     edit_data validate on_submit confirm_template new_request edit_request export}; 
+                     edit_data validate on_submit after_submit confirm_template new_request edit_request
+                     export};
 
     ad_arg_parser $valid_args $args
 
@@ -829,12 +835,13 @@ ad_proc -public ad_form {
         #    for both add and edit forms)
         # 2. an new_data block (when __new_p is true)
         # 3. an edit_data block (when __new_p is false)
+        # 4. an after_submit block (for ad_returnredirect and the like that is the same for new and edit)
 
         # We don't need to interrogate the af_parts structure because we know we're in the last call to
         # to ad_form at this point and that this call contained the "action blocks".
 
         # Execute our to_sql filters, if any, before passing control to the caller's
-        # on_submit, new_data or edit_data blocks
+        # on_submit, new_data, edit_data or after_submit blocks
 
         foreach element_name $af_element_names($form_name) {
             if { [llength $element_name] == 1 } {
@@ -858,6 +865,10 @@ ad_proc -public ad_form {
             template::element::set_value $form_name __new_p 0
         } elseif { [info exists edit_data] && !$__new_p } {
             ad_page_contract_eval uplevel #$level $edit_data
+        }
+
+        if { [info exists after_submit] } {
+            ad_page_contract_eval uplevel #$level $after_submit
         }
     }
 
