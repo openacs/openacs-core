@@ -783,11 +783,10 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
                       ' language 'plpgsql'"
 
         set ret_val [ns_db 0or1row $db "select $function_name ()"]
+        
         # drop the anonymous function (OpenACS - Dan)
-
-	# bartt: Wait a second to workaround a problem in PostgreSQL 7.3.
-	# The problem only occured here. Couldn't reproduce it elsewhere.
-        after 1000 {ns_db dml $db "drop function $function_name ()"}
+        # JCD: ignore return code -- maybe we should be smarter about this though.
+        catch {ns_db dml $db "drop function $function_name ()"} 
 
         return $ret_val
 
