@@ -4,7 +4,7 @@
 <package key="acs-automated-testing" url="http://openacs.org/repository/apm/packages/acs-automated-testing/" type="apm_service">
     <package-name>ACS Automated testing</package-name>
     <pretty-plural>ACS Automated testing</pretty-plural>
-    <initial-install-p>f</initial-install-p>
+    <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
 
     <version name="4.1" url="http://openacs.org/repository/download/apm/acs-automated-testing-4.1.apm">
