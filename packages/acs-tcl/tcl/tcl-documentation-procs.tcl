@@ -1573,7 +1573,7 @@ ad_page_contract_filter tmpfile { name value } {
     ns_normalizepath $value
     
     # check to make sure path is to an authorized directory
-    set tmpdir_list [ad_parameter_all_values_as_list TmpDir]
+    set tmpdir_list [ad_parameter_all_values_as_list -package_id [site_node_closest_ancestor_package "acs-subsite"] TmpDir]
     if { [empty_string_p $tmpdir_list] } {
 	set tmpdir_list [list "/var/tmp" "/tmp"]
     }
