@@ -715,14 +715,25 @@ ad_proc rp_report_error {
     
     ad_call_proc_if_exists ds_add conn error $message
     
+    set params [list]
+
     if {![ad_parameter -package_id [ad_acs_kernel_id] "RestrictErrorsToAdminsP" dummy 0] || \
             [permission::permission_p -object_id [ad_conn package_id] -privilege admin] } {
         # Serve the stacktrace
-        ns_return 500 text/html [ad_parse_template -params [list [list stacktrace $message]] "/packages/acs-tcl/lib/page-error"]
-    } else {
-        # Do not serve up a stack trace, just an apologetic note
-        ns_return 500 text/html [ad_parse_template "/packages/acs-tcl/lib/page-error"]
+        set params [list [list stacktrace $message]]
     }
+
+    with_catch errmsg {
+        set rendered_page [ad_parse_template -params $params "/packages/acs-tcl/lib/page-error"]
+    } {
+        # An error occurred during rendering of the error page
+        global errorInfo
+        ns_log Error "rp_report_error: Error rendering error page (!)\n$errorInfo"
+        set rendered_page "</table></table></table></h1></b></i><blockquote><pre>[ns_quotehtml $message]</pre></blockquote>[ad_footer]"
+    }
+
+    ns_return 500 text/html $rendered_page
+
     set headers [ns_conn headers]
     ns_log Error "[ns_conn method] http://[ns_set iget $headers host][ns_conn url]?[ns_conn query]
 referred by \"[ns_set iget $headers referer]\"
