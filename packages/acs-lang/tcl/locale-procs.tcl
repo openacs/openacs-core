@@ -295,7 +295,6 @@ ad_proc -public lang::user::locale {
     {-user_id ""}
 } {
     Get user locale preference for a given package instance.
-    This preliminary implementation only has one site-wide setting, though.
     
     @param package_id The package for which you want to get the locale preference.
     @param site_wide Set this if you want to get the site-wide locale preference.
