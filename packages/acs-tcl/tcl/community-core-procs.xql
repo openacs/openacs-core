@@ -101,6 +101,8 @@
       <querytext>
 
           select user_id, 
+                 username,
+                 authority_id,
                  first_names, 
                  last_name, 
                  first_names || ' ' || last_name as name,
