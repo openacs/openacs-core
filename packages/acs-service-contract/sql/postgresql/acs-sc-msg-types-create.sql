@@ -250,3 +250,5 @@ select acs_sc_msg_type__new('boolean','');
 select acs_sc_msg_type__new('timestamp','');
 select acs_sc_msg_type__new('uri','');
 select acs_sc_msg_type__new('version','');
+select acs_sc_msg_type__new('float','');
+select acs_sc_msg_type__new('bytearray','');
