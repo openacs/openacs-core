@@ -21,6 +21,7 @@
 <!ENTITY templates SYSTEM "developers-guide/templates.xml">
 <!ENTITY object-identity SYSTEM "developers-guide/object-identity.xml">
 <!ENTITY parties SYSTEM "developers-guide/parties.xml">
+<!ENTITY i18n-devel SYSTEM "developers-guide/i18n.xml">
 
 <!ENTITY objects-design SYSTEM "kernel/object-system-design.xml">
 <!ENTITY objects-req SYSTEM "kernel/object-system-req.xml">
@@ -32,6 +33,7 @@
 <!ENTITY subsites-design SYSTEM "kernel/subsites-design.xml">
 <!ENTITY apm-req SYSTEM "kernel/apm-requirements.xml">
 <!ENTITY apm-design SYSTEM "kernel/apm-design.xml">
+<!ENTITY i18n-req SYSTEM "kernel/i18n-requirements.xml">
 
 <!ENTITY security-req SYSTEM "kernel/security-requirements.xml">
 <!ENTITY security-design SYSTEM "kernel/security-design.xml">
@@ -186,6 +188,7 @@
       &templates;
       &permissions;
       &subsites;
+      &i18n-devel;
 
     </chapter>
 
@@ -270,6 +273,7 @@
       &subsites-design;
       &apm-req;
       &apm-design;
+      &i18n-req;
 
       &security-req;
       &security-design;
