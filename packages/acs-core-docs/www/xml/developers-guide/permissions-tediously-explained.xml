@@ -1,3 +1,9 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
 <sect1 id="permissions-tediously-explained" xreflabel="OpenACS Permissions Tediously Explained"> 
   <title>OpenACS 4.x Permissions Tediously Explained</title>
   <para>
@@ -1390,5 +1396,6 @@ from
     </programlisting>
 
   </sect2>
+
 </sect1>
 

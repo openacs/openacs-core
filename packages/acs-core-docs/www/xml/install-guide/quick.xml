@@ -1,3 +1,9 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
 <chapter id="quick">
   <title>Quick Install</title>
 
@@ -23,35 +29,27 @@
         <computeroutput>Menu &gt; System Settings &gt; Add/Remove
         Applications</computeroutput> and select <computeroutput>Database Server</computeroutput>.</para>
       </listitem>
-      <listitem><para>On the PostGreSQL page, do the <xref
-      linkend="install-postgres-rpm"/> bullet point and step <xref linkend="install-plpgsql"/></para></listitem>
-      <listitem><para>On the Aolserver page, do steps <xref
-      linkend="aolserver-tarball"/>, <xref
-      linkend="install-aolserver-compile"/>, and <xref linkend="aolserver-db-wrapper"/></para></listitem>
       <listitem>
-        <para>In <xref linkend="openacs-setup"/> on the OpenACS page, do steps <xref linkend="make-web-directory"/>, <xref linkend="install-openacs-download"/>, <xref linkend="install-aolserver-user-accounts"/>, and <xref linkend="unpack-openacs"/></para>
+          <xi:include href="postgres.xml#install-postgres-rpm" xmlns:xi="http://www.w3.org/2001/XInclude"/>
       </listitem>
-      <listitem>
-        <para>In <xref linkend="install-openacs-prepare-postgres"/>, do steps <xref linkend="create-service-db-user"/>, <xref linkend="create-database"/>, and <xref linkend="db-setup-exit"/></para>
-      </listitem>
-      <listitem>
-        <para>In <xref linkend="install-openacs-configure-aol"/>, do <xref linkend="start-aolserver"/></para>
-      </listitem>
-      <listitem>
-        <para>Browse to <ulink url="http://localhost:8000"/>.  If you see a page like <ulink
-        url="files/openacs-start.html">this</ulink>, proceed with <xref linkend="install-openacs-using-installer"/>.  If not, look at <xref linkend="connect-to-aolserver"/> for troubleshooting information.</para>
-      </listitem>
+
+      <xi:include href="postgres.xml#install-plpgsql" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+      <xi:include href="aolserver.xml#aolserver-tarball" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+      <xi:include href="aolserver.xml#install-aolserver-compile" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+      <xi:include href="aolserver.xml#aolserver-db-wrapper" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+      <xi:include href="openacs.xml#make-web-directory" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+      <xi:include href="openacs.xml#install-openacs-download" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+      <xi:include href="openacs.xml#install-aolserver-user-accounts" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+      <xi:include href="openacs.xml#unpack-openacs" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+      <xi:include href="openacs.xml#create-service-db-user" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+      <xi:include href="openacs.xml#create-database" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+      <xi:include href="openacs.xml#db-setup-exit" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+      <xi:include href="openacs.xml#start-aolserver" xmlns:xi="http://www.w3.org/2001/XInclude"/>
     </orderedlist>
   </sect2>
   <sect2 id="quick-next-steps">  
-    <para>After completing installation and restarting the server, go to <ulink url="http://localhost:8000"/> for configuration and customization instructions.  You can upgrade a Quick Install with source control, full text search, backup/recovery, and other production features by walking through the <ulink url="unix-install">Installation documentation</ulink> and doing the steps marked OPTIONAL.</para>
+    <para>After completing installation and restarting the server, go to <ulink url="http://localhost:8000" /> for configuration and customization instructions.  You can upgrade a Quick Install with source control, full text search, backup/recovery, and other production features by walking through the <ulink url="unix-install">Installation documentation</ulink> and doing the steps marked OPTIONAL.</para>
   </sect2>
   <para><phrase role="cvstag">($Id$)</phrase></para>
 
 </chapter>
-<!--
-   Local Variables:
-   sgml-parent-document: ("../index.xml" "book" "chapter")
-   End:
--->
-

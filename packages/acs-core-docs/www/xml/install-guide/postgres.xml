@@ -1,3 +1,10 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
+
 <sect1 id="postgres">
   <title>Install PostGreSQL</title>
 
@@ -20,7 +27,7 @@
   data directory appears to be in the same place as in a source
   install; start the service; create a new group for web service
   users, and modify the postgres user's
-  environment (<link id="install-postgres-env">more
+  environment (<link linkend="install-postgres-env">more
   information</link>):</para>
       </formalpara>
   <screen>[root@yourserver root]# <userinput>ln -s /var/lib/pgsql/data /usr/local/pgsql/data</userinput>
@@ -461,8 +468,4 @@ checkpoint_segments = 3     # in logfile segments (16MB each), min 1
   <para><phrase role="cvstag">($Id$)</phrase></para>
 
 </sect1>
-<!--
-   Local Variables:
-   sgml-parent-document: ("../index.xml" "book" "sect1")
-   End:
--->
+

@@ -1,3 +1,9 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
 <sect1 id="win2k-installation" xreflabel="OpenACS Installation Guide for Windows 2000">
 <title>OpenACS Installation Guide for Windows2000</title>
 
@@ -493,8 +499,3 @@ bin\nsd -I -s iguanasdirect -t iguanasdirect.tcl
 
 </sect2>
 </sect1>
-<!--
-   Local Variables:
-   sgml-parent-document: ("../index.xml" "book" "sect1")
-   End:
--->

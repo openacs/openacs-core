@@ -7,20 +7,16 @@
 
   <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets/html/chunk.xsl"/>
 
-<!-- Red Hat 8/xsl-stylesheets 1.50.0-3 commented out
-  <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets-1.50.0-3/html/chunk.xsl"/>
--->
-
-<!-- Red Hat 9/xsl-stylesheets 1.58.1-2 commented out
-  <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets-1.58.1-2/html/chunk.xsl"/>
--->
-
-<!-- Debian 3.0 chunk.xsl commented out
+<!-- Debian 3.0 use this path for chunk.xsl instead:
   <xsl:import href="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl"/>
 -->
 
+<!-- override default cellspacing value -->
+
+  <xsl:variable name="html.cellspacing">0</xsl:variable>
+
 <!-- vinodk: Not sure if this is needed                   -->
-  <xsl:output media-type="text/html" encoding="iso-8859-1"/>
+  <xsl:output media-type="text/html" encoding="utf-8"/>
 
 
 <!-- vinodk: narrower TOC's, use chunker (?), pretty file names      -->
@@ -330,4 +326,88 @@
 </xsl:template>
 
 
+<!-- override the default processing of segmented lists to get
+prettier tables -->
+
+<xsl:template match="segmentedlist">
+  <xsl:variable name="presentation">
+    <xsl:call-template name="dbhtml-attribute">
+      <xsl:with-param name="pis"
+                      select="processing-instruction('dbhtml')"/>
+      <xsl:with-param name="attribute" select="'list-presentation'"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <div class="{name(.)}">
+    <xsl:call-template name="anchor"/>
+
+    <xsl:choose>
+      <xsl:when test="$presentation = 'req-table'">
+        <xsl:apply-templates select="." mode="seglist-req-table"/>
+      </xsl:when>
+      <xsl:when test="$presentation = 'table'">
+        <xsl:apply-templates select="." mode="seglist-table"/>
+      </xsl:when>
+      <xsl:when test="$presentation = 'list'">
+        <xsl:apply-templates/>
+      </xsl:when>
+      <xsl:when test="$segmentedlist.as.table != 0">
+        <xsl:apply-templates select="." mode="seglist-table"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </div>
+</xsl:template>
+
+<xsl:template match="segmentedlist" mode="seglist-req-table">
+  <xsl:variable name="table-summary">
+    <xsl:call-template name="dbhtml-attribute">
+      <xsl:with-param name="pis"
+                      select="processing-instruction('dbhtml')"/>
+      <xsl:with-param name="attribute" select="'table-summary'"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:variable name="list-width">
+    <xsl:call-template name="dbhtml-attribute">
+      <xsl:with-param name="pis"
+                      select="processing-instruction('dbhtml')"/>
+      <xsl:with-param name="attribute" select="'list-width'"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:apply-templates select="title"/>
+
+  <table border="1" cellpadding="3" cellspacing="0" width="90%">
+  <tr><th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th></tr>
+    <xsl:if test="$list-width != ''">
+      <xsl:attribute name="width">
+        <xsl:value-of select="$list-width"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="$table-summary != ''">
+      <xsl:attribute name="summary">
+        <xsl:value-of select="$table-summary"/>
+      </xsl:attribute>
+    </xsl:if>
+    <thead>
+      <tr>
+        <xsl:call-template name="tr.attributes">
+          <xsl:with-param name="row" select="segtitle[1]"/>
+          <xsl:with-param name="rownum" select="1"/>
+        </xsl:call-template>
+        <xsl:apply-templates select="segtitle" mode="seglist-table"/>
+      </tr>
+    </thead>
+    <tbody>
+      <xsl:apply-templates select="seglistitem" mode="seglist-table"/>
+    </tbody>
+  </table>
+</xsl:template>
+
+
+
 </xsl:stylesheet>
+

@@ -1,3 +1,9 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
 <sect1 id="openacs" xreflabel="Install OpenACS &version;">
 <title>Install OpenACS &version;</title>
 
@@ -357,11 +363,11 @@ logout
       <listitem id="create-database">
 	<para>Create a database with the same name as our service name, <replaceable>service0</replaceable>.</para>
     <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$ <userinput>createdb <replaceable>service0</replaceable></userinput>
+[service0@yourserver service0]$ <userinput>createdb -E UNICODE <replaceable>service0</replaceable></userinput>
 CREATE DATABASE
 [service0@yourserver service0]$
 <action>su - <replaceable>service0</replaceable>
-createdb <replaceable>service0</replaceable></action></screen>
+createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
       </listitem>
       <listitem>
         <para>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.</para>
@@ -654,8 +660,3 @@ Loading package .info files ... this will take a few minutes</programlisting>
 
   <para><phrase role="cvstag">($Id$)</phrase></para>
 </sect1>
-<!--
-   Local Variables:
-   sgml-parent-document: ("../index.xml" "book" "sect1")
-   End:
--->

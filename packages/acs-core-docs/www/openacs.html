@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install OpenACS 4.7.0d</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="unix-install.html" title="Chapter 4. Installing on Unix/Linux"><link rel="previous" href="aolserver.html" title="Install AOLserver 3.3oacs1"><link rel="next" href="credits.html" title="Credits"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="aolserver.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Installing on Unix/Linux</th><td width="20%" align="right"> <a accesskey="n" href="credits.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="openacs"></a>Install OpenACS 4.7.0d</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install OpenACS 5.0.0d</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="unix-install.html" title="Chapter 4. Installing on Unix/Linux"><link rel="previous" href="aolserver.html" title="Install AOLserver 3.3oacs1"><link rel="next" href="credits.html" title="Credits"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="aolserver.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Installing on Unix/Linux</th><td width="20%" align="right"> <a accesskey="n" href="credits.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="openacs"></a>Install OpenACS 5.0.0d</h2></div></div><div class="authorblurb"><p>
 	by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
@@ -31,7 +31,7 @@ chmod 770 /web</pre></pre></li><li><p><a name="install-openacs-download"></a>You
       of your site is one word, that would be a good choice. For
       example &quot;<span class="replaceable">service0</span>&quot; might be the service name for the
       <a href="http://service0.net/" target="_top"><span class="replaceable">service0</span>.net</a>
-      community.</p><p>For the 4.7.0d-P and 4.7.0d-O Reference Platform,
+      community.</p><p>For the 5.0.0d-P and 5.0.0d-O Reference Platform,
       we'll use a server named <span class="replaceable">service0</span> and
       a user named <span class="replaceable">service0</span>.  We'll leave the password
       blank for increased security.  The only way to log in will be
@@ -72,8 +72,8 @@ logout
 
 [root@yourserver root]#</pre></li><li><p><a name="unpack-openacs"></a>Unpack the OpenACS tarball and rename it to <tt>service0</tt>.  Secure the directory so that only the owner can access it.  Check the permissions by listing the directory.</p><pre class="screen">[root@yourserver root]# <b><tt>su - <span class="replaceable">service0</span></tt></b>
 [service0@yourserver service0]$ <b><tt>cd /web</tt></b>
-[service0@yourserver web]$ <b><tt>tar xzf /tmp/openacs-4.7.0d.tgz</tt></b>
-[service0@yourserver web]$ <b><tt>mv openacs-4.7.0d <span class="replaceable">service0</span></tt></b>
+[service0@yourserver web]$ <b><tt>tar xzf /tmp/openacs-5.0.0d.tgz</tt></b>
+[service0@yourserver web]$ <b><tt>mv openacs-5.0.0d <span class="replaceable">service0</span></tt></b>
 [service0@yourserver web]$ <b><tt>chmod -R 700 <span class="replaceable">service0</span></tt></b>
 [service0@yourserver web]$ <b><tt>ls -al</tt></b>
 total 3
@@ -86,8 +86,8 @@ logout
 [root@yourserver root]#
 <pre class="action">su - service0
 cd /web
-tar xzf /tmp/openacs-4.7.0d.tgz
-mv openacs-4.7.0d service0
+tar xzf /tmp/openacs-5.0.0d.tgz
+mv openacs-5.0.0d service0
 chmod -R 700 service0/
 exit</pre></pre></li><li><p><a href="cvs-service-import.html" title="Add the Service to CVS - OPTIONAL">Add the Service to CVS</a> (OPTIONAL)</p></li><li><p>(This step should be obsoleted by the 5.0.0 tarball, as
       these directories will be included in the tarball)Set up several additional directories in the service root:
@@ -242,11 +242,11 @@ CREATE USER
 logout
 
 [root@yourserver root]#</pre></li><li><p><a name="create-database"></a>Create a database with the same name as our service name, <span class="replaceable">service0</span>.</p><pre class="screen">[root@yourserver root]# <b><tt>su - <span class="replaceable">service0</span></tt></b>
-[service0@yourserver service0]$ <b><tt>createdb <span class="replaceable">service0</span></tt></b>
+[service0@yourserver service0]$ <b><tt>createdb -E UNICODE <span class="replaceable">service0</span></tt></b>
 CREATE DATABASE
 [service0@yourserver service0]$
 <pre class="action">su - <span class="replaceable">service0</span>
-createdb <span class="replaceable">service0</span></pre></pre></li><li><p>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.</p><a class="indexterm" name="id2891690"></a><pre class="screen">[service0@yourserver service0]$ <b><tt>export EDITOR=emacs;crontab -e</tt></b></pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/vacuumdb --analyze <span class="replaceable">service0</span></pre></li><li><p><a href="install-full-text-search.html#install-openfts-postgres" title="Install OpenFTS prerequisites in PostGreSQL instance">Add Full Text Search Support</a> (OPTIONAL)</p></li><li><a name="db-setup-exit"></a><pre class="screen">[service0@yourserver service0]$ <b><tt>exit</tt></b>
+createdb -E UNICODE <span class="replaceable">service0</span></pre></pre></li><li><p>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.</p><a class="indexterm" name="id2962087"></a><pre class="screen">[service0@yourserver service0]$ <b><tt>export EDITOR=emacs;crontab -e</tt></b></pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/vacuumdb --analyze <span class="replaceable">service0</span></pre></li><li><p><a href="install-full-text-search.html#install-openfts-postgres" title="Install OpenFTS prerequisites in PostGreSQL instance">Add Full Text Search Support</a> (OPTIONAL)</p></li><li><a name="db-setup-exit"></a><pre class="screen">[service0@yourserver service0]$ <b><tt>exit</tt></b>
 logout
 
 [root@yourserver root]# </pre></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-openacs-configure-aol"></a>Configure an AOLserver Service for OpenACS</h3></div></div><div class="orderedlist"><ol type="1"><li><p><a name="configure-config-tcl"></a>
@@ -256,7 +256,7 @@ logout
 	  need to configure a virtual server.  The Reference Platform
 	  uses a configuration file included in the OpenACS tarball,
 	  <tt>/web/<span class="replaceable">service0</span>/etc/config.tcl</tt>.
-	   Open it in an editor to adjust the parameters.</p><a class="indexterm" name="id2894100"></a><pre class="screen">[root@yourserver root]# <b><tt>su - <span class="replaceable">service0</span></tt></b>
+	   Open it in an editor to adjust the parameters.</p><a class="indexterm" name="id2962225"></a><pre class="screen">[root@yourserver root]# <b><tt>su - <span class="replaceable">service0</span></tt></b>
 [service0@yourserver service0]$ <b><tt>cd /web/<span class="replaceable">service0</span>/etc</tt></b>
 [service0@yourserver etc]# <b><tt>emacs config.tcl</tt></b>
 </pre><p>
@@ -321,7 +321,7 @@ nsd: no process killed
 	</p></li><li><p><a href="maintenance-web.html#install-openacs-keepalive" title="">Automate
         AOLserver keepalive</a> (OPTIONAL)</p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-openacs-using-installer"></a>Configure a Service with the OpenACS Installer</h3></div></div><p>
 	  Now that you've got AOLserver up and running, let's install OpenACS
-	  4.7.0d.
+	  5.0.0d.
 	</p><div class="itemizedlist"><ul type="disc"><li><p> 
 		  You should see a page from the webserver titled
 		  <tt>OpenACS Installation:
@@ -377,10 +377,10 @@ Loading package .info files ... this will take a few minutes</pre><p>
 		  Give the server a few minutes to start up. Then
 		  reload the final page above. You should see the front page, with
 		  an area to login near the upper right.  Congratulations, OpenACS
-		  4.7.0d is now up and running!  
+		  5.0.0d is now up and running!  
 		</p></li><li><p>Install Full Text Search (OPTIONAL).  If you have <a href="install-full-text-search.html#install-openfts" title="Install OpenFTS module">installed OpenFTS</a> and enabled
         OpenFTS, you can now <a href="install-full-text-search.html#install-fts-engine" title="Install Full Text Search Engine">install</a> the OpenFTS Driver package and
-        Full Text Search Engine package in the OpenACS service.</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2894769"></a>Next Steps</h3></div></div><div class="itemizedlist"><ul type="disc"><li><p>This is a good time to make a <a href="backup-recovery.html#snapshot-backup" title="Snapshot backup and recovery">backup</a> of your service.  If this is a
+        Full Text Search Engine package in the OpenACS service.</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2916160"></a>Next Steps</h3></div></div><div class="itemizedlist"><ul type="disc"><li><p>This is a good time to make a <a href="backup-recovery.html#snapshot-backup" title="Snapshot backup and recovery">backup</a> of your service.  If this is a
     production site, you should set up <a href="backup-recovery.html#automated-backup" title="Automated Backup (OPTIONAL)">automatic nightly backups</a>.</p></li><li><p>If you want traffic reports, <a href="maintenance-web.html#analog-setup" title="Set up Log Analysis Reports - OPTIONAL">set up analog</a> or another log
     processing program.</p></li><li><p>Follow the instruction on the home page to
       change the appearance of your service or add more

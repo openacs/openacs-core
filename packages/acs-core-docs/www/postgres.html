@@ -3,14 +3,14 @@
 	by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 4.7.0d will run with PostGreSQL 7.2.x or 7.3.2.  It
+        </p></div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.0.0d will run with PostGreSQL 7.2.x or 7.3.2.  It
   has not been fully tested with 7.3.2; 7.2.4 is the recommended
   version of PostgreSQL to use.</p><div class="itemizedlist"><ul type="disc"><li><p><a name="install-postgres-rpm"></a><b>Using the Red Hat RPM. </b>Red Hat users: If you install PostGreSQL 7.3.2 from the Red Hat 9 RPM, you
   can skip a few steps.  These shell commands add a link so that the
   data directory appears to be in the same place as in a source
   install; start the service; create a new group for web service
   users, and modify the postgres user's
-  environment (<a name="install-postgres-env" href="">more
+  environment (<a href="postgres.html#install-postgres-env">more
   information</a>):</p><pre class="screen">[root@yourserver root]# <b><tt>ln -s /var/lib/pgsql/data /usr/local/pgsql/data</tt></b>
 [root@yourserver root]# <b><tt>service postgresql start</tt></b>
 Initializing database:
@@ -27,7 +27,7 @@ service postgresql start
 echo &quot;export LD_LIBRARY_PATH=/usr/local/pgsql/lib&quot; &gt;&gt; ~postgres/.bash_profile
 echo &quot;export PATH=$PATH:/usr/local/pgsql/bin&quot; &gt;&gt; ~postgres/.bash_profile
 groupadd web
-su - postgres</pre></pre><p>... and then skip to <a href="postgres.html#install-plpgsql" title="">6</a>.  Something similar may work for other binary packages as well.</p></li></ul></div><div class="orderedlist"><ol type="1"><li><p><b>Unpack PostGreSQL. </b>If you have not downloaded the postgresql tarball to
+su - postgres</pre></pre><p>... and then skip to <a href="quick.html#install-plpgsql" title="">3</a>.  Something similar may work for other binary packages as well.</p></li></ul></div><div class="orderedlist"><ol type="1"><li><p><b>Unpack PostGreSQL. </b>If you have not downloaded the postgresql tarball to
         <tt>/tmp/postgresql-7.2.4.tar.gz</tt>,
         <a href="individual-programs.html#source-postgresql">get it</a>.</p><pre class="screen">[root@yourserver root]# <b><tt>cd /usr/local/src</tt></b>
 [root@yourserver src]# <b><tt>tar xzf /tmp/postgresql-7.2.4.tar.gz</tt></b>
@@ -64,7 +64,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/
 	  Change to the postgres user and run <tt>./configure</tt> to set the compilation options automatically. This is the point at which you can
 	  configure PostgreSQL in various ways. For example, if you want to
 	  enable
-	  Unicode<a class="indexterm" name="id2885469"></a> support, add the flags <tt>--enable-locale</tt> and <tt>--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt>./configure --help</tt>.
+	  Unicode<a class="indexterm" name="id2969953"></a> support, add the flags <tt>--enable-locale</tt> and <tt>--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt>./configure --help</tt>.
 	</p><pre class="screen">[root@yourserver src]# <b><tt>su - postgres</tt></b>
 [postgres@yourserver pgsql]$<b><tt> cd /usr/local/src/postgresql-7.2.4</tt></b>
 [postgres@yourserver postgresql-7.2.4]$ <b><tt>./configure</tt></b>
@@ -161,11 +161,11 @@ logout
         state. Red Hat and Debian and SuSE each work a little
         differently.
 	</p><div class="itemizedlist"><ul type="disc"><li><p>Red Hat RPM:</p><p>The init script is already installed; just turn it on for the appropriate run levels.</p><pre class="screen">[root@yourserver root]# <b><tt>chkconfig --level 345 postgresql on</tt></b>
-[root@yourserver root]# </pre></li><li><p>Red Hat from source:</p><pre class="screen">[root@yourserver src]# <b><tt>cp /tmp/openacs-4.7.0d/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
+[root@yourserver root]# </pre></li><li><p>Red Hat from source:</p><pre class="screen">[root@yourserver src]# <b><tt>cp /tmp/openacs-5.0.0d/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
 [root@yourserver src]# <b><tt>chown root.root /etc/rc.d/init.d/postgresql</tt></b>
 [root@yourserver src]# <b><tt>chmod 755 /etc/rc.d/init.d/postgresql</tt></b>
 [root@yourserver src]# 
-<pre class="action">cp /tmp/openacs-4.7.0d/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+<pre class="action">cp /tmp/openacs-5.0.0d/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/rc.d/init.d/postgresql
 chmod 755 /etc/rc.d/init.d/postgresql</pre></pre><p>Test the script.</p><pre class="screen">[root@yourserver root]# <b><tt>service postgresql stop</tt></b>
 Stopping PostgreSQL: ok
@@ -184,11 +184,11 @@ Starting PostgreSQL: ok
 <pre class="action">chkconfig --add postgresql
 chkconfig --level 345 postgresql on
 chkconfig --list postgresql
-service postgresql start</pre></pre></li><li><p>Debian:</p><pre class="screen">root:~# <b><tt>cp /tmp/openacs-4.7.0d/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
+service postgresql start</pre></pre></li><li><p>Debian:</p><pre class="screen">root:~# <b><tt>cp /tmp/openacs-5.0.0d/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
 root:~# <b><tt>chown root.root /etc/init.d/postgresql</tt></b>
 root:~# <b><tt>chmod 755 /etc/init.d/postgresql</tt></b>
 root:~# <pre class="action">
-cp /tmp/openacs-4.7.0d/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+cp /tmp/openacs-5.0.0d/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/init.d/postgresql
 chmod 755 /etc/init.d/postgresql</pre></pre><p>Test the script</p><pre class="screen">root:~# <b><tt>/etc/init.d/postgresql stop</tt></b>
 Stopping PostgreSQL: ok
@@ -216,7 +216,7 @@ root:~#</pre></li><li><p>SuSE:</p><div class="note" style="margin-left: 0.5in; m
             <tt>rc.d/</tt> part in each of the
             following commands.
 
-          </p></div><pre class="screen">root:~# <b><tt>cp /tmp/openacs-4.7.0d/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</tt></b>
+          </p></div><pre class="screen">root:~# <b><tt>cp /tmp/openacs-5.0.0d/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</tt></b>
 root:~# <b><tt>chown root.root /etc/rc.d/init.d/postgresql</tt></b>
 root:~# <b><tt>chmod 755 /etc/rc.d/init.d/postgresql</tt></b></pre><p>
 

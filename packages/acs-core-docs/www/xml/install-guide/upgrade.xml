@@ -1,3 +1,9 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
 <sect1 id="upgrade-detail">
     <title>Support for upgrades.</title>
   <authorblurb>
@@ -9,11 +15,9 @@
     packages automatically.  If you haven't changed anything, no
     manual intervention should be required.  If you are running
     OpenACS prior to 4.5, upgrading will require manual effort.</para>
-</sect1>
 
-<sect1 id="upgrade-4.5-to-4.6">
-  <title>Upgrading OpenACS 4.5 to 4.6</title>
-  <sect2><title>Checklist</title>
+  <sect2 id="upgrade-4.5-to-4.6">
+<title>Checklist</title>
     <para>The required platform for OpenACS 4.6 is the same as
     4.5, with the excepion of OpenFTS.  You now need OpenFTS 0.3.2, not 0.2.
     OpenACS 4.6 does not support PostGreSQL 7.3.</para>
@@ -308,8 +312,3 @@ exit</action></screen>
   <para><phrase role="cvstag">($Id$)</phrase></para>
 
 </sect1>
-<!--
-   Local Variables:
-   sgml-parent-document: ("../index.xml" "book" "sect1")
-   End:
--->
