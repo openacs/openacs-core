@@ -45,9 +45,9 @@
 <fullquery name="context">      
       <querytext>
       
-  select acs_object.name(context_id)
-  from acs_objects
-  where object_id = :object_id
+SELECT acs_object.name(context_id) as context_name, context_id, security_inherit_p
+  FROM acs_objects
+ WHERE object_id = :object_id
 
       </querytext>
 </fullquery>
@@ -56,7 +56,7 @@
 <fullquery name="children">      
       <querytext>
       
-	select object_id as c_object_id,acs_object.name(object_id) as c_name
+	select object_id as c_object_id,acs_object.name(object_id) as c_name, object_type as c_type
 	from acs_objects o
 	where context_id = :object_id
               and exists (select 1

@@ -35,10 +35,13 @@ proc db_bootstrap_checks { errors error_p } {
         nsv_set ad_database_version . $version
     }
 
-    if { $version < 7.1 } {
-        append my_errors "<li>Your installed version of Postgres is too old.  Please install Postgres V7.1 or later.\n"
+    if { $version < 7.2 } {
+        append my_errors "<li>Your installed version of Postgres is too old.  Please install PostgreSQL 7.2 or later.\n"
         set my_error_p 1
-    } 
+    } elseif { [string equal $version "7.3"] } 
+        append my_errors "<li>PostgreSQL 7.3 is not supported at this moment. Please use 7.2.3.\n"
+        set my_error_p 1
+    }
 
     if { [catch { ns_pg_bind 1row $db "select count(*) from pg_class" }] } {
         append my_errors "<li>Your Postgres driver is too old.  You need to update.\n"
@@ -59,23 +62,7 @@ proc db_bootstrap_checks { errors error_p } {
         set my_error_p 1
     }
 
-    # DRB: The PG user has to have "createuser" privs for the PG 7.1 install to work.  Not necessary for PG 7.2
-
-    if { $version == 7.1 } {
-        if { [catch { ns_db dml $db "create function __test__() returns integer as 'select 1' language 'sql'" } errmsg] } {
-            append my_errors "<li>Unexpected error creating SQL function.  Check your AOLserver log for details.\n"
-            set my_error_p 1
-        } else {
-            if { [catch { ns_db dml $db "update pg_proc set proname = '__test__' where proname = '__test__'" } errmsg] } {
-                append my_errors "<li>To install the kernel datamodel in PostgreSQL 7.1 database user named in your AOLserver database pools must have the CREATEUSER privilege.   You must drop your database and user and recreate the user, answering \"yes\" when asked if the new user should be able to create other users.<p>After installation is complete we recommend that you remove this privilege using the following command:<blockquote><pre>alter user your_acs_postgres_user nocreatuser\;</pre></blockquote><p>If you upgrade to PostgreSQL 7.2 you can avoid the need to grant this privilege."
-                set my_error_p 1
-            }
-            if { [catch { ns_db dml $db "drop function __test__();" } errmsg] } {
-                append my_errors "<li>An unexpected error was encountered while dropping test function: <blockquote><pre>$errmsg</pre></blockquote>\n"
-                set my_error_p 1
-            }
-        }
-    }
+    # RBM: Remove check for 7.1 since we don't support it anymore. 2002-01-14 
 
     ns_db releasehandle $db
 

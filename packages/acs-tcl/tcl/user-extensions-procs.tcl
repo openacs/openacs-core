@@ -1,7 +1,9 @@
 
 ad_library {
 
-    Procs to manage extensions to user data
+    Procs to manage extensions to user data.
+    This calls the UserData service contract for allowing packages to be notified 
+    of changes in user information.
 
     @author ben@openforce.net
     @creation-date 2002-01-22
@@ -15,6 +17,11 @@ namespace eval acs_user_extension {
         {-op:required}
         {-list_of_args:required}
         {-impl ""}
+    } {
+    
+    	Dispatches (calls the service contract routines) the requested
+	method so that the operation gets executed.
+
     } {
         if {[empty_string_p $impl]} {
             set extensions [list_extensions]

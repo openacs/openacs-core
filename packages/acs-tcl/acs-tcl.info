@@ -25,6 +25,7 @@
             <file type="package_spec" path="acs-tcl.info"/>
             <file type="tcl_procs" db_type="oracle" path="tcl/00-database-procs-oracle.tcl"/>
             <file type="tcl_procs" db_type="postgresql" path="tcl/00-database-procs-postgresql.tcl"/>
+            <file type="query_file" db_type="postgresql" path="tcl/00-database-procs-postgresql-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/00-database-procs.tcl"/>
             <file type="tcl_procs" path="tcl/10-charset-compat-procs.tcl"/>
             <file type="tcl_init" path="tcl/20-memoize-init.tcl"/>

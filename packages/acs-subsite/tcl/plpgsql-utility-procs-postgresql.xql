@@ -3,7 +3,7 @@
 <queryset>
   <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-  <fullquery name="plpgsql_utility::generate_attribute_parameter_call.get_function_args">      
+  <fullquery name="plpgsql_utility::get_function_args.get_function_args">      
     <querytext>
       select arg_name, arg_default
       from acs_function_args

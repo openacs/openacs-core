@@ -29,6 +29,7 @@ set root_id [ad_conn node_id]
 db_foreach node_list {
     select name, node_id
     from site_nodes
+    order by name
 } {
     append nodes "<input type=radio name=root value=$node_id> /$name<br>"
 }

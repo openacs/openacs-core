@@ -141,7 +141,7 @@ begin
 
     return magic_object_id__object_id;
    
-end;' language 'plpgsql';
+end;' language 'plpgsql' with(isstrict,iscachable);
 
 
 

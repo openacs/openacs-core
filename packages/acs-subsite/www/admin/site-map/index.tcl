@@ -202,6 +202,11 @@ db_foreach nodes_select {} {
 	doc_body_append "<option value=$package_key>$pretty_name</option>\n"
       }
 
+      # If this is a site-wide admin, offer a link to the package manager
+      if { [ad_permission_p 0 admin] } {
+          doc_body_append "<option value=\"/new\">--Install new package--</option>\n"
+      }
+
       doc_body_append "
         </select>
         </td>

@@ -19,6 +19,7 @@
     from site_nodes n
    where n.parent_id = :node_id
     and n.object_id is not null
+   order by name
 
       </querytext>
 </fullquery>

@@ -96,8 +96,6 @@
 
   </multiple>
 
-  </table>
-
 </td></tr>
 
 <noparse><if \@buttons:rowcount\@ gt 0></noparse>

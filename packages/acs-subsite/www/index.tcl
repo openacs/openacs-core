@@ -28,11 +28,8 @@ set subsite_name [db_string name {
 
 set node_id [ad_conn node_id]
 
-db_multirow nodes site_nodes {
-  select site_node.url(n.node_id) as url, acs_object.name(n.object_id) as name
-    from site_nodes n
-   where n.parent_id = :node_id
-    and n.object_id is not null
-}
+db_multirow nodes site_nodes {}
+
+set login_url "register/?[export_vars { { return_url {[ad_conn url]}} }]"
 
 ad_return_template

@@ -4,7 +4,7 @@
 # created.
 # Original version by Don Baccus (dhogaza@pacifier.com>
 # Modified for openacs4 by Vinod Kurup <vinod@kurup.com>
-# Last modified: 14 Nov 2002
+# Last modified: 02 Jan 2003
 # This version: ftp only.	
 
 proc acs_pgbackup {} {	
@@ -16,16 +16,22 @@ proc acs_pgbackup {} {
     set bak          "[file dirname [ns_info pageroot]]/backup"
     set servername   "[ns_info server]"
 
-    set pguser "-U [db_get_username]"
+    set pguser "[db_get_username]"
     set day [clock format [clock seconds] -format %d]
     set data "${servername}_${day}.dmp"
 	
 	# make the backup directory
-	ns_mkdir $bak
+	if ![file exists $bak] {
+        if [catch {ns_mkdir $bak} errmsg] {
+            ns_log Error "mkdir failed: $errmsg"
+		ns_sendmail [ad_system_owner] [ad_system_owner] "[ad_system_name] : mkdir failed..." "$errmsg" 
+            return
+        }
+    }
 
     ns_log Notice "Backup of [ad_system_name] starting."
     ns_log Notice "pg_dump beginning..."
-    if [catch {append msg [exec "pg_dump" $pguser $servername ">$bak/$data"]} errmsg] { 
+    if [catch {append msg [exec "pg_dump" "-U" "$pguser" "$servername" ">$bak/$data"]} errmsg] { 
 		ns_log Error "pg_dump failed: $errmsg" 
 		ns_sendmail [ad_system_owner] [ad_system_owner] "[ad_system_name] : pg_dump failed..." "$errmsg" 
 		return 
@@ -52,7 +58,7 @@ proc acs_pgbackup {} {
     
     # Replicate the above code to make remote copies to other systems	
     ns_log Notice "vacuum beginning..." 	
-    if [catch {append msg [exec "vacuumdb" $pguser "-q" "-z" "$servername"]} errmsg] { 
+    if [catch {append msg [exec "vacuumdb" "-U" "$pguser" "-q" "-z" "$servername"]} errmsg] { 
 		ns_log Error "vacuum failed: $errmsg" 
 		ns_sendmail [ad_system_owner] [ad_system_owner] "[ad_system_name] : vacuum failed..." "$errmsg" 
     }	
@@ -62,7 +68,11 @@ proc acs_pgbackup {} {
 }	 
 
 if { ! [nsv_exists acs_pgbackup scheduled_p] } {
-    ns_schedule_daily 0 0 acs_pgbackup 
+    ad_schedule_proc \
+        -thread t \
+        -schedule_proc ns_schedule_daily \
+        "00 00" \
+        acs_pgbackup 
     nsv_set acs_pgbackup scheduled_p 1
     ns_log Notice "Backup has been scheduled." 
 }

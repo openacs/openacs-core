@@ -106,6 +106,10 @@
         <td align='right'>Email contains:</td>
         <td> <input type='text' name='email'> </td>
       </tr>
+      <tr bgcolor='#ffffff'>
+        <td align='right'>IP Address:</td>
+        <td> <input type='text' name='ip'> </td>
+      </tr>
 
       <tr bgcolor='#ffffff'>
         <td>&nbsp;</td>
