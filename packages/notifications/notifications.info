@@ -7,7 +7,7 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="0.2d" url="http://openacs.org/repository/download/apm/notifications-0.3d.apm">
+    <version name="0.3d" url="http://openacs.org/repository/download/apm/notifications-0.3d.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
@@ -16,7 +16,7 @@
         <summary>Notification Management</summary>
         <release-date>2002-08-19</release-date>
 
-        <provides url="notifications" version="0.2d"/>
+        <provides url="notifications" version="0.3d"/>
         <requires url="acs-mail-lite" version="0.1d"/>
 
         <files>
@@ -92,6 +92,7 @@
             <file type="content_page" path="www/test.tcl"/>
         </files>
         <parameters>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="EmailQmailQueueScanP" default="0" description="Should the package scan the qmail queue for incoming mail? (1 is true, 0 is false)" section_name="email"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailQmailQueue"  description="The location of the qmail queue for incoming email" section_name="email"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailReplyAddressPrefix"  default="notification" description="The prefix for email replies" section_name="email"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailDomain"  description="The domain for the notification email address" section_name="email"/>
