@@ -57,9 +57,9 @@ db_foreach select_params {} {
     }
 
     set elm [list ${parameter_name}:text,optional,nospell \
-                 [list label $parameter_name] \
-                 [list help_text $description] \
-                 [list section $section_name] \
+                 [list label [util::subst_safe $parameter_name]] \
+                 [list help_text [util::subst_safe $description]] \
+                 [list section [util::subst_safe $section_name]] \
                  {html {size 50}}]
 
     set file_val [ad_parameter_from_file $parameter_name $package_key]
