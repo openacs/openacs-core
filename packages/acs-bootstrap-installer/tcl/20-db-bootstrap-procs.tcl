@@ -1,3 +1,26 @@
+
+ad_proc -private db_available_pools {{ -dbn "" }} {
+    Returns a list of the available pools for the given database name.
+
+    <p>
+    We define this here in 20-db-bootstrap-procs.tcl rather than
+    acs-tcl/tcl/00-database-procs.tcl, as we also need to call it from
+    db_bootstrap_set_db_type, below, and from db_bootstrap_checks,
+    before all the rest of the db_* api code in 00-database-procs.tcl
+    is sourced.
+
+    @param dbn The database name to use.  If empty_string, uses the default database.
+
+    @author Andrew Piskorski (atp@piskorski.com)
+    @creation-date 2003/03/16
+} {
+    if { [empty_string_p $dbn] } {
+        set dbn [nsv_get {db_default_database} .]
+    }
+    return [nsv_get {db_available_pools} $dbn]
+}
+
+
 ad_proc db_bootstrap_set_db_type { errors } {
 
     @author Don Baccus (dhogaza@pacifier.com)
@@ -11,6 +34,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
     time at the moment to change how the bootstrapper communicates
     database problems to the installer.
 } {
+    set proc_name {Database API}
 
     # Might as well get el grosso hacko out of the way...
     upvar $errors database_problem
@@ -69,21 +93,69 @@ ad_proc db_bootstrap_set_db_type { errors } {
     #
 
     set server_name [ns_info server]
-    append config_path "ns/server/$server_name/acs/database"
-    set the_set [ns_configsection $config_path]
-    set pools [list]
+    set config_path "ns/server/$server_name/acs/database"
+    set all_pools [ns_db pools]
 
-    if { [string length $the_set] > 0 } {
-        for {set i 0} {$i < [ns_set size $the_set]} {incr i} {
-            if { [string tolower [ns_set key $the_set $i]] ==  "availablepool" } {
-                lappend pools [ns_set value $the_set $i]
+    set database_names [ns_config $config_path {database_names}]
+
+    if { [llength $database_names] <= 0 } {
+        # Fall back to old OpenACS 4.6.x pre-multi-db style.
+        set old_availablepool_p 1
+        set default_dbn {default}
+    } else {
+        # The config file is using the new multi-db format.
+        set old_availablepool_p 0
+
+        set default_dbn [lindex $database_names 0]
+        if { [empty_string_p $default_dbn] } {
+            set default_dbn {default}
+            set old_availablepool_p 1
+
+        } else {
+            foreach dbn $database_names {
+                # TODO: For each pool, may want to add a check against
+                # all_pools to ensure that the pool is valid.
+
+                set dbn_pools [ns_config $config_path "pools_${dbn}"]
+                nsv_set {db_available_pools} $dbn $dbn_pools
+                ns_log Notice "$proc_name: For database '$dbn', the following pools are available: $dbn_pools"
+            }
+
+            if { [empty_string_p [db_available_pools -dbn $default_dbn]] } {
+                ns_log Error "$proc_name: No pools specified for database '$default_dbn'." 
+                set old_availablepool_p 1
             }
         }
     }
 
-    if { [llength $pools] == 0 } {
-        set pools [ns_db pools]
+    nsv_set {db_default_database} . $default_dbn
+    ns_log Notice "$proc_name: Default database (dbn) is: '$default_dbn'"
+
+    if { $old_availablepool_p } {
+        # We ONLY do this as a fallback, if something was wrong with
+        # the newer multi-db config above, or if it was simply missing
+        # entirely:  --atp@piskorski.com, 2003/03/17 00:55 EST
+
+        set dbn_pools [list]
+        set the_set [ns_configsection $config_path]
+        if { [string length $the_set] > 0 } {
+            for {set i 0} {$i < [ns_set size $the_set]} {incr i} {
+                if { [string tolower [ns_set key $the_set $i]] ==  "availablepool" } {
+                    lappend dbn_pools [ns_set value $the_set $i]
+                }
+            }
+        }
+
+        nsv_set {db_available_pools} $default_dbn $dbn_pools
     }
+
+    set pools [db_available_pools]
+    if { [llength $pools] <= 0 } {
+        nsv_set {db_available_pools} $default_dbn $all_pools
+        set pools $all_pools
+        ns_log Notice "$proc_name: Using ALL database pools for OpenACS."
+    }
+    ns_log Notice "$proc_name: The following pools are available for OpenACS: $pools"
 
     # DRB: if the user hasn't given us enough database pools might as well tell
     # them in plain english
@@ -96,8 +168,14 @@ ad_proc db_bootstrap_set_db_type { errors } {
     run correctly."
     }
 
-    ns_log Notice "Database API: The following pools are available: $pools"
-    nsv_set db_available_pools . $pools
+    # We're done with the mult-db dbn stuff, from now on we deal only
+    # with the OpenACS default database pools:
+    #
+    # TODO: For now the below pool-checking code runs ONLY for the
+    # default database.  Should probalby extend the checking to all
+    # configured databases:
+    #
+    # --atp@piskorski.com, 2003/03/17 00:53 EST
 
     # DRB: Try to allocate a handle from each pool and determine its database type.
     # I wrote this to break after the first allocation failure because a defunct

@@ -7,6 +7,7 @@ ad_library {
     @cvs-id $Id$
 }
 
+
 ad_proc -public db_nullify_empty_string { string } {
     A convenience function that returns [db_null] if $string is the empty string.
 } {
@@ -17,7 +18,8 @@ ad_proc -public db_nullify_empty_string { string } {
     }
 }
 
-ad_proc -public db_nextval { sequence } { 
+
+ad_proc db_nextval {{ -dbn "" } sequence } {
 
     Returns the next value for a sequence. This can utilize a pool of
     sequence values.
@@ -31,13 +33,16 @@ ad_proc -public db_nextval { sequence } {
      </pre>
 
     @param sequence the name of an sql sequence
-    @see <a href="/doc/db-api-detailed.html">/doc/db-api-detailed.html</a>
 
+    @param dbn The database name to use.  If empty_string, uses the default database.
+
+    @see <a href="/doc/db-api-detailed.html">/doc/db-api-detailed.html</a>
 } {
-    return [db_string "nextval" "select $sequence.nextval from dual"]
+    return [db_string -dbn $dbn "nextval" "select $sequence.nextval from dual"]
 }
 
-ad_proc -public db_exec_plsql { statement_name sql args } {
+
+ad_proc -public db_exec_plsql {{ -dbn "" } statement_name sql args } {
 
     Executes a PL/SQL statement, returning the variable of bind 
     variable <code>:1</code>.
@@ -112,10 +117,9 @@ ad_proc -public db_exec_plsql { statement_name sql args } {
     Note that this description is <b>oracle</b> specific, because 
     this api-browser is running under oracle.
 
+    @param dbn The database name to use.  If empty_string, uses the default database.
 
     @see <a href="/doc/db-api-detailed.html">/doc/db-api-detailed.html</a>
-
-
 } {
     ad_arg_parser { bind_output bind } $args
 
@@ -126,7 +130,7 @@ ad_proc -public db_exec_plsql { statement_name sql args } {
 	return -code error "the -bind_output switch is not currently supported"
     }
 
-    db_with_handle db {
+    db_with_handle -dbn $dbn db {
 	# Right now, use :1 as the output value if it occurs in the statement,
 	# or not otherwise.
         set test_sql [db_qd_replace_sql $full_statement_name $sql]
@@ -137,6 +141,7 @@ ad_proc -public db_exec_plsql { statement_name sql args } {
 	}
     }
 }
+
 
 ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
 
@@ -185,12 +190,14 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
     return -code $errno -errorinfo $errorInfo -errorcode $errorCode $error
 }
 
-ad_proc -public db_dml { statement_name sql args } {
+
+ad_proc -public db_dml {{ -dbn "" } statement_name sql args } {
 
     Do a DML statement.
 
-    @see <a href="/doc/db-api-detailed.html">/doc/db-api-detailed.html</a>
+    @param dbn The database name to use.  If empty_string, uses the default database.
 
+    @see <a href="/doc/db-api-detailed.html">/doc/db-api-detailed.html</a>
 } {
     ad_arg_parser { clobs blobs clob_files blob_files bind } $args
 
@@ -225,7 +232,8 @@ ad_proc -public db_dml { statement_name sql args } {
     if { $lob_argc > 1 } {
 	error "Only one of -clobs, -blobs, -clob_files, or -blob_files may be specified as an argument to db_dml"
     }
-    db_with_handle db {
+
+    db_with_handle -dbn $dbn db {
 	if { $lob_argc == 1 } {
 	    # Bind :1, :2, ..., :n as LOBs (where n = [llength $lob_argv])
 	    set bind_vars [list]
@@ -239,40 +247,47 @@ ad_proc -public db_dml { statement_name sql args } {
     }
 }
 
-proc_doc db_resultrows {} { Returns the number of rows affected by the last DML command. } {
-    global db_state
+
+ad_proc db_resultrows {{ -dbn "" }} {
+    Returns the number of rows affected by the last DML command.
+
+    @param dbn The database name to use.  If empty_string, uses the default database.
+} {
+    upvar "#0" [db_state_array_name_is -dbn $dbn] db_state
     return [ns_ora resultrows $db_state(last_used)]
 }
 
-ad_proc db_write_clob { statement_name sql args } {
+
+ad_proc db_write_clob {{ -dbn "" } statement_name sql args } {
+    @param dbn The database name to use.  If empty_string, uses the default database.
+} {
     ad_arg_parser { bind } $args
-
     set full_statement_name [db_qd_get_fullname $statement_name]
-
-    db_with_handle db {
+    db_with_handle -dbn $dbn db {
 	db_exec write_clob $db $full_statement_name $sql
     }
 }
 
-ad_proc db_write_blob { statement_name sql args } {
+ad_proc db_write_blob {{ -dbn "" } statement_name sql args } {
+    @param dbn The database name to use.  If empty_string, uses the default database.
+} {
     ad_arg_parser { bind } $args
-
     set full_statement_name [db_qd_get_fullname $statement_name]
-
-    db_with_handle db { 
+    db_with_handle -dbn $dbn db { 
 	db_exec_lob write_blob $db $full_statement_name $sql
     }
 }
 
-ad_proc db_blob_get_file { statement_name sql args } {
+ad_proc db_blob_get_file {{ -dbn "" } statement_name sql args } {
+    @param dbn The database name to use.  If empty_string, uses the default database.
+} {
     ad_arg_parser { bind file args } $args
-
     set full_statement_name [db_qd_get_fullname $statement_name]
-
-    db_with_handle db {
+    db_with_handle -dbn $dbn db {
 	eval [list db_exec_lob blob_get_file $db $full_statement_name $sql 2 $file] $args
     }
 }
+
 
 ad_proc -private db_exec_lob { type db statement_name pre_sql {ulevel 2} args } {
 
@@ -372,13 +387,14 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql {ulevel 2} args } 
     return -code $errno -errorinfo $errorInfo -errorcode $errorCode $error
 }
 
-ad_proc db_get_sql_user { } {
+
+ad_proc db_get_sql_user {{ -dbn "" }} {
 
     Returns a valid user@database/password string to access a database through sqlplus.
 
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-
-    set pool [lindex [nsv_get db_available_pools .] 0]
+    set pool [lindex [db_available_pools -dbn $dbn] 0]
     set datasource [ns_config ns/db/pool/$pool DataSource]    
     if { ![empty_string_p $datasource] && ![string is space $datasource] } {
 	return "[ns_config ns/db/pool/$pool User]/[ns_config ns/db/pool/$pool Password]@$datasource"
@@ -387,14 +403,17 @@ ad_proc db_get_sql_user { } {
     }
 }
 
-ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
 
+ad_proc db_source_sql_file {{
+    -dbn ""
+    -callback apm_ns_write_callback
+} file } {
     Sources a SQL file (in SQL*Plus format).
 
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    
     global env
-    set user_pass [db_get_sql_user]
+    set user_pass [db_get_sql_user -dbn $dbn]
     cd [file dirname $file]
     set fp [open "|[file join $env(ORACLE_HOME) bin sqlplus] $user_pass @$file" "r"]
 
@@ -408,16 +427,17 @@ ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
 }
 
 
-ad_proc db_source_sqlj_file { {-callback apm_ns_write_callback} file } {
-
+ad_proc db_source_sqlj_file {{
+    -dbn ""
+    -callback apm_ns_write_callback
+} file } {
     Sources a SQLJ file using loadjava.
 
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    
     global env
-    set user_pass [db_get_sql_user]
+    set user_pass [db_get_sql_user -dbn $dbn]
     set fp [open "|[file join $env(ORACLE_HOME) bin loadjava] -verbose -user $user_pass $file" "r"]
-
 
     # Despite the fact that this works, the text does not get written to the stream.
     # The output is generated as an error when you attempt to close the input stream as
@@ -435,19 +455,25 @@ ad_proc db_source_sqlj_file { {-callback apm_ns_write_callback} file } {
     }
 }
 
-ad_proc -public db_tables { -pattern } {
+
+ad_proc -public db_tables {
+    -pattern
+    {-dbn ""}
+} {
     Returns a Tcl list of all the tables owned by the connected user.
     
     @param pattern Will be used as LIKE 'pattern%' to limit the number of tables returned.
+
+    @param dbn The database name to use.  If empty_string, uses the default database.
 
     @author Lars Pind lars@pinds.com
 
     @change-log yon@arsdigita.com 20000711 changed to return lower case table names
 } {
     set tables [list]
-    
+
     if { [info exists pattern] } {
-	db_foreach table_names_with_pattern {
+	db_foreach -dbn $dbn table_names_with_pattern {
 	    select lower(table_name) as table_name
 	    from user_tables
 	    where table_name like upper(:pattern)
@@ -455,7 +481,7 @@ ad_proc -public db_tables { -pattern } {
 	    lappend tables $table_name
 	}
     } else {
-	db_foreach table_names_without_pattern {
+	db_foreach -dbn $dbn table_names_without_pattern {
 	    select lower(table_name) as table_name
 	    from user_tables
 	} {
@@ -466,26 +492,31 @@ ad_proc -public db_tables { -pattern } {
 }
 
 
-ad_proc -public db_table_exists { table_name } {
+ad_proc -public db_table_exists {{ -dbn "" } table_name } {
     Returns 1 if a table with the specified name exists in the database, otherwise 0.
-    
+
+    @param dbn The database name to use.  If empty_string, uses the default database.
+
     @author Lars Pind (lars@pinds.com)
 } {
-    set n_rows [db_string table_count {
+    set n_rows [db_string -dbn $dbn table_count {
 	select count(*) from user_tables where table_name = upper(:table_name)
     }]
     return $n_rows
 }
 
-ad_proc -public db_columns { table_name } {
+
+ad_proc -public db_columns {{ -dbn "" } table_name } {
     Returns a Tcl list of all the columns in the table with the given name.
-    
+
+    @param dbn The database name to use.  If empty_string, uses the default database.
+
     @author Lars Pind lars@pinds.com
 
     @change-log yon@arsdigita.com 20000711 changed to return lower case column names
 } {
     set columns [list]
-    db_foreach table_column_names {
+    db_foreach -dbn $dbn table_column_names {
 	select lower(column_name) as column_name
 	from user_tab_columns
 	where table_name = upper(:table_name)
@@ -496,13 +527,15 @@ ad_proc -public db_columns { table_name } {
 }
 
 
-ad_proc -public db_column_exists { table_name column_name } {
+ad_proc -public db_column_exists {{ -dbn "" } table_name column_name } {
     Returns 1 if the row exists in the table, 0 if not.
+
+    @param dbn The database name to use.  If empty_string, uses the default database.
     
     @author Lars Pind lars@pinds.com
 } {
     set columns [list]
-    set n_rows [db_string column_exists {
+    set n_rows [db_string -dbn $dbn column_exists {
 	select count(*) 
 	from user_tab_columns
 	where table_name = upper(:table_name)
@@ -512,10 +545,12 @@ ad_proc -public db_column_exists { table_name column_name } {
 }
 
 
-ad_proc -public db_column_type { table_name column_name } {
+ad_proc -public db_column_type {{ -dbn "" } table_name column_name } {
 
     Returns the Oracle Data Type for the specified column.
     Returns -1 if the table or column doesn't exist.
+
+    @param dbn The database name to use.  If empty_string, uses the default database.
 
     @author Yon Feldman (yon@arsdigita.com)
 
@@ -530,26 +565,26 @@ ad_proc -public db_column_type { table_name column_name } {
                                (yon@arsdigita.com)
 
 } {
-
-    return [db_string column_type_select "
+    return [db_string -dbn $dbn column_type_select "
 	select data_type as data_type
 	  from user_tab_columns
 	 where upper(table_name) = upper(:table_name)
 	   and upper(column_name) = upper(:column_name)
     " -default "-1"]
-
 }
 
-ad_proc -public ad_column_type { table_name column_name } {
+
+ad_proc -public ad_column_type {{ -dbn "" } table_name column_name } {
 
     Returns 'numeric' for number type columns, 'text' otherwise
     Throws an error if no such column exists.
 
+    @param dbn The database name to use.  If empty_string, uses the default database.
+
     @author Yon Feldman (yon@arsdigita.com)
 
 } {
-
-    set column_type [db_column_type $table_name $column_name]
+    set column_type [db_column_type -dbn $dbn $table_name $column_name]
 
     if { $column_type == -1 } {
 	return "Either table $table_name doesn't exist or column $column_name doesn't exist"
@@ -558,5 +593,4 @@ ad_proc -public ad_column_type { table_name column_name } {
     } else {
 	return "text"
     }
-
 }
