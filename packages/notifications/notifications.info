@@ -7,15 +7,16 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="0.1d" url="http://openacs.org/repository/download/apm/notifications-0.1d.apm">
+    <version name="0.2d" url="http://openacs.org/repository/download/apm/notifications-0.2d.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
     </database-support>
         <owner url="mailto:ben@openforce.net">Ben Adida</owner>
         <summary>Notification Management</summary>
+        <release-date>2002-08-19</release-date>
 
-        <provides url="notifications" version="0.1"/>
+        <provides url="notifications" version="0.2d"/>
         <requires url="acs-mail-lite" version="0.1d"/>
 
         <files>
@@ -31,6 +32,10 @@
             <file type="data_model" db_type="oracle" path="sql/oracle/notifications-package-drop.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/notifications-replies-create.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/notifications-replies-package-create.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-0.1d-0.2d.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/delivery-method-sc-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/email-sc-impl-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/notification-type-sc-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/notifications-core-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/notifications-core-drop.sql"/>
             <file type="data_model_create" db_type="postgresql" path="sql/postgresql/notifications-create.sql"/>
@@ -38,6 +43,8 @@
             <file type="data_model" db_type="postgresql" path="sql/postgresql/notifications-init.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/notifications-package-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/notifications-package-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/notifications-replies-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/notifications-replies-package-create.sql"/>
             <file type="tcl_procs" path="tcl/delivery-method-procs.tcl"/>
             <file type="query_file" path="tcl/delivery-method-procs.xql"/>
             <file type="tcl_procs" path="tcl/interval-procs.tcl"/>
