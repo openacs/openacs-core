@@ -32,6 +32,7 @@
   <msg key="cannot_retrieve_password">No se soporta la obtención de contraseñas de una autoridad local.</msg>
   <msg key="Cannot_see_memb_list">No puede ver la lista de miembros</msg>
   <msg key="Change_locale_label">Seleccionar idioma</msg>
+  <msg key="Change_my_email_P">Cambiar el nivel de privacidad de mi email</msg>
   <msg key="Change_my_Password">Cambiar mi contraseña</msg>
   <msg key="Change_pass_email_por">Cambiar contraseña, correo, foto</msg>
   <msg key="Check_Your_Inbox">Revisar correo entrante</msg>
@@ -69,6 +70,9 @@
   <msg key="edit_comment">editar comentario</msg>
   <msg key="Elements_not_editable">Algunos elementos no pueden ser editados ya que están siendo administrados por %authority_name%.</msg>
   <msg key="Email">correo electrónico</msg>
+  <msg key="email_as_a_form">Permitir contactarme mediante una forma</msg>
+  <msg key="email_as_image">Mostrar mi correo electrónico como una imagen</msg>
+  <msg key="email_as_text">Mostrar mi correo electrónico como texto</msg>
   <msg key="email_body_Forgotten_password">Datos de su cuenta: 
 %account_id_label%: %account_id% 
 %password_label%: %password%
@@ -78,6 +82,8 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
 %password_label%: %password%
 Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Email_Confirmation">Confirmación de correo</msg>
+  <msg key="email_dont_show">No mostrar mi correo electrónico</msg>
+  <msg key="email_not_available">No disponible</msg>
   <msg key="Email_not_Requested">Correo electrónico no solicitado</msg>
   <msg key="email_subject_Forgotten_password">Recordatorio de su contraseña en %system_name%</msg>
   <msg key="email_subject_Registration_password">Bienvenido a %system_name%</msg>
@@ -189,10 +195,12 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="lt_Your_email_is_confirm">Su correo ha sido confirmado</msg>
   <msg key="lt_Your_login_has_expire">Su sesión ha caducado. Por favor introduzca su contraseña para seguir trabajando.</msg>
   <msg key="lt_Your_URL_doesnt_have_">La URL introducida no es válida. Un ejemplo de URL válida es \&quot;%valid_url_example%\&quot;.&quot;</msg>
-  <msg key="Make_administrator">Crear un administrador</msg>
+  <msg key="mail_a_message_to">Enviar un mensaje a:</msg>
+  <msg key="Make_administrator">Volver administrador</msg>
   <msg key="Make_member">Crear un miembro</msg>
   <msg key="Make_yourself_invisible_label">Volverse invisible</msg>
   <msg key="Make_yourself_visible_label">Volverse visible</msg>
+  <msg key="manage_users_email">Administrar la privacidad del correo electrónico de los usuarios</msg>
   <msg key="Manage_your_notifications">Administrar notificaciones</msg>
   <msg key="Mem_list_not_allowed">No esta autorizado para ver la lista de miembros.</msg>
   <msg key="Member_State">Estado del miembro</msg>
@@ -243,7 +251,8 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Search_For_Exist_User">Buscar un usuario existente</msg>
   <msg key="Security_context_root">Contexto de seguridad de root</msg>
   <msg key="Select_an_Object_by_Id">Seleccionar un objeto por Id </msg>
-  <msg key="Send_email_to_this_user">Enviar correo a este usuario</msg>
+  <msg key="Send_email_to_this_user">Enviar email a este usuario</msg>
+  <msg key="Send_me_a_copy">Envienme una copia:</msg>
   <msg key="Show">Mostrar</msg>
   <msg key="Site_wide_administration">Administración general</msg>
   <msg key="sorry_forgotten_pwd">No se le puede ayudar con el olvido de su contraseña.</msg>
