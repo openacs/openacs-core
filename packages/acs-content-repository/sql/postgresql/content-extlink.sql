@@ -12,7 +12,7 @@
 
 -- create or replace package body content_extlink
 -- function new
-create function content_extlink__new (varchar,varchar,varchar,varchar,integer,integer,timestamp,integer,varchar)
+create function content_extlink__new (varchar,varchar,varchar,varchar,integer,integer,timestamp with time zone,integer,varchar)
 returns integer as '
 declare
   new__name                   alias for $1;  -- default null  

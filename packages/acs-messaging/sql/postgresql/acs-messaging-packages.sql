@@ -11,7 +11,7 @@
 --
 
 create function acs_message__edit (integer,varchar,varchar,varchar,
-text,integer,timestamp,integer,varchar,boolean)
+text,integer,timestamp with time zone,integer,varchar,boolean)
 returns integer as '
 declare
     p_message_id    alias for $1;
@@ -74,7 +74,7 @@ end;' language 'plpgsql';
 -- Jon Griffin 05-21-2001
 ----------------
 
-create function acs_message__new (integer,integer,timestamp,integer,
+create function acs_message__new (integer,integer,timestamp with time zone,integer,
 varchar,varchar,varchar,varchar,varchar,text,integer,integer,integer,
 varchar,varchar,boolean)
 returns integer as '
@@ -194,7 +194,7 @@ begin
     end if;
 end;' language 'plpgsql';
 
-create function acs_message__send (integer,varchar,integer,timestamp)
+create function acs_message__send (integer,varchar,integer,timestamp with time zone)
 returns integer as '
 declare
     p_message_id    alias for $1;
@@ -211,7 +211,7 @@ begin
     return 1;
 end;' language 'plpgsql';
 
-create function acs_message__send (integer,integer,integer,timestamp)
+create function acs_message__send (integer,integer,integer,timestamp with time zone)
 returns integer as '
 declare
     p_message_id    alias for $1;

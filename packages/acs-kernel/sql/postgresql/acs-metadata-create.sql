@@ -689,6 +689,18 @@ begin
    
 end;' language 'plpgsql';
 
+create function acs_attribute__create_attribute (varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer,integer,integer,varchar,boolean)
+returns integer as '
+begin
+    return acs_attribute__create_attribute ($1, $2, $3, $4, $5, $6, $7, cast ($8 as varchar), $9, $10, $11, $12, $13);
+end;' language 'plpgsql';
+
+create function acs_attribute__create_attribute (varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer,integer,integer,varchar,boolean)
+returns integer as '
+begin
+    return acs_attribute__create_attribute ($1, $2, $3, $4, $5, $6, $7, cast ($8 as varchar), $9, $10, $11, $12, $13);
+end;' language 'plpgsql';
+
 
 -- procedure drop_attribute
 create function acs_attribute__drop_attribute (varchar,varchar)

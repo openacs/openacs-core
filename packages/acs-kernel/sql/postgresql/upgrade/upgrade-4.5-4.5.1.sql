@@ -67,6 +67,44 @@
 
 -- postgresql.sql
 
+create function inline_0 () returns integer as '
+-- Create a bitfromint4(integer) function if it doesn''t exists.
+-- Due to a bug in PG 7.3 this function is absent in PG 7.3.
+declare
+    v_bitfromint4_count integer;
+begin
+    select into v_bitfromint4_count count(*) from pg_proc where proname = ''bitfromint4'';
+    if v_bitfromint4_count = 0 then
+	create or replace function bitfromint4 (integer) returns bit varying as ''
+	begin 
+    	    return "bit"($1);
+	end;'' language ''plpgsql'';
+   end if;
+   return 1;
+end;' language 'plpgsql';
+
+select inline_0();
+drop function inline_0();
+
+create function inline_1 () returns integer as '
+-- Create a bitfromint4(integer) function if it doesn''t exists.
+-- Due to a bug in PG 7.3 this function is absent in PG 7.3.
+declare
+    v_bittoint4_count integer;
+begin
+    select into v_bittoint4_count count(*) from pg_proc where proname = ''bittoint4'';
+    if v_bittoint4_count = 0 then
+	create or replace function bittoint4 (bit varying) returns integer as ''
+	begin 
+    	    return "int4"($1);
+	end;'' language ''plpgsql'';
+   end if;
+   return 1;
+end;' language 'plpgsql';
+
+select inline_1();
+drop function inline_1();
+
 create function tree_increment_key(varbit)
  returns varbit as '
  declare

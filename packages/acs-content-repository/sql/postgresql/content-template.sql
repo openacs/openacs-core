@@ -35,7 +35,7 @@ begin
 end;' language 'plpgsql';
 
 -- function new
-create function content_template__new (varchar,integer,integer,timestamp,integer,varchar)
+create function content_template__new (varchar,integer,integer,timestamp with time zone,integer,varchar)
 returns integer as '
 declare
   new__name                   alias for $1;  

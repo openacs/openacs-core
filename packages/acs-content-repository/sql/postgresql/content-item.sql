@@ -54,7 +54,7 @@ end;' language 'plpgsql';
 
 
 -- function new
-create function content_item__new (varchar,integer,integer,varchar,timestamp,integer,integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar)
+create function content_item__new (varchar,integer,integer,varchar,timestamp with time zone,integer,integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar)
 returns integer as '
 declare
   new__name                   alias for $1;  
@@ -212,7 +212,7 @@ begin
  
 end;' language 'plpgsql';
 
-create function content_item__new (varchar,integer,integer,varchar,timestamp,integer,integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer)
+create function content_item__new (varchar,integer,integer,varchar,timestamp with time zone,integer,integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer)
 returns integer as '
 declare
   new__name                   alias for $1;  
@@ -416,7 +416,7 @@ end;' language 'plpgsql';
 
 -- function new -- sets security_inherit_p to FALSE -DaveB
 
-create function content_item__new ( integer, varchar, integer, varchar, timestamp, integer, integer, varchar, boolean, varchar, text, varchar, boolean, varchar,varchar,varchar)
+create function content_item__new ( integer, varchar, integer, varchar, timestamp with time zone, integer, integer, varchar, boolean, varchar, text, varchar, boolean, varchar,varchar,varchar)
 
 returns integer as '
 declare
@@ -1605,7 +1605,7 @@ end;' language 'plpgsql';
 
 
 -- procedure set_release_period
-create function content_item__set_release_period (integer,timestamp,timestamp)
+create function content_item__set_release_period (integer, timestamp with time zone, timestamp with time zone)
 returns integer as '
 declare
   set_release_period__item_id                alias for $1;  

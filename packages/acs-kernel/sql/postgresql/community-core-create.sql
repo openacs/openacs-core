@@ -301,7 +301,7 @@ comment on column parties.url is '
 
 -- create or replace package body party
 -- function new
-create function party__new (integer,varchar,timestamp,integer,varchar,varchar,varchar,integer)
+create function party__new (integer,varchar,timestamp with time zone,integer,varchar,varchar,varchar,integer)
 returns integer as '
 declare
   new__party_id               alias for $1;  -- default null  
@@ -430,7 +430,7 @@ comment on table persons is '
 -- create or replace package body person
 -- function new
 select define_function_args('person__new','person_id,object_type;person,creation_date;now(),creation_user,creation_ip,email,url,first_names,last_name,context_id');
-create function person__new (integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,varchar,integer)
+create function person__new (integer,varchar,timestamp with time zone,integer,varchar,varchar,varchar,varchar,varchar,integer)
 returns integer as '
 declare
   new__person_id              alias for $1;  -- default null  
@@ -667,7 +667,7 @@ comment on column users.n_sessions is '
 select define_function_args('user__new','user_id,object_type;user,creation_date;now(),creation_user,creation_ip,email,url,first_names,last_name,password,salt,password_question,password_answer,screen_name,email_verified_p;t,context_id');
 
 
-create function acs_user__new (integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,varchar,char,char,varchar,varchar,varchar,boolean,integer)
+create function acs_user__new (integer,varchar,timestamp with time zone,integer,varchar,varchar,varchar,varchar,varchar,char,char,varchar,varchar,varchar,boolean,integer)
 returns integer as '
 declare
   new__user_id                  alias for $1;  -- default null  

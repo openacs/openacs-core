@@ -15,7 +15,7 @@
 ------------------
 
 -- rel_segment__new -- full version
-create function rel_segment__new (integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,integer,varchar,integer)
+create function rel_segment__new (integer,varchar,timestamp with time zone,integer,varchar,varchar,varchar,varchar,integer,varchar,integer)
 returns integer as '
 declare
   new__segment_id        alias for $1;  -- default null  

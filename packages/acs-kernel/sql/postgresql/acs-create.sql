@@ -60,7 +60,7 @@ comment on table acs_magic_objects is '
 
 -- create or replace package body acs
 -- function add_user
-create function acs__add_user (integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,varchar,char,char,varchar,varchar,varchar,boolean,varchar)
+create function acs__add_user (integer,varchar,timestamp with time zone,integer,varchar,varchar,varchar,varchar,varchar,char,char,varchar,varchar,varchar,boolean,varchar)
 returns integer as '
 declare
   user_id                alias for $1;  -- default null    

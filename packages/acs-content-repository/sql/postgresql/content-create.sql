@@ -704,7 +704,7 @@ create table cr_release_periods (
                    constraint cr_release_periods_pk
 		   primary key,
   start_when	   timestamp default now(),
-  end_when	   timestamp default now() + (365 * 20)
+  end_when	   timestamp default now() + interval '20 years'
 );
 
 create table cr_scheduled_release_log (
