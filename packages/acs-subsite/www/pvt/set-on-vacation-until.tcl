@@ -31,6 +31,6 @@ db_transaction {
 
 set home_link [ad_pvt_home_link]
 set site_link [ad_site_home_link]
-set pretty_date [util_AnsiDatetoPrettyDate $on_vacation_until]
+set pretty_date [lc_time_fmt $on_vacation_until "%q"]
 
 ad_return_template

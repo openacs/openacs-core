@@ -17,9 +17,12 @@ nsv_set locale en_GB,abmon {{Jan} {Feb} {Mar} {Apr} {May} {Jun} {Jul} {Aug} {Sep
 nsv_set locale en_GB,am_str ""
 nsv_set locale en_GB,currency_symbol "£"
 nsv_set locale en_GB,day {{Sunday} {Monday} {Tuesday} {Wednesday} {Thursday} {Friday} {Saturday}}
+nsv_set locale en_GB,firstdayofweek 0
 nsv_set locale en_GB,decimal_point "."
 nsv_set locale en_GB,d_fmt "%d/%m/%y"
 nsv_set locale en_GB,d_t_fmt "%a %d %B %Y %H:%M %Z"
+nsv_set locale en_GB,dlong_fmt "%d %B %Y"
+nsv_set locale en_GB,dlongweekday_fmt "%A %d %B %Y"
 nsv_set locale en_GB,frac_digits 2
 nsv_set locale en_GB,grouping {3 3 }
 nsv_set locale en_GB,int_curr_symbol "GBP "
@@ -40,6 +43,7 @@ nsv_set locale en_GB,p_sign_posn 1
 nsv_set locale en_GB,t_fmt_ampm ""
 nsv_set locale en_GB,t_fmt "%H:%M"
 nsv_set locale en_GB,thousands_sep ","
+nsv_set locale en_GB,formbuilder_time_format "HH12:MI AM"
 
 # US
 nsv_set locale en_US,abday {{Sun} {Mon} {Tue} {Wed} {Thu} {Fri} {Sat}}
@@ -47,9 +51,12 @@ nsv_set locale en_US,abmon {{Jan} {Feb} {Mar} {Apr} {May} {Jun} {Jul} {Aug} {Sep
 nsv_set locale en_US,am_str "AM"
 nsv_set locale en_US,currency_symbol "$"
 nsv_set locale en_US,day {{Sunday} {Monday} {Tuesday} {Wednesday} {Thursday} {Friday} {Saturday}}
+nsv_set locale en_US,firstdayofweek 0
 nsv_set locale en_US,decimal_point "."
 nsv_set locale en_US,d_fmt "%m/%d/%y"
 nsv_set locale en_US,d_t_fmt "%a %B %d, %Y %r %Z"
+nsv_set locale en_US,dlong_fmt "%B %d, %Y"
+nsv_set locale en_US,dlongweekday_fmt "%A %B %d, %Y"
 nsv_set locale en_US,frac_digits 2
 nsv_set locale en_US,grouping {3 3 }
 nsv_set locale en_US,int_curr_symbol "USD "
@@ -70,6 +77,7 @@ nsv_set locale en_US,p_sign_posn 1
 nsv_set locale en_US,t_fmt_ampm "%I:%M:%S %p"
 nsv_set locale en_US,t_fmt "%r"
 nsv_set locale en_US,thousands_sep ","
+nsv_set locale en_US,formbuilder_time_format "HH12:MI AM"
 
 # France
 nsv_set locale fr_FR,abday {{dim} {lun} {mar} {mer} {jeu} {ven} {sam}}
@@ -77,9 +85,12 @@ nsv_set locale fr_FR,abmon {{jan} {fév} {mar} {avr} {mai} {jun} {jui} {aoû} {sep
 nsv_set locale fr_FR,am_str ""
 nsv_set locale fr_FR,currency_symbol "F"
 nsv_set locale fr_FR,day {{dimanche} {lundi} {mardi} {mercredi} {jeudi} {vendredi} {samedi}}
+nsv_set locale fr_FR,firstdayofweek 1
 nsv_set locale fr_FR,decimal_point ","
 nsv_set locale fr_FR,d_fmt "%d.%m.%Y"
 nsv_set locale fr_FR,d_t_fmt "%a %d %B %Y %H:%M %Z"
+nsv_set locale fr_FR,dlong_fmt "%d %B %Y"
+nsv_set locale fr_FR,dlongweekday_fmt "%A %d %B %Y"
 nsv_set locale fr_FR,frac_digits 2
 nsv_set locale fr_FR,grouping {-1 -1 }
 nsv_set locale fr_FR,int_curr_symbol "FRF "
@@ -100,6 +111,7 @@ nsv_set locale fr_FR,p_sign_posn 1
 nsv_set locale fr_FR,t_fmt_ampm ""
 nsv_set locale fr_FR,t_fmt "%H:%M"
 nsv_set locale fr_FR,thousands_sep "."
+nsv_set locale fr_FR,formbuilder_time_format "HH24:MI"
 
 # Germany
 nsv_set locale de_DE,abday {{Son} {Mon} {Die} {Mit} {Don} {Fre} {Sam}}
@@ -107,9 +119,12 @@ nsv_set locale de_DE,abmon {{Jan} {Feb} {Mär} {Apr} {Mai} {Jun} {Jul} {Aug} {Sep
 nsv_set locale de_DE,am_str ""
 nsv_set locale de_DE,currency_symbol "DM"
 nsv_set locale de_DE,day {{Sonntag} {Montag} {Dienstag} {Mittwoch} {Donnerstag} {Freitag} {Samstag}}
+nsv_set locale de_DE,firstdayofweek 1
 nsv_set locale de_DE,decimal_point ","
 nsv_set locale de_DE,d_fmt "%d.%m.%Y"
 nsv_set locale de_DE,d_t_fmt "%a %d %B %Y %H:%M %Z"
+nsv_set locale de_DE,dlong_fmt "%d %B %Y"
+nsv_set locale de_DE,dlongweekday_fmt "%A %d %B %Y"
 nsv_set locale de_DE,frac_digits 2
 nsv_set locale de_DE,grouping {3 3 }
 nsv_set locale de_DE,int_curr_symbol "DEM "
@@ -130,6 +145,7 @@ nsv_set locale de_DE,p_sign_posn 1
 nsv_set locale de_DE,t_fmt_ampm ""
 nsv_set locale de_DE,t_fmt "%H:%M"
 nsv_set locale de_DE,thousands_sep "."
+nsv_set locale de_DE,formbuilder_time_format "HH24:MI"
 
 # Spain
 nsv_set locale es_ES,abday {{dom} {lun} {mar} {mié} {jue} {vie} {sáb}}
@@ -137,9 +153,12 @@ nsv_set locale es_ES,abmon {{ene} {feb} {mar} {abr} {may} {jun} {jul} {ago} {sep
 nsv_set locale es_ES,am_str ""
 nsv_set locale es_ES,currency_symbol "Pts"
 nsv_set locale es_ES,day {{domingo} {lunes} {martes} {miércoles} {jueves} {viernes} {sábado}}
+nsv_set locale es_ES,firstdayofweek 1
 nsv_set locale es_ES,decimal_point ","
 nsv_set locale es_ES,d_fmt "%d/%m/%y"
 nsv_set locale es_ES,d_t_fmt "%a %d %B %Y %H:%M %Z"
+nsv_set locale es_ES,dlong_fmt "%d %B %Y"
+nsv_set locale es_ES,dlongweekday_fmt "%A %d %B %Y"
 nsv_set locale es_ES,frac_digits 0
 nsv_set locale es_ES,grouping {-1 -1 }
 nsv_set locale es_ES,int_curr_symbol "ESP "
@@ -160,6 +179,41 @@ nsv_set locale es_ES,p_sign_posn 1
 nsv_set locale es_ES,t_fmt_ampm ""
 nsv_set locale es_ES,t_fmt "%H:%M"
 nsv_set locale es_ES,thousands_sep ""
+nsv_set locale es_ES,formbuilder_time_format "HH24:MI"
+
+# Danish
+nsv_set locale da_DK,abday {{søn} {man} {tir} {ons} {tor} {fre} {lør}}
+nsv_set locale da_DK,abmon {{jan} {feb} {mar} {apr} {maj} {jun} {jul} {aug} {sep} {okt} {nov} {dec}}
+nsv_set locale da_DK,am_str ""
+nsv_set locale da_DK,currency_symbol "kr"
+nsv_set locale da_DK,day {{søndag} {mandag} {tirsdag} {onsdag} {torsdag} {fredag} {lørdag}}
+nsv_set locale da_DK,firstdayofweek 1
+nsv_set locale da_DK,decimal_point ","
+nsv_set locale da_DK,d_fmt "%e/%m-%y"
+nsv_set locale da_DK,d_t_fmt "%a %e. %B %Y %r %Z"
+nsv_set locale da_DK,dlong_fmt "%e. %B %Y"
+nsv_set locale da_DK,dlongweekday_fmt "%A den %e. %B %Y"
+nsv_set locale da_DK,frac_digits 2
+nsv_set locale da_DK,grouping {3 3 }
+nsv_set locale da_DK,int_curr_symbol "DKK "
+nsv_set locale da_DK,int_frac_digits 2
+nsv_set locale da_DK,mon_decimal_point ","
+nsv_set locale da_DK,mon_grouping {3 3 }
+nsv_set locale da_DK,mon {{januar} {februar} {marts} {april} {maj} {juni} {juli} {august} {september} {oktober} {november} {december}}
+nsv_set locale da_DK,mon_thousands_sep "."
+nsv_set locale da_DK,n_cs_precedes 1
+nsv_set locale da_DK,negative_sign "-"
+nsv_set locale da_DK,n_sep_by_space 0
+nsv_set locale da_DK,n_sign_posn             1
+nsv_set locale da_DK,p_cs_precedes 1
+nsv_set locale da_DK,pm_str ""
+nsv_set locale da_DK,positive_sign ""
+nsv_set locale da_DK,p_sep_by_space 0
+nsv_set locale da_DK,p_sign_posn 1
+nsv_set locale da_DK,t_fmt_ampm ""
+nsv_set locale da_DK,t_fmt "%H:%M"
+nsv_set locale da_DK,thousands_sep "."
+nsv_set locale da_DK,formbuilder_time_format "HH24:MI"
 
 # Monetary amounts
 nsv_set locale money:000  {($num$sym)}

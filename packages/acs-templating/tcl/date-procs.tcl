@@ -69,20 +69,10 @@ ad_proc -public template::util::date::init {} {
 ad_proc -public template::util::date::monthName { month length } {
     Return the specified month name (short or long)
 } {
-  variable month_data
-
   if { [string equal $length long] } {
-    set index 0
+    return [lc_time_fmt "2002-[format "%02d" $month]-01" "%B"]
   } else {
-    set index 1
-  }
-
-  set month [template::util::leadingTrim $month]
-
-  if { [info exists month_data($month)] } {
-    return [lindex $month_data($month) $index]
-  } else {
-    return ""
+    return [lc_time_fmt "2002-[format "%02d" $month]-01" "%b"]
   }
 }
 
@@ -150,6 +140,25 @@ ad_proc -public template::util::date::now {} {
   }
 
   return [eval create $today]
+}
+
+ad_proc -public template::util::date::from_ansi {
+    ansi_date
+    {format "YYYY MM DD"}
+} {
+    Create a new templating system date structure from a full ANSI
+    date, i.e. in the format YYYY-MM-DD HH24:MI:SS.
+
+    @param ansi_date Date in full ANSI format YYYY-MM-DD HH24:MI:SS (time portion is optional).
+    @param format Format for the date object. Optional, defaults to YYYY MM DD.
+    @return Date object for use with e.g. form builder.
+    @author Lars Pind (lars@pinds.com)
+    @creation-date November 18, 2002
+} {
+    set date [template::util::date::create]
+    set date [template::util::date::set_property format $date $format]
+    set date [template::util::date::set_property ansi $date $ansi_date]
+    return $date
 }
 
 ad_proc -public template::util::date::get_property { what date } {
@@ -283,7 +292,7 @@ ad_proc -public template::util::date::get_property { what date } {
         lappend date_list "[string range $pad [string length $fragment] end]$fragment"
         set pad "00"
       }
-      set value [util_AnsiDatetoPrettyDate [join $date_list "-"]]
+      set value [lc_time_fmt [join $date_list "-"] "%q"]
       unpack $date
       if { ![string equal $hours {}] && \
            ![string equal $minutes {}] } {
@@ -384,6 +393,26 @@ ad_proc -public template::util::date::set_property { what date value } {
       }
       lappend new_date $old_format
       return $new_date
+    }
+    ansi {
+        # Some initialisation...
+        # Rip $date into $ansi_* as numbers, no leading zeroes
+        set matchdate {([0-9]{4})\-0?(1?[0-9])\-0?([1-3]?[0-9])}
+        set matchtime {0?([1-2]?[0-9]):0?([1-5]?[0-9]):0?([1-6]?[0-9])}
+        set matchfull "$matchdate $matchtime"
+        
+        set time_p 1
+        if {![regexp -- $matchfull $value match ansi_year ansi_month ansi_days ansi_hours ansi_minutes ansi_seconds]} {
+            if {[regexp -- $matchdate $value match ansi_year ansi_month ansi_days]} {
+                set ansi_hours 0
+                set ansi_minutes 0
+                set ansi_seconds 0
+            } else {
+                error "Invalid date: $datetime"
+            }
+        }
+        # Return new date, but use old format
+        return [list $ansi_year $ansi_month $ansi_days $ansi_hours $ansi_minutes $ansi_seconds [lindex $date 6]]
     }
     now {
       return [template::util::date set_property clock $date [clock seconds]]
