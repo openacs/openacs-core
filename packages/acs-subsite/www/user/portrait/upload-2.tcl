@@ -135,10 +135,10 @@ values
 
 # let's figure out if this person has a portrait yet
 
-if ![db_0or1row get_item_id "select object_id_two as item_id
+if { ![db_0or1row get_item_id "select object_id_two as item_id
 from acs_rels
 where object_id_one = :user_id
-and rel_type = 'user_portrait_rel'"] {
+and rel_type = 'user_portrait_rel'"] } {
     # The user doesn't have a portrait relation yet
     db_transaction {
 	set item_id [db_exec_plsql create_item $create_item]
