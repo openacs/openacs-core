@@ -658,7 +658,7 @@ ad_proc -public apm_parameter_unregister {
 	return
     }
 	
-    db_dml parameter_unregister {
+    db_exec_plsql parameter_unregister {
 	begin
 	delete from apm_parameter_values 
 	where parameter_id = :parameter_id;
