@@ -193,13 +193,13 @@ declare
   root_id integer;
 begin
   root_id := acs_object.new (
-    object_id => 0
+    object_id => -4
   );
 
   insert into acs_magic_objects
    (name, object_id)
   values
-   ('security_context_root', 0);
+   ('security_context_root', -4);
 end;
 /
 show errors
@@ -229,33 +229,56 @@ end;
 /
 show errors
 
-begin
- insert into acs_objects
-  (object_id, object_type)
- values
-  (-1, 'party');
-
- insert into parties
-  (party_id)
- values
-  (-1);
-
- insert into acs_magic_objects
-  (name, object_id)
- values
-  ('the_public', -1);
-
- commit;
-end;
-/
-show errors
-
--- Insert the site-wide group. The members of this
--- group correspond to all registered users.
 declare
-  group_id integer;
+  foo acs_objects.object_id%TYPE;
 begin
-  group_id := acs_group.new (
+
+  -- Make the "Unregistered Visitor" be object 0, which corresponds
+  -- with the user_id assigned throughout the toolkit Tcl code
+
+  insert into acs_objects
+    (object_id, object_type)
+  values
+    (0, 'person');
+
+  insert into parties
+    (party_id)
+  values
+    (0);
+
+  insert into persons
+    (person_id, first_names, last_name)
+  values
+    (0, 'Unregistered', 'Visitor');
+
+  insert into acs_magic_objects
+    (name, object_id)
+  values
+    ('unregistered_visitor', 0);
+
+  -- Create the public group
+  foo := acs_group.new (
+    group_id => -1,
+    group_name => 'The Public'
+  );
+
+  insert into acs_magic_objects
+   (name, object_id)
+  values
+   ('the_public', -1);
+
+  -- Add our only user, the Unregistered Visitor, to the public group
+
+  foo := membership_rel.new (
+           rel_type => 'membership_rel',
+           object_id_one => acs.magic_object_id('the_public'),      
+           object_id_two => acs.magic_object_id('unregistered_visitor'),
+           member_state => 'approved'
+         );
+
+  -- Make the registered users group
+
+  foo := acs_group.new (
     group_id => -2,
     group_name => 'Registered Users'
   );
@@ -265,25 +288,16 @@ begin
  values
   ('registered_users', -2);
 
- commit;
-end;
-/
-show errors
+  -- Now declare "The Public" to be composed of itself and the "Registered
+  -- Users" group
 
--- Create the default context.
-declare
-  object_id integer;
-begin
-  object_id := acs_object.new (
-    object_id => -3
-  );
-
-  insert into acs_magic_objects
-   (name, object_id)
-  values
-   ('default_context', object_id);
+  foo := composition_rel.new (
+           rel_type => 'composition_rel',
+           object_id_one => acs.magic_object_id('the_public'),
+           object_id_two => acs.magic_object_id('registered_users')
+         );
 
   commit;
 end;
 /
-show errors
+show errors;

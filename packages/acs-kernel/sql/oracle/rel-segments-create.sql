@@ -206,45 +206,216 @@ create or replace view rel_seg_distinct_member_map
 as select distinct segment_id, member_id
    from rel_seg_approved_member_map;
 
+-- The party_approved_member_map table maps all parties to all their
+-- members.  It's here rather in a logical place for historical reasons.
 
--- party_member_map can be used to expand any party into its members.  
--- Every party is considered to be a member of itself.
+-- The count column is needed because composition_rels lead to a lot of
+-- redundant data in the group element map (i.e. you can belong to the
+-- registered users group an infinite number of times, strange concept)
 
--- By the way, aren't the party_member_map and party_approved_member_map 
--- views equivalent??  (TO DO: RESOLVE THIS QUESTION)
+-- (it is "cnt" rather than "count" because Oracle confuses it with the
+-- "count()" aggregate in some contexts)
 
-create or replace view party_member_map
-as select segment_id as party_id, member_id
-   from rel_seg_distinct_member_map
-   union
-   select group_id as party_id, member_id
-   from group_distinct_member_map
-   union
-   select party_id, party_id as member_id
-   from parties;
+-- Though for permission checking we only really need to map parties to
+-- member users, the old view included identity entries for all parties
+-- in the system.  It doesn't cost all that much to maintain the extra
+-- rows so we will, just in case some overly clever programmer out there
+-- depends on it.
 
-create or replace view party_approved_member_map
-as select distinct segment_id as party_id, member_id
-   from rel_seg_approved_member_map
-   union
-   select distinct group_id as party_id, member_id
-   from group_approved_member_map
-   union
-   select party_id, party_id as member_id
-   from parties;
+create table party_approved_member_map (
+    party_id        integer
+                    constraint party_member_party_fk
+                    references parties,
+    member_id       integer
+                    constraint party_member_member_fk
+                    references parties,
+    cnt             integer,
+    constraint party_approved_member_map_pk
+    primary key (party_id, member_id)
+);
 
--- party_element_map tells us all the parties that "belong to" a party,
--- whether through somet type of membership, composition, or identity.
+-- Need this to speed referential integrity 
+create index party_member_member_idx on party_approved_member_map(member_id);
 
-create or replace view party_element_map
-as select distinct group_id as party_id, element_id
-   from group_element_map
-   union
-   select distinct segment_id as party_id, party_id as element_id
-   from rel_segment_party_map
-   union
-   select party_id, party_id as element_id
-   from parties;
+-- Triggers to maintain party_approved_member_map when parties are create or replaced or
+-- destroyed.
+
+create or replace trigger parties_in_tr before insert on parties
+for each row 
+begin
+  insert into party_approved_member_map
+    (party_id, member_id, cnt)
+  values
+    (:new.party_id, :new.party_id, 1);
+end parties_in_tr;
+/
+show errors;
+
+create or replace trigger parties_del_tr before delete on parties
+for each row
+begin
+  delete from party_approved_member_map
+  where party_id = :old.party_id
+    and member_id = :old.party_id;
+end parties_del_tr;
+/
+show errors;
+
+-- Triggers to maintain party_approved_member_map when relational segments are
+-- create or replaced or destroyed.   We only remove the (segment_id, member_id) rows as
+-- removing the relational segment itself does not remove members from the
+-- group with that rel_type.  This was intentional on the part of the aD folks
+-- who added relational segments to ACS 4.2.
+
+create or replace trigger rel_segments_in_tr before insert on rel_segments
+for each row
+begin
+  insert into party_approved_member_map
+    (party_id, member_id, cnt)
+  select :new.segment_id, element_id, 1
+    from group_element_index
+    where group_id = :new.group_id
+      and rel_type = :new.rel_type;
+end rel_segments_in_tr;
+/
+show errors;
+
+create or replace trigger rel_segments_del_tr before delete on rel_segments
+for each row
+begin
+  delete from party_approved_member_map
+  where party_id = :old.segment_id
+    and member_id in (select element_id
+                      from group_element_index
+                      where group_id = :old.group_id
+                        and rel_type = :old.rel_type);
+end parties_del_tr;
+/
+show errors;
+
+-- DRB: Helper functions to maintain the materialized party_approved_member_map.  The counting crap
+-- has to do with the fact that composition rels create duplicate rows in groups.
+
+create or replace package party_approved_member is
+
+  procedure add_one(
+    p_party_id in parties.party_id%TYPE,
+    p_member_id in parties.party_id%TYPE
+  );
+
+  procedure add(
+    p_party_id in parties.party_id%TYPE,
+    p_member_id in parties.party_id%TYPE,
+    p_rel_type in acs_rels.rel_type%TYPE
+  );
+
+  procedure remove_one (
+    p_party_id in parties.party_id%TYPE,
+    p_member_id in parties.party_id%TYPE
+  );
+
+  procedure remove (
+    p_party_id in parties.party_id%TYPE,
+    p_member_id in parties.party_id%TYPE,
+    p_rel_type in acs_rels.rel_type%TYPE
+  );
+
+end party_approved_member;
+/
+show errors;
+
+create or replace package body party_approved_member is
+
+  procedure add_one(
+    p_party_id in parties.party_id%TYPE,
+    p_member_id in parties.party_id%TYPE
+  )
+  is
+  begin
+
+    insert into party_approved_member_map
+      (party_id, member_id, cnt)
+    values
+      (p_party_id, p_member_id, 1);
+
+    exception when dup_val_on_index then
+      update party_approved_member_map
+      set cnt = cnt + 1
+      where party_id = p_party_id
+        and member_id = p_member_id;
+
+  end add_one;
+
+  procedure add(
+    p_party_id in parties.party_id%TYPE,
+    p_member_id in parties.party_id%TYPE,
+    p_rel_type in acs_rels.rel_type%TYPE
+  )
+  is
+    v_segment_id rel_segments.segment_id%TYPE;
+  begin
+
+    add_one(p_party_id, p_member_id);
+
+    -- if the relation type is mapped to a relational segment map that too
+
+    select segment_id into v_segment_id
+    from rel_segments s
+    where s.rel_type = p_rel_type
+      and s.group_id = p_party_id;
+
+    exception when no_data_found then return;
+
+    add_one(v_segment_id, p_member_id);
+
+  end add;
+
+  procedure remove_one (
+    p_party_id in parties.party_id%TYPE,
+    p_member_id in parties.party_id%TYPE
+  )
+  is
+  begin
+
+    update party_approved_member_map
+    set cnt = cnt - 1
+    where party_id = p_party_id
+      and member_id = p_member_id;
+
+    delete from party_approved_member_map
+    where party_id = p_party_id
+      and member_id = p_member_id
+      and cnt = 0;
+
+  end remove_one;
+
+  procedure remove (
+    p_party_id in parties.party_id%TYPE,
+    p_member_id in parties.party_id%TYPE,
+    p_rel_type in acs_rels.rel_type%TYPE
+  )
+  is
+    v_segment_id rel_segments.segment_id%TYPE;
+  begin
+
+    remove_one(p_party_id, p_member_id);
+
+    -- if the relation type is mapped to a relational segment unmap that too
+
+    select segment_id into v_segment_id
+    from rel_segments s
+    where s.rel_type = p_rel_type
+      and s.group_id = p_party_id;
+
+    exception when no_data_found then return;
+
+    remove_one(v_segment_id, p_member_id);
+
+  end remove;
+
+end party_approved_member;
+/
+show errors;
 
 -- View: rel_segment_group_rel_type_map
 --

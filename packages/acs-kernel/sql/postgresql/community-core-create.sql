@@ -269,38 +269,6 @@ comment on column parties.url is '
 -- PARTY PACKAGE --
 -------------------
 
--- create or replace package party
--- as
--- 
---  function new (
---   party_id	in parties.party_id%TYPE default null,
---   object_type	in acs_objects.object_type%TYPE
--- 		   default 'party',
---   creation_date	in acs_objects.creation_date%TYPE
--- 		   default sysdate,
---   creation_user	in acs_objects.creation_user%TYPE
--- 		   default null,
---   creation_ip	in acs_objects.creation_ip%TYPE default null,
---   email		in parties.email%TYPE,
---   url		in parties.url%TYPE default null,
---   context_id	in acs_objects.context_id%TYPE default null
---  ) return parties.party_id%TYPE;
--- 
---  procedure delete (
---   party_id	in parties.party_id%TYPE
---  );
--- 
---  function name (
---   party_id	in parties.party_id%TYPE
---  ) return varchar2;
--- 
--- end party;
-
--- show errors
-
-
--- create or replace package body party
--- function new
 create function party__new (integer,varchar,timestamp with time zone,integer,varchar,varchar,varchar,integer)
 returns integer as '
 declare
@@ -327,8 +295,6 @@ begin
   
 end;' language 'plpgsql';
 
-
--- procedure delete
 create function party__delete (integer)
 returns integer as '
 declare
@@ -339,8 +305,6 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
-
--- function name
 create function party__name (integer)
 returns varchar as '
 declare
@@ -354,8 +318,6 @@ begin
   
 end;' language 'plpgsql';
 
-
--- function email
 create function party__email (integer)
 returns varchar as '
 declare
@@ -370,7 +332,6 @@ begin
   return party_email;
   
 end;' language 'plpgsql';
-
 
 -- show errors
 

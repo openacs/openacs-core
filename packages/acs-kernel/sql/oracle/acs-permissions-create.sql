@@ -228,80 +228,21 @@ as select a.object_id, a.grantee_id, m.descendant as privilege
    from acs_permissions_all a, acs_privilege_descendant_map m
    where a.privilege = m.privilege;
 
--- The last two unions make sure that the_public gets expaned to all
--- users plus 0 (the default user_id) we should probably figure out a
--- better way to handle this eventually since this view is getting
--- pretty freaking hairy. I'd love to be able to move this stuff into
--- a Java middle tier.
+-- Fast new acs_object_party_privilege_map based on the denormalized
+-- party_approved_member_map.  You may now use this map without fear.
 
-create or replace view acs_object_party_privilege_map
-as select ogpm.object_id, gmm.member_id as party_id, ogpm.privilege
-   from acs_object_grantee_priv_map ogpm, group_approved_member_map gmm
-   where ogpm.grantee_id = gmm.group_id
-   union
-   select ogpm.object_id, rsmm.member_id as party_id, ogpm.privilege
-   from acs_object_grantee_priv_map ogpm, rel_seg_approved_member_map rsmm
-   where ogpm.grantee_id = rsmm.segment_id
-   union
-   select object_id, grantee_id as party_id, privilege
-   from acs_object_grantee_priv_map
-   union
-   select object_id, u.user_id as party_id, privilege
-   from acs_object_grantee_priv_map m, users u
-   where m.grantee_id = -1
-   union
-   select object_id, 0 as party_id, privilege
-   from acs_object_grantee_priv_map
-   where grantee_id = -1;
+create or replace view acs_object_party_privilege_map as
+select c.object_id, pdm.descendant as privilege, pamm.member_id as party_id
+from acs_object_context_index c, acs_permissions p, acs_privilege_descendant_map pdm,
+  party_approved_member_map pamm
+where c.ancestor_id = p.object_id
+  and pdm.privilege = p.privilege
+  and pamm.party_id = p.grantee_id;
 
-----------------------------------------------------
--- ALTERNATE VIEW: ALL_OBJECT_PARTY_PRIVILEGE_MAP --
-----------------------------------------------------
-
--- This view is a helper for all_object_party_privilege_map
-create or replace view acs_grantee_party_map as
-   select -1 as grantee_id, 0 as party_id from dual
-   union all
-   select -1 as grantee_id, user_id as party_id
-   from users
-   union all
-   select party_id as grantee_id, party_id
-   from parties
-   union all
-   select segment_id as grantee_id, member_id
-   from rel_seg_approved_member_map
-   union all
-   select group_id as grantee_id, member_id as party_id
-   from group_approved_member_map;
-
--- This view is like acs_object_party_privilege_map, but does not 
--- necessarily return distinct rows.  It may be *much* faster to join
--- against this view instead of acs_object_party_privilege_map, and is
--- usually not much slower.  The tradeoff for the performance boost is
--- increased complexity in your usage of the view.  Example usage that I've
--- found works well is:
---
---    select DISTINCT 
---           my_table.*
---    from my_table,
---         (select object_id
---          from all_object_party_privilege_map 
---          where party_id = :user_id and privilege = :privilege) oppm
---    where oppm.object_id = my_table.my_id;
---
+-- Kept to avoid breaking existing code, should eventually go away.
 
 create or replace view all_object_party_privilege_map as
-select /*+ ORDERED */ 
-               op.object_id,
-               pdm.descendant as privilege,
-               gpm.party_id as party_id
-        from acs_object_paths op, 
-             acs_permissions p, 
-             acs_privilege_descendant_map pdm,
-             acs_grantee_party_map gpm
-        where op.ancestor_id = p.object_id 
-          and pdm.privilege = p.privilege
-          and gpm.grantee_id = p.grantee_id;
+select * from acs_object_party_privilege_map;
 
 
 --create or replace view acs_object_party_method_map
@@ -373,74 +314,22 @@ as
   as
     exists_p char(1);
   begin
-    --
-    -- direct permissions
+
     select decode(count(*),0,'f','t') into exists_p
-    from dual where exists (
-        select 'x'
-          from acs_object_grantee_priv_map
-         where object_id = permission_p.object_id
-           and grantee_id = permission_p.party_id
-           and privilege = permission_p.privilege);
-    if exists_p = 't' then
-        return 't';
-    end if;
-    --
-    -- public-like permissions
-    select decode(count(*),0,'f','t') into exists_p
-    from dual where exists (
-        select 'x'
-          from acs_object_grantee_priv_map
-         where object_id = permission_p.object_id
-           and 0 = permission_p.party_id
-           and privilege = permission_p.privilege
-           and grantee_id = -1);
-    if exists_p = 't' then
-        return 't';
-    end if;
-    --
-    -- public permissions
-    select decode(count(*),0,'f','t') into exists_p
-    from dual where exists (
-        select 'x'
-          from acs_object_grantee_priv_map m, users u
-         where object_id = permission_p.object_id
-           and u.user_id = permission_p.party_id
-           and privilege = permission_p.privilege
-           and m.grantee_id = -1);
-    if exists_p = 't' then
-        return 't';
-    end if;
-    --
-    -- group permmissions
-    select decode(count(*),0,'f','t') into exists_p
-    from dual where exists (
-          select 'x'
-          from acs_object_grantee_priv_map ogpm,
-               group_approved_member_map gmm
-         where object_id = permission_p.object_id
-           and gmm.member_id = permission_p.party_id
-           and privilege = permission_p.privilege
-           and ogpm.grantee_id = gmm.group_id);
-    if exists_p = 't' then
-        return 't';
-    end if;
-    --
-    -- relational segment approved group
-    select decode(count(*),0,'f','t') into exists_p
-    from dual where exists (
-        select 'x'
-          from acs_object_grantee_priv_map ogpm,
-               rel_seg_approved_member_map rsmm
-         where object_id = permission_p.object_id
-           and rsmm.member_id = permission_p.party_id
-           and privilege = permission_p.privilege
-           and ogpm.grantee_id = rsmm.segment_id);
-    if exists_p = 't' then
-        return 't';
-    end if;
+    from dual where exists
+      (select 1
+       from acs_permissions p, party_approved_member_map m,
+         acs_object_context_index c, acs_privilege_descendant_map h
+       where p.object_id = c.ancestor_id
+         and h.descendant = permission_p.privilege
+         and c.object_id = permission_p.object_id
+         and m.member_id = permission_p.party_id
+         and p.privilege = h.privilege
+         and p.grantee_id = m.party_id);
+
     return exists_p;
-  end;
+
+  end permission_p;
   --
 end acs_permission;
 /

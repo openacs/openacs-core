@@ -1,3 +1,4 @@
+
 -- This giant package body is here since we are adding 
 --
 create or replace package body acs_object
@@ -619,5 +620,599 @@ as
     end update_last_modified;
 
 end acs_object;
+/
+show errors
+
+-- DRB: Change security context to object -4
+
+drop trigger acs_objects_context_id_in_tr;
+drop trigger acs_objects_context_id_up_tr;
+
+delete from acs_magic_objects
+where name = 'security_context_root';
+
+declare
+  foo acs_objects.object_id%TYPE;
+begin
+  foo := acs_object.new (
+           object_id => -4,
+           object_type => 'acs_object'
+         );
+end;
+/
+show errors;
+
+insert into acs_magic_objects
+ (name, object_id)
+values
+ ('security_context_root', -4);
+
+update acs_object_context_index
+set ancestor_id = -4
+where ancestor_id = 0;
+
+update acs_object_context_index
+set object_id = -4
+where object_id = 0;
+
+update acs_permissions
+set object_id = -4
+where object_id = 0;
+
+-- Content Repository sets parent_id to security_context_root
+-- for content modules
+
+update cr_items
+set parent_id = -4
+where parent_id = 0;
+
+begin
+  acs_object.delete(0);
+end;
+/
+show errors;
+
+create or replace trigger acs_objects_context_id_in_tr
+after insert on acs_objects
+for each row
+declare
+  security_context_root acs_magic_objects.object_id%TYPE;
+begin
+  insert into acs_object_context_index
+   (object_id, ancestor_id, n_generations)
+  values
+   (:new.object_id, :new.object_id, 0);
+
+  if :new.context_id is not null and :new.security_inherit_p = 't' then
+    insert into acs_object_context_index
+     (object_id, ancestor_id,
+      n_generations)
+    select
+     :new.object_id as object_id, ancestor_id,
+     n_generations + 1 as n_generations
+    from acs_object_context_index
+    where object_id = :new.context_id;
+  else
+
+    select object_id into security_context_root
+    from acs_magic_objects
+    where name = 'security_context_root';
+
+    if :new.object_id != security_context_root then
+      insert into acs_object_context_index
+        (object_id, ancestor_id, n_generations)
+      values
+        (:new.object_id, security_context_root, 1);
+    end if;
+
+  end if;
+end;
+/
+show errors
+
+create or replace trigger acs_objects_context_id_up_tr
+after update on acs_objects
+for each row
+declare
+  security_context_root acs_magic_objects.object_id%TYPE;
+begin
+  if :new.object_id = :old.object_id and
+     :new.context_id = :old.context_id and
+     :new.security_inherit_p = :old.security_inherit_p then
+    return;
+  end if;
+
+  -- Remove my old ancestors from my descendants.
+  delete from acs_object_context_index
+  where object_id in (select object_id
+                      from acs_object_contexts
+                      where ancestor_id = :old.object_id)
+  and ancestor_id in (select ancestor_id
+		      from acs_object_contexts
+		      where object_id = :old.object_id);
+
+  -- Kill all my old ancestors.
+  delete from acs_object_context_index
+  where object_id = :old.object_id;
+
+  insert into acs_object_context_index
+   (object_id, ancestor_id, n_generations)
+  values
+   (:new.object_id, :new.object_id, 0);
+
+  if :new.context_id is not null and :new.security_inherit_p = 't' then
+     -- Now insert my new ancestors for my descendants.
+    for pair in (select *
+		 from acs_object_context_index
+		 where ancestor_id = :new.object_id) loop
+      insert into acs_object_context_index
+       (object_id, ancestor_id, n_generations)
+      select
+       pair.object_id, ancestor_id,
+       n_generations + pair.n_generations + 1 as n_generations
+      from acs_object_context_index
+      where object_id = :new.context_id;
+    end loop;
+  else
+
+    select object_id into security_context_root
+    from acs_magic_objects
+    where name = 'security_context_root';
+
+    if :new.object_id != 0 then
+      -- We need to make sure that :NEW.OBJECT_ID and all of its
+      -- children have security_context_root as an ancestor.
+      for pair in (select *
+		   from acs_object_context_index
+		   where ancestor_id = :new.object_id)
+      loop
+        insert into acs_object_context_index
+          (object_id, ancestor_id, n_generations)
+        values
+          (pair.object_id, security_context_root, pair.n_generations + 1);
+      end loop;
+    end if;
+
+  end if;
+end;
+/
+show errors
+
+----------------------------------------------------------------------------
+
+-- DRB: We now will turn the magic -1 party into a group that contains
+-- all registered users and a new unregistered visitor.  This will allow
+-- us to do all permission checking on a materialized version of the
+-- party_member_map.
+
+-- Make our new "Unregistered Visitor" be object 0, which corresponds
+-- with the user_id assigned throughout the toolkit Tcl code
+
+insert into acs_objects
+  (object_id, object_type)
+values
+  (0, 'person');
+
+insert into parties
+  (party_id)
+values
+  (0);
+
+insert into persons
+  (person_id, first_names, last_name)
+values
+  (0, 'Unregistered', 'Visitor');
+
+insert into acs_magic_objects
+  (name, object_id)
+values
+  ('unregistered_visitor', 0);
+
+-- Now transform the old special -1 party into a legitimate group with
+-- one user, our Unregistered Visitor
+
+update acs_objects
+set object_type = 'group'
+where object_id = -1;
+ 
+insert into groups
+ (group_id, group_name, join_policy)
+values
+ (-1, 'The Public', 'closed');
+
+declare
+  foo acs_objects.object_id%TYPE;
+begin
+
+  -- Add our only user, the Unregistered Visitor
+
+  foo := membership_rel.new (
+           rel_type => 'membership_rel',
+           object_id_one => acs.magic_object_id('the_public'),      
+           object_id_two => acs.magic_object_id('unregistered_visitor'),
+           member_state => 'approved'
+         );
+
+  -- Now declare "The Public" to be composed of itself and the "Registered
+  -- Users" group
+
+  foo := composition_rel.new (
+           rel_type => 'composition_rel',
+           object_id_one => acs.magic_object_id('the_public'),
+           object_id_two => acs.magic_object_id('registered_users')
+         );
+end;
+/
+show errors;
+
+-------------------------------------------------------------------------------
+
+-- DRB: Replace the old party_emmber_map and party_approved_member_map views
+-- (they were both the same and very slow) with a table containing the same
+-- information.  This can be used to greatly speed permissions checking.
+
+drop view party_member_map;
+drop view party_approved_member_map;
+
+-- The count column is needed because composition_rels lead to a lot of
+-- redundant data in the group element map (i.e. you can belong to the
+-- registered users group an infinite number of times, strange concept)
+
+-- (it is "cnt" rather than "count" because Oracle confuses it with the
+-- "count()" aggregate in some contexts)
+
+-- Though for permission checking we only really need to map parties to
+-- member users, the old view included identity entries for all parties
+-- in the system.  It doesn't cost all that much to maintain the extra
+-- rows so we will, just in case some overly clever programmer out there
+-- depends on it.
+
+create table party_approved_member_map (
+    party_id        integer
+                    constraint party_member_party_fk
+                    references parties,
+    member_id       integer
+                    constraint party_member_member_fk
+                    references parties,
+    cnt             integer,
+    constraint party_approved_member_map_pk
+    primary key (party_id, member_id)
+);
+
+-- Need this to speed referential integrity 
+create index party_member_member_idx on party_approved_member_map(member_id);
+
+-- Every person is a member of itself
+
+insert into party_approved_member_map
+  (party_id, member_id, cnt)
+select party_id, party_id, 1
+from parties;
+
+-- Every party is a member if it is an approved member of
+-- some sort of membership_rel
+
+insert into party_approved_member_map
+  (party_id, member_id, cnt)
+select group_id, member_id, count(*)
+from group_approved_member_map
+group by group_id, member_id;
+
+-- Every party is a member if it is an approved member of
+-- some sort of relation segment
+
+insert into party_approved_member_map
+  (party_id, member_id, cnt)
+select segment_id, member_id, count(*)
+from rel_seg_approved_member_map
+group by segment_id, member_id;
+
+-- Triggers to maintain party_approved_member_map when parties are create or replaced or
+-- destroyed.
+
+create or replace trigger parties_in_tr before insert on parties
+for each row 
+begin
+  insert into party_approved_member_map
+    (party_id, member_id, cnt)
+  values
+    (:new.party_id, :new.party_id, 1);
+end parties_in_tr;
+/
+show errors;
+
+create or replace trigger parties_del_tr before delete on parties
+for each row
+begin
+  delete from party_approved_member_map
+  where party_id = :old.party_id
+    and member_id = :old.party_id;
+end parties_del_tr;
+/
+show errors;
+
+-- Triggers to maintain party_approved_member_map when relational segments are
+-- create or replaced or destroyed.   We only remove the (segment_id, member_id) rows as
+-- removing the relational segment itself does not remove members from the
+-- group with that rel_type.  This was intentional on the part of the aD folks
+-- who added relational segments to ACS 4.2.
+
+create or replace trigger rel_segments_in_tr before insert on rel_segments
+for each row
+begin
+  insert into party_approved_member_map
+    (party_id, member_id, cnt)
+  select :new.segment_id, element_id, 1
+    from group_element_index
+    where group_id = :new.group_id
+      and rel_type = :new.rel_type;
+end rel_segments_in_tr;
+/
+show errors;
+
+create or replace trigger rel_segments_del_tr before delete on rel_segments
+for each row
+begin
+  delete from party_approved_member_map
+  where party_id = :old.segment_id
+    and member_id in (select element_id
+                      from group_element_index
+                      where group_id = :old.group_id
+                        and rel_type = :old.rel_type);
+end parties_del_tr;
+/
+show errors;
+
+-- DRB: Helper functions to maintain the materialized party_approved_member_map.  The counting crap
+-- has to do with the fact that composition rels create duplicate rows in groups.
+
+create or replace package party_approved_member is
+
+  procedure add_one(
+    p_party_id in parties.party_id%TYPE,
+    p_member_id in parties.party_id%TYPE
+  );
+
+  procedure add(
+    p_party_id in parties.party_id%TYPE,
+    p_member_id in parties.party_id%TYPE,
+    p_rel_type in acs_rels.rel_type%TYPE
+  );
+
+  procedure remove_one (
+    p_party_id in parties.party_id%TYPE,
+    p_member_id in parties.party_id%TYPE
+  );
+
+  procedure remove (
+    p_party_id in parties.party_id%TYPE,
+    p_member_id in parties.party_id%TYPE,
+    p_rel_type in acs_rels.rel_type%TYPE
+  );
+
+end party_approved_member;
+/
+show errors;
+
+create or replace package body party_approved_member is
+
+  procedure add_one(
+    p_party_id in parties.party_id%TYPE,
+    p_member_id in parties.party_id%TYPE
+  )
+  is
+  begin
+
+    insert into party_approved_member_map
+      (party_id, member_id, cnt)
+    values
+      (p_party_id, p_member_id, 1);
+
+    exception when dup_val_on_index then
+      update party_approved_member_map
+      set cnt = cnt + 1
+      where party_id = p_party_id
+        and member_id = p_member_id;
+
+  end add_one;
+
+  procedure add(
+    p_party_id in parties.party_id%TYPE,
+    p_member_id in parties.party_id%TYPE,
+    p_rel_type in acs_rels.rel_type%TYPE
+  )
+  is
+    v_segment_id rel_segments.segment_id%TYPE;
+  begin
+
+    add_one(p_party_id, p_member_id);
+
+    -- if the relation type is mapped to a relational segment map that too
+
+    select segment_id into v_segment_id
+    from rel_segments s
+    where s.rel_type = p_rel_type
+      and s.group_id = p_party_id;
+
+    exception when no_data_found then return;
+
+    add_one(v_segment_id, p_member_id);
+
+  end add;
+
+  procedure remove_one (
+    p_party_id in parties.party_id%TYPE,
+    p_member_id in parties.party_id%TYPE
+  )
+  is
+  begin
+
+    update party_approved_member_map
+    set cnt = cnt - 1
+    where party_id = p_party_id
+      and member_id = p_member_id;
+
+    delete from party_approved_member_map
+    where party_id = p_party_id
+      and member_id = p_member_id
+      and cnt = 0;
+
+  end remove_one;
+
+  procedure remove (
+    p_party_id in parties.party_id%TYPE,
+    p_member_id in parties.party_id%TYPE,
+    p_rel_type in acs_rels.rel_type%TYPE
+  )
+  is
+    v_segment_id rel_segments.segment_id%TYPE;
+  begin
+
+    remove_one(p_party_id, p_member_id);
+
+    -- if the relation type is mapped to a relational segment unmap that too
+
+    select segment_id into v_segment_id
+    from rel_segments s
+    where s.rel_type = p_rel_type
+      and s.group_id = p_party_id;
+
+    exception when no_data_found then return;
+
+    remove_one(v_segment_id, p_member_id);
+
+  end remove;
+
+end party_approved_member;
+/
+show errors;
+
+create or replace trigger group_element_index_in_tr
+before insert on group_element_index
+for each row
+declare
+  v_member_state membership_rels.member_state%TYPE;
+begin
+
+  select member_state into v_member_state
+  from membership_rels
+  where rel_id = :new.rel_id;
+
+  -- Only membership_rels are tracked in the party_approved_member_map
+
+  if v_member_state = 'approved' then
+    party_approved_member.add(:new.group_id, :new.element_id, :new.rel_type);
+  end if;
+
+end;
+/
+show errors;
+
+create or replace trigger group_element_index_del_tr
+after delete on group_element_index
+for each row
+begin
+  party_approved_member.remove(:old.group_id, :old.element_id, :old.rel_type);
+end;
+/
+show errors;
+
+
+create or replace trigger membership_rels_up_tr
+before update on membership_rels
+for each row
+begin
+  
+  if :new.member_state = :old.member_state then
+    return;
+  end if;
+
+  for map in (select group_id, element_id, rel_type
+              from group_element_index
+              where rel_id = :new.rel_id)
+  loop
+    if :new.member_state = 'approved' then
+      party_approved_member.add(map.group_id, map.element_id, map.rel_type);
+    else
+      party_approved_member.remove(map.group_id, map.element_id, map.rel_type);
+    end if;
+  end loop;
+
+end;
+/
+show errors
+
+-- New fast version of acs_object_party_privilege_map
+
+create or replace view acs_object_party_privilege_map as
+select c.object_id, pdm.descendant as privilege, pamm.member_id as party_id
+from acs_object_context_index c, acs_permissions p, acs_privilege_descendant_map pdm,
+  party_approved_member_map pamm
+where c.ancestor_id = p.object_id
+  and pdm.privilege = p.privilege
+  and pamm.party_id = p.grantee_id;
+
+-- Kept to avoid breaking existing code, should eventually go away.
+
+create or replace view all_object_party_privilege_map as
+select * from acs_object_party_privilege_map;
+
+create or replace package body acs_permission
+as
+  procedure grant_permission (
+    object_id	 acs_permissions.object_id%TYPE,
+    grantee_id	 acs_permissions.grantee_id%TYPE,
+    privilege	 acs_permissions.privilege%TYPE
+  )
+  as
+  begin
+    insert into acs_permissions
+      (object_id, grantee_id, privilege)
+    values
+      (object_id, grantee_id, privilege);
+  exception
+    when dup_val_on_index then
+      return;
+  end grant_permission;
+  --
+  procedure revoke_permission (
+    object_id	 acs_permissions.object_id%TYPE,
+    grantee_id	 acs_permissions.grantee_id%TYPE,
+    privilege	 acs_permissions.privilege%TYPE
+  )
+  as
+  begin
+    delete from acs_permissions
+    where object_id = revoke_permission.object_id
+    and grantee_id = revoke_permission.grantee_id
+    and privilege = revoke_permission.privilege;
+  end revoke_permission;
+
+  function permission_p (
+    object_id	 acs_objects.object_id%TYPE,
+    party_id	 parties.party_id%TYPE,
+    privilege	 acs_privileges.privilege%TYPE
+  ) return char
+  as
+    exists_p char(1);
+  begin
+
+    select decode(count(*),0,'f','t') into exists_p
+    from dual where exists
+      (select 1
+       from acs_permissions p, party_approved_member_map m,
+         acs_object_context_index c, acs_privilege_descendant_map h
+       where p.object_id = c.ancestor_id
+         and h.descendant = permission_p.privilege
+         and c.object_id = permission_p.object_id
+         and m.member_id = permission_p.party_id
+         and p.privilege = h.privilege
+         and p.grantee_id = m.party_id);
+
+    return exists_p;
+
+  end permission_p;
+
+end acs_permission;
 /
 show errors

@@ -10,6 +10,60 @@
 -- TRIGGERS --
 --------------
 
+create or replace trigger group_element_index_in_tr
+before insert on group_element_index
+for each row
+declare
+  v_member_state membership_rels.member_state%TYPE;
+begin
+
+  select member_state into v_member_state
+  from membership_rels
+  where rel_id = :new.rel_id;
+
+  -- Only membership_rels are tracked in the party_approved_member_map
+
+  if v_member_state = 'approved' then
+    party_approved_member.add(:new.group_id, :new.element_id, :new.rel_type);
+  end if;
+
+end;
+/
+show errors;
+
+create or replace trigger group_element_index_del_tr
+after delete on group_element_index
+for each row
+begin
+  party_approved_member.remove(:old.group_id, :old.element_id, :old.rel_type);
+end;
+/
+show errors;
+
+create or replace trigger membership_rels_up_tr
+before update on membership_rels
+for each row
+begin
+  
+  if :new.member_state = :old.member_state then
+    return;
+  end if;
+
+  for map in (select group_id, element_id, rel_type
+              from group_element_index
+              where rel_id = :new.rel_id)
+  loop
+    if :new.member_state = 'approved' then
+      party_approved_member.add(map.group_id, map.element_id, map.rel_type);
+    else
+      party_approved_member.remove(map.group_id, map.element_id, map.rel_type);
+    end if;
+  end loop;
+
+end;
+/
+show errors
+
 create or replace trigger membership_rels_in_tr
 after insert on membership_rels
 for each row

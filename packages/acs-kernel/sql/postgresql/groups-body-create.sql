@@ -10,120 +10,6 @@
 -- TRIGGERS --
 --------------
 
--- DRB: Helper functions to maintain the materialized party_approved_member_map.  The counting crap
--- has to do with the way composition_rels work, which is not how any sane person would care
--- for them to work.   Fixing the groups and relational segments model will be a nice future project.
--- For now I will just settle for making permission checking fast ...
-
-create or replace function insert_into_party_map(integer, integer, varchar) returns integer as '
-declare
-  p_party_id alias for $1;
-  p_member_id alias for $2;
-  p_rel_type alias for $3;
-  v_segment_id rel_segments.segment_id%TYPE;
-  v_count integer;
-begin
-
-  insert into party_approved_member_map
-    (party_id, member_id, count)
-  select p_party_id, p_member_id, 1
-  where not exists (select 1
-                    from party_approved_member_map
-                    where party_id = p_party_id
-                    and member_id = p_member_id);
-
-  get diagnostics v_count = row_count;
-
-  if v_count = 0 then
-    update party_approved_member_map
-    set count = count + 1
-    where party_id = p_party_id
-      and member_id = p_member_id;
-  end if;
-
-  -- if the relation type is mapped to a relational segment map that too
-
-  select into v_segment_id segment_id
-  from rel_segments s
-  where s.rel_type = p_rel_type
-    and s.group_id = p_party_id;
-
-  if found then
-    insert into party_approved_member_map
-      (party_id, member_id, count)
-    select v_segment_id, p_member_id, 1
-    where not exists (select 1
-                      from party_approved_member_map
-                      where party_id = v_segment_id
-                        and member_id = p_member_id);
-
-    get diagnostics v_count = row_count;
-
-    if v_count = 0 then
-      update party_approved_member_map
-      set count = count + 1
-      where party_id = v_segment_id
-        and member_id = p_member_id;
-    end if;
-
-  end if;
-
-  return 1;
-
-end;' language 'plpgsql';
-
-create or replace function delete_from_party_map(integer, integer, varchar) returns integer as '
-declare
-  p_party_id alias for $1;
-  p_member_id alias for $2;
-  p_rel_type alias for $3;
-  v_segment_id rel_segments.segment_id%TYPE;
-  v_count integer;
-begin
-
-  delete from party_approved_member_map
-  where party_id = p_party_id
-    and member_id = p_member_id
-    and count = 1;
-
-  get diagnostics v_count = row_count;
-
-  if v_count = 0 then
-    update party_approved_member_map
-    set count = count - 1
-    where party_id = p_party_id
-      and member_id = p_member_id;
-  end if;
-
-  -- if the relation type is mapped to a relational segment unmap that too
-
-  select into v_segment_id segment_id
-  from rel_segments s
-  where s.rel_type = p_rel_type
-    and s.group_id = p_party_id;
-
-  if found then
-
-    delete from party_approved_member_map
-    where party_id = v_segment_id
-      and member_id = p_member_id
-      and count = 1;
-
-    get diagnostics v_count = row_count;
-
-    if v_count = 0 then
-      update party_approved_member_map
-      set count = count - 1
-      where party_id = v_segment_id
-        and member_id = p_member_id;
-    end if;
-
-  end if;
-
-  return 1;
-
-end;' language 'plpgsql';
-
 create or replace function group_element_index_in_tr () returns opaque as '
 declare
   v_member_state membership_rels.member_state%TYPE;
@@ -136,7 +22,7 @@ begin
   -- Only membership_rels are tracked in the party_approved_member_map
 
   if v_member_state = ''approved'' then
-    perform insert_into_party_map(new.group_id, new.element_id, new.rel_type);
+    perform insert_into_party_map(new.group_id, new.element_id, new.rel_id, new.rel_type);
   end if;
 
   return new;
@@ -148,12 +34,15 @@ for each row execute procedure group_element_index_in_tr ();
 
 create or replace function group_element_index_del_tr () returns opaque as '
 begin
-  perform delete_from_party_map(old.group_id, old.element_id, old.rel_type);
+  perform delete_from_party_map(old.group_id, old.element_id, old.rel_id, old.rel_type);
   return old;
 end;' language 'plpgsql';
 
 create trigger group_element_index_del_tr after delete on group_element_index
 for each row execute procedure group_element_index_del_tr (); 
+
+-- The insert trigger was dummied up in groups-create.sql, so we just need
+-- to replace the trigger function, not create the trigger
 
 create or replace function membership_rels_in_tr () returns opaque as '
 declare
@@ -215,9 +104,9 @@ begin
              where rel_id = new.rel_id
   loop
     if new.member_state = ''approved'' then
-      perform insert_into_party_map(map.group_id, map.element_id, map.rel_type);
+      perform insert_into_party_map(map.group_id, map.element_id, new.rel_id, map.rel_type);
     else
-      perform delete_from_party_map(map.group_id, map.element_id, map.rel_type);
+      perform delete_from_party_map(map.group_id, map.element_id, new.rel_id, map.rel_type);
     end if;
   end loop;
 
@@ -431,7 +320,7 @@ for each row execute procedure composition_rels_del_tr ();
 -- function new
 select define_function_args('composition_rel__new','rel_id,rel_type;composition_rel,object_id_one,object_id_two,creation_user,creation_ip');
 
-create function composition_rel__new (integer,varchar,integer,integer,integer,varchar)
+create or replace function composition_rel__new (integer,varchar,integer,integer,integer,varchar)
 returns integer as '
 declare
   new__rel_id            alias for $1;  -- default null  
@@ -462,7 +351,7 @@ begin
 end;' language 'plpgsql';
 
 -- function new
-create function composition_rel__new (integer,integer)
+create or replace function composition_rel__new (integer,integer)
 returns integer as '
 declare
   object_id_one          alias for $1;  
@@ -477,7 +366,7 @@ begin
 end;' language 'plpgsql';
 
 -- procedure delete
-create function composition_rel__delete (integer)
+create or replace function composition_rel__delete (integer)
 returns integer as '
 declare
   rel_id                 alias for $1;  
@@ -489,7 +378,7 @@ end;' language 'plpgsql';
 
 
 -- function check_path_exists_p
-create function composition_rel__check_path_exists_p (integer,integer)
+create or replace function composition_rel__check_path_exists_p (integer,integer)
 returns boolean as '
 declare
   component_id           alias for $1;  
@@ -516,7 +405,7 @@ end;' language 'plpgsql';
 
 
 -- function check_index
-create function composition_rel__check_index (integer,integer)
+create or replace function composition_rel__check_index (integer,integer)
 returns boolean as '
 declare
   check_index__component_id           alias for $1;  
@@ -593,7 +482,7 @@ end;' language 'plpgsql';
 
 
 -- function check_representation
-create function composition_rel__check_representation (integer)
+create or replace function composition_rel__check_representation (integer)
 returns boolean as '
 declare
   check_representation__rel_id                 alias for $1;  
@@ -647,7 +536,7 @@ end;' language 'plpgsql';
 -- function new
 select define_function_args('membership_rel__new','rel_id,rel_type;membership_rel,object_id_one,object_id_two,member_state;approved,creation_user,creation_ip');
 
-create function membership_rel__new (integer,varchar,integer,integer,varchar,integer,varchar)
+create or replace function membership_rel__new (integer,varchar,integer,integer,varchar,integer,varchar)
 returns integer as '
 declare
   new__rel_id            alias for $1;  -- default null  
@@ -679,7 +568,7 @@ begin
 end;' language 'plpgsql';
 
 -- function new
-create function membership_rel__new (integer,integer)
+create or replace function membership_rel__new (integer,integer)
 returns integer as '
 declare
   object_id_one          alias for $1;  
@@ -695,7 +584,7 @@ begin
 end;' language 'plpgsql';
 
 -- procedure ban
-create function membership_rel__ban (integer)
+create or replace function membership_rel__ban (integer)
 returns integer as '
 declare
   ban__rel_id           alias for $1;  
@@ -709,7 +598,7 @@ end;' language 'plpgsql';
 
 
 -- procedure approve
-create function membership_rel__approve (integer)
+create or replace function membership_rel__approve (integer)
 returns integer as '
 declare
   approve__rel_id               alias for $1;  
@@ -723,7 +612,7 @@ end;' language 'plpgsql';
 
 
 -- procedure reject
-create function membership_rel__reject (integer)
+create or replace function membership_rel__reject (integer)
 returns integer as '
 declare
   reject__rel_id                alias for $1;  
@@ -737,7 +626,7 @@ end;' language 'plpgsql';
 
 
 -- procedure unapprove
-create function membership_rel__unapprove (integer)
+create or replace function membership_rel__unapprove (integer)
 returns integer as '
 declare
   unapprove__rel_id             alias for $1;  
@@ -751,7 +640,7 @@ end;' language 'plpgsql';
 
 
 -- procedure deleted
-create function membership_rel__deleted (integer)
+create or replace function membership_rel__deleted (integer)
 returns integer as '
 declare
   deleted__rel_id               alias for $1;  
@@ -765,7 +654,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-create function membership_rel__delete (integer)
+create or replace function membership_rel__delete (integer)
 returns integer as '
 declare
   rel_id                 alias for $1;  
@@ -777,7 +666,7 @@ end;' language 'plpgsql';
 
 
 -- function check_index
-create function membership_rel__check_index (integer,integer,integer)
+create or replace function membership_rel__check_index (integer,integer,integer)
 returns boolean as '
 declare
   check_index__group_id               alias for $1;  
@@ -819,7 +708,7 @@ end;' language 'plpgsql';
 
 
 -- function check_representation
-create function membership_rel__check_representation (integer)
+create or replace function membership_rel__check_representation (integer)
 returns boolean as '
 declare
   check_representation__rel_id  alias for $1;  
@@ -868,7 +757,7 @@ end;' language 'plpgsql';
 -- function new
 select define_function_args('acs_group__new','group_id,object_type;group,creation_date;now(),creation_user,creation_ip,email,url,group_name,join_policy,context_id');
 
-create function acs_group__new (integer,varchar,timestamp with time zone,integer,varchar,varchar,varchar,varchar,varchar,integer)
+create or replace function acs_group__new (integer,varchar,timestamp with time zone,integer,varchar,varchar,varchar,varchar,varchar,integer)
 returns integer as '
 declare
   new__group_id              alias for $1;  -- default null  
@@ -933,7 +822,7 @@ begin
 end;' language 'plpgsql';
 
 -- function new
-create function acs_group__new (varchar) returns integer as '
+create or replace function acs_group__new (varchar) returns integer as '
 declare
         gname   alias for $1;
 begin
@@ -950,7 +839,7 @@ begin
 end;' language 'plpgsql';
 
 -- procedure delete
-create function acs_group__delete (integer)
+create or replace function acs_group__delete (integer)
 returns integer as '
 declare
   delete__group_id              alias for $1;  
@@ -982,7 +871,7 @@ end;' language 'plpgsql';
 
 
 -- function name
-create function acs_group__name (integer)
+create or replace function acs_group__name (integer)
 returns varchar as '
 declare
   name__group_id         alias for $1;  
@@ -997,7 +886,7 @@ begin
   
 end;' language 'plpgsql';
 
-create function acs_group__member_p (integer, integer, boolean)
+create or replace function acs_group__member_p (integer, integer, boolean)
 returns boolean as '
 declare
   p_party_id               alias for $1;  
@@ -1022,7 +911,7 @@ end;' language 'plpgsql';
 
 
 -- function check_representation
-create function acs_group__check_representation (integer)
+create or replace function acs_group__check_representation (integer)
 returns boolean as '
 declare
   group_id               alias for $1;  

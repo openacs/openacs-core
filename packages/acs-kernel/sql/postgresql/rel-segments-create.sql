@@ -130,44 +130,134 @@ create view rel_seg_distinct_member_map
 as select distinct segment_id, member_id
    from rel_seg_approved_member_map;
 
--- party_approved_member_map can be used to expand any party into its members.  
--- Every party is considered to be a member of itself.
+-- Though for permission checking we only really need to map parties to
+-- member users, the old view included identity entries for all parties
+-- in the system.  It doesn't cost all that much to maintain the extra
+-- rows so we will, just in case some overly clever programmer out there
+-- depends on it.
 
--- DRB: This is here rather where parties are created for historical reasons
--- (in other words this is where the old view was created in older versions)
+-- This represents a large amount of redundant data which is separately
+-- stored in the group_element_index table.   We might want to clean this
+-- up in the future but time constraints on 4.6.1 require I keep this 
+-- relatively simple.  Implementing a real "subgroup_rel" would help a
+-- lot by in itself reducing the number of redundant rows in the two
+-- tables.
 
--- The count column is needed because composition_rels and relational segment
--- rel_types derived from membership_rel lead to a lot of redundant data in the
--- group element map (i.e. you can belong to the registered users group an
--- infinite number of times, strange concept)
+-- DRB: Unfortunately visibility semantics in PostgreSQL are very different
+-- than in Oracle.  This makes it impossible to remove the duplicate
+-- rows by maintaining a count column as I've done in the Oracle version
+-- without requiring application code to issue explicit "lock table in
+-- exclusive mode" statements.  This would kill abstraction and be very
+-- error prone.  The PL/pgSQL procs can issue the locks but unfortunately
+-- statements within such procs don't generate a new snapshot when executed
+-- but rather work within the context of the caller.  This means locks within
+-- a PL/pgSQL are too late to be of use.  Such code works perfectly in Oracle.
+
+-- Maybe people who buy Oracle aren't as dumb as you thought!
 
 create table party_approved_member_map (
     party_id        integer
+                    constraint party_member_party_nn
+                    not null
                     constraint party_member_party_fk
                     references parties,
     member_id       integer
+                    constraint party_member_member_nn
+                    not null
                     constraint party_member_member_fk
                     references parties,
-    count           integer,
-    constraint party_member_map_pk
-    primary key (party_id, member_id)
+    tag             integer
+                    constraint party_member_tag_nn
+                    not null,
+    constraint party_approved_member_map_pk
+    primary key (party_id, member_id, tag)
 );
 
 -- Need this to speed referential integrity 
 create index party_member_member_idx on party_approved_member_map(member_id);
 
+-- Helper functions to maintain the materialized party_approved_member_map. 
+
+create or replace function insert_into_party_map(integer, integer, integer, varchar) returns integer as '
+declare
+  p_party_id alias for $1;
+  p_member_id alias for $2;
+  p_rel_id alias for $3;
+  p_rel_type alias for $4;
+  v_segment_id rel_segments.segment_id%TYPE;
+  v_count integer;
+begin
+
+  insert into party_approved_member_map
+    (party_id, member_id, tag)
+  values
+    (p_party_id, p_member_id, p_rel_id);
+
+  -- if the relation type is mapped to a relational segment map that too
+
+  select into v_segment_id segment_id
+  from rel_segments s
+  where s.rel_type = p_rel_type
+    and s.group_id = p_party_id;
+
+  if found then
+    insert into party_approved_member_map
+      (party_id, member_id, tag)
+    values
+      (v_segment_id, p_member_id, p_rel_id);
+  end if;
+
+  return 1;
+
+end;' language 'plpgsql';
+
+create or replace function delete_from_party_map(integer, integer, integer, varchar) returns integer as '
+declare
+  p_party_id alias for $1;
+  p_member_id alias for $2;
+  p_rel_id alias for $3;
+  p_rel_type alias for $4;
+  v_segment_id rel_segments.segment_id%TYPE;
+  v_count integer;
+begin
+
+  delete from party_approved_member_map
+  where party_id = p_party_id
+    and member_id = p_member_id
+    and tag = p_rel_id;
+
+  -- if the relation type is mapped to a relational segment unmap that too
+
+  select into v_segment_id segment_id
+  from rel_segments s
+  where s.rel_type = p_rel_type
+    and s.group_id = p_party_id;
+
+  if found then
+    delete from party_approved_member_map
+    where party_id = v_segment_id
+      and member_id = p_member_id
+      and tag = p_rel_id;
+  end if;
+
+  return 1;
+
+end;' language 'plpgsql';
+
+
 -- Triggers to maintain party_approved_member_map when parties are created or
--- destroyed.
+-- destroyed.  These don't call the above helper functions because we're just
+-- creating the identity row for the party.
 
 create or replace function parties_in_tr () returns opaque as '
 begin
 
   insert into party_approved_member_map
-    (party_id, member_id, count)
+    (party_id, member_id, tag)
   values
-    (new.party_id, new.party_id, 1);
-  return new;
+    (new.party_id, new.party_id, 0);
 
+  return new;
 
 end;' language 'plpgsql';
 
@@ -198,8 +288,8 @@ create or replace function rel_segments_in_tr () returns opaque as '
 begin
 
   insert into party_approved_member_map
-    (party_id, member_id, count)
-  select new.segment_id, element_id, 1
+    (party_id, member_id, tag)
+  select new.segment_id, element_id, rel_id
     from group_element_index
     where group_id = new.group_id
       and rel_type = new.rel_type;
@@ -225,7 +315,7 @@ begin
 
 end;' language 'plpgsql';
 
-create trigger parties_del_tr before delete on rel_segments
+create trigger rel_segments_del_tr before delete on rel_segments
 for each row execute procedure rel_segments_del_tr ();
 
 -- View: rel_segment_group_rel_type_map
