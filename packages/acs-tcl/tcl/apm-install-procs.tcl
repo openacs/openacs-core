@@ -985,9 +985,10 @@ ad_proc -private apm_packages_full_install {
 	    set version_id [apm_version_enable -callback $callback \
 				[apm_package_install -callback $callback $spec_file]]
 	} errmsg] } {
-	    apm_callback_and_log $callback "<p><font color=red>[string totitle $package_key] not installed.</font>
+            global errorInfo
+	    apm_callback_and_log -severity Error $callback "<p><font color=red>[string totitle $package_key] not installed.</font>
 <p> Error:
-<pre><blockquote>[ad_quotehtml $errmsg]</blockquote></pre>"
+<pre><blockquote>[ad_quotehtml $errmsg]</blockquote><blockquote>[ad_quotehtml $errorInfo]</blockquote></pre>"
 	} 
     }
 }
