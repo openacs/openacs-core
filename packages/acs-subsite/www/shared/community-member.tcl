@@ -129,6 +129,6 @@ order by object_name, creation_date"
 set context_bar [ad_context_bar_ws_or_index "Community member"]
 set system_name [ad_system_name]
 set pretty_creation_date [util_AnsiDatetoPrettyDate $creation_date]
-set login_export_vars "return_url=[ns_urlencode "/shared/community-member?user_id=$user_id"]"
+set login_export_vars "return_url=[ns_urlencode [acs_community_member_url -user_id $user_id]]"
 
 ad_return_template

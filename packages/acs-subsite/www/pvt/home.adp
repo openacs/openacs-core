@@ -33,7 +33,7 @@ other.
 <p>
 
 If you want to check what other users of this service are shown, visit
-<a href="/shared/community-member?@export_user_id@">@ad_url@/shared/community-member?@export_user_id@</a>.
+<%= [acs_community_member_link -user_id $user_id -label "${ad_url}[acs_community_member_url -user_id $user_id]"] %>
 
 <h4>Basic Information</h4>
 
