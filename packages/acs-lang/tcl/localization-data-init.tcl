@@ -216,6 +216,40 @@ nsv_set locale da_DK,t_fmt "%H:%M"
 nsv_set locale da_DK,thousands_sep "."
 nsv_set locale da_DK,formbuilder_time_format "HH24:MI"
 
+# Norwegian
+nsv_set locale no_NO,abday {{søn} {man} {tir} {ons} {tor} {fre} {lør}}
+nsv_set locale no_NO,abmon {{jan} {feb} {mar} {apr} {mai} {jun} {jul} {aug} {sep} {okt} {nov} {des}}
+nsv_set locale no_NO,am_str ""
+nsv_set locale no_NO,currency_symbol "kr"
+nsv_set locale no_NO,day {{søndag} {mandag} {tirsdag} {onsdag} {torsdag} {fredag} {lørdag}}
+nsv_set locale no_NO,firstdayofweek 1
+nsv_set locale no_NO,decimal_point ","
+nsv_set locale no_NO,d_fmt "%e/%m-%y"
+nsv_set locale no_NO,d_t_fmt "%a %e. %B %Y %r %Z"
+nsv_set locale no_NO,dlong_fmt "%e. %B %Y"
+nsv_set locale no_NO,dlongweekday_fmt "%A den %e. %B %Y"
+nsv_set locale no_NO,frac_digits 2
+nsv_set locale no_NO,grouping {3 3 }
+nsv_set locale no_NO,int_curr_symbol "NOK "
+nsv_set locale no_NO,int_frac_digits 2
+nsv_set locale no_NO,mon_decimal_point ","
+nsv_set locale no_NO,mon_grouping {3 3 }
+nsv_set locale no_NO,mon {{januar} {februar} {marts} {april} {mai} {juni} {juli} {august} {september} {oktober} {november} {desember}}
+nsv_set locale no_NO,mon_thousands_sep "."
+nsv_set locale no_NO,n_cs_precedes 1
+nsv_set locale no_NO,negative_sign "-"
+nsv_set locale no_NO,n_sep_by_space 0
+nsv_set locale no_NO,n_sign_posn             1
+nsv_set locale no_NO,p_cs_precedes 1
+nsv_set locale no_NO,pm_str ""
+nsv_set locale no_NO,positive_sign ""
+nsv_set locale no_NO,p_sep_by_space 0
+nsv_set locale no_NO,p_sign_posn 1
+nsv_set locale no_NO,t_fmt_ampm ""
+nsv_set locale no_NO,t_fmt "%H:%M"
+nsv_set locale no_NO,thousands_sep "."
+nsv_set locale no_NO,formbuilder_time_format "HH24:MI"
+
 # FI
 nsv_set locale fi_FI,abday {{su} {ma} {ti} {ke} {to} {pe} {la}}
 nsv_set locale fi_FI,abmon {{tammi} {helmi} {maalis} {huhti} {touko} {kesä}{heinä} {elo} {syys} {loka} {marras} {joulu}}
