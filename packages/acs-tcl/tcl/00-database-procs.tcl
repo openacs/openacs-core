@@ -377,7 +377,7 @@ ad_proc -public db_boolean { bool } {
 }
 
 
-ad_proc db_nextval {{ -dbn "" } sequence } {
+ad_proc -public db_nextval {{ -dbn "" } sequence } {
 
     Returns the next value for a sequence. This can utilize a pool of
     sequence values.
@@ -450,7 +450,7 @@ ad_proc db_nth_pool_name {{ -dbn "" } n } {
 }
 
 
-ad_proc db_with_handle {{ -dbn "" } db code_block } {
+ad_proc -public db_with_handle {{ -dbn "" } db code_block } {
 
     Places a usable database handle in $db and executes $code_block.
 
@@ -865,7 +865,7 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
 }
 
 
-ad_proc db_release_unused_handles {{ -dbn "" }} {
+ad_proc -public db_release_unused_handles {{ -dbn "" }} {
 
     Releases any database handles that are presently unused.
 
@@ -1024,7 +1024,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
 }
 
 
-ad_proc db_string {{ -dbn "" } statement_name sql args } {
+ad_proc -public db_string {{ -dbn "" } statement_name sql args } {
 
     Usage: <b>db_string</b> <i>statement-name sql</i> [ <tt>-default</tt> <i>default</i> ] [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
   
@@ -1052,7 +1052,7 @@ ad_proc db_string {{ -dbn "" } statement_name sql args } {
 }
 
 
-ad_proc db_list {{ -dbn "" } statement_name sql args } {
+ad_proc -public db_list {{ -dbn "" } statement_name sql args } {
 
     Usage: <b>db_list</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
     
@@ -1078,7 +1078,7 @@ ad_proc db_list {{ -dbn "" } statement_name sql args } {
 }
 
 
-ad_proc db_list_of_lists {{ -dbn "" } statement_name sql args } {
+ad_proc -public db_list_of_lists {{ -dbn "" } statement_name sql args } {
 
     Usage: <b>db_list_of_lists</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
 
@@ -1148,7 +1148,7 @@ ad_proc -public db_list_of_ns_sets {
 }
 
 
-ad_proc db_foreach {{ -dbn "" } statement_name sql args } {
+ad_proc -public db_foreach {{ -dbn "" } statement_name sql args } {
 
     Usage: 
     <blockquote>
@@ -1766,7 +1766,7 @@ ad_proc -public db_dml {{ -dbn "" } statement_name sql args } {
 }
 
 
-ad_proc db_resultrows {{ -dbn "" }} {
+ad_proc -public db_resultrows {{ -dbn "" }} {
     Returns the number of rows affected by the last DML command.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
@@ -1791,7 +1791,7 @@ ad_proc db_resultrows {{ -dbn "" }} {
 }
 
 
-ad_proc db_0or1row {{ -dbn "" } statement_name sql args } { 
+ad_proc -public db_0or1row {{ -dbn "" } statement_name sql args } { 
 
     Usage: 
     <blockquote>
@@ -1850,7 +1850,7 @@ ad_proc db_0or1row {{ -dbn "" } statement_name sql args } {
 }
 
 
-ad_proc db_1row { args } {
+ad_proc -public db_1row { args } {
     Usage: 
     <blockquote>
     db_1row <i>statement-name sql</i> [ -bind <i>bind_set_id</i> | -bind <i>bind_value_list</i> ] \
@@ -2746,7 +2746,7 @@ ad_proc -public ad_column_type {{ -dbn "" } table_name column_name } {
 }
 
 
-ad_proc db_write_clob {{ -dbn "" } statement_name sql args } {
+ad_proc -public db_write_clob {{ -dbn "" } statement_name sql args } {
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     ad_arg_parser { bind } $args
@@ -2779,7 +2779,7 @@ ad_proc db_write_clob {{ -dbn "" } statement_name sql args } {
 }
 
 
-ad_proc db_write_blob {{ -dbn "" } statement_name sql args } {
+ad_proc -public db_write_blob {{ -dbn "" } statement_name sql args } {
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     ad_arg_parser { bind } $args
@@ -2790,7 +2790,7 @@ ad_proc db_write_blob {{ -dbn "" } statement_name sql args } {
 }
 
 
-ad_proc db_blob_get_file {{ -dbn "" } statement_name sql args } {
+ad_proc -public db_blob_get_file {{ -dbn "" } statement_name sql args } {
     @param dbn The database name to use.  If empty_string, uses the default database.
 
     <p>
