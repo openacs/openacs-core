@@ -198,29 +198,26 @@ end;' language 'plpgsql';
 
 
 -- procedure create_type
-create function acs_rel_type__create_type (varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer,varchar,varchar,integer,integer)
+create function acs_rel_type__create_type (varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer,varchar,varchar,integer,integer)
 returns integer as '
 declare
   create_type__rel_type               alias for $1;  
   create_type__pretty_name            alias for $2;  
   create_type__pretty_plural          alias for $3;  
-  create_type__table_name             alias for $4;  
-  create_type__id_column              alias for $5;  
-  create_type__package_name           alias for $6;  
-  create_type__object_type_one        alias for $7; 
-  create_type__role_one               alias for $8; 
-
-  create_type__min_n_rels_one         alias for $9; 
-  create_type__max_n_rels_one         alias for $10; 
-
-  create_type__object_type_two        alias for $11; 
-  create_type__role_two               alias for $12; 
-
-  create_type__min_n_rels_two         alias for $13; 
-  create_type__max_n_rels_two         alias for $14; 
+  create_type__supertype              alias for $4;
+  create_type__table_name             alias for $5;  
+  create_type__id_column              alias for $6;  
+  create_type__package_name           alias for $7;  
+  create_type__object_type_one        alias for $8; 
+  create_type__role_one               alias for $9; 
+  create_type__min_n_rels_one         alias for $10; 
+  create_type__max_n_rels_one         alias for $11; 
+  create_type__object_type_two        alias for $12; 
+  create_type__role_two               alias for $13; 
+  create_type__min_n_rels_two         alias for $14; 
+  create_type__max_n_rels_two         alias for $15; 
 
   type_extension_table acs_object_types.type_extension_table%TYPE default null;
-  supertype    acs_object_types.supertype%TYPE       default ''relationship'';
   abstract_p   acs_object_types.abstract_p%TYPE      default ''f'';
   name_method  acs_object_types.name_method%TYPE     default null;     
 begin
@@ -228,7 +225,7 @@ begin
       create_type__rel_type,
       create_type__pretty_name,
       create_type__pretty_plural,
-      supertype,
+      create_type__supertype,
       create_type__table_name,
       create_type__id_column,
       create_type__package_name,

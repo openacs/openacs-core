@@ -34,8 +34,8 @@ begin
       new__constraint_type,
       now(),
       new__creation_user,
-      new__creation_ip
-      new__context_id,
+      new__creation_ip,
+      new__context_id
     );
 
     insert into rel_constraints
