@@ -91,14 +91,17 @@ ns_write "<li>Channels are: [array get channel_tag]\n"
 # Wipe the repository dir
 file delete -force "${work_dir}repository/"
 
+# Wipe and re-create the working directory
+file delete -force $work_dir
+publish::mkdirs $work_dir
+cd $work_dir
+    
 foreach channel [lsort -decreasing [array names channel_tag]] {
 
     ns_write "<li>Starting channel $channel with tag $channel_tag($channel)\n"
 
-    # Wipe and re-create the working directory
-    file delete -force $work_dir
-    publish::mkdirs $work_dir
-    cd $work_dir
+    # Wipe and re-create the checkout directory
+    file delete -force "${work_dir}openacs-4"
     
     # Prepare channel directory
     set channel_dir "${work_dir}repository/${channel}/"
@@ -109,7 +112,7 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
     set packages [list]
     
     # Checkout from the tag given by channel_tag($channel)
-    if { [string equal $channel_tag($channel) HEAD] } {
+    if { ![string equal $channel_tag($channel) HEAD] } {
         catch { exec $cvs_command -d $cvs_root -z3 co -r $channel_tag($channel) openacs-4/packages } output
         catch { exec $cvs_command -d $cvs_root -z3 co -r $channel_tag($channel) openacs-4/contrib/packages } output
     } else {
@@ -138,8 +141,6 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
                 if { [lsearch -exact $packages $version(package.key)] != -1 } {
                     ns_write "<li>Skipping package $package_key, because we already have another version of it"
                 } else {
-                    ns_write "<li> Building package $package_key for channel $channel\n"
-                    
                     lappend packages $version(package.key)
                     
                     append manifest {  } {<package>} \n
@@ -157,6 +158,8 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
                     
                     set apm_file "${channel_dir}${version(package.key)}-${version(name)}.apm"
 
+                    ns_write "<li> Building package $package_key for channel $channel in file $apm_file\n"
+                    
                     set files [apm_get_package_files \
                                    -all_db_types \
                                    -package_key $version(package.key) \
