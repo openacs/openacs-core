@@ -14,7 +14,7 @@
         <owner url="mailto:lars@pinds.com">Lars Pind</owner>
         <owner url="mailt: jbank@arsdigita.com">Joseph Bank</owner>
         <summary>Routines used to aggregate request/response information for debugging.</summary>
-        <release-date>2001-01-24 00:00:00-08</release-date>
+        <release-date>2001-01-24</release-date>
         <vendor url="http://www.arsdigita.com/">ArsDigita Corporation</vendor>
 
         <requires url="acs-kernel" version="4.0"/>

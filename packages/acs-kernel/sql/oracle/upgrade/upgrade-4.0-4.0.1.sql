@@ -80,7 +80,8 @@ update parties set email = lower(email);
 
 -- performance improvements
 
-create bitmap index acs_obj_types_supertype_idx on acs_object_types (supertype);
+-- create bitmap index acs_obj_types_supertype_idx on acs_object_types (supertype);
+create index acs_obj_types_supertype_idx on acs_object_types (supertype);
 
 -- update apm procedures
 -- bquinn@arsdigita.com 11/18/2000

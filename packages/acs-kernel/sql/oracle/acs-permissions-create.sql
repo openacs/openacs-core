@@ -52,7 +52,8 @@ create table acs_privilege_hierarchy (
 	primary key (privilege, child_privilege)
 );
 
-create bitmap index acs_priv_hier_child_priv_idx on acs_privilege_hierarchy (child_privilege);
+-- create bitmap index acs_priv_hier_child_priv_idx on acs_privilege_hierarchy (child_privilege);
+create index acs_priv_hier_child_priv_idx on acs_privilege_hierarchy (child_privilege);
 
 --create table acs_privilege_method_rules (
 --	privilege	not null constraint acs_priv_method_rules_priv_fk
@@ -205,7 +206,8 @@ create table acs_permissions (
 );
 
 create index acs_permissions_grantee_idx on acs_permissions (grantee_id);
-create bitmap index acs_permissions_privilege_idx on acs_permissions (privilege);
+-- create bitmap index acs_permissions_privilege_idx on acs_permissions (privilege);
+create index acs_permissions_privilege_idx on acs_permissions (privilege);
 
 create or replace view acs_privilege_descendant_map
 as select p1.privilege, p2.privilege as descendant

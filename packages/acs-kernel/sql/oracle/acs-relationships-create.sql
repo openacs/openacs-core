@@ -54,10 +54,14 @@ create table acs_rel_types (
 	check (min_n_rels_two <= max_n_rels_two)
 );
 
-create bitmap index acs_rel_types_objtypeone_idx on acs_rel_types (object_type_one);
-create bitmap index acs_rel_types_role_one_idx on acs_rel_types (role_one);
-create bitmap index acs_rel_types_objtypetwo_idx on acs_rel_types (object_type_two);
-create bitmap index acs_rel_types_role_two_idx on acs_rel_types (role_two);
+-- create bitmap index acs_rel_types_objtypeone_idx on acs_rel_types (object_type_one);
+create index acs_rel_types_objtypeone_idx on acs_rel_types (object_type_one);
+-- create bitmap index acs_rel_types_role_one_idx on acs_rel_types (role_one);
+create index acs_rel_types_role_one_idx on acs_rel_types (role_one);
+-- create bitmap index acs_rel_types_objtypetwo_idx on acs_rel_types (object_type_two);
+create index acs_rel_types_objtypetwo_idx on acs_rel_types (object_type_two);
+-- create bitmap index acs_rel_types_role_two_idx on acs_rel_types (role_two);
+create index acs_rel_types_role_two_idx on acs_rel_types (role_two);
 
 comment on table acs_rel_types is '
  Each row in <code>acs_rel_types</code> represents a type of

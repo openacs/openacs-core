@@ -163,7 +163,8 @@ create table apm_packages (
 				check (enabled_p in ('t', 'f'))
 );
 
-create bitmap index apm_packages_package_key_idx on apm_packages (package_key);
+-- create bitmap index apm_packages_package_key_idx on apm_packages (package_key);
+create index apm_packages_package_key_idx on apm_packages (package_key);
 
 comment on table apm_packages is '
    This table maintains the list of all package instances in the sytem. 
@@ -578,8 +579,8 @@ create table apm_package_files (
     constraint apm_package_files_un unique(version_id, path)
 );
 
-create bitmap index apm_pkg_files_file_type_idx on apm_package_files (file_type);
-create bitmap index apm_pkg_files_db_type_idx on apm_package_files (db_type);
+-- create bitmap index apm_pkg_files_file_type_idx on apm_package_files (file_type);
+create index apm_pkg_files_db_type_idx on apm_package_files (db_type);
 
 comment on table apm_package_files is '
   The files that belong to an APM package.  We store this information in the database
