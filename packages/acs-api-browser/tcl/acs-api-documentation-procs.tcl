@@ -80,7 +80,19 @@ ad_proc -public api_read_script_documentation {
     }
     return [list]
 }
-
+    
+ad_proc -private api_format_see_list { sees } { 
+    Generate an HTML list of referenced procs and pages.
+} { 
+    append out "<strong>See Also:</strong>\n<ul>"
+    foreach see $sees { 
+	append out "<li>[api_format_see $see]\n"
+    }
+    append out "</ul>\n"
+     
+    return $out
+}
+    
 ad_proc -private api_format_author_list { authors } {
 
     Generates an HTML-formatted list of authors (including <code>&lt;dt&gt;</code> and
@@ -136,9 +148,14 @@ ad_proc -private api_format_common_elements { doc_elements_var } {
     if { [info exists doc_elements(cvs-id)] } {
 	append out "<dt><b>CVS ID:</b>\n<dd><code>[ns_quotehtml [lindex $doc_elements(cvs-id) 0]]</code>\n"
     }
+    if { [info exists doc_elements(see)] } {
+	append out [api_format_see_list $doc_elements(see)]
+    }
 
     return $out
 }
+
+
 
 ad_proc -public api_script_documentation {
     { -format text/html }
@@ -238,6 +255,16 @@ ad_proc -private api_format_author { author_string } {
 	return "$name &lt;<a href=\"mailto:$email\">$email</a>&gt;"
     }
     return $author_string
+}
+
+ad_proc -private api_format_see { see } {
+    regsub -all {proc *} $see {} see
+    set see [string trim $see]
+    if {[nsv_exists api_proc_doc $see]} { 
+        return "<a href=\"proc-view?proc=[ns_urlencode ${see}]\">$see</a>"
+    } else { 
+        return $see
+    }
 }
 
 ad_proc -public api_library_documentation {
