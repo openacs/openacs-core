@@ -216,7 +216,7 @@ begin
     insert into ${table_name} 
     ($id_column[plsql_utility::generate_attribute_dml -ignore [list $id_column] $table_name $attribute_list]) 
     values 
-    (v_$id_column[plsql_utility::generate_attribute_dml -prepend "p." -ignore [list $id_column] $table_name $attribute_list]);
+    (v_$id_column[plsql_utility::generate_attribute_dml -prepend "p_" -ignore [list $id_column] $table_name $attribute_list]);
 
     return v_$id_column;
 
