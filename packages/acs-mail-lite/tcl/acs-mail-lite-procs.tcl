@@ -429,31 +429,53 @@ namespace eval acs_mail_lite {
 	foreach {key value} $extraheaders {
 	    append msg "\n$key\: $value"
 	}
-	
+
 	## Blank line between headers and body
 	append msg "\n\n$body\n"
-	
-	if { [string equal [bounce_sendmail] "SMTP"] } {
-	    ## Terminate body with a solitary period
-	    foreach line [split $msg "\n"] { 
-	        if [string match . $line] {
-		    append data .
-	        }
-	        append data "$line\r\n"
-	    }
-	    append data .
 
-	    smtp -from_addr $from_addr -sendlist $to_addr -msg $data -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
-	    if {![empty_string_p $bcc]} {
-		smtp -from_addr $from_addr -sendlist $bcc -msg $data -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
-	    }
+        # ----------------------------------------------------
+        # Rollout support
+        # ----------------------------------------------------
+        # if set in /etc/config.tcl, then
+        # /packages/acs-tcl/tcl/rollout-email-procs.tcl will rename a
+        # proc to ns_sendmail. So we simply call ns_sendmail instead
+        # of the sendmail bin if the EmailDeliveryMode parameter is
+        # set - JFR
+        #-----------------------------------------------------
+        set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode] 
 
+        if {![empty_string_p $delivery_mode]} {
+            # The to_addr has been put in an array, and returned. Now
+            # it is of the form: email email_address name namefromdb
+            # user_id user_id_if_present_or_empty_string
+            set to_address "[lindex $to_addr 1] ([lindex $to_addr 3])"
+            ns_sendmail "$to_address" "$from_addr" "$subject" "$body" "$extraheaders" "$bcc"
         } else {
-            sendmail -from_addr $from_addr -sendlist $to_addr -msg $msg -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
-	    if {![empty_string_p $bcc]} {
-		sendmail -from_addr $from_addr -sendlist $bcc -msg $msg -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
-	    }
-	}
+
+            if { [string equal [bounce_sendmail] "SMTP"] } {
+                ## Terminate body with a solitary period
+                foreach line [split $msg "\n"] { 
+                    if [string match . $line] {
+                        append data .
+                    }
+                    append data "$line\r\n"
+                }
+                append data .
+                
+                smtp -from_addr $from_addr -sendlist $to_addr -msg $data -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
+                if {![empty_string_p $bcc]} {
+                    smtp -from_addr $from_addr -sendlist $bcc -msg $data -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
+                }
+                
+            } else {
+                sendmail -from_addr $from_addr -sendlist $to_addr -msg $msg -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
+                if {![empty_string_p $bcc]} {
+                    sendmail -from_addr $from_addr -sendlist $bcc -msg $msg -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
+                }
+            }
+            
+            
+        }
     }
     
     ad_proc -private sendmail {
@@ -479,7 +501,7 @@ namespace eval acs_mail_lite {
         foreach rcpt $rcpts(email) rcpt_id $rcpts(user_id) rcpt_name $rcpts(name) {
 	    if { $valid_email_p || ![bouncing_email_p -email $rcpt] } {
 		with_finally -code {
-		    set sendmail [list [bounce_sendmail] "-f[bounce_address -user_id $rcpt_id -package_id $package_id -message_id $message_id]" "-t"]
+		    set sendmail [list [bounce_sendmail] "-f[bounce_address -user_id $rcpt_id -package_id $package_id -message_id $message_id]" "-t" "-i"]
 
 		    # add username if it exists
 		    if {![empty_string_p $rcpt_name]} {
@@ -487,6 +509,9 @@ namespace eval acs_mail_lite {
 		    } else {
 			set pretty_to $rcpt
 		    }
+
+                    # substitute all "\r\n" with "\n", because piped text should only contain "\n"
+                    regsub -all "\r\n" $msg "\n" msg
 
 		    set f [open "|$sendmail" "w"]
 		    puts $f "From: $from_addr\nTo: $pretty_to\n$msg"

@@ -532,68 +532,35 @@ ad_proc -public ds_get_comments {} {
     return $comments
 }
 
-ad_proc -public ds_profile { command {tag {}} } {
+ad_proc -public ds_profile { command tag } {
     Helper proc for performance profiling. 
     This will count the number of invocations of the given tag, the total time spent within all invocations
     (between the corresponding 'ds_profile start' and 'ds_profile stop' invocations).
     The results will be output at the bottom of the page, and include the average time spent per invocation.
 
-    @param command 
-    
-    <ul>
-      <li><b>start</b> marks the beginning of a block.
-      <li><b>stop</b> marks the end of a block. Start and stops must match.
-      <li><b>log</b> output profiling information to the server error log at level Notice.
-    </ul>
+    @param command start or stop.
     
     @param tag The name of the operation you're timing. Could be the name of a procedure, or some other unique identifier.
 } {
     global ds_profile__total_ms ds_profile__iterations ds_profile__start_clock
     switch $command {
         start {
-            if { [empty_string_p $tag] } {
-                error "Tag parameter is required"
-            }
             set ds_profile__start_clock($tag) [clock clicks -milliseconds]
         }
         stop {
-            if { ![empty_string_p $ds_profile__start_clock($tag)] } {
-                set num_ms [expr [clock clicks -milliseconds] - $ds_profile__start_clock($tag)]
-                set ds_profile__start_clock($tag) {}
-                
-                if { ![info exists ds_profile__total_ms($tag)] } {
-                    set ds_profile__total_ms($tag) 0
-                    set ds_profile__iterations($tag) 0
-                }
-                
-                set ds_profile__total_ms($tag) [expr [set ds_profile__total_ms($tag)] + $num_ms]
-                set ds_profile__iterations($tag) [expr [set ds_profile__iterations($tag)] + 1]
-            } else {
-                ns_log Error "ds_profile stop called without a corresponding call to ds_profile start, with tag $tag"
+            set num_ms [expr [clock clicks -milliseconds] - $ds_profile__start_clock($tag)]
+            set ds_profile__start_clock($tag) {}
+
+            if { ![info exists ds_profile__total_ms($tag)] } {
+                set ds_profile__total_ms($tag) 0
+                set ds_profile__iterations($tag) 0
             }
-        }
-        log {
-            if { ![empty_string_p $tag] } {
-                set tags [list $tag]
-            } else {
-                set tags [list]
-                if { [info exists ds_profile__total_ms] } {
-                    set tags [lsort [array names ds_profile__total_ms]]
-                }
-            }
-            foreach tag $tags {
-                set total_ms [lc_numeric [set ds_profile__total_ms($tag)]]
-                set iterations [set ds_profile__iterations($tag)]
-                if { $iterations > 0 } {
-                    set average_ms [lc_numeric [expr $total_ms / $iterations]]
-                } else {
-                    set average_ms {}
-                }
-                ns_log Notice "Developer Support Profiling: Tag '$tag' | Total time: $total_ms ms | \# iterations: $iterations | Time per iteration: $average_ms ms"
-            }
+
+            set ds_profile__total_ms($tag) [expr [set ds_profile__total_ms($tag)] + $num_ms]
+            set ds_profile__iterations($tag) [expr [set ds_profile__iterations($tag)] + 1]
         }
         default {
-            error "Invalid command. Valid commands are 'start', 'stop', and 'log'."
+            error "Invalid command. Valid commands are 'start' and 'stop'."
         }
     }
 }

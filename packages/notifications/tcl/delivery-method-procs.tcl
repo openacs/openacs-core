@@ -32,8 +32,7 @@ ad_proc -public notification::delivery::send {
     {-from_user_id ""}
     {-to_user_id:required}
     {-subject:required}
-    {-content_text:required}
-    {-content_html:required}
+    {-content:required}
 } {
     do the delivery of certain content to a particular user using a particular delivery method.
     This is just a wrapper proc that sets up the call to the service contract implementation for
@@ -49,7 +48,7 @@ ad_proc -public notification::delivery::send {
     set impl_key [get_impl_key -delivery_method_id $delivery_method_id]
 
     # Prepare the arguments
-    set args [list $from_user_id $to_user_id $reply_object_id $notification_type_id $subject $content_text $content_html]
+    set args [list $from_user_id $to_user_id $reply_object_id $notification_type_id $subject $content]
 
     # Make the generic call
     return [acs_sc_call NotificationDeliveryMethod Send $args $impl_key]

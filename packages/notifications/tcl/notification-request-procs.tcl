@@ -80,13 +80,4 @@ namespace eval notification::request {
         # Do it
         db_exec_plsql delete_all_requests {}
     }
-
-    ad_proc -public delete_all_for_user {
-        {-user_id:required}
-    } {
-        delete all the requests for a given user
-    } {
-        # do the delete
-        db_exec_plsql delete_all_for_user {}
-    }
 }

@@ -236,25 +236,6 @@ begin
 end;
 ' language 'plpgsql';
 
-select define_function_args ('notification_request__delete_all_for_user', 'user_id');
-
-create function notification_request__delete_all_for_user(integer)
-returns integer as '
-declare
-    p_user_id                       alias for $1;
-    v_request                       RECORD;
-begin
-    for v_request in select request_id
-                     from notification_requests
-                     where user_id= p_user_id
-    loop
-        perform notification_request__delete(v_request.request_id);
-    end loop;
-
-    return 0;
-end;
-' language 'plpgsql';
-
 select define_function_args ('notification__new','notification_id,type_id,object_id,notif_date,response_id,notif_user,notif_subject,notif_text,notif_html,creation_date,creation_user,creation_ip,context_id');
 
 create or replace function notification__new(integer,integer,integer,timestamptz,integer,integer,varchar,text,text,timestamptz,integer,varchar,integer)

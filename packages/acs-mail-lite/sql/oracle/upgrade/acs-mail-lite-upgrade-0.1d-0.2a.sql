@@ -1,5 +1,5 @@
-alter table acs_mail_lite_queue add (package_id integer constraint acs_mail_lite_queue_pck_fk references apm_packages);
-alter table acs_mail_lite_queue add (valid_email_p varchar2(1) constraint acs_mail_lite_qu_valid_em_p_ck check (valid_email_p in ('t','f')));
+alter table acs_mail_lite_queue add column package_id integer constraint acs_mail_lite_queue_pck_fk references apm_packages;
+alter table acs_mail_lite_queue add column valid_email_p varchar2(1) constraint acs_mail_lite_qu_valid_em_p_ck check (valid_email_p in ('t','f'));
 
 
 create table acs_mail_lite_mail_log (

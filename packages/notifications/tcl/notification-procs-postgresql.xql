@@ -20,13 +20,4 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="notification::new.update_message">
-        <querytext>
-                update notifications
-                set notif_html = :notif_html,
-                notif_text = :notif_text
-                where notification_id = :notification_id
-        </querytext>
-    </fullquery>
-
 </queryset>

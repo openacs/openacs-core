@@ -15,10 +15,4 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="notification::request::delete_all.delete_all_requests_for_all_users">
-        <querytext>
-            select notification_request__delete_all_for_user(:user_id);
-        </querytext>
-    </fullquery>
-
 </queryset>

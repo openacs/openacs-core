@@ -3,7 +3,6 @@
 
   <msg key="Action">Action</msg>
   <msg key="Change">Change</msg>
-  <msg key="Contents">Contents:</msg>
   <msg key="Delivery_Method">Delivery Method</msg>
   <msg key="Frequency">Frequency</msg>
   <msg key="Item">Item</msg>

@@ -49,11 +49,8 @@ namespace eval notification::sweep {
             set prev_user_id 0
             set prev_type_id 0
             set prev_deliv_method_id ""
+            set batched_content ""
             set list_of_notification_ids [list]
-            set batched_content_text ""
-            set batched_content_html ""
-            set summary_text "[_ notifications.Contents]/n"
-            set summary_html "<h4>[_ notifications.Contents]</h4><ul>"
 
             # Add a stop codon
             lappend notifications STOP
@@ -79,7 +76,7 @@ namespace eval notification::sweep {
                     ns_log Debug "NOTIF-BATCHED: batching things up for $prev_user_id"
 
                     # If no content, keep going
-                    if {![empty_string_p $batched_content_text]} {
+                    if {![empty_string_p $batched_content]} {
                         ns_log Debug "NOTIF-BATCHED: content to send!"
                         db_transaction {
                             ns_log Debug "NOTIF-BATCHED: sending content"
@@ -89,8 +86,7 @@ namespace eval notification::sweep {
                                     -to_user_id $prev_user_id \
                                     -notification_type_id $prev_type_id \
                                     -subject "[_ notifications.lt_system_name_-_Batched]" \
-                                    -content_text "$summary_text $batched_content_text" \
-                                    -content_html "$summary_html </ul><hr>$batched_content_html" \
+                                    -content $batched_content \
                                     -delivery_method_id $prev_deliv_method_id
                             
                             ns_log Debug "NOTIF-BATCHED: marking notifications"
@@ -104,10 +100,7 @@ namespace eval notification::sweep {
 
                         # Reset things
                         set list_of_notification_ids [list]
-                        set batched_content_text ""
-                        set batched_content_html ""
-                        set summary_text "[_ notifications.Contents]/n"
-                        set summary_html "<h4>[_ notifications.Contents]</h4><ul>"
+                        set batched_content ""
                     } else {
                         ns_log Debug "NOTIF-BATCHED: NO content to send!"
                     }
@@ -120,33 +113,7 @@ namespace eval notification::sweep {
 
                 # append content to built-up content
                 ns_log Debug "NOTIF-BATCHED: appending one notif!"
-                #Lets see what we have:
-                set notif_text [ns_set get $notif notif_text]
-                set notif_html [ns_set get $notif notif_html]
-
-                if {[empty_string_p $notif_text]} {
-                    set notif_text [ad_html_text_convert -from html -to text $no
-tif_html]
-                }
-
-                if {[empty_string_p $notif_html]} {
-                    set notif_html [ad_html_text_convert -from text -to html $no
-tif_text]
-                } else {
-                    set html_content_p 1
-                }
-
-                append summary_text "[ns_set get $notif notif_subject]\n"
-                append summary_html "<li><a href=#[ns_set get $notif notificatio
-n_id]>[ns_set get $notif notif_subject]</a></li>"
-
-                append batched_content_text "[_ notifications.SUBJECT] [ns_set get $notif notif_s
-ubject]\n[ns_set get $notif notif_text]\n=====================\n"
-                append batched_content_html "<a name=[ns_set get $notif notifica
-tion_id]>[_ notifications.SUBJECT]</a> [ns_set get $notif notif_subject]\n $notif_html <hr><p>"
-                lappend list_of_notification_ids [ns_set get $notif notification
-_id]
-
+                append batched_content "[_ notifications.SUBJECT] [ns_set get $notif notif_subject]\n[ns_set get $notif notif_text]\n\n\n=====================\n\n\n"
                 lappend list_of_notification_ids [ns_set get $notif notification_id]
 
                 # Set the vars
@@ -165,8 +132,7 @@ _id]
                         -to_user_id [ns_set get $notif user_id] \
                         -notification_type_id [ns_set get $notif type_id] \
                         -subject [ns_set get $notif notif_subject] \
-                        -content_text [ns_set get $notif notif_text] \
-                        -content_html [ns_set get $notif notif_html] \
+                        -content [ns_set get $notif notif_text] \
                         -reply_object_id [ns_set get $notif response_id] \
                         -delivery_method_id [ns_set get $notif delivery_method_id]
                     

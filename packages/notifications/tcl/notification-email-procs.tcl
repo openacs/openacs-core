@@ -88,8 +88,7 @@ namespace eval notification::email {
         reply_object_id
         notification_type_id
         subject
-        content_text
-        content_html
+        content
     } {
         Send the actual email.
 
@@ -100,8 +99,7 @@ namespace eval notification::email {
         
        # Variable used in the content
        set manage_notifications_url [manage_notifications_url]
-       append content_text "\n[_ notifications.lt_Getting_too_much_emai]"
-       append content_html "\n[_ notifications.lt_Getting_too_much_emai]"
+       append content "\n[_ notifications.lt_Getting_too_much_emai]"
 
         # Use this to build up extra mail headers        
         set extra_headers [ns_set new]
@@ -121,12 +119,6 @@ namespace eval notification::email {
         } else {
             set from_email $reply_to
         }
-
-        set message_data [build_mime_message $content_text $content_html]
-        ns_set put $extra_headers MIME-Version [ns_set get $message_data MIME-Version]
-        ns_set put $extra_headers Content-ID [ns_set get $message_data Content-ID]
-        ns_set put $extra_headers Content-Type [ns_set get $message_data Content-Type]
-        set content [ns_set get $message_data body]
 
         acs_mail_lite::send \
             -to_addr $email \

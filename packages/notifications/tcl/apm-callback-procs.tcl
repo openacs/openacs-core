@@ -52,7 +52,7 @@ ad_proc -public notification::apm::after_upgrade {
         -from_version_name $from_version_name \
         -to_version_name $to_version_name \
         -spec {
-            5.1.0d1 5.1.0d2 {
+            4.6.2 4.6.4 {
                 db_transaction {
                     
                     # Delete and recreate contract
@@ -94,8 +94,7 @@ ad_proc -public notification::apm::create_delivery_method_contract {} {
                         reply_object_id:integer
                         notification_type_id:integer
                         subject:string
-                        content_text:string 
-                        content_html:string 
+                        content:string 
                     }
                 }
                 ScanReplies {
