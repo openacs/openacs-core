@@ -614,13 +614,11 @@ ad_proc ad_html_security_check { html } {
     set allowed_protocols_list [concat \
 	    [ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] AllowedProtocol antispam] \
 	    [ad_parameter_all_values_as_list AllowedProtocol antispam]]
-    set all_allowed_attributes_list [concat $allowed_attributes_list $allowed_url_attributes_list]
-    ns_log Debug "All attributes:  $all_allowed_attributes_list"
 
     foreach tag $allowed_tags_list {
 	set allowed_tag([string tolower $tag]) 1
     }
-    foreach attribute $all_allowed_attributes_list {
+    foreach attribute $allowed_attributes_list {
 	set allowed_attribute([string tolower $attribute]) 1
     }
     foreach tagname $allowed_tags_list {
