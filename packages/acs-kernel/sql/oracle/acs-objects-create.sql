@@ -263,13 +263,13 @@ begin
   security_context_root := -4;
 
   -- Remove my old ancestors from my descendants.
-  delete from acs_object_context_index
-  where object_id in (select object_id
-                      from acs_object_contexts
-                      where ancestor_id = :old.object_id)
-  and ancestor_id in (select ancestor_id
-		      from acs_object_contexts
-		      where object_id = :old.object_id);
+  for pair in ( select object_id from acs_object_contexts where 
+                ancestor_id = :old.object_id) loop
+    delete from acs_object_context_index
+    where object_id = pair.object_id
+      and ancestor_id in ( select ancestor_id from acs_object_contexts
+                           where object_id = :old.object_id );
+  end loop;
 
   -- Kill all my old ancestors.
   delete from acs_object_context_index
