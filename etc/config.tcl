@@ -198,7 +198,11 @@ ns_section ns/server/${server}/acs/acs-rollout-support
     #             recipient appears in the EmailAllow parameter, otherwise they 
     #             are logged.
 
-#    ns_param   EmailDeliveryMode redirect
+# Note that if you want normal email delivery, you must select default
+# as the delivery mode option. Otherwise, a lot of your email will not
+# go out!
+
+ns_param   EmailDeliveryMode default
 #    ns_param   EmailRedirectTo    somenerd@yourdomain.test, othernerd@yourdomain.test
 #    ns_param   EmailAllow         somenerd@yourdomain.test,othernerd@yourdomain.test
 
