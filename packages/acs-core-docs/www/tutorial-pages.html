@@ -2,7 +2,7 @@
     by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2820802"></a>Build the "Index" page</h3></div></div><div></div></div><p>Each user-visible page in your package has, typically,
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2817831"></a>Build the "Index" page</h3></div></div><div></div></div><p>Each user-visible page in your package has, typically,
       three parts.  The <tt class="computeroutput">xql</tt> file contains any database queries, the
       <tt class="computeroutput">tcl</tt> file holds the procedural logic for the page and does things
       like check permissions, invoke the database queries, and modify
@@ -69,7 +69,7 @@ note about the file:</p><div class="itemizedlist"><ul type="disc"><li><p>The pag
 &lt;/queryset&gt;</pre><p>Create the user-visible page.</p><pre class="screen">[service0@yourserver www]$ <b class="userinput"><tt>emacs index.adp</tt></b></pre><p>The first line indicates that this page should be rendered within the the master template, which defaults to <tt class="computeroutput">/web/service0/www/default-master</tt>.  The second line passes a <tt class="computeroutput">title</tt> variable to the master template.  The third line inserts the contents of the variable <tt class="computeroutput">table_html</tt>.  The last line is a link to a page we haven't created yet.</p><pre class="programlisting">&lt;master&gt;
 &lt;property name="title"&gt;Sample Notes&lt;/property&gt;
 @table_html@
-&lt;p&gt;&lt;a href="note-edit"&gt;Add a note&lt;/a&gt;&lt;/p&gt;</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2836242"></a>Making the APM load your files</h3></div></div><div></div></div><p>Before we can test these files, we have to notify the
+&lt;p&gt;&lt;a href="note-edit"&gt;Add a note&lt;/a&gt;&lt;/p&gt;</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2837446"></a>Making the APM load your files</h3></div></div><div></div></div><p>Before we can test these files, we have to notify the
       package manager that they exist.  (More precisely, the tcl and
       adp will work fine as-is, but the xql file will not be
       recognized until we tell the APM about it.).</p><div class="itemizedlist"><ul type="disc"><li><p> Go to <tt class="computeroutput">http://yourserver.test:8000/acs-admin/apm</tt></p></li><li><p>Click on the <tt class="computeroutput">samplenote</tt> link</p></li><li><p>Click <tt class="computeroutput">Manage file information</tt></p></li><li><p>
@@ -85,7 +85,7 @@ note about the file:</p><div class="itemizedlist"><ul type="disc"><li><p>The pag
             to load the contents of the XQL into memory so that it can
             be used, and to reload it whenever the file is changed.
             The watch will last until the server is restarted.
-          </p></li></ul></div><p>Now that the APM is aware of your files, check to make sure that the self-documenting code is working.</p><div class="itemizedlist"><ul type="disc"><li><p>Browse to <tt class="computeroutput">http://yourserver.test:8000/api-doc/</tt></p></li><li><p>Click <tt class="computeroutput">Notes 0.1d</tt></p></li><li><p>Click <tt class="computeroutput">Content Pages</tt></p></li><li><p>Click <tt class="computeroutput">index.tcl</tt> and examine the results.</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2836382"></a>Test the index page</h3></div></div><div></div></div><p>Go to <tt class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver.test:8000</span></span>/note/</tt>.  You should see this:</p><pre class="screen">
+          </p></li></ul></div><p>Now that the APM is aware of your files, check to make sure that the self-documenting code is working.</p><div class="itemizedlist"><ul type="disc"><li><p>Browse to <tt class="computeroutput">http://yourserver.test:8000/api-doc/</tt></p></li><li><p>Click <tt class="computeroutput">Notes 0.1d</tt></p></li><li><p>Click <tt class="computeroutput">Content Pages</tt></p></li><li><p>Click <tt class="computeroutput">index.tcl</tt> and examine the results.</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2837586"></a>Test the index page</h3></div></div><div></div></div><p>Go to <tt class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver.test:8000</span></span>/note/</tt>.  You should see this:</p><pre class="screen">
 Sample Notes
 Your Workspace : Main Site : Sample Note 
 
@@ -94,7 +94,7 @@ No data found.
 Add a note.
 
 foo@yourserver.test
-</pre><p>Since our table is empty, it's a pretty boring page.  So next we'll make it possible to add records. </p><p>If you get any other output, such as an error message, skip to <a href="tutorial-debug.html" title="Debugging and Automated Testing">Section , &#8220;Debugging and Automated Testing&#8221;</a>.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2838257"></a>Add the add/edit page</h3></div></div><div></div></div><p>We'll create a single page to handle both adding and
+</pre><p>Since our table is empty, it's a pretty boring page.  So next we'll make it possible to add records. </p><p>If you get any other output, such as an error message, skip to <a href="tutorial-debug.html" title="Debugging and Automated Testing">Section , &#8220;Debugging and Automated Testing&#8221;</a>.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2838259"></a>Add the add/edit page</h3></div></div><div></div></div><p>We'll create a single page to handle both adding and
       editing records.  In this recursive approach, the same tcl
       function can present a blank HTML form, present the same form
       pre-loaded with an existing record, and handle the resulting
@@ -173,7 +173,7 @@ ad_returnredirect "index"
       <tt class="computeroutput">title</tt>, for both variables but
       wrap it in curly brackets for context so that the spaces aren't
       interpreted separators.  The formtemplate tag outputs the form
-      html with the matching name.</p><p>Go to the APM as before and reload.  Then test all this by going to the package home page and adding and editing a few records.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2838423"></a>Adding files to cvs</h3></div></div><div></div></div><p>Put your new work into source control.</p><pre class="screen">[service0@yourserver www]$ <b class="userinput"><tt>cvs add *.adp *.tcl *.xql</tt></b>
+      html with the matching name.</p><p>Go to the APM as before and reload.  Then test all this by going to the package home page and adding and editing a few records.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2838424"></a>Adding files to cvs</h3></div></div><div></div></div><p>Put your new work into source control.</p><pre class="screen">[service0@yourserver www]$ <b class="userinput"><tt>cvs add *.adp *.tcl *.xql</tt></b>
 cvs add: cannot add special file `CVS'; skipping
 cvs add: doc/CVS already exists
 cvs add: scheduling file `index.adp' for addition

@@ -38,7 +38,6 @@ Corrections</a>
 
 <td valign="top">
 <p><a href="/api-doc/">API Browser</a>
-<p><a href="ix.html">Index</a>
 <% 
 # This block of ADP code ensures that the Installer can still serve this
 # page even without a working templating system.
