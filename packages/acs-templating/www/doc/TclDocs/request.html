@@ -27,15 +27,15 @@ The request commands provide a mechanism for managing the query parameters to a 
 Listing of public methods:<br>
 <blockquote>
 
-  <a href="#template::request::create">template::request::create</a><br>
+  <a href="#"></a><br>
 
-  <a href="#template::request::error">template::request::error</a><br>
+  <a href="#"></a><br>
 
-  <a href="#template::request::get_param">template::request::get_param</a><br>
+  <a href="#"></a><br>
 
-  <a href="#template::request::is_valid">template::request::is_valid</a><br>
+  <a href="#"></a><br>
 
-  <a href="#template::request::set_param">template::request::set_param</a><br>
+  <a href="#"></a><br>
 
 </blockquote>
 
@@ -47,103 +47,7 @@ Listing of public methods:<br>
 
 <b>Public Methods:</b><br>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::request::create"><font size="+1" weight=bold>template::request::create</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-Create the request data structure. Typically called at the beginning of the code for any page that accepts query parameters.
-</blockquote>
-<dl>
-
-  <dt><b>Options:</b>
-  <table>
-  
-  <tr><td align=right><code>params</code></td>
-  <td align=left>
-  
-  A block of parameter declarations, separated by newlines. Equivalent to calling set_param for each parameter, but requiring slightly less typing.</td></tr>
-  
-  </table>
-
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::request::error"><font size="+1" weight=bold>template::request::error</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-Manually report request error(s) by setting error messages and then calling is_valid to handle display. Useful for conditions not tied to a single query parameter. The arguments to the procedure may be any number of name-message combinations.
-</blockquote>
-<dl>
-
-  <b>Parameters:</b>
-  <table>
-  
-  <tr>
-  <td align=right><code>name</code>
-  <font color=red>*</font></td>
-       <td align=left>
-    
-  A unique identifier for the error condition, which may be used for layout purposes.</td></tr>
-  
-  <tr>
-  <td align=right><code>msg</code>
-  <font color=red>*</font></td>
-       <td align=left>
-    
-  The message text associated with the condition.</td></tr>
-  
-   </table>
-
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::request::get_param"><font size="+1" weight=bold>template::request::get_param</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-Retrieves the value(s) of the specified parameter.
-</blockquote>
-<dl>
-
-  <b>Parameters:</b>
-  <table>
-  
-  <tr>
-  <td align=right><code>name</code>
-  <font color=red>*</font></td>
-       <td align=left>
-    
-  The name of the parameter.</td></tr>
-  
-   </table>
-
-  <dt><b>Returns:</b>
-  <dd>
-  The value of the specified parameter.
-
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::request::is_valid"><font size="+1" weight=bold>template::request::is_valid</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
@@ -176,7 +80,34 @@ Checks for any param errors. If errors are found, sets the display template to t
 
 <p>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::request::set_param"><font size="+1" weight=bold>template::request::set_param</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
+  
+</td>
+</tr>
+<tr><td>
+<blockquote>
+Create the request data structure. Typically called at the beginning of the code for any page that accepts query parameters.
+</blockquote>
+<dl>
+
+  <dt><b>Options:</b>
+  <table>
+  
+  <tr><td align=right><code>params</code></td>
+  <td align=left>
+  
+  A block of parameter declarations, separated by newlines. Equivalent to calling set_param for each parameter, but requiring slightly less typing.</td></tr>
+  
+  </table>
+
+</dl>
+</td>
+</tr>
+</table>
+
+<p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
@@ -231,6 +162,75 @@ Declares a query parameter as part of the page request. Validates the values ass
   <dt><b>See Also:</b>
   
     <dd>element::create - <a href=""></a></br>
+</dl>
+</td>
+</tr>
+</table>
+
+<p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
+  
+</td>
+</tr>
+<tr><td>
+<blockquote>
+Manually report request error(s) by setting error messages and then calling is_valid to handle display. Useful for conditions not tied to a single query parameter. The arguments to the procedure may be any number of name-message combinations.
+</blockquote>
+<dl>
+
+  <b>Parameters:</b>
+  <table>
+  
+  <tr>
+  <td align=right><code>name</code>
+  <font color=red>*</font></td>
+       <td align=left>
+    
+  A unique identifier for the error condition, which may be used for layout purposes.</td></tr>
+  
+  <tr>
+  <td align=right><code>msg</code>
+  <font color=red>*</font></td>
+       <td align=left>
+    
+  The message text associated with the condition.</td></tr>
+  
+   </table>
+
+</dl>
+</td>
+</tr>
+</table>
+
+<p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
+  
+</td>
+</tr>
+<tr><td>
+<blockquote>
+Retrieves the value(s) of the specified parameter.
+</blockquote>
+<dl>
+
+  <b>Parameters:</b>
+  <table>
+  
+  <tr>
+  <td align=right><code>name</code>
+  <font color=red>*</font></td>
+       <td align=left>
+    
+  The name of the parameter.</td></tr>
+  
+   </table>
+
+  <dt><b>Returns:</b>
+  <dd>
+  The value of the specified parameter.
+
 </dl>
 </td>
 </tr>

@@ -34,7 +34,19 @@ The namespace doc::util currently contains no public methods.
 
 <b>Private Methods</b>:<br>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="doc::sort_@see"><font size="+1" weight=bold>doc::sort_@see</font></a>
+  <a name="
+	  set split_name $see_name
+	  doc::util::text_divider split_name ::
+	  set name_length [llength $split_name]
+	  set see_namespace [join [lrange $split_name 0 [expr $name_length - 2]] \"\"]
+	  set url \"[doc::util::dbl_colon_fix $see_namespace].html#[set see_name]\"
+	"><font size="+1" weight=bold>
+	  set split_name $see_name
+	  doc::util::text_divider split_name ::
+	  set name_length [llength $split_name]
+	  set see_namespace [join [lrange $split_name 0 [expr $name_length - 2]] \"\"]
+	  set url \"[doc::util::dbl_colon_fix $see_namespace].html#[set see_name]\"
+	</font></a>
   
 </td>
 </tr>
@@ -51,16 +63,38 @@ procedure to deal with @see comments
 
 <p>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="doc::util::bracket_space"><font size="+1" weight=bold>doc::util::bracket_space</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
 <tr><td>
 <blockquote>
-puts a space after all closing curly brackets, does not add a space when brackets are already followed by a space
+divides a string variable into a list of strings, all but the first element beginning with the indicated text {marker;} the first element of the created list contains all of the string preceding the first occurrence of the text marker
 </blockquote>
 <dl>
 
+  <b>Parameters:</b>
+  <table>
+  
+  <tr>
+  <td align=right><code>text</code>
+  <font color=red>*</font></td>
+       <td align=left>
+    
+  name of string variable (not the string value itself)</td></tr>
+  
+  <tr>
+  <td align=right><code>marker</code>
+  <font color=red>*</font></td>
+       <td align=left>
+    
+  the string indicating text division</td></tr>
+  
+   </table>
+
+  <dt><b>See Also:</b>
+  
+    <dd>proc - <a href="doc__util.html#doc::util::find_marker_indices">doc::util::find_marker_indices</a></br>
 </dl>
 </td>
 </tr>
@@ -68,24 +102,7 @@ puts a space after all closing curly brackets, does not add a space when bracket
 
 <p>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="doc::util::dbl_colon_fix"><font size="+1" weight=bold>doc::util::dbl_colon_fix</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-
-</blockquote>
-<dl>
-
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="doc::util::escape_square_brackets"><font size="+1" weight=bold>doc::util::escape_square_brackets</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
@@ -102,7 +119,7 @@ escapes out all square brackets
 
 <p>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="doc::util::find_marker_indices"><font size="+1" weight=bold>doc::util::find_marker_indices</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
@@ -146,13 +163,13 @@ given a body of text and a text marker, returns a list of position indices for e
 
 <p>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="doc::util::make_text_listable"><font size="+1" weight=bold>doc::util::make_text_listable</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
 <tr><td>
 <blockquote>
-
+puts a space after all closing curly brackets, does not add a space when brackets are already followed by a space
 </blockquote>
 <dl>
 
@@ -163,7 +180,7 @@ given a body of text and a text marker, returns a list of position indices for e
 
 <p>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="doc::util::sort_see"><font size="+1" weight=bold>doc::util::sort_see</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
@@ -199,38 +216,33 @@ used to sort the see list, which has structure {[name} name type type url url \]
 
 <p>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="doc::util::text_divider"><font size="+1" weight=bold>doc::util::text_divider</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
 <tr><td>
 <blockquote>
-divides a string variable into a list of strings, all but the first element beginning with the indicated text {marker;} the first element of the created list contains all of the string preceding the first occurrence of the text marker
+
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
-  <table>
-  
-  <tr>
-  <td align=right><code>text</code>
-  <font color=red>*</font></td>
-       <td align=left>
-    
-  name of string variable (not the string value itself)</td></tr>
-  
-  <tr>
-  <td align=right><code>marker</code>
-  <font color=red>*</font></td>
-       <td align=left>
-    
-  the string indicating text division</td></tr>
-  
-   </table>
+</dl>
+</td>
+</tr>
+</table>
 
-  <dt><b>See Also:</b>
+<p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
   
-    <dd>proc - <a href="doc__util.html#doc::util::find_marker_indices">doc::util::find_marker_indices</a></br>
+</td>
+</tr>
+<tr><td>
+<blockquote>
+
+</blockquote>
+<dl>
+
 </dl>
 </td>
 </tr>

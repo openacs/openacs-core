@@ -18,25 +18,27 @@ Commands for managing dynamic templated forms.
 Listing of public methods:<br>
 <blockquote>
 
-  <a href="#template::form::create">template::form::create</a><br>
+  <a href="#"></a><br>
 
-  <a href="#template::form::exists">template::form::exists</a><br>
+  <a href="#"></a><br>
 
-  <a href="#template::form::export">template::form::export</a><br>
+  <a href="#"></a><br>
 
-  <a href="#template::form::get_combined_values">template::form::get_combined_values</a><br>
+  <a href="#"></a><br>
 
-  <a href="#template::form::get_values">template::form::get_values</a><br>
+  <a href="#"></a><br>
 
-  <a href="#template::form::is_request">template::form::is_request</a><br>
+  <a href="#"></a><br>
 
-  <a href="#template::form::is_submission">template::form::is_submission</a><br>
+  <a href="#"></a><br>
 
-  <a href="#template::form::is_valid">template::form::is_valid</a><br>
+  <a href="#"></a><br>
 
-  <a href="#template::form::section">template::form::section</a><br>
+  <a href="#"></a><br>
 
-  <a href="#template::form::set_values">template::form::set_values</a><br>
+  <a href="#"></a><br>
+
+  <a href="#"></a><br>
 
 </blockquote>
 
@@ -48,7 +50,97 @@ Listing of public methods:<br>
 
 <b>Public Methods:</b><br>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::form::create"><font size="+1" weight=bold>template::form::create</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
+  
+</td>
+</tr>
+<tr><td>
+<blockquote>
+Convenience procedure to set individual values of a form (useful for simple update forms). Typical usage is to query a onerow data source from database and pass the resulting array reference to set_values for setting default values in an update form.
+</blockquote>
+<dl>
+
+  <b>Parameters:</b>
+  <table>
+  
+  <tr>
+  <td align=right><code>id</code>
+  <font color=red>*</font></td>
+       <td align=left>
+    
+  The form identifier</td></tr>
+  
+  <tr>
+  <td align=right><code>array_ref</code>
+  <font color=red>*</font></td>
+       <td align=left>
+    
+  The name of a local array variable whose keys correspond to element identifiers in the form</td></tr>
+  
+   </table>
+
+</dl>
+</td>
+</tr>
+</table>
+
+<p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
+  
+</td>
+</tr>
+<tr><td>
+<blockquote>
+Determine whether a form exists by checking for its data structures.
+</blockquote>
+<dl>
+
+  <b>Parameters:</b>
+  <table>
+  
+  <tr>
+  <td align=right><code>id</code>
+  <font color=red>*</font></td>
+       <td align=left>
+    
+  The ID of an ATS form object.</td></tr>
+  
+   </table>
+
+  <dt><b>Returns:</b>
+  <dd>
+  1 if a form with the specified ID exists. 0 if it does not.
+
+</dl>
+</td>
+</tr>
+</table>
+
+<p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
+  
+</td>
+</tr>
+<tr><td>
+<blockquote>
+Generates hidden input tags for all values in a form submission. Typically used to create a confirmation page following an initial submission.
+</blockquote>
+<dl>
+
+  <dt><b>Returns:</b>
+  <dd>
+  A string containing hidden input tags for inclusion in a form.
+
+</dl>
+</td>
+</tr>
+</table>
+
+<p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
@@ -97,61 +189,7 @@ Initialize the data structures for a form.
 
 <p>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::form::exists"><font size="+1" weight=bold>template::form::exists</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-Determine whether a form exists by checking for its data structures.
-</blockquote>
-<dl>
-
-  <b>Parameters:</b>
-  <table>
-  
-  <tr>
-  <td align=right><code>id</code>
-  <font color=red>*</font></td>
-       <td align=left>
-    
-  The ID of an ATS form object.</td></tr>
-  
-   </table>
-
-  <dt><b>Returns:</b>
-  <dd>
-  1 if a form with the specified ID exists. 0 if it does not.
-
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::form::export"><font size="+1" weight=bold>template::form::export</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-Generates hidden input tags for all values in a form submission. Typically used to create a confirmation page following an initial submission.
-</blockquote>
-<dl>
-
-  <dt><b>Returns:</b>
-  <dd>
-  A string containing hidden input tags for inclusion in a form.
-
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::form::get_combined_values"><font size="+1" weight=bold>template::form::get_combined_values</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
@@ -194,7 +232,135 @@ Return a list which represents the result of getting combined values from multip
 
 <p>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::form::get_values"><font size="+1" weight=bold>template::form::get_values</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
+  
+</td>
+</tr>
+<tr><td>
+<blockquote>
+Return the number of elements in a form
+</blockquote>
+<dl>
+
+  <b>Parameters:</b>
+  <table>
+  
+  <tr>
+  <td align=right><code>id</code>
+  <font color=red>*</font></td>
+       <td align=left>
+    
+  The form identifier</td></tr>
+  
+   </table>
+
+</dl>
+</td>
+</tr>
+</table>
+
+<p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
+  
+</td>
+</tr>
+<tr><td>
+<blockquote>
+Return true if a submission in progress. The submission may or may not be valid.
+</blockquote>
+<dl>
+
+  <b>Parameters:</b>
+  <table>
+  
+  <tr>
+  <td align=right><code>id</code>
+  <font color=red>*</font></td>
+       <td align=left>
+    
+  The form identifier</td></tr>
+  
+   </table>
+
+  <dt><b>Returns:</b>
+  <dd>
+  1 if true or 0 if false
+
+</dl>
+</td>
+</tr>
+</table>
+
+<p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
+  
+</td>
+</tr>
+<tr><td>
+<blockquote>
+Return true if preparing a form for an initial request (as opposed to repreparing a form that is returned to the user due to validation problems). This command is used to conditionally set default values for form elements.
+</blockquote>
+<dl>
+
+  <b>Parameters:</b>
+  <table>
+  
+  <tr>
+  <td align=right><code>id</code>
+  <font color=red>*</font></td>
+       <td align=left>
+    
+  The form identifier</td></tr>
+  
+   </table>
+
+  <dt><b>Returns:</b>
+  <dd>
+  1 if true or 0 if false
+
+</dl>
+</td>
+</tr>
+</table>
+
+<p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
+  
+</td>
+</tr>
+<tr><td>
+<blockquote>
+Return true if submission in progress and submission was valid. Typically used to conditionally execute DML and redirect to the next page, as opposed to returning the form back to the user to report validation errors.
+</blockquote>
+<dl>
+
+  <b>Parameters:</b>
+  <table>
+  
+  <tr>
+  <td align=right><code>id</code>
+  <font color=red>*</font></td>
+       <td align=left>
+    
+  The form identifier</td></tr>
+  
+   </table>
+
+  <dt><b>Returns:</b>
+  <dd>
+  1 if true or 0 if false
+
+</dl>
+</td>
+</tr>
+</table>
+
+<p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
@@ -230,106 +396,7 @@ Set local variables for form variables (assume they are all single values). Typi
 
 <p>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::form::is_request"><font size="+1" weight=bold>template::form::is_request</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-Return true if preparing a form for an initial request (as opposed to repreparing a form that is returned to the user due to validation problems). This command is used to conditionally set default values for form elements.
-</blockquote>
-<dl>
-
-  <b>Parameters:</b>
-  <table>
-  
-  <tr>
-  <td align=right><code>id</code>
-  <font color=red>*</font></td>
-       <td align=left>
-    
-  The form identifier</td></tr>
-  
-   </table>
-
-  <dt><b>Returns:</b>
-  <dd>
-  1 if true or 0 if false
-
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::form::is_submission"><font size="+1" weight=bold>template::form::is_submission</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-Return true if a submission in progress. The submission may or may not be valid.
-</blockquote>
-<dl>
-
-  <b>Parameters:</b>
-  <table>
-  
-  <tr>
-  <td align=right><code>id</code>
-  <font color=red>*</font></td>
-       <td align=left>
-    
-  The form identifier</td></tr>
-  
-   </table>
-
-  <dt><b>Returns:</b>
-  <dd>
-  1 if true or 0 if false
-
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::form::is_valid"><font size="+1" weight=bold>template::form::is_valid</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-Return true if submission in progress and submission was valid. Typically used to conditionally execute DML and redirect to the next page, as opposed to returning the form back to the user to report validation errors.
-</blockquote>
-<dl>
-
-  <b>Parameters:</b>
-  <table>
-  
-  <tr>
-  <td align=right><code>id</code>
-  <font color=red>*</font></td>
-       <td align=left>
-    
-  The form identifier</td></tr>
-  
-   </table>
-
-  <dt><b>Returns:</b>
-  <dd>
-  1 if true or 0 if false
-
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::form::section"><font size="+1" weight=bold>template::form::section</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
@@ -364,14 +431,20 @@ Set the name of the current section of the form. A form may be divided into any 
 </table>
 
 <p>
+
+
+<p>
+
+
+<b>Private Methods</b>:<br>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::form::set_values"><font size="+1" weight=bold>template::form::set_values</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
 <tr><td>
 <blockquote>
-Convenience procedure to set individual values of a form (useful for simple update forms). Typical usage is to query a onerow data source from database and pass the resulting array reference to set_values for setting default values in an update form.
+Auto-generate the template for a form
 </blockquote>
 <dl>
 
@@ -386,13 +459,17 @@ Convenience procedure to set individual values of a form (useful for simple upda
   The form identifier</td></tr>
   
   <tr>
-  <td align=right><code>array_ref</code>
+  <td align=right><code>style</code>
   <font color=red>*</font></td>
        <td align=left>
     
-  The name of a local array variable whose keys correspond to element identifiers in the form</td></tr>
+  The style template to use when generating the form. Form style templates must be placed in the forms subdirectory of the ATS resources directory.</td></tr>
   
    </table>
+
+  <dt><b>Returns:</b>
+  <dd>
+  A string containing a template for the body of the form.
 
 </dl>
 </td>
@@ -400,14 +477,25 @@ Convenience procedure to set individual values of a form (useful for simple upda
 </table>
 
 <p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
+  
+</td>
+</tr>
+<tr><td>
+<blockquote>
+Helper procedure used to access the basic data structures of a form object. Called by several of the form commands.
+</blockquote>
+<dl>
 
+</dl>
+</td>
+</tr>
+</table>
 
 <p>
-
-
-<b>Private Methods</b>:<br>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::form::check_elements"><font size="+1" weight=bold>template::form::check_elements</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
@@ -436,64 +524,7 @@ Iterates over all declared elements, checking for hidden widgets and rendering t
 
 <p>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::form::generate"><font size="+1" weight=bold>template::form::generate</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-Render the finished HTML output for a dynamic form.
-</blockquote>
-<dl>
-
-  <b>Parameters:</b>
-  <table>
-  
-  <tr>
-  <td align=right><code>id</code>
-  <font color=red>*</font></td>
-       <td align=left>
-    
-  The form identifier</td></tr>
-  
-  <tr>
-  <td align=right><code>style</code>
-  <font color=red>*</font></td>
-       <td align=left>
-    
-  The style template to use when generating the form. Form style templates must be placed in the forms subdirectory of the ATS resources directory.</td></tr>
-  
-   </table>
-
-  <dt><b>Returns:</b>
-  <dd>
-  A string containing the HTML for the body of the form.
-
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::form::get_reference"><font size="+1" weight=bold>template::form::get_reference</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-Helper procedure used to access the basic data structures of a form object. Called by several of the form commands.
-</blockquote>
-<dl>
-
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::form::render"><font size="+1" weight=bold>template::form::render</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
@@ -533,13 +564,13 @@ Render the HTML FORM tag along with a hidden element that identifies the form ob
 
 <p>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::form::template"><font size="+1" weight=bold>template::form::template</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
 <tr><td>
 <blockquote>
-Auto-generate the template for a form
+Render the finished HTML output for a dynamic form.
 </blockquote>
 <dl>
 
@@ -564,7 +595,7 @@ Auto-generate the template for a form
 
   <dt><b>Returns:</b>
   <dd>
-  A string containing a template for the body of the form.
+  A string containing the HTML for the body of the form.
 
 </dl>
 </td>

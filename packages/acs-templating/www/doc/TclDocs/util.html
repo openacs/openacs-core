@@ -34,7 +34,147 @@ The namespace util currently contains no public methods.
 
 <b>Private Methods</b>:<br>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::util::alphabetized_index"><font size="+1" weight=bold>template::util::alphabetized_index</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
+  
+</td>
+</tr>
+<tr><td>
+<blockquote>
+a proc used for debugging, just prints out a value to the error log
+</blockquote>
+<dl>
+
+</dl>
+</td>
+</tr>
+</table>
+
+<p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
+  
+</td>
+</tr>
+<tr><td>
+<blockquote>
+capitalizes the first letter of a string
+</blockquote>
+<dl>
+
+  <dt><b>Returns:</b>
+  <dd>
+  returns formatted string
+
+</dl>
+</td>
+</tr>
+</table>
+
+<p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
+  
+</td>
+</tr>
+<tr><td>
+<blockquote>
+escapes quotes and removes comment tags from a body of commented text
+</blockquote>
+<dl>
+
+  <b>Parameters:</b>
+  <table>
+  
+  <tr>
+  <td align=right><code>text</code>
+  <font color=red>*</font></td>
+       <td align=left>
+    
+  </td></tr>
+  
+   </table>
+
+  <dt><b>Returns:</b>
+  <dd>
+  text
+
+</dl>
+</td>
+</tr>
+</table>
+
+<p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
+  
+</td>
+</tr>
+<tr><td>
+<blockquote>
+just takes a body of text and puts a space behind every double {quote;} this is done so that the text body can be treated as a list without causing problems resulting from list elements being separated by characters other than a space
+</blockquote>
+<dl>
+
+  <b>Parameters:</b>
+  <table>
+  
+  <tr>
+  <td align=right><code>text</code>
+  <font color=red>*</font></td>
+       <td align=left>
+    
+  req/none the body of text to be worked on</td></tr>
+  
+   </table>
+
+  <dt><b>Returns:</b>
+  <dd>
+  same text but with a space behind each quote; double quotes that are already trailed by a space are unaffected
+
+</dl>
+</td>
+</tr>
+</table>
+
+<p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
+  
+</td>
+</tr>
+<tr><td>
+<blockquote>
+takes a .adp template name and the name of the file to be written and creates the {file;} also puts out a notice before
+</blockquote>
+<dl>
+
+  <b>Parameters:</b>
+  <table>
+  
+  <tr>
+  <td align=right><code>template</code>
+  <font color=red>*</font></td>
+       <td align=left>
+    
+  the name of the template to be used in making the file</td></tr>
+  
+  <tr>
+  <td align=right><code>file_name</code>
+  <font color=red>*</font></td>
+       <td align=left>
+    
+  the name of the file to be created</td></tr>
+  
+   </table>
+
+</dl>
+</td>
+</tr>
+</table>
+
+<p>
+<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
@@ -74,57 +214,7 @@ takes an alphabetized list and an entry
 
 <p>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::util::comment_text_normalize"><font size="+1" weight=bold>template::util::comment_text_normalize</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-escapes quotes and removes comment tags from a body of commented text
-</blockquote>
-<dl>
-
-  <b>Parameters:</b>
-  <table>
-  
-  <tr>
-  <td align=right><code>text</code>
-  <font color=red>*</font></td>
-       <td align=left>
-    
-  </td></tr>
-  
-   </table>
-
-  <dt><b>Returns:</b>
-  <dd>
-  text
-
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::util::display_value"><font size="+1" weight=bold>template::util::display_value</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-a proc used for debugging, just prints out a value to the error log
-</blockquote>
-<dl>
-
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::util::proc_element_compare"><font size="+1" weight=bold>template::util::proc_element_compare</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
@@ -141,61 +231,7 @@ used to compare two different elements in a list of parsed data for public or pr
 
 <p>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::util::proper_noun"><font size="+1" weight=bold>template::util::proper_noun</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-capitalizes the first letter of a string
-</blockquote>
-<dl>
-
-  <dt><b>Returns:</b>
-  <dd>
-  returns formatted string
-
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::util::quote_space"><font size="+1" weight=bold>template::util::quote_space</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-just takes a body of text and puts a space behind every double {quote;} this is done so that the text body can be treated as a list without causing problems resulting from list elements being separated by characters other than a space
-</blockquote>
-<dl>
-
-  <b>Parameters:</b>
-  <table>
-  
-  <tr>
-  <td align=right><code>text</code>
-  <font color=red>*</font></td>
-       <td align=left>
-    
-  req/none the body of text to be worked on</td></tr>
-  
-   </table>
-
-  <dt><b>Returns:</b>
-  <dd>
-  same text but with a space behind each quote; double quotes that are already trailed by a space are unaffected
-
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::util::server_root"><font size="+1" weight=bold>template::util::server_root</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
@@ -212,7 +248,7 @@ uses ns_library to find the server root, may not always be accurate because it e
 
 <p>
 <table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::util::string_range"><font size="+1" weight=bold>template::util::string_range</font></a>
+  <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
 </tr>
@@ -221,42 +257,6 @@ uses ns_library to find the server root, may not always be accurate because it e
 
 </blockquote>
 <dl>
-
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
-  <a name="template::util::write_from_template"><font size="+1" weight=bold>template::util::write_from_template</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-takes a .adp template name and the name of the file to be written and creates the {file;} also puts out a notice before
-</blockquote>
-<dl>
-
-  <b>Parameters:</b>
-  <table>
-  
-  <tr>
-  <td align=right><code>template</code>
-  <font color=red>*</font></td>
-       <td align=left>
-    
-  the name of the template to be used in making the file</td></tr>
-  
-  <tr>
-  <td align=right><code>file_name</code>
-  <font color=red>*</font></td>
-       <td align=left>
-    
-  the name of the file to be created</td></tr>
-  
-   </table>
 
 </dl>
 </td>
