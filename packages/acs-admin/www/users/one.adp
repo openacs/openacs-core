@@ -57,6 +57,13 @@ above.
 <h2>Administrative Actions</h2>
 
 <ul>
+<if @admin_p@>
+  <li><a href="modify-admin-privileges?user_id=@user_id@&action=revoke">Revoke site-wide administration privileges</a></li>
+</if>
+<else>
+  <li><a href="modify-admin-privileges?user_id=@user_id@&action=grant">Grant site-wide administration privileges</a></li>
+</else>
+
 <li><a href="/user/password-update?@export_edit_vars@">Update this user's password</a></li>
 
 <li><a href="/user/portrait/index.tcl?@export_edit_vars@">Manage this user's portrait</a></li>
