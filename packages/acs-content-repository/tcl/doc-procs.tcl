@@ -11,7 +11,7 @@ namespace eval doc {
         
         upvar $info_ref info
         
-        template::query info_source onevalue "
+        template::query get_info info_source onevalue "
         select doc.get_package_header(:package_name) from dual
         "
         
@@ -44,16 +44,9 @@ namespace eval doc {
     upvar $doc_ref  doc
     upvar $code_ref code
 
-    if { [template::util::is_nil db] } {    
-      set db [ns_db gethandle]
-      set free_db 1
-    } else {
-      set free_db 0
-    }
-
-    template::query header onevalue "
+    template::query get_header header onevalue "
       select doc.get_proc_header(:proc_name, :package_name) from dual
-    " -db $db
+    "
 
     # Get JavaDoc block, if any
     if { [regexp {/\*\*(.*)\*/} $header match] } {
@@ -64,10 +57,6 @@ namespace eval doc {
     } else {
       set doc ""
       set code $header
-    }
-
-    if { $free_db } {
-      ns_db releasehandle $db
     }
   }
 
@@ -163,14 +152,7 @@ namespace eval doc {
   # { {label value} {label value} ... }
   proc package_list { {db ""} } {
 
-    if { [template::util::is_nil db] } {
-      set db [ns_db gethandle] 
-      set free_db 1
-    } else {
-      set free_db 0
-    }
-
-    template::query result multilist "
+    template::query get_packages result multilist "
       select distinct 
         lower(name) as label,  
         lower(name) as value 
@@ -180,11 +162,7 @@ namespace eval doc {
         type='PACKAGE'
       and
         line=1
-      order by label" -db $db
-
-    if { $free_db } {
-      ns_db releasehandle $db
-    }
+      order by label"
  
     return $result
   }  
@@ -193,14 +171,7 @@ namespace eval doc {
   # { value value ... }
   proc func_list { package_name {db ""} } {
 
-    if { [template::util::is_nil db] } {
-      set db [ns_db gethandle] 
-      set free_db 1
-    } else {
-      set free_db 0
-    }
-
-    template::query result multilist "
+    template::query get_funcs result multilist "
       select distinct 
         lower(text) as line_header 
       from 
@@ -214,11 +185,7 @@ namespace eval doc {
         or
           lower(text) like '%function%'
       )
-      order by line_header" -db $db
-
-    if { $free_db } {
-      ns_db releasehandle $db
-    }
+      order by line_header"
 
     set line_opts [list]
     foreach line $result {
@@ -237,20 +204,13 @@ namespace eval doc {
   # { value value ... }
   proc func_multirow { package_name result_ref {db ""} } {
 
-    if { [template::util::is_nil db] } {
-      set db [ns_db gethandle] 
-      set free_db 1
-    } else {
-      set free_db 0
-    }
-
     upvar "${result_ref}:rowcount" result_rowcount
     set result_rowcount 0
 
     # Get each line that contains "procedure" or "function" in it
     # Pretty risky... The like query should be improved to return 
     # less false matches
-    template::query result multirow "
+    template::query get_functions result multirow "
       select distinct 
         lower(text) as line_header 
       from 
@@ -264,7 +224,7 @@ namespace eval doc {
         or
           lower(text) like '%function%'
       )
-      order by line_header" -db $db -eval {
+      order by line_header" -eval {
 
       # Only insert a row into the datasource if it looks like a procedure
       # or function definition
@@ -278,10 +238,6 @@ namespace eval doc {
         set result_row(type) [string totitle $type]
         set result_row(name) [string tolower $name]
       }
-    }
- 
-    if { $free_db } {
-      ns_db releasehandle $db
     }
   }   
 }

@@ -64,10 +64,10 @@ end;' language 'plpgsql';
 create function content_revision__new(varchar,varchar,timestamp,varchar,text,integer) returns integer as '
 declare
         new__title              alias for $1;
-        new__description        alias for $2;
-        new__publish_date       alias for $3;
-        new__mime_type          alias for $4;
-        new__text               alias for $5;
+        new__description        alias for $2;  -- default null
+        new__publish_date       alias for $3;  -- default now()
+        new__mime_type          alias for $4;  -- default ''text/plain''
+        new__text               alias for $5;  -- default '' ''
         new__item_id            alias for $6;
 begin
         return content_revision__new(new__title,

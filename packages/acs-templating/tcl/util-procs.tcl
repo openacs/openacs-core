@@ -128,7 +128,7 @@ proc template::util::is_unique { table columns values } {
 
   append query [join $conditions " and "]
 
-  template::query count onevalue $query
+  template::query get_count count onevalue $query
 
   return [expr $count == 0]
 }

@@ -365,9 +365,10 @@ proc template::data::transform::search { element_ref } {
       error "No search query specified for search widget"
     }
 
+    # FIXME: need to get a statement name here
     set query $element(search_query)
 
-    template::query options multilist $query
+    template::query get_options options multilist $query
 
     set option_count [llength $options]
 

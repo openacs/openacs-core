@@ -42,13 +42,14 @@ specification for many physical pages, so the overall layout of a site can be mo
             <file type="data_model_drop" db_type="oracle" path="sql/oracle/acs-templating-drop.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/demo-create.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/demo-drop.sql"/>
+            <file type="data_model_create" db_type="postgresql" path="sql/postgresql/acs-templating-create.sql"/>
+            <file type="data_model_drop" db_type="postgresql" path="sql/postgresql/acs-templating-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/demo-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/demo-drop.sql"/>
             <file type="tcl_procs" path="tcl/0-procs.tcl"/>
             <file type="tcl_init" path="tcl/acs-integration-init.tcl"/>
             <file type="tcl_procs" path="tcl/acs-integration-procs.tcl"/>
             <file type="tcl_procs" path="tcl/data-procs.tcl"/>
-            <file path="tcl/database-procs/dbapi.tcl"/>
-            <file path="tcl/database-procs/generic.tcl"/>
-            <file path="tcl/database-procs/oracle.tcl"/>
             <file type="tcl_procs" path="tcl/date-procs.tcl"/>
             <file type="tcl_procs" path="tcl/debug-procs.tcl"/>
             <file type="tcl_procs" path="tcl/doc-procs.tcl"/>

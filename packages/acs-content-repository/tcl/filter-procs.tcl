@@ -73,7 +73,7 @@ proc get_content {} {
   }
 
   # Get the live revision
-  template::query revision_id onevalue "
+  template::query get_revision revision_id onevalue "
     select live_revision from cr_items where item_id = :item_id
   " -cache "item_live_revision $item_id"
 
@@ -83,7 +83,7 @@ proc get_content {} {
   }
 
   # Get the mime type, decide if we want the text
-  template::query mime_type onevalue "
+  template::query get_mime_type mime_type onevalue "
     select mime_type from cr_revisions 
       where revision_id = :revision_id
   " -cache "revision_mime_type $revision_id" -persistent \
@@ -101,14 +101,14 @@ proc get_content {} {
   }
  
   # Get the content type
-  template::query content_type onevalue "
+  template::query get_content_type content_type onevalue "
     select content_type from cr_items 
     where item_id = :item_id
   " -cache "item_content_type $item_id" -persistent \
     -timeout 3600
 
   # Get the table name
-  template::query table_name onevalue "
+  template::query get_table_name table_name onevalue "
     select table_name from acs_object_types 
     where object_type = :content_type
   " -cache "type_table_name $content_type" -persistent \
@@ -117,7 +117,7 @@ proc get_content {} {
   upvar content content
 
   # Get (all) the content (note this is really dependent on file type)
-  template::query content onerow "select 
+  template::query get_content content onerow "select 
     x.*, 
     :item_id as item_id $text_sql, 
     :content_type as content_type
@@ -183,7 +183,7 @@ proc get_folder_labels { { varname "folders" } } {
   set url ""
 
   # build the folder URL out as we iterate over the query
-  template::query $varname multirow $query -uplevel -eval {
+  template::query get_url $varname multirow $query -uplevel -eval {
     append url "$row(name)/"
     set row(url) ${url}index.acs
   }
@@ -211,7 +211,7 @@ proc init { urlvar rootvar {content_root ""} {template_root ""} {context "public
       item_id = content_item.get_id(:url, :content_root)"
 
   # cache this query persistently for 1 hour
-  template::query item_info onerow $query \
+  template::query get_item_info item_info onerow $query \
 	  -cache "get_id_filter $url $content_root" \
 	  -persistent -timeout 216000
 
@@ -228,7 +228,7 @@ proc init { urlvar rootvar {content_root ""} {template_root ""} {context "public
   set content_type $item_info(content_type)
 
   # Make sure that a live revision exists
-  template::query live_revision onevalue "
+  template::query get_live_revision live_revision onevalue "
     select live_revision from cr_items where item_id = :item_id
   " -cache "item_live_revision $item_id"
 
@@ -256,7 +256,7 @@ proc init { urlvar rootvar {content_root ""} {template_root ""} {context "public
     dual"
 
 
-  template::query template_url onevalue $query
+  template::query get_template_url template_url onevalue $query
 
   if { [string equal $template_url {}] } { 
     ns_log Notice "No template found to render content item $item_id in context '$context'"

@@ -30,19 +30,15 @@ if {[form is_request add_entry]} {
 
 if { [form is_valid add_entry] } {
     ns_log error "now we've gotten past the if statement"
-    set db [ns_db gethandle]
 
-    ns_ora dml $db -bind [ns_getform] "
+    db_dml insert_address -bind [ns_getform] "
       insert into 
         address_book
       values (
         :first_names, :last_name, :title, null, :gender, :address, :city, :state, :zip, :country,
           :email, :relationship, :primary_phone, :home, :work, :cell, :pager, :fax
       )"
-
-    ns_db releasehandle $db
  
     template::forward index.html
-
 }
 

@@ -8,12 +8,8 @@ set query "select
            from
              ad_template_sample_users"
 
-set db [ns_db gethandle]
-
-template::query users multirow $query -db $db \
+template::query get_users users multirow $query \
  -eval { set row(full_name) "$row(last_name), $row(first_name)" }
-
-ns_db releasehandle $db
 
 # Manually access the datasource 
 
