@@ -23,11 +23,11 @@ set pg_bindir "/usr/local/pgsql/bin"
 
 # AOLServer configuration
 set serverroot "/var/lib/aolserver/${server}"
-set svscanroot "/var/lib/svscan"
+set svscanroot "/var/lib/svscan/${server}"
 set server_url "http://localhost:8000"
 set error_log_file "${serverroot}/log/error.log"
-set start_server_command "svc -u ${svscanroot}/$server"
-set stop_server_command "svc -d ${svscanroot}/$server"
+set start_server_command "rm ${svscanroot}/down; svc -u ${svscanroot}"
+set stop_server_command "svc -d ${svscanroot}"
 set restart_server_command "svc -t ${svscanroot}/$server"
 # Time from invocation of startup command until the server is actually up
 set startup_seconds 20
