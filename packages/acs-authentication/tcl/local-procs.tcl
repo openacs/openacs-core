@@ -243,28 +243,33 @@ ad_proc -private auth::local::password::ChangePassword {
     set result(password_status) "ok"
 
     if { [parameter::get -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -default 1] } {
-        acs_user::get -username $username -array user
-
-        set system_name [ad_system_name]
-        set pvt_home_name [ad_pvt_home_name]
-        set password_update_link_text [_ acs-subsite.Change_my_Password]
-        
-        if { [auth::UseEmailForLoginP] } {
-            set account_id_label [_ acs-subsite.Email]
-            set account_id $user(email)
-        } else {
-            set account_id_label [_ acs-subsite.Username]
-            set account_id $user(username)
-        }
-
-        set subject [_ acs-subsite.Password_changed_subject]
-        set body [_ acs-subsite.Password_changed_body]
-
-        ns_sendmail \
-            $user(email) \
-            [ad_outgoing_sender] \
-            $subject \
-            $body
+	with_catch errmsg {
+	    acs_user::get -username $username -array user
+	    
+	    set system_name [ad_system_name]
+	    set pvt_home_name [ad_pvt_home_name]
+	    set password_update_link_text [_ acs-subsite.Change_my_Password]
+	    
+	    if { [auth::UseEmailForLoginP] } {
+		set account_id_label [_ acs-subsite.Email]
+		set account_id $user(email)
+	    } else {
+		set account_id_label [_ acs-subsite.Username]
+		set account_id $user(username)
+	    }
+	    
+	    set subject [_ acs-subsite.Password_changed_subject]
+	    set body [_ acs-subsite.Password_changed_body]
+	    
+	    ns_sendmail \
+		$user(email) \
+		[ad_outgoing_sender] \
+		$subject \
+		$body
+	} {
+            global errorInfo
+            ns_log Error "Error sending out password changed notification to account owner with user_id $user(user_id), email $user(email): $errmsg\n$errorInfo"
+	}
     }
     
     return [array get result]
