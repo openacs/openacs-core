@@ -14,7 +14,7 @@ set context [list "Configuration"]
 # TODO: Add join policy
 
 
-ad_form -name name -mode display -form {
+ad_form -name name -cancel_url [ad_conn url] -mode display -form {
     {instance_name:text
         {label "Subsite name"}
         {html {size 50}}
