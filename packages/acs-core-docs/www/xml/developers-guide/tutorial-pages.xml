@@ -22,9 +22,8 @@
       <computeroutput>index</computeroutput>, so we'll build that
       first, starting with the tcl file:
 </para>
-      <screen>[service0@yourserver samplenote]$<userinput> mkdir /web/service0/packages/samplenote/www</userinput>
-[service0@yourserver samplenote]$<userinput> cd /web/service0/packages/samplenote/www</userinput>
-[service0@yourserver www]$ <userinput>emacs index.tcl</userinput></screen>
+      <screen>[service0@yourserver postgresql]$<userinput> cd /var/lib/aolserver/service0/myfirstpackages/www</userinput>
+[service0@yourserver www <userinput>emacs index.tcl</userinput></screen>
       <para>Paste this into the file.</para>      
       <programlisting>ad_page_contract {
     This is the main page for the package.  It displays all of the Notes and provides links to edit them and to create new Notes.

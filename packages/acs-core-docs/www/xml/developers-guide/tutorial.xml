@@ -95,8 +95,8 @@ standard OpenACS &version; distribution.
     <orderedlist>
       <listitem>
         <para>Browse to
-        <computeroutput>http://<replaceable>yourserver</replaceable>:8000/<ulink
-        url="/acs-admin/apm">acs-admin/apm</ulink></computeroutput>.
+        <computeroutput>http://<replaceable>yourserver:8000</replaceable><ulink
+        url="/acs-admin/apm">/acs-admin/apm</ulink></computeroutput>.
 </para>
       </listitem>
       <listitem>
@@ -154,8 +154,8 @@ standard OpenACS &version; distribution.
       in this tutorial.</para>
       <orderedlist>
         <listitem><para>Browse to
-<computeroutput>http://yourserver.test:8000<ulink
-        url="/acs-admin/site-map/">/admin/site-map/</ulink></computeroutput>.</para>
+<computeroutput><replaceable>http://yourserver.test:8000</replaceable><ulink
+        url="/admin/site-map/">/admin/site-map/</ulink></computeroutput>.</para>
         </listitem>
         <listitem>
           <para>Click the <computeroutput><guilabel>new sub

@@ -2,7 +2,7 @@
       by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2832777"></a>Code the data model</h3></div></div><div></div></div><p>We create all database objects with scripts in the
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2820344"></a>Code the data model</h3></div></div><div></div></div><p>We create all database objects with scripts in the
       <tt class="computeroutput">myfirstpackage/sql/</tt> directory.  All
       database scripts are database-specific and are thus in either
       the <tt class="computeroutput">myfirstpackage/sql/oracle</tt> or
@@ -37,7 +37,7 @@
       <tt class="computeroutput">@author</tt> which will be picked up
       by the API browser.  The string
       <tt class="computeroutput">$Id$</tt> will automatically be
-      expanded when the file is checked in to cvs.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs myfirstpackage-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2832421"></a><p class="title"><b>Figure 7.2. Database Creation Script - master create file</b></p><pre class="programlisting">--
+      expanded when the file is checked in to cvs.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs myfirstpackage-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2832515"></a><p class="title"><b>Figure 7.2. Database Creation Script - master create file</b></p><pre class="programlisting">--
 -- @author rhs@mit.edu
 -- @cvs-id $Id$
 --
@@ -57,7 +57,7 @@ select content_type__create_type(
     object.  Notice the use of "mfp."  This token, derived from "My
     First Package," ensures that our object is unlikely to conflict
     with objects from other packages.</p><p>Create a database file to drop everything if the package
-        is uninstalled.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs myfirstpackage-drop.sql</tt></b></pre><div class="figure"><a name="id2836333"></a><p class="title"><b>Figure 7.3. Database deletion script</b></p><pre class="programlisting">-- packages/myfirstpackage/sql/myfirstpackage-drop.sql
+        is uninstalled.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs myfirstpackage-drop.sql</tt></b></pre><div class="figure"><a name="id2835314"></a><p class="title"><b>Figure 7.3. Database deletion script</b></p><pre class="programlisting">-- packages/myfirstpackage/sql/myfirstpackage-drop.sql
 -- drop script
 --
 -- @author joel@aufrecht.org
@@ -77,4 +77,9 @@ psql:myfirstpackage-create.sql:14: NOTICE:  CREATE TABLE will create implicit tr
 (1 row)
 
 [service0@yourserver postgresql]$</pre><p>If there are errors, use them to debug the sql file and try again.  If there are errors in the database table creation, you may need to run the drop script to drop the table so that you can recreate it.  The drop script will probably have errors since some of the things it's trying to drop may be missing.  They can be ignored.</p><p>Once you get the same output as shown above, test the drop script:</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>psql -f myfirstpackage-drop.sql</tt></b>
-[service0@yourserver postgresql]$</pre><p>Once both scripts are working without errors, run the create script one last time and proceed.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-newpackage.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-pages.html">Next</a></td></tr><tr><td width="40%" align="left">Creating a Package </td><td width="20%" align="center"><a accesskey="u" href="tutorial.html">Up</a></td><td width="40%" align="right"> Creating Web Pages</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/tutorial-database.html#comments">View comments on this page at openacs.org</a></center></body></html>
+ content_type__drop_type
+-------------------------
+                       0
+(1 row)
+
+[service0@yourserver postgresql]$</pre><p>Once both scripts are working without errors, <span class="emphasis"><em>run the create script one last time</em></span> and proceed.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-newpackage.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-pages.html">Next</a></td></tr><tr><td width="40%" align="left">Creating a Package </td><td width="20%" align="center"><a accesskey="u" href="tutorial.html">Up</a></td><td width="40%" align="right"> Creating Web Pages</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/tutorial-database.html#comments">View comments on this page at openacs.org</a></center></body></html>

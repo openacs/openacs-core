@@ -1,20 +1,19 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install OpenACS 5.0.0a4</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="aolserver.html" title="Install AOLserver 3.3oacs1"><link rel="next" href="win2k-installation.html" title="OpenACS Installation Guide for Windows2000"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="aolserver.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="win2k-installation.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openacs"></a>Install OpenACS 5.0.0a4</h2></div></div><div></div></div><div class="authorblurb"><p>
-	by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
+    by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="openacs-setup"></a>Set up the file system for an OpenACS Service</h3></div></div><div></div></div><div class="orderedlist"><ol type="1"><li><p><a name="make-web-directory"></a>The reference install stores all OpenACS services in
-      <tt class="computeroutput">/var/lib/aolserver</tt>, with one subdirectory per service.  The first time you install a service, you must create
-      that directory and set its permissions:</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>mkdir /var/lib/aolserver</tt></b>
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="openacs-setup"></a>Set up the file system for one or more OpenACS Sites</h3></div></div><div></div></div><p>For Linux Standard Base compliance and ease of backup,
+      all of the files in each OpenACS site are stored in a
+      subdirectory of
+      <tt class="computeroutput">/var/lib/aolserver</tt>, one
+      subdirectory per site.  The first time you install an OpenACS
+      site on a server, you must create the parent directory and set its permissions:</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>mkdir /var/lib/aolserver</tt></b>
 [root@yourserver root]# <b class="userinput"><tt>chgrp web /var/lib/aolserver</tt></b>
 [root@yourserver root]# <b class="userinput"><tt>chmod 770 /var/lib/aolserver</tt></b>
 [root@yourserver root]#
 <pre class="action"><span class="action">mkdir /var/lib/aolserver
 chgrp web /var/lib/aolserver
-chmod 770 /var/lib/aolserver</span></pre></pre></li><li><p><a name="install-openacs-download"></a>You should already have downloaded the OpenACS tarball
-      to the <tt class="computeroutput">/tmp</tt> directory.  If
-      not, <a href="individual-programs.html#openacs-download">download the OpenACS
-      tarball</a> and save it in
-      <tt class="computeroutput">/tmp</tt> and proceed:</p></li><li><p><a name="install-aolserver-user-accounts"></a>Set up your user account.</p><p>
+chmod 770 /var/lib/aolserver</span></pre></pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-aolserver-user-accounts"></a>Set up a user account for each site.</h3></div></div><div></div></div><p>
       AOLserver needs to be started as the root user if you want to use
       port 80. Once it starts, though, it will drop the root privileges and
       run as another user, which you must specify on the command line. It's
@@ -29,46 +28,43 @@ chmod 770 /var/lib/aolserver</span></pre></pre></li><li><p><a name="install-open
       of your site is one word, that would be a good choice. For
       example "<span class="replaceable"><span class="replaceable">service0</span></span>" might be the service name for the
       <a href="http://service0.net/" target="_top"><span class="replaceable"><span class="replaceable">service0</span></span>.net</a>
-      community.</p><p>For the 5.0.0a4-P and 5.0.0a4-O Reference Platform,
-      we'll use a server named <span class="replaceable"><span class="replaceable">service0</span></span> and
-      a user named <span class="replaceable"><span class="replaceable">service0</span></span>.  We'll leave the password
-      blank for increased security.  The only way to log in will be
-      with ssh certificates.  The only people who should log in are
+      community.</p><p>We'll leave the password blank, which prevents login by
+      password, for increased security.  The only way to log in will
+      be with ssh certificates.  The only people who should log in are
       developers for that specific instance.  Add this user, and put
-      it in the <tt class="computeroutput">web</tt> group so that it
-      can use database commands associated with that group.
-    </p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>useradd -g web <span class="replaceable"><span class="replaceable">service0</span></span> -d /home/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
-[root@yourserver root]#</pre><p>Set up database environment variables.  They are
-	necessary for working with the database.  
-</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
-[service0@yourserver service0]$ <b class="userinput"><tt>emacs .bashrc</tt></b></pre><p>Put in the appropriate lines for the database you are running.  If you will use both databases, put in both sets of lines.</p><div class="itemizedlist"><ul type="disc"><li><p>PostGreSQL:</p><pre class="programlisting">export LD_LIBRARY_PATH=LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib
-export PATH=$PATH:/usr/local/pgsql/bin</pre></li><li><p>Oracle.  These environment variables are specific for a local Oracle
-      installation communicating via IPC. If you are connecting to a remote
-      Oracle installation, you'll need to adjust these appropriately. Also,
-      make sure that the '8.1.7' matches your Oracle version.
-</p><pre class="programlisting">export ORACLE_BASE=/ora8/m01/app/oracle
-export ORACLE_HOME=$ORACLE_BASE/product/<span class="replaceable"><span class="replaceable">8.1.7</span></span>
-export PATH=$PATH:$ORACLE_HOME/bin
-export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib
-export ORACLE_SID=ora8
-export ORACLE_TERM=vt100
-export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data</pre></li></ul></div><p>Test this by logging out and back in as
-	<tt class="computeroutput"><span class="replaceable"><span class="replaceable">service0</span></span></tt> and checking the paths.</p><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>exit</tt></b>
-logout
-[root@yourserver src]# <b class="userinput"><tt>su - <b class="userinput"><tt><span class="replaceable"><span class="replaceable">service0</span></span></tt></b></tt></b>
-[postgres@yourserver pgsql]$ <b class="userinput"><tt>env | grep PATH</tt></b>
-</pre><p>For PostGreSQL, you should see:</p><pre class="screen">
-LD_LIBRARY_PATH=LD_LIBRARY_PATH=:/usr/local/pgsql/lib
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:/root/bin:/usr/local/pgsql/bin:/usr/local/pgsql/bin</pre><p>For Oracle:</p><pre class="screen">ORACLE_BASE=/ora8/m01/app/oracle
-ORACLE_HOME=/ora8/m01/app/oracle/product/8.1.7
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:/root/bin:/ora8/m01/app/oracle/product/8.1.7/bin
-LD_LIBRARY_PATH=/ora8/m01/app/oracle/product/8.1.7/lib:/lib:/usr/lib
-ORACLE_SID=ora8
-ORACLE_TERM=vt100
-ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data</pre><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>exit</tt></b>
-logout
-
-[root@yourserver root]#</pre></li><li><p><a name="unpack-openacs"></a>Unpack the OpenACS tarball and rename it to <tt class="computeroutput">service0</tt>.  Secure the directory so that only the owner can access it.  Check the permissions by listing the directory.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+      it in the <tt class="computeroutput"><span class="replaceable"><span class="replaceable">service0</span></span></tt> group so that it
+      can use database and server commands associated with that group.
+    </p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>groupadd <span class="replaceable"><span class="replaceable">web</span></span></tt></b>
+[root@yourserver root]# <b class="userinput"><tt>useradd -g <span class="replaceable"><span class="replaceable">service0</span></span> -G web <span class="replaceable"><span class="replaceable">service0</span></span> -d /home/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+[root@yourserver root]#</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-with-script"></a>Install with automated script (EXPERIMENTAL)</h3></div></div><div></div></div><p>Starting with OpenACS 5.0, an experimental script is
+    available to automate all of the steps for the rest of this section.  Requires tclwebtest.  If you are not feeling lucky, skip to <a href="openacs.html#install-from-tarball" title="Install from tarball">Section , &#8220;Install from tarball&#8221;</a>.</p><div class="orderedlist"><ol type="1"><li><p>Get the install script from CVS:</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+[service0@yourserver service0]$ <b class="userinput"><tt>cvs -d :pserver:anonymous@openacs.org:/cvsroot co -d install openacs-4/etc/install</tt></b>
+cvs server: Updating install
+U install/README
+U install/TODO
+  ... many lines omitted ...
+U install/tcl/twt-procs.tcl
+U install/tcl/user-procs.tcl
+[service0@yourserver service0]$ <b class="userinput"><tt>cd install</tt></b>
+</pre><p>Edit
+        <tt class="computeroutput">/home/<span class="replaceable"><span class="replaceable">service0/install/install.tcl</span></span></tt>install.tcl
+        file and change the values as documented in the file.</p><p>Run the file as root.</p><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>exit</tt></b> 
+[root@yourserver root]# <b class="userinput"><tt>./home/service0/install/install.sh</tt></b>
+/home/service0/install/install.sh: Starting installation with config_file 
+/home/service0/install/install.tcl. Using serverroot=/var/lib/aolserver/
+service0, server_url=http://0.0.0.0:8000, do_checkout=yes, do_install=yes, 
+dotlrn=no, and database=postgres., use_daemontools=true
+  ... many lines omitted ...
+./install.sh: Finished (re)installing /var/lib/aolserver/service0 at Wed Nov  
+5 13:27:17 CET 2003.  Access the new site at http://127.0.0.1:8000 with admin 
+username admin@yourserver.test and password 1
+[root@yourserver root]#
+<pre class="action"><span class="action">exit
+./home/<span class="replaceable"><span class="replaceable">service0</span></span>/install/install.sh</span></pre></pre></li></ol></div><p>You can proceed to <a href="openacs.html#install-next-steps" title="Next Steps">Section , &#8220;Next Steps&#8221;</a>.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-from-tarball"></a>Install from tarball</h3></div></div><div></div></div><p>You should already have downloaded the OpenACS tarball
+      to the <tt class="computeroutput">/tmp</tt> directory.  If
+      not, <a href="individual-programs.html#openacs-download">download the OpenACS
+      tarball</a> and save it in
+      <tt class="computeroutput">/tmp</tt> and proceed:</p><div class="orderedlist"><ol type="1"><li><p><a name="install-openacs-download"></a>Unpack the OpenACS tarball and rename it to <tt class="computeroutput">service0</tt>.  Secure the directory so that only the owner can access it.  Check the permissions by listing the directory.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [service0@yourserver service0]$ <b class="userinput"><tt>cd /var/lib/aolserver</tt></b>
 [service0@yourserver aolserver]$ <b class="userinput"><tt>tar xzf /tmp/openacs-5.0.0a4.tgz</tt></b>
 [service0@yourserver aolserver]$ <b class="userinput"><tt>mv openacs-5.0.0a4 <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
@@ -87,21 +83,11 @@ cd /var/lib/aolserver
 tar xzf /tmp/openacs-5.0.0a4.tgz
 mv openacs-5.0.0a4 service0
 chmod -R 700 service0/
-exit</span></pre></pre></li><li><p><a href="cvs-service-import.html" title="Add the Service to CVS - OPTIONAL">Add the Service to CVS</a> (OPTIONAL)</p></li><li><p>(This step should be obsoleted by the 5.0.0 tarball, as
-      these directories will be included in the tarball)Set up several additional directories in the service root:
-      <tt class="computeroutput">etc</tt> is for configuration and control files, <tt class="computeroutput">log</tt> is for error and request (web page hit) log files, and <tt class="computeroutput">database-backup</tt> is for database backup files.  If you did the CVS step, note that these new directories are excluded from that step so that you can decide whether or not you want your logs and config files in source control.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
-[service0@yourserver service0]$ <b class="userinput"><tt>mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/log /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup</tt></b>
-[service0@yourserver aolserver]$ <b class="userinput"><tt>exit</tt></b>
-logout
-
-[root@yourserver aolserver]#
-<pre class="action"><span class="action">su - service0
-mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/log /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup
-exit</span></pre></pre></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-openacs-prepare-oracle"></a>Prepare Oracle for OpenACS</h3></div></div><div></div></div><p>If you won't be using Oracle, skip to <a href="openacs.html#install-openacs-prepare-postgres" title="Prepare PostgreSQL for an OpenACS Service">Section , &#8220;Prepare PostgreSQL for an OpenACS Service&#8221;</a></p><p>
+exit</span></pre></pre></li><li><p><a href="cvs-service-import.html" title="Add the Service to CVS - OPTIONAL">Add the Service to CVS</a> (OPTIONAL)</p></li><li><p>Prepare the database</p><div class="itemizedlist"><ul type="disc"><li><p><a name="install-openacs-prepare-oracle"></a><b>Prepare Oracle for OpenACS. </b>If you won't be using Oracle, skip to <a href="openacs.html#install-openacs-prepare-postgres" title="Prepare PostgreSQL for an OpenACS Service">Prepare PostgreSQL for an OpenACS Service</a></p><p>
 	  You should be sure that your user account
 	  (e.g. <tt class="computeroutput"><span class="replaceable"><span class="replaceable">service0</span></span></tt>) is in the
 	  <tt class="computeroutput">dba</tt> group.
-	</p><div class="orderedlist"><ol type="1"><li><p> 
+	</p><div class="orderedlist"><ol type="a"><li><p> 
 		  Verify membership by typing
 		  <tt class="computeroutput">groups</tt> when you login:
 
@@ -231,7 +217,10 @@ SQL&gt; exit</pre><p>
 		  If you can't login, try redoing step 1 again. If the date is
 		  in the wrong format, make sure you followed the steps outlined in
 		  <a href="oracle.html#install-oracle-troubleshooting" title="Troubleshooting Oracle Dates">Section , &#8220;Troubleshooting Oracle Dates&#8221;</a>
-		  </p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-openacs-prepare-postgres"></a>Prepare PostgreSQL for an OpenACS Service</h3></div></div><div></div></div><div class="orderedlist"><ol type="1"><li><p><a name="create-service-db-user"></a>Create a user in the database matching the service name.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - postgres</tt></b>
+		  </p></li></ol></div></li><li><p><a name="install-openacs-prepare-postgres"></a><b>Prepare PostgreSQL for an OpenACS Service. </b></p><div class="itemizedlist"><ul type="circle"><li><p><a name="create-service-db-user"></a>PostGreSQL:</p><p>Create a user in the database matching the service
+            name.  With default PostGreSQL authentication the name of
+            the user of the process will be matched to this account
+            automatically.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - postgres</tt></b>
 [postgres@yourserver pgsql]$ <b class="userinput"><tt>createuser <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 Shall the new user be allowed to create databases? (y/n) <b class="userinput"><tt>y</tt></b>
 Shall the new user be allowed to create more new users? (y/n) <b class="userinput"><tt>y</tt></b>
@@ -244,17 +233,17 @@ logout
 CREATE DATABASE
 [service0@yourserver service0]$
 <pre class="action"><span class="action">su - <span class="replaceable"><span class="replaceable">service0</span></span>
-createdb -E UNICODE <span class="replaceable"><span class="replaceable">service0</span></span></span></pre></pre></li><li><p>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.</p><a class="indexterm" name="id2825344"></a><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>export EDITOR=emacs;crontab -e</tt></b></pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/vacuumdb --analyze <span class="replaceable"><span class="replaceable">service0</span></span></pre></li><li><p><a href="install-full-text-search.html#install-openfts-postgres" title="Install OpenFTS prerequisites in PostGreSQL instance">Add Full Text Search Support</a> (OPTIONAL)</p></li><li><a name="db-setup-exit"></a><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>exit</tt></b>
+createdb -E UNICODE <span class="replaceable"><span class="replaceable">service0</span></span></span></pre></pre></li><li><p>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.</p><a class="indexterm" name="id2826718"></a><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>export EDITOR=emacs;crontab -e</tt></b></pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/vacuumdb --analyze <span class="replaceable"><span class="replaceable">service0</span></span></pre></li><li><p><a href="install-full-text-search.html#install-openfts-postgres" title="Install OpenFTS prerequisites in PostGreSQL instance">Add Full Text Search Support</a> (OPTIONAL)</p></li><li><a name="db-setup-exit"></a><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>exit</tt></b>
 logout
 
-[root@yourserver root]# </pre></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-openacs-configure-aol"></a>Configure an AOLserver Service for OpenACS</h3></div></div><div></div></div><div class="orderedlist"><ol type="1"><li><p><a name="configure-config-tcl"></a>
+[root@yourserver root]# </pre></li></ul></div></li></ul></div></li><li><a name="install-openacs-configure-aol"></a><p><b>Configure an AOLserver Service for OpenACS. </b></p><div class="orderedlist"><ol type="a"><li><p><a name="configure-config-tcl"></a>
 	  The AOLserver architecture lets you run an arbitrary number of
 	  virtual servers. A virtual server is an HTTP service running on a
 	  specific port, e.g. port 80. In order for OpenACS to work, you
 	  need to configure a virtual server.  The Reference Platform
 	  uses a configuration file included in the OpenACS tarball,
 	  <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/config.tcl</tt>.
-	   Open it in an editor to adjust the parameters.</p><a class="indexterm" name="id2825455"></a><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+	   Open it in an editor to adjust the parameters.</p><a class="indexterm" name="id2826840"></a><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [service0@yourserver service0]$ <b class="userinput"><tt>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc</tt></b>
 [service0@yourserver etc]# <b class="userinput"><tt>emacs config.tcl</tt></b>
 </pre><p>
@@ -279,7 +268,7 @@ logout
 	  started, but for more options, read the <a href="http://aolserver.com/docs/admin/config.html" target="_top">AOLServer
 	  docs</a>.
 	</p></li><li><p><a href="install-full-text-search.html#enable-openfts" title="Enable OpenFTS in config.tcl">Enable OpenFTS Full Text Search</a> (OPTIONAL)</p></li><li><p><a href="maintenance-web.html#install-ssl" title="Installing SSL Support">Install nsopenssl
-        for SSL support.</a> (OPTIONAL)</p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="verify-aolserver-startup"></a>Verify AOLserver startup</h3></div></div><div></div></div><div class="orderedlist"><ol type="1"><li><p><a name="start-aolserver"></a>
+        for SSL support.</a> (OPTIONAL)</p></li></ol></div></li><li><a name="verify-aolserver-startup"></a><p><b>Verify AOLserver startup. </b></p><div class="orderedlist"><ol type="a"><li><p><a name="start-aolserver"></a>
 	  Kill any current running AOLserver processes and start a new
 	  one.  If you are using Oracle, rather than PostgreSQL, replace
 	  <tt class="computeroutput">nsd-postgres</tt> with
@@ -317,7 +306,8 @@ nsd: no process killed
 	  changes, don't forget to kill any running servers with
 	  <b class="userinput"><tt>killall nsd</tt></b>.
 	</p></li><li><p><a href="maintenance-web.html#install-openacs-keepalive" title="">Automate
-        AOLserver keepalive</a> (OPTIONAL)</p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-openacs-using-installer"></a>Configure a Service with the OpenACS Installer</h3></div></div><div></div></div><p>
+        AOLserver keepalive</a> (OPTIONAL)</p></li></ol></div></li><li><a name="install-openacs-using-installer"></a><p><b>Configure a Service with the OpenACS
+          Installer. </b>
 	  Now that you've got AOLserver up and running, let's install OpenACS
 	  5.0.0a4.
 	</p><div class="itemizedlist"><ul type="disc"><li><p> 
@@ -376,10 +366,43 @@ Loading package .info files ... this will take a few minutes</pre><p>
 		  reload the final page above. You should see the front page, with
 		  an area to login near the upper right.  Congratulations, OpenACS
 		  5.0.0a4 is now up and running!  
-		</p></li><li><p>Install Full Text Search (OPTIONAL).  If you have <a href="install-full-text-search.html#install-openfts" title="Install OpenFTS module">installed OpenFTS</a> and enabled
+		</p></li></ul></div></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-next-steps"></a>Next Steps</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p>Install Full Text Search (OPTIONAL).  If you have <a href="install-full-text-search.html#install-openfts" title="Install OpenFTS module">installed OpenFTS</a> and enabled
         OpenFTS, you can now <a href="install-full-text-search.html#install-fts-engine" title="Install Full Text Search Engine">install</a> the OpenFTS Driver package and
-        Full Text Search Engine package in the OpenACS service.</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2827232"></a>Next Steps</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p>This is a good time to make a <a href="backup-recovery.html#snapshot-backup" title="Snapshot backup and recovery">backup</a> of your service.  If this is a
+        Full Text Search Engine package in the OpenACS service.</p></li><li><p>This is a good time to make a <a href="backup-recovery.html#snapshot-backup" title="Snapshot backup and recovery">backup</a> of your service.  If this is a
     production site, you should set up <a href="backup-recovery.html#automated-backup" title="Automated Backup (OPTIONAL)">automatic nightly backups</a>.</p></li><li><p>If you want traffic reports, <a href="maintenance-web.html#analog-setup" title="Set up Log Analysis Reports - OPTIONAL">set up analog</a> or another log
     processing program.</p></li><li><p>Follow the instruction on the home page to
       change the appearance of your service or add more
-      packages. (<a href="configure.html" title="Chapter 4. Configuring a New Service">more information</a>)</p></li><li><p>Proceed to the <a href="tutorial.html" title="Chapter 7. Development Tutorial">tutorial</a> to learn how to develop your own packages.</p></li><li><p>Test your <a href="backup-recovery.html" title="Backup and Recovery">backup and recovery</a> procedure.</p></li></ul></div></div><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="aolserver.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="win2k-installation.html">Next</a></td></tr><tr><td width="40%" align="left">Install AOLserver 3.3oacs1 </td><td width="20%" align="center"><a accesskey="u" href="complete-install.html">Up</a></td><td width="40%" align="right"> OpenACS Installation Guide for Windows2000</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs.html#comments">View comments on this page at openacs.org</a></center></body></html>
+      packages. (<a href="configure.html" title="Chapter 4. Configuring a New Service">more information</a>)</p></li><li><p>Proceed to the <a href="tutorial.html" title="Chapter 7. Development Tutorial">tutorial</a> to learn how to develop your own packages.</p></li><li><p>Set up database environment variables for the site
+	user.  These settings are necessary for working with the
+	database while logged in as the service user.  They do not
+	directly affect the service's run-time connection with the
+	database, because those environmental variables are set by the
+	wrapper scripts nsd-postgres and nsd-oracle.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+[service0@yourserver service0]$ <b class="userinput"><tt>emacs .bashrc</tt></b></pre><p>Put in the appropriate lines for the database you are running.  If you will use both databases, put in both sets of lines.</p><div class="itemizedlist"><ul type="circle"><li><p>PostGreSQL:</p><pre class="programlisting">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib
+export PATH=$PATH:/usr/local/pgsql/bin</pre></li><li><p>Oracle.  These environment variables are specific for a local Oracle
+      installation communicating via IPC. If you are connecting to a remote
+      Oracle installation, you'll need to adjust these appropriately. Also,
+      make sure that the '8.1.7' matches your Oracle version.
+</p><pre class="programlisting">export ORACLE_BASE=/ora8/m01/app/oracle
+export ORACLE_HOME=$ORACLE_BASE/product/<span class="replaceable"><span class="replaceable">8.1.7</span></span>
+export PATH=$PATH:$ORACLE_HOME/bin
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib
+export ORACLE_SID=ora8
+export ORACLE_TERM=vt100
+export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data</pre></li></ul></div><p>Test this by logging out and back in as
+	<tt class="computeroutput"><span class="replaceable"><span class="replaceable">service0</span></span></tt> and checking the paths.</p><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>exit</tt></b>
+logout
+[root@yourserver src]# <b class="userinput"><tt>su - <b class="userinput"><tt><span class="replaceable"><span class="replaceable">service0</span></span></tt></b></tt></b>
+[postgres@yourserver pgsql]$ <b class="userinput"><tt>env | grep PATH</tt></b>
+</pre><div class="itemizedlist"><ul type="circle"><li><p>For PostGreSQL, you should see:</p><pre class="screen">
+LD_LIBRARY_PATH=LD_LIBRARY_PATH=:/usr/local/pgsql/lib
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:/root/bin:/usr/local/pgsql/bin:/usr/local/pgsql/bin</pre></li><li><p>For Oracle:</p><pre class="screen">ORACLE_BASE=/ora8/m01/app/oracle
+ORACLE_HOME=/ora8/m01/app/oracle/product/8.1.7
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:/root/bin:/ora8/m01/app/oracle/product/8.1.7/bin
+LD_LIBRARY_PATH=/ora8/m01/app/oracle/product/8.1.7/lib:/lib:/usr/lib
+ORACLE_SID=ora8
+ORACLE_TERM=vt100
+ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data</pre></li></ul></div><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>exit</tt></b>
+logout
+
+[root@yourserver root]#</pre></li><li><p>Test your <a href="backup-recovery.html" title="Backup and Recovery">backup and recovery</a> procedure.</p></li></ul></div></div><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="aolserver.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="win2k-installation.html">Next</a></td></tr><tr><td width="40%" align="left">Install AOLserver 3.3oacs1 </td><td width="20%" align="center"><a accesskey="u" href="complete-install.html">Up</a></td><td width="40%" align="right"> OpenACS Installation Guide for Windows2000</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs.html#comments">View comments on this page at openacs.org</a></center></body></html>

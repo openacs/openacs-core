@@ -75,16 +75,10 @@ cp: overwrite `/etc/skel/.emacs'? <userinput>y</userinput>
             <primary>daemontools</primary>
             <secondary>installation</secondary>
           </indexterm>
-          <itemizedlist>
+          <para><link linkend="daemontools-download">download daemontools</link> and install it.</para>
+         <itemizedlist>
             <listitem>
-              <para>Red Hat</para>
-              <para>Make sure you have the source tarball in
-          <computeroutput>/tmp</computeroutput>, or <link
-          linkend="daemontools-download">download it</link>.  (The -p
-              flag in mkdir causes all implied directories in the path
-              to be made as well.)</para>
-            <para>(Red Hat 9.0: put 
-<programlisting>#include &lt;errno.h&gt;</programlisting> as the first line of <computeroutput>/package/admin/daemontools-0.76/src/error.h</computeroutput>.  <ulink url="http://www.riverside.org/archive/html/djbdns/2003-01/msg00307.html">More information</ulink>)</para>
+              <para>Red Hat 8</para>
               <screen>[root@yourserver root]# <userinput>mkdir -p /package</userinput>
 [root@yourserver root]# <userinput>chmod 1755 /package/</userinput>
 [root@yourserver root]# <userinput>cd /package/</userinput>
@@ -102,6 +96,48 @@ chmod 1755 /package
 cd /package 
 tar xzf /tmp/daemontools-0.76.tar.gz 
 cd admin/daemontools-0.76 
+package/install</action></screen>
+            </listitem>
+            <listitem>
+              <para>Red Hat 9</para>
+              <para>Make sure you have the source tarball in
+          <computeroutput>/tmp</computeroutput>, or <link
+          linkend="daemontools-download">download it</link>.
+</para>
+              <screen>[root@yourserver root]# <userinput>mkdir -p /package</userinput>
+[root@yourserver root]# <userinput>chmod 1755 /package/</userinput>
+[root@yourserver root]# <userinput>cd /package/</userinput>
+[root@yourserver package]# <userinput>tar xzf /tmp/daemontools-0.76.tar.gz</userinput>
+[root@yourserver package]# <userinput>cd admin</userinput>
+[root@yourserver admin]# <userinput>wget http://moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch</userinput>
+--14:19:24--  http://moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch
+           => `daemontools-0.76.errno.patch'
+Resolving moni.csi.hu... done.
+Connecting to moni.csi.hu[141.225.11.87]:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 355 [text/plain]
+
+100%[====================================>] 355          346.68K/s    ETA 00:00
+
+14:19:24 (346.68 KB/s) - `daemontools-0.76.errno.patch' saved [355/355]
+
+[root@yourserver admin]# <userinput>cd daemontools-0.76</userinput>
+[root@yourserver daemontools-0.76]# <userinput>patch -p1 &lt; ../daemontools-0.76.errno.patch</userinput>
+[root@yourserver daemontools-0.76]# <userinput>package/install</userinput>
+Linking ./src/* into ./compile...
+(many lines omitted)
+Creating /service...
+Adding svscanboot to inittab...
+init should start svscan now.
+[root@yourserver root]#
+<action>mkdir -p /package 
+chmod 1755 /package 
+cd /package 
+tar xzf /tmp/daemontools-0.76.tar.gz 
+cd admin
+wget http://moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch
+cd daemontools-0.76
+patch -p1 &lt; ../daemontools-0.76.errno.patch
 package/install</action></screen>
             </listitem>
             <listitem>
@@ -131,18 +167,32 @@ chmod 755 /usr/local/bin/svgroup</action></screen>
     </sect1>
     <sect1 id="install-qmail">
       <title>Install qmail (OPTIONAL)</title>
-      <para>Qmail is a Mail Transfer Agent.  It handles incoming and outgoing mail.  Install qmail if you want your OpenACS server to send and receive mail, and you don't want to use an alternate MTA.</para>
+      <para>Qmail is a Mail Transfer Agent.  It handles incoming and
+      outgoing mail.  Install qmail if you want your OpenACS server to
+      send and receive mail, and you don't want to use an alternate
+      MTA.</para>
+      <para>Red Hat 9: all djb tools (qmail, daemontools, ucspi) will
+      fail to compile in Red Hat 9 because of changes to glibc (<ulink url="http://moni.csi.hu/pub/glibc-2.3.1/">patches</ulink>)</para>
       <orderedlist>
         <listitem>
           <formalpara>
             <title>Install ucspi</title>
               <para>This program handles incoming tcp connections.
-              <link linkend="ucspi-download">Download ucspi</link> and install it.</para>
+            <link linkend="ucspi-download">Download ucspi</link> and install it.</para>
           </formalpara>
-          <para>Red Hat 9.0: put <programlisting>#include &lt;errno.h&gt;</programlisting> as the first line of <computeroutput>error.h</computeroutput>.  <ulink url="http://www.riverside.org/archive/html/djbdns/2003-01/msg00307.html">More information</ulink>)</para>
           <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
-[root@yourserver src]# <userinput>tar xzf /tmp/ucspi-tcp-0.88.tar.gz</userinput>
-[root@yourserver src]# <userinput>cd ucspi-tcp-0.88</userinput>
+[root@yourserver src]# <userinput>wget http://cr.yp.to/ucspi-tcp/ucspi-tcp-0.88.tar.gz</userinput>
+[root@yourserver src]# <userinput>tar xzf ucspi-tcp-0.88.tar.gz</userinput>
+<action>cd /usr/local/src 
+wget http://cr.yp.to/ucspi-tcp/ucspi-tcp-0.88.tar.gz
+tar xzf ucspi-tcp-0.88.tar.gz </action></screen>
+          <para>Red Hat 9 only</para>
+<screen><action>wget http://moni.csi.hu/pub/glibc-2.3.1/ucspi-tcp-0.88.errno.patch
+cd ucspi-tcp-0.88
+patch -p1 &lt;../ucspi-tcp-0.88.errno.patch
+cd ..</action></screen>
+          <para>All platforms continue:</para>
+<screen>[root@yourserver src]# <userinput>cd ucspi-tcp-0.88</userinput>
 [root@yourserver ucspi-tcp-0.88]#<userinput> make</userinput>
 ( cat warn-auto.sh; \
 echo 'main="$1"; shift'; \
@@ -153,8 +203,7 @@ echo 'main="$1"; shift'; \
 ./install
 ./instcheck
 [root@yourserver ucspi-tcp-0.88]#
-<action>cd /usr/local/src 
-tar xzf /tmp/ucspi-tcp-0.88.tar.gz 
+<action>
 cd ucspi-tcp-0.88 
 make 
 make setup check</action></screen>
@@ -196,15 +245,20 @@ tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </action></scree
             </formalpara>
             <para><link linkend="ucspi-download">Download qmail</link>,
             set up the standard supporting users and build the binaries:</para>
-            <para>Red Hat 9.0: Put 
-<programlisting>#include &lt;errno.h&gt;</programlisting>
-as the first line of
-            <computeroutput>/usr/local/src/qmail-1.03/error.h</computeroutput>.
-            <ulink
-            url="http://www.riverside.org/archive/html/djbdns/2003-01/msg00307.html">More
-            information</ulink></para>
             <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
-[root@yourserver src]# <userinput>tar xzf /tmp/qmail-1.03.tar.gz</userinput>
+[root@yourserver src]# <userinput>wget http://www.qmail.org/netqmail-1.04.tar.gz</userinput>
+[root@yourserver src]# <userinput>tar xzf netqmail-1.04.tar.gz</userinput>
+--15:04:11--  http://www.qmail.org/netqmail-1.04.tar.gz
+           => `netqmail-1.04.tar.gz'
+Resolving www.qmail.org... done.
+Connecting to www.qmail.org[192.203.178.37]:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 242,310 [application/x-gunzip]
+
+88% [===============================>     ] 214,620       22.93K/s ETA 00:01
+
+15:04:21 (24.04 KB/s) - `netqmail-1.04.tar.gz' saved [242310/242310]
+
 [root@yourserver src]# <userinput>mkdir /var/qmail</userinput>
 [root@yourserver src]#<userinput> groupadd nofiles</userinput>
 [root@yourserver src]# <userinput>useradd -g nofiles -d /var/qmail/alias alias</userinput>
@@ -215,16 +269,28 @@ as the first line of
 [root@yourserver src]# <userinput>useradd -g qmail -d /var/qmail qmailq</userinput>
 [root@yourserver src]# <userinput>useradd -g qmail -d /var/qmail qmailr</userinput>
 [root@yourserver src]# <userinput>useradd -g qmail -d /var/qmail qmails</userinput>
-[root@yourserver src]# <userinput>cd qmail-1.03</userinput>
-[root@yourserver qmail-1.03]# <userinput>make setup check</userinput>
+[root@yourserver src]# <userinput>cd netqmail-1.04</userinput>
+[root@yourserver netqmail-1.04]# <userinput>./collate.sh</userinput>
+
+You should see 7 lines of text below.  If you see anything
+else, then something might be wrong.
+[1] Extracting qmail-1.03...
+[2] Patching qmail-1.03 into netqmail-1.04.  Look for errors below:
+     20
+[4] The previous line should say 20 if you used GNU patch.
+[5] Renaming qmail-1.03 to netqmail-1.04...
+[6] Continue installing qmail using the instructions found at:
+[7] http://www.lifewithqmail.org/lwq.html#installation
+[root@yourserver netqmail-1.04]# <userinput>cd netqmail-1.04</userinput>
+[root@yourserver netqmail-1.04]# <userinput>make setup check</userinput>
 ( cat warn-auto.sh; \
 echo CC=\'`head -1 conf-cc`\'; \
 (many lines omitted)
 ./install
 ./instcheck
-[root@yourserver qmail-1.03]#
 <action>cd /usr/local/src 
-tar xzf /tmp/qmail-1.03.tar.gz 
+wget http://www.qmail.org/netqmail-1.04.tar.gz
+tar xzf netqmail-1.04.tar.gz
 mkdir /var/qmail 
 groupadd nofiles 
 useradd -g nofiles -d /var/qmail/alias alias 
@@ -235,7 +301,9 @@ groupadd qmail
 useradd -g qmail -d /var/qmail qmailq 
 useradd -g qmail -d /var/qmail qmailr 
 useradd -g qmail -d /var/qmail qmails
-cd qmail-1.03 
+cd netqmail-1.04
+./collate.sh
+cd netqmail-1.04
 make setup check</action></screen>
           <para>Replace sendmail with qmail's wrapper.</para>
           <indexterm>
@@ -327,7 +395,7 @@ chmod 755 /var/qmail/supervise/qmail-smtpd/run
 chmod 755 /var/qmail/supervise/qmail-smtpd/log/run
 ln -s /var/qmail/supervise/qmail-send /var/qmail/supervise/qmail-smtpd /service
 </action></screen>
-          <para>Wait ten seconds or so, and then verify that that the four qmail processes are running.  If uptimes are 1 second, this may indicate broken scripts that are continuously restarting.  In that case, start debugging by checking permissions.</para>
+          <para>Wait ten seconds or so, and then verify that that the four qmail processes are running.  If uptimes don't rise above 1 second, this may indicate broken scripts that are continuously restarting.  In that case, start debugging by checking permissions.</para>
           <screen>[root@yourserver root]# <userinput>qmailctl stat</userinput>
 /service/qmail-send: up (pid 32700) 430 seconds
 /service/qmail-send/log: up (pid 32701) 430 seconds
@@ -345,24 +413,24 @@ messages in queue but not yet preprocessed: 0
             <para>Download the Analog <link linkend="analog-download">source tarball</link> in
 <computeroutput>/tmp</computeroutput>.  Unpack, compile, and install analog.</para>
             <screen>[root@yourserver aolserver]# <userinput>cd /usr/local/src</userinput>
-[root@yourserver src]# <userinput>tar xzf /tmp/analog-5.31.tar.gz</userinput>
-[root@yourserver src]# <userinput>cd analog-5.31</userinput>
-[root@yourserver analog-5.31]# <userinput>make</userinput>
+[root@yourserver src]# <userinput>tar xzf /tmp/analog-5.32.tar.gz</userinput>
+[root@yourserver src]# <userinput>cd analog-5.32</userinput>
+[root@yourserver analog-5.32]# <userinput>make</userinput>
 cd src &amp;&amp; make
-make[1]: Entering directory `/usr/local/src/analog-5.31/src'
+make[1]: Entering directory `/usr/local/src/analog-5.32/src'
 <emphasis>(many lines omitted)</emphasis>
 ***IMPORTANT: You must read the licence before using analog
 ***
-make[1]: Leaving directory `/usr/local/src/analog-5.31/src'
-[root@yourserver analog-5.31]# <userinput>cd ..</userinput>
-[root@yourserver src]#<userinput> mv analog-5.31 /usr/share/</userinput>
+make[1]: Leaving directory `/usr/local/src/analog-5.32/src'
+[root@yourserver analog-5.32]# <userinput>cd ..</userinput>
+[root@yourserver src]#<userinput> mv analog-5.32 /usr/share/</userinput>
 [root@yourserver src]#
 <action>cd /usr/local/src
-tar xzf /tmp/analog-5.31.tar.gz
-cd analog-5.31
+tar xzf /tmp/analog-5.32.tar.gz
+cd analog-5.32
 make
 cd ..
-mv analog-5.31 /usr/share/</action></screen>
+mv analog-5.32 /usr/share/</action></screen>
       <para>See also <xref linkend="analog-setup"/></para>
     </sect1>
 
@@ -623,7 +691,8 @@ line, click
           thread</ulink> for details on compiling nsopenssl.)</para>
 
       <screen>[root@yourserver bin]#<userinput> cd /usr/local/src/aolserver</userinput>
-[root@yourserver aolserver]# <userinput>tar xzf /tmp/nsopenssl-2.1.tar.gz</userinput>
+[root@yourserver aolserver]# <userinput>wget --passive http://www.scottg.net/download/nsopenssl-2.1.tar.gz</userinput>
+[root@yourserver aolserver]# <userinput>tar xzf nsopenssl-2.1.tar.gz </userinput>
 [root@yourserver aolserver]# <userinput>cd nsopenssl-2.1</userinput>
 [root@yourserver nsopenssl-2.1]# <userinput>make OPENSSL=/usr/local/ssl</userinput>
 gcc -I/usr/local/ssl/include -I../aolserver/include -D_REENTRANT=1 -DNDEBUG=1 -g -fPIC -Wall -Wno-unused -mcpu=i686 -DHAVE_CMMSG=1 -DUSE_FIONREAD=1 -DHAVE_COND_EINTR=1   -c -o nsopenssl.o nsopenssl.c
@@ -633,7 +702,9 @@ gcc -shared -nostartfiles -o nsopenssl.so nsopenssl.o config.o init.o ssl.o thre
 [root@yourserver nsopenssl-2.1]# <userinput>cp https.tcl /usr/local/aolserver/modules/tcl/</userinput>
 [root@yourserver nsopenssl-2.1]#
 <action>cd /usr/local/src/aolserver
-tar xzf /tmp/nsopenssl-2.1.tar.gz 
+wget --passive
+http://www.scottg.net/download/nsopenssl-2.1.tar.gz
+tar xzf nsopenssl-2.1.tar.gz 
 cd nsopenssl-2.1 
 make OPENSSL=/usr/local/ssl 
 cp nsopenssl.so /usr/local/aolserver/bin 
@@ -649,5 +720,18 @@ make OPENSSL=/usr/lib/ssl
 cp nsopenssl.so /usr/local/aolserver/bin
 cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
     </sect1>
+
+    <sect1 id="install-tclwebtest">
+      <title>Install tclwebtest.</title>
+      <para>Download the <link linkend="tclwebtest-source">tclwebtest
+      source</link>, unpack it, and put it an appropriate
+      place.</para>
+      <screen><action>cd /usr/local/src
+tar xvzf /tmp/tclwebtest-0.3.tar.gz
+mv tclwebtest /usr/local/
+ln -s /usr/local/tclwebtest-0.3/tclwebtest /usr/local/bin
+</action></screen>
+    </sect1>
+
   </appendix>
 

@@ -14,7 +14,7 @@
 # @author Peter Marklund (peter@collaboraid.biz)
 
 set -e
-set -x
+#set -x
 
 export CVS_RSH=ssh
 script_path=$(dirname $(which $0))

@@ -174,7 +174,7 @@
           </informaltable>
         </figure>
       </sect2>
-    
+
     <sect2 id="how-to-use">
       <title>How to use this guide</title>
       <itemizedlist>
@@ -208,7 +208,7 @@ dropdb <replaceable>server1</replaceable>
 createdb <replaceable>server1</replaceable></action></screen>
         </listitem>
       </itemizedlist>
-      
+  </sect2>
       <sect2>
         <title>Paths and Users</title>
         
@@ -380,9 +380,10 @@ createdb <replaceable>server1</replaceable></action></screen>
         </para>
           </listitem>
         </itemizedlist>
-      </sect2>
     <para><phrase role="cvstag">($Id: overview.xml,v 1.12 2003/10/28
     22:07:41 joela Exp $)</phrase></para>
+
+      </sect2>
     </sect1>
 
 

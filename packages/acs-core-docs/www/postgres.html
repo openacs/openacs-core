@@ -3,13 +3,13 @@
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </p></div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.0.0a4 will run with <a href="individual-programs.html#source-postgresql">PostGreSQL</a> 7.2.x, 7.3.2,
-  7.3.3, and 7.3.4.  7.3.4 is the recommended version of PostgreSQL.</p><div class="itemizedlist"><ul type="disc"><li><p><a name="install-postgres-rpm"></a><b>Using the Red Hat RPM. </b>Red Hat users: If you install PostGreSQL 7.3.4 from the Red Hat 9 RPM, you
-  can skip a few steps.  These shell commands add a link so that the
-  data directory appears to be in the same place as in a source
-  install; start the service; create a new group for web service
+  7.3.3, and 7.3.4.  7.3.4 is the recommended version of PostgreSQL.</p><div class="itemizedlist"><ul type="disc"><li><p><a name="install-postgres-rpm"></a><b>Using the Red Hat RPM. </b>Red Hat users: If you install PostGreSQL 7.3.2 from the Red Hat 9 RPM, you
+  can skip a few steps.  These shell commands add some links for compatibility with the directories from a source-based install; start the service; create a new group for web service
   users, and modify the postgres user's
   environment (<a href="postgres.html#install-postgres-env">more
-  information</a>):</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>ln -s /var/lib/pgsql/data /usr/local/pgsql/data</tt></b>
+  information</a>):</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>ln -s /usr/lib/pgsql/ /var/lib/pgsql/lib</tt></b>
+[root@yourserver root]# <b class="userinput"><tt>ln -s /var/lib/pgsql /usr/local/pgsql</tt></b>
+[root@yourserver root]# <b class="userinput"><tt>ln -s /etc/init.d/postgresql /etc/init.d/postgres</tt></b>
 [root@yourserver root]# <b class="userinput"><tt>service postgresql start</tt></b>
 Initializing database:
                                                            [  OK  ]
@@ -20,7 +20,8 @@ Starting postgresql service:                               [  OK  ]
 [root@yourserver root]# <b class="userinput"><tt>su - postgres</tt></b>
 -bash-2.05b$
 <pre class="action"><span class="action">
-ln -s /var/lib/pgsql/data /usr/local/pgsql/data
+ln -s /usr/lib/pgsql/ /var/lib/pgsql/lib
+ln -s /var/lib/pgsql /usr/local/pgsql
 service postgresql start
 echo "export LD_LIBRARY_PATH=/usr/local/pgsql/lib" &gt;&gt; ~postgres/.bash_profile
 echo "export PATH=$PATH:/usr/local/pgsql/bin" &gt;&gt; ~postgres/.bash_profile
@@ -62,7 +63,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/
 	  Change to the postgres user and run <tt class="computeroutput">./configure</tt> to set the compilation options automatically. This is the point at which you can
 	  configure PostgreSQL in various ways. For example, if you want to
 	  enable
-	  Unicode<a class="indexterm" name="id2815650"></a> support, add the flags <tt class="computeroutput">--enable-locale</tt> and <tt class="computeroutput">--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt class="computeroutput">./configure --help</tt>.
+	  Unicode<a class="indexterm" name="id2820707"></a> support, add the flags <tt class="computeroutput">--enable-locale</tt> and <tt class="computeroutput">--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt class="computeroutput">./configure --help</tt>.
 	</p><pre class="screen">[root@yourserver src]# <b class="userinput"><tt>su - postgres</tt></b>
 [postgres@yourserver pgsql]$<b class="userinput"><tt> cd /usr/local/src/postgresql-7.3.4</tt></b>
 [postgres@yourserver postgresql-7.3.4]$ <b class="userinput"><tt>./configure</tt></b>
