@@ -2,7 +2,7 @@
   <table width="100%" id="developer-toolbar">
     <tr align="center">
       <td>
-        <a href="@ds_url@">Developer Support</a>
+        <a href="@ds_url@">Developer&nbsp;Support</a>
       </td>
 
       <td class="actions">
@@ -21,7 +21,7 @@
           <span>|</span></li>
           <li><a href="/acs-admin/apm/" title="Modify/reload packages">APM</a>
           <span>|</span></li>
-          <li><a href="/admin/site-map/" title="Manage your package instances">Site Map</a>
+          <li><a href="/admin/site-map/" title="Manage your package instances">Site&nbsp;Map</a>
           <span>|</span></li>
           <li><a href="/acs-admin/apm/?reload_links_p=1" title="Scan for changed library files">Changed</a>
           <span>|</span></li>
@@ -35,7 +35,7 @@
           <span>|</span></li>
           <li><a href="/doc/" title="View system documentation">Docs</a>
           <span>|</span></li>
-          <li><a href="/api-doc/" title="View/search OpenACS Tcl API documentation">API doc</a></li>
+          <li><a href="/api-doc/" title="View/search OpenACS Tcl API documentation">API&nbsp;doc</a></li>
         </ul>
       </td>
 
