@@ -1,11 +1,15 @@
 ad_library {
 
-    Provides a variety of non-ACS-specific utilities
+    Provides a variety of non-ACS-specific utilities, including
+    the procs to support the who's online feature.
 
     @author Various (acs@arsdigita.com)
     @creation-date 13 April 2000
     @cvs-id utilities-procs.tcl,v 1.19.2.18 2003/06/06 21:40:37 donb Exp
 }
+
+namespace eval util {}
+namespace eval util::whos_online {}
 
 # Let's define the nsv arrays out here, so we can call nsv_exists
 # on their keys without checking to see if it already exists.
@@ -4396,4 +4400,182 @@ proc_doc ad_var_type_check_third_urlv_integer_p {{args ""}} {
     } else {
         return 1
     }
+}
+
+####################
+#
+# Procs in the util::whos_online namespace
+#
+####################
+
+ad_proc -private util::whos_online::init {} {
+    Schedules the flush proc that cleans up old who's online values.
+    Makes sure the unregistered visitor (user_id=0) is invisible.
+
+    @author Bjoern Kiesbye
+} {
+    ad_schedule_proc -thread t 3600 util::whos_online::flush
+
+    # We typically don't want to see the unregistered user in the who's online list
+    set_invisible 0
+}
+
+ad_proc -private util::whos_online::flush {} {
+    Removing all user_ids from the last_hit (nsv_set) wich have a time Stamp older than 
+    the number of seconds indicated by the LastVisitUpdateInterval parameter
+    of the main site (defaults to 600 seconds = 10 minutes).
+
+    @author Bjoern Kiesbye
+} { 
+    array set last_hit [nsv_array get last_hit]
+    set onliners_out [list]
+    set interval [parameter::get \
+                      -package_id [subsite::main_site_id] \
+                      -parameter LastVisitUpdateInterval \
+                      -default 600]
+    set interval 1
+    set oldtime [expr [ns_time] - $interval]
+
+    for {set search [array startsearch last_hit]} {[array anymore last_hit $search]} {} {
+        set user [array nextelement last_hit $search]
+        set time $last_hit($user)
+        if {$time<$oldtime} { 
+            lappend onliners_out $user 
+        } 
+    }
+    
+    array donesearch last_hit $search
+
+    for {set i 0 } { $i < [llength $onliners_out]} {incr i} {
+        set user_id [lindex $onliners_out $i]
+        if { [nsv_exists last_hit $user_id] } {
+            nsv_unset last_hit $user_id
+        }
+        if { [nsv_exists invisible_users $user_id] } {
+            nsv_unset invisible_users $user_id
+        }
+    }
+}
+
+ad_proc -private util::whos_online::user_requested_page { user_id } {
+    Records that the user with given id requested a page on the server
+
+    @author Bjoern Kiesbye
+} {
+    nsv_set last_hit $user_id [ns_time] 
+}
+
+ad_proc -public util::whos_online::user_ids {} {
+    This function returns a list of user_ids from users wich have requested a page 
+    from this Server in the last 10 min.And aren't set to invisible. 
+
+    @author Bjoern Kiesbye
+} {
+    array set last_hit [nsv_array get last_hit]
+    set onliners [list]
+    set oldtime [expr [ns_time] - [ad_parameter LastVisitUpdateInterval "" 600]]
+
+    array set invisible [nsv_array get invisible_users]
+
+    for {set search [array startsearch last_hit]} {[array anymore last_hit $search]} {} {
+        set user [array nextelement last_hit $search]
+        set time $last_hit($user)
+        set invi 0
+        if {$time>$oldtime} { 
+            for { set search2 [array startsearch invisible]} {[array anymore invisible $search2]} {} {
+                set user_cur [array nextelement invisible $search2]
+                if {$user_cur == $user} {
+                    set invi 255
+                    break
+                } 
+            }  
+            array donesearch invisible $search2
+            if {$invi == 0} {
+                lappend onliners $user
+            } 
+        } 
+    }
+    
+    array donesearch last_hit $search
+
+    return $onliners
+}
+
+ad_proc -public util::whos_online::all_user_ids {} {
+    This function returns a list of user_ids from users wich have requested a page 
+    from this Server in the last 10 min.Even those wich are set to invisible. 
+
+    @author Bjoern Kiesbye
+} {
+    array set last_hit [nsv_array get last_hit]
+    set onliners [list]
+    set oldtime [expr [ns_time] - [ad_parameter LastVisitUpdateInterval "" 600]]
+
+    array set invisible [nsv_array get invisible_users]
+
+    for {set search [array startsearch last_hit]} {[array anymore last_hit $search]} {} {
+        set user [array nextelement last_hit $search]
+        set time $last_hit($user)
+        set invi 0
+        if {$time>$oldtime} { 
+            lappend onliners $user
+        } 
+    } 
+    
+    array donesearch last_hit $search
+    
+    return $onliners
+} 
+
+ad_proc -public util::whos_online::set_invisible {user_id} {
+    This procedure sets the user user_id to invisible,
+    his user_id will not be returned by user_ids. 
+    The invisible state will only last as long as the user is online. 
+
+    @author Bjoern Kiesbye
+} {
+    nsv_set invisible_users $user_id [ns_time]
+}
+
+ad_proc -public util::whos_online::unset_invisible {user_id} {
+    This procedure unsets the invisible state of user_id. 
+
+    @author Bjoern Kiesbye
+} {
+    nsv_unset invisible_users $user_id
+}
+
+
+ad_proc -public util::whos_online::check_invisible {user_id} {
+    This function checks if the user user_id is set 
+    to invisible (true) , or is not set to invisible (false)
+
+    @author Bjoern Kiesbye
+} {
+    array set invisible [nsv_array get invisible_users]
+    
+    for {set search [array startsearch invisible]} {[array anymore invisible $search]} {} {
+        set user [array nextelement invisible $search]
+        if {$user == $user_id} {
+            array donesearch invisible $search
+            return "true" 
+        }
+        array donesearch invisible $search
+        return "false"
+    }
+}
+
+ad_proc -public util::whos_online::all_invisible_user_ids {} {
+    This function returns a list with all user_ids wich are set to invisible
+
+    @author Bjoern Kiesbye
+} {   
+    array set invisible [nsv_array get invisible_users]
+    set return_invisible [list]
+    for {set search [array startsearch invisible]} {[array anymore invisible $search]} {} {
+        lappend return_invisible  [array nextelement invisible $search]
+    }
+    
+    array donesearch invisible $search
+    return $return_invisible
 }

@@ -499,8 +499,6 @@ ad_proc -private rp_filter { why } {
 
     ad_call_proc_if_exists ds_collect_connection_info
 
-
-
     # -------------------------------------------------------------------------
     # Start of patch "hostname-based subsites"
     # -------------------------------------------------------------------------
@@ -636,6 +634,12 @@ ad_proc -private rp_filter { why } {
         # to assume that most people have added acs-lang to their system.
         ad_conn -set locale ""
         ad_conn -set language ""
+    }
+
+    # Who's online
+    # Don't record requests for not-logged in users
+    if { [ad_conn user_id] != "0"} { 
+        util::whos_online::user_requested_page [ad_conn user_id]
     }
 
     #####
