@@ -47,13 +47,13 @@
 <!ENTITY plsql-standards SYSTEM "engineering-standards/plsql.xml">
 
 <!-- Installation Guide -->
-<!ENTITY getstarted SYSTEM "install-guide/getting-started.xml">
-<!ENTITY requirements SYSTEM "install-guide/requirements.xml">
-<!ENTITY redhat SYSTEM "install-guide/redhat.xml">
+<!ENTITY install-overview SYSTEM "install-guide/overview.xml">
+<!ENTITY operating-system SYSTEM "install-guide/os.xml">
 <!ENTITY oracle SYSTEM "install-guide/oracle.xml">
+<!ENTITY postgres SYSTEM "install-guide/postgres.xml">
 <!ENTITY aolserver SYSTEM "install-guide/aolserver.xml">
-<!ENTITY acs SYSTEM "install-guide/acs.xml">
-<!ENTITY acc-tests SYSTEM "install-guide/tests.xml">
+<!ENTITY nextsteps SYSTEM "install-guide/next-steps.xml">
+<!ENTITY openacs SYSTEM "install-guide/openacs.xml">
 <!ENTITY credits SYSTEM "install-guide/credits.xml">
 
 <!-- Installing on Windoze -->
@@ -97,49 +97,14 @@
     <chapter id="unix-install" xreflabel="Installing on Unix/Linux">
       <title>Installing on Unix/Linux</title>
 
-      <sect1>
-	<title>Overview</title>
-	<para> 
-	  This document is a guide to installing OpenACS).
-	  It is targeted for first time users who may not be
-	  familiar with Oracle and AOLServer, but who are familiar with UNIX -
-	  with an emphasis on Linux.  However, for the purposes of running the
-	  OpenACS, Linux is not substantially different from other UNIX systems,
-	  such as Solaris or HP-UX.
-	</para>
-
-	<para> 
-	  Assuming you have a computer with a network connection, before
-	  starting installation of OpenACS please refer to the following:
-	</para>
-
-	<itemizedlist>
-	  <listitem><para> If it's a PC and you're going to use Linux, then read everything. </para></listitem>
-	  <listitem><para> If it's a UNIX box, skip the Linux chapter and read everything else. </para></listitem>
-	  <listitem><para> If it's a Windows box, read <link linkend="win-install">How to install OpenACS on Windows</link>
-	      instead.  </para></listitem>
-	  <listitem><para> If you already have Oracle up and running, then skip to the
-	      AOLserver 3.x chapter and read from there.</para></listitem>
-
-	</itemizedlist>
-
-	<para>
-	  If you are interested in learning more about OpenACS first, then
-	  please read Chapter Three: <ulink url="http://www.arsdigita.com/books/panda/community.html">Scalable
-	    Systems for Online Communities</ulink> from <ulink url="http://www.arsdigita.com/books/panda/">Philip &amp; Alex's Guide to
-	    Web Publishing</ulink>, and this document on <ulink url="http://philip.greenspun.com/wtr/using-the-acs.html">Using the
-	    ArsDigita Community System</ulink>.
-	</para>
-      </sect1>
-
-      &getstarted;
-      &requirements;
-      &redhat;
-      &oracle;
-      &aolserver;
-      &acs;
-      &acc-tests;
-      &credits;
+	   &install-overview;
+	   &operating-system;
+	   &oracle;
+	   &postgres;
+	   &aolserver;
+       &openacs;
+	   &nextsteps;
+       &credits;
 
     </chapter>
 

@@ -1,0 +1,111 @@
+# nsd.tcl -- This is a sample AOLserver Startup Script
+#
+# By mburke@arsdigita.com, 2000-04-16
+# Based on a file created by Curtis Galloway
+#
+# This sample script will, with minor modifications, get you
+# up and running ACS on a Windows box.
+#
+# winnsd.txt,v 3.3 2000/06/20 16:50:11 curtisg Exp
+#
+
+set home [file dirname [ns_info config]]
+set bin [file dirname [info nameofexecutable]]
+
+# Setting the following should get you going.
+set server            winacs
+set httpport          80
+set oracleuser        winacs
+set oraclepassword    winacs
+set sroot             servers/$server
+
+
+
+foreach d [list log servers $sroot $sroot/modules $sroot/pages] {
+	if ![file exists $home/$d] {
+		file mkdir $home/$d
+	}
+}
+
+ns_section ns/threads
+ns_param stacksize 500000
+
+ns_section ns/db/drivers
+ns_param ora8 ora8.dll
+
+ns_section ns/db/pool/main
+ns_param driver ora8
+ns_param connections 2
+ns_param user $oracleuser
+ns_param datasource ""
+ns_param password $oraclepassword
+ns_param verbose off
+
+ns_section ns/db/pool/subquery
+ns_param driver ora8
+ns_param connections 2
+ns_param user $oracleuser
+ns_param datasource ""
+ns_param password $oraclepassword
+ns_param verbose off
+
+ns_section ns/db/pool/log
+ns_param driver ora8
+ns_param connections 2
+ns_param user $oracleuser
+ns_param datasource ""
+ns_param password $oraclepassword
+ns_param verbose off
+
+ns_section ns/db/pools
+ns_param main main
+ns_param subquery subquery
+ns_param log log
+
+ns_section ns/parameters
+ns_param home $home
+ns_param auxconfigdir /web/$server/parameters
+#ns_param smtphost your.mail.server
+#ns_param smtpuser username
+
+ns_section ns/servers
+ns_param $server $server
+
+ns_section ns/server/$server
+ns_param threadtimeout 5000000
+ns_param pageroot /web/$server/www
+ns_param enabletclpages on
+ns_param directoryfile index.tcl,index.adp,index.html,index.htm
+
+ns_section ns/server/$server/adp
+ns_param map /*.adp
+ns_param defaultparser fancy
+
+ns_section ns/server/$server/modules
+foreach m [list nssock nslog nscp nscgi] {
+        ns_param $m $bin/$m.so
+}
+
+ns_section ns/server/$server/adp
+ns_param map /*.adp
+
+ns_section ns/server/$server/module/nssock
+ns_param port $httpport
+
+ns_section ns/server/$server/module/nscgi
+ns_param map "GET /*.bat"
+ns_param map "GET /cgi $bin"
+
+ns_section ns/server/$server/module/nscp
+ns_param port 9999
+
+ns_section ns/server/$server/module/nscp/users
+# password is "x"
+ns_param user nsadmin:t2GqvvaiIUbF2:
+
+ns_section ns/server/$server/db
+ns_param pools *
+ns_param DefaultPool main
+
+ns_section ns/server/$server/tcl
+ns_param library /web/$server/tcl
