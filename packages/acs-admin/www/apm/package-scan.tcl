@@ -22,7 +22,7 @@ doc_body_append "
 Done.
 </ul>
 
-<a href=\"\">Return to the Package Manager</a>
+<a href=\"./\">Return to the Package Manager</a>
 
 [ad_footer]
 "

@@ -16,7 +16,7 @@ catch { nsv_unset apm_reload_watch $watch_file }
 
 doc_body_append "No longer watching the following file:<ul><li>$watch_file</ul>
 
-<a href=\"../apm/\">Return to the Package Manager</a>
+<a href=\"./\">Return to the Package Manager</a>
 
 [ad_footer]
 "

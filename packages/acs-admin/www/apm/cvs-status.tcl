@@ -91,7 +91,7 @@ if { [llength $all_files_to_commit] > 0 } {
     doc_body_append "</pre></blockquote>"
 }
 
-doc_body_append "<a href=\"\">Return to the Package Manager</a>
+doc_body_append "<a href=\"./\">Return to the Package Manager</a>
 
 [ad_footer]"
 
