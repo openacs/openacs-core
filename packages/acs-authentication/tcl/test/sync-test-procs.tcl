@@ -6,7 +6,7 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case job_start_end {
+aa_register_case sync_start_end {
     Test batch job basics: Starting, getting document, adding entries, ending.
 } {    
     aa_run_with_teardown \
@@ -80,7 +80,7 @@ aa_register_case job_start_end {
         }
 }
 
-aa_register_case job_actions {
+aa_register_case sync_actions {
     Test job actions: insert, update, 
 } {    
     aa_run_with_teardown \
@@ -296,7 +296,7 @@ aa_register_case job_actions {
         }
 }
 
-aa_register_case job_snapshot {
+aa_register_case sync_snapshot {
     Test a snapshot job
 } {
     aa_run_with_teardown \
@@ -442,7 +442,7 @@ aa_register_case job_snapshot {
 }
 
 
-aa_register_case job_batch_for_local {
+aa_register_case sync_batch_for_local {
     Test a batch job for the local authority
 } {
     aa_run_with_teardown \
@@ -459,7 +459,7 @@ aa_register_case job_batch_for_local {
 }
 
 
-aa_register_case job_batch_ims_example_doc { 
+aa_register_case sync_batch_ims_example_doc { 
     Test IMS Enterprise 1.1 batch sync with the XML document from the specification.
 } {
     aa_stub acs_sc::invoke {
@@ -643,7 +643,7 @@ aa_register_case job_batch_ims_example_doc {
 }
 
 
-aa_register_case job_batch_ims_test {
+aa_register_case sync_batch_ims_test {
     Test IMS Enterprise 1.1 batch sync with a constructed document which actually works
 } {
     aa_stub acs_sc::invoke {
@@ -883,10 +883,18 @@ aa_register_case job_batch_ims_test {
         }
 }
 
-
-
-aa_register_case job_batch_reuse_username_email {
-    Test that we can reuse the username and email of deleted users.
+aa_register_case sync_http_get_document {
+    Test the HTTPGet implementation of GetDocument service contract.
 } {
-    # TODO!
+    array set result [acs_sc::invoke \
+                          -error \
+                          -contract "GetDocument" \
+                          -impl "HTTPGet" \
+                          -operation "GetDocument" \
+                          -call_args [list [list url "[ad_url]/SYSTEM/dbtest.tcl"]]]
+    
+
+    aa_equals "result.doc_status is ok" $result(doc_status) "ok"
+    aa_true "result.doc_message is empty" [empty_string_p $result(doc_message)]
+    aa_equals "result.document is 'success'" $result(document) "success"
 }

@@ -556,7 +556,7 @@ ad_proc -private auth::sync::get_doc::http::GetParameters {} {
     Parameters for HTTP GetDocument implementation.
 } {
     return {
-        URL {The URL from which to retrieve the document}
+        url {The URL from which to retrieve the document}
     }
 }
 
@@ -573,11 +573,11 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
 
     array set param $parameters
     
-    set result(document) [util_httpget $param(URL)]
+    set result(document) [util_httpget $param(url)]
 
     set result(doc_status) "ok"
 
-    retun [array get result]
+    return [array get result]
 }
 
 
