@@ -65,15 +65,20 @@
         <td> @tests.timestamp@ </td>
         <td>
           <if @tests.result@ eq "fail">
-            <font color=#ff0000>
+             <span style="background-color: red; color: white; font-weight: bold; padding: 4px;">FAILED
           </if>
           <if @tests.result@ eq "log">
-            <font color=#10b010>
+            <span style="color: #10b010">log
           </if>
-          @tests.result@
-          <if @tests.result@ eq "fail" or @tests.result@ eq "log">
-            </font>
+          <if @tests.result@ eq "pass">
+            <span style="color: green">passed
           </if>
+          <if @tests.result@ eq "fail" or @tests.result@ eq "log" or @tests.result@ eq "pass">
+            </span>
+          </if>
+          <else>
+            @tests.result@
+          </else>
         </td>
         <td> <pre>@tests.notes@</pre> </td>
   

@@ -6,10 +6,4 @@ ad_library {
   @cvs-id $Id$
 }
 
-#
-# Set the valid testcase categories list, and testcase/component lists.
-#
-nsv_set aa_test cases {}
-nsv_set aa_test components {}
-nsv_set aa_test init_classes {}
-nsv_set aa_test categories {config db script web}
+# LARS: Moved to aa-test-procs.tcl file. See comment there.

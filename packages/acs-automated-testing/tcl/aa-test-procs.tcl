@@ -9,13 +9,26 @@
 
 ad_library {
     Procs to support the acs-automated-testing package.
+
+    NOTE: There's a hack in packages/acs-bootstrap-installer/bootstrap.tcl to load 
+    this file on server startup before other packages' -procs files.
  
     @author Peter Harper (peter.harper@open-msg.com)
     @creation-date 21 June 2001
     @cvs-id $Id$
 }
- 
- 
+
+# LARS: We do this here, because if we do it in the -init file, then we cannot register 
+# test cases in -procs files of packages.
+ns_log Debug "Maybe initialize test stuff? [nsv_exists aa_test cases]"
+if { ![nsv_exists aa_test cases] } {
+    ns_log Debug "LARS: Initializing test stuff"
+    nsv_set aa_test cases {}
+    nsv_set aa_test components {}
+    nsv_set aa_test init_classes {}
+    nsv_set aa_test categories {config db script web}
+}
+  
 ad_proc -public aa_stub {
   proc_name
   new_body
@@ -376,6 +389,7 @@ ad_proc -public aa_register_case {
       incr body_count
     }
   "
+  ns_log Notice "aa_register_case: Registered test case $testcase_id in package $package_key"
 }
 
 ad_proc -public aa_export_vars {
