@@ -20,6 +20,9 @@
         </callbacks>
         <parameters>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="enabled_p"  default="0" description="Source scripts flag"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="IsInstallReportServer"  default="0" description="Setting this parameter to true means this server should present a web interface at /test with the install and test results of other OpenACS servers. If you set this parameter to true you also need to set the XMLReportDir parameter.
+
+"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="XMLReportDir"  description="The full path to the directory where the xml report of system tests are stored. This is also the directory where the install and test xml reports of other servers should be stored if this server is to function as a master test server.
 "/>
         </parameters>
