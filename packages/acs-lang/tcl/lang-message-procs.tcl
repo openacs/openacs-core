@@ -93,8 +93,9 @@ ad_proc -public lang::message::register {
             # The system will not function correctly if there are keys registered in other locales
             # than en_US that are not present for en_US. This introduces the inconvenience of having to
             # register the en_US messages first, but that is manageable
-            ns_log Error "lang::message::register - refusing to register message for non-en_US locale ${locale}. The message key ${package_key}.${message_key} bust be registered in en_US first"
-            return -1
+            set error_message "lang::message::register - refusing to register message for non-en_US locale ${locale}. The message key ${package_key}.${message_key} bust be registered in en_US first"
+            ns_log Error $error_message
+            error $error_message
         }
     }
 
@@ -225,6 +226,36 @@ ad_proc -public lang::message::delete {
               conflict_p f \
               sync_time [db_null] \
         ]
+}
+
+ad_proc -public lang::message::revert {
+    {-package_key:required}
+    {-message_key:required}
+    {-locale:required}
+} {
+    Revert a message to the last overwritten version of it, i.e. revert the last change.
+
+    @author Peter Marklund
+} {
+    set last_overwritten_message [db_string select_last_overwritten_message {
+        select old_message
+        from lang_messages_audit lma1
+        where lma1.package_key = :package_key
+          and lma1.message_key = :message_key
+          and lma1.locale = :locale
+          and lma1.audit_id = (select max(lma2.audit_id)
+                               from lang_messages_audit lma2
+                               where lma2.package_key = lma1.package_key
+                                 and lma2.message_key = lma1.message_key
+                                 and lma2.locale = lma1.locale
+                               )                          
+    }]
+    
+    lang::message::register \
+        $locale \
+        $package_key \
+        $message_key \
+        $last_overwritten_message
 }
 
 ad_proc -public lang::message::get_element {
