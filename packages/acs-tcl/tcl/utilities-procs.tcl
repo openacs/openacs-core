@@ -2748,6 +2748,13 @@ ad_proc util_email_valid_p { query_email } {
     return [regexp "^\[^@<>\"\t ]+@\[^@<>\".\t]+(\\.\[^@<>\".\n ]+)+$" $query_email]
 }
 
+ad_proc util_email_unique_p { email } {
+    Returns 1 if the email passed in does not yet exist in the system.
+
+    @author yon (yon@openforce.net)
+} {
+    return [db_string email_unique_p {}]
+}
 
 ad_proc util_url_valid_p { query_url } {
     Returns 1 if a URL is a web URL (HTTP or HTTPS).

@@ -24,4 +24,14 @@
       </querytext>
 </fullquery>
 
+<fullquery name="util_email_unique_p.email_unique_p">
+  <querytext>
+    select count(*)
+    from dual
+    where not exists (select 1
+                      from parties
+                      where email = :email)
+  </querytext>
+</fullquery>
+
 </queryset>
