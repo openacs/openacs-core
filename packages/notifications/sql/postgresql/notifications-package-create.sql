@@ -1,0 +1,282 @@
+
+--
+-- The Notifications Package
+--
+-- ben@openforce.net
+-- Copyright OpenForce, 2002.
+--
+-- GNU GPL v2
+--
+
+
+-- The Notification Interval Package
+
+select define_function_args ('notification_interval__new','interval_id,name,n_seconds,creation_date,creation_user,creation_ip,context_id');
+
+select define_function_args ('notification_interval__delete','interval_id');
+
+-- implementation
+
+create function notification_interval__new (integer, varchar, integer, timestamp, integer, varchar, integer)
+returns integer as '
+DECLARE
+	p_interval_id			alias for $1;
+	p_name				alias for $2;
+	p_n_seconds			alias for $3;
+	p_creation_date			alias for $4;
+	p_creation_user			alias for $5;
+	p_creation_ip			alias for $6;
+	p_context_id			alias for $7;
+	v_interval_id			integer;
+BEGIN
+	v_interval_id:= acs_object__new (
+					p_interval_id,
+					''notification_interval'',
+					p_creation_date,
+					p_creation_user,
+					p_creation_ip,
+					p_context_id);
+	
+	insert into notification_intervals	
+	(interval_id, name, n_seconds) values
+	(v_interval_id, p_name, p_n_seconds);
+
+	return v_interval_id;
+END;
+' language 'plpgsql';
+
+
+create function notification_interval__delete(integer)
+returns integer as '
+DECLARE
+	p_interval_id			alias for $1;
+BEGIN
+	perform acs_object__delete(p_interval_id);
+	return 0;
+END;
+' language 'plpgsql';
+
+
+-- The notification delivery methods package
+
+select define_function_args ('notification_delivery_method__new','delivery_method_id,short_name,pretty_name,creation_date,creation_user,creation_ip,context_id');
+
+select define_function_args ('notification_delivery_method__delete','delivery_method_id');
+
+
+create function notification_delivery_method__new (integer, varchar, varchar, timestamp, integer, varchar, integer)
+returns integer as '
+DECLARE
+	p_delivery_method_id			alias for $1;
+	p_short_name				alias for $2;
+	p_pretty_name				alias for $3;
+	p_creation_date				alias for $4;
+	p_creation_user				alias for $5;
+	p_creation_ip				alias for $6;
+	p_context_id				alias for $7;
+	v_delivery_method_id			integer;
+BEGIN
+	v_delivery_method_id:= acs_object__new (
+					       p_delivery_method_id,
+					       ''notification_delivery_method'',
+					       p_creation_date,
+					       p_creation_user,
+					       p_creation_ip,
+					       p_context_id);
+
+	insert into notification_delivery_methods
+	(delivery_method_id, short_name, pretty_name) values
+	(v_delivery_method_id, p_short_name, p_pretty_name);
+
+	return v_delivery_method_id;
+END;
+' language 'plpgsql';
+
+create function notification_delivery_method__delete(integer)
+returns integer as '
+DECLARE
+	p_delivery_method_id		alias for $1;
+BEGIN
+	perform acs_object__delete(p_delivery_method_id);
+	return 0;
+END;
+' language 'plpgsql';
+
+
+-- Notification Types Package
+select define_function_args ('notification_type__new','type_id,short_name,pretty_name,description,creation_date,creation_user,creation_ip,context_id');
+
+select define_function_args ('notification_type__delete','type_id');
+
+
+-- implementation
+
+create function notification_type__new (integer,varchar,varchar,varchar,timestamp,integer,varchar,integer)
+returns integer as '
+DECLARE
+	p_type_id			alias for $1;
+	p_short_name			alias for $2;
+	p_pretty_name			alias for $3;
+	p_description			alias for $4;
+	p_creation_date			alias for $5;
+	p_creation_user			alias for $6;
+	p_creation_ip			alias for $7;
+	p_context_id			alias for $8;
+	v_type_id			integer;
+BEGIN
+	v_type_id:= acs_object__new (
+				    p_type_id,
+				    ''notification_type'',
+				    p_creation_date,
+				    p_creation_user,
+				    p_creation_ip,
+				    p_context_id);
+
+      insert into notification_types
+      (type_id, short_name, pretty_name, description) values
+      (v_type_id, p_short_name, p_pretty_name, p_description);
+      
+      return v_type_id;
+END;
+' language 'plpgsql';
+
+
+create function notification_type__delete(integer)
+returns integer as '
+DECLARE
+	p_type_id		alias for $1;
+BEGIN
+	perform acs_object__delete(p_type_id);
+	return 0;
+END;
+' language 'plpgsql';
+
+
+-- the notification request package
+
+select define_function_args ('notification_request__new','request_id,object_type;notification_request,type_id,user_id,object_id,interval_id,delivery_method_id,format,creation_date,creation_user,creation_ip,context_id');
+
+select define_function_args ('notification_request__delete','request_id');
+
+select define_function_args ('notification_request__delete_all', 'object_id');
+
+
+-- implementation
+
+create function notification_request__new (integer,varchar,integer,integer,integer,integer,varchar,timestamp,integer,varchar,integer)
+returns integer as '
+DECLARE
+	p_request_id				alias for $1;
+	p_object_type				alias for $2;
+	p_type_id				alias for $3;
+	p_user_id				alias for $4;
+	p_object_id				alias for $5;
+	p_interval_id				alias for $6;
+	p_delivery_method_id			alias for $7;
+	p_format				alias for $8;
+	p_creation_date				alias for $9;
+	p_creation_user				alias for $10;
+	p_creation_ip				alias for $11;
+	p_context_id				alias for $12;
+	v_request_id				integer;
+BEGIN
+	v_request_id:= acs_object__new (
+				       p_request_id,
+				       p_object_type,
+				       p_creation_date,
+				       p_creation_user,
+				       p_creation_ip,
+				       p_context_id);
+
+      insert into notification_requests
+      (request_id, type_id, user_id, object_id, interval_id, delivery_method_id, format) values
+      (v_request_id, p_type_id, p_user_id, p_object_id, p_interval_id, p_delivery_method_id, p_format);
+
+      return v_request_id;                          
+
+END;
+' language 'plpgsql';
+
+
+create function notification_request__delete(integer)
+returns integer as '
+DECLARE
+	p_request_id			alias for $1;
+BEGIN
+	perform acs_object__delete(p_request_id);
+	return 0;
+END;
+' language 'plpgsql';
+
+
+create function notification_request__delete_all(integer)
+returns integer as '
+DECLARE
+	p_object_id			alias for $1;
+	v_request			RECORD;
+BEGIN
+	for v_request in 
+	(select request_id from notification_requests where object_id= p_object_id)
+	LOOP    
+              PERFORM notification_request__delete(v_request.request_id);
+	END LOOP;
+
+	return 0;
+END;
+' language 'plpgsql';
+
+
+
+-- the notifications package
+select define_function_args ('notification__new','notification_id,type_id,object_id,notif_date,response_id,notif_subject,notif_text,notif_html,creation_date,creation_user,creation_ip,context_id');
+
+select define_function_args ('notification__delete','notification_id');
+
+-- implementation
+
+create function notification__new(integer,integer,integer,timestamp,integer,varchar,text,text,timestamp,integer,varchar,integer)
+returns integer as '
+DECLARE
+	p_notification_id			alias for $1;
+	p_type_id				alias for $2;
+	p_object_id				alias for $3;
+	p_notif_date				alias for $4;
+	p_response_id				alias for $5;
+	p_notif_subject				alias for $6;
+	p_notif_text				alias for $7;
+	p_notif_html				alias for $8;
+	p_creation_date				alias for $9;
+	p_creation_user				alias for $10;
+	p_creation_ip				alias for $11;
+	p_context_id				alias for $12;
+	v_notification_id			integer;
+BEGIN
+	v_notification_id:= acs_object__new (
+					    p_notification_id,
+					    ''notification'',
+					    p_creation_date,
+					    p_creation_user,
+					    p_creation_ip,
+					    p_context_id);
+					    
+	insert into notifications
+	(notification_id, type_id, object_id, notif_date, response_id, notif_subject, notif_text, notif_html)
+	values
+	(v_notification_id, p_type_id, p_object_id, p_notif_date, p_response_id, p_notif_subject, p_notif_text, p_notif_html);
+
+	return v_notification_id;
+	
+END;
+' language 'plpgsql';
+
+
+create function notification__delete(integer)
+returns integer as '
+DECLARE
+	p_notification_id		alias for $1;
+BEGIN
+	perform acs_object__delete(p_notification_id);
+	return 0;
+END;
+' language 'plpgsql';
+
