@@ -417,7 +417,6 @@ sort_mem = 32168            # min 32
 
 #       Write-ahead log (WAL)
 #
-wal_files = 3               # range 0-64
 checkpoint_segments = 3     # in logfile segments (16MB each), min 1
 </programlisting>
           <para>Restart postgres (<computeroutput>service postgres restart</computeroutput>) so that the changes take effect.</para>
