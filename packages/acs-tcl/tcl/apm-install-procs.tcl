@@ -421,10 +421,11 @@ ad_proc -private apm_package_install {
 
     if { [string match "[apm_workspace_install_dir]*" $package_path] } {
         # Package is being installed from the apm_workspace dir (expanded from .apm file)
+
+        # Backup any existing (old) package in packages dir first
         set old_package_path [acs_package_root_dir $package_key]
         if { [file exists $old_package_path] } { 
-            # Backup existing (old) package in packages dir first
-            exec "mv" "$old_package_path" "${old_package_path}.bak"
+            util::backup_file -file_path $old_package_path
         }
 
         # Move the package into the packages dir        
