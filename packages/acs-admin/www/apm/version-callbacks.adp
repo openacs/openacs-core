@@ -44,6 +44,13 @@
   scripts have been run. For mounting and instantiating, well, that should be fairly obvious.
 </p>
 
+<p>
+  For the upgrade callbacks, you should definitely check out the <a
+  href="/api-doc/proc-view?proc=apm%5fupgrade%5flogic">apm_upgrade_logic</a>,
+  which makes it very easy to handle the logic of which things to
+  process depending on which version you're upgrading from and to.
+</p>
+
 <table cellspacing="1" cellpadding="4" bgcolor="#999999">
   <tr bgcolor="white">
     <th>Callback</th>
