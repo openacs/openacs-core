@@ -42,7 +42,7 @@ if { $user_id == 0 } {
 
 set focus ""
 if { [empty_string_p $user_id] } {  
-    set focus "login.email"
+    set focus "login.username"
 }
 
 # One common problem with login is that people can hit the back button

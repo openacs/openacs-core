@@ -93,38 +93,9 @@
         <!-- Already logged in -->
       </if>
       <else>
-        <table bgcolor="#cccccc" cellpadding="0" cellspacing="0" border="0">
-          <tr>
-            <td>
-              <table cellspacing="1" cellpadding="4" border="0">
-                <tr bgcolor="#ccccff">
-                  <th>
-                    Log in
-                  </th>
-                </tr>
-                <form method="post" action="register/user-login" name="login">
-                  <tr bgcolor="#eeeeee">
-                    <td>
-                      @form_vars;noquote@
-                      <table>
-                      <tr><td>Email:</td><td><input type="text" name="email" value="@email@" /></td></tr>
-                      <tr><td>Password:</td><td><input type="password" name="password" /></td></tr>
-                      
-                      <if @allow_persistent_login_p@ eq 1>
-                      <tr><td colspan="2"><input type="checkbox" name="persistent_cookie_p" value="1" @remember_password@ /> 
-                      Remember this login
-                      (<a href="register/explain-persistent-cookies">help</a>)</td></tr>
-                      </if>
-                      
-                      <tr><td colspan="2" align="center"><input type="submit" value="Log in" /></td></tr>
-                      </table>
-                    </td>
-                  </tr>
-                </form>
-              </table>
-            </td>
-          </tr>
-        </table>
+        <div id="login-box">
+          <include src="/packages/acs-subsite/www/register/login-include" return_url="/">
+        </div>
       </else>
 
       <p></p>
