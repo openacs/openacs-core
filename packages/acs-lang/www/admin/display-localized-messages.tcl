@@ -15,7 +15,7 @@ ad_page_contract {
 
 set tab [ns_urlencode "localized-messages"]
 set return_url "display-grouped-messages?tab=$tab&locales=$locales"
-set context_bar [ad_context_bar [list "index?tab=$tab" "Locales & Messages"] [list $return_url Listing] "Messages"]
+set context_bar [ad_context_bar [list $return_url Listing] "Messages"]
 set default_locale [ad_parameter DefaultLocale]
 set default_locale en_US
 

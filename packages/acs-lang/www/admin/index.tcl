@@ -8,12 +8,14 @@ ad_page_contract {
     @creation-date 19 October 2001
     @cvs-id $Id$
 } {
-    {tab "locales"}
+    {tab "home"}
 }
 
 set locale_user [ad_locale user locale]
 set instance_name [ad_conn instance_name]
-set context_bar [ad_context_bar [ad_conn instance_name]]
+set context_bar [ad_context_bar]
+
+set translator_mode_p [lang::util::translator_mode_p]
 
 if { [ad_permission_p 0 admin] } {
     set show_locales_p "t"

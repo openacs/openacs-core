@@ -1,5 +1,5 @@
-<master src="master" />
-<property name="title">Messages Administration</property>
+<master>
+  <property name="title">Messages Administration</property>
 
 <h2>Localized Messages</h2>
 @context_bar@
@@ -16,7 +16,7 @@
 
 <else>
 
-<p>Messages that <strong>need</strong> translation.</p>
+<p>Messages that <strong>need</strong> translation in the <b>@package_key@</b> package.</p>
 
 <table cellpadding="0" cellspacing="0" border="0">
  <tr>

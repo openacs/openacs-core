@@ -1,7 +1,7 @@
-<master src="master" />
- <property name="title">Messages Administration</property>
+<master>
+ <property name="title">@page_title@</property>
 
-<h2>Localized Messages</h2>
+<h2>@page_title@</h2>
 
 @context_bar@
 

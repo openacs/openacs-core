@@ -1,4 +1,4 @@
-<master src="master">
+<master>
  <property name="title">Edit a message</property>
 
 <h2>New Localized Messages</h2>
