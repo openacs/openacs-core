@@ -1,29 +1,39 @@
 ad_page_contract {
     Let's the user change his/her password.  Asks
     for old password, new password, and confirmation.
-
+    
     @cvs-id $Id$
 } {
-    {user_id {[ad_conn user_id]}}
+    {user_id {[ad_conn untrusted_user_id]}}
     {return_url ""}
     {old_password ""}
 }
-
-# Redirect to HTTPS if so configured
-if { [security::RestrictLoginToSSLP] } {
-    # TODO: Lars - this needs to change
-    #security::require_secure_conn
-}
-
-if { $user_id == 0 } {
-    ad_redirect_for_registration
-}
-
 # This is a bit confusing, but old_password is what we get passed in here,
 # whereas password_old is the form element.
 
+
+# Redirect to HTTPS if so configured
+if { [security::RestrictLoginToSSLP] } {
+    security::require_secure_conn
+}
+
+if { ![empty_string_p $old_password] } {
+    # If old_password is set, this is a user who has had his password recovered,
+    # so they won't be authenticated yet.
+} else {
+    set level [ad_decode [security::RestrictLoginToSSLP] 1 "secure" "ok"]
+
+    # If the user is changing passwords for another user, they need to be account ok
+    set account_status [ad_decode $user_id [ad_conn untrusted_user_id] "closed" "ok"]
+
+    auth::require_login \
+        -level $level \
+        -account_status $account_status
+}
+
+
 if { ![auth::password::can_change_p -user_id $user_id] } {
-    ad_return_error "Not allowed" "Changing password is not allowed. Sorry"
+    ad_return_error "Not supported" "Changing password is not supported."
 }
 
 set admin_p [permission::permission_p -object_id $user_id -privilege admin]
@@ -108,21 +118,9 @@ ad_form -extend -name update -form {
         }
     }
 
-    # If we get here, it means the user's password was successfully changed, which
-    # means the user knew this account's old password (and now also knows the new password).
-    # So all in all, we must consider this user now properly authenticated, and htus, we log him/her in.
-    # However, this doesn't verify the user's account status ...
-    # LARS: We should check to see if we can rid ourselves of this mechanism. 
-    # I think that what we need it for is the "user must change password  now" usecase,
-    # where we don't want to let people in until after they've changed password, 
-    # but then when they have, we don't want them to have to authenticate once again
-    # (besides, with external authentication, passwords may have a time lag from they're 
-    # chnaged until they're effective ...)
-    # Should we change the password management API to optionally check and return account_status?
-    # In which case we'd have to also check local account status
-
-    if { ![ad_conn user_id] } {
-        ad_user_login $user_id
+    # If the account was closed, it might be open now
+    if { [string equal [ad_conn account_status] "closed"] } {
+        auth::verify_account_status
     }
     
 } -after_submit {
