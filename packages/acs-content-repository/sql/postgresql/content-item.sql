@@ -653,9 +653,7 @@ begin
     v_title := new__title;
   end if;
 
-  -- create the revision if data or title or text is not null
-  -- note that the caller could theoretically specify both text
-  -- and data, in which case the text is ignored.
+  -- create the revision if data or title is not null
 
   if new__data is not null then
 
@@ -673,6 +671,23 @@ begin
         new__creation_ip,
         v_package_id
         );
+
+  elsif new__title is not null then
+
+    v_revision_id := content_revision__new(
+	v_title,
+	new__description,
+        now(),
+	new__mime_type,
+        null,
+	null,
+	v_item_id,
+        null,
+        new__creation_date, 
+        new__creation_user, 
+        new__creation_ip,
+        v_package_id
+    );
 
   end if;
 
