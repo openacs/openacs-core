@@ -673,7 +673,7 @@ ad_proc -public template::multirow {
     }
 
     extend {
-      upvar $name:columns columns
+      upvar $multirow_level_up $name:columns columns
       foreach column_name $args {
         lappend columns $column_name
       }
