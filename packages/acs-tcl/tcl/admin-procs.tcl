@@ -474,29 +474,29 @@ proc_doc ad_registration_finite_state_machine_admin_links {
     set user_finite_state_links [list]
     switch $member_state {
 	"approved" {
-	    lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&member_state=banned\">ban</a>"
- 	    lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&member_state=deleted\">delete</a>"
+	    lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&member_state=banned\">[_ acs-tcl.ban]</a>"
+ 	    lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&member_state=deleted\">[_ acs-tcl.delete]</a>"
 	}
 	"deleted" {
-	    lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&member_state=approved\">undelete</a>"
- 	    lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&member_state=banned\">ban</a>"
+	    lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&member_state=approved\">[_ acs-tcl.undelete]</a>"
+ 	    lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&member_state=banned\">[_ acs-tcl.ban]</a>"
 	}
 	"needs approval" {
-	    lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&member_state=approved\">approve</a>"
- 	    lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&member_state=rejected\">reject</a>"
+	    lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&member_state=approved\">[_ acs-tcl.approve]</a>"
+ 	    lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&member_state=rejected\">[_ acs-tcl.reject]</a>"
 	}
 	"rejected" {
- 	    lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&member_state=approved\">approve</a>"
+ 	    lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&member_state=approved\">[_ acs-tcl.approve]</a>"
 	}
 	"banned" {
- 	    lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&member_state=approved\">approve</a>"
+ 	    lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&member_state=approved\">[_ acs-tcl.approve]</a>"
 	}
     }
 
     if { $email_verified_p == "t" } {
- 	lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&email_verified_p=f\">require email verification</a>"	
+ 	lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&email_verified_p=f\">[_ acs-tcl.lt_require_email_verific]</a>"	
     } else {
- 	lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&email_verified_p=t\">approve email</a>"
+ 	lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&email_verified_p=t\">[_ acs-tcl.approve_email]</a>"
     }
 
     return $user_finite_state_links
