@@ -40,9 +40,15 @@ ad_proc -public ad_context_bar_html {
     return $out
 }
 
-ad_proc ad_context_node_list { node_id } {
+ad_proc ad_context_node_list { 
+    {-top_node_id ""}
+    node_id 
+} {
     Starting with the given node_id, return a list of
     [list url instance_name] items for parent nodes.
+
+    @option top_node_id The top-most node_id for which we'll show context bar. This can be used with 
+    the node_id of the nearest subsite to get the context-bar only up to the nearest subsite.
 
     @author Peter Marklund
 } {
@@ -61,13 +67,20 @@ ad_proc ad_context_node_list { node_id } {
 
         set context [concat [list [list $node(url) $node(instance_name)]] $context]
 
+        # If we've reached the top, quit
+        if { ![empty_string_p $top_node_id] && $top_node_id == $node_id } {
+            break
+        }
+
         set node_id $node(parent_id)
+
     }
 
     return $context
 }
 
 ad_proc -public ad_context_bar { 
+    {-top_node_id ""}
     -node_id
     args
 } {
@@ -90,7 +103,7 @@ ad_proc -public ad_context_bar {
 
     set context [list]
 
-    set context [concat $context [ad_context_node_list $node_id]]
+    set context [concat $context [ad_context_node_list -top_node_id $top_node_id $node_id]]
 
     if { [string match admin/* [ad_conn extra_url]] } {
         lappend context [list "[ad_conn package_url]admin/" \
