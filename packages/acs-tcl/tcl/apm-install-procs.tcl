@@ -404,6 +404,8 @@ ad_proc -private apm_package_install {
     array set version [apm_read_package_info_file $spec_file_path]
     set package_key $version(package.key)
 
+    apm_callback_and_log $callback "<h3>Installing $version(package-name) $version(name)</h3>"
+
     # Determine if we are upgrading or installing.
     set upgrade_from_version_name [apm_package_upgrade_from $package_key $version(name)]
     set upgrade_p [expr ![empty_string_p $upgrade_from_version_name]]
@@ -504,7 +506,7 @@ ad_proc -private apm_package_install {
 	apm_package_install_owners -callback $callback $version(owners) $version_id
         apm_package_install_callbacks -callback $callback $version(callbacks) $version_id
 
-	apm_callback_and_log $callback "<h3>Installing $version(package-name), version $version(name).</h3>"
+	apm_callback_and_log $callback "<p>Installed $version(package-name), version $version(name).</p>"
     } {
 	apm_callback_and_log -severity Error $callback "<p>Failed to install $version(package-name), version $version(name).  The following error was generated:
 <pre><blockquote>
@@ -1049,9 +1051,8 @@ ad_proc -public apm_version_update {
 
 
 ad_proc -private apm_packages_full_install {
-    {
-	-callback apm_dummy_callback
-    } pkg_info_list 
+    {-callback apm_dummy_callback} 
+    pkg_info_list 
 } {
 
     Loads the data model, installs, enables, instantiates, and mounts all of the packages in pkg_list.
@@ -1061,9 +1062,13 @@ ad_proc -private apm_packages_full_install {
 	if { [catch {
 	    set spec_file [pkg_info_spec $pkg_info]
 	    set package_key [pkg_info_key $pkg_info]
-	    apm_package_install_data_model -callback $callback $spec_file
-	    set version_id [apm_version_enable -callback $callback \
-				[apm_package_install -callback $callback $spec_file]]
+
+            apm_package_install \
+                -load_data_model \
+                -enable \
+                -callback $callback \
+                $spec_file
+
 	} errmsg] } {
             global errorInfo
 	    apm_callback_and_log -severity Error $callback "<p><font color=red>[string totitle $package_key] not installed.</font>
