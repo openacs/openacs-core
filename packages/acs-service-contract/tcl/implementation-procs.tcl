@@ -304,6 +304,12 @@ ad_proc -private acs_sc::impl::binding::init_procs {
     apm_mark_files_for_reload -force_reload [list $file]
 
     return
+    #----------------------------------------------------------------------
+    # NOTE: End of actual proc above this line. Stale code below
+    #----------------------------------------------------------------------
+
+
+
     
     # LARS:
     # This is the left-over stuff, which we could one day resurrect if we
