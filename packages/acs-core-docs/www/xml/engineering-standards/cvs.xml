@@ -1,10 +1,10 @@
 <?xml version='1.0' ?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-<sect1 id="cvs-guidelines">
+<chapter id="cvs-guidelines">
   <title>
     CVS Guidelines
   </title>
@@ -13,123 +13,9 @@
       By Joel Aufrecht with input from Jeff Davis, Branimir Dolicki, and Jade Rubick.
     </para>
   </authorblurb>
-
-  <sect2>
-    <title>OpenACS CVS Concepts</title>
-    <sect3>
-      <title>Modules</title>
-      <para>
-        All OpenACS code resides within a single CVS module, <computeroutput>openacs-4</computeroutput>.  (The openacs-4 directory contains code for all versions of OpenACS 4 and later, and .LRN 1 and later.)   Checking out this module retrieves all openacs code of any type.  For convenience, subsets of <computeroutput>openacs-4</computeroutput> are repackaged as smaller modules.</para>
-        
-        <para>
-          <computeroutput>acs-core</computeroutput> contains only critical common
-          packages. It does not have any user applications, such as forums,
-          bug-tracker, calendar, or ecommerce.  These can be added at
-          any time.
-        </para>
-      <para>The complete list of core packages is:</para>
-<programlisting>acs-admin 
-acs-api-browser 
-acs-authentication 
-acs-automated-testing 
-acs-bootstrap-installer
-acs-content-repository 
-acs-core-docs 
-acs-kernel 
-acs-lang 
-acs-mail
-acs-messaging 
-acs-reference 
-acs-service-contract 
-acs-subsite 
-acs-tcl
-acs-templating 
-ref-timezones search</programlisting>
-
-        <para>
-          <computeroutput>dotlrn-all</computeroutput> contains the packages required, in combination with acs-core, to run the .LRN system.
-        </para>
-
-        <para>
-          <computeroutput>project-manager-all</computeroutput> contains the packages required, in combination with acs-core, to run the project-manager package.
-        </para>
-
-        <para>
-          Each OpenACS package (i.e., directory in <computeroutput>openacs-4/packages/</computeroutput>) is also aliased as a module of the same name.
-        </para>
-
-    </sect3>
-
-    <sect3>
-      <title>
-        Tags and Branches
-      </title>
-      <para>
-        Tags and Branches look similar in commands, but behave differently. A tag is a fixed point on a branch.  Check out
-            a tag to get a specific version of OpenACS. Check out a branch to
-            get the most current code for that major-minor version (e.g., 5.0.x
-            or 5.1.x). You can only commit to a branch, not a tag, so check out
-            a branch if you will be working on the code. </para>
-            <itemizedlist>
-              <listitem>
-            <para><computeroutput>openacs-<replaceable>x</replaceable>-<replaceable>y</replaceable>-<replaceable>z</replaceable>-final</computeroutput>
-            tags mark final releases of OpenACS.  This tag is applied to the acs-core files for an OpenACS core release, and to the latest released versions of all other packages at the time of release.  Example: <computeroutput>openacs-5-0-4-final</computeroutput>.
-                </para>
-              </listitem>
-              <listitem>
-            <para><computeroutput>dotlrn-<replaceable>x</replaceable>-<replaceable>y</replaceable>-<replaceable>z</replaceable>-final</computeroutput>
-            tags mark final releases of .LRN.  These tags apply only to .LRN packages.  Example: <computeroutput>dotlrn-2-0-1-final</computeroutput>
-                </para>
-              </listitem>
-              <listitem>
-            <para><computeroutput><replaceable>packagename</replaceable>-<replaceable>x</replaceable>-<replaceable>y</replaceable>-<replaceable>z</replaceable>-final</computeroutput>
-                  tags apply to releases of individual packages.  For example, <computeroutput>calendar-2-0-0-final</computeroutput> is a tag that will retrieve only the files in the calendar 2.0.0 release. It applies only to the
-                  calendar package. All non-core, non-dotlrn packages should have a
-                  tag of this style, based on the package name. Many packages have
-                  not been re-released since the new naming convention was adopted
-                  and so don't have a tag of this type.
-                </para>
-              </listitem>
-
-              <listitem>
-            <para><computeroutput>openacs-<replaceable>x</replaceable>-<replaceable>y</replaceable>-compat</computeroutput> tags point to the most recent released version of OpenACS <replaceable>X</replaceable>.<replaceable>Y</replaceable>.
-            It is similar to openacs-x-y-z-compat, except that it will
-            always get the most recent dot-release of Core and the
-            most recent compatible, released version of all other
-            packages.  All of the other tag styles should be static,
-            but -compat tags may change over time. If you want version
-            5.0.4 exactly, use the openacs-5-0-4-final tag. If you want the best newest released code in the 5.0.x release series and you want to upgrade within 5.0.x later, use the compat tag. 
-            </para>
-            <para>
-              For example, if you check out the entire tree with -r
-              openacs-5-0-compat, you might get version 5.0.4 of each OpenACS
-              core package, version 2.0.1 of calendar, version 2.0.3 of each .LRN
-              package, etc. If you update the checkout two months later, you
-              might get version 5.0.5 of all OpenACS core packages and version
-              2.1 of calendar.
-            </para>
-              </listitem>
-              <listitem>
-                <para>oacs-<replaceable>x</replaceable>-<replaceable>y</replaceable> is a <emphasis>branch, </emphasis>, not a tag.  All core packages in the 5.0 release series (5.0.0, 5.0.1, 5.0.2, etc) are also on the oacs-5-0 branch.  Similarly, OpenACS core packages for 5.1.0 are on the oacs-5-1 branch.</para>
-                <para>These branches are used for two purposes.  OpenACS
-                Core packages on these branches are being tidied up for
-            release.  Only bug fixes, not new features, should be
-            added to core packages on release branches.  For all other
-            packages, release branches are the recommended location
-            for development.  For example, if you are working on
-            calendar, which is compatible with openacs 5.0 but not
-                5.1, work on the oacs-5-0 branch.</para>
-              </listitem>
-        <listitem>
-          <para><computeroutput>HEAD</computeroutput> is a branch used
-          for development of core packages.</para>
-        </listitem>
-      </itemizedlist>
-    </sect3>
-  </sect2>
-  <sect2>
+  <sect1 id="using-cvs-with-openacs">
     <title>Using CVS with OpenACS</title>
-    <sect3>
+    <sect2>
       <title>Getting Started</title>
       <para>
         All OpenACS code is available anonymously.  To get code
@@ -207,9 +93,9 @@ emacs avail</programlisting>
         <para>into your <computeroutput>~/.ssh/config</computeroutput> file, then you can use <computeroutput>-d :ext:cvs-server:/cvsroot</computeroutput> instead of <computeroutput>-d :ext:openacs.org:/cvsroot</computeroutput>.  You can then change the definition of <computeroutput>cvs-server</computeroutput> by changing one file instead of editing hundreds of <computeroutput>CVSROOT/Repository</computeroutput> files.</para>
       </sidebar>
 
-    </sect3>
+    </sect2>
 
-    <sect3>
+    <sect2>
       <title>Checkout for Package Development</title>
       <para>If you are actively developing a non-core package, you
       should work from the latest core release branch.  Currently this
@@ -235,9 +121,9 @@ cvs up -d <replaceable>packagename</replaceable></programlisting>
             for a list of available packages and their
             current state.  
       </para>
-    </sect3>
+    </sect2>
 
-    <sect3>
+    <sect2>
       <title>Checkout for Core Development</title>
       <para>If you are actively developing packages in the OpenACS
       Core, work from the HEAD branch.  HEAD is used for active
@@ -251,9 +137,9 @@ cvs up -d <replaceable>packagename</replaceable></programlisting>
       <programlisting>cvs -d:ext:openacs.org:/cvsroot checkout acs-core</programlisting>
       <para>To check out HEAD anonymously:</para>
       <programlisting>cvs -d:pserver:anonymous@openacs.org:/cvsroot checkout acs-core</programlisting>
-    </sect3>
+    </sect2>
 
-    <sect3>
+    <sect2>
       <title>Checkout .LRN</title>
       <para>
         .LRN consists of a given version openacs core, plus a set of
@@ -269,17 +155,132 @@ mv openacs-4 dotlrn
 cd dotlrn/packages
 cvs -d :pserver:anonymous@openacs.org:/cvsroot checkout -r &releasebranch; dotlrn-all
 mv dotlrn/install.xml ..</programlisting>
-    </sect3>
-  </sect2>
-  <sect2>
+    </sect2>
+  <sect2 id="working-with-cvs">
     <title>Working with CVS</title>
     <para>
       Once you have a checkout you can use some commands to track
       what has changed since you checked out your copy.  <computeroutput>cvs -n update</computeroutput> does not change any files, but reports which changes have been updated or locally modified, or are not present in CVS.
     </para>
     <para>To update your files, use <computeroutput>cvs update</computeroutput>.  This will merge changes from the repository with your local files.  It has no effect on the openacs.org repository.</para>
-  </sect2>
-  <sect2>
+    </sect2>
+  </sect1>
+
+  <sect1 id="openacs-cvs-concepts">
+    <title>OpenACS CVS Concepts</title>
+    <sect2>
+      <title>Modules</title>
+      <para>
+        All OpenACS code resides within a single CVS module, <computeroutput>openacs-4</computeroutput>.  (The openacs-4 directory contains code for all versions of OpenACS 4 and later, and .LRN 1 and later.)   Checking out this module retrieves all openacs code of any type.  For convenience, subsets of <computeroutput>openacs-4</computeroutput> are repackaged as smaller modules.</para>
+        
+        <para>
+          <computeroutput>acs-core</computeroutput> contains only critical common
+          packages. It does not have any user applications, such as forums,
+          bug-tracker, calendar, or ecommerce.  These can be added at
+          any time.
+        </para>
+      <para>The complete list of core packages is:</para>
+<programlisting>acs-admin 
+acs-api-browser 
+acs-authentication 
+acs-automated-testing 
+acs-bootstrap-installer
+acs-content-repository 
+acs-core-docs 
+acs-kernel 
+acs-lang 
+acs-mail
+acs-messaging 
+acs-reference 
+acs-service-contract 
+acs-subsite 
+acs-tcl
+acs-templating 
+ref-timezones search</programlisting>
+
+        <para>
+          <computeroutput>dotlrn-all</computeroutput> contains the packages required, in combination with acs-core, to run the .LRN system.
+        </para>
+
+        <para>
+          <computeroutput>project-manager-all</computeroutput> contains the packages required, in combination with acs-core, to run the project-manager package.
+        </para>
+
+        <para>
+          Each OpenACS package (i.e., directory in <computeroutput>openacs-4/packages/</computeroutput>) is also aliased as a module of the same name.
+        </para>
+
+    </sect2>
+
+    <sect2>
+      <title>
+        Tags and Branches
+      </title>
+      <para>
+        Tags and Branches look similar in commands, but behave differently. A tag is a fixed point on a branch.  Check out
+            a tag to get a specific version of OpenACS. Check out a branch to
+            get the most current code for that major-minor version (e.g., 5.0.x
+            or 5.1.x). You can only commit to a branch, not a tag, so check out
+            a branch if you will be working on the code. </para>
+            <itemizedlist>
+              <listitem>
+            <para><computeroutput>openacs-<replaceable>x</replaceable>-<replaceable>y</replaceable>-<replaceable>z</replaceable>-final</computeroutput>
+            tags mark final releases of OpenACS.  This tag is applied to the acs-core files for an OpenACS core release, and to the latest released versions of all other packages at the time of release.  Example: <computeroutput>openacs-5-0-4-final</computeroutput>.
+                </para>
+              </listitem>
+              <listitem>
+            <para><computeroutput>dotlrn-<replaceable>x</replaceable>-<replaceable>y</replaceable>-<replaceable>z</replaceable>-final</computeroutput>
+            tags mark final releases of .LRN.  These tags apply only to .LRN packages.  Example: <computeroutput>dotlrn-2-0-1-final</computeroutput>
+                </para>
+              </listitem>
+              <listitem>
+            <para><computeroutput><replaceable>packagename</replaceable>-<replaceable>x</replaceable>-<replaceable>y</replaceable>-<replaceable>z</replaceable>-final</computeroutput>
+                  tags apply to releases of individual packages.  For example, <computeroutput>calendar-2-0-0-final</computeroutput> is a tag that will retrieve only the files in the calendar 2.0.0 release. It applies only to the
+                  calendar package. All non-core, non-dotlrn packages should have a
+                  tag of this style, based on the package name. Many packages have
+                  not been re-released since the new naming convention was adopted
+                  and so don't have a tag of this type.
+                </para>
+              </listitem>
+
+              <listitem>
+            <para><computeroutput>openacs-<replaceable>x</replaceable>-<replaceable>y</replaceable>-compat</computeroutput> tags point to the most recent released version of OpenACS <replaceable>X</replaceable>.<replaceable>Y</replaceable>.
+            It is similar to openacs-x-y-z-compat, except that it will
+            always get the most recent dot-release of Core and the
+            most recent compatible, released version of all other
+            packages.  All of the other tag styles should be static,
+            but -compat tags may change over time. If you want version
+            5.0.4 exactly, use the openacs-5-0-4-final tag. If you want the best newest released code in the 5.0.x release series and you want to upgrade within 5.0.x later, use the compat tag. 
+            </para>
+            <para>
+              For example, if you check out the entire tree with -r
+              openacs-5-0-compat, you might get version 5.0.4 of each OpenACS
+              core package, version 2.0.1 of calendar, version 2.0.3 of each .LRN
+              package, etc. If you update the checkout two months later, you
+              might get version 5.0.5 of all OpenACS core packages and version
+              2.1 of calendar.
+            </para>
+              </listitem>
+              <listitem>
+                <para>oacs-<replaceable>x</replaceable>-<replaceable>y</replaceable> is a <emphasis>branch, </emphasis>, not a tag.  All core packages in the 5.0 release series (5.0.0, 5.0.1, 5.0.2, etc) are also on the oacs-5-0 branch.  Similarly, OpenACS core packages for 5.1.0 are on the oacs-5-1 branch.</para>
+                <para>These branches are used for two purposes.  OpenACS
+                Core packages on these branches are being tidied up for
+            release.  Only bug fixes, not new features, should be
+            added to core packages on release branches.  For all other
+            packages, release branches are the recommended location
+            for development.  For example, if you are working on
+            calendar, which is compatible with openacs 5.0 but not
+                5.1, work on the oacs-5-0 branch.</para>
+              </listitem>
+        <listitem>
+          <para><computeroutput>HEAD</computeroutput> is a branch used
+          for development of core packages.</para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+  </sect1>
+
+  <sect1 id="contributing-code">
     <title>Contributing code back to OpenACS</title>
     <para>There are three main ways to contribute code to OpenACS:</para>
     <orderedlist>
@@ -346,12 +347,15 @@ new revision: 1.94; previous revision: 1.93
 done
 cvs commit: Rebuilding administrative file database</literallayout>
             </listitem>
+          <listitem>
+            <para>See <xref linkend="releasing-package"/></para>
+          </listitem>
           </orderedlist>
           
       </listitem>
     </orderedlist>
 
-  <sect3 id="Commit_Rules">
+  <sect2 id="Commit_Rules">
     <title>
       Rules for Committing Code to the OpenACS.org repository
     </title>
@@ -576,7 +580,7 @@ cvs commit: Rebuilding administrative file database</literallayout>
         </para>
       </listitem>
     </orderedlist>
-    <sect4>
+    <sect3>
       <title>
         Reasons
       </title>
@@ -619,9 +623,9 @@ cvs commit: Rebuilding administrative file database</literallayout>
         needed, and provides a common ancestor between the fork and the
         OpenACS code so that patches can be generated.
       </para>
-    </sect4>
-  </sect3>
-  <sect3>
+    </sect3>
+  </sect2>
+  <sect2>
     <title>
       Informal Guidelines
     </title>
@@ -739,13 +743,14 @@ cvs commit: Rebuilding administrative file database</literallayout>
       </listitem>
 
     </itemizedlist>
-  </sect3>
-    <sect3>
-      <title>Additional Resources</title>
-      <itemizedlist>
-        <listitem>
-          <para>
-            The 
+  </sect2>
+  </sect1>
+  <sect1 id="cvs-resources">
+    <title>Additional Resources for CVS</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The 
             <ulink url="http://www.openacs.org/cvs">
               OpenACS cvs web</ulink>
             and
@@ -772,13 +777,43 @@ cvs commit: Rebuilding administrative file database</literallayout>
           </ulink>
           </para>
         </listitem>
-      </itemizedlist>
-    </sect3>
 
-  </sect2>
+        
+        <listitem>
+          <para>
+            <ulink url="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs.html">cvs manual</ulink>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <ulink url="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs_7.html#SEC66">adding files/dirs with cvs</ulink>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <ulink url="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs_10.html#SEC82">file locking etc. with cvs</ulink>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <ulink url="http://www.piskorski.com/docs/cvs-conventions.html">Piskorski's cvs refs</ulink>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <ulink url="http://openacs.org/doc/current/backups-with-cvs.html">backup with cvs</ulink>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <ulink url="http://openacs.org/forums/message-view?message_id=178551">merging 2 file heirarchies with cvs</ulink>
+          </para>
+        </listitem>
+      </itemizedlist>
+  </sect1>
   <para>
     <phrase role="cvstag">
       ($Id$)
     </phrase>
   </para>
-</sect1>
+</chapter>
