@@ -618,7 +618,7 @@ declare
   v_template_id                          cr_templates.template_id%TYPE;
   v_child_type                           record;
   v_rel_type                             record;
-  v_pub_wf                               record;
+  -- v_pub_wf                               record;
 begin
 
   -- validate children
@@ -688,25 +688,28 @@ begin
   -- KG: logic is wrong here.  Only the latest workflow matters, and even
   -- that is a little problematic because more than one workflow may be
   -- open on an item.  In addition, this should be moved to CMS.
+  
+  -- Removed this as having workflow stuff in the CR is just plain wrong.
+  -- DanW, Aug 25th, 2001.
 
-  for v_pub_wf in  select
-                     case_id, state
-                   from
-                     wf_cases
-                   where
-                     workflow_key = ''publishing_wf''
-                   and
-                     object_id = is_publishable__item_id
+  --   for v_pub_wf in  select
+  --                      case_id, state
+  --                    from
+  --                      wf_cases
+  --                    where
+  --                      workflow_key = ''publishing_wf''
+  --                    and
+  --                      object_id = is_publishable__item_id
+  -- 
+  --   LOOP
+  --     if v_pub_wf.state != ''finished'' then
+  --        return ''f'';
+  --     end if;
+  --   end loop;
 
-  LOOP
-    if v_pub_wf.state != ''finished'' then
-       return ''f'';
-    end if;
-  end loop;
-
-  if NOT FOUND then 
-     return ''f'';
-  end if;
+  -- if NOT FOUND then 
+  --   return ''f'';
+  -- end if;
 
   return ''t'';
  
@@ -781,23 +784,26 @@ create function content_item__delete (integer)
 returns integer as '
 declare
   delete__item_id                alias for $1;  
-  v_wf_cases_val                 record;
+  -- v_wf_cases_val                 record;
   v_symlink_val                  record;
   v_revision_val                 record;
   v_rel_val                      record;
 begin
 
-  raise NOTICE ''Deleting associated workflows...'';
+  -- Removed this as having workflow stuff in the CR is just plain wrong.
+  -- DanW, Aug 25th, 2001.
+
+  --   raise NOTICE ''Deleting associated workflows...'';
   -- 1) delete all workflow cases associated with this item
-  for v_wf_cases_val in select
-                          case_id
-                        from
-                          wf_cases
-                        where
-                          object_id = delete__item_id 
-  LOOP
-    PERFORM workflow_case__delete(v_wf_cases_val.case_id);
-  end loop;
+  --   for v_wf_cases_val in select
+  --                           case_id
+  --                         from
+  --                           wf_cases
+  --                         where
+  --                           object_id = delete__item_id 
+  --   LOOP
+  --     PERFORM workflow_case__delete(v_wf_cases_val.case_id);
+  --   end loop;
 
   raise NOTICE ''Deleting symlinks...'';
   -- 2) delete all symlinks to this item

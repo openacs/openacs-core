@@ -162,6 +162,7 @@ of the parent object in inherit_permissions');
     if c_perm_cur%NOTFOUND then
       v_ret := 'f';
     end if;
+    close c_perm_cur;
     return v_ret;
   end has_revoke_authority;
 
@@ -320,6 +321,7 @@ of the parent object in inherit_permissions');
       exit when is_recursive = 'f';
     
     end loop;
+    close c_object_cur;
 
   end revoke_permission;
 

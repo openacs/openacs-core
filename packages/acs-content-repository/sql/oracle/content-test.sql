@@ -1,4 +1,4 @@
-set serveroutput on
+set serveroutput on size 1000000 format wrapped
 
 declare
   folder_id		cr_folders.folder_id%TYPE;
@@ -24,8 +24,8 @@ begin
 
 
 -- create folders and an item
-folder_id := content_folder.new('grandpa', 'Grandpa', NULL, -1);
-folder_b_id := content_folder.new('grandma', 'Grandma', NULL, -1);
+folder_id := content_folder.new('grandpa', 'Grandpa', NULL, -100);
+folder_b_id := content_folder.new('grandma', 'Grandma', NULL, -100);
 sub_folder_id := content_folder.new('pa', 'Pa', NULL, folder_id);
 sub_sub_folder_id := content_folder.new('me', 'Me', NULL, sub_folder_id);
 item_id := content_item.new('puppy', sub_sub_folder_id);
@@ -210,7 +210,7 @@ content_item.move(sub_sub_folder_id, folder_id);
 --dbms_output.put_line('Path for ' || item_id || ' is ' || 
 --content_item.get_path(item_id));
 --dbms_output.put_line('Moving grandpa to pa - this should''nt work');
-content_folder.move(folder_id, sub_folder_id);
+-- content_folder.move(folder_id, sub_folder_id);
 --dbms_output.put_line('Path for ' || item_id || ' is ' || 
 --  content_item.get_path(item_id));
 --dbms_output.put_line('Renaming puppy to kitty...');
