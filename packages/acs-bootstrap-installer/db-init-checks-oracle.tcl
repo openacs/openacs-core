@@ -74,7 +74,8 @@ This variable must be set in order for the Oracle software to work properly (eve
         set my_error_p 1
     } 
 
-    set db [ns_db gethandle]
+    set pool [lindex [nsv_get db_available_pools .] 0]
+    set db [ns_db gethandle $pool]
 
     # First we look for the overall presence of interMedia
     set sql "SELECT (SELECT COUNT(*) FROM USER_ROLE_PRIVS WHERE GRANTED_ROLE = 'CTXAPP') ctxrole,
