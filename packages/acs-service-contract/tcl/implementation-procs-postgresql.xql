@@ -8,6 +8,7 @@
             select acs_sc_impl__new(
                        :contract_name, 
                        :name,
+                       :pretty_name,
                        :owner
                    ); 	
         </querytext>

@@ -13,7 +13,8 @@
 
   <fullquery name="acs_sc::impl::get.select_impl">
     <querytext>
-        select impl_name, 
+        select impl_name,
+               impl_pretty_name,
                impl_owner_name, 
                impl_contract_name
         from   acs_sc_impls
