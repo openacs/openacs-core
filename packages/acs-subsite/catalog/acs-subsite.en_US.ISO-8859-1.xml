@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d3" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.0d4" locale="en_US" charset="ISO-8859-1">
 
   <msg key="About_You">About You</msg>
-  <msg key="again">again</msg>
-  <msg key="Answer">Answer:</msg>
-  <msg key="answer">answer:</msg>
-  <msg key="at">at</msg>
   <msg key="Account_closed">
     &lt;p&gt;Your account is currently closed.&lt;/p&gt;
     &lt;p&gt;If you wish, we can &lt;a href=&quot;%restore_url%&quot;&gt;reopen your account&lt;/a&gt;.&lt;/p&gt;
   </msg>
   <msg key="Account_reopened_message">Your account at %system_name% has been reopened. Welcome back.</msg>
   <msg key="Account_reopened_title">Account Reopened</msg>
+  <msg key="again">again</msg>
+  <msg key="Answer">Answer:</msg>
+  <msg key="answer">answer:</msg>
+  <msg key="at">at</msg>
   <msg key="Awaiting_Approval">Awaiting Approval</msg>
   <msg key="Bad_Password">Bad Password</msg>
   <msg key="Basic_Information">Basic Information</msg>
@@ -28,10 +28,51 @@
   <msg key="edit_your_alerts">edit your alerts</msg>
   <msg key="Email">Email</msg>
   <msg key="email_address">email address:</msg>
+  <msg key="email_body_Admin_creation_password">
+%first_names% %last_name%, 
+
+You have been added as a user to %system_name%
+at %system_url%
+
+Here's how you can log in at %system_url%:
+
+%account_id_label%: %account_id%
+%password_label%: %password%
+
+Please visit the following link to change your password now:
+
+%reset_password_url%
+
+Thank you,
+%admin_first_names% %admin_last_name%
+</msg>
+  <msg key="email_body_Forgotten_password">Here is your new login information:
+
+%account_id_label%: %account_id%
+%password_label%: %password%
+
+Please visit the following link to change your password now:
+
+%reset_password_url%
+</msg>
+  <msg key="email_body_Registration_password">Thank you for registering at %system_name%.
+
+Here's how you can log in at %system_url%:
+	    
+%account_id_label%: %account_id%
+%password_label%: %password%
+
+Please visit the following link to change your password now:
+
+%reset_password_url%
+</msg>
   <msg key="Email_Confirmation">Email Confirmation</msg>
   <msg key="Email_not_Requested">Email not Requested</msg>
   <msg key="Email_Password">Email Password</msg>
   <msg key="email_password">&quot;email password&quot;</msg>
+  <msg key="email_subject_Admin_creation_password">You have been added as a user to %system_name%</msg>
+  <msg key="email_subject_Forgotten_password">Your forgotten password on %system_name%</msg>
+  <msg key="email_subject_Registration_password">Welcome to %system_name%</msg>
   <msg key="Error_sending_mail">Error sending mail</msg>
   <msg key="Feature_disabled">Feature disabled</msg>
   <msg key="First_names">First names</msg>

@@ -433,12 +433,14 @@ ad_proc -private auth::local::registration::Register {
     if { $generated_pwd_p || \
              [parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] || \
              [parameter::get -parameter EmailRegistrationConfirmationToUserP -default 0] } {
+
 	with_catch errmsg {
-	    ns_sendmail \
-                $email \
-                [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]] \
-                [_ acs-subsite.lt_Welcome_to_system_nam] \
-                [_ acs-subsite.lt_Thank_you_for_visitin]
+            auth::password::email_password \
+                -username $username \
+                -authority_id $authority_id \
+                -password $password \
+                -message_type "Registration" \
+                -from [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]]
 	} {
             # We don't fail hard here, just log an error
             global errorInfo
