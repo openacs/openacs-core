@@ -7,19 +7,21 @@
       <querytext>
       
 	begin
-	    :1 := acs.add_user(user_id => :user_id,
-			 email => :email,
-			 url => :url,
-			 first_names => :first_names,
-			 last_name => :last_name,
-			 password => :hashed_password,
-	                 salt => :salt,
-	                 password_question => :password_question,
-	                 password_answer => :password_answer,
-	                 creation_ip => :peeraddr,
-	                 email_verified_p => :email_verified_p,
-	                 member_state => :member_state);
-	    end;
+	    :1 := acs.add_user(
+                user_id => :user_id,
+		email => :email,
+		url => :url,
+		first_names => :first_names,
+		last_name => :last_name,
+		password => :hashed_password,
+	        salt => :salt,
+	        password_question => :password_question,
+	        password_answer => :password_answer,
+	        creation_ip => :peeraddr,
+	        email_verified_p => :email_verified_p,
+	        member_state => :member_state
+            );
+	end;
 	
       </querytext>
 </fullquery>
