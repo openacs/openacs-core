@@ -917,3 +917,80 @@ ad_proc -public ad_set_form_values {
     }
 }
 
+ad_proc -public ad_form_new_p {
+    -key
+} {
+
+    This is for pages built with ad_form that handle edit and add requests in one file.
+    It determines wether the current request is for editing an existing item, 
+    in which case it returns 0, or adding a new one, which will return 1.
+    
+    <p>
+
+    For this to work there needs to be an element defined in the form that is of
+    the ad_form pseudo datatype "key". If you don't specify -key then this proc
+    will try to guess it from the existing variables - if there is exactly one that 
+    ends on _id then it takes that one, otherwise you have to specify it manually.
+
+    <p>
+
+    It does not make sense to use this in pages that don't use ad_form.
+
+    <p>
+
+    Example usage:
+    <pre>
+    if { [ad_form_new_p] } {
+        ad_require_permission $package_id create
+        set page_title "New Item"
+    } else {
+        ad_require_permission $item_id write
+        set page_title "Edit Item"
+    }
+
+    </pre>
+
+    @param key the name of the key element. In the above example: <code>ad_form_new_p -key item_id</code>
+} {
+
+    set form [ns_getform]
+    if { [empty_string_p $form] } {
+        # no form. assume new
+        return 1
+    }
+    
+    if { ![info exists key] } {
+        # no key name given. loop through form and try to guess one
+
+        for { set i 0 } { $i < [ns_set size $form] } { incr i } {
+            
+            if { [regexp {_id$} [ns_set key $form $i]] } {
+                # this could be a key
+                
+                if { [info exists key] } {
+                    # we found one before already, bad. throw an error
+                    unset key
+                    break
+                }
+                set key [ns_set key $form $i]
+            }
+        }
+        if { ![info exists key] } {
+            ad_return_error "ad_form_new_p failed" "Could not guess key element. Please specify it by using \"ad_form_new_p -key your_key_id\"."
+            ad_script_abort
+        }
+    }
+
+    if { [ns_set find $form $key] == -1 } {
+        # no key
+        return 1
+    }
+
+    if { [ns_set get $form __new_p] == 1 } {
+        # there is a key, but __new_p is also set
+        return 1
+    }
+    
+    # not new
+    return 0
+}
