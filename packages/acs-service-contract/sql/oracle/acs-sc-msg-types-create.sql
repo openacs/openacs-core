@@ -344,6 +344,7 @@ begin
     v_msg_type_id := acs_sc_msg_type.new('integer','');
     v_msg_type_id := acs_sc_msg_type.new('string','');
     v_msg_type_id := acs_sc_msg_type.new('boolean','');
+    v_msg_type_id := acs_sc_msg_type.new('timestamp','');
     v_msg_type_id := acs_sc_msg_type.new('uri','');
     v_msg_type_id := acs_sc_msg_type.new('version','');
     v_msg_type_id := acs_sc_msg_type.new('float','');
