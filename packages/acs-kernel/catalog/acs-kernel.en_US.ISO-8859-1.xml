@@ -51,6 +51,7 @@
   <msg key="common_ok">ok</msg>
   <msg key="common_Open">Open</msg>
   <msg key="common_open">open</msg>
+  <msg key="common_Permissions">Permissions</msg>
   <msg key="common_Previous">Previous</msg>
   <msg key="common_previous">previous</msg>
   <msg key="common_Register">Register</msg>
