@@ -10,10 +10,23 @@
 -- TRIGGERS --
 --------------
 
--- The insert trigger was dummied up in groups-create.sql, so we just need
--- to replace the trigger function, not create the trigger
+drop trigger membership_rels_in_tr on membership_rels;
+drop function membership_rels_in_tr ();
 
-create or replace function membership_rels_in_tr () returns opaque as '
+-- The insert trigger was dummied up in groups-create.sql, so we just need
+-- to replace the trigger function, not create the trigger.
+
+-- However, PG 7.3 introduces a new type "trigger" for the return type
+-- needed for functions called by triggers.  "create function" transmorgifies
+-- the return type "opaque" to "trigger" so PG 7.2 dumps can be restored into
+-- PG 7.3.  But "create or replace" doesn't do it.   We can't use "trigger"
+-- because we currently are still supporting PG 7.2.  Isn't life a pleasure?
+
+-- I'm leaving the triggers we aren't overriding as "create or replace" because
+-- this will be the right thing to do if the PG folks fix this problem or when
+-- we drop support of PG 7.2 and no longer need to declare these as type "opaque"
+
+create function membership_rels_in_tr () returns opaque as '
 declare
   v_object_id_one acs_rels.object_id_one%TYPE;
   v_object_id_two acs_rels.object_id_two%TYPE;
@@ -68,6 +81,9 @@ begin
   return new;
 
 end;' language 'plpgsql';
+
+create trigger membership_rels_in_tr after insert  on membership_rels
+for each row execute procedure membership_rels_in_tr ();
 
 create or replace function membership_rels_up_tr () returns opaque as '
 declare
