@@ -416,6 +416,7 @@ set package_id [ad_conn package_id]
 set user_id [ad_conn user_id]
 
 set context_bar [ad_context_bar]
+# this line should use permission::permission_p instead of ad_permission_p
 set create_p [ad_permission_p $package_id create]
 
 db_multirow notes notes {
@@ -449,7 +450,7 @@ ad_return_template
 
 <para>
 This example shows both the Tcl and PL/SQL APIs for checking
-permissions.  The Tcl proc <computeroutput>ad_permission_p</computeroutput> and the PL/SQL
+permissions.  The Tcl proc <computeroutput>permission::permission_p</computeroutput> and the PL/SQL
 function <computeroutput>acs_permission.permission_p</computeroutput> both return a flag
 indicating whether the current user has permission to perform the
 given action. By default, the Tcl procedure extracts the user_id out
