@@ -14,13 +14,11 @@ aa_register_case auth_authenticate {
 } {    
     # Initialize variables
     set user_id [ad_conn user_id]
-    db_1row get_admin_info {
-        select email
-        from cc_users
-        where user_id = :user_id
-    }      
+    set username [acs_user::get_element -element username]
+
     # We need to use a known password and the existing one cannot
-    # be retrieved
+    # be retrieved, so we're going to set it to something we know
+    # sorry, admin
     set password "test_password"
 
     aa_run_with_teardown \
@@ -32,7 +30,7 @@ aa_register_case auth_authenticate {
             # Successful authentication
             array set auth_info \
                 [auth::authenticate \
-                     -username $email \
+                     -username $username \
                      -password $password]
     
             aa_equals "auth_status for successful authentication" $auth_info(auth_status) "ok"
@@ -42,7 +40,7 @@ aa_register_case auth_authenticate {
             array unset auth_info
             array set auth_info \
                 [auth::authenticate \
-                     -username $email \
+                     -username $username \
                      -password "blabla"]
 
             aa_equals "auth_status for bad password authentication" $auth_info(auth_status) "bad_password"
@@ -52,7 +50,7 @@ aa_register_case auth_authenticate {
             array unset auth_info
             array set auth_info \
                 [auth::authenticate \
-                     -username $email \
+                     -username $username \
                      -password ""]
 
             aa_equals "auth_status for blank password authentication" $auth_info(auth_status) "bad_password"
@@ -83,7 +81,7 @@ aa_register_case auth_authenticate {
             array set auth_info \
                 [auth::authenticate \
                      -authority_id -123 \
-                     -username $email \
+                     -username $username \
                      -password $password]
 
             aa_equals "auth_status for bad authority_id authentication" $auth_info(auth_status) "auth_error"
@@ -93,16 +91,19 @@ aa_register_case auth_authenticate {
             set closed_states {banned rejected "needs approval" deleted}
             foreach closed_state $closed_states {
                 acs_user::change_state -user_id $user_id -state $closed_state
- 
-               # Successful authentication
+
+                # Successful authentication
                 array unset auth_info
                 array set auth_info \
                     [auth::authenticate \
-                         -username $email \
+                         -username $username \
                          -password $password]
     
                 aa_equals "auth_status for successful authentication" $auth_info(auth_status) "ok"
-                aa_equals "account_status for successful authentication" $auth_info(account_status) "closed"
+                if { [string equal $auth_info(auth_status) "ok"] } {
+                    # Only perform this test if auth_status is ok, otherwise account_status won't be set
+                    aa_equals "account_status for successful authentication" $auth_info(account_status) "closed"
+                }
             }
     
             # Error handling    
