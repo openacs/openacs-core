@@ -983,11 +983,11 @@ db_multirow \
         <para>Implement your proc as <computeroutput>my_proc_not_cached</computeroutput></para>
       </listitem>
       <listitem>
-        <para>Create a version of your proc called <computeroutput>my_proc</computeroutput> which wraps the non-cached version in the caching mechanism.  In this example, my_proc_not_cached takes one argument, -foo, so the wrapper passes that on.</para>
+        <para>Create a version of your proc called <computeroutput>my_proc</computeroutput> which wraps the non-cached version in the caching mechanism.  In this example, my_proc_not_cached takes one argument, -foo, so the wrapper passes that on.  The wrapper also uses the list command, to ensure that the arguments get passed correctly and to prevent commands passed in as arguments from being executed.</para>
         <programlisting>ad_proc my_proc {-foo} {
         Get a cached version of my_proc.
 } {
-    return [util_memoize my_proc_not_cached -foo $foo]
+    return [util_memoize [list my_proc_not_cached -foo $foo]]
 }</programlisting>
       </listitem>
       <listitem>
