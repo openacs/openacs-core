@@ -8,22 +8,19 @@
     <singleton-p>t</singleton-p>
     <auto-mount>notifications</auto-mount>
 
-    <version name="5.0d1" url="http://openacs.org/repository/download/apm/notifications-5.0d1.apm">
-    <database-support>
-        <database>oracle</database>
-        <database>postgresql</database>
-    </database-support>
-        <owner url="mailto:ben@openforce.net">Ben Adida</owner>
+    <version name="5.0.0a5" url="http://openacs.org/repository/download/apm/notifications-5.0.0a5.apm">
+        <owner url="http://openacs.org">OpenACS</owner>
         <summary>Notification Management</summary>
-        <release-date>2003-02-17</release-date>
+        <release-date>2003-11-07</release-date>
+        <vendor url="http://openacs.org/">OpenACS</vendor>
 
-        <provides url="notifications" version="5.0d1"/>
+        <provides url="notifications" version="5.0.0a5"/>
         <requires url="acs-mail-lite" version="0.1d"/>
 
         <callbacks>
-            <callback type="after-install" proc="notification::apm::after_install"/>
-            <callback type="before-uninstall" proc="notification::apm::before_uninstall"/>
-            <callback type="after-upgrade" proc="notification::apm::after_upgrade"/>
+            <callback type="before-uninstall"  proc="notification::apm::before_uninstall"/>
+            <callback type="after-install"  proc="notification::apm::after_install"/>
+            <callback type="after-upgrade"  proc="notification::apm::after_upgrade"/>
         </callbacks>
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailDomain"  description="The domain for the notification email address" section_name="email"/>

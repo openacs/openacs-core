@@ -6,23 +6,20 @@
     <pretty-plural>Reference Data - Timezones</pretty-plural>
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
-
-    <version name="0.4" url="http://openacs.org/repository/download/apm/ref-timezones-0.4.apm">
-    <database-support>
-        <database>oracle</database>
-        <database>postgresql</database>
-    </database-support>
+    
+    <version name="5.0.0a5" url="http://openacs.org/repository/download/apm/ref-timezones-5.0.0a5.apm">
         <owner url="mailto:jon@mayuli.com">Jon Griffin</owner>
         <summary>This is the timezone data for the reference data package.</summary>
-        <release-date>2001-09-03</release-date>
+        <release-date>2003-11-07</release-date>
         <vendor url="www.mayuli.com">Mayuli Enterprises LLC</vendor>
-        <description format="text/plain">This is the timezone data for the reference data package.
-</description>
+        <description format="text/plain">This is the timezone data for the reference data package.</description>
 
-        <provides url="ref-timezones" version="0.4"/>
-        <requires url="acs-kernel" version="5.0d13"/>
-        <requires url="acs-reference" version="0.3d"/>
+        <provides url="ref-timezones" version="5.0.0a5"/>
+        <requires url="acs-kernel" version="5.0.0a5"/>
+        <requires url="acs-reference" version="5.0.0a5"/>
 
+        <callbacks>
+        </callbacks>
         <parameters>
         <!-- No version parameters -->
         </parameters>
