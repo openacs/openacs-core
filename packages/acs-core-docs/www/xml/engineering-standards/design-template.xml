@@ -211,13 +211,6 @@
       maintainability of our systems in the face of constant change. 
     </para>
 
-    <para>
-      Also noteworthy is that although the OpenACS currently utilizes the
-      AOLserver Tcl API, the current drive towards Java is likely to effect
-      a change in the content of these sections in the future.
-    </para>
-
-
   </sect2>
 
   <sect2 id="yourpackage-design-data-model">
