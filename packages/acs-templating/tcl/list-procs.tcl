@@ -831,11 +831,16 @@ ad_proc -private template::list::template {
 ad_proc -private template::list::prepare_for_rendering {
     {-name:required}
 } {
-    set level [template::adp_level]
+    set __level [template::adp_level]
 
     # Provide a reference to the list properties for use by the list template
     # This one is named __list_properties to avoid getting scrambled by below multirow
     get_reference -name $name -local_name __list_properties
+
+    # Upvar other variables passed in through the pass_properties property
+    foreach var $__list_properties(pass_properties) {
+        upvar #$__level $var $var
+    }
 
     #
     # Dynamic columns: display_eval, link_url_eval, aggregate
@@ -843,7 +848,7 @@ ad_proc -private template::list::prepare_for_rendering {
 
     if { $__list_properties(dynamic_cols_p) || $__list_properties(aggregates_p) } {
         foreach element_ref $__list_properties(element_refs) {
-            upvar #$level $element_ref element_properties
+            upvar #$__level $element_ref element_properties
             
             # display_eval, link_url_eval
             foreach eval_property { display link_url } {
@@ -883,7 +888,7 @@ ad_proc -private template::list::prepare_for_rendering {
         template::multirow foreach $__list_properties(multirow) {
 
             foreach element_ref $__list_properties(element_refs) {
-                upvar #$level $element_ref __element_properties
+                upvar #$__level $element_ref __element_properties
                 
                 # display_eval, link_url_eval
                 foreach eval_property { display link_url } {
