@@ -13,6 +13,10 @@
   <b>&raquo;</b> <a href="@parameter_url@">Change system locale</a>: Current system locale is <b>@system_locale_label@ [ @system_locale@ ]</b>
 </p>
 
+<p>
+  <b>&raquo;</b> <a href="lookup">Look up message</a>
+</p>
+
 <if @timezone_p@>
   <p>
     <b>&raquo;</b> <a href="set-system-timezone">Change system timezone</a>: Current system timezone is <b>@timezone@</b>
