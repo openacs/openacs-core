@@ -613,7 +613,7 @@ ad_proc subsite::get_pageflow_struct {} {
     return $pageflow
 }
 
-ad_proc subsite::main_site_id {} {
+ad_proc -public subsite::main_site_id {} {
     Get the package_id of the Main Site. The Main Site is the subsite
     that is always mounted at '/' and that has a number
     of site-wide parameter settings.
@@ -623,4 +623,25 @@ ad_proc subsite::main_site_id {} {
     array set main_node [site_node::get_from_url -url "/"]
     
     return $main_node(object_id)
+}
+
+
+ad_proc -public subsite::get_template_options {} {
+    Gets options for subsite master template for use with a form builder select widget.
+} {
+    set master_template_options [list]
+    lappend master_template_options [list "Default" "/www/default-master"]
+    lappend master_template_options [list "Community" "/packages/acs-subsite/www/group-master"]
+    set current_master [parameter::get -parameter DefaultTemplate -package_id [ad_conn subsite_id]]
+    set found_p 0
+    foreach elm $master_template_options {
+        if { [string equal $current_master [lindex $elm 1]] } {
+            set found_p 1
+            break
+        }
+    }
+    if { !$found_p } {
+        lappend master_template [list $current_master $current_master]
+    }
+    return $master_template_options
 }
