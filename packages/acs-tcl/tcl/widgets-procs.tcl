@@ -12,12 +12,12 @@ proc_doc state_widget { {default ""} {select_name "usps_abbrev"}} "Returns a sta
     }
 
     db_foreach all_states {
-	select state_name, usps_abbrev from states order by state_name
+	select state_name, abbrev from us_states order by state_name
     } {
-        if { $default == $usps_abbrev } {
-            append widget_value "<option value=\"$usps_abbrev\" SELECTED>$state_name</option>\n" 
+        if { $default == $abbrev } {
+            append widget_value "<option value=\"$abbrev\" SELECTED>$state_name</option>\n" 
         } else {            
-            append widget_value "<option value=\"$usps_abbrev\">$state_name</option>\n"
+            append widget_value "<option value=\"$abbrev\">$state_name</option>\n"
         }
     }
     append widget_value "</select>\n"
@@ -36,12 +36,12 @@ proc_doc country_widget { {default ""} {select_name "country_code"} {size_subtag
 	}
     }
     db_foreach all_countries {
-	select country_name, iso from country_codes order by country_name 
+	select default_name, iso from countries order by default_name 
     } {
         if { $default == $iso } {
-            append widget_value "<option value=\"$iso\" SELECTED>$country_name</option>\n" 
+            append widget_value "<option value=\"$iso\" SELECTED>$default_name</option>\n" 
         } else {            
-            append widget_value "<option value=\"$iso\">$country_name</option>\n"
+            append widget_value "<option value=\"$iso\">$default_name</option>\n"
         }
     }
     append widget_value "</select>\n"
