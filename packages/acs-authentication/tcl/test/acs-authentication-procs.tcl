@@ -115,10 +115,10 @@ aa_register_case auth_authenticate {
                          -username $username \
                          -password $password]
     
-                aa_equals "auth_status for successful authentication" $auth_info(auth_status) "ok"
+                aa_equals "auth_status for '$closed_state' user" $auth_info(auth_status) "ok"
                 if { [string equal $auth_info(auth_status) "ok"] } {
                     # Only perform this test if auth_status is ok, otherwise account_status won't be set
-                    aa_equals "account_status for successful authentication" $auth_info(account_status) "closed"
+                    aa_equals "account_status for '$closed_state' user" $auth_info(account_status) "closed"
                 }
             }
     
@@ -259,6 +259,7 @@ aa_register_case auth_confirm_email {
         -rollback \
         -test_code {
             db_dml update { update users set email_verified_p = 'f' where user_id = :user_id }
+            acs_user::flush_cache -user_id $user_id
    
             aa_equals "email should be not verified" [acs_user::get_element -user_id $user_id -element email_verified_p] "f"
             
@@ -638,11 +639,11 @@ aa_register_case auth_use_email_for_login_p {
             parameter::set_value -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -value 0
             aa_false "Param UseEmailForLoginP 0 -> false" [auth::UseEmailForLoginP]
 
-            parameter::set_value -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -value {}
-            aa_false "Param UseEmailForLoginP {} -> false" [auth::UseEmailForLoginP]
-
             array set elms [auth::get_registration_elements]
             aa_false "Registration elements do contain username" [expr [lsearch [concat $elms(required) $elms(optional)] "username"] == -1]
+
+            parameter::set_value -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -value {}
+            aa_true "Param UseEmailForLoginP {} -> true" [auth::UseEmailForLoginP]
 
             parameter::set_value -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -value {foo}
             aa_true "Param UseEmailForLoginP foo -> true" [auth::UseEmailForLoginP]
