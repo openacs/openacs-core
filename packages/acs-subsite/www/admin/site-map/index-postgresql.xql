@@ -18,13 +18,6 @@
 </fullquery>
 
  
-<fullquery name="node_id">      
-      <querytext>
-      select site_node__node_id('/', null) 
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="nodes_select">      
       <querytext>
 select package_id,

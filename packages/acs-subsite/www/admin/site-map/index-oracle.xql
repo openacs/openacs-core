@@ -18,13 +18,6 @@
 </fullquery>
 
  
-<fullquery name="node_id">      
-      <querytext>
-      select site_node.node_id('/') from dual
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="nodes_select">      
       <querytext>
       
