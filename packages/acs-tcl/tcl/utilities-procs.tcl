@@ -2709,6 +2709,30 @@ ad_proc -public ad_tcl_vars_list_to_ns_set {
     return $set_id
 }
 
+ad_proc -public util_sets_equal_p { list1 list2 } {
+    Tests whether each unique string in list1 occurs as many
+    times in list1 as in list2 and vice versa (regarless of order).
+
+    @return 1 if the lists have identical sets and 0 otherwise
+
+    @author Peter Marklund
+} {
+    if { [llength $list1] != [llength $list2] } {
+        return 0
+    }
+
+    set sorted_list1 [lsort $list1]
+    set sorted_list2 [lsort $list2]
+
+    for { set index1 0 } { $index1 < [llength $sorted_list1] } { incr index1 } {
+        if { ![string equal [lindex $sorted_list1 $index1] [lindex $sorted_list2 $index1]] } {
+            return 0
+        }
+    }
+
+    return 1    
+}
+
 ad_proc -public ad_tcl_list_list_to_ns_set { 
     -set_id
     -put:boolean
