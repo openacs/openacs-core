@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="4.6b" url="http://www.openacs.org/repository/download/apm/acs-subsite-4.6b.apm">
+    <version name="4.6.1" url="http://www.openacs.org/repository/download/apm/acs-subsite-4.6.1.apm">
     <database-support>
     </database-support>
         <owner>Michael Bryzek</owner>
@@ -19,7 +19,7 @@
         <vendor url="http://www.openacs.org/">OpenACS</vendor>
         <description format="text/html">Aware of parties, groups, users, portraits, ...</description>
 
-        <provides url="acs-subsite" version="4.6b"/>
+        <provides url="acs-subsite" version="4.6.1"/>
         <requires url="acs-content-repository" version="4.1"/>
         <requires url="acs-kernel" version="4.1"/>
         <requires url="acs-tcl" version="4.1"/>
