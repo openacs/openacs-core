@@ -38,7 +38,7 @@ ad_proc -public auth::sync::job::get {
     db_1row select_job {} -column_array row
 
     # TODO: This is temporary, make sure this is where the UI ends up
-    set row(log_url) [export_vars -base "[ad_url]/acs-admin/package/acs-authentication/sync-log" { job_id }]
+    set row(log_url) [export_vars -base "[ad_url]/acs-admin/auth/batch-job" { job_id }]
 }
 
 ad_proc -public auth::sync::job::get_entries {
