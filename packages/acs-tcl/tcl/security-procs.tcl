@@ -338,7 +338,7 @@ ad_proc -public ad_get_client_property {
 
     set cmd [list sec_lookup_property $id $module $name]
 
-    if { $cache_only == "t" && ![util_memoize_value_cached_p $cmd] } {
+    if { $cache_only == "t" && ![util_memoize_cached_p $cmd] } {
 	return ""
     }
 
