@@ -20,8 +20,7 @@ create table lang_messages_audit (
                        references ad_locales(locale)
                        constraint lang_messages_audit_l_nn
                        not null,
-    old_message        text,
-    comment_text       text,
+    message            text,
     overwrite_date     timestamptz 
                        default now() 
                        not null,
