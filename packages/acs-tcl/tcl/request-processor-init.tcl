@@ -44,6 +44,7 @@ proc permission::cache_p {} "return [ad_parameter -package_id [ad_acs_kernel_id]
 nsv_set rp_properties request_count 0
 
 foreach method {GET HEAD POST} {
+  ns_register_filter preauth $method /resources/* rp_resources_filter
   ns_register_filter preauth $method * rp_filter
   ns_register_proc $method / rp_handler
 }

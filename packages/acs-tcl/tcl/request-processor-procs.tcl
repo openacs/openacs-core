@@ -441,9 +441,42 @@ ad_proc -private rp_html_directory_listing { dir } {
 #
 #####
 
+ad_proc -private rp_resources_filter { why } {
+
+    This filter runs on all URLs of the form /resources/*.  The acs-resources package
+    mounts itself at /resources but we short circuit references here in order to
+    maximize throughput for resource files.  We just ns_returnfile the file, no
+    permissions are checked, the ad_conn structure is not initialized, etc.
+
+    There are two mapping possibilities:
+
+    /resources/package-key/* maps to root/packages/package-key/www/resources/*
+
+    If that fails, we map to root/www/resources/*
+
+    If the file doesn't exist we'll log an error and return nothing, which will cause
+    normal browsers to display their "?" not found icon for images, who knows what for
+    .css files.
+
+} {
+
+    set path "[acs_package_root_dir [lindex [ns_conn urlv] 1]]/www/resources/[lrange [ns_conn urlv] 2 end]"
+
+    if { ![file exists $path] } {
+        set path "[acs_root_dir]/www/resources/[lrange [ns_conn urlv] 1 end]"
+    }
+    if { [file exists $path] } {
+        ns_returnfile 200 [ns_guesstype $path] $path
+    } else {
+        ns_log Error "rp_sources_filter: file \"$path\" does not exists"
+    }
+
+    return filter_return
+}
+
 ad_proc -private rp_filter { why } {
 
-  This is the first filter that runs. It sets up ad_conn and handles
+  This is the first filter that runs for non-resource URLs. It sets up ad_conn and handles
   session security.
 
 } {
@@ -611,7 +644,6 @@ ad_proc -private rp_filter { why } {
             admin/* {
               permission::require_permission -object_id [ad_conn object_id] -privilege admin
             }
-            resources/* { }
             default {
               permission::require_permission -object_id [ad_conn object_id] -privilege read
             }
