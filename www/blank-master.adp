@@ -9,6 +9,7 @@
     </multiple>
 
     <script src="/resources/acs-subsite/core.js" language="javascript"></script>
+    <textarea id="holdtext" style="display: none;"></textarea>
 
   </head>
   <body<multiple name=attribute> @attribute.key@="@attribute.value@"</multiple>>
