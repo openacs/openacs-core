@@ -296,11 +296,12 @@
       </xi:include>
     </chapter>
 
+      <xi:include href="developers-guide/i18n.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+
     <xi:include href="developers-guide/cvs.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>CVS Section missing</xi:fallback>
-    </xi:include>
-    <xi:include href="releasing-openacs.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-      <xi:fallback>'Releasing OpenACS' missing</xi:fallback>
     </xi:include>
 
   </part>
@@ -412,9 +413,9 @@
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
     </chapter>
-      <xi:include href="developers-guide/i18n.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-        <xi:fallback>Section missing</xi:fallback>
-      </xi:include>
+    <xi:include href="releasing-openacs.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>'Releasing OpenACS' missing</xi:fallback>
+    </xi:include>
 
   </part>
 <index/>

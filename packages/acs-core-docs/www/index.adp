@@ -3,21 +3,34 @@
 <table border="0" cellpadding="8" cellspacing="0" width="80%">
 
 <tr><td valign="top">
-<a href="index.html">Full index</a>
-
-<br>
-<a href="http://openacs.org/projects/openacs/doc-project">Errata and Corrections</a>
-<p><strong>Getting Started</strong>
+<p><strong><a href="index.html">Core Documentation</a></strong> with shortcuts
 <ul>
-<li><a href="release-notes.html">Release Notes</a>
+<li><a href="for-everyone.html">Part I: For Everyone</a>
+<ul>
+<li><a href="release-notes.html">Release Notes</a></li>
+</ul>
+</li>
+<li><a href="acs-admin.html">Part II: Administrator's
+Guide</a>
+<ul>
 <li><a href="install-steps.html">Installation</a>
 <li><a href="upgrade.html">Upgrading</a>
 <li><a href="backup-recovery.html">Backup and Recovery</a>
+<li><a href="configuring-new-site.html">Configuring a new site</a>
+</ul>
+</li>
+<li><a href="acs-admin.html">Part III: Package Developer's Guide</a>
+<ul>
+<li><a href="tutorial.html">Developer Tutorial</a></li>
+</ul>
+</li>
+<li><a href="acs-plat-dev.html">Part IV:Platform Developer's Guide</a>
+</li>
 </ul>
 
 <strong>Primers and References</strong>
 <ul>
-<li><a href="tutorial.html">Developer Tutorial</a>
+
 <li><a href="http://openacs.org/faq/">OpenACS FAQs</a>
 <li><a href="http://cvs.openacs.org/">OpenACS CVS Browser</a>
 <li><a href="http://openacs.org/education/">Learning OpenACS</a>
