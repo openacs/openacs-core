@@ -1000,9 +1000,9 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
     return $default
 }
 
-ad_proc -public site_node_closest_ancestor_package_url {
+ad_proc -deprecated -public site_node_closest_ancestor_package_url {
     { -default "" }
-    { -package_key "acs-subsite" }
+    { -package_key {} }
 } {
     Returns the url stub of the nearest application of the specified
     type.
@@ -1010,12 +1010,21 @@ ad_proc -public site_node_closest_ancestor_package_url {
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 2001-02-05
 
-    @param package_key The type of package for which we're looking
+    @param package_key The types of packages for which we're looking (defaults to subsite packages)
     @param default The default value to return if no package of the
     specified type was found
 
+    @see site::node::closest_ancestor_package
 } {
-    set subsite_pkg_id [site_node_closest_ancestor_package $package_key]
+    if {[empty_string_p $package_key]} {
+        set package_key [subsite::package_keys]
+    }
+
+    set subsite_pkg_id [site_node::closest_ancestor_package \
+                            -include_self \
+                            -package_key $package_key \
+                            -url [ad_conn url] ]
+
     if {[empty_string_p $subsite_pkg_id]} {
         # No package was found... return the default
         return $default
