@@ -59,10 +59,10 @@ ad_proc search_content_get {
 	    set data $content
 	}
 	file {
-	    set data [db_blob_get data "select $content, 'file' as storage_type"]
+	    set data [db_blob_get data "select '$content' as content, 'file' as storage_type"]
 	}
 	lob {
-	    set data [db_blob_get data "select $content, 'lob' as storage_type"]
+	    set data [db_blob_get data "select '$content' as content, 'lob' as storage_type"]
 	}
     }
 
