@@ -1197,10 +1197,87 @@ select inline_1 ();
 
 drop function inline_1 ();
 
+
+create function inline_2 ()
+returns integer as '
+declare
+  v_item_id     integer;
+  v_revision_id integer;
+begin
+
+  select acs_object_id_seq.nextval into v_item_id;
+
+  PERFORM content_template__new(
+                ''default_template'',
+                ''-200'',
+                v_item_id,
+                now(),
+                null,
+                null
+        );
+
+  v_revision_id := content_revision__new(
+               ''Template'',
+               NULL,
+               now(),
+               ''text/html'',
+               null,
+               ''<html><body><content></body></html>'',
+               v_item_id,
+               NULL,
+               now(),
+               null,
+               null);
+
+  update 
+    cr_revisions
+  set 
+    content_length = length(content)
+  where
+    revision_id = v_revision_id;
+
+  update 
+    cr_items
+  set 
+    live_revision = v_revision_id
+  where 
+    item_id = v_item_id;
+
+
+  PERFORM content_type__register_template(
+                       ''content_revision'',
+	               v_item_id,
+	               ''public'',
+                       ''f'');
+
+  PERFORM content_type__set_default_template(
+                        ''content_revision'',
+                        v_item_id,
+                        ''public'' );
+
+  PERFORM content_type__register_template(
+                       ''image'',
+	               v_item_id,
+	               ''public'',
+                       ''f'');
+
+  PERFORM content_type__set_default_template(
+                        ''image'',
+                        v_item_id,
+                        ''public'' );
+
+  return 0;
+end;' language 'plpgsql';
+
+select inline_2 ();
+
+drop function inline_2 ();
+
+
 -- show errors
 
 -- prompt *** Preparing search indices...
-\i content-search.sql
+-- \i content-search.sql
 
 
 

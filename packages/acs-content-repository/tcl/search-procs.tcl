@@ -4,7 +4,7 @@ ad_proc content_search__datasource {
     Provides data source for search interface.  Used to access content items
     after search.
 } {
-    db_0or1row notes_datasource {
+    db_0or1row revisions_datasource {
 	select r.revision_id as object_id, 
 	       r.title as title, 
 	       r.content as content,
@@ -52,7 +52,7 @@ ad_proc content_search__url {
           from site_nodes n
          where n.object_id = :package_id        
     "
-
+    
     return $url
 }
 
