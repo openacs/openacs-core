@@ -33,10 +33,7 @@ set untrusted_user_id [ad_conn untrusted_user_id]
 if { $untrusted_user_id != 0 } {
     set user_name [person::name -person_id $untrusted_user_id]
     set pvt_home_url [ad_pvt_home]
-    set pvt_home_name [ad_pvt_home_name]
-    if [empty_string_p $pvt_home_name] {
 	set pvt_home_name [_ acs-subsite.Your_Account]
-    }
     set logout_url [ad_get_logout_url]
 
     # Site-wide admin link
