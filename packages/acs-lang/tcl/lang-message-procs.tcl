@@ -19,11 +19,11 @@ namespace eval lang::message {}
 
 ad_proc -public lang::message::register { 
     -upgrade:boolean
+    {-comment ""}
     locale
     package_key
     message_key
     message
-    comment
 } { 
     <p>
     Registers a message for a given locale and package.
@@ -56,6 +56,9 @@ ad_proc -public lang::message::register {
     @param upgrade       A boolean switch indicating if this message is registered
                          as part of a message catalog upgrade or not. The default
                          (switch not provided) is that we are not upgrading.
+
+    @see lang::message::lookup
+    @see _
 } { 
     # Create a globally unique key for the cache
     set key "${package_key}.${message_key}"
@@ -211,7 +214,7 @@ ad_proc -private lang::message::format {
                 
                 if { [lsearch -exact $value_array_keys $variable_key] == -1 } {
                     ns_log Warning "lang::message::format: The value_array_list \"$value_array_list\" does not contain the variable name $variable_key found in the message: $localized_message"
-                
+                    
                     # There is no value available to do the substitution with
                     # so don't substitute at all
                     append formated_message $percent_match
@@ -304,7 +307,9 @@ ad_proc -public lang::message::lookup {
     @author Jeff Davis (davis@arsdigita.com)
     @author Henry Minsky (hqm@arsdigita.com)
     @author Peter Marklund (peter@collaboraid.biz)
+
     @see _
+    @see lang::message::register
     
     @return A localized piece of text.
 } { 
@@ -321,16 +326,11 @@ ad_proc -public lang::message::lookup {
             set locale [ad_conn locale]
         } else {
             # There is no HTTP connection - resort to system locale
-            set system_locale [parameter::get -package_id [apm_package_id_from_key acs-lang] -parameter SiteWideLocale]
-            set locale $system_locale
+            set locale [lang::system::locale]
         }
     } elseif { [string length $locale] == 2 } {
-        # Only language provided
-
-        # let's get the default locale for this language
-        # The cache is flushed if the default locale for this language is
-        # changed.
-        set locale [util_memoize [list ad_locale_locale_from_lang $locale]]    
+        # Only language provided, let's get the default locale for this language
+        set locale [lang::util::default_locale_from_lang $locale]
     } 
 
     if { [lang::util::translator_mode_p] } {
@@ -345,59 +345,64 @@ ad_proc -public lang::message::lookup {
         }
         
         # return_url is already encoded and HTML quoted
-        set translate_url "/acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } { locales $locale } { package_key $package_key_part } return_url }]"
+        set translate_url "/acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } locale { package_key $package_key_part } return_url }]"
     }
 
+    # We remember the passed-in locale, because we want the translator mode to show which 
+    # messages have been translated, and which have not.
+    set org_locale $locale
+
+    # Trying locale directly
     if { [message_exists_p $locale $key] } {
-        # Message exists in the given locale
-
-        set return_value [nsv_get lang_message_$locale $key]
-        # Do any variable substitutions (interpolation of variables)
-        if { [llength $substitution_list] > 0 || ($upvar_level >= 1 && [string first "%" $return_value] != -1) } {
-            set return_value [lang::message::format $return_value $substitution_list [expr $upvar_level + 1]]
-        }
-        
-        if { [lang::util::translator_mode_p] } {
-            # Translator mode - return a translation link
-            append return_value "<a href=\"$translate_url\" title=\"Edit translation of $message_key_part in $locale\"><font color=\"green\"><b>o</b></font></a>"
-        }
-
+        set message [nsv_get lang_message_$locale $key]
     } else {
-        # There is no entry in the message catalog for the given locale
-
-        if { [nsv_exists lang_message_en_US $key] != 0 } {
-            # The key exists but there is no translation in the current locale
-
-            if { ![lang::util::translator_mode_p] } {
-                # We are not in translator mode
-
-                if { [string equal $default "TRANSLATION MISSING"] } {
-                    set return_value "$default: $key"
-                } else {
-                    set return_value $default
-                }
+        # Trying default locale for language
+        set language [lindex [split $locale "_"] 0]
+        set locale [lang::util::default_locale_from_lang $language]
+        if { [message_exists_p $locale $key] } {
+            set message [nsv_get lang_message_$locale $key]
+        } else {
+            # Trying system locale for package (or site-wide)
+            set locale [lang::system::locale]
+            if { [message_exists_p $locale $key] } {
+                set message [nsv_get lang_message_$locale $key]
             } else {
-                # Translator mode - return a translation link
-
-                set us_text [nsv_get lang_message_en_US $key]
-                # Do any variable substitutions (interpolation of variables)
-                if { [llength $substitution_list] > 0 || ($upvar_level >= 1 && [string first "%" $us_text] != -1) } {
-                    set us_text [lang::message::format $us_text $substitution_list [expr $upvar_level + 1]]
+                # Trying site-wide system locale
+                set locale [lang::system::locale -site_wide]
+                if { [message_exists_p $locale $key] } {
+                    set message [nsv_get lang_message_$locale $key]
+                } else {
+                    # Resorting to en_US
+                    set locale "en_US"
+                    if { [message_exists_p $locale $key] } {
+                        set message [nsv_get lang_message_$locale $key]
+                    } else {
+                        ns_log Error "lang::message::lookup: Key '$key' does not exists in en_US"
+                        set message "NO KEY: $key"
+                    }
                 }
-        
-
-                set return_value "<span style=\"background-color: yellow;\">$us_text</span><a href=\"$translate_url\" title=\"translate $message_key_part to $locale\"><font color=\"red\"><b>*</b></font></a>"
             }
-
-        } {
-            # The key doesn't exist - this is a programming error
-
-            set return_value "NO KEY: $key"
-            ns_log Error "lang::message::lookup key doesn't exist: $key"
+        }
+    }
+    
+    # Do any variable substitutions (interpolation of variables)
+    if { [llength $substitution_list] > 0 || ($upvar_level >= 1 && [string first "%" $message] != -1) } {
+        set message [lang::message::format $message $substitution_list [expr $upvar_level + 1]]
+    }
+    
+    if { [lang::util::translator_mode_p] } {
+        # Translator mode - return a translation link
+        if { [string equal $locale $org_locale] } {
+            # The message has been translated in the desired locale
+            append message "<a href=\"$translate_url\" title=\"Edit translation of $message_key_part in $locale\"><font color=\"green\"><b>o</b></font></a>"
+        } else {
+            # The translation is missing in the desired locale, make it yellow
+            set message "<span style=\"background-color: yellow;\">$message</span><a href=\"$translate_url\" title=\"Translate $message_key_part to $locale\"><font color=\"red\"><b>*</b></font></a>"
+            
         }
     }
 
-    return $return_value
+    return $message
 }
 
 ad_proc -private lang::message::translate { 
@@ -579,3 +584,19 @@ ad_proc -deprecated -warn lang_babel_translate {
 } {
     return [lang::message::translate $msg $lang]
 }     
+
+
+ad_proc -public lang::message::update_description {
+    {-package_key:required}
+    {-message_key:required}
+    {-description:required}
+} {
+    @author Simon Carstensen
+    @creation_date 2003-08-12
+} {
+    if { [empty_string_p [string trim $description]] } {
+        db_dml update_description_insert_null {}
+    } else {
+        db_dml update_description {} -clobs [list $description]
+    }
+}
