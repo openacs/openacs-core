@@ -91,9 +91,10 @@ declare
         v_rec   record;
         v_data  text default '''';
 begin
-        for v_rec in select data, segment from lob_data where lob_id = p_lob_id order by segment;
+        for v_rec in select data, segment from lob_data where lob_id = p_lob_id order by segment 
+        loop
             v_data := v_data || v_rec.data;
-        end if;
+        end loop;
 
         return v_data;
 
