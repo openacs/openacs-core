@@ -680,8 +680,13 @@ aa_register_case \
     set subst_message [lang::message::format $localized_message $value_list]
     set expected_message "The frog jumped across the fence. About 50% of the time, he stumbled, or maybe it was %20 %times%."
 
-    aa_true "the frog should jump across the fence" [string equal $subst_message \
-                                                                  $expected_message]
+    aa_equals "the frog should jump across the fence" $subst_message $expected_message
+
+    set my_var(my_key) foo
+    set localized_message "A text with an array variable %my_var.my_key% in it"
+    set subst_message [lang::message::format $localized_message {} 1]
+    set expected_message "A text with an array variable foo in it"
+    aa_equals "embedded array variable" $subst_message $expected_message
 }
 
 aa_register_case \
