@@ -341,6 +341,15 @@ ad_proc -public auth::authority::batch_sync {
                     -authority_id $authority_id \
                     -job_id $job_id \
                     -document $doc_result(document)
+            
+                set ack_doc [auth::sync::GetAcknowledgementDocument \
+                                 -authority_id $authority_id \
+                                 -job_id $job_id \
+                                 -document $doc_result(document)]
+                
+                template::util::write_file \
+                    "[acs_root_dir]/batch-sync-acknolwedgement.xml" \
+                    $ack_doc
             } {
                 global errorInfo
                 ns_log Error "Error processing sync document:\n$errorInfo"

@@ -60,6 +60,52 @@ ad_proc -private auth::package_uninstall {} {} {
     }
 }
 
+ad_proc -public auth::after_upgrade {
+    {-from_version_name:required}
+    {-to_version_name:required}
+} {
+    apm_upgrade_logic \
+        -from_version_name $from_version_name \
+        -to_version_name $to_version_name \
+        -spec {
+            5.0a1 5.0a2 {
+                db_transaction {
+                    
+                    # Delete and recreate contract
+                    auth::process_doc::delete_contract
+                    auth::process_doc::create_contract
+
+                    # The old implementation is still there, but now it's unbound
+
+                    # We change the name of the old implementation, so we can recreate it, but don't break foreign key references to it
+                    set old_impl_id [acs_sc::impl::get_id -name "IMS_Enterprise_v_1p1" -owner "acs-authentication"]
+                    db_dml update { 
+                        update acs_sc_impls 
+                        set   impl_name = 'IMS_Enterprise_v_1p1_old' 
+                        where impl_id = :old_impl_id
+                    }
+                    db_dml update { 
+                        update acs_sc_impl_aliases
+                        set impl_name = 'IMS_Enterprise_v_1p1_old' 
+                        where impl_id = :old_impl_id
+                    }
+
+                    # Create the new implementation
+                    set new_impl_id [auth::sync::process_doc::ims::register_impl]
+
+                    # Update authorities that used to use the old impl to use the new impl
+                    db_dml update_authorities {
+                        update auth_authorities
+                        set    process_doc_impl_id = :new_impl_id
+                        where  process_doc_impl_id = :old_impl_id
+                    }
+
+                    # Delete the old implementation
+                    acs_sc::impl::delete -contract_name "auth_sync_process" -impl_name "IMS_Enterprise_v_1p1_old"
+                }
+            }
+        }
+}
 
 #####
 #
@@ -381,6 +427,16 @@ ad_proc -private auth::process_doc::create_contract {} {
             ProcessDocument {
                 description {
                     Process a user synchronization document.
+                }
+                input {
+                    job_id:integer
+                    document:string
+                    parameters:string,multiple
+                }
+            }
+            GetAcknowledgementDocument {
+                description {
+                    Return an acknowledgement document in a format suitable for display on.
                 }
                 input {
                     job_id:integer
