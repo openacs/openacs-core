@@ -1915,7 +1915,7 @@ begin
 
   return v_revision_id;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' with (isstrict);
 
 
 -- function get_best_revision

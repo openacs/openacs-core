@@ -1377,6 +1377,10 @@ function get_latest_revision (
       o.creation_date desc;
 begin
 
+  if item_id is null then
+    return null;
+  end if;
+
   open c_revision_cur;
   fetch c_revision_cur into v_revision_id;
   if c_revision_cur%NOTFOUND then
