@@ -15,19 +15,6 @@ declare
     main_site_id        site_nodes.node_id%TYPE;
 begin   
 
-  kernel_id := apm_service__new (
-                    null,
-                    ''ACS Kernel'',
-                    ''acs-kernel'',
-                    ''apm_service'',
-                    now(),
-                    null,
-                    null,
-                    acs__magic_object_id(''default_context'')
-                    );
-
-  perform apm_package__enable (kernel_id);
-
   main_site_id := apm_service__new(
                     null,
 		    ''Main Site'',
