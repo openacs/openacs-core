@@ -641,14 +641,14 @@ ad_proc -public db_exec_plsql {{ -dbn "" } statement_name sql args } {
             # if a table is being created, we need to bypass things, too (OpenACS - Ben).
             set test_sql [db_qd_replace_sql $full_statement_name $sql]
             if {[regexp -nocase -- {^\s*select} $test_sql match]} {
-                ns_log Debug "PLPGSQL: bypassed anon function"
+                # ns_log Debug "PLPGSQL: bypassed anon function"
                 set selection [db_exec 0or1row $db $full_statement_name $sql]
             } elseif {[regexp -nocase -- {^\s*create table} $test_sql match] || [regexp -nocase -- {^\s*drop table} $test_sql match]} {
-                ns_log Debug "PLPGSQL: bypassed anon function -- create/drop table"
+                ns_log Debug "PLPGSQL: bypassed anon function for create/drop table"
                 set selection [db_exec dml $db $full_statement_name $sql]
                 return ""
             } else {
-                ns_log Debug "PLPGSQL: using anonymous function"
+                # ns_log Debug "PLPGSQL: using anonymous function"
                 set selection [db_exec_plpgsql $db $full_statement_name $sql \
                                    $statement_name]
             }
@@ -904,6 +904,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
 
 } {
     set start_time [clock clicks -milliseconds]
+    set start_time_fine [clock clicks]
     set driverkey [db_driverkey -handle_p 1 $db]
 
     # Note: Although marked as private, db_exec is in fact called
@@ -995,6 +996,14 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
             }
         }
     } error]
+
+    # JCD: we log the clicks, dbname, query time, and statement to catch long running queries.
+    # If we took more than 5 seconds yack about it.
+    if { [expr [clock clicks -milliseconds] - $start_time] > 5000} {
+        ns_log Warning "db_exec: longdb [expr [clock clicks] - $start_time_fine] $db $type $statement_name"
+    } else { 
+        ns_log Debug "db_exec: timing [expr [clock clicks] - $start_time_fine] $db $type $statement_name"
+    }
 
     ad_call_proc_if_exists ds_collect_db_call $db $type $statement_name $sql $start_time $errno $error
     if { $errno == 2 } {

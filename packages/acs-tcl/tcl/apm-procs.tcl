@@ -924,7 +924,7 @@ ad_proc -public apm_interface_remove {interface_id} {
 	apm_package_version.remove_interface(
              interface_id => :interface_id
 	);
-	end;					        
+	end;
     }
 }
 
@@ -962,7 +962,9 @@ ad_proc -public apm_package_key_from_id {package_id} {
     return [util_memoize "apm_package_key_from_id_mem $package_id"]
 }
 
-proc apm_package_key_from_id_mem {package_id} {
+ad_proc -private apm_package_key_from_id_mem {package_id} {
+    unmemoized version of apm_package_key_from_id
+} {
     return [db_string apm_package_key_from_id {
 	select package_key from apm_packages where package_id = :package_id
     } -default ""]
@@ -978,7 +980,9 @@ ad_proc -public apm_instance_name_from_id {package_id} {
     return [util_memoize "apm_instance_name_from_id_mem $package_id"]
 }
 
-proc apm_instance_name_from_id_mem {package_id} {
+ad_proc -private apm_instance_name_from_id_mem {package_id} {
+    unmemoized version of apm_instance_name_from_id
+} {
     return [db_string apm_package_key_from_id {
 	select instance_name from apm_packages where package_id = :package_id
     } -default ""]
@@ -996,7 +1000,9 @@ ad_proc -public apm_package_id_from_key {package_key} {
     return [util_memoize "apm_package_id_from_key_mem $package_key"]
 }
 
-proc apm_package_id_from_key_mem {package_key} {
+ad_proc -private apm_package_id_from_key_mem {package_key} {
+    unmemoized version of apm_package_id_from_key
+} {
     return [db_string apm_package_id_from_key {
 	select package_id from apm_packages where package_key = :package_key
     } -default 0]
