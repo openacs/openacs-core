@@ -261,66 +261,149 @@ ns_param   port               $httpport
 
 #---------------------------------------------------------------------
 #
-# OpenSSL
+# OpenSSL for Aolserver 3.3
 #
 #---------------------------------------------------------------------
 
-ns_section "ns/server/${server}/module/nsopenssl"
+if { [ns_info version] < 4} {
 
-ns_param ModuleDir            ${serverroot}/etc/certs
+    ns_section "ns/server/${server}/module/nsopenssl"
+    
+    ns_param ModuleDir            ${serverroot}/etc/certs
+    
+    # NSD-driven connections:
+    ns_param ServerPort                $httpsport
+    ns_param ServerHostname            $hostname
+    ns_param ServerAddress             $address
+    ns_param ServerCertFile            certfile.pem
+    ns_param ServerKeyFile             keyfile.pem
+    ns_param ServerProtocols           "SSLv2, SSLv3, TLSv1"
+    ns_param ServerCipherSuite         "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
+    ns_param ServerSessionCache        true
+    ns_param ServerSessionCacheID      1
+    ns_param ServerSessionCacheSize    512
+    ns_param ServerSessionCacheTimeout 300
+    ns_param ServerPeerVerify          false
+    ns_param ServerPeerVerifyDepth     3
+    ns_param ServerCADir               ca
+    ns_param ServerCAFile              ca.pem
+    ns_param ServerTrace               false
+    
+    # For listening and accepting SSL connections via Tcl/C API:
+    ns_param SockServerCertFile              certfile.pem
+    ns_param SockServerKeyFile               keyfile.pem
+    ns_param SockServerProtocols             "SSLv2, SSLv3, TLSv1"
+    ns_param SockServerCipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
+    ns_param SockServerSessionCache          true
+    ns_param SockServerSessionCacheID        2
+    ns_param SockServerSessionCacheSize      512
+    ns_param SockServerSessionCacheTimeout   300
+    ns_param SockServerPeerVerify            false
+    ns_param SockServerPeerVerifyDepth       3
+    ns_param SockServerCADir                 internal_ca
+    ns_param SockServerCAFile                internal_ca.pem
+    ns_param SockServerTrace                 false
+    
+    # Outgoing SSL connections
+    ns_param SockClientCertFile              certfile.pem
+    ns_param SockClientKeyFile               keyfile.pem
+    ns_param SockClientProtocols             "SSLv2, SSLv3, TLSv1"
+    ns_param SockClientCipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
+    ns_param SockClientSessionCache          false
+    ns_param SockClientSessionCacheID        3
+    ns_param SockClientSessionCacheSize      512
+    ns_param SockClientSessionCacheTimeout   300
+    ns_param SockClientPeerVerify            false
+    ns_param SockServerPeerVerifyDepth       3
+    ns_param SockClientCADir                 ca
+    ns_param SockClientCAFile                ca.pem
+    ns_param SockClientTrace                 false
+    
+    # OpenSSL library support:
+    #ns_param RandomFile          /some/file
+    ns_param SeedBytes            1024
+} else {
 
-# NSD-driven connections:
-ns_param ServerPort                $httpsport
-ns_param ServerHostname            $hostname
-ns_param ServerAddress             $address
-ns_param ServerCertFile            certfile.pem
-ns_param ServerKeyFile             keyfile.pem
-ns_param ServerProtocols           "SSLv2, SSLv3, TLSv1"
-ns_param ServerCipherSuite         "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
-ns_param ServerSessionCache        true
-ns_param ServerSessionCacheID      1
-ns_param ServerSessionCacheSize    512
-ns_param ServerSessionCacheTimeout 300
-ns_param ServerPeerVerify          false
-ns_param ServerPeerVerifyDepth     3
-ns_param ServerCADir               ca
-ns_param ServerCAFile              ca.pem
-ns_param ServerTrace               false
+    #---------------------------------------------------------------------
+    #
+    # OpenSSL for Aolserver 4
+    #
+    #---------------------------------------------------------------------
+    
+    # We explicitly tell the server which SSL contexts to use as defaults when an
+    # SSL context is not specified for a particular client or server SSL
+    # connection. Driver connections do not use defaults; they must be explicitly
+    # specificied in the driver section. The Tcl API will use the defaults as there
+    # is currently no provision to specify which SSL context to use for a
+    # particular connection via an ns_openssl Tcl command.
+    
+    ns_section "ns/server/${server}/module/nsopenssl/defaults"
+    ns_param server               users
+    ns_param client               client
+    
+    ns_section "ns/server/${server}/module/nsopenssl/sslcontext/users"
+    ns_param Role                  server
+    ns_param ModuleDir             ${serverroot}/etc/certs
+    ns_param CertFile              certfile.pem 
+    ns_param KeyFile               keyfile.pem
+    #ns_param CADir                 ca-client/dir
+    #ns_param CAFile                ca-client/ca-client.crt
+    ns_param Protocols             "SSLv3, TLSv1" 
+    ns_param CipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP" 
+    ns_param PeerVerify            false
+    ns_param PeerVerifyDepth       3
+    ns_param Trace                 false
+    
+    #ns_section "ns/server/${server}/module/nsopenssl/sslcontext/admins"
+    #ns_param Role                  server
+    #ns_param ModuleDir             /path/to/dir
+    #ns_param CertFile              server/server.crt 
+    #ns_param KeyFile               server/server.key 
+    #ns_param CADir                 ca-client/dir 
+    #ns_param CAFile                ca-client/ca-client.crt
+    #ns_param Protocols             "All"
+    #ns_param CipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP" 
+    #ns_param PeerVerify            false
+    #ns_param PeerVerifyDepth       3
+    #ns_param Trace                 false
+    
+    ns_section "ns/server/${server}/module/nsopenssl/sslcontext/client"
+    ns_param Role                  client
+    ns_param ModuleDir             ${serverroot}/etc/certs
+    ns_param CertFile              certfile.pem
+    ns_param KeyFile               keyfile.pem 
+    #ns_param CADir                 ${serverroot}/etc/certs
+    #ns_param CAFile                certfile.pem
+    ns_param Protocols             "SSLv2, SSLv3, TLSv1" 
+    ns_param CipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP" 
+    ns_param PeerVerify            false
+    ns_param PeerVerifyDepth       3
+    ns_param Trace                 false
+    
+    # SSL drivers. Each driver defines a port to listen on and an explitictly named
+    # SSL context to associate with it. Note that you can now have multiple driver
+    # connections within a single virtual server, which can be tied to different
+    # SSL contexts. Isn't that cool?
+    
+    ns_section "ns/server/${server}/module/nsopenssl/ssldrivers"
+    ns_param users         "Driver for regular user access"
+    ns_param admins        "Driver for administrator access"
+    
+    ns_section "ns/server/${server}/module/nsopenssl/ssldriver/users"
+    ns_param sslcontext            users
+    # ns_param port                  $httpsport_users
+    ns_param port                  $httpsport
+    ns_param hostname              $hostname
+    ns_param address               $address
+    
+    ns_section "ns/server/${server}/module/nsopenssl/ssldriver/admins"
+    ns_param sslcontext            admins
+    # ns_param port                  $httpsport_admins
+    ns_param port                  $httpsport
+    ns_param hostname              $hostname
+    ns_param address               $address
 
-# For listening and accepting SSL connections via Tcl/C API:
-ns_param SockServerCertFile              certfile.pem
-ns_param SockServerKeyFile               keyfile.pem
-ns_param SockServerProtocols             "SSLv2, SSLv3, TLSv1"
-ns_param SockServerCipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
-ns_param SockServerSessionCache          true
-ns_param SockServerSessionCacheID        2
-ns_param SockServerSessionCacheSize      512
-ns_param SockServerSessionCacheTimeout   300
-ns_param SockServerPeerVerify            false
-ns_param SockServerPeerVerifyDepth       3
-ns_param SockServerCADir                 internal_ca
-ns_param SockServerCAFile                internal_ca.pem
-ns_param SockServerTrace                 false
-
-# Outgoing SSL connections
-ns_param SockClientCertFile              certfile.pem
-ns_param SockClientKeyFile               keyfile.pem
-ns_param SockClientProtocols             "SSLv2, SSLv3, TLSv1"
-ns_param SockClientCipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
-ns_param SockClientSessionCache          false
-ns_param SockClientSessionCacheID        3
-ns_param SockClientSessionCacheSize      512
-ns_param SockClientSessionCacheTimeout   300
-ns_param SockClientPeerVerify            false
-ns_param SockServerPeerVerifyDepth       3
-ns_param SockClientCADir                 ca
-ns_param SockClientCAFile                ca.pem
-ns_param SockClientTrace                 false
-
-# OpenSSL library support:
-#ns_param RandomFile          /some/file
-ns_param SeedBytes            1024
-
+}
 
 #---------------------------------------------------------------------
 # 
