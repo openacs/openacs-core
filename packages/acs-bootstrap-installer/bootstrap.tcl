@@ -127,6 +127,10 @@ set errno [catch {
     # Load the Tcl package init files.
     apm_bootstrap_load_libraries -init acs-tcl
 
+    # LARS: Load packages/acs-automated-testing/tcl/aa-test-procs.tcl
+    ns_log Notice "Loading acs-automated-testing specially so other packages can define tests..."
+    apm_bootstrap_load_libraries -procs acs-automated-testing
+
     # Load libraries, queries etc. for remaining packages
     apm_load_packages
 
@@ -141,6 +145,7 @@ set errno [catch {
 	# fail catastrophically.
 	bootstrap_fatal_error "The request processor routines have not been loaded."
     }
+
 
     ns_log Notice "$proc_name: Done loading OpenACS."
 }]
