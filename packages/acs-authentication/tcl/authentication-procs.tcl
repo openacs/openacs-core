@@ -26,7 +26,8 @@ ad_proc -public auth::require_login {} {
     Use this in a page script to ensure that only registered and authenticated 
     users can execute the page, for example for posting to a forum.
 
-    @return user_id of user, if the user is logged in. Otherwise will issue an ad_script_abort.
+    @return user_id of user, if the user is logged in. 
+            Otherwise will issue a returnredirect and abort the current page.
 
     @see ad_script_abort
 } {
@@ -38,15 +39,43 @@ ad_proc -public auth::authenticate {
     {-username:required}
     {-password:required}
 } {
-    Try to authenticate login the user by validating the username/password combination, 
+    Try to authenticate and login the user forever by validating the username/password combination, 
     and return authentication and account status codes.    
     
-    @param username Username of the user.
-
+    @param authority_id The ID of the authority to ask to verify the user. Defaults to local authority.
+    @param username Authority specific username of the user.
     @param passowrd The password as the user entered it.
     
-    @param authority_id The ID of the authority to ask to verify the user. Leave blank for local authority.
+    @return Array list with the following entries:
+    
+    <ul>
+      <li> auth_status:     Whether authentication succeeded. 
+                            ok, no_account, bad_password, auth_error, failed_to_connect 
+      <li> auth_message:    Human-readable message about what went wrong. Guaranteed to be set if auth_status is not ok. 
+                            Should be ignored if auth_status is ok. May contain HTML.
+
+      <li> account_status:  Account status from authentication server. 
+                            ok, closed.
+      <li> account_message: Human-readable message about account status. Guaranteed to be set if auth_status is not ok. 
+                            If non-empty, must be relayed to the user regardless of account_status. May contain HTML.
+                            This proc is responsible for concatenating any remote and/or local account messages into 
+                            one single message which can be displayed to the user.
+
+      <li> user_id:         Set to local user_id if auth_status is ok.
+    </ul>
+
 } {
+    # Default to local authority
+    if { [empty_string_p $authority_id] } {
+        set authority_id [auth::authority::local]
+    }
+
+    # Implementation note: 
+    # Invoke the service contract
+    # Provide canned strings for auth_message and account_message if not returned by SC implementation.
+    # Concatenate remote account message and local account message into one logical understandable message.
+    # Same with account status: only ok if both are ok.
+
     array set auth_info [auth::authentication::Authenticate \
                              -username $username \
                              -authority_id $authority_id \
@@ -204,7 +233,9 @@ ad_proc -private auth::get_local_account {
 
     # Initialize to 'closed', because most cases below mean the account is closed
     set auth_info(account_status) "closed"
-    
+
+    # system_name is used in some of the I18N messages
+    set system_name [ad_system_name]    
     switch $member_state {
         "approved" {
             if { $email_verified_p == "f" } {
@@ -267,14 +298,34 @@ ad_proc -private auth::authentication::Authenticate {
 } {
     if { [empty_string_p $authority_id] } {
         set authority_id [auth::authority::local]
+    } {
+        # Check that the authority exists
+        set authority_exists_p [db_string authority_exists_p {
+            select count(*)
+            from auth_authorities
+            where authority_id = :authority_id
+        }]
+
+        if { ! $authority_exists_p } {
+            set auth_info(auth_status) auth_error
+            set auth_info(auth_message) "Internal error - authority with id $authority_id does not exist"
+
+            return [array get auth_info]
+        }
     }
 
     # TODO:
     # Implement parameters
 
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "auth_impl_name"]
+    if { [empty_string_p $impl_id] } {
+        # Invalid authority
+        return {}
+    }
+
     return [acs_sc::invoke \
                 -contract "auth_authentication" \
-                -impl [auth::authority::get_element -authority_id $authority_id -element "auth_impl_name"] \
+                -impl $impl_id \
                 -operation Authenticate \
                 -call_args [list $username $password [list]]]
 }
