@@ -15,7 +15,17 @@
       </querytext>
 </fullquery>
 
- 
+<fullquery name="relation_segment_has_dependant.select_rel_info">      
+      <querytext>
+	    select s.segment_id, r.object_id_two as party_id
+  	      from rel_segments s, acs_rels r
+	     where r.object_id_one = s.group_id
+	       and r.rel_type = s.rel_type
+	       and r.rel_id = :rel_id
+      </querytext>
+</fullquery>
+
+
 <fullquery name="relation_required_segments_multirow.select_required_rel_segments">      
       <querytext>
 

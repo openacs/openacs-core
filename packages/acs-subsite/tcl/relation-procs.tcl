@@ -125,14 +125,7 @@ ad_proc -public relation_remove {
 
     # Pull out the segment_id and the party_id (object_id_two) from
     # acs_rels. Note the outer joins since the segment may not exist.
-    if { ![db_0or1row select_rel_info {
-	select s.segment_id, r.object_id_two as party_id, t.package_name
-	  from rel_segments s, acs_rels r, acs_object_types t
-	 where r.object_id_one = s.group_id(+)
-	  and r.rel_type = s.rel_type(+)
-	  and r.rel_type = t.object_type
-	  and r.rel_id = :rel_id
-    }] } {
+    if { ![db_0or1row select_rel_info {}] } {
         # Relation doesn't exist
 	return 0
     }
@@ -177,13 +170,7 @@ ad_proc -public relation_segment_has_dependant {
 } {
 
     if { ![empty_string_p $rel_id] } {
-	if { ![db_0or1row select_rel_info {
-	    select s.segment_id, r.object_id_two as party_id
-  	      from rel_segments s, acs_rels r
-	     where r.object_id_one = s.group_id
-	       and r.rel_type = s.rel_type
-	       and r.rel_id = :rel_id
-	}] } {
+	if { ![db_0or1row select_rel_info {}] } {
 	    # There is either no relation or no segment... thus no dependants
 	    return 0
 	}
@@ -193,12 +180,7 @@ ad_proc -public relation_segment_has_dependant {
 	error "Both of segment_id and party_id must be specified in call to relation_segment_has_dependant"
     }
 
-    return [db_string others_depend_p {
-	    select case when exists
-	             (select 1 from rc_violations_by_removing_rel r where r.rel_id = :rel_id)
-	           then 1 else 0 end
-	      from dual
-    }]
+    return [db_string others_depend_p {}]
 }
 
 
@@ -223,14 +205,7 @@ ad_proc -public relation_type_is_valid_to_group_p {
 	set group_id [application_group::group_id_from_package_id]
     }
 
-    return [db_string rel_type_valid_p {
-	    select case when exists
-	             (select 1 from rc_valid_rel_types r 
-                      where r.group_id = :group_id 
-                        and r.rel_type = :rel_type)
-	           then 1 else 0 end
-	      from dual
-    }]
+    return [db_string rel_type_valid_p {}]
     
 }
 
@@ -279,32 +254,7 @@ ad_proc relation_types_valid_to_group_multirow {
     template::multirow create $datasource_name \
 	    object_type object_type_enc indent pretty_name valid_p
 
-    db_foreach select_sub_rel_types {
-	select 
-	    pretty_name, object_type, level, indent,
-	    decode(valid_types.rel_type, null, 0, 1) as valid_p
-	from 
-	    (select
-	        t.pretty_name, t.object_type, level,
-	        replace(lpad(' ', (level - 1) * 4), 
-	                ' ', '&nbsp;') as indent,
-	        rownum as tree_rownum
-	     from 
-	        acs_object_types t
-	     connect by 
-	        prior t.object_type = t.supertype
-	     start with 
-	        t.object_type = :start_with ) types,
-	    (select 
-	        rel_type 
-	     from 
-	        rc_valid_rel_types
-	     where 
-	        group_id = :group_id ) valid_types
-	where 
-	    types.object_type = valid_types.rel_type(+)
-	order by tree_rownum
-    } {
+    db_foreach select_sub_rel_types {} {
 	template::multirow append $datasource_name $object_type [ad_urlencode $object_type] $indent $pretty_name $valid_p
     }
 
@@ -331,29 +281,7 @@ ad_proc -public relation_required_segments_multirow {
 
     set group_rel_type_list [list]
 
-    db_foreach select_required_rel_segments {
-	select distinct s.segment_id, s.group_id, s.rel_type,
-	       g.group_name, g.join_policy, t.pretty_name as rel_type_pretty_name,
-               nvl(dl.dependency_level, 0)
-	from rc_all_constraints c, 
-             (select rel_segment, required_rel_segment
-              from rc_segment_required_seg_map
-	      where rel_side = 'two'
-	      UNION ALL
-	      select segment_id, segment_id
-	      from rel_segments) map,
-             rel_segments s, 
-             rc_segment_dependency_levels dl,
-	     groups g, acs_object_types t
-	where c.group_id = :group_id
-	  and c.rel_type = :rel_type
-	  and c.required_rel_segment = map.rel_segment
-          and map.required_rel_segment = s.segment_id
-          and s.segment_id = dl.segment_id(+)
-	  and g.group_id = s.group_id
-	  and t.object_type = s.rel_type
-        order by nvl(dl.dependency_level, 0)
-    } {
+    db_foreach select_required_rel_segments {} {
 	template::multirow append $datasource_name $segment_id $group_id $rel_type [ad_urlencode $rel_type] $rel_type_pretty_name $group_name $join_policy
 
 	lappend group_rel_type_list [list $group_id $rel_type]
