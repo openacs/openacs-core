@@ -467,6 +467,17 @@ ad_proc -private template::form::render { id tag_attributes } {
     }
   }
 
+  # Check for errors in hidden elements
+  foreach element_ref $elements { 
+ 
+    # get a reference by element ID 
+    upvar #$level $element_ref element
+   
+    if { [string equal $element(widget) "hidden"] && [exists_and_not_null $id:error($element(id))] } {
+      error "Validation error in hidden form element: '[set $id:error($element(id))]' on element '$element(id)'."
+    }
+  }
+
   # get any additional attributes developer specified to include in form tag
   if { [info exists properties(html)] } {
     array set attributes $properties(html)
