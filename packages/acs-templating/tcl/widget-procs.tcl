@@ -409,7 +409,7 @@ ad_proc -public template::widget::user { element_reference tag_attributes } {
 
   set output {}
 
-  if { [info exists element(value)] && [string equal $element(value) ":other:"] } {
+  if { [info exists element(value)] && ([string equal $element(value) ":other:"] || [string equal $element(value) ":noresult:"]) } {
       # input widget to search for users
 
       append output "<input name=\"$element(name)\""
@@ -439,9 +439,22 @@ ad_proc -public template::widget::user { element_reference tag_attributes } {
       }
 
       set users_list [db_list_of_lists users $sql]
-      lappend users_list { "Search again..." ":other:" }
-
-      set output [template::widget::menu $element(name) $users_list "" attributes]
+      if { [llength $users_list] == 0 } {
+          append output "<input name=\"$element(name)\""
+          foreach name [array names attributes] {
+              if { [string equal $attributes($name) {}] } {
+                  append output " $name"
+              } else {
+                  append output " $name=\"$attributes($name)\""
+              }
+          }
+          set element(value) ":noresult:"
+      append output ">"
+          
+      } else {
+          lappend users_list { "Search again..." ":other:" }
+          set output [template::widget::menu $element(name) $users_list "" attributes]
+      }
   } else {
       # select widget to pick a known user
       set options $element(options)
