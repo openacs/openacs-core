@@ -14,7 +14,7 @@
 
       <p>
       Thank you for using our software. Please write to us at the <a
-      href="http://openacs.org/forums/forum-view?forum_id=14013">OpenACS bboard</a> to let
+      href="http://openacs.org/forums/forum-view?forum_id=14013">OpenACS discussion forums</a> to let
       us know of your experience with installing and using OpenACS. 
       </p>
       
@@ -29,10 +29,7 @@
         administrator.
       </else>
       </p>
-      
-      
-      
-      
+            
       <h2>How to Customize Your Site</h2>
       
       <p>
@@ -71,11 +68,12 @@
       </p>      
 
       <p>
-      Should you develop an OpenACS package that you want to share with the rest
-      of the community, upload it to <a
-      href="http://openacs.org/storage/"
-      title="OpenACS.org File Storage">OpenACS Repository</a> and we will
-      evaluate it and publish it.
+      If you are using OpenACS to develop a website, please read our 
+      <a href="http://openacs.org/contribute">conbribution instructions</a> to learn
+      how you can become involved in the OpenACS project.
+      If you develop your own OpenACS packages there is a good chance they will be 
+      useful to other people in the community and after review they can be included in the OpenACS
+      distribution.
       </p>      
 
       <p>
@@ -235,7 +233,7 @@
               </tr>
               <tr bgcolor="#eeeeee">
                 <td>
-                  <a href="http://openacs.org/forums/forum-view?forum_id=14013">OpenACS bboard</a>
+                  <a href="http://openacs.org/forums/forum-view?forum_id=14013">OpenACS forums</a>
                 </td>
               </tr>
               <tr bgcolor="#eeeeee">
