@@ -125,8 +125,7 @@ ad_proc -public ad_url {} {
     return [ad_parameter -package_id [ad_acs_kernel_id] SystemURL]
 }
 
-ad_proc -public acs_community_member_page {
-} {
+ad_proc -public acs_community_member_page {} {
     @return the url for the community member page
 } {
     return "[subsite::get_element -element url -notrailing][ad_parameter \
