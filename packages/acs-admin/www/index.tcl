@@ -53,7 +53,7 @@ db_foreach installed_packages {
            pretty_name as package_pretty_name
     from apm_package_types
 } {
-    if { [apm_package_installed_p $package_key] && [file exists "[acs_package_root_dir $package_key]/www/sw-admin/"] } {
+    if { [apm_package_installed_p $package_key] && [file exists "[acs_package_root_dir $package_key]/www/sitewide-admin/"] } {
         append package_admin_widget "<li><a href=\"package/$package_key/\">$package_pretty_name</a></li>"
         set packages_to_admin_p 1
     }
