@@ -881,7 +881,7 @@ db_multirow \
     <programlisting>
     set subject "my subject"
 
-    set message "<b>Bold</b> not bold"
+    set message "&lt;b&gt;Bold&lt;/b&gt; not bold"
 
     set from_addr "me@myemail.com"
 
@@ -910,6 +910,7 @@ db_multirow \
         -body $message \
         -extraheaders $extra_headers
     </programlisting>
+  </sect1>
 
   <sect1 id="tutorial-future-topics">
   <title>Future Topics</title>
