@@ -19,7 +19,7 @@
 You should use this if you are using the reference data package as many other reference data packages are dependent on this.</description>
 
         <provides url="ref-language" version="0.1d"/>
-        <requires url="acs-kernel" version="4.0"/>
+        <requires url="acs-kernel" version="4.6.2"/>
         <requires url="acs-reference" version="0.1d"/>
 
         <files>
