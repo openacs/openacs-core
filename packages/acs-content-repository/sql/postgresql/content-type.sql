@@ -913,7 +913,7 @@ create or replace function content_type__is_content_type (varchar)
 returns boolean as '
 declare
   is_content_type__object_type            alias for $1;  
-  v_is_content_type                       boolean       
+  v_is_content_type                       boolean;
 begin
 
   if is_content_type__object_type = ''content_revision'' then
