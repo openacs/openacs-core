@@ -53,7 +53,7 @@ set switchable_count [template::multirow size locale_list]
 # system default for "Change Locale".  The reason is that, after a list of language names, "..." should
 # be more recognizable than a foreign word
 
-if {$enabled_locale_count > $switchable_count && $enabled_locale_count > 1} {
+if {$enabled_locale_count > $switchable_count && $switchable_count > 1} {
     set change_locale_url [export_vars -base $base_lang_url {return_url}]
     set browser_locale [lang::conn::browser_locale]
     set exists_p [lang::message::message_exists_p $browser_locale acs-lang.change-locale]

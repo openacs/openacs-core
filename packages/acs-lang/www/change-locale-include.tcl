@@ -1,16 +1,16 @@
-ad_page_contract {
-    Change user preffered locale
+# includelet pseudo-contract
+#    Change user preferred locale
 
-    @author Peter Marklund (peter@collaboraid.biz)
-    @author Christian Hvid
-} {
-    { return_url "" }
-    { package_id "" }
-}
+#    @author Peter Marklund (peter@collaboraid.biz)
+#    @author Christian Hvid
 
-if { $return_url == "" } {
+if { ![exists_and_not_null return_url] } {
     # Use referer header
     set return_url [ns_set iget [ns_conn headers] referer]
+}
+
+if { ![exists_and_not_null package_id] } {
+    set package_id [ad_conn package_id]
 }
 
 set use_timezone_p [expr [lang::system::timezone_support_p] && [ad_conn user_id]]
