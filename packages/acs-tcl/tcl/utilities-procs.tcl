@@ -3019,8 +3019,10 @@ ad_proc -public util_list_to_ns_set { aList } {
 }
 
 ad_proc -public util_sets_equal_p { list1 list2 } {
-    Return 1 if the two lists contain sets of identical items (strings)
-    (regardless of order) and 0 otherwise. 
+    Tests whether each unique string in list1 occurs as many
+    times in list1 as in list2 and vice versa (regarless of order).
+
+    @return 1 if the lists have identical sets and 0 otherwise
 
     @author Peter Marklund
 } {
@@ -3028,8 +3030,11 @@ ad_proc -public util_sets_equal_p { list1 list2 } {
         return 0
     }
 
-    foreach item $list1 {
-        if { [lsearch -exact $list2 $item] < 0 } {
+    set sorted_list1 [lsort $list1]
+    set sorted_list2 [lsort $list2]
+
+    for { set index1 0 } { $index1 < [llength $sorted_list1] } { incr index1 } {
+        if { ![string equal [lindex $sorted_list1 $index1] [lindex $sorted_list2 $index1]] } {
             return 0
         }
     }
