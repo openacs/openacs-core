@@ -170,6 +170,7 @@ as
   and m.rel_id = mr.rel_id
   and m.group_id = (select acs.magic_object_id('registered_users') from dual)
   and m.container_id = m.group_id
+  and m.rel_type = 'membership_rel'
   and mr.member_state = 'approved'
   and u.email_verified_p = 't';
 
@@ -200,7 +201,8 @@ and u.user_id = m.member_id
 and m.group_id = mo.object_id
 and mo.name = 'registered_users'
 and m.rel_id = mr.rel_id
-and m.container_id = m.group_id;
+and m.container_id = m.group_id
+and m.rel_type = 'membership_rel';
 
 
 -----------------------------------
