@@ -5,10 +5,11 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     enabled_p
+    {return_url "."}
 }
 
 ds_require_permission [ad_conn package_id] "admin"
 
 ds_set_database_enabled $enabled_p
 
-ad_returnredirect .
+ad_returnredirect $return_url

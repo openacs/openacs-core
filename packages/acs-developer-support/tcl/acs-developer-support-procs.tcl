@@ -154,6 +154,56 @@ ad_proc ds_link {} {
 
 }
 
+ad_proc ds_show_p {} { 
+    Should we show developer-support on the current connection.
+} {
+    if { [ds_enabled_p] && [ds_permission_p] } {
+        return 1
+    }
+    return 0
+}
+
+ad_proc -public ds_get_page_serve_time_ms {} {
+    Returns the number of miliseconds passed since this request thread was started.
+
+    Returns the empty string if this information is not available.
+} {
+    set result {}
+    if { [ds_enabled_p] && [ds_collection_enabled_p] } {
+        global ad_conn
+        if { [nsv_exists ds_request "$ad_conn(request).conn"] } {
+            array set conn [nsv_get ds_request "$ad_conn(request).conn"]
+            if { [info exists conn(startclicks)] } {
+                set result [format "%.f" [expr { ([clock clicks -milliseconds] - $conn(startclicks)) }]]
+            }
+        }
+    }
+    return $result
+}
+
+ad_proc -public ds_get_db_command_info {} {
+    Get a Tcl list with { num_commands total_ms } for the database commands for the request.
+    
+    Returns the empty string if the information is not available.
+} { 
+    set result {}
+    if { [ds_enabled_p] && [ds_collection_enabled_p] } {
+        global ad_conn
+	if { [nsv_exists ds_request "$ad_conn(request).db"] } {
+	    set total 0
+	    set counter 0
+	    foreach { handle command statement_name sql start end errno error } [nsv_get ds_request "$ad_conn(request).db"] {
+		incr total [expr { $end - $start }]
+		if { [lsearch { dml exec 1row 0or1row select } [lindex $command 0]] >= 0 } {
+		    incr counter
+		}
+	    }
+            set result [list $counter $total]
+	}
+    }
+    return $result
+}
+
 ad_proc -private ds_collect_connection_info {} { 
     Collects information about the current connection. 
     Should be called only at the very beginning of the request processor handler. 
@@ -376,12 +426,13 @@ ad_proc -public ds_conn { args } {
     Developer support version of ad_conn. Overloads "ad_conn user_id",
     delegates to ad_conn in all other cases.
 } {
-    if { [lindex $args 0] == "user_id" || 
-         ([lindex $args 0] == "-get" && [lindex $args 1] == "user_id") } {
-        return [ds_get_user_id]
-    } else {
-        return [eval "orig_ad_conn [join $args]"]
+    foreach elm { user_id untrusted_user_id } {
+        if { [string equal [lindex $args 0] $elm] || 
+             ([string equal [lindex $args 0] "-get"] && [string equal [lindex $args 1] $elm]) } {
+            return [ds_get_user_id]
+        }
     }
+    return [eval "orig_ad_conn [join $args]"]
 }
 
 ad_proc -public ds_set_user_switching_enabled { enabled_p } {
@@ -409,6 +460,7 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
 } {
     if { $enabled_p } {
 	if { [llength [info proc orig_ad_get_user_id]] == 0 } {
+            ds_comment "Enabling user-switching2"
 
 	    # let the user stay who he is now (but ignore any error trying to do so)
 	    catch {
@@ -429,6 +481,7 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
 	    }
 	}
     } else {
+        ds_comment "Disabling user-switching"
 	if { [llength [info proc orig_ad_get_user_id]] == 1 } {
             rename ad_conn {}
             rename orig_ad_conn ad_conn
@@ -460,4 +513,21 @@ ad_proc -private ds_watch_packages {} {
             ns_log Notice "developer support - not watching file for package $package_key as package is not enabled"
         }
     }
+}
+
+ad_proc -public ds_comments_p {} {
+    Should we show comments inline on the page?
+} {
+    return [parameter::get -package_id [ds_instance_id] -parameter ShowCommentsInlineP -default 0]
+}
+
+ad_proc -public ds_get_comments {} {
+    Get comments for the current request
+} {
+    set comments [list]
+    global ad_conn
+    if { [nsv_exists ds_request "$ad_conn(request).comment"] } {
+        set comments [nsv_get ds_request "$ad_conn(request).comment"]
+    }
+    return $comments
 }
