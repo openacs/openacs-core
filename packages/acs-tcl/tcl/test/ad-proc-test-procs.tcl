@@ -2,6 +2,7 @@ ad_library {
 
     Tests for ad_proc.
 
+    @author Lee Denison lee@xarg.co.uk
     @creation-date 2005-03-11
 }
 
@@ -91,22 +92,44 @@ aa_register_case -cats {api smoke} ad_proc_fire_callback {
         return 1
     }
 
+    set foo(test) 2
+
     ad_proc -callback a_callback -impl an_impl2 {} { 
-        this is a test callback implementation 
+        this is a test callback implementation which does
+        an upvar of an array.
     } {
-        return 2
+        upvar $arg1 arr 
+        if {[info exists arr(test)]} { 
+            return $arr(test)
+        }
+        return {}
     }
+
     ad_proc -callback a_callback -impl fail_impl {} { 
         this is a test callback implementation 
     } {
         error "should fail"
     }
 
+    ad_proc EvilCallback {} {
+        error "Should not be invoked" 
+    }
+
+
     aa_true "callback returns value for each defined callback and catches the error callback" \
         [expr {[llength [callback -catch a_callback -arg1 foo bar]] == 2}]
 
     aa_true "callback returns correct value for specified implementation" \
         [expr {[callback -impl an_impl1 a_callback -arg1 foo bar] == 1}]
+
+    aa_true "callback returns correct value for an array ref" \
+        [expr {[callback -impl an_impl2 a_callback -arg1 foo bar] == 2}]
+
+    aa_true "callback works with {} args" \
+        [expr {[callback -impl an_impl2 a_callback -arg1 {} {}] == {}}]
+
+    aa_true "callback errors with missing arg" \
+        [expr [catch {callback -impl an_impl2 a_callback -arg1 foo} err] == 1]
 
     aa_true "throws error for invalid arguments with implementations" \
         [catch {callback a_callback bar} error]
@@ -116,5 +139,12 @@ aa_register_case -cats {api smoke} ad_proc_fire_callback {
 
     aa_true "throws error without -catch when an error occurs in a callback" \
         [catch {callback a_callback -arg1 foo bar} error]
+
+    set x [catch {callback -impl an_impl2 a_callback -arg1 foo {[EvilCallback]}} error]
+    aa_false "EvilCallback not invoked returned $error" $x
+
+    set x [catch {callback -impl an_impl2 a_callback -arg1 {[EvilCallback]} bar} error]
+    aa_false "EvilCallback not invoked returned $error" $x
+
 
 }
