@@ -106,6 +106,10 @@ begin
   -- Reset the last time of execution to start of processing
   update cr_scheduled_release_job set last_exec = this_exec;
 
+  -- Table was growing without bound (OpenACS DanW)
+  delete from cr_scheduled_release_log
+  where exec_date < sysdate - 4*7;
+
   commit;
 
 end cr_scheduled_release_exec;
@@ -113,49 +117,51 @@ end cr_scheduled_release_exec;
 show errors
 
 -- initialize the scheduled publication job
-    
-declare
+-- job scheduling moved to aolserver (OpenACS - DanW)    
 
-  v_job_id integer;
-  interval integer := 15;
 
-  cursor job_cur is
-    select job from user_jobs 
-      where what = 'cr_scheduled_release_exec;';
+-- declare
 
-begin
+--   v_job_id integer;
+--   interval integer := 15;
 
-  open job_cur;
-  fetch job_cur into v_job_id;
+--   cursor job_cur is
+--     select job from user_jobs 
+--       where what = 'cr_scheduled_release_exec;';
 
-  if job_cur%NOTFOUND then
+-- begin
 
-    dbms_output.put_line('
-      Submitting job to process scheduled updates to live content...');
+--   open job_cur;
+--   fetch job_cur into v_job_id;
 
-    dbms_job.submit(
-      job        =>  v_job_id, 
-      what       =>  'cr_scheduled_release_exec;',
-      next_date  =>  sysdate,
-      interval   =>  'sysdate + ' || (interval/24/60)
-    );
+--   if job_cur%NOTFOUND then
 
-    update cr_scheduled_release_job set job_id = v_job_id;
+--     dbms_output.put_line('
+--       Submitting job to process scheduled updates to live content...');
+
+--     dbms_job.submit(
+--       job        =>  v_job_id, 
+--       what       =>  'cr_scheduled_release_exec;',
+--       next_date  =>  sysdate,
+--       interval   =>  'sysdate + ' || (interval/24/60)
+--     );
+
+--     update cr_scheduled_release_job set job_id = v_job_id;
  
-  else
+--   else
 
-    dbms_job.change(
-      job        =>  v_job_id, 
-      what       =>  'cr_scheduled_release_exec;',
-      next_date  =>  sysdate,
-      interval   =>  'sysdate + ' || (interval/24/60)
-    );
+--     dbms_job.change(
+--       job        =>  v_job_id, 
+--       what       =>  'cr_scheduled_release_exec;',
+--       next_date  =>  sysdate,
+--       interval   =>  'sysdate + ' || (interval/24/60)
+--     );
 
-  end if;
+--   end if;
 
-end;
-/
-show errors
+-- end;
+-- /
+-- show errors
 
 
 

@@ -1759,7 +1759,6 @@ declare
   v_revision_id                            cr_revisions.revision_id%TYPE;
   v_publish_date                           cr_revisions.publish_date%TYPE;
 begin
-  -- FIXME: what is up with this? both selects are the same.
 
   if get_publish_date__is_live then
     select

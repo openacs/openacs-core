@@ -95,6 +95,10 @@ begin
     exec__err_msg
   );
 
+  -- Table was growing without bound (OpenACS DanW)
+  delete from cr_scheduled_release_log
+  where exec_date < now() - ''4 week''::interval;
+
   -- Reset the last time of execution to start of processing
   update cr_scheduled_release_job set last_exec = exec__this_exec;
 
@@ -106,6 +110,9 @@ end;' language 'plpgsql';
 -- show errors
 
 -- initialize the scheduled publication job
+
+-- Job scheduling has been moved to aolserver for both the oracle and 
+-- postgresql versions.  DanW
     
 create function inline_1 ()
 returns integer as '
