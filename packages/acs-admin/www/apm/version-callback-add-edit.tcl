@@ -75,6 +75,8 @@ ad_form -name callback -cancel_url $return_url -form {
 } -on_submit {
     
     apm_set_callback_proc -type $type -version_id $version_id $proc
+
+    apm_package_install_spec $version_id
     
     ad_returnredirect $return_url
     ad_script_abort

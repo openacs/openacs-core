@@ -38,7 +38,7 @@ ad_page_contract {
 db_transaction {
     apm_parameter_register -parameter_id $parameter_id $parameter_name $description $package_key \
 	$default_value $datatype $section_name $min_n_values $max_n_values
-    apm_generate_package_spec $version_id
+    apm_package_install_spec $version_id
 } on_error {
     if {![db_string apm_parameter_register_doubleclick_p {
 	select 1 from apm_parameters where parameter_id = :parameter_id
