@@ -25,7 +25,7 @@
           steps like looking directly at tables and testing stored
           procedures.  Start emacs.  Type
             <userinput>M-x sql-postgres</userinput>.  Press enter for
-            server name and use <userinput><replaceable>service0</replaceable></userinput> for
+            server name and use <userinput><replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput> for
             database name.  You can use C-(up arrow) and C-(down arrow)
             for command history.
 </para>
@@ -38,7 +38,7 @@
       <para></para>
     </formalpara>
     <para>To set up real-time monitoring of the AOLserver error
-          log, <emphasis role="bold">type</emphasis> <screen>less /var/lib/aolserver/<replaceable>service0</replaceable>/log/openacs-dev-error.log</screen>
+          log, <emphasis role="bold">type</emphasis> <screen>less /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/log/openacs-dev-error.log</screen>
           <literallayout>F to show new log entries in real time (like tail -f)
 C-c to stop and F to start it up again. 
 G goes to the end.
@@ -101,9 +101,9 @@ G goes to the end.
     It seems to me that a lot of people have been asking for some guidelines on how to write automated tests. I've done several tests by now and have found the process to be extremely easy and useful. It's a joy to work with automated testing once you get the hang of it.</para>
     <para>Create the directory that will contain the test
     script and edit the script file.  The directory location and file name are standards which are recognized by the automated testing package:</para>
-    <screen>[service0 www]$<userinput> mkdir /var/lib/aolserver/<replaceable>service0</replaceable>/packages/myfirstpackage/tcl/test</userinput>
-[service0 www]$<userinput> cd /var/lib/aolserver/<replaceable>service0</replaceable>/packages/myfirstpackage/tcl/test</userinput>
-[service0 test]$ <userinput>emacs myfirstpackages-procs.tcl</userinput></screen>
+    <screen>[$OPENACS_SERVICE_NAME www]$<userinput> mkdir /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/tcl/test</userinput>
+[$OPENACS_SERVICE_NAME www]$<userinput> cd /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/tcl/test</userinput>
+[$OPENACS_SERVICE_NAME test]$ <userinput>emacs myfirstpackages-procs.tcl</userinput></screen>
     <para>Write the tests.  This is obviously the big step :)  The script should first call ad_library like any normal -procs.tcl file:</para>
     <screen>ad_library {
     ...

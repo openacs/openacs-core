@@ -16,7 +16,7 @@
     <sect1 id="install-openacs-keepalive" xreflabel="Keep AOLserver alive">
 	<title>Starting and Stopping an OpenACS instance.</title> 
 
-    <para>The simplest way to start and stop and OpenACS site is to run the startup shell script provided, <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/run</computeroutput>.  This runs as a regular task, and logs to the logfile.  To stop the site, kill the script.</para>
+    <para>The simplest way to start and stop and OpenACS site is to run the startup shell script provided, <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/daemontools/run</computeroutput>.  This runs as a regular task, and logs to the logfile.  To stop the site, kill the script.</para>
     <para>A more stable way to run OpenACS is with a "keepalive" mechanism of some sort, so that whenever the server halts or is stopped for a reset, it restarts automatically.  This is recommended for development and production servers.</para>
       <para>The Reference Platform uses Daemontools to control AOLserver.  A simpler method, using <computeroutput>init</computeroutput>, is <link linkend="install-openacs-inittab">here</link>.</para>
       <orderedlist>
@@ -49,62 +49,62 @@
             </itemizedlist>
             <para>Hence, the AOLserver
 	  instance for your development server is started by the file
-	  <computeroutput>/service/service0/run</computeroutput>.
+	  <computeroutput>/service/$OPENACS_SERVICE_NAME/run</computeroutput>.
 	  But we use a symlink to make it easier to add and remove
 	  stuff from the <computeroutput>/service</computeroutput>, so
 	  the actual location is
-          <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>etc/daemontools/run</computeroutput>.</para>
+          <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>etc/daemontools/run</computeroutput>.</para>
 
           <para>Daemontools creates additional files and directories to track status and
         log.  A daemontools directory is included in the OpenACS tarball at
-        <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools</computeroutput>.  To use it, first ill any existing AOLserver instances.  As root, link the <computeroutput>daemontools</computeroutput> directory into the <computeroutput>/service</computeroutput> directory.  Daemontools' <computeroutput>svscan</computeroutput> process checks this directory every five seconds, and will quickly execute <computeroutput>run</computeroutput>.</para>
+        <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/daemontools</computeroutput>.  To use it, first ill any existing AOLserver instances.  As root, link the <computeroutput>daemontools</computeroutput> directory into the <computeroutput>/service</computeroutput> directory.  Daemontools' <computeroutput>svscan</computeroutput> process checks this directory every five seconds, and will quickly execute <computeroutput>run</computeroutput>.</para>
             
-            <screen>[service0 etc]$ <userinput>killall nsd</userinput>
+            <screen>[$OPENACS_SERVICE_NAME etc]$ <userinput>killall nsd</userinput>
 nsd: no process killed
-[service0 etc]$ <userinput>emacs /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/run</userinput>
-[service0 etc]$ <userinput>exit</userinput>
+[$OPENACS_SERVICE_NAME etc]$ <userinput>emacs /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/daemontools/run</userinput>
+[$OPENACS_SERVICE_NAME etc]$ <userinput>exit</userinput>
 
-[root root]# <userinput>ln -s /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/ /service/<replaceable>service0</replaceable></userinput></screen>
+[root root]# <userinput>ln -s /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/daemontools/ /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput></screen>
             <para>Verify that AOLserver is running.</para>
             <screen>[root root]#<userinput> ps -auxw | grep nsd</userinput>
-<replaceable>service0</replaceable>   5562 14.2  6.2 22436 15952 ?       S    11:55   0:04 /usr/local/aolserver/bin/nsd -it /var/lib/aolserver/<replaceable>service0</replaceable>/etc/config.tcl -u serve
+<replaceable>$OPENACS_SERVICE_NAME</replaceable>   5562 14.2  6.2 22436 15952 ?       S    11:55   0:04 /usr/local/aolserver/bin/nsd -it /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/config.tcl -u serve
 root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
 [root root]#</screen>
           </listitem>
           <listitem>
-            <para>The user <replaceable>service0</replaceable> can now control the service <replaceable>service0</replaceable> with these commands:</para>
+            <para>The user <replaceable>$OPENACS_SERVICE_NAME</replaceable> can now control the service <replaceable>$OPENACS_SERVICE_NAME</replaceable> with these commands:</para>
             <itemizedlist>
               <listitem><para>
 
-            <computeroutput>svc -d /service/<replaceable>service0</replaceable></computeroutput> -
+            <computeroutput>svc -d /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></computeroutput> -
             Bring the server down
 
           </para></listitem>
               
               <listitem><para>
 
-            <computeroutput>svc -u /service/<replaceable>service0</replaceable></computeroutput> -
+            <computeroutput>svc -u /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></computeroutput> -
             Start the server up and leave it in keepalive mode.
 
           </para></listitem>
               
               <listitem><para>
 
-            <computeroutput>svc -o /service/<replaceable>service0</replaceable></computeroutput> -
+            <computeroutput>svc -o /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></computeroutput> -
             Start the server up once. Do not restart it if it stops.
 
           </para></listitem>
 
         <listitem><para>
 
-            <computeroutput>svc -t /service/<replaceable>service0</replaceable></computeroutput> -
+            <computeroutput>svc -t /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></computeroutput> -
             Stop and immediately restart the server.
 
           </para></listitem>
 
         <listitem><para>
         
-            <computeroutput>svc -k /service/<replaceable>service0</replaceable></computeroutput> -
+            <computeroutput>svc -k /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></computeroutput> -
             Sends the server a KILL signal. This is like KILL -9. AOLserver
             exits immediately. If svc -t fails to fully kill AOLserver, use
             this option.  This does not take the server out of keepalive mode, so it should still bounce back up immediately.
@@ -115,20 +115,20 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
 
         <listitem>
           <para>Install a script to automate the stopping and starting
-          of AOLserver services via daemontools.  You can then restart a service via <computeroutput>restart-aolserver <replaceable>service0</replaceable></computeroutput></para>
-          <screen>[root root]# <userinput>cp /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/restart-aolserver-daemontools.txt /usr/local/bin/restart-aolserver</userinput>
+          of AOLserver services via daemontools.  You can then restart a service via <computeroutput>restart-aolserver <replaceable>$OPENACS_SERVICE_NAME</replaceable></computeroutput></para>
+          <screen>[root root]# <userinput>cp /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-core-docs/www/files/restart-aolserver-daemontools.txt /usr/local/bin/restart-aolserver</userinput>
 [root root]# <userinput>chmod 755 /usr/local/bin/restart-aolserver</userinput>
 [root root]#</screen>
         </listitem>
       <listitem>
         <para>
         At this point, these commands will work only for the
-        <computeroutput>root</computeroutput> user.  Grant permission for the <computeroutput>web</computeroutput> group to use <computeroutput>svc</computeroutput> commands on the <emphasis><replaceable>service0</replaceable></emphasis> server.</para>
-            <screen>[root root]# <userinput>svgroup web /service/<replaceable>service0</replaceable></userinput>
+        <computeroutput>root</computeroutput> user.  Grant permission for the <computeroutput>web</computeroutput> group to use <computeroutput>svc</computeroutput> commands on the <emphasis><replaceable>$OPENACS_SERVICE_NAME</replaceable></emphasis> server.</para>
+            <screen>[root root]# <userinput>svgroup web /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [root root]#</screen>
           </listitem>
           <listitem>
-            <para>Verify that the controls work.  You may want to <computeroutput>tail -f /var/lib/aolserver/<replaceable>service0</replaceable>/log/<replaceable>service0</replaceable>-error.log</computeroutput> in another window, so you can see what happens when you type these commands.
+            <para>Verify that the controls work.  You may want to <computeroutput>tail -f /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/log/<replaceable>$OPENACS_SERVICE_NAME</replaceable>-error.log</computeroutput> in another window, so you can see what happens when you type these commands.
       </para>
             <para>
 
@@ -165,10 +165,10 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
 	      <entry>aolserver</entry>
 	      <entry><computeroutput></computeroutput>supervise
 (a child of svscanboot)</entry>
-	      <entry>/service/<replaceable>service0</replaceable>/run</entry>
-	      <entry>/var/lib/aolserver/<replaceable>service0</replaceable>/log/error.log</entry>
-	      <entry>/var/lib/aolserver/<replaceable>service0</replaceable>/log/service0.log</entry>
-            <entry>svc -k /service/<replaceable>service0</replaceable></entry>
+	      <entry>/service/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/run</entry>
+	      <entry>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/log/error.log</entry>
+	      <entry>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/log/$OPENACS_SERVICE_NAME.log</entry>
+            <entry>svc -k /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></entry>
 	    </row>
 	    <row>
 	      <entry>postgresql</entry>
@@ -335,7 +335,7 @@ Killing 23750</programlisting>
         <title>Services on different ports</title>
         <para>To run a different service on another port but the same
         ip, simply repeat <xref linkend="openacs"/> replacing
-        <replaceable>service0</replaceable>, and change the
+        <replaceable>$OPENACS_SERVICE_NAME</replaceable>, and change the
 <programlisting>set httpport              8000
 set httpsport             8443 </programlisting>
  to different values.</para>
@@ -487,17 +487,17 @@ cvs up index.adp</programlisting>
           </listitem>
           <listitem id="ssl-certificates" xreflabel="Generate ssl certificates">
             <para>Prepare a certificate directory for the service.</para>
-            <screen>[service0 etc]$ <userinput>mkdir /var/lib/aolserver/<replaceable>service0</replaceable>/etc/certs</userinput>
-[service0 etc]$ <userinput>chmod 700 /var/lib/aolserver/<replaceable>service0</replaceable>/etc/certs</userinput>
-[service0 etc]$ 
-<action>mkdir /var/lib/aolserver/<replaceable>service0</replaceable>/etc/certs
-chmod 700 /var/lib/aolserver/<replaceable>service0</replaceable>/etc/certs</action></screen>            
+            <screen>[$OPENACS_SERVICE_NAME etc]$ <userinput>mkdir /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/certs</userinput>
+[$OPENACS_SERVICE_NAME etc]$ <userinput>chmod 700 /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/certs</userinput>
+[$OPENACS_SERVICE_NAME etc]$ 
+<action>mkdir /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/certs
+chmod 700 /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/certs</action></screen>            
           </listitem>
           <listitem>
             <para>It takes two files to support an SSL connection.  The certificate is the public half of the key pair - the server sends the certificate to browser requesting ssl.  The key is the private half of the key pair.  In addition, the certificate must be signed by Certificate Authority or browsers will protest.  Each web browser ships with a built-in list of acceptable Certificate Authorities (CAs) and their keys.  Only a site certificate signed by a known and approved CA will work smoothly.  Any other certificate will cause browsers to produce some messages or block the site.  Unfortunately, getting a site certificate signed by a CA costs money.  In this section, we'll generate an unsigned certificate which will work in most browsers, albeit with pop-up messages.</para>
             <para>Use an OpenSSL perl script to generate a certificate and key.</para>
-            <screen>[service0 service0]$ <userinput>cd /var/lib/aolserver/service0/etc/certs</userinput>
-[service0 certs]$ <userinput>perl /usr/share/ssl/misc/CA -newcert</userinput>
+            <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/certs</userinput>
+[$OPENACS_SERVICE_NAME certs]$ <userinput>perl /usr/share/ssl/misc/CA -newcert</userinput>
 Using configuration from /usr/share/ssl/openssl.cnf
 Generating a 1024 bit RSA private key
 ...++++++
@@ -506,15 +506,15 @@ writing new private key to 'newreq.pem'
 Enter PEM pass phrase:</screen>
             <para>Enter a pass phrase for the CA certificate.  Then, answer the rest of the questions.  At the end you should see this:</para>
         <screen>Certificate (and private key) is in newreq.pem
-[service0 certs]$</screen>
+[$OPENACS_SERVICE_NAME certs]$</screen>
         <para><computeroutput>newreq.pem</computeroutput> contains our certificate and private key.  The key is protected by a passphrase, which means that we'll have to enter the pass phrase each time the server starts.  This is impractical and unnecessary, so we create an unprotected version of the key.  <emphasis>Security implication</emphasis>: if anyone gets access to the file keyfile.pem, they effectively own the key as much as you do.  Mitigation: don't use this key/cert combo for anything besides providing ssl for the web site.</para>
             <screen>[root misc]# <userinput>openssl rsa -in newreq.pem -out keyfile.pem</userinput>
 read RSA key
 Enter PEM pass phrase:
 writing RSA key
-[service0 certs]$ </screen>
+[$OPENACS_SERVICE_NAME certs]$ </screen>
         <para>To create the certificate file, we take the combined file, copy it, and strip out the key.</para>
-        <screen>[service0 certs]$ <userinput>cp newreq.pem certfile.pem</userinput>
+        <screen>[$OPENACS_SERVICE_NAME certs]$ <userinput>cp newreq.pem certfile.pem</userinput>
 [root misc]# <userinput>emacs certfile.pem</userinput></screen>
         <para>Strip out the section that looks like</para>
         <programlisting>-----BEGIN RSA PRIVATE KEY-----
@@ -538,46 +538,46 @@ S/Sd2MYA0JVmQuIt5bYowXR1KYKDka1d3DUgtoVTiFepIRUrMkZlCli08mWVjE6T
       the OpenACS tarball.</para>
     <orderedlist>
       <listitem>
-        <screen>[root src]# <userinput>su - service0</userinput>
-[service0 service0]$ <userinput>cd /var/lib/aolserver/service0</userinput>
-[service0 service0]$ <userinput>cp /var/lib/aolserver/service0/packages/acs-core-docs/www/files/analog.cfg.txt etc/analog.cfg</userinput>
-[service0 service0]$ <userinput>mkdir www/log</userinput>
-[service0 service0]$ <userinput>cp -r /usr/share/analog-5.31/images www/log/</userinput>
-[service0 service0]$ <action>
-su - service0
-cd /var/lib/aolserver/service0
-cp /var/lib/aolserver/service0/packages/acs-core-docs/www/files/analog.cfg.txt etc/analog.cfg
+        <screen>[root src]# <userinput>su - $OPENACS_SERVICE_NAME</userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME</userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cp /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/files/analog.cfg.txt etc/analog.cfg</userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>mkdir www/log</userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cp -r /usr/share/analog-5.31/images www/log/</userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <action>
+su - $OPENACS_SERVICE_NAME
+cd /var/lib/aolserver/$OPENACS_SERVICE_NAME
+cp /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/files/analog.cfg.txt etc/analog.cfg
 mkdir www/log
 cp -r /usr/share/analog-5.31/images www/log/</action></screen>
         <para>Edit
-<computeroutput>/var/lib/aolserver/service0/etc/analog.cfg</computeroutput> and change the variable in <computeroutput>HOSTNAME "[my
+<computeroutput>/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/analog.cfg</computeroutput> and change the variable in <computeroutput>HOSTNAME "[my
 organisation]"</computeroutput> to reflect your website title.  If you
 don't want the traffic log to be publicly visible, change
-<computeroutput>OUTFILE /var/lib/aolserver/service0/www/log/traffic.html</computeroutput> to use a private
+<computeroutput>OUTFILE /var/lib/aolserver/$OPENACS_SERVICE_NAME/www/log/traffic.html</computeroutput> to use a private
 directory.</para>
       </listitem>
       <listitem>
         <para>Run it.</para>
-        <screen>[service0 service0]$ <userinput>/usr/share/analog-5.31/analog -G -g/var/lib/aolserver/service0/etc/analog.cfg</userinput>
+        <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>/usr/share/analog-5.31/analog -G -g/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/analog.cfg</userinput>
 /usr/share/analog-5.31/analog: analog version 5.31/Unix
 /usr/share/analog-5.31/analog: Warning F: Failed to open DNS input file
-  /home/service0/dnscache: ignoring it
+  /home/$OPENACS_SERVICE_NAME/dnscache: ignoring it
   (For help on all errors and warnings, see docs/errors.html)
 /usr/share/analog-5.31/analog: Warning R: Turning off empty Search Word Report
-[service0 service0]$</screen>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$</screen>
         <para>Verify that it works by browing to <computeroutput>http://yourserver.test:8000/log/traffic.html</computeroutput></para>
       </listitem>
       <listitem>
         <para>Automate this by creating a file in
           <computeroutput>/etc/cron.daily</computeroutput>.</para>
-          <screen>[service0 service0]$ <userinput>exit</userinput>
+          <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>exit</userinput>
 logout
 
 [root root]# <userinput>emacs /etc/cron.daily/analog</userinput></screen>
         <para>Put this into the file:</para>
         <programlisting>#!/bin/sh
 
-/usr/share/analog-5.31/analog -G -g/var/lib/aolserver/<replaceable>service0</replaceable>/etc/analog.cfg</programlisting>
+/usr/share/analog-5.31/analog -G -g/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/analog.cfg</programlisting>
         <screen>[root root]# <userinput>chmod 755 /etc/cron.daily/analog</userinput></screen>
         <para>Test it by running the script.</para>
         <screen>[root root]# <userinput>sh /etc/cron.daily/analog</userinput></screen>
@@ -647,7 +647,7 @@ logout
         <listitem>
           <para>Identify a runaway Oracle query: first, use <userinput>ps aux</userinput> or <userinput>top</userinput> to get the UNIX process ID of a runaway Oracle process.</para>
         <para>Log in to SQL*Plus as the admin:</para>
-        <screen>[<replaceable>service0</replaceable> ~]$ svrmgrl
+        <screen>[<replaceable>$OPENACS_SERVICE_NAME</replaceable> ~]$ svrmgrl
 
 Oracle Server Manager Release 3.1.7.0.0 - Production
 

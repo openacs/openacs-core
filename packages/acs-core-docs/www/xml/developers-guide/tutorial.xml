@@ -73,7 +73,7 @@ standard OpenACS &version; distribution.
 
             <row>
               <entry>Name of development account</entry>
-              <entry><replaceable>service0</replaceable></entry>
+              <entry><replaceable>$OPENACS_SERVICE_NAME</replaceable></entry>
             </row>
             <row>
               <entry>New Package key</entry>
@@ -139,7 +139,7 @@ standard OpenACS &version; distribution.
       </listitem>
     </orderedlist>
       <para>This creates a package rooted at
-          <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/<replaceable>myfirstpackage</replaceable></computeroutput>.
+          <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/<replaceable>myfirstpackage</replaceable></computeroutput>.
           This is the "home directory" of our new package, and all
           files in the package will be within this directory.</para>
     </sect2>
@@ -167,13 +167,13 @@ standard OpenACS &version; distribution.
       </orderedlist>
       <para>By mounting the package, we've caused all requests to
       <computeroutput>http://yourserver.test:8000/my-first-package</computeroutput>
-      to be satisfied from the files at <computeroutput>/var/lib/aolserver/service0/packages/myfirstpackage/www</computeroutput>.</para>
+      to be satisfied from the files at <computeroutput>/var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/myfirstpackage/www</computeroutput>.</para>
     </sect2>
     <sect2>
       <title>Quick start</title>
       <para>The remainder of the tutorial walks you through each file one at a time as you create the package.  You can skip all this, and get a working package, by doing the following:</para>
-    <screen>cd /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/tutorial
-psql <replaceable>service0</replaceable> -f myfirstpackage-create.sql
+    <screen>cd /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-core-docs/www/files/tutorial
+psql <replaceable>$OPENACS_SERVICE_NAME</replaceable> -f myfirstpackage-create.sql
 cp note-edit.* note-delete.tcl index.* ../../../../myfirstpackage/www/
 mkdir ../../../../myfirstpackage/lib
 cp note-list.* ../../../../myfirstpackage/lib/

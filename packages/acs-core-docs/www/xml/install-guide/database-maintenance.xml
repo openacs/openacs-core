@@ -35,7 +35,7 @@
         <listitem>
           <para>Change the OpenACS service's configuration file to
           point to the remote database.  Edit
-          <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/config.tcl</computeroutput>
+          <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/config.tcl</computeroutput>
           and change</para>
           <programlisting></programlisting>
           <para>to </para>
@@ -60,14 +60,14 @@
         option. This command will drop the user and every database object
         the user owns.</para>
 
-      <programlisting>SVRMGR&gt; <userinput>drop user <replaceable>service0</replaceable> cascade;</userinput></programlisting>
+      <programlisting>SVRMGR&gt; <userinput>drop user <replaceable>$OPENACS_SERVICE_NAME</replaceable> cascade;</userinput></programlisting>
 
       <para>
         If this does not work because svrmgrl &quot;cannot drop a user that
         is currently connected&quot;, make sure to kill the AOLserver using
         this user. If it still does not work, do:</para>
 
-      <programlisting>SVRMGR&gt; <userinput>select username, sid, serial# from v$session where lower(username)=&#39;<replaceable>service0</replaceable>&#39;;</userinput></programlisting>
+      <programlisting>SVRMGR&gt; <userinput>select username, sid, serial# from v$session where lower(username)=&#39;<replaceable>$OPENACS_SERVICE_NAME</replaceable>&#39;;</userinput></programlisting>
 
       <para>and then</para>
       <programlisting>SVRMGR&gt; <userinput>alter system kill session &#39;<replaceable>sid, serial#</replaceable>&#39;;</userinput></programlisting>
@@ -81,7 +81,7 @@
       <para>
         If you feel the need to delete <emphasis>everything</emphasis>
         related to the service, you can also issue the following:</para>
-      <programlisting>SVRMGR&gt; <userinput>drop tablespace <replaceable>service0</replaceable> including contents cascade constraints;</userinput></programlisting>   
+      <programlisting>SVRMGR&gt; <userinput>drop tablespace <replaceable>$OPENACS_SERVICE_NAME</replaceable> including contents cascade constraints;</userinput></programlisting>   
     </sect2>
 
     <sect2 id="install-openacs-delete-postgres-tablespace" xreflabel="Deleting a PostgreSQL tablespace">
@@ -95,11 +95,11 @@
         your server in <computeroutput>/etc/inittab</computeroutput>,
         reread the inittab with <computeroutput>/sbin/init
         q</computeroutput>, and then <computeroutput>restart-aolserver
-        <replaceable>service0</replaceable></computeroutput>.</para>
+        <replaceable>$OPENACS_SERVICE_NAME</replaceable></computeroutput>.</para>
     
       <para>Then, to drop the db, just do:</para>
       <programlisting>
-[service0 ~]$ <userinput>dropdb <replaceable>service0</replaceable></userinput>
+[$OPENACS_SERVICE_NAME ~]$ <userinput>dropdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 DROP DATABASE</programlisting>
     </sect2>
   </sect1>
@@ -128,7 +128,7 @@ DROP DATABASE</programlisting>
     <para>We'll set vacuum up to run nightly at 1 AM. Add the following
     line:</para>
     <programlisting>
-0 1 * * * /usr/local/pgsql/bin/vacuumdb <replaceable>service0</replaceable></programlisting>
+0 1 * * * /usr/local/pgsql/bin/vacuumdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></programlisting>
     <para><phrase role="cvstag">($Id$)</phrase></para>
 
   </sect1>

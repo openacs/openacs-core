@@ -54,10 +54,10 @@
     </sect2>
     <sect2>
       <title>How do I put custom functionality on front page of a new site?</title>
-      <para>Every page within an OpenACS site is part of a <emphasis role="strong">subsite</emphasis> <ulink url="/doc/acs-subsite">More information)</ulink>.  The home page of the entire site is the front page is a special, default instance of a subsite, served from <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/www</computeroutput>.  If an index page is not found there, the default index page for all subsites is used.  To customize the code on the front page, copy the default index page from the Subsite package to the Main site and edit it:</para>
+      <para>Every page within an OpenACS site is part of a <emphasis role="strong">subsite</emphasis> <ulink url="/doc/acs-subsite">More information)</ulink>.  The home page of the entire site is the front page is a special, default instance of a subsite, served from <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/www</computeroutput>.  If an index page is not found there, the default index page for all subsites is used.  To customize the code on the front page, copy the default index page from the Subsite package to the Main site and edit it:</para>
       <orderedlist>
   <listitem>
-    <screen><userinput>cp <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-subsite/www/index*</computeroutput> <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/www</computeroutput></userinput></screen>
+    <screen><userinput>cp <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-subsite/www/index*</computeroutput> <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/www</computeroutput></userinput></screen>
         </listitem>
         <listitem>
           <para>Edit the new <computeroutput>index.adp</computeroutput> to change the text; you shouldn't need to edit <computeroutput>index.tcl</computeroutput> unless you are adding new functionality.</para>
@@ -73,14 +73,14 @@
           A templated page uses an ADP/TCL pair.  The first line in the ADP file is usually:
           </para>
           <programlisting>&lt;master&gt;</programlisting>  
-          <para>If it appears exactly like this, without any arguments, the template processer uses <computeroutput>default-master</computeroutput> for that subsite.  For pages in <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/www</computeroutput>, this is <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/www/default-master.adp</computeroutput> and the associated .tcl file.
+          <para>If it appears exactly like this, without any arguments, the template processer uses <computeroutput>default-master</computeroutput> for that subsite.  For pages in <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/www</computeroutput>, this is <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/www/default-master.adp</computeroutput> and the associated .tcl file.
           </para>
         </listitem>
         <listitem>
-          <para>The <computeroutput>default-master</computeroutput> is itself a normal ADP page.  It draws the subsite navigation elements and invokes <computeroutput>site-master</computeroutput> (<computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/www/site-master.adp</computeroutput> and .tcl)</para>
+          <para>The <computeroutput>default-master</computeroutput> is itself a normal ADP page.  It draws the subsite navigation elements and invokes <computeroutput>site-master</computeroutput> (<computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/www/site-master.adp</computeroutput> and .tcl)</para>
         </listitem>
         <listitem>
-          <para>The <computeroutput>site-master</computeroutput> draws site-wide navigation elements and invokes <computeroutput>blank-master</computeroutput> (<computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/www/blank-master.adp</computeroutput> and .tcl).  </para>
+          <para>The <computeroutput>site-master</computeroutput> draws site-wide navigation elements and invokes <computeroutput>blank-master</computeroutput> (<computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/www/blank-master.adp</computeroutput> and .tcl).  </para>
         </listitem>
         <listitem>
           <para><computeroutput>Blank-master</computeroutput> does HTML housekeeping and provides a framework for special sitewide navigation "meta" elements such as Translator widgets and Admin widgets.</para>
@@ -125,7 +125,7 @@
         <listitem>
           <formalpara>
             <title>Finding the problem</title>
-            <para>We start with the page that has the error.  In the URL it's <computeroutput>http://myserver.net/events/event-info.tcl</computeroutput>, so open the file <computeroutput>/var/lib/aolserver/service0/packages/events/www/event-info.tcl</computeroutput>.  It contains this line:</para>
+            <para>We start with the page that has the error.  In the URL it's <computeroutput>http://myserver.net/events/event-info.tcl</computeroutput>, so open the file <computeroutput>/var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/events/www/event-info.tcl</computeroutput>.  It contains this line:</para>
           </formalpara>
           <programlisting>set can_register_p [events::security::can_register_for_event_p -event_id $event_id]</programlisting>
           <para>We need to know what that procedure does, so go to <ulink url="/api-doc">/api-doc</ulink>, paste events::security::can_register_for_event_p into the ACS Tcl API Search box, and click Feeling Lucky.  The next pages shows the proc, and we click "show source" to see more information.  The body of the proc is simply</para>
