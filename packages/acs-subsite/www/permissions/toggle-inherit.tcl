@@ -9,10 +9,11 @@ ad_page_contract {
   @cvs-id $Id$
 } {
   object_id:integer,notnull
+  {application_url ""}
 }
 
 ad_require_permission $object_id admin
 
 permission::toggle_inherit -object_id $object_id
 
-ad_returnredirect one?[export_url_vars object_id]
+ad_returnredirect one?[export_vars {application_url object_id}]
