@@ -70,11 +70,11 @@ ad_proc -public lang::system::locale {
         return [site_wide_locale]
     } 
 
-    if { [empty_string_p $package_id] } {
+    if { [empty_string_p $package_id] && [ad_conn isconnected] } {
         set package_id [ad_conn package_id]
     }
 
-    # get locale from lang_package_locale
+    # Get locale for package
 
     set locale [package_level_locale $package_id]
 
@@ -200,13 +200,20 @@ ad_proc -private lang::system::default_locale_not_cached {
     @creation-date 2003-08-13
     @return the default locale or the empty string if there is no default enabled locale.
 } {
-    return [db_string select_default_locale {
+    # Using a bind variable for language doens't work
+    # with Oracle since the language column is a char, not a varchar
+    # We'd have to pad the language with spaces for bind vars to work
+    return [db_string select_default_locale "
               select locale
               from   ad_locales
-              where  language = :language
-              and    default_p = 't'
+              where  language = '$language'
               and    enabled_p = 't'
-    } -default ""]
+              and    (default_p = 't' or
+                      (select count(*)
+                      from ad_locales
+                      where language = '$language') = 1
+                     )
+    " -default ""]
 }
 
 ad_proc -public lang::system::get_locales {} {
@@ -374,14 +381,12 @@ ad_proc -public lang::user::timezone {} {
     
     @return  a timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
 } {
-    if { ![lang::system::timezone_support_p] } {
+    set user_id [ad_conn user_id]
+    if { ![lang::system::timezone_support_p] || $user_id == 0 } {
         return ""
     }
 
-    # FIXME:
-    # We probably don't want to keep this in client properties, since these are
-    # no longer permanent. We'll move this into a DB table at some point.
-    return [ad_get_client_property -cache t "acs-lang" "timezone"]
+    return [db_string select_user_timezone {} -default ""]
 }
     
 ad_proc -public lang::user::set_timezone { 
@@ -395,11 +400,13 @@ ad_proc -public lang::user::set_timezone {
         return ""
     }
 
-    # FIXME: (lars)
-    # This shouldn't be in client properties, since they're session-based
-    # I'm doing this for now, because I don't know whether we'll use a separate table, 
-    # like with the locale setting, or the user-profile package.
-    ad_set_client_property -persistent t "acs-lang" timezone $timezone
+    set user_id [ad_conn user_id]
+
+    if { $user_id == 0 } {
+        error "User not logged in"
+    } else {
+        db_dml set_user_timezone {}
+    }
 }
 
 
@@ -491,7 +498,7 @@ ad_proc -private lang::conn::browser_locale {} {
 
     foreach locale $conn_locales {       
         regexp {^([^_]+)(?:_([^_]+))?$} $locale locale language region 
-        set orig_locale $locale
+
         if { [exists_and_not_null region] } {
             # We have both language and region, e.g. en_US
             if { [lsearch -exact $system_locales $locale] != -1 } {
