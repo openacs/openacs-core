@@ -8,7 +8,6 @@ if { $admin_p } {
     lappend actions [_ acs-subsite.Create_new_subsite] "[subsite::get_element -element url]admin/subsite-add" {}
 }
 
-
 list::create \
     -name subsites \
     -multirow subsites \
@@ -17,7 +16,7 @@ list::create \
     -elements {
         instance_name {
             label "[_ acs-subsite.Name]"
-            link_url_eval "$name/"
+            link_url_eval "$url/"
         }
         num_members {
             label "\# [_ acs-subsite.Members]"
@@ -51,6 +50,7 @@ db_multirow -extend { join_url request_url } subsites select_subsites {
            p.instance_name,
            n.node_id, 
            n.name,
+           :subsite_url || n.name as url,
            (select count(*)
             from   group_approved_member_map m
             where  m.rel_type = 'membership_rel'
