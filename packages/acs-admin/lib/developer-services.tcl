@@ -6,4 +6,5 @@ set acs_service_contract_url [apm_package_url_from_key "acs-service-contract"]
 
 set acs_api_browser_url [apm_package_url_from_key "acs-api-browser"]
 
+set acs_core_docs_url [apm_package_url_from_key "acs-core-docs"]
 
