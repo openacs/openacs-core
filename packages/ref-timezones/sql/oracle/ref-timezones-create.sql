@@ -121,23 +121,12 @@ as
 
     function utc_to_local (
 	 -- Returns utc_time converted to local time
-	 tz        in timezones.tz%TYPE,
-	 utc_time  in date
-    ) return date;
-
-    function utc_to_local (
-	 -- Returns utc_time converted to local time
-	 tz_id     in timezones.tz_id%TYPE,
+	 tz_id        in timezones.tz_id%TYPE,
 	 utc_time  in date
     ) return date;
 
     function local_to_utc (
 	 tz_id      in timezones.tz_id%TYPE,
-	 local_time in date
-    ) return date;
-
-    function local_to_utc (
-	 tz         in timezones.tz%TYPE,
 	 local_time in date
     ) return date;
 
@@ -150,21 +139,9 @@ as
 	 local_time in date default sysdate
     ) return integer;
 
-    function get_offset (
-	 tz         in timezones.tz%TYPE,
-	 local_time in date default sysdate
-    ) return integer;
-
-
     function get_rawoffset (
 	 -- Gets the timezone offset NOT modified for DST
 	 tz_id      in timezones.tz_id%TYPE,
-	 local_time in date default sysdate
-    ) return integer;
-
-    function get_rawoffset (
-	 -- Gets the timezone offset NOT modified for DST
-	 tz         in timezones.tz%TYPE,
 	 local_time in date default sysdate
     ) return integer;
 
@@ -174,17 +151,11 @@ as
 	 local_time  in date default sysdate
     ) return varchar;
 
-    function get_abbrev (
-	 -- Returns abbreviation for the coversion rule
-	 tz	     in timezones.tz%TYPE,
-	 local_time  in date default sysdate
-    ) return varchar;
-
     function get_zone_offset (
     	 -- Returns the relative offset between two zones at a
 	 -- particular UTC time. 
-	 tz_this     in timezones.tz%TYPE,
-	 tz_other    in timezones.tz%TYPE,
+	 tz_this     in timezones.tz_id%TYPE,
+	 tz_other    in timezones.tz_id%TYPE,
 	 utc_time    in date default sysdate
     ) return integer;
 
@@ -196,29 +167,15 @@ as
 	 local_time  in date default sysdate
     ) return char;	 
 
-    function isdst_p (
-	 -- Returns 't' if timezone is currently using DST
-	 tz	     in timezones.tz%TYPE,
-	 local_time  in date default sysdate
-    ) return char;	 
-
-
     -- Special formatting functions
 
     function get_date (
 	 -- Returns a formatted date with timezone info appended  
 	 tz_id	     in timezones.tz_id%TYPE,
 	 local_time  in date,
-	 format	     in varchar default 'yyyy-mm-ss hh24:mi:ss'
+	 format	     in varchar default 'yyyy-mm-ss hh24:mi:ss',
+         append_timezone_p in char default 't'
     ) return varchar;
-
-    function get_date (
-	 -- Returns a formatted date with timezone info appended  
-	 tz	     in timezones.tz%TYPE,
-	 local_time  in date,
-	 format	     in varchar default 'yyyy-mm-ss hh24:mi:ss'
-    ) return varchar;
-
 
 end timezone;
 /
@@ -317,17 +274,6 @@ as
 	      return utc_time;
     end utc_to_local;
 
-    function utc_to_local (
-	 tz        in timezones.tz%TYPE,
-	 utc_time  in date
-    ) return date
-    is
-    begin
-	 return utc_to_local(get_id(tz), utc_time);
-    end;
-
-
-
     function local_to_utc (
 	 tz_id      in timezones.tz_id%TYPE,
 	 local_time in date
@@ -345,15 +291,6 @@ as
     exception
 	 when no_data_found then
 	      return local_time;
-    end;
-
-    function local_to_utc (
-	 tz         in timezones.tz%TYPE,
-	 local_time in date
-    ) return date
-    is
-    begin
-	 return local_to_utc(get_id(tz),local_time);
     end;
 
     function get_offset (
@@ -375,16 +312,6 @@ as
 	      return 0;
     end;
 
-    function get_offset (
-	 tz         in timezones.tz%TYPE,
-	 local_time in date default sysdate
-    ) return integer
-    is
-    begin
-	 return get_offset(get_id(tz),local_time);
-    end;
-    
-
     function get_rawoffset (
 	 tz_id      in timezones.tz_id%TYPE,
 	 local_time in date default sysdate
@@ -405,15 +332,6 @@ as
 	      return 0;
     end;
 
-    function get_rawoffset (
-	 tz         in timezones.tz%TYPE,
-	 local_time in date default sysdate
-    ) return integer
-    is
-    begin
-	 return get_rawoffset(get_id(tz),local_time);
-    end;
-
     function get_abbrev (
 	 tz_id	     in timezones.tz_id%TYPE,
 	 local_time  in date default sysdate
@@ -432,29 +350,26 @@ as
 	      return 'GMT';
     end;
 
-    function get_abbrev (
-	 tz	     in timezones.tz%TYPE,
-	 local_time  in date default sysdate
-    ) return varchar
-    is
-    begin
-	 return get_abbrev(get_id(tz),local_time);
-    end;
-
     function get_date (
 	 -- Returns a formatted date with timezone info appended  
 	 tz_id	     in timezones.tz_id%TYPE,
 	 local_time  in date,
-	 format	     in varchar default 'yyyy-mm-ss hh24:mi:ss'
+	 format	     in varchar default 'yyyy-mm-ss hh24:mi:ss',
+         append_timezone_p in char default 't'
     ) return varchar
     is
 	 v_date varchar(1000);
     begin
-	 select to_char(local_time,format) || ' ' || abbrev into v_date 
-	 from   timezone_rules
-	 where  tz_id = get_date.tz_id
-	 and    local_time between local_start and local_end
-	 and    rownum = 1;
+         if append_timezone_p = 't' then
+             select to_char(local_time,format) || ' ' || abbrev into v_date 
+             from   timezone_rules
+             where  tz_id = get_date.tz_id
+             and    local_time between local_start and local_end
+             and    rownum = 1;
+         else
+             select to_char(local_time,format) into v_date 
+             from   dual;
+         end if;
 
 	 return v_date;
     exception
@@ -462,17 +377,6 @@ as
 	      select to_char(local_time,format) into v_date from dual;
 	      return v_date;
     end;
-
-    function get_date (
-	 tz	     in timezones.tz%TYPE,
-	 local_time  in date,
-	 format	     in varchar default 'yyyy-mm-ss hh24:mi:ss'
-    ) return varchar
-    is
-    begin
-	 return get_date(get_id(tz),local_time,format);
-    end;
-
 
     function isdst_p (
 	 -- Returns 't' if timezone is currently using DST
@@ -494,18 +398,9 @@ as
 	      return 'f';
     end;
 
-    function isdst_p (
-	 tz	     in timezones.tz%TYPE,
-	 local_time  in date default sysdate
-    ) return char
-    is
-    begin
-	 return isdst_p (get_id(tz),local_time);
-    end;
-
     function get_zone_offset (
-	 tz_this     in timezones.tz%TYPE,
-	 tz_other    in timezones.tz%TYPE,
+	 tz_this     in timezones.tz_id%TYPE,
+	 tz_other    in timezones.tz_id%TYPE,
 	 utc_time    in date default sysdate
     ) return integer
     is
