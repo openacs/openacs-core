@@ -65,11 +65,10 @@ done
 
 # Create a config file with overridden server name if it was
 # provided on the command line
+export orig_config_file=$config_file
 if parameter_true "$server_overridden"; then
     echo "$0: Overriding config server setting with $server"
     create_override_config_file $server $config_file
-else
-    export source_config_file=$config_file
 fi
 
 usage="$0 [OPTIONS]
@@ -147,6 +146,7 @@ done
 
 serverroot=`get_config_param serverroot`
 use_daemontools=`get_config_param use_daemontools`
+svc_bindir=`get_config_param svc_bindir`
 svscanroot=`get_config_param svscanroot`
 svscan_sourcedir=`get_config_param svscan_sourcedir`
 server_url=`get_config_param server_url`
@@ -179,7 +179,7 @@ if [ -n "$post_checkout_script" ] && [ ! -x $post_checkout_script ]; then
 fi
 
 # Log some important parameters for the installation
-echo "$0: Starting installation with config_file $config_file. Using serverroot=$serverroot, server_url=$server_url, do_checkout=$do_checkout, do_install=${do_install}, dotlrn=$dotlrn, and database=$database., use_daemontools=$use_daemontools"
+echo "$0: Starting installation with config_file $orig_config_file. Using serverroot=$serverroot, server_url=$server_url, do_checkout=$do_checkout, do_install=${do_install}, dotlrn=$dotlrn, and database=$database., use_daemontools=$use_daemontools"
 
 if parameter_true $use_daemontools; then
     echo "$0: Daemontools settings: svscanroot=$svscanroot svscan_sourcedir=$svscan_sourcedir"
@@ -192,7 +192,7 @@ prompt_continue $interactive
 echo "$0: Taking down $serverroot at $(date)"
 
 if parameter_true $use_daemontools; then
-    svc -d ${svscanroot}
+    $svc_bindir/svc -d ${svscanroot}
 else
     # non-daemontools stop
     $stop_server_command
@@ -218,7 +218,7 @@ else
     #Oracle
     # Need to su to login shell for sqlplus to be in path. Should maybe make ORA_HOME
     # a config param instead.
-    su - oracle -c "cd $script_path; config_file=$source_config_file ./oracle/recreate-user.sh";
+    su - oracle -c "cd ${script_path}/oracle; config_file=$config_file ./recreate-user.sh";
 fi
 
 # Check out new files
@@ -241,11 +241,11 @@ if [ $do_checkout == "yes" ]; then
 	    fi
 	    rm ${svscanroot}
 	fi
-	svc -xd $svscan_sourcedir
+	$svc_bindir/svc -xd $svscan_sourcedir
     fi
 	
     echo "$0: Checking out OpenACS at $(date)"
-    config_file=$source_config_file dotlrn=$dotlrn ./checkout.sh
+    config_file=$config_file dotlrn=$dotlrn ./checkout.sh
 
     # The post_checkout script can copy back any files (AOLServer config files,
     # log files etc.) under the new source tree, and apply any patches
@@ -278,7 +278,7 @@ if parameter_true $use_daemontools; then
     if [ -f $svscanroot/down ]; then
 	rm $svscanroot/down
     fi
-    svc -u $svscanroot
+    $svc_bindir/svc -u $svscanroot
 else
     # non-daemontools command
     $start_server_command
@@ -299,13 +299,13 @@ if parameter_true $do_install; then
 
   # Install OpenACS
   echo "$0: Starting installation of OpenACS at $(date)"
-  ${tclwebtest_dir}/tclwebtest -config_file $source_config_file openacs-install.test
+  ${tclwebtest_dir}/tclwebtest -config_file $config_file openacs-install.test
   
   # Restart the server
   echo "$0: Restarting server at $(date)"
   
   if parameter_true $use_daemontools; then
-      svc -t $svscanroot
+      $svc_bindir/svc -t $svscanroot
   else
       $restart_server_command
   fi
@@ -321,17 +321,17 @@ if parameter_true $do_install; then
   if parameter_true "$dotlrn_demo_data"; then
       # Do .LRN demo data setup
       echo "$0: Starting basic setup of .LRN at $(date)"
-      ${tclwebtest_dir}/tclwebtest -config_file $source_config_file dotlrn-basic-setup.test
+      ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-basic-setup.test
   fi
       
   if parameter_true $crawl_links; then
       # Search for broken pages
       echo "$0: Starting to crawl links to search for broken pages at $(date)"
-      ${tclwebtest_dir}/tclwebtest -config_file $source_config_file dotlrn-links-check.test
+      ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-links-check.test
   fi
 
   # Run the Tcl API tests
-  ${tclwebtest_dir}/tclwebtest -config_file $source_config_file tcl-api-test.test
+  ${tclwebtest_dir}/tclwebtest -config_file $config_file tcl-api-test.test
 
   if [ $database == "postgres" ]; then
       # Run vacuum analyze

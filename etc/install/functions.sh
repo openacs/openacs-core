@@ -1,7 +1,7 @@
 # Access config parameters in the TCL file through this function
 
 get_config_param () {
-    echo "source $source_config_file; puts [set $1]" | tclsh
+    echo "source $config_file; puts [set $1]" | tclsh
 }
 
 create_override_config_file () {
@@ -13,9 +13,7 @@ create_override_config_file () {
     if [ ! -a $override_config_file ]; then
       echo "set server $server" > $override_config_file
       cat $config_file | egrep -v '^[[:space:]]*set[[:space:]]+server[[:space:]]+' >> $override_config_file
-      export source_config_file=$override_config_file
-else  
-      export source_config_file=$config_file    
+      export config_file=$override_config_file
     fi
 }
 
