@@ -66,7 +66,7 @@
   </sect2>
   
   <sect2 id="snapshot-backup">
-    <title>Snapshot backup and recovery</title>
+    <title>Manual backup and recovery</title>
     
     <para>This section describes how to make a one-time backup and
     restore of the files and database.  This is useful for rolling back to
@@ -339,141 +339,30 @@
 
   <sect2 id="automated-backup">
     <title>Automated Backup (OPTIONAL)</title>
-    <para>Backup can encompass all files in
-    <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable></computeroutput>.  Use one cron job to back up the database to a file in
-    <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/database-backup</computeroutput>, and a second cron job to back up the entire file tree.</para>
-    <sect3 id="postgres-quick-backup">
-      <title>Postgres automatic backup</title>
-      <para>Backing up the database consists of creating a file
-      which is a picture of the database at a particular moment.
-      Postgres can be backed up while running.  </para>
-      <para>Depending on your overall backup strategy, you can
-      create a series of database backup files (recommended for a development server where you are using <xref linkend="backups-with-cvs"/>), or you can create a
-      single nightly backup file which is then collected into a
-      bigger backup file that includes the other parts of the
-      service.  The latter technique is more generally recommended.  To make a new file every
-      night, edit the crontab file for <replaceable>service0</replaceable>:</para>
-      <screen>[service0@yourserver service0]$ <userinput>export EDITOR=emacs;crontab -e</userinput></screen>
-      <para>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</para>
-      <programlisting>0 1 * * * /usr/local/pgsql/bin/pg_dump -f /var/lib/aolserver/service0/database-backup/service0_`date +\%Y-\%m-\%d`.dmp service0</programlisting>
-      <para>If you plan to back up the whole <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable></computeroutput> directory, then it would be redundant to keep a history of database backups.  In that case, set up the cron job to overwrite the previous backup each time:</para>
-      <programlisting>0 1 * * * /usr/local/pgsql/bin/pg_dump -f /var/lib/aolserver/service0/database-backup/service0_nightly.dmp service0</programlisting>
-    </sect3>
-  </sect2>
-  <sect2>
-    <title>A full Backup/Recovery cycle</title>
-    <para><emphasis>On a test service</emphasis>, make sure that your backup-recovery process work.  After backing up the database and file system, delete the service as detailed below and then recover it.</para>    
-  </sect2>
+    <para>The recommended backup strategy for a production sit is to use an automated script which first backs up the database to a file in <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/database-backup</computeroutput> and then backs up all of <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable></computeroutput> to a single zip file, and then copies that zip file to another computer.</para>
+    <orderedlist>
+      <listitem>
+        <para>Make sure that the manual backup process described above works.</para>
+      </listitem>
+      <listitem>
+        <para>Customize the default backup script.  Edit <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/backup.sh</computeroutput> with your specific parameters.</para>
+      </listitem>
+      <listitem>
+        <para>
+        Make sure the file is executable:</para>
+<programlisting>chmod +x backup.sh</programlisting>
+      </listitem>
+      <listitem>
+        <para>
+        Set this file to run automatically by adding a line to root's crontab. (Typically, with <computeroutput>export EDITOR=emacs; crontab -e</computeroutput>.)  This example runs the backup script at 1:30 am every day.</para>
+        <programlisting>30 1 * * * *        sh /var/lib/aolserver/<replaceable>service0</replaceable>/etc/backup.sh</programlisting>
+      </listitem>
+    </orderedlist>
 
-  <sect2 id="other-backup-strategies">
-    <title>Other Backup Strategies</title>
-    <para>Earlier strategies, included here because this section
-    hasn't been fully updated yet.</para>
-    <sect3 id="install-export-oracle">
-      <title>Set Up Nightly Oracle Exports</title>
-      <para>Edit the backup script to save the backup
-      file in <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/database-backup</computeroutput>.
-      While you&#39;re working with Oracle, you should configure it to do
-      automatic exports. An export is a separate backup copy of the
-      database.  This copy includes all of the database&#39;s state at the
-      time that the export was initiated. If your database is corrupted,
-      you can restore from one of these backups. You should do this step as
-      <computeroutput>root</computeroutput>.
-      </para>
-      <para>
-        Automating backups is accomplished using the UNIX
-      <computeroutput>crontab</computeroutput> facility.</para>
-      
-      <para>
-        While still <computeroutput>root</computeroutput>, run the
-        following command. You can replace the
-        <computeroutput>EDITOR=&quot;emacs -nw&quot;</computeroutput>
-        portion with whatever editor your prefer, such as
-        <computeroutput>EDITOR=vi</computeroutput>.
-      </para>
-      <programlisting>
-        root:~# export EDITOR=&quot;emacs -nw&quot;
-      root:~# crontab -e</programlisting>
-
-      <para>Now add the following line on a line by itself </para>
-
-      <programlisting>
-      0 23 * * * /usr/sbin/export-oracle</programlisting>
-
-      <para>
-        Save the file, exit the editor. Verify that the addition
-      succeeded by checking the output of the following command.</para>
-
-      <programlisting>
-        root:~# crontab -l | grep export-oracle
-        0 23 * * * /usr/sbin/export-oracle
-        root:~# exit
-      ; Logout</programlisting>
-
-      <para>If you see the line, go ahead and log out.</para>
-    </sect3>
-    <sect3 id="install-export-postgres">
-      <title>Set up nightly Postgres exports</title>
-
-      <para>This is an alternate method to the crontabls - backup.
-      Dowload <ulink url="files/acs-pgbackup-init.txt">this script</ulink>
-      to <computeroutput>/tmp</computeroutput>. At the top of the script
-      are several variables that you'll need to customize:
-      </para>
-
-      <itemizedlist>
-        <listitem><para>
-        <computeroutput>bak</computeroutput> - location where you want
-        local backups to be saved
-        </para></listitem>
-
-        <listitem><para>
-        <computeroutput>servername</computeroutput> - name of your server
-        (and database instance)
-        </para></listitem>
-
-        <listitem><para>
-        <computeroutput>ftp_user</computeroutput> - username on your ftp
-        account 
-        </para></listitem>
-
-        <listitem><para>
-        <computeroutput>ftp_password</computeroutput> - password on your
-        ftp account
-        </para></listitem>
-
-        <listitem><para>
-        <computeroutput>ftp_dir</computeroutput> - path on the remote
-        server where your backups will be uploaded
-        </para></listitem>
-
-        <listitem><para>
-        <computeroutput>ftp_server</computeroutput> - your ftp server
-        </para></listitem>
-      </itemizedlist>
-
-      <para>
-
-        Next, we'll save this file to our server's
-        <computeroutput>tcl</computeroutput> directory so that it will be
-        loaded on startup. It will automatically be run every night at
-        midnight. Note that this script only backs up the database - not the
-        OpenACS scripts and file content.
-      </para>
-
-      <programlisting>
-        joeuser:~$ cp /tmp/acs-pgbackup-init.txt ~/var/lib/aolserver/birdnotes/tcl/acs-pgbackup-init.tcl
-      joeuser:~$ restart-aolserver birdnotes</programlisting>
-
-      <para>
-        That's it! The script will email you with each successful backup (or
-        if it fails, it will send you an email with the reason)
-      </para>
-    </sect3>
   </sect2>
   <sect2 id="backups-with-cvs">
     <title>Using CVS for backup-recovery</title>
-    <para>If you are already using CVS, you probably don't
+    <para>CVS-only backup is often appropriate for development sites.  If you are already using CVS and your data is not important, you probably don't
     need to do anything to back up your files.  Just make
     sure that your current work is checked into the system.
     You can then roll back based on date - note the
