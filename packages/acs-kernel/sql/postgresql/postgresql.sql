@@ -22,10 +22,10 @@ begin
         
         if dir < 0 then
            v_inc := \-1;
-           v_i   := v_len + 1 - dir;
+           v_i   := v_len;
         else 
            v_inc := 1;
-           v_i   := dir;
+           v_i   := 1;
         end if;
            
         while v_i > 0 and v_i <= v_len LOOP
