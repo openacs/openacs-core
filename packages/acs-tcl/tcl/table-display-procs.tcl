@@ -934,7 +934,7 @@ proc_doc ad_custom_page_defaults defaults {
             set pre {&}
         }
         ad_returnredirect $redirect
-        return -code return
+        ad_script_abort
     }
     
     # we have a form so stuff in the ones we dont find.

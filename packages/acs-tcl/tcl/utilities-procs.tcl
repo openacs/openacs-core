@@ -391,6 +391,7 @@ ad_proc ad_dbclick_check_dml {
     }
 
     ad_returnredirect $return_url
+    # should this be ad_script_abort?  Should check how its being used.
     return
 }
 
