@@ -321,18 +321,27 @@ aa_register_case auth_password_can_change_p {
 aa_register_case auth_password_change {
     Test the auth::password::change proc.
 } {
+    aa_stub ns_sendmail {
+        global ns_sendmail_to
+        set ns_sendmail_to $to
+    }
+
     aa_run_with_teardown \
         -rollback \
-        -test_code {
+        -test_code {         
             # create user we'll use for testing
+            set email "test2@user.com"
             array set user_info [auth::create_user \
-                    -email "test2@user.com" \
+                    -email $email \
                     -first_names "Test" \
                     -last_name "User" \
                     -password "changeme" \
                     -secret_question "no_question" \
                     -secret_answer "no_answer"]
             set user_id $user_info(user_id)
+
+            global ns_sendmail_to
+            set ns_sendmail_to {}
 
             # password_status "ok"
             set old_password "changeme"
@@ -344,6 +353,10 @@ aa_register_case auth_password_change {
             aa_equals "Should return 'ok'" \
                 $auth_info(password_status) \
                 "ok"
+            
+            # Check that user gets email about changed password
+            aa_equals "Email sent to user" $ns_sendmail_to $email
+            set ns_sendmail_to {}
 
             # check that the new password is actually set correctly
             set password_correct_p [ad_check_password $user_id $new_password]
