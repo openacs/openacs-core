@@ -48,6 +48,17 @@ BEGINNING OF TEMPLATE
   </sect2>
 END OF TEMPLATE -->
 
+  <sect2 id="release-notes-5-0-3">
+    <title>Version 5.0.3</title>
+
+      <itemizedlist>
+        <listitem>
+        <para>Bug fixes: <ulink url="http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=1560">1560</ulink>, <ulink url="http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=1556">#1556. Site becomes unresponsive, requires restart</ulink></para>
+        </listitem>
+    </itemizedlist>
+    </sect2>
+
+
   <sect2 id="release-notes-5-0-2">
     <title>Version 5.0.2</title>
 
