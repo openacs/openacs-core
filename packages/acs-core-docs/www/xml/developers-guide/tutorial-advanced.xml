@@ -15,6 +15,9 @@
     you've completed the basic tutorial.</para>
     <sect1 id="tutorial-specs">
       <title>Write the Requirements and Design Specs</title>
+      <para>Before you get started you should make yourself familiar with
+      the tags that are used to write your documentation. For tips on
+        editing SGML files in emacs, see <xref linkend="docbook-primer"/>.</para>
       <para>It's time to document.  For the tutorial we'll use
       pre-written documentation.  When creating a package
       from scratch, start by copying the documentation template from
@@ -47,9 +50,7 @@
         <computeroutput>&lt;revhistory&gt;</computeroutput>).  Add a
         new record to the document version history.  Look for the
         <computeroutput>&lt;authorgroup&gt;</computeroutput> tag and
-        add yourself as a second author.  Save and exit.  For tips on
-        editing SGML files in emacs, see <xref
-        linkend="docbook-primer"/></para>
+        add yourself as a second author.  Save and exit.</para>
       <para>Process the xml file to create html documentation.  The
       html documentation, including supporting files such as pictures,
       is stored in the <computeroutput>www/docs/</computeroutput>
