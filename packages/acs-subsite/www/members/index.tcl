@@ -57,10 +57,15 @@ if { $admin_p } {
 }
 
 set actions {}
+set bulk_actions {}
 
 if { $admin_p || [parameter::get -parameter "MembersCanInviteMembersP" -default 0] } {
     set actions [_ acs-subsite.Invite]
     lappend actions { member-invite }
+}
+
+if { $admin_p } {
+    
 }
 
 set member_state_options [list]
@@ -82,6 +87,7 @@ template::list::create \
     -page_flush_p t \
     -page_query_name members_pagination \
     -actions $actions \
+    -bulk_actions $bulk_actions \
     -elements {
         name {
             label "[_ acs-subsite.Name]"
@@ -98,37 +104,32 @@ template::list::create \
                 @members.rel_role_pretty@
             }
         }
-        rel_role_action {
-            label {}
-            display_template {
-                <if @members.make_admin_url@ not nil>
-                  <a href="@members.make_admin_url@">#acs-subsite.Make_administrator#</a>
-                </if>
-                <if @members.make_member_url@ not nil>
-                  <a href="@members.make_member_url@">#acs-subsite.Make_member#</a>
-                </if>
-            }
-        }
         member_state_pretty {
             label "[_ acs-subsite.Member_State]"
         }
         member_state_change {
-            label {}
+            label {Action}
             display_template {
                 <if @members.approve_url@ not nil>
-                  <a href="@members.approve_url@">#acs-subsite.Approve#</a>
+                  <a href="@members.approve_url@" class="button">#acs-subsite.Approve#</a>
                 </if>
                 <if @members.reject_url@ not nil>
-                  <a href="@members.reject_url@">#acs-subsite.Reject#</a>
+                  <a href="@members.reject_url@" class="button">#acs-subsite.Reject#</a>
                 </if>
                 <if @members.ban_url@ not nil>
-                  <a href="@members.ban_url@">#acs-subsite.Ban#</a>
+                  <a href="@members.ban_url@" class="button">#acs-subsite.Ban#</a>
                 </if>
                 <if @members.delete_url@ not nil>
-                  <a href="@members.delete_url@">#acs-subsite.Delete#</a>
+                  <a href="@members.delete_url@" class="button">#acs-subsite.Delete#</a>
                 </if>
                 <if @members.remove_url@ not nil>
-                  <a href="@members.remove_url@">#acs-subsite.Remove#</a>
+                  <a href="@members.remove_url@" class="button">#acs-subsite.Remove#</a>
+                </if>
+                <if @members.make_admin_url@ not nil>
+                  <a href="@members.make_admin_url@" class="button">#acs-subsite.Make_administrator#</a>
+                </if>
+                <if @members.make_member_url@ not nil>
+                  <a href="@members.make_member_url@" class="button">#acs-subsite.Make_member#</a>
                 </if>
             }
         }
