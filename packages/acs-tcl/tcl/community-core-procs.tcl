@@ -480,6 +480,8 @@ ad_proc -public acs_user::get {
 
 ad_proc -public acs_user::get_element {
     {-user_id {}}
+    {-authority_id {}}
+    {-username {}}
     {-element:required}
 } {
     Get a particular element from the basic information about a user returned by acs_user::get.
@@ -495,6 +497,8 @@ ad_proc -public acs_user::get_element {
 } {
     acs_user::get \
         -user_id $user_id \
+        -authority_id $authority_id \
+        -username $username \
         -array row \
         -include_bio=[string equal $element "bio"]
     
