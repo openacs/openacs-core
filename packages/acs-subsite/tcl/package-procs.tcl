@@ -839,4 +839,7 @@ ad_proc -public package_instantiate_object {
 	subsite_callback -object_type $object_type "insert" $object_id
     }
 
+    # BUG FIX (ben - OpenACS)
+    return $object_id
+
 }
