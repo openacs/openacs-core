@@ -12,7 +12,7 @@
         <owner url="mailto:lars@pinds.com">Lars Pind</owner>
         <summary>Profiling for requests including database timing information.</summary>
         <release-date>2003-11-10</release-date>
-        <vendor url="http://openacs.org/">OpenACS</vendor>
+        <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Developer support stores timing and other logged information for requests 
         to support debugging and tuning and supports user switching and a Tcl Sell to invoke arbitrary tcl code on the server.
         </description>

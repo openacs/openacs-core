@@ -11,7 +11,7 @@
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>An interface for Site-wide administration of an OpenACS Installation.</summary>
         <release-date>2003-11-07</release-date>
-        <vendor url="http://www.openacs.org/">OpenACS</vendor>
+        <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides a UI for administering site-wide services
           (including package installation, cache, authentication, and user accounts) for an OpenACS system.
         </description>

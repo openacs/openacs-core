@@ -14,7 +14,7 @@
     </database-support>
         <owner url="mailto:jon@jongriffin.com">Jon Griffin</owner>
         <summary>ISO 3166 country data.</summary>
-        <vendor url="www.mayuli.com">Mayuli Enterprises, LLC</vendor>
+        <vendor url="http://www.mayuli.com">Mayuli Enterprises, LLC</vendor>
         <description format="text/html">Countries supplies the ISO 3166 Country data for acs-reference.</description>
 
         <provides url="ref-countries" version="0.1d"/>

@@ -11,7 +11,7 @@
         <owner url="mailto:jon@mayuli.com">Jon Griffin</owner>
         <summary>Timezone data for acs-reference.</summary>
         <release-date>2003-11-07</release-date>
-        <vendor url="www.mayuli.com">Mayuli Enterprises LLC</vendor>
+        <vendor url="http://www.mayuli.com">Mayuli Enterprises, LLC</vendor>
         <description format="text/plain">This is the timezone data for the acs-reference data package.  Used by acs-lang (among others) for localized times.</description>
 
         <provides url="ref-timezones" version="5.0.0a5"/>
