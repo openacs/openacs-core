@@ -141,6 +141,7 @@ ad_proc -public acs_community_member_url {
     {-user_id:required}
 } {
     @return the url for the community member page of a particular user
+    @see acs_community_member_url
 } {
     return "[subsite::get_element -element url -notrailing][ad_parameter \
 	    -package_id [ad_acs_kernel_id] CommunityMemberURL]?[export_vars user_id]"
@@ -151,6 +152,7 @@ ad_proc -public acs_community_member_link {
     {-label ""}
 } {
     @return the link of the community member page of a particular user
+    @see acs_community_member_url
 } {
     if {[empty_string_p $label]} {
         set label [db_string select_community_member_link_label {
