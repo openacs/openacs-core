@@ -28,7 +28,7 @@ begin
                     now(),
                     null,
                     null,
-                    acs.magic_object_id(''default_context'')
+                    acs__magic_object_id(''default_context'')
                     );
 
 
@@ -82,7 +82,7 @@ begin
     null,
     site_node__node_id(''/'', null),
     ''acs-admin'',
-    admin_id
+    admin_id,
     ''t'',
     ''t'',
     null,
@@ -102,7 +102,7 @@ begin
 
   node_id := site_node__new (
     null,
-    site_node.node_id(''/''),
+    site_node__node_id(''/''),
     ''doc'',
     docs_id,
     ''t'',
@@ -139,7 +139,7 @@ begin
 
   api_doc_id := site_node__new (
     null,
-    site_node.node_id(''/''),
+    site_node__node_id(''/''),
     ''api-doc'',
     api_doc_id,
     ''t'',
