@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Install Linux and supporting software</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="unix-install.html" title="Chapter 3. Installing on Unix/Linux"><link rel="previous" href="install-overview.html" title="Overview"><link rel="next" href="oracle.html" title="Install Oracle 8.1.7"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><center>4.6.x DRAFT IN PROGRESS</center><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-overview.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 3. Installing on Unix/Linux</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="oracle.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="linux-installation"></a>Install Linux and supporting software</h2></div></div><div class="authorblurb"><p>
+    by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
+          OpenACS docs are written by the named authors, but may be edited
+          by OpenACS documentation staff.
+        </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id2833797"></a>Paths and Users</h3></div></div><div class="figure"><p class="title"><b>Figure 3.1. Assumptions in this section</b></p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>Fully qualified domain name of your server</td><td><span class="replaceable">yourserver.test</span></td></tr><tr><td>name of administrative access account</td><td>remadmin</td></tr><tr><td>OpenACS service</td><td><a class="indexterm" name="id2833556"></a><span class="replaceable">server0</span></td></tr><tr><td>OpenACS service account</td><td><span class="replaceable">server0</span></td></tr><tr><td>OpenACS database name</td><td><span class="replaceable">server0</span></td></tr><tr><td>Root of OpenACS service file tree</td><td><span class="replaceable">/web/server0</span></td></tr><tr><td>Location of source code tarballs for new software</td><td>/tmp</td></tr><tr><td>The OpenACS tarball contains some files which
+                are useful while setting up other software.  Those
+                files are located at:</td><td>/tmp/openacs-4-6/packages/acs-core-docs/www/files</td></tr><tr><td>Database backup directory</td><td><span class="replaceable">/web/server0/database-backup</span></td></tr><tr><td>Service config files</td><td><span class="replaceable">/web/server0/etc</span></td></tr><tr><td>Service log files</td><td><span class="replaceable">/web/server0/log</span></td></tr><tr><td>Compile directory</td><td>/usr/local/src</td></tr><tr><td>PostGreSQL directory</td><td>/usr/local/pgsql</td></tr><tr><td>AOLServer directory</td><td>/usr/local/aolserver</td></tr></tbody></table></div></div><p>
+	  None of these locations are set in stone - they're simply
+	  the values that we've chosen.  The values that you'll
+	  probably want to change, such as service name, are
+	  <span class="replaceable">marked like this</span>.  The other
+	  values we recommend you leave unchanged unless you have a
+	  reason to change them.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+	  Some of the paths and user accounts have been changed from
+	  those recommended in previous versions of this document to
+	  improve security and maintainability.  See <a href="http://openacs.org/forums/message-view?message_id=82934" target="_top">this
+	  thread</a> for discussion.
+</p></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="install-linux"></a>Install Linux</h3></div></div><p>You will need a PC running linux with the following software installed:</p><div class="itemizedlist"><ul type="disc"><li><p>libxml2</p></li><li><p>tcl</p></li><li><p>gmake and the compile and build environment.</p></li></ul></div><p>and optionally this software:</p><div class="itemizedlist"><ul type="disc"><li><p>emacs</p></li><li><p>cvs</p></li><li><p>ImageMagick</p></li><li><p>DocBook and supporting software</p></li></ul></div><p>You can follow the <a href="install-redhat.html" title="Appendix A. Install Red Hat 8.0">walkthrough of the
+    Red Hat 8.0 Install for OpenACS</a>.</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="install-more-software"></a>Install additional supporting software</h3></div></div><p>This section assumes that the source tarballs for supporting
+    software are in <tt>/tmp</tt>.  It assumes
+    that you begin each continuous block of commands as root, and you
+    should end each block as root.  It doesn't care which directory
+    you start in.  Text instructions always precede the commands they refer to.</p><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="openacs-unpack"></a>Unpack the OpenACS tarball</h4></div></div><p>The OpenACS tarball contains sample configuration files
+      for some of the packages listed below.  In order to access those
+      files, unpack the tarball now.</p><pre class="screen">[root@yourserver root]# <b><tt>cd /tmp</tt></b>
+[root@yourserver tmp]# <b><tt>tar xzf openacs-4-6.tgz</tt></b>
+<pre class="action">cd /tmp
+tar xzf openacs-4-6.tgz</pre></pre></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="install-cvs"></a>Initialize CVS (OPTIONAL)</h4></div></div><a class="indexterm" name="id2834674"></a><p>CVS is a source control system.  Create and prepare a
+      directory for a local cvs repository.</p><pre class="screen">[root@yourserver tmp]# <b><tt>mkdir /cvsroot</tt></b>
+[root@yourserver tmp]#<b><tt> cvs -d /cvsroot init</tt></b>
+[root@yourserver tmp]#
+<pre class="action">mkdir /cvsroot
+cvs -d /cvsroot init</pre></pre></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="id2834723"></a>Add PSGML commands to emacs init file (OPTIONAL)</h4></div></div><p><a class="indexterm" name="id2834733"></a>
+If you plan to write or edit any documentation with emacs, install a
+      customized emacs configuration file with DocBook commands in the skeleton
+      directory, so it will be used for all new users.  The file also
+      fixes the backspace -&gt; help mis-mapping that often occurs in
+      terminals.</p><pre class="screen">[root@yourserver tmp]# <b><tt>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/emacs.txt /etc/skel/.emacs</tt></b>
+[root@yourserver tmp]# </pre></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="install-daemontools"></a>Install Daemontools (OPTIONAL)</h4></div></div><p>Daemontools is a collection of programs for controlling
+      other processes.  We use daemontools to run and monitor AOLServer.  It is
+      installed in /package.  These commands install daemontools and
+      svgroup.  svgroup is a script for granting permissions, to allow
+      users other than root to use daemontools for specific
+      services.</p><div class="orderedlist"><ol type="1"><li><p>Install Daemontools</p><a class="indexterm" name="id2834810"></a><div class="itemizedlist"><ul type="disc"><li><p>Red Hat</p><p>Make sure you have the source tarball in
+          <tt>/tmp</tt>, or <a href="individual-programs.html#daemontools-download">download it</a>.  (The -p
+              flag in mkdir causes all implied directories in the path
+              to be made as well.)</p><pre class="screen">[root@yourserver root]# <b><tt>mkdir -p /package</tt></b>
+[root@yourserver root]# <b><tt>chmod 1755 /package/</tt></b>
+[root@yourserver root]# <b><tt>cd /package/</tt></b>
+[root@yourserver package]# <b><tt>tar xzf /tmp/daemontools-0.76.tar.gz</tt></b>
+[root@yourserver package]# <b><tt>cd admin/daemontools-0.76/</tt></b>
+[root@yourserver daemontools-0.76]# <b><tt>package/install</tt></b>
+Linking ./src/* into ./compile...
+(many lines omitted)
+Creating /service...
+Adding svscanboot to inittab...
+init should start svscan now.
+[root@yourserver root]#
+<pre class="action">mkdir -p /package 
+chmod 1755 /package 
+cd /package 
+tar xzf /tmp/daemontools-0.76.tar.gz 
+cd admin/daemontools-0.76 
+package/install</pre></pre></li><li><p>Debian</p><pre class="screen">root:~# apt-get install daemontools-installer
+root:~# build-daemontools</pre></li></ul></div></li><li><p>Verify that svscan is running.  If it is, you should see
+      these two processes running:</p><pre class="screen">[root@yourserver root]# <b><tt>ps -auxw | grep service</tt></b>
+root     13294  0.0  0.1  1352  272 ?        S    09:51   0:00 svscan /service
+root     13295  0.0  0.0  1304  208 ?        S    09:51   0:00 readproctitle service errors: .......................................
+[root@yourserver root]#</pre></li><li><p>Install a script to grant non-root users permission to
+        control daemontools services.</p><pre class="screen">[root@yourserver root]# <b><tt>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</tt></b>
+[root@yourserver root]# <b><tt>chmod 755 /usr/local/bin/svgroup</tt></b>
+<pre class="action">cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup 
+chmod 755 /usr/local/bin/svgroup</pre></pre></li></ol></div></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="id2835016"></a>Install qmail (OPTIONAL)</h4></div></div><p>Qmail is a Mail Transfer Agent.  It handles incoming and outgoing mail.  Install qmail if you want your OpenACS server to send and receive mail, and you don't want to use an alternate MTA.</p><div class="orderedlist"><ol type="1"><li><p><b>Install ucspi. </b>This program handles incoming tcp connections.</p><pre class="screen">[root@yourserver root]# <b><tt>cd /usr/local/src</tt></b>
+[root@yourserver src]# <b><tt>tar xzf /tmp/ucspi-tcp-0.88.tar.gz</tt></b>
+[root@yourserver src]# <b><tt>cd ucspi-tcp-0.88</tt></b>
+[root@yourserver ucspi-tcp-0.88]#<b><tt> make</tt></b>
+( cat warn-auto.sh; \
+echo 'main=&quot;$1&quot;; shift'; \
+(many lines omitted)
+./compile instcheck.c
+./load instcheck hier.o auto_home.o unix.a byte.a
+[root@yourserver ucspi-tcp-0.88]# <b><tt>make setup check</tt></b>
+./install
+./instcheck
+[root@yourserver ucspi-tcp-0.88]#
+<pre class="action">cd /usr/local/src 
+tar xzf /tmp/ucspi-tcp-0.88.tar.gz 
+cd ucspi-tcp-0.88 
+make 
+make setup check</pre></pre><p>Verify that ucspi-tcp was installed successfully by
+running the tcpserver program which is part of ucspi-tcp:</p><pre class="screen">[root@yourserver ucspi-tcp-0.88]# <b><tt>tcpserver</tt></b>
+tcpserver: usage: tcpserver [ -1UXpPhHrRoOdDqQv ] [ -c limit ] [ -x rules.cdb ] [ -B banner ] [ -g gid ] [ -u uid
+] [ -b backlog ] [ -l localname ] [ -t timeout ] host port program
+[root@yourserver ucspi-tcp-0.88]#
+</pre><p><a class="indexterm" name="id2835136"></a>
+(I'm not sure if this next step is 100% necessary, but when I skip it
+I get problems.  If you get the error <tt>553 sorry, that domain isn't in my list of allowed rcpthosts (#5.7.1)</tt> then you need to do this.)  AOLServer sends outgoing mail via the ns_sendmail
+command, which pipes a command to the sendmail executable.  Or, in our
+case, the qmail replacement wrapper for the sendmail executable.  In
+some cases, though, the outgoing mail requset is apparently sent
+through tcp/ip, so that it comes to qmail from 127.0.0.1 (a special IP
+address that means the local machine - the &quot;loopback&quot; interface).
+Unless this mail is addressed to the same machine, qmail thinks that
+it's an attempt to relay mail, and rejects it.  So these two commands
+set up an exception so that any mail sent from 127.0.0.1 is allowed to
+send outgoing mail.</p><pre class="screen">[root@yourserver ucspi-tcp-0.88]# <b><tt>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</tt></b>
+[root@yourserver ucspi-tcp-0.88]# <b><tt>tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</tt></b>
+<pre class="action">cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
+tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </pre></pre></li><li><p><b>Install Qmail. </b><a class="indexterm" name="id2835232"></a></p><p>First, set up the standard supporting users and build the binaries:</p><pre class="screen">[root@yourserver root]# <b><tt>cd /usr/local/src</tt></b>
+[root@yourserver src]# <b><tt>tar xzf /tmp/qmail-1.03.tar.gz</tt></b>
+[root@yourserver src]# <b><tt>mkdir /var/qmail</tt></b>
+[root@yourserver src]#<b><tt> groupadd nofiles</tt></b>
+[root@yourserver src]# <b><tt>useradd -g nofiles -d /var/qmail/alias alias</tt></b>
+[root@yourserver src]# <b><tt>useradd -g nofiles -d /var/qmail qmaild</tt></b>
+[root@yourserver src]# <b><tt>useradd -g nofiles -d /var/qmail qmaill</tt></b>
+[root@yourserver src]# <b><tt>useradd -g nofiles -d /var/qmail qmailp</tt></b>
+[root@yourserver src]# <b><tt>groupadd qmail</tt></b>
+[root@yourserver src]# <b><tt>useradd -g qmail -d /var/qmail qmailq</tt></b>
+[root@yourserver src]# <b><tt>useradd -g qmail -d /var/qmail qmailr</tt></b>
+[root@yourserver src]# <b><tt>useradd -g qmail -d /var/qmail qmails</tt></b>
+[root@yourserver src]# <b><tt>cd qmail-1.03</tt></b>
+[root@yourserver qmail-1.03]# <b><tt>make setup check</tt></b>
+( cat warn-auto.sh; \
+echo CC=\'`head -1 conf-cc`\'; \
+(many lines omitted)
+./install
+./instcheck
+[root@yourserver qmail-1.03]#
+<pre class="action">cd /usr/local/src 
+tar xzf /tmp/qmail-1.03.tar.gz 
+mkdir /var/qmail 
+groupadd nofiles 
+useradd -g nofiles -d /var/qmail/alias alias 
+useradd -g nofiles -d /var/qmail qmaild 
+useradd -g nofiles -d /var/qmail qmaill 
+useradd -g nofiles -d /var/qmail qmailp 
+groupadd qmail 
+useradd -g qmail -d /var/qmail qmailq 
+useradd -g qmail -d /var/qmail qmailr 
+useradd -g qmail -d /var/qmail qmails
+cd qmail-1.03 
+make setup check</pre></pre><p>Replace sendmail with qmail's wrapper.</p><a class="indexterm" name="id2835390"></a><pre class="screen">[root@yourserver qmail-1.03]# <b><tt>rm -f /usr/bin/sendmail</tt></b>
+[root@yourserver qmail-1.03]# <b><tt>ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</tt></b>
+[root@yourserver qmail-1.03]#
+<pre class="action">rm -f /usr/bin/sendmail 
+ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</pre></pre><p>Configure qmail - specifically, run the config script to set up files in <tt>/var/qmail/control</tt> specifying the computer's identity and which addresses it should accept mail for.  This command will automatically set up qmail correctly if you have correctly set a valid host nome.  If not, you'll want to read <tt>/var/qmail/doc/INSTALL.ctl</tt> to find out how to configure qmail.</p><pre class="screen">[root@yourserver qmail-1.03]# <b><tt>./config-fast <span class="replaceable">yourserver.test</span></tt></b>
+Your fully qualified host name is yourserver.test.
+Putting yourserver.test into control/me...
+Putting yourserver.test into control/defaultdomain...
+Putting yourserver.test into control/plusdomain...
+Putting yourserver.test into control/locals...
+Putting yourserver.test into control/rcpthosts...
+Now qmail will refuse to accept SMTP messages except to yourserver.test.
+Make sure to change rcpthosts if you add hosts to locals or virtualdomains!
+[root@yourserver qmail-1.03]#
+<pre class="action">./config-fast <span class="replaceable">yourserver.test</span></pre></pre><p>All incoming mail that isn't for a specific user is handled by the <tt>alias</tt> user.  This includes all root mail.  These commands prepare the alias user to receive mail.</p><pre class="screen">[root@yourserver qmail-1.03]# <b><tt>cd ~alias; touch .qmail-postmaster .qmail-mailer-daemon .qmail-root</tt></b>
+[root@yourserver alias]# <b><tt>chmod 644 ~alias/.qmail*</tt></b>
+[root@yourserver alias]# <b><tt>/var/qmail/bin/maildirmake ~alias/Maildir/</tt></b>
+[root@yourserver alias]# <b><tt>chown -R alias.nofiles /var/qmail/alias/Maildir</tt></b>
+[root@yourserver alias]#
+<pre class="action">cd ~alias; touch .qmail-postmaster .qmail-mailer-daemon .qmail-root 
+chmod 644 ~alias/.qmail* 
+/var/qmail/bin/maildirmake ~alias/Maildir/ 
+chown -R alias.nofiles /var/qmail/alias/Maildir</pre></pre><a class="indexterm" name="id2835556"></a><p>Configure qmail to use the Maildir delivery format
+          (instead of mbox), and install a version of the qmail startup script modified to use Maildir.</p><pre class="screen">[root@yourserver alias]# <b><tt>echo &quot;./Maildir&quot; &gt; /var/qmail/bin/.qmail</tt></b>
+[root@yourserver alias]# <b><tt>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</tt></b>
+[root@yourserver alias]# <b><tt>chmod 755 /var/qmail/rc</tt></b>
+[root@yourserver alias]# 
+<pre class="action">echo &quot;./Maildir&quot; &gt; /var/qmail/bin/.qmail 
+cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc 
+chmod 755 /var/qmail/rc 
+</pre></pre><p>Set up the skeleton directory so that new users will
+          be configured for qmail.</p><pre class="screen">[root@localhost root]# <b><tt>/var/qmail/bin/maildirmake /etc/skel/Maildir</tt></b>
+[root@localhost root]# <b><tt>echo &quot;./Maildir/&quot; &gt; /etc/skel/.qmail</tt></b>
+[root@localhost root]# 
+<pre class="action">/var/qmail/bin/maildirmake /etc/skel/Maildir
+echo &quot;./Maildir/&quot; &gt; /etc/skel/.qmail</pre></pre><p>Qmail runs in two parts.  First, several different
+          qmail daemons are started by the qmail rc file.  Second, a
+          process is started in within tcpserver to listen for incoming smtp traffic.  Run both of these commands to start qmail.  Be very careful about line breaks - there should be a total of two commands here.  Note also that the tcpserver command takes the uid and guid of <tt>qmaild</tt>, which will only be 502 and 501 if you have followed all of these instructions exactly and in order.  Otherwise, <b><tt>grep qmaild /etc/passwd</tt></b> to find uid and guid, in that order.</p><pre class="screen">[root@yourserver alias]# <b><tt>/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <span class="replaceable">502</span> -g <span class="replaceable">501</span> 0 smtp /var/qmail/bin/qmail-smtpd 2&gt;&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp;</tt></b>
+[1] 15863
+[root@yourserver alias]# <b><tt>csh -cf '/var/qmail/rc &amp;'</tt></b>
+[1] 15865
+[root@yourserver alias]#
+<pre class="action">/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <span class="replaceable">502</span> -g <span class="replaceable">501</span> 0 smtp /var/qmail/bin/qmail-smtpd 2&gt;&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp; 
+csh -cf '/var/qmail/rc &amp;'</pre></pre><p>Verify that seven different qmail threads are running:</p><pre class="screen">[root@yourserver alias]# <b><tt>ps -auxw | grep qmail</tt></b>
+qmaild   15862  0.0  0.1  1380  452 pts/1    S    10:26   0:00 /usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u 502 -g 501 0 smtp
+root     15863  0.0  0.1  1332  412 pts/1    S    10:26   0:00 /var/qmail/bin/splogger smtpd 3
+qmails   15865  0.0  0.1  1360  316 pts/1    S    10:26   0:00 qmail-send
+qmaill   15866  0.0  0.1  1328  408 pts/1    S    10:26   0:00 splogger qmail
+root     15867  0.0  0.1  1328  268 pts/1    S    10:26   0:00 qmail-lspawn ./Maildir/
+qmailr   15868  0.0  0.1  1324  268 pts/1    S    10:26   0:00 qmail-rspawn
+qmailq   15869  0.0  0.1  1320  276 pts/1    S    10:26   0:00 qmail-clean
+[root@yourserver alias]#</pre><p>Further verify by sending and receiving email.  Incoming mail for root is stored in <tt>/var/qmail/alias/Maildir</tt>.  If it worked, make it permanent by putting the same commands in your startup scripts.  (These instructions put the commands in rc.local, which means that they'll be run once, on boot.  There will be no monitoring and no interface to start and stop and check status.  We ought instead to either use full init scripts or daemontools.)</p><pre class="screen">[root@yourserver alias]# <b><tt>echo &quot;/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <span class="replaceable">502</span> -g <span class="replaceable">501</span> 0 smtp /var/qmail/bin/qmail-smtpd \ &quot; &gt;&gt; /etc/rc.local</tt></b>
+[root@yourserver alias]# <b><tt>echo &quot;2&gt;&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp;  &quot; &gt;&gt; /etc/rc.local</tt></b>
+[root@yourserver alias]# <b><tt>echo &quot;csh -cf '/var/qmail/rc &amp;' &quot; &gt;&gt; /etc/rc.local</tt></b>
+[root@yourserver alias]# 
+<pre class="action">echo &quot;/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <span class="replaceable">502</span> -g <span class="replaceable">501</span> 0 smtp /var/qmail/bin/qmail-smtpd \ &quot; &gt;&gt; /etc/rc.local
+echo &quot;2&gt;&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp;  &quot; &gt;&gt; /etc/rc.local
+echo &quot;csh -cf '/var/qmail/rc &amp;' &quot; &gt;&gt; /etc/rc.local</pre></pre></li></ol></div></div></div><p><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="install-overview.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="oracle.html">Next</a></td></tr><tr><td width="40%" align="left">Overview&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="unix-install.html">Up</a></td><td width="40%" align="right">&nbsp;Install Oracle 8.1.7</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/linux-installation.html#comments">View comments on this page at openacs.org</a></center></body></html>

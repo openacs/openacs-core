@@ -1,14 +1,14 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS 4.6 Package Manager Design</title><meta name="generator" content="DocBook XSL Stylesheets V1.56.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 7. Kernel Documentation"><link rel="previous" href="apm-requirements.html" title="OpenACS 4.6 Package Manager Requirements"><link rel="next" href="security-requirements.html" title="OpenACS 4 Security Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="apm-requirements.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 7. Kernel Documentation</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="security-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="apm-design"></a>OpenACS 4.6 Package Manager Design</h2></div></div><div class="authorblurb"><p>
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>OpenACS 4.6.2 Package Manager Design</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 10. Kernel Documentation"><link rel="previous" href="apm-requirements.html" title="OpenACS 4.6.2 Package Manager Requirements"><link rel="next" href="db-api-detailed.html" title="Database Access API"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><center>4.6.x DRAFT IN PROGRESS</center><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="apm-requirements.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 10. Kernel Documentation</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="db-api-detailed.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="apm-design"></a>OpenACS 4.6.2 Package Manager Design</h2></div></div><div class="authorblurb"><p>
 by <a href="mailto:bquinn@arsdigita.com" target="_top">Bryan Quinn</a><br>
           OpenACS docs are written by the named authors, but may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="apm-design-essentials"></a>Essentials</h3></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="/acs-admin/apm" target="_top">OpenACS Administrator directory</a></p></li><li><p><a href="apm-requirements.html">OpenACS 4.6 Package Manager Requirements</a></p></li><li><p><a href="packages.html">Packages</a></p></li><li><p><a href="images/apm.pdf" target="_top">ER diagram</a></p></li><li><p>Tcl API </p><div class="itemizedlist"><ul type="circle"><li><p><a href="/api-doc/procs-file-view?path=packages%2facs%2dkernel%2ftcl%2fapm%2dprocs%2etcl" target="_top">
+        </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="apm-design-essentials"></a>Essentials</h3></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="/acs-admin/apm" target="_top">OpenACS Administrator directory</a></p></li><li><p><a href="apm-requirements.html">OpenACS 4.6.2 Package Manager Requirements</a></p></li><li><p><a href="packages.html">Packages</a></p></li><li><p><a href="images/apm.pdf" target="_top">ER diagram</a></p></li><li><p>Tcl API </p><div class="itemizedlist"><ul type="round"><li><p><a href="/api-doc/procs-file-view?path=packages%2facs%2dkernel%2ftcl%2fapm%2dprocs%2etcl" target="_top">
 apm-procs.tcl</a></p></li><li><p><a href="/api-doc/procs-file-view?path=packages%2facs%2dkernel%2ftcl%2fapm%2dinstall%2dprocs%2etcl" target="_top">
 apm-install-procs.tcl</a> (Supports installation of packages)</p></li><li><p><a href="/api-doc/procs-file-view?path=packages%2facs%2dkernel%2ftcl%2f20%2dapm%2dload%2dprocs%2etcl" target="_top">
 20-apm-load-procs.tcl</a> (Bootstraps APM for server startup)</p></li><li><p><a href="/api-doc/procs-file-view?path=packages%2facs%2dkernel%2ftcl%2fapm%2dadmin%2dprocs%2etcl" target="_top">
-apm-admin-procs.tcl</a> (Supports APM UI)</p></li></ul></div></li><li><p>PL/SQL file </p><div class="itemizedlist"><ul type="circle"><li><p><a href="/doc/sql/display-sql?url=apm-create.sql&amp;package_key=acs-kernel" target="_top">apm-create.sql</a></p></li></ul></div></li></ul></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="apm-design-intro"></a>Introduction</h3></div></div><p>
-In general terms, a <span class="strong">package</span> is a unit of software that
+apm-admin-procs.tcl</a> (Supports APM UI)</p></li></ul></div></li><li><p>PL/SQL file </p><div class="itemizedlist"><ul type="round"><li><p><a href="/doc/sql/display-sql?url=apm-create.sql&amp;package_key=acs-kernel" target="_top">apm-create.sql</a></p></li></ul></div></li></ul></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="apm-design-intro"></a>Introduction</h3></div></div><p>
+In general terms, a <span class="strong"><em>package</em></span> is a unit of software that
 serves a single well-defined purpose. That purpose may be to provide a
 service directly to one or more classes of end-user, (e.g., discussion forums
 and file storage for community members, user profiling tools for the site
@@ -16,16 +16,16 @@ publisher), or it may be to act as a building block for other packages (e.g.,
 an application programming interface (API) for storing and querying access
 control rules, or an API for scheduling email alerts). Thus, packages fall
 into one of two categories: 
-</p><div class="itemizedlist"><ul type="disc"><li><p><span class="strong">OpenACS Applications:</span> a &quot;program or group of programs
+</p><div class="itemizedlist"><ul type="disc"><li><p><span class="strong"><em>OpenACS Applications:</em></span> a &quot;program or group of programs
 designed for end users&quot; (the <a href="http://www.pcwebopaedia.com/TERM/a/application.html" target="_top">Webopedia
 definition</a>); also known as <span class="emphasis"><em>modules</em></span>, for historical reasons.
 Examples of applications include <a href="/doc/bboard" target="_top">Bboard</a> and <a href="/doc/news" target="_top">News</a>. 
 
 
-</p></li><li><p><span class="strong">OpenACS Services:</span> the aforementioned building blocks.
+</p></li><li><p><span class="strong"><em>OpenACS Services:</em></span> the aforementioned building blocks.
 Examples of services include the <a href="/doc/acs-content-repository" target="_top">OpenACS
 Content Repository</a>, the <a href="/doc/acs-templating" target="_top">OpenACS Templating
-System</a>, and the <a href="kernel-doc.html" title="Chapter 7. Kernel Documentation">OpenACS Kernel</a>, which includes
+System</a>, and the <a href="kernel-doc.html" title="Chapter 10. Kernel Documentation">OpenACS Kernel</a>, which includes
 APM.</p></li></ul></div><p>An installation of the OpenACS includes the OpenACS Kernel, some services that
 extend the kernel's functionality, and some applications intended for
 end-users. Packages function as individual pieces of <a href="subsites-design.html" title="OpenACS 4 Subsites Design Document">subsites</a>. A subsite can contain multiple
@@ -89,21 +89,21 @@ where both ArsDigita and third-party developers will be able publish their
 packages for other ACS users to download and install.</p><p>For a simple illustration of the difference between ACS without APM
 (pre-3.3) and ACS with APM (3.3 and beyond), consider a hypothetical ACS
 installation that uses only two of the thirty-odd modules available circa ACS
-3.2 (say, bboard and e-commerce):</p><div class="mediaobject"><img src="images/acs-without-apm-vs-with-apm.png" align="center" longdesc="ld-id2850596.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-id2850596.html" target="longdesc">D</a>]</span></div></div><p>APM itself is part of a package, the <span class="strong">OpenACS Kernel</span>, an OpenACS
+3.2 (say, bboard and e-commerce):</p><div class="mediaobject"><img src="images/acs-without-apm-vs-with-apm.png" align="center" longdesc="ld-id2890348.html"><div class="longdesc-link" align="right"><br clear="all"><span style="font-size: 8pt;">[<a href="ld-id2890348.html" target="longdesc">D</a>]</span></div></div><p>APM itself is part of a package, the <span class="strong"><em>OpenACS Kernel</em></span>, an OpenACS
 service that is the only mandatory component of an OpenACS installation.</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="apm-design-competitors"></a>Competitive Analysis</h3></div></div><p>The OpenACS is a platform for web-based application software, and any software
 platform has the potential to develop problems like those described above.
 Fortunately, there are many precedents for systematic solutions,
 including:</p><div class="itemizedlist"><ul type="disc"><li><p><a href="http://www.debian.org/" target="_top">Debian GNU/Linux</a> and the <a href="http://www.debian.org/doc/packaging-manuals/packaging.html/" target="_top">Debian
 Packaging manual</a></p></li><li><p><a href="http://www.freebsd.org/" target="_top">FreeBSD</a> has <a href="http://www.freebsd.org/handbook/ports.html" target="_top">the Ports
 collection</a></p></li><li><p><a href="http://www.redhat.com/" target="_top">Red Hat Linux</a> has <a href="http://rpm.redhat.com/" target="_top">the Red Hat Package Manager (RPM)</a></p></li></ul></div><p>Borrowing from all of the above, OpenACS 3.3 introduces its own package
-management system, the OpenACS Package Manager (APM), which consists of:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="strong">a standard format for APM packages</span> (also called
-&quot;OpenACS packages&quot;), including: </p><div class="itemizedlist"><ul type="circle"><li><p>version numbering, independent of any other package and the OpenACS as a
-whole</p></li><li><p>specification of the package interface</p></li><li><p>specification of dependencies on other packages (if any)</p></li><li><p>attribution (who wrote it) and ownership (who maintains it)</p></li></ul></div></li><li><p><span class="strong">web-based tools for package management:</span> </p><div class="itemizedlist"><ul type="circle"><li><p>obtaining packages from a remote distribution point</p></li><li><p>installing packages, if and only if: </p><div class="orderedlist"><ol type="1"><li><p>all prerequisite packages are installed</p></li><li><p>no conflicts will be created by the installation</p></li></ol></div></li><li><p>configuring packages (obsoleting the monolithic OpenACS configuration
-file)</p></li><li><p>upgrading packages, without clobbering local modifications</p></li><li><p>uninstalling unwanted packages</p></li></ul></div></li><li><p><span class="strong">a registry of installed packages</span>, database-backed and
+management system, the OpenACS Package Manager (APM), which consists of:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="strong"><em>a standard format for APM packages</em></span> (also called
+&quot;OpenACS packages&quot;), including: </p><div class="itemizedlist"><ul type="round"><li><p>version numbering, independent of any other package and the OpenACS as a
+whole</p></li><li><p>specification of the package interface</p></li><li><p>specification of dependencies on other packages (if any)</p></li><li><p>attribution (who wrote it) and ownership (who maintains it)</p></li></ul></div></li><li><p><span class="strong"><em>web-based tools for package management:</em></span> </p><div class="itemizedlist"><ul type="round"><li><p>obtaining packages from a remote distribution point</p></li><li><p>installing packages, if and only if: </p><div class="orderedlist"><ol type="1"><li><p>all prerequisite packages are installed</p></li><li><p>no conflicts will be created by the installation</p></li></ol></div></li><li><p>configuring packages (obsoleting the monolithic OpenACS configuration
+file)</p></li><li><p>upgrading packages, without clobbering local modifications</p></li><li><p>uninstalling unwanted packages</p></li></ul></div></li><li><p><span class="strong"><em>a registry of installed packages</em></span>, database-backed and
 integrated with filesystem-based version control 
 
 
-</p></li><li><p><span class="strong">web-based tools for package development:</span> </p><div class="itemizedlist"><ul type="circle"><li><p>creating new packages locally</p></li><li><p>releasing new versions of locally-created packages</p></li></ul></div></li></ul></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="apm-design-design-tradeoffs"></a>Design Tradeoffs</h3></div></div><p>
+</p></li><li><p><span class="strong"><em>web-based tools for package development:</em></span> </p><div class="itemizedlist"><ul type="round"><li><p>creating new packages locally</p></li><li><p>releasing new versions of locally-created packages</p></li></ul></div></li></ul></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="apm-design-design-tradeoffs"></a>Design Tradeoffs</h3></div></div><p>
 The design chosen for APM was meant to satisfy the following constraints: 
 </p><div class="itemizedlist"><ul type="disc"><li><p>The process of authoring a package must be as simple as possible.</p></li><li><p>Strict conventions must be established that provide a set of canonical
 locations and names for files and patterns, for OpenACS application
@@ -124,7 +124,7 @@ following these steps, the package can be subsite specific, available to
 subsites across the system, and be available for distribution to other OpenACS
 installations without doing a monolithic upgrade or reinstall.</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="apm-design-api"></a>API</h3></div></div><p>The APM is composed of systems for accomplishing a set of package-related
 tasks. Each of these tasks comprise a feature area that has an API, data
-model, and a UI:</p><div class="itemizedlist"><ul type="disc"><li><p>Authoring a Package</p></li><li><p>Maintaining Multiple Versions of a Package</p></li><li><p>Creating Instances of the Package</p></li><li><p>Specifying Configuration Parameters for each Instance</p></li></ul></div><p><span class="strong">Authoring a Package</span></p><p>Full instructions on how to prepare an OpenACS package are available in <a href="packages.html">Packages</a>. The API here can be invoked manually by a package's data model
+model, and a UI:</p><div class="itemizedlist"><ul type="disc"><li><p>Authoring a Package</p></li><li><p>Maintaining Multiple Versions of a Package</p></li><li><p>Creating Instances of the Package</p></li><li><p>Specifying Configuration Parameters for each Instance</p></li></ul></div><p><span class="strong"><em>Authoring a Package</em></span></p><p>Full instructions on how to prepare an OpenACS package are available in <a href="packages.html">Packages</a>. The API here can be invoked manually by a package's data model
 creation script, but need not to be used. This API is part of the <a href="/api-doc/plsql-subprogram-one?type=PACKAGE&amp;name=APM" target="_top">APM PL/SQL
 package</a>.</p><pre class="programlisting">
 
@@ -165,7 +165,7 @@ function register_p (
     package_key     in apm_package_types.package_key%TYPE
 ) return integer;
 
-</pre><p><span class="strong">Maintaining Multiple Versions of a Package</span></p><p>While the package authoring API provides a means for registering a
+</pre><p><span class="strong"><em>Maintaining Multiple Versions of a Package</em></span></p><p>While the package authoring API provides a means for registering a
 package, some information about a package is version dependent. For example,
 between versions, the owner of a package, its vendor, its URI, and its
 dependency information may change. The API for package versions allows this
@@ -245,7 +245,7 @@ procedure disable (
 );
 
 </pre><p>Files associated with a version can be added and removed. The path is
-relative to the <span class="strong">package-root</span> which is
+relative to the <span class="strong"><em>package-root</em></span> which is
 <tt>acs-server-root/packages/package-key</tt>.</p><pre class="programlisting">
 -- Add a file to the indicated version. 
 function add_file(
@@ -327,7 +327,7 @@ function compare(
     version_name_two        in apm_package_versions.version_name%TYPE
 ) return integer;
 
-</pre><p><span class="strong">Creating Instances of a Package</span></p><p>Once a package is registered in the system, it is possible to create
+</pre><p><span class="strong"><em>Creating Instances of a Package</em></span></p><p>Once a package is registered in the system, it is possible to create
 instances of it. Each instance can maintain its own content and
 parameters.</p><pre class="programlisting">
 
@@ -382,7 +382,7 @@ end;
 show errors
 
 
-</pre><p><span class="strong">Specifying Configuration Parameters for each Instance</span></p><p>A parameter is a setting that can be changed on a package instance basis.
+</pre><p><span class="strong"><em>Specifying Configuration Parameters for each Instance</em></span></p><p>A parameter is a setting that can be changed on a package instance basis.
 Parameters are registered on each <tt>package_key</tt>, and the values
 are associated with each instance. Parameters can have default values and can
 be of type 'string' or 'number.' There is support with this
@@ -513,14 +513,14 @@ access it. Thus in order to develop a package, the developer must be granted
 site-wide administration.</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="apm-design-config"></a>Configuration/Parameters</h3></div></div><p>APM has two parameters for configuring how it interacts with the UNIX
 filesystem, accessible via the <a href="/admin/site-map/" target="_top">Site Map admin</a>
 page. These parameters need not be changed under most circumstances, but may
-need to be tweaked for Windows compatibility.</p><div class="itemizedlist"><ul type="disc"><li><p><span class="strong">GzipExecutableDirectory</span>
+need to be tweaked for Windows compatibility.</p><div class="itemizedlist"><ul type="disc"><li><p><span class="strong"><em>GzipExecutableDirectory</em></span>
  This directory points to where the <tt>gunzip</tt> program can be found
 for uncompressing <tt>gzip</tt> archives. This is needed for the
 installation of <tt>.apm</tt> files which are simply <tt>gzip</tt>ed
 tarballs. Default is <tt>/usr/local/bin</tt> 
 
 
-</p></li><li><p><span class="strong">InfoFilePermissionsMode</span>
+</p></li><li><p><span class="strong"><em>InfoFilePermissionsMode</em></span>
  This sets the default UNIX permissions used when creating files using the
 APM. Default is 775.</p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="apm-design-future"></a>Future Improvements/Areas of Likely Change</h3></div></div><p>APM has been in production since OpenACS 3.3, and as of version 4.0 offers a
 stable set of features. One major feature planned is integration with the OpenACS
@@ -542,4 +542,4 @@ for authoring, maintaining, and installing packages. The current UI presents
 all of this functionality in one interface and it can be confusing from a
 usability perspective.</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="apm-design-authors"></a>Authors</h3></div></div><div class="itemizedlist"><ul type="disc"><li><p>System creator: Bryan Quinn, Jon Salz, Michael Yoon, Lars Pind, Todd
 Nightingale.</p></li><li><p>System owner: Bryan Quinn</p></li><li><p>Documentation author: Bryan Quinn, building from earlier versions by Jon
-Salz, Michael Yoon, and Lars Pind.</p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="apm-design-rev-history"></a>Revision History</h3></div></div><div class="informaltable"><table border="1"><colgroup><col><col><col><col></colgroup><tbody><tr><td><span class="strong">Document Revision #</span></td><td><span class="strong">Action Taken, Notes</span></td><td><span class="strong">When?</span></td><td><span class="strong">By Whom?</span></td></tr><tr><td>0.1</td><td>Creation</td><td>9/25/2000</td><td>Bryan Quinn</td></tr><tr><td>0.8</td><td>Ready for QA</td><td>9/29/2000</td><td>Bryan Quinn</td></tr><tr><td>0.9</td><td>Edited for ACS 4 Beta release</td><td>10/02/2000</td><td>Kai Wu</td></tr><tr><td>1.0</td><td>Edited for OpenACS 4.6 Beta release</td><td>03/02/2002</td><td>Roberto Mello</td></tr></tbody></table></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="apm-requirements.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="security-requirements.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS 4.6 Package Manager Requirements&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td><td width="40%" align="right">&nbsp;OpenACS 4 Security Requirements</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/apm-design.html#comments">View comments on this page at openacs.org</a></center></body></html>
+Salz, Michael Yoon, and Lars Pind.</p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="apm-design-rev-history"></a>Revision History</h3></div></div><div class="informaltable"><table border="1"><colgroup><col><col><col><col></colgroup><tbody><tr><td><span class="strong"><em>Document Revision #</em></span></td><td><span class="strong"><em>Action Taken, Notes</em></span></td><td><span class="strong"><em>When?</em></span></td><td><span class="strong"><em>By Whom?</em></span></td></tr><tr><td>0.1</td><td>Creation</td><td>9/25/2000</td><td>Bryan Quinn</td></tr><tr><td>0.8</td><td>Ready for QA</td><td>9/29/2000</td><td>Bryan Quinn</td></tr><tr><td>0.9</td><td>Edited for ACS 4 Beta release</td><td>10/02/2000</td><td>Kai Wu</td></tr><tr><td>1.0</td><td>Edited for OpenACS 4.6.2 Beta release</td><td>03/02/2002</td><td>Roberto Mello</td></tr></tbody></table></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="apm-requirements.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="db-api-detailed.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS 4.6.2 Package Manager Requirements&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td><td width="40%" align="right">&nbsp;Database Access API</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/apm-design.html#comments">View comments on this page at openacs.org</a></center></body></html>

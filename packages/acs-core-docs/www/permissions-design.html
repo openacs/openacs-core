@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS 4 Permissions Design</title><meta name="generator" content="DocBook XSL Stylesheets V1.56.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 7. Kernel Documentation"><link rel="previous" href="permissions-requirements.html" title="OpenACS 4 Permissions Requirements"><link rel="next" href="groups-requirements.html" title="OpenACS 4 Groups Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="permissions-requirements.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 7. Kernel Documentation</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="groups-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="permissions-design"></a>OpenACS 4 Permissions Design</h2></div></div><div class="authorblurb"><p>
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>OpenACS 4 Permissions Design</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 10. Kernel Documentation"><link rel="previous" href="permissions-requirements.html" title="OpenACS 4 Permissions Requirements"><link rel="next" href="groups-requirements.html" title="OpenACS 4 Groups Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><center>4.6.x DRAFT IN PROGRESS</center><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="permissions-requirements.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 10. Kernel Documentation</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="groups-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="permissions-design"></a>OpenACS 4 Permissions Design</h2></div></div><div class="authorblurb"><p>
 by <a href="mailto:jmp@arsdigita.com" target="_top">John Prevost</a> and <a href="http://planitia.org" target="_top">Rafael H. Schloming</a><br>
           OpenACS docs are written by the named authors, but may be edited
           by OpenACS documentation staff.
@@ -48,14 +48,14 @@ adequate performance. The core model consists of five tables:</p><div class="var
 
 </span></dt><dd><p>The set of all defined privileges.</p></dd><dt><span class="term"><tt>acs_privilege_method_rules</tt>
 
-</span></dt><dd><p>A relation describing the set of methods <span class="strong">directly</span>
+</span></dt><dd><p>A relation describing the set of methods <span class="strong"><em>directly</em></span>
 associated with each privilege.</p></dd><dt><span class="term"><tt>acs_privilege_hierarchy</tt>
 
-</span></dt><dd><p>A relation describing which privileges <span class="strong">directly</span>
+</span></dt><dd><p>A relation describing which privileges <span class="strong"><em>directly</em></span>
 &quot;contain&quot; other privileges.</p></dd><dt><span class="term"><tt>acs_permissions</tt>
 
 </span></dt><dd><p>A table with one (<span class="emphasis"><em>party</em></span>, <span class="emphasis"><em>object</em></span>, <span class="emphasis"><em>privilege</em></span>)
-row for every privilege <span class="strong">directly</span> granted on any object in
+row for every privilege <span class="strong"><em>directly</em></span> granted on any object in
 the system - this is a denormalization of
 <tt>acs_privilege_method_rules</tt> and
 <tt>acs_privilege_hierarchy</tt></p></dd></dl></div><p>There are also a number of views to make it easier to ask specific
@@ -78,7 +78,7 @@ privileges directly from <tt>acs_object_grantee_priv_map</tt> or also because
 a party is a member of a group (at any depth).</p></dd><dt><span class="term"><tt>acs_object_party_method_map</tt>
 
 </span></dt><dd><p>Relation with every (<span class="emphasis"><em>object</em></span>, <span class="emphasis"><em>party</em></span>, <span class="emphasis"><em>method</em></span>)
-tuple implied by the above trees.</p></dd></dl></div><p>In general, <span class="strong">only <tt>acs_object_party_method_map</tt></span>
+tuple implied by the above trees.</p></dd></dl></div><p>In general, <span class="strong"><em>only <tt>acs_object_party_method_map</tt></em></span>
 should be used for queries from other modules. The other views are
 intermediate steps in building that query.</p><p>The data model also includes two simple PL/SQL procedures
 (<tt>acs_permission.grant_permission</tt> and
@@ -95,7 +95,7 @@ have taken methods from (at any level) (see
 <tt>acs_privilege_hierarchy</tt>)</p></li><li><p>objects get access control from direct grants, or inherit permissions
 from their context (unless the &quot;don't inherit&quot; flag is
 set)</p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="permissions-design-transactions"></a>Legal Transactions</h3></div></div><p>There are three essential areas in which all transactions in the
-permissions system fall:</p><div class="itemizedlist"><ul type="disc"><li><p>Modification of methods and privileges</p></li><li><p>Modification of permissions</p></li><li><p>Queries on permissions</p></li></ul></div><p><span class="strong">&quot;Modification of methods and privileges.&quot;</span> This
+permissions system fall:</p><div class="itemizedlist"><ul type="disc"><li><p>Modification of methods and privileges</p></li><li><p>Modification of permissions</p></li><li><p>Queries on permissions</p></li></ul></div><p><span class="strong"><em>&quot;Modification of methods and privileges.&quot;</em></span> This
 refers to actions that happen mainly at package installation time - a package
 will create a number of methods for its own use, then associate them with the
 system's standard privileges, or new privileges which the package has
@@ -103,7 +103,7 @@ created. The association step might also happen later, if the site-wide
 administrator chooses to change permissions policy.</p><p>These steps involve directly manipulating the <tt>acs_methods</tt>,
 <tt>acs_privileges</tt>, and <tt>acs_privilege_method_rules</tt> tables. A
 web page for manipulating these features should be limited to site-wide
-administrators.</p><p><span class="strong">&quot;Modification of permissions&quot;</span> - involves fairly
+administrators.</p><p><span class="strong"><em>&quot;Modification of permissions&quot;</em></span> - involves fairly
 common operations. Users are typically able to administer permissions for
 objects they themselves create. The two basic operations here are
 &quot;grant&quot; and &quot;revoke&quot;. Granting permissions is done via
@@ -112,7 +112,7 @@ objects they themselves create. The two basic operations here are
 <tt>acs_permissions</tt> table.</p><p>Web pages for making these changes are available to all users, so they
 should not be in an admin area. In order to grant and revoke permissions on
 an object, the user must have the <tt>administer_privileges</tt> method
-permission on that object.</p><p><span class="strong">&quot;Queries on permissions&quot;</span> - by far the most
+permission on that object.</p><p><span class="strong"><em>&quot;Queries on permissions&quot;</em></span> - by far the most
 common operation is querying the permissions database. Several kinds of
 questions are commonly asked: First, and most commonly, &quot;Can this party
 perform this method on this object?&quot; Two Tcl functions are provided to
@@ -127,7 +127,7 @@ against <tt>acs_object_party_method_map</tt>, or by calling the Tcl functions
 for appropriate methods.</p><p>Finally, when administering the permissions for an object, a web page
 needs to know all permissions directly granted on that object. This is done
 by querying against <tt>acs_permissions</tt>.</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="permissions-design-api"></a>API</h3></div></div><p>The API to the permissions system consists of a few well-known tables,
-plus a pair of PL/SQL procedures and a pair of Tcl functions.</p><p><span class="strong">Tables</span></p><p><tt>acs_methods</tt>, <tt>acs_privileges</tt>, and
+plus a pair of PL/SQL procedures and a pair of Tcl functions.</p><p><span class="strong"><em>Tables</em></span></p><p><tt>acs_methods</tt>, <tt>acs_privileges</tt>, and
 <tt>acs_privilege_method_rules</tt> manage the set of permissions in the
 system. At installation time, a package will add to these three tables to
 introduce new permissions into the system.</p><p>The main table for queries is <tt>acs_object_party_method_map</tt>, which
@@ -135,7 +135,7 @@ contains (<span class="emphasis"><em>object</em></span>, <span class="emphasis">
 allowed operations in the system.</p><p>Also of interest for queries is <tt>acs_permissions</tt>, which lists
 directly granted privileges. Neither <tt>acs_object_party_method_map</tt>
 (which is a view) nor <tt>acs_permissions</tt> should be updated
-directly.</p><p><span class="strong">PL/SQL Procedures</span></p><p><tt>acs_permissions.grant_permission</tt> introduces new permissions for
+directly.</p><p><span class="strong"><em>PL/SQL Procedures</em></span></p><p><tt>acs_permissions.grant_permission</tt> introduces new permissions for
 an object. It should be given an (<span class="emphasis"><em>object</em></span>, <span class="emphasis"><em>party</em></span>,
 <span class="emphasis"><em>privilege</em></span>) triple, and will always succeed. If the permission is
 already in the system, no change occurs. The interface for this procedure
@@ -154,7 +154,7 @@ procedure revoke_permission (
   privilege    acs_permissions.privilege%TYPE
 );
 </pre><p>These procedures are defined in <a href="http://acs40.arsdigita.com/doc/sql/display-sql?url=acs-permissions-create.sql&amp;package_key=acs-kernel" target="_top">
-<tt>permissions-create.sql</tt></a></p><p><span class="strong">Tcl Procedures</span></p><p>Two tcl procedures provide a simple call for the query, &quot;Can this
+<tt>permissions-create.sql</tt></a></p><p><span class="strong"><em>Tcl Procedures</em></span></p><p>Two tcl procedures provide a simple call for the query, &quot;Can this
 user perform this method on this object?&quot; One returns true or false, the
 other presents an error page.</p><p>To receive a true or false value, Tcl code should call:</p><pre class="programlisting">
 ad_permission_p $object_id $object_type $method -user_id $user_id
@@ -184,4 +184,4 @@ inheritance.</p></li></ul></div></div><div class="sect2"><div class="titlepage">
 
 </span></dt><dd><p><a href="mailto:rhs@mit.edu" target="_top">Rafael H. Schloming</a></p></dd><dt><span class="term">Documentation author
 
-</span></dt><dd><p><a href="mailto:jmp@arsdigita.com" target="_top">John Prevost</a></p></dd></dl></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="permissions-design-rev-history"></a>Revision History</h3></div></div><div class="informaltable"><table border="1"><colgroup><col><col><col><col></colgroup><tbody><tr><td><span class="strong">Document Revision #</span></td><td><span class="strong">Action Taken, Notes</span></td><td><span class="strong">When?</span></td><td><span class="strong">By Whom?</span></td></tr><tr><td>0.1</td><td>Creation</td><td>9/11/2000</td><td>John Prevost</td></tr><tr><td>0.2</td><td>Edited for ACS 4 Beta release</td><td>10/04/2000</td><td>Kai Wu</td></tr></tbody></table></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="permissions-requirements.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="groups-requirements.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS 4 Permissions Requirements&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td><td width="40%" align="right">&nbsp;OpenACS 4 Groups Requirements</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/permissions-design.html#comments">View comments on this page at openacs.org</a></center></body></html>
+</span></dt><dd><p><a href="mailto:jmp@arsdigita.com" target="_top">John Prevost</a></p></dd></dl></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="permissions-design-rev-history"></a>Revision History</h3></div></div><div class="informaltable"><table border="1"><colgroup><col><col><col><col></colgroup><tbody><tr><td><span class="strong"><em>Document Revision #</em></span></td><td><span class="strong"><em>Action Taken, Notes</em></span></td><td><span class="strong"><em>When?</em></span></td><td><span class="strong"><em>By Whom?</em></span></td></tr><tr><td>0.1</td><td>Creation</td><td>9/11/2000</td><td>John Prevost</td></tr><tr><td>0.2</td><td>Edited for ACS 4 Beta release</td><td>10/04/2000</td><td>Kai Wu</td></tr></tbody></table></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="permissions-requirements.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="groups-requirements.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS 4 Permissions Requirements&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td><td width="40%" align="right">&nbsp;OpenACS 4 Groups Requirements</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/permissions-design.html#comments">View comments on this page at openacs.org</a></center></body></html>

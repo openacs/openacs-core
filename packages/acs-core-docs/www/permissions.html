@@ -1,9 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Groups, Context, Permissions</title><meta name="generator" content="DocBook XSL Stylesheets V1.56.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="dev-guide.html" title="Chapter 4. OpenACS Developer's Guide"><link rel="previous" href="templates.html" title="Using Templates in OpenACS 4.6"><link rel="next" href="subsites.html" title="Writing OpenACS 4.6 Application Pages"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="templates.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 4. OpenACS Developer's Guide</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="subsites.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="permissions"></a>Groups, Context, Permissions</h2></div></div><div class="authorblurb"><p><p>By <a href="mailto:psu@arsdigita.com" target="_top">Pete Su</a></p><br>
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Groups, Context, Permissions</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="dev-guide.html" title="Chapter 8. Development Reference"><link rel="previous" href="templates.html" title="Using Templates in OpenACS 4.6.2"><link rel="next" href="subsites.html" title="Writing OpenACS 4.6.2 Application Pages"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><center>4.6.x DRAFT IN PROGRESS</center><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="templates.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 8. Development Reference</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="subsites.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="permissions"></a>Groups, Context, Permissions</h2></div></div><div class="authorblurb"><p><p>By <a href="mailto:psu@arsdigita.com" target="_top">Pete Su</a></p><br>
           OpenACS docs are written by the named authors, but may be edited
           by OpenACS documentation staff.
         </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="permissions-overview"></a>Overview</h3></div></div><p>
-The OpenACS 4.6 Permissions system allows developers and administrators to
+The OpenACS 4.6.2 Permissions system allows developers and administrators to
 set access control policies at the object level, that is, any
 application or system object represented by a row in the
 <tt>acs_objects</tt> table can be access-controlled via a simple
@@ -14,7 +14,7 @@ API call.
 Although this may all sound easy and wonderful, no developer or
 administrator would want to <span class="emphasis"><em>explicitly</em></span> set access control
 rights for <span class="emphasis"><em>every user</em></span> and <span class="emphasis"><em>every object</em></span> on a
-site. Therefore, OpenACS 4.6 has two auxiliary mechanisms for making this
+site. Therefore, OpenACS 4.6.2 has two auxiliary mechanisms for making this
 easier: First, the Groups system allows users to be grouped together
 in flexible ways. Second, the object model defines a notion of
 <span class="emphasis"><em>object context</em></span>, which allows applications to group objects
@@ -26,7 +26,7 @@ In OpenACS 3.x, the groups system allowed developers and administrators to
 define simple groupings of users. Each group had a human readable name
 and unique ID, and there was a single mapping table that mapped users
 to groups. (The actual data model was more complicated because it
-contained a meta-data system much like the OpenACS 4.6 object type system,
+contained a meta-data system much like the OpenACS 4.6.2 object type system,
 but that's not relevant right now.)
 </p><p>
 The 3.x groups system, while very useful, was limited in few ways. The
@@ -48,7 +48,7 @@ and organizations: although the Sierra Club may be an organization
 member of Greenpeace, its members are not necessarily members of
 Greenpeace.
 </p><p>
-OpenACS 4.6 solves both of these modeling problems by introducing a new
+OpenACS 4.6.2 solves both of these modeling problems by introducing a new
 abstraction called a <span class="emphasis"><em>party</em></span>. Parties have a recursive
 definition, and we can illustrate how it works with the following
 simplified data model. First, we define the <tt>parties</tt>
@@ -114,18 +114,18 @@ is a mapping between <span class="emphasis"><em>privileges</em></span>, parties 
 already know what parties and objects are, but we don't know what
 privileges are.
 </p><p>
-In OpenACS 4.6, a privilege models the right to perform some operation on
+In OpenACS 4.6.2, a privilege models the right to perform some operation on
 some object. They are the basic units out of which we build access
 control policies.  For example, in the Unix filesystem we typically
 implement access control by granting users some combination of
-read. write or execute privileges on files and directories. In OpenACS 4.6,
+read. write or execute privileges on files and directories. In OpenACS 4.6.2,
 the table of privileges is organized hierarchically so that developers
 can define privileges that aggregate some set of privileges
 together. For example, if we have read, write, create and delete
 privileges, it might be convenient to combine them into a new privilege
 called &quot;admin&quot;. Then if we grant a user this privilege she is
 automatically granted all the child privileges that the privilege
-contains. The OpenACS 4.6 kernel data model actually defines these
+contains. The OpenACS 4.6.2 kernel data model actually defines these
 privileges as follows:
 </p><pre class="programlisting">
 
@@ -165,7 +165,7 @@ to every object individually: in many cases, we'd prefer controlling
 permissions to large groups of objects in the site, all at once. We
 use contexts to achieve this goal.
 </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="permissions-object-context"></a>Object Context</h3></div></div><p>
-In OpenACS 4.6, an object context is a generalization of the scoping
+In OpenACS 4.6.2, an object context is a generalization of the scoping
 mechanism introduced in OpenACS 3.x.  &quot;Scoping&quot; and &quot;scope&quot; are terms best
 explained by example: consider some hypothetical rows in the
 <tt>address_book</tt> table:
@@ -180,7 +180,7 @@ which a given object belongs, where each context is <span class="emphasis"><em>e
 person <span class="emphasis"><em>or</em></span> a group of people <span class="emphasis"><em>or</em></span> the general public
 (itself a group of people).
 </p><p>
-In OpenACS 4.6, rather than breaking the world into a limited set of scopes,
+In OpenACS 4.6.2, rather than breaking the world into a limited set of scopes,
 every object lives in a single <span class="emphasis"><em>context</em></span>.  A context is just an
 another object that represents the security domain to which the object
 belongs. By convention, if an object A doesn't have any permissions
@@ -197,7 +197,7 @@ permissions in a subtree of some context.
 application. With only row-level permissions it is not obvious how to
 reasonably initialize the access control list when creating a
 message. At best, we have to explicitly grant various read and write
-privileges whenever we create a message, which is tedious.  In OpenACS 4.6,
+privileges whenever we create a message, which is tedious.  In OpenACS 4.6.2,
 a reasonable thing to do is to create an object representing a forum,
 and point the <tt>context_id</tt> field of a new message at the
 forum. Then, suppose we grant every user in the system read-access to
@@ -211,7 +211,7 @@ This mechanism allows developers and administrators to define a
 hierarchy that matches the structure they need for access control in
 their application.  The following picture shows a typical context
 hierarchy for a hypothetical site:
-</p><blockquote class="blockquote"><div><img src="images/context-hierarchy.gif"></div></blockquote><p>
+</p><blockquote class="blockquote"><p><img src="images/context-hierarchy.gif"></p></blockquote><p>
 A few things to note here. First, the top two contexts in the picture
 are &quot;magic&quot; in some sense because they are created by default by OpenACS
 for a specific purpose. The object <tt>default_context</tt>
@@ -331,7 +331,7 @@ Now put the more complex code back. You'll notice a lot of stuff like this:
 </pre><p>
 This displays the title of the note as either a link or plain text
 depending on whether or not we have write privileges on the object.
-The <tt>if</tt> tag is something that the OpenACS 4.6 template system
+The <tt>if</tt> tag is something that the OpenACS 4.6.2 template system
 defines for you to support conditional presentation. The <a href="/doc/acs-templating/developer-guide.html" target="_top">templates developer guide</a> provides more information about this.
 </p><p>
 If you study the rest of the system, you will also notice that the
@@ -345,7 +345,7 @@ implement a user interface that allowed the user to explicitly attach
 permissions to notes that she wanted to make public or whatever. But
 that's beyond the scope of this example.
 </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="permissions-summary"></a>Summary</h3></div></div><p>
-OpenACS 4.6 defines three separate mechanisms for specifying access control
+OpenACS 4.6.2 defines three separate mechanisms for specifying access control
 in applications. The Groups data model allows you to define 
 hierarchical organizations of users and groups of users. The Permissions
 data model allows you to define a hierarchy of user rights. Finally,
@@ -355,4 +355,4 @@ then used to do access control checks in application pages.
 </p><p>
 In the next section, we'll look at a more complex page for adding and
 editing notes, and discuss these issues further.
-</p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="templates.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="subsites.html">Next</a></td></tr><tr><td width="40%" align="left">Using Templates in OpenACS 4.6&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right">&nbsp;Writing OpenACS 4.6 Application Pages</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/permissions.html#comments">View comments on this page at openacs.org</a></center></body></html>
+</p><p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="templates.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="subsites.html">Next</a></td></tr><tr><td width="40%" align="left">Using Templates in OpenACS 4.6.2&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right">&nbsp;Writing OpenACS 4.6.2 Application Pages</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/permissions.html#comments">View comments on this page at openacs.org</a></center></body></html>
