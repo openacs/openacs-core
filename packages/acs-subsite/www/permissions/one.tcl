@@ -30,16 +30,14 @@ if {[empty_string_p $ancestor]} {
 	set extra_where_clause "AND grantee_id <> -1"
 }
 
-set name [ad_quotehtml [db_string name {}]]
+set name [db_string name {}]
 
 set context [list [list "./" [_ acs-subsite.Permissions]] [_ acs-subsite.Permissions_for_name]]
 
 db_multirow inherited inherited_permissions { *SQL* } { 
-    set grantee_name [ad_quotehtml $grantee_name]
 }
 
 db_multirow acl acl { *SQL* } {
-    set grantee_name [ad_quotehtml $grantee_name]
 }
 
 set controls [list]
@@ -63,7 +61,6 @@ set hide_children_url "one?[export_vars {object_id application_url {children_p f
 
 if [string equal $children_p "t"] {
     db_multirow children children { *SQL* } {
-        set c_name [ad_quotehtml $c_name]
     }
 } else {
     db_1row children_count { *SQL* } 
