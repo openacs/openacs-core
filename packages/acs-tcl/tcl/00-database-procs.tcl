@@ -57,7 +57,7 @@ ad_library {
 #
 #   ns_section ns/server/$server_name/acs/database
 #
-#     ns_param databases  [list ora pg foo]
+#     ns_param database_names [list ora pg foo]
 #     ns_param pools_ora  [list main subquery log]
 #     ns_param pools_pg   [list pg-main pg-subquery pg-log]
 #     ns_param pools_foo  [list foo1 foo2]
