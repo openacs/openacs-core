@@ -906,9 +906,13 @@ ad_proc -public ad_form {
     }
 
     if { [template::form is_submission $form_name] &&
-         [uplevel #$level {set __refreshing_p}] &&
-         [info exists on_refresh] } {
-        ad_page_contract_eval uplevel #$level $on_refresh
+         [uplevel #$level {set __refreshing_p}] } {
+          
+        uplevel array unset ${form_name}:error
+
+        if { [info exists on_refresh] } {
+            ad_page_contract_eval uplevel #$level $on_refresh
+        }
     }
 
     if { [template::form is_valid $form_name] && ![uplevel #$level {set __refreshing_p}] } {
