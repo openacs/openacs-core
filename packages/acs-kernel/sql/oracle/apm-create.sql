@@ -2351,12 +2351,14 @@ as
     version_name		in apm_package_versions.version_name%TYPE
   ) return varchar2
     is
+        a_fields integer;
 	a_start integer;
 	a_end   integer;
 	a_order varchar2(1000);
 	a_char  char(1);
 	a_seen_letter char(1) := 'f';
     begin
+        a_fields := 0;
 	a_start := 1;
 	loop
 	    a_end := a_start;
@@ -2377,12 +2379,13 @@ as
 	    -- zero-pad and append the number
 	    a_order := a_order || substr('0000', 1, 4 - (a_end - a_start)) ||
 		substr(version_name, a_start, a_end - a_start) || '.';
+            a_fields := a_fields + 1;
 	    if a_end > length(version_name) then
 		-- end of string - we're outta here
 		if a_seen_letter = 'f' then
 		    -- append the "final" suffix if there haven't been any letters
 		    -- so far (i.e., not development/alpha/beta)
-		    a_order := a_order || '  3F.';
+		    a_order := a_order || lpad(' ',(7 - a_fields)*5,'0000.') || '  3F.';
 		end if;
 		return a_order;
 	    end if;
@@ -2394,11 +2397,11 @@ as
 	    else
 		-- if the next character was a letter, append the appropriate characters
 		if a_char = 'd' then
-		    a_order := a_order || '  0D.';
+		    a_order := a_order || lpad(' ',(7 - a_fields)*5,'0000.') || '  0D.';
 		elsif a_char = 'a' then
-		    a_order := a_order || '  1A.';
+		    a_order := a_order || lpad(' ',(7 - a_fields)*5,'0000.') || '  1A.';
 		elsif a_char = 'b' then
-		    a_order := a_order || '  2B.';
+		    a_order := a_order || lpad(' ',(7 - a_fields)*5,'0000.') || '  2B.';
 		end if;
     
 		-- can't have something like 3.3a1b2 - just one letter allowed!
