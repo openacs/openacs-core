@@ -23,8 +23,11 @@
                     where acs_objects.object_id = site_nodes.object_id) as object_type,
                    apm_packages.package_key,
                    apm_packages.package_id,
-                   apm_packages.instance_name
-            from site_nodes left join apm_packages on site_nodes.object_id = apm_packages.package_id
+                   apm_packages.instance_name,
+                   apm_package_types.package_type
+            from site_nodes left join 
+                 apm_packages on site_nodes.object_id = apm_packages.package_id left join
+                 apm_package_types using (package_key)
         </querytext>
     </fullquery>
 
@@ -42,8 +45,11 @@
                     where acs_objects.object_id = site_nodes.object_id) as object_type,
                    apm_packages.package_key,
                    apm_packages.package_id,
-                   apm_packages.instance_name
-            from site_nodes left join apm_packages on site_nodes.object_id = apm_packages.package_id
+                   apm_packages.instance_name,
+                   apm_package_types.package_type
+            from site_nodes left join 
+                 apm_packages on site_nodes.object_id = apm_packages.package_id left join
+                 apm_package_types using (package_key)
             where site_nodes.node_id = :node_id
         </querytext>
     </fullquery>

@@ -23,10 +23,13 @@
                     where acs_objects.object_id = site_nodes.object_id) as object_type,
                    apm_packages.package_key,
                    apm_packages.package_id,
-                   apm_packages.instance_name
+                   apm_packages.instance_name,
+                   apm_package_types.package_type
             from site_nodes,
-                 apm_packages
+                 apm_packages,
+                 apm_package_types
             where site_nodes.object_id = apm_packages.package_id(+)
+            and apm_package_types.package_key = apm_packages.package_key
         </querytext>
     </fullquery>
 
@@ -44,11 +47,14 @@
                     where acs_objects.object_id = site_nodes.object_id) as object_type,
                    apm_packages.package_key,
                    apm_packages.package_id,
-                   apm_packages.instance_name
+                   apm_packages.instance_name,
+                   apm_package_types.package_type
             from site_nodes,
-                 apm_packages
+                 apm_packages,
+                 apm_package_types
             where site_nodes.node_id = :node_id
             and site_nodes.object_id = apm_packages.package_id(+)
+            and apm_package_types.package_key = apm_packages.package_key
         </querytext>
     </fullquery>
 
