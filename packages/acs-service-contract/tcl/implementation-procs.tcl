@@ -46,9 +46,47 @@ ad_proc -public acs_sc::impl::delete {
 ad_proc -public acs_sc::impl::new_from_spec {
     {-spec:required}
 } {
-    Add new service contract implementation from an array-list style implementation.
+    Add new service contract implementation from an array-list style implementation, 
+    and binds it to the specified contract.
     
-    @return the ID of the new implementation
+    <p>
+
+    The specification takes the following form:
+
+    <blockquote><pre>
+    set spec {
+        contract_name "Action_SideEffect"
+        owner "bug-tracker"
+        name "CaptureResolutionCode"
+        aliases {
+            GetObjectType bug_tracker::bug::object_type
+            GetPrettyName bug_tracker::bug::capture_resolution_code::pretty_name
+            DoSideEffect  bug_tracker::bug::capture_resolution_code::do_side_effect
+        }
+    }
+    acs_sc::impl::new_from_spec -spec $spec
+    </pre></blockquote>
+
+    And here's the explanation:
+
+    <p>
+
+    The spec is an array-list with the following entries: 
+    
+    <ul>
+      <li>contract_name: The name of the service contract you're implementing.
+      <li>owner: Owner of the implementation, use the package-key.
+      <li>name: Name of your implementation.
+      <li>aliases: Specification of the tcl procedures for each of the service contract's operations.
+    </ul>
+
+    The aliases section is itself an array-list. The keys are the operation names 
+    from the service contract. The values are the names of Tcl procedures in your package, 
+    which implement these operations.
+
+    @param spec The specification for the new service contract implementation.
+    
+    @return the impl_id of the newly registered implementation
 } {
     # Spec contains: contract_name, name, owner, aliases
     array set impl $spec
