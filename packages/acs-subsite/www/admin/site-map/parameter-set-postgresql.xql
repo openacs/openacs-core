@@ -17,7 +17,7 @@
 <fullquery name="parameter_table">      
       <querytext>
 
-select p.parameter_id, p.parameter_name, coalesce(p.description, 'No Description') as description,
+select p.parameter_id, p.parameter_name, p.package_key, coalesce(p.description, 'No Description') as description,
          coalesce(v.attr_value, 'No Value') as attr_value, coalesce(p.section_name, 'No Section Name') as section_name
         from apm_parameters p left outer join (select parameter_id, attr_value
 				from apm_parameter_values v

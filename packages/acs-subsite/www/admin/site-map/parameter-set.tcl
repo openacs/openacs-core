@@ -19,7 +19,7 @@ set table_def [list \
 		   [list parameter_name "Parameter Name"] \
 		   [list description "Description"]]
 
-set table_sql "select p.parameter_id, p.parameter_name, nvl(p.description, 'No Description') description,
+set table_sql "select p.parameter_id, p.parameter_name, p.package_key, nvl(p.description, 'No Description') description,
 	 nvl(v.attr_value, 'No Value') attr_value, nvl(p.section_name, 'No Section Name') section_name
 	from apm_parameters p, (select parameter_id, attr_value 
 				from apm_parameter_values v 
@@ -39,6 +39,7 @@ if {[exists_and_not_null dimensional_list] } {
 lappend table_def [list attr_value "Value" no_sort \
 	{<td>
 	   <input name=params.$parameter_id value=\"$attr_value\" size=50>
+           <font color=red><strong>[ad_parameter_from_file $parameter_name [uplevel set package_key]]</strong></font>
 	    </td>}]
 
 append additional_sql [ad_order_by_from_sort_spec $orderby $table_def]
@@ -46,6 +47,12 @@ append additional_sql [ad_order_by_from_sort_spec $orderby $table_def]
 set body "[ad_header "Parameters for $instance_name"]
 <h2>Parameters for $instance_name</h2>
 [ad_context_bar [list "index" "Site Map"] "$instance_name Parameters"]
+<hr>
+Note text in red below the parameter entry fields indicates the value of this
+parameter is being overridden by an entry in the OpenACS parameter file.  The
+use of the parameter file is discouraged but some sites need it to provide
+instance-specific values for parameters independent of the apm_parameter
+tables.
 <hr>
 "
 
