@@ -108,7 +108,7 @@ ad_proc -public auth::sync::job::end {
                 [ad_system_owner] \
                 [ad_system_owner] \
                 "Batch sync completed" \
-                "Batch user synchronization is complete.\n\nRunning time: $run_time_seconds seconds\nNumber of actions: $num_actions\nNumber of problems: $num_problems\n\nTo view the log, please visit\n$view_log_url"
+                "Batch user synchronization is complete.\n\nRunning time: $job(run_time_seconds) seconds\nNumber of actions: $job(num_actions)\nNumber of problems: $job(num_problems)\n\nTo view the log, please visit\n$job(log_url)"
         } {
             # We don't fail hard here, just log an error
             global errorInfo
@@ -337,11 +337,21 @@ ad_proc -public auth::sync::job::snapshot_delete_remaining {
 } {
     Deletes the users that weren't included in the snapshot.
 } {
-    # run through users that belong to the given authority, 
-    # but which don't already have an entry in the log
-    # and call auth::sync::job::action -operation "delete" on them
+    set usernames [db_list select_user_ids {
+        select username
+        from   cc_users
+        where  authority_id = :authority_id
+        and    user_id not in (select user_id from auth_batch_job_entries where job_id = :job_id and authority_id = :authority_id)
+        and    member_state != 'banned'
+    }]
 
-    # TODO
+    foreach username $usernames {
+        auth::sync::job::action \
+            -job_id $job_id \
+            -operation "delete" \
+            -authority_id [auth::authority::local] \
+            -username $username
+    }
 }
 
 
