@@ -30,6 +30,18 @@ where user_id = :user_id"] {
     return
 }
 
+#
+# RBM: Check if the requested user is a site-wide admin and warn the 
+# viewer in that case (so that a ban/deletion can be avoided).
+#
+
+set site_wide_admin_p [acs_user::site_wide_admin_p -user_id $user_id]
+set warning_p 0
+
+if { $site_wide_admin_p } {
+    set warning_p 1
+}
+
 set public_link [acs_community_member_url -user_id $user_id]
 set sec_context_root [acs_magic_object "security_context_root"] 
 if [db_0or1row user_is_admin "select privilege from acs_permissions where object_id = :sec_context_root and grantee_id = :user_id and privilege = 'admin'"] {
