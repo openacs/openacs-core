@@ -1,3 +1,9 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
 <sect1 id="tcl-doc" xreflabel="Documenting Tcl Files: Page Contracts and Libraries">
 <title>Documenting Tcl Files: Page Contracts and Libraries</title>
 
@@ -344,8 +350,3 @@ substitute an appropriate string when you check the file in.</para></listitem>
 <para><phrase role="cvstag">($Id$)</phrase></para>
 </sect2>
 </sect1>
-<!--
-   Local Variables:
-   sgml-parent-document: ("../index.xml" "book" "sect1")
-   End:
--->

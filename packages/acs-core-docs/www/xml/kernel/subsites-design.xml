@@ -1,3 +1,9 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
 <sect1 id="subsites-design" xreflabel="OpenACS 4 Subsites Design Document">
 <title>OpenACS 4 Subsites Design Document</title>
 
@@ -367,8 +373,3 @@ solvable by configuration instead of coding.</para>
 </sect2>
 
 </sect1>
-<!--
-   Local Variables:
-   sgml-parent-document: ("../index.xml" "book" "sect1")
-   End:
--->

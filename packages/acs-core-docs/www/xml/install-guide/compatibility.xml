@@ -1,3 +1,9 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
 <chapter id="compatibility">
   <title>Compatibility for required software</title>
   <authorblurb>
@@ -75,8 +81,3 @@
   <para><phrase role="cvstag">($Id$)</phrase></para>
 
 </chapter>
-<!--
-   Local Variables:
-   sgml-parent-document: ("../index.xml" "part" "chapter")
-   End:
--->

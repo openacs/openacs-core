@@ -1,3 +1,9 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
   <sect1 id="tutorial-database">
     <title>Setting Up Database Objects</title>
     
@@ -291,8 +297,4 @@ done
       <para>Once both scripts are working without errors, run the create script one last time and proceed.</para>
     </sect2>
   </sect1>
-  <!--
-       Local Variables:
-       sgml-parent-document: ("../index.xml" "book" "chapter")
-       End:
--->
+  

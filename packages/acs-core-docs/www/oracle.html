@@ -9,7 +9,7 @@
 
   </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
 
-	  OpenACS 4.7.0d does not yet work with Oracle 9i
+	  OpenACS 5.0.0d does not yet work with Oracle 9i
 
 	</p><p>
 
@@ -1271,7 +1271,7 @@ SQL&gt; drop user <span class="emphasis"><em>oracle_user_name</em></span> cascad
             </p><pre class="programlisting">
 SQL&gt; drop tablespace <span class="emphasis"><em>table_space_name</em></span> including contents cascade constraints;</pre></li></ul></div></li></ul></div><p>
       For more information on Oracle, please consult the <a href="http://oradoc.photo.net/" target="_top">documentation</a>.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-oracle-defaults"></a>Defaults</h3></div></div><p>We used the following defaults while installing Oracle.</p><div class="informaltable"><table border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Variable</th><th>Value</th><th>Reason</th></tr></thead><tbody><tr><td>ORACLE_HOME</td><td>/ora8/m01/app/oracle/product/8.1.7</td><td>This is the default Oracle installation directory.</td></tr><tr><td>ORACLE_SERVICE</td><td>ora8</td><td>The service name is a domain-qualified identifier for
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-oracle-defaults"></a>Defaults</h3></div></div><p>We used the following defaults while installing Oracle.</p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Variable</th><th>Value</th><th>Reason</th></tr></thead><tbody><tr><td>ORACLE_HOME</td><td>/ora8/m01/app/oracle/product/8.1.7</td><td>This is the default Oracle installation directory.</td></tr><tr><td>ORACLE_SERVICE</td><td>ora8</td><td>The service name is a domain-qualified identifier for
               your Oracle server.</td></tr><tr><td>ORACLE_SID</td><td>ora8</td><td>This is an identifier for your Oracle server.</td></tr><tr><td>ORACLE_OWNER</td><td>oracle</td><td>The user who owns all of the oracle files.</td></tr><tr><td>ORACLE_GROUP</td><td>dba</td><td>The special oracle group. Users in the dba group are
               authorized to do a <tt>connect
               internal</tt> within

@@ -1,3 +1,9 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
   <sect1 id="tutorial-newpackage">
     <title>Creating a Package</title>
     
@@ -278,8 +284,3 @@ done
 [service0@yourserver samplenote]$</screen>
     </sect2>
   </sect1>
-<!--
-       Local Variables:
-       sgml-parent-document: ("../index.xml" "book" "chapter")
-       End:
--->

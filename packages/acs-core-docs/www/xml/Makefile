@@ -22,10 +22,15 @@ all: html pdf
 
 prelim:
 	cp -u images/*.{pdf,png,gif,jpg} ../images/
+
+# put all non-regenerated html in a sub-dir so that we can delete html
+# in the main directory and regenerate
+	cp -u non-xml/*.html ../
+
 	cp -u openacs.css ..
 
 html: prelim
-	cd .. ; $(XSLTPROC) xml/openacs.xsl xml/index.xml
+	cd .. ; $(XSLTPROC) --xinclude xml/openacs.xsl xml/index.xml
 
 pdf: html
 #	$(HTMLDOC) --batch ../for-everyone.book ../for-admins.book ../for-developers.book

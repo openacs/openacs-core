@@ -1,3 +1,9 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
   <appendix id="install-more-software">
     <title>Install additional supporting software</title>
 
@@ -639,8 +645,3 @@ cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
     </sect1>
   </appendix>
 
-<!--
-   Local Variables:
-   sgml-parent-document: ("../index.xml" "book" "part")
-   End:
--->

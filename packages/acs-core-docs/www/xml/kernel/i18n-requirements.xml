@@ -1,5 +1,11 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
 <sect1 id="i18n-requirements" xreflabel="OpenACS &version; Internationalization Requirements">
-  <title>OpenACS &version; Internationalization Requirements</title>
+  <title>OpenACS Internationalization Requirements</title>
 
   <authorblurb>
       by Henry Minsky, 
@@ -96,8 +102,8 @@ system error messages, names of countries, cities, order of given
 and family names for people, syntax of numeric and date strings and
 collation order of strings.</para>
 
-<para>The ACS should be able to operate in languages and regions
-beyond US English. The goal of ACS Globalization is to provide a
+<para>The OpenACS should be able to operate in languages and regions
+beyond US English. The goal of OpenACS Globalization is to provide a
 clean and efficient way to factor out the locale dependent
 functionality from our applications, in order to be able to easily
 swap in alternate localizations.</para>
@@ -106,7 +112,7 @@ swap in alternate localizations.</para>
 rework when targeting the toolkit or applications built with the
 toolkit to another locale.</para>
 
-<para>The cost of porting the ACS to another locale without some
+<para>The cost of porting the OpenACS to another locale without some
 kind of globalization support would be large and ongoing, since
 without a mechanism to incorporate the locale-specific changes
 cleanly back into the code base, it would require making a new fork
@@ -185,7 +191,7 @@ various localization functions, and also there are facilities in
 Java which we will want to move to. So the design to meet the
 requirements will tend to rely on these capabilities, or close
 approximations to them where possible, in order to make it easier
-to maintain Tcl and Java ACS versions.</para>
+to maintain Tcl and Java OpenACS versions.</para>
 
 </sect2><sect2 id="IV._Use-cases_and_User-scenarios"><title>Use-cases and User-scenarios</title>
 
@@ -196,14 +202,14 @@ efficiently:</para>
 <listitem>
 <para>A developer needs to author a web site/application in a
 language besides English, and possibly a character set besides
-ISO-8859-1. This includes the operation of the ACS itself, i.e.,
+ISO-8859-1. This includes the operation of the OpenACS itself, i.e.,
 navigation, admin pages for modules, error messages, as well as
 additional modules or content supplied by the web site
 developer.</para>
 
 <para>What do they need to modify to make this work? Can their
 localization work be easily folded in to future releases of
-ACS?</para>
+OpenACS?</para>
 </listitem>
 
 <listitem>
@@ -245,24 +251,25 @@ Links</title>
 documentation for this software is linked off of</emphasis></para>
 </listitem>
 
-<listitem>
-<para><emphasis>Design document</emphasis></para>
-</listitem>
-
-<listitem>
-<para><emphasis>Developer&#39;s guide</emphasis></para>
-</listitem>
-
-<listitem>
-<para><emphasis>User&#39;s guide</emphasis></para>
-</listitem>
-
-<listitem>
-<para><emphasis>Other-cool-system-related-to-this-one
-document</emphasis><ulink url="http://www.li18nux.net/">LI18NUX
+      <listitem>
+        <para><emphasis><link linkend="i18n-design">Design document</link></emphasis></para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis><link linkend="i18n">Developer&#39;s guide</link></emphasis></para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>User&#39;s guide</emphasis></para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>Other-cool-system-related-to-this-one
+document</emphasis></para>
+<para><ulink url="http://www.li18nux.net/">LI18NUX
 2000 Globalization Specification:
 http://www.li18nux.net/</ulink></para>
-
+        
 <para><ulink url="http://www.mozilla.org/docs/refList/i18n/l12yGuidelines.html">Mozilla
 i18N Guidelines:
 http://www.mozilla.org/docs/refList/i18n/l12yGuidelines.html</ulink></para>
@@ -318,7 +325,15 @@ and times. <emphasis>Note that Java has builtin support for these
 already</emphasis>.</para>
 
 <para><emphasis>10.30</emphasis> For each locale there will be
-default date, number and currency formats.</para>
+default date, number and currency formats. <remark>Currency i18n is
+NOT IMPLEMENTED for 5.0.0.</remark></para>
+
+      <para><emphasis>10.40</emphasis>Administrators can upgrade their
+servers to use new locales via the APM. <remark>NOT IMPLEMENTED in
+5.0.0; current workaround is to get an xml file and load it
+manually.</remark></para>
+
+
 </blockquote>
 
 </sect2><sect2 id="VI.B_Associating_a_Locale_with_a_Request"><title>Associating a Locale with a Request</title>
@@ -424,11 +439,6 @@ as needing update.</para>
 efficient as possible so as not to slow down the delivery of
 pages.</para>
 
-<para><emphasis>Design question: Is there any reason to implement
-the message catalog on top of the content repository as the
-underlying storage and retrieval service, with a layer of caching
-for performance? Would we get a nice user interface and version
-control almost for free?</emphasis></para>
 </blockquote>
 
 </sect2><sect2 id="VI.E_Character_Set_Encoding"><title>Character Set Encoding</title>
@@ -470,24 +480,19 @@ filesystem</para>
 <para>Writing data to the filesystem</para>
 </listitem>
 </itemizedlist>
-
-<para><emphasis>Design question: Do we want to mandate that all
-template files be stored in UTF8? I don&#39;t think so, because
-most people don&#39;t have Unicode editors, or don&#39;t want to be
-bothered with an extra step to convert files to UTF8 and back when
-editing them in their favorite editor.</emphasis></para>
-
-<para><emphasis>Same question for script and template files, how do
-we know what language and character set they are authored in?
-Should we overload the filename suffix (e.g.,
-&#39;.shiftjis.adp&#39;,
-&#39;.ja_JP.euc.adp&#39;)?</emphasis></para>
-
-<para><emphasis>The simplest design is probably just to assign a
-default mapping from each locale to character a set: e.g. ja_JP
--&gt; ShiftJIS, fr_FR -&gt; ISO-8859-1. +++ (see new ACS/Java
-notes) +++</emphasis>
-</para>
+<para>Acs-templating does the following.</para>
+<itemizedlist>
+        <listitem>
+          <para>When the acs-templating package opens an an ADP or TCL file, it assumes the file is iso-8859-1.  If the output charset (OutputCharset) in the AOLserver config file is set, then acs-templating assumes it's that charset.  
+Writing Files</para>
+        </listitem>
+        <listitem>
+          <para>When the acs-templating package writes an an ADP or
+          TCL file, it assumes the file is iso-8859-1.  If the output
+          charset (OutputCharset) in the AOLserver config file is set,
+          then acs-templating assumes it's that charset.  </para>
+        </listitem>
+      </itemizedlist>
 
   <sect3 id="Tcl_Source_File_Character_Set">
     <title>Tcl Source File Character Set</title>
@@ -518,13 +523,18 @@ notes) +++</emphasis>
       <para><emphasis>50.30</emphasis> Data which is submitted with a
          HTTP request using a GET or POST method may be in any character
          set. The system must be able to determine the encoding of the form
-         data and convert it to Unicode on demand.</para>
+         data and convert it to Unicode on demand.  </para>
 
         <para><emphasis>50.35</emphasis> The developer must be able to
           override the default system choice of character set when parsing
-          and validating user form data.</para>
+          and validating user form data. <remark>INCOMPLETE - form
+          widgets in acs-templating/tcl/date-procs.tcl are not
+          internationalized.  Also, acs-templating's UI needs to be
+          internationalized by replacing all user-visible strings with
+          message keys.</remark></para>
 
-       <para><emphasis>50.30.10</emphasis> Extra hair: In Japan and some
+
+       <para><emphasis>50.30.10</emphasis>In Japan and some
            other Asian languages where there are multiple character set
            encodings in common use, the server may need to attempt to do an 
            auto-detection of the character set, because buggy browsers may
@@ -552,9 +562,9 @@ notes) +++</emphasis>
 <sect2 id="VI.F_ACS_Kernel_Issues"><title>ACS Kernel Issues</title>
 
 <blockquote>
-<para><emphasis>60.10</emphasis> All ACS error messages must use
+<para><emphasis>60.10</emphasis> All OpenACS error messages must use
 the message catalog and the request locale to generate error
-message for the appropriate locale.</para>
+message for the appropriate locale.<remark>NOT IMPLEMENTED for 5.0.0.</remark></para>
 
 <para><emphasis>60.20</emphasis> Web server error messages such as
 404, 500, etc must also be delivered in the appropriate
@@ -577,10 +587,6 @@ system must be able to select an approprate locale-specific
 template file to use. The request locale is computed as per (see
 requirement 20.0).</para>
 
-<para><emphasis>Design note: this would probably be implemented by
-suffixing the locale or a locale abbreviation to the template
-filename, such as foo.ja.adp or foo.en_GB.adp.</emphasis></para>
-
 <para><emphasis>70.20</emphasis>A template file may be created for
 a partial locale (language only, without a territory), and the
 request processor should be able to find the closest match for the
@@ -597,7 +603,7 @@ Datasource Output in Templates</title>
 <para><emphasis>70.50</emphasis> The properties of a datasource
 column may include a datatype so that the templating system can
 format the output for the current locale. The datatype is defined
-by a standard ACS datatype plus a format token or format string,
+by a standard OpenACS datatype plus a format token or format string,
 for example: a date column might be specified as
 &#39;current_date:date LONG,&#39; or &#39;current_date:date
 &quot;YYYY-Mon-DD&quot;&#39;</para>
@@ -608,7 +614,8 @@ for example: a date column might be specified as
 <para><emphasis>70.60</emphasis> The forms API must support
 construction of locale-specific HTML form widgets, such as date
 entry widgets, and form validation of user input data for
-locale-specific data, such as dates or numbers.</para>
+locale-specific data, such as dates or numbers.  <emphasis>NOT
+IMPLEMENTED in 5.0.0.</emphasis></para>
 
 <para><emphasis>70.70</emphasis> For forms which allow users to
 upload files, a standard method for a user to indicate the charset
@@ -669,7 +676,8 @@ universal time zone such as GMT.</para>
 three (UCS2) or six (UCS4) bytes per character, make sure that
 column size declarations in the schema are large enough to
 accomodate required data (such as email addresses in
-Japanese).</para>
+Japanese).  <remark>Since 5.0.0, this is covered in the database
+install instructions for both PostGreSQL and Oracle.</remark></para>
 </blockquote>
 
 </sect2><sect2 id="VI.I_Email_and_Messaging"><title>Email and
@@ -677,7 +685,8 @@ Messaging</title>
 
 <para>When sending an email message, just as when delivering the
 content in web page over an HTTP connection, it is necessary to be
-able to specify what character set encoding to use.</para>
+able to specify what character set encoding to use.
+</para>
 
 <blockquote>
 <para><emphasis>110.10</emphasis> The email message sending API
@@ -687,6 +696,38 @@ will allow for a character set encoding to be specified.</para>
 allow for character set to be parsed correctly (hopefully a well
 formatted message will have a MIME character set content type header) </para>
 </blockquote>
+
+    <para>Mail is not internationalized.  The following issues
+must be addressed.</para>
+    <itemizedlist>
+      <listitem><para>
+        Six different functions currently call ns_sendmail.  This
+        means that there are six different end points for sending
+        mail.  This should be brought down to no more than two (one
+        for acs_mail and one for acs_mail_lite), and ideally just
+        one.  Functions that currently call ns_sendmail directly
+        should instead call acs_mail_lite.
+</para>      </listitem>
+      <listitem><para>
+        Outgoing email functions (acs_mail and acs_mail_lite) must do
+        the following: 1) Determine the appropriate language or
+        languages to use for the message subject and message body.  2)
+        Encode the subject and body appropriately and set message
+        headers, in accordance with RFC 3282
+        (http://www.ietf.org/rfc/rfc3282.txt) and other RFCs.
+</para>
+      </listitem>
+      <listitem>
+        <para>Extreme Use case: Web site has a default language of Danish.  A forum is set up for Swedes, so the forum has a package_id and a language setting of Swedish.  A poster posts to the forum in Russian (is this possible?).  A user is subscribed to the forum and has a language preference of Chinese.  What should be in the message body and message subject?
+INCOMPLETE - The mail functions in acs_mail and acs_mail_lite
+are not internationalized.</para>
+      </listitem>
+      <listitem><para>Incoming mail should be localized.</para>
+      </listitem>
+    </itemizedlist>
+
+
+
 
 </sect2>
 <sect2 id="i18n-requirements-implementation-notes">
@@ -709,6 +750,13 @@ formatted message will have a MIME character set content type header) </para>
          <entry><emphasis role="strong">Action Taken, Notes</emphasis></entry>
          <entry><emphasis role="strong">When?</emphasis></entry>
          <entry><emphasis role="strong">By Whom?</emphasis></entry>
+      </row>
+
+      <row>
+        <entry>1</entry>
+        <entry>Updated with results of MIT-sponsored i18n work at Collaboraid.</entry>
+        <entry>14 Aug 2003</entry>
+        <entry>Joel Aufrecht</entry>
       </row>
 
       <row>
@@ -748,3 +796,5 @@ formatted message will have a MIME character set content type header) </para>
 </sect2>
 
 </sect1>
+
+
