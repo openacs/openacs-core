@@ -241,6 +241,21 @@ ad_proc -public template::widget::submit { element_reference tag_attributes } {
   return [input submit element $tag_attributes]
 }
 
+ad_proc -public template::widget::attachment { element_reference tag_attributes } {
+
+    upvar $element_reference element
+
+    set output [input file element $tag_attributes]
+
+    set element(name) $element(attach_name)
+    set element(label) $element(attach_label)
+    set element(html) $element(attach_html)
+
+    append output [submit element $tag_attributes]
+
+    return $output
+}
+
 ad_proc -public template::widget::checkbox { element_reference tag_attributes } {
 
   upvar $element_reference element
