@@ -71,9 +71,25 @@ insert into ad_locales
         nls_charset, mime_charset, default_p)
  values ('TH_TH', 'Thai (TH)', 'th', 'TH', 'THAI', 'THAILAND', 'TH8TISASCII', 'TIS-620', 't');
 
--- Forgot to add this locale earlier, some installations may have it so this could
--- error, the upgrade will still do the job though
-insert into ad_locales 
-       (locale, label, language, country, nls_language, nls_territory, 
-        nls_charset, mime_charset, default_p)
- values ('sv_SE', 'Swedish (SE)', 'sv', 'SE', 'SWEDISH', 'SWEDEN', 'WE8ISO8859P1', 'ISO-8859-1', 't');
+-- Forgot to add this locale earlier, some installations may have it already
+create function inline_0 ()
+returns integer as '
+declare
+  v_locale_exists_p integer;
+begin
+	select count(*) into v_locale_exists_p 
+	from ad_locales where locale = ''sv_SE'';
+
+	if v_locale_exists_p = ''0'' then
+	insert into ad_locales 
+       	(locale, label, language, country, nls_language, nls_territory, 
+        	nls_charset, mime_charset, default_p)
+ 	values (''sv_SE'', ''Swedish (SE)'', ''sv'', ''SE'', ''SWEDISH'', ''SWEDEN'', 
+	        ''WE8ISO8859P1'', ''ISO-8859-1'', ''t'');
+	end if;
+
+	return 1;
+end;' language 'plpgsql';
+
+select inline_0 ();
+drop function inline_0 ();
