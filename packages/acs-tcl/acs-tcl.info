@@ -70,6 +70,7 @@
             <file type="query_file" path="tcl/deprecated-utilities-procs.xql"/>
             <file type="tcl_init" path="tcl/document-init.tcl"/>
             <file type="tcl_procs" path="tcl/document-procs.tcl"/>
+            <file type="tcl_procs" path="tcl/dynamic-group-procs.tcl"/>
             <file type="tcl_procs" path="tcl/exception-procs.tcl"/>
             <file type="query_file" db_type="oracle" path="tcl/membership-rel-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/membership-rel-procs-postgresql.xql"/>
