@@ -22,7 +22,7 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="permission::permission_p.select_permission_p">
+    <fullquery name="permission::permission_p_not_cached.select_permission_p">
         <querytext>
             select 1
             where 't' = acs_permission__permission_p(:object_id, :party_id, :privilege)
