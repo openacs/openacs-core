@@ -121,7 +121,7 @@ namespace eval lang::util {
         return $indices_list
     }    
 
-    ad_proc replace_adp_message_tags_with_lookups { adp_files } {
+    ad_proc replace_adp_message_tags_with_lookups { files {mode adp} } {
         Modify the given adp templates by replacing occurencies of
     
         <#package_key.message_key Some en_US text#>
@@ -135,12 +135,13 @@ namespace eval lang::util {
         set number_of_replacements "0"
     
         # First open the catalog file of the package to add new message keys to
-        if { [llength $adp_files] > 0 } {
-            set adp_file [lindex $adp_files 0]
+        if { [llength $files] > 0 } {
+            set adp_file [lindex $files 0]
     
             # Open the corresponding catalog file of the package for writing
             # Create the catalog directory if it doesn't exist
             regexp {^packages/([^/]+)} $adp_file full_match package_key
+    
             set catalog_dir "[acs_root_dir]/packages/$package_key/catalog"
             if { ![file isdirectory $catalog_dir] } {
                 ns_log Notice "lang_extract_keys_from_adps: Creating new catalog directory $catalog_dir"
@@ -149,11 +150,11 @@ namespace eval lang::util {
             set catalog_file_path "$catalog_dir/$package_key.en_US.iso-8859-1.cat"
             ns_log Notice "lang_extract_keys_from_adps: opening catalog file $catalog_file_path for writing"
             set catalog_file_id [open "$catalog_file_path" a+]
-
+    
             # Use the original catalog file contents to determine if a key should
             # be added to the catalog file or not
             set original_catalog_file_contents [read $catalog_file_id]
-
+    
             if { ![regexp {\n$} $original_catalog_file_contents match] } {
                 # The file does not end in a new line so add one
                 puts $catalog_file_id "\n"                
@@ -162,17 +163,17 @@ namespace eval lang::util {
             # No files to process so return
             return
         }
-
+    
         # Keep track of the messages added to the catalog file
         array set added_catalog_messages {}
-
+    
         # Loop over and process the adp files
-        foreach adp_file $adp_files {            
-
+        foreach adp_file $files {            
+    
             # We keep track of when we've written to the catalog file to be able
             # to add a comment for each adp
             set has_written_to_catalog_file_p "0"
-
+    
             set full_adp_path "[acs_root_dir]/$adp_file"
             ns_log Notice "processing adp file $full_adp_path"
     
@@ -190,9 +191,9 @@ namespace eval lang::util {
             # Get the indices of the first and last char of the <#...#> text snippets
             set message_key_indices [lang::util::get_adp_message_indices $file_contents]
             foreach index_pair $message_key_indices {
-
+    
                 incr number_of_replacements
-
+    
                 set tag_start_idx [lindex $index_pair 0]
                 set tag_end_idx [lindex $index_pair 1]
                 set message_tag "[string range $file_contents $tag_start_idx $tag_end_idx]"
@@ -204,12 +205,12 @@ namespace eval lang::util {
                     ns_log Error "Internal programming error: could not extract message key and text from the message tag $message_tag in file $adp_file. This means there is a mismatch with the regexp that extracted the message key."
                     continue
                 }
-
+    
                 # If the message key doesn't contain the package key prefix then add such a prefix
                 if { ![regexp {\.} $message_key match] } {
                     set message_key "${package_key}.${message_key}"
                 }
-
+    
                 # Make the key unique so that we can add it to the catalog file
                 set message_key_to_add [get_unique_key_to_add_to_catalog_file $original_catalog_file_contents [array get added_catalog_messages] $message_key $new_en_us_text]
                 if { ![empty_string_p $message_key_to_add] } {
@@ -217,28 +218,36 @@ namespace eval lang::util {
                         # The message key had to be changed to be made unique
                         ns_log Warning "The message key $message_key was changed to $message_key_to_add to be made unique. If the value was mistyped and should have been the same as previously then you must manually remove the entry for $message_key_to_add from the catalog file and change the key in the adp $adp_file fom $message_key_to_add to $message_key"
                     }
-
+    
                     set message_key $message_key_to_add
                     ns_log Notice "adding message key $message_key to catalog file"
-
+    
                     if { !$has_written_to_catalog_file_p } {
                         # Show which template the keys are for
                         puts $catalog_file_id "# $adp_file"
                     }
-
+    
                     puts $catalog_file_id "_mr en_US $message_key \{${new_en_us_text}\}"                    
                     set added_catalog_messages($message_key) "$new_en_us_text"
                     set has_written_to_catalog_file_p "1"
                 }  else {
                     ns_log Notice "message key $message_key already exists in catalog file with same value, not adding"
                 }             
-
+    
                 # Insert new or update existing message key
                 lang::message::register "en_US" $message_key $new_en_us_text
     
     
                 # Replace the message tag with the message key
-                regsub [lang::util::get_adp_message_regexp_pattern] $modified_file_contents "#${message_key}#" modified_file_contents
+                
+                switch $mode {
+                    adp {
+                        regsub [lang::util::get_adp_message_regexp_pattern] $modified_file_contents "#${message_key}#" modified_file_contents
+                    } 
+                    tcl {
+                        regsub [lang::util::get_adp_message_regexp_pattern] $modified_file_contents "\[_ ${message_key}\]" modified_file_contents
+                    }
+                }
             }
     
             # Update the adp with the replaced message keys
@@ -246,12 +255,12 @@ namespace eval lang::util {
             puts $adp_file_id "$modified_file_contents"
             close $adp_file_id
         }    
-
+    
         # Close the catalog file
         if { [info exists catalog_file_id] } {
             close $catalog_file_id
         }
-
+    
         return $number_of_replacements
     }   
 
