@@ -73,9 +73,7 @@ ad_proc -public get_content {} {
   }
 
   # Get the live revision
-  template::query get_revision revision_id onevalue "
-    select live_revision from cr_items where item_id = :item_id
-  " -cache "item_live_revision $item_id"
+  set revision_id [db_string get_revision ""]
 
   if { [template::util::is_nil revision_id] } {
     ns_log notice "No live revision for item $item_id"
@@ -83,11 +81,7 @@ ad_proc -public get_content {} {
   }
 
   # Get the mime type, decide if we want the text
-  template::query get_mime_type mime_type onevalue "
-    select mime_type from cr_revisions 
-      where revision_id = :revision_id
-  " -cache "revision_mime_type $revision_id" -persistent \
-    -timeout 3600
+  set mime_type [db_string get_mime_type ""]
   
   if { [template::util::is_nil mime_type] } {
     ns_log notice "No such revision: $reivision_id"
@@ -101,36 +95,15 @@ ad_proc -public get_content {} {
   }
  
   # Get the content type
-  template::query get_content_type content_type onevalue "
-    select content_type from cr_items 
-    where item_id = :item_id
-  " -cache "item_content_type $item_id" -persistent \
-    -timeout 3600
+  set content_type [db_string get_content_type ""]
 
   # Get the table name
-  template::query get_table_name table_name onevalue "
-    select table_name from acs_object_types 
-    where object_type = :content_type
-  " -cache "type_table_name $content_type" -persistent \
-    -timeout 3600
+  set table_name [db_string get_table_name ""]
 
   upvar content content
 
   # Get (all) the content (note this is really dependent on file type)
-  template::query get_content content onerow "select 
-    x.*, 
-    :item_id as item_id $text_sql, 
-    :content_type as content_type
-  from
-    cr_revisions r, ${table_name}x x
-  where
-    r.revision_id = :revision_id
-  and 
-    x.revision_id = r.revision_id
-  " -cache "content_for_revision $revision_id" -persistent \
-    -timeout 3600
-
-  if { ![array exists content] } { 
+  if {![db_0or1row get_content "" -column_array content]} {
     ns_log Notice "No data found for item $item_id, revision $revision_id"
     return 0
   }
@@ -199,14 +172,7 @@ ad_proc -public get_content_value { revision_id } {
       }
 
       # Query for values from a previous revision
-
-      template::query gcv_get_previous_content content onevalue "
-      select 
-        content
-      from 
-        cr_content_text
-      where 
-        revision_id = :revision_id"
+      set content [db_string gcv_get_previous_content ""]
 
   }
 
@@ -227,27 +193,11 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
   }
 
   # cache this query persistently for 1 hour
-  template::query get_item_info item_info onerow "
-    select 
-      item_id, content_type
-    from 
-      cr_items
-    where
-      item_id = content_item.get_id(:url, :content_root)" \
-   -cache "get_id_filter $url $content_root" \
-   -persistent -timeout 216000
+  db_0or1row get_item_info "" -column_array item_info
 
   # No item found, so do not handle this request
   if { ![info exists item_info] } { 
-      template::query get_template_info item_info onerow "
-        select 
-          item_id, content_type
-        from 
-          cr_items
-        where
-          item_id = content_item.get_id(:url, :template_root)" \
-      -cache "get_id_filter $url $template_root" \
-      -persistent -timeout 216000
+      db_1row get_template_info "" -column_array item_info
     
       if { ![info exists item_info] } { 
           ns_log Notice "No content found for url $url"
@@ -263,9 +213,7 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
 
   # Make sure that a live revision exists
   if [empty_string_p $rev_id] {
-      template::query get_live_revision live_revision onevalue "
-          select live_revision from cr_items where item_id = :item_id
-      " -cache "item_live_revision $item_id"
+      set live_revision [db_string get_live_revision ""]
 
       if { [template::util::is_nil live_revision] } {
           ns_log Notice "No live revision found for content item $item_id"
@@ -279,22 +227,7 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
   variable template_path
 
   # Get the template 
-  set OFFquery "select 
-    content_template.get_path(
-      content_item.get_template(:item_id, 'public'),
-      :template_root) as template_url 
-  from   dual"
-
-  template::query get_template_url info onerow "select 
-    (select live_revision 
-       from cr_items 
-      where item_id = content_item.get_template(:item_id, :context)) as template_id,
-    content_template.get_path(
-      content_item.get_template(:item_id, :context),
-      :template_root) as template_url 
-  from 
-    dual"
-
+  db_1row get_template_url "" -column_array info
 
   if { [string equal $info(template_url) {}] } { 
     ns_log Notice "No template found to render content item $item_id in context '$context'"

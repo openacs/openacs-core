@@ -12,11 +12,9 @@ ad_proc -public item::content_is_null { revision_id } {
   @return 1 if the content is null, 0 otherwise
 
 } {
-  template::query cin_get_content content_test onevalue "
-    select 't' from cr_revisions 
-      where revision_id = :revision_id
-      and content is not null"
-  return [template::util::is_nil content_test]
+    set content_test [db_string cin_get_content ""]
+
+    return [template::util::is_nil content_test]
 }
 
 
@@ -40,15 +38,13 @@ ad_proc -public item::get_template_id { item_id {context public} } {
 
 } {
 
-  template::query gti_get_template_id template_id onevalue "
-    select content_item.get_template(:item_id, :context) as template_id
-    from dual" -cache "item_itemplate_id $item_id"
+    set template_id [db_string gti_get_template_id ""]
 
-  if { [info exists template_id] } {
-    return $template_id
-  } else {
-    return ""
-  }
+    if { [info exists template_id] } {
+        return $template_id
+    } else {
+        return ""
+    }
 }
 
 
@@ -96,15 +92,13 @@ ad_proc -public item::get_url { item_id } {
 } {
 
   # Get the path
-  template::query gu_get_path item_path onevalue "
-    select content_item.get_path(:item_id) from dual
-  " -cache "item_path $item_id" 
+    set item_path [db_string gu_get_path ""]
 
-  if { [info exists item_path] } {
-    return $item_path
-  } else {
-    return ""
-  }
+    if { [info exists item_path] } {
+        return $item_path
+    } else {
+        return ""
+    }
 }
 
 
@@ -124,16 +118,14 @@ ad_proc -public item::get_live_revision { item_id } {
 
 } {
 
-  template::query glr_get_live_revision live_revision onevalue "
-    select live_revision from cr_items
-      where item_id = :item_id" -cache "item_live_revision $item_id"
+    set live_revision [db_string glr_get_live_revision ""]
 
-  if { [template::util::is_nil live_revision] } {
-    ns_log notice "WARNING: No live revision for item $item_id"
-    return ""
-  } else {
-    return $live_revision
-  }
+    if { [template::util::is_nil live_revision] } {
+        ns_log notice "WARNING: No live revision for item $item_id"
+        return ""
+    } else {
+        return $live_revision
+    }
 }
 
 
@@ -154,17 +146,9 @@ ad_proc -public item::get_mime_info { revision_id {datasource_ref mime_info} } {
   @see proc item::get_extended_url
 
 } {
+    set sql [db_map gmi_get_mime_info]
 
-  return [template::query gmi_get_mime_info mime_info onerow "
-    select 
-      m.mime_type, m.file_extension
-    from
-      cr_mime_types m, cr_revisions r
-    where
-      r.mime_type = m.mime_type
-    and
-      r.revision_id = :revision_id
-  " -cache "rev_mime_info $revision_id" -uplevel]
+    return [uplevel "db_0or1row ignore $sql"]
 }
 
 

@@ -11,9 +11,7 @@ namespace eval doc {
         
         upvar $info_ref info
         
-        template::query get_info info_source onevalue "
-        select doc.get_package_header(:package_name) from dual
-        "
+        set info_source [db_string get_info ""]
         
 # Delete leading stars and dashes
         regsub -all -line -- {^( |--|\*|/\*\*|\*/)*} $info_source "" info_source
@@ -44,9 +42,7 @@ namespace eval doc {
     upvar $doc_ref  doc
     upvar $code_ref code
 
-    template::query get_header header onevalue "
-      select doc.get_proc_header(:proc_name, :package_name) from dual
-    "
+    set header [db_string get_header ""]
 
     # Get JavaDoc block, if any
     if { [regexp {/\*\*(.*)\*/} $header match] } {
@@ -152,40 +148,16 @@ namespace eval doc {
   # { {label value} {label value} ... }
   ad_proc -public package_list { {db ""} } {
 
-    template::query get_packages result multilist "
-      select distinct 
-        lower(name) as label,  
-        lower(name) as value 
-      from 
-        user_source
-      where 
-        type='PACKAGE'
-      and
-        line=1
-      order by label"
+      set result [db_list_of_list get_packages ""]
  
-    return $result
+      return $result
   }  
 
   # Return a list of all the function creation headers in a package, in form
   # { value value ... }
   ad_proc -public func_list { package_name {db ""} } {
 
-    template::query get_funcs result multilist "
-      select distinct 
-        lower(text) as line_header 
-      from 
-        user_source
-      where 
-        type='PACKAGE'
-      and
-        lower(name) = lower(:package_name)
-      and (
-          lower(text) like '%procedure%'
-        or
-          lower(text) like '%function%'
-      )
-      order by line_header"
+      set result [db_list_of_lists get_funcs ""]
 
     set line_opts [list]
     foreach line $result {
@@ -210,28 +182,14 @@ namespace eval doc {
     # Get each line that contains "procedure" or "function" in it
     # Pretty risky... The like query should be improved to return 
     # less false matches
-    template::query get_functions result multirow "
-      select distinct 
-        lower(text) as line_header 
-      from 
-        user_source
-      where 
-        type='PACKAGE'
-      and
-        lower(name) = lower(:package_name)
-      and (
-          lower(text) like '%procedure%'
-        or
-          lower(text) like '%function%'
-      )
-      order by line_header" -eval {
+    db_multirow result get_functions "" {
 
       # Only insert a row into the datasource if it looks like a procedure
       # or function definition
       # Maybe this should ignore comments, too ? [^-]* at the beginning
       if { [regexp {(procedure|function)[^a-zA-Z0-9_]*([a-zA-Z0-9_]+)} \
-             $row(line_header) match type name] && 
-	   ![regexp {\-\-} $row(line_header) match]} {
+             $line_header match type name] && 
+	   ![regexp {\-\-} $line_header match]} {
         incr result_rowcount
         upvar "${result_ref}:${result_rowcount}" result_row
         set result_row(rownum) $result_rowcount
