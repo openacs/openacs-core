@@ -173,7 +173,7 @@ select 1
 <fullquery name="package_instantiate_object.create_object">      
       <querytext>
 
-	PERFORM ${package_name}__new([plpgsql_utility::generate_attribute_parameter_call \
+	select ${package_name}__new([plpgsql_utility::generate_attribute_parameter_call \
 		-prepend ":" \
 		${package_name}__new \
 		$pieces])
