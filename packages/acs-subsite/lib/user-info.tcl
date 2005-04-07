@@ -115,16 +115,6 @@ if { ![string equal [acs_user::ScreenName] "none"] } {
                  ]]
 }
 
-# Get info from eabis
-
-set organization ""
-set position ""
-set institution_short_name ""
-set responsibilities ""
-set role ""
-
-db_0or1row get_eabis_info "select organization,position,institution_short_name,responsibilities,role from eabis_user_info where user_id = :user_id"
-
 ad_form -extend -name user_info -form {
     {url:text,optional
         {label "[_ acs-subsite.Home_page]"}
@@ -137,28 +127,6 @@ ad_form -extend -name user_info -form {
         {mode $elm_mode(bio)}
         {display_value {[ad_text_to_html -- $user(bio)]}}
     }
-    {organization:text
-        {label "Organization"}
-        {html {size 50}}
-    }
-    {institution_short_name:text,optional
-        {label "Short Name"}
-        {html {size 30}}
-    }
-    {position:text
-        {label "Position"}
-        {html {size 50}}
-    }
-    {responsibilities:text,optional
-        {label "Responsibilities"}
-        {html {size 50}}
-    }
-    {role:text(select)
-        {label "Role"}
-        {options {{Academic academic} {Corporate corporate} {Student student} {Staff staff} {Other other}}}
-    }
-
-
 } -on_request {
     foreach var { authority_id first_names last_name email username screen_name url bio } {
         set $var $user($var)
@@ -200,11 +168,6 @@ ad_form -extend -name user_info -form {
     if {[apm_package_enabled_p "categories"]} {
 	category::map_object -object_id $user_id [category::ad_form::get_categories -container_object_id $main_site_id]
     }
-
-    if [catch {db_dml eabis_user_info_insert "insert into eabis_user_info (organization,position,institution_short_name,responsibilities,role,user_id) values (:organization,:position,:institution_short_name,:responsibilities,:role,:user_id)"}] {
-    db_dml eabis_user_info "update eabis_user_info set organization=:organization,  position=:position, institution_short_name=:institution_short_name, responsibilities=:responsibilities, role=:role where user_id=:user_id"
-    }
-
 } -after_submit {
     if { [string equal [ad_conn account_status] "closed"] } {
         auth::verify_account_status
