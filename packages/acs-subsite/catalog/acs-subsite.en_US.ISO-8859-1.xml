@@ -363,6 +363,9 @@ You can always change your password by doing the following:
   <msg key="Select_an_Object_by_Id">Select an Object by Id:</msg>
   <msg key="Send_email_to_this_user">Send email to this user</msg>
   <msg key="Send_me_a_copy">Send me a copy:</msg>
+  <msg key="set_reg_asm">Set the assessment for registration
+
+</msg>
   <msg key="Show">Show</msg>
   <msg key="Site_wide_administration">Site-wide administration</msg>
   <msg key="sorry_forgotten_pwd">Sorry, we can't help you with your forgotten password.</msg>
