@@ -4,10 +4,15 @@ ad_page_contract {
     @author Vivian Hernandez (vivian@viaro.net) Viaro Networks (www.viaro.net)
     @creation-date 2005-01-20
     @cvs-id $Id: 
+} {
+    assessment_id:optional
 }
 
-set value [parameter::get -parameter AsmForRegisterId]
-set assessment_id $value
+
+if {![exists_and_not_null assessment_id]} {
+    set value [parameter::get -parameter AsmForRegisterId]
+    set assessment_id $value
+}
 set install_p [apm_package_installed_p "assessment"]
 set mount_p [site_node::get_package_url -package_key assessment]
 if {$install_p == 0 || $mount_p == ""} {
@@ -18,10 +23,10 @@ set url ""
 
 set instance_id [ db_list_of_lists get_instance_id {}]
 set new_url [apm_package_url_from_id [lindex $instance_id 0]]
+set instance_name [ad_conn instance_name] 
+set page_title "$instance_name [_ acs-subsite.set_reg_asm]"
 
-set page_title "[ad_conn instance_name] Set the assessment for registration"
-
-set context [list "Set the assessment for registration"]
+set context [list "[_ acs-subsite.set_reg_asm]"]
 
 set subsite_id [ad_conn subsite_id]
 
@@ -38,7 +43,7 @@ ad_form -name get_assessment  -form {
 	{label "[_ acs-subsite.choose_assessment]"}
 	{options $assessments}
 	{help_text "[_ acs-subsite.choose_assessment_help]"}
-	{value $value}}
+	{value $assessment_id}}
     {submit:text(submit)
 	{label "   OK   "}}
         {edit:text(submit)
@@ -50,11 +55,11 @@ ad_form -name get_assessment  -form {
 		set package_id [db_string package_id {}]
 		set url [apm_package_url_from_id $package_id]
 	    }
-	    ad_returnredirect "${url}asm-admin/one-a?assessment_id=$assessment_id"
+	    ad_returnredirect "${url}asm-admin/one-a?assessment_id=$assessment_id&reg_p=1"
 	}
     }  else {
 	parameter::set_value -package_id [ad_conn package_id] -parameter AsmForRegisterId -value $assessment_id
-	ad_returnredirect "set-reg-assessment"
+	ad_returnredirect ""
     }
 }
 
