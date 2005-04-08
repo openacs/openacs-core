@@ -21,4 +21,13 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="notification::request::request_count.request_count">
+        <querytext>
+            select count(*)
+            from notification_requests
+            where type_id = :type_id
+            and object_id = :object_id
+        </querytext>
+    </fullquery>
+
 </queryset>

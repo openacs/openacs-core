@@ -62,6 +62,15 @@ namespace eval notification::request {
         return [expr { [db_string request_count {}] > 0 }]
     }
 
+    ad_proc -public request_count {
+        {-type_id:required}
+        {-object_id:required}
+    } {
+        returns number of notification requests for this type and object
+    } {
+        return [db_string request_count {} -default 0]
+    }
+
     ad_proc -public delete {
         {-request_id:required}
     } {
