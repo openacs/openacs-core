@@ -58,7 +58,7 @@ ad_form -name get_assessment  -form {
 	    ad_returnredirect "${url}asm-admin/one-a?assessment_id=$assessment_id&reg_p=1"
 	}
     }  else {
-	parameter::set_value -package_id [ad_conn package_id] -parameter AsmForRegisterId -value $assessment_id
+	parameter::set_value -package_id [ad_conn subsite_id] -parameter AsmForRegisterId -value $assessment_id
 	ad_returnredirect ""
     }
 }
