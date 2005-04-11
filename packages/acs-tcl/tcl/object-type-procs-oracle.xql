@@ -34,6 +34,7 @@
             from acs_object_types
            start with object_type = :subtype
       connect by prior supertype = object_type
+           where object_type != :substype
         order by level desc
       </querytext>
 </fullquery>

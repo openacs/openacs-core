@@ -114,21 +114,30 @@ ad_proc -private acs_object_type::acs_object_instance_of {
 ad_proc -private acs_object_type::supertype {
     {-supertype:required}
     {-subtype:required}
-    {-no_cache:boolean}
 } {
     Returns true if subtype is equal to, or a subtype of, supertype.
 
     @author Lee Denison (lee@thaum.net)
 } {
-    if {$no_cache_p} {
-        set supertypes [db_list supertypes {}]
+    set supertypes [object_type::supertypes]
+    append supertypes $subtype
 
-        return [expr {[lsearch $supertypes $supertype] >= 0}]
+    return [expr {[lsearch $supertypes $supertype] >= 0}]
+}
+
+ad_proc -private acs_object_type::supertypes {
+    {-subtype:required}
+    {-no_cache:boolean}
+} {
+    Returns a list of the supertypes of subtypes.
+
+    @author Lee Denison (lee@thaum.net)
+} {
+    if {$no_cache_p} {
+        return [db_list supertypes {}]
     } else {
-        return [util_memoize [list acs_object_type::supertype \
-            -supertype $supertype \
+        return [util_memoize [list acs_object_type::supertypes \
             -subtype $subtype \
             -no_cache]]
     }
 }
-
