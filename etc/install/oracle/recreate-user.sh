@@ -1,5 +1,5 @@
 #!/bin/bash
-# Assumes the envirionment variable config_file to be set
+# Assumes the environment variable config_file to be set
 
 # The drop and create scripts are assumed to be in the same directory as this script
 script_path=$(dirname $(which $0))
