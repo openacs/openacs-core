@@ -287,9 +287,6 @@ set install_error_file "${serverroot}/log/install-log-errors"
 # should we install dotlrn?
 set dotlrn "no"
 
-# Which tag should we checkout from?
-set dotlrn_branch "HEAD"
-
 # Should basic demo setup of departments, classes, users, etc. be done?
 set dotlrn_demo_data "no"
 set dotlrn_users_data_file "users-data.csv"

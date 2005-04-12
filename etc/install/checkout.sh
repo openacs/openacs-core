@@ -63,8 +63,8 @@ else
 fi
 
 echo "$0: Checking out acs-core from branch \"$oacs_branch\""
-cvs -q -d :pserver:anonymous:@openacs.org:/cvsroot login
-cvs -q -z3 -d :pserver:anonymous@openacs.org:/cvsroot checkout $oacs_branch_switch acs-core
+cvs -q -d :pserver:anonymous:@cvs.openacs.org:/cvsroot login
+cvs -q -z3 -d :pserver:anonymous@cvs.openacs.org:/cvsroot checkout $oacs_branch_switch acs-core
 mv ${serverroot}-tmp/openacs-4 ${serverroot}
 rmdir ${serverroot}-tmp
 
@@ -74,26 +74,15 @@ if [ -n "$packages_list" ]; then
     # Checkout additional packages (modules)
     for package in $packages_list
     do
-      cvs -q -z3 -d :pserver:anonymous@openacs.org:/cvsroot checkout $oacs_branch_switch $package
+      cvs -q -z3 -d :pserver:anonymous@cvs.openacs.org:/cvsroot checkout $oacs_branch_switch $package
     done
 fi
 
 if [ $dotlrn == "yes" ]; then
     # Checkout needed packages
     echo "$0: Checking out packages from branch $oacs_branch"
-    cvs -q -z3 -d :pserver:anonymous@openacs.org:/cvsroot co $oacs_branch_switch dotlrn-prereq
+    cvs -q -z3 -d :pserver:anonymous@cvs.openacs.org:/cvsroot co $oacs_branch_switch dotlrn-all
 
-    # Checkout .LRN
-    dotlrn_branch=`get_config_param dotlrn_branch`
-    if [ "$dotlrn_branch" == "HEAD"]; then
-        dotlrn_branch_switch=""
-    else
-        dotlrn_branch_switch="-r $dotlrn_branch"
-    fi  
-    echo "$0: Checking out .LRN from branch $dotlrn_branch"
-    cvs -q -d :pserver:anonymous:@dotlrn.openacs.org:/dotlrn-cvsroot login
-    cvs -q -z3 -d :pserver:anonymous@dotlrn.openacs.org:/dotlrn-cvsroot \
-        co $dotlrn_branch_switch dotlrn-core
 fi
 
 echo $(date) > ${serverroot}/www/SYSTEM/checkout-date

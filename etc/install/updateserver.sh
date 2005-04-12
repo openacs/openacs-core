@@ -14,8 +14,7 @@ root_dirs="www etc"
 
 cvs_args_with_dir="-f -q update -Pd"
 cvs_args_no_dir="-f -q update -P"
-oacs_cvs="cvs -d :pserver:anonymous@openacs.org:/cvsroot"
-lrn_cvs="cvs -d :pserver:anonymous@dotlrn.openacs.org:/dotlrn-cvsroot"
+oacs_cvs="cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot"
 
 # CVS update in root without new dirs
 echo "$0 - Updating in root dir $server_root" 
@@ -30,14 +29,7 @@ do
   cd $dir
   echo "$0 - Updating package $dir"
 
-  dotlrn_p=$(grep dotlrn CVS/Root)
-  if [ -z "$dotlrn_p" ]; then 
-      cvscommand=$oacs_cvs
-  else 
-      cvscommand=$lrn_cvs
-  fi
-
-  $cvscommand $cvs_args_with_dir
+  $oacs_cvs $cvs_args_with_dir
   cd .. 
 done
 
