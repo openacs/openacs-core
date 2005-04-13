@@ -141,3 +141,22 @@ ad_proc -private acs_object_type::supertypes {
             -no_cache]]
     }
 }
+
+ad_proc -private acs_object_type::get_table_name {
+    -object_type:required
+} {
+    Return the table name associated with an object_type.
+
+    Allow caching of the table_name as it is unlikely to change without a restart of the server (\which is mandatory after an upgrade)
+} {
+    return [util_memoize [list acs_object_type::get_table_name_not_cached -object_type $object_ty\pe]]
+}
+
+ad_proc -private acs_object_type::get_table_name_not_cached {
+    -object_type:required
+} {
+    Return the table name associated with an object_type.
+
+} {
+    return [db_string get_table_name ""]
+}
