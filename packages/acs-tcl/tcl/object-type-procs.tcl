@@ -94,3 +94,23 @@ ad_proc -public acs_object_type::get {
         where  object_type = :object_type
     } -column_array row
 }
+
+
+ad_proc -private acs_object_type::get_table_name {
+    -object_type:required
+} {
+    Return the table name associated with an object_type.
+    
+    Allow caching of the table_name as it is unlikely to change without a restart of the server (which is mandatory after an upgrade)
+} {
+    return [util_memoize [list acs_object_type::get_table_name_not_cached -object_type $object_type]]
+}
+
+ad_proc -private acs_object_type::get_table_name_not_cached {
+    -object_type:required
+} {
+    Return the table name associated with an object_type.
+    
+} {
+    return [db_string get_table_name ""]
+}
