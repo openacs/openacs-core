@@ -587,7 +587,15 @@ ad_proc -private package_insert_default_comment { } {
 "
 }
 
-ad_proc package_object_attribute_list { 
+ad_proc package_object_attribute_list {
+    { -start_with "acs_object" }
+    { -include_storage_types {type_specific} }
+    object_type
+} {
+    return [util_memoize "package_object_attribute_list_cached -start_with $start_with -include_storage_types $include_storage_types $object_type"]
+}
+
+ad_proc package_object_attribute_list_cached { 
     { -start_with "acs_object" }
     { -include_storage_types {type_specific} }
     object_type 
