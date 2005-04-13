@@ -247,8 +247,9 @@ ad_proc tsearch2::build_query { -query } {
 
     # remove any spaces between words and operators
     # all remaining spaces between words turn into &
-    while {[regsub {([-/@.\d\w\(\)])\s+?([-/@.\d\w\(\)])} $query {\1\&\2} query]} {}
-
+    while {[regexp {([-/@.\d\w\(\)])\s+?([-/@.\d\w\(\)])} $query]} {
+        regsub {([-/@.\d\w\(\)])\s+?([-/@.\d\w\(\)])} $query {\1\&\2} query
+    }
     # if a ! is by itself then prepend &
     regsub {(\w+?)\s*(!)} $query {\1 \& !} query
     # if there is )( then insert an & between them 

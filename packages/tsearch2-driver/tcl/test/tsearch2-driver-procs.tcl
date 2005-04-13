@@ -37,6 +37,12 @@ aa_register_case build_query {
             set q "(openacs or test) automated"
             aa_true "Multiple terms grouped automatic AND '[tsearch2::build_query -query $q]'" \
                 [string equal "(openacs | test) & automated" \
-                     [tsearch2::build_query -query $q]]                                    
+                     [tsearch2::build_query -query $q]]
+            set q "one a two"
+            aa_true "Single letter elements" \
+                [string equal "one & a & two" \
+                     [tsearch2::build_query -query $q]]
+
+
         }
 }
