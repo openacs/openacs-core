@@ -315,3 +315,25 @@ ad_proc -public content::folder::is_sub_folder {
 			      ] \
 		content_folder is_sub_folder]
 }
+
+ad_proc content::folder::get_folder_from_package {
+    -package_id:required
+} {
+    @author Timo Hentschel (timo@timohentschel.de)
+    @creation-date 2005-01-06
+
+    Returns the folder_id of the package instance. Cached
+} {
+    return [util_memoize [list content::folder::get_folder_from_package_not_cached -package_id $package_id]]
+}
+
+ad_proc content::folder::get_folder_from_package_not_cached {
+    -package_id:required
+} {
+    @author Timo Hentschel (timo@timohentschel.de)
+    @creation-date 2005-01-06
+
+    Returns the folder_id of the package instance
+} {
+    return [db_string get_folder_id "select folder_id from cr_folders where package_id=:package_id"]
+}
