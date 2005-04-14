@@ -179,7 +179,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
     # them in plain english
 
     if { [llength $pools] == 0 } {
-        set database_problem "There are no database pools specified in your OpenNSD
+        set database_problem "There are no database pools specified in your Aolserver
     configuration file."
     } elseif { [llength $pools] < 3 } {
         set database_problem "OpenACS requires three database pools in order to
