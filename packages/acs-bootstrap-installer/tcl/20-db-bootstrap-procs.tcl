@@ -103,7 +103,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
     # in all cases...
 
     nsv_set ad_known_database_types . \
-        [list [list "oracle" "Oracle8" "Oracle8"] [list "postgresql" "PostgreSQL" "PostgreSQL"]]
+        [list [list "oracle" "Oracle" "Oracle"] [list "postgresql" "PostgreSQL" "PostgreSQL"]]
 
     #
     # Initialize the list of available pools
@@ -219,12 +219,18 @@ ad_proc db_bootstrap_set_db_type { errors } {
                 ns_log Error "$proc_name: RDBMS type could not be determined: $errmsg"
             } else {
                 foreach known_database_type [nsv_get ad_known_database_types .] {
-                    if { ![string compare $driver [lindex $known_database_type 1]] } {
+
+                    set this_type [lindex $known_database_type 1]
+
+                    # we do a string match here, because we want to
+                    # match against Oracle, Oracle8, Oracle10, etc..
+                    if { [string match ${this_type}* $driver] } {
                         set this_suffix [lindex $known_database_type 0]
                         break
                     }
                 }
             }
+
             ns_db releasehandle $db
             if { [string length $this_suffix] == 0 } {
                 ns_log Notice "$proc_name: couldn't determine RDBMS type of database pool \"$pool\"."
