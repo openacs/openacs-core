@@ -192,7 +192,7 @@ ad_proc -private -private db_driverkey {{
         # These are the default driverkey values, if they are not set
         # in the config file:
 
-        if { [string equal $driver {Oracle8}] } {
+        if { [string match Oracle* $driver] } {
             set driverkey {oracle}
         } elseif { [string equal $driver {PostgreSQL}] } {
             set driverkey {postgresql}
