@@ -9,14 +9,6 @@
       </querytext>
 </fullquery>
 
-<fullquery name="item::get_revision_content.grc_get_table_names">      
-      <querytext>
-      
-    select table_name from acs_object_types 
-    where object_type = :content_type
-  
-      </querytext>
-</fullquery>
 
 <fullquery name="item::get_revision_content.grc_get_all_content">      
       <querytext>

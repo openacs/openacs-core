@@ -135,7 +135,7 @@ ad_proc -public item::get_revision_content { revision_id args } {
   set content_type [get_content_type $item_id]
 
   # Get the table name
-  set table_name [db_string grc_get_table_names ""]
+  set table_name [acs_object_type::get_table_name -object_type $content_type]
 
   upvar content content
 

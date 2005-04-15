@@ -102,7 +102,7 @@ ad_proc -public get_content { { content_type {} } } {
   }
 
   # Get the table name
-  set table_name [db_string get_table_name ""]
+  set table_name [acs_object_type::get_table_name -object_type $content_type]
 
   upvar content content
 
