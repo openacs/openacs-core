@@ -110,7 +110,7 @@
 </fullquery>
 
  
-<fullquery name="package_object_attribute_list.attributes_select">      
+<fullquery name="package_object_attribute_list_cached.attributes_select">      
       <querytext>
       
     select a.attribute_id, 
