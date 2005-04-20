@@ -203,7 +203,7 @@ ad_proc -public content::init {
     # cache this query persistently for 1 hour
     set item_info(item_id) [::content::item::get_id -item_path $url \
                                 -root_folder_id $content_root \
-                                -resolve_index "f"]
+                                -resolve_index $resolve_index]
     set item_info(content_type) [::content::item::get_content_type \
                                      -item_id $item_info(item_id)]
 
@@ -211,7 +211,7 @@ ad_proc -public content::init {
     if { [string equal "" $item_info(item_id)] } {
         set item_info(item_id) [::content::item::get_id -item_path $url \
                                     -root_folder_id $content_root \
-                                    -resolve_index "f"]
+                                    -resolve_index $resolve_index]
         set item_info(content_type) [::content::item::get_content_type \
                                          -item_id $item_info(item_id)]
         if { [string equal "" $item_info(item_id)] } {
