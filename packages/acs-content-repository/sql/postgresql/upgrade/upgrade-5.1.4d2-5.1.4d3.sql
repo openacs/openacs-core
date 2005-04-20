@@ -7,8 +7,8 @@
 -- @cvs-id $Id$
 --
 
--- add pacakge_id. for some reason content_folder__new did not support setting
--- cr_folders.pacakge_id
+-- add package_id. for some reason content_folder__new did not support setting
+-- cr_folders.package_id
 
 create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar, boolean)
 returns integer as '
