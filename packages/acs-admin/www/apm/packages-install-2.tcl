@@ -57,7 +57,7 @@ if { [lindex $dependency_results 0] == 1 && [llength [lindex $dependency_results
 
     set extra_package_keys [lindex $dependency_results 2]
 
-    # Check was good after adding a couple more pacakges
+    # Check was good after adding a couple more packages
 
     doc_body_append "[apm_header "Package Installation"]
     <h2>Additional Packages Automatically Added</h2><p>

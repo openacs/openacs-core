@@ -42,7 +42,7 @@ ad_proc -public -callback navigation::package_admin {
     and without a leading / since the link may be prefixed by the
     full path or by the vhost url depending on context.</p>
 
-    <p>The <code>/pacakges/acs-tcl/lib/actions.adp<code> file is an include which
+    <p>The <code>/packages/acs-tcl/lib/actions.adp<code> file is an include which
     will render admin actions returned by this callback.</p>
 
     @param package_id - the package for which to generate the admin links
