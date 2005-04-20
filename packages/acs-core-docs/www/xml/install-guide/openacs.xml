@@ -425,7 +425,7 @@ CREATE DATABASE
               <listitem>
                 <para><emphasis>httpsport</emphasis> - This is the
       port for https requests.  The Reference Platform https port is
-      8443.  If http port is set to 80, httpsport should be 143 to
+      8443.  If http port is set to 80, httpsport should be 443 to
       match the standard.</para>
               </listitem>
               
