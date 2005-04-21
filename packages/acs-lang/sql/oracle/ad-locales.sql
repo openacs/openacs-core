@@ -278,5 +278,4 @@ insert into ad_locales
 values ('ca_ES', 'Catalan (ES)', 'ca', 'ES', 'SPANISH',  'SPAIN','WE8DEC', 'ISO-8859-1', 't', 'f');
 
 
-end;
 
