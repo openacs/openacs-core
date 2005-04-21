@@ -40,6 +40,7 @@ ad_proc -public template::list::create {
     {-class ""}
     {-html ""}
     {-page_size ""}
+    {-page_size_variable_p 0}
     {-page_groupsize 10}
     {-page_query ""}
     {-page_query_name ""}
@@ -177,6 +178,8 @@ ad_proc -public template::list::create {
 
     @param  page_size      The number of rows to display on each page. If specified, the list will be paginated.
 
+    @param  page_size_variable_p Displays a selectbox to let the user change the number of rows to display on each page. If specified, the list will be paginated.
+
     @param  page_groupsize The page group size for the paginator. See template::paginator::create for more details.
                            
 
@@ -237,6 +240,7 @@ ad_proc -public template::list::create {
         multirow {}
         style {}
         page_size {}
+        page_size_variable_p {}
         page_groupsize {}
         page_query {}
         page_query_name {}
@@ -272,6 +276,8 @@ ad_proc -public template::list::create {
         ulevel {}
         output {}
         bulk_action_export_chunk {}
+	page_size_export_chunk {}
+	url {}
     }
 
     # Set default for no_data
@@ -296,6 +302,7 @@ ad_proc -public template::list::create {
         class
         html
         page_size
+        page_size_variable_p
         page_groupsize
         page_query
         page_query_name
@@ -413,7 +420,15 @@ ad_proc -public template::list::create {
     }
 
     # Pagination
-    if { ![empty_string_p $list_properties(page_size)] && $list_properties(page_size) != 0 } {
+    if { $list_properties(page_size_variable_p) == 1 } {
+	# Create a filter for the variable page size
+        template::list::filter::create \
+            -list_name $name \
+            -filter_name "page_size" \
+            -spec [list label "Page Size" default_value 20 hide_p t]
+    }
+
+    if { (![empty_string_p $list_properties(page_size)] && $list_properties(page_size) != 0) || $list_properties(page_size_variable_p) == 1 } {
         # Check that we have either page_query or page_query_name
         if { [empty_string_p $list_properties(page_query)] && [empty_string_p $list_properties(page_query_name)] } {
             error "When specifying a non-zero page_size, you must also provide either page_query or page_query_name"
@@ -488,6 +503,12 @@ ad_proc -public template::list::prepare {
     }
 
     # Create the paginator 
+    if { $list_properties(page_size_variable_p) == 1 } {
+	set list_properties(page_size) $list_properties(filter,page_size)
+	set list_properties(url) [ad_conn url]
+        set list_properties(page_size_export_chunk) [uplevel $list_properties(ulevel) [list export_vars -form -exclude {page_size page} $list_properties(filters_export)]]
+    }
+
     if { ![empty_string_p $list_properties(page_size)] && $list_properties(page_size) != 0 } {
 
         if { [string equal $list_properties(page_query) ""] } {
@@ -1072,6 +1093,10 @@ ad_proc -private template::list::render {
     set __list_code [template::adp_compile -string $__adp_output]
     
     # Paginator
+    if { $list_properties(page_size_variable_p) == 1 } {
+	template::util::list_to_multirow page_sizes {{name 20 value 20} {name 50 value 50} {name 100 value 100}}
+    }
+
     if { ![empty_string_p $list_properties(page_size)] && $list_properties(page_size) != 0 } {
         
         set current_page $list_properties(filter,page)
