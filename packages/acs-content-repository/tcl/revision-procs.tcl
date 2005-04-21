@@ -254,8 +254,19 @@ ad_proc -public cr_import_content {
                 db_dml set_file_content ""
             }
             lob {
-                db_dml set_lob_content "" -blob_files [list $tmp_filename]
+                # mmagerl: rename file, because Oracle cannot handle UTF chararacters
+                set tmp_newname [uni_procs::masquerade_name -name $tmp_filename -masqslash "f"]
+                ns_log Debug "mmagerl: Renaming $tmp_filename to $tmp_newname"
+                if {![string eq $tmp_filename $tmp_newname]} {
+                  file rename $tmp_filename $tmp_newname
+                }
+                db_dml set_lob_content "" -blob_files [list $tmp_newname]
                 db_dml set_lob_size ""
+                ns_log Debug "mmagerl: Chaning $tmp_newname back to $tmp_filename"
+                if {![string eq $tmp_filename $tmp_newname]} {
+                  file rename $tmp_newname $tmp_filename
+                }
+                # mmagerl: end
             }
         }
 

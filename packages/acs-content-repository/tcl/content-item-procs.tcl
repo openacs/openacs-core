@@ -71,16 +71,12 @@ content revision will also be created.
 
     @see content::symlink::new content::extlink::new content::folder::new
 } {
-    if {![info exists creation_user]} {
+    if {[empty_string_p $creation_user]} {
 	set creation_user [ad_conn user_id]
     }
 
-    if {![info exists creation_ip]} {
+    if {[empty_string_p $creation_ip]} {
 	set creation_ip [ad_conn peeraddr]
-    }
-
-    if {![exists_and_not_null content_type]} {
-	set content_type [::content::item::content_type -item_id $item_id]
     }
 
     set var_list [list]
