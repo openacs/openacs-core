@@ -120,7 +120,6 @@
              creation_user => :creation_user,
              creation_ip   => :creation_ip,
              package_id    => :package_id,
-             creation_ip   => :creation_ip,
 	     filename      => :object_name
            );
          end;
