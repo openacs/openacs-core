@@ -1099,7 +1099,7 @@ ad_proc -private template::list::render {
     
     # Paginator
     if { $list_properties(page_size_variable_p) == 1 } {
-	template::util::list_to_multirow page_sizes {{name 20 value 20} {name 50 value 50} {name 100 value 100}}
+	template::util::list_to_multirow page_sizes {{name 10 value 10} {name 20 value 20} {name 50 value 50} {name 100 value 100}}
     }
 
     if { ![empty_string_p $list_properties(page_size)] && $list_properties(page_size) != 0 } {

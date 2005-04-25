@@ -2,56 +2,57 @@
 
 <if @list_properties.page_size@ not nil>
   <noparse>
-    <if \@paginator.page_count@ gt 1>
+    <if \@paginator.page_count@ gt 1 or \@list_properties.page_size_variable_p@ eq 1>
       <tr width="100%" class="list-paginator">
         <td colspan="@elements:rowcount@"><table width="100%"><tr width="100%"><td align="center">
-          <if \@paginator.group_count@ gt 1 and \@paginator.groupsize@ gt 1>
-            <if \@paginator.previous_group_url@ not nil>
-              <a href="\@paginator.previous_group_url@" title="\@paginator.previous_group_context@">&lt;&lt;</a>
+          <if \@paginator.page_count@ gt 1>
+            <if \@paginator.group_count@ gt 1 and \@paginator.groupsize@ gt 1>
+              <if \@paginator.previous_group_url@ not nil>
+                <a href="\@paginator.previous_group_url@" title="\@paginator.previous_group_context@">&lt;&lt;</a>
+              </if>
+              <else>
+                &lt;&lt;
+              </else>
+            </if>
+            <if \@paginator.previous_page_url@ not nil>
+              &nbsp;<a href="\@paginator.previous_page_url@" title="\@paginator.previous_page_context@">&lt;</a>&nbsp;
             </if>
             <else>
-              &lt;&lt;
+              &nbsp;&lt;&nbsp;
             </else>
-          </if>
-          <if \@paginator.previous_page_url@ not nil>
-            &nbsp;<a href="\@paginator.previous_page_url@" title="\@paginator.previous_page_context@">&lt;</a>&nbsp;
-          </if>
-          <else>
-            &nbsp;&lt;&nbsp;
-          </else>
 
-          <multiple name="paginator_pages">
-            <if \@paginator.current_page@ ne \@paginator_pages.page@>
-              <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><a 
-              href="\@paginator_pages.url@" title="\@paginator_pages.context@">\@paginator_pages.page@</a>
+            <multiple name="paginator_pages">
+              <if \@paginator.current_page@ ne \@paginator_pages.page@>
+                <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><a href="\@paginator_pages.url@" title="\@paginator_pages.context@">\@paginator_pages.page@</a>
+              </if>
+              <else>
+                <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><b>\@paginator_pages.page@</b>
+              </else>
+            </multiple>
+
+            <if \@paginator.next_page_url@ not nil>
+              &nbsp;<a href="\@paginator.next_page_url@" title="\@paginator.next_page_context@">&gt;</a>&nbsp;
             </if>
             <else>
-              <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><b>\@paginator_pages.page@</b>
+              &nbsp;&gt;&nbsp;
             </else>
-          </multiple>
-
-          <if \@paginator.next_page_url@ not nil>
-            &nbsp;<a href="\@paginator.next_page_url@" title="\@paginator.next_page_context@">&gt;</a>&nbsp;
-          </if>
-          <else>
-            &nbsp;&gt;&nbsp;
-          </else>
-          <if \@paginator.group_count@ gt 1 and \@paginator.groupsize@ gt 1>
-            <if \@paginator.next_group_url@ not nil>
-              <a href="\@paginator.next_group_url@" title="\@paginator.next_group_context@">&gt;&gt;</a>
+            <if \@paginator.group_count@ gt 1 and \@paginator.groupsize@ gt 1>
+              <if \@paginator.next_group_url@ not nil>
+                <a href="\@paginator.next_group_url@" title="\@paginator.next_group_context@">&gt;&gt;</a>
+              </if>
+              <else>
+                &gt;&gt;
+              </else>
             </if>
-            <else>
-              &gt;&gt;
-            </else>
           </if>
 
-          <if @list_properties.page_size_variable_p@ eq 1>
+          <if \@list_properties.page_size_variable_p@ eq 1>
             </td><td align="right" width="5%">
             <form name="\@list_properties.name@_resize" method="GET">
-              @list_properties.page_size_export_chunk;noquote@
+              \@list_properties.page_size_export_chunk;noquote@
               <select name="page_size" onChange="acs_ListBulkActionClick('\@list_properties.name@_resize', '\@list_properties.url@'); return false;">
                 <multiple name="page_sizes">
-                  <option value="\@page_sizes.value@"<if @list_properties.page_size@ eq \@page_sizes.value@> selected</if>>\@page_sizes.name@
+                  <option value="\@page_sizes.value@"<if \@list_properties.page_size@ eq \@page_sizes.value@> selected</if>>\@page_sizes.name@
                 </multiple>
               </select>
             </form>
@@ -210,7 +211,7 @@
   <noparse>
     <if \@paginator.page_count@ gt 1>
       <tr width="100%" class="list-paginator">
-        <td colspan="@elements:rowcount@"><table width="100%"><tr width="100%"><td align="center">
+        <td colspan="@elements:rowcount@" align="center">
           <if \@paginator.group_count@ gt 1 and \@paginator.groupsize@ gt 1>
             <if \@paginator.previous_group_url@ not nil>
               <a href="\@paginator.previous_group_url@" title="\@paginator.previous_group_context@">&lt;&lt;</a>
@@ -250,20 +251,7 @@
               &gt;&gt;
             </else>
           </if>
-
-          <if @list_properties.page_size_variable_p@ eq 1>
-            </td><td align="right" width="5%">
-            <form name="\@list_properties.name@_resize" method="GET">
-              @list_properties.page_size_export_chunk;noquote@
-              <select name="page_size" onChange="acs_ListBulkActionClick('\@list_properties.name@_resize', '\@list_properties.url@'); return false;">
-                <multiple name="page_sizes">
-                  <option value="\@page_sizes.value@"<if @list_properties.page_size@ eq \@page_sizes.value@> selected</if>>\@page_sizes.name@
-                </multiple>
-              </select>
-            </form>
-          </if>
-
-        </td></tr></table></td>
+        </td>
       </tr>
     </if>
   </noparse>
