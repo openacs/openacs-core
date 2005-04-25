@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.1.5" url="http://openacs.org/repository/download/apm/acs-templating-5.1.5.apm">
+    <version name="5.1.5d1" url="http://openacs.org/repository/download/apm/acs-templating-5.1.5d1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Templating library.</summary>
         <release-date>2004-02-28</release-date>
@@ -25,7 +25,7 @@ single layout specification for many physical pages, so the overall
 layout of a site can be more easily administered.
 </description>
 
-        <provides url="acs-templating" version="5.1.4"/>
+        <provides url="acs-templating" version="5.1.5d1"/>
         <requires url="acs-kernel" version="5.0.0"/>
 
         <callbacks>
@@ -45,7 +45,3 @@ layout of a site can be more easily administered.
 
     </version>
 </package>
-
-
-
-
