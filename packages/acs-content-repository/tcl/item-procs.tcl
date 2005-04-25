@@ -414,7 +414,7 @@ ad_proc -public -deprecated item::get_live_revision { item_id } {
 
 } {
 
-    set live_revision [db_string glr_get_live_revision ""]
+    set live_revision [db_string glr_get_live_revision "" -default ""]
 
     if { [template::util::is_nil live_revision] } {
         ns_log warning "item::get_live_revision: No live revision for item $item_id"
