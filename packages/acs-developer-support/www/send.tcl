@@ -5,6 +5,7 @@ ad_page_contract {
     {code:trim {}}
     {output:trim {}}
 }
+ds_require_permission [ad_conn package_id] "admin"
 
 if {![empty_string_p $code]} { 
     if {[regexp {(.*)\.(adp)} $code match stub ext]} { 
