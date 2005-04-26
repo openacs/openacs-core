@@ -17,6 +17,6 @@ nsv_set util_background_exec_mutex . [ns_mutex create]
 set maxbackup [ns_config -int "ns/parameters" maxbackup 0]
 
 if { $maxbackup } {
-    ad_schedule_proc -schedule_proc ns_schedule_daily \
+    ad_schedule_proc -all_servers t -schedule_proc ns_schedule_daily \
 	[list 00 00] util::roll_server_log
 }
