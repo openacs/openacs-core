@@ -47,6 +47,7 @@ body {
 }
 
 #site-header .user-greeting {
+  color: #070839;
   display: inline;
 }
 
@@ -122,7 +123,7 @@ body {
 
 #context-bar {
   font-family: Arial, sans-serif;
-  font-size: 11px;
+  font-size: 14px;
   margin-bottom: 2px;
   padding-left: 8px;
 }
