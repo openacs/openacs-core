@@ -66,6 +66,14 @@ ad_proc -public ::content::item::new {
 
     @see content::symlink::new content::extlink::new content::folder::new
 } {
+    if {[empty_string_p $creation_user]} {
+        set creation_user [ad_conn user_id]
+    }
+
+    if {[empty_string_p $creation_ip]} {
+        set creation_ip [ad_conn peeraddr]
+    }
+
     set var_list [list]
     lappend var_list \
         [list name $name] \
