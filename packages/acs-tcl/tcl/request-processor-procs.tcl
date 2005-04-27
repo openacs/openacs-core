@@ -726,12 +726,12 @@ ad_proc rp_report_error {
         # We need 'message' to be a copy, because errorInfo will get overridden by some of the template parsing below
         set message $errorInfo
     }
-    set error_url [ad_conn url]
+    set error_url "[ad_url][ad_conn url]?[export_entire_form_as_url_vars]"
     #    set error_file [template::util::url_to_file $error_url]
     set error_file [ad_conn file]
     set package_key []
-    set prev_url  [ns_urldecode [ns_set get [ns_conn headers] Referer]?[export_entire_form_as_url_vars]]
-    set feedback_id  [db_nextval acs_object_id_seq]
+    set prev_url [get_referrer]
+    set feedback_id [db_nextval acs_object_id_seq]
     set user_id [ad_conn user_id]
     set bug_package_id [ad_conn package_id]
     set error_info $message
