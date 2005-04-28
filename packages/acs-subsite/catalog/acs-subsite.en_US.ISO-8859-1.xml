@@ -16,6 +16,7 @@
     &lt;p&gt;Your account is currently closed.&lt;/p&gt;
     &lt;p&gt;If you wish, we can &lt;a href=&quot;%restore_url%&quot;&gt;reopen your account&lt;/a&gt;.&lt;/p&gt;
   </msg>
+  <msg key="Account_closed_title">Account Closed</msg>
   <msg key="Account_closed_workspace_msg">
     &lt;p&gt;
       &lt;font color=&quot;red&quot;&gt;
