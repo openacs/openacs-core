@@ -35,11 +35,11 @@ ad_proc -public cr_write_content {
 
     if { [info exists item_id] } {
         if { ![db_0or1row get_item_info ""] } {
-            ad_return -code error "There is no content that matches item_id '$item_id'"
+            error "There is no content that matches item_id '$item_id'" {} NOT_FOUND
         }
     } elseif { [info exists revision_id] } {
         if { ![db_0or1row get_revision_info ""] } {
-            ad_return -code error "There is no content that matches revision_id '$revision_id'"
+            error "There is no content that matches revision_id '$revision_id'" {} NOT_FOUND
         }
     } else {
         ad_return -code error "Either revision_id or item_id must be specified"
