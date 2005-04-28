@@ -34,7 +34,7 @@ set pvt_home_url [ad_pvt_home]
 
 set context [list $page_title]
 
-set fragments [callback user::workspace -user_id $user_id]
+set fragments [callback -catch user::workspace -user_id $user_id]
 
 set ad_url [ad_url]
 
