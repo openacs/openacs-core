@@ -6,7 +6,7 @@ ad_page_contract {
     {message:html ""}
 }
 
-set page_title [_ acs-subsite.Account_closed]
+set page_title [_ acs-subsite.account_closed_title]
 
 set context [list [_ "acs-kernel.common_Register"]]
 
