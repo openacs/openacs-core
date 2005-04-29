@@ -11,6 +11,7 @@ Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="subm
 <if @locale_enabled_p@ and @site_wide_admin_p@>
   <ul class="action-links">
     <li><a href="@import_all_url@" title="Imports all messages for this locale from the catalog files">Import all messages for this locale</a></li>
+    <li><a href="@import_all_ts_url@" title="Imports all messages for this locale from the translation server">Import all messages for this locale from translation server</a></li>
     <li> <a href="@export_all_url@" title="Export all messages for this locale to the catalog files">Export all messages for this locale</a></li>
   </ul>
 </if>

@@ -115,4 +115,5 @@ ad_form -extend -name search -form {
 
 
 set import_all_url [export_vars -base import-messages { { locale $current_locale } {return_url {[ad_return_url]}} }]
+set import_all_ts_url [export_vars -base import-messages-from-ts { { locale $current_locale } {return_url {[ad_return_url]}} }]
 set export_all_url [export_vars -base export-messages { { locale $current_locale } {return_url {[ad_return_url]}} }]

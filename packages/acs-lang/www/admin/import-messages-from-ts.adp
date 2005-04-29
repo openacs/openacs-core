@@ -2,7 +2,7 @@
  <property name="title">Import messages from Translation Server</property>
 
 Import results for
-<if @package_key@ nil>
+<if @single_package_p@ eq 0>
   <b>all packages</b>
 </if>
 <else>
@@ -17,11 +17,11 @@ locale <b>@locale@</b>
 </else>.
 
 <p>
-  Import finished. Number of messages processed: @message_count.processed@, added: @message_count.added@, updated: @message_count.updated@, 
-  deleted: @message_count.deleted@.
+  Import finished. Number of messages processed: @message_count_total.processed@, added: @message_count_total.added@, updated: @message_count_total.updated@, 
+  deleted: @message_count_total.deleted@.
 </p>
 
-<if @message_count.errors@ not nil>
+<if @errors_list@ not nil>
 <p>
   The following errors were produced:
 
