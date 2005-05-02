@@ -11,10 +11,10 @@
 </table>
 
 <if @source_p@ eq 0>
-[ <a href="proc-view?proc=@proc@&amp;source_p=1">show source</a> ]
+[ <a href="proc-view?proc=@proc@&amp;source_p=1&amp;version_id=@version_id@">show source</a> ]
 </if>
 <else>
-[ <a href="proc-view?proc=@proc@&amp;source_p=0">hide source</a> ]
+[ <a href="proc-view?proc=@proc@&amp;source_p=0&amp;version_id=@version_id@">hide source</a> ]
 </else>
 
 <if @source_p@ ne @default_source_p@> 

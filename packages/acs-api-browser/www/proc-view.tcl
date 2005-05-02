@@ -30,7 +30,7 @@ if { [exists_and_not_null version_id] } {
 lappend context [list $proc]
 
 set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_source_p]
-set return_url [ns_urlencode [ad_conn url]?[export_url_vars proc]]
+set return_url [ns_urlencode [ad_conn url]?[export_url_vars proc version_id]]
 set error_msg ""
 
 if { ![info exists source_p] } {
