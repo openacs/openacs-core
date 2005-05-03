@@ -437,6 +437,7 @@ ad_proc -public template::widget::menu {
     values_list
     attribute_reference
     {mode edit}
+    {widget_type select}
 } {
 
     upvar $attribute_reference attributes
@@ -444,9 +445,9 @@ ad_proc -public template::widget::menu {
     # Create an array for easier testing of selected values
     template::util::list_to_lookup $values_list values
 
+    set output {}
     if { ![string equal $mode "edit"] } {
         set selected_list [list]
-        set output {}
 
         foreach option $options_list {
 
@@ -461,32 +462,52 @@ ad_proc -public template::widget::menu {
 
         append output [join $selected_list ", "]
     } else {
+        switch -exact -- $widget_type {
+            checkbox -
+            radio {
+                if {[info exists attributes(multiple)]} {
+                    set widget_type radio
+                }
+                foreach option $options_list {
 
-        
-        set output "<select name=\"$widget_name\" "
+                    set label [lindex $option 0]
+                    set value [lindex $option 1]
 
-        foreach name [array names attributes] {
-            if { [string equal $attributes($name) {}] } {
-                append output " $name=\"$name\""
-            } else {
-                append output " $name=\"$attributes($name)\""
+                    append output " <input type=\"$widget_type\" name=\"$widget_name\" value=\"[template::util::quote_html $value]\""
+                    if { [info exists values($value)] } {
+                        append output " selected=\"selected\""
+                    }
+
+                    append output ">$label<br />\n"
+                }
+            }
+            default {
+                append output "<select name=\"$widget_name\" "
+
+                foreach name [array names attributes] {
+                    if { [string equal $attributes($name) {}] } {
+                        append output " $name=\"$name\""
+                    } else {
+                        append output " $name=\"$attributes($name)\""
+                    }
+                }
+                append output ">\n"
+
+                foreach option $options_list {
+
+                    set label [lindex $option 0]
+                    set value [lindex $option 1]
+
+                    append output " <option value=\"[template::util::quote_html $value]\""
+                    if { [info exists values($value)] } {
+                        append output " selected=\"selected\""
+                    }
+
+                    append output ">$label</option>\n"
+                }
+                append output "</select>"
             }
         }
-        append output ">\n"
-
-        foreach option $options_list {
-
-            set label [lindex $option 0]
-            set value [lindex $option 1]
-
-            append output " <option value=\"[template::util::quote_html $value]\""
-            if { [info exists values($value)] } {
-                append output " selected=\"selected\""
-            }
-
-            append output ">$label</option>\n"
-        }
-        append output "</select>"
     }
 
     return $output
@@ -547,8 +568,8 @@ ad_proc -public template::data::transform::search { element_ref } {
         if { [info exists element(options)] } {
             unset element(options)
         }
-        template::element::set_error $element(form_id) $element_id "
-        Please enter a search string."
+        template::element::set_error $element(form_id) $element_id \
+            "Please enter a search string."
         return [list]
     }
 
@@ -574,9 +595,8 @@ ad_proc -public template::data::transform::search { element_ref } {
                 unset element(options)
             }
 
-            template::element::set_error $element(form_id) $element_id "
-        No matches were found for \"$value\".<br>Please
-        try again."
+            template::element::set_error $element(form_id) $element_id \
+                "No matches were found for \"$value\".<br>Please\ntry again."
 
         } elseif { $option_count == 1 } {
 
@@ -587,9 +607,8 @@ ad_proc -public template::data::transform::search { element_ref } {
 
             # need to return a select list
             set element(options) [concat $options { { "Search again..." ":search:" } }]
-            template::element::set_error $element(form_id) $element_id "
-        More than one match was found for \"$value\".<br>Please
-        choose one from the list."
+            template::element::set_error $element(form_id) $element_id \
+                "More than one match was found for \"$value\".<br>Please\nchoose one from the list."
 
             set value [lindex [lindex $options 0] 1]
         }
@@ -691,8 +710,8 @@ ad_proc -public template::widget::block { element_reference tag_attributes } {
 	}
 	incr count
     }
+
     return "<table>$output</table>"
-    
 }
 
 
