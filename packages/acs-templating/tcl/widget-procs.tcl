@@ -465,7 +465,7 @@ ad_proc -public template::widget::menu {
         switch -exact -- $widget_type {
             checkbox -
             radio {
-                if {[info exists attributes(multiple)]} {
+                if {![info exists attributes(multiple)]} {
                     set widget_type radio
                 }
                 foreach option $options_list {
