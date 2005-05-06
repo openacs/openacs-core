@@ -6,6 +6,8 @@ ad_library {
     @cvs-id $Id$
 }
 
+namespace eval ::install::xml::action {}
+
 ad_proc -private ::install::xml::action::set-system-locale { node } {
    set the systewide locale
 
