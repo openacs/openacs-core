@@ -10,8 +10,6 @@ ad_page_contract {
     version_id:naturalnum,notnull
 }
 
-apm_parameter_unregister $parameter_id
-
 db_1row apm_package_by_version_id {
     select pretty_name, version_name, package_key
       from apm_package_version_info 
@@ -27,4 +25,27 @@ foreach section $sections {
     }
 }
 
-ad_returnredirect [export_vars -base "version-parameters" { version_id section_name }]
+set return_url [export_vars -base "version-parameters" { version_id section_name }]
+
+ad_form -name del -form {
+    parameter_id:key
+    {confirm_p:text(hidden)}
+    {version_id:text(hidden)}
+    {section_name:text(hidden)}
+} -edit_request {
+    set confirm_p 1
+    set parameter_name [db_string get_parameter_name {
+        select parameter_name
+        from apm_parameters
+        where parameter_id = :parameter_id
+    }]
+} -edit_data {
+    #here's where we actually do the delete.
+    apm_parameter_unregister $parameter_id
+} -after_submit {
+    ad_returnredirect $return_url
+    ad_script_abort
+} -cancel_url $return_url
+
+set page_title "Confirm Deletion"
+set context [list [list "." "Package Manager"] [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] [list [export_vars -base version-parameters { version_id section_name }] "Parameters"] $page_title]
