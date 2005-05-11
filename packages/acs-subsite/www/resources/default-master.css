@@ -20,6 +20,13 @@ TR.odd {
     background-color: #e0e0e0;
 }
 
+/* Replace deprictated center tags in forms. Eventually all forms should use form builder and this tag should not be used */
+
+DIV.submit-button {
+	text-align: center;
+}
+
+
 /* Calendar widget css */
 
 /* The main calendar widget.  DIV containing a table. */
