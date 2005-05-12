@@ -658,7 +658,7 @@ ad_proc -public ad_form {
                 return -code error "Validate block must have three arguments: element name, expression, error message"
             }
 
-            if { [lsearch $af_element_names($form_name) [lindex $validate_element 0]] == -1 } {
+            if {[template::element::exists $form_name $validate_element]} { 
                 return -code error "Element \"[lindex $validate_element 0]\" is not a form element"
             }
             lappend af_validate_elements($form_name) $validate_element
