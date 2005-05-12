@@ -169,7 +169,10 @@ insert into cr_mime_types (label,mime_type,file_extension) values ('OpenOffice M
 insert into cr_mime_types (label,mime_type,file_extension) values ('OpenOffice Writer', 'application/vnd.sun.xml.writer', 'sxw');
 insert into cr_mime_types (label,mime_type,file_extension) values ('OpenOffice Writer Global', 'application/vnd.sun.xml.writer.global', 'sxg');
 insert into cr_mime_types (label,mime_type,file_extension) values ('OpenOffice Writer Template', 'application/vnd.sun.xml.writer.template', 'stw');
-
+insert into cr_mime_types (label,mime_type,file_extension) values ('Audio - WAV','audio/wav', 'wav');
+insert into cr_mime_types (label,mime_type,file_extension) values ('Audio - MPEG','audio/mpeg', 'mpeg');
+insert into cr_mime_types (label,mime_type,file_extension) values ('Audio - MP3','audio/mp3', 'mp3');
+insert into cr_mime_types (label,mime_type,file_extension) values ('Image - Progressive JPEG','image/pjpeg', 'pjpeg');
 
 -- Extension to mime type maps.
 
@@ -440,7 +443,6 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ('sxm', 'ap
 insert into cr_extension_mime_type_map (extension, mime_type) values ('sxw', 'application/vnd.sun.xml.writer');
 insert into cr_extension_mime_type_map (extension, mime_type) values ('sxg', 'application/vnd.sun.xml.writer.global');
 insert into cr_extension_mime_type_map (extension, mime_type) values ('stw', 'application/vnd.sun.xml.writer.template');
-
 
 --  Here are some less common mime types and extensions not defined here.
 --
