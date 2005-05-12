@@ -1153,7 +1153,6 @@ ad_proc util_expand_entities_ie_style { html } {
     Unlike it's sister proc, <a href="/api-doc/proc-view?proc=util_expand_entities"><code>util_expand_entities</code></a>,
     it also expands numeric entities (#999 or #xff style).
 
-    
     @author Lars Pind (lars@pinds.com)
     @creation-date October 17, 2000
 } {
@@ -1169,7 +1168,7 @@ ad_proc util_expand_entities_ie_style { html } {
 	    # {
 		switch -regexp -- [string index $html [expr $i+2]] {
 		    [xX] {
-			regexp -indices -start [expr $i+3] {[0-9a-eA-E]*} $html hex_idx
+			regexp -indices -start [expr $i+3] {[0-9a-fA-f]*} $html hex_idx
 			set hex [string range $html [lindex $hex_idx 0] [lindex $hex_idx 1]]
 			set html [string replace $html $i [lindex $hex_idx 1] \
 				[subst -nocommands -novariables "\\x$hex"]]
