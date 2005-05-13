@@ -58,7 +58,9 @@ th.list img {
 th.list-narrow a {
   color: black;
 }
-
+th.list-narrow img {
+  border-style: none;
+}
 
 td.list {
   padding-left: 16px; 
