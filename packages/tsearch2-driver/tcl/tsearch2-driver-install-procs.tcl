@@ -45,6 +45,7 @@ ad_proc -public tsearch2_driver::install::preinstall_checks {
                 # RPM, Debian, source default locations
                 set locs [list "/usr/share/pgsql/contrib/tsearch2.sql" \
                               "/usr/local/pgsql/contrib/tsearch2.sql" \
+                              "/usr/local/pgsql/share/contrib/tsearch2.sql" \
                               "/usr/share/postgresql/contrib/tsearch2.sql"]
                 foreach loc $locs {
                     if { [file exists $loc] } {
