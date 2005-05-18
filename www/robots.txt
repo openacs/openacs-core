@@ -1,7 +1,5 @@
 User-agent: *
-Disallow: /
-Disallow: /doc/
-Disallow: /api-doc/
+Disallow: /register
 Disallow: /register/
 Disallow: /comments/
 Disallow: /notifications/
@@ -12,5 +10,17 @@ Disallow: /acs-lang/
 Disallow: /acs-admin/
 Disallow: /RPC2/
 
-
-
+# googlebot knows wildcards so block all register
+User-agent: googlebot
+Disallow: /register
+Disallow: /register/
+Disallow: /*/register
+Disallow: /*/register/
+Disallow: /comments/
+Disallow: /notifications/
+Disallow: /test/
+Disallow: /workflow/
+Disallow: /acs-service-contract/
+Disallow: /acs-lang/
+Disallow: /acs-admin/
+Disallow: /RPC2/
