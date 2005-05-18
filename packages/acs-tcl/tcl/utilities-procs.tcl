@@ -2355,7 +2355,7 @@ ad_proc -public ad_set_cookie {
             append cookie "; Expires=Mon, 01-Jan-2035 01:00:00 GMT"
         }
     } elseif { $max_age != "" } {
-	append cookie "; Max-Age=$max_age"
+        append cookie "; Max-Age=$max_age; Expires=[util::cookietime [expr [ns_time] + $max_age]]"
     }
 
     if { [string equal $expire "t"] } {
@@ -4941,3 +4941,10 @@ ad_proc -public util::roll_server_log {{}} {
     ns_log Notice "util::roll_server_log: Done rolling the server log." 
     return 0
 } 
+
+ad_proc -public util::cookietime {time} {
+    Return an RFC2109 compliant string for use in "Expires".
+} {
+    regsub {, (\d+) (\S+) (\d+)} [ns_httptime $time] {, \1-\2-\3} string
+    return $string
+}
