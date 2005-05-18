@@ -159,40 +159,6 @@ proc_doc check_for_form_variable_naughtiness {
 }
 
 
-ad_proc -deprecated -warn set_form_variables {{error_if_not_found_p 1}} {
-    use ad_page_contract for this functionality
-    @see ad_page_contract 
-} { 
-    if { $error_if_not_found_p == 1} {
-	uplevel { if { [ns_getform] == "" } {
-	    ns_returnerror 500 "Missing form data"
-	    return
-	}
-       }
-     } else {
-	 uplevel { if { [ns_getform] == "" } {
-	     # we're not supposed to barf at the user but we want to return
-	     # from this subroutine anyway because otherwise we'd get an error
-	     return
-	 }
-     }
-  }
-
-    # at this point we know that the form is legal
-    # The variable names are prefixed with a V to avoid confusion with the form variables while checking for naughtiness.
-    uplevel {
-	set Vform [ns_getform] 
-	set Vform_size [ns_set size $Vform]
-	set Vform_counter_i 0
-	while {$Vform_counter_i<$Vform_size} {
-	    set Vname [ns_set key $Vform $Vform_counter_i]
-	    set Vvalue [ns_set value $Vform $Vform_counter_i]
-	    check_for_form_variable_naughtiness $Vname $Vvalue
-	    set $Vname $Vvalue
-	    incr Vform_counter_i
-	}
-    }
-}
 
 ad_proc -private DoubleApos {string} {
     if the user types "O'Malley" and you try to insert that into an SQL
@@ -209,120 +175,6 @@ ad_proc -private DoubleApos {string} {
 }
 
 
-
-ad_proc -deprecated -warn set_form_variables_string_trim_DoubleAposQQ {} {
-    if the user types "O'Malley" and you try to insert that into an SQL
-    database, you will lose big time because the single quote is magic
-    in SQL and the insert has to look like 'O''Malley'.  This function
-    also trims white space off the ends of the user-typed data.
-
-    if the form looked like
-    &lt;input type=text name=yow&gt; and &lt;input type=text name=bar&gt;
-    then after you run this function you'll have Tcl vars 
-    $QQfoo and $QQbar set to whatever the user typed in the form
-    plus an extra single quote in front of the user's single quotes
-    and maybe some missing white space
-
-    @see ad_page_contract
-} { 
-    #The variable names are prefixed with a V to avoid confusion with the form variables while checking for naughtiness.
-    uplevel {
-	set Vform [ns_getform] 
-	if {$Vform == ""} {
-	    ns_returnerror 500 "Missing form data"
-	    return;
-	}
-	set Vform_size [ns_set size $Vform]
-	set Vform_counter_i 0
-	while {$Vform_counter_i<$Vform_size} {
-	    set Vname [ns_set key $Vform $Vform_counter_i]
-	    set Vvalue [ns_set value $Vform $Vform_counter_i]
-	    check_for_form_variable_naughtiness $Vname $Vvalue
-	    set QQ$Vname [DoubleApos [string trim $Vvalue]]
-	    incr Vform_counter_i
-	}
-    }
-}
-
-# this one does both the regular and the QQ
-
-ad_proc -deprecated -warn set_the_usual_form_variables {{error_if_not_found_p 1}} {
-    use ad_page_contract for this functionality
-
-    @see ad_page_contract 
-} { 
-    if { [ns_getform] == "" } {
-	if $error_if_not_found_p {
-	    uplevel { 
-		ns_returnerror 500 "Missing form data"
-		return
-	    }
-	} else {
-	    return
-	}
-    }
-
-    # The variable names are prefixed with a V to avoid confusion with the form variables while checking for naughtiness.
-    uplevel {
-	set Vform [ns_getform] 
-	set Vform_size [ns_set size $Vform]
-	set Vform_counter_i 0
-	while {$Vform_counter_i<$Vform_size} {
-	    set Vname [ns_set key $Vform $Vform_counter_i]
-	    set Vvalue [ns_set value $Vform $Vform_counter_i]
-	    check_for_form_variable_naughtiness $Vname $Vvalue
-	    set QQ$Vname [DoubleApos [string trim $Vvalue]]
-	    set $Vname $Vvalue
-	    incr Vform_counter_i
-	}
-    }
-}
-
-ad_proc -deprecated -warn set_form_variables_string_trim_DoubleApos {} {
-    use ad_page_contract for this functionality
-    @see ad_page_contract 
-} { 
-    # The variable names are prefixed with a V to avoid confusion with the form variables while checking for naughtiness.
-    uplevel {
-	set Vform [ns_getform] 
-	if {$Vform == ""} {
-	    ns_returnerror 500 "Missing form data"
-	    return;
-	}
-	set Vform_size [ns_set size $Vform]
-	set Vform_counter_i 0
-	while {$Vform_counter_i<$Vform_size} {
-	    set Vname [ns_set key $Vform $Vform_counter_i]
-	    set Vvalue [ns_set value $Vform $Vform_counter_i]
-	    check_for_form_variable_naughtiness $Vname $Vvalue
-	    set $Vname [DoubleApos [string trim $Vvalue]]
-	    incr Vform_counter_i
-	}
-    }
-}
-
-ad_proc -deprecated -warn set_form_variables_string_trim {} {
-    use ad_page_contract for this functionality
-    @see ad_page_contract 
-} { 
-    # The variable names are prefixed with a V to avoid confusion with the form variables while checking for naughtiness.
-    uplevel {
-	set Vform [ns_getform] 
-	if {$Vform == ""} {
-	    ns_returnerror 500 "Missing form data"
-	    return;
-	}
-	set Vform_size [ns_set size $Vform]
-	set Vform_counter_i 0
-	while {$Vform_counter_i<$Vform_size} {
-	    set Vname [ns_set key $Vform $Vform_counter_i]
-	    set Vvalue [ns_set value $Vform $Vform_counter_i]
-	    check_for_form_variable_naughtiness $Vname $Vvalue
-	    set $Vname [string trim $Vvalue]
-	    incr Vform_counter_i
-	}
-    }
-}
 
 # debugging kludges
 
@@ -1761,252 +1613,6 @@ proc_doc util_escape_quotes_for_csv {string} "Returns its argument with double q
 }
 
 
-ad_proc -deprecated -warn ad_page_variables {variable_specs} {
-    use ad_page_contract now.
-
-<pre>
-Current syntax:
-
-    ad_page_variables {var_spec1 [varspec2] ... }
-
-    This proc handles translating form inputs into Tcl variables, and checking
-    to see that the correct set of inputs was supplied.  Note that this is mostly a
-    check on the proper programming of a set of pages.
-
-Here are the recognized var_specs:
-
-    variable				; means it's required
-    {variable default-value}
-      Optional, with default value.  If the value is supplied but is null, and the
-      default-value is present, that value is used.
-    {variable -multiple-list}
-      The value of the Tcl variable will be a list containing all of the
-      values (in order) supplied for that form variable.  Particularly useful
-      for collecting checkboxes or select multiples.
-      Note that if required or optional variables are specified more than once, the
-      first (leftmost) value is used, and the rest are ignored.
-    {variable -array}
-      This syntax supports the idiom of supplying multiple form variables of the
-      same name but ending with a "_[0-9]", e.g., foo_1, foo_2.... Each value will be
-      stored in the array variable variable with the index being whatever follows the
-      underscore.
-
-QQ variables are automatically created by ad_page_variables.
-
-Other elements of the var_spec are ignored, so a documentation string
-describing the variable can be supplied.
-
-Note that the default value form will become the value form in a "set"
-
-Note that the default values are filled in from left to right, and can depend on
-values of variables to their left:
-ad_page_variables {
-    file
-    {start 0}
-    {end {[expr $start + 20]}}
-}
-</pre>
-    @see ad_page_contract
-} {
-    set exception_list [list]
-    set form [ns_getform]
-    if { $form != "" } {
-	set form_size [ns_set size $form]
-	set form_counter_i 0
-
-	# first pass -- go through all the variables supplied in the form
-	while {$form_counter_i<$form_size} {
-	    set variable [ns_set key $form $form_counter_i]
-	    set value [ns_set value $form $form_counter_i]
-	    check_for_form_variable_naughtiness $variable $value
-	    set found "not"
-	    # find the matching variable spec, if any
-	    foreach variable_spec $variable_specs {
-		if { [llength $variable_spec] >= 2 } {
-		    switch -- [lindex $variable_spec 1] {
-			-multiple-list {
-			    if { [lindex $variable_spec 0] == $variable } {
-				# variable gets a list of all the values
-				upvar 1 $variable var
-				lappend var $value
-				set found "done"
-				break
-			    }
-			}
-			-array {
-			    set varname [lindex $variable_spec 0]
-			    set pattern "($varname)_(.+)"
-			    if { [regexp $pattern $variable match array index] } {
-				if { ![empty_string_p $array] } {
-				    upvar 1 $array arr
-				    set arr($index) [ns_set value $form $form_counter_i]
-				}
-				set found "done"
-				break
-			    }
-			}
-			default {
-			    if { [lindex $variable_spec 0] == $variable } {
-				set found "set"
-				break
-			    }
-			}
-		    }
-		} elseif { $variable_spec == $variable } {
-		    set found "set"
-		    break
-		}
-	    }
-	    if { $found == "set" } {
-		upvar 1 $variable var
-		if { ![info exists var] } {
-		    # take the leftmost value, if there are multiple ones
-		    set var $value
-		}
-	    }
-	    incr form_counter_i
-	}
-    }
-
-    # now make a pass over each variable spec, making sure everything required is there
-    # and doing defaulting for unsupplied things that aren't required
-    foreach variable_spec $variable_specs {
-	set variable [lindex $variable_spec 0]
-	upvar 1 $variable var
-
-	if { [llength $variable_spec] >= 2 } {
-	    if { ![info exists var] } {
-		set default_value_or_flag [lindex $variable_spec 1]
-		
-		switch -- $default_value_or_flag {
-		    -array {
-			# don't set anything
-		    }
-		    -multiple-list {
-			set var [list]
-		    }
-		    default {
-			# Needs to be set.
-			uplevel [list eval set $variable "\[subst [list $default_value_or_flag]\]"]
-			# This used to be:
-			#
-			#   uplevel [list eval [list set $variable "$default_value_or_flag"]]
-			#
-			# But it wasn't properly performing substitutions.
-		    }
-		}
-	    }
-
-	    # no longer needed because we QQ everything by default now
-	    #	    # if there is a QQ or qq or any variant after the var_spec,
-	    #	    # make a "QQ" variable
-	    #	    if { [regexp {^[Qq][Qq]$} [lindex $variable_spec 2]] && [info exists var] } {
-	    #		upvar QQ$variable QQvar
-	    #		set QQvar [DoubleApos $var]
-	    #	    }
-
-	} else {
-	    if { ![info exists var] } {
-		lappend exception_list "\"$variable\" required but not supplied"
-	    }
-	}
-
-        # modified by rhs@mit.edu on 1/31/2000
-	# to QQ everything by default (but not arrays)
-        if {[info exists var] && ![array exists var]} {
-	    upvar QQ$variable QQvar
-	    set QQvar [DoubleApos $var]
-	}
-
-    }
-
-    set n_exceptions [llength $exception_list]
-    # this is an error in the HTML form
-    if { $n_exceptions == 1 } {
-	ns_returnerror 500 [lindex $exception_list 0]
-	return -code return
-    } elseif { $n_exceptions > 1 } {
-	ns_returnerror 500 "<li>[join $exception_list "</li>\n<li>"]</li>\n"
-	return -code return
-    }
-}
-
-ad_proc -deprecated -warn page_validation {args} {
-    use ad_page_contract.
-    <p>
-    This proc allows page arg, etc. validation.  It accepts a bunch of
-    code blocks.  Each one is executed, and any error signalled is
-    appended to the list of exceptions.
-    Note that you can customize the complaint page to match the design of your site,
-    by changing the proc called to do the complaining:
-    it's [ad_parameter ComplainProc "" ad_return_complaint]
-
-    The division of labor between ad_page_variables and page_validation 
-    is that ad_page_variables
-    handles programming errors, and does simple defaulting, so that the rest of
-    the Tcl code doesn't have to worry about testing [info exists ...] everywhere.
-    page_validation checks for errors in user input.  For virtually all such tests,
-    there is no distinction between "unsupplied" and "null string input".
-
-    Note that errors are signalled using the Tcl "error" function.  This allows
-    nesting of procs which do the validation tests.  In addition, validation
-    functions can return useful values, such as trimmed or otherwise munged
-    versions of the input.
-
-    @see ad_page_contract
-} {
-    if { [info exists {%%exception_list}] } {
-	error "Something's wrong"
-    }
-    # have to put this in the caller's frame, so that sub_page_validation can see it
-    # that's because the "uplevel" used to evaluate the code blocks hides this frame
-    upvar {%%exception_list} {%%exception_list}
-    set {%%exception_list} [list]
-    foreach validation_block $args {
-	if { [catch {uplevel $validation_block} errmsg] } {
-	    lappend {%%exception_list} $errmsg
-	}
-    }
-    set exception_list ${%%exception_list}
-    unset {%%exception_list}
-    set n_exceptions [llength $exception_list]
-    if { $n_exceptions != 0 } {
-	set complain_proc [ad_parameter ComplainProc "" ad_return_complaint]
-	if { $n_exceptions == 1 } {
-	    $complain_proc $n_exceptions [lindex $exception_list 0]
-	} else {
-	    $complain_proc $n_exceptions "<li>[join $exception_list "</li>\n<li>"]</li>\n"
-	}
-	return -code return
-    }
-}
-
-ad_proc -public -deprecated sub_page_validation {args} {
-    use ad_page_contract.
-    <p>
-    Use this inside a page_validation block which needs to check more than one thing.
-    Put this around each part that might signal an error.
-
-    @see ad_page_contract
-} {
-    # to allow this to be at any level, we search up the stack for {%%exception_list}
-    set depth [info level]
-    for {set level 1} {$level <= $depth} {incr level} {
-	upvar $level {%%exception_list} {%%exception_list}
-	if { [info exists {%%exception_list}] } {
-	    break
-	}
-    }
-    if { ![info exists {%%exception_list}] } {
-	error "sub_page_validation not inside page_validation"
-    }
-    foreach validation_block $args {
-	if { [catch {uplevel $validation_block} errmsg] } {
-	    lappend {%%exception_list} $errmsg
-	}
-    }
-}
-
 ad_proc -deprecated validate_integer {field_name string} {
     Throws an error if the string isn't a decimal integer; otherwise
     strips any leading zeros (so this won't work for octals) and returns
@@ -2110,9 +1716,13 @@ ad_proc -private util_WriteWithExtraOutputHeaders {headers_so_far {first_part_of
 
 
 ad_proc -public ReturnHeaders {{content_type text/html}} {
-    we use this when we want to send out just the headers 
-    nd then do incremental ns_writes.  This way the user
-    doesn't have to wait like if you used a single ns_return
+    We use this when we want to send out just the headers 
+    and then do incremental writes with ns_write.  This way the user
+    doesn't have to wait for streamed output (useful when doing
+    bulk uploads, installs, etc.).
+
+    It returns status 200 and all headers including 
+    any added to outputheaders.
 } { 
     set all_the_headers "HTTP/1.0 200 OK
 MIME-Version: 1.0
@@ -2122,44 +1732,6 @@ Content-Type: $content_type\r\n"
 }
 
 
-ad_proc -deprecated -warn ReturnHeadersNoCache {{content_type text/html}} { 
-    Deprecated. just set [ad_conn outputheaders].
-    @see ad_conn
-} { 
-
-    ns_write "HTTP/1.0 200 OK
-MIME-Version: 1.0
-Content-Type: $content_type
-pragma: no-cache\r\n"
-
-     ns_startcontent -type $content_type
-}
-
-ad_proc -deprecated -warn ReturnHeadersWithCookie {cookie_content {content_type text/html}} {
-    Deprecated. just set [ad_conn outputheaders].
-    @see ad_conn
-} {    
-    ns_write "HTTP/1.0 200 OK
-MIME-Version: 1.0
-Content-Type: $content_type
-Set-Cookie:  $cookie_content\r\n"
-
-     ns_startcontent -type $content_type
-}
-
-ad_proc -deprecated -warn ReturnHeadersWithCookieNoCache {cookie_content {content_type text/html}} {
-    Deprecated. just set [ad_conn outputheaders].
-    @see ad_conn
-} {    
-
-    ns_write "HTTP/1.0 200 OK
-MIME-Version: 1.0
-Content-Type: $content_type
-Set-Cookie:  $cookie_content
-pragma: no-cache\r\n"
-
-     ns_startcontent -type $content_type
-}
 
 ad_proc -public ad_return_top_of_page {first_part_of_page {content_type text/html}} { 
     Returns HTTP headers plus the top of the user-visible page.  Saves a
@@ -2355,7 +1927,7 @@ ad_proc -public ad_set_cookie {
             append cookie "; Expires=Mon, 01-Jan-2035 01:00:00 GMT"
         }
     } elseif { $max_age != "" } {
-        append cookie "; Max-Age=$max_age; Expires=[util::cookietime [expr [ns_time] + $max_age]]"
+	append cookie "; Max-Age=$max_age"
     }
 
     if { [string equal $expire "t"] } {
@@ -2564,7 +2136,7 @@ ad_proc -public ad_cache_returnredirect { url { persistent "f" } { excluded_vars
 # branimir 2000/04/25 ad_returnredirect and helper procs :
 #    util_complete_url_p util_absolute_path_p util_current_location
 #    util_current_directory   
-# See: http://www.arsdigita.com/bboard/q-and-a-fetch-msg.tcl?msg_id=0003eV
+# See: http://rhea.redhat.com/bboard-archive/acs_design/0003eV.html
 
 ad_proc -public ad_returnredirect {
     {-message {}}
@@ -2597,6 +2169,12 @@ ad_proc -public ad_returnredirect {
     @see util_user_message
     @see ad_script_abort
 } {
+    if { [string is false $html_p] } {
+      	util_user_message -message $message
+    } else {
+      	util_user_message -message $message -html
+    }
+
     if { [util_complete_url_p $target_url] } {
         # http://myserver.com/foo/bar.tcl style - just pass to ns_returnredirect
         set url $target_url
@@ -2624,13 +2202,7 @@ ad_proc -public ad_returnredirect {
         util_ReturnMetaRefresh $url 
     } else {
         ns_returnredirect $url
-    }
-    
-    if { [string is false $html_p] } {
-	util_user_message -message $message
-    } else {
-	util_user_message -message $message -html
-    }
+    }    
 }
 
 ad_proc -public util_user_message { 
@@ -2713,6 +2285,46 @@ ad_proc -public util_absolute_path_p {{} path} {
    }
 }
 
+ad_proc -public util_driver_info {
+  {-array:required} 
+  {-driver ""}
+} {
+  Returns the protocol and port for the specified driver.
+
+  @param driver the driver to query (defaults to [ad_conn driver])
+  @param array the array to populate with proto and port
+} {
+    upvar $array result
+
+    if {[string equal $driver ""]} {
+        set driver [ad_conn driver]
+    }
+
+    switch $driver {
+        nssock {
+            set result(proto) http
+            set result(port) [ns_config -int "ns/server/[ns_info server]/module/nssock" Port]
+        }
+        nsunix {
+            set result(proto) http
+            set result(port) {}
+        }
+        nsssl - nsssle {
+            set result(port) [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" Port]
+            set result(proto) https
+        }
+        nsopenssl {
+            set result(port) [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" ServerPort]
+            set result(proto) https
+        }
+        default {
+            ns_log Error "Unknown driver: [ad_conn driver]. Only know nssock, nsunix, nsssl, nsssle, nsopenssl"
+            set result(port) [ns_config -int "ns/server/[ns_info server]/module/nssock" Port]
+            set result(proto) http
+        }
+    }
+}
+
 ad_proc -public util_current_location {{}} {
    Like ad_conn location - Returns the location string of the current
    request in the form protocol://hostname[:port] but it looks at the
@@ -2733,29 +2345,9 @@ ad_proc -public util_current_location {{}} {
     set default_port(http) 80
     set default_port(https) 443
     
-    switch [ad_conn driver] {
-        nssock {
-            set proto http
-            set port [ns_config -int "ns/server/[ns_info server]/module/nssock" Port]
-        }
-        nsunix {
-            set proto http
-            set port {}
-        }
-        nsssl - nsssle {
-            set port [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" Port]
-            set proto https
-        }
-        nsopenssl {
-            set port [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" ServerPort]
-            set proto https
-        }
-        default {
-            ns_log Error "Unknown driver: [ad_conn driver]. Only know nssock, nsunix, nsssl, nsssle, nsopenssl"
-            set port [ns_config -int "ns/server/[ns_info server]/module/nssock" Port]
-            set proto http
-        }
-    }
+    util_driver_info -array driver
+    set proto $driver(proto)
+    set port $driver(port)
 
     # This is the host from the browser's HTTP request
     set Host [ns_set iget [ad_conn headers] Host]
@@ -2822,12 +2414,17 @@ ad_proc -public ad_call_proc_if_exists { proc args } {
 
 ad_proc -public ad_get_tcl_call_stack { {level -2} } {
     Returns a stack trace from where the caller was called.
+    See also ad_print_stack_trace which generates a more readable 
+    stack trace at the expense of truncating args.
 
     @param level The level to start from, relative to this
     proc. Defaults to -2, meaning the proc that called this 
     proc's caller.
 
+
     @author Lars Pind (lars@pinds.com)
+
+    @see ad_print_stack_trace
  } {
     set stack ""
     for { set x [expr [info level] + $level] } { $x > 0 } { incr x -1 } {
@@ -3391,34 +2988,6 @@ ad_proc -public max { args } {
     return $max
 }
 
-ad_proc -deprecated -warn ad_check_for_naughty_html {user_submitted_html} {
-
-This proc is deprecated. Please use <a
-href="/api-doc/proc-view?proc=ad_html_security_check">ad_html_security_check</a>
-instead.
-
-<p>
-
-Returns a human-readable explanation if the user has used any of the
-HTML tags marked as naughty in the antispam section of ad.ini, otherwise
-returns an empty string.
-
-@see ad_html_security_check
-} {
-
-    set tag_names [list div font]
-    # look for a less than sign, zero or more spaces, then the tag
-    if { ! [empty_string_p $tag_names]} { 
-        if { [regexp "< *([join $tag_names "\[ \n\t\r\f\]|"]\[ \n\t\r\f\])" [string tolower $user_submitted_html]] } {
-            return "<p>For security reasons we do not accept the submission of any HTML 
-	    containing the following tags:</p> <code>[join $tag_names " "]</code>" 
-        }
-    }
-
-    # HTML was okay as far as we know
-    return ""
-}
-
 # usage: 
 #   suppose the variable is called "expiration_date"
 #   put "[ad_dateentrywidget expiration_date]" in your form
@@ -3438,11 +3007,6 @@ proc ad_dateentrywidget {column {default_date "1940-11-03"}} {
 
 
     return [ns_dbformvalueput $output $column date $default_date]
-}
-
-ad_proc -deprecated -warn ad_dateentrywidget_default_to_today {column} {
-    set today [lindex [split [ns_localsqltimestamp] " "] 0]
-    return [ad_dateentrywidget $column $today]
 }
 
 ad_proc -public util_ns_set_to_list {
@@ -4895,19 +4459,28 @@ ad_proc -public util::age_pretty {
         set age_seconds 60
     }
 
-    if { $age_seconds < [expr $hours_limit * 60 * 60] } {
+   if { $age_seconds < [expr $hours_limit * 60 * 60] } {
         set hours [expr abs($age_seconds / 3600)]
         set minutes [expr round(($age_seconds% 3600)/60.0)]
-        switch $hours {
-            0 { set result "" }
-            1 { set result "One hour " }
-            default { set result "$hours hours "}
+        if {[expr $hours < 24]} {
+            switch $hours {
+                0 { set result "" }
+                1 { set result "One hour " }
+                default { set result "$hours hours "}
+            }
+            switch $minutes {
+                0 {}
+                1 { append result "$minutes minute " }
+                default { append result "$minutes minutes " }
+            }
+        } else {
+            set days [expr abs($hours / 24)]
+            switch $days {
+                1 { set result "One day " }
+                default { set result "$days days "}
+            }
         }
-        switch $minutes {
-            0 {}
-            1 { append result "$minutes minute " }
-            default { append result "$minutes minutes " }
-        }
+
         append result "ago"
     } elseif { $age_seconds < [expr $days_limit * 60 * 60 * 24] } {
         set result [lc_time_fmt $timestamp_ansi $mode_2_fmt $locale]
@@ -4915,6 +4488,123 @@ ad_proc -public util::age_pretty {
         set result [lc_time_fmt $timestamp_ansi $mode_3_fmt $locale]
 
     }
+}
+
+
+ad_proc -public util::word_diff {
+	{-old:required}
+	{-new:required}
+	{-split_by {}}
+	{-filter_proc {ad_quotehtml}}
+	{-start_old {<strike><i><font color="blue">}}
+	{-end_old {</font></i></strike>}}
+	{-start_new {<u><b><font color="red">}}
+	{-end_new {</font></b></u>}}
+} {
+	Does a word (or character) diff on two lines of text and indicates text
+	that has been deleted/changed or added by enclosing it in
+	start/end_old/new.
+	
+	@param	old	The original text.
+	@param	new	The modified text.
+	
+	@param	split_by	If split_by is a space, the diff will be made
+	on a word-by-word basis. If it is the empty string, it will be made on
+	a char-by-char basis.
+
+	@param	filter_proc	A filter to run the old/new text through before
+	doing the diff and inserting the HTML fragments below. Keep in mind
+	that if the input text is HTML, and the start_old, etc... fragments are
+	inserted at arbitrary locations depending on where the diffs are, you
+	might end up with invalid HTML unless the original HTML is quoted.
+
+	@param	start_old	HTML fragment to place before text that has been removed.
+	@param	end_old		HTML fragment to place after text that has been removed.
+	@param	start_new	HTML fragment to place before new text.
+	@param	end_new		HTML fragment to place after new text.
+
+	@see ad_quotehtml
+	@author Gabriel Burca
+} {
+
+	if {$filter_proc != ""} {
+		set old [$filter_proc $old]
+		set new [$filter_proc $new]
+	}
+
+	set old_f [ns_tmpnam]
+	set new_f [ns_tmpnam]
+	set old_fd [open $old_f "w"]
+	set new_fd [open $new_f "w"]
+	puts $old_fd [join [split $old $split_by] "\n"]
+	puts $new_fd [join [split $new $split_by] "\n"]
+	close $old_fd
+	close $new_fd
+
+	# Diff output is 1 based, our lists are 0 based, so insert a dummy
+	# element to start the list with.
+	set old_w [linsert [split $old $split_by] 0 {}]
+	set sv 1
+
+#	For debugging purposes:
+#	set diff_pipe [open "| diff -f $old_f $new_f" "r"]
+#	while {![eof $diff_pipe]} {
+#		append res "[gets $diff_pipe]<br>"
+#	}
+
+	set diff_pipe [open "| diff -f $old_f $new_f" "r"]
+	while {![eof $diff_pipe]} {
+		gets $diff_pipe diff
+		if {[regexp {^d(\d+)(\s+(\d+))?$} $diff full m1 m2]} {
+			if {$m2 != ""} {set d_end $m2} else {set d_end $m1}
+			for {set i $sv} {$i < $m1} {incr i} {
+				append res "${split_by}[lindex $old_w $i]"
+			}
+			for {set i $m1} {$i <= $d_end} {incr i} {
+				append res "${split_by}${start_old}[lindex $old_w $i]${end_old}"
+			}
+			set sv [expr $d_end + 1]
+		} elseif {[regexp {^c(\d+)(\s+(\d+))?$} $diff full m1 m2]} {
+			if {$m2 != ""} {set d_end $m2} else {set d_end $m1}
+			for {set i $sv} {$i < $m1} {incr i} {
+				append res "${split_by}[lindex $old_w $i]"
+			}
+			for {set i $m1} {$i <= $d_end} {incr i} {
+				append res "${split_by}${start_old}[lindex $old_w $i]${end_old}"
+			}
+			while {![eof $diff_pipe]} {
+				gets $diff_pipe diff
+				if {$diff == "."} {
+					break
+				} else {
+					append res "${split_by}${start_new}${diff}${end_new}"
+				}
+			}
+			set sv [expr $d_end + 1]
+		} elseif {[regexp {^a(\d+)$} $diff full m1]} {
+			set d_end $m1
+			for {set i $sv} {$i < $m1} {incr i} {
+				append res "${split_by}[lindex $old_w $i]"
+			}
+			while {![eof $diff_pipe]} {
+				gets $diff_pipe diff
+				if {$diff == "."} {
+					break
+				} else {
+					append res "${split_by}${start_new}${diff}${end_new}"
+				}
+			}
+			set sv [expr $d_end + 1]
+		}
+	}
+	
+	for {set i $sv} {$i < [llength $old_w]} {incr i} {
+		append res "${split_by}[lindex $old_w $i]"
+	}
+
+	file delete -- $old_f $new_f
+
+	return $res
 }
 
 ad_proc -public util::string_length_compare { s1 s2 } {
@@ -4941,10 +4631,3 @@ ad_proc -public util::roll_server_log {{}} {
     ns_log Notice "util::roll_server_log: Done rolling the server log." 
     return 0
 } 
-
-ad_proc -public util::cookietime {time} {
-    Return an RFC2109 compliant string for use in "Expires".
-} {
-    regsub {, (\d+) (\S+) (\d+)} [ns_httptime $time] {, \1-\2-\3} string
-    return $string
-}
