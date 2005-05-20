@@ -516,7 +516,7 @@ root:~ # </screen>
           <orderedlist>
             <listitem>
               <para>Install the startup script:</para>
-              <screen><userinput>cd /Library/StartupItems/</userinput>
+              <screen><userinput>cd /System/Library/StartupItems/</userinput>
 <userinput>tar xfz /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-core-docs/www/files/osx-postgres-startup-item.tgz</userinput>
 </screen>
             </listitem>
