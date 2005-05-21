@@ -15,10 +15,27 @@
 --
 
 --
--- Drop database packages for .LRN site-wide search
+-- Create ctxsys schema objects for .LRN site-wide search
 --
--- @author <a href="mailto:openacs@dirkgomez.de">Dirk Gomez</a>
+-- @author <a href="mailto:openacs@dirkgomez.de">openacs@dirkgomez.de</a>
 -- @version $Id$
 -- @creation-date 13-May-2005
+--
+-- Partly ported from ACES.
+
+CREATE OR replace procedure sws_user_proc_&1 ( rid IN ROWID, tlob IN OUT nocopy clob )
+AS
+BEGIN
+   &1..sws_user_datastore_proc(rid, tlob);
+END;
+/
+show errors;
+
+grant execute on sws_user_proc_&1 to &1;
+
+grant ctxapp to &1;
+
+-- stuff to make interMedia faster
+exec ctx_adm.set_parameter('max_index_memory', '1G');
 
 exit;

@@ -15,10 +15,18 @@
 --
 
 --
--- Drop database packages for .LRN site-wide search
+-- Drop the intermedia index for .LRN site-wide search
 --
 -- @author <a href="mailto:openacs@dirkgomez.de">Dirk Gomez</a>
 -- @version $Id$
 -- @creation-date 13-May-2005
+
+begin
+  ctx_ddl.drop_section_group('swsgroup');
+  ctx_ddl.drop_preference('sws_user_datastore');
+end;
+/  
+
+drop index sws_ctx_index;
 
 exit;
