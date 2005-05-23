@@ -757,7 +757,7 @@ end;' language 'plpgsql';
 
 
 -- procedure register_child_type
-select define_function_args('content_type__register_child_type','content_type,child_type,relation_tag;generic,min_n;0,max_n');
+select define_function_args('content_type__register_child_type','parent_type,child_type,relation_tag;generic,min_n;0,max_n');
 create or replace function content_type__register_child_type (varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
