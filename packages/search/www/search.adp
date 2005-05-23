@@ -49,7 +49,7 @@
           <a href="@searchresult.url_one@">#search.Untitled#</a>
         </if>
         <else>
-          <div class="title"><a href="@searchresult.url_one@">@searchresult.title_summary;noquote@</a></div>
+          <div class="title"><a href="@searchresult.url_one@">@searchresult.title_summary;noquote@</a><!-- @searchresult.object_id@ --> </div>
         </else>
         <if @searchresult.txt_summary@ not nil>	
           <div class="search-match">@searchresult.txt_summary;noquote@</div>
