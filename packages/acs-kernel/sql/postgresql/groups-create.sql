@@ -32,7 +32,7 @@ create table membership_rels (
                         primary key,
         -- null means waiting for admin approval
         member_state    varchar(20) constraint membership_rel_mem_ck
-                        check (member_state in ('approved', 'needs approval',
+                        check (member_state in ('merged','approved', 'needs approval',
                                               'banned', 'rejected', 'deleted'))
 );
 
