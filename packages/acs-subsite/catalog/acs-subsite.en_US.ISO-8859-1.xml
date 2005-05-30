@@ -271,7 +271,7 @@ account was deleted for some reason.</msg>
   <msg key="Notes">Notes:</msg>
   <msg key="Notice">Notice:</msg>
   <msg key="on_name_to">on %name% to:</msg>
-  <msg key="online">online</msg>
+  <msg key="Online">online</msg>
   <msg key="optional">(optional)</msg>
   <msg key="Options">Options</msg>
   <msg key="Or_add_a_new_user">Or add a new user</msg>
