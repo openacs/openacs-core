@@ -174,6 +174,7 @@ ad_proc -public ::content::folder::update {
 } {
     set valid_attributes [list label description package_id]
 
+    set update_text "" 
     set item_attributes $attributes
     set i 0 
     foreach {attribute value} $attributes {
@@ -195,7 +196,7 @@ ad_proc -public ::content::folder::update {
 
 	# we have valid attributes, update them
 
-	set query_text "update cr_folders set ${update_text}"
+	set query_text "update cr_folders set ${update_text} where folder_id=:folder_id"
 	db_dml item_update $query_text
     }
 
