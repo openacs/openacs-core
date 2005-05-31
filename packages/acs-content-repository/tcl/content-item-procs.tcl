@@ -267,7 +267,7 @@ ad_proc -public ::content::item::update {
 
 	# we have valid attributes, update them
 
-	set query_text "update cr_items set ${update_text}"
+	set query_text "update cr_items set ${update_text} where item_id=:item_id"
 	db_dml item_update $query_text
     }
 }
