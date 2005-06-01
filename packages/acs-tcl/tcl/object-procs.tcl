@@ -68,7 +68,7 @@ ad_proc -public acs_object::get {
 } {
     Gets information about an acs_object.
 
-    Returns object_id, object_type, context_id, security_inherit_p, 
+    Returns object_id, package_id, object_type, context_id, security_inherit_p, 
     creation_user, creation_date_ansi, creation_ip, last_modified_ansi,
     modifying_user, modifying_ip, tree_sortkey,  object_name
 
@@ -95,4 +95,3 @@ ad_proc -public acs_object::get_element {
     acs_object::get -object_id $object_id -array row
     return $row($element)
 }
-
