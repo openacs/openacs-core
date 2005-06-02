@@ -195,7 +195,7 @@ ad_proc -public ::content::folder::update {
 
 	# we have valid attributes, update them
 
-	set query_text "update cr_folders set ${update_text}"
+	set query_text "update cr_folders set ${update_text}  where folder_id=:folder_id"
 	db_dml item_update $query_text
     }
 
