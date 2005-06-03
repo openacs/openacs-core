@@ -46,6 +46,7 @@
   <msg key="Ban">Ban</msg>
   <msg key="Basic_Information">Basic Information</msg>
   <msg key="Biography">Biography</msg>
+  <msg key="Biography_Mime_Type">Biography Mime Type</msg>
   <msg key="cannot_retrieve_password">Retrieving password from local authority is not supported.</msg>
   <msg key="Cannot_see_memb_list">Cannot see the members list</msg>
   <msg key="Change_locale_label">Change language</msg>

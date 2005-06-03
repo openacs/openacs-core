@@ -77,6 +77,10 @@
   <msg key="common_view">view</msg>
   <msg key="common_Yes">Yes</msg>
   <msg key="common_yes">yes</msg>
+  <msg key="Email_Address">Email Address</msg>
+  <msg key="First_Names">First Names</msg>
+  <msg key="Group">Group</msg>
+  <msg key="Last_Name">Last Name</msg>
   <msg key="Member_role_pretty_name">Member</msg>
   <msg key="member_role_pretty_name">member</msg>
   <msg key="Member_role_pretty_plural">Members</msg>
@@ -91,4 +95,10 @@
   <msg key="member_state_needs_approval">needs approval</msg>
   <msg key="member_state_Rejected">Rejected</msg>
   <msg key="member_state_rejected">rejected</msg>
+  <msg key="Parties">Parties</msg>
+  <msg key="Party">Party</msg>
+  <msg key="People">People</msg>
+  <msg key="Person">Person</msg>
+  <msg key="URL">URL</msg>
+  <msg key="User">User</msg>
 </message_catalog>
