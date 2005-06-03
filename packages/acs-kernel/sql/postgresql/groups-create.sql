@@ -54,8 +54,8 @@ begin
  --
  attr_id := acs_object_type__create_type (
    ''group'',
-   ''Group'',
-   ''Groups'',
+   ''#acs-kernel.Group#'',
+   ''#acs-kernel.Groups#'',
    ''party'',
    ''groups'',
    ''group_id'',
@@ -69,8 +69,8 @@ begin
 	''group'',
 	''group_name'',
 	''string'',
-	''Group name'',
-	''Group names'',
+	''#acs-kernel.Group_name#'',
+	''#acs-kernel.Group_names#'',
 	null,
 	null,
 	null,
