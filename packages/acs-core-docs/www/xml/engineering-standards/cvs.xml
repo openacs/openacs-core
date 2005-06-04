@@ -72,7 +72,9 @@ cvs -q</action></screen>
         <listitem>
           <para>Create the user's account.  On cvs.openacs.org:</para>
           <screen><action>sudo bash
-/usr/sbin/useradd -c "<replaceable>Real Name</replaceable>" -G cvs,<replaceable>username</replaceable> -p <replaceable>passwd</replaceable> <replaceable>username</replaceable></action></screen>
+/usr/sbin/useradd -c "<replaceable>Real Name</replaceable>" -G cvs -p <replaceable>passwd</replaceable> <replaceable>username</replaceable>
+/usr/sbin/usermod -G cvs,<replaceable>username</replaceable> <replaceable>username</replaceable>
+          </action></screen>
         </listitem>
         <listitem>
           <para>Grant cvs access to the user account.  On any machine, in a temporary directory:</para>
