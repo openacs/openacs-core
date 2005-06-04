@@ -197,7 +197,6 @@ begin
 end;' language 'plpgsql';
 
 select define_function_args('content_template__delete','template_id');
-
 create or replace function content_template__delete (integer)
 returns integer as '
 declare
@@ -209,6 +208,7 @@ begin
 end;' language 'plpgsql';
 
 -- function is_template
+select define_function_args('content_template__is_template','template_id');
 create or replace function content_template__is_template (integer)
 returns boolean as '
 declare
@@ -220,8 +220,8 @@ begin
  
 end;' language 'plpgsql' stable;
 
-
 -- function get_path
+select define_function_args('content_template__get_path','template_id,root_folder_id');
 create or replace function content_template__get_path (integer,integer)
 returns varchar as '
 declare
