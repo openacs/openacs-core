@@ -8,26 +8,7 @@ ad_page_contract {
 
 } {}
 
-set title "OpenACS Object Type Administration"
+set page_title "Object Type Hierarchical Index"
+set context [list "Object Type Hierarchical Index"]
 
-set page "
-[ad_admin_header $title]
-<h2>$title</h2>
-[ad_context_bar $title]
-<hr>
-<ul>"
-
-append page "
- <table border=0 cellspacing=0 cellpadding=0 width=90%>
-  <tr>
-   <td valign=top>[acs_object_type_hierarchy]
-   </td>
-   <td valign=top align=right><a href=\"./alphabetical-index\">Alphabetical Index</a></td>
-  </tr>
- </table>"
-
-append page "
-</ul>
-[ad_admin_footer]"
-
-ns_return 200 text/html $page
+set object_type_hierarchy [acs_object_type_hierarchy]
