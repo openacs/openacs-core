@@ -45,5 +45,12 @@ begin acs_rel_type.drop_type(:rel_type); end;
 	    end;
 </querytext>
 </fullquery>
+
+<fullquery name="rel_types::create_role.create_role">
+<querytext>
+begin  acs_rel_type.create_role(:role, :pretty_name, :pretty_plural);
+end;
+</querytext>
+</fullquery>
  
 </queryset>
