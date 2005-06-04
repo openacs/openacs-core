@@ -216,9 +216,9 @@ ad_proc -public content::folder::get_index_page {
     @return item_id of content item named "index" in folder_id
 } {
     return [package_exec_plsql \
-		-var_list [list \
+		-var_list [list [list \
 			       folder_id $folder_id \
-			      ] \
+				    ]] \
 		content_folder get_index_page]
 }
 
