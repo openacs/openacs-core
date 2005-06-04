@@ -26,7 +26,7 @@ ad_proc -private subsite::after_upgrade {
         -from_version_name $from_version_name \
         -to_version_name $to_version_name \
         -spec {
-            5.2.0d2 5.2.0d3 {
+            5.2.0d1 5.2.0d2 {
 		set type_id [content::type::new -content_type "email_image" -pretty_name "Email_Image" \
 		     -pretty_plural "Email_Images" -table_name "users_email_image" -id_column "email_image_id"]
 
