@@ -70,4 +70,11 @@ select acs_rel_type__create_type (
 </querytext>
 </fullquery>
 
+<fullquery name="rel_types::create_role.create_role">
+<querytext>
+      select acs_rel_type__create_role(:role, :pretty_name, :pretty_plural)
+</querytext>
+</fullquery>
+
+
 </queryset>

@@ -17,10 +17,12 @@
         <maturity>3</maturity>
 
         <provides url="acs-subsite" version="5.2.0d3"/>
+        <requires url="acs-authentication" version="5.1.4"/>
         <requires url="acs-content-repository" version="5.2.0d1"/>
         <requires url="acs-kernel" version="5.2.0d3"/>
         <requires url="acs-tcl" version="5.2.0d1"/>
-        <requires url="acs-authentication" version="5.1.4"/>
+        <requires url="acs-translations" version="0.1d1"/>
+
         <callbacks>
             <callback type="after-install"  proc="subsite::package_install"/>
             <callback type="after-mount"  proc="subsite::after_mount"/>
@@ -31,6 +33,7 @@
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AcceptablePortraitMIMETypes"  default="image/gif image/jpeg" description="Enter a set of acceptable MIME types for portrait submissions." section_name="user-info"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowPersistentLoginP"  default="1" description="do we allow persistent logins?" section_name="user-login"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="application"  default="default" description="Name of the ETP application to use (default, faq, wiki, or create your own with the etp::define_applicaton procedure)" section_name="EditThisPage"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="AsmForRegisterId"  description="This set the assessment used for registration" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultFormStyle"  description="The default form template to use if a particular form doesn't have something more specific defined already."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultListStyle"  description="The default list template to use if a particular list does not explicitly specify the list style to use."/>
@@ -61,9 +64,8 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ShowMembersListTo"  default="1" description="Who can see the subsite members list. 0 = Everyone; 1 = Members; 2 = Only administrators."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SolicitPortraitP"  default="1" description="Set this to 1 if you want users to be asked to submit a portrait." section_name="user-info"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SomeAmericanReadersP"  default="1" description="is it even worth bothering asking for state and zip code?"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="TmpDir"  default="/tmp /var/tmp" description="What tmp directories are used on this system? Note the leading / character."/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="application"  default="default" description="Name of the ETP application to use (default, faq, wiki, or create your own with the etp::define_applicaton procedure)" section_name="EditThisPage"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="subtopic_application"  default="default" description="Name of the ETP application to use when creating a subtopic" section_name="EditThisPage"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="TmpDir"  default="/tmp /var/tmp" description="What tmp directories are used on this system? Note the leading / character."/>
         </parameters>
 
     </version>
