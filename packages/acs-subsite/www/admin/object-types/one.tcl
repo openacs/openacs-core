@@ -12,46 +12,17 @@ ad_page_contract {
     object_type:notnull
 }
 
-
-if { ![db_0or1row object_type {
-    select supertype,
-           abstract_p,
-           pretty_name,
-           pretty_plural,
-           table_name,
-           id_column,
-           name_method,
-           type_extension_table,
-           package_name,
-           dynamic_p
-      from acs_object_types
-     where object_type = :object_type
-}] } {
-    ad_return_complaint 1 "<li> The specified object type, $object_type, does not exist"
+if { ![db_0or1row object_type {}] } {
+    ad_return_complaint 1 "The specified object type, $object_type, does not exist"
     ad_script_abort
 }
 
+set page_title "Details for type $pretty_name"
+set context [list [list index "Object Type Index"] "Details for type $pretty_name"]
 
-
-set title "Details for type $pretty_name"
-
-set page "
-[ad_admin_header $title]
-<h2>$title</h2>
-[ad_context_bar [list "./" "Object Type Administration"] $title]
-<hr>
-<ul>"
+set page "[acs_object_type_hierarchy -object_type $object_type]"
 
 append page "
- <table border=0 cellspacing=0 cellpadding=0 width=90%>
-  <tr>
-   <td>[acs_object_type_hierarchy -object_type $object_type]</td>
-   <td align=right>
-    <a href=\"./index\">Hierarchical Index</a>&nbsp;|&nbsp;<a href=\"./alphabetical-index\">Alphabetical Index</a>
-   </td>
-  </tr>
- </table>
-
 <p>
 <b>Information</b>:
  <ul>
@@ -197,6 +168,4 @@ $body
 
 append page "
 </ul>
-[ad_admin_footer]"
-
-ns_return 200 text/html $page
+"
