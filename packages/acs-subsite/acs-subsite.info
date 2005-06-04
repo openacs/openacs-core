@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.2.0d2" url="http://openacs.org/repository/download/apm/acs-subsite-5.2.0d2.apm">
+    <version name="5.2.0a1" url="http://openacs.org/repository/download/apm/acs-subsite-5.2.0a1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
         <release-date>2004-04-29</release-date>
@@ -16,11 +16,11 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.2.0d2"/>
-        <requires url="acs-content-repository" version="5.2.0d1"/>
-        <requires url="acs-kernel" version="5.2.0d3"/>
-        <requires url="acs-tcl" version="5.2.0d1"/>
-        <requires url="acs-authentication" version="5.1.4"/>
+        <provides url="acs-subsite" version="5.2.0a1"/>
+        <requires url="acs-content-repository" version="5.2.0a1"/>
+        <requires url="acs-kernel" version="5.2.0a1"/>
+        <requires url="acs-tcl" version="5.2.0a1"/>
+        <requires url="acs-authentication" version="5.2.0a1"/>
         <callbacks>
             <callback type="after-install"  proc="subsite::package_install"/>
             <callback type="after-mount"  proc="subsite::after_mount"/>

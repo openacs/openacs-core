@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.2.0d10" url="http://openacs.org/repository/download/apm/acs-kernel-5.2.0d10.apm">
+    <version name="5.2.0a1" url="http://openacs.org/repository/download/apm/acs-kernel-5.2.0a1.apm">
         <owner url="mailto:oct@openacs.org">OpenACS Core Team</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
         <release-date>2005-01-09</release-date>
@@ -16,7 +16,7 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-kernel" version="5.2.0d10"/>
+        <provides url="acs-kernel" version="5.2.0a1"/>
 
         <callbacks>
         </callbacks>
