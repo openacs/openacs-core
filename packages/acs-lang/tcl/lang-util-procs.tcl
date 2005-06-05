@@ -754,3 +754,23 @@ ad_proc -private lang::util::escape_vars_if_not_null {
     }
 }
 
+ad_proc -public lang::util::convert_from_hash {
+    {-hashed_key:required}
+} {
+    Converts a string with #message_key# syntax to something that can
+    be used in select boxes
+    
+    @author Malte Sussdorff (sussdorff@sussdorff.de)
+    @creation-date 2005-06-05
+    
+    @param hashed_key
+
+    @return 
+    
+    @error 
+} {
+    
+    regsub -all {(\#([-a-zA-Z0-9_:\.]+)\#)} $hashed_key {[lang::message::lookup [ad_conn locale] {\2}]} hashed_key
+    return [subst $hashed_key]
+    
+}
