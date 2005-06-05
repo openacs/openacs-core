@@ -563,7 +563,7 @@ as
   begin
     update membership_rels
     set member_state = 'merged'
-    where rel_id = approve.rel_id;
+    where rel_id = merge.rel_id;
   end;
 
   procedure reject (
