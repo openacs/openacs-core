@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.1.2" locale="es_GT" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.1.5" locale="es_GT" charset="ISO-8859-1">
 
   <msg key="_or">, o</msg>
   <msg key="_Update_Basic_Information">Actualizar Información Básica</msg>
@@ -175,6 +175,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="lt_Uploaded_pretty_date">Subido: %pretty_date%</msg>
   <msg key="lt_Uploaded_publish_date">Subido: %publish_date%</msg>
   <msg key="lt_Use_the_Browse_button">Utiliza el botón de &quot;Examinar...&quot; para localizar tu archivo, luego selecciona el botón de &quot;Abrir&quot;.</msg>
+  <msg key="lt_User_has_portrait_title">Este usuario ha ingresado una biografía o ha subido una fotografía</msg>
   <msg key="lt_We_cant_find_you">No te pudimos encontrar (usuario %user_id%) en la tabla de usuarios. Probablemente tu cuenta fue borrada por alguna razón.</msg>
   <msg key="lt_We_had_a_problem_proc">Tuvimos un problema procesando tu entrada.</msg>
   <msg key="lt_We_were_not_awaiting_">No estabamos esperando su correo. Debe tratarse de un error.</msg>
@@ -194,6 +195,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Make_yourself_visible_label">Volverse visible</msg>
   <msg key="Manage_your_notifications">Administrar notificaciones</msg>
   <msg key="Mem_list_not_allowed">Lo sentimos, pero no estas autorizado para ver la lista de miembros.</msg>
+  <msg key="Member">miembro</msg>
   <msg key="Member_State">Estado del miembro</msg>
   <msg key="Members">Miembros</msg>
   <msg key="Name">Nombre y apellidos:</msg>
@@ -209,6 +211,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Notes">Notas:</msg>
   <msg key="Notice">Aviso:</msg>
   <msg key="on_name_to">en %name% a</msg>
+  <msg key="Online">en línea</msg>
   <msg key="optional">(opcional)</msg>
   <msg key="Options">Opciones</msg>
   <msg key="Or_add_a_new_user">O agregar un nuevo/a usuario/a</msg>
@@ -221,6 +224,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Permissions_for_name">Permisos para %name%</msg>
   <msg key="Please_return_to_home">Por favor regresa a %home_link%.</msg>
   <msg key="Portrait">Foto</msg>
+  <msg key="Profile">Perfil</msg>
   <msg key="Question">Pregunta:</msg>
   <msg key="Re_enable">Reactivar</msg>
   <msg key="Recover_Password">Recuperar Contraseña</msg>
@@ -230,6 +234,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Reject">Rechazar</msg>
   <msg key="Remember_my_login">Recordar mi contraseña en esta computadora</msg>
   <msg key="Remove">Eliminar</msg>
+  <msg key="Remove_All">Remover Todos</msg>
   <msg key="Req_membership_comm">Solicitar membresía de esta comunidad</msg>
   <msg key="Req_membership_subs">Solicitar membresía de este subsitio</msg>
   <msg key="Request_membership">Solicitar  membresía</msg>
@@ -271,6 +276,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="upload_a_replacement_por">cargar un retrato de reemplazo</msg>
   <msg key="Upload_Portrait">Cargar Retrato</msg>
   <msg key="Username">Nombre de usuario</msg>
+  <msg key="UserSiteMap">Mapa del Sitio del Usuario</msg>
   <msg key="Vacation_Info_Updated">Información de Vacaciones Actualizada </msg>
   <msg key="Vacation_information_updated">La información de sus vacaciones en %site_link% ha sido actualizada.</msg>
   <msg key="Welcome_user">Bienvenido/a, %user_name%</msg>

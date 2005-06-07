@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.1.2" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.1.5" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="_or">, o</msg>
   <msg key="_Update_Basic_Information">Actualizar Información Básica</msg>
@@ -195,6 +195,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Make_yourself_visible_label">Volverse visible</msg>
   <msg key="Manage_your_notifications">Administrar notificaciones</msg>
   <msg key="Mem_list_not_allowed">No esta autorizado para ver la lista de miembros.</msg>
+  <msg key="Member">miembro</msg>
   <msg key="Member_State">Estado del miembro</msg>
   <msg key="Members">Miembros</msg>
   <msg key="Name">Nombre y apellidos:</msg>
@@ -210,6 +211,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Notes">Notas:</msg>
   <msg key="Notice">Aviso:</msg>
   <msg key="on_name_to">en %name% a</msg>
+  <msg key="Online">en línea</msg>
   <msg key="optional">(opcional)</msg>
   <msg key="Options">Opciones</msg>
   <msg key="Or_add_a_new_user">O añadir un nuevo/a usuario/a</msg>
@@ -232,6 +234,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Reject">Rechazar</msg>
   <msg key="Remember_my_login">Recordar mi contraseña en este equipo</msg>
   <msg key="Remove">Eliminar</msg>
+  <msg key="Remove_All">Borrar Todos</msg>
   <msg key="Req_membership_comm">Solicitar pertenecer a esta comunidad</msg>
   <msg key="Req_membership_subs">Solicitar pertenecer a este subsitio</msg>
   <msg key="Request_membership">Solicitar la entrada</msg>
