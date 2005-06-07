@@ -30,6 +30,13 @@ create table site_wide_index (
                                         constraint sws_index_fk references acs_objects(object_id) on delete cascade,
 	object_name	     	varchar(4000),
 	indexed_content	        clob,
+	package_id		integer 
+-- TODO Dirk: bring back not null constraint 
+--		                     constraint swi_package_id_nn
+--		                     not null
+				     constraint swi_package_id_fk
+                                     references apm_packages
+                                     on delete cascade,
 	datastore		char(1) not null,
         event_date                      date
                                         default sysdate,
