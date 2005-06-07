@@ -7,7 +7,7 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="0.2d1"" url="http://www.mayuli.com/acs-repository/download/apm/ref-countries-0.2d1.apm">
+    <version name="0.2d1" url="http://www.mayuli.com/acs-repository/download/apm/ref-countries-0.2d1.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
