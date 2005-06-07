@@ -25,9 +25,10 @@ ad_proc -public ::content::revision::new {
     {-content_type}
     {-creation_user}
     {-creation_ip}
+    {-context_id}
+    {-package_id}
     {-attributes}
     {-is_live "f"}
-    -context_id
 } {
     Adds a new revision of a content item. If content_type is not
     passed in, we determine it from the content item. This is needed
@@ -61,6 +62,8 @@ ad_proc -public ::content::revision::new {
 
     @param creation_ip
 
+    @param package_id
+
     @param is_live
 
     @param context_id defaults to item_id if not specified. Use empty string for NULL context_id
@@ -88,6 +91,9 @@ ad_proc -public ::content::revision::new {
     }
     if {![info exists context_id]} {
         set context_id $item_id
+    }
+    if {![info exists package_id]} {
+        set package_id [ad_conn package_id]
     }
     set attribute_names ""
     set attribute_values ""
@@ -128,8 +134,8 @@ DB -----------------------------------------------------------------------------
     set table_name "${table_name}i"
 
     set query_text "insert into ${table_name}
-                    (revision_id, object_type, creation_user, creation_date, creation_ip, title, description, item_id, mime_type $attribute_names)
-            values (:revision_id, :content_type, :creation_user, :creation_date, :creation_ip, :title, :description, :item_id, :mime_type $attribute_values)"
+                    (revision_id, object_type, creation_user, creation_date, creation_ip, title, description, item_id, context_id, package_id, mime_type $attribute_names)
+            values (:revision_id, :content_type, :creation_user, :creation_date, :creation_ip, :title, :description, :item_id, :context_id, :package_id, :mime_type $attribute_values)"
     db_transaction {
         if {[string equal "" $revision_id]} {
 	    set revision_id [db_nextval "acs_object_id_seq"]
