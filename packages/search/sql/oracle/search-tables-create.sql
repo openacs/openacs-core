@@ -29,6 +29,7 @@ create table site_wide_index (
                                         constraint sws_index_pk primary key
                                         constraint sws_index_fk references acs_objects(object_id) on delete cascade,
 	object_name	     	varchar(4000),
+	indexed_content	        clob,
 	datastore		char(1) not null,
         event_date                      date
                                         default sysdate,
