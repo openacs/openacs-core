@@ -18,6 +18,7 @@ ad_proc -public ::content::item::new {
     {-creation_date ""}
     {-creation_user ""}
     {-context_id ""}
+    {-package_id ""}
     {-creation_ip ""}
     {-item_subtype "content_item"}
     {-content_type "content_revision"}
@@ -49,6 +50,7 @@ ad_proc -public ::content::item::new {
     @param item_subtype
     @param content_type - content_revision or subtype of content_revision
     @param context_id -
+    @param package_id -
     @param creation_user -
     @param creation_ip -
     @param creation_date - defaults to current date and time
@@ -73,6 +75,9 @@ ad_proc -public ::content::item::new {
     if {[empty_string_p $creation_ip]} {
         set creation_ip [ad_conn peeraddr]
     }
+    if {[empty_string_p $package_id]} {
+        set package_id [ad_conn package_id]
+    }
 
     set var_list [list]
     lappend var_list \
@@ -83,6 +88,7 @@ ad_proc -public ::content::item::new {
         [list creation_date $creation_date ] \
         [list creation_user $creation_user ] \
         [list context_id $context_id ] \
+        [list package_id $package_id ] \
         [list creation_ip $creation_ip ] \
         [list item_subtype $item_subtype ] \
         [list content_type $content_type ] \
@@ -123,6 +129,7 @@ ad_proc -public ::content::item::new {
             -mime_type $mime_type \
             -content_type $content_type \
             -is_live $is_live \
+	    -package_id $package_id \
             -attributes $attributes
     }
     
