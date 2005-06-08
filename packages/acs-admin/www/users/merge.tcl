@@ -35,7 +35,7 @@ if { [db_0or1row one_user_portrait { *SQL* }] } {
 db_1row one_get_info { *SQL* }
 
 db_multirow -extend {one_item_object_url} one_user_contributions one_user_contributions { *SQL* } {
-    set one_item_object_url  "[site_node::get_url_from_object_id $object_id]"
+    set one_item_object_url  "[site_node::get_url_from_object_id -object_id $object_id]"
 }
 
 set user_id_one_items [callback MergeShowUserInfo -user_id $user_id ]
@@ -61,7 +61,7 @@ if { [db_0or1row two_user_portrait { *SQL* }] } {
 db_1row two_get_info { *SQL* }
 
 db_multirow -extend {two_item_object_url} two_user_contributions two_user_contributions { *SQL* } {
-    set two_item_object_url "[site_node::get_url_from_object_id $object_id]"
+    set two_item_object_url "[site_node::get_url_from_object_id -object_id $object_id]"
 }
 
 set user_id_two_items [callback MergeShowUserInfo -user_id $user_id_from_search ]
