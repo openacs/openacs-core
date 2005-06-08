@@ -1,6 +1,6 @@
 ad_library {
 
-    Definitions for the account merge 
+    Definitions of procs for the merge process
 
     @creation-date 15 APR 2005
     @author Enrique Catalan (quio@galileo.edu)
@@ -13,6 +13,12 @@ ad_proc -callback MergePackageUser {
     -to_user_id:required
 } {
     Merge two accounts
-} {}
+} -
+
+ad_proc -callback MergeShowUserInfo {
+    -user_id:required
+} {
+    Merge two accounts
+} -
 
 
