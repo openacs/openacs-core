@@ -12,6 +12,8 @@
   <msg key="common_add">add</msg>
   <msg key="common_Administration">Administration</msg>
   <msg key="common_administration">administration</msg>
+  <msg key="common_All">All</msg>
+  <msg key="common_Any">Any</msg>
   <msg key="common_Apply">Apply</msg>
   <msg key="common_apply">apply</msg>
   <msg key="common_Cancel">Cancel</msg>
