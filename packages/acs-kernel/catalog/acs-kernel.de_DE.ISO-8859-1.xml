@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.1.2d4" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.2.0d9" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="authentication_authority">Authentifizierungsstelle</msg>
   <msg key="common_Add">Hinzufügen</msg>
@@ -67,6 +67,9 @@
   <msg key="common_view">Anzeigen</msg>
   <msg key="common_Yes">Ja</msg>
   <msg key="common_yes">Ja</msg>
+  <msg key="Email_Address">E-Mail Adresse</msg>
+  <msg key="First_Names">Vorname(n)</msg>
+  <msg key="Last_Name">Nachname</msg>
   <msg key="Member_role_pretty_name">Teilnehmer</msg>
   <msg key="member_role_pretty_name">Teilnehmer</msg>
   <msg key="Member_role_pretty_plural">Teilnehmer</msg>
@@ -81,4 +84,5 @@
   <msg key="member_state_needs_approval">Zugang beantragt</msg>
   <msg key="member_state_Rejected">Abgelehnt</msg>
   <msg key="member_state_rejected">Abgelehnt</msg>
+  <msg key="URL">URL</msg>
 </message_catalog>

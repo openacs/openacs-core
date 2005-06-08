@@ -80,7 +80,7 @@
   <msg key="common_Yes">Yes</msg>
   <msg key="common_yes">yes</msg>
   <msg key="Email_Address">Email Address</msg>
-  <msg key="First_Names">First Names</msg>
+  <msg key="First_Names">First Name(s)</msg>
   <msg key="Group">Group</msg>
   <msg key="Last_Name">Last Name</msg>
   <msg key="Member_role_pretty_name">Member</msg>

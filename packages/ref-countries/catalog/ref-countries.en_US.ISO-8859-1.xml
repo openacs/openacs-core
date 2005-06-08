@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="ref-countries" package_version="0.2d1" locale="en_US" charset="ISO-8859-1">
+
   <msg key="AD">Andorra</msg>
   <msg key="AE">United Arab Emirates</msg>
   <msg key="AF">Afghanistan</msg>
@@ -48,7 +49,7 @@
   <msg key="CN">China</msg>
   <msg key="CO">Colombia</msg>
   <msg key="CR">Costa Rica</msg>
-  <msg key="CS">Serbia & Montenegro</msg>
+  <msg key="CS">Serbia and Montenegro</msg>
   <msg key="CU">Cuba</msg>
   <msg key="CV">Cape Verde</msg>
   <msg key="CX">Christmas Island</msg>
@@ -211,11 +212,11 @@
   <msg key="TH">Thailand</msg>
   <msg key="TJ">Tajikistan</msg>
   <msg key="TK">Tokelau</msg>
+  <msg key="TL">Timor-Leste</msg>
   <msg key="TM">Turkmenistan</msg>
   <msg key="TN">Tunisia</msg>
   <msg key="TO">Tonga</msg>
   <msg key="TP">East Timor</msg>
-<msg key="TL">Timor-Leste</msg>
   <msg key="TR">Turkey</msg>
   <msg key="TT">Trinidad And Tobago</msg>
   <msg key="TV">Tuvalu</msg>
