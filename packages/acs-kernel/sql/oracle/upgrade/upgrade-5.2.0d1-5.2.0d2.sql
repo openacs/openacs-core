@@ -2268,7 +2268,7 @@ is
 
   update acs_objects
   set title = group_name
-  were object_id = v_group_id;
+  where object_id = v_group_id;
 
 
   -- setup the permissible relationship types for this group
