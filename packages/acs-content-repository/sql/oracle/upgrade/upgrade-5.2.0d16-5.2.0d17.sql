@@ -1,46 +1,3 @@
--- Data model to support content repository of the ArsDigita Community
--- System
-
--- Copyright (C) 1999-2000 ArsDigita Corporation
--- Authors:      Michael Pih (pihman@arsdigita.com)
---               Karl Goldstein (karlg@arsdigita.com)
-
--- $Id$
-
--- This is free software distributed under the terms of the GNU Public
--- License.  Full text of the license is available from the GNU Project:
--- http://www.fsf.org/copyleft/gpl.html
-
--- Create a trigger to make sure that there will never be more than
--- one default template for a given content type and use context
-
-set serveroutput on
-
-create or replace trigger cr_type_template_map_tr
-before insert on cr_type_template_map 
-for each row
-begin
-
-  if :new.is_default = 't' then
-    update
-      cr_type_template_map
-    set
-      is_default = 'f'
-    where
-      content_type = :new.content_type
-    and
-      use_context = :new.use_context
-    and 
-      template_id ^= :new.template_id
-    and
-      is_default = 't';
-  end if;
-
-  return;
-end cr_type_template_map_tr;
-/
-show errors
-
 create or replace package body content_type is
 
 procedure create_type (
@@ -943,16 +900,14 @@ end content_type;
 /
 show errors
 
--- Refresh the attribute views
-
-prompt *** Refreshing content type attribute views...
+-- Refresh the attribute triggers
 
 begin
 
   for type_rec in (select object_type from acs_object_types 
     connect by supertype = prior object_type 
     start with object_type = 'content_revision') loop
-    content_type.refresh_view(type_rec.object_type);
+    content_type.refresh_trigger(type_rec.object_type);
   end loop;
 
 end;

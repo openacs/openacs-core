@@ -594,7 +594,8 @@ begin
                                      new.revision_id,
                                      now(),
                                      new.creation_user, 
-                                     new.creation_ip
+                                     new.creation_ip,
+                                     new.object_package_id
                 ));
                 '';
 
