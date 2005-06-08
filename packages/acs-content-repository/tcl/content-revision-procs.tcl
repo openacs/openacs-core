@@ -25,7 +25,6 @@ ad_proc -public ::content::revision::new {
     {-content_type}
     {-creation_user}
     {-creation_ip}
-    {-context_id}
     {-package_id}
     {-attributes}
     {-is_live "f"}
@@ -66,8 +65,6 @@ ad_proc -public ::content::revision::new {
 
     @param is_live
 
-    @param context_id defaults to item_id if not specified. Use empty string for NULL context_id
-
     @param attributes A list of lists of pairs of additional attributes and
     their values to pass to the constructor. Each pair is a list of two
      elements: key => value such as
@@ -88,9 +85,6 @@ ad_proc -public ::content::revision::new {
 
     if {![exists_and_not_null content_type]} {
 	set content_type [::content::item::content_type -item_id $item_id]
-    }
-    if {![info exists context_id]} {
-        set context_id $item_id
     }
     if {![info exists package_id]} {
         set package_id [ad_conn package_id]
@@ -134,8 +128,8 @@ DB -----------------------------------------------------------------------------
     set table_name "${table_name}i"
 
     set query_text "insert into ${table_name}
-                    (revision_id, object_type, creation_user, creation_date, creation_ip, title, description, item_id, context_id, package_id, mime_type $attribute_names)
-            values (:revision_id, :content_type, :creation_user, :creation_date, :creation_ip, :title, :description, :item_id, :context_id, :package_id, :mime_type $attribute_values)"
+                    (revision_id, object_type, creation_user, creation_date, creation_ip, title, description, item_id, object_package_id, mime_type $attribute_names)
+            values (:revision_id, :content_type, :creation_user, :creation_date, :creation_ip, :title, :description, :item_id, :package_id, :mime_type $attribute_values)"
     db_transaction {
         if {[string equal "" $revision_id]} {
 	    set revision_id [db_nextval "acs_object_id_seq"]
