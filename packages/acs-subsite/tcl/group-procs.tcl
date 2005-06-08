@@ -13,7 +13,7 @@ ad_library {
 
 namespace eval group {}
 
-ad_proc group::new { 
+ad_proc -public group::new { 
     { -form_id "" }
     { -variable_prefix "" }
     { -creation_user "" }
@@ -104,6 +104,7 @@ ad_proc group::new {
     lappend var_list [list context_id $context_id]
     lappend var_list [list $id_column $group_id]
     if { ![empty_string_p $group_name] } {
+	set group_name [lang::util::convert_to_i18n -prefix "group" -text "$group_name"]
         lappend var_list [list group_name $group_name]
     }
 
