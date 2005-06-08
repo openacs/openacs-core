@@ -1,41 +1,40 @@
 <?xml version="1.0"?>
-
   <queryset>
     <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-    <fullquery name="one_select_member_subgroups">
-        <querytext>
-            select dotlrn_communities.*,
-                   dotlrn_community.url(dotlrn_communities.community_id) as url,
-                   dotlrn_member_rels_approved.rel_type,
-                   dotlrn_member_rels_approved.role,
-                   '' as role_pretty_name
-            from dotlrn_communities,
-                 dotlrn_member_rels_approved
-            where dotlrn_member_rels_approved.user_id = :user_id
-            and dotlrn_member_rels_approved.community_id = dotlrn_communities.community_id
-            and dotlrn_communities.community_type = 'dotlrn_community'
-            order by dotlrn_communities.pretty_name,
-                     dotlrn_communities.community_key
-        </querytext>
+
+    <fullquery name="one_user_contributions">
+      <querytext>
+      select 
+        a.object_id,
+	at.pretty_name, 
+	at.pretty_plural, 
+	to_char(a.creation_date, 'YYYY-MM-DD HH24:MI:SS') as creation_date,
+	acs_object.name(a.object_id) as object_name
+      from acs_objects a, acs_object_types at
+      where a.object_type = at.object_type
+	and a.creation_user = :user_id
+      order by pretty_name, 
+	creation_date desc, 
+	object_name
+      </querytext>
     </fullquery>
 
-    <fullquery name="two_select_member_subgroups">
-        <querytext>
-            select dotlrn_communities.*,
-                   dotlrn_community.url(dotlrn_communities.community_id) as url,
-                   dotlrn_member_rels_approved.rel_type,
-                   dotlrn_member_rels_approved.role,
-                   '' as role_pretty_name
-            from dotlrn_communities,
-                 dotlrn_member_rels_approved
-            where dotlrn_member_rels_approved.user_id = :user_id_from_search
-            and dotlrn_member_rels_approved.community_id = dotlrn_communities.community_id
-            and dotlrn_communities.community_type = 'dotlrn_community'
-            order by dotlrn_communities.pretty_name,
-                     dotlrn_communities.community_key
-        </querytext>
+    <fullquery name="two_user_contributions">
+      <querytext>
+      select 
+        a.object_id,
+	at.pretty_name, 
+	at.pretty_plural, 
+	to_char(a.creation_date, 'YYYY-MM-DD HH24:MI:SS') as creation_date,
+	acs_object.name(a.object_id) as object_name
+      from acs_objects a, acs_object_types at
+      where a.object_type = at.object_type
+	and a.creation_user = :user_id_from_search
+      order by pretty_name, 
+	creation_date desc, 
+	object_name
+      </querytext>
     </fullquery>
-
 
   </queryset>

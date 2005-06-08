@@ -46,6 +46,7 @@ namespace eval membership_rel {
                         -user_id $rel_user_id                    
                 }
                 "needs approval" { db_exec_plsql unapprove {} }
+                "merged" { db_exec_plsql merge {} }
             }
 
             # Record who changed the state

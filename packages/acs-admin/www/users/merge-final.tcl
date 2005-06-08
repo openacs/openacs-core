@@ -15,8 +15,15 @@ ad_page_contract {
 	set from_authority_id [db_string gettoa "select authority_id from cc_users where user_id = :from_user_id"]
 	set to_authority_id [db_string getfroma "select authority_id from cc_users where user_id = :to_user_id"]
 	if { ![string equal $from_authority_id $to_authority_id] } {
-	    ad_complain "Merge only works for users from the same authority"
+	    ad_complain "Merge only works for users of the same authority"
 	} 
+    }
+    if_the_logged_in_user_is_crazy {
+	# Just for security reasons...
+	set current_user_id [ad_conn user_id]
+	if { [string equal $current_user_id $to_user_id] || [string equal $current_user_id $from_user_id] } {
+	    ad_complain "You can't merge yourself"
+	}
     }
 }
 

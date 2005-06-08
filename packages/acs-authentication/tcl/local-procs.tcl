@@ -83,6 +83,7 @@ ad_proc -private auth::local::authentication::register_impl {} {
         name "local"
         pretty_name "Local"
         aliases {
+            MergeUser auth::local::authentication::MergeUser
             Authenticate auth::local::authentication::Authenticate
             GetParameters auth::local::authentication::GetParameters
         }
@@ -95,6 +96,58 @@ ad_proc -private auth::local::authentication::unregister_impl {} {
     Unregister the 'local' implementation of the 'auth_authentication' service contract.
 } {
     acs_sc::impl::delete -contract_name "auth_authentication" -impl_name "local"
+}
+
+ad_proc -private auth::local::authentication::MergeUser {
+    from_user_id
+    to_user_id
+    {authority_id ""}
+} {
+    Merge Implementation of local authentication. This will
+    merge the names, emails, usernames, permissions, etc
+    of the two users to merge.
+} {
+    ns_log Notice "Starting auth::local::authentication::MergeUser"
+    db_transaction {
+	ns_log Notice "  Merging user portraits"
+
+	if { ![db_0or1row to_user_portrait {*SQL*}] &&  [db_0or1row from_user_portrait {*SQL*}] } {
+	    db_dml upd_portrait {*SQL*}
+	} 
+	
+	# get the permissions of the from_user_id
+	# and grant them to the to_user_id
+ 	db_foreach getfromobjs {*SQL*} {
+ 	    # revoke the permissions of from_user_id
+ 	    permission::revoke -object_id $from_oid -party_id $from_user_id -privilege $from_priv
+ 	    if { ![db_string touserhas {*SQL*} ] } {
+ 		# grant the permissions to to_user_id
+ 		permission::grant -object_id $from_oid -party_id $to_user_id -privilege $from_priv
+ 	    } 
+ 	}
+	
+	ns_log notice "  Merging acs_objects"
+	db_dml acs_objs_upd  {*SQL*} 	
+
+	ns_log notice "  Merging username, email and basic info in general"
+
+	set new_username "merged_$from_user_id"
+	append new_username "_$to_user_id"
+	
+	# Shall we keep the domain for email?
+	# Actually, the username 'merged_xxx_yyy'
+	# won't be an email, so we will keep it without
+	# domain 
+	set new_email $new_username
+	    
+	set rel_id [db_string getrelid { *SQL* }]  
+	membership_rel::change_state -rel_id $rel_id -state "merged"
+	
+	acs_user::update -user_id $from_user_id -username "$new_username" -screen_name "$new_username"
+	party::update -party_id $from_user_id -email "$new_email" 
+	
+    }
+    ns_log notice "Finishing auth::local::authentication::MergeUser"
 }
 
 
