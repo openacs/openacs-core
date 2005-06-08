@@ -34,9 +34,9 @@ if { !$merge_p } {
 } else {
     set final_results [callback MergePackageUser -from_user_id $from_user_id -to_user_id $to_user_id]
 
-    set temp "<ul>"
+    set results "<ul>"
     foreach res $final_results {
-	append temp "<li>$res</li>"
+	append results "<li>$res</li>"
     }
 
     set impl_id [auth::authority::get_element -authority_id $to_authority_id -element "auth_impl_id"]
@@ -50,10 +50,10 @@ if { !$merge_p } {
 
 
     foreach item $user_res {
-	append temp "<li>$item</li>"
+	append results "<li>$item</li>"
     }
 
-    append temp "</ul>"
+    append results "</ul>"
 
     set msg "Merge is done"
     ns_log Notice $msg

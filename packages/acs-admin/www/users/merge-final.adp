@@ -4,10 +4,9 @@
     
     <h2>Merging ...</h2>
 
-    <p/>
-      
-      @temp;noquote@
-
+    <if @merge_p@ ne 0>
       <p/>
-	@msg@
-      
+        @results;noquote@
+      <p/>
+        @msg@
+    </if>  

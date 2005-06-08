@@ -22,9 +22,9 @@ ad_page_contract {
 
 
 if { [string equal $merge_action "0"] } {
-    set temp_id $from_user_id
+    set tempid $from_user_id
     set from_user_id $to_user_id
-    set to_user_id $temp_id
+    set to_user_id $tempid
 }
 
 
