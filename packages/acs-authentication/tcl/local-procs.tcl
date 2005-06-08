@@ -111,24 +111,6 @@ ad_proc -private auth::local::authentication::MergeUser {
     db_transaction {
 	ns_log Notice "  Merging user portraits"
 
-	if { ![db_0or1row to_user_portrait {*SQL*}] &&  [db_0or1row from_user_portrait {*SQL*}] } {
-	    db_dml upd_portrait {*SQL*}
-	} 
-	
-	# get the permissions of the from_user_id
-	# and grant them to the to_user_id
- 	db_foreach getfromobjs {*SQL*} {
- 	    # revoke the permissions of from_user_id
- 	    permission::revoke -object_id $from_oid -party_id $from_user_id -privilege $from_priv
- 	    if { ![db_string touserhas {*SQL*} ] } {
- 		# grant the permissions to to_user_id
- 		permission::grant -object_id $from_oid -party_id $to_user_id -privilege $from_priv
- 	    } 
- 	}
-	
-	ns_log notice "  Merging acs_objects"
-	db_dml acs_objs_upd  {*SQL*} 	
-
 	ns_log notice "  Merging username, email and basic info in general"
 
 	set new_username "merged_$from_user_id"
