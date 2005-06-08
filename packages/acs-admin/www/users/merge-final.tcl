@@ -39,6 +39,8 @@ if { !$merge_p } {
 	append results "<li>$res</li>"
     }
 
+    merge::MergeUserInfo -from_user_id $from_user_id -to_user_id $to_user_id
+
     set impl_id [auth::authority::get_element -authority_id $to_authority_id -element "auth_impl_id"]
     set parameters [list $from_user_id $to_user_id $to_authority_id]
     set user_res [acs_sc::invoke \
