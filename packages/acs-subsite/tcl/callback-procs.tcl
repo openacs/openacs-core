@@ -10,11 +10,11 @@ ad_proc -public -callback user::workspace {
     -user_id
 } {
     used to generate html fragments for display on the /pvt/home page.
-
+    
     The html fragment should have an h2 header for sectioning.
-
+    
     @param user_id - the user to display
-
+    
     @see callback::user::workspace::impl::acs-subsite
 } -
 
@@ -24,3 +24,10 @@ ad_proc -public -callback user::workspace -impl acs-subsite {} {
 } {
     return [template::adp_include /packages/acs-subsite/lib/user-subsites [list user_id $user_id]]
 }
+
+ad_proc -public -callback user::registration { 
+    -package_id 
+} {
+    used to verify if there is another registration process.
+    The implementation must return the url of the registration page.
+} - 
