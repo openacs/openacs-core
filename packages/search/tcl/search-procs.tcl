@@ -253,3 +253,53 @@ ad_proc -private search::choice_bar {
     }
 
 }
+
+
+ad_proc -callback search::datasource {
+    -object_id:required
+} {
+    This callback is invoked by the search indexer when and object is
+    indexed for search. The datasource implementation name should be
+    the object_type for the object.
+} -
+
+# define for all objects, not just search?
+
+ad_proc -callback search::index {
+    -object_id:required
+    -content:required
+    -title:required
+    -description
+    -keywords
+} {
+    This callback is invoked by the search indexer. It will dispatch
+    to the full text search engine. Additional optional paramters may
+    be added to support additional features of full text search engines.
+} -
+
+ad_proc -callback search::search {
+    -query:required
+} {
+    This callback is invoked when a search is to be performed. Query
+    will be a list of lists. The first list is required and will be a
+    list of search terms to send to the full text search
+    engine. Additional optional lists will be a two element list. THe
+    first element will be the name of an advanced search operator. The
+    second element will be a list of data to restrict search results
+    based on that operator.
+} -
+
+ad_proc -callback search::unindex {
+    -object_id:required
+} {
+    This callback is invoked to remove and item from the search index.
+} -
+
+ad_proc -callback search::url {
+    -object_id:required
+} {
+   This callback is invoked when a URL needs to be generated for an
+   object. Usually this is called from /o.vuh which defers URL
+   calculation until a link is actually clicked, so generating a list
+   of URLs for various object types is quick.
+} -
