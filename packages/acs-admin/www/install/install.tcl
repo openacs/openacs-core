@@ -8,12 +8,12 @@ ad_page_contract {
 
 
 if { ![empty_string_p $repository_url] } {
-    set page_title "Install From OpenACS Repository"
+    set page_title "Install or Upgrade From OpenACS Repository"
 } else {
-    set page_title "Install From Local File System"
+    set page_title "Install or Upgrade From Local File System"
 }
 
-set context [list [list "." "Install Software"] $page_title]
+set context [list [list "." "Install or Upgrade Software"] $page_title]
 
 
 #####
@@ -83,7 +83,7 @@ template::list::create \
     -multirow packages \
     -key package_key \
     -bulk_actions {
-        "Install checked applications" "install-2" "Install checked applications"
+        "Install or upgrade checked applications" "install-2" "Install or upgrade checked applications"
     } \
     -bulk_action_export_vars {
         repository_url
@@ -92,7 +92,7 @@ template::list::create \
         package_name {
             label "Package"
             link_url_col install_url
-            link_html { title "Install this package" }
+            link_html { title "Install or upgrade this package" }
         }
         summary {
             label "Summary"
