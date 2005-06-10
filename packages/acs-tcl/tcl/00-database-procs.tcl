@@ -1075,7 +1075,9 @@ ad_proc -public db_list_of_lists {{ -dbn "" } statement_name sql args } {
     @return a Tcl list, each element of which is a list of all column 
     values in a row of the result of the SQL query<tt>sql</tt>. If 
     <tt>sql</tt> doesn't return any rows, returns an empty list. 
-
+    
+    It checks if the element is I18N and replaces it, thereby
+    reducing the need to do this with every single package
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
@@ -1093,7 +1095,7 @@ ad_proc -public db_list_of_lists {{ -dbn "" } statement_name sql args } {
         while { [db_getrow $db $selection] } {
             set this_result [list]
             for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-                lappend this_result [ns_set value $selection $i]
+		lappend this_result [lang::util::localize [ns_set value $selection $i]]
             }
             lappend result $this_result
         }
