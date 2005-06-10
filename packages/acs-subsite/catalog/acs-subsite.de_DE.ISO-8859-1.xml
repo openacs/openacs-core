@@ -31,6 +31,7 @@
   <msg key="Ban">Deaktivieren</msg>
   <msg key="Basic_Information">Allgemeine Informationen:</msg>
   <msg key="Biography">Lebenslauf</msg>
+  <msg key="Biography_Mime_Type">Mime Type der Biographie</msg>
   <msg key="cannot_retrieve_password">Passwort zurücksetzen durch lokale Authentifizierungsstelle nicht unterstützt</msg>
   <msg key="Cannot_see_memb_list">Liste der Teilnehmer verborgen</msg>
   <msg key="Change_locale_label">Sprache einstellen</msg>

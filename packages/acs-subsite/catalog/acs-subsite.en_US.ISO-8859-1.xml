@@ -265,6 +265,7 @@ account was deleted for some reason.</msg>
   <msg key="lt_What_other_people_see">What other people see when they click your name</msg>
   <msg key="lt_You_cant_have_a_lt_in">You can't have a &amp;lt; in your first name because it will look like an HTML tag and confuse other users.</msg>
   <msg key="lt_You_cant_have_a_lt_in_1">You can't have a &amp;lt; in your last name because it will look like an HTML tag and confuse other users.</msg>
+  <msg key="lt_You_have_to_provide_a">You have to provide at least an object_id_on or object_id_two</msg>
   <msg key="lt_You_wont_get_any_email">You won't get any email until after %pretty_date%.</msg>
   <msg key="lt_Your_email_has_been_c">Your email has been confirmed. You may now log into
     %system_name%.</msg>
@@ -284,6 +285,7 @@ account was deleted for some reason.</msg>
   <msg key="Member">Member</msg>
   <msg key="Member_State">Member State</msg>
   <msg key="Members">Members</msg>
+  <msg key="Missing_argument">Missing argument</msg>
   <msg key="Name">Name</msg>
   <msg key="New_Password">New Password</msg>
   <msg key="No_applications">No applications</msg>
@@ -401,6 +403,10 @@ You can always change your password by doing the following:
   <msg key="upload_a_portrait">upload a portrait</msg>
   <msg key="upload_a_replacement_por">upload a replacement portrait</msg>
   <msg key="Upload_Portrait">Upload Portrait</msg>
+  <msg key="User_Portrait">User Portrait</msg>
+  <msg key="User_Portraits">User Portraits</msg>
+  <msg key="User_Profile">User Profile</msg>
+  <msg key="User_Profiles">User Profiles</msg>
   <msg key="Username">Username</msg>
   <msg key="Username_not_found_for_authority">No user with username '%username%' found for authority %this_authority%</msg>
   <msg key="Username_required">Username required</msg>
