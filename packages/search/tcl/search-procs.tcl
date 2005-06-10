@@ -113,7 +113,13 @@ ad_proc -private search::indexer {} {
                     if {[acs_sc_binding_exists_p FtsContentProvider $object_type]} {
                         array set datasource {mime {} storage_type {} keywords {}}
                         if {[catch {
-                            array set datasource  [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
+                            # check if a callback exists, if not fall
+                            # back to service contract
+                            if {[callback::impl_exists -callback search::datasource -impl $object_type]} {
+                                array set datasource [lindex [callback -impl $object_type search::datasource -object_id $object_id] 0]
+                            } else {
+                                array set datasource  [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
+                            }
                             search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
 
                             acs_sc_call FtsEngineDriver \
@@ -197,7 +203,7 @@ ad_proc -private search::content_get {
             set data [db_blob_get get_lob_data {}]
         }
     }
-
+    
     search::content_filter txt data $mime
 }
 
