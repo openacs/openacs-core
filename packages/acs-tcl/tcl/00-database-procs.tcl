@@ -1095,7 +1095,12 @@ ad_proc -public db_list_of_lists {{ -dbn "" } statement_name sql args } {
         while { [db_getrow $db $selection] } {
             set this_result [list]
             for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-		lappend this_result [lang::util::localize [ns_set value $selection $i]]
+		set result_value [ns_set value $selection $i]
+		if {[string match "#*#" $result_value]} {
+		    lappend this_result [lang::util::localize $result_value]
+		} else {
+		    lappend this_result $result_value
+		}
             }
             lappend result $this_result
         }
