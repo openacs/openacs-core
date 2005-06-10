@@ -256,7 +256,7 @@ begin
   insert into acs_objects
     (object_id, object_type, title)
   values
-    (0, ''user'', ''Unregistered Visitor'');
+    (0, ''user'', ''#acs-kernel.Unregistered_Visitor#'');
 
   insert into parties
     (party_id)
@@ -266,7 +266,7 @@ begin
   insert into persons
     (person_id, first_names, last_name)
   values
-    (0, ''Unregistered'', ''Visitor'');
+    (0, ''#acs-kernel.Unregistered#'', ''#acs-kernel.Visitor#'');
 
   insert into users
     (user_id, username)
@@ -286,7 +286,7 @@ begin
     null,
     null,
     null,
-    ''The Public'',
+    ''#acs-kernel.The_Public#'',
     ''closed'',
     null
   );
@@ -333,7 +333,7 @@ begin
     null,
     null,
     null,
-    ''Registered Users'',
+    ''#acs-kernel.Registered_Users#'',
     ''closed'',
     null
   );
@@ -388,7 +388,7 @@ select authority__new(
     null,              -- authority_id
     null,              -- object_type
     'local',           -- short_name
-    'OpenACS Local',   -- pretty_name 
+    '#acs-kernel.OpenACS_Local#',   -- pretty_name 
     't',               -- enabled_p
     1,                 -- sort_order
     null,              -- auth_impl_id

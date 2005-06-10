@@ -6,6 +6,8 @@
   <msg key="common_add">Hinzufügen</msg>
   <msg key="common_Administration">Administration</msg>
   <msg key="common_administration">Verwaltung</msg>
+  <msg key="common_All">allen</msg>
+  <msg key="common_Any">einigen</msg>
   <msg key="common_Apply">Übernehmen</msg>
   <msg key="common_apply">Übernehmen</msg>
   <msg key="common_Cancel">Abbrechen</msg>
@@ -70,6 +72,7 @@
   <msg key="Email_Address">E-Mail Adresse</msg>
   <msg key="First_Names">Vorname(n)</msg>
   <msg key="Last_Name">Nachname</msg>
+  <msg key="Last_Names">Nachnamen</msg>
   <msg key="Member_role_pretty_name">Teilnehmer</msg>
   <msg key="member_role_pretty_name">Teilnehmer</msg>
   <msg key="Member_role_pretty_plural">Teilnehmer</msg>
@@ -84,5 +87,7 @@
   <msg key="member_state_needs_approval">Zugang beantragt</msg>
   <msg key="member_state_Rejected">Abgelehnt</msg>
   <msg key="member_state_rejected">Abgelehnt</msg>
+  <msg key="Person">Person</msg>
+  <msg key="Registered_Users">Registrierte User</msg>
   <msg key="URL">URL</msg>
 </message_catalog>
