@@ -322,17 +322,49 @@ ad_proc -public relation::get_id {
 ad_proc -public relation::get_object_one {
     {-object_id_two:required}
     {-rel_type "membership_rel"}
+    {-multiple_p "f"}
 } {
     Return the object_id of object one if a relation of rel_type exists between the supplied object_id_two and it.
+    
+    @param multiple_p If set to "t" return a list instead of only one object_id
 } {
-    return [db_string select_object_one {} -default {}]
+    if {$multiple_p == "t"} {
+	return [db_list select_object_one {}]
+    } else {
+	return [db_string select_object_one {} -default {}]
+    }
 }
 
 ad_proc -public relation::get_object_two {
     {-object_id_one:required}
     {-rel_type "membership_rel"}
+    {-multiple_p "f"}
 } {
     Return the object_id of object two if a relation of rel_type exists between the supplied object_id_one and it.
+    
+    @param multiple_p If set to "t" return a list instead of only one object_id
 } {
-    return [db_string select_object_two {} -default {}]
+    if {$multiple_p == "t"} {
+	return [db_list select_object_two {}]
+    } else {
+	return [db_string select_object_two {} -default {}]
+    }
+}
+
+ad_proc -public relation::get_objects {
+    {-object_id_one ""}
+    {-object_id_two ""}
+    {-rel_type "membership_rel"}
+} {
+    Return the list of object_ids if a relation of rel_type exists between the supplied object_id and it.
+} {
+    if {[empty_string_p $object_id_one]} {
+	if {[empty_string_p $object_id_two]} {
+	    ad_return_error "[_ acs-subsite.Missing_argument]" "[_ acs-subsite.lt_You_have_to_provide_a]"
+	} else {
+	    return [relation::get_object_one -object_id_two $object_id_two -rel_type $rel_type -multiple_p "t"]
+	}
+    } else {
+	return [relation::get_object_two -object_id_one $object_id_one -rel_type $rel_type -multiple_p "t"]
+    }
 }
