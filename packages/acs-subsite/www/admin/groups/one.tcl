@@ -59,4 +59,21 @@ attribute::multirow \
 	-object_type $group_type \
 	$group_id
 
+if {[apm_package_installed_p categories]} {
+    set category_url [site_node::get_package_url -package_key categories]
+
+    set mapped_trees [category_tree::get_mapped_trees $group_id]
+    foreach mapped_tree $mapped_trees {
+	util_unlist $mapped_tree tree_id tree_name subtree_id
+	if {![empty_string_p $subtree_id]} {
+	    set tree_name "${tree_name}::[category::get_name $subtree_id]"
+	}
+	lappend category_trees $tree_name
+    }
+    if {[empty_string_p $mapped_trees]} {
+	set category_trees "None"
+    }
+    set category_trees [join $category_trees ,]
+}
+
 ad_return_template
