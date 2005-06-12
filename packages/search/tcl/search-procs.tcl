@@ -63,22 +63,22 @@ ad_proc -public search::dequeue {
 }
 
 
-ad_proc -public -callback search::action {
-    -action
-    -object_id
-    -datasource
-    -object_type
-} {
-    Do something with a search datasource Called by the indexer
-    after having created the datasource.
+# ad_proc -public -callback search::action {
+#     -action
+#     -object_id
+#     -datasource
+#     -object_type
+# } {
+#     Do something with a search datasource Called by the indexer
+#     after having created the datasource.
 
-    @param action UPDATE INSERT DELETE
-    @param datasource name of the datasource array
+#     @param action UPDATE INSERT DELETE
+#     @param datasource name of the datasource array
 
-    @return ignored
+#     @return ignored
 
-    @author Jeff Davis (davis@xarg.net)
-} -
+#     @author Jeff Davis (davis@xarg.net)
+# } -
 
 
 ad_proc -private search::indexer {} {
@@ -98,11 +98,9 @@ ad_proc -private search::indexer {} {
         ns_log Debug "search::indexer: driver=$driver binding exists? [acs_sc_binding_exists_p FtsEngineDriver $driver]"
         return
     }
-
     # JCD: pull out the rows all at once so we release the handle
     foreach row [db_list_of_lists search_observer_queue_entry {}] { 
         foreach {object_id event_date event} $row { break }
-
         array unset datasource
         switch -- $event {
             UPDATE -
@@ -110,26 +108,36 @@ ad_proc -private search::indexer {} {
                 # Don't bother reindexing if we've already inserted/updated this object in this run
                 if {![info exists seen($object_id)]} {
                     set object_type [acs_object_type $object_id]
-                    if {[acs_sc_binding_exists_p FtsContentProvider $object_type]} {
+		    ns_log notice "\n-----DB-----\n SEARCH INDEX object type = '${object_type}' \n------------\n "
+                    if {[callback::impl_exists -callback search::datasource -impl $object_type] \
+			    || [acs_sc_binding_exists_p FtsContentProvider $object_type]} {
                         array set datasource {mime {} storage_type {} keywords {}}
                         if {[catch {
                             # check if a callback exists, if not fall
                             # back to service contract
                             if {[callback::impl_exists -callback search::datasource -impl $object_type]} {
+				#ns_log notice "\n-----DB-----\n SEARCH INDEX callback datasource exists for object_type '${object_type}'\n------------\n "
                                 array set datasource [lindex [callback -impl $object_type search::datasource -object_id $object_id] 0]
                             } else {
                                 array set datasource  [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
                             }
                             search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
 
+			    if {[callback::impl_exists -callback search::index -impl $driver]} {
+				if {![info exists datasource(package_id)]} {
+				    set datasource(package_id) ""
+				}
+				callback -impl $driver search::index -object_id $object_id -content $txt -title $datasource(title) -keywords $datasource(keywords) -package_id $datasource(package_id) -datasource datasource
+			    } else {
                             acs_sc_call FtsEngineDriver \
                                 [ad_decode $event UPDATE update_index index] \
                                 [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
+			    }
                         } errMsg]} {
                             ns_log Error "search::indexer: error getting datasource for $object_id $object_type: $errMsg\n[ad_print_stack_trace]\n"
                         } else {
                             # call the action so other people who do indexey things have a hook
-                            callback -catch search::action \
+#                            callback -catch search::action \
                                 -action $event \
                                 -object_id $object_id \
                                 -datasource datasource \
@@ -222,6 +230,7 @@ ad_proc -private search::content_filter {
             set txt $data
         }
         default { 
+	    ns_log notice "\n-----\n DAVEB search::content_filter mime= '${mime}' \n ------ \n"
             error "invalid mime type in search::content_filter: $mime"
         }
     }
@@ -279,6 +288,11 @@ ad_proc -callback search::index {
 
 ad_proc -callback search::search {
     -query:required
+    -user_id
+    {-offset 0}
+    {-limit 10}
+    {-df ""}
+    {-dt ""}    
 } {
     This callback is invoked when a search is to be performed. Query
     will be a list of lists. The first list is required and will be a
@@ -302,4 +316,16 @@ ad_proc -callback search::url {
    object. Usually this is called from /o.vuh which defers URL
    calculation until a link is actually clicked, so generating a list
    of URLs for various object types is quick.
+} -
+
+ad_proc -callback search::index {
+    -object_id 
+    -content
+    -title
+    -keywords
+    {-datasource ""}
+    {-package_id ""}    
+} {
+    This callback is invoked from the search::indexer scheduled procedure
+    to add an item to the index
 } -
