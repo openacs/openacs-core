@@ -82,7 +82,12 @@ if {[ad_parameter -package_id $package_id SubsiteSearchP -default 1]
 }
 
 set t0 [clock clicks -milliseconds]
-array set result [acs_sc_call FtsEngineDriver search $params $driver]
+if {[callback::impl_exists -impl $driver -callback search::search]} {
+    # DAVEB TODO Add subsite to the callback def?
+    array set result [lindex [callback -impl $driver search::search -query $q -offset $offset -limit $limit -user_id $user_id -df $df] 0]
+} else {
+    array set result [acs_sc_call FtsEngineDriver search $params $driver]
+}
 set tend [clock clicks -milliseconds]
 
 if { $t == "Feeling Lucky" && $result(count) > 0} {
@@ -121,6 +126,7 @@ for { set __i 0 } { $__i < [expr $high - $low +1] } { incr __i } {
 
     set object_id [lindex $result(ids) $__i]
     set object_type [acs_object_type $object_id]
+    ns_log notice "\n------\nDAVEB search\n object_id='${object_id}' object_type='${object_type}'\n-----\n"
     array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
     search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
     set title_summary [acs_sc_call FtsEngineDriver summary [list $q $datasource(title)] $driver]
