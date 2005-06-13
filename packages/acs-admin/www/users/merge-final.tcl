@@ -35,9 +35,14 @@ if { !$merge_p } {
     set final_results [callback MergePackageUser -from_user_id $from_user_id -to_user_id $to_user_id]
 
     set results "<ul>"
-    foreach res $final_results {
-	append results "<li>$res</li>"
+    foreach item $final_results {
+	append results "<li>[lindex $item 0]<ul>"
+	for { set idx 1 } { $idx < [llength $item] } {incr idx} {
+	    append results "<li>[lindex $item $idx] </li>"
+	}
+	append results "</ul></li>"
     }
+    append results "</ul>"
 
     merge::MergeUserInfo -from_user_id $from_user_id -to_user_id $to_user_id
 
@@ -50,12 +55,18 @@ if { !$merge_p } {
 		      -operation MergeUser \
 		      -call_args $parameters]
 
-
-    foreach item $user_res {
-	append results "<li>$item</li>"
-    }
-
-    append results "</ul>"
+    # TODO: Add to the SC implementations of the SC
+    # an output to improve the  msg's of the the final 
+    # status of auth_authentication merge.
+    # It could be a list as we did with callbacks implementations.
+    #     foreach item $user_res {
+    # 	append results "<li>[lindex $item 0]<ul>"
+    # 	for { set idx 1 } { $idx < [llength $item] } {incr idx} {
+    # 	    append results "<li>[lindex $item $idx]</li>"
+    # 	}
+    # 	append results "</ul></li></ul>"
+    #     }
+    #     append results "</ul>"
 
     set msg "Merge is done"
     ns_log Notice $msg

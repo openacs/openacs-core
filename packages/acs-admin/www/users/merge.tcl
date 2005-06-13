@@ -40,9 +40,14 @@ db_multirow -extend {one_item_object_url} one_user_contributions one_user_contri
 
 set user_id_one_items [callback MergeShowUserInfo -user_id $user_id ]
 if { ![empty_string_p $user_id_one_items] } {
-    set user_id_one_items_html "<ul><li>User Items<ul>"
-    foreach item $user_id_one_items {
-	append user_one_items_html "<li>$item</li>"
+    set user_id_one_items_html "<ul><li><b>Packages User Information </b><ul>"
+    foreach pkg_list $user_id_one_items {
+	append user_id_one_items_html "<li><i>[lindex $pkg_list 0]</i><ul>"
+	set length [llength $pkg_list]
+	for { set idx 1} { $idx < $length } { incr idx } {
+	    append user_id_one_items_html "<li>[lindex $pkg_list $idx]</li>"
+	}
+	append user_id_one_items_html "</ul></li>"
     }
     append user_id_one_items_html "</ul></li></ul>"
 } else {
@@ -66,9 +71,14 @@ db_multirow -extend {two_item_object_url} two_user_contributions two_user_contri
 
 set user_id_two_items [callback MergeShowUserInfo -user_id $user_id_from_search ]
 if { ![empty_string_p $user_id_two_items] } {
-    set user_id_two_items_html "<ul><li>User Items<ul>"
-    foreach item $user_id_two_items {
-	append user_two_items_html "<li>$item</li>"
+    set user_id_two_items_html "<ul><li><b>Packages User Information </b><ul>"
+    foreach pkg_list $user_id_two_items {
+	append user_id_two_items_html "<li><i>[lindex $pkg_list 0]</i><ul>"
+	set length [llength $pkg_list]
+	for { set idx 1} { $idx < $length } { incr idx } {
+	    append user_id_two_items_html "<li>[lindex $pkg_list $idx]</li>"
+	}
+	append user_id_two_items_html "</ul></li>"
     }
     append user_id_two_items_html "</ul></li></ul>"
 } else {

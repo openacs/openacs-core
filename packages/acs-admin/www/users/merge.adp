@@ -94,7 +94,7 @@
 				</group>
 			      </ul>
 			    </multiple>
-			     @user_id_one_items_html@
+			     @user_id_one_items_html;noquote@
 			  </div>
 			</div>
 		      </td>
@@ -223,7 +223,7 @@
 				</group>
 			      </ul>
 			    </multiple>
-			     @user_id_one_items_html@
+			    @user_id_two_items_html;noquote@
 			  </div>
 			</div>
 		      </td>
