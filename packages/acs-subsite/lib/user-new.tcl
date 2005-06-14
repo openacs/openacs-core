@@ -41,7 +41,7 @@ if { $self_register_p } {
 # Redirect to the registration assessment if there is one, if not, continue with the regular
 # registration form.
 
-set url [callback -catch -impl url user::registration]
+set url [callback -catch -impl asm_url user::registration]
 
 if { ![empty_string_p $url] } {
     ad_returnredirect "$url"
