@@ -40,7 +40,7 @@ ad_proc -public email_image::check_image_magick {} {
 } {
     set convert_p [string length [exec find /usr/local/bin -name convert]]
     set freetype_p [string length [exec whereis freetype]]
-    if { $convert_p != 0 && $freetype_p != 0 } {
+    if { $convert_p != 0 && $freetype_p != 9 } {
 	return 1
     } else {
 	return 0
@@ -91,7 +91,11 @@ ad_proc -public email_image::get_user_email {
     
 		} else {
 		    # Create a new email_image
-		    set email_image [email_image::new_item -user_id $user_id -bgcolor $bgcolor -transparent $transparent]
+		    if { [catch { set email_image [email_image::new_item -user_id $user_id -bgcolor $bgcolor -transparent $transparent] } errmsg ] } {
+                        set email_user [lindex [split $email '@'] 0]
+                        set email_domain [lindex [split $email '@'] 1]
+                        set email_image "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\">${email_user}<img border=0 align=middle src=/shared/images/at.gif>${email_domain}</a>"
+                    }
 		}
 	    } else {
 		# ImageMagick not present, we protect the email by adding
