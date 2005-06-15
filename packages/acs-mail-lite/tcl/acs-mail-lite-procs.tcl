@@ -820,7 +820,7 @@ namespace eval acs_mail_lite {
 	mime::finalize $multi_token -subordinates all
 	set message_id [generate_message_id]
 
-#	sendmail -from_addr $from_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id $message_id -package_id $package_id
+	sendmail -from_addr $from_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id $message_id -package_id $package_id
 	
 	if {[empty_string_p $package_id]} {
 	    set package_id [apm_package_id_from_key "acs-mail-lite"]
