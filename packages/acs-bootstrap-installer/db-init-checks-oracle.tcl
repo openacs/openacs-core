@@ -41,7 +41,9 @@ proc db_installer_checks { errors error_p } {
     # Date format is a globally defined value for Oracle, so we only need to check it once
     # for correctness.
 
-    if { [db_string sysdate "select sysdate from dual"] != [ns_fmttime [ns_time] "%Y-%m-%d"] } {
+    if { [db_string sysdate "select sysdate from dual"] != 
+         [db_string sysdate2 "select to_char(sysdate,'YYYY-MM-DD') from dual"] } {
+				  
         # See if NLS_DATE_FORMAT is set correctly
     	append my_errors "<hr><P><B>"
 	append my_errors [db_string sysdate "select sysdate from dual"] 
