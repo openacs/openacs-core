@@ -10,6 +10,10 @@
 #
 
 # new string features and inline scan are used, requiring 8.3.
+
+# If we have mime, don't do anything
+if {![catch {package require mime}]} {
+
 package require Tcl 8.3
 
 package provide mime 1.3.3
@@ -3583,3 +3587,4 @@ proc ::mime::field_decode {field} {
     return $result
 }
 
+}
