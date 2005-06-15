@@ -1805,20 +1805,30 @@ ad_page_contract_filter float { name value } {
     @author Steven Pulito (stevenp@seas.upenn.edu)
     @creation-date 22 August 2000
 } {
+    # Check if the first character is a "+" or "-"
+    set signum ""
+    if {[regexp {^([\+\-])(.*)} $value match signum rest]} {
+        set value $rest
+    }
+
     # remove the first decimal point, the theory being that
     # at this point a valid float will pass an integer test
     regsub {\.} $value "" value_to_be_tested
 
     if { ![regexp {^[0-9]+$} $value_to_be_tested] } {
-	ad_complain "Value is not an decimal number."
-	return 0
+        ad_complain "Value is not an decimal number."
+        return 0
     }
     # trim leading zeros, so as not to confuse Tcl
     set value [string trimleft $value "0"]
     if { [empty_string_p $value] } {
-	# but not all of the zeros
-	set value "0"
+        # but not all of the zeros
+        set value "0"
     }
+
+    # finally add the signum character again
+    set value "$signum$value"
+
     return 1
 }
 
