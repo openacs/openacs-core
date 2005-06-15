@@ -8,6 +8,8 @@ ad_library {
 
 }
 
+package require mime
+package require base64
 namespace eval acs_mail_lite {
 
     ad_proc -public with_finally {
@@ -682,7 +684,7 @@ namespace eval acs_mail_lite {
     } {
 	## Extract "from" email address
 	set from_addr [parse_email_address -email $from_addr]
-
+	
 	## Get address-array with email, name and user_id
 	set to_addr [get_address_array -addresses [string map {\n "" \r ""} $to_addr]]
 	if {![empty_string_p $bcc]} {
@@ -723,6 +725,7 @@ namespace eval acs_mail_lite {
 	    set send_p [parameter::get -package_id [get_package_id] -parameter "send_immediately" -default 0]
 	}
 
+
 	# if send_p true, then start acs_mail_lite::send_immediately, so mail is not stored in the db before delivery
 	if { $send_p } {
 	    acs_mail_lite::send_immediately -to_addr $to_addr -from_addr $from_addr -subject $subject -body $body -extraheaders $eh_list -bcc $bcc -valid_email_p $valid_email_p -package_id $package_id
@@ -732,7 +735,77 @@ namespace eval acs_mail_lite {
 	}
         return $message_id
     }
- 
+
+    
+    ad_proc -public complex_send {
+	-send_immediately:boolean
+	-valid_email:boolean
+        -to_addr:required
+        -from_addr:required
+        {-subject ""}
+        -body:required
+	{-package_id ""}
+	{-file_ids ""}
+	{-folder_id ""}
+	{-mime_type "text/plain"}
+    } {
+	
+	Prepare an email to be send with the option to pass in a list
+	of file_ids as well as specify an html_body and a mime_type
+
+	@param send_immediately The email is send immediately and not stored in the acs_mail_lite_queue
+	
+	@param to_addr Email address to send the mail to
+
+	@param from_addr Who is sending the email
+	
+	@param subject of the email
+	
+	@param body Text body of the email
+	
+	@param bcc BCC Users to send this mail to
+
+	@param package_id Package ID of the sending package
+	
+	@param file_ids List of file ids to be send as attachments. This will only work with files stored in the file system.
+
+	@param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
+
+    } {
+
+
+	# Set the message token
+	set message_token [mime::initialize -canonical "$mime_type" -string "$body"]
+
+	# encode all attachments in base64
+    
+	set tokens [list $message_token]
+	if {[exists_and_not_null folder_id]} {
+
+	    db_foreach get_file_info "select r.mime_type,r.title, r.content as filename
+	    from cr_revisions r, cr_items i
+	    where r.item_id = i.item_id and i.parent_id = :folder_id" {
+		lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
+	    }
+	} else {
+	    
+	    db_foreach get_file_info "select r.mime_type,r.title, r.content as filename
+	    from cr_revisions r
+	    where r.revision_id in ([join $file_ids ","])" {
+		lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
+	    }
+	}
+	
+	set multi_token [mime::initialize -canonical multipart/mixed -parts "$tokens"]
+	set packaged [mime::buildmessage $multi_token]
+	
+	#Close all mime tokens
+	mime::finalize $multi_token -subordinates all
+
+	sendmail -from_addr $from_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id [generate_message_id] -package_id $package_id
+
+    }
+	 
     ad_proc -private sweeper {} {
         Send messages in the acs_mail_lite_queue table.
     } {
