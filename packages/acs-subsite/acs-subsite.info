@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.2.0a1" url="http://openacs.org/repository/download/apm/acs-subsite-5.2.0a1.apm">
+    <version name="5.2.0a2" url="http://openacs.org/repository/download/apm/acs-subsite-5.2.0a2.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
         <release-date>2004-04-29</release-date>
@@ -16,11 +16,12 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.2.0a1"/>
+        <provides url="acs-subsite" version="5.2.0a2"/>
+        <requires url="acs-authentication" version="5.2.0a1"/>
         <requires url="acs-content-repository" version="5.2.0a1"/>
         <requires url="acs-kernel" version="5.2.0a1"/>
         <requires url="acs-tcl" version="5.2.0a1"/>
-        <requires url="acs-authentication" version="5.2.0a1"/>
+
         <callbacks>
             <callback type="after-install"  proc="subsite::package_install"/>
             <callback type="after-mount"  proc="subsite::after_mount"/>
@@ -31,6 +32,7 @@
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AcceptablePortraitMIMETypes"  default="image/gif image/jpeg" description="Enter a set of acceptable MIME types for portrait submissions." section_name="user-info"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowPersistentLoginP"  default="1" description="do we allow persistent logins?" section_name="user-login"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="AsmForRegisterId"  default="1" description="Assessment used in the registration process." section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultFormStyle"  description="The default form template to use if a particular form doesn't have something more specific defined already."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultListStyle"  description="The default list template to use if a particular list does not explicitly specify the list style to use."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultMaster"  default="/www/default-master" description="Path to the default master page (skin) for acs-templating.  Extensions .adp/.tcl are implied."/>
@@ -50,6 +52,7 @@
 3 - Show user email as an image (require ImageMagick). If ImageMagick not present then the @ symbol is replaced with an image.
 2 - Hide email, show a link that allows users to send a message.
 1 -  Shows nothing." section_name="user-info"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegImplName"  default="asm_url" description="Name of the implementation used in the registration process. " section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationProvidesRandomPasswordP"  default="0" description="have the system generate a random password instead of the user" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRequiresApprovalP"  default="0" description="set this to 1 if user does not go live immediately" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRequiresEmailVerificationP"  default="0" description="set this to 1 if the user has to receive and email and come back to the site" section_name="user-login"/>

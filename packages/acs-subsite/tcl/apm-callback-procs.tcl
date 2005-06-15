@@ -35,6 +35,14 @@ ad_proc -private subsite::after_upgrade {
 		content::folder::register_content_type -folder_id $folder_id -content_type "email_image" 
 
 	    }
+	    5.2.0a1 5.2.0a2 {
+		set value [parameter::get -parameter "AsmForRegisterId" -package_id [subsite::main_site_id]]
+		if {[empty_string_p $value]} {
+		    apm_parameter_register "AsmForRegisterId" "Assessment used on the registration process." "acs-subsite" "0" "number" "user-login"
+		}
+		apm_parameter_register "RegImplName" "Name of the implementation used in the registration process" "acs-subsite" "asm_url" "string" "user-login"
+		
+	    }
 	}
 }
 
