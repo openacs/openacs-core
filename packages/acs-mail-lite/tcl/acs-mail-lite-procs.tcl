@@ -814,7 +814,9 @@ namespace eval acs_mail_lite {
 	}
 	
 	set multi_token [mime::initialize -canonical multipart/mixed -parts "$tokens"]
-	set packaged [mime::buildmessage $multi_token]
+
+	mime::setheader $multi_token Subject "$subject"
+ 	set packaged [mime::buildmessage $multi_token]
 	
 	#Close all mime tokens
 	mime::finalize $multi_token -subordinates all
@@ -834,7 +836,7 @@ namespace eval acs_mail_lite {
 	    -message_id $message_id \
 	    -subject $subject \
 	    -object_id $object_id \
-	    -file_ids $file_ids
+	    -file_ids [split $file_ids ","]
     }
 	 
     ad_proc -private sweeper {} {
