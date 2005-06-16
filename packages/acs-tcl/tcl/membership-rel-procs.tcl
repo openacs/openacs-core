@@ -42,6 +42,7 @@ namespace eval membership_rel {
                     
                     # Add user to public group - see bug 1468
                     group::add_member \
+                        -no_perm_check \
                         -group_id [acs_magic_object the_public] \
                         -user_id $rel_user_id                    
                 }
