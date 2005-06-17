@@ -232,7 +232,7 @@ ad_proc -public content::folder::get_label {
 } {
     return [package_exec_plsql \
 		-var_list [list \
-			       folder_id $folder_id \
+			       [list folder_id $folder_id] \
 			      ] \
 		content_folder get_label]
 }
@@ -279,9 +279,9 @@ ad_proc -public content::folder::is_registered {
 } {
     return [package_exec_plsql \
 		-var_list [list \
-			       folder_id $folder_id \
-			       content_type $content_type \
-			       include_subtypes $include_subtypes \
+			       [list folder_id $folder_id] \
+			       [list content_type $content_type] \
+                               [list include_subtypes $include_subtypes] \
 			      ] \
 		content_folder is_registered]
 }
@@ -295,7 +295,7 @@ ad_proc -public content::folder::is_root {
     @return t or f
 } {
     return [package_exec_plsql -var_list [list \
-        folder_id $folder_id \
+                                              [list folder_id $folder_id] \
     ] content_folder is_root]
 }
 
