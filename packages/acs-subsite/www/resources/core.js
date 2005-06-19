@@ -110,21 +110,12 @@ function acs_RichText_Or_File_InputMethodChanged(form_name, richtext_name, radio
     }
 }
 
-/* RTE functions */ 
-function acs_rteSubmitForm() {
-        updateRTEs();
-	return true;
-}
-
-function acs_rteInit(form_name) {
-// sets onsubmit to function for the given form name
-    if (document.forms == null) return;
-    if (document.forms[form_name] == null) return;
-    document.forms[form_name].onsubmit = acs_rteSubmitForm;
-}
-
 /* HTMLArea (part of Richtext Widget) Support */
+
 function acs_initHtmlArea(editor_var, elementid) {
+    var config         = new HTMLArea.Config();
+    config.editorURL   = "/resources/acs-templating/htmlarea/";
+    editor_var = new HTMLArea(elementid, config);
     editor_var.generate();
     return false;
 }
@@ -1673,3 +1664,70 @@ function showCalendar(id) {
   return false;
 }
 
+// same function as above but instead of a text box we use the date widget
+function showCalendarWithDateWidget(id) {
+  var idM = document.getElementById(id+'.month');
+  var idD = document.getElementById(id+'.day');
+  var idY = document.getElementById(id+'.year');
+  var calval = idY.value+'-'+idM.value+'-'+idD.value;
+  if (calendar != null) {
+    // we already have one created, so just update it.
+    calendar.hide();            // hide the existing calendar
+    calendar.parseDate(calval); // set it to a new date
+  } else {
+    // first-time call, create the calendar
+    var cal = new Calendar(true, null, selectwidget, closeHandler);
+    calendar = cal;             // remember the calendar in the global
+    cal.setRange(2000, 2010);   // min/max year allowed
+    calendar.create();          // create a popup calendar
+    calendar.parseDate(calval); // set it to a new date
+  }
+  calendar.selM = idM;            // inform it about the input field in use
+  calendar.selD = idD;            // inform it about the input field in use
+  calendar.selY = idY;            // inform it about the input field in use
+  calendar.showAtElement(idM);   // show the calendar next to the input field
+  // catch mousedown on the document
+  Calendar.addEvent(document, "mousedown", checkCalendar);
+  return false;
+}
+
+// This function gets called when an end-user clicks on some date
+function selectwidget(cal, date) {
+  var y = 0;
+  var m = -1;
+  var d = 0;
+  var a = date.split(/\W+/);
+  var fmt = cal.dateFormat;
+
+  var b = fmt.split(/\W+/);
+  var i = 0, j = 0;
+  for (i = 0; i < a.length; ++i) {
+    if (b[i] == "D" || b[i] == "DD") {
+      continue;
+    }
+    if (b[i] == "d" || b[i] == "dd") {
+      d = parseInt(a[i], 10);
+    }
+    if (b[i] == "m" || b[i] == "mm") {
+      m = parseInt(a[i], 10) - 1;
+    }
+    if ((b[i] == "y") || (b[i] == "yy")) {
+      y = parseInt(a[i], 10);
+      (y < 100) && (y += (y > 29) ? 1900 : 2000);
+    }
+    if (b[i] == "M" || b[i] == "MM") {
+      for (j = 0; j < 12; ++j) {
+        if (Calendar._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) { m = j; break; }
+      }
+    }
+  }
+  if (y != 0 && m != -1 && d != 0) {
+    m = m + 1;
+    cal.selM.value = m;
+    cal.selY.value = y;
+    cal.selD.value = d;
+    return;
+  }
+}
+
+// ********************
