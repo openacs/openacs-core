@@ -2524,7 +2524,7 @@ begin
           end if;
         end if;
 
-        update cr_items set live_revision = v_new_live_revision, latest_revision = v_new_revision_id where item_id = v_item_id;
+        update cr_items set live_revision = v_new_live_revision_id, latest_revision = v_new_revision_id where item_id = v_item_id;
 
     end if;
 
