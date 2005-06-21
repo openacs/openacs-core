@@ -19,6 +19,9 @@ foreach optional_param {return_url content export_vars} {
 if {![info exists mime_type]} {
     set mime_type "text/plain"
 }
+if {![info exists cancel_url]} {
+    set cancel_url $return_url
+}
 
 foreach party_id $party_ids {
     lappend recipients "<a href=\"[contact::url -party_id $party_id]\">[contact::name -party_id $party_id]</a>"
@@ -59,7 +62,7 @@ ad_form -action [ad_conn url] \
     -html {enctype multipart/form-data} \
     -name email \
     -cancel_label "[_ contacts.Cancel]" \
-    -cancel_url $return_url \
+    -cancel_url $cancel_url \
     -edit_buttons {{"Send" send}} \
     -form $form_elements \
     -on_request {
