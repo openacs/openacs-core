@@ -712,3 +712,46 @@ ad_proc -public content::item::copy {
                                [list name $name]] \
                            content_item copy]
 }
+
+
+ad_proc -public content::item::upload_file {
+    {-upload_file:required}
+    {-parent_id:required}
+    {-package_id ""}
+} {
+    Store the file uploaded under the parent_id if a file was uploaded
+    
+    @author Malte Sussdorff (sussdorff@sussdorff.de)
+    @creation-date 2005-06-21
+    
+    @param upload_file
+
+    @param parent_id
+
+    @return the revision_id of the generated item
+    
+    @error 
+} {
+
+    set filename [template::util::file::get_property filename $upload_file]
+    if {$filename != "" } {
+	set tmp_filename [template::util::file::get_property tmp_filename $upload_file]
+	set mime_type [template::util::file::get_property mime_type $upload_file]
+	set tmp_size [file size $tmp_filename]
+	set extension [file extension $filename]
+	if {![exists_and_not_null title]} {
+	    regsub -all ".${extension}\$" $filename "" title
+	}
+	
+	set existing_filenames [db_list get_parent_existing_filenames {}]
+	set filename [util_text_to_url \
+			  -text ${title} -existing_urls "$existing_filenames" -replacement "_"]
+	
+        set revision_id [cr_import_content \
+			     -storage_type "file" -title $title -package_id $package_id $parent_id $tmp_filename $tmp_size $mime_type $filename]
+
+	content::item::set_live_revision -revision_id $revision_id
+
+	return $revision_id
+    } 
+}
