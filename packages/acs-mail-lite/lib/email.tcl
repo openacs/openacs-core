@@ -77,7 +77,7 @@ ad_form -action [ad_conn url] \
 	
 	set package_id [ad_conn package_id]
 
-	set revision_id [template::util::file::store_for_party -package_id $package_id -upload_file $upload_file -party_id $party_id]
+	set revision_id [content::item::upload_file -package_id $package_id -upload_file $upload_file -parent_id $party_id]
 
 	if {[exists_and_not_null revision_id]} {
 	    if {[exists_and_not_null file_ids]} {
@@ -113,9 +113,16 @@ ad_form -action [ad_conn url] \
 
 	template::multirow foreach messages {
 	    if {[exists_and_not_null file_ids]} {
-		acs_mail_lite::complex_send -to_addr $to_addr -from_addr "$from_addr" -subject "$subject" -body "$content" -package_id $package_id -file_ids $file_ids
+		acs_mail_lite::complex_send -to_addr $to_addr -from_addr "$from_addr" -subject "$subject" -body "$content" -package_id $package_id -file_ids $file_ids -mime_type $mime_type
 	    } else {
-		acs_mail_lite::send -to_addr $to_addr -from_addr "$from_addr" -subject "$subject" -body "$content" -package_id $package_id
+
+		# acs_mail_lite does not know about sending the
+		# correct mime types....
+		if {$mime_type == "text/html"} {
+		    acs_mail_lite::complex_send -to_addr $to_addr -from_addr "$from_addr" -subject "$subject" -body "$content" -package_id $package_id -mime_type $mime_type
+		} else {
+		    acs_mail_lite::send -to_addr $to_addr -from_addr "$from_addr" -subject "$subject" -body "$content" -package_id $package_id
+		}
 	    }
 	}
 

@@ -804,7 +804,7 @@ namespace eval acs_mail_lite {
 		lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
 		lappend file_ids $revision_id
 	    }
-	} else {
+	} elseif {[exists_and_not_null file_ids]} {
 	    
 	    db_foreach get_file_info "select r.mime_type,r.title, r.content as filename
 	    from cr_revisions r
@@ -822,7 +822,7 @@ namespace eval acs_mail_lite {
 	mime::finalize $multi_token -subordinates all
 	set message_id [generate_message_id]
 
-	sendmail -from_addr $from_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id $message_id -package_id $package_id
+	acs_mail_lite::sendmail -from_addr $from_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id $message_id -package_id $package_id
 	
 	if {[empty_string_p $package_id]} {
 	    set package_id [apm_package_id_from_key "acs-mail-lite"]
