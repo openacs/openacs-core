@@ -21,7 +21,7 @@
   <msg key="Minutes">Minuten</msg>
   <msg key="Month">Monat</msg>
   <msg key="Next_with_arrow">Weiter &gt;&gt;</msg>
-  <msg key="No_row_pretty_plural">Keine %row_pretty_plural% vorhanden</msg>
+  <msg key="No_row_pretty_plural">Keine Daten vorhanden</msg>
   <msg key="Previous_with_arrow">&lt;&lt; Zurück</msg>
   <msg key="required">Angabe erforderlich</msg>
   <msg key="Seconds">Sekunden</msg>
