@@ -785,3 +785,19 @@ ad_proc -public lang::util::convert_to_i18n {
     return "#${package_key}.${message_key}#"
 }
 
+ad_proc -public lang::util::localize_list_of_lists {
+    {-list}
+} {
+    localize the elements of a list_of_lists
+} {
+    set list_output [list]
+    foreach item $list {
+	set item_output [list]
+	foreach part $item {
+	    lappend item_output [lang::util::localize $part]
+	}
+	lappend list_output $item_output
+    }
+    return $list_output
+}
+
