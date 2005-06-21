@@ -10,10 +10,14 @@ foreach required_param {party_ids} {
 	return -code error "$required_param is a required parameter."
     }
 }
-foreach optional_param {return_url content} {
+foreach optional_param {return_url content export_vars} {
     if {![info exists $optional_param]} {
 	set $optional_param {}
     }
+}
+
+if {![info exists mime_type]} {
+    set mime_type "text/plain"
 }
 
 foreach party_id $party_ids {
@@ -29,21 +33,29 @@ set form_elements {
     {to:text(inform),optional {label "[_ contacts.Recipients]"} {value $recipients}}
 }
 
+foreach var $export_vars {
+    upvar $var var_value
+    lappend form_elements [list ${var}:text(hidden) {value $var_value}]
+}
+
+set content_list [list $content $mime_type]
+
 append form_elements {
     {subject:text(text),optional
 	{label "[_ contacts.Subject]"}
 	{html {size 55}}
     }
-    {content:text(textarea),optional
+    {content:text(richtext),optional
 	{label "[_ contacts.Message]"}
 	{html {cols 55 rows 18}}
+	{value $content_list}
     }
     {upload_file:file(file),optional
 	{label "[_ contacts.Upload_File]"}
     }
 }
 
-ad_form -action message \
+ad_form -action [ad_conn url] \
     -html {enctype multipart/form-data} \
     -name email \
     -cancel_label "[_ contacts.Cancel]" \
@@ -55,7 +67,7 @@ ad_form -action message \
     } -edit_request {
     } -on_submit {
 	set from [ad_conn user_id]
-	set from_addr [cc_email_from_party $user_id]
+	set from_addr [cc_email_from_party $from]
 	template::multirow create messages message_type to_addr subject content
 
 	# Insert the uploaded file linked under the package_id
