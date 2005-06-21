@@ -520,9 +520,11 @@ namespace eval acs_mail_lite {
                     # substitute all "\r\n" with "\n", because piped text should only contain "\n"
                     regsub -all "\r\n" $msg "\n" msg
 
-		    set f [open "|$sendmail" "w"]
+		    if {[catch {set f [open "|$sendmail" "w"]
 		    puts $f "From: $from_addr\nTo: $pretty_to\n$msg"
-		    close $f
+			close $f}]} {
+			ns_log Notice "Mail Not Send $from_addr .... $pretty_to"
+		    } 
 		} -finally {
 		}
 	    } else {
