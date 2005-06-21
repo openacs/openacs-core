@@ -23,4 +23,13 @@
       and ci.item_id = :item_id
     </querytext>
   </fullquery>
+
+  <fullquery name="content::item::upload_file.get_parent_existing_filenames">
+  <querytext>
+    select name
+      from cr_items
+     where parent_id = :parent_id
+  </querytext>
+</fullquery>
+
 </queryset>
