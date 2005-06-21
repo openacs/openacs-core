@@ -42,7 +42,7 @@ if { $self_register_p } {
 # registration form.
 
 
-set implName [parameter::get -parameter "RegImplName" -package_id [subsite::main_site_id]]
+set implName [parameter::get -parameter "RegistrationImplName" -package_id [subsite::main_site_id]]
 
 set url [callback -catch -impl "$implName" user::registration]
 
