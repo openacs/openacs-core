@@ -68,19 +68,6 @@ ad_proc -private template::util::file::generate_filename {
 
     @param existing_filenames a list of filenames that the generated filename must not be equal to
 } {
-    if {[exists_and_not_null party_id] 
-	&& [string is integer $party_id] && ![exists_and_not_null existing_filenames]} {
-	set existing_filenames [db_list get_parties_existing_filenames {}]
-    }
-    set filename [util_text_to_url \
-		      -text ${title} -replacement "_"]
-    set output_filename "${filename}.${extension}"
-    set num 1
-    while {[lsearch $existing_filenames $output_filename] >= 0} {
-	set output_filename "${filename}${num}.${extension}"
-	incr num
-    }
-    return $output_filename
 }
 
 ad_proc -public template::util::file::store_for_party {
@@ -111,11 +98,18 @@ ad_proc -public template::util::file::store_for_party {
 	if {![exists_and_not_null title]} {
 	    regsub -all ".${extension}\$" $filename "" title
 	}
-	set filename [template::util::file::generate_filename \
-			  -title $title \
-			  -extension $extension \
-			  -party_id $party_id]
+	
+	set existing_filenames [db_list get_parties_existing_filenames {}]
+	set filename [util_text_to_url \
+		      -text ${title} -replacement "_"]
+	set output_filename "${filename}.${extension}"
+	set num 1
+	while {[lsearch $existing_filenames $output_filename] >= 0} {
+	    set output_filename "${filename}${num}.${extension}"
+	    incr num
+	}
 
+	set filename $output_filename
 	
         set revision_id [cr_import_content \
 			     -storage_type "file" -title $title -package_id $package_id $party_id $tmp_filename $tmp_size $mime_type $filename]
