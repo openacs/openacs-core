@@ -284,6 +284,8 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
     upvar $element_reference element
 
+    set output ""
+    
     if { [info exists element(html)] } {
         array set attributes $element(html)
     }
