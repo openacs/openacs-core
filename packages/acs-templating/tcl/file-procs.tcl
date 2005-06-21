@@ -83,15 +83,6 @@ ad_proc -private template::util::file::generate_filename {
     return $output_filename
 }
 
-ad_proc -private template::util::file::get_file_extension {
-    {-filename:required}
-} {
-    get the file extension from a file
-} {
-    return [lindex [split $filename "."] end]
-}
-
-
 ad_proc -public template::util::file::store_for_party {
     {-upload_file:required}
     {-party_id:required}
@@ -116,7 +107,7 @@ ad_proc -public template::util::file::store_for_party {
 	set tmp_filename [template::util::file::get_property tmp_filename $upload_file]
 	set mime_type [template::util::file::get_property mime_type $upload_file]
 	set tmp_size [file size $tmp_filename]
-	set extension [lindex [split $filename "."] end]
+	set extension [file extension $filename]
 	if {![exists_and_not_null title]} {
 	    regsub -all ".${extension}\$" $filename "" title
 	}
