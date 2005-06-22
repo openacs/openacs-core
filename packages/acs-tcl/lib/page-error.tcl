@@ -29,6 +29,7 @@ if {$user_id eq 0} {
     set public_userm_email $user_email
 }
 
+set send_email_p [parameter::get -package_id [ad_acs_kernel_id] -parameter SendErrorEmailP -default 0]
 set system_name [ad_system_name]
 set subject "[_ acs-tcl.lt_Error_Report_in_ad_sy] ( [_ acs-tcl.File ] $error_file )"
 set found_in_version ""
@@ -55,7 +56,7 @@ set error_desc_email "
 <br>
 [_ acs-tcl.lt_NB_This_error_was_sub]"
 
-if {[empty_string_p $bug_number] } {
+if {[empty_string_p $bug_number] && $send_email_p} {
     ns_sendmail "$send_to" $public_userm_email $subject $error_desc_email
 }
 set bt_instance [parameter::get -package_id [ad_acs_kernel_id] \
@@ -102,19 +103,6 @@ if {$auto_submit_p && $user_id > 0} {
 	    -user_id $user_id
 	
 	bug_tracker::bugs_exist_p_set_true -package_id $bt_package_id
-	
-	set workflow_id [bug_tracker::bug::get_instance_workflow_id -package_id $bt_package_id]
-	set case_id {}
-	set object_id [workflow::case::get_notification_object \
-			   -type workflow_my_cases \
-			   -workflow_id $workflow_id \
-			   -case_id $case_id]
-	set type_id [notification::type::get_type_id -short_name workflow_my_cases]
-	set delivery_method_id [notification::delivery::get_id -short_name email]
-	set interval_id [notification::interval::get_id_from_name -name instant]
-	
-	notification::request::new -type_id $type_id -user_id $user_id -object_id $object_id \
-	    -interval_id $interval_id -delivery_method_id $delivery_method_id
         db_dml insert_auto_bug { *SQL* }
     } else {
 	
