@@ -289,14 +289,7 @@ ad_proc -public template::util::date::get_property { what date } {
 	}
         set pad "00"
       }
-
-      # DRB: We need to differentiate between date and timestamp, for PG, at least,
-      # and since Oracle supports to_timestamp() we'll just do it for both DBs.
-      if { [llength $date] <= 3 } {
-          return "to_date('$value', '$format')"
-      } else {
-          return "to_timestamp('$value', '$format')"
-      }
+      return "to_date('$value', '$format')"
     }
     ansi {
       # LARS: Empty date results in NULL value
@@ -1028,6 +1021,10 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
 
   set tokens [list]
 
+  if {[info exists attributes(id)]} {
+       set id_attr_name $attributes(id)
+  }
+
   while { ![string equal $format_string {}] } {
 
     # Snip off the next token
@@ -1044,6 +1041,10 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
     # Output the widget
     set fragment_def $template::util::date::fragment_widgets([string toupper $token])
     set fragment [lindex $fragment_def 1]
+
+    if {[exists_and_not_null id_attr_name]} {
+           set attributes(id) "${id_attr_name}.${fragment}"
+    }
 
     append output [template::widget::[lindex $fragment_def 0] \
                      element \
