@@ -40,8 +40,10 @@ ad_proc -private subsite::after_upgrade {
 		if {[empty_string_p $value]} {
 		    apm_parameter_register "RegistrationId" "Assessment used on the registration process." "acs-subsite" "0" "number" "user-login"
 		}
-		apm_parameter_register "RegistrationImplName" "Name of the implementation used in the registration process" "acs-subsite" "asm_url" "string" "user-login"
-		
+		set value [parameter::get -parameter "RegistrationId" -package_id [subsite::main_site_id]]
+		if {[empty_string_p $value]} {
+		    apm_parameter_register "RegistrationImplName" "Name of the implementation used in the registration process" "acs-subsite" "asm_url" "string" "user-login"
+                }
 	    }
 	}
 }
