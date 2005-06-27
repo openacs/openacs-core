@@ -137,6 +137,6 @@ td.list-filter-pane {
 
 td.list-list-pane {
   background-color: white;
-  valign: center;
+  vertical-align: middle;
   padding-left: 10px;
 }
