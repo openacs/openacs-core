@@ -155,8 +155,8 @@ ad_proc -public ::content::folder::unregister_content_type {
 }
 
 ad_proc -public ::content::folder::update {
-    folder_id:required
-    attributes:required
+    -folder_id:required
+    -attributes:required
 } {
     Update standard cr_folder attributes, including the attributes for
     the folder cr_item
@@ -202,7 +202,7 @@ ad_proc -public ::content::folder::update {
 
     # pass the rest of the attributes to content::item::set
     # we can just send the folder attributes because they don't overlap
-    content::item::set \
+    content::item::update \
 	-item_id $folder_id \
 	-attributes $attributes
 }
