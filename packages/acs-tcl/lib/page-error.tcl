@@ -2,8 +2,6 @@
 
 ad_page_contract {
     
-    
-    
     @author Victor Guerra (guerra@galileo.edu)
     @creation-date 2005-02-03
     @arch-tag: 983f3d87-40c8-4327-8873-c6a01ba7d875
@@ -33,7 +31,7 @@ set send_email_p [parameter::get -package_id [ad_acs_kernel_id] -parameter SendE
 set system_name [ad_system_name]
 set subject "[_ acs-tcl.lt_Error_Report_in_ad_sy] ( [_ acs-tcl.File ] $error_file )"
 set found_in_version ""
-set send_to [ad_system_owner]
+set send_to [ad_admin_owner]
 
 set error_desc_email "
  --------------------------------------------------------<br>
@@ -44,6 +42,7 @@ set error_desc_email "
 <b>[_ acs-tcl.File]</b> $error_file<br>
 <b>[_ acs-tcl.User_Name]</b> $user_name<br>
 <b>[_ acs-tcl.lt_User_Id_of_the_user_t]</b> $user_id<br>
+<b>IP:</b> [ns_conn peeraddr]<br>
 <b>[_ acs-tcl.Browser_of_the_user]</b> [ad_quotehtml [ns_set get [ns_conn headers] User-Agent]]<br>
 <br>
 -----------------------------<br>
