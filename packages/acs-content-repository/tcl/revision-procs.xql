@@ -39,7 +39,7 @@
       <querytext>
           select content_type
           from cr_content_mime_type_map
-          where mime_type = :mime_type
+          where mime_type = :mime_type and content_type = 'content_revision'
       </querytext>
 </fullquery>
 
