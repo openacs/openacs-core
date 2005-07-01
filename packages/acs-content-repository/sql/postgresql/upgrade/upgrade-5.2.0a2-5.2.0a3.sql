@@ -154,3 +154,5 @@ begin
   return v_item_id;
 
 end;' language 'plpgsql';
+
+select define_function_args('content_folder__is_folder','item_id');

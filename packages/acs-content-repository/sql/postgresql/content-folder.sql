@@ -649,7 +649,7 @@ end;' language 'plpgsql';
 
 
 -- function is_folder
-select define_function_args('content_folder__is_folder','folder_id');
+select define_function_args('content_folder__is_folder','item_id');
 create or replace function content_folder__is_folder (integer)
 returns boolean as '
 declare
