@@ -190,11 +190,9 @@ ad_proc -public cr_import_content {
         set item_id [db_nextval acs_object_id_seq]
     }
 
-    # use content_type of existing item
+    # use content_type of existing item 
     if $old_item_p {
 	set content_type [db_string get_content_type ""]
-    } else {
-	set content_type [cr_registered_type_for_mime_type $mime_type]
     }
     set revision_id [db_nextval acs_object_id_seq]
 

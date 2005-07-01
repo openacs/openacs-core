@@ -35,12 +35,4 @@
       </querytext>
 </fullquery>
 
-<fullquery name="cr_registered_type_for_mime_type.registered_type_for_mime_type">
-      <querytext>
-          select content_type
-          from cr_content_mime_type_map
-          where mime_type = :mime_type
-      </querytext>
-</fullquery>
-
 </queryset>
