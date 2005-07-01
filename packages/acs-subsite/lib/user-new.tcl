@@ -47,7 +47,8 @@ set implName [parameter::get -parameter "RegistrationImplName" -package_id [subs
 set url [callback -catch -impl "$implName" user::registration]
 
 if { ![empty_string_p $url] } {
-    ad_returnredirect "$url"
+    ad_returnredirect [export_vars -base $url { return_url }]
+    ad_script_abort
 }
 
 
