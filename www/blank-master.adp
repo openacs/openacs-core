@@ -21,7 +21,7 @@
   <if @acs_blank_master__htmlareas@ not nil>
     <script type="text/javascript"><!--
       //Usage: initRTE(imagesPath, includesPath, cssFile)
-      initRTE("/resources/acs-templating/rte/images/", "/resources/acs-templating/rte/", "/resources/acs-templating/rte/rte.css");
+      initRTE("/resources/acs-templating/rte/images/", "/resources/acs-templating/rte/", "");
       // --></script></if>
 
 
