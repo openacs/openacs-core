@@ -198,7 +198,7 @@ ad_proc -public cr_import_content {
 
     db_transaction {
 
-        if { [empty_string_p [cr_registered_type_for_mime_type $mime_type]] } {
+        if { [empty_string_p [db_string is_registered "" -default ""]] } {
             db_dml mime_type_insert ""
             db_exec_plsql mime_type_register ""
         }
