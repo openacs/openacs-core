@@ -1,3 +1,4 @@
+
 ad_library {
 
     Provides a simple API for reliably sending email.
@@ -88,7 +89,7 @@ namespace eval acs_mail_lite {
     } {
         set domain [get_parameter -name "BounceDomain"]
         if { [empty_string_p $domain] } {
-	    set domain [ns_info hostname]
+	    set domain [ad_url]
 	}
 	return $domain
     }
