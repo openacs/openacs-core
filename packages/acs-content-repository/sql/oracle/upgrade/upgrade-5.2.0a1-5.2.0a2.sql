@@ -1,3 +1,295 @@
+create or replace package content_type AUTHID CURRENT_USER as
+--/** This package is used to manipulate content types and attributes
+--    
+--*/
+
+procedure create_type (
+  --/** Create a new content type. Automatically create the attribute table
+  --    for the type if the table does not already exist.
+  --    @author Karl Goldstein
+  --    @param content_type  The name of the new type
+  --    @param supertype     The supertype, defaults to content_revision
+  --    @param pretty_name   Pretty name for the type, singular
+  --    @param pretty_plural Pretty name for the type, plural
+  --    @param table_name    The name for the attribute table, defaults to
+  --                         the name of the supertype
+  --    @param id_column     The primary key for the table, defaults to 'XXX'
+  --    @param name_method   As in <tt>acs_object_type.create_type</tt>
+  --    @see {acs_object_type.create_type}
+  --*/
+  content_type		in acs_object_types.object_type%TYPE,
+  supertype		in acs_object_types.object_type%TYPE 
+                           default 'content_revision',
+  pretty_name		in acs_object_types.pretty_name%TYPE,
+  pretty_plural	        in acs_object_types.pretty_plural%TYPE,
+  table_name		in acs_object_types.table_name%TYPE default null,
+  id_column		in acs_object_types.id_column%TYPE default 'XXX',
+  name_method           in acs_object_types.name_method%TYPE default null
+);
+
+procedure drop_type (
+  --/** First drops all attributes related to a specific type, then drops type
+  --    the given type.
+  --    @author Simon Huynh
+  --    @param content_type  The content type to be dropped
+  --    @param drop_children_p If 't', then the sub-types
+  --    of the given content type and their associated tables
+  --    are also dropped.
+  --*/
+  content_type		in acs_object_types.object_type%TYPE,
+  drop_children_p	in char default 'f',
+  drop_table_p		in char default 'f'
+
+);
+
+
+function create_attribute (
+  --/** Create a new attribute for the specified type. Automatically create
+  --    the column for the attribute if the column does not already exist.
+  --    @author Karl Goldstein
+  --    @param content_type   The name of the type to alter
+  --    @param attribute_name The name of the attribute to create
+  --    @param pretty_name    Pretty name for the new attribute, singular
+  --    @param pretty_plural  Pretty name for the new attribute, plural
+  --    @param default_value  The default value for the attribute, defaults to null
+  --    @return The id of the newly created attribute
+  --    @see {acs_object_type.create_attribute}, {content_type.create_type}
+  --*/
+  content_type		in acs_attributes.object_type%TYPE,
+  attribute_name	in acs_attributes.attribute_name%TYPE,
+  datatype		in acs_attributes.datatype%TYPE,
+  pretty_name		in acs_attributes.pretty_name%TYPE,
+  pretty_plural	in acs_attributes.pretty_plural%TYPE default null,
+  sort_order		in acs_attributes.sort_order%TYPE default null,
+  default_value	in acs_attributes.default_value%TYPE default null,
+  column_spec           in varchar2  default 'varchar2(4000)'
+) return acs_attributes.attribute_id%TYPE;
+
+procedure drop_attribute (
+  --/** Drop an existing attribute. If you are using CMS, make sure to
+  --    call <tt>cm_form_widget.unregister_attribute_widget</tt> before calling
+  --    this function.
+  --    @author Karl Goldstein
+  --    @param content_type   The name of the type to alter
+  --    @param attribute_name The name of the attribute to drop
+  --    @param drop_column    If 't', will also alter the table and remove
+  --         the column where the attribute is stored. The default is 'f'
+  --         (leaves the table untouched).
+  --    @see {acs_object.drop_attribute}, {content_type.create_attribute},
+  --         {cm_form_widget.unregister_attribute_widget}
+  --*/
+  content_type		in acs_attributes.object_type%TYPE,
+  attribute_name	in acs_attributes.attribute_name%TYPE,
+  drop_column           in varchar2 default 'f'
+);
+
+procedure register_template (
+  --/** Register a template for the content type. This template may be used
+  --    to render all items of that type.
+  --    @author Karl Goldstein
+  --    @param content_type  The type for which the template is to be registered
+  --    @param template_id   The ID of the template to register
+  --    @param use_context   The context in which the template is appropriate, such
+  --                         as 'admin' or 'public'
+  --    @param is_default    If 't', this template becomes the default template for
+  --                         the type, default is 'f'.
+  --    @see {content_item.register_template}, {content_item.unregister_template}, 
+  --         {content_item.get_template}, {content_type.unregister_template},
+  --         {content_type.set_default_template}, {content_type.get_template}
+  --*/
+  content_type  in cr_type_template_map.content_type%TYPE,
+  template_id   in cr_templates.template_id%TYPE,
+  use_context   in cr_type_template_map.use_context%TYPE,
+  is_default    in cr_type_template_map.is_default%TYPE default 'f'
+);
+
+procedure set_default_template (
+  --/** Make the registered template a default template. The default template
+  --    will be used to render all items of the type for which no individual
+  --    template is registered.
+  --    @author Karl Goldstein
+  --    @param content_type  The type for which the template is to be made default
+  --    @param template_id   The ID of the template to make default
+  --    @param use_context   The context in which the template is appropriate, such
+  --                         as 'admin' or 'public'
+  --    @see {content_item.register_template}, {content_item.unregister_template}, 
+  --         {content_item.get_template}, {content_type.unregister_template},
+  --         {content_type.register_template}, {content_type.get_template}
+  --*/
+  content_type  in cr_type_template_map.content_type%TYPE,
+  template_id   in cr_templates.template_id%TYPE,
+  use_context   in cr_type_template_map.use_context%TYPE
+);
+
+function get_template (
+  --/** Retrieve the appropriate template for rendering items of the specified type.
+  --    @author Karl Goldstein
+  --    @param content_type  The type for which the template is to be retrieved
+  --    @param use_context   The context in which the template is appropriate, such
+  --                         as 'admin' or 'public'
+  --    @return The ID of the template to use
+  --    @see {content_item.register_template}, {content_item.unregister_template}, 
+  --         {content_item.get_template}, {content_type.unregister_template},
+  --         {content_type.register_template}, {content_type.set_default_template}
+  --*/
+  content_type  in cr_type_template_map.content_type%TYPE,
+  use_context   in cr_type_template_map.use_context%TYPE
+) return cr_templates.template_id%TYPE;
+
+procedure unregister_template (
+  --/** Unregister a template.  If the unregistered template was the default template,
+  --    the content_type can no longer be rendered in the use_context,
+  --    @author Karl Goldstein
+  --    @param content_type  The type for which the template is to be unregistered
+  --    @param template_id   The ID of the template to unregister
+  --    @param use_context   The context in which the template is to be unregistered
+  --    @see {content_item.register_template}, {content_item.unregister_template}, 
+  --         {content_item.get_template}, {content_type.set_default_template},
+  --         {content_type.register_template}, {content_type.get_template}
+  --*/
+  content_type  in cr_type_template_map.content_type%TYPE default null,
+  template_id   in cr_templates.template_id%TYPE,
+  use_context   in cr_type_template_map.use_context%TYPE default null
+);
+
+procedure refresh_view (
+  --/** Create a view for the type which joins all attributes of the type, 
+  --    including the inherited attributes.  The view is named 
+  --    "<table name for content_type>X"
+  --    Called by create_attribute and create_type.
+  --    @author Karl Goldstein
+  --    @param content_type  The type for which the view is to be created.
+  --    @see {content_type.create_type}
+  --*/
+  content_type  in cr_type_template_map.content_type%TYPE
+);
+
+procedure register_relation_type (
+  --/** Register a relationship between a content type and another object
+  --    type.  This may then be used by the content_item.is_valid_relation
+  --    function to validate any relationship between an item and another
+  --    object.
+  --    @author Karl Goldstein
+  --    @param content_type  The type of the item from which the relationship
+  --                          originated.
+  --    @param target_type   The type of the item to which the relationship
+  --                          is targeted.
+  --    @param relation_tag  A simple token used to identify a set of
+  --                          relations.
+  --    @param min_n          The minimun number of relationships of this type
+  --                          which an item must have to go live.
+  --    @param max_n          The minimun number of relationships of this type
+  --                          which an item must have to go live.
+  --    @see {content_type.unregister_relation_type}
+  --*/
+  content_type  in cr_type_relations.content_type%TYPE,
+  target_type   in cr_type_relations.target_type%TYPE,
+  relation_tag  in cr_type_relations.relation_tag%TYPE default 'generic',
+  min_n         in integer default 0,
+  max_n         in integer default null
+);
+
+procedure unregister_relation_type (
+  --/** Unregister a relationship between a content type and another object
+  --    type.
+  --    @author Karl Goldstein
+  --    @param content_type  The type of the item from which the relationship
+  --                          originated.
+  --    @param target_type   The type of the item to which the relationship
+  --                          is targeted.
+  --    @param relation_tag  A simple token used to identify a set of
+  --                          relations.
+  --    @see {content_type.register_relation_type}
+  --*/
+  content_type in cr_type_relations.content_type%TYPE,
+  target_type  in cr_type_relations.target_type%TYPE,
+  relation_tag in cr_type_relations.relation_tag%TYPE default null
+);
+
+procedure register_child_type (
+  --/** Register a parent-child relationship between a content type
+  --    and another object
+  --    type.  This may then be used by the content_item.is_valid_relation
+  --    function to validate the relationship between an item and a potential
+  --    child.
+  --    @author Karl Goldstein
+  --    @param content_type  The type of the item from which the relationship
+  --                          originated.
+  --    @param child_type    The type of the child item.
+  --    @param relation_tag  A simple token used to identify a set of
+  --                          relations.
+  --    @param min_n         The minimun number of parent-child
+  --                          relationships of this type
+  --                          which an item must have to go live.
+  --    @param max_n         The minimun number of relationships of this type
+  --                          which an item must have to go live.
+  --    @see {content_type.register_relation_type}, {content_type.register_child_type}
+  --*/
+  parent_type  in cr_type_children.parent_type%TYPE,
+  child_type    in cr_type_children.child_type%TYPE,
+  relation_tag  in cr_type_children.relation_tag%TYPE default 'generic',
+  min_n         in integer default 0,
+  max_n         in integer default null
+);
+
+procedure unregister_child_type (
+  --/** Register a parent-child relationship between a content type
+  --    and another object
+  --    type.  This may then be used by the content_item.is_valid_relation
+  --    function to validate the relationship between an item and a potential
+  --    child.
+  --    @author Karl Goldstein
+  --    @param parent_type   The type of the parent item.
+  --    @param child_type    The type of the child item.
+  --    @param relation_tag  A simple token used to identify a set of
+  --                          relations.
+  --    @see {content_type.register_relation_type}, {content_type.register_child_type}
+  --*/
+  parent_type  in cr_type_children.parent_type%TYPE,
+  child_type   in cr_type_children.child_type%TYPE,
+  relation_tag in cr_type_children.relation_tag%TYPE default null
+);
+
+procedure register_mime_type (
+  content_type  in cr_content_mime_type_map.content_type%TYPE,
+  mime_type	in cr_content_mime_type_map.mime_type%TYPE
+);
+
+procedure unregister_mime_type (
+  content_type  in cr_content_mime_type_map.content_type%TYPE,
+  mime_type	in cr_content_mime_type_map.mime_type%TYPE
+);
+
+function is_content_type (
+  object_type   in acs_object_types.object_type%TYPE
+) return char;
+
+procedure rotate_template (
+  --/** Sets the default template for a content type and registers all the
+  --    previously existing items of that content type to the original 
+  --    template
+  --    @author Michael Pih
+  --    @param template_id The template that will become the default 
+  --      registered template for the specified content type and use context
+  --    @param v_content_type The content type
+  --    @param use_context The context in which the template will be used
+  --*/
+  template_id     in cr_templates.template_id%TYPE,
+  v_content_type    in cr_items.content_type%TYPE,
+  use_context     in cr_type_template_map.use_context%TYPE
+);
+
+-- Create or replace a trigger on insert for simplifying addition of
+-- revisions for any content type
+
+procedure refresh_trigger (
+  content_type  in acs_object_types.object_type%TYPE
+);
+
+end content_type;
+/
+show errors;
+
 create or replace package body content_type is
 
 procedure create_type (
