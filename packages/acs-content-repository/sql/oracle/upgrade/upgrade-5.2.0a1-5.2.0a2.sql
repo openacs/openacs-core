@@ -1199,6 +1199,7 @@ begin
   for type_rec in (select object_type from acs_object_types 
     connect by supertype = prior object_type 
     start with object_type = 'content_revision') loop
+    content_type.refresh_view(type_rec.object_type);
     content_type.refresh_trigger(type_rec.object_type);
   end loop;
 
