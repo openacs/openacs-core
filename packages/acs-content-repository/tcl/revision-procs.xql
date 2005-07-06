@@ -4,7 +4,7 @@
 <fullquery name="cr_write_content.get_revision_info">
       <querytext>
           select i.storage_type, i.storage_area_key, r.mime_type, i.item_id,
-	         r.content_length
+                 r.content_length
           from cr_items i, cr_revisions r
           where r.revision_id = :revision_id and i.item_id = r.item_id
       </querytext>
@@ -21,7 +21,7 @@
 <fullquery name="cr_import_content.get_content_type">
       <querytext>
             select content_type
-	    from cr_items
+            from cr_items
             where item_id = :item_id
       </querytext>
 </fullquery>
@@ -29,9 +29,9 @@
 <fullquery name="cr_import_content.mime_type_insert">
       <querytext>
             insert into cr_mime_types (mime_type) 
-    	    select :mime_type
-    	    from dual
-    	    where not exists (select 1 from cr_mime_types where mime_type = :mime_type)
+            select :mime_type
+            from dual
+            where not exists (select 1 from cr_mime_types where mime_type = :mime_type)
       </querytext>
 </fullquery>
 
@@ -48,7 +48,7 @@
           select 1
           from cr_content_mime_type_map
           where mime_type = :mime_type
-          and contetnt_type = 'content_revision'
+          and content_type = 'content_revision'
       </querytext>
 </fullquery>
 
