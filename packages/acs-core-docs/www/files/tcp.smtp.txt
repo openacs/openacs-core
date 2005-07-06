@@ -1,2 +1,0 @@
-localhost:allow,RELAYCLIENT=""
-127.0.0.1:allow,RELAYCLIENT=""
