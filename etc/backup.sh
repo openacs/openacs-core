@@ -155,7 +155,7 @@ for dbname in $POSTGRES_DBS
 do
     dmp_file=$WEBDIR/$dbname/database-backup/$dbname-nightly-backup.dmp
     echo -n "-> Dumping $dbname to $dmp_file ... "
-    time $PG_BINDIR/pg_dump -f $dmp_file -Fp $dbname -h $DBHOST
+    time $PG_BINDIR/pg_dump -f $dmp_file -Fp $dbname
     /bin/ls -lh $dmp_file | awk '{print $5}'
     gzip -f $dmp_file
 done
