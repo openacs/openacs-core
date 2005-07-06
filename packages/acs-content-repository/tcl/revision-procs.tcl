@@ -193,6 +193,14 @@ ad_proc -public cr_import_content {
     # use content_type of existing item 
     if $old_item_p {
 	set content_type [db_string get_content_type ""]
+    } else {
+        # all we really need to know is if the mime type is mapped to image, we
+        # actually use the passed in image_type or other_type to create the object
+        if {[db_string image_type_p "" -default 0]} {
+            set content_type image
+        } else {
+            set content_type content_revision
+        }
     }
     set revision_id [db_nextval acs_object_id_seq]
 

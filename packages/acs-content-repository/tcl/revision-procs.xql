@@ -51,5 +51,14 @@
           and contetnt_type = 'content_revision'
       </querytext>
 </fullquery>
-  
+
+<fullquery name="cr_import_content.image_type_p">
+    <querytext>
+        select 1
+        from cr_content_mime_type_map
+        where mime_type = :mime_type
+        and content_type = 'image'
+    </querytext>
+</fullquery>
+
 </queryset>
