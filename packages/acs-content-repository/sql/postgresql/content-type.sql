@@ -14,8 +14,6 @@
 -- Create a trigger to make sure that there will never be more than
 -- one default template for a given content type and use context
 
---set serveroutput on
-
 create function cr_type_template_map_tr () returns opaque as '
 begin
 
@@ -41,7 +39,7 @@ end;' language 'plpgsql';
 create trigger cr_type_template_map_tr before insert on cr_type_template_map
 for each row execute procedure cr_type_template_map_tr ();
 
-select define_function_args('content_type__create_type','content_type,supertype;content_revision,pretty_name,pretty_plural,table_name,id_column;XXX,name_method');
+select define_function_args('content_type__create_type','content_type,supertype;content_revision,pretty_name,pretty_plural,table_name,id_column,name_method');
 
 create or replace function content_type__create_type (varchar,varchar,varchar,varchar,varchar,varchar,varchar)
 returns integer as '
@@ -76,7 +74,7 @@ begin
     from pg_class
    where relname = lower(create_type__table_name);
 
-  if NOT v_temp_p then
+  if NOT v_temp_p and create_type__table_name is not null then
     select table_name into v_supertype_table from acs_object_types
       where object_type = create_type__supertype;
 
@@ -207,9 +205,9 @@ begin
 end;' language 'plpgsql';
 
 
--- function create_attribute
 
 select define_function_args('content_type__create_attribute','content_type,attribute_name,datatype,pretty_name,pretty_plural,sort_order,default_value,column_spec;text');
+
 create or replace function content_type__create_attribute (varchar,varchar,varchar,varchar,varchar,integer,varchar,varchar)
 returns integer as '
 declare
@@ -270,8 +268,6 @@ begin
 end;' language 'plpgsql';
 
 
--- procedure drop_attribute
-
 select define_function_args('content_type__drop_attribute','content_type,attribute_name,drop_column;f');
 
 create or replace function content_type__drop_attribute (varchar,varchar,boolean)
@@ -312,9 +308,6 @@ begin
       execute ''alter table '' || v_table || '' drop column '' ||
 	drop_attribute__attribute_name || '' cascade'';
 
---    exception when others then
---      raise_application_error(-20000, ''Unable to drop column '' || 
---       v_table || ''.'' || attribute_name || '' in content_type.drop_attribute'');  
   end if;  
 
   PERFORM content_type__refresh_view(drop_attribute__content_type);
@@ -323,7 +316,6 @@ begin
 end;' language 'plpgsql';
 
 
--- procedure register_template
 select define_function_args('content_type__register_template','content_type,template_id,use_context,is_default;f');
 create or replace function content_type__register_template (varchar,integer,varchar,boolean)
 returns integer as '
@@ -375,9 +367,8 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
-
--- procedure set_default_template
 select define_function_args('content_type__set_default_template','content_type,template_id,use_context');
+
 create or replace function content_type__set_default_template (varchar,integer,varchar)
 returns integer as '
 declare
@@ -406,8 +397,8 @@ begin
 end;' language 'plpgsql';
 
 
--- function get_template
 select define_function_args('content_type__get_template','content_type,use_context');
+
 create or replace function content_type__get_template (varchar,varchar)
 returns integer as '
 declare
@@ -433,8 +424,8 @@ begin
 end;' language 'plpgsql' stable strict;
 
 
--- procedure unregister_template
 select define_function_args('content_type__unregister_template','content_type,template_id,use_context');
+
 create or replace function content_type__unregister_template (varchar,integer,varchar)
 returns integer as '
 declare
@@ -474,8 +465,8 @@ begin
 end;' language 'plpgsql';
 
 
--- function trigger_insert_statement
 select define_function_args('content_type__trigger_insert_statement','content_type');
+
 create or replace function content_type__trigger_insert_statement (varchar)
 returns varchar as '
 declare
@@ -557,8 +548,8 @@ cr_dummy for each row execute procedure cr_dummy_ins_del_tr ();
 -- Create or replace a trigger on insert for simplifying addition of
 -- revisions for any content type
 
--- procedure refresh_trigger
 select define_function_args('content_type__refresh_trigger','content_type');
+
 create or replace function content_type__refresh_trigger (varchar)
 returns integer as '
 declare
@@ -639,9 +630,8 @@ begin
 
 end;' language 'plpgsql';
 
-
--- procedure refresh_view
 select define_function_args('content_type__refresh_view','content_type');
+
 create or replace function content_type__refresh_view (varchar)
 returns integer as '
 declare
@@ -652,18 +642,10 @@ declare
   v_table_name                         varchar;
   join_rec                             record;
 begin
---                  select 
---                    table_name, id_column, level
---                  from
---                    acs_object_types
---                  where
---                    object_type <> ''acs_object''
---                  and
---                    object_type <> ''content_revision''
---                  start with
---                    object_type = refresh_view__content_type
---                  connect by
---                    object_type = prior supertype 
+
+  if v_table_name is null then
+    return 0;
+  end if;
 
   for join_rec in select ot2.table_name, ot2.id_column, tree_level(ot2.tree_sortkey) as level
                   from acs_object_types ot1, acs_object_types ot2
@@ -673,10 +655,12 @@ begin
                     and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
                   order by ot2.tree_sortkey desc
   LOOP
-    cols := cols || '', '' || join_rec.table_name || ''.*'';
-    tabs := tabs || '', '' || join_rec.table_name;
-    joins := joins || '' and acs_objects.object_id = '' || 
-             join_rec.table_name || ''.'' || join_rec.id_column;
+    if join_rec.table_name is not null then
+        cols := cols || '', '' || join_rec.table_name || ''.*'';
+        tabs := tabs || '', '' || join_rec.table_name;
+        joins := joins || '' and acs_objects.object_id = '' || 
+                 join_rec.table_name || ''.'' || join_rec.id_column;
+    end if;
   end loop;
 
   select table_name into v_table_name from acs_object_types
@@ -756,9 +740,8 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
-
--- procedure register_child_type
 select define_function_args('content_type__register_child_type','parent_type,child_type,relation_tag;generic,min_n;0,max_n');
+
 create or replace function content_type__register_child_type (varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
@@ -805,8 +788,8 @@ begin
 end;' language 'plpgsql';
 
 
--- procedure unregister_child_type
 select define_function_args('content_type__unregister_child_type','content_type,child_type,relation_tag');
+
 create or replace function content_type__unregister_child_type (varchar,varchar,varchar)
 returns integer as '
 declare
@@ -828,8 +811,8 @@ begin
 end;' language 'plpgsql';
 
 
--- procedure register_relation_type
 select define_function_args('content_type__register_relation_type','content_type,target_type,relation_tag;generic,min_n;0,max_n');
+
 create or replace function content_type__register_relation_type (varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
@@ -881,8 +864,8 @@ begin
 end;' language 'plpgsql';
 
 
--- procedure unregister_relation_type
 select define_function_args('content_type__unregister_relation_type','content_type,target_type,relation_tag;generic');
+
 create or replace function content_type__unregister_relation_type (varchar,varchar,varchar)
 returns integer as '
 declare
@@ -905,8 +888,8 @@ begin
 end;' language 'plpgsql';
 
 
--- procedure register_mime_type
 select define_function_args('content_type__register_mime_type','content_type,mime_type');
+
 create or replace function content_type__register_mime_type (varchar,varchar)
 returns integer as '
 declare
@@ -943,8 +926,8 @@ begin
 end;' language 'plpgsql';
 
 
--- procedure unregister_mime_type
 select define_function_args('content_type__unregister_mime_type','content_type,mime_type');
+
 create or replace function content_type__unregister_mime_type (varchar,varchar)
 returns integer as '
 declare
@@ -960,8 +943,8 @@ begin
 end;' language 'plpgsql';
 
 
--- function is_content_type
 select define_function_args('content_type__is_content_type','content_type'); 
+
 create or replace function content_type__is_content_type (varchar)
 returns boolean as '
 declare
@@ -985,8 +968,8 @@ begin
 end;' language 'plpgsql' stable;
 
 
--- procedure rotate_template
 select define_function_args('content_type__rotate_template','template_id,content_type,use_context');
+
 create or replace function content_type__rotate_template (integer,varchar,varchar)
 returns integer as '
 declare
@@ -1065,11 +1048,6 @@ returns integer as '
 declare 
         type_rec        record;
 begin
-
---                 select object_type 
---                   from acs_object_types 
---                   connect by supertype = prior object_type 
---                   start with object_type = ''content_revision''
 
   for type_rec in select ot.object_type 
                   from acs_object_types ot, acs_object_types ot2

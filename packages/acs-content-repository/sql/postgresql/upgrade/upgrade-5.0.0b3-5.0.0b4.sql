@@ -424,23 +424,6 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
-
-
-create or replace function content_revision__export_xml (integer)
-returns integer as '
-declare
-  revision_id            alias for $1;  
-  clob_loc               text;          
-  v_doc_id               cr_xml_docs.doc_id%TYPE;
-  v_revision_id          cr_revisions.revision_id%TYPE;
-begin
-
-  raise exception '' content_revision__export_xml Not currently implemented on postgresql'';
- 
-end;' language 'plpgsql';
-
-
-
 create or replace function content_keyword__is_assigned (integer,integer,varchar)
 returns boolean as '
 declare
@@ -641,35 +624,6 @@ begin
 
   return 0; 
 end;' language 'plpgsql';
-
-
-create or replace function content_revision__import_xml (integer,integer,numeric)
-returns integer as '
-declare
-  import_xml__item_id                alias for $1;  
-  import_xml__revision_id            alias for $2;  
-  import_xml__doc_id                 alias for $3;  
-  clob_loc                           text;          
-  v_revision_id                      cr_revisions.revision_id%TYPE;
-begin
-
-	raise exception '' content_revision__import_xml not implemented on postgres'';
-
-end;' language 'plpgsql';
-
-
-create or replace function content_revision__index_attributes (integer)
-returns integer as '
-declare
-  index_attributes__revision_id            alias for $1;  
-  clob_loc                                 text;          
-  v_revision_id                            cr_revisions.revision_id%TYPE;
-begin
-
-	raise exception ''content_revision__index_attributes not implemented on postgres'';
-
-end;' language 'plpgsql';
-
 
 create or replace function content_type__get_template (varchar,varchar)
 returns integer as '
