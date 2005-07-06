@@ -89,7 +89,7 @@ namespace eval acs_mail_lite {
     } {
         set domain [get_parameter -name "BounceDomain"]
         if { [empty_string_p $domain] } {
-	    set domain [ad_url]
+	    regsub {http://} [ns_config ns/server/[ns_info server]/module/nssock hostname] {} domain
 	}
 	return $domain
     }
