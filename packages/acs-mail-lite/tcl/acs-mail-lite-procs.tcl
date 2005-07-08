@@ -520,7 +520,10 @@ namespace eval acs_mail_lite {
 
 		    set f [open "|$sendmail" "w"]
 		    puts $f "From: $from_addr\nTo: $pretty_to\n$msg"
-		    close $f
+		    set err2 {}
+		    if { [catch {set err1 [close $f]} err2] } { 
+			ns_log Error "Attempt to send From: $from_addr\nTo: $pretty_to\n$msg failed.\nError $err1 : $err2"
+		    }
 		} -finally {
 		}
 	    } else {
