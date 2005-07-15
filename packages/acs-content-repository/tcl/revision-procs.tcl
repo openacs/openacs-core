@@ -35,11 +35,11 @@ ad_proc -public cr_write_content {
 
     if { [info exists item_id] } {
         if { ![db_0or1row get_item_info ""] } {
-            ad_return -code error "There is no content that matches item_id '$item_id'"
+            error "There is no content that matches item_id '$item_id'" {} NOT_FOUND
         }
     } elseif { [info exists revision_id] } {
         if { ![db_0or1row get_revision_info ""] } {
-            ad_return -code error "There is no content that matches revision_id '$revision_id'"
+            error "There is no content that matches revision_id '$revision_id'" {} NOT_FOUND
         }
     } else {
         ad_return -code error "Either revision_id or item_id must be specified"
@@ -50,6 +50,7 @@ ad_proc -public cr_write_content {
          ![string equal $storage_type "lob"] } {
         ad_return -code error "Storage type '$storage_type' is invalid."
     }
+
     # I set content length to 0 here because otherwise I need to do
     # db-specific queries for get_revision_info
     if {[empty_string_p $content_length]} {
@@ -68,20 +69,26 @@ ad_proc -public cr_write_content {
         file {
             set path [cr_fs_path $storage_area_key]
             set filename [db_string write_file_content ""]
-            # JCD: for webdavfs there needs to be a content-length 0 header 
-            # but ns_returnfile does not send one.  
-	    if { $string_p } {
-		set fd [open $filename]
+            if { $string_p } {
+		set fd [open $filename "r"]
 		set text [read $fd]
 		close $fd
 		return $text
 	    } else {
-		set size [file size $filename]
-		if {!$size} { 
-		    ns_set put [ns_conn outputheaders] "Content-Length" 0
-		}
-		ns_returnfile 200 $mime_type $filename
-	    }
+                # JCD: for webdavfs there needs to be a content-length 0 header 
+                # but ns_returnfile does not send one.   Also, we need to 
+                # ns_return size 0 files since if fastpath is enabled ns_returnfile 
+                # simply closes the connection rather than send anything (including 
+                # any headers).  This bug is fixed in AOLServer 4.0.6 and later
+                # but work around it for now.
+                set size [file size $filename]
+                if {!$size} { 
+                    ns_set put [ns_conn outputheaders] "Content-Length" 0
+                    ns_return 200 text/plain {}
+                } else {
+                    ns_returnfile 200 $mime_type $filename
+                }
+            }
         }
         lob  {
 
@@ -155,7 +162,7 @@ ad_proc -public cr_import_content {
 } {
 
     if { ![info exists creation_user] } {
-        set creation_user [ad_verify_and_get_user_id]
+        set creation_user [ad_conn user_id]
     }
 
     if { ![info exists creation_ip] } {
@@ -177,17 +184,23 @@ ad_proc -public cr_import_content {
         set item_id [db_nextval acs_object_id_seq]
     }
 
-    # use content_type of existing item
+    # use content_type of existing item 
     if $old_item_p {
 	set content_type [db_string get_content_type ""]
     } else {
-	set content_type [cr_registered_type_for_mime_type $mime_type]
+        # all we really need to know is if the mime type is mapped to image, we
+        # actually use the passed in image_type or other_type to create the object
+        if {[db_string image_type_p "" -default 0]} {
+            set content_type image
+        } else {
+            set content_type content_revision
+        }
     }
     set revision_id [db_nextval acs_object_id_seq]
 
     db_transaction {
 
-        if { [empty_string_p [cr_registered_type_for_mime_type $mime_type]] } {
+        if { [empty_string_p [db_string is_registered "" -default ""]] } {
             db_dml mime_type_insert ""
             db_exec_plsql mime_type_register ""
         }
