@@ -3245,3 +3245,12 @@ ad_proc -private db_exec_lob_postgresql {{
 
     return -code $errno -errorinfo $errinfo -errorcode $errcode $error
 }
+
+ad_proc -public db_bounce_pools {{ -dbn "" }} { 
+    @return Call ns_db bouncepool on all pools for the named database.
+    @param dbn The database name to use.  Uses the default database if not supplied.
+} {
+    foreach pool [db_available_pools $dbn] {
+        ns_db bouncepool $pool
+    }
+}

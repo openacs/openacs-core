@@ -80,6 +80,12 @@ foreach pkg_info $pkg_install_list {
                 -mount_path $selected_mount_path \
                 $spec_file]
 
+        #Installations/upgrades are done in a separate process, making
+        #changes that could affect our sessions.  This is particularly a
+        #problem with the content_item package on Oracle.  To be on the safe
+        #side we refresh the db connections after each install/upgrade.
+        db_bounce_pools
+
     if { $version_id == 0 } {
         # Installation of the package failed and we shouldn't continue with installation
         # as there might be packages depending on the failed package. Ideally we should
