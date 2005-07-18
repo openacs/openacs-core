@@ -1959,6 +1959,3 @@ begin
 
 end;
 /
-
--- content_item must be explicitly recompiled on Oracle 8 for some reason.
-alter package content_item compile body;
