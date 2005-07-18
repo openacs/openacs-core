@@ -1133,6 +1133,15 @@ ad_proc -private apm_package_install_data_model {
     if {$ul_p} {
 	apm_callback_and_log $callback "</ul><p>"
     }
+
+    if { [llength $data_model_files] } {
+        #Installations/upgrades are done in a separate process, making
+        #changes that could affect our sessions.  This is particularly a
+        #problem with the content_item package on Oracle.  To be on the safe
+        #side we refresh the db connections after each install/upgrade.
+        ns_log Debug "apm_package_install_data_model: Bouncing db pools."
+        db_bounce_pools
+    }
 }
 
 ad_proc -private apm_package_upgrade_parameters { 
