@@ -109,7 +109,9 @@ ad_proc -public group::new {
 	if {[empty_string_p $pretty_name]} {
 	    set pretty_name $group_name
 	}
-	set pretty_name [lang::util::convert_to_i18n -prefix "group" -text "$pretty_name"]
+# Commented out the following as convert_to_i18n was only approved for
+# 5.3 in acs-lang due to dependency on acs-translations.
+#	set pretty_name [lang::util::convert_to_i18n -prefix "group" -text "$pretty_name"]
     }
 
     set group_id [package_instantiate_object \
