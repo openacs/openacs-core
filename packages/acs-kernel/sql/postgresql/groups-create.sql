@@ -32,7 +32,7 @@ create table membership_rels (
                         primary key,
         -- null means waiting for admin approval
         member_state    varchar(20) constraint membership_rel_mem_ck
-                        check (member_state in ('merged','approved', 'needs approval',
+                        check (member_state in ('merged', 'approved', 'needs approval',
                                               'banned', 'rejected', 'deleted'))
 );
 
@@ -54,8 +54,8 @@ begin
  --
  attr_id := acs_object_type__create_type (
    ''group'',
-   ''Group'',
-   ''Groups'',
+   ''#acs-kernel.Group#'',
+   ''#acs-kernel.Groups#'',
    ''party'',
    ''groups'',
    ''group_id'',
@@ -69,8 +69,8 @@ begin
 	''group'',
 	''group_name'',
 	''string'',
-	''Group name'',
-	''Group names'',
+	''#acs-kernel.Group_name#'',
+	''#acs-kernel.Group_names#'',
 	null,
 	null,
 	null,
@@ -113,8 +113,8 @@ begin
 
  attr_id := acs_rel_type__create_type (
    ''membership_rel'',                 -- rel_type
-   ''Membership Relation'',            -- pretty_name
-   ''Membership Relationships'',       -- pretty_plural
+   ''#acs-kernel.Membership_Relation#'',            -- pretty_name
+   ''#acs-kernel.lt_Membership_Relationsh#'',       -- pretty_plural
    ''relationship'',                   -- supertype
    ''membership_rels'',                -- table_name
    ''rel_id'',                         -- id_column
@@ -132,12 +132,12 @@ begin
  --
  -- Administrator Relationship
  --
- attr_id := acs_rel_type__create_role (''admin'', ''Administrator'', ''Administrators'');
+ attr_id := acs_rel_type__create_role (''admin'', ''#acs-kernel.Administrator#'', ''#acs-kernel.Administrators#'');
 
  attr_id := acs_rel_type__create_type (
    ''admin_rel'',                      -- rel_type
-   ''Administrator Relation'',         -- pretty_name
-   ''Administrator Relationships'',    -- pretty_plural
+   ''#acs-kernel.lt_Administrator_Relatio#'',         -- pretty_name
+   ''#acs-kernel.lt_Administrator_Relatio_1#'',    -- pretty_plural
    ''membership_rel'',                 -- supertype
    ''admin_rels'',                     -- table_name
    ''rel_id'',                         -- id_column
