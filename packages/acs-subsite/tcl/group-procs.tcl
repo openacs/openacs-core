@@ -13,7 +13,7 @@ ad_library {
 
 namespace eval group {}
 
-ad_proc group::new { 
+ad_proc -public group::new { 
     { -form_id "" }
     { -variable_prefix "" }
     { -creation_user "" }
@@ -21,6 +21,7 @@ ad_proc group::new {
     { -group_id "" } 
     { -context_id "" } 
     { -group_name "" }
+    { -pretty_name ""}
     {group_type "group"}
 } {
     Creates a group of this type by calling the .new function for
@@ -105,9 +106,13 @@ ad_proc group::new {
     lappend var_list [list $id_column $group_id]
     if { ![empty_string_p $group_name] } {
         lappend var_list [list group_name $group_name]
+	if {[empty_string_p $pretty_name]} {
+	    set pretty_name $group_name
+	}
+	set pretty_name [lang::util::convert_to_i18n -prefix "group" -text "$pretty_name"]
     }
 
-    return [package_instantiate_object \
+    set group_id [package_instantiate_object \
     	-creation_user $creation_user \
     	-creation_ip $creation_ip \
     	-package_name $package_name \
@@ -117,6 +122,11 @@ ad_proc group::new {
     	-variable_prefix $variable_prefix \
     	$group_type]
 
+    # Update the title to the pretty name
+    if {![empty_string_p $pretty_name]} {
+	db_dml title_update "update acs_objects set title=:pretty_name where object_id = :group_id"
+    }
+    return $group_id
 }
 
 ad_proc group::delete { group_id } {
@@ -183,9 +193,10 @@ ad_proc -public group::get {
 } {
     upvar 1 $array row
     db_1row group_info {
-        select group_name, join_policy
-        from   groups
+        select group_name, title, join_policy
+        from   groups g, acs_objects o
         where  group_id = :group_id
+	and object_id = :group_id
     } -column_array row
 }
 
