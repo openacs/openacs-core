@@ -53,8 +53,8 @@ begin
 
     PERFORM acs_rel_type__create_type (
         ''user_profile'',
-	''User Profile'',
-	''User Profiles'',
+	''#acs-subsite.User_Profile#'',
+	''#acs-subsite.User_Profiles#'',
 	''membership_rel'',
 	''user_profiles'',
 	''profile_id'',

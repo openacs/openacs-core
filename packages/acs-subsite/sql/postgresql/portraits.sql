@@ -45,8 +45,8 @@ begin
 
   PERFORM acs_rel_type__create_type (
       ''user_portrait_rel'',
-      ''User Portrait'',
-      ''User Portraits'',
+      ''#acs-subsite.User_Portrait#'',
+      ''#acs-subsite.User_Portraits#'',
       ''relationship'',
       ''user_portraits'',
       ''user_id'',
