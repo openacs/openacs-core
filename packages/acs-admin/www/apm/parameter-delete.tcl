@@ -32,6 +32,8 @@ ad_form -name del -form {
     {confirm_p:text(hidden)}
     {version_id:text(hidden)}
     {section_name:text(hidden)}
+    {pretty_name:text(inform) {label "Package"}}
+    {parameter_name:text(inform) {label "Parameter"}}
 } -edit_request {
     set confirm_p 1
     set parameter_name [db_string get_parameter_name {
@@ -49,3 +51,5 @@ ad_form -name del -form {
 
 set page_title "Confirm Deletion"
 set context [list [list "." "Package Manager"] [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] [list [export_vars -base version-parameters { version_id section_name }] "Parameters"] $page_title]
+
+ad_return_template
