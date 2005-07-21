@@ -434,10 +434,6 @@ proc ad_proc args {
         uplevel [::list proc $proc_name_as_passed args "    ::callback::${callback}::contract__arg_parser\n${log_code}$code_block"]
     } elseif { [llength $switches] == 0 } {
         uplevel [::list proc $proc_name_as_passed $arg_list "${log_code}$code_block"]
-    } elseif { ![string equal $callback ""] && ![string equal $impl ""] } {
-        # We are creating a callback implementation so we invoke the 
-        # arg parser of the contract proc
-        uplevel [::list proc $proc_name_as_passed args "    ::callback::${callback}::contract__arg_parser\n${log_code}$code_block"]
     } else {
         set parser_code "    ::upvar args args\n"
 
