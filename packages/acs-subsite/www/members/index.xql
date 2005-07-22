@@ -44,7 +44,15 @@
             from rel_segment_party_map
             where rel_type = 'admin_rel'
               and group_id = :group_id
-              and party_id = u.user_id) as member_admin_p
+              and party_id = u.user_id) as member_admin_p,
+           (select distinct r.pretty_name 
+            from acs_rel_roles r, rel_segment_party_map m, acs_rel_types t
+            where m.group_id = :group_id
+            and t.rel_type = m.rel_type
+            and m.rel_type <> 'admin_rel'
+            and m.rel_type <> 'membership_rel'
+            and r.role = t.role_two
+            and m.party_id = u.user_id) as other_role_pretty
     from   acs_rels r,
            membership_rels mr,
            cc_users u
