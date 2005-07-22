@@ -52,9 +52,7 @@ if { [template::form is_valid role_form] } {
     }
 
     db_transaction {
-	db_exec_plsql create_role {
-	    begin acs_rel_type.create_role(role => :role, pretty_name => :pretty_name, pretty_plural => :pretty_plural); end;
-	}
+        rel_types::create_role -pretty_name $pretty_name -pretty_plural $pretty_plural -role $role
     }
     ad_returnredirect $return_url
     ad_script_abort
