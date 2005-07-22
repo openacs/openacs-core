@@ -30,11 +30,14 @@ set supertype_options [db_list_of_lists "select_group_supertypes" {
           from acs_object_types t
        connect by prior t.object_type = t.supertype
          start with t.object_type = 'group'}]
+foreach opt $supertype_options {
+    lappend supertype_options_i18n [lang::util::localize $opt]
+}
 
 template::element create group_type supertype \
 	-datatype "text" \
 	-widget select \
-	-options $supertype_options \
+	-options $supertype_options_i18n \
 	-label "Supertype"
 
 template::element create group_type pretty_name \
