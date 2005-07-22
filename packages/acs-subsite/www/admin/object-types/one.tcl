@@ -33,7 +33,7 @@ if { ![db_0or1row object_type {
 
 
 
-set title "Details for type $pretty_name"
+set title "Details for type [lang::util::localize $pretty_name]"
 
 set page "
 [ad_admin_header $title]
@@ -55,8 +55,8 @@ append page "
 <p>
 <b>Information</b>:
  <ul>
-  <li>Pretty Name: $pretty_name</li>
-  <li>Pretty Plural: $pretty_plural</li>
+<li>Pretty Name: [lang::util::localize $pretty_name]</li>
+<li>Pretty Plural: [lang::util::localize $pretty_plural]</li>
   <li>Abstract: [ad_decode $abstract_p "f" "False" "True"]</li>
   <li>Dynamic: [ad_decode $dynamic_p "f" "False" "True"]</li>
   [ad_decode $table_name "" "" "<li>Table Name: $table_name</li>"]
