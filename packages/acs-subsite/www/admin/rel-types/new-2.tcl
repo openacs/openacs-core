@@ -81,6 +81,9 @@ set object_types_one_list [db_list_of_lists select_object_types_one {
    connect by prior t.object_type = t.supertype
      start with t.object_type=:max_object_type_one
 }]
+foreach obj $object_types_one_list {
+    lappend object_types_one_list_i18n [lang::util::localize $obj]
+}
 
 set object_types_two_list [db_list_of_lists select_object_types_two {
     select replace(lpad(' ', (level - 1) * 4), ' ', '&nbsp;') || t.pretty_name, 
@@ -89,18 +92,24 @@ set object_types_two_list [db_list_of_lists select_object_types_two {
    connect by prior t.object_type = t.supertype
      start with t.object_type=:max_object_type_two
 }]
+foreach obj $object_types_two_list {
+    lappend object_types_two_list_i18n [lang::util::localize $obj]
+}
 
 set roles_list [db_list_of_lists select_roles {
     select r.pretty_name, r.role
       from acs_rel_roles r
      order by lower(r.role)
 }]
+foreach role $roles_list {
+    lappend roles_list_i18n [lang::util::localize $role]
+}
 
 template::element create rel_type object_type_one \
 	-label "Object type one" \
 	-datatype text \
 	-widget select \
-	-options $object_types_one_list
+	-options $object_types_one_list_i18n
 
 # Set return_url here to set it up correctly for use with roles
 
@@ -110,7 +119,7 @@ template::element create rel_type role_one \
 	-label "Role one<br><font size=-1>(<a href=roles/new?return_url=$role_return_url_enc>create new role</a>)</font>" \
 	-datatype text \
 	-widget select \
-	-options $roles_list
+	-options $roles_list_i18n
 
 template::element create rel_type min_n_rels_one \
 	-value $supertype_min_n_rels_one \
@@ -128,14 +137,14 @@ template::element create rel_type object_type_two \
 	-label "Object type two" \
 	-datatype text \
 	-widget select \
-	-options $object_types_two_list
+	-options $object_types_two_list_i18n
 
 
 template::element create rel_type role_two \
 	-label "Role two<br><font size=-1>(<a href=roles/new?return_url=$role_return_url_enc>create new role</a>)</font>" \
 	-datatype text \
 	-widget select \
-	-options $roles_list
+	-options $roles_list_i18n
 
 template::element create rel_type min_n_rels_two \
 	-value $supertype_min_n_rels_two \
