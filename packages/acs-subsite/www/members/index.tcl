@@ -175,7 +175,11 @@ db_multirow -extend {
     if { $member_admin_p > 0 } {
         set rel_role_pretty [lang::util::localize $admin_role_pretty]
     } else {
-        set rel_role_pretty [lang::util::localize $member_role_pretty]
+        if { ![empty_string_p $other_role_pretty] } {
+            set rel_role_pretty [lang::util::localize $other_role_pretty]
+        } else {
+            set rel_role_pretty [lang::util::localize $member_role_pretty]
+        }
     }
     set member_state_pretty [group::get_member_state_pretty -member_state $member_state]
     set user_email [email_image::get_user_email -user_id $user_id]
