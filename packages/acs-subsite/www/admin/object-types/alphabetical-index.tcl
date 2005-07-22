@@ -25,7 +25,7 @@ db_foreach object_type_in_alphabetical_order {
      order by lower(pretty_name)
 } {
 
-    append body "\n    <a href=\"./one?[export_url_vars object_type]\">$pretty_name</a><br>"
+    append body "\n    <a href=\"./one?[export_url_vars object_type]\">[lang::util::localize $pretty_name]</a><br>"
 
 }
 
