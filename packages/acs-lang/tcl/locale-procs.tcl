@@ -290,9 +290,10 @@ ad_proc -public lang::user::site_wide_locale {
     }
 
     # For all the users with a user_id of 0 don't cache.
-    if { $user_id == 0} {
-	return [lang::user::site_wide_locale_not_cached $user_id]
-    }
+    # MS: WHY ON EARTH ?
+    #    if { $user_id == 0} {
+    #	return [lang::user::site_wide_locale_not_cached $user_id]
+    #    }
 
     # Cache for the lifetime of sessions (7 days)
     return [util_memoize [list lang::user::site_wide_locale_not_cached $user_id] [sec_session_timeout]]
@@ -303,14 +304,18 @@ ad_proc -private lang::user::site_wide_locale_not_cached {
 } {
     Get the user's preferred site wide locale.
 } {
+    set system_locale [lang::system::site_wide_locale]
     if { $user_id == 0 } {
 	set locale [ad_get_cookie "ad_locale"]
 	if { [empty_string_p $locale] } {
-	    set locale [lang::system::site_wide_locale]
+	    set locale $system_locale
 	}
 	return $locale
     } else {
-        return [db_string get_user_site_wide_locale {} -default ""]
+	# MS: This is a bug, as the returned value is different whether
+	# you give it a user_id or not. WHY EVER this was done.
+	
+        return [db_string get_user_site_wide_locale {} -default "$system_locale"]
     }
 }
 
