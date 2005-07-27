@@ -77,11 +77,20 @@
   <msg key="common_view">view</msg>
   <msg key="common_Yes">Yes</msg>
   <msg key="common_yes">yes</msg>
+  <msg key="Default_Context">Default Context</msg>
   <msg key="Email_Address">Email Address</msg>
   <msg key="First_Names">First Names</msg>
   <msg key="Group">Group</msg>
   <msg key="Last_Name">Last Name</msg>
   <msg key="lt_Administrator_Relatio">Administrator Relationship</msg>
+  <msg key="lt_Main_Site_Administrat">Main Site Administrators</msg>
+  <msg key="lt_Relational_Constraint">Relational Constraint</msg>
+  <msg key="lt_Relational_Constraint_1">Relational Constraints</msg>
+  <msg key="lt_Relational_Party_Segm">Relational Party Segment</msg>
+  <msg key="lt_Relational_Party_Segm_1">Relational Party Segments</msg>
+  <msg key="lt_Security_context_root">Security context root</msg>
+  <msg key="Main_Site">Main Site</msg>
+  <msg key="Main_Site_Members">Main Site Members</msg>
   <msg key="Member_role_pretty_name">Member</msg>
   <msg key="member_role_pretty_name">member</msg>
   <msg key="Member_role_pretty_plural">Members</msg>
@@ -99,6 +108,8 @@
   <msg key="Membership_Relation">Membership Relation</msg>
   <msg key="Party">Party</msg>
   <msg key="Person">Person</msg>
+  <msg key="Registered_Users">Registered Users</msg>
+  <msg key="The_Public">The Public</msg>
   <msg key="Unregistered_Visitor">Unregistered Visitor</msg>
   <msg key="User">User</msg>
 </message_catalog>
