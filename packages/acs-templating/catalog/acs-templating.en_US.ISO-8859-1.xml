@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-templating" package_version="5.1.4" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-templating" package_version="5.2.0a1" locale="en_US" charset="ISO-8859-1">
 
   <msg key="12-Hour">12-Hour</msg>
   <msg key="24-Hour">24-Hour</msg>
+  <msg key="data">data</msg>
   <msg key="Day">Day</msg>
   <msg key="Element_is_required">%label% is required</msg>
   <msg key="Element_is_too_long_Plural">%label% is %excess_no_bytes% characters too long.</msg>
@@ -17,11 +18,16 @@
   <msg key="Invalid_keyword">Invalid keyword</msg>
   <msg key="Invalid_natural_number">Invalid natural number </msg>
   <msg key="Invalid_url">Invalid url</msg>
+  <msg key="lt_Checkuncheck_all_rows">Check/uncheck all rows</msg>
+  <msg key="lt_Checkuncheck_this_row">Check/uncheck this row, and select an action to perform below</msg>
+  <msg key="lt_When_specifying_a_non">When specifying a non-zero page_size, you must also provide either page_query or page_query_name</msg>
   <msg key="Meridian">Meridian</msg>
   <msg key="Minutes">Minutes</msg>
   <msg key="Month">Month</msg>
   <msg key="Next_with_arrow">Next &gt;&gt;</msg>
   <msg key="No_row_pretty_plural">No %row_pretty_plural%.</msg>
+  <msg key="Page">Page</msg>
+  <msg key="Page_Size">Page Size</msg>
   <msg key="Previous_with_arrow">&lt;&lt; Previous</msg>
   <msg key="required">required</msg>
   <msg key="Seconds">Seconds</msg>

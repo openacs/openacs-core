@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-templating" package_version="5.1.2" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-templating" package_version="5.2.0a1" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="12-Hour">12-stündig</msg>
   <msg key="24-Hour">24-stündig</msg>
+  <msg key="data">Daten</msg>
   <msg key="Day">Tag</msg>
   <msg key="Element_is_required">%label% muss ausgefüllt werden</msg>
   <msg key="Element_is_too_long_Plural">%label% ist um %excess_no_bytes% Zeichen zu lang.</msg>

@@ -33,7 +33,7 @@ ad_proc -public template::list::create {
     {-has_checkboxes:boolean}
     {-checkbox_name "checkbox"}
     {-orderby_name "orderby"}
-    {-row_pretty_plural "data"}
+    {-row_pretty_plural "#acs-templating.data#"}
     {-no_data ""}
     {-main_class "list"}
     {-sub_class ""}
@@ -285,6 +285,7 @@ ad_proc -public template::list::create {
     }
 
     # Set default for no_data
+    set row_pretty_plural [lang::util::localize $row_pretty_plural]
     set no_data [ad_decode $no_data "" [_ acs-templating.No_row_pretty_plural] $no_data]
     # Set ulevel to the level of the page, so we can access it later
     set list_properties(ulevel) "\#[expr [info level] - $ulevel]"
@@ -336,8 +337,8 @@ ad_proc -public template::list::create {
             -list_name $name \
             -element_name $checkbox_name \
             -spec {
-                label {<input type="checkbox" name="_dummy" onclick="acs_ListCheckAll('$name', this.checked)" title="Check/uncheck all rows">}
-                display_template {<input type="checkbox" name="$key" value="@$list_properties(multirow).$key@" id="$name,@$list_properties(multirow).$key@" title="Check/uncheck this row, and select an action to perform below">}
+                label {<input type="checkbox" name="_dummy" onclick="acs_ListCheckAll('$name', this.checked)" title="[_ acs-templating.lt_Checkuncheck_all_rows]">}
+                display_template {<input type="checkbox" name="$key" value="@$list_properties(multirow).$key@" id="$name,@$list_properties(multirow).$key@" title="[_ acs-templating.lt_Checkuncheck_this_row]">}
                 sub_class {narrow}
                 html { align center }
             }
@@ -428,20 +429,20 @@ ad_proc -public template::list::create {
         template::list::filter::create \
             -list_name $name \
             -filter_name "page_size" \
-            -spec [list label "Page Size" default_value 20 hide_p t]
+            -spec [list label "[_ acs-templating.Page_Size]" default_value 20 hide_p t]
     }
 
     if { (![empty_string_p $list_properties(page_size)] && $list_properties(page_size) != 0) || $list_properties(page_size_variable_p) == 1 } {
         # Check that we have either page_query or page_query_name
         if { [empty_string_p $list_properties(page_query)] && [empty_string_p $list_properties(page_query_name)] } {
-            error "When specifying a non-zero page_size, you must also provide either page_query or page_query_name"
+            error "[_ acs-templating.lt_When_specifying_a_non]"
         }
 
         # We create the selected page as a filter, so we get the filter,page thing out
         template::list::filter::create \
             -list_name $name \
             -filter_name "page" \
-            -spec [list label "Page" default_value 1 hide_p t]
+            -spec [list label "[_ acs-templating.Page]" default_value 1 hide_p t]
     }
 
     # Done, prepare the list. This has to be done while we still have access to the caller's scope
