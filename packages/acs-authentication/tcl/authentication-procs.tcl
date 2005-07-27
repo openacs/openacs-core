@@ -1213,11 +1213,29 @@ ad_proc -private auth::get_local_account {
         if { [string equal $info_result(info_status) "ok"] } {
 
             array set user $info_result(user_info)
-            set user(user_id) [auth::create_local_account \
+            array set creation_info [auth::create_local_account \
                                    -authority_id $authority_id \
                                    -username $username \
                                    -array user]
-            acs_user::get -authority_id $authority_id -username $username -array user
+
+	    if { [string equal $creation_info(creation_status) "ok"] } {
+		acs_user::get -authority_id $authority_id -username $username -array user
+	    } else {
+		set auth_info(account_status) "closed"
+		# Used to get help contact info
+		auth::authority::get -authority_id $authority_id -array authority
+		set system_name [ad_system_name]
+		set auth_info(account_message) "You have successfully authenticated, but we were unable to create an account for you on $system_name. "
+		append auth_info(account_message) "The error was: $creation_info(element_messages). Please contact the system administrator." 
+		
+		if { ![empty_string_p $authority(help_contact_text)] } {
+		    append auth_info(account_message) "<p><h3>Help Information</h3>"
+		    append auth_info(account_message) [ad_html_text_convert \
+							   -from $authority(help_contact_text_format) \
+							   -to "text/html" -- $authority(help_contact_text)]
+		}
+		return [array get auth_info]
+	    }
 
         } else {
         
