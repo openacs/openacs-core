@@ -1,11 +1,11 @@
 <master>
-  <property name="title">Problem with your input</property>
+  <property name="title">#acs-tcl.lt_Problem_with_your_inp#</property>
 
 <p>
-  We had
-  <if @complaints:rowcount@ gt 1>some problems</if>
-  <else>a problem</else>
-  with your input:
+  #acs-tcl.We_had#
+  <if @complaints:rowcount@ gt 1>#acs-tcl.some_problems#</if>
+  <else>#acs-tcl.a_problem#</else>
+  #acs-tcl.with_your_input#
 </p>
 
 <ul>
@@ -18,9 +18,10 @@
 </ul>
 
 <p>
-  Please back up using your browser, correct the above <if @complaints:rowcount@ gt 1>s</if>, and resubmit your entry.
+  #acs-tcl.lt_Please_back_up_using_# <if @complaints:rowcount@ gt 1>#acs-tcl.errors#</if><else>#acs-tcl.error#</else>#acs-tcl.lt__and_resubmit_your_en#
 </p>
 
 <p>
-  Thank you.
+  #acs-tcl.Thank_you#
 </p>
+
