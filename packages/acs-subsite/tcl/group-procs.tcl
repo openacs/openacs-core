@@ -214,6 +214,24 @@ ad_proc -public group::get_element {
     return $row($element)
 }
 
+ad_proc -public group::get_id {
+    {-group_name:required}
+} {
+    Retrieve the group_id to a given group-name.
+    Note: this WILL bomb if the group-name is not unique.
+
+    @author Christian Langmann (C_Langmann@gmx.de)
+    @creation-date 2005-06-09
+
+    @param group_name the name of the group to look for
+
+    @return the id of the group
+
+    @error
+} {
+    return [db_string get_group_id {} -default ""]
+}
+
 ad_proc -public group::get_members {
     {-group_id:required}
     {-type "party"}

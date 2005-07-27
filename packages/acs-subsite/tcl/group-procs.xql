@@ -21,6 +21,16 @@
       </querytext>
 </fullquery>
 
+<fullquery name="group::get_id.get_group_id">
+      <querytext>
+      
+	select group_id
+	from groups
+	where group_name = :group_name
+	
+      </querytext>
+</fullquery>
+
 <fullquery name="group::get_members_not_cached.group_members_party">
       <querytext>
       
