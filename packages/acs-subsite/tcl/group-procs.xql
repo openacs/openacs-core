@@ -11,7 +11,6 @@
       </querytext>
 </fullquery>
 
- 
 <fullquery name="group::new.package_select">      
       <querytext>
       
@@ -22,7 +21,38 @@
       </querytext>
 </fullquery>
 
- 
+<fullquery name="group::get_members_not_cached.group_members_party">
+      <querytext>
+      
+		select member_id
+		from group_member_map
+		where group_id = :group_id
+	
+      </querytext>
+</fullquery>
+
+<fullquery name="group::get_members_not_cached.group_members_person">
+      <querytext>
+      
+		select m.member_id
+		from group_member_map m, persons p
+		where m.group_id = :group_id
+		and m.member_id = p.person_id
+	
+      </querytext>
+</fullquery>
+
+<fullquery name="group::get_members_not_cached.group_members_user">
+      <querytext>
+      
+		select m.member_id
+		from group_member_map m, users u
+		where m.group_id = :group_id
+		and m.member_id = u.user_id
+	
+      </querytext>
+</fullquery>
+
 <fullquery name="group::join_policy.select_join_policy">      
       <querytext>
       
@@ -50,7 +80,4 @@
       </querytext>
 </fullquery>
 
- 
-
- 
 </queryset>

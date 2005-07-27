@@ -214,6 +214,62 @@ ad_proc -public group::get_element {
     return $row($element)
 }
 
+ad_proc -public group::get_members {
+    {-group_id:required}
+    {-type "party"}
+} {
+    Get party_ids of all members from cache.
+
+    @param type Type of members - party, person, user
+
+    @see group::get_members_not_cached
+    @see group::flush_members_cache
+
+    @author Timo Hentschel (timo@timohentschel.de)
+    @creation-date 2005-07-26
+} {
+    return [util_memoize [list group::get_members_not_cached -group_id $group_id -type $type]]
+}
+
+ad_proc -private group::get_members_not_cached {
+    {-group_id:required}
+    {-type:required}
+} {
+    Get party_ids of all members.
+
+    @param type Type of members - party, person, user
+
+    @see group::get_members
+    @see group::flush_members_cache
+
+    @author Timo Hentschel (timo@timohentschel.de)
+    @creation-date 2005-07-26
+} {
+    switch $type {
+	party  { set member_list [db_list group_members_party {}] }
+	person { set member_list [db_list group_members_person {}] }
+	user   { set member_list [db_list group_members_user {}] }
+    }
+
+    return $member_list
+}
+
+ad_proc -private group::flush_members_cache {
+    {-group_id:required}
+} {
+    Flush group members cache.
+
+    @see group::get_members
+    @see group::get_members_not_cached
+
+    @author Timo Hentschel (timo@timohentschel.de)
+    @creation-date 2005-07-26
+} {
+    util_memoize_flush "group::get_members_not_cached -group_id $group_id -type party"
+    util_memoize_flush "group::get_members_not_cached -group_id $group_id -type user"
+    util_memoize_flush "group::get_members_not_cached -group_id $group_id -type person"
+}
+
 ad_proc -public group::permission_p { 
     { -user_id "" }
     { -privilege "read" }
@@ -499,6 +555,7 @@ ad_proc -public group::add_member {
     }
     
     relation_add -member_state $member_state $rel_type $group_id $user_id
+    flush_members_cache -group_id $group_id
 }
 
 
@@ -524,4 +581,6 @@ ad_proc -public group::remove_member {
             relation_remove $rel_id
         }
     }
+
+    flush_members_cache -group_id $group_id
 }
