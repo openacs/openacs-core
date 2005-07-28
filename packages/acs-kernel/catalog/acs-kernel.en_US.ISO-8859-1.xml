@@ -22,6 +22,7 @@
   <msg key="common_closed">closed</msg>
   <msg key="common_Continue">Continue</msg>
   <msg key="common_continue">continue</msg>
+  <msg key="common_Copy">Copy</msg>
   <msg key="common_Default">Use Default</msg>
   <msg key="common_default">use default</msg>
   <msg key="common_Delete">Delete</msg>
@@ -71,6 +72,8 @@
   <msg key="common_Stop">Stop</msg>
   <msg key="common_stop">stop</msg>
   <msg key="common_Submit">Submit</msg>
+  <msg key="common_Title">Title</msg>
+  <msg key="common_Type">Type</msg>
   <msg key="common_Update">Update</msg>
   <msg key="common_update">update</msg>
   <msg key="common_View">View</msg>
