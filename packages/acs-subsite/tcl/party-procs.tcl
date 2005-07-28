@@ -207,5 +207,22 @@ namespace eval party {
 	}
 
     }
-
+    
+    ad_proc -public email {
+	{-party_id:required}
+    } {
+	this returns the parties email. Cached
+    } {
+	return [util_memoize [list ::contact::email_not_cached -party_id $party_id]]
+    }
+    
+    ad_proc -private email_not_cached {
+	{-party_id:required}
+    } {
+	this returns the contact's name
+    } {
+	set email [db_string get_party_email { select email from parties where party_id = :party_id } -default {}]
+	return $email
+    }
+    
 }
