@@ -150,28 +150,28 @@ template::list::create \
             html "align left"
 	    display_template {
 		<if @nodes.add_folder_url@ ne "">
-		  <a href="@nodes.add_folder_url@#add">add folder</a>
+		  <a href="@nodes.add_folder_url@#add">[_ acs-subsite.add_folder]</a>
 		</if>
 		<if @nodes.new_app_url@ ne "">
-		  <a href="@nodes.new_app_url@#new">new application</a>
+		  <a href="@nodes.new_app_url@#new">[_ acs-subsite.new_application]</a>
 		</if>
 		<if @nodes.unmount_url@ ne "">
-		  <a href="@nodes.unmount_url@">unmount</a>
+		  <a href="@nodes.unmount_url@">[_ acs-subsite.unmount]</a>
 		</if>
 		<if @nodes.mount_url@ ne "">
-		  <a href="@nodes.mount_url@">mount</a>
+		  <a href="@nodes.mount_url@">[_ acs-subsite.mount]</a>
 		</if>
 		<if @nodes.rename_url@ ne "">
-		  <a href="@nodes.rename_url@#rename">rename</a>
+		  <a href="@nodes.rename_url@#rename">[_ acs-subsite.rename]</a>
 		</if>
 		<if @nodes.delete_url@ ne "">
-		  <a href="@nodes.delete_url@" onclick="return confirm('Are you sure you want to delete node @nodes.name@ and any package mounted there?');">delete</a>
+		  <a href="@nodes.delete_url@" onclick="return confirm('Are you sure you want to delete node @nodes.name@ and any package mounted there?');">[_ acs-subsite.delete]</a>
 		</if>
 		<if @nodes.parameters_url@ ne "">
-		  <a href="@nodes.parameters_url@">parameters</a>
+		  <a href="@nodes.parameters_url@">[_ acs-subsite.parameters]</a>
 		</if>
 		<if @nodes.permissions_url@ ne "">
-		  <a href="@nodes.permissions_url@">permissions</a>
+		  <a href="@nodes.permissions_url@">[_ acs-subsite.permissions]</a>
 		</if>
 		<if @nodes.extra_form_part@ ne "">
 		  @nodes.extra_form_part;noquote@

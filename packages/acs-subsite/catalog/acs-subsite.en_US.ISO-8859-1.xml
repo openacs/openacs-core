@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.2.0d3" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.2.0a2" locale="en_US" charset="ISO-8859-1">
 
   <msg key="_or">, or</msg>
   <msg key="_Update_Basic_Information">Update Basic Information</msg>
@@ -29,8 +29,14 @@
   <msg key="Account_reopened_message">Your account at %system_name% has been reopened. Welcome back.</msg>
   <msg key="Account_reopened_title">Account Reopened</msg>
   <msg key="Action">Action</msg>
+  <msg key="Add">Add</msg>
+  <msg key="add_folder">add folder</msg>
   <msg key="Add_new_app">Add new application</msg>
+  <msg key="Add_this_user">Add this user</msg>
+  <msg key="Add_User">Add User</msg>
+  <msg key="Add_users">Add users</msg>
   <msg key="Admin">Control Panel</msg>
+  <msg key="admin">Admin</msg>
   <msg key="Administer_subsite">Administer %subsite_name%</msg>
   <msg key="Administrative_options">Administrative options for this user</msg>
   <msg key="Alert_Type">Alert Type</msg>
@@ -45,8 +51,8 @@
   <msg key="Bad_Password">Bad Password</msg>
   <msg key="Ban">Ban</msg>
   <msg key="Basic_Information">Basic Information</msg>
-  <msg key="Biography">Biography</msg>
   <msg key="Biographies">Biographies</msg>
+  <msg key="Biography">Biography</msg>
   <msg key="Biography_Mime_Type">Biography Mime Type</msg>
   <msg key="Biography_Mime_Types">Biography Mime Types</msg>
   <msg key="cannot_retrieve_password">Retrieving password from local authority is not supported.</msg>
@@ -81,6 +87,7 @@ logging in again. &lt;/p&gt;
   <msg key="Continue">Continue</msg>
   <msg key="Continue_to_your_account">Continue to %pvt_home_name%</msg>
   <msg key="Country_Name">Country Name</msg>
+  <msg key="create">Create</msg>
   <msg key="create_asm">Create a new custom registration questionnaire</msg>
   <msg key="Create_new_community">Create new %pretty_name%</msg>
   <msg key="Create_new_subsite">Create new subsite</msg>
@@ -91,6 +98,7 @@ logging in again. &lt;/p&gt;
   <msg key="Database_Error">Database Error</msg>
   <msg key="default_context">default context</msg>
   <msg key="Delete">Delete</msg>
+  <msg key="delete">delete</msg>
   <msg key="DevAdmin">DevAdmin</msg>
   <description key="DevAdmin">Can we please have a description about the purpose of this key?</description>
 
@@ -165,6 +173,7 @@ Please visit the following link to change your password now:
   <msg key="Home_page">Home page</msg>
   <msg key="If_you_were_to">If you were to</msg>
   <msg key="Information_Updated">Information Updated</msg>
+  <msg key="Install_locales">Install Locales</msg>
   <msg key="Invite">Invite</msg>
   <msg key="ISO_Code">ISO Code</msg>
   <msg key="ISO_Code_List">ISO Code List</msg>
@@ -193,9 +202,15 @@ Please visit the following link to change your password now:
   <msg key="Logout">Logout</msg>
   <msg key="Logout_from_system">Logout from %system_name%</msg>
   <msg key="lt__youd_be_able_to_get">, you'd be able to get more information on your fellow community member.</msg>
+  <msg key="lt_Add_checked_users_to_">Add checked users to users who have permissions on your object.</msg>
   <msg key="lt_Cannot_join_this_grou">Cannot join this group.</msg>
   <msg key="lt_Complete_List_of_ISO_">Complete List of ISO Codes</msg>
   <msg key="lt_Continue_working_with">Continue working with %system_name%</msg>
+  <msg key="lt_deleteaifif_nodespara">delete&lt;/a&gt;
+		&lt;/if&gt;
+		&lt;if @nodes.parameters_url@ ne &quot;&quot;&gt;
+		  &lt;a href=&quot;@nodes.parameters_url@&quot;&gt;&lt;#_ parameters</msg>
+  <msg key="lt_Do_not_inherit_from_p">Do not inherit from $parent_object_name</msg>
   <msg key="lt_Edit_comment_for_the_">Edit comment for the portrait of %first_names% %last_name%</msg>
   <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) registered as a user of 
 %system_url%</msg>
@@ -207,6 +222,8 @@ Please visit the following link to change your password now:
   <msg key="lt_If_you_happen_to_know">If you happen to know or believe that the person you would like to
   invite already has an account on this system:</msg>
   <msg key="lt_If_you_need_this_func">If you need this functionality, please load acs-reference and ref-countries.</msg>
+  <msg key="lt_Inherit_from_parent_o">Inherit from $parent_object_name</msg>
+  <msg key="lt_Inherit_permissions_f">Inherit permissions from the $parent_object_name</msg>
   <msg key="lt_Inherited_Permissions">Inherited Permissions</msg>
   <msg key="lt_It_would_be_a_very_ba">It would be a very bad idea to choose this option if you're using a
 shared computer in a library or school.  Any subsequent user of this
@@ -244,9 +261,11 @@ waiting approval.</msg>
   <msg key="lt_Saving_email_address_">Saving email address and password</msg>
   <msg key="lt_Show_everyone_else_at">Show everyone else at %system_name% how great looking you are:</msg>
   <msg key="lt_Sorry_but_it_seems_th">Sorry but it seems that you've been banned from %system_name%.</msg>
+  <msg key="lt_Stop_inheriting_permi">Stop inheriting permissions from the $parent_object_name</msg>
   <msg key="lt_Sure_erase_user_por">Are you sure that you want to erase this user's portrait?</msg>
   <msg key="lt_Sure_erase_your_por">Are you sure that you want to erase your portrait?</msg>
   <msg key="lt_The_picture_of_you_in">The picture of you in the system is invalid. Please</msg>
+  <msg key="lt_There_are_no_users_wh">There are no users who don't already have access to this object</msg>
   <msg key="lt_There_was_a_problem_w">There was a problem with authenticating your account</msg>
   <msg key="lt_This_is_the_image_that">This is the image that we show to other users at %system_name%</msg>
   <msg key="lt_This_user_doesnt_have">This user doesn't have a portrait yet. You can</msg>
@@ -288,7 +307,9 @@ account was deleted for some reason.</msg>
   <msg key="Member_State">Member State</msg>
   <msg key="Members">Members</msg>
   <msg key="Missing_argument">Missing argument</msg>
+  <msg key="mount">mount</msg>
   <msg key="Name">Name</msg>
+  <msg key="new_application">new application</msg>
   <msg key="New_Password">New Password</msg>
   <msg key="No_applications">No applications</msg>
   <msg key="no_assessment">No assessment available</msg>
@@ -311,6 +332,7 @@ account was deleted for some reason.</msg>
   <msg key="Options">Options</msg>
   <msg key="Or_add_a_new_user">Or add a new user</msg>
   <msg key="or_the">or the</msg>
+  <msg key="parameters">parameters</msg>
   <msg key="Password">Password</msg>
   <msg key="Password_changed_body">Your login information on %system_name%:
 
@@ -343,6 +365,7 @@ You can always change your password by doing the following:
   <msg key="Profile">Profile</msg>
   <msg key="Question">Question</msg>
   <msg key="Re_enable">Re-enable</msg>
+  <msg key="read">Read</msg>
   <msg key="Recover_Password">Recover Password</msg>
   <msg key="Refresh_login">Refresh login</msg>
   <msg key="reg_asm_link">Custom User Registration Questionnaire</msg>
@@ -355,6 +378,7 @@ You can always change your password by doing the following:
   <msg key="Remember_my_login">Remember my login on this computer</msg>
   <msg key="Remove">Remove</msg>
   <msg key="Remove_All">Remove All</msg>
+  <msg key="rename">rename</msg>
   <msg key="Req_membership_comm">Request membership of this community</msg>
   <msg key="Req_membership_subs">Request membership of this subsite</msg>
   <msg key="Request_membership">Request membership</msg>
@@ -373,6 +397,7 @@ You can always change your password by doing the following:
 
 </msg>
   <msg key="Show">Show</msg>
+  <msg key="Site_Wide_Admin">Site Wide Administration</msg>
   <msg key="Site_wide_administration">Site-wide administration</msg>
   <msg key="sorry_forgotten_pwd">Sorry, we can't help you with your forgotten password.</msg>
   <msg key="Status">Status</msg>
@@ -395,6 +420,7 @@ You can always change your password by doing the following:
   <msg key="Topic">Topic</msg>
   <msg key="type_specific_info">type-specific info</msg>
   <msg key="Unknown_email">Unknown email</msg>
+  <msg key="unmount">unmount</msg>
   <msg key="UP">UP</msg>
   <description key="UP">Can we please have a description of this key??</description>
 
@@ -419,6 +445,7 @@ You can always change your password by doing the following:
   <msg key="When_leaving_checkbox_empty">When you leave a checkbox empty here then that privilege will be revoked from the party you choose in case it has been granted to that party before.</msg>
   <msg key="Whos_Online_link_label">Users currently online</msg>
   <msg key="Whos_Online_title">Who's Online</msg>
+  <msg key="write">Write</msg>
   <msg key="Yes_I_am_sure">Yes, I'm sure</msg>
   <msg key="You_are_in_the_follow">You are in the following groups:</msg>
   <msg key="You_can_also_browse_from">You can also browse from the</msg>
