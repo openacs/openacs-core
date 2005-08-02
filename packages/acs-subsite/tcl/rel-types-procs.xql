@@ -34,5 +34,11 @@ where group_type= :group_type
 and rel_type= :rel_type
 </querytext>
 </fullquery>
+
+<fullquery name="rel_types::create_role.get_roles">
+<querytext>
+select role from acs_rel_roles
+</querytext>
+</fullquery>
  
 </queryset>

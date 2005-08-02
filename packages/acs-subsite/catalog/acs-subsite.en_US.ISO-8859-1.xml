@@ -332,8 +332,8 @@ account was deleted for some reason.</msg>
   <msg key="Options">Options</msg>
   <msg key="Or_add_a_new_user">Or add a new user</msg>
   <msg key="or_the">or the</msg>
-  <msg key="parameters">parameters</msg>
   <msg key="Parameters">Parameters</msg>
+  <msg key="parameters">parameters</msg>
   <msg key="Password">Password</msg>
   <msg key="Password_changed_body">Your login information on %system_name%:
 

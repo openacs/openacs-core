@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.2.0d2" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.2.0a2" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="_or"> oder</msg>
   <msg key="_Update_Basic_Information">Die Allgemeinen Informationen aktualisieren</msg>
@@ -14,8 +14,14 @@
   <msg key="Account_reopened_message">Ihr Benutzerkonto wurde wieder aktiviert. Willkommen bei %system_name%.</msg>
   <msg key="Account_reopened_title">Benutzerkonto wieder aktiviert</msg>
   <msg key="Action">Aktion</msg>
+  <msg key="Add">Hinzufügen</msg>
+  <msg key="add_folder">Ordner hinzufügen</msg>
   <msg key="Add_new_app">Neue Anwendung hinzufügen</msg>
+  <msg key="Add_this_user">Diesen User hinzufügen</msg>
+  <msg key="Add_User">User hinzufügen</msg>
+  <msg key="Add_users">User hinzufügen</msg>
   <msg key="Admin">Verwalten</msg>
+  <msg key="admin">Admin</msg>
   <msg key="Administer_subsite">%subsite_name% verwalten</msg>
   <msg key="Administrative_options">Verwaltungsoptionen für diesen Benutzer</msg>
   <msg key="Alert_Type">Art der Benachrichtigung</msg>
@@ -34,6 +40,7 @@
   <msg key="cannot_retrieve_password">Passwort zurücksetzen durch lokale Authentifizierungsstelle nicht unterstützt</msg>
   <msg key="Cannot_see_memb_list">Liste der Teilnehmer verborgen</msg>
   <msg key="Change_locale_label">Sprache einstellen</msg>
+  <msg key="Change_my_email_P">Änderung meines e-Mail Privacy Levels</msg>
   <msg key="Change_my_Password">Passwort ändern</msg>
   <msg key="Change_pass_email_por">Passwort, E-Mail-Adresse oder Bild ändern</msg>
   <msg key="Check_Your_Inbox">Überpüfen Sie Ihr Postfach</msg>
@@ -51,6 +58,7 @@
   <msg key="Continue">Fortsetzen</msg>
   <msg key="Continue_to_your_account">Weiter nach %pvt_home_name%</msg>
   <msg key="Country_Name">Land</msg>
+  <msg key="create">Erstellen</msg>
   <msg key="Create_new_community">Neue %pretty_name% erstellen</msg>
   <msg key="Create_new_subsite">Neue Subsite erstellen</msg>
   <msg key="Current_Password">Aktuelles Passwort:</msg>
@@ -60,6 +68,7 @@
   <msg key="Database_Error">Datenbankfehler</msg>
   <msg key="default_context">Standardkontext</msg>
   <msg key="Delete">Löschen</msg>
+  <msg key="delete">löschen</msg>
   <msg key="DevAdmin">Administration (Entwickler)</msg>
   <msg key="Developers_Admin">Administration auf Entwicklerebene</msg>
   <msg key="Direct_Permissions">Explizite Berechtigungen</msg>
@@ -70,9 +79,13 @@
   <msg key="edit_comment">Kommentar bearbeiten</msg>
   <msg key="Elements_not_editable">Einige Elemente können nicht bearbeitet werden, da sie von %authority_name% verwaltet werden.</msg>
   <msg key="Email">E-Mail-Adresse</msg>
+  <msg key="email_as_a_form">Zulassen, mich über ein Formular anzusprechen</msg>
+  <msg key="email_as_image">Meine e-Mail als Bild anzeigen</msg>
+  <msg key="email_as_text">Meine e-Mail als Text anzeigen</msg>
   <msg key="email_body_Forgotten_password">Hier sind Ihre neuen Anmeldedaten: %account_id_label%: %account_id% %password_label%: %password%. Bitte ändern Sie Ihr Passwort unter folgendem Link: %reset_password_url%</msg>
   <msg key="email_body_Registration_password">Vielen Dank für Ihre Registrierung bei %system_name%. Mit folgenden Daten können Sie sich bei %system_url% anmelden: %account_id_label%: %account_id% %password_label%: %password% Bitte ändern Sie Ihr Passwort unter folgendem Link: %reset_password_url%</msg>
   <msg key="Email_Confirmation">E-Mail-Adresse bestätigen:</msg>
+  <msg key="email_dont_show">Meine e-Mail nicht anzeigen</msg>
   <msg key="Email_not_Requested">E-Mail nicht angefordert</msg>
   <msg key="Email_required">Email-Adresse muss angegeben werden</msg>
   <msg key="email_subject_Forgotten_password">Ihr vergessenes Passwort für %system_name%</msg>
@@ -102,6 +115,7 @@
   <msg key="Home_page">Homepage</msg>
   <msg key="If_you_were_to">Wenn Sie sich anmelden </msg>
   <msg key="Information_Updated">Die Information wurde aktualisiert.</msg>
+  <msg key="Install_locales">Sprachen installieren</msg>
   <msg key="Invite">Einladen</msg>
   <msg key="ISO_Code">ISO-Code</msg>
   <msg key="ISO_Code_List">Liste der ISO-Codes</msg>
@@ -130,6 +144,7 @@
   <msg key="Logout">Abmelden</msg>
   <msg key="Logout_from_system">Von %system_name% abmelden</msg>
   <msg key="lt__youd_be_able_to_get">, werden Ihnen mehr Informationen über andere Teilnehmer Ihrer Gruppe angezeigt.</msg>
+  <msg key="lt_Add_checked_users_to_">Markierte User zu den Usern hinzufügen, die Zugriffsrechte auf das Objekt haben.</msg>
   <msg key="lt_Cannot_join_this_grou">Diese Gruppe kann nicht hinzugefügt werden.</msg>
   <msg key="lt_Complete_List_of_ISO_">Vollständige Liste der ISO-Codes</msg>
   <msg key="lt_Continue_working_with">Weiterarbeiten mit %system_name% </msg>
@@ -143,6 +158,8 @@
   <msg key="lt_If_you_dont_think_the">Wenn die Person noch kein Benutzerkonto hat:</msg>
   <msg key="lt_If_you_happen_to_know">Wenn die Person, die Sie einladen wollen, bereits ein Benutzerkonto auf diesem System hat:</msg>
   <msg key="lt_If_you_need_this_func">Wenn Sie diese Funktionalität nutzen wollen, laden Sie bitte acs-reference und ref-countries.</msg>
+  <msg key="lt_Inherit_from_parent_o">Übernehmen von $parent_object_name</msg>
+  <msg key="lt_Inherit_permissions_f">Zugriffsberechtigungen von $parent_object_name übernehmen</msg>
   <msg key="lt_Inherited_Permissions">Vererbte Berechtigungen</msg>
   <msg key="lt_It_would_be_a_very_ba">Diese Option sollte nicht gewählt werden, wenn der Computer von mehreren Personen genutzt wird, etwa in einer Bibliothek oder einem universitären Rechenzentrum. Nachfolgende Benutzer können sonst unter Ihrer Identität auf den Dienst zugreifen.</msg>
   <msg key="lt_New_registration_at_s">Neue Registrierung bei %system_url%</msg>
@@ -220,6 +237,7 @@
   <msg key="Options">Optionen</msg>
   <msg key="Or_add_a_new_user">oder einen neuen Benutzer hinzufügen</msg>
   <msg key="or_the">oder das</msg>
+  <msg key="parameters">parameter</msg>
   <msg key="Password">Passwort</msg>
   <msg key="Password_changed_body">Das Passwort Ihres Benutzerkontos (%account_id_label%: %account_id%) bei %system_name% wurde kürzlich geändert. Es sind keine weiteren Schritte nötig, diese Mitteilung dient lediglich Ihrer Sicherheit. --------------- Sie können Ihr Passwort jederzeit mit folgenden Schritten ändern: 1. Melden Sie sich bei %system_name% an. 2. Klicken Sie auf den Link '%pvt_home_name%'. 3. Wählen Sie die Option '%password_update_link_text%'.</msg>
   <msg key="Password_changed_subject">Passwort geändert</msg>
@@ -233,6 +251,7 @@
   <msg key="Profile">Profil</msg>
   <msg key="Question">Frage:</msg>
   <msg key="Re_enable">Aktivieren</msg>
+  <msg key="read">Lesen</msg>
   <msg key="Recover_Password">Passwort zurücksetzen</msg>
   <msg key="Refresh_login">Anmeldung aktualisieren</msg>
   <msg key="Register">Registrieren</msg>
@@ -241,6 +260,7 @@
   <msg key="Remember_my_login">Anmeldedaten auf diesem Computer speichern</msg>
   <msg key="Remove">Entfernen</msg>
   <msg key="Remove_All">Alle Entfernen</msg>
+  <msg key="rename">Umbenennen</msg>
   <msg key="Req_membership_comm">Zugang zu dieser Gruppe beantragen</msg>
   <msg key="Req_membership_subs">Mitgliedschaft für diese Subsite beantragen</msg>
   <msg key="Request_membership">Zugang beantragen</msg>
@@ -255,6 +275,7 @@
   <msg key="Select_an_Object_by_Id">Wählen Sie mit Hilfe der ID ein Objekt aus:</msg>
   <msg key="Send_email_to_this_user">E-Mail an diesen Benutzer senden</msg>
   <msg key="Show">Anzeigen</msg>
+  <msg key="Site_Wide_Admin">System Administration</msg>
   <msg key="Site_wide_administration">Systemadministration</msg>
   <msg key="sorry_forgotten_pwd">Das Passwort kann nicht zurückgesetzt werden.</msg>
   <msg key="Status">Status</msg>
@@ -276,6 +297,7 @@
   <msg key="Topic">Thema</msg>
   <msg key="type_specific_info">Typspezifische Informationen:</msg>
   <msg key="Unknown_email">Email-Adresse unbekannt</msg>
+  <msg key="unmount">abhängen</msg>
   <msg key="UP">Eine Ebene nach oben</msg>
   <msg key="up_to_context_name">Eine Ebene höher zu &quot;%context_name%&quot;</msg>
   <msg key="Update">Aktualisieren</msg>
@@ -293,6 +315,7 @@
   <msg key="When_leaving_checkbox_empty">Bereits erteilte Berechtigungen, die Sie hier nicht auswählen, werden aufgehoben.</msg>
   <msg key="Whos_Online_link_label">Benutzer, die derzeit online sind</msg>
   <msg key="Whos_Online_title">Wer ist online?</msg>
+  <msg key="write">Schreiben</msg>
   <msg key="Yes_I_am_sure">Ja, löschen</msg>
   <msg key="You_are_in_the_follow">Sie gehören folgenden Gruppen an:</msg>
   <msg key="You_can_also_browse_from">Weitere Möglichkeiten für die Navigation sind der</msg>

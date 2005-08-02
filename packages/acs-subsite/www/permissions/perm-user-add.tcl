@@ -4,6 +4,6 @@ ad_page_contract {
     return_url
 }
 
-set context [list [list $return_url "Permissions"] "Add User"]
-set title "Add User"
+set context [list [list $return_url "Permissions"] "[_ acs-subsite.Add_User]"]
+set title "[_ acs-subsite.Add_User]"
 
