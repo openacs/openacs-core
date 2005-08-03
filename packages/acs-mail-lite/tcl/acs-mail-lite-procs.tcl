@@ -216,144 +216,171 @@ namespace eval acs_mail_lite {
 	return 1
     }
 
+
     ad_proc -private load_mail_dir {
-        -queue_dir:required
+         -queue_dir:required
     } {
-        Scans qmail incoming email queue for bounced mail and processes
-	these bounced mails.
-	
-        @author ben@openforce.net
-        @author dan.wickstrom@openforce.net
-        @creation-date 22 Sept, 2001
-	
-        @option queue_dir The location of the qmail mail queue in the file-system.
-    } {
-        if {[catch {
-	    # get list of all incoming mail
-            set messages [glob "$queue_dir/new/*"]
-        } errmsg]} {
-            ns_log Debug "queue dir = $queue_dir/new/*, no messages"
-            return [list]
-        }
-	
-        set list_of_bounce_ids [list]
-        set new_messages_p 0
+         Scans incoming email. The array email contains
 
-	# loop over every incoming mail
-        foreach msg $messages {
-            ns_log Debug "opening file: $msg"
-            if [catch {set f [open $msg r]}] {
-                continue
-            }
-            set file [read $f]
-            close $f
-            set file [split $file "\n"]
-	    
-            set new_messages 1
-            set end_of_headers_p 0
-            set i 0
-            set line [lindex $file $i]
-            set headers [list]
-	    
-            # walk through the headers and extract each one
-            while ![empty_string_p $line] {
-                set next_line [lindex $file [expr $i + 1]]
-                if {[regexp {^[ ]*$} $next_line match] && $i > 0} {
-                    set end_of_headers_p 1
-                }
-                if {[regexp {^([^:]+):[ ]+(.+)$} $line match name value]} {
-                    # join headers that span more than one line (e.g. Received)
-                    if { ![regexp {^([^:]+):[ ]+(.+)$} $next_line match] && !$end_of_headers_p} {
-			append line $next_line
-			incr i
-                    }
-                    lappend headers [string tolower $name] $value
-		    
-                    if {$end_of_headers_p} {
-			incr i
-			break
-                    }
-                } else {
-                    # The headers and the body are delimited by a null line as specified by RFC822
-                    if {[regexp {^[ ]*$} $line match]} {
-			incr i
-			break
-                    }
-                }
-                incr i
-                set line [lindex $file $i]
-            }
-            set body "\n[join [lrange $file $i end] "\n"]"
-	    
-            # okay now we have a list of headers and the body, let's
-            # put it into notifications stuff
-            array set email_headers $headers
-	    
-            if [catch {set from $email_headers(from)}] {
-                set from ""
-            }
-            if [catch {set to $email_headers(to)}] {
-                set to ""
-            }
-	    
-            set to [parse_email_address -email $to]
-	    ns_log Debug "acs-mail-lite: To: $to"
-            util_unlist [parse_bounce_address -bounce_address $to] user_id package_id signature
-	    
-            # If no user_id found or signature invalid, ignore message
-            if {[empty_string_p $user_id] || ![valid_signature -signature $signature -msg $body]} {
-		if {[empty_string_p $user_id]} {
-		    ns_log Notice "acs-mail-lite: No user id $user_id found"
-		} else {
-		    ns_log Notice "acs-mail-lite: Invalid mail signature"
+         @author Nima Mazloumi (nima.mazloumi@gmx.de)
+         @creation-date 2005-07-15
+
+																	       @option queue_dir The location of the qmail mail queue in the file-system.
+    } {
+
+         # get list of all incoming mail
+	if {[catch {
+	    set messages [glob "$queue_dir/new/*"]
+	} errmsg]} {
+	    if {[string match "no files matched glob pattern*"  $errmsg ]} {
+                 ns_log Debug "load_mail_dir: queue dir = $queue_dir/new/*, no messages"
+	    } else {
+                 ns_log Error "load_mail_dir: queue dir = $queue_dir/new/ error $errmsg"
+	    }
+	    return [list]
+	}
+
+         # loop over every incoming mail
+	foreach msg $messages {
+	        ns_log Debug "load_mail_dir: opening $msg"
+             parse_email -file $file -array email
+
+	        array set headers $email(headers)
+
+             callback IncomingEmail -from $email(From) -to $email(To) -subject $email(Subject) \
+                                    -bodies $email(bodies) -headers $headers -files $email(files)
+
+             #let's delete the file now
+	    if {[catch {ns_unlink $msg} errmsg]} {
+                 ns_log Error "load_mail_dir: unable to delete queued message $msg: $errmsg"
+	    }
+	}
+    }
+
+    ad_proc parse_email {
+     -file:required
+     -array:required
+    } {
+	An email is splitted into several parts: headers, bodies and files lists and all headers directly.
+	
+	The headers consists of a list with two elements: key and value. All keys are lower case.
+	The bodies consists of a list with two elements: content-type and content.
+	The files consists of a list with three elements: content-type, filename and content.
+	
+	An array is upvared to the caller containing three all lists and for convenience also all headers directly:
+	
+	Important headers like:
+	
+	-Message-ID
+	-Subject
+	-From
+	-To
+	
+	Others like:
+
+	-Date
+	-Received
+	-In-Reply-To
+	-Return-Path
+	
+	Optional application specific stuff like:
+
+	X-Mozilla-Status
+	X-Virus-Scanned
+	X-Mozilla-Status2
+	X-UIDL
+	X-Account-Key
+	X-Sasl-enc
+	
+	You can therefore get a value for a header either through iterating the headers list or simply by calling i.e. "set message_id $email(Message-ID)".
+	
+	Note: We assume "application/octet-stream" for all attachments and "base64" for
+	as transfer encoding for all files.
+	
+	Note: tcllib required - mime, base64
+
+	@author Nima Mazloumi (nima.mazloumi@gmx.de)
+	@creation-date 2005-07-15
+	
+    } {
+	
+	upvar $array email
+	
+	#prepare the message
+	set mime [mime::initialize -file $file]
+
+	#get the content type
+	set content [mime::getproperty $mime content]
+	
+	#get all available headers
+	set keys [mime::getheader $mime -names]
+	
+	set headers [list]
+	
+	# create both the headers array and all headers directly for the
+	# email array
+	foreach header $keys {
+	    set value [mime::getheader $mime $header]
+	    set email([string tolower $header]) $value
+	    lappend headers [list [string tolower $header] $value]
+	}
+	
+	set email(headers) $headers
+	
+	#check for multipart, otherwise we only have one part
+	if { [string first "multipart" $content] != -1 } {
+	    set parts [mime::getproperty $mime parts]
+	} else {
+	    set parts [list $mime]
+	}
+	
+	# travers the tree and extract parts into a flat list
+	set all_parts [list]
+	foreach part $parts {
+	    if { [string equal [mime::getproperty $part content] "multipart/alternative" ] } {
+		foreach child_part [mime::getproperty $part parts] {
+		    lappend all_parts $child_part
 		}
-                if {[catch {ns_unlink $msg} errmsg]} {
-                    ns_log Notice "acs-mail-lite: couldn't remove message"
-                }
-                continue
-            }
-
-	    # Try to invoke package-specific procedure for special treatment
-	    # of mail bounces
-	    catch {acs_sc::invoke -contract AcsMailLite -operation MailBounce -impl [string map {- _} [apm_package_key_from_id $package_id]] -call_args [list [array get email_headers] $body]}
-	    
-	    # Okay, we have a bounce for a system user
-	    # Check if the user has been marked as bouncing mail
-	    # if the user is bouncing mail, we simply disgard the
-	    # bounce since it was sent before the user's email was
-	    # disabled.
-
-	    ns_log Debug "Bounce checking: $to, $user_id"
-
-	    if { ![bouncing_user_p -user_id $user_id] } {
-                ns_log Notice "acs-mail-lite: Bouncing email from user $user_id"
-		# record the bounce in the database
-		db_dml record_bounce {}
-
-		if {![db_resultrows]} {
-		    db_dml insert_bounce {}
+	    } else {
+		lappend all_parts $part
+	    }
+	}
+	
+	set bodies [list]
+	set files [list]
+	
+	#now extract all parts (bodies/files) and fill the email array
+	foreach part $all_parts {
+	    switch [mime::getproperty $part content] {
+		"text/plain" {
+		    lappend bodies [list "text/plain" [mime::getbody $part]]
+		}
+		"text/html" {
+		    lappend bodies [list "text/html" [mime::getbody $part]]
+		}
+		"application/octet-stream" {
+		    set content_type [mime::getproperty $part content]
+		    set encoding [mime::getproperty $part encoding]
+		    set content  [base64::decode [mime::getbody $part]]
+		    set params [mime::getproperty $part params]
+		    if {[lindex $params 0] == "name"} {
+			set filename [lindex $params 1]
+		    } else {
+			set filename ""
+		    }
+		    lappend files [list $content_type $encoding $filename $content]
 		}
 	    }
-            catch {ns_unlink $msg}
-        }
+	}
+	
+	set email(bodies) $bodies
+	set email(files) $files
+	
+	#release the message
+	mime::finalize $mime -subordinates all
+	
     }
     
-    ad_proc -public scan_replies {} {
-        Scheduled procedure that will scan for bounced mails
-    } {
-	# Make sure that only one thread is processing the queue at a time.
-	if {[nsv_incr acs_mail_lite check_bounce_p] > 1} {
-	    nsv_incr acs_mail_lite check_bounce_p -1
-	    return
-	}
-
-	with_finally -code {
-	    ns_log Debug "acs-mail-lite: about to load qmail queue"
-	    load_mail_dir -queue_dir [mail_dir]
-	} -finally {
-	    nsv_incr acs_mail_lite check_bounce_p -1
-	}
-    }
 
     ad_proc -private check_bounces { } {
 	Daily proc that sends out warning mail that emails
