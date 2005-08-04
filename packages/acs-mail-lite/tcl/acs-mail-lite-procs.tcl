@@ -839,9 +839,9 @@ namespace eval acs_mail_lite {
 		    }
 	    } elseif {[exists_and_not_null file_ids]} {
 		
-		db_foreach get_file_info {select r.mime_type,r.title, r.content as filename
+		db_foreach get_file_info "select r.mime_type,r.title, r.content as filename
 		    from cr_revisions r
-		    where r.revision_id in ([join $file_ids ","])} {
+		    where r.revision_id in ([join $file_ids ","])" {
 			lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
 		    }
 	    }
