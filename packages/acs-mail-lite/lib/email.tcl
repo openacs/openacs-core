@@ -10,7 +10,7 @@ foreach required_param {party_ids} {
 	return -code error "$required_param is a required parameter."
     }
 }
-foreach optional_param {return_url content export_vars} {
+foreach optional_param {return_url content export_vars file_ids} {
     if {![info exists $optional_param]} {
 	set $optional_param {}
     }
@@ -23,22 +23,52 @@ if {![info exists cancel_url]} {
     set cancel_url $return_url
 }
 
+
+# Some how when the form is submited the party_ids values became
+# only one element of a list, this avoid that problem
+
+set recipients [list]
 foreach party_id $party_ids {
-    lappend recipients "<a href=\"[contact::url -party_id $party_id]\">[contact::name -party_id $party_id]</a>"
+    lappend recipients [list "<a href=\"[contact::url -party_id $party_id]\">[contact::name -party_id $party_id]</a> 
+                             ([cc_email_from_party $party_id])" $party_id]
 }
-set recipients [join $recipients ", "]
 
 set form_elements {
     message_id:key
-    party_ids:text(hidden)
     return_url:text(hidden)
     {message_type:text(hidden) {value "email"}}
-    {to:text(inform),optional {label "[_ contacts.Recipients]"} {value $recipients}}
+    {to:text(checkbox),multiple {label "[_ contacts.Recipients]"} {options  $recipients }}
 }
+
+
+if { [exists_and_not_null file_ids] } {
+    set files [list]
+    foreach file $file_ids {
+	set file_title [db_string get_file_title { select title from cr_revisions where revision_id = :file} -default "Untitled"]
+	lappend files "<a href=\"/file-storage/download/?file_id=$file\">$file_title</a> "
+    }
+    set files [join $files ", "]
+
+    append form_elements {
+        {files_ids:text(inform),optional {label "Associated Files:"} {value $files}}
+    }
+}
+
+
 
 foreach var $export_vars {
     upvar $var var_value
-    lappend form_elements [list ${var}:text(hidden) {value $var_value}]
+
+    # We need to split to construct the element with two lappends
+    # becasue if we put something like this {value $value} the value
+    # of the variable is not interpreted
+
+    set element [list]
+    lappend element "${var}:text(hidden)"
+    lappend element "value $var_value"
+    
+    # Adding the element to the form
+    lappend form_elements $element
 }
 
 set content_list [list $content $mime_type]
@@ -76,12 +106,14 @@ ad_form -action [ad_conn url] \
 	# Insert the uploaded file linked under the package_id
 	
 	set package_id [ad_conn package_id]
-
-	set revision_id [content::item::upload_file -package_id $package_id -upload_file $upload_file -parent_id $party_id]
+	
+	if {![empty_string_p $upload_file] } {
+	    set revision_id [content::item::upload_file -package_id $package_id -upload_file $upload_file -parent_id $party_id]
+	}
 
 	if {[exists_and_not_null revision_id]} {
 	    if {[exists_and_not_null file_ids]} {
-		append file_ids ",$revision_id"
+		append file_ids " $revision_id"
 	    } else {
 		set file_ids $revision_id
 	    }
@@ -89,7 +121,7 @@ ad_form -action [ad_conn url] \
 	}
 
 	# Send the mail to all parties.
-	foreach party_id $party_ids {
+	foreach party_id $to {
 	    set name [contact::name -party_id $party_id]
 	    set first_names [lindex $name 0]
 	    set last_name [lindex $name 1]
@@ -103,7 +135,7 @@ ad_form -action [ad_conn url] \
 	    foreach element [list first_names last_name name date] {
 		lappend values [list "{$element}" [set $element]]
 	    }
-	    template::multirow append messages $message_type $to_addr [contact::util::interpolate -text $subject -values $values] [contact::util::interpolate -text $content -values $values]
+	    template::multirow append messages $message_type $to_addr [contact::message::interpolate -text $subject -values $values] [contact::message::interpolate -text $content -values $values]
 
 	    # Link the file to all parties
 	    if {[exists_and_not_null revision_id]} {
@@ -111,9 +143,12 @@ ad_form -action [ad_conn url] \
 	    }
 	}
 
+	
+
 	template::multirow foreach messages {
 	    if {[exists_and_not_null file_ids]} {
 		acs_mail_lite::complex_send -to_addr $to_addr -from_addr "$from_addr" -subject "$subject" -body "$content" -package_id $package_id -file_ids $file_ids -mime_type $mime_type
+
 	    } else {
 
 		# acs_mail_lite does not know about sending the
