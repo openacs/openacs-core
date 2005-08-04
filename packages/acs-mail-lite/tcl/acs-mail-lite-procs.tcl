@@ -784,94 +784,95 @@ namespace eval acs_mail_lite {
     # the correct mime procs)
     if {[package require base64] >= "2.3.1" && [package require mime] >= "1.4"} {
 
-    ad_proc -public complex_send {
-	-send_immediately:boolean
-	-valid_email:boolean
-        -to_addr:required
-        -from_addr:required
-        {-subject ""}
-        -body:required
-	{-package_id ""}
-	{-file_ids ""}
-	{-folder_id ""}
-	{-mime_type "text/plain"}
-	{-object_id ""}
-    } {
-	
-	Prepare an email to be send with the option to pass in a list
-	of file_ids as well as specify an html_body and a mime_type
-
-	@param send_immediately The email is send immediately and not stored in the acs_mail_lite_queue
-	
-	@param to_addr Email address to send the mail to
-
-	@param from_addr Who is sending the email
-	
-	@param subject of the email
-	
-	@param body Text body of the email
-	
-	@param bcc BCC Users to send this mail to
-
-	@param package_id Package ID of the sending package
-	
-	@param file_ids List of file ids to be send as attachments. This will only work with files stored in the file system.
-
-	@param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
-
-	@param object_id The ID of the object that is responsible for sending the mail in the first place
-	
-    } {
-
-	# Set the message token
-	set message_token [mime::initialize -canonical "$mime_type" -string "$body"]
-
-	# encode all attachments in base64
-    
-	set tokens [list $message_token]
-	if {[exists_and_not_null folder_id]} {
-
-	    db_foreach get_file_info "select r.revision_id,r.mime_type,r.title, r.content as filename
-	    from cr_revisions r, cr_items i
-	    where r.item_id = i.item_id and i.parent_id = :folder_id" {
-		lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
-		lappend file_ids $revision_id
-	    }
-	} elseif {[exists_and_not_null file_ids]} {
+	ad_proc -public complex_send {
+	    -send_immediately:boolean
+	    -valid_email:boolean
+	    -to_addr:required
+	    -from_addr:required
+	    {-subject ""}
+	    -body:required
+	    {-package_id ""}
+	    {-file_ids ""}
+	    {-folder_id ""}
+	    {-mime_type "text/plain"}
+	    {-object_id ""}
+	} {
 	    
-	    db_foreach get_file_info "select r.mime_type,r.title, r.content as filename
-	    from cr_revisions r
-	    where r.revision_id in ([join $file_ids ","])" {
-		lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
+	    Prepare an email to be send with the option to pass in a list
+	    of file_ids as well as specify an html_body and a mime_type
+	    
+	    @param send_immediately The email is send immediately and not stored in the acs_mail_lite_queue
+	    
+	    @param to_addr Email address to send the mail to
+
+	    @param from_addr Who is sending the email
+	    
+	    @param subject of the email
+	    
+	    @param body Text body of the email
+	    
+	    @param bcc BCC Users to send this mail to
+	    
+	    @param package_id Package ID of the sending package
+	    
+	    @param file_ids List of file ids to be send as attachments. This will only work with files stored in the file system.
+	    
+	    @param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
+	    
+	    @param object_id The ID of the object that is responsible for sending the mail in the first place
+	    
+	} {
+	    
+	    # Set the message token
+	    set message_token [mime::initialize -canonical "$mime_type" -string "$body"]
+	    
+	    # encode all attachments in base64
+	    
+	    set tokens [list $message_token]
+	    if {[exists_and_not_null folder_id]} {
+		
+		db_foreach get_file_info {select r.revision_id,r.mime_type,r.title, r.content as filename
+		    from cr_revisions r, cr_items i
+		    where r.item_id = i.item_id and i.parent_id = :folder_id} {
+			lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
+			lappend file_ids $revision_id
+		    }
+	    } elseif {[exists_and_not_null file_ids]} {
+		
+		db_foreach get_file_info {select r.mime_type,r.title, r.content as filename
+		    from cr_revisions r
+		    where r.revision_id in ([join $file_ids ","])} {
+			lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
+		    }
 	    }
+	    
+	    set multi_token [mime::initialize -canonical multipart/mixed -parts "$tokens"]
+	    
+	    mime::setheader $multi_token Subject "$subject"
+	    set packaged [mime::buildmessage $multi_token]
+	    
+	    #Close all mime tokens
+	    mime::finalize $multi_token -subordinates all
+	    set message_id [generate_message_id]
+	    
+	    acs_mail_lite::sendmail -from_addr $from_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id $message_id -package_id $package_id
+	    
+	    if {[empty_string_p $package_id]} {
+		set package_id [apm_package_id_from_key "acs-mail-lite"]
+	    }
+	    
+	    callback acs_mail_lite::complex_send \
+		-package_id $package_id \
+		-from_party_id [party::get_by_email -email $from_addr] \
+		-to_party_id [party::get_by_email -email $to_addr] \
+		-body $body \
+		-message_id $message_id \
+		-subject $subject \
+		-object_id $object_id \
+		-file_ids [split $file_ids ","]
 	}
-	
-	set multi_token [mime::initialize -canonical multipart/mixed -parts "$tokens"]
-
-	mime::setheader $multi_token Subject "$subject"
- 	set packaged [mime::buildmessage $multi_token]
-	
-	#Close all mime tokens
-	mime::finalize $multi_token -subordinates all
-	set message_id [generate_message_id]
-
-	acs_mail_lite::sendmail -from_addr $from_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id $message_id -package_id $package_id
-	
-	if {[empty_string_p $package_id]} {
-	    set package_id [apm_package_id_from_key "acs-mail-lite"]
-	}
-
-	callback acs_mail_lite::complex_send \
-	    -package_id $package_id \
-	    -from_party_id [party::get_by_email -email $from_addr] \
-	    -to_party_id [party::get_by_email -email $to_addr] \
-	    -body $body \
-	    -message_id $message_id \
-	    -subject $subject \
-	    -object_id $object_id \
-	    -file_ids [split $file_ids ","]
-    }
-}	 
+    }	 
+    
     ad_proc -private sweeper {} {
         Send messages in the acs_mail_lite_queue table.
     } {
