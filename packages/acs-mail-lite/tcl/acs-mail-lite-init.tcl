@@ -12,7 +12,7 @@ ad_library {
 ad_schedule_proc -thread t 60 acs_mail_lite::sweeper
 
 # check every few minutes for bounces
-ad_schedule_proc -thread t [acs_mail_lite::get_parameter -name BounceScanQueue -default 120] acs_mail_lite::scan_replies
+#ad_schedule_proc -thread t [acs_mail_lite::get_parameter -name BounceScanQueue -default 120] acs_mail_lite::scan_replies
 
 nsv_set acs_mail_lite send_mails_p 0
 nsv_set acs_mail_lite check_bounce_p 0
