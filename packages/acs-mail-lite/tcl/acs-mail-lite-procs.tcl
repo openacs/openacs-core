@@ -779,7 +779,11 @@ namespace eval acs_mail_lite {
         return $message_id
     }
 
-    
+
+    # Only provide this procedure if you have tcllib installed (with
+    # the correct mime procs)
+    if {[package require base64] >= "2.3.1" && [package require mime] >= "1.4"} {
+
     ad_proc -public complex_send {
 	-send_immediately:boolean
 	-valid_email:boolean
@@ -818,7 +822,6 @@ namespace eval acs_mail_lite {
 	@param object_id The ID of the object that is responsible for sending the mail in the first place
 	
     } {
-
 
 	# Set the message token
 	set message_token [mime::initialize -canonical "$mime_type" -string "$body"]
@@ -868,7 +871,7 @@ namespace eval acs_mail_lite {
 	    -object_id $object_id \
 	    -file_ids [split $file_ids ","]
     }
-	 
+}	 
     ad_proc -private sweeper {} {
         Send messages in the acs_mail_lite_queue table.
     } {
