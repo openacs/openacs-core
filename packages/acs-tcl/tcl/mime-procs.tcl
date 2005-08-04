@@ -9,6 +9,7 @@
 # unpublished package of 1999.
 #
 
+if {[catch {package require mime}]} {
 # new string features and inline scan are used, requiring 8.3.
 package require Tcl 8.3
 
@@ -3582,4 +3583,4 @@ proc ::mime::field_decode {field} {
     append result $field
     return $result
 }
-
+}

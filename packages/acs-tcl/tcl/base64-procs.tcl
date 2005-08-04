@@ -17,6 +17,7 @@
 # Version 2.2.1 bugfixes
 # Version 2.2.2 bugfixes
 
+if {[catch {package require base64}]} {
 package require Tcl 8.2
 namespace eval ::base64 {
     namespace export encode decode
@@ -321,3 +322,4 @@ if {![catch {package require Trf 2.0}]} {
 
 package provide base64 2.2.2
 
+}
