@@ -39,7 +39,7 @@ ad_proc -public content::symlink::delete {
 } {
     return [package_exec_plsql -var_list [list \
         [list symlink_id $symlink_id ] \
-    ] content_symlink del]
+    ] content_symlink delete]
 }
 
 
