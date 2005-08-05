@@ -683,7 +683,7 @@ namespace eval acs_mail_lite {
 	@option from_addr mail sender
 	@option subject mail subject
 	@option body mail body
-	@option extraheaders extra mail headers
+	@option extraheaders extra mail headers in an ns_set
 	@option bcc see to_addr
 	@option package_id To be used for calling a package-specific proc when mail has bounced
         @returns the Message-Id of the mail
