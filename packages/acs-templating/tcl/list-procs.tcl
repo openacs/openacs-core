@@ -558,7 +558,7 @@ ad_proc -public template::list::prepare {
 
         # We need this uplevel so that the bind variables in the query will get bound at the caller's level
         uplevel $ulevel [list template::paginator create \
-                             --foo--bar-- \
+							 $list_properties(page_query_name) \
                              $list_properties(paginator_name) \
                              $list_properties(page_query_substed) \
                              -pagesize $list_properties(page_size) \
