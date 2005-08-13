@@ -1,5 +1,10 @@
 #!/bin/sh 
 
+# aolserver4 recommends descriptors limit (FD_SETSIZE) to be set to 1024, 
+# which is standard for most OS distributions
+# For freebsd systems, uncomment following line:
+# ulimit -n 1024
+
 # give time for Postgres to come up
 # see http://openacs.org/forums/message-view?message_id=176100
 sleep 4
