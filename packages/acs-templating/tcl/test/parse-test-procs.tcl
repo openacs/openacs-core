@@ -50,3 +50,16 @@ aa_register_case template_variable {
             
         }
 }
+
+aa_register_case -cats {api smoke} tcl_to_sql_list {
+    Tests the tcl_to_sql_list proc.
+
+    @author Torben Brosten
+} {
+    aa_equals "parses list of 0 items" [template::util::tcl_to_sql_list [list]] ""
+    aa_equals "parses list of 1 item" [template::util::tcl_to_sql_list [list a]] ":__bind_array(1)"
+    aa_equals "checking values of parsed list of 1 item" $__bind_array(1) "a"
+    aa_equals "parses list of 2 or more" [template::util::tcl_to_sql_list [list a b c]] ":__bind_array(1),:__bind_array(2),:__bind_array(3)"
+    aa_equals "checking last value of parsed list of 2 or more items" $__bind_array(3) "c"
+
+}

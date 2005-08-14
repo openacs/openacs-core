@@ -731,19 +731,26 @@ ad_proc -public template::util::number_list { last_number {start_at 0} } {
   return $ret
 }
 
-ad_proc -public template::util::tcl_to_sql_list { lst } {
-    Convert a TCL list to a SQL list, for use with the "in" statement
-    why doesn't this use ns_dbquotevalue?
+ad_proc -public template::util::tcl_to_sql_list { tcllist } {
+    Converts a TCL list to a list of values to insert in db_* SQL statements. For use with the SQL "in" statement
 } {
+    upvar __bind_array bind_array
 
-  if { [llength $lst] > 0 } {
-    set sql "'"
-    append sql [join $lst "', '"]
-    append sql "'"
-    return $sql
-  } else {
-    return ""
-  }
+    set sql_segment ""
+    set list_pairs [list]
+    set ii 0
+    if { [llength $tcllist] > 0 } {
+        foreach {list_item} $tcllist {
+            incr ii
+            lappend list_pairs $ii $list_item
+            lappend sql_segment ":__bind_array($ii)"
+        }
+        array set bind_array $list_pairs
+        return [join $sql_segment ,]
+    } else {
+        array set bind_array ""
+        return ""
+    }
 }
 
 
