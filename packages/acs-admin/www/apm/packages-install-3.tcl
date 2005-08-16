@@ -100,5 +100,3 @@ append body "
 </form>
 [ad_footer]
 "
-
-doc_return 200 text/html $body

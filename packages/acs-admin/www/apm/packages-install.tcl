@@ -9,7 +9,7 @@ ad_page_contract {
     {checked_by_default_p:boolean 0}
 }
 
-ad_return_top_of_page "[apm_header "Package Installation"]
+set page_content "[apm_header "Package Installation"]
 <p>Please wait while the installer searches your system for packages to install ...<p>
 
 "
@@ -63,12 +63,12 @@ foreach spec_file $all_spec_files {
 
 apm_log APMDebug $spec_files
 
-ns_write "Done.<p>
+append page_content "Done.<p>
 "
 
 if { [empty_string_p $spec_files] } {
     # No spec files to work with.
-    ns_write "
+    append page_content "
     <h2>No New Packages to Install</h2><p>
 
     There are no new packages to install.  Please load some
@@ -77,11 +77,11 @@ if { [empty_string_p $spec_files] } {
     "
 } else {   
     
-    ns_write "
+    append page_content "
     <h2>Select Packages to Install</h2><p>
     <p>Please select the set of packages you'd like to install.</p>"
 
-    ns_write "
+    append page_content "
 
 <script language=javascript>
 function uncheckAll() {
@@ -99,7 +99,7 @@ function checkAll() {
 <a href=\"packages-install?checked_by_default_p=1\"  onclick=\"javascript:checkAll(); return false\"><b>check all boxes</b></a>
 "
 
-    ns_write "<form action=packages-install-2 method=post>"
+    append page_content "<form action=packages-install-2 method=post>"
 
     # Client properties do not deplete the limited URL variable space.
     # But they are limited to the maximum length of a varchar ...
@@ -132,19 +132,19 @@ function checkAll() {
     }
 
     if {[empty_string_p $widget]} {
-	ns_write "There are no new packages available.<p>
+	append page_content "There are no new packages available.<p>
 	[ad_footer]"
 	ad_script_abort
     }
     
-    ns_write $widget
-    ns_write "
+    append page_content $widget
+    append page_content "
     <input type=submit value=\"Next -->\">
     </form>
     "
     
     if {![empty_string_p $errors]} {
-	ns_write "The following errors were generated
+	append page_content "The following errors were generated
 	<ul>
 	    $errors
 	</ul>
@@ -162,6 +162,6 @@ if { [llength $already_installed_list] > 0 } {
 
 
 
-ns_write "
+append page_content "
 [ad_footer]
 " 

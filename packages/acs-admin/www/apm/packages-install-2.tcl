@@ -10,7 +10,7 @@ ad_page_contract {
     {enable:multiple ""}
     {force_p "f"}
 }
-
+set page_content ""
 # Install and enable are sets of keys; need to turn them back into spec files.
 set spec_files [ad_get_client_property apm spec_files]
 
@@ -45,7 +45,7 @@ foreach spec_file $spec_files {
 }
 
 if {![info exists install_spec_files]} {
-    doc_body_append "[apm_header "Package Installation"]<p>
+    append page_content "[apm_header "Package Installation"]<p>
 No packages selected.<p>[ad_footer]"
     return
 }
@@ -59,7 +59,7 @@ if { [lindex $dependency_results 0] == 1 && [llength [lindex $dependency_results
 
     # Check was good after adding a couple more packages
 
-    doc_body_append "[apm_header "Package Installation"]
+    append page_content "[apm_header "Package Installation"]
     <h2>Additional Packages Automatically Added</h2><p>
     
     Some of the packages you were trying to install required other packages to be installed first.
@@ -75,9 +75,9 @@ if { [lindex $dependency_results 0] == 1 && [llength [lindex $dependency_results
     set install [concat $install $extra_package_keys]
     set enable [concat $enable $extra_package_keys]
     
-    doc_body_append [apm_package_selection_widget [lindex $dependency_results 1] $install $enable]
+    append page_content [apm_package_selection_widget [lindex $dependency_results 1] $install $enable]
 
-    doc_body_append "
+    append page_content "
     </table></blockquote>
     <input type=submit value=\"Select Data Model Scripts\">
     </form>
@@ -95,7 +95,7 @@ if { [lindex $dependency_results 0] == 1 && [llength [lindex $dependency_results
     ad_script_abort
 } else {
     ### Check failed.  Offer user an explanation and an ability to select unselect packages.
-    doc_body_append "[apm_header "Package Installation"]
+    append page_content "[apm_header "Package Installation"]
     <h2>Select Packages to Install</h2><p>
     
     Some of the packages you are trying to install have unsatisfied dependencies.  The packages
@@ -117,10 +117,10 @@ if { [lindex $dependency_results 0] == 1 && [llength [lindex $dependency_results
     <table>
     "
     
-    doc_body_append [apm_package_selection_widget [lindex $dependency_results 1] $install $enable]
+    append page_content [apm_package_selection_widget [lindex $dependency_results 1] $install $enable]
 
     
-    doc_body_append "
+    append page_content "
     </table></blockquote>
     <input type=checkbox name=force_p value=\"t\"> <strong>Force the install<p></strong>
     <input type=submit value=\"Select Data Model Scripts\">
