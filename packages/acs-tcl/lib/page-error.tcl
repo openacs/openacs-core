@@ -56,7 +56,9 @@ set error_desc_email "
 [_ acs-tcl.lt_NB_This_error_was_sub]"
 
 if {[empty_string_p $bug_number] } {
-    ns_sendmail "$send_to" $public_userm_email $subject $error_desc_email
+    if {[catch {ns_sendmail "$send_to" $public_userm_email $subject $error_desc_email} errmsg]} {
+        ns_log warning "ACS-TCL/lib/page-error failed to send mail to $send_to for $error_desc"
+    }
 }
 set bt_instance [parameter::get -package_id [ad_acs_kernel_id] \
 		     -parameter BugTrackerInstance -default ""]
