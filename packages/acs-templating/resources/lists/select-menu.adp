@@ -21,8 +21,12 @@
                 </tr>
                 <tr>
                     <td>
-	                <select name="@filters.filter_label@" onchange="window.location = this.options[this.selectedIndex].value">
-		            <option value=""> - - - - - </option>
+	                <select name="@filters.filter_label@" onchange="window.location = this.options[this.selectedIndex].value">		       <if @filters.filter_clear_url@ not nil>
+		               <option value="@filters.filter_clear_url@"> - - - - - </option>
+                            </if>
+                            <else>
+		               <option value=""> - - - - - </option>
+			    </else>
       	                    <group column="filter_name">
 	                    <if @filters.selected_p@ true>
 			         <option value="@filters.url@" selected>
