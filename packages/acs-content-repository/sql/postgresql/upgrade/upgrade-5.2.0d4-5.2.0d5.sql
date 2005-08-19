@@ -15,7 +15,7 @@ select define_function_args('content_item__get_context','item_id');
 select define_function_args('content_item__get_revision_count','item_id');
 select define_function_args('content_item__set_release_period','item_id,start_when,end_when');
 select define_function_args('content_item__unset_live_revision','item_id');
-select define_function_args('content_item__set_live_revision','item_id,publish_status;ready');
+select define_function_args('content_item__set_live_revision','revision_id,publish_status;ready');
 select define_function_args('content_item__get_live_revision','item_id');
 select define_function_args('content_item__get_content_type','item_id');
 select define_function_args('content_item__get_template','item_id,use_context');
