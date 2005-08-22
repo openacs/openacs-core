@@ -319,7 +319,7 @@
                          set bound_sql [db_bind_var_substitution $sql $bind]
                      }
                  } else {
-                     set bound_sql [uplevel 4 [list db_bind_var_substitution $sql]]
+                     set bound_sql [uplevel 3 [list db_bind_var_substitution $sql]]
                  }
              } error]
              if { $errno } {
