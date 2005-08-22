@@ -312,16 +312,30 @@ ad_proc -public install::xml::action::mount-existing { node } {
 ad_proc -public install::xml::action::set-parameter { node } {
     Sets a package parameter.
 
-    <p>&lt;set-parameter name=&quot;<em>parameter</em>&quot; [ package=&quot;<em>package-key</em> | url=&quot;<em>package-url</em>&quot; ] value=&quot;<em>value</em>&quot; /&gt;</p>
+    <p>&lt;set-parameter name=&quot;<em>parameter</em>&quot; [ package=&quot;<em>package-key</em> | url=&quot;<em>package-url</em>&quot; ] type=&quot;<em>[id|literal]</em>&quot; value=&quot;<em>value</em>&quot; /&gt;</p>
 } { 
+    variable ::install::xml::ids
+
     set name [apm_required_attribute_value $node name]
     set value [apm_attribute_value -default {} $node value]
 
     set package_id [install::xml::object_id::package $node]
 
-    parameter::set_value -package_id $package_id \
-        -parameter $name \
-        -value $value
+    set type [apm_attribute_value -default "literal" $node type]
+
+    switch -- $type {
+      literal {
+        parameter::set_value -package_id $package_id \
+            -parameter $name \
+            -value $value
+
+      }
+      id {
+        parameter::set_value -package_id $package_id \
+            -parameter $name \
+            -value $ids($value)
+      }
+    }
 }
 
 ad_proc -public install::xml::action::set-parameter-default { node } {
