@@ -79,6 +79,11 @@ proc xml_node_get_attribute {node_id attribute_name {default ""}} {
     return [$node_id getAttribute $attribute_name $default]
 }
 
+# Set Node Attribute
+proc xml_node_set_attribute {node_id attribute_name value} {
+  $node_id setAttribute $attribute_name $value
+}
+
 # Get Content
 proc xml_node_get_content {node_id} {
 #   ns_log notice "xml_node_get_content [$node_id nodeName] --> [$node_id text]"
