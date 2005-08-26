@@ -6,6 +6,7 @@
 # Displays all filters as a select box to save space
 %>
 
+
 <table border="0">
 <tr>
     <multiple name="filters">
@@ -13,7 +14,7 @@
             <table border="0" cellspacing="0" cellpadding="2" width="100%">
 		<tr>
         	    <td colspan="3" class="list-filter-header">
-	                @filters.filter_label@
+	                @filters.filter_label@ 
 	                <if @filters.filter_clear_url@ not nil>
            		    (<a href="@filters.filter_clear_url@" title="Clear the currently selected @filters.filter_label@">clear</a>)
 	                </if>
@@ -21,12 +22,10 @@
                 </tr>
                 <tr>
                     <td>
-	                <select name="@filters.filter_label@" onchange="window.location = this.options[this.selectedIndex].value">		       <if @filters.filter_clear_url@ not nil>
-		               <option value="@filters.filter_clear_url@"> - - - - - </option>
-                            </if>
-                            <else>
-		               <option value=""> - - - - - </option>
-			    </else>
+	                <select name="@filters.filter_label@" onchange="window.location = this.options[this.selectedIndex].value">		       
+			    <if @filters.filter_clear_url@ nil>
+		               <option value="#">- - - - -</option>
+			    </if>
       	                    <group column="filter_name">
 	                    <if @filters.selected_p@ true>
 			         <option value="@filters.url@" selected>
