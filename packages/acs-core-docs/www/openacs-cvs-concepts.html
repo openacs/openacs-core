@@ -1,10 +1,10 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS CVS Concepts</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="cvs-guidelines.html" title="Chapter 14. 
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS CVS Concepts</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="cvs-guidelines.html" title="Chapter 14. 
     CVS Guidelines
   "><link rel="previous" href="using-cvs-with-openacs.html" title="Using CVS with OpenACS"><link rel="next" href="contributing-code.html" title="Contributing code back to OpenACS"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="using-cvs-with-openacs.html">Prev</a> </td><th width="60%" align="center">Chapter 14. 
     CVS Guidelines
-  </th><td width="20%" align="right"> <a accesskey="n" href="contributing-code.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openacs-cvs-concepts"></a>OpenACS CVS Concepts</h2></div></div><div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2607170"></a>Modules</h3></div></div><div></div></div><p>
-        All OpenACS code resides within a single CVS module, <tt class="computeroutput">openacs-4</tt>.  (The openacs-4 directory contains code for all versions of OpenACS 4 and later, and .LRN 1 and later.)   Checking out this module retrieves all openacs code of any type.  For convenience, subsets of <tt class="computeroutput">openacs-4</tt> are repackaged as smaller modules.</p><p>
-          <tt class="computeroutput">acs-core</tt> contains only critical common
+  </th><td width="20%" align="right"> <a accesskey="n" href="contributing-code.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openacs-cvs-concepts"></a>OpenACS CVS Concepts</h2></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2598625"></a>Modules</h3></div></div></div><p>
+        All OpenACS code resides within a single CVS module, <code class="computeroutput">openacs-4</code>.  (The openacs-4 directory contains code for all versions of OpenACS 4 and later, and .LRN 1 and later.)   Checking out this module retrieves all openacs code of any type.  For convenience, subsets of <code class="computeroutput">openacs-4</code> are repackaged as smaller modules.</p><p>
+          <code class="computeroutput">acs-core</code> contains only critical common
           packages. It does not have any user applications, such as forums,
           bug-tracker, calendar, or ecommerce.  These can be added at
           any time.
@@ -25,29 +25,29 @@ acs-subsite
 acs-tcl
 acs-templating 
 ref-timezones search</pre><p>
-          <tt class="computeroutput">dotlrn-all</tt> contains the packages required, in combination with acs-core, to run the .LRN system.
+          <code class="computeroutput">dotlrn-all</code> contains the packages required, in combination with acs-core, to run the .LRN system.
         </p><p>
-          <tt class="computeroutput">project-manager-all</tt> contains the packages required, in combination with acs-core, to run the project-manager package.
+          <code class="computeroutput">project-manager-all</code> contains the packages required, in combination with acs-core, to run the project-manager package.
         </p><p>
-          Each OpenACS package (i.e., directory in <tt class="computeroutput">openacs-4/packages/</tt>) is also aliased as a module of the same name.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2559324"></a>
+          Each OpenACS package (i.e., directory in <code class="computeroutput">openacs-4/packages/</code>) is also aliased as a module of the same name.
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2552093"></a>
         Tags and Branches
-      </h3></div></div><div></div></div><p>
+      </h3></div></div></div><p>
         Tags and Branches look similar in commands, but behave differently. A tag is a fixed point on a branch.  Check out
             a tag to get a specific version of OpenACS. Check out a branch to
             get the most current code for that major-minor version (e.g., 5.0.x
             or 5.1.x). You can only commit to a branch, not a tag, so check out
-            a branch if you will be working on the code. </p><div class="itemizedlist"><ul type="disc"><li><p><tt class="computeroutput">openacs-<span class="replaceable"><span class="replaceable">x</span></span>-<span class="replaceable"><span class="replaceable">y</span></span>-<span class="replaceable"><span class="replaceable">z</span></span>-final</tt>
-            tags mark final releases of OpenACS.  This tag is applied to the acs-core files for an OpenACS core release, and to the latest released versions of all other packages at the time of release.  Example: <tt class="computeroutput">openacs-5-0-4-final</tt>.
-                </p></li><li><p><tt class="computeroutput">dotlrn-<span class="replaceable"><span class="replaceable">x</span></span>-<span class="replaceable"><span class="replaceable">y</span></span>-<span class="replaceable"><span class="replaceable">z</span></span>-final</tt>
-            tags mark final releases of .LRN.  These tags apply only to .LRN packages.  Example: <tt class="computeroutput">dotlrn-2-0-1-final</tt>
-                </p></li><li><p><tt class="computeroutput"><span class="replaceable"><span class="replaceable">packagename</span></span>-<span class="replaceable"><span class="replaceable">x</span></span>-<span class="replaceable"><span class="replaceable">y</span></span>-<span class="replaceable"><span class="replaceable">z</span></span>-final</tt>
-                  tags apply to releases of individual packages.  For example, <tt class="computeroutput">calendar-2-0-0-final</tt> is a tag that will retrieve only the files in the calendar 2.0.0 release. It applies only to the
+            a branch if you will be working on the code. </p><div class="itemizedlist"><ul type="disc"><li><p><code class="computeroutput">openacs-<span class="replaceable"><span class="replaceable">x</span></span>-<span class="replaceable"><span class="replaceable">y</span></span>-<span class="replaceable"><span class="replaceable">z</span></span>-final</code>
+            tags mark final releases of OpenACS.  This tag is applied to the acs-core files for an OpenACS core release, and to the latest released versions of all other packages at the time of release.  Example: <code class="computeroutput">openacs-5-0-4-final</code>.
+                </p></li><li><p><code class="computeroutput">dotlrn-<span class="replaceable"><span class="replaceable">x</span></span>-<span class="replaceable"><span class="replaceable">y</span></span>-<span class="replaceable"><span class="replaceable">z</span></span>-final</code>
+            tags mark final releases of .LRN.  These tags apply only to .LRN packages.  Example: <code class="computeroutput">dotlrn-2-0-1-final</code>
+                </p></li><li><p><code class="computeroutput"><span class="replaceable"><span class="replaceable">packagename</span></span>-<span class="replaceable"><span class="replaceable">x</span></span>-<span class="replaceable"><span class="replaceable">y</span></span>-<span class="replaceable"><span class="replaceable">z</span></span>-final</code>
+                  tags apply to releases of individual packages.  For example, <code class="computeroutput">calendar-2-0-0-final</code> is a tag that will retrieve only the files in the calendar 2.0.0 release. It applies only to the
                   calendar package. All non-core, non-dotlrn packages should have a
                   tag of this style, based on the package name. Many packages have
                   not been re-released since the new naming convention was adopted
                   and so don't have a tag of this type.
-                </p></li><li><p><tt class="computeroutput">openacs-<span class="replaceable"><span class="replaceable">x</span></span>-<span class="replaceable"><span class="replaceable">y</span></span>-compat</tt> tags point to the most recent released version of OpenACS <span class="replaceable"><span class="replaceable">X</span></span>.<span class="replaceable"><span class="replaceable">Y</span></span>.
+                </p></li><li><p><code class="computeroutput">openacs-<span class="replaceable"><span class="replaceable">x</span></span>-<span class="replaceable"><span class="replaceable">y</span></span>-compat</code> tags point to the most recent released version of OpenACS <span class="replaceable"><span class="replaceable">X</span></span>.<span class="replaceable"><span class="replaceable">Y</span></span>.
             It is similar to openacs-x-y-z-compat, except that it will
             always get the most recent dot-release of Core and the
             most recent compatible, released version of all other
@@ -68,5 +68,5 @@ ref-timezones search</pre><p>
             packages, release branches are the recommended location
             for development.  For example, if you are working on
             calendar, which is compatible with openacs 5.0 but not
-                5.1, work on the oacs-5-0 branch.</p></li><li><p><tt class="computeroutput">HEAD</tt> is a branch used
+                5.1, work on the oacs-5-0 branch.</p></li><li><p><code class="computeroutput">HEAD</code> is a branch used
           for development of core packages.</p></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="using-cvs-with-openacs.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="contributing-code.html">Next</a></td></tr><tr><td width="40%" align="left">Using CVS with OpenACS </td><td width="20%" align="center"><a accesskey="u" href="cvs-guidelines.html">Up</a></td><td width="40%" align="right"> Contributing code back to OpenACS</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/openacs-cvs-concepts.html#comments">View comments on this page at openacs.org</a></center></body></html>

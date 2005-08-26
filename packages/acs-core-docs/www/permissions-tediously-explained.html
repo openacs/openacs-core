@@ -1,6 +1,6 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS Permissions Tediously Explained</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="parties.html" title="Parties in OpenACS"><link rel="next" href="object-identity.html" title="Object Identity"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="parties.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="object-identity.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="permissions-tediously-explained"></a>OpenACS Permissions Tediously Explained</h2></div></div><div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS Permissions Tediously Explained</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="parties.html" title="Parties in OpenACS"><link rel="next" href="object-identity.html" title="Object Identity"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="parties.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="object-identity.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="permissions-tediously-explained"></a>OpenACS Permissions Tediously Explained</h2></div></div></div><p>
     by Vadim Nasardinov. Modified and converted to Docbook XML by Roberto Mello
-  </p><p>The code has been modified since this document was written so it is now out of date.  See <a href="http://openacs.org/forums/message-view?message_id=121807" target="_top">this forum thread</a>.</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-overview"></a>Overview</h3></div></div><div></div></div><p>
+  </p><p>The code has been modified since this document was written so it is now out of date.  See <a href="http://openacs.org/forums/message-view?message_id=121807" target="_top">this forum thread</a>.</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-overview"></a>Overview</h3></div></div></div><p>
       The general permissions system has a relatively complex data model in OpenACS.
       Developers who haven't had the time to learn the internals of the data model
       may end up writing seemingly correct code that crashes their system in
@@ -14,11 +14,11 @@
       system internals.
     </p><p>
       In OpenACS 4.x, most of the interesting tables are expected to extend (subtype)
-      the <tt class="computeroutput">acs_objects</tt> table, i.e. they are expected to have an integer
-      primary key column that references the <tt class="computeroutput">object_id</tt> column of
-      <tt class="computeroutput">acs_objects</tt>. 
+      the <code class="computeroutput">acs_objects</code> table, i.e. they are expected to have an integer
+      primary key column that references the <code class="computeroutput">object_id</code> column of
+      <code class="computeroutput">acs_objects</code>. 
     </p><a name="acs_objects"></a><pre class="programlisting">
-create table <span class="bold"><b>acs_objects</b></span> (
+create table <span class="bold"><strong>acs_objects</strong></span> (
       object_id             integer
           not null
           constraint acs_objects_pk primary key,
@@ -42,23 +42,23 @@ create table <span class="bold"><b>acs_objects</b></span> (
 );
     </pre><p>
       This means that any interesting entity (object)
-      in the system has an entry in the <tt class="computeroutput">acs_objects</tt>. This
+      in the system has an entry in the <code class="computeroutput">acs_objects</code>. This
       allows developers to define relationships between any two entities <span class="emphasis"><em>A</em></span>
       and <span class="emphasis"><em>B</em></span> by defining a relationship between their corresponding entries
-      in the <tt class="computeroutput">acs_objects</tt> table.  One of the applications of this
+      in the <code class="computeroutput">acs_objects</code> table.  One of the applications of this
       powerful capability is the general permissions system. 
     </p><p>
-      At the heart of the permission system are two tables: <tt class="computeroutput">acs_privileges</tt>
-      and <tt class="computeroutput">acs_permissions</tt>. 
+      At the heart of the permission system are two tables: <code class="computeroutput">acs_privileges</code>
+      and <code class="computeroutput">acs_permissions</code>. 
     </p><a name="acs_privileges"></a><pre class="programlisting">
-  create table <span class="bold"><b>acs_privileges</b></span> (
+  create table <span class="bold"><strong>acs_privileges</strong></span> (
       privilege           varchar2(100) not null
           constraint acs_privileges_pk primary key,
       pretty_name         varchar2(100),
       pretty_plural       varchar2(100)
   );
     </pre><a name="acs_permissions"></a><pre class="programlisting">
-  create table <span class="bold"><b>acs_permissions</b></span> (
+  create table <span class="bold"><strong>acs_permissions</strong></span> (
       object_id
           not null
           constraint acs_permissions_on_what_id_fk references <a href="permissions-tediously-explained.html#acs_objects">acs_objects</a> (object_id),
@@ -72,14 +72,14 @@ create table <span class="bold"><b>acs_objects</b></span> (
           primary key (object_id, grantee_id, privilege)
   );
     </pre><p>
-      The <tt class="computeroutput">acs_privileges</tt> table stores 
+      The <code class="computeroutput">acs_privileges</code> table stores 
       named privileges like <span class="emphasis"><em>read</em></span>, 
       <span class="emphasis"><em>write</em></span>, <span class="emphasis"><em>delete</em></span>, <span class="emphasis"><em>create</em></span>, and 
-      <span class="emphasis"><em>admin</em></span>. The <tt class="computeroutput">acs_permissions</tt>
+      <span class="emphasis"><em>admin</em></span>. The <code class="computeroutput">acs_permissions</code>
       table stores assertions of the form: 
     </p><p>
-      Who (<tt class="computeroutput">grantee_id</tt>) can do what (<tt class="computeroutput">privilege</tt>) 
-      on which object (<tt class="computeroutput">object_id</tt>).
+      Who (<code class="computeroutput">grantee_id</code>) can do what (<code class="computeroutput">privilege</code>) 
+      on which object (<code class="computeroutput">object_id</code>).
     </p><p>
       The naive approach to managing system security would be to require application developers
       to store permission information explicitly about every object, i.e. if the system has 100,000 and 1,000 users
@@ -97,26 +97,44 @@ create table <span class="bold"><b>acs_objects</b></span> (
       necessity to explicitly maintain security information for every single
       object.  There are three kinds of hierarchies involved.
       These are discussed in the following sections.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-context-hierarchy"></a>Context Hierarchy</h3></div></div><div></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-context-hierarchy"></a>Context Hierarchy</h3></div></div></div><p>
       Suppose objects <span class="emphasis"><em>A</em></span>, <span class="emphasis"><em>B</em></span>, ..., 
       and <span class="emphasis"><em>F</em></span> form the following hierarchy. 
-    </p><div class="table"><a name="id2553264"></a><p class="title"><b>Table 11.2. Context Hierarchy Example</b></p><table summary="Context Hierarchy Example" cellspacing="0" border="1"><colgroup><col align="center"><col align="center"><col align="center"></colgroup><tbody><tr><td colspan="3" align="center"><span class="bold"><b>A</b></span><p>
-  	        <tt class="computeroutput">object_id=10</tt>
-              </p></td></tr><tr><td colspan="2" align="center"><span class="bold"><b>B</b></span><p>
-  	        <tt class="computeroutput">object_id=20</tt>
-              </p></td><td align="center"><span class="bold"><b>C</b></span><p>
-  	        <tt class="computeroutput">object_id=30</tt>
-              </p></td></tr><tr><td align="center"><span class="bold"><b>D</b></span><p>
-  	        <tt class="computeroutput">object_id=40</tt>
-              </p></td><td align="center"><span class="bold"><b>E</b></span><p>
-  	        <tt class="computeroutput">object_id=50</tt>
-              </p></td><td align="center"><span class="bold"><b>F</b></span><p>
-  	        <tt class="computeroutput">object_id=60</tt>
-              </p></td></tr></tbody></table></div><p>
+    </p><div class="table"><a name="id2543751"></a><p class="title"><b>Table 11.2. Context Hierarchy Example</b></p><table summary="Context Hierarchy Example" cellspacing="0" border="1"><colgroup><col align="center"><col align="center"><col align="center"></colgroup><tbody><tr><td colspan="3" align="center">
+	      <span class="bold"><strong>A</strong></span>
+	      <p>
+  	        <code class="computeroutput">object_id=10</code>
+              </p>
+	    </td></tr><tr><td colspan="2" align="center">
+	      <span class="bold"><strong>B</strong></span>
+	      <p>
+  	        <code class="computeroutput">object_id=20</code>
+              </p>
+	    </td><td align="center">
+	      <span class="bold"><strong>C</strong></span>
+	      <p>
+  	        <code class="computeroutput">object_id=30</code>
+              </p>
+	    </td></tr><tr><td align="center">
+	      <span class="bold"><strong>D</strong></span>
+	      <p>
+  	        <code class="computeroutput">object_id=40</code>
+              </p>
+	    </td><td align="center">
+	      <span class="bold"><strong>E</strong></span>
+	      <p>
+  	        <code class="computeroutput">object_id=50</code>
+              </p>
+	    </td><td align="center">
+	      <span class="bold"><strong>F</strong></span>
+	      <p>
+  	        <code class="computeroutput">object_id=60</code>
+              </p>
+	    </td></tr></tbody></table></div><p>
       This can be represented in the 
       <a href="permissions-tediously-explained.html#acs_objects">acs_objects</a> table
       by the following entries: 
-    </p><div class="table"><a name="id2547992"></a><p class="title"><b>Table 11.3. acs_objects example data</b></p><table summary="acs_objects example data" cellspacing="0" border="1"><colgroup><col align="center"><col align="center"></colgroup><thead><tr><th align="center">object_id</th><th align="center">context_id</th></tr></thead><tbody><tr><td align="center">20</td><td align="center">10</td></tr><tr><td align="center">30</td><td align="center">10</td></tr><tr><td align="center">40</td><td align="center">20</td></tr><tr><td align="center">50</td><td align="center">20</td></tr><tr><td align="center">60</td><td align="center">30</td></tr></tbody></table></div><p>
+    </p><div class="table"><a name="id2571331"></a><p class="title"><b>Table 11.3. acs_objects example data</b></p><table summary="acs_objects example data" cellspacing="0" border="1"><colgroup><col align="center"><col align="center"></colgroup><thead><tr><th align="center">object_id</th><th align="center">context_id</th></tr></thead><tbody><tr><td align="center">20</td><td align="center">10</td></tr><tr><td align="center">30</td><td align="center">10</td></tr><tr><td align="center">40</td><td align="center">20</td></tr><tr><td align="center">50</td><td align="center">20</td></tr><tr><td align="center">60</td><td align="center">30</td></tr></tbody></table></div><p>
       The first entry tells us that object 20 is the descendant of object 10, and
       the third entry shows that object 40 is the descendant of object 20. By
       running a <a href="http://www.oradoc.com/ora817/server.817/a85397/expressi.htm#1023748" target="_top">CONNECT BY</a> query,
@@ -142,9 +160,9 @@ create table <span class="bold"><b>acs_objects</b></span> (
       Despite its potentially great storage costs, maintaining a
       flattened representation of the context tree is exactly what OpenACS 4.x
       does.  The flattened context tree is stored in the
-      <tt class="computeroutput">acs_object_context_index</tt> table.
+      <code class="computeroutput">acs_object_context_index</code> table.
     </p><a name="acs_object_context_index"></a><pre class="programlisting">
-  create table <span class="bold"><b>acs_object_context_index</b></span> (
+  create table <span class="bold"><strong>acs_object_context_index</strong></span> (
       object_id
           not null
           constraint acs_obj_context_idx_obj_id_fk references <a href="permissions-tediously-explained.html#acs_objects">acs_objects</a> (object_id),
@@ -162,12 +180,12 @@ create table <span class="bold"><b>acs_objects</b></span> (
       an <a href="http://www.oradoc.com/ora817/server.817/a85397/statem3e.htm#2061922" target="_top">index-organized
       table</a>, which means it is substantially optimized for access by primary key.
       Number two, as the above computations suggest, the size of the table
-      grows <span class="strong">polynomially</span>
+      grows <span class="strong"><strong>polynomially</strong></span>
       with respect to the average number of descendants that an object
-      has, and <span class="strong">exponentially</span>
+      has, and <span class="strong"><strong>exponentially</strong></span>
       with respect to the depth of the context tree. 
     </p><p>
-      The <tt class="computeroutput">acs_object_context_index</tt> is kept in sync with the
+      The <code class="computeroutput">acs_object_context_index</code> is kept in sync with the
       <a href="permissions-tediously-explained.html#acs_objects">acs_objects</a>
       table by triggers like this: 
     </p><pre class="programlisting">
@@ -200,34 +218,46 @@ end;
 </pre><p>
       One final note about 
       <a href="permissions-tediously-explained.html#acs_objects">acs_objects</a>. By setting
-      an object's <tt class="computeroutput">security_inherit_p</tt> column to 'f', you can stop permissions
+      an object's <code class="computeroutput">security_inherit_p</code> column to 'f', you can stop permissions
       from cascading down the context tree. In the following example, Joe does not have
       the read permissions on <span class="emphasis"><em>C</em></span> and <span class="emphasis"><em>F</em></span>. 
-    </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col align="center"><col align="center"><col align="center"></colgroup><tbody><tr><td colspan="3" align="center"><div class="literallayout"><p><br>
-<span class="bold"><b>A</b></span><br>
-<tt class="computeroutput">object_id=10</tt><br>
+    </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col align="center"><col align="center"><col align="center"></colgroup><tbody><tr><td colspan="3" align="center">
+	      <div class="literallayout"><p><br>
+<span class="bold"><strong>A</strong></span><br>
+<code class="computeroutput">object_id=10</code><br>
 <span class="emphasis"><em>readable by Joe</em></span><br>
-	      </p></div></td></tr><tr><td colspan="2" align="center"><div class="literallayout"><p><br>
-<span class="bold"><b>B</b></span><br>
-<tt class="computeroutput">object_id=20</tt><br>
+	      </p></div>
+	    </td></tr><tr><td colspan="2" align="center">
+	      <div class="literallayout"><p><br>
+<span class="bold"><strong>B</strong></span><br>
+<code class="computeroutput">object_id=20</code><br>
 <span class="emphasis"><em>readable by Joe</em></span><br>
-              </p></div></td><td align="center"><div class="literallayout"><p><br>
-<span class="bold"><b>C</b></span><br>
-<tt class="computeroutput">object_id=30</tt><br>
+              </p></div>
+	    </td><td align="center">
+	      <div class="literallayout"><p><br>
+<span class="bold"><strong>C</strong></span><br>
+<code class="computeroutput">object_id=30</code><br>
 security_inherit_p = 'f'<br>
 <span class="emphasis"><em>not readable by Joe</em></span><br>
-	      </p></div></td></tr><tr><td align="center"><div class="literallayout"><p><br>
-<span class="bold"><b>D</b></span><br>
-<tt class="computeroutput">object_id=40</tt><br>
-	      </p></div></td><td align="center"><div class="literallayout"><p><br>
-<span class="bold"><b>E</b></span><br>
-<tt class="computeroutput">object_id=50</tt><br>
-	      </p></div></td><td align="center"><div class="literallayout"><p><br>
-<span class="bold"><b>F</b></span><br>
-<tt class="computeroutput">object_id=60</tt><br>
+	      </p></div>
+	    </td></tr><tr><td align="center">
+	      <div class="literallayout"><p><br>
+<span class="bold"><strong>D</strong></span><br>
+<code class="computeroutput">object_id=40</code><br>
+	      </p></div>
+	    </td><td align="center">
+	      <div class="literallayout"><p><br>
+<span class="bold"><strong>E</strong></span><br>
+<code class="computeroutput">object_id=50</code><br>
+	      </p></div>
+	    </td><td align="center">
+	      <div class="literallayout"><p><br>
+<span class="bold"><strong>F</strong></span><br>
+<code class="computeroutput">object_id=60</code><br>
 security_inherit_p = 'f'<br>
 <span class="emphasis"><em>not readable by Joe</em></span><br>
-	      </p></div></td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-privilege-hierarchy"></a>Privilege Hierarchy</h3></div></div><div></div></div><p>
+	      </p></div>
+	    </td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-privilege-hierarchy"></a>Privilege Hierarchy</h3></div></div></div><p>
       Privileges are also organized hierarchically.  In addition to
       the five main system privileges defined in the ACS Kernel data
       model, application developers may define their own. Note,
@@ -243,9 +273,9 @@ security_inherit_p = 'f'<br>
       privileges are tied. Privileges are structured as follows.
     </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col align="center"><col align="center"><col align="center"><col align="center"></colgroup><tbody><tr><td colspan="4" align="center">admin</td></tr><tr><td align="center">create</td><td align="center">delete</td><td align="center">read</td><td align="center">write</td></tr></tbody></table></div><p>
       The parent-child relationship between privileges is represented in
-      the <tt class="computeroutput">acs_privilege_hierarchy</tt> table: 
+      the <code class="computeroutput">acs_privilege_hierarchy</code> table: 
     </p><a name="acs_privilege_hierarchy"></a><pre class="programlisting">
-  create table <span class="bold"><b>acs_privilege_hierarchy</b></span> (
+  create table <span class="bold"><strong>acs_privilege_hierarchy</strong></span> (
       privilege
           not null
           constraint acs_priv_hier_priv_fk references <a href="permissions-tediously-explained.html#acs_privileges">acs_privileges</a> (privilege),
@@ -259,7 +289,7 @@ security_inherit_p = 'f'<br>
       As in the case of the context hierarchy, it is convenient to have a flattened representation
       of this hierarchal structure.  This is accomplished by defining the following view. 
     </p><a name="acs_privilege_descendant_map"></a><pre class="programlisting">
-  create or replace view <span class="bold"><b>acs_privilege_descendant_map</b></span>
+  create or replace view <span class="bold"><strong>acs_privilege_descendant_map</strong></span>
   as
   select
     p1.privilege,
@@ -284,11 +314,19 @@ security_inherit_p = 'f'<br>
       reasonably small, there is no pressing need to cache the flattened ansector-descendant
       view of the privilege hierarchy in a specially maintained table like
       it is done in the case of the context hierarchy.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-party-hierarchy"></a>Party Hierarchy</h3></div></div><div></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-party-hierarchy"></a>Party Hierarchy</h3></div></div></div><p>
       Now for the third hierarchy playing a promiment role in the permission system. The party
       data model is set up as follows. 
-    </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col align="center"><col align="center"></colgroup><tbody><tr><td colspan="2" align="center"><a href="permissions-tediously-explained.html#tedious-parties">parties</a></td></tr><tr><td align="center"><a href="permissions-tediously-explained.html#persons">persons</a></td><td rowspan="2" align="center" valign="top"><a href="permissions-tediously-explained.html#groups">groups</a></td></tr><tr><td align="center"><a href="permissions-tediously-explained.html#users">users</a></td></tr></tbody></table></div><a name="tedious-parties"></a><pre class="programlisting">
-  create table <span class="bold"><b>parties</b></span> (
+    </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col align="center"><col align="center"></colgroup><tbody><tr><td colspan="2" align="center">
+	      <a href="permissions-tediously-explained.html#tedious-parties">parties</a>
+	    </td></tr><tr><td align="center">
+	      <a href="permissions-tediously-explained.html#persons">persons</a>
+	    </td><td rowspan="2" align="center" valign="top">
+	      <a href="permissions-tediously-explained.html#groups">groups</a>
+	    </td></tr><tr><td align="center">
+              <a href="permissions-tediously-explained.html#users">users</a>
+	    </td></tr></tbody></table></div><a name="tedious-parties"></a><pre class="programlisting">
+  create table <span class="bold"><strong>parties</strong></span> (
       party_id
           not null
           constraint parties_party_id_fk references <a href="permissions-tediously-explained.html#acs_objects">acs_objects</a> (object_id)
@@ -298,7 +336,7 @@ security_inherit_p = 'f'<br>
       url                 varchar2(200)
   );
     </pre><a name="persons"></a><pre class="programlisting">
-  create table <span class="bold"><b>persons</b></span> (
+  create table <span class="bold"><strong>persons</strong></span> (
       person_id
           not null
           constraint persons_person_id_fk references <a href="permissions-tediously-explained.html#tedious-parties">parties</a> (party_id)
@@ -309,7 +347,7 @@ security_inherit_p = 'f'<br>
           not null
   );
     </pre><a name="users"></a><pre class="programlisting">
-  create table <span class="bold"><b>users</b></span> (
+  create table <span class="bold"><strong>users</strong></span> (
       user_id
           not null
           constraint users_user_id_fk references <a href="permissions-tediously-explained.html#persons">persons</a> (person_id)
@@ -318,7 +356,7 @@ security_inherit_p = 'f'<br>
       -- other attributes
   );
     </pre><a name="groups"></a><pre class="programlisting"> 
-  create table <span class="bold"><b>groups</b></span> (
+  create table <span class="bold"><strong>groups</strong></span> (
       group_id
           not null
           constraint groups_group_id_fk references <a href="permissions-tediously-explained.html#tedious-parties">parties</a> (party_id)
@@ -326,9 +364,9 @@ security_inherit_p = 'f'<br>
       group_name           varchar2(100) not null
   );
     </pre><p>
-      Recall that the <tt class="computeroutput">grantee_id</tt> column of the
+      Recall that the <code class="computeroutput">grantee_id</code> column of the
       <a href="permissions-tediously-explained.html#acs_permissions">acs_permissions</a> table references 
-      <tt class="computeroutput">parties.party_id</tt>.
+      <code class="computeroutput">parties.party_id</code>.
       This means that you can grant a privilege on an object to a party, person, user, or group.
       Groups represent aggregations of parties. The most common scenario that you are likely
       to encounter is a group that is a collection of users, although you could also
@@ -339,9 +377,9 @@ security_inherit_p = 'f'<br>
       a group named <span class="emphasis"><em>Pranksters</em></span>, you can assign membership to Pete,
       Poly, and Penelope. The fact that these users are members of the
       <span class="emphasis"><em>Pranksters</em></span> group will be recorded in the
-      <tt class="computeroutput">membership_rels</tt> and <tt class="computeroutput">acs_rels</tt> tables: 
+      <code class="computeroutput">membership_rels</code> and <code class="computeroutput">acs_rels</code> tables: 
     </p><a name="acs_rels"></a><pre class="programlisting">
-  create table <span class="bold"><b>acs_rels</b></span> (
+  create table <span class="bold"><strong>acs_rels</strong></span> (
       rel_id
           not null
           constraint acs_rels_rel_id_fk references <a href="permissions-tediously-explained.html#acs_objects">acs_objects</a> (object_id)
@@ -359,7 +397,7 @@ security_inherit_p = 'f'<br>
           unique (rel_type, object_id_one, object_id_two)
   );
     </pre><a name="membership_rels"></a><pre class="programlisting">
-  create table <span class="bold"><b>membership_rels</b></span> (
+  create table <span class="bold"><strong>membership_rels</strong></span> (
       rel_id
           constraint membership_rel_rel_id_fk references <a href="permissions-tediously-explained.html#acs_rels">acs_rels</a> (rel_id)
           constraint membership_rel_rel_id_pk primary key,
@@ -371,7 +409,13 @@ security_inherit_p = 'f'<br>
     </pre><p>
       The <a href="permissions-tediously-explained.html#acs_rels">acs_rels</a>
       table entries would look like so: 
-    </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col align="center"><col align="center"><col align="center"></colgroup><thead><tr><th align="center"><tt class="computeroutput">rel_type</tt></th><th align="center"><tt class="computeroutput">object_one</tt></th><th align="center"><tt class="computeroutput">object_two</tt></th></tr></thead><tbody><tr><td align="center">
+    </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col align="center"><col align="center"><col align="center"></colgroup><thead><tr><th align="center">
+              <code class="computeroutput">rel_type</code>
+	    </th><th align="center">
+              <code class="computeroutput">object_one</code>
+	    </th><th align="center">
+	      <code class="computeroutput">object_two</code>
+	    </th></tr></thead><tbody><tr><td align="center">
 	      membership_rel
 	    </td><td align="center">
 	      Pranksters
@@ -393,12 +437,12 @@ security_inherit_p = 'f'<br>
       Another way of building up groups is by adding subgroups.  Suppose
       we define <span class="emphasis"><em>Merry Pranksters</em></span> and <span class="emphasis"><em>Sad Pranksters</em></span> as subgroups
       of <span class="emphasis"><em>Pranksters</em></span>.  We say that the <span class="emphasis"><em>Pranksters</em></span> group
-      is <span class="strong">composed</span> of 
+      is <span class="strong"><strong>composed</strong></span> of 
       groups <span class="emphasis"><em>Merry Pranksters</em></span> and <span class="emphasis"><em>Sad Pranksters</em></span>.  This
       information is stored in the <a href="permissions-tediously-explained.html#acs_rels">acs_rels</a>
-      and <tt class="computeroutput">composition_rels</tt> tables. 
+      and <code class="computeroutput">composition_rels</code> tables. 
     </p><a name="composition_rels"></a><pre class="programlisting">
-create table <span class="bold"><b>composition_rels</b></span> (
+create table <span class="bold"><strong>composition_rels</strong></span> (
     rel_id
         constraint composition_rel_rel_id_fk references <a href="permissions-tediously-explained.html#acs_rels">acs_rels</a> (rel_id)
         constraint composition_rel_rel_id_pk primary key
@@ -406,7 +450,13 @@ create table <span class="bold"><b>composition_rels</b></span> (
     </pre><p>
       The relevant entries in the 
       <a href="permissions-tediously-explained.html#acs_rels">acs_rels</a> look like so. 
-    </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col align="center"><col align="center"><col align="center"></colgroup><thead><tr><th align="center"><tt class="computeroutput">rel_type</tt></th><th align="center"><tt class="computeroutput">object_one</tt></th><th align="center"><tt class="computeroutput">object_two</tt></th></tr></thead><tbody><tr><td align="center">
+    </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col align="center"><col align="center"><col align="center"></colgroup><thead><tr><th align="center">
+              <code class="computeroutput">rel_type</code>
+	    </th><th align="center">
+              <code class="computeroutput">object_one</code>
+	    </th><th align="center">
+	      <code class="computeroutput">object_two</code>
+	    </th></tr></thead><tbody><tr><td align="center">
 	      composition_rel
 	    </td><td align="center">
 	      Pranksters
@@ -436,7 +486,7 @@ create table <span class="bold"><b>composition_rels</b></span> (
       reducing the performance hit incurred by hierarchical queries is to cache query results in
       a table maintained by triggers.  The OpenACS 4.x data model defines two such tables:
     </p><a name="group_component_index"></a><pre class="programlisting">
- create table <span class="bold"><b>group_component_index</b></span> (
+ create table <span class="bold"><strong>group_component_index</strong></span> (
           group_id        not null
                           constraint group_comp_index_group_id_fk
                           references <a href="permissions-tediously-explained.html#groups">groups</a> (group_id),
@@ -455,7 +505,7 @@ create table <span class="bold"><b>composition_rels</b></span> (
           primary key (group_id, component_id, rel_id)
   ) organization index;
     </pre><a name="group_member_index"></a><pre class="programlisting">
-  create table <span class="bold"><b>group_member_index</b></span> (
+  create table <span class="bold"><strong>group_member_index</strong></span> (
       group_id
           not null
           constraint group_member_index_grp_id_fk references <a href="permissions-tediously-explained.html#groups">groups</a> (group_id),
@@ -472,11 +522,11 @@ create table <span class="bold"><b>composition_rels</b></span> (
           primary key (member_id, group_id, rel_id)
   ) organization index;
     </pre><p>
-      The <tt class="computeroutput">group_component_index</tt> table stores a flattened representation of the
+      The <code class="computeroutput">group_component_index</code> table stores a flattened representation of the
       group composition hierarchy that is maintained in sync with the <a href="permissions-tediously-explained.html#acs_rels">acs_rels</a>
-      and <tt class="computeroutput">composition_rels</tt> tables through triggers. 
+      and <code class="computeroutput">composition_rels</code> tables through triggers. 
     </p><p>
-      As far as the <tt class="computeroutput">group_member_index</tt> table goes, I am not sure I understand its
+      As far as the <code class="computeroutput">group_member_index</code> table goes, I am not sure I understand its
       purpose.  It maintains group-member relationships that are resolved with respect
       to group composition.  Note that information stored in
       <a href="permissions-tediously-explained.html#group_member_index">group_member_index</a> can be trivially derived by joining
@@ -507,7 +557,7 @@ where
   mr.rel_id = r.rel_id
   and r.object_id_one = gci.component_id;
     </pre><p>
-      A heuristic way to verify that <tt class="computeroutput">group_member_view</tt> is essentially identical
+      A heuristic way to verify that <code class="computeroutput">group_member_view</code> is essentially identical
       to <a href="permissions-tediously-explained.html#group_member_index">group_member_index</a> is to compute the
       symmetric difference between the two: 
     </p><pre class="programlisting">
@@ -535,16 +585,16 @@ from
       membership relationship resolution can be computed trivially with no hierarchical
       queries involved. There is no need to keep the view in a denormalized
       table, unless doing so results in substantial performance gains.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-putting-all-together"></a>Putting It All Together</h3></div></div><div></div></div><p>
-      Security information is queried by calling the <tt class="computeroutput">acs_permission.permission_p</tt>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-putting-all-together"></a>Putting It All Together</h3></div></div></div><p>
+      Security information is queried by calling the <code class="computeroutput">acs_permission.permission_p</code>
       function in OpenACS 4.x+. This is accessible from Tcl via the
-      <tt class="computeroutput">permission::permission_p</tt> procedure. 
+      <code class="computeroutput">permission::permission_p</code> procedure. 
     </p><pre class="programlisting">  
   create or replace package body acs_permission
   as
     -- some stuff removed for the sake of brevity
   
-    function <span class="bold"><b>permission_p</b></span> (
+    function <span class="bold"><strong>permission_p</strong></span> (
       object_id	 acs_objects.object_id%TYPE,
       party_id	 parties.party_id%TYPE,
       privilege	 acs_privileges.privilege%TYPE
@@ -570,7 +620,7 @@ from
       the party composition (and membership) hierarchy. As such,
       it contains an extremely large number of rows. About
       the only kind of query you can run against it is the one
-      performed by the <tt class="computeroutput">acs_permission.permission_p</tt>
+      performed by the <code class="computeroutput">acs_permission.permission_p</code>
       function.  Anything other than that would take forever to
       finish or would ultimately result in an Oracle error.
     </p><p>
@@ -606,7 +656,7 @@ select count(*)
   end;
   /
     </pre><p>
-      The <tt class="computeroutput">acs_permission.revoke_permission</tt> function merely runs a
+      The <code class="computeroutput">acs_permission.revoke_permission</code> function merely runs a
       delete statement like so: 
     </p><pre class="programlisting">  
   delete from
@@ -616,9 +666,15 @@ select count(*)
      and grantee_id = revoke_permission.grantee_id
      and privilege = revoke_permission.privilege;
     </pre><p>
-      Note that in the above example, <tt class="computeroutput">acs_permissions</tt> had only
+      Note that in the above example, <code class="computeroutput">acs_permissions</code> had only
       one entry that needed to be deleted: 
-    </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col align="center"><col align="center"><col align="center"></colgroup><thead><tr><th align="center"><tt class="computeroutput">object_id</tt></th><th align="center"><tt class="computeroutput">grantee_id</tt></th><th align="center"><tt class="computeroutput">privilege</tt></th></tr></thead><tbody><tr><td align="center">
+    </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col align="center"><col align="center"><col align="center"></colgroup><thead><tr><th align="center">
+              <code class="computeroutput">object_id</code>
+	    </th><th align="center">
+	      <code class="computeroutput">grantee_id</code>
+	    </th><th align="center">
+	      <code class="computeroutput">privilege</code>
+	    </th></tr></thead><tbody><tr><td align="center">
 	      default_context
 	    </td><td align="center">
 	      registered_users
@@ -627,9 +683,9 @@ select count(*)
 	    </td></tr></tbody></table></div><p>
       The above script would never get around to deleting this entry because it had
       to loop through a gazillion rows in the humongous
-      <tt class="computeroutput">acs_object_party_privilege_map</tt> view. 
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-appendix"></a>Appendix: Various View Definitions</h3></div></div><div></div></div><a name="acs_object_party_privilege_map"></a><pre class="programlisting">
-create or replace view <span class="bold"><b>acs_object_party_privilege_map</b></span>
+      <code class="computeroutput">acs_object_party_privilege_map</code> view. 
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-appendix"></a>Appendix: Various View Definitions</h3></div></div></div><a name="acs_object_party_privilege_map"></a><pre class="programlisting">
+create or replace view <span class="bold"><strong>acs_object_party_privilege_map</strong></span>
 as
 select
   ogpm.object_id,
@@ -648,7 +704,7 @@ select
 from
   <a href="permissions-tediously-explained.html#acs_object_grantee_priv_map">acs_object_grantee_priv_map</a>;
     </pre><a name="acs_object_grantee_priv_map"></a><pre class="programlisting">
-create or replace view <span class="bold"><b>acs_object_grantee_priv_map</b></span>
+create or replace view <span class="bold"><strong>acs_object_grantee_priv_map</strong></span>
 as
 select
   a.object_id,
@@ -660,7 +716,7 @@ from
 where
   a.privilege = m.privilege;
     </pre><a name="acs_permissions_all"></a><pre class="programlisting"> 
-create or replace view <span class="bold"><b>acs_permissions_all</b></span>
+create or replace view <span class="bold"><strong>acs_permissions_all</strong></span>
 as
 select
   op.object_id,
@@ -672,7 +728,7 @@ from
 where
   op.ancestor_id = p.object_id;
     </pre><a name="acs_object_paths"></a><pre class="programlisting">
-create or replace view <span class="bold"><b>acs_object_paths</b></span>
+create or replace view <span class="bold"><strong>acs_object_paths</strong></span>
 as
 select
   object_id,
@@ -682,7 +738,7 @@ from
   <a href="permissions-tediously-explained.html#acs_object_context_index">acs_object_context_index</a>;
     </pre><a name="group_member_map"></a><pre class="programlisting"> 
 
-create or replace view <span class="bold"><b>group_member_map</b></span>
+create or replace view <span class="bold"><strong>group_member_map</strong></span>
 as
 select
   group_id,

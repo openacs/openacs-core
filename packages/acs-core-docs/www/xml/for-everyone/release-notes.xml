@@ -35,6 +35,17 @@ END OF TEMPLATE -->
 
 <para>The ChangeLogs include an annotated list of changes <link linkend="changelog-latest">since the last release</link> and <link linkend="changelog">in the entire &majorversion;.&minorversion; release sequence.</link></para>
 
+  <sect2 id="release-notes-5-2-0">
+    <title>Release 5.2.0 beta 1</title>
+    <itemizedlist>
+      <listitem>
+        <para>Bug fixes.</para>
+        <para>New TIPs implemented.</para>
+        <para>This release does <emphasis role="strong">not</emphasis> include new translations.</para>
+      </listitem>
+    </itemizedlist>
+   </sect2>
+
   <sect2 id="release-notes-5-1-4">
     <title>Release 5.1.4</title>
     <itemizedlist>
@@ -370,16 +381,23 @@ END OF TEMPLATE -->
     <para><ulink url="release-notes-4-5.html">Release Notes for 4.5</ulink></para>
   </sect2>
 
+<!-- skipping this until after 5.2.0; since the changelog resets with minor releases, changelog-latest = changelog
+ 
   <sect2 id="changelog-latest">
     <title>Changelog (most recent release only)</title>
     <programlisting><xi:include href="../../../../../ChangeLog-latest" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>ChangeLog missing</xi:fallback></xi:include></programlisting>
 
   </sect2>
+-->
 
+<!-- a changelog entry contains <if>; this will have to be escaped before it can be processed correctly
   <sect2 id="changelog">
     <title>Changelog for &releasebranch;</title>
-    <programlisting><xi:include href="../../../../../ChangeLog" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>ChangeLog missing</xi:fallback></xi:include></programlisting>
-
+<programlisting>
+<xi:include href="../../../../../ChangeLog" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>ChangeLog missing</xi:fallback></xi:include>
+</programlisting>
   </sect2>
+-->
+
 
 </sect1>
