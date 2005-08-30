@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.2.0a1" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.2.0b1" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="authentication_authority">Authentifizierungsstelle</msg>
   <msg key="common_Actions">Aktionen</msg>
@@ -46,8 +46,8 @@
   <msg key="common_no">Nein</msg>
   <msg key="common_OK">OK</msg>
   <msg key="common_ok">OK</msg>
-  <msg key="common_Open">Selbstregistrierung</msg>
-  <msg key="common_open">Selbstregistrierung</msg>
+  <msg key="common_Open">Offen</msg>
+  <msg key="common_open">Offen</msg>
   <msg key="common_Previous">Zürück</msg>
   <msg key="common_previous">Zurück</msg>
   <msg key="common_Register">Registrieren</msg>
@@ -71,6 +71,7 @@
   <msg key="Email_Address">e-Mail Addresse</msg>
   <msg key="First_Names">Vorname</msg>
   <msg key="Last_Name">Nachname</msg>
+  <msg key="Main_Site">Main Site</msg>
   <msg key="Member_role_pretty_name">Teilnehmer</msg>
   <msg key="member_role_pretty_name">Teilnehmer</msg>
   <msg key="Member_role_pretty_plural">Teilnehmer</msg>
@@ -85,6 +86,9 @@
   <msg key="member_state_needs_approval">Zugang beantragt</msg>
   <msg key="member_state_Rejected">Abgelehnt</msg>
   <msg key="member_state_rejected">Abgelehnt</msg>
+  <msg key="Person">Person</msg>
   <msg key="Registered_Users">Registrierte User</msg>
   <msg key="The_Public">Alle Besucher des Systems</msg>
+  <msg key="Unregistered">Unregistrierter</msg>
+  <msg key="Visitor">Besucher</msg>
 </message_catalog>
