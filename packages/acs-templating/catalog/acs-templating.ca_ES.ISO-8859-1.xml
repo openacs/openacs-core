@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-templating" package_version="5.1.2" locale="ca_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-templating" package_version="5.2.0a1" locale="ca_ES" charset="ISO-8859-1">
 
-  <msg key="12-Hour">12-Hores</msg>
-  <msg key="24-Hour">24-Hores</msg>
+  <msg key="12-Hour">12 hores</msg>
+  <msg key="24-Hour">24 hores</msg>
   <msg key="Day">Dia</msg>
   <msg key="Element_is_required">és obligatori %label% </msg>
   <msg key="Element_is_too_long_Plural">%label% és %excess_no_bytes% caràcters massa llarg. </msg>
@@ -28,6 +28,6 @@
   <msg key="Sort_order">Ordre de classificació</msg>
   <msg key="Spellcheck">Revisor ortogràfic</msg>
   <msg key="Tag_handler_invalid_number_of_args">El nombre d'arguments per al gestor d'etiquetes no és vàlid </msg>
-  <msg key="Template_parser_error_in_parameter_list">Errada en la llista de paràmetres </msg>
+  <msg key="Template_parser_error_in_parameter_list">Error en la llista de paràmetres </msg>
   <msg key="Year">Any</msg>
 </message_catalog>
