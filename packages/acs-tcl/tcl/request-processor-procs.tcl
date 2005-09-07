@@ -666,7 +666,7 @@ ad_proc -private rp_filter { why } {
 
     if { ![empty_string_p [ad_conn object_id]] } {
       ad_try {
-        switch -glob [ad_conn extra_url] {
+        switch -glob -- [ad_conn extra_url] {
             admin/* {
               permission::require_permission -object_id [ad_conn object_id] -privilege admin
             }
