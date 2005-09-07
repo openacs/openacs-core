@@ -33,4 +33,12 @@
       </querytext>
    </fullquery>
 
+   <fullquery name="lang::util::get_locale_options_not_cached.select_locales">
+      <querytext>
+       select label, locale
+        from   ad_locales
+      </querytext>
+   </fullquery>
+
+
 </queryset>

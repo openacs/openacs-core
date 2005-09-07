@@ -807,3 +807,18 @@ ad_proc -public lang::util::localize_list_of_lists {
     }
     return $list_output
 }
+
+ad_proc -public lang::util::get_locale_options {
+} {
+    Return a list of locales know to the system
+} {
+    return [util_memoize lang::util::get_locale_options_not_cached]
+}
+
+ad_proc -private lang::util::get_locale_options_not_cached {} {
+    Return all enabled locales in the system in a format suitable for the options argument of a form.
+
+    @author Lars Pind
+} {
+    return [db_list_of_lists select_locales {}]
+}
