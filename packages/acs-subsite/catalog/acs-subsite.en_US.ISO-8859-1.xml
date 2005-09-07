@@ -210,7 +210,7 @@ Please visit the following link to change your password now:
 		&lt;/if&gt;
 		&lt;if @nodes.parameters_url@ ne &quot;&quot;&gt;
 		  &lt;a href=&quot;@nodes.parameters_url@&quot;&gt;&lt;#_ parameters</msg>
-  <msg key="lt_Do_not_inherit_from_p">Do not inherit from $parent_object_name</msg>
+  <msg key="lt_Do_not_inherit_from_p">Do not inherit from %parent_object_name%</msg>
   <msg key="lt_Edit_comment_for_the_">Edit comment for the portrait of %first_names% %last_name%</msg>
   <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) registered as a user of 
 %system_url%</msg>
@@ -222,8 +222,8 @@ Please visit the following link to change your password now:
   <msg key="lt_If_you_happen_to_know">If you happen to know or believe that the person you would like to
   invite already has an account on this system:</msg>
   <msg key="lt_If_you_need_this_func">If you need this functionality, please load acs-reference and ref-countries.</msg>
-  <msg key="lt_Inherit_from_parent_o">Inherit from $parent_object_name</msg>
-  <msg key="lt_Inherit_permissions_f">Inherit permissions from the $parent_object_name</msg>
+  <msg key="lt_Inherit_from_parent_o">Inherit from %parent_object_name%</msg>
+  <msg key="lt_Inherit_permissions_f">Inherit permissions from the %parent_object_name%</msg>
   <msg key="lt_Inherited_Permissions">Inherited Permissions</msg>
   <msg key="lt_It_would_be_a_very_ba">It would be a very bad idea to choose this option if you're using a
 shared computer in a library or school.  Any subsequent user of this
@@ -261,7 +261,7 @@ waiting approval.</msg>
   <msg key="lt_Saving_email_address_">Saving email address and password</msg>
   <msg key="lt_Show_everyone_else_at">Show everyone else at %system_name% how great looking you are:</msg>
   <msg key="lt_Sorry_but_it_seems_th">Sorry but it seems that you've been banned from %system_name%.</msg>
-  <msg key="lt_Stop_inheriting_permi">Stop inheriting permissions from the $parent_object_name</msg>
+  <msg key="lt_Stop_inheriting_permi">Stop inheriting permissions from the %parent_object_name%</msg>
   <msg key="lt_Sure_erase_user_por">Are you sure that you want to erase this user's portrait?</msg>
   <msg key="lt_Sure_erase_your_por">Are you sure that you want to erase your portrait?</msg>
   <msg key="lt_The_picture_of_you_in">The picture of you in the system is invalid. Please</msg>
