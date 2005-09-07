@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-lang" package_version="5.1.2d2" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-lang" package_version="5.2.0b1" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="available-in-this-language">Deutsche Version verfügbar</msg>
   <msg key="change-locale">Sprache wechseln</msg>
   <msg key="English">Englisch</msg>
   <msg key="French">Französisch</msg>
   <msg key="German">Deutsch</msg>
+  <msg key="Locale">Locale</msg>
   <msg key="localization-abday">{So} {Mo} {Di} {Mi} {Do} {Fr} {Sa}</msg>
   <msg key="localization-abmon">{Jan} {Feb} {Mrz} {Apr} {Mai} {Jun} {Jul} {Aug} {Sep} {Okt} {Nov} {Dez}</msg>
   <msg key="localization-am_str">A.M.</msg>
@@ -38,7 +39,6 @@
   <msg key="localization-positive_sign">+</msg>
   <msg key="localization-t_fmt">%H:%M</msg>
   <msg key="localization-thousands_sep">.</msg>
-  <msg key="this-language">Deutsche</msg>
   <msg key="Spanish">Spanisch</msg>
   <msg key="this-language">Deutsch</msg>
 </message_catalog>
