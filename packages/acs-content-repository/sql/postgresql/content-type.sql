@@ -643,10 +643,6 @@ declare
   join_rec                             record;
 begin
 
-  if v_table_name is null then
-    return 0;
-  end if;
-
   for join_rec in select ot2.table_name, ot2.id_column, tree_level(ot2.tree_sortkey) as level
                   from acs_object_types ot1, acs_object_types ot2
                   where ot2.object_type <> ''acs_object''                       
