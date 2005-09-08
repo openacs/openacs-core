@@ -7,6 +7,7 @@
   <msg key="French">Französisch</msg>
   <msg key="German">Deutsch</msg>
   <msg key="Locale">Locale</msg>
+  <msg key="Locale_for">Locale für %package_name%</msg>
   <msg key="localization-abday">{So} {Mo} {Di} {Mi} {Do} {Fr} {Sa}</msg>
   <msg key="localization-abmon">{Jan} {Feb} {Mrz} {Apr} {Mai} {Jun} {Jul} {Aug} {Sep} {Okt} {Nov} {Dez}</msg>
   <msg key="localization-am_str">A.M.</msg>
@@ -39,6 +40,12 @@
   <msg key="localization-positive_sign">+</msg>
   <msg key="localization-t_fmt">%H:%M</msg>
   <msg key="localization-thousands_sep">.</msg>
+  <msg key="Resolve_message_conflicts">Übersetzungskonflikte aufläsen</msg>
   <msg key="Spanish">Spanisch</msg>
   <msg key="this-language">Deutsch</msg>
+  <msg key="Translated_messages_on_this_page">Übersetzte Nachrichten auf dieser Seite (%locale%)</msg>
+  <msg key="Your_locale_for_package">Die Spracheinstellung für %package_name%. Wenn gesetzt wird diese die Systemweiten Einstellungen für diese Applikation überschreiben</msg>
+  <msg key="Your_locale_site_wide">Ihre Spracheinstellung für die gesamte Website</msg>
+  <msg key="Your_Preferred_Locale">Ihre bevorzugte Spracheinstellung</msg>
+  <msg key="Your_timezone">Ihre Zeitzone</msg>
 </message_catalog>
