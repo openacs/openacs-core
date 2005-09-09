@@ -128,7 +128,7 @@ ad_proc -public group::new {
     # groups to the title at the appropriate places.
 
     if { ![empty_string_p [info procs "::lang::util::convert_to_i18n"]] } {
-	set pretty_name [lang::util::convert_to_i18n -message_key "group_title.${group_id}" -text "$pretty_name"]
+	set pretty_name [lang::util::convert_to_i18n -message_key "group_title_${group_id}" -text "$pretty_name"]
     } 
 	
     # Update the title to the pretty name

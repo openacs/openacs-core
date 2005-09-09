@@ -45,6 +45,19 @@ ad_proc -private subsite::after_upgrade {
 		    apm_parameter_register "RegistrationImplName" "Name of the implementation used in the registration process" "acs-subsite" "asm_url" "string" "user-login"
                 }
 	    }
+	    5.2.0a2 5.2.0a3 {
+		db_transaction {
+		    db_foreach select_group_name {select group_id, group_name from groups} {
+			if { ![empty_string_p [info procs "::lang::util::convert_to_i18n"]] } {
+			    set pretty_name [lang::util::convert_to_i18n -message_key "group_title_${group_id}" -text "$group_name"]
+			} else {
+			    set pretty_name "$group_name"
+			}
+			
+			db_dml title_update "update acs_objects set title=:pretty_name where object_id = :group_id"
+		    }
+		}
+	    }
 	}
 }
 
