@@ -109,9 +109,6 @@ ad_proc -public group::new {
 	if {[empty_string_p $pretty_name]} {
 	    set pretty_name $group_name
 	}
-# Commented out the following as convert_to_i18n was only approved for
-# 5.3 in acs-lang due to dependency on acs-translations.
-#	set pretty_name [lang::util::convert_to_i18n -prefix "group" -text "$pretty_name"]
     }
 
     set group_id [package_instantiate_object \
@@ -124,6 +121,16 @@ ad_proc -public group::new {
     	-variable_prefix $variable_prefix \
     	$group_type]
 
+    # We can't change the group_name to an I18N version as this would
+    # break compatability with group::member_p -group_name and the
+    # like. So instead we change the title of the object of the group
+    # (through the pretty name). We just have to change the display of
+    # groups to the title at the appropriate places.
+
+    if { ![empty_string_p [info procs "::lang::util::convert_to_i18n"]] } {
+	set pretty_name [lang::util::convert_to_i18n -message_key "group_title.${group_id}" -text "$pretty_name"]
+    } 
+	
     # Update the title to the pretty name
     if {![empty_string_p $pretty_name]} {
 	db_dml title_update "update acs_objects set title=:pretty_name where object_id = :group_id"
@@ -358,9 +365,10 @@ ad_proc -public group::update {
     "
 
     if {[info exists group_name]} {
+	set pretty_name [lang::util::convert_to_i18n -message_key "group_title.${group_id}" -text "$group_name"]
 	db_dml update_object_title {
 	    update acs_objects
-	    set title = :group_name
+	    set title = :pretty_name
 	    where object_id = :group_id
 	}
     }
