@@ -35,11 +35,23 @@ foreach party_id $party_ids {
     }
 }
 
+# The element check_uncheck only calls a javascript function
+# to check or uncheck all recipients
 set form_elements {
     message_id:key
     return_url:text(hidden)
     {message_type:text(hidden) {value "email"}}
-    {to:text(checkbox),multiple {label "[_ contacts.Recipients]"} {options  $recipients }}
+    {check_uncheck:text(checkbox),multiple,optional
+	{label "Check/Uncheck"}
+	{options {{"" 1}}}
+	{section "[_ contacts.Recipients]"}
+	{html {onclick check_uncheck_boxes(this.checked)}}
+    }
+    {to:text(checkbox),multiple 
+	{label "[_ contacts.Recipients]"} 
+	{options  $recipients }
+	{html {checked 1}}
+    }
 }
 
 
@@ -79,6 +91,7 @@ append form_elements {
     {subject:text(text),optional
 	{label "[_ contacts.Subject]"}
 	{html {size 55}}
+	{section "[_ contacts.Message]"}
     }
     {content:text(richtext),optional
 	{label "[_ contacts.Message]"}
