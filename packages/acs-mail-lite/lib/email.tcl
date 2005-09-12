@@ -24,13 +24,15 @@ if {![info exists cancel_url]} {
 }
 
 
-# Some how when the form is submited the party_ids values became
+# Somehow when the form is submited the party_ids values became
 # only one element of a list, this avoid that problem
 
 set recipients [list]
 foreach party_id $party_ids {
-    lappend recipients [list "<a href=\"[contact::url -party_id $party_id]\">[contact::name -party_id $party_id]</a> 
+    if {![empty_string_p $party_id]} {
+	lappend recipients [list "<a href=\"[contact::url -party_id $party_id]\">[contact::name -party_id $party_id]</a> 
                              ([cc_email_from_party $party_id])" $party_id]
+    }
 }
 
 set form_elements {
