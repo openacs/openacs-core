@@ -1,3 +1,4 @@
+
 ##############################################################################
 #
 #   Copyright 2001, OpenACS, Peter Harper.
@@ -1197,4 +1198,15 @@ ad_proc -public aa_get_first_url {
 
     db_1row first_url { *SQL* }
         return $url
+}
+
+ad_proc -public aa_display_result {
+    {-response:required}
+    {-explanation:required}
+} {
+    if {$response} {
+	aa_log_result "pass" $explanation
+    } else {
+	aa_log_result "fail" $explanation
+    }
 }
