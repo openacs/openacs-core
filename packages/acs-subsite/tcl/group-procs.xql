@@ -21,7 +21,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="group::get_id.get_group_id">
+<fullquery name="group::get_id_not_cached.get_group_id">
       <querytext>
       
 	select group_id

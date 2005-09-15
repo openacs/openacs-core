@@ -188,6 +188,7 @@ ad_proc group::delete { group_id } {
     "
 
     return $object_type
+    util_memoize_flush "group::get_title_not_cached -group_id $group_id"
 }
 
 ad_proc -public group::get {
@@ -226,6 +227,23 @@ ad_proc -public group::get_id {
 } {
     Retrieve the group_id to a given group-name.
     Note: this WILL bomb if the group-name is not unique.
+
+    @author Christian Langmann (C_Langmann@gmx.de)
+    @creation-date 2005-06-09
+
+    @param group_name the name of the group to look for
+
+    @return the id of the group
+
+    @error
+} {
+    return [util_memoize [list group::get_id_not_cached -group_name $group_name]]
+}
+
+ad_proc -private group::get_id_not_cached {
+    {-group_name:required}
+} {
+    Retrieve the group_id to a given group-name.
 
     @author Christian Langmann (C_Langmann@gmx.de)
     @creation-date 2005-06-09
@@ -371,6 +389,7 @@ ad_proc -public group::update {
 	    set title = :pretty_name
 	    where object_id = :group_id
 	}
+	util_memoize_flush "group::get_title_not_cached -group_id $group_id"
     }
 }
 
@@ -609,4 +628,35 @@ ad_proc -public group::remove_member {
     }
 
     flush_members_cache -group_id $group_id
+}
+
+ad_proc -public group::title {
+    {-group_name ""}
+    {-group_id ""}
+} {
+    Get the title of a group, cached
+    Use either the group_id or the group_name
+
+    @param group_id The group_id of the group
+    @param group_name The name of the group. Note this is not the I18N title we want to retrieve with this procedure
+} {
+    if {![empty_string_p $group_name]} {
+	set group_id [group::get_id -group_name $group_name]
+    } 
+
+    if {![empty_string_p $group_id]} {
+	return [util_memoize [list group::title_not_cached -group_id $group_id]]
+    } else {
+	return ""
+    }
+}
+
+ad_proc -private group::title_not_cached {
+    {-group_id ""}
+} {
+    Get the title of a group, not cached
+
+    @param group_id The group_id of the group
+} {
+    return [group::get_element -group_id $group_id -element "title"]
 }
