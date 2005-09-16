@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="acs-kernel" package_version="5.2.0b1" locale="en_US" charset="ISO-8859-1">
 
-  <msg key="Administrator">Administrator</msg>
-  <msg key="Administrators">Administrators</msg>
+  <msg key="Administrators">Administratoren</msg>
   <msg key="authentication_authority">Authority</msg>
   <description key="authentication_authority">The identifying label for an authentication server, such as an  LDAP or RADIUS server.</description>
 
