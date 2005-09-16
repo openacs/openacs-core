@@ -41,27 +41,18 @@
       </querytext>
 </fullquery>
 
-<fullquery name="group::get_members_not_cached.group_members_person">
+<fullquery name="group::get_members_not_cached.group_members">
       <querytext>
       
 		select m.member_id
-		from group_member_map m, persons p
+		from group_member_map m, acs_objects o
 		where m.group_id = :group_id
-		and m.member_id = p.person_id
+		and m.member_id = o.object_id
+		and o.object_type = :type
 	
       </querytext>
 </fullquery>
 
-<fullquery name="group::get_members_not_cached.group_members_user">
-      <querytext>
-      
-		select m.member_id
-		from group_member_map m, users u
-		where m.group_id = :group_id
-		and m.member_id = u.user_id
-	
-      </querytext>
-</fullquery>
 
 <fullquery name="group::join_policy.select_join_policy">      
       <querytext>

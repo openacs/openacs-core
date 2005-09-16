@@ -290,8 +290,7 @@ ad_proc -private group::get_members_not_cached {
 } {
     switch $type {
 	party  { set member_list [db_list group_members_party {}] }
-	person { set member_list [db_list group_members_person {}] }
-	user   { set member_list [db_list group_members_user {}] }
+	default { set member_list [db_list group_members {}] }
     }
 
     return $member_list
