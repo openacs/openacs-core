@@ -139,6 +139,25 @@ ad_proc -deprecated ad_user_new {
     return $user_id
 }
 
+ad_proc -public person::person_p {
+    {-party_id:required}
+} {
+    is this party a person? Cached
+} {
+    return [util_memoize [list ::person::person_p_not_cached -party_id $party_id]]
+}
+
+ad_proc -public person::person_p_not_cached {
+    {-party_id:required}
+} {
+    is this party a person? Cached
+} {
+    if {[db_0or1row contact_person_exists_p {select '1' from persons where person_id = :party_id}]} {
+        return 1
+    } else {
+        return 0
+    }
+}
     
 ad_proc -public person::new {
     {-first_names:required}
