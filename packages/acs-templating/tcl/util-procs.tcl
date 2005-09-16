@@ -731,7 +731,7 @@ ad_proc -public template::util::number_list { last_number {start_at 0} } {
   return $ret
 }
 
-ad_proc -public template::util::tcl_to_sql_list { tcllist } {
+ad_proc -public template::util::tcl_to_sql_list { lst } {
     Convert a TCL list to a SQL list, for use with the "in" statement
     why doesn't this use ns_dbquotevalue?
 } {
@@ -745,7 +745,6 @@ ad_proc -public template::util::tcl_to_sql_list { tcllist } {
         return ""
     }
 }
-
 
 ad_proc -public template::get_resource_path {} {
     Get the template directory
