@@ -732,13 +732,15 @@ ad_proc -public template::util::number_list { last_number {start_at 0} } {
 }
 
 ad_proc -public template::util::tcl_to_sql_list { lst } {
-    Convert a TCL list to a SQL list, for use with the "in" statement
-    why doesn't this use ns_dbquotevalue?
+    Convert a TCL list to a SQL list, for use with the "in" statement.
+    Uses DoubleApos (similar to ns_dbquotevalue) functionality to escape single quotes
 } {
 
     if { [llength $lst] > 0 } {
+        # regsub adds DoubleApos functionality for security reasons.
+        regsub -all -- ' "$lst" '' lst2
         set sql "'"
-        append sql [join $lst "', '"]
+        append sql [join $lst2 "', '"]
         append sql "'"
         return $sql
     } else {
