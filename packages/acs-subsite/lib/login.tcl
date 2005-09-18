@@ -86,7 +86,7 @@ if { [string equal $authority_id [auth::get_register_authority]] || [auth::UseEm
 }
 
 set login_button [list [list [_ acs-subsite.Log_In] ok]]
-ad_form -name login -html { style "margin: 0px;" } -show_required_p 0 -edit_buttons $login_button -action "/register/" -form {
+ad_form -name login -html { style "margin: 0px;" } -show_required_p 0 -edit_buttons $login_button -action "[subsite::get_element -element url]register/" -form {
     {return_url:text(hidden)}
     {time:text(hidden)}
     {token_id:text(hidden)}
