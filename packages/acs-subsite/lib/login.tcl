@@ -80,13 +80,13 @@ if { ![exists_and_not_null authority_id] } {
 
 set forgotten_pwd_url [auth::password::get_forgotten_url -authority_id $authority_id -username $username -email $email]
 
-set register_url [export_vars -base "[subsite::get_element -element url]register/user-new" { return_url }]
+set register_url [export_vars -base "[subsite::get_url]register/user-new" { return_url }]
 if { [string equal $authority_id [auth::get_register_authority]] || [auth::UseEmailForLoginP] } {
     set register_url [export_vars -no_empty -base $register_url { username email }]
 }
 
 set login_button [list [list [_ acs-subsite.Log_In] ok]]
-ad_form -name login -html { style "margin: 0px;" } -show_required_p 0 -edit_buttons $login_button -action "[subsite::get_element -element url]register/" -form {
+ad_form -name login -html { style "margin: 0px;" } -show_required_p 0 -edit_buttons $login_button -action "[subsite::get_url]register/" -form {
     {return_url:text(hidden)}
     {time:text(hidden)}
     {token_id:text(hidden)}
