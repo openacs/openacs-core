@@ -107,6 +107,7 @@ tar xvfz tDOM-0.8.0.tar.gz</action></screen>
 ./configure --prefix=/usr/local/aolserver40r10 --with-tcl=/usr/local/lib/
 make install
 </action></screen>
+      <para>If you are using gcc 4 or later, see <ulink url="http://openacs.org/forums/message-view?message_id=309814">http://openacs.org/forums/message-view?message_id=309814</ulink></para>
       <para>If this is the only version of AOLserver in use, or is the default version, create a symlink.  If not, then be sure to use <computeroutput>/usr/local/aolserver40r10</computeroutput> instead of <computeroutput>/usr/local/aolserver</computeroutput> in the steps below and check both scripts and makefiles to ensure they use the correct path.</para>
       <screen>[root aolserver]# <userinput>ln -s /usr/local/aolserver40r10 /usr/local/aolserver</userinput></screen>
     </listitem>
