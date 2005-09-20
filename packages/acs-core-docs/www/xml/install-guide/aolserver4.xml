@@ -81,8 +81,8 @@ make install</action>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r v2_7 nsoracle</userinput>
-[root aolserver]# <userinput>wget http://www.tdom.org/tDOM-0.7.8.tar.gz</userinput>
-[root aolserver]# <userinput>tar xvfz tDOM-0.7.8.tar.gz</userinput>
+[root aolserver]# <userinput>wget http://www.tdom.org/tDOM-0.8.0.tar.gz</userinput>
+[root aolserver]# <userinput>tar xvfz tDOM-0.8.0.tar.gz</userinput>
 [root root]# 
 <action>cd /usr/local/src
 mkdir aolserver40r10
@@ -163,7 +163,7 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
             </listitem>
             <listitem id="aolserver4-tdom-install">
               <para>Install tDOM</para>
-              <screen>[root nssha1]# <userinput>cd ../tDOM-0.7.8/unix</userinput></screen>
+              <screen>[root nssha1]# <userinput>cd ../tDOM-0.8.0/unix</userinput></screen>
               <para>Edit the <computeroutput>CONFIG</computeroutput> file. Uncomment the instructions meant for AOLserver 4, but edit it to look like this:</para>
               <screen>../configure --enable-threads --disable-tdomalloc
           --prefix=/usr/local/aolserver --with-tcl=/usr/local/lib</screen>
