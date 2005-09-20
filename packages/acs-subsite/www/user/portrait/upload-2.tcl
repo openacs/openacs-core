@@ -84,7 +84,7 @@ if { ![db_0or1row get_item_id {}]} {
         # DRB: this is done via manual SQL because acs rel types are a bit messed
         # up on the PostgreSQL side, which should be fixed someday.
 
-	db_exec_plsql create_rel {}
+#	db_exec_plsql create_rel {}
     }
 }
 
@@ -100,7 +100,8 @@ set revision_id [cr_import_content \
                     $guessed_file_type \
                     portrait-of-user-$user_id]
 
-cr_set_imported_content_live $guessed_file_type $revision_id
+# cr_set_imported_content_live $guessed_file_type $revision_id
+db_exec_plsql dbqd.acs-content-repository.tcl.revision-procs.cr_set_imported_content_live.set_live ""
 
 if { [exists_and_not_null return_url] } {
     ad_returnredirect $return_url
