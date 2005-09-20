@@ -81,7 +81,7 @@ make install</action>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r v2_7 nsoracle</userinput>
-[root aolserver]# <userinput>wget http://www.tdom.org/tDOM-0.8.0.tar.gz</userinput>
+[root aolserver]# <userinput>wget http://www.tdom.org/files/tDOM-0.8.0.tar.gz</userinput>
 [root aolserver]# <userinput>tar xvfz tDOM-0.8.0.tar.gz</userinput>
 [root root]# 
 <action>cd /usr/local/src
