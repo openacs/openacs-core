@@ -35,8 +35,8 @@ create index notif_repl_object_id_idx ON notification_replies(object_id);
 
 select acs_object_type__create_type (
             'notification_reply',
-            'Notification Reply',
-            'Notification Replies',
+            '#notifications.Notification_Reply#',
+            '#notifications.Notification_Replies#',
             'acs_object',
             'notification_replies',
             'reply_id',

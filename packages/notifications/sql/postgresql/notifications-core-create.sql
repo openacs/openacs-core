@@ -208,8 +208,8 @@ create index notification_user_map_user_idx ON notification_user_map(user_id);
 --
 select acs_object_type__create_type(
     'notification_interval',
-    'Notification Interval',
-    'Notification Intervals',
+    '#notifications.lt_Notification_Interval#',
+    '#notifications.lt_Notification_Interval_1#',
     'acs_object',
     'notification_intervals',
     'interval_id',
@@ -221,8 +221,8 @@ select acs_object_type__create_type(
 
 select acs_object_type__create_type(
     'notification_delivery_method',
-    'Notification Delivery Method',
-    'Notification Delivery Methods',
+    '#notifications.lt_Notification_Delivery#',
+    '#notifications.lt_Notification_Delivery_1#',
     'acs_object',
     'notification_delivery_methods',
     'delivery_method_id',
@@ -234,8 +234,8 @@ select acs_object_type__create_type(
 
 select acs_object_type__create_type(
     'notification_type',
-    'Notification Type',
-    'Notification Types',
+    '#notifications.Notification_Type#',
+    '#notifications.Notification_Types#',
     'acs_object',
     'notification_types',
     'type_id',
@@ -247,8 +247,8 @@ select acs_object_type__create_type(
 
 select acs_object_type__create_type(
     'notification_request',
-    'Notification Request',
-    'Notification Requests',
+    '#notifications.Notification_Request#',
+    '#notifications.lt_Notification_Requests#',
     'acs_object',
     'notification_requests',
     'request_id',
@@ -260,8 +260,8 @@ select acs_object_type__create_type(
 
 select acs_object_type__create_type(
     'notification',
-    'Notification',
-    'Notifications',
+    '#notifications.Notification#',
+    '#notifications.Notifications#',
     'acs_object',
     'notifications',
     'notification_id',
