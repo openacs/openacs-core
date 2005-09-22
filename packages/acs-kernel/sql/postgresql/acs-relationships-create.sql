@@ -445,6 +445,8 @@ for each row execute procedure acs_rels_in_tr ();
 
 -- create or replace package body acs_rel
 -- function new
+
+select define_function_args('acs_rel__new','rel_id,rel_type,object_id_one,object_id_two,context_id,creation_user,creation_ip');
 create function acs_rel__new (integer,varchar,integer,integer,integer,integer,varchar)
 returns integer as '
 declare
