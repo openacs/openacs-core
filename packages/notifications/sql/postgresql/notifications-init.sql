@@ -10,7 +10,7 @@
 
 select notification_interval__new (
     null,
-    '#notifications.daily#',
+    'daily',
     3600 * 24,
     now(),
     null,
@@ -20,7 +20,7 @@ select notification_interval__new (
 
 select notification_interval__new (
     null,
-    '#notifications.hourly#',
+    'hourly',
     3600,
     now(),
     null,
@@ -30,7 +30,7 @@ select notification_interval__new (
 
 select notification_interval__new (
     null,
-    '#notifications.instant#',
+    'instant',
     0,
     now(),
     null,
