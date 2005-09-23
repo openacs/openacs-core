@@ -2053,7 +2053,7 @@ begin
 
   if content_folder__is_folder(move__item_id) = ''t'' then
 
-    PERFORM content_folder__move(move__item_id, move__target_folder_id,move__name);
+    PERFORM content_folder__move(move__item_id, move__target_folder_id);
 
   elsif content_folder__is_folder(move__target_folder_id) = ''t'' then
    
