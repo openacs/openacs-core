@@ -6,56 +6,7 @@
 
 
 <table> <tr valign="top"> 
-<td>
-<div class="portlet-wrapper">
-	<div class="portlet-title">
-	<span>My Account</span>
-	</div>
-        <div class="portlet">
-  	<include src="/packages/acs-subsite/lib/user-info" />
-  	<if @account_status@ eq "closed">
-    	#acs-subsite.Account_closed_workspace_msg#
-  	</if>
-</div>
-</div>
-
-
-  <if @portrait_state@ eq upload>
-
-<div class="portlet-wrapper">
-        <div class="portlet-title">
-	     <span>#acs-subsite.Your_Portrait#</span>
-	</div>
-        <div class="portlet">
-	    <p>
-	    #acs-subsite.lt_Show_everyone_else_at#  <a href="@portrait_upload_url@">#acs-subsite.upload_a_portrait#</a>
-	    </p>
-	</div>
-</div>
-</if>
-
-  <if @portrait_state@ eq show>
-<div class="portlet-wrapper">  
-  <div class="portlet-title">
-             <span>#acs-subsite.Your_Portrait#</span>
-  </div>
-  <div class="portlet">
-    <p>
-      #acs-subsite.lt_On_portrait_publish_d#.
-    </p>
-<table><tr valign="top"><td>
-<img width=64 height=86 src="/shared/portrait-bits.tcl?user_id=@user_id@"
-alt="Portrait"><p>
-<a href="/user/portrait/?return_url=/pvt/home">Edit</a>
-</td><td>@portrait_description@</td></tr>
-</table>
-</div>
-</div>
-  </if>
-
-</td>
-<td>
-
+<td width="35%">
 <div class="portlet-wrapper">
 	<div class="portlet-title">
 	<span>Edit Options</span>
@@ -107,6 +58,55 @@ alt="Portrait"><p>
   </else>
 </div>
 </div>
+
+</td>
+<td>
+
+<div class="portlet-wrapper">
+	<div class="portlet-title">
+	<span>My Account</span>
+	</div>
+        <div class="portlet">
+  	<include src="/packages/acs-subsite/lib/user-info" />
+  	<if @account_status@ eq "closed">
+    	#acs-subsite.Account_closed_workspace_msg#
+  	</if>
+</div>
+</div>
+
+
+  <if @portrait_state@ eq upload>
+
+<div class="portlet-wrapper">
+        <div class="portlet-title">
+	     <span>#acs-subsite.Your_Portrait#</span>
+	</div>
+        <div class="portlet">
+	    <p>
+	    #acs-subsite.lt_Show_everyone_else_at#  <a href="@portrait_upload_url@">#acs-subsite.upload_a_portrait#</a>
+	    </p>
+	</div>
+</div>
+</if>
+
+  <if @portrait_state@ eq show>
+<div class="portlet-wrapper">  
+  <div class="portlet-title">
+             <span>#acs-subsite.Your_Portrait#</span>
+  </div>
+  <div class="portlet">
+    <p>
+      #acs-subsite.lt_On_portrait_publish_d#.
+    </p>
+<table><tr valign="top"><td>
+<img width=64 height=86 src="/shared/portrait-bits.tcl?user_id=@user_id@"
+alt="Portrait"><p>
+<a href="/user/portrait/?return_url=/pvt/home">Edit</a>
+</td><td>@portrait_description@</td></tr>
+</table>
+</div>
+</div>
+  </if>
 
 <div class="portlet-wrapper">
         <div class="portlet-title">
