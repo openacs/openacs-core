@@ -362,6 +362,7 @@ You can always change your password by doing the following:
   <msg key="Permissions_for_name">Permissions for %name%</msg>
   <msg key="Please_return_to_home">Please return to %home_link%.</msg>
   <msg key="Portrait">Portrait</msg>
+  <msg key="Privacy">Privacy</msg>
   <msg key="Problem_auth_no_memb">There was a problem authenticating the account.  Most likely, the database contains users with no member_state.</msg>
   <msg key="Profile">Profile</msg>
   <msg key="Question">Question</msg>
