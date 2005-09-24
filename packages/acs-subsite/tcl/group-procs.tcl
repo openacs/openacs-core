@@ -224,28 +224,36 @@ ad_proc -public group::get_element {
 
 ad_proc -public group::get_id {
     {-group_name:required}
+    {-subsite_id ""}
+    {-application_group_id ""}
 } {
-    Retrieve the group_id to a given group-name.
-    Note: this WILL bomb if the group-name is not unique.
+    Retrieve the group_id to a given group-name. If you have more than one group with this name, it will return the first one it finds.
+    Keep that in mind when using this procedure.
 
     @author Christian Langmann (C_Langmann@gmx.de)
+    @author Malte Sussdorff (openacs@sussdorff.de)
     @creation-date 2005-06-09
 
     @param group_name the name of the group to look for
+    @param subsite_id the ID of the subsite to search for the group name
+    @param application_group_id the ID of the application group to search for the group name
 
-    @return the id of the group
+    @return the first group_id of the groups found for that group_name.
 
     @error
 } {
-    return [util_memoize [list group::get_id_not_cached -group_name $group_name]]
+    return [util_memoize [list group::get_id_not_cached -group_name $group_name -subsite_id $subsite_id -application_group_id ""]]
 }
 
 ad_proc -private group::get_id_not_cached {
     {-group_name:required}
+    {-subsite_id ""}
+    {-application_group_id ""}
 } {
     Retrieve the group_id to a given group-name.
 
     @author Christian Langmann (C_Langmann@gmx.de)
+    @author Malte Sussdorff (openacs@sussdorff.de)
     @creation-date 2005-06-09
 
     @param group_name the name of the group to look for
@@ -254,7 +262,16 @@ ad_proc -private group::get_id_not_cached {
 
     @error
 } {
-    return [db_string get_group_id {} -default ""]
+    if {[exists_and_not_null subsite_id]} {
+	set application_group_id [application_group::group_id_from_package_id -package_id [ad_conn subsite_id]]
+    } 
+    
+    if {[exists_and_not_null application_group_id]} {
+	set group_ids [db_list get_group_id_with_application {}]
+    } else {
+	set group_ids [db_list get_group_id {}]
+    }
+    return [lindex $group_ids 0]
 }
 
 ad_proc -public group::get_members {
