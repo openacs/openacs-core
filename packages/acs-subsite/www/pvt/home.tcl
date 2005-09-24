@@ -14,6 +14,7 @@ ad_page_contract {
     portrait_state:onevalue
     portrait_publish_date:onevalue
     portrait_title:onevalue
+    portrait_description:onevalue
     export_user_id:onevalue
     ad_url:onevalue
     member_link:onevalue
@@ -55,7 +56,8 @@ if { [llength [lang::system::get_locales]] > 1 } {
 if [ad_parameter SolicitPortraitP "user-info" 0] {
     # we have portraits for some users 
     if ![db_0or1row get_portrait_info "
-    select cr.publish_date, nvl(cr.title,'your portrait') as portrait_title
+    select cr.publish_date, nvl(cr.title,'your portrait') as portrait_title,
+    nvl(cr.description,'no description') as portrait_description 
     from cr_revisions cr, cr_items ci, acs_rels a
     where cr.revision_id = ci.live_revision
     and  ci.item_id = a.object_id_two
