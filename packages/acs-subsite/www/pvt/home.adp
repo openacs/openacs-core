@@ -9,11 +9,11 @@
 <td width="35%">
 <div class="portlet-wrapper">
 	<div class="portlet-title">
-	<span>Edit Options</span>
+	<span><h2>Edit Options</h2></span>
 	</div>
 	<div class="portlet">
   #acs-kernel.common_Actions#
-  <ul class="action-links">
+  <ul>
     <li><a href="../user/password-update">#acs-subsite.Change_my_Password#</a></li>
 
     <if @change_locale_url@ not nil>
@@ -38,7 +38,7 @@
   <span>#acs-subsite.Privacy#</span>
   </div>
   <div class="portlet">
-  <ul class="action-links">
+  <ul>
     <li><a href="@community_member_url@">#acs-subsite.lt_What_other_people_see#</a></li>
     <li><a href="@whos_online_url@">#acs-subsite.Whos_Online_link_label#</a></li>
     <li><a href="../user/email-privacy-level">#acs-subsite.Change_my_email_P#</a></li>
@@ -46,13 +46,13 @@
 
   <if @invisible_p@ true>
     #acs-subsite.Currently_invisible_msg#
-    <ul class="action-links">
+    <ul>
       <li><a href="@make_visible_url@">#acs-subsite.Make_yourself_visible_label#</a></li>
     </ul>
   </if>
   <else>
     #acs-subsite.Currently_visible_msg#
-    <ul class="action-links">
+    <ul>
       <li><a href="@make_invisible_url@">#acs-subsite.Make_yourself_invisible_label#</a></li>
     </ul>
   </else>
