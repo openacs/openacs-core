@@ -95,3 +95,12 @@ ad_proc -public acs_object::get_element {
     acs_object::get -object_id $object_id -array row
     return $row($element)
 }
+
+ad_proc -public acs_object::set_context_id {
+    {-object_id:required}
+    {-context_id:required}
+} {
+    Sets the context_id of the specified object.
+} {
+    db_dml update_context_id {}
+}
