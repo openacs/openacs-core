@@ -38,8 +38,16 @@ ad_proc -public email_image::check_image_magick {} {
     
     returns 1 if required software is present, 0 otherwise
 } {
-    set convert_p [string length [exec find /usr/local/bin -name convert]]
-    set freetype_p [string length [exec whereis freetype]]
+    if { [catch {
+        set convert_p [string length [exec find /usr/local/bin -name convert]]
+    }] } {
+        set convert_p 0
+    }
+    if { [catch {
+        set freetype_p [string length [exec whereis freetype]]
+    }] } {
+        set freetype_p 0
+    }
     if { $convert_p != 0 && $freetype_p != 9 } {
 	return 1
     } else {
