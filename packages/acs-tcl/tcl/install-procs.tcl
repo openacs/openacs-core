@@ -168,6 +168,7 @@ ad_proc -public install::xml::action::mount { node } {
 
     # Remove double slashes
     regsub -all {//} $mount_point "/" mount_point
+    set mount_point [string trimright $mount_point " /"]
 
     if {[string is space $mount_point] ||
         [string equal $mount_point "/"]} {
