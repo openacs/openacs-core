@@ -17,4 +17,14 @@
       </querytext>
 </fullquery>
 
+<fullquery name="acs_object::set_context_id.update_context_id">
+      <querytext>
+
+        update acs_objects
+           set context_id = :context_id
+         where object_id = :object_id
+
+      </querytext>
+</fullquery>
+
 </queryset>
