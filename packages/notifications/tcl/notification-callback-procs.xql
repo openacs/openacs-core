@@ -26,4 +26,24 @@
         </querytext>
     </fullquery>	
 
+    <fullquery
+      name="callback::acs_mail_lite::incoming_email::impl::notifications.holdinsert">
+      <querytext>
+        insert into notification_email_hold
+        (reply_id,to_addr,headers,body)
+        values
+        (:reply_id,:to_addr,:headers,:bodies)
+      </querytext>
+    </fullquery>
+
+    <fullquery name="callback::acs_mail_lite::incoming_email::impl::notifications.select_impl">
+        <querytext>
+        select sc.impl_owner_name as package_key from notification_types n, acs_sc_impls sc
+        where
+        n.sc_impl_id = sc.impl_id and
+        n.type_id = :type_id
+        limit 1
+        </querytext>
+    </fullquery>
+
 </queryset>
