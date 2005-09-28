@@ -181,9 +181,9 @@ namespace eval acs_mail_lite {
 	@option bounce_address bounce address to be checked
 	@returns tcl-list of user_id package_id bounce_signature
     } {
-        set regexp_str "^[bounce_prefix]-(\[0-9\]+)-(\[^-\]+)-(\[0-9\]+)\@"
+        set regexp_str "\[[bounce_prefix]\]-(\[0-9\]+)-(\[^-\]+)-(\[0-9\]+)\@"
         if {![regexp $regexp_str $bounce_address all user_id signature package_id]} {
-	    ns_log Notice "acs-mail-lite: bounce_address not found"
+	    ns_log Notice "acs-mail-lite: bounce address not found for $bounce_address"
             return ""
         }
     	return [list $user_id $package_id $signature]
@@ -202,89 +202,144 @@ namespace eval acs_mail_lite {
 
     ad_proc -public valid_signature {
 	-signature:required
-	-msg:required
+	-message_id:required
     } {
         Validates if provided signature matches message_id
 	@option signature signature to be checked
 	@option msg message-id that the signature should be checked against
 	@returns boolean 0 or 1
     } {
-	if {![regexp "Message-Id: (<\[\-0-9\]+\\.\[0-9\]+\\.oacs@[address_domain]>)\n" $msg match message_id] || ![string equal $signature [ns_sha1 $message_id]]} {
+	if {![regexp "(<\[\-0-9\]+\\.\[0-9\]+\\.oacs@[address_domain]>)" $message_id match id] || ![string equal $signature [ns_sha1 $id]]} {
 	    # either couldn't find message-id or signature doesn't match
 	    return 0
 	}
 	return 1
     }
 
-
-    ad_proc -private load_mail_dir {
-         -queue_dir:required
+    ad_proc -private load_mails {
+        -queue_dir:required
     } {
-         Scans incoming email. The array email contains
+        Scans for incoming email. You need
 
-         @author Nima Mazloumi (nima.mazloumi@gmx.de)
-         @creation-date 2005-07-15
+        An incoming email has to comply to the following syntax rule:
+        [<SitePrefix>][-]<ReplyPrefix>-Whatever@<BounceDomain>
 
-																	       @option queue_dir The location of the qmail mail queue in the file-system.
+        [] = optional
+        <> = Package Parameters
+
+        If no SitePrefix is set we assume that there is only one OpenACS installation. Otherwise
+        only messages are dealt with which contain a SitePrefix.
+
+        ReplyPrefixes are provided by packages that implement the callback acs_mail_lite::incoming_email
+        and provide a package parameter called ReplyPrefix. Only implementations are considered where the
+        implementation name is equal to the package key of the package.
+
+        Also we only deal with messages that contain a valid and registered ReplyPrefix.
+        These prefixes are automatically set in the acs_mail_lite_prefixes table.
+
+        @author Nima Mazloumi (nima.mazloumi@gmx.de)
+        @creation-date 2005-07-15
+
+        @option queue_dir The location of the qmail mail (BounceMailDir) queue in the file-system i.e. /home/service0/mail.
+
+        @see acs_mail_lite::incoming_email
+        @see acs_mail_lite::parse_email
     } {
-
-         # get list of all incoming mail
-	if {[catch {
-	    set messages [glob "$queue_dir/new/*"]
-	} errmsg]} {
-	    if {[string match "no files matched glob pattern*"  $errmsg ]} {
-                 ns_log Debug "load_mail_dir: queue dir = $queue_dir/new/*, no messages"
-	    } else {
-                 ns_log Error "load_mail_dir: queue dir = $queue_dir/new/ error $errmsg"
-	    }
-	    return [list]
-	}
-
-         # loop over every incoming mail
+	
+        # get list of all incoming mail
+        if {[catch {
+            set messages [glob "$queue_dir/new/*"]
+        } errmsg]} {
+            if {[string match "no files matched glob pattern*"  $errmsg ]} {
+                ns_log Notice "load_mails: queue dir = $queue_dir/new/*, no messages"
+            } else {
+                ns_log Error "load_mails: queue dir = $queue_dir/new/ error $errmsg"
+            }
+            return [list]
+        }
+	
+        # loop over every incoming mail
 	foreach msg $messages {
-	        ns_log Debug "load_mail_dir: opening $msg"
-             parse_email -file $file -array email
-
-	        array set headers $email(headers)
-
-             callback IncomingEmail -from $email(From) -to $email(To) -subject $email(Subject) \
-                                    -bodies $email(bodies) -headers $headers -files $email(files)
-
-             #let's delete the file now
-	    if {[catch {ns_unlink $msg} errmsg]} {
-                 ns_log Error "load_mail_dir: unable to delete queued message $msg: $errmsg"
+	    ns_log Notice "load_mails: opening $msg"
+	    array set email {}
+	    
+	    parse_email -file $msg -array email
+	    
+	    ns_log Notice "load_mails: message from $email(from) to $email(to)"
+	    set to [parse_email_address -email $email(to)]
+	    
+	    set process_p 1
+	    
+	    #check if we have several sites. In this case a site prefix is set
+	    set site_prefix [get_parameter -name SitePrefix -default ""]
+	    set package_prefix ""
+	    
+	    if {![empty_string_p $site_prefix]} {
+		regexp "($site_prefix)-(\[^-\]*)\?-(\[^@\]+)\@" $to all site_prefix package_prefix rest
+	        #we only process the email if both a site and package prefix was found
+	        if {[empty_string_p $site_prefix] || [empty_string_p $package_prefix]} {
+		    set process_p 0
+		}
+		#no site prefix is set, so this is the only site
+	    } else {
+		regexp "(\[^-\]*)-(\[^@\]+)\@" $to all package_prefix rest
+		#we only process the email if a package prefix was found
+		if {[empty_string_p $package_prefix]} {
+                    set process_p 0
+                }
 	    }
-	}
+	    if {$process_p} {
+		
+		#check if an implementation exists for the package_prefix and call the callback
+		if {[db_0or1row select_impl {}]} {
+		    
+		    ns_log Notice "load_mails: Prefix $prefix found. Calling callback implmentation $impl_name for package_id $package_id"
+		    callback -impl $impl_name acs_mail_lite::incoming_email -array email -package_id $package_id
+
+		} else {
+		    ns_log Notice "load_mails: prefix not found. Doing nothing."
+		}
+	    } else {
+		ns_log Notice "load_mails: Either the SitePrefix setting was incorrect or not registered package prefix '$package_prefix'."
+	    }
+            #let's delete the file now
+            if {[catch {ns_unlink $msg} errmsg]} {
+                ns_log Error "load_mails: unable to delete queued message $msg: $errmsg"
+            } else {
+		ns_log Notice "load_mails: deleted $msg"
+	    }
+        }
     }
 
     ad_proc parse_email {
-     -file:required
-     -array:required
+	-file:required
+	-array:required
     } {
 	An email is splitted into several parts: headers, bodies and files lists and all headers directly.
 	
-	The headers consists of a list with two elements: key and value. All keys are lower case.
+	The headers consists of a list with header names as keys and their correponding values. All keys are lower case.
 	The bodies consists of a list with two elements: content-type and content.
 	The files consists of a list with three elements: content-type, filename and content.
 	
-	An array is upvared to the caller containing three all lists and for convenience also all headers directly:
+	The array with all the above data is upvared to the caller environment.
+
+	Important headers are:
 	
-	Important headers like:
-	
-	-Message-ID
+	-Message-ID (a unique id for the email, is different for each email except it was bounced from a mailer deamon)
 	-Subject
 	-From
 	-To
 	
-	Others like:
-
+	Others possible headers:
+	
 	-Date
 	-Received
-	-In-Reply-To
-	-Return-Path
+        -References (this references the original message id if the email is a reply)
+	-In-Reply-To (this references the original message id if the email is a reply)
+	-Return-Path (this is used for mailer deamons to bounce emails back like bounce-user_id-signature-package_id@service0.com)
 	
-	Optional application specific stuff like:
-
+	Optional application specific stuff only exist in special cases:
+	
 	X-Mozilla-Status
 	X-Virus-Scanned
 	X-Mozilla-Status2
@@ -292,41 +347,39 @@ namespace eval acs_mail_lite {
 	X-Account-Key
 	X-Sasl-enc
 	
-	You can therefore get a value for a header either through iterating the headers list or simply by calling i.e. "set message_id $email(Message-ID)".
+	You can therefore get a value for a header either through iterating the headers list or simply by calling i.e. "set message_id $email(message-id)".
 	
 	Note: We assume "application/octet-stream" for all attachments and "base64" for
 	as transfer encoding for all files.
 	
 	Note: tcllib required - mime, base64
-
+	
 	@author Nima Mazloumi (nima.mazloumi@gmx.de)
 	@creation-date 2005-07-15
 	
     } {
-	
 	upvar $array email
-	
+
 	#prepare the message
 	set mime [mime::initialize -file $file]
-
+	
 	#get the content type
 	set content [mime::getproperty $mime content]
 	
 	#get all available headers
 	set keys [mime::getheader $mime -names]
-	
+		
 	set headers [list]
-	
-	# create both the headers array and all headers directly for the
-	# email array
+
+	# create both the headers array and all headers directly for the email array
 	foreach header $keys {
 	    set value [mime::getheader $mime $header]
 	    set email([string tolower $header]) $value
-	    lappend headers [list [string tolower $header] $value]
+	    lappend headers [list $header $value]
 	}
-	
+
 	set email(headers) $headers
-	
+		
 	#check for multipart, otherwise we only have one part
 	if { [string first "multipart" $content] != -1 } {
 	    set parts [mime::getproperty $mime parts]
@@ -378,9 +431,146 @@ namespace eval acs_mail_lite {
 	
 	#release the message
 	mime::finalize $mime -subordinates all
+    }    
+        
+    ad_proc -private -deprecated load_mail_dir {
+        -queue_dir:required
+    } {
+        Scans qmail incoming email queue for bounced mail and processes
+	these bounced mails.
 	
+        @author ben@openforce.net
+        @author dan.wickstrom@openforce.net
+        @creation-date 22 Sept, 2001
+	
+        @option queue_dir The location of the qmail mail queue in the file-system.
+    } {
+        if {[catch {
+	    # get list of all incoming mail
+            set messages [glob "$queue_dir/new/*"]
+        } errmsg]} {
+            ns_log Debug "queue dir = $queue_dir/new/*, no messages"
+            return [list]
+        }
+	
+        set list_of_bounce_ids [list]
+        set new_messages_p 0
+
+	# loop over every incoming mail
+        foreach msg $messages {
+            ns_log Debug "opening file: $msg"
+            if [catch {set f [open $msg r]}] {
+                continue
+            }
+            set file [read $f]
+            close $f
+            set file [split $file "\n"]
+	    
+            set new_messages 1
+            set end_of_headers_p 0
+            set i 0
+            set line [lindex $file $i]
+            set headers [list]
+	    
+            # walk through the headers and extract each one
+            while ![empty_string_p $line] {
+                set next_line [lindex $file [expr $i + 1]]
+                if {[regexp {^[ ]*$} $next_line match] && $i > 0} {
+                    set end_of_headers_p 1
+                }
+                if {[regexp {^([^:]+):[ ]+(.+)$} $line match name value]} {
+                    # join headers that span more than one line (e.g. Received)
+                    if { ![regexp {^([^:]+):[ ]+(.+)$} $next_line match] && !$end_of_headers_p} {
+			append line $next_line
+			incr i
+                    }
+                    lappend headers [string tolower $name] $value
+		    
+                    if {$end_of_headers_p} {
+			incr i
+			break
+                    }
+                } else {
+                    # The headers and the body are delimited by a null line as specified by RFC822
+                    if {[regexp {^[ ]*$} $line match]} {
+			incr i
+			break
+                    }
+                }
+                incr i
+                set line [lindex $file $i]
+            }
+            set body "\n[join [lrange $file $i end] "\n"]"
+	    
+            # okay now we have a list of headers and the body, let's
+            # put it into notifications stuff
+            array set email_headers $headers
+	    
+            if [catch {set from $email_headers(from)}] {
+                set from ""
+            }
+            if [catch {set to $email_headers(to)}] {
+                set to ""
+            }
+	    
+            set to [parse_email_address -email $to]
+	    ns_log Debug "acs-mail-lite: To: $to"
+            util_unlist [parse_bounce_address -bounce_address $to] user_id package_id signature
+	    
+            # If no user_id found or signature invalid, ignore message
+            if {[empty_string_p $user_id] || ![valid_signature -signature $signature -msg $body]} {
+		if {[empty_string_p $user_id]} {
+		    ns_log Notice "acs-mail-lite: No user id $user_id found"
+		} else {
+		    ns_log Notice "acs-mail-lite: Invalid mail signature"
+		}
+                if {[catch {ns_unlink $msg} errmsg]} {
+                    ns_log Notice "acs-mail-lite: couldn't remove message"
+                }
+                continue
+            }
+
+	    # Try to invoke package-specific procedure for special treatment
+	    # of mail bounces
+	    catch {acs_sc::invoke -contract AcsMailLite -operation MailBounce -impl [string map {- _} [apm_package_key_from_id $package_id]] -call_args [list [array get email_headers] $body]}
+	    
+	    # Okay, we have a bounce for a system user
+	    # Check if the user has been marked as bouncing mail
+	    # if the user is bouncing mail, we simply disgard the
+	    # bounce since it was sent before the user's email was
+	    # disabled.
+
+	    ns_log Debug "Bounce checking: $to, $user_id"
+
+	    if { ![bouncing_user_p -user_id $user_id] } {
+                ns_log Notice "acs-mail-lite: Bouncing email from user $user_id"
+		# record the bounce in the database
+		db_dml record_bounce {}
+
+		if {![db_resultrows]} {
+		    db_dml insert_bounce {}
+		}
+	    }
+            catch {ns_unlink $msg}
+        }
     }
     
+    ad_proc -public scan_replies {} {
+        Scheduled procedure that will scan for bounced mails
+    } {
+	# Make sure that only one thread is processing the queue at a time.
+	if {[nsv_incr acs_mail_lite check_bounce_p] > 1} {
+	    nsv_incr acs_mail_lite check_bounce_p -1
+	    return
+	}
+
+	with_finally -code {
+	    ns_log Debug "acs-mail-lite: about to load qmail queue"
+	    load_mails -queue_dir [mail_dir]
+	} -finally {
+	    nsv_incr acs_mail_lite check_bounce_p -1
+	}
+    }
 
     ad_proc -private check_bounces { } {
 	Daily proc that sends out warning mail that emails
@@ -548,11 +738,14 @@ namespace eval acs_mail_lite {
                     # substitute all "\r\n" with "\n", because piped text should only contain "\n"
                     regsub -all "\r\n" $msg "\n" msg
 
-		    if {[catch {set f [open "|$sendmail" "w"]
-		    puts $f "From: $from_addr\nTo: $pretty_to\n$msg"
-			close $f}]} {
-			ns_log Notice "Mail Not Send $from_addr .... $pretty_to"
-		    } 
+		    if {[catch {
+			set err1 {}
+			set f [open "|$sendmail" "w"]
+			puts $f "From: $from_addr\nTo: $pretty_to\n$msg"
+			set err1 [close $f]
+		    } err2]} {
+			ns_log Error "Attempt to send From: $from_addr\nTo: $pretty_to\n$msg failed.\nError $err1 : $err2"
+		    }
 		} -finally {
 		}
 	    } else {
@@ -707,7 +900,7 @@ namespace eval acs_mail_lite {
 	@option from_addr mail sender
 	@option subject mail subject
 	@option body mail body
-	@option extraheaders extra mail headers
+	@option extraheaders extra mail headers in an ns_set
 	@option bcc see to_addr
 	@option package_id To be used for calling a package-specific proc when mail has bounced
         @returns the Message-Id of the mail
@@ -779,100 +972,96 @@ namespace eval acs_mail_lite {
         return $message_id
     }
 
-
-    # Only provide this procedure if you have tcllib installed (with
-    # the correct mime procs)
-    if {[package require base64] >= "2.3.1" && [package require mime] >= "1.4"} {
-
-	ad_proc -public complex_send {
-	    -send_immediately:boolean
-	    -valid_email:boolean
-	    -to_addr:required
-	    -from_addr:required
-	    {-subject ""}
-	    -body:required
-	    {-package_id ""}
-	    {-file_ids ""}
-	    {-folder_id ""}
-	    {-mime_type "text/plain"}
-	    {-object_id ""}
-	} {
-	    
-	    Prepare an email to be send with the option to pass in a list
-	    of file_ids as well as specify an html_body and a mime_type
-	    
-	    @param send_immediately The email is send immediately and not stored in the acs_mail_lite_queue
-	    
-	    @param to_addr Email address to send the mail to
-
-	    @param from_addr Who is sending the email
-	    
-	    @param subject of the email
-	    
-	    @param body Text body of the email
-	    
-	    @param bcc BCC Users to send this mail to
-	    
-	    @param package_id Package ID of the sending package
-	    
-	    @param file_ids List of file ids to be send as attachments. This will only work with files stored in the file system.
-	    
-	    @param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
-	    
-	    @param object_id The ID of the object that is responsible for sending the mail in the first place
-	    
-	} {
-	    
-	    # Set the message token
-	    set message_token [mime::initialize -canonical "$mime_type" -string "$body"]
-	    
-	    # encode all attachments in base64
-	    
-	    set tokens [list $message_token]
-	    if {[exists_and_not_null folder_id]} {
-		
-		db_foreach get_file_info {select r.revision_id,r.mime_type,r.title, r.content as filename
-		    from cr_revisions r, cr_items i
-		    where r.item_id = i.item_id and i.parent_id = :folder_id} {
-			lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
-			lappend file_ids $revision_id
-		    }
-	    } elseif {[exists_and_not_null file_ids]} {
-		
-		db_foreach get_file_info "select r.mime_type,r.title, r.content as filename
-		    from cr_revisions r
-		    where r.revision_id in ([join $file_ids ","])" {
-			lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
-		    }
-	    }
-	    
-	    set multi_token [mime::initialize -canonical multipart/mixed -parts "$tokens"]
-	    
-	    mime::setheader $multi_token Subject "$subject"
-	    set packaged [mime::buildmessage $multi_token]
-	    
-	    #Close all mime tokens
-	    mime::finalize $multi_token -subordinates all
-	    set message_id [generate_message_id]
-	    
-	    acs_mail_lite::sendmail -from_addr $from_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id $message_id -package_id $package_id
-	    
-	    if {[empty_string_p $package_id]} {
-		set package_id [apm_package_id_from_key "acs-mail-lite"]
-	    }
-	    
-	    callback acs_mail_lite::complex_send \
-		-package_id $package_id \
-		-from_party_id [party::get_by_email -email $from_addr] \
-		-to_party_id [party::get_by_email -email $to_addr] \
-		-body $body \
-		-message_id $message_id \
-		-subject $subject \
-		-object_id $object_id \
-		-file_ids [split $file_ids ","]
-	}
-    }	 
     
+    ad_proc -public complex_send {
+	-send_immediately:boolean
+	-valid_email:boolean
+        -to_addr:required
+        -from_addr:required
+        {-subject ""}
+        -body:required
+	{-package_id ""}
+	{-file_ids ""}
+	{-folder_id ""}
+	{-mime_type "text/plain"}
+	{-object_id ""}
+    } {
+	
+	Prepare an email to be send with the option to pass in a list
+	of file_ids as well as specify an html_body and a mime_type
+
+	@param send_immediately The email is send immediately and not stored in the acs_mail_lite_queue
+	
+	@param to_addr Email address to send the mail to
+
+	@param from_addr Who is sending the email
+	
+	@param subject of the email
+	
+	@param body Text body of the email
+	
+	@param bcc BCC Users to send this mail to
+
+	@param package_id Package ID of the sending package
+	
+	@param file_ids List of file ids to be send as attachments. This will only work with files stored in the file system.
+
+	@param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
+
+	@param object_id The ID of the object that is responsible for sending the mail in the first place
+	
+    } {
+
+
+	# Set the message token
+	set message_token [mime::initialize -canonical "$mime_type" -string "$body"]
+
+	# encode all attachments in base64
+    
+	set tokens [list $message_token]
+	if {[exists_and_not_null folder_id]} {
+
+	    db_foreach get_file_info "select r.revision_id,r.mime_type,r.title, r.content as filename
+	    from cr_revisions r, cr_items i
+	    where r.item_id = i.item_id and i.parent_id = :folder_id" {
+		lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
+		lappend file_ids $revision_id
+	    }
+	} elseif {[exists_and_not_null file_ids]} {
+	    
+	    db_foreach get_file_info "select r.mime_type,r.title, r.content as filename
+	    from cr_revisions r
+	    where r.revision_id in ([join $file_ids ","])" {
+		lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
+	    }
+	}
+	
+	set multi_token [mime::initialize -canonical multipart/mixed -parts "$tokens"]
+
+	mime::setheader $multi_token Subject "$subject"
+ 	set packaged [mime::buildmessage $multi_token]
+	
+	#Close all mime tokens
+	mime::finalize $multi_token -subordinates all
+	set message_id [generate_message_id]
+
+	acs_mail_lite::sendmail -from_addr $from_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id $message_id -package_id $package_id
+	
+	if {[empty_string_p $package_id]} {
+	    set package_id [apm_package_id_from_key "acs-mail-lite"]
+	}
+
+	callback acs_mail_lite::complex_send \
+	    -package_id $package_id \
+	    -from_party_id [party::get_by_email -email $from_addr] \
+	    -to_party_id [party::get_by_email -email $to_addr] \
+	    -body $body \
+	    -message_id $message_id \
+	    -subject $subject \
+	    -object_id $object_id \
+	    -file_ids [split $file_ids ","]
+    }
+	 
     ad_proc -private sweeper {} {
         Send messages in the acs_mail_lite_queue table.
     } {

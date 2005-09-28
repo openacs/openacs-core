@@ -1,29 +1,48 @@
 <?xml version="1.0"?>
-<!DOCTYPE queryset PUBLIC "-//OpenACS//DTD XQL 1.0//EN" "http://www.thecodemill.biz/repository/xql.dtd">
-<!-- packages/acs-mail-lite/tcl/acs-mail-lite-callback-procs.xql -->
-<!-- @author Malte Sussdorff (sussdorff@sussdorff.de) -->
-<!-- @creation-date 2005-08-03 -->
-<!-- @arch-tag: ef7b6a8f-d03c-4502-96ef-7fdd5c2713a4 -->
-<!-- @cvs-id $Id$ -->
-
 <queryset>
-     <fullquery name="IncomingEmail.record_bounce">
-      <querytext>
+   <fullquery name="callback::acs_mail_lite::incoming_email::impl::acs-mail-lite.record_bounce">
+     <querytext>
 
-        update acs_mail_lite_bounce
-        set bounce_count = bounce_count + 1
-        where user_id = :user_id
+       update acs_mail_lite_bounce
+       set bounce_count = bounce_count + 1
+       where user_id = :user_id
 
-      </querytext>
+     </querytext>
+   </fullquery>
+
+   <fullquery name="callback::acs_mail_lite::incoming_email::impl::acs-mail-lite.insert_bounce">
+     <querytext>
+
+       insert into acs_mail_lite_bounce (user_id, bounce_count)
+       values (:user_id, 1)
+
+     </querytext>
+   </fullquery>
+
+    <fullquery name="callback::subsite::parameter_changed::impl::acs-mail-lite.update_entry">
+        <querytext>
+        update acs_mail_lite_reply_prefixes set prefix = :value where
+        package_id = :package_id and impl_name = :package_key
+        </querytext>
     </fullquery>
 
-    <fullquery name="IncomingEmail.insert_bounce">
-      <querytext>
+    <fullquery name="callback::subsite::parameter_changed::impl::acs-mail-lite.insert_entry">
+        <querytext>
+        insert into acs_mail_lite_reply_prefixes (package_id,impl_name,prefix)
+        values (:package_id,:package_key,:value)
+        </querytext>
+    </fullquery>
 
-        insert into acs_mail_lite_bounce (user_id, bounce_count)
-        values (:user_id, 1)
+    <fullquery name="callback::subsite::parameter_changed::impl::acs-mail-lite.remove_entry">
+        <querytext>
+	delete from acs_mail_lite_reply_prefixes where package_id = :package_id
+        </querytext>
+    </fullquery>
 
-      </querytext>
+    <fullquery name="callback::subsite::parameter_changed::impl::acs-mail-lite.entry_exists">
+        <querytext>
+	select * from acs_mail_lite_reply_prefixes where package_id = :package_id
+        </querytext>
     </fullquery>
 
 </queryset>
