@@ -32,84 +32,104 @@ ad_proc -public -callback acs_mail_lite::send {
 } {
 }
 
-
-ad_proc -public -callback IncomingEmail {
-     -from:required
-     -to:required
-     -subject:required
-     -bodies:required
-     -headers:required
-     -files
+ad_proc -public -callback acs_mail_lite::incoming_email {
+    -array:required
+    -package_id
 } {
-      Interface for all packages that are interested in incoming
-								      # emails
-
-     @author Nima Mazloumi (nima.mazloumi@gmx.de)
-     @creation-date 2005-07-15
-
-     @param subject      the subject of the incoming email
-     @param bodies       list of all bodies of the incoming email as
-										 # content-type content pairs
-     @param headers      all the headers of the email as an array
-     @param from         sender email
-     @param to           recepient email
-     @param files        optional list of attachments with four
-									 # elements: content-type encoding filename content
-     @return             nothing
-     @error
 }
 
-ad_proc -public -callback IncomingEmail -impl acs-mail-lite {
-     -from:required
-     -to:required
-     -subject:required
-     -bodies:required
-     -headers:required
-     -files
+ad_proc -public -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
+    -array:required
+    -package_id:required
 } {
-     Implementation of the interface email::incoming::handle for
-									     # acs-mail-lite
+    Implementation of the interface acs_mail_lite::incoming_email for acs-mail-lite. This proc
+    takes care of emails bounced back from mailer deamons. The required syntax for the To header
+    is as follows: EnvelopPrefix-user_id-signature-package_id@myhost.com. This email was set for
+    the Return-Path header of the original email. The signature is created by calculating the SHA
+    value of the original Message-Id header. Thus an email is valid if the signature is correct and
+    the user is known. If this is the case we record the bounce.
 
-     @author Nima Mazloumi (nima.mazloumi@gmx.de)
-     @creation-date 2005-07-15
+    @author Nima Mazloumi (nima.mazloumi@gmx.de)
+    @creation-date 2005-07-15
 
-     @param subject      the subject of the incoming email
-     @param bodies       the bodies of the incoming email as
-									 # content-type content pairs
-     @param headers      all the headers of the email as an array
-     @param from         sender email
-     @param to           recepient email
-     @param files        optional list of attachments with four
-									 # elements: content-type encoding filename content
-     @return             nothing
-     @error
+    @param array        An array with all headers, files and bodies. To access the array you need to use upvar.
+    @param package_id   The package instance that registered the prefix
+    @return             nothing
+    @error
 } {
-    set to [parse_email_address -email $to]
-     ns_log Debug "acs-mail-lite: To: $to"
-    util_unlist [parse_bounce_address -bounce_address $to] user_id package_id signature
+    upvar $array email
 
-     # If no user_id found or signature invalid, ignore message
-    if {[empty_string_p $user_id] || ![valid_signature -signature $signature -msg $body]} {
-	if {[empty_string_p $user_id]} {
-             ns_log Notice "acs-mail-lite: No user id $user_id found"
-	} else {
-             ns_log Notice "acs-mail-lite: Invalid mail signature"
+    set to [acs_mail_lite::parse_email_address -email $email(to)]
+    ns_log Notice "acs_mail_lite::incoming_email -impl acs-mail-lite called. Recepient $to"
+
+    util_unlist [acs_mail_lite::parse_bounce_address -bounce_address $to] user_id package_id signature
+    
+    # If no user_id found or signature invalid, ignore message
+    if {[empty_string_p $user_id] || ![acs_mail_lite::valid_signature -signature $signature -message_id $email(message-id)]} {
+        if {[empty_string_p $user_id]} {
+            ns_log Notice "acs_mail_lite::incoming_email impl acs-mail-lite: No equivalent user found for $to"
+        } else {
+            ns_log Notice "acs_mail_lite::incoming_email impl acs-mail-lite: Invalid mail signature $signature"
+        }
+    } else {
+	ns_log Notice "acs_mail_lite::incoming_email impl acs-mail-lite: Bounce checking $to, $user_id"
+	
+	if { ![acs_mail_lite::bouncing_user_p -user_id $user_id] } {
+	    ns_log Notice "acs_mail_lite::incoming_email impl acs-mail-lite: Bouncing email from user $user_id"
+	    # record the bounce in the database
+	    db_dml record_bounce {}
+	    
+	    if {![db_resultrows]} {
+		db_dml insert_bounce {}
+	    }
 	}
-	if {[catch {ns_unlink $msg} errmsg]} {
-             ns_log Notice "acs-mail-lite: couldn't remove message"
-	}
-         continue
     }
+}
 
-     ns_log Debug "Bounce checking: $to, $user_id"
+ad_proc -public -callback subsite::parameter_changed -impl acs-mail-lite {
+        -package_id:required
+        -parameter:required
+        -value:required
+} {
+    Implementation of subsite::parameter_changed for acs-mail-lite.
+    All packages that implement the callback acs_mail_lite::incoming_email require to provide
+    a package parameter called EnvelopePrefix. As soon as a site admin sets this parameter
+    this callback here is called to put that information in the mapping table acs_mail_lite_reply_tokens.
+    This table allows acs-mail-lite to inform the implementation directly.
+    
+    In order to allow packages listening to mails sent out by notifications we also listen to the parameter
+    ProcessNotificationRepliesP.
+    
+    @author Nima Mazloumi (nima.mazloumi@gmx.de)
+    @creation-date 2005-08-17
+    
+    @param package_id the package_id of the package the parameter was changed for
+    @param parameter  the parameter name
+    @param value      the new value
+    
+} {
+    ns_log Debug "subsite::parameter_changed -impl acs-mail-lite called for $parameter"
 
-    if { ![bouncing_user_p -user_id $user_id] } {
-         ns_log Notice "acs-mail-lite: Bouncing email from user $user_id"
-         # record the bounce in the database
-	db_dml record_bounce {}
+    set empty_p [empty_string_p $value]
 
-	if {![db_resultrows]} {
-	    db_dml insert_bounce {}
+    set package_key [apm_package_key_from_id $package_id]
+
+    if {[string equal "EnvelopePrefix" $parameter] || [string equal "EmailReplyAddressPrefix" $parameter]} {
+	if {[db_0or1row entry_exists {}]} {
+	    if { $empty_p } {
+		ns_log Notice "subsite::parameter_changed -impl acs-mail-lite prefix: removing prefix $prefix"
+		db_dml remove_entry {}
+	    } else {
+		ns_log Notice "subsite::parameter_changed -impl acs-mail-lite prefix: changing prefix $prefix to $value"
+		db_dml update_entry {}
+	    }
+	} else {
+	    if {!$empty_p} {
+		ns_log Notice "subsite::parameter_changed -impl acs-mail-lite prefix: creating new prefix $value for package_id $package_id"
+		db_dml insert_entry {}
+	    }
 	}
+    } else {
+	ns_log Debug "subsite::parameter_changed -impl acs-mail-lite don't care about $parameter"
     }
 }
