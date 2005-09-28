@@ -13,7 +13,7 @@ if { ![empty_string_p $repository_url] } {
     set page_title "Install or Upgrade From Local File System"
 }
 
-set context [list [list "." "Install or Upgrade Software"] $page_title]
+set context [list [list "." "Install Software"] $page_title]
 
 
 #####
