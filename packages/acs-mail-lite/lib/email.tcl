@@ -10,7 +10,8 @@ foreach required_param {party_ids} {
 	return -code error "$required_param is a required parameter."
     }
 }
-foreach optional_param {return_url content export_vars file_ids} {
+
+foreach optional_param {return_url content export_vars file_ids object_id no_callback} {
     if {![info exists $optional_param]} {
 	set $optional_param {}
     }
@@ -22,7 +23,6 @@ if {![info exists mime_type]} {
 if {![info exists cancel_url]} {
     set cancel_url $return_url
 }
-
 
 # Somehow when the form is submited the party_ids values became
 # only one element of a list, this avoid that problem
@@ -119,7 +119,6 @@ ad_form -action [ad_conn url] \
 	template::multirow create messages message_type to_addr subject content
 
 	# Insert the uploaded file linked under the package_id
-	
 	set package_id [ad_conn package_id]
 	
 	if {![empty_string_p $upload_file] } {
@@ -162,16 +161,58 @@ ad_form -action [ad_conn url] \
 
 	template::multirow foreach messages {
 	    if {[exists_and_not_null file_ids]} {
-		acs_mail_lite::complex_send -to_addr $to_addr -from_addr "$from_addr" -subject "$subject" -body "$content" -package_id $package_id -file_ids $file_ids -mime_type $mime_type
+
+		acs_mail_lite::complex_send \
+		    -to_addr $to_addr \
+		    -from_addr "$from_addr" \
+		    -subject "$subject" \
+		    -body "$content" \
+		    -package_id $package_id \
+		    -file_ids $file_ids \
+		    -mime_type $mime_type \
+		    -object_id $object_id \
+		    -no_callback $no_callback
 
 	    } else {
 
 		# acs_mail_lite does not know about sending the
 		# correct mime types....
 		if {$mime_type == "text/html"} {
-		    acs_mail_lite::complex_send -to_addr $to_addr -from_addr "$from_addr" -subject "$subject" -body "$content" -package_id $package_id -mime_type $mime_type
+
+		    acs_mail_lite::complex_send \
+			-to_addr $to_addr \
+			-from_addr "$from_addr" \
+			-subject "$subject" \
+			-body "$content" \
+			-package_id $package_id \
+			-mime_type $mime_type \
+			-object_id $object_id \
+			-no_callback $no_callback
+		    
 		} else {
-		    acs_mail_lite::send -to_addr $to_addr -from_addr "$from_addr" -subject "$subject" -body "$content" -package_id $package_id
+		    if { [exists_and_not_null object_id] } {
+
+			acs_mail_lite::complex_send \
+			    -to_addr $to_addr \
+			    -from_addr "$from_addr" \
+			    -subject "$subject" \
+			    -body "$content" \
+			    -package_id $package_id \
+			    -mime_type "text/html" \
+			    -object_id $object_id \
+			    -no_callback $no_callback
+
+		    } else {
+			
+			acs_mail_lite::send \
+			    -to_addr $to_addr \
+			    -from_addr "$from_addr" \
+			    -subject "$subject" \
+			    -body "$content" \
+			    -package_id $package_id \
+			    -no_callback $no_callback
+
+		    }
 		}
 	    }
 	}
