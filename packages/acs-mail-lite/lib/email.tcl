@@ -11,7 +11,7 @@ foreach required_param {party_ids} {
     }
 }
 
-foreach optional_param {return_url content export_vars file_ids object_id no_callback} {
+foreach optional_param {return_url content export_vars file_ids object_id no_callback_p} {
     if {![info exists $optional_param]} {
 	set $optional_param {}
     }
@@ -161,23 +161,9 @@ ad_form -action [ad_conn url] \
 
 	template::multirow foreach messages {
 	    if {[exists_and_not_null file_ids]} {
-
-		acs_mail_lite::complex_send \
-		    -to_addr $to_addr \
-		    -from_addr "$from_addr" \
-		    -subject "$subject" \
-		    -body "$content" \
-		    -package_id $package_id \
-		    -file_ids $file_ids \
-		    -mime_type $mime_type \
-		    -object_id $object_id \
-		    -no_callback $no_callback
-
-	    } else {
-
-		# acs_mail_lite does not know about sending the
-		# correct mime types....
-		if {$mime_type == "text/html"} {
+		
+		# If the no_callback_p is set to "t" then no callback will be executed
+		if { $no_callback_p } {
 
 		    acs_mail_lite::complex_send \
 			-to_addr $to_addr \
@@ -185,12 +171,45 @@ ad_form -action [ad_conn url] \
 			-subject "$subject" \
 			-body "$content" \
 			-package_id $package_id \
+			-file_ids $file_ids \
 			-mime_type $mime_type \
 			-object_id $object_id \
-			-no_callback $no_callback
-		    
+			-no_callback_p
+
 		} else {
-		    if { [exists_and_not_null object_id] } {
+
+		    acs_mail_lite::complex_send \
+			-to_addr $to_addr \
+			-from_addr "$from_addr" \
+			-subject "$subject" \
+			-body "$content" \
+			-package_id $package_id \
+			-file_ids $file_ids \
+			-mime_type $mime_type \
+			-object_id $object_id
+
+		}
+
+	    } else {
+
+		# acs_mail_lite does not know about sending the
+		# correct mime types....
+		if {$mime_type == "text/html"} {
+
+
+		    if { $no_callback_p } {
+			# If the no_callback_p is set to "t" then no callback will be executed			
+			acs_mail_lite::complex_send \
+			    -to_addr $to_addr \
+			    -from_addr "$from_addr" \
+			    -subject "$subject" \
+			    -body "$content" \
+			    -package_id $package_id \
+			    -mime_type $mime_type \
+			    -object_id $object_id \
+			    -no_callback_p
+
+		    } else {
 
 			acs_mail_lite::complex_send \
 			    -to_addr $to_addr \
@@ -198,20 +217,56 @@ ad_form -action [ad_conn url] \
 			    -subject "$subject" \
 			    -body "$content" \
 			    -package_id $package_id \
-			    -mime_type "text/html" \
-			    -object_id $object_id \
-			    -no_callback $no_callback
+			    -mime_type $mime_type \
+			    -object_id $object_id
 
+		    }
+		    
+		} else {
+		    if { [exists_and_not_null object_id] } {
+			# If the no_callback_p is set to "t" then no callback will be executed
+			if { $no_callback_p } {
+			    acs_mail_lite::complex_send \
+				-to_addr $to_addr \
+				-from_addr "$from_addr" \
+				-subject "$subject" \
+				-body "$content" \
+				-package_id $package_id \
+				-mime_type "text/html" \
+				-object_id $object_id \
+				-no_callback_p
+			} else {
+
+			    acs_mail_lite::complex_send \
+				-to_addr $to_addr \
+				-from_addr "$from_addr" \
+				-subject "$subject" \
+				-body "$content" \
+				-package_id $package_id \
+				-mime_type "text/html" \
+				-object_id $object_id 
+			}
 		    } else {
 			
-			acs_mail_lite::send \
-			    -to_addr $to_addr \
-			    -from_addr "$from_addr" \
-			    -subject "$subject" \
-			    -body "$content" \
-			    -package_id $package_id \
-			    -no_callback $no_callback
+			if { $no_callback_p } {
+			    # If the no_callback_p is set to "t" then no callback will be executed
+			    acs_mail_lite::send \
+				-to_addr $to_addr \
+				-from_addr "$from_addr" \
+				-subject "$subject" \
+				-body "$content" \
+				-package_id $package_id \
+				-no_callback_p
 
+			} else {
+			    acs_mail_lite::send \
+				-to_addr $to_addr \
+				-from_addr "$from_addr" \
+				-subject "$subject" \
+				-body "$content" \
+				-package_id $package_id 
+			}
+			
 		    }
 		}
 	    }
