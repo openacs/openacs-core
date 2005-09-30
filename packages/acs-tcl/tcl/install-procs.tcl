@@ -535,6 +535,32 @@ ad_proc -public install::xml::action::add-subsite-member { node } {
     return {}
 }
 
+ad_proc -public install::xml::action::relation-type { node } {
+    Create a relation type.
+} {
+    set rel_type [apm_required_attribute_value $node rel-type]
+    set pretty_name [apm_required_attribute_value $node pretty-name]
+    set pretty_plural [apm_required_attribute_value $node pretty-plural]
+    set object_type_one [apm_required_attribute_value $node object-type-one]
+    set min_n_rels_one [apm_required_attribute_value $node min-n-rels-one]
+    set max_n_rels_one [apm_attribute_value -default "" $node max-n-rels-one]
+    set object_type_two [apm_required_attribute_value $node object-type-two]
+    set min_n_rels_two [apm_required_attribute_value $node min-n-rels-two]
+    set max_n_rels_two [apm_attribute_value -default "" $node max-n-rels-two]
+
+    rel_types::new $rel_type \
+        $pretty_name \
+        $pretty_plural \
+        $object_type_one \
+        $min_n_rels_one \
+        $max_n_rels_one \
+        $object_type_two \
+        $min_n_rels_two \
+        $max_n_rels_two
+
+    return {}
+}
+
 ad_proc -public install::xml::object_id::package { node } {
     Returns an object_id for a package specified in node.
 
