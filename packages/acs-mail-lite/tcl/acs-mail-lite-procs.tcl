@@ -962,7 +962,7 @@ namespace eval acs_mail_lite {
 	    db_dml create_queue_entry {}
 	}
 
-	if { !$no_callback_p } {
+	if { ![exists_and_not_null no_callback_p] } {
 	    callback acs_mail_lite::send \
 		-package_id $package_id \
 		-from_party_id $from_party_id \
