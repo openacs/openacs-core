@@ -891,6 +891,7 @@ namespace eval acs_mail_lite {
         {-extraheaders ""}
         {-bcc ""}
 	{-package_id ""}
+	{-no_callback "t"}
     } {
         Reliably send an email message.
 
@@ -903,6 +904,7 @@ namespace eval acs_mail_lite {
 	@option extraheaders extra mail headers in an ns_set
 	@option bcc see to_addr
 	@option package_id To be used for calling a package-specific proc when mail has bounced
+	@option no_callback Boolean that indicates if callback should be executed or not. Set to "t" if you don't want to execute callbacks, or "f" otherwise, Default "t".
         @returns the Message-Id of the mail
     } {
 	## Extract "from" email address
@@ -960,15 +962,16 @@ namespace eval acs_mail_lite {
 	    db_dml create_queue_entry {}
 	}
 
+	if { !$no_callback } {
+	    callback acs_mail_lite::send \
+		-package_id $package_id \
+		-from_party_id $from_party_id \
+		-to_party_id $to_party_id \
+		-body $body \
+		-message_id $message_id \
+		-subject $subject
+	}
 
-	callback acs_mail_lite::send \
-	    -package_id $package_id \
-	    -from_party_id $from_party_id \
-	    -to_party_id $to_party_id \
-	    -body $body \
-	    -message_id $message_id \
-	    -subject $subject
-	
         return $message_id
     }
 
@@ -985,6 +988,7 @@ namespace eval acs_mail_lite {
 	{-folder_id ""}
 	{-mime_type "text/plain"}
 	{-object_id ""}
+	{-no_callback "t"}
     } {
 	
 	Prepare an email to be send with the option to pass in a list
@@ -1009,6 +1013,8 @@ namespace eval acs_mail_lite {
 	@param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
 
 	@param object_id The ID of the object that is responsible for sending the mail in the first place
+	
+	@param no_callback Boolean that indicates if callback should be executed or not. Set to "t" if you don't want to execute callbacks, or "f" otherwise, Default "t".
 	
     } {
 
@@ -1051,15 +1057,17 @@ namespace eval acs_mail_lite {
 	    set package_id [apm_package_id_from_key "acs-mail-lite"]
 	}
 
-	callback acs_mail_lite::complex_send \
-	    -package_id $package_id \
-	    -from_party_id [party::get_by_email -email $from_addr] \
-	    -to_party_id [party::get_by_email -email $to_addr] \
-	    -body $body \
-	    -message_id $message_id \
-	    -subject $subject \
-	    -object_id $object_id \
-	    -file_ids [split $file_ids ","]
+	if { !$no_callback } {
+	    callback acs_mail_lite::complex_send \
+		-package_id $package_id \
+		-from_party_id [party::get_by_email -email $from_addr] \
+		-to_party_id [party::get_by_email -email $to_addr] \
+		-body $body \
+		-message_id $message_id \
+		-subject $subject \
+		-object_id $object_id \
+		-file_ids [split $file_ids ","]
+	}
     }
 	 
     ad_proc -private sweeper {} {
