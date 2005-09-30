@@ -891,7 +891,7 @@ namespace eval acs_mail_lite {
         {-extraheaders ""}
         {-bcc ""}
 	{-package_id ""}
-	{-no_callback "t"}
+	-no_callback:boolean
     } {
         Reliably send an email message.
 
@@ -962,7 +962,7 @@ namespace eval acs_mail_lite {
 	    db_dml create_queue_entry {}
 	}
 
-	if { !$no_callback } {
+	if { !$no_callback_p } {
 	    callback acs_mail_lite::send \
 		-package_id $package_id \
 		-from_party_id $from_party_id \
@@ -988,7 +988,7 @@ namespace eval acs_mail_lite {
 	{-folder_id ""}
 	{-mime_type "text/plain"}
 	{-object_id ""}
-	{-no_callback "t"}
+	-no_callback:boolean
     } {
 	
 	Prepare an email to be send with the option to pass in a list
@@ -1057,7 +1057,7 @@ namespace eval acs_mail_lite {
 	    set package_id [apm_package_id_from_key "acs-mail-lite"]
 	}
 
-	if { !$no_callback } {
+	if { !$no_callback_p } {
 	    callback acs_mail_lite::complex_send \
 		-package_id $package_id \
 		-from_party_id [party::get_by_email -email $from_addr] \
