@@ -43,15 +43,42 @@ ad_proc -public application_link::get_linked {
 }
 
 ad_proc -private ::install::xml::action::application-link { node } {
-    Create a forum instance from an install.xml file
+    Create an application link:
+
+    <p>&lt;application-link from-package-id=&quot;<em>from-package-id</em>&quot; to-package-id=&quot;<em>to-package-id</em>&quot;/&gt;</p>
 } {
-    set this_package_url [apm_required_attribute_value $node this_package_url]
-    set target_package_url [apm_required_attribute_value $node target_package_url]
+    set this_package_url [apm_attribute_value \
+        -default "" \
+        $node \
+        this_package_url]
+    set target_package_url [apm_attribute_value \
+        -default "" \
+        $node \
+        target_package_url]
 
-    set this_package_id [site_node::get_element -url $this_package_url -element package_id]
-    set target_package_id [site_node::get_element -url $target_package_url -element package_id]
+    set from_package_id [apm_attribute_value -default "" $node from-package-id]
+    set to_package_id [apm_attribute_value -default "" $node to-package-id]
 
-    application_link::new -this_package_id $this_package_id -target_package_id $target_package_id
+    if {![string equal $this_package_url ""]} {
+        set this_package_id [site_node::get_element -url $this_package_url \
+            -element package_id]
+    } elseif {![string equal $from_package_id ""]} {
+        set this_package_id [install::xml::util::get_id $from_package_id]
+    } else {
+        error "application-link tag must specify either this_package_url or from-package-id"
+    }
+
+    if {![string equal $target_package_url ""]} {
+        set target_package_id [site_node::get_element -url $target_package_url \
+            -element package_id]
+    } elseif {![string equal $to_package_id ""]} {
+        set target_package_id [install::xml::util::get_id $to_package_id]
+    } else {
+        error "application-link tag must specify either target_package_url or to-package-id"
+    }
+
+    application_link::new -this_package_id $this_package_id \
+        -target_package_id $target_package_id
 
 }
 
