@@ -353,6 +353,7 @@ ad_proc -public lang::user::locale {
 
 ad_proc -public lang::user::set_locale {
     {-package_id ""}
+    {-user_id ""}
     locale
 } {
     Set user locale setting for a given package instance.
@@ -360,7 +361,9 @@ ad_proc -public lang::user::set_locale {
     @param package_id The package for which you want to set the locale setting, if you want to set it for a specific package, as opposed to a site-wide setting.
     @param locale The new locale that you want to use as your system locale.
 } {
-    set user_id [ad_conn user_id]
+    if { [empty_string_p $user_id] } {
+	set user_id [ad_conn user_id]
+    }
 
     if { $user_id == 0 } {
         # Not logged in, use a cookie-based client locale
