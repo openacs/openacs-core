@@ -15,8 +15,10 @@ ad_proc -public application_link::new {
     set user_id [ad_conn user_id]
     set id_addr [ad_conn peeraddr]
 
-    db_exec_plsql create_forward_link {}
+    set result [db_exec_plsql create_forward_link {}]
     db_exec_plsql create_backward_link {}
+
+    return $result
 }
 
 ad_proc -public application_link::delete_links {
@@ -47,6 +49,8 @@ ad_proc -private ::install::xml::action::application-link { node } {
 
     <p>&lt;application-link from-package-id=&quot;<em>from-package-id</em>&quot; to-package-id=&quot;<em>to-package-id</em>&quot;/&gt;</p>
 } {
+    set id [apm_attribute_value -default "" $node id]
+
     set this_package_url [apm_attribute_value \
         -default "" \
         $node \
@@ -77,8 +81,11 @@ ad_proc -private ::install::xml::action::application-link { node } {
         error "application-link tag must specify either target_package_url or to-package-id"
     }
 
-    application_link::new -this_package_id $this_package_id \
-        -target_package_id $target_package_id
-
+    set link_id [application_link::new -this_package_id $this_package_id \
+        -target_package_id $target_package_id]
+ 
+    if {![string is space $id]} {
+        set ::install::xml::ids($id) $link_id
+    }
 }
 
