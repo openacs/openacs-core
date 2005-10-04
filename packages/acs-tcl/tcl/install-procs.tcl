@@ -310,6 +310,34 @@ ad_proc -public install::xml::action::mount-existing { node } {
     return $out
 }
 
+ad_proc -public install::xml::action::create-package { node } {
+    Create a relation type.
+} {
+    variable ::install::xml::ids
+
+    set id [apm_required_attribute_value $node id]
+    set package_key [apm_required_attribute_value $node package-key]
+    set instance_name [apm_attribute_value -default "" $node name]
+    set context_id [apm_attribute_value -default "" $node context-id]
+
+    if {[string equal $context_id ""]} {
+        set context_id [db_null]
+    } else {
+        set context_id [install::xml::util::get_id $context_id]
+    }
+
+    set package_id [apm_package_instance_new \
+        -instance_name $instance_name \
+        -package_key $package_key \
+        -context_id $context_id]
+
+    if {![string is space $id]} {
+        set ::install::xml::ids($id) $package_id
+    }
+
+    return $package_id
+}
+
 ad_proc -public install::xml::action::set-parameter { node } {
     Sets a package parameter.
 
