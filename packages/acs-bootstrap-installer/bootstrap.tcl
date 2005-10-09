@@ -140,6 +140,12 @@ set errno [catch {
     ns_log Notice "Loading acs-automated-testing specially so other packages can define tests..."
     apm_bootstrap_load_libraries -procs acs-automated-testing
 
+    # GN: Should be loaded before user packages such they can use
+    # the xotcl infrastructure
+    if {[file isdirectory $root_directory/packages/xotcl-core]} {
+       apm_bootstrap_load_libraries -procs xotcl-core
+    }
+
     # Load libraries, queries etc. for remaining packages
     apm_load_packages
 
