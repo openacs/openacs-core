@@ -46,6 +46,17 @@ template_tag property { chunk params } {
 template_tag master { params } {
 
   set src [ns_set iget $params src]
+  set slave_properties_p [template::get_attribute multiple $params slave-properties-p 0]
+
+  if {[template::util::is_true $slave_properties_p]} {
+    template::adp_append_code "
+      foreach {__key __value} \$__args {
+        if {!\[string equal \$__key __adp_slave\]} {
+          set __adp_properties(\$__key) \"\$__value\"
+        }
+      }
+    "
+  }
 
   # default to the site-wide master
   if {[empty_string_p $src]} {
