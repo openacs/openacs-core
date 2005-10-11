@@ -32,7 +32,7 @@ One of the strengths of the OpenACS project is the community surrounding it:
 
 <li><a href="http://www.openacs.org/blog/">Tips and hints blog</a></li>
 <li><a href="http://www.openacs.org/irc/">IRC</a> at <code><a href="irc://irc.freenode.net/#openacs">irc://irc.freenode.net/#openacs</a></code></li>
-<li><a href="http://www.openacs.org/irc/log/">Chatroom logs</a> and <a href="http://www.openaccs.org/irc/log/logger/current">today's log</a></li>
+<li><a href="http://www.openacs.org/irc/log/">Chatroom logs</a> and <a href="http://www.openacs.org/irc/log/logger/current">today's log</a></li>
 <li><a href="http://www.openacs.org/contribute/">How to contribute</a></li>
 </ul>
 
