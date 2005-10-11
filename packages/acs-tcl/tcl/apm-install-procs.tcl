@@ -28,7 +28,7 @@ ad_proc apm_scan_packages {
     }
 
     ### Scan for all unregistered .info files.
-    
+
     ns_log Notice "apm_scan_packages: Scanning for new unregistered packages..."
     set new_spec_files [list]
     # Loop through all directories in the /packages directory, searching each for a
@@ -125,7 +125,7 @@ ad_proc -public apm_dependency_provided_p {
 }
 
 ad_proc -private pkg_info_new { package_key spec_file_path provides requires {dependency_p ""} {comment ""}} {
-    
+
     Returns a datastructure that maintains information about a package.
     @param package_key The key of the package.
     @param spec_file_path The path to the package specification file
@@ -156,7 +156,7 @@ ad_proc -private pkg_info_spec {pkg_info} {
 }
 
 ad_proc -private pkg_info_path {pkg_info} {
-    
+
 
     @return The full path of the packages dir stored in the package info map.
             Assumes that the info file is stored in the root
@@ -386,11 +386,11 @@ ad_proc -private apm_dependency_check_new {
                             available packages as returned by apm_get_package_repository.
 
     @return             An array list with the following elements:
-    
+
     <ul>
-    
+
       <li>status: 'ok' or 'failed'.
-    
+
       <li>install: If status is 'ok', this is the complete list of packages that need to be installed, 
                    in the order in which they need to be installed.
                    If status is 'failed', the list of packages that can be installed.
@@ -402,7 +402,7 @@ ad_proc -private apm_dependency_check_new {
                     were originally requested, or because they were required. If status is 'ok', 
                     will be identical to 'install'.
                   
-    
+
     </ul>
 
     @see apm_get_package_repository
@@ -415,7 +415,7 @@ ad_proc -private apm_dependency_check_new {
         failed {}
         packages {}
     }
-    
+
     # 'pending_packages' is an array keyed by package_key with a value of 1 for each package pending installation
     # When dependencies have been met, the entry will be unset
     array set pending_packages [list]
@@ -812,7 +812,7 @@ ad_proc -private apm_package_install {
 
 	apm_version_enable -callback $callback $version_id
     }
-    
+
     # Instantiating, mounting, and after-install callback only invoked on initial install
     if { ! $upgrade_p } {
         # After install Tcl proc callback
@@ -930,7 +930,7 @@ ad_proc -private apm_package_deinstall {
     regsub {@.+} [cc_email_from_party [ad_get_user_id]] "" my_email_name
 
     set backup_dir "[apm_workspace_dir]/$package_key-removed-$my_email_name-[ns_fmttime [ns_time] "%Y%m%d-%H:%M:%S"]"
-    
+
     apm_callback_and_log $callback "
     <li>Moving <tt>packages/$package_key</tt> to $backup_dir... "
 
@@ -959,7 +959,7 @@ ad_proc -private apm_package_delete {
     {-remove_files:boolean}
     package_key
 } {
-    
+
     Deinstall a package from the system. Will unmount and uninstantiate
     package instances, invoke any before-unstall callback, source any
     provided sql drop scripts, remove message keys, and delete
@@ -970,30 +970,46 @@ ad_proc -private apm_package_delete {
 
     # Unmount all instances of this package with the Tcl API that 
     # invokes before-unmount callbacks
-    db_foreach all_package_instances {
-        select site_nodes.node_id
-        from apm_packages, site_nodes
-        where apm_packages.package_id = site_nodes.object_id
-        and   apm_packages.package_key = :package_key
-    } {
-        set url [site_node::get_url -node_id $node_id]
-        apm_callback_and_log $callback "Unmounting package instance at url $url <br />"
-        site_node::unmount -node_id $node_id
-    }    
+    db_transaction {
+        db_foreach all_package_instances {
+            select site_nodes.node_id
+            from apm_packages, site_nodes
+            where apm_packages.package_id = site_nodes.object_id
+            and   apm_packages.package_key = :package_key
+        } {
+            set url [site_node::get_url -node_id $node_id]
+            apm_callback_and_log $callback "Unmounting package instance at url $url <br />"
+            site_node::unmount -node_id $node_id
+        }    
 
-    # Delete the package instances with Tcl API that invokes 
-    # before-uninstantiate callbacks
-    db_foreach all_package_instances {
-        select package_id
-        from apm_packages
-        where package_key = :package_key
-    } {
-        apm_callback_and_log $callback "Deleting package instance $package_id <br />"
-        apm_package_instance_delete $package_id
+        # Delete the package instances with Tcl API that invokes 
+        # before-uninstantiate callbacks
+        db_foreach all_package_instances {
+            select package_id
+            from apm_packages
+            where package_key = :package_key
+        } {
+            apm_callback_and_log $callback "Deleting package instance $package_id <br />"
+            apm_package_instance_delete $package_id
+        }
+
+        # Invoke the before-uninstall Tcl callback before the sql drop scripts
+        apm_invoke_callback_proc -version_id $version_id -type before-uninstall
+
+        # Unregister I18N messages
+        lang::catalog::package_delete -package_key $package_key
+
+        # Remove package from APM tables
+        apm_callback_and_log $callback "<li>Deleting $package_key..."
+        db_exec_plsql apm_package_delete {
+    	begin
+    	    apm_package_type.drop_type(
+    	        package_key => :package_key,
+    	        cascade_p => 't'
+                );
+    	end;
+        }
     }
-
-    # Invoke the before-uninstall Tcl callback before the sql drop scripts
-    apm_invoke_callback_proc -version_id $version_id -type before-uninstall
 
     # Source SQL drop scripts
     if {![empty_string_p $sql_drop_scripts]} {
@@ -1002,25 +1018,11 @@ ad_proc -private apm_package_delete {
     <ul>
     "
         foreach path $sql_drop_scripts {
-    	apm_callback_and_log $callback "<li><pre>"
-    	db_source_sql_file -callback $callback "[acs_package_root_dir $package_key]/$path"
-    	apm_callback_and_log $callback "</pre>"
+        	apm_callback_and_log $callback "<li><pre>"
+        	db_source_sql_file -callback $callback "[acs_package_root_dir $package_key]/$path"
+        	apm_callback_and_log $callback "</pre>"
         }
     }    
-
-    # Unregister I18N messages
-    lang::catalog::package_delete -package_key $package_key
-
-    # Remove package from APM tables
-    apm_callback_and_log $callback "<li>Deleting $package_key..."
-    db_exec_plsql apm_package_delete {
-	begin
-	    apm_package_type.drop_type(
-	        package_key => :package_key,
-	        cascade_p => 't'
-            );
-	end;
-    }
 
     # Optionally remove the files from the filesystem
     if {$remove_files_p==1} {
@@ -1053,7 +1055,7 @@ ad_proc -private apm_package_version_delete {
 }
 
 ad_proc -public apm_package_version_count {package_key} {
-    
+
     @return The number of versions of the indicated package.
 } {
     return [db_string apm_package_version_count {
@@ -1091,7 +1093,7 @@ ad_proc -private apm_package_install_data_model {
     if { ![empty_string_p $data_model_files] } {
 	apm_callback_and_log $callback "<p><li>Installing data model for $version(package-name) $version(name)...\n"
     }
-    
+
     foreach item $data_model_files {
 	set file_path [lindex $item 0]
 	set file_type [lindex $item 1]
@@ -1242,9 +1244,9 @@ ad_proc -private apm_package_install_owners_prepare {owner_names owner_uris } {
 }
 
 ad_proc -private apm_package_install_owners { {-callback apm_dummy_callback} owners version_id} {
-    
+
     Install all of the owners of the package version.
-    
+
 } {
     db_dml apm_delete_owners {
 	delete from apm_package_owners where version_id = :version_id
@@ -1419,7 +1421,7 @@ ad_proc -public apm_version_update {
     apm::package_version::attributes::store \
         -version_id $version_id \
         -array local_array
-    
+
     return $version_id
 }
 
@@ -1512,7 +1514,7 @@ ad_proc -private apm_upgrade_for_version_p {path initial_version_name final_vers
 }
 
 ad_proc -private apm_order_upgrade_scripts {upgrade_script_names} {
-    
+
     Upgrade scripts are ordered so that they may be executed in a sequence
     that upgrades package.  For example, if you start at version 1.0, and need to go
     to version 2.0, a correct order would be 1.0-1.5, 1.5-1.6, 1.6-2.0.
@@ -1530,7 +1532,7 @@ ad_proc -private apm_upgrade_script_compare {f1 f2} {
     # Strip off any path information.
     set f1 [lindex [split $f1 /] end]
     set f2 [lindex [split $f2 /] end]
-    
+
     # Get the version number from, e.g. the 2.0 from upgrade-2.0-3.0.sql 
     if {[regexp {\-(.*)-.*.sql} $f1 match f1_version_from] && 
     [regexp {\-(.*)-.*.sql} $f2 match f2_version_from]} {
@@ -1729,17 +1731,17 @@ ad_proc -public apm_version_names_compare {
     @param version_name_2 the second version name
 
     @return 
-    
+
     <ul>
 
       <li> -1: the first version is smallest
 
       <li> 0: they're identical
-    
+
       <li> 1: the second version is smallest
 
     </ul>
-    
+
     @author Lars Pind
 } {
     db_1row select_sortable_versions {}
@@ -1771,9 +1773,9 @@ ad_proc -public apm_upgrade_logic {
     fall within the from_version_name and to_version_name it'll get executed in the caller's namespace, ordered by the from_version.
 
     <p>
-    
+
     Example:
-    
+
     <blockquote><pre>
 
     ad_proc my_upgrade_callback {
@@ -1801,9 +1803,9 @@ ad_proc -public apm_upgrade_logic {
             }
         }
     }
-    
+
     </pre></blockquote>
-    
+
     @param from_version_name The version you're upgrading from, e.g. '1.3'.
     @param to_version_name The version you're upgrading to, e.g. '2.4'.
     @param spec The code chunks in the format described above
@@ -1813,7 +1815,7 @@ ad_proc -public apm_upgrade_logic {
     if { [expr [llength $spec] % 3] != 0 } {
         error "The length of spec should be dividable by 3"
     }
-    
+
     array set chunks [list]
     foreach { elm_from elm_to elm_chunk } $spec {
 
@@ -1848,7 +1850,7 @@ ad_proc -private apm_get_package_repository {
 
     @param repository_url The URL for the repository channel to get from, or the empty string to
                           seach the local file system instead.
-    
+
     @param array          Name of an array where you want the repository stored. It will be keyed by package-key,
                           and each entry will be an array list list what's returned by apm_read_package_info_file.
 
@@ -1863,7 +1865,7 @@ ad_proc -private apm_get_package_repository {
 
     if { ![empty_string_p $repository_url] } {
         set manifest_url "${repository_url}manifest.xml"
-    
+
         # See if we already have it in a client property
         set manifest [ad_get_client_property acs-admin [string range $manifest_url end-49 end]]
 
@@ -2165,7 +2167,7 @@ ad_proc -private apm::package_version::attributes::get_pretty_name { attribute_n
 } {
     array set attributes [apm::package_version::attributes::get_spec]
     array set attribute $attributes($attribute_name)
-    
+
     return $attribute(pretty_name)
 }
 
@@ -2305,7 +2307,7 @@ ad_proc -private apm::package_version::attributes::get {
 
     @param The name of an array in the callers environment in which the attribute values
            will be set (with attribute names as keys and attribute values as values).
-    
+
     @author Peter Marklund
 } {
     upvar $array attributes
