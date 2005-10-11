@@ -87,7 +87,7 @@ if { [exists_and_not_null file_ids] } {
     set files [list]
     foreach file $file_ids {
 	set file_title [db_string get_file_title { select title from cr_revisions where revision_id = :file} -default "Untitled"]
-	lappend files "<a href=\"/tracking/download/?file_id=$file\">$file_title</a> "
+	lappend files "<a href=\"/tracking/download/$file_title?version_id=$file\">$file_title</a> "
     }
     set files [join $files ", "]
 
