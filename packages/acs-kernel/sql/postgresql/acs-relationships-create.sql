@@ -308,23 +308,6 @@ end;' language 'plpgsql';
  );
 
  select acs_rel_type__create_type (
-   'application_link',
-   'Application Link',
-   'Application Links',
-   'acs_object',
-   'acs_rels',
-   'rel_id',
-   'acs_rel',
-   'acs_rel_types',
-   'apm_package',
-   0,
-   null::integer,
-   'apm_package',
-   0,
-   null::integer
- );
-
- select acs_rel_type__create_type (
    'application_data_link',
    'Application Data Link',
    'Application Data Links',
