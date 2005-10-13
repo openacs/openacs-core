@@ -191,7 +191,7 @@ function acs_ListBulkActionClick(formName, url) {
  */
 
 /** The Calendar object constructor. */
-Calendar = function (mondayFirst, dateStr, onSelected, onClose) {
+Calendar = function (mondayFirst, dateStr, onSelected, onClose, dateFormat) {
 	// member variables
 	this.activeDiv = null;
 	this.currentDateEl = null;
@@ -203,7 +203,7 @@ Calendar = function (mondayFirst, dateStr, onSelected, onClose) {
 	this.hidden = false;
 	this.minYear = 1970;
 	this.maxYear = 2050;
-	this.dateFormat = Calendar._TT["DEF_DATE_FORMAT"];
+	this.dateFormat = dateFormat
 	this.ttDateFormat = Calendar._TT["TT_DATE_FORMAT"];
 	this.isPopup = true;
 	this.weekNumbers = true;
@@ -1605,7 +1605,6 @@ Calendar._TT["CLOSE"] = "Close";
 Calendar._TT["TODAY"] = "Today";
 
 // date formats
-Calendar._TT["DEF_DATE_FORMAT"] = "y-mm-dd";
 Calendar._TT["TT_DATE_FORMAT"] = "D, M d";
 
 Calendar._TT["WK"] = "wk";
@@ -1655,7 +1654,12 @@ function checkCalendar(ev) {
 // This function shows the calendar under the element having the given id.
 // It takes care of catching "mousedown" signals on document and hiding the
 // calendar if the click was outside.
-function showCalendar(id) {
+// The format specifies how the date is going to be returned. You can combine
+// the letters y, m, d, D or M in any way you want with any separator that
+// you want (e.g. "," or "-" or ".")
+// The letter D will return the name of the day (e.g Fri, Mon, etc.) and
+// M will return the name of the month (e.g Oct, Spt, Jan, etc.)
+function showCalendar(id,dateformat) {
   var el = document.getElementById(id);
   if (calendar != null) {
     // we already have one created, so just update it.
@@ -1663,7 +1667,10 @@ function showCalendar(id) {
     calendar.parseDate(el.value); // set it to a new date
   } else {
     // first-time call, create the calendar
-    var cal = new Calendar(true, null, selected, closeHandler);
+    if ( dateformat == null ) {
+       var dateformat = 'd-m-y';
+    }		
+    var cal = new Calendar(true, null, selected, closeHandler,dateformat);
     calendar = cal;             // remember the calendar in the global
     cal.setRange(1900, 2070);   // min/max year allowed
     calendar.create();          // create a popup calendar
