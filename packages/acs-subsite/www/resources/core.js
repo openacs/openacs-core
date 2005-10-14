@@ -1668,7 +1668,7 @@ function showCalendar(id,dateformat) {
   } else {
     // first-time call, create the calendar
     if ( dateformat == null ) {
-       var dateformat = 'd-m-y';
+       var dateformat = 'y-mm-dd';
     }		
     var cal = new Calendar(true, null, selected, closeHandler,dateformat);
     calendar = cal;             // remember the calendar in the global
