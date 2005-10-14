@@ -907,6 +907,7 @@ namespace eval acs_mail_lite {
 	@option no_callback_p Boolean that indicates if callback should be executed or not. If you don't provide it it will execute callbacks
         @returns the Message-Id of the mail
     } {
+
 	## Extract "from" email address
 	set from_addr [parse_email_address -email $from_addr]
 
@@ -1017,6 +1018,14 @@ namespace eval acs_mail_lite {
 	@param no_callback_p Boolean that indicates if callback should be executed or not. If you don't provide it it will execute callbacks	
 	
     } {
+	
+	# We check if the parameter 
+	set fixed_sender [parameter::get -parameter "FixedSenderEmail" \
+			      -package_id [apm_package_id_from_key "acs-mail-lite"]]
+
+	if { ![empty_string_p $fixed_sender] } {
+	    set from_addr $fixed_sender
+	}
 
 	# Set the message token
 	set message_token [mime::initialize -canonical "$mime_type" -string "$body"]
