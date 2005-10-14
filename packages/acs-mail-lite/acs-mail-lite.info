@@ -7,25 +7,26 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="1.0b3" url="http://openacs.org/repository/download/apm/acs-mail-lite-1.0b3.apm">
+    <version name="1.0b4" url="http://openacs.org/repository/download/apm/acs-mail-lite-1.0b4.apm">
         <owner url="mailto:eric@openforce.biz">Eric Lorenzo</owner>
         <owner url="mailto:timo@studio-k4.de">Timo Hentschel</owner>
         <summary>Simplified reliable email transmission with bounce management.</summary>
-        <release-date>2005-09-30</release-date>
+        <release-date>2005-10-14</release-date>
         <description format="text/html">This package provides a simple ns_sendmail-like interface for sending messages, but queues messages in the database to ensure reliable sending and make sending a message 'transactional'. Prefered over acs-messaging or acs-mail.</description>
         <maturity>0</maturity>
 
-        <provides url="acs-mail-lite" version="1.0b3"/>
+        <provides url="acs-mail-lite" version="1.0b4"/>
 
         <callbacks>
-            <callback type="before-uninstall"  proc="acs_mail_lite::before_uninstall"/>
             <callback type="after-install"  proc="acs_mail_lite::after_install"/>
+            <callback type="before-uninstall"  proc="acs_mail_lite::before_uninstall"/>
         </callbacks>
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="BounceDomain"  description="Email Domain for outgoing messages" section_name="email"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="BounceMailDir"  description="Location of the maildir location that accepts incoming bounces" section_name="email"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="BounceScanQueue"  default="120" description="How often (in seconds) to scan for new bounces" section_name="email"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EnvelopePrefix"  default="bounce" description="The prefix for sending mail that will be handled by this instance" section_name="email"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="FixedSenderEmail"  description="Email addres that will be always the email stored in the sender. Default is empty" section_name="email"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="MMEncodeBin"  default="/usr/bin/mmencode" description="Location of mmencode executable." section_name="email"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MaxBounceCount"  default="10" description="Number of bounced emails after resulting in disabling an email-address" section_name="email"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MaxDaysToBounce"  default="2" description="Number of days after mail sending a bounce is expected at the very latest" section_name="email"/>
