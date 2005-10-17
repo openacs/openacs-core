@@ -299,6 +299,17 @@ ad_proc -public content::revision::is_live {
 }
 
 
+ad_proc -public content::revision::item_id {
+    -revision_id:required
+} {
+    @param revision_id
+
+    @return item_id
+} {
+    return [db_string item_id {} -default ""]
+}
+
+
 ad_proc -public content::revision::read_xml {
     -item_id:required
     -revision_id:required
