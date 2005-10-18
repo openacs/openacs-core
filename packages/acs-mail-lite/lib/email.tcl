@@ -131,6 +131,14 @@ append form_elements {
     }
 }
 
+if { [exists_and_not_null item_id] } {
+    append form_elements {
+	{item_id:text(hidden),optional
+	    {value $item_id}
+	}
+    }
+}
+
 if { ![exists_and_not_null action] } {
     set action [ad_conn url]
 }
@@ -370,7 +378,8 @@ ad_form -action $action \
                 -title $title \
                 -description $subject \
                 -content $content_body \
-                -content_format "text/plain"
+                -content_format "text/plain" \
+	        -item_id "$item_id"
 	    
             lappend recipients "<a href=\"[contact::url -party_id $party_id]\">$to</a>"
 	    
