@@ -9,8 +9,8 @@ ad_library {
 
 }
 
-package require mime
-package require base64
+# package require mime
+# package require base64
 namespace eval acs_mail_lite {
 
     ad_proc -public with_finally {
@@ -795,6 +795,10 @@ namespace eval acs_mail_lite {
 	
     } {
 
+        # Added it here as it seems to cause problems with forums
+        # Unsure how this could happen, but who am I to argue
+        package require mime
+        package require base64
 
 	# Set the message token
 	set message_token [mime::initialize -canonical "$mime_type" -string "$body"]
