@@ -1190,3 +1190,23 @@ ad_proc -public aa_test::parse_test_file {
     }
     set test(testcase_failure) [array get testcase_failure]
 }
+ad_proc -public aa_get_first_url {
+    {-package_key:required}
+} {
+  Procedure for geting the url of a mounted package with the package_key. It uses the first instance that it founds. This is usefull for tclwebtest tests.
+} {
+
+    db_1row first_url { *SQL* }
+        return $url
+}
+
+ad_proc -public aa_display_result {
+    {-response:required}
+    {-explanation:required}
+} {
+    if {$response} {
+	aa_log_result "pass" $explanation
+    } else {
+	aa_log_result "fail" $explanation
+    }
+}
