@@ -17,6 +17,10 @@ foreach optional_param {return_url content export_vars file_ids object_id} {
     }
 }
 
+# See if the contacts and mail-tracking packages are installed.
+set contacts_p [apm_package_installed_p "contacts"]
+set tracking_p [apm_package_installed_p "mail-tracking"]
+
 if {![info exists mime_type]} {
     set mime_type "text/plain"
 }
@@ -34,8 +38,11 @@ if {![info exists no_callback_p]} {
 set recipients [list]
 foreach party_id $party_ids {
     if {![empty_string_p $party_id]} {
-	lappend recipients [list "<a href=\"[contact::url -party_id $party_id]\">[contact::name -party_id $party_id]</a> 
-                             ([cc_email_from_party $party_id])" $party_id]
+	if { $contacts_p } {
+	    lappend recipients [list "<a href=\"[contact::url -party_id $party_id]\">[contact::name -party_id $party_id]</a> ([cc_email_from_party $party_id])" $party_id]
+	} else {
+	    lappend recipients [list "[acs_mail_lite::party_name -party_id $party_id]</a> ([cc_email_from_party $party_id])" $party_id]
+	}
     }
 }
 
@@ -50,15 +57,15 @@ if { $recipients_num <= 1 } {
 	title:text(hidden),optional
 	{message_type:text(hidden) {value "email"}}
 	{to:text(checkbox),multiple 
-	    {label "[_ contacts.Recipients]"} 
+	    {label "[_ acs-mail-lite.Recipients]"} 
 	    {options  $recipients }
 	    {html {checked 1}}
-	    {section "[_ contacts.Recipients]"}
+	    {section "[_ acs-mail-lite.Recipients]"}
 	}
 	{cc:text(text),optional
-	    {label "CC:"} 
+	    {label "[_ acs-mail-lite.CC]:"} 
 	    {html {size 56}}
-	    {help_text "[_ contacts.cc_help]"}
+	    {help_text "[_ acs-mail-lite.cc_help]"}
 	}
     }
 } else {
@@ -69,13 +76,13 @@ if { $recipients_num <= 1 } {
 	title:text(hidden),optional
 	{message_type:text(hidden) {value "email"}}
 	{check_uncheck:text(checkbox),multiple,optional
-	    {label "[_ contacts.check_uncheck]"}
+	    {label "[_ acs-mail-lite.check_uncheck]"}
 	    {options {{"" 1}}}
-	    {section "[_ contacts.Recipients]"}
+	    {section "[_ acs-mail-lite.Recipients]"}
 	    {html {onclick check_uncheck_boxes(this.checked)}}
 	}
 	{to:text(checkbox),multiple 
-	    {label "[_ contacts.Recipients]"} 
+	    {label "[_ acs-mail-lite.Recipients]"} 
 	    {options  $recipients }
 	    {html {checked 1}}
 	}
@@ -86,17 +93,19 @@ if { $recipients_num <= 1 } {
 if { [exists_and_not_null file_ids] } {
     set files [list]
     foreach file $file_ids {
-	set file_title [db_string get_file_title { select title from cr_revisions where revision_id = :file} -default "Untitled"]
-	lappend files "<a href=\"/tracking/download/$file_title?version_id=$file\">$file_title</a> "
+	set file_title [db_string get_file_title { } -default "[_ acs-mail-lite.Untitled]"]
+	if { $tracking_p } {
+	    lappend files "<a href=\"/tracking/download/$file_title?version_id=$file\">$file_title</a> "
+	} else {
+	    lappend files "$file_title "
+	}
     }
     set files [join $files ", "]
 
     append form_elements {
-        {files_ids:text(inform),optional {label "[_ contacts.Associated_files]"} {value $files}}
+        {files_ids:text(inform),optional {label "[_ acs-mail-lite.Associated_files]"} {value $files}}
     }
 }
-
-
 
 foreach var $export_vars {
     upvar $var var_value
@@ -117,17 +126,17 @@ set content_list [list $content $mime_type]
 
 append form_elements {
     {subject:text(text),optional
-	{label "[_ contacts.Subject]"}
+	{label "[_ acs-mail-lite.Subject]"}
 	{html {size 55}}
-	{section "[_ contacts.Message]"}
+	{section "[_ acs-mail-lite.Message]"}
     }
     {content_body:text(richtext),optional
-	{label "[_ contacts.Message]"}
+	{label "[_ acs-mail-lite.Message]"}
 	{html {cols 55 rows 18}}
 	{value $content_list}
     }
     {upload_file:file(file),optional
-	{label "[_ contacts.Upload_File]"}
+	{label "[_ acs-mail-lite.Upload_file]"}
     }
 }
 
@@ -143,34 +152,38 @@ if { ![exists_and_not_null action] } {
     set action [ad_conn url]
 }
 
+set edit_buttons [list [list [_ acs-mail-lite.Send] send]]
+
 ad_form -action $action \
     -html {enctype multipart/form-data} \
     -name email \
-    -cancel_label "[_ contacts.Cancel]" \
+    -cancel_label "[_ acs-mail-lite.Cancel]" \
     -cancel_url $cancel_url \
-    -edit_buttons {{"Send" send}} \
+    -edit_buttons $edit_buttons \
     -form $form_elements \
     -on_request {
     } -new_request {
-	if {[exists_and_not_null folder_id]} {
-            callback contacts::email_subject -folder_id $folder_id
-        }
-        if {[exists_and_not_null item_id]} {
-            contact::message::get -item_id $item_id -array message_info
-            set subject $message_info(description)
-            set content_body [ad_html_text_convert \
-                             -to "text/plain" \
-                             -from $message_info(content_format) \
-                             -- $message_info(content) \
-			     ]
-            set title $message_info(title)
-        }
-        if {[exists_and_not_null signature_id]} {
-            set signature [contact::signature::get -signature_id $signature_id]
-            if { [exists_and_not_null signature] } {
-		append content_body "{<br><br> $signature } text/html"
-            }
-        }
+	if { $contacts_p } {
+	    if {[exists_and_not_null folder_id] } {
+		callback contacts::email_subject -folder_id $folder_id
+	    }
+	    if {[exists_and_not_null item_id] } {
+		contact::message::get -item_id $item_id -array message_info
+		set subject $message_info(description)
+		set content_body [ad_html_text_convert \
+				      -to "text/plain" \
+				      -from $message_info(content_format) \
+				      -- $message_info(content) \
+				     ]
+		set title $message_info(title)
+	    }
+	    if {[exists_and_not_null signature_id] } {
+		set signature [contact::signature::get -signature_id $signature_id]
+		if { [exists_and_not_null signature] } {
+		    append content_body "{<br><br> $signature } text/html"
+		}
+	    }
+	}
     } -edit_request {
     } -on_submit {
 	# List to store know wich emails recieved the message
@@ -184,13 +197,16 @@ ad_form -action $action \
 
 	set cc_list [split $cc ";"]
 
-	template::multirow create messages message_type to_addr subject content_body
+	template::multirow create messages message_type to_addr to_party_id subject content_body
 
 	# Insert the uploaded file linked under the package_id
 	set package_id [ad_conn package_id]
 	
 	if {![empty_string_p $upload_file] } {
-	    set revision_id [content::item::upload_file -package_id $package_id -upload_file $upload_file -parent_id $party_id]
+	    set revision_id [content::item::upload_file \
+				 -package_id $package_id \
+				 -upload_file $upload_file \
+				 -parent_id $party_id]
 	}
 
 	if {[exists_and_not_null revision_id]} {
@@ -199,12 +215,15 @@ ad_form -action $action \
 	    } else {
 		set file_ids $revision_id
 	    }
-
 	}
 
 	# Send the mail to all parties.
 	foreach party_id $to {
-	    set name [contact::name -party_id $party_id]
+	    if { $contacts_p } {
+		set name [contact::name -party_id $party_id]
+	    } else {
+		set name [acs-mail-lite::name -party_id $party_id]
+	    }
 	    set first_names [lindex $name 0]
 	    set last_name [lindex $name 1]
 	    set date [lc_time_fmt [dt_sysdate] "%q"]
@@ -219,13 +238,13 @@ ad_form -action $action \
                                      -rel_type "contact_rels_employment"]
                 if { ![empty_string_p $employer_id] } {
                     # Get the employer email adress
-                    set to_addr [contact::email -party_id $employer_id]
+                    set to_addr [cc_email_from_party -party_id $employer_id]
                     if {[empty_string_p $to_addr]} {
-                        ad_return_error [_ contacts.Error] [_ contacts.lt_there_was_an_error_processing_this_request]
-                        break
+                        ad_return_error [_ acs-mail-lite.Error] [_ acs-mail-lite.lt_there_was_an_error_processing] 
+			break
                     }
                 } else {
-                    ad_return_error [_ contacts.Error] [_ contacts.lt_there_was_an_error_processing_this_request]
+                    ad_return_error [_ acs-mail-lite.Error] [_ acs-mail-lite.lt_there_was_an_error_processing]
                     break
                 }
             }
@@ -233,8 +252,8 @@ ad_form -action $action \
 	    foreach element [list first_names last_name name date] {
 		lappend values [list "{$element}" [set $element]]
 	    }
-	    template::multirow append messages $message_type $to_addr [contact::message::interpolate -text $subject -values $values] [contact::message::interpolate -text $content_body -values $values]
-
+	    template::multirow append messages $message_type $to_addr $party_id [acs_mail_lite::message_interpolate -text $subject -values $values] [acs_mail_lite::message_interpolate -text $content_body -values $values]
+	    
 	    # Link the file to all parties
 	    if {[exists_and_not_null revision_id]} {
 		application_data_link::new -this_object_id $revision_id -target_object_id $party_id
@@ -255,11 +274,16 @@ ad_form -action $action \
 	    foreach element [list first_names last_name name date] {
 		lappend values [list "{$element}" [set $element]]
 	    }
-	    template::multirow append messages $message_type $to_addr [contact::message::interpolate -text $subject -values $values] [contact::message::interpolate -text $content_body -values $values]
-
+	    template::multirow append messages $message_type $to_addr "" [acs_mail_lite::message_interpolate -text $subject -values $values] [acs_mail_lite::message_interpolate -text $content_body -values $values]
+	    
 	}
-
+	
+	
+	set to_list [list]
 	template::multirow foreach messages {
+	    
+	    lappend to_list [list $to_addr]
+	    
 	    if {[exists_and_not_null file_ids]} {
 		# If the no_callback_p is set to "t" then no callback will be executed
 		if { $no_callback_p } {
@@ -371,24 +395,29 @@ ad_form -action $action \
 		}
 	    }
 
-	    contact::message::log \
-                -message_type "email" \
-                -sender_id $from \
-                -recipient_id $party_id \
-                -title $title \
-                -description $subject \
-                -content $content_body \
-                -content_format "text/plain" \
-	        -item_id "$item_id"
-	    
-            lappend recipients "<a href=\"[contact::url -party_id $party_id]\">$to</a>"
-	    
+	    if { $contacts_p && ![empty_string_p $to_party_id] } {
+
+		contact::message::log \
+		    -message_type "email" \
+		    -sender_id $from \
+		    -recipient_id $to_party_id \
+		    -title $title \
+		    -description $subject \
+		    -content $content_body \
+		    -content_format "text/plain" \
+		    -item_id "$item_id"
+		
+		lappend recipients "<a href=\"[contact::url -party_id $to_party_id]\">$to</a>"
+
+	    } else {
+		lappend recipients "$to"
+	    }
 	}
 
 	set recipients [join $recipients_addr ", "]
-        util_user_message -html -message "[_ contacts.Your_message_was_sent_to_-recipients-]"
-
-    } -after_submit {
+        util_user_message -html -message "[_ acs-mail-lite.Your_message_was_sent_to]"
 	
+    } -after_submit {
 	ad_returnredirect $return_url
     }
+
