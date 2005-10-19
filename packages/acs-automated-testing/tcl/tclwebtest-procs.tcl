@@ -74,6 +74,12 @@ ad_proc twt::server_url {} {
 } {
     set ip_address [ns_config ns/server/[ns_info server]/module/nssock Address]
 
+   
+    # If the IP is not configured in the config.tcl we will use the ip of localhost
+    if {[empty_string_p $ip_address]} {
+     set ip_address 127.0.0.1
+    }
+
     regexp {(:[0-9]*)?$} [util_current_location] match port
 
     if { [exists_and_not_null port] } {
