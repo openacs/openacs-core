@@ -119,4 +119,37 @@
         </querytext>
     </fullquery>
 
+<fullquery name="acs_mail_lite::party_name.get_org_name">
+    <querytext>
+	select
+		name
+	from 
+		organizations
+	where
+		organization_id = :party_id
+    </querytext>
+</fullquery>
+
+<fullquery name="acs_mail_lite::party_name.get_group_name">
+    <querytext>
+	select
+		group_name
+	from 
+		groups
+	where
+		group_id = :party_id
+    </querytext>
+</fullquery>
+
+<fullquery name="acs_mail_lite::party_name.get_party_name">
+    <querytext>
+	select
+		party_name
+	from 
+		party_names
+	where
+		party_id = :party_id
+    </querytext>
+</fullquery>
+
 </queryset>

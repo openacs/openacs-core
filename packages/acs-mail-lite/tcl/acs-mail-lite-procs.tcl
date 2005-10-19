@@ -1156,4 +1156,53 @@ namespace eval acs_mail_lite {
 	# shouldn't we first delete the bindings?
 	acs_sc::contract::delete -name AcsMailLite
     }
+
+    ad_proc -public party_name {
+	-party_id:required
+    } {
+	Gets the party name of the provided party_id
+	
+	@author Miguel Marin (miguelmarin@viaro.net)
+	@author Viaro Networks www.viaro.net
+	
+	@param party_id The party_id to get the name from.
+	@returns The party name
+    } {
+	if {[person::person_p -party_id $party_id]} {
+	    return [person::name -person_id $party_id]
+	} else {
+	    if { [apm_package_installed_p "organizations"] } {
+		set name [db_string get_org_name { } -default ""]
+	    } 
+	    
+	    if { [empty_string_p $name] } {
+		set name [db_string get_group_name { } -default ""]
+	    }
+
+	    if { [empty_string_p $name] } {
+		set name [db_string get_party_name { } -default ""]
+	    }
+	    
+	}
+	return $name
+    }
+
+    ad_proc -private message_interpolate {
+	{-values:required}
+	{-text:required}
+    } {
+	Interpolates a set of values into a string. This is directly copied from the bulk mail package
+	
+	@param values a list of key, value pairs, each one consisting of a
+	target string and the value it is to be replaced with.
+	@param text the string that is to be interpolated
+	
+	@return the interpolated string
+    } {
+	foreach pair $values {
+	    regsub -all [lindex $pair 0] $text [lindex $pair 1] text
+	}
+	return $text
+    }
+
 }
