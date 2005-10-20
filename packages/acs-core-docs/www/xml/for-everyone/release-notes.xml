@@ -36,7 +36,7 @@ END OF TEMPLATE -->
 <para>The ChangeLogs include an annotated list of changes <link linkend="changelog-latest">since the last release</link> and <link linkend="changelog">in the entire &majorversion;.&minorversion; release sequence.</link></para>
 
   <sect2 id="release-notes-5-2-0">
-    <title>Release 5.2.0 beta 1</title>
+    <title>Release 5.2.0 release candidate 1</title>
     <itemizedlist>
       <listitem>
         <para>Bug fixes.</para>

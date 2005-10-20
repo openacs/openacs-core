@@ -7,10 +7,10 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.2.0b1" url="http://openacs.org/repository/download/apm/acs-api-browser-5.1.0b1.apm">
+    <version name="5.2.0b5" url="http://openacs.org/repository/download/apm/acs-api-browser-5.1.0b1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Interactive documentation for the Tcl and SQL APIs.</summary>
-        <release-date>2005-08-25</release-date>
+        <release-date>2005-10-20</release-date>
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>

@@ -2,7 +2,7 @@
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-overview"></a>Overview</h3></div></div></div><p>
-The OpenACS 5.2.0b1 Permissions system allows developers and administrators to
+The OpenACS 5.2.0b5 Permissions system allows developers and administrators to
 set access control policies at the object level, that is, any
 application or system object represented by a row in the
 <code class="computeroutput">acs_objects</code> table can be access-controlled via a simple
@@ -13,7 +13,7 @@ API call.
 Although this may all sound easy and wonderful, no developer or
 administrator would want to <span class="emphasis"><em>explicitly</em></span> set access control
 rights for <span class="emphasis"><em>every user</em></span> and <span class="emphasis"><em>every object</em></span> on a
-site. Therefore, OpenACS 5.2.0b1 has two auxiliary mechanisms for making this
+site. Therefore, OpenACS 5.2.0b5 has two auxiliary mechanisms for making this
 easier: First, the Groups system allows users to be grouped together
 in flexible ways. Second, the object model defines a notion of
 <span class="emphasis"><em>object context</em></span>, which allows applications to group objects
@@ -25,7 +25,7 @@ In OpenACS 3.x, the groups system allowed developers and administrators to
 define simple groupings of users. Each group had a human readable name
 and unique ID, and there was a single mapping table that mapped users
 to groups. (The actual data model was more complicated because it
-contained a meta-data system much like the OpenACS 5.2.0b1 object type system,
+contained a meta-data system much like the OpenACS 5.2.0b5 object type system,
 but that's not relevant right now.)
 </p><p>
 The 3.x groups system, while very useful, was limited in few ways. The
@@ -47,7 +47,7 @@ and organizations: although the Sierra Club may be an organization
 member of Greenpeace, its members are not necessarily members of
 Greenpeace.
 </p><p>
-OpenACS 5.2.0b1 solves both of these modeling problems by introducing a new
+OpenACS 5.2.0b5 solves both of these modeling problems by introducing a new
 abstraction called a <span class="emphasis"><em>party</em></span>. Parties have a recursive
 definition, and we can illustrate how it works with the following
 simplified data model. First, we define the <code class="computeroutput">parties</code>
@@ -113,18 +113,18 @@ is a mapping between <span class="emphasis"><em>privileges</em></span>, parties 
 already know what parties and objects are, but we don't know what
 privileges are.
 </p><p>
-In OpenACS 5.2.0b1, a privilege models the right to perform some operation on
+In OpenACS 5.2.0b5, a privilege models the right to perform some operation on
 some object. They are the basic units out of which we build access
 control policies.  For example, in the Unix filesystem we typically
 implement access control by granting users some combination of
-read. write or execute privileges on files and directories. In OpenACS 5.2.0b1,
+read. write or execute privileges on files and directories. In OpenACS 5.2.0b5,
 the table of privileges is organized hierarchically so that developers
 can define privileges that aggregate some set of privileges
 together. For example, if we have read, write, create and delete
 privileges, it might be convenient to combine them into a new privilege
 called "admin". Then if we grant a user this privilege she is
 automatically granted all the child privileges that the privilege
-contains. The OpenACS 5.2.0b1 kernel data model actually defines these
+contains. The OpenACS 5.2.0b5 kernel data model actually defines these
 privileges as follows:
 </p><pre class="programlisting">
 
@@ -164,7 +164,7 @@ to every object individually: in many cases, we'd prefer controlling
 permissions to large groups of objects in the site, all at once. We
 use contexts to achieve this goal.
 </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-object-context"></a>Object Context</h3></div></div></div><p>
-In OpenACS 5.2.0b1, an object context is a generalization of the scoping
+In OpenACS 5.2.0b5, an object context is a generalization of the scoping
 mechanism introduced in OpenACS 3.x.  "Scoping" and "scope" are terms best
 explained by example: consider some hypothetical rows in the
 <code class="computeroutput">address_book</code> table:
@@ -179,7 +179,7 @@ which a given object belongs, where each context is <span class="emphasis"><em>e
 person <span class="emphasis"><em>or</em></span> a group of people <span class="emphasis"><em>or</em></span> the general public
 (itself a group of people).
 </p><p>
-In OpenACS 5.2.0b1, rather than breaking the world into a limited set of scopes,
+In OpenACS 5.2.0b5, rather than breaking the world into a limited set of scopes,
 every object lives in a single <span class="emphasis"><em>context</em></span>.  A context is just an
 another object that represents the security domain to which the object
 belongs. By convention, if an object A doesn't have any permissions
@@ -196,7 +196,7 @@ permissions in a subtree of some context.
 application. With only row-level permissions it is not obvious how to
 reasonably initialize the access control list when creating a
 message. At best, we have to explicitly grant various read and write
-privileges whenever we create a message, which is tedious.  In OpenACS 5.2.0b1,
+privileges whenever we create a message, which is tedious.  In OpenACS 5.2.0b5,
 a reasonable thing to do is to create an object representing a forum,
 and point the <code class="computeroutput">context_id</code> field of a new message at the
 forum. Then, suppose we grant every user in the system read-access to
@@ -329,7 +329,7 @@ Now put the more complex code back. You'll notice a lot of stuff like this:
 </pre><p>
 This displays the title of the note as either a link or plain text
 depending on whether or not we have write privileges on the object.
-The <code class="computeroutput">if</code> tag is something that the OpenACS 5.2.0b1 template system
+The <code class="computeroutput">if</code> tag is something that the OpenACS 5.2.0b5 template system
 defines for you to support conditional presentation. The <a href="/doc/acs-templating/developer-guide.html" target="_top">templates developer guide</a> provides more information about this.
 </p><p>
 If you study the rest of the system, you will also notice that the
@@ -343,7 +343,7 @@ implement a user interface that allowed the user to explicitly attach
 permissions to notes that she wanted to make public or whatever. But
 that's beyond the scope of this example.
 </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-summary"></a>Summary</h3></div></div></div><p>
-OpenACS 5.2.0b1 defines three separate mechanisms for specifying access control
+OpenACS 5.2.0b5 defines three separate mechanisms for specifying access control
 in applications. The Groups data model allows you to define 
 hierarchical organizations of users and groups of users. The Permissions
 data model allows you to define a hierarchy of user rights. Finally,

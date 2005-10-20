@@ -7,10 +7,10 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.2.0b1" url="http://openacs.org/repository/download/apm/acs-authentication-5.1.0b1.apm">
+    <version name="5.2.0b5" url="http://openacs.org/repository/download/apm/acs-authentication-5.1.0b1.apm">
         <owner url="mailto:lars@collaboraid.biz">Lars Pind</owner>
         <summary>Authentication, account management, and related functionality.</summary>
-        <release-date>2005-08-25</release-date>
+        <release-date>2005-10-20</release-date>
         <maturity>3</maturity>
         <vendor url="http://www.collaboraid.biz">Collaboraid</vendor>
         <maturity>3</maturity>

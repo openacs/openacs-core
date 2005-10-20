@@ -7,10 +7,10 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.2.0b1" url="http://openacs.org/repository/download/apm/acs-core-docs-5.1.0b1.apm">
+    <version name="5.2.0b5" url="http://openacs.org/repository/download/apm/acs-core-docs-5.1.0b1.apm">
         <owner url="mailto:docs@openacs.org">OpenACS Documentation Team</owner>
         <summary>Documentation for the OpenACS Core.</summary>
-        <release-date>2005-08-25</release-date>
+        <release-date>2005-10-20</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
 	<maturity>3</maturity>
