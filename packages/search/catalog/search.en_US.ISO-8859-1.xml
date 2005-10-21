@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="search" package_version="5.2.0b1" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="search" package_version="5.2.0b5" locale="en_US" charset="ISO-8859-1">
 
   <msg key="Advanced_Search">Advanced Search</msg>
   <msg key="and_not_needed">The &quot;&lt;b&gt;AND&lt;/b&gt;&quot; operator is unnecessary -- we include all search terms by default.</msg>

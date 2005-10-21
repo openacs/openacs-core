@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.2.0a5" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.2.0b5" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="_or"> oder</msg>
   <msg key="_Update_Basic_Information">Die Allgemeinen Informationen aktualisieren</msg>
@@ -277,6 +277,7 @@
   <msg key="Permissions_for_name">Zugriffsberechtigungen für %name%</msg>
   <msg key="Please_return_to_home">Bitte gehen Sie zurück zu %home_link%.</msg>
   <msg key="Portrait">Bild</msg>
+  <msg key="Privacy">Privatsphäre</msg>
   <msg key="Problem_auth_no_memb">Es gab einen Fehler beim authentifizieren des Accounts. Sehr wahrscheinlich enthält die Datenbank User mit keinem member_state.</msg>
   <msg key="Profile">Profil</msg>
   <msg key="Question">Frage:</msg>
@@ -284,6 +285,7 @@
   <msg key="read">Lesen</msg>
   <msg key="Recover_Password">Passwort zurücksetzen</msg>
   <msg key="Refresh_login">Anmeldung aktualisieren</msg>
+  <msg key="reg_asm_link">Angepasster Fragebogen für die Benutzerregistrierung</msg>
   <msg key="Register">Registrieren</msg>
   <msg key="Registration_Approval_Notice">&lt;p&gt;Vielen Dank für Ihre Registrierung bei %system_name%. Der Antrag wurde an einen Administrator übermittelt.&lt;/p&gt; &lt;p&gt;Sobald Sie freigeschaltet sind, erhalten Sie eine E-Mail mit den erforderlichen Anmeldedaten und können %system_name% nutzen.&lt;/p&gt; </msg>
   <msg key="Reject">Ablehnen</msg>

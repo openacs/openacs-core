@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-tcl" package_version="5.2.0b3" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-tcl" package_version="5.2.0b5" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="a_problem">Ein Problem</msg>
   <msg key="approve">Freischalten</msg>
@@ -19,6 +19,7 @@
   <msg key="File">Datei mit Fehler:</msg>
   <msg key="Insert_error">Bei der Einfügung der Information in die Datenbank trat ein Fehler:</msg>
   <msg key="lt__and_resubmit_your_en"> und wiederholen Ihre Eingabe.</msg>
+  <msg key="lt_Argspec_element_is_in">Die Spezifikation des Arguments '%element%' is ungültig, weil es mehr als zwei Elemente enthält</msg>
   <msg key="lt_Automatically_Submite">Fehler automatisch gemeldet</msg>
   <msg key="lt_Error_Report_in_ad_sy">Fehlermeldung in %system_name%</msg>
   <msg key="lt_Filter_type_must_be_f">Filtertyp muss 'filter' oder 'post' sein</msg>
@@ -55,19 +56,29 @@
   <msg key="lt_require_email_verific">E-Mail-Verifizierung anfordern</msg>
   <msg key="lt_The_email_you_submit">Bitte geben Sie eine gültige e-Mail Adresse ein.</msg>
   <msg key="lt_The_flag_name_name_is">Der Namen der Markierung \&quot;%name%\&quot; ist für ad_page_contract reserviert</msg>
-  <msg key="lt_The_proc_must_accept_"></msg>
+  <msg key="lt_The_proc_must_accept_">Die Prozedur muss zwei Argumente akzeptieren, den Namen der Variablen und eine Liste von Filtern</msg>
   <msg key="lt_The_signature_for_the">Die Signatur für die Variable '%formal_name%' war nicht korrekt.</msg>
+  <msg key="lt_Theres_no_greble_with">Es gibt kein &quot;greble&quot; bei diesem Wert</msg>
   <msg key="lt_User_Id_of_the_user_t">User ID:</msg>
+  <msg key="lt_Valid_switches_are_-r">Gültige Parameter sind: '-requires'</msg>
+  <msg key="lt_Validation_block_name">Prüfblock Namen können keine Doppelpunkte enthalten</msg>
+  <msg key="lt_Validation_key_compla">Prüfung von &quot;%key%&quot; gab einen Fehler</msg>
   <msg key="lt_value_does_not_appear">%value% scheint keine gültige US-Telefonnummer zu sein.</msg>
   <msg key="lt_Value_for_name_contai">Wert für %name% enthält HTML Tags</msg>
   <msg key="lt_Value_is_not_an_decim">Wert ist keine Dezimalzahl.</msg>
   <msg key="lt_Value_is_not_an_integ">Wert ist keine ganzzahlige Zahl</msg>
   <msg key="lt_We_had_a_problem_proc">Wir hatten ein Problem, Ihre Anfrage zu verarbeiten:</msg>
+  <msg key="lt_You_cant_have_two_val">Sie können nicht zwei Prüfblöcke namens '%name%' haben</msg>
+  <msg key="lt_You_cant_name_your_va">Sie können nicht den Prüfblock wie ein formalen Parameter benennen.</msg>
   <msg key="lt_You_must_specify_some">Sie müssen etwas für %formal_name% spezifizieren</msg>
   <msg key="lt_You_must_supply_a_val">Sie müssen einen Wert für %formal_name% bestimmen</msg>
   <msg key="lt_You_specified_a_path_">Sie haben einen Pfad spezifiziert, der im System nicht erlaubt ist.</msg>
   <msg key="lt_Youve_supplied_two_va">Sie haben zwei Werte für '%formal_name%' angegeben</msg>
+  <msg key="maturity_immature">Unausgereift</msg>
   <msg key="maturity_incompatible">Kompatibilitätsprobleme</msg>
+  <msg key="maturity_mature">Ausgereift</msg>
+  <msg key="maturity_mature_and_standard">Ausgereift und Standard</msg>
+  <msg key="maturity_new_submission">Neues Paket oder unbekannter Reifegrad</msg>
   <msg key="Page">Seite mit Fehler:</msg>
   <msg key="Previus">Vorhergehende Seite:</msg>
   <msg key="Public_User">Öffentlicher (nicht registrierter) User </msg>
@@ -88,4 +99,5 @@
   <msg key="User_Name">User Name:</msg>
   <msg key="We">Wir würden es begrüßen, wenn sie einige Details dessen,m was Sie gerade zu tun versuchten, spezifizieren könnten.</msg>
   <msg key="We_had">Wir hatten</msg>
+  <msg key="with_your_input">mit ihrer Eingabe:</msg>
 </message_catalog>

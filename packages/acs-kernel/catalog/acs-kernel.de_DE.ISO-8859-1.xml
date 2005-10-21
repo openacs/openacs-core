@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.2.0b2" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.2.0b5" locale="de_DE" charset="ISO-8859-1">
 
+  <msg key="Administrator">Administrator</msg>
   <msg key="Administrators">Administratoren </msg>
   <msg key="authentication_authority">Authentifizierungsstelle</msg>
   <msg key="common_Actions">Aktionen</msg>
@@ -113,6 +114,7 @@
   <msg key="The_Public">Alle Besucher des Systems</msg>
   <msg key="Unregistered">Unregistrierter</msg>
   <msg key="Unregistered_Visitor">Nicht registrierter Besucher</msg>
+  <msg key="URL">URL</msg>
   <msg key="User">User</msg>
   <msg key="Visitor">Besucher</msg>
 </message_catalog>
