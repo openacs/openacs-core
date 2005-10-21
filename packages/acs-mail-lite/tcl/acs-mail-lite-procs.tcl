@@ -1024,7 +1024,9 @@ namespace eval acs_mail_lite {
 			      -package_id [apm_package_id_from_key "acs-mail-lite"]]
 
 	if { ![empty_string_p $fixed_sender] } {
-	    set from_addr $fixed_sender
+	    set sender_addr $fixed_sender
+	} else {
+	    set sender_addr $from_addr
 	}
 
 	# Set the message token
@@ -1059,14 +1061,13 @@ namespace eval acs_mail_lite {
 	mime::finalize $multi_token -subordinates all
 	set message_id [generate_message_id]
 
-	acs_mail_lite::sendmail -from_addr $from_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id $message_id -package_id $package_id
+	acs_mail_lite::sendmail -from_addr $sender_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id $message_id -package_id $package_id
 	
 	if {[empty_string_p $package_id]} {
 	    set package_id [apm_package_id_from_key "acs-mail-lite"]
 	}
 
 	if { ![exists_and_not_null no_callback_p] } {
-
 	    callback acs_mail_lite::complex_send \
 		-package_id $package_id \
 		-from_party_id [party::get_by_email -email $from_addr] \
@@ -1075,7 +1076,7 @@ namespace eval acs_mail_lite {
 		-message_id $message_id \
 		-subject $subject \
 		-object_id $object_id \
-		-file_ids [split $file_ids ","]
+		-file_ids $file_ids
 	}
     }
 	 
