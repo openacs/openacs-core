@@ -20,7 +20,26 @@ ad_proc -public -callback acs_mail_lite::complex_send {
     {-object_id}
     {-file_ids}
 } {
-}
+
+    Callback for executing code after an email has been send using the complex send mechanism.
+   
+    	@param from_party_id Who is sending the email
+	
+	@param to_party_id to whom did we send this email
+
+	@param subject of the email
+	
+	@param body Text body of the email
+	
+	@param package_id Package ID of the sending package
+	
+	@param file_ids List of file ids to be send as attachments. This will only work with files stored in the file system. The list is actually a string with the ids concated with a ",". 
+
+	@param object_id The ID of the object that is responsible for sending the mail in the first place
+
+	@param message_id the generated message_id for this mail
+
+} -
 
 ad_proc -public -callback acs_mail_lite::send {
     {-package_id:required}
@@ -35,6 +54,17 @@ ad_proc -public -callback acs_mail_lite::send {
 ad_proc -public -callback acs_mail_lite::incoming_email {
     -array:required
     -package_id
+} {
+}
+
+ad_proc -public -callback acs_mail_lite::email_form_elements {
+    -varname:required
+} {
+}
+
+ad_proc -public -callback acs_mail_lite::files {
+    -varname:required
+    -recipient_ids:required
 } {
 }
 
