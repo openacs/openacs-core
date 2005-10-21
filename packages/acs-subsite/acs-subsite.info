@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.2.0b5" url="http://openacs.org/repository/download/apm/acs-subsite-5.2.0a5.apm">
+    <version name="5.2.0b5" url="http://openacs.org/repository/download/apm/acs-subsite-5.2.0b5.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
         <release-date>2005-10-20</release-date>
