@@ -734,7 +734,7 @@ ad_proc -public template::list::write_csv {
         append __output "\"[join $__cols "\",\""]\"\n"
     }
 
-    ns_return 200 text/plain $__output
+    ns_return 200 text/csv $__output
 }
 
 
