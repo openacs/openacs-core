@@ -187,8 +187,8 @@ ad_proc group::delete { group_id } {
       END;
     "
 
-    return $object_type
     util_memoize_flush "group::get_title_not_cached -group_id $group_id"
+    return $object_type
 }
 
 ad_proc -public group::get {
