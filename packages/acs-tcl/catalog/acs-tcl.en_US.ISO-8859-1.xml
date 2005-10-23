@@ -55,8 +55,8 @@
   <msg key="lt_Problem_with_a_Templa">Problem with a Templated Page</msg>
   <msg key="lt_Problem_with_your_inp">Problem with your input</msg>
   <msg key="lt_require_email_verific">require email verification</msg>
-  <msg key="lt_The_-requires_element">The -requires element \&quot;$element\&quot; has a comma in it.</msg>
-  <msg key="lt_The_-requires_element_1">The -requires element \&quot;$element\&quot; has too many colons</msg>
+  <msg key="lt_The_-requires_element">The -requires element \&quot;%element%\&quot; has a comma in it.</msg>
+  <msg key="lt_The_-requires_element_1">The -requires element \&quot;%element%\&quot; has too many colons</msg>
   <msg key="lt_The_email_you_submit">Please, enter a valid email address.</msg>
   <msg key="lt_The_flag_name_name_is">The flag name \&quot;%name%\&quot; is reserved for ad_page_contract</msg>
   <msg key="lt_The_proc_must_accept_">The proc must accept two  arguments, the name of the variable and a list of filters</msg>

@@ -54,6 +54,8 @@
   <msg key="lt_Problem_with_a_Templa">Problem mit einer Template Seite</msg>
   <msg key="lt_Problem_with_your_inp">Problem mit Ihrer Eingabe</msg>
   <msg key="lt_require_email_verific">E-Mail-Verifizierung anfordern</msg>
+  <msg key="lt_The_-requires_element">Das -requires element \&quot;%element%\&quot; enthält ein Komma.</msg>
+  <msg key="lt_The_-requires_element_1">Das -requires element \&quot;%element%\&quot; hat zu viele Doppelpunkte</msg>
   <msg key="lt_The_email_you_submit">Bitte geben Sie eine gültige e-Mail Adresse ein.</msg>
   <msg key="lt_The_flag_name_name_is">Der Namen der Markierung \&quot;%name%\&quot; ist für ad_page_contract reserviert</msg>
   <msg key="lt_The_proc_must_accept_">Die Prozedur muss zwei Argumente akzeptieren, den Namen der Variablen und eine Liste von Filtern</msg>
