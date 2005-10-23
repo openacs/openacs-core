@@ -11,7 +11,7 @@ foreach required_param {party_ids} {
     }
 }
 
-foreach optional_param {return_url content export_vars file_ids object_id} {
+foreach optional_param {return_url content export_vars file_ids object_id cc item_id} {
     if {![info exists $optional_param]} {
 	set $optional_param {}
     }
@@ -157,7 +157,7 @@ set edit_buttons [list [list [_ acs-mail-lite.Send] send]]
 ad_form -action $action \
     -html {enctype multipart/form-data} \
     -name email \
-    -cancel_label "[_ acs-mail-lite.Cancel]" \
+    -cancel_label "[_ acs-kernel.common_Cancel]" \
     -cancel_url $cancel_url \
     -edit_buttons $edit_buttons \
     -form $form_elements \
@@ -240,7 +240,7 @@ ad_form -action $action \
                     # Get the employer email adress
                     set to_addr [cc_email_from_party -party_id $employer_id]
                     if {[empty_string_p $to_addr]} {
-                        ad_return_error [_ acs-mail-lite.Error] [_ acs-mail-lite.lt_there_was_an_error_processing] 
+                        ad_return_error [_ acs-kernel.common_Error] [_ acs-mail-lite.lt_there_was_an_error_processing] 
 			break
                     }
                 } else {
@@ -395,7 +395,7 @@ ad_form -action $action \
 		}
 	    }
 
-	    if { $contacts_p && ![empty_string_p $to_party_id] } {
+	    if { $contacts_p && ![empty_string_p $to_party_id] && ![empty_string_p $item_id]} {
 
 		contact::message::log \
 		    -message_type "email" \
