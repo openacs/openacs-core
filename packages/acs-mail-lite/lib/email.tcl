@@ -170,11 +170,7 @@ ad_form -action $action \
 	    if {[exists_and_not_null item_id] } {
 		contact::message::get -item_id $item_id -array message_info
 		set subject $message_info(description)
-		set content_body [ad_html_text_convert \
-				      -to "text/plain" \
-				      -from $message_info(content_format) \
-				      -- $message_info(content) \
-				     ]
+		set content_body [list $message_info(content) $message_info(content_format)]
 		set title $message_info(title)
 	    }
 	    if {[exists_and_not_null signature_id] } {
@@ -269,10 +265,16 @@ ad_form -action $action \
 	    set to $name
 	    set to_addr $email_addr
 	    lappend recipients_addr $to_addr
-
 	    set values [list]
 	    foreach element [list first_names last_name name date] {
 		lappend values [list "{$element}" [set $element]]
+	    }
+	    if {$contact_p} {
+		set party_revision_id [contact::live_revision -party_id $party_id]
+		set salutation [ams::value -attribute_name "salutation" -object_id $party_revision_id -locale $locale]
+		if {![empty_string_p $salutation]} {
+		    lappend value [list "{salutation}" $salutation]
+		}
 	    }
 	    template::multirow append messages $message_type $to_addr "" [acs_mail_lite::message_interpolate -text $subject -values $values] [acs_mail_lite::message_interpolate -text $content_body -values $values]
 	    
