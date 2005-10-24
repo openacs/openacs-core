@@ -93,7 +93,7 @@ if { $recipients_num <= 1 } {
 if { [exists_and_not_null file_ids] } {
     set files [list]
     foreach file $file_ids {
-	set file_title [db_string get_file_title { } -default "[_ acs-mail-lite.Untitled]"]
+	set file_title [lang::util::localize [db_string get_file_title { } -default "[_ acs-mail-lite.Untitled]"]]
 	if { $tracking_p } {
 	    lappend files "<a href=\"/tracking/download/$file_title?version_id=$file\">$file_title</a> "
 	} else {

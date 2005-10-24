@@ -7,5 +7,4 @@ function check_uncheck_boxes(checkP){
 }
 -->
 </SCRIPT> 
-
 <formtemplate id="email"></formtemplate>
