@@ -97,7 +97,10 @@ db_transaction {
 			 "portrait-of-user-$user_id"]
 
     content::item::set_live_revision -revision_id $revision_id
-    db_exec_plsql create_rel {}
+    # Only create the new relationship if there does not exist one already
+    if {![relation::get_id -object_id_one $user_id -object_id_two $item_id -rel_type "user_portrait_rel"]} {
+	db_exec_plsql create_rel {}
+    }
 }
 
 if { [exists_and_not_null return_url] } {
