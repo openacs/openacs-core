@@ -32,4 +32,13 @@
   </querytext>
 </fullquery>
 
+  <fullquery name="content::item::get_id_by_name.get_item_id_by_name">
+  <querytext>
+    select item_id
+      from cr_items
+     where name = :name
+     and parent_id = :parent_id
+  </querytext>
+</fullquery>
+
 </queryset>

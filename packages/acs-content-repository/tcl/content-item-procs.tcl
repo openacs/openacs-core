@@ -754,3 +754,17 @@ ad_proc -public content::item::upload_file {
 	return $revision_id
     } 
 }
+
+ad_proc -public content::item::get_id_by_name {
+    {-name:required}
+    {-parent_id:required}
+} {
+    Returns the item_id of the a content item with the passed in name
+
+    @param name Name of the content item
+    @param parent_id Parent_id of the content item
+
+    @return the item id belonging to the name, empty string if no item_id was found
+} {
+    return [db_string get_item_id_by_name {} -default ""]
+}
