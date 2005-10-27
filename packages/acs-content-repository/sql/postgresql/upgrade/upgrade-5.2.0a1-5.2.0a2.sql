@@ -205,11 +205,14 @@ returns integer as '
 declare
     ct RECORD;
 begin
-  for ct in select object_type
-            from acs_object_type_supertype_map
-            where ancestor_type = ''content_revision''
+  for ct in select t.object_type,t.table_name
+            from acs_object_type_supertype_map m, acs_object_types t
+            where t.object_type = m.object_type
+            and m.ancestor_type = ''content_revision''
   loop
-    perform content_type__refresh_view (ct.object_type);
+        if table_exists(ct.table_name) = ''t'' then 
+                perform content_type__refresh_view (ct.object_type);
+        end if;
   end loop;
 
   return null;
