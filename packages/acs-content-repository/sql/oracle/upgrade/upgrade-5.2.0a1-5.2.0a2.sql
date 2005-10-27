@@ -1950,12 +1950,18 @@ show errors
 
 begin
 
-  for type_rec in (select object_type from acs_object_types 
+  for type_rec in (select object_type,table_name from acs_object_types
     connect by supertype = prior object_type 
     start with object_type = 'content_revision') loop
-    content_type.refresh_view(type_rec.object_type);
-    content_type.refresh_trigger(type_rec.object_type);
-    content_type.refresh_view(type_rec.object_type);
+        select decode(count(*),0,'f','t') into v_exists_p
+         from user_tables
+         where table_name = upper(type_rec.table_name);
+
+        if v_exists_p = 't' then
+            content_type.refresh_view(type_rec.object_type);
+            content_type.refresh_trigger(type_rec.object_type);
+             content_type.refresh_view(type_rec.object_type);
+        end if; 
   end loop;
 
 end;
