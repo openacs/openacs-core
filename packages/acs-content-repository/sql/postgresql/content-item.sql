@@ -124,7 +124,7 @@ begin
     v_title := new__title;
   end if;
 
-  if new__package_id is null then
+  if new__package_id is null and v_parent_id != 0 then
     v_package_id := acs_object__package_id(content_item__get_root_folder(v_parent_id));
   else
     v_package_id := new__package_id;
