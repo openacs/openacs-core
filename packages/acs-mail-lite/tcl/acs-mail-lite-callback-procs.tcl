@@ -117,9 +117,9 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
 }
 
 ad_proc -public -callback subsite::parameter_changed -impl acs-mail-lite {
-        -package_id:required
-        -parameter:required
-        -value:required
+    -package_id:required
+    -parameter:required
+    -value:required
 } {
     Implementation of subsite::parameter_changed for acs-mail-lite.
     All packages that implement the callback acs_mail_lite::incoming_email require to provide
@@ -139,13 +139,15 @@ ad_proc -public -callback subsite::parameter_changed -impl acs-mail-lite {
     
 } {
     ns_log Debug "subsite::parameter_changed -impl acs-mail-lite called for $parameter"
-
+    
     set empty_p [empty_string_p $value]
-
+    
     set package_key [apm_package_key_from_id $package_id]
-
+    
     if {0} {
-#    if {[string equal "EnvelopePrefix" $parameter] || [string equal "EmailReplyAddressPrefix" $parameter]} {
+	# The stuff below does not work
+	#    if {[string equal "EnvelopePrefix" $parameter] || [string equal "EmailReplyAddressPrefix" $parameter]} {
+	# }
 	if {[db_0or1row entry_exists {}]} {
 	    if { $empty_p } {
 		ns_log Notice "subsite::parameter_changed -impl acs-mail-lite prefix: removing prefix $prefix"
