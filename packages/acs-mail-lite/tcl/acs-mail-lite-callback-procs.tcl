@@ -144,10 +144,7 @@ ad_proc -public -callback subsite::parameter_changed -impl acs-mail-lite {
     
     set package_key [apm_package_key_from_id $package_id]
     
-    if {0} {
-	# The stuff below does not work
-	#    if {[string equal "EnvelopePrefix" $parameter] || [string equal "EmailReplyAddressPrefix" $parameter]} {
-	# }
+    if {[string equal "EnvelopePrefix" $parameter] || [string equal "EmailReplyAddressPrefix" $parameter]} {
 	if {[db_0or1row entry_exists {}]} {
 	    if { $empty_p } {
 		ns_log Notice "subsite::parameter_changed -impl acs-mail-lite prefix: removing prefix $prefix"
