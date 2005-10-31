@@ -1313,8 +1313,10 @@ Calendar.prototype.parseDate = function (str, fmt) {
 	var d = 0;
 	var a = str.split(/\W+/);
 	if (!fmt) {
-		fmt = this.dateFormat;
-	}
+	    fmt = this.dateFormat;
+	} else {
+	    this.dateFormat = fmt;
+        }
 	var b = fmt.split(/\W+/);
 	var i = 0, j = 0;
 	for (i = 0; i < a.length; ++i) {
@@ -1327,7 +1329,7 @@ Calendar.prototype.parseDate = function (str, fmt) {
 		if (b[i] == "m" || b[i] == "mm") {
 			m = parseInt(a[i], 10) - 1;
 		}
-		if ((b[i] == "y") || (b[i] == "yy")) {
+		if ((b[i] == "y") || (b[i] == "yy") || (b[i] == "yyyy")) {
 			y = parseInt(a[i], 10);
 			(y < 100) && (y += (y > 29) ? 1900 : 2000);
 		}
@@ -1536,6 +1538,7 @@ Date.prototype.print = function (frm) {
 	s["mm"] = (m < 9) ? ("0" + (1+m)) : (1+m);
 	s["y"] = y;
 	s["yy"] = new String(y).substr(2, 2);
+	s["yyyy"] = y;
 	s["w"] = wn;
 	s["ww"] = (wn < 10) ? ("0" + wn) : wn;
 	with (Calendar) {
@@ -1544,7 +1547,7 @@ Date.prototype.print = function (frm) {
 		s["M"] = _MN3[m];
 		s["MM"] = _MN[m];
 	}
-	var re = /(.*)(\W|^)(d|dd|m|mm|y|yy|MM|M|DD|D|w|ww)(\W|$)(.*)/;
+	var re = /(.*)(\W|^)(d|dd|m|mm|y|yy|yyyy|MM|M|DD|D|w|ww)(\W|$)(.*)/;
 	while (re.exec(str) != null) {
 		str = RegExp.$1 + RegExp.$2 + s[RegExp.$3] + RegExp.$4 + RegExp.$5;
 	}
@@ -1664,13 +1667,13 @@ function showCalendar(id,dateformat) {
   if (calendar != null) {
     // we already have one created, so just update it.
     calendar.hide();            // hide the existing calendar
-    calendar.parseDate(el.value); // set it to a new date
+    calendar.parseDate(el.value, dateformat); // set it to a new date
   } else {
     // first-time call, create the calendar
     if ( dateformat == null ) {
        var dateformat = 'y-mm-dd';
     }		
-    var cal = new Calendar(true, null, selected, closeHandler,dateformat);
+    var cal = new Calendar(true, null, selected, closeHandler, dateformat);
     calendar = cal;             // remember the calendar in the global
     cal.setRange(1900, 2070);   // min/max year allowed
     calendar.create();          // create a popup calendar
@@ -1729,7 +1732,7 @@ function selectwidget(cal, date) {
     if (b[i] == "m" || b[i] == "mm") {
       m = parseInt(a[i], 10) - 1;
     }
-    if ((b[i] == "y") || (b[i] == "yy")) {
+    if ((b[i] == "y") || (b[i] == "yy") || (b[i] == "yyyy")) {
       y = parseInt(a[i], 10);
       (y < 100) && (y += (y > 29) ? 1900 : 2000);
     }
