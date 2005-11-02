@@ -30,15 +30,27 @@ if { ![info exists header_stuff] } {
 # Attributes
 
 multirow create attribute key value
-
 set onload {}
 
-# Handle RTE widget, which needs special javascript and css in the page header
-global acs_blank_master__htmlareas
+# Handle richtext widget, which needs special javascript and css 
+# in the page header
+
+multirow create htmlarea_support id 
+global acs_blank_master__htmlareas acs_blank_master__rte acs_blank_master__xinha
+
 if {[info exists acs_blank_master__htmlareas] } {
+  if {[info exists acs_blank_master__rte]} {
     foreach htmlarea_id [lsort -unique $acs_blank_master__htmlareas] {
-        lappend onload "acs_rteInit('${htmlarea_id}');"
+      lappend onload "acs_rteInit('${htmlarea_id}');"
+    }}
+  if {[info exists acs_blank_master__xinha]} {
+    # setting language
+    set lang [lang::conn::language]
+    # if there are problems with the language definitions, set it to "en"
+    foreach element_id $acs_blank_master__htmlareas {
+      multirow append htmlarea_support $element_id
     }
+  }
 }
 
 if { ![template::util::is_nil focus] } {
