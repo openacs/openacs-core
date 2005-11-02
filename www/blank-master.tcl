@@ -46,7 +46,8 @@ if {[info exists acs_blank_master__htmlareas] } {
   if {[info exists acs_blank_master__xinha]} {
     # setting language
     set lang [lang::conn::language]
-    # if there are problems with the language definitions, set it to "en"
+    # if there are problems with the language definitions, set lang to "en"
+    if {$lang ne "en" && $lang ne "de"} {set lang en} 
     foreach element_id $acs_blank_master__htmlareas {
       multirow append htmlarea_support $element_id
     }
