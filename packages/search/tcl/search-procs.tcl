@@ -62,23 +62,30 @@ ad_proc -public search::dequeue {
     }
 }
 
+ad_proc -public search::is_guest_p {
+} {
+    Checks whether the logged-in user is a guest
+} {
+    set user_id [ad_conn user_id]
+    return [db_string get_is_guest_p {select dotlrn_privacy.guest_p(:user_id) from dual}]
+}
 
-# ad_proc -public -callback search::action {
-#     -action
-#     -object_id
-#     -datasource
-#     -object_type
-# } {
-#     Do something with a search datasource Called by the indexer
-#     after having created the datasource.
+ad_proc -public -callback search::action {
+     -action
+     -object_id
+     -datasource
+     -object_type
+} {
+     Do something with a search datasource Called by the indexer
+     after having created the datasource.
 
-#     @param action UPDATE INSERT DELETE
-#     @param datasource name of the datasource array
+     @param action UPDATE INSERT DELETE
+     @param datasource name of the datasource array
 
-#     @return ignored
+     @return ignored
 
-#     @author Jeff Davis (davis@xarg.net)
-# } -
+     @author Jeff Davis (davis@xarg.net)
+} -
 
 
 ad_proc -private search::indexer {} {
@@ -99,7 +106,15 @@ ad_proc -private search::indexer {} {
         return
     }
     # JCD: pull out the rows all at once so we release the handle
-    foreach row [db_list_of_lists search_observer_queue_entry {}] { 
+    foreach row [db_list_of_lists search_observer_queue_entry {}] {
+        nsv_incr search_static_variables item_counter
+        if {[nsv_get search_static_variables item_counter] > 1000} {
+            nsv_set search_static_variables item_counter 0
+            db_exec_plsql optimize_intermedia_index {begin
+                ctx_ddl.sync_index ('swi_index');
+                end;
+            }
+        }
         foreach {object_id event_date event} $row { break }
         array unset datasource
         switch -- $event {
@@ -127,7 +142,12 @@ ad_proc -private search::indexer {} {
 				if {![info exists datasource(package_id)]} {
 				    set datasource(package_id) ""
 				}
-				callback -impl $driver search::index -object_id $object_id -content $txt -title $datasource(title) -keywords $datasource(keywords) -package_id $datasource(package_id) -datasource datasource
+				set datasource(community_id) [search::dotlrn::get_community_id -package_id $datasource(package_id)]
+				
+				if {![info exists datasource(relevant_date)]} {
+				    set datasource(relevant_date) ""
+				}
+				callback -impl $driver search::index -object_id $object_id -content $txt -title $datasource(title) -keywords $datasource(keywords) -package_id $datasource(package_id) -community_id $datasource(community_id) -relevant_date $datasource(relevant_date) -datasource datasource 
 			    } else {
                             acs_sc_call FtsEngineDriver \
                                 [ad_decode $event UPDATE update_index index] \
@@ -247,9 +267,9 @@ ad_proc -private search::choice_bar {
 
     foreach value $values {
         if {[string compare $default $value] == 0} {
-            lappend return_list "<font color=\"a90a08\"><strong>[lindex $items $count]</strong></font>"
+            lappend return_list "<font color=\"\#a90a08\"><strong>[lindex $items $count]</strong></font>"
         } else {
-            lappend return_list "<a href=\"[lindex $links $count]\"><font color=\"000000\">[lindex $items $count]</font></a>"
+            lappend return_list "<a href=\"[lindex $links $count]\"><font color=\"\#000000\">[lindex $items $count]</font></a>"
         }
 
         incr count
@@ -274,25 +294,15 @@ ad_proc -callback search::datasource {
 
 # define for all objects, not just search?
 
-ad_proc -callback search::index {
-    -object_id:required
-    -content:required
-    -title:required
-    -description
-    -keywords
-} {
-    This callback is invoked by the search indexer. It will dispatch
-    to the full text search engine. Additional optional paramters may
-    be added to support additional features of full text search engines.
-} -
-
 ad_proc -callback search::search {
     -query:required
     -user_id
     {-offset 0}
     {-limit 10}
     {-df ""}
-    {-dt ""}    
+    {-dt ""}
+    {-package_ids ""}
+    {-object_type ""}
 } {
     This callback is invoked when a search is to be performed. Query
     will be a list of lists. The first list is required and will be a
@@ -323,9 +333,61 @@ ad_proc -callback search::index {
     -content
     -title
     -keywords
+    -community_id
+    -relevant_date
+    {-description ""}
     {-datasource ""}
     {-package_id ""}    
 } {
     This callback is invoked from the search::indexer scheduled procedure
     to add an item to the index
 } -
+
+ad_proc -callback search::update_index {    
+    -object_id 
+    -content
+    -title
+    -keywords
+    -community_id
+    -relevant_date
+    {-description ""}
+    {-datasource ""}
+    {-package_id ""}    
+} {
+    This callback is invoked from the search::indexer scheduled procedure
+    to update an item already in the index
+} -
+
+ad_proc -callback search::summary {
+    -query
+    -text
+} {
+    This callback is invoked to return an HTML fragment highlighting the terms in query
+} - 
+
+ad_proc -callback search::driver_info {
+} {
+    This callback returns information about the search engine implementation
+} -
+
+# dotlrn specific procs
+
+namespace eval search::dotlrn {}
+
+ad_proc -public search::dotlrn::get_community_id {
+    -package_id
+} {
+    if dotlrn is installed find the package's community_id
+    
+    @param package_id Package to find community
+
+    @return dotLRN community_id. empty string if package_id is not under a dotlrn package instance
+} {
+    if {[apm_package_installed_p dotlrn]} {
+	set site_node [site_node::get_node_id_from_object_id -object_id $package_id]
+	set dotlrn_package_id [site_node::closest_ancestor_package -node_id $site_node -package_key dotlrn -include_self]
+	set community_id [db_string get_community_id {select community_id from dotlrn_communities_all where package_id=:dotlrn_package_id} -default [db_null]]
+	return $community_id
+    } 
+    return ""
+}
