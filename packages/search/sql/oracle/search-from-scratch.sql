@@ -22,28 +22,41 @@
 -- @creation-date 13-May-2005
 --
 
-truncate table site_wide_index;
+truncate table search_observer_queue;
 
-insert into site_wide_index (object_id, object_name, datastore)
-  select message_id, subject, 'a' from forums_messages;
-
-insert into site_wide_index (object_id, object_name, datastore)
-  select event_id, name, 'a' from acs_events;
-
-insert into site_wide_index (object_id, object_name, datastore)
-  select entry_id, question, 'a' from faq_q_and_as;
-
-insert into site_wide_index (object_id, object_name, datastore)
-  select content_id, pretty_name, 'a' from static_portal_content;
-
-insert into site_wide_index (object_id, object_name, datastore)
-  select survey_id, name, 'a' from surveys;
-
+insert into search_observer_queue (object_id, event) select object_id, 'INSERT' from acs_objects where object_type in ('cal_item') ;
+commit;
+     
+insert into search_observer_queue (object_id, event) select object_id, 'INSERT' from acs_objects, cr_items where object_id=live_revision and object_type in ('file_storage_object') ;
 commit;
 
-alter index sws_ctx_index rebuild parameters ('sync') ;
+insert into search_observer_queue (object_id, event) select object_id, 'INSERT' from acs_objects where object_type in ('static_portal_content');
+commit;
 
-exit
+insert into search_observer_queue (object_id, event) select object_id, 'INSERT' from acs_objects where object_type in ('forums_message') ;
+commit;
+
+insert into search_observer_queue (object_id, event) select object_id, 'INSERT' from acs_objects where object_type in ('forums_forum') ;
+commit;
+
+insert into search_observer_queue (object_id, event) select object_id, 'INSERT' from acs_objects, cr_items, cr_news where news_id=live_revision and object_id=live_revision and object_type in ('news');
+-- and archive_date is null;
+commit;
+
+insert into search_observer_queue (object_id, event) select object_id, 'INSERT' from acs_objects where object_type in ('faq') ;
+commit;
+
+insert into search_observer_queue (object_id, event) select object_id, 'INSERT' from acs_objects where object_type in ('survey');
+commit;
+
+insert into search_observer_queue (object_id, event) select object_id, 'INSERT' from acs_objects,cr_items where object_type in ('phb_person') and object_id=live_revision ;
+commit;
+
+
+--alter index swi_index rebuild parameters ('sync') ;
+
+
+exit;
 
 
 

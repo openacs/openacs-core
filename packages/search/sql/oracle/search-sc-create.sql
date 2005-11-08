@@ -183,3 +183,5 @@ begin
 end;
 /
 show errors
+
+exit;

@@ -13,3 +13,5 @@ create table syndication (
 
 comment on table syndication is 'stores xml fragments for consolidating into rss feeds. Also stores an html version of the content item
          and it''s url from the link field of the rss';
+
+exit;
