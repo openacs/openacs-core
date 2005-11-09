@@ -22,7 +22,7 @@ primarily a script that generates the the content part of the template
 single layout specification for many physical pages, so the overall
 layout of a site can be more easily administered.
 </description>
-        <license>GPL version 2</license>
+	<license url="http://www.gnu.org/copyleft/gpl.html">GPL version 2</license>
         <maturity>3</maturity>
 
         <provides url="acs-templating" version="5.2.0b6"/>
