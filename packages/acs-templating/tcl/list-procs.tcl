@@ -1325,7 +1325,6 @@ ad_proc -private template::list::prepare_filters {
             if { [empty_string_p [string trim $label]] } {
                 set label $filter_properties(null_label)
             }
-
             switch $filter_properties(type) {
                 singleval {
                     set selected_p [exists_and_equal current_filter_value $value]
@@ -1334,12 +1333,22 @@ ad_proc -private template::list::prepare_filters {
                     if { ![exists_and_not_null current_filter_value] } {
                         set selected_p 0
                     } else {
-                        set selected_p [util_sets_equal_p $current_filter_value $value]
+			# Since here we have multiple values
+			# we set as selected_p the value that match any
+			# of the values present in the list
+			set selected_p 0
+			foreach val $current_filter_value {
+			    if { [util_sets_equal_p $val $value] } {
+				set selected_p 1
+				break
+			    }
+			}
                     }
                 }
                 multivar {
                     # Value is a list of { key value } lists
                     # We only check the value whose key matches the filter name
+		    set selected_p 0
                     foreach elm $value {
                         foreach { elm_key elm_value } [lrange $elm 0 1] {}
                         if { [string equal $elm_key $filter_properties(name)] } { 
@@ -1419,7 +1428,8 @@ ad_proc -private template::list::render_filters {
         url_html_title \
         count \
         add_url \
-        selected_p 
+        selected_p \
+	type
     
     foreach filter_ref $list_properties(filter_refs) {
 
@@ -1430,6 +1440,7 @@ ad_proc -private template::list::render_filters {
             # Loop over 'values' and 'url' simultaneously
             foreach elm $filter_properties(values) url $filter_properties(urls) selected_p $filter_properties(selected_p) add_url $filter_properties(add_urls) {
                 
+
                 # 'label' is the first element, 'value' the second
                 # We do an lrange here, otherwise values would be set wrong 
                 # in case someone accidentally supplies a list with too many elements, 
@@ -1440,17 +1451,25 @@ ad_proc -private template::list::render_filters {
                     set label $filter_properties(null_label)
                 }
 
-                template::multirow -local append filters \
-                    $filter_properties(name) \
-                    $filter_properties(label) \
-                    $filter_properties(clear_url) \
-                    [string_truncate -len 25 -- $label] \
-                    $value \
-                    $url \
-                    $label \
-                    $count \
-                    $add_url \
-                    $selected_p
+		if { [string equal $filter_properties(type) "multival"] } {
+		    # We need to ns_urlencode the name to work
+		    set filter_properties_name [ns_urlencode $filter_properties(name)]
+		} else {
+		    set filter_properties_name $filter_properties(name)
+		}
+
+		template::multirow -local append filters \
+		    $filter_properties_name \
+		    $filter_properties(label) \
+		    $filter_properties(clear_url) \
+		    [string_truncate -len 25 -- $label] \
+		    $value \
+		    $url \
+		    $label \
+		    $count \
+		    $add_url \
+		    $selected_p \
+		    $filter_properties(type)
             }
         }
     }
