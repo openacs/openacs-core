@@ -7,16 +7,12 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.2.0b5" url="http://openacs.org/repository/download/apm/acs-templating-5.1.0b5.apm">
+    <version name="5.2.0b6" url="http://openacs.org/repository/download/apm/acs-templating-5.2.0b6.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Templating library.</summary>
-        <release-date>2005-10-20</release-date>
-        <maturity>3</maturity>
+        <release-date>2005-11-09</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
-        <maturity>3</maturity>
-        <license url="http://www.gnu.org/copyleft/gpl.html">GPL version 2</license>
-        <description format="text/html">
-The templating system provides the tag library and support routines
+        <description format="text/html">The templating system provides the tag library and support routines
 that allow developers and graphic designers to work
 independently. Templates specify the layout of the page seperately
 from the contents of the page. Graphic designers work primarily on the
@@ -26,8 +22,10 @@ primarily a script that generates the the content part of the template
 single layout specification for many physical pages, so the overall
 layout of a site can be more easily administered.
 </description>
+        <license>GPL version 2</license>
+        <maturity>3</maturity>
 
-        <provides url="acs-templating" version="5.1.0b5"/>
+        <provides url="acs-templating" version="5.2.0b6"/>
         <requires url="acs-kernel" version="5.2.0a1"/>
 
         <callbacks>
@@ -47,7 +45,3 @@ layout of a site can be more easily administered.
 
     </version>
 </package>
-
-
-
-
