@@ -338,10 +338,12 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
       } elseif {$richtextEditor eq "xinha"} {
 	lappend ::acs_blank_master__htmlareas $attributes(id)
 	append output "<input name='$element(id).format' value='text/html' type='hidden'/>"
-      } else {
+      } 
+
+  } else {
 	append output "Format: [menu $element(id).format [template::util::richtext::format_options] {} {}]"
-      }
-    }
+  }
+
     # Spell-checker
     array set spellcheck [template::util::spellcheck::spellcheck_properties \
 			      -element_ref element]
