@@ -1,25 +1,14 @@
 <?xml version="1.0"?>
 <queryset>
 
-    <fullquery name="acs_mail_lite::bouncing_email_p.bouncing_p">
-      <querytext>
-
-    	select case when email_bouncing_p = 't' then 1 else 0 end 
-	as send_p 
-      	from cc_users 
-     	where lower(email) = lower(:email)
-
-      </querytext>
-    </fullquery>
-
-
     <fullquery name="acs_mail_lite::bouncing_user_p.bouncing_p">
       <querytext>
 
     	select case when email_bouncing_p = 't' then 1 else 0 end 
 	as send_p 
-      	from cc_users 
+      	from parties, users 
      	where user_id = :user_id
+          and party_id = user_id
 
       </querytext>
     </fullquery>
@@ -98,8 +87,9 @@
      <querytext>
 
        select user_id, first_names || ' ' || last_name as user_name
-       from cc_users
+       from parties, users
        where email = :email
+         and party_id = user_id
 
      </querytext>
    </fullquery>
