@@ -1267,7 +1267,7 @@ make install
           [root ns_pam-0.1]# <userinput>make install LDAP=/usr/local/openldap INST=/usr/local/aolserver</userinput>
           [root ns_pam-0.1]#
 <action>cd /usr/local/src/aolserver/
-wget http://www.sussdorff.de/ressources/nsldap.tgz
+wget http://www.sussdorff.de/resources/nsldap.tgz
 tar xfz nsldap.tgz
 cd nsldap
 make install LDAP=/usr/local/openldap INST=/usr/local/aolserver
