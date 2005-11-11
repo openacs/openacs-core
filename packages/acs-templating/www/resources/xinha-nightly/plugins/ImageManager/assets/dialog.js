@@ -19,7 +19,7 @@ function Dialog(url, action, init) {
 		init = window;	// pass this window object by default
 	}
 	Dialog._geckoOpenModal(url, action, init);
-};
+}
 
 Dialog._parentEvent = function(ev) {
 	setTimeout( function() { if (Dialog._modal && !Dialog._modal.closed) { Dialog._modal.focus() } }, 50);
@@ -54,13 +54,13 @@ Dialog._geckoOpenModal = function(url, action, init) {
 		Dialog._addEvent(w, "click", Dialog._parentEvent);
 		Dialog._addEvent(w, "mousedown", Dialog._parentEvent);
 		Dialog._addEvent(w, "focus", Dialog._parentEvent);
-	};
+	}
 	// release the captured events
 	function relwin(w) {
 		Dialog._removeEvent(w, "click", Dialog._parentEvent);
 		Dialog._removeEvent(w, "mousedown", Dialog._parentEvent);
 		Dialog._removeEvent(w, "focus", Dialog._parentEvent);
-	};
+	}
 	capwin(window);
 	// capture other frames
 	for (var i = 0; i < window.frames.length; capwin(window.frames[i++]));

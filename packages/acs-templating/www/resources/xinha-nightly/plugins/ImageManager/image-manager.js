@@ -23,7 +23,7 @@
 function ImageManager(editor)
 {
 
-};
+}
 
 ImageManager._pluginInfo = {
 	name          : "ImageManager",
@@ -165,17 +165,19 @@ HTMLArea.prototype._insertImage = function(image) {
 		}
 		var img = image;
 		if (!img) {
-			var sel = editor._getSelection();
-			var range = editor._createRange(sel);			
-			editor._doc.execCommand("insertimage", false, param.f_url);
 			if (HTMLArea.is_ie) {
+        var sel = editor._getSelection();
+        var range = editor._createRange(sel);
+        editor._doc.execCommand("insertimage", false, param.f_url);
 				img = range.parentElement();
 				// wonder if this works...
 				if (img.tagName.toLowerCase() != "img") {
 					img = img.previousSibling;
 				}
 			} else {
-				img = range.startContainer.previousSibling;
+				img = document.createElement('img');
+        img.src = param.f_url;
+        editor.insertNodeAtSelection(img);
 			}
 		} else {			
 			img.src = param.f_url;
@@ -186,21 +188,63 @@ HTMLArea.prototype._insertImage = function(image) {
 			switch (field) {
 			    case "f_alt"    : img.alt	 = value; break;
 			    case "f_border" :
-            img.style.borderWidth = /[^0-9]/.test(value) ? value :  (parseInt(value || "0") + 'px');
+          if(value.length)
+          {           
+            img.style.borderWidth = /[^0-9]/.test(value) ? value :  (parseInt(value) + 'px');
             if(img.style.borderWidth && !img.style.borderStyle)
             {
               img.style.borderStyle = 'solid';
             }
-            break;
+          }
+          else
+          {
+            img.style.borderWidth = '';
+            img.style.borderStyle = '';
+          }
+          break;
+          
           case "f_borderColor": img.style.borderColor = value; break;
           case "f_backgroundColor": img.style.backgroundColor = value; break;
-          case "f_padding": img.style.padding =
-                              /[^0-9]/.test(value) ? value :  (parseInt(value || "0") + 'px'); break;
-          case "f_margin": img.style.margin =
-                              /[^0-9]/.test(value) ? value :  (parseInt(value || "0") + 'px'); break;
+            
+          case "f_padding": 
+          {
+            if(value.length)
+            {
+              img.style.padding = /[^0-9]/.test(value) ? value :  (parseInt(value) + 'px'); 
+            }
+            else
+            {
+              img.style.padding = '';
+            }
+          }
+          break;
+          
+          case "f_margin": 
+          {
+            if(value.length)
+            {
+              img.style.margin = /[^0-9]/.test(value) ? value :  (parseInt(value) + 'px'); 
+            }
+            else
+            {
+              img.style.margin = '';
+            }
+          }
+          break;
+          
 			    case "f_align"  : img.align	 = value; break;
-				case "f_width"  : img.width = parseInt(value || "0"); break;
-				case "f_height"  : img.height = parseInt(value || "0"); break;
+            
+          case "f_width" : 
+          {
+            if(!isNaN(parseInt(value))) { img.width  = parseInt(value); } else { img.width = ''; }
+          }
+          break;
+          
+				  case "f_height":
+          {
+            if(!isNaN(parseInt(value))) { img.height = parseInt(value); } else { img.height = ''; }
+          }
+          break;
 			}
 
 		}
@@ -208,4 +252,3 @@ HTMLArea.prototype._insertImage = function(image) {
 		
 	}, outparam);
 };
-

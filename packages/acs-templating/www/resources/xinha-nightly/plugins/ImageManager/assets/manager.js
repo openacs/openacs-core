@@ -8,7 +8,7 @@
 	//Translation
 	function i18n(str) {
         return HTMLArea._lc(str, 'ImageManager');
-	};
+	}
 
 
 	//set the alignment options
@@ -105,7 +105,7 @@
 	{
 		__dlg_close(null);
 		return false;
-	};
+	}
 
 	function onOK() 
 	{
@@ -156,7 +156,7 @@
 
 		__dlg_close(param);
 		return false;
-	};
+	}
 
 	//similar to the Files::makeFile() in Files.php
 	function makeURL(pathA, pathB) 

@@ -37,4 +37,4 @@ function __dlg_translate(context) {
         }
     }
     document.title = HTMLArea._lc(document.title, context);
-};
+}

@@ -5,17 +5,18 @@
     --  from full_example-body.html.
     --
     --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/examples/full_example.js $
-    --  $LastChangedDate: 2005-09-29 21:03:01 +1200 (Thu, 29 Sep 2005) $
-    --  $LastChangedRevision: 359 $
-    --  $LastChangedBy: gocher $
+    --  $LastChangedDate: 2005-10-30 05:28:08 +1300 (Sun, 30 Oct 2005) $
+    --  $LastChangedRevision: 416 $
+    --  $LastChangedBy: gogo $
     --------------------------------------------------------------------------*/
 
   var num     = 1;
   if(window.parent && window.parent != window)
   {
     var f = window.parent.menu.document.forms[0];
-    _editor_lang = f.lang.value;
-    _editor_skin = f.skin.value;
+    _editor_lang = f.lang[f.lang.selectedIndex].value;
+    _editor_skin = f.skin[f.skin.selectedIndex].value;
+    
     num = parseInt(f.num.value);
     if(isNaN(num))
     {

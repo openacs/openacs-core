@@ -33,7 +33,7 @@ if(window.top)
 
 function i18n(str) {
     return HTMLArea._lc(str, 'ImageManager');
-};
+}
 	
 	var mode = "<?php echo $editor->getAction(); ?>" //crop, scale, measure
 
