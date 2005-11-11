@@ -10,17 +10,17 @@
       <link rel="@header_links.rel@" type="@header_links.type@" href="@header_links.href@" media="@header_links.media@" />
     </multiple>
 
-    <if @acs_blank_master__xinha@ not nil>
+    <if @acs_blank_master.xinha@ not nil>
       <if @htmlarea_support:rowcount@ ne 0>
        <script type="text/javascript">
-        _editor_url  = "/resources/acs-templating/xinha-nightly/"  // (preferably absolute)URL (including trailing slash) where Xinha is installed   
+        _editor_url  = "@xinha_dir@"  // (preferably absolute)URL (including trailing slash) where Xinha is installed   
         _editor_lang = "@lang@";
        </script>
-       <script type="text/javascript" src="/resources/acs-templating/xinha-nightly/htmlarea.js" language="javascript"></script>
+       <script type="text/javascript" src="@xinha_dir@htmlarea.js" language="javascript"></script>
       </if>
     </if>
 
-    <if @acs_blank_master__rte@ not nil>
+    <if @acs_blank_master.rte@ not nil>
       <if @acs_blank_master__htmlareas@ not nil>
         <script language="JavaScript" type="text/javascript" 
              src="/resources/acs-templating/rte/richtext.js">
@@ -42,7 +42,7 @@
       <include src="/packages/acs-developer-support/lib/toolbar">
     </if>
 
-    <if @acs_blank_master__rte@ not nil>
+    <if @acs_blank_master.rte@ not nil>
      <if @acs_blank_master__htmlareas@ not nil>
        <script language="JavaScript" type="text/javascript"><!--
            initRTE("/resources/acs-templating/rte/images/", "/resources/acs-templating/rte/", "/resources/acs-templating/rte/rte.css");
@@ -51,7 +51,7 @@
      </if>
   </if>
 
-  <if @acs_blank_master__xinha@ not nil>
+  <if @acs_blank_master.xinha@ not nil>
     <if @htmlarea_support:rowcount@ ne 0>
       <script type="text/javascript">
 	xinha_editors = null;
@@ -61,17 +61,7 @@
 	xinha_init = xinha_init ? xinha_init : function()
 	{
 	xinha_plugins = xinha_plugins ? xinha_plugins :
-	[
-	'GetHtml',
-	'CharacterMap',
-	'ContextMenu',
-	'FullScreen',
-	'ListType',
-	'TableOperations',
-	'EditTag',
-	'LangMarks',
-	'Abbreviation'
-	];
+	[@xinha_plugins@];
 	// THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
 	if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
 	xinha_editors = xinha_editors ? xinha_editors :
@@ -81,8 +71,9 @@
            </multiple>
 	];
        xinha_config = xinha_config ? xinha_config() : new HTMLArea.Config();
-       xinha_config.height = '350px';
-       xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+       @xinha_params@
+       @xinha_options@
+        xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
        HTMLArea.startEditors(xinha_editors);
     }
     window.onload = xinha_init;

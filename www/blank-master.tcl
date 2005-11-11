@@ -32,18 +32,24 @@ if { ![info exists header_stuff] } {
 multirow create attribute key value
 set onload {}
 
-# Handle richtext widget, which needs special javascript and css 
+# Handle richtext widgets, which needs special javascript and css 
 # in the page header
 
 multirow create htmlarea_support id 
-global acs_blank_master__htmlareas acs_blank_master__rte acs_blank_master__xinha
+global acs_blank_master__htmlareas acs_blank_master
 
 if {[info exists acs_blank_master__htmlareas] } {
-  if {[info exists acs_blank_master__rte]} {
+
+  if {[info exists acs_blank_master(rte)]} {
     foreach htmlarea_id [lsort -unique $acs_blank_master__htmlareas] {
       lappend onload "acs_rteInit('${htmlarea_id}');"
     }}
-  if {[info exists acs_blank_master__xinha]} {
+
+  if {[info exists acs_blank_master(xinha)]} {
+    set xinha_dir /resources/acs-templating/xinha-nightly/
+    set xinha_plugins $acs_blank_master(xinha.plugins)
+    set xinha_params "xinha_config.height = '350px';"
+    set xinha_options $acs_blank_master(xinha.options)
     # setting language
     set lang [lang::conn::language]
     # if there are problems with the language definitions, set lang to "en"

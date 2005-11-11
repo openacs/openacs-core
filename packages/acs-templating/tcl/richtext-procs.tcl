@@ -264,23 +264,73 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
 ad_proc -public template::widget::richtext { element_reference tag_attributes } {
   Implements the richtext widget, which offers rich text editing options.
 
-  This version supports the rte editor.
+  This version supports the rte and xinha editor.
 
-
-  If the acs-templating.UseHtmlAreaForRichtextP parameter is set to true (1), this will use the htmlArea WYSIWYG editor widget.
-  Otherwise, it will use a normal textarea, with a drop-down to select a format. The available formats are:
+  If the acs-templating.UseHtmlAreaForRichtextP parameter is set to true (1), 
+  this will use the htmlArea WYSIWYG editor widget.
+  Otherwise, it will use a normal textarea, with a drop-down to select a format. 
+  The available formats are:
   <ul>
   <li>Enhanced text = Allows HTML, but automatically inserts line and paragraph breaks.
-  <li>Plain text = Automatically inserts line and paragraph breaks, and quotes all HTML-specific characters, such as less-than, greater-than, etc.
-  <li>Fixed-width text = Same as plain text, but conserves spacing; useful for tabular data.
+  <li>Plain text = Automatically inserts line and paragraph breaks, and quotes 
+      all HTML-specific characters, such as less-than, greater-than, etc.
+  <li>Fixed-width text = Same as plain text, but conserves spacing; useful 
+      for tabular data.
   <li>HTML = normal HTML.
   </ul>
-  You can also parameterize the richtext widget with a 'htmlarea_p' attribute, which can be true or false, and which will override the parameter setting.
+  You can also parameterize the richtext widget with a 'htmlarea_p' attribute, 
+  which can be true or false, and which will override the parameter setting.
+<p>
+  The default editor in wysigwig mode is rte. In oder to use xinha, one
+  has to use 'editor xinha' in the options of the form field. The following
+  options for xinha may be specified:
+  <ul>
+  <li> <em>editor</em>: xinha
+  <li> <em>height</em>: height of the xinha widget (e.g. 350px)
+  <li> <em>width</em>: width of the xinha widget (e.g. 500px)
+  <li> <em>plugins</em>: tcl list of plugins to be used in xinha. There
+     is an a special plugin for the oacs file selector available, called OacsFs. 
+     If no options are specified, the following plugins will be loaded:
+  <pre>
+          GetHtml CharacterMap ContextMenu FullScreen
+	  ListType TableOperations EditTag LangMarks Abbreviation
+  </pre>
+     <p>
+     These options are used by the OacsFs plugin
+     <ul>
+    <li> <em>folder_id</em>: the folder from which files should be taken
+      for the file selector. Can be used alterantive with fs_package_id, whatever
+      more handy in the application.
+    <li> <em>fs_package_id</em>: the package id of the file_storage package 
+      from which files should be taken
+      for the file selector. Can be used alterantive with folder_id, whatever
+      more handy in the application. If nothing is specified, the
+      globally mounted file-store is used.
+    <li> <em>file_types</em>: SQL match pattern for selecting certain types
+      of files (e.g. pdf files). The match pattern is applied on the MIME
+      type of the field. E.g. a value of %text/% allows any kind of text
+      files to be selected, while %pdf% could be used for pdf-files. If
+      nothing is specified, all file-types are presented.
+    </ul>
+  </ul>
+  
+  Example for the use of the xinha widget with options: 
+  <pre>
+   text:richtext(richtext),nospell,optional 
+	  {label #xowiki.content#} 
+	  {options {editor xinha plugins OacsFs height 350px file_types %pdf%}}
+	  {html {rows 15 cols 50 style {width: 100%}}}
+  </pre>
 
-  Derived from the htmlarea richtext widget for htmlarea by lars@pinds.com
-
-  modified for RTE http://www.kevinroth.com/ by davis@xarg.net
-  suff for xinha by gustaf.neumann@wu-wien.ac.at
+  Caveat: the three adp-files needed for the OpenACS file selector 
+     (insert-image, insert-ilink and file-selector)
+     are currently part of the xowiki package, since acs-templating
+     is per default not mounted. This is hopefully only a temporal situation
+     and we find a better place.
+  <p>
+  Derived from the htmlarea richtext widget for htmlarea by lars@pinds.com<br/>
+  modified for RTE http://www.kevinroth.com/ by davis@xarg.net<br/>
+  xinha support by gustaf.neumann@wu-wien.ac.at
 } {
 
   upvar $element_reference element
@@ -300,8 +350,10 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     set format {}
   }
   
-  set richtextEditor xinha
-  set richtextEditor rte
+  array set options [expr {[info exists element(options)] ? 
+			   $element(options) : ""}]
+  set richtextEditor [expr {[info exists options(editor)] ?
+			     $options(editor) : "rte"}]
 
   if { $element(mode) eq "edit" } {
     set attributes(id) "richtext__$element(form_id)__$element(id)"
@@ -321,7 +373,8 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     if { $htmlarea_p } {
       # Tell the blank-master to include the special stuff 
       # for the richtext widget in the page header
-      set ::acs_blank_master__$richtextEditor 1
+
+      set ::acs_blank_master($richtextEditor) 1
 
       if {$richtextEditor eq "rte"} {
 	lappend ::acs_blank_master__htmlareas $element(form_id)
@@ -336,6 +389,27 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
 	set output "<script type='text/javascript'><!--\nwriteRichText('$element(id)','$contents',500,200,true,false,'<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\"/>','[string map {\n \\n \r {} "'" "&\#39"} $output]'); //--></script><noscript id=\"rte-noscr-$element(id)\">$output</noscript>"
       } elseif {$richtextEditor eq "xinha"} {
+
+	# we have a xinha richtext widget, specified by "options {editor xinha}"
+	# The following options are supported: 
+	#      editor plugins width height folder_id fs_package_id
+	#
+	set plugins {GetHtml CharacterMap ContextMenu FullScreen
+	  ListType TableOperations EditTag LangMarks Abbreviation}
+	if {[info exists options(plugins)]} {
+	  set plugins $options(plugins)
+	}
+	set quoted [list]
+	foreach e $plugins {lappend quoted '$e'}
+	set ::acs_blank_master(xinha.plugins) [join $quoted ", "]
+
+	set xinha_options ""
+	foreach e {width height folder_id fs_package_id file_types} {
+	  if {[info exists options($e)]} {
+	    append xinha_options "xinha_config.$e = '[ad_urlencode $options($e)]';\n"
+	  }
+	}
+	set ::acs_blank_master(xinha.options) $xinha_options
 	lappend ::acs_blank_master__htmlareas $attributes(id)
 	append output "<input name='$element(id).format' value='text/html' type='hidden'/>"
       } 
