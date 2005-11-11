@@ -16,11 +16,11 @@ function PasteText(editor) {
                 action   : function(editor) {
                              self.buttonPress(editor);
                            }
-            })
+            });
 
   cfg.addToolbarElement("pastetext", ["paste", "killword"], 1);
 
-};
+}
 
 PasteText._pluginInfo = {
 	name          : "PasteText",

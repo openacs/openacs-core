@@ -29,6 +29,29 @@
 * @see config.inc.php
 */
 
+// Strip slashes if MQGPC is on
+set_magic_quotes_runtime(0);
+if(get_magic_quotes_gpc())
+{
+  $to_clean = array(&$_GET, &$_POST, &$_REQUEST, &$_COOKIE);
+  while(count($to_clean))
+  {
+    $cleaning =& $to_clean[array_pop($junk = array_keys($to_clean))];
+    unset($to_clean[array_pop($junk = array_keys($to_clean))]);
+    foreach(array_keys($cleaning) as $k)
+    {
+      if(is_array($cleaning[$k]))
+      {
+        $to_clean[] =& $cleaning[$k];
+      }
+      else
+      {
+        $cleaning[$k] = stripslashes($cleaning[$k]);
+      }
+    }
+  }
+}
+
 /**
 * ImageManager configuration
 */

@@ -27,8 +27,8 @@
     --     included in the top 10 lines of the file (see the embedded edit mode)
     --
     --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/htmlarea.js $
-    --  $LastChangedDate: 2005-10-26 19:42:49 +1300 (Wed, 26 Oct 2005) $
-    --  $LastChangedRevision: 402 $
+    --  $LastChangedDate: 2005-11-07 21:36:41 +1300 (Mon, 07 Nov 2005) $
+    --  $LastChangedRevision: 421 $
     --  $LastChangedBy: gocher $
     --------------------------------------------------------------------------*/
 
@@ -36,8 +36,8 @@ HTMLArea.version =
 {
   'Release'   : 'Trunk',
   'Head'      : '$HeadURL: http://svn.xinha.python-hosting.com/trunk/htmlarea.js $'.replace(/^[^:]*: (.*) \$$/, '$1'),
-  'Date'      : '$LastChangedDate: 2005-10-26 19:42:49 +1300 (Wed, 26 Oct 2005) $'.replace(/^[^:]*: ([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\) \$/, '$4 $2 $3'),
-  'Revision'  : '$LastChangedRevision: 402 $'.replace(/^[^:]*: (.*) \$$/, '$1'),
+  'Date'      : '$LastChangedDate: 2005-11-07 21:36:41 +1300 (Mon, 07 Nov 2005) $'.replace(/^[^:]*: ([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\) \$/, '$4 $2 $3'),
+  'Revision'  : '$LastChangedRevision: 421 $'.replace(/^[^:]*: (.*) \$$/, '$1'),
   'RevisionBy': '$LastChangedBy: gocher $'.replace(/^[^:]*: (.*) \$$/, '$1')
 };
 
@@ -152,7 +152,7 @@ function HTMLArea(textarea, config)
     }
     HTMLArea.freeLater(this, '_textArea');
   }
-};
+}
 
 HTMLArea.onload = function(){};
 HTMLArea.init = function() {
@@ -791,7 +791,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
     tb_body.appendChild(tb_row);
 
     table.className = 'toolbarRow'; // meh, kinda.
-  }; // END of function: newLine
+  } // END of function: newLine
 
   // init first line
   newLine();
@@ -823,7 +823,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
       }
       this[id] = newval;
     }
-  }; // END of function: setButtonStatus
+  } // END of function: setButtonStatus
 
   // this function will handle creation of combo boxes.  Receives as
   // parameter the name of a button as defined in the toolBar config.
@@ -894,7 +894,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
       });
     }
     return el;
-  }; // END of function: createSelect
+  } // END of function: createSelect
 
   // appends a new button to toolbar
   function createButton(txt) {
@@ -1009,14 +1009,14 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
           img.style.top = '0px';
           img.style.left = '0px';
         }
-      }
+      };
       
     } else if (!el) {
       el = createSelect(txt);
     }
 
     return el;
-  };
+  }
 
   var first = true;
   for (var i = 0; i < this.config.toolbar.length; ++i) {
@@ -1440,13 +1440,13 @@ HTMLArea.prototype.generate = function ()
 
       case 'toolbar':
       {
-        width = this._toolBar.offsetWidth;
+        width = this._toolBar.offsetWidth + 'px';
       }
       break;
 
       default :
       {
-        width = this.config.width;
+        width = /[^0-9]/.test(this.config.width) ? this.config.width : this.config.width + 'px';
       }
       break;
     }
@@ -1461,7 +1461,7 @@ HTMLArea.prototype.generate = function ()
 
       default :
       {
-        height = this.config.height;
+        height = /[^0-9]/.test(this.config.height) ? this.config.height : this.config.height + 'px';
       }
       break;
     }
@@ -2239,7 +2239,7 @@ HTMLArea.prototype.debugTree = function() {
     for (; --indent >= 0;)
       ta.value += " ";
     ta.value += str + "\n";
-  };
+  }
   function _dt(root, level) {
     var tag = root.tagName.toLowerCase(), i;
     var ns = HTMLArea.is_ie ? root.scopeName : root.prefix;
@@ -2247,7 +2247,7 @@ HTMLArea.prototype.debugTree = function() {
     for (i = root.firstChild; i; i = i.nextSibling)
       if (i.nodeType == 1)
         _dt(i, level + 2);
-  };
+  }
   _dt(this._doc.body, 0);
   document.body.appendChild(ta);
 };
@@ -2289,7 +2289,7 @@ HTMLArea.prototype._wordClean = function() {
     txt += "Final document length: " + editor._doc.body.innerHTML.length + "\n";
     txt += "Clean-up took " + (((new Date()).getTime() - stats.T) / 1000) + " seconds";
     alert(txt);
-  };
+  }
   function clearClass(node) {
     var newc = node.className.replace(/(^|\s)mso.*?(\s|$)/ig, ' ');
     if (newc != node.className) {
@@ -2299,7 +2299,7 @@ HTMLArea.prototype._wordClean = function() {
         ++stats.mso_class;
       }
     }
-  };
+  }
   function clearStyle(node) {
     var declarations = node.style.cssText.split(/\s*;\s*/);
     for (var i = declarations.length; --i >= 0;)
@@ -2309,7 +2309,7 @@ HTMLArea.prototype._wordClean = function() {
         declarations.splice(i, 1);
       }
     node.style.cssText = declarations.join("; ");
-  };
+  }
   function stripTag(el) {
     if (HTMLArea.is_ie)
       el.outerHTML = HTMLArea.htmlEncode(el.innerText);
@@ -2319,14 +2319,14 @@ HTMLArea.prototype._wordClean = function() {
       HTMLArea.removeFromParent(el);
     }
     ++stats.mso_xmlel;
-  };
+  }
   function checkEmpty(el) {
     if (/^(a|span|b|strong|i|em|font)$/i.test(el.tagName) &&
         !el.firstChild) {
       HTMLArea.removeFromParent(el);
       ++stats.empty_tags;
     }
-  };
+  }
   function parseTree(root) {
     var tag = root.tagName.toLowerCase(), i, next;
     if ((HTMLArea.is_ie && root.scopeName != 'HTML') || (!HTMLArea.is_ie && /:/.test(tag))) {
@@ -2342,7 +2342,7 @@ HTMLArea.prototype._wordClean = function() {
       }
     }
     return true;
-  };
+  }
   parseTree(this._doc.body);
   // showStats();
   // this.debugTree();
@@ -2827,7 +2827,7 @@ HTMLArea.prototype.getParentElement = function(sel) {
         if (TestRange.inRange(range)) break;
         if ((parent.nodeType != 1) || (parent.tagName.toLowerCase() == 'body')) break;
         parent = parent.parentElement;
-      };
+      }
       return parent;
         case "None":
       // It seems that even for selection of type "None",
@@ -3369,18 +3369,20 @@ HTMLArea.prototype._insertImage = function(image) {
       return false;
     }
     var img = image;
-    if (!img) {
-      var sel = editor._getSelection();
-      var range = editor._createRange(sel);
-      editor._doc.execCommand("insertimage", false, param.f_url);
+    if (!img) {      
       if (HTMLArea.is_ie) {
+        var sel = editor._getSelection();
+        var range = editor._createRange(sel);
+        editor._doc.execCommand("insertimage", false, param.f_url);
         img = range.parentElement();
         // wonder if this works...
         if (img.tagName.toLowerCase() != "img") {
           img = img.previousSibling;
         }
       } else {
-        img = range.startContainer.previousSibling;
+        img = document.createElement('img');
+        img.src = param.f_url;
+        editor.insertNodeAtSelection(img);
         if (!img.tagName) {
           // if the cursor is at the beginning of the document
           img = range.startContainer.firstChild;
@@ -3443,8 +3445,8 @@ HTMLArea.prototype._insertTable = function() {
         if (cellwidth)
           td.style.width = cellwidth + "%";
         tr.appendChild(td);
-        // Mozilla likes to see something inside the cell.
-        (HTMLArea.is_gecko) && td.appendChild(doc.createElement("br"));
+        // Browsers like to see something inside the cell (&nbsp;).
+        td.appendChild(doc.createTextNode('\u00a0'));
       }
     }
     if (HTMLArea.is_ie) {
@@ -3471,7 +3473,7 @@ HTMLArea.prototype._comboSelected = function(el, txt) {
       case "fontsize": this.execCommand(txt, false, value); break;
       case "formatblock":
     // (HTMLArea.is_ie) && (value = "<" + value + ">");
-    value = "<" + value + ">"
+    if(!HTMLArea.is_gecko || value !== 'blockquote') {   value = "<" + value + ">";}
     this.execCommand(txt, false, value);
     break;
       default:
@@ -4330,12 +4332,12 @@ HTMLArea.cloneObject = function(obj) {
   var newObj = new Object;
 
   // check for array objects
-  if (obj.constructor.toString().indexOf("function Array(") == 1) {
+  if (obj.constructor.toString().match( /\s*function Array\(/ )) {
     newObj = obj.constructor();
   }
 
   // check for function objects (as usual, IE is fucked up)
-  if (obj.constructor.toString().indexOf("function Function(") == 1) {
+  if (obj.constructor.toString().match( /\s*function Function\(/ )) {
     newObj = obj; // just copy reference to it
   } else for (var n in obj) {
     var node = obj[n];
@@ -4644,7 +4646,11 @@ HTMLArea.isParaContainer = function(el)
   return el && el.nodeType == 1 && (HTMLArea._paraContainerTags.indexOf(" " + el.tagName.toLowerCase() + " ") != -1);
 };
 
-HTMLArea._closingTags = " head script style div span tr td tbody table em strong b i strike code cite dfn abbr acronym font a title textarea select form ";
+// These are all the tags for which the end tag is not optional or 
+// forbidden, taken from the list at:
+//   http://www.w3.org/TR/REC-html40/index/elements.html
+HTMLArea._closingTags = " a abbr acronym address applet b bdo big blockquote button caption center cite code del dfn dir div dl em fieldset font form frameset h1 h2 h3 h4 h5 h6 i iframe ins kbd label legend map menu noframes noscript object ol optgroup pre q s samp script select small span strike strong style sub sup table textarea title tt u ul var ";
+
 HTMLArea.needsClosingTag = function(el) {
   return el && el.nodeType == 1 && (HTMLArea._closingTags.indexOf(" " + el.tagName.toLowerCase() + " ") != -1);
 };
@@ -4879,7 +4885,7 @@ HTMLArea._colorToRgb = function(v) {
   // returns the hex representation of one byte (2 digits)
   function hex(d) {
     return (d < 16) ? ("0" + d.toString(16)) : d.toString(16);
-  };
+  }
 
   if (typeof v == "number") {
     // we're talking to IE here
@@ -5090,7 +5096,7 @@ HTMLArea._postback = function(url, data, handler)
         alert('An error has occurred: ' + req.statusText);
       }
     }
-  };
+  }
 
   req.onreadystatechange = callBack;
 
@@ -5129,7 +5135,7 @@ HTMLArea._getback = function(url, handler)
         alert('An error has occurred: ' + req.statusText);
       }
     }
-  };
+  }
 
   req.onreadystatechange = callBack;
   req.open('GET', url, true);

@@ -93,7 +93,6 @@ init = function()
 	jg_doc.setColor("#000000"); // black
 
 	initEditor();
-}
+};
 
 addEvent(window, 'load', init);
-

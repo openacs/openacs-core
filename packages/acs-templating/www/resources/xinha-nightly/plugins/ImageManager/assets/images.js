@@ -7,7 +7,7 @@
 
 	function i18n(str) {
         return HTMLArea._lc(str, 'ImageManager');
-	};
+	}
 
 	function changeDir(newDir) 
 	{
