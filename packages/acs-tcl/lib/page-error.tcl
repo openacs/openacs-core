@@ -32,7 +32,7 @@ if {$user_id eq 0} {
 set system_name [ad_system_name]
 set subject "[_ acs-tcl.lt_Error_Report_in_ad_sy] ( [_ acs-tcl.File ] $error_file )"
 set found_in_version ""
-set send_to [ad_system_owner]
+set send_to [parameter::get -package_id [ad_acs_kernel_id] -parameter HostAdministrator -default "[ad_system_owner]"]
 
 set error_desc_email "
  --------------------------------------------------------<br>
