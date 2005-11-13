@@ -1,4 +1,4 @@
-<html style="width: 400px; height: 260px">
+<html>
 <head>
   <title>#acs-templating.HTMLArea_InsertModifyLink#</title>
 
@@ -8,7 +8,7 @@
 
 
 <script type="text/javascript">
-    window.resizeTo(400, 260);
+  window.resizeTo(500, 200);
 
 HTMLArea = window.opener.HTMLArea;
 
@@ -166,17 +166,17 @@ form { padding: 0px; margin: 0px; }
 </head>
 
 <body onload="Init()">
-  <div class="title"> <title>#acs-templating.HTMLArea_InsertModifyLink#</title></div>
+  <div class="title">#acs-templating.HTMLArea_InsertModifyLink#</div>
     <div style="padding-left:10px;padding-right:10px;">
 <form>
-<table border="0" style="width: 100%;">
+<table border="0" width="400" >
   <tr>
     <td class="label">URL:</td>
-    <td><input type="text" id="f_href" style="width: 100%" /></td>
+    <td colspan="2"><input type="text" id="f_href" style="width: 100%;" /></td>
   </tr>
   <tr>
     <td class="label">Title (tooltip):</td>
-    <td><input type="text" id="f_title" style="width: 100%" /></td>
+    <td colspan="2"><input type="text" id="f_title" style="width: 100%;"  /></td>
   </tr>
   <tr>
     <td class="label"><span id="f_target_label">Target:</span></td>
@@ -186,27 +186,24 @@ form { padding: 0px; margin: 0px; }
       <option value="_self">Same frame (_self)</option>
       <option value="_top">Top frame (_top)</option>
     </select>
-    <input type="text" name="f_other_target" id="f_other_target" size="10" style="visibility: hidden" />
-  <if @fs_found@ eq 1>
-    </td><td>
-    <button type="button" onClick="openFileSelector();">#acs-templating.HTMLArea_OpenFileStorage#</button>
-    </td>
-  </if>
-  <else>
+    </td><td align="right">
+<if @fs_found@ eq 1>
+  <button  type="button" onClick="openFileSelector();">#acs-templating.HTMLArea_OpenFileStorage#</button>
+</if>
+<else>
     <span style="margin-top:2px; margin-bottom:2px; border:2px outset #FFFFFF;padding-top:1px;padding-bottom:1px;padding-right:6px;padding-left:6px;color:GrayText;cursor:default;" title="#acs-templating.HTMLArea_FileStorageNotFoundToolTip#">#acs-templating.HTMLArea_OpenFileStorage#</span> 
   </else>
-    </td>
+    <input type="text" name="f_other_target" id="f_other_target" size="10" style="visibility: hidden" />
+  </td>
   </tr>
+  <tr><td colspan="2">&nbsp; 
+  <button type="submit" name="ok" onclick="return onOK();">OK</button> 
+  <button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
+</td>
+</tr>
 </table>
 
-<div id="buttons">
-  <button type="submit" name="ok" onclick="return onOK();">OK</button>
 
-
-
-
-  <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
-</div>
 
 </form>
 </body>
