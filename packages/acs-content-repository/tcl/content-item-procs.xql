@@ -24,6 +24,24 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="content::item::get.get_item_folder">
+    <querytext>
+      select cf.*,
+      ci.name,
+      ci.item_id,
+      ci.live_revision,
+      ci.latest_revision,
+      ci.locale,
+      ci.publish_status,
+      ci.content_type,
+      ci.storage_type
+      from cr_folders cf,
+      cr_items ci
+      where ci.item_id = cf.folder_id
+      and ci.item_id = :item_id
+    </querytext>
+  </fullquery>
+    
   <fullquery name="content::item::upload_file.get_parent_existing_filenames">
   <querytext>
     select name

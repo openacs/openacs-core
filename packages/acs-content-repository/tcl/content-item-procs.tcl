@@ -219,6 +219,9 @@ ad_proc -public ::content::item::get {
         # content_type query was unsucessful, item does not exist
         return 0
     }
+    if {[string equal "content_folder" $content_type]} {
+        return [db_0or1row get_item_folder "" -column_array local_array]
+    }
     set table_name [db_string get_table_name "select table_name from acs_object_types where object_type=:content_type"]
     set table_name "${table_name}x"    
     # get attributes of the content_item use the content_typex view
