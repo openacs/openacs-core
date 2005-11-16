@@ -178,6 +178,20 @@ aa_register_case content_item {
             #########################################################
             aa_true "Extended attribute set" [expr [string equal "attribute_value" \
                                $new_type_item(attribute_name)]]
+
+            #########################################################
+            # test update of item and attributes
+            #########################################################
+            content::item::update \
+                -item_id $new_type_item_id \
+                -attributes {{name new_name} {publish_status live}}
+            array unset new_type_item
+            content::item::get \
+                -item_id $new_type_item_id \
+                -revision "latest" \
+                -array_name new_type_item
+            aa_true "Item updated $new_type_item(name) $new_type_item(publish_status)" [expr {($new_type_item(name)) eq "new_name" && ($new_type_item(publish_status) eq "live")} ]
+            
             #########################################################
             # copy it
             #########################################################
