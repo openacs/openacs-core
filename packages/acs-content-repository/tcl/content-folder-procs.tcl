@@ -201,7 +201,7 @@ ad_proc -public ::content::folder::update {
 	db_dml item_update $query_text
     }
 
-    # pass the rest of the attributes to content::item::set
+    # pass the rest of the attributes to content::item::update
     # we can just send the folder attributes because they don't overlap
     content::item::update \
 	-item_id $folder_id \
