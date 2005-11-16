@@ -166,18 +166,22 @@ ad_proc -public ::content::folder::update {
     
     @param folder_id folder to update
 
-    @param attributes A list of pairs of additional attributes and their values to get. Each pair is a list of two elements: key => value
+    @param attributes A list of pairs of additional attributes and
+    their values to set. Each pair is a list of lists of two elements:
+    key => value
+    Valid attributes are: label, description, name, package_id
 
     @return 
     
     @error 
 } {
-    set valid_attributes [list label description package_id]
+    set valid_attributes [list label description package_id name]
 
     set update_text "" 
-    set item_attributes $attributes
-    set i 0 
-    foreach {attribute value} $attributes {
+
+    foreach {attribute_list} $attributes {
+	set attribute [lindex $attribute_list 0]
+	set value [lindex $attribute_list 1]	
 	if {[lsearch $valid_attributes $attribute] > -1}  {
 
 	    # create local variable to use for binding
@@ -187,10 +191,7 @@ ad_proc -public ::content::folder::update {
 		append update_text ","
 	    }
 	    append update_text " ${attribute} = :${attribute} "
-	    # remove this attribute from the list passed to item::set
-	    set item_attributes [lreplace $item_attributes $i $i]
    	}
-	incr i
     }
     if {![string equal "" $update_text]} {
 
