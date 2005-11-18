@@ -288,5 +288,36 @@ namespace eval rel_types {
 	}
 	return $return_code
     }
-}
 
+
+    ad_proc -public delete_role {
+	{-role}
+    } {
+
+	Drop a Relationship Role.
+
+	@author Nick Carroll (nick.c@rroll.net)
+	@creation-date 2005-11-18
+
+	@param role The role to delete.
+
+	@return Returns 1 if successful, otherwise 0.
+    } {
+	set return_code 1
+
+	db_transaction {
+	    # Create the message key (refer to rel_types::create_role).
+	    # Required to unregister translations.
+	    set message_key "role_${role}"
+
+	    # Unegister the language keys
+	    lang::message::unregister acs-translations $message_key
+	    lang::message::unregister acs-translations "${message_key}_plural"
+
+	    db_exec_plsql drop_role {}
+	} on_error {
+	    set return_code 0
+	}
+	return $return_code
+    }
+}
