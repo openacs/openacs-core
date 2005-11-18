@@ -76,5 +76,10 @@ select acs_rel_type__create_type (
 </querytext>
 </fullquery>
 
+<fullquery name="rel_types::delete_role.drop_role">
+<querytext>
+      select acs_rel_type__drop_role(:role)
+</querytext>
+</fullquery>
 
 </queryset>
