@@ -61,3 +61,30 @@ aa_register_case -cats {api smoke} tcl_to_sql_list {
     aa_equals "parses list of 2 or more" [template::util::tcl_to_sql_list [list isn't hess' 'bit 'trippy']] "'isn''t', 'hess''', '''bit', '''trippy'''"
 
 }
+
+aa_register_case -cats {api smoke} expand_percentage_signs {
+    Test expand percentage signs to make sure it substitures correctly
+    
+    @author Dave Bauer
+    @creation-date 2005-11-20
+} {
+    set orig_message "Test message %one%"
+    set one "\[__does_not_exist__\]"
+    set message $orig_message
+
+    aa_false "Expanded square bracket text" [catch {set expanded_message [template::expand_percentage_signs $message]} errmsg]
+    aa_log $errmsg
+    aa_equals "square brackets safe" $expanded_message "Test message \[__does_not_exist__\]"
+    
+    set one "\$__does_not_exist"
+    aa_false "Expanded dollar test" [catch {set expanded_message [template::expand_percentage_signs $message]} errmsg]
+    aa_log $errmsg
+    aa_equals "dollar sign safe" $expanded_message "Test message \$__does_not_exist"
+
+    set one "\$two(\$three(\[__does_not_exist\]))"
+
+    aa_false "Square bracket in array key test" [catch {set expanded_message [template::expand_percentage_signs $message]} errmsg]
+    aa_log $errmsg
+    aa_equals "square brackets in array key safe" $expanded_message "Test message \$two(\$three(\[__does_not_exist\]))"
+   
+}
