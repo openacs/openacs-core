@@ -449,15 +449,16 @@ ad_proc -public template::expand_percentage_signs { message } {
       #   array variables
       # TODO: ad_quotehtml
       # TODO: lang::util::localize    
-      regsub {^%([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)%$} $substitution {$\1(\2)} substitution
-      #   ordinary variables
-      regsub {^%([a-zA-Z0-9_:]+)%$} $substitution {$\1} substitution
-
-      # Create command to execute in caller's scope
-      set command "subst -nocommands \"$substitution\""
-    
-      # and execute that
-      set substitution [uplevel $command]
+      regsub -all {[\]\[\{\}\"]\\$} $substitution {\\&} substitution      
+      if { [regexp {^%([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)%$} $substitution match arr key] } {
+        # the array key name is substitured by the tcl parser s
+        regsub -all {[\]\[\{\}\"]\\$} $key {\\&} key      
+        set substitution [uplevel $command]
+      }
+      if { [regexp {^%([a-zA-Z0-9_:]+)%$} $substitution match var] } {
+        set command "set $var"
+        set substitution [uplevel $command]
+      }
     }
 
     append formatted_message $substitution
@@ -466,6 +467,15 @@ ad_proc -public template::expand_percentage_signs { message } {
   append formatted_message $remaining_message
 
   return $formatted_message
+
+
+#
+
+
+
+
+
+
 }
 
 ad_proc -public template::adp_compile { source_type source } {
