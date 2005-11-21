@@ -417,10 +417,10 @@ ad_proc -public template::expand_percentage_signs { message } {
       # TODO: ad_quotehtml
       # TODO: lang::util::localize    
 
-#      regsub -all {[\]\[\{\}\"]\\$} $substitution {\\&} substitution      
+      regsub -all {[\]\[\{\}\"]\\$} $substitution {\\&} substitution      
       if { [regexp {^%([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)%$} $substitution match arr key] } {
         # the array key name is substitured by the tcl parser s
-#        regsub -all {[\]\[\{\}\"]\\$} $key {\\&} key      
+        regsub -all {[\]\[\{\}\"]\\$} $key {\\&} key      
 	set command "set ${arr}(${key})"
         set substitution [uplevel $command]
       }
