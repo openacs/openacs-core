@@ -453,7 +453,7 @@ ad_proc -public template::expand_percentage_signs { message } {
       if { [regexp {^%([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)%$} $substitution match arr key] } {
         # the array key name is substitured by the tcl parser s
         regsub -all {[\]\[\{\}\"]\\$} $key {\\&} key      
-        set command "set ${var}(${key})"
+        set command "set ${arr}(${key})"
         set substitution [uplevel $command]
       }
       if { [regexp {^%([a-zA-Z0-9_:]+)%$} $substitution match var] } {
