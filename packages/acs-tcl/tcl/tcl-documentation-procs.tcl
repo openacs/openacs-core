@@ -1477,13 +1477,20 @@ ad_page_contract_filter integer { name value } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
-    if { ![regexp {^(-)?(0*)(([1-9][0-9]*|0))$} $value match sign zeros value] } {
-	ad_complain "[_ acs-tcl.lt_name_is_not_an_intege]"
-	return 0
-    }
+  # first simple a quick check avoiding the slow regexp
+  if {[string is integer $value]} {
+    return 1
+  }
+  if { [regexp {^(-)?(0*)([1-9][0-9]*|0)$} $value match sign zeros value] } {
     # Trim the value for any leading zeros
     set value $sign$value
-    return 1
+    # the string might be still to large, so check again...
+    if {[string is integer $value]} {
+      return 1
+    }
+  }
+  ad_complain "[_ acs-tcl.lt_name_is_not_an_intege]"
+  return 0
 }
 
 ad_page_contract_filter naturalnum { name value } {
@@ -1493,11 +1500,13 @@ ad_page_contract_filter naturalnum { name value } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
-    if { ![regexp {^(0*)(([1-9][0-9]*|0))$} $value match zeros value] } {
-	ad_complain "[_ acs-tcl.lt_name_is_not_a_natural]"
-	return 0
+    if { [regexp {^(0*)([1-9][0-9]*|0)$} $value match zeros value] } {
+      if {[string is integer $value]} {
+	return 1
+      }
     }
-    return 1
+  ad_complain "[_ acs-tcl.lt_name_is_not_a_natural]"
+  return 0
 }
 
 ad_page_contract_filter range { name value range } {
