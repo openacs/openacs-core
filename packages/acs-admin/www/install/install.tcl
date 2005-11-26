@@ -37,6 +37,9 @@ foreach package_key [array names repository] {
             
         # If in upgrade mode, only add to list if it's an upgrade
         if { !$upgrade_p || [string equal $version(install_type) upgrade] } {
+	    if {![exists_and_not_null version(maturity)]} {
+		set version(maturity) ""
+	    }
             set package([string toupper $version(package-name)]) \
                 [list \
                      $version(package.key) \
@@ -61,6 +64,14 @@ foreach package_key [array names repository] {
 multirow create packages package_key package_name version_name package_type install_type summary maturity
 foreach name [lsort -ascii [array names package]] {
     set row $package($name)
+    if {[info exists apm::package_version::attributes::maturity_int_to_text]} {
+	set maturity_text "[apm::package_version::attributes::maturity_int_to_text [lindex $row 6]]"
+	set maturity_label {[apm::package_version::attributes::get_pretty_name maturity]}
+    } else { 
+	set maturity_text ""
+	set maturity_label "Maturity"
+    }
+
     multirow append packages \
         [lindex $row 0] \
         [lindex $row 1] \
@@ -68,7 +79,7 @@ foreach name [lsort -ascii [array names package]] {
         [lindex $row 3] \
         [lindex $row 4] \
         [lindex $row 5] \
-        [apm::package_version::attributes::maturity_int_to_text [lindex $row 6]]
+	$maturity_text
 }
 
 multirow extend packages install_url
@@ -98,7 +109,7 @@ template::list::create \
             label "Summary"
         }   
         maturity {
-            label {[apm::package_version::attributes::get_pretty_name maturity]}
+	    label "$maturity_label"
         }
         version_name {
             label "Version"
