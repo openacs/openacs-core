@@ -40,7 +40,8 @@ begin
 
   -- parent_id = 0 means that this is a mount point
   if parent_id ^= 0 and 
-     content_folder.is_registered(parent_id,'content_folder') = 'f' then
+    content_folder.is_folder(parent_id) and
+    content_folder.is_registered(parent_id,'content_folder') = 'f' then
 
     raise_application_error(-20000, 
         'This folder does not allow subfolders to be created');
