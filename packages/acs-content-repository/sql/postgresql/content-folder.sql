@@ -185,7 +185,8 @@ begin
 
   -- parent_id = 0 means that this is a mount point
   if new__parent_id != 0 and 
-     content_folder__is_registered(new__parent_id,''content_folder'',''f'') = ''f'' then
+    content_folder__is_folder(new__parent_id) and
+    content_folder__is_registered(new__parent_id,''content_folder'',''f'') = ''f'' then
 
     raise EXCEPTION ''-20000: This folder does not allow subfolders to be created'';
     return null;
