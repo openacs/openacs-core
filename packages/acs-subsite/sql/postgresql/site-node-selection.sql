@@ -9,6 +9,7 @@
 create table site_nodes_selection (
         node_id         integer constraint site_nodes_sel_id_fk
                         references acs_objects (object_id)
+                        on delete cascade
                         constraint site_node_sel_id_pk
                         primary key,
 	view_p		boolean
