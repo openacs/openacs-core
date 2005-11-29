@@ -54,22 +54,28 @@ set context [list "[_ acs-subsite.Join_group_name]"]
 template::form create join
 
 relation_required_segments_multirow \
-        -datasource_name required_segments \
+-datasource_name required_segments \
         -group_id $group_id \
         -rel_type $rel_type
 
 set num_required_segments [multirow size required_segments]
-
 if { [form is_request join] } {
     for { set rownum 1 } { $rownum <= $num_required_segments } { incr rownum } {
         set required_seg [multirow get required_segments $rownum]
-        
         if { ![group::member_p -group_id $required_segments(group_id)] } {
+
             if { [string equal $required_segments(join_policy) "closed"] } {
                 ad_return_error [_ acs-subsite.Closed_group] "[_ acs-subsite.This_group_is_closed]<p>$ret_link"
                 ad_script_abort
             }
-            
+            # we need to add a rel_id element for the relation to
+            # create because add_form_elements only adds elements for
+            # attributes and id_column is not an attribute
+            element create join seg_$required_segments(segment_id).rel_id \
+                -widget hidden \
+                -optional
+            # add any additional attributes we want to capture when a
+            # user joins
             attribute::add_form_elements \
                 -form_id join \
                 -variable_prefix seg_$required_segments(segment_id) \
@@ -77,7 +83,10 @@ if { [form is_request join] } {
                 -object_type $required_segments(rel_type)
         }
     }
-}  
+}
+
+# don't show the form if all elements are hidden
+set not_hidden 0
 
 attribute::add_form_elements \
     -form_id join \
@@ -91,10 +100,15 @@ if { [form size join] > 0 } {
             -datatype text \
             -widget hidden
     }
+    foreach elm [form get_elements join] {
+        if {[element get_property join $elm widget] ne "hidden"} {
+            incr not_hidden
+        }
+    }
 }
 
 # Empty form means nothing to ask for, don't have to submit first
-if { [form size join] == 0 || [template::form is_valid join] } {
+if { $not_hidden == 0 || [template::form is_valid join] } {
 
     db_transaction {
         
