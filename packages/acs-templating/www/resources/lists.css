@@ -82,7 +82,7 @@ tr.list-paginator {
 td.list-button-bar { 
   padding-bottom: 12px;
   font-size: 115%;
-
+  line-height: 250%;
 }
 
 .list-filter { 

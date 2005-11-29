@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="acs-kernel" package_version="5.0.4" locale="AR_EG" charset="utf-8">
+
+  <msg key="member_role_pretty_name">عضوِ</msg>
+  <msg key="member_role_pretty_plural">أعضاء</msg>
+</message_catalog>
