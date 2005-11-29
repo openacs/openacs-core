@@ -24,9 +24,9 @@ create table acs_mail_lite_queue (
 );
 
 create table acs_mail_lite_mail_log (
-    user_id                     integer
-                                constraint acs_mail_lite_log_user_id_fk
-                                references users (user_id)
+    party_id                     integer
+                                constraint acs_mail_lite_log_party_id_fk
+                                references parties (party_id)
                                 on delete cascade
 				constraint acs_mail_lite_log_pk
 				primary key,
@@ -35,9 +35,9 @@ create table acs_mail_lite_mail_log (
 
 
 create table acs_mail_lite_bounce (
-    user_id                     integer
-                                constraint acs_mail_lite_bou_user_id_fk
-                                references users (user_id)
+    party_id                     integer
+                                constraint acs_mail_lite_bou_party_id_fk
+                                references parties (party_id)
                                 on delete cascade
 				constraint acs_mail_lite_bou_pk
 				primary key,
