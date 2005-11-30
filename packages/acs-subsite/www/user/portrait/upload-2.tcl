@@ -98,7 +98,8 @@ db_transaction {
 
     content::item::set_live_revision -revision_id $revision_id
     # Only create the new relationship if there does not exist one already
-    if {![relation::get_id -object_id_one $user_id -object_id_two $item_id -rel_type "user_portrait_rel"]} {
+   set user_portrait_rel_id [relation::get_id -object_id_one $user_id -object_id_two $item_id -rel_type "user_portrait_rel"]
+   if {[empty_string_p $user_portrait_rel_id]} {
 	db_exec_plsql create_rel {}
     }
 }
