@@ -26,10 +26,13 @@ proc db_bootstrap_checks { errors error_p } {
     }
 
     if { ![info exists my_error_p] } {
-        # DRB: I've got the SQL to pick the version to drop in later...what we really want,
-        # though, is Oracle's "compat version" number and I'm not sure how to get it (it is
-        # reported as 8.1.0 during the Oracle installation process)
-        nsv_set ad_database_version . "8.1.6"
+        # Get the version from Oracle, using the db tools equivalent of
+        # sticks and fire...
+        set db [ns_db gethandle]
+        set selection [ns_db 1row $db "select version from product_component_version where product like 'Oracle%'"]
+        regexp {^[0-9]\.[0-9]\.[0-9]} [ns_set value $selection 0] match
+        ns_db releasehandle $db
+        nsv_set ad_database_version . $match
     }
 }
 
