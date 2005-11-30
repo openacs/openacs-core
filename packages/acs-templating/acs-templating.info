@@ -7,10 +7,10 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.2.0b6" url="http://openacs.org/repository/download/apm/acs-templating-5.2.0b6.apm">
+    <version name="5.2.0b8" url="http://openacs.org/repository/download/apm/acs-templating-5.2.0b8.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Templating library.</summary>
-        <release-date>2005-11-09</release-date>
+        <release-date>2005-11-29</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">The templating system provides the tag library and support routines
 that allow developers and graphic designers to work
