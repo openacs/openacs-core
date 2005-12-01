@@ -7,12 +7,12 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.2.0b8" url="http://openacs.org/repository/download/apm/acs-messaging-5.1.0b5.apm">
+    <version name="5.2.0b9" url="http://openacs.org/repository/download/apm/acs-messaging-5.2.0b9.apm">
         <owner url="mailto:akk+@cs.cmu.edu">Anukul Kapoor</owner>
         <owner url="mailto:prevost@maya.com">John Prevost</owner>
         <owner url="mailto:vinod@kurup.com">Vinod Kurup</owner>
         <summary>General messaging for bboard and general comments.</summary>
-        <release-date>2005-11-29</release-date>
+        <release-date>2005-12-01</release-date>
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>

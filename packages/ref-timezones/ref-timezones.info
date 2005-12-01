@@ -7,10 +7,10 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.2.0b8" url="http://openacs.org/repository/download/apm/ref-timezones-5.1.0b5.apm">
+    <version name="5.2.0b9" url="http://openacs.org/repository/download/apm/ref-timezones-5.2.0b9.apm">
         <owner url="mailto:jon@mayuli.com">Jon Griffin</owner>
         <summary>Timezone data for acs-reference.</summary>
-        <release-date>2005-11-29</release-date>
+        <release-date>2005-12-01</release-date>
         <maturity>3</maturity>
         <vendor url="http://www.mayuli.com">Mayuli Enterprises, LLC</vendor>
         <description format="text/plain">This is the timezone data for the acs-reference data package.  Used by acs-lang (among others) for localized times.</description>

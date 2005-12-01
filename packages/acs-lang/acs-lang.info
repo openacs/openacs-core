@@ -7,10 +7,10 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.2.0b8" url="http://openacs.org/repository/download/apm/acs-lang-5.1.0b5.apm">
+    <version name="5.2.0b9" url="http://openacs.org/repository/download/apm/acs-lang-5.2.0b9.apm">
         <owner url="mailto:peter@collaboraid.biz">Peter Marklund</owner>
         <summary>OpenACS Internationalization Support.</summary>
-        <release-date>2005-11-29</release-date>
+        <release-date>2005-12-01</release-date>
         <maturity>3</maturity>
         <vendor url="http://www.collaboraid.biz">Collaboraid</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
