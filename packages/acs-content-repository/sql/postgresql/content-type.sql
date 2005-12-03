@@ -310,7 +310,7 @@ begin
   -- Drop the column if neccessary
   if drop_attribute__drop_column then
       execute ''alter table '' || v_table || '' drop column '' ||
-	drop_attribute__attribute_name || '' cascade'';
+        drop_attribute__attribute_name || '' cascade'';
 
 --    exception when others then
 --      raise_application_error(-20000, ''Unable to drop column '' || 
@@ -487,7 +487,7 @@ declare
   attr_rec                                 record;
 begin
   if trigger_insert_statement__content_type is null then 
-	return exception ''content_type__trigger_insert_statement called with null content_type'';
+        return exception ''content_type__trigger_insert_statement called with null content_type'';
   end if;
 
   select 
@@ -758,7 +758,7 @@ end;' language 'plpgsql';
 
 
 -- procedure register_child_type
-select define_function_args('content_type__register_child_type','content_type,child_type,relation_tag;generic,min_n;0,max_n');
+select define_function_args('content_type__register_child_type','parent_type,child_type,relation_tag;generic,min_n;0,max_n');
 create or replace function content_type__register_child_type (varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
@@ -923,7 +923,7 @@ begin
   where 
     not exists ( select 1
                  from
-	           cr_content_mime_type_map
+                   cr_content_mime_type_map
                  where
                    mime_type = register_mime_type__mime_type
                  and
