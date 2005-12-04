@@ -62,6 +62,8 @@ foreach package_key [array names repository] {
 
 # Sort the list alphabetically (in case package_name and package_key doesn't sort the same)
 multirow create packages package_key package_name version_name package_type install_type summary maturity
+set maturity_label "Maturity"
+
 foreach name [lsort -ascii [array names package]] {
     set row $package($name)
     if {[info exists apm::package_version::attributes::maturity_int_to_text]} {
