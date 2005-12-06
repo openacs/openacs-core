@@ -9,10 +9,9 @@
 <td width="35%">
 <div class="portlet-wrapper">
 	<div class="portlet-title">
-	<span><h2>Edit Options</h2></span>
+	<span><h2>#acs-subsite.Edit_Options#</h2></span>
 	</div>
 	<div class="portlet">
-  #acs-kernel.common_Actions#
   <ul>
     <li><a href="../user/password-update">#acs-subsite.Change_my_Password#</a></li>
 
@@ -35,7 +34,7 @@
 
 <div class="portlet-wrapper">
   <div class="portlet-title">
-  <span>#acs-subsite.Privacy#</span>
+  <span><h2>#acs-subsite.Privacy#<h2></span>
   </div>
   <div class="portlet">
   <ul>
@@ -64,7 +63,7 @@
 
 <div class="portlet-wrapper">
 	<div class="portlet-title">
-	<span>My Account</span>
+	<span><h2> #acs-subsite.My_Account# </h2></span>
 	</div>
         <div class="portlet">
   	<include src="/packages/acs-subsite/lib/user-info" />
@@ -79,7 +78,7 @@
 
 <div class="portlet-wrapper">
         <div class="portlet-title">
-	     <span>#acs-subsite.Your_Portrait#</span>
+	     <span><h2>#acs-subsite.Your_Portrait#</h2></span>
 	</div>
         <div class="portlet">
 	    <p>
@@ -92,16 +91,15 @@
   <if @portrait_state@ eq show>
 <div class="portlet-wrapper">  
   <div class="portlet-title">
-             <span>#acs-subsite.Your_Portrait#</span>
+             <span><h2>#acs-subsite.Your_Portrait#</h2></span>
   </div>
   <div class="portlet">
     <p>
       #acs-subsite.lt_On_portrait_publish_d#.
     </p>
 <table><tr valign="top"><td>
-<img width=64 height=86 src="/shared/portrait-bits.tcl?user_id=@user_id@"
-alt="Portrait"><p>
-<a href="/user/portrait/?return_url=/pvt/home">Edit</a>
+<img height=100 src="/shared/portrait-bits.tcl?user_id=@user_id@" alt="Portrait"><p>
+<a href="/user/portrait/?return_url=/pvt/home">#acs-subsite.Edit#</a>
 </td><td>@portrait_description@</td></tr>
 </table>
 </div>
@@ -110,7 +108,7 @@ alt="Portrait"><p>
 
 <div class="portlet-wrapper">
         <div class="portlet-title">
-  	<span><list name="fragments"></span>
+  	<span><h2><list name="fragments"><h2></span>
 	</div>
 	<div class="portlet">
     	@fragments:item;noquote@
