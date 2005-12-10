@@ -368,7 +368,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     }
 
     set output [textarea_internal $element(id) attributes $contents]
-    append output "\n<br />"
+    append output "\n<br /><input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\"/>"
 
     if { $htmlarea_p } {
       # Tell the blank-master to include the special stuff 
