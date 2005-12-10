@@ -19,7 +19,7 @@
           (including package installation, cache, authentication, and user accounts) for an OpenACS system.
         </description>
 
-        <provides url="acs-admin" version="5.1.0b5"/>
+        <provides url="acs-admin" version="5.2.0b9"/>
         <requires url="acs-kernel" version="5.2.0a1"/>
 
         <callbacks>

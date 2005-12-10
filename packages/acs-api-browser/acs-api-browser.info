@@ -17,7 +17,7 @@
 	<maturity>3</maturity>
         <description format="text/html">On line interactive documentation for the locally installed Tcl and SQL APIs.  Links to the Tcl core and AOLServer online documentation as well.</description>
 
-        <provides url="acs-api-browser" version="5.1.0b5"/>
+        <provides url="acs-api-browser" version="5.2.0b9"/>
         <requires url="acs-kernel" version="5.2.0a1"/>
 
         <callbacks>

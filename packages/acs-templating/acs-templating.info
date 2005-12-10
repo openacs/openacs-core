@@ -25,7 +25,7 @@ layout of a site can be more easily administered.
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL version 2</license>
         <maturity>3</maturity>
 
-        <provides url="acs-templating" version="5.2.0b6"/>
+        <provides url="acs-templating" version="5.2.0b9"/>
         <requires url="acs-kernel" version="5.2.0a1"/>
 
         <callbacks>

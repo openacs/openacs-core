@@ -18,7 +18,7 @@
         <description format="text/html">Site wide search implemented with service contracts, currently 
         only supports postgres via the OpenFTS driver.</description>
 
-        <provides url="search" version="5.1.0b5"/>
+        <provides url="search" version="5.2.0b9"/>
 
         <callbacks>
         </callbacks>

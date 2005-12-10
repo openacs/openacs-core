@@ -17,7 +17,7 @@
 	<maturity>3</maturity>
         <description format="text/html">This package bootstraps OpenACS. If the core packages have not yet been installed, it calls the installer which leads the user through the steps necessary to do so.  It also checks that the installation meets the requirements for a successful install of OpenACS.</description>
 
-        <provides url="acs-bootstrap-installer" version="5.1.0b5"/>
+        <provides url="acs-bootstrap-installer" version="5.2.0b9"/>
         <requires url="acs-kernel" version="5.2.0a1"/>
 
         <callbacks>

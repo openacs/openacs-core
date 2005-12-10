@@ -20,7 +20,7 @@
         OpenACS system.  Also provides a UI for managing
         automatic-rebuild servers as in a test farm.</description>
 
-        <provides url="acs-automated-testing" version="5.1.0b5"/>
+        <provides url="acs-automated-testing" version="5.2.0b9"/>
         <requires url="acs-kernel" version="5.2.0a1"/>
 
         <callbacks>

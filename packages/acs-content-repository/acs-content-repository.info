@@ -21,7 +21,7 @@
          other CMS backing functionality.  Utilized by Bug Tracker, File Storage, and other packages.
         </description>
 
-        <provides url="acs-content-repository" version="5.2.0b7"/>
+        <provides url="acs-content-repository" version="5.2.0b9"/>
         <requires url="acs-kernel" version="5.2.0a1"/>
         <requires url="acs-service-contract" version="5.2.0a1"/>
         <requires url="search" version="5.2.0a1"/>

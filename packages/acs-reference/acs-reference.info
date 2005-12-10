@@ -21,7 +21,7 @@
 &lt;li&gt; Running standard reports on this data.
 &lt;li&gt; Monitoring the usage of reference data.
 &lt;/ul&gt;</description>
-        <provides url="acs-reference" version="5.1.0b5"/>
+        <provides url="acs-reference" version="5.2.0b9"/>
         <requires url="acs-kernel" version="5.2.0a1"/>
 
         <callbacks>

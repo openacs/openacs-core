@@ -16,11 +16,11 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.2.0b6"/>
-        <requires url="acs-authentication" version="5.2.0a1"/>
-        <requires url="acs-content-repository" version="5.2.0a1"/>
-        <requires url="acs-kernel" version="5.2.0a1"/>
-        <requires url="acs-tcl" version="5.2.0a1"/>
+        <provides url="acs-subsite" version="5.2.0b9"/>
+        <requires url="acs-authentication" version="5.2.0b9"/>
+        <requires url="acs-content-repository" version="5.2.0b9"/>
+        <requires url="acs-kernel" version="5.2.0b9"/>
+        <requires url="acs-tcl" version="5.2.0b9"/>
 
         <callbacks>
             <callback type="after-install"  proc="subsite::package_install"/>
