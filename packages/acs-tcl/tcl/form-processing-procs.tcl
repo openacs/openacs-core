@@ -646,7 +646,9 @@ ad_proc -public ad_form {
     # checks.  We implement this by building a global list of validation elements
 
     global af_validate_elements
-    set af_validate_elements($form_name) [list]
+    if { !$extends_p } {
+        set af_validate_elements($form_name) [list]
+    }
 
     if { [info exists validate] } {
 
