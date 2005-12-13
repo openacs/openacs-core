@@ -952,3 +952,4 @@ begin
   return v_item_id;
 
 end;' language 'plpgsql';
+\i ../content-folder.sql
