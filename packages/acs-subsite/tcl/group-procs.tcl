@@ -485,18 +485,14 @@ ad_proc -public group::member_p {
     { -user_id "" }
     { -group_name "" }
     { -group_id "" }
+    { -subsite_id "" }
     -cascade:boolean
 } {
     Return 1 if the user is a member of the group specified.
     You can specify a group name or group id.
     </p><p>
-    <strong>Note:</strong> The group name is <strong>not</strong> unique
-    by definition,
-    and if you call this function with a duplicate group name it 
-    <strong>will</strong> bomb!!! Using the group name as a parameter is
-    thus strongly discouraged unless you are really, really sure the 
-    name is unique.</p>
-    <p>
+    If there is more than one group with this name, it will use the first one.
+     <p>
     If cascade is true, check to see if the user is
     a member of the group by virtue of any other component group.
     (e.g. if group B is a component of group A then if a user
@@ -504,6 +500,7 @@ ad_proc -public group::member_p {
      also.)
     If cascade is false, then the user must have specifically
     been granted membership on the group in question.</p>
+    @param subsite_id Only useful when using group_name. Marks the subsite in which to search for the group_id that belongs to the group_name
 } {
     if { [empty_string_p $user_id] } {
 	set user_id [ad_conn user_id]
@@ -514,7 +511,7 @@ ad_proc -public group::member_p {
     }
 
     if { ![empty_string_p $group_name] } {
-	set group_id [db_string group_id_from_name {} -default {}]
+	set group_id [group::get_id -group_name $group_name -subsite_id $subsite_id]
 	if { [empty_string_p $group_id] } {
 	    return 0
 	}
@@ -526,6 +523,40 @@ ad_proc -public group::member_p {
     return [template::util::is_true $result]
 }
 
+ad_proc -public group::party_member_p {
+    -party_id
+    { -group_name "" }
+    { -group_id "" }
+    { -subsite_id "" }
+} {
+    Return 1 if the party is an approved member of the group specified.
+    You can specify a group name or group id.
+    </p><p>
+    <strong>Note:</strong> The group name is <strong>not</strong> unique
+    by definition,
+    and if you call this function with a duplicate group name it 
+    <strong>will</strong> bomb!!! Using the group name as a parameter is
+    thus strongly discouraged unless you are really, really sure the 
+    name is unique.</p>
+    <p>The party must have specifically
+    been granted membership on the group in question.</p>
+} {
+
+    if { [empty_string_p $group_name] && [empty_string_p $group_id] } {
+	return 0
+    }
+
+    if { ![empty_string_p $group_name] } {
+	set group_id [group::get_id -group_name $group_name -subsite_id $subsite_id]
+	if { [empty_string_p $group_id] } {
+	    return 0
+	}
+    }
+
+    set result [db_string party_is_member {} -default "f"]
+    
+    return [template::util::is_true $result]
+}
 
 ad_proc -public group::get_rel_segment {
     {-group_id:required}
