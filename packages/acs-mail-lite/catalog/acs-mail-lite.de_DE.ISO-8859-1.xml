@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-mail-lite" package_version="1.0b5" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-mail-lite" package_version="1.0b6" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="Associated_files">Verknüpfte Dateien:</msg>
   <msg key="CC">CC</msg>
