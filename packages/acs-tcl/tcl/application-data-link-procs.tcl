@@ -12,16 +12,11 @@ ad_proc -public application_data_link::new {
     -this_object_id:required
     -target_object_id:required
 } {
-    if {[catch {ad_conn user_id} user_id]} {
-	set user_id 0
-    }
-    
-    if {[catch {ad_conn peeraddr} id_addr]} {
-	set id_addr 127.0.0.1
-    }
+    set forward_rel_id [db_nextval acs_data_links_seq]
+    set backward_rel_id [db_nextval acs_data_links_seq]
 
-    db_exec_plsql create_forward_link {}
-    db_exec_plsql create_backward_link {}
+    db_dml create_forward_link {}
+    db_dml create_backward_link {}
 }
 
 ad_proc -public application_data_link::delete_links {
@@ -30,7 +25,7 @@ ad_proc -public application_data_link::delete_links {
     set rel_ids [db_list linked_objects {}]
 
     foreach rel_id $rel_ids {
-	relation_remove $rel_id
+	dm_dml delete_link {}
     }
 }
 
