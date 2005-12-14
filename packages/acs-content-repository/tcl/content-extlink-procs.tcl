@@ -33,7 +33,7 @@ ad_proc -public content::extlink::copy {
 }
 
 ad_proc -public content::extlink::new {
-    -extlink_id:required
+    {-extlink_id ""}
     -url:required
     -parent_id:required
     {-name ""}
