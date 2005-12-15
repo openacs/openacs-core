@@ -4,7 +4,7 @@
     CVS Guidelines
   "><link rel="next" href="openacs-cvs-concepts.html" title="OpenACS CVS Concepts"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="cvs-guidelines.html">Prev</a> </td><th width="60%" align="center">Chapter 14. 
     CVS Guidelines
-  </th><td width="20%" align="right"> <a accesskey="n" href="openacs-cvs-concepts.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="using-cvs-with-openacs"></a>Using CVS with OpenACS</h2></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2608735"></a>Getting Started</h3></div></div></div><p>
+  </th><td width="20%" align="right"> <a accesskey="n" href="openacs-cvs-concepts.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="using-cvs-with-openacs"></a>Using CVS with OpenACS</h2></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2559077"></a>Getting Started</h3></div></div></div><p>
         All OpenACS code is available anonymously.  To get code
       anonymously, use the parameter
       <code class="computeroutput">-d:pserver:anonymous@cvs.openacs.org:/cvsroot</code> immediately after <code class="computeroutput">cvs</code> in a cvs command to check out or export code.
@@ -47,7 +47,7 @@ cvs -q</span></span></pre><p><code class="computeroutput">-z6</code> speeds up c
 cd CVSROOT
 emacs avail</span></span></pre><p>Add an avail line of the form:</p><pre class="programlisting">avail|<span class="replaceable"><span class="replaceable">username</span></span>|openacs-4</pre><pre class="screen"><span class="action"><span class="action">cvs commit -m "added commit on X for username" avail</span></span></pre></li></ol></div></div><div class="sidebar"><p>Branimir suggests an additional level of abstraction.  If you put</p><pre class="programlisting">Host cvs-server
       HostName cvs.openacs.org
-      User <span class="replaceable"><span class="replaceable">yournamehere</span></span></pre><p>into your <code class="computeroutput">~/.ssh/config</code> file, then you can use <code class="computeroutput">-d :ext:cvs-server:/cvsroot</code> instead of <code class="computeroutput">-d :ext:cvs.openacs.org:/cvsroot</code>.  You can then change the definition of <code class="computeroutput">cvs-server</code> by changing one file instead of editing hundreds of <code class="computeroutput">CVSROOT/Repository</code> files.</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2549970"></a>Checkout for Package Development</h3></div></div></div><p>If you are actively developing a non-core package, you
+      User <span class="replaceable"><span class="replaceable">yournamehere</span></span></pre><p>into your <code class="computeroutput">~/.ssh/config</code> file, then you can use <code class="computeroutput">-d :ext:cvs-server:/cvsroot</code> instead of <code class="computeroutput">-d :ext:cvs.openacs.org:/cvsroot</code>.  You can then change the definition of <code class="computeroutput">cvs-server</code> by changing one file instead of editing hundreds of <code class="computeroutput">CVSROOT/Repository</code> files.</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2608901"></a>Checkout for Package Development</h3></div></div></div><p>If you are actively developing a non-core package, you
       should work from the latest core release branch.  Currently this
       is oacs-5-2.  This ensures that you are working on top
       of a stable OpenACS core, but still allows you to commit feature
@@ -62,13 +62,13 @@ cvs up -d <span class="replaceable"><span class="replaceable">packagename</span>
             Inventory</a> and <a href="http://openacs.org/projects/openacs/packages/" target="_top">Package
             maintainers and status</a> for a list of available
             packages and their current state.
-      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2612968"></a>Checkout for Core Development</h3></div></div></div><p>If you are actively developing packages in the OpenACS
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2578820"></a>Checkout for Core Development</h3></div></div></div><p>If you are actively developing packages in the OpenACS
       Core, work from the HEAD branch.  HEAD is used for active
               development of the next version of core OpenACS. It may be very
               buggy; it may not even install correctly. Do not use this branch for
               development of non-core features unless your work depends on some
               of the HEAD core work. To check out HEAD, omit the
-              <code class="computeroutput">-r</code> tag.</p><p></p><p>To check out HEAD for development, which requires an OpenACS developer account:</p><pre class="screen"><span class="action"><span class="action">cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre><p>To check out HEAD anonymously:</p><pre class="screen"><span class="action"><span class="action">cvs -d:pserver:anonymous@cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2549503"></a>Checkout .LRN</h3></div></div></div><p>
+              <code class="computeroutput">-r</code> tag.</p><p></p><p>To check out HEAD for development, which requires an OpenACS developer account:</p><pre class="screen"><span class="action"><span class="action">cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre><p>To check out HEAD anonymously:</p><pre class="screen"><span class="action"><span class="action">cvs -d:pserver:anonymous@cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2588969"></a>Checkout .LRN</h3></div></div></div><p>
         .LRN consists of a given version openacs core, plus a set of
         packages. These are collectively packages together to form a
         distrubution of .LRN. F .LRN 2.0.0 sits on top of OpenACS 5.0.0.

@@ -1,3 +1,2023 @@
+2005-12-14 23:24  timoh
+
+	* packages/acs-tcl/tcl/application-data-link-procs.tcl: bugfix:
+	  typo
+
+2005-12-14 14:12  timoh
+
+	* packages/acs-tcl/tcl/: application-data-link-procs-oracle.xql,
+	  application-data-link-procs-postgresql.xql,
+	  application-data-link-procs.tcl, application-data-link-procs.xql:
+	  use seperate table for application data links
+
+2005-12-14 14:11  timoh
+
+	* packages/acs-kernel/: acs-kernel.info,
+	  sql/oracle/acs-relationships-create.sql,
+	  sql/postgresql/acs-relationships-create.sql,
+	  sql/postgresql/upgrade/upgrade-5.2.0b9-5.2.0b10.sql: added new
+	  seperate table for application_data_links
+
+2005-12-14 11:10  maltes
+
+	* packages/acs-lang/sql/postgresql/ad-locales.sql: Add swiss german
+	  to the ad_locales
+
+2005-12-14 09:15  timoh
+
+	* packages/acs-subsite/tcl/: group-procs.tcl, group-procs.xql:
+	  fixed group_id_from_name query, added group::party_member_p
+
+2005-12-14 07:27  eduardop
+
+	* packages/acs-content-repository/tcl/content-extlink-procs.tcl:
+	  Fix Bug #2712: param extlink_id in content::extlink::new should
+	  not be required
+
+2005-12-13 05:07  maltes
+
+	*
+	  packages/acs-content-repository/sql/postgresql/upgrade/upgrade-5.2.0b9-5.2.0b10.sql:
+	  Added missing content-folders on upgrade
+
+2005-12-12 05:09  maltes
+
+	* packages/acs-content-repository/: acs-content-repository.info,
+	  sql/postgresql/upgrade/upgrade-5.2.0b9-5.2.0b10.sql: A couple of
+	  content_item__new functions were missing so I recreated them all
+
+2005-12-10 03:48  maltes
+
+	* packages/acs-subsite/www/admin/site-map/package-new.tcl: Applied
+	  #725, fixed #1936
+
+2005-12-10 03:24  maltes
+
+	* packages/: acs-admin/acs-admin.info,
+	  acs-api-browser/acs-api-browser.info,
+	  acs-authentication/acs-authentication.info,
+	  acs-automated-testing/acs-automated-testing.info,
+	  acs-bootstrap-installer/acs-bootstrap-installer.info,
+	  acs-content-repository/acs-content-repository.info,
+	  acs-core-docs/acs-core-docs.info, acs-kernel/acs-kernel.info,
+	  acs-lang/acs-lang.info, acs-mail/acs-mail.info,
+	  acs-messaging/acs-messaging.info,
+	  acs-reference/acs-reference.info,
+	  acs-service-contract/acs-service-contract.info,
+	  acs-subsite/acs-subsite.info, acs-tcl/acs-tcl.info,
+	  acs-templating/acs-templating.info,
+	  ref-timezones/ref-timezones.info, search/search.info: Applied
+	  patch #747 to fix provides information
+
+2005-12-10 03:00  maltes
+
+	* packages/acs-templating/tcl/richtext-procs.tcl: Applied patch
+	  #749, fix bug #2704. Not thoroughly tested
+
+2005-12-07 13:07  daveb
+
+	* packages/acs-api-browser/lib/search.tcl: Add urls for 10g
+
+2005-12-07 12:22  daveb
+
+	* packages/acs-api-browser/lib/search.tcl: Don't return server
+	  error if db version is not in the list
+
+2005-12-05 19:41  rafael
+
+	* packages/acs-subsite/: www/pvt/home.adp,
+	  catalog/acs-subsite.en_US.ISO-8859-1.xml: Fixed I18n keys and
+	  checked look in plain openacs install
+
+2005-12-04 13:38  maltes
+
+	* packages/acs-admin/www/install/install.tcl: FIxing a problem when
+	  no package is to be upgraded with maturity label
+
+2005-12-03 12:57  daveb
+
+	* packages/acs-content-repository/sql/postgresql/content-type.sql:
+	  Fix define_function_args for content_type__register_child_type
+
+2005-12-01 09:45  jaufrecht
+
+	* readme.txt, packages/acs-core-docs/www/aolserver.html,
+	  packages/acs-core-docs/www/aolserver4.html,
+	  packages/acs-core-docs/www/automated-testing-best-practices.html,
+	  packages/acs-core-docs/www/backup-recovery.html,
+	  packages/acs-core-docs/www/bootstrap-acs.html,
+	  packages/acs-core-docs/www/configuring-configuring-packages.html,
+	  packages/acs-core-docs/www/configuring-configuring-permissions.html,
+	  packages/acs-core-docs/www/configuring-install-packages.html,
+	  packages/acs-core-docs/www/configuring-mounting-packages.html,
+	  packages/acs-core-docs/www/contributing-code.html,
+	  packages/acs-core-docs/www/credits.html,
+	  packages/acs-core-docs/www/cvs-guidelines.html,
+	  packages/acs-core-docs/www/cvs-tips.html,
+	  packages/acs-core-docs/www/db-api-detailed.html,
+	  packages/acs-core-docs/www/db-api.html,
+	  packages/acs-core-docs/www/docbook-primer.html,
+	  packages/acs-core-docs/www/eng-standards-constraint-naming.html,
+	  packages/acs-core-docs/www/eng-standards-filenaming.html,
+	  packages/acs-core-docs/www/eng-standards-plsql.html,
+	  packages/acs-core-docs/www/eng-standards-versioning.html,
+	  packages/acs-core-docs/www/ext-auth-requirements.html,
+	  packages/acs-core-docs/www/filename.html,
+	  packages/acs-core-docs/www/form-builder.html,
+	  packages/acs-core-docs/www/high-avail.html,
+	  packages/acs-core-docs/www/how-do-I.html,
+	  packages/acs-core-docs/www/i18n-convert.html,
+	  packages/acs-core-docs/www/index.html,
+	  packages/acs-core-docs/www/individual-programs.html,
+	  packages/acs-core-docs/www/install-cvs.html,
+	  packages/acs-core-docs/www/install-daemontools.html,
+	  packages/acs-core-docs/www/install-full-text-search-openfts.html,
+	  packages/acs-core-docs/www/install-full-text-search-tsearch2.html,
+	  packages/acs-core-docs/www/install-next-nightly-vacuum.html,
+	  packages/acs-core-docs/www/install-openacs-keepalive.html,
+	  packages/acs-core-docs/www/install-qmail.html,
+	  packages/acs-core-docs/www/install-redhat.html,
+	  packages/acs-core-docs/www/install-steps.html,
+	  packages/acs-core-docs/www/ix01.html,
+	  packages/acs-core-docs/www/mac-installation.html,
+	  packages/acs-core-docs/www/maint-performance.html,
+	  packages/acs-core-docs/www/maintenance-deploy.html,
+	  packages/acs-core-docs/www/maintenance-web.html,
+	  packages/acs-core-docs/www/object-identity.html,
+	  packages/acs-core-docs/www/objects.html,
+	  packages/acs-core-docs/www/openacs-cvs-concepts.html,
+	  packages/acs-core-docs/www/openacs.html,
+	  packages/acs-core-docs/www/oracle.html,
+	  packages/acs-core-docs/www/packages.html,
+	  packages/acs-core-docs/www/parties.html,
+	  packages/acs-core-docs/www/permissions-tediously-explained.html,
+	  packages/acs-core-docs/www/permissions.html,
+	  packages/acs-core-docs/www/postgres.html,
+	  packages/acs-core-docs/www/programming-with-aolserver.html,
+	  packages/acs-core-docs/www/psgml-for-emacs.html,
+	  packages/acs-core-docs/www/psgml-mode.html,
+	  packages/acs-core-docs/www/release-notes-4-5.html,
+	  packages/acs-core-docs/www/release-notes-4-6-2.html,
+	  packages/acs-core-docs/www/release-notes-4-6-3.html,
+	  packages/acs-core-docs/www/release-notes-4-6.html,
+	  packages/acs-core-docs/www/release-notes.html,
+	  packages/acs-core-docs/www/releasing-openacs-core.html,
+	  packages/acs-core-docs/www/request-processor.html,
+	  packages/acs-core-docs/www/requirements-template.html,
+	  packages/acs-core-docs/www/security-notes.html,
+	  packages/acs-core-docs/www/style-guide.html,
+	  packages/acs-core-docs/www/subsites.html,
+	  packages/acs-core-docs/www/tcl-doc.html,
+	  packages/acs-core-docs/www/templates.html,
+	  packages/acs-core-docs/www/tutorial-css-layout.html,
+	  packages/acs-core-docs/www/tutorial-cvs.html,
+	  packages/acs-core-docs/www/tutorial-database.html,
+	  packages/acs-core-docs/www/tutorial-debug.html,
+	  packages/acs-core-docs/www/tutorial-distribute.html,
+	  packages/acs-core-docs/www/tutorial-etp-templates.html,
+	  packages/acs-core-docs/www/tutorial-newpackage.html,
+	  packages/acs-core-docs/www/tutorial-pages.html,
+	  packages/acs-core-docs/www/unix-installation.html,
+	  packages/acs-core-docs/www/upgrade-4.5-to-4.6.html,
+	  packages/acs-core-docs/www/upgrade-openacs-files.html,
+	  packages/acs-core-docs/www/upgrade-overview.html,
+	  packages/acs-core-docs/www/using-cvs-with-openacs.html,
+	  packages/acs-core-docs/www/variables.html,
+	  packages/acs-core-docs/www/win2k-installation.html,
+	  packages/acs-core-docs/www/xml/for-everyone/release-notes.xml:
+	  numbering fixes for rc3
+
+2005-12-01 09:41  jaufrecht
+
+	* packages/: acs-admin/acs-admin.info,
+	  acs-api-browser/acs-api-browser.info,
+	  acs-authentication/acs-authentication.info,
+	  acs-automated-testing/acs-automated-testing.info,
+	  acs-bootstrap-installer/acs-bootstrap-installer.info,
+	  acs-content-repository/acs-content-repository.info,
+	  acs-core-docs/acs-core-docs.info, acs-kernel/acs-kernel.info,
+	  acs-lang/acs-lang.info, acs-mail/acs-mail.info,
+	  acs-messaging/acs-messaging.info,
+	  acs-reference/acs-reference.info,
+	  acs-service-contract/acs-service-contract.info,
+	  acs-subsite/acs-subsite.info, acs-tcl/acs-tcl.info,
+	  acs-templating/acs-templating.info,
+	  ref-timezones/ref-timezones.info, search/search.info: updated apm
+	  version numbers
+
+2005-11-30 10:45  rodrigop
+
+	* packages/acs-subsite/www/user/portrait/upload-2.tcl: fix for bug
+	  #2703
+
+2005-11-29 22:49  janine
+
+	* packages/acs-bootstrap-installer/db-init-checks-oracle.tcl:
+	  Replaced Don's placeholder code with real code to check the
+	  actual Oracle version number
+
+2005-11-29 21:21  jaufrecht
+
+	* packages/: acs-admin/acs-admin.info,
+	  acs-api-browser/acs-api-browser.info,
+	  acs-authentication/acs-authentication.info,
+	  acs-automated-testing/acs-automated-testing.info,
+	  acs-bootstrap-installer/acs-bootstrap-installer.info,
+	  acs-content-repository/acs-content-repository.info,
+	  acs-core-docs/acs-core-docs.info,
+	  acs-core-docs/www/acs-admin.html,
+	  acs-core-docs/www/aolserver.html,
+	  acs-core-docs/www/aolserver4.html,
+	  acs-core-docs/www/automated-testing-best-practices.html,
+	  acs-core-docs/www/backup-recovery.html,
+	  acs-core-docs/www/bootstrap-acs.html,
+	  acs-core-docs/www/complete-install.html,
+	  acs-core-docs/www/configuring-configuring-packages.html,
+	  acs-core-docs/www/configuring-configuring-permissions.html,
+	  acs-core-docs/www/configuring-install-packages.html,
+	  acs-core-docs/www/configuring-mounting-packages.html,
+	  acs-core-docs/www/contributing-code.html,
+	  acs-core-docs/www/credits.html,
+	  acs-core-docs/www/cvs-guidelines.html,
+	  acs-core-docs/www/cvs-tips.html,
+	  acs-core-docs/www/db-api-detailed.html,
+	  acs-core-docs/www/db-api.html,
+	  acs-core-docs/www/docbook-primer.html,
+	  acs-core-docs/www/eng-standards-constraint-naming.html,
+	  acs-core-docs/www/eng-standards-filenaming.html,
+	  acs-core-docs/www/eng-standards-plsql.html,
+	  acs-core-docs/www/eng-standards-versioning.html,
+	  acs-core-docs/www/ext-auth-requirements.html,
+	  acs-core-docs/www/filename.html,
+	  acs-core-docs/www/form-builder.html,
+	  acs-core-docs/www/high-avail.html,
+	  acs-core-docs/www/how-do-I.html,
+	  acs-core-docs/www/i18n-convert.html,
+	  acs-core-docs/www/index.html,
+	  acs-core-docs/www/individual-programs.html,
+	  acs-core-docs/www/install-cvs.html,
+	  acs-core-docs/www/install-daemontools.html,
+	  acs-core-docs/www/install-full-text-search-openfts.html,
+	  acs-core-docs/www/install-full-text-search-tsearch2.html,
+	  acs-core-docs/www/install-next-add-server.html,
+	  acs-core-docs/www/install-next-nightly-vacuum.html,
+	  acs-core-docs/www/install-openacs-keepalive.html,
+	  acs-core-docs/www/install-qmail.html,
+	  acs-core-docs/www/install-redhat.html,
+	  acs-core-docs/www/install-steps.html,
+	  acs-core-docs/www/ix01.html,
+	  acs-core-docs/www/mac-installation.html,
+	  acs-core-docs/www/maint-performance.html,
+	  acs-core-docs/www/maintenance-deploy.html,
+	  acs-core-docs/www/maintenance-web.html,
+	  acs-core-docs/www/object-identity.html,
+	  acs-core-docs/www/objects.html,
+	  acs-core-docs/www/openacs-cvs-concepts.html,
+	  acs-core-docs/www/openacs-unpack.html,
+	  acs-core-docs/www/openacs.html, acs-core-docs/www/oracle.html,
+	  acs-core-docs/www/packages.html, acs-core-docs/www/parties.html,
+	  acs-core-docs/www/permissions-tediously-explained.html,
+	  acs-core-docs/www/permissions.html,
+	  acs-core-docs/www/postgres.html,
+	  acs-core-docs/www/programming-with-aolserver.html,
+	  acs-core-docs/www/psgml-for-emacs.html,
+	  acs-core-docs/www/psgml-mode.html,
+	  acs-core-docs/www/release-notes-4-5.html,
+	  acs-core-docs/www/release-notes-4-6-2.html,
+	  acs-core-docs/www/release-notes-4-6-3.html,
+	  acs-core-docs/www/release-notes-4-6.html,
+	  acs-core-docs/www/release-notes.html,
+	  acs-core-docs/www/releasing-openacs-core.html,
+	  acs-core-docs/www/request-processor.html,
+	  acs-core-docs/www/requirements-template.html,
+	  acs-core-docs/www/security-notes.html,
+	  acs-core-docs/www/style-guide.html,
+	  acs-core-docs/www/subsites.html, acs-core-docs/www/tcl-doc.html,
+	  acs-core-docs/www/templates.html,
+	  acs-core-docs/www/tutorial-css-layout.html,
+	  acs-core-docs/www/tutorial-cvs.html,
+	  acs-core-docs/www/tutorial-database.html,
+	  acs-core-docs/www/tutorial-debug.html,
+	  acs-core-docs/www/tutorial-distribute.html,
+	  acs-core-docs/www/tutorial-etp-templates.html,
+	  acs-core-docs/www/tutorial-newpackage.html,
+	  acs-core-docs/www/tutorial-pages.html,
+	  acs-core-docs/www/unix-installation.html,
+	  acs-core-docs/www/upgrade-4.5-to-4.6.html,
+	  acs-core-docs/www/upgrade-openacs-files.html,
+	  acs-core-docs/www/upgrade-overview.html,
+	  acs-core-docs/www/using-cvs-with-openacs.html,
+	  acs-core-docs/www/variables.html,
+	  acs-core-docs/www/win2k-installation.html,
+	  acs-core-docs/www/xml/variables.ent,
+	  acs-core-docs/www/xml/for-everyone/release-notes.xml,
+	  acs-kernel/acs-kernel.info, acs-lang/acs-lang.info,
+	  acs-mail/acs-mail.info, acs-messaging/acs-messaging.info,
+	  acs-reference/acs-reference.info,
+	  acs-service-contract/acs-service-contract.info,
+	  acs-subsite/acs-subsite.info, acs-tcl/acs-tcl.info,
+	  acs-templating/acs-templating.info,
+	  ref-timezones/ref-timezones.info, search/search.info: preparing
+	  for 5.2.0 rc2/b8 release
+
+2005-11-29 17:27  donb
+
+	* packages/: acs-content-repository/sql/oracle/content-folder.sql,
+	  acs-content-repository/sql/oracle/upgrade/upgrade-5.2.0b5-5.2.0b6.sql,
+	  acs-subsite/acs-subsite.info: 1. Fixed a wee bit of PG-ish code
+	  that snuck into the content repository's    Oracle datamodel.
+
+	  2. Tested Dave's recent changes to subsite for Oracle.  It works.
+	   Bumped    the info file to reflect the new version so the
+	  upgrade scripts will run.
+
+2005-11-29 11:00  daveb
+
+	* packages/acs-subsite/www/register/user-join.tcl: Fix bug#2689.
+	  Add rel_id to form for required segments, don't show the form if
+	  all the elements are hidden.
+
+2005-11-29 06:27  daveb
+
+	* packages/acs-subsite/sql/: oracle/site-node-selection.sql,
+	  oracle/upgrade/upgrade-5.2.0b5-5.2.0b6.sql,
+	  postgresql/site-node-selection.sql,
+	  postgresql/upgrade/upgrade-5.2.0b5-5.2.0b6.sql: Fix bug#2695. Add
+	  on delete cascade to foreign key in site_nodes_selection table.
+
+2005-11-29 03:39  maltes
+
+	* packages/acs-content-repository/: acs-content-repository.info,
+	  sql/postgresql/upgrade/upgrade-5.2.0b6-5.2.0b7.sql: Somehow the
+	  extlink functions where missing on our installs, so I assume it
+	  is saver to get them again in an upgrade script
+
+2005-11-26 13:25  daveb
+
+	* packages/acs-content-repository/sql/oracle/:
+	  upgrade/upgrade-5.2.0b5-5.2.0b6.sql, content-folder.sql: Allow
+	  content_folders to have non-cr_items as parents
+
+2005-11-26 13:24  daveb
+
+	*
+	  packages/acs-content-repository/sql/postgresql/upgrade/upgrade-5.2.0b5-5.2.0b6.sql:
+	  Upgrade to allow cr_folders to have non-cr_items as parents
+
+2005-11-26 13:22  daveb
+
+	*
+	  packages/acs-content-repository/sql/postgresql/content-folder.sql:
+	  Allow folders to have non-cr_items are parents
+
+2005-11-26 02:05  maltes
+
+	* packages/acs-admin/www/install/install.tcl: Made sure an upgrade
+	  from local works and does not complain about missing functions
+
+2005-11-25 03:13  gustafn
+
+	* packages/acs-tcl/tcl/tcl-documentation-procs.tcl: Fix for bug
+	  #57; If one specifies integer as argument type in a page
+	  contract, it should be a valid tcl integer.  For sequence
+	  numbers, a different type should be defined and used. Tcl 8.5 has
+	  e.g. "string is wideinteger"...
+
+2005-11-22 19:50  daveb
+
+	* packages/acs-mail/tcl/acs-mail-procs.tcl: Set an NSV variable so
+	  that only one instance of process_queue proc runs at at time.
+
+2005-11-22 13:40  daveb
+
+	* packages/acs-templating/tcl/parse-procs.tcl: Fix array reference
+
+2005-11-21 17:27  donb
+
+	* packages/acs-subsite/www/index.adp: Removed Rafael's change to
+	  the default index page due to the following reasons.
+
+	  1. This is OpenACS, not OpenACS/dotLRN.  A .LRN install properly
+	  identifies itself as .LRN.
+
+	  2. The formatting was horrible, with the subsite list ending up
+	  low on the right-hand corner of the page.
+
+	  3. The file was not localized.  If we want more information on
+	  the default index page we need to localize it.
+
+	  4. Changes with this level of visibility - the first thing a
+	  potential new developer sees upon installing the toolkit - should
+	  not be done unilaterally.  We need to talk about such things
+	  first.
+
+2005-11-21 09:49  daveb
+
+	* packages/acs-templating/tcl/parse-procs.tcl: Fix array reference
+
+2005-11-21 09:12  daveb
+
+	* packages/acs-templating/tcl/: parse-procs.tcl,
+	  test/parse-test-procs.tcl: Fix bug#2691, more safely substitute
+	  variables in message keys.  Thanks for Andrew Grumet for the
+	  original code and Jeff for the suggestion to esacpe commands from
+	  an array key reference.  Includes autoamted test code.
+
+2005-11-16 07:50  daveb
+
+	* packages/acs-content-repository/tcl/content-folder-procs.tcl:
+	  Correct comment reference
+
+2005-11-16 07:49  daveb
+
+	* packages/acs-content-repository/tcl/:
+	  test/content-folder-test-procs.tcl, content-folder-procs.tcl: Fix
+	  bug#2686 content::folder::update works now
+
+2005-11-16 07:28  daveb
+
+	*
+	  packages/acs-content-repository/tcl/test/content-item-test-procs.tcl:
+	  Add test for bug#2686
+
+2005-11-15 08:36  daveb
+
+	* packages/acs-content-repository/tcl/: content-item-procs.tcl,
+	  content-item-procs.xql: Let content::item::get work with folders
+
+2005-11-13 10:31  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/:
+	  oacs-fs.js, popups/file-selector.adp, popups/insert-ilink.adp:
+	  fixing IE dependcies (fixed bug for IE in initialization,
+	  improved sizing for IE)
+
+2005-11-12 13:06  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/popups/file-selector.tcl:
+	  Fixing two typos in variable names that were show stoppers.
+
+2005-11-12 04:37  gustafn
+
+	* packages/acs-templating/www/resources/xinha-nightly/: dialog.js,
+	  plugins/CSS/css.js, plugins/ContextMenu/context-menu.js,
+	  plugins/Equation/equation.js, plugins/FullPage/full-page.js,
+	  plugins/ImageManager/editor.php,
+	  plugins/ImageManager/editorFrame.php,
+	  plugins/ImageManager/Classes/Thumbnail.php,
+	  plugins/ImageManager/assets/dialog.js,
+	  plugins/ImageManager/assets/images.js,
+	  plugins/ImageManager/assets/manager.js,
+	  plugins/ImageManager/assets/popup.js,
+	  plugins/SpellChecker/spell-check-ui.js,
+	  plugins/SpellChecker/spell-checker.js,
+	  plugins/TableOperations/table-operations.js, popups/popup.js:
+	  hopefully last updats from xinha repository (these files are not
+	  modified by me at all, only the plugin is new)
+
+2005-11-12 02:41  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/popups/:
+	  blank.html, file-selector.adp, file-selector.tcl,
+	  insert-ilink.adp, insert-ilink.tcl, insert-ilink.xql,
+	  insert-image.adp, insert-image.tcl: Adding missing omitted files
+	  from OacsFs
+
+2005-11-12 02:36  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/img/:
+	  close.gif, insert-ilink.gif, insert-image.gif, qmark.gif, up.gif:
+	  Adding omitted files
+
+2005-11-12 02:21  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/:
+	  fullscreen.adp, fullscreen.tcl, oacs-fs.css, oacs-fs.js: Adding
+	  omitted files from OacsFs plugin
+
+2005-11-11 13:25  gustafn
+
+	* packages/acs-templating/tcl/richtext-procs.tcl,
+	  www/blank-master.adp, www/blank-master.tcl: improved interface
+	  between rich-text widget and rte and xinha. A developer can
+	  specify in the form entry definition to use e.g. xinha, setting
+	  width and height, specify plugins, etc. Default remains rte.
+
+2005-11-11 13:10  gustafn
+
+	*
+	  packages/acs-templating/catalog/acs-templating.en_US.ISO-8859-1.xml:
+	  Message keys for the oacs file selector for xinha
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/popups/blank.html:
+	  file blank.html was added on branch oacs-5-2 on 2005-11-12
+	  10:41:34 +0000
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/popups/file-selector.adp:
+	  file file-selector.adp was added on branch oacs-5-2 on 2005-11-12
+	  10:41:34 +0000
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/popups/file-selector.tcl:
+	  file file-selector.tcl was added on branch oacs-5-2 on 2005-11-12
+	  10:41:34 +0000
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/popups/insert-ilink.adp:
+	  file insert-ilink.adp was added on branch oacs-5-2 on 2005-11-12
+	  10:41:34 +0000
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/popups/insert-ilink.tcl:
+	  file insert-ilink.tcl was added on branch oacs-5-2 on 2005-11-12
+	  10:41:34 +0000
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/popups/insert-ilink.xql:
+	  file insert-ilink.xql was added on branch oacs-5-2 on 2005-11-12
+	  10:41:34 +0000
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/popups/insert-image.adp:
+	  file insert-image.adp was added on branch oacs-5-2 on 2005-11-12
+	  10:41:34 +0000
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/popups/insert-image.tcl:
+	  file insert-image.tcl was added on branch oacs-5-2 on 2005-11-12
+	  10:41:34 +0000
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/img/close.gif:
+	  file close.gif was added on branch oacs-5-2 on 2005-11-12
+	  10:36:16 +0000
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/fullscreen.adp:
+	  file fullscreen.adp was added on branch oacs-5-2 on 2005-11-12
+	  10:21:19 +0000
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/fullscreen.tcl:
+	  file fullscreen.tcl was added on branch oacs-5-2 on 2005-11-12
+	  10:21:19 +0000
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/img/insert-ilink.gif:
+	  file insert-ilink.gif was added on branch oacs-5-2 on 2005-11-12
+	  10:36:16 +0000
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/img/insert-image.gif:
+	  file insert-image.gif was added on branch oacs-5-2 on 2005-11-12
+	  10:36:16 +0000
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/oacs-fs.css:
+	  file oacs-fs.css was added on branch oacs-5-2 on 2005-11-12
+	  10:21:19 +0000
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/oacs-fs.js:
+	  file oacs-fs.js was added on branch oacs-5-2 on 2005-11-12
+	  10:21:19 +0000
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/img/qmark.gif:
+	  file qmark.gif was added on branch oacs-5-2 on 2005-11-12
+	  10:36:16 +0000
+
+2005-11-11 12:32  gustafn
+
+	*
+	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsFs/img/up.gif:
+	  file up.gif was added on branch oacs-5-2 on 2005-11-12 10:36:16
+	  +0000
+
+2005-11-11 12:32  gustafn
+
+	* packages/acs-templating/www/resources/xinha-nightly/: dialog.js,
+	  htmlarea.js, popupwin.js, examples/full_example.js,
+	  plugins/BackgroundImage/background-image.js,
+	  plugins/BackgroundImage/popups/bgimage.html, plugins/CSS/css.js,
+	  plugins/CharCounter/char-counter.js,
+	  plugins/CharacterMap/character-map.js,
+	  plugins/CharacterMap/popups/select_character.html,
+	  plugins/ClientsideSpellcheck/clientside-spellcheck.js,
+	  plugins/ContextMenu/context-menu.js,
+	  plugins/DoubleClick/double-click.js,
+	  plugins/DynamicCSS/dynamiccss.js, plugins/EditTag/edit-tag.js,
+	  plugins/EnterParagraphs/enter-paragraphs.js,
+	  plugins/Equation/equation.js,
+	  plugins/Equation/popups/operations.html,
+	  plugins/Filter/filter.js, plugins/Filter/filters/paragraph.js,
+	  plugins/Filter/filters/word.js,
+	  plugins/FindReplace/find-replace.js,
+	  plugins/FindReplace/fr_engine.js,
+	  plugins/FindReplace/popups/find_replace.html,
+	  plugins/FormOperations/form-operations.js,
+	  plugins/Forms/forms.js, plugins/Forms/popups/fieldset.html,
+	  plugins/Forms/popups/form.html, plugins/Forms/popups/input.html,
+	  plugins/Forms/popups/label.html,
+	  plugins/Forms/popups/select.html,
+	  plugins/Forms/popups/textarea.html,
+	  plugins/FullPage/full-page.js,
+	  plugins/FullPage/popups/docprop.html,
+	  plugins/GetHtml/get-html.js,
+	  plugins/HorizontalRule/popups/edit_horizontal_rule.html,
+	  plugins/HtmlTidy/html-tidy-logic.php,
+	  plugins/HtmlTidy/html-tidy.js, plugins/ImageManager/backend.php,
+	  plugins/ImageManager/config.inc.php,
+	  plugins/ImageManager/editor.php,
+	  plugins/ImageManager/editorFrame.php,
+	  plugins/ImageManager/image-manager.js,
+	  plugins/ImageManager/images.php,
+	  plugins/ImageManager/manager.php,
+	  plugins/ImageManager/resizer.php,
+	  plugins/ImageManager/thumbs.php,
+	  plugins/ImageManager/Classes/Files.php,
+	  plugins/ImageManager/Classes/GD.php,
+	  plugins/ImageManager/Classes/IM.php,
+	  plugins/ImageManager/Classes/ImageEditor.php,
+	  plugins/ImageManager/Classes/ImageManager.php,
+	  plugins/ImageManager/Classes/NetPBM.php,
+	  plugins/ImageManager/Classes/Thumbnail.php,
+	  plugins/ImageManager/Classes/Transform.php,
+	  plugins/ImageManager/assets/dialog.js,
+	  plugins/ImageManager/assets/editor.js,
+	  plugins/ImageManager/assets/editorFrame.js,
+	  plugins/ImageManager/assets/images.js,
+	  plugins/ImageManager/assets/manager.js,
+	  plugins/ImageManager/assets/popup.js,
+	  plugins/InsertAnchor/popups/insert_anchor.html,
+	  plugins/InsertMarquee/insert-marquee.js,
+	  plugins/InsertMarquee/popups/insert_marquee.html,
+	  plugins/InsertPagebreak/insert-pagebreak.js,
+	  plugins/InsertPicture/InsertPicture.php,
+	  plugins/InsertPicture/insert-picture.js,
+	  plugins/InsertPicture/viewpicture.html,
+	  plugins/InsertSmiley/insert-smiley.js,
+	  plugins/InsertSmiley/popups/insertsmiley.html,
+	  plugins/InsertWords/insert-words.js,
+	  plugins/LangMarks/lang-marks.js, plugins/Linker/linker.js,
+	  plugins/Linker/dTree/dtree.js, plugins/ListType/list-type.js,
+	  plugins/NoteServer/note-server.js,
+	  plugins/NoteServer/popups/codenote.html,
+	  plugins/OacsFs/fullscreen.adp, plugins/OacsFs/fullscreen.tcl,
+	  plugins/OacsFs/oacs-fs.css, plugins/OacsFs/oacs-fs.js,
+	  plugins/OacsFs/img/close.gif,
+	  plugins/OacsFs/img/insert-ilink.gif,
+	  plugins/OacsFs/img/insert-image.gif,
+	  plugins/OacsFs/img/qmark.gif, plugins/OacsFs/img/up.gif,
+	  plugins/OacsFs/popups/blank.html,
+	  plugins/OacsFs/popups/file-selector.adp,
+	  plugins/OacsFs/popups/file-selector.tcl,
+	  plugins/OacsFs/popups/insert-ilink.adp,
+	  plugins/OacsFs/popups/insert-ilink.tcl,
+	  plugins/OacsFs/popups/insert-ilink.xql,
+	  plugins/OacsFs/popups/insert-image.adp,
+	  plugins/OacsFs/popups/insert-image.tcl,
+	  plugins/PasteText/paste-text.js, plugins/QuickTag/quick-tag.js,
+	  plugins/QuickTag/popups/quicktag.html,
+	  plugins/SpellChecker/spell-check-logic.cgi,
+	  plugins/SpellChecker/spell-check-logic.php,
+	  plugins/SpellChecker/spell-check-ui.html,
+	  plugins/SpellChecker/spell-check-ui.js,
+	  plugins/SpellChecker/spell-checker.js,
+	  plugins/Stylist/stylist.js,
+	  plugins/TableOperations/table-operations.js,
+	  plugins/Template/template.js,
+	  plugins/Template/popups/template.html,
+	  plugins/UnFormat/un-format.js,
+	  plugins/UnFormat/popups/unformat.html, popups/editor_help.html,
+	  popups/insert_image.html, popups/insert_table.html,
+	  popups/link.html, popups/popup.js, skins/blue-look/skin.css,
+	  skins/blue-metallic/skin.css, skins/green-look/skin.css,
+	  skins/inditreuse/skin.css, skins/titan/skin.css,
+	  skins/xp-blue/skin.css, skins/xp-green/skin.css: New version of
+	  xinha, new plugin OacsFS for xinha (file-selector for OACS).
+
+2005-11-11 09:47  maltes
+
+	* packages/acs-tcl/lib/page-error.tcl: Errors should be send to the
+	  HostAdministrator, not to the SystemOwner, as the
+	  hostadministrator deals with technical issues, not the system
+	  owner
+
+2005-11-10 14:21  gerardom
+
+	* packages/acs-templating/tcl/richtext-procs.tcl: fixed a bug, it
+	  was impossible to submit a form if the html area was not on the
+	  page
+
+2005-11-10 08:14  gerardom
+
+	* packages/acs-automated-testing/tcl/aa-test-procs.tcl: now if
+	  there is no mounted instance of the package the proc
+	  aa_get_first_url will mount it
+
+2005-11-09 11:36  miguelm
+
+	* packages/acs-templating/resources/lists/select-menu.adp: adding
+	  javascripts to support multival filters functionallity
+
+2005-11-09 11:35  miguelm
+
+	* packages/acs-templating/tcl/list-procs.tcl: changes to use
+	  multival filter type in resources/lists/ files
+
+2005-11-09 11:33  miguelm
+
+	* packages/acs-templating/acs-templating.info: adding URL of
+	  license
+
+2005-11-09 11:30  miguelm
+
+	* packages/acs-templating/acs-templating.info: increment version
+	  number to get changes in list-procs.tcl procedures for multival
+	  filter type
+
+2005-11-02 01:20  gustafn
+
+	* packages/acs-templating/www/resources/xinha-nightly/: dialog.js,
+	  htmlarea.css, htmlarea.js, inline-dialog.js, license.txt,
+	  panel-dialog.js, popupwin.js, contrib/lc_parse_strings.php,
+	  examples/Extended.html, examples/custom.css,
+	  examples/dynamic.css, examples/ext_example-body.html,
+	  examples/ext_example-dest.php, examples/ext_example-menu.php,
+	  examples/ext_example.html, examples/full_example-body.html,
+	  examples/full_example-menu.html, examples/full_example.css,
+	  examples/full_example.html, examples/full_example.js,
+	  examples/stylist.css, examples/testbed.html, images/ed_about.gif,
+	  images/ed_align.gif, images/ed_align_center.gif,
+	  images/ed_align_justify.gif, images/ed_align_left.gif,
+	  images/ed_align_right.gif, images/ed_blank.gif,
+	  images/ed_buttons_main.gif, images/ed_charmap.gif,
+	  images/ed_clearfonts.gif, images/ed_color_bg.gif,
+	  images/ed_color_fg.gif, images/ed_copy.gif, images/ed_custom.gif,
+	  images/ed_cut.gif, images/ed_delete.gif,
+	  images/ed_format_bold.gif, images/ed_format_italic.gif,
+	  images/ed_format_strike.gif, images/ed_format_sub.gif,
+	  images/ed_format_sup.gif, images/ed_format_underline.gif,
+	  images/ed_help.gif, images/ed_hr.gif, images/ed_html.gif,
+	  images/ed_image.gif, images/ed_indent_less.gif,
+	  images/ed_indent_more.gif, images/ed_killword.gif,
+	  images/ed_left_to_right.gif, images/ed_link.gif,
+	  images/ed_list_bullet.gif, images/ed_list_num.gif,
+	  images/ed_overwrite.gif, images/ed_paste.gif,
+	  images/ed_print.gif, images/ed_redo.gif,
+	  images/ed_right_to_left.gif, images/ed_rmformat.gif,
+	  images/ed_save.gif, images/ed_save.png, images/ed_saveas.gif,
+	  images/ed_selectall.gif, images/ed_show_border.gif,
+	  images/ed_splitblock.gif, images/ed_splitcel.gif,
+	  images/ed_undo.gif, images/ed_word_cleaner.gif,
+	  images/fullscreen_maximize.gif, images/fullscreen_minimize.gif,
+	  images/insert_table.gif, images/insertfilelink.gif,
+	  images/insertmacro.png, images/tidy.gif,
+	  images/toggle_borders.gif, lang/b5.js, lang/ch.js, lang/cz.js,
+	  lang/da.js, lang/de.js, lang/ee.js, lang/el.js, lang/es.js,
+	  lang/fi.js, lang/fr.js, lang/gb.js, lang/he.js, lang/hu.js,
+	  lang/it.js, lang/ja.js, lang/lt.js, lang/lv.js, lang/nb.js,
+	  lang/nl.js, lang/no.js, lang/pl.js, lang/pt_br.js, lang/ro.js,
+	  lang/ru.js, lang/se.js, lang/si.js, lang/vn.js,
+	  popups/about.html, popups/blank.html, popups/color_picker.js,
+	  popups/custom2.html, popups/editor_help.html,
+	  popups/insert_image.html, popups/insert_table.html,
+	  popups/link.html, popups/old_insert_image.html, popups/popup.css,
+	  popups/popup.js, popups/select_color.html,
+	  skins/blue-look/button-background.png,
+	  skins/blue-look/separator.gif, skins/blue-look/skin.css,
+	  skins/blue-metallic/button-background.png,
+	  skins/blue-metallic/separator.gif, skins/blue-metallic/skin.css,
+	  skins/green-look/button-background.gif,
+	  skins/green-look/separator.gif, skins/green-look/skin.css,
+	  skins/inditreuse/README, skins/inditreuse/back.png,
+	  skins/inditreuse/button-background.png,
+	  skins/inditreuse/hover.png, skins/inditreuse/selected.png,
+	  skins/inditreuse/separator.png, skins/inditreuse/skin.css,
+	  skins/titan/README, skins/titan/back.png,
+	  skins/titan/button-background.png, skins/titan/hover.png,
+	  skins/titan/selected.png, skins/titan/separator.png,
+	  skins/titan/skin.css, skins/xp-blue/back.png,
+	  skins/xp-blue/button-background.png, skins/xp-blue/hover.png,
+	  skins/xp-blue/selected.png, skins/xp-blue/separator.png,
+	  skins/xp-blue/skin.css, skins/xp-green/back.png,
+	  skins/xp-green/button-background.png, skins/xp-green/hover.png,
+	  skins/xp-green/selected.png, skins/xp-green/separator.png,
+	  skins/xp-green/skin.css: initial-checkin
+
+2005-11-02 00:55  gustafn
+
+	* packages/acs-templating/www/resources/xinha-nightly/plugins/:
+	  BackgroundImage/background-image.js,
+	  BackgroundImage/popups/bgimage.html,
+	  CharacterMap/character-map.js, CSS/css.js,
+	  CharCounter/char-counter.js,
+	  CharacterMap/popups/select_character.html,
+	  ClientsideSpellcheck/clientside-spellcheck.js,
+	  ContextMenu/context-menu.js, DoubleClick/double-click.js,
+	  DynamicCSS/dynamiccss.js, EditTag/edit-tag.js,
+	  EnterParagraphs/enter-paragraphs.js, Equation/equation.js,
+	  Equation/popups/operations.html, Filter/filter.js,
+	  Filter/filters/paragraph.js, Filter/filters/word.js,
+	  FindReplace/find-replace.js, FindReplace/fr_engine.js,
+	  FindReplace/popups/find_replace.html,
+	  FormOperations/form-operations.js, Forms/forms.js,
+	  Forms/popups/fieldset.html, Forms/popups/form.html,
+	  Forms/popups/input.html, Forms/popups/label.html,
+	  Forms/popups/select.html, Forms/popups/textarea.html,
+	  FullPage/full-page.js, FullPage/popups/docprop.html,
+	  GetHtml/get-html.js,
+	  HorizontalRule/popups/edit_horizontal_rule.html,
+	  HtmlTidy/html-tidy-logic.php, HtmlTidy/html-tidy.js,
+	  ImageManager/backend.php, ImageManager/config.inc.php,
+	  ImageManager/editor.php, ImageManager/editorFrame.php,
+	  ImageManager/image-manager.js, ImageManager/images.php,
+	  ImageManager/manager.php, ImageManager/resizer.php,
+	  ImageManager/thumbs.php, ImageManager/assets/dialog.js,
+	  ImageManager/assets/editor.js,
+	  ImageManager/assets/editorFrame.js,
+	  ImageManager/Classes/Files.php, ImageManager/Classes/GD.php,
+	  ImageManager/Classes/IM.php,
+	  ImageManager/Classes/ImageEditor.php,
+	  ImageManager/Classes/ImageManager.php,
+	  ImageManager/Classes/NetPBM.php,
+	  ImageManager/Classes/Thumbnail.php,
+	  ImageManager/assets/images.js, ImageManager/assets/manager.js,
+	  ImageManager/assets/popup.js, ImageManager/Classes/Transform.php,
+	  InsertAnchor/popups/insert_anchor.html,
+	  InsertMarquee/insert-marquee.js,
+	  InsertMarquee/popups/insert_marquee.html,
+	  InsertPagebreak/insert-pagebreak.js,
+	  InsertPicture/InsertPicture.php, InsertPicture/insert-picture.js,
+	  InsertPicture/viewpicture.html, InsertSmiley/insert-smiley.js,
+	  InsertSmiley/popups/insertsmiley.html,
+	  InsertWords/insert-words.js, LangMarks/lang-marks.js,
+	  Linker/linker.js, Linker/dTree/dtree.js, ListType/list-type.js,
+	  NoteServer/note-server.js, NoteServer/popups/codenote.html,
+	  PasteText/paste-text.js, QuickTag/quick-tag.js,
+	  QuickTag/popups/quicktag.html,
+	  SpellChecker/spell-check-logic.cgi,
+	  SpellChecker/spell-check-logic.php,
+	  SpellChecker/spell-check-ui.html, SpellChecker/spell-check-ui.js,
+	  SpellChecker/spell-checker.js, Stylist/stylist.js,
+	  TableOperations/table-operations.js, Template/template.js,
+	  Template/popups/template.html, UnFormat/un-format.js,
+	  UnFormat/popups/unformat.html: Initial revision
+
+2005-11-02 00:55  gustafn
+
+	* packages/acs-templating/www/resources/xinha-nightly/:
+	  images/de/bold.gif, images/de/italic.gif,
+	  images/de/underline.gif, plugins/Abbreviation/abbreviation.css,
+	  plugins/Abbreviation/abbreviation.js,
+	  plugins/Abbreviation/abbr/de.js, plugins/Abbreviation/abbr/en.js,
+	  plugins/Abbreviation/img/ed_abbreviation.gif,
+	  plugins/Abbreviation/lang/de.js, plugins/Abbreviation/lang/fr.js,
+	  plugins/Abbreviation/lang/no.js,
+	  plugins/Abbreviation/popups/abbreviation.html,
+	  plugins/BackgroundImage/backgrounds/blufur.jpg,
+	  plugins/BackgroundImage/backgrounds/palecnvs.jpg,
+	  plugins/BackgroundImage/backgrounds/ppplcnvs.jpg,
+	  plugins/BackgroundImage/backgrounds/ylwsand.jpg,
+	  plugins/BackgroundImage/backgrounds/thumbnails/blufur.jpg,
+	  plugins/BackgroundImage/backgrounds/thumbnails/palecnvs.jpg,
+	  plugins/BackgroundImage/backgrounds/thumbnails/ppplcnvs.jpg,
+	  plugins/BackgroundImage/backgrounds/thumbnails/ylwsand.jpg,
+	  plugins/BackgroundImage/img/ed_bgimage.gif,
+	  plugins/BackgroundImage/lang/de.js,
+	  plugins/BackgroundImage/lang/fr.js,
+	  plugins/BackgroundImage/lang/no.js,
+	  plugins/CharacterMap/CharacterMap.css,
+	  plugins/CharacterMap/img/ed_charmap.gif,
+	  plugins/CharacterMap/lang/de.js, plugins/CharacterMap/lang/fr.js,
+	  plugins/CharacterMap/lang/it.js, plugins/CharacterMap/lang/nl.js,
+	  plugins/CharacterMap/lang/no.js, plugins/CharCounter/lang/de.js,
+	  plugins/CharCounter/lang/fr.js, plugins/CharCounter/lang/no.js,
+	  plugins/ClientsideSpellcheck/img/clientside-spellcheck.gif,
+	  plugins/ClientsideSpellcheck/img/he-spell-check.gif,
+	  plugins/ClientsideSpellcheck/lang/de.js,
+	  plugins/ContextMenu/1.pl, plugins/ContextMenu/menu.css,
+	  plugins/ContextMenu/lang/de.js, plugins/ContextMenu/lang/el.js,
+	  plugins/ContextMenu/lang/fr.js, plugins/ContextMenu/lang/he.js,
+	  plugins/ContextMenu/lang/nl.js, plugins/ContextMenu/lang/no.js,
+	  plugins/ContextMenu/lang/pl.js, plugins/DynamicCSS/lang/de.js,
+	  plugins/DynamicCSS/lang/fr.js, plugins/DynamicCSS/lang/nl.js,
+	  plugins/DynamicCSS/lang/no.js,
+	  plugins/EditTag/img/ed_edit_tag.gif, plugins/EditTag/lang/de.js,
+	  plugins/EditTag/lang/fr.js, plugins/EditTag/lang/no.js,
+	  plugins/EditTag/popups/edit_tag.html,
+	  plugins/Equation/img/abs_value.gif,
+	  plugins/Equation/img/diag_fraction.gif,
+	  plugins/Equation/img/divide.gif,
+	  plugins/Equation/img/dsp_greater_equal.gif,
+	  plugins/Equation/img/dsp_less_equal.gif,
+	  plugins/Equation/img/dsp_notequal.gif,
+	  plugins/Equation/img/equation.gif,
+	  plugins/Equation/img/equation.old.gif,
+	  plugins/Equation/img/greater_equal_than.gif,
+	  plugins/Equation/img/hor_fraction.gif,
+	  plugins/Equation/img/less_equal_than.gif,
+	  plugins/Equation/img/mul.gif, plugins/Equation/img/notequal.gif,
+	  plugins/Equation/img/parenthesis.gif,
+	  plugins/Equation/img/root.gif,
+	  plugins/Equation/img/square_root.gif,
+	  plugins/Equation/lang/de.js, plugins/Equation/lang/fr.js,
+	  plugins/Equation/lang/no.js, plugins/Filter/img/ed_filter.gif,
+	  plugins/FindReplace/img/ed_find.gif,
+	  plugins/FindReplace/lang/de.js, plugins/FindReplace/lang/fr.js,
+	  plugins/FindReplace/lang/no.js, plugins/FindReplace/lang/pl.js,
+	  plugins/FindReplace/lang/pt_br.js, plugins/FormOperations/README,
+	  plugins/FormOperations/default_form.html,
+	  plugins/FormOperations/formmail.php,
+	  plugins/FormOperations/iframe.css,
+	  plugins/FormOperations/panel.html,
+	  plugins/FormOperations/img/buttons.gif,
+	  plugins/FormOperations/lang/de.js,
+	  plugins/FormOperations/lang/fr.js,
+	  plugins/FormOperations/lang/no.js, plugins/Forms/forms.css,
+	  plugins/Forms/img/ed_button.gif,
+	  plugins/Forms/img/ed_checkbox.gif,
+	  plugins/Forms/img/ed_fieldset.gif, plugins/Forms/img/ed_file.gif,
+	  plugins/Forms/img/ed_form.gif, plugins/Forms/img/ed_hidden.gif,
+	  plugins/Forms/img/ed_image.gif, plugins/Forms/img/ed_label.gif,
+	  plugins/Forms/img/ed_password.gif,
+	  plugins/Forms/img/ed_radio.gif, plugins/Forms/img/ed_reset.gif,
+	  plugins/Forms/img/ed_select.gif, plugins/Forms/img/ed_submit.gif,
+	  plugins/Forms/img/ed_text.gif, plugins/Forms/img/ed_textarea.gif,
+	  plugins/FullPage/img/docprop.gif, plugins/FullPage/lang/de.js,
+	  plugins/FullPage/lang/fr.js, plugins/FullPage/lang/he.js,
+	  plugins/FullPage/lang/nl.js, plugins/FullPage/lang/no.js,
+	  plugins/FullPage/lang/pl.js, plugins/FullPage/lang/ro.js,
+	  plugins/FullScreen/full-screen.js, plugins/FullScreen/lang/de.js,
+	  plugins/FullScreen/lang/fr.js, plugins/FullScreen/lang/no.js,
+	  plugins/FullScreen/lang/pl.js,
+	  plugins/HorizontalRule/horizontal-rule.js,
+	  plugins/HorizontalRule/lang/de.js,
+	  plugins/HorizontalRule/lang/fr.js,
+	  plugins/HorizontalRule/lang/no.js,
+	  plugins/HtmlTidy/html-tidy-config.cfg, plugins/HtmlTidy/README,
+	  plugins/HtmlTidy/img/html-tidy.gif, plugins/HtmlTidy/lang/de.js,
+	  plugins/HtmlTidy/lang/fr.js, plugins/HtmlTidy/lang/nl.js,
+	  plugins/HtmlTidy/lang/no.js, plugins/ImageManager/README.txt,
+	  plugins/ImageManager/ddt.php,
+	  plugins/ImageManager/newFolder.html,
+	  plugins/ImageManager/assets/EditorContent.js,
+	  plugins/ImageManager/assets/ImageEditor.css,
+	  plugins/ImageManager/assets/editor.css,
+	  plugins/ImageManager/assets/editorFrame.css,
+	  plugins/ImageManager/assets/hover.htc,
+	  plugins/ImageManager/assets/imagelist.css,
+	  plugins/ImageManager/assets/manager.css,
+	  plugins/ImageManager/assets/slider.js,
+	  plugins/ImageManager/assets/wz_jsgraphics.js,
+	  plugins/ImageManager/demo_images/bikerpeep.jpg,
+	  plugins/ImageManager/demo_images/wesnoth078.jpg,
+	  plugins/ImageManager/demo_images/linux/linux.gif,
+	  plugins/ImageManager/img/2x2.gif,
+	  plugins/ImageManager/img/2x2_w.gif,
+	  plugins/ImageManager/img/btnFolderNew.gif,
+	  plugins/ImageManager/img/btnFolderUp.gif,
+	  plugins/ImageManager/img/btn_cancel.gif,
+	  plugins/ImageManager/img/btn_ok.gif,
+	  plugins/ImageManager/img/crop.gif,
+	  plugins/ImageManager/img/default.gif,
+	  plugins/ImageManager/img/div.gif,
+	  plugins/ImageManager/img/dots.gif,
+	  plugins/ImageManager/img/edit_active.gif,
+	  plugins/ImageManager/img/edit_pencil.gif,
+	  plugins/ImageManager/img/edit_trash.gif,
+	  plugins/ImageManager/img/folder.gif,
+	  plugins/ImageManager/img/hand.gif,
+	  plugins/ImageManager/img/islocked2.gif,
+	  plugins/ImageManager/img/locked.gif,
+	  plugins/ImageManager/img/measure.gif,
+	  plugins/ImageManager/img/noimages.gif,
+	  plugins/ImageManager/img/rotate.gif,
+	  plugins/ImageManager/img/save.gif,
+	  plugins/ImageManager/img/scale.gif,
+	  plugins/ImageManager/img/spacer.gif,
+	  plugins/ImageManager/img/t_black.gif,
+	  plugins/ImageManager/img/t_white.gif,
+	  plugins/ImageManager/img/Thumbs.db,
+	  plugins/ImageManager/img/unlocked.gif,
+	  plugins/ImageManager/img/unlocked2.gif,
+	  plugins/ImageManager/lang/de.js, plugins/ImageManager/lang/fr.js,
+	  plugins/ImageManager/lang/no.js, plugins/ImageManager/lang/pl.js,
+	  plugins/InsertAnchor/insert-anchor.css,
+	  plugins/InsertAnchor/insert-anchor.js,
+	  plugins/InsertAnchor/img/insert-anchor.gif,
+	  plugins/InsertAnchor/img/placeholder.gif,
+	  plugins/InsertAnchor/lang/de.js, plugins/InsertAnchor/lang/fr.js,
+	  plugins/InsertAnchor/lang/no.js, plugins/InsertAnchor/lang/pl.js,
+	  plugins/InsertMarquee/img/ed_marquee.gif,
+	  plugins/InsertMarquee/lang/de.js,
+	  plugins/InsertMarquee/lang/fr.js,
+	  plugins/InsertMarquee/lang/it.js,
+	  plugins/InsertMarquee/lang/no.js,
+	  plugins/InsertPagebreak/img/pagebreak.gif,
+	  plugins/InsertPagebreak/lang/de.js,
+	  plugins/InsertPagebreak/lang/fr.js,
+	  plugins/InsertPagebreak/lang/no.js,
+	  plugins/InsertPicture/demo_pictures/bikerpeep.jpg,
+	  plugins/InsertPicture/demo_pictures/wesnoth078.jpg,
+	  plugins/InsertPicture/img/btn_open.gif,
+	  plugins/InsertPicture/img/nopic.gif,
+	  plugins/InsertPicture/lang/de.js,
+	  plugins/InsertPicture/lang/fr.js,
+	  plugins/InsertPicture/lang/no.js,
+	  plugins/InsertSmiley/img/ed_smiley.gif,
+	  plugins/InsertSmiley/lang/de.js, plugins/InsertSmiley/lang/fr.js,
+	  plugins/InsertSmiley/lang/no.js,
+	  plugins/InsertSmiley/smileys/0001.gif,
+	  plugins/InsertSmiley/smileys/0002.gif,
+	  plugins/InsertSmiley/smileys/0003.gif,
+	  plugins/InsertSmiley/smileys/0004.gif,
+	  plugins/InsertSmiley/smileys/0005.gif,
+	  plugins/InsertSmiley/smileys/0006.gif,
+	  plugins/InsertSmiley/smileys/0007.gif,
+	  plugins/InsertSmiley/smileys/0008.gif,
+	  plugins/InsertSmiley/smileys/0009.gif,
+	  plugins/InsertSmiley/smileys/0010.gif,
+	  plugins/InsertSmiley/smileys/0011.gif,
+	  plugins/InsertSmiley/smileys/0012.gif,
+	  plugins/InsertSmiley/smileys/0013.gif,
+	  plugins/InsertSmiley/smileys/0014.gif,
+	  plugins/InsertSmiley/smileys/0015.gif,
+	  plugins/InsertSmiley/smileys/0016.gif,
+	  plugins/InsertSmiley/smileys/0017.gif,
+	  plugins/InsertSmiley/smileys/0018.gif,
+	  plugins/InsertSmiley/smileys/0019.gif,
+	  plugins/InsertSmiley/smileys/0020.gif,
+	  plugins/InsertSmiley/smileys/0021.gif,
+	  plugins/InsertSmiley/smileys/0022.gif,
+	  plugins/InsertSmiley/smileys/0023.gif,
+	  plugins/InsertSmiley/smileys/0024.gif,
+	  plugins/InsertSmiley/smileys/0025.gif,
+	  plugins/InsertSmiley/smileys/0026.gif,
+	  plugins/InsertSmiley/smileys/0027.gif,
+	  plugins/InsertSmiley/smileys/0028.gif,
+	  plugins/InsertSmiley/smileys/0029.gif,
+	  plugins/InsertSmiley/smileys/0030.gif,
+	  plugins/InsertSmiley/smileys/0031.gif,
+	  plugins/InsertSmiley/smileys/0032.gif,
+	  plugins/InsertSmiley/smileys/0033.gif,
+	  plugins/InsertSmiley/smileys/0034.gif,
+	  plugins/InsertSmiley/smileys/0035.gif,
+	  plugins/InsertSmiley/smileys/0036.gif,
+	  plugins/InsertSmiley/smileys/0037.gif,
+	  plugins/InsertSmiley/smileys/0038.gif,
+	  plugins/InsertSmiley/smileys/0039.gif,
+	  plugins/InsertSmiley/smileys/0040.gif,
+	  plugins/InsertSmiley/smileys/0041.gif,
+	  plugins/InsertSmiley/smileys/0042.gif,
+	  plugins/InsertSmiley/smileys/0043.gif,
+	  plugins/InsertSmiley/smileys/0044.gif,
+	  plugins/InsertSmiley/smileys/0045.gif,
+	  plugins/InsertSmiley/smileys/0046.gif,
+	  plugins/InsertSmiley/smileys/0047.gif,
+	  plugins/InsertSmiley/smileys/0048.gif,
+	  plugins/InsertSmiley/smileys/0049.gif,
+	  plugins/InsertSmiley/smileys/0050.gif,
+	  plugins/InsertSmiley/smileys/0051.gif,
+	  plugins/InsertSmiley/smileys/0052.gif,
+	  plugins/InsertSmiley/smileys/0053.gif,
+	  plugins/InsertSmiley/smileys/0054.gif,
+	  plugins/InsertSmiley/smileys/0055.gif,
+	  plugins/InsertSmiley/smileys/0056.gif,
+	  plugins/InsertSmiley/smileys/0057.gif,
+	  plugins/InsertSmiley/smileys/0058.gif,
+	  plugins/InsertSmiley/smileys/0059.gif,
+	  plugins/InsertSmiley/smileys/0060.gif,
+	  plugins/InsertSmiley/smileys/0061.gif,
+	  plugins/InsertSmiley/smileys/0062.gif,
+	  plugins/InsertSmiley/smileys/0063.gif,
+	  plugins/InsertSmiley/smileys/0064.gif,
+	  plugins/InsertSmiley/smileys/0065.gif,
+	  plugins/InsertSmiley/smileys/0066.gif,
+	  plugins/InsertSmiley/smileys/0067.gif,
+	  plugins/InsertSmiley/smileys/0068.gif,
+	  plugins/InsertSmiley/smileys/0069.gif,
+	  plugins/InsertSmiley/smileys/0070.gif,
+	  plugins/InsertSmiley/smileys/0071.gif,
+	  plugins/InsertSmiley/smileys/0072.gif,
+	  plugins/InsertSmiley/smileys/0073.gif,
+	  plugins/InsertSmiley/smileys/0074.gif,
+	  plugins/InsertSmiley/smileys/0075.gif,
+	  plugins/InsertSmiley/smileys/0076.gif,
+	  plugins/InsertSmiley/smileys/0077.gif,
+	  plugins/InsertSmiley/smileys/0078.gif,
+	  plugins/InsertSmiley/smileys/0079.gif,
+	  plugins/InsertSmiley/smileys/0080.gif,
+	  plugins/InsertSmiley/smileys/0081.gif,
+	  plugins/InsertSmiley/smileys/0082.gif,
+	  plugins/InsertSmiley/smileys/0083.gif,
+	  plugins/InsertSmiley/smileys/0084.gif,
+	  plugins/InsertSmiley/smileys/0085.gif,
+	  plugins/InsertSmiley/smileys/0086.gif,
+	  plugins/InsertSmiley/smileys/0087.gif,
+	  plugins/InsertSmiley/smileys/0088.gif,
+	  plugins/InsertSmiley/smileys/0089.gif,
+	  plugins/InsertSmiley/smileys/0090.gif,
+	  plugins/InsertSmiley/smileys/0091.gif,
+	  plugins/InsertSmiley/smileys/0092.gif,
+	  plugins/InsertSmiley/smileys/0093.gif,
+	  plugins/InsertSmiley/smileys/0094.gif,
+	  plugins/InsertSmiley/smileys/0095.gif,
+	  plugins/InsertSmiley/smileys/0096.gif,
+	  plugins/InsertSmiley/smileys/0097.gif,
+	  plugins/InsertSmiley/smileys/0098.gif,
+	  plugins/InsertSmiley/smileys/0099.gif,
+	  plugins/InsertSmiley/smileys/0100.gif,
+	  plugins/InsertSmiley/smileys/0101.gif,
+	  plugins/InsertSmiley/smileys/0102.gif,
+	  plugins/InsertSmiley/smileys/0103.gif,
+	  plugins/InsertSmiley/smileys/0104.gif,
+	  plugins/InsertSmiley/smileys/0105.gif,
+	  plugins/InsertSmiley/smileys/0106.gif,
+	  plugins/InsertSmiley/smileys/0107.gif,
+	  plugins/InsertSmiley/smileys/0108.gif,
+	  plugins/InsertSmiley/smileys/0109.gif,
+	  plugins/InsertSmiley/smileys/0110.gif,
+	  plugins/InsertSmiley/smileys/0111.gif,
+	  plugins/InsertSmiley/smileys/0112.gif,
+	  plugins/InsertSmiley/smileys/0113.gif,
+	  plugins/InsertSmiley/smileys/0114.gif,
+	  plugins/InsertSmiley/smileys/0115.gif,
+	  plugins/InsertSmiley/smileys/0116.gif,
+	  plugins/InsertSmiley/smileys/0117.gif,
+	  plugins/InsertSmiley/smileys/0118.gif,
+	  plugins/InsertSmiley/smileys/0119.gif,
+	  plugins/InsertSmiley/smileys/0120.gif,
+	  plugins/InsertSmiley/smileys/0121.gif,
+	  plugins/InsertSmiley/smileys/0122.gif,
+	  plugins/InsertSmiley/smileys/0123.gif,
+	  plugins/InsertSmiley/smileys/0124.gif,
+	  plugins/InsertSmiley/smileys/0125.gif,
+	  plugins/InsertSmiley/smileys/0126.gif,
+	  plugins/InsertSmiley/smileys/0127.gif,
+	  plugins/InsertSmiley/smileys/0128.gif,
+	  plugins/InsertSmiley/smileys/0129.gif,
+	  plugins/InsertSmiley/smileys/0130.gif,
+	  plugins/InsertSmiley/smileys/0131.gif,
+	  plugins/InsertSmiley/smileys/0132.gif,
+	  plugins/InsertSmiley/smileys/0133.gif,
+	  plugins/InsertSmiley/smileys/0134.gif,
+	  plugins/InsertSmiley/smileys/0135.gif,
+	  plugins/InsertSmiley/smileys/0136.gif,
+	  plugins/InsertSmiley/smileys/0137.gif,
+	  plugins/InsertSmiley/smileys/0138.gif,
+	  plugins/InsertSmiley/smileys/0139.gif,
+	  plugins/InsertSmiley/smileys/0140.gif,
+	  plugins/InsertSmiley/smileys/0141.gif,
+	  plugins/InsertSmiley/smileys/0142.gif,
+	  plugins/InsertSmiley/smileys/0143.gif,
+	  plugins/InsertSmiley/smileys/0144.gif,
+	  plugins/InsertSmiley/smileys/0145.gif,
+	  plugins/InsertSmiley/smileys/0146.gif,
+	  plugins/InsertSmiley/smileys/0147.gif,
+	  plugins/InsertSmiley/smileys/0148.gif,
+	  plugins/InsertSmiley/smileys/0149.gif,
+	  plugins/InsertSmiley/smileys/0150.gif,
+	  plugins/InsertSmiley/smileys/0151.gif,
+	  plugins/InsertSmiley/smileys/0152.gif,
+	  plugins/InsertSmiley/smileys/0153.gif,
+	  plugins/InsertSmiley/smileys/0154.gif,
+	  plugins/InsertSmiley/smileys/0155.gif,
+	  plugins/InsertSmiley/smileys/0156.gif,
+	  plugins/InsertSmiley/smileys/0157.gif,
+	  plugins/InsertSmiley/smileys/0158.gif,
+	  plugins/InsertSmiley/smileys/0159.gif,
+	  plugins/InsertSmiley/smileys/0160.gif,
+	  plugins/InsertSmiley/smileys/0161.gif,
+	  plugins/InsertSmiley/smileys/0162.gif,
+	  plugins/InsertSmiley/smileys/0163.gif,
+	  plugins/InsertSmiley/smileys/0164.gif,
+	  plugins/InsertSmiley/smileys/0165.gif,
+	  plugins/InsertSmiley/smileys/0166.gif,
+	  plugins/InsertSmiley/smileys/0167.gif,
+	  plugins/InsertSmiley/smileys/0168.gif,
+	  plugins/InsertSmiley/smileys/0169.gif,
+	  plugins/InsertSmiley/smileys/0170.gif,
+	  plugins/InsertSmiley/smileys/0171.gif,
+	  plugins/InsertSmiley/smileys/0172.gif,
+	  plugins/InsertSmiley/smileys/0173.gif,
+	  plugins/InsertSmiley/smileys/0174.gif,
+	  plugins/InsertSmiley/smileys/0175.gif,
+	  plugins/InsertSmiley/smileys/0176.gif,
+	  plugins/InsertSmiley/smileys/0177.gif,
+	  plugins/InsertSmiley/smileys/0178.gif,
+	  plugins/InsertSmiley/smileys/0179.gif,
+	  plugins/InsertSmiley/smileys/0180.gif,
+	  plugins/InsertSmiley/smileys/0181.gif,
+	  plugins/InsertSmiley/smileys/0182.gif,
+	  plugins/InsertSmiley/smileys/0183.gif,
+	  plugins/InsertSmiley/smileys/0184.gif,
+	  plugins/InsertSmiley/smileys/0185.gif,
+	  plugins/InsertSmiley/smileys/0186.gif,
+	  plugins/InsertSmiley/smileys/0187.gif,
+	  plugins/InsertSmiley/smileys/0188.gif,
+	  plugins/InsertSmiley/smileys/0189.gif,
+	  plugins/InsertSmiley/smileys/0190.gif,
+	  plugins/InsertSmiley/smileys/0191.gif,
+	  plugins/InsertSmiley/smileys/0192.gif,
+	  plugins/InsertSmiley/smileys/0193.gif,
+	  plugins/InsertSmiley/smileys/0194.gif,
+	  plugins/InsertSmiley/smileys/0195.gif,
+	  plugins/InsertSmiley/smileys/0196.gif,
+	  plugins/InsertSmiley/smileys/0197.gif,
+	  plugins/InsertSmiley/smileys/0198.gif,
+	  plugins/InsertSmiley/smileys/0199.gif,
+	  plugins/InsertSmiley/smileys/0200.gif,
+	  plugins/InsertSmiley/smileys/0201.gif,
+	  plugins/InsertSmiley/smileys/0202.gif,
+	  plugins/InsertSmiley/smileys/0203.gif,
+	  plugins/InsertSmiley/smileys/0204.gif,
+	  plugins/InsertSmiley/smileys/0205.gif,
+	  plugins/InsertSmiley/smileys/0206.gif,
+	  plugins/InsertSmiley/smileys/0207.gif,
+	  plugins/InsertSmiley/smileys/0208.gif,
+	  plugins/InsertSmiley/smileys/0209.gif,
+	  plugins/InsertSmiley/smileys/0210.gif,
+	  plugins/InsertSmiley/smileys/0211.gif,
+	  plugins/InsertSmiley/smileys/0212.gif,
+	  plugins/InsertSmiley/smileys/0213.gif,
+	  plugins/InsertSmiley/smileys/0214.gif,
+	  plugins/InsertSmiley/smileys/0215.gif,
+	  plugins/InsertSmiley/smileys/0216.gif,
+	  plugins/InsertSmiley/smileys/0217.gif,
+	  plugins/InsertSmiley/smileys/0218.gif,
+	  plugins/InsertSmiley/smileys/0219.gif,
+	  plugins/InsertSmiley/smileys/0220.gif,
+	  plugins/InsertSmiley/smileys/0221.gif,
+	  plugins/InsertSmiley/smileys/0222.gif,
+	  plugins/InsertSmiley/smileys/0223.gif,
+	  plugins/InsertSmiley/smileys/0224.gif,
+	  plugins/InsertSmiley/smileys/0225.gif,
+	  plugins/InsertSmiley/smileys/0226.gif,
+	  plugins/InsertSmiley/smileys/0227.gif,
+	  plugins/InsertSmiley/smileys/0228.gif,
+	  plugins/InsertSmiley/smileys/0229.gif,
+	  plugins/InsertSmiley/smileys/0230.gif,
+	  plugins/InsertSmiley/smileys/0231.gif,
+	  plugins/InsertSmiley/smileys/0232.gif,
+	  plugins/InsertSmiley/smileys/0233.gif,
+	  plugins/InsertSmiley/smileys/0234.gif,
+	  plugins/InsertSmiley/smileys/0235.gif,
+	  plugins/InsertSmiley/smileys/0236.gif,
+	  plugins/InsertSmiley/smileys/0237.gif,
+	  plugins/InsertSmiley/smileys/0238.gif,
+	  plugins/InsertSmiley/smileys/0239.gif,
+	  plugins/InsertSmiley/smileys/0240.gif,
+	  plugins/InsertSmiley/smileys/0241.gif,
+	  plugins/InsertSmiley/smileys/0242.gif,
+	  plugins/InsertSmiley/smileys/0243.gif,
+	  plugins/InsertSmiley/smileys/0244.gif,
+	  plugins/InsertSmiley/smileys/0245.gif,
+	  plugins/InsertSmiley/smileys/0246.gif,
+	  plugins/InsertSmiley/smileys/0247.gif,
+	  plugins/InsertSmiley/smileys/0248.gif,
+	  plugins/InsertSmiley/smileys/0249.gif,
+	  plugins/InsertSmiley/smileys/0250.gif,
+	  plugins/InsertSmiley/smileys/0251.gif,
+	  plugins/InsertSmiley/smileys/0252.gif,
+	  plugins/InsertSmiley/smileys/0253.gif,
+	  plugins/InsertSmiley/smileys/0254.gif,
+	  plugins/InsertSmiley/smileys/0255.gif,
+	  plugins/InsertSmiley/smileys/0256.gif,
+	  plugins/InsertSmiley/smileys/0257.gif,
+	  plugins/InsertSmiley/smileys/0258.gif,
+	  plugins/InsertSmiley/smileys/0259.gif,
+	  plugins/InsertSmiley/smileys/0260.gif,
+	  plugins/InsertSmiley/smileys/0261.gif,
+	  plugins/InsertSmiley/smileys/0262.gif,
+	  plugins/InsertSmiley/smileys/0263.gif,
+	  plugins/InsertSmiley/smileys/0264.gif,
+	  plugins/InsertSmiley/smileys/0265.gif,
+	  plugins/InsertSmiley/smileys/0266.gif,
+	  plugins/InsertSmiley/smileys/0267.gif,
+	  plugins/InsertSmiley/smileys/0268.gif,
+	  plugins/InsertSmiley/smileys/0269.gif,
+	  plugins/InsertSmiley/smileys/0270.gif,
+	  plugins/InsertSmiley/smileys/0271.gif,
+	  plugins/InsertSmiley/smileys/0272.gif,
+	  plugins/InsertSmiley/smileys/0273.gif,
+	  plugins/InsertSmiley/smileys/0274.gif,
+	  plugins/InsertSmiley/smileys/0275.gif,
+	  plugins/InsertSmiley/smileys/0276.gif,
+	  plugins/InsertSmiley/smileys/0277.gif,
+	  plugins/InsertSmiley/smileys/0278.gif,
+	  plugins/InsertSmiley/smileys/0279.gif,
+	  plugins/InsertSmiley/smileys/0280.gif,
+	  plugins/InsertSmiley/smileys/0281.gif,
+	  plugins/InsertSmiley/smileys/0282.gif,
+	  plugins/InsertSmiley/smileys/0283.gif,
+	  plugins/InsertSmiley/smileys/0284.gif,
+	  plugins/InsertSmiley/smileys/0285.gif,
+	  plugins/InsertSmiley/smileys/0286.gif,
+	  plugins/InsertSmiley/smileys/0287.gif,
+	  plugins/InsertSmiley/smileys/0288.gif,
+	  plugins/InsertSmiley/smileys/0289.gif,
+	  plugins/InsertSmiley/smileys/0290.gif,
+	  plugins/InsertSmiley/smileys/0291.gif,
+	  plugins/InsertSmiley/smileys/0292.gif,
+	  plugins/InsertSmiley/smileys/0293.gif,
+	  plugins/InsertSmiley/smileys/0294.gif,
+	  plugins/InsertSmiley/smileys/0295.gif,
+	  plugins/InsertSmiley/smileys/0296.gif,
+	  plugins/InsertSmiley/smileys/0297.gif,
+	  plugins/InsertSmiley/smileys/0298.gif,
+	  plugins/InsertSmiley/smileys/0299.gif,
+	  plugins/InsertSmiley/smileys/0300.gif,
+	  plugins/InsertSmiley/smileys/0301.gif,
+	  plugins/InsertSmiley/smileys/0302.gif,
+	  plugins/InsertSmiley/smileys/0303.gif,
+	  plugins/InsertSmiley/smileys/0304.gif,
+	  plugins/InsertSmiley/smileys/0305.gif,
+	  plugins/InsertSmiley/smileys/0306.gif,
+	  plugins/InsertSmiley/smileys/0307.gif,
+	  plugins/InsertSmiley/smileys/0308.gif,
+	  plugins/InsertSmiley/smileys/0309.gif,
+	  plugins/InsertSmiley/smileys/0310.gif,
+	  plugins/InsertSmiley/smileys/0311.gif,
+	  plugins/InsertSmiley/smileys/0312.gif,
+	  plugins/InsertSmiley/smileys/0313.gif,
+	  plugins/InsertSmiley/smileys/0314.gif,
+	  plugins/InsertSmiley/smileys/0315.gif,
+	  plugins/InsertSmiley/smileys/0316.gif,
+	  plugins/InsertSmiley/smileys/0317.gif,
+	  plugins/InsertSmiley/smileys/0318.gif,
+	  plugins/InsertSmiley/smileys/0319.gif,
+	  plugins/InsertSmiley/smileys/0320.gif,
+	  plugins/InsertSmiley/smileys/0321.gif,
+	  plugins/InsertSmiley/smileys/0322.gif,
+	  plugins/InsertSmiley/smileys/0323.gif,
+	  plugins/InsertSmiley/smileys/0324.gif,
+	  plugins/InsertSmiley/smileys/0325.gif,
+	  plugins/InsertSmiley/smileys/0326.gif,
+	  plugins/InsertSmiley/smileys/0327.gif,
+	  plugins/InsertSmiley/smileys/0328.gif,
+	  plugins/InsertSmiley/smileys/0329.gif,
+	  plugins/InsertSmiley/smileys/0330.gif,
+	  plugins/InsertSmiley/smileys/0331.gif,
+	  plugins/InsertSmiley/smileys/0332.gif,
+	  plugins/InsertSmiley/smileys/0333.gif,
+	  plugins/InsertSmiley/smileys/0334.gif,
+	  plugins/InsertSmiley/smileys/0335.gif,
+	  plugins/InsertSmiley/smileys/0336.gif,
+	  plugins/InsertSmiley/smileys/0337.gif,
+	  plugins/InsertSmiley/smileys/0338.gif,
+	  plugins/InsertSmiley/smileys/0339.gif,
+	  plugins/InsertSmiley/smileys/0340.gif,
+	  plugins/InsertSmiley/smileys/0341.gif,
+	  plugins/InsertSmiley/smileys/0342.gif,
+	  plugins/InsertSmiley/smileys/0343.gif,
+	  plugins/InsertSmiley/smileys/0344.gif,
+	  plugins/InsertSmiley/smileys/0345.gif,
+	  plugins/InsertSmiley/smileys/0346.gif,
+	  plugins/InsertSmiley/smileys/0347.gif,
+	  plugins/InsertSmiley/smileys/0348.gif,
+	  plugins/InsertSmiley/smileys/0349.gif,
+	  plugins/InsertSmiley/smileys/0350.gif,
+	  plugins/InsertSmiley/smileys/0351.gif,
+	  plugins/InsertSmiley/smileys/0352.gif,
+	  plugins/InsertSmiley/smileys/0353.gif,
+	  plugins/InsertSmiley/smileys/0354.gif,
+	  plugins/InsertSmiley/smileys/0355.gif,
+	  plugins/InsertSmiley/smileys/0356.gif,
+	  plugins/InsertSmiley/smileys/0357.gif,
+	  plugins/InsertSmiley/smileys/0358.gif,
+	  plugins/InsertSmiley/smileys/0359.gif,
+	  plugins/InsertSmiley/smileys/0360.gif,
+	  plugins/InsertSmiley/smileys/0361.gif,
+	  plugins/InsertSmiley/smileys/0362.gif,
+	  plugins/InsertSmiley/smileys/0363.gif,
+	  plugins/InsertSmiley/smileys/0364.gif,
+	  plugins/InsertSmiley/smileys/0365.gif,
+	  plugins/InsertSmiley/smileys/0366.gif,
+	  plugins/InsertSmiley/smileys/0367.gif,
+	  plugins/InsertSmiley/smileys/0368.gif,
+	  plugins/InsertSmiley/smileys/0369.gif,
+	  plugins/InsertSmiley/smileys/0370.gif,
+	  plugins/InsertSmiley/smileys/0371.gif,
+	  plugins/InsertSmiley/smileys/0372.gif,
+	  plugins/InsertSmiley/smileys/0373.gif,
+	  plugins/InsertSmiley/smileys/0374.gif,
+	  plugins/InsertSmiley/smileys/0375.gif,
+	  plugins/InsertSmiley/smileys/0376.gif,
+	  plugins/InsertSmiley/smileys/0377.gif,
+	  plugins/InsertSmiley/smileys/0378.gif,
+	  plugins/InsertSmiley/smileys/0379.gif,
+	  plugins/InsertSmiley/smileys/0380.gif,
+	  plugins/InsertSmiley/smileys/0381.gif,
+	  plugins/InsertSmiley/smileys/0382.gif,
+	  plugins/InsertSmiley/smileys/0383.gif,
+	  plugins/InsertSmiley/smileys/0384.gif,
+	  plugins/InsertSmiley/smileys/0385.gif,
+	  plugins/InsertSmiley/smileys/0386.gif,
+	  plugins/InsertSmiley/smileys/0387.gif,
+	  plugins/InsertSmiley/smileys/0388.gif,
+	  plugins/InsertSmiley/smileys/0389.gif,
+	  plugins/InsertSmiley/smileys/0390.gif,
+	  plugins/InsertSmiley/smileys/0391.gif,
+	  plugins/InsertSmiley/smileys/0392.gif,
+	  plugins/InsertSmiley/smileys/0393.gif,
+	  plugins/InsertSmiley/smileys/0394.gif,
+	  plugins/InsertSmiley/smileys/0395.gif,
+	  plugins/InsertSmiley/smileys/0396.gif,
+	  plugins/InsertSmiley/smileys/0397.gif,
+	  plugins/InsertSmiley/smileys/0398.gif,
+	  plugins/InsertSmiley/smileys/0399.gif,
+	  plugins/InsertSmiley/smileys/0400.gif,
+	  plugins/InsertSmiley/smileys/0401.gif,
+	  plugins/InsertSmiley/smileys/0402.gif,
+	  plugins/InsertSmiley/smileys/0403.gif,
+	  plugins/InsertSmiley/smileys/0404.gif,
+	  plugins/InsertSmiley/smileys/0405.gif,
+	  plugins/InsertSmiley/smileys/0406.gif,
+	  plugins/InsertSmiley/smileys/0407.gif,
+	  plugins/InsertSmiley/smileys/0408.gif,
+	  plugins/InsertSmiley/smileys/0409.gif,
+	  plugins/InsertSmiley/smileys/0410.gif,
+	  plugins/InsertSmiley/smileys/0411.gif,
+	  plugins/InsertSmiley/smileys/0412.gif,
+	  plugins/InsertSmiley/smileys/0413.gif,
+	  plugins/InsertSmiley/smileys/0414.gif,
+	  plugins/InsertSmiley/smileys/0415.gif,
+	  plugins/InsertSmiley/smileys/0416.gif,
+	  plugins/InsertSmiley/smileys/0417.gif,
+	  plugins/InsertSmiley/smileys/0418.gif,
+	  plugins/InsertSmiley/smileys/0419.gif,
+	  plugins/InsertSmiley/smileys/0420.gif,
+	  plugins/InsertSmiley/smileys/0421.gif,
+	  plugins/InsertSmiley/smileys/0422.gif,
+	  plugins/InsertSmiley/smileys/0423.gif,
+	  plugins/InsertSmiley/smileys/0424.gif,
+	  plugins/InsertSmiley/smileys/0425.gif,
+	  plugins/InsertSmiley/smileys/0426.gif,
+	  plugins/InsertSmiley/smileys/0427.gif,
+	  plugins/InsertSmiley/smileys/0428.gif,
+	  plugins/InsertSmiley/smileys/0429.gif,
+	  plugins/InsertSmiley/smileys/0430.gif,
+	  plugins/InsertSmiley/smileys/0431.gif,
+	  plugins/InsertSmiley/smileys/0432.gif,
+	  plugins/InsertSmiley/smileys/0433.gif,
+	  plugins/InsertSmiley/smileys/0434.gif,
+	  plugins/InsertSmiley/smileys/0435.gif,
+	  plugins/InsertSmiley/smileys/0436.gif,
+	  plugins/InsertSmiley/smileys/0437.gif,
+	  plugins/InsertSmiley/smileys/0438.gif,
+	  plugins/InsertSmiley/smileys/0439.gif,
+	  plugins/InsertSmiley/smileys/0440.gif,
+	  plugins/InsertSmiley/smileys/0441.gif,
+	  plugins/InsertSmiley/smileys/0442.gif,
+	  plugins/InsertSmiley/smileys/0443.gif,
+	  plugins/InsertSmiley/smileys/0444.gif,
+	  plugins/InsertSmiley/smileys/0445.gif,
+	  plugins/InsertSmiley/smileys/0446.gif,
+	  plugins/InsertSmiley/smileys/0447.gif,
+	  plugins/InsertSmiley/smileys/0448.gif,
+	  plugins/InsertSmiley/smileys/0449.gif,
+	  plugins/InsertSmiley/smileys/0450.gif,
+	  plugins/InsertSmiley/smileys/0451.gif,
+	  plugins/InsertSmiley/smileys/0452.gif,
+	  plugins/InsertSmiley/smileys/0453.gif,
+	  plugins/InsertSmiley/smileys/0454.gif,
+	  plugins/InsertSmiley/smileys/0455.gif,
+	  plugins/InsertSmiley/smileys/0456.gif,
+	  plugins/InsertSmiley/smileys/0457.gif,
+	  plugins/InsertSmiley/smileys/0458.gif,
+	  plugins/InsertSmiley/smileys/0459.gif,
+	  plugins/InsertSmiley/smileys/0460.gif,
+	  plugins/InsertSmiley/smileys/0461.gif,
+	  plugins/InsertSmiley/smileys/0462.gif,
+	  plugins/InsertSmiley/smileys/0463.gif,
+	  plugins/InsertSmiley/smileys/0464.gif,
+	  plugins/InsertSmiley/smileys/0465.gif,
+	  plugins/InsertSmiley/smileys/0466.gif,
+	  plugins/InsertSmiley/smileys/0467.gif,
+	  plugins/InsertSmiley/smileys/0468.gif,
+	  plugins/InsertSmiley/smileys/0469.gif,
+	  plugins/InsertSmiley/smileys/0470.gif,
+	  plugins/InsertSmiley/smileys/0471.gif,
+	  plugins/InsertSmiley/smileys/0472.gif,
+	  plugins/InsertSmiley/smileys/0473.gif,
+	  plugins/InsertSmiley/smileys/0474.gif,
+	  plugins/InsertSmiley/smileys/0475.gif,
+	  plugins/InsertSmiley/smileys/0476.gif,
+	  plugins/InsertSmiley/smileys/0477.gif,
+	  plugins/InsertSmiley/smileys/0478.gif,
+	  plugins/InsertSmiley/smileys/0479.gif,
+	  plugins/InsertSmiley/smileys/0480.gif,
+	  plugins/InsertSmiley/smileys/0481.gif,
+	  plugins/InsertSmiley/smileys/0482.gif,
+	  plugins/InsertSmiley/smileys/0483.gif,
+	  plugins/InsertSmiley/smileys/0484.gif,
+	  plugins/InsertSmiley/smileys/0485.gif,
+	  plugins/InsertSmiley/smileys/0486.gif,
+	  plugins/InsertSmiley/smileys/0487.gif,
+	  plugins/InsertSmiley/smileys/0488.gif,
+	  plugins/InsertSmiley/smileys/0489.gif,
+	  plugins/InsertSmiley/smileys/0490.gif,
+	  plugins/InsertSmiley/smileys/0491.gif,
+	  plugins/InsertSmiley/smileys/0492.gif,
+	  plugins/InsertSmiley/smileys/0493.gif,
+	  plugins/InsertSmiley/smileys/0494.gif,
+	  plugins/InsertSmiley/smileys/0495.gif,
+	  plugins/InsertSmiley/smileys/0496.gif,
+	  plugins/InsertSmiley/smileys/0497.gif,
+	  plugins/InsertSmiley/smileys/0498.gif,
+	  plugins/InsertSmiley/smileys/0499.gif,
+	  plugins/InsertSmiley/smileys/0500.gif,
+	  plugins/InsertSmiley/smileys/0501.gif,
+	  plugins/InsertSmiley/smileys/0502.gif,
+	  plugins/InsertSmiley/smileys/0503.gif,
+	  plugins/InsertSmiley/smileys/0504.gif,
+	  plugins/InsertSmiley/smileys/0505.gif,
+	  plugins/InsertSmiley/smileys/0506.gif,
+	  plugins/InsertSmiley/smileys/0507.gif,
+	  plugins/InsertSmiley/smileys/0508.gif,
+	  plugins/InsertSmiley/smileys/0509.gif,
+	  plugins/InsertSmiley/smileys/0510.gif,
+	  plugins/InsertSmiley/smileys/0511.gif,
+	  plugins/InsertSmiley/smileys/0512.gif,
+	  plugins/InsertSmiley/smileys/0513.gif,
+	  plugins/InsertSmiley/smileys/0514.gif,
+	  plugins/InsertSmiley/smileys/0515.gif,
+	  plugins/InsertSmiley/smileys/0516.gif,
+	  plugins/InsertSmiley/smileys/0517.gif,
+	  plugins/InsertSmiley/smileys/0518.gif,
+	  plugins/InsertSmiley/smileys/0519.gif,
+	  plugins/InsertSmiley/smileys/0520.gif,
+	  plugins/InsertSmiley/smileys/0521.gif,
+	  plugins/InsertSmiley/smileys/0522.gif,
+	  plugins/InsertSmiley/smileys/0523.gif,
+	  plugins/InsertSmiley/smileys/0524.gif,
+	  plugins/InsertSmiley/smileys/0525.gif,
+	  plugins/InsertSmiley/smileys/0526.gif,
+	  plugins/InsertSmiley/smileys/0527.gif,
+	  plugins/InsertSmiley/smileys/0528.gif,
+	  plugins/InsertSmiley/smileys/0529.gif,
+	  plugins/InsertSmiley/smileys/0530.gif,
+	  plugins/InsertSmiley/smileys/0531.gif,
+	  plugins/InsertSmiley/smileys/0532.gif,
+	  plugins/InsertSmiley/smileys/0533.gif,
+	  plugins/InsertSmiley/smileys/0534.gif,
+	  plugins/InsertSmiley/smileys/0535.gif,
+	  plugins/InsertSmiley/smileys/0536.gif,
+	  plugins/InsertSmiley/smileys/0537.gif,
+	  plugins/InsertSmiley/smileys/0538.gif,
+	  plugins/InsertSmiley/smileys/0539.gif,
+	  plugins/InsertSmiley/smileys/0540.gif,
+	  plugins/InsertSmiley/smileys/0541.gif,
+	  plugins/InsertSmiley/smileys/0542.gif,
+	  plugins/InsertSmiley/smileys/0543.gif,
+	  plugins/InsertSmiley/smileys/0544.gif,
+	  plugins/InsertSmiley/smileys/0545.gif,
+	  plugins/InsertSmiley/smileys/0546.gif,
+	  plugins/InsertSmiley/smileys/0547.gif,
+	  plugins/InsertSmiley/smileys/0548.gif,
+	  plugins/InsertSmiley/smileys/0549.gif,
+	  plugins/InsertSmiley/smileys/0550.gif,
+	  plugins/InsertSmiley/smileys/0551.gif,
+	  plugins/InsertSmiley/smileys/0552.gif,
+	  plugins/InsertSmiley/smileys/0553.gif,
+	  plugins/InsertSmiley/smileys/0554.gif,
+	  plugins/InsertSmiley/smileys/0555.gif,
+	  plugins/InsertSmiley/smileys/0556.gif,
+	  plugins/InsertSmiley/smileys/0557.gif,
+	  plugins/InsertSmiley/smileys/0558.gif,
+	  plugins/InsertSmiley/smileys/0559.gif,
+	  plugins/InsertSmiley/smileys/0560.gif,
+	  plugins/InsertSmiley/smileys/0561.gif,
+	  plugins/InsertSmiley/smileys/0562.gif,
+	  plugins/InsertSmiley/smileys/0563.gif,
+	  plugins/InsertSmiley/smileys/0564.gif,
+	  plugins/InsertSmiley/smileys/0565.gif,
+	  plugins/InsertSmiley/smileys/0566.gif,
+	  plugins/InsertSmiley/smileys/0567.gif,
+	  plugins/InsertSmiley/smileys/0568.gif,
+	  plugins/InsertSmiley/smileys/0569.gif,
+	  plugins/InsertSmiley/smileys/0570.gif,
+	  plugins/InsertSmiley/smileys/0571.gif,
+	  plugins/InsertSmiley/smileys/0572.gif,
+	  plugins/InsertSmiley/smileys/0573.gif,
+	  plugins/InsertSmiley/smileys/0574.gif,
+	  plugins/InsertSmiley/smileys/0575.gif,
+	  plugins/InsertSmiley/smileys/0576.gif,
+	  plugins/InsertSmiley/smileys/0577.gif,
+	  plugins/InsertSmiley/smileys/0578.gif,
+	  plugins/InsertSmiley/smileys/0579.gif,
+	  plugins/InsertSmiley/smileys/0580.gif,
+	  plugins/LangMarks/lang-marks.css, plugins/LangMarks/img/el.gif,
+	  plugins/LangMarks/img/en.gif, plugins/LangMarks/img/fr.gif,
+	  plugins/LangMarks/img/la.gif, plugins/LangMarks/lang/de.js,
+	  plugins/LangMarks/lang/fr.js, plugins/LangMarks/lang/no.js,
+	  plugins/Linker/dialog.html, plugins/Linker/scan.php,
+	  plugins/Linker/dTree/api.html, plugins/Linker/dTree/dtree.css,
+	  plugins/Linker/dTree/example01.html,
+	  plugins/Linker/dTree/img/base.gif,
+	  plugins/Linker/dTree/img/cd.gif,
+	  plugins/Linker/dTree/img/copy.gif,
+	  plugins/Linker/dTree/img/empty.gif,
+	  plugins/Linker/dTree/img/folder.gif,
+	  plugins/Linker/dTree/img/folderopen.gif,
+	  plugins/Linker/dTree/img/globe.gif,
+	  plugins/Linker/dTree/img/imgfolder.gif,
+	  plugins/Linker/dTree/img/join.gif,
+	  plugins/Linker/dTree/img/joinbottom.gif,
+	  plugins/Linker/dTree/img/line.gif,
+	  plugins/Linker/dTree/img/minus.gif,
+	  plugins/Linker/dTree/img/minusbottom.gif,
+	  plugins/Linker/dTree/img/move.gif,
+	  plugins/Linker/dTree/img/musicfolder.gif,
+	  plugins/Linker/dTree/img/nolines_minus.gif,
+	  plugins/Linker/dTree/img/nolines_plus.gif,
+	  plugins/Linker/dTree/img/offline.gif,
+	  plugins/Linker/dTree/img/offline.png,
+	  plugins/Linker/dTree/img/page.gif,
+	  plugins/Linker/dTree/img/plus.gif,
+	  plugins/Linker/dTree/img/plusbottom.gif,
+	  plugins/Linker/dTree/img/question.gif,
+	  plugins/Linker/dTree/img/trash.gif, plugins/Linker/lang/de.js,
+	  plugins/Linker/lang/fr.js, plugins/Linker/lang/no.js,
+	  plugins/Linker/lang/pl.js, plugins/ListType/ListType.css,
+	  plugins/ListType/img/circle.png,
+	  plugins/ListType/img/decimal.png, plugins/ListType/img/disc.png,
+	  plugins/ListType/img/lower-alpha.png,
+	  plugins/ListType/img/lower-roman.png,
+	  plugins/ListType/img/none.png, plugins/ListType/img/square.png,
+	  plugins/ListType/img/upper-alpha.png,
+	  plugins/ListType/img/upper-roman.png,
+	  plugins/ListType/lang/de.js, plugins/ListType/lang/fr.js,
+	  plugins/ListType/lang/nl.js, plugins/ListType/lang/no.js,
+	  plugins/ListType/lang/pl.js, plugins/NoteServer/img/note.gif,
+	  plugins/NoteServer/lang/de.js, plugins/NoteServer/lang/fr.js,
+	  plugins/NoteServer/lang/no.js,
+	  plugins/PasteText/img/ed_paste_text.gif,
+	  plugins/PasteText/lang/de.js, plugins/PasteText/lang/fr.js,
+	  plugins/PasteText/lang/no.js, plugins/PasteText/lang/pl.js,
+	  plugins/PasteText/popups/paste_text.html,
+	  plugins/QuickTag/tag-lib.js,
+	  plugins/QuickTag/img/ed_quicktag.gif,
+	  plugins/QuickTag/lang/de.js, plugins/QuickTag/lang/fr.js,
+	  plugins/QuickTag/lang/no.js, plugins/QuickTag/lang/pl.js,
+	  plugins/QuickTag/lang/pt_br.js, plugins/SpellChecker/README,
+	  plugins/SpellChecker/aspell_setup.php,
+	  plugins/SpellChecker/readme-tech.html,
+	  plugins/SpellChecker/spell-check-savedicts.php,
+	  plugins/SpellChecker/spell-check-style.css,
+	  plugins/SpellChecker/img/he-spell-check.gif,
+	  plugins/SpellChecker/img/spell-check.gif,
+	  plugins/SpellChecker/lang/cz.js, plugins/SpellChecker/lang/da.js,
+	  plugins/SpellChecker/lang/de.js, plugins/SpellChecker/lang/fr.js,
+	  plugins/SpellChecker/lang/he.js, plugins/SpellChecker/lang/hu.js,
+	  plugins/SpellChecker/lang/nl.js, plugins/SpellChecker/lang/no.js,
+	  plugins/SpellChecker/lang/ro.js, plugins/Stylist/lang/de.js,
+	  plugins/Stylist/lang/fr.js, plugins/Stylist/lang/no.js,
+	  plugins/Stylist/lang/pl.js, plugins/SuperClean/dialog.html,
+	  plugins/SuperClean/super-clean.js, plugins/SuperClean/tidy.php,
+	  plugins/SuperClean/filters/paragraph.js,
+	  plugins/SuperClean/filters/word.js,
+	  plugins/SuperClean/img/ed_superclean.gif,
+	  plugins/SuperClean/lang/de.js, plugins/SuperClean/lang/fr.js,
+	  plugins/SuperClean/lang/no.js,
+	  plugins/TableOperations/img/cell-delete.gif,
+	  plugins/TableOperations/img/cell-insert-after.gif,
+	  plugins/TableOperations/img/cell-insert-before.gif,
+	  plugins/TableOperations/img/cell-merge.gif,
+	  plugins/TableOperations/img/cell-prop.gif,
+	  plugins/TableOperations/img/cell-split.gif,
+	  plugins/TableOperations/img/col-delete.gif,
+	  plugins/TableOperations/img/col-insert-after.gif,
+	  plugins/TableOperations/img/col-insert-before.gif,
+	  plugins/TableOperations/img/col-split.gif,
+	  plugins/TableOperations/img/row-delete.gif,
+	  plugins/TableOperations/img/row-insert-above.gif,
+	  plugins/TableOperations/img/row-insert-under.gif,
+	  plugins/TableOperations/img/row-prop.gif,
+	  plugins/TableOperations/img/row-split.gif,
+	  plugins/TableOperations/img/table-prop.gif,
+	  plugins/TableOperations/lang/cz.js,
+	  plugins/TableOperations/lang/da.js,
+	  plugins/TableOperations/lang/de.js,
+	  plugins/TableOperations/lang/el.js,
+	  plugins/TableOperations/lang/fi.js,
+	  plugins/TableOperations/lang/fr.js,
+	  plugins/TableOperations/lang/he.js,
+	  plugins/TableOperations/lang/it.js,
+	  plugins/TableOperations/lang/nl.js,
+	  plugins/TableOperations/lang/no.js,
+	  plugins/TableOperations/lang/pl.js,
+	  plugins/TableOperations/lang/ro.js,
+	  plugins/Template/template.css,
+	  plugins/Template/img/ed_template.gif,
+	  plugins/Template/img/layout_01.gif,
+	  plugins/Template/img/layout_02.gif,
+	  plugins/Template/img/layout_03.gif, plugins/Template/lang/de.js,
+	  plugins/Template/lang/fr.js, plugins/Template/lang/it.js,
+	  plugins/Template/lang/no.js, plugins/UnFormat/img/unformat.gif,
+	  plugins/UnFormat/lang/de.js, plugins/UnFormat/lang/fr.js,
+	  plugins/UnFormat/lang/nl.js, plugins/UnFormat/lang/no.js: Initial
+	  checkin
+
+2005-11-01 20:04  gustafn
+
+	* www/blank-master.tcl: made the language test in xinha more
+	  restrictive, some plugings have not enough languages specified.
+
+2005-11-01 19:45  gustafn
+
+	* www/: blank-master.adp, blank-master.tcl: adding support for
+	  xinha to blank-master
+
+2005-11-01 19:39  gustafn
+
+	* packages/acs-templating/tcl/richtext-procs.tcl: enhancing
+	  richtext procs for supporting xinha and rte.	by default, rte is
+	  defined. to use xinha, add the following line to
+	  template::widget::richtext   set richtextEditor xinha
+
+2005-10-31 12:26  miguelm
+
+	* packages/acs-subsite/www/resources/core.js: making changes to
+	  accept the formart yyyy in year
+
+2005-10-29 05:29  maltes
+
+	* packages/acs-content-repository/: acs-content-repository.info,
+	  tcl/acs-content-repository-callback-procs.tcl,
+	  tcl/acs-content-repository-init.tcl: Added support for a
+	  different location for the CR files using the CRFileLocationRoot
+	  parameter and some callback magic
+
+2005-10-28 11:03  daveb
+
+	* packages/acs-content-repository/sql/:
+	  oracle/upgrade/upgrade-5.2.0b5-5.2.0b6.sql,
+	  postgresql/content-item.sql,
+	  postgresql/upgrade/upgrade-5.2.0b5-5.2.0b6.sql: Don't try to get
+	  the package id of folder_id 0 (which isn't a folder anyway!)
+
+2005-10-27 16:26  donb
+
+	*
+	  packages/acs-content-repository/sql/oracle/upgrade/upgrade-5.2.0a1-5.2.0a2.sql:
+	  Fixed Daveb's translation of his PG change to this script (he
+	  didn't have oracle to test his changes on)
+
+2005-10-27 12:30  daveb
+
+	*
+	  packages/acs-content-repository/sql/oracle/upgrade/upgrade-5.2.0a1-5.2.0a2.sql:
+	  Fix bug#2668
+
+2005-10-27 10:16  daveb
+
+	*
+	  packages/acs-content-repository/sql/postgresql/upgrade/upgrade-5.2.0a1-5.2.0a2.sql:
+	  Fix bug#2668, don't try to recrete views for edit-this-page
+	  content types without content tables.
+
+2005-10-26 09:06  maltes
+
+	* packages/acs-subsite/www/user/portrait/upload-2.xql: No longer
+	  needed
+
+2005-10-26 09:04  maltes
+
+	* packages/acs-subsite/www/user/portrait/upload-2.tcl: Fixed the
+	  issue with an already existing relationship
+
+2005-10-26 08:56  maltes
+
+	* packages/acs-content-repository/tcl/: content-item-procs.tcl,
+	  content-item-procs.xql: Added content::item::get_id_by_name
+	  Procedure
+
+2005-10-26 08:54  maltes
+
+	* packages/acs-subsite/www/user/portrait/upload-2.tcl: Cleaned up
+	  the upload, made it more foolproof, changed the parent_id of the
+	  portrait, reenabled the creation of the link
+
+2005-10-25 08:40  daveb
+
+	*
+	  packages/acs-content-repository/sql/postgresql/upgrade/upgrade-5.2.0b5-5.2.0b6.sql:
+	  Fix upgrade since we support proper upgrade from beta to release.
+
+2005-10-25 08:27  daveb
+
+	*
+	  packages/acs-content-repository/sql/postgresql/upgrade/upgrade-5.2.0d4-5.2.0d5.sql:
+	  Fix define function args for set_live_revision
+
+2005-10-23 06:38  maltes
+
+	* packages/acs-tcl/catalog/: acs-tcl.de_DE.ISO-8859-1.xml,
+	  acs-tcl.en_US.ISO-8859-1.xml: New I18N messages and some fixes
+
+2005-10-21 12:04  maltes
+
+	* packages/acs-subsite/tcl/group-procs.tcl: the util_memoize_flush
+	  should be before the return...
+
+2005-10-21 10:38  maltes
+
+	* packages/ref-timezones/ref-timezones.info: Fixed broken URL after
+	  the release
+
+2005-10-21 07:00  maltes
+
+	* packages/: search/catalog/search.en_US.ISO-8859-1.xml,
+	  search/catalog/search.de_DE.ISO-8859-1.xml,
+	  acs-authentication/catalog/acs-authentication.de_DE.ISO-8859-1.xml,
+	  acs-authentication/catalog/acs-authentication.en_US.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.de_DE.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.en_US.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.de_DE.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.en_US.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.de_DE.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.de_DE.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.en_US.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.de_DE.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.en_US.ISO-8859-1.xml: New
+	  I18N strings synchronized with the RC version
+
+2005-10-21 06:56  maltes
+
+	* packages/: acs-admin/acs-admin.info,
+	  acs-api-browser/acs-api-browser.info,
+	  acs-authentication/acs-authentication.info,
+	  acs-automated-testing/acs-automated-testing.info,
+	  acs-bootstrap-installer/acs-bootstrap-installer.info,
+	  acs-core-docs/acs-core-docs.info, acs-lang/acs-lang.info,
+	  acs-mail/acs-mail.info, acs-messaging/acs-messaging.info,
+	  acs-reference/acs-reference.info,
+	  acs-service-contract/acs-service-contract.info,
+	  acs-subsite/acs-subsite.info, acs-templating/acs-templating.info,
+	  search/search.info: Updated to the correct version numbers, as
+	  the URL was not updated in the last commit
+
+2005-10-20 19:16  roelc
+
+	* packages/acs-templating/tcl/list-procs.tcl: Return text/csv mime
+	  type in template::list::write_csv
+
+2005-10-20 11:08  jaufrecht
+
+	* packages/: ref-timezones/ref-timezones.info, search/search.info:
+	  openacs 5.2 rc 1 (tagged b5)
+
+2005-10-20 11:05  jaufrecht
+
+	* ChangeLog, readme.txt, packages/acs-admin/acs-admin.info,
+	  packages/acs-api-browser/acs-api-browser.info,
+	  packages/acs-authentication/acs-authentication.info,
+	  packages/acs-automated-testing/acs-automated-testing.info,
+	  packages/acs-bootstrap-installer/acs-bootstrap-installer.info,
+	  packages/acs-content-repository/acs-content-repository.info,
+	  packages/acs-core-docs/acs-core-docs.info,
+	  packages/acs-core-docs/www/acs-admin.html,
+	  packages/acs-core-docs/www/aolserver.html,
+	  packages/acs-core-docs/www/aolserver4.html,
+	  packages/acs-core-docs/www/automated-testing-best-practices.html,
+	  packages/acs-core-docs/www/backup-recovery.html,
+	  packages/acs-core-docs/www/bootstrap-acs.html,
+	  packages/acs-core-docs/www/complete-install.html,
+	  packages/acs-core-docs/www/configuring-configuring-packages.html,
+	  packages/acs-core-docs/www/configuring-configuring-permissions.html,
+	  packages/acs-core-docs/www/configuring-install-packages.html,
+	  packages/acs-core-docs/www/configuring-mounting-packages.html,
+	  packages/acs-core-docs/www/contributing-code.html,
+	  packages/acs-core-docs/www/credits.html,
+	  packages/acs-core-docs/www/cvs-guidelines.html,
+	  packages/acs-core-docs/www/cvs-tips.html,
+	  packages/acs-core-docs/www/db-api-detailed.html,
+	  packages/acs-core-docs/www/db-api.html,
+	  packages/acs-core-docs/www/docbook-primer.html,
+	  packages/acs-core-docs/www/eng-standards-constraint-naming.html,
+	  packages/acs-core-docs/www/eng-standards-filenaming.html,
+	  packages/acs-core-docs/www/eng-standards-plsql.html,
+	  packages/acs-core-docs/www/eng-standards-versioning.html,
+	  packages/acs-core-docs/www/ext-auth-requirements.html,
+	  packages/acs-core-docs/www/filename.html,
+	  packages/acs-core-docs/www/form-builder.html,
+	  packages/acs-core-docs/www/high-avail.html,
+	  packages/acs-core-docs/www/how-do-I.html,
+	  packages/acs-core-docs/www/i18n-convert.html,
+	  packages/acs-core-docs/www/index.html,
+	  packages/acs-core-docs/www/individual-programs.html,
+	  packages/acs-core-docs/www/install-cvs.html,
+	  packages/acs-core-docs/www/install-daemontools.html,
+	  packages/acs-core-docs/www/install-full-text-search-openfts.html,
+	  packages/acs-core-docs/www/install-full-text-search-tsearch2.html,
+	  packages/acs-core-docs/www/install-next-add-server.html,
+	  packages/acs-core-docs/www/install-next-nightly-vacuum.html,
+	  packages/acs-core-docs/www/install-openacs-keepalive.html,
+	  packages/acs-core-docs/www/install-qmail.html,
+	  packages/acs-core-docs/www/install-redhat.html,
+	  packages/acs-core-docs/www/install-steps.html,
+	  packages/acs-core-docs/www/ix01.html,
+	  packages/acs-core-docs/www/mac-installation.html,
+	  packages/acs-core-docs/www/maint-performance.html,
+	  packages/acs-core-docs/www/maintenance-deploy.html,
+	  packages/acs-core-docs/www/maintenance-web.html,
+	  packages/acs-core-docs/www/object-identity.html,
+	  packages/acs-core-docs/www/objects.html,
+	  packages/acs-core-docs/www/openacs-cvs-concepts.html,
+	  packages/acs-core-docs/www/openacs-unpack.html,
+	  packages/acs-core-docs/www/openacs.html,
+	  packages/acs-core-docs/www/oracle.html,
+	  packages/acs-core-docs/www/packages.html,
+	  packages/acs-core-docs/www/parties.html,
+	  packages/acs-core-docs/www/permissions-tediously-explained.html,
+	  packages/acs-core-docs/www/permissions.html,
+	  packages/acs-core-docs/www/postgres.html,
+	  packages/acs-core-docs/www/programming-with-aolserver.html,
+	  packages/acs-core-docs/www/psgml-for-emacs.html,
+	  packages/acs-core-docs/www/psgml-mode.html,
+	  packages/acs-core-docs/www/release-notes-4-5.html,
+	  packages/acs-core-docs/www/release-notes-4-6-2.html,
+	  packages/acs-core-docs/www/release-notes-4-6-3.html,
+	  packages/acs-core-docs/www/release-notes-4-6.html,
+	  packages/acs-core-docs/www/release-notes.html,
+	  packages/acs-core-docs/www/releasing-openacs-core.html,
+	  packages/acs-core-docs/www/request-processor.html,
+	  packages/acs-core-docs/www/requirements-template.html,
+	  packages/acs-core-docs/www/security-notes.html,
+	  packages/acs-core-docs/www/style-guide.html,
+	  packages/acs-core-docs/www/subsites.html,
+	  packages/acs-core-docs/www/tcl-doc.html,
+	  packages/acs-core-docs/www/templates.html,
+	  packages/acs-core-docs/www/tutorial-css-layout.html,
+	  packages/acs-core-docs/www/tutorial-cvs.html,
+	  packages/acs-core-docs/www/tutorial-database.html,
+	  packages/acs-core-docs/www/tutorial-debug.html,
+	  packages/acs-core-docs/www/tutorial-distribute.html,
+	  packages/acs-core-docs/www/tutorial-etp-templates.html,
+	  packages/acs-core-docs/www/tutorial-newpackage.html,
+	  packages/acs-core-docs/www/tutorial-pages.html,
+	  packages/acs-core-docs/www/unix-installation.html,
+	  packages/acs-core-docs/www/upgrade-4.5-to-4.6.html,
+	  packages/acs-core-docs/www/upgrade-openacs-files.html,
+	  packages/acs-core-docs/www/upgrade-overview.html,
+	  packages/acs-core-docs/www/using-cvs-with-openacs.html,
+	  packages/acs-core-docs/www/variables.html,
+	  packages/acs-core-docs/www/win2k-installation.html,
+	  packages/acs-core-docs/www/xml/variables.ent,
+	  packages/acs-core-docs/www/xml/for-everyone/release-notes.xml,
+	  packages/acs-kernel/acs-kernel.info,
+	  packages/acs-lang/acs-lang.info, packages/acs-mail/acs-mail.info,
+	  packages/acs-messaging/acs-messaging.info,
+	  packages/acs-reference/acs-reference.info,
+	  packages/acs-service-contract/acs-service-contract.info,
+	  packages/acs-subsite/acs-subsite.info,
+	  packages/acs-tcl/acs-tcl.info,
+	  packages/acs-templating/acs-templating.info: openacs 5.2 rc 1
+	  (tagged b5)
+
 2005-10-19 09:18  gerardom
 
 	* packages/acs-automated-testing/tcl/aa-test-procs-postgresql.xql:
@@ -647,6 +2667,13 @@
 	  lang::util::convert_to_i18n made optional (depending on the
 	  installation of acs-translations)
 
+2005-08-19 11:34  jeffd
+
+	*
+	  packages/acs-content-repository/sql/postgresql/upgrade/upgrade-5.2.0d17-5.2.0d18.sql:
+	  fix the define_function_args thing for
+	  content_item__set_live_revision reported by Peter Alberer
+
 2005-08-19 07:34  miguelm
 
 	* packages/acs-templating/resources/lists/select-menu.adp: adding
@@ -807,6 +2834,11 @@
 
 	* packages/acs-templating/tcl/list-procs.tcl: set __adp_stub so
 	  includes work. Only fully qualified includes will work with this
+
+2005-07-21 08:51  skaufman
+
+	* packages/acs-admin/www/apm/parameter-delete.adp: adds missing
+	  template .adp
 
 2005-07-21 05:11  leed
 
@@ -1093,1350 +3125,4 @@
 	* packages/acs-subsite/www/admin/: set-reg-assessment.adp,
 	  set-reg-assessment.tcl, set-reg-assessment.xql: move
 	  set-reg-assessment pages to assessment
-
-2005-06-20 11:20  jader
-
-	* packages/acs-content-repository/sql/postgresql/:
-	  content-item.sql, upgrade/upgrade-5.2.0a2-5.2.0a3.sql: Fix bug
-	  #2497, error in content_item__copy, added upgrade script
-
-2005-06-19 01:24  hamiltonc
-
-	* packages/acs-templating/www/resources/calendar.gif: general
-	  purpose calendar button
-
-2005-06-19 00:33  hamiltonc
-
-	* packages/acs-subsite/www/resources/core.js: commit new javascript
-	  to generate calendar with ad_form data widget
-
-2005-06-18 08:23  daveb
-
-	*
-	  packages/acs-content-repository/sql/postgresql/upgrade/upgrade-5.2.0a1-5.2.0a2.sql:
-	  Recreate new version of refresh_view procedure and recreate all
-	  the views to add package_id to the view from acs_objects.
-
-2005-06-16 17:26  daveb
-
-	* packages/acs-content-repository/tcl/content-folder-procs.tcl: Use
-	  nested list for -var_list parameter
-
-2005-06-16 04:56  darior
-
-	* packages/acs-content-repository/sql/common/mime-type-data.sql:
-	  add mime types for application spss
-
-2005-06-15 18:00  donb
-
-	* packages/acs-bootstrap-installer/installer/index.tcl: Fixed bug
-	  #1704
-
-2005-06-15 17:24  donb
-
-	* packages/acs-tcl/tcl/: 00-database-procs.tcl,
-	  membership-rel-procs.tcl: Fixed bug #2101 for PG 8.0 on windows
-	  Fixed another bug whose number I forgot, that prevented users
-	  from deactivating their account.
-
-2005-06-15 16:57  donb
-
-	* packages/acs-bootstrap-installer/db-init-checks-oracle.tcl: Fixed
-	  bug #2164 for Oracle
-
-2005-06-15 11:46  miguelm
-
-	* packages/acs-subsite/tcl/email-image-procs.tcl: adding catch for
-	  email image generation
-
-2005-06-15 10:57  annyf
-
-	* packages/acs-subsite/: acs-subsite.info, lib/user-new.tcl,
-	  tcl/apm-callback-procs.tcl: add RegImplName parameter to set the
-	  name of the implementation used in the registration process
-
-2005-06-15 09:43  jader
-
-	* packages/acs-tcl/tcl/tcl-documentation-procs.tcl: Fix bug #2487,
-	  float filter does not accept negative numbers.
-
-2005-06-14 08:28  annyf
-
-	* packages/acs-subsite/acs-subsite.info: remove parameter and
-	  create it on the assessment package
-
-2005-06-13 13:43  enriquec
-
-	* packages/acs-admin/www/users/: merge-final.tcl, merge.adp,
-	  merge.tcl: Improving the resultant messages output of each
-	  callback of the merge process
-
-2005-06-10 11:47  annyf
-
-	* packages/acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml:
-	  add messages
-
-2005-06-10 11:42  annyf
-
-	* packages/acs-subsite/lib/user-new.tcl: add user::registration
-	  callback to handle the assessment registration process
-
-2005-06-10 11:26  annyf
-
-	* packages/acs-subsite/tcl/callback-procs.tcl: add
-	  user::registration callback to handle the assessment registration
-	  process
-
-2005-06-09 17:38  jader
-
-	* packages/acs-admin/www/install/install.tcl: Update wording to be
-	  more accurate
-
-2005-06-08 14:48  enriquec
-
-	* packages/acs-admin/www/users/merge-final.tcl: Adding a proc call
-	  that will merge the users objects, permissions and protraits
-
-2005-06-08 14:46  enriquec
-
-	* packages/: acs-authentication/tcl/local-procs.tcl,
-	  acs-authentication/tcl/local-procs.xql,
-	  acs-admin/tcl/merge-procs.tcl, acs-admin/tcl/merge-procs.xql:
-	  Moving the code that reassign objects from local authentication
-	  procs to the merge procs library.
-
-2005-06-08 14:12  timoh
-
-	* packages/acs-content-repository/: acs-content-repository.info,
-	  sql/oracle/content-type.sql,
-	  sql/oracle/upgrade/upgrade-5.2.0a1-5.2.0a2.sql,
-	  sql/postgresql/content-type.sql,
-	  sql/postgresql/upgrade/upgrade-5.2.0a1-5.2.0a2.sql,
-	  tcl/content-revision-procs.tcl: fixing package_id of revisions;
-	  changed insert trigger to make use of object_package_id in the
-	  insert view
-
-2005-06-08 13:10  andrewg
-
-	*
-	  packages/acs-kernel/sql/oracle/upgrade/upgrade-5.2.0d9-5.2.0d10.sql:
-	  Fix typo, wrong proc qualifier
-
-2005-06-08 13:09  andrewg
-
-	*
-	  packages/acs-kernel/sql/oracle/upgrade/upgrade-5.2.0d1-5.2.0d2.sql:
-	  Fix typo, were -> where
-
-2005-06-08 10:52  andrewg
-
-	* packages/acs-admin/www/users/merge.tcl: Adding missing -object_id
-	  switch to site_node::get_url_from_object_id calls
-
-2005-06-08 10:01  darior
-
-	* packages/acs-tcl/tcl/site-node-apm-integration-procs.tcl: Undid
-	  previous commit
-
-2005-06-08 04:48  enriquec
-
-	* packages/acs-admin/www/users/: merge-confirm.tcl,
-	  merge-final.adp, merge-final.tcl: Adding an 'if' clause in adp
-	  merge final page if the user doesn't want to merge.
-
-2005-06-08 04:22  enriquec
-
-	* packages/acs-admin/tcl/merge-procs.tcl: Adding the new callback
-	  MergeShowUserInfo
-
-2005-06-08 04:11  enriquec
-
-	* packages/: acs-tcl/tcl/membership-rel-procs-oracle.xql,
-	  acs-tcl/tcl/membership-rel-procs-postgresql.xql,
-	  acs-tcl/tcl/membership-rel-procs.tcl,
-	  acs-admin/www/users/merge-final.tcl,
-	  acs-admin/www/users/merge-oracle.xql,
-	  acs-admin/www/users/merge-postgresql.xql,
-	  acs-admin/www/users/merge.adp, acs-admin/www/users/merge.tcl,
-	  acs-admin/www/users/merge.xql,
-	  acs-authentication/tcl/apm-callback-procs.tcl,
-	  acs-authentication/tcl/local-procs.tcl,
-	  acs-authentication/tcl/local-procs.xql,
-	  acs-kernel/sql/oracle/upgrade/upgrade-5.1.5-5.2.0a1.sql,
-	  acs-kernel/sql/postgresql/upgrade/upgrade-5.1.5-5.2.0a1.sql:
-	  Fixing bugs in user merge support. Improving the process, making
-	  it more generic and now it works for acs-core. Adding the upgrade
-	  scripts for oracle and pg.
-
-2005-06-07 06:14  timoh
-
-	* packages/acs-content-repository/tcl/: content-item-procs.tcl,
-	  content-revision-procs.tcl: bugfix: set package_id and context_id
-	  for items and revisions
-
-2005-06-07 04:31  darior
-
-	* packages/acs-tcl/tcl/site-node-apm-integration-procs.tcl:
-	  Forgotten procedure new_site_node_and_package in
-	  site-node-apm-integration-procs.tcl
-
-2005-06-05 14:27  donb
-
-	* packages/acs-tcl/tcl/text-html-procs.tcl: Fixed bug #1655 by
-	  applying patch #468
-
-2005-06-05 09:38  daveb
-
-	* packages/acs-content-repository/sql/postgresql/:
-	  content-revision.sql, upgrade/upgrade-5.2.0d15-5.2.0a1.sql: Fix
-	  bug#1937 with patch#548. Use full syntax for inserts so integer
-	  values work on content_revision__copy in PostgreSQL.
-
-2005-06-05 08:12  donb
-
-	* packages/acs-kernel/sql/oracle/groups-body-create.sql: Fixed
-	  someone's typo in the new "merge" pl/sql procs
-
-2005-06-04 12:35  michaels
-
-	* packages/acs-subsite/www/admin/object-types/: one.adp, one.tcl:
-	  template object display page
-
-2005-06-04 11:51  michaels
-
-	* packages/: acs-admin/acs-admin.info,
-	  acs-api-browser/acs-api-browser.info,
-	  acs-authentication/acs-authentication.info,
-	  acs-automated-testing/acs-automated-testing.info,
-	  acs-bootstrap-installer/acs-bootstrap-installer.info,
-	  acs-content-repository/acs-content-repository.info,
-	  acs-core-docs/acs-core-docs.info, acs-kernel/acs-kernel.info,
-	  acs-lang/acs-lang.info, acs-mail/acs-mail.info,
-	  acs-messaging/acs-messaging.info,
-	  acs-reference/acs-reference.info,
-	  acs-service-contract/acs-service-contract.info,
-	  acs-subsite/acs-subsite.info, acs-tcl/acs-tcl.info,
-	  acs-templating/acs-templating.info,
-	  ref-timezones/ref-timezones.info, search/search.info: bump all
-	  core version numbers (and requires as well) to 5.2.0a1
-
-2005-06-04 11:48  michaels
-
-	* packages/acs-subsite/www/admin/object-types/:
-	  alphabetical-index.adp, alphabetical-index.tcl, index.adp,
-	  index.tcl: template object view indexes
-
-2005-06-04 11:26  michaels
-
-	* packages/acs-subsite/tcl/apm-callback-procs.tcl: incorrectly
-	  numbered apm_upgrade_logic
-
-2005-06-04 10:13  michaels
-
-	* packages/acs-content-repository/tcl/content-folder-procs.tcl:
-	  var_list must be a list of lists
-
-2005-06-04 10:12  michaels
-
-	* packages/acs-content-repository/: acs-content-repository.info,
-	  sql/postgresql/content-template.sql,
-	  sql/postgresql/upgrade/upgrade-5.2.0d16-5.2.0d17.sql: define
-	  function args for content_template__get_path and __delete; add
-	  upgrade script and bump version to 5.2.0d17
-
-2005-06-02 12:46  daveb
-
-	* packages/acs-tcl/tcl/request-processor-procs.tcl: Add a list of
-	  valid options to ad_conn api documentation.
-
-2005-06-01 23:18  hamiltonc
-
-	* packages/acs-templating/resources/lists/: course-filters.adp,
-	  courses.adp: added list templates for course lists in
-	  dotlrn-catalog
-
-2005-06-01 01:03  timoh
-
-	* packages/acs-tcl/tcl/application-data-link-procs-oracle.xql: file
-	  application-data-link-procs-oracle.xql was added on branch
-	  oacs-5-2 on 2005-07-26 16:43:57 +0000
-
-2005-06-01 01:03  timoh
-
-	* packages/acs-tcl/tcl/application-data-link-procs-postgresql.xql:
-	  file application-data-link-procs-postgresql.xql was added on
-	  branch oacs-5-2 on 2005-07-26 16:43:57 +0000
-
-2005-06-01 01:03  timoh
-
-	* packages/acs-tcl/tcl/application-data-link-procs.tcl: file
-	  application-data-link-procs.tcl was added on branch oacs-5-2 on
-	  2005-07-26 16:43:57 +0000
-
-2005-06-01 01:03  timoh
-
-	* packages/acs-tcl/tcl/application-data-link-procs.xql: file
-	  application-data-link-procs.xql was added on branch oacs-5-2 on
-	  2005-07-26 16:43:57 +0000
-
-2005-06-01 01:03  timoh
-
-	* packages/acs-tcl/tcl/application-link-procs-oracle.xql: file
-	  application-link-procs-oracle.xql was added on branch oacs-5-2 on
-	  2005-07-26 16:43:57 +0000
-
-2005-06-01 01:03  timoh
-
-	* packages/acs-tcl/tcl/application-link-procs-postgresql.xql: file
-	  application-link-procs-postgresql.xql was added on branch
-	  oacs-5-2 on 2005-07-26 16:43:57 +0000
-
-2005-06-01 01:03  timoh
-
-	* packages/acs-tcl/tcl/application-link-procs.tcl: file
-	  application-link-procs.tcl was added on branch oacs-5-2 on
-	  2005-07-26 16:45:14 +0000
-
-2005-06-01 01:03  timoh
-
-	* packages/acs-tcl/tcl/application-link-procs.xql: file
-	  application-link-procs.xql was added on branch oacs-5-2 on
-	  2005-07-26 16:43:57 +0000
-
-2005-06-01 01:03  maltes
-
-	* packages/acs-tcl/tcl/: application-data-link-procs-oracle.xql,
-	  application-data-link-procs-postgresql.xql,
-	  application-data-link-procs.tcl, application-data-link-procs.xql,
-	  application-link-procs-oracle.xql,
-	  application-link-procs-postgresql.xql,
-	  application-link-procs.tcl, application-link-procs.xql: Added
-	  application and application data linking functionality written by
-	  Timo. This allows you to link packages together (e.g.
-	  project-manager and logger) or data of packages (e.g. a project
-	  and a file-storage folder)
-
-2005-05-31 11:07  daveb
-
-	* packages/acs-content-repository/tcl/: content-folder-procs.tcl,
-	  content-item-procs.tcl: Add where clause to content::item::update
-	  and content::folder::update
-
-2005-05-27 00:30  jeffd
-
-	* packages/acs-subsite/www/permissions/toggle-inherit.tcl: fix so
-	  subsite admins toggling inheritence dont remove their own admin
-	  rights
-
-2005-05-23 19:54  enriquec
-
-	* packages/acs-admin/: www/users/merge-confirm.adp,
-	  www/users/merge-confirm.tcl, www/users/merge-confirm.xql,
-	  www/users/merge-final.adp, www/users/merge-final.tcl,
-	  www/users/merge-oracle.xql, www/users/merge-postgresql.xql,
-	  www/users/merge.adp, www/users/merge.tcl, www/users/merge.xql,
-	  www/users/one.adp, www/users/search.tcl, tcl/merge-procs.tcl,
-	  www/resources/left.gif, www/resources/not_available.gif,
-	  www/resources/right.gif, www/resources/um-more-info.css: Adding
-	  GUI to merge user accounts. I modified the 'one acs admin user'
-	  page and 'search' page to support this.
-
-2005-05-23 19:21  enriquec
-
-	* packages/acs-kernel/: acs-kernel.info,
-	  sql/oracle/groups-body-create.sql, sql/oracle/groups-create.sql,
-	  sql/oracle/upgrade/upgrade-5.2.0d9-5.2.0d10.sql,
-	  sql/postgresql/groups-body-create.sql,
-	  sql/postgresql/groups-create.sql,
-	  sql/postgresql/upgrade/upgrade-5.2.0d9-5.2.0d10.sql: Adding the
-	  member_state 'merged'. Added plsql functions and upgrade scripts
-	  for oracle and pg.
-
-2005-05-23 09:57  jeffd
-
-	* packages/search/www/: search.adp, search.tcl: search for things
-	  owned by the subsite itself as well, provide object_id in
-	  datasource
-
-2005-05-20 06:23  andrewg
-
-	* packages/acs-tcl/tcl/utilities-procs.tcl: Merging in changes from
-	  oacs-5-1.  Please see comments for 1.70.2.8.
-
-2005-05-13 11:47  skaufman
-
-	* packages/acs-templating/www/resources/lists.css: eliminates ugly
-	  border around list sort arrows for list-narrow style
-
-2005-05-12 14:35  jeffd
-
-	* packages/acs-content-repository/: acs-content-repository.info,
-	  sql/common/mime-type-data.sql,
-	  sql/oracle/upgrade/upgrade-5.2.0d15-5.2.0d16.sql,
-	  sql/postgresql/upgrade/upgrade-5.2.0d15-5.2.0d16.sql: add some
-	  common mimetypes, bump version, upgrade scripts provided
-
-2005-05-12 13:24  jeffd
-
-	* packages/acs-tcl/tcl/form-processing-procs.tcl: check both the
-	  ad_form elements and the template elements
-
-2005-05-12 12:12  jeffd
-
-	* packages/acs-tcl/tcl/form-processing-procs.tcl: inverted logic
-	  and the wrong element key from last commit
-
-2005-05-12 04:45  jeffd
-
-	* packages/acs-tcl/tcl/text-html-procs.tcl: duh A-F not A-f
-
-2005-05-12 04:42  jeffd
-
-	* packages/acs-tcl/tcl/text-html-procs.tcl: fix expanding hex
-	  entities resolves bug 2454
-
-2005-05-12 01:41  jeffd
-
-	* packages/acs-tcl/tcl/form-processing-procs.tcl: use
-	  template::element::exists for checking if an element exists for
-	  validation blocks - faster and works in the event you added an
-	  element directly via the form api
-
-2005-05-11 06:24  carolinem
-
-	* packages/acs-subsite/www/resources/default-master.css:
-	  submit-button class
-
-2005-05-10 09:17  andrewg
-
-	* packages/acs-admin/www/apm/parameter-delete.tcl: Bringing in last
-	  commit from the oacs-5-1 branch onto HEAD.
-
-2005-05-06 09:25  richardh
-
-	* packages/acs-lang/tcl/lang-install-procs.tcl: Added namespace
-	  eval to avoid start-up failure
-
-2005-05-03 15:10  jeffd
-
-	* packages/acs-templating/tcl/widget-procs.tcl: inverted logic on
-	  checking multiple in last commit
-
-2005-05-03 14:23  jeffd
-
-	* packages/acs-templating/tcl/widget-procs.tcl: support a
-	  display_widget attribute for the category widget so we can show
-	  checkboxes for category selection
-
-2005-05-03 03:26  jeffd
-
-	* packages/acs-templating/tcl/widget-procs.tcl: make 4 space
-
-2005-05-02 14:13  skaufman
-
-	* packages/acs-api-browser/www/: proc-view.adp, proc-view.tcl:
-	  maintains chain-of-crumb links when toggling show/hide source
-
-2005-04-29 14:17  miguelm
-
-	* packages/acs-subsite/www/admin/set-reg-assessment.adp: send
-	  parameter to set the registration assessment
-
-2005-04-28 17:25  jeffd
-
-	* packages/acs-subsite/lib/login.adp: get rid of spurious -
-
-2005-04-28 15:38  jeffd
-
-	* packages/acs-content-repository/tcl/revision-procs.tcl: throw a
-	  NOT_FOUND error for not found so we can 404 in things like
-	  photo-album/www/image/index.vuh
-
-2005-04-28 11:45  skaufman
-
-	* packages/acs-api-browser/www/proc-view.tcl: adds package to
-	  trail-of-crumbs for proc-view as it is in procs-file-view,
-	  display-sql, etc
-
-2005-04-28 03:33  jeffd
-
-	* packages/acs-subsite/www/pvt/home.tcl: use -catch for callback so
-	  if page fragment has error we still serve page
-
-2005-04-28 02:53  jeffd
-
-	* packages/acs-subsite/www/register/account-closed.tcl: change msg
-	  key in account-closed page, uppercase key
-
-2005-04-28 02:49  jeffd
-
-	* packages/acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml:
-	  add the account closed title msg key
-
-2005-04-28 02:46  jeffd
-
-	* packages/acs-subsite/www/register/account-closed.tcl: change msg
-	  key in account-closed page
-
-2005-04-27 07:46  jeffd
-
-	* packages/acs-tcl/tcl/request-processor-procs.tcl: fix getting the
-	  referrer and constructing the url for the email traceback notify
-
-2005-04-27 04:27  timoh
-
-	* packages/acs-content-repository/tcl/content-item-procs.tcl: added
-	  defaults for creation user and creation ip of content-items
-
-2005-04-26 18:06  jeffd
-
-	* packages/acs-subsite/www/register/account-closed.tcl: doubled up
-	  title/text annoying
-
-2005-04-26 07:36  jader
-
-	* packages/acs-tcl/tcl/utilities-init.tcl: Applying Nis' fix for
-	  bug 2407 (log rotation runs only on canonical server)
-
-2005-04-25 15:50  victorg
-
-	* packages/acs-content-repository/tcl/item-procs.tcl: Adding
-	  default value to db_string in item::get_live_revision
-
-2005-04-25 06:29  timoh
-
-	* packages/acs-templating/: resources/lists/table.adp,
-	  tcl/list-procs.tcl: added 10 as dynamic list size; let selectbox
-	  for dynamic size appear always
-
-2005-04-22 01:29  eduardop
-
-	* packages/acs-content-repository/tcl/revision-procs-oracle.xql:
-	  bugfix: fixing bug #2402, bad merge
-
-2005-04-21 10:13  timoh
-
-	* packages/acs-templating/: resources/lists/table.adp,
-	  tcl/list-procs.tcl: added variable row numbers via selectbox;
-	  added pagination b" ar at bottom of list
-
-2005-04-20 13:11  daveb
-
-	* packages/acs-content-repository/tcl/filter-procs.tcl: Pass
-	  resolve index to get_id
-
-2005-04-20 06:21  eduardop
-
-	* packages/acs-content-repository/tcl/revision-procs-oracle.xql:
-	  fix (people should try these changes first prior to commit)
-
-2005-04-20 04:48  eduardop
-
-	* packages/: acs-admin/www/apm/packages-install-2.tcl,
-	  acs-content-repository/sql/postgresql/upgrade/upgrade-5.1.4d2-5.1.4d3.sql,
-	  acs-tcl/tcl/navigation-callback-procs.tcl: fix pacakge -> package
-	  typo
-
-2005-04-19 19:11  jader
-
-	* packages/acs-core-docs/www/xml/install-guide/openacs.xml: Fixed
-	  typo in reference guide, courtesy of Oscar Castaneda V.
-
-2005-04-14 10:33  jader
-
-	* packages/: acs-bootstrap-installer/tcl/20-db-bootstrap-procs.tcl,
-	  acs-tcl/tcl/00-database-procs.tcl: Updated to work with Oracle
-	  10. Was using Oracle8 hardcoded -- the new code is is more
-	  flexible with what the driver calls itself.
-
-2005-04-13 01:28  maltes
-
-	* packages/acs-content-repository/tcl/content-folder-procs.tcl:
-	  Added function to return the content_folder_id for a package
-
-2005-04-13 01:23  maltes
-
-	* packages/acs-tcl/tcl/: object-type-procs.tcl,
-	  object-type-procs.xql: Added function (cached) to return
-	  table_name of an object
-
-2005-04-12 11:52  eduardop
-
-	* etc/install/: checkout.sh, install.tcl, updateserver.sh,
-	  oracle/recreate-user.sh: update
-
-2005-04-12 07:37  andrewg
-
-	* packages/acs-templating/www/resources/: bullet.gif, minus.gif,
-	  mktree.css, mktree.js, plus.gif: Adding dhtml tree code.
-
-2005-04-11 15:21  leed
-
-	* packages/acs-tcl/tcl/callback-procs.tcl: Added procs for querying
-	  callbacks.
-
-2005-04-11 15:18  leed
-
-	* packages/acs-tcl/tcl/: object-type-procs-oracle.xql,
-	  object-type-procs-postgresql.xql, object-type-procs.tcl: Fixed
-	  supertype accessor.
-
-2005-04-08 15:58  miguelm
-
-	* packages/acs-subsite/www/admin/set-reg-assessment.tcl: fix query
-	  to select the assessments created in the same subsite
-
-2005-04-07 13:16  miguelm
-
-	* packages/acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml:
-	  add messages related to the register assessment
-
-2005-04-07 11:06  miguelm
-
-	* packages/acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml:
-	  add messages related to registration assessment
-
-2005-04-07 11:02  miguelm
-
-	* packages/acs-subsite/www/admin/set-reg-assessment.tcl: change the
-	  button functionality
-
-2005-04-05 11:26  miguelm
-
-	* packages/acs-subsite/www/admin/: set-reg-assessment.adp,
-	  set-reg-assessment.tcl: fix edit button
-
-2005-04-04 11:31  miguelm
-
-	* packages/acs-subsite/www/admin/: set-reg-assessment.tcl,
-	  set-reg-assessment.xql: fix query to select an instance that is
-	  alredy mounted
-
-2005-04-04 10:59  miguelm
-
-	* packages/acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml:
-	  add message displayed when the assessment is related to the
-	  registration process
-
-2005-04-04 10:47  miguelm
-
-	* packages/acs-subsite/www/admin/: index.adp,
-	  set-reg-assessment.adp, set-reg-assessment.tcl,
-	  set-reg-assessment.xql: add links to edit and create the
-	  registration assessment
-
-2005-04-03 01:33  leed
-
-	* packages/acs-tcl/tcl/: object-type-procs-oracle.xql,
-	  object-type-procs-postgresql.xql, object-type-procs.tcl:
-	  Functions to get the parent types of an object type with
-	  util_memoize caching.
-
-2005-04-01 12:18  torbenb
-
-	* packages/acs-core-docs/www/xml/install-guide/oracle.xml: adding
-	  link about Andrew Piskorski's Oracle9i install notes per thread
-	  http://openacs.org/forums/message-view?message_id=67108
-
-2005-04-01 10:51  jader
-
-	* packages/acs-core-docs/www/xml/install-guide/maintenance.xml:
-	  Updated link on maintenance page, thanks to Wojtek Przywrzej
-
-2005-03-31 09:44  miguelm
-
-	* packages/acs-subsite/www/admin/set-reg-assessment.xql: verify if
-	  the public have read privilege for the assessment
-
-2005-03-30 07:00  jeffd
-
-	* packages/search/tcl/search-procs.tcl: object_type unavailable on
-	  delete
-
-2005-03-29 17:01  jeffd
-
-	* packages/acs-bootstrap-installer/tcl/00-proc-procs.tcl: fix for
-	  trailing space on boolean flag resolves bug 2381 by Carl
-	  Coryell-Martin
-
-2005-03-29 16:36  jeffd
-
-	* packages/acs-tcl/tcl/parameter-procs.tcl: add param docs for
-	  localize and boolean for parameter;:get
-
-2005-03-29 15:39  jeffd
-
-	* packages/search/tcl/: search-procs.tcl, syndicate-procs.tcl: add
-	  a search::action callback and make the syndication called from
-	  the callback rather than inline.
-
-2005-03-29 06:44  jader
-
-	* packages/acs-core-docs/www/xml/install-guide/: maintenance.xml,
-	  overview.xml: Added link to binary installers
-
-2005-03-29 02:28  jeffd
-
-	* packages/acs-bootstrap-installer/tcl/00-proc-procs.tcl: have
-	  callbacks executed one level below the calling function so upvar
-	  works how you would expect in the callback
-
-2005-03-29 02:23  jeffd
-
-	* packages/acs-tcl/tcl/test/ad-proc-test-procs.tcl: test that array
-	  pass by ref works as expected, test eval uplevel work with empty
-	  args and that only one round of eval applied
-
-2005-03-29 00:46  jeffd
-
-	* packages/acs-tcl/tcl/install-procs.tcl: fix docs for
-	  set-parameter-default
-
-2005-03-28 02:18  carlb
-
-	* packages/acs-core-docs/www/xml/install-guide/aolserver4.xml:
-	  cleaned up doc, removed references to specific aolserver versions
-	  where posible, and added needed library path variable for
-	  nsposgres
-
-2005-03-27 08:04  daveb
-
-	* packages/search/www/search.tcl: Remove ETP specific code from
-	  search package. Also trimming "index" from all ETP urls could
-	  quite possibly trim something uninteded. The correct course of
-	  action would be to handle this in the ETP URL service contract
-	  using file commands to get just the filename if it exactly
-	  matches index.
-
-2005-03-26 14:56  jeffd
-
-	* packages/acs-lang/tcl/lang-install-procs.tcl: fix typo in
-	  disable-locale action
-
-2005-03-26 14:55  jeffd
-
-	* packages/acs-tcl/tcl/parameter-procs.xql: wrong field name for
-	  default_value
-
-2005-03-26 06:35  jeffd
-
-	* packages/acs-subsite/www/pvt/home.tcl: fix subsite_url
-
-2005-03-26 04:30  jeffd
-
-	* packages/acs-content-repository/: acs-content-repository.info,
-	  sql/postgresql/content-item.sql,
-	  sql/postgresql/upgrade/upgrade-5.2.0d14-5.2.0d15.sql: propigate
-	  title rather than name for content_item__new, bump to d15,
-	  upgrade
-
-2005-03-25 15:59  jeffd
-
-	* packages/acs-subsite/: lib/message.adp, lib/message.tcl,
-	  www/register/account-closed.tcl, www/register/email-confirm.tcl:
-	  add a message include and change the account closed and
-	  email-confirm pages to use it
-
-2005-03-25 09:04  jeffd
-
-	* packages/acs-lang/tcl/lang-install-procs.tcl: document a bit
-	  better, add a disable-locale action
-
-2005-03-25 08:58  jeffd
-
-	* packages/acs-tcl/tcl/install-procs.tcl: add the
-	  set-default-parameter install action
-
-2005-03-25 08:49  jeffd
-
-	* packages/acs-tcl/tcl/: parameter-procs.tcl, parameter-procs.xql:
-	  add a parameter::set_default function used by teh
-	  set-parameter-default install action
-
-2005-03-24 10:37  skaufman
-
-	* packages/acs-kernel/catalog/acs-kernel.en_US.ISO-8859-1.xml: adds
-	  missing key for common_Submit
-
-2005-03-24 08:26  daveb
-
-	* packages/acs-tcl/tcl/site-nodes-procs.tcl: Allow context_id as an
-	  optional parameter to site_node::mount to allow update if a
-	  package is moved to a different site_node.
-
-2005-03-23 16:37  jeffd
-
-	* packages/acs-tcl/lib/page-error.tcl: quotehtml the error and user
-	  agent
-
-2005-03-23 14:51  skaufman
-
-	* packages/acs-templating/www/resources/lists.css: removes ugly
-	  border around sort-order arrows
-
-2005-03-23 14:21  skaufman
-
-	* packages/acs-templating/resources/lists/table.adp: border is
-	  deprecated and should not be used here
-
-2005-03-23 14:01  skaufman
-
-	* packages/acs-templating/resources/lists/table.adp: removed ugly
-	  border around sort-order arrows in listbuilder
-
-2005-03-23 13:53  leed
-
-	* packages/acs-bootstrap-installer/tcl/00-proc-procs.tcl: Callbacks
-	  no longer throw an error if -catch is specified with -impl and
-	  the chosen implementation that does not exist.
-
-2005-03-23 05:54  daveb
-
-	* packages/search/tcl/search-procs.tcl: Revert client specific code
-	  checked in.
-
-2005-03-22 18:26  daveb
-
-	* packages/search/tcl/search-procs.tcl: Add support to update
-	  acs_objects.package_id and acs_objects.title on index for search.
-	  PBS specific enhancement to support clipboard and other 5.2
-	  functionality.
-
-2005-03-21 21:53  gabrielb
-
-	* packages/acs-kernel/sql/postgresql/postgresql.sql: Fixes bug
-	  #2300.
-
-2005-03-21 16:57  jeffd
-
-	* packages/acs-subsite/: lib/user-subsites.adp,
-	  lib/user-subsites.tcl, tcl/callback-procs.tcl, www/pvt/home.adp,
-	  www/pvt/home.tcl: user subsite list
-
-2005-03-21 14:16  jeffd
-
-	* packages/acs-subsite/lib/: user-info.adp, user-info.tcl: remove
-	  the list of groups and replace with list of links to communities
-	  based on application group membership
-
-2005-03-21 14:05  jeffd
-
-	* packages/acs-kernel/acs-kernel.info: make AllowedTag match the
-	  physical markup used by RTE
-
-2005-03-21 03:59  rob
-
-	* packages/acs-kernel/sql/: oracle/acs-create.sql,
-	  postgresql/acs-create.sql: Added annotate permission as per TIP
-	  74
-
-2005-03-21 00:14  jeffd
-
-	* packages/acs-kernel/catalog/acs-kernel.en_US.ISO-8859-1.xml: add
-	  an Actions common key
-
-2005-03-20 16:15  donb
-
-	* packages/acs-automated-testing/acs-automated-testing.info: Made
-	  this auto-mounted package a singleton so it doesn't show up in
-	  the "mount application" select list.	There's no good reason to
-	  mount it more than once anyway that either daveb or I could come
-	  up with.
-
-2005-03-20 08:13  jeffd
-
-	* packages/acs-kernel/catalog/acs-kernel.en_US.ISO-8859-1.xml: add
-	  a common key: Permissions
-
-2005-03-20 07:58  jeffd
-
-	* packages/acs-content-repository/sql/postgresql/:
-	  content-folder.sql, content-item.sql, content-revision.sql,
-	  upgrade/upgrade-5.2.0d12-5.2.0d13.sql: fix laundry list of bugs
-	  in content repository copy code.
-
-	  duplicate version of the 11arg content_folder__new
-
-	  copy_creation_ip rather than copy__creation_ip in
-	  content_revision__copy
-
-	  content_folder__copy did not preserve context_id properly
-
-	  content_item__copy2 had a bunch of unused varaibles -- removed
-	  them.
-
-	  content_item__copy now preserves live_revision so things which
-	  copy an item with a live revision to not have to explicitly
-	  publish the new copy (which eg file storage did not do).
-
-	  content_revision__copy did an insert into acs_objects without
-	  specifying column names which breaks on a new install since the
-	  order is not as expected.
-
-2005-03-20 05:41  daveb
-
-	* packages/acs-content-repository/:
-	  tcl/test/content-keyword-test-procs.tcl,
-	  tcl/test/content-keyword-test-procs.xql,
-	  acs-content-repository.info, sql/postgresql/content-keyword.sql,
-	  sql/postgresql/upgrade/upgrade-5.2.0d13-5.2.0d14.sql: Add
-	  content_keyword__del to match oracle pl/sql.	Add
-	  define_function_args calls for content-keyword.sql.  Add basic
-	  tests for content::keyword apis.
-
-2005-03-19 17:23  jeffd
-
-	* packages/acs-tcl/tcl/test/ad-proc-test-procs.tcl: add a couple
-	  extra callbacks to make tests not fail after the first run (when
-	  the callbacks it thinks should not be defined actually are
-	  defined since we have been through once
-
-2005-03-19 16:53  daveb
-
-	* packages/acs-content-repository/tcl/keyword-procs.tcl: Fix proc
-	  name, should br cr::keyword::delete
-
-2005-03-19 16:47  jeffd
-
-	* packages/acs-tcl/: lib/actions.adp, lib/actions.tcl,
-	  tcl/navigation-callback-procs.tcl: add a
-	  navigation::package_admin callback and an implementation for
-	  forums and the lib include to generate html
-
-2005-03-19 14:57  jeffd
-
-	* packages/acs-templating/tcl/richtext-procs.tcl: daveb spotted
-	  that the quoting was wrong for the on_fail arg, \r not stripped
-
-2005-03-19 06:06  jeffd
-
-	* packages/acs-api-browser/: tcl/acs-api-documentation-procs.tcl,
-	  www/content-page-view.adp: fix markup, make @see
-	  /file/path/foo.tcl, @see /doc/db-api.html @see
-	  http://openacs.org/foo work
-
-2005-03-18 10:31  andrewg
-
-	* packages/acs-lang/sql/oracle/ad-locales.sql: Re-removing stray
-	  'end', introduced by victorg's commit.
-
-2005-03-18 10:10  jeffd
-
-	* packages/acs-subsite/www/resources/core.js,
-	  packages/acs-templating/tcl/richtext-procs.tcl,
-	  packages/acs-templating/tcl/widget-procs.tcl,
-	  www/blank-master.adp, www/blank-master.tcl: Switch to RTE for
-	  richtext html editor.
-
-2005-03-18 09:14  jeffd
-
-	* packages/acs-templating/www/resources/rte/: blank.htm,
-	  changelog.txt, demo.asp, demo.htm, demo.php, html2xhtml.js,
-	  insert_link.htm, insert_table.htm, multi.htm, palette.htm,
-	  richtext.js, richtext_compressed.js, rte.css, rte.tar.gz,
-	  xarg-fixes.patch, images/bgcolor.gif, images/blackdot.gif,
-	  images/bold.gif, images/centre.gif, images/copy.gif,
-	  images/cut.gif, images/email.gif, images/hr.gif,
-	  images/hyperlink.gif, images/image.gif, images/indent.gif,
-	  images/insert_table.gif, images/italic.gif,
-	  images/justifyfull.gif, images/left_just.gif, images/list.gif,
-	  images/numbered_list.gif, images/outdent.gif, images/paste.gif,
-	  images/redo.gif, images/right_just.gif, images/smiley.gif,
-	  images/spellcheck.gif, images/textcolor.gif,
-	  images/underline.gif, images/undo.gif: commit the 20050304
-	  version of rte from http://www.kevinroth.com/ + patches from Xarg
-	  to make it work properly on safari and degrade correctly for the
-	  richtext widget (requires that a second input box be rendered for
-	  the content type html/text/etc).  Also renames the View source
-	  button to 'edit html' which is what it is and moves it top right
-	  with the other edit widgets
-
-2005-03-18 05:50  jeffd
-
-	* packages/acs-content-repository/sql/postgresql/:
-	  content-folder.sql, upgrade/upgrade-5.2.0d12-5.2.0d13.sql: minor
-	  fix: move_name should have been move__name
-
-2005-03-18 05:44  jeffd
-
-	* packages/acs-content-repository/: acs-content-repository.info,
-	  sql/postgresql/upgrade/upgrade-5.2.0d12-5.2.0d13.sql: upgrade to
-	  fix bug in content_folder__move and add the integer,integer
-	  version used in content_item__move; bump to 5.2.0d13.  thanks
-	  daveb
-
-2005-03-17 19:21  daveb
-
-	*
-	  packages/acs-content-repository/sql/postgresql/content-folder.sql:
-	  Add content_folder__move function that allows rename on move.
-	  Already existed on Oracle.
-
-2005-03-17 16:04  jeffd
-
-	* packages/acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml:
-	  speeleng error
-
-2005-03-17 05:33  jeffd
-
-	* packages/acs-subsite/tcl/subsite-procs.tcl: use parameter::get
-	  for getting SolicitPortraitP param rather than pacakge-key which
-	  breaks with multiple subsites bug 2357 patch 653 Orzenil Silva
-	  Junior
-
-2005-03-17 00:35  jeffd
-
-	* packages/search/tcl/search-procs.tcl: more error checking
-
-2005-03-17 00:33  jeffd
-
-	* packages/acs-tcl/tcl/apm-install-procs.tcl: fix string literal
-	  arg to empty_string_p
-
-2005-03-16 11:19  jeffd
-
-	* packages/acs-templating/tcl/tag-procs.tcl: <if XXYYZZ in YY>
-	  would return true.  this fixes it so the literal string has to be
-	  in there
-
-2005-03-16 06:14  leed
-
-	* packages/acs-tcl/tcl/install-procs.tcl: Allow package key to be
-	  specified using the package attribute as well package-key.
-
-2005-03-15 12:04  daveb
-
-	* packages/acs-bootstrap-installer/installer/index.tcl: Change form
-	  from GET to POST so password isn't logged in access log. Fix
-	  bug#1743.
-
-2005-03-14 10:03  carlb
-
-	* packages/acs-templating/www/doc/guide/index.html: fixed links and
-	  removed aD email
-
-2005-03-13 16:45  carlb
-
-	* packages/acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml:
-	  changed private level to privacy level
-
-2005-03-13 16:41  carlb
-
-	* packages/acs-subsite/catalog/acs-subsite.de_DE.ISO-8859-1.xml:
-	  character encoding fixes and translations
-
-2005-03-13 15:51  daveb
-
-	* packages/: acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml,
-	  acs-authentication/tcl/authentication-procs.tcl: Fix bug#2310
-
-2005-03-13 14:52  daveb
-
-	* packages/acs-tcl/tcl/: site-nodes-procs.tcl,
-	  site-nodes-procs.xql: Fix bug#2176, update context_id when
-	  remounting and unmounted package instance
-
-2005-03-13 14:21  donb
-
-	* packages/acs-subsite/tcl/: package-procs-oracle.xql,
-	  test/acs-subsite-procs.tcl: Bug #2274: My removal of "upper()"
-	  some time back broke some things, hmmm, put it back in.
-
-2005-03-12 16:59  michaels
-
-	* packages/acs-subsite/www/admin/host-node-map/: index-oracle.xql,
-	  index-postgresql.xql, index.adp, index.tcl, index.xql: templated
-	  host-node map; now uses listbuilder and ad_form
-
-2005-03-12 14:59  donb
-
-	* packages/acs-subsite/lib/subsites.xql: Jeff's "anyone can be a
-	  subsite" patch came complete with an extra "]".  "acs-subite"
-	  doesn't match "acs-subsite]" ...
-
-2005-03-12 14:47  jeffd
-
-	* packages/acs-tcl/tcl/request-processor-procs.tcl: return
-	  recursion_count from ad_conn even if not initialized bug 1788
-
-2005-03-12 13:39  donb
-
-	* packages/acs-templating/tcl/date-procs.tcl:
-	  Modified the date type's "to_sql" property to return to_timestamp
-	  if the format includes minutes and seconds, to_date otherwise.
-	  In reality we should probably move to having both date and
-	  timestamp template types but for now this should work for both
-	  Oracle and PG.
-
-2005-03-12 13:38  michaels
-
-	* packages/acs-subsite/www/admin/site-map/instance-delete.tcl:
-	  fixed small redirect bug
-
-2005-03-12 13:36  michaels
-
-	* packages/acs-subsite/www/admin/site-map/: unmounted.tcl,
-	  unmounted.adp: added adp for umounted applications page
-
-2005-03-12 13:28  andrewg
-
-	* packages/acs-content-repository/sql/oracle/content-folder.sql:
-	  This is just a comment on the previous commit.  Oracle was
-	  refusing to compile the package because the specification and
-	  body were not declaring the type in an identical way.  The
-	  specification says that the package_id column is of type
-	  acs_objects.package_id%TYPE but the body previously was declaring
-	  it cr_folders.package_id%TYPE.  That wasn't good enough for
-	  Oracle.  Now the two are declaring the type the same way.
-
-2005-03-12 11:45  andrewg
-
-	* packages/acs-content-repository/sql/oracle/:
-	  content-template.sql, packages-create.sql: Bugfix.
-
-2005-03-12 11:22  andrewg
-
-	* packages/acs-content-repository/sql/oracle/: content-folder.sql,
-	  content-item.sql: Bugfix
-
-2005-03-12 11:07  daveb
-
-	* packages/acs-subsite/acs-subsite.info: Require acs-authenication
-	  so it will upgrade correctly.
-
-2005-03-11 15:51  jeffd
-
-	* packages/acs-bootstrap-installer/tcl/00-proc-procs.tcl: i am a
-	  monkey
-
-2005-03-11 15:49  leed
-
-	* packages/acs-tcl/tcl/test/ad-proc-test-procs.tcl: Added tests for
-	  ad_proc callbacks.
-
-2005-03-11 15:48  jeffd
-
-	* packages/acs-bootstrap-installer/tcl/00-proc-procs.tcl: throw
-	  error if invoking specific impl which does not exist
-
-2005-03-11 15:41  jeffd
-
-	* packages/acs-bootstrap-installer/tcl/00-proc-procs.tcl: fix empty
-	  body contract check
-
-2005-03-11 15:15  jeffd
-
-	* packages/acs-bootstrap-installer/tcl/00-proc-procs.tcl: some
-	  error checking for callback declaration, fix namespace eval
-	  warning, add an @see for the contract to each impl
-
-2005-03-11 14:37  jeffd
-
-	* packages/acs-bootstrap-installer/tcl/00-proc-procs.tcl: too listy
-	  by far
-
-2005-03-11 12:12  jeffd
-
-	* packages/acs-bootstrap-installer/tcl/00-proc-procs.tcl: Callback
-	  implmentation, see tip 79 for details
-
-2005-03-10 07:25  victorg
-
-	* packages/acs-lang/sql/: oracle/ad-locales.sql,
-	  postgresql/ad-locales.sql: There was two default locales for
-	  languages 'es' and 'zh'
-
-2005-03-10 07:22  leed
-
-	* packages/acs-tcl/tcl/site-nodes-procs.tcl: Added
-	  site_node::get_ancestors proc.
-
-2005-03-10 07:20  leed
-
-	* packages/acs-tcl/tcl/apm-install-procs.tcl: Add adp parse level
-	  to install xml parsing to allow use of multirows.
-
-2005-03-09 17:42  jeffd
-
-	* packages/search/: search.info, tcl/search-procs.tcl,
-	  www/advanced-search.adp, www/index.adp, www/search.adp,
-	  www/search.tcl: subsite scoped search
-
-2005-03-09 15:40  jeffd
-
-	* packages/acs-tcl/tcl/test/file-test-procs.tcl: comment some code,
-	  check for limit :bind which breaks pg7.3
-
-2005-03-09 11:19  leed
-
-	* packages/acs-tcl/tcl/request-processor-procs.tcl: Fixed length of
-	  string calc.
-
-2005-03-09 08:24  jeffd
-
-	* packages/acs-bootstrap-installer/tcl/00-proc-procs.tcl: log a
-	  debug message for procs declared in a namespace eval rather than
-	  explicit namespace
-
-2005-03-07 16:06  jeffd
-
-	* packages/acs-subsite/tcl/subsite-procs.tcl: comment out query for
-	  now since the it breaks in a transaction -- hardcode acs-subsite
-
-2005-03-07 15:48  jeffd
-
-	* packages/acs-subsite/tcl/subsite-procs.xql: missed the
-	  subsite-procs app group create query names somehow tip 76
-
-2005-03-07 15:32  jeffd
-
-	* packages/acs-subsite/lib/subsites.xql: missing close querytext
-
-2005-03-07 15:21  jeffd
-
-	* packages/acs-reference/acs-reference.info: fix lingering broken
-	  ad links
-
-2005-03-07 13:26  jeffd
-
-	* packages/acs-tcl/tcl/site-nodes-procs.tcl: another tip 76 change
-	  for hardcoded acs-subsite
-
-2005-03-07 13:10  jeffd
-
-	* packages/acs-subsite/www/permissions/perm-include.tcl: fix to use
-	  ad_conn subsite_url
-
-2005-03-07 13:02  jeffd
-
-	* packages/: acs-subsite/lib/subsites.tcl,
-	  acs-subsite/lib/subsites.xql,
-	  acs-tcl/tcl/request-processor-procs.tcl,
-	  acs-subsite/tcl/subsite-procs-oracle.xql,
-	  acs-subsite/tcl/subsite-procs-postgresql.xql,
-	  acs-subsite/tcl/subsite-procs.tcl,
-	  acs-subsite/tcl/subsite-procs.xql: first part of tip 76 --
-	  multiple packages as subsites adds a subsite::package_keys
-	  function for listing subsites, and uses it instead of hard coding
-	  acs-subsite all over
-
-2005-03-07 12:47  jeffd
-
-	* packages/search/tcl/search-procs.tcl: typo two log messages
-
-2005-03-07 07:36  jeffd
-
-	* packages/acs-kernel/catalog/acs-kernel.en_US.ISO-8859-1.xml: add
-	  a details common key
-
-2005-03-07 05:24  jeffd
-
-	* packages/search/tcl/search-procs.tcl: make the search indexer
-	  much more robust to errors in the datasource or indexing routines
-	  -- catch + emit traceback for errors
-
-2005-03-06 11:09  jeffd
-
-	* packages/acs-kernel/: acs-kernel.info,
-	  sql/postgresql/postgresql.sql,
-	  sql/postgresql/upgrade/upgrade-5.2.0d8-5.2.0d9.sql: add an
-	  explicit cast of proname in drop_package needed in pg8
-
-2005-03-06 10:15  jeffd
-
-	* www/robots.txt: add wildcard disallow for googlebot
-
-2005-03-04 15:09  jeffd
-
-	* packages/acs-tcl/tcl/: 00-database-procs.tcl, ds-stub-procs.tcl,
-	  request-processor-procs.tcl: stub ds procs rather than call
-	  ad_call_proc_if_defined_and_function_name_too_short
-
-2005-03-04 14:30  jeffd
-
-	* packages/acs-tcl/tcl/acs-permissions-procs.tcl: change how
-	  permission::cache_p is defined so it does not break ttrace
-
-2005-03-04 14:11  miguelm
-
-	* packages/acs-subsite/www/admin/set-reg-assessment.tcl: remove
-	  unnecessary variable
-
-2005-03-04 13:22  jeffd
-
-	* packages/acs-subsite/tcl/: relation-procs.tcl,
-	  relation-procs.xql: utility proc for getting related items
-
-2005-03-03 15:16  donb
-
-	* packages/acs-tcl/tcl/form-processing-procs.tcl: 1. Allow use of
-	  variables in form element names, so you can more easily build
-	  dynamic forms.  2. Relax the rules slightly so you can initialize
-	  a form without providing    a form block.
-
-2005-03-03 13:06  jeffd
-
-	* packages/acs-tcl/tcl/request-processor-init.tcl: change cache_p
-	  to cache in first call of function not in init; emit notice on
-	  registering filters and procs
-
-2005-03-03 10:17  jeffd
-
-	* tcl/zz-postload.tcl: don't rename away __is_xql
-
-2005-03-03 04:15  jeffd
-
-	* packages/acs-lang/tcl/localization-data-init.tcl: include
-	  variable define for ::lang::util::percent_match
-
-2005-03-02 18:36  donb
-
-	* packages/acs-tcl/acs-tcl.info: Needed to bump version number
-	  because I'm writing code that depends on my change to ad_form ...
-
-2005-03-02 18:35  donb
-
-	* packages/acs-tcl/tcl/form-processing-procs.tcl: Allow one to
-	  initiate an ad_form with specifying the "form" block, useful for
-	  building forms incrementally.
-
-2005-03-02 18:13  jader
-
-	* packages/acs-core-docs/www/xml/install-guide/software.xml: Add in
-	  Oracle 10g to software compatibility matrix.
-
-2005-03-02 14:38  miguelm
-
-	* packages/acs-subsite/lib/user-new.tcl: send return_url when an
-	  assessment is related
-
-2005-03-01 11:39  maltes
-
-	* www/resources/info.txt: Added resources directory so we can put
-	  e.g. a combined css in there
-
-2005-03-01 06:46  miguelm
-
-	* packages/acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml:
-	  add messages
-
-2005-03-01 05:17  jeffd
-
-	* packages/acs-tcl/tcl/text-html-procs.tcl: add an ad_unquotehtml
-	  function to invert ad_quotehtml
-
-2005-03-01 02:42  leed
-
-	* packages/acs-tcl/tcl/request-processor-procs.tcl: Removed call to
-	  subsite::package_keys
-
-2005-03-01 01:56  leed
-
-	* packages/acs-tcl/tcl/request-processor-procs.tcl: Fixed typo in
-	  [ad_conn subsite_url]
-
-2005-03-01 01:17  jeffd
-
-	* packages/acs-tcl/tcl/: request-processor-init.tcl,
-	  request-processor-procs.tcl: ad_acs_admin_id removed
 
