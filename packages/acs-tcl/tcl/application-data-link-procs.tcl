@@ -25,7 +25,7 @@ ad_proc -public application_data_link::delete_links {
     set rel_ids [db_list linked_objects {}]
 
     foreach rel_id $rel_ids {
-	db_dml delete_link {}
+	dm_dml delete_link {}
     }
 }
 
