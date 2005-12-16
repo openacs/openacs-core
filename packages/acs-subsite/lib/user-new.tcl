@@ -44,10 +44,10 @@ if { $self_register_p } {
 
 set implName [parameter::get -parameter "RegistrationImplName" -package_id [subsite::main_site_id]]
 
-set url [callback -catch -impl "$implName" user::registration]
+set callback_url [callback -catch -impl "$implName" user::registration]
 
-if { ![empty_string_p $url] } {
-    ad_returnredirect [export_vars -base $url { return_url }]
+if { ![empty_string_p $callback_url] } {
+    ad_returnredirect [export_vars -base $callback_url { return_url }]
     ad_script_abort
 }
 
