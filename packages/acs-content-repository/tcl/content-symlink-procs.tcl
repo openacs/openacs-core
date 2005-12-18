@@ -66,10 +66,11 @@ ad_proc -public content::symlink::new {
     {-creation_user ""}
     {-creation_ip ""}
 } {
-    @param name
-    @param label
-    @param target_id
-    @param parent_id
+    This procedure allows you to create a new Symlink
+    @param name Name of the new content item. Used instead of "symlink_to_item target_id"
+    @param label 
+    @param target_id Item_id of the item to which the link should point
+    @param parent_id item_id (preferably folder_id) of the parent (folder) where the link is associated and shown in. 
     @param symlink_id
     @param creation_date
     @param creation_user
@@ -96,7 +97,8 @@ ad_proc -public content::symlink::new {
 ad_proc -public content::symlink::resolve {
     -item_id:required
 } {
-    @param item_id
+    Return the item_id of the target item to which the symlink points
+    @param item_id item_id of the symlink
 
     @return NUMBER(38)
 } {
