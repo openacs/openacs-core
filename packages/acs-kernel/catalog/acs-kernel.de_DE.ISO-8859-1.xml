@@ -112,6 +112,8 @@
   <msg key="Person">Person</msg>
   <msg key="Registered_Users">Registrierte User</msg>
   <msg key="The_Public">Alle Besucher des Systems</msg>
+  <msg key="registered_users">Registrierte User</msg>
+  <msg key="the_public">Alle Besucher des Systems</msg>
   <msg key="Unregistered">Unregistrierter</msg>
   <msg key="Unregistered_Visitor">Nicht registrierter Besucher</msg>
   <msg key="URL">URL</msg>
