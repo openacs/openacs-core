@@ -94,6 +94,9 @@ if { [exists_and_not_null file_ids] } {
     set files [list]
     foreach file $file_ids {
 	set file_title [lang::util::localize [content::item::get_title -item_id $file]]
+	if {[empty_string_p $file_title]} {
+	    set file_title "empty"
+	}
 	if { $tracking_p } {
 	    lappend files "<a href=\"/tracking/download/$file_title?file_id=$file\">$file_title</a> "
 	} else {
@@ -103,7 +106,8 @@ if { [exists_and_not_null file_ids] } {
     set files [join $files ", "]
 
     append form_elements {
-        {files_ids:text(inform),optional {label "[_ acs-mail-lite.Associated_files]"} {value $files}}
+        {file_ids:text(hidden) {value $file_ids}}
+        {files:text(inform),optional {label "[_ acs-mail-lite.Associated_files]"} {value $files}}
     }
 }
 
