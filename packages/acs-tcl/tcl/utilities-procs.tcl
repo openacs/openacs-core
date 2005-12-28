@@ -353,7 +353,7 @@ proc util_PrettyBoolean {t_or_f { default  "default" } } {
 }
 
 proc_doc util_PrettyTclBoolean {zero_or_one} "Turns a 1 (or anything else that makes a Tcl IF happy) into Yes; anything else into No" {
-    if $zero_or_one {
+  if {$zero_or_one} {
 	return "Yes"
     } else {
 	return "No"
@@ -1948,6 +1948,10 @@ ad_proc -public ad_set_cookie {
 ad_proc -private ad_run_scheduled_proc { proc_info } { 
     Runs a scheduled procedure and updates monitoring information in the shared variables. 
 } {
+    if {[ns_info name] eq "NaviServer"} {
+      set proc_info [lindex $proc_info 0]
+    }
+
     # Grab information about the scheduled procedure.
     set thread [lindex $proc_info 0]
     set once [lindex $proc_info 1]

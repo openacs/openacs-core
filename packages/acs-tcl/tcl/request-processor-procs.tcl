@@ -1474,3 +1474,20 @@ ad_proc -public request_denied_filter { why } {
 
     return filter_return
 }
+
+
+if {[ns_info name] eq "NaviServer"} {
+  foreach filter {rp_filter rp_resources_filter request_denied_filter} {
+    rename $filter ${filter}_aolserver
+    proc $filter {_ why} [list ${filter}_aolserver \$why]
+  }
+
+  rename rp_invoke_filter rp_invoke_filter_conn
+  proc   rp_invoke_filter { filter_info why } { rp_invoke_filter_conn {} $filter_info $why }
+  
+  rename rp_invoke_proc   rp_invoke_proc_conn
+  proc   rp_invoke_proc   { argv }            { rp_invoke_proc_conn {} $argv }
+
+  rename rp_handler rp_handler_aolserver
+  proc rp_handler {_} {rp_handler_aolserver}
+}
