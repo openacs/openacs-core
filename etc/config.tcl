@@ -629,6 +629,10 @@ ns_section ns/server/${server}/modules
         ns_param   libtdom            ${bindir}/libtdom.so
     }
 
+    # nsthread library which should become standard in 5.3
+    if {[file exists ${homedir}/lib/thread2.6.2/libthread2.6.2.so]} {
+	ns_param libthread ${homedir}/lib/thread2.6.2/libthread2.6.2.so
+    }
 
 ns_log notice "nsd.tcl: using threadsafe tcl: [info exists tcl_platform(threaded)]"
 ns_log notice "nsd.tcl: finished reading config file."
