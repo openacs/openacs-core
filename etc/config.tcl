@@ -51,6 +51,10 @@ set debug false
 set homedir                   /usr/local/aolserver
 set bindir                    [file dirname [ns_info nsd]] 
 
+
+set max_file_upload_mb        20
+set max_file_upload_min        5
+
 ###################################################################### 
 #
 # End of instance-specific settings 
@@ -240,8 +244,8 @@ ns_section ns/server/${server}/module/nssock
     ns_param   port               $httpport
 # setting maxinput higher than practical may leave the server vulnerable to resource DoS attacks
 # see http://www.panoptic.com/wiki/aolserver/166
-    ns_param   maxinput           [expr 20 * 1024 * 1024] ;# Maximum File Size for uploads in bytes
-    ns_param   recvwait           [expr 5 * 60] ;# Maximum request time in minutes
+    ns_param   maxinput           [expr {$max_file_upload_mb * 1024 * 1024}] ;# Maximum File Size for uploads in bytes
+    ns_param   recvwait           [expr {$max_file_upload_min * 60}] ;# Maximum request time in minutes
 
 
 #---------------------------------------------------------------------
@@ -477,9 +481,9 @@ if { [ns_info version] < 4} {
         # following added per
         # http://www.mail-archive.com/aolserver@listserv.aol.com/msg07365.html
         # Maximum File Size for uploads:
-        ns_param   maxinput           [expr 5 * 1024 * 1024] ;# in bytes
+        ns_param   maxinput           [expr {$max_file_upload_mb * 1024 * 1024}] ;# in bytes
         # Maximum request time
-        ns_param   recvwait           [expr 5 * 60] ;# in minutes
+        ns_param   recvwait           [expr {$max_file_upload_min * 60}] ;# in minutes
 
 #    ns_section "ns/server/${server}/module/nsopenssl/ssldriver/admins"
     #    ns_param sslcontext            admins
