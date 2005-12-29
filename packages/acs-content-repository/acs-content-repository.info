@@ -22,7 +22,7 @@
         </description>
 
         <provides url="acs-content-repository" version="5.2.1d1"/>
-        <requires url="acs-kernel" version="5.2.0">
+        <requires url="acs-kernel" version="5.2.0"/>
         <requires url="acs-service-contract" version="5.2.0"/>
         <requires url="search" version="5.2.0"/>
 
