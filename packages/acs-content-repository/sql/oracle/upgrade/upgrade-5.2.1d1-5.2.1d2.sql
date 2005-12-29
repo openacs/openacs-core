@@ -1,3 +1,34 @@
+-- 
+-- 
+-- 
+-- @author Dave Bauer (dave@thedesignexperience.org)
+-- @creation-date 2005-12-26
+-- @arch-tag: c141278e-3359-4f40-8d61-3b8e940c633c
+-- @cvs-id $Id$
+--
+
+-- New installs were not setting parent_id to security_context_root (-4)
+-- but 0 so the CR root folders have the wrong info
+-- re-run these upgrades.
+
+-- Content Repository sets parent_id to security_context_root
+-- for content modules
+
+
+update acs_objects
+set context_id = -4
+where context_id = 0;
+
+update cr_items
+set parent_id = -4
+where parent_id = 0;
+
+
+-- now we need to recreate all the functions that assume 0
+-- we use acs_magic_object('security_context_root') instead of 0
+-- for future flexibility
+
+
 -- Data model to support content repository of the ArsDigita
 -- Community System
 
@@ -1779,5 +1810,3 @@ begin
 end cr_items_publish_update_tr;
 /
 show errors
-
-

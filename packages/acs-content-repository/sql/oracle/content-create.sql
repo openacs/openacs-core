@@ -835,7 +835,7 @@ begin
     name        => 'pages',
     label       => 'Pages', 
     description => 'Site pages go here',
-    parent_id   => 0,
+    parent_id   => -4,
     folder_id   => content_item.get_root_folder
   );
 
@@ -867,7 +867,7 @@ begin
     name        => 'templates',
     label       => 'Templates', 
     description => 'Templates which render the pages go here',
-    parent_id   => 0,
+    parent_id   => -4,
     folder_id   => content_template.get_root_folder
   );
 

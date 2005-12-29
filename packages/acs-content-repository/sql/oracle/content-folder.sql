@@ -38,8 +38,8 @@ begin
     v_context_id := content_folder.new.context_id;
   end if;
 
-  -- parent_id = 0 means that this is a mount point
-  if parent_id ^= 0 and 
+  -- parent_id = security context root means that this is a mount point
+  if parent_id ^= 4 and 
     content_folder.is_folder(parent_id) = 'f' and
     content_folder.is_registered(parent_id,'content_folder') = 'f' then
 
@@ -49,7 +49,7 @@ begin
 
     v_package_id := package_id;
 
-    if parent_id is not null and parent_id ^= 0 and package_id is null then
+    if parent_id is not null and parent_id ^= -4 and package_id is null then
         v_package_id := acs_object.package_id(content_item.get_root_folder(parent_id));
     end if;
 
@@ -434,7 +434,7 @@ is
     start with
       item_id = target_folder_id;
 
-  v_parent_id integer := 0;
+  v_parent_id integer := -4;
   v_sub_folder_p char := 'f';
 
 begin

@@ -183,8 +183,8 @@ begin
     v_context_id := new__context_id;
   end if;
 
-  -- parent_id = 0 means that this is a mount point
-  if new__parent_id != 0 and 
+  -- parent_id = security_context_root means that this is a mount point
+  if new__parent_id != -4 and 
     content_folder__is_folder(new__parent_id) and
     content_folder__is_registered(new__parent_id,''content_folder'',''f'') = ''f'' then
 
@@ -699,10 +699,10 @@ begin
     v_parent_id := v_rec.parent_id;
     exit when v_parent_id = is_sub_folder__folder_id;
     -- we did not find the folder, reset v_parent_id
-    v_parent_id := 0;
+    v_parent_id := -4;
   end LOOP;
 
-  if v_parent_id != 0 then 
+  if v_parent_id != -4 then 
     v_sub_folder_p := ''t'';
   end if;
 
@@ -971,7 +971,7 @@ declare
   v_is_root                       boolean;       
 begin
 
-  select parent_id = 0 into v_is_root 
+  select parent_id = -4 into v_is_root 
     from cr_items where item_id = is_root__folder_id;
 
   return v_is_root;
