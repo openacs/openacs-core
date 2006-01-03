@@ -28,7 +28,7 @@ proc db_bootstrap_checks { errors error_p } {
     if { ![info exists my_error_p] } {
         # Get the version from Oracle, using the db tools equivalent of
         # sticks and fire...
-        set db [ns_db gethandle]
+        set db [ns_db gethandle [lindex [db_available_pools {}] 0]]
         set selection [ns_db 1row $db "select version from product_component_version where product like 'Oracle%'"]
         regexp {^[0-9]\.[0-9]\.[0-9]} [ns_set value $selection 0] match
         ns_db releasehandle $db
