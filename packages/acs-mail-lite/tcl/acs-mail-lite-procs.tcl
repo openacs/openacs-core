@@ -1,4 +1,3 @@
-
 ad_library {
 
     Provides a simple API for reliably sending email.
@@ -9,8 +8,8 @@ ad_library {
 
 }
 
-package require mime
-package require base64
+package require mime 1.4
+package require base64 2.3.1
 namespace eval acs_mail_lite {
 
     ad_proc -public with_finally {
@@ -264,10 +263,10 @@ namespace eval acs_mail_lite {
 	    array set email {}
 	    
 	    parse_email -file $msg -array email
-	    
+ 	    set email(to) [parse_email_address -email $email(to)]
+ 	    set email(from) [parse_email_address -email $email(from)]
 	    ns_log Notice "load_mails: message from $email(from) to $email(to)"
-	    set to [parse_email_address -email $email(to)]
-	    
+           
 	    set process_p 1
 	    
 	    #check if we have several sites. In this case a site prefix is set
@@ -275,14 +274,14 @@ namespace eval acs_mail_lite {
 	    set package_prefix ""
 	    
 	    if {![empty_string_p $site_prefix]} {
-		regexp "($site_prefix)-(\[^-\]*)\?-(\[^@\]+)\@" $to all site_prefix package_prefix rest
+		regexp "($site_prefix)-(\[^-\]*)\?-(\[^@\]+)\@" $email(to) all site_prefix package_prefix rest
 	        #we only process the email if both a site and package prefix was found
 	        if {[empty_string_p $site_prefix] || [empty_string_p $package_prefix]} {
 		    set process_p 0
 		}
 		#no site prefix is set, so this is the only site
 	    } else {
-		regexp "(\[^-\]*)-(\[^@\]+)\@" $to all package_prefix rest
+		regexp "(\[^-\]*)-(\[^@\]+)\@" $email(to) all package_prefix rest
 		#we only process the email if a package prefix was found
 		if {[empty_string_p $package_prefix]} {
                     set process_p 0
@@ -293,12 +292,18 @@ namespace eval acs_mail_lite {
 		#check if an implementation exists for the package_prefix and call the callback
 		if {[db_0or1row select_impl {}]} {
 		    
-		    ns_log Notice "load_mails: Prefix $prefix found. Calling callback implmentation $impl_name for package_id $package_id"
-		    callback -impl $impl_name acs_mail_lite::incoming_email -array email -package_id $package_id
+		    #    ns_log Notice "load_mails: Prefix $prefix found. Calling callback implmentation $impl_name for package_id $package_id"
+		    #    callback -impl $impl_name acs_mail_lite::incoming_email -array email -package_id $package_id
 
+		    callback -impl wieners acs_mail_lite::incoming_email -array email
+
+		    # We execute all callbacks now
+		    # callback acs_mail_lite::incoming_email -array email
 		} else {
 		    ns_log Notice "load_mails: prefix not found. Doing nothing."
 		}
+		
+
 	    } else {
 		ns_log Notice "load_mails: Either the SitePrefix setting was incorrect or not registered package prefix '$package_prefix'."
 	    }
@@ -325,18 +330,18 @@ namespace eval acs_mail_lite {
 
 	Important headers are:
 	
-	-Message-ID (a unique id for the email, is different for each email except it was bounced from a mailer deamon)
-	-Subject
-	-From
-	-To
+	-message-id (a unique id for the email, is different for each email except it was bounced from a mailer deamon)
+	-subject
+	-from
+	-to
 	
 	Others possible headers:
 	
-	-Date
-	-Received
-        -References (this references the original message id if the email is a reply)
-	-In-Reply-To (this references the original message id if the email is a reply)
-	-Return-Path (this is used for mailer deamons to bounce emails back like bounce-user_id-signature-package_id@service0.com)
+	-date
+	-received
+        -references (this references the original message id if the email is a reply)
+	-in-reply-to (this references the original message id if the email is a reply)
+	-return-path (this is used for mailer deamons to bounce emails back like bounce-user_id-signature-package_id@service0.com)
 	
 	Optional application specific stuff only exist in special cases:
 	
@@ -414,7 +419,8 @@ namespace eval acs_mail_lite {
 		"application/octet-stream" {
 		    set content_type [mime::getproperty $part content]
 		    set encoding [mime::getproperty $part encoding]
-		    set content  [base64::decode [mime::getbody $part]]
+		    set body [mime::getbody $part -decode]
+		    set content  $body
 		    set params [mime::getproperty $part params]
 		    if {[lindex $params 0] == "name"} {
 			set filename [lindex $params 1]
@@ -425,7 +431,7 @@ namespace eval acs_mail_lite {
 		}
 	    }
 	}
-	
+
 	set email(bodies) $bodies
 	set email(files) $files
 	
@@ -514,7 +520,7 @@ namespace eval acs_mail_lite {
             }
 	    
             set to [parse_email_address -email $to]
-	    ns_log Debug "acs-mail-lite: To: $to"
+	    ns_log Notice "acs-mail-lite: To: $to"
             util_unlist [parse_bounce_address -bounce_address $to] user_id package_id signature
 	    
             # If no user_id found or signature invalid, ignore message
@@ -1044,7 +1050,7 @@ namespace eval acs_mail_lite {
 		lappend file_ids $revision_id
 	    }
 	} elseif {[exists_and_not_null file_ids]} {
-	    
+
 	    db_foreach get_file_info "select r.mime_type,r.title, r.content as filename
 	    from cr_revisions r
 	    where r.revision_id in ([join $file_ids ","])" {
@@ -1062,7 +1068,7 @@ namespace eval acs_mail_lite {
 	set message_id [generate_message_id]
 
 	acs_mail_lite::sendmail -from_addr $sender_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id $message_id -package_id $package_id
-	
+
 	if {[empty_string_p $package_id]} {
 	    set package_id [apm_package_id_from_key "acs-mail-lite"]
 	}
