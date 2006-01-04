@@ -1,12 +1,954 @@
 -- 
 -- 
 -- 
--- @author Dave Bauer (dave@thedesignexperience.org)
+-- @author Don Baccus (dhogaza@pacifier.com)
 -- @creation-date 2005-10-28
 -- @arch-tag: dab7cf3d-a947-43d4-ba54-66f34c66d9d0
 -- @cvs-id $Id$
 --
 
+create or replace package content_item
+as
+
+--/** 
+--Content items store the overview of the content published on a
+--website. The actual content is stored in content revisions. It is
+--implemented this way so that there can be mulitple versions of the
+--actual content while the main idea remains constant. For example: If
+--there is a review for the movie "Terminator," there will exist a
+--content item by the name "terminator" with all the right parameters
+--(supertype, parent, etc), there will also exist at least one content
+--revision pointing to this item with the actual review content.  
+--@see {content_revision}, {content_folder} 
+--*/
+
+c_root_folder_id constant integer := -100;
+
+function get_root_folder (
+  item_id  in cr_items.item_id%TYPE default null
+) return cr_folders.folder_id%TYPE;
+
+function new (
+  --/** Creates a new content item. If the <tt>data</tt>, <tt>title</tt> or <tt>text</tt>
+  --    parameters are specified, also creates a revision for the item.
+  --    @author Karl Goldstein
+  --    @param name          The name for the item, must be URL-encoded.
+  --                         If an item with this name already exists under the specified
+  --                         parent item, an error is thrown
+  --    @param parent_id     The parent of this item, defaults to null
+  --    @param item_id       The id of the new item. A new id will be allocated if this
+  --                         parameter is null
+  --    @param locale        The locale for this item, for use with Intermedia search
+  --    @param item_subtype  The type of the new item, defaults to 'content_item'
+  --                         This parameter is used to support inheritance, so that
+  --                         subclasses of <tt>content_item</tt> can call this function
+  --                         to initialize the parent class
+  --    @param content_type  The content type for the item, defaults to 
+  --                        'content_revision'. Only objects of this type 
+  --                         may be used as revisions for the item
+  --    @param title         The user-readable title for the item, defaults to the item's
+  --                         name
+  --    @param description   A short description for the item (4000 characters maximum)
+  --    @param mime_type     The file type of the item, defaults to 'text/plain'
+  --    @param nls_language  The language for the item, used for Intermedia search
+  --    @param text          The text content of the new revision, 4000 charcters maximum.
+  --                         Cannot be specified simultaneously with the <tt>data</tt>
+  --                         parameter
+  --    @param data          The blob content of the new revision. Cannot be specified 
+  --                         simultaneously with the <tt>text</tt> parameter
+  --    @param relation_tag  If a parent-child relationship is registered
+  --                         for these content types, use this tag to  
+  --			     describe the parent-child relationship.  Defaults
+  --                         to 'parent content type'-'child content type'
+  --    @param is_live       If 't', the new revision will become live
+  --    @param context_id    Security context id, as in <tt>acs_object.new</tt>
+  --                         If null, defaults to parent_id, and copies permissions
+  --                         from the parent into the current item
+  --    @param storage_type  in ('lob','file').  Indicates how content is to be stored.
+  --                         'file' content is stored externally in the file system.
+  --    @param <i>others</i> As in acs_object.new
+  --    @return The id of the newly created item
+  --    @see {acs_object.new}
+  --*/
+  name          in cr_items.name%TYPE,
+  parent_id     in cr_items.parent_id%TYPE default null,
+  item_id	in acs_objects.object_id%TYPE default null,
+  locale        in cr_items.locale%TYPE default null,
+  creation_date	in acs_objects.creation_date%TYPE
+			   default sysdate,
+  creation_user	in acs_objects.creation_user%TYPE
+			   default null,
+  context_id    in acs_objects.context_id%TYPE default null,
+  creation_ip	in acs_objects.creation_ip%TYPE default null,
+  item_subtype	in acs_object_types.object_type%TYPE 
+                           default 'content_item',
+  content_type  in acs_object_types.object_type%TYPE 
+                           default 'content_revision',
+  title         in cr_revisions.title%TYPE default null,
+  description   in cr_revisions.description%TYPE default null,
+  mime_type   	in cr_revisions.mime_type%TYPE default 'text/plain',
+  nls_language 	in cr_revisions.nls_language%TYPE default null,
+  text	        in varchar2 default null,
+  data	        in cr_revisions.content%TYPE default null,
+  relation_tag  in cr_child_rels.relation_tag%TYPE default null,
+  is_live       in char default 'f',
+  storage_type  in cr_items.storage_type%TYPE default 'lob',
+  security_inherit_p in acs_objects.security_inherit_p%TYPE default 't',
+  package_id    in acs_objects.package_id%TYPE default null
+) return cr_items.item_id%TYPE;
+
+
+function is_published (
+  --/** Determins whether an item is published or not.
+  --    @author Michael Pih
+  --    @param item_id		The item ID
+  --    @return 't' if the item is published, 'f' otherwise
+ --*/
+  item_id	        in cr_items.item_id%TYPE
+) return char;
+
+
+function is_publishable (
+  --/** Determines if an item is publishable.  Publishable items must
+  --    meet the following criteria:
+  --	1) for each child type, the item has n children, min_n < n < max_n
+  --	2) for each relation type, the item has n relations, min_n < n < max_n
+  --	3) any 'publishing_wf' workflows are finished
+  --    @author Michael Pih
+  --    @param item_id		The item ID
+  --    @return 't' if the item is publishable in it's present state, 
+  --            Otherwise, returns 'f'
+  --*/
+  item_id		in cr_items.item_id%TYPE
+) return char;
+
+
+
+function is_valid_child (
+  --/** Determines if an item would be a valid child of another item by
+  --    checking if the parent allows children of the would-be child's
+  --    content type and if the parent already has n_max children of
+  --    that content type.
+  --    @author Michael Pih
+  --    @param item_id		The item ID of the potential parent
+  --    @param content_type	The content type of the potential child item
+  --    @return 't' if the item would be a valid child, 'f' otherwise
+  --*/
+
+  item_id	in cr_items.item_id%TYPE,
+  content_type  in acs_object_types.object_type%TYPE,
+  relation_tag  in cr_child_rels.relation_tag%TYPE default null
+) return char;
+
+procedure del (
+  --/** Deletes the specified content item, along with any revisions, symlinks, 
+  --    workflows, associated templates, associated keywords, 
+  --    child and item relationships for the item. Use with caution - this
+  --    operation cannot be undone.
+  --    @author Karl Goldstein
+  --    @param item_id The id of the item to delete
+  --    @see {acs_object.delete}
+  --*/  
+  item_id	in cr_items.item_id%TYPE
+);
+
+procedure edit_name (
+  --/** Renames the item. If an item with the specified name already exists 
+  --    under this item's parent, an error is thrown
+  --    @author Karl Goldstein
+  --    @param item_id The id of the item to rename
+  --    @param name    The new name for the item, must be URL-encoded
+  --    @see {content_item.new}
+  --*/ 
+  item_id	 in cr_items.item_id%TYPE,
+  name           in cr_items.name%TYPE
+);
+
+function get_id (
+  --/** Takes in a path, such as "/tv/programs/star_trek/episode_203"
+  --    and returns the id of the item with this path.  Note:  URLs are abstract (no
+  --    extensions are allowed in content item names and extensions are stripped when
+  --    looking up content items)
+  --    @author Karl Goldstein
+  --    @param item_path       The path to be resolved
+  --    @param root_folder_id  Starts path resolution from this folder. Defaults to
+  --                           the root of the sitemap
+  --    @param resolve_index   Boolean flag indicating whether to return the
+  --                           id of the index page for folders (if one 
+  --                           exists). Defaults to 'f'.
+  --    @return The id of the item with the given path, or null if no such item exists
+  --    @see {content_item.get_path}
+  --*/   
+  item_path   in varchar2,
+  root_folder_id in cr_items.item_id%TYPE default c_root_folder_id,
+  resolve_index  in char default 'f'
+) return cr_items.item_id%TYPE;
+
+function get_path (
+  --/** Retrieves the full path to an item, in the form of
+  --    "/tv/programs/star_trek/episode_203"
+  --    @author Karl Goldstein
+  --    @param item_id         	The item for which the path is to be retrieved
+  --    @param root_folder_id  	Starts path resolution from this folder. 
+  --                            Defaults to the root of the sitemap
+  --    @return The path to the item
+  --    @see {content_item.get_id}, {content_item.write_to_file}
+  --*/   
+  item_id        in cr_items.item_id%TYPE,
+  root_folder_id in cr_items.item_id%TYPE default null
+) return varchar2;
+
+function get_virtual_path (
+  --/** Retrieves the virtual path to an item, in the form of
+  --    "/tv/programs/star_trek/episode_203"
+  --    @author Michael Pih
+  --    @param item_id         The item for which the path is to be retrieved
+  --    @param root_folder_id  Starts path resolution from this folder. 
+  --                           Defaults to the root of the sitemap
+  --    @return The virtual path to the item
+  --    @see {content_item.get_id}, {content_item.write_to_file}, {content_item.get_path}
+  --*/   
+  item_id        in cr_items.item_id%TYPE,
+  root_folder_id in cr_items.item_id%TYPE default c_root_folder_id
+) return varchar2;
+
+procedure write_to_file (
+  --/** Writes the content of the  live revision of this item to a file, 
+  --    creating all the neccessary directories in the process
+  --    @author Karl Goldstein
+  --    @param item_id         The item to be written to a file
+  --    @param root_path       The path in the filesystem to which the root of the
+  --                           sitemap corresponds
+  --    @see {content_item.get_path}
+  --*/
+  item_id     in cr_items.item_id%TYPE,
+  root_path   in varchar2
+);
+
+procedure register_template (
+  --/** Registers a template which will be used to render this item.
+  --    @author Karl Goldstein
+  --    @param item_id         The item for which the template will be registered
+  --    @param template_id     The template to be registered
+  --    @param use_context     The context in which the template is appropriate, such
+  --                           as 'admin' or 'public'
+  --    @see {content_type.register_template}, {content_item.unregister_template},
+  --         {content_item.get_template}       
+  --*/
+  item_id      in cr_items.item_id%TYPE,
+  template_id  in cr_templates.template_id%TYPE,
+  use_context  in cr_item_template_map.use_context%TYPE
+);
+
+procedure unregister_template (
+  --/** Unregisters a template which will be used to render this item.
+  --    @author Karl Goldstein
+  --    @param item_id         The item for which the template will be unregistered
+  --    @param template_id     The template to be registered
+  --    @param use_context     The context in which the template is appropriate, such
+  --                           as 'admin' or 'public'
+  --    @see {content_type.register_template}, {content_item.register_template},
+  --         {content_item.get_template}       
+  --*/
+  item_id      in cr_items.item_id%TYPE,
+  template_id  in cr_templates.template_id%TYPE default null,
+  use_context  in cr_item_template_map.use_context%TYPE default null
+);
+
+function get_template (
+  --/** Retrieves the template which should be used to render this item. If no template
+  --    is registered to specifically render the item in the given context, the 
+  --    default template for the item's type is returned.
+  --    @author Karl Goldstein
+  --    @param item_id         The item for which the template will be unregistered
+  --    @param use_context     The context in the item is to be rendered, such
+  --                           as 'admin' or 'public'
+  --    @return The id of the registered template, or null if no template could be
+  --            found
+  --    @see {content_type.register_template}, {content_item.register_template},
+  --*/
+  item_id     in cr_items.item_id%TYPE,
+  use_context in cr_item_template_map.use_context%TYPE
+) return cr_templates.template_id%TYPE;
+
+function get_live_revision (
+  --/** Retrieves the id of the live revision for the item
+  --    @param item_id         The item for which the live revision is to be retrieved
+  --    @return The id of the live revision for this item, or null if no live revision
+  --            exists
+  --    @see {content_item.set_live_revision}, {content_item.get_latest_revision}
+  --*/
+  item_id   in cr_items.item_id%TYPE
+) return cr_revisions.revision_id%TYPE;
+  
+procedure set_live_revision (
+  --/** Make the specified revision the live revision for the item
+  --    @author Karl Goldstein
+  --    @param revision_id The id of the revision which is to become live 
+  --                       for its corresponding item
+  --    @see {content_item.get_live_revision}
+  --*/
+  revision_id   in cr_revisions.revision_id%TYPE,
+  publish_status in cr_items.publish_status%TYPE default 'ready'
+);
+
+
+procedure unset_live_revision (
+  --/** Set the live revision to null for the item
+  --    @author Michael Pih
+  --    @param item_id The id of the item for which to unset the live revision
+  --    @see {content_item.set_live_revision}
+  item_id      in cr_items.item_id%TYPE
+);
+
+procedure set_release_period (
+  --/** Sets the release period for the item.  This information may be
+  --    used by applications to update the publishing status of items
+  --    at periodic intervals.
+  --    @author Karl Goldstein
+  --    @param item_id    The id the item.
+  --    @param start_when The time and date when the item should be released.
+  --    @param end_when   The time and date when the item should be expired.
+  --*/
+  item_id    in cr_items.item_id%TYPE,
+  start_when date default null,
+  end_when   date default null
+);
+
+
+function get_revision_count (
+  --/** Return the total count of revisions for this item
+  --    @author Karl Goldstein
+  --    @param item_id The id the item
+  --    @return The number of revisions for this item
+  --    @see {content_revision.new}
+  --*/
+  item_id   in cr_items.item_id%TYPE
+) return number;
+
+-- Return the object type of this item
+function get_content_type (
+  --/** Retrieve the content type of this item. Only objects of this type may be
+  --    used as revisions for the item. 
+  --    @author Karl Goldstein
+  --    @param item_id     The item for which the content type is to be retrieved
+  --    @return The content type of the item
+  --*/
+  item_id     in cr_items.item_id%TYPE
+) return cr_items.content_type%TYPE;
+
+function get_context (
+  --/** Retrieve the parent of the given item
+  --    @author Karl Goldstein
+  --    @param item_id     The item for which the parent is to be retrieved
+  --    @return The id of the parent for this item
+  --*/
+  item_id	in cr_items.item_id%TYPE
+) return acs_objects.context_id%TYPE;
+
+procedure move (
+  --/** Move the specified item to a different folder. If the target folder does
+  --    not exist, or if the folder already contains an item with the same name
+  --    as the given item, an error will be thrown.
+  --    @author Karl Goldstein
+  --    @param item_id          The item to be moved
+  --    @param target_folder_id The new folder for the item
+  --    @see {content_item.new}, {content_folder.new}, {content_item.copy}
+  --*/
+  item_id		in cr_items.item_id%TYPE,
+  target_folder_id	in cr_folders.folder_id%TYPE,
+  name                  in cr_items.name%TYPE default null
+);
+
+procedure copy (
+  --/** Copies the item to a new location, creating an identical item with 
+  --    an identical latest revision (if any).  If the target folder does
+  --    not exist, or if the folder already contains an item with the same name
+  --    as the given item, an error will be thrown.
+  --    @author Karl Goldstein, Michael Pih
+  --    @param item_id          The item to be copied
+  --    @param target_folder_id The folder where the item is to be copied
+  --    @param creation_user    The user_id of the creator
+  --    @param creation_ip      The IP address of the creator
+  --    @see {content_item.new}, {content_folder.new}, {content_item.move}
+  --*/
+  item_id		in cr_items.item_id%TYPE,
+  target_folder_id	in cr_folders.folder_id%TYPE,
+  creation_user		in acs_objects.creation_user%TYPE,
+  creation_ip		in acs_objects.creation_ip%TYPE default null,
+  name                  in cr_items.name%TYPE default null
+);
+
+function copy2 (
+  --/** Copies the item to a new location, creating an identical item with 
+  --    an identical latest revision (if any).  If the target folder does
+  --    not exist, or if the folder already contains an item with the same name
+  --    as the given item, an error will be thrown.
+  --    @author Karl Goldstein, Michael Pih
+  --    @param item_id          The item to be copied
+  --    @param target_folder_id The folder where the item is to be copied
+  --    @param creation_user    The user_id of the creator
+  --    @param creation_ip      The IP address of the creator
+  --    @return The item ID of the new copy.
+  --    @see {content_item.new}, {content_folder.new}, {content_item.move}
+  --*/
+  item_id		in cr_items.item_id%TYPE,
+  target_folder_id	in cr_folders.folder_id%TYPE,
+  creation_user		in acs_objects.creation_user%TYPE,
+  creation_ip		in acs_objects.creation_ip%TYPE default null,
+  name                  in cr_items.name%TYPE default null
+) return cr_items.item_id%TYPE;
+
+-- get the latest revision for an item
+function get_latest_revision (
+  --/** Retrieves the id of the latest revision for the item (as opposed to the live
+  --    revision)
+  --    @author Karl Goldstein
+  --    @param item_id         The item for which the latest revision is to be retrieved
+  --    @return The id of the latest revision for this item, or null if no revisions 
+  --            exist
+  --    @see {content_item.get_live_revision}
+  --*/
+  item_id    in cr_items.item_id%TYPE
+) return cr_revisions.revision_id%TYPE;
+
+
+function get_best_revision (
+  --/** Retrieves the id of the live revision for the item if one exists, 
+  --    otherwise retrieves the id of the latest revision if one exists.
+  --    revision)
+  --    @author Michael Pih
+  --    @param item_id The item for which the revision is to be retrieved
+  --    @return The id of the live or latest revision for this item, 
+  --            or null if no revisions exist
+  --    @see {content_item.get_live_revision}, {content_item.get_latest_revision}
+  --*/
+  item_id	in cr_items.item_id%TYPE
+) return cr_revisions.revision_id%TYPE;
+
+function get_title (
+  --/** Retrieves the title for the item, using either the latest or the live revision.
+  --    If the specified item is in fact a folder, return the folder's label.
+  --    In addition, this function will automatically resolve symlinks.
+  --    @author Karl Goldstein
+  --    @param item_id        The item for which the title is to be retrieved
+  --    @param is_live        If 't', use the live revision to get the title. Otherwise,
+  --                          use the latest revision. The default is 'f'
+  --    @return The title of the item
+  --    @see {content_item.get_live_revision}, {content_item.get_latest_revision}, 
+  --         {content_symlink.resolve}
+  --*/
+  item_id    in cr_items.item_id%TYPE,
+  is_live    in char default 'f'
+) return cr_revisions.title%TYPE;
+
+function get_publish_date (
+  --/** Retrieves the publish date for the item
+  --    @author Karl Goldstein
+  --    @param item_id     The item for which the publish date is to be retrieved
+  --    @param is_live     If 't', use the live revision for the item. Otherwise, use
+  --                       the latest revision. The default is 'f'
+  --    @return The publish date for the item, or null if the item has no revisions
+  --    @see {content_item.get_live_revision}, {content_item.get_latest_revision}, 
+  --*/
+  item_id    in cr_items.item_id%TYPE,
+  is_live    in char default 'f'
+) return cr_revisions.publish_date%TYPE;
+
+function is_subclass (
+  --/** Determines if one type is a subclass of another. A class is always a subclass of
+  --    itself. 
+  --    @author Karl Goldstein
+  --    @param object_type    The child class
+  --    @param supertype      The superclass
+  --    @return 't' if the child class is a subclass of the superclass, 'f' otherwise
+  --    @see {acs_object_type.create_type}
+  --*/
+  object_type in acs_object_types.object_type%TYPE,
+  supertype	in acs_object_types.supertype%TYPE
+) return char;
+
+function relate (
+  --/** Relates two content items
+  --    @author Karl Goldstein
+  --    @param item_id		The item id
+  --    @param object_id	The item id of the related object
+  --    @param relation_tag	A tag to help identify the relation type, 
+  --      defaults to 'generic'
+  --    @param order_n		The order of this object among other objects
+  --      of the same relation type, defaults to null.
+  --    @param relation_type    The object type of the relation, defaults to
+  --      'cr_item_rel'
+  --*/
+  item_id       in cr_items.item_id%TYPE,
+  object_id     in acs_objects.object_id%TYPE,
+  relation_tag in cr_type_relations.relation_tag%TYPE default 'generic',
+  order_n       in cr_item_rels.order_n%TYPE default null,
+  relation_type in acs_object_types.object_type%TYPE default 'cr_item_rel'
+) return cr_item_rels.rel_id%TYPE;
+
+
+procedure unrelate (
+  --/** Delete the item relationship between two items
+  --    @author Michael Pih
+  --    @param rel_id The relationship id
+  --    @see {content_item.relate}
+  --*/
+  rel_id	  in cr_item_rels.rel_id%TYPE
+);
+
+function is_index_page (
+  --/** Determine if the item is an index page for the specified folder.
+  --    The item is an index page for the folder if it exists in the
+  --    folder and its item name is "index".
+  --    @author Karl Goldstein
+  --    @param item_id The item id
+  --    @param folder_id The folder id
+  --    @return 't' if the item is an index page for the specified
+  --     folder, 'f' otherwise
+  --    @see {content_folder.get_index_page}
+  --*/
+  item_id   in cr_items.item_id%TYPE,
+  folder_id in cr_folders.folder_id%TYPE
+) return varchar2;
+
+
+function get_parent_folder (
+  --/** Get the parent folder.
+  --    @author Michael Pih
+  --    @param item_id The item id
+  --    @return the folder_id of the parent folder, null otherwise
+  --*/
+  item_id	in cr_items.item_id%TYPE
+) return cr_folders.folder_id%TYPE;
+
+end content_item;
+/
+show errors
+
+create or replace package body content_item
+as
+
+function get_root_folder (
+  item_id  in cr_items.item_id%TYPE default null
+) return cr_folders.folder_id%TYPE is
+
+  v_folder_id cr_folders.folder_id%TYPE;
+
+begin
+
+  if item_id is NULL or item_id in (-4,-100,-200) then
+
+    v_folder_id := c_root_folder_id;
+
+  else
+
+    select
+      item_id into v_folder_id
+    from
+      cr_items
+    where 
+      parent_id = -4
+    connect by
+      prior parent_id = item_id
+    start with
+      item_id = get_root_folder.item_id;
+    
+  end if;    
+
+  return v_folder_id;
+
+exception
+  when NO_DATA_FOUND then
+    raise_application_error(-20000, 
+      'Could not find a root folder for item ID ' || item_id || '.  ' ||
+      'Either the item does not exist or its parent value is corrupted.');
+end get_root_folder;
+
+function new (
+  name          in cr_items.name%TYPE,
+  parent_id     in cr_items.parent_id%TYPE default null,
+  item_id	in acs_objects.object_id%TYPE default null,
+  locale        in cr_items.locale%TYPE default null,
+  creation_date	in acs_objects.creation_date%TYPE
+			   default sysdate,
+  creation_user	in acs_objects.creation_user%TYPE
+			   default null,
+  context_id    in acs_objects.context_id%TYPE
+                           default null,
+  creation_ip	in acs_objects.creation_ip%TYPE default null,
+  item_subtype	in acs_object_types.object_type%TYPE 
+                           default 'content_item',
+  content_type  in acs_object_types.object_type%TYPE 
+                           default 'content_revision',
+  title         in cr_revisions.title%TYPE default null,
+  description   in cr_revisions.description%TYPE default null,
+  mime_type   	in cr_revisions.mime_type%TYPE default 'text/plain',
+  nls_language 	in cr_revisions.nls_language%TYPE default null,
+  text	        in varchar2 default null,
+  data	        in cr_revisions.content%TYPE default null,
+  relation_tag  in cr_child_rels.relation_tag%TYPE default null,
+  is_live       in char default 'f',
+  storage_type  in cr_items.storage_type%TYPE default 'lob',
+  security_inherit_p in acs_objects.security_inherit_p%TYPE default 't',
+  package_id    in acs_objects.package_id%TYPE default null
+) return cr_items.item_id%TYPE
+is
+  v_parent_id      cr_items.parent_id%TYPE;
+  v_parent_type    acs_objects.object_type%TYPE;
+  v_item_id	   cr_items.item_id%TYPE;
+  v_revision_id    cr_revisions.revision_id%TYPE;
+  v_title	   cr_revisions.title%TYPE;
+  v_rel_id	   acs_objects.object_id%TYPE;
+  v_rel_tag        cr_child_rels.relation_tag%TYPE;
+  v_package_id     acs_objects.package_id%TYPE;
+  v_context_id     acs_objects.context_id%TYPE;
+  v_storage_type   cr_items.storage_type%TYPE;
+begin
+
+  -- if content_item.is_subclass(item_subtype,'content_item') = 'f' then
+  --  raise_application_error(-20000, 'The object_type ' || item_subtype || 
+  --    ' does not inherit from content_item.');
+  -- end if;
+
+  -- place the item in the context of the pages folder if no
+  -- context specified 
+
+  if storage_type = 'text' then
+     v_storage_type := 'lob';
+  else 
+     v_storage_type := storage_type;
+  end if;
+
+  if parent_id is null then
+    v_parent_id := c_root_folder_id;
+  else
+    v_parent_id := parent_id;
+  end if;
+
+  if package_id is null and parent_id ^= -4 then
+    v_package_id := acs_object.package_id(content_item.get_root_folder(v_parent_id));
+  else
+    v_package_id := package_id;
+  end if;
+
+  -- Determine context_id
+  if context_id is null then
+    v_context_id := v_parent_id;
+  else
+    v_context_id := context_id;
+  end if;
+
+  if v_parent_id = -4 or 
+    content_folder.is_folder(v_parent_id) = 't' then
+
+    if v_parent_id ^= -4 and 
+      content_folder.is_registered(
+        v_parent_id, content_item.new.content_type, 'f') = 'f' then
+
+      raise_application_error(-20000, 
+        'This item''s content type ' || content_item.new.content_type ||
+        ' is not registered to this folder ' || v_parent_id);
+
+    end if;
+
+  elsif v_parent_id ^= -4 then
+
+    begin
+
+     -- Figure out the relation_tag to use
+     if content_item.new.relation_tag is null then
+       v_rel_tag := content_item.get_content_type(v_parent_id) 
+         || '-' || content_item.new.content_type;
+     else
+       v_rel_tag := content_item.new.relation_tag;
+     end if;
+
+     select object_type into v_parent_type from acs_objects
+       where object_id = v_parent_id;
+
+     if is_subclass(v_parent_type, 'content_item') = 't' and
+	is_valid_child(v_parent_id, content_item.new.content_type, v_rel_tag) = 'f' then
+
+       raise_application_error(-20000, 
+	 'This item''s content type ' || content_item.new.content_type ||
+	 ' is not allowed in this container ' || v_parent_id);
+
+     end if;
+
+     exception when NO_DATA_FOUND then
+
+       raise_application_error(-20000,
+	 'Invalid parent ID ' || v_parent_id || 
+	 ' specified in content_item.new');
+
+    end;
+
+  end if;
+
+  -- Create the object
+
+  v_item_id := acs_object.new(
+      object_id	        => content_item.new.item_id,
+      object_type	=> content_item.new.item_subtype,
+      title             => content_item.new.name,
+      package_id        => v_package_id,
+      context_id        => v_context_id,
+      creation_date	=> content_item.new.creation_date, 
+      creation_user	=> content_item.new.creation_user, 
+      creation_ip	=> content_item.new.creation_ip,
+      security_inherit_p => content_item.new.security_inherit_p
+  );
+
+  -- Turn off security inheritance if there is no security context
+  --if context_id is null then
+  --  update acs_objects set security_inherit_p = 'f'
+  --    where object_id = v_item_id;
+  --end if;
+
+  insert into cr_items (
+    item_id, name, content_type, parent_id, storage_type
+  ) values (
+    v_item_id, content_item.new.name, 
+    content_item.new.content_type, v_parent_id, v_storage_type
+  );
+
+  -- if the parent is not a folder, insert into cr_child_rels
+  -- We checked above before creating the object that it is a valid rel
+  if v_parent_id ^= -4 and
+    content_folder.is_folder(v_parent_id) = 'f' then
+
+    v_rel_id := acs_object.new(
+      object_type	=> 'cr_item_child_rel',
+      title		=> v_rel_tag || ': ' || v_parent_id || ' - ' || v_item_id,
+      package_id	=> v_package_id,
+      context_id	=> v_parent_id
+    );
+
+    insert into cr_child_rels (
+      rel_id, parent_id, child_id, relation_tag, order_n
+    ) values (
+      v_rel_id, v_parent_id, v_item_id, v_rel_tag, v_item_id
+    );
+
+  end if;
+
+  -- use the name of the item if no title is supplied
+  if content_item.new.title is null then
+    v_title := content_item.new.name;
+  else
+    v_title := content_item.new.title;
+  end if;
+
+  -- create the revision if data or title or text is not null
+  -- note that the caller could theoretically specify both text
+  -- and data, in which case the text is ignored.
+
+  if content_item.new.data is not null then
+
+    v_revision_id := content_revision.new(
+        item_id	      => v_item_id,
+	title	      => v_title,
+        package_id    => v_package_id,
+	description   => content_item.new.description,
+	data	      => content_item.new.data,
+	mime_type     => content_item.new.mime_type,
+        creation_date => content_item.new.creation_date, 
+        creation_user => content_item.new.creation_user, 
+        creation_ip   => content_item.new.creation_ip,
+	nls_language  => content_item.new.nls_language
+    );
+
+  elsif content_item.new.title is not null or 
+      content_item.new.text is not null then
+
+    v_revision_id := content_revision.new(
+	item_id	      => v_item_id,
+	title	      => v_title,
+        package_id    => v_package_id,
+	description   => content_item.new.description,
+	text	      => content_item.new.text,
+	mime_type     => content_item.new.mime_type,
+        creation_date => content_item.new.creation_date, 
+        creation_user => content_item.new.creation_user, 
+        creation_ip   => content_item.new.creation_ip
+    );
+
+  end if;
+
+  -- make the revision live if is_live is 't'
+  if content_item.new.is_live = 't' then
+    content_item.set_live_revision(v_revision_id);
+  end if;
+
+  -- Have the new item inherit the permission of the parent item
+  -- if no security context was specified
+  --if parent_id is not null and context_id is null then
+  --  content_permission.inherit_permissions (
+  --    parent_id, v_item_id, creation_user
+  --  );
+  --end if;
+
+  return v_item_id;
+end new;
+
+function is_published (
+  item_id               in cr_items.item_id%TYPE
+) return char
+is
+  v_is_published        char(1);
+begin
+
+  select
+    't' into v_is_published
+  from
+    cr_items
+  where
+    live_revision is not null
+  and
+    publish_status = 'live'
+  and
+    item_id = is_published.item_id;
+
+  return v_is_published;
+  exception
+    when NO_DATA_FOUND then
+      return 'f';
+end is_published;
+
+function is_publishable (
+  item_id		in cr_items.item_id%TYPE
+) return char
+is
+  v_child_count		integer;
+  v_rel_count		integer;
+  v_template_id		cr_templates.template_id%TYPE;
+
+  -- get the child types registered to this content type
+  cursor c_child_types is
+    select
+      child_type, min_n, max_n
+    from
+      cr_type_children
+    where
+      parent_type = content_item.get_content_type( is_publishable.item_id );
+
+  -- get the relation types registered to this content type
+  cursor c_rel_types is
+    select
+      target_type, min_n, max_n
+    from
+      cr_type_relations
+    where
+      content_type = content_item.get_content_type( is_publishable.item_id );
+  
+  -- get the publishing workflows associated with this content item
+  -- there should only be 1 if CMS exists, otherwise 0
+  --   cursor c_pub_wf is
+  --     select
+  --       case_id, state
+  --     from
+  --       wf_cases
+  --     where
+  --       workflow_key = 'publishing_wf'
+  --     and
+  --       object_id = is_publishable.item_id;
+
+begin
+
+  -- validate children
+  -- make sure the # of children of each type fall between min_n and max_n
+  for v_child_type in c_child_types loop
+    select
+      count(rel_id) into v_child_count
+    from
+      cr_child_rels
+    where
+      parent_id = is_publishable.item_id
+    and
+      content_item.get_content_type( child_id ) = v_child_type.child_type;
+
+    -- make sure # of children is in range
+    if v_child_type.min_n is not null 
+      and v_child_count < v_child_type.min_n then
+      return 'f';
+    end if;
+    if v_child_type.max_n is not null
+      and v_child_count > v_child_type.max_n then
+      return 'f';
+    end if;
+
+  end loop;
+
+
+  -- validate relations
+  -- make sure the # of ext links of each type fall between min_n and max_n
+  for v_rel_type in c_rel_types loop
+    select
+      count(rel_id) into v_rel_count
+    from
+      cr_item_rels i, acs_objects o
+    where
+      i.related_object_id = o.object_id
+    and
+      i.item_id = is_publishable.item_id
+    and
+      nvl(content_item.get_content_type(o.object_id),o.object_type) = v_rel_type.target_type;
+      
+    -- make sure # of object relations is in range
+    if v_rel_type.min_n is not null 
+      and v_rel_count < v_rel_type.min_n then
+      return 'f';
+    end if;
+    if v_rel_type.max_n is not null 
+      and v_rel_count > v_rel_type.max_n then
+      return 'f';
+    end if;
+  end loop;
+
+  -- validate publishing workflows
+  -- make sure any 'publishing_wf' associated with this item are finished
+  -- KG: logic is wrong here.  Only the latest workflow matters, and even
+  -- that is a little problematic because more than one workflow may be
+  -- open on an item.  In addition, this should be moved to CMS.
+
+  -- Removed this as having workflow stuff in the CR is just plain wrong.
+  -- DanW, Aug 25th, 2001.
+
+  --   for v_pub_wf in c_pub_wf loop
+  --     if v_pub_wf.state ^= 'finished' then
+  --        return 'f';
+  --     end if;
+  --   end loop;
+
+  return 't';
+    exception
+      when NO_DATA_FOUND then
+        return 'f';
+end is_publishable;
+
+function is_valid_child (
+  item_id		in cr_items.item_id%TYPE,
+  content_type		in acs_object_types.object_type%TYPE,
+  relation_tag          in cr_child_rels.relation_tag%TYPE default null
+) return char
+is
+  v_is_valid_child      char(1);
+  v_max_children	cr_type_children.max_n%TYPE;
+  v_n_children		integer;
+begin
+
+  v_is_valid_child := 'f';
+
+  -- first check if content_type is a registered child_type
+  begin
+    select
+      sum(max_n) into v_max_children
+    from
+      cr_type_children
+    where
+      parent_type = content_item.get_content_type( is_valid_child.item_id )
+    and
       child_type = is_valid_child.content_type
     and 
       (is_valid_child.relation_tag is null 
@@ -342,7 +1284,7 @@ is
 
   v_count integer;
   v_name varchar2(400); 
-  v_parent_id integer := 0;
+  v_parent_id integer := -4;
   v_tree_level integer;
 
   v_resolved_root_id integer;
@@ -361,7 +1303,7 @@ is
     order by
       tree_level desc;
 
-  v_rel_parent_id integer := 0;
+  v_rel_parent_id integer := -4;
   v_rel_tree_level integer := 0;
 
   v_path varchar2(4000) := '';
@@ -1324,6 +2266,222 @@ end content_item;
 /
 show errors
 
+
+create or replace package content_folder
+as
+
+function new (
+  --/** Create a new folder
+  --    @author Karl Goldstein
+  --    @param label        The label for the folder
+  --    @param description  A short description of the folder, 4000 characters maximum
+  --    @param parent_id    The parent of the folder
+  --    @param folder_id    The id of the new folder. A new id will be allocated by default
+  --    @param context_id  The context id. The parent id will be used as the default context
+  --    @param creation_date As in <tt>acs_object.new</tt>
+  --    @param creation_ip   As in <tt>acs_object.new</tt>
+  --    @param creation_user As in <tt>acs_object.new</tt>
+  --    @param package_id  The package id.
+  --    @return The id of the newly created folder
+  --    @see {acs_object.new}, {content_item.new}
+  --*/
+  name          in cr_items.name%TYPE,
+  label         in cr_folders.label%TYPE,
+  description   in cr_folders.description%TYPE default null,
+  parent_id     in cr_items.parent_id%TYPE default null,
+  context_id	in acs_objects.context_id%TYPE default null,
+  folder_id	in cr_folders.folder_id%TYPE default null,
+  creation_date	in acs_objects.creation_date%TYPE default sysdate,
+  creation_user	in acs_objects.creation_user%TYPE default null,
+  creation_ip	in acs_objects.creation_ip%TYPE default null,
+  security_inherit_p in acs_objects.security_inherit_p%TYPE default 't',
+  package_id	in acs_objects.package_id%TYPE default null
+) return cr_folders.folder_id%TYPE;
+
+procedure del (
+  --/** Delete a folder. An error is thrown if the folder is not empty
+  --    @author Karl Goldstein
+  --    @param folder_id    The id of the folder to delete
+  --    @see {acs_object.delete}, {content_item.delete}
+  --*/
+  folder_id	in cr_folders.folder_id%TYPE,
+  cascade_p     in char default 'f' 
+);
+
+procedure edit_name (
+  --/** Change the name, label and/or description of the folder
+  --    @author Karl Goldstein
+  --    @param folder_id    The id of the folder to modify
+  --    @param name         The new name for the folder. An error will be thrown if 
+  --                        an item with this name already exists under this folder's
+  --                        parent. If this parameter is null, the old name will be preserved
+  --    @param label        The new label for the folder. The old label will be preserved if
+  --                        this parameter is null
+  --    @param label        The new description for the folder. The old description
+  --                        will be preserved if this parameter is null
+  --    @see {content_folder.new}
+  --*/
+  folder_id	 in cr_folders.folder_id%TYPE,
+  name           in cr_items.name%TYPE default null,
+  label  	 in cr_folders.label%TYPE default null,
+  description    in cr_folders.description%TYPE default null
+);
+
+procedure move (
+  --/** Recursively move the folder and all items in into a new location. 
+  --    An error is thrown if either of the parameters is not a folder. 
+  --    The root folder of the sitemap and the root folder of the
+  --    templates cannot be moved.
+  --    @author Karl Goldstein
+  --    @param folder_id         The id of the folder to move
+  --    @param target_folder_id  The destination folder
+  --    @see {content_folder.new}, {content_folder.copy}
+  --*/
+  folder_id		in cr_folders.folder_id%TYPE,
+  target_folder_id	in cr_folders.folder_id%TYPE,
+  name                  in cr_items.name%TYPE default null
+);
+
+procedure copy (
+  --/** Recursively copy the folder and all items in into a new location. 
+  --    An error is thrown if either of the parameters is not a folder. 
+  --    The root folder of the sitemap and the root folder of the
+  --    templates cannot be copied
+  --    @author Karl Goldstein
+  --    @param folder_id         The id of the folder to copy
+  --    @param target_folder_id  The destination folder
+  --    @param creation_user	 The id of the creation user
+  --	@param creation_ip	 The IP address of the creation user (defaults to null)
+  --    @see {content_folder.new}, {content_folder.copy}
+  --*/
+  folder_id		in cr_folders.folder_id%TYPE,
+  target_folder_id	in cr_folders.folder_id%TYPE,
+  creation_user		in acs_objects.creation_user%TYPE,
+  creation_ip		in acs_objects.creation_ip%TYPE default null,
+  name                  in cr_items.name%TYPE default null
+);
+
+function is_folder (
+  --/** Determine if the item is a folder
+  --    @author Karl Goldstein
+  --    @param item_id         The item id
+  --    @return 't' if the item is a folder, 'f' otherwise
+  --    @see {content_folder.new}, {content_folder.is_sub_folder}
+  --*/
+  item_id	  in cr_items.item_id%TYPE
+) return char;
+
+function is_sub_folder (
+  --/** Determine if the item <tt>target_folder_id</tt> is a subfolder of
+  --    the item <tt>folder_id</tt>
+  --    @author Karl Goldstein
+  --    @param folder_id        The superfolder id
+  --    @param target_folder_id The subfolder id 
+  --    @return 't' if the item <tt>target_folder_id</tt> is a subfolder of
+  --            the item <tt>folder_id</tt>, 'f' otherwise
+  --    @see {content_folder.is_folder}
+  --*/
+  folder_id		in cr_folders.folder_id%TYPE,
+  target_folder_id	in cr_folders.folder_id%TYPE
+) return char;
+
+function is_empty (
+  --/** Determine if the folder is empty
+  --    @author Karl Goldstein
+  --    @param folder_id        The folder id
+  --    @return 't' if the folder contains no subfolders or items, 'f' otherwise
+  --    @see {content_folder.is_folder}
+  --*/
+  folder_id  in cr_folders.folder_id%TYPE
+) return varchar2;
+
+function is_root (
+  --/** Determine whether the folder is a root (has a parent_id of 0)
+  --    @author Karl Goldstein
+  --    @param folder_id    The folder ID
+  --    @return 't' if the folder is a root or 'f' otherwise
+  --*/
+  folder_id in cr_folders.folder_id%TYPE
+) return char;
+
+procedure register_content_type (
+  --/** Register a content type to the folder, if it is not already registered.
+  --    Only items of the registered type(s) may be added to the folder.
+  --    @author Karl Goldstein
+  --    @param folder_id        The folder id
+  --    @param content_type     The content type to be registered
+  --    @see {content_folder.unregister_content_type}, 
+  --         {content_folder.is_registered}
+  --*/
+  folder_id		in cr_folders.folder_id%TYPE,
+  content_type		in cr_folder_type_map.content_type%TYPE,
+  include_subtypes	in varchar2 default 'f'
+);
+
+procedure unregister_content_type (
+  --/** Unregister a content type from the folder, if it has been registered.
+  --    Only items of the registered type(s) may be added to the folder.
+  --    If the folder already contains items of the type to be unregistered, the
+  --    items remain in the folder.
+  --    @author Karl Goldstein
+  --    @param folder_id        The folder id
+  --    @param content_type     The content type to be unregistered
+  --    @param include_subtypes If 't', all subtypes of <tt>content_type</tt> will be
+  --                            unregistered as well
+  --    @see {content_folder.register_content_type}, {content_folder.is_registered}
+  --*/
+  folder_id		in cr_folders.folder_id%TYPE,
+  content_type		in cr_folder_type_map.content_type%TYPE,
+  include_subtypes	in varchar2 default 'f'
+);
+
+-- change this to is_type_registered
+function is_registered (
+  --/** Determines if a content type is registered to the folder
+  --    Only items of the registered type(s) may be added to the folder.
+  --    @author Karl Goldstein
+  --    @param folder_id        The folder id
+  --    @param content_type     The content type to be checked
+  --    @param include_subtypes If 't', all subtypes of the <tt>content_type</tt> 
+  --                            will be checked, returning 't' if all of them are registered. If 'f',
+  --                            only an exact match with <tt>content_type</tt> will be
+  --                            performed.
+  --    @return 't' if the type is registered to this folder, 'f' otherwise                        
+  --    @see {content_folder.register_content_type}, {content_folder.unregister_content_type}, 
+  --*/
+  folder_id		in cr_folders.folder_id%TYPE,
+  content_type		in cr_folder_type_map.content_type%TYPE,
+  include_subtypes	in varchar2 default 'f'
+) return varchar2;
+
+
+function get_label (
+  --/** Returns the label for the folder. This function is the default name method
+  --    for the folder object.
+  --    @author Karl Goldstein
+  --    @param folder_id        The folder id
+  --    @return The folder's label
+  --    @see {acs_object_type.create_type}, the docs for the name_method parameter
+  --*/
+  folder_id in cr_folders.folder_id%TYPE
+) return cr_folders.label%TYPE;
+
+
+function get_index_page (
+  --/** Returns the item ID of the index page of the folder, null otherwise
+  --    @author Michael Pih
+  --    @param folder_id	The folder id
+  --    @return The item ID of the index page
+  --*/
+  folder_id in cr_folders.folder_id%TYPE
+) return cr_items.item_id%TYPE;
+
+
+
+end content_folder;
+/
+show errors
+
 create or replace package body content_folder
 as
 
@@ -1352,8 +2510,8 @@ begin
     v_context_id := content_folder.new.context_id;
   end if;
 
-  -- parent_id = 0 means that this is a mount point
-  if parent_id ^= 0 and 
+  -- parent_id = security context root means that this is a mount point
+  if parent_id ^= -4 and 
     content_folder.is_folder(parent_id) = 'f' and
     content_folder.is_registered(parent_id,'content_folder') = 'f' then
 
@@ -1363,7 +2521,7 @@ begin
 
     v_package_id := package_id;
 
-    if parent_id is not null and parent_id ^= 0 and package_id is null then
+    if parent_id is not null and parent_id ^= -4 and package_id is null then
         v_package_id := acs_object.package_id(content_item.get_root_folder(parent_id));
     end if;
 
@@ -1748,7 +2906,7 @@ is
     start with
       item_id = target_folder_id;
 
-  v_parent_id integer := 0;
+  v_parent_id integer := -4;
   v_sub_folder_p char := 'f';
 
 begin

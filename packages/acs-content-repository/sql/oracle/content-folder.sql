@@ -39,7 +39,7 @@ begin
   end if;
 
   -- parent_id = security context root means that this is a mount point
-  if parent_id ^= 4 and 
+  if parent_id ^= -4 and 
     content_folder.is_folder(parent_id) = 'f' and
     content_folder.is_registered(parent_id,'content_folder') = 'f' then
 
