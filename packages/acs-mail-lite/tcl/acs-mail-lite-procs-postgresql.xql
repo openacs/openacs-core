@@ -7,7 +7,7 @@
      <querytext>
 
        insert into acs_mail_lite_bounce_notif (user_id, notification_count, notification_time)
-       select user_id, 0 as notification_count,
+       select party_id, 0 as notification_count,
            date_trunc('day', current_timestamp - to_interval(1 + :notification_interval, 'days'))
            as notification_time
         from acs_mail_lite_bounce
