@@ -337,7 +337,6 @@ create sequence acs_data_links_seq start with 1;
 
 create table acs_data_links (
 	rel_id		integer not null
-			constraint acs_data_links_rel_id_fk
 			constraint acs_data_links_pk primary key,
 	object_id_one	integer not null
 			constraint acs_data_links_one_fk
