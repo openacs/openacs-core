@@ -967,8 +967,9 @@ begin
     for v_row in select o.object_type,o.table_name 
         from acs_object_type_supertype_map m,
 	     acs_object_types o
-        where m.ancestor_type=''content_revision''
-        and o.object_type=m.object_type
+        where (m.ancestor_type=''content_revision''
+        and o.object_type=m.object_type)
+	or (o.object_type=''content_revision'')
     loop
 	if table_exists(v_row.table_name) then 
             perform content_type__refresh_view(v_row.object_type);
