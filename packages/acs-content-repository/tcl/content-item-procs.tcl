@@ -49,8 +49,8 @@ ad_proc -public ::content::item::new {
     @param parent_id - parent object of this content_item
     @param item_subtype
     @param content_type - content_revision or subtype of content_revision
-    @param context_id -
-    @param package_id -
+    @param context_id - Context of the item. usually used in conjunction with permissions.
+    @param package_id - Package ID of the object
     @param creation_user -
     @param creation_ip -
     @param creation_date - defaults to current date and time
@@ -59,6 +59,8 @@ ad_proc -public ::content::item::new {
     @param title - title of content_revision to be created
     @param description of content_revision to be created
     @param text - text of content revision to be created
+    @param nls_language - ???
+    @param data - ???
     @param attributes - A list of lists ofpairs of additional attributes and
     their values to pass to the constructor. Each pair is a list of two
      elements: key => value such as
@@ -75,6 +77,7 @@ ad_proc -public ::content::item::new {
     if {[empty_string_p $creation_ip]} {
         set creation_ip [ad_conn peeraddr]
     }
+
     if {[empty_string_p $package_id]} {
         set package_id [ad_conn package_id]
     }
@@ -130,7 +133,11 @@ ad_proc -public ::content::item::new {
             -content_type $content_type \
             -is_live $is_live \
 	    -package_id $package_id \
-            -attributes $attributes
+	    -creation_user $creation_user \
+	    -creation_ip $creation_ip \
+	    -creation_date $creation_date \
+	    -nls_language $nls_language \
+	    -attributes $attributes
     }
     
     return $item_id
