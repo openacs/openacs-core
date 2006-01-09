@@ -2,7 +2,7 @@
     CVS Guidelines
   "><link rel="previous" href="using-cvs-with-openacs.html" title="Using CVS with OpenACS"><link rel="next" href="contributing-code.html" title="Contributing code back to OpenACS"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="using-cvs-with-openacs.html">Prev</a> </td><th width="60%" align="center">Chapter 14. 
     CVS Guidelines
-  </th><td width="20%" align="right"> <a accesskey="n" href="contributing-code.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openacs-cvs-concepts"></a>OpenACS CVS Concepts</h2></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2608195"></a>Modules</h3></div></div></div><p>
+  </th><td width="20%" align="right"> <a accesskey="n" href="contributing-code.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openacs-cvs-concepts"></a>OpenACS CVS Concepts</h2></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2594394"></a>Modules</h3></div></div></div><p>
         All OpenACS code resides within a single CVS module, <code class="computeroutput">openacs-4</code>.  (The openacs-4 directory contains code for all versions of OpenACS 4 and later, and .LRN 1 and later.)   Checking out this module retrieves all openacs code of any type.  For convenience, subsets of <code class="computeroutput">openacs-4</code> are repackaged as smaller modules.</p><p>
           <code class="computeroutput">acs-core</code> contains only critical common
           packages. It does not have any user applications, such as forums,
@@ -30,7 +30,7 @@ ref-timezones search</pre><p>
           <code class="computeroutput">project-manager-all</code> contains the packages required, in combination with acs-core, to run the project-manager package.
         </p><p>
           Each OpenACS package (i.e., directory in <code class="computeroutput">openacs-4/packages/</code>) is also aliased as a module of the same name.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2578959"></a>
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2597178"></a>
         Tags and Branches
       </h3></div></div></div><p>
         Tags and Branches look similar in commands, but behave differently. A tag is a fixed point on a branch.  Check out

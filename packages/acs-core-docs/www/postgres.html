@@ -106,7 +106,7 @@ chmod -R 750 /usr/local/pgsql</span></span></pre></li></ul></div></li><li><a nam
 [postgres ~] <strong class="userinput"><code>emacs ~postgres/.bashrc</code></strong></pre><p>Paste this line into <code class="computeroutput">.bash_profile</code>:</p><pre class="programlisting">source $HOME/.bashrc</pre><p>Paste these lines into <code class="computeroutput">.bashrc</code>:</p><pre class="programlisting">export PATH=/usr/local/bin/:$PATH:/usr/local/pgsql/bin
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib</pre><p>Test this by logging in as
 	<code class="computeroutput">postgres</code> and checking the
-	paths; you should see <code class="computeroutput">/usr/local/pgsql/bin</code></p><pre class="screen">[root src]# <strong class="userinput"><code>su - postgres</code></strong>
+	paths; you should see <code class="computeroutput">/usr/local/pgsql/bin</code> somewhere in the output (the total output is system-dependent so yours may vary)</p><pre class="screen">[root src]# <strong class="userinput"><code>su - postgres</code></strong>
 [postgres pgsql]$ <strong class="userinput"><code>env | grep PATH</code></strong>
 LD_LIBRARY_PATH=:/usr/local/pgsql/lib
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:/root/bin:/usr/local/pgsql/bin:/usr/local/pgsql/bin
