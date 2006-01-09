@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.2.0" url="http://openacs.org/repository/download/apm/acs-core-docs-5.2.0.apm">
+    <version name="5.2.1" url="http://openacs.org/repository/download/apm/acs-core-docs-5.2.1.apm">
         <owner url="mailto:docs@openacs.org">OpenACS Documentation Team</owner>
         <summary>Documentation for the OpenACS Core.</summary>
         <release-date>2006-01-08</release-date>
