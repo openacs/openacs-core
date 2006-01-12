@@ -28,7 +28,6 @@ function new (
 ) return cr_folders.folder_id%TYPE is
   v_folder_id	cr_folders.folder_id%TYPE;
   v_context_id	acs_objects.context_id%TYPE;
-  v_package_id	acs_objects.package_id%TYPE;
 begin
 
   -- set the context_id
@@ -47,12 +46,6 @@ begin
         'This folder does not allow subfolders to be created');
   else
 
-    v_package_id := package_id;
-
-    if parent_id is not null and parent_id ^= -4 and package_id is null then
-        v_package_id := acs_object.package_id(content_item.get_root_folder(parent_id));
-    end if;
-
     v_folder_id := content_item.new(
         item_id       => folder_id,
         name          => name, 
@@ -64,13 +57,13 @@ begin
         creation_ip   => creation_ip, 
         parent_id     => parent_id,
 	security_inherit_p => security_inherit_p,
-        package_id    => v_package_id
+        package_id    => package_id
     );
 
     insert into cr_folders (
       folder_id, label, description, package_id
     ) values (
-      v_folder_id, label, description, v_package_id
+      v_folder_id, label, description, package_id
     );
 
     -- set the correct object title
