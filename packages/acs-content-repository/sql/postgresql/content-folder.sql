@@ -171,7 +171,6 @@ declare
   new__creation_ip            alias for $9;  -- default null
   new__security_inherit_p     alias for $10;  -- default true
   new__package_id             alias for $11; -- default null
-  v_package_id                acs_objects.object_id%TYPE;
   v_folder_id                 cr_folders.folder_id%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
 begin
@@ -193,12 +192,6 @@ begin
 
   else
 
-    v_package_id := new__package_id;
-
-    if new__parent_id is not null and new__parent_id not in (-100,-200) and new__package_id is null then
-        v_package_id := acs_object__package_id(content_item__get_root_folder(new__parent_id));
-    end if;
-
     v_folder_id := content_item__new(
 	new__folder_id,
 	new__name, 
@@ -216,13 +209,13 @@ begin
 	''CR_FILES'',
 	''content_folder'',
         ''content_folder'',
-        v_package_id
+        new__package_id
     );
 
     insert into cr_folders (
       folder_id, label, description, package_id
     ) values (
-      v_folder_id, new__label, new__description, v_package_id
+      v_folder_id, new__label, new__description, new__package_id
     );
 
     -- set the correct object title

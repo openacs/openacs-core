@@ -97,7 +97,6 @@ declare
   v_rel_id         acs_objects.object_id%TYPE;
   v_rel_tag        cr_child_rels.relation_tag%TYPE;
   v_context_id     acs_objects.context_id%TYPE;
-  v_package_id     acs_objects.package_id%TYPE;
   v_storage_type   cr_items.storage_type%TYPE;
 begin
 
@@ -122,12 +121,6 @@ begin
     v_title := new__name;
   else
     v_title := new__title;
-  end if;
-
-  if new__package_id is null and v_parent_id != -4 then
-    v_package_id := acs_object__package_id(content_item__get_root_folder(v_parent_id));
-  else
-    v_package_id := new__package_id;
   end if;
 
   if v_parent_id = -4 or 
@@ -175,7 +168,7 @@ begin
       v_context_id,
       ''t'',
       v_title,
-      v_package_id
+      new__package_id
   );
 
 
@@ -198,7 +191,7 @@ begin
       v_parent_id,
       ''t'',
       v_rel_tag || '': '' || v_parent_id || '' - '' || v_item_id,
-      v_package_id
+      new__package_id
     );
 
     insert into cr_child_rels (
@@ -223,7 +216,7 @@ begin
         new__creation_date, 
         new__creation_user, 
         new__creation_ip,
-        v_package_id
+        new__package_id
         );
 
   elsif new__text is not null or new__title is not null then
@@ -240,7 +233,7 @@ begin
         new__creation_date, 
         new__creation_user, 
         new__creation_ip,
-        v_package_id
+        new__package_id
     );
 
   end if;
@@ -339,7 +332,6 @@ declare
   v_rel_id                    acs_objects.object_id%TYPE;
   v_rel_tag                   cr_child_rels.relation_tag%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
-  v_package_id     acs_objects.package_id%TYPE;
 begin
 
   -- place the item in the context of the pages folder if no
@@ -356,12 +348,6 @@ begin
     v_context_id := v_parent_id;
   else
     v_context_id := new__context_id;
-  end if;
-
-  if new__package_id is null then
-    v_package_id := acs_object__package_id(content_item__get_root_folder(v_parent_id));
-  else
-    v_package_id := new__package_id;
   end if;
 
   if v_parent_id = -4 or 
@@ -402,7 +388,7 @@ begin
       v_context_id,
       ''t'',
       coalesce(new__title,new__name),
-      v_package_id
+      new__package_id
   );
 
   insert into cr_items (
@@ -432,7 +418,7 @@ begin
       v_parent_id,
       ''t'',
       v_rel_tag || '': '' || v_parent_id || '' - '' || v_item_id,
-      v_package_id
+      new__package_id
     );
 
     insert into cr_child_rels (
@@ -465,7 +451,7 @@ begin
         new__creation_date, 
         new__creation_user, 
         new__creation_ip,
-        v_package_id
+        new__package_id
     );
 
   end if;
@@ -540,7 +526,6 @@ declare
   v_rel_id                    acs_objects.object_id%TYPE;
   v_rel_tag                   cr_child_rels.relation_tag%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
-  v_package_id                acs_objects.package_id%TYPE;
 begin
 
   -- place the item in the context of the pages folder if no
@@ -557,12 +542,6 @@ begin
     v_context_id := v_parent_id;
   else
     v_context_id := new__context_id;
-  end if;
-
-  if new__package_id is null then
-    v_package_id := acs_object__package_id(content_item__get_root_folder(v_parent_id));
-  else
-    v_package_id := new__package_id;
   end if;
 
   -- use the name of the item if no title is supplied
@@ -610,7 +589,7 @@ begin
       v_context_id,
       ''t'',
       v_title,
-      v_package_id
+      new__package_id
   );
 
   insert into cr_items (
@@ -640,7 +619,7 @@ begin
       v_parent_id,
       ''t'',
       v_rel_tag || '': '' || v_parent_id || '' - '' || v_item_id,
-      v_package_id
+      new__package_id
     );
 
     insert into cr_child_rels (
@@ -667,7 +646,7 @@ begin
         new__creation_date, 
         new__creation_user, 
         new__creation_ip,
-        v_package_id
+        new__package_id
         );
 
   elsif new__title is not null then
@@ -684,7 +663,7 @@ begin
         new__creation_date, 
         new__creation_user, 
         new__creation_ip,
-        v_package_id
+        new__package_id
     );
 
   end if;
@@ -824,7 +803,6 @@ declare
   v_rel_id                    acs_objects.object_id%TYPE;
   v_rel_tag                   cr_child_rels.relation_tag%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
-  v_package_id                acs_objects.package_id%TYPE;
 begin
 
   -- place the item in the context of the pages folder if no
@@ -848,12 +826,6 @@ begin
     v_title := new__name;
   else
     v_title := new__title;
-  end if;
-
-  if new__package_id is null then
-    v_package_id := acs_object__package_id(content_item__get_root_folder(v_parent_id));
-  else
-    v_package_id := new__package_id;
   end if;
 
   if v_parent_id = -4 or 
@@ -895,7 +867,7 @@ begin
       v_context_id,
       new__security_inherit_p,
       v_title,
-      v_package_id
+      new__package_id
   );
 
   insert into cr_items (
@@ -926,7 +898,7 @@ begin
       v_parent_id,
       ''f'',
       v_rel_tag || '': '' || v_parent_id || '' - '' || v_item_id,
-      v_package_id
+      new__package_id
     );
 
     insert into cr_child_rels (
@@ -952,7 +924,7 @@ begin
         new__creation_date, 
         new__creation_user, 
         new__creation_ip,
-        v_package_id
+        new__package_id
     );
 
   end if;
