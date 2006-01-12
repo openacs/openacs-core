@@ -669,6 +669,8 @@ begin
                   from acs_object_types ot1, acs_object_types ot2
                   where ot2.object_type <> ''acs_object''                       
                     and ot2.object_type <> ''content_revision''
+                    and lower(ot2.table_name) <> ''acs_objects''     
+                    and lower(ot2.table_name) <> ''cr_revisions''
                     and ot1.object_type = refresh_view__content_type
                     and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
                   order by ot2.tree_sortkey desc
