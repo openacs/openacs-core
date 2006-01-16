@@ -10,7 +10,7 @@
     <version name="5.2.1" url="http://openacs.org/repository/download/apm/acs-bootstrap-installer-5.2.1.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Bootstraps an OpenACS installation.</summary>
-        <release-date>2006-01-08</release-date>
+        <release-date>2006-01-16</release-date>
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
