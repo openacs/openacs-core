@@ -3,27 +3,12 @@ cvs2cl -F <span class="replaceable"><span class="replaceable">oacs-5-0</span></s
 cvs2cl -F <span class="replaceable"><span class="replaceable">oacs-5-0</span></span> --delta <span class="replaceable"><span class="replaceable">openacs-5-0-1-final</span></span>:<span class="replaceable"><span class="replaceable">oacs-5-0</span></span> -f ChangeLog-recent</span></span></pre></li><li><p><b>Update Version Numbers. </b>The version numbers in the documentation and in the packages must be updated.  This should only happen after a release candidate is approved.</p><p class="remark"><i><span class="remark">.LRN: this must be repeated for .LRN modules (dotlrn-core in the dotlrn cvs tree) and for any modified modules in the .LRN prerequisites (dotlrn-prereq in openacs cvs tree).  My current working model is that I bulk-update .LRN and OpenACS core but that I don't touch dotlrn-prereq modules - I just use the most recent release and it's up to individual package developers to tag and <a href="releasing-package.html" title="How to package and release an OpenACS Package">release those packages</a> when they change.  This model is already broken because following it means that dotlrn-prereqs don't get new translations.</span></i></p><div class="orderedlist"><ol type="a"><li><p>Update /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/xml/variables.ent with the new version number.
             </p></li><li><p>Add new section in /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/xml/for-everyone/release-notes.xml
 </p></li><li><p>Regenerate all HTML docs</p><pre class="screen">cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/xml
-make</pre></li><li><p>Update /var/lib/aolserver/$OPENACS_SERVICE_NAME/readme.txt with the new version number</p></li><li><p>Update version number and release date in all of the core packages.  Here's a bash/perl script which works but could be made easier to use.  (It depends on all of the old versions and dates being identical.)  Run it from /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages:</p><pre class="programlisting">#!/bin/sh
-# run this file from ../packages to renumber all .info version numbers
-
-#---------------------------------------------------------------------
-# here's what we're looking for
-#---------------------------------------------------------------------
-#   &lt;version name="5.1.0d1" url="http:blahblah/acs-kernel-5.1.0d1.apm"&gt;
-#      &lt;provides url="acs-kernel" version="5.1.0d1"/&gt;
-#---------------------------------------------------------------------
-# here's what we don't want to touch
-#---------------------------------------------------------------------
-#      &lt;requires url="acs-kernel" version="5.0.0b4"/&gt;
-#---------------------------------------------------------------------
-
-for dir in `find -name *.info`
-  do
-  perl -p -i -e 's/name="5\.0\.0"/name="5\.1\.0d1"/' $dir
-  perl -p -i -e 's/-5\.0\.0.apm"/-5\.1\.0d1.apm"/' $dir
-  perl -p -i -e 's/(provides.*version)="5\.0\.0"/\1="5\.1\.0d1"/' $dir
-  perl -p -i -e 's/2004-10-21/2004-11-26/' $dir
-done</pre></li><li><p>Install a new site using the modified code and verify that the automated tests pass.</p></li><li><p>Commit changes to CVS</p></li></ol></div></li><li><p><b>Tag the files in CVS. </b>The steps to this point should have ensured that the head of the current branch contains the full set of code to release.  Now we need to tag it as the code to be released.</p><div class="orderedlist"><ol type="a"><li><p>Check out OpenACS Core.  The files must be checked
+make</pre></li><li><p>Update /var/lib/aolserver/$OPENACS_SERVICE_NAME/readme.txt with the new version number</p></li><li><p>Update version number and release date in all of the
+          core packages.  Use
+          /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/files/update-info.sh
+          with the new version number and the release date as arguments.
+          Run it from /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages:</p><pre class="screen">cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages
+       ./acs-core-docs/www/files/update-info <span class="replaceable"><span class="replaceable">5.2.1</span></span> <span class="replaceable"><span class="replaceable">2006-01-16</span></span></pre></li><li><p>Install a new site using the modified code and verify that the automated tests pass.</p></li><li><p>Commit changes to CVS</p></li></ol></div></li><li><p><b>Tag the files in CVS. </b>The steps to this point should have ensured that the head of the current branch contains the full set of code to release.  Now we need to tag it as the code to be released.</p><div class="orderedlist"><ol type="a"><li><p>Check out OpenACS Core.  The files must be checked
           out through a cvs account with write access and should be a
           checkout from the release branch.  In this example, we are assuming
           this is being done as a local user on openacs.org (which make the 
