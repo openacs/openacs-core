@@ -47,6 +47,7 @@ create or replace view content_item_globals as
     from dual;
 
 -- package body content_item
+
 create or replace package body content_item
 as
 
@@ -2454,10 +2455,16 @@ begin
     start with object_type = 'content_revision') loop
         if table_exists(type_rec.table_name) then
             content_type.refresh_view(type_rec.object_type);
-            content_type.refresh_trigger(type_rec.object_type);
-             content_type.refresh_view(type_rec.object_type);
         end if; 
   end loop;
+
+  -- DRB: The EVIL acs_message_revision names CR_REVISIONS as its table name.  This replaces
+  -- the cr_revision trigger on cr_revisionsi which doesn't set item_id.  This causes an
+  -- "can't insert NULL item_id" error when inserting on the view.  This took me like
+  -- THREE FUCKING DAYS to figure out (well, there were other errors I had to fix with
+  -- upgrades before I could fix this one).
+
+  content_type.refresh_view('content_revision');
 
 end;
 /
@@ -2482,7 +2489,6 @@ function new (
   --    @param creation_date As in <tt>acs_object.new</tt>
   --    @param creation_ip   As in <tt>acs_object.new</tt>
   --    @param creation_user As in <tt>acs_object.new</tt>
-  --    @param package_id As in <tt>acs_object.new</tt>
   --    @return The id of the newly created keyword
   --    @see {acs_object.new}, {content_item.new}, {content_keyword.item_assign},
   --         {content_keyword.delete}
@@ -2497,7 +2503,7 @@ function new (
 			   default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
   object_type   in acs_object_types.object_type%TYPE default 'content_keyword',
-  package_id    in acs_objects.package_id%TYPE
+  package_id    in acs_objects.package_id%TYPE default null
 ) return cr_keywords.keyword_id%TYPE;
 
 procedure del (
@@ -2628,8 +2634,6 @@ end content_keyword;
 /
 show errors
 
-
-
 -- recreate content keyword package body for package_id
 
 create or replace package body content_keyword
@@ -2729,7 +2733,7 @@ function new (
 			   default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
   object_type   in acs_object_types.object_type%TYPE default 'content_keyword',
-  package_id    in acs_objects.package_id%TYPE
+  package_id    in acs_objects.package_id%TYPE default null
 ) return cr_keywords.keyword_id%TYPE
 is
   v_id integer;

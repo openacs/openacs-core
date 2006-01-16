@@ -1955,8 +1955,6 @@ begin
     start with object_type = 'content_revision') loop
         if table_exists(type_rec.table_name) then
             content_type.refresh_view(type_rec.object_type);
-            content_type.refresh_trigger(type_rec.object_type);
-             content_type.refresh_view(type_rec.object_type);
         end if; 
   end loop;
 

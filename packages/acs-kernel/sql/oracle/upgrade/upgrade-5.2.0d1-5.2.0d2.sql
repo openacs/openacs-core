@@ -266,11 +266,11 @@ as
  function new (
   object_id	in acs_objects.object_id%TYPE default null,
   object_type	in acs_objects.object_type%TYPE
-			   default 'acs_object',
+		   default 'acs_object',
   creation_date	in acs_objects.creation_date%TYPE
-			   default sysdate,
+		   default sysdate,
   creation_user	in acs_objects.creation_user%TYPE
-			   default null,
+		   default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
   context_id    in acs_objects.context_id%TYPE default null,
   security_inherit_p in acs_objects.security_inherit_p%TYPE default 't',
@@ -282,6 +282,7 @@ as
   v_object_id acs_objects.object_id%TYPE;
   v_title acs_objects.title%TYPE;
   v_object_type_pretty_name acs_object_types.pretty_name%TYPE;
+  v_creation_date acs_objects.creation_date%TYPE;
  begin
   if object_id is null then
    select acs_object_id_seq.nextval
@@ -302,12 +303,18 @@ as
     v_title := title;
   end if;
 
+  if creation_date is null then
+    select sysdate into v_creation_date from dual;
+  else
+    v_creation_date := creation_date;
+  end if;
+
   insert into acs_objects
-   (object_id, object_type, title, package_id, context_id,
-    creation_date, creation_user, creation_ip)
+   (object_id, object_type, context_id, creation_date,
+    creation_user, creation_ip, security_inherit_p, title, package_id)
   values
-   (v_object_id, object_type, v_title, package_id, context_id,
-    creation_date, creation_user, creation_ip);
+   (v_object_id, object_type, context_id, v_creation_date,
+    creation_user, creation_ip, security_inherit_p, v_title, package_id);
 
   acs_object.initialize_attributes(v_object_id);
 
