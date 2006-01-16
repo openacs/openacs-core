@@ -58,8 +58,8 @@ set error_desc_email "
 if {[empty_string_p $bug_number] } {
 # This will have to wait until a later release. The author of this code MUST make this optional, and off by default.
 #    if {[catch {ns_sendmail "$send_to" $public_userm_email $subject $error_desc_email} errmsg]} {
-        ns_log warning "ACS-TCL/lib/page-error failed to send mail to $send_to for $error_desc"
-    }
+#        ns_log warning "ACS-TCL/lib/page-error failed to send mail to $send_to for $error_desc_email"
+#    }
 }
 set bt_instance [parameter::get -package_id [ad_acs_kernel_id] \
 		     -parameter BugTrackerInstance -default ""]
