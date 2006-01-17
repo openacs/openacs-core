@@ -368,7 +368,8 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     }
 
     set output [textarea_internal $element(id) attributes $contents]
-    append output "\n<br /><input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\"/>"
+
+    append output "Format: [menu $element(id).format [template::util::richtext::format_options] {} {}]"
 
     if { $htmlarea_p } {
       # Tell the blank-master to include the special stuff 
@@ -411,13 +412,9 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 	}
 	set ::acs_blank_master(xinha.options) $xinha_options
 	lappend ::acs_blank_master__htmlareas $attributes(id)
-	append output "<input name='$element(id).format' value='text/html' type='hidden'/>"
       } 
 
-  } else {
-	append output "Format: [menu $element(id).format [template::util::richtext::format_options] {} {}]"
   }
-
     # Spell-checker
     array set spellcheck [template::util::spellcheck::spellcheck_properties \
 			      -element_ref element]
