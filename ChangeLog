@@ -1,3 +1,8 @@
+2006-01-16 21:42  daveb
+
+	* packages/acs-templating/tcl/richtext-procs.tcl: Fix richtext to
+	  show Format widget on no RTE or no javascript.
+
 2006-01-16 13:24  daveb
 
 	* packages/acs-core-docs/www/files/update-info.sh: Add example

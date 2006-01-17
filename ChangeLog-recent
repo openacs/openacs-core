@@ -1,3 +1,58 @@
+2006-01-16 21:42  daveb
+
+	* packages/acs-templating/tcl/richtext-procs.tcl: Fix richtext to
+	  show Format widget on no RTE or no javascript.
+
+2006-01-16 13:59  daveb
+
+	* packages/acs-core-docs/www/: aolserver.html, aolserver4.html,
+	  automated-testing-best-practices.html, backup-recovery.html,
+	  bootstrap-acs.html, credits.html, cvs-guidelines.html,
+	  db-api-detailed.html, db-api.html,
+	  eng-standards-constraint-naming.html,
+	  eng-standards-filenaming.html, eng-standards-plsql.html,
+	  eng-standards-versioning.html, filename.html, form-builder.html,
+	  individual-programs.html, install-next-nightly-vacuum.html,
+	  install-steps.html, mac-installation.html, maintenance-web.html,
+	  object-identity.html, objects.html, openacs.html, oracle.html,
+	  packages.html, parties.html, permissions.html, postgres.html,
+	  programming-with-aolserver.html, psgml-mode.html,
+	  release-notes-4-5.html, release-notes-4-6-2.html,
+	  release-notes-4-6-3.html, release-notes-4-6.html,
+	  release-notes.html, releasing-openacs-core.html,
+	  request-processor.html, requirements-template.html,
+	  security-notes.html, style-guide.html, subsites.html,
+	  tcl-doc.html, templates.html, tutorial-database.html,
+	  tutorial-etp-templates.html, tutorial-pages.html,
+	  unix-installation.html, variables.html, win2k-installation.html,
+	  xml/releasing-openacs.xml: Update documentation
+
+2006-01-16 13:47  daveb
+
+	* packages/: acs-admin/acs-admin.info,
+	  acs-api-browser/acs-api-browser.info,
+	  acs-authentication/acs-authentication.info,
+	  acs-automated-testing/acs-automated-testing.info,
+	  acs-bootstrap-installer/acs-bootstrap-installer.info,
+	  acs-content-repository/acs-content-repository.info,
+	  acs-core-docs/acs-core-docs.info, acs-kernel/acs-kernel.info,
+	  acs-lang/acs-lang.info, acs-mail/acs-mail.info,
+	  acs-messaging/acs-messaging.info,
+	  acs-reference/acs-reference.info,
+	  acs-service-contract/acs-service-contract.info,
+	  acs-subsite/acs-subsite.info, acs-tcl/acs-tcl.info,
+	  acs-templating/acs-templating.info,
+	  ref-timezones/ref-timezones.info, search/search.info: Update
+	  release date
+
+2006-01-16 13:45  daveb
+
+	* readme.txt: Update version number
+
+2006-01-16 13:41  daveb
+
+	* ChangeLog: New changelog
+
 2006-01-16 13:24  daveb
 
 	* packages/acs-core-docs/www/files/update-info.sh: Add example
@@ -20,27 +75,6 @@
 	  acs-kernel/sql/oracle/upgrade/upgrade-5.2.1d1-5.2.1d2.sql: Fixed
 	  5.1->5.2 upgrade, all content repository tests now pass.
 
-2006-01-14 18:27  michaels
-
-	* packages/news-aggregator/: news-aggregator.info, todo,
-	  sql/postgresql/news-aggregator-packages-create.sql,
-	  sql/postgresql/news-aggregator-tables-create.sql,
-	  sql/postgresql/upgrade/upgrade-0.9.7-0.9.8.sql,
-	  tcl/aggregator-procs-postgresql.xql, tcl/aggregator-procs.tcl,
-	  tcl/apm-callback-procs.tcl, tcl/apm-callback-procs.xql,
-	  tcl/news-aggregator-init.tcl,
-	  tcl/news-aggregator-procs-postgresql.xql,
-	  tcl/news-aggregator-procs.tcl, tcl/source-procs-postgresql.xql,
-	  tcl/source-procs.tcl, tcl/subscription-procs.xql,
-	  www/aggregator-add.adp, www/aggregator-add.tcl,
-	  www/aggregator-edit.adp, www/aggregator-edit.tcl,
-	  www/aggregator.adp, www/aggregator.tcl, www/index.adp,
-	  www/index.tcl, www/subscriptions-postgresql.xql,
-	  www/subscriptions.tcl, www/toggle-show-description.tcl: lots of
-	  little tweaks for data cleanup on uninstantiate, some more UI
-	  work, bug fixes, etc.; added daveb's sweeper proc; not tagging
-	  v0.9.8 just yet though
-
 2006-01-12 13:25  daveb
 
 	* packages/acs-content-repository/sql/oracle/: content-folder.sql,
@@ -55,34 +89,12 @@
 	  package_id based on parent_id. In almost all cases this will
 	  return null anyway.
 
-2006-01-12 09:19  hamiltonc
-
-	* packages/calendar/: catalog/calendar.en_US.ISO-8859-1.xml,
-	  www/cal-item-new.tcl: add a simple help text to the calendar type
-	  drop down
-
 2006-01-11 22:20  dedsc
 
 	* packages/acs-content-repository/sql/postgresql/content-type.sql:
 	  fix content_type__refresh_view to do a lowercase when selecting
 	  table_name. this was in the upgrade script for 5.2.0a1 to 5.2.0a2
 	  but didn't find it's way here
-
-2006-01-09 07:24  josee
-
-	* packages/assessment/tcl/: apm-callback-procs.tcl,
-	  as-sc-procs.tcl: adding service contract implementations of the
-	  fts content provider
-
-2006-01-09 07:23  josee
-
-	* packages/assessment/tcl/as-sc-procs.tcl: adding service contract
-	  implementations for the fts content provider
-
-2006-01-09 07:23  josee
-
-	* packages/assessment/tcl/as-sc-procs.tcl: file as-sc-procs.tcl was
-	  added on branch oacs-5-2 on 2006-01-09 12:24:27 +0000
 
 2006-01-09 01:32  carlb
 
@@ -164,12 +176,6 @@
 	  a note about default system path in a section that was confusing
 	  new users
 
-2006-01-08 16:46  daveb
-
-	* packages/dotlrn-weblogger/tcl/: dotlrn-weblogger-procs.tcl,
-	  test/dotlrn-weblogger-procs.tcl: Unsubscribe users from weblog if
-	  they leave a community.  Add test to make sure this works.
-
 2006-01-08 09:52  daveb
 
 	* packages/acs-content-repository/tcl/content-item-procs.tcl:
@@ -181,33 +187,11 @@
 	  #2771. Made sure creation_* parameters are passed on to
 	  content::revision::new
 
-2006-01-07 02:31  maltes
-
-	* packages/general-comments/www/comment-add-3.tcl: Fixes #2773:
-	  Change require_login to ad_conn user_id as permissions are
-	  checked afterwards
-
-2006-01-06 18:49  maltes
-
-	* contrib/packages/mailing-lists/mailing-lists.info: Fix #2777. URL
-	  was wrong
-
-2006-01-06 12:19  daveb
-
-	* contrib/packages/portal/www/index.adp: Src is an attribute of the
-	  inclue tag, not a parameter passed to the include. You can't set
-	  it by reference.
-
 2006-01-05 14:40  daveb
 
 	* packages/acs-tcl/lib/page-error.tcl: Turn off emailing page
 	  errors.  Whoever added this, please, please,please! add the
 	  paramtere for this and make it off by default.
-
-2006-01-05 14:21  daveb
-
-	* packages/forums/www/: message-view.adp, message-view.tcl: If
-	  presentation_type is flat, only show in flat mode.
 
 2006-01-05 12:43  daveb
 
@@ -220,26 +204,6 @@
 	  Added create or replace of apm_package to the 5.2.0 version since
 	  we've not actually bumped acs-kernel.info yet ...
 
-2006-01-04 17:46  michaels
-
-	* packages/news-aggregator/sql/postgresql/upgrade/:
-	  upgrade-0.9.4d-0.9.5b.sql: thought about puting off adding back
-	  the constraints a few version until we're pretty sure anyone out
-	  there with older versions has had a chance to get through earlier
-	  upgrades but then thought better of it
-
-2006-01-04 15:39  michaels
-
-	*
-	  packages/news-aggregator/sql/postgresql/upgrade/upgrade-0.9.6b-0.9.7.sql:
-	  duh... bad comment in upgrade script
-
-2006-01-04 15:37  daveb
-
-	* packages/general-comments/: general-comments.info,
-	  tcl/general-comments-procs-postgresql.xql,
-	  www/comment-add-3-postgresql.xql: Use -4 parent_id.
-
 2006-01-04 15:28  daveb
 
 	* packages/acs-messaging/: acs-messaging.info,
@@ -248,71 +212,11 @@
 	  parent_id as -4 instead of 0. Postgresql doesn't have a default
 	  for parent_id so it doesn't get an upgrade script.
 
-2006-01-04 15:21  daveb
-
-	* packages/news/sql/postgresql/upgrade/upgrade-5.2.0d2-5.2.0d3.sql:
-	  Fix another missing comma!
-
-2006-01-04 15:17  daveb
-
-	* packages/news/sql/postgresql/upgrade/upgrade-5.2.0d2-5.2.0d3.sql:
-	  Add missing comma
-
-2006-01-04 13:53  michaels
-
-	* packages/auth-ldap/auth-ldap.info: bumping version
-
-2006-01-04 11:51  michaels
-
-	* packages/news-aggregator/news-aggregator.info: bump version to
-	  0.9.7 and tag for release
-
-2006-01-04 11:50  michaels
-
-	* packages/news-aggregator/www/: subscription-copy.tcl,
-	  subscription-copy.xql, subscription-move.tcl,
-	  subscription-move.xql, subscriptions.tcl, subscriptions.xql: fix
-	  up subscription move/copy
-
-2006-01-04 11:48  michaels
-
-	* packages/news-aggregator/sql/postgresql/:
-	  news-aggregator-tables-create.sql,
-	  upgrade/upgrade-0.9.6b-0.9.7.sql: add a few indexes
-
 2006-01-04 10:51  daveb
 
 	*
 	  packages/acs-content-repository/sql/postgresql/upgrade/upgrade-5.2.1d1-5.2.1d2.sql:
 	  Refresh content_revision view also, not just child types.
-
-2006-01-04 00:35  michaels
-
-	* packages/news-aggregator/www/index.adp: change 'manage' url
-
-2006-01-04 00:31  michaels
-
-	* packages/news-aggregator/www/: aggregator-tabs.adp,
-	  aggregator-tabs.tcl, aggregator.adp, aggregator.tcl, manage.adp,
-	  manage.tcl, permissions.adp, permissions.tcl: get rid of manage
-	  page that included the various forms; instead include
-	  aggregator-tabs from each form
-
-2006-01-04 00:29  michaels
-
-	* packages/news-aggregator/www/subscriptions.xql: allow user to
-	  select from known feeds
-
-2006-01-04 00:28  michaels
-
-	* packages/news-aggregator/www/subscriptions.adp: use standard form
-	  template
-
-2006-01-04 00:26  michaels
-
-	* packages/news-aggregator/www/subscriptions.tcl: allow user to
-	  select from known feeds when adding a feed (in addition to
-	  supplying a feed url)
 
 2006-01-03 20:42  daveb
 
@@ -374,27 +278,6 @@
 	  packages/acs-content-repository/sql/postgresql/upgrade/upgrade-5.2.0b11-5.2.0b12.sql:
 	  Refresh insert views on upgrade since the definition has changed.
 
-2006-01-02 15:49  michaels
-
-	* packages/news-aggregator/tcl/: aggregator-procs.tcl,
-	  source-procs-postgresql.xql: fixing something minor i broke in
-	  proc args and changing now() to current_timestamp
-
-2006-01-02 15:41  michaels
-
-	* packages/news-aggregator/tcl/news-aggregator-procs.tcl: minor fix
-	  to proc that calculates 'updated since' time
-
-2006-01-02 15:40  michaels
-
-	* packages/news-aggregator/tcl/: subscription-procs.tcl,
-	  subscription-procs.xql: remove source if no longer referenced
-
-2006-01-02 15:36  michaels
-
-	* packages/news-aggregator/tcl/source-procs.tcl: remove a source if
-	  it is no longer being used by any aggregators
-
 2006-01-02 13:02  daveb
 
 	*
@@ -411,11 +294,6 @@
 
 	* packages/acs-content-repository/acs-content-repository.info: Bump
 	  to corect version number.
-
-2006-01-01 19:24  donb
-
-	* packages/forums/sql/oracle/: forums-messages-package-create.sql,
-	  upgrade/upgrade-1.2d1-1.2d2.sql: Applied patch to fix bug #2761.
 
 2006-01-01 18:37  gustafn
 
@@ -482,34 +360,6 @@
 	  popups/popup.js, skins/blue-metallic/skin.css: upgrade to the
 	  current xinha-nightly version
 
-2006-01-01 15:04  michaels
-
-	* packages/news-aggregator/www/index.adp: add space
-
-2006-01-01 14:44  michaels
-
-	* packages/news-aggregator/: news-aggregator.info,
-	  tcl/aggregator-procs.tcl, tcl/news-aggregator-procs.tcl,
-	  tcl/source-procs.tcl, tcl/weblog-procs.tcl, tcl/weblog-procs.xql,
-	  www/aggregator-add.tcl, www/aggregator.tcl, www/index.adp,
-	  www/index.tcl, www/item-blog.adp, www/item-blog.tcl,
-	  www/item-blog.xql, www/manage.adp, www/settings.adp: add ability
-	  to post item to subsite lars-blogger instances, more UI and perm
-	  tweaks. bump version to 0.9.6b
-
-2005-12-29 17:54  michaels
-
-	* packages/news-aggregator/:
-	  catalog/news-aggregator.en_US.ISO-8859-1.xml,
-	  tcl/news-aggregator-procs.tcl, www/index.adp, www/index.tcl: some
-	  more UI changes based on what i saw today over at
-	  http://feeds.feedburner.com/vudici (i.e., very clean)
-
-2005-12-29 08:54  maltes
-
-	* contrib/packages/mailing-lists/www/madmin/: list-subscribers.tcl,
-	  list-subscribers.xql: Added email to list-subscribers
-
 2005-12-29 06:57  maltes
 
 	* packages/acs-kernel/catalog/: acs-kernel.ar_LB.utf-8.xml,
@@ -525,17 +375,6 @@
 2005-12-29 05:07  maltes
 
 	* etc/config.tcl: Added check for libthread library
-
-2005-12-29 03:03  maltes
-
-	* packages/dotlrn/tcl/: apm-callback-procs.tcl, dotlrn-init.tcl:
-	  Fix #2764. Move privacy setting to after instantiate callback so
-	  you can actually change the parameter
-
-2005-12-29 02:58  maltes
-
-	* packages/user-tracking/user-tracking.info: Fix #2765. Added
-	  dependency on .LRN.
 
 2005-12-28 20:27  daveb
 
@@ -565,85 +404,10 @@
 	  utilities-procs.tcl: Basic compatibility with naviserver 4.99.0
 	  (some packages with filters will need similar fixes)
 
-2005-12-28 17:45  michaels
-
-	* packages/news-aggregator/www/index.tcl: more outlook-like
-	  timestamp formatting
-
-2005-12-28 15:37  michaels
-
-	* packages/news-aggregator/www/index.adp: tidy up an <if>
-
-2005-12-28 13:49  michaels
-
-	* packages/news-aggregator/www/index.tcl: abort script after
-	  redirect
-
-2005-12-28 13:40  michaels
-
-	* packages/news-aggregator/:
-	  sql/postgresql/upgrade/upgrade-0.9d-0.9.4d.sql,
-	  tcl/apm-callback-procs.tcl: couple of errors/typos in the upgrade
-	  scripts
-
-2005-12-28 12:55  michaels
-
-	* packages/news-aggregator/: news-aggregator.info,
-	  sql/postgresql/news-aggregator-tables-create.sql,
-	  sql/postgresql/upgrade/upgrade-0.9.4d-0.9.5b.sql,
-	  sql/postgresql/upgrade/upgrade-0.9d-0.9.4d.sql,
-	  tcl/aggregator-procs-postgresql.xql, tcl/aggregator-procs.tcl,
-	  tcl/apm-callback-procs.tcl, tcl/apm-callback-procs.xql,
-	  tcl/install-procs.tcl, tcl/install-procs.xql,
-	  www/aggregator-add.adp, www/aggregator-add.tcl,
-	  www/aggregator-delete.tcl, www/aggregator-delete.xql,
-	  www/aggregator.adp, www/aggregator.tcl, www/index.adp,
-	  www/index.tcl, www/index.xql, www/manage.adp, www/manage.tcl,
-	  www/set-default.tcl, www/settings.adp, www/settings.tcl,
-	  www/settings.xql, www/subscriptions.adp, www/subscriptions.tcl:
-	  Minor tweaks to the UI and data model to better support instance
-	  awareness and manageability. The Oracle code is WAY out of date
-	  and, not having an Oracle install, I'm not going to worry about
-	  it now. Version bumped to 0.9.5b and I removed Simon from owner
-	  list as he's no longer active in the community. Release will be
-	  tagged oacs-5-1-compat but work will need to be done to get it
-	  going on oacs-5-2.
-
-2005-12-28 07:09  emmar
-
-	* packages/jabber/sql/oracle/jabber-create.sql: Removing a
-	  remaining quote
-
-2005-12-27 16:50  emmar
-
-	* packages/dotlrn/tcl/: community-procs-oracle.xql,
-	  community-procs-postgresql.xql, community-procs.tcl: Extracting
-	  SQL from tcl to xql and fix sintax for oracle
-
 2005-12-27 03:55  maltes
 
 	* packages/acs-tcl/tcl/utilities-procs.tcl: Added
 	  util::find_all_files
-
-2005-12-26 20:13  emmar
-
-	* packages/dotlrn/sql/oracle/community-memberships-create.sql: Fix
-	  for bug #2732
-
-2005-12-26 19:59  emmar
-
-	* packages/dotlrn-survey/sql/oracle/dotlrn-survey-create.sql: Fix
-	  package body
-
-2005-12-25 18:43  michaels
-
-	* packages/news-aggregator/www/item-blog.adp: noquote fix
-
-2005-12-24 19:57  michaels
-
-	* packages/news-aggregator/www/: index-oracle.xql,
-	  index-postgresql.xql, index.xql: no need for db specific files
-	  for index or person name query
 
 2005-12-23 03:26  maltes
 
@@ -661,48 +425,20 @@
 	* packages/acs-lang/sql/postgresql/ad-locales.sql: Added swiss
 	  locale
 
-2005-12-19 15:05  timoh
-
-	*
-	  packages/dotlrn-project-manager/tcl/dotlrn-project-manager-callback-procs.tcl:
-	  moved logger instantiate to seperate callback
-
 2005-12-19 13:42  maltes
 
 	* packages/acs-lang/sql/postgresql/ad-locales.sql: Removed swiss
 	  locale. Will recommit once the release has been made
-
-2005-12-18 09:05  maltes
-
-	* packages/file-storage/tcl/file-storage-procs.tcl:  Fixes #2744
 
 2005-12-18 06:17  maltes
 
 	* packages/acs-content-repository/tcl/content-symlink-procs.tcl: A
 	  little tiny bit of documentation for the symlink procedures
 
-2005-12-18 06:16  maltes
-
-	* packages/file-storage/www/view/index.vuh: Support for symlinks
-
 2005-12-16 12:00  daveb
 
 	* packages/acs-subsite/lib/user-new.tcl: Fix bug#2715 url varibale
 	  name overwriting value of form element
-
-2005-12-16 06:31  eduardop
-
-	* packages/dotlrn/www/manage-memberships.adp: Fix bugs
-
-2005-12-15 17:54  maltes
-
-	* packages/dotlrn/: dotlrn.info, tcl/community-procs.tcl: New
-	  parameter for sending community mails
-
-2005-12-15 17:53  maltes
-
-	* packages/dotlrn/catalog/: dotlrn.de_DE.ISO-8859-1.xml,
-	  dotlrn.en_US.ISO-8859-1.xml: New I18N
 
 2005-12-15 17:48  maltes
 
