@@ -40,9 +40,9 @@ address that means the local machine - the "loopback" interface).
 Unless this mail is addressed to the same machine, qmail thinks that
 it's an attempt to relay mail, and rejects it.  So these two commands
 set up an exception so that any mail sent from 127.0.0.1 is allowed to
-send outgoing mail.</p><pre class="screen">[root ucspi-tcp-0.88]# <strong class="userinput"><code>cp /tmp/openacs-5.2.0/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</code></strong>
+send outgoing mail.</p><pre class="screen">[root ucspi-tcp-0.88]# <strong class="userinput"><code>cp /tmp/openacs-5.2.2/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</code></strong>
 [root ucspi-tcp-0.88]# <strong class="userinput"><code>tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</code></strong>
-<span class="action"><span class="action">cp /tmp/openacs-5.2.0/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
+<span class="action"><span class="action">cp /tmp/openacs-5.2.2/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
 tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </span></span></pre></li><li><p><b>Install Qmail. </b><a class="indexterm" name="id2588608"></a></p><p><a href="individual-programs.html#ucspi-download">Download qmail</a>,
             set up the standard supporting users and build the binaries:</p><pre class="screen">[root root]# <strong class="userinput"><code>cd /usr/local/src</code></strong>
 [root src]# <strong class="userinput"><code>wget http://www.qmail.org/netqmail-1.04.tar.gz</code></strong>
@@ -126,11 +126,11 @@ chmod 644 ~alias/.qmail*
 /var/qmail/bin/maildirmake ~alias/Maildir/ 
 chown -R alias.nofiles /var/qmail/alias/Maildir</span></span></pre><a class="indexterm" name="id2559982"></a><p>Configure qmail to use the Maildir delivery format
           (instead of mbox), and install a version of the qmail startup script modified to use Maildir.</p><pre class="screen">[root alias]# <strong class="userinput"><code>echo "./Maildir" &gt; /var/qmail/bin/.qmail</code></strong>
-[root alias]# <strong class="userinput"><code>cp /tmp/openacs-5.2.0/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</code></strong>
+[root alias]# <strong class="userinput"><code>cp /tmp/openacs-5.2.2/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</code></strong>
 [root alias]# <strong class="userinput"><code>chmod 755 /var/qmail/rc</code></strong>
 [root alias]# 
 <span class="action"><span class="action">echo "./Maildir" &gt; /var/qmail/bin/.qmail 
-cp /tmp/openacs-5.2.0/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc 
+cp /tmp/openacs-5.2.2/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc 
 chmod 755 /var/qmail/rc 
 </span></span></pre><p>Set up the skeleton directory so that new users will
           be configured for qmail.</p><pre class="screen">[root root]# <strong class="userinput"><code>/var/qmail/bin/maildirmake /etc/skel/Maildir</code></strong>
@@ -142,13 +142,13 @@ echo "./Maildir/" &gt; /etc/skel/.qmail</span></span></pre><p>As recommended, we
 [root root]# <strong class="userinput"><code>mkdir -p /var/qmail/supervise/qmail-smtpd/log</code></strong>
 [root root]# <strong class="userinput"><code>mkdir /var/log/qmail</code></strong>
 [root root]# <strong class="userinput"><code>chown qmaill /var/log/qmail</code></strong>
-[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.2.0/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl</code></strong>
+[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.2.2/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl</code></strong>
 [root root]# <strong class="userinput"><code>chmod 755 /var/qmail/bin/qmailctl</code></strong>
 [root root]# <strong class="userinput"><code>ln -s /var/qmail/bin/qmailctl /usr/bin</code></strong>
-[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.2.0/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run </code></strong>
-[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.2.0/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run</code></strong>
-[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.2.0/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run</code></strong>
-[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.2.0/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run</code></strong>
+[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.2.2/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run </code></strong>
+[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.2.2/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run</code></strong>
+[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.2.2/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run</code></strong>
+[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.2.2/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run</code></strong>
 [root root]# <strong class="userinput"><code>chmod 755 /var/qmail/supervise/qmail-send/run</code></strong>
 [root root]# <strong class="userinput"><code>chmod 755 /var/qmail/supervise/qmail-send/log/run</code></strong>
 [root root]# <strong class="userinput"><code>chmod 755 /var/qmail/supervise/qmail-smtpd/run</code></strong>
@@ -159,13 +159,13 @@ echo "./Maildir/" &gt; /etc/skel/.qmail</span></span></pre><p>As recommended, we
 mkdir -p /var/qmail/supervise/qmail-smtpd/log
 mkdir /var/log/qmail
 chown qmaill /var/log/qmail
-cp /tmp/openacs-5.2.0/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl
+cp /tmp/openacs-5.2.2/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl
 chmod 755 /var/qmail/bin/qmailctl
 ln -s /var/qmail/bin/qmailctl /usr/bin
-cp /tmp/openacs-5.2.0/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run
-cp /tmp/openacs-5.2.0/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run
-cp /tmp/openacs-5.2.0/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run
-cp /tmp/openacs-5.2.0/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run
+cp /tmp/openacs-5.2.2/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run
+cp /tmp/openacs-5.2.2/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run
+cp /tmp/openacs-5.2.2/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run
+cp /tmp/openacs-5.2.2/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run
 chmod 755 /var/qmail/supervise/qmail-send/run
 chmod 755 /var/qmail/supervise/qmail-send/log/run
 chmod 755 /var/qmail/supervise/qmail-smtpd/run
