@@ -36,6 +36,7 @@
 	select object_id_two
 	from acs_data_links
 	where object_id_one = :package_id
+	order by object_id_two
     </querytext>
 </fullquery>
 
@@ -46,6 +47,7 @@
 	where r.object_id_one = :from_object_id
 	and r.object_id_two = o.object_id
 	and o.object_type = :to_object_type
+	order by r.object_id_two
     </querytext>
 </fullquery>
 
@@ -56,6 +58,7 @@
 	where r.object_id_one = :from_object_id
 	and r.object_id_two = i.item_id
 	and i.content_type = :to_content_type
+	order by r.object_id_two
     </querytext>
 </fullquery>
 
