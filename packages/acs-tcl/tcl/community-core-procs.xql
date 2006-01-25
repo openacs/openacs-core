@@ -163,7 +163,7 @@
         select party_id 
         from   parties 
         where  lower(email) = lower(:email)
-
+	order by party_id desc
       </querytext>
 </fullquery>
 
