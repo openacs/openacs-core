@@ -159,11 +159,11 @@ ad_proc -public util_memoize_flush_regexp {
 } {
     foreach name [ns_cache names util_memoize] {
        if $log_p {
-           ns_log notice "util_memoize_flush_regexp: checking $name for $expr"
+           ns_log Debug "util_memoize_flush_regexp: checking $name for $expr"
        }
        if { [regexp $expr $name] } {
            if $log_p {
-               ns_log notice "util_memoize_flush_regexp: flushing $name"
+               ns_log Debug "util_memoize_flush_regexp: flushing $name"
            }
            util_memoize_flush $name
        }
