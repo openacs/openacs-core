@@ -237,9 +237,9 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
 
       append output [textarea_internal "$element(id)" attributes $contents]
       if { $htmlarea_p } {
-          append output "<input name='$element(id).format' value='text/html# type='hidden'/>"
+          append output "<input name='$element(id).format' value='text/html' type='hidden'/>"
       } else {
-          append output "<br/>Format: [menu "$element(id).format" [template::util::richtext::format_options] $format attributes]"
+          append output "<br/>Format: [menu $element(id).format [template::util::richtext::format_options] $format attributes]"
       }
           
       # Spell-checker
@@ -368,8 +368,11 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     }
 
     set output [textarea_internal $element(id) attributes $contents]
-
-    append output "Format: [menu $element(id).format [template::util::richtext::format_options] {} {}]"
+    if { $htmlarea_p } {
+      append output "<input name='$element(id).format' value='text/html' type='hidden'/>"
+    } else {
+      append output "<br/>Format: [menu $element(id).format [template::util::richtext::format_options] {} {}]"
+    }
 
     if { $htmlarea_p } {
       # Tell the blank-master to include the special stuff 
