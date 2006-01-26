@@ -369,7 +369,8 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
     set output [textarea_internal $element(id) attributes $contents]
     if { $htmlarea_p } {
-      append output "<input name='$element(id).format' value='text/html' type='hidden'/>"
+      append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'/>\");</script>\n"
+      append output "<noscript><br/>Format: [menu $element(id).format [template::util::richtext::format_options] {} {}]</noscript>\n"
     } else {
       append output "<br/>Format: [menu $element(id).format [template::util::richtext::format_options] {} {}]"
     }
