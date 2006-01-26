@@ -349,7 +349,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     set contents {}
     set format {}
   }
-  
+
   array set options [expr {[info exists element(options)] ? 
 			   $element(options) : ""}]
   set richtextEditor [expr {[info exists options(editor)] ?
@@ -367,20 +367,15 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 			  -default 0]
     }
 
+    set format_menu [menu $element(id).format [template::util::richtext::format_options] $format {}]
     set output [textarea_internal $element(id) attributes $contents]
-    if { $htmlarea_p } {
-      append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'/>\");</script>\n"
-      append output "<noscript><br/>Format: [menu $element(id).format [template::util::richtext::format_options] {} {}]</noscript>\n"
-    } else {
-      append output "<br/>Format: [menu $element(id).format [template::util::richtext::format_options] {} {}]"
-    }
 
     if { $htmlarea_p } {
       # Tell the blank-master to include the special stuff 
       # for the richtext widget in the page header
-
+      
       set ::acs_blank_master($richtextEditor) 1
-
+      
       if {$richtextEditor eq "rte"} {
 	lappend ::acs_blank_master__htmlareas $element(form_id)
 	# quote contents for javascript.
@@ -391,10 +386,14 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 	# which the richtext widget won't work but which do have js enabled 
 	# should output since we need the format widget (this for Safari among 
 	# some others)
+	append output "<noscript><br/>Format: $format_menu</noscript>\n"
 
 	set output "<script type='text/javascript'><!--\nwriteRichText('$element(id)','$contents',500,200,true,false,'<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\"/>','[string map {\n \\n \r {} "'" "&\#39"} $output]'); //--></script><noscript id=\"rte-noscr-$element(id)\">$output</noscript>"
       } elseif {$richtextEditor eq "xinha"} {
-
+	
+	append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'/>\");</script>\n"
+	append output "<noscript><br/>Format: $format_menu</noscript>\n"
+	
 	# we have a xinha richtext widget, specified by "options {editor xinha}"
 	# The following options are supported: 
 	#      editor plugins width height folder_id fs_package_id
@@ -418,7 +417,10 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 	lappend ::acs_blank_master__htmlareas $attributes(id)
       } 
 
-  }
+    } else {
+      append output "<br/>Format: $format_menu"
+    }
+
     # Spell-checker
     array set spellcheck [template::util::spellcheck::spellcheck_properties \
 			      -element_ref element]
