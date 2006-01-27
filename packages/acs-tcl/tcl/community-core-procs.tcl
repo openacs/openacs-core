@@ -656,7 +656,7 @@ ad_proc -public party::get_by_email {
 
     @return party_id
 } {
-    return [lindex [db_list select_party_id {*SQL*}] 0]
+    return [db_string select_party_id {*SQL*} -default ""]
 }
 
 ad_proc -public party::approved_members {

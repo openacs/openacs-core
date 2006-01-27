@@ -157,16 +157,6 @@
       </querytext>
 </fullquery>
 
-<fullquery name="party::get_by_email.select_party_id">
-      <querytext>
-      
-        select party_id 
-        from   parties 
-        where  lower(email) = lower(:email)
-	order by party_id desc
-      </querytext>
-</fullquery>
-
 
 <fullquery name="party::get_by_email.select_party_id">
       <querytext>
