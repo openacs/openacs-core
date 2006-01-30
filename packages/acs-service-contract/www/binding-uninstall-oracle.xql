@@ -6,7 +6,7 @@
 <fullquery name="binding_uninstall">      
       <querytext>
          begin
-           select acs_sc_binding.del(:contract_id,:impl_id)
+           acs_sc_binding.del(contract_id => :contract_id, impl_id => :impl_id);
          end;
       </querytext>
 </fullquery>
