@@ -6,5 +6,7 @@
 -- $Id$
 --
 
+@@ template-demo-notes-drop.sql
+
 drop table ad_template_sample_users;
 drop sequence ad_template_sample_users_seq;
