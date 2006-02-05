@@ -308,7 +308,7 @@ end;
 '
 language 'plpgsql';
 
-select template__make_sample_data();
+-- select template__make_sample_data();
 
 drop function template__make_sample_data();
 
