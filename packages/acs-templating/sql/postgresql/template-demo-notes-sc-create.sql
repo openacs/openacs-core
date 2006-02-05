@@ -57,10 +57,10 @@ end;' language 'plpgsql';
 
 
 create trigger template_demo_notes__itrg after insert on template_demo_notes
-for each row execute procedure notes__itrg (); 
+for each row execute procedure template_demo_notes__itrg (); 
 
 create trigger template_demo_notes__dtrg after delete on template_demo_notes
-for each row execute procedure notes__dtrg (); 
+for each row execute procedure template_demo_notes__dtrg (); 
 
 create trigger template_demo_notes__utrg after update on template_demo_notes
-for each row execute procedure notes__utrg (); 
+for each row execute procedure template_demo_notes__utrg (); 

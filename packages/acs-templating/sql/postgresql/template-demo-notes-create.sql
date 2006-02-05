@@ -93,7 +93,7 @@ declare
   p_template_demo_note_id                    alias for $1;       -- default null
   p_title                      alias for $2;
   p_body                       alias for $3;
-  p_object_type                alias for $4;       -- default ''note''
+  p_object_type                alias for $4;       -- default ''template_demo_note''
   p_creation_date              alias for $5;        -- default now()
   p_creation_user              alias for $6;        -- default null
   p_creation_ip                alias for $7;        -- default null
@@ -160,4 +160,5 @@ end;
 
 
 -- neophytosd
-\i notes-sc-create.sql
+\i template-demo-notes-sc-create.sql
+\i template-demo-notes-sample.sql
