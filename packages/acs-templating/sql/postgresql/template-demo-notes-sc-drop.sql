@@ -6,9 +6,9 @@ select acs_sc_impl__delete(
 
 
 
-drop trigger template_demo_notes__utrg on notes;
-drop trigger template_demo_notes__dtrg on notes;
-drop trigger template_demo_notes__itrg on notes;
+drop trigger template_demo_notes__utrg on template_demo_notes;
+drop trigger template_demo_notes__dtrg on template_demo_notes;
+drop trigger template_demo_notes__itrg on template_demo_notes;
 
 
 
