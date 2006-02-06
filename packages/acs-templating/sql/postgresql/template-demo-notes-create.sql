@@ -114,11 +114,13 @@ begin
     values
       (v_template_demo_note_id, p_title, p_body);
 
-    PERFORM acs_permission__grant_permission(
-          v_template_demo_note_id,
-          p_creation_user,
-          ''admin''
-    );
+    if p_creation_user is not null then
+      PERFORM acs_permission__grant_permission(
+            v_template_demo_note_id,
+            p_creation_user,
+            ''admin''
+      );
+    end if;
 
     return v_template_demo_note_id;
 
@@ -160,5 +162,5 @@ end;
 
 
 -- neophytosd
-\i template-demo-notes-sc-create.sql
+
 \i template-demo-notes-sample.sql

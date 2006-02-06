@@ -4,7 +4,6 @@
 --
 
 -- neophytosd
-\i template-demo-notes-sc-drop.sql 
 
 --drop functions
 drop function template_demo_note__new (integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer);
