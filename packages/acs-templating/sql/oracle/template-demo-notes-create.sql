@@ -38,6 +38,14 @@ begin
     pretty_plural => 'Bodies',
     datatype => 'string'
   );
+
+  attr_id := acs_attribute.create_attribute (
+    object_type => 'template_demo_note',
+    attribute_name => 'color',
+    pretty_name => 'Color',
+    pretty_plural => 'Colors',
+    datatype => 'string'
+  );
 end;
 /
 show errors;
@@ -48,7 +56,8 @@ create table template_demo_notes (
                              primary key,
     title                    varchar(255) 
                              not null,
-    body                     varchar(4000)
+    body                     varchar(4000),
+    color                    varchar(100)
 );
 
 create or replace package template_demo_note
@@ -57,6 +66,8 @@ as
         template_demo_note_id  in template_demo_notes.template_demo_note_id%TYPE default null,
 	title                  in template_demo_notes.title%TYPE,
 	body                   in template_demo_notes.body%TYPE,
+        color                  in template_demo_notes.color%TYPE,
+
 	object_type         in acs_object_types.object_type%TYPE
 			       default 'template_demo_note',
 	creation_date       in acs_objects.creation_date%TYPE
@@ -84,6 +95,8 @@ as
         template_demo_note_id             in template_demo_notes.template_demo_note_id%TYPE default null,
         title               in template_demo_notes.title%TYPE,
         body                in template_demo_notes.body%TYPE,
+        color                  in template_demo_notes.color%TYPE,
+
         object_type         in acs_object_types.object_type%TYPE
 			       default 'note',
         creation_date       in acs_objects.creation_date%TYPE
@@ -106,9 +119,9 @@ as
          );
 
          insert into template_demo_notes
-          (template_demo_note_id, title, body)
+          (template_demo_note_id, title, body, color)
          values
-          (v_template_demo_note_id, title, body);
+          (v_template_demo_note_id, title, body, color);
 
          acs_permission.grant_permission(
            object_id => v_template_demo_note_id,

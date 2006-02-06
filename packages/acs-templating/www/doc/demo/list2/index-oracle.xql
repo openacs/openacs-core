@@ -7,6 +7,7 @@
       select 
         n.template_demo_note_id, 
         n.title,
+        n.color,
         to_char(o.creation_date, 'HH12:MI Month DD, YYYY') as creation_date,
         p.first_names || ' ' || p.last_name as creation_user_name,
         decode(acs_permission.permission_p(template_demo_note_id,
