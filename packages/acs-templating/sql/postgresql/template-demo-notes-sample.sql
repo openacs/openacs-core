@@ -2,33 +2,20 @@ create function template__make_sample_data() returns integer
 as
 '
 declare
-    security_context_root integer;
-    a_sitewide_admin integer;
-    acs_templating_package_id int4;
+    security_context_root int4;
+    default_context int4;
+    registered_users int4;
+    unregistered_visitor int4;
+    owning_party int4;
+    context int4;
 begin
-    -- try to find a sitewide admin by finding a user 
-    -- with admin perm on the security context root object
-
     security_context_root := acs__magic_object_id(''security_context_root'');
+    default_context       := acs__magic_object_id(''default_context'');
+    registered_users      := acs__magic_object_id(''registered_users'');
+    unregistered_visitor  := acs__magic_object_id(''unregistered_visitor'');
 
-    select 
-        p.grantee_id into a_sitewide_admin
-    from
-        acs_permissions p
-    where
-        p.object_id = security_context_root
-      and
-        p.privilege = ''admin''
-    limit 1;
-
-    -- now, we want the object id of the acs templating package instance
-
-    select
-        p.package_id into acs_templating_package_id
-    from
-	apm_packages p
-    where
-        p.package_key = ''acs-templating'';
+    context := default_context;
+    owning_party := unregistered_visitor;
 
     perform template_demo_note__new
 	(
@@ -38,9 +25,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -51,9 +38,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -64,9 +51,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -77,9 +64,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -90,9 +77,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -103,9 +90,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -116,9 +103,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -129,9 +116,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -142,9 +129,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -155,9 +142,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -168,9 +155,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -181,9 +168,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -194,9 +181,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -207,9 +194,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -220,9 +207,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -233,9 +220,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -246,9 +233,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -259,9 +246,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -272,9 +259,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -285,9 +272,9 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
     perform template_demo_note__new
@@ -298,17 +285,17 @@ begin
 		''template_demo_note'',
 
 		now(),
-		a_sitewide_admin,
+		owning_party,
 		NULL,
-		acs_templating_package_id
+		context
 	);
 
-    return a_sitewide_admin;
+    return context;
 end;
 '
 language 'plpgsql';
 
--- select template__make_sample_data();
+select template__make_sample_data();
 
 drop function template__make_sample_data();
 
