@@ -6,7 +6,7 @@
 -- neophytosd
 
 --drop functions
-drop function template_demo_note__new (integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer);
+drop function template_demo_note__new (integer,varchar,varchar,varchar,varchar,timestamptz,integer,varchar,integer);
 drop function template_demo_note__del(integer);
 drop function template_demo_note__name (integer);
 

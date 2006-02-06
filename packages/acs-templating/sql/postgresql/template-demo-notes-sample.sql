@@ -22,8 +22,9 @@ begin
 		NULL,
 		''title01'',
 		''body01'',
-		''template_demo_note'',
+		''red'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -35,8 +36,9 @@ begin
 		NULL,
 		''title02'',
 		''body02'',
-		''template_demo_note'',
+		''blue'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -48,8 +50,9 @@ begin
 		NULL,
 		''title03'',
 		''body03'',
-		''template_demo_note'',
+		''green'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -61,8 +64,9 @@ begin
 		NULL,
 		''title04'',
 		''body04'',
-		''template_demo_note'',
+		''orange'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -74,8 +78,9 @@ begin
 		NULL,
 		''title05'',
 		''body05'',
-		''template_demo_note'',
+		''purple'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -87,8 +92,9 @@ begin
 		NULL,
 		''title06'',
 		''body06'',
-		''template_demo_note'',
+		''red'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -100,8 +106,9 @@ begin
 		NULL,
 		''title07'',
 		''body07'',
-		''template_demo_note'',
+		''blue'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -113,8 +120,9 @@ begin
 		NULL,
 		''title08'',
 		''body08'',
-		''template_demo_note'',
+		''green'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -126,8 +134,9 @@ begin
 		NULL,
 		''title09'',
 		''body09'',
-		''template_demo_note'',
+		''orange'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -139,8 +148,9 @@ begin
 		NULL,
 		''title10'',
 		''body10'',
-		''template_demo_note'',
+		''purple'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -152,8 +162,9 @@ begin
 		NULL,
 		''title11'',
 		''body11'',
-		''template_demo_note'',
+		''red'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -165,8 +176,9 @@ begin
 		NULL,
 		''title12'',
 		''body12'',
-		''template_demo_note'',
+		''blue'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -178,8 +190,9 @@ begin
 		NULL,
 		''title13'',
 		''body13'',
-		''template_demo_note'',
+		''green'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -191,8 +204,9 @@ begin
 		NULL,
 		''title14'',
 		''body14'',
-		''template_demo_note'',
+		''orange'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -204,8 +218,9 @@ begin
 		NULL,
 		''title15'',
 		''body15'',
-		''template_demo_note'',
+		''purple'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -217,8 +232,9 @@ begin
 		NULL,
 		''title16'',
 		''body16'',
-		''template_demo_note'',
+		''red'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -230,8 +246,9 @@ begin
 		NULL,
 		''title17'',
 		''body17'',
-		''template_demo_note'',
+		''blue'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -243,21 +260,9 @@ begin
 		NULL,
 		''title18'',
 		''body18'',
+		''green'',
+
 		''template_demo_note'',
-
-		now(),
-		owning_party,
-		NULL,
-		context
-	);
-
-    perform template_demo_note__new
-	(
-		NULL,
-		''title1'',
-		''body1'',
-		''template_demo_note'',
-
 		now(),
 		owning_party,
 		NULL,
@@ -269,8 +274,9 @@ begin
 		NULL,
 		''title19'',
 		''body19'',
-		''template_demo_note'',
+		''orange'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,
@@ -282,8 +288,9 @@ begin
 		NULL,
 		''title20'',
 		''body20'',
-		''template_demo_note'',
+		''purple'',
 
+		''template_demo_note'',
 		now(),
 		owning_party,
 		NULL,

@@ -66,6 +66,22 @@ begin
       ''f''                    -- static_p
     );
 
+    PERFORM acs_attribute__create_attribute (
+      ''template_demo_note'',                -- object_type
+      ''color'',               -- attribute_name
+      ''string'',              -- datatype
+      ''Color'',               -- pretty_name
+      ''Colors'',              -- pretty_plural
+      null,                    -- table_name
+      null,                    -- column_name
+      null,                    -- default_value
+      1,                       -- min_n_values
+      1,                       -- max_n_values
+      null,                    -- sort_order
+      ''type_specific'',       -- storage
+      ''f''                    -- static_p
+    );
+
     return 0;
 end;' language 'plpgsql';
 
@@ -82,22 +98,24 @@ create table template_demo_notes (
     title      varchar(255) 
                constraint template_demo_notes_title_nn
                not null,
-    body       text
+    body       text,
+    color      text
 );
 
-select define_function_args('template_demo_note__new','template_demo_note_id,title,body,object_type;note,creation_date;now,creation_user,creation_ip,context_id');
+select define_function_args('template_demo_note__new','template_demo_note_id,title,body,color,object_type;note,creation_date;now,creation_user,creation_ip,context_id');
 
-create function template_demo_note__new (integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer)
+create function template_demo_note__new (integer,varchar,varchar,varchar,varchar,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
   p_template_demo_note_id                    alias for $1;       -- default null
   p_title                      alias for $2;
   p_body                       alias for $3;
-  p_object_type                alias for $4;       -- default ''template_demo_note''
-  p_creation_date              alias for $5;        -- default now()
-  p_creation_user              alias for $6;        -- default null
-  p_creation_ip                alias for $7;        -- default null
-  p_context_id                 alias for $8;        -- default null
+  p_color                      alias for $4;
+  p_object_type                alias for $5;       -- default ''template_demo_note''
+  p_creation_date              alias for $6;        -- default now()
+  p_creation_user              alias for $7;        -- default null
+  p_creation_ip                alias for $8;        -- default null
+  p_context_id                 alias for $9;        -- default null
   v_template_demo_note_id                    template_demo_notes.template_demo_note_id%TYPE;
 begin
     v_template_demo_note_id := acs_object__new (
@@ -110,9 +128,9 @@ begin
     );
 
     insert into template_demo_notes
-      (template_demo_note_id, title, body)
+      (template_demo_note_id, title, body, color)
     values
-      (v_template_demo_note_id, p_title, p_body);
+      (v_template_demo_note_id, p_title, p_body, p_color);
 
     if p_creation_user is not null then
       PERFORM acs_permission__grant_permission(
@@ -163,4 +181,4 @@ end;
 
 -- neophytosd
 
-\i template-demo-notes-sample.sql
+-- \i template-demo-notes-sample.sql

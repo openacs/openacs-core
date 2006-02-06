@@ -33,6 +33,9 @@ template::list::create -name notes \
 	creation_date {
 	    label "When Note Created"
 	}
+	color {
+	    label "Color"
+	}
     }
 
 ad_return_template
