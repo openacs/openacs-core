@@ -27,3 +27,5 @@ insert into ad_template_sample_users values
 
 -- load jiml's notes-like package (disabled; untested)
 -- @@ template-demo-notes-create.sql
+-- @@ template-demo-notes-sample.sql
+
