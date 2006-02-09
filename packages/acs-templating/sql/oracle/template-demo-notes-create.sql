@@ -98,7 +98,7 @@ as
         color                  in template_demo_notes.color%TYPE,
 
         object_type         in acs_object_types.object_type%TYPE
-			       default 'note',
+			       default 'template_demo_note',
         creation_date       in acs_objects.creation_date%TYPE
                                 default sysdate,
         creation_user       in acs_objects.creation_user%TYPE
