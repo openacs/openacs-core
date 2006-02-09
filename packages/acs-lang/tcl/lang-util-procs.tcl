@@ -822,3 +822,16 @@ ad_proc -private lang::util::get_locale_options_not_cached {} {
 } {
     return [db_list_of_lists select_locales {}]
 }
+
+ad_proc -public lang::util::edit_lang_key_url {
+    -message:required
+    {-package_key "acs-translations"}
+} {
+} {
+    if { [regsub "^${package_key}." [string trim $message "\#"] {} message_key] } {
+	 set edit_url [export_vars -base "[apm_package_url_from_key "acs-lang"]admin/edit-localized-message" { { locale {[ad_conn locale]} } package_key message_key { return_url [ad_return_url] } }]
+     } else {
+	 set edit_url ""
+     }
+     return $edit_url
+ }
