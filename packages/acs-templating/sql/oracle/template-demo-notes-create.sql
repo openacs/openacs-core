@@ -83,9 +83,9 @@ as
     );
 
 	function name (
-		note_id	   in template_demo_notes.template_demo_note_id%TYPE
+		template_demo_note_id	   in template_demo_notes.template_demo_note_id%TYPE
 	) return template_demo_notes.title%TYPE;
-end note;
+end template_demo_note;
 /
 show errors
 
