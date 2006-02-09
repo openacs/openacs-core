@@ -27,4 +27,5 @@ insert into ad_template_sample_users values
  (4, 'Yoruba', 'Diaz', '12 Magic Ave.', NULL, 'Lariot', 'WY');
 
 \i template-demo-notes-create.sql
+\i template-demo-notes-sample.sql
 
