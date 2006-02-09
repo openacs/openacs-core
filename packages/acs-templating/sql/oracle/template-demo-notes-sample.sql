@@ -23,7 +23,7 @@ begin
 		'red',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -37,7 +37,7 @@ begin
 		'blue',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -51,7 +51,7 @@ begin
 		'green',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -65,7 +65,7 @@ begin
 		'orange',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -79,7 +79,7 @@ begin
 		'purple',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -93,7 +93,7 @@ begin
 		'red',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -107,7 +107,7 @@ begin
 		'blue',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -121,7 +121,7 @@ begin
 		'green',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -135,7 +135,7 @@ begin
 		'orange',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -149,7 +149,7 @@ begin
 		'purple',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -163,7 +163,7 @@ begin
 		'red',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -177,7 +177,7 @@ begin
 		'blue',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -191,7 +191,7 @@ begin
 		'green',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -205,7 +205,7 @@ begin
 		'orange',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -219,7 +219,7 @@ begin
 		'purple',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -233,7 +233,7 @@ begin
 		'red',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -247,7 +247,7 @@ begin
 		'blue',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -261,7 +261,7 @@ begin
 		'green',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -275,7 +275,7 @@ begin
 		'orange',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
@@ -289,7 +289,7 @@ begin
 		'purple',
 
 		'template_demo_note',
-		now(),
+		sysdate,
 		owning_party,
 		NULL,
 		context
