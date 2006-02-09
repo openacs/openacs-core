@@ -181,4 +181,4 @@ end;
 
 -- neophytosd
 
--- \i template-demo-notes-sample.sql
+\i template-demo-notes-sample.sql
