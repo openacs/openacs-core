@@ -6,13 +6,13 @@ ad_page_contract {
   @creation-date 2000-10-23
   @cvs-id $Id$
 } {
-  note_id:integer,notnull,multiple
+  template_demo_note_id:integer,notnull,multiple
 }
 
-foreach note_id $note_id {
-    ad_require_permission $note_id delete
+foreach template_demo_note_id $template_demo_note_id {
+    ad_require_permission $template_demo_note_id delete
 
-    package_exec_plsql -var_list [list [list note_id $note_id]] note del
+    package_exec_plsql -var_list [list [list template_demo_note_id $template_demo_note_id]] template_demo_note del
 }
 
 ad_returnredirect "./"
