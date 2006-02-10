@@ -35,7 +35,7 @@
                     where object_id = template_demo_note_id
                       and party_id = :user_id
                       and privilege = 'read')
-      order by creation_date
+      [template::list::orderby_clause -orderby -name notes]
     </querytext>
   </fullquery>
  
