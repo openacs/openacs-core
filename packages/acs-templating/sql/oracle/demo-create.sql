@@ -25,7 +25,7 @@ insert into ad_template_sample_users values
 insert into ad_template_sample_users values 
  (4, 'Yoruba', 'Diaz', '12 Magic Ave.', NULL, 'Lariot', 'WY');
 
--- load jiml's notes-like package (disabled; untested)
--- @@ template-demo-notes-create.sql
--- @@ template-demo-notes-sample.sql
+-- load jiml's notes-like package
+@@ template-demo-notes-create.sql
+@@ template-demo-notes-sample.sql
 
