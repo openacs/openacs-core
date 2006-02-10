@@ -391,7 +391,11 @@ if { [ns_info version] < 4} {
         # this is used by acs-tcl/tcl/security-procs.tcl to get the 
         # https port.
         ns_param ServerPort                $httpsport
-    
+    # setting maxinput higher than practical may leave the server vulnerable to resource DoS attacks
+    # see http://www.panoptic.com/wiki/aolserver/166
+    # must set maxinput for nsopenssl as well as nssock
+    ns_param   maxinput           [expr {$max_file_upload_mb * 1024 * 1024}] ;# Maximum File Size for uploads in bytes
+
     # We explicitly tell the server which SSL contexts to use as defaults when an
     # SSL context is not specified for a particular client or server SSL
     # connection. Driver connections do not use defaults; they must be explicitly
