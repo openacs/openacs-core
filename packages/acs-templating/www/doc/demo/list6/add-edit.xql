@@ -3,7 +3,7 @@
 
   <fullquery name="template_demo_note_select">      
     <querytext>
-      select title, body
+      select title, body, color
       from template_demo_notes
       where template_demo_note_id = :template_demo_note_id
     </querytext>
@@ -23,6 +23,7 @@
         update template_demo_notes
         set title = :title,
           body = :body
+          color = :color
         where template_demo_note_id = :template_demo_note_id
     </querytext>
   </fullquery>
