@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.2.2d2" url="http://openacs.org/repository/download/apm/acs-lang-5.2.2d2.apm">
+    <version name="5.2.3d2" url="http://openacs.org/repository/download/apm/acs-lang-5.2.3d2.apm">
         <owner url="mailto:peter@collaboraid.biz">Peter Marklund</owner>
         <summary>OpenACS Internationalization Support.</summary>
         <release-date>2006-01-16</release-date>
@@ -19,7 +19,7 @@
 request processor hooks, templating, accessing and managing the message catalog, and
 locale-specific formatting functions for localizing dates, times, monetary amounts etc.</description>
 
-        <provides url="acs-lang" version="5.2.2d2"/>
+        <provides url="acs-lang" version="5.2.3d2"/>
         <requires url="acs-kernel" version="5.2.2"/>
         <requires url="ref-timezones" version="5.2.2"/>
 
