@@ -44,6 +44,7 @@ if { $create_p } {
 set color_choices {
     {Blue blue}
     {Green green}
+    {Purple purple}
     {Red red}
     {Orange orange}
     {Yellow yellow}
