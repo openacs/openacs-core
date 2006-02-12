@@ -63,7 +63,7 @@ ad_form -form {
 
 } -edit_request {
 
-    permission::require_permission -object_id $note_id -privilege write
+    permission::require_permission -object_id $template_demo_note_id -privilege write
 
     # Customize the page title to reflect the fact that this form is used to
     # edit an existing note.
@@ -87,7 +87,8 @@ ad_form -form {
     # Generate the new object automatically from the data set in the form.  Standard
     # acs_object attributes like creation_user are set automatically.
 
-    package_instantiate_object -var_list [list [list context_id $package_id]] \
+    package_instantiate_object \
+        -var_list [list [list context_id $package_id]] \
         -form_id add-edit \
         template_demo_note
 
