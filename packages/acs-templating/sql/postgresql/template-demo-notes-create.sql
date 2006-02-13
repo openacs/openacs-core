@@ -103,7 +103,7 @@ create table template_demo_notes (
     color      text
 );
 
-select define_function_args('template_demo_note__new','template_demo_note_id,title,body,color,object_type;note,creation_date;now,creation_user,creation_ip,context_id');
+select define_function_args('template_demo_note__new','template_demo_note_id,title,body,color,object_type;template_demo_note,creation_date;now,creation_user,creation_ip,context_id');
 
 create function template_demo_note__new (integer,varchar,varchar,varchar,varchar,timestamptz,integer,varchar,integer)
 returns integer as '
