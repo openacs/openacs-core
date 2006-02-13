@@ -41,7 +41,6 @@ template::list::create -name notes \
     -key "template_demo_note_id" \
     -page_size 3 \
     -page_query_name template_demo_notes_paginate \
-    -page_flush_p 1 \
     -actions $actions \
     -bulk_actions {
 	"Delete Checked Notes" "delete" "Delete Checked Notes"

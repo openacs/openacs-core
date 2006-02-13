@@ -106,9 +106,22 @@ ad_form -form {
 
 } -after_submit {
 
-    # We've successfully processed the submission, send the user back to the index page.
+    # We've successfully processed the submission.
+    # Clear the pagination cache.
+
+    cache flush notes*
+
+    # send the user back to the index page
 
     ad_returnredirect "./"
+
+    # NOTE! guess what, we wouldn't be done here; there is a problem:
+    # notice that when you add a note when you have filters active,
+    # it doesn't remember your filters when you come back from editing.
+    #
+    # we've decided this is beyond the scope of this tutorial and you
+    # can learn more by studying the function export_vars (which would
+    # be applied to the filter variables)
 
     # ad_returnredirect returns after redirecting the user, so abort the script rather
     # than fall through to the display code.  Failure to abort the script will burden
