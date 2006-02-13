@@ -1,5 +1,14 @@
 # main index page for notes.
 
+# Notice we have a new -query parameter, color_filter_value. If anything
+# wants to activate the filter (whose name is color_filter_value) defined 
+# ahead in the template::list, then it can feed the page a parameter of
+# color_filter_value="something". When this happens, the filter will add 
+# its where clause to template::list::filter_where_clause and therefore 
+# to the query which has a call to that proc. In this case, the where claue
+# will be "n.color = 'something'". Look at the filter definition in the
+# list definition to see this.
+
 ad_page_contract {
 
   @author rhs@mit.edu
@@ -7,7 +16,7 @@ ad_page_contract {
   @cvs-id $Id$
 } -query {
   orderby:optional
-  color:optional
+  color_filter_value:optional
 } -properties {
   notes:multirow
   context:onevalue
@@ -40,6 +49,12 @@ if { $create_p } {
 # Since the colors column is a text column and not implemented as a
 # separate table with a numeric key column, the value will be the 
 # name of the color.
+#
+# So, to activate the filter, say for Blue, this page is fed this:
+# color_filter_value="blue"
+# and notice, this is the lowercase version, the second item in each
+# inner list. The first item is displayed to the user for choosing 
+# among possible filter values.
 
 set color_choices {
     {Blue blue}
@@ -50,7 +65,11 @@ set color_choices {
     {Yellow yellow}
 }
 
-# Here's the list; notice the new -filters section
+# Here's the list; notice the new -filters section. If the user chooses
+# to activate the filter (presumably by manipulating some user interface),
+# the filter will add its where clause to output of the call
+# template::list::filter_where_clause. Look at the query; you'll see the
+# call to filter_where_clause there near the bottom, in brackets.
 
 template::list::create -name notes \
     -multirow template_demo_notes \
@@ -75,10 +94,10 @@ template::list::create -name notes \
 	}
     } \
     -filters {
-	color {
+	color_filter_value {
 	    label "Color"
 	    where_clause {
-		n.color = :color
+		n.color = :color_filter_value
 	    }
 	    values $color_choices
 	}
