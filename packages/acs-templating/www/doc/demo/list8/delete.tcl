@@ -18,9 +18,4 @@ foreach template_demo_note_id $template_demo_note_id {
 	del
 }
 
-# We've successfully processed the submission.
-# Clear the pagination cache.
-
-cache flush notes*
-
 ad_returnredirect "./"
