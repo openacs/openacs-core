@@ -13,7 +13,7 @@ foreach template_demo_note_id $template_demo_note_id {
     ad_require_permission $template_demo_note_id delete
 
     package_exec_plsql \
-	-var_list [list [list note_id $note_id]] \
+	-var_list [list [list template_demo_note_id $template_demo_note_id]] \
 	template_demo_note \
 	del
 }
