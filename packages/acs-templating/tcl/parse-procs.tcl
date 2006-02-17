@@ -107,6 +107,11 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
   if { [catch { adp_prepare } errMsg] } {
     
     # return without rendering any HTML if the code aborts
+
+    # DRB: after popping off the parse level so the portal package
+    # and other clever users of the include tag work properly ...
+    template::util::lpop parse_level
+
     if { [string equal $errMsg ADP_ABORT] } { 
       return "" 
     } else {
