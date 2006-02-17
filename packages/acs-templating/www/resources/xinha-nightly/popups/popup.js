@@ -44,36 +44,29 @@ function __dlg_init(bottom) {
     link.rel = "stylesheet";
     head.appendChild(link);
   }
-	var body = document.body;
-	var body_height = 0;
-	if (typeof bottom == "undefined") {
-		var div = document.createElement("div");
-		body.appendChild(div);
-		var pos = getAbsolutePos(div);
-		body_height = pos.y;
-	} else {
-		var pos = getAbsolutePos(bottom);
-		body_height = pos.y + bottom.offsetHeight;
-	}
 	window.dialogArguments = opener.Dialog._arguments;
-	if (!document.all) {
+  
+	var body = document.body;
+	if (window.sizeToContent) {
 		window.sizeToContent();
 		window.sizeToContent();	// for reasons beyond understanding,
 					// only if we call it twice we get the
 					// correct size.
 		window.addEventListener("unload", __dlg_onclose, true);
 		window.innerWidth = body.offsetWidth + 5;
-		window.innerHeight = body_height + 2;
+		window.innerHeight = body.scrollHeight + 2;
 		// center on parent
 		var x = opener.screenX + (opener.outerWidth - window.outerWidth) / 2;
 		var y = opener.screenY + (opener.outerHeight - window.outerHeight) / 2;
 		window.moveTo(x, y);
 	} else {
-		// window.dialogHeight = body.offsetHeight + 50 + "px";
-		// window.dialogWidth = body.offsetWidth + "px";
+		var docElm      = document.documentElement ? document.documentElement : null;    
+		var body_height = body.scrollHeight;
+    
 		window.resizeTo(body.offsetWidth, body_height);
-		var ch = body.clientHeight;
-		var cw = body.clientWidth;
+		var ch = docElm && docElm.clientHeight ? docElm.clientHeight : body.clientHeight;
+		var cw = docElm && docElm.clientWidth  ? docElm.clientWidth  : body.clientWidth;
+		
 		window.resizeBy(body.offsetWidth - cw, body_height - ch);
 		var W = body.offsetWidth;
 		var H = 2 * body_height - ch;

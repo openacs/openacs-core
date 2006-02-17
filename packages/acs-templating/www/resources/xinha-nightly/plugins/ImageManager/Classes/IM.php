@@ -182,9 +182,9 @@ Class Image_Transform_Driver_IM extends Image_Transform
     /**
      * Save the image file
      *
-     * @param $filename string  the name of the file to write to
-     * @param $quality  quality image dpi, default=75
-     * @param $type     string  (JPG,PNG...)
+     * @param string  $filename the name of the file to write to
+     * @param quality $quality  image dpi, default=75
+     * @param string  $type     (JPG,PNG...)
      *
      * @return none
      */

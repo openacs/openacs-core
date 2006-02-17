@@ -194,7 +194,6 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 HTMLArea.prototype._origOutwardHtml = HTMLArea.prototype.outwardHtml;
 HTMLArea.prototype.outwardHtml = function(html) {
 	html = html.replace("onclick=\"try{if(document.designMode && document.designMode == 'on') return false;}catch(e){} window.open(", "onclick=\"window.open(");
-	html = html.replace("onclick=\"try{if(document.designMode &amp;&amp; document.designMode == 'on') return false;}catch(e){} window.open(", "onclick=\"window.open(");
-	this._origOutwardHtml(html);
+	html = this._origOutwardHtml(html);
 	return html;
 };

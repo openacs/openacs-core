@@ -270,6 +270,7 @@ $IMConfig['thumbnail_height'] = 96;
 $IMConfig['tmp_prefix'] = '.editor_';
 
 
+$IMConfig['ViewMode'] = 'thumbs';
 
 
 

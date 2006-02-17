@@ -105,11 +105,14 @@
 
 <!-- image properties -->
 
-<table  border="0" cellspacing="0" cellpadding="0">
+<table  border="0" cellspacing="0" cellpadding="0" width="100%">
   <tr>
     <th align="left">Description:</th>
     <td colspan="6">
-      <input type="text" id="f_alt" style="width:100%"/>
+      <input type="text" id="f_alt" style="width:95%"/>
+    </td>
+    <td rowspan="4" width="100" height="100" valign="middle" style="padding:4px;background-color:#CCC;border:1px inset;">
+      <img src="" id="f_preview" />
     </td>
   </tr>
 
