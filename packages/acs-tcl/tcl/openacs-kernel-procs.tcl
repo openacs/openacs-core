@@ -108,6 +108,9 @@ ad_proc -public oacs_util::csv_foreach {
         ns_getcsv $csv_stream headers
     }
 
+    # provide access to errorInfo and errorCode
+    global errorInfo errorCode
+
     # Upvar Magic!
     upvar 1 $array_name row_array
 
@@ -130,10 +133,17 @@ ad_proc -public oacs_util::csv_foreach {
         # Now we are ready to process the code block
         set errno [catch { uplevel 1 $code_block } error]
 
-        # Error?
-        if {$errno > 0} {
-            return -code $error
-        }
+        # handle error, return, break, continue
+	# (source: http://wiki.tcl.tk/unless last case)
+	switch -exact -- $errno {
+	    0   {}
+	    1   {return -code error -errorinfo $errorInfo \
+		     -errorcode $errorCode $error}
+	    2   {return $error}
+	    3   {break}
+	    4   {}
+	    default     {return -code $errno $error}
+	}
     }
 }
 
