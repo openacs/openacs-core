@@ -219,7 +219,7 @@ done
 
 if [ $TYPE == "full" ];
     then
-    NEWER=""
+    NEW_FLAG=""
     NOW=`date +%Y-%m-%d`
     echo $NOW> $TIMEDIR/$COMPUTER-full-date;
 fi
