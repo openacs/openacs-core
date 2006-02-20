@@ -213,7 +213,7 @@ namespace eval party {
     } {
 	this returns the parties email. Cached
     } {
-	return [util_memoize [list ::contact::email_not_cached -party_id $party_id]]
+	return [util_memoize [list ::party::email_not_cached -party_id $party_id]]
     }
     
     ad_proc -private email_not_cached {
