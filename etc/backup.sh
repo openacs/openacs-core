@@ -122,7 +122,11 @@ fi
 #---------------------------------------------------------------------
 # Check for free space
 #---------------------------------------------------------------------
-# get free byte count
+# get free byte count -
+#  if you're having trouble with this, it may be because your partition
+#  string is too long and is forcing the numbers to be printed on the
+#  next line (common with LVs). Add 1 line of context to grep's output
+#  (-A 1) and ask awk to print the 3rd token instead.
 free=`df | grep $BACKUPPART | awk '{print $4}'`
 
 # force to incremental if there isn't room for full
@@ -186,7 +190,7 @@ for directory in $DIRECTORIES
   FULLNAME=$BACKUPDIR/$DATE-$COMPUTER-${directory//\//-}-backup-$TYPE.tar.gz
   # to use bzip2 instead of gzip, change z to j in the tar flags
   cd $directory
-  tar -zcpsh . --file $FULLNAME $NEW_FLAG
+  tar -zcpsh --file $FULLNAME $NEW_FLAG .
   $CHOWN $BACKUPUSER $FULLNAME
   $CHMOD 660 $FULLNAME
   if [ -n "$OTHERHOST" ]
