@@ -10,7 +10,7 @@ ns_log notice "nsd.tcl: starting to read config file..."
 
 #---------------------------------------------------------------------
 # change to 80 and 443 for production use
-set httpport                  8001
+set httpport                  8000
 set httpsport                 8443 
 # If setting port below 1024 with AOLServer 4, read comments in file:
 #  /var/lib/aolserver/service0/packages/etc/daemontools/run
@@ -19,16 +19,16 @@ set httpsport                 8443
 # setting the address to 0.0.0.0 means aolserver listens on all interfaces
 set hostname                  [ns_info hostname]
 #set address                   [ns_info address]
-set address                   172.17.1.105
+set address                   0.0.0.0
 
 # Note: If port is privileged (usually < 1024), OpenACS must be
 # started by root, and, in AOLserver 4, the run script have a 
 # '-b address' flag which matches the address according to settings (above)
 
-set server                    "msweb-upgrade" 
+set server                    "service0" 
 set servername                "New OpenACS Installation - Development"
 
-set serverroot                "/home/${server}"
+set serverroot                "/var/lib/aolserver/${server}"
 
 #---------------------------------------------------------------------
 # which database do you want? postgres or oracle
@@ -48,7 +48,7 @@ if { $database == "oracle" } {
 # if debug is false, all debugging will be turned off
 set debug false
 
-set homedir                   /home/aolserver
+set homedir                   /usr/local/aolserver
 set bindir                    [file dirname [ns_info nsd]] 
 
 ###################################################################### 
