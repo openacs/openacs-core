@@ -89,7 +89,7 @@ DATE=`date +"%Y-%m-%d"`     # Year, Month, Date, e.g. 20020401
 #---------------------------------------------------------------------
 # Parse command line 
 #---------------------------------------------------------------------
-
+TYPE=""
 case $1 in
     --full)
         TYPE="full"
@@ -123,11 +123,12 @@ fi
 # Check for free space
 #---------------------------------------------------------------------
 # get free byte count -
-#  if you're having trouble with this, it may be because your partition
-#  string is too long and is forcing the numbers to be printed on the
-#  next line (common with LVs). Add 1 line of context to grep's output
-#  (-A 1) and ask awk to print the 3rd token instead.
 free=`df | grep $BACKUPPART | awk '{print $4}'`
+if [ "$free" = "" ]
+    then
+    # BACKUPPART may be too long, causing df output to wrap, let's try another method
+    free=`df | grep -A 1 $BACKUPPART | awk '{print $3}' | sed /^$/d`
+fi
 
 # force to incremental if there isn't room for full
 if [ $free -lt `expr $FULL_SPACE_FREE \* 1024 \* 1024` ];
