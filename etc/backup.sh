@@ -89,7 +89,7 @@ DATE=`date +"%Y-%m-%d"`     # Year, Month, Date, e.g. 20020401
 #---------------------------------------------------------------------
 # Parse command line 
 #---------------------------------------------------------------------
-TYPE=""
+
 case $1 in
     --full)
         TYPE="full"
@@ -105,12 +105,12 @@ if [ ! -s $TIMEDIR/$COMPUTER-full-date ];
     TYPE="full";
 fi
 
-if [[ $DOM == "01" || $DOW == "Sun" ]];
+if [[ "$DOM" = "01" || "$DOW" = "Sun" ]];
     then
     TYPE="full";
 fi
 
-if [ $TYPE == "full" ];
+if [ "$TYPE" = "full" ];
     then
     NEW_FLAG=""
 else
@@ -131,14 +131,14 @@ if [ "$free" = "" ]
 fi
 
 # force to incremental if there isn't room for full
-if [ $free -lt `expr $FULL_SPACE_FREE \* 1024 \* 1024` ];
+if [ "$free" -lt `expr $FULL_SPACE_FREE \* 1024 \* 1024` ];
     then
     TYPE="incremental"
     echo "Not enough free space for full backup; trying incremental"
 fi
 
 # abort if there isn't room for incremental
-if [ $free -lt `expr $INCR_SPACE_FREE \* 1024 \* 1024` ];
+if [ "$free" -lt `expr $INCR_SPACE_FREE \* 1024 \* 1024` ];
     then
     echo "Not enough free space for backup; aborting"
     exit -1
@@ -201,7 +201,7 @@ for directory in $DIRECTORIES
       scp_success=`$SCP -q $FULLNAME $OTHERUSER@$OTHERHOST:$BACKUPDIR`
       
      # if scp returns success, see if we should wipe
-      if [[ scp_success -eq 0 && $WIPE_OLD_AFTER_SCP_FULL == "true" && $TYPE == "full" ]];
+      if [[ scp_success -eq 0 && "$WIPE_OLD_AFTER_SCP_FULL" = "true" && "$TYPE" = "full" ]];
 	  then
 
           # wipe out all similar backups except for the just-copied one
@@ -222,7 +222,7 @@ done
 # incremental backups are relative to the last successful full
 # backup
 
-if [ $TYPE == "full" ];
+if [ "$TYPE" = "full" ];
     then
     NEW_FLAG=""
     NOW=`date +%Y-%m-%d`
