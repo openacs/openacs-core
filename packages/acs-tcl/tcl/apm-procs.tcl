@@ -8,6 +8,8 @@ ad_library {
     @cvs-id $Id$
 }
 
+namespace eval apm {}
+
 #####
 # Globals used by the package manager:
 #
@@ -1611,3 +1613,151 @@ ad_proc -private apm_application_new_checkbox {} {
 
     return $html_string
 }
+
+ad_proc -private apm::read_files {path file_list} {
+    Read the contents from a list of files at a certain path. Return
+    the data to the caller as a big string.
+} {
+    set data ""
+    foreach file $file_list {
+        if {![catch {set fp [open ${path}/${file} r]} err]} { 
+            append data [read $fp]
+            close $fp
+        }
+    }
+    return $data
+}
+
+ad_proc -public apm::metrics {
+    -package_key
+    -file_type
+    -array
+} {
+    Return some code metrics about the files in package $package_key. This
+    will return an array of 3 items: 
+    <ul>
+    <li>count - the number of files</li>
+    <li>lines - the number of lines in the files</li>
+    <li>procs - the number of procs, if applicable (0 if not applicable)</li>
+    </ul>
+    This will be placed in the array variable that is provided
+    to this proc.
+    <p>
+    Valid file_type's: 
+    <ul>
+    <li>data_model_pg - PG datamodel files</li>
+    <li>data_model_ora - Oracle datamodel files</li>
+    <li>include_page - ADP files in package_key/lib</li>
+    <li>content_page - ADP files in package_key/www</li>
+    <li>tcl_procs - TCL procs in package_key/tcl</li>
+    <li>test_procs - automated tests in package_key/tcl/test</li>
+    <li>documentation - docs in package_key/www/doc</li>
+    </ul>
+    
+    This proc is cached.
+
+    @author Vinod Kurup
+    @creation-date 2006-02-09
+
+    @param package_key The package_key of interest
+    @param file_type See options above
+    @param array variable to hold the array that will be returned
+} {
+    upvar $array metrics
+    array set metrics [util_memoize [list apm::metrics_internal $package_key $file_type]]
+}
+
+ad_proc -private apm::metrics_internal {
+    package_key
+    file_type
+} {
+    The cached version of apm::metrics
+
+    @see apm::metrics
+} {
+    array set metrics {}
+    set package_path [acs_package_root_dir $package_key]
+
+    # We'll be using apm_get_package_files to get a list of files
+    # by file type. 
+
+    switch $file_type {
+        data_model_pg -
+        data_model_ora {
+            set file_types [list data_model_create data_model]
+        }
+        default {
+            set file_types $file_type
+        }
+    }
+
+    set filelist [apm_get_package_files \
+                      -all_db_types \
+                      -package_key $package_key \
+                      -file_types $file_types]
+
+    # filelist needs to be weeded for certain file types
+    switch $file_type {
+        include_page -
+        content_page {
+            # weed out non-.adp files
+            set adp_files {}
+            foreach file $filelist {
+                if { [string match {*.adp} $file] } {
+                    lappend adp_files $file
+                }
+            }
+            set filelist $adp_files
+        }
+        data_model_pg {
+            # ignore drop and upgrade scripts
+            set pg_files {}
+            foreach file $filelist {
+                if { [string match {*/postgresql/*} $file] && ![string match *-drop.sql $file] && ![string match {*/upgrade/*} $file] } {
+                    lappend pg_files $file
+                } 
+            }
+            set filelist $pg_files
+        }
+        data_model_ora {
+            # ignore drop and upgrade scripts
+            set ora_files {}
+            foreach file $filelist {
+                if { [string match {*/oracle/*} $file] && ![string match *-drop.sql $file] && ![string match {*/upgrade/*} $file] } {
+                    lappend ora_files $file
+                }
+            }
+            set filelist $ora_files
+        }
+    }
+
+    # read the files, so we can count lines and grep for procs
+    set filedata [apm::read_files $package_path $filelist]
+
+    # The first 2 metrics are easy (file count and line count)
+    set metrics(count) [llength $filelist]
+    set metrics(lines) [llength [split $filedata \n]]
+
+    # extract procs, depending on the file_type
+    switch -exact $file_type {
+        tcl_procs {
+            set metrics(procs) [regexp -all -line {^\s*ad_proc} $filedata]
+        }
+        test_procs {
+            set metrics(procs) [regexp -all -line {^\s*aa_register_case} $filedata]
+        }
+        data_model_pg {
+            set metrics(procs) [regexp -all -line -nocase {^\s*create\s+or\s+replace\s+function\s+} $filedata]
+        }
+        data_model_ora {
+            set metrics(procs) [expr [regexp -all -line -nocase {^\s+function\s+} $filedata] + [regexp -all -line -nocase {^\s+procedure\s+} $filedata]]
+        }
+        default {
+            # other file-types don't have procs
+            set metrics(procs) 0
+        }
+    }
+    
+    return [array get metrics]
+}
+
