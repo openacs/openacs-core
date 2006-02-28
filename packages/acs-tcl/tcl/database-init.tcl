@@ -8,3 +8,5 @@ ad_library {
 
 }
 
+ns_cache create db_cache_pool -size \
+    [parameter::get_from_package_key  -package_key acs-kernel -parameter DBCacheSize]
