@@ -322,6 +322,9 @@ ad_proc -public install::xml::action::set-parameter { node } {
     parameter::set_value -package_id $package_id \
         -parameter $name \
         -value $value
+
+    return ""
+
 }
 
 ad_proc -public install::xml::action::set-parameter-default { node } {
@@ -337,6 +340,9 @@ ad_proc -public install::xml::action::set-parameter-default { node } {
         -package_key $package_key \
         -parameter $name \
         -value $value
+
+    return ""
+
 }
 
 ad_proc -public install::xml::action::set-permission { node } {
