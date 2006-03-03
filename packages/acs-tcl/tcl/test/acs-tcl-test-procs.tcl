@@ -819,25 +819,34 @@ aa_register_case \
         
         @author Peter Marklund
 } {
-    set sql {to_char(fm.posting_date, 'YYYY-MM-DD HH24:MI:SS')}
-    aa_equals "don't subst bind vars in quoted date" [db_bind_var_substitution $sql {SS 3 MI 4}] $sql
 
-    set sql {to_char(fm.posting_date, :SS)}
-    aa_equals "don't subst bind vars in quoted date" [db_bind_var_substitution $sql {SS 3 MI 4}] {to_char(fm.posting_date, '3')}
+    # DRB: Not all of these test cases work for Oracle (select can't be used in
+    # db_exec_plsql) and bindvar substituion is done by Oracle, not the driver,
+    # anyway so there's not much point in testing.   These tests really test
+    # Oracle bindvar emulation, in other words...
 
-    set sql {to_char(fm.posting_date, don''t subst ':SS', do subst :SS )}
-    aa_equals "don't subst bind vars in quoted date" [db_bind_var_substitution $sql {SS 3 MI 4}] {to_char(fm.posting_date, don''t subst ':SS', do subst '3' )}
+    if { [db_type] ne "oracle" } {
+        set sql {to_char(fm.posting_date, 'YYYY-MM-DD HH24:MI:SS')}
+        aa_equals "don't subst bind vars in quoted date" [db_bind_var_substitution $sql {SS 3 MI 4}] $sql
+    
+        set sql {to_char(fm.posting_date, :SS)}
+        aa_equals "don't subst bind vars in quoted date" [db_bind_var_substitution $sql {SS 3 MI 4}] {to_char(fm.posting_date, '3')}
+    
+        set sql {to_char(fm.posting_date, don''t subst ':SS', do subst :SS )}
+        aa_equals "don't subst bind vars in quoted date" [db_bind_var_substitution $sql {SS 3 MI 4}] {to_char(fm.posting_date, don''t subst ':SS', do subst '3' )}
 
-    set SS 3
-    set db_value [db_exec_plsql test_bind {
-        select ':SS'
-    }]
-    aa_equals "db_exec_plsql should not bind quoted var" $db_value ":SS"
 
-    set db_value [db_exec_plsql test_bind {
-        select :SS
-    }]
-    aa_equals "db_exec_plsql bind not quoted var" $db_value "3"
+        set SS 3
+        set db_value [db_exec_plsql test_bind {
+            select ':SS'
+        }]
+        aa_equals "db_exec_plsql should not bind quoted var" $db_value ":SS"
+    
+        set db_value [db_exec_plsql test_bind {
+            select :SS
+        }]
+        aa_equals "db_exec_plsql bind not quoted var" $db_value "3"
+    }
 }
 
 aa_register_case -cats {api} \
