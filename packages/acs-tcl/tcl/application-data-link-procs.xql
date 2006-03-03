@@ -35,7 +35,7 @@
     <querytext>
 	select object_id_two
 	from acs_data_links
-	where object_id_one = :package_id
+	where object_id_one = :object_id
 	order by object_id_two
     </querytext>
 </fullquery>
