@@ -23,12 +23,7 @@
 -- OBJECT TYPES --
 ------------------
 
--- DRB: As originally defined two types couldn't share an attribute
--- table, which seems stupid.  Why in the world should I be forbidden
--- to define two types inherited from two different parent types (specifically
--- content_revision and image) and to extend them with the same attributes
--- table?  
-
+-- DRB: null table name change
 create table acs_object_types (
 	object_type	varchar(1000) not null
 			constraint acs_object_types_pk primary key,
@@ -41,15 +36,18 @@ create table acs_object_types (
 	pretty_plural	varchar(1000) not null
 			constraint acs_obj_types_pretty_plural_un
 			unique,
-	table_name	varchar(30) not null
+	table_name	varchar(30)
                         constraint acs_object_types_table_name_un unique,
-	id_column	varchar(30) not null,
+	id_column	varchar(30),
 	package_name	varchar(30) not null
 			constraint acs_object_types_pkg_name_un unique,
 	name_method	varchar(100),
 	type_extension_table varchar(30),
         dynamic_p       boolean default 'f',
-        tree_sortkey    varbit
+        tree_sortkey    varbit,
+	constraint acs_object_types_table_id_name_ck
+	check ((table_name is null and id_column is null) or
+               (table_name is not null and id_column is not null))
 );
 
 create index acs_obj_types_supertype_idx on acs_object_types (supertype);
@@ -516,6 +514,7 @@ where attr.object_type = all_types.ancestor_type;
 -- METADATA PACKAGES --
 -----------------------
 
+-- DRB: null table_name change
 create function acs_object_type__create_type (varchar,varchar,varchar,varchar,varchar,varchar,varchar,boolean,varchar,varchar)
 returns integer as '
 declare
@@ -523,8 +522,8 @@ declare
   create_type__pretty_name            alias for $2;  
   create_type__pretty_plural          alias for $3;  
   create_type__supertype              alias for $4;  
-  create_type__table_name             alias for $5;  
-  create_type__id_column              alias for $6;  -- default ''XXX''
+  create_type__table_name             alias for $5;  -- default null
+  create_type__id_column              alias for $6;  -- default null
   create_type__package_name           alias for $7;  -- default null
   create_type__abstract_p             alias for $8;  -- default ''f''
   create_type__type_extension_table   alias for $9;  -- default null
