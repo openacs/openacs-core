@@ -37,16 +37,18 @@ create table acs_object_types (
 	pretty_plural	varchar2(1000) not null
 			constraint acs_obj_types_pretty_plural_un
 			unique,
-	table_name	varchar2(30) not null
+	table_name	varchar2(30)
                         constraint acs_object_types_table_name_un unique,
-	id_column	varchar2(30) not null,
+	id_column	varchar2(30),
 	package_name	varchar2(30) not null
 			constraint acs_object_types_pkg_name_un unique,
 	name_method	varchar2(100),
 	type_extension_table varchar2(30),
         dynamic_p       char(1) default 'f' 
                         constraint acs_obj_types_dynamic_p_ck
-                        check (dynamic_p in ('t', 'f'))
+                        check (dynamic_p in ('t', 'f')),
+	check ((table_name is null and id_column is null) or
+               (table_name is not null and id_column is not null))
 );
 
 -- create bitmap index acs_obj_types_supertype_idx on acs_object_types (supertype);
@@ -429,8 +431,8 @@ is
     pretty_plural	in acs_object_types.pretty_plural%TYPE,
     supertype		in acs_object_types.supertype%TYPE
 			   default 'acs_object',
-    table_name		in acs_object_types.table_name%TYPE,
-    id_column		in acs_object_types.id_column%TYPE default 'XXX',
+    table_name		in acs_object_types.table_name%TYPE default null,
+    id_column		in acs_object_types.id_column%TYPE default default null,
     package_name	in acs_object_types.package_name%TYPE default null,
     abstract_p		in acs_object_types.abstract_p%TYPE default 'f',
     type_extension_table in acs_object_types.type_extension_table%TYPE
@@ -514,8 +516,8 @@ is
     pretty_plural	in acs_object_types.pretty_plural%TYPE,
     supertype		in acs_object_types.supertype%TYPE
 			   default 'acs_object',
-    table_name		in acs_object_types.table_name%TYPE,
-    id_column		in acs_object_types.id_column%TYPE,
+    table_name		in acs_object_types.table_name%TYPE default null,
+    id_column		in acs_object_types.id_column%TYPE default null,
     package_name	in acs_object_types.package_name%TYPE default null,
     abstract_p		in acs_object_types.abstract_p%TYPE default 'f',
     type_extension_table in acs_object_types.type_extension_table%TYPE
