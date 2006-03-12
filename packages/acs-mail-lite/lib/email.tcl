@@ -32,6 +32,10 @@ if {![info exists no_callback_p]} {
     set no_callback_p f
 }
 
+if {![info exists checked_p]} {
+    set checked_p t
+}
+
 # Somehow when the form is submited the party_ids values became
 # only one element of a list, this avoid that problem
 
@@ -81,10 +85,21 @@ if { $recipients_num <= 1 } {
 	    {section "[_ acs-mail-lite.Recipients]"}
 	    {html {onclick check_uncheck_boxes(this.checked)}}
 	}
-	{to:text(checkbox),multiple 
-	    {label "[_ acs-mail-lite.Recipients]"} 
-	    {options  $recipients }
-	    {html {checked 1}}
+    }
+    if {$checked_p == "t"} {
+	append form_elements {
+	    {to:text(checkbox),multiple 
+		{label "[_ acs-mail-lite.Recipients]"} 
+		{options  $recipients }
+		{html {checked 1}}
+	    }
+	}
+    } else {
+	append form_elements {
+	    {to:text(checkbox),multiple 
+		{label "[_ acs-mail-lite.Recipients]"} 
+		{options  $recipients }
+	    }
 	}
     }
 }
@@ -273,8 +288,9 @@ ad_form -action $action \
 	    foreach element [list first_names last_name name date] {
 		lappend values [list "{$element}" [set $element]]
 	    }
-	    if {$contact_p} {
+	    if {$contacts_p} {
 		set party_revision_id [contact::live_revision -party_id $party_id]
+		set locale [lang::user::site_wide_locale -user_id $party_id]
 		set salutation [ams::value -attribute_name "salutation" -object_id $party_revision_id -locale $locale]
 		if {![empty_string_p $salutation]} {
 		    lappend value [list "{salutation}" $salutation]
@@ -303,7 +319,7 @@ ad_form -action $action \
 			-file_ids $file_ids \
 			-mime_type $mime_type \
 			-object_id $object_id \
-			-no_callback_p
+			-no_callback
 
 		} else {
 
@@ -336,7 +352,7 @@ ad_form -action $action \
 			    -package_id $package_id \
 			    -mime_type $mime_type \
 			    -object_id $object_id \
-			    -no_callback_p
+			    -no_callback
 
 		    } else {
 
@@ -364,7 +380,7 @@ ad_form -action $action \
 				-package_id $package_id \
 				-mime_type "text/html" \
 				-object_id $object_id \
-				-no_callback_p
+				-no_callback
 			} else {
 
 			    acs_mail_lite::complex_send \
@@ -386,7 +402,7 @@ ad_form -action $action \
 				-subject "$subject" \
 				-body "$content_body" \
 				-package_id $package_id \
-				-no_callback_p
+				-no_callback
 
 			} else {
 			    acs_mail_lite::send \
