@@ -101,6 +101,8 @@
        from parties, persons
        where email = :email
          and party_id = person_id
+	order by party_id desc
+	limit 1
 
      </querytext>
    </fullquery>

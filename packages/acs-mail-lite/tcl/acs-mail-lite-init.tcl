@@ -11,6 +11,8 @@ ad_library {
 # Default interval is 1 minute.
 ad_schedule_proc -thread t 60 acs_mail_lite::sweeper
 
+ad_schedule_proc -thread t 120 acs_mail_lite::load_mails -queue_dir "/home/malte/mail"
+
 # check every few minutes for bounces
 #ad_schedule_proc -thread t [acs_mail_lite::get_parameter -name BounceScanQueue -default 120] acs_mail_lite::scan_replies
 
