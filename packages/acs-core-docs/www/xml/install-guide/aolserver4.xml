@@ -83,6 +83,7 @@ make install</action>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r v2_7 nsoracle</userinput>
 [root aolserver]# <userinput>wget http://www.tdom.org/tDOM-0.7.8.tar.gz</userinput>
 [root aolserver]# <userinput>tar xvfz tDOM-0.7.8.tar.gz</userinput>
+[root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/tcllib co -r tcllib-1-8 tcllib</userinput>
 [root root]# 
 <action>cd /usr/local/src
 mkdir aolserver40r10
@@ -93,7 +94,8 @@ cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgre
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r v2_7 nsoracle
 wget http://www.tdom.org/files/tDOM-0.8.0.tar.gz
-tar xvfz tDOM-0.8.0.tar.gz</action></screen>
+tar xvfz tDOM-0.8.0.tar.gz
+cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/tcllib co -r tcllib-1-8 tcllib</action></screen>
     </listitem>
     <listitem id="aolserver4-install">
       <formalpara>
@@ -170,6 +172,13 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
               <para>Note that the location of the Tcl library may vary on differnt platforms (e.g. for Debian 3.0: --with-tcl=/usr/lib/tcl8.4)</para>
               <para>Now you can compile and configure tDOM</para>
               <screen>[root unix]# <userinput>sh CONFIG</userinput>
+[root unix]# <userinput>make install</userinput></screen>
+            </listitem>
+            <listitem id="aolserver4-tcllib-install">
+              <para>Install TCLLIB</para>
+              <screen>[root nssha1]# <userinput>cd ../tcllib</userinput></screen>
+              <para>Configure and compile TCLLIB</para>
+              <screen>[root unix]# <userinput>./configure -prefix=/usr/local/aolserver40r10</userinput>
 [root unix]# <userinput>make install</userinput></screen>
             </listitem>
           </orderedlist>
