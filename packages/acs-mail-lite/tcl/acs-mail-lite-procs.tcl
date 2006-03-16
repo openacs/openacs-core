@@ -768,15 +768,17 @@ namespace eval acs_mail_lite {
 	{-folder_id ""}
 	{-mime_type "text/plain"}
 	{-object_id ""}
+	-no_callback:boolean 
+	-use_sender:boolean 
     } {
-	
+
 	Prepare an email to be send with the option to pass in a list
 	of file_ids as well as specify an html_body and a mime_type
 
 	@param send_immediately The email is send immediately and not stored in the acs_mail_lite_queue
 	
 	@param to_addr Email address to send the mail to
-
+	
 	@param from_addr Who is sending the email
 	
 	@param subject of the email
@@ -787,18 +789,26 @@ namespace eval acs_mail_lite {
 
 	@param package_id Package ID of the sending package
 	
-	@param file_ids List of file ids to be send as attachments. This will only work with files stored in the file system.
+	@param file_ids List of file ids (ITEMS, not revisions) to be send as attachments. This will only work with files stored in the file system.
 
 	@param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
 
 	@param object_id The ID of the object that is responsible for sending the mail in the first place
-	
-    } {
 
-        # Added it here as it seems to cause problems with forums
-        # Unsure how this could happen, but who am I to argue
-        package require mime
-        package require base64
+	@param no_callback Boolean that indicates if callback should be executed or not. If you don't provide it it will execute callbacks	
+
+	@param use_sender Boolean indicating that from_addr should be used regardless of fixed-sender parameter
+    } {
+	
+	# We check if the parameter 
+	set fixed_sender [parameter::get -parameter "FixedSenderEmail" \
+			      -package_id [apm_package_id_from_key "acs-mail-lite"]]
+
+	if { ![empty_string_p $fixed_sender] && !$use_sender_p} {
+	    set sender_addr $fixed_sender
+	} else {
+	    set sender_addr $from_addr
+	}
 
 	# Set the message token
 	set message_token [mime::initialize -canonical "$mime_type" -string "$body"]
@@ -815,11 +825,23 @@ namespace eval acs_mail_lite {
 		lappend file_ids $revision_id
 	    }
 	} elseif {[exists_and_not_null file_ids]} {
-	    
+
+	    set item_p 1
 	    db_foreach get_file_info "select r.mime_type,r.title, r.content as filename
 	    from cr_revisions r
 	    where r.revision_id in ([join $file_ids ","])" {
 		lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
+		set item_p 0
+	    }
+
+	    if {$item_p} {
+		db_foreach get_file_info "select r.mime_type,r.title, r.content as filename
+	           from cr_revisions r, cr_items i
+	           where r.revision_id = i.latest_revision
+                   and i.item_id in ([join $file_ids ","])" {
+		       ns_log Debug "Files: $file_ids ::: $filename"
+		       lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
+		   }
 	    }
 	}
 	
@@ -827,28 +849,55 @@ namespace eval acs_mail_lite {
 
 	mime::setheader $multi_token Subject "$subject"
  	set packaged [mime::buildmessage $multi_token]
-	
+
 	#Close all mime tokens
 	mime::finalize $multi_token -subordinates all
 	set message_id [generate_message_id]
+        
+	# Rollout support (see above for details)
 
-	acs_mail_lite::sendmail -from_addr $from_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id $message_id -package_id $package_id
-	
+	set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode] 
+        if {![empty_string_p $delivery_mode]
+            && ![string equal $delivery_mode default]
+        } {
+            # The to_addr has been put in an array, and returned. Now
+            # it is of the form: email email_address name namefromdb
+            # user_id user_id_if_present_or_empty_string
+
+        # ----------------------------------------------------
+        # Rollout support
+        # ----------------------------------------------------
+        # if set in etc/config.tcl, then
+        # packages/acs-tcl/tcl/rollout-email-procs.tcl will rename a
+        # proc to ns_sendmail. So we simply call ns_sendmail instead
+        # of the sendmail bin if the EmailDeliveryMode parameter is
+        # set to anything other than default - JFR
+        #-----------------------------------------------------
+
+            set to_address "[lindex $to_addr 1] ([lindex $to_addr 3])"
+            set eh [util_list_to_ns_set $extraheaders]
+            ns_sendmail $to_address $from_addr $subject $body $eh $bcc
+        } else {
+	    acs_mail_lite::sendmail -from_addr $sender_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id $message_id -package_id $package_id
+	}
+
 	if {[empty_string_p $package_id]} {
 	    set package_id [apm_package_id_from_key "acs-mail-lite"]
 	}
 
-	callback acs_mail_lite::complex_send \
-	    -package_id $package_id \
-	    -from_party_id [party::get_by_email -email $from_addr] \
-	    -to_party_id [party::get_by_email -email $to_addr] \
-	    -body $body \
-	    -message_id $message_id \
-	    -subject $subject \
-	    -object_id $object_id \
-	    -file_ids [split $file_ids ","]
+	if { !$no_callback_p } {
+	    callback acs_mail_lite::complex_send \
+		-package_id $package_id \
+		-from_party_id [party::get_by_email -email $from_addr] \
+		-to_party_id [party::get_by_email -email $to_addr] \
+		-body $body \
+		-message_id $message_id \
+		-subject $subject \
+		-object_id $object_id \
+		-file_ids $file_ids
+	}
     }
-	 
+
     ad_proc -private sweeper {} {
         Send messages in the acs_mail_lite_queue table.
     } {
