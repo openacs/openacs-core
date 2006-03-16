@@ -16,7 +16,7 @@
         <description format="text/html">Provides an API for packages to provide subscription based email notifications and handle replies.  Used by forums, bug-tracker, etc.  The currently prefered package for email notifications.</description>
 
         <provides url="notifications" version="5.1.7"/>
-        <requires url="acs-mail-lite" version="0.1d"/>
+        <requires url="acs-mail-lite" version="1.0b7"/>
 
         <callbacks>
             <callback type="before-uninstall"  proc="notification::apm::before_uninstall"/>
