@@ -19,6 +19,7 @@ ad_proc -public -callback acs_mail_lite::complex_send {
     {-subject}
     {-object_id}
     {-file_ids}
+    {-cc}
 } {
 
     Callback for executing code after an email has been send using the complex send mechanism.

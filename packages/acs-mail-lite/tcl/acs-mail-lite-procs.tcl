@@ -729,6 +729,7 @@ namespace eval acs_mail_lite {
         -sendlist:required
 	-msg:required
 	{-valid_email_p 0}
+	{-cc ""}
 	-message_id:required
 	-package_id:required
     } {
@@ -762,7 +763,7 @@ namespace eval acs_mail_lite {
 		    if {[catch {
 			set err1 {}
 			set f [open "|$sendmail" "w"]
-			puts $f "From: $from_addr\nTo: $pretty_to\n$msg"
+			puts $f "From: $from_addr\nTo: $pretty_to\nCC: $cc\n$msg"
 			set err1 [close $f]
 		    } err2]} {
 			ns_log Error "Attempt to send From: $from_addr\nTo: $pretty_to\n$msg failed.\nError $err1 : $err2"
@@ -1010,6 +1011,7 @@ namespace eval acs_mail_lite {
 	{-folder_id ""}
 	{-mime_type "text/plain"}
 	{-object_id ""}
+	{-cc ""}
 	-no_callback:boolean 
 	-use_sender:boolean 
     } {
@@ -1120,7 +1122,7 @@ namespace eval acs_mail_lite {
             set eh [util_list_to_ns_set $extraheaders]
             ns_sendmail $to_address $from_addr $subject $body $eh $bcc
         } else {
-	    acs_mail_lite::sendmail -from_addr $sender_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id $message_id -package_id $package_id
+	    acs_mail_lite::sendmail -from_addr $sender_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id $message_id -package_id $package_id -cc $cc
 	}
 
 	if {[empty_string_p $package_id]} {
@@ -1134,6 +1136,7 @@ namespace eval acs_mail_lite {
 		-to_party_id [party::get_by_email -email $to_addr] \
 		-body $body \
 		-message_id $message_id \
+		-cc $cc \
 		-subject $subject \
 		-object_id $object_id \
 		-file_ids $file_ids
