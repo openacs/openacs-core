@@ -60,7 +60,7 @@ if { $recipients_num <= 1 } {
 	no_callback_p:text(hidden)
 	title:text(hidden),optional
 	{message_type:text(hidden) {value "email"}}
-	{to:text(checkbox),multiple 
+	{to:text(checkbox),multiple,optional
 	    {label "[_ acs-mail-lite.Recipients]"} 
 	    {options  $recipients }
 	    {html {checked 1}}
@@ -88,7 +88,7 @@ if { $recipients_num <= 1 } {
     }
     if {$checked_p == "t"} {
 	append form_elements {
-	    {to:text(checkbox),multiple 
+	    {to:text(checkbox),multiple,optional 
 		{label "[_ acs-mail-lite.Recipients]"} 
 		{options  $recipients }
 		{html {checked 1}}
@@ -96,7 +96,7 @@ if { $recipients_num <= 1 } {
 	}
     } else {
 	append form_elements {
-	    {to:text(checkbox),multiple 
+	    {to:text(checkbox),multiple,optional 
 		{label "[_ acs-mail-lite.Recipients]"} 
 		{options  $recipients }
 	    }
@@ -210,7 +210,9 @@ ad_form -action $action \
 	# Remove all spaces in cc
 	regsub -all " " $cc "" cc
 
-	set cc_list [split $cc ";"]
+	# Just in case someone is using "," instead of ";"
+	regsub -all ";" $cc "," cc
+	set cc_list [split $cc ","]
 
 	template::multirow create messages message_type to_addr to_party_id subject content_body
 
@@ -267,19 +269,38 @@ ad_form -action $action \
 	    foreach element [list first_names last_name name date] {
 		lappend values [list "{$element}" [set $element]]
 	    }
-	    template::multirow append messages $message_type $to_addr $party_id [acs_mail_lite::message_interpolate -text $subject -values $values] [acs_mail_lite::message_interpolate -text $content_body -values $values]
+	    
+	    # Append the CC for each to recipient
+	    template::multirow append messages $message_type $to_addr $party_id [acs_mail_lite::message_interpolate -text $subject -values $values] [acs_mail_lite::message_interpolate -text $content_body -values $values] $cc
 	    
 	    # Link the file to all parties
 	    if {[exists_and_not_null revision_id]} {
 		application_data_link::new -this_object_id $revision_id -target_object_id $party_id
 	    }
 	}
-
+	
 	# Send the email to all CC in cc_list
 	foreach email_addr $cc_list {
-	    set name $email_addr
-	    set first_names [split $email_addr "@"]
-	    set last_name $first_names
+	    set party_id [party::get_by_email -email $email_addr]
+
+	    # The CC E-Mail is unknown in the system. Create the person.
+	    if {[string eq "" $party_id]} {
+		if {[regexp {(.+)[\.|_](.+)@(.+)} $email_addr match first_names last_name url]} {
+		    set name "$first_names $last_name"
+		} else {
+		    set name $email_addr
+		    set first_names "."
+		    set last_name [lindex [split $email_addr "@"] 0]
+		}
+		if {$contacts_p} {
+		    set party_id [contacts::person::new -email $email_addr -first_names $first_names -last_name $last_name]
+		    ns_log Notice "Contact generated for $first_names $last_name at $email_addr"
+		} else {
+		    set party_id [person::new -email $email_addr -first_names $first_names -last_name $last_name]
+		    ns_log Notice "Person generated for $first_names $last_name at $email_addr"
+		}
+	    }
+	    
 	    set date [lc_time_fmt [dt_sysdate] "%q"]
 	    set to $name
 	    set to_addr $email_addr
@@ -288,6 +309,7 @@ ad_form -action $action \
 	    foreach element [list first_names last_name name date] {
 		lappend values [list "{$element}" [set $element]]
 	    }
+
 	    if {$contacts_p} {
 		set party_revision_id [contact::live_revision -party_id $party_id]
 		set locale [lang::user::site_wide_locale -user_id $party_id]
@@ -296,10 +318,9 @@ ad_form -action $action \
 		    lappend value [list "{salutation}" $salutation]
 		}
 	    }
-	    template::multirow append messages $message_type $to_addr "" [acs_mail_lite::message_interpolate -text $subject -values $values] [acs_mail_lite::message_interpolate -text $content_body -values $values]
+	    template::multirow append messages $message_type $to_addr $party_id [acs_mail_lite::message_interpolate -text $subject -values $values] [acs_mail_lite::message_interpolate -text $content_body -values $values] ""
 	    
 	}
-	
 	
 	set to_list [list]
 	template::multirow foreach messages {
