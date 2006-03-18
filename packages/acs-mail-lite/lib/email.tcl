@@ -281,26 +281,10 @@ ad_form -action $action \
 	
 	# Send the email to all CC in cc_list
 	foreach email_addr $cc_list {
-	    set party_id [party::get_by_email -email $email_addr]
 
-	    # The CC E-Mail is unknown in the system. Create the person.
-	    if {[string eq "" $party_id]} {
-		if {[regexp {(.+)[\.|_](.+)@(.+)} $email_addr match first_names last_name url]} {
-		    set name "$first_names $last_name"
-		} else {
-		    set name $email_addr
-		    set first_names "."
-		    set last_name [lindex [split $email_addr "@"] 0]
-		}
-		if {$contacts_p} {
-		    set party_id [contacts::person::new -email $email_addr -first_names $first_names -last_name $last_name]
-		    ns_log Notice "Contact generated for $first_names $last_name at $email_addr"
-		} else {
-		    set party_id [person::new -email $email_addr -first_names $first_names -last_name $last_name]
-		    ns_log Notice "Person generated for $first_names $last_name at $email_addr"
-		}
-	    }
-	    
+	    set name $email_addr
+	    set first_names [split $email_addr "@"]
+	    set last_name $first_names
 	    set date [lc_time_fmt [dt_sysdate] "%q"]
 	    set to $name
 	    set to_addr $email_addr
