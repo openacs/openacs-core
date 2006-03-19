@@ -70,7 +70,10 @@ ad_proc build_mime_message {
     # message out through an SMTP socket, but we're not doing that so we
     # have to hijack the process a bit.
     set mime_body [mime::buildmessage $multi_part]
-
+    # mime-encode the periods at the beginning of a line in the
+    # message text or they are lost. Most noticable when the line
+    # is broken within a URL
+    regsub {^\.} $mime_body {=2E} mime_body
     # the first three lines of the message are special; we need to grab
     # the info, add it to the message headers, and discard the lines
     set lines [split $mime_body \n]
