@@ -1818,17 +1818,17 @@ begin
   else
 
     v_folder_id := content_item.new(
-        item_id       => folder_id,
-        name          => name, 
+        name          => new.name, 
+        parent_id     => new.parent_id,
+        item_id       => new.folder_id,
+        creation_date => new.creation_date, 
+        creation_user => new.creation_user, 
+		context_id    => v_context_id,
+        creation_ip   => new.creation_ip, 
         item_subtype  => 'content_folder',
         content_type  => 'content_folder',
-	context_id    => v_context_id,
-        creation_date => creation_date, 
-        creation_user => creation_user, 
-        creation_ip   => creation_ip, 
-        parent_id     => parent_id,
-	security_inherit_p => security_inherit_p,
-        package_id    => package_id
+		security_inherit_p => new.security_inherit_p,
+        package_id    => new.package_id
     );
 
     insert into cr_folders (
