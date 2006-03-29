@@ -31,5 +31,13 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="content::revision::item_id.item_id">
+    <querytext>
+      select item_id
+      from cr_revisions
+      where revision_id = :revision_id
+    </querytext>
+  </fullquery>
+
 </queryset>
 
