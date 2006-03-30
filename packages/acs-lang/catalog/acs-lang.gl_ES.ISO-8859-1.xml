@@ -33,7 +33,7 @@
   <msg key="localization-p_sign_posn">1</msg>
   <msg key="localization-pm_str">PM</msg>
   <msg key="localization-positive_sign">+</msg>
-  <msg key="localization-t_fmt">%R</msg>
+  <msg key="localization-t_fmt">%r</msg>
   <msg key="localization-thousands_sep">.</msg>
   <msg key="Spanish">Español</msg>
 </message_catalog>
