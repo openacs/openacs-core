@@ -164,7 +164,7 @@ ad_form -extend -name login -on_request {
     set token [sec_get_token $token_id]
     set computed_hash [ns_sha1 "$time$token_id$token"]
     
-    set expiration_time [parameter::get -parameter LoginExpirationTime -package_id [ad_acs_kernel_id] -default 600]
+    set expiration_time [parameter::get -parameter LoginPageExpirationTime -package_id [ad_acs_kernel_id] -default 600]
     if { $expiration_time < 30 } { 
         # If expiration_time is less than 30 seconds, it's practically impossible to login
         # and you will have completely hosed login on your entire site
