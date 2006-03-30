@@ -163,6 +163,7 @@ do
     time $PG_BINDIR/pg_dump -f $dmp_file -Fp $dbname -h $DBHOST
     /bin/ls -lh $dmp_file | awk '{print $5}'
     gzip -f $dmp_file
+    time $PG_BINDIR/vacuumdb -fz -U postgres $dbname -h $DBHOST
 done
 
 #---------------------------------------------------------------------
