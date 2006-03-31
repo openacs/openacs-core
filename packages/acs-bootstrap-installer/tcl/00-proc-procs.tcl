@@ -759,7 +759,7 @@ ad_proc -public callback {
         set c [catch {::uplevel 1 $procname $args} ret]
         switch -exact $c {
             0 { # code ok
-                if {[llength $ret] > 0} {
+                if { $ret ne "" } {
                     lappend returns $ret
                 }
             }
@@ -774,7 +774,7 @@ ad_proc -public callback {
                 return [list $ret]
             }
             3 { # code break -- terminate return current list of results.
-                if {[llength $ret] > 0} { 
+                if { $ret ne ""} { 
                     lappend returns $ret
                 }
                 return $returns
