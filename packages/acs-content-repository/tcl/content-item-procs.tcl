@@ -738,13 +738,23 @@ ad_proc -public content::item::upload_file {
 	set tmp_size [file size $tmp_filename]
 	set extension [file extension $filename]
 	if {![exists_and_not_null title]} {
-	    regsub -all ".${extension}\$" $filename "" title
+
+	    # maltes: The following regsub garbles the title and consequently the filename as well. 
+	    # "info_c+w.zip" will become "info_c+"
+	    # This is bad, first of all because a letter is missing entirely. Additionally 
+	    # the title in itself should be the original filename, after all this is what
+	    # the user uploaded, not something stripped of its extension.
+	    # So I commented this out until someone can either fix the regsub but more importantly
+	    # can explain why the title should not contain the extension.
+
+	    # regsub -all ".${extension}\$" $filename "" title
+	    set title $filename
 	}
 	
 	set existing_filenames [db_list get_parent_existing_filenames {}]
 	set filename [util_text_to_url \
 			  -text ${title} -existing_urls "$existing_filenames" -replacement "_"]
-	
+
         set revision_id [cr_import_content \
 			     -storage_type "file" -title $title -package_id $package_id $parent_id $tmp_filename $tmp_size $mime_type $filename]
 
