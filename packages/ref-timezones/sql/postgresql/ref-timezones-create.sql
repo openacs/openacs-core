@@ -168,7 +168,7 @@ begin
     rdbms_date(utc_end), rdbms_date(local_start),
     to_date(local_end),
     gmt_offset,
-    case isdst_p isdst_p when 0 then ''f'' else ''t''end;
+    case isdst_p when 0 then ''f'' else ''t''end;
 end;' language 'plpgsql';
 
 create or replace function timezone__convert_to_utc (integer, varchar) returns timestamptz as '
