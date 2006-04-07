@@ -168,7 +168,7 @@ begin
 			 constraint cr_release_periods_pk
 			 primary key,
 	start_when	 timestamptz default current_timestamp,
-	end_when	 timestamptz default current_timestamp + interval ''20 years''
+	end_when	 timestamptz default current_timestamp + interval ''''20 years''''
       )'';
 
   end if;
