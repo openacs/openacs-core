@@ -531,6 +531,7 @@ ad_proc -public ad_proc {
 	   preferred.</li>
       <li> If you use named parameters, you can specify which ones are required, optional,
            (including default values), and boolean. See the examples below.</li>
+    <li> There is now a callback facility. See below.</li>
       <li> The declaration can (and <b>should!</b>) include documentation. This documentation 
            may contain tags which are parsed for display by the api browser.  Some tags are 
 	   <tt>@param</tt>, <tt>@return</tt>, <tt>@error</tt>, <tt>@see</tt>, <tt>@author</tt>
@@ -570,7 +571,6 @@ if {$flush_p} {
       meaning that <tt>--</tt> marks the end of the parameters. This is important if
       your named parameter contains a value of something starting with a "-".
     </p>
-
     <p>
     Here's an example with named parameters, and namespaces (notice the preferred way of
     declaring namespaces and namespaced procedures). Ignore the \ in "\@param",
@@ -611,6 +611,31 @@ ad_proc -public ::foobar::new {
 }
     </pre>
     </p>
+    <p>
+      (note, most of the info on callbacks here due to leeldn)<p>
+      You can define callbacks, both generally (which you would do first) and specific
+      to a particular implementation. The way you do so is:
+    </p>
+    <p>
+      <ul>
+        <li>you have to first define the callback contract with
+          <code>ad_proc -callback foo::bar::zip { arg1 arg2 } { docs } -</code>
+          <p>This defines the callback generally. (<em>Note! Don't define a body here!</em>)
+        <li>then define an implementation with
+            <code>ad_proc -callback foo::bar::zip -impl myimpl  { } { } { #code }</code>
+        <li>Two ways to call:
+		<ul>
+		  <li>then you can call _all_ implentations (ie. in an event / event handler type arrangement) with
+		    <code>callback foo::bar::zip $arg1 $arg2</code>
+                  <li>or you can call a specific implementation (ie. in a service contract type arrangement) with
+                      <code>callback -impl myimpl foo::bar::zip $arg1 $arg2</code>
+		</ul>
+        <li>in both cases the result is a list of the results of each called implementation (with empty results removed),
+	    so in the case of calling a specific implementation you get a list of one element as the result
+	<li>See <a href="/api-doc/proc-view?proc=callback"><code>callback</code></a> for more info.
+      </ul>
+    </p>
+
 
     @param public specifies that the procedure is part of a public API.
     @param private specifies that the procedure is package-private.
