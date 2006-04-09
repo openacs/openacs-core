@@ -10,7 +10,7 @@
     <version name="5.2.3b1" url="http://openacs.org/repository/download/apm/acs-kernel-5.2.3b1.apm">
         <owner url="mailto:oct@openacs.org">OpenACS Core Team</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
-        <release-date>2006-01-16</release-date>
+        <release-date>2006-04-08</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, partiies and the supporting PL/SQL and PL/pgSQL procedures.</description>
         <license>GPL</license>
