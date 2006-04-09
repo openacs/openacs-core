@@ -1,95 +1,96 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Enabling WYSIWYG</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial-advanced.html" title="Chapter 10. Advanced Topics"><link rel="previous" href="tutorial-schedule-procs.html" title="Scheduled Procedures"><link rel="next" href="tutorial-parameters.html" title="Adding in parameters for your package"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-schedule-procs.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Advanced Topics</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-parameters.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-wysiwyg-editor"></a>Enabling WYSIWYG</h2></div></div></div><div class="authorblurb"><p>by <a href="mailto:nima.mazloumi@gmx.de" target="_top">Nima Mazloumi</a></p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Enabling WYSIWYG</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial-advanced.html" title="Chapter 10. Advanced Topics"><link rel="previous" href="tutorial-schedule-procs.html" title="Scheduled Procedures"><link rel="next" href="tutorial-parameters.html" title="Adding in parameters for your package"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-schedule-procs.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Advanced Topics</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-parameters.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-wysiwyg-editor"></a>Enabling WYSIWYG</h2></div></div><div></div></div><div class="authorblurb"><p>by <a href="mailto:nima.mazloumi@gmx.de" target="_top">Nima Mazloumi</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><p>Most of the forms in OpenACS are created using the form builder, see <a href="form-builder.html" title="Using HTML Forms">the section called &#8220;Using HTML Forms&#8221;</a>. For detailed information on the 
-    API take a look <a href="/api-doc/proc-view?proc=ad_form" target="_top">here</a>.</p><p>The following section shows how you can modify your form to allow WYSIWYG functionalities.</p><p>Convert your page to use <code class="computeroutput">ad_form</code> (some changes but worth it)</p><p>Here an examples. From:</p><pre class="programlisting">
+        </div><p>Most of the forms in OpenACS are created using the form builder, see <a href="form-builder.html" title="Using HTML Forms">Section , &#8220;Using HTML Forms&#8221;</a>. For detailed information on the 
+    API take a look <a href="/api-doc/proc-view?proc=ad_form" target="_top">here</a>.</p><p>The following section shows how you can modify your form to allow WYSIWYG functionalities.</p><p>Convert your page to use <tt class="computeroutput">ad_form</tt> (some changes but worth it)</p><p>Here an examples. From:</p><pre class="programlisting">
 	template::form create my_form
-	template::element create my_form my_form_id -label "The ID" -datatype integer -widget hidden
-	template::element create my_form my_input_field_1 -html { size 30 } -label "Label 1" -datatype text -optional
-	template::element create my_form my_input_field_2 -label "Label 2" -datatype text -help_text "Some Help" -after_html {<font color="red">&lt;a&gt;Anchor&lt;/a&gt;</font>}
+	template::element create my_form my_form_id -label &quot;The ID&quot; -datatype integer -widget hidden
+	template::element create my_form my_input_field_1 -html { size 30 } -label &quot;Label 1&quot; -datatype text -optional
+	template::element create my_form my_input_field_2 -label &quot;Label 2&quot; -datatype text -help_text &quot;Some Help&quot; -after_html {<font color="red">&lt;a&gt;Anchor&lt;/a&gt;</font>}
 	</pre><p>To:</p><pre class="programlisting">
 	ad_form -name my_form -form {
 		my_form_id:key(acs_object_id_seq)
  		{my_input_field_1:text,optional
-               {label "Label 1"}
+               {label &quot;Label 1&quot;}
                {html {size 30}}}
       	{my_input_field_2:text
-               {label "Label 2"}
-               {help_text "Some Help"}
+               {label &quot;Label 2&quot;}
+               {help_text &quot;Some Help&quot;}
 	       	   {after_html
                {<font color="red">&lt;a&gt;Anchor&lt;/a&gt;</font>}}}
 	} ...
-	</pre><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>You must not give your your form the same name that your page has. Otherwise HTMLArea won't load.</p></div><p>Convert your textarea widget to a richtext widget and enable htmlarea.</p><p>The <code class="computeroutput">htmlarea_p</code>-flag can be used to prevent 
+	</pre><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>You must not give your your form the same name that your page has. Otherwise HTMLArea won't load.</p></div><p>Convert your textarea widget to a richtext widget and enable htmlarea.</p><p>The <tt class="computeroutput">htmlarea_p</tt>-flag can be used to prevent 
 	WYSIWYG functionality. Defaults to true if left away.</p><p>From:</p><pre class="programlisting">
 	{my_input_field_2:text
 	</pre><p>To:</p><pre class="programlisting">
 	{my_input_field_2:richtext(richtext)
-			{htmlarea_p "t"}
+			{htmlarea_p &quot;t&quot;}
 	</pre><p>The richtext widget presents a list with two elements: text and content type.
-	To learn more on existing content types search in Google for "MIME-TYPES" or 
-	take a look at the <code class="computeroutput">cr_mime_types</code> table.</p><p>Make sure that both values are passed as a list to your 
-	<code class="computeroutput">ad_form</code> or you will have problems 
+	To learn more on existing content types search in Google for &quot;MIME-TYPES&quot; or 
+	take a look at the <tt class="computeroutput">cr_mime_types</tt> table.</p><p>Make sure that both values are passed as a list to your 
+	<tt class="computeroutput">ad_form</tt> or you will have problems 
 	displaying the content or handling the data manipulation correctly.</p><p>Depending on the data model of your package you either support a content format 
-	or don't. If you don't you can assume <code class="computeroutput">"text/html"</code> or 
-	<code class="computeroutput">"text/richtext"</code> or <code class="computeroutput">"text/enhanced"</code>.</p><p>The relevant parts in your <code class="computeroutput">ad_form</code> definition are the 
-	switches <code class="computeroutput">-new_data</code>, <code class="computeroutput">-edit_data</code>, 
-	<code class="computeroutput">-on_request</code> and <code class="computeroutput">-on_submit</code>.</p><p>To allow your data to display correctly you need to add an <code class="computeroutput">-on_request</code> block. 
-	If you have the format stored in the database pass this as well else use <code class="computeroutput">"text/html"</code>:</p><pre class="programlisting">
-	set my_input_field_2 [template::util::richtext::create $my_input_field_2 "text/html"]
+	or don't. If you don't you can assume <tt class="computeroutput">&quot;text/html&quot;</tt> or 
+	<tt class="computeroutput">&quot;text/richtext&quot;</tt> or <tt class="computeroutput">&quot;text/enhanced&quot;</tt>.</p><p>The relevant parts in your <tt class="computeroutput">ad_form</tt> definition are the 
+	switches <tt class="computeroutput">-new_data</tt>, <tt class="computeroutput">-edit_data</tt>, 
+	<tt class="computeroutput">-on_request</tt> and <tt class="computeroutput">-on_submit</tt>.</p><p>To allow your data to display correctly you need to add an <tt class="computeroutput">-on_request</tt> block. 
+	If you have the format stored in the database pass this as well else use <tt class="computeroutput">&quot;text/html&quot;</tt>:</p><pre class="programlisting">
+	set my_input_field_2 [template::util::richtext::create $my_input_field_2 &quot;text/html&quot;]
 	</pre><p>Now make sure that your SQL queries that do the data manipulation retrieve the correct value. 
-	If you simply use <code class="computeroutput">my_input_field_2</code> you will store a list. 
-	Thus you need to add an <code class="computeroutput">-on_submit</code> block:</p><pre class="programlisting">
+	If you simply use <tt class="computeroutput">my_input_field_2</tt> you will store a list. 
+	Thus you need to add an <tt class="computeroutput">-on_submit</tt> block:</p><pre class="programlisting">
 	set my_input_field_2 [ template::util::richtext::get_property contents $my_input_field_2]
 	set format [ template::util::richtext::get_property format $my_input_field_2] #This is optional
-	</pre><p>Now the correct values for <code class="computeroutput">my_input_field_2</code> and 
-	<code class="computeroutput">format</code> are passed to the <code class="computeroutput">-new_data</code> and 
-	<code class="computeroutput">-edit_data</code> blocks which don't need to get touched.</p><p>To make HTMLArea optional per package intance define a string parameter 
-	"<code class="computeroutput">UseWysiwygP</code>" which defaults "<code class="computeroutput">0</code>" for your 
+	</pre><p>Now the correct values for <tt class="computeroutput">my_input_field_2</tt> and 
+	<tt class="computeroutput">format</tt> are passed to the <tt class="computeroutput">-new_data</tt> and 
+	<tt class="computeroutput">-edit_data</tt> blocks which don't need to get touched.</p><p>To make HTMLArea optional per package intance define a string parameter 
+	&quot;<tt class="computeroutput">UseWysiwygP</tt>&quot; which defaults &quot;<tt class="computeroutput">0</tt>&quot; for your 
 	package using the APM.</p><p>In your edit page make the following changes</p><pre class="programlisting">
 	# Is WYSIWYG enabled?
-	set use_wysiwyg_p [parameter::get -parameter "UseWysiwygP" -default "f"]
+	set use_wysiwyg_p [parameter::get -parameter &quot;UseWysiwygP&quot; -default &quot;f&quot;]
 	
 	...
 	
 	{htmlarea_p $use_wysiwyg_p}
-	</pre><p>The <code class="computeroutput">-on_request</code> switch should set this value for your form.</p><pre class="programlisting">
+	</pre><p>The <tt class="computeroutput">-on_request</tt> switch should set this value for your form.</p><pre class="programlisting">
 	set htmlarea_p $use_wysiwyg_p
 	</pre><p>All you need now is a configuration page where the user can change this setting</p>. Create a 
-	<code class="computeroutput">configure.tcl</code> file:
+	<tt class="computeroutput">configure.tcl</tt> file:
 	<pre class="programlisting">
 	ad_page_contract {
 
     	This page allows a faq admin to change the UseWysiwygP setting
 
 	} {
-    	{return_url ""}
+    	{return_url &quot;&quot;}
 	}
 
-	set title "Should we support WYSIWYG?"
+	set title &quot;Should we support WYSIWYG?&quot;
 	set context [list $title]
 
 	set use_wysiwyg_p
 
 	ad_form -name categories_mode -form {
     	{enabled_p:text(radio)
-        	{label "Enable WYSIWYG"}
+        	{label &quot;Enable WYSIWYG&quot;}
         	{options {{Yes t} {No f}}}
         	{value $use_wysiwyg_p}
     	}
     	{return_url:text(hidden) {value $return_url}}
-    	{submit:text(submit) {label "Change"}}
+    	{submit:text(submit) {label &quot;Change&quot;}}
 	} -on_submit {
-    	parameter::set_value  -parameter "UseWysiwygP" -value $enabled_p
+    	parameter::set_value  -parameter &quot;UseWysiwygP&quot; -value $enabled_p
     	if {![empty_string_p $return_url]} {
         	ns_returnredirect $return_url
     	}
 	}
 	</pre><p>In the corresponding ADP file write</p><pre class="programlisting">
 	&lt;master&gt;
-	&lt;property name="title"&gt;@title@&lt;/property&gt;
-	&lt;property name="context"&gt;@context@&lt;/property&gt;
+	&lt;property name=&quot;title&quot;&gt;@title@&lt;/property&gt;
+	&lt;property name=&quot;context&quot;&gt;@context@&lt;/property&gt;
 
-	&lt;formtemplate id="categories_mode"&gt;&lt;/formtemplate&gt;
+	&lt;formtemplate id=&quot;categories_mode&quot;&gt;&lt;/formtemplate&gt;
 	</pre><p>And finally reference this page from your admin page</p><pre class="programlisting">
 	#TCL:
 	set return_url [ad_conn url]

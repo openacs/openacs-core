@@ -1,22 +1,23 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Using HTML Forms</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="programming-with-aolserver.html" title="Programming with AOLserver"><link rel="next" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="programming-with-aolserver.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="eng-standards.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="form-builder"></a>Using HTML Forms</h2></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ad-form-overview"></a>Overview</h3></div></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="multi-part-elements"></a>Multi-part Elements</h3></div></div></div><p>Some elements have more than one choice, or can submit more than one value.</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2476460"></a>SELECT elements</h4></div></div></div><div class="orderedlist"><ol type="1"><li><p><b>Creating the form element. </b>Populate a list of lists with values for the option list.</p><pre class="programlisting">set foo_options [db_list_of_lists foo_option_list "
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Using HTML Forms</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="programming-with-aolserver.html" title="Programming with AOLserver"><link rel="next" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="programming-with-aolserver.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="eng-standards.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="form-builder"></a>Using HTML Forms</h2></div></div><div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ad-form-overview"></a>Overview</h3></div></div><div></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="multi-part-elements"></a>Multi-part Elements</h3></div></div><div></div></div><p>Some elements have more than one choice, or can submit more than one value.</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2862946"></a>SELECT elements</h4></div></div><div></div></div><div class="orderedlist"><ol type="1"><li><p><b>Creating the form element. </b>Populate a list of lists with values for the option list.</p><pre class="programlisting">set foo_options [db_list_of_lists foo_option_list &quot;
     select foo,
            foo_id
       from foos
-"]
-</pre><p>The variable <code class="computeroutput">foo_options</code> should resemble <code class="computeroutput">{{first foo} 1234} {{second foo} 1235}
-</code></p><p>Within ad_form, set up the element to use this list:</p><pre class="programlisting">{foo:text(select)
-        {label "Which Foo"}
+&quot;]
+</pre><p>The variable <tt class="computeroutput">foo_options</tt> should resemble <tt class="computeroutput">{{first foo} 1234} {{second foo} 1235}
+</tt></p><p>Within ad_form, set up the element to use this list:</p><pre class="programlisting">{foo:text(select)
+        {label &quot;Which Foo&quot;}
         {options $foo_options}
-    }</pre><p>This will result in a single name/value pair coming back in the submitted form.  Handle this within the same ad_form structure, in the <code class="computeroutput">-new_data</code> and <code class="computeroutput">-edit_data</code>.  In the example, it is available as <code class="computeroutput">$foo</code></p></li></ol></div><p>See also the 
-        <a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.6" target="_top">W3C spec for "The SELECT, OPTGROUP, and OPTION elements"</a>.
+    }</pre><p>This will result in a single name/value pair coming back in the submitted form.  Handle this within the same ad_form structure, in the <tt class="computeroutput">-new_data</tt> and <tt class="computeroutput">-edit_data</tt>.  In the example, it is available as <tt class="computeroutput">$foo</tt></p></li></ol></div><p>See also the 
+        <a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.6" target="_top">W3C spec for &quot;The SELECT, OPTGROUP, and OPTION elements&quot;</a>.
         </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="refreshing"></a>Using refreshes to pull additional information from the
-    database</h3></div></div></div><p>A situation you may run into often is where you want to pull
+    database</h3></div></div><div></div></div><p>A situation you may run into often is where you want to pull
     in form items from a sub-category when the first category is
     selected. Ad_form makes this fairly easy to do. In the definition
     of your form element, include an html section</p><pre class="programlisting">    {pm_task_id:integer(select),optional
-        {label "Subject"}
+        {label &quot;Subject&quot;}
         {options {$task_options}}
-        {html {onChange "document.form_name.__refreshing_p.value='1';submit()"}}
+        {html {onChange &quot;document.form_name.__refreshing_p.value='1';submit()&quot;}}
         {value $pm_task_id}
     }
     </pre><p>What this will do is set the value for pm_task_id and all the
@@ -31,17 +32,17 @@
     -on_refresh section of your ad_form. In that section, you'll get
     the values from the database, and set the values as so:</p><pre class="programlisting">    db_1row get_task_values { }
     template::element set_value form_name estimated_hours_work $estimated_hours_work
-    </pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="form-troubleshooting"></a>Troubleshooting</h3></div></div></div><p>A good way to troubleshoot when you're using ad_form is to
+    </pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="form-troubleshooting"></a>Troubleshooting</h3></div></div><div></div></div><p>A good way to troubleshoot when you're using ad_form is to
     add the following code at the top of the .tcl page (thanks Jerry
     Asher):</p><pre class="programlisting">
 ns_log notice it's my page!
 set mypage [ns_getform]
-if {[string equal "" $mypage]} {
+if {[string equal &quot;&quot; $mypage]} {
     ns_log notice no form was submitted on my page
 } else {
     ns_log notice the following form was submitted on my page
     ns_set print $mypage
 }
-    </pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="form-widgets"></a>Tips for form widgets</h3></div></div></div><p>Here are some tips for dealing with some of the form widgets:</p><p><a href="http://openacs.org/forums/message-view?message_id=106331" target="_top">Current widget</a></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="errors"></a>Common Errors</h3></div></div></div><p>Here are some common errors and what to do when you
-    encounter them:</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2533978"></a>Error when selecting values</h4></div></div></div><p>This generally happens when there is an error in your
+    </pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="form-widgets"></a>Tips for form widgets</h3></div></div><div></div></div><p>Here are some tips for dealing with some of the form widgets:</p><p><a href="http://openacs.org/forums/message-view?message_id=106331" target="_top">Current widget</a></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="errors"></a>Common Errors</h3></div></div><div></div></div><p>Here are some common errors and what to do when you
+    encounter them:</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2865409"></a>Error when selecting values</h4></div></div><div></div></div><p>This generally happens when there is an error in your
           query.</p></div></div><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="programming-with-aolserver.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="eng-standards.html">Next</a></td></tr><tr><td width="40%" align="left">Programming with AOLserver </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> Chapter 12. Engineering Standards</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/form-builder.html#comments">View comments on this page at openacs.org</a></center></body></html>
