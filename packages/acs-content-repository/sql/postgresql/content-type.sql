@@ -607,7 +607,7 @@ begin
                     and ot2.object_type <> ''content_revision''
                     and ot1.object_type = refresh_trigger__content_type
                     and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
-                  order by level desc
+                  order by level asc
   LOOP
     rule_text := rule_text || '' '' || content_type__trigger_insert_statement(type_rec.object_type) || '';'';
   end loop;
