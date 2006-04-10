@@ -24,7 +24,7 @@ set tracking_p [apm_package_installed_p "mail-tracking"]
 if {![info exists mime_type]} {
     set mime_type "text/plain"
 }
-if {![info exists cancel_url]} {
+if {![exists_and_not_null cancel_url]} {
     set cancel_url $return_url
 }
 
@@ -57,6 +57,7 @@ if { $recipients_num <= 1 } {
     set form_elements {
 	message_id:key
 	return_url:text(hidden)
+	cancel_url:text(hidden)
 	no_callback_p:text(hidden)
 	title:text(hidden),optional
 	{message_type:text(hidden) {value "email"}}
@@ -76,6 +77,7 @@ if { $recipients_num <= 1 } {
     set form_elements {
 	message_id:key
 	return_url:text(hidden)
+	cancel_url:text(hidden)
 	no_callback_p:text(hidden)
 	title:text(hidden),optional
 	{message_type:text(hidden) {value "email"}}
