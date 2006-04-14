@@ -175,7 +175,7 @@ ad_proc -public ::content::folder::update {
     
     @error 
 } {
-    set valid_attributes [list label description package_id name]
+    set valid_attributes [list label description package_id]
 
     set update_text "" 
 
