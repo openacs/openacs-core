@@ -30,33 +30,6 @@ ad_proc -public email_image::get_priv_email {
     return [db_string get_private_email {  }]
 }
 
-
-ad_proc -public email_image::check_image_magick {} {
-    Check if the ImageMagick software is installed and if the necesary
-    library (FreeType) is present, by looking for the "convert" command and
-    freetype library.
-    
-    returns 1 if required software is present, 0 otherwise
-} {
-    if { [catch {
-        set convert_p [string length [exec find /usr/local/bin -name convert]]
-    }] } {
-        set convert_p 0
-    }
-    if { [catch {
-        set freetype_p [string length [exec whereis freetype]]
-    }] } {
-        set freetype_p 0
-    }
-    if { $convert_p != 0 && $freetype_p != 9 } {
-	return 1
-    } else {
-	return 0
-    }
-}
-
-
-
 ad_proc -public email_image::get_user_email {
     -user_id:required
     {-return_url ""}
@@ -89,28 +62,21 @@ ad_proc -public email_image::get_user_email {
 	    return "<a href=mailto:$email title=\"Send email to this user\">$email</a>"
 	}
 	"3" {
-	    if { [email_image::check_image_magick] } {
-		set email_image_id [email_image::get_related_item_id -user_id $user_id]
-		if { $email_image_id != "-1" } {
-		    # The user has an email image stored in the content repository
-		    set revision_id [content::item::get_latest_revision -item_id $email_image_id]
-		    set export_vars "user_id=$user_id&revision_id=$revision_id"
-		    set email_image "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\"><img border=0 align=middle src=/shared/email-image-bits.tcl?$export_vars></a>"
-    
-		} else {
-		    # Create a new email_image
-		    if { [catch { set email_image [email_image::new_item -user_id $user_id -bgcolor $bgcolor -transparent $transparent] } errmsg ] } {
-                        set email_user [lindex [split $email '@'] 0]
-                        set email_domain [lindex [split $email '@'] 1]
-                        set email_image "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\">${email_user}<img border=0 align=middle src=/shared/images/at.gif>${email_domain}</a>"
-                    }
-		}
+	    set email_image_id [email_image::get_related_item_id -user_id $user_id]
+	    if { $email_image_id != "-1" } {
+		# The user has an email image stored in the content repository
+		set revision_id [content::item::get_latest_revision -item_id $email_image_id]
+		set export_vars "user_id=$user_id&revision_id=$revision_id"
+		set email_image "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\"><img border=0 align=middle src=/shared/email-image-bits.tcl?$export_vars></a>"
 	    } else {
-		# ImageMagick not present, we protect the email by adding
-		# an image replacing the "@" symbol
-		set email_user [lindex [split $email '@'] 0]
-		set email_domain [lindex [split $email '@'] 1]
-		set email_image "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\">${email_user}<img border=0 align=middle src=/shared/images/at.gif>${email_domain}</a>"
+		# Create a new email_image
+		if { [catch { set email_image [email_image::new_item -user_id $user_id -bgcolor $bgcolor -transparent $transparent] } errmsg ] } {
+		    # ImageMagick not present, we protect the email by adding
+		    # an image replacing the "@" symbol
+                    set email_user [lindex [split $email '@'] 0]
+                    set email_domain [lindex [split $email '@'] 1]
+                    set email_image "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\">${email_user}<img border=0 align=middle src=/shared/images/at.gif>${email_domain}</a>"
+                }
 	    }
 	    return $email_image
 	}
@@ -229,11 +195,6 @@ ad_proc -public email_image::edit_email_image {
     @bgcolor       The background color of the image in the format \#xxxxxx, default to \#ffffff
     @transparent   If you want the background color transparent set it to 1. Default to 1
 } {
-    
-    if { ![email_image::check_image_magick]} {
-	# ImageMagick or library not present
-	return
-    }
     if { $new_email == [email_image::get_email -user_id $user_id] } {
 	# Email didn't change
 	return
@@ -256,7 +217,10 @@ ad_proc -public email_image::edit_email_image {
     set bg "xc:$bgcolor"
     
     # Creating an image of the rigth length where the email will be
-    exec convert -size $size $bg $dest_path
+    if { [catch { exec convert -size $size $bg $dest_path } ] } {
+        # ImageMagick not present
+        return
+    }
     
     # Creating the image with the email of the user on it
     exec convert -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $new_email" \
