@@ -215,7 +215,7 @@ begin
 	
 	-- copy to a different folder, or same folder if name
 	-- is different
-    if copy__target_folder_id != v_current_folder_id  or ( v_name <> copy_name and copy_name is not null ) then
+    if copy__target_folder_id != v_current_folder_id  or ( v_name <> copy__name and copy__name is not null ) then
 
       if content_folder__is_registered(copy__target_folder_id,
         ''content_extlink'',''f'') = ''t'' then
