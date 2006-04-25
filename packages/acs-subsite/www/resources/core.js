@@ -1686,7 +1686,7 @@ function showCalendar(id,dateformat) {
 }
 
 // same function as above but instead of a text box we use the date widget
-function showCalendarWithDateWidget(id) {
+function showCalendarWithDateWidget(id,fmt) {
   var idM = document.getElementById(id+'.month');
   var idD = document.getElementById(id+'.day');
   var idY = document.getElementById(id+'.year');
@@ -1694,14 +1694,14 @@ function showCalendarWithDateWidget(id) {
   if (calendar != null) {
     // we already have one created, so just update it.
     calendar.hide();            // hide the existing calendar
-    calendar.parseDate(calval); // set it to a new date
+    calendar.parseDate(calval,fmt); // set it to a new date
   } else {
     // first-time call, create the calendar
     var cal = new Calendar(true, null, selectwidget, closeHandler);
     calendar = cal;             // remember the calendar in the global
     cal.setRange(2000, 2010);   // min/max year allowed
     calendar.create();          // create a popup calendar
-    calendar.parseDate(calval); // set it to a new date
+    calendar.parseDate(calval,fmt); // set it to a new date
   }
   calendar.selM = idM;            // inform it about the input field in use
   calendar.selD = idD;            // inform it about the input field in use
