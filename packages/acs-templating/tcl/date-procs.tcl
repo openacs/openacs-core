@@ -714,51 +714,49 @@ ad_proc -public template::util::date::validate { date error_ref } {
   }
 
   variable fragment_formats
-
   upvar $error_ref error_msg
 
   unpack $date
 
-  set error_msg ""
-  set return_code 1
+  set error_msg [list]
 
   foreach {field exp} { year "YYYY|YY" month "MM|MON|MONTH" day "DD" 
                       hours "HH24|HH12" minutes "MI" seconds "SS" } {
 
     # If the field is required, but missing, report an error
     if {  [string equal [set $field] {}] } {
-      if { [regexp $exp $format match] } {
-        append error_msg "No value supplied for $field<br>"
-        set return_code 0
-      }
+	if { [regexp $exp $format match] } {
+	    set field_pretty [_ acs-templating.${field}]
+	    lappend error_msg [_ acs-templating.lt_No_value_supplied_for_-field_pretty-]
+	}
     } else {
-      # fields should only be integers
-      if { ![regexp {^[0-9]+$} [set $field] match] } {
-        append error_msg "The $field must be a non-negative integer<br>"  
-        set return_code 0
-        set $field {}
-      }
+	# fields should only be integers
+	if { ![regexp {^[0-9]+$} [set $field] match] } {
+	    set field_pretty [_ acs-templating.${field}]
+	    lappend error_msg [_ acs-templating.lt_The_-field_pretty-_must_be_non_negative]
+	    set $field {}
+	}
     }
   }
 
   if { [template::util::negative $year] } {
-    append error_msg "Year must be positive<br>"
-    set return_code 0
+      lappend error_msg [_ acs-templating.Year_must_be_positive]
   }
 
   if { ![string equal $month {}] } {
     if { $month < 1 || $month > 12 } {
-      append error_msg "Month must be between 1 and 12<br>"
-      set return_code 0
+	lappend error_msg [_ acs-templating.Month_must_be_between_1_and_12]
     } else {
       if { $year > 0 } { 
         if { ![string equal $day {}] } {
           set maxdays [get_property days_in_month $date]
           if { $day < 1 || $day > $maxdays } {
-            append error_msg "The day must be between 1 and $maxdays for "
-            append error_msg "the month of 
-                              [get_property long_month_name $date] <br>"
-            set return_code 0
+	      set month_pretty [template::util::date::get_property long_month_name $date]
+	      if { $month == "2" } {
+		  # February has a different number of days depending on the year
+		  append month_pretty " ${year}"
+	      }
+	      lappend error_msg [_ acs-templating.lt_day_between_for_month_pretty]
 	  }
         }
       }
@@ -766,21 +764,22 @@ ad_proc -public template::util::date::validate { date error_ref } {
   }
 
   if { [template::util::negative $hours] || $hours > 23 } {
-    append error_msg "Hours must be between 0 and 23<br>"
-    set return_code 0
+      lappend error_msg [_ acs-templating.Hours_must_be_between_0_and_23]
   } 
 
   if { [template::util::negative $minutes] || $minutes > 59 } {
-    append error_msg "Minutes must be between 0 and 59<br>"
-    set return_code 0
+      lappend error_msg [_ acs-templating.Minutes_must_be_between_0_and_59]
   } 
 
   if { [template::util::negative $seconds] || $seconds > 59 } {
-    append error_msg "Seconds must be between 0 and 59<br>"
-    set return_code 0
+      lappend error_msg [_ acs-templating.Seconds_must_be_between_0_and_59]
   } 
-
-  return $return_code
+  if { [llength $error_msg] > 0 } {
+      set error_msg "[join $error_msg {<br />}]"
+      return 0
+  } else {
+      return 1
+  }
 }
 
 
@@ -1274,27 +1273,23 @@ ad_proc -public template::data::validate::textdate { value_ref message_ref } {
 		set month [::string trimleft [lindex $datelist 1] 0]
 		set day   [::string trimleft [lindex $datelist 2] 0]
 		if { $month < 1 || $month > 12 } {
-		    lappend error_msg "Month must be between 1 and 12"
-		} else {
-		    
+		    lappend error_msg [_ acs-templating.Month_must_be_between_1_and_12]
+		} else {		    
 		    set maxdays [template::util::date::get_property days_in_month $datelist]
 		    if { $day < 1 || $day > $maxdays } {
+			set month_pretty [template::util::date::get_property long_month_name $datelist]
 			if { $month == "2" } {
-			    lappend error_msg "The day must be between 1 and $maxdays for the month of [template::util::date::get_property long_month_name $datelist] ${year}"
-			} else {
-			    lappend error_msg "The day must be between 1 and $maxdays for the month of [template::util::date::get_property long_month_name $datelist]"
+			    # February has a different number of days depending on the year
+			    append month_pretty " ${year}"
 			}
+			lappend error_msg [_ acs-templating.lt_day_between_for_month_pretty]
 		    }
-		}
-		# we do another check just in case the above stuff didn't catch a problem
-		if { [llength $error_msg] == "0"  } {
-		    lappend error_msg "The date specified is not valid"
 		}
 	    }
 	} else {
 	    # the textdate is not formatted properly
 	    set format [::string toupper [template::util::textdate_localized_format]]
-	    lappend error_msg "Dates must be formatted as: ${format}"
+	    lappend error_msg [_ acs-templating.lt_Dates_must_be_formatted_]
 	}
     }
     if { [llength $error_msg] > 0 } {
