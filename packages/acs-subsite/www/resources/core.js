@@ -1685,6 +1685,31 @@ function showCalendar(id,dateformat) {
   return false;
 }
 
+// same function as above except you can set a defaultdate which
+// the calendar will go to immediately when when you click on it
+function showCalendarWithDefault(id,defaultdate,dateformat) {
+  var el = document.getElementById(id);
+  if (calendar != null) {
+    // we already have one created, so just update it.
+    calendar.hide();            // hide the existing calendar
+    calendar.parseDate(el.value, dateformat); // set it to a new date
+  } else {
+    // first-time call, create the calendar
+    if ( dateformat == null ) {
+       var dateformat = 'y-mm-dd';
+    }		
+    var cal = new Calendar(true, defaultdate, selected, closeHandler, dateformat);
+    calendar = cal;             // remember the calendar in the global
+    cal.setRange(1900, 2070);   // min/max year allowed
+    calendar.create();          // create a popup calendar
+  }
+  calendar.sel = el;            // inform it about the input field in use
+  calendar.showAtElement(el);   // show the calendar next to the input field
+  // catch mousedown on the document
+  Calendar.addEvent(document, "mousedown", checkCalendar);
+  return false;
+}
+
 // same function as above but instead of a text box we use the date widget
 function showCalendarWithDateWidget(id,fmt) {
   var idM = document.getElementById(id+'.month');
