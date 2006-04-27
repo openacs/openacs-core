@@ -1307,9 +1307,11 @@ ad_proc -public template::widget::textdate { element_reference tag_attributes } 
 
   upvar $element_reference element
 
+  set date_valid_p 0
   if { [info exists element(value)] } {
       set textdate $element(value)
       if { [regexp {^([0-9]{4})-([0-9]{2})-([0-9]{2})$} $textdate match year month day] } {
+	  set date_valid_p [string is false [catch { clock scan "${textdate}" }]]
 	  # we have a correctly formatted iso date that we
           # can reformat for display, we don't use lc_time_fmt
           # because it could fail and cause a server error. 
@@ -1327,9 +1329,15 @@ ad_proc -public template::widget::textdate { element_reference tag_attributes } 
       set textdate ""
   }
 
+  if { $date_valid_p } {
+      set javascriptdate $textdate
+  } else {
+      set javascriptdate ""
+  }
+
   if { [string equal $element(mode) "edit"] } {
       append output "<input type=\"text\" name=\"$element(id)\" size=\"10\" maxlength=\"10\" id=\"$element(id)_input_field\" value=\"[ad_quotehtml $textdate]\" />"
-      append output "<input type=\"button\" style=\"border-width: 0px; height: 17px; width: 19px; background-image: url('/resources/acs-templating/calendar.gif'); background-repeat: no-repeat; cursor: pointer;\" onclick=\"return showCalendar('$element(id)_input_field', '[template::util::textdate_localized_format]');\" />"
+      append output "<input type=\"button\" style=\"border-width: 0px; height: 17px; width: 19px; background-image: url('/resources/acs-templating/calendar.gif'); background-repeat: no-repeat; cursor: pointer;\" onclick=\"return showCalendarWithDefault('$element(id)_input_field', '$javascriptdate', '[template::util::textdate_localized_format]');\" />"
   } else {
       append output $textdate
       append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ad_quotehtml $textdate]\">"
