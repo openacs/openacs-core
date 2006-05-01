@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-lang" package_version="5.1.2d2" locale="en_GB" charset="ISO-8859-1">
+<message_catalog package_key="acs-lang" package_version="5.2.3b2" locale="en_GB" charset="ISO-8859-1">
 
   <msg key="localization-abday">{Sun} {Mon} {Tue} {Wed} {Thu} {Fri} {Sat}</msg>
   <msg key="localization-abmon">{Jan} {Feb} {Mar} {Apr} {May} {Jun} {Jul} {Aug} {Sep} {Oct} {Nov} {Dec}</msg>

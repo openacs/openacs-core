@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-kernel" package_version="5.1.2d4" locale="zh_TW" charset="utf-8">
+<message_catalog package_key="acs-kernel" package_version="5.2.3b2" locale="zh_TW" charset="utf-8">
 
   <msg key="authentication_authority">權限</msg>
   <msg key="common_Add">新增</msg>
@@ -38,6 +38,8 @@
   <msg key="common_login">登入</msg>
   <msg key="common_Needs_Approval">需核可</msg>
   <msg key="common_needs_approval">需要核准</msg>
+  <msg key="common_New">新</msg>
+  <msg key="common_new">新</msg>
   <msg key="common_Next">後一</msg>
   <msg key="common_next">下一個</msg>
   <msg key="common_no">否</msg>
@@ -59,6 +61,7 @@
   <msg key="common_search">搜尋</msg>
   <msg key="common_Stop">停止</msg>
   <msg key="common_stop">停止</msg>
+  <msg key="common_submit">送出</msg>
   <msg key="common_Update">更新</msg>
   <msg key="common_update">更新</msg>
   <msg key="common_View">檢視</msg>
@@ -67,6 +70,7 @@
   <msg key="common_yes">是</msg>
   <msg key="Member_role_pretty_name">成員</msg>
   <msg key="member_role_pretty_name">會員</msg>
+  <msg key="Member_role_pretty_plural">成員</msg>
   <msg key="member_role_pretty_plural">會員們</msg>
   <msg key="member_state_Approved">已核可</msg>
   <msg key="member_state_approved">核准的</msg>

@@ -1,10 +1,41 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-tcl" package_version="5.1.2" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="acs-tcl" package_version="5.2.3b2" locale="nl_NL" charset="ISO-8859-1">
 
+  <msg key="a_problem">een probleem</msg>
   <msg key="approve">goedkeuren</msg>
   <msg key="approve_email">e-mail goedkeuren</msg>
   <msg key="ban">uitsluiten</msg>
+  <msg key="Browser_of_the_user">Browser van gebruiker</msg>
+  <msg key="Comments">&lt;b&gt;Opmerkingen: &lt;/b&gt;&lt;br&gt; &lt;span style=&quot;color:red;&quot;&gt; (Leg alstublieft uit wat u wilt doen) &lt;/span&gt;</msg>
   <msg key="delete">verwijderen</msg>
+  <msg key="Detais">Details:</msg>
+  <msg key="Email">E-mail:</msg>
+  <msg key="Error">Foutbeschrijving:</msg>
+  <msg key="error">fout</msg>
+  <msg key="Error_Description">Foutbeschrijving</msg>
+  <msg key="Error_details">Foutdetails</msg>
+  <msg key="Error_Report">Foutrapport</msg>
+  <msg key="errors">fouten</msg>
+  <msg key="File">Bestand met fout:</msg>
+  <msg key="Insert_error">Er is een fout opgetreden bij het invoegen van de gegevens in de databank.</msg>
+  <msg key="lt__and_resubmit_your_en">, en dien uw lid opnieuw in</msg>
+  <msg key="lt_Argspec_element_is_in">Argspec '%element%' is ongeldig omdat het meer dan twee elementen bevat</msg>
+  <msg key="lt_Automatically_Submite">Fout automatisch ingestuurd</msg>
+  <msg key="lt_Error_Report_in_ad_sy">Foutrapport in %system_name%</msg>
+  <msg key="lt_Filter_type_must_be_f">Filter moet van het type 'filter' of 'post' zijn</msg>
+  <msg key="lt_Flag_name_must_be_a_v">Vlagnaam moet een geldige symboolnaam zijn</msg>
+  <msg key="lt_Flag_names_must_be_al">Vlagnamen moeten geheel uit kleine letters bestaan</msg>
+  <msg key="lt_Invalid_date_date_ele">Ongeldige datum: %date_element% ontbreekt</msg>
+  <msg key="lt_Invalid_date_The_year">Ongeldige datum: Een jaar bestaat uit 4 cijfers.</msg>
+  <msg key="lt_Invalid_time_time_ele">Ongeldige tijd: %time_element% ontbreekt</msg>
+  <msg key="lt_Invalid_time_time_is_">Ongeldige tijd: tijd ontbreekt</msg>
+  <msg key="lt_Invalid_time_timetime">Ongeldige tijd: %time(time)% heeft een ongeldige indeling</msg>
+  <msg key="lt_Invalid_time_timetime_1">Ongeldige tijd: %time(time)% %time(ampm)%</msg>
+  <msg key="lt_name_does_not_appear_">%name% ziet er niet uit als een geldig e-mailadres</msg>
+  <msg key="lt_name_does_not_appear__2">%name% ziet er niet uit als een booleaanse waarde</msg>
+  <msg key="lt_name_is_not_a_natural">%name% ziet er niet uit als een natuurlijk getal, dat is, een geheel getal groter dan 0.</msg>
+  <msg key="lt_name_is_not_a_valid_S">%name% is geen geldig SQL-symbool</msg>
+  <msg key="lt_name_is_not_an_intege">%naam% is geen geheel getal</msg>
   <msg key="lt_require_email_verific">E-mailbevestiging vereisen</msg>
   <msg key="reject">weigeren</msg>
   <msg key="undelete">terughalen</msg>

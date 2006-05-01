@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.1.2d4" locale="eu_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.2.3b2" locale="eu_ES" charset="ISO-8859-1">
 
   <msg key="authentication_authority">Autoritatea</msg>
   <msg key="common_Add">Gehitu</msg>
@@ -38,6 +38,8 @@
   <msg key="common_login">sartu</msg>
   <msg key="common_Needs_Approval">Onarpenaren Zai</msg>
   <msg key="common_needs_approval">onarpenaren zai</msg>
+  <msg key="common_New">Berria</msg>
+  <msg key="common_new">berria</msg>
   <msg key="common_Next">Hurrengoa</msg>
   <msg key="common_next">hurrengoa</msg>
   <msg key="common_no">Ez</msg>
@@ -55,8 +57,11 @@
   <msg key="common_reset">berrezarri</msg>
   <msg key="common_Save">Gorde</msg>
   <msg key="common_save">gorde</msg>
+  <msg key="common_Search">Bilatu</msg>
+  <msg key="common_search">bilatu</msg>
   <msg key="common_Stop">Gelditu</msg>
   <msg key="common_stop">gelditu</msg>
+  <msg key="common_submit">enviar</msg>
   <msg key="common_Update">Eguneratu</msg>
   <msg key="common_update">eguneratu</msg>
   <msg key="common_View">Ikusi</msg>

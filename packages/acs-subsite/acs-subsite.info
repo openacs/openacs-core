@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.2.3b1" url="http://openacs.org/repository/download/apm/acs-subsite-5.2.3b1.apm">
+    <version name="5.2.3b2" url="http://openacs.org/repository/download/apm/acs-subsite-5.2.3b2.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
         <release-date>2006-04-08</release-date>
@@ -16,7 +16,7 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.2.3b1"/>
+        <provides url="acs-subsite" version="5.2.3b2"/>
         <requires url="acs-authentication" version="5.2.3b1"/>
         <requires url="acs-content-repository" version="5.2.3b1"/>
         <requires url="acs-kernel" version="5.2.3b1"/>

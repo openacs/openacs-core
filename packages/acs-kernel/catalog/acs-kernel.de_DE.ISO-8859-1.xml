@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.2.0" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.2.3b2" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="Administrator">Administrator</msg>
   <msg key="Administrators">Administratoren </msg>
@@ -71,6 +71,7 @@
   <msg key="common_Stop">Abbrechen</msg>
   <msg key="common_stop">Abbrechen</msg>
   <msg key="common_Submit">abschicken</msg>
+  <msg key="common_submit">abschicken</msg>
   <msg key="common_Title">Titel</msg>
   <msg key="common_Type">Typ</msg>
   <msg key="common_Update">Aktualisieren</msg>

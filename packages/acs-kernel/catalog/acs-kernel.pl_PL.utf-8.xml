@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-kernel" package_version="5.1.2d4" locale="pl_PL" charset="utf-8">
+<message_catalog package_key="acs-kernel" package_version="5.2.3b2" locale="pl_PL" charset="utf-8">
 
+  <msg key="authentication_authority">Upoważnienie</msg>
   <msg key="common_Add">Dodaj</msg>
   <msg key="common_add">Dodaj</msg>
   <msg key="common_Administration">Administracja</msg>
@@ -15,9 +16,11 @@
   <msg key="common_closed">Zamknięty</msg>
   <msg key="common_Continue">Dalej</msg>
   <msg key="common_continue">Dalej</msg>
+  <msg key="common_Default">Użyj Domyślnego</msg>
   <msg key="common_default">Domyślne</msg>
   <msg key="common_Delete">Usuń</msg>
   <msg key="common_delete">Usuń</msg>
+  <msg key="common_Discard">Odrzuć</msg>
   <msg key="common_discard">Anuluj</msg>
   <msg key="common_Display">Wyświetl</msg>
   <msg key="common_display">wyświetl</msg>
@@ -27,6 +30,7 @@
   <msg key="common_finish">Zakończ</msg>
   <msg key="common_First">Pierwszy</msg>
   <msg key="common_first">pierwszy</msg>
+  <msg key="common_Go">Idź</msg>
   <msg key="common_go">Idź</msg>
   <msg key="common_Help">Pomoc</msg>
   <msg key="common_help">Pomoc</msg>
@@ -57,6 +61,7 @@
   <msg key="common_search">szukaj</msg>
   <msg key="common_Stop">Zatrzymaj</msg>
   <msg key="common_stop">Zatrzymaj</msg>
+  <msg key="common_submit">wyślij</msg>
   <msg key="common_Update">Odśwież</msg>
   <msg key="common_update">Odśwież</msg>
   <msg key="common_View">Widok</msg>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-kernel" package_version="5.1.2d4" locale="ja_JP" charset="utf-8">
+<message_catalog package_key="acs-kernel" package_version="5.2.3b2" locale="ja_JP" charset="utf-8">
 
   <msg key="common_cancel">キャンセル</msg>
   <msg key="common_close">閉じる</msg>

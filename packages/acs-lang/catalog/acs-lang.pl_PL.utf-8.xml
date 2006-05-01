@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-lang" package_version="5.1.2d2" locale="pl_PL" charset="utf-8">
+<message_catalog package_key="acs-lang" package_version="5.2.3b2" locale="pl_PL" charset="utf-8">
 
   <msg key="available-in-this-language">Dostępne po polsku</msg>
+  <msg key="change-locale">Zmień język</msg>
   <msg key="English">Angielski</msg>
   <msg key="French">Francuski</msg>
   <msg key="German">Niemiecki</msg>
@@ -31,6 +32,7 @@
   <msg key="localization-pm_str"></msg>
   <msg key="localization-positive_sign"></msg>
   <msg key="localization-t_fmt">%T</msg>
-  <msg key="localization-thousands_sep"></msg>
+  <msg key="localization-thousands_sep">&amp;nbsp;</msg>
   <msg key="Spanish">Hiszpański</msg>
+  <msg key="this-language">Angielski</msg>
 </message_catalog>

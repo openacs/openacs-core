@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-templating" package_version="5.1.2" locale="zh_CN" charset="utf-8">
+<message_catalog package_key="acs-templating" package_version="5.2.3b2" locale="zh_CN" charset="utf-8">
 
   <msg key="12-Hour">12-小时</msg>
   <msg key="24-Hour">24-小时</msg>
@@ -22,7 +22,7 @@
   <msg key="Month">月</msg>
   <msg key="Next_with_arrow">下一个</msg>
   <msg key="No_row_pretty_plural">无%row_pretty_plural%</msg>
-  <msg key="Previous_with_arrow">前一个</msg>
+  <msg key="Previous_with_arrow">上一个</msg>
   <msg key="required">必填项</msg>
   <msg key="Seconds">秒</msg>
   <msg key="Sort_order">排列顺序</msg>

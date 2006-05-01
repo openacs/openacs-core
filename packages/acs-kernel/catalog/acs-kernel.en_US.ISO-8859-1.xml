@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.2.0" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.2.3b2" locale="en_US" charset="ISO-8859-1">
 
   <msg key="Administrator">Administrator</msg>
   <msg key="Administrators">Administrators</msg>
@@ -26,6 +26,8 @@
   <msg key="common_Continue">Continue</msg>
   <msg key="common_continue">continue</msg>
   <msg key="common_Copy">Copy</msg>
+  <description key="common_Copy">Important for non-English for most languages, is this singular or plural?!</description>
+
   <msg key="common_Default">Use Default</msg>
   <msg key="common_default">use default</msg>
   <msg key="common_Delete">Delete</msg>
@@ -46,6 +48,8 @@
   <msg key="common_go">go</msg>
   <msg key="common_Help">Help</msg>
   <msg key="common_help">help</msg>
+  <msg key="common_Last">Last</msg>
+  <msg key="common_lastt">last</msg>
   <msg key="common_Login">Log in</msg>
   <msg key="common_login">log in</msg>
   <msg key="common_Needs_Approval">Needs Approval</msg>
@@ -54,8 +58,6 @@
   <msg key="common_new">new</msg>
   <msg key="common_Next">Next</msg>
   <msg key="common_next">next</msg>
-  <msg key="common_Last">Last</msg>
-  <msg key="common_lastt">last</msg>
   <msg key="common_no">No</msg>
   <msg key="common_OK">OK</msg>
   <msg key="common_ok">ok</msg>
@@ -77,6 +79,7 @@
   <msg key="common_Stop">Stop</msg>
   <msg key="common_stop">stop</msg>
   <msg key="common_Submit">Submit</msg>
+  <msg key="common_submit">submit</msg>
   <msg key="common_Title">Title</msg>
   <msg key="common_Type">Type</msg>
   <msg key="common_Update">Update</msg>

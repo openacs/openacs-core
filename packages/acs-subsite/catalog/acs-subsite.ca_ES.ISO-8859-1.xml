@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.2.0a2" locale="ca_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.2.3b2" locale="ca_ES" charset="ISO-8859-1">
 
   <msg key="_or">, o</msg>
   <msg key="_Update_Basic_Information">Actualitza informació bàsica </msg>
   <msg key="A_member_of_the_system">Membre de la comunitat %system_name% des de</msg>
-  <msg key="About_You">La meua informació</msg>
+  <msg key="About_You">La meva informació</msg>
   <msg key="Account_at_system_closed">El vostre compte en %system_name% s'ha tancat.</msg>
   <msg key="Account_close_confirm_no_label">No, torna'm a %pvt_home_name%</msg>
   <msg key="Account_close_confirm_yes_label">Sí, tanca el meu compte, per favor</msg>
