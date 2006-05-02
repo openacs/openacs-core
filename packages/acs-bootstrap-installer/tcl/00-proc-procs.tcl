@@ -420,7 +420,7 @@ proc ad_proc args {
         set log_code "ns_log Debug \"Deprecated proc $proc_name used\"\n"
     }
 
-    if { ![string equal $callback ""] && ![string equal $impl ""] } {
+    if { $callback ne "" && $impl ne "" } {
         if { [llength [info procs "::callback::${callback}::contract__arg_parser"]] == 0 } {
             # We create a dummy arg parser for the contract in case
             # the contract hasn't been defined yet.  We need this
@@ -432,7 +432,7 @@ proc ad_proc args {
         # We are creating a callback implementation so we invoke the
         # arg parser of the contract proc
         uplevel [::list proc $proc_name_as_passed args "    ::callback::${callback}::contract__arg_parser\n${log_code}$code_block"]
-    } elseif { [llength $switches] == 0 } {
+    } elseif { $callback eq "" && [llength $switches] == 0 } {
         uplevel [::list proc $proc_name_as_passed $arg_list "${log_code}$code_block"]
     } else {
         set parser_code "    ::upvar args args\n"
