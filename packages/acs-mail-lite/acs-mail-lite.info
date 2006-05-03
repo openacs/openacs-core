@@ -7,7 +7,7 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="1.0b7" url="http://openacs.org/repository/download/apm/acs-mail-lite-1.0b7.apm">
+    <version name="1.2b1" url="http://openacs.org/repository/download/apm/acs-mail-lite-1.2b1.apm">
         <owner url="mailto:eric@openforce.biz">Eric Lorenzo</owner>
         <owner url="mailto:timo@studio-k4.de">Timo Hentschel</owner>
         <summary>Simplified reliable email transmission with bounce management.</summary>
@@ -15,7 +15,7 @@
         <description format="text/html">This package provides a simple ns_sendmail-like interface for sending messages, but queues messages in the database to ensure reliable sending and make sending a message 'transactional'. Prefered over acs-messaging or acs-mail.</description>
         <maturity>0</maturity>
 
-        <provides url="acs-mail-lite" version="1.0b7"/>
+        <provides url="acs-mail-lite" version="1.2b1"/>
 
         <callbacks>
             <callback type="after-install"  proc="acs_mail_lite::after_install"/>
@@ -35,6 +35,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="NotificationSender"  default="reminder@openacs.org" description="Sender of the notification email" section_name="email"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SendmailBin"  default="/usr/sbin/sendmail" description="Location of sendmail binary on your system (Set to SMTP to use SMTP server)" section_name="email"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="send_immediately"  default="0" description="Boolean value to say whether new mails should be send out immediately or stored in the db before send out." section_name="email"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="FolderID"  default="" description="Folder ID of a folder in the content repository that contains files that can be included using checkboxes in each e-mail send out of the system. This effects /lib/email" section_name="email"/>
         </parameters>
 
     </version>
