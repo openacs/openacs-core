@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.2.3rc1" url="http://openacs.org/repository/download/apm/acs-admin-5.2.3rc1.apm">
+    <version name="5.2.3b2" url="http://openacs.org/repository/download/apm/acs-admin-5.2.3b2.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>An interface for Site-wide administration of an OpenACS Installation.</summary>
         <maturity>3</maturity>
@@ -19,7 +19,7 @@
           (including package installation, cache, authentication, and user accounts) for an OpenACS system.
         </description>
 
-        <provides url="acs-admin" version="5.2.3rc1"/>
+        <provides url="acs-admin" version="5.2.3b2"/>
         <requires url="acs-kernel" version="5.2.3b1"/>
 
         <callbacks>
