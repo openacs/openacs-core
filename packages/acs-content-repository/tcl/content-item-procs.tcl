@@ -163,7 +163,7 @@ ad_proc -public ::content::item::rename {
                                [list item_id $item_id] \
                                [list name $name]
                           ] \
-                content_item rename]
+                content_item edit_name]
 }
 
 ad_proc -public ::content::item::move {
