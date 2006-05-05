@@ -210,7 +210,17 @@ aa_register_case content_item {
             #########################################################
             # rename it
             #########################################################
-            #TODO
+
+            set new_name "__rename_new_name"
+            content::item::rename \
+                -item_id $new_type_item_id \
+                -name $new_name
+            content::item::get \
+                -item_id $new_type_item_id \
+                -array_name renamed_item
+            aa_true "Item renamed" \
+                [expr {$new_name eq $renamed_item(name)}]
+                     
 
             #########################################################
             # publish it
