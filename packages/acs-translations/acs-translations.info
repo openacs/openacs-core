@@ -11,9 +11,9 @@
         <owner url="mailto:sussdorff@sussdorff.de">Malte Sussdorff</owner>
         <summary>Package for storing dynamic translations</summary>
         <description format="text/html">Package for storing dynamic translations</description>
-        <maturity>0</maturity>
+        <maturity>3</maturity>
 
-        <provides url="acs-translations" version="0.1d1"/>
+        <requires url="acs-translations" version="5.2.3b1"/>
 
         <callbacks>
         </callbacks>

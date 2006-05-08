@@ -21,6 +21,7 @@ locale-specific formatting functions for localizing dates, times, monetary amoun
 
         <provides url="acs-lang" version="5.2.3b2"/>
         <requires url="acs-kernel" version="5.2.3b1"/>
+        <requires url="acs-translations" version="5.2.3b1"/>
         <requires url="ref-timezones" version="5.2.3b1"/>
 
         <callbacks>
