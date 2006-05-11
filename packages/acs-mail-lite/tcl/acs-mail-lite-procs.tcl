@@ -1007,6 +1007,7 @@ namespace eval acs_mail_lite {
         {-subject ""}
         -body:required
 	{-package_id ""}
+	{-files ""}
 	{-file_ids ""}
 	{-folder_id ""}
 	{-mime_type "text/plain"}
@@ -1033,6 +1034,8 @@ namespace eval acs_mail_lite {
 
 	@param package_id Package ID of the sending package
 	
+	@param files List of file_title, mime_type, file_path (as in full path to the file) combination of files to be attached
+
 	@param file_ids List of file ids (ITEMS, not revisions) to be send as attachments. This will only work with files stored in the file system.
 
 	@param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
@@ -1088,7 +1091,13 @@ namespace eval acs_mail_lite {
 		   }
 	    }
 	}
-	
+
+	if {![string eq "" $files]} {
+	    foreach file $files {
+		lappend tokens [mime::initialize -param [list name "[ad_quotehtml [lindex $file 0]]"] -canonical [lindex $file 1] -file "[lindex $file 2]"]
+	    }
+	}
+
 	set multi_token [mime::initialize -canonical multipart/mixed -parts "$tokens"]
 
 	mime::setheader $multi_token Subject "$subject"
