@@ -69,9 +69,10 @@
 <fullquery name="person::name_not_cached.get_person_name">      
       <querytext>
       
-          select first_names||' '||last_name as person_name
-            from persons
-           where person_id = :person_id
+          select distinct first_names||' '||last_name as person_name
+            from persons, parties
+           where person_id = party_id
+		and (party_id = :person_id or email = :email)
           
       </querytext>
 </fullquery>

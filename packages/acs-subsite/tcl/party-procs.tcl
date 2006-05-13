@@ -224,5 +224,51 @@ namespace eval party {
 	set email [db_string get_party_email { select email from parties where party_id = :party_id } -default {}]
 	return $email
     }
+
+    ad_proc -public name {
+	{-party_id ""}
+	{-email ""}
+    } {
+	Gets the party name of the provided party_id
+	
+	@author Miguel Marin (miguelmarin@viaro.net)
+	@author Viaro Networks www.viaro.net
+
+	@author Malte Sussdorff (malte.sussdorff@cognovis.de)
+
+	@param party_id The party_id to get the name from.
+	@param email The email of the party
+
+	@returns The party name
+    } {
+	if {$party_id eq "" && $email eq ""} {
+	    error "You need to provide either party_id or email"
+	} elseif {![string eq "" $party_id] && ![string eq "" $email]} {
+	    error "Only provide provide party_id OR email, not both"
+	}
+	
+	if {$party_id eq ""} {
+	    set party_id [party::get_by_email -email $email]
+	}
+
+	if {[person::person_p -party_id $party_id]} {
+	    set name [person::name -person_id $party_id]
+	} else {
+	    if { [apm_package_installed_p "organizations"] } {
+		set name [db_string get_org_name {} -default ""]
+	    } 
+	    
+	    if { [empty_string_p $name] } {
+		set name [db_string get_group_name {} -default ""]
+	    }
+
+	    if { [empty_string_p $name] } {
+		set name [db_string get_party_name {} -default ""]
+	    }
+	    
+	}
+	return $name
+    }
+
     
 }
