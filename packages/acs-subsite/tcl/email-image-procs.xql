@@ -54,7 +54,7 @@
   </querytext>
 </fullquery>
 
-<fullquery name="email_image::edit_email.update_cr_items">
+<fullquery name="email_image::edit_email_image.update_cr_items">
   <querytext>
         update cr_items
         set live_revision  = :revision_id

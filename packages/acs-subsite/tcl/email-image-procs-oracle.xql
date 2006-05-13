@@ -19,7 +19,7 @@
      </querytext>
 </fullquery>
 
-<fullquery name="email_image::edit_email.lob_size">
+<fullquery name="email_image::edit_email_image.lob_size">
       <querytext>
         update cr_revisions
         set content_length = dbms_lob.getlength(content)
@@ -27,7 +27,7 @@
      </querytext>
 </fullquery>
 
-<fullquery name="email_image::edit_email.lob_content">
+<fullquery name="email_image::edit_email_image.lob_content">
       <querytext>
         update cr_revisions
         set    content = empty_blob()
