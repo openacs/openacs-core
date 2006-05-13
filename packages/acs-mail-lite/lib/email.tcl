@@ -32,6 +32,10 @@ if {![info exists no_callback_p]} {
     set no_callback_p f
 }
 
+if {![info exists use_sender_p]} {
+    set use_sender_p f
+}
+
 if {![info exists checked_p]} {
     set checked_p t
 }
@@ -59,6 +63,7 @@ if { $recipients_num <= 1 } {
 	return_url:text(hidden)
 	cancel_url:text(hidden)
 	no_callback_p:text(hidden)
+	use_sender_p:text(hidden)
 	title:text(hidden),optional
 	{message_type:text(hidden) {value "email"}}
 	{to:text(checkbox),multiple,optional
@@ -132,7 +137,13 @@ if { [exists_and_not_null file_ids] } {
 set file_folder_id [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "FolderID"]
 if {![string eq "" $file_folder_id]} {
     # get the list of files in an option
-    set file_options [db_list_of_lists files "select name, item_id from cr_items where parent_id = :file_folder_id and content_type = 'file_storage_object'"]
+    set file_options [db_list_of_lists files {
+	select r.title, i.item_id
+	from cr_items i, cr_revisions r
+	where i.parent_id = :file_folder_id
+	and i.content_type = 'file_storage_object'
+	and r.revision_id = i.latest_revision
+    }]
     if {![string eq "" $file_options]} {
 	append form_elements {
 	    {files_extend:text(checkbox),optional 
@@ -336,49 +347,51 @@ ad_form -action $action \
 	    lappend to_list [list $to_addr]
 	    
 	    if {[exists_and_not_null file_ids]} {
-		# If the no_callback_p is set to "t" then no callback will be executed
-		if { $no_callback_p } {
 
-		    acs_mail_lite::complex_send \
-			-to_addr $to_addr \
-			-from_addr "$from_addr" \
-			-subject "$subject" \
-			-body "$content_body" \
-			-package_id $package_id \
-			-file_ids $file_ids \
-			-mime_type $mime_type \
-			-object_id $object_id \
-			-no_callback
+		# do not use fixed sender
+		if { $use_sender_p } {
 
-		} else {
-
-		    acs_mail_lite::complex_send \
-			-to_addr $to_addr \
-			-from_addr "$from_addr" \
-			-subject "$subject" \
-			-body "$content_body" \
-			-package_id $package_id \
-			-file_ids $file_ids \
-			-mime_type $mime_type \
-			-object_id $object_id
-
-		}
-
-	    } else {
-
-		# acs_mail_lite does not know about sending the
-		# correct mime types....
-		if {$mime_type == "text/html"} {
-
-
+		    # If the no_callback_p is set to "t" then no callback will be executed
 		    if { $no_callback_p } {
-			# If the no_callback_p is set to "t" then no callback will be executed			
+
 			acs_mail_lite::complex_send \
 			    -to_addr $to_addr \
 			    -from_addr "$from_addr" \
 			    -subject "$subject" \
 			    -body "$content_body" \
 			    -package_id $package_id \
+			    -file_ids $file_ids \
+			    -mime_type $mime_type \
+			    -object_id $object_id \
+			    -no_callback \
+			    -use_sender
+
+		    } else {
+
+			acs_mail_lite::complex_send \
+			    -to_addr $to_addr \
+			    -from_addr "$from_addr" \
+			    -subject "$subject" \
+			    -body "$content_body" \
+			    -package_id $package_id \
+			    -file_ids $file_ids \
+			    -mime_type $mime_type \
+			    -object_id $object_id \
+			    -use_sender
+			
+		    }
+
+		} else {
+
+		    if { $no_callback_p } {
+
+			acs_mail_lite::complex_send \
+			    -to_addr $to_addr \
+			    -from_addr "$from_addr" \
+			    -subject "$subject" \
+			    -body "$content_body" \
+			    -package_id $package_id \
+			    -file_ids $file_ids \
 			    -mime_type $mime_type \
 			    -object_id $object_id \
 			    -no_callback
@@ -391,35 +404,132 @@ ad_form -action $action \
 			    -subject "$subject" \
 			    -body "$content_body" \
 			    -package_id $package_id \
+			    -file_ids $file_ids \
 			    -mime_type $mime_type \
 			    -object_id $object_id
 
+		    }
+		}
+
+	    } else {
+
+		# acs_mail_lite does not know about sending the
+		# correct mime types....
+		if {$mime_type == "text/html"} {
+
+		    # do not use fixed sender
+		    if { $use_sender_p } {
+
+			if { $no_callback_p } {
+			    # If the no_callback_p is set to "t" then no callback will be executed
+			    acs_mail_lite::complex_send \
+				-to_addr $to_addr \
+				-from_addr "$from_addr" \
+				-subject "$subject" \
+				-body "$content_body" \
+				-package_id $package_id \
+				-mime_type $mime_type \
+				-object_id $object_id \
+				-no_callback \
+				-use_sender
+
+			} else {
+			    
+			    acs_mail_lite::complex_send \
+				-to_addr $to_addr \
+				-from_addr "$from_addr" \
+				-subject "$subject" \
+				-body "$content_body" \
+				-package_id $package_id \
+				-mime_type $mime_type \
+				-object_id $object_id \
+				-use_sender
+			}
+
+		    } else {
+
+			if { $no_callback_p } {
+			    # If the no_callback_p is set to "t" then no callback will be executed
+			    acs_mail_lite::complex_send \
+				-to_addr $to_addr \
+				-from_addr "$from_addr" \
+				-subject "$subject" \
+				-body "$content_body" \
+				-package_id $package_id \
+				-mime_type $mime_type \
+				-object_id $object_id \
+				-no_callback
+
+			} else {
+			    
+			    acs_mail_lite::complex_send \
+				-to_addr $to_addr \
+				-from_addr "$from_addr" \
+				-subject "$subject" \
+				-body "$content_body" \
+				-package_id $package_id \
+				-mime_type $mime_type \
+				-object_id $object_id
+			    
+			}
 		    }
 		    
 		} else {
 		    
 		    if { [exists_and_not_null object_id] } {
-			# If the no_callback_p is set to "t" then no callback will be executed
-			if { $no_callback_p } {
-			    acs_mail_lite::complex_send \
-				-to_addr $to_addr \
-				-from_addr "$from_addr" \
-				-subject "$subject" \
-				-body "$content_body" \
-				-package_id $package_id \
-				-mime_type "text/html" \
-				-object_id $object_id \
-				-no_callback
+
+			# do not use fixed sender
+			if { $use_sender_p } {
+
+			    # If the no_callback_p is set to "t" then no callback will be executed
+			    if { $no_callback_p } {
+				acs_mail_lite::complex_send \
+				    -to_addr $to_addr \
+				    -from_addr "$from_addr" \
+				    -subject "$subject" \
+				    -body "$content_body" \
+				    -package_id $package_id \
+				    -mime_type "text/html" \
+				    -object_id $object_id \
+				    -no_callback \
+				    -use_sender
+			    } else {
+				
+				acs_mail_lite::complex_send \
+				    -to_addr $to_addr \
+				    -from_addr "$from_addr" \
+				    -subject "$subject" \
+				    -body "$content_body" \
+				    -package_id $package_id \
+				    -mime_type "text/html" \
+				    -object_id $object_id \
+				    -use_sender
+			    }
+
 			} else {
 
-			    acs_mail_lite::complex_send \
-				-to_addr $to_addr \
-				-from_addr "$from_addr" \
-				-subject "$subject" \
-				-body "$content_body" \
-				-package_id $package_id \
-				-mime_type "text/html" \
-				-object_id $object_id 
+			    # If the no_callback_p is set to "t" then no callback will be executed
+			    if { $no_callback_p } {
+				acs_mail_lite::complex_send \
+				    -to_addr $to_addr \
+				    -from_addr "$from_addr" \
+				    -subject "$subject" \
+				    -body "$content_body" \
+				    -package_id $package_id \
+				    -mime_type "text/html" \
+				    -object_id $object_id \
+				    -no_callback
+			    } else {
+				
+				acs_mail_lite::complex_send \
+				    -to_addr $to_addr \
+				    -from_addr "$from_addr" \
+				    -subject "$subject" \
+				    -body "$content_body" \
+				    -package_id $package_id \
+				    -mime_type "text/html" \
+				    -object_id $object_id
+			    }
 			}
 		    } else {
 			
@@ -439,9 +549,8 @@ ad_form -action $action \
 				-from_addr "$from_addr" \
 				-subject "$subject" \
 				-body "$content_body" \
-				-package_id $package_id 
+				-package_id $package_id
 			}
-			
 		    }
 		}
 	    }
