@@ -9,6 +9,7 @@ ad_library {
 }
 
 package require mime 1.4
+package require smtp 1.4
 package require base64 2.3.1
 namespace eval acs_mail_lite {
 
@@ -1002,39 +1003,47 @@ namespace eval acs_mail_lite {
     ad_proc -public complex_send {
 	-send_immediately:boolean
 	-valid_email:boolean
-        -to_addr:required
+        {-to_addr ""}
         -from_addr:required
         {-subject ""}
         -body:required
+	{-cc_addr ""}
+	{-bcc_addr ""}
 	{-package_id ""}
 	{-files ""}
 	{-file_ids ""}
 	{-folder_id ""}
 	{-mime_type "text/plain"}
 	{-object_id ""}
-	{-cc ""}
+	-single_email:boolean
 	-no_callback:boolean 
 	-use_sender:boolean 
     } {
 
 	Prepare an email to be send with the option to pass in a list
-	of file_ids as well as specify an html_body and a mime_type
+	of file_ids as well as specify an html_body and a mime_type. It also supports multiple "TO" recipients as well as CC
+	and BCC recipients. Runs entirely off MIME and SMTP to achieve this. 
+	For backward compatibility a switch "single_email_p" is added
 
 	@param send_immediately The email is send immediately and not stored in the acs_mail_lite_queue
 	
-	@param to_addr Email address to send the mail to
+	@param to_addr List of e-mail addresses to send this mail to. We will figure out the name if possible.
 	
-	@param from_addr Who is sending the email
+	@param from_addr E-Mail address of the sender. We will try to figure out the name if possible.
 	
 	@param subject of the email
 	
 	@param body Text body of the email
 	
-	@param bcc BCC Users to send this mail to
+	@param cc_addr List of CC Users e-mail addresses to send this mail to. We will figure out the name if possible. Only useful if single_email is provided. Otherwise the CC users will be send individual emails.
+
+	@param bcc_addr List of CC Users e-mail addresses to send this mail to. We will figure out the name if possible. Only useful if single_email is provided. Otherwise the CC users will be send individual emails.
 
 	@param package_id Package ID of the sending package
 	
 	@param files List of file_title, mime_type, file_path (as in full path to the file) combination of files to be attached
+
+	@param folder_id ID of the folder who's content will be send along with the e-mail.
 
 	@param file_ids List of file ids (ITEMS, not revisions) to be send as attachments. This will only work with files stored in the file system.
 
@@ -1042,11 +1051,17 @@ namespace eval acs_mail_lite {
 
 	@param object_id The ID of the object that is responsible for sending the mail in the first place
 
+	@param single_email Boolean that indicates that only one mail will be send (in contrast to one e-mail per recipient). 
+
 	@param no_callback Boolean that indicates if callback should be executed or not. If you don't provide it it will execute callbacks	
 
 	@param use_sender Boolean indicating that from_addr should be used regardless of fixed-sender parameter
     } {
 	
+	if {[empty_string_p $package_id]} {
+	    set package_id [apm_package_id_from_key "acs-mail-lite"]
+	}
+
 	# We check if the parameter 
 	set fixed_sender [parameter::get -parameter "FixedSenderEmail" \
 			      -package_id [apm_package_id_from_key "acs-mail-lite"]]
@@ -1063,6 +1078,7 @@ namespace eval acs_mail_lite {
 	# encode all attachments in base64
     
 	set tokens [list $message_token]
+
 	if {[exists_and_not_null folder_id]} {
 
 	    db_foreach get_file_info "select r.revision_id,r.mime_type,r.title, r.content as filename
@@ -1073,23 +1089,23 @@ namespace eval acs_mail_lite {
 	    }
 	} elseif {[exists_and_not_null file_ids]} {
 
-	    set item_p 1
-	    db_foreach get_file_info "select r.mime_type,r.title, r.content as filename
-	    from cr_revisions r
-	    where r.revision_id in ([join $file_ids ","])" {
-		lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
-		set item_p 0
+	    # Check if we are dealing with revisions or items.
+	    set item_ids [list]
+	    foreach file_id $file_ids {
+		set item_id [content::revision::item_id -revision_id $file_id]
+		if {[string eq "" $item_id]} {
+		    lappend item_ids $file_id
+		} else {
+		    lappend item_ids $item_id
+		}
 	    }
 
-	    if {$item_p} {
-		db_foreach get_file_info "select r.mime_type,r.title, r.content as filename
+	    db_foreach get_file_info "select r.mime_type,r.title, r.content as filename
 	           from cr_revisions r, cr_items i
 	           where r.revision_id = i.latest_revision
-                   and i.item_id in ([join $file_ids ","])" {
-		       ns_log Debug "Files: $file_ids ::: $filename"
+                   and i.item_id in ([join $item_ids ","])" {
 		       lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
 		   }
-	    }
 	}
 
 	if {![string eq "" $files]} {
@@ -1099,57 +1115,111 @@ namespace eval acs_mail_lite {
 	}
 
 	set multi_token [mime::initialize -canonical multipart/mixed -parts "$tokens"]
-
+    
 	mime::setheader $multi_token Subject "$subject"
  	set packaged [mime::buildmessage $multi_token]
 
-	#Close all mime tokens
-	mime::finalize $multi_token -subordinates all
-	set message_id [generate_message_id]
+	set message_id "[mime::uniqueID]"
         
+	# Protection against smartasses who provide two from addresses
+	set from_addr [lindex $from_addr 0]
+	set party_id($from_addr) [party::get_by_email -email $from_addr]
+	set from_string "[party::name -email $from_addr] <${from_addr}>"
+	
+	# Now the To recipients
+	set to_list [list]
+	foreach email $to_addr {
+	    set name($email) [party::name -email $email]
+	    set party_id($email) [party::get_by_email -email $email]
+	    lappend to_list "$name($email) <${email}>"
+	    lappend to_party_ids $party_id($email)
+	}
+	
+	# Now the Cc recipients
+	set cc_list [list]
+	foreach email $cc_addr {
+	    set name($email) [party::name -email $email]
+	    set party_id($email) [party::get_by_email -email $email]
+	    lappend cc_list "$name($email) <${email}>"
+	    lappend cc_party_ids $party_id($email)
+	}
+	
+
+	# Now the Bcc recipients
+	set bcc_list [list]
+	foreach email $bcc_addr {
+	    set name($email) [party::name -email $email]
+	    set party_id($email) [party::get_by_email -email $email]
+	    lappend bcc_list "$name($email) <${email}>"
+	    lappend bcc_party_ids $party_id($email)
+	}
+	
 	# Rollout support (see above for details)
-
+	
 	set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode] 
-        if {![empty_string_p $delivery_mode]
-            && ![string equal $delivery_mode default]
-        } {
-            # The to_addr has been put in an array, and returned. Now
-            # it is of the form: email email_address name namefromdb
-            # user_id user_id_if_present_or_empty_string
+	if {![empty_string_p $delivery_mode]
+	    && ![string equal $delivery_mode default]
+	} {
+	    set eh [util_list_to_ns_set $extraheaders]
+	    ns_sendmail $to_addr $sender_addr $subject $packaged $eh $bcc
+	    #Close all mime tokens
+	    mime::finalize $multi_token -subordinates all
+	} else {
+	    
+	    if {$single_email_p} {
+	    
+		smtp::sendmessage $multi_token \
+		    -header [list From "$from_string"] \
+		    -header [list To "[join $to_list ","]"] \
+		    -header [list CC "[join $cc_list ","]"] \
+		    -header [list BCC "[join $bcc_list ","]"] \
+		    -header [list Subject "otto"] \
+		    -header [list message-id "[mime::uniqueID]"] \
+		    -header [list date "[mime::parsedatetime -now proper]"]
 
-        # ----------------------------------------------------
-        # Rollout support
-        # ----------------------------------------------------
-        # if set in etc/config.tcl, then
-        # packages/acs-tcl/tcl/rollout-email-procs.tcl will rename a
-        # proc to ns_sendmail. So we simply call ns_sendmail instead
-        # of the sendmail bin if the EmailDeliveryMode parameter is
-        # set to anything other than default - JFR
-        #-----------------------------------------------------
+		#Close all mime tokens
+		mime::finalize $multi_token -subordinates all
+	    
+		if { !$no_callback_p } {
+		    callback acs_mail_lite::complex_send \
+			-package_id $package_id \
+			-from_party_id [party::get_by_email -email $from_addr] \
+			-to_party_id [party::get_by_email -email $to_addr] \
+			-body $body \
+			-message_id $message_id \
+			-cc $cc \
+			-subject $subject \
+			-object_id $object_id \
+			-file_ids $file_ids
+		}
+	    } else {
+		# We send individual e-mails
+		set recipient_list [concat $to_addr $cc_addr $bcc_addr]
+		foreach email $recipient_list {
+		    smtp::sendmessage $multi_token \
+			-header [list From "$from_string"] \
+			-header [list To "$name($email) <${email}>"] \
+			-header [list Subject "otto"] \
+			-header [list message-id "[mime::uniqueID]"] \
+			-header [list date "[mime::parsedatetime -now proper]"]
 
-            set to_address "[lindex $to_addr 1] ([lindex $to_addr 3])"
-            set eh [util_list_to_ns_set $extraheaders]
-            ns_sendmail $to_address $from_addr $subject $body $eh $bcc
-        } else {
-	    acs_mail_lite::sendmail -from_addr $sender_addr -sendlist [get_address_array -addresses $to_addr] -msg $packaged -valid_email_p t -message_id $message_id -package_id $package_id -cc $cc
-	}
+		    if { !$no_callback_p } {
+			callback acs_mail_lite::complex_send \
+			    -package_id $package_id \
+			    -from_party_id $party_id($from_addr) \
+			    -to_party_id $party_id($email) \
+			    -body $body \
+			    -message_id $message_id \
+			    -subject $subject \
+			    -object_id $object_id \
+			    -file_ids $file_ids
+		    }
+		}
 
-	if {[empty_string_p $package_id]} {
-	    set package_id [apm_package_id_from_key "acs-mail-lite"]
-	}
-
-	if { !$no_callback_p } {
-	    callback acs_mail_lite::complex_send \
-		-package_id $package_id \
-		-from_party_id [party::get_by_email -email $from_addr] \
-		-to_party_id [party::get_by_email -email $to_addr] \
-		-body $body \
-		-message_id $message_id \
-		-cc $cc \
-		-subject $subject \
-		-object_id $object_id \
-		-file_ids $file_ids
-	}
+		#Close all mime tokens
+		mime::finalize $multi_token -subordinates all
+	    }
+	}	    
     }
 	 
     ad_proc -private sweeper {} {
@@ -1228,36 +1298,6 @@ namespace eval acs_mail_lite {
     } {
 	# shouldn't we first delete the bindings?
 	acs_sc::contract::delete -name AcsMailLite
-    }
-
-    ad_proc -public party_name {
-	-party_id:required
-    } {
-	Gets the party name of the provided party_id
-	
-	@author Miguel Marin (miguelmarin@viaro.net)
-	@author Viaro Networks www.viaro.net
-	
-	@param party_id The party_id to get the name from.
-	@returns The party name
-    } {
-	if {[person::person_p -party_id $party_id]} {
-	    return [person::name -person_id $party_id]
-	} else {
-	    if { [apm_package_installed_p "organizations"] } {
-		set name [db_string get_org_name { } -default ""]
-	    } 
-	    
-	    if { [empty_string_p $name] } {
-		set name [db_string get_group_name { } -default ""]
-	    }
-
-	    if { [empty_string_p $name] } {
-		set name [db_string get_party_name { } -default ""]
-	    }
-	    
-	}
-	return $name
     }
 
     ad_proc -private message_interpolate {
