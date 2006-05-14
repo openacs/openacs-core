@@ -1003,12 +1003,15 @@ namespace eval acs_mail_lite {
     ad_proc -public complex_send {
 	-send_immediately:boolean
 	-valid_email:boolean
+	{-to_party_ids ""}
+	{-cc_party_ids ""}
+	{-bcc_party_ids ""}
         {-to_addr ""}
-        -from_addr:required
-        {-subject ""}
-        -body:required
 	{-cc_addr ""}
 	{-bcc_addr ""}
+        {-from_addr ""}
+        {-subject ""}
+        -body:required
 	{-package_id ""}
 	{-files ""}
 	{-file_ids ""}
@@ -1027,8 +1030,14 @@ namespace eval acs_mail_lite {
 
 	@param send_immediately The email is send immediately and not stored in the acs_mail_lite_queue
 	
+	@param to_party_ids list of ids to whom did we send this email
+
+	@param cc_party_ids list of ids to whom did we send this email in "CC"
+
+	@param bcc_party_ids list of ids to whom did we send this email in "BCC"
+
 	@param to_addr List of e-mail addresses to send this mail to. We will figure out the name if possible.
-	
+
 	@param from_addr E-Mail address of the sender. We will try to figure out the name if possible.
 	
 	@param subject of the email
@@ -1116,7 +1125,6 @@ namespace eval acs_mail_lite {
 
 	set multi_token [mime::initialize -canonical multipart/mixed -parts "$tokens"]
     
-	mime::setheader $multi_token Subject "$subject"
  	set packaged [mime::buildmessage $multi_token]
 
 	set message_id "[mime::uniqueID]"
@@ -1128,32 +1136,53 @@ namespace eval acs_mail_lite {
 	
 	# Now the To recipients
 	set to_list [list]
+
 	foreach email $to_addr {
-	    set name($email) [party::name -email $email]
 	    set party_id($email) [party::get_by_email -email $email]
-	    lappend to_list "$name($email) <${email}>"
-	    lappend to_party_ids $party_id($email)
+	    if {$party_id($email) eq ""} {
+		# We could not find a party_id, write the email alone
+		lappend to_list $email
+	    } else {	    
+		# Make sure we are not sending the same e-mail twice to the same person
+		if {[lsearch $to_party_ids $party_id($email)] > -1} {
+		    lappend to_party_ids $party_id($email)
+		}
+	    }
 	}
+
 	
 	# Now the Cc recipients
 	set cc_list [list]
+
 	foreach email $cc_addr {
-	    set name($email) [party::name -email $email]
 	    set party_id($email) [party::get_by_email -email $email]
-	    lappend cc_list "$name($email) <${email}>"
-	    lappend cc_party_ids $party_id($email)
+	    if {$party_id($email) eq ""} {
+		# We could not find a party_id, write the email alone
+		lappend cc_list $email
+	    } else {	    
+		# Make sure we are not sending the same e-mail twice to the same person
+		if {[lsearch $cc_party_ids $party_id($email)] > -1} {
+		    lappend cc_party_ids $party_id($email)
+		}
+	    }
 	}
-	
 
 	# Now the Bcc recipients
 	set bcc_list [list]
+
 	foreach email $bcc_addr {
-	    set name($email) [party::name -email $email]
 	    set party_id($email) [party::get_by_email -email $email]
-	    lappend bcc_list "$name($email) <${email}>"
-	    lappend bcc_party_ids $party_id($email)
+	    if {$party_id($email) eq ""} {
+		# We could not find a party_id, write the email alone
+		lappend bcc_list $email
+	    } else {	    
+		# Make sure we are not sending the same e-mail twice to the same person
+		if {[lsearch $bcc_party_ids $party_id($email)] > -1} {
+		    lappend bcc_party_ids $party_id($email)
+		}
+	    }
 	}
-	
+
 	# Rollout support (see above for details)
 	
 	set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode] 
@@ -1165,49 +1194,112 @@ namespace eval acs_mail_lite {
 	    #Close all mime tokens
 	    mime::finalize $multi_token -subordinates all
 	} else {
-	    
+
 	    if {$single_email_p} {
-	    
+		
+		#############################
+		# 
+		# One mail to all
+		# 
+		#############################
+
+		# First join the emails without parties for the callback.
+		set to_addr_string [join $to_list ","]
+		set cc_addr_string [join $cc_list ","]
+		set bcc_addr_string [join $bcc_list ","]
+
+		# Append the entries from the system users to the e-mail
+		foreach party $to_party_ids {
+		    lappend to_list "[party::name -party_id $party] <[party::email -party_id $party]>"
+		}
+		
+		foreach party $cc_party_ids {
+		    lappend cc_list "[party::name -party_id $party] <[party::email -party_id $party]>"
+		}
+		
+		foreach party $bcc_party_ids {
+		    lappend bcc_list "[party::name -party_id $party] <[party::email -party_id $party]>"
+		}
+
 		smtp::sendmessage $multi_token \
 		    -header [list From "$from_string"] \
 		    -header [list To "[join $to_list ","]"] \
 		    -header [list CC "[join $cc_list ","]"] \
 		    -header [list BCC "[join $bcc_list ","]"] \
-		    -header [list Subject "otto"] \
+		    -header [list Subject "$subject"] \
 		    -header [list message-id "[mime::uniqueID]"] \
 		    -header [list date "[mime::parsedatetime -now proper]"]
 
 		#Close all mime tokens
 		mime::finalize $multi_token -subordinates all
-	    
+
 		if { !$no_callback_p } {
 		    callback acs_mail_lite::complex_send \
 			-package_id $package_id \
 			-from_party_id [party::get_by_email -email $from_addr] \
-			-to_party_id [party::get_by_email -email $to_addr] \
+			-to_party_ids $to_party_ids \
+			-cc_party_ids $cc_party_ids \
+			-bcc_party_ids $bcc_party_ids \
+			-to_addr $to_addr_string \
+			-cc_addr $cc_addr_string \
+			-bcc_addr $bcc_addr_string \
 			-body $body \
 			-message_id $message_id \
-			-cc $cc \
 			-subject $subject \
 			-object_id $object_id \
 			-file_ids $file_ids
 		}
+
+	    
 	    } else {
-		# We send individual e-mails
-		set recipient_list [concat $to_addr $cc_addr $bcc_addr]
+		
+		####################################################################
+		# 
+		# Individual E-Mails. 
+		# All recipients, (regardless who they are) get a separate E-Mail
+		#
+		####################################################################
+
+		# We send individual e-mails. First the ones that do not have a party_id
+		set recipient_list [concat $to_list $cc_list $bcc_list]
 		foreach email $recipient_list {
+		    set message_id [mime::uniqueID]
 		    smtp::sendmessage $multi_token \
 			-header [list From "$from_string"] \
-			-header [list To "$name($email) <${email}>"] \
-			-header [list Subject "otto"] \
-			-header [list message-id "[mime::uniqueID]"] \
+			-header [list To "$email"] \
+			-header [list Subject "$subject"] \
+			-header [list message-id "$message_id"] \
 			-header [list date "[mime::parsedatetime -now proper]"]
-
+		    
 		    if { !$no_callback_p } {
 			callback acs_mail_lite::complex_send \
 			    -package_id $package_id \
-			    -from_party_id $party_id($from_addr) \
-			    -to_party_id $party_id($email) \
+			    -from_party_ids $party_id($from_addr) \
+			    -to_addr $email \
+			    -body $body \
+			    -message_id $message_id \
+			    -subject $subject \
+			    -object_id $object_id \
+			    -file_ids $file_ids
+		    }
+		}
+
+		# And now we send it to all the other users who actually do have a party_id
+		set recipient_list [concat $to_party_ids $cc_party_ids $bcc_party_ids]
+		foreach party $recipient_list {
+		    set message_id [mime::uniqueID]
+		    smtp::sendmessage $multi_token \
+			-header [list From "$from_string"] \
+			-header [list To "[party::name -party_id $party] <[party::email -party_id $party]>"] \
+			-header [list Subject "$subject"] \
+			-header [list message-id "$message_id"] \
+			-header [list date "[mime::parsedatetime -now proper]"]
+		    
+		    if { !$no_callback_p } {
+			callback acs_mail_lite::complex_send \
+			    -package_id $package_id \
+			    -from_party_ids $party_id($from_addr) \
+			    -to_party_id $party \
 			    -body $body \
 			    -message_id $message_id \
 			    -subject $subject \
