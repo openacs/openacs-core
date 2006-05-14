@@ -13,20 +13,34 @@ ad_library {
 ad_proc -public -callback acs_mail_lite::complex_send {
     {-package_id:required}
     {-from_party_id:required}
-    {-to_party_id:required}
+    {-to_party_ids}
+    {-cc_party_ids}
+    {-bcc_party_ids}
+    {-to_addr}
+    {-cc_addr}
+    {-bcc_addr}
     {-body}
     {-message_id:required}
     {-subject}
     {-object_id}
     {-file_ids}
-    {-cc}
 } {
 
     Callback for executing code after an email has been send using the complex send mechanism.
    
     	@param from_party_id Who is sending the email
 	
-	@param to_party_id to whom did we send this email
+	@param to_party_ids list of ids to whom did we send this email
+
+	@param cc_party_ids list of ids to whom did we send this email in "CC"
+
+	@param bcc_party_ids list of ids to whom did we send this email in "BCC"
+
+	@param to_addr string of emails seperated by "," to whom did we send this email
+
+	@param cc_addr string of emails seperated by "," to whom did we send this email in CC
+
+	@param bcc_addr string of emails seperated by "," to whom did we send this email in BCC
 
 	@param subject of the email
 	
