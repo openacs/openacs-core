@@ -352,17 +352,16 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
   array set options [expr {[info exists element(options)] ? 
 			   $element(options) : ""}]
-  set richtextEditor [expr {[info exists options(editor)] ?
-			     $options(editor) : "rte"}]
 
   if { $element(mode) eq "edit" } {
     set attributes(id) "richtext__$element(form_id)__$element(id)"
+    set package_id_templating [apm_package_id_from_key "acs-templating"]
 
     if { [exists_and_not_null element(htmlarea_p)] } {
       set htmlarea_p [template::util::is_true $element(htmlarea_p)]
     } else {
       set htmlarea_p [parameter::get \
-			  -package_id [apm_package_id_from_key "acs-templating"] \
+			  -package_id $package_id_templating \
 			  -parameter "UseHtmlAreaForRichtextP" \
 			  -default 0]
     }
@@ -371,9 +370,14 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     set output [textarea_internal $element(id) attributes $contents]
 
     if { $htmlarea_p } {
+      # figure out, which rich text editor to use
+      set richtextEditor [expr {[info exists options(editor)] ?
+				$options(editor) : [parameter::get \
+							-package_id $package_id_templating \
+							-parameter "RichTextEditor" \
+							-default "rte"]}]
       # Tell the blank-master to include the special stuff 
       # for the richtext widget in the page header
-      
       set ::acs_blank_master($richtextEditor) 1
       
       if {$richtextEditor eq "rte"} {
@@ -398,10 +402,16 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 	# The following options are supported: 
 	#      editor plugins width height folder_id fs_package_id
 	#
-	set plugins {GetHtml CharacterMap ContextMenu FullScreen
-	  ListType TableOperations EditTag LangMarks Abbreviation}
 	if {[info exists options(plugins)]} {
 	  set plugins $options(plugins)
+	} else {
+	  set plugins [parameter::get \
+			   -package_id $package_id_templating \
+			   -parameter "XinhaDefaultPlugins" \
+			   -default ""]
+
+	  # GetHtml CharacterMap ContextMenu FullScreen 
+	  # ListType TableOperations EditTag LangMarks Abbreviation
 	}
 	set quoted [list]
 	foreach e $plugins {lappend quoted '$e'}
