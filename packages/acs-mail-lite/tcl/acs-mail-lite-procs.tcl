@@ -1009,7 +1009,7 @@ namespace eval acs_mail_lite {
         {-to_addr ""}
 	{-cc_addr ""}
 	{-bcc_addr ""}
-        {-from_addr ""}
+        -from_addr:required
         {-subject ""}
         -body:required
 	{-package_id ""}
@@ -1144,7 +1144,7 @@ namespace eval acs_mail_lite {
 		lappend to_list $email
 	    } else {	    
 		# Make sure we are not sending the same e-mail twice to the same person
-		if {[lsearch $to_party_ids $party_id($email)] > -1} {
+		if {[lsearch $to_party_ids $party_id($email)] < 0} {
 		    lappend to_party_ids $party_id($email)
 		}
 	    }
@@ -1161,7 +1161,7 @@ namespace eval acs_mail_lite {
 		lappend cc_list $email
 	    } else {	    
 		# Make sure we are not sending the same e-mail twice to the same person
-		if {[lsearch $cc_party_ids $party_id($email)] > -1} {
+		if {[lsearch $cc_party_ids $party_id($email)] < 0} {
 		    lappend cc_party_ids $party_id($email)
 		}
 	    }
@@ -1177,7 +1177,7 @@ namespace eval acs_mail_lite {
 		lappend bcc_list $email
 	    } else {	    
 		# Make sure we are not sending the same e-mail twice to the same person
-		if {[lsearch $bcc_party_ids $party_id($email)] > -1} {
+		if {[lsearch $bcc_party_ids $party_id($email)] < 0} {
 		    lappend bcc_party_ids $party_id($email)
 		}
 	    }
@@ -1232,7 +1232,7 @@ namespace eval acs_mail_lite {
 
 		#Close all mime tokens
 		mime::finalize $multi_token -subordinates all
-
+		
 		if { !$no_callback_p } {
 		    callback acs_mail_lite::complex_send \
 			-package_id $package_id \
