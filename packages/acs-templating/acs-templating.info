@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.2.3b2" url="http://openacs.org/repository/download/apm/acs-templating-5.2.3b2.apm">
+    <version name="5.2.3b3" url="http://openacs.org/repository/download/apm/acs-templating-5.2.3b3.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Templating library.</summary>
         <release-date>2006-05-03</release-date>
@@ -25,7 +25,7 @@ layout of a site can be more easily administered.
         <license>GPL version 2</license>
         <maturity>3</maturity>
 
-        <provides url="acs-templating" version="5.2.3b2"/>
+        <provides url="acs-templating" version="5.2.3b3"/>
         <requires url="acs-kernel" version="5.2.3b1"/>
 
         <callbacks>
