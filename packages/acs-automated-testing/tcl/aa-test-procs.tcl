@@ -477,7 +477,7 @@ ad_proc -public aa_export_vars {
     explicitly export the specified variables to the current testcase. You need
     to call aa_export_vars <b>before</b> you create the variables. Example:
     <pre>
-    aa_export_vars package_id item_id
+    aa_export_vars {package_id item_id}
     set package_id 23
     set item_id 109
     </pre>
