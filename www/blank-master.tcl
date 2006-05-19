@@ -48,7 +48,7 @@ if {[info exists acs_blank_master__htmlareas] } {
   if {[info exists acs_blank_master(xinha)]} {
     set xinha_dir /resources/acs-templating/xinha-nightly/
     set xinha_plugins $acs_blank_master(xinha.plugins)
-    set xinha_params "xinha_config.height = '350px';"
+    set xinha_params ""
     set xinha_options $acs_blank_master(xinha.options)
     # setting language
     set lang [lang::conn::language]

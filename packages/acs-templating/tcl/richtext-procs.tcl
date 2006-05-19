@@ -312,6 +312,16 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
       files to be selected, while %pdf% could be used for pdf-files. If
       nothing is specified, all file-types are presented.
     </ul>
+    <li> <em>javascript</em>: provide javascript code to configure 
+     the xinha widget and its plugins. The configure object is called <tt>xinha_config</tt>.
+     Example to use xinha with only a few controls:
+     <pre>
+         {options {editor xinha plugins {OacsFs} height 350px javascript {
+           xinha_config.toolbar = [
+             ['popupeditor', 'bold','italic','createlink','insertimage','separator'],
+             ['killword','removeformat'] ];
+         }}}
+     </pre>
   </ul>
   
   Example for the use of the xinha widget with options: 
@@ -327,6 +337,9 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
      are currently part of the xowiki package, since acs-templating
      is per default not mounted. This is hopefully only a temporal situation
      and we find a better place.
+  <p>
+  Note that the rich-rext editor interacts with <tt>blank-master.tcl</tt> and 
+  <tt>blank-master.adp</tt>.
   <p>
   Derived from the htmlarea richtext widget for htmlarea by lars@pinds.com<br/>
   modified for RTE http://www.kevinroth.com/ by davis@xarg.net<br/>
@@ -420,8 +433,11 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 	set xinha_options ""
 	foreach e {width height folder_id fs_package_id file_types} {
 	  if {[info exists options($e)]} {
-	    append xinha_options "xinha_config.$e = '[ad_urlencode $options($e)]';\n"
+	    append xinha_options "xinha_config.$e = '$options($e)';\n"
 	  }
+	}
+	if {[info exists options(javascript)]} {
+	  append xinha_options $options(javascript) \n
 	}
 	set ::acs_blank_master(xinha.options) $xinha_options
 	lappend ::acs_blank_master__htmlareas $attributes(id)

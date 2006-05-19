@@ -71,8 +71,8 @@
            </multiple>
 	];
        xinha_config = xinha_config ? xinha_config() : new HTMLArea.Config();
-       @xinha_params@
-       @xinha_options@
+       @xinha_params;noquote@
+       @xinha_options;noquote@
         xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
        HTMLArea.startEditors(xinha_editors);
     }
