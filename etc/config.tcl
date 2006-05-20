@@ -533,8 +533,8 @@ ns_section ns/db/pools
     ns_param   pool3              "Pool 3"
 
 ns_section ns/db/pool/pool1
-    ns_param   maxidle            1000000000
-    ns_param   maxopen            1000000000
+    ns_param   maxidle            0
+    ns_param   maxopen            0
     ns_param   connections        5
     ns_param   verbose            $debug
     ns_param   extendedtableinfo  true
@@ -552,8 +552,8 @@ ns_section ns/db/pool/pool1
     } 
 
 ns_section ns/db/pool/pool2
-    ns_param   maxidle            1000000000
-    ns_param   maxopen            1000000000
+    ns_param   maxidle            0
+    ns_param   maxopen            0
     ns_param   connections        5
     ns_param   verbose            $debug
     ns_param   extendedtableinfo  true
@@ -571,8 +571,8 @@ ns_section ns/db/pool/pool2
     } 
 
 ns_section ns/db/pool/pool3
-    ns_param   maxidle            1000000000
-    ns_param   maxopen            1000000000
+    ns_param   maxidle            0
+    ns_param   maxopen            0
     ns_param   connections        5
     ns_param   verbose            $debug
     ns_param   extendedtableinfo  true
