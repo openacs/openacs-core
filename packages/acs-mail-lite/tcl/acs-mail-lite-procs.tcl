@@ -1006,6 +1006,9 @@ namespace eval acs_mail_lite {
 	{-to_party_ids ""}
 	{-cc_party_ids ""}
 	{-bcc_party_ids ""}
+	{-to_group_ids ""}
+	{-cc_group_ids ""}
+	{-bcc_group_ids ""}
         {-to_addr ""}
 	{-cc_addr ""}
 	{-bcc_addr ""}
@@ -1015,9 +1018,11 @@ namespace eval acs_mail_lite {
 	{-package_id ""}
 	{-files ""}
 	{-file_ids ""}
-	{-folder_id ""}
+	{-folder_ids ""}
 	{-mime_type "text/plain"}
 	{-object_id ""}
+	{-single_email_p ""}
+	{-no_callback_p ""}
 	-single_email:boolean
 	-no_callback:boolean 
 	-use_sender:boolean 
@@ -1026,15 +1031,21 @@ namespace eval acs_mail_lite {
 	Prepare an email to be send with the option to pass in a list
 	of file_ids as well as specify an html_body and a mime_type. It also supports multiple "TO" recipients as well as CC
 	and BCC recipients. Runs entirely off MIME and SMTP to achieve this. 
-	For backward compatibility a switch "single_email_p" is added
+	For backward compatibility a switch "single_email_p" is added.
 
 	@param send_immediately The email is send immediately and not stored in the acs_mail_lite_queue
 	
-	@param to_party_ids list of ids to whom did we send this email
+	@param to_party_ids list of party ids to whom we send this email
 
-	@param cc_party_ids list of ids to whom did we send this email in "CC"
+	@param cc_party_ids list of party ids to whom we send this email in "CC"
 
-	@param bcc_party_ids list of ids to whom did we send this email in "BCC"
+	@param bcc_party_ids list of party ids to whom we send this email in "BCC"
+
+	@param to_party_ids list of group_ids to whom we send this email
+
+	@param cc_party_ids list of group_ids to whom we send this email in "CC"
+
+	@param bcc_party_ids list of group_ids to whom we send this email in "BCC"
 
 	@param to_addr List of e-mail addresses to send this mail to. We will figure out the name if possible.
 
@@ -1052,9 +1063,9 @@ namespace eval acs_mail_lite {
 	
 	@param files List of file_title, mime_type, file_path (as in full path to the file) combination of files to be attached
 
-	@param folder_id ID of the folder who's content will be send along with the e-mail.
+	@param folder_ids ID of the folder who's content will be send along with the e-mail.
 
-	@param file_ids List of file ids (ITEMS, not revisions) to be send as attachments. This will only work with files stored in the file system.
+	@param file_ids List of file ids (items or revisions) to be send as attachments. This will only work with files stored in the file system.
 
 	@param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
 
@@ -1063,10 +1074,13 @@ namespace eval acs_mail_lite {
 	@param single_email Boolean that indicates that only one mail will be send (in contrast to one e-mail per recipient). 
 
 	@param no_callback Boolean that indicates if callback should be executed or not. If you don't provide it it will execute callbacks	
+	@param single_email_p Boolean that indicates that only one mail will be send (in contrast to one e-mail per recipient). Used so we can set a variable in the callers environment to call complex_send.
+
+	@param no_callback_p Boolean that indicates if callback should be executed or not. If you don't provide it it will execute callbacks. Used so we can set a variable in the callers environment to call complex_send.
 
 	@param use_sender Boolean indicating that from_addr should be used regardless of fixed-sender parameter
     } {
-	
+
 	if {[empty_string_p $package_id]} {
 	    set package_id [apm_package_id_from_key "acs-mail-lite"]
 	}
@@ -1081,6 +1095,10 @@ namespace eval acs_mail_lite {
 	    set sender_addr $from_addr
 	}
 
+	set party_id($sender_addr) [party::get_by_email -email $sender_addr]
+	set party_id($from_addr) [party::get_by_email -email $from_addr]
+	set from_string "[party::name -email $sender_addr] <${sender_addr}>"
+	
 	# Set the message token
 	set message_token [mime::initialize -canonical "$mime_type" -string "$body"]
 
@@ -1088,15 +1106,7 @@ namespace eval acs_mail_lite {
     
 	set tokens [list $message_token]
 
-	if {[exists_and_not_null folder_id]} {
-
-	    db_foreach get_file_info "select r.revision_id,r.mime_type,r.title, r.content as filename
-	    from cr_revisions r, cr_items i
-	    where r.item_id = i.item_id and i.parent_id = :folder_id" {
-		lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
-		lappend file_ids $revision_id
-	    }
-	} elseif {[exists_and_not_null file_ids]} {
+	if {[exists_and_not_null file_ids]} {
 
 	    # Check if we are dealing with revisions or items.
 	    set item_ids [list]
@@ -1116,11 +1126,23 @@ namespace eval acs_mail_lite {
 		       lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
 		   }
 	}
-
+	
 	if {![string eq "" $files]} {
 	    foreach file $files {
 		lappend tokens [mime::initialize -param [list name "[ad_quotehtml [lindex $file 0]]"] -canonical [lindex $file 1] -file "[lindex $file 2]"]
 	    }
+	}
+
+	if {[exists_and_not_null folder_ids]} {
+	    
+	    foreach folder_id $folder_ids {
+		db_foreach get_file_info {select r.revision_id,r.mime_type,r.title, i.item_id, r.content as filename
+		    from cr_revisions r, cr_items i
+		    where r.revision_id = i.latest_revision and i.parent_id = :folder_id} {
+			lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
+			lappend item_ids $item_id
+		    }
+	    } 
 	}
 
 	set multi_token [mime::initialize -canonical multipart/mixed -parts "$tokens"]
@@ -1129,11 +1151,6 @@ namespace eval acs_mail_lite {
 
 	set message_id "[mime::uniqueID]"
         
-	# Protection against smartasses who provide two from addresses
-	set from_addr [lindex $from_addr 0]
-	set party_id($from_addr) [party::get_by_email -email $from_addr]
-	set from_string "[party::name -email $from_addr] <${from_addr}>"
-	
 	# Now the To recipients
 	set to_list [list]
 
@@ -1149,8 +1166,11 @@ namespace eval acs_mail_lite {
 		}
 	    }
 	}
-
 	
+	foreach to_id [group::get_members -group_id $to_group_ids] {
+	    lappend to_party_ids $to_id
+	} 
+
 	# Now the Cc recipients
 	set cc_list [list]
 
@@ -1167,6 +1187,10 @@ namespace eval acs_mail_lite {
 	    }
 	}
 
+	foreach cc_id [group::get_members -group_id $cc_group_ids] {
+	    lappend cc_party_ids $cc_id
+	} 
+
 	# Now the Bcc recipients
 	set bcc_list [list]
 
@@ -1182,6 +1206,10 @@ namespace eval acs_mail_lite {
 		}
 	    }
 	}
+
+	foreach bcc_id [group::get_members -group_id $bcc_group_ids] {
+	    lappend bcc_party_ids $bcc_id
+	} 
 
 	# Rollout support (see above for details)
 	
@@ -1236,7 +1264,7 @@ namespace eval acs_mail_lite {
 		if { !$no_callback_p } {
 		    callback acs_mail_lite::complex_send \
 			-package_id $package_id \
-			-from_party_id [party::get_by_email -email $from_addr] \
+			-from_party_id [party::get_by_email -email $sender_addr] \
 			-to_party_ids $to_party_ids \
 			-cc_party_ids $cc_party_ids \
 			-bcc_party_ids $bcc_party_ids \
@@ -1247,7 +1275,7 @@ namespace eval acs_mail_lite {
 			-message_id $message_id \
 			-subject $subject \
 			-object_id $object_id \
-			-file_ids $file_ids
+			-file_ids $item_ids
 		}
 
 	    
@@ -1264,6 +1292,7 @@ namespace eval acs_mail_lite {
 		set recipient_list [concat $to_list $cc_list $bcc_list]
 		foreach email $recipient_list {
 		    set message_id [mime::uniqueID]
+
 		    smtp::sendmessage $multi_token \
 			-header [list From "$from_string"] \
 			-header [list To "$email"] \
@@ -1274,13 +1303,13 @@ namespace eval acs_mail_lite {
 		    if { !$no_callback_p } {
 			callback acs_mail_lite::complex_send \
 			    -package_id $package_id \
-			    -from_party_ids $party_id($from_addr) \
+			    -from_party_id $party_id($from_addr) \
 			    -to_addr $email \
 			    -body $body \
 			    -message_id $message_id \
 			    -subject $subject \
 			    -object_id $object_id \
-			    -file_ids $file_ids
+			    -file_ids $item_ids
 		    }
 		}
 
@@ -1288,9 +1317,11 @@ namespace eval acs_mail_lite {
 		set recipient_list [concat $to_party_ids $cc_party_ids $bcc_party_ids]
 		foreach party $recipient_list {
 		    set message_id [mime::uniqueID]
+		    set email "[party::name -party_id $party] <[party::email -party_id $party]>"
+
 		    smtp::sendmessage $multi_token \
 			-header [list From "$from_string"] \
-			-header [list To "[party::name -party_id $party] <[party::email -party_id $party]>"] \
+			-header [list To "$email"] \
 			-header [list Subject "$subject"] \
 			-header [list message-id "$message_id"] \
 			-header [list date "[mime::parsedatetime -now proper]"]
@@ -1298,13 +1329,13 @@ namespace eval acs_mail_lite {
 		    if { !$no_callback_p } {
 			callback acs_mail_lite::complex_send \
 			    -package_id $package_id \
-			    -from_party_ids $party_id($from_addr) \
-			    -to_party_id $party \
+			    -from_party_id $party_id($from_addr) \
+			    -to_party_ids $party \
 			    -body $body \
 			    -message_id $message_id \
 			    -subject $subject \
 			    -object_id $object_id \
-			    -file_ids $file_ids
+			    -file_ids $item_ids
 		    }
 		}
 
