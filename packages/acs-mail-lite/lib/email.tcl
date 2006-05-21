@@ -11,7 +11,7 @@ foreach required_param {party_ids} {
     }
 }
 
-foreach optional_param {return_url content export_vars file_ids object_id cc item_id} {
+foreach optional_param {return_url content export_vars file_ids object_id cc item_id bcc} {
     if {![info exists $optional_param]} {
 	set $optional_param {}
     }
@@ -76,6 +76,11 @@ if { $recipients_num <= 1 } {
 	    {label "[_ acs-mail-lite.CC]:"} 
 	    {html {size 56}}
 	    {help_text "[_ acs-mail-lite.cc_help]"}
+	}
+	{bcc:text(text),optional
+	    {label "[_ acs-mail-lite.BCC]:"} 
+	    {html {size 56}}
+	    {help_text "[_ contacts.cc_help]"}
 	}
     }
 } else {
@@ -235,14 +240,12 @@ ad_form -action $action \
 	set from [ad_conn user_id]
 	set from_addr [cc_email_from_party $from]
 
-	# Remove all spaces in cc
+	# Remove all spaces in cc and bcc
 	regsub -all " " $cc "" cc
+	regsub -all " " $bcc "" bcc
 
-	# Just in case someone is using "," instead of ";"
-	regsub -all ";" $cc "," cc
-	set cc_list [split $cc ","]
-
-	template::multirow create messages message_type to_addr to_party_id subject content_body
+	set cc_list [split $cc ";"]
+	set bcc_list [split $bcc ";"]
 
 	# Insert the uploaded file linked under the package_id
 	set package_id [ad_conn package_id]
@@ -271,18 +274,14 @@ ad_form -action $action \
 
 	# Send the mail to all parties.
 	foreach party_id $to {
-	    if { $contacts_p } {
-		set name [contact::name -party_id $party_id]
-	    } else {
-		set name [acs-mail-lite::name -party_id $party_id]
-	    }
+	    set name [party::name -party_id $to]
 	    set first_names [lindex $name 0]
 	    set last_name [lindex $name 1]
 	    set date [lc_time_fmt [dt_sysdate] "%q"]
 	    set to $name
-	    set to_addr [cc_email_from_party $party_id]
-	    lappend recipients_addr $to_addr
+	    set to_addr [party::email -party_id $party_id]
 
+	    # This should not be happening in the first place and should be removed from here later....
 	    if {[empty_string_p $to_addr]} {
                 # We are going to check if this party_id has an employer and if this
                 # employer has an email
@@ -290,7 +289,7 @@ ad_form -action $action \
                                      -rel_type "contact_rels_employment"]
                 if { ![empty_string_p $employer_id] } {
                     # Get the employer email adress
-                    set to_addr [cc_email_from_party -party_id $employer_id]
+                    set to_addr [party::email -party_id $employer_id]
                     if {[empty_string_p $to_addr]} {
                         ad_return_error [_ acs-kernel.common_Error] [_ acs-mail-lite.lt_there_was_an_error_processing] 
 			break
@@ -305,276 +304,46 @@ ad_form -action $action \
 		lappend values [list "{$element}" [set $element]]
 	    }
 	    
-	    # Append the CC for each to recipient
-	    template::multirow append messages $message_type $to_addr $party_id [acs_mail_lite::message_interpolate -text $subject -values $values] [acs_mail_lite::message_interpolate -text $content_body -values $values] $cc
-	    
+	    set subject [contact::message::interpolate -text $subject -values $values]
+	    set content_body [contact::message::interpolate -text $content_body -values $values]
+	    acs_mail_lite::complex_send \
+		-to_party_ids $party_id \
+		-cc_addr $cc_list \
+		-bcc_addr $bcc_list \
+		-from_addr "$from_addr" \
+		-subject "$subject" \
+		-body "$content_body" \
+		-package_id $package_id \
+		-file_ids $file_ids \
+		-mime_type $mime_type \
+		-object_id $object_id \
+		-no_callback_p $no_callback_p \
+		-single_email
+
 	    # Link the file to all parties
 	    if {[exists_and_not_null revision_id]} {
 		application_data_link::new -this_object_id $revision_id -target_object_id $party_id
 	    }
-	}
-	
-	# Send the email to all CC in cc_list
-	foreach email_addr $cc_list {
-
-	    set name $email_addr
-	    set first_names [split $email_addr "@"]
-	    set last_name $first_names
-	    set date [lc_time_fmt [dt_sysdate] "%q"]
-	    set to $name
-	    set to_addr $email_addr
-	    lappend recipients_addr $to_addr
-	    set values [list]
-	    foreach element [list first_names last_name name date] {
-		lappend values [list "{$element}" [set $element]]
-	    }
-
-	    if {$contacts_p} {
-		set party_revision_id [contact::live_revision -party_id $party_id]
-		set locale [lang::user::site_wide_locale -user_id $party_id]
-		set salutation [ams::value -attribute_name "salutation" -object_id $party_revision_id -locale $locale]
-		if {![empty_string_p $salutation]} {
-		    lappend value [list "{salutation}" $salutation]
-		}
-	    }
-	    template::multirow append messages $message_type $to_addr $party_id [acs_mail_lite::message_interpolate -text $subject -values $values] [acs_mail_lite::message_interpolate -text $content_body -values $values] ""
 	    
-	}
-	
-	set to_list [list]
-	template::multirow foreach messages {
-	    
-	    lappend to_list [list $to_addr]
-	    
-	    if {[exists_and_not_null file_ids]} {
+	    lappend recipients "$to"
 
-		# do not use fixed sender
-		if { $use_sender_p } {
-
-		    # If the no_callback_p is set to "t" then no callback will be executed
-		    if { $no_callback_p } {
-
-			acs_mail_lite::complex_send \
-			    -to_addr $to_addr \
-			    -from_addr "$from_addr" \
-			    -subject "$subject" \
-			    -body "$content_body" \
-			    -package_id $package_id \
-			    -file_ids $file_ids \
-			    -mime_type $mime_type \
-			    -object_id $object_id \
-			    -no_callback \
-			    -use_sender
-
-		    } else {
-
-			acs_mail_lite::complex_send \
-			    -to_addr $to_addr \
-			    -from_addr "$from_addr" \
-			    -subject "$subject" \
-			    -body "$content_body" \
-			    -package_id $package_id \
-			    -file_ids $file_ids \
-			    -mime_type $mime_type \
-			    -object_id $object_id \
-			    -use_sender
-			
-		    }
-
-		} else {
-
-		    if { $no_callback_p } {
-
-			acs_mail_lite::complex_send \
-			    -to_addr $to_addr \
-			    -from_addr "$from_addr" \
-			    -subject "$subject" \
-			    -body "$content_body" \
-			    -package_id $package_id \
-			    -file_ids $file_ids \
-			    -mime_type $mime_type \
-			    -object_id $object_id \
-			    -no_callback
-
-		    } else {
-
-			acs_mail_lite::complex_send \
-			    -to_addr $to_addr \
-			    -from_addr "$from_addr" \
-			    -subject "$subject" \
-			    -body "$content_body" \
-			    -package_id $package_id \
-			    -file_ids $file_ids \
-			    -mime_type $mime_type \
-			    -object_id $object_id
-
-		    }
-		}
-
-	    } else {
-
-		# acs_mail_lite does not know about sending the
-		# correct mime types....
-		if {$mime_type == "text/html"} {
-
-		    # do not use fixed sender
-		    if { $use_sender_p } {
-
-			if { $no_callback_p } {
-			    # If the no_callback_p is set to "t" then no callback will be executed
-			    acs_mail_lite::complex_send \
-				-to_addr $to_addr \
-				-from_addr "$from_addr" \
-				-subject "$subject" \
-				-body "$content_body" \
-				-package_id $package_id \
-				-mime_type $mime_type \
-				-object_id $object_id \
-				-no_callback \
-				-use_sender
-
-			} else {
-			    
-			    acs_mail_lite::complex_send \
-				-to_addr $to_addr \
-				-from_addr "$from_addr" \
-				-subject "$subject" \
-				-body "$content_body" \
-				-package_id $package_id \
-				-mime_type $mime_type \
-				-object_id $object_id \
-				-use_sender
-			}
-
-		    } else {
-
-			if { $no_callback_p } {
-			    # If the no_callback_p is set to "t" then no callback will be executed
-			    acs_mail_lite::complex_send \
-				-to_addr $to_addr \
-				-from_addr "$from_addr" \
-				-subject "$subject" \
-				-body "$content_body" \
-				-package_id $package_id \
-				-mime_type $mime_type \
-				-object_id $object_id \
-				-no_callback
-
-			} else {
-			    
-			    acs_mail_lite::complex_send \
-				-to_addr $to_addr \
-				-from_addr "$from_addr" \
-				-subject "$subject" \
-				-body "$content_body" \
-				-package_id $package_id \
-				-mime_type $mime_type \
-				-object_id $object_id
-			    
-			}
-		    }
-		    
-		} else {
-		    
-		    if { [exists_and_not_null object_id] } {
-
-			# do not use fixed sender
-			if { $use_sender_p } {
-
-			    # If the no_callback_p is set to "t" then no callback will be executed
-			    if { $no_callback_p } {
-				acs_mail_lite::complex_send \
-				    -to_addr $to_addr \
-				    -from_addr "$from_addr" \
-				    -subject "$subject" \
-				    -body "$content_body" \
-				    -package_id $package_id \
-				    -mime_type "text/html" \
-				    -object_id $object_id \
-				    -no_callback \
-				    -use_sender
-			    } else {
-				
-				acs_mail_lite::complex_send \
-				    -to_addr $to_addr \
-				    -from_addr "$from_addr" \
-				    -subject "$subject" \
-				    -body "$content_body" \
-				    -package_id $package_id \
-				    -mime_type "text/html" \
-				    -object_id $object_id \
-				    -use_sender
-			    }
-
-			} else {
-
-			    # If the no_callback_p is set to "t" then no callback will be executed
-			    if { $no_callback_p } {
-				acs_mail_lite::complex_send \
-				    -to_addr $to_addr \
-				    -from_addr "$from_addr" \
-				    -subject "$subject" \
-				    -body "$content_body" \
-				    -package_id $package_id \
-				    -mime_type "text/html" \
-				    -object_id $object_id \
-				    -no_callback
-			    } else {
-				
-				acs_mail_lite::complex_send \
-				    -to_addr $to_addr \
-				    -from_addr "$from_addr" \
-				    -subject "$subject" \
-				    -body "$content_body" \
-				    -package_id $package_id \
-				    -mime_type "text/html" \
-				    -object_id $object_id
-			    }
-			}
-		    } else {
-			
-			if { $no_callback_p } {
-			    # If the no_callback_p is set to "t" then no callback will be executed
-			    acs_mail_lite::send \
-				-to_addr $to_addr \
-				-from_addr "$from_addr" \
-				-subject "$subject" \
-				-body "$content_body" \
-				-package_id $package_id \
-				-no_callback
-
-			} else {
-			    acs_mail_lite::send \
-				-to_addr $to_addr \
-				-from_addr "$from_addr" \
-				-subject "$subject" \
-				-body "$content_body" \
-				-package_id $package_id
-			}
-		    }
-		}
-	    }
-
-	    if { $contacts_p && ![empty_string_p $to_party_id] && ![empty_string_p $item_id]} {
-
-		contact::message::log \
-		    -message_type "email" \
-		    -sender_id $from \
-		    -recipient_id $to_party_id \
-		    -title $title \
-		    -description $subject \
-		    -content $content_body \
-		    -content_format "text/plain" \
-		    -item_id "$item_id"
-		
-		lappend recipients "<a href=\"[contact::url -party_id $to_party_id]\">$to</a>"
-
-	    } else {
-		lappend recipients "$to"
-	    }
 	}
 
-	set recipients [join $recipients_addr ", "]
+	if {$to eq ""} {
+	    acs_mail_lite::complex_send \
+		-cc_addr $cc_list \
+		-bcc_addr $bcc_list \
+		-from_addr "$from_addr" \
+		-subject "$subject" \
+		-body "$content_body" \
+		-package_id $package_id \
+		-file_ids $file_ids \
+		-mime_type $mime_type \
+		-object_id $object_id \
+		-no_callback_p $no_callback_p \
+		-single_email
+	}
+
         util_user_message -html -message "[_ acs-mail-lite.Your_message_was_sent_to]"
 	
     } -after_submit {

@@ -1166,10 +1166,29 @@ namespace eval acs_mail_lite {
 		}
 	    }
 	}
-	
-	foreach to_id [group::get_members -group_id $to_group_ids] {
-	    lappend to_party_ids $to_id
-	} 
+
+	# Run through the party_ids and check if a group is in there.
+	set new_to_party_ids [list]
+	foreach to_id $to_party_ids {
+	    if {[group::group_p -group_id $to_id]} {
+		lappend to_group_ids $to_id
+	    } else {
+		if {[lsearch $new_to_party_ids $to_id] < 0} {
+		    lappend new_to_party_ids $to_id
+		}
+	    }
+	}
+
+	foreach group_id $to_group_ids {
+	    foreach to_id [group::get_members -group_id $group_id] {
+		if {[lsearch $new_to_party_ids $to_id] < 0} {
+		    lappend new_to_party_ids $to_id
+		}
+	    } 
+	}
+
+	# New to party ids contains now the unique party_ids of members of the groups along with the parties
+	set to_party_ids $new_to_party_ids
 
 	# Now the Cc recipients
 	set cc_list [list]
@@ -1187,9 +1206,28 @@ namespace eval acs_mail_lite {
 	    }
 	}
 
-	foreach cc_id [group::get_members -group_id $cc_group_ids] {
-	    lappend cc_party_ids $cc_id
-	} 
+	# Run through the party_ids and check if a group is in there.
+	set new_cc_party_ids [list]
+	foreach cc_id $cc_party_ids {
+	    if {[group::group_p -group_id $cc_id]} {
+		lappend cc_group_ids $cc_id
+	    } else {
+		if {[lsearch $new_cc_party_ids $cc_id] < 0} {
+		    lappend new_cc_party_ids $cc_id
+		}
+	    }
+	}
+	    
+	foreach group_id $cc_group_ids {
+	    foreach cc_id [group::get_members -group_id $group_id] {
+		if {[lsearch $new_cc_party_ids $cc_id] < 0} {
+		    lappend new_cc_party_ids $cc_id
+		}
+	    } 
+	}
+
+	# New to party ids contains now the unique party_ids of members of the groups along with the parties
+	set cc_party_ids $new_cc_party_ids
 
 	# Now the Bcc recipients
 	set bcc_list [list]
@@ -1207,9 +1245,28 @@ namespace eval acs_mail_lite {
 	    }
 	}
 
-	foreach bcc_id [group::get_members -group_id $bcc_group_ids] {
-	    lappend bcc_party_ids $bcc_id
-	} 
+	# Run through the party_ids and check if a group is in there.
+	set new_bcc_party_ids [list]
+	foreach bcc_id $bcc_party_ids {
+	    if {[group::group_p -group_id $bcc_id]} {
+		lappend bcc_group_ids $bcc_id
+	    } else {
+		if {[lsearch $new_bcc_party_ids $bcc_id] < 0} {
+		    lappend new_bcc_party_ids $bcc_id
+		}
+	    }
+	}
+	    
+	foreach group_id $bcc_group_ids {
+	    foreach bcc_id [group::get_members -group_id $group_id] {
+		if {[lsearch $new_bcc_party_ids $bcc_id] < 0} {
+		    lappend new_bcc_party_ids $bcc_id
+		}
+	    } 
+	}
+
+	# New to party ids contains now the unique party_ids of members of the groups along with the parties
+	set bcc_party_ids $new_bcc_party_ids
 
 	# Rollout support (see above for details)
 	
@@ -1248,7 +1305,7 @@ namespace eval acs_mail_lite {
 		foreach party $bcc_party_ids {
 		    lappend bcc_list "[party::name -party_id $party] <[party::email -party_id $party]>"
 		}
-
+		
 		smtp::sendmessage $multi_token \
 		    -header [list From "$from_string"] \
 		    -header [list To "[join $to_list ","]"] \
