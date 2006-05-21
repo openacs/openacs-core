@@ -12,7 +12,6 @@
 
 <if @self_registration@ true>
 
-<p />
 <if @register_url@ not nil>
   <a href="@register_url@">#acs-subsite.Register#</a>
 </if>
