@@ -707,3 +707,25 @@ ad_proc -private group::title_not_cached {
 } {
     return [group::get_element -group_id $group_id -element "title"]
 }
+
+ad_proc -private group::group_p {
+    {-group_id ""}
+} {
+    Get the title of a group, not cached
+
+    @param group_id The group_id of the group
+} {
+    return [util_memoize [list group::group_p_not_cached -group_id $group_id]]
+}
+
+
+ad_proc -private group::group_p_not_cached {
+    {-group_id ""}
+} {
+    Get the title of a group, not cached
+
+    @param group_id The group_id of the group
+} {
+    return [db_string group "select 1 from groups where group_id = :group_id" -default 0]
+}
+
