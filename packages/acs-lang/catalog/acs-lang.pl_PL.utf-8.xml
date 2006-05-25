@@ -14,6 +14,8 @@
   <msg key="localization-d_t_fmt">%d %B %Y %T %Z</msg>
   <msg key="localization-day">{Niedziela} {Poniedziałek} {Wtorek} {Środa} {Czwartek} {Piątek} {Sobota}</msg>
   <msg key="localization-decimal_point">,</msg>
+  <msg key="localization-formbuilder_date_format">MIESIĄC DD RRRR</msg>
+  <msg key="localization-formbuilder_time_format">GG12:MI PP</msg>
   <msg key="localization-frac_digits">2</msg>
   <msg key="localization-grouping">3 3 </msg>
   <msg key="localization-int_curr_symbol">PLN </msg>
@@ -30,9 +32,13 @@
   <msg key="localization-p_sep_by_space">0</msg>
   <msg key="localization-p_sign_posn">1</msg>
   <msg key="localization-pm_str"></msg>
-  <msg key="localization-positive_sign"></msg>
+  <msg key="localization-positive_sign">+</msg>
   <msg key="localization-t_fmt">%T</msg>
   <msg key="localization-thousands_sep">&amp;nbsp;</msg>
+  <msg key="Resolve_message_conflicts">Rozwiąż konflikty komunikatów</msg>
   <msg key="Spanish">Hiszpański</msg>
   <msg key="this-language">Angielski</msg>
+  <msg key="Translated_messages_on_this_page">Przetłumaczone teksty na tej stronie (%locale%)</msg>
+  <msg key="Your_timezone">Twoja Strefa Czasowa
+</msg>
 </message_catalog>

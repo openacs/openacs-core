@@ -81,4 +81,5 @@
   <msg key="member_state_needs_approval">onay gerekli</msg>
   <msg key="member_state_Rejected">Reddedildi</msg>
   <msg key="member_state_rejected">reddedildi</msg>
+  <msg key="Visitor">Ziyaretçi</msg>
 </message_catalog>

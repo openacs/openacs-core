@@ -6,10 +6,13 @@
   <msg key="CSV">CSV</msg>
   <msg key="data">gegevens</msg>
   <msg key="Day">Dag</msg>
+  <msg key="day">dag</msg>
   <msg key="Element_is_required">%label% is verplicht</msg>
   <msg key="Element_is_too_long_Plural">%label% is %excess_no_bytes% karakters te lang.</msg>
   <msg key="Element_is_too_long_Singular">%label% is één karakter te lang.</msg>
   <msg key="Formats">Indelingen</msg>
+  <msg key="hours">uren</msg>
+  <msg key="Hours_must_be_between_0_and_23">Uren moeten tussen 0 en 23 liggen.</msg>
   <msg key="HTMLArea_action_cancel">Annuleren</msg>
   <msg key="HTMLArea_ImageAlignment">Uitlijning</msg>
   <msg key="HTMLArea_ImageAlignmentBottom">Bodem</msg>
@@ -55,10 +58,18 @@
   <msg key="Invalid_url">Ongeldige url</msg>
   <msg key="lt_Checkuncheck_all_rows">Selecteer/deselecteer alle rijen</msg>
   <msg key="lt_Checkuncheck_this_row">Selecteer/deselecteer deze rij en kies hieronder een aktie om uit te voeren</msg>
+  <msg key="lt_Dates_must_be_formatted_">Datum moet ingegeven worden volgens: %format%</msg>
+  <msg key="lt_day_between_for_month_pretty">De dag moet tussen 1 en %maxdays% liggen voor de maand %month_pretty%.</msg>
+  <msg key="lt_No_value_supplied_for_-field_pretty-">Geen waarde opgegeven voor %field_pretty%</msg>
+  <msg key="lt_The_-field_pretty-_must_be_non_negative">De %field_pretty% moet een niet-negatieve integer zijn.</msg>
   <msg key="lt_When_specifying_a_non">Indien u een page_size ongelijk aan nul opgeeft, dan moet u ook page_query of page_query_name opgeven</msg>
   <msg key="Meridian">Meridiaan</msg>
   <msg key="Minutes">Minuten</msg>
+  <msg key="minutes">minuten</msg>
+  <msg key="Minutes_must_be_between_0_and_59">Minuten moeten liggen tussen 0 en 59.</msg>
   <msg key="Month">Maand</msg>
+  <msg key="month">maand</msg>
+  <msg key="Month_must_be_between_1_and_12">Maand moet tussen 1 en 12 liggen</msg>
   <msg key="Next_with_arrow">Volgende &gt;&gt;</msg>
   <msg key="No_row_pretty_plural">Geen %row_pretty_plural% beschikbaar</msg>
   <msg key="Page">Pagina</msg>
@@ -66,10 +77,14 @@
   <msg key="Previous_with_arrow">&lt;&lt; Vorige</msg>
   <msg key="required">verplicht</msg>
   <msg key="Seconds">Seconden</msg>
+  <msg key="seconds">seconden</msg>
+  <msg key="Seconds_must_be_between_0_and_59">Seconden moeten tussen 0 en 59 liggen</msg>
   <msg key="Sort_order">Sortering</msg>
   <msg key="Spellcheck">Spellingscontrole</msg>
   <msg key="Table">Tabel</msg>
   <msg key="Tag_handler_invalid_number_of_args">Ongeldig aantal argumenten meegegeven aan de afhandelingsroutine voor deze tag.</msg>
   <msg key="Template_parser_error_in_parameter_list">Fout in parameterlijst</msg>
   <msg key="Year">Jaar</msg>
+  <msg key="year">jaar</msg>
+  <msg key="Year_must_be_positive">Jaar moet positief zijn</msg>
 </message_catalog>

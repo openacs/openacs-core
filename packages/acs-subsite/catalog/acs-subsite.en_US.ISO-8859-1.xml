@@ -212,6 +212,8 @@ Please visit the following link to change your password now:
 		&lt;/if&gt;
 		&lt;if @nodes.parameters_url@ ne &quot;&quot;&gt;
 		  &lt;a href=&quot;@nodes.parameters_url@&quot;&gt;&lt;#_ parameters</msg>
+  <description key="lt_deleteaifif_nodespara">Something went horribly wrong here!</description>
+
   <msg key="lt_Do_not_inherit_from_p">Do not inherit from %parent_object_name%</msg>
   <msg key="lt_Edit_comment_for_the_">Edit comment for the portrait of %first_names% %last_name%</msg>
   <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) registered as a user of 

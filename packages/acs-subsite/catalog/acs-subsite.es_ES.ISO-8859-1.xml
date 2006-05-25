@@ -89,7 +89,7 @@
   <msg key="edit_comment">editar comentario</msg>
   <msg key="Edit_Options">Opciones</msg>
   <msg key="Elements_not_editable">Algunos elementos no pueden ser editados ya que están siendo administrados por %authority_name%.</msg>
-  <msg key="Email">correo electrónico</msg>
+  <msg key="Email">Correo electrónico</msg>
   <msg key="email_as_a_form">Permitir contactarme mediante una forma</msg>
   <msg key="email_as_a_form_admin">Permitir contacto mediante una forma</msg>
   <msg key="email_as_image">Mostrar mi correo electrónico como una imagen</msg>
@@ -277,7 +277,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="or_the">o desde</msg>
   <msg key="Parameters">Parámetros</msg>
   <msg key="parameters">parámetros</msg>
-  <msg key="Password">Contraseña:</msg>
+  <msg key="Password">Contraseña</msg>
   <msg key="Password_changed_body">Su información en %system_name%: %account_id_label%: %account_id% Su contraseña para esta cuenta ha sido modificiada. No necesita hacer nada, se le envía este correo para proteger la seguridad de su cuenta. --------------- Puede cambiar su contraseña siguiendo los siguientes pasos: 1. Entre en %system_name% 2. Haga click en el enlace &quot;%pvt_home_name%&quot; 3. Escoja &quot;%password_update_link_text%&quot;</msg>
   <msg key="Password_changed_subject">Contraseña modificada</msg>
   <msg key="Password_regular_change_now">su contraseña debe ser cambiada regularmente. Por favor cambie su contraseña ahora.</msg>
