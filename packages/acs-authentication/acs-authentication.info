@@ -7,17 +7,17 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.2.3b2" url="http://openacs.org/repository/download/apm/acs-authentication-5.2.3b2.apm">
+    <version name="5.2.3" url="http://openacs.org/repository/download/apm/acs-authentication-5.2.3.apm">
         <owner url="mailto:lars@collaboraid.biz">Lars Pind</owner>
         <summary>Authentication, account management, and related functionality.</summary>
-        <release-date>2006-05-03</release-date>
+        <release-date>2006-05-25</release-date>
         <maturity>3</maturity>
         <vendor url="http://www.collaboraid.biz">Collaboraid</vendor>
         <maturity>3</maturity>
         <license url="http://www.gnu.org/copyleft/gpl.html">GPL version 2</license>
         <description format="text/html">Implements authentication-related security functions for OpenACS, including password, account and session management, bulk account creation etc.  Provides a contract based interface for different authentication methods such as PAM or LDAP based authentication.</description>
 
-        <provides url="acs-authentication" version="5.2.3b2"/>
+        <provides url="acs-authentication" version="5.2.3"/>
         <requires url="acs-kernel" version="5.2.3b1"/>
         <requires url="acs-service-contract" version="5.2.3b1"/>
 

@@ -10,7 +10,7 @@
     <version name="5.2.3b3" url="http://openacs.org/repository/download/apm/acs-templating-5.2.3b3.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Templating library.</summary>
-        <release-date>2006-05-03</release-date>
+        <release-date>2006-05-25</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">The templating system provides the tag library and support routines
 that allow developers and graphic designers to work
