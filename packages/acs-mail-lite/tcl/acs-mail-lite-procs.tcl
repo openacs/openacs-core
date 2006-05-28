@@ -1105,11 +1105,11 @@ namespace eval acs_mail_lite {
 	# encode all attachments in base64
     
 	set tokens [list $message_token]
+	set item_ids [list]
 
 	if {[exists_and_not_null file_ids]} {
 
 	    # Check if we are dealing with revisions or items.
-	    set item_ids [list]
 	    foreach file_id $file_ids {
 		set item_id [content::revision::item_id -revision_id $file_id]
 		if {[string eq "" $item_id]} {
