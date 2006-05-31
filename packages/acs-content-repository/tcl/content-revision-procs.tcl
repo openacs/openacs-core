@@ -28,6 +28,8 @@ ad_proc -public ::content::revision::new {
     {-package_id}
     {-attributes}
     {-is_live "f"}
+    {-tmp_filename ""}
+    {-storage_type ""}
 } {
     Adds a new revision of a content item. If content_type is not
     passed in, we determine it from the content item. This is needed
@@ -60,11 +62,12 @@ ad_proc -public ::content::revision::new {
     @param creation_user
 
     @param creation_ip
+ 
+    @param package_id Package_id content belongs to
 
-    @param package_id
+    @param is_live True is revision should be set live
 
-    @param is_live
-
+    @param tmp_filename file containing content to be added to revision
     @param attributes A list of lists of pairs of additional attributes and
     their values to pass to the constructor. Each pair is a list of two
      elements: key => value such as
@@ -85,6 +88,9 @@ ad_proc -public ::content::revision::new {
 
     if {![exists_and_not_null content_type]} {
 	set content_type [::content::item::content_type -item_id $item_id]
+    }
+    if {![exists_and_not_null storage_type]} {
+	set storage_type [db_string get_storage_type ""]
     }
     if {![info exists package_id]} {
         set package_id [ad_conn package_id]
@@ -135,9 +141,13 @@ DB -----------------------------------------------------------------------------
 	    set revision_id [db_nextval "acs_object_id_seq"]
 	}
         db_dml insert_revision $query_text
-        update_content \
+        ::content::revision::update_content \
+	    -item_id $item_id \
             -revision_id $revision_id \
-            -content $content
+            -content $content \
+	    -tmp_filename $tmp_filename \
+	    -storage_type $storage_type \
+	    -mime_type $mime_type
     }
     if {[string is true $is_live]} {
         content::item::set_live_revision -revision_id $revision_id
@@ -145,14 +155,23 @@ DB -----------------------------------------------------------------------------
     return $revision_id
 }
 
-ad_proc -public content::revision::update_content {
+ad_proc -public ::content::revision::update_content {
+    -item_id
     -revision_id
     -content
+    -storage_type
+    -mime_type 
+    {-tmp_filename ""}
+    
 } {
     
     Update content column seperately. Oracle does not allow insert
     into a BLOB.
     
+    This assumes that if storage type is lob and no file is specified
+    that the content is really text and store it in the text column
+    in PostgreSQL
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2005-02-09
     
@@ -164,7 +183,37 @@ ad_proc -public content::revision::update_content {
     
     @error 
 } {
-    db_dml update_content "" -blobs [list $content]
+
+     switch $storage_type {
+	file {
+	    if {$tmp_filename eq ""} {
+		set tmp_filename [ns_mktemp /tmp/XXXXXX]
+		set fd [open $tmp_filename w]
+		puts $fd $content
+		close $fd
+	    }
+	    set tmp_size [file size $tmp_filename]
+	    set filename [cr_create_content_file $item_id $revision_id $tmp_filename]
+	    db_dml set_file_content ""
+	}
+	lob {
+	    if {$tmp_filename ne ""} {
+		# handle file
+		set filename [cr_create_content_file $item_id $revision_id $tmp_filename]		
+	        db_dml set_lob_content "" -blob_files [list $tmp_filename]
+	        db_dml set_lob_size ""
+	    } else {
+		# handle blob
+		db_dml update_content "" -blobs [list $content]
+	    }
+	}
+	default {
+		# HAM : 112505
+		# I added a default switch because in some cases
+		#   storage type is text and revision is not being updated
+		db_dml update_content "" -blobs [list $content]
+	}
+    }
 }
 
 ad_proc -public content::revision::content_copy {
@@ -296,6 +345,17 @@ ad_proc -public content::revision::is_live {
     return [package_exec_plsql -var_list [list \
         [list revision_id $revision_id ] \
     ] content_revision is_live]
+}
+
+
+ad_proc -public content::revision::item_id {
+    -revision_id:required
+} {
+    @param revision_id
+
+    @return item_id
+} {
+    return [db_string item_id {} -default ""]
 }
 
 

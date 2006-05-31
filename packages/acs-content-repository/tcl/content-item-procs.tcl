@@ -32,6 +32,7 @@ ad_proc -public ::content::item::new {
     {-is_live ""}
     {-storage_type "file"}
     {-attributes ""}
+    {-tmp_filename ""}
 } {
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-05-28
@@ -59,6 +60,7 @@ ad_proc -public ::content::item::new {
     @param title - title of content_revision to be created
     @param description of content_revision to be created
     @param text - text of content revision to be created
+    @param tmp_filename file containing content to be added to new revision
     @param attributes - A list of lists ofpairs of additional attributes and
     their values to pass to the constructor. Each pair is a list of two
      elements: key => value such as
@@ -106,7 +108,7 @@ ad_proc -public ::content::item::new {
     # the content type is not the object type of the cr_item so we pass in
     # the cr_item subtype here and content_type as part of
     # var_list
-
+    db_transaction {
     set item_id [package_exec_plsql \
 		     -var_list $var_list \
 		     content_item new]
@@ -130,9 +132,10 @@ ad_proc -public ::content::item::new {
             -content_type $content_type \
             -is_live $is_live \
 	    -package_id $package_id \
+	    -tmp_filename $tmp_filename \
             -attributes $attributes
     }
-    
+    }    
     return $item_id
 
 }
@@ -268,7 +271,7 @@ ad_proc -public ::content::item::update {
 
 	# we have valid attributes, update them
 
-	set query_text "update cr_items set ${update_text}"
+	set query_text "update cr_items set ${update_text} where item_id=:item_id"
 	db_dml item_update $query_text
     }
 }
