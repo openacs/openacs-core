@@ -432,7 +432,7 @@ is
     supertype		in acs_object_types.supertype%TYPE
 			   default 'acs_object',
     table_name		in acs_object_types.table_name%TYPE default null,
-    id_column		in acs_object_types.id_column%TYPE default default null,
+    id_column		in acs_object_types.id_column%TYPE default null,
     package_name	in acs_object_types.package_name%TYPE default null,
     abstract_p		in acs_object_types.abstract_p%TYPE default 'f',
     type_extension_table in acs_object_types.type_extension_table%TYPE
