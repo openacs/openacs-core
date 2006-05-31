@@ -208,6 +208,28 @@ aa_register_case content_item {
             #########################################################
             #TODO
 
+
+            #########################################################
+            # new from tmpfile
+            #########################################################            
+            set tmp_item_name [ns_mktemp "__content_item_test_XXXXXX"] 
+            set tmp_item_id [content::item::new \
+                                 -name $tmp_item_name \
+                                 -title $tmp_item_name \
+                                 -parent_id $first_folder_id \
+                                 -tmp_filename [acs_root_dir]/packages/acs-content-repository/tcl/test/test.html]
+
+            aa_true "Tmp_filename added cr_item exists" \
+                [expr {[content::item::get_id \
+                            -item_path $tmp_item_name \
+                            -root_folder_id $first_folder_id] \
+                           eq $tmp_item_id}]
+
+             latest_revision from cr_items where
+             item_id=:tmp_item_id" -default ""]' "
+            aa_true "Tmp_filename added cr_revision exists" \
+                [expr {[content::item::get_latest_revision \
+                            -item_id $tmp_item_id] ne ""}]
             #########################################################
             # delete first folder and everything in it to clean up
             #########################################################
