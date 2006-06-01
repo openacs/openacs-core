@@ -1295,17 +1295,17 @@ namespace eval acs_mail_lite {
 
 		# Append the entries from the system users to the e-mail
 		foreach party $to_party_ids {
-		    lappend to_list "[party::name -party_id $party] <[party::email -party_id $party]>"
+		    lappend to_list "\"[party::name -party_id $party]\" <[party::email -party_id $party]>"
 		}
 		
 		foreach party $cc_party_ids {
-		    lappend cc_list "[party::name -party_id $party] <[party::email -party_id $party]>"
+		    lappend cc_list "\"[party::name -party_id $party]\" <[party::email -party_id $party]>"
 		}
 		
 		foreach party $bcc_party_ids {
-		    lappend bcc_list "[party::name -party_id $party] <[party::email -party_id $party]>"
+		    lappend bcc_list "\"[party::name -party_id $party]\" <[party::email -party_id $party]>"
 		}
-		
+
 		smtp::sendmessage $multi_token \
 		    -header [list From "$from_string"] \
 		    -header [list To "[join $to_list ","]"] \
@@ -1374,7 +1374,7 @@ namespace eval acs_mail_lite {
 		set recipient_list [concat $to_party_ids $cc_party_ids $bcc_party_ids]
 		foreach party $recipient_list {
 		    set message_id [mime::uniqueID]
-		    set email "[party::name -party_id $party] <[party::email -party_id $party]>"
+		    set email "\"[party::name -party_id $party]\" <[party::email -party_id $party]>"
 
 		    smtp::sendmessage $multi_token \
 			-header [list From "$from_string"] \
