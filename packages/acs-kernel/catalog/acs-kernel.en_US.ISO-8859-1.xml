@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.2.3b2" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.2.3" locale="en_US" charset="ISO-8859-1">
 
   <msg key="Administrator">Administrator</msg>
   <msg key="Administrators">Administrators</msg>
@@ -92,6 +92,8 @@
   <msg key="Email_Address">Email Address</msg>
   <msg key="First_Names">First Names</msg>
   <msg key="Group">Group</msg>
+  <msg key="Group_name">Group Name</msg>
+  <msg key="Groups">Groups</msg>
   <msg key="Last_Name">Last Name</msg>
   <msg key="lt_Administrator_Relatio">Administrator Relationship</msg>
   <msg key="lt_Main_Site_Administrat">Main Site Administrators</msg>
