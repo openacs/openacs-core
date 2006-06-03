@@ -5,13 +5,7 @@
 # @arch-tag: 48fe00a8-a527-4848-b5de-0f76dfb60291
 # @cvs-id $Id$
 
-foreach required_param {party_ids} {
-    if {![info exists $required_param]} {
-	return -code error "$required_param is a required parameter."
-    }
-}
-
-foreach optional_param {return_url content export_vars file_ids object_id cc item_id bcc} {
+foreach optional_param {party_ids return_url content export_vars file_ids object_id cc item_id bcc to_addr to} {
     if {![info exists $optional_param]} {
 	set $optional_param {}
     }
@@ -56,6 +50,7 @@ foreach party_id $party_ids {
 
 # The element check_uncheck only calls a javascript function
 # to check or uncheck all recipients
+
 set recipients_num [llength $recipients]
 if { $recipients_num <= 1 } {
     set form_elements {
@@ -66,12 +61,28 @@ if { $recipients_num <= 1 } {
 	use_sender_p:text(hidden)
 	title:text(hidden),optional
 	{message_type:text(hidden) {value "email"}}
-	{to:text(checkbox),multiple,optional
-	    {label "[_ acs-mail-lite.Recipients]"} 
-	    {options  $recipients }
-	    {html {checked 1}}
-	    {section "[_ acs-mail-lite.Recipients]"}
-	}
+    }
+
+    if {$recipients_num == 1} {
+	append form_elements {
+	    {to:text(checkbox),multiple,optional
+		{label "[_ acs-mail-lite.Recipients]"} 
+		{options  $recipients }
+		{html {checked 1}}
+		{section "[_ acs-mail-lite.Recipients]"}
+	    }
+	} 
+    } else {
+	append form_elements {
+	    {to_addr:text(text),optional
+		{label "[_ acs-mail-lite.Recipients]:"} 
+		{html {size 56}}
+		{help_text "[_ acs-mail-lite.cc_help]"}
+	    }
+	} 
+    } 
+
+    append form_elements {
 	{cc:text(text),optional
 	    {label "[_ acs-mail-lite.CC]:"} 
 	    {html {size 56}}
@@ -241,9 +252,11 @@ ad_form -action $action \
 	set from_addr [cc_email_from_party $from]
 
 	# Remove all spaces in cc and bcc
+	regsub -all " " $to_addr "" to_addr
 	regsub -all " " $cc "" cc
 	regsub -all " " $bcc "" bcc
 
+	set to_list [split $to_addr ";"]
 	set cc_list [split $cc ";"]
 	set bcc_list [split $bcc ";"]
 
@@ -308,6 +321,7 @@ ad_form -action $action \
 	    set content_body [contact::message::interpolate -text $content_body -values $values]
 	    acs_mail_lite::complex_send \
 		-to_party_ids $party_id \
+		-to_addr $to_list \
 		-cc_addr $cc_list \
 		-bcc_addr $bcc_list \
 		-from_addr "$from_addr" \
@@ -331,6 +345,7 @@ ad_form -action $action \
 
 	if {$to eq ""} {
 	    acs_mail_lite::complex_send \
+		-to_addr $to_list \
 		-cc_addr $cc_list \
 		-bcc_addr $bcc_list \
 		-from_addr "$from_addr" \
