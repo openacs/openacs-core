@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Using PSGML mode in Emacs</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="doc-standards.html" title="Chapter 15. Documentation Standards"><link rel="previous" href="docbook-primer.html" title="OpenACS Documentation Guide"><link rel="next" href="nxml-mode.html" title="Using nXML mode in Emacs"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="docbook-primer.html">Prev</a> </td><th width="60%" align="center">Chapter 15. Documentation Standards</th><td width="20%" align="right"> <a accesskey="n" href="nxml-mode.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="psgml-mode"></a>Using PSGML mode in Emacs</h2></div></div><div></div></div><div class="authorblurb"><p>By David Lutterkort</p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Using PSGML mode in Emacs</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="doc-standards.html" title="Chapter 15. Documentation Standards"><link rel="previous" href="docbook-primer.html" title="OpenACS Documentation Guide"><link rel="next" href="nxml-mode.html" title="Using nXML mode in Emacs"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="docbook-primer.html">Prev</a> </td><th width="60%" align="center">Chapter 15. Documentation Standards</th><td width="20%" align="right"> <a accesskey="n" href="nxml-mode.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="psgml-mode"></a>Using PSGML mode in Emacs</h2></div></div><div></div></div><div class="authorblurb"><p>By David Lutterkort</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><p>Note: <tt class="computeroutput">nxml</tt> mode replaces and/or complements psgml mode.  <a href="http://www.xmlhack.com/read.php?item=2061" target="_top">More information</a>.</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="psgml-mode-whatisit"></a>What it is</h3></div></div><div></div></div><p>PSGML Mode is a mode for editing, umm, SGML and XML documents in emacs. It
@@ -23,7 +24,7 @@ zip archive from <a href="http://docbook.org/" target="_top">docbook.org</a></p>
    
 </pre></li><li><p>Create a file with the name <tt class="computeroutput">CATALOG</tt> in the <tt class="computeroutput">dtd</tt>
 directory and put the line </p><pre class="programlisting">
-      CATALOG "docbook-xml/docbook.cat"
+      CATALOG &quot;docbook-xml/docbook.cat&quot;
 </pre><p>
 in it. By maintaining your own <tt class="computeroutput">CATALOG</tt>, it is easy to add more
 DTD's without changing your emacs settings. (<span class="emphasis"><em>How about that HTML 4.01 DTD you
@@ -32,18 +33,18 @@ DTD is in the zip archives and tarballs available on the site.</em></span>)</p><
 that funky <tt class="computeroutput">CATALOG</tt></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="psgml-mode-tell-emacs"></a>What to tell emacs</h3></div></div><div></div></div><p>If you installed PSGML mode in a non-standard location, e.g., somewhere in
 your home directory, you need to add this to the <tt class="computeroutput">load-path</tt> by adding
 this line to your <tt class="computeroutput">.emacs</tt> file:</p><pre class="programlisting">
-      (add-to-list 'load-path "/some/dir/that/contains/psgml.elc")
+      (add-to-list 'load-path &quot;/some/dir/that/contains/psgml.elc&quot;)
    
 </pre><p>To let PSGML mode find your <tt class="computeroutput">CATALOG</tt> and to enable PSGML mode for
 all your editing, add these lines to your <tt class="computeroutput">.emacs</tt>:</p><pre class="programlisting">
       (require 'psgml)
 
-      (add-to-list 'auto-mode-alist '("\\.html" . sgml-mode))
-      (add-to-list 'auto-mode-alist '("\\.adp" . xml-mode))
-      (add-to-list 'auto-mode-alist '("\\.xml" . xml-mode))
-      (add-to-list 'auto-mode-alist '("\\.xsl" . xml-mode))
+      (add-to-list 'auto-mode-alist '(&quot;\\.html&quot; . sgml-mode))
+      (add-to-list 'auto-mode-alist '(&quot;\\.adp&quot; . xml-mode))
+      (add-to-list 'auto-mode-alist '(&quot;\\.xml&quot; . xml-mode))
+      (add-to-list 'auto-mode-alist '(&quot;\\.xsl&quot; . xml-mode))
       
-      (add-to-list 'sgml-catalog-files "/path/to/your/dtd/CATALOG")
+      (add-to-list 'sgml-catalog-files &quot;/path/to/your/dtd/CATALOG&quot;)
    
 </pre><p>If you want font-locking and indentation, you can also add these lines
 into the <tt class="computeroutput">.emacs</tt> file:</p><pre class="programlisting">
@@ -58,21 +59,21 @@ into the <tt class="computeroutput">.emacs</tt> file:</p><pre class="programlist
       (setq sgml-set-face t)
       (setq-default sgml-indent-data t)
       ;; Some convenient key definitions:
-      (define-key sgml-mode-map "\C-c\C-x\C-e" 'sgml-describe-element-type)
-      (define-key sgml-mode-map "\C-c\C-x\C-i" 'sgml-general-dtd-info)
-      (define-key sgml-mode-map "\C-c\C-x\C-t" 'sgml-describe-entity)
+      (define-key sgml-mode-map &quot;\C-c\C-x\C-e&quot; 'sgml-describe-element-type)
+      (define-key sgml-mode-map &quot;\C-c\C-x\C-i&quot; 'sgml-general-dtd-info)
+      (define-key sgml-mode-map &quot;\C-c\C-x\C-t&quot; 'sgml-describe-entity)
    
 </pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="psgml-mode-doctype"></a>What is a <tt class="computeroutput">DOCTYPE</tt> ?</h3></div></div><div></div></div><p>All SGML and XML documents that should conform to a DTD have to declare a
 doctype. For the docbook XML, all your <tt class="computeroutput">.xml</tt> files whould start with
 the line</p><pre class="programlisting">
-      &lt;!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "docbookx.dtd"&gt;
+      &lt;!DOCTYPE book PUBLIC &quot;-//OASIS//DTD DocBook XML V4.1.2//EN&quot; &quot;docbookx.dtd&quot;&gt;
    
 </pre><p>If your document is only part of a larger XML document, you can tell PSGML
 mode about it by <span class="emphasis"><em>appending</em></span> the following lines to your file. In this
 case, do <span class="emphasis"><em>not</em></span> include a DOCTYPE declaration in your file.</p><pre class="programlisting">
       &lt;!--
        Local Variables:
-       sgml-parent-document: ("top.xml" "book" "sect1")
+       sgml-parent-document: (&quot;top.xml&quot; &quot;book&quot; &quot;sect1&quot;)
        End:
       --&gt;
    
@@ -82,4 +83,4 @@ current document is a <tt class="computeroutput">book</tt> and that the current 
 element is a <tt class="computeroutput">sect1</tt>.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="psgml-mode-usage"></a>How to use it</h3></div></div><div></div></div><p>Of course, you should read the emacs texinfo pages that come with PSGML
 mode from start to finish. Barring that, here are some handy commands:</p><div class="informaltable"><table cellspacing="0" border="0"><colgroup><col><col></colgroup><thead><tr><th>Key</th><th>Command</th></tr></thead><tbody><tr><td><tt class="computeroutput">C-c C-e</tt></td><td>Insert an element. Uses completion and only lets you insert elements that
 are valid</td></tr><tr><td><tt class="computeroutput">C-c C-a</tt></td><td>Edit attributes of enclosing element.</td></tr><tr><td><tt class="computeroutput">C-c C-x C-i</tt></td><td>Show information about the document's DTD.</td></tr><tr><td><tt class="computeroutput">C-c C-x C-e</tt></td><td>Describe element. Shows for one element which elements can be parents,
-what its contents can be and lists its attributes.</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="psgml-mode-reading"></a>Further reading</h3></div></div><div></div></div><p>Start with the <a href="docbook-primer.html" title="OpenACS Documentation Guide">the section called &#8220;OpenACS Documentation Guide&#8221;</a></p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="docbook-primer.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="nxml-mode.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS Documentation Guide </td><td width="20%" align="center"><a accesskey="u" href="doc-standards.html">Up</a></td><td width="40%" align="right"> Using nXML mode in Emacs</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/psgml-mode.html#comments">View comments on this page at openacs.org</a></center></body></html>
+what its contents can be and lists its attributes.</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="psgml-mode-reading"></a>Further reading</h3></div></div><div></div></div><p>Start with the <a href="docbook-primer.html" title="OpenACS Documentation Guide">Section , &#8220;OpenACS Documentation Guide&#8221;</a></p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="docbook-primer.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="nxml-mode.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS Documentation Guide </td><td width="20%" align="center"><a accesskey="u" href="doc-standards.html">Up</a></td><td width="40%" align="right"> Using nXML mode in Emacs</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/psgml-mode.html#comments">View comments on this page at openacs.org</a></center></body></html>

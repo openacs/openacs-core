@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Security Design</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 17. Kernel Documentation"><link rel="previous" href="security-requirements.html" title="Security Requirements"><link rel="next" href="security-notes.html" title="Security Notes"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="security-requirements.html">Prev</a> </td><th width="60%" align="center">Chapter 17. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="security-notes.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="security-design"></a>Security Design</h2></div></div><div></div></div><div class="authorblurb"><p>By Richard Li and Archit Shah</p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Security Design</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 17. Kernel Documentation"><link rel="previous" href="security-requirements.html" title="Security Requirements"><link rel="next" href="security-notes.html" title="Security Notes"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="security-requirements.html">Prev</a> </td><th width="60%" align="center">Chapter 17. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="security-notes.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="security-design"></a>Security Design</h2></div></div><div></div></div><div class="authorblurb"><p>By Richard Li and Archit Shah</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="security-design-essentials"></a>Essentials</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="security-requirements.html">OpenACS 4 Security Requirements</a></p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="security-design-intro"></a>Introduction</h3></div></div><div></div></div><p>
@@ -57,7 +58,7 @@ authentication. If the <tt class="computeroutput">ad_session_id</tt> cookie is v
 user_id and session_id are pulled from it and put into ad_conn.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="secure-connections"></a>Authenticating Secure Connections</h4></div></div><div></div></div><p>Secure connections are authenticated slightly differently. The function
 <tt class="computeroutput">ad_secure_conn_p</tt> is used to determine whether or not the URL
 being accessed is requires a secure login. The function simply checks if the
-location begins with "https". (This is safe because the location is
+location begins with &quot;https&quot;. (This is safe because the location is
 set during the server initialization.)</p><p>If secure authentication is required, the <tt class="computeroutput">ad_secure_token</tt>
 cookie is checked to make sure its data matches the data stored in
 <tt class="computeroutput">ad_session_id</tt>. This is true for all pages except those that are
@@ -79,7 +80,7 @@ then it updates the current session to reflect the new user_id. The
 manipulation of the permanent login cookies is based on 3 factors:</p><div class="itemizedlist"><ul type="disc"><li><p>previous login: other user, same user</p></li><li><p>permanent: was a permanent login requested?</p></li><li><p>secure: is this a secure connection?</p></li></ul></div><p>
 Both the secure and insecure permanent login cookie can have one of three
 actions taken on it: 
-</p><div class="itemizedlist"><ul type="disc"><li><p>set: cookie with no expiration is set</p></li><li><p>delete: set to "" with max age of 0, so it is expired
+</p><div class="itemizedlist"><ul type="disc"><li><p>set: cookie with no expiration is set</p></li><li><p>delete: set to &quot;&quot; with max age of 0, so it is expired
 immediately</p></li><li><p>nothing: if the cookie is present, it remains</p></li></ul></div><p>
 The current state of the permanent login cookies is not taken into account
 when determining the appropriate action. 
@@ -185,12 +186,12 @@ value and the signature. In addition to the expiration of the digital
 signature, RFC 2109 specifies an optional max age that is returned to the
 client. For most cookies, this max age matches the expiration date of the
 cookie's signature. The standard specifies that when the max age is not
-included, the cookie should be "discarded when the user agent
-exits." Because we can not trust the client to do this, we must specify
+included, the cookie should be &quot;discarded when the user agent
+exits.&quot; Because we can not trust the client to do this, we must specify
 a timeout for the signature. The SessionLifetime parameter is used for this
 purpose, as it represents the maximum possible lifetime of a single
-session.</p><p>RFC 2109 specifies this optional "secure" parameter which
-mandates that the user-agent use "secure means" to contact the
+session.</p><p>RFC 2109 specifies this optional &quot;secure&quot; parameter which
+mandates that the user-agent use &quot;secure means&quot; to contact the
 server when transmitting the cookie. If a secure cookie is returned to the
 client over https, then the cookie will never be transmitted over insecure
 means.</p><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="signature-performance"></a>Performance</h5></div></div><div></div></div><p>Performance is a key goal of this implementation of signed cookies. To
@@ -219,7 +220,7 @@ trying to protect information from being read (e.g., hashing passwords).</p></di
 External SSL mechanisms (firewall, dedicated hardware, etc.) can be used by
 creating two pools of AOLservers. In one pool the servers should be
 configured with the location parameter of nssock module set to
-"https://yourservername". The servers in the other pool are
+&quot;https://yourservername&quot;. The servers in the other pool are
 configured as normal. The external SSL agent should direct SSL queries to the
 pool of secure servers, and it should direct non-SSL queries to the insecure
 servers. 

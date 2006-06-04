@@ -110,20 +110,22 @@ function acs_RichText_Or_File_InputMethodChanged(form_name, richtext_name, radio
     }
 }
 
-/* RTE functions */ 
-function acs_rteSubmitForm() {
-        updateRTEs();
-	return true;
-}
-
-function acs_rteInit(form_name) {
-// sets onsubmit to function for the given form name
-    if (document.forms == null) return;
-    if (document.forms[form_name] == null) return;
-    document.forms[form_name].onsubmit = acs_rteSubmitForm;
-}
+ /* RTE functions */ 	 
+ function acs_rteSubmitForm() { 	 
+         updateRTEs(); 	 
+         return true; 	 
+ } 	 
+  	 
+ function acs_rteInit(form_name) { 	 
+ // sets onsubmit to function for the given form name 	 
+     if (document.forms == null) return; 	 
+     if (document.forms[form_name] == null) return; 	 
+     document.forms[form_name].onsubmit = acs_rteSubmitForm; 	 
+ } 	 
+ 
 
 /* HTMLArea (part of Richtext Widget) Support */
+
 function acs_initHtmlArea(editor_var, elementid) {
     editor_var.generate();
     return false;
@@ -189,7 +191,7 @@ function acs_ListBulkActionClick(formName, url) {
  */
 
 /** The Calendar object constructor. */
-Calendar = function (mondayFirst, dateStr, onSelected, onClose) {
+Calendar = function (mondayFirst, dateStr, onSelected, onClose, dateFormat) {
 	// member variables
 	this.activeDiv = null;
 	this.currentDateEl = null;
@@ -201,7 +203,7 @@ Calendar = function (mondayFirst, dateStr, onSelected, onClose) {
 	this.hidden = false;
 	this.minYear = 1970;
 	this.maxYear = 2050;
-	this.dateFormat = Calendar._TT["DEF_DATE_FORMAT"];
+	this.dateFormat = dateFormat;
 	this.ttDateFormat = Calendar._TT["TT_DATE_FORMAT"];
 	this.isPopup = true;
 	this.weekNumbers = true;
@@ -1311,8 +1313,10 @@ Calendar.prototype.parseDate = function (str, fmt) {
 	var d = 0;
 	var a = str.split(/\W+/);
 	if (!fmt) {
-		fmt = this.dateFormat;
-	}
+	    fmt = this.dateFormat;
+	} else {
+	    this.dateFormat = fmt;
+        }
 	var b = fmt.split(/\W+/);
 	var i = 0, j = 0;
 	for (i = 0; i < a.length; ++i) {
@@ -1325,7 +1329,7 @@ Calendar.prototype.parseDate = function (str, fmt) {
 		if (b[i] == "m" || b[i] == "mm") {
 			m = parseInt(a[i], 10) - 1;
 		}
-		if ((b[i] == "y") || (b[i] == "yy")) {
+		if ((b[i] == "y") || (b[i] == "yy") || (b[i] == "yyyy")) {
 			y = parseInt(a[i], 10);
 			(y < 100) && (y += (y > 29) ? 1900 : 2000);
 		}
@@ -1534,6 +1538,7 @@ Date.prototype.print = function (frm) {
 	s["mm"] = (m < 9) ? ("0" + (1+m)) : (1+m);
 	s["y"] = y;
 	s["yy"] = new String(y).substr(2, 2);
+	s["yyyy"] = y;
 	s["w"] = wn;
 	s["ww"] = (wn < 10) ? ("0" + wn) : wn;
 	with (Calendar) {
@@ -1542,7 +1547,7 @@ Date.prototype.print = function (frm) {
 		s["M"] = _MN3[m];
 		s["MM"] = _MN[m];
 	}
-	var re = /(.*)(\W|^)(d|dd|m|mm|y|yy|MM|M|DD|D|w|ww)(\W|$)(.*)/;
+	var re = /(.*)(\W|^)(d|dd|m|mm|y|yy|yyyy|MM|M|DD|D|w|ww)(\W|$)(.*)/;
 	while (re.exec(str) != null) {
 		str = RegExp.$1 + RegExp.$2 + s[RegExp.$3] + RegExp.$4 + RegExp.$5;
 	}
@@ -1603,7 +1608,6 @@ Calendar._TT["CLOSE"] = "Close";
 Calendar._TT["TODAY"] = "Today";
 
 // date formats
-Calendar._TT["DEF_DATE_FORMAT"] = "y-mm-dd";
 Calendar._TT["TT_DATE_FORMAT"] = "D, M d";
 
 Calendar._TT["WK"] = "wk";
@@ -1653,15 +1657,23 @@ function checkCalendar(ev) {
 // This function shows the calendar under the element having the given id.
 // It takes care of catching "mousedown" signals on document and hiding the
 // calendar if the click was outside.
-function showCalendar(id) {
+// The format specifies how the date is going to be returned. You can combine
+// the letters y, m, d, D or M in any way you want with any separator that
+// you want (e.g. "," or "-" or ".")
+// The letter D will return the name of the day (e.g Fri, Mon, etc.) and
+// M will return the name of the month (e.g Oct, Spt, Jan, etc.)
+function showCalendar(id,dateformat) {
   var el = document.getElementById(id);
   if (calendar != null) {
     // we already have one created, so just update it.
     calendar.hide();            // hide the existing calendar
-    calendar.parseDate(el.value); // set it to a new date
+    calendar.parseDate(el.value, dateformat); // set it to a new date
   } else {
     // first-time call, create the calendar
-    var cal = new Calendar(true, null, selected, closeHandler);
+    if ( dateformat == null ) {
+       var dateformat = 'y-mm-dd';
+    }		
+    var cal = new Calendar(true, null, selected, closeHandler, dateformat);
     calendar = cal;             // remember the calendar in the global
     cal.setRange(1900, 2070);   // min/max year allowed
     calendar.create();          // create a popup calendar
@@ -1673,3 +1685,95 @@ function showCalendar(id) {
   return false;
 }
 
+// same function as above except you can set a defaultdate which
+// the calendar will go to immediately when when you click on it
+function showCalendarWithDefault(id,defaultdate,dateformat) {
+  var el = document.getElementById(id);
+  if (calendar != null) {
+    // we already have one created, so just update it.
+    calendar.hide();            // hide the existing calendar
+    calendar.parseDate(el.value, dateformat); // set it to a new date
+  } else {
+    // first-time call, create the calendar
+    if ( dateformat == null ) {
+       var dateformat = 'y-mm-dd';
+    }		
+    var cal = new Calendar(true, defaultdate, selected, closeHandler, dateformat);
+    calendar = cal;             // remember the calendar in the global
+    cal.setRange(1900, 2070);   // min/max year allowed
+    calendar.create();          // create a popup calendar
+  }
+  calendar.sel = el;            // inform it about the input field in use
+  calendar.showAtElement(el);   // show the calendar next to the input field
+  // catch mousedown on the document
+  Calendar.addEvent(document, "mousedown", checkCalendar);
+  return false;
+}
+
+// same function as above but instead of a text box we use the date widget
+function showCalendarWithDateWidget(id,fmt) {
+  var idM = document.getElementById(id+'.month');
+  var idD = document.getElementById(id+'.day');
+  var idY = document.getElementById(id+'.year');
+  var calval = idY.value+'-'+idM.value+'-'+idD.value;
+  if (calendar != null) {
+    // we already have one created, so just update it.
+    calendar.hide();            // hide the existing calendar
+    calendar.parseDate(calval,fmt); // set it to a new date
+  } else {
+    // first-time call, create the calendar
+    var cal = new Calendar(true, null, selectwidget, closeHandler);
+    calendar = cal;             // remember the calendar in the global
+    cal.setRange(2000, 2010);   // min/max year allowed
+    calendar.create();          // create a popup calendar
+    calendar.parseDate(calval,fmt); // set it to a new date
+  }
+  calendar.selM = idM;            // inform it about the input field in use
+  calendar.selD = idD;            // inform it about the input field in use
+  calendar.selY = idY;            // inform it about the input field in use
+  calendar.showAtElement(idM);   // show the calendar next to the input field
+  // catch mousedown on the document
+  Calendar.addEvent(document, "mousedown", checkCalendar);
+  return false;
+}
+
+// This function gets called when an end-user clicks on some date
+function selectwidget(cal, date) {
+  var y = 0;
+  var m = -1;
+  var d = 0;
+  var a = date.split(/\W+/);
+  var fmt = cal.dateFormat;
+
+  var b = fmt.split(/\W+/);
+  var i = 0, j = 0;
+  for (i = 0; i < a.length; ++i) {
+    if (b[i] == "D" || b[i] == "DD") {
+      continue;
+    }
+    if (b[i] == "d" || b[i] == "dd") {
+      d = parseInt(a[i], 10);
+    }
+    if (b[i] == "m" || b[i] == "mm") {
+      m = parseInt(a[i], 10) - 1;
+    }
+    if ((b[i] == "y") || (b[i] == "yy") || (b[i] == "yyyy")) {
+      y = parseInt(a[i], 10);
+      (y < 100) && (y += (y > 29) ? 1900 : 2000);
+    }
+    if (b[i] == "M" || b[i] == "MM") {
+      for (j = 0; j < 12; ++j) {
+        if (Calendar._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) { m = j; break; }
+      }
+    }
+  }
+  if (y != 0 && m != -1 && d != 0) {
+    m = m + 1;
+    cal.selM.value = m;
+    cal.selY.value = y;
+    cal.selD.value = d;
+    return;
+  }
+}
+
+// ********************

@@ -13,6 +13,8 @@ ad_page_contract {
     @param target URL to return to
     @param passthrough Form variables to pass along from caller
     @param limit_to_users_in_group_id Limits search to users in the specified group id.  This can be a comma separated list to allow searches within multiple groups. (optional)
+    @param limit_to_user_id. This is useful is you don't want to show a list of user_ids. This could be a comma separated list. (optional)
+    @param from_user_id is used if you want to merge the user_id with user_id_from_search (optional)
 
     @author Jin Choi (jsc@arsdigita.com)
 } {
@@ -23,6 +25,8 @@ ad_page_contract {
     {passthrough ""}
     {limit_users_in_group_id ""}
     {only_authorized_p:integer 1}
+    {limit_to_user_id ""}
+    {from_user_id ""}
 } -properties {
     group_name:onevalue
     search_type:onevalue
@@ -102,6 +106,11 @@ if { ![info exists passthrough] } {
     set passthrough_parameters "[export_entire_form_as_url_vars $passthrough]"
 }
 
+if { [exists_and_not_null limit_to_user_id ] } {
+    set limit_to_user_id [join $limit_to_user_id ","]
+    lappend where_clause "cc_users.user_id not in ($limit_to_user_id)"
+}
+
 if { [exists_and_not_null limit_to_users_in_group_id] } {
 set query "select distinct first_names, last_name, email, member_state, email_verified_p, cu.user_id
 from cc_users cu, group_member_map gm, membership_rels mr
@@ -132,7 +141,12 @@ db_foreach user_search_admin $query {
     set last_name_from_search $last_name
     set email_from_search $email
     
-    set user_search:[set rowcount](user_id) $user_id
+    if { [empty_string_p $from_user_id] } {
+	set user_search:[set rowcount](user_id) $user_id
+    } else {
+	set user_search:[set rowcount](user_id) $from_user_id
+    }
+
     set user_search:[set rowcount](first_names) $first_names
     set user_search:[set rowcount](last_name) $last_name
     set user_search:[set rowcount](email) $email

@@ -88,10 +88,7 @@ if { $counter > 0 } {
     } -on_submit {
         db_foreach select_params_set {} {
             if { [info exists $c__parameter_name]} {
-                parameter::set_value \
-                    -package_id $package_id \
-                    -parameter $c__parameter_name \
-                    -value [set $c__parameter_name]
+		callback subsite::parameter_changed -package_id $package_id -parameter $c__parameter_name -value [set $c__parameter_name]
             }
         }
     } -after_submit {

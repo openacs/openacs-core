@@ -285,6 +285,12 @@ procedure rotate_template (
   use_context     in cr_type_template_map.use_context%TYPE
 );
 
+-- Create or replace a trigger on insert for simplifying addition of
+-- revisions for any content type
+
+procedure refresh_trigger (
+  content_type  in acs_object_types.object_type%TYPE
+);
 
 end content_type;
 /
@@ -1499,7 +1505,7 @@ function new (
 			   default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
   object_type   in acs_object_types.object_type%TYPE default 'content_keyword',
-  package_id    in acs_objects.package_id%TYPE
+  package_id    in acs_objects.package_id%TYPE default null
 ) return cr_keywords.keyword_id%TYPE;
 
 procedure del (

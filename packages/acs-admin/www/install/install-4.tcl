@@ -7,8 +7,10 @@ ad_page_contract {
 
 if { ![empty_string_p $repository_url] } {
     set parent_page_title "Install From OpenACS Repository"
+    set parent_page_url [export_vars -base install {repository_url}]
 } else {
     set parent_page_title "Install From Local File System"
+    set parent_page_url [export_vars -base install]
 }
 
 if { $success_p } {
@@ -17,5 +19,5 @@ if { $success_p } {
     set page_title "Installation Failed"
 }
 
-set context [list [list "." "Install Software"] [list "install" $parent_page_title] $page_title]
+set context [list [list "." "Install Software"] [list $parent_page_url $parent_page_title] $page_title]
 

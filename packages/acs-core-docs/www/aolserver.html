@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install AOLserver 3.3oacs1</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="install-more-software.html" title="Appendix B. Install additional supporting software"><link rel="previous" href="install-ldap-radius.html" title="Install LDAP for use as external authentication"><link rel="next" href="credits.html" title="Appendix C. Credits"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-ldap-radius.html">Prev</a> </td><th width="60%" align="center">Appendix B. Install additional supporting software</th><td width="20%" align="right"> <a accesskey="n" href="credits.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="aolserver"></a>Install AOLserver 3.3oacs1</h2></div></div><div></div></div><div class="authorblurb"><p>by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install AOLserver 3.3oacs1</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="install-more-software.html" title="Appendix B. Install additional supporting software"><link rel="previous" href="install-ldap-radius.html" title="Install LDAP for use as external authentication"><link rel="next" href="credits.html" title="Appendix C. Credits"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-ldap-radius.html">Prev</a> </td><th width="60%" align="center">Appendix B. Install additional supporting software</th><td width="20%" align="right"> <a accesskey="n" href="credits.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="aolserver"></a>Install AOLserver 3.3oacs1</h2></div></div><div></div></div><div class="authorblurb"><p>by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><p>We recommend the use of <a href="aolserver4.html" title="Install AOLserver 4">AOLserver 4.0.1</a> or later.  These instructions are retained as a resource.</p><p>
@@ -24,7 +25,7 @@ Length: 3,858,074 [application/x-compressed]
 [root src]#
 <span class="action"><span class="action">cd /usr/local/src
 wget --passive http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar.gz
-tar xzf aolserver3.3oacs1.tar.gz</span></span></pre><p>This section also relies on some OpenACS files, which you can get with <a href="openacs-unpack.html" title="Unpack the OpenACS tarball">the section called &#8220;Unpack the OpenACS tarball&#8221;</a>.</p></li><li><a name="install-aolserver-compile"></a><p><b>Compile AOLserver. </b>Compile and install AOLserver.  First, prepare the installation directory and the source code.  The message about BUILD-MODULES can be ignored.</p><pre class="screen">root@yourserver root]# <b class="userinput"><tt>mkdir -p /usr/local/aolserver</tt></b>
+tar xzf aolserver3.3oacs1.tar.gz</span></span></pre><p>This section also relies on some OpenACS files, which you can get with <a href="openacs-unpack.html" title="Unpack the OpenACS tarball">Section , &#8220;Unpack the OpenACS tarball&#8221;</a>.</p></li><li><a name="install-aolserver-compile"></a><p><b>Compile AOLserver. </b>Compile and install AOLserver.  First, prepare the installation directory and the source code.  The message about BUILD-MODULES can be ignored.</p><pre class="screen">root@yourserver root]# <b class="userinput"><tt>mkdir -p /usr/local/aolserver</tt></b>
 [root root]# <b class="userinput"><tt>cd /usr/local/src/aolserver</tt></b>
 [root aolserver]# <b class="userinput"><tt>./conf-clean</tt></b>
 cat: BUILD-MODULES: No such file or directory
@@ -42,7 +43,7 @@ cd /usr/local/src/aolserver
           the environment variables properly.
         </p><p><tt class="computeroutput">conf-inst</tt> should contain the
           location where AOLserver is to be installed.  Overwrite the
-          tarball's default value with our default value, <tt class="computeroutput">/usr/local/aolserver</tt>:</p><pre class="screen">[root aolserver]# <b class="userinput"><tt>echo "/usr/local/aolserver" &gt; conf-inst</tt></b>
+          tarball's default value with our default value, <tt class="computeroutput">/usr/local/aolserver</tt>:</p><pre class="screen">[root aolserver]# <b class="userinput"><tt>echo &quot;/usr/local/aolserver&quot; &gt; conf-inst</tt></b>
 [root aolserver]#</pre><p><tt class="computeroutput">conf-make</tt> should contain the
           name of the GNU Make command on your system. It defaults to
           <tt class="computeroutput">gmake</tt>.  Debian users: <tt class="computeroutput"><b class="userinput"><tt>ln -s /usr/bin/make /usr/bin/gmake</tt></b></tt>.</p><p>Set an environment variable that the nspostgres driver
@@ -82,17 +83,17 @@ Done Building Sat Mar  8 10:31:35 PST 2003
 	  communicate with the database.  There is one script each for
 	  Oracle and PostgreSQL.  They don't conflict, so if you plan
 	  to use both databases, install both.</p><div class="itemizedlist"><ul type="disc"><li><p>Oracle</p><pre class="screen">[root aolserver]# <b class="userinput"><tt>cd /usr/local/aolserver/bin</tt></b>
-[root bin]# <b class="userinput"><tt>cp /var/tmp/openacs-5.2.0d1/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</tt></b>
+[root bin]# <b class="userinput"><tt>cp /var/tmp/openacs-5.2.3b1/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</tt></b>
 [root bin]# <b class="userinput"><tt>chmod 750 nsd-oracle</tt></b>
 [root bin]#
 <span class="action"><span class="action">cd /usr/local/aolserver/bin
-cp /var/tmp/openacs-5.2.0d1/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
+cp /var/tmp/openacs-5.2.3b1/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
 chmod 750 nsd-oracle</span></span></pre></li><li><p>PostgreSQL</p><pre class="screen">[root aolserver]# <b class="userinput"><tt>cd /usr/local/aolserver/bin</tt></b>
-[root bin]# <b class="userinput"><tt>cp /var/tmp/openacs-5.2.0d1/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</tt></b>
+[root bin]# <b class="userinput"><tt>cp /var/tmp/openacs-5.2.3b1/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</tt></b>
 [root bin]# <b class="userinput"><tt>chmod 755 nsd-postgres</tt></b>
 [root bin]#
 <span class="action"><span class="action">cd /usr/local/aolserver/bin
-cp /var/tmp/openacs-5.2.0d1/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
+cp /var/tmp/openacs-5.2.3b1/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
 chmod 755 nsd-postgres</span></span></pre></li></ul></div></li><li><a name="install-tdom"></a><p><b>Install tDOM. </b>Download the <a href="individual-programs.html#source-tdom">tDOM
         tarball</a>, unpack it, adjust the configuration file to match our patched
         distribution of aolserver, and compile it.</p><pre class="screen">[root root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
@@ -115,11 +116,11 @@ Length: 826,613 [application/x-compressed]
 wget --passive http://www.tdom.org/tDOM-0.7.8.tar.gz
 tar xzf tDOM-0.7.8.tar.gz
 cd tDOM-0.7.8/unix</span></span> </pre><p>Edit the file CONFIG and change this section:</p><pre class="programlisting"># ----------------------------------------------------
-# aolsrc="/usr/src/aolserver-3.4"
+# aolsrc=&quot;/usr/src/aolserver-3.4&quot;
 # ../configure --enable-threads --disable-tdomalloc \
 #   --with-aolserver=$aolsrc \
 #   --with-tcl=$aolsrc/tcl8.3.4/unix </pre><p>to</p><pre class="programlisting"># ----------------------------------------------------
-aolsrc="/usr/local/src/aolserver/aolserver"
+aolsrc=&quot;/usr/local/src/aolserver/aolserver&quot;
 ../configure --enable-threads --disable-tdomalloc \
   --with-aolserver=$aolsrc \
   --with-tcl=$aolsrc/tcl8.3.2/unix</pre><p>And configure and compile:</p><pre class="screen">[root unix]# <b class="userinput"><tt>sh CONFIG</tt></b>
@@ -144,7 +145,7 @@ make
 cp libtdom0.7.8.so /usr/local/aolserver/bin/
 cd /usr/local/aolserver/bin
 ln -s libtdom0.7.8.so libtdom.so</span></span></pre></li><li><p><a href="install-nsopenssl.html" title="Install nsopenssl">Install nsopenssl</a>
-      (OPTIONAL)</p></li><li><p><a href="install-full-text-search.html#install-openfts" title="Install OpenFTS module">Install Full Text Search with OpenFTS</a> (OPTIONAL)</p></li><li><p><a href="install-nspam.html" title="Install nspam">Install nspam</a> (OPTIONAL)</p></li><li><a name="install-aolserver-permissions"></a><p><b>Test AOLserver. </b>In order to test AOLserver, we'll run it using the
+      (OPTIONAL)</p></li><li><p><a href="install-full-text-search-openfts.html#install-openfts" title="Install OpenFTS module">Install Full Text Search with OpenFTS</a> (OPTIONAL)</p></li><li><p><a href="install-nspam.html" title="Install nspam">Install nspam</a> (OPTIONAL)</p></li><li><a name="install-aolserver-permissions"></a><p><b>Test AOLserver. </b>In order to test AOLserver, we'll run it using the
       sample-config.tcl file provided in the AOLserver distribution,
       under the nobody user and <tt class="computeroutput">web</tt>
       group.  The sample-config.tcl configuration writes to the
@@ -170,7 +171,7 @@ cd /usr/local/aolserver
 chown -R root.web log servers
 chmod -R g+w log servers
 ls -l</span></span></pre><p>Note: AOLserver4.x does not include a default start page, so we create one for this test. Type 
-        <b class="userinput"><tt>echo "Welcome to AOLserver" &gt; /usr/local/aolserver40r8/servers/server1/pages/index.html</tt></b>
+        <b class="userinput"><tt>echo &quot;Welcome to AOLserver&quot; &gt; /usr/local/aolserver40r8/servers/server1/pages/index.html</tt></b>
       </p><p>Now, we'll run a quick test to ensure AOLserver is running
           correctly. We'll use the sample config file provided with
           AOLserver. This file will attempt to guess your IP address and
@@ -193,7 +194,7 @@ config file.</pre><p>The first warning, about nsssl, can be ignored.  We won't b
 
         </p><pre class="screen">[root aolserver]# <b class="userinput"><tt>lynx localhost:8000</tt></b></pre><p>
 
-          You should see a "Welcome to AOLserver" page. If this
+          You should see a &quot;Welcome to AOLserver&quot; page. If this
           doesn't work, try going to
           <tt class="computeroutput">http://127.0.0.1:8000/</tt>. If this
           still doesn't work, check out the <a href="aolserver.html#install-aolserver-troubleshooting">Troubleshooting AOLserver</a> section below.  Note that you will not be able to browse to the web page from another machine, because AOLserver is only listening to the local address.

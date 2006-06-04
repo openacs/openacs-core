@@ -10,3 +10,6 @@ set servers_to_monitor {}
 
 # How long the keepalive script waits until it attempts another restart
 set seconds_between_restarts [expr 10*60]
+
+# Who shall we email if the server is/cannot be restarted?
+set mailto root

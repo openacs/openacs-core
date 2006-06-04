@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.1.2" locale="es_GT" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.2.3b2" locale="es_GT" charset="ISO-8859-1">
 
   <msg key="_or">, o</msg>
   <msg key="_Update_Basic_Information">Actualizar Información Básica</msg>
@@ -230,6 +230,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Reject">Rechazar</msg>
   <msg key="Remember_my_login">Recordar mi contraseña en esta computadora</msg>
   <msg key="Remove">Eliminar</msg>
+  <msg key="Remove_All">Eliminar todos</msg>
   <msg key="Req_membership_comm">Solicitar membresía de esta comunidad</msg>
   <msg key="Req_membership_subs">Solicitar membresía de este subsitio</msg>
   <msg key="Request_membership">Solicitar  membresía</msg>
@@ -243,7 +244,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Select_an_Object_by_Id">Seleccionar un objeto por Id </msg>
   <msg key="Send_email_to_this_user">Enviar email a este usuario</msg>
   <msg key="Show">Mostrar</msg>
-  <msg key="Site_wide_administration">Administración Site-wide</msg>
+  <msg key="Site_wide_administration">Administración del sitio</msg>
   <msg key="sorry_forgotten_pwd">Lo sentimos, no podemos ayudarlo con su contraseña olvidada.</msg>
   <msg key="Status">Estado</msg>
   <msg key="Story_Behind_Photo">Historia Detrás Foto</msg>
@@ -271,6 +272,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="upload_a_replacement_por">cargar un retrato de reemplazo</msg>
   <msg key="Upload_Portrait">Cargar Retrato</msg>
   <msg key="Username">Nombre de usuario</msg>
+  <msg key="UserSiteMap">Mapa del sitio del usuario</msg>
   <msg key="Vacation_Info_Updated">Información de Vacaciones Actualizada </msg>
   <msg key="Vacation_information_updated">La información de sus vacaciones en %site_link% ha sido actualizada.</msg>
   <msg key="Welcome_user">Bienvenido/a, %user_name%</msg>

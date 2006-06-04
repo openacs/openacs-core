@@ -763,26 +763,33 @@ ad_proc -public lang::util::convert_to_i18n {
 } {
     Internationalising of Attributes. This is done by storing the attribute with it's acs-lang key
 } {
-    
-    if {[empty_string_p $message_key]} {
-	if {[empty_string_p $prefix]} {
-	    # Having no prefix or message_key is discouraged as it
-	    # might have interesting side effects due to double
-	    # meanings of the same english string in multiple contexts
-	    # but for the time being we should still allow this.
-	    set message_key [lang::util::suggest_key $text]
-	} else {
-	    set message_key "${prefix}_[lang::util::suggest_key $text]"
-	}
-    } 
-    
-    # Register the language keys
-    lang::message::register en_US $package_key $message_key $text
-    if {[exists_and_not_null locale]} {
-	lang::message::register $locale $package_key $message_key $text
-    }
 
-    return "#${package_key}.${message_key}#"
+    # If the package acs-translations is installed do the conversion
+    # magic, otherwise just return the text again.
+
+    if {[apm_package_id_from_key acs-translations]} {
+	if {[empty_string_p $message_key]} {
+	    if {[empty_string_p $prefix]} {
+		# Having no prefix or message_key is discouraged as it
+		# might have interesting side effects due to double
+		# meanings of the same english string in multiple contexts
+		# but for the time being we should still allow this.
+		set message_key [lang::util::suggest_key $text]
+	    } else {
+		set message_key "${prefix}_[lang::util::suggest_key $text]"
+	    }
+	} 
+	
+	# Register the language keys
+	lang::message::register en_US $package_key $message_key $text
+	if {[exists_and_not_null locale]} {
+	    lang::message::register $locale $package_key $message_key $text
+	}
+	
+	return "#${package_key}.${message_key}#"
+    } else {
+	return "$text"
+    }
 }
 
 ad_proc -public lang::util::localize_list_of_lists {
@@ -815,3 +822,16 @@ ad_proc -private lang::util::get_locale_options_not_cached {} {
 } {
     return [db_list_of_lists select_locales {}]
 }
+
+ad_proc -public lang::util::edit_lang_key_url {
+    -message:required
+    {-package_key "acs-translations"}
+} {
+} {
+    if { [regsub "^${package_key}." [string trim $message "\#"] {} message_key] } {
+	 set edit_url [export_vars -base "[apm_package_url_from_key "acs-lang"]admin/edit-localized-message" { { locale {[ad_conn locale]} } package_key message_key { return_url [ad_return_url] } }]
+     } else {
+	 set edit_url ""
+     }
+     return $edit_url
+ }

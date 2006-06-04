@@ -37,18 +37,17 @@ if { $self_register_p } {
     ad_user_logout 
 }
 
-
 # Redirect to the registration assessment if there is one, if not, continue with the regular
 # registration form.
 
 
-set implName [parameter::get -parameter "RegImplName" -package_id [subsite::main_site_id]]
+set implName [parameter::get -parameter "RegistrationImplName" -package_id [subsite::main_site_id]]
 
-set url [callback -catch -impl "$implName" user::registration]
+set callback_url [callback -catch -impl "$implName" user::registration]
 
-if { ![empty_string_p $url] } {
-    ad_returnredirect "$url"
-
+if { $callback_url ne "" } {
+    ad_returnredirect [export_vars -base $callback_url { return_url }]
+    ad_script_abort
 }
 
 

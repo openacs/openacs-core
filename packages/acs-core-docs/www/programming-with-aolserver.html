@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Programming with AOLserver</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="object-identity.html" title="Object Identity"><link rel="next" href="form-builder.html" title="Using HTML Forms"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="object-identity.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="form-builder.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="programming-with-aolserver"></a>Programming with AOLserver</h2></div></div><div></div></div><div class="authorblurb"><p>By Michael Yoon, Jon Salz and <a href="http://www.pinds.com/lars" target="_top">Lars Pind</a>.</p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Programming with AOLserver</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="object-identity.html" title="Object Identity"><link rel="next" href="form-builder.html" title="Using HTML Forms"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="object-identity.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="form-builder.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="programming-with-aolserver"></a>Programming with AOLserver</h2></div></div><div></div></div><div class="authorblurb"><p>By Michael Yoon, Jon Salz and <a href="http://www.pinds.com/lars" target="_top">Lars Pind</a>.</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="programming-aolserver-global"></a>The <tt class="computeroutput">global</tt> command</h3></div></div><div></div></div><p>
@@ -23,7 +24,7 @@ procedure. This distinction is important to understand in order to use
 interpreter) between HTTP requests. If it didn't, that would affect (and
 complicate) our use of script-global variables dramatically, which would then
 be better described as <span class="emphasis"><em>thread</em></span>-global variables. Given
-AOLserver's behaviour, however, "script-global" is a more
+AOLserver's behaviour, however, &quot;script-global&quot; is a more
 appropriate term.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="programming-aolserver-sched-procs"></a>Threads and Scheduled Procedures</h3></div></div><div></div></div><p>
 <tt class="computeroutput">ns_schedule_proc</tt> and <tt class="computeroutput">ad_schedule_proc</tt> each take a
 <tt class="computeroutput">-thread</tt> flag to cause a scheduled procedure to run
@@ -81,15 +82,15 @@ pass-by-value, and it uses Tcl arrays, which have good native support.
 ad_proc ad_get_user_info { user_id } {
     db_1row user_info { select first_names, last_name, email from users where user_id = :user_id }
     return [list \
-        name "$first_names $last_name" \
+        name &quot;$first_names $last_name&quot; \
     email $email \
-    namelink "&lt;a href=\"/shared/community-member?user_id=[ns_urlencode $user_id]\"&gt;$first_names $last_name&lt;/a&gt;" \
-    emaillink "&lt;a href=\"mailto:$email\"&gt;$email&lt;/a&gt;"]
+    namelink &quot;&lt;a href=\&quot;/shared/community-member?user_id=[ns_urlencode $user_id]\&quot;&gt;$first_names $last_name&lt;/a&gt;&quot; \
+    emaillink &quot;&lt;a href=\&quot;mailto:$email\&quot;&gt;$email&lt;/a&gt;&quot;]
 }
 
 array set user_info [ad_get_user_info $user_id]
 
-doc_body_append "$user_info(namelink) ($user_info(emaillink))"
+doc_body_append &quot;$user_info(namelink) ($user_info(emaillink))&quot;
 </pre><p>
 You could also have done this by using an array internally and using
 <tt class="computeroutput">array get</tt>: 
@@ -97,10 +98,10 @@ You could also have done this by using an array internally and using
 
 ad_proc ad_get_user_info { user_id } {
     db_1row user_info { select first_names, last_name, email from users where user_id = :user_id }
-    set user_info(name) "$first_names $last_name"
+    set user_info(name) &quot;$first_names $last_name&quot;
     set user_info(email) $email
-    set user_info(namelink) "&lt;a href=\"/shared/community-member?user_id=[ns_urlencode $user_id]\"&gt;$first_names $last_name&lt;/a&gt;"
-    set user_info(emaillink) "&lt;a href=\"mailto:$email\"&gt;$email&lt;/a&gt;"
+    set user_info(namelink) &quot;&lt;a href=\&quot;/shared/community-member?user_id=[ns_urlencode $user_id]\&quot;&gt;$first_names $last_name&lt;/a&gt;&quot;
+    set user_info(emaillink) &quot;&lt;a href=\&quot;mailto:$email\&quot;&gt;$email&lt;/a&gt;&quot;
     return [array get user_info]
 }
 
@@ -125,15 +126,15 @@ ad_proc ad_get_user_info {
 } {
     upvar $array user_info
     db_1row user_info { select first_names, last_name, email from users where user_id = :user_id }
-    set user_info(name) "$first_names $last_name"
+    set user_info(name) &quot;$first_names $last_name&quot;
     set user_info(email) $email
-    set user_info(namelink) "&lt;a href=\"/shared/community-member?user_id=[ns_urlencode $user_id]\"&gt;$first_names $last_name&lt;/a&gt;"
-    set user_info(emaillink) "&lt;a href=\"mailto:$email\"&gt;$email&lt;/a&gt;"
+    set user_info(namelink) &quot;&lt;a href=\&quot;/shared/community-member?user_id=[ns_urlencode $user_id]\&quot;&gt;$first_names $last_name&lt;/a&gt;&quot;
+    set user_info(emaillink) &quot;&lt;a href=\&quot;mailto:$email\&quot;&gt;$email&lt;/a&gt;&quot;
 }
 
 ad_get_user_info -array user_info $user_id
 
-doc_body_append "$user_info(namelink) ($user_info(emaillink))"
+doc_body_append &quot;$user_info(namelink) ($user_info(emaillink))&quot;
 
 </pre><p>We prefer pass-by-value over pass-by-reference. Pass-by-reference makes
 the code harder to read and debug, because changing a value in one place has
@@ -157,16 +158,16 @@ ad_proc ad_get_user_info {
     user_id
 } {
     db_1row user_info { select first_names, last_name, email from users where user_id = :user_id }
-    ns_set put $set name "$first_names $last_name"
+    ns_set put $set name &quot;$first_names $last_name&quot;
     ns_set put $set email $email
-    ns_set put $set namelink "&lt;a href=\"/shared/community-member?user_id=[ns_urlencode $user_id]\"&gt;$first_names $last_name&lt;/a&gt;"
-    ns_set put $set emaillink "&lt;a href=\"mailto:$email\"&gt;$email&lt;/a&gt;"
+    ns_set put $set namelink &quot;&lt;a href=\&quot;/shared/community-member?user_id=[ns_urlencode $user_id]\&quot;&gt;$first_names $last_name&lt;/a&gt;&quot;
+    ns_set put $set emaillink &quot;&lt;a href=\&quot;mailto:$email\&quot;&gt;$email&lt;/a&gt;&quot;
 }
 
 set user_info [ns_set create]
 ad_get_user_info -set $user_info $user_id
 
-doc_body_append "[ns_set get $user_info namelink] ([ns_set get $user_info emaillink])"
+doc_body_append &quot;[ns_set get $user_info namelink] ([ns_set get $user_info emaillink])&quot;
 
 </pre><p>
 We don't recommend <tt class="computeroutput">ns_set</tt> as a general mechanism for passing
@@ -179,12 +180,12 @@ compared to an array:</p><pre class="programlisting">
 # ns_set variant
 set size [ns_set size $myset]
 for { set i 0 } { $i &lt; $size } { incr i } {
-    puts "[ns_set key $myset $i] = [ns_set value $myset $i]"
+    puts &quot;[ns_set key $myset $i] = [ns_set value $myset $i]&quot;
 }
 
 # array variant
 foreach name [array names myarray] {
-    puts "$myarray($name) = $myarray($name)"
+    puts &quot;$myarray($name) = $myarray($name)&quot;
 }
 
 </pre><p>

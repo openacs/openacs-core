@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Writing OpenACS Application Pages</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="permissions.html" title="Groups, Context, Permissions"><link rel="next" href="parties.html" title="Parties in OpenACS"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="permissions.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="parties.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="subsites"></a>Writing OpenACS Application Pages</h2></div></div><div></div></div><div class="authorblurb"><p>By Rafael H. Schloming and Pete Su</p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Writing OpenACS Application Pages</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="permissions.html" title="Groups, Context, Permissions"><link rel="next" href="parties.html" title="Parties in OpenACS"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="permissions.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="parties.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="subsites"></a>Writing OpenACS Application Pages</h2></div></div><div></div></div><div class="authorblurb"><p>By Rafael H. Schloming and Pete Su</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-overview"></a>Overview</h3></div></div><div></div></div><p>
@@ -86,11 +87,11 @@ set package_id [ad_conn package_id]
 if {[info exists note_id]} {
       permission::require_permission -object_id $note_id -privilege write
 
-      set context_bar [ad_context_bar "Edit Note"]
+      set context_bar [ad_context_bar &quot;Edit Note&quot;]
 } else {
       permission::require_permission -object_id $note_id -privilege create
 
-      set context_bar [ad_context_bar "New Note"]
+      set context_bar [ad_context_bar &quot;New Note&quot;]
 }
 
 </pre><p>
@@ -152,7 +153,7 @@ nothing but display the form object:
 &lt;hr&gt;
 
 &lt;center&gt;
-&lt;formtemplate id="new_note"&gt;&lt;/formtemplate&gt;
+&lt;formtemplate id=&quot;new_note&quot;&gt;&lt;/formtemplate&gt;
 &lt;/center&gt;
 
 </pre><p>
@@ -233,7 +234,7 @@ if [template::form is_valid new_note] {
     }
   }
 
-  ad_returnredirect "."
+  ad_returnredirect &quot;.&quot;
 }
 
 </pre><p>
@@ -253,7 +254,7 @@ home page, and set up the permissions so that the instance is only
 visible to that user. The end result is a site where users can come
 and write notes to themselves.
 </p><p>
-This is a good example of the leverage available in the OpenACS 5.2.0d1
+This is a good example of the leverage available in the OpenACS 5.2.3b1
 system. The code that we have written for Notes is not at all more
 complex than a similar application without access control or site map
 awareness. By adding a small amount of code, we have taken a small,
@@ -261,7 +262,7 @@ simple, and special purpose application to something that has the
 potential to be a very useful, general-purpose tool, complete with
 multi-user features, access control, and centralized administration.
 </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-summary"></a>Summary</h3></div></div><div></div></div><p>
-In OpenACS 5.2.0d1, application pages and scripts can be aware of the package
+In OpenACS 5.2.3b1, application pages and scripts can be aware of the package
 instance, or subsite in which they are executing. This is a powerful
 general purpose mechanism that can be used to structure web services
 in very flexible ways.

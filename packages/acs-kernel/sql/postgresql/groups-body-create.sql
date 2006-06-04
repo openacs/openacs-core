@@ -701,6 +701,18 @@ begin
     return 0; 
 end;' language 'plpgsql';
 
+-- procedure merge
+create or replace function membership_rel__merge (integer)
+returns integer as '
+declare
+  merge__rel_id                alias for $1;  
+begin
+    update membership_rels
+    set member_state = ''merged''
+    where rel_id = merge__rel_id;
+
+    return 0; 
+end;' language 'plpgsql';
 
 -- function check_index
 create or replace function membership_rel__check_index (integer,integer,integer)

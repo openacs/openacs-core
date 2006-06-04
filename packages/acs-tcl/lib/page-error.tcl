@@ -31,7 +31,7 @@ set send_email_p [parameter::get -package_id [ad_acs_kernel_id] -parameter SendE
 set system_name [ad_system_name]
 set subject "[_ acs-tcl.lt_Error_Report_in_ad_sy] ( [_ acs-tcl.File ] $error_file )"
 set found_in_version ""
-set send_to [ad_admin_owner]
+set send_to [parameter::get -package_id [ad_acs_kernel_id] -parameter HostAdministrator -default "[ad_system_owner]"]
 
 set error_desc_email "
  --------------------------------------------------------<br>
@@ -55,7 +55,7 @@ set error_desc_email "
 <br>
 [_ acs-tcl.lt_NB_This_error_was_sub]"
 
-if {[empty_string_p $bug_number] && $send_email_p} {
+if { $bug_number eq "" && $send_email_p} {
     ns_sendmail "$send_to" $public_userm_email $subject $error_desc_email
 }
 set bt_instance [parameter::get -package_id [ad_acs_kernel_id] \

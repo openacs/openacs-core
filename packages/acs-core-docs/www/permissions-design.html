@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Permissions Design</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 17. Kernel Documentation"><link rel="previous" href="permissions-requirements.html" title="Permissions Requirements"><link rel="next" href="groups-requirements.html" title="Groups Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="permissions-requirements.html">Prev</a> </td><th width="60%" align="center">Chapter 17. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="groups-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="permissions-design"></a>Permissions Design</h2></div></div><div></div></div><div class="authorblurb"><p>By John Prevost and <a href="http://planitia.org" target="_top">Rafael H. Schloming</a> </p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Permissions Design</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 17. Kernel Documentation"><link rel="previous" href="permissions-requirements.html" title="Permissions Requirements"><link rel="next" href="groups-requirements.html" title="Groups Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="permissions-requirements.html">Prev</a> </td><th width="60%" align="center">Chapter 17. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="groups-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="permissions-design"></a>Permissions Design</h2></div></div><div></div></div><div class="authorblurb"><p>By John Prevost and <a href="http://planitia.org" target="_top">Rafael H. Schloming</a> </p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-design-essentials"></a>Essentials</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p>Tcl in <tt class="computeroutput">packages/acs-kernel</tt></p></li><li><p><a href="permissions-requirements.html">OpenACS 4 Permissions Requirements</a></p></li><li><p><a href="/doc/sql/display-sql?url=acs-permissions-create.sql&amp;package_key=acs-kernel" target="_top">
@@ -26,7 +27,7 @@ on a module-by-module basis, often even on a page-by-page basis. For example,
 a typical module might allow any registered user to access its pages
 read-only, but only allow members of a certain group to make changes. The way
 this group was determined also varied greatly between modules. Some modules
-used "roles", while others did not. Other modules did all access
+used &quot;roles&quot;, while others did not. Other modules did all access
 control based simply on coded rules regarding who can act on a given database
 row based on the information in that row.</p><p>Problems resulting from this piecemeal approach to permissions and access
 control were many, the two major ones being inconsistency, and
@@ -50,7 +51,7 @@ adequate performance. The core model consists of five tables:</p><div class="var
 associated with each privilege.</p></dd><dt><span class="term"><tt class="computeroutput">acs_privilege_hierarchy</tt>
 
 </span></dt><dd><p>A relation describing which privileges <span class="strong">directly</span>
-"contain" other privileges.</p></dd><dt><span class="term"><tt class="computeroutput">acs_permissions</tt>
+&quot;contain&quot; other privileges.</p></dd><dt><span class="term"><tt class="computeroutput">acs_permissions</tt>
 
 </span></dt><dd><p>A table with one (<span class="emphasis"><em>party</em></span>, <span class="emphasis"><em>object</em></span>, <span class="emphasis"><em>privilege</em></span>)
 row for every privilege <span class="strong">directly</span> granted on any object in
@@ -58,7 +59,7 @@ the system - this is a denormalization of
 <tt class="computeroutput">acs_privilege_method_rules</tt> and
 <tt class="computeroutput">acs_privilege_hierarchy</tt></p></dd></dl></div><p>There are also a number of views to make it easier to ask specific
 questions about permissions. For example, a number of the above tables
-describe "direct" or explicit permissions. Inheritance and default
+describe &quot;direct&quot; or explicit permissions. Inheritance and default
 values can, however, introduce permissions which are not directly specified.
 (For example, read access on a forum allows read access on all the messages
 in the forum.)</p><p>The following views provide flattened versions of inherited
@@ -91,9 +92,9 @@ which:</p><div class="itemizedlist"><ul type="disc"><li><p>parties get the privi
 a member of</p></li><li><p>privileges get associated with the methods of any other privileges they
 have taken methods from (at any level) (see
 <tt class="computeroutput">acs_privilege_hierarchy</tt>)</p></li><li><p>objects get access control from direct grants, or inherit permissions
-from their context (unless the "don't inherit" flag is
+from their context (unless the &quot;don't inherit&quot; flag is
 set)</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-design-transactions"></a>Legal Transactions</h3></div></div><div></div></div><p>There are three essential areas in which all transactions in the
-permissions system fall:</p><div class="itemizedlist"><ul type="disc"><li><p>Modification of methods and privileges</p></li><li><p>Modification of permissions</p></li><li><p>Queries on permissions</p></li></ul></div><p><span class="strong">"Modification of methods and privileges."</span> This
+permissions system fall:</p><div class="itemizedlist"><ul type="disc"><li><p>Modification of methods and privileges</p></li><li><p>Modification of permissions</p></li><li><p>Queries on permissions</p></li></ul></div><p><span class="strong">&quot;Modification of methods and privileges.&quot;</span> This
 refers to actions that happen mainly at package installation time - a package
 will create a number of methods for its own use, then associate them with the
 system's standard privileges, or new privileges which the package has
@@ -101,24 +102,24 @@ created. The association step might also happen later, if the site-wide
 administrator chooses to change permissions policy.</p><p>These steps involve directly manipulating the <tt class="computeroutput">acs_methods</tt>,
 <tt class="computeroutput">acs_privileges</tt>, and <tt class="computeroutput">acs_privilege_method_rules</tt> tables. A
 web page for manipulating these features should be limited to site-wide
-administrators.</p><p><span class="strong">"Modification of permissions"</span> - involves fairly
+administrators.</p><p><span class="strong">&quot;Modification of permissions&quot;</span> - involves fairly
 common operations. Users are typically able to administer permissions for
 objects they themselves create. The two basic operations here are
-"grant" and "revoke". Granting permissions is done via
+&quot;grant&quot; and &quot;revoke&quot;. Granting permissions is done via
 <tt class="computeroutput">acs_permissions.grant_permission</tt>, and revocation via
 <tt class="computeroutput">acs_permissions.revoke_permission</tt>. These directly manipulate the
 <tt class="computeroutput">acs_permissions</tt> table.</p><p>Web pages for making these changes are available to all users, so they
 should not be in an admin area. In order to grant and revoke permissions on
 an object, the user must have the <tt class="computeroutput">administer_privileges</tt> method
-permission on that object.</p><p><span class="strong">"Queries on permissions"</span> - by far the most
+permission on that object.</p><p><span class="strong">&quot;Queries on permissions&quot;</span> - by far the most
 common operation is querying the permissions database. Several kinds of
-questions are commonly asked: First, and most commonly, "Can this party
-perform this method on this object?" Two Tcl functions are provided to
+questions are commonly asked: First, and most commonly, &quot;Can this party
+perform this method on this object?&quot; Two Tcl functions are provided to
 answer this - one which returns a boolean, the other of which results in an
 error page. These tcl functions directly access the
 <tt class="computeroutput">acs_object_party_method_map</tt>.</p><p>The second most commonly asked question occurs when a list of objects is
 being displayed, often in order to provide appropriate UI functionality:
-"For this party, what methods are available on these objects?"
+&quot;For this party, what methods are available on these objects?&quot;
 Here, the SQL query needs to filter based on whether the party/user can
 perform some operation on the object. This is done via a join or sub-select
 against <tt class="computeroutput">acs_object_party_method_map</tt>, or by calling the Tcl functions
@@ -152,8 +153,8 @@ procedure revoke_permission (
   privilege    acs_permissions.privilege%TYPE
 );
 </pre><p>These procedures are defined in <a href="/doc/sql/display-sql?url=acs-permissions-create.sql&amp;package_key=acs-kernel" target="_top">
-<tt class="computeroutput">permissions-create.sql</tt></a></p><p><span class="strong">Tcl Procedures</span></p><p>Two tcl procedures provide a simple call for the query, "Can this
-user perform this method on this object?" One returns true or false, the
+<tt class="computeroutput">permissions-create.sql</tt></a></p><p><span class="strong">Tcl Procedures</span></p><p>Two tcl procedures provide a simple call for the query, &quot;Can this
+user perform this method on this object?&quot; One returns true or false, the
 other presents an error page.</p><p>To receive a true or false value, Tcl code should call:</p><pre class="programlisting">
 ad_permission_p $object_id $object_type $method -user_id $user_id
 </pre><p>If the <tt class="computeroutput">user_id</tt> argument is left out, then the currently logged in
@@ -167,14 +168,14 @@ choose revoke, confirm their deletion, and be returned to the same page after
 those privileges have been revoked.</p><p>Granting permissions currently (as of 10/2000) works by providing a list
 of all possible permissions and a list of all parties in the system. (For
 large sites, some future search mechanism will be necessary.) After choosing
-privileges to grant, the user is returned to the "edit privileges for
-one object" screen.</p><p>If it makes sense, the system will also display a checkbox which the user
+privileges to grant, the user is returned to the &quot;edit privileges for
+one object&quot; screen.</p><p>If it makes sense, the system will also display a checkbox which the user
 may select to toggle whether permissions are inherited from the object's
 context.</p><p>There are a number of potential future enhancements for the permissions
 UI, outlined below.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-design-configure"></a>Configuration/Parameters</h3></div></div><div></div></div><p>There are no configuration options for the permissions system.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-design-future"></a>Future Improvements/Areas of Likely Change</h3></div></div><div></div></div><p>The most important future changes to the Permissions system are likely to
 be in the UI:</p><div class="itemizedlist"><ul type="disc"><li><p>There should be a page displaying a list of all objects for which the
 current user is allowed to administer privileges.</p></li><li><p>Users should be able to view the permissions on any object, or perhaps on
-objects which they have the "read_permissions" method. This would
+objects which they have the &quot;read_permissions&quot; method. This would
 allow them to see what grants are affecting their objects through
 inheritance.</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-design-authors"></a>Authors</h3></div></div><div></div></div><div class="variablelist"><dl><dt><span class="term">System creator
 

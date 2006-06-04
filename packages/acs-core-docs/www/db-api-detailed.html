@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Database Access API</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 17. Kernel Documentation"><link rel="previous" href="apm-design.html" title="Package Manager Design"><link rel="next" href="i18n-requirements.html" title="OpenACS Internationalization Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="apm-design.html">Prev</a> </td><th width="60%" align="center">Chapter 17. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="i18n-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="db-api-detailed"></a>Database Access API</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="mailto:jsalz@mit.edu" target="_top">Jon Salz</a>. Revised and expanded by Roberto Mello (rmello at fslc dot usu dot edu), July 2002. </p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Database Access API</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 17. Kernel Documentation"><link rel="previous" href="apm-design.html" title="Package Manager Design"><link rel="next" href="i18n-requirements.html" title="OpenACS Internationalization Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="apm-design.html">Prev</a> </td><th width="60%" align="center">Chapter 17. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="i18n-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="db-api-detailed"></a>Database Access API</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="mailto:jsalz@mit.edu" target="_top">Jon Salz</a>. Revised and expanded by Roberto Mello (rmello at fslc dot usu dot edu), July 2002. </p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="itemizedlist"><ul type="disc"><li><p>Tcl procedures: /packages/acs-kernel/10-database-procs.tcl</p></li><li><p>Tcl initialization: /packages/acs-kernel/database-init.tcl</p></li></ul></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-bigpicture"></a>The Big Picture</h3></div></div><div></div></div><p>
@@ -10,14 +11,14 @@ makes this even easier.
 database (i.e., directly through the <tt class="computeroutput">ns_db</tt> interface):</p><div class="orderedlist"><ol type="1"><li><p><span class="strong">Handle management</span>. We required code to pass database
 handles around, and for routines which needed to perform database access but
 didn't receive a database handle as input, it was difficult to know from
-which of the three "magic pools" (main, subquery, and log) to
+which of the three &quot;magic pools&quot; (main, subquery, and log) to
 allocate a new handle. 
 
 
 </p></li><li><p><span class="strong">Nested transactions</span>. In our Oracle driver, <tt class="computeroutput">begin
-transaction</tt> really means "turn auto-commit mode off" and
-<tt class="computeroutput">end transaction</tt> means "commit the current transaction and
-turn auto-commit mode on." Thus if transactional code needed to call a
+transaction</tt> really means &quot;turn auto-commit mode off&quot; and
+<tt class="computeroutput">end transaction</tt> means &quot;commit the current transaction and
+turn auto-commit mode on.&quot; Thus if transactional code needed to call a
 routine which needed to operate transactionally, the semantics were
 non-obvious. Consider: </p><pre class="programlisting">
 
@@ -28,9 +29,9 @@ proc foo { db args } {
 }
 
 db_transaction {
-db_dml unused "insert into greeble(bork) values(33)"
+db_dml unused &quot;insert into greeble(bork) values(33)&quot;
 foo $db
-db_dml unused "insert into greeble(bork) values(50)"
+db_dml unused &quot;insert into greeble(bork) values(50)&quot;
 }
 
 </pre><p>
@@ -38,7 +39,7 @@ This would insert greeble #33 and do all the stuff in <tt class="computeroutput"
 transactionally, but the <tt class="computeroutput">end transaction</tt> in <tt class="computeroutput">foo</tt>
 would actually cause a commit, and greeble #50 would later be inserted in
 auto-commit mode. This could cause subtle bugs: e.g., in the case that the
-insert for greeble #50 failed, part of the "transaction" would have
+insert for greeble #50 failed, part of the &quot;transaction&quot; would have
 already have been committed!. This is not a good thing. 
 
 
@@ -61,7 +62,7 @@ It lays the groundwork for addressing the fourth problem by assigning each
 SQL statement a logical name. In a future version of the OpenACS Core, this API
 will translate logical statement names into actual SQL, based on the type of
 database in use. (To smooth the learning curve, we provide a facility for
-writing SQL inline for a "default SQL dialect", which we assume to
+writing SQL inline for a &quot;default SQL dialect&quot;, which we assume to
 be Oracle for now.) 
 </p><p>To be clear, SQL abstraction is <span class="emphasis"><em>not</em></span> fully implemented in OpenACS
 3.3.1. The statement names supplied to each call are not used by the API at
@@ -83,8 +84,8 @@ but you'll never need to use it.) The new API routines set local
 variables automatically. For instance: 
 </p><pre class="programlisting">
 
-db_1row select_names "select first_names, last_name from users where user_id = [ad_get_user_id]"
-doc_body_append "Hello, $first_names $last_name!"
+db_1row select_names &quot;select first_names, last_name from users where user_id = [ad_get_user_id]&quot;
+doc_body_append &quot;Hello, $first_names $last_name!&quot;
 
 </pre><p>
 Like <tt class="computeroutput">ns_db 1row</tt>, this will bomb if the query doesn't return
@@ -92,11 +93,11 @@ any rows (no such user exists). If this isn't what you want, you can
 write: 
 </p><pre class="programlisting">
 
-if { [db_0or1row select_names "select first_names, last_name from users where user_id = [ad_get_user_id]"] } {
-    doc_body_append "Hello, $first_names $last_name!"
+if { [db_0or1row select_names &quot;select first_names, last_name from users where user_id = [ad_get_user_id]&quot;] } {
+    doc_body_append &quot;Hello, $first_names $last_name!&quot;
 } else {
     # Executed if the query returns no rows.
-    doc_body_append "There's no such user!"
+    doc_body_append &quot;There's no such user!&quot;
 }
 
 </pre><p>
@@ -104,8 +105,8 @@ Selecting a bunch of rows is a lot prettier now:
 
  </p><pre class="programlisting">
 
-db_foreach select_names "select first_names, last_name from users" {
-     doc_body_append "Say hi to $first_names $last_name for me!&lt;br&gt;"
+db_foreach select_names &quot;select first_names, last_name from users&quot; {
+     doc_body_append &quot;Say hi to $first_names $last_name for me!&lt;br&gt;&quot;
 }
 
 </pre><p>
@@ -116,10 +117,10 @@ select</tt> plus a <tt class="computeroutput">while</tt> loop plus
 
  </p><pre class="programlisting">
 
-db_foreach select_names "select first_names, last_name from users where last_name like 'S%'" {
-     doc_body_append "Say hi to $first_names $last_name for me!&lt;br&gt;"
+db_foreach select_names &quot;select first_names, last_name from users where last_name like 'S%'&quot; {
+     doc_body_append &quot;Say hi to $first_names $last_name for me!&lt;br&gt;&quot;
 } if_no_rows {
-     doc_body_append "There aren't any users with last names beginnings with S!"
+     doc_body_append &quot;There aren't any users with last names beginnings with S!&quot;
 }
 
 </pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-handles"></a>Handle Management</h3></div></div><div></div></div><p>
@@ -128,21 +129,21 @@ allocates new handles when they are necessary (e.g., to perform subqueries
 while a select is active). For example: 
 </p><pre class="programlisting">
 
-doc_body_append "&lt;ul&gt;"
-db_foreach select_names "select first_names, last_name, user_id from users" {
+doc_body_append &quot;&lt;ul&gt;&quot;
+db_foreach select_names &quot;select first_names, last_name, user_id from users&quot; {
     # Automatically allocated a database handle from the main pool.
-    doc_body_append "&lt;li&gt;User $first_names $last_name\n&lt;ul&gt;"
+    doc_body_append &quot;&lt;li&gt;User $first_names $last_name\n&lt;ul&gt;&quot;
 
-    db_foreach select_groups "select group_id from user_group_map where user_id = $user_id" {
+    db_foreach select_groups &quot;select group_id from user_group_map where user_id = $user_id&quot; {
         # There's a selection in progress, so we allocated a database handle
         # from the subquery pool for this selection.
-        doc_body_append "&lt;li&gt;Member of group #$group_id.\n"
+        doc_body_append &quot;&lt;li&gt;Member of group #$group_id.\n&quot;
     } if_no_rows {
         # Not a member of any groups.
-        doc_body_append "&lt;li&gt;Not a member of any group.\n"
+        doc_body_append &quot;&lt;li&gt;Not a member of any group.\n&quot;
     }
 }
-doc_body_append "&lt;/ul&gt;"
+doc_body_append &quot;&lt;/ul&gt;&quot;
 db_release_unused_handles
 
 </pre><p>
@@ -186,7 +187,7 @@ there is never any need to put single-quotes around the value for a bind
 variable, or to use <tt class="computeroutput">db_quote</tt> to escape single-quotes contained
 in the value. The following works fine, despite the apostrophe:</p><pre class="programlisting">
 
-set exclamation "That's all, folks!"
+set exclamation &quot;That's all, folks!&quot;
 db_dml exclamation_insert { insert into exclamations(exclamation) values(:exclamation) }
 
 </pre><p>Note that you can use a bind variable in a SQL statement only where you
@@ -202,9 +203,9 @@ Why bother with bind variables at all - why not just write the Tcl statement
 above like this: 
 </p><pre class="programlisting">
 
-db_dml presentation_delete "
+db_dml presentation_delete &quot;
     delete from wp_presentations where presentation_id = $some_presentation_id
-"
+&quot;
 
 </pre><p>
 (Note the use of double-quotes to allow the variable reference to
@@ -238,7 +239,7 @@ to the referenced bind variables, e.g.:
 </p><pre class="programlisting">
 
 set user_id 123456
-set role "administrator"
+set role &quot;administrator&quot;
 
 db_foreach user_group_memberships_by_role {
     select g.group_id, g.group_name
@@ -248,7 +249,7 @@ db_foreach user_group_memberships_by_role {
     and map.role = :role
 } {
     # do something for each group of which user 123456 is in the role
-    # of "administrator"
+    # of &quot;administrator&quot;
 }
 
 </pre><p>
@@ -259,7 +260,7 @@ containing keys for each bind variable named in the query, e.g.:</p><pre class="
 
 set bind_vars [ns_set create]
 ns_set put $bind_vars user_id 123456
-ns_set put $bind_vars role "administrator"
+ns_set put $bind_vars role &quot;administrator&quot;
 
 db_foreach user_group_memberships_by_role {
     select g.group_id, g.group_name
@@ -269,7 +270,7 @@ db_foreach user_group_memberships_by_role {
     and map.role = :role
 } -bind $bind_vars {
     # do something for each group in which user 123456 has the role
-    # of "administrator"
+    # of &quot;administrator&quot;
 }
 
 </pre><p>
@@ -283,9 +284,9 @@ db_foreach user_group_memberships_by_role {
     where g.group_id = map.user_id
     and map.user_id = :user_id
     and map.role = :role
-} -bind [list user_id 123456 role "administrator"] {
+} -bind [list user_id 123456 role &quot;administrator&quot;] {
     # do something for each group in which user 123456 has the role
-    # of "administrator"
+    # of &quot;administrator&quot;
 }
 
 </pre><p><span class="strong"><a name="kernel.dbapi_nulls_and_bind_vars"></a>Nulls and Bind Variables</span></p><p>
@@ -297,8 +298,8 @@ When processing a DML statement, Oracle coerces empty strings into
 </p><p>As a result, when using bind variables, the only way to make Oracle set a
 column value to <tt class="computeroutput">null</tt> is to set the corresponding bind variable
 to the empty string, since a bind variable whose value is the string
-"null" will be interpreted as the literal string
-"null".</p><p>These Oracle quirks complicate the process of writing clear and abstract
+&quot;null&quot; will be interpreted as the literal string
+&quot;null&quot;.</p><p>These Oracle quirks complicate the process of writing clear and abstract
 DML difficult. Here is an example that illustrates why:</p><pre class="programlisting">
 
 #
@@ -310,14 +311,14 @@ DML difficult. Here is an example that illustrates why:</p><pre class="programli
 #   );
 #
 
-set bar ""
-set baz ""
+set bar &quot;&quot;
+set baz &quot;&quot;
 
-db_dml foo_create "insert into foo(bar, baz) values(:bar, :baz)"
+db_dml foo_create &quot;insert into foo(bar, baz) values(:bar, :baz)&quot;
 #
-# the values of the "bar" and "baz" columns in the new row are both
+# the values of the &quot;bar&quot; and &quot;baz&quot; columns in the new row are both
 # null, because Oracle has coerced the empty string (even for the
-# numeric column "bar") into null in both cases
+# numeric column &quot;bar&quot;) into null in both cases
 
 </pre><p>
 Since databases other than Oracle do not coerce empty strings into
@@ -332,9 +333,9 @@ explicitly to <tt class="computeroutput">null</tt>, e.g.:</p><pre class="program
 set bar [db_null]
 set baz [db_null]
 
-db_dml foo_create "insert into foo(bar, baz) values(:bar, :baz)"
+db_dml foo_create &quot;insert into foo(bar, baz) values(:bar, :baz)&quot;
 #
-# sets the values for both the "bar" and "baz" columns to null
+# sets the values for both the &quot;bar&quot; and &quot;baz&quot; columns to null
 
 </pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-sql-abstraction"></a>SQL Abstraction</h3></div></div><div></div></div><p>
 We now require that each SQL statement be assigned a logical name for the
@@ -348,8 +349,8 @@ Normally, <tt class="computeroutput">db_foreach</tt>, <tt class="computeroutput"
 can say: 
 </p><pre class="programlisting">
 
-db_foreach users_select "select first_names, last_name from users" {
-    doc_body_append "&lt;li&gt;$first_names $last_name\n"
+db_foreach users_select &quot;select first_names, last_name from users&quot; {
+    doc_body_append &quot;&lt;li&gt;$first_names $last_name\n&quot;
 }
 
 </pre><p>
@@ -363,11 +364,11 @@ instruct the database routines to place the results in a Tcl array or
 the values are the column values. For example: 
 </p><pre class="programlisting">
 
-db_foreach users_select "select first_names, last_name from users" -column_set columns {
+db_foreach users_select &quot;select first_names, last_name from users&quot; -column_set columns {
     # Now $columns is an ns_set.
-    doc_body_append "&lt;li&gt;"
+    doc_body_append &quot;&lt;li&gt;&quot;
     for { set i 0 } { $i &lt; [ns_set size $columns] } { incr i } {
-        doc_body_append "[ns_set key $columns $i] is [ns_set value $columns $i]. \n"
+        doc_body_append &quot;[ns_set key $columns $i] is [ns_set value $columns $i]. \n&quot;
     }
 }
 
@@ -396,10 +397,10 @@ column values (or a set or array populated if <tt class="computeroutput">-column
 <tt class="computeroutput">column_set</tt> is specified). If the query returns no rows, executes
 <span class="emphasis"><em><tt class="computeroutput">if_no_rows_block</tt></em></span> (if provided). </p><p>Example:</p><pre class="programlisting">
 
-db_foreach select_foo "select foo, bar from greeble" {
-    doc_body_append "&lt;li&gt;foo=$foo; bar=$bar\n"
+db_foreach select_foo &quot;select foo, bar from greeble&quot; {
+    doc_body_append &quot;&lt;li&gt;foo=$foo; bar=$bar\n&quot;
 } if_no_rows {
-    doc_body_append "&lt;li&gt;There are no greebles in the database.\n"
+    doc_body_append &quot;&lt;li&gt;There are no greebles in the database.\n&quot;
 }
 
 </pre><p>
@@ -411,7 +412,7 @@ loop and flush the database handle) and <tt class="computeroutput">continue</tt>
 </pre><p>Performs the SQL query <span class="emphasis"><em><tt class="computeroutput">sql</tt></em></span>, setting variables to
 column values. Raises an error if the query does not return exactly 1 row. </p><p>Example:</p><pre class="programlisting">
 
-db_1row select_foo "select foo, bar from greeble where greeble_id = $greeble_id"
+db_1row select_foo &quot;select foo, bar from greeble where greeble_id = $greeble_id&quot;
 # Bombs if there's no such greeble!
 # Now $foo and $bar are set.
 
@@ -470,11 +471,11 @@ specified, should be a list of <span class="emphasis"><em>paths to files</em></s
 insert. Only one of <tt class="computeroutput">-blobs</tt>, <tt class="computeroutput">-clobs</tt>,
 <tt class="computeroutput">-blob_files</tt>, and <tt class="computeroutput">-clob_files</tt> may be provided.</p><p>Example:</p><pre class="programlisting">
 
-db_dml insert_photos "
+db_dml insert_photos &quot;
         insert photos(photo_id, image, thumbnail_image)
         values(photo_id_seq.nextval, empty_blob(), empty_blob())
         returning image, thumbnail_image into :1, :2
-    "  -blob_files [list "/var/tmp/the_photo" "/var/tmp/the_thumbnail"] 
+    &quot;  -blob_files [list &quot;/var/tmp/the_photo&quot; &quot;/var/tmp/the_thumbnail&quot;] 
 
 </pre><p>
 This inserts a new row into the <tt class="computeroutput">photos</tt> table, with the contents
@@ -511,37 +512,37 @@ If there is no <tt class="computeroutput">on_error</tt> code, any errors will be
 
 proc replace_the_foo { col } {
     db_transaction {
-        db_dml "delete from foo"
-        db_dml "insert into foo(col) values($col)"
+        db_dml &quot;delete from foo&quot;
+        db_dml &quot;insert into foo(col) values($col)&quot;
     }
 }
 
 proc print_the_foo {} {
-    doc_body_append "foo is [db_string "select col from foo"]&lt;br&gt;\n"
+    doc_body_append &quot;foo is [db_string &quot;select col from foo&quot;]&lt;br&gt;\n&quot;
 }
 
 replace_the_foo 8
-print_the_foo ; # Writes out "foo is 8"
+print_the_foo ; # Writes out &quot;foo is 8&quot;
 
 db_transaction {
     replace_the_foo 14
-    print_the_foo ; # Writes out "foo is 14"
-    db_dml "insert into some_other_table(col) values(999)"
+    print_the_foo ; # Writes out &quot;foo is 14&quot;
+    db_dml &quot;insert into some_other_table(col) values(999)&quot;
     ...
     db_abort_transaction
 } on_error {
-    doc_body_append "Error in transaction: $errmsg"
+    doc_body_append &quot;Error in transaction: $errmsg&quot;
 }
     
 
-print_the_foo ; # Writes out "foo is 8"
+print_the_foo ; # Writes out &quot;foo is 8&quot;
 
 </pre></dd><dt><span class="term"><span class="strong"><tt class="computeroutput"><a name="kernel.dbapi_db_abort_transaction"></a>db_abort_transaction</tt></span>
 </span></dt><dd><pre class="programlisting">
 <span class="strong">db_abort_transaction</span>
 </pre><p>Aborts all levels of a transaction. That is if this is called within
 several nested transactions, all of them are terminated. Use this insetead of
-<tt class="computeroutput">db_dml "abort" "abort transaction"</tt>. 
+<tt class="computeroutput">db_dml &quot;abort&quot; &quot;abort transaction&quot;</tt>. 
 
 
 </p></dd><dt><span class="term"><span class="strong"><tt class="computeroutput"><a name="kernel.dbapi_db_multirow"></a>db_multirow</tt></span></span></dt><dd><pre class="programlisting">
@@ -617,13 +618,13 @@ want to have to use the new API (<tt class="computeroutput">db_foreach</tt>,
 
 proc lookup_the_foo { foo } {
     db_with_handle db {
-        return [db_string unused "select ..."]
+        return [db_string unused &quot;select ...&quot;]
     }
 }
 
 db_with_handle db {
     # Now there's a database handle in $db.
-    set selection [ns_db select $db "select foo from bar"]
+    set selection [ns_db select $db &quot;select foo from bar&quot;]
     while { [ns_db getrow $db $selection] } {
         set_variables_after_query
 
@@ -721,7 +722,7 @@ db_with_handle db {
 		</pre><p>
 			Returns a list of three-element lists describing the database engines known
 			to OpenACS.  Each sublist contains the internal database name (used in file
-			paths, etc), the driver name, and a "pretty name" to be used in selection
+			paths, etc), the driver name, and a &quot;pretty name&quot; to be used in selection
 			forms displayed to the user.
 		</p><p>
 			The nsv containing the list is initialized by the bootstrap script and should

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-subsite" package_version="5.1.2" locale="ro_RO" charset="utf-8">
+<message_catalog package_key="acs-subsite" package_version="5.2.3b2" locale="ro_RO" charset="utf-8">
 
   <msg key="_or">, sau</msg>
+  <msg key="_Update_Basic_Information">Actualizaţi Informaţiile de Bază</msg>
   <msg key="A_member_of_the_system">Membru al comunităţii %system_name% din</msg>
   <msg key="About_You">Despre Tine</msg>
   <msg key="Account_at_system_closed">Contul tau pe %system_name% a fost închis</msg>
@@ -43,7 +44,9 @@
   <msg key="communities">comunităţi</msg>
   <msg key="community">comunitate</msg>
   <msg key="Confirm">Confirmă</msg>
+  <msg key="confirmation_password_changed">You have successfully chosen a new password.</msg>
   <msg key="Continue">Continuă</msg>
+  <msg key="Continue_to_your_account">Continue to %pvt_home_name%</msg>
   <msg key="Country_Name">Numele Ţării</msg>
   <msg key="Create_new_community">Creează un nou %pretty_name%</msg>
   <msg key="Create_new_subsite">Creează un subsite nou</msg>
@@ -164,6 +167,7 @@
   <msg key="lt_Uploaded_pretty_date">Încarcat: %pretty_date% </msg>
   <msg key="lt_Uploaded_publish_date">Încarcat: %publish_date% </msg>
   <msg key="lt_Use_the_Browse_button">Utilizaţi butonul &quot;Browse...&quot; pentru a localiza fişierul, apoi apăsaţi &quot;Open&quot;.</msg>
+  <msg key="lt_User_has_portrait_title">Acest utilizator a introdus o biografie sau a încărcat un portret</msg>
   <msg key="lt_We_cant_find_you">Nu vă putem găsi(utilizatorul %user_id%) în tabelul utilizatorilor. Probabil contul dumneavoastră a fost şters dintr-un motiv sau altul.</msg>
   <msg key="lt_We_had_a_problem_proc">Am întâmpinat o problem în prelucrarea informaţiei introduse de dumneavoastră</msg>
   <msg key="lt_We_were_not_awaiting_">Nu ne aşteptam să primim email-ul dumneavoastră. Trebuie să fie vreo greşeală</msg>
@@ -210,6 +214,7 @@
   <msg key="Permissions_for_name">Permisiuni pentru %name%</msg>
   <msg key="Please_return_to_home">Vă rugăm reveniţi la %home_link%. </msg>
   <msg key="Portrait">Portret</msg>
+  <msg key="Profile">Profil</msg>
   <msg key="Question">Întrebare</msg>
   <msg key="Re_enable">Re-activează</msg>
   <msg key="Recover_Password">Recuperaţi Parola</msg>
@@ -219,6 +224,7 @@
   <msg key="Reject">Respinge</msg>
   <msg key="Remember_my_login">Aminteşte-ţi de autentificare mea pe acest calculator</msg>
   <msg key="Remove">Elimină</msg>
+  <msg key="Remove_All">Ştergeţi-le pe Toate</msg>
   <msg key="Req_membership_comm">Cere să fii membru în această comunitate</msg>
   <msg key="Req_membership_subs">Inscrie-te ca membru in acest subsite</msg>
   <msg key="Request_membership">Cere calitate de membru</msg>
@@ -260,6 +266,7 @@
   <msg key="upload_a_replacement_por">încarcă un portret înlocuitor</msg>
   <msg key="Upload_Portrait">Încarcă Portret</msg>
   <msg key="Username">Nume de utilizator</msg>
+  <msg key="UserSiteMap">Harta Site-ului pentru Utilizator</msg>
   <msg key="Vacation_Info_Updated">Informaţie de Vacanţă Actualizată</msg>
   <msg key="Vacation_information_updated">Informaţia dumneavoastră de vacanţă pe %site_link% a fost actualizată</msg>
   <msg key="Welcome_user">Bine aţi venit, %user_name%</msg>
@@ -267,6 +274,7 @@
   <msg key="Whos_Online_link_label">Utilizatori conectaţi acum</msg>
   <msg key="Whos_Online_title">Cine e Conectat</msg>
   <msg key="Yes_I_am_sure">Da, sunt sigur</msg>
+  <msg key="You_are_in_the_follow">Aparţii următoarelor grupe:</msg>
   <msg key="You_can_also_browse_from">Puteţi răsfoi de asemenea şi de pe </msg>
   <msg key="You_can_always_re_open">Puteţi oricând să-l redeschideţi prin</msg>
   <msg key="You_do_not_have_admin_on">Nu aveţi drepturi administrative asupra acestui obiect %root% sau asupra oricăreia dintre ramurile sale</msg>

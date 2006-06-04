@@ -62,7 +62,6 @@
 
                       </tr>
                     </formgroup>
-                  </table>
                 </noparse>
               </if>
 

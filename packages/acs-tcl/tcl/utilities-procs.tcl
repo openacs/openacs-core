@@ -353,7 +353,7 @@ proc util_PrettyBoolean {t_or_f { default  "default" } } {
 }
 
 proc_doc util_PrettyTclBoolean {zero_or_one} "Turns a 1 (or anything else that makes a Tcl IF happy) into Yes; anything else into No" {
-    if $zero_or_one {
+  if {$zero_or_one} {
 	return "Yes"
     } else {
 	return "No"
@@ -1948,6 +1948,10 @@ ad_proc -public ad_set_cookie {
 ad_proc -private ad_run_scheduled_proc { proc_info } { 
     Runs a scheduled procedure and updates monitoring information in the shared variables. 
 } {
+    if {[ns_info name] eq "NaviServer"} {
+      set proc_info [lindex $proc_info 0]
+    }
+
     # Grab information about the scheduled procedure.
     set thread [lindex $proc_info 0]
     set once [lindex $proc_info 1]
@@ -4637,4 +4641,75 @@ ad_proc -public util::cookietime {time} {
 } {
     regsub {, (\d+) (\S+) (\d+)} [ns_httptime $time] {, \1-\2-\3} string
     return $string
+}
+
+ad_proc -public util::find_all_files {
+    {-include_dirs 0}
+    {-max_depth 1}
+    {-check_file_func ""}
+    {-extension ""}
+    {-path:required}
+} {
+
+    Returns a list of lists with full paths and filename to all files under $path in the directory tree
+    (descending the tree to a depth of up to $max_depth).  Clients should not 
+    depend on the order of files returned.
+
+    DOES NOT WORK ON WINDOWS (you have to change the splitter and I don't know how to detect a windows system)
+
+    @param include_dirs Should directories be included in the list of files. 
+    @param max_depth How many levels of directories should be searched. Defaults to 1 which is the current directory
+    @param check_file_func Function which can be executed upon the file to determine if it is worth the effort
+    @param extension Only return files with this extension (single value !)
+    @param path The path in which to search for the files. Note that this is an absolute Path
+
+    @return list of lists (filename and full_path) of all files found.
+} {
+    # Use the examined_files array to track files that we've examined.
+    array set examined_files [list]
+
+    # A list of files that we will return (in the order in which we
+    # examined them).
+    set files [list]
+
+    # A list of files that we still need to examine.
+    set files_to_examine [list $path]
+
+    # Perform a breadth-first search of the file tree. For each level,
+    # examine files in $files_to_examine; if we encounter any directories,
+    # add contained files to $new_files_to_examine (which will become
+    # $files_to_examine in the next iteration).
+    while { [incr max_depth -1] > -2 && [llength $files_to_examine] != 0 } {
+	set new_files_to_examine [list]
+	foreach file $files_to_examine {
+	    # Only examine the file if we haven't already. (This is just a safeguard
+	    # in case, e.g., Tcl decides to play funny games with symbolic links so
+	    # we end up encountering the same file twice.)
+	    if { ![info exists examined_files($file)] } {
+		# Remember that we've examined the file.
+		set examined_files($file) 1
+
+		if { [empty_string_p $check_file_func] || [eval [list $check_file_func $file]] } {
+		    # If it's a file, add to our list. If it's a
+		    # directory, add its contents to our list of files to
+		    # examine next time.
+		    
+		    set filename [lindex [split $file "/"] end]
+		    set file_extension [lindex [split $filename "."] end]
+		    if { [file isfile $file] } {
+			if {$extension eq "" || $file_extension eq $extension} {
+			    lappend files [list $filename $file]
+			}
+		    } elseif { [file isdirectory $file] } {
+			if { $include_dirs == 1 } {
+			    lappend files $file
+			}
+			set new_files_to_examine [concat $new_files_to_examine [glob -nocomplain "$file/*"]]
+		    }
+		}
+	    }
+	}
+	set files_to_examine $new_files_to_examine
+    }
+    return $files
 }

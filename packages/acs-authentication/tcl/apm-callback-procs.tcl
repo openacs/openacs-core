@@ -138,6 +138,33 @@ ad_proc -private auth::after_upgrade {
 
 		}
 	    }
+            5.1.5 5.2.0a1 {
+                db_transaction {
+
+		    # I will add support to MergeUser operation 
+		    # this is a direct update to the SC tables, 
+		    # we should expect a new API for handling updates on SC, 
+		    # but since there's no one yet, we'll do it 
+		    # in this way. (quio@galileo.edu)
+		    ns_log notice "acs_authentication: Starting Upgrade (adding merge support)"
+		    acs_sc::contract::operation::new \
+			-contract_name "auth_authentication" \
+			-operation "MergeUser" \
+			-input { from_user_id:integer to_user_id:integer authority_id:integer } \
+			-output {} \
+			-description "Merges two accounts given the user_id of each one"
+
+ 		    acs_sc::impl::alias::new \
+ 			-contract_name "auth_authentication" \
+ 			-impl_name "local" \
+ 			-operation "MergeUser" \
+ 			-alias "auth::local::authentication::MergeUser" \
+		     
+  		    ns_log notice "acs_authentication: Finishing Upgrade (adding merge support)"
+
+		}
+	    }
+
 	}
 }
 
@@ -176,6 +203,17 @@ ad_proc -private auth::authentication::create_contract {} {
                     account_status:string
                     account_message:string
                 }
+            }
+            MergeUser {
+                description {
+		    Merges two accounts given the user_id of each one                 
+                }
+                input {
+                    from_user_id:integer
+                    to_user_id:integer
+		    authority_id:integer
+                }
+                output {}
             }
             GetParameters {
                 description {

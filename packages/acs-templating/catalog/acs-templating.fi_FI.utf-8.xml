@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-templating" package_version="5.1.2" locale="fi_FI" charset="utf-8">
+<message_catalog package_key="acs-templating" package_version="5.2.3b2" locale="fi_FI" charset="utf-8">
 
   <msg key="required">pakollinen kenttä</msg>
   <msg key="Spellcheck">Tarkista oikeinkirjoitus?</msg>

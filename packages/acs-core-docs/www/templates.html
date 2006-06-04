@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Using Templates in OpenACS</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="db-api.html" title="The OpenACS Database Access API"><link rel="next" href="permissions.html" title="Groups, Context, Permissions"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="db-api.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="permissions.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="templates"></a>Using Templates in OpenACS</h2></div></div><div></div></div><div class="authorblurb"><p>By Pete Su</p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Using Templates in OpenACS</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="db-api.html" title="The OpenACS Database Access API"><link rel="next" href="permissions.html" title="Groups, Context, Permissions"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="db-api.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="permissions.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="templates"></a>Using Templates in OpenACS</h2></div></div><div></div></div><div class="authorblurb"><p>By Pete Su</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="templates-overview"></a>Overview</h3></div></div><div></div></div><p>
@@ -68,12 +69,12 @@ db_1row user_name {
     where forum_id = :user_id
 }
 
-set page_title "Add a note for $user_name"
-set submit_label "Add"
-set target "note-add-2"
+set page_title &quot;Add a note for $user_name&quot;
+set submit_label &quot;Add&quot;
+set target &quot;note-add-2&quot;
 set note_id [db_nextval acs_object_id_seq]
 
-ad_return_template "note-add"
+ad_return_template &quot;note-add&quot;
 
 </pre><p>
 Some things to note about this code:
@@ -110,27 +111,27 @@ file.  Create a file called <tt class="computeroutput">note-add.adp</tt> in your
 and insert this text:
 </p><pre class="programlisting">
 
-&lt;master src="master"&gt;
-&lt;property name="title"&gt;@page_title@&lt;/property&gt;
-&lt;property name="context_bar"&gt;@context_bar@&lt;/property&gt;
+&lt;master src=&quot;master&quot;&gt;
+&lt;property name=&quot;title&quot;&gt;@page_title@&lt;/property&gt;
+&lt;property name=&quot;context_bar&quot;&gt;@context_bar@&lt;/property&gt;
 
 &lt;form action=@target@&gt;
 &lt;p&gt;Title: 
-&lt;input type="text" name="title" value=""&gt;
+&lt;input type=&quot;text&quot; name=&quot;title&quot; value=&quot;&quot;&gt;
 &lt;/p&gt;
 &lt;p&gt;Body: 
-&lt;input type="text" name="title" value=""&gt;
+&lt;input type=&quot;text&quot; name=&quot;title&quot; value=&quot;&quot;&gt;
 &lt;/p&gt;
 &lt;p&gt;
 &lt;center&gt;
-&lt;input type=submit value="@submit_label@"&gt;
+&lt;input type=submit value=&quot;@submit_label@&quot;&gt;
 &lt;/center&gt;
 &lt;/p&gt;
 &lt;/form&gt;
 
 </pre><p>
 The main point to note here is: when you want to substitute a value
-into a page, you put the name of the data source between two "@"
+into a page, you put the name of the data source between two &quot;@&quot;
 characters. Another point to note is the use of a master template:
 Master templates allow you do centralize display code that is used
 throughout an application in a single file. In this case, we intend to
@@ -144,7 +145,7 @@ this:
 &lt;%= [eval ad_context_bar $context_bar] %&gt; 
 &lt;hr&gt; 
 &lt;slave&gt; 
-&lt;br clear="all"&gt; 
+&lt;br clear=&quot;all&quot;&gt; 
 &lt;%= [ad_footer] %&gt;
 
 </pre><p>

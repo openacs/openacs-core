@@ -142,7 +142,9 @@ set errno [catch {
 
     # GN: Should be loaded before user packages such they can use
     # the xotcl infrastructure
-    if {[file isdirectory $root_directory/packages/xotcl-core]} {
+    # DRB: only do it if xotcl's installed
+    if {[info command ::xotcl::Class] ne "" &&
+        [file isdirectory $root_directory/packages/xotcl-core]} {
        apm_bootstrap_load_libraries -procs xotcl-core
     }
 

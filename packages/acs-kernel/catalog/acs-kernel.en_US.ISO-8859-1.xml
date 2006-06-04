@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.2.0d9" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.2.3" locale="en_US" charset="ISO-8859-1">
 
   <msg key="Administrator">Administrator</msg>
   <msg key="Administrators">Administrators</msg>
@@ -26,6 +26,9 @@
   <msg key="common_closed">closed</msg>
   <msg key="common_Continue">Continue</msg>
   <msg key="common_continue">continue</msg>
+  <msg key="common_Copy">Copy</msg>
+  <description key="common_Copy">Important for non-English for most languages, is this singular or plural?!</description>
+
   <msg key="common_Default">Use Default</msg>
   <msg key="common_default">use default</msg>
   <msg key="common_Delete">Delete</msg>
@@ -46,6 +49,8 @@
   <msg key="common_go">go</msg>
   <msg key="common_Help">Help</msg>
   <msg key="common_help">help</msg>
+  <msg key="common_Last">Last</msg>
+  <msg key="common_lastt">last</msg>
   <msg key="common_Login">Log in</msg>
   <msg key="common_login">log in</msg>
   <msg key="common_Needs_Approval">Needs Approval</msg>
@@ -75,23 +80,35 @@
   <msg key="common_Stop">Stop</msg>
   <msg key="common_stop">stop</msg>
   <msg key="common_Submit">Submit</msg>
+  <msg key="common_submit">submit</msg>
+  <msg key="common_Title">Title</msg>
+  <msg key="common_Type">Type</msg>
   <msg key="common_Update">Update</msg>
   <msg key="common_update">update</msg>
   <msg key="common_View">View</msg>
   <msg key="common_view">view</msg>
   <msg key="common_Yes">Yes</msg>
   <msg key="common_yes">yes</msg>
-  <msg key="Email_Address">Email Address</msg>
   <msg key="Email_Addresses">Email Addresses</msg>
-  <msg key="First_Names">First Name(s)</msg>
+  <msg key="Last_Names">Last Names</msg>
+  <msg key="lt_Administrator_Relatio_1">Administrator Relationships</msg>
+  <msg key="lt_Membership_Relationsh">Membership Relationships</msg>
+  <msg key="Default_Context">Default Context</msg>
+  <msg key="Email_Address">Email Address</msg>
+  <msg key="First_Names">First Names</msg>
   <msg key="Group">Group</msg>
   <msg key="Group_name">Group Name</msg>
   <msg key="Groups">Groups</msg>
   <msg key="Last_Name">Last Name</msg>
-  <msg key="Last_Names">Last Names</msg>
-  <msg key="lt_Administrator_Relatio">Administrator Relation</msg>
-  <msg key="lt_Administrator_Relatio_1">Administrator Relationships</msg>
-  <msg key="lt_Membership_Relationsh">Membership Relationships</msg>
+  <msg key="lt_Administrator_Relatio">Administrator Relationship</msg>
+  <msg key="lt_Main_Site_Administrat">Main Site Administrators</msg>
+  <msg key="lt_Relational_Constraint">Relational Constraint</msg>
+  <msg key="lt_Relational_Constraint_1">Relational Constraints</msg>
+  <msg key="lt_Relational_Party_Segm">Relational Party Segment</msg>
+  <msg key="lt_Relational_Party_Segm_1">Relational Party Segments</msg>
+  <msg key="lt_Security_context_root">Security context root</msg>
+  <msg key="Main_Site">Main Site</msg>
+  <msg key="Main_Site_Members">Main Site Members</msg>
   <msg key="Member_role_pretty_name">Member</msg>
   <msg key="member_role_pretty_name">member</msg>
   <msg key="Member_role_pretty_plural">Members</msg>
@@ -121,4 +138,6 @@
   <msg key="URL">URL</msg>
   <msg key="User">User</msg>
   <msg key="Visitor">Visitor</msg>
+  <msg key="Person">Person</msg>
+  <msg key="registered_users">Registered Users</msg>
 </message_catalog>

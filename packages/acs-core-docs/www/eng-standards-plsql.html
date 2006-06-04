@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>PL/SQL Standards</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="eng-standards-filenaming.html" title="ACS File Naming and Formatting Standards"><link rel="next" href="variables.html" title="Variables"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="eng-standards-filenaming.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="variables.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eng-standards-plsql"></a>PL/SQL Standards</h2></div></div><div></div></div><div class="authorblurb"><p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>PL/SQL Standards</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="eng-standards-filenaming.html" title="ACS File Naming and Formatting Standards"><link rel="next" href="variables.html" title="Variables"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="eng-standards-filenaming.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="variables.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eng-standards-plsql"></a>PL/SQL Standards</h2></div></div><div></div></div><div class="authorblurb"><p>
 By Richard Li and Yon Feldman
 </p>
           OpenACS docs are written by the named authors, and may be edited
@@ -15,7 +16,7 @@ By Richard Li and Yon Feldman
     is maintainable by others, this is especially true in our case
     because we are building an open source toolkit than anyone can
     download and browse the source code. So document like you are
-    trying to impress your "Introduction to Programming" professor or
+    trying to impress your &quot;Introduction to Programming&quot; professor or
     TA.
    </p></li><li><p>
     It is important to be consistent throughout an application as much
@@ -62,7 +63,7 @@ By Richard Li and Yon Feldman
     &lt;package_name&gt;;</tt>, not just <tt class="computeroutput">end;</tt>; same
     goes for procedures, functions, package bodies, and triggers.
    </p></li><li><p>
-    Always use the "show errors" SQL*Plus command after each PL/SQL
+    Always use the &quot;show errors&quot; SQL*Plus command after each PL/SQL
     block. It will help you debug when there are compilation errors in
     your PL/SQL code.
    </p></li><li><p>
@@ -107,7 +108,7 @@ By Richard Li and Yon Feldman
         show errors
      
 </pre></li><li><p>
-    Explicitly designate each parameter as "in," "out," or "inout."
+    Explicitly designate each parameter as &quot;in,&quot; &quot;out,&quot; or &quot;inout.&quot;
    </p></li><li><p>
     Each parameter should be on its own line, with a tab after the
     parameter name, then in/out/inout, then a space, and finally the
@@ -115,7 +116,7 @@ By Richard Li and Yon Feldman
    </p></li><li><p>
     Use %TYPE and %ROWTYPE whenever possible.
    </p></li><li><p>
-    Use 't' and 'f' for booleans, not the PL/SQL "boolean" datatype
+    Use 't' and 'f' for booleans, not the PL/SQL &quot;boolean&quot; datatype
     because it can't be used in SQL queries.
    </p></li><li><p>
     All <tt class="computeroutput">new</tt> functions (e.g., <tt class="computeroutput">acs_object.new,

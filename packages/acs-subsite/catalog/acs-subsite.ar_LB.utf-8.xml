@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-subsite" package_version="5.1.2" locale="ar_LB" charset="utf-8">
+<message_catalog package_key="acs-subsite" package_version="5.2.3b2" locale="ar_LB" charset="utf-8">
 
   <msg key="_or">أو </msg>
   <msg key="_Update_Basic_Information">حدث المعلومات الاساسية</msg>
@@ -173,6 +173,7 @@
   <msg key="lt_Uploaded_pretty_date">تم تحميل %pretty_date%</msg>
   <msg key="lt_Uploaded_publish_date">تم تحميل  %publish_date%</msg>
   <msg key="lt_Use_the_Browse_button">إستخدم كبسة البحث للصول إلى الملف ومن ثم إضغط علىكبسة الفتح</msg>
+  <msg key="lt_User_has_portrait_title">المستخدم ادخل سيرته الذاتية او حمل معلوماته الشخصية</msg>
   <msg key="lt_We_cant_find_you">لا نستطيع  إ يجادك  %user_id% على  لائحة المستخدمين ربما قد تم الغاءك لسبب ما</msg>
   <msg key="lt_We_had_a_problem_proc">توجد مشكلة أثناء معالجة مدخلاتك</msg>
   <msg key="lt_We_were_not_awaiting_">نحن لم نكن ننتظر بريدك الإلكتروني. يجب أن يكون هناك بعض الخطأ.</msg>
@@ -219,6 +220,7 @@
   <msg key="Permissions_for_name">الصلاحيات ل %name%</msg>
   <msg key="Please_return_to_home">الرجاء الرجوع إلى  %home_link%.</msg>
   <msg key="Portrait">بورتريه</msg>
+  <msg key="Profile">الملف الشخصي</msg>
   <msg key="Question">السؤالُ:</msg>
   <msg key="Re_enable">إعادة تفعيل</msg>
   <msg key="Recover_Password">إسترجع كلمة السر</msg>
@@ -228,6 +230,7 @@
   <msg key="Reject">أرفض</msg>
   <msg key="Remember_my_login">إحفظ إسم دخولي علىهذا الحاسوب</msg>
   <msg key="Remove">أزل</msg>
+  <msg key="Remove_All">Remove All</msg>
   <msg key="Req_membership_comm">أطلب عضوية هذا المجتمع</msg>
   <msg key="Req_membership_subs">أطلب عضوية هذا الموقع</msg>
   <msg key="Request_membership">أطلب عضوية </msg>
@@ -269,6 +272,7 @@
   <msg key="upload_a_replacement_por">تحميل أو تغير بورتريه</msg>
   <msg key="Upload_Portrait">تحميل  بورتريه</msg>
   <msg key="Username">إسم المستخدم</msg>
+  <msg key="UserSiteMap">User's Site Map</msg>
   <msg key="Vacation_Info_Updated">معلومات الاجازة قد تم تحديثها</msg>
   <msg key="Vacation_information_updated">المعلومات الخاصة بإجازتك قد تم تحديثها</msg>
   <msg key="Welcome_user">أهلا %user_name%</msg>

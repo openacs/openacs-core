@@ -306,7 +306,7 @@ begin
   -- Drop the column if neccessary
   if drop_attribute__drop_column then
       execute ''alter table '' || v_table || '' drop column '' ||
-	drop_attribute__attribute_name || '' cascade'';
+        drop_attribute__attribute_name || '' cascade'';
 
   end if;  
 
@@ -478,7 +478,7 @@ declare
   attr_rec                                 record;
 begin
   if trigger_insert_statement__content_type is null then 
-	return exception ''content_type__trigger_insert_statement called with null content_type'';
+        return exception ''content_type__trigger_insert_statement called with null content_type'';
   end if;
 
   select 
@@ -598,7 +598,7 @@ begin
                     and ot2.object_type <> ''content_revision''
                     and ot1.object_type = refresh_trigger__content_type
                     and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
-                  order by level desc
+                  order by level asc
   LOOP
     rule_text := rule_text || '' '' || content_type__trigger_insert_statement(type_rec.object_type) || '';'';
   end loop;
@@ -647,6 +647,8 @@ begin
                   from acs_object_types ot1, acs_object_types ot2
                   where ot2.object_type <> ''acs_object''                       
                     and ot2.object_type <> ''content_revision''
+                    and lower(ot2.table_name) <> ''acs_objects''     
+                    and lower(ot2.table_name) <> ''cr_revisions''
                     and ot1.object_type = refresh_view__content_type
                     and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
                   order by ot2.tree_sortkey desc
@@ -738,6 +740,8 @@ end;' language 'plpgsql';
 
 select define_function_args('content_type__register_child_type','parent_type,child_type,relation_tag;generic,min_n;0,max_n');
 
+-- procedure register_child_type
+select define_function_args('content_type__register_child_type','parent_type,child_type,relation_tag;generic,min_n;0,max_n');
 create or replace function content_type__register_child_type (varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
@@ -902,7 +906,7 @@ begin
   where 
     not exists ( select 1
                  from
-	           cr_content_mime_type_map
+                   cr_content_mime_type_map
                  where
                    mime_type = register_mime_type__mime_type
                  and

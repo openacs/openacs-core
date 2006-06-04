@@ -53,7 +53,7 @@ ad_form -name application -cancel_url . -form {
 
     # Autogenerate folder name
     if { [empty_string_p $folder] } {
-        set existing_urls [site_node::get_children -node_id $parent_node_id -element name]
+        set existing_urls [site_node::get_children -node_id $node_id -element name]
 
         set folder [util_text_to_url \
                       -existing_urls $existing_urls \

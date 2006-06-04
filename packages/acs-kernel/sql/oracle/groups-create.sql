@@ -30,7 +30,7 @@ create table membership_rels (
                         primary key,
         member_state    varchar2(20) not null
                         constraint membership_rel_mem_ck
-                        check (member_state in ('approved', 'needs approval',
+                        check (member_state in ('merged','approved', 'needs approval',
                                               'banned', 'rejected', 'deleted'))
 );
 
@@ -449,6 +449,10 @@ as
   );
 
   procedure approve (
+    rel_id      in membership_rels.rel_id%TYPE
+  );
+
+  procedure merge (
     rel_id      in membership_rels.rel_id%TYPE
   );
 

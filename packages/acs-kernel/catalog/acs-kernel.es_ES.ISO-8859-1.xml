@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.1.2d4" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.2.3b2" locale="es_ES" charset="ISO-8859-1">
 
+  <msg key="Administrator">Administrador</msg>
+  <msg key="Administrators">Administradores</msg>
   <msg key="authentication_authority">Autoridad</msg>
+  <msg key="common_Actions">Acciones</msg>
+  <msg key="common_actions">acciones</msg>
   <msg key="common_Add">Añadir</msg>
   <msg key="common_add">añadir</msg>
   <msg key="common_Administration">Administración</msg>
   <msg key="common_administration">administración</msg>
+  <msg key="common_All">Todo</msg>
   <msg key="common_Apply">Aplicar</msg>
   <msg key="common_apply">aplicar</msg>
   <msg key="common_Cancel">Cancelar</msg>
@@ -16,10 +21,13 @@
   <msg key="common_closed">cerrado</msg>
   <msg key="common_Continue">Continuar</msg>
   <msg key="common_continue">continuar</msg>
+  <msg key="common_Copy">Copiar</msg>
   <msg key="common_Default">Usar por Defecto</msg>
   <msg key="common_default">Use el Elemento por Defecto</msg>
   <msg key="common_Delete">Borrar</msg>
   <msg key="common_delete">eliminar</msg>
+  <msg key="common_Details">Detalles</msg>
+  <msg key="common_details">detalles</msg>
   <msg key="common_Discard">Descartar</msg>
   <msg key="common_discard">descartar</msg>
   <msg key="common_Display">Mostrar</msg>
@@ -34,6 +42,8 @@
   <msg key="common_go">ir</msg>
   <msg key="common_Help">Ayuda</msg>
   <msg key="common_help">ayuda</msg>
+  <msg key="common_Last">Último</msg>
+  <msg key="common_lastt">último</msg>
   <msg key="common_Login">Entrar</msg>
   <msg key="common_login">entrar</msg>
   <msg key="common_Needs_Approval">Necesita Aprobación</msg>
@@ -47,6 +57,7 @@
   <msg key="common_ok">ok</msg>
   <msg key="common_Open">Abrir</msg>
   <msg key="common_open">abrir</msg>
+  <msg key="common_Permissions">Permisos</msg>
   <msg key="common_Previous">Anterior</msg>
   <msg key="common_previous">anterior</msg>
   <msg key="common_Register">Registrarse</msg>
@@ -61,12 +72,30 @@
   <msg key="common_search">buscar</msg>
   <msg key="common_Stop">Detener</msg>
   <msg key="common_stop">detener</msg>
+  <msg key="common_Submit">Enviar</msg>
+  <msg key="common_submit">enviar</msg>
+  <msg key="common_Title">Título</msg>
+  <msg key="common_Type">Tipo</msg>
   <msg key="common_Update">Actualizar</msg>
   <msg key="common_update">actualizar</msg>
   <msg key="common_View">Ver</msg>
   <msg key="common_view">ver</msg>
   <msg key="common_Yes">Si</msg>
   <msg key="common_yes">sí</msg>
+  <msg key="Default_Context">Contexto por Defecto</msg>
+  <msg key="Email_Address">Dirección de correo</msg>
+  <msg key="First_Names">Nombre</msg>
+  <msg key="Group">Grupo</msg>
+  <msg key="Last_Name">Apellidos</msg>
+  <msg key="lt_Administrator_Relatio">Relación de Administración</msg>
+  <msg key="lt_Main_Site_Administrat">Administradores del Sitio Principal</msg>
+  <msg key="lt_Relational_Constraint">Restricción Relacional</msg>
+  <msg key="lt_Relational_Constraint_1">Restricciones Relacionales</msg>
+  <msg key="lt_Relational_Party_Segm">Segmento Relacional de Agrupación</msg>
+  <msg key="lt_Relational_Party_Segm_1">Segmentos Relacionales de Agrupación</msg>
+  <msg key="lt_Security_context_root">Raiz del contexto de seguridad</msg>
+  <msg key="Main_Site">Sitio Principal</msg>
+  <msg key="Main_Site_Members">Miembros del Sitio Principal</msg>
   <msg key="Member_role_pretty_name">Miembro</msg>
   <msg key="member_role_pretty_name">miembro</msg>
   <msg key="Member_role_pretty_plural">Miembros</msg>
@@ -81,4 +110,16 @@
   <msg key="member_state_needs_approval">necesita aprobación</msg>
   <msg key="member_state_Rejected">Rechazado</msg>
   <msg key="member_state_rejected">rechazado</msg>
+  <msg key="Membership_Relation">Relación de Pertenencia</msg>
+  <msg key="Party">Agrupación</msg>
+  <msg key="Person">Persona</msg>
+  <msg key="Registered_Users">Usuarios Registrados</msg>
+  <msg key="registered_users">usuarios registrados</msg>
+  <msg key="The_Public">Público</msg>
+  <msg key="the_public">público</msg>
+  <msg key="Unregistered">No Registrado</msg>
+  <msg key="Unregistered_Visitor">Visitante No Registrado</msg>
+  <msg key="URL">URL</msg>
+  <msg key="User">Usuario</msg>
+  <msg key="Visitor">Visitante</msg>
 </message_catalog>

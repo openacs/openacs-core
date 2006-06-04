@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS Packages</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="next" href="objects.html" title="OpenACS Data Models and the Object System"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="packages"></a>OpenACS Packages</h2></div></div><div></div></div><div class="authorblurb"><p>By Pete Su and Bryan Quinn</p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS Packages</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="next" href="objects.html" title="OpenACS Data Models and the Object System"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="packages"></a>OpenACS Packages</h2></div></div><div></div></div><div class="authorblurb"><p>By Pete Su and Bryan Quinn</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-overview"></a>Overview</h3></div></div><div></div></div><p>
@@ -8,11 +9,11 @@
       package.  This document presents reasons for packaging software,
       conventions for the file system and naming that must be
       followed, and step by step instructions for creating a new
-      package for the "Notes" example package.
+      package for the &quot;Notes&quot; example package.
     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="server-file-layout"></a>Server file layout</h3></div></div><div></div></div><p>
       Here is how an OpenACS 5 server is laid out
       starting from the Server root (ROOT):
-    </p><div class="figure"><a name="id2505554"></a><p class="title"><b>Figure 11.1. Server file layout diagram</b></p><pre class="programlisting">
+    </p><div class="figure"><a name="id2851274"></a><p class="title"><b>Figure 11.1. Server file layout diagram</b></p><pre class="programlisting">
 ROOT/
     bin/
         Various executables and scripts for server maintanence.
@@ -49,8 +50,8 @@ ROOT/
     </p><p>
       <a class="indexterm" name="baby"></a>
       To illustrate the general structure of a package, let's see what the
-      package for the "notes" application should look like.
-    </p><div class="figure"><a name="id2549268"></a><p class="title"><b>Figure 11.2. Package file layout diagram</b></p><pre class="programlisting">
+      package for the &quot;notes&quot; application should look like.
+    </p><div class="figure"><a name="id2851358"></a><p class="title"><b>Figure 11.2. Package file layout diagram</b></p><pre class="programlisting">
 ROOT/
   +-- packages/    APM Root
         |
@@ -123,7 +124,7 @@ ROOT/
       directories.  This makes it suitable for storing icons, css
       files, javascript, and other static content which can be treated
       this way.
-    </p><div class="table"><a name="id2527937"></a><p class="title"><b>Table 11.1. Package files</b></p><table summary="Package files" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>File Type</th><th>Its Use</th><th>Naming Convention</th></tr></thead><tbody><tr><td>Package Specification File</td><td>The package specification file is an XML file generated and
+    </p><div class="table"><a name="id2846023"></a><p class="title"><b>Table 11.1. Package files</b></p><table summary="Package files" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>File Type</th><th>Its Use</th><th>Naming Convention</th></tr></thead><tbody><tr><td>Package Specification File</td><td>The package specification file is an XML file generated and
           maintained by the OpenACS Package Manager (APM).  It specifies
           information about the package including its parameters and its
           files.</td><td><tt class="computeroutput">notes.info</tt></td></tr><tr><td>Data Model Creation Script</td><td>
@@ -257,14 +258,14 @@ ROOT/
         </p></dd><dt><span class="term">Package Name
           </span></dt><dd><p>
           This is a short human readable name for your package. For our example,
-          we will use the name "Notes".
+          we will use the name &quot;Notes&quot;.
         </p></dd><dt><span class="term">Package Plural
           </span></dt><dd><p>
           If your package name is a nice singular noun, this should be the
           plural form of it. I assume the plural form is used when multiple
           instances of the package are used by a single service. We'll talk more
           about package instances later. Our example apllication doesn't really
-          have a good plural name. So just make it also be "Notes".
+          have a good plural name. So just make it also be &quot;Notes&quot;.
         </p></dd><dt><span class="term">Package Type
           </span></dt><dd><p>
           Generally we think of packages as either being <span class="emphasis"><em>applications</em></span>,
@@ -287,10 +288,10 @@ ROOT/
         </p></dd><dt><span class="term">Summary and Description
           </span></dt><dd><p>
           Enter a short summary and longer description of what the Notes
-          application will do. That is, something like "this application keeps
-          short textual notes in the database", and so on.
+          application will do. That is, something like &quot;this application keeps
+          short textual notes in the database&quot;, and so on.
         </p></dd></dl></div><p>
-    </p></li><li><p>Click the button "Create Package".
+    </p></li><li><p>Click the button &quot;Create Package&quot;.
     </p></li><li><p>At this point, APM will create a directory called
       <tt class="computeroutput">ROOT/packages/notes</tt>.
     </p></li><li><p>
@@ -309,11 +310,11 @@ ROOT/
           <tt class="computeroutput">ROOT/packages/notes/sql/postgresql/notes-drop.sql</tt>.
         </p><p>
           After you do this, go back to the main APM page. From there,
-          click the link called "notes" to go to the management
-          page for the new package. Now click the link called "Manage
-          file information", then the "Scan the
+          click the link called &quot;notes&quot; to go to the management
+          page for the new package. Now click the link called &quot;Manage
+          file information&quot;, then the &quot;Scan the
           <tt class="computeroutput">packages/notes</tt> directory for
-          additional files in this package" link on that page to scan
+          additional files in this package&quot; link on that page to scan
           the file system for new files.  This will bring you do a page
           that lists all the files you just added and lets you add them to
           the <tt class="computeroutput">notes</tt> package.
@@ -326,9 +327,9 @@ ROOT/
           <tt class="computeroutput">.tcl</tt> files for code, it does not
           do the same thing for data model files.  
         </p></li><li><p>Now go back to the main management page for the <tt class="computeroutput">notes</tt>
-          If your package has parameters, create them using the "Manage
-          Parameter Information" link.  Define package callbacks via the "Tcl Callbacks (install,
-        instantiate, mount)" link.</p></li><li><p>The new package has been created and installed in the server. At
+          If your package has parameters, create them using the &quot;Manage
+          Parameter Information&quot; link.  Define package callbacks via the &quot;Tcl Callbacks (install,
+        instantiate, mount)&quot; link.</p></li><li><p>The new package has been created and installed in the server. At
       this point, you should add your package files to your CVS repository.
       I'll assume that you have set up your development repository according
       to the standards described in 
@@ -341,7 +342,7 @@ ROOT/
 % cd sql
 % cvs add *.sql
 % cd ROOT/packages/notes
-% cvs commit -m "add new package for notes"
+% cvs commit -m &quot;add new package for notes&quot;
     </pre></li><li><p>
       Now you can start developing the package. In addition to writing code,
       you should also consider the tasks outlined in the <a href="tutorial-newpackage.html" title="Creating an Application Package">package development tutorial</a>.
@@ -380,7 +381,7 @@ ROOT/
       the <a href="/admin/site-map" target="_top">Site Map</a> page, which is by
       default available at <tt class="computeroutput">/acs-admin/site-map</tt>. Use the
       interface here to add a new sub-folder called <tt class="computeroutput">notes</tt> to
-      the root of the site, then click "new application" to mount a new
+      the root of the site, then click &quot;new application&quot; to mount a new
       instance of the <tt class="computeroutput">notes</tt> application to the site. Name the
       new instance <tt class="computeroutput">notes-1</tt>.
     </p><p>

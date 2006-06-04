@@ -1,17 +1,18 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>The Request Processor</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="objects.html" title="OpenACS Data Models and the Object System"><link rel="next" href="db-api.html" title="The OpenACS Database Access API"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="objects.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="db-api.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="request-processor"></a>The Request Processor</h2></div></div><div></div></div><div class="authorblurb"><p>By Pete Su</p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>The Request Processor</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="objects.html" title="OpenACS Data Models and the Object System"><link rel="next" href="db-api.html" title="The OpenACS Database Access API"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="objects.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="db-api.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="request-processor"></a>The Request Processor</h2></div></div><div></div></div><div class="authorblurb"><p>By Pete Su</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="rp-overview"></a>Overview</h3></div></div><div></div></div><p>
-This document is a brief introduction to the OpenACS 5.2.0d1 Request Processor;
+This document is a brief introduction to the OpenACS 5.2.3b1 Request Processor;
 more details can be found in the <a href="rp-design.html">OpenACS 4 Request Processor Design</a>. Here we cover the high level concepts behind the
 system, and implications and usage for the application developer.
 </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="rp-thenewway"></a>Request Processor</h3></div></div><div></div></div><p>
-The 5.2.0d1 Request Processor is a global filter and set of Tcl procs that
+The 5.2.3b1 Request Processor is a global filter and set of Tcl procs that
 respond to every incoming URL reaching the server. The following
 diagram summarizes the stages of the request processor assuming a URL
 request like <tt class="computeroutput">http://someserver.com/notes/somepage.adp</tt>.
 
-</p><div class="mediaobject" align="center"><img src="images/rp-flow.gif" align="middle"></div><p>
+</p><div class="mediaobject" align="center"><img src="../images/rp-flow.gif" align="middle"></div><p>
 
 </p><div class="variablelist"><dl><dt><span class="term">Stage 1: Search Site Map</span></dt><dd><p>
 The first thing the RP does is to map the given URL to the appropriate
@@ -35,9 +36,9 @@ detail in its own document. It examines the client request and either
 extracts or sets up new session tokens for the user.
 </p></dd><dt><span class="term">Stage 3: Authorization</span></dt><dd><p>
 Next, the Request Processor checks if the user has appropriate access
-privileges to the requested part of the site. In OpenACS 5.2.0d1, access control
+privileges to the requested part of the site. In OpenACS 5.2.3b1, access control
 is dictated by the <a href="permissions" target="_top">permissions system</a>. In
-this case, the RP checks if the user has "read" priviledges on the
+this case, the RP checks if the user has &quot;read&quot; priviledges on the
 object in the site map specified by the URL. This object is typically
 a package instance, but it could easily be something more granular,
 such as whehter the user can view a particular piece of content within
@@ -46,7 +47,7 @@ sites with areas that are only accessible to specific groups of users.
 </p></dd><dt><span class="term">Stage 4: URL Processing, File Search</span></dt><dd><p>
 Finally, the Request Processor finds the file we intend to serve,
 searching the filesystem to locate the actual file that corresponds to
-an abstract URL.  It searches for files with predefined "magic"
+an abstract URL.  It searches for files with predefined &quot;magic&quot;
 extensions, i.e. files that end with: <tt class="computeroutput">.html</tt>,
 <tt class="computeroutput">.tcl</tt> and <tt class="computeroutput">.adp</tt>.  
 </p><p>

@@ -47,13 +47,11 @@ proc server_responds_p { server_url } {
 
 foreach {server_url restart_command} $servers_to_monitor {
 
-    if { [server_responds_p $server_url] } {
-    } else {
-	puts -nonewline "Checking server at $server_url - "
-        puts -nonewline "no response. "
-        puts "Executing command \"$restart_command\" to restart server."
+    if { ![server_responds_p $server_url] } {
         if { [catch {eval exec $restart_command} errmsg] } {
-            puts "Error executing restart_command: $errmsg"
-        }
+	    catch { exec /bin/mail -s "${server_url} did not respond to a monitoring check and could not be restarted" $mailto }
+        } else {
+	    catch { exec /bin/mail -s "${server_url} did not respond to a monitoring check so it was restarted" $mailto }
+	}
     }
 }

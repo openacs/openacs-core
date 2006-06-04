@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.1.2d4" locale="pt_BR" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.2.3b2" locale="pt_BR" charset="ISO-8859-1">
 
   <msg key="authentication_authority">Autoridade</msg>
   <msg key="common_Add">Adicionar</msg>
@@ -61,6 +61,7 @@
   <msg key="common_search">procurar</msg>
   <msg key="common_Stop">Pare</msg>
   <msg key="common_stop">Parar</msg>
+  <msg key="common_submit">Enviar</msg>
   <msg key="common_Update">Atualizar</msg>
   <msg key="common_update">Atualizar</msg>
   <msg key="common_View">Ver</msg>

@@ -398,32 +398,35 @@ ad_proc -public lang::catalog::export {
     }
 
     foreach package_key $package_key_list {
-        # Loop over all locales that the package has messages in
-        # and write a catalog file for each such locale
-        db_foreach get_locales_for_package {} {
-            # If we are only exporting certain locales and this is not one of them - continue
-            if { [llength $locales] > 0 && [lsearch -exact $locales $locale] == -1 } {
-                continue
-            }
-
-            # Get messages and descriptions for the locale
-            set messages_list [list]
-            set descriptions_list [list]
-            all_messages_for_package_and_locale $package_key $locale
-            template::util::multirow_foreach all_messages {
-                lappend messages_list @all_messages.message_key@ @all_messages.message@
-                lappend descriptions_list @all_messages.message_key@ @all_messages.description@
-            }
-
-            set catalog_file_path [get_catalog_file_path \
-                                       -package_key $package_key \
-                                       -locale $locale]
-
-            export_to_file -descriptions_list $descriptions_list $catalog_file_path $messages_list
-
-            # Messages exported to file are in sync with file
-            db_dml update_sync_time {}
-        }
+	# We do not want to export acs-translations. This usually is a very bad idea as the object_ids are different from site to site.
+	if {![string eq $package_key "acs-translations"]} {
+	    # Loop over all locales that the package has messages in
+	    # and write a catalog file for each such locale
+	    db_foreach get_locales_for_package {} {
+		# If we are only exporting certain locales and this is not one of them - continue
+		if { [llength $locales] > 0 && [lsearch -exact $locales $locale] == -1 } {
+		    continue
+		}
+		
+		# Get messages and descriptions for the locale
+		set messages_list [list]
+		set descriptions_list [list]
+		all_messages_for_package_and_locale $package_key $locale
+		template::util::multirow_foreach all_messages {
+		    lappend messages_list @all_messages.message_key@ @all_messages.message@
+		    lappend descriptions_list @all_messages.message_key@ @all_messages.description@
+		}
+		
+		set catalog_file_path [get_catalog_file_path \
+					   -package_key $package_key \
+					   -locale $locale]
+		
+		export_to_file -descriptions_list $descriptions_list $catalog_file_path $messages_list
+		
+		# Messages exported to file are in sync with file
+		db_dml update_sync_time {}
+	    }
+	}
     }
 }
 

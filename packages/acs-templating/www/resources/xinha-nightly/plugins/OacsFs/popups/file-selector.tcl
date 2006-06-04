@@ -118,7 +118,7 @@ if {[permission::permission_p -party_id $user_id -object_id $folder_id \
 	      -tmp_filename $upload_tmpfile \
 	      -creation_user $user_id \
 	      -creation_ip [ad_conn peeraddr] \
-	      -package_id $package_id
+	      -package_id $fs_package_id
 	} else {
 	  # write file	
 	  fs::add_file \
@@ -127,7 +127,7 @@ if {[permission::permission_p -party_id $user_id -object_id $folder_id \
 	      -tmp_filename $upload_tmpfile \
 	      -creation_user $user_id \
 	      -creation_ip [ad_conn peeraddr] \
-	      -package_id $package_id
+	      -package_id $fs_package_id
 	}
 	
       }

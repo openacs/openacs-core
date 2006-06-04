@@ -60,7 +60,15 @@ if {![info exists object_type]} {
     return
 }
 
-set page_url [acs_sc::invoke -contract FtsContentProvider -operation url -impl $object_type -call_args [list $object_id]]
+# Try to retrieve the page url using a callback that makes use of upvar
+
+set page_url [lindex [callback -catch -impl $object_type subsite::url -object_id $object_id -package_id $package_id -type "display"] 0]
+
+# If this did not work, try again with the Service contract
+if {[empty_string_p $page_url]} {
+	set page_url [acs_sc::invoke -contract FtsContentProvider -operation url -impl $object_type -call_args [list $object_id]]
+}
+
 if {![empty_string_p $page_url]} {
     ad_returnredirect $page_url$anchor
 } else {

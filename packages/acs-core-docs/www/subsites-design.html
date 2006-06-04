@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Subsites Design Document</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 17. Kernel Documentation"><link rel="previous" href="subsites-requirements.html" title="Subsites Requirements"><link rel="next" href="apm-requirements.html" title="Package Manager Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="subsites-requirements.html">Prev</a> </td><th width="60%" align="center">Chapter 17. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="apm-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="subsites-design"></a>Subsites Design Document</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="http://planitia.org" target="_top">Rafael H. Schloming</a> </p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Subsites Design Document</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 17. Kernel Documentation"><link rel="previous" href="subsites-requirements.html" title="Subsites Requirements"><link rel="next" href="apm-requirements.html" title="Package Manager Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="subsites-requirements.html">Prev</a> </td><th width="60%" align="center">Chapter 17. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="apm-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="subsites-design"></a>Subsites Design Document</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="http://planitia.org" target="_top">Rafael H. Schloming</a> </p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><p><span class="emphasis"><em>*Note* This document has not gone through the any of the
@@ -18,13 +19,13 @@ associated with subsites is actually minimal, a discussion of subsites design
 is, in fact, a discussion of how core OpenACS 4 components implicitly support
 subsites as a whole.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-hist-considerations"></a>Historical Considerations</h3></div></div><div></div></div><p>The subsites problem actually has several quite diverse origins. It was
 originally recognized as a toolkit feature in the form of
-"scoping". The basic concept behind scoping was to allow one scoped
+&quot;scoping&quot;. The basic concept behind scoping was to allow one scoped
 OpenACS installation to behave as multiple unscoped OpenACS installations so that one
 OpenACS install could serve multiple communities. Each piece of application data
-was tagged with a "scope" consisting of the (user_id, group_id,
+was tagged with a &quot;scope&quot; consisting of the (user_id, group_id,
 scope) triple. In practice the highly denormalized data models that this
 method uses produced large amounts of very redundant code and in general made
-it an extremely cumbersome process to "scopify" a module.</p><p>Before the advent of scoping there were several cases of client projects
+it an extremely cumbersome process to &quot;scopify&quot; a module.</p><p>Before the advent of scoping there were several cases of client projects
 implementing their own version of scoping in special cases. One example being
 the wineaccess multi-retailer ecommerce. (Remember the other examples and get
 details. Archnet?, iluvcamp?)</p><p>The requirements of all these different projects vary greatly, but the one
@@ -201,10 +202,10 @@ subsite administrator would want to do.</p></div><div class="sect2" lang="en"><d
 required for subsites. It is likely that as developers begin to use the
 subsites system for more sophisticated projects, it will become necessary to
 develop tools to help build tightly integrated packages. The general area
-this falls under is "inter-package communication". An actual
+this falls under is &quot;inter-package communication&quot;. An actual
 implementation of this could be anything from clever use of configuration
 parameters to lots of package level introspection. Another area that is
-currently underdeveloped is the ability to "tar up" and distribute
+currently underdeveloped is the ability to &quot;tar up&quot; and distribute
 a particular configuration of site nodes/packages. As we build more
 fundamental applications that can be applied in more general areas, this
 feature will become more and more in demand since more problems will be

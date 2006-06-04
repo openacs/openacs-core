@@ -30,6 +30,18 @@ aa_register_case content_folder {
                 -folder_id $first_folder_id \
                 -content_type content_folder
             
+
+            #########################################################
+            # Update the folder
+            #########################################################
+            content::folder::update \
+                -folder_id $first_folder_id \
+                -attributes {{label new_label} {description new_description}}
+            content::item::get \
+                -item_id $first_folder_id \
+                -array_name first_folder
+            aa_true "Folder updated" [expr {($first_folder(label) eq "new_label") && ($first_folder(description) eq "new_description")}]
+                                          
             #########################################################
             # create a child folder
             #########################################################

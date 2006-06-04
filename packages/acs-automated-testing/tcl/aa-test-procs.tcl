@@ -1,3 +1,4 @@
+
 ##############################################################################
 #
 #   Copyright 2001, OpenACS, Peter Harper.
@@ -1019,8 +1020,6 @@ ad_proc -private aa_execute_rollback_tests {} {
 namespace eval aa_test {}
 
 ad_proc -public aa_test::xml_report_dir {} {
-    returns the package parameter XMLReportDir.
-} {
     return [parameter::get -parameter XMLReportDir]
 }
 
@@ -1189,4 +1188,30 @@ ad_proc -public aa_test::parse_test_file {
         set testcase_failure($testcase_id) $count
     }
     set test(testcase_failure) [array get testcase_failure]
+}
+
+ad_proc -public aa_get_first_url {
+    {-package_key:required}
+} {
+  Procedure for geting the url of a mounted package with the package_key. It uses the first instance that it founds. This is usefull for tclwebtest tests.
+} {
+
+    if {![db_0or1row first_url { *SQL* }]} {
+        site_node::instantiate_and_mount -package_key $package_key
+	db_1row first_url {*SQL*}
+}
+
+ return $url
+
+}
+
+ad_proc -public aa_display_result {
+    {-response:required}
+    {-explanation:required}
+} {
+    if {$response} {
+	aa_log_result "pass" $explanation
+    } else {
+	aa_log_result "fail" $explanation
+    }
 }

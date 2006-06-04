@@ -241,7 +241,7 @@ ad_proc -public email_image::edit_email_image {
 	    set revision_id [content::revision::new -item_id $item_id -title $image_name \
 				 -mime_type $mime_type  \
 				 -description "User email image" -creation_ip $creation_ip ]
-	    db_dml edit_update_cr_items { }
+	    db_dml update_cr_items { }
 	    db_dml lob_content { } -blob_files [list ${dest_path}]
 	    db_dml lob_size { }
 	}

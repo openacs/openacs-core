@@ -139,6 +139,25 @@ ad_proc -deprecated ad_user_new {
     return $user_id
 }
 
+ad_proc -public person::person_p {
+    {-party_id:required}
+} {
+    is this party a person? Cached
+} {
+    return [util_memoize [list ::person::person_p_not_cached -party_id $party_id]]
+}
+
+ad_proc -public person::person_p_not_cached {
+    {-party_id:required}
+} {
+    is this party a person? Cached
+} {
+    if {[db_0or1row contact_person_exists_p {select '1' from persons where person_id = :party_id}]} {
+        return 1
+    } else {
+        return 0
+    }
+}
     
 ad_proc -public person::new {
     {-first_names:required}
@@ -180,11 +199,18 @@ ad_proc -public person::get {
 }
 
 ad_proc -public person::name {
-    {-person_id:required}
+    {-person_id ""}
+    {-email ""}
 } {
     get the name of a person. Cached.
 } {
-    return [util_memoize [list person::name_not_cached -person_id $person_id]]
+    if {$person_id eq "" && $email eq ""} {
+	error "You need to provide either person_id or email"
+    } elseif {![string eq "" $person_id] && ![string eq "" $email]} {
+	error "Only provide provide person_id OR email, not both"
+    } else {
+	return [util_memoize [list person::name_not_cached -person_id $person_id -email $email]]
+    }
 }
 
 ad_proc -public person::name_flush {
@@ -197,11 +223,18 @@ ad_proc -public person::name_flush {
 }
 
 ad_proc -public person::name_not_cached {
-    {-person_id:required}
+    {-person_id ""}
+    {-email ""}
 } {
     get the name of a person
 } {
-    db_1row get_person_name {}
+    if {$email eq ""} {
+	db_1row get_person_name {}
+    } else {
+	# As the old functionality returned an error, but I want an empty string for e-mail
+	# Therefore for emails we use db_string
+	set person_name [db_string get_person_name {} -default ""]
+    }
     return $person_name
 }
 
@@ -637,7 +670,13 @@ ad_proc -public party::get_by_email {
 
     @return party_id
 } {
-    return [db_string select_party_id {*SQL*} -default {}]
+    #    return [db_string select_party_id {*SQL*} -default ""]
+
+    # The following query is identical in the result as the one above
+    # It just takes into account that some applications (like contacts) make email not unique
+    # Instead of overwriting this procedure in those packages, I changed it here, as the functionality
+    # is unchanged.
+    return [lindex [db_list select_party_id {}] 0]
 }
 
 ad_proc -public party::approved_members {

@@ -20,7 +20,7 @@
 </fullquery>
 
 
-<fullquery name="email_image::edit_email.lob_size">
+<fullquery name="email_image::edit_email_image.lob_size">
       <querytext>
         update cr_revisions 
 	set content_length = lob_length(lob)
@@ -28,7 +28,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="email_image::edit_email.lob_content">
+<fullquery name="email_image::edit_email_image.lob_content">
       <querytext>
         update cr_revisions
         set mime_type = :mime_type,

@@ -283,7 +283,6 @@ ad_proc -private search::choice_bar {
 
 }
 
-
 ad_proc -callback search::datasource {
     -object_id:required
 } {

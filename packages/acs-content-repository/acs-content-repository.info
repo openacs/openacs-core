@@ -7,11 +7,11 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="5.2.0d18" url="http://openacs.org/repository/download/apm/acs-content-repository-5.2.0d18.apm">
+    <version name="5.2.3" url="http://openacs.org/repository/download/apm/acs-content-repository-5.2.3.apm">
         <owner url="http://openacs.org">OpenACS</owner>
 
         <summary>The canonical repository for OpenACS content.</summary>
-        <release-date>2005-01-09</release-date>
+        <release-date>2006-05-25</release-date>
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
@@ -21,15 +21,16 @@
          other CMS backing functionality.  Utilized by Bug Tracker, File Storage, and other packages.
         </description>
 
-        <provides url="acs-content-repository" version="5.2.0d18"/>
-        <requires url="acs-kernel" version="5.2.0d9"/>
-        <requires url="acs-service-contract" version="5.1.0"/>
-        <requires url="search" version="5.1.0"/>
+        <provides url="acs-content-repository" version="5.2.3"/>
+        <requires url="acs-kernel" version="5.2.3b1"/>
+        <requires url="acs-service-contract" version="5.2.3b1"/>
+        <requires url="search" version="5.2.3b1"/>
 
         <callbacks>
         </callbacks>
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="TemplateRoot"  default="templates" description="The directory to which templates are published and from where they are retrieved when a page is served. If the value does not start with a '/', it is taken to be relative to [acs_root_dir]. Packages that use the content-repository can override this setting by defining their own TemplateRoot parameter." section_name="templates"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CRFileLocationRoot"  default="content-repository-content-files" description="The directory to which files are published and from where they are retrieved when a files is served. It is taken to be relative to [acs_root_dir]." section_name="files"/>
         </parameters>
 
     </version>

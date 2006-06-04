@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Subsites Requirements</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 17. Kernel Documentation"><link rel="previous" href="groups-design.html" title="Groups Design"><link rel="next" href="subsites-design.html" title="Subsites Design Document"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="groups-design.html">Prev</a> </td><th width="60%" align="center">Chapter 17. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="subsites-design.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="subsites-requirements"></a>Subsites Requirements</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="http://planitia.org" target="_top">Rafael H. Schloming</a> and Dennis Gregorovic</p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Subsites Requirements</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 17. Kernel Documentation"><link rel="previous" href="groups-design.html" title="Groups Design"><link rel="next" href="subsites-design.html" title="Subsites Design Document"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="groups-design.html">Prev</a> </td><th width="60%" align="center">Chapter 17. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="subsites-design.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="subsites-requirements"></a>Subsites Requirements</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="http://planitia.org" target="_top">Rafael H. Schloming</a> and Dennis Gregorovic</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-requirements-intro"></a>Introduction</h3></div></div><div></div></div><p>The following is a requirements document for OpenACS 4 Subsites, part of the
@@ -9,22 +10,22 @@ reflecting real-world relationships. For example, a corporate
 intranet/extranet website serves both units within the company (e.g.,
 offices, departments, teams, projects) and external parties (e.g., customers,
 partners, vendors). Subsites enable a single OpenACS instance to provide each
-subcommunity with its own "virtual website," by assembling OpenACS
+subcommunity with its own &quot;virtual website,&quot; by assembling OpenACS
 packages that together deliver a feature set tailored to the needs of the
 subcommunity.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-requirements-system-overview"></a>System Overview</h3></div></div><div></div></div><p>The OpenACS subsite system allows a single OpenACS installation to serve multiple
 communities. At an implementation level this is primarily accomplished by
-having an application "scope" its content to a particular package
+having an application &quot;scope&quot; its content to a particular package
 instance. The <a href="rp-design.html" title="Request Processor Design">request
 processor</a> then figures out which package_id a particular URL references
 and then provides this information through the <tt class="computeroutput">ad_conn</tt> api (<tt class="computeroutput">[ad_conn
 package_id]</tt>, <tt class="computeroutput">[ad_conn package_url]</tt>).</p><p>The other piece of the subsite system is a subsite package that provides
-subsite admins a "control panel" for administering their subsite.
+subsite admins a &quot;control panel&quot; for administering their subsite.
 This is the same package used to provide all the community core functionality
-available at the "main" site which is in fact simply another
+available at the &quot;main&quot; site which is in fact simply another
 subsite.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-requirements-use-cases"></a>Use-cases and User-scenarios</h3></div></div><div></div></div><p>The Subsites functionality is intended for use by two different classes of
 users:</p><div class="orderedlist"><ol type="1"><li><p>Package programmers (referred to as 'the programmer') must
 develop subcommunity-aware applications.</p></li><li><p>Site administrators (referred to as 'the administrator') use
-subsites to provide tailored "virtual websites" to different
+subsites to provide tailored &quot;virtual websites&quot; to different
 subcommunities.</p></li></ol></div><p>Joe Programmer is working on the forum package and wants to make it
 subsite-aware. Using [ad_conn package_id], Joe adds code that only displays
 forum messages associated with the current package instance. Joe is happy to

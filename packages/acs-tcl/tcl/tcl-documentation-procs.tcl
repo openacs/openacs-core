@@ -97,7 +97,7 @@ ad_proc -public ad_complain {
     if { [info exists ad_page_contract_error_string($key)] } {
 	lappend ad_page_contract_complaints $ad_page_contract_error_string($key)
     } elseif { [empty_string_p $message] } {
-	lappend ad_page_contract_complaints "Validation \"$key\" complained"
+	lappend ad_page_contract_complaints "[_ acs-tcl.lt_Validation_key_compla]"
     } else {
 	lappend ad_page_contract_complaints $message
     }
@@ -268,7 +268,7 @@ ad_proc -public ad_page_contract {
     greble_exists -requires { greble_is_in_range } {
         global greble_values
 	if { ![info exists greble_values($greble)] } {
-	    ad_complain "There's no greble with that value"
+	    ad_complain "[_ acs-tcl.lt_Theres_no_greble_with]"
 	}
     }
 } -errors {
@@ -600,7 +600,7 @@ ad_proc -public ad_page_contract {
 	set element_len [llength $element]
 
 	if { $element_len > 2 } {
-	    return -code error "Argspec '$element' is invalid, because it contains more than two elements."
+	    return -code error "[_ acs-tcl.lt_Argspec_element_is_in]"
 	}
 
 	set arg_spec [lindex $element 0]
@@ -766,30 +766,30 @@ ad_proc -public ad_page_contract {
 	set name [lindex $validate $i]
 
 	if { [string first : $name] != -1 } {
-	    return -code error "Validation block names cannot contain colon"
+	    return -code error "[_ acs-tcl.lt_Validation_block_name]"
 	}
 	if { [info exists apc_formal($name)] } {
-	    return -code error "You can't name your validation blocks the same as a formal argument"
+	    return -code error "[_ acs-tcl.lt_You_cant_name_your_va]"
 	}
 	if { [info exists apc_validation_blocks($name)] } {
-	    return -code error "You can't have two validation blocks named '$name'"
+	    return -code error "[_ acs-tcl.lt_You_cant_have_two_val]"
 	}
 
 	incr i
 	if { [string index [lindex $validate $i] 0] == "-" } {
 	    if { ![string equal [lindex $validate $i] -requires] } {
-		return -code error "Valid switches are: -requires"
+		return -code error "[_ acs-tcl.lt_Valid_switches_are_-r]"
 	    }
 	    set requires [lindex $validate [incr i]]
 
 	    foreach element $requires {
 		if { [string first , $element] != -1 } {
-		    return -code error "The -requires element \"$element\" has a comma in it."
+		    return -code error "[_ acs-tcl.lt_The_-requires_element]"
 		}
 		set parts_v [split $element ":"]
 		set parts_c [llength $parts_v]
 		if { $parts_c > 2 }  {
-		    return -code error "The -requires element \"$element\" has too many colons"
+		    return -code error "[_ acs-tcl.lt_The_-requires_element_1]"
 		}
 		set req_filter [lindex $parts_v 1]
 		if { [string equal $req_filter array] || [string equal $req_filter multiple] } {
@@ -908,7 +908,7 @@ ad_proc -public ad_page_contract {
 
 	if { [empty_string_p $actual_value] } {
 	    if { [info exists apc_internal_filter($formal_name:notnull)] } {
-		ad_complain -key $formal_name:notnull "You must specify something for $formal_name"
+		ad_complain -key $formal_name:notnull "[_ acs-tcl.lt_You_must_specify_some]"
 		continue
 	    } else { 
 		ad_page_contract_set_validation_passed $formal_name:notnull
@@ -945,7 +945,7 @@ ad_proc -public ad_page_contract {
             lappend $variable_to_set $actual_value
 	} else {
 	    if { [info exists $variable_to_set] } {
-		ad_complain -key $formal_name:-doublevalue "You've supplied two values for '$formal_name'"
+		ad_complain -key $formal_name:-doublevalue "[_ acs-tcl.lt_Youve_supplied_two_va]"
 		continue
 	    } else {
 		set $variable_to_set $actual_value
@@ -995,14 +995,14 @@ ad_proc -public ad_page_contract {
  		    # This is not an array, verify the variable
 		    if { ![info exists apc_signatures($formal_name)] || \
 			    ![ad_verify_signature $var $apc_signatures($formal_name)] } {
-			ad_complain -key $formal_name:verify "The signature for the variable '$formal_name' was incorrect."
+			ad_complain -key $formal_name:verify "[_ acs-tcl.lt_The_signature_for_the]"
 			continue
 		    }
 		} else {
 		    # This is an array: verify the [array get] form of the array
 		    if { ![info exists apc_signatures($formal_name)] || \
 			    ![ad_verify_signature [lsort [array get var]] $apc_signatures($formal_name)] } {
-			ad_complain -key $formal_name:verify "The signature for the variable '$formal_name' was incorrect."
+			ad_complain -key $formal_name:verify "[_ acs-tcl.lt_The_signature_for_the]"
 			continue
 		    }
 		}
@@ -1045,7 +1045,7 @@ ad_proc -public ad_page_contract {
 		}
 		
 	    } elseif { ![info exists apc_internal_filter($formal_name:optional)] } {
-		ad_complain -key $formal_name "You must supply a value for $formal_name"
+		ad_complain -key $formal_name "[_ acs-tcl.lt_You_must_supply_a_val]"
 	    }
 	}
     }
@@ -1187,7 +1187,7 @@ ad_proc -public ad_page_contract_filter {
 	not to confuse Tcl into thinking it's octal
     } {
 	if { ![regexp {^[0-9]+$} $value] } {
-	    ad_complain "Value is not an integer"
+	    ad_complain "[_ acs-tcl.lt_Value_is_not_an_integ]"
 	    return 0
 	}
 	# trim leading zeros, so as not to confuse Tcl
@@ -1250,19 +1250,19 @@ ad_proc -public ad_page_contract_filter {
 } {
 
     if { ![string is wordchar $name] || [empty_string_p $name] } {
-	return -code error "Flag name must be a valid identifier"
+	return -code error "[_ acs-tcl.lt_Flag_name_must_be_a_v]"
     }
     if { ![string equal [string tolower $name] $name] } {
-	return -code error "Flag names must be all lowercase"
+	return -code error "[_ acs-tcl.lt_Flag_names_must_be_al]"
     }
     if { ![string match $type filter] && ![string match $type post] } {
-	return -code error "Filter type must be 'filter' or 'post'"
+	return -code error "[_ acs-tcl.lt_Filter_type_must_be_f]"
     }
 
     set proc_args_len [llength $proc_args]
 
     if { $proc_args_len != 2 && $proc_args_len != 3 } {
-	return -code error "Invalid number of arguments declared for the proc: the argument name and the value and possibly parameters"
+	return -code error "[_ acs-tcl.lt_Invalid_number_of_arg]"
     }
 
     set script [info script]
@@ -1279,11 +1279,11 @@ ad_proc -public ad_page_contract_filter {
 
     if { [string equal $prior_type internal] } {
 	ns_mutex unlock $mutex
-	return -code error "The flag name \"$name\" is reserved for ad_page_contract"
+	return -code error "[_ acs-tcl.lt_The_flag_name_name_is]"
     } elseif { ![empty_string_p $prior_type] } {
 	set prior_script [ad_page_contract_filter_script $name]
 	if { ![string equal $prior_script $script] } {
-	    ns_log Warning "Multiple definitions of ad_page_contract filter \"$name\" in $script and $prior_script"
+	    ns_log Warning "[_ acs-tcl.lt_Multiple_definitions_]"
 	}
     }
 
@@ -1427,7 +1427,7 @@ ad_proc ad_page_contract_filter_rule {
     @creation-date 25 July 2000
 } {
     if { [llength $proc_args] != 2 } {
-	return -code error "The proc must accept two  arguments, the name of the variable and a list of filters"
+	return -code error "[_ acs-tcl.lt_The_proc_must_accept_]"
     }
 
     set script [info script]
@@ -1477,13 +1477,20 @@ ad_page_contract_filter integer { name value } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
-    if { ![regexp {^(-)?(0*)(([1-9][0-9]*|0))$} $value match sign zeros value] } {
-	ad_complain "$name is not an integer"
-	return 0
-    }
+  # first simple a quick check avoiding the slow regexp
+  if {[string is integer $value]} {
+    return 1
+  }
+  if { [regexp {^(-)?(0*)([1-9][0-9]*|0)$} $value match sign zeros value] } {
     # Trim the value for any leading zeros
     set value $sign$value
-    return 1
+    # the string might be still to large, so check again...
+    if {[string is integer $value]} {
+      return 1
+    }
+  }
+  ad_complain "[_ acs-tcl.lt_name_is_not_an_intege]"
+  return 0
 }
 
 ad_page_contract_filter naturalnum { name value } {
@@ -1493,11 +1500,13 @@ ad_page_contract_filter naturalnum { name value } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
-    if { ![regexp {^(0*)(([1-9][0-9]*|0))$} $value match zeros value] } {
-	ad_complain "$name is not a natural number, that is an integer greater than or equal to 0."
-	return 0
+    if { [regexp {^(0*)([1-9][0-9]*|0)$} $value match zeros value] } {
+      if {[string is integer $value]} {
+	return 1
+      }
     }
-    return 1
+  ad_complain "[_ acs-tcl.lt_name_is_not_a_natural]"
+  return 0
 }
 
 ad_page_contract_filter range { name value range } {
@@ -1508,13 +1517,13 @@ ad_page_contract_filter range { name value range } {
     @creation-date August 18, 2000
 } {
     if { [llength $range] != 2 } {
-	error "Invalid number of parameters passed to filter range/"
+	error "[_ acs-tcl.lt_Invalid_number_of_par]"
 	ad_script_abort
     }
     set min [lindex $range 0]
     set max [lindex $range 1]
     if { $value < $min || $value > $max } {
-	ad_complain "$name is not in the range \[$min, $max\]"
+	ad_complain "[_ acs-tcl.lt_name_is_not_in_the_ra]"
 	return 0
     }
     return 1
@@ -1526,7 +1535,7 @@ ad_page_contract_filter sql_identifier { name value } {
     @creation-date 25 July 2000
 } {		
     if { ![string is wordchar $value] } {
-	ad_complain "$name is not a valid SQL identifier"
+	ad_complain "[_ acs-tcl.lt_name_is_not_a_valid_S]"
 	return 0 
     } 
     return 1
@@ -1546,7 +1555,7 @@ ad_page_contract_filter nohtml { name value } {
     @creation-date 25 July 2000
 } {
     if { [string first < $value] >= 0 } {
-	ad_complain "Value for $name contains HTML tags"
+	ad_complain "[_ acs-tcl.lt_Value_for_name_contai]"
 	return 0
     }
     return 1
@@ -1588,7 +1597,7 @@ ad_page_contract_filter tmpfile { name value } {
     # Log details about this filter failing, to make it easier to debug.
     ns_log Notice "ad_page_contract tmpfile filter on variable '$name' at URL '[ad_conn url]': The tmpfile given was '$value', and the list of valid directories is '$tmpdir_list'."
 
-    ad_complain "You specified a path to a file that is not allowed on the system."
+    ad_complain "[_ acs-tcl.lt_You_specified_a_path_]"
     return 0
 }
 
@@ -1599,7 +1608,7 @@ ad_page_contract_filter -type post date { name date } {
 } {
     foreach date_element { day month year } {
 	if { ![info exists date($date_element)] } {
-	    ad_complain "Invalid date: $date_element is missing"
+	    ad_complain "[_ acs-tcl.lt_Invalid_date_date_ele]"
 	    return 0
 	}
     }
@@ -1612,14 +1621,14 @@ ad_page_contract_filter -type post date { name date } {
 
     foreach date_element { day year } {
 	if { ![regexp {^(0*)(([1-9][0-9]*|0))$} $date($date_element) match zeros real_value] } {
-	    ad_complain "Invalid date: $date_element is not a natural number"
+	    ad_complain "[_ acs-tcl.lt_Invalid_date_date_ele_1]"
 	    return 0
 	}
 	set date($date_element) $real_value
     }
 
     if { ![empty_string_p $date(year)] && [string length $date(year)] != 4 } {
-	ad_complain "Invalid date: The year must contain 4 digits."
+	ad_complain "[_ acs-tcl.lt_Invalid_date_The_year]"
 	return 0
     } 
 
@@ -1644,7 +1653,7 @@ ad_page_contract_filter -type post date { name date } {
 	    || ($date(month) == 9 && $date(day) > 30) \
 	    || ($date(month) == 11 && $date(day) > 30)
     } {
-	ad_complain "Invalid date: $date(month) $date(day) $date(year)"
+	ad_complain "[_ acs-tcl.lt_Invalid_date_datemont]"
 	return 0
     }
 
@@ -1660,7 +1669,7 @@ ad_page_contract_filter -type post time { name time } {
 } {
     foreach time_element { time ampm } {
 	if { ![info exists time($time_element)] } {
-	    ad_complain "Invalid time: $time_element is missing"
+	    ad_complain "[_ acs-tcl.lt_Invalid_time_time_ele]"
 	    return 0
 	}
     }
@@ -1672,7 +1681,7 @@ ad_page_contract_filter -type post time { name time } {
 
     set time_element_values [split $time(time) ":"]
     if { [llength $time_element_values] != 3 } {
-	ad_complain "Invalid time: $time(time) is in invalid format"
+	ad_complain "[_ acs-tcl.lt_Invalid_time_timetime]"
 	return 0
     }
 
@@ -1691,7 +1700,7 @@ ad_page_contract_filter -type post time { name time } {
 	    || $time(minutes) < 0 || $time(minutes) > 59 \
 	    || $time(seconds) < 0 || $time(seconds) > 59
     } {
-	ad_complain "Invalid time: $time(time) $time(ampm)"
+	ad_complain "[_ acs-tcl.lt_Invalid_time_timetime_1]"
 	return 0
     }
 
@@ -1705,7 +1714,7 @@ ad_page_contract_filter -type post time24 { name time } {
     @creation-date 25 July 2000
 } {
     if { ![info exists time(time)] } {
-	ad_complain "Invalid time: time is missing"
+	ad_complain "[_ acs-tcl.lt_Invalid_time_time_is_]"
 	return 0
     }
   
@@ -1716,7 +1725,7 @@ ad_page_contract_filter -type post time24 { name time } {
 
     set time_element_values [split $time(time) ":"]
     if { [llength $time_element_values] != 3 } {
-	ad_complain "Invalid time: $time(time) is in invalid format"
+	ad_complain "[_ acs-tcl.lt_Invalid_time_timetime]"
 	return 0
     }
 
@@ -1734,7 +1743,7 @@ ad_page_contract_filter -type post time24 { name time } {
 	    || $time(minutes) < 0 || $time(minutes) > 59 \
 	    || $time(seconds) < 0 || $time(seconds) > 59
     } {
-	ad_complain "Invalid time: $time(time)"
+	ad_complain "[_ acs-tcl.lt_Invalid_time_timetime_2]"
 	return 0
     }
 
@@ -1749,10 +1758,10 @@ ad_page_contract_filter string_length_range { name value range} {
     @creation-date August 2000
 } {
     if { [string length $value] < [lindex $range 0] } {
-	ad_complain "$name is too short.  Please enter a value of at least [lindex $range 0] characters long. The value you entered was [string length $value] characters long."
+	ad_complain "[_ acs-tcl.lt_name_is_too_short__Pl]"
 	return 0
     } elseif { [string length $value] > [lindex $range 1] } {
-	ad_complain "$name is too long.  Please enter a value of at most [lindex $range 1] characters long. The value you entered was [string length $value] characters long."
+	ad_complain "[_ acs-tcl.lt_name_is_too_long__Ple]"
 	return 0
     }
     return 1
@@ -1769,12 +1778,12 @@ ad_page_contract_filter string_length { name value length } {
 } {
     if { [lindex $length 0] == "min" } {
 	if { [string length $value] < [lindex $length 1] } {
-	    ad_complain "$name is too short.  Please enter a value of at least [lindex $length 1] characters long. The value you entered was [string length $value] characters long."
+	    ad_complain "[_ acs-tcl.lt_name_is_too_short__Pl_1]"
 	    return 0
 	}
     } else {
 	if { [string length $value] > [lindex $length 1] } {
-	    ad_complain "$name is too long.  Please enter a value of at most [lindex $length 1] characters long. The value you entered was [string length $value] characters long."
+	    ad_complain "[_ acs-tcl.lt_name_is_too_long__Ple_1]"
 	    return 0
 	}
     }
@@ -1791,7 +1800,7 @@ ad_page_contract_filter email { name value } {
 } {
     set valid_p [regexp "^\[^@\t ]+@\[^@.\t]+(\\.\[^@.\n ]+)+$" $value]
     if { !$valid_p } {
-	ad_complain "$name does not appear to be a valid email address."
+	ad_complain "[_ acs-tcl.lt_name_does_not_appear_]"
 	return 0
     }
     return 1
@@ -1805,20 +1814,30 @@ ad_page_contract_filter float { name value } {
     @author Steven Pulito (stevenp@seas.upenn.edu)
     @creation-date 22 August 2000
 } {
+    # Check if the first character is a "+" or "-"
+    set signum ""
+    if {[regexp {^([\+\-])(.*)} $value match signum rest]} {
+        set value $rest
+    }
+
     # remove the first decimal point, the theory being that
     # at this point a valid float will pass an integer test
     regsub {\.} $value "" value_to_be_tested
 
     if { ![regexp {^[0-9]+$} $value_to_be_tested] } {
-	ad_complain "Value is not an decimal number."
-	return 0
+        ad_complain "[_ acs-tcl.lt_Value_is_not_an_decim]"
+        return 0
     }
     # trim leading zeros, so as not to confuse Tcl
     set value [string trimleft $value "0"]
     if { [empty_string_p $value] } {
-	# but not all of the zeros
-	set value "0"
+        # but not all of the zeros
+        set value "0"
     }
+
+    # finally add the signum character again
+    set value "$signum$value"
+
     return 1
 }
 
@@ -1851,8 +1870,7 @@ ad_page_contract_filter phone { name value } {
 } {
     if { ![empty_string_p [string trim $value]] } {
 	if { ![regexp {^\(?([1-9][0-9]{2})\)?(-|\.|\ )?([0-9]{3})(-|\.|\ )?([0-9]{4})} $value] } {
-	    ad_complain "$value does not appear to be a valid U.S. phone
-	    number."
+	    ad_complain "[_ acs-tcl.lt_value_does_not_appear]"
 	    return 0
 	}
     }
@@ -1869,7 +1887,7 @@ ad_page_contract_filter usphone { name value } {
     @creation-date 22 August 2000
 } {
     if {![empty_string_p [string trim $value]] && ![regexp {[1-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]} $value]} {
-	ad_complain "$name does not appear to be a valid US phone number."
+	ad_complain "[_ acs-tcl.lt_name_does_not_appear__1]"
 	return 0
     }
     return 1
@@ -1897,7 +1915,7 @@ ad_page_contract_filter boolean { name value } {
 	    [string match $lcase_value "no"] } {
 	return 1
     } else {
-	ad_complain "$name does not appear to be a boolean value."
+	ad_complain "[_ acs-tcl.lt_name_does_not_appear__2]"
 	return 0
     }
 }
@@ -1970,13 +1988,13 @@ ad_proc ad_page_contract_handle_datasource_error {error} {
   # copied from defs-procs.tcl: ad_return_complaint
 
   doc_return 200 text/html "[ad_header_with_extra_stuff \
-                             "Problem with a Templated Page" "" ""]
+                             "[_ acs-tcl.lt_Problem_with_a_Templa]" "" ""]
     
-<h2>Problem with a Page (or maybe Your Input)</h2>
+<h2>[_ acs-tcl.lt_Problem_with_a_Page_o]</h2>
 
 <hr>
 
-We had a problem processing your request:
+[_ acs-tcl.lt_We_had_a_problem_proc]
 	
 <ul>
   <li>$error
@@ -1984,7 +2002,7 @@ We had a problem processing your request:
 	
 <p>
 	
-Sorry.
+[_ acs-tcl.Sorry]
 	
 [ad_footer]
 "

@@ -211,7 +211,7 @@ chmod -R 750 /usr/local/pgsql</action></screen>
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib</programlisting>
       <para>Test this by logging in as
 	<computeroutput>postgres</computeroutput> and checking the
-	paths; you should see <computeroutput>/usr/local/pgsql/bin</computeroutput></para>
+	paths; you should see <computeroutput>/usr/local/pgsql/bin</computeroutput> somewhere in the output (the total output is system-dependent so yours may vary)</para>
       <screen>[root src]# <userinput>su - postgres</userinput>
 [postgres pgsql]$ <userinput>env | grep PATH</userinput>
 LD_LIBRARY_PATH=:/usr/local/pgsql/lib

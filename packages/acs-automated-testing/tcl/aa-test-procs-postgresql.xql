@@ -34,4 +34,15 @@
   </querytext>
 </fullquery>
 
+
+<fullquery name="aa_get_first_url.first_url">
+  <querytext>
+   select site_node__url(node_id) as url
+   from site_nodes
+   where object_id in (select package_id from apm_packages
+                       where package_key = :package_key)
+   limit 1
+   </querytext>
+</fullquery>
+
 </queryset>

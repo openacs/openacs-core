@@ -50,8 +50,8 @@ ad_proc -public ::content::item::new {
     @param parent_id - parent object of this content_item
     @param item_subtype
     @param content_type - content_revision or subtype of content_revision
-    @param context_id -
-    @param package_id -
+    @param context_id - Context of the item. usually used in conjunction with permissions.
+    @param package_id - Package ID of the object
     @param creation_user -
     @param creation_ip -
     @param creation_date - defaults to current date and time
@@ -61,6 +61,8 @@ ad_proc -public ::content::item::new {
     @param description of content_revision to be created
     @param text - text of content revision to be created
     @param tmp_filename file containing content to be added to new revision
+    @param nls_language - ???
+    @param data - ???
     @param attributes - A list of lists ofpairs of additional attributes and
     their values to pass to the constructor. Each pair is a list of two
      elements: key => value such as
@@ -132,8 +134,12 @@ ad_proc -public ::content::item::new {
             -content_type $content_type \
             -is_live $is_live \
 	    -package_id $package_id \
+	    -creation_user $creation_user \
+	    -creation_ip $creation_ip \
+	    -creation_date $creation_date \
+	    -nls_language $nls_language \
 	    -tmp_filename $tmp_filename \
-            -attributes $attributes
+	    -attributes $attributes
     }
     }    
     return $item_id
@@ -170,7 +176,7 @@ ad_proc -public ::content::item::rename {
                                [list item_id $item_id] \
                                [list name $name]
                           ] \
-                content_item rename]
+                content_item edit_name]
 }
 
 ad_proc -public ::content::item::move {
@@ -221,6 +227,9 @@ ad_proc -public ::content::item::get {
     if {[string equal "" $content_type]} {
         # content_type query was unsucessful, item does not exist
         return 0
+    }
+    if {[string equal "content_folder" $content_type]} {
+        return [db_0or1row get_item_folder "" -column_array local_array]
     }
     set table_name [db_string get_table_name "select table_name from acs_object_types where object_type=:content_type"]
     set table_name "${table_name}x"    
@@ -716,7 +725,6 @@ ad_proc -public content::item::copy {
                            content_item copy]
 }
 
-
 ad_proc -public content::item::upload_file {
     {-upload_file:required}
     {-parent_id:required}
@@ -743,13 +751,27 @@ ad_proc -public content::item::upload_file {
 	set tmp_size [file size $tmp_filename]
 	set extension [file extension $filename]
 	if {![exists_and_not_null title]} {
-	    regsub -all ".${extension}\$" $filename "" title
+
+	    # maltes: The following regsub garbles the title and consequently the filename as well. 
+	    # "info_c+w.zip" will become "info_c+"
+	    # This is bad, first of all because a letter is missing entirely. Additionally 
+	    # the title in itself should be the original filename, after all this is what
+	    # the user uploaded, not something stripped of its extension.
+	    # So I commented this out until someone can either fix the regsub but more importantly
+	    # can explain why the title should not contain the extension.
+
+            # DRB: removing the explicit "." isn't sufficient because the "." in the
+            # extension also matches any char unless it is escaped.  Like Malte, I
+            # see no reason to get rid of the extension in the title anyway ...
+
+	    # regsub -all ".${extension}\$" $filename "" title
+	    set title $filename
 	}
 	
 	set existing_filenames [db_list get_parent_existing_filenames {}]
 	set filename [util_text_to_url \
 			  -text ${title} -existing_urls "$existing_filenames" -replacement "_"]
-	
+
         set revision_id [cr_import_content \
 			     -storage_type "file" -title $title -package_id $package_id $parent_id $tmp_filename $tmp_size $mime_type $filename]
 
@@ -757,4 +779,18 @@ ad_proc -public content::item::upload_file {
 
 	return $revision_id
     } 
+}
+
+ad_proc -public content::item::get_id_by_name {
+    {-name:required}
+    {-parent_id:required}
+} {
+    Returns the item_id of the a content item with the passed in name
+
+    @param name Name of the content item
+    @param parent_id Parent_id of the content item
+
+    @return the item id belonging to the name, empty string if no item_id was found
+} {
+    return [db_string get_item_id_by_name {} -default ""]
 }

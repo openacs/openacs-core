@@ -748,8 +748,6 @@ ad_proc -public template::util::tcl_to_sql_list { lst } {
     }
 }
 
-
-
 ad_proc -public template::get_resource_path {} {
     Get the template directory
     The body is doublequoted, so it is interpreted when this file is read

@@ -8,9 +8,9 @@ ad_page_contract {
 
 
 if { ![empty_string_p $repository_url] } {
-    set page_title "Install From OpenACS Repository"
+    set page_title "Install or Upgrade From OpenACS Repository"
 } else {
-    set page_title "Install From Local File System"
+    set page_title "Install or Upgrade From Local File System"
 }
 
 set context [list [list "." "Install Software"] $page_title]
@@ -37,6 +37,9 @@ foreach package_key [array names repository] {
             
         # If in upgrade mode, only add to list if it's an upgrade
         if { !$upgrade_p || [string equal $version(install_type) upgrade] } {
+	    if {![exists_and_not_null version(maturity)]} {
+		set version(maturity) ""
+	    }
             set package([string toupper $version(package-name)]) \
                 [list \
                      $version(package.key) \
@@ -59,8 +62,19 @@ foreach package_key [array names repository] {
 
 # Sort the list alphabetically (in case package_name and package_key doesn't sort the same)
 multirow create packages package_key package_name version_name package_type install_type summary maturity
+
+if {[catch {set maturity_label [apm::package_version::attributes::get_pretty_name maturity]} errmsg]} {
+    set maturity_label "Maturity"
+}
+
 foreach name [lsort -ascii [array names package]] {
     set row $package($name)
+    if {[info procs apm::package_version::attributes::maturity_int_to_text] != 0} {
+	set maturity_text "[apm::package_version::attributes::maturity_int_to_text [lindex $row 6]]"
+    } else { 
+	set maturity_text ""
+    }
+
     multirow append packages \
         [lindex $row 0] \
         [lindex $row 1] \
@@ -68,7 +82,7 @@ foreach name [lsort -ascii [array names package]] {
         [lindex $row 3] \
         [lindex $row 4] \
         [lindex $row 5] \
-        [apm::package_version::attributes::maturity_int_to_text [lindex $row 6]]
+	$maturity_text
 }
 
 multirow extend packages install_url
@@ -83,7 +97,7 @@ template::list::create \
     -multirow packages \
     -key package_key \
     -bulk_actions {
-        "Install checked applications" "install-2" "Install checked applications"
+        "Install or upgrade checked applications" "install-2" "Install or upgrade checked applications"
     } \
     -bulk_action_export_vars {
         repository_url
@@ -92,13 +106,13 @@ template::list::create \
         package_name {
             label "Package"
             link_url_col install_url
-            link_html { title "Install this package" }
+            link_html { title "Install or upgrade this package" }
         }
         summary {
             label "Summary"
         }   
         maturity {
-            label {[apm::package_version::attributes::get_pretty_name maturity]}
+	    label "$maturity_label"
         }
         version_name {
             label "Version"

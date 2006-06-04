@@ -173,6 +173,8 @@ insert into cr_mime_types (label,mime_type,file_extension) values ('Audio - WAV'
 insert into cr_mime_types (label,mime_type,file_extension) values ('Audio - MPEG','audio/mpeg', 'mpeg');
 insert into cr_mime_types (label,mime_type,file_extension) values ('Audio - MP3','audio/mp3', 'mp3');
 insert into cr_mime_types (label,mime_type,file_extension) values ('Image - Progressive JPEG','image/pjpeg', 'pjpeg');
+insert into cr_mime_types (label,mime_type,file_extension) values ('SPPS data file','application/x-spss-savefile', 'sav');
+insert into cr_mime_types (label,mime_type,file_extension) values ('SPPS data file','application/x-spss-outputfile', 'spo');
 
 -- Extension to mime type maps.
 
@@ -443,6 +445,9 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ('sxm', 'ap
 insert into cr_extension_mime_type_map (extension, mime_type) values ('sxw', 'application/vnd.sun.xml.writer');
 insert into cr_extension_mime_type_map (extension, mime_type) values ('sxg', 'application/vnd.sun.xml.writer.global');
 insert into cr_extension_mime_type_map (extension, mime_type) values ('stw', 'application/vnd.sun.xml.writer.template');
+insert into cr_extension_mime_type_map (extension, mime_type) values ('sav', 'application/x-spss-savefile');
+insert into cr_extension_mime_type_map (extension, mime_type) values ('spo', 'application/x-spss-outputfile');
+
 
 --  Here are some less common mime types and extensions not defined here.
 --

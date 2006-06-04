@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>The OpenACS Database Access API</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="request-processor.html" title="The Request Processor"><link rel="next" href="templates.html" title="Using Templates in OpenACS"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="request-processor.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="templates.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="db-api"></a>The OpenACS Database Access API</h2></div></div><div></div></div><p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>The OpenACS Database Access API</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="request-processor.html" title="The Request Processor"><link rel="next" href="templates.html" title="Using Templates in OpenACS"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="request-processor.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="templates.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="db-api"></a>The OpenACS Database Access API</h2></div></div><div></div></div><p>
     By Pete Su and Jon Salz. Modified by Roberto Mello.
   </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-overview"></a>Overview</h3></div></div><div></div></div><p>
       One of OpenACS's great strengths is that code written for it is
@@ -15,7 +16,7 @@
       an example of the API.
     </p><pre class="programlisting">
 set count 0
-set tcl_var "foo"
+set tcl_var &quot;foo&quot;
 set sql {
       	SELECT foo, bar, baz
        FROM some_table, some_other_table
@@ -128,8 +129,8 @@ and some_table.condition_p = '$foo'</pre><p>
       query, and Tcl style string interpolation does not happen. So you
       cannot do something like:
     </p><pre class="programlisting">
-set table "baz"
-set condition "where foo = bar"
+set table &quot;baz&quot;
+set condition &quot;where foo = bar&quot;
 
 db_foreach my_query { select :table from some_table where :condition }
     </pre><p>
@@ -158,7 +159,7 @@ db_foreach my_query { select :table from some_table where :condition }
       </p><pre class="programlisting">
 
 set user_id 123456
-set role "administrator"
+set role &quot;administrator&quot;
 
 db_foreach user_group_memberships_by_role {
     select g.group_id, g.group_name
@@ -168,7 +169,7 @@ db_foreach user_group_memberships_by_role {
     and map.role = :role
 } {
     # do something for each group of which user 123456 is in the role
-    # of "administrator"
+    # of &quot;administrator&quot;
 }
 
       </pre><p>
@@ -179,7 +180,7 @@ db_foreach user_group_memberships_by_role {
 
 set bind_vars [ns_set create]
 ns_set put $bind_vars user_id 123456
-ns_set put $bind_vars role "administrator"
+ns_set put $bind_vars role &quot;administrator&quot;
 
 db_foreach user_group_memberships_by_role {
     select g.group_id, g.group_name
@@ -189,7 +190,7 @@ db_foreach user_group_memberships_by_role {
     and map.role = :role
 } -bind $bind_vars {
     # do something for each group in which user 123456 has the role
-    # of "administrator"
+    # of &quot;administrator&quot;
 }
 
       </pre><p>
@@ -203,9 +204,9 @@ db_foreach user_group_memberships_by_role {
     where g.group_id = map.user_id
     and map.user_id = :user_id
     and map.role = :role
-} -bind [list user_id 123456 role "administrator"] {
+} -bind [list user_id 123456 role &quot;administrator&quot;] {
     # do something for each group in which user 123456 has the role
-    # of "administrator"
+    # of &quot;administrator&quot;
 }
 
       </pre></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="dbapi_nulls_and_bind_vars"></a>Nulls and Bind Variables</h4></div></div><div></div></div><p>
@@ -217,8 +218,8 @@ db_foreach user_group_memberships_by_role {
       </p><p>As a result, when using bind variables, the only way to make Oracle set a
 	column value to <tt class="computeroutput">null</tt> is to set the corresponding bind variable
 	to the empty string, since a bind variable whose value is the string
-	"null" will be interpreted as the literal string
-	"null".</p><p>These Oracle quirks complicate the process of writing clear and abstract
+	&quot;null&quot; will be interpreted as the literal string
+	&quot;null&quot;.</p><p>These Oracle quirks complicate the process of writing clear and abstract
 	DML difficult. Here is an example that illustrates why:</p><pre class="programlisting">
 
 #
@@ -230,14 +231,14 @@ db_foreach user_group_memberships_by_role {
 #   );
 #
 
-set bar ""
-set baz ""
+set bar &quot;&quot;
+set baz &quot;&quot;
 
-db_dml foo_create "insert into foo(bar, baz) values(:bar, :baz)"
+db_dml foo_create &quot;insert into foo(bar, baz) values(:bar, :baz)&quot;
 #
-# the values of the "bar" and "baz" columns in the new row are both
+# the values of the &quot;bar&quot; and &quot;baz&quot; columns in the new row are both
 # null, because Oracle has coerced the empty string (even for the
-# numeric column "bar") into null in both cases
+# numeric column &quot;bar&quot;) into null in both cases
 
       </pre><p>
 	Since databases other than Oracle do not coerce empty strings into
@@ -250,9 +251,9 @@ db_dml foo_create "insert into foo(bar, baz) values(:bar, :baz)"
 	explicitly to <tt class="computeroutput">null</tt>, e.g.:</p><pre class="programlisting">set bar [db_null]
 set baz [db_null]
 
-db_dml foo_create "insert into foo(bar, baz) values(:bar, :baz)"
+db_dml foo_create &quot;insert into foo(bar, baz) values(:bar, :baz)&quot;
 #
-# sets the values for both the "bar" and "baz" columns to null</pre></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-pooling"></a>Sequence Pooling</h3></div></div><div></div></div><p>
+# sets the values for both the &quot;bar&quot; and &quot;baz&quot; columns to null</pre></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-pooling"></a>Sequence Pooling</h3></div></div><div></div></div><p>
       The database library can transparently maintain pools of sequence values, so
       that each request for a new sequence value (using <tt class="computeroutput">db_nextval</tt>)
       does not incur a roundtrip to the server. For instance, this functionality is
@@ -299,7 +300,7 @@ PoolSequence.sec_id_seq=20
 db_abort_transaction
 	  </pre><p>Aborts all levels of a transaction. That is if this is called within
 	    several nested transactions, all of them are terminated. Use this insetead of
-	    <tt class="computeroutput">db_dml "abort" "abort transaction"</tt>. 
+	    <tt class="computeroutput">db_dml &quot;abort&quot; &quot;abort transaction&quot;</tt>. 
 	    
 
 	  </p></dd><dt><span class="term"><span class="strong"><tt class="computeroutput"><a name="devguide.dbapi_db_multirow"></a>db_multirow</tt></span></span></dt><dd><pre class="programlisting">
@@ -417,10 +418,10 @@ db_foreach <span class="emphasis"><em>statement-name sql</em></span> [ -bind <sp
 	      </tt></em></span> (if provided).
 	  </p><p>Example:</p><pre class="programlisting">
 
-db_foreach select_foo "select foo, bar from greeble" {
-    doc_body_append "&lt;li&gt;foo=$foo; bar=$bar\n"
+db_foreach select_foo &quot;select foo, bar from greeble&quot; {
+    doc_body_append &quot;&lt;li&gt;foo=$foo; bar=$bar\n&quot;
 } if_no_rows {
-    doc_body_append "&lt;li&gt;There are no greebles in the database.\n"
+    doc_body_append &quot;&lt;li&gt;There are no greebles in the database.\n&quot;
 }
 
 	  </pre><p>
@@ -442,7 +443,7 @@ db_1row <span class="emphasis"><em>statement-name</em></span> <span class="empha
 	    query does not return exactly 1 row.
 	  </p><p>Example:</p><pre class="programlisting">
 
-db_1row select_foo "select foo, bar from greeble where greeble_id = $greeble_id"
+db_1row select_foo &quot;select foo, bar from greeble where greeble_id = $greeble_id&quot;
 # Bombs if there's no such greeble!
 # Now $foo and $bar are set.
 
@@ -525,11 +526,11 @@ db_dml <span class="emphasis"><em>statement-name</em></span> <span class="emphas
 	    insert. Only one of <tt class="computeroutput">-blobs</tt>, <tt class="computeroutput">-clobs</tt>,
 	    <tt class="computeroutput">-blob_files</tt>, and <tt class="computeroutput">-clob_files</tt> may be provided.</p><p>Example:</p><pre class="programlisting">
 
-db_dml insert_photos "
+db_dml insert_photos &quot;
         insert photos(photo_id, image, thumbnail_image)
         values(photo_id_seq.nextval, empty_blob(), empty_blob())
         returning image, thumbnail_image into :1, :2
-    "  -blob_files [list "/var/tmp/the_photo" "/var/tmp/the_thumbnail"] 
+    &quot;  -blob_files [list &quot;/var/tmp/the_photo&quot; &quot;/var/tmp/the_thumbnail&quot;] 
 
 	  </pre><p>
 	    This inserts a new row into the <tt class="computeroutput">photos</tt> table, with the contents
@@ -566,30 +567,30 @@ db_transaction <span class="emphasis"><em>code_block</em></span> [ on_error { <s
 
 proc replace_the_foo { col } {
     db_transaction {
-        db_dml "delete from foo"
-        db_dml "insert into foo(col) values($col)"
+        db_dml &quot;delete from foo&quot;
+        db_dml &quot;insert into foo(col) values($col)&quot;
     }
 }
 
 proc print_the_foo {} {
-    doc_body_append "foo is [db_string "select col from foo"]&lt;br&gt;\n"
+    doc_body_append &quot;foo is [db_string &quot;select col from foo&quot;]&lt;br&gt;\n&quot;
 }
 
 replace_the_foo 8
-print_the_foo ; # Writes out "foo is 8"
+print_the_foo ; # Writes out &quot;foo is 8&quot;
 
 db_transaction {
     replace_the_foo 14
-    print_the_foo ; # Writes out "foo is 14"
-    db_dml "insert into some_other_table(col) values(999)"
+    print_the_foo ; # Writes out &quot;foo is 14&quot;
+    db_dml &quot;insert into some_other_table(col) values(999)&quot;
     ...
     db_abort_transaction
 } on_error {
-    doc_body_append "Error in transaction: $errmsg"
+    doc_body_append &quot;Error in transaction: $errmsg&quot;
 }
     
 
-print_the_foo ; # Writes out "foo is 8"
+print_the_foo ; # Writes out &quot;foo is 8&quot;
 
 	  </pre></dd><dt><span class="term"><tt class="computeroutput"><a name="devguide.dbapi_db_resultrows"></a>db_resultrows</tt></span></dt><dd><pre class="programlisting">
 db_resultrows
@@ -606,13 +607,13 @@ db_with_handle <span class="emphasis"><em>var</em></span> <span class="emphasis"
 
 proc lookup_the_foo { foo } {
     db_with_handle db {
-        return [db_string unused "select ..."]
+        return [db_string unused &quot;select ...&quot;]
     }
 }
 
 db_with_handle db {
     # Now there's a database handle in $db.
-    set selection [ns_db select $db "select foo from bar"]
+    set selection [ns_db select $db &quot;select foo from bar&quot;]
     while { [ns_db getrow $db $selection] } {
         set_variables_after_query
 
@@ -633,17 +634,17 @@ db_nullify_empty_string <span class="emphasis"><em>string</em></span>
 	    [db_null] if its <span class="emphasis"><em><tt class="computeroutput">string</tt></em></span> argument is the empty string
 	    and can be used to encapsulate another Oracle quirk: </p><pre class="programlisting">
 
-set baz ""
+set baz &quot;&quot;
 
 # Clean out the foo table
 #
-db_dml unused "delete from foo"
+db_dml unused &quot;delete from foo&quot;
 
-db_dml unused "insert into foo(baz) values('$baz')"
+db_dml unused &quot;insert into foo(baz) values('$baz')&quot;
 
-set n_rows [db_string unused "select count(*) from foo where baz is null"]
+set n_rows [db_string unused &quot;select count(*) from foo where baz is null&quot;]
 #
-# $n_rows is 1; in effect, the "baz is null" criterion is matching
+# $n_rows is 1; in effect, the &quot;baz is null&quot; criterion is matching
 # the empty string we just inserted (because of Oracle's coercion
 # quirk)
 
@@ -652,7 +653,7 @@ set n_rows [db_string unused "select count(*) from foo where baz is null"]
 	    <tt class="computeroutput">null</tt> by writing: 
 	  </p><pre class="programlisting">
 
-db_dml foo_insert "insert into foo(baz) values(:1)" {[db_nullify_empty_string $baz]}
+db_dml foo_insert &quot;insert into foo(baz) values(:1)&quot; {[db_nullify_empty_string $baz]}
 
 	  </pre></dd></dl></div><p>
       </p><div class="cvstag">($Id$)</div><p>

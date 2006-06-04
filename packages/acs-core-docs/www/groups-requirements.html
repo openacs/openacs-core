@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Groups Requirements</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 17. Kernel Documentation"><link rel="previous" href="permissions-design.html" title="Permissions Design"><link rel="next" href="groups-design.html" title="Groups Design"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="permissions-design.html">Prev</a> </td><th width="60%" align="center">Chapter 17. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="groups-design.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="groups-requirements"></a>Groups Requirements</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="http://planitia.org" target="_top">Rafael H. Schloming</a>, Mark Thomas</p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Groups Requirements</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 17. Kernel Documentation"><link rel="previous" href="permissions-design.html" title="Permissions Design"><link rel="next" href="groups-design.html" title="Groups Design"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="permissions-design.html">Prev</a> </td><th width="60%" align="center">Chapter 17. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="groups-design.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="groups-requirements"></a>Groups Requirements</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="http://planitia.org" target="_top">Rafael H. Schloming</a>, Mark Thomas</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="groups-requirements-intro"></a>Introduction</h3></div></div><div></div></div><p>Almost all database-backed websites have users, and need to model the
@@ -15,7 +16,7 @@
       member of the division and the corporation, and works at (is a member of, but
       in a different sense) a particular office. OpenACS's Parties and Groups
       system will support such complex relations faithfully.</p><p><span class="strong">Historical Motivations</span></p><p>The primary limitation of the OpenACS 3.x user group system is that it
-      restricts the application developer to representing a "flat group"
+      restricts the application developer to representing a &quot;flat group&quot;
       that contains only users: The <tt class="computeroutput">user_groups</tt> table may contain the
       <tt class="computeroutput">group_id</tt> of a parent group, but parent-child relationship
       support is limited because it only allows one kind of relationship between
@@ -27,8 +28,8 @@
       <tt class="computeroutput">scope</tt>, <tt class="computeroutput">user_id</tt>, and <tt class="computeroutput">group_id</tt> columns
       was used to identify the party. One disadvantage of this design convention is
       that it increases a data model's complexity by requiring the programmer
-      to:</p><div class="itemizedlist"><ul type="disc"><li><p>add these three columns to each "scoped" table</p></li><li><p>define a multi-column check constraint to protect against data corruption
-          (e.g., a row with a <tt class="computeroutput">scope</tt> value of "group" but a null
+      to:</p><div class="itemizedlist"><ul type="disc"><li><p>add these three columns to each &quot;scoped&quot; table</p></li><li><p>define a multi-column check constraint to protect against data corruption
+          (e.g., a row with a <tt class="computeroutput">scope</tt> value of &quot;group&quot; but a null
           <tt class="computeroutput">group_id</tt>)</p></li><li><p>perform extra checks in <tt class="computeroutput">Tcl</tt> and <tt class="computeroutput">PL/SQL</tt>
           functions and procedures to check both the <tt class="computeroutput">user_id</tt> and
           <tt class="computeroutput">group_id</tt> values</p></li></ul></div><p>In sum, the goal of the <span class="strong">Parties and Groups</span> system is to
@@ -175,39 +176,39 @@
 
 
         </span></dt><dd><p>The parties and groups system provides an API for answering the question:
-            "Is party <span class="strong">P</span> a member of group
-            <span class="strong">G</span>?"</p></dd><dt><span class="term"><span class="strong">135.0 Composition check</span>
+            &quot;Is party <span class="strong">P</span> a member of group
+            <span class="strong">G</span>?&quot;</p></dd><dt><span class="term"><span class="strong">135.0 Composition check</span>
 
 
         </span></dt><dd><p>The parties and groups system provides an API for answering the question:
-            "Is group <span class="strong">G<sub>C</sub></span> a component of group
-            <span class="strong">G<sub>P</sub></span>?"</p></dd><dt><span class="term"><span class="strong">140.0 Get members query</span>
+            &quot;Is group <span class="strong">G<sub>C</sub></span> a component of group
+            <span class="strong">G<sub>P</sub></span>?&quot;</p></dd><dt><span class="term"><span class="strong">140.0 Get members query</span>
 
 
         </span></dt><dd><p>The parties and groups system provides an API for answering the question:
-            "Which parties are members of group <span class="strong">G</span>?"</p></dd><dt><span class="term"><span class="strong">145.0 Get components query</span>
+            &quot;Which parties are members of group <span class="strong">G</span>?&quot;</p></dd><dt><span class="term"><span class="strong">145.0 Get components query</span>
 
 
         </span></dt><dd><p>The parties and groups system provides an API for answering the question:
-            "Which groups are components of group <span class="strong">G</span>?"</p></dd><dt><span class="term"><span class="strong">150.0 Member-of-groups query</span>
+            &quot;Which groups are components of group <span class="strong">G</span>?&quot;</p></dd><dt><span class="term"><span class="strong">150.0 Member-of-groups query</span>
 
 
         </span></dt><dd><p>The parties and groups system provides an API for answering the question:
-            "Of which groups is party <span class="strong">P</span> a member?"</p></dd><dt><span class="term"><span class="strong">155.0 Component-of-groups query</span>
+            &quot;Of which groups is party <span class="strong">P</span> a member?&quot;</p></dd><dt><span class="term"><span class="strong">155.0 Component-of-groups query</span>
 
 
         </span></dt><dd><p>The parties and groups system provides an API for answering the question:
-            "Of which groups is group <span class="strong">G</span> a component?"</p></dd><dt><span class="term"><span class="strong">160.0 Allowed membership check</span>
+            &quot;Of which groups is group <span class="strong">G</span> a component?&quot;</p></dd><dt><span class="term"><span class="strong">160.0 Allowed membership check</span>
 
 
         </span></dt><dd><p>The parties and groups system provides an API for answering the question:
-            "Is party <span class="strong">P</span> allowed to become a member of group
-            <span class="strong">G</span>?"</p></dd><dt><span class="term"><span class="strong">165.0 Allowed composition check</span>
+            &quot;Is party <span class="strong">P</span> allowed to become a member of group
+            <span class="strong">G</span>?&quot;</p></dd><dt><span class="term"><span class="strong">165.0 Allowed composition check</span>
 
 
         </span></dt><dd><p>The parties and groups system provides an API for answering the question:
-            "Is group <span class="strong">G<sub>C</sub></span> allowed to become a component
-            of group <span class="strong">G<sub>P</sub></span>?"</p></dd><dt><span class="term"><span class="strong">170.0 Efficiency</span>
+            &quot;Is group <span class="strong">G<sub>C</sub></span> allowed to become a component
+            of group <span class="strong">G<sub>P</sub></span>?&quot;</p></dd><dt><span class="term"><span class="strong">170.0 Efficiency</span>
 
 
         </span></dt><dd><p>Since many pages at a site may check membership in a group before serving

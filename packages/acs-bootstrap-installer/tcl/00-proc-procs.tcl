@@ -784,7 +784,7 @@ ad_proc -public callback {
         set c [catch {::uplevel 1 $procname $args} ret]
         switch -exact $c {
             0 { # code ok
-                if { $ret ne ""} {
+                if { $ret ne "" } {
                     lappend returns $ret
                 }
             }

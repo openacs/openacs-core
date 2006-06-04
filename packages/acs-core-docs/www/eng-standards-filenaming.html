@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>ACS File Naming and Formatting Standards</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="eng-standards-constraint-naming.html" title="Constraint naming standard"><link rel="next" href="eng-standards-plsql.html" title="PL/SQL Standards"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="eng-standards-constraint-naming.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="eng-standards-plsql.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eng-standards-filenaming"></a>ACS File Naming and Formatting Standards</h2></div></div><div></div></div><div class="authorblurb"><p>By Michael Yoon and Aurelius Prochazka</p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>ACS File Naming and Formatting Standards</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="eng-standards-constraint-naming.html" title="Constraint naming standard"><link rel="next" href="eng-standards-plsql.html" title="PL/SQL Standards"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="eng-standards-constraint-naming.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="eng-standards-plsql.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eng-standards-filenaming"></a>ACS File Naming and Formatting Standards</h2></div></div><div></div></div><div class="authorblurb"><p>By Michael Yoon and Aurelius Prochazka</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><p>
@@ -64,7 +65,7 @@ explicitly name the index file (<tt class="computeroutput">index.tcl</tt>,
 just the directory name, for both relative links
 (<tt class="computeroutput">subdir/</tt>) and absolute links
 (<tt class="computeroutput">/top-level-dir/</tt>). If linking to the directory in which
-the page is located, use the empty string (<tt class="computeroutput">""</tt>), which
+the page is located, use the empty string (<tt class="computeroutput">&quot;&quot;</tt>), which
 browsers will resolve correctly.
 </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-filenaming-headers"></a>File Headers and Page Input</h3></div></div><div></div></div><p>
 Include the appropriate standard header in all scripts.  The first
@@ -166,7 +167,7 @@ For SQL and other non-Tcl source files, the following file header structure is r
 --
 -- <a href="http://www.loria.fr/~molli/cvs/doc/cvs_12.html#SEC93" target="_top">$Id$</a>
 </pre><p>
-Of course, replace "<tt class="computeroutput">--</tt>" with the comment delimiter
+Of course, replace &quot;<tt class="computeroutput">--</tt>&quot; with the comment delimiter
 appropriate for the language in which you are programming.
 </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-filenaming-pages"></a>Page Construction</h3></div></div><div></div></div><p>
 Construct the page as one Tcl variable (name it
@@ -177,25 +178,25 @@ combining the two operations.
 </p><p>
 For example:
 </p><pre class="programlisting">
-set page_content "[ad_header "<span class="emphasis"><em>Page Title</em></span>"]
+set page_content &quot;[ad_header &quot;<span class="emphasis"><em>Page Title</em></span>&quot;]
 
 &lt;h2&gt;<span class="emphasis"><em>Page Title</em></span>&lt;/h2&gt;
 
 &lt;hr&gt;
 
 &lt;ul&gt;
-"
+&quot;
 
 db_foreach get_row_info {
     select row_information 
     from bar
 } {
-    append page_content "&lt;li&gt;<span class="emphasis"><em>row_information</em></span>\n"
+    append page_content &quot;&lt;li&gt;<span class="emphasis"><em>row_information</em></span>\n&quot;
 }
 
-append page_content "&lt;/ul&gt;
+append page_content &quot;&lt;/ul&gt;
 
-[ad_footer]"
+[ad_footer]&quot;
 
 doc_return 200 text/html $page_content
 </pre><p>
@@ -213,7 +214,7 @@ first, so that the user is not left to stare at an empty page while
 the query is running.)
 </p><p>
 Local procedures (i.e., procedures defined and used only within one
-page) should be prefixed with "<span class="emphasis"><em><tt class="computeroutput">module_</tt></em></span>" and
+page) should be prefixed with &quot;<span class="emphasis"><em><tt class="computeroutput">module_</tt></em></span>&quot; and
 should be used rarely, only when they are exceedingly useful.
 </p><p>
 All files that prepare HTML to display should end with [ad_footer] or

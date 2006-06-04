@@ -503,9 +503,6 @@ end composition_rel;
 /
 show errors
 
-
-
-
 create or replace package body membership_rel
 as
 
@@ -557,6 +554,16 @@ as
     update membership_rels
     set member_state = 'approved'
     where rel_id = approve.rel_id;
+  end;
+
+  procedure merge (
+    rel_id      in membership_rels.rel_id%TYPE
+  )
+  is
+  begin
+    update membership_rels
+    set member_state = 'merged'
+    where rel_id = merge.rel_id;
   end;
 
   procedure reject (

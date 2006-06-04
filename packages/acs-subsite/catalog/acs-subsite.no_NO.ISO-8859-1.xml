@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.1.2" locale="no_NO" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.2.3b2" locale="no_NO" charset="ISO-8859-1">
 
   <msg key="_or">, eller</msg>
+  <msg key="_Update_Basic_Information">Oppdater grunnleggende informasjon</msg>
   <msg key="A_member_of_the_system">En medlem av %system_name% gruppe siden</msg>
   <msg key="About_You">Om deg</msg>
   <msg key="Account_at_system_closed">Kontoen din ved %system_name% har blitt stengt. </msg>
@@ -43,7 +44,9 @@
   <msg key="communities">grupper</msg>
   <msg key="community">gruppe</msg>
   <msg key="Confirm">Bekreft:</msg>
+  <msg key="confirmation_password_changed">Nytt passord er registrert</msg>
   <msg key="Continue">Fortsett</msg>
+  <msg key="Continue_to_your_account">Fortsett til %pvt_home_name%</msg>
   <msg key="Country_Name">Navn på land</msg>
   <msg key="Create_new_community">Lag ny %pretty_name%</msg>
   <msg key="Create_new_subsite">Lag nu undergruppe</msg>
@@ -164,6 +167,7 @@
   <msg key="lt_Uploaded_pretty_date">Lastet opp: %pretty_date%</msg>
   <msg key="lt_Uploaded_publish_date">Lastet opp: %publish_date%</msg>
   <msg key="lt_Use_the_Browse_button">Bruk &quot;Søk...&quot;-knappen til å finne filen din, så klikker du &quot;Åpne&quot;.</msg>
+  <msg key="lt_User_has_portrait_title">Denne brukerene har lagt inn en beskrivelse eller lastet opp et bilde</msg>
   <msg key="lt_We_cant_find_you">Vi kan ikke finne deg (bruker %user_id%) i brukertabellen, Sannsynligvis har kontoen din blitt slettet av en eller annen grunn.</msg>
   <msg key="lt_We_had_a_problem_proc">Vi fikk et problem da vi skulle prosessere ditt innlegg.</msg>
   <msg key="lt_We_were_not_awaiting_">Vi forventet ikke noen e-post. Det må være en misforståelse et sted.</msg>
@@ -210,6 +214,7 @@
   <msg key="Permissions_for_name">Rettigheter for %name%</msg>
   <msg key="Please_return_to_home">Vennligst gå tilbake til %home_link%</msg>
   <msg key="Portrait">Portrett</msg>
+  <msg key="Profile">Profil</msg>
   <msg key="Question">Spørsmål:</msg>
   <msg key="Re_enable">Gjør tilgjengelig igjen</msg>
   <msg key="Recover_Password">Finn igjen passord</msg>
@@ -219,6 +224,7 @@
   <msg key="Reject">Forkast</msg>
   <msg key="Remember_my_login">Husk min innlogging på denne datamaskinen</msg>
   <msg key="Remove">Fjern</msg>
+  <msg key="Remove_All">Fjern alle</msg>
   <msg key="Req_membership_comm">Be om medlemsskap for denne gruppen</msg>
   <msg key="Req_membership_subs">Be om medlemsskap for denne undergruppen</msg>
   <msg key="Request_membership">Be om medlemsskap</msg>
@@ -260,6 +266,7 @@
   <msg key="upload_a_replacement_por">last opp et annet bilde</msg>
   <msg key="Upload_Portrait">Last opp blide</msg>
   <msg key="Username">Brukernavn</msg>
+  <msg key="UserSiteMap">Brukerens sidekart</msg>
   <msg key="Vacation_Info_Updated">Ferieinformasjon lastet opp</msg>
   <msg key="Vacation_information_updated">Informasjon om ferien din ved %site_link% er lastet opp.</msg>
   <msg key="Welcome_user">Velkommen, %user_name%</msg>
@@ -267,6 +274,7 @@
   <msg key="Whos_Online_link_label">Brukere som er online nå</msg>
   <msg key="Whos_Online_title">Hvem er Online</msg>
   <msg key="Yes_I_am_sure">Ja, jeg er sikker</msg>
+  <msg key="You_are_in_the_follow">Du er med i følgende grupper</msg>
   <msg key="You_can_also_browse_from">Du kan også lese fra</msg>
   <msg key="You_can_always_re_open">Du kan alltid åpne på nytt ved å </msg>
   <msg key="You_do_not_have_admin_on">Du har ikke administrasjonsrettigheter for objektet %root% eller noen av dets barn</msg>

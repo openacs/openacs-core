@@ -331,12 +331,13 @@ begin
     cols := cols || '', '' || attr_rec.attribute_name;
   end loop;
 
-  execute ''insert into '' || v_table_name || '' select '' || copy_attributes__copy_id || 
+    execute ''insert into '' || v_table_name || ''('' || v_id_column || cols || '')'' || '' select '' || copy_attributes__copy_id || 
           '' as '' || v_id_column || cols || '' from '' || 
           v_table_name || '' where '' || v_id_column || '' = '' || 
           copy_attributes__revision_id;
-  
+
   return 0; 
+
 end;' language 'plpgsql';
 
 
