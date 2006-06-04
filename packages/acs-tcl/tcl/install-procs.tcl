@@ -380,6 +380,9 @@ ad_proc -public install::xml::action::set-parameter-default { node } {
         -package_key $package_key \
         -parameter $name \
         -value $value
+
+    return ""
+
 }
 
 ad_proc -public install::xml::action::set-permission { node } {

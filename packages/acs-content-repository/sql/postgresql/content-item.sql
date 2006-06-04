@@ -21,7 +21,7 @@ declare
   v_folder_id                             cr_folders.folder_id%TYPE;
 begin
 
-  if get_root_folder__item_id is NULL or get_root_folder__item_id in (0,-100,-200) then
+  if get_root_folder__item_id is NULL or get_root_folder__item_id in (-4,-100,-200) then
 
     v_folder_id := content_item_globals.c_root_folder_id;
 
@@ -29,7 +29,7 @@ begin
 
     select i2.item_id into v_folder_id
     from cr_items i1, cr_items i2
-    where i2.parent_id = 0
+    where i2.parent_id = -4
     and i1.item_id = get_root_folder__item_id
     and i1.tree_sortkey between i2.tree_sortkey and tree_right(i2.tree_sortkey);
 
@@ -97,7 +97,6 @@ declare
   v_rel_id         acs_objects.object_id%TYPE;
   v_rel_tag        cr_child_rels.relation_tag%TYPE;
   v_context_id     acs_objects.context_id%TYPE;
-  v_package_id     acs_objects.package_id%TYPE;
   v_storage_type   cr_items.storage_type%TYPE;
 begin
 
@@ -124,23 +123,17 @@ begin
     v_title := new__title;
   end if;
 
-  if new__package_id is null then
-    v_package_id := acs_object__package_id(content_item__get_root_folder(v_parent_id));
-  else
-    v_package_id := new__package_id;
-  end if;
-
-  if v_parent_id = 0 or 
+  if v_parent_id = -4 or 
     content_folder__is_folder(v_parent_id) = ''t'' then
 
-    if v_parent_id != 0 and 
+    if v_parent_id != -4 and 
       content_folder__is_registered(
         v_parent_id, new__content_type, ''f'') = ''f'' then
 
       raise EXCEPTION ''-20000: This items content type % is not registered to this folder %'', new__content_type, v_parent_id;
     end if;
 
-  else if v_parent_id != 0 then
+  else if v_parent_id != -4 then
 
      if new__relation_tag is null then
        v_rel_tag := content_item__get_content_type(v_parent_id) 
@@ -175,7 +168,7 @@ begin
       v_context_id,
       ''t'',
       v_title,
-      v_package_id
+      new__package_id
   );
 
 
@@ -186,7 +179,7 @@ begin
   );
 
   -- if the parent is not a folder, insert into cr_child_rels
-  if v_parent_id != 0 and
+  if v_parent_id != -4 and
     content_folder__is_folder(v_parent_id) = ''f'' then
 
     v_rel_id := acs_object__new(
@@ -198,7 +191,7 @@ begin
       v_parent_id,
       ''t'',
       v_rel_tag || '': '' || v_parent_id || '' - '' || v_item_id,
-      v_package_id
+      new__package_id
     );
 
     insert into cr_child_rels (
@@ -223,7 +216,7 @@ begin
         new__creation_date, 
         new__creation_user, 
         new__creation_ip,
-        v_package_id
+        new__package_id
         );
 
   elsif new__text is not null or new__title is not null then
@@ -240,7 +233,7 @@ begin
         new__creation_date, 
         new__creation_user, 
         new__creation_ip,
-        v_package_id
+        new__package_id
     );
 
   end if;
@@ -339,7 +332,6 @@ declare
   v_rel_id                    acs_objects.object_id%TYPE;
   v_rel_tag                   cr_child_rels.relation_tag%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
-  v_package_id     acs_objects.package_id%TYPE;
 begin
 
   -- place the item in the context of the pages folder if no
@@ -358,23 +350,17 @@ begin
     v_context_id := new__context_id;
   end if;
 
-  if new__package_id is null then
-    v_package_id := acs_object__package_id(content_item__get_root_folder(v_parent_id));
-  else
-    v_package_id := new__package_id;
-  end if;
-
-  if v_parent_id = 0 or 
+  if v_parent_id = -4 or 
     content_folder__is_folder(v_parent_id) = ''t'' then
 
-    if v_parent_id != 0 and 
+    if v_parent_id != -4 and 
       content_folder__is_registered(
         v_parent_id, new__content_type, ''f'') = ''f'' then
 
       raise EXCEPTION ''-20000: This items content type % is not registered to this folder %'', new__content_type, v_parent_id;
     end if;
 
-  else if v_parent_id != 0 then
+  else if v_parent_id != -4 then
 
      select object_type into v_parent_type from acs_objects
        where object_id = v_parent_id;
@@ -402,7 +388,7 @@ begin
       v_context_id,
       ''t'',
       coalesce(new__title,new__name),
-      v_package_id
+      new__package_id
   );
 
   insert into cr_items (
@@ -412,7 +398,7 @@ begin
   );
 
   -- if the parent is not a folder, insert into cr_child_rels
-  if v_parent_id != 0 and
+  if v_parent_id != -4 and
     content_folder__is_folder(v_parent_id) = ''f'' and 
     content_item__is_valid_child(v_parent_id, new__content_type) = ''t'' then
 
@@ -432,7 +418,7 @@ begin
       v_parent_id,
       ''t'',
       v_rel_tag || '': '' || v_parent_id || '' - '' || v_item_id,
-      v_package_id
+      new__package_id
     );
 
     insert into cr_child_rels (
@@ -465,7 +451,7 @@ begin
         new__creation_date, 
         new__creation_user, 
         new__creation_ip,
-        v_package_id
+        new__package_id
     );
 
   end if;
@@ -540,7 +526,6 @@ declare
   v_rel_id                    acs_objects.object_id%TYPE;
   v_rel_tag                   cr_child_rels.relation_tag%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
-  v_package_id                acs_objects.package_id%TYPE;
 begin
 
   -- place the item in the context of the pages folder if no
@@ -559,12 +544,6 @@ begin
     v_context_id := new__context_id;
   end if;
 
-  if new__package_id is null then
-    v_package_id := acs_object__package_id(content_item__get_root_folder(v_parent_id));
-  else
-    v_package_id := new__package_id;
-  end if;
-
   -- use the name of the item if no title is supplied
   if new__title is null or new__title = '''' then
     v_title := new__name;
@@ -572,17 +551,17 @@ begin
     v_title := new__title;
   end if;
 
-  if v_parent_id = 0 or 
+  if v_parent_id = -4 or 
     content_folder__is_folder(v_parent_id) = ''t'' then
 
-    if v_parent_id != 0 and 
+    if v_parent_id != -4 and 
       content_folder__is_registered(
         v_parent_id, new__content_type, ''f'') = ''f'' then
 
       raise EXCEPTION ''-20000: This items content type % is not registered to this folder %'', new__content_type, v_parent_id;
     end if;
 
-  else if v_parent_id != 0 then
+  else if v_parent_id != -4 then
 
      select object_type into v_parent_type from acs_objects
        where object_id = v_parent_id;
@@ -610,7 +589,7 @@ begin
       v_context_id,
       ''t'',
       v_title,
-      v_package_id
+      new__package_id
   );
 
   insert into cr_items (
@@ -620,7 +599,7 @@ begin
   );
 
   -- if the parent is not a folder, insert into cr_child_rels
-  if v_parent_id != 0 and
+  if v_parent_id != -4 and
     content_folder__is_folder(v_parent_id) = ''f'' and 
     content_item__is_valid_child(v_parent_id, new__content_type) = ''t'' then
 
@@ -640,7 +619,7 @@ begin
       v_parent_id,
       ''t'',
       v_rel_tag || '': '' || v_parent_id || '' - '' || v_item_id,
-      v_package_id
+      new__package_id
     );
 
     insert into cr_child_rels (
@@ -667,7 +646,7 @@ begin
         new__creation_date, 
         new__creation_user, 
         new__creation_ip,
-        v_package_id
+        new__package_id
         );
 
   elsif new__title is not null then
@@ -684,7 +663,7 @@ begin
         new__creation_date, 
         new__creation_user, 
         new__creation_ip,
-        v_package_id
+        new__package_id
     );
 
   end if;
@@ -824,7 +803,6 @@ declare
   v_rel_id                    acs_objects.object_id%TYPE;
   v_rel_tag                   cr_child_rels.relation_tag%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
-  v_package_id                acs_objects.package_id%TYPE;
 begin
 
   -- place the item in the context of the pages folder if no
@@ -850,23 +828,17 @@ begin
     v_title := new__title;
   end if;
 
-  if new__package_id is null then
-    v_package_id := acs_object__package_id(content_item__get_root_folder(v_parent_id));
-  else
-    v_package_id := new__package_id;
-  end if;
-
-  if v_parent_id = 0 or 
+  if v_parent_id = -4 or 
     content_folder__is_folder(v_parent_id) = ''t'' then
 
-    if v_parent_id != 0 and 
+    if v_parent_id != -4 and 
       content_folder__is_registered(
         v_parent_id, new__content_type, ''f'') = ''f'' then
 
       raise EXCEPTION ''-20000: This items content type % is not registered to this folder %'', new__content_type, v_parent_id;
     end if;
 
-  else if v_parent_id != 0 then
+  else if v_parent_id != -4 then
 
      select object_type into v_parent_type from acs_objects
        where object_id = v_parent_id;
@@ -895,7 +867,7 @@ begin
       v_context_id,
       new__security_inherit_p,
       v_title,
-      v_package_id
+      new__package_id
   );
 
   insert into cr_items (
@@ -906,7 +878,7 @@ begin
   );
 
   -- if the parent is not a folder, insert into cr_child_rels
-  if v_parent_id != 0 and
+  if v_parent_id != -4 and
     content_folder__is_folder(v_parent_id) = ''f'' and 
     content_item__is_valid_child(v_parent_id, new__content_type) = ''t'' then
 
@@ -926,7 +898,7 @@ begin
       v_parent_id,
       ''f'',
       v_rel_tag || '': '' || v_parent_id || '' - '' || v_item_id,
-      v_package_id
+      new__package_id
     );
 
     insert into cr_child_rels (
@@ -952,7 +924,7 @@ begin
         new__creation_date, 
         new__creation_user, 
         new__creation_ip,
-        v_package_id
+        new__package_id
     );
 
   end if;
@@ -2303,7 +2275,7 @@ begin
 
   if content_folder__is_folder(move__item_id) = ''t'' then
 
-    PERFORM content_folder__move(move__item_id, move__target_folder_id,move__name);
+    PERFORM content_folder__move(move__item_id, move__target_folder_id);
 
   elsif content_folder__is_folder(move__target_folder_id) = ''t'' then
    
@@ -2524,7 +2496,7 @@ begin
           end if;
         end if;
 
-        update cr_items set live_revision = v_new_live_revision, latest_revision = v_new_revision_id where item_id = v_item_id;
+        update cr_items set live_revision = v_new_live_revision_id, latest_revision = v_new_revision_id where item_id = v_item_id;
 
     end if;
 

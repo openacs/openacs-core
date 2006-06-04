@@ -196,7 +196,7 @@ begin
     null,
     null,
     ''t'',
-    ''Security context root'',
+    ''#acs-kernel.lt_Security_context_root#'',
     null
     );
 
@@ -368,7 +368,7 @@ select acs_object__new (
     null,
     null,
     null,
-    'Default Context'
+    '#acs-kernel.Default_Context#'
   );
 
 insert into acs_magic_objects

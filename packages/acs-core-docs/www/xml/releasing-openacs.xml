@@ -50,28 +50,13 @@ make</screen>
             <para>Update /var/lib/aolserver/$OPENACS_SERVICE_NAME/readme.txt with the new version number</para>
           </listitem>
           <listitem>
-            <para>Update version number and release date in all of the core packages.  Here's a bash/perl script which works but could be made easier to use.  (It depends on all of the old versions and dates being identical.)  Run it from /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages:</para>
-          <programlisting>#!/bin/sh
-# run this file from ../packages to renumber all .info version numbers
-
-#---------------------------------------------------------------------
-# here's what we're looking for
-#---------------------------------------------------------------------
-#   &lt;version name="5.1.0d1" url="http:blahblah/acs-kernel-5.1.0d1.apm"&gt;
-#      &lt;provides url="acs-kernel" version="5.1.0d1"/&gt;
-#---------------------------------------------------------------------
-# here's what we don't want to touch
-#---------------------------------------------------------------------
-#      &lt;requires url="acs-kernel" version="5.0.0b4"/&gt;
-#---------------------------------------------------------------------
-
-for dir in `find -name *.info`
-  do
-  perl -p -i -e 's/name="5\.0\.0"/name="5\.1\.0d1"/' $dir
-  perl -p -i -e 's/-5\.0\.0.apm"/-5\.1\.0d1.apm"/' $dir
-  perl -p -i -e 's/(provides.*version)="5\.0\.0"/\1="5\.1\.0d1"/' $dir
-  perl -p -i -e 's/2004-10-21/2004-11-26/' $dir
-done</programlisting>
+            <para>Update version number and release date in all of the
+          core packages.  Use
+          /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/files/update-info.sh
+          with the new version number and the release date as arguments.
+          Run it from /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages:</para>
+          <screen>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages
+       ./acs-core-docs/www/files/update-info <replaceable>5.2.1</replaceable> <replaceable>2006-01-16</replaceable></screen>
         </listitem>
         <listitem>
           <para>Install a new site using the modified code and verify that the automated tests pass.</para>

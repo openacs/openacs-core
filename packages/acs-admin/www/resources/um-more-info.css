@@ -1,0 +1,45 @@
+/* ADP Reveal mode */
+
+div.um-adp-box-off {
+  background-color: inherit;
+  border-width: 0px;
+}
+	
+div.um-adp-output-off {
+  background-color: inherit;
+  border-width: 0px;
+  padding: 0px;
+}
+
+div.um-adp-box-off2 {
+  background-color: inherit;
+  border-width: 0px;
+}
+	
+div.um-adp-output-off2 {
+  background-color: inherit;
+  border-width: 0px;
+  padding: 0px;
+}
+	
+/* Developer-support footer */
+
+.um-more-info {
+  clear: both;
+  padding: 6px;
+  border: none;
+}
+	
+.um-more-info-off {
+  display: none;
+}
+
+.um-more-info2 {
+  clear: both;
+  padding: 6px;
+  border: none;
+}
+	
+.um-more-info-off2 {
+  display: none;
+}

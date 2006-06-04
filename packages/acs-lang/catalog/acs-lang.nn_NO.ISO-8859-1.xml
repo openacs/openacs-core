@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-lang" package_version="5.1.2d2" locale="nn_NO" charset="ISO-8859-1">
+<message_catalog package_key="acs-lang" package_version="5.2.3b2" locale="nn_NO" charset="ISO-8859-1">
 
   <msg key="available-in-this-language">Tilgjengeleg på norsk</msg>
+  <msg key="change-locale">Change locale</msg>
   <msg key="English">Engelsk</msg>
   <msg key="French">Fransk</msg>
   <msg key="German">Tysk</msg>
@@ -11,11 +12,12 @@
   <msg key="localization-currency_symbol">kr</msg>
   <msg key="localization-d_fmt">%e%m-%y</msg>
   <msg key="localization-d_t_fmt">%a %e. %B %Y %r %Z</msg>
-  <msg key="localization-day">{sundag} {måndag} {tysdag} {onsdagy} {torsdag} {fredag} {laurdag} </msg>
+  <msg key="localization-day">{sundag} {måndag} {tysdag} {onsdag} {torsdag} {fredag} {laurdag} </msg>
   <msg key="localization-decimal_point">,</msg>
   <msg key="localization-dlong_fmt">%e. %B %Y</msg>
-  <msg key="localization-dlongweekday_fmt">%A den %e. %B %Y</msg>
+  <msg key="localization-dlongweekday_fmt">%A %e. %B %Y</msg>
   <msg key="localization-firstdayofweek">1</msg>
+  <msg key="localization-formbuilder_date_format">MONTH DD YYYY</msg>
   <msg key="localization-formbuilder_time_format">HH24:MI</msg>
   <msg key="localization-frac_digits">2</msg>
   <msg key="localization-grouping">3 3</msg>
@@ -37,4 +39,5 @@
   <msg key="localization-t_fmt">%H:%M </msg>
   <msg key="localization-thousands_sep">.</msg>
   <msg key="Spanish">Spansk</msg>
+  <msg key="this-language">English</msg>
 </message_catalog>

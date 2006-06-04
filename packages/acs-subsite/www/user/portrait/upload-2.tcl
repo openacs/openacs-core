@@ -73,34 +73,36 @@ if { $exception_count > 0 } {
     ad_script_abort
 }
 
-if { ![db_0or1row get_item_id {}]} { 
-    # The user doesn't have a portrait relation yet
-    db_transaction {
-        set var_list [list \
-            [list content_type image] \
-            [list name portrait-of-user-$user_id]]
-        set item_id [package_instantiate_object -var_list $var_list content_item]
+# Wrap the whole creation along with the relationship in a big transaction
+# Just to make sure it really worked.
 
-        # DRB: this is done via manual SQL because acs rel types are a bit messed
-        # up on the PostgreSQL side, which should be fixed someday.
+db_transaction {
+    set item_id [content::item::get_id_by_name -name "portrait-of-user-$user_id" -parent_id $user_id]
+    if { [empty_string_p $item_id]} { 
+	# The user doesn't have a portrait relation yet
+	set item_id [content::item::new -name "portrait-of-user-$user_id" -parent_id $user_id -content_type image]
+    }
 
+    # Load the file into the revision
+    set revision_id [cr_import_content \
+			 -item_id $item_id \
+			 -image_only \
+			 -storage_type file \
+			 -creation_user [ad_conn user_id] \
+			 -creation_ip [ad_conn peeraddr] \
+			 $user_id \
+			 $tmp_filename \
+			 $n_bytes \
+			 $guessed_file_type \
+			 "portrait-of-user-$user_id"]
+
+    content::item::set_live_revision -revision_id $revision_id
+    # Only create the new relationship if there does not exist one already
+   set user_portrait_rel_id [relation::get_id -object_id_one $user_id -object_id_two $item_id -rel_type "user_portrait_rel"]
+   if {[empty_string_p $user_portrait_rel_id]} {
 	db_exec_plsql create_rel {}
     }
 }
-
-set revision_id [cr_import_content \
-                    -image_only \
-                    -item_id $item_id \
-                    -storage_type lob \
-                    -creation_user [ad_conn user_id] \
-                    -creation_ip [ad_conn peeraddr] \
-                    [ad_conn package_id] \
-                    $tmp_filename \
-                    $n_bytes \
-                    $guessed_file_type \
-                    portrait-of-user-$user_id]
-
-cr_set_imported_content_live $guessed_file_type $revision_id
 
 if { [exists_and_not_null return_url] } {
     ad_returnredirect $return_url

@@ -220,7 +220,8 @@ create table cr_items (
                       constraint cr_items_storage_type
                       check (storage_type in ('lob','text','file')),
   storage_area_key    varchar(100) default 'CR_FILES' not null,
-  tree_sortkey        varbit
+  tree_sortkey        varbit not null,
+  max_child_sortkey   varbit
 );  
 
 create index cr_items_by_locale on cr_items(locale);
@@ -230,8 +231,8 @@ create unique index cr_items_by_latest_revision on cr_items(latest_revision);
 create unique index cr_items_unique_name on cr_items(parent_id, name);
 create unique index cr_items_unique_id on cr_items(parent_id, item_id);
 create index cr_items_by_parent_id on cr_items(parent_id);
-create index cr_sortkey_idx on cr_items(tree_sortkey);
 create index cr_items_name on cr_items(name);
+create unique index cr_items_tree_sortkey_un on cr_items(tree_sortkey);
 
 -- content-create.sql patch
 --
@@ -272,35 +273,38 @@ end;' language 'plpgsql' stable strict;
 
 create function cr_items_tree_insert_tr () returns opaque as '
 declare
-    v_parent_sk      varbit default null;
-    v_max_value      integer;
-    v_parent_id      integer;
+    v_parent_sk      	varbit default null;
+    v_max_child_sortkey varbit;
+    v_parent_id      	integer default null;
 begin
-    -- Lars: If the parent is not a cr_item, we treat it as if it was null.
     select item_id
     into   v_parent_id
     from   cr_items
     where  item_id = new.parent_id;
 
-    if v_parent_id is null then 
+    if new.parent_id = 0 then
+	
+	new.tree_sortkey := int_to_tree_key(new.item_id+1000);
 
-        -- Lars: Treat all items with a non-cr_item parent as one big pool wrt tree_sortkeys
-        -- The old algorithm had tree_sortkeys start from zero for each different parent
+    elsif v_parent_id is null then 
 
-        select max(tree_leaf_key_to_int(child.tree_sortkey)) into v_max_value 
-          from cr_items child
-         where not exists (select 1 from cr_items where child.parent_id = item_id);
-    else 
-        select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
-          from cr_items 
-         where parent_id = new.parent_id;
+	new.tree_sortkey := int_to_tree_key(new.parent_id+1000) || int_to_tree_key(new.item_id+1000);
 
-        select tree_sortkey into v_parent_sk 
-          from cr_items 
-         where item_id = new.parent_id;
+    else
+
+	SELECT tree_sortkey, tree_increment_key(max_child_sortkey)
+	INTO v_parent_sk, v_max_child_sortkey
+	FROM cr_items
+	WHERE item_id = new.parent_id 
+	FOR UPDATE;
+
+	UPDATE cr_items
+	SET max_child_sortkey = v_max_child_sortkey
+	WHERE item_id = new.parent_id;
+
+	new.tree_sortkey := v_parent_sk || v_max_child_sortkey;
+
     end if;
-
-    new.tree_sortkey := tree_next_key(v_parent_sk, v_max_value);
 
     return new;
 end;' language 'plpgsql';
@@ -311,11 +315,10 @@ execute procedure cr_items_tree_insert_tr ();
 
 create function cr_items_tree_update_tr () returns opaque as '
 declare
-        v_parent_sk     varbit default null;
-        v_max_value     integer;
-        p_id            integer;
-        v_rec           record;
-        clr_keys_p      boolean default ''t'';
+        v_parent_sk     	varbit default null;
+        v_max_child_sortkey     varbit;
+        v_parent_id            	integer default null;
+        v_old_parent_length	integer;
 begin
         if new.item_id = old.item_id and 
            ((new.parent_id = old.parent_id) or
@@ -325,48 +328,36 @@ begin
 
         end if;
 
-        for v_rec in select item_id
-                       from cr_items 
-                      where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey)
-                   order by tree_sortkey
-        LOOP
-            if clr_keys_p then
-               update cr_items set tree_sortkey = null
-               where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
-               clr_keys_p := ''f'';
-            end if;
-            
-            -- Lars: If the parent is not a cr_item, we treat it as if it was null.
-            select parent.item_id 
-              into p_id
-              from cr_items parent, 
-                   cr_items child
-             where child.item_id = v_rec.item_id
-             and   parent.item_id = child.parent_id;
+        select item_id
+    	into   v_parent_id
+	from   cr_items
+	where  item_id = new.parent_id;
 
-            if p_id is null then 
+	-- the tree sortkey is going to change so get the new one and update it and all its
+	-- children to have the new prefix...
+	v_old_parent_length := length(new.tree_sortkey) + 1;
 
-                -- Lars: Treat all items with a non-cr_item parent as one big pool wrt tree_sortkeys
-                -- The old algorithm had tree_sortkeys start from zero for each different parent
+        if new.parent_id = 0 then
+            v_parent_sk := int_to_tree_key(new.item_id+1000);
+	elsif v_parent_id is null then 
+            v_parent_sk := int_to_tree_key(new.parent_id+1000) || int_to_tree_key(new.item_id+1000);
+        else
+	    SELECT tree_sortkey, tree_increment_key(max_child_sortkey)
+	    INTO v_parent_sk, v_max_child_sortkey
+	    FROM cr_items
+	    WHERE item_id = new.parent_id 
+	    FOR UPDATE;
 
-                select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
-                  from cr_items child
-                 where not exists (select 1 from cr_items where child.parent_id = item_id);
-            else 
-                select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
-                  from cr_items 
-                 where parent_id = p_id;
+	    UPDATE cr_items
+	    SET max_child_sortkey = v_max_child_sortkey
+	    WHERE item_id = new.parent_id;
 
-                select tree_sortkey into v_parent_sk 
-                  from cr_items 
-                 where item_id = p_id;
-            end if;
+	    v_parent_sk := v_parent_sk || v_max_child_sortkey;
+        end if;
 
-            update cr_items 
-               set tree_sortkey = tree_next_key(v_parent_sk, v_max_value)
-             where item_id = v_rec.item_id;
-
-        end LOOP;
+	UPDATE cr_items
+	SET tree_sortkey = v_parent_sk || substring(tree_sortkey, v_old_parent_length)
+	WHERE tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
 
         return new;
 
@@ -1252,7 +1243,7 @@ begin
     ''pages'',
     ''Pages'', 
     ''Site pages go here'',
-    0,
+    -4,
     null,
     content_item__get_root_folder(null),
     now(),
@@ -1287,7 +1278,7 @@ begin
     ''templates'',
     ''Templates'', 
     ''Templates which render the pages go here'',
-    0,
+    -4,
     null,
     content_template__get_root_folder(),
     now(),

@@ -5,7 +5,7 @@ create sequence t_anon_func_seq;
 create view anon_func_seq as 
 select nextval('t_anon_func_seq') as nextval;
 
-create function instr(varchar,char,integer,integer) returns integer as '
+create or replace function instr(varchar,char,integer,integer) returns integer as '
 declare
         str             alias for $1;
         pat             alias for $2;
@@ -44,7 +44,7 @@ begin
 end;' language 'plpgsql' immutable;
 
 
-create function instr(varchar,char,integer) returns integer as '
+create or replace function instr(varchar,char,integer) returns integer as '
 declare
         str             alias for $1;
         pat             alias for $2;
@@ -54,7 +54,7 @@ begin
 end;' language 'plpgsql' immutable;
 
 
-create function instr(varchar,char) returns integer as '
+create or replace function instr(varchar,char) returns integer as '
 declare
         str             alias for $1;
         pat             alias for $2;
@@ -66,7 +66,7 @@ end;' language 'plpgsql' immutable;
 -- Splits string on requested character. Returns requested element
 -- (1-based)
 
-create function split(varchar,char,integer)
+create or replace function split(varchar,char,integer)
 returns varchar as '
 declare
   p_string		alias for $1;
@@ -97,7 +97,7 @@ begin
 end;' language 'plpgsql' immutable;
 
 
-create function get_func_drop_command (varchar) returns varchar as '
+create or replace function get_func_drop_command (varchar) returns varchar as '
 declare
         fname           alias for $1;
         nargs           integer default 0;
@@ -141,7 +141,7 @@ begin
 
 end;' language 'plpgsql';
 
-create function drop_package (varchar) returns varchar as '
+create or replace function drop_package (varchar) returns varchar as '
 declare
        package_name      alias for $1;
        v_rec             record;
@@ -171,7 +171,7 @@ begin
 
 end;' language 'plpgsql';
 
-create function number_src(text) returns text as '
+create or replace function number_src(text) returns text as '
 declare
         v_src   alias for $1;
         v_pos   integer;
@@ -222,7 +222,7 @@ begin
            and proargtypes = args;
 
          v_funcdef := v_funcdef || ''
-create function '' || fname || ''('';
+create or replace function '' || fname || ''('';
 
          v_pos := position('' '' in v_args);
 
@@ -250,7 +250,7 @@ create function '' || fname || ''('';
 
 end;' language 'plpgsql' stable strict;
 
-create function get_func_header(varchar,oidvector) returns text as '
+create or replace function get_func_header(varchar,oidvector) returns text as '
 declare
         fname   alias for $1;
         args    alias for $2;
@@ -276,7 +276,7 @@ select get_func_header(proname::varchar,proargtypes) as definition,
 
 ----------------------------------------------------------------------------
 
-create function inline_0 () returns integer as '
+create or replace function inline_0 () returns integer as '
 -- Create a bitfromint4(integer) function if it doesn''t exists.
 -- This function is no longer present in 7.3 and above
 declare
@@ -295,7 +295,7 @@ end;' language 'plpgsql';
 select inline_0();
 drop function inline_0();
 
-create function inline_1 () returns integer as '
+create or replace function inline_1 () returns integer as '
 -- Create a bitfromint4(integer) function if it doesn''t exists.
 -- This function is no longer present in 7.3 and above
 declare
@@ -347,7 +347,7 @@ drop function inline_1();
 -- SQL92 standard "bit varying" so I've used the synonym "varbit"
 -- throughout.
 
-create function int_to_tree_key(integer) returns varbit as '
+create or replace function int_to_tree_key(integer) returns varbit as '
 
 -- Convert an integer into the bit string format used to store
 -- tree sort keys.   Using 4 bytes for the long keys requires
@@ -374,7 +374,7 @@ begin
 
 end;' language 'plpgsql' immutable strict;
 
-create function tree_key_to_int(varbit, integer) returns integer as '
+create or replace function tree_key_to_int(varbit, integer) returns integer as '
 
 -- Convert the compressed key for the node at the given level to an 
 -- integer.
@@ -410,7 +410,7 @@ begin
 
 end;' language 'plpgsql' immutable strict;
 
-create function tree_ancestor_key(varbit, integer) returns varbit as '
+create or replace function tree_ancestor_key(varbit, integer) returns varbit as '
 
 -- Returns a key for the ancestor at the given level.  The root is level
 -- one.
@@ -439,7 +439,7 @@ begin
 
 end;' language 'plpgsql' immutable strict;
 
-create function tree_root_key(varbit) returns varbit as '
+create or replace function tree_root_key(varbit) returns varbit as '
 
 -- Return the tree_sortkey for the root node of the node with the 
 -- given tree_sortkey.  
@@ -456,7 +456,7 @@ begin
 
 end;' language 'plpgsql' immutable strict;
 
-create function tree_leaf_key_to_int(varbit) returns integer as '
+create or replace function tree_leaf_key_to_int(varbit) returns integer as '
 
 -- Convert the bitstring for the last, or leaf, node represented by this key
 -- to an integer.
@@ -485,7 +485,7 @@ begin
 
 end;' language 'plpgsql' immutable strict;
 
-create function tree_next_key(varbit, integer) returns varbit as '
+create or replace function tree_next_key(varbit, integer) returns varbit as '
 declare
   p_parent_key      alias for $1;
   p_child_value     alias for $2;
@@ -509,7 +509,7 @@ begin
 
 end;' language 'plpgsql' immutable;
 
-create function tree_increment_key(varbit)
+create or replace function tree_increment_key(varbit)
 returns varbit as '
 declare
     p_child_sort_key                alias for $1;
@@ -524,7 +524,7 @@ begin
     return int_to_tree_key(v_child_sort_key);
 end;' language 'plpgsql' immutable;
 
-create function tree_left(varbit) returns varbit as '
+create or replace function tree_left(varbit) returns varbit as '
 
 -- Create a key less than or equal to that of any child of the
 -- current key.
@@ -539,7 +539,7 @@ begin
   end if;
 end;' language 'plpgsql' immutable;
 
-create function tree_right(varbit) returns varbit as '
+create or replace function tree_right(varbit) returns varbit as '
 
 -- Create a key greater or equal to that of any child of the current key.
 -- Used in BETWEEN expressions to select the subtree rooted at the given
@@ -555,7 +555,7 @@ begin
   end if;
 end;' language 'plpgsql' immutable;
 
-create function tree_level(varbit) returns integer as '
+create or replace function tree_level(varbit) returns integer as '
 
 -- Return the tree level of the given key.  The root level is defined
 -- to be at level one.
@@ -586,7 +586,7 @@ begin
   return v_level;
 end;' language 'plpgsql' immutable;
 
-create function tree_ancestor_p(varbit, varbit) returns boolean as '
+create or replace function tree_ancestor_p(varbit, varbit) returns boolean as '
 declare
   p_potential_ancestor      alias for $1;
   p_potential_child         alias for $2;
@@ -604,7 +604,7 @@ end;' language 'plpgsql' immutable;
 -- tree_ancestor_keys(varbit), which returns the set of tree_sortkeys for all of the
 -- ancestors of the given tree_sortkey...
 
-create function tree_ancestor_keys(varbit, integer) returns setof varbit as '
+create or replace function tree_ancestor_keys(varbit, integer) returns setof varbit as '
   select $1
 ' language 'sql';
 
@@ -761,7 +761,7 @@ end;' language 'plpgsql';
 -- Returns an english-language description of the trigger type.  Used by the
 -- schema browser
 
-create function trigger_type (integer) returns varchar as '
+create or replace function trigger_type (integer) returns varchar as '
 declare
   tgtype            alias for $1;
   description       varchar;

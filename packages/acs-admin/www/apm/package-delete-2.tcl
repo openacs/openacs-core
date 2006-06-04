@@ -25,13 +25,9 @@ apm_version_info $version_id
 
 doc_body_append [apm_header "Delete"]
 
-db_transaction {
-    apm_package_delete -sql_drop_scripts $sql_drop_scripts -remove_files=0 -callback apm_doc_body_callback $package_key
-} on_error {
-    if {[apm_package_registered_p $package_key] } {
-	doc_body_append "The database returned the following error
-	message <pre><blockquote>[ad_quotehtml $errmsg]</blockquote></pre>"
-    }
+if { [catch {apm_package_delete -sql_drop_scripts $sql_drop_scripts -remove_files=0 -callback apm_doc_body_callback $package_key} errmsg] } {
+    doc_body_append "We encountered the following error when deleting package \"$package_key\":
+	<pre><blockquote>[ad_quotehtml $errmsg]</blockquote></pre>"
 }
 
 doc_body_append "

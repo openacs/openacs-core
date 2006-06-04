@@ -74,3 +74,45 @@ ad_proc -public subsite_callback {
 	}
     }
 }
+
+ad_proc -public -callback subsite::parameter_changed {
+   -package_id:required
+   -parameter:required
+   -value:required
+} {
+}
+
+ad_proc -public -callback subsite::parameter_changed -impl subsite {
+   -package_id:required
+   -parameter:required
+   -value:required
+} {
+    Implementation of subsite::parameter_changed for subsite itself. This proc will simply set the parameter
+
+    @author Nima Mazloumi (nima.mazloumi@gmx.de)
+    @creation-date 2005-08-17
+
+    @param package_id the package_id of the package the parameter was changed for
+    @param parameter  the parameter name
+    @param value      the new value
+
+    @see package::set_value
+} {
+    ns_log Debug "subsite::parameter_changed -impl subsite changing $parameter to $value"
+
+    parameter::set_value \
+	-package_id $package_id \
+	-parameter $parameter \
+	-value $value
+}
+
+ad_proc -public -callback subsite::url {
+    -package_id:required
+    -object_id:required
+    {-type ""}
+} {
+    Callback for creating a URL for an object_id. THis is usually called in /o.vuh, but
+    you could think of scenarios where using this hook makes sense as well.
+
+    The type let's you define what kind of URL you are looking for (e.g. admin/edit/display)
+} -

@@ -28,7 +28,6 @@ function new (
 ) return cr_folders.folder_id%TYPE is
   v_folder_id	cr_folders.folder_id%TYPE;
   v_context_id	acs_objects.context_id%TYPE;
-  v_package_id	acs_objects.package_id%TYPE;
 begin
 
   -- set the context_id
@@ -38,19 +37,14 @@ begin
     v_context_id := content_folder.new.context_id;
   end if;
 
-  -- parent_id = 0 means that this is a mount point
-  if parent_id ^= 0 and 
-     content_folder.is_registered(parent_id,'content_folder') = 'f' then
+  -- parent_id = security context root means that this is a mount point
+  if parent_id ^= -4 and 
+    content_folder.is_folder(parent_id) = 'f' and
+    content_folder.is_registered(parent_id,'content_folder') = 'f' then
 
     raise_application_error(-20000, 
         'This folder does not allow subfolders to be created');
   else
-
-    v_package_id := package_id;
-
-    if parent_id is not null and parent_id ^= 0 and package_id is null then
-        v_package_id := acs_object.package_id(content_item.get_root_folder(parent_id));
-    end if;
 
     v_folder_id := content_item.new(
         item_id       => folder_id,
@@ -63,13 +57,13 @@ begin
         creation_ip   => creation_ip, 
         parent_id     => parent_id,
 	security_inherit_p => security_inherit_p,
-        package_id    => v_package_id
+        package_id    => package_id
     );
 
     insert into cr_folders (
       folder_id, label, description, package_id
     ) values (
-      v_folder_id, label, description, v_package_id
+      v_folder_id, label, description, package_id
     );
 
     -- set the correct object title
@@ -433,7 +427,7 @@ is
     start with
       item_id = target_folder_id;
 
-  v_parent_id integer := 0;
+  v_parent_id integer := -4;
   v_sub_folder_p char := 'f';
 
 begin

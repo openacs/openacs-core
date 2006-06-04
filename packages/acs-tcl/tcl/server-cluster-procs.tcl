@@ -73,7 +73,7 @@ ad_proc -private server_cluster_httpget_from_peers {
 	# Schedule the request. Don't actually issue the request in this thread, since
 	# (a) we want to parallelize the requests, and (b) we want this procedure to
 	# return immediately.
-	ad_schedule_proc -once t -thread f -debug t 0 server_cluster_do_httpget "http://$host$url" $timeout
+	ad_schedule_proc -once t -thread f -debug t -all_servers t 0 server_cluster_do_httpget "http://$host$url" $timeout
     }
 }
 

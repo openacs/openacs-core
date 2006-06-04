@@ -35,12 +35,9 @@ db_transaction {
     # If the parent node didn't have anything mounted, use the current package_id as context_id
     set context_id [ad_conn package_id]
     array set node [site_node::get -node_id $node_id]
-    if { ![empty_string_p $node(parent_id)] } {
-        array set parent_node [site_node::get -node_id $node(parent_id)]        
 
-        if { ![empty_string_p $parent_node(object_id)] } {
-            set context_id $parent_node(object_id)
-        }
+    if { ![empty_string_p $node(object_id)] } {
+            set context_id $node(object_id)
     }
 
     if { $new_node_p } {

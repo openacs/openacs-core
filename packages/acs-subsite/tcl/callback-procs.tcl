@@ -19,7 +19,9 @@ ad_proc -public -callback user::workspace {
 } -
 
 
-ad_proc -public -callback user::workspace -impl acs-subsite {} {
+ad_proc -public -callback user::workspace -impl acs-subsite {
+	-user_id
+} {
     Generate a table showing the application group membership 
 } {
     return [template::adp_include /packages/acs-subsite/lib/user-subsites [list user_id $user_id]]

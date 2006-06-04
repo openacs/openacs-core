@@ -9,7 +9,7 @@
     <property name="focus">@focus;noquote@</property>
   </if>
   <property name="header_stuff">
-    <link rel="stylesheet" type="text/css" href="@css_url@" media="all" />
+    <link rel="stylesheet" type="text/css" href="@css_url@" media="all">
     @header_stuff;noquote@
   </property>
 
@@ -94,16 +94,18 @@
 
 <div id="site-footer">
   <div class="action-list">
-    <ul>
       <if @num_of_locales@ gt 1>
+    <ul>
         <li><a href="@change_locale_url@">#acs-subsite.Change_locale_label#</a></li>
+    </ul>
       </if>
       <else>
         <if @locale_admin_url@ not nil>
+    <ul>
           <li><a href="@locale_admin_url@">Install locales</a></li>
+    </ul>
         </if>
       </else>
-    </ul>
   </div>
 </div>
 

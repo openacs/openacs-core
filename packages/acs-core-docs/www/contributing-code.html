@@ -1,9 +1,10 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Contributing code back to OpenACS</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="cvs-guidelines.html" title="Chapter 14. 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Contributing code back to OpenACS</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="cvs-guidelines.html" title="Chapter 14. 
     CVS Guidelines
   "><link rel="previous" href="openacs-cvs-concepts.html" title="OpenACS CVS Concepts"><link rel="next" href="cvs-resources.html" title="Additional Resources for CVS"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="openacs-cvs-concepts.html">Prev</a> </td><th width="60%" align="center">Chapter 14. 
     CVS Guidelines
-  </th><td width="20%" align="right"> <a accesskey="n" href="cvs-resources.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="contributing-code"></a>Contributing code back to OpenACS</h2></div></div><div></div></div><p>There are three main ways to contribute code to OpenACS:</p><div class="orderedlist"><ol type="1"><li><p>To contribute a small fix, if you do not have a developer account, submit a <a href="http://openacs.org/bugtracker/openacs/patch-submission-instructions.htm" target="_top">patch</a>.</p></li><li><p>If you are making many changes, or would like to become a direct contributor, send mail to <a href="mailto:oct@openacs.org" target="_top">the Core Team</a> asking for commit rights.  You can then commit code directly to the repository:</p><div class="orderedlist"><ol type="a"><li><p>Use one of the checkout methods described above to get files to your system.  This takes the place of steps 1 and 2 in <a href="openacs.html#install-from-tarball" title="Installation Option 2: Install from tarball">the section called &#8220;Installation Option 2: Install from tarball&#8221;</a>.  Continue setting up the site as described there.</p></li><li><p>Fix bugs and add features.</p></li><li><p>
-            Commit that file (or files): </p><pre class="screen"><span class="action"><span class="action">cvs commit -m "what I did and why" filename</span></span></pre><p>
+  </th><td width="20%" align="right"> <a accesskey="n" href="cvs-resources.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="contributing-code"></a>Contributing code back to OpenACS</h2></div></div><div></div></div><p>There are three main ways to contribute code to OpenACS:</p><div class="orderedlist"><ol type="1"><li><p>To contribute a small fix, if you do not have a developer account, submit a <a href="http://openacs.org/bugtracker/openacs/patch-submission-instructions.htm" target="_top">patch</a>.</p></li><li><p>If you are making many changes, or would like to become a direct contributor, send mail to <a href="mailto:oct@openacs.org" target="_top">the Core Team</a> asking for commit rights.  You can then commit code directly to the repository:</p><div class="orderedlist"><ol type="a"><li><p>Use one of the checkout methods described above to get files to your system.  This takes the place of steps 1 and 2 in <a href="openacs.html#install-from-tarball" title="Installation Option 2: Install from tarball">Section , &#8220;Installation Option 2: Install from tarball&#8221;</a>.  Continue setting up the site as described there.</p></li><li><p>Fix bugs and add features.</p></li><li><p>
+            Commit that file (or files): </p><pre class="screen"><span class="action"><span class="action">cvs commit -m &quot;what I did and why&quot; filename</span></span></pre><p>
             Because this occurs in your personal checkout and not an anonymous
             one, this commit automagically moves back upstream to the Mother
             Ship repository at cvs.openacs.org.  The names of the changed files, and your comments, are sent to a mailing list for OpenACS developers.  A Core Team developer may review or roll back your changes if necessary.
@@ -14,16 +15,16 @@
                 </p></li></ol></div></li><li><p>Add a new package.  Contact the <a href="mailto:oct@openacs.org" target="_top">Core Team</a> to get approval and to get a module alias created.</p><div class="orderedlist"><ol type="a"><li><p>
                 Check out acs-core on the HEAD branch.  (Weird things happen if you add files to a branch but not to HEAD):</p><pre class="screen"><span class="action"><span class="action">cd /tmp
 cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre><p>Copy your package directory from your working directory to this directory.  Make sure not to copy any CVS directories.</p><pre class="screen"><span class="action"><span class="action">cp -r /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/<span class="replaceable"><span class="replaceable">newpackage</span></span> /tmp/openacs-4/packages</span></span></pre><p>Import the package into the cvs.openacs.org cvs repository:</p><pre class="screen"><span class="action"><span class="action">cd /tmp/openacs-4/packages/<span class="replaceable"><span class="replaceable">newpackage</span></span>
-cvs import -m "Initial import of <span class="replaceable"><span class="replaceable">newpackage</span></span>" openacs-4/packages/newpackage <span class="replaceable"><span class="replaceable">myname</span></span> <span class="replaceable"><span class="replaceable">newpackage-0-1d</span></span></span></span></pre></li><li><p>Add the new package to the modules file. (An administrator has to do this step.)  On any machine, in a temporary directory:</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
+cvs import -m &quot;Initial import of <span class="replaceable"><span class="replaceable">newpackage</span></span>&quot; openacs-4/packages/newpackage <span class="replaceable"><span class="replaceable">myname</span></span> <span class="replaceable"><span class="replaceable">newpackage-0-1d</span></span></span></span></pre></li><li><p>Add the new package to the modules file. (An administrator has to do this step.)  On any machine, in a temporary directory:</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
 cd CVSROOT
-emacs modules</span></span></pre><p>Add a line of the form:</p><pre class="programlisting"><span class="replaceable"><span class="replaceable">photo-album-portlet</span></span> openacs-4/packages/<span class="replaceable"><span class="replaceable">photo-album-portlet</span></span></pre><p>Commit the change:</p><pre class="screen"><span class="action"><span class="action">cvs commit -m "added alias for package <span class="replaceable"><span class="replaceable">newpackage</span></span>" modules</span></span></pre><p>This should print something like:</p><div class="literallayout"><p>cvs commit: Examining .<br>
+emacs modules</span></span></pre><p>Add a line of the form:</p><pre class="programlisting"><span class="replaceable"><span class="replaceable">photo-album-portlet</span></span> openacs-4/packages/<span class="replaceable"><span class="replaceable">photo-album-portlet</span></span></pre><p>Commit the change:</p><pre class="screen"><span class="action"><span class="action">cvs commit -m &quot;added alias for package <span class="replaceable"><span class="replaceable">newpackage</span></span>&quot; modules</span></span></pre><p>This should print something like:</p><div class="literallayout"><p>cvs commit: Examining .<br>
 **** Access allowed: Personal Karma exceeds Environmental Karma.<br>
 Checking in modules;<br>
 /cvsroot/CVSROOT/modules,v  &lt;--  modules<br>
 new revision: 1.94; previous revision: 1.93<br>
 done<br>
 cvs commit: Rebuilding administrative file database</p></div></li><li><p>Although you should add your package on HEAD, you should do package development on the latest release branch that your code is compatible with.  So, after completing the import, you may want to branch your package:</p><pre class="programlisting">cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/<span class="replaceable"><span class="replaceable">newpackage</span></span>
-cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></span></pre></li><li><p>See <a href="releasing-package.html" title="How to package and release an OpenACS Package">the section called &#8220;How to package and release an OpenACS Package&#8221;</a></p></li></ol></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Some packages are already in cvs at <tt class="computeroutput">openacs-4/contrib/packages</tt>.  Starting with OpenACS 5.1, we have a Maturity mechanism in the APM which makes the <tt class="computeroutput">contrib</tt> directory un-necessary.  If you are working on a <tt class="computeroutput">contrib</tt> package, you should move it to <tt class="computeroutput">/packages</tt>.  This must be done by an OpenACS administrator.  On cvs.openacs.org:</p><div class="orderedlist"><ol type="a"><li><pre class="programlisting">cp -r /cvsroot/openacs-4/contrib/packages/<span class="replaceable"><span class="replaceable">package0</span></span> /cvsroot/openacs-4/packages</pre></li><li><p>Update the modules file as described above.</p></li><li><p>Remove the directory from cvs in the old location using <tt class="computeroutput">cvs rm</tt>.  One approach <tt class="computeroutput">for file in `find | grep -v CVS`; do rm $file; cvs remove $file; done</tt></p></li></ol></div></div></li></ol></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Commit_Rules"></a>
+cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></span></pre></li><li><p>See <a href="releasing-package.html" title="How to package and release an OpenACS Package">Section , &#8220;How to package and release an OpenACS Package&#8221;</a></p></li></ol></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Some packages are already in cvs at <tt class="computeroutput">openacs-4/contrib/packages</tt>.  Starting with OpenACS 5.1, we have a Maturity mechanism in the APM which makes the <tt class="computeroutput">contrib</tt> directory un-necessary.  If you are working on a <tt class="computeroutput">contrib</tt> package, you should move it to <tt class="computeroutput">/packages</tt>.  This must be done by an OpenACS administrator.  On cvs.openacs.org:</p><div class="orderedlist"><ol type="a"><li><pre class="programlisting">cp -r /cvsroot/openacs-4/contrib/packages/<span class="replaceable"><span class="replaceable">package0</span></span> /cvsroot/openacs-4/packages</pre></li><li><p>Update the modules file as described above.</p></li><li><p>Remove the directory from cvs in the old location using <tt class="computeroutput">cvs rm</tt>.  One approach <tt class="computeroutput">for file in `find | grep -v CVS`; do rm $file; cvs remove $file; done</tt></p></li></ol></div></div></li></ol></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Commit_Rules"></a>
       Rules for Committing Code to the OpenACS repository
     </h3></div></div><div></div></div><p>
       CVS commit procedures are governed by 
@@ -82,11 +83,11 @@ cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></
               versions.
             </p></li><li><p>
               CVS commit messages and code comments should refer to
-              bug, tip, or patch number if appropriate, in the format "resolves
-              bug 11", "resolves bugs 11, resolves bug 22". "implements tip 42",
-              "implements tip 42, implements tip 50", "applies patch 456 by User
-              Name", "applies patch 456 by User Name, applies patch 523 by
-              ...".
+              bug, tip, or patch number if appropriate, in the format &quot;resolves
+              bug 11&quot;, &quot;resolves bugs 11, resolves bug 22&quot;. &quot;implements tip 42&quot;,
+              &quot;implements tip 42, implements tip 50&quot;, &quot;applies patch 456 by User
+              Name&quot;, &quot;applies patch 456 by User Name, applies patch 523 by
+              ...&quot;.
             </p></li></ol></div></li><li><p>
           When to TIP
         </p><div class="orderedlist"><ol type="1"><li><p>
@@ -122,7 +123,7 @@ cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></
           Tags
         </p><div class="orderedlist"><ol type="1"><li><p>
               When a package is released in final form, the developer
-              shall tag it "packagename-x-y-z-final" and "openacs-x-y-compat". x-y
+              shall tag it &quot;packagename-x-y-z-final&quot; and &quot;openacs-x-y-compat&quot;. x-y
               should correspond to the current branch. If the package is
               compatible with several different core versions, several compat
               tags should be applied.
@@ -135,7 +136,7 @@ cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></
           flag which defaults to no-effect wouldn't require a TIP. Added a
           new mandatory flag to an existing function would require a
           TIP.
-        </p></li></ol></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2604540"></a>
+        </p></li></ol></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2874031"></a>
         Reasons
       </h4></div></div><div></div></div><p>
         We don't currently have clear standards for committing
@@ -171,7 +172,7 @@ cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></
         applies to all packages. This tag can be used to fork packages as
         needed, and provides a common ancestor between the fork and the
         OpenACS code so that patches can be generated.
-      </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2613886"></a>
+      </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2874099"></a>
       Informal Guidelines
     </h3></div></div><div></div></div><p>
       Informal guidelines which may be obsolete in places and should be reviewed:
@@ -214,12 +215,12 @@ cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></
         </p></li><li><p>
           Always accompany a commit with a brief but informative
           comment. If your commit is related to bug number N and/or patch
-          number P, indicate this in the commit comment by including "bug N"
-          and/or "patch P". This allows us to link bugs and patches in the
+          number P, indicate this in the commit comment by including &quot;bug N&quot;
+          and/or &quot;patch P&quot;. This allows us to link bugs and patches in the
           Bug Tracker with changes to the source code. For example suppose
           you are committing a patch that closes a missing HTML tag, then an
-          appropriate comment could be "Fixing bug 321 by applying patch 134.
-          Added missing h3 HTML close tag".
+          appropriate comment could be &quot;Fixing bug 321 by applying patch 134.
+          Added missing h3 HTML close tag&quot;.
         </p></li><li><p>
           Commit one cohesive bug fix or feature change at a time.
           Don't put a bunch of unrelated changes into one commit.

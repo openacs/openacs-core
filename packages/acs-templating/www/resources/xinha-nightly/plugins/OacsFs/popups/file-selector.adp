@@ -16,7 +16,7 @@ function onOK() {
 <if @selector_type@ eq "image">
 	    opener.document.getElementById("f_url").value = document.getElementById(id + "_file_url").value;
 	    opener.document.getElementById("f_name").value = document.getElementById(id +  "_file_name").value;
-	    opener.document.getElementById("f_title").value = document.getElementById(id +  "_file_title").value;
+	    opener.document.getElementById("f_alt").value = document.getElementById(id +  "_file_title").value;
 	    opener.onPreview();
 </if>
 <else>

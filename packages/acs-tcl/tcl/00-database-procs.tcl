@@ -2520,7 +2520,7 @@ ad_proc -public db_source_sql_file {{
             cd [file dirname $file]
             ns_log notice "\n DAVEB pghost = '${pghost}' pgport = '${pgport}' pguser = '${pguser}' \n"
             if { $tcl_platform(platform) == "windows" } {
-                set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database]" "r"]
+                set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
             } else {
                 set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
             }
@@ -3456,5 +3456,14 @@ ad_proc -public db_flush_cache {
         if { [string match $cache_key_pattern $key] } {
             ns_cache flush $cache_pool $key
         }
+    }
+}
+
+ad_proc -public db_bounce_pools {{ -dbn "" }} { 
+    @return Call ns_db bouncepool on all pools for the named database.
+    @param dbn The database name to use.  Uses the default database if not supplied.
+} {
+    foreach pool [db_available_pools $dbn] {
+        ns_db bouncepool $pool
     }
 }

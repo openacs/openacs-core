@@ -1,19 +1,20 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>How Internationalization/Localization works in OpenACS</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="i18n.html" title="Chapter 16. Internationalization"><link rel="previous" href="i18n-overview.html" title="Internationalization and Localization Overview"><link rel="next" href="i18n-convert.html" title="How to Internationalize a Package"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="i18n-overview.html">Prev</a> </td><th width="60%" align="center">Chapter 16. Internationalization</th><td width="20%" align="right"> <a accesskey="n" href="i18n-convert.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="i18n-introduction"></a>How Internationalization/Localization works in OpenACS</h2></div></div><div></div></div><p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>How Internationalization/Localization works in OpenACS</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="i18n.html" title="Chapter 16. Internationalization"><link rel="previous" href="i18n-overview.html" title="Internationalization and Localization Overview"><link rel="next" href="i18n-convert.html" title="How to Internationalize a Package"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="i18n-overview.html">Prev</a> </td><th width="60%" align="center">Chapter 16. Internationalization</th><td width="20%" align="right"> <a accesskey="n" href="i18n-convert.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="i18n-introduction"></a>How Internationalization/Localization works in OpenACS</h2></div></div><div></div></div><p>
       This document describes how to develop internationalized OpenACS
       packages, including writing new packages with
       internationalization and converting old packages.  Text that
-      users might see is "localizable text"; replacing monolingual text
+      users might see is &quot;localizable text&quot;; replacing monolingual text
       and single-locale date/time/money functions with generic
-      functions is "internationalization"; translating first
-      generation text into a specific language is "localization."  At
+      functions is &quot;internationalization&quot;; translating first
+      generation text into a specific language is &quot;localization.&quot;  At
       a minimum, all packages should be internationalized.  If you do
       not also localize your package for different locales, volunteers
-      may use a public "localization server" to submit suggested text.
+      may use a public &quot;localization server&quot; to submit suggested text.
       Otherwise, your package will not be usable for all locales.
     </p><p>
       The main difference between monolingual and internationalized
       packages is that all user-visible text in the code of an internationalized
-      package are coded as "message keys."  The message keys
+      package are coded as &quot;message keys.&quot;  The message keys
       correspond to a message catalog, which contains versions of the
       text for each available language.  Script files (.adp and .tcl and .vuh), database files (.sql), and APM parameters are affected.
 
@@ -40,11 +41,11 @@
         ASCII English, as should all code.  Three different syntaxes
         are possible for message keys.
       </p><p>
-        "Short" syntax is the recommended syntax and should be used
+        &quot;Short&quot; syntax is the recommended syntax and should be used
         for new development.  When internationalizing an existing
-        package, you can use the "temporary" syntax, which the APM can
+        package, you can use the &quot;temporary&quot; syntax, which the APM can
         use to auto-generate missing keys and automatically translate
-        to the short syntax.  The "verbose" syntax is useful while
+        to the short syntax.  The &quot;verbose&quot; syntax is useful while
         developing, because it allows default text so that the page is
         usable before you have done
         localization.      </p><div class="itemizedlist"><ul type="disc"><li><p>
@@ -56,8 +57,8 @@
             <span class="replaceable"><span class="replaceable">#forum.title#</span></span>
           </p></li><li><p>
             The <span class="strong">verbose</span>: <tt class="computeroutput">&lt;trn
-            key="<span class="replaceable"><span class="replaceable">package_key.message_key</span></span>"
-            locale="<span class="replaceable"><span class="replaceable">locale</span></span>"&gt;<span class="replaceable"><span class="replaceable">default
+            key=&quot;<span class="replaceable"><span class="replaceable">package_key.message_key</span></span>&quot;
+            locale=&quot;<span class="replaceable"><span class="replaceable">locale</span></span>&quot;&gt;<span class="replaceable"><span class="replaceable">default
             text</span></span>&lt;/trn&gt;</tt>
           </p><p>
             The verbose syntax allows you to specify a default text in
@@ -67,7 +68,7 @@
             in the message catalog yet, because what it'll do is
             create the message key with the default text from the tag
             as the localized message.  Example: <span class="emphasis"><em>&lt;trn
-            key="forum.title" locale="en_US"&gt;Title&lt;/trn&gt;</em></span>
+            key=&quot;forum.title&quot; locale=&quot;en_US&quot;&gt;Title&lt;/trn&gt;</em></span>
           </p></li><li><p>
             The <span class="strong">temporary</span>:
            <tt class="computeroutput"> &lt;#<span class="replaceable"><span class="replaceable">message_key</span></span>
@@ -105,7 +106,7 @@
         that can be used on Linux to highlight translatable text in TCL files:
       </p><pre class="screen">
 # Find text in double quotes
-<b class="userinput"><tt>find -iname '*.tcl'|xargs egrep -i '"[a-z]'</tt></b>
+<b class="userinput"><tt>find -iname '*.tcl'|xargs egrep -i '&quot;[a-z]'</tt></b>
 
 # Find untranslated text in form labels, options and values
 <b class="userinput"><tt>find -iname '*.tcl'|xargs egrep -i '\-(options|label|value)'|egrep -v '&lt;#'|egrep -v '\-(value|label|options)[[:space:]]+\$[a-zA-Z_]+[[:space:]]*\\?[[:space:]]*$'</tt></b>
@@ -132,8 +133,8 @@
             replace tags with keys in the APM.</p></li></ul></div><p>
       The variable values in the message are usually fetched with upvar, here is an example from dotlrn:
       <tt class="computeroutput">
-      ad_return_complaint 1 "Error: A [parameter::get -parameter classes_pretty_name] 
-                   must have &lt;em&gt;no&lt;/em&gt;[parameter::get -parameter class_instances_pretty_plural] to be deleted"
+      ad_return_complaint 1 &quot;Error: A [parameter::get -parameter classes_pretty_name] 
+                   must have &lt;em&gt;no&lt;/em&gt;[parameter::get -parameter class_instances_pretty_plural] to be deleted&quot;
       </tt>
         was replaced by:
       <tt class="computeroutput">
@@ -169,8 +170,8 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
 </pre><p>
         When you feel ready you may vist your package in the
         <a href="/acs-admin/apm" target="_top">package manager</a>
-        and run the action "Replace tags with keys
-        and insert into catalog" on the TCL files that you've edited to
+        and run the action &quot;Replace tags with keys
+        and insert into catalog&quot; on the TCL files that you've edited to
         replace the temporary tags with calls to the message lookup
         procedure.
       </p><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="i18n-date-time-number"></a>Dates, Times, and Numbers in TCL files</h5></div></div><div></div></div><p>

@@ -105,12 +105,12 @@ if [ ! -s $TIMEDIR/$COMPUTER-full-date ];
     TYPE="full";
 fi
 
-if [[ $DOM == "01" || $DOW == "Sun" ]];
+if [[ "$DOM" = "01" || "$DOW" = "Sun" ]];
     then
     TYPE="full";
 fi
 
-if [ $TYPE == "full" ];
+if [ "$TYPE" = "full" ];
     then
     NEW_FLAG=""
 else
@@ -122,18 +122,23 @@ fi
 #---------------------------------------------------------------------
 # Check for free space
 #---------------------------------------------------------------------
-# get free byte count
+# get free byte count -
 free=`df | grep $BACKUPPART | awk '{print $4}'`
+if [ "$free" = "" ]
+    then
+    # BACKUPPART may be too long, causing df output to wrap, let's try another method
+    free=`df | grep -A 1 $BACKUPPART | awk '{print $3}' | sed /^$/d`
+fi
 
 # force to incremental if there isn't room for full
-if [ $free -lt `expr $FULL_SPACE_FREE \* 1024 \* 1024` ];
+if [ "$free" -lt `expr $FULL_SPACE_FREE \* 1024 \* 1024` ];
     then
     TYPE="incremental"
     echo "Not enough free space for full backup; trying incremental"
 fi
 
 # abort if there isn't room for incremental
-if [ $free -lt `expr $INCR_SPACE_FREE \* 1024 \* 1024` ];
+if [ "$free" -lt `expr $INCR_SPACE_FREE \* 1024 \* 1024` ];
     then
     echo "Not enough free space for backup; aborting"
     exit -1
@@ -158,6 +163,7 @@ do
     time $PG_BINDIR/pg_dump -f $dmp_file -Fp $dbname -h $DBHOST
     /bin/ls -lh $dmp_file | awk '{print $5}'
     gzip -f $dmp_file
+    time $PG_BINDIR/vacuumdb -fz -U postgres $dbname -h $DBHOST
 done
 
 #---------------------------------------------------------------------
@@ -186,7 +192,7 @@ for directory in $DIRECTORIES
   FULLNAME=$BACKUPDIR/$DATE-$COMPUTER-${directory//\//-}-backup-$TYPE.tar.gz
   # to use bzip2 instead of gzip, change z to j in the tar flags
   cd $directory
-  tar -zcpsh . --file $FULLNAME $NEW_FLAG
+  tar -zcpsh --file $FULLNAME $NEW_FLAG .
   $CHOWN $BACKUPUSER $FULLNAME
   $CHMOD 660 $FULLNAME
   if [ -n "$OTHERHOST" ]
@@ -196,7 +202,7 @@ for directory in $DIRECTORIES
       scp_success=`$SCP -q $FULLNAME $OTHERUSER@$OTHERHOST:$BACKUPDIR`
       
      # if scp returns success, see if we should wipe
-      if [[ scp_success -eq 0 && $WIPE_OLD_AFTER_SCP_FULL == "true" && $TYPE == "full" ]];
+      if [[ scp_success -eq 0 && "$WIPE_OLD_AFTER_SCP_FULL" = "true" && "$TYPE" = "full" ]];
 	  then
 
           # wipe out all similar backups except for the just-copied one
@@ -217,9 +223,9 @@ done
 # incremental backups are relative to the last successful full
 # backup
 
-if [ $TYPE == "full" ];
+if [ "$TYPE" = "full" ];
     then
-    NEWER=""
+    NEW_FLAG=""
     NOW=`date +%Y-%m-%d`
     echo $NOW> $TIMEDIR/$COMPUTER-full-date;
 fi

@@ -27,18 +27,18 @@
     --     included in the top 10 lines of the file (see the embedded edit mode)
     --
     --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/htmlarea.js $
-    --  $LastChangedDate: 2005-11-07 21:36:41 +1300 (Mon, 07 Nov 2005) $
-    --  $LastChangedRevision: 421 $
-    --  $LastChangedBy: gocher $
+    --  $LastChangedDate: 2006-01-19 14:10:25 +1300 (Thu, 19 Jan 2006) $
+    --  $LastChangedRevision: 461 $
+    --  $LastChangedBy: mokhet $
     --------------------------------------------------------------------------*/
 
 HTMLArea.version =
 {
   'Release'   : 'Trunk',
   'Head'      : '$HeadURL: http://svn.xinha.python-hosting.com/trunk/htmlarea.js $'.replace(/^[^:]*: (.*) \$$/, '$1'),
-  'Date'      : '$LastChangedDate: 2005-11-07 21:36:41 +1300 (Mon, 07 Nov 2005) $'.replace(/^[^:]*: ([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\) \$/, '$4 $2 $3'),
-  'Revision'  : '$LastChangedRevision: 421 $'.replace(/^[^:]*: (.*) \$$/, '$1'),
-  'RevisionBy': '$LastChangedBy: gocher $'.replace(/^[^:]*: (.*) \$$/, '$1')
+  'Date'      : '$LastChangedDate: 2006-01-19 14:10:25 +1300 (Thu, 19 Jan 2006) $'.replace(/^[^:]*: ([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\) \$/, '$4 $2 $3'),
+  'Revision'  : '$LastChangedRevision: 461 $'.replace(/^[^:]*: (.*) \$$/, '$1'),
+  'RevisionBy': '$LastChangedBy: mokhet $'.replace(/^[^:]*: (.*) \$$/, '$1')
 };
 
 if (typeof _editor_url == "string") {
@@ -2310,15 +2310,23 @@ HTMLArea.prototype._wordClean = function() {
       }
     node.style.cssText = declarations.join("; ");
   }
-  function stripTag(el) {
-    if (HTMLArea.is_ie)
+  if (HTMLArea.is_ie)
+  {
+    function stripTag(el)
+    {
       el.outerHTML = HTMLArea.htmlEncode(el.innerText);
-    else {
+      ++stats.mso_xmlel;
+    }
+  }
+  else
+  {
+    function stripTag(el)
+    {
       var txt = document.createTextNode(HTMLArea.getInnerText(el));
       el.parentNode.insertBefore(txt, el);
       HTMLArea.removeFromParent(el);
+      ++stats.mso_xmlel;
     }
-    ++stats.mso_xmlel;
   }
   function checkEmpty(el) {
     if (/^(a|span|b|strong|i|em|font)$/i.test(el.tagName) &&
@@ -2762,8 +2770,10 @@ HTMLArea.prototype.updateToolbar = function(noStatus) {
 /** Returns a node after which we can insert other nodes, in the current
  * selection.  The selection is removed.  It splits a text node, if needed.
  */
-HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted) {
-  if (!HTMLArea.is_ie) {
+if (!HTMLArea.is_ie)
+{
+  HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted)
+  {
     var sel = this._getSelection();
     var range = this._createRange(sel);
     // remove the current selection
@@ -2771,93 +2781,131 @@ HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted) {
     range.deleteContents();
     var node = range.startContainer;
     var pos = range.startOffset;
-    switch (node.nodeType) {
-        case 3: // Node.TEXT_NODE
-      // we have to split it at the caret position.
-      if (toBeInserted.nodeType == 3) {
-        // do optimized insertion
-        node.insertData(pos, toBeInserted.data);
-        range = this._createRange();
-        range.setEnd(node, pos + toBeInserted.length);
-        range.setStart(node, pos + toBeInserted.length);
-        sel.addRange(range);
-      } else {
-        node = node.splitText(pos);
+    switch (node.nodeType)
+    {
+      case 3: // Node.TEXT_NODE
+        // we have to split it at the caret position.
+        if (toBeInserted.nodeType == 3)
+        {
+          // do optimized insertion
+          node.insertData(pos, toBeInserted.data);
+          range = this._createRange();
+          range.setEnd(node, pos + toBeInserted.length);
+          range.setStart(node, pos + toBeInserted.length);
+          sel.addRange(range);
+        }
+        else
+        {
+          node = node.splitText(pos);
+          var selnode = toBeInserted;
+          if (toBeInserted.nodeType == 11 /* Node.DOCUMENT_FRAGMENT_NODE */)
+          {
+            selnode = selnode.firstChild;
+          }
+          node.parentNode.insertBefore(toBeInserted, node);
+          this.selectNodeContents(selnode);
+          this.updateToolbar();
+        }
+      break;
+      case 1: // Node.ELEMENT_NODE
         var selnode = toBeInserted;
-        if (toBeInserted.nodeType == 11 /* Node.DOCUMENT_FRAGMENT_NODE */) {
+        if (toBeInserted.nodeType == 11 /* Node.DOCUMENT_FRAGMENT_NODE */)
+        {
           selnode = selnode.firstChild;
         }
-        node.parentNode.insertBefore(toBeInserted, node);
+        node.insertBefore(toBeInserted, node.childNodes[pos]);
         this.selectNodeContents(selnode);
         this.updateToolbar();
-      }
-      break;
-        case 1: // Node.ELEMENT_NODE
-      var selnode = toBeInserted;
-      if (toBeInserted.nodeType == 11 /* Node.DOCUMENT_FRAGMENT_NODE */) {
-        selnode = selnode.firstChild;
-      }
-      node.insertBefore(toBeInserted, node.childNodes[pos]);
-      this.selectNodeContents(selnode);
-      this.updateToolbar();
       break;
     }
-  } else {
+  };
+}
+else
+{
+  HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted)
+  {
     return null;	// this function not yet used for IE <FIXME>
-  }
-};
+  };
+}
 
 // Returns the deepest node that contains both endpoints of the selection.
-HTMLArea.prototype.getParentElement = function(sel) {
-  if(typeof sel == 'undefined')
+if (HTMLArea.is_ie)
+{
+  HTMLArea.prototype.getParentElement = function(sel)
   {
-    sel = this._getSelection();
-  }
-  var range = this._createRange(sel);
-  if (HTMLArea.is_ie) {
-    switch (sel.type) {
-        case "Text":         
-      // try to circumvent a bug in IE:
-      // the parent returned is not always the real parent element    
-      var parent = range.parentElement();
-      while (true)
+    if(typeof sel == 'undefined')
+    {
+      sel = this._getSelection();
+    }
+    var range = this._createRange(sel);
+    switch (sel.type)
+    {
+      case "Text":
+        // try to circumvent a bug in IE:
+        // the parent returned is not always the real parent element
+        var parent = range.parentElement();
+        while (true)
+        {
+          var TestRange = range.duplicate();
+          TestRange.moveToElementText(parent);
+          if (TestRange.inRange(range))
+          {
+            break;
+          }
+          if ((parent.nodeType != 1) || (parent.tagName.toLowerCase() == 'body'))
+          {
+            break;
+          }
+          parent = parent.parentElement;
+        }
+        return parent;
+      case "None":
+        // It seems that even for selection of type "None",
+        // there _is_ a parent element and it's value is not
+        // only correct, but very important to us.  MSIE is
+        // certainly the buggiest browser in the world and I
+        // wonder, God, how can Earth stand it?
+        return range.parentElement();
+      case "Control":
+        return range.item(0);
+      default:
+        return this._doc.body;
+    }
+  };
+}
+else
+{
+  HTMLArea.prototype.getParentElement = function(sel)
+  {
+    if(typeof sel == 'undefined')
+    {
+      sel = this._getSelection();
+    }
+    var range = this._createRange(sel);
+    try
+    {
+      var p = range.commonAncestorContainer;
+      if (!range.collapsed && range.startContainer == range.endContainer &&
+          range.startOffset - range.endOffset <= 1 && range.startContainer.hasChildNodes())
       {
-        var TestRange = range.duplicate();
-        TestRange.moveToElementText(parent);
-        if (TestRange.inRange(range)) break;
-        if ((parent.nodeType != 1) || (parent.tagName.toLowerCase() == 'body')) break;
-        parent = parent.parentElement;
+        p = range.startContainer.childNodes[range.startOffset];
       }
-      return parent;
-        case "None":
-      // It seems that even for selection of type "None",
-      // there _is_ a parent element and it's value is not
-      // only correct, but very important to us.  MSIE is
-      // certainly the buggiest browser in the world and I
-      // wonder, God, how can Earth stand it?
-      return range.parentElement();
-        case "Control":
-      return range.item(0);
-        default:
-      return this._doc.body;
+      /*
+      alert(range.startContainer + ":" + range.startOffset + "\n" +
+            range.endContainer + ":" + range.endOffset);
+      */
+      while (p.nodeType == 3)
+      {
+        p = p.parentNode;
+      }
+      return p;
     }
-  } else try {
-    var p = range.commonAncestorContainer;
-    if (!range.collapsed && range.startContainer == range.endContainer &&
-        range.startOffset - range.endOffset <= 1 && range.startContainer.hasChildNodes())
-      p = range.startContainer.childNodes[range.startOffset];
-    /*
-    alert(range.startContainer + ":" + range.startOffset + "\n" +
-          range.endContainer + ":" + range.endOffset);
-    */
-    while (p.nodeType == 3) {
-      p = p.parentNode;
+    catch (e)
+    {
+      return null;
     }
-    return p;
-  } catch (e) {
-    return null;
-  }
-};
+  };
+}
 
 // Returns an array with all the ancestor nodes of the selection.
 HTMLArea.prototype.getAllAncestors = function() {
@@ -2918,20 +2966,21 @@ HTMLArea.prototype._getFirstAncestor = function(sel, types)
  *
  * @returns null | element
  */
-HTMLArea.prototype._activeElement = function(sel)
+if(HTMLArea.is_ie)
 {
-  if(sel == null) return null;
-  if(this._selectionEmpty(sel)) return null;
-
-  if(HTMLArea.is_ie)
+  HTMLArea.prototype._activeElement = function(sel)
   {
+    if((sel == null) || this._selectionEmpty(sel))
+    {
+      return null;
+    }
+
     if(sel.type.toLowerCase() == "control")
     {
       return sel.createRange().item(0);
     }
     else
     {
-
       // If it's not a control, then we need to see if
       // the selection is the _entire_ text of a parent node
       // (this happens when a node is clicked in the tree)
@@ -2964,9 +3013,17 @@ HTMLArea.prototype._activeElement = function(sel)
       */
       return null;
     }
-  }
-  else
+  };
+}
+else
+{
+  HTMLArea.prototype._activeElement = function(sel)
   {
+    if((sel == null) || this._selectionEmpty(sel))
+    {
+      return null;
+    }
+
     // For Mozilla we just see if the selection is not collapsed (something is selected)
     // and that the anchor (start of selection) is an element.  This might not be totally
     // correct, we possibly should do a simlar check to IE?
@@ -2986,25 +3043,38 @@ HTMLArea.prototype._activeElement = function(sel)
       }
     }
     return null;
-  }
-};
+  };
+}
 
-
-HTMLArea.prototype._selectionEmpty = function(sel)
+if(HTMLArea.is_ie)
 {
-  if(!sel) return true;
-
-  if(HTMLArea.is_ie)
+  HTMLArea.prototype._selectionEmpty = function(sel)
   {
+    if(!sel)
+    {
+      return true;
+    }
+
     return this._createRange(sel).htmlText == '';
-  }
-  else if(typeof sel.isCollapsed != 'undefined')
+  };
+}
+else
+{
+  HTMLArea.prototype._selectionEmpty = function(sel)
   {
-    return sel.isCollapsed;
-  }
+    if(!sel)
+    {
+      return true;
+    }
 
-  return true;
-};
+    if(typeof sel.isCollapsed != 'undefined')
+    {
+      return sel.isCollapsed;
+    }
+
+    return true;
+  };
+}
 
 HTMLArea.prototype._getAncestorBlock = function(sel)
 {
@@ -3174,12 +3244,14 @@ HTMLArea.prototype._formatBlock = function(block_format)
 };
 
 // Selects the contents inside the given node
-HTMLArea.prototype.selectNodeContents = function(node, pos) {
-  this.focusEditor();
-  this.forceRedraw();
-  var range;
-  var collapsed = typeof pos == "undefined" ? true : false;
-  if (HTMLArea.is_ie) {
+if (HTMLArea.is_ie)
+{
+  HTMLArea.prototype.selectNodeContents = function(node, pos)
+  {
+    this.focusEditor();
+    this.forceRedraw();
+    var range;
+    var collapsed = typeof pos == "undefined" ? true : false;
     // Tables and Images get selected as "objects" rather than the text contents
     if(collapsed && node.tagName && node.tagName.toLowerCase().match(/table|img|input|select|textarea/))
     {
@@ -3193,7 +3265,16 @@ HTMLArea.prototype.selectNodeContents = function(node, pos) {
       //(collapsed) && range.collapse(pos);
     }
     range.select();
-  } else {
+  };
+}
+else
+{
+  HTMLArea.prototype.selectNodeContents = function(node, pos)
+  {
+    this.focusEditor();
+    this.forceRedraw();
+    var range;
+    var collapsed = typeof pos == "undefined" ? true : false;
     var sel = this._getSelection();
     range = this._doc.createRange();
     // Tables and Images get selected as "objects" rather than the text contents
@@ -3208,31 +3289,42 @@ HTMLArea.prototype.selectNodeContents = function(node, pos) {
     }
     sel.removeAllRanges();
     sel.addRange(range);
-  }
-};
+  };
+}
 
 /** Call this function to insert HTML code at the current position.  It deletes
  * the selection, if any.
  */
-HTMLArea.prototype.insertHTML = function(html) {
-  var sel = this._getSelection();
-  var range = this._createRange(sel);
-  this.focusEditor();
-  if (HTMLArea.is_ie) {
+if (HTMLArea.is_ie)
+{
+  HTMLArea.prototype.insertHTML = function(html)
+  {
+    var sel = this._getSelection();
+    var range = this._createRange(sel);
+    this.focusEditor();
     range.pasteHTML(html);
-  } else {
+  };
+}
+else
+{
+  HTMLArea.prototype.insertHTML = function(html)
+  {
+    var sel = this._getSelection();
+    var range = this._createRange(sel);
+    this.focusEditor();
     // construct a new document fragment with the given HTML
     var fragment = this._doc.createDocumentFragment();
     var div = this._doc.createElement("div");
     div.innerHTML = html;
-    while (div.firstChild) {
+    while (div.firstChild)
+    {
       // the following call also removes the node from div
       fragment.appendChild(div.firstChild);
     }
     // this also removes the selection
     var node = this.insertNodeAtSelection(fragment);
-  }
-};
+  };
+}
 
 /**
  *  Call this function to surround the existing HTML code in the selection with
@@ -3245,17 +3337,24 @@ HTMLArea.prototype.surroundHTML = function(startTag, endTag) {
 };
 
 /// Retrieve the selected block
-HTMLArea.prototype.getSelectedHTML = function() {
-  var sel = this._getSelection();
-  var range = this._createRange(sel);
-  var existing = null;
-  if (HTMLArea.is_ie) {
-    existing = range.htmlText;
-  } else {
-    existing = HTMLArea.getHTML(range.cloneContents(), false, this);
-  }
-  return existing;
-};
+if (HTMLArea.is_ie)
+{
+  HTMLArea.prototype.getSelectedHTML = function()
+  {
+    var sel = this._getSelection();
+    var range = this._createRange(sel);
+    return range.htmlText;
+  };
+}
+else
+{
+  HTMLArea.prototype.getSelectedHTML = function()
+  {
+    var sel = this._getSelection();
+    var range = this._createRange(sel);
+    return HTMLArea.getHTML(range.cloneContents(), false, this);
+  };
+}
 
 /// Return true if we have some selection
 HTMLArea.prototype.hasSelectedText = function() {
@@ -3802,12 +3901,12 @@ HTMLArea.prototype._editorEvent = function(ev) {
       break;
         case 8: // KEY backspace
         case 46: // KEY delete
-      if (HTMLArea.is_gecko && !ev.shiftKey) {
-        if (this.dom_checkBackspace())
+      if ((HTMLArea.is_gecko && !ev.shiftKey) || HTMLArea.is_ie)
+      {
+        if (this.checkBackspace())
+        {
           HTMLArea._stopEvent(ev);
-      } else if (HTMLArea.is_ie) {
-        if (this.ie_checkBackspace())
-          HTMLArea._stopEvent(ev);
+        }
       }
       break;
     }
@@ -3830,61 +3929,77 @@ HTMLArea.prototype.convertNode = function(el, newTagName) {
   return newel;
 };
 
-HTMLArea.prototype.ie_checkBackspace = function() {
-  var sel = this._getSelection();
-  if(HTMLArea.is_ie && sel.type == 'Control')
+if(HTMLArea.is_ie)
+{
+  // this function is for IE
+  HTMLArea.prototype.checkBackspace = function()
   {
-    var elm = this._activeElement(sel);
-    HTMLArea.removeFromParent(elm);
-    return true;
-  }
-
-  // This bit of code preseves links when you backspace over the
-  // endpoint of the link in IE.  Without it, if you have something like
-  //    link_here |
-  // where | is the cursor, and backspace over the last e, then the link
-  // will de-link, which is a bit tedious
-  var range = this._createRange(sel);
-  var r2 = range.duplicate();
-  r2.moveStart("character", -1);
-  var a = r2.parentElement();
-  if (a != range.parentElement() &&
-      /^a$/i.test(a.tagName)) {
-    r2.collapse(true);
-    r2.moveEnd("character", 1);
-    r2.pasteHTML('');
-    r2.select();
-    return true;
-  }
-};
-
-HTMLArea.prototype.dom_checkBackspace = function() {
-  var self = this;
-  setTimeout(function() {
-    var sel = self._getSelection();
-    var range = self._createRange(sel);
-    var SC = range.startContainer;
-    var SO = range.startOffset;
-    var EC = range.endContainer;
-    var EO = range.endOffset;
-    var newr = SC.nextSibling;
-    if (SC.nodeType == 3)
-      SC = SC.parentNode;
-    if (!/\S/.test(SC.tagName)) {
-      var p = document.createElement("p");
-      while (SC.firstChild)
-        p.appendChild(SC.firstChild);
-      SC.parentNode.insertBefore(p, SC);
-      HTMLArea.removeFromParent(SC);
-      var r = range.cloneRange();
-      r.setStartBefore(newr);
-      r.setEndAfter(newr);
-      r.extractContents();
-      sel.removeAllRanges();
-      sel.addRange(r);
+    var sel = this._getSelection();
+    if(sel.type == 'Control')
+    {
+      var elm = this._activeElement(sel);
+      HTMLArea.removeFromParent(elm);
+      return true;
     }
-  }, 10);
-};
+
+    // This bit of code preseves links when you backspace over the
+    // endpoint of the link in IE.  Without it, if you have something like
+    //    link_here |
+    // where | is the cursor, and backspace over the last e, then the link
+    // will de-link, which is a bit tedious
+    var range = this._createRange(sel);
+    var r2 = range.duplicate();
+    r2.moveStart("character", -1);
+    var a = r2.parentElement();
+    if (a != range.parentElement() &&
+        /^a$/i.test(a.tagName))
+    {
+      r2.collapse(true);
+      r2.moveEnd("character", 1);
+      r2.pasteHTML('');
+      r2.select();
+      return true;
+    }
+  };
+}
+else
+{
+  // this function is for DOM
+  HTMLArea.prototype.checkBackspace = function()
+  {
+    var self = this;
+    setTimeout(function()
+      {
+        var sel = self._getSelection();
+        var range = self._createRange(sel);
+        var SC = range.startContainer;
+        var SO = range.startOffset;
+        var EC = range.endContainer;
+        var EO = range.endOffset;
+        var newr = SC.nextSibling;
+        if (SC.nodeType == 3)
+        {
+          SC = SC.parentNode;
+        }
+        if (!/\S/.test(SC.tagName))
+        {
+          var p = document.createElement("p");
+          while (SC.firstChild)
+          {
+            p.appendChild(SC.firstChild);
+          }
+          SC.parentNode.insertBefore(p, SC);
+          HTMLArea.removeFromParent(SC);
+          var r = range.cloneRange();
+          r.setStartBefore(newr);
+          r.setEndAfter(newr);
+          r.extractContents();
+          sel.removeAllRanges();
+          sel.addRange(r);
+        }
+      }, 10);
+  };
+}
 
 /** The idea here is
  * 1. See if we are in a block element
@@ -4367,31 +4482,51 @@ HTMLArea.checkSupportedBrowser = function() {
 // selection & ranges
 
 // returns the current selection object
-HTMLArea.prototype._getSelection = function() {
-  if (HTMLArea.is_ie) {
+if (HTMLArea.is_ie)
+{
+  HTMLArea.prototype._getSelection = function()
+  {
     return this._doc.selection;
-  } else {
+  };
+}
+else
+{
+  HTMLArea.prototype._getSelection = function()
+  {
     return this._iframe.contentWindow.getSelection();
-  }
-};
+  };
+}
 
 // returns a range for the current selection
-HTMLArea.prototype._createRange = function(sel) {
-  if (HTMLArea.is_ie) {
+if (HTMLArea.is_ie)
+{
+  HTMLArea.prototype._createRange = function(sel)
+  {
     return sel.createRange();
-  } else {
+  };
+}
+else
+{
+  HTMLArea.prototype._createRange = function(sel)
+  {
     this.activateEditor();
-    if (typeof sel != "undefined") {
-      try {
+    if (typeof sel != "undefined")
+    {
+      try
+      {
         return sel.getRangeAt(0);
-      } catch(e) {
+      }
+      catch(e)
+      {
         return this._doc.createRange();
       }
-    } else {
+    }
+    else
+    {
       return this._doc.createRange();
     }
-  }
-};
+  };
+}
 
 // event handling
 
@@ -4450,14 +4585,64 @@ HTMLArea.flushEvents = function()
   // alert('Flushed ' + x + ' events.');
 };
 
-HTMLArea._addEvent = function(el, evname, func) {
-  if (HTMLArea.is_ie) {
-    el.attachEvent("on" + evname, func);
-  } else {
+if (document.addEventListener)
+{
+  HTMLArea._addEvent = function(el, evname, func)
+  {
     el.addEventListener(evname, func, true);
-  }
-  HTMLArea._eventFlushers.push([el, evname, func]);
-};
+    HTMLArea._eventFlushers.push([el, evname, func]);
+  };
+  HTMLArea._removeEvent = function(el, evname, func)
+  {
+    el.removeEventListener(evname, func, true);
+  };
+  HTMLArea._stopEvent = function(ev)
+  {
+    ev.preventDefault();
+    ev.stopPropagation();
+  };
+}
+else if (document.attachEvent)
+{
+  HTMLArea._addEvent = function(el, evname, func)
+  {
+    el.attachEvent("on" + evname, func);
+    HTMLArea._eventFlushers.push([el, evname, func]);
+  };
+  HTMLArea._removeEvent = function(el, evname, func)
+  {
+    el.detachEvent("on" + evname, func);
+  };
+  HTMLArea._stopEvent = function(ev)
+  {
+    try
+    {
+      ev.cancelBubble = true;
+      ev.returnValue = false;
+    }
+    catch(e)
+    {
+      // Perhaps we could try here to stop the window.event
+      // window.event.cancelBubble = true;
+      // window.event.returnValue = false;
+    }
+  };
+}
+else
+{
+  HTMLArea._addEvent = function(el, evname, func)
+  {
+    alert('_addEvent is not supported');
+  };
+  HTMLArea._removeEvent = function(el, evname, func)
+  {
+    alert('_removeEvent is not supported');
+  };
+  HTMLArea._stopEvent = function(ev)
+  {
+    alert('_stopEvent is not supported');
+  };
+}
 
 HTMLArea._addEvents = function(el, evs, func) {
   for (var i = evs.length; --i >= 0;) {
@@ -4465,29 +4650,9 @@ HTMLArea._addEvents = function(el, evs, func) {
   }
 };
 
-HTMLArea._removeEvent = function(el, evname, func) {
-  if (HTMLArea.is_ie) {
-    el.detachEvent("on" + evname, func);
-  } else {
-    el.removeEventListener(evname, func, true);
-  }
-};
-
 HTMLArea._removeEvents = function(el, evs, func) {
   for (var i = evs.length; --i >= 0;) {
     HTMLArea._removeEvent(el, evs[i], func);
-  }
-};
-
-HTMLArea._stopEvent = function(ev) {
-  if (HTMLArea.is_ie) {
-    try{
-      ev.cancelBubble = true;
-      ev.returnValue = false;
-    } catch(e){}
-  } else {
-    ev.preventDefault();
-    ev.stopPropagation();
   }
 };
 
@@ -5536,17 +5701,20 @@ HTMLArea.hasParentNode = function(el)
   return false;
 };
 
-HTMLArea.getOuterHTML = function(element)
+if(HTMLArea.is_ie)
 {
-  if(HTMLArea.is_ie)
+  HTMLArea.getOuterHTML = function(element)
   {
     return element.outerHTML;
-  }
-  else
+  };
+}
+else
+{
+  HTMLArea.getOuterHTML = function(element)
   {
     return (new XMLSerializer()).serializeToString(element);
-  }
-};
+  };
+}
 
 HTMLArea.toFree = [ ];
 HTMLArea.freeLater = function(obj,prop)

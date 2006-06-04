@@ -42,7 +42,7 @@ foreach priv $privs {
     lappend elements ${priv}_p \
         [list \
              html { align center } \
-             label [string totitle [string map {_ { }} $priv]] \
+             label [string totitle [string map {_ { }} [_ acs-subsite.$priv]]] \
              display_template "
                <if @permissions.${priv}_p@ ge 2>
                  <img src=\"/shared/images/checkboxchecked\" border=\"0\" height=\"13\" width=\"13\" alt=\"X\" title=\"This permission is inherited, to remove, click the 'Do not inherit ...' button above.\">
@@ -78,9 +78,9 @@ if { ![empty_string_p $context_id] } {
     set inherit_p [permission::inherit_p -object_id $object_id]
 
     if { $inherit_p } {
-        lappend actions "Do not inherit from $parent_object_name" [export_vars -base "${perm_url}toggle-inherit" {object_id {return_url [ad_return_url]}}] "Stop inheriting permissions from the $parent_object_name"
+        lappend actions "[_ acs-subsite.lt_Do_not_inherit_from_p]" [export_vars -base "${perm_url}toggle-inherit" {object_id {return_url [ad_return_url]}}] "[_ acs-subsite.lt_Stop_inheriting_permi]"
     } else {
-        lappend actions "Inherit from $parent_object_name" [export_vars -base "${perm_url}toggle-inherit" {object_id {return_url [ad_return_url]}}] "Inherit permissions from the $parent_object_name"
+        lappend actions "[_ acs-subsite.lt_Inherit_from_parent_o]" [export_vars -base "${perm_url}toggle-inherit" {object_id {return_url [ad_return_url]}}] "[_ acs-subsite.lt_Inherit_permissions_f]"
     }
 }
 

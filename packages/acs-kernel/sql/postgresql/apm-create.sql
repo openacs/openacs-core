@@ -2367,7 +2367,7 @@ begin
     	package_type = coalesce(update_type__package_type, package_type),
     	spec_file_path = coalesce(update_type__spec_file_path, spec_file_path),
     	spec_file_mtime = coalesce(update_type__spec_file_mtime, spec_file_mtime),
-    	singleton_p = coalesce(update_type__singleton_p, singleton_p)
+    	singleton_p = coalesce(update_type__singleton_p, singleton_p),
     	initial_install_p = coalesce(update_type__initial_install_p, initial_install_p)
       where package_key = update_type__package_key;
 

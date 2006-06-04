@@ -171,7 +171,6 @@ declare
   new__creation_ip            alias for $9;  -- default null
   new__security_inherit_p     alias for $10;  -- default true
   new__package_id             alias for $11; -- default null
-  v_package_id                acs_objects.object_id%TYPE;
   v_folder_id                 cr_folders.folder_id%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
 begin
@@ -183,20 +182,15 @@ begin
     v_context_id := new__context_id;
   end if;
 
-  -- parent_id = 0 means that this is a mount point
-  if new__parent_id != 0 and 
-     content_folder__is_registered(new__parent_id,''content_folder'',''f'') = ''f'' then
+  -- parent_id = security_context_root means that this is a mount point
+  if new__parent_id != -4 and 
+    content_folder__is_folder(new__parent_id) and
+    content_folder__is_registered(new__parent_id,''content_folder'',''f'') = ''f'' then
 
     raise EXCEPTION ''-20000: This folder does not allow subfolders to be created'';
     return null;
 
   else
-
-    v_package_id := new__package_id;
-
-    if new__parent_id is not null and new__parent_id not in (-100,-200) and new__package_id is null then
-        v_package_id := acs_object__package_id(content_item__get_root_folder(new__parent_id));
-    end if;
 
     v_folder_id := content_item__new(
 	new__folder_id,
@@ -215,13 +209,13 @@ begin
 	''CR_FILES'',
 	''content_folder'',
         ''content_folder'',
-        v_package_id
+        new__package_id
     );
 
     insert into cr_folders (
       folder_id, label, description, package_id
     ) values (
-      v_folder_id, new__label, new__description, v_package_id
+      v_folder_id, new__label, new__description, new__package_id
     );
 
     -- set the correct object title
@@ -649,7 +643,7 @@ end;' language 'plpgsql';
 
 
 -- function is_folder
-select define_function_args('content_folder__is_folder','folder_id');
+select define_function_args('content_folder__is_folder','item_id');
 create or replace function content_folder__is_folder (integer)
 returns boolean as '
 declare
@@ -698,10 +692,10 @@ begin
     v_parent_id := v_rec.parent_id;
     exit when v_parent_id = is_sub_folder__folder_id;
     -- we did not find the folder, reset v_parent_id
-    v_parent_id := 0;
+    v_parent_id := -4;
   end LOOP;
 
-  if v_parent_id != 0 then 
+  if v_parent_id != -4 then 
     v_sub_folder_p := ''t'';
   end if;
 
@@ -970,7 +964,7 @@ declare
   v_is_root                       boolean;       
 begin
 
-  select parent_id = 0 into v_is_root 
+  select parent_id = -4 into v_is_root 
     from cr_items where item_id = is_root__folder_id;
 
   return v_is_root;

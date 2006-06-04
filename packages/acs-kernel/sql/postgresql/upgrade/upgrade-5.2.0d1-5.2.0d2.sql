@@ -521,7 +521,6 @@ begin
 end;' language 'plpgsql';
 
 drop function apm_package__new (integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer);
-
 create or replace function apm_package__new (integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
@@ -567,11 +566,6 @@ begin
 	 v_instance_name := new__instance_name;
        end if;
 
-       update acs_objects
-       set title = v_instance_name,
-           package_id = v_package_id
-       where object_id = v_package_id;
-
        select package_type into v_package_type
        from apm_package_types
        where package_key = new__package_key;
@@ -580,6 +574,11 @@ begin
        (package_id, package_key, instance_name)
        values
        (v_package_id, new__package_key, v_instance_name);
+
+       update acs_objects
+       set title = v_instance_name,
+           package_id = v_package_id
+       where object_id = v_package_id;
 
        if v_package_type = ''apm_application'' then
 	   insert into apm_applications

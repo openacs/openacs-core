@@ -192,10 +192,10 @@ After adding support for the fancy ADP parser, please restart your web server.
 # in the install.xml file)
 
 set stacksize [ns_config "ns/threads" StackSize]
-if { $stacksize < [expr $acs_application(min_stack_size) * 1024] } {
 
-    append errors "<li><p>The configured AOLserver Stacksize is too small
-([expr $stacksize / 1024]K).
+if { ![string is integer $stacksize] ||
+     $stacksize < [expr $acs_application(min_stack_size) * 1024] } {
+    append errors "<li><p><strong>The configured AOLserver Stacksize is too small, missing, or a non-integer value.
 $acs_application(pretty_name) requires a StackSize parameter of at least
 ${acs_application(min_stack_size)}K.
 <p>Please add the following line to your .tcl configuration file

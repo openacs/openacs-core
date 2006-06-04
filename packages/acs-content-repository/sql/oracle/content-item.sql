@@ -26,7 +26,7 @@ function get_root_folder (
 
 begin
 
-  if item_id is NULL then
+  if item_id is NULL or item_id in (-4,-100,-200) then
 
     v_folder_id := c_root_folder_id;
 
@@ -37,7 +37,7 @@ begin
     from
       cr_items
     where 
-      parent_id = 0
+      parent_id = -4
     connect by
       prior parent_id = item_id
     start with
@@ -90,7 +90,6 @@ is
   v_title	   cr_revisions.title%TYPE;
   v_rel_id	   acs_objects.object_id%TYPE;
   v_rel_tag        cr_child_rels.relation_tag%TYPE;
-  v_package_id     acs_objects.package_id%TYPE;
   v_context_id     acs_objects.context_id%TYPE;
   v_storage_type   cr_items.storage_type%TYPE;
 begin
@@ -115,12 +114,6 @@ begin
     v_parent_id := parent_id;
   end if;
 
-  if package_id is null and parent_id ^= 0 then
-    v_package_id := acs_object.package_id(content_item.get_root_folder(v_parent_id));
-  else
-    v_package_id := package_id;
-  end if;
-
   -- Determine context_id
   if context_id is null then
     v_context_id := v_parent_id;
@@ -128,10 +121,10 @@ begin
     v_context_id := context_id;
   end if;
 
-  if v_parent_id = 0 or 
+  if v_parent_id = -4 or 
     content_folder.is_folder(v_parent_id) = 't' then
 
-    if v_parent_id ^= 0 and 
+    if v_parent_id ^= -4 and 
       content_folder.is_registered(
         v_parent_id, content_item.new.content_type, 'f') = 'f' then
 
@@ -141,7 +134,7 @@ begin
 
     end if;
 
-  elsif v_parent_id ^= 0 then
+  elsif v_parent_id ^= -4 then
 
     begin
 
@@ -181,7 +174,7 @@ begin
       object_id	        => content_item.new.item_id,
       object_type	=> content_item.new.item_subtype,
       title             => content_item.new.name,
-      package_id        => v_package_id,
+      package_id        => content_item.new.package_id,
       context_id        => v_context_id,
       creation_date	=> content_item.new.creation_date, 
       creation_user	=> content_item.new.creation_user, 
@@ -204,13 +197,13 @@ begin
 
   -- if the parent is not a folder, insert into cr_child_rels
   -- We checked above before creating the object that it is a valid rel
-  if v_parent_id ^= 0 and
+  if v_parent_id ^= -4 and
     content_folder.is_folder(v_parent_id) = 'f' then
 
     v_rel_id := acs_object.new(
       object_type	=> 'cr_item_child_rel',
       title		=> v_rel_tag || ': ' || v_parent_id || ' - ' || v_item_id,
-      package_id	=> v_package_id,
+      package_id	=> content_item.new.package_id,
       context_id	=> v_parent_id
     );
 
@@ -238,7 +231,7 @@ begin
     v_revision_id := content_revision.new(
         item_id	      => v_item_id,
 	title	      => v_title,
-        package_id    => v_package_id,
+        package_id    => content_item.new.package_id,
 	description   => content_item.new.description,
 	data	      => content_item.new.data,
 	mime_type     => content_item.new.mime_type,
@@ -254,7 +247,7 @@ begin
     v_revision_id := content_revision.new(
 	item_id	      => v_item_id,
 	title	      => v_title,
-        package_id    => v_package_id,
+        package_id    => content_item.new.package_id,
 	description   => content_item.new.description,
 	text	      => content_item.new.text,
 	mime_type     => content_item.new.mime_type,
@@ -773,7 +766,7 @@ is
 
   v_count integer;
   v_name varchar2(400); 
-  v_parent_id integer := 0;
+  v_parent_id integer := -4;
   v_tree_level integer;
 
   v_resolved_root_id integer;
@@ -792,7 +785,7 @@ is
     order by
       tree_level desc;
 
-  v_rel_parent_id integer := 0;
+  v_rel_parent_id integer := -4;
   v_rel_tree_level integer := 0;
 
   v_path varchar2(4000) := '';

@@ -110,3 +110,7 @@ if { [form is_valid message_new] } {
     forward $return_url
 
 }
+
+set focus ""
+
+ad_return_template

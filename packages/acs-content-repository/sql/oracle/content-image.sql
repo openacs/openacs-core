@@ -113,7 +113,7 @@ as
     width		in images.width%TYPE default null,
     file_size		in cr_revisions.content_length%TYPE default null,
     storage_type        in cr_items.storage_type%TYPE default 'file',
-    package_id          in acs_objects.package_id%TYPE
+    package_id          in acs_objects.package_id%TYPE default null
   ) return cr_items.item_id%TYPE;
 
   function new_revision (
@@ -133,7 +133,7 @@ as
     height		in images.height%TYPE default null,
     width		in images.width%TYPE default null,
     file_size		in cr_revisions.content_length%TYPE default null,
-    package_id          in acs_objects.package_id%TYPE
+    package_id          in acs_objects.package_id%TYPE default null
   ) return cr_revisions.revision_id%TYPE;
 
   --/**
@@ -185,7 +185,7 @@ as
     width		in images.width%TYPE default null,
     file_size		in cr_revisions.content_length%TYPE default null,
     storage_type        in cr_items.storage_type%TYPE default 'file',
-    package_id          in acs_objects.package_id%TYPE
+    package_id          in acs_objects.package_id%TYPE default null
   ) return cr_items.item_id%TYPE
   is
     v_item_id	      cr_items.item_id%TYPE;
@@ -270,7 +270,7 @@ as
     height		in images.height%TYPE default null,
     width		in images.width%TYPE default null,
     file_size		in cr_revisions.content_length%TYPE default null,
-    package_id          in acs_objects.package_id%TYPE
+    package_id          in acs_objects.package_id%TYPE default null
   ) return cr_revisions.revision_id%TYPE
   is
     v_revision_id     cr_revisions.revision_id%TYPE;

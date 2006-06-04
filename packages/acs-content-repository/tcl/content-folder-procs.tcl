@@ -155,8 +155,8 @@ ad_proc -public ::content::folder::unregister_content_type {
 }
 
 ad_proc -public ::content::folder::update {
-    folder_id:required
-    attributes:required
+    -folder_id:required
+    -attributes:required
 } {
     Update standard cr_folder attributes, including the attributes for
     the folder cr_item
@@ -166,7 +166,10 @@ ad_proc -public ::content::folder::update {
     
     @param folder_id folder to update
 
-    @param attributes A list of pairs of additional attributes and their values to get. Each pair is a list of two elements: key => value
+    @param attributes A list of pairs of additional attributes and
+    their values to set. Each pair is a list of lists of two elements:
+    key => value
+    Valid attributes are: label, description, name, package_id
 
     @return 
     
@@ -174,9 +177,11 @@ ad_proc -public ::content::folder::update {
 } {
     set valid_attributes [list label description package_id]
 
-    set item_attributes $attributes
-    set i 0 
-    foreach {attribute value} $attributes {
+    set update_text "" 
+
+    foreach {attribute_list} $attributes {
+	set attribute [lindex $attribute_list 0]
+	set value [lindex $attribute_list 1]	
 	if {[lsearch $valid_attributes $attribute] > -1}  {
 
 	    # create local variable to use for binding
@@ -186,22 +191,19 @@ ad_proc -public ::content::folder::update {
 		append update_text ","
 	    }
 	    append update_text " ${attribute} = :${attribute} "
-	    # remove this attribute from the list passed to item::set
-	    set item_attributes [lreplace $item_attributes $i $i]
    	}
-	incr i
     }
     if {![string equal "" $update_text]} {
 
 	# we have valid attributes, update them
 
-	set query_text "update cr_folders set ${update_text}  where folder_id=:folder_id"
+	set query_text "update cr_folders set ${update_text} where folder_id=:folder_id"
 	db_dml item_update $query_text
     }
 
-    # pass the rest of the attributes to content::item::set
+    # pass the rest of the attributes to content::item::update
     # we can just send the folder attributes because they don't overlap
-    content::item::set \
+    content::item::update \
 	-item_id $folder_id \
 	-attributes $attributes
 }
@@ -215,9 +217,9 @@ ad_proc -public content::folder::get_index_page {
     @return item_id of content item named "index" in folder_id
 } {
     return [package_exec_plsql \
-		-var_list [list \
+		-var_list [list [list \
 			       folder_id $folder_id \
-			      ] \
+				    ]] \
 		content_folder get_index_page]
 }
 
@@ -231,7 +233,7 @@ ad_proc -public content::folder::get_label {
 } {
     return [package_exec_plsql \
 		-var_list [list \
-			       folder_id $folder_id \
+			       [list folder_id $folder_id] \
 			      ] \
 		content_folder get_label]
 }
@@ -260,7 +262,7 @@ ad_proc -public content::folder::is_folder {
     @return t or f
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
+           [list item_id $item_id] \
     ] content_folder is_folder]
 }
 
@@ -278,9 +280,9 @@ ad_proc -public content::folder::is_registered {
 } {
     return [package_exec_plsql \
 		-var_list [list \
-			       folder_id $folder_id \
-			       content_type $content_type \
-			       include_subtypes $include_subtypes \
+			       [list folder_id $folder_id] \
+			       [list content_type $content_type] \
+                               [list include_subtypes $include_subtypes] \
 			      ] \
 		content_folder is_registered]
 }
@@ -294,7 +296,7 @@ ad_proc -public content::folder::is_root {
     @return t or f
 } {
     return [package_exec_plsql -var_list [list \
-        folder_id $folder_id \
+                                              [list folder_id $folder_id] \
     ] content_folder is_root]
 }
 

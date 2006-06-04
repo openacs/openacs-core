@@ -105,7 +105,7 @@ function new (
 			   default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
   object_type   in acs_object_types.object_type%TYPE default 'content_keyword',
-  package_id    in acs_objects.package_id%TYPE
+  package_id    in acs_objects.package_id%TYPE default null
 ) return cr_keywords.keyword_id%TYPE
 is
   v_id integer;

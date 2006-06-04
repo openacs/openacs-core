@@ -32,6 +32,7 @@
 //      you to set the state of the tree when painting the page simply
 //      by setting some <li>'s class name as being "liOpen" (see example)
 // March 29, 2005: Added cookie-managed state (AG).
+// May 16, 2005: don't register 'convertTrees' multiple times (GN)
 /*
 This code is inspired by and extended from Stuart Langridge's aqlist code:
 		http://www.kryogenix.org/code/browser/aqlists/
@@ -42,7 +43,13 @@ This code is inspired by and extended from Stuart Langridge's aqlist code:
 */
 
 // Automatically attach a listener to the window onload, to convert the trees
-addEvent(window,"load",convertTrees);
+// Register the event only once. if registered multiple times, the items are rendered
+// with multiple + or - signs....     -gustaf neumann
+
+if (typeof mktree_registered == 'undefined') {
+  addEvent(window,"load",convertTrees);
+  var mktree_registered = 1;
+}
 
 // Utility function to add an event listener
 function addEvent(o,e,f){
@@ -50,6 +57,17 @@ function addEvent(o,e,f){
 	else if (o.attachEvent){ return o.attachEvent("on"+e,f); }
 	else { return false; }
 }
+
+function removeEvent( obj, type, fn ) {
+   if (obj.removeEventListener) {
+      obj.removeEventListener( type, fn, false );
+   } else if (obj.detachEvent) {
+      obj.detachEvent( "on"+type, obj[type+fn] );
+      obj[type+fn] = null;
+      obj["e"+type+fn] = null;
+   }
+}
+
 
 // utility function to set a global variable if it is not already set
 function setDefault(name,val) {

@@ -13,7 +13,6 @@
 -- @creation-date 2000-05-18
 --
 -- @cvs-id $Id$
---
 
 -- ******************************************************************
 -- * KNOWLEDGE LEVEL
@@ -673,7 +672,7 @@ begin
       v_sort_order := create_attribute__sort_order;
     end if;
 
-    select acs_attribute_id_seq.nextval into v_attribute_id;
+    select acs_attribute_id_seq.nextval from dual into v_attribute_id;
 
     insert into acs_attributes
       (attribute_id, object_type, table_name, column_name, attribute_name,

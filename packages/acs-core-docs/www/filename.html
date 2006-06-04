@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Detailed Design Documentation Template</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="doc-standards.html" title="Chapter 15. Documentation Standards"><link rel="previous" href="nxml-mode.html" title="Using nXML mode in Emacs"><link rel="next" href="requirements-template.html" title="System/Application Requirements Template"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="nxml-mode.html">Prev</a> </td><th width="60%" align="center">Chapter 15. Documentation Standards</th><td width="20%" align="right"> <a accesskey="n" href="requirements-template.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="filename"></a>Detailed Design Documentation Template</h2></div></div><div></div></div><p>By <a href="mailto:youremail@example.com" target="_top">You</a></p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="yourpackage-design-start-note"></a>Start Note</h3></div></div><div></div></div><p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Detailed Design Documentation Template</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="doc-standards.html" title="Chapter 15. Documentation Standards"><link rel="previous" href="nxml-mode.html" title="Using nXML mode in Emacs"><link rel="next" href="requirements-template.html" title="System/Application Requirements Template"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="nxml-mode.html">Prev</a> </td><th width="60%" align="center">Chapter 15. Documentation Standards</th><td width="20%" align="right"> <a accesskey="n" href="requirements-template.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="filename"></a>Detailed Design Documentation Template</h2></div></div><div></div></div><p>By <a href="mailto:youremail@example.com" target="_top">You</a></p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="yourpackage-design-start-note"></a>Start Note</h3></div></div><div></div></div><p>
       <span class="emphasis"><em>NOTE: Some of the sections of this template may not apply to your
 	package, e.g. there may be no user-visible UI elements for a component
 	of the OpenACS Core.  Furthermore, it may be easier in some circumstances
@@ -22,7 +23,7 @@
 	  classes of users) to accomplish.  </p></li><li><p> Within reasonable bounds, what this package is not intended to allow users to
 	  accomplish. </p></li><li><p> The application domains where this package is most likely to be of use.  </p></li><li><p> A high-level overview of how the package meets its
 	  requirements (which should have been documented elsewhere).  This
-	  is to include relevant material from the "features" section of the
+	  is to include relevant material from the &quot;features&quot; section of the
 	  cover sheet (the cover sheet is a wrapper doc with links to all
 	  other package docs). </p></li></ul></div><p>
       Also worthy of treatment in this section:
@@ -82,7 +83,7 @@
     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="yourpackage-design-data-model"></a>Data Model Discussion</h3></div></div><div></div></div><p>
       The data model discussion should do more than merely display the SQL
       code, since this information is already be available via a link in the
-      "essentials" section above.  Instead, there should be a high-level
+      &quot;essentials&quot; section above.  Instead, there should be a high-level
       discussion of how your data model meets your solution requirements:
       why the database entities were defined as they are, and what
       transactions you expect to occur. (There may be some overlap with the
@@ -107,14 +108,14 @@
     </p><p>
       <span class="emphasis"><em>Note: In order that developer documentation be uniform across
 	different system documents, these users should herein be designated as
-	"the developer," "the OpenACS-admin," "the sub-admin," and "the user,"
+	&quot;the developer,&quot; &quot;the OpenACS-admin,&quot; &quot;the sub-admin,&quot; and &quot;the user,&quot;
 	respectively. </em></span>
     </p><p>
       Finally, note that as our templating system becomes more entrenched
       within the OpenACS, this section's details are likely to shift from UI
       specifics to template interface specifics.
     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="yourpackage-design-config"></a>Configuration/Parameters</h3></div></div><div></div></div><p>
-      Under OpenACS 5.2.0d1, parameters are set at two levels: at the global level by
+      Under OpenACS 5.2.3b1, parameters are set at two levels: at the global level by
       the OpenACS-admin, and at the subsite level by a sub-admin.  In this
       section, list and discuss both levels of parameters.
     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="yourpackage-design-future"></a>Future Improvements/Areas of Likely Change</h3></div></div><div></div></div><p>
@@ -122,7 +123,7 @@
       here.  You could also comment on non-functional improvements to the
       package, such as usability.
     </p><p>
-      Note that a careful treatment of the earlier "competitive analysis"
+      Note that a careful treatment of the earlier &quot;competitive analysis&quot;
       section can greatly facilitate the documenting of this section.
     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="yourpackage-design-authors"></a>Authors</h3></div></div><div></div></div><p>
       Although a system's data model file often contains this information,

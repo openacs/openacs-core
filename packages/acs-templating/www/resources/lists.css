@@ -87,7 +87,7 @@ tr.list-paginator {
 td.list-button-bar { 
   padding-bottom: 12px;
   font-size: 115%;
-
+  line-height: 250%;
 }
 
 .list-filter { 
@@ -137,6 +137,6 @@ td.list-filter-pane {
 
 td.list-list-pane {
   background-color: white;
-  valign: center;
+  vertical-align: middle;
   padding-left: 10px;
 }

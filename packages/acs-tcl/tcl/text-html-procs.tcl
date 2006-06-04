@@ -1342,7 +1342,7 @@ ad_proc -public ad_html_text_convert {
         return ""
     }
 
-    set valid_froms { text/enhanced text/plain text/fixed-width text/html }
+    set valid_froms { text/enhanced text/plain text/fixed-width text/html text/xml }
     set valid_tos { text/plain text/html }
     
     # Validate procedure input
@@ -1397,7 +1397,17 @@ ad_proc -public ad_html_text_convert {
 		    set text [ad_html_to_text -maxlen $maxlen -- $text]
 		}
 	    }
-	} 
+	}
+	text/xml {
+	    switch $to {
+                text/html {
+                    set text "<pre>[ad_text_to_html -no_lines -- $text]</pre>"
+		}
+                text/plain {
+		            set text [wrap_string $text $maxlen]
+		}
+	    }
+	}	 
     }
 
     # Handle closing of HTML tags, truncation

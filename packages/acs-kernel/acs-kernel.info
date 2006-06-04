@@ -7,16 +7,16 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.2.0d10" url="http://openacs.org/repository/download/apm/acs-kernel-5.2.0d10.apm">
+    <version name="5.2.3" url="http://openacs.org/repository/download/apm/acs-kernel-5.2.3.apm">
         <owner url="mailto:oct@openacs.org">OpenACS Core Team</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
-        <release-date>2005-09-23</release-date>
+        <release-date>2006-05-25</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, partiies and the supporting PL/SQL and PL/pgSQL procedures.</description>
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-kernel" version="5.2.0d10"/>
+        <provides url="acs-kernel" version="5.2.3"/>
 
         <callbacks>
         </callbacks>
@@ -45,7 +45,6 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="HomeURL"  default="/pvt/home" description="the URL of the workspace link" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="HostAdministrator"  default="somenerd@yourdomain.com" description="a person whom people can email with technical problems" section_name="system-information"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="HttpCacheControlP"  default="1" description="Wether we output http headers on every request for dynamic pages that prevent browsers and proxies from caching the page." section_name="request-processor"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="IndexInternalRedirectUrl"  description="If non-blank and IndexRedirectUrl is blank, serve the given template rather than the default index template, but with an rp_internal_redirect. Value is relative to serverroot. Example: /packages/dotlrn/index"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="IndexRedirectUrl"  description="If non-blank, serve the given template rather than the default index template.  Example: /dotlrn/index"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="InfoFilePermissionsMode"  default="0775" description="The default UNIX permissions to assign to the .info file when it is created." section_name="apm"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="LogDebugP"  default="0" description="log request-processor debug messages to the error log? very verbose." section_name="request-processor"/>

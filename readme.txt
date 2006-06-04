@@ -1,6 +1,6 @@
 This is the OpenACS - the Open Architecture Community System.
 
-Version HEAD - In development - use at your own risk!
+Version 5.2.1
 
 --------------
 

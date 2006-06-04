@@ -412,6 +412,38 @@ a.button:active {
   border: solid 1px black;
 }
 
+
+a.admin-button { 
+  font: 85% arial;
+  border: solid 1px black;
+  background-color: #aaa;
+  text-align: center; 
+  padding: 1px;
+  padding-left: 8px;
+  padding-right: 8px;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+}
+a.admin-button:link { 
+  text-decoration: none;
+  border: solid 1px black;
+  color: #111;
+}
+a.admin-button:visited { 
+  text-decoration: none;
+  border: solid 1px black;
+}
+a.admin-button:hover { 
+  text-decoration: none;
+  background-color: #ccc;
+  border: solid 1px black;
+}
+a.admin-button:active { 
+  text-decoration: none;
+  border: solid 1px black;
+}
+
 a.admin:link, a.admin:visited {
   color: #f00;
   font-family: verdana;

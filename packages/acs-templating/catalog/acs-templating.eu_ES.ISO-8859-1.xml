@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-templating" package_version="5.1.2" locale="eu_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-templating" package_version="5.2.3b2" locale="eu_ES" charset="ISO-8859-1">
 
+  <msg key="12-Hour">12-Ordu</msg>
+  <msg key="24-Hour">24-Ordu</msg>
   <msg key="Day">Eguna</msg>
   <msg key="Element_is_required">%label% beharrezkoa da</msg>
   <msg key="Element_is_too_long_Plural">%label% gehiegizko %excess_no_bytes% karaktere ditu.</msg>
@@ -25,5 +27,7 @@
   <msg key="Seconds">Segunduak</msg>
   <msg key="Sort_order">ordena</msg>
   <msg key="Spellcheck">Ortografia zuzenketa</msg>
+  <msg key="Tag_handler_invalid_number_of_args">&quot;tag handler&quot;i argumentu kopuru okerra pasatu zaizkio</msg>
+  <msg key="Template_parser_error_in_parameter_list">Errorea parametro zerrendan</msg>
   <msg key="Year">Urtea</msg>
 </message_catalog>

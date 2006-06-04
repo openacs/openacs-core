@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Object Model Design</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 17. Kernel Documentation"><link rel="previous" href="object-system-requirements.html" title="Object Model Requirements"><link rel="next" href="permissions-requirements.html" title="Permissions Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="object-system-requirements.html">Prev</a> </td><th width="60%" align="center">Chapter 17. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="permissions-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="object-system-design"></a>Object Model Design</h2></div></div><div></div></div><div class="authorblurb"><p>By Pete Su, Michael Yoon, Richard Li, Rafael Schloming</p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Object Model Design</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 17. Kernel Documentation"><link rel="previous" href="object-system-requirements.html" title="Object Model Requirements"><link rel="next" href="permissions-requirements.html" title="Permissions Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="object-system-requirements.html">Prev</a> </td><th width="60%" align="center">Chapter 17. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="permissions-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="object-system-design"></a>Object Model Design</h2></div></div><div></div></div><div class="authorblurb"><p>By Pete Su, Michael Yoon, Richard Li, Rafael Schloming</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="object-system-design-essentials"></a>Essentials</h3></div></div><div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="objects-design-data-model"></a>Data Model</h4></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="/doc/sql/display-sql?url=acs-metadata-create.sql&amp;package_key=acs-kernel" target="_top">
@@ -15,7 +16,7 @@ so forth)</p></li><li><p>Presentation tools (e.g. how to display a field in a fo
 page)</p></li></ul></div><p>All of these services involve relating additional service-related
 information to application data objects. Examples of application objects
 include:</p><div class="itemizedlist"><ul type="disc"><li><p>forum messages</p></li><li><p>A user home page</p></li><li><p>A ticket in the ticket tracker</p></li></ul></div><p>In the past, developers had to use ad-hoc and inconsistent schemes to
-interface to various "general" services. OpenACS 4 defines a central
+interface to various &quot;general&quot; services. OpenACS 4 defines a central
 data model that keeps track of the application objects that we wish to
 manage, and serves as a primary store of <span class="emphasis"><em>metadata</em></span>. By
 <span class="emphasis"><em>metadata</em></span>, we mean data stored on behalf of an application
@@ -49,14 +50,14 @@ also uses <tt class="computeroutput">(user_id, group_id)</tt> pairs in its
 <tt class="computeroutput">user_group_map</tt> table as a way to identify data associated with a
 single membership relation.</p><p>Also, in OpenACS 3.x many utility modules exist that do nothing more than
 attach some extra attributes to existing application data. For example,
-general comments maintains a table that maps application "page"
+general comments maintains a table that maps application &quot;page&quot;
 data (static or dynamic pages on the website) to one or more user comments on
 that page. It does so by constructing a unique identifier for each page,
 usually a combination of the table in which the data is stored, and the value
 of the primary key value for the particular page. This idiom is referred to
-as the "(on_which_table + on_what_id)" method for identifying
+as the &quot;(on_which_table + on_what_id)&quot; method for identifying
 application data. In particular, general comments stores its map from pages
-to comments using a "(on_which_table + on_what_id)" key plus the ID
+to comments using a &quot;(on_which_table + on_what_id)&quot; key plus the ID
 of the comment itself.</p><p>All of these composite key constructions are implicit object identifiers -
 they build a unique ID out of other pieces of the data model. The problem is
 that their definition and use is ad-hoc and inconsistent, making the
@@ -72,13 +73,13 @@ do to take advantage of general services in OpenACS 4 is to use the new API to
 make sure every object the system is to manage is associated with a row in
 <tt class="computeroutput">acs_objects</tt>. More importantly, if they do this, new services
 like general comments can be created without requiring existing applications
-to "hook into" them via new metadata.</p><p><span class="strong">Note:</span> Object identifiers are a good example of metadata
+to &quot;hook into&quot; them via new metadata.</p><p><span class="strong">Note:</span> Object identifiers are a good example of metadata
 in the new system. Each row in <tt class="computeroutput">acs_objects</tt> stores information
 <span class="emphasis"><em>about</em></span> the application object, but not the application object itself.
 This becomes more clear if you skip ahead and look at the SQL schema code
 that defines this table.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="objects-design-obj-context"></a>Object Context and Access Control</h4></div></div><div></div></div><p>Until the implementation of the general permissions system, every OpenACS
 application had to manage access control to its data separately. Later on, a
-notion of "scoping" was introduced into the core data model.</p><p>"Scope" is a term best explained by example. Consider some
+notion of &quot;scoping&quot; was introduced into the core data model.</p><p>&quot;Scope&quot; is a term best explained by example. Consider some
 hypothetical rows in the <tt class="computeroutput">address_book</tt> table:</p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col><col></colgroup><tbody><tr><td><span class="strong">...</span></td><td><span class="strong"><tt class="computeroutput">scope</tt></span></td><td><span class="strong"><tt class="computeroutput">user_id</tt></span></td><td><span class="strong"><tt class="computeroutput">group_id</tt></span></td><td><span class="strong">...</span></td></tr><tr><td>...</td><td><tt class="computeroutput">user</tt></td><td><tt class="computeroutput">123</tt></td><td> </td><td>...</td></tr><tr><td>...</td><td><tt class="computeroutput">group</tt></td><td> </td><td><tt class="computeroutput">456</tt></td><td>...</td></tr><tr><td>...</td><td><tt class="computeroutput">public</tt></td><td> </td><td> </td><td>...</td></tr></tbody></table></div><p>The first row represents an entry in User 123's personal address book,
 the second row represents an entry in User Group 456's shared address
 book, and the third row represents an entry in the site's public address
@@ -95,8 +96,8 @@ forum topic might list a subsite as its context. Thus, contexts make it
 easier to break the site up into security domains according to its natural
 structure. An object's context is stored in the <tt class="computeroutput">context_id</tt>
 column of the <tt class="computeroutput">acs_objects</tt> table.</p><p>We use an object's context to provide a default answer to questions
-regarding access control. Whenever we ask a question of the form "can
-user X perform action Y on object Z", the OpenACS security model will defer
+regarding access control. Whenever we ask a question of the form &quot;can
+user X perform action Y on object Z&quot;, the OpenACS security model will defer
 to an object's context if there is no information about user X's
 permission to perform action Y on object Z.</p><p>The context system forms the basis for the rest of the OpenACS access control
 system, which is described in in two separate documents: one for the <a href="permissions-design.html" title="Permissions Design">permissions system</a> and another for the
@@ -109,7 +110,7 @@ this functionality.</p><p><span class="emphasis"><em>User/Groups in OpenACS 3.x<
 along with attributes to be stored with each instance of a group type. Each
 group type could define a helper table that stored attributes on each
 instance of the group type. This table was called the
-"<tt class="computeroutput">_info</tt>" table because the name was generated by
+&quot;<tt class="computeroutput">_info</tt>&quot; table because the name was generated by
 appending <tt class="computeroutput">_info</tt> to the name of the group type.</p><p>The user/groups data model also provided the
 <tt class="computeroutput">user_group_type_member_fields</tt> and
 <tt class="computeroutput">user_group_member_fields</tt> tables to define attributes for members
@@ -130,7 +131,7 @@ the attributes defined in the parent type, and can define some of its own.
 The motivation for subtypes comes from the need for OpenACS to be more
 extensible. In OpenACS 3.x, many applications extended the core data models by
 directly adding more columns, in order to provide convenient access to new
-information. This resulted in core data tables that were too "fat",
+information. This resulted in core data tables that were too &quot;fat&quot;,
 containing a hodge podge of unrelated information that should have been
 normalized away. The canonical example of this is the explosion of the
 <tt class="computeroutput">users</tt> table in OpenACS 3.x. In addition to being sloppy technically,
@@ -146,19 +147,19 @@ attributes in two ways. The first was to use columns in the helper table. The
 second consisted of two tables, one describing attributes and one storing
 values, to provide a flexible means for attaching attributes to metadata
 objects. This style of attribute storage is used in several other parts of
-OpenACS 3.x, and we will refer to it as "skinny tables". For
+OpenACS 3.x, and we will refer to it as &quot;skinny tables&quot;. For
 example:</p><div class="itemizedlist"><ul type="disc"><li><p>In the Ecommerce data model, the <tt class="computeroutput">ec_custom_product_fields</tt>
 table defines attributes for catalog products, and the
 <tt class="computeroutput">ec_custom_product_field_values</tt> table stores values for those
 attributes.</p></li><li><p>In the Photo DB data model, the <tt class="computeroutput">ph_custom_photo_fields</tt> table
 defines attributes for the photographs owned by a specific user, and tables
 named according to the convention
-"<tt class="computeroutput">ph_user_&lt;user_id&gt;_custom_info</tt>" are used to
+&quot;<tt class="computeroutput">ph_user_&lt;user_id&gt;_custom_info</tt>&quot; are used to
 store values for those attributes.</p></li></ul></div><p>In addition, there are some instances where we are not using this model
 but <span class="emphasis"><em>should</em></span>, e.g. the <tt class="computeroutput">users_preferences</tt> table, which
 stores preferences for registered users in columns such as
 <tt class="computeroutput">prefer_text_only_p</tt> and <tt class="computeroutput">dont_spam_me_p</tt>. The
-"standard" way for an OpenACS 3.x-based application to add to the list
+&quot;standard&quot; way for an OpenACS 3.x-based application to add to the list
 of user preferences is to add a column to the <tt class="computeroutput">users_preferences</tt>
 table (exactly the kind of data model change that has historically
 complicated the process of upgrading to a more recent OpenACS version).</p><p>The Objet Model generalizes the scheme used in the old OpenACS 3.x user/groups
@@ -187,16 +188,16 @@ type T, to other objects of a given type R. Each relation type is a subtype
 of <tt class="computeroutput">acs_object</tt>, extended with extra attributes that store
 constraints on the relation, and the types of objects the relation actually
 maps. In turn, each instance of a relation type is an object that represents
-a single fact of the form "the object t of type T is related to the
-object r of type R." That is, each instance of a relation type is
+a single fact of the form &quot;the object t of type T is related to the
+object r of type R.&quot; That is, each instance of a relation type is
 essentially just a pair of objects.</p><p>Relation types generalize mapping tables. For example, the 3.x user/groups
 data model can be largely duplicated using a single relation type describing
-the "group membership" relation. Group types would then be subtypes
+the &quot;group membership&quot; relation. Group types would then be subtypes
 of this membership relation type. Group type attributes would be attached to
 the relation type itself. Group member attributes would be attached to
 instances of the membership relation. Finally, the mapping table would be
 replaced by a central skinny table that the relation type system defines.</p><p>Relation types should be used when you want to be able to attach data to
-the "fact" that object X and object Y are related to each other. On
+the &quot;fact&quot; that object X and object Y are related to each other. On
 the face of it, they seem like a redundant mechanism however, since one could
 easily create a mapping table to do the same thing. The advantage of
 registering this table as a relation type is that in principle the OpenACS 4
@@ -210,7 +211,7 @@ the question of why we don't just use an object database. The main reason
 is that all of the major object database vendors ship products that are
 effectively tied to some set of object oriented programming languages. Their
 idea is to provide tight language-level integration to lower the
-"impedance mismatch" between the database and the language.
+&quot;impedance mismatch&quot; between the database and the language.
 Therefore, database objects and types are generally directly modeled on
 language level objects and types. Of course, this makes it nearly impossible
 to interact with the database from a language that does not have this tight
@@ -218,7 +219,7 @@ coupling, and it limits the data models that we can write to ideas that are
 expressible in the host language. In particular, we lose many of the best
 features of the relational database model. This is a disaster from an ease of
 use standpoint.
-	  </p><p>The "Object relational" systems provide an interesting
+	  </p><p>The &quot;Object relational&quot; systems provide an interesting
 alternative. Here, some notion of subtyping is embedded into an existing SQL
 or SQL-like database engine. Examples of systems like this include the new
 Informix, PostgreSQL 7, and Oracle has something like this too. The main
@@ -274,16 +275,16 @@ form:</p><pre class="programlisting">
 </pre><p>This table contains one row for every object type in the system. The key
 things to note about this table are:</p><div class="itemizedlist"><ul type="disc"><li><p>For every type, we store metadata for how to display this type in certain
 contexts (<tt class="computeroutput">pretty_name</tt> and <tt class="computeroutput">pretty_plural</tt>).</p></li><li><p>If the type is a subtype, then its parent type is stored in the column
-<tt class="computeroutput">supertype</tt>.</p></li><li><p>We support a notion of "abstract" types that contain no
+<tt class="computeroutput">supertype</tt>.</p></li><li><p>We support a notion of &quot;abstract&quot; types that contain no
 instances (as of 9/2000 this is not actually used). These types exist only to
-be subtyped. An example might be a type representing "shapes" that
+be subtyped. An example might be a type representing &quot;shapes&quot; that
 contains common characteristics of all shapes, but which is only used to
 create subtypes that represent real, concrete shapes like circles, squares,
 and so on.</p></li><li><p>Every type defines a table in which one can find one row for every
 instance of this type (<tt class="computeroutput">table_name</tt>, <tt class="computeroutput">id_column</tt>).</p></li><li><p><tt class="computeroutput">type_extension_table</tt> is for naming a table that stores extra
 generic attributes.</p></li></ul></div><p>The second table we use to describe types is <tt class="computeroutput">acs_attributes</tt>.
 Each row in this table represents a single attribute on a specific object
-type (e.g. the "password" attribute of the "user" type).
+type (e.g. the &quot;password&quot; attribute of the &quot;user&quot; type).
 Again, here is an abbreviated version of what this table looks like. The
 actual table used in the implementation is somewhat different and is
 discussed in a separate document.</p><pre class="programlisting">
@@ -310,15 +311,15 @@ discussed in a separate document.</p><pre class="programlisting">
 (<tt class="computeroutput">pretty_name</tt>, <tt class="computeroutput">sort_order</tt>).</p></li><li><p>The <tt class="computeroutput">data_type</tt> column stores type information on this
 attribute. This is not the SQL type of the attribute; it is just a human
 readable name for the type of data we think the attribute holds (e.g.
-"String", or "Money"). This might be used later to
+&quot;String&quot;, or &quot;Money&quot;). This might be used later to
 generate a user interface.</p></li><li><p>The <tt class="computeroutput">sort_order</tt> column stores information about how to sort
-the attribute values.</p></li><li><p>Attributes can either be stored explicitly in a table ("type
-specific storage") or in a skinny table ("generic storage").
+the attribute values.</p></li><li><p>Attributes can either be stored explicitly in a table (&quot;type
+specific storage&quot;) or in a skinny table (&quot;generic storage&quot;).
 In most cases, an attribute maps directly to a column in the table identified
 by the <tt class="computeroutput">table_name</tt> of the corresponding object type, although, as
 mentioned above, we sometimes store attribute values as key-value pairs in a
-"skinny" table. However, when you ask the question "What are
-the attributes of this type of object?", you don't really care about
+&quot;skinny&quot; table. However, when you ask the question &quot;What are
+the attributes of this type of object?&quot;, you don't really care about
 how the values for each attribute are stored (in a column or as key-value
 pairs); you expect to receive the complete list of all attributes.</p></li><li><p>The <tt class="computeroutput">max_n_values</tt> and <tt class="computeroutput">min_n_values</tt> columns
 encode information about the number of values an attribute may hold.
@@ -328,7 +329,7 @@ attribute are like group level attributes in OpenACS 3.x.</p></li></ul></div><p>
 types. We said above that object relationships are used to generalize the 3.x
 notion of <span class="emphasis"><em>group member fields</em></span>. These were fields that a developer
 could store on each member of a group, but which were contextualized to the
-membership relation. That is, they were really "attached" to the
+membership relation. That is, they were really &quot;attached&quot; to the
 fact that a user was a member of a particular group, and not really attached
 to the user. This is a subtle but important distinction, because it allowed
 the 3.x system to store multiple sets of attributes on a given user, one set
@@ -355,8 +356,8 @@ for each group membership relation in which they participated.</p><p>In OpenACS 
 instances of <tt class="computeroutput">object_type_one</tt> and instances of
 <tt class="computeroutput">object_type_two</tt>. Therefore, each instance of this relation type
 will be a pair of objects of the appropriate types.</p></li><li><p>The <tt class="computeroutput">role</tt> columns store human readable names for the roles
-played by each object in the relation (e.g. "employee" and
-"employer"). Each role must appear in the
+played by each object in the relation (e.g. &quot;employee&quot; and
+&quot;employer&quot;). Each role must appear in the
 <tt class="computeroutput">acs_rel_roles</tt>.</p></li><li><p>The <tt class="computeroutput">min_n_rels_one</tt> column, and its three friends allow the
 programmer to specify constraints on how many objects any given object can be
 related to on either side of the relation.</p></li></ul></div><p>This table is easier to understand if you also know how the <a href="object-system-design.html#object-system-design-acs-rels"><tt class="computeroutput">acs_rels</tt> table</a> works.</p><p>To summarize, the <tt class="computeroutput">acs_object_types</tt> and
@@ -396,7 +397,7 @@ to objects. The table <tt class="computeroutput">acs_attribute_values</tt> and
 <tt class="computeroutput">acs_static_attr_values</tt> are used to store attribute values that
 are not stored in a helper table associated with the object's type. The
 former is used for instance attributes while the latter is used for
-class-wide "static" values. These tables have the same basic form,
+class-wide &quot;static&quot; values. These tables have the same basic form,
 so we'll only show the first:</p><pre class="programlisting">
 
 <tt class="computeroutput">create table acs_attribute_values (
@@ -683,8 +684,8 @@ available to your application.</p></div><div class="sect3" lang="en"><div class=
 creating and managing relation types, and <tt class="computeroutput">acs_rel</tt> for relating
 objects.</p><p>These two procedures just insert and remove roles from the
 <tt class="computeroutput">acs_rel_roles</tt> table. This table stores the legal relationship
-"roles" that can be used when creating relation types. Examples of
-roles are, say, "member", or "employer".</p><pre class="programlisting">
+&quot;roles&quot; that can be used when creating relation types. Examples of
+roles are, say, &quot;member&quot;, or &quot;employer&quot;.</p><pre class="programlisting">
 
 <tt class="computeroutput"> procedure create_role (
     role        in acs_rel_roles.role%TYPE
@@ -857,4 +858,4 @@ type mechanism is a bit more complex, but in return it provides functionality
 on par with the old user/groups system in a more general way.</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="object-system-design-future"></a>Future Improvements/Areas of Likely Change</h3></div></div><div></div></div><p>Nothing here yet.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="object-system-design-authors"></a>Authors</h3></div></div><div></div></div><p>Pete Su generated this document
 from material culled from other documents by Michael Yoon, Richard Li and Rafael Schloming. But, any remaining lies
 are his and his alone.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="object-system-design-revision-hist"></a>Revision History</h3></div></div><div></div></div><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><tbody><tr><td><span class="strong">Document Revision #</span></td><td><span class="strong">Action Taken, Notes</span></td><td><span class="strong">When?</span></td><td><span class="strong">By Whom?</span></td></tr><tr><td>0.1</td><td>Creation</td><td>9/09/2000</td><td>Pete Su</td></tr><tr><td>0.2</td><td>Edited for ACS 4 Beta</td><td>9/30/2000</td><td>Kai Wu</td></tr><tr><td>0.3</td><td>Edited for ACS 4.0.1, fixed some mistakes, removed use of term
-"OM"</td><td>11/07/2000</td><td>Pete Su</td></tr></tbody></table></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="object-system-requirements.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="permissions-requirements.html">Next</a></td></tr><tr><td width="40%" align="left">Object Model Requirements </td><td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td><td width="40%" align="right"> Permissions Requirements</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/object-system-design.html#comments">View comments on this page at openacs.org</a></center></body></html>
+&quot;OM&quot;</td><td>11/07/2000</td><td>Pete Su</td></tr></tbody></table></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="object-system-requirements.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="permissions-requirements.html">Next</a></td></tr><tr><td width="40%" align="left">Object Model Requirements </td><td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td><td width="40%" align="right"> Permissions Requirements</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/object-system-design.html#comments">View comments on this page at openacs.org</a></center></body></html>

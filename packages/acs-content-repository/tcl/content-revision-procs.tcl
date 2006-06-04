@@ -68,6 +68,11 @@ ad_proc -public ::content::revision::new {
     @param is_live True is revision should be set live
 
     @param tmp_filename file containing content to be added to revision
+
+    @param package_id
+
+    @param is_live
+
     @param attributes A list of lists of pairs of additional attributes and
     their values to pass to the constructor. Each pair is a list of two
      elements: key => value such as
@@ -101,11 +106,6 @@ ad_proc -public ::content::revision::new {
     if { [exists_and_not_null attributes] } {
 	set type_attributes [package_object_attribute_list $content_type]
         ns_log debug "
-DB --------------------------------------------------------------------------------
-DB DAVE debugging /var/lib/aolserver/openacs-5-2/packages/acs-content-repository/tcl/content-revision-procs.tcl
-DB --------------------------------------------------------------------------------
-DB type_attributes = '${type_attributes}' 
-DB --------------------------------------------------------------------------------"
 	set valid_attributes [list]
 	# add in extended attributes for this type, ingore
 	# content_revision as those are already captured as named

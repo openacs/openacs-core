@@ -12,8 +12,13 @@ ad_proc -public application_link::new {
     -this_package_id:required
     -target_package_id:required
 } {
-    set user_id [ad_conn user_id]
-    set id_addr [ad_conn peeraddr]
+    if {[catch {ad_conn user_id} user_id]} {
+	set user_id 0
+    }
+    
+    if {[catch {ad_conn peeraddr} id_addr]} {
+	set id_addr 127.0.0.1
+    }
 
     set result [db_exec_plsql create_forward_link {}]
     db_exec_plsql create_backward_link {}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-lang" package_version="5.1.2d2" locale="zh_TW" charset="utf-8">
+<message_catalog package_key="acs-lang" package_version="5.2.3b2" locale="zh_TW" charset="utf-8">
 
   <msg key="available-in-this-language">繁體中文版</msg>
   <msg key="change-locale">變更地區設定</msg>
@@ -17,6 +17,7 @@
   <msg key="localization-dlong_fmt">%Y年%B%d日</msg>
   <msg key="localization-dlongweekday_fmt">%A %B %d, %Y</msg>
   <msg key="localization-firstdayofweek">0</msg>
+  <msg key="localization-formbuilder_date_format">MONTH DD YYYY</msg>
   <msg key="localization-formbuilder_time_format">上午 HH12:MI</msg>
   <msg key="localization-frac_digits">2</msg>
   <msg key="localization-grouping">3 3</msg>

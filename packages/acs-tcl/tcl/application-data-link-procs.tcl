@@ -12,11 +12,11 @@ ad_proc -public application_data_link::new {
     -this_object_id:required
     -target_object_id:required
 } {
-    set user_id [ad_conn user_id]
-    set id_addr [ad_conn peeraddr]
+    set forward_rel_id [db_nextval acs_data_links_seq]
+    set backward_rel_id [db_nextval acs_data_links_seq]
 
-    db_exec_plsql create_forward_link {}
-    db_exec_plsql create_backward_link {}
+    db_dml create_forward_link {}
+    db_dml create_backward_link {}
 }
 
 ad_proc -public application_data_link::delete_links {
@@ -25,7 +25,7 @@ ad_proc -public application_data_link::delete_links {
     set rel_ids [db_list linked_objects {}]
 
     foreach rel_id $rel_ids {
-	relation_remove $rel_id
+	db_dml delete_link {}
     }
 }
 
@@ -38,6 +38,13 @@ ad_proc -public application_data_link::get {
 ad_proc -public application_data_link::get_linked {
     -from_object_id:required
     -to_object_type:required
+} {
+    return [db_list linked_object {}]
+}
+
+ad_proc -public application_data_link::get_linked_content {
+    -from_object_id:required
+    -to_content_type:required
 } {
     return [db_list linked_object {}]
 }

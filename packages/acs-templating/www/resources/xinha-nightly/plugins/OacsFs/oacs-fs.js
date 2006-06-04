@@ -39,11 +39,13 @@ function OacsFs(editor) {
     var self = this;
 
     //alert(this.editor.config.fs_package_id);
+    //alert("length=" + bl.length);
 
     // register the toolbar buttons provided by this plugin
     for (var i = 0; i < bl.length; ++i) {
 	var btn = bl[i];
 	var id = "LW-" + btn[0];
+
 	cfg.registerButton(id, HTMLArea._lc(btn[1], "OacsFs"), editor.imgURL(btn[0] + ".gif", "OacsFs"), false,
 			   function(editor, id) {
 			       // dispatch button press event
@@ -59,6 +61,7 @@ function OacsFs(editor) {
 	    break;
 	}
     }
+
     cfg.hideSomeButtons(" insertimage ");
     cfg.pageStyle = "@import url(" + _editor_url + 
 	"plugins/OacsFs/oacs-fs.css) screen; "
@@ -66,7 +69,7 @@ function OacsFs(editor) {
 
 OacsFs.btnList = [
 		  ["insert-ilink", "Insert Internal Link"],
-		  ["insert-image", "Insert Image"],
+		  ["insert-image", "Insert Image"]
 		  ];
 
 OacsFs.prototype.buttonPress = function(editor, id) {

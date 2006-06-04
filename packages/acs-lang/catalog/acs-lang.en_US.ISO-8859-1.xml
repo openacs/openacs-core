@@ -8,7 +8,8 @@
   <msg key="English">English</msg>
   <msg key="French">French</msg>
   <msg key="German">German</msg>
-  <msg key="Locale_for">Locale for $package_name</msg>
+  <msg key="Locale">Locale</msg>
+  <msg key="Locale_for">Locale for %package_name%</msg>
   <msg key="localization-abday">{Sun} {Mon} {Tue} {Wed} {Thu} {Fri} {Sat}</msg>
   <msg key="localization-abmon">{Jan} {Feb} {Mar} {Apr} {May} {Jun} {Jul} {Aug} {Sep} {Oct} {Nov} {Dec}</msg>
   <msg key="localization-am_str">AM</msg>
@@ -58,7 +59,7 @@
   <description key="this-language">The label of the locale, in the locale's language.  This should be different for each locale.  This should not be English unless the locale is &quot;en&quot;.</description>
 
   <msg key="Translated_messages_on_this_page">Translated messages on this page (%locale%)</msg>
-  <msg key="Your_locale_for_package">Your locale setting for $package_name. If set, this will override the site-wide setting in this particular application.</msg>
+  <msg key="Your_locale_for_package">Your locale setting for %package_name%. If set, this will override the site-wide setting in this particular application.</msg>
   <msg key="Your_locale_site_wide">Your locale setting for the whole site</msg>
   <msg key="Your_Preferred_Locale">Your Preferred Locale</msg>
   <msg key="Your_timezone">Your Timezone</msg>

@@ -93,7 +93,7 @@ ad_proc -public lang::message::register {
             # The system will not function correctly if there are keys registered in other locales
             # than en_US that are not present for en_US. This introduces the inconvenience of having to
             # register the en_US messages first, but that is manageable
-            set error_message "lang::message::register - refusing to register message for non-en_US locale ${locale}. The message key ${package_key}.${message_key} bust be registered in en_US first"
+            set error_message "lang::message::register - refusing to register message for non-en_US locale ${locale}. The message key ${package_key}.${message_key} must be registered in en_US first"
             ns_log Error $error_message
             error $error_message
         }
