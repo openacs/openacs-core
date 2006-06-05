@@ -441,6 +441,12 @@ ad_proc -private install_do_packages_install {} {
     set dependency_results [apm_dependency_check -initial_install [apm_scan_packages -new [file join [acs_root_dir] packages]]]
     set dependencies_satisfied_p [lindex $dependency_results 0]
     set pkg_list [lindex $dependency_results 1]
+
+    if { !$dependencies_satisfied_p } {
+        ns_write "<p><b><i>At least one core package has an unsatisifed dependency.  No packages have been installed.  Here's what the APM has computed:</i></b><blockquote>$pkg_list</blockquote>"
+        return
+    }
+
     apm_packages_full_install -callback apm_ns_write_callback $pkg_list
 
     # Complete the initial install.

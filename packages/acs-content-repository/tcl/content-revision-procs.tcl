@@ -105,7 +105,6 @@ ad_proc -public ::content::revision::new {
 
     if { [exists_and_not_null attributes] } {
 	set type_attributes [package_object_attribute_list $content_type]
-        ns_log debug "
 	set valid_attributes [list]
 	# add in extended attributes for this type, ingore
 	# content_revision as those are already captured as named
