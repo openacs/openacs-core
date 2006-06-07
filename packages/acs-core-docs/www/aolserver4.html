@@ -40,23 +40,23 @@ make install</span></span>
       </pre></li><li><a name="aolserver4-download"></a><p><b>Retrieve AOLserver. </b>Download the aolserver from CVS.</p><pre class="screen">[root root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
 [root src]# <b class="userinput"><tt>mkdir aolserver40r10</tt></b>
 [root src]# <b class="userinput"><tt>cd aolserver40r10</tt></b>
-[root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver login</tt></b>
-[root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co  -r aolserver_v40_r10 aolserver</tt></b>
-[root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache</tt></b>
-[root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres</tt></b>
-[root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1</tt></b>
-[root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r v2_7 nsoracle</tt></b>
+[root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@aolserver.cvs.sourceforge.net:/cvsroot/aolserver login</tt></b>
+[root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@aolserver.cvs.sourceforge.net:/cvsroot/aolserver co  -r aolserver_v40_r10 aolserver</tt></b>
+[root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@aolserver.cvs.sourceforge.net:/cvsroot/aolserver co nscache</tt></b>
+[root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@aolserver.cvs.sourceforge.net:/cvsroot/aolserver co nspostgres</tt></b>
+[root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@aolserver.cvs.sourceforge.net:/cvsroot/aolserver co nssha1</tt></b>
+[root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@aolserver.cvs.sourceforge.net:/cvsroot/aolserver co -r v2_7 nsoracle</tt></b>
 [root aolserver]# <b class="userinput"><tt>wget http://www.tdom.org/files/tDOM-0.8.0.tar.gz</tt></b>
 [root aolserver]# <b class="userinput"><tt>tar xvfz tDOM-0.8.0.tar.gz</tt></b>
 [root root]# 
 <span class="action"><span class="action">cd /usr/local/src
 mkdir aolserver40r10
 cd aolserver40r10
-cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r aolserver_v40_r10 aolserver
-cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache
-cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres
-cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1
-cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r v2_7 nsoracle
+cvs -z3 -d:pserver:anonymous@aolserver.cvs.sourceforge.net:/cvsroot/aolserver co -r aolserver_v40_r10 aolserver
+cvs -z3 -d:pserver:anonymous@aolserver.cvs.sourceforge.net:/cvsroot/aolserver co nscache
+cvs -z3 -d:pserver:anonymous@aolserver.cvs.sourceforge.net:/cvsroot/aolserver co nspostgres
+cvs -z3 -d:pserver:anonymous@aolserver.cvs.sourceforge.net:/cvsroot/aolserver co nssha1
+cvs -z3 -d:pserver:anonymous@aolserver.cvs.sourceforge.net:/cvsroot/aolserver co -r v2_7 nsoracle
 wget http://www.tdom.org/files/tDOM-0.8.0.tar.gz
 tar xvfz tDOM-0.8.0.tar.gz</span></span></pre></li><li><a name="aolserver4-install"></a><p><b>Configure, compile and install AOLserver. </b>Many people need to run more than one version of AOLserver in parallel.  This section accomodates future upgrades by installing AOLserver 4 in <tt class="computeroutput">/usr/local/aolserver40r9</tt>.</p><pre class="screen">[root aolserver]# <b class="userinput"><tt>cd /usr/local/src/aolserver40r10/aolserver</tt></b>
 [root aolserver]# <b class="userinput"><tt>./configure --prefix=/usr/local/aolserver40r10 --with-tcl=/usr/local/lib/</tt></b>
