@@ -246,9 +246,6 @@ namespace eval acs_mail_lite {
         @see acs_mail_lite::parse_email
     } {
        
-	# FIXME
-	set queue_dir "/home/malte/mail/"
-	
         # get list of all incoming mail
         if {[catch {
             set messages [glob "$queue_dir/new/*"]
@@ -303,10 +300,8 @@ namespace eval acs_mail_lite {
 		    #    ns_log Notice "load_mails: Prefix $prefix found. Calling callback implmentation $impl_name for package_id $package_id"
 		    #    callback -impl $impl_name acs_mail_lite::incoming_email -array email -package_id $package_id
 
-		    callback -impl wieners acs_mail_lite::incoming_email -array email
-
 		    # We execute all callbacks now
-		    # callback acs_mail_lite::incoming_email -array email
+		    callback acs_mail_lite::incoming_email -array email
 #		} else {
 #		    ns_log Notice "load_mails: prefix not found. Doing nothing."
 #		}
