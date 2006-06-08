@@ -17,7 +17,7 @@ declare
   v_rec                  record;
 begin
     for counter in 1..v_count loop
-        for v_rec in EXECUTE ''select '' || quote_ident(v_sequence_name) ''.nextval as a_seq_val''
+        for v_rec in EXECUTE ''select '' || quote_ident(v_sequence_name) || ''.nextval as a_seq_val''
         LOOP
            a_sequence_values := a_sequence_values || '''','''' || v_rec.a_seq_val;
           exit;
