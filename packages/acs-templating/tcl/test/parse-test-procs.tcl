@@ -123,4 +123,4 @@ aa_register_case -cats {api smoke} expand_percentage_signs {
     aa_log $errmsg
     aa_equals "square brackets in array key safe" $expanded_message "Test message \$two(\$three(\[__does_not_exist\]))"
    
-}>>>>>>> 1.2.2.4
+}
