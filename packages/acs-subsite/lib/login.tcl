@@ -100,7 +100,7 @@ if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id [ad_acs
 
 set focus {}
 if { [auth::UseEmailForLoginP] } {
-    ad_form -extend -name login -form [list [list email:text($username_widget),nospell [list label [_ acs-subsite.Email]]]]
+    ad_form -extend -name login -form [list [list email:text($username_widget),nospell [list label [_ acs-subsite.Email]] [list html [list style "width: 150px"]]]]
     set user_id_widget_name email
     if { ![empty_string_p $email] } {
         set focus "password"
@@ -117,7 +117,7 @@ if { [auth::UseEmailForLoginP] } {
         }
     }
 
-    ad_form -extend -name login -form [list [list username:text($username_widget),nospell [list label [_ acs-subsite.Username]]]]
+    ad_form -extend -name login -form [list [list username:text($username_widget),nospell [list label [_ acs-subsite.Username]] [list html [list style "width: 150px"]]]]
     set user_id_widget_name username
     if { ![empty_string_p $username] } {
         set focus "password"
@@ -130,6 +130,7 @@ set focus "login.$focus"
 ad_form -extend -name login -form {
     {password:text(password) 
         {label "[_ acs-subsite.Password]"}
+	{html {style "width: 150px"}}
     }
 }
 
