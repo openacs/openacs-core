@@ -1018,6 +1018,7 @@ namespace eval acs_mail_lite {
 	{-object_id ""}
 	{-single_email_p ""}
 	{-no_callback_p ""}
+	{-extraheaders ""}
 	-single_email:boolean
 	-no_callback:boolean 
 	-use_sender:boolean 
@@ -1065,6 +1066,8 @@ namespace eval acs_mail_lite {
 	@param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
 
 	@param object_id The ID of the object that is responsible for sending the mail in the first place
+
+	@param extraheaders List of keywords and their values passed in for headers. Interesting ones are: "Precedence: list" to disable autoreplies and mark this as a list message. This is as list of lists !!
 
 	@param single_email Boolean that indicates that only one mail will be send (in contrast to one e-mail per recipient). 
 
@@ -1140,13 +1143,28 @@ namespace eval acs_mail_lite {
 	    } 
 	}
 
+
+	#### Now we start with composing the mail message ####
+
 	set multi_token [mime::initialize -canonical multipart/mixed -parts "$tokens"]
-    
+
+	# Set the message_id
+	set message_id "[mime::uniqueID]"
+	mime::setheader $multi_token "message_id" "[mime::uniqueID]"
+	
+	# Set the date
+	mime::setheader $multi_token date "[mime::parsedatetime -now proper]"
+	
+	# Set the subject
+	mime::setheader $multi_token Subject "$subject"
+
+	foreach header $extraheaders {
+	    mime::setheader $multi_token "[lindex $header 0]" "[lindex $header 1]"
+	}
+
  	set packaged [mime::buildmessage $multi_token]
 
-	set message_id "[mime::uniqueID]"
-        
-	# Now the To recipients
+       	# Now the To recipients
 	set to_list [list]
 
 	foreach email $to_addr {
@@ -1305,11 +1323,8 @@ namespace eval acs_mail_lite {
 		    -header [list From "$from_string"] \
 		    -header [list To "[join $to_list ","]"] \
 		    -header [list CC "[join $cc_list ","]"] \
-		    -header [list BCC "[join $bcc_list ","]"] \
-		    -header [list Subject "$subject"] \
-		    -header [list message-id "[mime::uniqueID]"] \
-		    -header [list date "[mime::parsedatetime -now proper]"]
-
+		    -header [list BCC "[join $bcc_list ","]"]
+		
 		#Close all mime tokens
 		mime::finalize $multi_token -subordinates all
 		
@@ -1347,11 +1362,8 @@ namespace eval acs_mail_lite {
 
 		    smtp::sendmessage $multi_token \
 			-header [list From "$from_string"] \
-			-header [list To "$email"] \
-			-header [list Subject "$subject"] \
-			-header [list message-id "$message_id"] \
-			-header [list date "[mime::parsedatetime -now proper]"]
-		    
+			-header [list To "$email"]
+
 		    if { !$no_callback_p } {
 			callback acs_mail_lite::complex_send \
 			    -package_id $package_id \
@@ -1373,10 +1385,7 @@ namespace eval acs_mail_lite {
 
 		    smtp::sendmessage $multi_token \
 			-header [list From "$from_string"] \
-			-header [list To "$email"] \
-			-header [list Subject "$subject"] \
-			-header [list message-id "$message_id"] \
-			-header [list date "[mime::parsedatetime -now proper]"]
+			-header [list To "$email"]
 		    
 		    if { !$no_callback_p } {
 			callback acs_mail_lite::complex_send \
