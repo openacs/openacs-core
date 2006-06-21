@@ -173,7 +173,7 @@ ad_proc -public lc_numeric {
     set grouping [lc_get -locale $locale "grouping"]
 
     # Fall back on en_US if grouping is not on valid format
-    if { ![string equal $locale en_US] && ![regexp {^[0-9 ]+$} $grouping] } {
+    if { $locale ne "en_US" && ![regexp {^[0-9 -]+$} $grouping] } {
         ns_log Warning "lc_numeric: acs-lang.localization-grouping key has invalid value $grouping for locale $locale"
         set sep ,
         set dec .
