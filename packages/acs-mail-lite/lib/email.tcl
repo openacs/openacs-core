@@ -287,7 +287,7 @@ ad_form -action $action \
 
 	# Send the mail to all parties.
 	foreach party_id $to {
-	    set name [party::name -party_id $to]
+	    set name [party::name -party_id $party_id]
 	    set first_names [lindex $name 0]
 	    set last_name [lindex $name 1]
 	    set date [lc_time_fmt [dt_sysdate] "%q"]
