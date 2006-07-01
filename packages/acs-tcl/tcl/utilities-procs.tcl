@@ -1724,6 +1724,9 @@ ad_proc -public ReturnHeaders {{content_type text/html}} {
     It returns status 200 and all headers including 
     any added to outputheaders.
 } { 
+    if {![string match *charset=* $content_type]} {
+      append content_type "; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
+    }
     set all_the_headers "HTTP/1.0 200 OK
 MIME-Version: 1.0
 Content-Type: $content_type\r\n"
@@ -1738,6 +1741,9 @@ ad_proc -public ad_return_top_of_page {first_part_of_page {content_type text/htm
     TCP packet (and therefore some overhead) compared to using
     ReturnHeaders and an ns_write.
 } {
+    if {![string match *charset=* $content_type]} {
+      append content_type "; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
+    }
     set all_the_headers "HTTP/1.0 200 OK
 MIME-Version: 1.0
 Content-Type: $content_type\r\n"
