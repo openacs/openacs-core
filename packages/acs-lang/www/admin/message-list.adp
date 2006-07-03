@@ -1,6 +1,17 @@
 <master>
   <property name="title">@page_title@</property>
   <property name="context">@context;noquote@</property>
+  <div style="float: right;">
+    <formtemplate id="locale_form">
+      <table cellspacing="2" cellpadding="2" border="0">
+        <tr class="form-element"><td class="form-label">Language</td>
+        <td class="form-widget"><formwidget id="locale"></td></tr>
+        @form_vars;noquote@
+        <tr class="form-element">
+        <td align="left" colspan="2"><formwidget id="formbutton:ok"></td></tr>
+      </table>
+    </formtemplate>
+  </div>
 
 <p>
   Show: 
