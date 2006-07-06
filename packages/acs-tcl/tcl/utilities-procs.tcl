@@ -1714,44 +1714,35 @@ ad_proc -private util_WriteWithExtraOutputHeaders {headers_so_far {first_part_of
     ns_write $entire_string_to_write
 }
 
-
 ad_proc -public ReturnHeaders {{content_type text/html}} {
-    We use this when we want to send out just the headers 
-    and then do incremental writes with ns_write.  This way the user
-    doesn't have to wait for streamed output (useful when doing
-    bulk uploads, installs, etc.).
+   We use this when we want to send out just the headers
+   and then do incremental writes with ns_write.  This way the user
+   doesn't have to wait for streamed output (useful when doing
+   bulk uploads, installs, etc.).
 
-    It returns status 200 and all headers including 
-    any added to outputheaders.
-} { 
-    if {![string match *charset=* $content_type]} {
-      append content_type "; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
-    }
-    set all_the_headers "HTTP/1.0 200 OK
-MIME-Version: 1.0
-Content-Type: $content_type\r\n"
-     util_WriteWithExtraOutputHeaders $all_the_headers
-     ns_startcontent -type $content_type
-}
-
-
-
-ad_proc -public ad_return_top_of_page {first_part_of_page {content_type text/html}} { 
-    Returns HTTP headers plus the top of the user-visible page.  Saves a
-    TCP packet (and therefore some overhead) compared to using
-    ReturnHeaders and an ns_write.
+   It returns status 200 and all headers including
+   any added to outputheaders.
 } {
-    if {![string match *charset=* $content_type]} {
-      append content_type "; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
-    }
-    set all_the_headers "HTTP/1.0 200 OK
+   set all_the_headers "HTTP/1.0 200 OK
 MIME-Version: 1.0
 Content-Type: $content_type\r\n"
     util_WriteWithExtraOutputHeaders $all_the_headers
+    if {[string match text/* $content_type]} {
+      if {![string match *charset=* $content_type]} {
+	append content_type \
+	    "; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
+      }
+      ns_startcontent -type $content_type
+    } else {
+      ns_startcontent
+    }
+}
 
-    ns_startcontent -type $content_type
-
-    if { ![empty_string_p $first_part_of_page] } {
+ad_proc -public ad_return_top_of_page {first_part_of_page {content_type text/html}} { 
+    Returns HTTP headers plus the top of the user-visible page.  
+} {
+    ReturnHeaders $content_type
+    if { $first_part_of_page ne "" } {
 	ns_write $first_part_of_page
     }
 }
