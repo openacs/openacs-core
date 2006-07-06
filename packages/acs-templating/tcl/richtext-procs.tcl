@@ -371,7 +371,8 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     set package_id_templating [apm_package_id_from_key "acs-templating"]
 
     set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
-    if { [string first "safari" $user_agent] != -1 } { 
+    if { [string first "safari" $user_agent] != -1 ||
+	 [string first "opera"  $user_agent] != -1 } { 
       set htmlarea_p 0
     } elseif { [exists_and_not_null element(htmlarea_p)] } {
       set htmlarea_p [template::util::is_true $element(htmlarea_p)]
