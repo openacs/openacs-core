@@ -136,6 +136,10 @@ function expandCollapseList(ul,cName,itemId) {
 
 // Search the document for UL elements with the correct CLASS name, then process them
 function convertTrees() {
+  // this is a check in opera to avoid multiple renderings
+        if (typeof window.treeClass != 'undefined') {
+	  return;
+	}
 	setDefault("treeClass","mktree");
 	setDefault("nodeClosedClass","liClosed");
 	setDefault("nodeOpenClass","liOpen");
