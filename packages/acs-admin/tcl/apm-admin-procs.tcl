@@ -56,6 +56,10 @@ ad_proc apm_header { { -form "" } args } {
             lappend cmd $elem
         }
         set context_bar [eval $cmd]
+        # this is rather a hack, but just needed for streaming output
+        # a more general solution can be provided at some later time...
+        regsub "#acs-kernel.Main_Site#" $context_bar \
+	    [_ acs-kernel.Main_Site] context_bar
     }
     set header [ad_header $title ""]
     append body "$header\n"
