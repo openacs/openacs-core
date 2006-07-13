@@ -62,7 +62,9 @@ ad_proc twt::do_request { page_url } {
     }
 }
 
-ad_proc twt::log { message } {
+ad_proc twt::log {
+    TWT proc for writing a Notice message to the web server log.
+} { message } {
     ns_log Notice "twt::log - $message"
 }
 
@@ -149,7 +151,12 @@ ad_proc twt::user::delete {
         -permanent
 }
 
-ad_proc twt::user::login { email password } {
+ad_proc twt::user::login {
+    tclwebtest for logging the user in.
+
+    @param email Email of user to log in.
+    @param password Password of user to log in.
+} { email password } {
 
     tclwebtest::cookies clear
 
@@ -179,6 +186,8 @@ ad_proc twt::user::login { email password } {
     }
 }
 
-ad_proc twt::user::logout {} {
+ad_proc twt::user::logout {
+    tclwebtest for logging the user out.
+} {} {
     twt::do_request "[twt::server_url]/register/logout"
 }
