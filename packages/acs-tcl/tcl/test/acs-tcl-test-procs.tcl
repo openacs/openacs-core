@@ -1011,49 +1011,56 @@ aa_register_case -cats {api db} db__caching {
 }
 
 
-aa_register_case -cats {api smoke} parameter__check_procs {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {parameter::get parameter::get_from_package_key parameter::set_default parameter::set_default parameter::set_value parameter::set_from} \
+    parameter__check_procs {
     Test the parameter::* procs
 
     @author Rocael Hernandez (roc@viaro.net)
 } {
 
-    db_foreach get_param {
-	select ap.parameter_name, ap.package_key, ap.default_value
-	from apm_parameters ap, apm_package_types apt
-	where
-	ap.package_key = apt.package_key
-	and apt.singleton_p ='t'
-    } {
 
-	set value [random]
-	if {$value > 0.7} {
+    aa_run_with_teardown \
+	-rollback \
+	-test_code {
+	    db_foreach get_param {
+		select ap.parameter_name, ap.package_key, ap.default_value
+		from apm_parameters ap, apm_package_types apt
+		where
+		ap.package_key = apt.package_key
+		and apt.singleton_p ='t'
+	    } {
 
-	    set package_id [apm_package_id_from_key $package_key]	    
-	    aa_log "$package_key $parameter_name $default_value"
-	    aa_true "check parameter::get" [string equal [parameter::get -package_id $package_id -parameter $parameter_name] $default_value]
-	    aa_true "check parameter::get_from_package_key" \
-		[string equal [parameter::get_from_package_key -package_key $package_key -parameter $parameter_name] $default_value]
+		set value [random]
+		if {$value > 0.7} {
 
-	    parameter::set_default -package_key $package_key -parameter $parameter_name -value $value
-	    set value_db [db_string get_values {
-		select default_value from apm_parameters
-		where package_key = :package_key and parameter_name = :parameter_name
-	    }]
-	    aa_true "check parameter::set_default" \
-		[string equal $value $value_db]
+		    set package_id [apm_package_id_from_key $package_key]	    
+		    aa_log "$package_key $parameter_name $default_value"
+		    aa_true "check parameter::get" [string equal [parameter::get -package_id $package_id -parameter $parameter_name] $default_value]
+		    aa_true "check parameter::get_from_package_key" \
+			[string equal [parameter::get_from_package_key -package_key $package_key -parameter $parameter_name] $default_value]
 
-	    set value [expr $value + 10]
-	    parameter::set_from_package_key -package_key $package_key -parameter $parameter_name -value $value
-	    aa_true "check parameter::set_from_package_key" \
-		[string equal $value [parameter::get -package_id $package_id -parameter $parameter_name]]
+		    parameter::set_default -package_key $package_key -parameter $parameter_name -value $value
+		    set value_db [db_string get_values {
+			select default_value from apm_parameters
+			where package_key = :package_key and parameter_name = :parameter_name
+		    }]
+		    aa_true "check parameter::set_default" \
+			[string equal $value $value_db]
 
-	    set value [expr $value + 10]
-	    parameter::set_value -package_id $package_id -parameter $parameter_name -value $value
-	    aa_true "check parameter::set_value" \
-		[string equal $value [parameter::get -package_id $package_id -parameter $parameter_name]]
+		    set value [expr $value + 10]
+		    parameter::set_from_package_key -package_key $package_key -parameter $parameter_name -value $value
+		    aa_true "check parameter::set_from_package_key" \
+			[string equal $value [parameter::get -package_id $package_id -parameter $parameter_name]]
 
-	    break;
+		    set value [expr $value + 10]
+		    parameter::set_value -package_id $package_id -parameter $parameter_name -value $value
+		    aa_true "check parameter::set_value" \
+			[string equal $value [parameter::get -package_id $package_id -parameter $parameter_name]]
+
+		    break;
+		}
+	    }
 	}
-    }
-    
 }
