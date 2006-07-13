@@ -82,7 +82,7 @@ proc ad_proc_valid_switch_p {str} {
 }
 
 proc ad_proc args {
-    set public_p 0
+    set public_p 1
     set private_p 0
     set deprecated_p 0
     set warn_p 0
