@@ -6,28 +6,6 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case -cats {smoke production_safe} documentation__check_proc_interface_status {
-    checks all procs have an interface status (-public or -private)
-
-    @author Jeff Davis davis@xarg.net
-} {
-    set count 0 
-    set good 0
-    foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
-        array set pa [nsv_get api_proc_doc $p]
-        if { !($pa(deprecated_p) || $pa(warn_p)) } {
-            incr count
-            if { !($pa(public_p) || $pa(private_p)) } {
-                aa_log_result fail "No interface status for $p"
-            } else {
-                incr good
-            }
-        }
-        array unset pa
-    }
-    aa_log "Found $good good of $count checked"
-}
-
 aa_register_case -cats {smoke production_safe} documentation__check_proc_doc {
     checks if documentation exists for public procs.
 
@@ -54,7 +32,7 @@ aa_register_case -cats {smoke production_safe} documentation__check_proc_doc {
 
 
 
-aa_register_case -cats {smoke production_safe} documentation__check_deprecated_see {
+aa_register_case -cats {smoke production_safe} -error_level warning documentation__check_deprecated_see {
     checks if deprecated procs have an @see clause
 
     @author Jeff Davis davis@xarg.net
