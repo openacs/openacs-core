@@ -82,7 +82,7 @@ proc ad_proc_valid_switch_p {str} {
 }
 
 proc ad_proc args {
-    set public_p 1
+    set public_p 0
     set private_p 0
     set deprecated_p 0
     set warn_p 0
@@ -136,6 +136,10 @@ proc ad_proc args {
 
     if { $public_p && $private_p } {
         return -code error "Mutually exclusive switches -public and -private passed to ad_proc"
+    }
+
+    if { !$public_p && !$private_p } {
+        set public_p 1
     }
 
     if { $warn_p && !$deprecated_p } {
