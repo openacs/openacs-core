@@ -13,6 +13,10 @@ if { ![info exists header_stuff] } {
     set header_stuff {}
 }
 
+if { ![info exists on_load] } {
+    set on_load {}
+}
+
 if { [template::util::is_nil subnavbar_link] } {
     set subnavbar_link ""
 }
