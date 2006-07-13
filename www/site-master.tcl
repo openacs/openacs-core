@@ -3,6 +3,7 @@
 #   focus
 #   header_stuff
 #   section
+#   on_load (expects funtion_name(params);)
 
 if { ![info exists section] } {
     set section {}
@@ -96,3 +97,8 @@ set whos_online_url "[subsite::get_element -element url]shared/whos-online"
 #----------------------------------------------------------------------
 
 util_get_user_messages -multirow "user_messages"
+
+set extra_headers ""
+set extra_headers [join [callback subsite::get_extra_headers] " \n "]
+set callback_on_load [callback subsite::header_onload]
+

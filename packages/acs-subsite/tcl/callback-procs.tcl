@@ -33,3 +33,16 @@ ad_proc -public -callback user::registration {
     used to verify if there is another registration process.
     The implementation must return the url of the registration page.
 } - 
+
+ad_proc -callback subsite::get_extra_headers {
+} {
+    returns any further header stuff that needs to be added
+} -
+
+ad_proc -callback subsite::header_onload {
+} {
+    returns any javascript function that needs to be loaded
+    the callback implementation should simply do:
+    return {your_function(params);}
+} -
+

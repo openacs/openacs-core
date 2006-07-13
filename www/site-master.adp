@@ -11,7 +11,12 @@
   <property name="header_stuff">
     <link rel="stylesheet" type="text/css" href="@css_url@" media="all">
     @header_stuff;noquote@
+    @extra_headers;noquote@
   </property>
+  <property name="on_load">
+    @on_load;noquote@@callback_on_load;noquote@
+  </property>
+
 
 
 <!-- Header -->
