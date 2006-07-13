@@ -30,7 +30,7 @@ if { ![info exists header_stuff] } {
 # Attributes
 
 multirow create attribute key value
-set onload {}
+set onload $on_load
 
 # Handle richtext widgets, which needs special javascript and css 
 # in the page header
