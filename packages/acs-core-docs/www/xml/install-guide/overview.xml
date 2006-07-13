@@ -40,11 +40,10 @@
 
     <para>You can try out OpenACS using some binary installers. In
     general, they are not yet supported by the community, so they are
-    mostly for evaluation purposes. <ulink
-    href="http://openacs.org/faq/one-faq?faq_id=130897#130917">Installing
+    mostly for evaluation purposes. <ulink url="http://openacs.org/faq/one-faq?faq_id=130897#130917">Installing
     OpenACS</ulink></para>
 
-    <para>You can see a list of <ulink href="http://openacs.org/projects/openacs/installer">current installers</ulink>.
+    <para>You can see a list of <ulink url="http://openacs.org/projects/openacs/installer">current installers</ulink>.
     </para>
 
     <orderedlist>
