@@ -16,6 +16,12 @@ ad_proc apm_test_callback_proc {
     {-arg1:required}
     {-arg2:required}
 } {
+    Writes the arbitrary values of arg1 and arg2 to a file so that we can
+    check that the proc was executed.
+
+    @param arg1 Arbitrary value.
+    @param arg2 Arbitrary value.
+} {
     # Write something to a file so that can check that the proc executed
     set file_path [apm_test_callback_file_path]
     set file_id [open $file_path w]
