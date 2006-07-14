@@ -1020,6 +1020,10 @@ ad_proc -private aa_execute_rollback_tests {} {
 namespace eval aa_test {}
 
 ad_proc -public aa_test::xml_report_dir {} {
+    Retrieves the XMLReportDir parameter.
+
+    @return Returns the value for the XMLReportDir parameter.
+} {
     return [parameter::get -parameter XMLReportDir]
 }
 
@@ -1208,6 +1212,13 @@ ad_proc -public aa_get_first_url {
 ad_proc -public aa_display_result {
     {-response:required}
     {-explanation:required}
+} {
+    Displays either a pass or fail result with specified explanation
+    depending on the given response.
+
+    @param response A boolean value where true (or 1, etc) corresponds
+    to a pass result, otherwise the result is a fail.
+    @param explanation An explanation accompanying the response.
 } {
     if {$response} {
 	aa_log_result "pass" $explanation
