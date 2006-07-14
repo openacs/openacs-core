@@ -213,7 +213,13 @@ ad_proc -public template::widget::search { element_reference tag_attributes } {
     return $output
 }
 
-ad_proc -public template::widget::textarea { element_reference tag_attributes } {
+ad_proc -public template::widget::textarea {
+    element_reference tag_attributes
+} {
+    A widget for the HTML form input textarea element.  Includes spellchecker.
+
+    @see template::util::spellcheck::spellcheck_properties
+} {
 
     upvar $element_reference element
 
