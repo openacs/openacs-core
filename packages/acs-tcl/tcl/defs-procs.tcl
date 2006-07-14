@@ -224,6 +224,9 @@ ad_proc -deprecated ad_header {
     {extra_stuff_for_document_head ""} 
 } {
     writes HEAD, TITLE, and BODY tags to start off pages in a consistent fashion
+
+
+    @see   Documentation on the site master template for the proper way to standardize page headers
 } {
     
     #    if {[ad_parameter MenuOnUserPagesP pdm] == 1} {
@@ -241,6 +244,8 @@ ad_proc -deprecated ad_header_with_extra_stuff {
     {pre_content_html ""}
 } {
     This is the version of the ad_header that accepts extra stuff for the document head and pre-page content html
+
+    @see  Documentation on the site master template for the proper way to standardize page headers
 } {
     set html "<html>
 <head>
@@ -274,6 +279,9 @@ ad_proc -deprecated ad_footer {
     Writes a horizontal rule, a mailto address box 
     (ad_system_owner if not specified as an argument), 
     and then closes the BODY and HTML tags
+
+
+    @see  Documentation on the site master template for the proper way to standardize page footers
 } {
     global sidegraphic_displayed_p
     if { [empty_string_p $signatory] } {
@@ -323,7 +331,10 @@ ad_proc -public ad_admin_owner {} {
 ad_proc -deprecated ad_admin_header {
     {-focus ""}
     page_title
-} "" {
+} {
+    
+    @see  Documentation on the site master template for the proper way to standardize page headers
+} {
     
     # if {[ad_parameter -package_id [ad_acs_kernel_id]  MenuOnAdminPagesP pdm] == 1} {
 	
@@ -337,6 +348,9 @@ ad_proc -deprecated ad_admin_header {
 ad_proc -deprecated ad_admin_footer {} {
     Signs pages with ad_admin_owner (usually a programmer who can fix 
     bugs) rather than the signatory of the user pages
+
+
+    @see  Documentation on the site master template for the proper way to standardize page footers
 } {
     if { [llength [info procs ds_link]] == 1 } {
 	set ds_link [ds_link]
