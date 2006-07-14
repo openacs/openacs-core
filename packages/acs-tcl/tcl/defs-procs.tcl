@@ -52,14 +52,6 @@ ad_proc -public ad_outgoing_sender {} {
     return [ad_parameter -package_id [ad_acs_kernel_id] OutgoingSender]
 }
 
-
-ad_proc -deprecated ad_graphics_site_available_p {} {
-    As defined in the GraphicsSiteAvailableP kernel parameter.
-    @return 1 if there is a graphics site
-} {
-    return [ad_parameter -package_id [ad_acs_kernel_id]  GraphicsSiteAvailableP]
-}
-
 ad_proc -public ad_system_name {} {
     This is the main name of the Web service that you're offering
     on top of the OpenACS Web Publishing System.
@@ -259,14 +251,8 @@ $extra_stuff_for_document_head
 
     array set attrs [list]
 
-    if { [info exists prefer_text_only_p] && $prefer_text_only_p == "f" && [ad_graphics_site_available_p] } {
-        set attrs(bgcolor) [ad_parameter -package_id [ad_acs_kernel_id]  bgcolor "" "white"]
-	set attrs(background) [ad_parameter -package_id [ad_acs_kernel_id]  background "" "/graphics/bg.gif"]
-	set attrs(text) [ad_parameter -package_id [ad_acs_kernel_id]  textcolor "" "black"]
-    } else {
-	set attrs(bgcolor) [ad_parameter -package_id [ad_acs_kernel_id]  bgcolor "" "white"]
-	set attrs(text) [ad_parameter -package_id [ad_acs_kernel_id]  textcolor "" "black"]
-    }
+    set attrs(bgcolor) [ad_parameter -package_id [ad_acs_kernel_id]  bgcolor "" "white"]
+    set attrs(text) [ad_parameter -package_id [ad_acs_kernel_id]  textcolor "" "black"]
 
     if { ![empty_string_p $focus] } {
 	set attrs(onLoad) "javascript:document.${focus}.focus()"
