@@ -1285,6 +1285,8 @@ ad_proc -public -deprecated ad_privacy_threshold {} {
     database is less than or equal to what ad_privacy_threshold returns.
     
     Now deprecated.
+
+    @see  ad_conn
 } {
     set session_user_id [ad_get_user_id]
     if {$session_user_id == 0} {

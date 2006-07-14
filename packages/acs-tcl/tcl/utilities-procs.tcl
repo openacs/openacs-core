@@ -2062,7 +2062,12 @@ ad_proc -public ad_schedule_proc {
     }
 }
 
-ad_proc -deprecated util_ReturnMetaRefresh { url { seconds_delay 0 }} {
+ad_proc util_ReturnMetaRefresh { url { seconds_delay 0 } } {
+    Ugly workaround to deal with IE5.0 bug handling
+    multipart/form-data using                                                                                  
+    Meta Refresh page instead of a redirect.                                                                                                                   
+    
+} {
     ReturnHeaders
     ns_write "
     <head>

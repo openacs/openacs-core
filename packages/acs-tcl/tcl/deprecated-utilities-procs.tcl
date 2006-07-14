@@ -41,6 +41,9 @@ ad_library {
 
 ad_proc -deprecated -warn set_variables_after_query {} {
     to be removed.
+
+
+    @see packages/acs-tcl/tcl/00-database-procs.tcl
 } { 
     uplevel {
 	    set set_variables_after_query_i 0
@@ -56,6 +59,9 @@ ad_proc -deprecated -warn set_variables_after_query {} {
 
 ad_proc -deprecated -warn set_variables_after_subquery {} {
     to be removed.
+
+
+    @see packages/acs-tcl/tcl/00-database-procs.tcl
 } { 
     uplevel {
 	    set set_variables_after_query_i 0
@@ -73,6 +79,9 @@ ad_proc -deprecated -warn set_variables_after_subquery {} {
 
 ad_proc -deprecated -warn set_variables_after_query_not_selection {selection_variable {name_prefix ""}} {
     to be removed.
+
+
+    @see packages/acs-tcl/tcl/00-database-procs.tcl
 } { 
     set set_variables_after_query_i 0
     set set_variables_after_query_limit [ns_set size $selection_variable]
