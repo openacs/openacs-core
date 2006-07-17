@@ -15,7 +15,7 @@
     <title>Install some API</title>
     <para>As a workaround for missing content-repository functionality, copy a provided file into the directory for tcl files:</para>
     <screen>
-    <action>cp /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-core-docs/www/files/note-procs.tcl /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/tcl/</action></screen>
+    <action>cp /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-core-docs/www/files/tutorial/note-procs.tcl /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/tcl/</action></screen>
     <para>To make this file take effect, go to the <ulink url="/acs-admin/apm">APM</ulink> and choose "Reload changed" for "MyFirstPackage".</para>
   </sect2>
   <sect2>
