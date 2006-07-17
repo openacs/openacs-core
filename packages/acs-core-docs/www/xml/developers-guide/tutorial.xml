@@ -168,7 +168,7 @@ standard OpenACS &version; distribution.
         </listitem>
       </orderedlist>
       <para>By mounting the package, we've caused all requests to
-      <computeroutput>http://yourserver.test:8000/my-first-package</computeroutput>
+      <computeroutput>http://yourserver.test:8000/myfirstpackage</computeroutput>
       to be satisfied from the files at <computeroutput>/var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/myfirstpackage/www</computeroutput>.</para>
     </sect2>
     <sect2>
