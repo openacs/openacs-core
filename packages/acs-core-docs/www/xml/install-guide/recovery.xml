@@ -1,16 +1,17 @@
 <?xml version='1.0' ?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
   <chapter id="backup-recovery">
   <title>Backup and Recovery</title>
-  <authorblurb>
+   <authorblurb>
+  <para><phrase role="cvstag">($Id$)</phrase></para>
+
     <para>By <ulink url="mailto:dhogaza@pacifier.com">Don Baccus</ulink> with additions
       by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
-  </authorblurb>
-  <para>We will cover some basic backup and recovery strategies.  These are intended to 
+    <para>We will cover some basic backup and recovery strategies.  These are intended to 
     be robust but simple enough to set up.  For a large scale production site you would 
     probably need to create your own backup strategies (in particular full dumps from 
     oracle, while easy to set up, are far from the best solution).
@@ -18,7 +19,7 @@
   
   <para>There are three basic things which need to be backed up, the database data, the server 
     source tree, and the acs-content-repository (which is in the server source tree).</para>
-
+  <para>
     <figure>
       <title>Backup and Recovery Strategy</title>
       <mediaobject>
@@ -27,6 +28,9 @@
         </imageobject>
       </mediaobject>
     </figure>
+  </para>
+   </authorblurb>
+
 
   <sect1 id="install-next-backups">
     <title>Backup Strategy</title>
@@ -160,11 +164,11 @@ Export done in US7ASCII character set and US7ASCII NCHAR character set
   . exporting pre-schema procedural objects and actions
   . exporting foreign function library names for user SERVICE_NAME 
   . exporting object type definitions for user SERVICE_NAME 
-  About to export SERVICE_NAME&#39;s objects ...
+  About to export SERVICE_NAME's objects ...
   . exporting database links
   . exporting sequence numbers
   . exporting cluster definitions
-  . about to export SERVICE_NAME&#39;s tables via Conventional Path ...
+  . about to export SERVICE_NAME's tables via Conventional Path ...
   . exporting synonyms
   . exporting views
   . exporting stored procedures
@@ -411,6 +415,7 @@ exit</action></screen>
 <action>su - $OPENACS_SERVICE_NAME
 cd /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>
 cvs up -r current</action></screen>
+
   </sect1>
-  <para><phrase role="cvstag">($Id$)</phrase></para>
+
 </chapter>

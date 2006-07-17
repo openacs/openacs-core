@@ -1,6 +1,6 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
@@ -48,7 +48,7 @@
             <entry namest="4.6.2" nameend="4.6.3" align="center">Verified</entry>
           </row>  
           <row>
-            <entry>3.4.2oacs1</entry>
+            <entry>3.4.4oacs1</entry>
             <entry namest="4.6.2" align="center">Verified</entry>
           </row>  
           <row>

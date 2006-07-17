@@ -1,6 +1,6 @@
 <?xml version='1.0' ?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
@@ -8,8 +8,7 @@
   <title>OpenACS Documentation Guide</title>
 
   <para>
-    By Claus Rasmussen, with additions by <ulink url="mailto:rmello@cc.usu.edu">Roberto
-      Mello</ulink> and the OpenACS Community
+    By Claus Rasmussen, with additions by Roberto Mello, Vinod Kurup, and the OpenACS Community
   </para>
 
   <sect2 id="dbprimer-overview" xreflabel="OpenACS Documentation Overview">
@@ -119,7 +118,7 @@
     <para>
       OpenACS forum discussions on documentation requirements and strategies are
       summarized in the following sections.  Production
-      phases are mainly organized and fulfilled by Joel Aufrecht.
+      phases are mainly organized and fulfilled by a designated documentation maintainer.
       Hopefully the following sections will help spur greater
       direct participation by the OpenACS community.
     </para>
@@ -780,13 +779,19 @@
   <sect2 id="dbprimer-why" xreflabel="Why DocBook?">
     <title>OpenACS Documentation Strategy: Why DocBook?</title>
     <para>
-      All OpenACS documentation will be marked up to conform to the
+      OpenACS documentation is taking a dual approach to publishing.
+    Documentation that is subject to rapid change and participation by
+    the OpenACS community is managed through the <ulink
+    url="http://openacs.org/xowiki/pages/en/Documentation_Project">OpenACS
+    xowiki Documentation Project</ulink>
+    Formal documents that tend to remain static and require more
+    expressive publishing tools will be marked up to conform to the
       <ulink url="http://docbook.org/xml/index.html">DocBook XML
-      DTD</ulink>. Theoretically, any strict DTD would have been
-      sufficient. We could even write our own, or just use the
-      OpenACS templating system via the Edit-This-Page package.
-      However,
-      <indexterm><primary>DocBook</primary><secondary>DTD</secondary></indexterm> 
+      DTD</ulink>. The remaining discussion is about publishing using
+    Docbook.
+</para>
+<para>
+<indexterm><primary>DocBook</primary><secondary>DTD</secondary></indexterm> 
       is a publishing standard based on XML with
       similar goals to the OpenACS Documentation project.  Some specific reasons why we are using DocBook:
     </para>
@@ -846,13 +851,13 @@
       at that time.
     </para>
     <para>
-      In 2004, Docbook released version 4.2, which complies with all 
+      In 2004, Docbook released version 4.4, which complies with all 
       the OpenACS publishing requirements.
       Producing a web friendly book hierarchy arguably remains DocBooks'
       weakest point. For example, a dynamically built document
       should be able to extract details of a specific reference from
       a bibliographic (table) and present a footnote  at the
-      point where referenced. DocBook 4.2 allows for this with
+      point where referenced. DocBook 4.4 allows for this with
       <computeroutput>bibliocoverage</computeroutput>,
       <computeroutput>bibliorelation</computeroutput>, and
       <computeroutput>bibliosource</computeroutput>. <ulink
@@ -863,8 +868,7 @@
     
     <para>
       The following DocBook primer walks you through the basics, and should cover the
-      needs for 95 percent of the documentation we produce. However,
-      you're always welcome to check out DocBook's
+      needs for 95 percent of the documentation we produce. You are welcome to explore DocBook's
       <ulink url="http://docbook.org/tdg/en/html/part2.html">
     list of elements</ulink> and use more exotic features in your
       documents. The list is made up of SGML-elements but basically
@@ -933,11 +937,12 @@
 
       <listitem>
     <para>
-    Some editing tool. A popular one is Emacs with the psgml
-    mode. We have a <link linkend="psgml-mode">intro to the PSGML
-    Mode in Emacs</link> as part of our documentation. You can
-    read about other editing tools in the <ulink
-    url="http://en.tldp.org/LDP/LDP-Author-Guide/">LDP Author Guide</ulink>.
+    Some editing tool. A popular one is Emacs with the psgml and nXML
+    modes. The <ulink
+    url="http://en.tldp.org/LDP/LDP-Author-Guide/">LDP Author
+    Guide</ulink> and <ulink
+    url="http://wiki.docbook.org/topic/DocBookAuthoringTools">DocBook
+    Wiki</ulink> list some alternates.
     </para>
       </listitem>
     </itemizedlist>
@@ -950,7 +955,7 @@
       title for your document. Then start thinking about the possible
       sections and subsections you will have in your document. Make
       sure you coordinate with the OpenACS Gatekeepers to make sure
-      you're not writing something that someone else is already
+      you are not writing something that someone else is already
       writing. Also, if you desire to use the OpenACS CVS repository,
       please e-mail the gatekeeper in charge of documentation.
     </para>
@@ -1036,8 +1041,8 @@
     </para>
 
     <programlisting>
-&lt;sect1 id="docbook-primer" xreflabel="aD DocBook Primer"&gt;
-  &lt;title&gt;aD DocBook Primer&lt;/title&gt;
+&lt;sect1 id="docbook-primer" xreflabel="DocBook Primer"&gt;
+  &lt;title&gt;DocBook Primer&lt;/title&gt;
 
 ...
 
@@ -1067,9 +1072,15 @@
     <para>
       <indexterm><primary>computeroutput</primary><secondary>code</secondary></indexterm>
       For displaying a snippet of code, a filename or anything else you just want to appear as a part of
-      a sentence, we will use the tag 
-      <ulink url="http://docbook.org/tdg/en/html/computeroutput.html"><computeroutput>&lt;computeroutput&gt;</computeroutput></ulink>.
-      This takes the place of the HTML-tag <computeroutput>&lt;code&gt;</computeroutput>
+      a sentence, we use  
+      <ulink
+      url="http://docbook.org/tdg/en/html/computeroutput.html"><computeroutput>&lt;computeroutput&gt;</computeroutput></ulink>
+      and <ulink
+      url="http://docbook.org/tdg/en/html/code.html"><code>&lt;code&gt;</code></ulink>
+      tags.
+      These replace the HTML-tag <code>&lt;code&gt;</code> tag,
+      depending on whether the tag is describing computer output or
+      computer code.
     </para>
 
     <para>
@@ -1077,7 +1088,14 @@
       <ulink url="http://docbook.org/tdg/en/html/programlisting.html"><computeroutput>&lt;programlisting&gt;</computeroutput></ulink> is used. Just wrap your code block in it; mono-spacing, indents and all that stuff is taken care of
       automatically. 
     </para>
-
+    <para>For expressing user interaction via a terminal window, we wrap
+      the <ulink
+      url="http://docbook.org/tdg/en/html/screen.html"><computeroutput>&lt;screen&gt;</computeroutput></ulink> 
+      tag around text that has been wrapped by combinations of <ulink
+      url="http://docbook.org/tdg/en/html/computeroutput.html"><computeroutput>&lt;computeroutput&gt;</computeroutput></ulink>
+      and <ulink
+      url="http://docbook.org/tdg/en/html/userinput.html"><userinput>&lt;userinput&gt;</userinput></ulink>
+</para>
   </sect2>
 
 
@@ -1180,8 +1198,11 @@
         ....will create a hyper-link to Oracle in the HTML-version of the documentation.
       </para>
 
-      <para><emphasis role="strong">NOTE:</emphasis> Do NOT use ampersands in your hyper links. These are reserved for referencing
-        entities, which is exactly how you'll make an ampersand: <computeroutput>&amp;amp;</computeroutput>
+      <para><emphasis role="strong">NOTE:</emphasis> Do NOT use
+        ampersands in your hyperlinks. These are reserved for
+        referencing <ulink
+        url="http://www.docbook.org/tdg/en/html/ch01.html#s-entities">entities</ulink>.
+        To create an ampersand, use the entity <code>&amp;amp;</code>
 
       </para></listitem>
       </varlistentry>
@@ -1194,14 +1215,10 @@
     <title>Graphics</title>
 
     <para>
-      <emphasis><emphasis role="strong">NOTE:</emphasis> Currently this section currently only takes HTML-output into consideration -
-    not a printed version</emphasis>
-    </para>
-
-    <para>
       <emphasis>
-    <emphasis role="strong">Another Note:</emphasis> Also, it's still not a 100 percent sure that this is how we are going to 
-    do it, so if you want to start converting your documents right away, start out with the ones without graphics ;)
+    <emphasis role="strong">Note:</emphasis> The graphics guidelines
+    are not written in stone. Use another valid approach if it works better
+    for you.
       </emphasis>
     </para>
 
@@ -1210,12 +1227,12 @@
       To insert a graphic we use the elements 
       <ulink url="http://docbook.org/tdg/en/html/mediaobject.html"><computeroutput>&lt;mediaobject&gt;</computeroutput></ulink>,
       <ulink url="http://docbook.org/tdg/en/html/imageobject.html"><computeroutput>&lt;imageobject&gt;</computeroutput></ulink>,
-      and
-      <ulink url="http://docbook.org/tdg/en/html/imagedata.html"><computeroutput>&lt;imagedata&gt;</computeroutput></ulink>. 
-      The news is that you have to provide two versions of all your graphics - one for the Web (probably a GIF or a JPEG) 
-      and one for print (EPS). Finally you should provide a brief description wrapped in
-      <ulink url="http://docbook.org/tdg/en/html/textobject.html"><computeroutput>&lt;textobject&gt;</computeroutput></ulink> - 
-      in HTML this will be the ALT text.
+      <ulink url="http://docbook.org/tdg/en/html/imagedata.html"><computeroutput>&lt;imagedata&gt;</computeroutput></ulink>,
+      and 
+      <ulink url="http://docbook.org/tdg/en/html/textobject.html"><computeroutput>&lt;textobject&gt;</computeroutput></ulink>.
+      Two versions of all graphics are required. One for the Web
+      (usually a JPEG or GIF), and a brief text description.  The
+      description becomes the ALT text. You can also supply a version for print (EPS).
     </para>
 
     <programlisting>
@@ -1424,9 +1441,8 @@
     <title>Indexing Your DocBook Documents</title>
 
     <para>
-      Marking up index-words may not have any importance for the HTML-output, but in order to make it easier to make
-      a nice print-version of the documentation, you should mark up words in your documents that you would like to
-      see show up in an index one day.
+      Words that are marked as index-words are referenced in an index
+      in the final, parsed document.
     </para>
 
     <para>
@@ -1458,16 +1474,14 @@
       multiple files, you call a different stylesheet. 
     </para>
     
-
-    
     <para>
       To generate a single HTML file from your DocBook XML file,
       use the command:
     </para>
     
-    <programlisting>
-bash$  xsltproc -o outputfilename.xml /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/html.xsl filename.xml
-</programlisting>
+    <screen>
+<computeroutput>bash$ </computeroutput><userinput>xsltproc -o outputfilename.xml /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/html.xsl filename.xml</userinput>
+</screen>
 
     
     <note>
@@ -1487,9 +1501,9 @@ bash$  xsltproc -o outputfilename.xml /usr/share/sgml/docbook/stylesheet/xsl/nwa
       following command: 
     </para>
 
-    <programlisting>
-bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl filename.xml
-</programlisting>
+    <screen>
+<computeroutput>bash$ </computeroutput><userinput>xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl filename.xml</userinput>
+</screen>
 
     <para> 
     You could also look at the <ulink url="http://cvs.openacs.org/cvs/openacs-4/packages/acs-core-docs/www/xml/Makefile?view=markup">acs-core-docs Makefile</ulink> 
@@ -1514,22 +1528,25 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
     for tools.
     </para>
       </listitem>
-      
+     <listitem><para>
+      James Clark 
+      wrote <link linkend="nxml-mode">nXML Mode</link>, an alternative
+      to PSGML Mode. nXML Mode can validate a file as it is edited.
+      </para></listitem>
+    
       <listitem><para>
       David Lutterkort
       wrote an <link linkend="psgml-mode">intro to the PSGML Mode in Emacs</link>
     </para></listitem>
-
       <listitem><para>
-      For checking if your document is well-formed, James Clark's free Java parser,
-      <ulink url="http://www.jclark.com/xml/xp/index.html">XP</ulink>, is recommended. (note that
-      it is not a validating parser, but as long as you follow the guidelines set forth in this
-      document, your XML will validate)</para></listitem>
+      James Clark's free Java parser
+      <ulink url="http://www.jclark.com/xml/xp/index.html">XP</ulink>. Note that
+      this does not validate XML, only parses it.
+      </para></listitem>
 
       <listitem><para>
       <ulink url="http://sources.redhat.com/docbook-tools/">DocBook Tool for Linux</ulink>: 
-      Let's you convert your docbook documents to a number of formats. Sometimes it's nice to see
-      how you stuff looks. <emphasis>NOTE: I only got these to
+      Converts docbook documents to a number of formats. <emphasis>NOTE: I only got these to
       work with Docbook SGML, NOT with Docbook XML. If you are
       able to make it work with our XML, please let us know.</emphasis>
     </para>
@@ -1547,7 +1564,9 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
       <ulink url="http://tidy.sourceforge.net/">HTML tidy</ulink>
       can be a handy tool to make your HTML "regexp'able".
       Brandoch Calef has made a 
-      <ulink url="http://developer.arsdigita.com/working-papers/bcalef/html-to-docbook.html#html2docbook">Perl script</ulink>
+      <ulink
+      url="http://web.archive.org/web/20010830084757/http://developer.arsdigita.com/working-papers/bcalef/html-to-docbook.html">Perl
+      script with directions</ulink> (now via archive.org)
       that gets you most of the way.
 
     </para>
@@ -1555,59 +1574,6 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
     </itemizedlist>
   </sect2>
 
-  <sect2 id="dbprimer-rev-history">
-    <title>Revision History</title>
-    
-    <informaltable>
-      <tgroup cols="4">
-    <thead>
-      <row>
-        <entry>Document Revision #</entry>
-        <entry>Action Taken, Notes</entry>
-        <entry>When?</entry>
-        <entry>By Whom?</entry>
-      </row>
-    </thead>
-
-    <tbody>
-      
-      <row>
-        <entry>0.4</entry>
-        <entry>
-          Fixed some typos.
-        </entry>
-        <entry>8/3/2002</entry>
-        <entry>Vinod Kurup</entry>
-      </row>
-          
-      <row>
-        <entry>0.3</entry>
-        <entry>
-          Added OpenACS information, updated tools, added
-          extra links and added info to the Publishing section.
-        </entry>
-        <entry>12/24/2001</entry>
-        <entry>Roberto Mello</entry>
-      </row>
-          
-      <row>
-        <entry>0.2</entry>
-        <entry>Changed recommendation from &lt;phrase&gt; to &lt;emphasis role="strong"&gt;</entry>
-        <entry>01/19/2000</entry>
-        <entry>Claus Rasmussen</entry>
-      </row>
-
-      <row>
-        <entry>0.1</entry>
-        <entry>Creation</entry>
-        <entry>12/2000</entry>
-        <entry>Claus Rasmussen</entry>
-      </row>
-    </tbody>
-      </tgroup>
-    </informaltable>
-
-  </sect2>
 
 
 </sect1>

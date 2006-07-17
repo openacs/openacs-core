@@ -1,6 +1,6 @@
 <?xml version='1.0' ?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
@@ -327,8 +327,8 @@ config file.</screen>
     </para>
       </formalpara>
     <screen>
-[01/Jun/2000:12:11:20][5914.2051][-nssock-] Notice: nssock: listening on http://localhost.localdomain:8000 (127.0.0.1:8000)
-[01/Jun/2000:12:11:20][5914.2051][-nssock-] Notice: accepting connections</screen>
+[01/Jun/2000:12:11:20][5914.4051][-nssock-] Notice: nssock: listening on http://localhost.localdomain:8000 (127.0.0.1:8000)
+[01/Jun/2000:12:11:20][5914.4051][-nssock-] Notice: accepting connections</screen>
 
     <para>
 

@@ -14,7 +14,7 @@
   <xsl:variable name="html.cellspacing">0</xsl:variable>
 
 <!-- vinodk: Not sure if this is needed                   -->
-  <xsl:output media-type="text/html" encoding="utf-8"/>
+  <xsl:output media-type="text/html" encoding="ISO-8859-1"/>
 
   <xsl:variable name="generate.index">1</xsl:variable>
 

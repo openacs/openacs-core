@@ -3,8 +3,10 @@
 # @author Modified by Roberto Mello (rmello@fslc.usu.edu) to have PDF generation
 #         plus refactored it a bit to have rules and dependencies.
 # @author davis@xarg.net Added automatic creation of an XSL link so we don't edit openacs.xsl, 
-#	  added a lint target which runs xmllint, changed pdf generation to use FOP.  Made it 
-#	  work on the mac.  OSX note: xmllint from fink does not work, use /usr/bin/xmllint 
+#         added a lint target which runs xmllint, changed pdf generation to use FOP.  Made it 
+#         work on the mac.  
+# OSX note: xmllint from fink does not work, use /usr/bin/xmllint 
+#           xmllint from fink seems to work fine on osx 10.4.x
 #
 # @creation-date 2002-08-10
 # @modified-date 2003-12-06
@@ -18,7 +20,7 @@
 # I'm a Makefile newbie, so feel free to comment/slash/change.
 
 # Paths
-XSLTPROC=xsltproc
+XSLTPROC=/sw/bin/xsltproc
 HTMLDOC=htmldoc
 
 all: html 
@@ -27,7 +29,7 @@ XSL:
 	if [ ! -d XSL -a ! -L XSL ]; then \
 		echo -e "\n\nNo XSL directory here.  I am looking for one...\n"; \
 		for d in \
-	 		/sw/share/xml/docbook-xsl \
+			/sw/share/xml/docbook-xsl \
 			/usr/share/sgml/docbook/xsl-stylesheets-* \
 			/usr/share/sgml/docbook/xsl-stylesheets \
 			/usr/share/sgml/docbook/stylesheet/xsl/nwalsh; \
@@ -50,20 +52,23 @@ see http://sourceforge.net/projects/docbook/ for the docbook-xsl stylesheets\n";
 		fi; \
 	fi;
 
-
-prelim:
+prelim: images 
 	cp images/*.{pdf,png,gif,jpg} ../images/
 
 # all non-regenerated html is kept in a sub-dir so that we can delete html
 # in the main directory before regenerating
 # this helps avoid meaningless cvs conflicts in second-hand files
 	rm ../*html
-	cp -u non-xml/*.html ../
+
+target: non-xml
+# the dash u part of cp -u is redundant in the context of make/Makefile
+	cp non-xml/*.html ..
+
 	cp openacs.css ..
 
 html: prelim XSL
 # adding --nonet --novalid is much faster but generates a bunch of bogus error messages
-	cd .. ; $(XSLTPROC) --nonet --novalid --xinclude xml/openacs.xsl xml/index.xml
+	cd .. ; $(XSLTPROC) --xinclude xml/openacs.xsl xml/index.xml
 
 # I got this to work with FOP 0.20.5 and docbook-xsl 1.62, and Jimi 1.0
 # see README.fop for some notes.
@@ -76,6 +81,8 @@ fopdf: XSL
 
 # Validate with xmllint. --postvalid is needed so validation takes place after xincludes.
 # In emacs do M-x compile then make lint; then C-x ` to walk through the resulting errors.
-#
+#	/usr/bin/xmllint --xinclude --noout --postvalid index.xml 2>&1 | grep -v 'No declaration for attribute base of element'
+#	/sw/bin/xmllint --xinclude --noout --postvalid index.xml 2>&1 | grep -v 'No declaration for attribute base of element'
+#  I skip adding the grep at the end because it returns an ambiguous error when there are no messages at end of compiling.. due to no errors.
 lint: XSL
-	xmllint --xinclude --noout --postvalid index.xml 2>&1 | grep -v 'No declaration for attribute base of element'
+	/sw/bin/xmllint --xinclude --noout --postvalid index.xml 2>&1

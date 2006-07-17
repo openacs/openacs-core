@@ -1,10 +1,4 @@
-<?xml version='1.0' ?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY % myvars SYSTEM "../variables.ent">
-%myvars;
-]>
-  <sect1 id="tutorial-database">
+<sect1 id="tutorial-database">
     <title>Setting Up Database Objects</title>
     
     <authorblurb>

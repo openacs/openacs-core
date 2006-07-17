@@ -1,6 +1,6 @@
 <?xml version='1.0' ?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
@@ -232,9 +232,9 @@ done
         <listitem>
           <para>Investigate each of the available ETP templates:</para>
           <itemizedlist>
-            <listitem>Default</listitem>
-            <listitem>News</listitem>
-            <listitem>FAQ</listitem>
+            <listitem><para>Default</para></listitem>
+            <listitem><para>News</para></listitem>
+            <listitem><para>FAQ</para></listitem>
           </itemizedlist>
         </listitem>
       </itemizedlist>
@@ -256,7 +256,8 @@ done
         </listitem>
         <listitem>
           <para>The template should provide us with the following ETP layout:</para>
-          <informaltable frame="all" border="1" cellpadding="5" cellspacing="0">
+          <table frame="all" border="1" cellpadding="5" cellspacing="0">
+              <title>table showing ETP layout</title>
             <?dbhtml table-width="250" ?>
             <?dbfo table-width="250" ?>
             <tgroup cols="2" align="left" colsep="1" rowsep="1">
@@ -274,7 +275,7 @@ done
                 </row>
               </tbody>
             </tgroup>
-          </informaltable>
+          </table>
         </listitem>
         <listitem>
           <para>The "Main Content" pane should contain the editable content that ETP provides.</para>
@@ -299,8 +300,8 @@ done
         <listitem>
           <para>Use the function etp::define_application to register your template with ETP</para>
           <itemizedlist>
-            <listitem>Uncomment the "asc" definition</listitem>
-            <listitem>Set allow_extlinks to true, the rest should be false.</listitem>
+            <listitem><para>Uncomment the "asc" definition</para></listitem>
+            <listitem><para>Set allow_extlinks to true, the rest should be false.</para></listitem>
           </itemizedlist>
         </listitem>
         <listitem>
@@ -1401,19 +1402,19 @@ db_multirow \
 
   <sect1 id="tutorial-wysiwyg-editor">
     <title>Enabling WYSIWYG</title>
-    <authorblurb>
+     <authorblurb>
       <para>by <ulink url="mailto:nima.mazloumi@gmx.de">Nima Mazloumi</ulink></para>
-    </authorblurb>    
+     </authorblurb>
     <para>Most of the forms in OpenACS are created using the form builder, see <xref linkend="form-builder"/>. For detailed information on the 
     API take a look <ulink url="/api-doc/proc-view?proc=ad_form">here</ulink>.</para>
     <para>The following section shows how you can modify your form to allow WYSIWYG functionalities.</para>
-	<para>Convert your page to use <computeroutput>ad_form</computeroutput> (some changes but worth it)</para>
+	<para>Convert your page to use <code>ad_form</code> (some changes but worth it)</para>
 	<para>Here an examples. From:</para>
 	<programlisting>
 	template::form create my_form
 	template::element create my_form my_form_id -label "The ID" -datatype integer -widget hidden
 	template::element create my_form my_input_field_1 -html { size 30 } -label "Label 1" -datatype text -optional
-	template::element create my_form my_input_field_2 -label "Label 2" -datatype text -help_text "Some Help" -after_html {<a name="#">Anchor</a>}
+	template::element create my_form my_input_field_2 -label "Label 2" -datatype text -help_text "Some Help" -after_html {&lt;a name="#"&gt;Anchor&lt;/a&gt;}
 	</programlisting>
 	<para>To:</para>
 	<programlisting>
@@ -1426,14 +1427,14 @@ db_multirow \
                {label "Label 2"}
                {help_text "Some Help"}
 	       	   {after_html
-               {<a name="#">Anchor</a>}}}
+               {&lt;a name="#"&gt;Anchor&lt;/a&gt;}}}
 	} ...
 	</programlisting>
 	<warning>
 	<para>You must not give your your form the same name that your page has. Otherwise HTMLArea won't load.</para>
 	</warning>
 	<para>Convert your textarea widget to a richtext widget and enable htmlarea.</para>
-	<para>The <computeroutput>htmlarea_p</computeroutput>-flag can be used to prevent 
+	<para>The <code>htmlarea_p</code>-flag can be used to prevent 
 	WYSIWYG functionality. Defaults to true if left away.</para>
 	<para>From:</para>
 	<programlisting>
@@ -1446,33 +1447,33 @@ db_multirow \
 	</programlisting>
 	<para>The richtext widget presents a list with two elements: text and content type.
 	To learn more on existing content types search in Google for "MIME-TYPES" or 
-	take a look at the <computeroutput>cr_mime_types</computeroutput> table.</para>
+	take a look at the <code>cr_mime_types</code> table.</para>
 	<para>Make sure that both values are passed as a list to your 
-	<computeroutput>ad_form</computeroutput> or you will have problems 
+	<code>ad_form</code> or you will have problems 
 	displaying the content or handling the data manipulation correctly.</para>
 	<para>Depending on the data model of your package you either support a content format 
-	or don't. If you don't you can assume <computeroutput>"text/html"</computeroutput> or 
-	<computeroutput>"text/richtext"</computeroutput> or <computeroutput>"text/enhanced"</computeroutput>.</para>
-	<para>The relevant parts in your <computeroutput>ad_form</computeroutput> definition are the 
-	switches <computeroutput>-new_data</computeroutput>, <computeroutput>-edit_data</computeroutput>, 
-	<computeroutput>-on_request</computeroutput> and <computeroutput>-on_submit</computeroutput>.</para>
-	<para>To allow your data to display correctly you need to add an <computeroutput>-on_request</computeroutput> block. 
-	If you have the format stored in the database pass this as well else use <computeroutput>"text/html"</computeroutput>:</para>
+	or don't. If you don't you can assume <code>"text/html"</code> or 
+	<code>"text/richtext"</code> or <code>"text/enhanced"</code>.</para>
+	<para>The relevant parts in your <code>ad_form</code> definition are the 
+	switches <code>-new_data</code>, <code>-edit_data</code>, 
+	<code>-on_request</code> and <code>-on_submit</code>.</para>
+	<para>To allow your data to display correctly you need to add an <code>-on_request</code> block. 
+	If you have the format stored in the database pass this as well else use <code>"text/html"</code>:</para>
 	<programlisting>
 	set my_input_field_2 [template::util::richtext::create $my_input_field_2 "text/html"]
 	</programlisting>
 	<para>Now make sure that your SQL queries that do the data manipulation retrieve the correct value. 
-	If you simply use <computeroutput>my_input_field_2</computeroutput> you will store a list. 
-	Thus you need to add an <computeroutput>-on_submit</computeroutput> block:</para>
+	If you simply use <code>my_input_field_2</code> you will store a list. 
+	Thus you need to add an <code>-on_submit</code> block:</para>
 	<programlisting>
 	set my_input_field_2 [ template::util::richtext::get_property contents $my_input_field_2]
 	set format [ template::util::richtext::get_property format $my_input_field_2] #This is optional
 	</programlisting>
-	<para>Now the correct values for <computeroutput>my_input_field_2</computeroutput> and 
-	<computeroutput>format</computeroutput> are passed to the <computeroutput>-new_data</computeroutput> and 
-	<computeroutput>-edit_data</computeroutput> blocks which don't need to get touched.</para>
-	<para>To make HTMLArea optional per package intance define a string parameter 
-	"<computeroutput>UseWysiwygP</computeroutput>" which defaults "<computeroutput>0</computeroutput>" for your 
+	<para>Now the correct values for <code>my_input_field_2</code> and 
+	<code>format</code> are passed to the <code>-new_data</code> and 
+	<code>-edit_data</code> blocks which don't need to get touched.</para>
+	<para>To make HTMLArea optional per package instance define a string parameter 
+	<code>UseWysiwygP</code> which defaults <code>0</code> for your 
 	package using the APM.</para>
 	<para>In your edit page make the following changes</para>
 	<programlisting>
@@ -1483,12 +1484,12 @@ db_multirow \
 	
 	{htmlarea_p $use_wysiwyg_p}
 	</programlisting>
-	<para>The <computeroutput>-on_request</computeroutput> switch should set this value for your form.</para>
+	<para>The <code>-on_request</code> switch should set this value for your form.</para>
 	<programlisting>
 	set htmlarea_p $use_wysiwyg_p
 	</programlisting>
-	<para>All you need now is a configuration page where the user can change this setting</para>. Create a 
-	<computeroutput>configure.tcl</computeroutput> file:
+	<para>All you need now is a configuration page where the user can change this setting. Create a 
+	<code>configure.tcl</code> file:</para>
 	<programlisting>
 	ad_page_contract {
 
@@ -1521,10 +1522,10 @@ db_multirow \
 	<para>In the corresponding ADP file write</para>
 	<programlisting>
 	&lt;master&gt;
-	&lt;property name="title">@title@&lt;/property&gt;
-	&lt;property name="context">@context@&lt;/property&gt;
+	&lt;property name="title"&gt;@title@&lt;/property&gt;
+	&lt;property name="context"&gt;@context@&lt;/property&gt;
 
-	&lt;formtemplate id="categories_mode">&lt;/formtemplate&gt;
+	&lt;formtemplate id="categories_mode"&gt;&lt;/formtemplate&gt;
 	</programlisting>
 	<para>And finally reference this page from your admin page</para>
 	<programlisting>
@@ -1534,8 +1535,9 @@ db_multirow \
 	#ADP:
 	&lt;a href=configure?&lt;%=[export_url_vars return_url]%&gt;&gt;Configure&lt;/a&gt;
 	</programlisting>
-	</sect1>
 
+</sect1>
+ 
   <sect1 id="tutorial-parameters">
     <title>Adding in parameters for your package</title>
     <para>Each instance of a package can have paramaters associated
@@ -1578,7 +1580,7 @@ db_multirow \
 
     <para>Now use the APM to create a new package version
       1.0b2. Commit all your changes, tag the release 
-      (<xlink linkend="tutorial-upgrades" />), 
+      (<xref linkend="tutorial-upgrades" />), 
       and both new installations and upgrades
       will be taken care of.</para>
   </sect1>
@@ -1650,8 +1652,8 @@ ns_param pools_legacy [list legacy]</programlisting>
       </listitem>
       <listitem>
         <para>To use the legacy database, use the
-          <computeroutput>-dbn</computeroutput> flag for any of the
-          <computeroutput>db_</computeroutput> API calls.  For
+          <code>-dbn</code> flag for any of the
+          <code>db_</code> API calls.  For
           example, suppose there is a table called "foo" in the legacy
           system, with a field "bar".  List "bar" for all records with
           this tcl file:</para>
