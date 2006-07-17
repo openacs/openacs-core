@@ -1,14 +1,24 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
 <sect1 id="form-builder">
-<title>Using HTML Forms</title>
+<title>Using Form Builder: building html forms dynamically</title>
+
 
 <sect2 id="ad-form-overview">
 <title>Overview</title>
+<authorblurb>
+  <para><phrase role="cvstag">($Id$)</phrase></para>
+</authorblurb>
+<para>OpenACS has a form manager called ad_form. Ad_form has an
+adaptable UI. Error handling includes inline error reporting, and is customizable.
+ However, ad_form can be tricky to use. In addition to this document,
+ the ad_form <ulink
+ url="http://openacs.org/api-doc/proc-view?proc=ad_form">api
+ documentation</ulink> is helpful.</para>
 
 </sect2>
 
@@ -119,5 +129,4 @@ if {[string equal "" $mypage]} {
     </sect3>
   </sect2>
 
-  <para><phrase role="cvstag">($Id$)</phrase></para>
 </sect1>

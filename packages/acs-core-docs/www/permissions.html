@@ -1,12 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Groups, Context, Permissions</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="templates.html" title="Using Templates in OpenACS"><link rel="next" href="subsites.html" title="Writing OpenACS Application Pages"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="templates.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="subsites.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="permissions"></a>Groups, Context, Permissions</h2></div></div><div></div></div><div class="authorblurb"><p>By Pete Su</p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Groups, Context, Permissions</title><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="templates.html" title="Using Templates in OpenACS"><link rel="next" href="subsites.html" title="Writing OpenACS Application Pages"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="templates.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="subsites.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="permissions"></a>Groups, Context, Permissions</h2></div></div></div><div class="authorblurb"><p>By Pete Su</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-overview"></a>Overview</h3></div></div><div></div></div><p>
-The OpenACS 5.2.3b1 Permissions system allows developers and administrators to
+        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-overview"></a>Overview</h3></div></div></div><p>
+The OpenACS 5.2.3rc1 Permissions system allows developers and administrators to
 set access control policies at the object level, that is, any
 application or system object represented by a row in the
-<tt class="computeroutput">acs_objects</tt> table can be access-controlled via a simple
+<code class="computeroutput">acs_objects</code> table can be access-controlled via a simple
 PL/SQL or Tcl interface. The permissions system manages a data model
 that then allows scripts to check permissions using another simple
 API call.
@@ -14,19 +13,19 @@ API call.
 Although this may all sound easy and wonderful, no developer or
 administrator would want to <span class="emphasis"><em>explicitly</em></span> set access control
 rights for <span class="emphasis"><em>every user</em></span> and <span class="emphasis"><em>every object</em></span> on a
-site. Therefore, OpenACS 5.2.3b1 has two auxiliary mechanisms for making this
+site. Therefore, OpenACS 5.2.3rc1 has two auxiliary mechanisms for making this
 easier: First, the Groups system allows users to be grouped together
 in flexible ways. Second, the object model defines a notion of
 <span class="emphasis"><em>object context</em></span>, which allows applications to group objects
 together into larger security domains.  The rest of this document will
 talk about each of these parts, and how they fit together with the
 permissions system.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-groups"></a>Groups</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-groups"></a>Groups</h3></div></div></div><p>
 In OpenACS 3.x, the groups system allowed developers and administrators to
 define simple groupings of users. Each group had a human readable name
 and unique ID, and there was a single mapping table that mapped users
 to groups. (The actual data model was more complicated because it
-contained a meta-data system much like the OpenACS 5.2.3b1 object type system,
+contained a meta-data system much like the OpenACS 5.2.3rc1 object type system,
 but that's not relevant right now.)
 </p><p>
 The 3.x groups system, while very useful, was limited in few ways. The
@@ -48,10 +47,10 @@ and organizations: although the Sierra Club may be an organization
 member of Greenpeace, its members are not necessarily members of
 Greenpeace.
 </p><p>
-OpenACS 5.2.3b1 solves both of these modeling problems by introducing a new
+OpenACS 5.2.3rc1 solves both of these modeling problems by introducing a new
 abstraction called a <span class="emphasis"><em>party</em></span>. Parties have a recursive
 definition, and we can illustrate how it works with the following
-simplified data model. First, we define the <tt class="computeroutput">parties</tt>
+simplified data model. First, we define the <code class="computeroutput">parties</code>
 table, where each party has an email address and a URL for contact
 information.
 </p><pre class="programlisting">
@@ -79,9 +78,9 @@ create table persons (
 )
 
 </pre><p>
-The <tt class="computeroutput">users</tt> table is also defined in this data model as a
-subtype of <tt class="computeroutput">person</tt>. It contains many of the basic columns
-that the old OpenACS 3.x <tt class="computeroutput">users</tt> table contained.
+The <code class="computeroutput">users</code> table is also defined in this data model as a
+subtype of <code class="computeroutput">person</code>. It contains many of the basic columns
+that the old OpenACS 3.x <code class="computeroutput">users</code> table contained.
 </p><p>
 Finally, we define two relations, one for group <span class="emphasis"><em>membership</em></span> and
 one for group <span class="emphasis"><em>composition</em></span>.  The composition relation allows us
@@ -104,7 +103,7 @@ groups that were hard or impossible to model in 3.x.
 The full details of the groups data model is beyond the scope of this
 tutorial - I've just given you what you need to understand how
 permissions work. For further detail, you can look at <a href="parties.html">Parties in OpenACS 4</a> or <a href="groups-design.html">OpenACS 4 Groups Design</a>.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-permissions"></a>Permissions</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-permissions"></a>Permissions</h3></div></div></div><p>
   NOTE: Much more detailed information about the permissions system
   and how to use it is available in the
   <a href="permissions-tediously-explained.html">OpenACS Permissions Tediously Explained</a> document.
@@ -114,18 +113,18 @@ is a mapping between <span class="emphasis"><em>privileges</em></span>, parties 
 already know what parties and objects are, but we don't know what
 privileges are.
 </p><p>
-In OpenACS 5.2.3b1, a privilege models the right to perform some operation on
+In OpenACS 5.2.3rc1, a privilege models the right to perform some operation on
 some object. They are the basic units out of which we build access
 control policies.  For example, in the Unix filesystem we typically
 implement access control by granting users some combination of
-read. write or execute privileges on files and directories. In OpenACS 5.2.3b1,
+read. write or execute privileges on files and directories. In OpenACS 5.2.3rc1,
 the table of privileges is organized hierarchically so that developers
 can define privileges that aggregate some set of privileges
 together. For example, if we have read, write, create and delete
 privileges, it might be convenient to combine them into a new privilege
-called &quot;admin&quot;. Then if we grant a user this privilege she is
+called "admin". Then if we grant a user this privilege she is
 automatically granted all the child privileges that the privilege
-contains. The OpenACS 5.2.3b1 kernel data model actually defines these
+contains. The OpenACS 5.2.3rc1 kernel data model actually defines these
 privileges as follows:
 </p><pre class="programlisting">
 
@@ -147,7 +146,7 @@ end;
 </pre><p>
 To give a user permission to perform a particular operation on a
 particular object you call
-<tt class="computeroutput">acs_permission.grant_permission</tt> like this:
+<code class="computeroutput">acs_permission.grant_permission</code> like this:
 
  </p><pre class="programlisting">
 
@@ -164,12 +163,12 @@ in a system. But it would be tedious to explicitly attach permissions
 to every object individually: in many cases, we'd prefer controlling
 permissions to large groups of objects in the site, all at once. We
 use contexts to achieve this goal.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-object-context"></a>Object Context</h3></div></div><div></div></div><p>
-In OpenACS 5.2.3b1, an object context is a generalization of the scoping
-mechanism introduced in OpenACS 3.x.  &quot;Scoping&quot; and &quot;scope&quot; are terms best
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-object-context"></a>Object Context</h3></div></div></div><p>
+In OpenACS 5.2.3rc1, an object context is a generalization of the scoping
+mechanism introduced in OpenACS 3.x.  "Scoping" and "scope" are terms best
 explained by example: consider some hypothetical rows in the
-<tt class="computeroutput">address_book</tt> table:
-</p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col><col></colgroup><thead><tr><th>...</th><th><tt class="computeroutput">scope</tt></th><th><tt class="computeroutput">user_id</tt></th><th><tt class="computeroutput">group_id</tt></th><th>...</th></tr></thead><tbody><tr><td>...</td><td><tt class="computeroutput">user</tt></td><td><tt class="computeroutput">123</tt></td><td> </td><td>...</td></tr><tr><td>...</td><td><tt class="computeroutput">group</tt></td><td> </td><td><tt class="computeroutput">456</tt></td><td>...</td></tr><tr><td>...</td><td><tt class="computeroutput">public</tt></td><td> </td><td> </td><td>...</td></tr></tbody></table></div><p>
+<code class="computeroutput">address_book</code> table:
+</p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col><col></colgroup><thead><tr><th>...</th><th><code class="computeroutput">scope</code></th><th><code class="computeroutput">user_id</code></th><th><code class="computeroutput">group_id</code></th><th>...</th></tr></thead><tbody><tr><td>...</td><td><code class="computeroutput">user</code></td><td><code class="computeroutput">123</code></td><td> </td><td>...</td></tr><tr><td>...</td><td><code class="computeroutput">group</code></td><td> </td><td><code class="computeroutput">456</code></td><td>...</td></tr><tr><td>...</td><td><code class="computeroutput">public</code></td><td> </td><td> </td><td>...</td></tr></tbody></table></div><p>
 The first row represents an entry in User 123's personal address book,
 the second row represents an entry in User Group 456's shared address
 book, and the third row represents an entry in the site's public
@@ -180,26 +179,26 @@ which a given object belongs, where each context is <span class="emphasis"><em>e
 person <span class="emphasis"><em>or</em></span> a group of people <span class="emphasis"><em>or</em></span> the general public
 (itself a group of people).
 </p><p>
-In OpenACS 5.2.3b1, rather than breaking the world into a limited set of scopes,
+In OpenACS 5.2.3rc1, rather than breaking the world into a limited set of scopes,
 every object lives in a single <span class="emphasis"><em>context</em></span>.  A context is just an
 another object that represents the security domain to which the object
 belongs. By convention, if an object A doesn't have any permissions
 explicitly attached to it, then the system will look at the
-<tt class="computeroutput">context_id</tt> column in <tt class="computeroutput">acs_objects</tt> and check
+<code class="computeroutput">context_id</code> column in <code class="computeroutput">acs_objects</code> and check
 the context object there for permissions. Two things control the scope
 of this search: the structure of the context hierarchy itself, and the
-value of the <tt class="computeroutput">security_inherit_p</tt> flag in each object. If
-this flag is set to <tt class="computeroutput">'t'</tt>, then the automatic search
+value of the <code class="computeroutput">security_inherit_p</code> flag in each object. If
+this flag is set to <code class="computeroutput">'t'</code>, then the automatic search
 through the context happens, otherwise it does not. You might set this
-field to <tt class="computeroutput">'f'</tt> if you want to override the default
+field to <code class="computeroutput">'f'</code> if you want to override the default
 permissions in a subtree of some context.
 </p><p> A good example of how to use this hierarchy is in the forums
 application. With only row-level permissions it is not obvious how to
 reasonably initialize the access control list when creating a
 message. At best, we have to explicitly grant various read and write
-privileges whenever we create a message, which is tedious.  In OpenACS 5.2.3b1,
+privileges whenever we create a message, which is tedious.  In OpenACS 5.2.3rc1,
 a reasonable thing to do is to create an object representing a forum,
-and point the <tt class="computeroutput">context_id</tt> field of a new message at the
+and point the <code class="computeroutput">context_id</code> field of a new message at the
 forum. Then, suppose we grant every user in the system read-access to
 this forum. By default, they will automatically have read-access to
 the new message we just inserted, since the system automatically
@@ -211,32 +210,32 @@ This mechanism allows developers and administrators to define a
 hierarchy that matches the structure they need for access control in
 their application.  The following picture shows a typical context
 hierarchy for a hypothetical site:
-</p><div class="blockquote"><blockquote class="blockquote"><div><img src="../images/context-hierarchy.gif"></div></blockquote></div><p>
+</p><div class="blockquote"><blockquote class="blockquote"><div><img src="images/context-hierarchy.gif"></div></blockquote></div><p>
 A few things to note here. First, the top two contexts in the picture
-are &quot;magic&quot; in some sense because they are created by default by OpenACS
-for a specific purpose. The object <tt class="computeroutput">default_context</tt>
+are "magic" in some sense because they are created by default by OpenACS
+for a specific purpose. The object <code class="computeroutput">default_context</code>
 represents the root of the context hierarchy for the entire site. All
 permission searches walk up the tree to this point and then stop. If
 you grant permissions on this object, then by default those
 permissions will hold for every object in the system, regardless of
 which subsite they happen to live in. The object
-<tt class="computeroutput">security_context_root</tt> has a slightly different role. If
+<code class="computeroutput">security_context_root</code> has a slightly different role. If
 some object has no permissions attached to it, and its value for
-<tt class="computeroutput">security_inherit_p</tt> is <tt class="computeroutput">'f'</tt>, or
-<tt class="computeroutput">context_id</tt> is null, then we use this context by default.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-example"></a>Example</h3></div></div><div></div></div><p>
+<code class="computeroutput">security_inherit_p</code> is <code class="computeroutput">'f'</code>, or
+<code class="computeroutput">context_id</code> is null, then we use this context by default.
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-example"></a>Example</h3></div></div></div><p>
 At this point, you should either go and download the Notes example
 code from the package repository, or check it out of the OpenACS CVS
 repository and add it to your server. The package is called
-&quot;notes&quot;. To check it out from CVS, read the <a href="http://openacs.org/4/checkout" target="_top">these instructions</a>
+"notes". To check it out from CVS, read the <a href="http://openacs.org/4/checkout" target="_top">these instructions</a>
 on how to use anonymous checkouts and then
-checkout the module <tt class="computeroutput">notes</tt>:
+checkout the module <code class="computeroutput">notes</code>:
 </p><p>The notes code has been modified since this document was written so it is now out of date.  See <a href="http://openacs.org/forums/message-view?message_id=121807" target="_top">this forum thread</a>.</p><pre class="programlisting">% export CVSROOT=:pserver:anonymous@cvs.openacs.org:/cvsroot
 % cvs login # just hit enter when prompted for a password
 % cvs co notes
 </pre><p>
 After you have downloaded the package, look at the
-<tt class="computeroutput">index.tcl</tt> page in the <tt class="computeroutput">www</tt> directory. You can also
+<code class="computeroutput">index.tcl</code> page in the <code class="computeroutput">www</code> directory. You can also
 look at the code <a href="http://cvs.openacs.org/cvs/openacs-4/packages/notes/www/index.tcl?view=markup" target="_top">in your browser</a>. The code should look something like this:
 </p><pre class="programlisting">
 
@@ -288,8 +287,8 @@ ad_return_template
 
 </pre><p>
 This example shows both the Tcl and PL/SQL APIs for checking
-permissions.  The Tcl proc <tt class="computeroutput">permission::permission_p</tt> and the PL/SQL
-function <tt class="computeroutput">acs_permission.permission_p</tt> both return a flag
+permissions.  The Tcl proc <code class="computeroutput">permission::permission_p</code> and the PL/SQL
+function <code class="computeroutput">acs_permission.permission_p</code> both return a flag
 indicating whether the current user has permission to perform the
 given action. By default, the Tcl procedure extracts the user_id out
 of the request environment, while the SQL procedure takes it as an
@@ -305,9 +304,9 @@ privileges. Also, the WHERE clause of the query ensures that we only
 see notes that we are allowed to see.
 </p><p>
 Next, look at the <a href="http://cvs.openacs.org/cvs/openacs-4/packages/notes/www/index.adp?view=markup" target="_top">index.adp</a>. It is pretty complicated.
-The main part of this page uses a <tt class="computeroutput">multiple</tt> template
+The main part of this page uses a <code class="computeroutput">multiple</code> template
 tag. If you want to experiment, you can replace the main body of the
-<tt class="computeroutput">multiple</tt> tag with this:
+<code class="computeroutput">multiple</code> tag with this:
 </p><pre class="programlisting">
 
 &lt;multiple name=notes&gt;
@@ -330,7 +329,7 @@ Now put the more complex code back. You'll notice a lot of stuff like this:
 </pre><p>
 This displays the title of the note as either a link or plain text
 depending on whether or not we have write privileges on the object.
-The <tt class="computeroutput">if</tt> tag is something that the OpenACS 5.2.3b1 template system
+The <code class="computeroutput">if</code> tag is something that the OpenACS 5.2.3rc1 template system
 defines for you to support conditional presentation. The <a href="/doc/acs-templating/developer-guide.html" target="_top">templates developer guide</a> provides more information about this.
 </p><p>
 If you study the rest of the system, you will also notice that the
@@ -343,8 +342,8 @@ appropriately. In a more advanced version of the application, we could
 implement a user interface that allowed the user to explicitly attach
 permissions to notes that she wanted to make public or whatever. But
 that's beyond the scope of this example.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-summary"></a>Summary</h3></div></div><div></div></div><p>
-OpenACS 5.2.3b1 defines three separate mechanisms for specifying access control
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-summary"></a>Summary</h3></div></div></div><p>
+OpenACS 5.2.3rc1 defines three separate mechanisms for specifying access control
 in applications. The Groups data model allows you to define 
 hierarchical organizations of users and groups of users. The Permissions
 data model allows you to define a hierarchy of user rights. Finally,

@@ -1,6 +1,6 @@
 <?xml version='1.0' ?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
@@ -20,7 +20,9 @@
     <listitem>
       <formalpara id="install-postgres-mac">
         <title>Special notes for Mac OS X</title>
-        <para>If you are running Mac OS X prior to 10.3, you should be able to install and use PostGreSQL 7.3.x.  Mac OS X 10.3 requires PostGreSQL 7.4.</para>
+        <para>If you are running Mac OS X prior to 10.3, you should be
+        able to install and use PostGreSQL 7.3.x.  Mac OS X 10.3
+        requires PostGreSQL 7.4. </para>
       </formalpara>
     </listitem>
     <listitem>
@@ -512,13 +514,31 @@ Starting PostgreSQL: ok
 root:~ # </screen>
         </listitem>
         <listitem>
-          <para>Mac OS X:</para>
+          <para>Mac OS X 10.3:</para>
           <orderedlist>
             <listitem>
               <para>Install the startup script:</para>
               <screen><userinput>cd /System/Library/StartupItems/</userinput>
 <userinput>tar xfz /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-core-docs/www/files/osx-postgres-startup-item.tgz</userinput>
 </screen>
+            </listitem>
+          </orderedlist>
+        </listitem>
+        <listitem>
+          <para>Mac OS X 10.4 can use Launchd:</para>
+          <orderedlist>
+            <listitem>
+              <para>Install the startup script:</para>
+              <screen><userinput>cd /Library/LaunchDaemons</userinput>
+<userinput>cp
+/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-core-docs/www/files/osx-postgres-launchd-item.txt
+org.postgresql.PostgreSQL.plist</userinput>
+</screen>
+    <para>If postgres does not start automatically on reboot, see what
+    error you get when manually starting it with:</para>
+  <screen>
+$ <userinput>sudo launchctl load /Library/LaunchDaemons/org.postgresql.PostgreSQL.plist</userinput>
+$ <userinput>sudo launchctl start org.postgresql.PostgreSQL</userinput></screen>
             </listitem>
           </orderedlist>
         </listitem>

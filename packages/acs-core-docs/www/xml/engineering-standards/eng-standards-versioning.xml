@@ -1,6 +1,6 @@
 <?xml version='1.0' ?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
@@ -8,14 +8,17 @@
 <title>Release Version Numbering</title>
  
 <authorblurb>
-<para>By Ron Henderson</para>
-<para>Revised by Joel Aufrecht</para>
+<para><phrase role="cvstag">($Id$)</phrase></para>
+
+<para>By Ron Henderson, Revised by Joel Aufrecht</para>
 </authorblurb>
 
-<para> 
+<para>
+
 OpenACS version numbers help identify at a high-level what is in a
-particular release and what has changed since the last release. A
-"version number" is really just a string of the form:
+particular release and what has changed since the last release. 
+</para>
+<para>A "version number" is really just a string of the form:
 </para>
 
 <blockquote>
@@ -196,7 +199,9 @@ acs-kernel on 5.1.0 you wouldn't want a file upgrade-5.0.4-5.1.0d1.sql since if 
 </para>
       </listitem>
     </orderedlist>
+
+
   </sect2>
-<para><phrase role="cvstag">($Id$)</phrase></para>
+
 </sect1>
 

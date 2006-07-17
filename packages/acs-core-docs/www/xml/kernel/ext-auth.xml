@@ -1,6 +1,6 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
@@ -96,6 +96,7 @@ parts. Each has a section below.</para>
   <title>New API</title>
     <segmentedlist>
       <?dbhtml list-presentation="req-table"?>
+       <segtitle>New API</segtitle>
         <seglistitem>
           <seg>EXT-AUTH-01</seg>
           <seg>A</seg>
@@ -122,6 +123,7 @@ parts. Each has a section below.</para>
     <sect3 id="Login"><title>Login</title>
       <segmentedlist>
         <?dbhtml list-presentation="req-table"?>
+      <segtitle>Login</segtitle>
         <seglistitem>
           <seg>EXT-AUTH-04</seg>
           <seg>A</seg>
@@ -188,6 +190,7 @@ authority drop-down element at all.</para>
 
     <sect3 id="Configuratio"><title>Configuration</title>
       <segmentedlist>
+        <segtitle>Configuration</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-07</seg>
@@ -219,6 +222,7 @@ authentication process from a page linked under /acs-admin.</para>
     
 
       <segmentedlist>
+        <segtitle>create service contract</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-16</seg>
@@ -238,6 +242,7 @@ authentication process from a page linked under /acs-admin.</para>
       </segmentedlist>
       
       <segmentedlist>
+          <segtitle> </segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-18</seg>
@@ -299,6 +304,7 @@ implemetned using a service contract.</para>
     <sect3 id="Synchronizing_and_Linking_User"><title>Synchronizing
 and Linking Users</title>
       <segmentedlist>
+        <segtitle>Synchronizing and linking users</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-28</seg>
@@ -369,6 +375,7 @@ have a problem if there was an email conflict between two accounts
 on the same authority. Hm. I don't think it's worth spending too much
 time trying to solve this problem through software.</para>
       <segmentedlist>
+        <segtitle>EXT-AUTH-31</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-31</seg>
@@ -452,6 +459,7 @@ desires to change password.</para>
     <sect3 id="Login_Pages_Over_HTTP"><title>Login Pages Over
 HTTPS</title>
       <segmentedlist>
+        <segtitle>EXT-AUTH-20</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-20</seg>
@@ -473,7 +481,7 @@ and at login.</para>
       <para>In both cases, it'll be handled by the driver sending
 automatically sending the email containing a link for the user to
 verify his account. Then the driver will return an account status
-of "closed,temporary", and a message that says ""Check your inbox
+of "closed,temporary", and a message that says "Check your inbox
 and click the link in the email".</para>
       <para>OpenACS will have a page which receives the email
 verification, for use by local accounts. Other authorities will
@@ -493,6 +501,7 @@ with this part of the codebase anyway.</para>
     <sect3 id="Recommended__Untrusted_Logins_and_Login_Leve"><title>Recommended:
 Untrusted Logins and Login Levels</title>
       <segmentedlist>
+        <segtitle>EXT-AUTH-33</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-33</seg>
@@ -553,6 +562,7 @@ before.</para>
     <sect3 id="Recommended__Make_Non-Persistent_Login_Wor"><title>Recommended:
 Make Non-Persistent Login Work</title>
       <segmentedlist>
+        <segtitle>EXT-AUTH-34</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-34</seg>
@@ -579,6 +589,7 @@ current session handling code.</para>
     <sect3 id="Recommended__Single-Sign-O"><title>Recommended:
 Single-Sign-On</title>
       <segmentedlist>
+        <segtitle>EXT-AUTH-23</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-23</seg>
@@ -599,6 +610,7 @@ redirection-based external authority.</para>
     <sect3 id="Recommended__Expire_All_Login"><title>Recommended:
 Expire All Logins</title>
       <segmentedlist>
+        <segtitle>EXT-AUTH-22</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-22</seg>
@@ -629,6 +641,7 @@ every 10 minutes or so.</para>
     <sect3 id="Recommended__Email_account_owner_on_password"><title>Recommended:
 Email account owner on password change</title>
       <segmentedlist>
+        <segtitle>EXT-AUTH-24</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-24</seg>
@@ -644,6 +657,7 @@ he/she is at least alerted to the fact.</para>
     <sect3 id="Optional__Password_polic"><title>Optional:
 Password policy</title>
       <segmentedlist>
+        <segtitle>EXT-AUTH-25</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-25</seg>
@@ -664,6 +678,7 @@ from 10 to at least 32 characters.</para>
     <sect3 id="Optional__Login_Without_Explicit_Domai"><title>Optional:
 Login Without Explicit Authority</title>
       <segmentedlist>
+        <segtitle>EXT-AUTH-26</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-26</seg>
@@ -711,9 +726,10 @@ if { ![auth::split_username -username_var username -authority_var authority] } {
 
     </sect3>
 
-    <sect3 id="Optional__Who's_Onlin"><title>Optional: Who's
-Online</title>
+
+    <sect3 id="Optional__Whois_Onlin"><title>Optional: Who's Online</title>
       <segmentedlist>
+        <segtitle>EXT-AUTH-27</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-27</seg>
@@ -741,6 +757,7 @@ quite finished the work and put it back into the tree.</para>
     <sect3 id="Optional__Subsite-level_configuratio"><title>Optional:
 Subsite-level configuration</title>
       <segmentedlist>
+        <segtitle>EXT-AUTH-28</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-28</seg>
@@ -759,6 +776,7 @@ it, someone who'd need it.</para>
     <sect3 id="Future__Making_the_Authentication_API_itself"><title>Future:
 Making the Authentication API itself a service contract</title>
       <segmentedlist>
+        <segtitle>EXT-AUTH-32</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-32</seg>
@@ -792,6 +810,7 @@ service contract.</para>
     <sect3 id="Future__Authenticating_against_multiple_serv"><title>Future:
 Authenticating against multiple servers simultaneously</title>
       <segmentedlist>
+        <segtitle>EXT-AUTH-36</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-36</seg>
@@ -820,6 +839,7 @@ they're there.</para>
       <title>Implement
 Specific Drivers</title>
       <segmentedlist>
+        <segtitle>Implement specific drivers</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-09</seg>

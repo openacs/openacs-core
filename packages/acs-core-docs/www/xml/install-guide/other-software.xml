@@ -1,6 +1,6 @@
 <?xml version='1.0' ?>
-<!DOCTYPE appendix PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE appendix PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
@@ -714,7 +714,7 @@ where it says
       </authorblurb>
       <para>OpenFTS and tsearch1 use is deprecated in favor of
       Tsearch2. See 
-      <xref linkend="install-full-text-search-tsearch2">Tsearch2</xref>. Tsearch2 is much easier to install, requiring only
+      <xref linkend="install-full-text-search-tsearch2"></xref>. Tsearch2 is much easier to install, requiring only
       compilation of one module from PostgreSQL contrib, with an
       automated install process using the tsearch2-driver package.</para>
       
@@ -1147,9 +1147,9 @@ ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
       
       <para>This section is work in progress. It will detail how you can install Squirrelmail as a webmail frontend for OpenACS, thereby neglecting the need to have a seperate webmail package within OpenACS</para>
       <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]# <userinput>cd www</userinput>
-[$OPENACS_SERVICE_NAME www]# <userinput>wget http://cesnet.dl.sourceforge.net/sourceforge/squirrelmail/squirrelmail-1.4.2.tar.gz</userinput>
-[$OPENACS_SERVICE_NAME www]# <userinput>tar xfz squirrelmail-1.4.2.tar.gz</userinput>
-[$OPENACS_SERVICE_NAME www]# <userinput>mv squirrelmail-1.4.2 mail</userinput>
+[$OPENACS_SERVICE_NAME www]# <userinput>wget http://cesnet.dl.sourceforge.net/sourceforge/squirrelmail/squirrelmail-1.4.4.tar.gz</userinput>
+[$OPENACS_SERVICE_NAME www]# <userinput>tar xfz squirrelmail-1.4.4.tar.gz</userinput>
+[$OPENACS_SERVICE_NAME www]# <userinput>mv squirrelmail-1.4.4 mail</userinput>
 [$OPENACS_SERVICE_NAME www]# <userinput>cd mail/config</userinput>
 [$OPENACS_SERVICE_NAME www]# <userinput>./conf.pl</userinput>
       </screen>
@@ -1189,12 +1189,22 @@ make install INST=/usr/local/aolserver
           </formalpara>
           <para>To enable ns_pam in AOLServer you will first have to edit your config.tcl file and enable the loading of the ns_pam module and configure the aolservers pam configuration file.</para>
           <itemizedlist>
-            <listitem>Change <emphasis>config.tcl</emphasis>. Remove the <emphasis>#</emphasis> in front of <computeroutput>ns_param nspam ${bindir}/nspam.so</computeroutput> to enable the loading of the ns_pam module.</listitem>
-            <listitem>Change <emphasis>config.tcl</emphasis>. Replace <computeroutput>pam_domain</computeroutput> in the section <computeroutput>ns/server/${server}/module/nspam</computeroutput> with <userinput>aolserver</userinput></listitem>
-            <listitem>Create <emphasis>/etc/pam.d/aolserver</emphasis>.
+            <listitem><para>
+               Change <emphasis>config.tcl</emphasis>. Remove the
+      <emphasis>#</emphasis> in front of <computeroutput>ns_param
+      nspam ${bindir}/nspam.so</computeroutput> to enable the loading
+      of the ns_pam module.
+            </para></listitem>
+            <listitem><para>
+              Change <emphasis>config.tcl</emphasis>. Replace
+      <computeroutput>pam_domain</computeroutput> in the section
+      <computeroutput>ns/server/${server}/module/nspam</computeroutput>
+      with <userinput>aolserver</userinput>
+            </para></listitem>
+            <listitem><para>Create <emphasis>/etc/pam.d/aolserver</emphasis>.
             <screen>
               [root ns_pam]#<userinput>cp /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/pam-aolserver.txt /etc/pam.d/aolserver</userinput>
-            </screen>
+            </screen></para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -1277,17 +1287,19 @@ make install LDAP=/usr/local/openldap INST=/usr/local/aolserver
         <listitem id="configure-ns_ldap">
           <formalpara>
             <title>Configure ns_ldap for traditional use</title>
-          </formalpara>
           <para>Traditionally OpenACS has supported ns_ldap for authentification by storing the OpenACS password in an encrypted field within the LDAP server called "userPassword". Furthermore a CN field was used for searching for the username, usually userID or something similar. This field is identical to the <emphasis>username</emphasis>stored in OpenACS. Therefore the login will only work if you change login method to make use of the username instead.</para>  
+          </formalpara>
           <itemizedlist>
-            <listitem>Change <emphasis>config.tcl</emphasis>. Remove the <emphasis>#</emphasis> in front of <computeroutput>ns_param nsldap ${bindir}/nsldap.so</computeroutput> to enable the loading of the ns_ldap module.</listitem>
+            <listitem><para>
+              Change <emphasis>config.tcl</emphasis>. Remove the <emphasis>#</emphasis> in front of <computeroutput>ns_param nsldap ${bindir}/nsldap.so</computeroutput> to enable the loading of the ns_ldap module.
+            </para></listitem>
           </itemizedlist>
         </listitem>
         <listitem id="configure-ns_ldap-bind">
           <formalpara>
             <title>Configure ns_ldap for use with LDAP bind</title>
-          </formalpara>
           <para>LDAP authentication usually is done by trying to bind (aka. login) a user with the LDAP server. The password of the user is not stored in any field of the LDAP server, but kept internally. The latest version of ns_ldap supports this method with the <emphasis>ns_ldap bind</emphasis> command. All you have to do to enable this is to configure auth_ldap to make use of the BIND authentification instead. Alternatively you can write a small script on how to calculate the username out of the given input (e.g. if the OpenACS username is malte.fb03.tu, the LDAP request can be translated into "ou=malte,ou=fb03,o=tu" (this example is encoded in auth_ldap and you just have to comment it out to make use of it).</para>
+          </formalpara>
         </listitem>
       </orderedlist>
     </sect1>

@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!-- Global variables are defined in variables.ent -->
 <!ENTITY % myvars SYSTEM "variables.ent">
 %myvars;
@@ -35,14 +35,14 @@
           has packages for user/groups management, content
           management, e-commerce, news, FAQs, calendar, forums, bug
           tracking, full-text searching, and <ulink
-	    url="http://openacs.org/packages/">much
-	    more</ulink>.
+            url="http://openacs.org/packages/">much
+            more</ulink>.
         </para>
 
 
         <para>
           OpenACS relies on <ulink
-	    url="http://www.aolserver.com/">AOLserver</ulink>, the
+            url="http://www.aolserver.com/">AOLserver</ulink>, the
           free, multithreaded, scalable, Tcl-enabled,
           web/application server used by America Online for most of
           its web sites, and a true ACID-compliant Relational
@@ -56,12 +56,12 @@
           The OpenACS toolkit is derived from the ArsDigita
           Community System (ACS). ArsDigita (now part of Red Hat,
           Inc.) kindly made their work available under the <ulink
-	    url="http://www.gnu.org/licenses/gpl.txt">GPL</ulink>,
+            url="http://www.gnu.org/licenses/gpl.txt">GPL</ulink>,
           making all of this possible.
         </para>
 
-	<para>
-	  The OpenACS project was born when Don Baccus, Ben Adida, and
+        <para>
+          The OpenACS project was born when Don Baccus, Ben Adida, and
           others decided to port ACS from Oracle to PostgreSQL, thus
           making it a fully open-source solution.  With OpenACS 4,
           Oracle and PostgreSQL support were combined in one code base
@@ -78,7 +78,7 @@
           project.  Formal, consensus driven governance has been
           established (with semi-annual elections) which ensures the
           project serves the needs of it's constituents.
-	</para>
+        </para>
 
         <para>
           The OpenACS community would like to hear your comments and
@@ -106,8 +106,8 @@
     <xi:include href="install-guide/overview.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>Overview Section Missing</xi:fallback>
     </xi:include>
-
-<!--    <xi:include href="install-guide/quick.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+<!--
+    <xi:include href="install-guide/quick.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback><para>Quick Guide Missing</para></xi:fallback>
     </xi:include>
 -->
@@ -250,9 +250,10 @@
     <chapter id="eng-standards">
       <title>Engineering Standards</title>
 
-      <xi:include href="engineering-standards/style-guide.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+       <xi:include href="engineering-standards/style-guide.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
+ 
       <xi:include href="engineering-standards/cvs.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
@@ -274,11 +275,8 @@
       <xi:include href="engineering-standards/auto-testing.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
-    </chapter>
 
-    <xi:include href="engineering-standards/cvs.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-      <xi:fallback>Section missing</xi:fallback>
-    </xi:include>
+    </chapter>
 
     <chapter id="doc-standards">
       <title>Documentation Standards</title>
@@ -317,42 +315,42 @@
       <sect1 id="kernel-overview">
         <title>Overview</title>
 
-	<itemizedlist>
-	  <listitem>
+        <itemizedlist>
+          <listitem>
             <para>
               The <emphasis>OpenACS Kernel</emphasis>, which
-	      handles system-wide necessities such as metadata,
-	      security, users and groups, subsites, and package
-	      management and deployment.
-	    </para>
+              handles system-wide necessities such as metadata,
+              security, users and groups, subsites, and package
+              management and deployment.
+            </para>
           </listitem>
-	  <listitem>
+          <listitem>
             <para>
               The <emphasis>OpenACS Core</emphasis>, which
-	      comprises all the other packages that ship with the
-	      kernel and are most frequently needed by users, such as
-	      templating, forums, and user
-	      registration/management. The packages tend to be
-	      developed and distributed with the kernel.
-	    </para>
+              comprises all the other packages that ship with the
+              kernel and are most frequently needed by users, such as
+              templating, forums, and user
+              registration/management. The packages tend to be
+              developed and distributed with the kernel.
+            </para>
           </listitem>
-	  <listitem>
+          <listitem>
             <para>
 
               <emphasis>OpenACS Application packages</emphasis>,
               which typically provide user-level
-	      web services built on top of the Kernel and Core.
-	      Application packages are
-	      developed separately from the Kernel, and are typically
-	      released independently of it.
+              web services built on top of the Kernel and Core.
+              Application packages are
+              developed separately from the Kernel, and are typically
+              released independently of it.
 
-	    </para>
+            </para>
           </listitem>
-	</itemizedlist>
-	<para>
-	  This document provides a high level overview of the kernel
-	  package. <ulink url="index.html">Documentation for other packages on this server</ulink>
-	</para>
+        </itemizedlist>
+        <para>
+          This document provides a high level overview of the kernel
+          package. <ulink url="index.html">Documentation for other packages on this server</ulink>
+        </para>
       </sect1>
 
       <xi:include href="kernel/object-system-req.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
@@ -421,5 +419,5 @@
     </xi:include>
 
   </part>
-<index/>
+<index></index>
 </book>

@@ -1,6 +1,6 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
@@ -677,13 +677,13 @@ created.
 status of a package, or all packages, with a single click.
 </para></listitem>
 
-<listitem><para><emphasis role="strong">4.200.0 Compound Package Construction</emphasis> </para>
+<listitem><para><emphasis role="strong">4.400.0 Compound Package Construction</emphasis> </para>
 
-<para><emphasis role="strong">4.200.1</emphasis> The developer can include .APM packages
+<para><emphasis role="strong">4.400.1</emphasis> The developer can include .APM packages
 (sub-packages) within a package (the compound package) like any other
 file.</para>
 
-<para><emphasis role="strong">4.200.5</emphasis> The recommended usage for this feature is to
+<para><emphasis role="strong">4.400.5</emphasis> The recommended usage for this feature is to
 allow for separation of optional and required components from the
 installation as well as better organization of files once installed. For
 example, all documentation for the community-core can be packages as
@@ -692,7 +692,7 @@ dependencies that are not satisfied by the packages in the compound package,
 but this is discouraged. In such a case, the sub-package should really be a
 separate package that is required by the compound package.</para>
 
-<para><emphasis role="strong">4.200.10</emphasis> If a sub-package is required for the
+<para><emphasis role="strong">4.400.10</emphasis> If a sub-package is required for the
 installation of the compound package, the compound package should have a
 registered dependency on the sub-package.</para>
 </listitem>
@@ -730,7 +730,7 @@ downloads the APM file off the web, proceeds with a file based installation,
 and then optionally removes the .APM file just downloaded.</para>
 
 <para><emphasis role="strong">90.10.1</emphasis> If .APM files are present in a package, then it
-is considered a compound package (use 4.210.0).</para>
+is considered a compound package (use 4.410.0).</para>
 
 <para><emphasis role="strong">90.15.0</emphasis> Installation requires these steps:</para>
 
@@ -755,42 +755,42 @@ the package is enabled.</para></listitem>
 
 </listitem>
 
-<listitem><para><emphasis role="strong">4.210.0 Compound package Install</emphasis> </para>
+<listitem><para><emphasis role="strong">4.410.0 Compound package Install</emphasis> </para>
 
-<para><emphasis role="strong">4.210.1</emphasis> If .APM files are present in a package, then it
+<para><emphasis role="strong">4.410.1</emphasis> If .APM files are present in a package, then it
 is considered a compound package.</para>
 
-<para><emphasis role="strong">4.210.5.0</emphasis> Installation of a compound package proceeds
+<para><emphasis role="strong">4.410.5.0</emphasis> Installation of a compound package proceeds
 according to the following sequence:</para>
 
 
 
 <orderedlist>
-<listitem><para><emphasis role="strong">4.210.5.1</emphasis> Identify the set of all sub-packages within
+<listitem><para><emphasis role="strong">4.410.5.1</emphasis> Identify the set of all sub-packages within
 the compound package by scanning for all files with .APM.</para></listitem>
 
-<listitem><para><emphasis role="strong">4.210.5.2</emphasis> Identify which sub-packages are required by
+<listitem><para><emphasis role="strong">4.410.5.2</emphasis> Identify which sub-packages are required by
 checking the dependencies of the compound package. If there dependencies not
 satisfied by the current system or the packages included with the compound
 package, halt installation and inform user to install these packages
 first.</para></listitem>
 
-<listitem><para><emphasis role="strong">4.210.5.3</emphasis> Present Administrator with the ability to
+<listitem><para><emphasis role="strong">4.410.5.3</emphasis> Present Administrator with the ability to
 choose which sub-packages to install. Required sub-packages must be
 installed.</para></listitem>
 
-<listitem><para><emphasis role="strong">4.210.5.4</emphasis> Proceed with the installation of each
+<listitem><para><emphasis role="strong">4.410.5.4</emphasis> Proceed with the installation of each
 sub-package, starting with required packages. If the sub-package is already
 installed, then do nothing. Else, If the sub-package is a normal package,
 proceed according to <emphasis role="strong">90.15.0</emphasis>, otherwise if it is a compound
-package, proceed according to <emphasis role="strong">4.210.5.0</emphasis>.</para></listitem>
+package, proceed according to <emphasis role="strong">4.410.5.0</emphasis>.</para></listitem>
 
-<listitem><para><emphasis role="strong">4.210.5.5</emphasis> If all required sub-packages are installed,
+<listitem><para><emphasis role="strong">4.410.5.5</emphasis> If all required sub-packages are installed,
 proceed to install non-required sub-packages. If there was a failure during
 the installation of a required sub-package, then the installation of the
 compound package is also a failure.</para></listitem>
 
-<listitem><para><emphasis role="strong">4.210.5.6</emphasis> Any attempt to install a compound package in
+<listitem><para><emphasis role="strong">4.410.5.6</emphasis> Any attempt to install a compound package in
 the future involves a choice presented to the admin of installing any
 uninstalled sub-packages.</para></listitem>
 </orderedlist>
@@ -798,10 +798,10 @@ uninstalled sub-packages.</para></listitem>
 
 </listitem>
 
-<listitem><para><emphasis role="strong">4.220.0 Recovering from failed package installation</emphasis></para>
+<listitem><para><emphasis role="strong">4.420.0 Recovering from failed package installation</emphasis></para>
 
 
-<para><emphasis role="strong">4.220.1</emphasis> If any error is generated during package
+<para><emphasis role="strong">4.420.1</emphasis> If any error is generated during package
 installation, the package is not considered installed. To recover from this
 failure, the package should be selected for installation again.</para>
 </listitem>

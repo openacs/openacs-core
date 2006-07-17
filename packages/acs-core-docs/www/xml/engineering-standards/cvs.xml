@@ -1,21 +1,22 @@
 <?xml version='1.0' ?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-<chapter id="cvs-guidelines">
+<sect1 id="cvs-guidelines">
   <title>
     CVS Guidelines
   </title>
-  <authorblurb>
-    <para>
+<authorblurb>
+    <para><phrase role="cvstag">($Id$)</phrase></para>
+   <para>
       By Joel Aufrecht with input from Jeff Davis, Branimir Dolicki, and Jade Rubick.
     </para>
-  </authorblurb>
-  <sect1 id="using-cvs-with-openacs">
+</authorblurb>
+  <sect2 id="using-cvs-with-openacs">
     <title>Using CVS with OpenACS</title>
-    <sect2>
+    <sect3>
       <title>Getting Started</title>
       <para>
         All OpenACS code is available anonymously.  To get code
@@ -95,9 +96,9 @@ emacs avail</action></screen>
         <para>into your <computeroutput>~/.ssh/config</computeroutput> file, then you can use <computeroutput>-d :ext:cvs-server:/cvsroot</computeroutput> instead of <computeroutput>-d :ext:cvs.openacs.org:/cvsroot</computeroutput>.  You can then change the definition of <computeroutput>cvs-server</computeroutput> by changing one file instead of editing hundreds of <computeroutput>CVSROOT/Repository</computeroutput> files.</para>
       </sidebar>
 
-    </sect2>
+    </sect3>
 
-    <sect2>
+    <sect3>
       <title>Checkout for Package Development</title>
       <para>If you are actively developing a non-core package, you
       should work from the latest core release branch.  Currently this
@@ -126,9 +127,9 @@ cvs up -d <replaceable>packagename</replaceable></action></screen>
             maintainers and status</ulink> for a list of available
             packages and their current state.
       </para>
-    </sect2>
+    </sect3>
 
-    <sect2>
+    <sect3>
       <title>Checkout for Core Development</title>
       <para>If you are actively developing packages in the OpenACS
       Core, work from the HEAD branch.  HEAD is used for active
@@ -142,9 +143,9 @@ cvs up -d <replaceable>packagename</replaceable></action></screen>
       <screen><action>cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</action></screen>
       <para>To check out HEAD anonymously:</para>
       <screen><action>cvs -d:pserver:anonymous@cvs.openacs.org:/cvsroot checkout acs-core</action></screen>
-    </sect2>
+    </sect3>
 
-    <sect2>
+    <sect3>
       <title>Checkout .LRN</title>
       <para>
         .LRN consists of a given version openacs core, plus a set of
@@ -160,20 +161,20 @@ mv openacs-4 dotlrn
 cd dotlrn/packages
 cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot checkout -r &releasebranch; dotlrn-all
 mv dotlrn/install.xml ..</action></screen>
-    </sect2>
-  <sect2 id="working-with-cvs">
+    </sect3>
+  <sect3 id="working-with-cvs">
     <title>Working with CVS</title>
     <para>
       Once you have a checkout you can use some commands to track
       what has changed since you checked out your copy.  <computeroutput>cvs -n update</computeroutput> does not change any files, but reports which changes have been updated or locally modified, or are not present in CVS.
     </para>
     <para>To update your files, use <computeroutput>cvs update</computeroutput>.  This will merge changes from the repository with your local files.  It has no effect on the cvs.openacs.org repository.</para>
-    </sect2>
-  </sect1>
+    </sect3>
+  </sect2>
 
-  <sect1 id="openacs-cvs-concepts">
+  <sect2 id="openacs-cvs-concepts">
     <title>OpenACS CVS Concepts</title>
-    <sect2>
+    <sect3>
       <title>Modules</title>
       <para>
         All OpenACS code resides within a single CVS module, <computeroutput>openacs-4</computeroutput>.  (The openacs-4 directory contains code for all versions of OpenACS 4 and later, and .LRN 1 and later.)   Checking out this module retrieves all openacs code of any type.  For convenience, subsets of <computeroutput>openacs-4</computeroutput> are repackaged as smaller modules.</para>
@@ -215,9 +216,9 @@ ref-timezones search</programlisting>
           Each OpenACS package (i.e., directory in <computeroutput>openacs-4/packages/</computeroutput>) is also aliased as a module of the same name.
         </para>
 
-    </sect2>
+    </sect3>
 
-    <sect2>
+    <sect3>
       <title>
         Tags and Branches
       </title>
@@ -282,10 +283,10 @@ ref-timezones search</programlisting>
           for development of core packages.</para>
         </listitem>
       </itemizedlist>
-    </sect2>
-  </sect1>
+    </sect3>
+  </sect2>
 
-  <sect1 id="contributing-code">
+  <sect2 id="contributing-code">
     <title>Contributing code back to OpenACS</title>
     <para>There are three main ways to contribute code to OpenACS:</para>
     <orderedlist>
@@ -378,7 +379,7 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
       </listitem>
     </orderedlist>
 
-  <sect2 id="Commit_Rules">
+  <sect3 id="Commit_Rules">
     <title>
       Rules for Committing Code to the OpenACS repository
     </title>
@@ -636,8 +637,8 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
         </para>
       </listitem>
     </orderedlist>
-  </sect2>
-  <sect2>
+  </sect3>
+  <sect3>
     <title>
       Informal Guidelines
     </title>
@@ -755,9 +756,9 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
       </listitem>
 
     </itemizedlist>
+  </sect3>
   </sect2>
-  </sect1>
-  <sect1 id="cvs-resources">
+  <sect2 id="cvs-resources">
     <title>Additional Resources for CVS</title>
     <itemizedlist>
       <listitem>
@@ -822,10 +823,10 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
           </para>
         </listitem>
       </itemizedlist>
-  </sect1>
-  <para>
-    <phrase role="cvstag">
-      ($Id$)
-    </phrase>
-  </para>
-</chapter>
+
+
+  </sect2>
+  
+</sect1>
+
+

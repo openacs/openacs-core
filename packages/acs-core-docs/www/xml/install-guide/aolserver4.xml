@@ -1,6 +1,6 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
@@ -116,7 +116,7 @@ make install
     <listitem id="aolserver4-modules-install">
       <formalpara>
         <title>Configure, compile and install the modules</title>
-        <para>
+          <para>
           <orderedlist>
             <listitem id="aolserver4-nscache-install">
               <para>Install nscache</para>
@@ -127,12 +127,12 @@ make install
               <para>Install nsoracle (if you want to use Oracle)</para>
               <screen>[root nscache]# <userinput>cd ../nsoracle</userinput>
 [root nsoracle]# <userinput>make install AOLSERVER=/usr/local/aolserver</userinput></screen>
-            </listitem>
+
             <para>OpenACS looks for the Oracle driver at
             /usr/local/aolserver/bin/ora8.so, but some versions of
             nsoracle may create nsoracle.so instead. In that case, you
-            can symlink (ln -s nsoracle.so ora8.so) to fix it. </para>
-
+            can symlink (<userinput>ln -s nsoracle.so ora8.so</userinput>) to fix it. </para>
+            </listitem>
             <listitem id="aolserver4-nspostgres-install">
               <para>Install nspostgres (if you want to use Postgres)</para>
               <screen>[root nscache]# <userinput>cd ../nspostgres</userinput>
@@ -183,7 +183,7 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
 [root unix]# <userinput>make install</userinput></screen>
             </listitem>
           </orderedlist>
-        </para>
+          </para>
       </formalpara>
     </listitem>
     <listitem id="aolserver4-db-wrapper">
@@ -191,13 +191,13 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
         <title>Add a database-specific wrapper script.</title>
 <para>This script
 	  sets database environment variables before starting
-	  AOLserver; this allows the AOLserver instance can
-	  communicate with the database.  There is one script each for
-	  Oracle and PostgreSQL.  They don't conflict, so if you plan
-	  to use both databases, install both.</para>
+	  AOLserver; this allows the AOLserver instance to
+	  communicate with the database.  There is one script for
+	  Oracle and one for PostgreSQL.  They do not conflict. If you plan
+	  to use both databases, install both.
 
-    <para>
-      Note that this section requires you to have the OpenACS, which
+
+      Note that this section requires you to have OpenACS files available, which
       you can get through CVS, through a tarball, or by other
       means. You can come back to this section after you acquire the
       OpenACS code, but don't forget to come back. (Note to

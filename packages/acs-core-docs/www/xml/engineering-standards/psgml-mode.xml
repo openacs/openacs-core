@@ -1,6 +1,6 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
@@ -150,7 +150,7 @@ doctype. For the docbook XML, all your <computeroutput>.xml</computeroutput> fil
 the line</para>
 
 <programlisting>
-      &lt;!DOCTYPE book PUBLIC &quot;-//OASIS//DTD DocBook XML V4.1.2//EN&quot; &quot;docbookx.dtd&quot;&gt;
+      &lt;!DOCTYPE book PUBLIC &quot;-//OASIS//DTD DocBook XML V4.4//EN&quot; &quot;docbookx.dtd&quot;&gt;
    
 </programlisting>
 

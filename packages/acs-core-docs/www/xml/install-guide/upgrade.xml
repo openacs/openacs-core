@@ -1,6 +1,6 @@
 <?xml version='1.0' ?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
@@ -84,7 +84,7 @@
       </indexterm>
       <para>The required platform for OpenACS 4.6 is the same as
       4.5, with the exception of OpenFTS.  OpenACS 4.6 and later require OpenFTS 0.3.2 for full text search on PostGreSQL.  If you have OpenFTS 0.2, you'll need to upgrade.  </para>
-      <para>If upgrading from 4.2, you need to manually run acs-kernel/sql/postgres/upgrade-4.2-4.5.sql.  See <ulink url="http://openacs.org/bugtracker/openacs/bug?bug_number=632">Bug #632</ulink></para>
+      <para>If upgrading from 4.4, you need to manually run acs-kernel/sql/postgres/upgrade-4.4-4.5.sql.  See <ulink url="http://openacs.org/bugtracker/openacs/bug?bug_number=632">Bug #632</ulink></para>
       <itemizedlist mark="circle">
         <listitem><para>A computer with OpenACS 4.5.</para>
         </listitem>
@@ -331,11 +331,11 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
       <title>Chosing a Method to Upgrade your Files</title>
       <para>OpenACS is distributed in many different ways:
         <itemizedlist>
-          <listitem> as a collection of files</listitem>
-          <listitem> as one big tarball</listitem>
-          <listitem> via CVS</listitem>
-          <listitem> via automatic download from within the APM
-            (package manager)</listitem>
+          <listitem><para>as a collection of files</para></listitem>
+          <listitem><para> as one big tarball</para></listitem>
+          <listitem><para> via CVS</para></listitem>
+          <listitem><para> via automatic download from within the APM
+            (package manager)</para></listitem>
         </itemizedlist>
       </para>
 
@@ -402,7 +402,7 @@ exit</action></screen>
           <listitem>
               <formalpara>
                 <title>Step 0: Set up a working CVS checkout</title>
-              </formalpara>
+
 
               <para>To get your OpenACS code into your local CVS
                 repository, you will set up a working CVS checkout of
@@ -413,7 +413,7 @@ exit</action></screen>
                 conflicts, commit your changes, and then update your
                 site. It sounds complicated, but it's not too bad, and
                 it is the best way to work around CVS's limitations.</para>
-
+              </formalpara>
               <para>This part describes how to set up your working CVS
         checkout. Once it is set up, you'll be able to update any
         packages using the existing working CVS checkout. We use one
@@ -450,8 +450,7 @@ exit</action></screen>
           <listitem>
               <formalpara>
                 <title>Step 1: Import new OpenACS code</title>
-              </formalpara>
-
+              <para>
               <itemizedlist>
                 <listitem>
                   <formalpara>
@@ -473,7 +472,8 @@ exit</action></screen>
 [$OPENACS_SERVICE_NAME openacs-5-1]$ <userinput>cvs up -Pd <replaceable>packagename</replaceable></userinput></screen>
               <para>In the next section, the import must be tailored to just this package.</para>
               </listitem>
-              </itemizedlist>
+              </itemizedlist></para>
+             </formalpara>
             </listitem>
             <listitem>
               <formalpara>

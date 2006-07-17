@@ -1,17 +1,15 @@
 <?xml version='1.0' ?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
 <chapter id="maintenance-web">
   <title>Production Environments</title>
-
     <authorblurb>
-      <para>By <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
+      <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
+
     </authorblurb>
-    
-    <para>Maintenance tasks, optional software, and alternate configurations for AOLserver.</para>
     
     <sect1 id="install-openacs-keepalive" xreflabel="Keep AOLserver alive">
 	<title>Starting and Stopping an OpenACS instance.</title> 
@@ -67,7 +65,7 @@ nsd: no process killed
 [root root]# <userinput>ln -s /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/daemontools/ /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput></screen>
             <para>Verify that AOLserver is running.</para>
             <screen>[root root]#<userinput> ps -auxw | grep nsd</userinput>
-<replaceable>$OPENACS_SERVICE_NAME</replaceable>   5562 14.2  6.2 22436 15952 ?       S    11:55   0:04 /usr/local/aolserver/bin/nsd -it /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/config.tcl -u serve
+<replaceable>$OPENACS_SERVICE_NAME</replaceable>   5562 14.4  6.2 22436 15952 ?       S    11:55   0:04 /usr/local/aolserver/bin/nsd -it /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/config.tcl -u serve
 root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
 [root root]#</screen>
           </listitem>
@@ -379,7 +377,8 @@ set address                127.0.0.1 </programlisting>
     <sect1 id="maintenance-deploy">
   <title>Staged Deployment for Production Networks</title>
     <authorblurb>
-      <para>By <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
+  <para><phrase role="cvstag">($Id$)</phrase></para>      
+<para>By <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
     </authorblurb>
   <para>This section describes two minimal-risk methods for deploying changes on a production network.  The important characteristics of a safe change deployment include:  (THIS SECTION IN DEVELOPMENT)</para>
   <itemizedlist>
@@ -487,6 +486,8 @@ cvs up -Pd index.adp</programlisting>
 <para>The production site can run "HEAD" from cvs.</para>
 
 <para>The drawback to using HEAD as the live code is that you cannot commit new work on the development server without erasing the definition of 'working production code.'  So a better method is to use a tag.  This guarantees that, at any time in the future, you can retrieve exactly the same set of code.  This is useful for both of the characteristics of safe change deployment.  For control, you can use tags to define a body of code, test that code, and then know that what you are deploying is exactly that code.  For rollback, you can use return to the last working tag if the new tag (or new, untagged changes) cause problems.  .... example of using tags to follow ...</para>
+
+
     </sect2>
     <sect2>
       <title>Method 2: A/B Deployment</title>
@@ -609,10 +610,11 @@ S/Sd2MYA0JVmQuIt5bYowXR1KYKDka1d3DUgtoVTiFepIRUrMkZlCli08mWVjE6T
 1MU24SHLgdTfDJprEdxZOnxajnbxL420xNVc5RRXlJA8Xxhx/HBKTw==
 -----END RSA PRIVATE KEY-----</programlisting>
         </listitem>
-      <listitem>
+      <listitem><para>
         If you start up using the etc/daemontools/run script, you will
         need to edit this script to make sure the ports are bound for
         SSL. Details of this are in the run script.
+        </para>
       </listitem>
       </orderedlist>
     </sect1>
@@ -840,9 +842,10 @@ openacs.org=&gt;</programlisting>
     package</ulink>.
       </para>
     </sect3>
+
   </sect2>
 
+
   </sect1>
-  <para><phrase role="cvstag">($Id$)</phrase></para>
 </chapter>
    
