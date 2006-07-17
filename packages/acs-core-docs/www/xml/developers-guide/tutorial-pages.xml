@@ -49,7 +49,6 @@
       <programlisting><xi:include href="../../files/tutorial/index.tcl" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>example missing</xi:fallback></xi:include></programlisting>
     <para>Now <computeroutput>index.adp</computeroutput>:</para>
       <programlisting><xi:include href="../../files/tutorial/index.adp" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>example missing</xi:fallback></xi:include></programlisting>
-      <para>You can test your work by <ulink url="/myfirstpackage/">viewing the page</ulink>.</para>
       <para>The index page includes the list page, which we put in /lib instead of /www to designate that it's available for reuse by other packages.</para>
       <screen>[$OPENACS_SERVICE_NAME www]$<userinput> mkdir /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/lib</userinput>
 [$OPENACS_SERVICE_NAME www]$<userinput> cd /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/lib</userinput>
@@ -57,6 +56,7 @@
       <programlisting><xi:include href="../../files/tutorial/note-list.tcl" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>example missing</xi:fallback></xi:include></programlisting>
 <screen>[$OPENACS_SERVICE_NAME lib]$ <userinput>emacs note-list.adp</userinput></screen>
 <programlisting><xi:include href="../../files/tutorial/note-list.adp" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>example missing</xi:fallback></xi:include></programlisting>
+<para>You can test your work by <ulink url="/myfirstpackage/">viewing the page</ulink>.</para>
       <para>Create the add/edit page.  If note_id is passed in,
       it display that note, and can change to edit mode if appropriate.  Otherwise, it presents a form for adding notes.</para>
     <screen>[$OPENACS_SERVICE_NAME lib]$<userinput> cd /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/www</userinput>
