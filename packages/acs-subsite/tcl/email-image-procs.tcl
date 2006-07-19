@@ -17,7 +17,7 @@ ad_proc -public email_image::update_private_p {
     @level   Change to this level
 } {
     db_transaction {
-	db_dml update_users {  }
+        db_dml update_users {  }
     }
 }
 
@@ -27,7 +27,12 @@ ad_proc -public email_image::get_priv_email {
     Returns the priv_email field of the user from the users table.
     @user_id
 } {
-    return [db_string get_private_email {  }]
+    set priv_level [db_string get_private_email {  }]
+    if {$priv_level eq "5"} {
+      set priv_level [parameter::get_from_package_key -package_key "acs-subsite" \
+      -parameter "PrivateEmailLevelP" -default 4]
+    }
+    return $priv_level
 }
 
 ad_proc -public email_image::get_user_email {
@@ -50,43 +55,43 @@ ad_proc -public email_image::get_user_email {
     set email [email_image::get_email -user_id $user_id]
     set user_level [email_image::get_priv_email -user_id $user_id]
     if { $user_level == 5 } {
-	# We get the privacy level from PrivateEmailLevelP parameter
-	set priv_level [parameter::get_from_package_key -package_key "acs-subsite" \
-			    -parameter "PrivateEmailLevelP" -default 4]
+        # We get the privacy level from PrivateEmailLevelP parameter
+        set priv_level [parameter::get_from_package_key -package_key "acs-subsite" \
+	 -parameter "PrivateEmailLevelP" -default 4]
     } else {
-	# We use the privacy level that the user select
-	set priv_level $user_level
+        # We use the privacy level that the user select
+        set priv_level $user_level
     }
     switch $priv_level {
-	"4" {
-	    return "<a href=mailto:$email title=\"Send email to this user\">$email</a>"
-	}
-	"3" {
-	    set email_image_id [email_image::get_related_item_id -user_id $user_id]
-	    if { $email_image_id != "-1" } {
-		# The user has an email image stored in the content repository
-		set revision_id [content::item::get_latest_revision -item_id $email_image_id]
-		set export_vars "user_id=$user_id&revision_id=$revision_id"
-		set email_image "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\"><img border=0 align=middle src=/shared/email-image-bits.tcl?$export_vars></a>"
-	    } else {
-		# Create a new email_image
-		if { [catch { set email_image [email_image::new_item -user_id $user_id -bgcolor $bgcolor -transparent $transparent] } errmsg ] } {
-		    # ImageMagick not present, we protect the email by adding
-		    # an image replacing the "@" symbol
+        "4" {
+            return "<a href=mailto:$email title=\"Send email to this user\">$email</a>"
+        }
+        "3" {
+            set email_image_id [email_image::get_related_item_id -user_id $user_id]
+            if { $email_image_id != "-1" } {
+                # The user has an email image stored in the content repository
+                set revision_id [content::item::get_latest_revision -item_id $email_image_id]
+                set export_vars "user_id=$user_id&revision_id=$revision_id"
+                set email_image "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\"><img border=0 align=middle src=/shared/email-image-bits.tcl?$export_vars></a>"
+            } else {
+                # Create a new email_image
+                if { [catch { set email_image [email_image::new_item -user_id $user_id -bgcolor $bgcolor -transparent $transparent] } errmsg ] } {
+                    # ImageMagick not present, we protect the email by adding
+                    # an image replacing the "@" symbol
                     set email_user [lindex [split $email '@'] 0]
                     set email_domain [lindex [split $email '@'] 1]
                     set email_image "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\">${email_user}<img border=0 align=middle src=/shared/images/at.gif>${email_domain}</a>"
                 }
-	    }
-	    return $email_image
-	}
-	"2" {
-	    return "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\">\#acs-subsite.Send_email_to_this_user\#</a>"
-	}
-	"1" { 
-	    #Do not show e-mail
-	    return "\#acs-subsite.email_not_available\#"
-	}
+            }
+            return $email_image
+        }
+        "2" {
+            return "<a href=\"/shared/send-email?sendto=$user_id&return_url=$return_url\">\#acs-subsite.Send_email_to_this_user\#</a>"
+        }
+        "1" { 
+            #Do not show e-mail
+            return "\#acs-subsite.email_not_available\#"
+        }
     }
 }
 
@@ -133,7 +138,7 @@ ad_proc -public email_image::new_item {
     set size "${width}x$height"
 
     if { [string equal $bgcolor ""]} {
-	set bgcolor "\#ffffff"
+        set bgcolor "\#ffffff"
     }
 
     set bg "xc:$bgcolor"
@@ -143,29 +148,29 @@ ad_proc -public email_image::new_item {
     
     # Creating the image with the email of the user on it
     exec convert -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $email" \
-	$dest_path $dest_path
+        $dest_path $dest_path
 
     if { [string equal $transparent ""] || [string equal $transparent "1"] } {
-	# Making the bg color transparent
-	exec convert $dest_path -transparent $bgcolor $dest_path
+        # Making the bg color transparent
+        exec convert $dest_path -transparent $bgcolor $dest_path
     }
     
     # Time to store the image in the content repository
     db_transaction {       
 
-	set mime_type [cr_filename_to_mime_type -create $dest_path]
-	set creation_ip [ad_conn peeraddr]
-	
-	set item_id [content::item::new -name $image_name -parent_id $folder_id -content_type "email_image" \
-			 -storage_type "lob" -creation_ip $creation_ip]
-	
-	set revision_id [content::revision::new -item_id $item_id -title $image_name -mime_type $mime_type  \
-			     -description "User email image"  -creation_ip $creation_ip ]
-	
-	email_image::add_relation -user_id $user_id -item_id $item_id
-	db_dml update_cr_items {  }
-	db_dml lob_content {  } -blob_files [list ${dest_path}]
-	db_dml lob_size {  }
+        set mime_type [cr_filename_to_mime_type -create $dest_path]
+        set creation_ip [ad_conn peeraddr]
+        
+        set item_id [content::item::new -name $image_name -parent_id $folder_id -content_type "email_image" \
+                         -storage_type "lob" -creation_ip $creation_ip]
+        
+        set revision_id [content::revision::new -item_id $item_id -title $image_name -mime_type $mime_type  \
+                             -description "User email image"  -creation_ip $creation_ip ]
+        
+        email_image::add_relation -user_id $user_id -item_id $item_id
+        db_dml update_cr_items {  }
+        db_dml lob_content {  } -blob_files [list ${dest_path}]
+        db_dml lob_size {  }
     }
     
     # Delete the temporary file created by ImageMagick
@@ -196,8 +201,8 @@ ad_proc -public email_image::edit_email_image {
     @transparent   If you want the background color transparent set it to 1. Default to 1
 } {
     if { $new_email == [email_image::get_email -user_id $user_id] } {
-	# Email didn't change
-	return
+        # Email didn't change
+        return
     }
     set font_size 14
     set font_type helvetica
@@ -211,7 +216,7 @@ ad_proc -public email_image::edit_email_image {
     set size "${width}x$height"
 
     if { [string equal $bgcolor ""]} {
-	set bgcolor "\#ffffff"
+        set bgcolor "\#ffffff"
     }
 
     set bg "xc:$bgcolor"
@@ -224,11 +229,11 @@ ad_proc -public email_image::edit_email_image {
     
     # Creating the image with the email of the user on it
     exec convert -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $new_email" \
-	$dest_path $dest_path
+        $dest_path $dest_path
 
     if { [string equal $transparent ""] || [string equal $transparent "1"] } {
-	# Making the bg color transparent
-	exec convert $dest_path -transparent $bgcolor $dest_path
+        # Making the bg color transparent
+        exec convert $dest_path -transparent $bgcolor $dest_path
     }
 
     set email_image_id [email_image::get_related_item_id -user_id $user_id]
@@ -236,30 +241,30 @@ ad_proc -public email_image::edit_email_image {
     set creation_ip [ad_conn peeraddr]
 
     if { $email_image_id != "-1" } {
-	db_transaction {
-	    set item_id $email_image_id
-	    set revision_id [content::revision::new -item_id $item_id -title $image_name \
-				 -mime_type $mime_type  \
-				 -description "User email image" -creation_ip $creation_ip ]
-	    db_dml update_cr_items { }
-	    db_dml lob_content { } -blob_files [list ${dest_path}]
-	    db_dml lob_size { }
-	}
+        db_transaction {
+            set item_id $email_image_id
+            set revision_id [content::revision::new -item_id $item_id -title $image_name \
+                                 -mime_type $mime_type  \
+                                 -description "User email image" -creation_ip $creation_ip ]
+            db_dml update_cr_items { }
+            db_dml lob_content { } -blob_files [list ${dest_path}]
+            db_dml lob_size { }
+        }
     } else {
-	db_transaction {
-	    
-	    set item_id [content::item::new -name $image_name -parent_id $folder_id -content_type "email_image" \
-			     -storage_type "lob" -creation_ip $creation_ip]
-	    
-	    set revision_id [content::revision::new -item_id $item_id -title $image_name -mime_type $mime_type  \
-				 -description "User email image"  -creation_ip $creation_ip ]
+        db_transaction {
+            
+            set item_id [content::item::new -name $image_name -parent_id $folder_id -content_type "email_image" \
+                             -storage_type "lob" -creation_ip $creation_ip]
+            
+            set revision_id [content::revision::new -item_id $item_id -title $image_name -mime_type $mime_type  \
+                                 -description "User email image"  -creation_ip $creation_ip ]
 
-	    email_image::add_relation -user_id $user_id -item_id $item_id
+            email_image::add_relation -user_id $user_id -item_id $item_id
 
-	    db_dml update_cr_items {  }
-	    db_dml lob_content {  } -blob_files [list ${dest_path}]
-	    db_dml lob_size {  }
-	}
+            db_dml update_cr_items {  }
+            db_dml lob_content {  } -blob_files [list ${dest_path}]
+            db_dml lob_size {  }
+        }
     }
     # Delete the temporary file created by ImageMagick
     catch { file delete  $dest_path } errMsg
@@ -302,7 +307,7 @@ ad_proc -public email_image::create_type_folder_rel { } {
     with the user_id.
 } {
     set type_id [content::type::new -content_type "email_image" -pretty_name "Email_Image" \
-		 -pretty_plural "Email_Images" -table_name "users_email_image" -id_column "email_image_id"]
+                 -pretty_plural "Email_Images" -table_name "users_email_image" -id_column "email_image_id"]
 
     set folder_id [content::folder::new -name "Email_Images" -label "Email_Images"]
 
