@@ -1,11 +1,16 @@
 ad_page_contract {
     
     Offers links to other pages, and lets the user type the name of a specific procedure.
-    
+    If about_package_key is set to an installed package, then this page will automatically
+    return /package-view page for the package-key, which is a handy way of integrating
+    static docs with evolving api, especially for core packages.
+
+    @about_package_key a package-key
     @author Jon Salz (jsalz@mit.edu)
     @author Lars Pind (lars@pinds.com)
     @cvs-id $Id$
 } {
+    about_package_key:optional
 } -properties {
     title:onevalue
     context:onevalue
@@ -17,27 +22,37 @@ ad_page_contract {
 set title "API Browser"
 set context [list]
 
-db_multirow installed_packages installed_packages_select {
-    select version_id, pretty_name, version_name
-      from apm_package_version_info
-     where installed_p = 't'
-       and enabled_p = 't'
-  order by upper(pretty_name)
-}
+if  { [info exists about_package_key] } {
 
-db_multirow disabled_packages disabled_packages_select {
-    select version_id, pretty_name, version_name
-      from apm_package_version_info
-     where installed_p = 't'
-       and enabled_p = 'f'
-  order by upper(pretty_name)
-}
+    if { [db_0or1row get_local_package_version_id {} ] } {
+        rp_form_put version_id $version_id
+        rp_internal_redirect package-view
+    }
 
-db_multirow uninstalled_packages uninstalled_packages_select {
-    select version_id, pretty_name, version_name
-      from apm_package_version_info
-     where installed_p = 'f'
-       and enabled_p = 'f'
-  order by upper(pretty_name)
-}
+} else {
 
+    db_multirow installed_packages installed_packages_select {
+        select version_id, pretty_name, version_name
+          from apm_package_version_info
+        where installed_p = 't'
+          and enabled_p = 't'
+      order by upper(pretty_name)
+    }
+
+    db_multirow disabled_packages disabled_packages_select {
+        select version_id, pretty_name, version_name
+          from apm_package_version_info
+         where installed_p = 't'
+           and enabled_p = 'f'
+      order by upper(pretty_name)
+    }
+
+    db_multirow uninstalled_packages uninstalled_packages_select {
+        select version_id, pretty_name, version_name
+          from apm_package_version_info
+         where installed_p = 'f'
+           and enabled_p = 'f'
+      order by upper(pretty_name)
+    }
+
+}
