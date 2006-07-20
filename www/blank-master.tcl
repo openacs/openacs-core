@@ -26,6 +26,10 @@ if { ![info exists header_stuff] } {
     set header_stuff {} 
 }
 
+if { ![info exists on_load] } {
+    set on_load {} 
+}
+
 
 # Attributes
 
