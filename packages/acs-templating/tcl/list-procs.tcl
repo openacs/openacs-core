@@ -51,6 +51,7 @@ ad_proc -public template::list::create {
     {-groupby ""}
     {-orderby ""}
     {-formats ""}
+    {-filter_form 0}
 } {
     Defines a list to be diplayed in a template. The list works in conjunction with a multirow, which contains the data for the list.
     The list is output using the &lt;listtemplate&gt; and &lt;listfilters&gt; templating tags, with the help of &lt;listelement&gt; and &lt;listrow&gt;.
@@ -227,6 +228,7 @@ ad_proc -public template::list::create {
                            where the value is 'subst'ed in the caller's environment.
                            See <a href="/api-doc/proc-view?proc=template::list::format::create">template::list::format::create</a> for details.
 
+    @param filter_form Whether or not we create the form data structure for the listfilters-form tag to dynamically generate a form to specify filter criteria. Default 0 will not generate form. Set to 1 to generate form to use listfilters-form tag.
 
     @see template::list::element::create
     @see template::list::filter::create
@@ -445,6 +447,12 @@ ad_proc -public template::list::create {
             -spec [list label "[_ acs-templating.Page]" default_value 1 hide_p t]
     }
 
+
+    
+    # generate filter form
+    if {$filter_form eq 1} {
+	filter_form -name $name
+    }
     # Done, prepare the list. This has to be done while we still have access to the caller's scope
     prepare \
         -name $name \
@@ -1450,6 +1458,20 @@ ad_proc -private template::list::render_filters {
                 if { [empty_string_p [string trim $label]] } {
                     set label $filter_properties(null_label)
                 }
+<<<<<<< list-procs.tcl
+		ns_log notice "DAVEB99 name = '${filter_properties(name)}' url='${filter_properties(clear_url)}'"
+                template::multirow -local append filters \
+                    $filter_properties(name) \
+                    $filter_properties(label) \
+                    $filter_properties(clear_url) \
+                    $label \
+                    $value \
+                    $url \
+                    $label \
+                    $count \
+                    $add_url \
+                    $selected_p
+=======
 
 		if { [string equal $filter_properties(type) "multival"] } {
 		    # We need to ns_urlencode the name to work
@@ -1470,6 +1492,7 @@ ad_proc -private template::list::render_filters {
 		    $add_url \
 		    $selected_p \
 		    $filter_properties(type)
+>>>>>>> 1.28
             }
         }
     }
@@ -2631,3 +2654,193 @@ template_tag listfilters { chunk params } {
     template::adp_append_string \
         "\[template::list::render_filters -name \"$list_name\" -style \"$style\"\]"
 }
+
+template_tag listfilters-form { chunk params } {
+    set level [template::adp_level]
+    set list_name [template::get_attribute listfilters $params name]
+
+    set style [ns_set iget $params style]
+    
+    template::adp_append_string \
+        "\[template::list::render_form_filters -name \"$list_name\" -style \"$style\"\]"
+}
+
+ad_proc -private template::list::render_form_filters {
+    {-name:required}
+    {-style ""}
+} {
+    Renders the form filters form
+
+    @author Dave Bauer (dave@solutiongrove.com)
+    @creation-date 2006-07-20
+
+    @see template::list::filter_form
+} {
+    if { [string equal $style {}] } { 
+        set style [parameter::get \
+                       -package_id [apm_package_id_from_key "acs-templating"] \
+                       -parameter DefaultListFilterStyle \
+                       -default "filters"]
+    }
+    set file_stub "[template::get_resource_path]/lists/$style"
+
+    # ensure that the style template has been compiled and is up-to-date
+    template::adp_init adp $file_stub
+    
+    # get result of template output procedure into __adp_output
+    # the only data source on which this template depends is the "elements"
+    # multirow data source.  The output of this procedure will be
+    # placed in __adp_output in this stack frame.
+   
+    template::code::adp::$file_stub
+    
+    return $__adp_output
+}
+
+ad_proc -private template::list::filter_form {
+    -name
+} {
+    Generate a dynamic form that let's the user choose from a list of possible filters, and once a filter is choosen, shows a dropdown box or text box to choose search criteria on that filter.
+    
+    Use with <listfilters-form> ADP tag to display the actual form
+    
+    The form will not exist and lsitfilters-form tag will not work unless the -filter_form switch to template::list::create is set to 1
+
+    @param name Name of list builder list
+
+    @author Dave Bauer (dave@solutiongrove.com)
+    @creation-date 2006-07-20
+
+    @see template::list::create
+} {
+    set level [template::adp_level]
+    # Provide a reference to the list properties for use by the list template
+    # Get an upvar'd reference to list_properties
+    get_reference -name $name
+    
+    set filter_names_options [list]
+    foreach filter_ref $list_properties(filter_refs) {
+
+        upvar #$level $filter_ref filter_properties
+	if {$filter_properties(label) ne "" && $filter_properties(name) ne "groupby" && $filter_properties(name) ne "orderby"} {
+	    lappend filter_names_options [list $filter_properties(label) $filter_properties(name)]
+	    ns_log notice "DAVEB98 setting $filter_properties(name) url='foo'"
+	    set filter_properties(clear_url) foo
+	}
+    }
+    upvar \#[template::adp_level] __client_property_filters client_property_filters
+    
+    set client_property_filters [ad_get_client_property acs-templating [ad_conn url]_$name]
+    # build an ad_form form based on the choosen filters
+    set filters_form_name list-filters-$name
+    upvar #[template::adp_level] __list_filter_form_client_property list_filter_form_client_property
+    set list_filter_form_client_property [ad_conn url]_$name
+    set add_filter_form_name list-filter-add-$name
+    ad_form -name $add_filter_form_name -form {
+	{choose_filter:text(select) {label "Add Filter"} {options {$filter_names_options}} }
+	{name:text(hidden) {value $name}}
+	{add_filter:text(submit) {label "Add"}}
+	{clear_all:text(submit) {label "Clear All"}}
+	{clear_one:text(hidden),optional}
+    } -on_request {
+	# setup little Xs to click to clear one field
+	# pass the name of the field in the clear_one variable
+
+	set __form [ns_getform]
+	set clear_one [ns_set get $__form clear_one]
+
+	if {[exists_and_not_null clear_one]} {
+	    set __old_client_property_filters [ad_get_client_property acs-templating $__list_filter_form_client_property]
+		set __client_property_filters [list]
+
+	    foreach {__ref __value} $__old_client_property_filters {
+
+		if {[set ${__ref}(name)] ne $clear_one} {
+		    lappend __client_property_filters $__ref $__value
+		}
+	    }
+            if {[exists_and_not_null __client_property_filters]} {
+		set client_property_filters $__client_property_filters
+	    }
+	}
+    
+    } -on_submit {
+
+	if {[exists_and_not_null clear_all]} {
+	    set __client_property_filters {}
+	    ad_set_client_property acs-templating [ad_conn url]_$name $__client_property_filters
+	    break
+	}
+	template::list::get_reference -name $name
+	foreach filter_ref $list_properties(filter_refs) {
+	    upvar \#[template::adp_level] $filter_ref filter_properties
+	    if {$filter_properties(name) eq $choose_filter} {
+		lappend __client_property_filters $filter_ref ""
+	    }
+	}
+ 	ad_set_client_property acs-templating [ad_conn url]_$name $__client_property_filters
+    }
+
+
+    ad_form -name $filters_form_name -has_submit 1 -form {
+	{name:text(hidden) {value $name}}
+    }
+
+    foreach {f_ref f_value} $client_property_filters {
+	upvar \#[template::adp_level] $f_ref filter_properties
+	if {![template::element::exists $filters_form_name $filter_properties(name)]} {
+	    # extract options 
+	    set options [list]
+
+
+	    foreach elm $filter_properties(values) url $filter_properties(urls) selected_p $filter_properties(selected_p) add_url $filter_properties(add_urls) {
+		# Loop over 'values' and 'url' simuAltaneously		
+		# 'label' is the first element, 'value' the second
+		# We do an lrange here, otherwise values would be set wrong 
+		# in case someone accidentally supplies a list with too many elements, 
+		# because then the foreach loop would run more than once
+		foreach { label value count } [lrange $elm 0 2] {}
+		
+		if { [empty_string_p [string trim $label]] } {
+		    set label $filter_properties(null_label)
+		}
+		lappend  options [list $label $value]
+	    }
+
+	    if {[llength $options]} {
+		ad_form -extend -name $filters_form_name -form {
+		    {$filter_properties(name):text(select),optional {label "$filter_properties(label) [<a title=\"remove filter\" href=\"[ad_conn url]?clear_one=$filter_properties(name)\">x</a>]"} {options $options}}
+		}
+	    } else {
+		ad_form -extend -name $filters_form_name -form {
+		    {$filter_properties(name):text,optional {label $filter_properties(label)  [<a title=\"remove filter\" href=\"[ad_conn url]?clear_one=$filter_properties(name)\">x</a>]} {help_text {[_ acs-templating.Enter_your_search_text]}} }
+		}
+	    }
+	}
+    }
+    
+    
+    ad_form -extend -name $filters_form_name -on_request {
+	foreach {f_ref f_value} $__client_property_filters {
+	    upvar \#[template::adp_level] $f_ref filter_properties
+	    set $filter_properties(name) $f_value
+	}
+    } -on_submit {
+	template::list::get_reference -name $name
+	set templist [list]
+	foreach {f_ref f_value} $__client_property_filters {
+	    upvar \#[template::adp_level] $f_ref filter_properties
+	    set filter_properties(value) [set $filter_properties(name)]
+	    lappend templist $f_ref $filter_properties(value)
+	}
+	set __client_property_filters $templist
+	ad_set_client_property acs-templating [ad_conn url]_$name $__client_property_filters
+    }
+    if {[llength $client_property_filters]} {
+	ad_form -extend -name $filters_form_name -form {
+	    {submit:text(submit) {label "Apply Filters"}}
+	}
+    }
+
+}
+
