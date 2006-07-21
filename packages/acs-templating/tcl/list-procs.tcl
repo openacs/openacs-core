@@ -2772,7 +2772,7 @@ ad_proc -private template::list::filter_form {
 		}
 	    } else {
 		ad_form -extend -name $filters_form_name -form {
-		    {$filter_properties(name):text,optional {label $filter_properties(label) \\[<a title=\"remove filter\" href=\"[ad_conn url]?clear_one=$filter_properties(name)\">x</a>\\]} {help_text {[_ acs-templating.Enter_your_search_text]}} }
+		    {$filter_properties(name):text,optional {label "$filter_properties(label) \\[<a title=\"remove filter\" href=\"[ad_conn url]?clear_one=$filter_properties(name)\">x</a>\\]"} {help_text {[_ acs-templating.Enter_your_search_text]}} }
 		}
 	    }
 	}
