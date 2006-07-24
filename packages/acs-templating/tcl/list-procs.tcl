@@ -2673,17 +2673,27 @@ ad_proc -private template::list::filter_form {
 	    # to choose from
 	    lappend filter_names_options [list $filter_properties(label) $filter_properties(name)]
 	} else {
+
 	    # filters without a label are added as hidden elements
 	    # to the form so that quer params for the list
 	    # and group by/order by are preserved when the filter
 	    # form is used
-	    if {[info exists filter_properties(value)]} {
+
+	    # grab the current value of the filter out of the list if
+	    # it exists
+	    upvar $list_properties(ulevel) $filter_properties(name) current_filter_value
+	    if {[info exists current_filter_value] && $current_filter_value ne ""} {
 		lappend filter_hidden_filters $filter_properties(name)
+		lappend filter_key_filters $filter_properties(name) $current_filter_value
 	    }
 	}
     }
-    upvar #[template::adp_level] __list_filter_form_client_property_key list_filter_form_client_property_key
-    set list_filter_form_client_property_key [list [ad_conn url] $name $filter_key_filters]
+    upvar #[template::adp_level] __list_filter_form_client_property_key list_filter_form_client_property_key 
+    # we only get 50 characters
+    # to save our clienty property name, we can encode it into an
+    # ns_sha1 hash to make it fit. we don't extract the data from the
+    # property name so this should work fine
+    set list_filter_form_client_property_key [ns_sha1 [list [ad_conn url] $name $filter_key_filters]]
     upvar \#[template::adp_level] __client_property_filters client_property_filters
     set client_property_filters [ad_get_client_property acs-templating $list_filter_form_client_property_key]
     # build an ad_form form based on the choosen filters
@@ -2716,7 +2726,7 @@ ad_proc -private template::list::filter_form {
 		set __client_property_filters [list]
 
 	    foreach {__ref __value} $__old_client_property_filters {
-
+		ns_log notice "clear_one [set ${__ref}(name)] $clear_one"
 		if {[set ${__ref}(name)] ne $clear_one} {
 		    lappend __client_property_filters $__ref $__value
 		}
@@ -2726,6 +2736,7 @@ ad_proc -private template::list::filter_form {
 	    # form of selected filters
             if {[exists_and_not_null __client_property_filters]} {
 		set client_property_filters $__client_property_filters
+		ad_set_client_property acs-templating $__list_filter_form_client_property_key $__client_property_filters
 	    }
 	}
     } -on_submit {
@@ -2782,7 +2793,7 @@ ad_proc -private template::list::filter_form {
 		# in case someone accidentally supplies a list with too many elements, 
 		# because then the foreach loop would run more than once
 		foreach { label value count } [lrange $elm 0 2] {}
-		
+
 		if { [empty_string_p [string trim $label]] } {
 		    set label $filter_properties(null_label)
 		}
@@ -2790,7 +2801,6 @@ ad_proc -private template::list::filter_form {
 	    }
 	    set clear_url_vars [concat [list [list clear_one $filter_properties(name)]] $filter_hidden_filters_url_vars]
 	    set clear_url [export_vars -base [ad_conn url] $clear_url_vars]
-	    ns_log notice "DAVEB99 '${filter_hidden_filters_url_vars}' $clear_url_vars $clear_url"
 	    if {[llength $options]} {
 		ad_form -extend -name $filters_form_name -form {
 		    {$filter_properties(name):text(select),optional {label "$filter_properties(label) \\[<a title=\"remove filter\" href=\"$clear_url\">x</a>\\]"} {options $options}}
