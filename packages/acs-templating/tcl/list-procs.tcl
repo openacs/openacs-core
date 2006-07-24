@@ -2659,41 +2659,35 @@ ad_proc -private template::list::filter_form {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
     
-    #
-    # Create 'filters' multirow
-    #
-
-    # Manually construct a multirow by setting the relevant variables
-    set filters:rowcount 0
-#    template::multirow -local create filters \
-        filter_name \
-        filter_label \
-        filter_clear_url \
-        label \
-        key_value \
-        url \
-        url_html_title \
-        count \
-        add_url \
-        selected_p 
-    
     set filter_names_options [list]
+    set filter_hidden_filters [list]
+    set filter_key_filters [list]
+    set filter_hidden_filters_url_vars [list]
+
+    # loop through all the filters in this list
     foreach filter_ref $list_properties(filter_refs) {
 
         upvar #$level $filter_ref filter_properties
-	if {$filter_properties(label) ne "" && $filter_properties(name) ne "groupby" && $filter_properties(name) ne "orderby"} {
+	if {$filter_properties(label) ne "" && $filter_properties(name) ne "orderby" && $filter_properties(name) ne "groupby"} {
+	    # filters with a label will be added to the form for the user
+	    # to choose from
 	    lappend filter_names_options [list $filter_properties(label) $filter_properties(name)]
-	    ns_log notice "DAVEB98 setting $filter_properties(name) url='foo'"
-	    set filter_properties(clear_url) foo
+	} else {
+	    # filters without a label are added as hidden elements
+	    # to the form so that quer params for the list
+	    # and group by/order by are preserved when the filter
+	    # form is used
+	    if {[info exists filter_properties(value)]} {
+		lappend filter_hidden_filters $filter_properties(name)
+	    }
 	}
     }
+    upvar #[template::adp_level] __list_filter_form_client_property_key list_filter_form_client_property_key
+    set list_filter_form_client_property_key [list [ad_conn url] $name $filter_key_filters]
     upvar \#[template::adp_level] __client_property_filters client_property_filters
-    
-    set client_property_filters [ad_get_client_property acs-templating [ad_conn url]_$name]
+    set client_property_filters [ad_get_client_property acs-templating $list_filter_form_client_property_key]
     # build an ad_form form based on the choosen filters
     set filters_form_name list-filters-$name
-    upvar #[template::adp_level] __list_filter_form_client_property list_filter_form_client_property
-    set list_filter_form_client_property [ad_conn url]_$name
     set add_filter_form_name list-filter-add-$name
     ad_form -name $add_filter_form_name -form {
 	{choose_filter:text(select) {label "Add Filter"} {options {$filter_names_options}} }
@@ -2701,7 +2695,13 @@ ad_proc -private template::list::filter_form {
 	{add_filter:text(submit) {label "Add"}}
 	{clear_all:text(submit) {label "Clear All"}}
 	{clear_one:text(hidden),optional}
-    } -on_request {
+    }
+    foreach fhf $filter_hidden_filters {
+	ad_form -extend -name $add_filter_form_name -form {
+	    {$fhf:text(hidden),optional}
+	}
+    }
+    ad_form -extend -name $add_filter_form_name -on_request {
 	# setup little Xs to click to clear one field
 	# pass the name of the field in the clear_one variable
 
@@ -2709,7 +2709,10 @@ ad_proc -private template::list::filter_form {
 	set clear_one [ns_set get $__form clear_one]
 
 	if {[exists_and_not_null clear_one]} {
-	    set __old_client_property_filters [ad_get_client_property acs-templating $__list_filter_form_client_property]
+	    # loop through the saved filters and remove 
+	    # the filter from the client property if its 
+	    # specified in clear_one
+	    set __old_client_property_filters [ad_get_client_property acs-templating $__list_filter_form_client_property_key]
 		set __client_property_filters [list]
 
 	    foreach {__ref __value} $__old_client_property_filters {
@@ -2718,16 +2721,18 @@ ad_proc -private template::list::filter_form {
 		    lappend __client_property_filters $__ref $__value
 		}
 	    }
+	    # if we changed the list of filters, save it in the 
+	    # client property, we read it later on to build the
+	    # form of selected filters
             if {[exists_and_not_null __client_property_filters]} {
 		set client_property_filters $__client_property_filters
 	    }
 	}
-    
     } -on_submit {
 
 	if {[exists_and_not_null clear_all]} {
 	    set __client_property_filters {}
-	    ad_set_client_property acs-templating [ad_conn url]_$name $__client_property_filters
+	    ad_set_client_property acs-templating $__list_filter_form_client_property_key $__client_property_filters
 	    break
 	}
 	template::list::get_reference -name $name
@@ -2737,20 +2742,38 @@ ad_proc -private template::list::filter_form {
 		lappend __client_property_filters $filter_ref ""
 	    }
 	}
- 	ad_set_client_property acs-templating [ad_conn url]_$name $__client_property_filters
+ 	ad_set_client_property acs-templating $__list_filter_form_client_property_key $__client_property_filters
     }
 
-
+    # create the form the holds the actual filter values
     ad_form -name $filters_form_name -has_submit 1 -form {
 	{name:text(hidden) {value $name}}
     }
+    # we need to pass the hidden list filters in this form too
+    # since we need to preserve the other variables if either 
+    # the add filter or the apply filter form is submitted
+    foreach fhf $filter_hidden_filters {
+	ad_form -extend -name $filters_form_name -form {
+	    {$fhf:text(hidden),optional}
+	}
+    }
 
+    # we need to extract the values of the hidden filters out of the
+    # form elements, there is some magic here where ad_form
+    # grabs the elements out of the form/url vars and
+    # sets them, we want to pull them out of the form instead of
+    # setting local variables to prevent collisions
+    foreach fhf $filter_hidden_filters {
+	lappend filter_hidden_filters_url_vars [list $fhf [template::element::get_value $add_filter_form_name $fhf]]
+    }
+
+    # add a select box for filters with a list of valid values
+    # otherwise add a regular text box
     foreach {f_ref f_value} $client_property_filters {
 	upvar \#[template::adp_level] $f_ref filter_properties
 	if {![template::element::exists $filters_form_name $filter_properties(name)]} {
 	    # extract options 
 	    set options [list]
-
 
 	    foreach elm $filter_properties(values) url $filter_properties(urls) selected_p $filter_properties(selected_p) add_url $filter_properties(add_urls) {
 		# Loop over 'values' and 'url' simuAltaneously		
@@ -2765,19 +2788,20 @@ ad_proc -private template::list::filter_form {
 		}
 		lappend  options [list $label $value]
 	    }
-
+	    set clear_url_vars [concat [list [list clear_one $filter_properties(name)]] $filter_hidden_filters_url_vars]
+	    set clear_url [export_vars -base [ad_conn url] $clear_url_vars]
+	    ns_log notice "DAVEB99 '${filter_hidden_filters_url_vars}' $clear_url_vars $clear_url"
 	    if {[llength $options]} {
 		ad_form -extend -name $filters_form_name -form {
-		    {$filter_properties(name):text(select),optional {label "$filter_properties(label) \\[<a title=\"remove filter\" href=\"[ad_conn url]?clear_one=$filter_properties(name)\">x</a>\\]"} {options $options}}
+		    {$filter_properties(name):text(select),optional {label "$filter_properties(label) \\[<a title=\"remove filter\" href=\"$clear_url\">x</a>\\]"} {options $options}}
 		}
 	    } else {
 		ad_form -extend -name $filters_form_name -form {
-		    {$filter_properties(name):text,optional {label "$filter_properties(label) \\[<a title=\"remove filter\" href=\"[ad_conn url]?clear_one=$filter_properties(name)\">x</a>\\]"} {help_text {[_ acs-templating.Enter_your_search_text]}} }
+		    {$filter_properties(name):text,optional {label "$filter_properties(label) \\[<a title=\"remove filter\" href=\"$clear_url\">x</a>\\]"} {help_text {[_ acs-templating.Enter_your_search_text]}} }
 		}
 	    }
 	}
     }
-    
     
     ad_form -extend -name $filters_form_name -on_request {
 	foreach {f_ref f_value} $__client_property_filters {
@@ -2785,6 +2809,9 @@ ad_proc -private template::list::filter_form {
 	    set $filter_properties(name) $f_value
 	}
     } -on_submit {
+	# set the values of the filters, the creator of the list
+	# still has to process the values to generate a valid
+	# where clause
 	template::list::get_reference -name $name
 	set templist [list]
 	foreach {f_ref f_value} $__client_property_filters {
@@ -2793,8 +2820,10 @@ ad_proc -private template::list::filter_form {
 	    lappend templist $f_ref $filter_properties(value)
 	}
 	set __client_property_filters $templist
-	ad_set_client_property acs-templating [ad_conn url]_$name $__client_property_filters
+	ad_set_client_property acs-templating $__list_filter_form_client_property_key $__client_property_filters
     }
+    # only show the submit button for the apply filters form if
+    # there are filters selected by the user
     if {[llength $client_property_filters]} {
 	ad_form -extend -name $filters_form_name -form {
 	    {submit:text(submit) {label "Apply Filters"}}
