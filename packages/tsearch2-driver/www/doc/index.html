@@ -1,40 +1,52 @@
 <html> <head> <title>TSEARCH2 PostgreSQL FtsEngineDriver for OpenACS
   5.x</title> </head> <h1>TSEARCH2 PostgreSQL FtsEngineDriver for
-  OpenACS 5.x</h1> <h2>Installing</h2> You'll need PostgreSQL 7.3 or
-  newer. The tsearch2 from contrib needs to be compiled. In addition
-  tsearch2.sql needs to be loaded into your database. In addition be
-  sure to mount the Search package somewhere. The indexer will not run
-  is Search is not mounted.  The FtsEngineDriver parameter of the
-  search package must be changes to "tsearch2-driver".
+  OpenACS 5.x</h1> <h2>Installing</h2> 
+<p>tsearch2-driver requires:</p>
+  <ul><li>PostgreSQL 7.3 or newer
+  </li><li>PostgreSQL's tsearch2 module 
+  </li><li>PostgreSQL versions 7.3 and 7.4 require tsearch2.sql to be
+  loaded into the database
+  </li><li>search package to be mounted somewhere.
+  </li><li>FtsEngineDriver parameter of search package set to "tsearch2-driver".
+  </li></ul>
 
   <h2>Using</h2>
-  If you install tsearch2-driver and mount search, go ahead and add
-  some content. Weblogger or edit-this-page will generate indexed
-  cotent. I had to manually load lars-blogger-sc-create.sql to get
-  Weblogger to register the service contract implementation to index
-  the content. After that it worked fine.
+  <p>
+  Once tsearch2-driver is installed, add some content to be indexed. 
+  Weblogger or edit-this-page has code to generate indexed
+  content. Lars-blogger package may require manually loading lars-blogger-sc-create.sql to get
+  Weblogger to register the service contract implementation that indexes
+  the content.
+  </p>
 
-<h2>Index old content</h2>
-If your old content has not been indexed before (e.g. because you had no
-search package mounted before), all is fine. Otherwise you have to inform the
-search package to reindex.<br>
-insert into search_observer_queue ( select my_id, now(),'INSERT' from
-my_table);<br>
+  <h2>Indexing pre-existing content that has been indexed before</h2>
+  <p>If your pre-existing content has been indexed before (e.g. because the
+  search package was mounted before as part of a previous search
+  service), you have to tell the search package to reindex:</p>
+  <pre>
+    insert into search_observer_queue (
+            select <i>my_id</i>, now(),'INSERT' from <i>my_table</i>
+            );
+  </pre><p>
 For forums and ETP this looks like:
-<blockquote>
+ </p>
 <pre>
-insert into search_observer_queue (select message_id, now(), 'INSERT' from forums_messages);
-insert into search_observer_queue (select live_revision, now(), 'INSERT' from ( 
-  select live_revision from cr_items where content_type = 'etp_page_revision') etp);
+    insert into search_observer_queue (
+            select message_id, now(), 'INSERT' from forums_messages
+            );
+    insert into search_observer_queue (
+            select live_revision, now(), 'INSERT' from (
+                    select live_revision from cr_items where content_type = 'etp_page_revision'
+                    ) 
+            etp );
 </pre>
-</blockquote>
-  <h2>Features</h2>
-  This version includes only the most basic features to prove that
-  tsearch2 can be used for indexing. There are many configuration
-  options that will be avaialble as parameters in the future. It is
-  also clear that the current service contract definitions are not
-  flexible enough to work well with every possible search driver, so
-  some features may not be available until after the search package is
-  also updated.
 
-  Dave Bauer dave@thedesignexperience.org 2004-06-05
+  <h2>Features</h2>
+<p>
+  This version includes only the most basic features.
+  Many options are possible by adding admin configurable parameters.
+  The current service contract definitions are not
+  flexible enough to work well with every possible search driver, so
+  some features may require making some improvements to the search package also.
+</p>
+  <p>Dave Bauer dave@thedesignexperience.org 2004-06-05</p>
