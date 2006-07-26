@@ -130,16 +130,18 @@ ad_proc -public ::content::revision::new {
     }
     
     set table_name [db_string get_table_name "select table_name from acs_object_types where object_type=:content_type"]
-    set table_name "${table_name}i"
 
-    set query_text "insert into ${table_name}
+    set query_text "insert into ${table_name}i
                     (revision_id, object_type, creation_user, creation_date, creation_ip, title, description, item_id, object_package_id, mime_type $attribute_names)
             values (:revision_id, :content_type, :creation_user, :creation_date, :creation_ip, :title, :description, :item_id, :package_id, :mime_type $attribute_values)"
     db_transaction {
-        if {[string equal "" $revision_id]} {
+        db_dml lock_objects "LOCK TABLE acs_objects IN SHARE ROW EXCLUSIVE MODE"
+        if {$revision_id eq ""} {
 	    set revision_id [db_nextval "acs_object_id_seq"]
 	}
-        db_dml insert_revision $query_text
+        # the postgres "insert into view" is rewritten by the rule into a "select"
+        [expr {[db_driverkey ""] eq "postgresql" ? "db_0or1row" : "db_dml"}] \
+	    insert_revision $query_text
         ::content::revision::update_content \
 	    -item_id $item_id \
             -revision_id $revision_id \

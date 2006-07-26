@@ -465,8 +465,8 @@ begin
 end;' language 'plpgsql';
 
 
+-- function trigger_insert_statement
 select define_function_args('content_type__trigger_insert_statement','content_type');
-
 create or replace function content_type__trigger_insert_statement (varchar)
 returns varchar as '
 declare
@@ -496,39 +496,14 @@ begin
                     object_type = trigger_insert_statement__content_type 
   LOOP
     cols := cols || '', '' || attr_rec.attribute_name;
-    vals := vals || '', new.'' || attr_rec.attribute_name;
+    vals := vals || '', p_new.'' || attr_rec.attribute_name;
   end LOOP;
 
   return ''insert into '' || v_table_name || 
-    '' ( '' || v_id_column || cols || '' ) values (cr_dummy.val'' ||
+    '' ( '' || v_id_column || cols || '' ) values (v_revision_id'' ||
     vals || '')'';
   
 end;' language 'plpgsql' stable;
-
--- dummy table provides a target for updates in dynamically generated trigger
--- statements.  If type is cr_revisions then rule would end up having only a 
--- select statement which causes an error to be thrown by the dml command.
--- dml command checks for NS_ROWS result and throws an error if found.  
--- Using a dummy update causes NS_OK to be returned which satisfies the dml
--- result checking.
-
--- DCW, 2001-06-09
-
-create table cr_dummy (
-       val integer
-);
-
-insert into cr_dummy (val) values (null);
-
-create function cr_dummy_ins_del_tr () returns opaque as '
-begin
-        raise exception ''Only updates are allowed on cr_dummy'';
-        return null;
-end;' language 'plpgsql';
-
-create trigger cr_dummy_ins_del_tr before insert or delete on 
-cr_dummy for each row execute procedure cr_dummy_ins_del_tr ();
-
 
 -- FIXME: need to look at this in more detail.  This probably can't be made 
 -- to work reliably in postgresql.  Currently we are using a rule to insert 
@@ -555,11 +530,13 @@ returns integer as '
 declare
   refresh_trigger__content_type           alias for $1;  
   rule_text                               text default '''';
+  function_text                           text default '''';
   v_table_name                            acs_object_types.table_name%TYPE;
   type_rec                                record;
 begin
 
   -- get the table name for the content type (determines view name)
+  raise NOTICE ''refresh trigger for % '', refresh_trigger__content_type;
 
   select table_name 
     into v_table_name
@@ -568,26 +545,30 @@ begin
 
   --=================== start building rule code =======================
 
-  rule_text := ''create rule '' || v_table_name || ''_r as on insert to '' ||
-               v_table_name || ''i do instead (
-                update cr_dummy set val = (
-                select content_revision__new(
-                                     new.title,
-                                     new.description,
+  function_text := function_text ||
+             ''create or replace function '' || v_table_name || ''_f (p_new ''|| v_table_name || ''i)
+             returns void as ''''
+             declare
+               v_revision_id integer;
+             begin
+
+               select content_revision__new(
+                                     p_new.title,
+                                     p_new.description,
                                      now(),
-                                     new.mime_type,
-                                     new.nls_language,
-                                     case when new.text is null 
-                                              then new.data 
-                                              else new.text
+                                     p_new.mime_type,
+                                     p_new.nls_language,
+                                     case when p_new.text is null 
+                                              then p_new.data 
+                                              else p_new.text
                                            end,
-                                     content_symlink__resolve(new.item_id),
-                                     new.revision_id,
+                                     content_symlink__resolve(p_new.item_id),
+                                     p_new.revision_id,
                                      now(),
-                                     new.creation_user, 
-                                     new.creation_ip,
-                                     new.object_package_id
-                ));
+                                     p_new.creation_user, 
+                                     p_new.creation_ip,
+                                     p_new.object_package_id
+                ) into v_revision_id;
                 '';
 
   -- add an insert statement for each subtype in the hierarchy for this type
@@ -600,13 +581,21 @@ begin
                     and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
                   order by level asc
   LOOP
-    rule_text := rule_text || '' '' || content_type__trigger_insert_statement(type_rec.object_type) || '';'';
+    function_text := function_text || '' '' || content_type__trigger_insert_statement(type_rec.object_type) || '';
+    '';
   end loop;
 
+  function_text := function_text || ''
+   return;
+   end;'''' language ''''plpgsql''''; 
+   '';
   -- end building the rule definition code
 
-  rule_text := rule_text || '' );'';
+  -- create the new function
+  execute function_text;
 
+  rule_text := ''create rule '' || v_table_name || ''_r as on insert to '' ||
+               v_table_name || ''i do instead SELECT '' || v_table_name || ''_f(new); '' ;
   --================== done building rule code =======================
 
   -- drop the old rule
@@ -671,7 +660,7 @@ begin
   -- create the input view (includes content columns)
 
   if table_exists(v_table_name || ''i'') then
-     execute ''drop view '' || v_table_name || ''i'';
+     execute ''drop view '' || v_table_name || ''i'' || '' CASCADE'';
   end if;
 
   -- FIXME:  need to look at content_revision__get_content.  Since the CR

@@ -111,6 +111,7 @@ ad_proc -public ::content::item::new {
     # the cr_item subtype here and content_type as part of
     # var_list
     db_transaction {
+    db_dml lock_objects "LOCK TABLE acs_objects IN SHARE ROW EXCLUSIVE MODE"
     set item_id [package_exec_plsql \
 		     -var_list $var_list \
 		     content_item new]
