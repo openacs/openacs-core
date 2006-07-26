@@ -302,6 +302,7 @@ namespace eval acs_mail_lite {
 
 		    # We execute all callbacks now
 		    callback acs_mail_lite::incoming_email -array email
+
 #		} else {
 #		    ns_log Notice "load_mails: prefix not found. Doing nothing."
 #		}
@@ -994,7 +995,11 @@ namespace eval acs_mail_lite {
         return $message_id
     }
 
-    
+
+    # complex_send
+    # created ... by ...
+    # modified 2006/07/25 by nfl: new param. alternative_part_p
+    #                             and creation of multipart/alternative    
     ad_proc -public complex_send {
 	-send_immediately:boolean
 	-valid_email:boolean
@@ -1019,9 +1024,10 @@ namespace eval acs_mail_lite {
 	{-single_email_p ""}
 	{-no_callback_p ""}
 	{-extraheaders ""}
+        {-alternative_part_p ""}
 	-single_email:boolean
 	-no_callback:boolean 
-	-use_sender:boolean 
+	-use_sender:boolean
     } {
 
 	Prepare an email to be send with the option to pass in a list
@@ -1077,6 +1083,8 @@ namespace eval acs_mail_lite {
 	@param no_callback_p Boolean that indicates if callback should be executed or not. If you don't provide it it will execute callbacks. Used so we can set a variable in the callers environment to call complex_send.
 
 	@param use_sender Boolean indicating that from_addr should be used regardless of fixed-sender parameter
+
+        @param alternative_part_p Boolean whether or not the code generates a multipart/alternative mail (text/html)
     } {
 
 	if {[empty_string_p $package_id]} {
@@ -1093,12 +1101,43 @@ namespace eval acs_mail_lite {
 	    set sender_addr $from_addr
 	}
 
+        # default values for alternative_part_p
+        # TRUE on mime_type text/html
+        # FALSE on mime_type text/plain
+        # if { [empty_string_p $alternative_part_p] } {    ...} 
+        if { $alternative_part_p eq "" } {
+	    if { $mime_type eq "text/plain" } {
+		#set alternative_part_p FALSE
+                set alternative_part_p "0"
+            } else {
+                #set alternative_part_p TRUE
+                set alternative_part_p "1"
+            }
+        }
+
 	set party_id($sender_addr) [party::get_by_email -email $sender_addr]
 	set party_id($from_addr) [party::get_by_email -email $from_addr]
 	set from_string "[party::name -email $sender_addr] <${sender_addr}>"
-	
-	# Set the message token
-	set message_token [mime::initialize -canonical "$mime_type" -string "$body"]
+
+        # decision between normal or multipart/alternative body
+        if { $alternative_part_p eq "0"} {
+  	    # Set the message token
+	    set message_token [mime::initialize -canonical "$mime_type" -string "$body"]
+        } else {
+            # build multipart/alternative
+	    if { $mime_type eq "text/plain" } {
+		set message_text_part [mime::initialize -canonical "text/plain" -string "$body"]
+                set converted [ad_text_to_html "$body"]
+                set message_html_part [mime::initialize -canonical "text/html" -string "$converted"]
+            } else {
+		set message_html_part [mime::initialize -canonical "text/html" -string "$body"]
+                set converted [ad_html_to_text "$body"]
+                set message_text_part [mime::initialize -canonical "text/plain" -string "$converted"]
+            }   
+            set message_token [mime::initialize -canonical multipart/alternative -parts [list $message_text_part $message_html_part]]
+            # see RFC 2046, 5.1.4.  Alternative Subtype, for further information/reference (especially order of parts)  
+        }
+
 
 	# encode all attachments in base64
     
@@ -1288,7 +1327,7 @@ namespace eval acs_mail_lite {
 	    && ![string equal $delivery_mode default]
 	} {
 	    set eh [util_list_to_ns_set $extraheaders]
-	    ns_sendmail $to_addr $sender_addr $subject $packaged $eh $bcc
+	    ns_sendmail $to_addr $sender_addr $subject $packaged $eh $bcc_addr
 	    #Close all mime tokens
 	    mime::finalize $multi_token -subordinates all
 	} else {
@@ -1308,15 +1347,15 @@ namespace eval acs_mail_lite {
 
 		# Append the entries from the system users to the e-mail
 		foreach party $to_party_ids {
-		    lappend to_list "\"[party::name -party_id $party]\" <[party::email -party_id $party]>"
+		    lappend to_list "\"[party::name -party_id $party]\" <[party::email_not_cached -party_id $party]>"
 		}
 		
 		foreach party $cc_party_ids {
-		    lappend cc_list "\"[party::name -party_id $party]\" <[party::email -party_id $party]>"
+		    lappend cc_list "\"[party::name -party_id $party]\" <[party::email_not_cached -party_id $party]>"
 		}
 		
 		foreach party $bcc_party_ids {
-		    lappend bcc_list "\"[party::name -party_id $party]\" <[party::email -party_id $party]>"
+		    lappend bcc_list "\"[party::name -party_id $party]\" <[party::email_not_cached -party_id $party]>"
 		}
 
 		smtp::sendmessage $multi_token \
@@ -1381,7 +1420,7 @@ namespace eval acs_mail_lite {
 		set recipient_list [concat $to_party_ids $cc_party_ids $bcc_party_ids]
 		foreach party $recipient_list {
 		    set message_id [mime::uniqueID]
-		    set email "\"[party::name -party_id $party]\" <[party::email -party_id $party]>"
+		    set email "\"[party::name -party_id $party]\" <[party::email_not_cached -party_id $party]>"
 
 		    smtp::sendmessage $multi_token \
 			-header [list From "$from_string"] \
