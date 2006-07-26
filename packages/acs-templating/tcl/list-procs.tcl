@@ -2740,7 +2740,6 @@ ad_proc -private template::list::filter_form {
 		set __client_property_filters [list]
 
 	    foreach {__ref __value} $__old_client_property_filters {
-		ns_log notice "clear_one [set ${__ref}(name)] $clear_one"
 		if {[set ${__ref}(name)] ne $clear_one} {
 		    lappend __client_property_filters $__ref $__value
 		}
@@ -2748,10 +2747,9 @@ ad_proc -private template::list::filter_form {
 	    # if we changed the list of filters, save it in the 
 	    # client property, we read it later on to build the
 	    # form of selected filters
-            if {[exists_and_not_null __client_property_filters]} {
-		set client_property_filters $__client_property_filters
-		ad_set_client_property acs-templating $__list_filter_form_client_property_key $__client_property_filters
-	    }
+	    set client_property_filters $__client_property_filters
+	    ad_set_client_property acs-templating $__list_filter_form_client_property_key $__client_property_filters
+	    
 	}
     } -on_submit {
 
