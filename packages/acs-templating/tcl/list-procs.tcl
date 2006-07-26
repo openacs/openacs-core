@@ -2659,6 +2659,7 @@ ad_proc -private template::list::filter_form {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
     
+    set filter_names_options_tmp [list]
     set filter_names_options [list]
     set filter_hidden_filters [list]
     set filter_key_filters [list]
@@ -2671,7 +2672,7 @@ ad_proc -private template::list::filter_form {
 	if {$filter_properties(label) ne "" && $filter_properties(name) ne "orderby" && $filter_properties(name) ne "groupby"} {
 	    # filters with a label will be added to the form for the user
 	    # to choose from
-	    lappend filter_names_options [list $filter_properties(label) $filter_properties(name)]
+	    lappend filter_names_options_tmp [list $filter_properties(label) $filter_properties(name)]
 	} else {
 
 	    # filters without a label are added as hidden elements
@@ -2684,10 +2685,13 @@ ad_proc -private template::list::filter_form {
 	    upvar $list_properties(ulevel) $filter_properties(name) current_filter_value
 	    if {[info exists current_filter_value] && $current_filter_value ne ""} {
 		lappend filter_hidden_filters $filter_properties(name)
-		lappend filter_key_filters $filter_properties(name) $current_filter_value
+		if {$filter_properties(name) ne "groupby" && $filter_properties(name) ne "orderby"} {
+		    lappend filter_key_filters $filter_properties(name) $current_filter_value
+		}
 	    }
 	}
     }
+
     upvar #[template::adp_level] __list_filter_form_client_property_key list_filter_form_client_property_key 
     # we only get 50 characters
     # to save our clienty property name, we can encode it into an
@@ -2696,6 +2700,16 @@ ad_proc -private template::list::filter_form {
     set list_filter_form_client_property_key [ns_sha1 [list [ad_conn url] $name $filter_key_filters]]
     upvar \#[template::adp_level] __client_property_filters client_property_filters
     set client_property_filters [ad_get_client_property acs-templating $list_filter_form_client_property_key]
+
+    # take out filters we already applied...
+    set i 0
+    foreach option_list $filter_names_options_tmp {
+	set option_label [lindex $option_list 0]
+	set option_name [lindex $option_list 1]
+	if {[lsearch $client_property_filters "${name}:filter:${option_name}:properties"]<0} {
+	    lappend filter_names_options [list $option_label $option_name]
+	}
+    }
     # build an ad_form form based on the choosen filters
     set filters_form_name list-filters-$name
     set add_filter_form_name list-filter-add-$name
