@@ -106,46 +106,6 @@ begin
    pretty_plural => 'Package Keys'
  );
 
- attr_id := acs_attribute.create_attribute(
-   object_type => 'apm_package',
-   attribute_name => 'package_uri',
-   datatype => 'string',
-   pretty_name => 'Package URI',
-   pretty_plural => 'Package URIs'
- );
-
- attr_id := acs_attribute.create_attribute(
-   object_type => 'apm_package',
-   attribute_name => 'spec_file_path',
-   datatype => 'string',
-   pretty_name => 'Specification File Path',
-   pretty_plural => 'Specification File Paths'
- );
-
- attr_id := acs_attribute.create_attribute(
-   object_type => 'apm_package',
-   attribute_name => 'spec_file_mtime',
-   datatype => 'number',
-   pretty_name => 'Specification File Modified Time',
-   pretty_plural => 'Specification File Modified Times'
- );
-
- attr_id := acs_attribute.create_attribute(
-   object_type => 'apm_package',
-   attribute_name => 'singleton_p',
-   datatype => 'boolean',
-   pretty_name => 'Singleton',
-   pretty_plural => 'Singletons'
- ); 
-
- attr_id := acs_attribute.create_attribute(
-   object_type => 'apm_package',
-   attribute_name => 'initial_install_p',
-   datatype => 'boolean',
-   pretty_name => 'Initial Install',
-   pretty_plural => 'Initial Installs'
- ); 
-
 end;
 /
 show errors;
@@ -454,7 +414,7 @@ begin
  attr_id := acs_attribute.create_attribute(
    object_type => 'apm_package_version',
    attribute_name => 'enabled_p',
-   datatype => 'string',
+   datatype => 'boolean',
    pretty_name => 'Enabled',
    pretty_plural => 'Enabled'
  );
@@ -470,7 +430,7 @@ begin
  attr_id := acs_attribute.create_attribute(
    object_type => 'apm_package_version',
    attribute_name => 'deactivation_date',
-   datatype => 'string',
+   datatype => 'date',
    pretty_name => 'Deactivation Date',
    pretty_plural => 'Deactivation Dates'
  );
@@ -723,7 +683,7 @@ begin
  attr_id := acs_attribute.create_attribute(
    object_type => 'apm_parameter',
    attribute_name => 'max_n_values',
-   datatype => 'string',
+   datatype => 'integer',
    pretty_name => 'Maximum Number of Values',
    pretty_plural => 'Maximum Number of Values Settings',
    default_value => 1

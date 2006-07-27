@@ -306,7 +306,7 @@ begin
  attr_id := acs_attribute.create_attribute (
    object_type => 'cr_item_child_rel',
    attribute_name => 'parent_id',
-   datatype => 'text',
+   datatype => 'integer',
    pretty_name => 'Parent ID',
    pretty_plural => 'Parent IDs'
  );
@@ -314,7 +314,7 @@ begin
  attr_id := acs_attribute.create_attribute (
    object_type => 'cr_item_child_rel',
    attribute_name => 'child_id',
-   datatype => 'text',
+   datatype => 'integer',
    pretty_name => 'Child ID',
    pretty_plural => 'Child IDs'
  );
@@ -330,7 +330,7 @@ begin
  attr_id := acs_attribute.create_attribute (
    object_type => 'cr_item_child_rel',
    attribute_name => 'order_n',
-   datatype => 'text',
+   datatype => 'integer',
    pretty_name => 'Sort Order',
    pretty_plural => 'Sort Orders'
  );
@@ -348,7 +348,7 @@ begin
  attr_id := acs_attribute.create_attribute (
    object_type => 'cr_item_rel',
    attribute_name => 'item_id',
-   datatype => 'text',
+   datatype => 'integer',
    pretty_name => 'Item ID',
    pretty_plural => 'Item IDs'
  );
@@ -356,7 +356,7 @@ begin
  attr_id := acs_attribute.create_attribute (
    object_type => 'cr_item_rel',
    attribute_name => 'related_object_id',
-   datatype => 'text',
+   datatype => 'integer',
    pretty_name => 'Related Object ID',
    pretty_plural => 'Related Object IDs'
  );
@@ -372,7 +372,7 @@ begin
  attr_id := acs_attribute.create_attribute (
    object_type => 'cr_item_rel',
    attribute_name => 'order_n',
-   datatype => 'text',
+   datatype => 'integer',
    pretty_name => 'Sort Order',
    pretty_plural => 'Sort Orders'
  );
