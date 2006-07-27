@@ -12,6 +12,12 @@ ad_proc -public application_link::new {
     -this_package_id:required
     -target_package_id:required
 } {
+    Create a new link between this_package_id and target_package_id.
+
+    @param this_package_id ID of the package that you want linked to the target
+    package.
+    @param target_package_id The ID of the target package.
+} {
     if {[catch {ad_conn user_id} user_id]} {
 	set user_id 0
     }
@@ -29,6 +35,12 @@ ad_proc -public application_link::new {
 ad_proc -public application_link::delete_links {
     -package_id:required
 } {
+    Delete application links for all packages linking to the given
+    package_id.
+
+    @param package_id Package ID that you want application links removed
+    from.
+} {
     set rel_ids [db_list linked_packages {}]
 
     foreach rel_id $rel_ids {
@@ -39,12 +51,25 @@ ad_proc -public application_link::delete_links {
 ad_proc -public application_link::get {
     -package_id:required
 } {
+    Retrieves a list of package_ids for all applications linked to the
+    given package_id.
+
+    @return List of linked package ids.
+} {
     return [db_list linked_packages {}]
 }
 
 ad_proc -public application_link::get_linked {
     -from_package_id:required
     -to_package_key:required
+} {
+    Gets the ID for the application linked to from_package_id and matches the
+    to_package_type.
+
+    @param from_package_id Object ID of linked-from application.
+    @param to_package_type Object type of linked-to application.
+
+    @return package_id of linked package.
 } {
     return [db_list linked_package {}]
 }
