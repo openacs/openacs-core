@@ -536,6 +536,15 @@ ad_proc -public add_form_elements {
     { -object_type "acs_object" }
     { -variable_prefix "" }
 } {
+    Adds form elements to the specified form_id.  Each form element
+    corresponds to an attribute belonging to the given object_type.
+
+    @param form_id ID of a form to add form elements to.
+    @param start_with Object type to start with.  Defaults to acs_object.
+    @param object_type Object type to extract attributes for.
+    Defaults to acs_object.
+    @param variable_prefix Variable prefix.
+} {
 
     if {[empty_string_p $form_id]} {
 	error "attribute::add_form_elements - form_id not specified"
