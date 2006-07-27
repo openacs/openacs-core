@@ -123,86 +123,6 @@ begin
    ''f''
    );
 
- attr_id := acs_attribute__create_attribute (
-   ''apm_package'',
-   ''package_uri'',
-   ''string'',
-   ''Package URI'',
-   ''Package URIs'',
-   null,
-   null,
-   null,
-   1,
-   1,
-   null,
-   ''type_specific'',
-   ''f''
-   );
-
- attr_id := acs_attribute__create_attribute (
-   ''apm_package'',
-   ''spec_file_path'',
-   ''string'',
-   ''Specification File Path'',
-   ''Specification File Paths'',
-   null,
-   null,
-   null,
-   1,
-   1,
-   null,
-   ''type_specific'',
-   ''f''
-   );
-
- attr_id := acs_attribute__create_attribute (
-   ''apm_package'',
-   ''spec_file_mtime'',
-   ''number'',
-   ''Specification File Modified Time'',
-   ''Specification File Modified Times'',
-   null,
-   null,
-   null,
-   1,
-   1,
-   null,
-   ''type_specific'',
-   ''f''
-   );
-
- attr_id := acs_attribute__create_attribute (
-   ''apm_package'',
-   ''initial_install_p'',
-   ''boolean'',
-   ''Initial Install'',
-   ''Initial Installs'',
-   null,
-   null,
-   null,
-   1,
-   1,
-   null,
-   ''type_specific'',
-   ''f''
-   );
-
- attr_id := acs_attribute__create_attribute (
-   ''apm_package'',
-   ''singleton_p'',
-   ''boolean'',
-   ''Singleton'',
-   ''Singletons'',
-   null,
-   null,
-   null,
-   1,
-   1,
-   null,
-   ''type_specific'',
-   ''f''
-   );
-
   return 0;
 end;' language 'plpgsql';
 
@@ -585,7 +505,7 @@ begin
  attr_id := acs_attribute__create_attribute (
    ''apm_package_version'',
    ''enabled_p'',
-   ''string'',
+   ''boolean'',
    ''Enabled'',
    ''Enabled'',
    null,
@@ -617,7 +537,7 @@ begin
  attr_id := acs_attribute__create_attribute (
    ''apm_package_version'',
    ''deactivation_date'',
-   ''string'',
+   ''date'',
    ''Deactivation Date'',
    ''Deactivation Dates'',
    null,
@@ -945,7 +865,7 @@ begin
  attr_id := acs_attribute__create_attribute (
    ''apm_parameter'',
    ''max_n_values'',
-   ''string'',
+   ''integer'',
    ''Maximum Number of Values'',
    ''Maximum Number of Values Settings'',
    null,

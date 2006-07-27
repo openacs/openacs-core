@@ -398,7 +398,7 @@ begin;
  select acs_attribute__create_attribute (
    'cr_item_child_rel',
    'parent_id',
-   'text',
+   'integer',
    'Parent ID',
    'Parent IDs',
    null,
@@ -414,7 +414,7 @@ begin;
  select acs_attribute__create_attribute (
    'cr_item_child_rel',
    'child_id',
-   'text',
+   'integer',
    'Child ID',
    'Child IDs',
    null,
@@ -446,7 +446,7 @@ begin;
  select acs_attribute__create_attribute (
    'cr_item_child_rel',
    'order_n',
-   'text',
+   'integer',
    'Sort Order',
    'Sort Orders',
    null,
@@ -475,7 +475,7 @@ begin;
  select acs_attribute__create_attribute (
    'cr_item_rel',
    'item_id',
-   'text',
+   'integer',
    'Item ID',
    'Item IDs',
    null,
@@ -491,7 +491,7 @@ begin;
  select acs_attribute__create_attribute (
    'cr_item_rel',
    'related_object_id',
-   'text',
+   'integer',
    'Related Object ID',
    'Related Object IDs',
    null,
@@ -523,7 +523,7 @@ begin;
  select acs_attribute__create_attribute (
    'cr_item_rel',
    'order_n',
-   'text',
+   'integer',
    'Sort Order',
    'Sort Orders',
    null,
