@@ -29,7 +29,7 @@ aa_register_case -cats {api smoke} ad_proc_create_callback {
             $callback_procs \
             ::callback::a_callback::contract] >= 0}]
 
-    ad_proc -callback a_callback_2 { arg1 arg2 } { this is a test callback }
+    ad_proc -callback a_callback_2 { arg1 arg2 } { this is a test callback } {}
     set callback_procs [info procs ::callback::a_callback_2::*]
     aa_true "creation of a valid callback contract with no body" \
         [expr {[lsearch -exact \
@@ -99,6 +99,8 @@ ad_proc -callback a_callback -impl fail_impl {} {
 }
 
 ad_proc EvilCallback {} {
+    This is a test callback implementation that should not be invoked.
+} {
         error "Should not be invoked"
 }
 

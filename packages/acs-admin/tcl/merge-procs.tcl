@@ -14,6 +14,12 @@ ad_proc -public merge::MergeUserInfo {
     -from_user_id:required
     -to_user_id:required
 } {
+    Merge user info.  Revokes permissions for from_user_id and grants
+    them to to_user_id.
+
+    @param from_user_id From user ID.
+    @param to_user_id To user ID. 
+} {
     ns_log Notice "Running merge::MergeUserInfo"
     db_transaction {
 	if { ![db_0or1row to_user_portrait {*SQL*}] &&  [db_0or1row from_user_portrait {*SQL*}] } {
