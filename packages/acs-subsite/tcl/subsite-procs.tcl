@@ -551,6 +551,10 @@ ad_proc -public subsite::add_section_row {
     {-multirow:required}
     {-section {}}
 } {
+    Helper proc for adding rows of sections to the page flow of the subsite.
+
+    @see subsite::define_pageflow
+} {
     upvar $array info
 
     # the folder index page is called .
@@ -629,6 +633,8 @@ ad_proc -public subsite::get_section_info {
 }
 
 ad_proc -public subsite::get_pageflow_struct {} {
+    Defines the page flow structure.
+} {
     # This is where the page flow structure is defined
     set subsections [list]
     lappend subsections home {
