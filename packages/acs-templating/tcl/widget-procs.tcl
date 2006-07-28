@@ -84,11 +84,32 @@ ad_proc -public template::widget::party_search { element_reference tag_attribute
     return $output
 }
 
-ad_proc -public template::data::validate::party_search { value_ref message_ref } {
+ad_proc -public template::data::validate::party_search { 
+    value_ref
+    message_ref
+} {
+    Validate the party search entry form.
+
+    @param value_ref A reference to the value input by the user.
+    @param message_ref A reference to the form element error field.
+
+    @return true - all input for this datatype is valid.
+} {
     return 1
 }
 
-ad_proc -private template::data::transform::party_search { element_ref } {
+ad_proc -private template::data::transform::party_search {
+    element_ref
+} {
+    Do the actual search of parties using the input value and return a list of lists
+    consisting of (party_name, party_id).
+
+    DRB: The blank string check should actually be in the validate procedure.
+
+    @param element_ref Reference variable to the form element.
+    @return search result or error
+
+} {
     upvar $element_ref element
     set element_id $element(id)
 
@@ -172,7 +193,12 @@ ad_proc -private template::data::transform::party_search { element_ref } {
 }
 
 
-ad_proc -public template::widget::search { element_reference tag_attributes } {
+ad_proc -public template::widget::search {
+    element_reference
+    tag_attributes
+} {
+    Return a widget consisting of either a search box or a search pull-down list.
+
     Here is an example of using the search widget with ad_form:
 
 <pre>
@@ -189,6 +215,12 @@ ad_proc -public template::widget::search { element_reference tag_attributes } {
 </pre>
     Can be either a select widget initially if options supplied 
     or a text box which on submit changes to a select widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes If the "options" attribute is passed in, a select widget
+           is created, otherwise a search text box.
+
+    @return Form HTML for widget
 
 } {
     upvar $element_reference element
@@ -214,11 +246,18 @@ ad_proc -public template::widget::search { element_reference tag_attributes } {
 }
 
 ad_proc -public template::widget::textarea {
-    element_reference tag_attributes
+    element_reference
+    tag_attributes
 } {
     A widget for the HTML form input textarea element.  Includes spellchecker.
 
     @see template::util::spellcheck::spellcheck_properties
+
+    @param element_reference Reference to the form element.
+    @param tag_attributes Html attributes to set in the widget.
+
+    @return Form HTML for widget
+
 } {
 
     upvar $element_reference element
@@ -260,6 +299,18 @@ ad_proc -private template::widget::textarea_internal {
     {value {}}
     {mode edit}
 } {
+    Do the actual construction of a textarea widget, called by various user-callable
+    widgets.
+
+    @param name Name of the widget.
+    @param attribute_reference Reference variable to the tag_attributes passed to the calling
+           widget proc.
+    @param value Optional value
+    @param mode If edit, output the textarea HTML, otherwise pass along the value (if
+           it exists) in a hidden HTML input tag
+
+    @return Form HTML for widget
+} {
     upvar $attribute_reference attributes
 
     if { ![string equal $mode "edit"] } {
@@ -299,7 +350,19 @@ ad_proc -public template::widget::inform { element_reference tag_attributes } {
     }
 }
 
-ad_proc -public template::widget::input { type element_reference tag_attributes } {
+ad_proc -public template::widget::input {
+    type
+    element_reference
+    tag_attributes
+} {
+    General proc used by a wide variety of widgets to output input HTML tags.
+
+    @param type The type of widget (checkbox, radio, text etc)
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to hang on the input tag
+
+    @return Form HTML for widget
+} {
 
     upvar $element_reference element
 
@@ -350,7 +413,18 @@ ad_proc -public template::widget::input { type element_reference tag_attributes 
     return $output
 }
 
-ad_proc -public template::widget::text { element_reference tag_attributes } {
+ad_proc -public template::widget::text {
+    element_reference
+    tag_attributes
+} {
+
+    Generate a text widget (not to be confused with textarea)
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
 
     upvar $element_reference element
 
@@ -367,7 +441,17 @@ ad_proc -public template::widget::text { element_reference tag_attributes } {
 
 
 
-ad_proc -public template::widget::file { element_reference tag_attributes } {
+ad_proc -public template::widget::file {
+    element_reference
+    tag_attributes
+} {
+    Generate a file widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
 
     upvar $element_reference element
 
@@ -376,7 +460,17 @@ ad_proc -public template::widget::file { element_reference tag_attributes } {
 
 
 
-ad_proc -public template::widget::password { element_reference tag_attributes } {
+ad_proc -public template::widget::password {
+    element_reference
+    tag_attributes
+} {
+    Generate a password input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
 
     upvar $element_reference element
 
@@ -384,14 +478,34 @@ ad_proc -public template::widget::password { element_reference tag_attributes } 
 }
 
 
-ad_proc -public template::widget::hidden { element_reference tag_attributes } {
+ad_proc -public template::widget::hidden {
+    element_reference
+    tag_attributes
+} {
+    Render a hidden input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
 
     upvar $element_reference element
 
     return [input hidden element $tag_attributes]
 }
 
-ad_proc -public template::widget::submit { element_reference tag_attributes } {
+ad_proc -public template::widget::submit {
+    element_reference
+    tag_attributes
+} {
+    Render a submit input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
 
     upvar $element_reference element
 
@@ -401,7 +515,17 @@ ad_proc -public template::widget::submit { element_reference tag_attributes } {
     return [input submit element $tag_attributes]
 }
 
-ad_proc -public template::widget::attachment { element_reference tag_attributes } {
+ad_proc -public template::widget::attachment {
+    element_reference
+    tag_attributes
+} {
+    Render an attachment input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
 
     upvar $element_reference element
 
@@ -416,21 +540,51 @@ ad_proc -public template::widget::attachment { element_reference tag_attributes 
     return $output
 }
 
-ad_proc -public template::widget::checkbox { element_reference tag_attributes } {
+ad_proc -public template::widget::checkbox {
+    element_reference
+    tag_attributes
+} {
+    Render a checkbox input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
 
     upvar $element_reference element
 
     return [input checkbox element $tag_attributes]
 }
 
-ad_proc -public template::widget::radio { element_reference tag_attributes } {
+ad_proc -public template::widget::radio {
+    element_reference
+    tag_attributes
+} {
+    Render a radio input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
 
     upvar $element_reference element
 
     return [input radio element $tag_attributes]
 }
 
-ad_proc -public template::widget::button { element_reference tag_attributes } {
+ad_proc -public template::widget::button {
+    element_reference
+    tag_attributes
+} {
+    Render a button input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
 
     upvar $element_reference element
 
@@ -444,6 +598,19 @@ ad_proc -public template::widget::menu {
     attribute_reference
     {mode edit}
     {widget_type select}
+} {
+    Render a menu widget (a "select" dropdown menu by default).
+
+    @param widget_name Name of the widget
+    @param options_list List of option/value pairs (i.e. dropdown menu items)
+    @param values_list List of values (i.e. the selected default value)
+    @param attribute_reference Reference variable to the caller's tag_attributes param
+    @param mode If "edit" the widget is rendered, otherwise values are passed along
+           using hidden input HTML tags
+    @param widget_type Select, checkbox, etc
+
+    @return Form HTML for widget
+
 } {
 
     upvar $attribute_reference attributes
@@ -519,7 +686,17 @@ ad_proc -public template::widget::menu {
     return $output
 }
 
-ad_proc -public template::widget::select { element_reference tag_attributes } {
+ad_proc -public template::widget::select {
+    element_reference
+    tag_attributes
+} {
+    Render a select widget which allows only one value to be selected.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
 
     upvar $element_reference element
 
@@ -533,7 +710,17 @@ ad_proc -public template::widget::select { element_reference tag_attributes } {
                 $element(name) $element(options) $element(values) attributes $element(mode)]
 }
 
-ad_proc -public template::widget::multiselect { element_reference tag_attributes } {
+ad_proc -public template::widget::multiselect {
+    element_reference
+    tag_attributes
+} {
+    Render a select widget which allows any number of values to be selected.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
 
     upvar $element_reference element
 
@@ -559,7 +746,15 @@ ad_proc -public template::widget::multiselect { element_reference tag_attributes
                 $element(name) $element(options) $element(values) attributes $element(mode)]
 }
 
-ad_proc -public template::data::transform::search { element_ref } {
+ad_proc -public template::data::transform::search {
+    element_ref
+} {
+    Process a submitted search widget's data.
+
+    @param element_ref Reference variable to the form element
+
+    @return Transformed value
+} {
 
     upvar $element_ref element
     set element_id $element(id)
@@ -628,7 +823,17 @@ ad_proc -public template::data::transform::search { element_ref } {
     return [list $value]
 }
 
-ad_proc -public template::widget::comment { element_reference tag_attributes } {
+ad_proc -public template::widget::comment {
+    element_reference
+    tag_attributes
+} {
+    Render a comment widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
 
     upvar $element_reference element
 
@@ -659,8 +864,16 @@ ad_proc -public template::widget::comment { element_reference tag_attributes } {
     return $output
 }
 
-ad_proc -public template::widget::block { element_reference tag_attributes } {
-    widget for blocks of radio-buttoned questions
+ad_proc -public template::widget::block {
+    element_reference
+    tag_attributes
+} {
+    Widget for blocks of radio-buttoned questions
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
 } {
     upvar $element_reference element
     
