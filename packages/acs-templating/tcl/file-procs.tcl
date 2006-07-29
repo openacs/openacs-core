@@ -40,7 +40,17 @@ ad_proc -public template::data::validate::file { value_ref message_ref } {
     return 1
 }
 
-ad_proc -public template::util::file::get_property { what file_list } {
+ad_proc -public template::util::file::get_property {
+    what
+    file_list
+} {
+    Return a property from a file datatype structure.
+
+    @param what Which property to return (filename, etc).
+    @param file_list The file datatype structure.
+
+    @return The requested property from the file datatype structure.
+} {
 
     switch $what {
         filename {

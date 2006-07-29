@@ -11,7 +11,17 @@ namespace eval template {}
 namespace eval template::widget {}
 namespace eval template::tabstrip {}
 
-ad_proc -public template::widget::tab { element_reference tag_attributes } {
+ad_proc -public template::widget::tab {
+  element_reference
+  tag_attributes
+} {
+  Widget to create one tab in a set of tabs ("tabstrip") in the tabbed UI.
+
+  @param element_reference Reference variable to the form element
+  @param tag_attributes HTML attributes to add to the tag
+
+  @return Form HTML for the widget
+} {
 
   upvar $element_reference element
 
@@ -45,14 +55,24 @@ ad_proc -public template::widget::tab { element_reference tag_attributes } {
 namespace eval template::tabstrip {}
 
 # Dispatch proc
-ad_proc -public template::tabstrip { command args } {
+ad_proc -public template::tabstrip {
+  command
+  args
+} {
+  Dispatch procedure for tabstrip.
+} {
   eval template::tabstrip::$command $args
 }
 
 # Create a new tabbed page
 # accepts the -base_url tag
 
-ad_proc -public template::tabstrip::create { dlg_name args } {
+ad_proc -public template::tabstrip::create {
+  dlg_name
+  args
+} {
+  Create a tabstrip, which is a UI tool consisting of a set of clickable tabs.
+} {
 
   template::util::get_opts $args
 
@@ -106,6 +126,8 @@ ad_proc -public template::tabstrip::create { dlg_name args } {
 ad_proc -public template::tabstrip::add_tab { 
   dlg_name name label template args
 } {
+  Add a tab to the given tabstrip.
+} {
   # Determine the current tab
   set level [template::adp_level]
   upvar #$level $dlg_name:properties properties
@@ -147,7 +169,11 @@ ad_proc -public template::tabstrip::add_tab {
 
 }
 
-ad_proc -public template::tabstrip::set_current_tab { dlg_name tab_name {rel_level 2}} {
+ad_proc -public template::tabstrip::set_current_tab {
+  dlg_name tab_name {rel_level 2}
+} {
+  Set the current tab (to be highlighted as a cue for the user) in the given tabstrip.
+} {
   
   set level [template::adp_level]
   upvar #$level $dlg_name:properties properties 

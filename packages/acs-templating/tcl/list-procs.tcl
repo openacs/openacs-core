@@ -582,6 +582,8 @@ ad_proc -public template::list::prepare {
 ad_proc -public template::list::get_refname {
     {-name:required}
 } {
+    Return a canonical name for the given list template.
+} {
     return "$name:properties"
 }
 
@@ -589,6 +591,17 @@ ad_proc -public template::list::get_reference {
     {-name:required}
     {-local_name "list_properties"}
     {-create:boolean}
+} {
+    Bind an upvar reference to a variable at the template parse level to a local
+    variable, optionally giving an error message if it doesn't exist.
+
+    @param name Name of the variable at the template parse level.
+    @param local_name Name of the local variable to bind the reference to, default
+           "list_properties".
+    @param create Boolean which if true suppresses the "not found" error return, for
+           instance when you're building the reference in order to create a new
+           list.
+
 } {
     set refname [get_refname -name $name]
     
@@ -604,7 +617,14 @@ ad_proc -private template::list::get_url {
     {-override ""}
     {-exclude ""}
 } {
-    @param  and     Set this flag if you want the result to start with an 'and' if the list of where clauses returned is non-empty.
+    Build a URL for the current page with query variables set for the various filters
+    active for the named list.  
+
+    @param name The name of the list
+    @param override Values that export_vars should override
+    @param exclude Values that export_vars should not put in the query string
+
+    @return The current page's URL decorated with the computed query string
 } {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
@@ -940,6 +960,11 @@ ad_proc -private template::list::template {
 ad_proc -private template::list::prepare_for_rendering {
     {-name:required}
 } {
+    Build all the variable references that are required when rendering a list
+    template.
+
+    @param name The name of the list template we hope to be able to render eventually.
+} {
     set __level [template::adp_level]
 
     # Provide a reference to the list properties for use by the list template
@@ -1088,6 +1113,15 @@ ad_proc -private template::list::render {
     {-name:required}
     {-style ""}
 } {
+    Simple procedure to render HTML from a list template
+
+    (That's a lame joke, Don)
+
+    @param name The name of the list template.
+    @param style Style template used to render this list template.
+
+    @return HTML suitable for display by your favorite browser.
+} {
     set level [template::adp_level]
     
     # Creates the '_eval' columns and aggregates
@@ -1183,6 +1217,8 @@ ad_proc -private template::list::render {
 
 ad_proc -private template::list::render_row {
     {-name:required}
+} {
+    Render one row of a list template.
 } {
     set level [template::adp_level]
 
@@ -1479,6 +1515,12 @@ ad_proc -private template::list::render_filters {
 ad_proc -public template::list::util_html_to_attributes_string {
     html
 } {
+    Takes a list in array get format and builds HTML attributes from them.
+
+    @param html A misnomer?  The input isn't HTML, the output is HTML.
+
+    @return HTML attributes built from the list in array get format
+} {
     set output {}
     foreach { key value } $html {
         if { ![empty_string_p $value] } {
@@ -1750,6 +1792,8 @@ ad_proc -public template::list::element::set_property {
     {-value:required}
     {-ulevel 1}
 } {
+    Set a property in the named list template.
+} {
     # Get an upvar'd reference to list_properties
     template::list::get_reference -name $list_name
     
@@ -1794,6 +1838,8 @@ ad_proc -public template::list::element::set_properties {
     {-element_name:required}
     {-spec:required}
     {-ulevel 1}
+} {
+    Set a list of properties in array get format for the given list template.
 } {
     incr ulevel
 
@@ -2019,6 +2065,13 @@ ad_proc -public template::list::filter::get_refname {
     {-list_name:required}
     {-filter_name:required}
 } {
+    Build a canonical name from a list and filter name.
+
+    @param list_name List name.
+    @param filter_name Filter name.
+
+    @return Canonical name built from list_name and filter_name.
+} {
     return "$list_name:filter:$filter_name:properties"
 }
 
@@ -2027,6 +2080,8 @@ ad_proc -public template::list::filter::get_reference {
     {-filter_name:required}
     {-local_name "filter_properties"}
     {-create:boolean}
+} {
+    Build a reference to the given filter for the given list template.
 } {
     set refname [get_refname -list_name $list_name -filter_name $filter_name]
     
@@ -2043,6 +2098,8 @@ ad_proc -public template::list::filter::set_property {
     {-property:required}
     {-value:required}
     {-ulevel 1}
+} {
+    Set a property for the given list and filter.
 } {
     # Get an upvar'd reference to list_properties
     template::list::get_reference -name $list_name
@@ -2082,6 +2139,9 @@ ad_proc -public template::list::filter::set_properties {
     {-spec:required}
     {-ulevel 1}
 } {
+    Set multiple properties for the given list and filter from a list in
+    array get format.
+} {
     incr ulevel
 
     foreach { property value } $spec {
@@ -2100,6 +2160,8 @@ ad_proc -public template::list::filter::get_property {
     {-filter_name:required}
     {-property:required}
 } {
+    Return a property from a given list and filter.
+} {
     get_reference \
         -list_name $list_name \
         -filter_name $filter_name
@@ -2110,6 +2172,13 @@ ad_proc -public template::list::filter::get_property {
 ad_proc -public template::list::filter::exists_p {
     {-list_name:required}
     {-filter_name:required}
+} {
+    Determine if a given filter exists for a given list template.
+
+    @param list_name The name of the list template.
+    @param filter_name The filter name.
+
+    @return True (1) if the filter exists, false (0) if not.
 } {
     set refname [get_refname -list_name $list_name -filter_name $filter_name]
     
@@ -2458,6 +2527,8 @@ ad_proc -public template::list::orderby::get_refname {
     {-list_name:required}
     {-orderby_name:required}
 } {
+    Build a canonical name from a list and orderby filter.
+} {
     return "$list_name:orderby:$orderby_name:properties"
 }
 
@@ -2466,6 +2537,8 @@ ad_proc -public template::list::orderby::get_reference {
     {-orderby_name:required}
     {-local_name "orderby_properties"}
     {-create:boolean}
+} {
+    Build a local reference to an orderby filter for a named list template.
 } {
     # Check that the list exists
     template::list::get_reference -name $list_name
@@ -2484,6 +2557,8 @@ ad_proc -public template::list::orderby::get_property {
     {-orderby_name:required}
     {-property:required}
 } {
+    Get a property from an orderby filter for a list template.
+} {
     get_reference \
         -list_name $list_name \
         -orderby_name $orderby_name
@@ -2497,6 +2572,8 @@ ad_proc -public template::list::orderby::set_property {
     {-property:required}
     {-value:required}
     {-ulevel 1}
+} {
+    Set a property for an orderby filter in the given list template.
 } {
     # Get an upvar'd reference to list_properties
     template::list::get_reference -name $list_name
@@ -2545,6 +2622,9 @@ ad_proc -public template::list::orderby::set_properties {
     {-orderby_name:required}
     {-spec:required}
     {-ulevel 1}
+} {
+    Set multiple properties for the given orderby filter in the given list
+    template from a list in array get format.
 } {
     incr ulevel
 

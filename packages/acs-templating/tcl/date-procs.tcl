@@ -1176,6 +1176,9 @@ ad_proc -public template::util::textdate_localized_format {} {
 ad_proc -public template::util::textdate::create {
     {textdate {}}
 } {
+    Build a textdate datatype structure, which is just the string itself for this
+    simple type.
+} {
     return $textdate
 }
 
@@ -1258,7 +1261,17 @@ ad_proc -public template::data::transform::textdate { element_ref } {
     }
 }
 
-ad_proc -public template::data::validate::textdate { value_ref message_ref } {
+ad_proc -public template::data::validate::textdate {
+    value_ref
+    message_ref
+} {
+  Validate that a submitted textdate if properly formatted.
+
+  @param value_ref Reference variable to the submitted value.
+  @param message_ref Reference variable for returning an error message.
+
+  @return True (1) if valid, false (0) if not.
+} {
 
     upvar 2 $message_ref message $value_ref textdate
     set error_msg [list]
