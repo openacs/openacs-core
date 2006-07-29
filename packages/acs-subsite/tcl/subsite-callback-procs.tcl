@@ -87,9 +87,7 @@ ad_proc -public -callback subsite::parameter_changed {
     @param value The new value.
 
     @see package::set_value
-} {
-
-}
+} -
 
 ad_proc -public -callback subsite::parameter_changed -impl subsite {
    -package_id:required
