@@ -595,7 +595,11 @@ ad_proc -public template::util::clear_cookie { name { domain "" } } {
   ns_set put [ns_conn outputheaders] "Set-Cookie" $cookie
 } 
 
-ad_proc -public template::util::quote_html { html } {
+ad_proc -public template::util::quote_html {
+  html
+} {
+  Quote possible HTML tags in the contents of the html parameter.  
+} {
 
   regsub -all \" [ns_quotehtml $html] \\&quot\; html
 

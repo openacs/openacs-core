@@ -49,6 +49,11 @@ ad_proc -public template::data::transform::spellcheck {
     -element_ref:required
     -values:required
 } {
+    Tranform submitted and previously validated input into a spellcheck datastructure.
+
+    @param element_ref Reference variable to the form element.
+    @param values The set of values for that element.
+} {
 
     upvar $element_ref element
 
