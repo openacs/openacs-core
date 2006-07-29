@@ -24,6 +24,13 @@ ad_proc -public template::util::richtext::create {
     {contents {}}
     {format {}}
 } {
+    Create a richtext widget
+
+    @param contents The text content of the widget
+    @param format How that text is formatted (text, html, etc)
+
+    @return Two-element list of the joined parameters
+} {
     return [list $contents $format]
 }
 
@@ -52,7 +59,17 @@ ad_proc -public template::util::richtext::format_options {} {
     }
 }
 
-ad_proc -public template::data::validate::richtext { value_ref message_ref } {
+ad_proc -public template::data::validate::richtext {
+    value_ref
+    message_ref
+} {
+    Validate richtext after form submission.
+
+    @param value_ref Reference variable to the submitted value
+    @param message_ref Reference variable for returning an error message
+
+    @return True (1) if the submitted data is valid, false (0) if not
+} {
 
     upvar 2 $message_ref message $value_ref richtext_list
 
@@ -76,7 +93,16 @@ ad_proc -public template::data::validate::richtext { value_ref message_ref } {
     return 1
 }    
 
-ad_proc -public template::data::transform::richtext { element_ref } {
+ad_proc -public template::data::transform::richtext {
+    element_ref
+} {
+    Transform the previously-validated submitted data into a two-element list
+    as defined by the richtext datatype.
+
+    @param element_ref Reference variable to the form element
+
+    @return Two-element list defined by the richtext datatype
+} {
 
     upvar $element_ref element
     set element_id $element(id)

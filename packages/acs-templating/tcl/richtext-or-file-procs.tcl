@@ -28,6 +28,8 @@ ad_proc -public template::util::richtext_or_file::create {
     {tmp_filename {}}
     {content_url {}}
 } {
+    Create a richtext_or_file datastructure.
+} {
     return [list $storage_type $mime_type $text $filename $tmp_filename $content_url]
 }
 
@@ -56,7 +58,19 @@ ad_proc -public template::util::richtext_or_file::format_options {} {
     }
 }
 
-ad_proc -public template::data::validate::richtext_or_file { value_ref message_ref } {
+ad_proc -public template::data::validate::richtext_or_file {
+    value_ref
+    message_ref
+} {
+    Validate submitted richtext_or_file by checking that the format is valid, HTML doesn't
+    contain illegal tags, etc.
+
+    @param value_ref Reference variable to the submitted value
+    @param message_ref Reference variable for returning an error message
+
+    @return True (1) if the submitted value is valid, false (0) otherwise
+} {
+
 
     upvar 2 $message_ref message $value_ref richtext_or_file_list
 
@@ -84,7 +98,16 @@ ad_proc -public template::data::validate::richtext_or_file { value_ref message_r
     return 1
 }    
 
-ad_proc -public template::data::transform::richtext_or_file { element_ref } {
+ad_proc -public template::data::transform::richtext_or_file {
+    element_ref
+} {
+    Transform submitted data into a valid richtext_or_file data structure (list)
+
+    @param element_ref Reference variable to the form element
+
+    @return Submitted data in the richtext_or_datafile list form
+
+} {
 
     upvar $element_ref element
     set element_id $element(id)
@@ -226,8 +249,18 @@ ad_proc -public template::util::richtext_or_file::get_property { what richtext_o
     }
 }
 
-ad_proc -public template::widget::richtext_or_file { element_reference tag_attributes } {
+ad_proc -public template::widget::richtext_or_file {
+    element_reference
+    tag_attributes
+} { 
+    Render a richtext_or_file widget
 
+    @param element_reference Reference variable to the form element
+    @param tag_attributes Attributes to include in the generated HTML
+
+    @return Form HTML for the widget
+
+} { 
   upvar $element_reference element
 
   if { [info exists element(html)] } {

@@ -50,7 +50,13 @@ namespace eval template::widget {}
 namespace eval template::widget::table {}
 
 
-ad_proc -public template::widget::table::create { statement_name name args } {
+ad_proc -public template::widget::table::create {
+  statement_name
+  name
+  args
+} {
+  Create a table widget
+} {
 
   upvar "tablewidget:${name}" widget
 
@@ -60,16 +66,24 @@ ad_proc -public template::widget::table::create { statement_name name args } {
   template::widget::table::prepare $statment_name $name 2
 }
 
-# Get the order by clause for the widget, other parameters (?)
-ad_proc -public template::widget::table::get_params { name {level 1} } {
+ad_proc -public template::widget::table::get_params {
+  name
+  {level 1}
+} {
+  Get the order by clause for the widget, other parameters (?)
+} {
   
   upvar $level "tablewidget:${name}" widget
 
   set widget(orderby) [ns_queryget "tablewidget:${name}_orderby"]
 }
 
-# Create the default column definition if none exists
-ad_proc -public template::widget::table::default_column_def { name { level 2} } {
+ad_proc -public template::widget::table::default_column_def {
+  name
+  { level 2}
+} {
+  Create the default column definition if none exists
+} {
 
   upvar $level "tablewidget:${name}" widget
 
@@ -88,8 +102,13 @@ ad_proc -public template::widget::table::default_column_def { name { level 2} } 
   }
 }
 
-# Compose the query, if neccessary, and define the datasources
-ad_proc -public template::widget::table::prepare { statement_name name {level 1} } {
+ad_proc -public template::widget::table::prepare {
+  statement_name
+  name
+  {level 1}
+} {
+  Compose the query, if neccessary, and define the datasources
+} {
   
   upvar $level "tablewidget:${name}" widget
  
