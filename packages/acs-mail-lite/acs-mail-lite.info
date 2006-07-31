@@ -18,8 +18,6 @@
         <provides url="acs-mail-lite" version="1.3b3"/>
 
         <callbacks>
-            <callback type="after-install"  proc="acs_mail_lite::after_install"/>
-            <callback type="before-uninstall"  proc="acs_mail_lite::before_uninstall"/>
         </callbacks>
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="BounceDomain"  description="Email Domain for outgoing messages" section_name="email"/>
