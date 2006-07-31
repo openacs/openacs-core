@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-authentication" package_version="5.2.3b2" locale="zh_TW" charset="utf-8">
-
-  <msg key="Invalid_username_or_password">無效的使用者名稱或密碼</msg>
-</message_catalog>
