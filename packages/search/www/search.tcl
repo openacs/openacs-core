@@ -9,6 +9,7 @@ ad_page_contract {
     {num:integer 0}
     {dfs:trim ""}
     {dts:trim ""}
+    {search_package_id ""}
 } 
 
 set page_title "Search Results"
@@ -73,12 +74,12 @@ set urlencoded_query [ad_urlencode $q]
 
 if { $offset < 0 } { set offset 0 }
 set params [list $q $offset $limit $user_id $df]
-if {[ad_parameter -package_id $package_id SubsiteSearchP -default 1]
+if {$search_package_id eq "" && [ad_parameter -package_id $package_id SubsiteSearchP -default 1]
     && [subsite::main_site_id] != [ad_conn subsite_id]} {
     # We are in a subsite and SubsiteSearchP is true
     lappend params [concat [ad_conn subsite_id] [subsite::util::packages -node_id [ad_conn node_id]]]
 } else { 
-    lappend params {}    
+  lappend params $search_package_id
 }
 
 set t0 [clock clicks -milliseconds]
@@ -126,7 +127,6 @@ for { set __i 0 } { $__i < [expr $high - $low +1] } { incr __i } {
     set title_summary [acs_sc_call FtsEngineDriver summary [list $q $datasource(title)] $driver]
     set txt_summary [acs_sc_call FtsEngineDriver summary [list $q $txt] $driver]
     set url_one [acs_sc_call FtsContentProvider url [list $object_id] $object_type]
-
     template::multirow append searchresult $title_summary $txt_summary $url_one $object_id
 }
 
