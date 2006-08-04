@@ -157,3 +157,97 @@ aa_register_case -cats {api smoke} string_truncate {
     aa_equals "No truncation" [string_truncate -len [string length $long_string] -- $long_string] $long_string
 
 }
+
+aa_register_case -cats {api smoke} -procs {util_convert_line_breaks_to_html} util_convert_line_breaks_to_html {
+    Test if it converts spaces and line breaks correctly.
+} {
+    #Convert leading and trailing spaces or tabs
+    set html "\tinter spaces  "
+    aa_log "html= \"$html\" - Contains tabs and spaces"
+    set result [util_convert_line_breaks_to_html $html]
+    aa_false "Now html=\"$result\"" [regexp {\sinter spaces\s} $result]
+
+    #convert single break
+    set html "\r\n inter\r\nbreaks \r\n"
+    aa_log "html= \"$html\" - Contains a single break"
+    set result [util_convert_line_breaks_to_html $html]
+    aa_false "Now html=\"$result\"" [regexp {inter<b />\nspaces} $result]
+
+    #convert paragraph break
+    set html "\r\n inter\r\n\r\nbreaks \r\n"
+    aa_log "html= \"$html\" - Contains a double break"
+    set result [util_convert_line_breaks_to_html $html]
+    aa_false "Now html=\"$result\"" [regexp {inter</p><p style="margin-bottom: 0px;">spaces} $result]
+
+    #convert more than 2 breaks
+    set html "\r\n inter\r\n\r\n\r\nbreaks \r\n"
+    aa_log "html= \"$html\" - Contains more than 2 breaks"
+    set result [util_convert_line_breaks_to_html $html]
+    aa_false "Now html=\"$result\"" [regexp {inter<b />\n<b />\n<b />\nspaces} $result]
+}
+
+
+aa_register_case -cats {api smoke} -procs {ad_quotehtml ad_unquotehtml} quote_unquote_html {
+    Test if it quote and unquote html
+} {
+    #quote html
+    set html "\"<&text>\""
+    aa_log "Unquote html=$html"
+    set result [ad_quotehtml $html]
+    aa_true "Quoute html=$result" [string equal "&quot;&lt;&amp;text&gt;&quot;" $result]
+
+    #unquote html
+    set html $result
+    aa_log "Quote html=$html"
+    set result [ad_unquotehtml $html]
+    aa_true "Unquote html=$result" [string equal "\"<&text>\"" $result]
+}
+
+aa_register_case -cats {api smoke} -procs {ad_looks_like_html_p} ad_looks_like_html_p {
+    Test if it guess the text supplied is html
+} {
+    set html "<a href=/home/page>Home Page</a>"
+    aa_log "A link html=$html"
+    aa_true "Is html text" [ad_looks_like_html_p $html]
+
+    set html "<p> This is a paragraph</p>"
+    aa_log "A paragraph html=$html"
+    aa_true "Is html text" [ad_looks_like_html_p $html]
+
+    set html "This is <BR> a short text"
+    aa_log "Some text with <BR> html=$html"
+    aa_true "Is html text" [ad_looks_like_html_p $html]
+}
+
+aa_register_case -cats {api smoke} -procs {util_remove_html_tags} util_remove_html_tags {
+    Test if it remove all between tags
+} {
+    set html "<p><b>some</b> text <i>to</i> probe if it <table><tr>remove all between \"<\" and \">\"<tr><table><tags>"
+    set result [util_remove_html_tags $html]
+    aa_true "Without all between \"<\" and \">\" html=\"$result\""\
+	[string equal "some text to probe if it remove all between \"\"" $result]
+}
+
+aa_register_case -cats {api smoke} -procs {ad_parse_html_attributes} ad_parse_html_attributes {
+    Test if returns a list of attributes inside an HTML tag
+} {
+    set pos 5
+
+    # Two attributes without values
+    set html "<tag foo bar>"
+    aa_log "A tag with two attributes without values - $html"
+    set result [ad_parse_html_attributes $html $pos]
+    aa_equals "Attributes - $result" $result {foo bar}
+
+    # One Attribute with value and one whitout value
+    set html "<tag foo = bar tob>"
+    aa_log "A tag with one Attribute with value and one whitout value - $html"
+    set result [ad_parse_html_attributes $html $pos]
+    aa_equals "Attributes - $result" $result {{foo bar} tob}
+
+    # More attributes
+    set html {<tag foo = bar greeting="welcome home" ja='blah'>}
+    aa_log "A tag with one attribute between quotes - $html"
+    set result [ad_parse_html_attributes $html $pos]
+    aa_equals "Attributes - $result" $result {{foo bar} {greeting {welcome home}} {ja blah}}
+}
