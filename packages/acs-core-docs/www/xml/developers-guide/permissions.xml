@@ -22,22 +22,26 @@
 The OpenACS &version; Permissions system allows developers and administrators to
 set access control policies at the object level, that is, any
 application or system object represented by a row in the
-<computeroutput>acs_objects</computeroutput> table can be access-controlled via a simple
+<computeroutput>acs_objects</computeroutput> table can be access-controlled via a
 PL/SQL or Tcl interface. The permissions system manages a data model
-that then allows scripts to check permissions using another simple
-API call.
+that then allows scripts to check permissions using another API call.
 </para>
 
 <para>
-Although this may all sound easy and wonderful, no developer or
-administrator would want to <emphasis>explicitly</emphasis> set access control
+Although object level permissions seems appropriate, no developer or
+administrator wants to <emphasis>explicitly</emphasis> set access control
 rights for <emphasis>every user</emphasis> and <emphasis>every object</emphasis> on a
-site. Therefore, OpenACS &version; has two auxiliary mechanisms for making this
-easier: First, the Groups system allows users to be grouped together
-in flexible ways. Second, the object model defines a notion of
+site. Therefore, OpenACS has two auxiliary mechanisms for making this
+easier:</para>
+<orderedlist>
+<listitem><para>the Groups system allows users to be grouped together
+in flexible ways.</para></listitem>
+<listitem><para>the object model defines a notion of
 <emphasis>object context</emphasis>, which allows applications to group objects
-together into larger security domains.  The rest of this document will
-talk about each of these parts, and how they fit together with the
+together into larger security domains.
+</para></listitem>
+</orderedlist>
+<para>The rest of this document discusses each of these parts, and how they fit together with the
 permissions system.
 </para>
 
@@ -48,42 +52,10 @@ permissions system.
 <title>Groups</title>
 
 
-<para>
-In OpenACS 3.x, the groups system allowed developers and administrators to
-define simple groupings of users. Each group had a human readable name
-and unique ID, and there was a single mapping table that mapped users
-to groups. (The actual data model was more complicated because it
-contained a meta-data system much like the OpenACS &version; object type system,
-but that's not relevant right now.)
-</para>
 
 <para>
-The 3.x groups system, while very useful, was limited in few ways. The
-main limitation: groups could not either contain or include other
-groups. You could not express the fact that all the members of group A
-should also be in group B - for example, to model a company with
-multiple offices. The company should have a main group representing
-all employees, and each office should have a group representing its
-employees. Obviously, you'd want every member of an office employee
-group to automatically be a member of the whole company employee
-group.
-</para>
-
-<para>
-In OpenACS 3.x, you also could not express the fact that group A should
-itself be a member of group B, without also implying that all of its
-members are also members of B. This type of relationship also comes up
-in the real world, though not as often. A good example is an
-organization like Greenpeace that can have as members both individuals
-and organizations: although the Sierra Club may be an organization
-member of Greenpeace, its members are not necessarily members of
-Greenpeace.
-</para>
-
-<para>
-OpenACS &version; solves both of these modeling problems by introducing a new
-abstraction called a <emphasis>party</emphasis>. Parties have a recursive
-definition, and we can illustrate how it works with the following
+OpenACS &version; has an abstraction called a <emphasis>party</emphasis>. Parties have a recursive
+definition. We can illustrate how it works with the following
 simplified data model. First, we define the <computeroutput>parties</computeroutput>
 table, where each party has an email address and a URL for contact
 information.
@@ -127,38 +99,35 @@ create table persons (
 
 <para>
 The <computeroutput>users</computeroutput> table is also defined in this data model as a
-subtype of <computeroutput>person</computeroutput>. It contains many of the basic columns
-that the old OpenACS 3.x <computeroutput>users</computeroutput> table contained.
+subtype of <computeroutput>person</computeroutput>. 
 </para>
 
 <para>
 Finally, we define two relations, one for group <emphasis>membership</emphasis> and
-one for group <emphasis>composition</emphasis>.  The composition relation allows us
-to express the fact that every member of group A should also be a
+one for group <emphasis>composition</emphasis>.  
+</para>
+<para>The composition relation expresses that every member of group A should also be a
 member of group B.  This relation allows us to define a hierarchy of
-groups instead of the simple flat groups that 3.x allowed.
+groups.
 </para>
 
 <para>
-The membership relation is much like the mapping we had in 3.x, except
-that it maps groups to <emphasis>parties</emphasis> instead of groups to users. What
-this means is that each member of a group is a party rather than just
+The membership relation maps groups to <emphasis>parties</emphasis>. Each member of a group is a party rather than just
 a user. That is, groups consist of members that are either a person or
 an entire group.  This allows us to say that group A should be a
 member of another group B.
 </para>
 
 <para>
-The groups data model is pleasantly recursive. The fact that parties
-are modeled as being either a person or a group has a lot of power,
-allowing us to model complex hierarchical groupings of persons and
-groups that were hard or impossible to model in 3.x.
+The groups data model is recursive. Modelling parties as either a
+person or a group provides a way to model complex hierarchical groupings of persons and
+groups.
 </para>
 
 <para>
 The full details of the groups data model is beyond the scope of this
-tutorial - I've just given you what you need to understand how
-permissions work. For further detail, you can look at <xref linkend="parties"/> or <xref linkend="groups-design"/>.
+tutorial. See <xref linkend="parties"/> or <xref
+linkend="groups-design"/> for more details.
 </para>
 
 </sect2>
@@ -173,31 +142,30 @@ permissions work. For further detail, you can look at <xref linkend="parties"/> 
 </para>
 
 <para>
-The permissions data model is actually pretty simple.  The data model
-is a mapping between <emphasis>privileges</emphasis>, parties and objects. We
-already know what parties and objects are, but we don't know what
-privileges are.
+The permissions data model is a mapping between
+<emphasis>privileges</emphasis>, parties and objects. Parties and
+objects have already been discussed. Now we focus on privileges.
 </para>
 
 <para>
-In OpenACS &version;, a privilege models the right to perform some operation on
-some object. They are the basic units out of which we build access
-control policies.  For example, in the Unix filesystem we typically
-implement access control by granting users some combination of
-read. write or execute privileges on files and directories. In OpenACS &version;,
+In OpenACS, a privilege describes the right to perform some operation on
+some object. Privileges are the basic units out of which we build access
+control policies.  For example in the Unix filesystem, access is controlled by granting users some combination of
+read, write, or execute privileges on files and directories. In
+OpenACS &version;,
 the table of privileges is organized hierarchically so that developers
 can define privileges that aggregate some set of privileges
 together. For example, if we have read, write, create and delete
 privileges, it might be convenient to combine them into a new privilege
-called "admin". Then if we grant a user this privilege she is
+called "admin". Then, when a user is granted "admin" privilege, she is
 automatically granted all the child privileges that the privilege
-contains. The OpenACS &version; kernel data model actually defines these
-privileges as follows:
+contains. The OpenACS &version; kernel data model defines these
+privileges:
 </para>
  
 
 <programlisting>
-
+# 
 begin
  acs_privilege.create_privilege('read');
  acs_privilege.create_privilege('write');
@@ -214,7 +182,11 @@ begin
 end;
 
 </programlisting>
-
+<para>
+Note that a user does not gain admin privileges when granted
+read, write, create and delete privileges, because some operations
+explicitly require admin privileges. No substitutions.
+</para>
 
 <para>
 To give a user permission to perform a particular operation on a
@@ -224,7 +196,7 @@ particular object you call
  </para>
 
 <programlisting>
-
+# sql code
     acs_permission.grant_permission (
       object_id => some_object_id,
       grantee_id => some_party_id,
@@ -237,10 +209,12 @@ particular object you call
 <para>
 Using just these mechanisms is enough for developers and
 administrators to effectively define access control for every object
-in a system. But it would be tedious to explicitly attach permissions
-to every object individually: in many cases, we'd prefer controlling
-permissions to large groups of objects in the site, all at once. We
-use contexts to achieve this goal.
+in a system. 
+</para>
+<para>Explicitly defining permissions to every object individually
+would become very tedious.
+OpenACS provides a object contexts as a means for controlling permissions of a large group
+of objects at the same time. 
 </para>
 
 </sect2>
@@ -250,8 +224,8 @@ use contexts to achieve this goal.
 
 
 <para>
-In OpenACS &version;, an object context is a generalization of the scoping
-mechanism introduced in OpenACS 3.x.  "Scoping" and "scope" are terms best
+In OpenACS &version;, object context is a scoping
+mechanism.  "Scoping" and "scope" are terms best
 explained by example: consider some hypothetical rows in the
 <computeroutput>address_book</computeroutput> table:
 </para>
@@ -299,38 +273,39 @@ explained by example: consider some hypothetical rows in the
 The first row represents an entry in User 123's personal address book,
 the second row represents an entry in User Group 456's shared address
 book, and the third row represents an entry in the site's public
-address book.
-</para>
-
-<para>
-In this way, the scoping columns identify the security context in
+address book. In this way, the scoping columns identify the security context in
 which a given object belongs, where each context is <emphasis>either</emphasis> a
 person <emphasis>or</emphasis> a group of people <emphasis>or</emphasis> the general public
 (itself a group of people).
 </para>
 
 <para>
-In OpenACS &version;, rather than breaking the world into a limited set of scopes,
-every object lives in a single <emphasis>context</emphasis>.  A context is just an
+Every object lives in a single <emphasis>context</emphasis>.  A context is just an
 another object that represents the security domain to which the object
-belongs. By convention, if an object A doesn't have any permissions
+belongs. By convention, if an object A does not have any permissions
 explicitly attached to it, then the system will look at the
 <computeroutput>context_id</computeroutput> column in <computeroutput>acs_objects</computeroutput> and check
 the context object there for permissions. Two things control the scope
-of this search: the structure of the context hierarchy itself, and the
-value of the <computeroutput>security_inherit_p</computeroutput> flag in each object. If
-this flag is set to <computeroutput>'t'</computeroutput>, then the automatic search
+of this search:</para>
+<orderedlist><listitem><para>the structure of the context hierarchy
+itself, and 
+</para></listitem><listitem><para>
+the value of the <computeroutput>security_inherit_p</computeroutput>
+flag in each object.
+</para></listitem></orderedlist>
+<para>If
+<computeroutput>security_inherit_p</computeroutput> flag is set to <computeroutput>'t'</computeroutput>, then the automatic search
 through the context happens, otherwise it does not. You might set this
 field to <computeroutput>'f'</computeroutput> if you want to override the default
 permissions in a subtree of some context.
 </para>
 
-<para> A good example of how to use this hierarchy is in the forums
+<para>For an example of how to use context hierarchy, consider the forums
 application. With only row-level permissions it is not obvious how to
 reasonably initialize the access control list when creating a
 message. At best, we have to explicitly grant various read and write
-privileges whenever we create a message, which is tedious.  In OpenACS &version;,
-a reasonable thing to do is to create an object representing a forum,
+privileges whenever we create a message, which is tedious.  
+A reasonable thing to do is to create an object representing a forum,
 and point the <computeroutput>context_id</computeroutput> field of a new message at the
 forum. Then, suppose we grant every user in the system read-access to
 this forum. By default, they will automatically have read-access to
@@ -352,8 +327,8 @@ hierarchy for a hypothetical site:
 </blockquote>
 
 <para>
-A few things to note here. First, the top two contexts in the picture
-are "magic" in some sense because they are created by default by OpenACS
+The top two contexts in the diagram
+are called "magic" numbers, because in some sense, they are created by default by OpenACS
 for a specific purpose. The object <computeroutput>default_context</computeroutput>
 represents the root of the context hierarchy for the entire site. All
 permission searches walk up the tree to this point and then stop. If
@@ -363,177 +338,13 @@ which subsite they happen to live in. The object
 <computeroutput>security_context_root</computeroutput> has a slightly different role. If
 some object has no permissions attached to it, and its value for
 <computeroutput>security_inherit_p</computeroutput> is <computeroutput>'f'</computeroutput>, or
-<computeroutput>context_id</computeroutput> is null, then we use this context by default.
+<computeroutput>context_id</computeroutput> is null, this context is used by default.
 </para>
-
+<para>See the package developer tutorials for examples on how to use
+permissions code.
+</para>
 </sect2>
 
-<sect2 id="permissions-example">
-<title>Example</title>
-
-
-<para>
-At this point, you should either go and download the Notes example
-code from the package repository, or check it out of the OpenACS CVS
-repository and add it to your server. The package is called
-"notes". To check it out from CVS, read the <ulink url="http://openacs.org/4/checkout">these instructions</ulink>
-on how to use anonymous checkouts and then
-checkout the module <computeroutput>notes</computeroutput>:
-</para>
-
-
-  <para>The notes code has been modified since this document was written so it is now out of date.  See <ulink url="http://openacs.org/forums/message-view?message_id=121807">this forum thread</ulink>.</para>
-
-
-<programlisting>% export CVSROOT=:pserver:anonymous@cvs.openacs.org:/cvsroot
-% cvs login # just hit enter when prompted for a password
-% cvs co notes
-</programlisting>
-
-
-<para>
-After you have downloaded the package, look at the
-<computeroutput>index.tcl</computeroutput> page in the <computeroutput>www</computeroutput> directory. You can also
-look at the code <ulink url="http://cvs.openacs.org/cvs/openacs-4/packages/notes/www/index.tcl?view=markup">in your browser</ulink>. The code should look something like this:
-</para>
-
- 
-
-<programlisting>
-
-# main index page for notes.
-
-ad_page_contract {
-   @author you
-   @cvs-id &#x0024;Id$
-} -properties {
-  notes:multirow
-  context_bar:onevalue
-  create_p:onevalue
-}
-
-set package_id [ad_conn package_id]
-set user_id [ad_conn user_id]
-
-set context_bar [ad_context_bar]
-set create_p [permission::permission_p \
-      -object_id $package_id \
-      -privilege create \
-      -party_id  $user_id]
-
-db_multirow notes notes {
-  select note_id, owner_id, title, body,
-         decode(acs_permission.permission_p(note_id,
-                                            :user_id,
-                                            'write'),
-                't', 1,
-                'f', 0) as write_p,
-         decode(acs_permission.permission_p(note_id,
-                                            :user_id,
-                                            'admin'),
-                't', 1,
-                'f', 0) as admin_p,
-         decode(acs_permission.permission_p(note_id,
-                                            :user_id,
-                                            'delete'),
-                't', 1,
-                'f', 0) as delete_p
-  from notes n, acs_objects o
-  where n.note_id = o.object_id
-  and o.context_id = :package_id
-  and acs_permission.permission_p(note_id, :user_id, 'read') = 't'
-  order by creation_date
-}
-
-ad_return_template
-
-</programlisting>
-
-
-<para>
-This example shows both the Tcl and PL/SQL APIs for checking
-permissions.  The Tcl proc <computeroutput>permission::permission_p</computeroutput> and the PL/SQL
-function <computeroutput>acs_permission.permission_p</computeroutput> both return a flag
-indicating whether the current user has permission to perform the
-given action. By default, the Tcl procedure extracts the user_id out
-of the request environment, while the SQL procedure takes it as an
-argument.
-</para>
-
-
-<para>
-It also shows how we display more complicated items using the template
-system. The code here creates a <emphasis>multirow</emphasis> data source, i.e. a
-data source that represents a query returning multiple rows from the
-database. For each row, we return the ID of the note, the ID of the
-owner of the note, the title, the body and then three flags that
-indicate whether the user has write, admin, and delete
-privileges. Also, the WHERE clause of the query ensures that we only
-see notes that we are allowed to see.
-</para>
-
-<para>
-Next, look at the <ulink url="http://cvs.openacs.org/cvs/openacs-4/packages/notes/www/index.adp?view=markup">index.adp</ulink>. It is pretty complicated.
-The main part of this page uses a <computeroutput>multiple</computeroutput> template
-tag. If you want to experiment, you can replace the main body of the
-<computeroutput>multiple</computeroutput> tag with this:
-</para>
-
- 
-
-<programlisting>
-
-&lt;multiple name=notes&gt;
-&lt;td&gt;@notes.title@&lt;/td&gt;&lt;td&gt;@notes.body&lt;/td&gt;
-&lt;/multiple&gt;
-
-</programlisting>
-
-
-<para>
-This will just make a table with one note per row.
-</para>
-
-<para>
-Now put the more complex code back. You'll notice a lot of stuff like this:
-</para>
-
- 
-
-<programlisting>
-
-&lt;if @notes.write_p@ eq 1&gt;
-  &lt;a href=add-edit?note_id=@notes.note_id@&gt;@notes.title@&lt;/a&gt;
-&lt;/if&gt;
-&lt;else&gt;
-  @notes.title@
-&lt;/else&gt;
-
-</programlisting>
-
-
-<para>
-This displays the title of the note as either a link or plain text
-depending on whether or not we have write privileges on the object.
-The <computeroutput>if</computeroutput> tag is something that the OpenACS &version; template system
-defines for you to support conditional presentation. The <ulink url="/doc/acs-templating/developer-guide.html">templates developer guide</ulink> provides more information about this.
-</para>
-
-<para>
-If you study the rest of the system, you will also notice that the
-notes application doesn't explicitly attach privileges to the objects
-it creates. All privileges are inherited from the context of the object
-which in this case is the package instance. The assumption is that the
-administrator of the site would create one instance of notes for every
-user that wants it, and set the permissions on this instance
-appropriately. In a more advanced version of the application, we could
-implement a user interface that allowed the user to explicitly attach
-permissions to notes that she wanted to make public or whatever. But
-that's beyond the scope of this example.
-</para>
-
-
-</sect2>
 
 <sect2 id="permissions-summary">
 <title>Summary</title>
@@ -541,17 +352,19 @@ that's beyond the scope of this example.
 
 <para>
 OpenACS &version; defines three separate mechanisms for specifying access control
-in applications. The Groups data model allows you to define 
-hierarchical organizations of users and groups of users. The Permissions
-data model allows you to define a hierarchy of user rights. Finally,
-the Context hierarchy allows you to define organize default
-permissions in a hierarchical fashion.  A simple PL/SQL or Tcl API is
-then used to do access control checks in application pages.
-</para>
-
-<para>
-In the next section, we'll look at a more complex page for adding and
-editing notes, and discuss these issues further.
+in applications. </para>
+<orderedlist><listitem><para>
+The Groups data model allows you to define 
+hierarchical organizations of users and groups of users. 
+</para></listitem><listitem><para>
+The Permissions
+data model allows you to define a hierarchy of user rights.
+</para></listitem><listitem><para>
+The Context hierarchy allows you to define organize default
+permissions in a hierarchical fashion.
+</para></listitem></orderedlist>
+<para>A PL/SQL or Tcl API is
+then used to check permissions in application pages.
 </para>
 
 <para><phrase role="cvstag">($Id$)</phrase></para>

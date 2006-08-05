@@ -4,7 +4,7 @@
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-<sect1 id="parties" xreflabel="Parties in OpenACS 4">
+<sect1 id="parties" xreflabel="Parties in OpenACS">
 <title>Parties in OpenACS</title>
 
 <authorblurb>
@@ -18,20 +18,21 @@
 
 <para>While many applications must deal with individuals and many applications
 must deal with groups, most applications must deal with individuals
-<emphasis>or</emphasis> groups. It is often the case with such applications that in many
-respects both individuals and groups are treated in an identical manner. It
-is this latter class of application that makes it extremely useful to model
-individuals and groups as specializations of one supertype. This concept is
-so commonly used throughout human language and thought that we don&#39;t even
-need to invent for it some bizarre and specialized terminology. This
+<emphasis>or</emphasis> groups. It is often the case with such
+applications that
+ both individuals and groups are treated identically. Modelling
+individuals and groups as specializations of one supertype is a
+practical way to manage both. This concept is
+so mundane that there is
+no need to invent special terminology. This
 supertype is called a &quot;party&quot;.</para>
 
-<para>A classic example use of the &quot;party&quot; supertype is evident
-in a common address book. A typical person&#39;s address book might contain
-the address of his doctor, and his cable company. So what do we label the
-first field in an entry in his address book? It isn&#39;t a person, and it
-isn&#39;t a company. It is a &quot;party&quot;.</para>
-
+<para>A classic example of the &quot;party&quot; supertype is evident
+in address books. A typical address book might contain
+the address of a doctor, grocery store, and friend. The
+first field in an entry in the address book is not labeled a person or
+company, but a &quot;party&quot;.
+</para>
 
 </sect2>
 
@@ -40,24 +41,24 @@ isn&#39;t a company. It is a &quot;party&quot;.</para>
 
 
 
-<para>Most developers who do significant work with the OpenACS will become
-intimately familiar with the parties data model, and probably extend it on
-many occasions. For this reason the parties developer guide will begin with
-an introduction to the data model.</para>
+<para>The parties developer guide begins with
+an introduction to the parties data model, since OpenACS
+community applications likely require using it in some way.</para>
 
 <para><emphasis role="strong">Parties</emphasis></para>
 
 <para>The central table in the parties data model is the parties table itself.
 Every party has exactly one row in this table. Every party has an optional
 unique email address and an optional url. A party is an acs object, so
-permissions may granted and revoked on parties and auditing information is
+permissions may be granted and revoked on parties and auditing information is
 stored in the acs objects table.</para>
 
  
 
 <programlisting>
 
-<computeroutput>create table parties (
+<computeroutput>
+create table parties (
     party_id    not null
             constraint parties_party_id_fk references
             acs_objects (object_id)
@@ -71,21 +72,25 @@ stored in the acs objects table.</para>
 </programlisting>
 
 
-<para>There are two tables that extend the parties table. One is the persons
-table and one is the groups table. A row in the persons table represents the
-most basic form of individual that is modeled by the parties data model. A
-row in the groups table represents the most basic form of an aggregation of
-individuals that is represented.</para>
+<para>The <computeroutput>persons</computeroutput> and
+<computeroutput>groups</computeroutput> tables extend the
+<computeroutput>parties</computeroutput> table.  A row in the persons table represents the
+most generic form of individual modeled. An individual need not be known to the system as a user. A
+user is a further specialized form of an individual (discussed later). A
+row in the groups table represents the most generic form of group
+modeled, where a group is an aggregation of zero or more
+individuals.</para>
 
 <para><emphasis role="strong">Persons</emphasis></para>
 
 <para>If a party is an individual then there will be a row in the persons table
-containing first_names and last_name for that individual. Note that the
-primary key of the persons table (person_id) references the primary key of
-the parties table (party_id). This guarantees that if there is a row in the
-persons table then there must be a corresponding row in the parties table.
-Also note that an individual need not be known to the system as a user. A
-user is in fact a further specialized form of an individual.</para>
+containing <computeroutput>first_names</computeroutput> and
+<computeroutput>last_name</computeroutput>
+ for that individual. The
+primary key of the persons table (<computeroutput>person_id</computeroutput>) references the primary key of
+the parties table (<computeroutput>party_id</computeroutput>), so that there is a corresponding row in the
+parties table when there is a row in the persons table.
+</para>
 
  
 
@@ -106,25 +111,28 @@ user is in fact a further specialized form of an individual.</para>
 
 <para><emphasis role="strong">Users</emphasis></para>
 
-<para>The users table is an even more specialized form of an individual. A row
-in the users table represents an individual that has login access to the
-system. Note that the primary key of the users table references the primary
-key of the persons table. Once again this guarantees that if there is a row
-in the users table then there must be a row in the persons table and a row in
-the parties table.</para>
+<para>The <computeroutput>users</computeroutput> table is a more
+specialized form of <computeroutput>persons</computeroutput> table. A row
+in <computeroutput>users</computeroutput> table represents an individual that has login access to the
+system. The primary key of the users table references the primary
+key of the persons table. This guarantees that if there is a row
+in <computeroutput>users</computeroutput> table then there must be a
+corresponding row in <computeroutput>persons</computeroutput> 
+and <computeroutput>parties</computeroutput> tables.</para>
 
-<para>One of the interesting benefits of decomposing all the information
+<para>Decomposing all the information
 associated with a user into the four tables (acs_objects, parties, persons,
-users) is that it is now possible to &quot;nuke&quot; a user from a live
-system by removing his entry from the users table, but leaving the rest of
-his information present (i.e. turning him from a user into a person). This is
-because wherever possible the OpenACS data model references the persons or
-parties table, <emphasis role="strong">not</emphasis> the users table. If this feature is
-desired when extending the system, then the developers should be careful to
-only references the users table in situations where it is clear that the
-references is to a user and not to an individual.</para>
+users) has some immediate benefits.  For instance, it is possible to remove access to a user from a live
+system by removing his entry from the users table, while leaving the rest of
+his information present (i.e. turning him from a user into a
+person).</para>
+<para>Wherever possible the OpenACS data model references the <computeroutput>persons</computeroutput> or
+<computeroutput>parties</computeroutput> table, <emphasis role="strong">not</emphasis> the <computeroutput>users</computeroutput> table.
+Developers should be careful to
+only reference the users table in situations where it is clear that the
+reference is to a user for all cases and not to any other individual
+for any case.</para>
 
- 
 
 <programlisting>
 
@@ -161,11 +169,10 @@ references is to a user and not to an individual.</para>
 <para><emphasis role="strong">Groups</emphasis></para>
 
 <para>The final piece of the parties data model is the groups data model. A
-group is a specialization of a party that represents an aggregation of other
+group is a specialization of a party that represents an aggregation of
+zero or more other
 parties. The only extra information directly associated with a group (beyond
-that in the parties table) is the name of the group. As you might guess there
-is another piece to the groups data model that records relations between
-parties and groups.</para>
+that in the parties table) is the name of the group:</para>
 
  
 
@@ -181,44 +188,64 @@ parties and groups.</para>
 </computeroutput>
 
 </programlisting>
-
+<para>
+There is another piece to the groups data model that records relations between
+parties and groups.
+</para>
 
 <para><emphasis role="strong">Group Relations</emphasis></para>
 
-<para>One surprise here is that there are actually two relations involved. One
-is the normal membership relation between parties and groups. A party may be
-a &quot;member&quot; of a group. The other relation is a composition
-relation between two groups. To fully understand why two relations are
-necessary, and the situations in which each is appropriate, let&#39;s
-consider an example. Greenpeace is an organization that can have as members
-both individuals and organizations. Hence the membership relation between
-groups and <emphasis>parties</emphasis>. But just because you are a member of an
-organization that is a member of Greenpeace, that doesn&#39;t make you a
-member of Greenpeace, i.e., membership is not transitive with respect to
-itself. Now let&#39;s consider a multinational corporation. This corporation
-might have a U.S. division and a European division. A member of either the
-U.S. or European division is automatically a member of the company. In this
-situation the U.S. and European divisions are &quot;components&quot; of
-the company, i.e., membership <emphasis>is</emphasis> transitive with respect to
-composition. Having a membership relation between groups and parties, and
-having a composition relation between groups and groups allows us to easily
-model the full range of sophisticated group structures that exist in the real
-world.</para>
+<para>Two types of group relations are represented in the data model:
+membership relations and composite relations.
+The full range of sophisticated group structures that exist in the real
+world can be modelled in OpenACS by these two relationship types.</para>
+<para>Membership relations represent direct membership relation between parties and groups. A party may be
+a &quot;member&quot; of a group.  Direct membership relations are
+common in administrative practices, and do not follow basic set
+theory rules.  If A is a member of B, and B is a member of C, A is
+<emphasis role="strong">not</emphasis> a member of C. Membership relations are not transitive.
+</para><para>Composition relation represents composite relation
+between <emphasis>two groups</emphasis>. Composite relation is
+transitive. That is, it works like
+memberships in set theory. If A is a member of B, and B is a member of
+C, then A is a member of C.
+</para><para>
+For example, consider the membership relations of Greenpeace, and
+composite relations of a multinational corporation. Greenpeace, an
+organization (ie. group), can have both individuals and organizations
+(other groups) as members. Hence the membership relation between
+groups and <emphasis>parties</emphasis>. However, someone is not
+a member of Greenpeace just because they are a member of a
+group that is a member of Greenpeace.  Now, consider a multinational
+corporation (MC) that has a U.S. division and a Eurasian division. A member of either the
+U.S. or Eurasian division is automatically a member of the MC. In this
+situation the U.S. and Eurasian divisions are &quot;components&quot; of
+the MC, i.e., membership <emphasis>is</emphasis> transitive with respect to
+composition. Furthermore, a member of a European (or other) office of the MC
+is automatically a member of the MC.
+</para>
 
 <para><emphasis role="strong">Group Membership</emphasis></para>
 
 <para>Group memberships can be created and manipulated using the membership_rel
-package. Note that you can only create one membership object for a given
-group, party pair. Because of composition, it is possible in some
+package. Only one membership object can be created for a given
+group, party pair.
+</para><para>
+It is possible in some
 circumstances to make someone a member of a group of which they are already a
-member. This is because there is a distinction between direct membership and
-indirect membership (membership via some component or sub component).</para>
-
+member. That is because the model distinguishes between direct membership and
+indirect membership (membership via some composite relationship).
+For example, a person might be listed in a system as both an
+individual (direct membership) and a
+member of a household (indirect membership) at a video rental store.
+</para>
  
 
 <programlisting>
 
-<computeroutput>create or replace package membership_rel
+<computeroutput>
+# sql code
+create or replace package membership_rel
 as
 
   function new (
@@ -267,17 +294,17 @@ show errors
 
 <para>Composition relations can be created or destroyed using the
 composition_rel package. The only restriction on compositions is that there
-cannot be a cycle, i.e., a group cannot be a component of itself either
-directly or indirectly. This constraint is maintained for you by the API, but
-if you don&#39;t want users seeing some random PL/SQL error message, it is a
-good idea to not give them the option to create a composition relation that
-would result in a cycle.</para>
-
- 
+cannot be a reference loop, i.e., a group cannot be a component of itself either
+directly or indirectly. This constraint is maintained for you by the API. 
+So users do not see some random PL/SQL error message, 
+do not give them the option to create a composition relation that
+would result in a circular reference.</para>
 
 <programlisting>
 
-<computeroutput>create or replace package composition_rel
+<computeroutput>
+# sql code
+create or replace package composition_rel
 as
 
   function new (
@@ -309,9 +336,9 @@ show errors
 
 
 
-<para>The data model described above does a reasonable job of representing many
+<para>The parties data model does a reasonable job of representing many
 of the situations one is likely to encounter when modeling organizational
-structures, but we still need to be able to efficiently answer questions like
+structures. We still need to be able to efficiently answer questions like
 &quot;what members are in this group and all of its components?&quot;, and
 &quot;of what groups is this party a member either directly or
 indirectly?&quot;. Composition relations allow you to describe an arbitrary
@@ -320,15 +347,16 @@ reasons the party system provides a bunch of views that take advantage of the
 internal representation of group relations to answer questions like these
 very quickly.</para>
 
-<para>This view returns all the subcomponents of a group including components of
-sub components and so forth. The container_id column is the group_id of the
-group in which component_id is directly contained. This allows you to easily
+<para>The <computeroutput>group_component_map</computeroutput>
+ view returns all the subcomponents of a group including components of
+sub components and so forth. The <computeroutput>container_id</computeroutput> column is the <computeroutput>group_id</computeroutput> of the
+group in which <computeroutput>component_id</computeroutput> is directly contained. This allows you to easily
 distinguish whether a component is a direct component or an indirect
-component. (If a component is a direct component then group_id will be equal
-to container_id.) You can think of this view as having a primary key of
-group_id, component_id, and container_id. The rel_id column points to the row
-in acs_rels that contains the relation object that relates component_id to
-container_id. The rel_id might be useful for retrieving or updating standard
+component. If a component is a direct component then <computeroutput>group_id</computeroutput> will be equal
+to <computeroutput>container_id</computeroutput>. You can think of this view as having a primary key of
+<computeroutput>group_id</computeroutput>, <computeroutput>component_id</computeroutput>, and <computeroutput>container_id</computeroutput>. The <computeroutput>rel_id</computeroutput> column points to the row
+in <computeroutput>acs_rels</computeroutput> table that contains the relation object that relates <computeroutput>component_id</computeroutput> to
+<computeroutput>container_id</computeroutput>. The <computeroutput>rel_id</computeroutput> might be useful for retrieving or updating standard
 auditing info for the relation.</para>
 
  
@@ -343,9 +371,8 @@ as select group_id, component_id, container_id, rel_id
 </programlisting>
 
 
-<para>This is similar to group_component_map except for membership relations.
-Note that this view will return all membership relations regardless of
-membership state.</para>
+<para>The <computeroutput>group_member_map</computeroutput> view is similar to <computeroutput>group_component_map</computeroutput> except for membership relations.
+This view returns all membership relations regardless of membership state.</para>
 
  
 
@@ -359,7 +386,8 @@ as select group_id, member_id, container_id, rel_id
 </programlisting>
 
 
-<para>The group_approved_member_map is the same as the group_member_map except
+<para>The <computeroutput>group_approved_member_map</computeroutput>
+view is the same as <computeroutput>group_member_map</computeroutput> except
 it only returns entries that relate to approved members.</para>
 
  
@@ -374,9 +402,11 @@ as select group_id, member_id, container_id, rel_id
 </programlisting>
 
 
-<para>This view is useful if you don&#39;t care about the distinction between
-direct membership and indirect membership. It simply returns all members of a
-group including members of components. (It is the transitive closure.)</para>
+<para>The <computeroutput>group_distinct_member_map</computeroutput>
+view is a
+useful view if you do not care about the distinction between
+direct membership and indirect membership. It returns all members of a
+group including members of components --the transitive closure.</para>
 
  
 
@@ -390,10 +420,10 @@ as select group_id, member_id
 </programlisting>
 
 
-<para>This view is the same as group_distinct_member_map, except it includes the
-identity mapping. In other words it maps from a party to the fully expanded
+<para>The <computeroutput>party_member_map</computeroutput> view is the same as <computeroutput>group_distinct_member_map</computeroutput>, except it includes the
+identity mapping. It maps from a party to the fully expanded
 list of parties represented by that party including the party itself. So if a
-party is an individual this view will have exactly one mapping that is from
+party is an individual, this view will have exactly one mapping that is from
 that party to itself. If a view is a group containing three individuals, this
 view will have four rows for that party, one for each member, and one from
 the party to itself.</para>
@@ -410,10 +440,8 @@ as select party_id, member_id
 </programlisting>
 
 
-<para>This view is the same as above except that when it expands groups, it only
+<para>The <computeroutput>party_approved_member_map</computeroutput> view is the same as <computeroutput>party_member_map</computeroutput> except that when it expands groups, it only
 pays attention to approved members.</para>
-
- 
 
 <programlisting>
 
@@ -424,35 +452,31 @@ as select party_id, member_id
 
 </programlisting>
 
-
-
 </sect2>
 
 <sect2 id="parties-extending-data-model">
 <title>Extending The Parties Data Model</title>
 
-
-
-<para>As is, the parties data model can represent some fairly sophisticated real
-world situations, and a lot of work has been put into making this efficient,
-but it is foolish to assume that this data model is sufficient for every
-application. It therefore seems likely that developers will want to extend
-the parties data model in a number of ways. This section will describe some
-of the more common ways.</para>
+<para>The parties data model can represent some fairly sophisticated real
+world situations. Still, it would be foolish to assume that this data
+model is sufficiently efficient for every
+application. This section describes some
+of the more common ways to extend the parties data model.</para>
 
 <para><emphasis role="strong">Specializing Users</emphasis></para>
 
-<para>It is conceivable that some applications will want to collect more
-detailed information for people using the system. If it is the case that
+<para>Some applications will want to collect more
+detailed information for people using the system. If 
 there can be only one such piece of information per user, then it might make
 sense to create another type of individual that is a further specialization
-of a user. For example a MENSA community web site might want to record IQs
+of a user. For example a Chess Club community web site might want to record
+the most recent score 
 for each user. In a situation like this it would be appropriate to create a
-subtype of users, say mensa_users. This child table of the users table would
+subtype of users, say chess_club_users. This child table of the users table would
 have a primary key that references the users table, thereby guaranteeing that
-each row in the mensa_users table has a corresponding row in each of the
+each row in the chess_club_users table has a corresponding row in each of the
 users, persons, parties, and acs_objects tables. This child table could then
-store any extra information relevant to the MENSA community.</para>
+store any extra information relevant to the Chess Club community.</para>
 
 <para><emphasis role="strong">Specializing Groups</emphasis></para>
 
@@ -461,7 +485,7 @@ system, it is likely that one would want to take advantage of the systems
 efficient representation of sophisticated organizational structures, but
 there would be much more specialized information associated with each group.
 In this case it would make sense to specialize the group party type into a
-company party type in the same manner as above.</para>
+company party type in the same manner as Specializing Users.</para>
 
 <para><emphasis role="strong">Specializing Membership Relations</emphasis></para>
 

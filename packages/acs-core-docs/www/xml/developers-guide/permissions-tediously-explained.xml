@@ -14,23 +14,28 @@
 
   <sect2 id="permissions-tedious-overview">
 
-    <title>Overview</title>
+    <title>Permissions Overview</title>
+   <para><emphasis role="strong">Who
+   (<computeroutput>grantee_id</computeroutput>) can do what
+   (<computeroutput>privilege</computeroutput>) on which object
+   (<computeroutput>object_id</computeroutput>).
+   </emphasis></para>
     <para>
-      The general permissions system has a relatively complex data model in OpenACS.
-      Developers who haven't had the time to learn the internals of the data model
+      The general permissions system has a flexible (and relatively complex) data model in OpenACS.
+      Developers who have not had the time to learn the internals of the data model
       may end up writing seemingly correct code that crashes their system in
       weird ways. This writeup is the result of my running into such a piece
       of code and trying to understand exactly what went wrong.
       It is geared towards developers who understand the general permissions
       system to the extent that is described in the 
       <ulink url="permissions.html">
-      OpenACS Permissions documentation</ulink>,
-      but who haven't had the opportunity to take a long, careful look at the
+      Groups, Context, Permissions documentation</ulink>,
+      but who have not had the opportunity to take a long, careful look at the
       system internals.
     </para>
 
     <para>
-      In OpenACS 4.x, most of the interesting tables are expected to extend (subtype)
+      In OpenACS, most of the interesting tables are expected to extend (subtype)
       the <computeroutput>acs_objects</computeroutput> table, i.e. they are expected to have an integer
       primary key column that references the <computeroutput>object_id</computeroutput> column of
       <computeroutput>acs_objects</computeroutput>. 
@@ -62,8 +67,8 @@ create table <emphasis role="bold">acs_objects</emphasis> (
     </programlisting>
 
     <para>
-      This means that any interesting entity (object)
-      in the system has an entry in the <computeroutput>acs_objects</computeroutput>. This
+      This means that items that want to use the features of the
+      OpenACS object system needs to have an entry in the <computeroutput>acs_objects</computeroutput>. This
       allows developers to define relationships between any two entities <emphasis>A</emphasis>
       and <emphasis>B</emphasis> by defining a relationship between their corresponding entries
       in the <computeroutput>acs_objects</computeroutput> table.  One of the applications of this
@@ -115,7 +120,7 @@ create table <emphasis role="bold">acs_objects</emphasis> (
     </para>
 
     <para>
-      The naive approach to managing system security would be to require application developers
+      The micromanaging approach to system security would be to require application developers
       to store permission information explicitly about every object, i.e. if the system has 100,000 and 1,000 users
       who have the <emphasis>read</emphasis> privilege on all objects, then we would need to store 100,000,000
       entries of the form: 
@@ -206,7 +211,7 @@ create table <emphasis role="bold">acs_objects</emphasis> (
       also has the <emphasis>read</emphasis> privilege on all objects attached under <emphasis>A</emphasis>.
     </para>
     <para>
-      The general permission system, as implemented in OpenACS 4.x, takes advantage
+      The general permission system takes advantage
       of the hierarchical organization of objects to unburden developers of the
       necessity to explicitly maintain security information for every single
       object.  There are three kinds of hierarchies involved.
@@ -460,7 +465,7 @@ create table <emphasis role="bold">acs_objects</emphasis> (
 
     <para>
       Despite its potentially great storage costs, maintaining a
-      flattened representation of the context tree is exactly what OpenACS 4.x
+      flattened representation of the context tree is exactly what OpenACS
       does.  The flattened context tree is stored in the
       <computeroutput>acs_object_context_index</computeroutput> table.
     </para>
@@ -637,7 +642,12 @@ security_inherit_p = 'f'
      </informaltable>
 
     <para>
-      The parent-child relationship between privileges is represented in
+      Note that <computeroutput>admin</computeroutput> privileges are
+      greater than read, write, create and delete privileges combined.
+       Issuing someone read, write, create and delete privileges will
+      not result in the person getting
+      <computeroutput>admin</computeroutput> privileges.</para>
+    <para>The parent-child relationship between privileges is represented in
       the <computeroutput>acs_privilege_hierarchy</computeroutput> table: 
     </para>
 
@@ -884,7 +894,11 @@ security_inherit_p = 'f'
 	</tbody>
       </tgroup>
     </informaltable>
-
+<para>Read <computeroutput>acs_rels</computeroutput>: right-side is a
+        subset of left-side, ie
+        <computeroutput>object2</computeroutput> is a part of
+        <computeroutput>object1</computeroutput>.
+</para>
     <para>
       Another way of building up groups is by adding subgroups.  Suppose
       we define <emphasis>Merry Pranksters</emphasis> and <emphasis>Sad Pranksters</emphasis> as subgroups
@@ -971,7 +985,7 @@ create table <emphasis role="bold">composition_rels</emphasis> (
       <ulink url="http://www.oradoc.com/ora817/server.817/a85397/expressi.htm#1023748">hierarchical queries</ulink>,
       which are expensive in Oracle. As we saw in the <emphasis>Context Hierarchy</emphasis> section, one way of
       reducing the performance hit incurred by hierarchical queries is to cache query results in
-      a table maintained by triggers.  The OpenACS 4.x data model defines two such tables:
+      a table maintained by triggers.  The OpenACS data model defines two such tables:
     </para>
     
     <programlisting id="group_component_index" xreflabel="group_component_index">
@@ -1020,6 +1034,7 @@ create table <emphasis role="bold">composition_rels</emphasis> (
       and <computeroutput>composition_rels</computeroutput> tables through triggers. 
     </para>
       
+   <para><emphasis role="strong">additional comments</emphasis></para>
     <para>
       As far as the <computeroutput>group_member_index</computeroutput> table goes, I am not sure I understand its
       purpose.  It maintains group-member relationships that are resolved with respect
@@ -1097,7 +1112,7 @@ from
 
     <para>
       Security information is queried by calling the <computeroutput>acs_permission.permission_p</computeroutput>
-      function in OpenACS 4.x+. This is accessible from Tcl via the
+      function in OpenACS. This is accessible from Tcl via the
       <computeroutput>permission::permission_p</computeroutput> procedure. 
     </para>
 
@@ -1125,18 +1140,18 @@ from
 
   end acs_permission;
     </programlisting>
-
+<para><emphasis role="strong">problem avoidance</emphasis></para>
     <para>
-      The function simply queries 
+      The function queries 
       <xref linkend="acs_object_party_privilege_map"/>,
       which is a humongous view that joins three flattened hierarchies:
       the context tree, the privilege hierarchy,
-      the party composition (and membership) hierarchy. As such,
-      it contains an extremely large number of rows. About
+      the party composition (and membership) hierarchy. 
+      It contains an extremely large number of rows. About
       the only kind of query you can run against it is the one
       performed by the <computeroutput>acs_permission.permission_p</computeroutput>
       function.  Anything other than that would take forever to
-      finish or would ultimately result in an Oracle error.
+      finish or would ultimately result in a query error.
     </para>
     
     <para>
