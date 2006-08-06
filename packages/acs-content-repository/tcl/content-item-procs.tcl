@@ -125,6 +125,7 @@ ad_proc -public ::content::item::new {
     if {[exists_and_not_null title] \
             || [exists_and_not_null text] \
             || [exists_and_not_null data] \
+            || [exists_and_not_null tmp_filename] \
             || [llength $attributes]} {
         content::revision::new \
             -item_id $item_id \
