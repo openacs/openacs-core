@@ -73,11 +73,11 @@
 
 <div id="context-bar">
   <if @context_bar@ not nil>
-    <div id="breadcrumbs">@context_bar;noquote@</div>
+    <div class="breadcrumbs">@context_bar;noquote@</div>
   </if>
   <else>
     <if @context:rowcount@ not nil>
-      <div id="breadcrumbs">
+      <div class="breadcrumbs">
         <ul>
           <multiple name="context">
             <if @context.url@ not nil>

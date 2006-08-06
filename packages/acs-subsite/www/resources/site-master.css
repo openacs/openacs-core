@@ -126,18 +126,21 @@ body {
   margin-bottom: 2px;
   padding-left: 8px;
 }
-#context-bar #breadcrumbs {
+#context-bar .breadcrumbs {
   clear: left;
   float: left;
   padding-top: 3px;
 }
-#context-bar #breadcrumbs ul {
+#context-bar .breadcrumbs ul {
+  display: inline;
   margin-left: 0;
   padding-left: 0;
   display: inline;
   border: none;
 } 
-#context-bar #breadcrumbs ul li {
+#context-bar .breadcrumbs ul li {
+  list-style: none;
+  display: inline;
   margin-left: 0;
   padding-left: 2px;
   border: none;
