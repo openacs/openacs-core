@@ -9,15 +9,17 @@
 <li>There is no user accessible directory</li>
 <li>There is no sub-site admin accessible diretory</li>
 <p>
-<li>Requirements document:  <a  href="requirements.html">Requirements</a>
-<li>Data model:?? where does this really go? </a>
-<li>ER diagram: None yet 
+<li>Requirements document:  <a  href="requirements.html">Requirements</a></li>
 </ul>
 
 <h3>II.  Introduction</h3>
+<p>
 Reference data is often overlooked in the rush to get coding. In reality, much of ....
+</p>
 <h3>III.  Historical Considerations</h3> 
+<p>
 Before the existence of acs-reference, the ACS required that you preload some tables in a script to get some basic reference functionality. There were many problems with this:
+</p>
 <ul>
 <li>No easy way to find out what reference data even existed.</li>
 <li>No way to find out how old the data was.</li>
@@ -25,7 +27,8 @@ Before the existence of acs-reference, the ACS required that you preload some ta
 <li>Very US/English slant on the data.</li>
 </ul>
 <h3>  IV. Competitive Analysis</h3>
-The only real competition is internally developed solutions. 
+<p>The only real competition is internally developed solutions. 
+</p>
 <h3>  V. Design Tradeoffs</h3>
 <h4>Primary Goals</h4>
 <ul>
@@ -36,19 +39,29 @@ The only real competition is internally developed solutions.
 When updating the reference tables their is overhead due to the fact that the table is registered with the repository. This should rarely occur anyway as the tables are only added once. 
 By not having the actual data itself in the acs-object system, subsequent additions and deletions to the reference tables themselves are unaffected by this overhead.
 <h3>  VI. API</h3>
+<p>See <a href="/api-doc/index?about_package_key=acs-reference">api-browser</a></p>
 <h3>  VII. Data Model Discussion</h3>
 <h3>  VIII. User Interface</h3>
-Their is no end user interface.
-There will 
+<p>Their is no end user interface.
+There needs to be some kind of admin UI to report status and possibly
+manage updates per requirements.
+</p>
 <h3>  IX. Configuration/Parameters</h3>
-None
+<p>None</p>
 <h3>  X. Future Improvements/Areas of Likely Change</h3>
-A server based update mechanism will be supported. This will allow for tables to be updated (and preferably diffed) instead of being reloaded with a package upgrade.
+<p>A server based update mechanism will be supported. This will allow for tables to be updated (and preferably diffed) instead of being reloaded with a package upgrade.
 An interface to produce xml/csv from the reference data would be a nice service to the community (allowing legacy applications a way to import this data).
+</p>
 <h3>  XI. Authors</h3>
+<p>
+Jon Griffin
+</p>
 <h3>  XII. Revision History</h3>
 <pre>
 $Log$
+Revision 1.1  2001/04/22 00:53:12  jong
+initial openacs import
+
 Revision 1.2  2000/12/13 04:39:00  jong
 Added Revision History and corrected typo in reference link
 
