@@ -118,7 +118,7 @@ namespace eval notification::email {
         
         set reply_to [reply_address -object_id $reply_object_id -type_id $notification_type_id]
 
-        if { ![empty_string_p $from_user_id] && [db_0or1row get_person {}]} {
+       if { ![empty_string_p $from_user_id] && $from_user_id != 0 && [db_0or1row get_person {}]} {
             set from_email "\"$first_names $last_name\" <[cc_email_from_party $from_user_id]>"
 
             # Set the Reply-To and Mail-Followup-To addresses to the
