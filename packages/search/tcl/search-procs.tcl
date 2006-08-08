@@ -100,7 +100,7 @@ ad_proc -private search::indexer {} {
     set driver [ad_parameter -package_id [apm_package_id_from_key search] FtsEngineDriver]
 
     if { $driver eq ""
-         || (![callback::exists -callback search::index -impl $driver] && ! [acs_sc_binding_exists_p FtsEngineDriver $driver])} {
+         || ! [acs_sc_binding_exists_p FtsEngineDriver $driver]} {
         # Nothing to do if no driver
         ns_log Debug "search::indexer: driver=$driver binding exists? [acs_sc_binding_exists_p FtsEngineDriver $driver]"
         return
