@@ -1,5 +1,3 @@
-A# 
-
 ad_library {
     
     Test Cases of Membership rel procs
