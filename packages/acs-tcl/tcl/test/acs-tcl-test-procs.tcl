@@ -1031,21 +1031,30 @@ aa_register_case \
 	-rollback \
 	-test_code {
 	    db_foreach get_param {
-		select ap.parameter_name, ap.package_key, ap.default_value
+		select ap.parameter_name, ap.package_key, ap.default_value, ap.parameter_id
 		from apm_parameters ap, apm_package_types apt
 		where
 		ap.package_key = apt.package_key
 		and apt.singleton_p ='t'
+		and ap.package_key <> 'acs-kernel'
 	    } {
 
 		set value [random]
-		if {$value > 0.7} {
+		if {![string equal $parameter_name "PasswordExpirationDays"] && $value > 0.7} {
 
 		    set package_id [apm_package_id_from_key $package_key]	    
-		    aa_log "$package_key $parameter_name $default_value"
-		    aa_true "check parameter::get" [string equal [parameter::get -package_id $package_id -parameter $parameter_name] $default_value]
+		    set actual_value [db_string real_value {
+			select apm_parameter_values.attr_value
+			from 
+			apm_parameter_values
+			where apm_parameter_values.package_id = :package_id
+			and apm_parameter_values.parameter_id = :parameter_id
+		    }]
+
+		    aa_log "$package_key $parameter_name $actual_value"
+		    aa_true "check parameter::get" [string equal [parameter::get -package_id $package_id -parameter $parameter_name] $actual_value]
 		    aa_true "check parameter::get_from_package_key" \
-			[string equal [parameter::get_from_package_key -package_key $package_key -parameter $parameter_name] $default_value]
+			[string equal [parameter::get_from_package_key -package_key $package_key -parameter $parameter_name] $actual_value]
 
 		    parameter::set_default -package_key $package_key -parameter $parameter_name -value $value
 		    set value_db [db_string get_values {
