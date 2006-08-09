@@ -11,7 +11,7 @@ ad_library {
 # Default interval is 1 minute.
 ad_schedule_proc -thread t 60 acs_mail_lite::sweeper
 
-set queue_dir [parameter::get_from_package_key -paramater "BounceMailDir" -package_key "acs-mail-lite"]
+set queue_dir [parameter::get_from_package_key -parameter "BounceMailDir" -package_key "acs-mail-lite"]
 
 ad_schedule_proc -thread t 120 acs_mail_lite::load_mails -queue_dir $queue_dir
 
