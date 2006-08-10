@@ -21,6 +21,19 @@ aa_register_case -cats {db smoke production_safe} datamodel__named_constraints {
                 aa_log_result fail "Table $table constraints name $conname violates contraint naming standard"
             }
         }
+	Oracle8 {
+	    aa_log "CK type includes also NOT NULL constraints"
+	    db_foreach check_constraints {
+		select at.table_name,
+		  decode(ac.constraint_type,'C','CK','R','FK','P','PK','U','UN','--') as c_type,
+		  ac.constraint_name 
+		from user_tables at, user_constraints ac 
+		where ac.table_name (+)= at.table_name 
+		  and not (constraint_name like '%_PK' or constraint_name like '%_UN' or constraint_name like '%_FK' or constraint_name like '%_CK' or constraint_name like '%_NN')
+	    } {
+                aa_log_result fail "Table $table_name constraints name $constraint_name ($c_type) violates constraint naming standard"
+	    }
+	}
         default {
             aa_log "Not run for [db_name]"
         }
@@ -45,7 +58,7 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_object_type_che
         set table_name [string tolower $table_name]
         set id_column [string tolower $id_column]
 
-        set __pk {}
+        set the_pk {}
         if {![db_table_exists $table_name]} {
             aa_log_result fail "Type $object_type: table $table_name does not exit"
         } else {
@@ -55,7 +68,7 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_object_type_che
                 # limit pg only?
                 # we could just check the column exists but since we want to 
                 # check the name method try at least to get a real object_id
-                if {[catch {db_0or1row check_exists "select $id_column as __pk from $table_name limit 1"} errMsg]} { 
+                if {[catch {db_0or1row check_exists "select min($id_column) as the_pk from $table_name"} errMsg]} { 
                     aa_log_result fail "Type $object_type: select $id_column from $table_name failed:\n$errMsg"
                 }
             }
@@ -66,10 +79,10 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_object_type_che
                 aa_log_result fail "Type $object_type: name method $name_method mixed case"
             }
             set name_method [string tolower $name_method]
-            if {[string is integer -strict $__pk]} {
+            if {[string is integer -strict $the_pk]} {
                 # intentionally don't use bind variables here which is ok 
-                # since we just checked __pk was an integer
-                if { [catch {db_0or1row name_method "select ${name_method}($__pk) as NAME from dual"} errMsg] } { 
+                # since we just checked the_pk was an integer
+                if { [catch {db_0or1row name_method "select ${name_method}($the_pk) as NAME from dual"} errMsg] } { 
                     aa_log_result fail "Type $object_type: name method $name_method failed\n$errMsg"
                 }
             }
@@ -90,21 +103,21 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_attribute_check
     @author Jeff Davis davis@xarg.net
 } {
     array set allow_types {
-        string {TEXT VARCHAR CHAR}
-        boolean {BOOL INT2 INT4}
-        number {NUMERIC INT2 INT4 INT8 FLOAT4 FLOAT8}
-        integer {INT2 INT4 INT8}
+        string {TEXT VARCHAR CHAR VARCHAR2}
+        boolean {BOOL INT2 INT4 CHAR}
+        number {NUMERIC INT2 INT4 INT8 FLOAT4 FLOAT8 NUMBER}
+        integer {INT2 INT4 INT8 NUMBER}
         money {NUMERIC FLOAT4 FLOAT8}
         timestamp {TIMESTAMPTZ}
         time_of_day {TIMESTAMPTZ}
         enumeration {INT2 INT4 INT8}
-        url {VARCHAR TEXT}
-        email {VARCHAR TEXT}
-        text  {VARCHAR TEXT CLOB}
-        keyword {CHAR VARCHAR TEXT}
+        url {VARCHAR TEXT VARCHAR2}
+        email {VARCHAR TEXT VARCHAR2}
+        text  {VARCHAR TEXT CLOB VARCHAR2}
+        keyword {CHAR VARCHAR TEXT VARCHAR2}
     }
 
-    db_foreach attribute {select a.*, lower(ot.table_name) as obj_type_table from acs_attributes a, acs_object_types ot where ot.object_type = a.object_type order by object_type} {
+    db_foreach attribute {select a.*, lower(ot.table_name) as obj_type_table from acs_attributes a, acs_object_types ot where ot.object_type = a.object_type order by a.object_type} {
 
         if {![string eq [string tolower $table_name] $table_name]} {
             aa_log_result fail "Type $object_type attribute $attribute table name $table_name mixed case"
