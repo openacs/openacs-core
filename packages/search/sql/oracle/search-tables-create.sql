@@ -43,10 +43,12 @@ create table site_wide_index (
         -- whether a user has the right to view this object, but also
         -- its community.  In pure OpenACS this should always be a
         -- null column and it should have no referential integrity.
-	community_id		integer
-			        constraint swi_community_id_fk
-                                references dotlrn_communities_all
-                                on delete cascade,
+        --	community_id		integer
+	--		        constraint swi_community_id_fk
+        --                        references dotlrn_communities_all
+        --                        on delete cascade,
+        -- DAVEB: We'll need to add a way for dotlrn to integrate
+        -- without tying it into the search table.
         -- Dirk Gomez: That's the place to put an object's relevant
         -- date which is part of the ranking function. In calendar
         -- this is the item date, in forum it could be the last reply
