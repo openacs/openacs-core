@@ -46,13 +46,13 @@ aa_register_case -cats {api smoke} -procs {oacs_util::process_objects_csv} proce
         # Create cvs file of persons
         set file_loc "/tmp/test.csv"
         set file_id [open $file_loc w]
-        puts $file_id "first_names,last_name"
-        puts $file_id "Charles,Mingus"
-        puts $file_id "Miles,Davis"
-        puts $file_id "Charlie,Parker"
+        puts $file_id "email,first_names,last_name"
+        puts $file_id "cmingus@foo.bar,Charles,Mingus"
+        puts $file_id "mdavis@foo.bar,Miles,Davis"
+        puts $file_id "cparker@foo.bar,Charlie,Parker"
         close $file_id
 
-	set csv_data "\nfirst_names,last_name\nCharles,Mingus\nMiles,Davis\nCharlie,Parker"
+	set csv_data "\nemail,first_names,last_name\ncmingus@foo.bar,Charles,Mingus\nmdavis@foo.bar,Miles,Davis\ncparker@foo.bar,Charlie,Parker"
         aa_log "CSV file for \"person\" objects creation with data:\n $csv_data"
 
 	set person_ids [oacs_util::process_objects_csv -object_type "person" -file $file_loc]
