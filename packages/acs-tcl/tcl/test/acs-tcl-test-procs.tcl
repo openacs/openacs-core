@@ -752,7 +752,7 @@ aa_register_case -cats {web smoke} -libraries tclwebtest front_page_1 {
 } {
     #set ::auto_path "/usr/local/tclwebtest/lib"
     #aa_log "auto_path: $auto_path"
-    ::tclwebtest::do_request "[ad_url]/"
+    ::twt::do_request "[ad_url]/"
     ::tclwebtest::assert text "Main Site"
 
 }
@@ -900,16 +900,16 @@ aa_register_case -cats {api db} db__caching {
     # entire db_cache_pool cache.
 
     set not_cached \
-        [db_string test2 {select first_names from persons limit 0} \
+        [db_string test2 {select first_names from persons where person_id=1 and person_id=2} \
             -default foo]
     aa_equals "Test that caching and non-caching db_string call return same default value" \
-        [db_string -cache_key test2 test2 {select first_names from persons limit 0} \
+        [db_string -cache_key test2 test2 {select first_names from persons where person_id=1 and person_id=2} \
             -default foo] \
         $not_cached
     aa_true "Test2 cached value found." \
         ![catch {ns_cache get db_cache_pool test2} errmsg]
     aa_equals "Test that caching and non-caching db_string call return same default value" \
-        [db_string -cache_key test2 test2 {select first_names from persons limit 0} \
+        [db_string -cache_key test2 test2 {select first_names from persons where person_id=1 and person_id=2} \
             -default foo] \
         $not_cached
     db_flush_cache
@@ -921,11 +921,11 @@ aa_register_case -cats {api db} db__caching {
     # by "string match" pattern.
 
     aa_true "Uncached db_string call returns error if query returns no data" \
-        [catch {db_string test3 "select first_names from persons limit 0"}]
+        [catch {db_string test3 "select first_names from persons where person_id=1 and person_id=2"}]
     aa_true "Cached db_string call returns error if query returns no data" \
-        [catch {db_string -cache_key test3 test3 "select first_names from persons limit 0"}]
+        [catch {db_string -cache_key test3 test3 "select first_names from persons where person_id=1 and person_id=2"}]
     aa_true "db_string call returns error if caching call returned error" \
-        [catch {db_string -cache_key test3 test3 "select first_names from persons limit 0"}]
+        [catch {db_string -cache_key test3 test3 "select first_names from persons where person_id=1 and person_id=2"}]
     db_flush_cache -cache_key_pattern tes*3
     aa_true "Flush of test3 from cache using pattern" \
         [catch {ns_cache get db_cache_pool test3} errmsg]
@@ -999,15 +999,15 @@ aa_register_case -cats {api db} db__caching {
     # Check db_0or1row caching returns 0 if query returns no values
 
     set not_cached \
-       [db_0or1row test8 {select * from persons limit 0} -column_array test8]
+       [db_0or1row test8 {select * from persons where person_id=1 and person_id=2} -column_array test8]
     set cached \
-        [db_0or1row -cache_key test8 test8 {select * from persons limit 0} -column_array test8]
+        [db_0or1row -cache_key test8 test8 {select * from persons where person_id=1 and person_id=2} -column_array test8]
     aa_equals "Test that caching and non-caching db_0or1row call return same result for 0 rows" \
         $cached $not_cached
     aa_true "Test8 cached value found." \
         ![catch {ns_cache get db_cache_pool test8} errmsg]
     set cached \
-        [db_0or1row -cache_key test8 test8 {select * from persons limit 0} -column_array test8]
+        [db_0or1row -cache_key test8 test8 {select * from persons where person_id=1 and person_id=2} -column_array test8]
     aa_equals "Test that cached db_0or1row returns the right value from the cache for 0 rows" \
         $cached $not_cached
     db_flush_cache
