@@ -1,7 +1,7 @@
 ad_library {
     Check whos-online procs
     
-    @author Juan Pablo Amaya
+    @author Juan Pablo Amaya jpamaya@unicauca.edu.co
     @creation-date 2006-08-02
 }
 
