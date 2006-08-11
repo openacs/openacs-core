@@ -31,7 +31,9 @@ aa_register_case -cats {db smoke production_safe} datamodel__named_constraints {
 		where ac.table_name (+)= at.table_name 
 		  and not (constraint_name like '%_PK' or constraint_name like '%_UN' or constraint_name like '%_FK' or constraint_name like '%_CK' or constraint_name like '%_NN')
 	    } {
-                aa_log_result fail "Table $table_name constraints name $constraint_name ($c_type) violates constraint naming standard"
+		if { [string last "$" $table_name] == -1 } {
+		    aa_log_result fail "Table $table_name constraints name $constraint_name ($c_type) violates constraint naming standard"
+		}
 	    }
 	}
         default {
