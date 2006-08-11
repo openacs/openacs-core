@@ -83,12 +83,12 @@ begin
    ''Package'',             -- pretty_name
    ''Packages'',            -- pretty_plural
    ''acs_object'',          -- supertype
-   ''APM_PACKAGES'',        -- table_name
+   ''apm_packages'',        -- table_name
    ''package_id'',          -- id_column
    ''apm_package'',         -- package_name
    ''f'',                   -- abstract_p
    ''apm_package_types'',   -- type_extension_table
-   ''apm_package.name''     -- name_method
+   ''apm_package__name''     -- name_method
    );
 
   return 0;
@@ -366,9 +366,9 @@ begin
    ''Package Version'',
    ''Package Versions'',
    ''acs_object'',
-   ''APM_PACKAGE_VERSIONS'',
+   ''apm_package_versions'',
    ''version_id'',
-   ''APM_PACKAGE_VERSION'',
+   ''apm_package_version'',
    ''f'',
    null,
    null
@@ -774,12 +774,12 @@ begin
    ''Package Parameter'',
    ''Package Parameters'',
    ''acs_object'',
-   ''APM_PARAMETERS'',
+   ''apm_parameters'',
    ''parameter_id'',
    ''apm_parameter'',
    ''f'',
    null,
-   ''apm_parameter__name''
+   null
    );
 
  attr_id := acs_attribute__create_attribute (

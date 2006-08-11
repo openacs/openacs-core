@@ -62,7 +62,7 @@ begin
    ''acs_group'',
    ''f'',
    ''group_types'',
-   ''acs_group.name''
+   ''acs_group__name''
    );
 
  attr_id := acs_attribute__create_attribute (

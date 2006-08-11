@@ -29,7 +29,6 @@ begin
    table_name => 'rel_segments',
    id_column => 'segment_id',
    package_name => 'rel_segment',
-   type_extension_table => 'rel_segment',
    name_method => 'rel_segment.name'
  );
 

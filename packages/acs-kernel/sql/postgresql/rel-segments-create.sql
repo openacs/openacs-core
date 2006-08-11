@@ -32,8 +32,8 @@ begin
    ''segment_id'',
    ''rel_segment'',
    ''f'',
-   ''rel_segment'',
-   ''rel_segment.name''
+   null,
+   ''rel_segment__name''
    );
 
   return 0;

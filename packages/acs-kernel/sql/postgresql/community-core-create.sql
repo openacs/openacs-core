@@ -132,7 +132,7 @@ begin
     ''party'',
    ''f'',
    null,
-   ''party.name''
+   ''party__name''
    );
 
  attr_id := acs_attribute__create_attribute (
@@ -180,7 +180,7 @@ begin
    ''person'',
    ''f'',
    null,
-   ''person.name''
+   ''person__name''
    );
 
  attr_id := acs_attribute__create_attribute (
