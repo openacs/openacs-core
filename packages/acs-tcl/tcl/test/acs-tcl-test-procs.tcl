@@ -1079,3 +1079,14 @@ aa_register_case \
 	    }
 	}
 }
+
+aa_register_case -cats {api smoke} acs_object__package_id {
+    Tests the acs_object__package_id procedure
+
+    @author Malte Sussdorff
+} {
+    # Retrieve an objects_package_id
+    set object_id [db_string get_object_id "select max(object_id) from acs_objects where package_id >0"]
+    set package_id [db_string get_package_id "select package_id from acs_objects where object_id = :object_id"]
+    aa_true "package_id returned is correct" [string eq $package_id [acs_object::package_id -object_id $object_id]]
+}

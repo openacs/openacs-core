@@ -96,6 +96,21 @@ ad_proc -public acs_object::get_element {
     return $row($element)
 }
 
+ad_proc -public acs_object::package_id {
+    {-object_id:required}
+} {
+    Gets the package_id of the object
+
+    @author Malte Sussdorff (malte.sussdorff@cognovis.de)
+    @creation-date 2006-08-10
+    
+    @param object_id the object to get the package_id for
+    
+    @return package_id of the object. Empty string if the package_id is not stored
+} {
+    return [db_string get_package_id {} -default ""]
+}
+
 ad_proc -public acs_object::set_context_id {
     {-object_id:required}
     {-context_id:required}
