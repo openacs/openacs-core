@@ -6,7 +6,7 @@ ad_library {
 }
 
 aa_register_case -cats {
-    smoke production_safe
+    smoke production_safe web
 } -procs {
     whos_online::num_users
     whos_online::set_invisible
