@@ -84,7 +84,7 @@ begin
    object_type => 'apm_package',
    pretty_name => 'Package',
    pretty_plural => 'Packages',
-   table_name => 'APM_PACKAGES',
+   table_name => 'apm_packages',
    id_column => 'package_id',
    package_name => 'apm_package',
    type_extension_table => 'apm_package_types',
@@ -342,9 +342,9 @@ begin
    object_type => 'apm_package_version',
    pretty_name => 'Package Version',
    pretty_plural => 'Package Versions',
-   table_name => 'APM_PACKAGE_VERSIONS',
+   table_name => 'apm_package_versions',
    id_column => 'version_id',
-   package_name => 'APM_PACKAGE_VERSION'
+   package_name => 'apm_package_version'
  );
 
  attr_id := acs_attribute.create_attribute(
@@ -634,7 +634,7 @@ begin
    object_type => 'apm_parameter',
    pretty_name => 'Package Parameter',
    pretty_plural => 'Package Parameters',
-   table_name => 'APM_PARAMETERS',
+   table_name => 'apm_parameters',
    id_column => 'parameter_id',
    package_name => 'apm_parameter'
  );
