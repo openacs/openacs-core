@@ -22,7 +22,7 @@ aa_register_case -cats {api smoke} ad_proc_create_callback {
             ad_proc -callback contract { arg1 arg2 } { docs } -
         } error]
 
-    ad_proc -callback a_callback { arg1 arg2 } { this is a test callback } -
+    ad_proc -callback a_callback { -arg1 arg2 } { this is a test callback } -
     set callback_procs [info procs ::callback::a_callback::*]
     aa_true "creation of a valid callback contract with '-' body" \
         [expr {[lsearch -exact \
