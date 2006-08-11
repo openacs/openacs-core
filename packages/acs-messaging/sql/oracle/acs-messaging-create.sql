@@ -17,9 +17,9 @@ begin
         object_type => 'acs_message',
         pretty_name => 'Message',
         pretty_plural => 'Messages',
-        table_name => 'ACS_MESSAGES',
-        id_column => 'MESSAGE_ID',
-        name_method => 'ACS_MESSAGE.NAME'
+        table_name => 'asc_messages',
+        id_column => 'message_id',
+        name_method => 'acs_message.name'
     );
 
     acs_object_type.create_type (
@@ -27,9 +27,9 @@ begin
         object_type => 'acs_message_revision',
         pretty_name => 'Message Revision',
         pretty_plural => 'Message Revisions',
-        table_name => 'CR_REVISIONS',
-        id_column => 'REVISION_ID',
-        name_method => 'ACS_OBJECT.DEFAULT_NAME'
+        table_name => 'cr_revisions',
+        id_column => 'revision_id',
+        name_method => 'acs_object.default_name'
     );
 
 end;
