@@ -15,12 +15,12 @@ select acs_object_type__create_type (
     'Message',
     'Messages',
     'content_item',
-    'ACS_MESSAGES',
-    'MESSAGE_ID',
+    'acs_messages',
+    'message_id',
     null,
     'f',
     null,
-    'ACS_MESSAGE.NAME'
+    'acs_message__name'
 );
 
 select acs_object_type__create_type (
@@ -28,12 +28,12 @@ select acs_object_type__create_type (
     'Message Revision',
     'Message Revisions',
     'content_revision',
-    'CR_REVISIONS',
-    'REVISION_ID',
+    'cr_revisions',
+    'revision_id',
     null,
     'f',
     null,
-    'ACS_OBJECT.DEFAULT_NAME'
+    'acs_object__default_name'
 );
 
 
