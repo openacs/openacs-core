@@ -2,7 +2,7 @@ ad_library {
     
     Tests that deal with the context bar creation.
 
-    @author Juan Pablo Amaya
+    @author Juan Pablo Amaya jpamaya@unicauca.edu.co
     @creation-date 11 August 2006
 }
 
