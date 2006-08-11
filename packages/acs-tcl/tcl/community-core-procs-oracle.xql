@@ -40,9 +40,11 @@
 
 <fullquery name="person::delete.delete_person">      
       <querytext>
-
-	    select person.del(:person_id) from dual;
-	
+	    begin
+			person.del(
+				person_id => :person_id
+			);
+		end;
       </querytext>
 </fullquery>
 
