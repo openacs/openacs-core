@@ -137,8 +137,8 @@ set to_result_page [expr ceil(double($result(count)) / double($limit))]
 
 set url_previous ""
 set url_next ""
-append url_previous "search?q=${urlencoded_query}"
-append url_next "search?q=${urlencoded_query}"
+append url_previous "search?q=${urlencoded_query}&search_package_id=$search_package_id"
+append url_next "search?q=${urlencoded_query}&search_package_id=$search_package_id"
 if { [expr $current_result_page - 1] > $from_result_page } { 
     append url_previous "&offset=[expr ($current_result_page - 2) * $limit]"
 }
