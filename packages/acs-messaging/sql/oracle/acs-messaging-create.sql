@@ -17,7 +17,7 @@ begin
         object_type => 'acs_message',
         pretty_name => 'Message',
         pretty_plural => 'Messages',
-        table_name => 'asc_messages',
+        table_name => 'acs_messages',
         id_column => 'message_id',
         name_method => 'acs_message.name'
     );
