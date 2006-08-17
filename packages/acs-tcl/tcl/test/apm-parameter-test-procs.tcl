@@ -8,7 +8,7 @@ aa_register_case -cats {api smoke} parameter_register_test {
     Test the registration of a parameter
 } {    
     set parameter_id [db_nextval "acs_object_id_seq"]
-    set parameter_name "New Parameter [ad_generate_random_string]"
+    set parameter_name [ad_generate_random_string]
     set description "Description for the new parameter"
     set package_key "acs-tcl"
     set default_value "5"
@@ -24,7 +24,7 @@ aa_register_case -cats {api smoke} parameter_unregister_test {
     Test the unregister of a parameter
 } {    
     set parameter_id [db_nextval "acs_object_id_seq"]
-    set parameter_name "New Parameter [ad_generate_random_string]"
+    set parameter_name [ad_generate_random_string]
     set description "Description for the new parameter"
     set package_key "acs-tcl"
     set default_value "10"
