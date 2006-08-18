@@ -259,7 +259,7 @@ OacsAttach.prototype.insertImage = function(image) {
     //   "/acs-templating/scripts/xinha/insert-image.tcl?fs_package_id=" + 
     // fs_package_id;
 
-    var PopupUrl = "/acs-templating/scripts/xinha/insert-file?";
+    var PopupUrl = "/acs-templating/scripts/xinha/attach-file?";
     if (typeof OacsAttach.attach_parent_id != "undefined") {
 	PopupUrl = PopupUrl + "&parent_id=" + OacsAttach.attach_parent_id;
     }
