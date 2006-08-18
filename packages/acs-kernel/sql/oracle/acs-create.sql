@@ -8,8 +8,9 @@
 
 create table acs_magic_objects (
         name                varchar2(100)
-                        constraint acs_magic_objects_pk primary key,
-        object_id        not null constraint acs_magic_objects_object_id_fk
+                        constraint acs_magic_objects_name_pk primary key,
+        object_id       constraint acs_magic_objects_object_id_nn not null 
+			constraint acs_magic_objects_object_id_fk
                         references acs_objects(object_id)
 );
 

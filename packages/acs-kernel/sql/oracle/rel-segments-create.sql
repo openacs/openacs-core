@@ -44,20 +44,21 @@ show errors
 -- using rel_segment.delete before dropping a relationship type.
 
 create table rel_segments (
-        segment_id      not null
+        segment_id      constraint rel_segments_segment_id_nn not null
                         constraint rel_segments_segment_id_fk
                         references parties (party_id)
-                        constraint rel_segments_pk primary key,
-        segment_name    varchar2(230) not null,
-        group_id        not null
+                        constraint rel_segments_segment_id_pk primary key,
+        segment_name    varchar2(230) 
+			constraint rel_segments_segment_name_nn not null,
+        group_id        constraint rel_segments_group_id_nn not null
                         constraint rel_segments_group_id_fk
                         references groups (group_id)
                         on delete cascade,
-        rel_type        not null
+        rel_type        constraint rel_segments_rel_type_nn not null
                         constraint rel_segments_rel_type_fk
                         references acs_rel_types (rel_type)
                         on delete cascade,
-        constraint rel_segments_grp_rel_type_uq unique(group_id, rel_type)
+        constraint rel_segments_grp_rel_type_un unique(group_id, rel_type)
 );
 
 -- rel_type has a foreign key reference - create an index

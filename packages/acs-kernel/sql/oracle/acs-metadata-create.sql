@@ -28,8 +28,9 @@ create table acs_object_types (
 			constraint acs_object_types_pk primary key,
 	supertype	constraint acs_object_types_supertype_fk
 			references acs_object_types (object_type),
-	abstract_p	char(1) default 'f' not null
-			constraint acs_obj_types_abstract_p_ck
+	abstract_p	char(1) default 'f' 
+			constraint acs_object_types_abstract_p_nn not null
+			constraint acs_object_types_abstract_p_ck
 			check (abstract_p in ('t', 'f')),
 	pretty_name	varchar2(1000) not null
 			constraint acs_obj_types_pretty_name_un
@@ -37,7 +38,7 @@ create table acs_object_types (
 	pretty_plural	varchar2(1000) not null
 			constraint acs_obj_types_pretty_plural_un
 			unique,
-	table_name	varchar2(30)
+	table_name	varchar2(30),
                         constraint acs_object_types_table_name_un unique,
 	id_column	varchar2(30),
 	package_name	varchar2(30) not null
@@ -45,7 +46,7 @@ create table acs_object_types (
 	name_method	varchar2(100),
 	type_extension_table varchar2(30),
         dynamic_p       char(1) default 'f' 
-                        constraint acs_obj_types_dynamic_p_ck
+                        constraint acs_object_types_dynamic_p_ck
                         check (dynamic_p in ('t', 'f')),
 	check ((table_name is null and id_column is null) or
                (table_name is not null and id_column is not null))
@@ -177,10 +178,11 @@ comment on column acs_object_type_tables.id_column is '
 ------------------------------------
 
 create table acs_datatypes (
-	datatype	varchar2(50) not null
-			constraint acs_datatypes_pk primary key,
+	datatype	varchar2(50) 
+			constraint acs_datatypes_datatype_nn not null
+			constraint acs_datatypes_datatype_pk primary key,
 	max_n_values	integer default 1
-			constraint acs_datatypes_max_n_ck
+			constraint acs_datatypes_max_n_values_ck
 			check (max_n_values > 0)
 );
 
@@ -268,35 +270,41 @@ end;
 create sequence acs_attribute_id_seq;
 
 create table acs_attributes (
-	attribute_id	integer not null
-			constraint acs_attributes_pk
+	attribute_id	integer 
+			constraint acs_attributes_attribute_id_nn not null
+			constraint acs_attributes_attribute_id_pk
 			primary key,
-	object_type	not null
+	object_type	constraint acs_attributes_object_type_nn not null
 			constraint acs_attributes_object_type_fk
 			references acs_object_types (object_type),
 	table_name	varchar2(30),
 	constraint acs_attrs_obj_type_tbl_name_fk
 	foreign key (object_type, table_name) references acs_object_type_tables,
-	attribute_name	varchar2(100) not null,
-	pretty_name	varchar2(100) not null,
+	attribute_name	varchar2(100) 
+			constraint aa_attribute_name_nn not null,
+	pretty_name	varchar2(100) 
+			constraint acs_attributes_pretty_name_nn not null,
 	pretty_plural	varchar2(100),
-	sort_order	integer not null,
-	datatype	not null
+	sort_order	integer 
+			constraint acs_attributes_sort_order_nn not null,
+	datatype	constraint acs_attributes_datatype_nn not null
 			constraint acs_attributes_datatype_fk
 			references acs_datatypes (datatype),
 	default_value	varchar2(4000),
-	min_n_values	integer default 1 not null
-			constraint acs_attributes_min_n_ck
+	min_n_values	integer default 1 
+			constraint acs_attributes_min_n_values_nn not null
+			constraint acs_attributes_min_n_values_ck
 			check (min_n_values >= 0),
-	max_n_values	integer default 1 not null
-			constraint acs_attributes_max_n_ck
+	max_n_values	integer default 1 
+			constraint acs_attributes_max_n_values_nn not null
+			constraint acs_attributes_max_n_values_ck
 			check (max_n_values >= 0),
 	storage 	varchar2(13) default 'type_specific'
 			constraint acs_attributes_storage_ck
 			check (storage in ('type_specific',
 					   'generic')),
         static_p        varchar2(1) default 'f'
-                        constraint acs_attributes_static_bool
+                        constraint acs_attributes_static_p_ck
 			check (static_p in ('t', 'f')),
 	column_name	varchar2(30),
 	constraint acs_attributes_attr_name_un
@@ -359,8 +367,10 @@ create table acs_enum_values (
 			constraint asc_enum_values_attr_id_fk
 			references acs_attributes (attribute_id),
 	enum_value	varchar2(1000),
-	pretty_name	varchar2(100) not null,
-	sort_order	integer not null,
+	pretty_name	varchar2(100) 
+			constraint acs_enum_values_pretty_name_nn not null,
+	sort_order	integer 
+			constraint acs_enum_values_sort_order_nn not null,
 	constraint acs_enum_values_pk
 	primary key (attribute_id, enum_value),
 	constraint acs_enum_values_pretty_name_un

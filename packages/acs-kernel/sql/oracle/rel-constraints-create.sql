@@ -38,18 +38,20 @@ create table rel_constraints (
 					primary key
 				constraint rc_constraint_id_fk
 					references acs_objects(object_id),
-    constraint_name		varchar(100) not null,
-    rel_segment 		not null
-				constraint rc_rel_segment_fk
+    constraint_name		varchar(100) 
+				constraint rc_constraint_name_nn not null,
+    rel_segment 		constraint rel_constraints_rel_segment_nn not null
+				constraint rel_constraints_rel_segment_fk
 					references rel_segments (segment_id),
-    rel_side                    char(3) default 'two' not null
-				constraint rc_rel_side_ck
+    rel_side                    char(3) default 'two' 
+				constraint rel_constraints_rel_side_nn not null
+				constraint rel_constraints_rel_side_ck
 					check (rel_side in
 					('one', 'two')),
-    required_rel_segment	not null
-				constraint rc_required_rel_segment
+    required_rel_segment	constraint rc_required_rel_segment_nn not null
+				constraint rc_required_rel_segment_fk
 					references rel_segments (segment_id),
-    constraint rel_constraints_uq
+    constraint rel_constraints_un
 	unique (rel_segment, rel_side, required_rel_segment)
 );
 
