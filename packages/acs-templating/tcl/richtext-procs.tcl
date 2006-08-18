@@ -236,6 +236,7 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
       }
 
       # Check browser's User-Agent header for compatibility with htmlArea
+      ad_return_complaint 1 "use htmlareap = $htmlarea_p"
       if { $htmlarea_p } {
           set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
           if { [string first "opera" $user_agent] != -1 } { 
@@ -422,7 +423,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
       # Tell the blank-master to include the special stuff 
       # for the richtext widget in the page header
       set ::acs_blank_master($richtextEditor) 1
-      
+
       if {$richtextEditor eq "rte"} {
 	lappend ::acs_blank_master__htmlareas $element(form_id)
 	# quote contents for javascript.
@@ -437,7 +438,6 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
 	set output "<script type='text/javascript'><!--\nwriteRichText('$element(id)','$contents',500,200,true,false,'<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\"/>','[string map {\n \\n \r {} "'" "&\#39"} $output]'); //--></script><noscript id=\"rte-noscr-$element(id)\">$output</noscript>"
       } elseif {$richtextEditor eq "xinha"} {
-	
 	append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'/>\");</script>\n"
 	append output "<noscript><br/>Format: $format_menu</noscript>\n"
 	
@@ -448,7 +448,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 	if {[info exists options(plugins)]} {
 	  set plugins $options(plugins)
 	} else {
-	  set plugins [parameter::get \
+            set plugins [parameter::get \
 			   -package_id $package_id_templating \
 			   -parameter "XinhaDefaultPlugins" \
 			   -default ""]
@@ -461,11 +461,19 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 	set ::acs_blank_master(xinha.plugins) [join $quoted ", "]
 
 	set xinha_options ""
-	foreach e {width height folder_id fs_package_id file_types} {
+	foreach e {width height folder_id fs_package_id file_types attach_parent_id} {
 	  if {[info exists options($e)]} {
 	    append xinha_options "xinha_config.$e = '$options($e)';\n"
 	  }
 	}
+          # DAVEB add package_id
+          append xinha_options "xinha_config.package_id = '[ad_conn package_id]';\n"
+          # DAVEB find out if there is a key datatype in the form
+
+          global af_key_name
+          if {[info exists af_key_name(${element(form_id)})]} {
+              append xinha_options "xinha_config.key = '[template::element get_value $element(form_id) $af_key_name(${element(form_id)})]';\n"
+          }
 	if {[info exists options(javascript)]} {
 	  append xinha_options $options(javascript) \n
 	}
