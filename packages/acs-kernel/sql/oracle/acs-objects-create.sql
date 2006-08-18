@@ -126,9 +126,10 @@ show errors
 create sequence acs_object_id_seq cache 1000;
 
 create table acs_objects (
-	object_id		integer not null
-				constraint acs_objects_pk primary key,
-	object_type		not null
+	object_id		integer 
+				constraint acs_objects_object_id_nn not null
+				constraint acs_objects_object_id_pk primary key,
+	object_type		constraint acs_objects_object_type_nn not null
 				constraint acs_objects_object_type_fk
 				references acs_object_types (object_type),
         title			varchar2(1000) default null,
@@ -139,9 +140,11 @@ create table acs_objects (
 				constraint acs_objects_sec_inherit_p_ck
 				check (security_inherit_p in ('t', 'f')),
 	creation_user		integer,
-	creation_date		date default sysdate not null,
+	creation_date		date default sysdate 
+				constraint acs_objects_creation_date_nn not null,
 	creation_ip		varchar2(50),
-	last_modified		date default sysdate not null,
+	last_modified		date default sysdate 
+				constraint acs_objects_last_modified_nn not null,
 	modifying_user		integer,
 	modifying_ip		varchar2(50),
         constraint acs_objects_context_object_un
@@ -1176,13 +1179,15 @@ show errors
 -------------------
 
 create table general_objects (
-	object_id		not null
+	object_id		constraint general_objects_object_id_nn not null
 				constraint general_objects_object_id_fk
 				references acs_objects (object_id)
-				constraint general_objects_pk
+				constraint general_objects_object_id_pk
 				primary key,
-	on_which_table		varchar2(30) not null,
-	on_what_id		integer not null,
+	on_which_table		varchar2(30) 
+				constraint go_on_which_table_nn not null,
+	on_what_id		integer 
+				constraint general_objects_on_what_id_nn not null,
 	constraint general_objects_un
 		unique (on_which_table, on_what_id)
 );

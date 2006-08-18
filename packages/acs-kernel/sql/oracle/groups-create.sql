@@ -17,27 +17,28 @@
 -- the "DENORMALIZATION" section further below).
 
 create table composition_rels (
-        rel_id          constraint composition_rel_rel_id_fk
+        rel_id          constraint composition_rels_rel_id_fk
                         references acs_rels (rel_id)
-                        constraint composition_rel_rel_id_pk
+                        constraint composition_rels_rel_id_pk
                         primary key
 );
 
 create table membership_rels (
-        rel_id          constraint membership_rel_rel_id_fk
+        rel_id          constraint membership_rels_rel_id_fk
                         references acs_rels (rel_id)
-                        constraint membership_rel_rel_id_pk
+                        constraint membership_rels_rel_id_pk
                         primary key,
-        member_state    varchar2(20) not null
-                        constraint membership_rel_mem_ck
+        member_state    varchar2(20) 
+			constraint mr_member_state_nn not null
+                        constraint mr_member_state_ck
                         check (member_state in ('merged','approved', 'needs approval',
                                               'banned', 'rejected', 'deleted'))
 );
 
 create table admin_rels (
-        rel_id          integer constraint admin_rel_rel_id_fk
+        rel_id          integer constraint admin_rels_rel_id_fk
                         references membership_rels (rel_id)
-                        constraint admin_rel_rel_id_pk
+                        constraint admin_rels_rel_id_pk
                         primary key
 );
 
@@ -131,12 +132,13 @@ end;
 show errors
 
 create table group_types (
-        group_type      not null
-                        constraint group_types_pk primary key
-                        constraint group_types_obj_type_fk
+        group_type      constraint group_types_group_type_nn not null
+                        constraint group_types_group_type_pk primary key
+                        constraint group_types_group_type_fk
                         references acs_object_types (object_type),
-        default_join_policy  varchar2(30) default 'open' not null
-                        constraint group_types_join_policy_ck
+        default_join_policy  varchar2(30) default 'open' 
+			constraint gt_default_join_policy_nn not null
+                        constraint gt_default_join_policy_ck
                         check (default_join_policy in 
                                ('open', 'needs approval', 'closed'))
 );
@@ -147,12 +149,14 @@ comment on table group_types is '
 ';
 
 create table groups (
-        group_id                not null
+        group_id        constraint groups_group_id_nn not null
                         constraint groups_group_id_fk
                         references parties (party_id)
-                        constraint groups_pk primary key,
-        group_name      varchar2(1000) not null,
-        join_policy     varchar2(30) default 'open' not null
+                        constraint groups_group_id_pk primary key,
+        group_name      varchar2(1000) 
+			constraint groups_group_name_nn not null,
+        join_policy     varchar2(30) default 'open' 
+			constraint groups_join_policy_nn not null
                         constraint groups_join_policy_ck
                         check (join_policy in 
                                ('open', 'needs approval', 'closed'))
@@ -162,12 +166,12 @@ create table groups (
 
 create table group_type_rels (
        group_rel_type_id      integer constraint gtr_group_rel_type_id_pk primary key,
-       rel_type		      not null 
-                              constraint gtr_rel_type_fk
+       rel_type		      constraint group_type_rels_rel_type_nn not null 
+                              constraint group_type_rels_rel_type_fk
                               references acs_rel_types (rel_type)
                               on delete cascade,
-       group_type	      not null 
-                              constraint gtr_group_type_fk
+       group_type	      constraint group_type_rels_group_type_nn not null 
+                              constraint group_type_rels_group_type_fk
                               references acs_object_types (object_type)
                               on delete cascade,
        constraint gtr_group_rel_types_un unique (group_type, rel_type)
@@ -186,11 +190,11 @@ comment on table group_type_rels is '
 
 create table group_rels (
        group_rel_id           integer constraint group_rels_group_rel_id_pk primary key,
-       rel_type		      not null 
+       rel_type		      constraint group_rels_rel_type_nn not null 
                               constraint group_rels_rel_type_fk
                               references acs_rel_types (rel_type)
                               on delete cascade,
-       group_id	              not null 
+       group_id	              constraint group_rels_group_id_nn not null 
                               constraint group_rels_group_id_fk
                               references groups (group_id)
                               on delete cascade,
@@ -232,25 +236,26 @@ comment on table group_rels is '
 -- the more complex "on update" trigger"
 
 create table group_element_index (
-	group_id	not null
+	group_id	constraint gei_group_id_nn not null
 			constraint group_element_index_grp_id_fk
 			references groups (group_id)
                         on delete cascade,
-	element_id	not null
+	element_id	constraint gei_element_id_nn not null
 			constraint group_element_index_elem_id_fk
 			references parties (party_id),
-	rel_id		not null
+	rel_id		constraint group_element_index_rel_id_nn not null
 			constraint group_element_index_rel_id_fk
 			references acs_rels (rel_id)
                         on delete cascade,
-	container_id	not null
+	container_id	constraint gei_container_id_nn not null
 			constraint group_element_index_cont_id_fk
 			references groups (group_id),
-        rel_type        not null
+        rel_type        constraint gei_rel_type_nn not null
                         constraint group_elem_index_rel_type_fk
                         references acs_rel_types (rel_type),
-        ancestor_rel_type varchar2(100) not null
-                        constraint grp_el_idx_ancstr_rel_type_ck
+        ancestor_rel_type varchar2(100) 
+			constraint gei_ancestor_rel_type_nn not null
+                        constraint gei_ancestor_rel_type_ck
                         check (ancestor_rel_type in ('composition_rel','membership_rel')),
 	constraint group_element_index_pk
 	primary key (element_id, group_id, rel_id)

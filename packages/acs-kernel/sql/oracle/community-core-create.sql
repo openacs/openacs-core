@@ -208,10 +208,10 @@ show errors
 -- ******************************************************************
 
 create table parties (
-	party_id	not null
+	party_id	constraint parties_party_id_nn not null
 			constraint parties_party_id_fk references
 			acs_objects (object_id)
-			constraint parties_pk primary key,
+			constraint parties_party_id_pk primary key,
 	email		varchar2(100)
 			constraint parties_email_un unique,
 	url		varchar2(200)
@@ -362,12 +362,14 @@ show errors
 -------------
 
 create table persons (
-	person_id	not null
+	person_id	constraint persons_person_id_nn not null
 			constraint persons_person_id_fk
 			references parties (party_id)
-			constraint persons_pk primary key,
-	first_names	varchar2(100) not null,
-	last_name	varchar2(100) not null
+			constraint persons_person_id_pk primary key,
+	first_names	varchar2(100) 
+			constraint persons_first_names_nn not null,
+	last_name	varchar2(100) 
+			constraint persons_last_name_nn not null
 );
 
 comment on table persons is '

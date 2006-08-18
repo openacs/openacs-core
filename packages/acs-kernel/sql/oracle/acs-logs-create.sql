@@ -10,15 +10,18 @@ create sequence acs_log_id_seq;
 
 create table acs_logs (
 	log_id		integer
-			constraint acs_logs_pk
+			constraint acs_logs_log_id_pk
 			primary key,
-	log_date	date default sysdate not null,
+	log_date	date default sysdate 
+			constraint acs_logs_log_date_nn not null,
 	log_level	varchar2(20)
 			constraint acs_logs_log_level_ck
 			check (log_level in ('notice', 'warn', 'error',
 					     'debug')),
-	log_key		varchar2(100) not null,
-	message		varchar2(4000) not null
+	log_key		varchar2(100) 
+			constraint acs_logs_log_key_nn not null,
+	message		varchar2(4000) 
+			constraint acs_logs_message_nn not null
 );
 
 create or replace package acs_log

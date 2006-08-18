@@ -113,11 +113,11 @@ show errors;
 create table apm_packages (
     package_id			constraint apm_packages_package_id_fk
 				references acs_objects(object_id)
-				constraint apm_packages_pack_id_pk primary key,
+				constraint apm_packages_package_id_pk primary key,
     package_key			constraint apm_packages_package_key_fk
 				references apm_package_types(package_key),
     instance_name		varchar2(300)
-			        constraint apm_packages_inst_name_nn not null,
+			        constraint apm_packages_instance_name_nn not null,
     -- default system locale for this package
     default_locale              varchar2(30)
 );
@@ -533,26 +533,29 @@ comment on table apm_package_db_types is '
 ';
 
 create table apm_parameters (
-	parameter_id		constraint apm_parameters_fk 
+	parameter_id		constraint apm_parameters_parameter_id_fk 
 				references acs_objects(object_id)
-			        constraint apm_parameters_pk primary key,
+			        constraint apm_parameters_parameter_id_pk primary key,
 	package_key		varchar2(100)
-				constraint apm_pack_param_pack_key_nn not null 	
-				constraint apm_pack_param_type_fk
+				constraint apm_parameters_package_key_nn not null 	
+				constraint apm_parameters_package_key_fk
 			        references apm_package_types (package_key),
 	parameter_name		varchar2(100) 
 				constraint apm_pack_params_name_nn not null,
         description		varchar2(2000),
 	section_name		varchar2(200),
-	datatype	        varchar2(100) not null
-			        constraint apm_parameter_datatype_ck 
+	datatype	        varchar2(100) 
+				constraint apm_parameters_datatype_nn not null
+			        constraint apm_parameters_datatype_ck 
 				check(datatype in ('number', 'string')),
 	default_value		varchar2(4000),
-	min_n_values		integer default 1 not null
-			        constraint apm_paramters_min_n_ck
+	min_n_values		integer default 1 
+				constraint apm_parameters_min_n_values_nn not null
+			        constraint apm_parameters_min_n_values_ck
 			        check (min_n_values >= 0),
-	max_n_values		integer default 1 not null
-			        constraint apm_paramters_max_n_ck
+	max_n_values		integer default 1 
+				constraint apm_parameters_max_n_values_nn not null
+			        constraint apm_paramaters_max_n_values_ck
 			        check (max_n_values >= 0),
 	constraint apm_paramters_attr_name_un
 	unique (parameter_name, package_key),
@@ -771,9 +774,9 @@ This table records data on all of the applications registered in OpenACS.
 
 create table apm_services (
        service_id			integer
-					constraint services_service_id_fk
+					constraint apm_services_service_id_fk
 					references apm_packages(package_id)
-				        constraint services_pk primary key
+				        constraint apm_services_service_id_pk primary key
 );
 
 comment on table apm_services is '
