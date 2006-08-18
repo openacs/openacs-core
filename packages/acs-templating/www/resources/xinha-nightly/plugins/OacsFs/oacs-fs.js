@@ -31,7 +31,13 @@ function OacsFs(editor) {
     OacsFs.fs_package_id = this.editor.config.fs_package_id;
     OacsFs.folder_id     = this.editor.config.folder_id;
     OacsFs.file_types    = this.editor.config.file_types;
+    OacsFs.script_dir    = this.editor.script_dir;
     OacsFs.fullscreen_mode = additionalArgs[1]; 
+
+    if (typeof OacsFs.script_dir == "undefined") {
+      // OacsFs.script_dir = ".";
+      OacsFs.script_dir = "/xowiki";
+    }
 	
     var cfg = editor.config;
     var tt = OacsFs.I18N;
@@ -121,7 +127,7 @@ OacsFs.prototype.insertInternalLink = function(link) {
     //   "plugins/OacsFs/popups/insert-image.tcl?fs_package_id=" + 
     // fs_package_id;
 
-    var PopupUrl = "./xinha/insert-ilink?";
+    var PopupUrl = OacsFs.script_dir + "/xinha/insert-ilink?";
     if (typeof OacsFs.fs_package_id != "undefined") {
 	PopupUrl = PopupUrl + "&fs_package_id=" + OacsFs.fs_package_id;
     }
@@ -185,7 +191,7 @@ OacsFs.prototype.insertInternalLinkTlf = function(link) {
     }
 
 		
-    var PopupUrl = "./xinha/insert-ilink?";
+    var PopupUrl = OacsFs.script_dir + "/xinha/insert-ilink?";
     if (typeof OacsFs.fs_package_id != "undefined") {
 	PopupUrl = PopupUrl + "&fs_package_id=" + OacsFs.fs_package_id;
     }
@@ -257,7 +263,7 @@ OacsFs.prototype.insertImage = function(image) {
     //   "plugins/OacsFs/popups/insert-image.tcl?fs_package_id=" + 
     // fs_package_id;
 
-    var PopupUrl = "./xinha/insert-image?";
+    var PopupUrl = OacsFs.script_dir + "/xinha/insert-image?";
     if (typeof OacsFs.fs_package_id != "undefined") {
 	PopupUrl = PopupUrl + "&fs_package_id=" + OacsFs.fs_package_id;
     }
