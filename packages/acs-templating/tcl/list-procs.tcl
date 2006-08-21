@@ -2829,7 +2829,11 @@ ad_proc -private template::list::filter_form {
 	    # form of selected filters
 	    set client_property_filters $__client_property_filters
 	    ad_set_client_property acs-templating $__list_filter_form_client_property_key $__client_property_filters
-	    
+
+           # now reload the form. excluding var clear_one
+           set pattern [ns_urlencode "clear_one"]=[ns_urlencode "$clear_one"]
+           regsub "${pattern}&?" [ad_return_url] {} url
+           ad_returnredirect $url
 	}
     } -on_submit {
 
