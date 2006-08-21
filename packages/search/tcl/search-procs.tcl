@@ -136,7 +136,7 @@ ad_proc -private search::indexer {} {
                             } else {
                                 array set datasource  [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
                             }
-                            search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
+                            search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type) $object_id
 
 			    if {[callback::impl_exists -callback search::index -impl $driver]} {
 				if {![info exists datasource(package_id)]} {
@@ -206,6 +206,7 @@ ad_proc -private search::content_get {
     content
     mime
     storage_type
+    object_id
 } {
     @author Neophytos Demetriou
 
@@ -225,7 +226,7 @@ ad_proc -private search::content_get {
             set data $content
         }
         file {
-            set data [db_blob_get get_file_data {}]
+            set data [cr_fs_path][db_string get_filename "select content from cr_revisions where revision_id=:object_id"]
         }
         lob {
             set data [db_blob_get get_lob_data {}]
@@ -250,8 +251,7 @@ ad_proc -private search::content_filter {
             set txt $data
         }
         default { 
-	    ns_log notice "\n-----\n DAVEB search::content_filter mime= '${mime}' \n ------ \n"
-            error "invalid mime type in search::content_filter: $mime"
+	    set txt [search::convert::binary_to_text -filename $data -mime_type $mime]
         }
     }
 }
