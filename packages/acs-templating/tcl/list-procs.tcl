@@ -561,9 +561,15 @@ ad_proc -public template::list::prepare {
             set flush_p t
         }
 
-        # We need this uplevel so that the bind variables in the query will get bound at the caller's level
+        # We need this uplevel so that the bind variables in the query
+        # will get bound at the caller's level
+        # we pass in a dummy query name because the query text was
+        # already retreived previously with db_map so this call
+        # always passes the full query text and not the query name
+        # this was failing if the template::list call contained a
+        # page_query with an empty page_query_name 
         uplevel $ulevel [list template::paginator create \
-							 $list_properties(page_query_name) \
+			     --dummy--query--name-- \
                              $list_properties(paginator_name) \
                              $list_properties(page_query_substed) \
                              -pagesize $list_properties(page_size) \
