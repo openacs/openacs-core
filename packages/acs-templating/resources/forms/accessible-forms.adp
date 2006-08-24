@@ -60,7 +60,7 @@
 	      <formgroup id="@elements.id@">
 		\@formgroup.widget;noquote@
 		<label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">
-		  \@formgroup.label@
+		  \@formgroup.label;noquote@
 		</label>
 	      </formgroup>
 	    </noparse>
