@@ -14,12 +14,45 @@ aa_register_case -cats {db smoke production_safe} datamodel__named_constraints {
 } {
     switch -exact -- [db_name] {
         PostgreSQL {
-            db_foreach check_constraints {
-                select relname as table, conname from pg_constraint r join (select relname,oid from pg_class) c on (c.oid = r.conrelid) where
-                not ( conname like '%_pk' or conname like '%_un' or conname like '%_fk' or conname like '%_ck')
-            } {
-                aa_log_result fail "Table $table constraints name $conname violates contraint naming standard"
-            }
+	    db_foreach check_constraint {
+		select 
+		cla.relname as table_name,
+		con.conrelid,
+		con.conname as constraint_name,
+		CASE 
+		when con.contype='c' then 'ck'
+		when con.contype='f' then 'fk'
+		when con.contype='p' then 'pk'
+		when con.contype='u' then 'un'
+		else '' 
+		END as constraint_type,
+		con.conkey
+		from 
+		pg_constraint con,
+		pg_class cla
+		where con.conrelid != 0 and cla.oid=con.conrelid
+		order by table_name,constraint_name
+	    } {
+
+		regsub {_[[:alpha:]]+$} $constraint_name "" name_without_type
+		set standard_name ${name_without_type}_${constraint_type}
+
+		set columns_list [split [string range $conkey 1 end-1] ","]
+		set columns [llength $columns_list]
+
+		if { $columns eq 1 } {
+		    set column_name [db_string get_col "select attname from pg_attribute where attnum = :columns_list and attrelid = :conrelid"]
+		    set standard_name ${table_name}_${column_name}_${constraint_type}
+		    if { [string length $standard_name] > 30 } {
+			set standard_name "${name_without_type}_${constraint_type}"
+		    }
+		}
+	
+		if { ![string eq $standard_name $constraint_name] } {
+		    aa_log_result fail "Table $table_name constraint $constraint_name ($constraint_type) violates naming standard (hint: $standard_name)"
+		}
+	    }
+
         }
 	Oracle8 {
 	    db_foreach check_constraints {
@@ -36,7 +69,8 @@ aa_register_case -cats {db smoke production_safe} datamodel__named_constraints {
 		order by acc.table_name, acc.constraint_name
 	    } {
 		if { [string last "$" $table_name] eq -1 } {
-		    set name_without_type [string range $constraint_name 0 end-3]
+		    regsub {_[[:alpha:]]+$} $constraint_name "" name_without_type
+		    set standard_name "${name_without_type}_${constraint_type}"
 		    if { $columns eq 1 } {
 
 			# NOT NULL constraints
@@ -50,9 +84,6 @@ aa_register_case -cats {db smoke production_safe} datamodel__named_constraints {
 			    # Only check the abbreviation
 			    set standard_name "${name_without_type}_${constraint_type}"
 			}
-		    } else {
-			# Constraint use more than 1 column, only check the abbreviation
-			set standard_name "${name_without_type}_${constraint_type}"
 		    }
 
 		    # Giving a hint for constraint naming
