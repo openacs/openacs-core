@@ -12,10 +12,11 @@ aa_register_case -cats {db smoke production_safe} datamodel__named_constraints {
 
     @author Jeff Davis davis@xarg.net
 } {
-    switch -exact -- [db_name] {
-        PostgreSQL {
-	    db_foreach check_constraint {
-		select 
+
+    set db_is_pg_p [string eq [db_name] "PostgreSQL"]
+
+    if { $db_is_pg_p } {
+	set get_constraints "select 
 		cla.relname as table_name,
 		con.conrelid,
 		con.conname as constraint_name,
@@ -26,82 +27,66 @@ aa_register_case -cats {db smoke production_safe} datamodel__named_constraints {
 		when con.contype='u' then 'un'
 		else '' 
 		END as constraint_type,
-		con.conkey
+		con.conkey,
+                '' as search_condition
 		from 
 		pg_constraint con,
 		pg_class cla
 		where con.conrelid != 0 and cla.oid=con.conrelid
-		order by table_name,constraint_name
-	    } {
-
-		regsub {_[[:alpha:]]+$} $constraint_name "" name_without_type
-		set standard_name ${name_without_type}_${constraint_type}
-
-		set columns_list [split [string range $conkey 1 end-1] ","]
-		set columns [llength $columns_list]
-
-		if { $columns eq 1 } {
-		    set column_name [db_string get_col "select attname from pg_attribute where attnum = :columns_list and attrelid = :conrelid"]
-		    set standard_name ${table_name}_${column_name}_${constraint_type}
-		    if { [string length $standard_name] > 30 } {
-			set standard_name "${name_without_type}_${constraint_type}"
-		    }
-		}
-	
-		if { ![string eq $standard_name $constraint_name] } {
-		    aa_log_result fail "Table $table_name constraint $constraint_name ($constraint_type) violates naming standard (hint: $standard_name)"
-		}
-	    }
-
-        }
-	Oracle8 {
-	    db_foreach check_constraints {
-		select acc.*, ac.search_condition,
-		  decode(ac.constraint_type,'C','CK','R','FK','P','PK','U','UN','') as constraint_type,
-		  CASE
-		  when acc.columns=1 then (select ucc.column_name from user_cons_columns ucc where ucc.constraint_name=acc.constraint_name)
-		  else ''
-		  END as column_name
+		order by table_name,constraint_name"
+	set get_constraint_col "select attname from pg_attribute where attnum = :columns_list and attrelid = :conrelid"
+    } else {
+	# Oracle
+	set get_constraints "select
+		acc.*, ac.search_condition,
+		  decode(ac.constraint_type,'C','CK','R','FK','P','PK','U','UN','') as constraint_type
 		from 
 		  (select count(column_name) as columns, table_name, constraint_name from user_cons_columns group by table_name, constraint_name) acc,
 		  user_constraints ac 
 		where ac.constraint_name = acc.constraint_name
-		order by acc.table_name, acc.constraint_name
-	    } {
-		if { [string last "$" $table_name] eq -1 } {
-		    regsub {_[[:alpha:]]+$} $constraint_name "" name_without_type
+		order by acc.table_name, acc.constraint_name"
+	set get_constraint_col "select column_name from user_cons_columns where constraint_name = :constraint_name"
+    }
+
+    db_foreach check_constraints $get_constraints {
+	if { $db_is_pg_p || [string last "$" $table_name] eq -1 } {
+
+	    regsub {_[[:alpha:]]+$} $constraint_name "" name_without_type
+	    set standard_name "${name_without_type}_${constraint_type}"
+
+	    if { $db_is_pg_p } {
+		set columns_list [split [string range $conkey 1 end-1] ","]
+		set columns [llength $columns_list]
+	    }
+
+	    if { $columns eq 1 } {
+
+		set column_name [db_string get_col $get_constraint_col]
+		
+		# NOT NULL constraints (oracle only)
+		if { [string eq $search_condition "\"$column_name\" IS NOT NULL"] } {
+		    set constraint_type "NN"
+		}
+
+		set standard_name ${table_name}_${column_name}_${constraint_type}
+
+		if { [string length $standard_name] > 30 } {
+		    # Only check the abbreviation
 		    set standard_name "${name_without_type}_${constraint_type}"
-		    if { $columns eq 1 } {
-
-			# NOT NULL constraints
-			if { [string eq $search_condition "\"$column_name\" IS NOT NULL"] } {
-			    set constraint_type "NN"
-			}
-
-			set standard_name ${table_name}_${column_name}_${constraint_type}
-
-			if { [string length $standard_name] > 30 } {
-			    # Only check the abbreviation
-			    set standard_name "${name_without_type}_${constraint_type}"
-			}
-		    }
-
-		    # Giving a hint for constraint naming
-		    if { [string eq [string range $standard_name 0 2] "SYS"] } {
-			set hint "unnamed"
-		    } else {
-			set hint "hint: $standard_name"
-		    }
-
-		    if { ![string eq $standard_name $constraint_name] } {
-			aa_log_result fail "Table $table_name constraint $constraint_name ($constraint_type) violates naming standard ($hint)"
-		    }
 		}
 	    }
+
+	    # Giving a hint for constraint naming
+	    if { [string eq [string range $standard_name 0 2] "SYS"] } {
+		set hint "unnamed"
+	    } else {
+		set hint "hint: $standard_name"
+	    }
+
+	    if { ![string eq $standard_name $constraint_name] } {
+		aa_log_result fail "Table $table_name constraint $constraint_name ($constraint_type) violates naming standard ($hint)"
+	    }
 	}
-        default {
-            aa_log "Not run for [db_name]"
-        }
     }
 }
 
