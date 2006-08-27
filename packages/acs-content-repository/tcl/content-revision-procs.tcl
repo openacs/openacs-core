@@ -140,7 +140,10 @@ ad_proc -public ::content::revision::new {
 	    set revision_id [db_nextval "acs_object_id_seq"]
 	}
         # the postgres "insert into view" is rewritten by the rule into a "select"
-        [expr {[db_driverkey ""] eq "postgresql" ? "db_0or1row" : "db_dml"}] \
+#        [expr {[db_driverkey ""] eq "postgresql" ? "db_0or1row" : "db_dml"}] \
+
+# fix for PG 7 (we are using some code imported from head)
+	    db_dml \
 	    insert_revision $query_text
         ::content::revision::update_content \
 	    -item_id $item_id \
@@ -451,5 +454,24 @@ ad_proc -public content::revision::update_attribute_index {
 } {
 } {
     return [package_exec_plsql content_revision update_attribute_index]
+}
+
+
+ad_proc -public content::revision::get_cr_file_path {
+    -revision_id 
+} {
+    Get the path to content in the filesystem
+    @param revision_id
+
+    @return path to filesystem stored revision content
+
+    @author Dave Bauer (dave@solutiongrove.com)
+    @creation-date 2006-08-27
+} {
+    # the file path is stored in filename column on oracle
+    # and content in postgresql, but we alias to filename so it makes
+    # sense
+    db_1row get_storage_key_and_path ""
+    return [cr_fs_path $storage_area_key]${filename}
 }
 
