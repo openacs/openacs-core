@@ -367,3 +367,19 @@ ad_proc -public image::get_size_item_id {
 		-item_path ${item_id}_${size_name} \
 		-root_folder_id $item_id]
 }
+
+ad_proc -public image::get_resized_item_id {
+    -item_id
+    {-size_name "thumbnail"}
+} {
+    Get the item id of a related resized image, usually the thumbnail size
+
+    @param item_id Item_id of the original image
+
+    @return item_id of the resized image, empty string if it doeesn't exist
+
+    @author Dave Bauer (dave@solutiongrove.com)
+    @creation-date 2006-08-29
+} {
+    return [db_string get_resized_item_id "" -default ""]
+}
