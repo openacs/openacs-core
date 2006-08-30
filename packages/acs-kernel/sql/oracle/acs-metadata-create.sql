@@ -38,7 +38,7 @@ create table acs_object_types (
 	pretty_plural	varchar2(1000) not null
 			constraint acs_obj_types_pretty_plural_un
 			unique,
-	table_name	varchar2(30),
+	table_name	varchar2(30)
                         constraint acs_object_types_table_name_un unique,
 	id_column	varchar2(30),
 	package_name	varchar2(30) not null
