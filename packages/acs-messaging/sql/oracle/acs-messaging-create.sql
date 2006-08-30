@@ -27,8 +27,6 @@ begin
         object_type => 'acs_message_revision',
         pretty_name => 'Message Revision',
         pretty_plural => 'Message Revisions',
-        table_name => 'cr_revisions',
-        id_column => 'revision_id',
         name_method => 'acs_object.default_name'
     );
 
