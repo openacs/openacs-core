@@ -14,20 +14,17 @@
 	function Init() {
 	  __dlg_init();
 	  var param = window.dialogArguments;
-	  if (param) {
-	      document.getElementById("f_url").value = param["f_url"];
-	      document.getElementById("f_alt").value = param["f_alt"];
-	      document.getElementById("f_border").value = param["f_border"];
-	      document.getElementById("f_align").value = param["f_align"];
-	      document.getElementById("f_vert").value = param["f_vert"];
-	      document.getElementById("f_horiz").value = param["f_horiz"];
-	      window.ipreview.location.replace(param.f_url);
-	  }
-	  // document.getElementById("f_url").focus();
-	  var f_url = document.getElementById("f_url");
-	  var url = f_url.value;
+//	  if (param) {
+//	      document.getElementById("f_href").value = param["f_href"];
+//	      document.getElementById("f_title").value = param["f_title"];
+//	      document.getElementById("f_target").value = param["f_target"];
+//	      document.getElementById("f_usetarget").value = param["f_usetarget"];
+
+//	  }
+	  // document.getElementById("f_href").focus();
+	  var f_href = document.getElementById("f_href");
+	  var url = f_href.value;
 	  if (url) {
-             	// window.ipreview.location.replace(url);
       		onOK();
 	      	__dlg_close(null);
 	  }
@@ -35,7 +32,7 @@
 	
 	function onOK() {
 	  var required = {
-	    "f_url": "#acs-templating.HTMLArea_NoURL#"
+	    "f_href": "#acs-templating.HTMLArea_NoURL#"
 	  };
 	  for (var i in required) {
 	    var el = document.getElementById(i);
@@ -46,16 +43,13 @@
 	    }
 	  }
 	  // pass data back to the calling window
-	  var fields = ["f_url", "f_alt", "f_align", "f_border",
-	                "f_horiz", "f_vert", "f_name"];
+	  var fields = ["f_href","f_title", "f_target"];
 	  var param = new Object();
 	  for (var i in fields) {
 	    var id = fields[i];
 	    var el = document.getElementById(id);
 	    param[id] = el.value;
-	  }
-	  if (selector_window) {
-	    selector_window.close();
+	    alert(id + "='" + el.value + "'");
 	  }
 	  __dlg_close(param);
 	  return false;
@@ -69,52 +63,6 @@
 	  return false;
 	};
 
-	function onPreview() {
-	  var f_url = document.getElementById("f_url");
-	  var url = f_url.value;
-	  if (!url) {
-	    alert("You have to enter an URL first");
-	    f_url.focus();
-	    return false;
-	  }
-	  if (document.getElementById('preview_div').style.display == 'none') { 
-		document.getElementById('showpreview').click();
-	  }
-	  window.ipreview.location.replace(url);
-	  return false;
-	};
-
-	function resizeWindow(formname) {
-		var w, h;
-		if (formname == "url") {
-			w = 415;
-			h = 330;
-		}
-		if (formname == "upload") {
-			w = 415;
-			h = 310;
-		}
-		if (document.getElementById('showpreview').checked == true) {
-			h = h + 200;
-		}
-		window.resizeTo(w, h);
-	}
-
-	function togglePreview() {
-		var w = window.clientWidth;
-		var h = window.clientHeight;
-		if (document.getElementById('preview_div').style.display == 'none') { 
-			document.getElementById('preview_div').style.display='';
-		} else { 
-			document.getElementById('preview_div').style.display='none'; 
-		}
-		if (document.getElementById('insert_image_url').style.display == 'none') { 
-			resizeWindow('upload');
-		} else { 
-			resizeWindow('url');
-		}		
-	}
-	
 </script>
 
 <style type="text/css">
@@ -148,89 +96,8 @@
 </head>
 
 <body onload="Init()">
-
-<div class="title">#acs-templating.HTMLArea_InsertImageTitle# URL <span id="insert_image_link"><a href="javascript:void(0);" onclick="resizeWindow('url'); document.getElementById('insert_image_url').style.display=''; document.getElementById('insert_image_upload').style.display='none';"><font size="-3">click here</font></a></span></div>
-<div id="insert_image_url" style="display:none;">
-	<div style="text-align: center;">
-		<form action="" method="get" name="imageprops">
-			<input type="hidden" name="f_name" id="f_name" />
-			<table border="0" width="100%" style="margin: 0 auto; text-align: left;padding: 0px;">
-				<tbody>
-					<tr>
-						<td width="1%" style="text-align: right" nowrap>#acs-templating.HTMLArea_ImageURL#</td>
-						<td width="99%"><input type="text"
-						onChange="ChangeImageSrc();" name="url" id="f_url"
-						style="width:75%"
-						title="#acs-templating.HTMLArea_ImageURLToolTip#" value="@f_url@" />
-						<button name="preview" onclick="return onPreview();" title="Preview the image in a new window">Preview</button>
-						</td>
-					</tr>
-					<tr>
-						<td width="1%" style="text-align: right" nowrap>#acs-templating.HTMLArea_ImageAlternateText#</td>
-						<td width="99%"><input type="text" name="alt" id="f_alt" style="width:100%" title="#acs-templating.HTMLArea_ImageAlternateTextToolTip#" /></td>
-					</tr>
-				</tbody>
-			</table>
-	</div>
-	<p />
-	<table style="margin-left: auto;margin-right: auto;" >
-		<tr>
-			<td valign="top">
-				<fieldset style="margin-left: 5px;">
-					<legend>Layout</legend>
-					
-					<table>
-						<tr>
-							<td>#acs-templating.HTMLArea_ImageAlignment#</td>
-							<td>
-								<select size="1" name="align" id="f_align">
-								  <option value="left"                         >#acs-templating.HTMLArea_ImageAlignmentLeft#</option>
-								  <option value="right"                        >#acs-templating.HTMLArea_ImageAlignmentRight#</option>
-								  <option value="bottom" selected="1"          >#acs-templating.HTMLArea_ImageAlignmentBottom#</option>
-								  <option value="middle"                       >#acs-templating.HTMLArea_ImageAlignmentMiddle#</option>
-								  <option value="top"                          >#acs-templating.HTMLArea_ImageAlignmentTop#</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>#acs-templating.HTMLArea_ImageBorderSize#</td>
-							<td><input type="text" name="border" id="f_border" size="5" title="#acs-templating.HTMLArea_ImageBorderSizeToolTip#" /></td>
-						</tr>
-					</table>
-				</fieldset>
-			</td>
-			<td valign="top">
-				<fieldset style="margin-right: 5px;">
-					<legend>#acs-templating.HTMLArea_ImageSpacing#</legend>
-					
-					<table border="0">
-						<tr>
-							<td>#acs-templating.HTMLArea_ImageSpacingHorizontal#</td>
-							<td><input type="text" name="horiz" id="f_horiz" size="5" title="#acs-templating.HTMLArea_ImageSpacingHorizontalToolTip#" /></td>
-						</tr>
-						<tr>
-							<td>#acs-templating.HTMLArea_ImageSpacingVertical#</td>
-							<td><input type="text" name="vert" id="f_vert" size="5" title="#acs-templating.HTMLArea_ImageSpacingVerticalToolTip#" /></td>
-						</tr>					
-					</table>
-				</fieldset>
-			</td>
-		</tr>
-		</form>
-	</table>
-	<input type="checkbox" name="showpreview" id="showpreview" onclick="togglePreview()"> Show Preview
-	<div id="preview_div" style="display:none">
-		<fieldset style="margin-top:10px;padding-top:10px;">
-		<legend><b>@HTML_Preview@</b></legend>
-		<iframe name="ipreview" id="ipreview" frameborder="0" style="width:95%;" height="150"  src="./blank.html"></iframe>
-		</fieldset>
-	</div>
-	<br /><br />
-    	<button type="button" name="ok" onclick="return onOK();">OK</button>&nbsp;<button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
-    	<br /><br />
-</div>
-
-<div class="title">#acs-templating.HTMLArea_InsertImageTitle# Upload <span id="uplaod_image_link"><a href="javascript:void(0);" onclick="resizeWindow('upload'); document.getElementById('insert_image_url').style.display='none'; document.getElementById('insert_image_upload').style.display='';"><font size="-3">click here</font></a></span></div>
+<h3>f_href="@f_href@"</h3>
+<h3>f_title="@f_title@"</h3>
 <div id="insert_image_upload">
 	<table border="0" width="100%" style="margin: 0 auto; text-align: left;padding: 0px;">
 	  <tbody>
@@ -239,7 +106,23 @@
 	  <fieldset style="margin-top:10px;padding-top:10px;">
 	    <legend><b>@HTML_UploadTitle@</b></legend>
 	    <formtemplate id="upload_form">
+<input type="hidden" name="f_href" id="f_href" value="@f_href@" />
+<input type="hidden" id="f_target"/>
+<input type="hidden" id="f_usetarget"/>
+
 	      <table cellspacing="2" cellpadding="2" border="0" width="55%">
+		<tr class="form-element">
+		  <if @formerror.f_title@ not nil>
+		    <td class="form-widget-error">
+		  </if>
+		  <else>
+		    <td class="form-widget">
+		  </else>
+		  <formwidget id="f_title">
+		    <formerror id="f_title">
+		      <div class="form-error">@formerror.f_title@</div>
+		    </formerror><br />
+	</td></tr>
 		<tr class="form-element">
 		  <if @formerror.upload_file@ not nil>
 		    <td class="form-widget-error">
@@ -251,12 +134,12 @@
 		    <formerror id="upload_file">
 		      <div class="form-error">@formerror.upload_file@</div>
 		    </formerror><br />
-                        #acs-templating.This_image_can_be_reused_by#<br />
+                        #acs-templating.This_file_can_be_reused_by#<br />
                         <formgroup id="share">
                           @formgroup.widget;noquote@ @formgroup.label@
 		    <br /></formgroup>
                   <img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" border="0">
-                  #acs-templating.This_image_can_be_reused_help#
+                  #acs-templating.This_file_can_be_reused_help#
 		    <formerror id="share">
 		      <div class="form-error">@formerror.share@</div>
 		    </formerror>                        

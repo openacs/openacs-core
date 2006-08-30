@@ -8,8 +8,10 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {parent_id:integer}
-    {selector_type "file"}
+    {selector_type "image"}
 }
+
+set f_url ""
 
 set user_id [ad_conn user_id]
 # if user has write permission, create image upload form, 
@@ -26,16 +28,13 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
         -html { enctype multipart/form-data } \
         -form {
             item_id:key
-	    {f_title:text,optional {html {size 50 id f_title} } }
             {upload_file:file(file) {html {size 30}} }
-            {share:text(radio),optional {label "[_ acs-templating.This_file_can_be_reused_by]"} {options $share_options} {help_text "[_ acs-templating.This_file_can_be_reused_help]"}}
+            {share:text(radio),optional {label "[_ acs-templating.This_image_can_be_reused_by]"} {options $share_options} {help_text "[_ acs-templating.This_image_can_be_reused_help]"}}
             {ok_btn:text(submit) {label "[_ acs-templating.HTMLArea_SelectUploadBtn]"}
             }
         } \
         -on_request {
             set share site
-	    set f_title ""
-	    set f_href ""
         } \
         -on_submit {
             # check file name
@@ -64,32 +63,27 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
             if {$mime_type eq ""} {
                 set mime_type [ns_guesstype $file_name] 
             }
-	    if {$f_title eq ""} {
-		element set_value upload_form f_title $file_name
-	    }
-            if {[string match "image/*" $mime_type]} {
-                
+            if {![string match "image/*" $mime_type]} {
+                template::form::set_error upload_form upload_file \
+                    [_ acs-templating.HTMLArea_SelectImageUploadNoImage]
+                break                
+            }
+
                 image::new \
                     -item_id $item_id \
                     -name ${item_id}_$file_name \
                     -parent_id $parent_id \
-		    -title $f_title \
                     -tmp_filename $upload_tmpfile \
                     -creation_user $user_id \
                     -creation_ip [ad_conn peeraddr] \
-                    -package_id [ad_conn package_id]
-            } else {
-                content::item::new \
-                    -item_id $item_id \
-                    -name ${item_id}_$file_name \
-		    -title $f_title \
-                    -parent_id $parent_id \
-                    -tmp_filename $upload_tmpfile \
-                    -creation_user $user_id \
-                    -creation_ip [ad_conn peeraddr] \
-                    -package_id [ad_conn package_id]
-            }
+                    -package_id [ad_conn package_id] \
+		    -mime_type $mime_type
+
+		# create thumbnail
+		image::resize -item_id $item_id
+
             file delete $upload_tmpfile
+	
             permission::grant \
                 -object_id $item_id \
                 -party_id $user_id \
@@ -123,18 +117,19 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
                 }
                 
             }
-            if {$share eq "private" && [string match "image/*" $mime_type]} {
+
+            if {$share eq "private"} {
                 # need a private URL that allows viewers of this
                 # object to see the image
                 # this isn't totally secure, because of course
                 # you need to be able to see the image somehow
                 # but we only allow read on the image if you can
                 # see the parent object
-		set f_href "/image/$item_id/private/$file_name"
+                set f_url "/image/$item_id/private/$file_name"
             } else {
-                set f_href "/o/$item_id/$file_name"
+                set f_url "/image/$item_id/$file_name"
             }
-
+	    
         }
 
 } else {
