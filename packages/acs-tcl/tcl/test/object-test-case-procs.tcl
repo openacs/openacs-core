@@ -28,14 +28,8 @@ aa_register_case \
 	set the_id [db_nextval acs_object_id_seq]
 	aa_run_with_teardown -test_code {  
 
-
-
-
-
-	    aa_log "test object_type $object_type :: $context_id2"
-
-	    db_exec_plsql type_create {select 
-		acs_object_type__create_type (
+	    if { [string eq [db_name] "PostgreSQL"] } {
+		set type_create_sql "select acs_object_type__create_type (
 					      :object_type,
 					      :pretty_name,
 					      :pretty_name,
@@ -45,19 +39,61 @@ aa_register_case \
 					      null,
 					      'f',
 					      null,
-					      :name_method);
-	    }
+					      :name_method);"
 	
-	   set the2_id [db_exec_plsql new_type {
-		select acs_object__new (
+		set new_type_sql "select acs_object__new (
 				 :the_id,
 				 :object_type,
 				 now(),
 				 :creation_user,
 				 :creation_ip,
 				 :context_id
-				 );
-	   }]
+				 );"
+		set object_del_sql "select acs_object__delete(:the_id)"
+		set type_drop_sql "select acs_object_type__drop_type(
+ 								     :object_type,
+ 								     't'
+								     )"
+	    } else {
+		# oracle
+		set type_create_sql "begin 
+		acs_object_type.create_type (
+			object_type => :object_type,
+			pretty_name => :pretty_name,
+			pretty_plural => :pretty_name,
+			supertype => 'acs_object',
+			abstract_p => 'f',
+			name_method => :name_method);
+                end;"
+	
+		set new_type_sql "begin 
+                :1 := acs_object.new (
+			object_id => :the_id,
+			object_type => :object_type,
+			creation_user => :creation_user,
+			creation_ip => :creation_ip,
+			context_id => :context_id);
+                end;"
+
+		set object_del_sql "begin
+                  acs_object.del(:the_id);
+                  end;"
+
+		set type_drop_sql "begin
+                  acs_object_type.drop_type(
+ 			object_type => :object_type,
+ 			cascade_p => 't');
+                  end;"
+	    }
+
+
+
+
+	    aa_log "test object_type $object_type :: $context_id2"
+
+	    db_exec_plsql type_create $type_create_sql
+	
+	    set the2_id [db_exec_plsql new_type $new_type_sql]
 	    
 	   acs_object::get -object_id $the_id -array array
 	   
@@ -93,11 +129,8 @@ aa_register_case \
 
  	} -teardown_code {
 
-	    db_exec_plsql object_del {select acs_object__delete(:the_id)}
-	    db_exec_plsql type_drop {select acs_object_type__drop_type(
- 								     :object_type,
- 								     't'
-								     ) }	
+	    db_exec_plsql object_del $object_del_sql
+	    db_exec_plsql type_drop $type_drop_sql
 	}
     }
 
