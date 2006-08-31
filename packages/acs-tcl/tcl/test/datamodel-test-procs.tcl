@@ -109,13 +109,15 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_object_type_che
         set id_column [string tolower $id_column]
 
         set the_pk {}
-        if {![db_table_exists $table_name]} {
+	if { [string eq $table_name ""] } {
+	    db_0or1row get_supertype "select * from acs_object_types where object_type = :supertype"
+        } 
+	if {![db_table_exists $table_name]} {
             aa_log_result fail "Type $object_type: table $table_name does not exit"
         } else {
             if {[string is space $id_column]} {
                 aa_log_result fail "Type $object_type: id_column not specified"
             } else {
-                # limit pg only?
                 # we could just check the column exists but since we want to 
                 # check the name method try at least to get a real object_id
                 if {[catch {db_0or1row check_exists "select min($id_column) as the_pk from $table_name"} errMsg]} { 
