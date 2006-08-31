@@ -108,6 +108,7 @@
 		  <else>
 		    <td class="form-widget">
 		  </else>
+		#acs-templating.Link_Title#<br />
 		  <formwidget id="f_title">
 		    <formerror id="f_title">
 		      <div class="form-error">@formerror.f_title@</div>
