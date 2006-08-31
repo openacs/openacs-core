@@ -26,7 +26,7 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
         -html { enctype multipart/form-data } \
         -form {
             item_id:key
-	    {f_title:text,optional {html {size 50 id f_title} } }
+	    {f_title:text,optional {label "[_ acs-templating.Link_Text]"} {html {size 50 id f_title} } }
             {upload_file:file(file) {html {size 30}} }
             {share:text(radio),optional {label "[_ acs-templating.This_file_can_be_reused_by]"} {options $share_options} {help_text "[_ acs-templating.This_file_can_be_reused_help]"}}
             {ok_btn:text(submit) {label "[_ acs-templating.HTMLArea_SelectUploadBtn]"}
@@ -141,5 +141,4 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
     set write_p 0
 }
 
-set HTML_Preview "Preview"
 set HTML_UploadTitle ""
