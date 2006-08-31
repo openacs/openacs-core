@@ -123,7 +123,10 @@ OacsAttach.prototype.insertInternalLink = function(link) {
     //   "/acs-templating/scripts/xinha/insert-image.tcl?fs_package_id=" + 
     // fs_package_id;
 
-    var PopupUrl = "/acs-templating/scripts/xinha/insert-ilink?";
+    var PopupUrl = "/acs-templating/scripts/xinha/attach-file?";
+    if (typeof OacsAttach.attach_parent_id != "undefined") {
+	PopupUrl = PopupUrl + "&parent_id=" + OacsAttach.attach_parent_id;
+    }
     if (typeof OacsAttach.fs_package_id != "undefined") {
 	PopupUrl = PopupUrl + "&fs_package_id=" + OacsAttach.fs_package_id;
     }
@@ -144,7 +147,6 @@ OacsAttach.prototype.insertInternalLink = function(link) {
 	       ilink.title = param.f_title.trim();
 	       ilink.setAttribute("target", param.f_target.trim());
 	       //ilink.setAttribute("use_target",param.f_usetarget.trim());
-
 	       if (!link || link == null) {
 		   if (HTMLArea.is_ie) {
 		       editor.insertHTML(ilink.outerHTML);
@@ -186,15 +188,16 @@ OacsAttach.prototype.insertInternalLinkTlf = function(link) {
 	};
     }
 
-		
-    var PopupUrl = "/acs-templating/scripts/xinha/insert-ilink?";
+    var PopupUrl = "/acs-templating/scripts/xinha/attach-file?";
+    if (typeof OacsAttach.attach_parent_id != "undefined") {
+	PopupUrl = PopupUrl + "&parent_id=" + OacsAttach.attach_parent_id;
+    }
     if (typeof OacsAttach.fs_package_id != "undefined") {
 	PopupUrl = PopupUrl + "&fs_package_id=" + OacsAttach.fs_package_id;
     }
     if (typeof OacsAttach.folder_id != "undefined") {
 	PopupUrl = PopupUrl + "&folder_id=" + OacsAttach.folder_id;
     }
-	
     Dialog(PopupUrl, function(param) {
 	       if (!param)
 		   return false;
@@ -259,14 +262,13 @@ OacsAttach.prototype.insertImage = function(image) {
     //   "/acs-templating/scripts/xinha/insert-image.tcl?fs_package_id=" + 
     // fs_package_id;
 
-    var PopupUrl = "/acs-templating/scripts/xinha/attach-file?";
+    var PopupUrl = "/acs-templating/scripts/xinha/attach-image?";
     if (typeof OacsAttach.attach_parent_id != "undefined") {
 	PopupUrl = PopupUrl + "&parent_id=" + OacsAttach.attach_parent_id;
     }
     if (typeof OacsAttach.folder_id != "undefined") {
 	PopupUrl = PopupUrl + "&folder_id=" + OacsAttach.folder_id;
     }
-	
     Dialog(PopupUrl, function(param) {
 	       if (!param) {	// user must have pressed Cancel
 		   return false;
