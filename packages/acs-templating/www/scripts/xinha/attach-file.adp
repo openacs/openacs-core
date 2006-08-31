@@ -1,6 +1,6 @@
 <html style="width: 400px; height: 260px">
 <head>
-  <title>#acs-templating.HTMLArea_InsertImageTitle#</title>
+  <title>#acs-templating.HTMLArea_InsertFileTitle#</title>
 
   <script type="text/javascript" 
 	  src="/resources/acs-templating/xinha-nightly/popups/popup.js">
@@ -14,14 +14,6 @@
 	function Init() {
 	  __dlg_init();
 	  var param = window.dialogArguments;
-//	  if (param) {
-//	      document.getElementById("f_href").value = param["f_href"];
-//	      document.getElementById("f_title").value = param["f_title"];
-//	      document.getElementById("f_target").value = param["f_target"];
-//	      document.getElementById("f_usetarget").value = param["f_usetarget"];
-
-//	  }
-	  // document.getElementById("f_href").focus();
 	  var f_href = document.getElementById("f_href");
 	  var url = f_href.value;
 	  if (url) {
@@ -96,9 +88,7 @@
 </head>
 
 <body onload="Init()">
-<h3>f_href="@f_href@"</h3>
-<h3>f_title="@f_title@"</h3>
-<div id="insert_image_upload">
+
 	<table border="0" width="100%" style="margin: 0 auto; text-align: left;padding: 0px;">
 	  <tbody>
       <td valign="top" width="50%" >
@@ -162,7 +152,6 @@
 	</tr>
 	  </tbody>
 	</table>
-</div>
 
 </body>
 </html>
