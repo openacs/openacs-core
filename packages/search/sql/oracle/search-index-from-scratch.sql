@@ -13,8 +13,3 @@ commit;
 alter index sws_ctx_index rebuild parameters ('sync') ;
 
 select * from sws_log_messages;
-quit
-exit
-
-
-

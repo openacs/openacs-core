@@ -54,9 +54,3 @@ commit;
 
 
 --alter index swi_index rebuild parameters ('sync') ;
-
-
-exit;
-
-
-

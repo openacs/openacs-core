@@ -49,4 +49,3 @@ end;
 create index swi_index on site_wide_index (indexed_content)
 indextype is ctxsys.context parameters ('datastore ctxsys.default_datastore memory 250M');
 
-exit;
