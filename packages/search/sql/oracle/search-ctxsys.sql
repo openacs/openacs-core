@@ -37,5 +37,3 @@ grant ctxapp to &1;
 
 -- stuff to make interMedia faster
 exec ctx_adm.set_parameter('max_index_memory', '1G');
-
-exit;

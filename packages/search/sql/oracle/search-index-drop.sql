@@ -28,5 +28,3 @@ end;
 /  
 
 drop index swi_ctx_index;
-
-exit;

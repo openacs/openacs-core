@@ -74,4 +74,3 @@ create table sws_log_messages (
   logmessage varchar2(4000),
   logtime    date default sysdate);
 
-exit;
