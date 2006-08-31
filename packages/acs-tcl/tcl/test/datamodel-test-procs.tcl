@@ -109,8 +109,10 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_object_type_che
         set id_column [string tolower $id_column]
 
         set the_pk {}
-	if { [string eq $table_name ""] } {
-	    db_0or1row get_supertype "select * from acs_object_types where object_type = :supertype"
+	while { [string is space $table_name] && ![string eq $object_type $supertype]} {
+	    if {![db_0or1row get_supertype "select * from acs_object_types where object_type = :supertype"]} {
+		break
+	    }
         } 
 	if {![db_table_exists $table_name]} {
             aa_log_result fail "Type $object_type: table $table_name does not exit"
