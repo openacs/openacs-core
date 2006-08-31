@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-templating" package_version="5.3.0d1" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-templating" package_version="5.3.0d2" locale="en_US" charset="ISO-8859-1">
 
   <msg key="12-Hour">12-Hour</msg>
   <msg key="24-Hour">24-Hour</msg>
+  <msg key="Anyone_on_the_internet">Anyone on the internet</msg>
+  <msg key="Anyone_on_this_system">Anyone on this system</msg>
   <msg key="CSV">CSV</msg>
   <msg key="data">data</msg>
   <msg key="Day">Day</msg>
@@ -10,6 +12,7 @@
   <msg key="Element_is_required">%label% is required</msg>
   <msg key="Element_is_too_long_Plural">%label% is %excess_no_bytes% characters too long.</msg>
   <msg key="Element_is_too_long_Singular">%label% is one character too long.</msg>
+  <msg key="Enter_your_search_text">Enter your search text here</msg>
   <msg key="Formats">Formats</msg>
   <msg key="hours">hours</msg>
   <msg key="Hours_must_be_between_0_and_23">Hours must be between 0 and 23</msg>
@@ -72,6 +75,7 @@
   <msg key="Month_must_be_between_1_and_12">Month must be between 1 and 12</msg>
   <msg key="Next_with_arrow">Next &gt;&gt;</msg>
   <msg key="No_row_pretty_plural">No %row_pretty_plural%.</msg>
+  <msg key="Only_myself">Only myself</msg>
   <msg key="Page">Page</msg>
   <msg key="Page_Size">Page Size</msg>
   <msg key="Previous_with_arrow">&lt;&lt; Previous</msg>
@@ -84,6 +88,8 @@
   <msg key="Table">Table</msg>
   <msg key="Tag_handler_invalid_number_of_args">Invalid number of arguments to tag handler.</msg>
   <msg key="Template_parser_error_in_parameter_list">Error in parameter list</msg>
+  <msg key="This_Group">This group</msg>
+  <msg key="This_image_can_be_reused_by">This image can be reused by</msg>
   <msg key="Year">Year</msg>
   <msg key="year">year</msg>
   <msg key="Year_must_be_positive">Year must be positive</msg>
