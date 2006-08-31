@@ -7,7 +7,7 @@ ad_library {
 
 namespace eval memoizing_procs_test {}
 
-ad_proc -private memoizing_procs_test::return_name {
+ad_proc -private memoizing_procs_test::return_string {
     {-name:required}
 } {
     Test proc that returns a string
