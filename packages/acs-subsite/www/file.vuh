@@ -1,0 +1,26 @@
+# packages/acs-subsite/www/image.vuh
+#
+# Subsite handler for images
+#
+# @author Dave Bauer (dave@thedesignexperience.org)
+# @creation-date 2006-08-01
+# @cvs-id $Id$
+
+if {![regexp {^/([0-9]{1,8})(/(.+))?$} [ad_conn path_info] match object_id dummy anchor]} {
+    ad_return_warning "Invalid object id" [subst {
+        The identifier given for this object is invalid.  Please check your url 
+        or contact the webmaster if you think it should work.
+    }]
+    return
+}
+
+# check permissions!
+
+permission::require_permission \
+    -privilege "read" \
+    -object_id $object_id \
+    -party_id [ad_conn user_id]
+
+# find a cr_item and serve it
+
+cr_write_content -item_id $object_id
