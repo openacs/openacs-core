@@ -1,0 +1,44 @@
+# packages/acs-subsite/www/image.vuh
+#
+# Subsite handler for images
+#
+# @author Dave Bauer (dave@thedesignexperience.org)
+# @creation-date 2006-08-01
+# @cvs-id $Id$
+set url [ad_conn path_info]
+if {![regexp {^/([0-9]{1,8})(/(private|thumbnail|info))?(/(.+))?$} $url match object_id extra_arg_slash extra_arg filename_slash filename anchor]} {
+    ad_return_warning "Invalid object id" [subst {
+        The identifier given for this object (${object_id}) is invalid.  Please check your url 
+        or contact the webmaster if you think it should work.
+    }]
+    return
+}
+
+# check permissions!
+if {$extra_arg eq ""} {
+	permission::require_permission \
+	    -privilege "read" \
+	    -object_id $object_id \
+	    -party_id [ad_conn user_id]
+} elseif {$extra_arg eq "/private"} {
+	permission::require_permission \
+	-privilege "read" \
+	-object_id [db_string get_parent_id "select parent_id from cr_items where item_id=:object_id" -default ""] \
+	-party_id [ad_conn user_id]
+}
+# find a cr_item and serve it
+
+if {$extra_arg eq "thumbnail"} {
+	#find the thumbnail object_id
+	set object_id [image::get_resized_item_id -item_id $object_id -size_name thumbnail]
+}
+
+if {$extra_arg eq "info"} {
+	rp_form_put item_id $object_id
+	rp_form_put filename $filename
+	rp_internal_redirect "/packages/acs-content-repository/www/image-info"
+	ad_script_abort
+} else {
+	cr_write_content -item_id $object_id
+}
+
