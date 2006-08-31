@@ -41,7 +41,6 @@
 	    var id = fields[i];
 	    var el = document.getElementById(id);
 	    param[id] = el.value;
-	    alert(id + "='" + el.value + "'");
 	  }
 	  __dlg_close(param);
 	  return false;
