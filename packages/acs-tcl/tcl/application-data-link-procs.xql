@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="application_data_link::new.create_forward_link">
+<fullquery name="application_data_link::new_from.create_forward_link">
     <querytext>
 	    insert into acs_data_links (rel_id, object_id_one, object_id_two)
-	    values (:forward_rel_id, :this_object_id, :target_object_id)
+	    values (:forward_rel_id, :object_id, :to_object_id)
     </querytext>
 </fullquery>
 
-<fullquery name="application_data_link::new.create_backward_link">
+<fullquery name="application_data_link::new_to.create_backward_link">
     <querytext>
 	    insert into acs_data_links (rel_id, object_id_one, object_id_two)
-	    values (:backward_rel_id, :target_object_id, :this_object_id)
+	    values (:backward_rel_id, :from_object_id, :object_id)
     </querytext>
 </fullquery>
 
@@ -62,4 +62,50 @@
     </querytext>
 </fullquery>
 
+<fullquery name="application_data_link::get_links_from.links_from">
+    <querytext>
+        select object_id_two
+        from acs_data_links,
+        acs_objects
+	$content_type_from_clause
+        where object_id_one = :object_id
+	and object_id = object_id_two
+	$to_type_where_clause
+    </querytext>
+</fullquery>
+
+<partialquery name="application_data_link::get_links_from.to_type_clause">
+    <querytext>
+	and object_type = :to_type
+    </querytext>
+</partialquery>
+
+<partialquery name="application_data_link::get_links_from.content_type_from_clause">
+    <querytext>
+	, cr_items
+    </querytext>
+</partialquery>
+
+<partialquery name="application_data_link::get_links_from.content_type_where_clause">
+    <querytext>
+	and content_type = :object_type
+    </querytext>
+</partialquery>
+
+<fullquery name="application_data_link::delete_from_list.delete_links">
+    <querytext>
+  	delete from acs_data_links where object_id_one=:object_id
+        and object_id_two in 
+          ([template::util::tcl_to_sql_list $link_object_id_list])
+    </querytext>
+</fullquery>
+
+<fullquery name="application_data_link::link_exists.link_exists">
+    <querytext>
+	select 1 from acs_data_links
+	where object_id_one = :from_object_id
+	and object_id_two = :to_object_id
+    </querytext>
+</fullquery>
+	
 </queryset>
