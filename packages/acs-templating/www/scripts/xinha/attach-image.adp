@@ -150,97 +150,30 @@
 </head>
 
 <body onload="Init()">
-<div class="title">#acs-templating.HTMLArea_InsertImageTitle# URL <span id="insert_image_link"><a href="javascript:void(0);" onclick="resizeWindow('url'); document.getElementById('insert_image_url').style.display=''; document.getElementById('insert_image_upload').style.display='none';"><font size="-3">click here</font></a></span></div>
-<div id="insert_image_url" style="display:none;">
-	<div style="text-align: center;">
-		<form action="" method="get" name="imageprops">
-			<input type="hidden" name="f_name" id="f_name" />
-			<table border="0" width="100%" style="margin: 0 auto; text-align: left;padding: 0px;">
-				<tbody>
-					<tr>
-						<td width="1%" style="text-align: right" nowrap>#acs-templating.HTMLArea_ImageURL#</td>
-						<td width="99%"><input type="text"
-						onChange="ChangeImageSrc();" name="url" id="f_url"
-						style="width:75%"
-						title="#acs-templating.HTMLArea_ImageURLToolTip#" value="@f_url@" /><input type="text" id="f_title"/>
-						<button name="preview" onclick="return onPreview();" title="Preview the image in a new window">Preview</button>
-						</td>
-					</tr>
-					<tr>
-						<td width="1%" style="text-align: right" nowrap>#acs-templating.HTMLArea_ImageAlternateText#</td>
-						<td width="99%"><input type="text" name="alt" id="f_alt" style="width:100%" title="#acs-templating.HTMLArea_ImageAlternateTextToolTip#" /></td>
-					</tr>
-				</tbody>
-			</table>
-	</div>
-	<p />
-	<table style="margin-left: auto;margin-right: auto;" >
-		<tr>
-			<td valign="top">
-				<fieldset style="margin-left: 5px;">
-					<legend>Layout</legend>
-					
-					<table>
-						<tr>
-							<td>#acs-templating.HTMLArea_ImageAlignment#</td>
-							<td>
-								<select size="1" name="align" id="f_align">
-								  <option value="left"                         >#acs-templating.HTMLArea_ImageAlignmentLeft#</option>
-								  <option value="right"                        >#acs-templating.HTMLArea_ImageAlignmentRight#</option>
-								  <option value="bottom" selected="1"          >#acs-templating.HTMLArea_ImageAlignmentBottom#</option>
-								  <option value="middle"                       >#acs-templating.HTMLArea_ImageAlignmentMiddle#</option>
-								  <option value="top"                          >#acs-templating.HTMLArea_ImageAlignmentTop#</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>#acs-templating.HTMLArea_ImageBorderSize#</td>
-							<td><input type="text" name="border" id="f_border" size="5" title="#acs-templating.HTMLArea_ImageBorderSizeToolTip#" /></td>
-						</tr>
-					</table>
-				</fieldset>
-			</td>
-			<td valign="top">
-				<fieldset style="margin-right: 5px;">
-					<legend>#acs-templating.HTMLArea_ImageSpacing#</legend>
-					
-					<table border="0">
-						<tr>
-							<td>#acs-templating.HTMLArea_ImageSpacingHorizontal#</td>
-							<td><input type="text" name="horiz" id="f_horiz" size="5" title="#acs-templating.HTMLArea_ImageSpacingHorizontalToolTip#" /></td>
-						</tr>
-						<tr>
-							<td>#acs-templating.HTMLArea_ImageSpacingVertical#</td>
-							<td><input type="text" name="vert" id="f_vert" size="5" title="#acs-templating.HTMLArea_ImageSpacingVerticalToolTip#" /></td>
-						</tr>					
-					</table>
-				</fieldset>
-			</td>
-		</tr>
-		</form>
-	</table>
-	<input type="checkbox" name="showpreview" id="showpreview" onclick="togglePreview()"> Show Preview
-	<div id="preview_div" style="display:none">
-		<fieldset style="margin-top:10px;padding-top:10px;">
-		<legend><b>@HTML_Preview@</b></legend>
-		<iframe name="ipreview" id="ipreview" frameborder="0" style="width:95%;" height="150"  src="./blank.html"></iframe>
-		</fieldset>
-	</div>
-	<br /><br />
-    	<button type="button" name="ok" onclick="return onOK();">OK</button>&nbsp;<button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
-    	<br /><br />
-</div>
 
-<div class="title">#acs-templating.HTMLArea_InsertImageTitle# Upload <span id="uplaod_image_link"><a href="javascript:void(0);" onclick="resizeWindow('upload'); document.getElementById('insert_image_url').style.display='none'; document.getElementById('insert_image_upload').style.display='';"><font size="-3">click here</font></a></span></div>
 <div id="insert_image_upload">
 	<table border="0" width="100%" style="margin: 0 auto; text-align: left;padding: 0px;">
 	  <tbody>
       <td valign="top" width="50%" >
 	<if @write_p@ eq 1>
-	  <fieldset style="margin-top:10px;padding-top:10px;">
 	    <legend><b>@HTML_UploadTitle@</b></legend>
 	    <formtemplate id="upload_form">
+			<input type="hidden" name="f_name" id="f_name" />
 	      <table cellspacing="2" cellpadding="2" border="0" width="55%">
+		<tr class="form-group">
+		<td>
+		<fieldset>
+	        <legend>Choose Image</legend>
+		<formgroup id="choose_file">
+<if @formgroup.rownum@ odd and @formgroup.rownum@ gt 1><br /></if>
+			<img src="/image/@formgroup.option@/thumbnail" width="50">
+                          @formgroup.widget;noquote@
+		</formgroup>
+	<br />
+	<formwidget id="select_btn">&nbsp;<button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
+		</fieldset>
+		</td>
+	        </tr> 
 		<tr class="form-element">
 		  <if @formerror.upload_file@ not nil>
 		    <td class="form-widget-error">
@@ -248,6 +181,9 @@
 		  <else>
 		    <td class="form-widget">
 		  </else>
+	<fieldset>
+	<legend>or Upload a New Image</legend>
+
 		  <formwidget id="upload_file">
 		    <formerror id="upload_file">
 		      <div class="form-error">@formerror.upload_file@</div>
@@ -261,16 +197,12 @@
 		    <formerror id="share">
 		      <div class="form-error">@formerror.share@</div>
 		    </formerror>                        
-      </td>
-    </tr>
-    <tr class="form-element">
-      <td class="form-widget" colspan="2" align="center">
-	<formwidget id="ok_btn">&nbsp;<button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>        
+	<formwidget id="upload_btn">&nbsp;<button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
+</fieldset>
       </td>
     </tr>
     </table>
     </formtemplate>
-    </fieldset>
     </if>
 	</td>
 	</tr>
