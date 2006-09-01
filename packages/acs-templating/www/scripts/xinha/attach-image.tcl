@@ -20,6 +20,21 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
 
     set write_p 1
 
+    # set recent images
+    db_multirow -unclobber recent_images recent_images \
+	{
+	    select ci.item_id, ci.name
+	    from cr_items ci, cr_revisionsx cr
+	    where ci.live_revision=cr.revision_id
+	    and ci.content_type='image'
+	    and cr.creation_user=:user_id
+	    order by creation_date desc
+	    limit 6
+	} {
+	    lappend recent_images_options [list $name $item_id]
+	}
+    
+
     set share_options [list [list "[_ acs-templating.Only_myself]" private] [list "[_ acs-templating.This_Group]" group] [list "[_ acs-templating.Anyone_on_this_system]" site] [list "[_ acs-templating.Anyone_on_the_internet]" public]]
     ad_form \
         -name upload_form \
@@ -28,9 +43,11 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
         -html { enctype multipart/form-data } \
         -form {
             item_id:key
-            {upload_file:file(file) {html {size 30}} }
+	    {choose_file:text(radio),optional {options $recent_images_options}}
+            {upload_file:file(file),optional {html {size 30}} }
             {share:text(radio),optional {label "[_ acs-templating.This_image_can_be_reused_by]"} {options $share_options} {help_text "[_ acs-templating.This_image_can_be_reused_help]"}}
-            {ok_btn:text(submit) {label "[_ acs-templating.HTMLArea_SelectUploadBtn]"}
+	    {select_btn:text(submit) {label "Select"}}
+            {upload_btn:text(submit) {label "[_ acs-templating.HTMLArea_SelectUploadBtn]"}
             }
         } \
         -on_request {
@@ -38,100 +55,106 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
         } \
         -on_submit {
             # check file name
-            if {$upload_file eq ""} {
+	    
+            if {$choose_file eq "" && $upload_file eq ""} {
                 template::form::set_error upload_form upload_file \
                     [_ acs-templating.HTMLArea_SpecifyUploadFilename]
                 break
             }
+	    if {$upload_file ne "" } {
 
-            # check quota
-            # FIXME quota is a good idea, set per-user upload quota??
-#            set maximum_folder_size [ad_parameter "MaximumFolderSize"]
-            
-#            if { $maximum_folder_size ne "" } {
-#                set max [ad_parameter "MaximumFolderSize"]
-#                if { $folder_size+[file size ${upload_file.tmpfile}] > $max } {
-#                    template::form::set_error upload_form upload_file \
-                        [_ file-storage.out_of_space]
- #                   break
- #               }
- #           }	 
-            
-            set file_name [template::util::file::get_property filename $upload_file]
-            set upload_tmpfile [template::util::file::get_property tmp_filename $upload_file]
-            set mime_type [template::util::file::get_property mime_type $upload_file]
-            if {$mime_type eq ""} {
-                set mime_type [ns_guesstype $file_name] 
-            }
-            if {![string match "image/*" $mime_type]} {
-                template::form::set_error upload_form upload_file \
-                    [_ acs-templating.HTMLArea_SelectImageUploadNoImage]
-                break                
-            }
+		# check quota
+		# FIXME quota is a good idea, set per-user upload quota??
+		#            set maximum_folder_size [ad_parameter "MaximumFolderSize"]
+		
+		#            if { $maximum_folder_size ne "" } {
+		#                set max [ad_parameter "MaximumFolderSize"]
+		#                if { $folder_size+[file size ${upload_file.tmpfile}] > $max } {
+		#                    template::form::set_error upload_form upload_file \
+					  #					  [_ file-storage.out_of_space]
+		#                   break
+		#               }
+		#           }	 
+		
+		set file_name [template::util::file::get_property filename $upload_file]
+		set upload_tmpfile [template::util::file::get_property tmp_filename $upload_file]
+		set mime_type [template::util::file::get_property mime_type $upload_file]
+		if {$mime_type eq ""} {
+		    set mime_type [ns_guesstype $file_name] 
+		}
+		if {![string match "image/*" $mime_type]} {
+		    template::form::set_error upload_form upload_file \
+			[_ acs-templating.HTMLArea_SelectImageUploadNoImage]
+		    break                
+		}
 
-                image::new \
-                    -item_id $item_id \
-                    -name ${item_id}_$file_name \
-                    -parent_id $parent_id \
-                    -tmp_filename $upload_tmpfile \
-                    -creation_user $user_id \
-                    -creation_ip [ad_conn peeraddr] \
-                    -package_id [ad_conn package_id] \
+		image::new \
+		    -item_id $item_id \
+		    -name ${item_id}_$file_name \
+		    -parent_id $parent_id \
+		    -tmp_filename $upload_tmpfile \
+		    -creation_user $user_id \
+		    -creation_ip [ad_conn peeraddr] \
+		    -package_id [ad_conn package_id] \
 		    -mime_type $mime_type
-
+		
 		# create thumbnail
 		image::resize -item_id $item_id
-
-            file delete $upload_tmpfile
-	
-            permission::grant \
-                -object_id $item_id \
-                -party_id $user_id \
-                -privilege admin
-            
-            switch -- $share {
-                private {
-                    permission::set_not_inherit -object_id $item_id
-                }
-                group {
-                    # Find the closest application group
-                    # either dotlrn or acs-subsite
-                    
-                    permission::grant \
-                        -party_id [acs_magic_object "registered_users"] \
-                        -object_id $item_id \
-                        -privilege "read"
-                }
-                public {
-                    permission::grant \
-                        -party_id [acs_magic_object "the_public"] \
-                        -object_id $item_id \
-                        -privilege "read"
-                }
-                site -
-                default {
-                    permission::grant \
-                        -party_id [acs_magic_object "registered_users"] \
-                        -object_id $item_id \
-                        -privilege "read"
-                }
-                
-            }
-
-            if {$share eq "private"} {
-                # need a private URL that allows viewers of this
-                # object to see the image
-                # this isn't totally secure, because of course
-                # you need to be able to see the image somehow
-                # but we only allow read on the image if you can
-                # see the parent object
-                set f_url "/image/$item_id/private/$file_name"
-            } else {
-                set f_url "/image/$item_id/$file_name"
-            }
+		
+		file delete $upload_tmpfile
+		
+		permission::grant \
+		    -object_id $item_id \
+		    -party_id $user_id \
+		    -privilege admin
+		
+		switch -- $share {
+		    private {
+			permission::set_not_inherit -object_id $item_id
+		    }
+		    group {
+			# Find the closest application group
+			# either dotlrn or acs-subsite
+			
+			permission::grant \
+			    -party_id [acs_magic_object "registered_users"] \
+			    -object_id $item_id \
+			    -privilege "read"
+		    }
+		    public {
+			permission::grant \
+			    -party_id [acs_magic_object "the_public"] \
+			    -object_id $item_id \
+			    -privilege "read"
+		    }
+		    site -
+		    default {
+			permission::grant \
+			    -party_id [acs_magic_object "registered_users"] \
+			    -object_id $item_id \
+			    -privilege "read"
+		    }
+		    
+		}
+	    } else {
+		# user chose an existing file
+		set item_id $choose_file 
+		set file_name ""
+	    }
 	    
-        }
-
+	    if {$share eq "private"} {
+		# need a private URL that allows viewers of this
+		# object to see the image
+		# this isn't totally secure, because of course
+		# you need to be able to see the image somehow
+		# but we only allow read on the image if you can
+		# see the parent object
+		set f_url "/image/$item_id/private/$file_name"
+	    } else {
+		set f_url "/image/$item_id/file_name"
+	    }
+	}
+    
 } else {
     set write_p 0
 }
