@@ -92,14 +92,25 @@
 	  <tbody>
       <td valign="top" width="50%" >
 	<if @write_p@ eq 1>
-	  <fieldset style="margin-top:10px;padding-top:10px;">
-	    <legend><b>@HTML_UploadTitle@</b></legend>
 	    <formtemplate id="upload_form">
 <input type="hidden" name="f_href" id="f_href" value="@f_href@" />
 <input type="hidden" id="f_target"/>
 <input type="hidden" id="f_usetarget"/>
 
 	      <table cellspacing="2" cellpadding="2" border="0" width="55%">
+		<tr class="form-group">
+		<td>
+		<fieldset>
+	        <legend>Choose File</legend>
+		<formgroup id="choose_file">
+<if @formgroup.rownum@ odd and @formgroup.rownum@ gt 1><br /></if>
+                          @formgroup.widget;noquote@ @formgroup.label@
+		</formgroup>
+	<br />
+	<formwidget id="select_btn">&nbsp;<button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
+		</fieldset>
+		</td>
+	        </tr> 
 		<tr class="form-element">
 		  <if @formerror.f_title@ not nil>
 		    <td class="form-widget-error">
@@ -107,19 +118,14 @@
 		  <else>
 		    <td class="form-widget">
 		  </else>
+	<fieldset>
+	<legend>or Upload a New File</legend>                  
 		#acs-templating.Link_Title#<br />
 		  <formwidget id="f_title">
 		    <formerror id="f_title">
 		      <div class="form-error">@formerror.f_title@</div>
 		    </formerror><br />
-	</td></tr>
-		<tr class="form-element">
-		  <if @formerror.upload_file@ not nil>
-		    <td class="form-widget-error">
-		  </if>
-		  <else>
-		    <td class="form-widget">
-		  </else>
+
 		  <formwidget id="upload_file">
 		    <formerror id="upload_file">
 		      <div class="form-error">@formerror.upload_file@</div>
@@ -133,11 +139,10 @@
 		    <formerror id="share">
 		      <div class="form-error">@formerror.share@</div>
 		    </formerror>                        
-      </td>
-    </tr>
-    <tr class="form-element">
-      <td class="form-widget" colspan="2" align="center">
-	<formwidget id="ok_btn">&nbsp;<button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>        
+	<formwidget id="ok_btn">&nbsp;<button type="button"
+	name="cancel" onclick="return
+	onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
+          </fieldset>
       </td>
     </tr>
     </table>
