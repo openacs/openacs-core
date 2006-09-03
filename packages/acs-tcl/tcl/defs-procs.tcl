@@ -501,30 +501,6 @@ ad_proc ad_return_if_another_copy_is_running {
     return 1
 }
 
-ad_proc ad_record_query_string {
-    query_string 
-    subsection 
-    n_results 
-    {user_id 0}
-} {
-    Records the query string and other params in the "query_string_record" table.
-    I'm not sure what's that's for.
-
-    @author Unknown
-    @author Roberto Mello
-} {  
-
-    if { $user_id == 0 } {
-	set user_id [db_null]
-    }
-
-    db_dml query_string_record {
-	insert into query_strings 
-	(query_date, query_string, subsection, n_results, user_id) values
-	(sysdate, :query_string, :subsection, :n_results, :user_id)
-    }
-}
-
 ad_proc ad_pretty_mailing_address_from_args {
     line1 
     line2
