@@ -29,7 +29,6 @@
 	  var f_url = document.getElementById("f_url");
 	  var url = f_url.value;
 	  if (url) {
-             	 window.ipreview.location.replace(url);
       		 onOK();
 	      	 __dlg_close(null);
 	  }
@@ -48,8 +47,7 @@
 	    }
 	  }
 	  // pass data back to the calling window
-	  var fields = ["f_url", "f_alt", "f_align", "f_border",
-	                "f_horiz", "f_vert", "f_name"];
+	  var fields = ["f_url"];
 	  var param = new Object();
 	  for (var i in fields) {
 	    var id = fields[i];
@@ -158,7 +156,7 @@
 	<if @write_p@ eq 1>
 	    <legend><b>@HTML_UploadTitle@</b></legend>
 	    <formtemplate id="upload_form">
-			<input type="hidden" name="f_name" id="f_name" />
+			<input type="hidden" name="f_url" id="f_url" value="@f_url@"/>
 	      <table cellspacing="2" cellpadding="2" border="0" width="55%">
 		<tr class="form-group">
 		<td>
