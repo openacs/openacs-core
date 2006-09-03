@@ -132,7 +132,7 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
                 # see the parent object
 		set f_href "/image/$item_id/private/$file_name"
             } else {
-                set f_href "/o/$item_id/$file_name"
+                set f_href "/file/$item_id/$file_name"
             }
 
         }
