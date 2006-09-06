@@ -84,6 +84,7 @@ namespace eval notification {
         {-default_request_data {}}
         {-return_notified:boolean}
         {-notif_user {}}
+	{-notif_date {}}
     } {
         Create a new notification if any notification requests exist for the object and type.
         
@@ -303,7 +304,7 @@ namespace eval notification {
                 set extra_vars [ns_set create]
                 oacs_util::vars_to_ns_set \
                     -ns_set $extra_vars \
-                    -var_list {notification_id type_id object_id response_id notif_subject notif_text notif_html notif_user}
+                    -var_list {notification_id type_id object_id response_id notif_subject notif_text notif_html notif_user notif_date}
                 
                 # Create the notification
                 package_instantiate_object -extra_vars $extra_vars notification
