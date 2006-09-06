@@ -265,3 +265,77 @@ select inline_0();
 
 drop function inline_0();
 
+-- rebuild content search triggers to honor publish_date
+drop trigger content_search__itrg on cr_revisions;
+
+drop trigger content_search__dtrg on cr_revisions;
+
+drop trigger content_search__utrg on cr_revisions;
+
+drop trigger content_item_search__utrg on cr_items;
+
+drop function content_search__itrg();
+drop function content_search__utrg();
+drop function content_item_search__utrg();
+
+create function content_search__itrg ()
+returns opaque as '
+begin
+if (select live_revision from cr_items where item_id=new.item_id) = new.revision_id and new.publish_date >= current_timestamp then
+        perform search_observer__enqueue(new.revision_id,''INSERT'');
+    end if;
+    return new;
+end;' language 'plpgsql';
+
+create or replace function content_search__utrg ()
+returns opaque as '
+declare
+    v_live_revision integer;
+begin
+    select into v_live_revision live_revision from
+        cr_items where item_id=old.item_id;
+    if old.revision_id=v_live_revision
+      and new.publish_date <= current_timestamp then
+        insert into search_observer_queue (
+            object_id,
+            event
+        ) values (
+old.revision_id,
+            ''UPDATE''
+        );
+    end if;
+    return new;
+end;' language 'plpgsql';
+
+-- we need new triggers on cr_items to index when a live revision
+-- changes -DaveB 2002-09-26
+
+create function content_item_search__utrg ()
+returns opaque as '
+begin
+    if new.live_revision is not null and coalesce(old.live_revision,0) <> new.live_revision and (select publish_date from cr_revisions where revision_id=new.live_revision) <= current_timestamp then
+        perform search_observer__enqueue(new.live_revision,''INSERT'');        
+    end if;
+
+    if old.live_revision is not null and old.live_revision <> coalesce(new.live_revision,0) then
+        perform search_observer__enqueue(old.live_revision,''DELETE'');
+    end if;
+    if new.publish_status = ''expired'' then
+        perform search_observer__enqueue(old.live_revision,''DELETE'');
+    end if;
+
+    return new;
+end;' language 'plpgsql';
+
+create trigger content_search__itrg after insert on cr_revisions
+for each row execute procedure content_search__itrg (); 
+
+create trigger content_search__dtrg after delete on cr_revisions
+for each row execute procedure content_search__dtrg (); 
+
+create trigger content_search__utrg after update on cr_revisions
+for each row execute procedure content_search__utrg (); 
+
+
+create trigger content_item_search__utrg before update on cr_items
+for each row execute procedure content_item_search__utrg ();
