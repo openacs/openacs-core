@@ -57,19 +57,8 @@ ad_proc -private cr_item_search::test_setup {
     return $folder_id
 }
 
-aa_register_case -cats db cr_item_serch_insert_trigger {
-    Test search insert trigger
-} {
-    aa_run_with_teardown \
-	-rollback \
-	-test_code \
-	{
-	    set folder_id [cr_item_search::test_setup]
 
-	}
-}
-
-aa_register_case -cats db cr_item_search_update_trigger {
+aa_register_case -cats db cr_item_search_triggers {
     Test search update trigger
 } {
     aa_run_with_teardown \
@@ -140,17 +129,5 @@ aa_register_case -cats db cr_item_search_update_trigger {
 		-revision_id $latest_revision \
 		-events [list INSERT UPDATE]
 	    
-	}
-}
-
-aa_register_case -cats db cr_item_search_delete_trigger {
-    Test search delete trigger
-} {
-    aa_run_with_teardown \
-	-rollback \
-	-test_code \
-	{
-	    set folder_id [cr_item_search::test_setup]
-
 	}
 }
