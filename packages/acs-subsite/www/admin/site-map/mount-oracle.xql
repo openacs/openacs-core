@@ -6,7 +6,7 @@
     <fullquery name="packages_unmounted_select">
         <querytext>
             select p.package_id, 
-                   acs_object.name(p.package_id) as name,
+                   p.instance_name as name,
                    pt.pretty_name as package_pretty_name
             from   apm_packages p,
                    apm_package_types pt,
