@@ -80,6 +80,15 @@ namespace eval notification::request {
         return [db_list request_subscribers {}]
     }
 
+    ad_proc -public request_ids {
+        {-type_id:required}
+        {-object_id:required}
+    } {
+        returns a list of request_ids for the object_id of the given type
+    } {
+        return [db_list request_ids {}]
+    }
+
     ad_proc -public delete {
         {-request_id:required}
     } {
