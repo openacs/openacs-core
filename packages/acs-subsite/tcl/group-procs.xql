@@ -47,7 +47,7 @@
 <fullquery name="group::get_members_not_cached.group_members_party">
       <querytext>
       
-		select member_id
+		select distinct member_id
 		from group_member_map
 		where group_id = :group_id
 	
@@ -57,7 +57,7 @@
 <fullquery name="group::get_members_not_cached.group_members">
       <querytext>
       
-		select m.member_id
+		select distinct m.member_id
 		from group_member_map m, acs_objects o
 		where m.group_id = :group_id
 		and m.member_id = o.object_id
