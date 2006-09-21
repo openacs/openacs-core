@@ -163,7 +163,9 @@ postmaster successfully started
 	  access. Plpgsql is a PL/SQL-like language.  We add it to
 	  template1, which is the template from which all new
 	  databases are created.  We can verify that it was created
-	  with the createlang command in list mode.</p><pre class="screen">[postgres postgresql-7.4.7]$ <strong class="userinput"><code>createlang plpgsql template1</code></strong>
+	  with the createlang command in list mode.</p>
+	  <p><a href="http://openacs.org/xowiki/en/How_to_install_in_Postgres_8%2e1%2ex">Additionals to install in Postgres 8.1.x</a></p>
+<pre class="screen">[postgres postgresql-7.4.7]$ <strong class="userinput"><code>createlang plpgsql template1</code></strong>
 [postgres pgsql]$ <strong class="userinput"><code>createlang -l template1</code></strong>
 Procedural languages
   Name   | Trusted?
