@@ -181,7 +181,7 @@ aa_register_case -cats {
     set separator ""
     set testnode_1 [list "/navigation_test_node1/" "navigation_test_node1"]
     set testnode_2 [list "[lindex $testnode_1 0]navigation_test_node2/" "navigation_test_node2"]
-    set root_node [list "/" [_ acs-kernel.Main_Site]]
+    set root_node [list "/" "Main Site"]
     set last_node [list "" "last"]
 
     set bar_components [list $root_node $testnode_1 $testnode_2 $last_node]
