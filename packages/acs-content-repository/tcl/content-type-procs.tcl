@@ -47,16 +47,27 @@ ad_proc -public content::type::delete {
     -content_type:required
     {-drop_children_p ""}
     {-drop_table_p ""}
+    {-drop_objects_p "f"}
 } {
     @param content_type
     @param drop_children_p
     @param drop_table_p
+    @param drop_objets_p Drop the objects of this content type along with all entries in cr_items and cr_revisions. Will not be done by default.
 } {
-    return [package_exec_plsql -var_list [list \
-        [list content_type $content_type ] \
-        [list drop_children_p $drop_children_p ] \
-        [list drop_table_p $drop_table_p ] \
-    ] content_type drop_type]
+    if {$drop_objects_p eq "f"} {
+	return [package_exec_plsql -var_list [list \
+						  [list content_type $content_type ] \
+						  [list drop_children_p $drop_children_p ] \
+						  [list drop_table_p $drop_table_p ] \
+						 ] content_type drop_type]
+    } else {
+	return [package_exec_plsql -var_list [list \
+						  [list content_type $content_type ] \
+						  [list drop_children_p $drop_children_p ] \
+						  [list drop_table_p $drop_table_p ] \
+						  [list drop_objects_p $drop_objects_p ] \
+						 ] content_type drop_type]
+    }
 }
 
 ad_proc -public content::type::attribute::new {
