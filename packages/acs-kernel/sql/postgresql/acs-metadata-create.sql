@@ -574,8 +574,17 @@ declare
   drop_type__object_type            alias for $1;  
   drop_type__cascade_p              alias for $2;  -- default ''f''
   row                               record;
+  object_row                        record;
 begin
-    -- XXX: drop_type cascade_p is ignored (ignored in oracle too, but defaults f)
+
+   if drop_type__cascade_p then
+     for object_row in select object_id
+                         from acs_objects
+                         where object_type = drop_type__object_type
+     loop
+       PERFORM acs_object__delete (object_row.object_id);
+     end loop;
+   end if;
 
     -- drop all the attributes associated with this type
     for row in select attribute_name 

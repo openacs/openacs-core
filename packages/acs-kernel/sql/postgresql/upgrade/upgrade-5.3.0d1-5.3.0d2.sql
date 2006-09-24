@@ -38,3 +38,41 @@ begin
 
     return 0;
 end;' language 'plpgsql';
+
+-- procedure drop_type
+create or replace function acs_object_type__drop_type (varchar,boolean)
+returns integer as '
+declare
+  drop_type__object_type            alias for $1;  
+  drop_type__cascade_p              alias for $2;  -- default ''f''
+  row                               record;
+  object_row                        record;
+begin
+
+   if drop_type__cascade_p then
+     for object_row in select object_id
+                         from acs_objects
+                         where object_type = drop_type__object_type
+     loop
+       PERFORM acs_object__delete (object_row.object_id);
+     end loop;
+   end if;
+
+    -- drop all the attributes associated with this type
+    for row in select attribute_name 
+                 from acs_attributes 
+                where object_type = drop_type__object_type 
+    loop
+       PERFORM acs_attribute__drop_attribute (drop_type__object_type, 
+                                              row.attribute_name);
+    end loop;
+
+    delete from acs_attributes
+    where object_type = drop_type__object_type;
+
+    delete from acs_object_types
+    where object_type = drop_type__object_type;
+
+    return 0; 
+end;' language 'plpgsql';
+
