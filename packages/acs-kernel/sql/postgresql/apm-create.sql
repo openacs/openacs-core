@@ -1631,12 +1631,22 @@ create or replace function apm_package__delete (integer) returns integer as '
 declare
    delete__package_id   alias for $1;
    cur_val              record;
+   v_folder_row         record;
 begin
     -- Delete all parameters.
     for cur_val in select value_id from apm_parameter_values
 	where package_id = delete__package_id loop
     	PERFORM apm_parameter_value__delete(cur_val.value_id);
     end loop;    
+
+   -- Delete the folders
+    for v_folder_row in select
+        folder_id
+        from cr_folders
+        where package_id = delete__package_id
+    loop
+        perform content_folder__del(v_folder_row.folder_id,''t'');
+    end loop;
 
     delete from apm_applications where application_id = delete__package_id;
     delete from apm_services where service_id = delete__package_id;
@@ -1646,6 +1656,7 @@ begin
 	where object_id = delete__package_id loop
     	PERFORM site_node__delete(cur_val.node_id);
     end loop;
+
     -- Delete the object.
     PERFORM acs_object__delete (
        delete__package_id
