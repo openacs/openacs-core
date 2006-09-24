@@ -22,7 +22,7 @@
 
         <provides url="acs-messaging" version="5.3.0d2"/>
         <requires url="acs-content-repository" version="5.3.0d1"/>
-        <requires url="acs-kernel" version="5.3.0d1"/>
+        <requires url="acs-kernel" version="5.3.0d2"/>
 
         <callbacks>
         </callbacks>
