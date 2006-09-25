@@ -45,7 +45,7 @@ drop function inline_0 ();
 create table cr_mime_types (
   label			varchar(200),
   mime_type	        varchar(200)
-			constraint cr_mime_types_pk
+			constraint cr_mime_types_mime_type_pk
 			primary key,
   file_extension        varchar(200)
 );
@@ -66,10 +66,10 @@ comment on table cr_mime_types is '
 
 create table cr_extension_mime_type_map (
    extension            varchar(200) 
-                        constraint cr_mime_type_extension_map_pk
+                        constraint cr_extension_mime_type_map_pk
                         primary key,
    mime_type            varchar(200) 
-                        constraint cr_mime_ext_map_mime_type_ref
+                        constraint cr_mime_ext_map_mime_type_fk
                         references cr_mime_types
 ); 
 create index cr_extension_mime_type_map_idx on cr_extension_mime_type_map(mime_type);
@@ -107,15 +107,15 @@ create index cr_cont_mimetypmap_mimetyp_idx ON cr_content_mime_type_map(mime_typ
 
 create table cr_locales (
   locale		varchar(4)
-                        constraint cr_locale_abbrev_pk
+                        constraint cr_locales_locale_pk
                         primary key,
   label			varchar(200)
-                        constraint cr_locale_name_nil
+                        constraint cr_locales_label_nn
 			not null
-                        constraint cr_locale_name_unq
+                        constraint cr_locales_label_un
                         unique,
   nls_language		varchar(30)
-                        constraint cr_locale_nls_lang_nil
+                        constraint cr_locale_nls_language_nn
 			not null,
   nls_territory		varchar(30),
   nls_charset		varchar(30)
@@ -140,10 +140,10 @@ insert into cr_locales (
 
 create table cr_type_children (
   parent_type   varchar(100)
-		constraint cr_type_children_parent_fk
+		constraint cr_type_children_parent_type_fk
 		references acs_object_types,
   child_type    varchar(100)
-		constraint cr_type_children_child_fk
+		constraint cr_type_children_child_type_fk
 		references acs_object_types,
   relation_tag  varchar(100),
   min_n         integer,
@@ -194,14 +194,14 @@ create table cr_items (
   item_id             integer 
                       constraint cr_items_item_id_fk references
                       acs_objects on delete cascade
-                      constraint cr_items_pk primary key,
+                      constraint cr_items_item_id_pk primary key,
   parent_id           integer 
-                      constraint cr_items_parent_id_nil 
+                      constraint cr_items_parent_id_nn 
                       not null
                       constraint cr_items_parent_id_fk references
                       acs_objects on delete cascade,
   name                varchar(400)
-                      constraint cr_items_name_nil
+                      constraint cr_items_name_nn
                       not null,
   locale              varchar(4)
                       constraint cr_items_locale_fk references
@@ -209,15 +209,15 @@ create table cr_items (
   live_revision       integer,
   latest_revision     integer,
   publish_status      varchar(40) 
-                      constraint cr_items_pub_status_chk
+                      constraint cr_items_publish_status_ck
                       check (publish_status in 
                             ('production', 'ready', 'live', 'expired')
                             ),
   content_type        varchar(100)
-                      constraint cr_items_rev_type_fk
+                      constraint cr_items_content_type_fk
                       references acs_object_types,
   storage_type        varchar(10) default 'text' not null
-                      constraint cr_items_storage_type
+                      constraint cr_items_storage_type_ck
                       check (storage_type in ('lob','text','file')),
   storage_area_key    varchar(100) default 'CR_FILES' not null,
   tree_sortkey        varbit not null,
@@ -382,15 +382,15 @@ comment on column cr_items.content_type is '
 
 create table cr_child_rels (
   rel_id             integer
-                     constraint cr_child_rels_rel_pk
+                     constraint cr_child_rels_rel_id_pk
                      primary key
-                     constraint cr_child_rels_rel_fk
+                     constraint cr_child_rels_rel_id_fk
                      references acs_objects,
   parent_id          integer
-                     constraint cr_child_rels_parent_nil
+                     constraint cr_child_rels_parent_id_nn
                      not null,
   child_id           integer
-                     constraint cr_child_rels_child_nil
+                     constraint cr_child_rels_child_id_nn
                      not null,
   relation_tag       varchar(100),
   order_n            integer
@@ -407,15 +407,15 @@ comment on table cr_child_rels is '
 
 create table cr_item_rels (
   rel_id             integer
-                     constraint cr_item_rels_pk
+                     constraint cr_item_rels_rel_id_pk
                      primary key
-                     constraint cr_item_rels_fk
+                     constraint cr_item_rels_rel_id_fk
                      references acs_objects,
   item_id            integer
-                     constraint cr_item_rels_item_fk
+                     constraint cr_item_rels_item_id_fk
                      references cr_items,
   related_object_id  integer
-                     constraint cr_item_rels_rel_obj__fk
+                     constraint cr_item_rels_rel_obj_fk
                      references acs_objects,
   relation_tag       varchar(100),
   order_n            integer
@@ -452,10 +452,10 @@ comment on column cr_item_rels.order_n is '
 -- Define the cr_revisions table
 
 create table cr_revisions (
-  revision_id     integer constraint cr_revisions_rev_id_fk references
+  revision_id     integer constraint cr_revisions_revision_id_fk references
 		  acs_objects (object_id) on delete cascade
-		  constraint cr_revisions_pk primary key,
-  item_id         integer constraint cr_revisions_item_id_nil
+		  constraint cr_revisions_revision_id_pk primary key,
+  item_id         integer constraint cr_revisions_item_id_nn
                   not null
                   constraint cr_revisions_item_id_fk references
 		  cr_items on delete cascade,
@@ -463,7 +463,7 @@ create table cr_revisions (
   description	  text,
   publish_date	  timestamptz,
   mime_type	  varchar(200) default 'text/plain'
-		  constraint cr_revisions_mime_type_ref
+		  constraint cr_revisions_mime_type_fk
 		  references cr_mime_types,
   nls_language    varchar(50),
   -- lob_id if storage_type = lob.
@@ -690,7 +690,8 @@ comment on column cr_revision_attributes.attributes is '
 -- ) on commit delete rows;
 
 create table cr_content_text (
-    revision_id        integer primary key,
+    revision_id        integer 
+		       constraint cr_content_text_revision_id_pk primary key,
     content            integer
 );
 
@@ -711,7 +712,7 @@ create table cr_item_publish_audit (
   old_status         varchar(40),
   new_status         varchar(40),
   publish_date       timestamptz
-                     constraint cr_item_publish_audit_date_nil
+                     constraint cr_item_publish_audit_date_nn
                      not null
 );
 
@@ -724,9 +725,9 @@ comment on table cr_item_publish_audit is '
 
 create table cr_release_periods (
   item_id          integer
-                   constraint cr_release_periods_fk
+                   constraint cr_release_periods_item_id_fk
 		   references cr_items
-                   constraint cr_release_periods_pk
+                   constraint cr_release_periods_item_id_pk
 		   primary key,
   start_when	   timestamptz default current_timestamp,
   end_when	   timestamptz default current_timestamp + interval '20 years'
@@ -768,14 +769,14 @@ create table cr_folders (
 
   --		    constraint cr_folder_id_fk references
   --		    cr_items on delete cascade
-		    constraint cr_folders_pk 
+		    constraint cr_folders_folder_id_pk 
                     primary key,
   label		    varchar(1000),
   description	    text,
   has_child_folders boolean default 'f',
   has_child_symlinks boolean default 'f',
   package_id integer 
-  constraint cr_fldr_pkg_id_fk
+  constraint cr_folders_pkg_id_fk
   references apm_packages
 );  
 
@@ -854,9 +855,9 @@ create index cr_folder_typ_map_cont_typ_idx ON cr_folder_type_map(content_type);
 
 create table cr_templates (
   template_id	  integer
-		  constraint cr_template_id_fk references
+		  constraint cr_templates_template_id_fk references
 		  cr_items on delete cascade
-		  constraint cr_templates_pk 
+		  constraint cr_templates_template_id_pk 
                   primary key
 );
 
@@ -883,13 +884,13 @@ create table cr_type_template_map (
   content_type     varchar(100)
                    constraint cr_type_template_map_typ_fk
                    references acs_object_types
-                   constraint cr_type_template_map_typ_nil
+                   constraint cr_type_template_map_typ_nn
                    not null,
   template_id      integer
                    constraint cr_type_template_map_tmpl_fk
 	           references cr_templates,
   use_context	   varchar(100)
-                   constraint cr_type_template_map_ctx_nil
+                   constraint cr_type_template_map_ctx_nn
                    not null
                    constraint cr_type_template_map_ctx_fk
                    references cr_template_use_contexts,
@@ -919,15 +920,15 @@ create table cr_item_template_map (
   item_id          integer
                    constraint cr_item_template_map_item_fk
                    references cr_items
-                   constraint cr_item_template_map_item_nil
+                   constraint cr_item_template_map_item_nn
                    not null,
   template_id      integer
                    constraint cr_item_template_map_tmpl_fk
 	           references cr_templates
-                   constraint cr_item_template_map_tmpl_nil
+                   constraint cr_item_template_map_tmpl_nn
                    not null,
   use_context	   varchar(100)
-                   constraint cr_item_template_map_ctx_nil
+                   constraint cr_item_template_map_ctx_nn
                    not null
                    constraint cr_item_template_map_ctx_fk
                    references cr_template_use_contexts,
@@ -949,14 +950,14 @@ comment on table cr_item_template_map is '
 
 create table cr_symlinks (
   symlink_id	  integer
-		  constraint cr_symlink_id_fk references
+		  constraint cr_symlinks_symlink_id_fk references
 		  cr_items on delete cascade
-		  constraint cr_symlinks_pk 
+		  constraint cr_symlinks_symlink_id_pk 
                   primary key,
   target_id       integer
-                  constraint cr_symlink_target_id_fk
+                  constraint cr_symlinks_target_id_fk
 		  references cr_items
-		  constraint cr_symlink_target_id_nil
+		  constraint cr_symlinks_target_id_nn
 		  not null,
   label		  varchar(1000)
 );
@@ -973,15 +974,15 @@ comment on table cr_symlinks is '
 
 create table cr_extlinks (
   extlink_id	  integer
-		  constraint cr_extlink_id_fk references
+		  constraint cr_extlinks_extlink_id_fk references
 		  cr_items on delete cascade
-		  constraint cr_extlinks_pk 
+		  constraint cr_extlinks_extlink_id_pk 
                   primary key,
   url             varchar(1000)
-		  constraint cr_extlink_url_nil
+		  constraint cr_extlinks_url_nn
 		  not null,
   label           varchar(1000)
-		  constraint cr_extlink_label_nil
+		  constraint cr_extlinks_label_nn
 		  not null,
   description	  text
 );
@@ -997,13 +998,13 @@ comment on table cr_extlinks is '
 
 create table cr_keywords (
   keyword_id		 integer
-			 constraint cr_keywords_pk
+			 constraint cr_keywords_keyword_id_pk
 		         primary key,
   parent_id              integer 
-                         constraint cr_keywords_hier
+                         constraint cr_keywords_parent_id_fk
                          references cr_keywords,
   heading		 varchar(600)
-			 constraint cr_keywords_name_nil
+			 constraint cr_keywords_heading_nn
 			 not null,
   description            text,
   has_children           boolean,
@@ -1129,14 +1130,14 @@ comment on column cr_keywords.description is '
 
 create table cr_item_keyword_map (
   item_id          integer
-                   constraint cr_item_keyword_map_item_fk
+                   constraint cr_item_keyword_map_item_id_fk
                    references cr_items
-                   constraint cr_item_keyword_map_item_nil
+                   constraint cr_item_keyword_map_item_id_nn
                    not null,
   keyword_id       integer
                    constraint cr_item_keyword_map_kw_fk
 	           references cr_keywords
-                   constraint cr_item_keyword_map_kw_nil
+                   constraint cr_item_keyword_map_kw_nn
                    not null,
   constraint cr_item_keyword_map_pk
   primary key (item_id, keyword_id)
@@ -1185,7 +1186,9 @@ for each row execute procedure cr_text_tr ();
 --) on commit delete rows;
 
 create table cr_doc_filter (
-    revision_id        integer primary key,
+    revision_id        integer 
+                       constraint cr_doc_filter_revision_id_pk 
+                       primary key,
     -- content            BLOB
     -- need a blob trigger here
     content            integer
@@ -1393,8 +1396,14 @@ drop function inline_2 ();
 -- this was added for edit-this-page and others
 -- 05-Nov-2001 Jon Griffin jon@mayuli.com
 
+---drop the previw constraint
+
 alter table cr_folders
-add constraint cr_flder_pkg_id_fk foreign key (package_id) references apm_packages (package_id);
+drop constraint cr_folders_pkg_id_fk;
+-------
+
+alter table cr_folders
+add constraint cr_folders_package_id_fk foreign key (package_id) references apm_packages (package_id);
 
 --constraint cr_fldr_pkg_id_fk
 

@@ -79,8 +79,8 @@ begin
       where object_type = create_type__supertype;
 
     execute ''create table '' || create_type__table_name || '' ('' ||
-      create_type__id_column  || '' integer primary key references '' || 
-      v_supertype_table || '')'';
+      create_type__id_column || '' integer constraint '' || create_type__table_name || ''_pk primary key '' || 
+      '' constraint '' || create_type__table_name || ''_fk references '' || v_supertype_table || '')'';
   end if;
 
   PERFORM acs_object_type__create_type (

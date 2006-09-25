@@ -16,7 +16,7 @@ create table images (
    image_id       integer
                   constraint images_image_id_fk
                   references cr_revisions
-                  constraint images_pk
+                  constraint images_image_id_pk
                   primary key,
    width          integer,
    height         integer
