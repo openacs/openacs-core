@@ -26,7 +26,7 @@ create table sec_session_properties (
     last_hit	   integer
                    constraint sec_session_date_nn
                    not null,
-    primary key(session_id, module, property_name)
+    constraint sec_session_prop_pk primary key(session_id, module, property_name)
 );
 
 create index sec_property_names on sec_session_properties(property_name);

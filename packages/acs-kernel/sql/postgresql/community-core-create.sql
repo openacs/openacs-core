@@ -249,7 +249,7 @@ create table parties (
 	party_id	integer not null
 			constraint parties_party_id_fk references
 			acs_objects (object_id)
-			constraint parties_pk primary key,
+			constraint parties_party_id_pk primary key,
 	email		varchar(100)
 			constraint parties_email_un unique,
 	url		varchar(200)
@@ -342,7 +342,7 @@ create table persons (
 	person_id	integer not null
 			constraint persons_person_id_fk
 			references parties (party_id)
-			constraint persons_pk primary key,
+			constraint persons_person_id_pk primary key,
 	first_names	varchar(100) not null,
 	last_name	varchar(100) not null
 );
@@ -485,9 +485,9 @@ create table users (
         user_id                 integer not null
                                 constraint users_user_id_fk
                                 references persons (person_id)
-                                constraint users_pk primary key,
+                                constraint users_user_id_pk primary key,
         authority_id            integer
-                                constraint users_auth_authorities_fk
+                                constraint users_authority_id_fk
                                 references auth_authorities(authority_id),
         username                varchar(100) 
                                 constraint users_username_nn 
@@ -520,9 +520,9 @@ create index users_username_lower_idx on users(lower(username));
 create index users_screenname_lower_idx on users(lower(screen_name));
 
 create table user_preferences (
-	user_id			integer constraint user_prefs_user_id_fk
+	user_id			integer constraint user_preferences_user_id_fk
 				references users (user_id)
-				constraint user_preferences_pk
+				constraint user_preferences_user_id_pk
 				primary key,
 	prefer_text_only_p	boolean default 'f',
 	-- an ISO 639 language code (in lowercase)

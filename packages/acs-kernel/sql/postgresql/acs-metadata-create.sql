@@ -263,9 +263,9 @@ comment on column acs_object_type_tables.id_column is '
 
 create table acs_datatypes (
 	datatype	varchar(50) not null
-			constraint acs_datatypes_pk primary key,
+			constraint acs_datatypes_datatype_pk primary key,
 	max_n_values	integer default 1
-			constraint acs_datatypes_max_n_ck
+			constraint acs_datatypes_max_n_values_ck
 			check (max_n_values > 0)
 );
 
@@ -364,7 +364,7 @@ select nextval('t_acs_attribute_id_seq') as nextval;
 
 create table acs_attributes (
 	attribute_id	integer not null
-			constraint acs_attributes_pk
+			constraint acs_attributes_attribute_id_pk
 			primary key,
 	object_type	varchar(100) not null
 			constraint acs_attributes_object_type_fk
@@ -382,10 +382,10 @@ create table acs_attributes (
 			references acs_datatypes (datatype),
 	default_value	text,
 	min_n_values	integer default 1 not null
-			constraint acs_attributes_min_n_ck
+			constraint acs_attributes_min_n_values_ck
 			check (min_n_values >= 0),
 	max_n_values	integer default 1 not null
-			constraint acs_attributes_max_n_ck
+			constraint acs_attributes_max_n_values_ck
 			check (max_n_values >= 0),
 	storage 	varchar(13) default 'type_specific'
 			constraint acs_attributes_storage_ck

@@ -136,11 +136,11 @@ drop function inline_1 ();
 create table apm_packages (
     package_id			integer constraint apm_packages_package_id_fk
 				references acs_objects(object_id)
-				constraint apm_packages_pack_id_pk primary key,
+				constraint apm_packages_package_id_pk primary key,
     package_key			varchar(100) constraint apm_packages_package_key_fk
 				references apm_package_types(package_key),
     instance_name		varchar(300)
-			        constraint apm_packages_inst_name_nn not null,
+			        constraint apm_packages_instance_name_nn not null,
     -- default system locale for this package
     default_locale              varchar(30)
 );
@@ -671,26 +671,26 @@ comment on table apm_package_db_types is '
 ';
 
 create table apm_parameters (
-	parameter_id		integer constraint apm_parameters_fk 
+	parameter_id		integer constraint apm_parameters_parameter_id_fk 
 				references acs_objects(object_id)
-			        constraint apm_parameters_pk primary key,
+			        constraint apm_parameters_parameter_id_pk primary key,
 	package_key		varchar(100)
-				constraint apm_pack_param_pack_key_nn not null 	
-				constraint apm_pack_param_type_fk
+				constraint apm_parameters_package_key_nn not null 	
+				constraint apm_parameters_package_key_fk
 			        references apm_package_types (package_key),
 	parameter_name		varchar(100) 
 				constraint apm_pack_params_name_nn not null,
         description		varchar(2000),
 	section_name		varchar(200),
 	datatype	        varchar(100) not null
-			        constraint apm_parameter_datatype_ck 
+			        constraint apm_parameters_datatype_ck 
 				check(datatype in ('number', 'string')),
 	default_value		text,
 	min_n_values		integer default 1 not null
-			        constraint apm_paramters_min_n_ck
+			        constraint apm_parameters_min_n_values_ck
 			        check (min_n_values >= 0),
 	max_n_values		integer default 1 not null
-			        constraint apm_paramters_max_n_ck
+			        constraint apm_parameters_max_n_values_ck
 			        check (max_n_values >= 0),
 	constraint apm_paramters_attr_name_un
 	unique (parameter_name, package_key),
@@ -743,9 +743,9 @@ create table apm_parameter_values (
 	value_id		integer constraint apm_parameter_values_fk
 				references acs_objects(object_id)
 				constraint apm_parameter_values_pk primary key,
-	package_id		integer constraint apm_pack_values_obj_id_fk
+	package_id		integer constraint apm_parameter_values_pk_id_fk 
 				references apm_packages (package_id) on delete cascade,
-	parameter_id		integer constraint apm_pack_values_parm_id_fk
+	parameter_id		integer constraint apm_parameter_values_pm_id_fk
 				references apm_parameters (parameter_id),
 	attr_value		text,
 	constraint apm_parameter_values_un 
@@ -991,9 +991,9 @@ comment on column apm_package_dependencies.service_version is '
 
 create table apm_applications (
        application_id		integer
-				constraint applications_application_id_fk
+				constraint apm_applications_aplt_id_fk
 				references apm_packages(package_id)
-				constraint applications_pk primary key
+				constraint apm_applications_pk primary key
 );
 
 comment on table apm_applications is '
@@ -1003,9 +1003,9 @@ This table records data on all of the applications registered in OpenACS.
 
 create table apm_services (
        service_id			integer
-					constraint services_service_id_fk
+					constraint apm_services_service_id_fk
 					references apm_packages(package_id)
-				        constraint services_pk primary key
+				        constraint apm_services_service_id_pk primary key
 );
 
 comment on table apm_services is '
