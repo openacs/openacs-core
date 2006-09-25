@@ -20,9 +20,9 @@ ad_proc -public application_data_link::new {
 } {
     application_data_link::new_from \
 	-object_id $this_object_id \
-	-target_object_id $target_object_id
+	-to_object_id $target_object_id
     application_data_link::new_to \
-	-object_id $this_object_id
+	-object_id $this_object_id \
         -from_object_id $target_object_id
 }
 
@@ -34,7 +34,7 @@ ad_proc -public application_data_link::new_from {
 
     @param object_id ID of the object that you want linked to the target
     object.
-    @param target_object_id The ID of the target object.
+    @param to_object_id The ID of the target object.
 } {
     set forward_rel_id [db_nextval acs_data_links_seq]
 
@@ -49,7 +49,7 @@ ad_proc -public application_data_link::new_to {
 
     @param object_id ID of the object that you want linked to the target
     object.
-    @param target_object_id The ID of the target object.
+    @param from_object_id The ID of the target object.
 } {
     set backward_rel_id [db_nextval acs_data_links_seq]
 
