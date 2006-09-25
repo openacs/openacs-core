@@ -57,7 +57,7 @@ create table rel_segments (
         segment_id      integer not null
                         constraint rel_segments_segment_id_fk
                         references parties (party_id)
-                        constraint rel_segments_pk primary key,
+                        constraint rel_segments_segment_id_pk primary key,
         segment_name    varchar(230) not null,
         group_id        integer not null
                         constraint rel_segments_group_id_fk
@@ -67,7 +67,7 @@ create table rel_segments (
                         constraint rel_segments_rel_type_fk
                         references acs_rel_types (rel_type)
                         on delete cascade,
-        constraint rel_segments_grp_rel_type_uq unique(group_id, rel_type)
+        constraint rel_segments_grp_rel_type_un unique(group_id, rel_type)
 );
 
 -- rel_type has a foreign key reference - create an index
