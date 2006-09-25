@@ -32,13 +32,13 @@ end;
 show errors
 
 create table application_groups (
-	group_id		constraint app_groups_group_id_fk
+	group_id		constraint application_groups_group_id_fk
 				references groups (group_id)
-				constraint app_groups_group_id_pk
+				constraint application_groups_group_id_pk
 				primary key,
-        package_id              constraint app_groups_package_id_fk
+        package_id              constraint application_groups_package_id_fk
                                 references apm_packages,
-                                constraint app_groups_package_id_un
+                                constraint application_groups_package_id_un
                                 unique (package_id)
 );
 

@@ -2,7 +2,8 @@ create sequence ad_template_sample_users_seq start 5 increment 1;
 create view ad_template_sample_users_sequence as select nextval('ad_template_sample_users_seq') as nextval;
 
 create table ad_template_sample_users (
-       user_id         integer primary key,
+       user_id         integer 
+		       constraint ad_template_sample_users_pk primary key,
        first_name      varchar(20),
        last_name       varchar(20),
        address1        varchar(40),
