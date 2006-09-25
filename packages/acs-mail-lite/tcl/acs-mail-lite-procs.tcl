@@ -1194,6 +1194,22 @@ namespace eval acs_mail_lite {
 	# Set the date
 	mime::setheader $multi_token date "[mime::parsedatetime -now proper]"
 	
+	# 2006/09/25 nfl/cognovis
+	# subject: convert 8-bit characters into MIME encoded words
+	# see http://tools.ietf.org/html/rfc2047
+	# note: we always assume ISO-8859-1 !!!
+	for {set i 128} {$i<256} {incr i} {
+	    set eight_bit_char [format %c $i]
+	    set mime_encoded_word "=?"
+	    append mime_encoded_word "ISO-8859-1"
+	    append mime_encoded_word "?"
+	    append mime_encoded_word "B"
+	    append mime_encoded_word "?"
+	    append mime_encoded_word [base64::encode $eight_bit_char]
+	    append mime_encoded_word "?="
+	    set subject [regsub -all $eight_bit_char $subject $mime_encoded_word]
+	}
+	
 	# Set the subject
 	mime::setheader $multi_token Subject "$subject"
 
