@@ -206,7 +206,7 @@ select nextval('t_acs_object_id_seq') as nextval;
 
 create table acs_objects (
 	object_id		integer not null
-				constraint acs_objects_pk primary key,
+				constraint acs_objects_object_id_pk primary key,
 	object_type		varchar(100) not null
 				constraint acs_objects_object_type_fk
 				references acs_object_types (object_type),
@@ -1584,7 +1584,7 @@ create table general_objects (
 	object_id		integer not null
 				constraint general_objects_object_id_fk
 				references acs_objects (object_id)
-				constraint general_objects_pk
+				constraint general_objects_object_id_pk
 				primary key,
 	on_which_table		varchar(30) not null,
 	on_what_id		integer not null,

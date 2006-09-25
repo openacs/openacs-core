@@ -12,52 +12,52 @@
 
 create table auth_authorities (
     authority_id             integer
-                             constraint auth_authorities_pk
+                             constraint auth_authorities_auth_id_pk
                              primary key
-                             constraint auth_authorities_aid_fk
+                             constraint auth_authorities_auth_id_fk
                              references acs_objects(object_id)
                              on delete cascade,
     short_name               varchar(255)
-                             constraint auth_authority_short_name_un
+                             constraint auth_authorities_short_name_un
                              unique,
     pretty_name              varchar(4000),
     help_contact_text        varchar(4000),
     help_contact_text_format varchar(200),
     enabled_p                boolean default 't' 
-                             constraint auth_authority_enabled_p_nn
+                             constraint auth_authorities_enbl_p_nn
                              not null,
     sort_order               integer not null,
     -- auth_authentication implementation
     -- (Cannot reference acs_sc_impls table as it doesn't exist yet)
     auth_impl_id             integer
-                             constraint auth_authority_auth_impl_fk
+                             constraint auth_authorities_auth_impl_fk
                              references acs_objects(object_id),
     -- auth_password implementation
     pwd_impl_id              integer
-                             constraint auth_authority_pwd_impl_fk
+                             constraint auth_authorities_pwd_impl_fk
                              references acs_objects(object_id),
     forgotten_pwd_url        varchar(4000),
     change_pwd_url           varchar(4000),
     -- auth_registration implementation
     register_impl_id         integer
-                             constraint auth_authority_reg_impl_fk
+                             constraint auth_authorities_reg_impl_fk
                              references acs_objects(object_id),
     register_url             varchar(4000),
     -- auth_user_info implementation
     user_info_impl_id        integer
-                             constraint auth_authority_userinf_impl_fk
+                             constraint auth_authorities_urinf_ipl_fk
                              references acs_objects(object_id),
     -- batch sync
     -- auth_sync_retrieve implementation
     get_doc_impl_id          integer 
-                             constraint auth_authority_getdoc_impl_fk
+                             constraint auth_authorities_getdoc_ipl_fk
                              references acs_objects(object_id),
     -- auth_sync_process implementation
     process_doc_impl_id      integer 
-                             constraint auth_authority_procdoc_impl_fk
+                             constraint auth_authorities_procdoc_ipl_fk
                              references acs_objects(object_id),
     batch_sync_enabled_p     boolean default 'f'
-                             constraint auth_authority_bs_enabled_p_nn
+                             constraint auth_authorities_bsenabled_p_nn
                              not null
 );
 
@@ -98,10 +98,10 @@ create table auth_driver_params(
                              constraint auth_driver_params_aid_nn
                              not null,
     impl_id                  integer
-                             constraint auth_driver_params_iid_fk
+                             constraint auth_driver_params_impl_id_fk
                              -- Cannot reference acs_sc_impls table as it doesn't exist yet
                              references acs_objects(object_id)
-                             constraint auth_driver_params_iid_nn
+                             constraint auth_driver_params_impl_id_nn
                              not null,
     key                      varchar(200),
     value                    text,

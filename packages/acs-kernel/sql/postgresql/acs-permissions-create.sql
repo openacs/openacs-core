@@ -19,7 +19,7 @@
 ---------------------------------------------
 
 create table acs_privileges (
-	privilege	varchar(100) not null constraint acs_privileges_pk
+	privilege	varchar(100) not null constraint acs_privileges_privilege_pk
 			primary key,
 	pretty_name	varchar(100),
 	pretty_plural	varchar(100)
@@ -335,7 +335,7 @@ end;' language 'plpgsql';
 
 create table acs_permissions (
 	object_id		integer not null
-				constraint acs_permissions_on_what_id_fk
+				constraint acs_permissions_object_id_fk
 				references acs_objects (object_id)
                                 on delete cascade,
 	grantee_id		integer not null
@@ -343,7 +343,7 @@ create table acs_permissions (
 				references parties (party_id)
                                 on delete cascade,
 	privilege		varchar(100) not null 
-                                constraint acs_permissions_priv_fk
+                                constraint acs_permissions_privilege_fk
 				references acs_privileges (privilege)
                                 on delete cascade,
 	constraint acs_permissions_pk
