@@ -22,7 +22,7 @@ create table lang_message_keys (
                        constraint lang_message_keys_message_key_nn
                        not null,
     package_key        varchar(100)
-                       constraint lang_message_keys_fk
+                       constraint lang_message_keys_pkg_key_fk
                        references apm_package_types(package_key)
                        on delete cascade
                        constraint lang_message_keys_package_key_nn
@@ -55,7 +55,7 @@ create table lang_messages (
                        default now() 
                        not null,
     creation_user      integer
-                       constraint lang_messages_creation_u_fk
+                       constraint lang_messages_creation_user_fk
                        references users (user_id),
     constraint lang_messages_fk
     foreign key (message_key, package_key) 
@@ -76,7 +76,7 @@ create table lang_messages_audit (
                        constraint lang_messages_audit_p_key_nn
                        not null,
     locale             varchar(30) 
-                       constraint lang_messages_audit_l_fk
+                       constraint lang_messages_audit_locale_fk
                        references ad_locales(locale)
                        constraint lang_messages_audit_l_nn
                        not null,
@@ -111,7 +111,9 @@ create sequence lang_messages_audit_id_seq;
 -- ****************************************************************************
 
 create table lang_translate_columns (   
-        column_id               integer primary key,
+        column_id               integer 
+                                constraint ltc_column_id_pk 
+                		primary key,
         -- cant do references on user_tables cause oracle sucks
         on_which_table          varchar(50),
         on_what_column          varchar(50),
@@ -128,7 +130,7 @@ create table lang_translate_columns (
         -- or add a row in the on_which_table table with the translated content.
         --
         short_p                 boolean,
-        constraint  ltc_u unique (on_which_table, on_what_column)
+        constraint  ltc_un unique (on_which_table, on_what_column)
 );
 
 
@@ -141,7 +143,7 @@ create table lang_translate_columns (
 create table lang_translation_registry (
 	on_which_table		varchar(50),
 	on_what_id		integer not null,
-        locale                  varchar(30) constraint ltr_locale_ref
+        locale                  varchar(30) constraint ltr_locale_fk
                                 references ad_locales(locale),
         --
         -- should have dependency info here
