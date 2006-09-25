@@ -3,7 +3,7 @@ create sequence auth_batch_jobs_job_id_seq;
 
 create table auth_batch_jobs (
   job_id                     integer 
-                             constraint auth_batch_jobs_pk
+                             constraint auth_batch_jobs_job_id_pk
                              primary key,
   job_start_time             timestamptz default current_timestamp,
   job_end_time               timestamptz,
@@ -12,13 +12,13 @@ create table auth_batch_jobs (
                              not null,
   snapshot_p                 boolean,
   authority_id               integer
-                             constraint auth_batch_jobs_auth_fk
+                             constraint auth_batch_jobs_auth_id_fk
                              references auth_authorities(authority_id)
                              on delete cascade,
   message                    text,
   -- if interactive, by which user
   creation_user              integer 
-                             constraint auth_batch_job_user_fk
+                             constraint auth_batch_jobs_user_fk
                              references users(user_id)
                              on delete set null,
   -- status information for the GetDocument operation
