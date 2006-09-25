@@ -21,7 +21,8 @@ create sequence cr_xml_doc_seq;
 -- ) on commit delete rows;
 
 create table cr_xml_docs (
-    doc_id        integer primary key,
+    doc_id        integer constraint cr_xml_docs_doc_id_pk 
+		  primary key,
     doc           text
 );
 
