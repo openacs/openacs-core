@@ -62,7 +62,7 @@ create table parties (
     party_id    not null
             constraint parties_party_id_fk references
             acs_objects (object_id)
-            constraint parties_pk primary key,
+            constraint parties_party_id_pk primary key,
     email       varchar(100)
             constraint parties_email_un unique,
     url     varchar(200)
@@ -100,7 +100,7 @@ parties table when there is a row in the persons table.
     person_id   not null
             constraint persons_person_id_fk
             references parties (party_id)
-            constraint persons_pk primary key,
+            constraint persons_person_id_pk primary key,
     first_names varchar(100) not null,
     last_name   varchar(100) not null
 );
@@ -140,7 +140,7 @@ for any case.</para>
     user_id         not null
                 constraint users_user_id_fk
                 references persons (person_id)
-                constraint users_pk primary key,
+                constraint users_user_id_pk primary key,
     password        varchar(100),
     salt            varchar(100),
     screen_name     varchar(100)
@@ -182,7 +182,7 @@ that in the parties table) is the name of the group:</para>
     group_id    not null
             constraint groups_group_id_fk
             references parties (party_id)
-            constraint groups_pk primary key,
+            constraint groups_group_id_pk primary key,
     group_name  varchar(100) not null
 );
 </computeroutput>

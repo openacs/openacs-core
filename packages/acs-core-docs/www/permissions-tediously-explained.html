@@ -338,7 +338,7 @@ security_inherit_p = 'f'<br>
       party_id
           not null
           constraint parties_party_id_fk references <a href="permissions-tediously-explained.html#acs_objects">acs_objects</a> (object_id)
-          constraint parties_pk primary key,
+          constraint parties_party_id_pk primary key,
       email               varchar2(100)
           constraint parties_email_un unique,
       url                 varchar2(200)
@@ -348,7 +348,7 @@ security_inherit_p = 'f'<br>
       person_id
           not null
           constraint persons_person_id_fk references <a href="permissions-tediously-explained.html#tedious-parties">parties</a> (party_id)
-          constraint persons_pk primary key,
+          constraint persons_person_id_pk primary key,
       first_names          varchar2(100)
           not null,
       last_name            varchar2(100)
@@ -359,7 +359,7 @@ security_inherit_p = 'f'<br>
       user_id
           not null
           constraint users_user_id_fk references <a href="permissions-tediously-explained.html#persons">persons</a> (person_id)
-          constraint users_pk primary key,
+          constraint users_user_id_pk primary key,
       password        char(40),
       -- other attributes
   );
@@ -368,7 +368,7 @@ security_inherit_p = 'f'<br>
       group_id
           not null
           constraint groups_group_id_fk references <a href="permissions-tediously-explained.html#tedious-parties">parties</a> (party_id)
-          constraint groups_pk primary key,
+          constraint groups_group_id_pk primary key,
       group_name           varchar2(100) not null
   );
     </pre><p>

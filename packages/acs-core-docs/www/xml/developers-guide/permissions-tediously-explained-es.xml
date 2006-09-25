@@ -420,7 +420,7 @@ end;
       party_id
           not null
           constraint parties_party_id_fk references acs_objects (object_id)
-          constraint parties_pk primary key,
+          constraint parties_party_id_pk primary key,
       email               varchar2(100)
           constraint parties_email_un unique,
       url                 varchar2(200)
@@ -432,7 +432,7 @@ end;
       person_id
           not null
           constraint persons_person_id_fk references parties (party_id)
-          constraint persons_pk primary key,
+          constraint persons_person_id_pk primary key,
       first_names          varchar2(100)
           not null,
       last_name            varchar2(100)
@@ -445,7 +445,7 @@ end;
       user_id
           not null
           constraint users_user_id_fk references persons (person_id)
-          constraint users_pk primary key,
+          constraint users_user_id_pk primary key,
       password        char(40),
       -- other attributes
   );
@@ -456,7 +456,7 @@ end;
       group_id
           not null
           constraint groups_group_id_fk references parties (party_id)
-          constraint groups_pk primary key,
+          constraint groups_group_id_pk primary key,
       group_name           varchar2(100) not null
   );
 	</screen>
@@ -535,8 +535,8 @@ end;
     <screen id="composition_rels" xreflabel="composition_rels">
 create table composition_rels (
     rel_id
-	  constraint composition_rel_rel_id_fk references <xref linkend="acs_rels"/> (rel_id)
-        constraint composition_rel_rel_id_pk primary key
+	  constraint composition_rels_rel_id_fk references <xref linkend="acs_rels"/> (rel_id)
+        constraint composition_rels_rel_id_pk primary key
 );
     </screen>
 
