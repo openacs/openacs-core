@@ -912,8 +912,8 @@ security_inherit_p = 'f'
     <programlisting id="composition_rels" xreflabel="composition_rels">
 create table <emphasis role="bold">composition_rels</emphasis> (
     rel_id
-        constraint composition_rel_rel_id_fk references <xref linkend="acs_rels"/> (rel_id)
-        constraint composition_rel_rel_id_pk primary key
+        constraint composition_rels_rel_id_fk references <xref linkend="acs_rels"/> (rel_id)
+        constraint composition_rels_rel_id_pk primary key
 );
     </programlisting>
 
