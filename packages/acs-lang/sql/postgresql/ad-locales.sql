@@ -17,22 +17,22 @@ begin;
 
 create table ad_locales (
   locale		varchar(30)
-                        constraint ad_locale_abbrev_pk
+                        constraint ad_locales_locale_pk
                         primary key,
   language		char(3) 
-                        constraint ad_language_name_nil
+                        constraint ad_locales_language_nn
 			not null,
   country		char(2) 
-                        constraint ad_country_name_nil
+                        constraint ad_locales_country_nn
 			not null,
   variant		varchar(30),
   label			varchar(200)
-                        constraint ad_locale_name_nil
+                        constraint ad_locales_label_nn
 			not null
-                        constraint ad_locale_name_unq
+                        constraint ad_locales_label_un
                         unique,
   nls_language		varchar(30)
-                        constraint ad_locale_nls_lang_nil
+                        constraint ad_locale_nls_lang_nn
 			not null,
   nls_territory		varchar(30),
   nls_charset		varchar(30),
@@ -67,7 +67,7 @@ create table ad_locale_user_prefs (
                         constraint lang_package_l_u_package_id_fk
                         references apm_packages(package_id) on delete cascade,
   locale                varchar(30) not null
-                        constraint trb_language_preference_lid_fk
+                        constraint ad_locale_user_prefs_locale_fk
                         references ad_locales (locale) on delete cascade
 );
 
