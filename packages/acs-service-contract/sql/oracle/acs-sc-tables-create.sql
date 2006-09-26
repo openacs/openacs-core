@@ -49,7 +49,7 @@ create table acs_sc_operations (
 
 create table acs_sc_impls (
     impl_id		      integer
-			      constraint acs_sc_impl_impl_id_fk
+			      constraint acs_sc_impls_impl_id_fk
 			      references acs_objects(object_id)
 			      on delete cascade
 			      constraint acs_sc_impl_pk
@@ -75,7 +75,7 @@ constraint acs_sc_impl_aliases_un unique(impl_name,impl_contract_name,impl_opera
 
 create table acs_sc_bindings (
     contract_id		      integer
-			      constraint acs_sc_binding_cid_fk
+			      constraint acs_sc_binding_contract_id_fk
 			      references acs_sc_contracts(contract_id)
 			      on delete cascade,
     impl_id		      integer
