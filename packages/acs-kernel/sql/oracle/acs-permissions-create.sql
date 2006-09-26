@@ -139,6 +139,7 @@ show errors
 ------------------------------------
 
 create table acs_permissions (
+				constraint acs_permissions_object_id_fk
 	object_id		integer 
 				constraint acs_permissions_object_id_nn not null
 				constraint acs_permissions_object_id_fk

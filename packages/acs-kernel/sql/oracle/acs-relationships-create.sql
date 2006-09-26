@@ -348,11 +348,11 @@ create table acs_data_links (
 			constraint acs_data_links_rel_id_nn not null
 			constraint acs_data_links_rel_id_pk primary key,
 	object_id_one	integer not null
-			constraint acs_data_links_one_fk
+			constraint acs_data_links_obj_one_fk
 			references acs_objects (object_id)
                         on delete cascade,
 	object_id_two	integer not null
-			constraint acs_data_links_two_fk
+			constraint acs_data_links_obj_two_fk
 			references acs_objects (object_id)
                         on delete cascade,
 	constraint acs_data_links_un unique

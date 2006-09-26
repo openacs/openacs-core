@@ -15,29 +15,29 @@
 
 create table ad_locales (
   locale		varchar2(30)
-                        constraint ad_locale_abbrev_pk
+                        constraint ad_locales_locale_pk
                         primary key,
-  language		char(3) constraint ad_language_name_nil
+  language		char(3) constraint ad_locales_language_nn
 			not null,
-  country		char(2) constraint ad_country_name_nil
+  country		char(2) constraint ad_locales_country_nn
 			not null,
   variant		varchar2(30),
   label			varchar2(200)
-                        constraint ad_locale_name_nil
+                        constraint ad_locale_label_nn
 			not null
-                        constraint ad_locale_name_unq
+                        constraint ad_locales_label_un
                         unique,
   nls_language		varchar2(30)
-                        constraint ad_locale_nls_lang_nil
+                        constraint ad_locales_nls_lang_nn
 			not null,
   nls_territory		varchar2(30),
   nls_charset		varchar2(30),
   mime_charset		varchar2(30),
   -- is this the default locale for its language
   default_p             char(1) default 'f'
-                        constraint ad_locale_defp_tf check (default_p in ('t','f')),
+                        constraint ad_locale_defp_ck check (default_p in ('t','f')),
   enabled_p             char(1) default 't'
-                        constraint ad_locale_enp_tf check (enabled_p in ('t','f'))
+                        constraint ad_locale_enp_ck check (enabled_p in ('t','f'))
 );
 
 comment on table ad_locales is '
@@ -64,7 +64,7 @@ create table ad_locale_user_prefs (
                         constraint lang_package_l_u_package_id_fk
                         references apm_packages(package_id) on delete cascade,
   locale                varchar(30) not null
-                        constraint trb_language_preference_lid_fk
+                        constraint ad_locale_user_prefs_locale_fk
                         references ad_locales (locale) on delete cascade
 );
 

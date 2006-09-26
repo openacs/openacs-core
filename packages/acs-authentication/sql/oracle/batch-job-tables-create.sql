@@ -2,7 +2,7 @@ create sequence auth_batch_jobs_job_id_seq;
 
 create table auth_batch_jobs (
   job_id                     integer 
-                             constraint auth_batch_jobs_pk
+                             constraint auth_batch_jobs_job_id_pk
                              primary key,
   job_start_time             date default sysdate,
   job_end_time               date,
