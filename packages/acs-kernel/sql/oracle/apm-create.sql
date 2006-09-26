@@ -18,15 +18,15 @@
 
 create table apm_package_types (
     package_key			varchar2(100)
-				constraint apm_package_types_p_key_pk primary key,
+				constraint apm_package_types_pkg_key_pk primary key,
     pretty_name			varchar(100)
     	    	    	    	constraint apm_package_types_pretty_n_nn not null
 				constraint apm_package_types_pretty_n_un unique,
     pretty_plural	        varchar2(100)
 				constraint apm_package_types_pretty_pl_un unique,
     package_uri			varchar2(1500)
-				constraint apm_packages_types_p_uri_nn not null
-				constraint apm_packages_types_p_uri_un unique,
+				constraint apm_packages_types_pkg_uri_nn not null
+				constraint apm_packages_types_pkg_uri_un unique,
     package_type		varchar2(300)
 				constraint apm_packages_pack_type_ck 
 				check (package_type in ('apm_application', 'apm_service')),

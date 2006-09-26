@@ -81,7 +81,7 @@ create table lang_messages_audit (
                        constraint lang_messages_audit_p_key_nn
                        not null,
     locale             varchar2(30) 
-                       constraint lang_messages_audit_l_fk
+                       constraint lang_messages_audit_locale_fk
                        references ad_locales(locale)
                        constraint lang_messages_audit_l_nn
                        not null,

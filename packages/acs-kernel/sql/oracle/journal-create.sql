@@ -30,10 +30,10 @@ show errors
 create table journal_entries (
   journal_id		constraint journal_entries_journal_id_fk
 			references acs_objects (object_id)
-			constraint journal_entries_pk
+			constraint journal_entries_journal_id_pk
 			primary key,
   object_id 		integer
-			constraint journal_entries_object_fk
+			constraint journal_entries_object_id_fk
 			references acs_objects on delete cascade,
   action                varchar2(100),
   action_pretty         varchar2(4000),

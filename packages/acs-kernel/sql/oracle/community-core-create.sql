@@ -523,9 +523,9 @@ create table users (
 	user_id			not null
 				constraint users_user_id_fk
 				references persons (person_id)
-				constraint users_pk primary key,
+				constraint users_user_id_pk primary key,
         authority_id            integer
-                                constraint users_auth_authorities_fk
+                                constraint users_authority_id_fk
                                 references auth_authorities(authority_id),
         username                varchar2(100) 
                                 constraint users_username_nn 
@@ -561,9 +561,9 @@ create table users (
 create index users_email_verified_idx on users (email_verified_p);
 
 create table user_preferences (
-	user_id			constraint user_prefs_user_id_fk
+	user_id			constraint user_preferences_user_id_fk
 				references users (user_id)
-				constraint user_preferences_pk
+				constraint user_preferences_user_id_pk
 				primary key,
 	prefer_text_only_p	char(1) default 'f'
 				constraint user_prefs_pref_txt_only_p_ck
