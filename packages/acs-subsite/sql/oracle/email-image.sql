@@ -4,9 +4,9 @@
 
 
 create table email_images (
-	user_id		constraint email_image_fk
+	user_id		constraint email_images_user_id_fk
 			references users
-			constraint email_image_pk
+			constraint email_images_user_id_pk
 			primary key
 );
 

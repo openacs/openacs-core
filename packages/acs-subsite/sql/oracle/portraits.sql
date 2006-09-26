@@ -8,7 +8,7 @@
 create table user_portraits (
 	user_id		constraint user_portraits_user_id_fk
 			references users
-			constraint user_portraits_pk
+			constraint user_portraits_user_id_pk
 			primary key
 );
 
