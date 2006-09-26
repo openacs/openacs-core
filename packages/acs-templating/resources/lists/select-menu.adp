@@ -110,12 +110,7 @@ function getPageURL (filter_url) {
                 </tr>
                 <tr>
                     <td>
-		        <if @filters.type@ eq "multival">
- 	                    <select name="@filters.filter_label@" onchange="window.location = getSelectedValues(this,'@filters.url@','@filters.filter_name@')" multiple size="3">    
-			</if>
-		        <else>
  	                    <select name="@filters.filter_label@" onchange="window.location = this.options[this.selectedIndex].value">
-			</else>
 			    <if @filters.filter_clear_url@ nil>
 		               <option value="#">- - - - -</option>
 			    </if>
