@@ -1461,7 +1461,8 @@ ad_proc -private template::list::render_filters {
         url_html_title \
         count \
         add_url \
-        selected_p 
+        selected_p \
+        type
     
     foreach filter_ref $list_properties(filter_refs) {
 
