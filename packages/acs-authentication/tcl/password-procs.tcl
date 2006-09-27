@@ -670,7 +670,7 @@ ad_proc -private auth::password::ChangePassword {
     {-new_password:required}
     {-authority_id:required}
 } {
-    Invoke the CanResetPassword operation on the given authority. 
+    Invoke the ChangePassword operation on the given authority. 
     Throws an error if the authority does not have a password management driver.
 
     @param username
@@ -707,7 +707,7 @@ ad_proc -private auth::password::RetrievePassword {
     {-username:required}
     {-authority_id:required}
 } {
-    Invoke the CanResetPassword operation on the given authority. 
+    Invoke the RetrievePassword operation on the given authority. 
     Throws an error if the authority does not have a password management driver.
 
     @param username
@@ -739,7 +739,7 @@ ad_proc -private auth::password::ResetPassword {
     {-username:required}
     {-authority_id ""}    
 } {
-    Invoke the CanResetPassword operation on the given authority. 
+    Invoke the ResetPassword operation on the given authority. 
     Throws an error if the authority does not have a password management driver.
 
     @param username
