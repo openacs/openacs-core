@@ -31,9 +31,9 @@ create table application_groups (
 				references groups (group_id)
 				constraint application_groups_group_id_pk
 				primary key,
-        package_id              constraint application_groups_package_id_fk
+        package_id              constraint ag_package_id_fk
                                 references apm_packages,
-                                constraint application_groups_package_id_un
+                                constraint ag_package_id_un
                                 unique (package_id)
 );
 
