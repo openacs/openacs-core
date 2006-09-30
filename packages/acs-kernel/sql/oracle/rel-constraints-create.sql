@@ -34,9 +34,9 @@ show errors
 
 create table rel_constraints (
     constraint_id		integer
-				constraint rel_constraints_constraint_id_pk
+				constraint rc_constraint_id_pk
 					primary key
-				constraint rel_constraints_constraint_id_fk
+				constraint rc_constraint_id_fk
 					references acs_objects(object_id),
     constraint_name		varchar(100) 
 				constraint rc_constraint_name_nn not null,
