@@ -89,7 +89,11 @@ ad_proc -public cr_write_content {
 			ns_set put [ns_conn outputheaders] "Content-Length" 0
 			ns_return 200 text/plain {}
 		    } else {
-			ns_returnfile 200 $mime_type $filename
+                        if {[info procs ad_returnfile_background] eq ""} {
+                            ns_returnfile 200 $mime_type $filename
+                        } else {
+                            ad_returnfile_background 200 $mime_type $filename
+                        }
 		    }
 		}
 	    }
