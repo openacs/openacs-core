@@ -638,8 +638,8 @@ ns_section ns/server/${server}/modules
     }
 
     # nsthread library which should become standard in 5.3
-    if {[file exists ${homedir}/lib/thread2.6.2/libthread2.6.2.so]} {
-	ns_param libthread ${homedir}/lib/thread2.6.2/libthread2.6.2.so
+    if {[file exists ${homedir}/lib/thread2.6.4/libthread2.6.4[info sharedlibextension]]} {
+        ns_param libthread ${homedir}/lib/thread2.6.4/libthread2.6.4[info sharedlibextension]
     }
 
 ns_log notice "nsd.tcl: using threadsafe tcl: [info exists tcl_platform(threaded)]"
