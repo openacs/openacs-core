@@ -8,7 +8,7 @@
   
   <group column="section">
     <if @elements.widget@ eq "hidden"> 
-      <noparse><formwidget id="@elements.id@" /></noparse>
+      <noparse><formwidget id="@elements.id@"></noparse>
     </if>
     
     <else>
@@ -16,7 +16,7 @@
         <if @elements.widget@ eq "submit">
 	  <span class="form-element">
 	    <group column="widget">
-	      <noparse><formwidget id="@elements.id@" /></noparse>
+	      <noparse><formwidget id="@elements.id@"></noparse>
 	    </group>
 	    <br/>
 	    <br/>
