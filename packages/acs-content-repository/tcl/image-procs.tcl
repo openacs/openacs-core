@@ -327,6 +327,7 @@ ad_proc -public image::resize {
     
     if {[catch {exec [image::convert_binary] -resize $sizes($size_name) $original_filename $tmp_filename} errmsg]} {
 	# maybe imagemagick isn't installed?
+        file delete $tmp_filename
 	return ""
     }
     if {[set resize_item_id \
@@ -346,6 +347,7 @@ ad_proc -public image::resize {
 	    -item_id $resize_item_id \
 	    -tmp_filename $tmp_filename
     }
+    file delete $tmp_filename    
     return $resize_item_id
 }
 
