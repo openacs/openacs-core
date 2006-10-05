@@ -44,8 +44,8 @@ procedure drop_type (
   --*/
   content_type		in acs_object_types.object_type%TYPE,
   drop_children_p	in char default 'f',
-  drop_table_p		in char default 'f'
-
+  drop_table_p		in char default 'f',
+  drop_objects_p		in char default 'f'
 );
 
 
