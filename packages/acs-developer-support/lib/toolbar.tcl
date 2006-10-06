@@ -73,3 +73,9 @@ if { $show_p } {
     }
 }
 
+set rm_package_id [apm_package_id_from_key xotcl-request-monitor]
+if {$rm_package_id > 0} {
+    set rm_url [apm_package_url_from_id $rm_package_id]
+} else {
+    set rm_url ""
+}

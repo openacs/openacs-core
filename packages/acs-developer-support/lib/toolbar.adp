@@ -35,7 +35,12 @@
           <span>|</span></li>
           <li><a href="/doc/" title="View system documentation">Docs</a>
           <span>|</span></li>
-          <li><a href="/api-doc/" title="View/search OpenACS Tcl API documentation">API&nbsp;doc</a></li>
+          <li><a href="/api-doc/" title="View/search OpenACS Tcl API documentation">API&nbsp;doc</a>
+          <if @rm_url@ ne ""><span>|</span></li>
+	  <li><a href="@rm_url@" title="View requests in the request monitor">Requests</a></li>
+	  </if><else>
+           </li>
+          </else>
         </ul>
       </td>
 
