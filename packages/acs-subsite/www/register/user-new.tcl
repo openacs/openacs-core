@@ -6,3 +6,8 @@ ad_page_contract {
     {email ""}
     {return_url [ad_pvt_home]}
 }
+
+set registration_url [parameter::get -parameter RegistrationRedirectUrl]
+if {![string eq "" $registration_url]} {
+    ad_returnredirect $registration_url
+}
