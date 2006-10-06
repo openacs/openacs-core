@@ -24,10 +24,12 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
     db_multirow -unclobber recent_images recent_images \
 	{
 	    select ci.item_id, ci.name
-	    from cr_items ci, cr_revisionsx cr
+	    from cr_items ci, cr_revisionsx cr, cr_child_rels ccr
 	    where ci.live_revision=cr.revision_id
 	    and ci.content_type='image'
 	    and cr.creation_user=:user_id
+	    and ccr.parent_id=ci.item_id
+	    and ccr.relation_tag='image-thumbnail'
 	    order by creation_date desc
 	    limit 6
 	} {
