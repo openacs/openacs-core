@@ -25,18 +25,8 @@ ad_proc build_mime_message {
     to be unable to handle utf-8 encoding). A future version of this proc
     should probably support an alternative charset argument or switch.
 } {
-    ## JCD: we moved these into -procs.tcl files so they get 
-    ## sourced when we bootstrap.
-    # this is always called from a scheduled proc
-    #    set r_dir [acs_root_dir]/packages/acs-tcl/tcl
-    #source $r_dir/base64.tcl
-    #source $r_dir/md5.tcl
-    #source $r_dir/mime.tcl
-
-    # Files are included, therefore there is no need for the mime
-    # package anymore.
-
-    # package require mime
+    # switched to using tcllib, its required for openacs >= 5.3
+    package require mime
 
     # convert text to charset
     set encoding [ns_encodingforcharset $charset]
