@@ -33,6 +33,7 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
 	    order by creation_date desc
 	    limit 6
 	} {
+	    set name [regsub "${item_id}_" $name ""] 	    
 	    lappend recent_images_options [list $name $item_id]
 	}
     

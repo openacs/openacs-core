@@ -19,6 +19,7 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
     set write_p 1
 
     # set recent files
+    set recent_files_options [list]
     db_multirow -unclobber recent_files recent_files \
 	{
 	    select ci.item_id, ci.name
@@ -30,6 +31,7 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
 	    order by creation_date desc
 	    limit 6
 	} {
+	    set name [regsub "${item_id}_" $name ""] 
 	    lappend recent_files_options [list $name $item_id]
 	}
 
