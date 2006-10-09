@@ -110,10 +110,12 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
 		    -object_id $item_id \
 		    -party_id $user_id \
 		    -privilege admin
-		
+
+		set f_url "/image/${item_id}/${file_name}"		
 		switch -- $share {
 		    private {
 			permission::set_not_inherit -object_id $item_id
+			set f_url "/image/${item_id}/private/${parent_id}/${file_name}"		
 		    }
 		    group {
 			# Find the closest application group
@@ -145,17 +147,7 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
 		set file_name ""
 	    }
 	    
-	    if {$share eq "private"} {
-		# need a private URL that allows viewers of this
-		# object to see the image
-		# this isn't totally secure, because of course
-		# you need to be able to see the image somehow
-		# but we only allow read on the image if you can
-		# see the parent object
-		set f_url "/image/$item_id/private/$file_name"
-	    } else {
-		set f_url "/image/$item_id/file_name"
-	    }
+
 	}
     
 } else {
