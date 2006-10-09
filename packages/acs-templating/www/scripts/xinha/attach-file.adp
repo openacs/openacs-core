@@ -104,7 +104,7 @@
 	        <legend>Choose File</legend>
 		<formgroup id="choose_file">
 <if @formgroup.rownum@ odd and @formgroup.rownum@ gt 1><br /></if>
-                          @formgroup.widget;noquote@ @formgroup.label@
+                          @formgroup.widget;noquote@ @formgroup.label;noquote@
 		</formgroup>
 	<br />
 	<formwidget id="select_btn">&nbsp;<button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>

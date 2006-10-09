@@ -148,7 +148,7 @@
 </head>
 
 <body onload="Init()">
-
+<h1>KEY = @parent_id@</h1>
 <div id="insert_image_upload">
 	<table border="0" width="100%" style="margin: 0 auto; text-align: left;padding: 0px;">
 	  <tbody>
