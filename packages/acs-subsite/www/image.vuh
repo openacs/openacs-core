@@ -6,7 +6,7 @@
 # @creation-date 2006-08-01
 # @cvs-id $Id$
 set url [ad_conn path_info]
-if {![regexp {^/([0-9]{1,8})(/(private|thumbnail|info))?(/(.+))?$} $url match object_id extra_arg_slash extra_arg filename_slash filename anchor]} {
+if {![regexp {^/([0-9]{1,8})(/(|thumbnail|info))?(/(private)/([0-9]{1,8}))?(/(.+))?$} $url match object_id extra_arg_slash extra_arg private_slash private private_parent_id filename_slash filename anchor]} {
     ad_return_warning "Invalid object id" [subst {
         The identifier given for this object (${object_id}) is invalid.  Please check your url 
         or contact the webmaster if you think it should work.
@@ -15,16 +15,40 @@ if {![regexp {^/([0-9]{1,8})(/(private|thumbnail|info))?(/(.+))?$} $url match ob
 }
 
 # check permissions!
-if {$extra_arg eq ""} {
-	permission::require_permission \
+if {$private eq "private"} {
+	# find if the image has a parent link to the object
+	# that is, if the image is used in a content item and you can read the
+	# content item, you can read the image regardless of the permissions
+	
+	if {![application_data_link::link_exists \
+		-from_object_id $private_parent_id \
+		-to_object_id $object_id]} {
+		# if the link does not exist it might be
+	        # because its a new object
+	        # that means you uploaded the image so you can see it in the editor while you are working on it
+		if {![permission::permission_p \
+			-object_id $object_id \
+			-privilege "read" \
+			-party_id [ad_conn user_id]]} {
+			# if you don't have permission to see it, it doesn't exist
+				ns_returnnotfound
+				ad_script_abort
+		}
+	} elseif {![permission::permission_p \
+	-privilege "read" \
+	-object_id $private_parent_id \
+	-party_id [ad_conn user_id]]} {
+	ns_returnnotfound
+	ad_script_abort
+        }
+} elseif {$extra_arg eq ""} {
+	if {![permission::permission_p \
 	    -privilege "read" \
 	    -object_id $object_id \
-	    -party_id [ad_conn user_id]
-} elseif {$extra_arg eq "/private"} {
-	permission::require_permission \
-	-privilege "read" \
-	-object_id [db_string get_parent_id "select parent_id from cr_items where item_id=:object_id" -default ""] \
-	-party_id [ad_conn user_id]
+	    -party_id [ad_conn user_id]]} {
+		ns_returnnotfound 
+		ad_script_abort
+	}
 }
 # find a cr_item and serve it
 
