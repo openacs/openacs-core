@@ -428,62 +428,32 @@ end;' language 'plpgsql';
 
 drop function apm__register_parameter (integer,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer);
 
-create or replace function apm__register_parameter (integer,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer)
+create or replace function apm__register_package (varchar,varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
 returns integer as '
 declare
-  register_parameter__parameter_id           alias for $1;  -- default null  
-  register_parameter__package_key            alias for $2;  
-  register_parameter__parameter_name         alias for $3;  
-  register_parameter__description            alias for $4;  -- default null  
-  register_parameter__datatype               alias for $5;  -- default ''string''  
-  register_parameter__default_value          alias for $6;  -- default null  
-  register_parameter__section_name           alias for $7;  -- default null 
-  register_parameter__min_n_values           alias for $8;  -- default 1
-  register_parameter__max_n_values           alias for $9;  -- default 1
-
-  v_parameter_id         apm_parameters.parameter_id%TYPE;
-  cur_val                record;
+  package_key            alias for $1;  
+  pretty_name            alias for $2;  
+  pretty_plural          alias for $3;  
+  package_uri            alias for $4;  
+  package_type           alias for $5;  
+  initial_install_p      alias for $6;  -- default ''f''  
+  singleton_p            alias for $7;  -- default ''f''  
+  spec_file_path         alias for $8;  -- default null
+  spec_file_mtime        alias for $9;  -- default null
 begin
-    -- Create the new parameter.    
-    v_parameter_id := acs_object__new(
-       register_parameter__parameter_id,
-       ''apm_parameter'',
-       now(),
-       null,
-       null,
-       null,
-       ''t'',
-       register_parameter__package_key || '': Parameter '' || register_parameter__parameter_name,
-       null
+    PERFORM apm_package_type__create_type(
+    	package_key,
+	pretty_name,
+	pretty_plural,
+	package_uri,
+	package_type,
+	initial_install_p,
+	singleton_p,
+	spec_file_path,
+	spec_file_mtime
     );
-    
-    insert into apm_parameters 
-    (parameter_id, parameter_name, description, package_key, datatype, 
-    default_value, section_name, min_n_values, max_n_values)
-    values
-    (v_parameter_id, register_parameter__parameter_name, 
-     register_parameter__description, register_parameter__package_key, 
-     register_parameter__datatype, register_parameter__default_value, 
-     register_parameter__section_name, register_parameter__min_n_values, 
-     register_parameter__max_n_values);
 
-    -- Propagate parameter to new instances.	
-    for cur_val in select ap.package_id, p.parameter_id, p.default_value 
-       from apm_parameters p left outer join apm_parameter_values v 
-             using (parameter_id), apm_packages ap
-      where p.package_key = ap.package_key
-        and v.attr_value is null
-        and p.package_key = register_parameter__package_key
-      loop
-      	PERFORM apm__set_value(
-	    cur_val.parameter_id, 
-	    cur_val.package_id,
-	    cur_val.default_value
-	    ); 	
-      end loop;	
-	
-    return v_parameter_id;
-   
+    return 0; 
 end;' language 'plpgsql';
 
 drop function apm__update_parameter (integer,varchar,varchar,varchar,varchar,varchar,integer,integer);
