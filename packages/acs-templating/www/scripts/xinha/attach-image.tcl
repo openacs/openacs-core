@@ -20,7 +20,7 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
 
     set write_p 1
 
-    # set recent images
+    set recent_images_options [list]
     db_multirow -unclobber recent_images recent_images \
 	{
 	    select ci.item_id, ci.name

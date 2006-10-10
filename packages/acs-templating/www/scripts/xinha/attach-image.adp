@@ -148,7 +148,6 @@
 </head>
 
 <body onload="Init()">
-<h1>KEY = @parent_id@</h1>
 <div id="insert_image_upload">
 	<table border="0" width="100%" style="margin: 0 auto; text-align: left;padding: 0px;">
 	  <tbody>
@@ -158,6 +157,7 @@
 	    <formtemplate id="upload_form">
 			<input type="hidden" name="f_url" id="f_url" value="@f_url@"/>
 	      <table cellspacing="2" cellpadding="2" border="0" width="55%">
+<if @recent_images_options@ not nil>
 		<tr class="form-group">
 		<td>
 		<fieldset>
@@ -172,6 +172,7 @@
 		</fieldset>
 		</td>
 	        </tr> 
+</if>
 		<tr class="form-element">
 		  <if @formerror.upload_file@ not nil>
 		    <td class="form-widget-error">
@@ -180,7 +181,7 @@
 		    <td class="form-widget">
 		  </else>
 	<fieldset>
-	<legend>or Upload a New Image</legend>
+	<legend><if @recent_images_options@ not nil>or</if> Upload a New Image</legend>
 
 		  <formwidget id="upload_file">
 		    <formerror id="upload_file">
