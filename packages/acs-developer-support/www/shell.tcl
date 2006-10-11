@@ -28,7 +28,7 @@ ad_form -name shell -form {
     if { ![string equal POST [ns_conn method]] } {
         set out "You cannot use GET to invoke a script on this page.\nClick OK to resubmit the form as a POST."
     } else {
-        if {[catch {set out [uplevel 1 $script]}]} {
+        if {[catch {set out [uplevel 1 [string map {"\\\r\n" " "} $script]]}]} {
             global errorInfo
             set out "ERROR:\n$errorInfo"
         }
