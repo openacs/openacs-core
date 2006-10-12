@@ -806,11 +806,11 @@ ad_proc -public ad_form {
                             return -code error "element $element_name: \"$flag\" attribute must have a parameter"
                         }
                         set name af_$flag
+                        global af_$flag
                         append name "(${form_name}__$element_name)"
                         if { [info exists $name] } {
                             return -code error "element $element_name: \"$flag\" appears twice"
                         }
-                        global $name
                         set $name $af_element_parameters($element_name:$flag)
                     }
 
