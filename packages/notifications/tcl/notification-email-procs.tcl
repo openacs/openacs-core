@@ -104,10 +104,14 @@ namespace eval notification::email {
 
        append content_text "\n[_ notifications.lt_Getting_too_much_emai]"
        if { [string length $content_html] == 0 } {
-         set text_only_p 1
+           set text_only_p 1
+           set mime_type "text/plain"
+	   set content $content_text
        } else {
-         set text_only_p 0
-         append content_html "\n[_ notifications.lt_Getting_too_much_emai]"
+           set text_only_p 0
+           set mime_type "text/html"
+           append content_html "<p>[_ notifications.lt_Getting_too_much_emai]"
+	   set content $content_html
        }
 
         # Use this to build up extra mail headers        
@@ -119,32 +123,24 @@ namespace eval notification::email {
         set reply_to [reply_address -object_id $reply_object_id -type_id $notification_type_id]
 
        if { ![empty_string_p $from_user_id] && $from_user_id != 0 && [db_0or1row get_person {}]} {
-            set from_email "\"$first_names $last_name\" <[cc_email_from_party $from_user_id]>"
+	   set from_email [cc_email_from_party $from_user_id]
+	   
+	   # Set the Reply-To and Mail-Followup-To addresses to the
+	   # address of the notifications handler.
+	   ns_set put $extra_headers Reply-To $reply_to
+	   ns_set put $extra_headers Mail-Followup-To $reply_to
+       } else {
+	   set from_email $reply_to
+       }
 
-            # Set the Reply-To and Mail-Followup-To addresses to the
-            # address of the notifications handler.
-            ns_set put $extra_headers Reply-To $reply_to
-            ns_set put $extra_headers Mail-Followup-To $reply_to
-        } else {
-            set from_email $reply_to
-        }
-
-if { $text_only_p } {
-  set content $content_text
-} else {
-        set message_data [build_mime_message $content_text $content_html]
-        ns_set put $extra_headers MIME-Version [ns_set get $message_data MIME-Version]
-        ns_set put $extra_headers Content-ID [ns_set get $message_data Content-ID]
-        ns_set put $extra_headers Content-Type [ns_set get $message_data Content-Type]
-        set content [ns_set get $message_data body]
-}
-
-        acs_mail_lite::send \
-            -to_addr $email \
-            -from_addr $from_email \
-            -subject $subject \
-            -body $content \
-            -extraheaders $extra_headers
+       acs_mail_lite::complex_send \
+           -to_party_ids $to_user_id \
+           -from_addr $from_email \
+           -mime_type $mime_type \
+           -subject $subject \
+           -body $content \
+           -use_sender \
+           -extraheaders $extra_headers
     }
 
     ad_proc -public bounce_mail_message {
