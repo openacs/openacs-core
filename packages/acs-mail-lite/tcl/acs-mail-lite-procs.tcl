@@ -303,6 +303,7 @@ namespace eval acs_mail_lite {
 		    # We execute all callbacks now
 		    callback acs_mail_lite::incoming_email -array email
 
+
 #		} else {
 #		    ns_log Notice "load_mails: prefix not found. Doing nothing."
 #		}
@@ -742,39 +743,41 @@ namespace eval acs_mail_lite {
 	        (needed to call package-specific code to deal with bounces)
     } {
 	array set rcpts $sendlist
-        foreach rcpt $rcpts(email) rcpt_id $rcpts(user_id) rcpt_name $rcpts(name) {
-	    if { $valid_email_p || ![bouncing_email_p -email $rcpt] } {
-		with_finally -code {
-		    set sendmail [list [bounce_sendmail] "-f[bounce_address -user_id $rcpt_id -package_id $package_id -message_id $message_id]" "-t" "-i"]
-
-		    # add username if it exists
-		    if {![empty_string_p $rcpt_name]} {
-			set pretty_to "$rcpt_name <$rcpt>"
-		    } else {
-			set pretty_to $rcpt
+	if {[info exists rcpts(email)]} {
+	    foreach rcpt $rcpts(email) rcpt_id $rcpts(user_id) rcpt_name $rcpts(name) {
+		if { $valid_email_p || ![bouncing_email_p -email $rcpt] } {
+		    with_finally -code {
+			set sendmail [list [bounce_sendmail] "-f[bounce_address -user_id $rcpt_id -package_id $package_id -message_id $message_id]" "-t" "-i"]
+			
+			# add username if it exists
+			if {![empty_string_p $rcpt_name]} {
+			    set pretty_to "$rcpt_name <$rcpt>"
+			} else {
+			    set pretty_to $rcpt
+			}
+			
+			# substitute all "\r\n" with "\n", because piped text should only contain "\n"
+			regsub -all "\r\n" $msg "\n" msg
+			
+			if {[catch {
+			    set err1 {}
+			    set f [open "|$sendmail" "w"]
+			    puts $f "From: $from_addr\nTo: $pretty_to\nCC: $cc\n$msg"
+			    set err1 [close $f]
+			} err2]} {
+			    ns_log Error "Attempt to send From: $from_addr\nTo: $pretty_to\n$msg failed.\nError $err1 : $err2"
+			}
+		    } -finally {
 		    }
-
-                    # substitute all "\r\n" with "\n", because piped text should only contain "\n"
-                    regsub -all "\r\n" $msg "\n" msg
-
-		    if {[catch {
-			set err1 {}
-			set f [open "|$sendmail" "w"]
-			puts $f "From: $from_addr\nTo: $pretty_to\nCC: $cc\n$msg"
-			set err1 [close $f]
-		    } err2]} {
-			ns_log Error "Attempt to send From: $from_addr\nTo: $pretty_to\n$msg failed.\nError $err1 : $err2"
-		    }
-		} -finally {
+		} else {
+		    ns_log Notice "acs-mail-lite: Email bouncing from $rcpt, mail not sent and deleted from queue"
 		}
-	    } else {
-		ns_log Notice "acs-mail-lite: Email bouncing from $rcpt, mail not sent and deleted from queue"
+		# log mail sending time
+		if {![empty_string_p $rcpt_id]} { log_mail_sending -user_id $rcpt_id }
 	    }
-	    # log mail sending time
-	    if {![empty_string_p $rcpt_id]} { log_mail_sending -user_id $rcpt_id }
 	}
     }
-    
+
     ad_proc -private smtp {
 	-from_addr:required
 	-sendlist:required
@@ -1101,6 +1104,24 @@ namespace eval acs_mail_lite {
 	    set sender_addr $from_addr
 	}
 
+	set smtp [ns_config ns/parameters smtphost]
+	if {[empty_string_p $smtp]} {
+	    set smtp [ns_config ns/parameters mailhost]
+	}
+	if {[empty_string_p $smtp]} {
+	    set smtp localhost
+	}
+	set timeout [ns_config ns/parameters smtptimeout]
+	if {[empty_string_p $timeout]} {
+	    set timeout 60
+	}
+	set smtpport [ns_config ns/parameters smtpport]
+	if {[empty_string_p $smtpport]} {
+	    set smtpport 25
+	}
+	set smtpuser [ns_config ns/parameters smtpuser]
+	set smtppassword [ns_config ns/parameters smtppassword]
+
         # default values for alternative_part_p
         # TRUE on mime_type text/html
         # FALSE on mime_type text/plain
@@ -1160,7 +1181,7 @@ namespace eval acs_mail_lite {
 	           from cr_revisions r, cr_items i
 	           where r.revision_id = i.latest_revision
                    and i.item_id in ([join $item_ids ","])" {
-		       lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
+		       lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -header [list "Content-Disposition" "attachment; filename=$title"] -header [list Content-Description $title] -canonical $mime_type -file "[cr_fs_path]$filename"]
 		   }
 	}
 	
@@ -1193,6 +1214,23 @@ namespace eval acs_mail_lite {
 	
 	# Set the date
 	mime::setheader $multi_token date "[mime::parsedatetime -now proper]"
+
+	# 2006/09/25 nfl/cognovis
+	# subject: convert 8-bit characters into MIME encoded words
+	# see http://tools.ietf.org/html/rfc2047
+	# note: we always assume ISO-8859-15 !!!
+	set subject_encoded $subject
+	for {set i 128} {$i<256} {incr i} {
+	    set eight_bit_char [format %c $i]
+	    set mime_encoded_word "=?"
+	    append mime_encoded_word "ISO-8859-15"
+	    append mime_encoded_word "?"
+	    append mime_encoded_word "B"
+	    append mime_encoded_word "?"
+	    append mime_encoded_word [base64::encode $eight_bit_char]
+	    append mime_encoded_word "?="
+	    set subject_encoded [regsub -all $eight_bit_char $subject_encoded $mime_encoded_word]
+	}
 	
 	# 2006/09/25 nfl/cognovis
 	# subject: convert 8-bit characters into MIME encoded words
@@ -1211,7 +1249,8 @@ namespace eval acs_mail_lite {
 	}
 	
 	# Set the subject
-	mime::setheader $multi_token Subject "$subject"
+	#2006/09/25 mime::setheader $multi_token Subject "$subject"
+	mime::setheader $multi_token Subject "$subject_encoded"
 
 	foreach header $extraheaders {
 	    mime::setheader $multi_token "[lindex $header 0]" "[lindex $header 1]"
@@ -1378,7 +1417,11 @@ namespace eval acs_mail_lite {
 		    -header [list From "$from_string"] \
 		    -header [list To "[join $to_list ","]"] \
 		    -header [list CC "[join $cc_list ","]"] \
-		    -header [list BCC "[join $bcc_list ","]"]
+		    -header [list BCC "[join $bcc_list ","]"] \
+		    -servers $smtp \
+		    -ports $smtpport \
+		    -username $smtpuser \
+		    -password $smtppassword
 		
 		#Close all mime tokens
 		mime::finalize $multi_token -subordinates all
@@ -1417,7 +1460,11 @@ namespace eval acs_mail_lite {
 
 		    smtp::sendmessage $multi_token \
 			-header [list From "$from_string"] \
-			-header [list To "$email"]
+			-header [list To "$email"] \
+			-servers $smtp \
+			-ports $smtpport \
+			-username $smtpuser \
+			-password $smtppassword
 
 		    if { !$no_callback_p } {
 			callback acs_mail_lite::complex_send \
@@ -1440,7 +1487,11 @@ namespace eval acs_mail_lite {
 
 		    smtp::sendmessage $multi_token \
 			-header [list From "$from_string"] \
-			-header [list To "$email"]
+			-header [list To "$email"] \
+			-servers $smtp \
+			-ports $smtpport \
+			-username $smtpuser \
+			-password $smtppassword
 		    
 		    if { !$no_callback_p } {
 			callback acs_mail_lite::complex_send \
