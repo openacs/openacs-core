@@ -1136,9 +1136,16 @@ namespace eval acs_mail_lite {
             }
         }
 
-	set party_id($sender_addr) [party::get_by_email -email $sender_addr]
 	set party_id($from_addr) [party::get_by_email -email $from_addr]
-	set from_string "[party::name -email $sender_addr] <${sender_addr}>"
+	
+	# Deal with the sender address. Only change the from string if we find a party_id
+	# This should take care of anyone parsing in an email which is already formated with <>.
+	set party_id($sender_addr) [party::get_by_email -email $sender_addr]
+	if {[exists_and_not_null party_id($sender_addr)]} {
+	    set from_string "\"[party::name -email $sender_addr]\" <${sender_addr}>"
+	} else {
+	    set from_string $sender_addr
+	}
 
         # decision between normal or multipart/alternative body
         if { $alternative_part_p eq "0"} {
@@ -1376,7 +1383,8 @@ namespace eval acs_mail_lite {
 	set bcc_party_ids $new_bcc_party_ids
 
 	# Rollout support (see above for details)
-	
+
+	ns_log Notice "acs-mail-lite:complex_send:: From String: $from_string"
 	set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode] 
 	if {![empty_string_p $delivery_mode]
 	    && ![string equal $delivery_mode default]
