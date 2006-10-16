@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-templating" package_version="5.3.0d2" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-templating" package_version="5.3.0d1" locale="en_US" charset="ISO-8859-1">
 
   <msg key="12-Hour">12-Hour</msg>
   <msg key="24-Hour">24-Hour</msg>
-  <msg key="Anyone_on_the_internet">Anyone on the internet</msg>
+  <msg key="Anyone_on_the_internet">Anyone on the Internet</msg>
   <msg key="Anyone_on_this_system">Anyone on this system</msg>
+  <msg key="Attach_File_Choose_a_file">Please choose a file to attach.</msg>
   <msg key="CSV">CSV</msg>
   <msg key="data">data</msg>
   <msg key="Day">Day</msg>
@@ -90,6 +91,7 @@
   <msg key="Template_parser_error_in_parameter_list">Error in parameter list</msg>
   <msg key="This_Group">This group</msg>
   <msg key="This_image_can_be_reused_by">This image can be reused by</msg>
+  <msg key="This_image_can_be_reused_help">This allows your image to be used in other contexts</msg>
   <msg key="Year">Year</msg>
   <msg key="year">year</msg>
   <msg key="Year_must_be_positive">Year must be positive</msg>
