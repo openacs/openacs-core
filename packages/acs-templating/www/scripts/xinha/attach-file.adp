@@ -99,13 +99,21 @@
 
 	      <table cellspacing="2" cellpadding="2" border="0" width="55%">
 		<tr class="form-group">
-		<td>
+		  <if @formerror.upload_file@ not nil>
+		    <td class="form-widget-error">
+		  </if>
+	          <else>
+		    <td class="form-widget">
+                  </else> 	
 		<fieldset>
 	        <legend>Choose File</legend>
 		<formgroup id="choose_file">
 <if @formgroup.rownum@ odd and @formgroup.rownum@ gt 1><br /></if>
                           @formgroup.widget;noquote@ @formgroup.label;noquote@
 		</formgroup>
+		    <formerror id="choose_file">
+		      <div class="form-error">@formerror.choose_file@</div>
+		    </formerror>
 	<br />
 	<formwidget id="select_btn">&nbsp;<button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
 		</fieldset>
