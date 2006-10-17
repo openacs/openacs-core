@@ -37,7 +37,11 @@ function OacsAttach(editor) {
     OacsAttach.folder_id     = this.editor.config.folder_id;
     OacsAttach.file_types    = this.editor.config.file_types;
     OacsAttach.fullscreen_mode = additionalArgs[1]; 
-	
+   if (this.editor.config.key) {
+	OacsAttach.key = this.editor.config.key;
+   } else {
+        OacsAttach.key = '';
+   }	
     var cfg = editor.config;
     var tt = OacsAttach.I18N;
     var bl = OacsAttach.btnList;
@@ -124,7 +128,9 @@ OacsAttach.prototype.insertInternalLink = function(link) {
     // fs_package_id;
 
     var PopupUrl = "/acs-templating/scripts/xinha/attach-file?";
-    if (typeof OacsAttach.attach_parent_id != "undefined") {
+    if (typeof OacsAttach.key != "undefinied") {
+	PopupUrl = PopupUrl + "&parent_id=" + OacsAttach.key;
+    } else if (typeof OacsAttach.attach_parent_id != "undefined") {
 	PopupUrl = PopupUrl + "&parent_id=" + OacsAttach.attach_parent_id;
     }
     if (typeof OacsAttach.fs_package_id != "undefined") {
@@ -189,7 +195,9 @@ OacsAttach.prototype.insertInternalLinkTlf = function(link) {
     }
 
     var PopupUrl = "/acs-templating/scripts/xinha/attach-file?";
-    if (typeof OacsAttach.attach_parent_id != "undefined") {
+    if (typeof OacsAttach.key != "undefinied") {
+	PopupUrl = PopupUrl + "&parent_id=" + OacsAttach.key;
+    } else  if (typeof OacsAttach.attach_parent_id != "undefined") {
 	PopupUrl = PopupUrl + "&parent_id=" + OacsAttach.attach_parent_id;
     }
     if (typeof OacsAttach.fs_package_id != "undefined") {
@@ -263,7 +271,9 @@ OacsAttach.prototype.insertImage = function(image) {
     // fs_package_id;
 
     var PopupUrl = "/acs-templating/scripts/xinha/attach-image?";
-    if (typeof OacsAttach.attach_parent_id != "undefined") {
+    if (typeof OacsAttach.key != "undefinied") {
+	PopupUrl = PopupUrl + "&parent_id=" + OacsAttach.key;
+    } else if (typeof OacsAttach.attach_parent_id != "undefined") {
 	PopupUrl = PopupUrl + "&parent_id=" + OacsAttach.attach_parent_id;
     }
     if (typeof OacsAttach.folder_id != "undefined") {
@@ -290,6 +300,7 @@ OacsAttach.prototype.insertImage = function(image) {
 	       } else {
 		   img.src = param.f_url;
 	       }
+	       if (img) {
 	       for (field in param) {
 		   var value = param[field];
 		   switch (field) {
@@ -300,5 +311,6 @@ OacsAttach.prototype.insertImage = function(image) {
 		   case "f_horiz"  : img.hspace = parseInt(value || "0"); break;
 		   }
 	       }
+               }
 	   }, outparam);
 };
