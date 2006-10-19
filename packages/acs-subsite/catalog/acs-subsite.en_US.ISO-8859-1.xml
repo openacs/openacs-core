@@ -61,6 +61,10 @@
   <msg key="Change_my_email_P">Change my email privacy level</msg>
   <msg key="Change_my_Password">Change my Password</msg>
   <msg key="Change_pass_email_por">Change password, email, portrait</msg>
+  <msg key="change_password_email_body_0">You have (or someone impersonating you has) requested to change your
+system password. To complete the change, visit the following link:</msg>
+  <msg key="change_password_email_body_1">If you are not the person who made this request, you don't need to take any action.</msg>
+  <msg key="change_password_email_subject">Change Password Request for</msg>
   <msg key="Check_Your_Inbox">Check Your Inbox</msg>
   <msg key="Children">Children</msg>
   <msg key="choose_assessment">Choose a custom registration questionnaire :</msg>
@@ -388,7 +392,9 @@ You can always change your password by doing the following:
   <msg key="rename">rename</msg>
   <msg key="Req_membership_comm">Request membership of this community</msg>
   <msg key="Req_membership_subs">Request membership of this subsite</msg>
+  <msg key="Request_Change_Password_token_email">Request to Change Password: A token for changing your password has been emailed to you. Follow the instructions in that email to change your password</msg>
   <msg key="Request_membership">Request membership</msg>
+  <msg key="Reset_Password">Reset Password</msg>
   <msg key="return_to_application">return to application</msg>
   <msg key="Revoke_Checked">Revoke Checked</msg>
   <msg key="Role">Role</msg>
