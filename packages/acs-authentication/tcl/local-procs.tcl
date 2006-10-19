@@ -233,8 +233,8 @@ ad_proc -private auth::local::password::CanRetrievePassword {
     Implements the CanRetrievePassword operation of the auth_password 
     service contract for the local account implementation.
 } {
-    # Nope, passwords are stored hashed, so we can't retrieve it for you
-    return 0
+    # passwords are stored hashed, so we send the hash and let the user choose a new password
+    return 1
 }
 
 ad_proc -private auth::local::password::CanResetPassword {
@@ -324,8 +324,20 @@ ad_proc -private auth::local::password::RetrievePassword {
     Implements the RetrievePassword operation of the auth_password 
     service contract for the local account implementation.
 } {
-    set result(password_status) "not_supported"
-    set result(password_message) [_ acs-subsite.cannot_retrieve_password]
+    set result(password_status) "ok"
+    set result(password_message) [_ acs-subsite.Request_Change_Password_token_email]
+
+    db_1row get_usr_id_and_password_hash {SELECT user_id, password as password_hash FROM users WHERE username = :username}
+
+    # TODO: This email message text should go in the recipient user language, english or every language supported
+    set subject "[ad_system_name]: [_ acs-subsite.change_password_email_subject] $username"
+    set body "[_ acs-subsite.change_password_email_body_0]\n\n[export_vars -base "[ad_url]/user/password-reset" {user_id password_hash}]\n\n[_ acs-subsite.change_password_email_body_1]"
+
+    ns_sendmail \
+	$username \
+	[ad_outgoing_sender] \
+	$subject \
+	$body
 
     return [array get result]
 }
