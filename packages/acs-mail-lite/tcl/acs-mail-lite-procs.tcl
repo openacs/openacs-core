@@ -304,6 +304,7 @@ namespace eval acs_mail_lite {
 		    callback acs_mail_lite::incoming_email -array email
 
 
+
 #		} else {
 #		    ns_log Notice "load_mails: prefix not found. Doing nothing."
 #		}
@@ -1090,13 +1091,142 @@ namespace eval acs_mail_lite {
         @param alternative_part_p Boolean whether or not the code generates a multipart/alternative mail (text/html)
     } {
 
+	# check, if send_immediately is set
+	# if not, take global parameter
+	if {$send_immediately_p} {
+	    set send_p $send_immediately_p
+	} else {
+	    # if parameter is not set, get the global setting
+	    set send_p [parameter::get -package_id [get_package_id] -parameter "send_immediately" -default 0]
+	}
+
+	# if send_p true, then start acs_mail_lite::send_immediately, so mail is not stored in the db before delivery
+	if { $send_p } {
+	    acs_mail_lite::complex_send_immediately \
+		-to_party_ids $to_party_ids \
+		-cc_party_ids $cc_party_ids \
+		-bcc_party_ids $bcc_party_ids \
+		-to_group_ids $to_group_ids \
+		-cc_group_ids $cc_group_ids \
+		-bcc_group_ids $bcc_group_ids \
+		-to_addr $to_addr \
+		-cc_addr $cc_addr \
+		-bcc_addr $bcc_addr \
+		-from_addr $from_addr \
+		-subject $subject \
+		-body $body \
+		-package_id $package_id \
+		-files $files \
+		-file_ids $file_ids \
+		-folder_ids $folder_ids \
+		-mime_type $mime_type \
+		-object_id $object_id \
+		-single_email_p $single_email_p \
+		-no_callback_p $no_callback_p \
+		-extraheaders $extraheaders \
+		-alternative_part_p $alternative_part_p \
+		-use_sender_p $use_sender_p
+	} else {
+	    # else, store it in the db and let the sweeper deliver the mail
+	    db_dml create_queue_entry {}
+	}
+    }
+
+    # complex_send
+    # created ... by ...
+    # modified 2006/07/25 by nfl: new param. alternative_part_p
+    #                             and creation of multipart/alternative    
+    ad_proc -public complex_send_immediately {
+	-valid_email:boolean
+	{-to_party_ids ""}
+	{-cc_party_ids ""}
+	{-bcc_party_ids ""}
+	{-to_group_ids ""}
+	{-cc_group_ids ""}
+	{-bcc_group_ids ""}
+        {-to_addr ""}
+	{-cc_addr ""}
+	{-bcc_addr ""}
+        -from_addr:required
+        {-subject ""}
+        -body:required
+	{-package_id ""}
+	{-files ""}
+	{-file_ids ""}
+	{-folder_ids ""}
+	{-mime_type "text/plain"}
+	{-object_id ""}
+	{-single_email_p ""}
+	{-no_callback_p ""}
+	{-extraheaders ""}
+        {-alternative_part_p ""}
+	{-use_sender_p ""}
+    } {
+
+	Prepare an email to be send immediately with the option to pass in a list
+	of file_ids as well as specify an html_body and a mime_type. It also supports multiple "TO" recipients as well as CC
+	and BCC recipients. Runs entirely off MIME and SMTP to achieve this. 
+	For backward compatibility a switch "single_email_p" is added.
+
+	
+	@param to_party_ids list of party ids to whom we send this email
+
+	@param cc_party_ids list of party ids to whom we send this email in "CC"
+
+	@param bcc_party_ids list of party ids to whom we send this email in "BCC"
+
+	@param to_party_ids list of group_ids to whom we send this email
+
+	@param cc_party_ids list of group_ids to whom we send this email in "CC"
+
+	@param bcc_party_ids list of group_ids to whom we send this email in "BCC"
+
+	@param to_addr List of e-mail addresses to send this mail to. We will figure out the name if possible.
+
+	@param from_addr E-Mail address of the sender. We will try to figure out the name if possible.
+	
+	@param subject of the email
+	
+	@param body Text body of the email
+	
+	@param cc_addr List of CC Users e-mail addresses to send this mail to. We will figure out the name if possible. Only useful if single_email is provided. Otherwise the CC users will be send individual emails.
+
+	@param bcc_addr List of CC Users e-mail addresses to send this mail to. We will figure out the name if possible. Only useful if single_email is provided. Otherwise the CC users will be send individual emails.
+
+	@param package_id Package ID of the sending package
+	
+	@param files List of file_title, mime_type, file_path (as in full path to the file) combination of files to be attached
+
+	@param folder_ids ID of the folder who's content will be send along with the e-mail.
+
+	@param file_ids List of file ids (items or revisions) to be send as attachments. This will only work with files stored in the file system.
+
+	@param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
+
+	@param object_id The ID of the object that is responsible for sending the mail in the first place
+
+	@param extraheaders List of keywords and their values passed in for headers. Interesting ones are: "Precedence: list" to disable autoreplies and mark this as a list message. This is as list of lists !!
+
+	@param single_email Boolean that indicates that only one mail will be send (in contrast to one e-mail per recipient). 
+
+	@param no_callback Boolean that indicates if callback should be executed or not. If you don't provide it it will execute callbacks	
+	@param single_email_p Boolean that indicates that only one mail will be send (in contrast to one e-mail per recipient). Used so we can set a variable in the callers environment to call complex_send.
+
+	@param no_callback_p Boolean that indicates if callback should be executed or not. If you don't provide it it will execute callbacks. Used so we can set a variable in the callers environment to call complex_send.
+
+	@param use_sender Boolean indicating that from_addr should be used regardless of fixed-sender parameter
+
+        @param alternative_part_p Boolean whether or not the code generates a multipart/alternative mail (text/html)
+    } {
+
+	set mail_package_id [apm_package_id_from_key "acs-mail-lite"]
 	if {[empty_string_p $package_id]} {
-	    set package_id [apm_package_id_from_key "acs-mail-lite"]
+	    set package_id $mail_package_id
 	}
 
 	# We check if the parameter 
 	set fixed_sender [parameter::get -parameter "FixedSenderEmail" \
-			      -package_id [apm_package_id_from_key "acs-mail-lite"]]
+			      -package_id $mail_package_id]
 
 	if { ![empty_string_p $fixed_sender] && !$use_sender_p} {
 	    set sender_addr $fixed_sender
@@ -1104,23 +1234,27 @@ namespace eval acs_mail_lite {
 	    set sender_addr $from_addr
 	}
 
-	set smtp [ns_config ns/parameters smtphost]
-	if {[empty_string_p $smtp]} {
-	    set smtp [ns_config ns/parameters mailhost]
-	}
+	# Get the SMTP Parameters
+	set smtp [parameter::get -parameter "SMTPHost" \
+	     -package_id $mail_package_id -default [ns_config ns/parameters mailhost]]
 	if {[empty_string_p $smtp]} {
 	    set smtp localhost
 	}
-	set timeout [ns_config ns/parameters smtptimeout]
+
+	set timeout [parameter::get -parameter "SMTPTimeout" \
+	     -package_id $mail_package_id -default  [ns_config ns/parameters smtptimeout]]
 	if {[empty_string_p $timeout]} {
 	    set timeout 60
 	}
-	set smtpport [ns_config ns/parameters smtpport]
-	if {[empty_string_p $smtpport]} {
-	    set smtpport 25
-	}
-	set smtpuser [ns_config ns/parameters smtpuser]
-	set smtppassword [ns_config ns/parameters smtppassword]
+
+	set smtpport [parameter::get -parameter "SMTPPort" \
+	     -package_id [apm_package_id_from_key "acs-mail-lite"] -default 25]
+
+	set smtpuser [parameter::get -parameter "SMTPUser" \
+	     -package_id [apm_package_id_from_key "acs-mail-lite"]]
+
+	set smtppassword [parameter::get -parameter "SMTPPassword" \
+	     -package_id [apm_package_id_from_key "acs-mail-lite"]]
 
         # default values for alternative_part_p
         # TRUE on mime_type text/html
@@ -1217,7 +1351,7 @@ namespace eval acs_mail_lite {
 
 	# Set the message_id
 	set message_id "[mime::uniqueID]"
-	mime::setheader $multi_token "message_id" "[mime::uniqueID]"
+	mime::setheader $multi_token "message-id" "[mime::uniqueID]"
 	
 	# Set the date
 	mime::setheader $multi_token date "[mime::parsedatetime -now proper]"
