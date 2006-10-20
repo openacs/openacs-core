@@ -13,11 +13,18 @@ ad_page_contract {
 
 set user_id [ad_conn user_id]
 # if user has write permission, create image upload form, 
-if {[permission::permission_p -party_id $user_id -object_id $parent_id \
-	 -privilege "write"]} {
-
-    set write_p 1
-
+set write_p [permission::permission_p \
+		 -party_id $user_id \
+		 -object_id $parent_id \
+		 -privilege "write"]
+if {!$write_p} {
+    # item might not exist!
+    set write_p [permission::permission_p \
+		     -party_id $user_id \
+		     -object_id [ad_conn package_id] \
+		     -privilege "write"]
+}
+if {$write_p} {
     # set recent files
     set recent_files_options [list]
     db_multirow -extend {mime_icon} -unclobber recent_files recent_files \
