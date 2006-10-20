@@ -33,14 +33,14 @@ if {[callback::impl_exists -impl $driver -callback search::driver_info]} {
     array set info [acs_sc_call FtsEngineDriver info [list] $driver]
 }
 
-set dotlrn_package_id [dotlrn::get_package_id]
-set is_guest_p [search::is_guest_p]
+#set dotlrn_package_id [dotlrn::get_package_id]
+#set is_guest_p [search::is_guest_p]
 
 # Ugly .LRNism: guests must not search for people. Here's the security
 # check that makes sure they cannot fiddle around with the URL
-if {$is_guest_p && [string equal $object_type "phb_person"]} {
-    ad_return_error "Security Breakin!" "Security Alert. This incident has been logged."
-}
+#if {$is_guest_p && [string equal $object_type "phb_person"]} {
+#    ad_return_error "Security Breakin!" "Security Alert. This incident has been logged."
+#}
 if { [array get info] == "" } {
     ReturnHeaders
     ns_write "[_ search.lt_FtsEngineDriver_not_a]"
