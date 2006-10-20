@@ -142,7 +142,7 @@ ad_proc -private search::indexer {} {
 				if {![info exists datasource(package_id)]} {
 				    set datasource(package_id) ""
 				}
-				set datasource(community_id) [search::dotlrn::get_community_id -package_id $datasource(package_id)]
+#				set datasource(community_id) [search::dotlrn::get_community_id -package_id $datasource(package_id)]
 				
 				if {![info exists datasource(relevant_date)]} {
 				    set datasource(relevant_date) ""
