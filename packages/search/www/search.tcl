@@ -24,6 +24,10 @@ set package_url_with_extras $package_url
 set context results
 set context_base_url $package_url
 
+# Do we want debugging information at the end of the page
+set debug_p 0
+
+set dotlrn_p [apm_package_installed_p "dotlrn"]
 set user_id [ad_conn user_id]
 set driver [ad_parameter -package_id $package_id FtsEngineDriver]
 if {[callback::impl_exists -impl $driver -callback search::driver_info]} {
@@ -33,14 +37,17 @@ if {[callback::impl_exists -impl $driver -callback search::driver_info]} {
     array set info [acs_sc_call FtsEngineDriver info [list] $driver]
 }
 
-#set dotlrn_package_id [dotlrn::get_package_id]
-#set is_guest_p [search::is_guest_p]
+if {$dotlrn_p} {
+    set dotlrn_package_id [dotlrn::get_package_id]
+    set is_guest_p [search::is_guest_p]
 
-# Ugly .LRNism: guests must not search for people. Here's the security
-# check that makes sure they cannot fiddle around with the URL
-#if {$is_guest_p && [string equal $object_type "phb_person"]} {
-#    ad_return_error "Security Breakin!" "Security Alert. This incident has been logged."
-#}
+    # Ugly .LRNism: guests must not search for people. Here's the security
+    # check that makes sure they cannot fiddle around with the URL
+    if {$is_guest_p && [string equal $object_type "phb_person"]} {
+	ad_return_error "Security Breakin!" "Security Alert. This incident has been logged."
+    }
+}
+
 if { [array get info] == "" } {
     ReturnHeaders
     ns_write "[_ search.lt_FtsEngineDriver_not_a]"
@@ -170,7 +177,7 @@ for { set __i 0 } { $__i < [expr $high - $low +1] } { incr __i } {
 	array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
 	set url_one [acs_sc_call FtsContentProvider url [list $object_id] $object_type]
     }
-    search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
+    search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type) $object_id
     if {[callback::impl_exists -impl $driver -callback search::summary]} {
 	set title_summary [lindex [callback -impl $driver search::summary -query $q -text $datasource(title)] 0]
 	set txt_summary [lindex [callback -impl $driver search::summary -query $q -text $txt] 0]
