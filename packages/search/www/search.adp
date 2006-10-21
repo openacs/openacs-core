@@ -1,11 +1,12 @@
 <master>
-<include src="/packages/dotlrn/www/dotlrn-search">
+<if @dotlrn_p@ true><include src="/packages/dotlrn/www/dotlrn-search"></if>
 <if @t@ eq "Search">
   <i>#search.lt_Tip_In_most_browsers_#</i><br><br>
-</if>
-  <if @empty_p@ true>
+  </if>
+<if @empty_p@ true>
     <p class="hint">#search.lt_You_must_specify_some#</p>
-  </if><else>
+</if>
+<else>
 	<if @and_queries_notice_p@ eq 1>
       	  <font color=6f6f6f>
           #search.The#
@@ -25,22 +26,23 @@
       	  </font>
 	</if>
 
-<multiple name="searchresult">
+   <multiple name="searchresult">
 	<if @searchresult.title_summary@ nil>
   		<a href="@searchresult.url_one@">#search.Untitled#</a><br>
 	</if>	
 	<else>
 	  <a href="@searchresult.url_one@">@searchresult.title_summary;noquote@</a><br>
 	</else>
+
 	<if @searchresult.txt_summary@ nil>	
 	</if>
 	<else>	
 	@searchresult.txt_summary;noquote@<br>	
 	</else>
 	<font color=green>@searchresult.url_one@</font><br><br>
-</multiple>
+   </multiple>
 
-<if @count@ eq 0>
+  <if @count@ eq 0>
   Your search - <b>@query@</b> - did not match any content.
   <br>#search.lt_No_pages_were_found_c#<b>@query@</b>".
   <br><br>#search.Suggestions#
@@ -52,8 +54,8 @@
       <li>#search.Try_fewer_keywords#
     </if>
   </ul>
-</if>
-<else>
+  </if>
+  <else>
   <table width=100% bgcolor=3366cc border=0 cellpadding=3 cellspacing=0>
     <tr><td>
       <font color=white>
@@ -66,7 +68,7 @@
     </td></tr>
   </table>
   <br clear=all>
-</else>
+  </else>
 
 <if @from_result_page@ lt @to_result_page@>
   <center>
@@ -85,7 +87,17 @@
 </if>
 <if @count@ gt 0>
   <center>
-  <include src="/packages/dotlrn/www/dotlrn-search">
+  <if @dotlrn_p@>
+    <include src="/packages/dotlrn/www/dotlrn-search">
+  </if>
+  <else>
+      <div>
+        <form method="get" action="search">
+          <input type="text" name="q" size="60" maxlength="256" value="@query@" />
+          <input type="submit" value="#search.Search#" />
+        </form>
+      </div>
+  </else>
   </center>
 
   <if @stw@ not nil>
@@ -104,61 +116,11 @@
     <if @nstopwords@ gt 1>
       <p class="hint">#search.lt_The_following_words_a# [<a href="help/basics#stopwords">#search.details#</a>]</p>
     </if>
-
-    <multiple name="searchresult">
-      <div class="result">
-        <if @searchresult.title_summary@ nil>
-          <a href="@searchresult.url_one@">#search.Untitled#</a>
-        </if>
-        <else>
-          <div class="title"><a href="@searchresult.url_one@">@searchresult.title_summary;noquote@</a><!-- @searchresult.object_id@ --> </div>
-        </else>
-        <if @searchresult.txt_summary@ not nil>	
-          <div class="search-match">@searchresult.txt_summary;noquote@</div>
-        </if>
-        <div class="url">@searchresult.url_one@</div>
-      </div>
-    </multiple>
-
-    <if @count@ eq 0>
-      <p>#search.lt_No_pages_were_found_c#</p>
-      <p>#search.Suggestions#</p>
-      <ul>
-        <li>#search.lt_Make_sure_all_words_a#</li>
-        <li>#search.lt_Try_different_keyword#</li>
-        <li>#search.lt_Try_more_general_keyw#</li>
-        <if @nquery@ gt 2>
-          <li>#search.Try_fewer_keywords#</li>
-        </if>
-      </ul>
-    </if>
-    <else>
+    
+    <if @debug_p@>
       <p>#search.Searched_for_query#</p>
       <p>#search.Results_count#</p>
-    </else>
-
-    <if @from_result_page@ lt @to_result_page@>
-      <div class="search-pages">
-        #search.Result_page#
-        <if @from_result_page@ lt @current_result_page@>
-          <a href="@url_previous@">#search.Previous#</a>
-        </if>
-        &nbsp;@choice_bar;noquote@&nbsp;
-        <if @current_result_page@ lt @to_result_page@>
-          <a href="@url_next@">#search.Next#</a>
-        </if>
-      </div>
     </if>
-    <if @count@ gt 0>
-      <div>
-        <form method="get" action="search">
-          <input type="text" name="q" size="60" maxlength="256" value="@query@" />
-          <input type="submit" value="#search.Search#" />
-        </form>
-      </div>
 
-      <if @stw@ not nil>
-        <p>#search.lt_Try_your_query_on_stw#</p>
-      </if>
     </if>
   </else>
