@@ -20,8 +20,6 @@ aa_register_case \
 
 	set pretty_name [ad_generate_random_string]
 	set object_type [string tolower $pretty_name]
-	set table_name "table${object_type}"
-	set id_column "id"
 	set name_method "${object_type}.name"
 	set creation_user [ad_conn user_id]
 	set creation_ip [ad_conn peeraddr]
@@ -36,8 +34,8 @@ aa_register_case \
 					      :pretty_name,
 					      :pretty_name,
 					      'acs_object',
-					      :table_name,
-					      :id_column,
+					      null,
+					      null,
 					      null,
 					      'f',
 					      null,
