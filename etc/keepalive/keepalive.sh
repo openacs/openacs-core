@@ -7,9 +7,6 @@
 # restart commands are expected to be in a config file named keepalive-config.tcl 
 # in the same directory as this script
 #
-# If you're having problems with this script, you should look at this thread:
-# http://openacs.org/forums/message-view?message_id=260846
-#
 # @author Peter Marklund
 
 # the next line restarts using tclsh, the trailing slash is intentional \
@@ -47,11 +44,14 @@ proc server_responds_p { server_url } {
 
 foreach {server_url restart_command} $servers_to_monitor {
 
-    if { ![server_responds_p $server_url] } {
+    puts -nonewline "Checking server at $server_url - "
+    if { [server_responds_p $server_url] } {
+        puts "server responds."
+    } else {
+        puts -nonewline "no response. "
+        puts "Executing command \"$restart_command\" to restart server."
         if { [catch {eval exec $restart_command} errmsg] } {
-	    catch { exec /bin/mail -s "${server_url} did not respond to a monitoring check and could not be restarted" $mailto }
-        } else {
-	    catch { exec /bin/mail -s "${server_url} did not respond to a monitoring check so it was restarted" $mailto }
-	}
+            puts "Error executing restart_command: $errmsg"
+        }
     }
 }
