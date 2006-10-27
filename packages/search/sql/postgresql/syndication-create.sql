@@ -2,7 +2,7 @@ create table syndication (
         object_id       integer
                         constraint syndication_object_id_fk
                         references acs_objects (object_id) on delete cascade
-                        constraint syndication_pk
+                        constraint syndication_object_id_pk
                         primary key,
         last_updated    timestamptz
                         constraint syndication_last_updated_nn
