@@ -49,7 +49,6 @@ aa_register_case -cats {api smoke} ad_proc_create_callback {
     ad_proc -callback a_callback -impl an_impl {} { 
         this is a test callback implementation 
     } {
-        return 1
     }
     set impl_procs [info procs ::callback::a_callback::impl::*]
     aa_true "creation of a valid callback implementation" \
