@@ -450,7 +450,7 @@ aa_register_case  \
                           -authority_id $test_vars(authority_id) \
                           -username $test_vars(username)]
     
-    aa_equals "cannot retrieve pwd from local auth" $result(password_status) "not_supported"
+    aa_equals "retrieve pwd from local auth" $result(password_status) "ok"
     aa_true "must have message on failure" [expr ![empty_string_p $result(password_message)]]
 }
 
