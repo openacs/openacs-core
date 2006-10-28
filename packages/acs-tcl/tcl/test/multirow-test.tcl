@@ -1,4 +1,4 @@
-ad_library {
+ad_page_contract {
 
     Tests the ad_context_bar_multirow referenced in navigation-procs.tcl.
 
@@ -6,5 +6,4 @@ ad_library {
     @creation-date 21 September 2006
 }
 
-ns_log NOTICE $node_id
 ad_context_bar_multirow -multirow test_rows -from_node $from_node -node_id $node_id $context
