@@ -1010,6 +1010,43 @@ ad_proc -private apm_package_id_from_key_mem {package_key} {
     } -default 0]
 }
 
+ad_proc -public apm_package_ids_from_key {
+    -package_key:required
+    -mounted:boolean
+} {
+    @param package_key The package key we are looking for the package
+    @param mounted Does the package have to be mounted?
+
+    @return List of package ids of all instances of the package.
+    Empty string 
+} {
+    return [util_memoize [list apm_package_ids_from_key_mem -package_key $package_key -mounted_p $mounted_p]]
+}
+
+ad_proc -private apm_package_ids_from_key_mem {
+    -package_key:required
+    {-mounted_p "0"}
+} {
+    unmemoized version of apm_package_ids_from_key
+} {
+    
+    if {$mounted_p} {
+	set package_ids [list]
+	db_foreach apm_package_ids_from_key {
+	    select package_id from apm_packages where package_key = :package_key
+	} {
+	    if {![string eq "" [site_node::get_node_id_from_object_id -object_id $package_id]]} {
+		lappend package_ids $package_id
+	    } 
+	}
+	return $package_ids
+    } else {
+	return [db_list apm_package_ids_from_key {
+	    select package_id from apm_packages where package_key = :package_key
+	}]
+    }
+}
+
 #
 # package_id -> package_url
 #
