@@ -24,6 +24,9 @@ aa_register_case -cats {web smoke} -libraries tclwebtest tclwebtest_example {
             # Visit homepage
             twt::do_request "/"
 
+	    # Logout user
+            twt::user::logout
+
         } -teardown_code {
             # TODO: delete test user
             twt::user::delete -user_id $user_id
