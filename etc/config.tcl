@@ -642,5 +642,9 @@ ns_section ns/server/${server}/modules
         ns_param libthread ${homedir}/lib/thread2.6.4/libthread2.6.4[info sharedlibextension]
     }
 
+    if {[ns_info version] >= 4.5} {
+        ns_limits set default -maxupload [ns_config ns/server/wieners/module/nssock maxinput]
+    }
+
 ns_log notice "nsd.tcl: using threadsafe tcl: [info exists tcl_platform(threaded)]"
 ns_log notice "nsd.tcl: finished reading config file."
