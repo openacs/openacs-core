@@ -44,7 +44,7 @@
      <querytext>
 
        delete from acs_mail_lite_bounce
-       where party_id in (select party_id
+       where user_id in (select user_id
                          from acs_mail_lite_mail_log
                          where last_mail_date < sysdate - :max_days_to_bounce)
 
@@ -68,7 +68,7 @@
 
        update acs_mail_lite_mail_log
        set last_mail_date = sysdate
-       where party_id = :user_id
+       where user_id = :user_id
 
      </querytext>
    </fullquery>
@@ -76,7 +76,7 @@
    <fullquery name="acs_mail_lite::log_mail_sending.insert_log_entry">
      <querytext>
 
-       insert into acs_mail_lite_mail_log (party_id, last_mail_date)
+       insert into acs_mail_lite_mail_log (user_id, last_mail_date)
        values (:user_id, sysdate)
 
      </querytext>

@@ -151,9 +151,6 @@ ad_proc -private template::data::transform::party_search {
     # search in groups and relsegs
     set groups_relsegs [db_list_of_lists search_groups_relsegs {}]
 
-    # Localize the groups 
-    set groups_relsegs [lang::util::localize_list_of_lists -list $groups_relsegs]
-
     if { [llength $persons] == 0 && [llength $groups_relsegs] == 0 } {
         # no search results so return text entry back to the user
 
