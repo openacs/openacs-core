@@ -12,7 +12,7 @@
         <owner url="mailto:prevost@maya.com">John Prevost</owner>
         <owner url="mailto:vinod@kurup.com">Vinod Kurup</owner>
         <summary>General messaging for bboard and general comments.</summary>
-        <release-date>2006-06-04</release-date>
+        <release-date>2006-10-30</release-date>
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
@@ -21,7 +21,7 @@
         prefered packages for delivering this functionality and it is anticipated that this package will ultimately be deprecated.</description>
 
         <provides url="acs-messaging" version="5.3.0d2"/>
-        <requires url="acs-content-repository" version="5.3.0d1"/>
+        <requires url="acs-content-repository" version="5.3.0a1"/>
         <requires url="acs-kernel" version="5.3.0d2"/>
 
         <callbacks>

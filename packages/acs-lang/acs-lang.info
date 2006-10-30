@@ -20,9 +20,9 @@ request processor hooks, templating, accessing and managing the message catalog,
 locale-specific formatting functions for localizing dates, times, monetary amounts etc.</description>
 
         <provides url="acs-lang" version="5.3.0d2"/>
-        <requires url="acs-kernel" version="5.3.0d1"/>
-        <requires url="acs-translations" version="5.3.0d1"/>
-        <requires url="ref-timezones" version="5.3.0d1"/>
+        <requires url="acs-kernel" version="5.3.0a1"/>
+        <requires url="acs-translations" version="5.3.0a1"/>
+        <requires url="ref-timezones" version="5.3.0a1"/>
 
         <callbacks>
         </callbacks>
