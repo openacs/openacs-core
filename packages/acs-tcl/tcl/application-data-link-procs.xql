@@ -40,25 +40,23 @@
     </querytext>
 </fullquery>
 
-<fullquery name="application_data_link::get_linked.linked_object">
+<fullquery name="application_data_link::get_linked_not_cached.linked_object">
     <querytext>
-	select o.object_id
-	from acs_data_links r, acs_objects o
-	where r.object_id_one = :from_object_id
-	and r.object_id_two = o.object_id
-	and o.object_type = :to_object_type
-	order by r.object_id_two
+    	select o.object_id
+	from acs_objects o
+	where o.object_type = :to_object_type
+	and o.object_id in (select object_id_two from acs_data_links where object_id_one = :from_object_id)
+	order by o.object_id
     </querytext>
 </fullquery>
 
-<fullquery name="application_data_link::get_linked_content.linked_object">
+<fullquery name="application_data_link::get_linked_content_not_cached.linked_object">
     <querytext>
 	select i.item_id
-	from acs_data_links r, cr_items i
-	where r.object_id_one = :from_object_id
-	and r.object_id_two = i.item_id
-	and i.content_type = :to_content_type
-	order by r.object_id_two
+	from cr_items i
+	where i.content_type = :to_content_type
+	and i.item_id in (select object_id_two from acs_data_links where object_id_one = :from_object_id)
+	order by i.item_id
     </querytext>
 </fullquery>
 
