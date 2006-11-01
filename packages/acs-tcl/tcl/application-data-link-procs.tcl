@@ -8,6 +8,8 @@ ad_library {
 
 namespace eval application_data_link {}
 
+# modified 2006/07/25 nfl: db_transaction around db_dml
+# modified 2006/07/26 nfl: change db_transaction to catch
 ad_proc -public application_data_link::new {
     -this_object_id:required
     -target_object_id:required
@@ -53,8 +55,37 @@ ad_proc -public application_data_link::new_to {
 } {
     set backward_rel_id [db_nextval acs_data_links_seq]
 
-    db_dml create_backward_link {}
+    # Flush the cache for both items
+    util_memoize_flush_regexp "application_data_link::get_linked_not_cached -from_object_id $this_object_id .*"
+    util_memoize_flush_regexp "application_data_link::get_linked_not_cached -from_object_id $target_object_id .*"
+    util_memoize_flush_regexp "application_data_link::get_linked_content_not_cached -from_object_id $this_object_id .*"
+    util_memoize_flush_regexp "application_data_link::get_linked_content_not_cached -from_object_id $target_object_id .*"
 
+    if { [catch {
+      db_dml create_forward_link {}
+      db_dml create_backward_link {}
+    }]}  {
+	# check if error occured because of existing link
+	if { [application_data_link::exist_link -object_id $this_object_id -target_object_id $target_object_id] eq "1" } {
+	    ns_log Debug "application_data_link::new: link already exists" 
+	} else {  
+	    ns_log Error "application_data_link::new: link creation failure"
+	}
+    }
+}
+
+# created 2006/07/25 nfl exist a link, returns 0 or 1
+ad_proc -public application_data_link::exist_link {
+    -object_id:required
+    -target_object_id:required  
+} {
+    set linked_objects [ application_data_link::get -object_id $object_id ]
+    if { [lsearch -exact $linked_objects "$target_object_id"] != -1 } {
+      # found link
+      return 1
+    } else {
+      return 0
+    }
 }
 
 ad_proc -public application_data_link::delete_links {
@@ -113,10 +144,30 @@ ad_proc -public application_data_link::get_linked {
 
     @return object_id of linked object.
 } {
+    return [util_memoize [list application_data_link::get_linked_not_cached -from_object_id $from_object_id -to_object_type $to_object_type]]
+}
+
+ad_proc -public application_data_link::get_linked_not_cached {
+    -from_object_id:required
+    -to_object_type:required
     return [db_list linked_object {}]
 }
 
 ad_proc -public application_data_link::get_linked_content {
+    -from_object_id:required
+    -to_content_type:required
+} {
+    Gets the content of the linked object.
+
+    @param from_object_id Object ID of linked-from object.
+    @param to_content_type Content type of linked-to object.
+
+    @return item_id for the content item.
+} {
+    return [util_memoize [list application_data_link::get_linked_content_not_cached -from_object_id $from_object_id -to_content_type $to_content_type]]
+}
+
+ad_proc -public application_data_link::get_linked_content_not_cached {
     -from_object_id:required
     -to_content_type:required
 } {
