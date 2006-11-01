@@ -853,6 +853,11 @@ ad_proc -public ad_page_contract {
 	# This is the value	
 	set actual_value [ns_set value $form $form_counter_i]
 
+	# This is needed for double click protection so we can access the two variables down below.
+	if {$actual_name eq "__submit_button_name" || $actual_name eq "__submit_button_value"} {
+	    set $actual_name $actual_value
+	}
+
 	# It may be a signature for another variable
 	if { [regexp {^(.*):sig$} $actual_name match formal_name] } {
 	    set apc_signatures($formal_name) $actual_value
@@ -1123,6 +1128,13 @@ ad_proc -public ad_page_contract {
 	    ad_script_abort
 	}
     }
+
+    # Set the __submit_button_variable. This is used in double click protection.
+    if {[exists_and_not_null __submit_button_name] && [info exists __submit_button_value]} {
+	uplevel 1 [list set $__submit_button_name $__submit_button_value]
+    }
+
+
 }
 
 ad_proc -public ad_page_contract_get_variables { } {

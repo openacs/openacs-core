@@ -738,6 +738,9 @@ ad_proc -public ad_form {
 
         template::element create $form_name __refreshing_p -datatype integer -widget hidden -value 0
 
+	# add the hidden button element
+	template::element create $form_name "__submit_button_name" -datatype text -widget hidden -value ""
+	template::element create $form_name "__submit_button_value" -datatype text -widget hidden -value ""
     }
 
     if { [info exists export] } {
@@ -1008,6 +1011,7 @@ ad_proc -public ad_form {
 
         # Get all the form elements.  We can't call form get_values because it doesn't handle multiples
         # in a reasonable way.
+
         foreach element_name $properties(element_names) {
             if { [info exists af_flag_list(${form_name}__$element_name)] && \
                  [lsearch $af_flag_list(${form_name}__$element_name) multiple] >= 0 } {
@@ -1018,6 +1022,13 @@ ad_proc -public ad_form {
                 uplevel #$level [list set $element_name $value]
             }
         }
+
+	# Update the clicked button if it does not already exist
+	uplevel #$level {
+		if {![exists_and_not_null ${__submit_button_name}]} {
+		    set ${__submit_button_name} ${__submit_button_value}
+		}
+	    }
 
         if { [info exists key_name] } {
             upvar #$level $key_name __key
