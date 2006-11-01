@@ -111,41 +111,40 @@ ad_proc -public ::content::item::new {
     # the cr_item subtype here and content_type as part of
     # var_list
     db_transaction {
-    db_dml lock_objects "LOCK TABLE acs_objects IN SHARE ROW EXCLUSIVE MODE"
-    set item_id [package_exec_plsql \
-		     -var_list $var_list \
-		     content_item new]
-    # if we have attributes we pass in everything
-    # and create a revision with all subtype attributes that were
-    # passed in
-
-    # since we can't rely on content_item__new to create a revision
-    # we have to pass is_live to content::revision::new and
-    # set the live revision there
-    if {[exists_and_not_null title] \
+	db_dml lock_objects "LOCK TABLE acs_objects IN SHARE ROW EXCLUSIVE MODE"
+	set item_id [package_exec_plsql \
+			 -var_list $var_list \
+			 content_item new]
+	# if we have attributes we pass in everything
+	# and create a revision with all subtype attributes that were
+	# passed in
+	
+	# since we can't rely on content_item__new to create a revision
+	# we have to pass is_live to content::revision::new and
+	# set the live revision there
+	if {[exists_and_not_null title] \
             || [exists_and_not_null text] \
-            || [exists_and_not_null data] \
-            || [exists_and_not_null tmp_filename] \
-            || [llength $attributes]} {
-        content::revision::new \
-            -item_id $item_id \
-            -title $title \
-            -description $description \
-            -content $text \
-            -mime_type $mime_type \
-            -content_type $content_type \
-            -is_live $is_live \
-	    -package_id $package_id \
-	    -creation_user $creation_user \
-	    -creation_ip $creation_ip \
-	    -creation_date $creation_date \
-	    -nls_language $nls_language \
-	    -tmp_filename $tmp_filename \
-	    -attributes $attributes
-    }
+		|| [exists_and_not_null data] \
+		|| [exists_and_not_null tmp_filename] \
+		|| [llength $attributes]} {
+	    content::revision::new \
+		-item_id $item_id \
+		-title $title \
+		-description $description \
+		-content $text \
+		-mime_type $mime_type \
+		-content_type $content_type \
+		-is_live $is_live \
+		-package_id $package_id \
+		-creation_user $creation_user \
+		-creation_ip $creation_ip \
+		-creation_date $creation_date \
+		-nls_language $nls_language \
+		-tmp_filename $tmp_filename \
+		-attributes $attributes
+	}
     }    
     return $item_id
-
 }
 
 ad_proc -public ::content::item::delete {
