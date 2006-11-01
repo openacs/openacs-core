@@ -7,6 +7,14 @@
       </querytext>
 </fullquery>
 
+<fullquery name="acs_object::package_id_not_cached.get_package_id">
+  <querytext>
+    select package_id
+      from acs_objects
+      where object_id = :object_id
+   </querytext>
+</fullquery>
+
 <fullquery name="acs_object_type.object_type_select">
       <querytext>
 
