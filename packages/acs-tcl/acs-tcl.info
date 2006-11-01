@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.3.0d1" url="http://openacs.org/repository/download/apm/acs-tcl-5.3.0d1.apm">
+    <version name="5.3.0d2" url="http://openacs.org/repository/download/apm/acs-tcl-5.3.0d2.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The Kernel Tcl API library.</summary>
         <release-date>2006-06-04</release-date>
@@ -16,7 +16,7 @@
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Contains all the core Tcl API, including the request processor, security and session management, permissions, site-nodes, package management infrastructure, etc.</description>
 
-        <provides url="acs-tcl" version="5.3.0d1"/>
+        <provides url="acs-tcl" version="5.3.0d2"/>
         <requires url="acs-bootstrap-installer" version="5.3.0d1"/>
         <requires url="acs-kernel" version="5.3.0d1"/>
 
