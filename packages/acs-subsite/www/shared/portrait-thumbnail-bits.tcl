@@ -8,6 +8,10 @@ ad_page_contract {
     user_id:integer
 }
 
+# NB: this really doesn't work! You can now pass a &size= parameter
+# into portrait-bits.tcl. sizes as per image::get_convert_to_sizes
+
+
 set column portrait_thumbnail
 
 set file_type [db_string -default "" unused "select portrait_file_type

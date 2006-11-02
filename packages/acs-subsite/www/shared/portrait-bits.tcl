@@ -6,6 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     user_id:integer
+	{size ""}
 }
 
 if { ![db_0or1row get_item_id ""] } {
@@ -13,5 +14,13 @@ if { ![db_0or1row get_item_id ""] } {
     return
 }
 
-cr_write_content -item_id $item_id
+if {[empty_string_p $size]} {
+	cr_write_content -item_id $item_id
+} else {	
+	set thumbnail_id [image::get_resized_item_id -item_id $item_id -size_name $size]
+	if {[empty_string_p $thumbnail_id]} {
+		set thumbnail_id [image::resize -item_id $item_id -size_name $size]
+	}
+	cr_write_content -item_id $thumbnail_id
+}
 
