@@ -302,7 +302,8 @@ ad_proc -private image::get_convert_to_sizes {
 
 } {
     #TODO make a parameter in content repository
-    return [list thumbnail 150x150 view 500x500]
+	# avatar size to match gravatar.com
+    return [list thumbnail 150x150 view 500x500 avatar 80x80]
 }
 
 ad_proc -public image::resize {
