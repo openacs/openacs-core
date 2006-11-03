@@ -62,7 +62,7 @@ if { $package_level_locales_p } {
 
 element create locale site_wide_locale \
     -datatype text \
-    -widget select \
+    -widget select_locales \
     -optional \
     -label "[_ acs-lang.Your_Preferred_Locale]" \
     -options $list_of_locales
