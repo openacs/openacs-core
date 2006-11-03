@@ -85,7 +85,7 @@ ad_proc -public ad_pvt_home_name {} {
     This is the name that will be used for the user's workspace (usually "Your Workspace").
     @return the name especified for the user's workspace in the HomeName kernel parameter.
 } {
-    return [ad_parameter -package_id [ad_acs_kernel_id] HomeName]
+    return [lang::util::localize [ad_parameter -package_id [ad_acs_kernel_id] HomeName]]
 }
 
 ad_proc -public ad_pvt_home_link {} {
