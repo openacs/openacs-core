@@ -128,6 +128,9 @@ ad_proc -private lc_sepfmt {
         return $num
     }
     
+    # we need to sanitize the subspec
+    regsub -all -- "(\[&\\\\\])" $sep "\\\\\\1" sep
+
     set match "^(-?$num_re+)("
     set group [lindex $grouping 0]
     
