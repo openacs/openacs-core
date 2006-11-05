@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
+<<<<<<< search.de_DE.ISO-8859-1.xml
+<message_catalog package_key="search" package_version="5.2.2" locale="de_DE" charset="ISO-8859-1">
+=======
 <message_catalog package_key="search" package_version="5.2.3b2" locale="de_DE" charset="ISO-8859-1">
+>>>>>>> 1.1.2.2
 
   <msg key="Advanced_Search">Erweiterte Suche</msg>
   <msg key="and_not_needed">Der '&lt;b&gt;AND&lt;/&gt;' operator is unnötig -- es sind alle Suchbegriffe standardmässig enthalten</msg>
