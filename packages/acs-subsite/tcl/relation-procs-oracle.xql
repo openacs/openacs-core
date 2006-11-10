@@ -77,11 +77,11 @@
       <querytext>
       
 	select 
-	    pretty_name, object_type, level, indent,
+	    pretty_name, object_type, indent,
 	    case when valid_types.rel_type = null then 0 else 1 end as valid_p
 	from 
 	    (select
-	        t.pretty_name, t.object_type, level,
+	        t.pretty_name, t.object_type,
 	        replace(lpad(' ', (level - 1) * 4), 
 	                ' ', '&nbsp;') as indent,
 	        rownum as tree_rownum
