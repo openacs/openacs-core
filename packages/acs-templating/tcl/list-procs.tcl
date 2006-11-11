@@ -1140,9 +1140,14 @@ ad_proc -private template::list::render {
     # Thus, we need to do the dynamic columns above before this step
     set __adp_output [template -name $name -style $style]
     
+    # set __adp_stub so includes work. Only fully qualified includes will work with this
+    set __list_code {
+	set __adp_stub ""
+    }
+
     # compile the template (this is the second compilation, if we're using a dynamic template -- I think)
-    set __list_code [template::adp_compile -string $__adp_output]
-    
+    append __list_code [template::adp_compile -string $__adp_output]
+
     # Paginator
     if { $list_properties(page_size_variable_p) == 1 } {
 	template::util::list_to_multirow page_sizes {{name 10 value 10} {name 20 value 20} {name 50 value 50} {name 100 value 100}}
