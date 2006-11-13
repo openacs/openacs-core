@@ -30,7 +30,7 @@ proc db_bootstrap_checks { errors error_p } {
         # sticks and fire...
         set db [ns_db gethandle [lindex [db_available_pools {}] 0]]
         set selection [ns_db 1row $db "select version from product_component_version where product like 'Oracle%'"]
-        regexp {^[0-9]\.[0-9]\.[0-9]} [ns_set value $selection 0] match
+        regexp {^[0-9]+\.[0-9]+\.[0-9]+} [ns_set value $selection 0] match
         ns_db releasehandle $db
         nsv_set ad_database_version . $match
     }
