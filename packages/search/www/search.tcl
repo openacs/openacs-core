@@ -111,7 +111,7 @@ if { $num > 0 } { append url_advanced_search "&num=${num}" }
 
 
 set query $q
-set nquery [llength $q]
+set nquery [llength [split $q]]
 set stopwords $result(stopwords)
 set nstopwords [llength $result(stopwords)] 
 set count $result(count)
