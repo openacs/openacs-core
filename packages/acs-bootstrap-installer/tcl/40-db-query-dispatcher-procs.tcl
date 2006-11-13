@@ -103,12 +103,13 @@ ad_proc -public db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
 
     # If the query being tested was written for a version that is older than 
     # the current RDBMS then we have compatibility. Otherwise we don't.
-    if {[db_rdbms_get_version $rdbms_test] <= [db_rdbms_get_version $rdbms_pattern]} {
-	return 1
-    }
-
-    # db_qd_log QDDebug "compatibility - version numbers are bad!"
-    return 0
+    foreach t [split [db_rdbms_get_version $rdbms_test   ] "\."] \
+            p [split [db_rdbms_get_version $rdbms_pattern] "\."] {
+                if {$t != $p} {return [expr $t < $p]}
+            }
+    
+    # Same version (though not strictly "older") is OK
+    return 1
 }
 
 
