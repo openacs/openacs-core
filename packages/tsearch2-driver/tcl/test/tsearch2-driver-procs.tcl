@@ -43,6 +43,9 @@ aa_register_case build_query {
                 [string equal "one & a & two" \
                      [tsearch2::build_query -query $q]]
 
-
+	    set q "or else"
+	    aa_true "Or at beginning by itself" \
+		[string equal "else" \
+		     [tsearch2::build_query -query $q]]
         }
 }
