@@ -47,5 +47,9 @@ aa_register_case build_query {
 	    aa_true "Or at beginning by itself" \
 		[string equal "else" \
 		     [tsearch2::build_query -query $q]]
+	    set q "not" 
+	    aa_true "Not all alone" \
+		[string equal "" \
+		     [tsearch2::build_query -query $q]]
         }
 }
