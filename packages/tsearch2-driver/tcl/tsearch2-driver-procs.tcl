@@ -258,7 +258,9 @@ ad_proc tsearch2::build_query { -query } {
     # or if there is )\w or \w( insert an & between them
     regsub {(\))([\(\w])} $query {\1\ & \2} query
     regsub {([\)\w])(\()} $query {\1\ & \2} query
-    
+    if {[regsub {!|\||\&} $query {}] eq ""} {
+	set query ""
+    }
     return $query
 }
 
