@@ -373,4 +373,27 @@ ad_proc -public content::type::unregister_template {
     ] content_type unregister_template]
 }
 
+ad_proc -public content::type::content_type_p {
+    -content_type:required
+    -mime_type:required
+} {
+    Checks if the mime_type is of the content_type, e.g if application/pdf is of content_type "image" (which it should not...)
 
+    Cached
+
+    @param content_type content type to check against
+    @param mime_type mime type to check for
+} {
+    return [util_memoize [list content::type::content_type_p_not_cached -mime_type $mime_type -content_type $content_type]]
+}
+
+ad_proc -public content::type::content_type_p_not_cached {
+    -content_type:required
+    -mime_type:required
+} {
+    Checks if the mime_type is of the content_type, e.g if application/pdf is of content_type "image" (which it should not...)
+    @param content_type content type to check against
+    @param mime_type mime type to check for
+} {
+    return [db_string content_type_p "" -default 0]
+}
