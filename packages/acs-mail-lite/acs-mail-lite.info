@@ -7,7 +7,8 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="1.3b5" url="http://openacs.org/repository/download/apm/acs-mail-lite-1.3b5.apm">
+    <version name="1.3b6" url="http://openacs.org/repository/download/apm/acs-mail-lite-1.3b6.apm">
+
         <owner url="mailto:eric@openforce.biz">Eric Lorenzo</owner>
         <owner url="mailto:timo@studio-k4.de">Timo Hentschel</owner>
         <summary>Simplified reliable email transmission with bounce management.</summary>
@@ -15,7 +16,8 @@
         <description format="text/html">This package provides a simple ns_sendmail-like interface for sending messages, but queues messages in the database to ensure reliable sending and make sending a message 'transactional'. Prefered over acs-messaging or acs-mail.</description>
         <maturity>0</maturity>
 
-        <provides url="acs-mail-lite" version="1.3b5"/>
+        <provides url="acs-mail-lite" version="1.3b6"/>
+
 
         <callbacks>
         </callbacks>
