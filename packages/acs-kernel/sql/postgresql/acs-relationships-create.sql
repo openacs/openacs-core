@@ -473,7 +473,7 @@ for each row execute procedure acs_rels_in_tr ();
 -- function new
 
 select define_function_args('acs_rel__new','rel_id,rel_type,object_id_one,object_id_two,context_id,creation_user,creation_ip');
-create function acs_rel__new (integer,varchar,integer,integer,integer,integer,varchar)
+create or replace function acs_rel__new (integer,varchar,integer,integer,integer,integer,varchar)
 returns integer as '
 declare
   new__rel_id            alias for $1;  -- default null  
@@ -487,6 +487,9 @@ declare
 begin
     -- XXX This should check that object_id_one and object_id_two are
     -- of the appropriate types.
+
+    LOCK TABLE acs_objects IN SHARE ROW EXCLUSIVE MODE;
+
     v_rel_id := acs_object__new (
       new__rel_id,
       new__rel_type,

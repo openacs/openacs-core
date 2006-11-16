@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.3.0d1" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.3.0d2" locale="en_US" charset="ISO-8859-1">
 
   <msg key="Administrator">Administrator</msg>
   <msg key="Administrators">Administrators</msg>
@@ -67,6 +67,7 @@
   <msg key="common_Permissions">Permissions</msg>
   <msg key="common_Previous">Previous</msg>
   <msg key="common_previous">previous</msg>
+  <msg key="common_Print">Print</msg>
   <msg key="common_Register">Register</msg>
   <msg key="common_register">register</msg>
   <msg key="common_Repeat">Repeat</msg>
