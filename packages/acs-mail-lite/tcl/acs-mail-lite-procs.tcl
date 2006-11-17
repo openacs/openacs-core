@@ -13,6 +13,7 @@ package require smtp 1.4
 package require base64 2.3.1
 namespace eval acs_mail_lite {
 
+    #---------------------------------------
     ad_proc -public with_finally {
 	-code:required
 	-finally:required
@@ -66,12 +67,14 @@ namespace eval acs_mail_lite {
 	}
     }
 
+    #---------------------------------------
     ad_proc -public get_package_id {} {
 	@returns package_id of this package
     } {
         return [apm_package_id_from_key acs-mail-lite]
     }
     
+    #---------------------------------------
     ad_proc -public get_parameter {
         -name:required
         {-default ""}
@@ -84,6 +87,7 @@ namespace eval acs_mail_lite {
         return [parameter::get -package_id [get_package_id] -parameter $name -default $default]
     }
     
+    #---------------------------------------
     ad_proc -public address_domain {} {
 	@returns domain address to which bounces are directed to
     } {
@@ -94,24 +98,28 @@ namespace eval acs_mail_lite {
 	return $domain
     }
     
+    #---------------------------------------
     ad_proc -private bounce_sendmail {} {
 	@returns path to the sendmail executable
     } {
 	return [get_parameter -name "SendmailBin"]
     }
     
+    #---------------------------------------
     ad_proc -private bounce_prefix {} {
 	@returns bounce prefix for x-envelope-from
     } {
         return [get_parameter -name "EnvelopePrefix"]
     }
     
+    #---------------------------------------
     ad_proc -private mail_dir {} {
 	@returns incoming mail directory to be scanned for bounces
     } {
         return [get_parameter -name "BounceMailDir"]
     }
     
+    #---------------------------------------
     ad_proc -public parse_email_address {
 	-email:required
     } {
@@ -126,6 +134,7 @@ namespace eval acs_mail_lite {
         }
     }
 
+    #---------------------------------------
     ad_proc -public bouncing_email_p {
 	-email:required
     } {
@@ -136,6 +145,7 @@ namespace eval acs_mail_lite {
 	return [db_string bouncing_p {} -default 0]
     }
 
+    #---------------------------------------
     ad_proc -public bouncing_user_p {
 	-user_id:required
     } {
@@ -146,6 +156,7 @@ namespace eval acs_mail_lite {
 	return [db_string bouncing_p {} -default 0]
     }
 
+    #---------------------------------------
     ad_proc -private log_mail_sending {
 	-user_id:required
     } {
@@ -158,6 +169,7 @@ namespace eval acs_mail_lite {
 	}
     }
 
+    #---------------------------------------
     ad_proc -public bounce_address {
         -user_id:required
 	-package_id:required
@@ -173,6 +185,7 @@ namespace eval acs_mail_lite {
 	return "[bounce_prefix]-$user_id-[ns_sha1 $message_id]-$package_id@[address_domain]"
     }
     
+    #---------------------------------------
     ad_proc -public parse_bounce_address {
         -bounce_address:required
     } {
@@ -189,6 +202,7 @@ namespace eval acs_mail_lite {
     	return [list $user_id $package_id $signature]
     }
     
+    #---------------------------------------
     ad_proc -public generate_message_id {
     } {
         Generate an id suitable as a Message-Id: header for an email.
@@ -200,6 +214,7 @@ namespace eval acs_mail_lite {
         return "<[clock clicks].[ns_time].oacs@[address_domain]>"
     }
 
+    #---------------------------------------
     ad_proc -public valid_signature {
 	-signature:required
 	-message_id:required
@@ -216,6 +231,7 @@ namespace eval acs_mail_lite {
 	return 1
     }
 
+    #---------------------------------------
     ad_proc -private load_mails {
         -queue_dir:required
     } {
@@ -322,6 +338,7 @@ namespace eval acs_mail_lite {
         }
     }
 
+    #---------------------------------------
     ad_proc parse_email {
 	-file:required
 	-array:required
@@ -453,6 +470,7 @@ namespace eval acs_mail_lite {
 	mime::finalize $mime -subordinates all
     }    
         
+    #---------------------------------------
     ad_proc -private -deprecated load_mail_dir {
         -queue_dir:required
     } {
@@ -575,6 +593,7 @@ namespace eval acs_mail_lite {
         }
     }
     
+    #---------------------------------------
     ad_proc -public scan_replies {} {
         Scheduled procedure that will scan for bounced mails
     } {
@@ -592,6 +611,7 @@ namespace eval acs_mail_lite {
 	}
     }
 
+    #---------------------------------------
     ad_proc -private check_bounces { } {
 	Daily proc that sends out warning mail that emails
 	are bouncing and disables emails if necessary
@@ -638,6 +658,7 @@ namespace eval acs_mail_lite {
 	}
     }
     
+    #---------------------------------------
     ad_proc -public deliver_mail {
 	-to_addr:required
 	-from_addr:required
@@ -723,6 +744,7 @@ namespace eval acs_mail_lite {
         }
     }
     
+    #---------------------------------------
     ad_proc -private sendmail {
 	-from_addr:required
         -sendlist:required
@@ -779,6 +801,7 @@ namespace eval acs_mail_lite {
 	}
     }
 
+    #---------------------------------------
     ad_proc -private smtp {
 	-from_addr:required
 	-sendlist:required
@@ -859,6 +882,7 @@ namespace eval acs_mail_lite {
 	}
     }
 
+    #---------------------------------------
     ad_proc -private get_address_array {
 	-addresses:required
     } {	Checks if passed variable is already an array of emails,
@@ -904,6 +928,7 @@ namespace eval acs_mail_lite {
 	return [array get address_array]
     }
     
+    #---------------------------------------
     ad_proc -public send {
 	-send_immediately:boolean
 	-valid_email:boolean
@@ -1000,10 +1025,14 @@ namespace eval acs_mail_lite {
     }
 
 
+    #---------------------------------------
     # complex_send
     # created ... by ...
     # modified 2006/07/25 by nfl: new param. alternative_part_p
-    #                             and creation of multipart/alternative    
+    #                             and creation of multipart/alternative
+    # 2006/../.. new created as an frontend to the old complex_send that now is called complex_send_immediatly
+    # 2006/11/17 modified (nfl)
+    #---------------------------------------
     ad_proc -public complex_send {
 	-send_immediately:boolean
 	-valid_email:boolean
@@ -1128,14 +1157,19 @@ namespace eval acs_mail_lite {
 		-use_sender_p $use_sender_p
 	} else {
 	    # else, store it in the db and let the sweeper deliver the mail
-	    db_dml create_queue_entry {}
+	    set creation_date [clock format [clock seconds] -format "%Y.%m.%d %H:%M:%S"]
+	    set locking_server ""
+	    db_dml create_complex_queue_entry {}
 	}
     }
 
+    #---------------------------------------
     # complex_send
     # created ... by ...
     # modified 2006/07/25 by nfl: new param. alternative_part_p
     #                             and creation of multipart/alternative    
+    # 2006/../.. Renamed to complex_send_immediately
+    #---------------------------------------
     ad_proc -public complex_send_immediately {
 	-valid_email:boolean
 	{-to_party_ids ""}
@@ -1653,7 +1687,76 @@ namespace eval acs_mail_lite {
 	    }
 	}	    
     }
-	 
+
+    #---------------------------------------
+    # 2006/11/17 Created by cognovis/nfl
+    #            nsv_incr description: http://www.panoptic.com/wiki/aolserver/Nsv_incr
+    #---------------------------------------    
+    ad_proc -private complex_sweeper {} {
+        Send messages in the acs_mail_lite_complex_queue table.
+    } {
+        # Make sure that only one thread is processing the queue at a time.
+        if {[nsv_incr acs_mail_lite complex_send_mails_p] > 1} {
+            nsv_incr acs_mail_lite complex_send_mails_p -1
+            return
+        }
+
+        with_finally -code {
+            db_foreach get_complex_queued_messages {} {
+		# check if record is already there and free to use
+		set return_id [db_string get_complex_queued_message {} -default -1]
+		if {$return_id == $id} {
+		    # lock this record for exclusive use
+		    set locking_server [ad_conn user_id]
+		    append locking_server ":"
+		    append locking_server [ad_conn session_id]
+		    append locking_server ":"   
+		    append locking_server [ad_conn url]
+		    db_dml lock_queued_message {}
+		    # send the mail
+		    set err [catch {
+			acs_mail_lite::complex_send_immediately \
+			    -to_party_ids $to_party_ids \
+			    -cc_party_ids $cc_party_ids \
+			    -bcc_party_ids $bcc_party_ids \
+			    -to_group_ids $to_group_ids \
+			    -cc_group_ids $cc_group_ids \
+			    -bcc_group_ids $bcc_group_ids \
+			    -to_addr $to_addr \
+			    -cc_addr $cc_addr \
+			    -bcc_addr $bcc_addr \
+			    -from_addr $from_addr \
+			    -subject $subject \
+			    -body $body \
+			    -package_id $package_id \
+			    -files $files \
+			    -file_ids $file_ids \
+			    -folder_ids $folder_ids \
+			    -mime_type $mime_type \
+			    -object_id $object_id \
+			    -single_email_p $single_email_p \
+			    -no_callback_p $no_callback_p \
+			    -extraheaders $extraheaders \
+			    -alternative_part_p $alternative_part_p \
+			    -use_sender_p $use_sender_p        
+		    } errMsg]
+		    if $err {
+			# release the lock
+			set locking_server ""
+			db_dml lock_queued_message {}    
+		    } else {
+			# mail was sent, delete the queue entry
+			db_dml delete_complex_queue_entry {}
+		    }
+		}
+            }
+        } -finally {
+            nsv_incr acs_mail_lite complex_send_mails_p -1
+        }
+    }                 
+
+
+    #---------------------------------------
     ad_proc -private sweeper {} {
         Send messages in the acs_mail_lite_queue table.
     } {
@@ -1680,6 +1783,7 @@ namespace eval acs_mail_lite {
 	}
     }
 
+    #---------------------------------------
     ad_proc -private send_immediately {
         -to_addr:required
         -from_addr:required
@@ -1712,6 +1816,7 @@ namespace eval acs_mail_lite {
 	}
     }
 
+    #---------------------------------------
     ad_proc -private after_install {} {
 	Callback to be called after package installation.
 	Adds the service contract package-specific bounce management.
@@ -1722,6 +1827,7 @@ namespace eval acs_mail_lite {
 	acs_sc::contract::operation::new -contract_name AcsMailLite -operation MailBounce -input "header:string body:string" -output "" -description "Callback to handle bouncing mails"
     }
 
+    #---------------------------------------
     ad_proc -private before_uninstall {} {
 	Callback to be called before package uninstallation.
 	Removes the service contract for package-specific bounce management.
@@ -1732,6 +1838,7 @@ namespace eval acs_mail_lite {
 	acs_sc::contract::delete -name AcsMailLite
     }
 
+    #---------------------------------------
     ad_proc -private message_interpolate {
 	{-values:required}
 	{-text:required}
@@ -1749,5 +1856,7 @@ namespace eval acs_mail_lite {
 	}
 	return $text
     }
+
+    #---------------------------------------
 
 }
