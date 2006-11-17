@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-mail-lite" package_version="1.0b7" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-mail-lite" package_version="1.3b5" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="Associated_files">Verknüpfte Dateien:</msg>
   <msg key="CC">CC</msg>
@@ -7,8 +7,11 @@
   <msg key="check_uncheck">Alle/Keine auswählen</msg>
   <msg key="lt_there_was_an_error_processing">Es gab einen Fehler bei der Verarbeitung Ihrer Anfrage</msg>
   <msg key="Message">Nachricht</msg>
+  <msg key="Queue_server">Serverprozeß</msg>
+  <msg key="Queueing_time">Queue-Zeitpunkt</msg>
   <msg key="Recipients">Empfänger</msg>
   <msg key="Send">Senden</msg>
+  <msg key="Sender">Absender</msg>
   <msg key="Subject">Betreff</msg>
   <msg key="Untitled">Unbenannt</msg>
   <msg key="Upload_file">Datei hinzufügen</msg>
