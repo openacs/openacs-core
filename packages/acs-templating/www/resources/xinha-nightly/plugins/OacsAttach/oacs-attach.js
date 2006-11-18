@@ -75,7 +75,7 @@ function OacsAttach(editor) {
 
 OacsAttach.btnList = [
 		  ["insert-ilink", "Insert Internal Link"],
-		  ["insert-image", "Insert Image"],
+		  ["insert-image", "Insert Image"]
 		  ];
 
 OacsAttach.prototype.buttonPress = function(editor, id) {
@@ -127,7 +127,7 @@ OacsAttach.prototype.insertInternalLink = function(link) {
     //   "/acs-templating/scripts/xinha/insert-image.tcl?fs_package_id=" + 
     // fs_package_id;
 
-    var PopupUrl = "/acs-templating/scripts/xinha/attach-file?";
+    var PopupUrl = "/acs-templating/scripts/xinha/attach-file?package_id=" + OacsAttach.package_id;
     if (typeof OacsAttach.key != "undefinied") {
 	PopupUrl = PopupUrl + "&parent_id=" + OacsAttach.key;
     } else if (typeof OacsAttach.attach_parent_id != "undefined") {
@@ -194,7 +194,7 @@ OacsAttach.prototype.insertInternalLinkTlf = function(link) {
 	};
     }
 
-    var PopupUrl = "/acs-templating/scripts/xinha/attach-file?";
+    var PopupUrl = "/acs-templating/scripts/xinha/attach-file?package_id=" + OacsAttach.package_id;
     if (typeof OacsAttach.key != "undefinied") {
 	PopupUrl = PopupUrl + "&parent_id=" + OacsAttach.key;
     } else  if (typeof OacsAttach.attach_parent_id != "undefined") {
@@ -270,7 +270,7 @@ OacsAttach.prototype.insertImage = function(image) {
     //   "/acs-templating/scripts/xinha/insert-image.tcl?fs_package_id=" + 
     // fs_package_id;
 
-    var PopupUrl = "/acs-templating/scripts/xinha/attach-image?";
+    var PopupUrl = "/acs-templating/scripts/xinha/attach-image?package_id=" + OacsAttach.package_id;
     if (typeof OacsAttach.key != "undefinied") {
 	PopupUrl = PopupUrl + "&parent_id=" + OacsAttach.key;
     } else if (typeof OacsAttach.attach_parent_id != "undefined") {
