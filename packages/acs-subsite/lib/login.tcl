@@ -14,6 +14,8 @@ if { [security::RestrictLoginToSSLP] } {
     security::require_secure_conn
 }
 
+set change_locale_url "/acs-lang/?[export_vars { { package_id "[ad_conn package_id]" } }]"
+
 set self_registration [parameter::get_from_package_key \
                                   -package_key acs-authentication \
 			          -parameter AllowSelfRegister \

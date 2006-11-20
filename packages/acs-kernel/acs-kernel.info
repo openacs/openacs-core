@@ -13,8 +13,6 @@
         <release-date>2006-05-25</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, partiies and the supporting PL/SQL and PL/pgSQL procedures.</description>
-        <license>GPL</license>
-        <maturity>3</maturity>
 
         <provides url="acs-kernel" version="5.2.3"/>
 
@@ -73,9 +71,11 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemName"  default="yourdomain Network" description="the name of your system" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemOwner"  default="webmaster@yourdomain.com" description="who signs the average user-visible pages" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemURL"  default="http://yourdomain.com" description="URL to tell users to go to" section_name="system-information"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseBackgroundDeliveryP"  default="0" description="Use background delivery for file downloads"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="UseCustomQuestionForPasswordReset"  default="0" description="Does the user get to choose their custom password question and answer" section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseEmailForLoginP"  default="1" description="Say 1 if we should login with email instead of username." section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UsePasswordWidgetForUsername"  default="0" description="Should we hide what the user types in the username field, the way we do with the password field? Set this to 1 if you are using sensitive information such as social security number for username." section_name="security"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseReverseProxyP"  default="0" description="Whether a reverse proxy like pound is used or not. Default is 0 (no reverse proxy)." section_name="security"/>
         </parameters>
 
     </version>

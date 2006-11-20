@@ -19,6 +19,7 @@ ad_proc -public notification::display::request_widget {
     {-pretty_name:required}
     {-url:required}
     {-user_id ""}
+    {-style "default"}
 } {
     Produce a widget for requesting notifications of a given type.   If the notifications package has not been
     mounted then return the empty string.
@@ -41,11 +42,19 @@ ad_proc -public notification::display::request_widget {
     if {![empty_string_p $request_id]} {
         set sub_url [ad_quotehtml [unsubscribe_url -request_id $request_id -url $url]]
         set pretty_name [ad_quotehtml $pretty_name]
-        set sub_chunk "[_ notifications.lt_You_have_requested_no]"
+        if {[string equal $style "short"]} {
+	    set sub_chunk "[_ notifications.Short_Unsubscribe_Link]"
+	} else {
+	    set sub_chunk "[_ notifications.lt_You_have_requested_no]"
+	}
     } else {
         set sub_url [ad_quotehtml [subscribe_url -type $type -object_id $object_id -url $url -user_id $user_id -pretty_name $pretty_name]]
         set pretty_name [ad_quotehtml $pretty_name]
-        set sub_chunk "[_ notifications.lt_You_may_a_hrefsub_url]"
+        if {[string equal $style "short"]} {
+	    set sub_chunk "[_ notifications.Short_Subscribe_Link]"
+	} else {
+	    set sub_chunk "[_ notifications.lt_You_may_a_hrefsub_url]"
+	}
     }
 
     if { [empty_string_p $sub_url] } {

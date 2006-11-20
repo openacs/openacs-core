@@ -89,7 +89,12 @@ ad_proc -public cr_write_content {
 			ns_set put [ns_conn outputheaders] "Content-Length" 0
 			ns_return 200 text/plain {}
 		    } else {
-			ns_returnfile 200 $mime_type $filename
+			set backgroundDelivery_p [ad_parameter -package_id [apm_package_id_from_key acs-content-repository] UseBackgroundDeliveryP files 0]
+			if {$backgroundDelivery_p} {			
+			    ad_returnfile_background 200 $mime_type $filename
+			} else {
+			    ns_returnfile 200 $mime_type $filename
+			}
 		    }
 		}
 	    }
