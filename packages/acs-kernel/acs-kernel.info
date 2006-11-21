@@ -75,7 +75,6 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="UseCustomQuestionForPasswordReset"  default="0" description="Does the user get to choose their custom password question and answer" section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseEmailForLoginP"  default="1" description="Say 1 if we should login with email instead of username." section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UsePasswordWidgetForUsername"  default="0" description="Should we hide what the user types in the username field, the way we do with the password field? Set this to 1 if you are using sensitive information such as social security number for username." section_name="security"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseReverseProxyP"  default="0" description="Whether a reverse proxy like pound is used or not. Default is 0 (no reverse proxy)." section_name="security"/>
         </parameters>
 
     </version>

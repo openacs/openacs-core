@@ -476,7 +476,7 @@ ad_proc -public ad_secure_conn_p {} {
         behind a SSL proxy. If so, all connections from the SSL proxy to
         the server use the HTTP protocol but HTTPS requests to the SSL
         proxy have an additional header. These HTTPS requests can be
-        identified by the header 'X-SSL-Request' with value 'true'.
+        identified by the header 'X-SSL-Request' with value '1'.
 
         Supports reverse proxies. See kernel parameter UseReverseProxyP
     
@@ -484,7 +484,7 @@ ad_proc -public ad_secure_conn_p {} {
 } {
 
     if {[ad_parameter -package_id [ad_acs_kernel_id] UseReverseProxyP security 0]} {
-	return [expr [string match "https:*" [ad_conn location]] || [string equal "true" [ns_set get [ad_conn headers] X-SSL-Request]]]
+	return [expr [string match "https:*" [ad_conn location]] || [string equal [ns_set get [ad_conn headers] X-SSL-Request] 1]]
     } else {
 	return [security::secure_conn_p]
     }
@@ -1340,7 +1340,7 @@ ad_proc -public security::https_available_p {} {
     return [expr ![empty_string_p [get_https_port]]]
 }
 
-ad_proc -public security::secure_conn_p {} { 
+ad_proc -public security::secure_conn_p { 
     Returns true if the connection [ad_conn] is secure (HTTPS), or false otherwise. 
 } {
     if {[string equal [ns_set get [ns_conn headers] "X-SSL-Request"] 1]} {
@@ -1506,11 +1506,8 @@ ad_proc -private security::get_secure_location {} {
         set secure_location $current_location
     } else {
         # Current location is insecure - get location from config file
-	if {[ad_parameter -package_id [ad_acs_kernel_id] UseReverseProxyP security 0]} {
 	    set secure_location $current_location
-        } else {
-	    set secure_location [ad_conn location]
-        }
+
 	# Prefix with https
         regsub {^(?:http://)?} $secure_location {https://} secure_location
 

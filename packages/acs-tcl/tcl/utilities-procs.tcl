@@ -2366,7 +2366,8 @@ ad_proc -public util_current_location {{}} {
         set hostname $location_hostname
     } else {
         set hostname $Host_hostname
-        if { ![empty_string_p $Host_port] } {
+        if {!([string equal [ns_set get [ns_conn headers] "X-SSL-Request"] 1] &&
+	      [string equal $Host_port $default_port(https)])} {
             set port $Host_port
         }
     }
