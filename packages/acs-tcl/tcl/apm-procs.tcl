@@ -1004,10 +1004,9 @@ ad_proc -private apm_package_id_from_key_mem {package_key} {
     unmemoized version of apm_package_id_from_key
 } {
     return [db_string apm_package_id_from_key {
-        select package_id from apm_packages where package_key = :package_key
+	select package_id from apm_packages where package_key = :package_key
     } -default 0]
 }
-
 
 #
 # package_id -> package_url

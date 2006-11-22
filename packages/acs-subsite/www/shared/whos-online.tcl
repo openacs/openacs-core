@@ -9,8 +9,7 @@ ad_page_contract {
     context:onevalue
 }
 
-#unima2-kk "Who's online" - acs-subsite.shared_whos_online
-set title [_ acs-subsite.shared_whos_online]
+set title "Who's Online?"
 set context [list "Who's Online"]
 
 set whos_online_interval [whos_online::interval]
@@ -18,14 +17,14 @@ set whos_online_interval [whos_online::interval]
 template::list::create \
     -name online_users \
     -multirow online_users \
-    -no_data [_ acs-subsite.shared_no_user_online] \
+    -no_data "No registered users online" \
     -elements {
         name {
-            label "#acs-subsite.shared_user_name#"
+            label "User name"
             link_url_col url
         }
         online_time_pretty {
-            label "#acs-subsite.shared_online_time#"
+            label "Online Time"
             html { align right }
         }
     }
@@ -40,7 +39,7 @@ foreach user_id [whos_online::user_ids] {
     lappend users [list \
                        "$user(first_names) $user(last_name)" \
                        [acs_community_member_url -user_id $user_id] \
-                       "$first_request_minutes #acs-subsite.shared_minutes#"]
+                       "$first_request_minutes minutes"]
 
 }
 

@@ -64,7 +64,7 @@ if {![db_0or1row get_item_id "select live_revision as revision_id, item_id
 from acs_rels a, cr_items c
 where a.object_id_two = c.item_id
 and a.object_id_one = :user_id
-and a.rel_type = 'user_portrait_rel' limit 1"] || [empty_string_p $revision_id]} {
+and a.rel_type = 'user_portrait_rel'"] || [empty_string_p $revision_id]} {
     # The user doesn't have a portrait yet
     set portrait_p 0
 } else {

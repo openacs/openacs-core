@@ -31,9 +31,6 @@
   <msg key="Notification_Types">Notification Types</msg>
   <msg key="Notifications">Notifications</msg>
   <msg key="Request_Notification">Request Notification</msg>
-  <msg key="Short_Subscribe_Link"></msg>
-  <msg key="Short_Unsubscribe_Link"></msg>
   <msg key="SUBJECT">SUBJECT:</msg>
-  <msg key="Subscribe">Subscribe</msg>
   <msg key="Unsubscribe">Unsubscribe</msg>
 </message_catalog>

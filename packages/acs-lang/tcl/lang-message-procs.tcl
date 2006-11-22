@@ -764,7 +764,7 @@ ad_proc -public lang::message::lookup {
                     if { [message_exists_p $locale $key] } {
                         set message [nsv_get lang_message_$locale $key]
                     } else {
-                        ns_log Error "lang::message::lookup: Key '$key' does not exist in en_US\nUser_id [ad_conn user_id]\n[ad_url][util_get_current_url]"
+                        ns_log Error "lang::message::lookup: Key '$key' does not exist in en_US"
                         set message "MESSAGE KEY MISSING: '$key'"
                     }
                 }

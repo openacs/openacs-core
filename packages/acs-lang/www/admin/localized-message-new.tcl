@@ -58,8 +58,6 @@ element create message_new return_url -datatype text -widget hidden -optional
 # processing of the form
 element create message_new locale -label "locale" -datatype text -widget hidden
 
-set focus ""
-
 if { [form is_request message_new] } {
 
     element set_value message_new package_key $package_key
