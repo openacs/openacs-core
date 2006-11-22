@@ -7,21 +7,21 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.3.0d2" url="http://openacs.org/repository/download/apm/acs-subsite-5.3.0d2.apm">
+    <version name="5.3.0b1" url="http://openacs.org/repository/download/apm/acs-subsite-5.3.0b1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
-        <release-date>2006-10-30</release-date>
+        <release-date>2006-11-19</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides for creating subsites within the OpenACS Community System.  Aware of parties, groups, users, portraits.  Can be themed via a per subsite master template.</description>
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.3.0d2"/>
-        <requires url="acs-authentication" version="5.3.0a1"/>
-        <requires url="acs-content-repository" version="5.3.0a1"/>
-        <requires url="acs-kernel" version="5.3.0a1"/>
-        <requires url="acs-tcl" version="5.3.0a1"/>
-        <requires url="acs-lang" version="5.3.0a1"/>
+        <provides url="acs-subsite" version="5.3.0b1"/>
+        <requires url="acs-authentication" version="5.3.0b1"/>
+        <requires url="acs-content-repository" version="5.3.0b1"/>
+        <requires url="acs-kernel" version="5.3.0b1"/>
+        <requires url="acs-tcl" version="5.3.0b1"/>
+        <requires url="acs-lang" version="5.3.0b1"/>
 
         <callbacks>
             <callback type="after-install"  proc="subsite::package_install"/>

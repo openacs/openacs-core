@@ -7,11 +7,11 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="5.3.0d4" url="http://openacs.org/repository/download/apm/acs-content-repository-5.3.0d4.apm">
+    <version name="5.3.0b1" url="http://openacs.org/repository/download/apm/acs-content-repository-5.3.0b1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
 
         <summary>The canonical repository for OpenACS content.</summary>
-        <release-date>2006-10-30</release-date>
+        <release-date>2006-11-19</release-date>
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
@@ -21,10 +21,10 @@
          other CMS backing functionality.  Utilized by Bug Tracker, File Storage, and other packages.
         </description>
 
-        <provides url="acs-content-repository" version="5.3.0d4"/>
-        <requires url="acs-kernel" version="5.3.0d2"/>
-        <requires url="acs-service-contract" version="5.3.0a1"/>
-        <requires url="search" version="5.3.0a1"/>
+        <provides url="acs-content-repository" version="5.3.0b1"/>
+        <requires url="acs-kernel" version="5.3.0b1"/>
+        <requires url="acs-service-contract" version="5.3.0b1"/>
+        <requires url="search" version="5.3.0b1"/>
 
         <callbacks>
         </callbacks>
