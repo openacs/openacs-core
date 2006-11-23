@@ -328,6 +328,7 @@ ad_proc -private group::flush_members_cache {
     util_memoize_flush "group::get_members_not_cached -group_id $group_id -type party"
     util_memoize_flush "group::get_members_not_cached -group_id $group_id -type user"
     util_memoize_flush "group::get_members_not_cached -group_id $group_id -type person"
+    util_memoize_flush_regexp "group::member_p_not_cached -group_id $group_id (.*)"
 }
 
 ad_proc -public group::permission_p { 
@@ -502,7 +503,11 @@ ad_proc -public group::member_p {
     If cascade is false, then the user must have specifically
     been granted membership on the group in question.</p>
     @param subsite_id Only useful when using group_name. Marks the subsite in which to search for the group_id that belongs to the group_name
+
+    @see group::flush_members_cache
+
 } {
+
     if { [empty_string_p $user_id] } {
 	set user_id [ad_conn user_id]
     }
@@ -517,6 +522,31 @@ ad_proc -public group::member_p {
 	    return 0
 	}
     }
+    
+    return [util_memoize [list group::member_p_not_cached -group_id $group_id -user_id $user_id -cascade_p $cascade_p]]
+}
+
+ad_proc -public group::member_p_not_cached {
+    { -user_id "" }
+    { -group_id "" }
+    {-cascade_p ""}
+} {
+    Return 1 if the user is a member of the group specified.
+    You can specify a group id.
+    </p><p>
+    If there is more than one group with this name, it will use the first one.
+     <p>
+    If cascade is true, check to see if the user is
+    a member of the group by virtue of any other component group.
+    (e.g. if group B is a component of group A then if a user
+     is a member of group B then he is automatically a member of A
+     also.)
+    If cascade is false, then the user must have specifically been granted membership on the group in question.</p>
+    @param subsite_id Only useful when using group_name. Marks the subsite in which to search for the group_id that belongs to the group_name
+
+    @see group::flush_members_cache
+
+} {
 
     set cascade [db_boolean $cascade_p]
     set result [db_string user_is_member {} -default "f"]
@@ -541,6 +571,7 @@ ad_proc -public group::party_member_p {
     name is unique.</p>
     <p>The party must have specifically
     been granted membership on the group in question.</p>
+    
 } {
 
     if { [empty_string_p $group_name] && [empty_string_p $group_id] } {
@@ -554,7 +585,7 @@ ad_proc -public group::party_member_p {
 	}
     }
 
-    set result [db_string party_is_member {} -default "f"]
+    set result [lindex [db_list party_is_member {}] 0]
     
     return [template::util::is_true $result]
 }
