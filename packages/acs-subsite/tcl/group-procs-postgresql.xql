@@ -30,7 +30,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="group::member_p.user_is_member">      
+<fullquery name="group::member_p_not_cached.user_is_member">      
       <querytext>
 	  select acs_group__member_p(:user_id,:group_id, :cascade)
       </querytext>
