@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-tcl" package_version="5.2.3b2" locale="es_CO" charset="ISO-8859-1">
+<message_catalog package_key="acs-tcl" package_version="5.2.3" locale="es_CO" charset="ISO-8859-1">
 
   <msg key="approve">aprobar</msg>
   <msg key="approve_email">aprobar correo</msg>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-lang" package_version="5.2.3b2" locale="th_TH" charset="utf-8">
+<message_catalog package_key="acs-lang" package_version="5.2.3" locale="th_TH" charset="utf-8">
 
   <msg key="English">ภาษาอังกฤษ</msg>
   <msg key="French">ภาษาฝรั่งเศส</msg>

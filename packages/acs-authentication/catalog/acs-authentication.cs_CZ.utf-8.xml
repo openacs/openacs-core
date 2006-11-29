@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="acs-authentication" package_version="5.2.3" locale="cs_CZ" charset="utf-8">
+
+  <msg key="Invalid_username_or_password">Neplatné uživatelské jméno nebo heslo</msg>
+</message_catalog>

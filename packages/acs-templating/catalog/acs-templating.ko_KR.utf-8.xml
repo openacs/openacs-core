@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-templating" package_version="5.2.3b2" locale="ko_KR" charset="utf-8">
+<message_catalog package_key="acs-templating" package_version="5.2.3" locale="ko_KR" charset="utf-8">
 
   <msg key="Invalid_choice">부적합한 선택</msg>
   <msg key="Invalid_currency">부적합한 통화</msg>

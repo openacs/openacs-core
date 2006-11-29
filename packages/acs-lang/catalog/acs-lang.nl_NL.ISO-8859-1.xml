@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-lang" package_version="5.2.3b2" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="acs-lang" package_version="5.2.3" locale="nl_NL" charset="ISO-8859-1">
 
   <msg key="available-in-this-language">Nederlandse versie is beschikbaar</msg>
   <msg key="change-locale">Taal instellen</msg>
   <msg key="English">Engels</msg>
   <msg key="French">Frans</msg>
   <msg key="German">Duits</msg>
-  <msg key="Locale">Locale</msg>
-  <msg key="Locale_for">Locale voor %package_name%</msg>
+  <msg key="Locale">Taalregio</msg>
+  <msg key="Locale_for">Taalregio voor voor %package_name%</msg>
   <msg key="localization-abday">{zon} {maa} {din} {woe} {don} {vr?} {zat}</msg>
   <msg key="localization-abmon">{jan} {feb} {mrt} {apr} {mei} {jun} {jul} {aug} {sep} {okt} {nov} {dec}</msg>
   <msg key="localization-am_str">Voormiddag</msg>
@@ -45,8 +45,8 @@
   <msg key="Spanish">Spaans</msg>
   <msg key="this-language">Nederlands</msg>
   <msg key="Translated_messages_on_this_page">Vertaalde berichten op deze pagina (%locale%)</msg>
-  <msg key="Your_locale_for_package">Uw localeinstelling voor %package_name%. Indien u deze instelt, overroept deze de sitebrede instelling in deze applicatie.</msg>
-  <msg key="Your_locale_site_wide">Uw localeinstelling voor de hele site</msg>
-  <msg key="Your_Preferred_Locale">Uw gewenste locale</msg>
+  <msg key="Your_locale_for_package">Uw taalregioinstelling voor %package_name%. Indien u deze instelt, overroept deze de sitebrede instelling in deze applicatie.</msg>
+  <msg key="Your_locale_site_wide">Uw taalregioinstelling voor de hele site</msg>
+  <msg key="Your_Preferred_Locale">Uw gewenste taalregio</msg>
   <msg key="Your_timezone">Uw tijdzone</msg>
 </message_catalog>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-lang" package_version="5.2.3b2" locale="hu_HU" charset="utf-8">
+<message_catalog package_key="acs-lang" package_version="5.2.3" locale="hu_HU" charset="utf-8">
 
   <msg key="localization-abday">{H} {K} {Sze} {Cs} {P} {Szo} {V}</msg>
   <msg key="localization-abmon">{jan.} {feb.} {márc.} {ápr.} {máj.} {jún.} {júl.} {aug.} {szept.} {okt.} {nov.} {dec.}</msg>

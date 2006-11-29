@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="acs-authentication" package_version="5.2.3" locale="nl_ZA" charset="ISO-8859-1">
+
+  <msg key="Invalid_username_or_password">Ongeldige gebruikersnaam of wagwoord</msg>
+</message_catalog>

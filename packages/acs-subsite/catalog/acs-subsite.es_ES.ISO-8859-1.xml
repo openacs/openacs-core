@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.2.3b2" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.2.3" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="_or">, o</msg>
   <msg key="_Update_Basic_Information">Actualizar Información Básica</msg>
@@ -61,7 +61,7 @@
   <msg key="communities">comunidades</msg>
   <msg key="community">comunidad</msg>
   <msg key="Confirm">Confirmar:</msg>
-  <msg key="confirmation_password_changed">Usted a seleccionado una nueva contraseña con éxito</msg>
+  <msg key="confirmation_password_changed">Usted ha seleccionado una nueva contraseña con éxito</msg>
   <msg key="Continue">Continuar</msg>
   <msg key="Continue_to_your_account">Continuar a %pvt_home_name%</msg>
   <msg key="Country_Name">País</msg>
@@ -209,7 +209,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="lt_registration_request_submitted">Su solicitud de registro ha sido enviada al administrador de %system_name% y está en espera de aprobación.</msg>
   <msg key="lt_Saving_email_address_">Guardando dirección de correo y contraseña</msg>
   <msg key="lt_Show_everyone_else_at">Demuestre a los usuarios de %system_name% lo fotogénico que es:</msg>
-  <msg key="lt_Sorry_but_it_seems_th">Lo sentimos, pero ha sido expulsado de &amp;system_name%</msg>
+  <msg key="lt_Sorry_but_it_seems_th">Lo sentimos, pero ha sido expulsado de %system_name%</msg>
   <msg key="lt_Stop_inheriting_permi">Dejar de Heredar permisos del %parent_object_name%</msg>
   <msg key="lt_Sure_erase_user_por">¿Seguro que quiere borrar la foto de este usuario?</msg>
   <msg key="lt_Sure_erase_your_por">¿Esta seguro de borrar su foto?</msg>
@@ -340,7 +340,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="This_group_is_closed">Este grupo es cerrado. Solo puede ser miembro por invitación.</msg>
   <msg key="this_subsite">este subsitio</msg>
   <msg key="This_user_has_left_the">Este usuario ha dejado la comunidad.</msg>
-  <msg key="To_log_in_visit_the">Para entrar, visite la</msg>
+  <msg key="To_log_in_visit_the">Por favor, compruebe la bandeja de Entrada. En los próximos minutos debe recibir un correo de %system_owner% con una nueva contraseña generada aleatoriamente y las instrucciones de cómo proceder. Una vez recibidas, vuelva a la</msg>
   <msg key="Topic">Tópico</msg>
   <msg key="type_specific_info">Introduzca información especifica</msg>
   <msg key="Unknown_email">Correo desconocido</msg>

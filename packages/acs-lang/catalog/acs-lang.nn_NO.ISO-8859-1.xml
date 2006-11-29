@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-lang" package_version="5.2.3b2" locale="nn_NO" charset="ISO-8859-1">
+<message_catalog package_key="acs-lang" package_version="5.2.3" locale="nn_NO" charset="ISO-8859-1">
 
   <msg key="available-in-this-language">Tilgjengeleg på norsk</msg>
   <msg key="change-locale">Change locale</msg>
@@ -39,5 +39,5 @@
   <msg key="localization-t_fmt">%H:%M </msg>
   <msg key="localization-thousands_sep">.</msg>
   <msg key="Spanish">Spansk</msg>
-  <msg key="this-language">English</msg>
+  <msg key="this-language">Norwegian (NO)</msg>
 </message_catalog>

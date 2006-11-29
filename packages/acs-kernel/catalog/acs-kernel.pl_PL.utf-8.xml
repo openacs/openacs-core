@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-kernel" package_version="5.2.3b2" locale="pl_PL" charset="utf-8">
+<message_catalog package_key="acs-kernel" package_version="5.2.3" locale="pl_PL" charset="utf-8">
 
   <msg key="Administrator">Administrator  </msg>
   <msg key="Administrators">Administratorzy</msg>
