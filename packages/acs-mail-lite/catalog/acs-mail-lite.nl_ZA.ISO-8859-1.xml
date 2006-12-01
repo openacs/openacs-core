@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="acs-mail-lite" package_version="1.1" locale="nl_ZA" charset="ISO-8859-1">
+
+  <msg key="Associated_files">Verbintenis met die lêers:</msg>
+  <msg key="CC">CC</msg>
+  <msg key="cc_help">Stuur kopie aan meerdere adresse geskeide deur &quot;;&quot;</msg>
+  <msg key="check_uncheck">Vink aan/Vink af</msg>
+  <msg key="lt_there_was_an_error_processing">Daar het 'n fout opgetree tydens verwerking van hierdie versoek.</msg>
+  <msg key="Message">Berig</msg>
+  <msg key="Recipients">Ontvangers</msg>
+  <msg key="Send">Verstuur</msg>
+  <msg key="Subject">Onderwerp</msg>
+  <msg key="Untitled">Naamloos</msg>
+  <msg key="Upload_file">Laai lêer</msg>
+  <msg key="Your_message_was_sent_to">U berig is verstuur aan &lt;string&gt;%recipients%&lt;/strong&gt;</msg>
+</message_catalog>
