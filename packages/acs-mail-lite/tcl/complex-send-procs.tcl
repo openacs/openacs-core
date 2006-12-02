@@ -228,7 +228,6 @@ namespace eval acs_mail_lite {
         @param alternative_part_p Boolean whether or not the code generates a multipart/alternative mail (text/html)
     } {
 
-	set start_seconds [clock clicks]
 	set mail_package_id [apm_package_id_from_key "acs-mail-lite"]
 	if {[empty_string_p $package_id]} {
 	    set package_id $mail_package_id
@@ -633,8 +632,6 @@ namespace eval acs_mail_lite {
 		mime::finalize $multi_token -subordinates all
 	    }
 	}	    
-        set time_taken [expr [clock clicks] - $start_seconds]
-	return $time_taken
     }
 
     #---------------------------------------
