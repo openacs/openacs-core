@@ -105,22 +105,22 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
     upvar $array email
 
     set to [acs_mail_lite::parse_email_address -email $email(to)]
-    ns_log Notice "acs_mail_lite::incoming_email -impl acs-mail-lite called. Recepient $to"
+    ns_log Debug "acs_mail_lite::incoming_email -impl acs-mail-lite called. Recepient $to"
 
     util_unlist [acs_mail_lite::parse_bounce_address -bounce_address $to] user_id package_id signature
     
     # If no user_id found or signature invalid, ignore message
-    if {[empty_string_p $user_id] || ![acs_mail_lite::valid_signature -signature $signature -message_id $email(message-id)]} {
+    if {[empty_string_p $user_id]} {
         if {[empty_string_p $user_id]} {
-            ns_log Notice "acs_mail_lite::incoming_email impl acs-mail-lite: No equivalent user found for $to"
+            ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: No equivalent user found for $to"
         } else {
-            ns_log Notice "acs_mail_lite::incoming_email impl acs-mail-lite: Invalid mail signature $signature"
+            ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: Invalid mail signature $signature"
         }
     } else {
-	ns_log Notice "acs_mail_lite::incoming_email impl acs-mail-lite: Bounce checking $to, $user_id"
+	ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: Bounce checking $to, $user_id"
 	
 	if { ![acs_mail_lite::bouncing_user_p -user_id $user_id] } {
-	    ns_log Notice "acs_mail_lite::incoming_email impl acs-mail-lite: Bouncing email from user $user_id"
+	    ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: Bouncing email from user $user_id"
 	    # record the bounce in the database
 	    db_dml record_bounce {}
 	    

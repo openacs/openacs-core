@@ -855,7 +855,7 @@ namespace eval acs_mail_lite {
 		set sock [ns_sockopen $smtp $smtpport]
 		set rfp [lindex $sock 0]
 		set wfp [lindex $sock 1]
-		
+
 		## Perform the SMTP conversation
 		with_finally -code {
 		    _ns_smtp_recv $rfp 220 $timeout
@@ -863,14 +863,38 @@ namespace eval acs_mail_lite {
 		    _ns_smtp_recv $rfp 250 $timeout
 		    _ns_smtp_send $wfp "MAIL FROM:<$mail_from>" $timeout
 		    _ns_smtp_recv $rfp 250 $timeout
-		    _ns_smtp_send $wfp "RCPT TO:<$rcpt>" $timeout
-		    _ns_smtp_recv $rfp 250 $timeout
+
+		    # By now we are sure that the server connection works, otherwise
+		    # we would have gotten an error already
+		    
+		    if {[catch {
+			_ns_smtp_send $wfp "RCPT TO:<$rcpt>" $timeout
+			_ns_smtp_recv $rfp 250 $timeout
+		    } errmsg]} {
+			
+			# This user has a problem with retrieving the email
+			# Record this fact as a bounce e-mail
+			if { $rcpt_id ne "" && ![bouncing_user_p -user_id $rcpt_id] } {
+			    ns_log Notice "acs-mail-lite: Bouncing email from user $rcpt_id due to $errmsg"
+			    # record the bounce in the database
+			    db_dml record_bounce {}
+			    
+			    if {![db_resultrows]} {
+				db_dml insert_bounce {}
+			    }
+			    
+			}
+			
+			return
+		    }
+
 		    _ns_smtp_send $wfp DATA $timeout
 		    _ns_smtp_recv $rfp 354 $timeout
 		    _ns_smtp_send $wfp $msg $timeout
 		    _ns_smtp_recv $rfp 250 $timeout
 		    _ns_smtp_send $wfp QUIT $timeout
 		    _ns_smtp_recv $rfp 221 $timeout
+
 		} -finally {
 		    ## Close the connection
 		    close $rfp
