@@ -371,6 +371,7 @@ namespace eval acs_mail_lite {
 	# see http://tools.ietf.org/html/rfc2047
 	
 	set subject_encoded [mime::word_encode "iso8859-1" base64 $subject]
+	regsub -all {\n} $subject_encoded {} subject_encoded
 	mime::setheader $multi_token Subject "$subject_encoded"
 
 	foreach header $extraheaders {
