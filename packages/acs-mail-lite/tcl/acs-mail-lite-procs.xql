@@ -62,6 +62,25 @@
      </querytext>
    </fullquery>
 
+   <fullquery name="acs_mail_lite::smtp.record_bounce">
+     <querytext>
+
+       update acs_mail_lite_bounce
+       set bounce_count = bounce_count + 1
+       where party_id = :rcpt_id
+
+     </querytext>
+   </fullquery>
+
+   <fullquery name="acs_mail_lite::smtp.insert_bounce">
+     <querytext>
+
+       insert into acs_mail_lite_bounce (party_id, bounce_count)
+       values (:rcpt_id, 1)
+
+     </querytext>
+   </fullquery>
+
    <fullquery name="acs_mail_lite::check_bounces.delete_log_if_no_recent_bounce">
      <querytext>
 
