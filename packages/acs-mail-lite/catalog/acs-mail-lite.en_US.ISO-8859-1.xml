@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-mail-lite" package_version="1.3b5" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-mail-lite" package_version="1.3b8" locale="en_US" charset="ISO-8859-1">
 
   <msg key="Associated_files">Associated Files:</msg>
+  <msg key="BCC">BCC</msg>
   <msg key="CC">CC</msg>
   <msg key="cc_help">Send copy to multiple addresses separated by &quot;;&quot;</msg>
   <msg key="check_uncheck">Check/Uncheck</msg>
