@@ -1179,10 +1179,17 @@ ad_proc -public apm_package_rename {
     if { [empty_string_p $package_id] } {
         set package_id [ad_conn package_id]
     }
-    db_dml app_rename {
-        update apm_packages
-        set instance_name = :instance_name
-        where package_id = :package_id
+    db_transaction {
+      db_dml app_rename {
+        update apm_packages 
+           set instance_name = :instance_name
+           where package_id = :package_id
+      }
+      db_dml rename_acs_object {
+        update acs_objects
+          set title = :instance_name
+          where object_id = :package_id
+      }
     }
     foreach node_id [db_list nodes_to_sync {}] {
         site_node::update_cache -node_id $node_id
