@@ -35,3 +35,7 @@ begin
     return v_rel_id;
    
 end;' language 'plpgsql';
+
+-- fix package instance names in acs_objects in case of renames
+update acs_objects set title = s.instance_name from (select p.instance_name, p.package_id from acs_objects o, apm_packages p where o.object_id = p.package_id and p.instance_name <> o.title) as s where object_id = s.package_id;
+
