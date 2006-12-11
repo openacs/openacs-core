@@ -54,7 +54,12 @@ if { $callback_url ne "" } {
 # Pre-generate user_id for double-click protection
 set user_id [db_nextval acs_object_id_seq]
 
-ad_form -name register -export {next_url user_id return_url} -form [auth::get_registration_form_elements]
+ad_form -name register -export {next_url user_id return_url} -form [auth::get_registration_form_elements]  -validate {
+    {email
+        {[string eq "" [party::get_by_email -email $email]]}
+        "[_ acs-subsite.Email_already_exists]"
+    }
+}
 
 if { [exists_and_not_null rel_group_id] } {
     ad_form -extend -name register -form {
