@@ -125,11 +125,23 @@ ad_proc -public -callback search::search -impl intermedia-driver {} {
               then nvl(months_between(sysdate,relevant_date)*1.5,20)
             end"
 
-    set is_guest_p [search::is_guest_p]
-    if {!$is_guest_p} {
-        set people_search_clause { o.object_type = 'phb_person' or }
+    set people_search_clause { o.object_type = 'phb_person' or }
+    if [apm_package_installed_p "dotlrn"] {
+        set is_guest_p [search::is_guest_p]
+        if {$is_guest_p} {
+            set people_search_clause { and }; # doesn't look like legal SQL
+        }
+
+        set is_member {
+          exists ( select 1
+                   from dotlrn_member_rels_approved
+                   where community_id = swi.community_id
+                     and user_id = :user_id)}
+        set community_id_clause " and (swi.community_id is null or $is_member) "
+        set member_clause " and $is_member "
     } else {
-        set people_search_clause { and }
+        set community_id_clause {}
+        set member_clause {}
     }
 
     set results_ids [db_list search "select s.object_id from 
@@ -146,11 +158,7 @@ ad_proc -public -callback search::search -impl intermedia-driver {} {
                    where m.object_id = o.object_id
                      and m.party_id = :user_id
                      and m.privilege = 'read') 
-          and (swi.community_id is null 
-              or exists ( select 1
-                       from dotlrn_member_rels_approved
-                       where community_id = swi.community_id
-                         and user_id = :user_id))))
+          $community_id_clause))
                     $package_ids_clause
                    order by $weighted_score desc) s where r > $offset and r <= $offset + $limit"]
     # TODO implement stopwords reporting for user query
@@ -163,10 +171,7 @@ ad_proc -public -callback search::search -impl intermedia-driver {} {
                    where m.object_id = o.object_id
                      and m.party_id = :user_id
                      and m.privilege = 'read') 
-          and exists (select 1
-                   from dotlrn_member_rels_approved
-                   where community_id = swi.community_id
-                     and user_id = :user_id)))
+          $member_clause))
                    $package_ids_clause "]
     set stop_words ""
     ns_log notice "
