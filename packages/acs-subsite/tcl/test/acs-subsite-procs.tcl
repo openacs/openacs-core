@@ -90,3 +90,16 @@ aa_register_case -cats smoke acs_subsite_trivial_smoke_test {
 
         }
 }
+
+aa_register_case -cats smoke acs_subsite_unregistered_visitor {
+    Test that unregistered visitor is not in any groups
+} {
+
+    aa_equals "Unregistered vistior is not in any groups except The Public" \
+        [db_string count_rels "
+	    select count(*)
+	    from group_member_map g, acs_magic_objects a
+	    where g.member_id = 0
+	      and g.group_id <> a.object_id
+	      and a.name = 'the_pubic'" -default 0] 0
+}
