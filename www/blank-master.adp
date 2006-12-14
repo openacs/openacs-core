@@ -7,7 +7,7 @@
       <link rel="stylesheet" type="text/css" href="/resources/acs-developer-support/acs-developer-support.css" media="all">
     </if>
     <multiple name="header_links">
-      <link rel="@header_links.rel@" type="@header_links.type@" href="@header_links.href@" media="@header_links.media@" />
+      <link rel="@header_links.rel@" type="@header_links.type@" href="@header_links.href@" media="@header_links.media@">
     </multiple>
 
     <if @acs_blank_master.xinha@ not nil>

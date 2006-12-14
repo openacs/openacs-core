@@ -32,4 +32,5 @@
   <msg key="localization-positive_sign"></msg>
   <msg key="localization-t_fmt">%H:%M</msg>
   <msg key="localization-thousands_sep">,</msg>
+  <msg key="this-language">English (GB)</msg>
 </message_catalog>

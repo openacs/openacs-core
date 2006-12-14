@@ -19,6 +19,7 @@ ad_proc -public ad_text_to_html {
     -no_lines:boolean
     -no_quote:boolean
     -includes_html:boolean
+    -encode:boolean
     text 
 } {
     Converts plaintext to html. Also translates any recognized 
@@ -29,6 +30,7 @@ ad_proc -public ad_text_to_html {
     semi-HTML input and preserve that formatting. This will also cause spaces/tabs to not be
     replaced with nbsp's, because this can too easily mess up HTML tags.
     @param includes_html Set this if the text parameter already contains some HTML which should be preserved.
+    @param encode This will encode international characters into it's html equivalent, like "ü" into &uuml;
 
     @author Branimir Dolicki (branimir@arsdigita.com)
     @author Lars Pind (lars@pinds.com)
@@ -75,6 +77,32 @@ ad_proc -public ad_text_to_html {
     # we quote the ones entered by the user:
     if { !$no_quote_p } {
         set text [ad_quotehtml $text]
+    }
+
+    if { $encode_p} {
+	set  myChars  {
+	    ª º À Á Â Ã Ä Å Æ Ç
+	    È É Ê Ë Ì Í Î Ï Ð Ñ
+	    Ò Ó Ô Õ Ö Ø Ù Ú Û Ü
+	    Ý Þ ß à á â ã ä å æ
+	    ç è é ê ë ì í î ï ð
+	    ñ ò ó ô õ ö ø ù ú û
+	    ü ý þ ÿ ¿
+	}
+
+	set  myHTML  {
+	    &ordf; &ordm; &Agrave; &Aacute; &Acirc; &Atilde; &Auml; &Aring; &Aelig; &Ccedil; 
+	    &Egrave; &Eacute; &Ecirc; &Euml; &Igrave; &Iacute; &Icirc; &Iuml; &ETH; &Ntilde; 
+	    &Ograve; &Oacute; &Ocirc; &Otilde; &Ouml; &Oslash; &Ugrave; &Uacute; &Ucirc; &Uuml; 
+	    &Yacute; &THORN; &szlig; &agrave; &aacute; &acirc; &atilde; &auml; &aring; &aelig;
+	    &ccedil; &egrave; &eacute; &ecirc; &euml; &igrave; &iacute; &icirc; &iuml; &eth; 
+	    &ntilde; &ograve; &oacute; &ocirc; &otilde; &ouml; &oslash; &ugrave; &uacute; &ucirc; 
+	    &uuml; &yacute; &thorn; &yuml; &iquest;
+	}
+
+	for  { set i 0 }   { $i  < [ llength  $myChars ] }   { incr i }  {
+	    set  text [ string map "[ lindex $myChars $i ] [ lindex  $myHTML  $i ]" $text ]
+	}
     }
 
     # Convert line breaks
@@ -983,6 +1011,34 @@ ad_proc -public ad_html_to_text {
     if { [llength $href_urls] > 0 } {
 	append output(text) "\n\n[join $href_urls "\n"]"
     }
+
+    #---
+    # conversion like in ad_text_to_html
+    # 2006/09/12
+    set  myChars  {
+	ª º À Á Â Ã Ä Å Æ Ç
+	È É Ê Ë Ì Í Î Ï Ð Ñ
+	Ò Ó Ô Õ Ö Ø Ù Ú Û Ü
+	Ý Þ ß à á â ã ä å æ
+	ç è é ê ë ì í î ï ð
+	ñ ò ó ô õ ö ø ù ú û
+	ü ý þ ÿ ¿
+    }
+
+    set  myHTML  {
+	&ordf; &ordm; &Agrave; &Aacute; &Acirc; &Atilde; &Auml; &Aring; &Aelig; &Ccedil; 
+	&Egrave; &Eacute; &Ecirc; &Euml; &Igrave; &Iacute; &Icirc; &Iuml; &ETH; &Ntilde; 
+	&Ograve; &Oacute; &Ocirc; &Otilde; &Ouml; &Oslash; &Ugrave; &Uacute; &Ucirc; &Uuml; 
+	&Yacute; &THORN; &szlig; &agrave; &aacute; &acirc; &atilde; &auml; &aring; &aelig;
+	&ccedil; &egrave; &eacute; &ecirc; &euml; &igrave; &iacute; &icirc; &iuml; &eth; 
+	&ntilde; &ograve; &oacute; &ocirc; &otilde; &ouml; &oslash; &ugrave; &uacute; &ucirc; 
+	&uuml; &yacute; &thorn; &yuml; &iquest;
+    }
+
+    for  { set i 0 }   { $i  < [ llength  $myHTML ] }   { incr i }  {
+	set output(text) [ string map "[ lindex $myHTML $i ] [ lindex  $myChars  $i ]" $output(text) ]
+    }
+    #---
 
     return $output(text)
 }

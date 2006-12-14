@@ -6,6 +6,8 @@
   <msg key="English">Inglês</msg>
   <msg key="French">Francês</msg>
   <msg key="German">Alemão</msg>
+  <msg key="Locale">Localização</msg>
+  <msg key="Locale_for">Localização para %package_name%</msg>
   <msg key="localization-abday">{Dom} {Seg} {Ter} {Qua} {Qui} {Sex} {Sáb}</msg>
   <msg key="localization-abmon">{Jan} {Fev} {Mar} {Abr} {Mai} {Jun} {Jul} {Ago} {Set} {Out} {Nov} {Dez}</msg>
   <msg key="localization-am_str">AM</msg>
@@ -38,6 +40,12 @@
   <msg key="localization-positive_sign">+</msg>
   <msg key="localization-t_fmt">%r</msg>
   <msg key="localization-thousands_sep">,</msg>
+  <msg key="Resolve_message_conflicts">Resolver mensagens conflitantes</msg>
   <msg key="Spanish">Espanhol</msg>
   <msg key="this-language">Português</msg>
+  <msg key="Translated_messages_on_this_page">Traduzir mensagens nesta página (%locale%)</msg>
+  <msg key="Your_locale_for_package">Sua definição de localização para %package_name%. Uma vez configurada, esta definição irá sobrescrever a configuração estabelecida como padrão da instalação apenas para esta aplicação particular.</msg>
+  <msg key="Your_locale_site_wide">Sua definição de localização padrão da instalação</msg>
+  <msg key="Your_Preferred_Locale">Sua localização preferida</msg>
+  <msg key="Your_timezone">Seu fuso-horário</msg>
 </message_catalog>

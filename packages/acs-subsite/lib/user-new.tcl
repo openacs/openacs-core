@@ -40,7 +40,6 @@ if { $self_register_p } {
 # Redirect to the registration assessment if there is one, if not, continue with the regular
 # registration form.
 
-
 set implName [parameter::get -parameter "RegistrationImplName" -package_id [subsite::main_site_id]]
 
 set callback_url [callback -catch -impl "$implName" user::registration]

@@ -55,7 +55,7 @@
   <msg key="localization-thousands_sep">,</msg>
   <msg key="Resolve_message_conflicts">Resolve message conflicts</msg>
   <msg key="Spanish">Spanish</msg>
-  <msg key="this-language">English</msg>
+  <msg key="this-language">English (US)</msg>
   <description key="this-language">The label of the locale, in the locale's language.  This should be different for each locale.  This should not be English unless the locale is &quot;en&quot;.</description>
 
   <msg key="Translated_messages_on_this_page">Translated messages on this page (%locale%)</msg>

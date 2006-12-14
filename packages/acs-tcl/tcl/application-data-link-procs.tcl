@@ -55,6 +55,8 @@ ad_proc -public application_data_link::new_to {
 
     db_dml create_backward_link {}
 
+    db_dml create_forward_link {}
+    db_dml create_backward_link {}
 }
 
 ad_proc -public application_data_link::delete_links {

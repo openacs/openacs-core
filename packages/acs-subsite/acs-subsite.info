@@ -53,6 +53,7 @@
 3 - Show user email as an image (require ImageMagick). If ImageMagick not present then the @ symbol is replaced with an image.
 2 - Hide email, show a link that allows users to send a message.
 1 -  Shows nothing." section_name="user-info"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegImplNamet"  default="asm_url" description="Name of the implementation used in the registration process." section_name="user-login"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="RegistrationId"  default="0" description="Assessment_id for the assessment used in the registration process. If value = 0 the current registration form will be used." section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationImplName"  default="null" description="Name of the implementation used for the registration process. If value is null, the normal registration process will be used and the RegisterId parameter will be ignored." section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationProvidesRandomPasswordP"  default="0" description="have the system generate a random password instead of the user" section_name="user-login"/>
