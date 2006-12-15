@@ -86,6 +86,11 @@ ad_proc -public application_data_link::exist_link {
     -object_id:required
     -target_object_id:required  
 } {
+    Check for the existence of a link from an object_id to a target_object_id
+
+    @param object_id The object we're looking for a link from
+    @param target_object_id THe object we're looking for a link to
+} {
     set linked_objects [ application_data_link::get -object_id $object_id ]
     if { [lsearch -exact $linked_objects "$target_object_id"] != -1 } {
       # found link
