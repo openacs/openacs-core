@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="notifications" package_version="5.2.0" locale="nl_ZA" charset="ISO-8859-1">
+
+  <msg key="Action">Aksie</msg>
+  <msg key="Change">Verander</msg>
+  <msg key="Contents">Inhoud:</msg>
+  <msg key="daily">daagliks</msg>
+  <msg key="Delivery_Method">Aflewermetode</msg>
+  <msg key="Frequency">Frekwensie</msg>
+  <msg key="hourly">uurliks</msg>
+  <msg key="instant">onmiddelik</msg>
+  <msg key="Item">Element</msg>
+  <msg key="lt_Getting_too_much_emai">Ontvang u te baie e-pos? Beheer u kennisgewinge op: %manage_notifications_url%</msg>
+  <msg key="lt_Notification_Delivery">Kennisgewingsmetode</msg>
+  <msg key="lt_Notification_Delivery_1">Kennisgewingsmethodes</msg>
+  <msg key="lt_Notification_Interval">Kennisgewingsinterval</msg>
+  <msg key="lt_Notification_Interval_1">Kennisgewingsinterval</msg>
+  <msg key="lt_Notification_Requests">Kennisgewingsintervalle</msg>
+  <msg key="lt_Request_Notification_">Versoek kennisgewing vir %pretty_name%</msg>
+  <msg key="lt_system_name_-_Batched">[%system_name% - Partijkennisgewing]</msg>
+  <msg key="lt_You_have_no_notificat">U het geen kennisgewinge gedefinieer nie</msg>
+  <msg key="lt_You_have_requested_no">U het kennisgewing versoek vir %pretty_name%. U kan &lt;A href=&quot;%sub_url%&quot;&gt;uitskryf&lt;/a&gt;.</msg>
+  <msg key="lt_You_may_a_hrefsub_url">U kan 'n &lt;a href=&quot;%sub_url%&quot;&gt;kennisgewing verkryg&lt;/a&gt; vir %pretty_name%.</msg>
+  <msg key="Manage_Notifications">Beheer kennisgewinge</msg>
+  <msg key="Notification">Kennisgewing</msg>
+  <msg key="Notification_Replies">Antwoorde op kennisgewinge</msg>
+  <msg key="Notification_Reply">Antwoord op kennisgewing</msg>
+  <msg key="Notification_Request">Kennisgewingsversoek</msg>
+  <msg key="Notification_Type">Kennisgewingstipe</msg>
+  <msg key="Notification_type">Kenningsgewingstipe</msg>
+  <msg key="Notification_Types">Kennisgewingstipes</msg>
+  <msg key="Notifications">Kennisgewinge</msg>
+  <msg key="Request_Notification">Versoek kennisgewing</msg>
+  <msg key="SUBJECT">ONDERWERP:</msg>
+  <msg key="Unsubscribe">Uitskryf</msg>
+</message_catalog>

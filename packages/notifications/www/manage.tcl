@@ -25,17 +25,19 @@ template::list::create \
         object_name {
             label {[_ notifications.Item]}
             link_url_eval {[export_vars -base object-goto { object_id type_id }]}
+	    link_html {title "\#notifications.goto_object_name\#"}
         }
         interval {
             label {[_ notifications.Frequency]}
             display_template {
                 @notifications.interval@ 
-                (<a href="@notifications.interval_url@">\#notifications.Change\#</a>)
+                (<a href="@notifications.interval_url@" title="\#notifications.change_interval_object_name\#">\#notifications.Change\#</a>)
             }
         }
         action {
             label {[_ notifications.Action]}
             display_template {\#notifications.Unsubscribe\#}
             link_url_eval {[export_vars -base request-delete { request_id {return_url [ad_return_url]} }]}
+	    link_html {title "\#notifications.Unsubscribe_from_object_name\#"}
         }
     }
