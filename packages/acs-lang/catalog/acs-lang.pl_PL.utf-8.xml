@@ -42,7 +42,7 @@
   <msg key="localization-thousands_sep">&amp;nbsp;</msg>
   <msg key="Resolve_message_conflicts">Rozwiąż konflikty komunikatów</msg>
   <msg key="Spanish">Hiszpański</msg>
-  <msg key="this-language">Angielski</msg>
+  <msg key="this-language">Polski</msg>
   <msg key="Translated_messages_on_this_page">Przetłumaczone teksty na tej stronie (%locale%)</msg>
   <msg key="Your_locale_for_package">Konfiguracja języka dla %package_name%. Jeśli wartość jest ustawiona, zmienia ustawienia językowe dla tej właśnie aplikacji.</msg>
   <msg key="Your_locale_site_wide">Ustawienia językowe dla całego serwisu</msg>

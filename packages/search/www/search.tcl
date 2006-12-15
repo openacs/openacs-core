@@ -97,12 +97,12 @@ set urlencoded_query [ad_urlencode $q]
 
 if { $offset < 0 } { set offset 0 }
 set params [list $q $offset $limit $user_id $df]
-if {[ad_parameter -package_id $package_id SubsiteSearchP -default 1]
+if {$search_package_id eq "" && [ad_parameter -package_id $package_id SubsiteSearchP -default 1]
     && [subsite::main_site_id] != [ad_conn subsite_id]} {
     # We are in a subsite and SubsiteSearchP is true
     lappend params [concat [ad_conn subsite_id] [subsite::util::packages -node_id [ad_conn node_id]]]
 } else { 
-    lappend params {}    
+  lappend params $search_package_id
 }
 
 set t0 [clock clicks -milliseconds]
@@ -195,8 +195,8 @@ set to_result_page [expr ceil(double($result(count)) / double($limit))]
 
 set url_previous ""
 set url_next ""
-append url_previous "search?q=${urlencoded_query}"
-append url_next "search?q=${urlencoded_query}"
+append url_previous "search?q=${urlencoded_query}&search_package_id=$search_package_id"
+append url_next "search?q=${urlencoded_query}&search_package_id=$search_package_id"
 if { [expr $current_result_page - 1] > $from_result_page } { 
     append url_previous "&offset=[expr ($current_result_page - 2) * $limit]"
 }

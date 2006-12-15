@@ -13,7 +13,14 @@ ad_library {
 namespace eval template {}
 namespace eval template::widget {}
 
-ad_proc -public template::widget::select_locales { element_reference tag_attributes } {
+ad_proc -public template::widget::select_locales {
+    element_reference
+    tag_attributes
+} {
+    Generate a select widget for locales.  We need a custom widget for this one
+    case because accessibility standards require us to put out a "lang" attribute
+    if the text is not in the same language as the rest of the page.
+} {
 
     upvar $element_reference element
 

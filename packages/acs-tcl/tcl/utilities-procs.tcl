@@ -2373,7 +2373,7 @@ ad_proc -public util_current_location {{}} {
         set hostname $Host_hostname
         if { ![empty_string_p $Host_port] } {
             set port $Host_port
-        }
+        }    
     }
 
     if { ![empty_string_p $port] && ![string equal $port $default_port($proto)] } {

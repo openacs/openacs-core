@@ -1012,6 +1012,34 @@ ad_proc -public ad_html_to_text {
 	append output(text) "\n\n[join $href_urls "\n"]"
     }
 
+    #---
+    # conversion like in ad_text_to_html
+    # 2006/09/12
+    set  myChars  {
+	ª º À Á Â Ã Ä Å Æ Ç
+	È É Ê Ë Ì Í Î Ï Ð Ñ
+	Ò Ó Ô Õ Ö Ø Ù Ú Û Ü
+	Ý Þ ß à á â ã ä å æ
+	ç è é ê ë ì í î ï ð
+	ñ ò ó ô õ ö ø ù ú û
+	ü ý þ ÿ ¿
+    }
+
+    set  myHTML  {
+	&ordf; &ordm; &Agrave; &Aacute; &Acirc; &Atilde; &Auml; &Aring; &Aelig; &Ccedil; 
+	&Egrave; &Eacute; &Ecirc; &Euml; &Igrave; &Iacute; &Icirc; &Iuml; &ETH; &Ntilde; 
+	&Ograve; &Oacute; &Ocirc; &Otilde; &Ouml; &Oslash; &Ugrave; &Uacute; &Ucirc; &Uuml; 
+	&Yacute; &THORN; &szlig; &agrave; &aacute; &acirc; &atilde; &auml; &aring; &aelig;
+	&ccedil; &egrave; &eacute; &ecirc; &euml; &igrave; &iacute; &icirc; &iuml; &eth; 
+	&ntilde; &ograve; &oacute; &ocirc; &otilde; &ouml; &oslash; &ugrave; &uacute; &ucirc; 
+	&uuml; &yacute; &thorn; &yuml; &iquest;
+    }
+
+    for  { set i 0 }   { $i  < [ llength  $myHTML ] }   { incr i }  {
+	set output(text) [ string map "[ lindex $myHTML $i ] [ lindex  $myChars  $i ]" $output(text) ]
+    }
+    #---
+
     return $output(text)
 }
 

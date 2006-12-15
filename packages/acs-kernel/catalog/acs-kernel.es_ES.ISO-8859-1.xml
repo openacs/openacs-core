@@ -86,6 +86,8 @@
   <msg key="Email_Address">Dirección de correo</msg>
   <msg key="First_Names">Nombre</msg>
   <msg key="Group">Grupo</msg>
+  <msg key="Group_name">Nombre del grupo</msg>
+  <msg key="Groups">Grupos</msg>
   <msg key="Last_Name">Apellidos</msg>
   <msg key="lt_Administrator_Relatio">Relación de Administración</msg>
   <msg key="lt_Main_Site_Administrat">Administradores del Sitio Principal</msg>

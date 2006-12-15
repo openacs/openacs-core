@@ -6,11 +6,12 @@
     <pretty-plural>Content Repository Services</pretty-plural>
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
-    
-    <version name="5.3.0d7" url="http://openacs.org/repository/download/apm/acs-content-repository-5.3.0d7.apm">
+
+    <version name="5.3.0b1" url="http://openacs.org/repository/download/apm/acs-content-repository-5.3.0b1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The canonical repository for OpenACS content.</summary>
-        <release-date>2006-06-04</release-date>
+        <release-date>2006-11-19</release-date>
+        <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides the API for creating and managing user generated content including 
          full support for versioning, rendering content to the filesystem, folders and composite content items, and
@@ -19,10 +20,10 @@
         <license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-content-repository" version="5.3.0d7"/>
-        <requires url="acs-kernel" version="5.3.0d2"/>
-        <requires url="acs-service-contract" version="5.3.0d1"/>
-        <requires url="search" version="5.3.0d1"/>
+        <provides url="acs-content-repository" version="5.3.0b1"/>
+        <requires url="acs-kernel" version="5.3.0b1"/>
+        <requires url="acs-service-contract" version="5.3.0b1"/>
+        <requires url="search" version="5.3.0b1"/>
 
         <callbacks>
         </callbacks>

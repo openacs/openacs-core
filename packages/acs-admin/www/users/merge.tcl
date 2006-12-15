@@ -38,7 +38,7 @@ db_multirow -extend {one_item_object_url} one_user_contributions one_user_contri
     set one_item_object_url  "[site_node::get_url_from_object_id -object_id $object_id]"
 }
 
-set user_id_one_items [callback MergeShowUserInfo -user_id $user_id ]
+set user_id_one_items [callback merge::MergeShowUserInfo -user_id $user_id ]
 if { ![empty_string_p $user_id_one_items] } {
     set user_id_one_items_html "<ul><li><b>Packages User Information </b><ul>"
     foreach pkg_list $user_id_one_items {
@@ -69,7 +69,7 @@ db_multirow -extend {two_item_object_url} two_user_contributions two_user_contri
     set two_item_object_url "[site_node::get_url_from_object_id -object_id $object_id]"
 }
 
-set user_id_two_items [callback MergeShowUserInfo -user_id $user_id_from_search ]
+set user_id_two_items [callback merge::MergeShowUserInfo -user_id $user_id_from_search ]
 if { ![empty_string_p $user_id_two_items] } {
     set user_id_two_items_html "<ul><li><b>Packages User Information </b><ul>"
     foreach pkg_list $user_id_two_items {
