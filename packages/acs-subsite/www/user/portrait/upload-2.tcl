@@ -90,6 +90,7 @@ db_transaction {
 			 -storage_type file \
 			 -creation_user [ad_conn user_id] \
 			 -creation_ip [ad_conn peeraddr] \
+			 -description $portrait_comment \
 			 $user_id \
 			 $tmp_filename \
 			 $n_bytes \
