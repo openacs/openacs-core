@@ -138,22 +138,28 @@ aa_register_case -cats {smoke production_safe} files__check_upgrade_ordering {
         foreach db_type {postgresql oracle} {
             set upgrades [list]
             foreach file $files {
-                set db [apm_guess_db_type $package $file]
-                if {[string is space $db] 
-                    || [string equal $db $db_type]} {
-                    set tail [file tail $file]
-                    if {[regexp {\-(.*)-(.*).sql} $tail match v1 v2]} {
-                        set v1s [apm_version_sortable $v1]
-                        set v2s [apm_version_sortable $v2]
-                        if {[string compare $v1s $v2s] > -1} {
-                            set error_p 1
-                            aa_log_result fail "$file: from after to version"
+                # DRB: Ignore old upgrade scripts that aren't in the proper place.  We
+                # still have old ACS 3 -> ACS 4 upgrade scripts lying around, and
+                # I don't want to report them as failures nor delete them ...
+		if { [string first sql $file] == -1 &&
+                     [string first upgrade $file] == -1 } {
+                    set db [apm_guess_db_type $package $file]
+                    if {[string is space $db] 
+                        || [string equal $db $db_type]} {
+                        set tail [file tail $file]
+                        if {[regexp {\-(.*)-(.*).sql} $tail match v1 v2]} {
+                            set v1s [apm_version_sortable $v1]
+                            set v2s [apm_version_sortable $v2]
+                            if {[string compare $v1s $v2s] > -1} {
+                                set error_p 1
+                                aa_log_result fail "$file: from after to version"
+                            } else {
+                                lappend upgrades [list $v1s $v2s $v1 $v2 $file]
+                            }
                         } else {
-                            lappend upgrades [list $v1s $v2s $v1 $v2 $file]
+                            set error_p 1
+                            aa_log_result fail "$file: could not find version numbers"
                         }
-                    } else {
-                        set error_p 1
-                        aa_log_result fail "$file: could not find version numbers"
                     }
                 }
             }

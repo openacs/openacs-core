@@ -32,7 +32,7 @@ set context [list [list "./" "Merge"] "Merge"]
 if { !$merge_p } {
     ad_returnredirect "/acs-admin/users"
 } else {
-    set final_results [callback MergePackageUser -from_user_id $from_user_id -to_user_id $to_user_id]
+    set final_results [callback merge::MergePackageUser -from_user_id $from_user_id -to_user_id $to_user_id]
 
     set results "<ul>"
     foreach item $final_results {

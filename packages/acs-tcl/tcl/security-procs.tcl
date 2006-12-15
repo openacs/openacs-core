@@ -478,7 +478,6 @@ ad_proc -public -deprecated -warn ad_secure_conn_p {} {
     return [security::secure_conn_p]
 }
 
-
 ad_proc -private sec_allocate_session {} {
 
     Returns a new session id
@@ -1492,8 +1491,8 @@ ad_proc -private security::get_secure_location {} {
         set secure_location $current_location
     } else {
         # Current location is insecure - get location from config file
-        set secure_location [ad_conn location]
-        # Prefix with https
+	set secure_location [ad_conn location]
+	# Prefix with https
         regsub {^(?:http://)?} $secure_location {https://} secure_location
 
 	# remove port number if using nonstandard port

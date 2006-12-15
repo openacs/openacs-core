@@ -287,6 +287,8 @@
   <msg key="Revoke_Checked">Odwołaj Zaznaczone</msg>
   <msg key="Role">Rola</msg>
   <msg key="Save_comment">Zapisz komentarz</msg>
+  <msg key="Screen_name">Pseudonim</msg>
+  <msg key="Screen_name_already_taken">Pseudonim już został przez kogoś wybrany.</msg>
   <msg key="Search_For_Exist_User">Szukaj Istniejącego Użytkownika</msg>
   <msg key="Select_an_Object_by_Id">Wybierz Obiekt wg. Id:</msg>
   <msg key="Send_email_to_this_user">Wyślij email do tego użytkownika</msg>

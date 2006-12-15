@@ -71,6 +71,8 @@ ad_proc -public ::content::revision::new {
 
     @param package_id
 
+    @param package_id
+
     @param is_live
 
     @param attributes A list of lists of pairs of additional attributes and

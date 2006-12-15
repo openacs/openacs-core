@@ -173,7 +173,7 @@ Bezoek de volgende koppeling en verander het wachtwoord direct: %reset_password_
   <msg key="lt__youd_be_able_to_get">, dan kan meer informatie over andere gebruikers worden verkregen.</msg>
   <msg key="lt_Add_checked_users_to_">Voeg aangeduidde gebruikers toe aan gebruikers die rechten hebben op je object.</msg>
   <msg key="lt_Cannot_join_this_grou">Bij deze groep is inschrijven niet mogelijk</msg>
-  <msg key="lt_Complete_List_of_ISO_">Complete lijst met ISO-Codes</msg>
+  <msg key="lt_Complete_List_of_ISO_">Complete lijst met ISO-codes</msg>
   <msg key="lt_Continue_working_with">Op %system_name% doorwerken </msg>
   <msg key="lt_Do_not_inherit_from_p">Niet erven van %parent_object_name%</msg>
   <msg key="lt_Edit_comment_for_the_">Bijschrift bewerken van de portretfoto van %first_names% %last_name% </msg>
@@ -201,7 +201,7 @@ Bezoek de volgende koppeling en verander het wachtwoord direct: %reset_password_
   <msg key="lt_Please_read_and_follo">Lees en volg de instructies in deze e-mail alstublieft.</msg>
   <msg key="lt_Please_try_to_a_hrefi">Probeer nogmaals om &lt;a href=&quot;index&quot;&gt;aan te melden&lt;/a&gt; </msg>
   <msg key="lt_Portrait_of_first_last">Portretfoto van %first_names% %last_name%</msg>
-  <msg key="lt_Privileges_higher_implied">Hogere privileges omvatten alle onderliggende privileges. Bij voorbeeld, het toekennen van admin rechten impliceert ook het toekennen van read en write rechten.
+  <msg key="lt_Privileges_higher_implied">Hogere privileges omvatten alle onderliggende privileges. Bijvoorbeeld, het toekennen van &quot;admin&quot;-rechten houdt ook het toekennen van &quot;read&quot;- en &quot;write&quot;-rechten in.
 </msg>
   <msg key="lt_Problem_with_authenti">Identiteitscontrole is mislukt</msg>
   <msg key="lt_Registration_informat">De inschrijfgegevens voor deze service zijn verzonden aan %email%.</msg>
@@ -270,7 +270,7 @@ Bezoek de volgende koppeling en verander het wachtwoord direct: %reset_password_
   <msg key="Notes">Toelichting:</msg>
   <msg key="Notice">Melding:</msg>
   <msg key="on_name_to">op %name% aan:</msg>
-  <msg key="Online">On-line</msg>
+  <msg key="Online">Online</msg>
   <msg key="optional">(facultatief)</msg>
   <msg key="Options">Opties</msg>
   <msg key="Or_add_a_new_user">Of een nieuwe gebruiker toevoegen</msg>
@@ -293,16 +293,22 @@ Het wachtwoord kan altijd worden gewijzigd door het volgende te doen:
 3. Kies &quot;%password_update_link_text%&quot; </msg>
   <msg key="Password_changed_subject">Wachtwoord is veranderd</msg>
   <msg key="Password_regular_change_now">Uw wachtwoord moet regelmatig veranderd worden. Verander alstublieft nu uw wachtwoord.</msg>
+  <msg key="Passwords_dont_match">Wachtwoorden komen niet overeen.</msg>
+  <msg key="perm_cannot_be_removed">Dit privilege kan niet verwijderd worden.</msg>
   <msg key="Permissions">Rechten</msg>
   <msg key="permissions">rechten</msg>
   <msg key="Permissions_for_name">Rechten van %name%</msg>
   <msg key="Please_return_to_home">Keer terug naar %home_link%.</msg>
   <msg key="Portrait">Portretfoto</msg>
+  <msg key="Privacy">Privacy</msg>
+  <msg key="Problem_auth_no_memb">Er is een probleem opgetreden tijdens de authenticatie van deze rekening. Vermoedelijk bevat de database gebruikers zonder &quot;member_state&quot;.</msg>
   <msg key="Profile">Profiel</msg>
   <msg key="Question">Vraag:</msg>
   <msg key="Re_enable">Opnieuw inschakelen</msg>
+  <msg key="read">Lezen</msg>
   <msg key="Recover_Password">Wachtwoord achterhalen</msg>
   <msg key="Refresh_login">Aanmeldsessie verversen</msg>
+  <msg key="reg_asm_link">Aangepaste gebruikersregistratievragenlijst</msg>
   <msg key="Register">Inschrijven</msg>
   <msg key="Registration_Approval_Notice">&lt;p&gt; Bedankt voor de inschrijving bij %system_name%. De beheerder is op de hoogte gebracht. Zodra toestemming is gegeven, zal dit via een e-mail worden gemeld. Daarna kan %system_name% verder worden gebruikt.
 </msg>
@@ -310,6 +316,7 @@ Het wachtwoord kan altijd worden gewijzigd door het volgende te doen:
   <msg key="Remember_my_login">Aanmeldsessie op deze computer bewaren</msg>
   <msg key="Remove">Verwijderen</msg>
   <msg key="Remove_All">Allen verwijderen</msg>
+  <msg key="rename">Hernoem</msg>
   <msg key="Req_membership_comm">Toegang tot deze gemeenschap verzoeken</msg>
   <msg key="Req_membership_subs">Toegang tot deze subsite verzoeken</msg>
   <msg key="Request_membership">Toegang vragen</msg>
@@ -318,11 +325,14 @@ Het wachtwoord kan altijd worden gewijzigd door het volgende te doen:
   <msg key="Role">Rol</msg>
   <msg key="Save_comment">Opmerking opslaan</msg>
   <msg key="Screen_name">Schermnaam</msg>
+  <msg key="Screen_name_already_taken">Deze schermnaam is al in gebruik.</msg>
   <msg key="Search_For_Exist_User">Zoek een gebruiker</msg>
   <msg key="Security_context_root">Hoofdveiligheidscontext</msg>
   <msg key="Select_an_Object_by_Id">Kies een object via Id:</msg>
   <msg key="Send_email_to_this_user">Stuur e-mail naar deze gebruiker</msg>
+  <msg key="Send_me_a_copy">Stuur me een kopietje:</msg>
   <msg key="Show">Tonen</msg>
+  <msg key="Site_Wide_Admin">Sitebreed beheer</msg>
   <msg key="Site_wide_administration">Hoofdadministratie</msg>
   <msg key="sorry_forgotten_pwd">Sorry, wij kunnen niet verder helpen met het vergeten wachtwoord.</msg>
   <msg key="Status">Status</msg>
@@ -334,6 +344,7 @@ Het wachtwoord kan altijd worden gewijzigd door het volgende te doen:
   <msg key="subsite">subsite</msg>
   <msg key="Subsites">Subsites</msg>
   <msg key="subsites">subsites</msg>
+  <msg key="Success_but_no_account_yet">Uw authenticatie is gelukt, maar u heeft nog geen rekening op %system_name%.</msg>
   <msg key="Thank_you">Bedankt.</msg>
   <msg key="The_ISO_codes_were_not">De ISO-codes zijn niet geïnstalleerd op deze server.</msg>
   <msg key="This_group_is_closed">Dit is een besloten groep. Alleen nieuwe leden met een uitnodiging worden toegelaten.</msg>
@@ -342,6 +353,7 @@ Het wachtwoord kan altijd worden gewijzigd door het volgende te doen:
   <msg key="To_log_in_visit_the">Met dit wachtwoord kan men zich aanmelden op de</msg>
   <msg key="Topic">Onderwerp</msg>
   <msg key="type_specific_info">soortspecifieke info</msg>
+  <msg key="Unknown_email">Onbekend e-mailadres</msg>
   <msg key="unmount">afkoppelen</msg>
   <msg key="UP">Één niveau hoger</msg>
   <msg key="up_to_context_name">tot aan %context_name% </msg>
@@ -351,7 +363,13 @@ Het wachtwoord kan altijd worden gewijzigd door het volgende te doen:
   <msg key="upload_a_portrait">Portretfoto aanbieden</msg>
   <msg key="upload_a_replacement_por">een nieuwe portretfoto aanbieden</msg>
   <msg key="Upload_Portrait">Portretfoto aanbieden</msg>
+  <msg key="User_Portrait">Gebruikersportret</msg>
+  <msg key="User_Portraits">Gebruikersportretten.</msg>
+  <msg key="User_Profile">Gebruikersprofiel</msg>
+  <msg key="User_Profiles">Gebruikersprofielen</msg>
   <msg key="Username">Gebruikersnaam</msg>
+  <msg key="Username_not_found_for_authority">Geen gebruiker met gebruikersnaam '%username%' gevonden voor de authoriteit %this_authority%</msg>
+  <msg key="Username_required">Gebruikersnaam vereist</msg>
   <msg key="UserSiteMap">Paginaoverzicht van gebruiker</msg>
   <msg key="Vacation_Info_Updated">De informatie omtrent afwezigheid is bijgewerkt</msg>
   <msg key="Vacation_information_updated">De informatie omtrent afwezigheid op %site_link% is bijgewerkt.</msg>
@@ -359,6 +377,7 @@ Het wachtwoord kan altijd worden gewijzigd door het volgende te doen:
   <msg key="When_leaving_checkbox_empty">Een leeg aankruisvakje betekent, dat de rechten van de gebruiker worden ingetrokken, voorzover deze rechten eerder waren toegewezen.</msg>
   <msg key="Whos_Online_link_label">Gebruikers die nu online zijn</msg>
   <msg key="Whos_Online_title">Wie is er online?</msg>
+  <msg key="write">Schrijven</msg>
   <msg key="Yes_I_am_sure">Ja, zeker</msg>
   <msg key="You_are_in_the_follow">Mijn aansluitingen bij gebruikersgroepen: </msg>
   <msg key="You_can_also_browse_from">Bladeren kan ook uit de</msg>
@@ -367,7 +386,7 @@ Het wachtwoord kan altijd worden gewijzigd door het volgende te doen:
   <msg key="You_dont_have_a_portrait">Mijn portretfoto is nog niet beschikbaar.</msg>
   <msg key="You_have_admin_rights_on">Er zijn rechten aanwezig om de volgende objecten te beheren:</msg>
   <msg key="You_have_no_email_alerts">Er staan geen kennisgevingen ingesteld.</msg>
-  <msg key="Your_Account">Mijn registratie</msg>
+  <msg key="Your_Account">Mijn rekening</msg>
   <msg key="Your_discussion_alerts">Mijn forum-kennisgevingen</msg>
   <msg key="Your_Portrait">Mijn portretfoto:</msg>
   <msg key="Your_system_alerts">Mijn %gc_system_name%-kennisgevingen</msg>
