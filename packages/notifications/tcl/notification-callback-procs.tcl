@@ -71,6 +71,13 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl notifications {
     set from [notification::email::parse_email_address $email(from)]
     set to [notification::email::parse_email_address $email(to)]
     
+    set to_stuff [notification::email::parse_reply_address -reply_address $to]
+    # We don't accept a bad incoming email address
+    if {[empty_string_p $to_stuff]} {
+	# This is not an e-mail notification can work with. Maybe bounce ?
+	return
+    }
+
     # Find the user_id of the sender
     ns_log Notice "acs_mail_lite::incoming_email -impl notifications: from $from"
     set user_id [cc_lookup_email_user $from]
@@ -88,21 +95,6 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl notifications {
 	return
     }
     
-    set to_stuff [notification::email::parse_reply_address -reply_address $to]
-    # We don't accept a bad incoming email address
-    if {[empty_string_p $to_stuff]} {
-	ns_log Notice "acs_mail_lite::incoming_email -impl notifications: bad to address $to from $from. bouncing message."
-	
-	# bounce message here
-	notification::email::bounce_mail_message \
-	    -to_addr $from \
-	    -from_addr $to \
-	    -body $email(bodies) \
-	    -message_headers $email(headers) \
-	    -reason "Invalid To Address"
-	return
-    }
-
     set object_id [lindex $to_stuff 0]
     set type_id [lindex $to_stuff 1]
     set to_addr $to
