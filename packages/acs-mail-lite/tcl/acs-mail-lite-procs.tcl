@@ -283,7 +283,28 @@ namespace eval acs_mail_lite {
  	    set email(to) [parse_email_address -email $email(to)]
  	    set email(from) [parse_email_address -email $email(from)]
 	    ns_log Debug "load_mails: message from $email(from) to $email(to)"
-           
+
+	    # Now run the simplest mailing list of all
+	    set to_party_id [party::get_by_email -email $email(to)]
+
+	    if {[db_string group_p "select 1 from groups where group_id = :to_party_id" -default 0]} {
+		template::util::list_of_lists_to_array $email(bodies) email_body
+		if {[exists_and_not_null email_body(text/html)]} {
+		    set body $email_body(text/html)
+		} else {
+		    set body $email_body(text/plain)
+		}
+		acs_mail_lite::complex_send \
+		    -from_addr [lindex $email(from) 0] \
+		    -to_party_ids [group::get_members -group_id $to_party_id] \
+		    -subject $email(subject) \
+		    -body $body \
+		    -single_email \
+		    -send_immediately
+
+		break
+	    }
+		    
 	    set process_p 1
 	    
 	    #check if we have several sites. In this case a site prefix is set
