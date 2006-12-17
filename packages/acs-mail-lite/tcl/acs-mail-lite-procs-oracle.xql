@@ -7,7 +7,7 @@
      <querytext>
 
        insert into acs_mail_lite_bounce_notif 
-       (user_id, notification_count, notification_time)
+       (party_id, notification_count, notification_time)
        (select user_id, 0 as notification_count,
                trunc(sysdate-1-:notification_interval) as notification_time
         from acs_mail_lite_bounce
@@ -21,7 +21,7 @@
 
        select u.user_id, u.email, u.first_names || ' ' || u.last_name as name
        from cc_users u, acs_mail_lite_bounce_notif n
-       where u.user_id = n.user_id
+       where u.user_id = n.party_id
        and u.email_bouncing_p = 't'
        and n.notification_time < sysdate - :notification_interval
        and n.notification_count < :max_notification_count
@@ -35,7 +35,7 @@
        update acs_mail_lite_bounce_notif
        set notification_time = trunc(sysdate),
            notification_count = notification_count + 1
-       where user_id = :user_id
+       where party_id = :user_id
 
      </querytext>
    </fullquery>

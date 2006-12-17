@@ -46,9 +46,9 @@ create table acs_mail_lite_bounce (
 
 
 create table acs_mail_lite_bounce_notif (
-    user_id                     integer
+    party_id                    integer
 				constraint acs_mail_li_bou_notif_us_id_fk
-                                references users (user_id)
+                                references parties (party_id)
                                 on delete cascade
 				constraint acs_mail_lite_notif_pk
 				primary key,
