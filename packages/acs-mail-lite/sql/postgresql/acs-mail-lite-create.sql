@@ -78,6 +78,7 @@ CREATE TABLE acs_mail_lite_complex_queue (
     cc_addr text,
     bcc_addr text,
     from_addr text,
+    reply_to text,
     subject text,
     body text,
     package_id integer,

@@ -1,0 +1,1 @@
+alter table acs_mail_lite_complex_queue add column reply_to text;

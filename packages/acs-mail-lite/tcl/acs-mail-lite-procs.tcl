@@ -282,18 +282,45 @@ namespace eval acs_mail_lite {
 	    parse_email -file $msg -array email
  	    set email(to) [parse_email_address -email $email(to)]
  	    set email(from) [parse_email_address -email $email(from)]
-	    ns_log Debug "load_mails: message from $email(from) to $email(to)"
+	    template::util::list_of_lists_to_array $email(bodies) email_body
+	    if {[exists_and_not_null email_body(text/html)]} {
+		set body $email_body(text/html)
+	    } else {
+		set body $email_body(text/plain)
+	    }
+	    
+	    # Take a look if the email contains an email with a "#"
+	    set pot_email [lindex [split $email(to) "@"] 0]
+	    if {[string last "#" $pot_email] > -1} {
+		# A match was found, now just forward the email
+		regsub -all {\#} $pot_email {@} to_addr
+		set from_addr [lindex $email(from) 0]
+		regsub -all {@} $from_addr {\#} reply_to
+		set reply_to_addr "${reply_to}@[address_domain]"
 
+		acs_mail_lite::complex_send \
+		    -from_addr $from_addr \
+		    -reply_to $reply_to_addr \
+		    -to_addr $to_addr \
+		    -subject $email(subject) \
+		    -body $body \
+		    -single_email \
+		    -send_immediately
+		
+		#let's delete the file now
+		if {[catch {ns_unlink $msg} errmsg]} {
+		    ns_log Error "load_mails: unable to delete queued message $msg: $errmsg"
+		} else {
+		    ns_log Debug "load_mails: deleted $msg"
+		}
+		
+		break
+	    }
+	    
 	    # Now run the simplest mailing list of all
 	    set to_party_id [party::get_by_email -email $email(to)]
-
+	    
 	    if {[db_string group_p "select 1 from groups where group_id = :to_party_id" -default 0]} {
-		template::util::list_of_lists_to_array $email(bodies) email_body
-		if {[exists_and_not_null email_body(text/html)]} {
-		    set body $email_body(text/html)
-		} else {
-		    set body $email_body(text/plain)
-		}
 		acs_mail_lite::complex_send \
 		    -from_addr [lindex $email(from) 0] \
 		    -to_party_ids [group::get_members -group_id $to_party_id] \
@@ -302,9 +329,16 @@ namespace eval acs_mail_lite {
 		    -single_email \
 		    -send_immediately
 
+		#let's delete the file now
+		if {[catch {ns_unlink $msg} errmsg]} {
+		    ns_log Error "load_mails: unable to delete queued message $msg: $errmsg"
+		} else {
+		    ns_log Debug "load_mails: deleted $msg"
+		}
+		
 		break
 	    }
-		    
+	    
 	    set process_p 1
 	    
 	    #check if we have several sites. In this case a site prefix is set
@@ -328,28 +362,29 @@ namespace eval acs_mail_lite {
 	    if {$process_p} {
 		
 		#check if an implementation exists for the package_prefix and call the callback
-### FIXME!!!!!
-###
-
-
-#		if {[db_0or1row select_impl {}]} {
-		    
-		    #    ns_log Notice "load_mails: Prefix $prefix found. Calling callback implmentation $impl_name for package_id $package_id"
-		    #    callback -impl $impl_name acs_mail_lite::incoming_email -array email -package_id $package_id
-
-		    # We execute all callbacks now
-		    callback acs_mail_lite::incoming_email -array email
-
-
-
-#		} else {
-#		    ns_log Notice "load_mails: prefix not found. Doing nothing."
-#		}
+		### FIXME!!!!!
+		###
 		
-
+		
+		#		if {[db_0or1row select_impl {}]} {
+		
+		#    ns_log Notice "load_mails: Prefix $prefix found. Calling callback implmentation $impl_name for package_id $package_id"
+		#    callback -impl $impl_name acs_mail_lite::incoming_email -array email -package_id $package_id
+		
+		# We execute all callbacks now
+		callback acs_mail_lite::incoming_email -array email
+		
+		
+		
+		#		} else {
+		#		    ns_log Notice "load_mails: prefix not found. Doing nothing."
+		#		}
+		
+		
 	    } else {
 		ns_log Error "load_mails: Either the SitePrefix setting was incorrect or not registered package prefix '$package_prefix'."
 	    }
+
             #let's delete the file now
             if {[catch {ns_unlink $msg} errmsg]} {
                 ns_log Error "load_mails: unable to delete queued message $msg: $errmsg"
