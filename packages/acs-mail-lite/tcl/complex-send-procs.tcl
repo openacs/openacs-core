@@ -21,6 +21,7 @@ namespace eval acs_mail_lite {
 	{-cc_addr ""}
 	{-bcc_addr ""}
         -from_addr:required
+	{-reply_to ""}
         {-subject ""}
         -body:required
 	{-package_id ""}
@@ -117,6 +118,7 @@ namespace eval acs_mail_lite {
 		-cc_addr $cc_addr \
 		-bcc_addr $bcc_addr \
 		-from_addr $from_addr \
+		-reply_to $reply_to \
 		-subject $subject \
 		-body $body \
 		-package_id $package_id \
@@ -157,6 +159,7 @@ namespace eval acs_mail_lite {
 	{-cc_addr ""}
 	{-bcc_addr ""}
         -from_addr:required
+	{-reply_to ""}
         {-subject ""}
         -body:required
 	{-package_id ""}
@@ -193,6 +196,8 @@ namespace eval acs_mail_lite {
 	@param to_addr List of e-mail addresses to send this mail to. We will figure out the name if possible.
 
 	@param from_addr E-Mail address of the sender. We will try to figure out the name if possible.
+	
+	@param reply_to E-Mail address to which replies should go. Defaults to from_addr
 	
 	@param subject of the email
 	
@@ -277,6 +282,12 @@ namespace eval acs_mail_lite {
             }
         }
 
+	# Set the Reply-To
+        if {$reply_to eq ""} {
+	    set reply_to $sender_addr
+	}
+
+	# Get the party_id for the sender
 	set party_id($from_addr) [party::get_by_email -email $from_addr]
 	
 	# Deal with the sender address. Only change the from string if we find a party_id
@@ -284,10 +295,13 @@ namespace eval acs_mail_lite {
 	set party_id($sender_addr) [party::get_by_email -email $sender_addr]
 	if {[exists_and_not_null party_id($sender_addr)]} {
 	    set from_string "\"[party::name -email $sender_addr]\" <${sender_addr}>"
+	    set reply_to_string "\"[party::name -email $sender_addr]\" <${reply_to}>"
 	} else {
 	    set from_string $sender_addr
+	    set reply_to_string $sender_addr
 	}
 
+	
         # decision between normal or multipart/alternative body
         if { $alternative_part_p eq "0"} {
   	    # Set the message token
@@ -499,7 +513,6 @@ namespace eval acs_mail_lite {
 
 	# Rollout support (see above for details)
 
-	ns_log Notice "acs-mail-lite:complex_send:: From String: $from_string"
 	set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode] 
 	if {![empty_string_p $delivery_mode]
 	    && ![string equal $delivery_mode default]
@@ -538,6 +551,7 @@ namespace eval acs_mail_lite {
 
 		smtp::sendmessage $multi_token \
 		    -header [list From "$from_string"] \
+		    -header [list Reply-To "$reply_to_string"] \
 		    -header [list To "[join $to_list ","]"] \
 		    -header [list CC "[join $cc_list ","]"] \
 		    -header [list BCC "[join $bcc_list ","]"] \
@@ -583,6 +597,7 @@ namespace eval acs_mail_lite {
 
 		    smtp::sendmessage $multi_token \
 			-header [list From "$from_string"] \
+			-header [list Reply-To "$reply_to_string"] \
 			-header [list To "$email"] \
 			-servers $smtp \
 			-ports $smtpport \
@@ -610,6 +625,7 @@ namespace eval acs_mail_lite {
 
 		    smtp::sendmessage $multi_token \
 			-header [list From "$from_string"] \
+			-header [list Reply-To "$reply_to_string"] \
 			-header [list To "$email"] \
 			-servers $smtp \
 			-ports $smtpport \
@@ -669,6 +685,7 @@ namespace eval acs_mail_lite {
 			    -cc_addr $cc_addr \
 			    -bcc_addr $bcc_addr \
 			    -from_addr $from_addr \
+			    -reply_to $reply_to \
 			    -subject $subject \
 			    -body $body \
 			    -package_id $package_id \
