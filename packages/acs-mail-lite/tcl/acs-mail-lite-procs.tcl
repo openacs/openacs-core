@@ -196,7 +196,7 @@ namespace eval acs_mail_lite {
     } {
         set regexp_str "\[[bounce_prefix]\]-(\[0-9\]+)-(\[^-\]+)-(\[0-9\]*)\@"
         if {![regexp $regexp_str $bounce_address all user_id signature package_id]} {
-	    ns_log Notice "acs-mail-lite: bounce address not found for $bounce_address"
+	    ns_log Debug "acs-mail-lite: bounce address not found for $bounce_address"
             return ""
         }
     	return [list $user_id $package_id $signature]
@@ -283,50 +283,52 @@ namespace eval acs_mail_lite {
  	    set email(to) [parse_email_address -email $email(to)]
  	    set email(from) [parse_email_address -email $email(from)]
 	    
-	    set process_p 1
+
+	    # The whole code with the prefixes does not work and is actually not well through through I fear.
+	    # This is why it is disabled in total and we rely on simple callback mechanisms instead
 	    
-	    #check if we have several sites. In this case a site prefix is set
-	    set site_prefix [get_parameter -name SitePrefix -default ""]
-	    set package_prefix ""
-	    
-	    if {![empty_string_p $site_prefix]} {
-		regexp "($site_prefix)-(\[^-\]*)\?-(\[^@\]+)\@" $email(to) all site_prefix package_prefix rest
-	        #we only process the email if both a site and package prefix was found
-	        if {[empty_string_p $site_prefix] || [empty_string_p $package_prefix]} {
-		    set process_p 0
-		}
-		#no site prefix is set, so this is the only site
-	    } else {
-		regexp "(\[^-\]*)-(\[^@\]+)\@" $email(to) all package_prefix rest
-		#we only process the email if a package prefix was found
-		if {[empty_string_p $package_prefix]} {
-                    set process_p 0
-                }
-	    }
-	    if {$process_p} {
-		
-		#check if an implementation exists for the package_prefix and call the callback
-		### FIXME!!!!!
-		###
-		
-		
-		#		if {[db_0or1row select_impl {}]} {
-		
-		#    ns_log Notice "load_mails: Prefix $prefix found. Calling callback implmentation $impl_name for package_id $package_id"
-		#    callback -impl $impl_name acs_mail_lite::incoming_email -array email -package_id $package_id
-		
+	    if {1} {
+		    
 		# We execute all callbacks now
 		callback acs_mail_lite::incoming_email -array email
 		
-		
-		
-		#		} else {
-		#		    ns_log Notice "load_mails: prefix not found. Doing nothing."
-		#		}
-		
-		
 	    } else {
-		ns_log Error "load_mails: Either the SitePrefix setting was incorrect or not registered package prefix '$package_prefix'."
+
+		set process_p 1
+		
+		#check if we have several sites. In this case a site prefix is set
+		set site_prefix [get_parameter -name SitePrefix -default ""]
+		set package_prefix ""
+		
+		if {![empty_string_p $site_prefix]} {
+		    regexp "($site_prefix)-(\[^-\]*)\?-(\[^@\]+)\@" $email(to) all site_prefix package_prefix rest
+		    #we only process the email if both a site and package prefix was found
+		    if {[empty_string_p $site_prefix] || [empty_string_p $package_prefix]} {
+			set process_p 0
+		    }
+		    #no site prefix is set, so this is the only site
+		} else {
+		    regexp "(\[^-\]*)-(\[^@\]+)\@" $email(to) all package_prefix rest
+		    #we only process the email if a package prefix was found
+		    if {[empty_string_p $package_prefix]} {
+			set process_p 0
+		    }
+		}
+		if {$process_p} {
+		    
+		    #check if an implementation exists for the package_prefix and call the callback
+		    
+		    if {[db_0or1row select_impl {}]} {
+			
+			ns_log Notice "load_mails: Prefix $prefix found. Calling callback implmentation $impl_name for package_id $package_id"
+		        callback -impl $impl_name acs_mail_lite::incoming_email -array email -package_id $package_id
+
+		    } else {
+			ns_log Notice "load_mails: prefix not found. Doing nothing."
+		    }
+		} else {
+		    ns_log Error "load_mails: Either the SitePrefix setting was incorrect or not registered package prefix '$package_prefix'."
+		}
 	    }
 
             #let's delete the file now
