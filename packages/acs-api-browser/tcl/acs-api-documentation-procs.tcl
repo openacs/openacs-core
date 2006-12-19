@@ -827,6 +827,8 @@ ad_proc -public api_get_body {proc_name} {
       # the definition is locally in the connection thread
       return [::Serializer methodSerialize $obj $method $prefix]
     }
+  } elseif {[regexp {^([^ ]+)(Class|Object) (.*)$} $proc_name match thread kind obj]} {
+    return [$thread do $obj serialize]
   } else {
     return [info body $proc_name]
   }
