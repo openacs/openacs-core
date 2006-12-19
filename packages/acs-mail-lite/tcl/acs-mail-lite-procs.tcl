@@ -282,62 +282,6 @@ namespace eval acs_mail_lite {
 	    parse_email -file $msg -array email
  	    set email(to) [parse_email_address -email $email(to)]
  	    set email(from) [parse_email_address -email $email(from)]
-	    template::util::list_of_lists_to_array $email(bodies) email_body
-	    if {[exists_and_not_null email_body(text/html)]} {
-		set body $email_body(text/html)
-	    } else {
-		set body $email_body(text/plain)
-	    }
-	    
-	    # Take a look if the email contains an email with a "#"
-	    set pot_email [lindex [split $email(to) "@"] 0]
-	    if {[string last "#" $pot_email] > -1} {
-		# A match was found, now just forward the email
-		regsub -all {\#} $pot_email {@} to_addr
-		set from_addr [lindex $email(from) 0]
-		regsub -all {@} $from_addr {\#} reply_to
-		set reply_to_addr "${reply_to}@[address_domain]"
-
-		acs_mail_lite::complex_send \
-		    -from_addr $from_addr \
-		    -reply_to $reply_to_addr \
-		    -to_addr $to_addr \
-		    -subject $email(subject) \
-		    -body $body \
-		    -single_email \
-		    -send_immediately
-		
-		#let's delete the file now
-		if {[catch {ns_unlink $msg} errmsg]} {
-		    ns_log Error "load_mails: unable to delete queued message $msg: $errmsg"
-		} else {
-		    ns_log Debug "load_mails: deleted $msg"
-		}
-		
-		break
-	    }
-	    
-	    # Now run the simplest mailing list of all
-	    set to_party_id [party::get_by_email -email $email(to)]
-	    
-	    if {[db_string group_p "select 1 from groups where group_id = :to_party_id" -default 0]} {
-		acs_mail_lite::complex_send \
-		    -from_addr [lindex $email(from) 0] \
-		    -to_party_ids [group::get_members -group_id $to_party_id] \
-		    -subject $email(subject) \
-		    -body $body \
-		    -single_email \
-		    -send_immediately
-
-		#let's delete the file now
-		if {[catch {ns_unlink $msg} errmsg]} {
-		    ns_log Error "load_mails: unable to delete queued message $msg: $errmsg"
-		} else {
-		    ns_log Debug "load_mails: deleted $msg"
-		}
-		
-		break
-	    }
 	    
 	    set process_p 1
 	    
