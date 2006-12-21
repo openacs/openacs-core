@@ -8,19 +8,35 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {parent_id:integer}
+    {package_id:integer}
     {selector_type "image"}
 }
+
+#HAM : ajax sources
+set js_source [ah::js_sources]
 
 set f_url ""
 
 set user_id [ad_conn user_id]
+
 # if user has write permission, create image upload form, 
-if {[permission::permission_p -party_id $user_id -object_id $parent_id \
-	 -privilege "write"]} {
 
-    set write_p 1
+set write_p [permission::permission_p \
+		 -party_id $user_id \
+		 -object_id $parent_id \
+		 -privilege "write"]
+if {!$write_p} {
+    # item might not exist!
+    set write_p [permission::permission_p \
+		     -party_id $user_id \
+		     -object_id $package_id \
+		     -privilege "write"]
+}
 
-    set recent_images_options [list]
+set recent_images_options [list]
+
+if {$write_p} {
+    # set recent images
     db_multirow -unclobber recent_images recent_images \
 	{
 	    select ci.item_id, ci.name
@@ -38,7 +54,9 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
 	}
     
 
+
     set share_options [list [list "[_ acs-templating.Only_myself]" private] [list "[_ acs-templating.This_Group]" group] [list "[_ acs-templating.Anyone_on_this_system]" site] [list "[_ acs-templating.Anyone_on_the_internet]" public]]
+
     ad_form \
         -name upload_form \
         -mode edit \
@@ -46,15 +64,17 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
         -html { enctype multipart/form-data } \
         -form {
             item_id:key
+            {package_id:text(hidden)}
 	    {choose_file:text(radio),optional {options $recent_images_options}}
             {upload_file:file(file),optional {html {size 30}} }
             {share:text(radio),optional {label "[_ acs-templating.This_image_can_be_reused_by]"} {options $share_options} {help_text "[_ acs-templating.This_image_can_be_reused_help]"}}
-	    {select_btn:text(submit) {label "Select"}}
+	    {select_btn:text(submit) {label "[_ acs-templating.Add_the_selected_image]"}}
             {upload_btn:text(submit) {label "[_ acs-templating.HTMLArea_SelectUploadBtn]"}
             }
         } \
         -on_request {
             set share site
+            set package_id $package_id
         } \
         -on_submit {
             # check file name
@@ -111,7 +131,6 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
 		    -party_id $user_id \
 		    -privilege admin
 
-		set f_url "/image/${item_id}/${file_name}"		
 		switch -- $share {
 		    private {
 			permission::set_not_inherit -object_id $item_id
@@ -144,10 +163,9 @@ if {[permission::permission_p -party_id $user_id -object_id $parent_id \
 	    } else {
 		# user chose an existing file
 		set item_id $choose_file 
-		set file_name ""
+		set file_name [lindex [lindex $recent_images_options [util_search_list_of_lists $recent_images_options $item_id 1]] 0]
 	    }
-	    
-
+		set f_url "/image/${item_id}/${file_name}"			    
 	}
     
 } else {

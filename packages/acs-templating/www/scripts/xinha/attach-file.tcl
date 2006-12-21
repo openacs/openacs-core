@@ -8,8 +8,12 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {parent_id:integer}
+    {package_id:integer}
     {selector_type "file"}
 }
+
+#HAM : ajax sources
+set js_source [ah::js_sources]
 
 set user_id [ad_conn user_id]
 # if user has write permission, create image upload form, 
@@ -21,7 +25,7 @@ if {!$write_p} {
     # item might not exist!
     set write_p [permission::permission_p \
 		     -party_id $user_id \
-		     -object_id [ad_conn package_id] \
+		     -object_id $package_id \
 		     -privilege "write"]
 }
 if {$write_p} {
@@ -54,11 +58,12 @@ if {$write_p} {
         -html { enctype multipart/form-data } \
         -form {
             item_id:key
+	    {package_id:text(hidden)}
 	    {f_title:text,optional {label "[_ acs-templating.Link_Text]"} {html {size 50 id f_title} } }
 	    {choose_file:text(radio),optional {options $recent_files_options}}
             {upload_file:file(file) {html {size 30}} }
             {share:text(radio),optional {label "[_ acs-templating.This_file_can_be_reused_by]"} {options $share_options} {help_text "[_ acs-templating.This_file_can_be_reused_help]"}}
-	    {select_btn:text(submit) {label "Select"}}
+	    {select_btn:text(submit) {label "[_ acs-templating.Add_the_selected_file]"}}
             {ok_btn:text(submit) {label "[_ acs-templating.HTMLArea_SelectUploadBtn]"}
             }
         } \
@@ -165,6 +170,8 @@ if {$write_p} {
 					 } else {
 					     set item_id $choose_file
 					     set file_name [lindex [lindex $recent_files_options [util_search_list_of_lists $recent_files_options $item_id 1]] 0]
+					     # we have to get rid of the icon from the form.
+					     set file_name [regsub -all {<.*?>} $file_name {}]
 					 }
 
 		if {$f_title eq ""} {

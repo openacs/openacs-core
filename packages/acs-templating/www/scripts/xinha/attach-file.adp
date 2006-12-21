@@ -1,4 +1,4 @@
-<html style="width: 400px; height: 260px">
+<html>
 <head>
   <title>#acs-templating.HTMLArea_InsertFileTitle#</title>
 
@@ -90,14 +90,15 @@
 
 	<table border="0" width="100%" style="margin: 0 auto; text-align: left;padding: 0px;">
 	  <tbody>
-      <td valign="top" width="50%" >
+      <td valign="top">
 	<if @write_p@ eq 1>
 	    <formtemplate id="upload_form">
-<input type="hidden" name="f_href" id="f_href" value="@f_href@" />
+<input type="hidden" name="f_href" id="f_href" value="@f_href;noquote@" />
 <input type="hidden" id="f_target"/>
 <input type="hidden" id="f_usetarget"/>
 
-	      <table cellspacing="2" cellpadding="2" border="0" width="55%">
+	      <table cellspacing="2" cellpadding="2" border="0" width="100%">
+<if @recent_files_options@ ne "">
 		<tr class="form-group">
 		  <if @formerror.upload_file@ not nil>
 		    <td class="form-widget-error">
@@ -106,7 +107,7 @@
 		    <td class="form-widget">
                   </else> 	
 		<fieldset>
-	        <legend>Choose File</legend>
+	        <legend>#acs-templating.Choose_File#</legend>
 		<formgroup id="choose_file">
 <if @formgroup.rownum@ odd and @formgroup.rownum@ gt 1><br /></if>
                           @formgroup.widget;noquote@ @formgroup.label;noquote@
@@ -119,6 +120,7 @@
 		</fieldset>
 		</td>
 	        </tr> 
+</if>
 		<tr class="form-element">
 		  <if @formerror.f_title@ not nil>
 		    <td class="form-widget-error">
@@ -127,7 +129,7 @@
 		    <td class="form-widget">
 		  </else>
 	<fieldset>
-	<legend>or Upload a New File</legend>                  
+	<legend>#acs-templating.Upload_a_New_File#</legend>                  
 		#acs-templating.Link_Title#<br />
 		  <formwidget id="f_title">
 		    <formerror id="f_title">
@@ -144,6 +146,7 @@
 		    <br /></formgroup>
                   <img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" border="0">
                   #acs-templating.This_file_can_be_reused_help#
+                  		    <br />
 		    <formerror id="share">
 		      <div class="form-error">@formerror.share@</div>
 		    </formerror>                        
