@@ -1,12 +1,11 @@
-<html style="width: 400px; height: 260px">
+<html>
 <head>
-  <title>#acs-templating.HTMLArea_InsertImageTitle#</title>
+<title>#acs-templating.HTMLArea_InsertImageTitle#</title>
 
-  <script type="text/javascript" 
-	  src="/resources/acs-templating/xinha-nightly/popups/popup.js">
-  </script>
-
-
+<script type="text/javascript" src="/resources/acs-templating/xinha-nightly/popups/popup.js"></script>
+  
+@js_source;noquote@
+  
 <script type="text/javascript">
 
 	var selector_window;
@@ -32,12 +31,14 @@
       		 onOK();
 	      	 __dlg_close(null);
 	  }
+	  initCarousel_html_carousel();
 	};
 	
 	function onOK() {
 	  var required = {
 	    "f_url": "#acs-templating.HTMLArea_NoURL#"
 	  };
+	  
 	  for (var i in required) {
 	    var el = document.getElementById(i);
 	    if (!el.value) {
@@ -46,14 +47,22 @@
 	      return false;
 	    }
 	  }
+	  
 	  // pass data back to the calling window
-	  var fields = ["f_url"];
-	  var param = new Object();
-	  for (var i in fields) {
-	    var id = fields[i];
-	    var el = document.getElementById(id);
-	    param[id] = el.value;
-	  }
+	  /*
+		  var fields = ["f_url"];
+		  var param = new Object();
+		  for (var i in fields) {
+		    var id = fields[i];
+		    var el = document.getElementById(id);
+		    param[id] = el.value;
+		  }
+	  */
+	  
+      var el = document.getElementById("f_url");
+      var param = new Object();
+	  param["f_url"] = el.value;
+	  
 	  if (selector_window) {
 	    selector_window.close();
 	  }
@@ -143,32 +152,128 @@
 	border-bottom: 1px solid black; letter-spacing: 2px;
 	}
 	form { padding: 0px; margin: 0px; }
+
+	#html-carousel {
+		background: #f5f4e4; 
+	} 
+	#html-carousel .carousel-list li {
+		margin:4px 10px 0px 10px; 
+	} 
+	#html-carousel .carousel-list li {
+		width: 106px;
+		border: 0px solid green;
+		padding: 10px;
+		padding-top: 15px;
+		margin: 0;
+		color: #3F3F3F; 
+	} 
+	#html-carousel .carousel-list li img {
+		border:1px solid #999;
+		display:block; 
+		height:100;
+	} 
+	#html-carousel {
+		margin-bottom: 10px;
+		float: left;     
+		width: 330px;     
+		height: 155px; 
+	} 
+	/* BUTTONS */ 
+	#prev-arrow-container, #next-arrow-container {
+		float:left;
+		margin: 1px;
+		padding: 0px; 
+	} 
+	#next-arrow {
+		cursor:pointer; 
+	} 
+	#prev-arrow {
+		cursor:pointer; 
+	} 
+
 </style>
+
+<link href="/resources/ajaxhelper/carousel/carousel.css" media="all" rel="Stylesheet" type="text/css" />
+<script src="/resources/ajaxhelper/carousel/carousel.js" type="text/javascript"></script>
 
 </head>
 
 <body onload="Init()">
 <div id="insert_image_upload">
-	<table border="0" width="100%" style="margin: 0 auto; text-align: left;padding: 0px;">
+
+	<table border="0" style="margin: 0 auto; text-align: left;padding: 0px;" width="100%">
 	  <tbody>
-      <td valign="top" width="50%" >
+      <td valign="top">
 	<if @write_p@ eq 1>
 	    <legend><b>@HTML_UploadTitle@</b></legend>
 	    <formtemplate id="upload_form">
 			<input type="hidden" name="f_url" id="f_url" value="@f_url@"/>
-	      <table cellspacing="2" cellpadding="2" border="0" width="55%">
-<if @recent_images_options@ not nil>
+	      <table cellspacing="2" cellpadding="2" border="0">
+	<if @recent_images_options@ not nil>
 		<tr class="form-group">
-		<td>
+		  <if @formerror.upload_file@ not nil>
+		    <td class="form-widget-error">
+		  </if>
+	          <else>
+		    <td class="form-widget">
+                  </else> 	
 		<fieldset>
-	        <legend>Choose Image</legend>
-		<formgroup id="choose_file">
-<if @formgroup.rownum@ odd and @formgroup.rownum@ gt 1><br /></if>
-			<img src="/image/@formgroup.option@/thumbnail" width="50">
-                          @formgroup.widget;noquote@
-		</formgroup>
-	<br />
-	<formwidget id="select_btn">&nbsp;<button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
+        <legend>#acs-templating.Choose_Image#</legend>
+        	<table border=0 cellpadding=2 cellspacing=0 width="100%">
+        	<tr>
+        	<td>
+			<div id="prev-arrow-container">
+				<img id="prev-arrow" class="left-button-image" src="/resources/ajaxhelper/carousel/left-enabled.gif"/>
+			</div> 
+			<div class="carousel-component" id="html-carousel">
+				<div class="carousel-clip-region">
+					<ul class="carousel-list">
+						<formgroup id="choose_file">
+							<li>
+								<img src="/image/@formgroup.option@/thumbnail" onclick="document.getElementById('upload_form:elements:choose_file:@formgroup.option@').click()" /><br / >@formgroup.widget;noquote@
+								<formerror id="upload_file">
+									<div class="form-error"><br />@formerror.upload_file@</div>
+								</formerror>	
+							</li>	
+						</formgroup>						
+					</ul>   
+				</div> 			
+			</div> 
+			
+			<div id="next-arrow-container" >
+				<img id="next-arrow" class="right-button-image" src="/resources/ajaxhelper/carousel/right-enabled.gif"/>
+			</div> 
+			
+			<script type="text/javascript">   
+
+			function initCarousel_html_carousel() {
+				carousel = new Carousel('html-carousel', {numVisible:1,scrollInc:1,animHandler:animHandler, animParameters:{duration:0.5}, buttonStateHandler:buttonStateHandler, nextElementID:'next-arrow', prevElementID:'prev-arrow', size:@recent_images:rowcount@})
+			};
+
+									
+			function buttonStateHandler(button, enabled) {
+				if (button == "prev-arrow") 
+					$('prev-arrow').src = enabled ? "/resources/ajaxhelper/carousel/left-enabled.gif" : "/resources/ajaxhelper/carousel/left-disabled.gif"
+				else 
+					$('next-arrow').src = enabled ? "/resources/ajaxhelper/carousel/right-enabled.gif" : "/resources/ajaxhelper/carousel/right-disabled.gif"
+			}
+			
+			function animHandler(carouselID, status, direction) {
+				var region = $(carouselID).childrenWithClassName("carousel-clip-region")[0]
+				if (status == "before") {
+					Effect.Fade(region, {to: 0.3, queue: { position:'end', scope: "carousel" }, duration: 0.2})
+				}
+				if (status == "after") {
+					Effect.Fade(region, {to: 1, queue: { position:'end', scope: "carousel" }, duration: 0.2})
+				}
+			}			
+				
+			</script> 
+		</td></tr>
+		<tr><td>
+			<formwidget id="select_btn">&nbsp;<button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
+		</td></tr>
+		</table>
 		</fieldset>
 		</td>
 	        </tr> 
@@ -181,7 +286,8 @@
 		    <td class="form-widget">
 		  </else>
 	<fieldset>
-	<legend><if @recent_images_options@ not nil>or</if> Upload a New Image</legend>
+
+	<legend>#acs-templating.Upload_a_New_Image#</legend>
 
 		  <formwidget id="upload_file">
 		    <formerror id="upload_file">
@@ -197,7 +303,7 @@
 		      <div class="form-error">@formerror.share@</div>
 		    </formerror>                        
 	<formwidget id="upload_btn">&nbsp;<button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
-</fieldset>
+	</fieldset>
       </td>
     </tr>
     </table>
