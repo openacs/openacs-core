@@ -3,9 +3,13 @@
 
   <msg key="12-Hour">12-Hour</msg>
   <msg key="24-Hour">24-Hour</msg>
+  <msg key="Add_the_selected_file">Add the selected file</msg>
+  <msg key="Add_the_selected_image">Add the selected image</msg>
   <msg key="Anyone_on_the_internet">Anyone on the Internet</msg>
   <msg key="Anyone_on_this_system">Anyone on this system</msg>
   <msg key="Attach_File_Choose_a_file">Please choose a file to attach.</msg>
+  <msg key="Choose_File">Choose File</msg>
+  <msg key="Choose_Image">Choose Image</msg>
   <msg key="CSV">CSV</msg>
   <msg key="data">data</msg>
   <msg key="Day">Day</msg>
@@ -60,6 +64,7 @@
   <msg key="Invalid_keyword">Invalid keyword</msg>
   <msg key="Invalid_natural_number">Invalid natural number </msg>
   <msg key="Invalid_url">Invalid url</msg>
+  <msg key="Link_Title">Link Title</msg>
   <msg key="lt_Checkuncheck_all_rows">Check/uncheck all rows</msg>
   <msg key="lt_Checkuncheck_this_row">Check/uncheck this row, and select an action to perform below</msg>
   <msg key="lt_Dates_must_be_formatted_">Dates must be formatted as: %format%</msg>
@@ -89,9 +94,13 @@
   <msg key="Table">Table</msg>
   <msg key="Tag_handler_invalid_number_of_args">Invalid number of arguments to tag handler.</msg>
   <msg key="Template_parser_error_in_parameter_list">Error in parameter list</msg>
+  <msg key="This_file_can_be_reused_by">This file can be reused by</msg>
+  <msg key="This_file_can_be_reused_help">This allows the file to be used in other contexts</msg>
   <msg key="This_Group">This group</msg>
   <msg key="This_image_can_be_reused_by">This image can be reused by</msg>
   <msg key="This_image_can_be_reused_help">This allows your image to be used in other contexts</msg>
+  <msg key="Upload_a_New_File">Upload a New File</msg>
+  <msg key="Upload_a_New_Image">Upload a New Image</msg>
   <msg key="Year">Year</msg>
   <msg key="year">year</msg>
   <msg key="Year_must_be_positive">Year must be positive</msg>
