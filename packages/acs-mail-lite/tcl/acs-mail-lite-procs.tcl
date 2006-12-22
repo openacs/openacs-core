@@ -284,53 +284,9 @@ namespace eval acs_mail_lite {
  	    set email(from) [parse_email_address -email $email(from)]
 	    
 
-	    # The whole code with the prefixes does not work and is actually not well through through I fear.
-	    # This is why it is disabled in total and we rely on simple callback mechanisms instead
+	    # We execute all callbacks now
+	    callback acs_mail_lite::incoming_email -array email
 	    
-	    if {1} {
-		    
-		# We execute all callbacks now
-		callback acs_mail_lite::incoming_email -array email
-		
-	    } else {
-
-		set process_p 1
-		
-		#check if we have several sites. In this case a site prefix is set
-		set site_prefix [get_parameter -name SitePrefix -default ""]
-		set package_prefix ""
-		
-		if {![empty_string_p $site_prefix]} {
-		    regexp "($site_prefix)-(\[^-\]*)\?-(\[^@\]+)\@" $email(to) all site_prefix package_prefix rest
-		    #we only process the email if both a site and package prefix was found
-		    if {[empty_string_p $site_prefix] || [empty_string_p $package_prefix]} {
-			set process_p 0
-		    }
-		    #no site prefix is set, so this is the only site
-		} else {
-		    regexp "(\[^-\]*)-(\[^@\]+)\@" $email(to) all package_prefix rest
-		    #we only process the email if a package prefix was found
-		    if {[empty_string_p $package_prefix]} {
-			set process_p 0
-		    }
-		}
-		if {$process_p} {
-		    
-		    #check if an implementation exists for the package_prefix and call the callback
-		    
-		    if {[db_0or1row select_impl {}]} {
-			
-			ns_log Notice "load_mails: Prefix $prefix found. Calling callback implmentation $impl_name for package_id $package_id"
-		        callback -impl $impl_name acs_mail_lite::incoming_email -array email -package_id $package_id
-
-		    } else {
-			ns_log Notice "load_mails: prefix not found. Doing nothing."
-		    }
-		} else {
-		    ns_log Error "load_mails: Either the SitePrefix setting was incorrect or not registered package prefix '$package_prefix'."
-		}
-	    }
-
             #let's delete the file now
             if {[catch {ns_unlink $msg} errmsg]} {
                 ns_log Error "load_mails: unable to delete queued message $msg: $errmsg"

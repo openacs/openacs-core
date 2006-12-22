@@ -6,7 +6,8 @@
     <fullquery name="acs_mail_lite::complex_send.create_complex_queue_entry">
         <querytext>
             insert into acs_mail_lite_complex_queue
-                  (creation_date,
+                  (id,
+		   creation_date,
                    locking_server,
                    to_party_ids,	
                    cc_party_ids,
@@ -34,7 +35,8 @@
                    use_sender_p     
                   )
             values
-                  (:creation_date,
+                  (:acs_mail_lite_id_seq.nextval,
+		   :creation_date,
                    :locking_server,
                    :to_party_ids,
                    :cc_party_ids,

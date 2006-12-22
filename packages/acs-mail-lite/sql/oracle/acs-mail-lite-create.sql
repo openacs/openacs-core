@@ -58,40 +58,43 @@ create table acs_mail_lite_bounce_notif (
     notification_count		integer default 0
 );
 
-CREATE TABLE acs_mail_lite_reply_prefixes
-(
-  prefix varchar(100) NOT NULL,
-  package_id int4 NOT NULL,
-  impl_name varchar(100) NOT NULL
-) ;
-
 
 CREATE TABLE acs_mail_lite_complex_queue (
-    id serial PRIMARY KEY,
-    creation_date text,
-    locking_server text,
-    to_party_ids text,
-    cc_party_ids text,
-    bcc_party_ids text,
-    to_group_ids text,
-    cc_group_ids text,
-    bcc_group_ids text,
-    to_addr text,
-    cc_addr text,
-    bcc_addr text,
-    from_addr text,
-    reply_to text,
-    subject text,
-    body text,
-    package_id integer,
-    files text,
-    file_ids text,
-    folder_ids text,
-    mime_type text,
-    object_id integer,
-    single_email_p boolean,
-    no_callback_p boolean,
-    extraheaders text,
-    alternative_part_p boolean,
-    use_sender_p boolean
+    id 				integer
+                                constraint acs_mail_lite_complex_queue_pk 
+				PRIMARY KEY,
+    creation_date 		text,
+    locking_server 		text,
+    to_party_ids 		varchar(4000),
+    cc_party_ids 		varchar(4000),
+    bcc_party_ids 		varchar(4000),
+    to_group_ids 		varchar(4000),
+    cc_group_ids		varchar(4000),
+    bcc_group_ids 		varchar(4000),
+    to_addr 			clob,
+    cc_addr 			clob,
+    bcc_addr			clob,
+    from_addr 			varchar(400),
+    reply_to 			varchar(400),
+    subject 			varchar(4000),
+    body 			clob,
+    package_id 			integer,
+    files 			varchar(4000),
+    file_ids 			varchar(4000),
+    folder_ids 			varchar(4000),
+    mime_type 			varchar(200),
+    object_id 			integer,
+    single_email_p 		varchar2(1)
+				constraint acs_mail_lite_co_qu_single_em_p_ck
+				check (valid_email_p in ('t','f')),
+    no_callback_p 		varchar2(1)
+				constraint acs_mail_lite_co_qu_no_callb_p_ck
+				check (valid_email_p in ('t','f')),
+    extraheaders 		clob,
+    alternative_part_p		varchar2(1)
+				constraint acs_mail_lite_co_qu_alt_part_p_ck
+				check (valid_email_p in ('t','f')),
+    use_sender_p 		varchar2(1)
+				constraint acs_mail_lite_co_qu_use_sender_p_ck
+				check (valid_email_p in ('t','f'))
 );
