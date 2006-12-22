@@ -135,11 +135,5 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="acs_mail_lite::load_mails.select_impl">
-        <querytext>
-	        select * from acs_mail_lite_reply_prefixes where prefix = :package_prefix
-        </querytext>
-    </fullquery>
-
 
 </queryset>
