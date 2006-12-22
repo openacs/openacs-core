@@ -35,7 +35,7 @@
                    use_sender_p     
                   )
             values
-                  (:acs_mail_lite_id_seq.nextval,
+                  (acs_mail_lite_id_seq.nextval,
 		   :creation_date,
                    :locking_server,
                    :to_party_ids,
