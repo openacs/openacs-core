@@ -384,9 +384,10 @@ namespace eval acs_mail_lite {
 	# subject: convert 8-bit characters into MIME encoded words
 	# see http://tools.ietf.org/html/rfc2047
 	
-	set subject_encoded [mime::word_encode "iso8859-1" base64 $subject]
-	regsub -all {\n} $subject_encoded {} subject_encoded
-	mime::setheader $multi_token Subject "$subject_encoded"
+	#set subject_encoded [mime::word_encode "iso8859-1" base64 $subject]
+	#regsub -all {\n} $subject_encoded {} subject_encoded
+	#mime::setheader $multi_token Subject "$subject_encoded"
+	mime::setheader $multi_token Subject "$subject"
 
 	foreach header $extraheaders {
 	    mime::setheader $multi_token "[lindex $header 0]" "[lindex $header 1]"
@@ -567,6 +568,7 @@ namespace eval acs_mail_lite {
 		    callback acs_mail_lite::complex_send \
 			-package_id $package_id \
 			-from_party_id [party::get_by_email -email $sender_addr] \
+			-from_addr $sender_addr \
 			-to_party_ids $to_party_ids \
 			-cc_party_ids $cc_party_ids \
 			-bcc_party_ids $bcc_party_ids \
@@ -608,6 +610,7 @@ namespace eval acs_mail_lite {
 			callback acs_mail_lite::complex_send \
 			    -package_id $package_id \
 			    -from_party_id $party_id($from_addr) \
+			    -from_addr $from_addr \
 			    -to_addr $email \
 			    -body $body \
 			    -message_id $message_id \
@@ -636,6 +639,7 @@ namespace eval acs_mail_lite {
 			callback acs_mail_lite::complex_send \
 			    -package_id $package_id \
 			    -from_party_id $party_id($from_addr) \
+			    -from_addr $from_addr \
 			    -to_party_ids $party \
 			    -body $body \
 			    -message_id $message_id \
