@@ -13,6 +13,7 @@ ad_library {
 ad_proc -public -callback acs_mail_lite::complex_send {
     {-package_id:required}
     {-from_party_id:required}
+    {-from_addr ""}
     {-to_party_ids}
     {-cc_party_ids}
     {-bcc_party_ids}

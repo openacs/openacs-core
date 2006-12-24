@@ -273,7 +273,7 @@ namespace eval acs_mail_lite {
             }
             return [list]
         }
-	
+
         # loop over every incoming mail
 	foreach msg $messages {
 	    ns_log Debug "load_mails: opening $msg"
@@ -282,7 +282,6 @@ namespace eval acs_mail_lite {
 	    parse_email -file $msg -array email
  	    set email(to) [parse_email_address -email $email(to)]
  	    set email(from) [parse_email_address -email $email(from)]
-	    
 
 	    # We execute all callbacks now
 	    callback acs_mail_lite::incoming_email -array email
@@ -398,26 +397,36 @@ namespace eval acs_mail_lite {
 	
 	#now extract all parts (bodies/files) and fill the email array
 	foreach part $all_parts {
-	    switch [mime::getproperty $part content] {
-		"text/plain" {
-		    lappend bodies [list "text/plain" [mime::getbody $part]]
-		}
-		"text/html" {
-		    lappend bodies [list "text/html" [mime::getbody $part]]
-		}
-		"application/octet-stream" {
-		    set content_type [mime::getproperty $part content]
-		    set encoding [mime::getproperty $part encoding]
-		    set body [mime::getbody $part -decode]
-		    set content  $body
-		    set params [mime::getproperty $part params]
-		    if {[lindex $params 0] == "name"} {
-			set filename [lindex $params 1]
-		    } else {
-			set filename ""
+
+	    # Attachments have a "Content-disposition" part
+	    # Therefore we filter out if it is an attachment here
+	    if {[catch {mime::getheader $part Content-disposition}]} {
+		switch [mime::getproperty $part content] {
+		    "text/plain" {
+			lappend bodies [list "text/plain" [mime::getbody $part]]
 		    }
-		    lappend files [list $content_type $encoding $filename $content]
+		    "text/html" {
+			lappend bodies [list "text/html" [mime::getbody $part]]
+		    }
 		}
+	    } else {
+		set encoding [mime::getproperty $part encoding]
+		set body [mime::getbody $part -decode]
+		set content  $body
+		set params [mime::getproperty $part params]
+		if {[lindex $params 0] == "name"} {
+		    set filename [lindex $params 1]
+		} else {
+		    set filename ""
+		}
+
+		# Determine the content_type
+		set content_type [mime::getproperty $part content]
+		if {$content_type eq "application/octet-stream"} {
+		    set content_type [ns_guesstype $filename]
+		}
+
+		lappend files [list $content_type $encoding $filename $content]
 	    }
 	}
 
