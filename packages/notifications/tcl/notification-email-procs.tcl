@@ -59,6 +59,12 @@ namespace eval notification::email {
         {-object_id:required}
         {-type_id:required}
     } {
+        # DAVEB allow creation user to be the reply address
+        set creation_user [db_string get_creation_user "select creation_user from acs_objects where object_id=:object_id" -default ""]
+        if {![string equal "" $creation_user]} {
+            acs_user::get -user_id $creation_user -array user
+            return "$user(name) <${user(email)}>"
+        }
         if {[empty_string_p $object_id] || [empty_string_p $type_id]} {
             return "\"[address_domain] mailer\" <[reply_address_prefix]@[address_domain]>"
         } else {
@@ -133,6 +139,13 @@ namespace eval notification::email {
 	   set from_email $reply_to
        }
 
+       # FIXME REWRITE ACS MAIL LITE TO USE EXTRA HEADERS
+       # SANELY!!! DAVEB 2006-12-26
+       set eh_list_of_lists [list]
+       foreach {key value} [util_ns_set_to_list -set $extra_headers] {
+           lappend $eh_list_of_lists [list $key $value]
+       }
+
        acs_mail_lite::complex_send \
            -to_party_ids $to_user_id \
            -from_addr $from_email \
@@ -140,7 +153,7 @@ namespace eval notification::email {
            -subject $subject \
            -body $content \
            -use_sender \
-           -extraheaders $extra_headers
+           -extraheaders $eh_list_of_lists
     }
 
     ad_proc -public bounce_mail_message {
