@@ -230,7 +230,7 @@ ad_proc -public cr_import_content {
                 if { [string equal $mime_type "image/jpeg"] } {
                     catch { set what_aolserver_told_us [ns_jpegsize $tmp_filename] }
                 } elseif { [string equal $mime_type "image/gif"] } {
-                    catch { set what_aolserver_told_us [sn_gifsize $tmp_filename] }
+                    catch { set what_aolserver_told_us [ns_gifsize $tmp_filename] }
                 } elseif { [string equal $mime_type "image/png"] } { 
 		    # we don't have built in png size detection
 		    # but we want to allow upload of png images
