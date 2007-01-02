@@ -193,6 +193,7 @@ create function acs_reference__is_expired_p (integer)
 returns char as '
 declare
     repository_id alias for $1;
+    v_expiry_date acs_reference_repositories.expiry_date%TYPE;
 begin
     select expiry_date into v_expiry_date
     from   acs_reference_repositories
