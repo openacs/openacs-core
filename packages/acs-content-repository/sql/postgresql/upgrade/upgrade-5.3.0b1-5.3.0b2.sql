@@ -6,4 +6,4 @@
 -- @cvs-id $Id$
 --
 
-update cr_revisions set content = '<html><body>@text;noquote@</body></html>' where revision_id = (select template_id from cr_type_template_map where content_type = 'content_revision' and use_context = 'public' and is_default = 't');
+update cr_revisions set content = '<html><body>@text;noquote@</body></html>' where revision_id = (select live_revision from cr_items ci, cr_type_template_map cm where cm.content_type = 'content_revision' and cm.use_context = 'public' and cm.is_default = 't' and ci.item_id=cm.template_id);
