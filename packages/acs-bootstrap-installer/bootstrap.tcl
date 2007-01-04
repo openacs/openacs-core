@@ -146,6 +146,7 @@ set errno [catch {
     if {[info command ::xotcl::Class] ne "" &&
         [file isdirectory $root_directory/packages/xotcl-core]} {
        apm_bootstrap_load_libraries -procs xotcl-core
+       apm_bootstrap_load_libraries -init xotcl-core
     }
 
     # Load libraries, queries etc. for remaining packages
