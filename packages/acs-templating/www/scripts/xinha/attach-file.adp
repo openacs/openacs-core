@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>#acs-templating.HTMLArea_InsertFileTitle#</title>
+  <title>#acs-templating.HTMLArea_InsertLink#</title>
 
   <script type="text/javascript" 
 	  src="/resources/acs-templating/xinha-nightly/popups/popup.js">
@@ -151,8 +151,7 @@
 		      <div class="form-error">@formerror.share@</div>
 		    </formerror>                        
 	<formwidget id="ok_btn">&nbsp;<button type="button"
-	name="cancel" onclick="return
-	onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
+	name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
           </fieldset>
       </td>
     </tr>
