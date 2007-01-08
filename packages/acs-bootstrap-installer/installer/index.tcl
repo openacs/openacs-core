@@ -212,7 +212,7 @@ After adding support the larger stacksize, please restart your web server.
 # APM needs to check its permissions.
 if { [catch {apm_workspace_dir} ] } {
     append errors "<li><p><strong>The [acs_root_dir] directory has incorrect permissions.  It must be owned by
-the user executing the web server, normally <code>nsadmin</code>, and the owner must have read and write priveliges
+the user executing the web server, normally <code>nsadmin</code>, and the owner must have read and write privileges
 on this directory.  You can correct this by running the following script as root.
 To give another user access to the files, add them to <code>web</code> group.
 <blockquote><pre>
@@ -228,7 +228,7 @@ chmod -R ug+rw [acs_root_dir]
 if { ![file writable [file join [acs_root_dir] packages]] } {
     append errors "<li><p><strong>The [acs_root_dir]/packages directory has incorrect permissions.  It must be owned by
     the user executing the web server, normally <code>nsadmin</code> and the owner must have read and write 
-    priveliges on this directory and all of its subdirectories.  You can correct this by running the following 
+    privileges on this directory and all of its subdirectories.  You can correct this by running the following 
     script as root.
     To give another user access to the files, add them to <code>web</code> group.
 <blockquote><pre>
