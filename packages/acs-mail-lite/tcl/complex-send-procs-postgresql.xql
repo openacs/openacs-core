@@ -82,6 +82,7 @@
                    cc_addr,
                    bcc_addr,
                    from_addr,
+		   reply_to,
                    subject,
                    body,
                    package_id,

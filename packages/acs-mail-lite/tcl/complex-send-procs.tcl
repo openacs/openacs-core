@@ -705,6 +705,7 @@ namespace eval acs_mail_lite {
 			    -use_sender_p $use_sender_p        
 		    } errMsg]
 		    if $err {
+			ns_log Error "Error while sending queued complex mail: $errMsg"
 			# release the lock
 			set locking_server ""
 			db_dml lock_queued_message {}    
