@@ -20,6 +20,9 @@
   <li><a href=rel-types/>Relationship Types</a>
   <li><a href=host-node-map/>Host-Node Map</a>
   <li><a href=object-types/>Object Types</a>
+  <if @asm_p@ eq 1>
+  <li><a href=set-reg-assessment> #acs-subsite.reg_asm_link#</a>
+  </if>
 </ul>
 
 <if @sw_admin_p@ true>
