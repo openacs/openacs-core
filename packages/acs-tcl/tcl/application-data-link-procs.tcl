@@ -8,6 +8,8 @@ ad_library {
 
 namespace eval application_data_link {}
 
+# modified 2006/07/25 nfl: db_transaction around db_dml
+# modified 2006/07/26 nfl: change db_transaction to catch
 ad_proc -public application_data_link::new {
     -this_object_id:required
     -target_object_id:required
@@ -18,12 +20,23 @@ ad_proc -public application_data_link::new {
     object.
     @param target_object_id The ID of the target object.
 } {
-    application_data_link::new_from \
-	-object_id $this_object_id \
-	-to_object_id $target_object_id
-    application_data_link::new_to \
-	-object_id $this_object_id \
-        -from_object_id $target_object_id
+    if { [catch {
+	application_data_link::new_from \
+	    -object_id $this_object_id \
+	    -to_object_id $target_object_id
+	
+	application_data_link::new_to \
+	    -object_id $this_object_id \
+	    -from_object_id $target_object_id
+	
+    }]}  {
+	# check if error occured because of existing link
+	if { [application_data_link::exist_link -object_id $this_object_id -target_object_id $target_object_id] eq "1" } {
+	    ns_log Debug "application_data_link::new: link already exists" 
+	} else {  
+	    ns_log Error "application_data_link::new: link creation failure"
+	}
+    }
 }
 
 ad_proc -public application_data_link::new_from {
@@ -37,6 +50,12 @@ ad_proc -public application_data_link::new_from {
     @param to_object_id The ID of the target object.
 } {
     set forward_rel_id [db_nextval acs_data_links_seq]
+
+    # Flush the cache for both items
+    util_memoize_flush_regexp "application_data_link::get_linked_not_cached -from_object_id $object_id .*"
+    util_memoize_flush_regexp "application_data_link::get_linked_not_cached -from_object_id $to_object_id .*"
+    util_memoize_flush_regexp "application_data_link::get_linked_content_not_cached -from_object_id $object_id .*"
+    util_memoize_flush_regexp "application_data_link::get_linked_content_not_cached -from_object_id $to_object_id .*"
 
     db_dml create_forward_link {}
 }
@@ -53,10 +72,32 @@ ad_proc -public application_data_link::new_to {
 } {
     set backward_rel_id [db_nextval acs_data_links_seq]
 
-    db_dml create_backward_link {}
+    # Flush the cache for both items
+    util_memoize_flush_regexp "application_data_link::get_linked_not_cached -from_object_id $object_id .*"
+    util_memoize_flush_regexp "application_data_link::get_linked_not_cached -from_object_id $from_object_id .*"
+    util_memoize_flush_regexp "application_data_link::get_linked_content_not_cached -from_object_id $object_id .*"
+    util_memoize_flush_regexp "application_data_link::get_linked_content_not_cached -from_object_id $from_object_id .*"
 
-    db_dml create_forward_link {}
     db_dml create_backward_link {}
+}
+
+# created 2006/07/25 nfl exist a link, returns 0 or 1
+ad_proc -public application_data_link::exist_link {
+    -object_id:required
+    -target_object_id:required  
+} {
+    Check for the existence of a link from an object_id to a target_object_id
+
+    @param object_id The object we're looking for a link from
+    @param target_object_id THe object we're looking for a link to
+} {
+    set linked_objects [ application_data_link::get -object_id $object_id ]
+    if { [lsearch -exact $linked_objects "$target_object_id"] != -1 } {
+      # found link
+      return 1
+    } else {
+      return 0
+    }
 }
 
 ad_proc -public application_data_link::delete_links {
@@ -115,10 +156,39 @@ ad_proc -public application_data_link::get_linked {
 
     @return object_id of linked object.
 } {
+    return [util_memoize [list application_data_link::get_linked_not_cached -from_object_id $from_object_id -to_object_type $to_object_type]]
+}
+
+ad_proc -public application_data_link::get_linked_not_cached {
+    -from_object_id:required
+    -to_object_type:required
+} {
+    Gets the ID for the object linked to from_object_id and matches the
+    to_object_type.
+
+    @param from_object_id Object ID of linked-from object.
+    @param to_object_type Object type of linked-to object.
+
+    @return object_id of linked object.
+} {
     return [db_list linked_object {}]
 }
 
 ad_proc -public application_data_link::get_linked_content {
+    -from_object_id:required
+    -to_content_type:required
+} {
+    Gets the content of the linked object.
+
+    @param from_object_id Object ID of linked-from object.
+    @param to_content_type Content type of linked-to object.
+
+    @return item_id for the content item.
+} {
+    return [util_memoize [list application_data_link::get_linked_content_not_cached -from_object_id $from_object_id -to_content_type $to_content_type]]
+}
+
+ad_proc -public application_data_link::get_linked_content_not_cached {
     -from_object_id:required
     -to_content_type:required
 } {
