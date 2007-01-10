@@ -5,7 +5,7 @@ ad_page_contract {
     {success_p 0}
 }
 
-if { ![empty_string_p $repository_url] } {
+if { $repository_url ne "" } {
     set parent_page_title "Install From OpenACS Repository"
     set parent_page_url [export_vars -base install {repository_url}]
 } else {

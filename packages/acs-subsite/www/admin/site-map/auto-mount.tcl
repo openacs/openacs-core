@@ -16,7 +16,7 @@ ad_page_contract {
 
 subsite::auto_mount_application -node_id $node_id $package_key
 
-if {[empty_string_p $return_url]} {
+if {$return_url eq ""} {
     set return_url [site_node::get_url -node_id]
 }
 

@@ -31,7 +31,7 @@ set last_year ""
 while { [ns_db getrow $db $selection] } {
     set_variables_after_query
     if { $last_year != $pretty_year } {
-	if { ![empty_string_p $last_year] } {
+	if { $last_year ne "" } {
 	    # insert a line break
 	    append whole_page "<tr><td colspan=2>&nbsp;</tr>\n"
 	}

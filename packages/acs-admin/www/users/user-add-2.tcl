@@ -26,7 +26,7 @@ foreach var_name [array names user] {
     set $var_name $user($var_name)
 }
 
-if { [empty_string_p $password] } {
+if { $password eq "" } {
     set password [ad_generate_random_string]
 }
 

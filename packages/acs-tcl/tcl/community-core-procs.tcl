@@ -80,19 +80,19 @@ ad_proc -deprecated ad_user_new {
     @see auth::create_user
     @see auth::create_local_account
 } {
-    if { [empty_string_p $user_id] } {
+    if { $user_id eq "" } {
         set user_id [db_nextval acs_object_id_seq]
     }
 
-    if { [empty_string_p $password_question] } {
+    if { $password_question eq "" } {
         set password_question [db_null]
     }
 
-    if { [empty_string_p $password_answer] } {
+    if { $password_answer eq "" } {
         set password_answer [db_null]
     }
 
-    if { [empty_string_p $url] } {
+    if { $url eq "" } {
         set url [db_null]
     }
 
@@ -206,7 +206,7 @@ ad_proc -public person::name {
 } {
     if {$person_id eq "" && $email eq ""} {
 	error "You need to provide either person_id or email"
-    } elseif {![string eq "" $person_id] && ![string eq "" $email]} {
+    } elseif {"" ne $person_id && "" ne $email } {
 	error "Only provide provide person_id OR email, not both"
     } else {
 	return [util_memoize [list person::name_not_cached -person_id $person_id -email $email]]
@@ -266,11 +266,11 @@ ad_proc -public person::get_bio {
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    if { [empty_string_p $person_id] } {
+    if { $person_id eq "" } {
         set person_id [ad_conn user_id]
     }
 
-    if { ![empty_string_p $exists_var] } {
+    if { $exists_var ne "" } {
         upvar $exists_var exists_p
     }
 
@@ -305,9 +305,9 @@ ad_proc -public person::update_bio {
         # There is no bio yet.
         # If new bio is empty, that's a don't change (1)
         # If new bio is non-empty, that's an insert (0)
-        set bio_change_to [empty_string_p $bio]
+        set bio_change_to [expr {$bio eq ""}]
     } else {
-        if { [string equal $bio $bio_old] } {
+        if {$bio eq $bio_old} {
             set bio_change_to 1
         } else {
             set bio_change_to 2
@@ -333,7 +333,7 @@ ad_proc -public acs_user::change_state {
 } {
     set rel_id [db_string select_rel_id {*SQL*} -default {}]
 
-    if {[empty_string_p $rel_id]} {
+    if {$rel_id eq ""} {
         return
     }
 
@@ -403,7 +403,7 @@ ad_proc -public acs_user::get_by_username {
     @return user_id of the user, or the empty string if no user found.
 }  {
     # Default to local authority
-    if { [empty_string_p $authority_id] } {
+    if { $authority_id eq "" } {
         set authority_id [auth::authority::local]
     }
 
@@ -459,18 +459,18 @@ ad_proc -public acs_user::get {
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    if { [empty_string_p $user_id] } {
-        if { [empty_string_p $username] } {
+    if { $user_id eq "" } {
+        if { $username eq "" } {
             set user_id [ad_conn user_id]
         } else {
-            if { [empty_string_p $authority_id] } {
+            if { $authority_id eq "" } {
                 set authority_id [auth::authority::local]
             }
         }
     }
 
     upvar $array row
-    if { ![empty_string_p $user_id] } {
+    if { $user_id ne "" } {
         array set row [util_memoize [list acs_user::get_from_user_id_not_cached $user_id] [cache_timeout]]
     } else {
         array set row [util_memoize [list acs_user::get_from_username_not_cached $username $authority_id] [cache_timeout]]
@@ -611,7 +611,7 @@ ad_proc -public acs_user::site_wide_admin_p {
 
     @author Peter Marklund
 } {
-    if { [empty_string_p $user_id]} {
+    if { $user_id eq ""} {
         set user_id [ad_conn user_id]
     }
 
@@ -691,7 +691,7 @@ ad_proc -public party::approved_members {
 
     @author Peter Marklund
 } {
-    if { ![empty_string_p $object_type] } {
+    if { $object_type ne "" } {
         set from_clause ", acs_objects ao"
         set where_clause "and pamm.member_id = ao.object_id
              and ao.object_type = :object_type"

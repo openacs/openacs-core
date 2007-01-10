@@ -13,7 +13,7 @@ ad_proc -public watch_files {} {
     set proc_name [info procs ::template::mtimes::tcl::$file]
     set mtime [file mtime $file]
 
-    if { [string equal $proc_name {}] || $mtime != [$proc_name] } {
+    if { $proc_name eq {} || $mtime != [$proc_name] } {
 
       uplevel #0 "source $file"
       proc ::template::mtimes::tcl::$file {} "return $mtime"

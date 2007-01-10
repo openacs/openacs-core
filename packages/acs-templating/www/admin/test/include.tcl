@@ -1,4 +1,4 @@
-if [llength $l] {
+if {[llength $l]} {
     set car		[lindex $l 0]
     set cdr		[lrange $l 1 end]
   

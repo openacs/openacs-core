@@ -203,7 +203,7 @@ ad_proc -private apm_mark_version_for_reload { version_id { changed_files_var ""
     <blockquote><pre>[list $file_id $path]</pre></blockquote>
 
 } {
-    if { ![empty_string_p $changed_files_var] } {
+    if { $changed_files_var ne "" } {
 	upvar $changed_files_var changed_files
     }
 
@@ -312,7 +312,7 @@ ad_proc -private apm_load_libraries {
         lappend file_types test_init
     }
  
-    if { [empty_string_p $packages] } {
+    if { $packages eq "" } {
         set packages [apm_enabled_packages]
     }
 
@@ -365,7 +365,7 @@ ad_proc -public apm_load_packages {
 
     @author Peter Marklund
 } {
-    if { [empty_string_p $packages] } {
+    if { $packages eq "" } {
         set packages [apm_enabled_packages]
     }
 
@@ -415,7 +415,7 @@ ad_proc -private apm_load_queries {
 
     @author ben@mit.edu
 } {
-    if { [empty_string_p $packages] } {
+    if { $packages eq "" } {
         set packages [apm_enabled_packages]
     }
 
@@ -453,9 +453,9 @@ ad_proc -private apm_load_queries {
             #             !( 1 ^ 0 )             = Nope
             #             !( 1 ^ 1 )             = Yep
             #
-            if {![expr $test_queries_p ^ $is_test_file_p] &&
-                [string equal $file_type query_file] &&
-                ([empty_string_p $file_db_type] || [string equal $file_db_type [db_type]])} {
+            if {![expr {$test_queries_p ^ $is_test_file_p}] &&
+                $file_type eq "query_file" &&
+                ($file_db_type eq "" || $file_db_type eq [db_type])} {
 	        db_qd_load_query_file $file
             } 
         }
@@ -737,7 +737,7 @@ ad_proc -public apm_parameter_update {
 } {
     @return The parameter id that has been updated.
 } {
-    if {[empty_string_p $section_name]} {
+    if {$section_name eq ""} {
 	set section_name [db_null]
     }
 
@@ -773,11 +773,11 @@ ad_proc -public apm_parameter_register {
     @return The parameter id of the new parameter.
 
 } {
-    if {[empty_string_p $parameter_id]} {
+    if {$parameter_id eq ""} {
 	set parameter_id [db_null]
     }
 
-    if {[empty_string_p $section_name]} {
+    if {$section_name eq ""} {
 	set section_name [db_null]
     }
 
@@ -815,7 +815,7 @@ ad_proc -public apm_parameter_unregister {
 } {
     Unregisters a parameter from the system.
 } {
-    if { [empty_string_p $parameter_id] } {
+    if { $parameter_id eq "" } {
         set parameter_id [db_string select_parameter_id { 
             select parameter_id
             from   apm_parameters
@@ -859,7 +859,7 @@ ad_proc -public apm_dependency_add {
     @return The id of the new dependency.
 } {
 
-    if {[empty_string_p $dependency_id]} {
+    if {$dependency_id eq ""} {
 	set dependency_id [db_null]
     }
     
@@ -900,7 +900,7 @@ ad_proc -public apm_interface_add {
     @return The id of the new interface.
 } {
 
-    if {[empty_string_p $interface_id]} {
+    if {$interface_id eq ""} {
 	set interface_id [db_null]
     }
     
@@ -947,7 +947,7 @@ ad_proc -public apm_version_get {
 } {
     upvar $array row
 
-    if { ![empty_string_p $package_key] } {
+    if { $package_key ne "" } {
         set version_id [apm_version_id_from_package_key $package_key]
     }
 
@@ -1035,7 +1035,7 @@ ad_proc -private apm_package_ids_from_key_mem {
 	db_foreach apm_package_ids_from_key {
 	    select package_id from apm_packages where package_key = :package_key
 	} {
-	    if {![string eq "" [site_node::get_node_id_from_object_id -object_id $package_id]]} {
+	    if {"" ne [site_node::get_node_id_from_object_id -object_id $package_id] } {
 		lappend package_ids $package_id
 	    } 
 	}
@@ -1176,7 +1176,7 @@ ad_proc -public apm_package_rename {
 } {
     Renames a package instance
 } {    
-    if { [empty_string_p $package_id] } {
+    if { $package_id eq "" } {
         set package_id [ad_conn package_id]
     }
     db_transaction {
@@ -1213,8 +1213,8 @@ ad_proc -public apm_set_callback_proc {
 } {
     apm_assert_callback_type_supported $type
 
-    if { [empty_string_p $version_id] } {
-        if { [empty_string_p $package_key] } {
+    if { $version_id eq "" } {
+        if { $package_key eq "" } {
             error "apm_set_package_callback_proc: Invoked with both version_id and package_key empty. You must supply either of these"
         }
         
@@ -1223,7 +1223,7 @@ ad_proc -public apm_set_callback_proc {
 
     set current_proc [apm_get_callback_proc -type $type -version_id $version_id]
 
-    if { [empty_string_p $current_proc] } {
+    if { $current_proc eq "" } {
         # We are adding
         db_dml insert_proc {}
     } else {
@@ -1247,7 +1247,7 @@ ad_proc -public apm_get_callback_proc {
 } {
     apm_assert_callback_type_supported $type
 
-    if { [empty_string_p $version_id] } {
+    if { $version_id eq "" } {
         set version_id [apm_version_id_from_package_key $package_key]
     }
     return [db_string select_proc {} -default ""]
@@ -1314,21 +1314,21 @@ ad_proc -public apm_invoke_callback_proc {
 } {
     array set arg_array $arg_list
 
-    if {[empty_string_p $proc_name]} {
+    if {$proc_name eq ""} {
         set proc_name [apm_get_callback_proc \
                            -version_id $version_id \
                            -package_key $package_key \
                            -type $type]
     }
 
-    if { [empty_string_p $proc_name] } {
-        if { [string equal $type "after-instantiate"] } {
+    if { $proc_name eq "" } {
+        if {$type eq "after-instantiate"} {
             # We check for the old proc on format: package_key_post_instantiation package_id
-            if { [empty_string_p $package_key] } {
+            if { $package_key eq "" } {
                 set package_key [apm_package_key_from_version_id $version_id]
             }
             set proc_name [apm_post_instantiation_tcl_proc_from_key $package_key]
-            if { [empty_string_p $proc_name] } {
+            if { $proc_name eq "" } {
                 # No callback and no old-style callback proc - no options left
                 return 0
             }
@@ -1480,7 +1480,7 @@ ad_proc -private apm_callback_has_valid_args {
         append test_arg_list " -${arg_name} value"
     }
 
-    if { [empty_string_p $test_arg_list] } {
+    if { $test_arg_list eq "" } {
         # The callback proc should take no args
         return [empty_string_p [info args ::${proc_name}]]
     }
@@ -1516,13 +1516,13 @@ ad_proc -public apm_package_instance_new {
  
     @return The id of the instantiated package
 } {
-    if { [empty_string_p $instance_name] } {
+    if { $instance_name eq "" } {
         set instance_name [db_string pretty_name_from_key {select pretty_name 
                                                           from apm_enabled_package_versions 
                                                           where package_key = :package_key}]
     }
 
-    if { [empty_string_p $package_id] } {
+    if { $package_id eq "" } {
 	set package_id [db_null]
     } 
 
@@ -1630,7 +1630,7 @@ ad_proc -public apm_log {
     Centralized APM logging. If you want to debug the APM, change
     APMDebug to Debug and restart the server.  
 } {
-    if {![string equal "APMDebug" $level]} {
+    if {"APMDebug" ne $level } {
         ns_log $level $msg
     }
 }
@@ -1794,7 +1794,7 @@ ad_proc -private apm::metrics_internal {
             set metrics(procs) [regexp -all -line -nocase {^\s*create\s+or\s+replace\s+function\s+} $filedata]
         }
         data_model_ora {
-            set metrics(procs) [expr [regexp -all -line -nocase {^\s+function\s+} $filedata] + [regexp -all -line -nocase {^\s+procedure\s+} $filedata]]
+            set metrics(procs) [expr {[regexp -all -line -nocase {^\s+function\s+} $filedata] + [regexp -all -line -nocase {^\s+procedure\s+} $filedata]}]
         }
         default {
             # other file-types don't have procs

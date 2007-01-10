@@ -109,7 +109,7 @@ ad_proc -public template::wizard::create { args } {
 	foreach step [split $step_data "\n"] {
 
 	    set step [string trim $step]
-	    if { [string equal $step {}] } { continue }
+	    if {$step eq {}} { continue }
 
 	    eval add $step
 	}
@@ -228,7 +228,7 @@ ad_proc -public template::wizard::get_current_step {
 
     upvar #$level wizard:current_id current_id
     set current_id [ns_queryget wizard_step${wizard_name} {}]
-    if { [empty_string_p $current_id] } {
+    if { $current_id eq "" } {
         if { [info exists start] } {
             set current_id $start
         } else {
@@ -241,7 +241,7 @@ ad_proc -public template::wizard::get_current_step {
 
     # if there is no step state, we are likely in the first step.
     # lets redirect with the proper state vars
-    if {[string equal [ns_queryget wizard_step${wizard_name}] ""]} {
+    if {[ns_queryget wizard_step${wizard_name}] eq ""} {
 	template::forward [get_forward_url $current_id]
     }
 
@@ -251,7 +251,7 @@ ad_proc -public template::wizard::get_current_step {
     upvar #$level wizard:current_url current_url
 
     # lets see if this step exists, if not we are finished with wizard and pass the steps
-    if [info exists step(url)] {
+    if {[info exists step(url)]} {
 	set current_url $step(url)
     } else {
 	# if we have set_finish_url then we redirect to that url when we are finished
@@ -265,7 +265,7 @@ ad_proc -public template::wizard::get_current_step {
 	    set wizard_name $parent_wizard
 
 	    # lets now increment step of the parent wizard
-	    set parent_step [expr [ns_queryget wizard_step${parent_wizard}] + 1]
+	    set parent_step [expr {[ns_queryget wizard_step${parent_wizard}] + 1}]
 	    template::forward [get_forward_url $parent_step]
 	}
 	
@@ -274,9 +274,9 @@ ad_proc -public template::wizard::get_current_step {
     # check for a "back" submission and forward immediately if so
     # also check if we are backing up the current wizard or another wizard
     
-    if { [ns_queryexists wizard_submit_back] && [string equal $wizard_name [ns_queryget wizard_name]]} {
+    if { [ns_queryexists wizard_submit_back] && $wizard_name eq [ns_queryget wizard_name]} {
 
-	set last_index [expr [lsearch -exact $steps $current_id] - 1]
+	set last_index [expr {[lsearch -exact $steps $current_id] - 1}]
 	set last_id [lindex $steps $last_index]
 
         # LARS: I removed this, because it causes forms to not save their changes when you hit the back button
@@ -312,7 +312,7 @@ ad_proc -public template::wizard::get_visited_step {} {
     # otherwise we keep the current value
     set last_visitedstep [get_param wizard_visitedstep${wizard_name}]
     set current_step [current_step]
-    if { ($last_visitedstep < $current_step) || [string equal $last_visitedstep ""] } {
+    if { ($last_visitedstep < $current_step) || $last_visitedstep eq "" } {
         return $current_step
     } else {
         return $last_visitedstep
@@ -350,12 +350,12 @@ ad_proc -private template::wizard::get_wizards_levels {} {
     @see template::wizard
 } {
     variable parse_level
-    set level [expr $parse_level - 1]
+    set level [expr {$parse_level - 1}]
 
     set levels {}
-    for {set i $level} {$i > 1} {set i [expr $i - 1]} {
+    for {set i $level} {$i > 1} {set i [expr {$i - 1}]} {
         upvar #$i wizard:name parent_wizard
-        if [info exists parent_wizard] {
+        if {[info exists parent_wizard]} {
             lappend levels $i
         } else {
             break
@@ -378,7 +378,7 @@ ad_proc -private template::wizard::get_wizards {} {
 
     foreach i $levels {
         upvar #$i wizard:name parent_wizard
-        if [info exists parent_wizard] {
+        if {[info exists parent_wizard]} {
             lappend wizards $parent_wizard
         }
     }
@@ -440,7 +440,7 @@ ad_proc -public template::wizard::submit { form_id args } {
     template::element create $form_id wizard_step${wizard_name} -widget hidden -value $current_id -datatype keyword
 
 
-    set step_index [expr [lsearch -exact $steps $current_id] + 1]
+    set step_index [expr {[lsearch -exact $steps $current_id] + 1}]
 
     # If not the first one and it is allowed than add a "Back" button
     if { $step_index > 1 && [info exists button_labels(back)] } {
@@ -555,7 +555,7 @@ ad_proc -public template::wizard::forward { } {
     get_reference
 
     upvar #$level wizard:current_id current_id
-    set current_index [expr [lsearch -exact $steps $current_id] + 1]
+    set current_index [expr {[lsearch -exact $steps $current_id] + 1}]
 
     if { [ns_queryexists wizard_submit_next] } {
 
@@ -566,7 +566,7 @@ ad_proc -public template::wizard::forward { } {
 
     } elseif { [ns_queryexists wizard_submit_back] } {
 
-	set last_id [lindex $steps [expr $current_index - 2]]
+	set last_id [lindex $steps [expr {$current_index - 2}]]
 	template::forward [get_forward_url $last_id] $cache_p $persistent_p $excluded_vars
 
     } elseif { [ns_queryexists wizard_submit_repeat] } {
@@ -578,7 +578,7 @@ ad_proc -public template::wizard::forward { } {
 	#    template::forward $properties(action)
 	# NOTE : we are changing the behaviour of wizard, when its finish it will not reset and go back
 	# to step 1, it will blindly go forward and we will catch this on get_current_step
-	set next_id [expr $current_index + 1]
+	set next_id [expr {$current_index + 1}]
 	template::forward [get_forward_url $next_id] $cache_p $persistent_p $excluded_vars
     }
 }
@@ -615,7 +615,7 @@ ad_proc -public template::wizard::get_forward_url { step_id } {
 	    if { [lsearch -exact [split [lindex [split $param ":"] 1] ","] "array"] != -1 || [array exists value] } {
 		# Array
 		foreach {index array_value} [array get value] {
-		    if { [info exists array_value] && ![empty_string_p $array_value] } {
+		    if { [info exists array_value] && $array_value ne "" } {
 			append url "&$param.$index=[ns_urlencode $array_value]"
 		    } else {
 			append url "&$param.$index="
@@ -684,7 +684,7 @@ ad_proc -public template::wizard::load_last_visited_step {
     
     # check the old visited step on the the state manager
     set visited_step [ad_get_client_property -default "" $key ${wizard_name}visited]
-    if {![string equal $visited_step ""]} {
+    if {$visited_step ne "" } {
         template::wizard::set_visited_step $visited_step
     }
 
@@ -710,7 +710,7 @@ ad_proc -public template::wizard::save_last_visited_step {
     get_reference
 
     # save the state of the visited step for this wizard
-    if { ![string equal $key ""] } {
+    if { $key ne "" } {
         ad_set_client_property $key ${wizard_name}visited [template::wizard::get_visited_step]
     }
 

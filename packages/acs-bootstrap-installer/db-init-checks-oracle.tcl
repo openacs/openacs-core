@@ -10,7 +10,7 @@ proc db_bootstrap_checks { errors error_p } {
     upvar $error_p my_error_p
 
     foreach pool [db_available_pools {}] {
-        if { [catch { set db [ns_db gethandle -timeout 15 $pool]}] || ![string compare $db ""] } {
+        if { [catch { set db [ns_db gethandle -timeout 15 $pool]}] || $db eq "" } {
             # This should never happened - we were able to grab a handle previously, why not now?
             append my_errors "(db_bootstrap_checks) Internal error accessing pool \"$pool\".<br>"
             set my_error_p 1

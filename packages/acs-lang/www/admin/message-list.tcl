@@ -66,7 +66,7 @@ db_1row counts {
              and deleted_p = 't') as num_deleted
     from dual
 }
-set num_untranslated [expr $num_messages - $num_translated]
+set num_untranslated [expr {$num_messages - $num_translated}]
 set num_messages_pretty [lc_numeric $num_messages]
 set num_translated_pretty [lc_numeric $num_translated]
 set num_untranslated_pretty [lc_numeric $num_untranslated]
@@ -145,7 +145,7 @@ multirow extend show_opts url selected_p
 
 multirow foreach show_opts {
     set selected_p [string equal $show $value]
-    if { [string equal $value "all"] } {
+    if {$value eq "all"} {
         set url "[ad_conn url]?[export_vars { locale package_key }]"
     } else { 
         set url "[ad_conn url]?[export_vars { locale package_key {show $value} }]"

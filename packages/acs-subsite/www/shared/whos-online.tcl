@@ -34,7 +34,7 @@ set users [list]
 foreach user_id [whos_online::user_ids] {
     acs_user::get -user_id $user_id -array user
 
-    set first_request_minutes [expr [whos_online::seconds_since_first_request $user_id] / 60]
+    set first_request_minutes [expr {[whos_online::seconds_since_first_request $user_id] / 60}]
 
     lappend users [list \
                        "$user(first_names) $user(last_name)" \

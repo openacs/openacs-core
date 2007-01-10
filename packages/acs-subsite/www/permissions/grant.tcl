@@ -58,7 +58,7 @@ db_foreach select_privileges_hierarchy { } {
     # find the end position up to where the block extends that we have
     # to move
     set end_pos $start_pos
-    for { set i [expr $start_pos + 1] } { $i <= [llength $hierarchy] } { incr i } {
+    for { set i [expr {$start_pos + 1}] } { $i <= [llength $hierarchy] } { incr i } {
         set level [lindex [lindex $hierarchy $i] 0]
         if { $level <= $start_pos_level } {
             break
@@ -88,7 +88,7 @@ db_foreach select_privileges_hierarchy { } {
     # insert the block to the new position, looping through the block
     foreach element $block_to_move {
         incr target_pos
-        set level_to_move [expr [lindex $element 0] + $target_level + 1 - $offset]
+        set level_to_move [expr {[lindex $element 0] + $target_level + 1 - $offset}]
         set privilege_to_move [lindex $element 1]
         set hierarchy [linsert $hierarchy $target_pos [list $level_to_move $privilege_to_move]]
 
@@ -156,7 +156,7 @@ if { [form is_valid grant] } {
     foreach privilege $privileges {
         # Lars: For some reason, selecting no privileges returns in a list 
         # containing one element, which is the empty string
-        if { ![empty_string_p $privilege] } {
+        if { $privilege ne "" } {
             permission::grant -party_id $party_id -object_id $object_id -privilege $privilege
         }
     }

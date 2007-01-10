@@ -32,11 +32,11 @@ db_transaction {
             -element url]
 
     # node_id was null so we're not deleting a mounted subsite instance
-    if {[empty_string_p $parent] } {
+    if {$parent eq "" } {
 	set parent [ad_conn subsite_url]
     }
 
-    if { ![empty_string_p $node_id] } {
+    if { $node_id ne "" } {
         # The package is mounted
         site_node::unmount -node_id $node_id
         site_node::delete -node_id $node_id

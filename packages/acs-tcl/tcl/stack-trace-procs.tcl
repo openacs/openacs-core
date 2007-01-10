@@ -22,12 +22,12 @@ ad_proc -public ad_print_stack_trace {} {
 } {
     uplevel {
         global errorInfo
-        if {![empty_string_p $errorInfo]} { 
+        if {$errorInfo ne ""} { 
             set callStack [list $errorInfo "invoked from within"]
         } else { 
             set callStack {}
         }
-        for {set i [info level]} {$i > 0} {set i [expr $i - 1]} {
+        for {set i [info level]} {$i > 0} {set i [expr {$i - 1}]} {
             set call [info level $i]
             if {[string length $call] > 160} {
                 set call "[string range $call 0 150]..."            }

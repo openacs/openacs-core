@@ -25,7 +25,7 @@ if {[catch {set pair [ns_cache get util_memoize $key]} errmsg]} {
 	}
     }
 
-    if {![info exists value] || [string equal "" $value]} {
+    if {![info exists value] || "" eq $value} {
 	ad_return_complaint 1 "Could not retrieve"
     }
 }

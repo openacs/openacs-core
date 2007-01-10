@@ -29,7 +29,7 @@ ad_page_contract {
 }
 
 set context [list]
-if [exists_and_not_null version_id] {
+if {[exists_and_not_null version_id]} {
     db_0or1row package_info_from_package_id {
         select pretty_name, package_key, version_name
           from apm_package_version_info

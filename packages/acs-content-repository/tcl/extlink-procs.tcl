@@ -36,7 +36,7 @@ ad_proc -deprecated content_extlink::new {
     set creation_user [ad_conn user_id]
     set creation_ip [ad_conn peeraddr]
 
-    if {[empty_string_p $package_id]} {
+    if {$package_id eq ""} {
 	set package_id [ad_conn package_id]
     }
 

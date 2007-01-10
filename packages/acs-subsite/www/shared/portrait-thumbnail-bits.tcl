@@ -19,12 +19,12 @@ from users
 where user_id = $user_id
 and portrait_thumbnail is not null"]
 
-if { [empty_string_p $file_type] } {
+if { $file_type eq "" } {
     # Try to get a regular portrait
     set file_type [db_string -default "" unused "select portrait_file_type
 from users
 where user_id = $user_id"]
-    if [empty_string_p $file_type] {
+    if {$file_type eq ""} {
 	ad_return_error "Couldn't find thumbnail or portrait" "Couldn't find a thumbnail or a portrait for User $user_id"
 	return
     }

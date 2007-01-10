@@ -25,7 +25,7 @@ ad_page_contract {
 
 set context [list [list "" "Parties"] "Add a party"]
 
-if {[empty_string_p $add_to_group_id]} {
+if {$add_to_group_id eq ""} {
     set add_to_group_id [application_group::group_id_from_package_id]
 }
 
@@ -56,8 +56,8 @@ set create_p [group::permission_p -privilege create $add_to_group_id]
 
 # Membership relations have a member_state attribute that gets set
 # based on the group's join policy.
-if {[string equal $ancestor_rel_type membership_rel]} {
-    if {[string equal $add_to_group_join_policy "closed"] && !$create_p} {
+if {$ancestor_rel_type eq "membership_rel"} {
+    if {$add_to_group_join_policy eq "closed" && !$create_p} {
 	ad_complain "You do not have permission to add elements to $add_to_group_name"
 	return
     }
@@ -81,7 +81,7 @@ db_1row select_type_info {
 # Check if the new party needs to first be added in other segments before
 # being added to $add_to_group_id using $add_with_rel_type.
 
-if {[empty_string_p $group_rel_type_list]} {
+if {$group_rel_type_list eq ""} {
     set required_group_rel_type_list [relation_required_segments_multirow \
 	    -datasource_name required_segments \
 	    -group_id $add_to_group_id \
@@ -143,7 +143,7 @@ foreach {type url} $redirects_for_type {
 }
 
 
-if { [string eq $party_type_exact_p "f"] && \
+if { $party_type_exact_p eq "f" && \
 	[subsite::util::sub_type_exists_p $party_type] } {
 
     # Sub party-types exist... select one

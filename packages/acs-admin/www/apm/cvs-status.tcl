@@ -37,7 +37,7 @@ db_foreach all_packages_owned_by_email "
 	    global vc_file_props
 	    if { [regexp {[a-zA-Z]} $vc_file_props(status)] } {
 		set status "$vc_file_props(status)"
-		if { ![string compare $status "Up-to-date"] } {
+		if { $status eq "Up-to-date" } {
 		    # It's up to date; don't print anything out.
 		    continue
 		}

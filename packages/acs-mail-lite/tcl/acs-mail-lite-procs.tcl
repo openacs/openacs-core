@@ -92,7 +92,7 @@ namespace eval acs_mail_lite {
 	@returns domain address to which bounces are directed to
     } {
         set domain [get_parameter -name "BounceDomain"]
-        if { [empty_string_p $domain] } {
+        if { $domain eq "" } {
 	    regsub {http://} [ns_config ns/server/[ns_info server]/module/nssock hostname] {} domain
 	}
 	return $domain
@@ -224,7 +224,7 @@ namespace eval acs_mail_lite {
 	@option msg message-id that the signature should be checked against
 	@returns boolean 0 or 1
     } {
-	if {![regexp "(<\[\-0-9\]+\\.\[0-9\]+\\.oacs@[address_domain]>)" $message_id match id] || ![string equal $signature [ns_sha1 $id]]} {
+	if {![regexp "(<\[\-0-9\]+\\.\[0-9\]+\\.oacs@[address_domain]>)" $message_id match id] || $signature ne [ns_sha1 $id] } {
 	    # either couldn't find message-id or signature doesn't match
 	    return 0
 	}
@@ -383,7 +383,7 @@ namespace eval acs_mail_lite {
 	# travers the tree and extract parts into a flat list
 	set all_parts [list]
 	foreach part $parts {
-	    if { [string equal [mime::getproperty $part content] "multipart/alternative" ] } {
+	    if {[mime::getproperty $part content] eq "multipart/alternative"} {
 		foreach child_part [mime::getproperty $part parts] {
 		    lappend all_parts $child_part
 		}
@@ -414,7 +414,7 @@ namespace eval acs_mail_lite {
 		set body [mime::getbody $part -decode]
 		set content  $body
 		set params [mime::getproperty $part params]
-		if {[lindex $params 0] == "name"} {
+		if {[lindex $params 0] eq "name"} {
 		    set filename [lindex $params 1]
 		} else {
 		    set filename ""
@@ -478,8 +478,8 @@ namespace eval acs_mail_lite {
             set headers [list]
 	    
             # walk through the headers and extract each one
-            while ![empty_string_p $line] {
-                set next_line [lindex $file [expr $i + 1]]
+            while {$line ne ""} {
+                set next_line [lindex $file [expr {$i + 1}]]
                 if {[regexp {^[ ]*$} $next_line match] && $i > 0} {
                     set end_of_headers_p 1
                 }
@@ -511,10 +511,10 @@ namespace eval acs_mail_lite {
             # put it into notifications stuff
             array set email_headers $headers
 	    
-            if [catch {set from $email_headers(from)}] {
+            if {[catch {set from $email_headers(from)}]} {
                 set from ""
             }
-            if [catch {set to $email_headers(to)}] {
+            if {[catch {set to $email_headers(to)}]} {
                 set to ""
             }
 	    
@@ -523,8 +523,8 @@ namespace eval acs_mail_lite {
             util_unlist [parse_bounce_address -bounce_address $to] user_id package_id signature
 	    
             # If no user_id found or signature invalid, ignore message
-            if {[empty_string_p $user_id] || ![valid_signature -signature $signature -msg $body]} {
-		if {[empty_string_p $user_id]} {
+            if {$user_id eq "" || ![valid_signature -signature $signature -msg $body]} {
+		if {$user_id eq ""} {
 		    ns_log Notice "acs-mail-lite: No user id $user_id found"
 		} else {
 		    ns_log Notice "acs-mail-lite: Invalid mail signature"
@@ -674,8 +674,8 @@ namespace eval acs_mail_lite {
         #-----------------------------------------------------
         set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode] 
 
-        if {![empty_string_p $delivery_mode]
-            && ![string equal $delivery_mode default]
+        if {$delivery_mode ne ""
+            && $delivery_mode ne "default" 
         } {
             # The to_addr has been put in an array, and returned. Now
             # it is of the form: email email_address name namefromdb
@@ -685,10 +685,10 @@ namespace eval acs_mail_lite {
             ns_sendmail $to_address $from_addr $subject $body $eh $bcc
         } else {
 
-            if { [string equal [bounce_sendmail] "SMTP"] } {
+            if {[bounce_sendmail] eq "SMTP"} {
                 ## Terminate body with a solitary period
                 foreach line [split $msg "\n"] { 
-                    if {[string match . [string trim $line]]} {
+                    if {"." eq [string trim $line]} {
                         append data .
                     }
 		    #AG: ensure no \r\r\n terminations.
@@ -698,13 +698,13 @@ namespace eval acs_mail_lite {
                 append data .
                 
                 smtp -from_addr $from_addr -sendlist $to_addr -msg $data -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
-                if {![empty_string_p $bcc]} {
+                if {$bcc ne ""} {
                     smtp -from_addr $from_addr -sendlist $bcc -msg $data -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
                 }
                 
             } else {
                 sendmail -from_addr $from_addr -sendlist $to_addr -msg $msg -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
-                if {![empty_string_p $bcc]} {
+                if {$bcc ne ""} {
                     sendmail -from_addr $from_addr -sendlist $bcc -msg $msg -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
                 }
             }
@@ -742,7 +742,7 @@ namespace eval acs_mail_lite {
 			set sendmail [list [bounce_sendmail] "-f[bounce_address -user_id $rcpt_id -package_id $package_id -message_id $message_id]" "-t" "-i"]
 			
 			# add username if it exists
-			if {![empty_string_p $rcpt_name]} {
+			if {$rcpt_name ne ""} {
 			    set pretty_to "$rcpt_name <$rcpt>"
 			} else {
 			    set pretty_to $rcpt
@@ -765,7 +765,7 @@ namespace eval acs_mail_lite {
 		    ns_log Notice "acs-mail-lite: Email bouncing from $rcpt, mail not sent and deleted from queue"
 		}
 		# log mail sending time
-		if {![empty_string_p $rcpt_id]} { log_mail_sending -user_id $rcpt_id }
+		if {$rcpt_id ne ""} { log_mail_sending -user_id $rcpt_id }
 	    }
 	}
     }
@@ -791,25 +791,25 @@ namespace eval acs_mail_lite {
 	        (needed to call package-specific code to deal with bounces)
     } { 
 	set smtp [ns_config ns/parameters smtphost]
-	if {[empty_string_p $smtp]} {
+	if {$smtp eq ""} {
 	    set smtp [ns_config ns/parameters mailhost]
 	}
-	if {[empty_string_p $smtp]} {
+	if {$smtp eq ""} {
 	    set smtp localhost
 	}
 	set timeout [ns_config ns/parameters smtptimeout]
-	if {[empty_string_p $timeout]} {
+	if {$timeout eq ""} {
 	    set timeout 60
 	}
 	set smtpport [ns_config ns/parameters smtpport]
-	if {[empty_string_p $smtpport]} {
+	if {$smtpport eq ""} {
 	    set smtpport 25
 	}
 	array set rcpts $sendlist
         foreach rcpt $rcpts(email) rcpt_id $rcpts(user_id) rcpt_name $rcpts(name) {
 	    if { $valid_email_p || ![bouncing_email_p -email $rcpt] } {
 		# add username if it exists
-		if {![empty_string_p $rcpt_name]} {
+		if {$rcpt_name ne ""} {
 		    set pretty_to "$rcpt_name <$rcpt>"
 		} else {
 		    set pretty_to $rcpt
@@ -871,7 +871,7 @@ namespace eval acs_mail_lite {
 		ns_log Notice "acs-mail-lite: Email bouncing from $rcpt, mail not sent and deleted from queue"
 	    }
 	    # log mail sending time
-	    if {![empty_string_p $rcpt_id]} { log_mail_sending -user_id $rcpt_id }
+	    if {$rcpt_id ne ""} { log_mail_sending -user_id $rcpt_id }
 	}
     }
 
@@ -957,11 +957,11 @@ namespace eval acs_mail_lite {
 	
 	## Get address-array with email, name and user_id
 	set to_addr [get_address_array -addresses [string map {\n "" \r ""} $to_addr]]
-	if {![empty_string_p $bcc]} {
+	if {$bcc ne ""} {
 	    set bcc [get_address_array -addresses [string map {\n "" \r ""} $bcc]]
 	}
 
-        if {![empty_string_p $extraheaders]} {
+        if {$extraheaders ne ""} {
             set eh_list [util_ns_set_to_list -set $extraheaders]
         } else {
             set eh_list ""
@@ -973,8 +973,8 @@ namespace eval acs_mail_lite {
 	set message_id [generate_message_id]
         lappend eh_list "Message-Id" $message_id
 
-	if {[empty_string_p $package_id]} {
-	    if [ad_conn -connected_p] {
+	if {$package_id eq ""} {
+	    if {[ad_conn -connected_p]} {
 		set package_id [ad_conn package_id]
 	    } else {
 		set package_id ""

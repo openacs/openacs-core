@@ -5,13 +5,13 @@ ad_page_contract {
     {return_url "."}
 }
 
-if [string equal $suffix "util_memoize"] {   
+if {$suffix eq "util_memoize"} {   
     foreach name [ns_cache names util_memoize] {
 	ns_cache flush util_memoize $name
     } 
 } else {
     #ns_return 200 text/html $suffix
-    if [catch { util_memoize_flush_cache $suffix } errmsg] {
+    if {[catch { util_memoize_flush_cache $suffix } errmsg]} {
 	ns_return 200 text/html "Cannot flush the cache for $suffix suffix."
     } 
 }

@@ -23,7 +23,7 @@ namespace eval doc {
         regexp {[^@]*} $info_source comment
         set info(comment) $comment
         
-        if [regexp {@see (.*)} $info_source x see] {
+        if {[regexp {@see (.*)} $info_source x see]} {
             foreach s [split $see ","] {
                 # strip braces
                 regsub {\{([^\}]+)\}} $s {\1} s

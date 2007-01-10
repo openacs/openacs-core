@@ -27,7 +27,7 @@ proc proc_source_file_full_path {proc_name} {
 proc_doc util_report_library_entry {{extra_message ""}} "Should be called at beginning of private Tcl library files so that it is easy to see in the error log whether or not private Tcl library files contain errors." {
     set tentative_path [info script]
     regsub -all {/\./} $tentative_path {/} scrubbed_path
-    if { [string compare $extra_message ""] == 0 } {
+    if { $extra_message eq ""  } {
 	set message "Loading $scrubbed_path"
     } else {
 	set message "Loading $scrubbed_path; $extra_message"
@@ -65,7 +65,7 @@ proc_doc check_for_form_variable_naughtiness {
     }
 
     # contributed by michael@cleverly.com
-    if { [string match Vform_counter_i $name] } {
+    if { "Vform_counter_i" eq $name } {
         error "Vform_counter_i not an allowed form variable"
     }
 
@@ -102,7 +102,7 @@ proc_doc check_for_form_variable_naughtiness {
 
         # check to make sure path is to an authorized directory
         set tmpdir_list [ad_parameter_all_values_as_list TmpDir]
-        if { [empty_string_p $tmpdir_list] } {
+        if { $tmpdir_list eq "" } {
             set tmpdir_list [list "/var/tmp" "/tmp"]
         }
 
@@ -138,7 +138,7 @@ proc_doc check_for_form_variable_naughtiness {
             # the variable matched the pattern
             set typed_var_type [lindex $typed_var_spec 1]
         
-            if { [string match "" $typed_var_type] } {
+            if { "" eq $typed_var_type } {
                 # if they don't specify a type, the default is 'integer'
                 set typed_var_type integer
             }
@@ -217,7 +217,7 @@ ad_proc ad_dbclick_check_dml {
     sensible error message to the user.
 } {
     if { [catch {
-	if { ![empty_string_p $bind] } {
+	if { $bind ne "" } {
 	    	db_dml $statement_name $insert_dml -bind $bind
 	} else {
 	    db_dml $statement_name $insert_dml 
@@ -273,7 +273,7 @@ ad_proc -public util_AnsiDatetoPrettyDate {sql_date} {
 	# was "8.0"
 
 	set trimmed_month [string trimleft $month 0]
-	set pretty_month [lindex $allthemonths [expr $trimmed_month - 1]]
+	set pretty_month [lindex $allthemonths [expr {$trimmed_month - 1}]]
 
 	set trimmed_day [string trimleft $day 0]
 
@@ -289,7 +289,7 @@ ad_proc -public remove_nulls_from_ns_set {old_set_id} {
     set new_set_id [ns_set new "no_nulls$old_set_id"]
 
     for {set i 0} {$i<[ns_set size $old_set_id]} {incr i} {
-	if { [ns_set value $old_set_id $i] != "" } {
+	if { [ns_set value $old_set_id $i] ne "" } {
 
 	    ns_set put $new_set_id [ns_set key $old_set_id $i] [ns_set value $old_set_id $i]
 
@@ -322,7 +322,7 @@ ad_proc -public merge_form_with_query {
 
     db_0or1row $statement_name $sql_qry -bind $bind -column_set set_id
     
-    if { $set_id != "" } {
+    if { $set_id ne "" } {
 	
 	for {set i 0} {$i<[ns_set size $set_id]} {incr i} {
 	    set form [ns_formvalueput $form [ns_set key $set_id $i] [ns_set value $set_id $i]]
@@ -336,15 +336,15 @@ ad_proc -public merge_form_with_query {
 
 
 proc util_PrettyBoolean {t_or_f { default  "default" } } {
-    if { $t_or_f == "t" || $t_or_f == "T" } {
+    if { $t_or_f eq "t" || $t_or_f eq "T" } {
 	return "Yes"
-    } elseif { $t_or_f == "f" || $t_or_f == "F" } {
+    } elseif { $t_or_f eq "f" || $t_or_f eq "F" } {
 	return "No"
     } else {
 	# Note that we can't compare default to the empty string as in 
 	# many cases, we are going want the default to be the empty
 	# string
-	if { [string compare $default "default"] == 0 } {
+	if { $default eq "default"  } {
 	    return "Unknown (\"$t_or_f\")"
 	} else {
 	    return $default
@@ -401,14 +401,14 @@ ad_proc -public db_html_select_options {
 
     set select_options ""
 
-    if { ![empty_string_p $bind] } {
+    if { $bind ne "" } {
 	set options [db_list $stmt_name $sql -bind $bind]
     } else {
 	set options [db_list $stmt_name $sql]
     }
 
     foreach option $options {
-	if { [string compare $option $select_option] == 0 } {
+	if { $option eq $select_option  } {
 	    append select_options "<option selected=\"selected\">$option</option>\n"
 	} else {
 	    append select_options "<option>$option</option>\n"
@@ -438,7 +438,7 @@ ad_proc -public db_html_select_value_options {
 } {
     set select_options ""
 
-    if { ![empty_string_p $bind] } {
+    if { $bind ne "" } {
 	set options [db_list_of_lists $stmt_name $sql -bind $bind]
     } else {
 	set options [uplevel [list db_list_of_lists $stmt_name $sql]]
@@ -633,7 +633,7 @@ ad_proc -public export_vars {
 
     if { $entire_form_p } {
         set the_form [ns_getform]
-        if { ![empty_string_p $the_form] } {
+        if { $the_form ne "" } {
             for { set i 0 } { $i < [ns_set size $the_form] } { incr i } {
                 set varname [ns_set key $the_form $i]
                 set varvalue [ns_set value $the_form $i]
@@ -667,7 +667,7 @@ ad_proc -public export_vars {
 		return -code error "A varspec must have either one or two elements."
 	    }
 
-            if { ![string equal $precedence_type "noprocessing_vars"] } {
+            if { $precedence_type ne "noprocessing_vars" } {
                 # Hide escaped colons for below split
                 regsub -all {\\:} $var_spec "!!cOlOn!!" var_spec
                 
@@ -688,7 +688,7 @@ ad_proc -public export_vars {
 
 		set exp_precedence_type($name) $precedence_type
 
-		if { ![string equal $precedence_type "exclude"] } {
+		if { $precedence_type ne "exclude" } {
 
 		    set flags [split [lindex $name_spec 1] ","]
 		    foreach flag $flags {
@@ -700,7 +700,7 @@ ad_proc -public export_vars {
 		    }
 		    
 		    if { [llength $var_spec] > 1 } {
-                        if { ![string equal $precedence_type "noprocessing_vars"] } {
+                        if { $precedence_type ne "noprocessing_vars" } {
                             set value [uplevel subst \{[lindex $var_spec 1]\}]
                         } else {
                             set value [lindex $var_spec 1]
@@ -715,7 +715,7 @@ ad_proc -public export_vars {
                                     # If the no_empty_p flag is set, remove empty string values first
                                     set exp_value($name) [list]
                                     foreach { key value } [array get upvar_variable] {
-                                        if { ![empty_string_p $value] } {
+                                        if { $value ne "" } {
                                             lappend exp_value($name) $key $value
                                         }
                                     }
@@ -736,13 +736,13 @@ ad_proc -public export_vars {
                                         # This is a list, remove empty entries
                                         set exp_value($name) [list]
                                         foreach elm $upvar_variable {
-                                            if { ![empty_string_p $elm] } {
+                                            if { $elm ne "" } {
                                                 lappend exp_value($name) $elm
                                             }
                                         }
                                     } else {
                                         # Simple value, this is easy
-                                        if { ![empty_string_p $upvar_variable] } {
+                                        if { $upvar_variable ne "" } {
                                             set exp_value($name) $upvar_variable
                                         }
                                     }
@@ -765,7 +765,7 @@ ad_proc -public export_vars {
     set export_set [ns_set create]
 
     foreach name [array names exp_precedence_type] {
-	if { ![string equal $exp_precedence_type($name) "exclude"] } {
+	if { $exp_precedence_type($name) ne "exclude" } {
 	    if { [info exists exp_value($name)] } {
 		if { [info exists exp_flag($name:array)] } {
 		    if { [info exists exp_flag($name:multiple)] } {
@@ -833,7 +833,7 @@ ad_proc -public export_vars {
 
     # Prepend with the base URL
     if { [exists_and_not_null base] } {
-        if { ![empty_string_p $export_string] } {
+        if { $export_string ne "" } {
             if { [regexp {\?} $base] } {
                 # The base already has query vars
                 set export_string "${base}&${export_string}"
@@ -1070,7 +1070,7 @@ ad_proc -public export_entire_form {} {
 } {
     set hidden ""
     set the_form [ns_getform]
-    if { ![empty_string_p $the_form] } {
+    if { $the_form ne "" } {
 	for {set i 0} {$i<[ns_set size $the_form]} {incr i} {
 	    set varname [ns_set key $the_form $i]
 	    set varvalue [ns_set value $the_form $i]
@@ -1095,19 +1095,19 @@ ad_proc export_ns_set_vars {{format "url"} {exclusion_list ""} {setid ""}} {
     @see export_vars
 }  {
 
-    if { [empty_string_p $setid] } {
+    if { $setid eq "" } {
 	set setid [ns_getform]
     }
 
     set return_list [list]
-    if { ![empty_string_p $setid] } {
+    if { $setid ne "" } {
         set set_size [ns_set size $setid]
         set set_counter_i 0
         while { $set_counter_i<$set_size } {
             set name [ns_set key $setid $set_counter_i]
             set value [ns_set value $setid $set_counter_i]
-            if {[lsearch $exclusion_list $name] == -1 && ![empty_string_p $name]} {
-                if {$format == "url"} {
+            if {[lsearch $exclusion_list $name] == -1 && $name ne ""} {
+                if {$format eq "url"} {
                     lappend return_list "[ns_urlencode $name]=[ns_urlencode $value]"
                 } else {
                     lappend return_list " name=\"[ad_quotehtml $name]\" value=\"[ad_quotehtml $value]\""
@@ -1116,7 +1116,7 @@ ad_proc export_ns_set_vars {{format "url"} {exclusion_list ""} {setid ""}} {
             incr set_counter_i
         }
     }
-    if {$format == "url"} {
+    if {$format eq "url"} {
         return [join $return_list "&"]
     } else {
         return "<input type=\"hidden\" [join $return_list " />\n <input type=\"hidden\" "] />"
@@ -1214,12 +1214,12 @@ ad_proc -public export_entire_form_as_url_vars {
 } {
     set params [list]
     set the_form [ns_getform]
-    if { ![empty_string_p $the_form] } {
+    if { $the_form ne "" } {
 	for {set i 0} {$i<[ns_set size $the_form]} {incr i} {
 	    set varname [ns_set key $the_form $i]
 	    set varvalue [ns_set value $the_form $i]
 	    if {
-		$vars_to_passthrough == "" ||
+		$vars_to_passthrough eq "" ||
 		([lsearch -exact $vars_to_passthrough $varname] != -1)
 	    } {
 		lappend params "[ns_urlencode $varname]=[ns_urlencode $varvalue]" 
@@ -1241,7 +1241,7 @@ ad_proc -public util_get_current_url {} {
     set url [ad_conn url]
 
     set query [ns_getform]
-    if { $query != "" } {
+    if { $query ne "" } {
         append url "?[export_entire_form_as_url_vars]"
     }
 
@@ -1298,7 +1298,7 @@ ad_proc -public util_search_list_of_lists {list_of_lists query_string {sublist_e
     set sublist_index 0
     foreach sublist $list_of_lists {
 	set comparison_element [lindex $sublist $sublist_element_pos]
-	if { [string compare $query_string $comparison_element] == 0 } {
+	if { $query_string eq $comparison_element  } {
 	    return $sublist_index
 	}
 	incr sublist_index
@@ -1317,7 +1317,7 @@ ad_proc -public util_get_http_status {url {use_get_p 1} {timeout 30}} {
     this means AOLserver may be sucking down a lot of bits that it 
     doesn't need.
 } { 
-    if $use_get_p {
+    if {$use_get_p} {
 	set http [ns_httpopen GET $url "" $timeout] 
     } else {
 	set http [ns_httpopen HEAD $url "" $timeout] 
@@ -1367,7 +1367,7 @@ ad_proc -public util_httpopen {
     Like ns_httpopen but works for POST as well; called by util_httppost
 } { 
     
-    if { ![string match http://* $url] } {
+    if { ![string match "http://*" $url] } {
         return -code error "Invalid url \"$url\":  _httpopen only supports HTTP"
     }
     set url [split $url /]
@@ -1382,7 +1382,7 @@ ad_proc -public util_httpopen {
     if { [catch {
         _ns_http_puts $timeout $wfd "$method $uri HTTP/1.0\r"
         _ns_http_puts $timeout $wfd "Host: $host\r"
-        if {$rqset != ""} {
+        if {$rqset ne ""} {
             for {set i 0} {$i < [ns_set size $rqset]} {incr i} {
                 _ns_http_puts $timeout $wfd \
                     "[ns_set key $rqset $i]: [ns_set value $rqset $i]\r"
@@ -1451,19 +1451,19 @@ ad_proc -public util_httppost {url formvars {timeout 30} {depth 0} {http_referer
 	set status [lindex $response 1]
 	if {$status == 302} {
 		set location [ns_set iget $headers location]
-		if {$location != ""} {
+		if {$location ne ""} {
 		    ns_set free $headers
 		    close $rfd
 		    return [util_httpget $location {}  $timeout $depth]
 		}
 	}
 	set length [ns_set iget $headers content-length]
-	if { [string match "" $length] } {set length -1}
+	if { "" eq $length } {set length -1}
 	set err [catch {
 		while 1 {
 			set buf [_ns_http_read $timeout $rfd $length]
 			append page $buf
-			if { [string match "" $buf] } break
+			if { "" eq $buf } break
 			if {$length > 0} {
 				incr length -[string length $buf]
 				if {$length <= 0} break
@@ -1472,7 +1472,7 @@ ad_proc -public util_httppost {url formvars {timeout 30} {depth 0} {http_referer
 	} errMsg]
 	ns_set free $headers
 	close $rfd
-	if $err {
+	if {$err} {
 		global errorInfo
 		return -code error -errorinfo $errorInfo $errMsg
 	}
@@ -1487,7 +1487,7 @@ ad_proc -public util_report_successful_library_load {{extra_message ""}} {
 } {
     set tentative_path [info script]
     regsub -all {/\./} $tentative_path {/} scrubbed_path
-    if { [string compare $extra_message ""] == 0 } {
+    if { $extra_message eq ""  } {
 	set message "Done... $scrubbed_path"
     } else {
 	set message "Done... $scrubbed_path; $extra_message"
@@ -1503,7 +1503,7 @@ ad_proc -public exists_and_not_null { varname } {
     (varname not $varname which will pass variable varnames value into this function).
 } {
     upvar 1 $varname var 
-    return [expr { [info exists var] && ![empty_string_p $var] }] 
+    return [expr { [info exists var] && $var ne "" }] 
 } 
 
 ad_proc -public exists_and_equal { varname value } {
@@ -1516,7 +1516,7 @@ ad_proc -public exists_and_equal { varname value } {
 } {
     upvar 1 $varname var
     
-    return [expr { [info exists var] && [string equal $var $value] } ]
+    return [expr { [info exists var] && $var eq $value } ]
 }
 
 ad_proc -public ad_httpget {
@@ -1549,7 +1549,7 @@ ad_proc -public ad_httpget {
 
     if {$status == 302 || $status == 301} {
 	set location [ns_set iget $headers location]
-	if {![empty_string_p $location]} { 
+	if {$location ne ""} { 
             ns_set free $headers
             close $rfd
 	    return [ad_httpget -url $location -timeout $timeout -depth $depth]
@@ -1563,13 +1563,13 @@ ad_proc -public ad_httpget {
         close $rfd
     } else { 
         set length [ns_set iget $headers content-length]
-        if { [string match "" $length] } {set length -1}
+        if { "" eq $length } {set length -1}
     
         set err [catch {
             while 1 {
                 set buf [_ns_http_read $timeout $rfd $length]
                 append page $buf
-                if { [string match "" $buf] } break
+                if { "" eq $buf } break
                 if {$length > 0} {
                     incr length -[string length $buf]
                     if {$length <= 0} break
@@ -1579,7 +1579,7 @@ ad_proc -public ad_httpget {
         ns_set free $headers
         close $rfd
 
-        if $err {
+        if {$err} {
             global errorInfo
             return -code error -errorinfo $errorInfo $errMsg
         }
@@ -1627,7 +1627,7 @@ ad_proc -deprecated validate_integer {field_name string} {
     }
     # trim leading zeros, so as not to confuse Tcl
     set string [string trimleft $string "0"]
-    if { [empty_string_p $string] } {
+    if { $string eq "" } {
 	# but not all of the zeros
 	return "0"
     }
@@ -1642,7 +1642,7 @@ ad_proc -deprecated validate_zip_code {field_name zip_string country_code} {
     @see ad_page_contract
 
 } {
-    if { $country_code == "" || [string toupper $country_code] == "US" } {
+    if { $country_code eq "" || [string toupper $country_code] eq "US" } {
 	if { [regexp {^[0-9][0-9][0-9][0-9][0-9](-[0-9][0-9][0-9][0-9])?$} $zip_string] } {
 	    set zip_5 [string range $zip_string 0 4]
 	    if {
@@ -1660,7 +1660,7 @@ ad_proc -deprecated validate_zip_code {field_name zip_string country_code} {
 	    error "The entry for $field_name, \"$zip_string\" does not look like a zip code"
 	}
     } else {
-	if { $zip_string != "" } {
+	if { $zip_string ne "" } {
 	    error "Zip code is not needed outside the US"
 	}
     }
@@ -1687,7 +1687,7 @@ ad_proc -deprecated validate_ad_dateentrywidget {field_name column form {allow_n
 	} else {
 	    return ""
 	}
-    } elseif { ![empty_string_p $year] && [string length $year] != 4 } {
+    } elseif { $year ne "" && [string length $year] != 4 } {
 	error "The year must contain 4 digits."
     } elseif { [catch  { ns_dbformvalue $form $column date date } errmsg ] } {
 	error "The entry for $field_name had a problem:  $errmsg."
@@ -1727,7 +1727,7 @@ ad_proc -public ReturnHeaders {{content_type text/html}} {
 MIME-Version: 1.0
 Content-Type: $content_type\r\n"
     util_WriteWithExtraOutputHeaders $all_the_headers
-    if {[string match text/* $content_type]} {
+    if {[string match "text/*" $content_type]} {
       if {![string match *charset=* $content_type]} {
 	append content_type \
 	    "; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
@@ -1791,7 +1791,7 @@ ad_proc -public ad_decode { args } {
 
     set counter 1
 
-    while { $counter < [expr $num_args - 2] } {
+    while { $counter < [expr {$num_args - 2}] } {
 	lappend from_list [lindex $args $counter]
 	incr counter
 	lappend to_list [lindex $args $counter]
@@ -1828,7 +1828,7 @@ ad_proc -public ad_get_cookie {
 } { 
     Returns the value of a cookie, or $default if none exists.
 } {
-    if { $include_set_cookies == "t" } {
+    if { $include_set_cookies eq "t" } {
 	set headers [ad_conn outputheaders]
 	for { set i 0 } { $i < [ns_set size $headers] } { incr i } {
 	    if { ![string compare [string tolower [ns_set key $headers $i]] "set-cookie"] && \
@@ -1845,7 +1845,7 @@ ad_proc -public ad_get_cookie {
         # If the cookie was set to a blank value we actually stored two quotes.  We need
         # to undo the kludge on the way out.
 
-        if { $value == "\"\"" } {
+        if { $value eq "\"\"" } {
               set value ""
         }
 	return $value
@@ -1896,7 +1896,7 @@ ad_proc -public ad_set_cookie {
     @see ad_get_cookie
 } {
     set headers [ad_conn outputheaders]
-    if { $replace != "f" } {
+    if { $replace ne "f" } {
 	# Try to find an already-set cookie named $name.
 	for { set i 0 } { $i < [ns_set size $headers] } { incr i } {
 	    if { ![string compare [string tolower [ns_set key $headers $i]] "set-cookie"] && \
@@ -1907,35 +1907,35 @@ ad_proc -public ad_set_cookie {
     }
 
     # need to set some value, so we put "" as the cookie value
-    if { $value == "" } {
+    if { $value eq "" } {
 	set cookie "$name=\"\""
     } else {
 	set cookie "$name=$value"
     }
 
-    if { $path != "" } {
+    if { $path ne "" } {
 	append cookie "; Path=$path"
     }
 
-    if { $max_age == "inf" } {
-        if { ![string equal $expire "t"] } {
+    if { $max_age eq "inf" } {
+        if { $expire ne "t" } {
             # netscape seemed unhappy with huge max-age, so we use
             # expires which seems to work on both netscape and IE
             append cookie "; Expires=Mon, 01-Jan-2035 01:00:00 GMT"
         }
-    } elseif { $max_age != "" } {
-        append cookie "; Max-Age=$max_age; Expires=[util::cookietime [expr [ns_time] + $max_age]]"
+    } elseif { $max_age ne "" } {
+        append cookie "; Max-Age=$max_age; Expires=[util::cookietime [expr {[ns_time] + $max_age}]]"
     }
 
-    if { [string equal $expire "t"] } {
+    if {$expire eq "t"} {
         append cookie "; Expires=Tue, 01-Jan-1980 01:00:00 GMT"
     }
 
-    if { $domain != "" } {
+    if { $domain ne "" } {
 	append cookie "; Domain=$domain"
     }
 
-    if { $secure != "f" } {
+    if { $secure ne "f" } {
 	append cookie "; Secure"
     }
 
@@ -1977,7 +1977,7 @@ ad_proc -private ad_run_scheduled_proc { proc_info } {
 	}
     }
 
-    if { $once == "f" } {
+    if { $once eq "f" } {
 	# The proc will run again - readd it to the shared variable (updating ns_time and
 	# incrementing the count).
 	lappend procs [list $thread $once $interval $proc $args [ns_time] [expr { $count + 1 }] $debug]
@@ -2030,7 +2030,7 @@ ad_proc -public ad_schedule_proc {
 } {
     # we don't schedule a proc to run if we have enabled server clustering,
     # we're not the canonical server, and the procedure was not requested to run on all servers.
-    if { [server_cluster_enabled_p] && ![ad_canonical_server_p] && $all_servers == "f" } {
+    if { [server_cluster_enabled_p] && ![ad_canonical_server_p] && $all_servers eq "f" } {
         return
     } 
 
@@ -2046,16 +2046,16 @@ ad_proc -public ad_schedule_proc {
     ns_mutex unlock [nsv_get ad_procs mutex]
 
     set my_args [list]
-    if { $thread == "t" } {
+    if { $thread eq "t" } {
 	lappend my_args "-thread"
     }
-    if { $once == "t" } {
+    if { $once eq "t" } {
 	lappend my_args "-once"
     }
 
     # Schedule the wrapper procedure (ad_run_scheduled_proc).
 
-    if { [empty_string_p $schedule_proc] } {
+    if { $schedule_proc eq "" } {
         eval [concat [list ns_schedule_proc] $my_args [list $interval ad_run_scheduled_proc [list $proc_info]]]
     } else {
         eval [concat [list $schedule_proc] $my_args $interval [list ad_run_scheduled_proc [list $proc_info]]]
@@ -2098,18 +2098,18 @@ ad_proc -public ad_cache_returnredirect { url { persistent "f" } { excluded_vars
     for { set i 0 } { $i < [llength $excluded_vars] } { incr i } {
 	set item [lindex [lindex $excluded_vars $i] 0]
 	set value [lindex [lindex $excluded_vars $i] 1]
-	if { [empty_string_p $value] } {
+	if { $value eq "" } {
 	    # Obtain value from adp level
 	    upvar #[template::adp_level] __item item_reference
 	    set item_reference $item
 	    upvar #[template::adp_level] __value value_reference
-	    uplevel #[template::adp_level] {set __value [expr $$__item]}
+	    uplevel #[template::adp_level] {set __value [expr {$$__item}]}
 	    set value $value_reference
 	}
 	lappend excluded_vars_list $item
-	if { ![empty_string_p $value] } {
+	if { $value ne "" } {
 	    # Value provided
-	    if { ![empty_string_p $excluded_vars_url] } {
+	    if { $excluded_vars_url ne "" } {
 		append excluded_vars_url "&"
 	    }
 	    append excluded_vars_url [export_vars -url [list [list "$item" "$value"]]]
@@ -2117,7 +2117,7 @@ ad_proc -public ad_cache_returnredirect { url { persistent "f" } { excluded_vars
     }
 
     set saved_list ""
-    if { ![empty_string_p $vars] } {
+    if { $vars ne "" } {
 	foreach item_value [split $vars "&"] {
 	    set item_value_pair [split $item_value "="]
 	    set item [lindex $item_value_pair 0]
@@ -2189,7 +2189,7 @@ ad_proc -public ad_returnredirect {
         set url [util_current_location]$target_url
     } else {
         # URL is relative to current directory.
-        if {[string equal $target_url "."]} {
+        if {$target_url eq "."} {
             set url [util_current_location][util_current_directory]
         } else {
             set url [util_current_location][util_current_directory]$target_url
@@ -2227,7 +2227,7 @@ ad_proc -public util_user_message {
     
     @see util_get_user_messages
 } {
-    if { ![empty_string_p $message] } {
+    if { $message ne "" } {
         if { [string is false $html_p] } {
             set message [ad_quotehtml $message]
         }
@@ -2259,7 +2259,7 @@ ad_proc -public util_get_user_messages {
     @see util_user_message
 } {
     set messages [ad_get_client_property -default {} -cache_only t "acs-kernel" "general_messages"]
-    if { !$keep_p && ![empty_string_p $messages] } {
+    if { !$keep_p && $messages ne "" } {
         ad_set_client_property "acs-kernel" "general_messages" {}
     }
     template::multirow create $multirow message
@@ -2284,7 +2284,7 @@ ad_proc -public util_absolute_path_p {{} path} {
    Check whether the path begins with a slash
 } {
    set firstchar [string index $path 0]
-   if {[string compare $firstchar /]} {
+   if {$firstchar ne "/" } {
         return 0
    } else {
         return 1
@@ -2302,7 +2302,7 @@ ad_proc -public util_driver_info {
 } {
     upvar $array result
 
-    if {[string equal $driver ""]} {
+    if {$driver eq ""} {
         set driver [ad_conn driver]
     }
 
@@ -2366,17 +2366,17 @@ ad_proc -public util_current_location {{}} {
         ns_log Error "util_current_location couldn't regexp '[ad_conn location]'"
     }
 
-    if { [empty_string_p $Host] } {
+    if { $Host eq "" } {
         # No Host header, return protocol from driver, hostname from [ad_conn location], and port from driver
         set hostname $location_hostname
     } else {
         set hostname $Host_hostname
-        if { ![empty_string_p $Host_port] } {
+        if { $Host_port ne "" } {
             set port $Host_port
         }    
     }
 
-    if { ![empty_string_p $port] && ![string equal $port $default_port($proto)] } {
+    if { $port ne "" && $port ne $default_port($proto) } {
         return "$proto://$hostname:$port"
     } else {
         return "$proto://$hostname"
@@ -2395,13 +2395,13 @@ ad_proc -public util_current_directory {{}} {
 } {
    set path [ad_conn url]
 
-   set lastchar [string range $path [expr [string length $path]-1] end]
-   if {![string compare $lastchar /]} {
+   set lastchar [string range $path [expr {[string length $path]-1}] end]
+   if {$lastchar eq "/" } {
         return $path
    } else { 
         set file_dirname [file dirname $path]
         # Treat the case of the root directory special
-        if {![string compare $file_dirname /]} {
+        if {$file_dirname eq "/" } {
             return /
         } else {
             return  $file_dirname/
@@ -2433,7 +2433,7 @@ ad_proc -public ad_get_tcl_call_stack { {level -2} } {
     @see ad_print_stack_trace
  } {
     set stack ""
-    for { set x [expr [info level] + $level] } { $x > 0 } { incr x -1 } {
+    for { set x [expr {[info level] + $level}] } { $x > 0 } { incr x -1 } {
 	append stack "    called from [info level $x]\n"
     }
     return $stack
@@ -2574,7 +2574,7 @@ ad_proc -public util_sets_equal_p { list1 list2 } {
     set sorted_list2 [lsort $list2]
 
     for { set index1 0 } { $index1 < [llength $sorted_list1] } { incr index1 } {
-        if { ![string equal [lindex $sorted_list1 $index1] [lindex $sorted_list2 $index1]] } {
+        if { [lindex $sorted_list1 $index1] ne [lindex $sorted_list2 $index1] } {
             return 0
         }
     }
@@ -2660,7 +2660,7 @@ ad_proc -public util_get_subset_missing {
 
     set sorted_list1 [list]
     foreach elm [lsort $list1] {
-        if { [llength $sorted_list1] == 0 || ![string equal [lindex $sorted_list1 end] $elm] } {
+        if { [llength $sorted_list1] == 0 || [lindex $sorted_list1 end] ne $elm } {
             lappend sorted_list1 $elm
         }
     }
@@ -2851,7 +2851,7 @@ ad_proc -public util_text_to_url {
 
     @author Tilmann Singer
 } {
-    if { [empty_string_p $text] } {
+    if { $text eq "" } {
         set text $_text
     }
 
@@ -2871,7 +2871,7 @@ ad_proc -public util_text_to_url {
     set text [string trim $text $replacement]
 
     # throw an error when the resulting string is empty
-    if { [empty_string_p $text] } {
+    if { $text eq "" } {
         error "Cannot compute a URL of this string: \"$original_text\" because after removing all illegal characters it's an empty string."
     }
 
@@ -2898,7 +2898,7 @@ ad_proc -public util_text_to_url {
 
                 if { [regexp "${text}${replacement}(\\d+)\$" $url match n] } {
                     # matches the foo-123 pattern
-                    if { $n >= $number } { set number [expr $n + 1] }
+                    if { $n >= $number } { set number [expr {$n + 1}] }
                 }
             }
             
@@ -3066,7 +3066,7 @@ ad_proc -public util_sets_equal_p { list1 list2 } {
     set sorted_list2 [lsort $list2]
 
     for { set index1 0 } { $index1 < [llength $sorted_list1] } { incr index1 } {
-        if { ![string equal [lindex $sorted_list1 $index1] [lindex $sorted_list2 $index1]] } {
+        if { [lindex $sorted_list1 $index1] ne [lindex $sorted_list2 $index1] } {
             return 0
         }
     }
@@ -3180,7 +3180,7 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
             set filename [file tail $file]
         }
 
-        if {[string equal */* $mime_type] || [empty_string_p $mime_type]} {
+        if {[string equal */* $mime_type] || $mime_type eq ""} {
             set mime_type [ns_guesstype $file]
         }
     }
@@ -3197,10 +3197,10 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
             error "Cannot upload file without specifing -filename"
         }
     
-        if {[string equal $mime_type */*] || [empty_string_p $mime_type]} {
+        if {[string equal $mime_type */*] || $mime_type eq ""} {
             set mime_type [ns_guesstype $filename]
     
-            if {[string equal $mime_type */*] || [empty_string_p $mime_type]} {
+            if {[string equal $mime_type */*] || $mime_type eq ""} {
                 set mime_type application/octet-stream
             }
         }
@@ -3299,12 +3299,12 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
         set response [ns_set name $headers]
         set status [lindex $response 1]
         set length [ns_set iget $headers content-length]
-        if { [string match "" $length] } { set length -1 }
+        if { "" eq $length } { set length -1 }
         set err [catch {
             while 1 {
                 set buf [_ns_http_read $timeout $rfd $length]
                 append page $buf
-                if { [string match "" $buf] } break
+                if { "" eq $buf } break
                 if {$length > 0} {
                     incr length -[string length $buf]
                     if {$length <= 0} break
@@ -3315,7 +3315,7 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
         ns_set free $headers
         close $rfd
 
-        if $err {
+        if {$err} {
             global errorInfo
             return -code error -errorinfo $errorInfo $errMsg
         }
@@ -3408,14 +3408,14 @@ aa_equals &quot;properties -&gt; datetime&quot; \
         foreach element_name $path {
             set current_node [xml_node_get_first_child_by_name $current_node $element_name]
 
-            if { [empty_string_p $current_node] } {
+            if { $current_node eq "" } {
                 # Try the next path
                 break
             }
         }
-        if { ![empty_string_p $current_node] } {
+        if { $current_node ne "" } {
             set result [xml_node_get_content $current_node]
-            if { ![empty_string_p $result] } {
+            if { $result ne "" } {
                 # Found the value, we're done
                 break
             }
@@ -3477,13 +3477,13 @@ ad_proc -public xml_get_child_node_attribute_by_path {
     set current_node $node
     foreach element_name $path_list {
 	set current_node [xml_node_get_first_child_by_name $current_node $element_name]
-	if { [empty_string_p $current_node] } {
+	if { $current_node eq "" } {
 	    # Try the next path
 	    break
 	}
     }
 
-    if { ![empty_string_p $current_node] } {
+    if { $current_node ne "" } {
 	set attribute [xml_node_get_attribute $current_node $attribute_name ""]
     }
 
@@ -3679,7 +3679,7 @@ ad_proc -public -deprecated ad_block_sql_urls {
     @see ad_page_contract
 } {
     set form [ns_getform]
-    if { [empty_string_p $form] } { return filter_ok }
+    if { $form eq "" } { return filter_ok }
 
     # Check each form data variable to see if it contains malicious
     # user input that we don't want to interpolate into our SQL
@@ -4049,10 +4049,10 @@ ad_proc -public util::array_list_spec_pretty {
 } {
     set output {}
     foreach { elm val } $list {
-        if { [llength $val] > 1 && [expr [llength $val] % 2] == 0  } {
+        if { [llength $val] > 1 && [expr {[llength $val] % 2}] == 0  } {
             append output [string repeat " " $indent] "$elm \{" \n
 
-            append output [util::array_list_spec_pretty $val [expr $indent + 4]]
+            append output [util::array_list_spec_pretty $val [expr {$indent + 4}]]
 
             append output [string repeat " " $indent] \} \n
         } else {
@@ -4069,9 +4069,9 @@ ad_proc -public util::interval_pretty {
 } {
     set result {}
     if { $seconds > 0 } {
-        set hrs [expr $seconds / (60*60)]
+        set hrs [expr {$seconds / (60*60)}]
         set mins [expr ($seconds / 60) % 60]
-        set secs [expr $seconds % 60]
+        set secs [expr {$seconds % 60}]
         if { $hrs > 0 } { append result "${hrs}h " }
         if { $hrs > 0 || $mins > 0 } { append result "${mins}m " }
         append result "${secs}s"
@@ -4115,17 +4115,17 @@ ad_proc -public util::age_pretty {
     @param locale If present, overrides the default locale
     @return Interval between timestamp and sysdate, as localized text string.
 } {
-    set age_seconds [expr [clock scan $sysdate_ansi] - [clock scan $timestamp_ansi]]
+    set age_seconds [expr {[clock scan $sysdate_ansi] - [clock scan $timestamp_ansi]}]
 
     if { $age_seconds < 30 } {
         # Handle with normal processing below -- otherwise this would require another string to localize
         set age_seconds 60
     }
 
-   if { $age_seconds < [expr $hours_limit * 60 * 60] } {
-        set hours [expr abs($age_seconds / 3600)]
-        set minutes [expr round(($age_seconds% 3600)/60.0)]
-        if {[expr $hours < 24]} {
+   if { $age_seconds < [expr {$hours_limit * 60 * 60}] } {
+        set hours [expr {abs($age_seconds / 3600)}]
+        set minutes [expr {round(($age_seconds% 3600)/60.0)}]
+        if {[expr {$hours < 24}]} {
             switch $hours {
                 0 { set result "" }
                 1 { set result "One hour " }
@@ -4137,7 +4137,7 @@ ad_proc -public util::age_pretty {
                 default { append result "$minutes minutes " }
             }
         } else {
-            set days [expr abs($hours / 24)]
+            set days [expr {abs($hours / 24)}]
             switch $days {
                 1 { set result "One day " }
                 default { set result "$days days "}
@@ -4145,7 +4145,7 @@ ad_proc -public util::age_pretty {
         }
 
         append result "ago"
-    } elseif { $age_seconds < [expr $days_limit * 60 * 60 * 24] } {
+    } elseif { $age_seconds < [expr {$days_limit * 60 * 60 * 24}] } {
         set result [lc_time_fmt $timestamp_ansi $mode_2_fmt $locale]
     } else {
         set result [lc_time_fmt $timestamp_ansi $mode_3_fmt $locale]
@@ -4190,7 +4190,7 @@ ad_proc -public util::word_diff {
 	@author Gabriel Burca
 } {
 
-	if {$filter_proc != ""} {
+	if {$filter_proc ne ""} {
 		set old [$filter_proc $old]
 		set new [$filter_proc $new]
 	}
@@ -4219,16 +4219,16 @@ ad_proc -public util::word_diff {
 	while {![eof $diff_pipe]} {
 		gets $diff_pipe diff
 		if {[regexp {^d(\d+)(\s+(\d+))?$} $diff full m1 m2]} {
-			if {$m2 != ""} {set d_end $m2} else {set d_end $m1}
+			if {$m2 ne ""} {set d_end $m2} else {set d_end $m1}
 			for {set i $sv} {$i < $m1} {incr i} {
 				append res "${split_by}[lindex $old_w $i]"
 			}
 			for {set i $m1} {$i <= $d_end} {incr i} {
 				append res "${split_by}${start_old}[lindex $old_w $i]${end_old}"
 			}
-			set sv [expr $d_end + 1]
+			set sv [expr {$d_end + 1}]
 		} elseif {[regexp {^c(\d+)(\s+(\d+))?$} $diff full m1 m2]} {
-			if {$m2 != ""} {set d_end $m2} else {set d_end $m1}
+			if {$m2 ne ""} {set d_end $m2} else {set d_end $m1}
 			for {set i $sv} {$i < $m1} {incr i} {
 				append res "${split_by}[lindex $old_w $i]"
 			}
@@ -4237,13 +4237,13 @@ ad_proc -public util::word_diff {
 			}
 			while {![eof $diff_pipe]} {
 				gets $diff_pipe diff
-				if {$diff == "."} {
+				if {$diff eq "."} {
 					break
 				} else {
 					append res "${split_by}${start_new}${diff}${end_new}"
 				}
 			}
-			set sv [expr $d_end + 1]
+			set sv [expr {$d_end + 1}]
 		} elseif {[regexp {^a(\d+)$} $diff full m1]} {
 			set d_end $m1
 			for {set i $sv} {$i < $m1} {incr i} {
@@ -4251,13 +4251,13 @@ ad_proc -public util::word_diff {
 			}
 			while {![eof $diff_pipe]} {
 				gets $diff_pipe diff
-				if {$diff == "."} {
+				if {$diff eq "."} {
 					break
 				} else {
 					append res "${split_by}${start_new}${diff}${end_new}"
 				}
 			}
-			set sv [expr $d_end + 1]
+			set sv [expr {$d_end + 1}]
 		}
 	}
 	
@@ -4348,7 +4348,7 @@ ad_proc -public util::find_all_files {
 		# Remember that we've examined the file.
 		set examined_files($file) 1
 
-		if { [empty_string_p $check_file_func] || [eval [list $check_file_func $file]] } {
+		if { $check_file_func eq "" || [eval [list $check_file_func $file]] } {
 		    # If it's a file, add to our list. If it's a
 		    # directory, add its contents to our list of files to
 		    # examine next time.

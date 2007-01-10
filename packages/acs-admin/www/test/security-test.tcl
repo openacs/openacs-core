@@ -10,7 +10,7 @@ ns_write "<li>Set client property..."
 
 set result [ad_get_client_property test MyName]
 
-if { [string compare $result MyValue] == 0 } {
+if { $result eq "MyValue"  } {
     ns_write "<li>Success: Client property successfully retrieved..."
 } else {
     ns_write "<li>Failure: Client property was incorrectly retrieved, expected MyValue, instead got $result..."

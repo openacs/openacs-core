@@ -76,7 +76,7 @@ ad_proc -public template::data::validate::richtext {
     set contents    [lindex $richtext_list 0]
     set format      [lindex $richtext_list 1]
 
-    if { ![empty_string_p $contents] && [lsearch -exact [template::util::richtext::formats] $format] == -1 } {
+    if { $contents ne "" && [lsearch -exact [template::util::richtext::formats] $format] == -1 } {
 	set message "Invalid format, '$format'."
 	return 0
     }
@@ -84,7 +84,7 @@ ad_proc -public template::data::validate::richtext {
     # enhanced text and HTML needs to be security checked
     if { [lsearch { text/enhanced text/html } $format] != -1 } {
         set check_result [ad_html_security_check $contents]
-        if { ![empty_string_p $check_result] } {
+        if { $check_result ne "" } {
             set message $check_result
             return 0
         }
@@ -110,7 +110,7 @@ ad_proc -public template::data::transform::richtext {
     set contents [ns_queryget $element_id]
     set format [ns_queryget $element_id.format]
 
-    if { [empty_string_p $contents] } {
+    if { $contents eq "" } {
         # We need to return the empty list in order for form builder to think of it 
         # as a non-value in case of a required element.
         return [list]
@@ -174,7 +174,7 @@ ad_proc -public template::util::richtext::get_property { what richtext_list } {
             return $format
         }
         html_value {
-            if { ![empty_string_p $contents] } {
+            if { $contents ne "" } {
                 return [ad_html_text_convert -from $format -to "text/html" -- $contents]
             } else {
                 return {}
@@ -221,7 +221,7 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
   
   set output {}
 
-  if { [string equal $element(mode) "edit"] } {
+  if {$element(mode) eq "edit"} {
       append output {<script language="javascript"><!--} \n {acs_RichText_WriteButtons();  //--></script>}
       
       set attributes(id) "richtext__$element(form_id)__$element(id)"

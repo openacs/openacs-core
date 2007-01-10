@@ -19,7 +19,7 @@ set tested_proc_names [list]
 foreach testcase [nsv_get aa_test cases] {
     set testcase_package_key [lindex $testcase 3]
 
-    if { [string equal $testcase_package_key $package_key] } {
+    if {$testcase_package_key eq $package_key} {
 	set tested_procs [lindex $testcase 10]
 	if { [llength $tested_procs] > 0 } {
 	    set tested_proc_names [concat $tested_proc_names $tested_procs] 

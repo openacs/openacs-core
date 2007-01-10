@@ -49,7 +49,7 @@ ad_proc -public site_node::new {
     with_finally -code {
         set url [site_node::get_url -node_id $parent_id]
         append url $name
-        if { $directory_p == "t" } { append url "/" }
+        if { $directory_p eq "t" } { append url "/" }
             nsv_set site_node_url_by_node_id $node_id $url
             nsv_set site_nodes $url \
                 [list url $url node_id $node_id parent_id $parent_id name $name \
@@ -121,7 +121,7 @@ ad_proc -public site_node::mount {
         }
         nsv_set site_node_url_by_object_id $object_id $url_by_object_id
     
-        if { ![empty_string_p $package_key] } {
+        if { $package_key ne "" } {
             set url_by_package_key [list $node(url)]
             if { [nsv_exists site_node_url_by_package_key $package_key] } {
                 set url_by_package_key [concat [nsv_get site_node_url_by_package_key $package_key] $url_by_package_key]
@@ -189,14 +189,14 @@ ad_proc -public site_node::instantiate_and_mount {
     @author Peter Marklund
 } {
     # Create a new node if none was provided and none exists
-    if { [empty_string_p $node_id] } {
+    if { $node_id eq "" } {
         # Default parent node to the main site
-        if { [empty_string_p $parent_node_id ] } {
+        if { $parent_node_id eq "" } {
             set parent_node_id [site_node::get_node_id -url "/"]
         }
 
         # Default node_name to package_key
-        if { [empty_string_p $node_name] } {
+        if { $node_name eq "" } {
             set node_name $package_key
         }
 
@@ -219,7 +219,7 @@ ad_proc -public site_node::instantiate_and_mount {
     }
 
     # Default context id to the closest ancestor package_id
-    if { [empty_string_p $context_id] } {
+    if { $context_id eq "" } {
         set context_id [site_node::closest_ancestor_package -node_id $node_id]
     }
 
@@ -258,7 +258,7 @@ ad_proc -private site_node::init_cache {} {
     nsv_array reset site_node_url_by_package_key [list]
 
     set root_node_id [db_string get_root_node_id {} -default {}]
-    if { ![empty_string_p $root_node_id] } {
+    if { $root_node_id ne "" } {
         site_node::update_cache -sync_children -node_id $root_node_id
     }
 }
@@ -299,7 +299,7 @@ ad_proc -private site_node::update_cache {
 
                 # Find the object_id previously mounted there
                 set cur_object_id $cur_node(object_id)
-                if { ![empty_string_p $cur_object_id] } {
+                if { $cur_object_id ne "" } {
                     # Remove the URL from the url_by_object_id entry for that object_id
                     set cur_idx [lsearch -exact $url_by_object_id($cur_object_id) $cur_node_url]
                     if { $cur_idx != -1 } {
@@ -310,7 +310,7 @@ ad_proc -private site_node::update_cache {
                 
                 # Find the package_key previously mounted there
                 set cur_package_key $cur_node(package_key)
-                if { ![empty_string_p $cur_package_key] } {
+                if { $cur_package_key ne "" } {
                     # Remove the URL from the url_by_package_key entry for that package_key
                     set cur_idx [lsearch -exact $url_by_package_key($cur_package_key) $cur_node_url]
                     if { $cur_idx != -1 } {
@@ -334,25 +334,25 @@ ad_proc -private site_node::update_cache {
         }
         
         db_foreach $query_name {} {
-            if {[empty_string_p $parent_id]} {
+            if {$parent_id eq ""} {
                 # url of root node
                 set url "/"
             } else {
                 # append directory to url of parent node
                 set url $url_by_node_id($parent_id)
                 append url $name
-                if { $directory_p == "t" } { append url "/" }
+                if { $directory_p eq "t" } { append url "/" }
             }
             # save new url
             set url_by_node_id($node_id) $url
-            if { ![empty_string_p $object_id] } {
+            if { $object_id ne "" } {
                 lappend url_by_object_id($object_id) $url
             }
-            if { ![empty_string_p $package_key] } {
+            if { $package_key ne "" } {
                 lappend url_by_package_key($package_key) $url
             }
 
-            if { [empty_string_p $package_id] } {
+            if { $package_id eq "" } {
                 set object_type ""
             } else {
                 set object_type "apm_package"
@@ -401,15 +401,15 @@ ad_proc -public site_node::get {
     The array elements are: package_id, package_key, object_type, directory_p, 
     instance_name, pattern_p, parent_id, node_id, object_id, url.
 } {
-    if {[empty_string_p $url] && [empty_string_p $node_id]} {
+    if {$url eq "" && $node_id eq ""} {
         error "site_node::get \"must pass in either url or node_id\""
     }
 
-    if {![empty_string_p $node_id]} {
+    if {$node_id ne ""} {
         return [get_from_node_id -node_id $node_id]
     }
 
-    if {![empty_string_p $url]} {
+    if {$url ne ""} {
         return [get_from_url -url $url]
     }
 
@@ -463,7 +463,7 @@ ad_proc -public site_node::get_from_url {
 
     # attempt adding a / to the end of the url if it doesn't already have
     # one
-    if {![string equal [string index $url end] "/"]} {
+    if {[string index $url end] ne "/" } {
         append url "/"
         if {[nsv_exists site_nodes $url]} {
             return [nsv_get site_nodes $url]
@@ -472,14 +472,14 @@ ad_proc -public site_node::get_from_url {
 
     # chomp off part of the url and re-attempt
     if {!$exact_p} {
-        while {![empty_string_p $url]} {
+        while {$url ne ""} {
         set url [string trimright $url /]
         set url [string range $url 0 [string last / $url]]
 
         if {[nsv_exists site_nodes $url]} {
             array set node [nsv_get site_nodes $url]
 
-            if {[string equal $node(pattern_p) t] && ![empty_string_p $node(object_id)]} {
+            if {$node(pattern_p) eq "t" && $node(object_id) ne ""} {
                 return [array get node]
             }
         }
@@ -578,7 +578,7 @@ ad_proc -public site_node::get_node_id_from_object_id {
     return the site node id associated with the given object_id
 } {
     set url  [lindex [get_url_from_object_id -object_id $object_id] 0]
-    if { ![empty_string_p $url] } {
+    if { $url ne "" } {
         return [get_node_id -url $url]
     } else {
         return {}
@@ -612,7 +612,7 @@ ad_proc -public site_node::get_ancestors {
     set result [list]
     set array_result_p [string equal $element ""]
 
-    while {![string equal $node_id ""]} {
+    while {$node_id ne "" } {
         array set node [get -node_id $node_id]
        
         if {$array_result_p} {
@@ -674,13 +674,13 @@ ad_proc -public site_node::get_children {
     
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    if { ![empty_string_p $package_type] && ![empty_string_p $package_key] } {
+    if { $package_type ne "" && $package_key ne "" } {
         error "You may specify either package_type, package_key, or filter_element, but not more than one."
     }
 
-    if { ![empty_string_p $package_type] } {
+    if { $package_type ne "" } {
         lappend filters package_type $package_type
-    } elseif { ![empty_string_p $package_key] } {
+    } elseif { $package_key ne "" } {
         lappend filters package_key $package_key
     }
 
@@ -710,13 +710,13 @@ ad_proc -public site_node::get_children {
 
                 set passed_p 1
                 foreach { elm val } $filters {
-                    if { ![string equal $site_node($elm) $val] } {
+                    if { $site_node($elm) ne $val } {
                         set passed_p 0
                         break
                     }
                 }
                 if { $passed_p } {
-                    if { ![empty_string_p $element] } {
+                    if { $element ne "" } {
                         lappend return_val $site_node($element)
                     } else {
                         lappend return_val $child_url
@@ -724,7 +724,7 @@ ad_proc -public site_node::get_children {
                 }
             }
         }
-    } elseif { ![empty_string_p $element] } {
+    } elseif { $element ne "" } {
         set return_val [list]
         foreach child_url $child_urls {
             array unset site_node
@@ -736,7 +736,7 @@ ad_proc -public site_node::get_children {
 
     # if we had filters or were getting a particular element then we 
     # have our results in return_val otherwise it's just urls
-    if { ![empty_string_p $element]
+    if { $element ne ""
          || [llength $filters] > 0} {
         return $return_val
     } else {
@@ -776,8 +776,8 @@ ad_proc -public site_node::closest_ancestor_package {
     @author Peter Marklund
 } {
     # Make sure we have a url to work with
-    if { [empty_string_p $url] } {
-          if { [empty_string_p $node_id] } {
+    if { $url eq "" } {
+          if { $node_id eq "" } {
               set url "/"
           } else {
               set url [site_node::get_url -node_id $node_id]
@@ -785,7 +785,7 @@ ad_proc -public site_node::closest_ancestor_package {
     }
 
     # should we return the package at the passed-in node/url?
-    if { $include_self_p && ![empty_string_p $package_key]} {
+    if { $include_self_p && $package_key ne ""} {
         array set node_array [site_node::get -url $url]
 
         if { [lsearch -exact $package_key $node_array(package_key)] != -1 } {
@@ -794,7 +794,7 @@ ad_proc -public site_node::closest_ancestor_package {
     }
 
     set elm_value {}
-    while { [empty_string_p $elm_value] && $url != "/"} {
+    while { $elm_value eq "" && $url ne "/"} {
         # move up a level
         set url [string trimright $url /]
         set url [string range $url 0 [string last / $url]]
@@ -802,7 +802,7 @@ ad_proc -public site_node::closest_ancestor_package {
         array set node_array [site_node::get -url $url]
 
         # are we looking for a specific package_key?
-        if { [empty_string_p $package_key] || \
+        if { $package_key eq "" || \
                  [lsearch -exact $package_key $node_array(package_key)] != -1 } {
             set elm_value $node_array($element)
         }       
@@ -846,7 +846,7 @@ ad_proc -public site_node::verify_folder_name {
     set existing_urls [site_node::get_children -node_id $parent_node_id -element name]
     
     array set parent_node [site_node::get -node_id $parent_node_id]
-    if { ![empty_string_p $parent_node(package_key)] } {
+    if { $parent_node(package_key) ne "" } {
         # Find all the page or directory names under this package
         foreach path [glob -nocomplain -types d "[acs_package_root_dir $parent_node(package_key)]/www/*"] {
             lappend existing_urls [lindex [file split $path] end]
@@ -862,10 +862,10 @@ ad_proc -public site_node::verify_folder_name {
         }
     } 
 
-    if { ![empty_string_p $folder] } {
+    if { $folder ne "" } {
         if { [lsearch $existing_urls $folder] != -1 } {
             # The folder is on the list
-            if { [empty_string_p $current_node_id] } {
+            if { $current_node_id eq "" } {
                 # New node: Complain
                 return {}
             } else {
@@ -880,7 +880,7 @@ ad_proc -public site_node::verify_folder_name {
         }
     } else {
         # Autogenerate folder name
-        if { [empty_string_p $instance_name] } {
+        if { $instance_name eq "" } {
             error "Instance name must be supplied when folder name is empty."
         }
 
@@ -934,7 +934,7 @@ ad_proc -public site_map_unmount_application {
     db_transaction {
         site_node::unmount -node_id $node_id
 
-        if {[string equal $delete_p t]} {
+        if {$delete_p eq "t"} {
             site_node::delete -node_id $node_id
         }
     }
@@ -995,7 +995,7 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
 
     @see site_node::closest_ancestor_package
 } {
-    if {[empty_string_p $url]} {
+    if {$url eq ""} {
         set url [ad_conn url]
     }
 
@@ -1008,7 +1008,7 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
     }
     
     # Add a trailing slash and try again.
-    if {[string index $url end] != "/"} {
+    if {[string index $url end] ne "/"} {
           append url "/"
           if {[catch {nsv_get site_nodes $url} result] == 0} {
               array set node $result
@@ -1019,14 +1019,14 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
     }
     
     # Try successively shorter prefixes.
-    while {$url != ""} {
+    while {$url ne ""} {
           # Chop off last component and try again.
           set url [string trimright $url /]
           set url [string range $url 0 [string last / $url]]
         
           if {[catch {nsv_get site_nodes $url} result] == 0} {
               array set node $result
-              if {$node(pattern_p) == "t" && $node(object_id) != "" && [lsearch -exact $package_keys $node(package_key)] != -1 } {
+              if {$node(pattern_p) eq "t" && $node(object_id) ne "" && [lsearch -exact $package_keys $node(package_key)] != -1 } {
                     return $node(package_id)
               }
           }
@@ -1051,7 +1051,7 @@ ad_proc -deprecated -public site_node_closest_ancestor_package_url {
 
     @see site::node::closest_ancestor_package
 } {
-    if {[empty_string_p $package_key]} {
+    if {$package_key eq ""} {
         set package_key [subsite::package_keys]
     }
 
@@ -1060,7 +1060,7 @@ ad_proc -deprecated -public site_node_closest_ancestor_package_url {
                             -package_key $package_key \
                             -url [ad_conn url] ]
 
-    if {[empty_string_p $subsite_pkg_id]} {
+    if {$subsite_pkg_id eq ""} {
         # No package was found... return the default
         return $default
     }

@@ -66,7 +66,7 @@ ad_proc -private server_cluster_httpget_from_peers {
     { -timeout 5 }
     url
 } { Schedules an HTTP GET request to be issued immediately to all peer hosts (using ad_schedule_proc -once t -thread f -debug t 0). } {
-    if { ![string match /* $url] } {
+    if { ![string match "/*" $url] } {
 	set url "/$url"
     }
     foreach host [server_cluster_peer_hosts] {
@@ -86,7 +86,7 @@ ad_proc -private ad_canonical_server_p {} {
     load balancer).
 } {
     set canonical_server [ad_parameter -package_id [ad_acs_kernel_id] CanonicalServer server-cluster]
-    if { [empty_string_p $canonical_server] } {
+    if { $canonical_server eq "" } {
 	ns_log Error "Your configuration is not correct for server clustering. Please ensure that you have the CanonicalServer parameter set correctly."
 	return 1
     }

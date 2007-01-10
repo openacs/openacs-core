@@ -24,7 +24,7 @@ if { ![info exists version_id] && \
     }
 }
 
-if [info exists version_id] {
+if {[info exists version_id]} {
     set public_p [api_set_public $version_id $public_p]
 } else {
     set public_p [api_set_public "" $public_p]

@@ -1,6 +1,6 @@
 set locale [ad_conn locale]
 
-set display_p [expr [lang::util::translator_mode_p] && ![string equal [ad_conn locale] "en_US"]]
+set display_p [expr {[lang::util::translator_mode_p] && [ad_conn locale] ne "en_US" }]
 
 template::list::create \
     -name messages \

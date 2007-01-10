@@ -24,7 +24,7 @@ ad_proc -private install_input_widget {
 } {
     set type_attribute [ad_decode $type "" "" "type=\"$type\""]
 
-    if { ![empty_string_p $value] } {
+    if { $value ne "" } {
         append extra_attributes " value=\"[ad_quotehtml $value]\""
     }
     
@@ -45,7 +45,7 @@ ad_proc -private install_param_mandatory_p { param_name } {
 } {
     array set mandatory_params_array [install_mandatory_params]
     set mandatory_names [array names mandatory_params_array]
-    return [expr [lsearch -exact $mandatory_names $param_name] != -1]
+    return [expr {[lsearch -exact $mandatory_names $param_name] != -1}]
 }
 
 ad_proc -private install_mandatory_params {} {
@@ -102,7 +102,7 @@ ad_proc -private install_page_contract { mandatory_params optional_params } {
     set form [ns_getform]
     set missing_params [list]
 
-    if { [empty_string_p $form] } {
+    if { $form eq "" } {
         # Form is empty - all mandatory params are missing
         foreach param_name [array names mandatory_params_array] {
             lappend missing_params $mandatory_params_array($param_name)
@@ -115,9 +115,9 @@ ad_proc -private install_page_contract { mandatory_params optional_params } {
                                  [array names optional_params_array]]
         foreach param_name $all_param_names {
             set param_value [ns_set iget $form $param_name]
-            set mandatory_p [expr [lsearch -exact $mandatory_params $param_name] != -1]
+            set mandatory_p [expr {[lsearch -exact $mandatory_params $param_name] != -1}]
 
-            if { ![empty_string_p $param_value] } {
+            if { $param_value ne "" } {
                 # Param in form - set value in callers scope
                 uplevel [list set $param_name $param_value]
             } else {
@@ -157,7 +157,7 @@ proc install_header { status title } {
 
     # Prefix the page title
     set page_title_prefix "OpenACS Installation"
-    if { ![empty_string_p $title] } {
+    if { $title ne "" } {
         set page_title "${page_title_prefix}: $title"
     } else {
         set page_title $page_title_prefix
@@ -267,7 +267,7 @@ proc install_handler { conn arg why } {
     # is still working.
     if { [regexp {/SYSTEM/(.*)} [ad_conn url] "" system_file] } {
 	if {[string compare [string range $system_file \
-		[expr [string length $system_file ] - 4] end] ".tcl"
+		[expr {[string length $system_file ] - 4}] end] ".tcl"
 	]} {
 	    set system_file "$system_file.tcl"
 	}
@@ -280,7 +280,7 @@ proc install_handler { conn arg why } {
 	return
     }
 
-    if { ![string compare $script ""] } {
+    if { $script eq "" } {
 	set script "index"
     }
 
@@ -344,7 +344,7 @@ ad_proc -public ad_windows_p {} {
     Note,  this procedure is a best guess, not sure of a better way of determining:
 } {
     set thisplatform [ns_info platform]
-    if {[string equal $thisplatform  "win32" ]} {
+    if {$thisplatform eq "win32"} {
        return 1
     } else {
        return 0

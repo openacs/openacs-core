@@ -70,7 +70,7 @@ ad_proc -public permission::permission_p {
     
     @param privilege The privilege you want to check for.
 } {
-    if { [empty_string_p $party_id] } {
+    if { $party_id eq "" } {
         set party_id [ad_conn user_id]
     }    
 
@@ -124,7 +124,7 @@ ad_proc -private permission::permission_p_not_cached {
 
     @see permission::permission_p
 } {
-    if { [empty_string_p $party_id] } {
+    if { $party_id eq "" } {
         set party_id [ad_conn user_id]
     }
 
@@ -151,7 +151,7 @@ ad_proc -public permission::require_permission {
 } {
     require that party X have privilege Y on object Z
 } {
-    if {[empty_string_p $party_id]} {
+    if {$party_id eq ""} {
         set party_id [ad_conn user_id]
     }
 
@@ -229,7 +229,7 @@ ad_proc -public permission::write_permission_p {
     if { [permission::permission_p -privilege write -object_id $object_id -party_id $party_id] } {
         return 1
     }
-    if { [empty_string_p $creation_user] } {
+    if { $creation_user eq "" } {
         set creation_user [acs_object::get_element -object_id $object_id -element creation_user]
     }
     if { [ad_conn user_id] == $creation_user } {

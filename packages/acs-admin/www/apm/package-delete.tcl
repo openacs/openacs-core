@@ -47,7 +47,7 @@ set initial_install_p [db_string initial_install_p {
     where package_key = :package_key
 }]
 
-if { [string equal $initial_install_p "t"] } {
+if {$initial_install_p eq "t"} {
     set kernel_deletion_warning "
 <p>
   You are about to delete package <code>$package_key</code> which is part of the <b>OpenACS core</b>
@@ -57,7 +57,7 @@ if { [string equal $initial_install_p "t"] } {
     set kernel_deletion_warning ""
 }
 
-if { ![empty_string_p $dependency_warning_text] || ![empty_string_p $kernel_deletion_warning] } {
+if { $dependency_warning_text ne "" || $kernel_deletion_warning ne "" } {
     set warning_text "
 <p>
   <b><font color=\"red\">WARNING</font></b> 
@@ -83,7 +83,7 @@ foreach file [apm_get_package_files -package_key $package_key -file_types data_m
   </tr>"
 } 
 
-if {![empty_string_p $file_list]} {
+if {$file_list ne ""} {
     set file_list "
     We recommend sourcing all of the drop scripts for the package.  Be aware that this will
     erase all data associated with this package from the database.

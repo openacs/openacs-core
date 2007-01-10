@@ -60,7 +60,7 @@ and apm_package_version.sortable_version_name(d.service_version) $sign apm_packa
     } else {
 	doc_body_append "<li>This package does not $dependency_type any services.\n"
     }
-    if { $installed_p == "t" } {
+    if { $installed_p eq "t" } {
 	doc_body_append "<li><a href=\"version-dependency-add?[export_url_vars version_id dependency_type]\">Add a service ${dependency_type}d by this package</a>\n"
     }
     doc_body_append "</ul>\n"

@@ -16,7 +16,7 @@ set user_id [ad_conn user_id]
 
 db_1row name_get "select first_names, last_name, email, url from persons, parties where persons.person_id = parties.party_id and party_id =:user_id" -bind [ad_tcl_vars_to_ns_set user_id]
 
-if { ![empty_string_p $first_names] || ![empty_string_p $last_name] } {
+if { $first_names ne "" || $last_name ne "" } {
     set full_name "$first_names $last_name"
 } else {
     set full_name "name unknown"
@@ -49,7 +49,7 @@ if { [db_table_exists "bboard_email_alerts"] } {
     order by bea.frequency" {
 	incr rownum
 
-	if { $valid_p == "f" } {
+	if { $valid_p eq "f" } {
 	    # alert has been disabled for some reason
 	    set bboard_rows:$rownum(status) "disable"
 	    set bboard_rows:$rownum(action_url) "/bboard/alert-reenable?rowid=[ns_urlencode $rowid]"	    
@@ -91,7 +91,7 @@ if { [db_table_exists "classified_email_alerts"] } {
     order by expires desc" {
 	incr rownum
 	
-	if { $valid_p == "f" } {
+	if { $valid_p eq "f" } {
 	    # alert has been disabled for some reason
 	    set classified_rows:$rownum(status) "Off"
 	    set classified_rows:$rownum(action) "<a href=\"/gc/alert-reenable?alert_id=$alert_id\">Re-enable</a>"
@@ -101,11 +101,11 @@ if { [db_table_exists "classified_email_alerts"] } {
 	    set classified_rows:$rownum(action) "<a href=\"/gc/alert-disable?rowid=$rowid\">Disable</a>"
 	}
 
-	if { $alert_type == "all" } {
+	if { $alert_type eq "all" } {
 	    set classified_rows:$rownum(alert_value) "--"
-	} elseif { $alert_type == "keywords" } {
+	} elseif { $alert_type eq "keywords" } {
 	    set classified_rows:$rownum(alert_value) $keywords
-	} elseif { $alert_type == "category" } {
+	} elseif { $alert_type eq "category" } {
 	    set classified_rows:$rownum(alert_value) $category
 	} else {
 	    # I don't know what to do here...

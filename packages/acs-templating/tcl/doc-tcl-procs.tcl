@@ -46,7 +46,7 @@ ad_proc -private doc::sort_@see { list_ref directive_comments } {
   set see_name [lindex $directive_comments 1]
   set url [lindex $directive_comments 2]
 
-  if {$url ==  "" } {
+  if {$url eq "" } {
     switch -exact $type {
 
 	namespace {
@@ -57,7 +57,7 @@ ad_proc -private doc::sort_@see { list_ref directive_comments } {
 	  set split_name $see_name
 	  doc::util::text_divider split_name ::
 	  set name_length [llength $split_name]
-	  set see_namespace [join [lrange $split_name 0 [expr $name_length - 2]] ""]
+	  set see_namespace [join [lrange $split_name 0 [expr {$name_length - 2}]] ""]
 	  set url "[doc::util::dbl_colon_fix $see_namespace].html#[set see_name]"
 	}
     }
@@ -91,9 +91,9 @@ ad_proc -private doc::util::find_marker_indices { text marker } {
   set last_index -1
    
   while { [regexp -indices $marker $text marker_idx] } {
-    lappend indices_list [expr [lindex $marker_idx 0] + $last_index]
-    set text [string range $text [expr [lindex $marker_idx 1] + 1]  end]
-    set last_index [expr [lindex $marker_idx 1] + $last_index + 1]
+    lappend indices_list [expr {[lindex $marker_idx 0] + $last_index}]
+    set text [string range $text [expr {[lindex $marker_idx 1] + 1}]  end]
+    set last_index [expr {[lindex $marker_idx 1] + $last_index + 1}]
   }
 
   # check for cases with no markers
@@ -119,7 +119,7 @@ ad_proc -private doc::util::text_divider { text_ref marker } {
     set result_list [list]
 
     # first check for no markers present
-    if { $indices_list == "end" } {
+    if { $indices_list eq "end" } {
 	set text [list $text]
 	return 0
     }
@@ -128,7 +128,7 @@ ad_proc -private doc::util::text_divider { text_ref marker } {
 
     foreach index $indices_list {
 	lappend result_list [string range $text $old_index $index]
-	set old_index [expr $index + 1]
+	set old_index [expr {$index + 1}]
     }
     
     lappend result_list [string range $text $old_index end]
@@ -355,7 +355,7 @@ ad_proc -private doc::parse_comment_text { proc_block } {
 			default "[lrange [lindex $directive_comments 1] 1 end]" \
 			description "[lrange $directive_comments 2 end]" ]
 		} else {
-		    if {$directive_type == "param"} {
+		    if {$directive_type eq "param"} {
 			set default_comment "required"
 		    } else {
 			set default_comment ""
@@ -430,7 +430,7 @@ ad_proc -private doc::parse_namespace { text_lines }  {
 
                 set namespace_name [lindex $directive_comments 0]
                 set namespace_description [lrange $directive_comments 1 end]
-                if {$namespace_description != "" } {
+                if {$namespace_description ne "" } {
 		    set has_comments 1
 		}
             }

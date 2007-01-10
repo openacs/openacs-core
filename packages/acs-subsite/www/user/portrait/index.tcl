@@ -34,7 +34,7 @@ set return_code "no_error"
 # no_portrait      : No portrait uploaded yet for this user.
 # no_portrait_info : Unable to retrieve information on portrait.
 
-if [empty_string_p $user_id] {
+if {$user_id eq ""} {
     set user_id $current_user_id
 }
 
@@ -48,11 +48,11 @@ if { $current_user_id == $user_id } {
 set export_vars      [export_url_vars user_id]
 set export_edit_vars [export_url_vars user_id return_url]
 
-if ![db_0or1row user_info "select 
+if {![db_0or1row user_info "select 
   first_names, 
   last_name 
 from persons 
-where person_id=:user_id"] {
+where person_id=:user_id"]} {
     set return_code "no_user"
     set context [list "Account Unavailable"]
     ad_return_template
@@ -64,7 +64,7 @@ if {![db_0or1row get_item_id "select live_revision as revision_id, item_id
 from acs_rels a, cr_items c
 where a.object_id_two = c.item_id
 and a.object_id_one = :user_id
-and a.rel_type = 'user_portrait_rel'"] || [empty_string_p $revision_id]} {
+and a.rel_type = 'user_portrait_rel'"] || $revision_id eq ""} {
     # The user doesn't have a portrait yet
     set portrait_p 0
 } else {
@@ -87,12 +87,12 @@ if {$portrait_p} {
 # we have revision_id now
 
 
-if [catch {db_1row get_picture_info "
+if {[catch {db_1row get_picture_info "
 select i.width, i.height, cr.title, cr.description, cr.publish_date
 from images i, cr_revisions cr
 where i.image_id = cr.revision_id
 and image_id = :revision_id
-"} errmsg] {
+"} errmsg]} {
     # There was an error obtaining the picture information
     set context [list "Invalid Picture"]
     set return_code "no_portrait_info"
@@ -100,12 +100,12 @@ and image_id = :revision_id
     return
 }
 
-if [empty_string_p $publish_date] {
+if {$publish_date eq ""} {
     ad_return_complaint 1 "<li>You shouldn't have gotten here; we don't have a portrait on file for you."
     return
 }
 
-if { ![empty_string_p $width] && ![empty_string_p $height] } {
+if { $width ne "" && $height ne "" } {
     set widthheight "width=$width height=$height"
 } else {
     set widthheight ""

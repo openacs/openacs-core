@@ -21,7 +21,7 @@ aa_register_case content_revision {
             set returned_first_folder_id [content::folder::new \
                                               -folder_id $first_folder_id \
                                               -name "test_folder_${first_folder_id}"]
-            aa_true "Folder created" [expr $first_folder_id == $returned_first_folder_id]
+            aa_true "Folder created" [expr {$first_folder_id == $returned_first_folder_id}]
 
             content::folder::register_content_type \
                 -folder_id $first_folder_id \
@@ -35,7 +35,7 @@ aa_register_case content_revision {
                                             -parent_id $first_folder_id \
 	                                    -storage_type "text"]
 
-            aa_true "First item created $first_item_id" [expr $first_item_id == $returned_first_item_id]
+            aa_true "First item created $first_item_id" [expr {$first_item_id == $returned_first_item_id}]
 
             # create a revision
             set revision_id [db_nextval "acs_object_id_seq"]
@@ -46,14 +46,14 @@ aa_register_case content_revision {
                                           -title "Test Title" \
                                           -description "Test Description" \
                                           -content "Test Content"]
-            aa_true "Basic Revision created revision_id $revision_id returned_revision_id $returned_revision_id " [expr $revision_id == $returned_revision_id]
+            aa_true "Basic Revision created revision_id $revision_id returned_revision_id $returned_revision_id " [expr {$revision_id == $returned_revision_id}]
 
 	::item::get_content -revision_id $returned_revision_id -array revision_content
 	set revision_content(content) [cr_write_content -revision_id $returned_revision_id -string]
-        aa_true "Revision contains correct content" [expr \
-	    [string equal $revision_content(title) "Test Title"] \
-	    && [string equal $revision_content(content) "Test Content"] \
-	    && $revision_id == $revision_content(revision_id)]
+        aa_true "Revision contains correct content" [expr {
+ 	    $revision_content(title) eq "Test Title"
+	    && $revision_content(content) eq "Test Content" 
+	    && $revision_id == $revision_content(revision_id)}]
 	    
             content::item::delete -item_id $first_item_id
 

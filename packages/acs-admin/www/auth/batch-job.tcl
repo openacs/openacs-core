@@ -72,7 +72,7 @@ ad_form \
             # Make certain columns pretty for display
             if { [regexp {_p$} $element_name] } {
                 set $element_name [ad_decode $batch_job($element_name) "t" "Yes" "No"]
-            } elseif { [string equal $element_name "creation_user"] && ![empty_string_p $batch_job($element_name)] } {
+            } elseif { $element_name eq "creation_user" && $batch_job($element_name) ne "" } {
                 set $element_name [acs_community_member_link -user_id $batch_job($element_name)]
             } else {
                 set $element_name [ad_quotehtml $batch_job($element_name)]
@@ -153,7 +153,7 @@ db_multirow -extend { entry_url short_message entry_time_pretty user_url } batch
     set entry_url [export_vars -base batch-action { entry_id }]
     
     # Use message and element_messages to display one short message in the table
-    if { ![empty_string_p $message] } {
+    if { $message ne "" } {
         set short_message $message
     } elseif { [llength $element_messages] == 2 } {
         # Only one element message - use it
@@ -166,7 +166,7 @@ db_multirow -extend { entry_url short_message entry_time_pretty user_url } batch
     }
     set short_message [string_truncate -len 75 -- $short_message]
 
-    if { $user_exists_p && ![empty_string_p $user_id]  } {
+    if { $user_exists_p && $user_id ne ""  } {
         set user_url [acs_community_member_admin_url -user_id $user_id]
     } else {
         set user_url {}

@@ -6,7 +6,7 @@ if { $user_id != 0 } {
 
 set pvt_home_url [ad_pvt_home]
 
-if { [string equal [ad_conn url] $pvt_home_url] } {
+if {[ad_conn url] eq $pvt_home_url} {
     set pvt_home_url {}
 }
 

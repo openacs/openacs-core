@@ -9,7 +9,7 @@ ad_page_contract {
 
 # Check that the authority has a register implementation
 auth::authority::get -authority_id $authority_id -array authority
-if { [empty_string_p $authority(register_impl_id)] } {
+if { $authority(register_impl_id) eq "" } {
     ad_return_error "No register driver" "The authority $authority(pretty_name) does not have a register driver and cannot register users"
 }
 

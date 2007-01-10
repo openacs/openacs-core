@@ -177,7 +177,7 @@ if { $errno && $errno != 2 } {
     # thrown by a call to bootstrap_fatal_error. If not, bootstrap_fatal_error was
     # never called, so we need to call it now.
     global errorCode
-    if { [string compare $errorCode "bootstrap_fatal_error"] } {
+    if {$errorCode ne "bootstrap_fatal_error"  } {
 	bootstrap_fatal_error "Error during bootstrapping" 0
     }
 }

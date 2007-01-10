@@ -8,7 +8,7 @@ ad_page_contract {
     {return_url "."}
 }
 
-lang::util::translator_mode_set [expr ![lang::util::translator_mode_p]]
+lang::util::translator_mode_set [expr {![lang::util::translator_mode_p]}] 
 
 ad_returnredirect $return_url
 

@@ -27,7 +27,7 @@ namespace eval membership_rel {
 
             # If user is being undeleted - remove him from the public group
             acs_user::get -user_id $rel_user_id -array user
-            if { [string equal $user(member_state) "deleted"] && [string equal $state "approved"] } {
+            if { $user(member_state) eq "deleted" && $state eq "approved" } {
                 group::remove_member \
                     -group_id [acs_magic_object the_public] \
                     -user_id $rel_user_id
@@ -64,7 +64,7 @@ namespace eval membership_rel {
             db_dml update_modifying_user {}
         }
 
-        if { ![empty_string_p $rel_user_id] } {
+        if { $rel_user_id ne "" } {
             acs_user::flush_cache -user_id $rel_user_id
         }
     }

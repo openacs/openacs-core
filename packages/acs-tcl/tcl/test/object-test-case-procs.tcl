@@ -28,7 +28,7 @@ aa_register_case \
 	set the_id [db_nextval acs_object_id_seq]
 	aa_run_with_teardown -test_code {  
 
-	    if { [string eq [db_name] "PostgreSQL"] } {
+	    if {[db_name] eq "PostgreSQL"} {
 		set type_create_sql "select acs_object_type__create_type (
 					      :object_type,
 					      :pretty_name,

@@ -18,15 +18,15 @@ ad_page_contract {
 
 set operation [string trim [string tolower $operation]]
 
-if { [string eq $operation "yes"] } {
-    if { [empty_string_p $return_url] } {
+if {$operation eq "yes"} {
+    if { $return_url eq "" } {
 	# Setup return_url to send up back to the group admin page
 	# when we're all done
 	set return_url "[ad_conn package_url]/admin/groups/one?[ad_export_vars group_id]"
     }
     ad_returnredirect "../rel-segments/new?[ad_export_vars {group_id rel_type return_url}]"
 } else {
-    if { [empty_string_p $return_url] } {
+    if { $return_url eq "" } {
 	set return_url "one?[ad_export_vars group_id]"
     }
     ad_returnredirect $return_url

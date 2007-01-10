@@ -14,7 +14,7 @@ ad_proc -private db_available_pools {{} dbn } {
     @author Andrew Piskorski (atp@piskorski.com)
     @creation-date 2003/03/16
 } {
-    if { [empty_string_p $dbn] } {
+    if { $dbn eq "" } {
         set dbn [nsv_get {db_default_database} .]
     }
     return [nsv_get {db_available_pools} $dbn]
@@ -124,7 +124,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
         set old_availablepool_p 0
 
         set default_dbn [lindex $database_names 0]
-        if { [empty_string_p $default_dbn] } {
+        if { $default_dbn eq "" } {
             set default_dbn {default}
             set old_availablepool_p 1
 
@@ -155,7 +155,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
 
         set dbn_pools [list]
         set the_set [ns_configsection $config_path]
-        if { [string length $the_set] > 0 } {
+        if { $the_set ne "" } {
             for {set i 0} {$i < [ns_set size $the_set]} {incr i} {
                 if { [string tolower [ns_set key $the_set $i]] ==  "availablepool" } {
                     lappend dbn_pools [ns_set value $the_set $i]
@@ -207,7 +207,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
     set bad_pools [list]
     set long_error 0
     foreach pool $pools {
-        if { [catch { set db [ns_db gethandle -timeout 15 $pool]}] || ![string compare $db ""] } {
+        if { [catch { set db [ns_db gethandle -timeout 15 $pool]}] || $db eq "" } {
             ns_log Warning "$proc_name: couldn't allocate a handle from database pool \"$pool\"."
             lappend bad_pools "<li>OpenACS could not allocate a handle from database pool \"$pool\"."
             set long_error 1
@@ -232,12 +232,12 @@ ad_proc db_bootstrap_set_db_type { errors } {
             }
 
             ns_db releasehandle $db
-            if { [string length $this_suffix] == 0 } {
+            if { $this_suffix eq "" } {
                 ns_log Notice "$proc_name: couldn't determine RDBMS type of database pool \"$pool\"."
                 lappend bad_pools "<li>OpenACS could not determine the RDBMS type associated with
     pool \"$pool\"."
                 set long_error 1
-            } elseif { [string length [nsv_get ad_database_type .]] == 0 } {
+            } elseif { [nsv_get ad_database_type .] eq "" } {
                 nsv_set ad_database_type . $this_suffix
             } elseif { ![string match $this_suffix [nsv_get ad_database_type .]] } {
                 ns_log Notice "$proc_name: Database pool \"$pool\" type \"$this_suffix\" differs from
@@ -249,7 +249,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
         }
     }
 
-    if { [string length [nsv_get ad_database_type .]] == 0 } {
+    if { [nsv_get ad_database_type .] eq "" } {
         set database_problem "RDBMS type could not be determined for any pool."
         ns_log Error "$proc_name: RDBMS type could not be determined for any pool."
     }

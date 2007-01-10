@@ -20,7 +20,7 @@ aa_register_case content_image {
             set returned_first_folder_id [content::folder::new \
                                               -folder_id $first_folder_id \
                                               -name "test_folder_${first_folder_id}"]
-            aa_true "Folder created" [expr $first_folder_id == $returned_first_folder_id]
+            aa_true "Folder created" [expr {$first_folder_id == $returned_first_folder_id}]
 
             content::folder::register_content_type \
                 -folder_id $first_folder_id \
@@ -35,7 +35,7 @@ aa_register_case content_image {
 					    -content_type "image" \
 	                                    -storage_type "file"]
 
-            aa_true "First item created $first_item_id" [expr $first_item_id == $returned_first_item_id]
+            aa_true "First item created $first_item_id" [expr {$first_item_id == $returned_first_item_id}]
 
             # create an image
             set image_id [db_nextval "acs_object_id_seq"]
@@ -45,7 +45,7 @@ aa_register_case content_image {
                                           -item_id $first_item_id \
                                           -title "Test Title" \
 				       -description "Test Description"]
-            aa_true "Basic Image created revision_id $image_id returned_revision_id $returned_image_id " [expr $image_id == $returned_image_id]
+            aa_true "Basic Image created revision_id $image_id returned_revision_id $returned_image_id " [expr {$image_id == $returned_image_id}]
 
 	::item::get_content -revision_id $returned_image_id -array revision_content
         aa_true "Revision contains correct content" [expr \
@@ -74,7 +74,7 @@ aa_register_case -cats {api smoke db} image_new {
             set returned_first_folder_id [content::folder::new \
                                               -folder_id $first_folder_id \
                                               -name "test_folder_${first_folder_id}"]
-            aa_true "Folder created" [expr $first_folder_id == $returned_first_folder_id]
+            aa_true "Folder created" [expr {$first_folder_id == $returned_first_folder_id}]
 
             content::folder::register_content_type \
                 -folder_id $first_folder_id \

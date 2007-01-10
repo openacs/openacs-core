@@ -153,7 +153,7 @@ ad_proc -private db_state_array_name_is {{ -dbn "" }} {
     @author Andrew Piskorski (atp@piskorski.com)
     @creation-date 2003/03/16
 } {
-    if { [empty_string_p $dbn] } {
+    if { $dbn eq "" } {
         set dbn [nsv_get {db_default_database} .]
     }
     return "db_state_${dbn}"
@@ -207,7 +207,7 @@ ad_proc -private -private db_driverkey {{
         # These are the default driverkey values, if they are not set
         # in the config file:
 
-        if { [string match Oracle* $driver] } {
+        if { [string match "Oracle*" $driver] } {
             set driverkey {oracle}
         } elseif { [string equal $driver {PostgreSQL}] } {
             set driverkey {postgresql}
@@ -237,7 +237,7 @@ ad_proc -public db_type { } {
 ad_proc -public db_compatible_rdbms_p { db_type } {
     @return 1 if the given db_type is compatible with the current RDBMS.  
 } {
-    return [expr { [empty_string_p $db_type] || [string equal [db_type] $db_type] }]
+    return [expr { $db_type eq "" || [db_type] eq $db_type }]
 }
 
 ad_proc -deprecated db_package_supports_rdbms_p { db_type_list } {
@@ -252,7 +252,7 @@ ad_proc -deprecated db_package_supports_rdbms_p { db_type_list } {
     # DRB: Legacy package check - we allow installation of old aD Oracle 4.2 packages,
     # though we don't guarantee that they work.
 
-    if { [db_type] == "oracle" && [lsearch $db_type_list "oracle-8.1.6"] != -1 } {
+    if { [db_type] eq "oracle" && [lsearch $db_type_list "oracle-8.1.6"] != -1 } {
         return 1
     }
 
@@ -316,7 +316,7 @@ ad_proc -public db_quote { string } { Quotes a string value to be placed in a SQ
 ad_proc -public db_nullify_empty_string { string } {
     A convenience function that returns [db_null] if $string is the empty string.
 } {
-    if { [empty_string_p $string] } {
+    if { $string eq "" } {
         return [db_null]
     } else {
         return $string
@@ -709,7 +709,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
     set function_name "__exec_${unique_id}_${fname}"
 
     # insert tcl variable values (Openacs - Dan)
-    if {![string equal $sql $pre_sql]} {
+    if {$sql ne $pre_sql } {
         set sql [uplevel 2 [list subst -nobackslashes $sql]]
     }
     ns_log Debug "PLPGSQL: converted: $sql to: select $function_name ()"
@@ -787,8 +787,8 @@ ad_proc -private db_get_quote_indices { sql } {
     set all_indices [regexp -inline -indices -all -- {(?:^|[^'])(')(?:[^']|'')+(')(?=$|[^'])} $sql]
 
     for {set i 0} { $i < [llength $all_indices] } { incr i 3 } {
-        lappend quote_indices [lindex [lindex $all_indices [expr $i + 1]] 0]
-        lappend quote_indices [lindex [lindex $all_indices [expr $i + 2]] 0]
+        lappend quote_indices [lindex [lindex $all_indices [expr {$i + 1}]] 0]
+        lappend quote_indices [lindex [lindex $all_indices [expr {$i + 2}]] 0]
     }
 
     return $quote_indices
@@ -798,7 +798,7 @@ ad_proc -private db_bind_var_quoted_p { sql bind_start_idx bind_end_idx} {
 
 } {
     foreach {quote_start_idx quote_end_idx} [db_get_quote_indices $sql] {
-        if { [expr $bind_start_idx > $quote_start_idx] && [expr $bind_end_idx < $quote_end_idx]} {
+        if { [expr {$bind_start_idx > $quote_start_idx}] && [expr {$bind_end_idx < $quote_end_idx}]} {
             return 1
         }
     }
@@ -814,19 +814,19 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
     function.
 
 } {
-    if {[string equal $bind ""]} {
+    if {$bind eq ""} {
         upvar __db_sql lsql
         set lsql $sql
         uplevel {            
             set __db_lst [regexp -inline -indices -all -- {:?:\w+} $__db_sql]
-            for {set __db_i [expr [llength $__db_lst] - 1]} {$__db_i >= 0} {incr __db_i -1} {
+            for {set __db_i [expr {[llength $__db_lst] - 1}]} {$__db_i >= 0} {incr __db_i -1} {
                 set __db_ws [lindex [lindex $__db_lst $__db_i] 0]
                 set __db_we [lindex [lindex $__db_lst $__db_i] 1]
                 set __db_bind_var [string range $__db_sql $__db_ws $__db_we]                
                 if {![string match "::*" $__db_bind_var] && ![db_bind_var_quoted_p $__db_sql $__db_ws $__db_we]} {
                     set __db_tcl_var [string range $__db_bind_var 1 end]
                     set __db_tcl_var [set $__db_tcl_var]
-                    if {[string equal $__db_tcl_var ""]} {
+                    if {$__db_tcl_var eq ""} {
                         set __db_tcl_var null
                     } else {
                         set __db_tcl_var "'[DoubleApos $__db_tcl_var]'"
@@ -841,14 +841,14 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
 
         set lsql $sql
         set lst [regexp -inline -indices -all -- {:?:\w+} $sql]
-        for {set i [expr [llength $lst] - 1]} {$i >= 0} {incr i -1} {
+        for {set i [expr {[llength $lst] - 1}]} {$i >= 0} {incr i -1} {
             set ws [lindex [lindex $lst $i] 0]
             set we [lindex [lindex $lst $i] 1]
             set bind_var [string range $sql $ws $we]
             if {![string match "::*" $bind_var] && ![db_bind_var_quoted_p $lsql $ws $we]} {
                 set tcl_var [string range $bind_var 1 end]
                 set val $bind_vars($tcl_var)
-                if {[string equal $val ""]} {
+                if {$val eq ""} {
                     set val null
                 } else {
                     set val "'[DoubleApos $val]'"
@@ -932,7 +932,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
     # insert tcl variable values (Openacs - Dan)
-    if {![string equal $sql $pre_sql]} {
+    if {$sql ne $pre_sql } {
         set sql [uplevel $ulevel [list subst -nobackslashes $sql]]
     }
 
@@ -1014,10 +1014,10 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
 
     # JCD: we log the clicks, dbname, query time, and statement to catch long running queries.
     # If we took more than 5 seconds yack about it.
-    if { [expr [clock clicks -milliseconds] - $start_time] > 5000} {
-        ns_log Warning "db_exec: longdb [expr [clock seconds] - $start_time_fine] seconds $db $type $statement_name"
+    if { [expr {[clock clicks -milliseconds] - $start_time}] > 5000} {
+        ns_log Warning "db_exec: longdb [expr {[clock seconds] - $start_time_fine}] seconds $db $type $statement_name"
     } else { 
-        ns_log Debug "db_exec: timing [expr [clock seconds] - $start_time_fine] seconds $db $type $statement_name"
+        ns_log Debug "db_exec: timing [expr {[clock seconds] - $start_time_fine}] seconds $db $type $statement_name"
     }
 
     ds_collect_db_call $db $type $statement_name $sql $start_time $errno $error
@@ -1273,7 +1273,7 @@ ad_proc -public db_foreach {{ -dbn "" } statement_name sql args } {
         set code_block [lindex $args 0]
     } elseif { $arglength == 3 } {
         # Should have code block + if_no_rows + code block.
-        if { ![string equal [lindex $args 1] "if_no_rows"] && ![string equal [lindex $args 1] "else"] } {
+        if { [lindex $args 1] ne "if_no_rows" && [lindex $args 1] ne "else" } {
             return -code error "Expected if_no_rows as second-to-last argument"
         }
         set code_block [lindex $args 0]
@@ -1400,7 +1400,7 @@ proc db_multirow_helper {} {
                     }
 
                     # Save values of columns which we might clobber
-                    if { $unclobber_p && ![empty_string_p $code_block] } {
+                    if { $unclobber_p && $code_block ne "" } {
                         foreach col $columns {
                             upvar 1 $col column_value __saved_$col column_save
 
@@ -1418,7 +1418,7 @@ proc db_multirow_helper {} {
                     }
                 }
 
-                if { [empty_string_p $code_block] } {
+                if { $code_block eq "" } {
                     # No code block - pull values directly into the var_name array.
 
                     # The extra loop after the last row is only for when there's a code block
@@ -1440,7 +1440,7 @@ proc db_multirow_helper {} {
                         unset this_row 
                     }
                     set array_get_next_row [array get next_row]
-                    if { ![empty_string_p $array_get_next_row] } {
+                    if { $array_get_next_row ne "" } {
                         array set this_row [array get next_row]
                     }
 
@@ -1516,7 +1516,7 @@ proc db_multirow_helper {} {
         }
 
         # Restore values of columns which we've saved
-        if { $unclobber_p && ![empty_string_p $code_block] && $local_counter > 0 } {
+        if { $unclobber_p && $code_block ne "" && $local_counter > 0 } {
             foreach col $columns {
                 upvar 1 $col column_value __saved_$col column_save
 
@@ -1679,8 +1679,8 @@ ad_proc -public db_multirow {
         set code_block [lindex $args 0]
     } elseif { $arglength == 3 } {
         # Should have code block + if_no_rows + code block.
-        if {   ![string equal [lindex $args 1] "if_no_rows"] \
-            && ![string equal [lindex $args 1] "else"] } {
+        if {   [lindex $args 1] ne "if_no_rows" \
+            && [lindex $args 1] ne "else" } {
             return -code error "Expected if_no_rows as second-to-last argument"
         }
         set code_block [lindex $args 0]
@@ -1794,7 +1794,7 @@ ad_proc -public db_multirow_group_last_row_p {
     }
     upvar 1 $column column_value
     # Otherwise, it's the last row in the group if the next row has a different value than this row
-    return [expr ![string equal $column_value $next_row($column)]]
+    return [expr {$column_value ne $next_row($column) }] 
 }
 
 
@@ -1875,7 +1875,7 @@ ad_proc -public db_dml {{ -dbn "" } statement_name sql args } {
             }
         }
 
-    } elseif { [string equal $command "blob_dml_file"] } {
+    } elseif {$command eq "blob_dml_file"} {
         # PostgreSQL:
         db_with_handle -dbn $dbn db {
             # another ugly hack to avoid munging tcl files.
@@ -2108,7 +2108,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
         error $syn_err
     }  elseif { $arg_c == 2 } {
         # We think they're specifying an on_error block
-        if { [string compare [lindex $args 0] "on_error"] } {
+        if {[lindex $args 0] ne "on_error"  } {
             # Unexpected: they put something besides on_error as a connector.
             error $syn_err
         } else {
@@ -2164,9 +2164,9 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
     if { $err_p || [db_abort_transaction_p -dbn $dbn]} {
         # An error was triggered or the transaction has been aborted.  
         db_abort_transaction -dbn $dbn
-        if { [info exists on_error] && ![empty_string_p $on_error] } {
+        if { [info exists on_error] && $on_error ne "" } {
 
-            if {[string equal postgresql [db_type]]} { 
+            if {"postgresql" eq [db_type]} { 
 
                 # JCD: with postgres we abort the transaction prior to 
                 # executing the on_error block since there is nothing 
@@ -2366,7 +2366,7 @@ ad_proc -public db_get_sql_user {{ -dbn "" }} {
 } {
     set pool [lindex [db_available_pools $dbn] 0]
     set datasource [ns_config "ns/db/pool/$pool" DataSource]    
-    if { ![empty_string_p $datasource] && ![string is space $datasource] } {
+    if { $datasource ne "" && ![string is space $datasource] } {
 	return "[ns_config ns/db/pool/$pool User]/[ns_config ns/db/pool/$pool Password]@$datasource"
     } else {
 	return "[ns_config ns/db/pool/$pool User]/[ns_config ns/db/pool/$pool Password]"
@@ -2407,12 +2407,12 @@ ad_proc -public db_get_port {{ -dbn "" }} {
     }
     set first_colon_pos [string first ":" $datasource]
 
-    if { $first_colon_pos == $last_colon_pos || [expr $last_colon_pos - $first_colon_pos] == 1 } {
+    if { $first_colon_pos == $last_colon_pos || [expr {$last_colon_pos - $first_colon_pos}] == 1 } {
 	# No port specified
 	return ""
     }
 
-    return [string range $datasource [expr $first_colon_pos + 1] [expr $last_colon_pos - 1] ]
+    return [string range $datasource [expr {$first_colon_pos + 1}] [expr {$last_colon_pos - 1}] ]
 }
 
 
@@ -2433,7 +2433,7 @@ ad_proc -public db_get_database {{ -dbn "" }} {
         ns_log Error "datasource contains no \":\"? datasource = $datasource"
         return ""
     }
-    return [string range $datasource [expr $last_colon_pos + 1] end]
+    return [string range $datasource [expr {$last_colon_pos + 1}] end]
 }
 
  
@@ -2454,7 +2454,7 @@ ad_proc -public db_get_dbhost {{ -dbn "" }} {
         ns_log Error "datasource contains no \":\"? datasource = $datasource"
         return ""
     }
-    return [string range $datasource 0 [expr $first_colon_pos - 1]]
+    return [string range $datasource 0 [expr {$first_colon_pos - 1}]]
 }
 
 ad_proc -public db_source_sql_file {{
@@ -2491,17 +2491,17 @@ ad_proc -public db_source_sql_file {{
             set file_name [file tail $file]
 
             set pguser [db_get_username]
-            if { ![string equal $pguser ""] } {
+            if { $pguser ne "" } {
                 set pguser "-U $pguser"
             }
 
             set pgport [db_get_port]
-            if { ![string equal $pgport ""] } {
+            if { $pgport ne "" } {
                 set pgport "-p $pgport"
             }
 
             set pgpass [db_get_password]
-            if { ![string equal $pgpass ""] } {
+            if { $pgpass ne "" } {
                 set pgpass "<<$pgpass"
             }
 
@@ -2519,7 +2519,7 @@ ad_proc -public db_source_sql_file {{
 
             cd [file dirname $file]
             ns_log notice "\n DAVEB pghost = '${pghost}' pgport = '${pgport}' pguser = '${pguser}' \n"
-            if { $tcl_platform(platform) == "windows" } {
+            if { $tcl_platform(platform) eq "windows" } {
                 set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
             } else {
                 set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
@@ -2626,17 +2626,17 @@ ad_proc -public db_load_sql_data {{
             global tcl_platform 
 
             set pguser [db_get_username]
-            if { ![string equal $pguser ""] } {
+            if { $pguser ne "" } {
                 set pguser "-U $pguser"
             }
 
             set pgport [db_get_port]
-            if { ![string equal $pgport ""] } {
+            if { $pgport ne "" } {
                 set pgport "-p $pgport"
             }
 
             set pgpass [db_get_password]
-            if { ![string equal $pgpass ""] } {
+            if { $pgpass ne "" } {
                 set pgpass "<<$pgpass"
             }
 
@@ -2654,7 +2654,7 @@ ad_proc -public db_load_sql_data {{
             puts $fd $copy_command
             close $fd
             
-            if { $tcl_platform(platform) == "windows" } {
+            if { $tcl_platform(platform) eq "windows" } {
                 set fp [open "|[file join [db_get_pgbin] psql] -f $copy_file $pghost $pgport $pguser  [db_get_database]" "r"]
             } else {
                 set fp [open "|[file join [db_get_pgbin] psql] -f $copy_file $pghost $pgport $pguser [db_get_database] $pgpass" "r"]
@@ -2935,7 +2935,7 @@ ad_proc -public ad_column_type {{ -dbn "" } table_name column_name } {
 
     if { $column_type == -1 } {
 	return "Either table $table_name doesn't exist or column $column_name doesn't exist"
-    } elseif { [string compare $column_type "NUMBER"] } {
+    } elseif {$column_type ne "NUMBER"  } {
 	return "numeric"
     } else {
 	return "text"
@@ -3053,7 +3053,7 @@ ad_proc -public db_blob_get {{ -dbn "" } statement_name sql args } {
             set sql [db_qd_replace_sql $full_statement_name $pre_sql]
   
             # insert tcl variable values (borrowed from Dan W - olah)
-            if {![string equal $sql $pre_sql]} {
+            if {$sql ne $pre_sql } {
                 set sql [uplevel 2 [list subst -nobackslashes $sql]]
             }
 
@@ -3126,14 +3126,14 @@ ad_proc -private db_exec_lob_oracle {{
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
     # insert tcl variable values (Openacs - Dan)
-    if {![string equal $sql $pre_sql]} {
+    if {$sql ne $pre_sql } {
         set sql [uplevel $ulevel [list subst -nobackslashes $sql]]
     }
  
     set file_storage_p 0
     upvar $ulevel storage_type storage_type
 
-    if {[info exists storage_type] && [string equal $storage_type file]} {
+    if {[info exists storage_type] && $storage_type eq "file"} {
         set file_storage_p 1
         set original_type $type
         set qtype 1row
@@ -3154,7 +3154,7 @@ ad_proc -private db_exec_lob_oracle {{
 
 	if { [info exists bind] && [llength $bind] != 0 } {
 	    if { [llength $bind] == 1 } {
-                if { [empty_string_p $file] } {
+                if { $file eq "" } {
                     set selection [eval [list ns_ora $qtype $db -bind $bind $sql]]
                 } else {
                     set selection [eval [list ns_ora $qtype $db -bind $bind $sql $file]]
@@ -3165,7 +3165,7 @@ ad_proc -private db_exec_lob_oracle {{
 		foreach { name value } $bind {
 		    ns_set put $bind_vars $name $value
 		}
-                if { [empty_string_p $file] } {
+                if { $file eq "" } {
                     set selection [eval [list ns_ora $qtype $db -bind $bind_vars $sql]]
                 } else {
                     set selection [eval [list ns_ora $qtype $db -bind $bind_vars $sql $file]]
@@ -3173,7 +3173,7 @@ ad_proc -private db_exec_lob_oracle {{
 	    }
 
 	} else {
-            if { [empty_string_p $file] } {
+            if { $file eq "" } {
                 set selection [uplevel $ulevel [list ns_ora $qtype $db $sql]]
             } else {
                 set selection [uplevel $ulevel [list ns_ora $qtype $db $sql $file]]
@@ -3184,7 +3184,7 @@ ad_proc -private db_exec_lob_oracle {{
             set content [ns_set value $selection 0]
             for {set i 0} {$i < [ns_set size $selection]} {incr i} {
                 set name [ns_set key $selection $i]
-                if {[string equal $name content]} {
+                if {$name eq "content"} {
                     set content [ns_set value $selection $i]
                 }
             }
@@ -3246,7 +3246,7 @@ ad_proc -private db_exec_lob_postgresql {{
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
     # insert tcl variable values (Openacs - Dan)
-    if {![string equal $sql $pre_sql]} {
+    if {$sql ne $pre_sql } {
         set sql [uplevel $ulevel [list subst -nobackslashes $sql]]
     }
     # create a function definition statement for the inline code 
@@ -3278,9 +3278,9 @@ ad_proc -private db_exec_lob_postgresql {{
         set content [ns_set value $selection 0]
         for {set i 0} {$i < [ns_set size $selection]} {incr i} {
             set name [ns_set key $selection $i]
-            if {[string equal $name storage_type]} {
+            if {$name eq "storage_type"} {
                 set storage_type [ns_set value $selection $i]
-            } elseif {[string equal $name content]} {
+            } elseif {$name eq "content"} {
                 set content [ns_set value $selection $i]
             }
         }

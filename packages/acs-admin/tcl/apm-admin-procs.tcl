@@ -22,7 +22,7 @@ ad_proc apm_parameter_section_slider {package_key} {
         lappend section_list [list $package_key $package_key [list "where" "section_name is null"]]
         foreach section $sections {
             incr i
-            if { ![empty_string_p $section] } {
+            if { $section ne "" } {
                 lappend section_list [list "section_$i" $section [list "where" "section_name = '[db_quote $section]'"]]
             }
         }
@@ -63,7 +63,7 @@ ad_proc apm_header { { -form "" } args } {
     }
     set header [ad_header $title ""]
     append body "$header\n"
-    if {![empty_string_p $form]} {
+    if {$form ne ""} {
         append body "<form $form>"
     }
     
@@ -103,7 +103,7 @@ ad_proc -private apm_package_selection_widget {
     only the enable checkbox will be displayed, and the resulting page is expected to assume that enable also means install.
 
 } {
-    if {[empty_string_p $pkg_info_list]} {
+    if {$pkg_info_list eq ""} {
         return ""
     }
     
@@ -128,7 +128,7 @@ ad_proc -private apm_package_selection_widget {
 
         append widget "  <tr valign=baseline bgcolor=[lindex $band_colors \
                 [expr { $counter % [llength $band_colors] }]]>"
-        if { ![string compare [pkg_info_dependency_p $pkg_info] "t"]} {
+        if { [pkg_info_dependency_p $pkg_info] eq "t" } {
             # Dependency passed.
 
             if { $install_enable_p } {
@@ -162,7 +162,7 @@ ad_proc -private apm_package_selection_widget {
             <td>$package_rel_path</td>
             <td><font color=green>Dependencies satisfied.</font></td>
             </tr> "
-        } elseif { ![string compare [pkg_info_dependency_p $pkg_info] "f"] } {
+        } elseif { [pkg_info_dependency_p $pkg_info] eq "f" } {
             #Dependency failed.
             if { $install_enable_p } {
                 append widget "  <td align=center><input type=checkbox name=install value=\"$package_key\"
@@ -400,7 +400,7 @@ ad_proc -private apm_build_repository {
 	
 	foreach { cur_work_dir cur_cvs_root cur_module } $checkout_list {
 	    cd $cur_work_dir
-	    if { ![string equal $channel_tag($channel) HEAD] } {
+	    if { $channel_tag($channel) ne "HEAD" } {
 		ns_log Debug "Repository: Checking out $cur_module from CVS:"
 		catch { exec $cvs_command -d $cur_cvs_root -z3 co -r $channel_tag($channel) $cur_module } output
 		ns_log Debug "Repository:  [llength $output] files"

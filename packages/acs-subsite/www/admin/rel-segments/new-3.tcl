@@ -45,7 +45,7 @@ db_transaction {
 	 where s.group_id = :group_id
 	   and s.rel_type = :rel_type
     } -default ""]
-    if { [empty_string_p $segment_id] } {
+    if { $segment_id eq "" } {
 	ad_return_error "Error creating segment" $errmsg
 	ad_script_abort
     }

@@ -39,7 +39,7 @@ if {![info exists checked_p]} {
 
 set recipients [list]
 foreach party_id $party_ids {
-    if {![empty_string_p $party_id]} {
+    if {$party_id ne ""} {
 	if { $contacts_p } {
 	    lappend recipients [list "<a href=\"[contact::url -party_id $party_id]\">[contact::name -party_id $party_id]</a> ([cc_email_from_party $party_id])" $party_id]
 	} else {
@@ -109,7 +109,7 @@ if { $recipients_num <= 1 } {
 	    {html {onclick check_uncheck_boxes(this.checked)}}
 	}
     }
-    if {$checked_p == "t"} {
+    if {$checked_p eq "t"} {
 	append form_elements {
 	    {to:text(checkbox),multiple,optional 
 		{label "[_ acs-mail-lite.Recipients]"} 
@@ -132,7 +132,7 @@ if { [exists_and_not_null file_ids] } {
     set files [list]
     foreach file $file_ids {
 	set file_title [lang::util::localize [content::item::get_title -item_id $file]]
-	if {[empty_string_p $file_title]} {
+	if {$file_title eq ""} {
 	    set file_title "empty"
 	}
 	if { $tracking_p } {
@@ -151,7 +151,7 @@ if { [exists_and_not_null file_ids] } {
 
 # Get the list of files from the file storage folder
 set file_folder_id [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "FolderID"]
-if {![string eq "" $file_folder_id]} {
+if {$file_folder_id ne ""} {
     # get the list of files in an option
     set file_options [db_list_of_lists files {
 	select r.title, i.item_id
@@ -160,7 +160,7 @@ if {![string eq "" $file_folder_id]} {
 	and i.content_type = 'file_storage_object'
 	and r.revision_id = i.latest_revision
     }]
-    if {![string eq "" $file_options]} {
+    if {$file_options ne ""} {
 	append form_elements {
 	    {files_extend:text(checkbox),optional 
 		{label "[_ acs-mail-lite.Additional_files]"}
@@ -263,7 +263,7 @@ ad_form -action $action \
 	# Insert the uploaded file linked under the package_id
 	set package_id [ad_conn package_id]
 	
-	if {![empty_string_p $upload_file] } {
+	if {$upload_file ne "" } {
 	    set revision_id [content::item::upload_file \
 				 -package_id $package_id \
 				 -upload_file $upload_file \
@@ -295,15 +295,15 @@ ad_form -action $action \
 	    set to_addr [party::email -party_id $party_id]
 
 	    # This should not be happening in the first place and should be removed from here later....
-	    if {[empty_string_p $to_addr]} {
+	    if {$to_addr eq ""} {
                 # We are going to check if this party_id has an employer and if this
                 # employer has an email
                 set employer_id [relation::get_object_two -object_id_one $party_id \
                                      -rel_type "contact_rels_employment"]
-                if { ![empty_string_p $employer_id] } {
+                if { $employer_id ne "" } {
                     # Get the employer email adress
                     set to_addr [party::email -party_id $employer_id]
-                    if {[empty_string_p $to_addr]} {
+                    if {$to_addr eq ""} {
                         ad_return_error [_ acs-kernel.common_Error] [_ acs-mail-lite.lt_there_was_an_error_processing] 
 			break
                     }

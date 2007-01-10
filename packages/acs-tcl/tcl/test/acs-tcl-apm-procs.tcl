@@ -16,7 +16,7 @@ aa_register_case -cats {api smoke} -procs { apm_parameter_register } test_apm_pa
 
         set package_list [db_list get_packages "select package_key from apm_package_types"]
         aa_log "List of packages:\{$package_list\}"
-        set list_index [randomRange [expr [llength $package_list] - 1]]
+        set list_index [randomRange [expr {[llength $package_list] - 1}]]
         set package_key [lrange $package_list $list_index $list_index]
       
 	set parameter_name [ad_generate_random_string]
@@ -31,7 +31,7 @@ aa_register_case -cats {api smoke} -procs { apm_parameter_register } test_apm_pa
        # Choose randomly the parameter whether will be string or number.
        # Also choose randomly its default value.
         set datatype [lrange $values $index $index] 
-        if { [string equal $datatype "number"]} {
+        if {$datatype eq "number"} {
             set default_value 0
         } else {
             set default_value [ad_generate_random_string]
@@ -56,7 +56,7 @@ aa_register_case -cats {api smoke} -procs {apm_package_instance_new} test_apm_pa
 
         set package_list [db_list get_packages "select package_key from apm_package_types"]
         aa_log "List of packages:\{$package_list\}"
-        set list_index [randomRange [expr [llength $package_list] - 1]]
+        set list_index [randomRange [expr {[llength $package_list] - 1}]]
         set package_key [lrange $package_list $list_index $list_index]
         
         set instance_name $package_key 

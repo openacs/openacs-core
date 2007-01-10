@@ -147,7 +147,7 @@ ad_proc -public template::element::create { form_id element_id args } {
   # add the reference to the elements lookup array for the form
   upvar #$level $form_id:$element_id opts
 
-  if [info exists opts] {
+  if {[info exists opts]} {
       error "Element '$element_id' already exists in form '$form_id'."
   }
 
@@ -175,8 +175,8 @@ ad_proc -public template::element::create { form_id element_id args } {
 
   # If the widget is a submit widget, remember it
   # All submit widgets are optional
-  if { [string equal $opts(widget) submit] || \
-       [string equal $opts(widget) button] } {
+  if { $opts(widget) eq "submit" || \
+       [string equal $opts(widget) "button"] } {
     set form_properties(has_submit) 1
     set opts(optional) 1
     if { ! [info exists opts(value)] } { set opts(value) $opts(label) }
@@ -202,7 +202,7 @@ ad_proc -public template::element::create { form_id element_id args } {
     }
   } 
 
-  if { [string equal $opts(widget) hidden] 
+  if { [string equal $opts(widget) "hidden"] 
        && [info exists opts(sign)] 
        && $opts(sign)
    } { 
@@ -236,7 +236,7 @@ ad_proc -public template::element::set_properties { form_id element_id args } {
 
   template::util::get_opts $args
 
-    if { [string equal $opts(widget) hidden] 
+    if { [string equal $opts(widget) "hidden"] 
          && [info exists opts(sign)] 
          && $opts(sign) 
          && [info exists opts(value)] } {
@@ -370,7 +370,7 @@ ad_proc -private template::element::validate { form_id element_id } {
     set values [list]
 
     # also clobber the value(s) for a submit widget
-    if { [string equal $element(widget) submit] } {
+    if {$element(widget) eq "submit"} {
       if { [info exists element(value)] } { unset element(value) }
       if { [info exists element(values)] } { unset element(values) }
     }
@@ -384,13 +384,13 @@ ad_proc -private template::element::validate { form_id element_id } {
 
   # set a label for use in the template
   set label $element(label)
-  if { [string equal $label {}] } {
+  if {$label eq {}} {
     set label $element(name)
   }
 
   # Element shouldn't be validated if it's an inform widget, or the element is not in edit mode.
   # The element will be in edit mode if its mode is either blank or set to 'edit'.
-  set is_inform [expr [string equal $element(widget) inform] || (![string equal $element(mode) "edit"] && ![string equal $element(mode) ""])]
+  set is_inform [expr {$element(widget) eq "inform" || ($element(mode) ne "edit" && $element(mode) ne "" )}]
 
   # Check for required element
   if { ! $is_inform  && ! $is_optional && ! [llength $values] } {
@@ -415,7 +415,7 @@ ad_proc -private template::element::validate { form_id element_id } {
       # a single anonymous validation check was specified
       set element(validate) [linsert $element(validate) 0 "anonymous"]
 
-    } elseif { [expr $v_length % 3] } {
+    } elseif { [expr {$v_length % 3}] } {
 
       error "Invalid number of parameters to validate option: 
              $element(validate) (Length is $v_length)"
@@ -432,7 +432,7 @@ ad_proc -private template::element::validate { form_id element_id } {
   
     # something was submitted, now check if it is valid
 
-    if { $is_optional && [empty_string_p $value] } {
+    if { $is_optional && $value eq "" } {
        # This is an optional field and it's empty... skip validation
        # (else things like the integer test will fail)
        continue
@@ -536,7 +536,7 @@ ad_proc -public template::element::querygetall { element_ref } {
 
   set transform_proc "::template::data::transform::$datatype"
 
-  if { [string equal [info procs $transform_proc] {}] } {
+  if {[info procs $transform_proc] eq {}} {
 
     set values [ns_querygetall $element(id)]
 
@@ -607,7 +607,7 @@ ad_proc -private template::element::render { form_id element_id tag_attributes }
   # Remember that the element has been rendered already
   set element(is_rendered) t
 
-  if { ![string equal $element(mode) "edit"] && [info exists element(display_value)] && ![string equal $element(widget) "hidden"] } {
+  if { $element(mode) ne "edit" && [info exists element(display_value)] && $element(widget) ne "hidden" } {
     return "$element(before_html) $element(display_value) $element(after_html)"  
   } else {
     return "[string trim "$element(before_html) [template::widget::$element(widget) element $tag_attributes] $element(after_html)"]"
@@ -665,7 +665,7 @@ ad_proc -private template::element::options { form_id element_id tag_attributes 
 
     upvar #$level formgroup:$i formgroup
     
-    set option [lindex $options [expr $i - 1]]
+    set option [lindex $options [expr {$i - 1}]]
     set value [lindex $option 1]
 
     if { ![info exists values($value)] } {

@@ -64,7 +64,7 @@ if { [db_string segment_exists_p {
                 then 1 else 0 end
       from dual
 }] } {
-    if { [empty_string_p $return_url] } {
+    if { $return_url eq "" } {
 	set return_url one?[ad_export_vars group_id]
     }
     ad_returnredirect $return_url 

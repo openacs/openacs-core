@@ -19,11 +19,11 @@ set context [list [list "." "Members"] "Invite"]
 # Check if email is already known on the system
 set party_id [db_string select_party { select party_id from parties where lower(email) = lower(:email) } -default {}]
 
-if { ![empty_string_p $party_id] } {
+if { $party_id ne "" } {
     # Yes, is it a user?
     set user_id [db_string select_user { select user_id from users where user_id = :party_id } -default {}]
 
-    if { [empty_string_p $user_id] } {
+    if { $user_id eq "" } {
         # This is a party, but it's not a user
 
         acs_object_type::get -object_type [acs_object_type $party_id] -array object_type
@@ -39,7 +39,7 @@ if { ![empty_string_p $party_id] } {
         # Check to see if the user is a member of the main site (registered user)
         set registered_user_id [db_string select_user { select user_id from cc_users where user_id = :party_id } -default {}]
 
-        if { [empty_string_p $registered_user_id] } {
+        if { $registered_user_id eq "" } {
             # User exists, but is not member of main site. Requires SW-admin to remedy.
             if { [acs_user::site_wide_admin_p] } {
                 set main_site_id [site_node::get_element -url / -element object_id]

@@ -140,7 +140,7 @@ ad_proc -public template::form::create { id args } {
   # check whether this form is being submitted
   upvar #$level $id:submission submission
 
-  if { [string equal $id request] } {
+  if {$id eq "request"} {
     # request is the magic ID for the form holding query parameters
     set submission 1
   } else {
@@ -152,7 +152,7 @@ ad_proc -public template::form::create { id args } {
   set formbutton [get_button $id]
 
   # If the user hit a button named "cancel", redirect and about
-  if { $submission && [string equal $formbutton "cancel"] && [exists_and_not_null opts(cancel_url)]} {
+  if { $submission && $formbutton eq "cancel" && [exists_and_not_null opts(cancel_url)]} {
     ad_returnredirect $opts(cancel_url)
     ad_script_abort
   }
@@ -173,7 +173,7 @@ ad_proc -public template::form::create { id args } {
     foreach element [split $element_data "\n"] {
 
       set element [string trim $element]
-      if { [string equal $element {}] } { continue }
+      if {$element eq {}} { continue }
 
       eval template::element create $id $element
     }
@@ -215,14 +215,14 @@ ad_proc -public template::form::get_button { id } {
   set formbutton {}
 
   # If the form isn't being submitted at all, no button was clicked
-  if { ![string equal $id [ns_queryget form:id]] } {
+  if { $id ne [ns_queryget form:id] } {
     return {}
   }
 
   # Search the submit form for the button
   set form [ns_getform]
 
-  if { ![empty_string_p $form] } {
+  if { $form ne "" } {
       set size [ns_set size $form]
       for { set i 0 } { $i < $size } { incr i } {
           if { [string match "formbutton:*" [ns_set key $form $i]] } {
@@ -257,14 +257,14 @@ ad_proc -public template::form::get_action { id } {
   set formaction {}
 
   # If the form isn't being submitted at all, there's no action
-  if { ![string equal $id [ns_queryget "form:id"]] } {
+  if { $id ne [ns_queryget "form:id"] } {
     return {}
   }
 
   set formbutton [get_button $id]
 
   # If we were in display mode, and a button was clicked, we should be in edit mode now
-  if { [string equal [ns_queryget "form:mode"] "display"] && ![empty_string_p $formbutton] } {
+  if { [string equal [ns_queryget "form:mode"] "display"] && $formbutton ne "" } {
     set formaction $formbutton
     return $formaction
   }
@@ -318,7 +318,7 @@ ad_proc -private template::form::template { id { style "" } } {
     set "elements:${elements:rowcount}(rownum)" ${elements:rowcount}
   }
 
-  if { [string equal $style {}] } { 
+  if {$style eq {}} { 
       set style [parameter::get \
                      -package_id [ad_conn subsite_id] \
                      -parameter DefaultFormStyle \
@@ -464,7 +464,7 @@ ad_proc -private template::form::render { id tag_attributes } {
       set label [lindex $button 0]
       set name [lindex $button 1]
 
-      if { [string equal $name "ok"] } {
+      if {$name eq "ok"} {
           # We hard-code the OK button to be wider than it otherwise would
 	  set label "       $label       "
       }
@@ -481,7 +481,7 @@ ad_proc -private template::form::render { id tag_attributes } {
    
     # Check if the element has an empty string mode, and in 
     # that case, set to form mode
-    if { [string equal $element(mode) {}] } {
+    if {$element(mode) eq {}} {
       set element(mode) $properties(mode)
     }
   }
@@ -492,7 +492,7 @@ ad_proc -private template::form::render { id tag_attributes } {
     # get a reference by element ID 
     upvar #$level $element_ref element
    
-    if { [string equal $element(widget) "hidden"] && [exists_and_not_null $id:error($element(id))] } {
+    if { $element(widget) eq "hidden" && [exists_and_not_null $id:error($element(id))] } {
       error "Validation error in hidden form element: '[set $id:error($element(id))]' on element '$element(id)'."
     }
   }
@@ -515,7 +515,7 @@ ad_proc -private template::form::render { id tag_attributes } {
 
   # append attributes to form tag
   foreach name [array names attributes] {
-    if { [string equal $attributes($name) {}] } {
+    if {$attributes($name) eq {}} {
       append output " $name"
     } else {
       append output " $name=\"$attributes($name)\""
@@ -529,7 +529,7 @@ ad_proc -private template::form::render { id tag_attributes } {
   
   # If we're in edit mode, output the action
   upvar #$level $id:formaction formaction
-  if { [string equal $properties(mode) "edit"] && [exists_and_not_null formaction] } {
+  if { $properties(mode) eq "edit" && [exists_and_not_null formaction] } {
     upvar #$level $id:formaction action
     append output [export_vars -form { { form\:formaction $formaction } }]
   }
@@ -554,10 +554,10 @@ ad_proc -private template::form::check_elements { id } {
     upvar #$level $element_ref element
    
     # Check if the element has been rendered already
-    if { [string equal $element(is_rendered) f] } {
+    if {$element(is_rendered) eq "f"} {
 
       # If the element is hidden, render it
-      if { [string equal $element(widget) hidden] } {
+      if {$element(widget) eq "hidden"} {
 
         append output [template::element render $id $element(id) {} ]
         append output "\n"
@@ -586,7 +586,7 @@ ad_proc -public template::form::is_request { id } {
             repreparing a form that is returned to the user due to 
             validation problems
 } {
-  return [expr ! [is_submission $id]]
+  return [expr {! [is_submission $id]}] 
 }
 
 ad_proc -public template::form::is_submission { id } {
@@ -766,7 +766,7 @@ ad_proc -public template::form::export {} {
             form.
 } {
   set form [ns_getform]
-  if { $form == "" } { return "" }
+  if { $form eq "" } { return "" }
 
   set export_data ""
 

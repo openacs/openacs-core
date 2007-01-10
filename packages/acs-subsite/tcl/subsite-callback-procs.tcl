@@ -34,7 +34,7 @@ ad_proc -public subsite_callback {
     not specified
 } {
 
-    if { [empty_string_p $object_type] } {
+    if { $object_type eq "" } {
 	db_1row select_object_type {
 	    select object_type
 	      from acs_objects 

@@ -32,7 +32,7 @@ db_dml update_member_state {
 }
 
 
-if {[empty_string_p $return_url]} {
+if {$return_url eq ""} {
     set return_url "one?rel_id=$rel_id"
 }
 ad_returnredirect $return_url

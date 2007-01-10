@@ -105,7 +105,7 @@ ad_return_template
 
 #  set contact_info [ad_user_contact_info $user_id "site_admin"]
 
-#  if ![empty_string_p $contact_info] {
+#  if {$contact_info ne ""} {
 #      append whole_page "<h3>Contact Info</h3>\n\n$contact_info\n
 #  <ul>
 #  <li><a href=contact-edit?[export_url_vars user_id]>Edit contact information</a>
@@ -117,24 +117,24 @@ ad_return_template
 #  </ul>"
 #  }
 
-#  if [db_table_exists users_demographics] {
-#      if [db_0or1row user_demographics "select 
+#  if {[db_table_exists users_demographics]} {
+#      if {[db_0or1row user_demographics "select 
 #      ud.*,
 #      u.first_names as referring_user_first_names,
 #      u.last_name as referring_user_last_name
 #      from users_demographics ud, users u
 #      where ud.user_id = $user_id
-#      and ud.referred_by = u.user_id(+)"] {
+#      and ud.referred_by = u.user_id(+)"]} {
 #  	# the table exists and there is a row for this user
 #  	set demographic_items ""
 #  	for {set i 0} {$i<[ns_set size $selection]} {incr i} {
 #  	    set varname [ns_set key $selection $i]
 #  	    set varvalue [ns_set value $selection $i]
-#  	    if { $varname != "user_id" && ![empty_string_p $varvalue] } {
+#  	    if { $varname ne "user_id" && $varvalue ne "" } {
 #  		append demographic_items "<li>$varname: $varvalue\n"
 #  	    }
 #  	}
-#  	if ![empty_string_p $demographic_items] {
+#  	if {$demographic_items ne ""} {
 #  	    append whole_page "<h3>Demographics</h3>\n\n<ul>$demographic_items</ul>\n"
 	    
 #  	}
@@ -150,7 +150,7 @@ ad_return_template
 #  	append category_items "<LI>$category\n"
 #      }
 
-#      if ![empty_string_p $category_items] {
+#      if {$category_items ne ""} {
 #  	append whole_page "<H3>Interests</H3>\n\n<ul>\n\n$category_items\n\n</ul>"
 #      }
 #  }

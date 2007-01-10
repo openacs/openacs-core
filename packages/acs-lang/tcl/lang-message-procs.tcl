@@ -86,7 +86,7 @@ ad_proc -public lang::message::register {
     set key_exists_p [db_string message_key_exists_p {}]
 
     if { ! $key_exists_p } {
-        if { [string equal $locale "en_US"] } {
+        if {$locale eq "en_US"} {
             db_dml insert_message_key {}
         } else {
             # Non-default locale
@@ -103,7 +103,7 @@ ad_proc -public lang::message::register {
     # Exclude the special case of datetime configuration messages in acs-lang. An alternative
     # to treating those messages as a special case here would be to have those messages use
     # quoted percentage signs (double percentage signs).
-    if { ![string equal $locale "en_US"] && ![regexp {^acs-lang\.localization-} $key] } {
+    if { $locale ne "en_US" && ![regexp {^acs-lang\.localization-} $key] } {
         set embedded_vars [get_embedded_vars $message]
         set embedded_vars_en_us [get_embedded_vars [lang::message::lookup en_US $key {} {} 0]]
         set missing_vars [util_get_subset_missing $embedded_vars $embedded_vars_en_us]
@@ -423,7 +423,7 @@ ad_proc -private lang::message::edit {
                 $old_message_array(upgrade_status)            
 
             # If we are deleting an en_US message we need to mark the message deleted in all locales
-            if { [string equal $locale "en_US"] } {
+            if {$locale eq "en_US"} {
                 set message_locales [db_list all_message_locales {
                     select locale
                     from lang_messages
@@ -537,7 +537,7 @@ ad_proc -private lang::message::get_embedded_vars {
     while { [regexp [embedded_vars_regexp] $remaining_message \
             match before_percent percent_match remaining_message] } {
 
-        if { [string equal $percent_match "%%"] } {
+        if {$percent_match eq "%%"} {
             # A quoted percentage sign - ignore
             continue
         } else {
@@ -579,7 +579,7 @@ ad_proc -private lang::message::format {
 
         append formated_message $before_percent
 
-        if { [string equal $percent_match "%%"] } {
+        if {$percent_match eq "%%"} {
             # A quoted percent sign
             append formated_message "%"
         } else {
@@ -715,7 +715,7 @@ ad_proc -public lang::message::lookup {
     # Make sure messages are in the cache
     cache
 
-    if { [empty_string_p $locale] } {
+    if { $locale eq "" } {
         # No locale provided
 
         if { [ad_conn isconnected] } {
@@ -728,7 +728,7 @@ ad_proc -public lang::message::lookup {
     } elseif { [string length $locale] == 2 } {
         # Only language provided, let's get the default locale for this language
         set default_locale [lang::util::default_locale_from_lang $locale]
-        if { [empty_string_p $default_locale] } {
+        if { $default_locale eq "" } {
             error "Could not look up locale for language $locale"
         } else {
             set locale $default_locale
@@ -764,7 +764,7 @@ ad_proc -public lang::message::lookup {
                     if { [message_exists_p $locale $key] } {
                         set message [nsv_get lang_message_$locale $key]
                     } else {
-			if {[string match acs-translations.* $key]} {
+			if {[string match "acs-translations.*" $key]} {
 			    ns_log Debug "lang::message::lookup: Key '$key' does not exist in en_US"
 			    set message "MESSAGE KEY MISSING: '$key'"
 			} else {
@@ -780,7 +780,7 @@ ad_proc -public lang::message::lookup {
     # Do any variable substitutions (interpolation of variables)
     # Set upvar_level to 0 and substitution_list empty to prevent substitution from happening
     if { [llength $substitution_list] > 0 || ($upvar_level >= 1 && [string first "%" $message] != -1) } {
-        set message [lang::message::format $message $substitution_list [expr $upvar_level + 1]]
+        set message [lang::message::format $message $substitution_list [expr {$upvar_level + 1}]]
     }
 
     if { [lang::util::translator_mode_p] } {
@@ -824,7 +824,7 @@ ad_proc -private lang::message::translate {
     set url "http://babel.altavista.com/translate.dyn?doit=done&BabelFishFrontPage=yes&bblType=urltext&url="
     set babel_result [ns_httpget "$url&lp=$lang&urltext=[ns_urlencode $qmsg]"]
     set result_pattern "$marker (\[^<\]*)"
-    if [regexp -nocase $result_pattern $babel_result ignore msg_tr] {
+    if {[regexp -nocase $result_pattern $babel_result ignore msg_tr]} {
         regsub "$marker." $msg_tr "" msg_tr
         return [string trim $msg_tr]
     } else {
@@ -845,7 +845,7 @@ ad_proc -private lang::message::cache {
     if { ![nsv_exists lang_message_cache executed_p] } {            
         nsv_set lang_message_cache executed_p 1
 
-        if { [empty_string_p $package_key] } {
+        if { $package_key eq "" } {
             set package_where_clause ""
         } else {
             set package_where_clause "where package_key = :package_key"

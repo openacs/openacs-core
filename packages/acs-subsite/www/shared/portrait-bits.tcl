@@ -14,11 +14,11 @@ if { ![db_0or1row get_item_id ""] } {
     return
 }
 
-if {[empty_string_p $size]} {
+if {$size eq ""} {
 	cr_write_content -item_id $item_id
 } else {	
 	set thumbnail_id [image::get_resized_item_id -item_id $item_id -size_name $size]
-	if {[empty_string_p $thumbnail_id]} {
+	if {$thumbnail_id eq ""} {
 		set thumbnail_id [image::resize -item_id $item_id -size_name $size]
 	}
 	cr_write_content -item_id $thumbnail_id

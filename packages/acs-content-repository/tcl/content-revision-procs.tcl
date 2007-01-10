@@ -113,8 +113,8 @@ ad_proc -public ::content::revision::new {
 	# parameters to this procedure
 	
 	foreach type_attribute $type_attributes {
-	    if {![string equal "cr_revisions" [lindex $type_attribute 1]] \
-                && ![string equal "acs_objects" [lindex $type_attribute 1]]} {
+	    if {"cr_revisions" ne [lindex $type_attribute 1] \
+                && "acs_objects" ne [lindex $type_attribute 1] } {
 		lappend valid_attributes [lindex $type_attribute 2]
 	    }
 	}

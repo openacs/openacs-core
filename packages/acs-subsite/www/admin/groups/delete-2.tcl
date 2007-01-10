@@ -20,15 +20,15 @@ ad_page_contract {
     }
 }
 
-if { [string eq $operation "Yes, I really want to delete this group"] } {
+if {$operation eq "Yes, I really want to delete this group"} {
     db_transaction {
 	set group_type [group::delete $group_id]
     }
-    if { [empty_string_p $return_url] && ![empty_string_p $group_type] } {
+    if { $return_url eq "" && $group_type ne "" } {
 	set return_url "../group-types/one?[ad_export_vars group_type]"
     }
 } else {
-    if { [empty_string_p $return_url] } {
+    if { $return_url eq "" } {
 	set return_url "one?[ad_export_vars group_id]"
     }
 }

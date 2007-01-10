@@ -36,7 +36,7 @@ set database              postgres
 
 set db_name               $server
 
-if { $database == "oracle" } {
+if { $database eq "oracle" } {
     set db_password           "mysitepassword"
 } else {
     set db_host               localhost
@@ -101,7 +101,7 @@ ns_section ns/parameters
 ns_section ns/threads 
     ns_param   mutexmeter         true      ;# measure lock contention 
     # The per-thread stack size must be a multiple of 8k for AOLServer to run under MacOS X
-    ns_param   stacksize          [expr 128 * 8192]
+    ns_param   stacksize          [expr {128 * 8192}]
 
 # 
 # MIME types. 
@@ -505,13 +505,13 @@ if { [ns_info version] < 4} {
 #
 #---------------------------------------------------------------------
 ns_section "ns/db/drivers" 
-if { $database == "oracle" } {
+if { $database eq "oracle" } {
     ns_param   ora8           ${bindir}/ora8.so
 } else {
     ns_param   postgres       ${bindir}/nspostgres.so  ;# Load PostgreSQL driver
 }
 
-if { $database == "oracle" } {
+if { $database eq "oracle" } {
     ns_section "ns/db/driver/ora8"
     ns_param  maxStringLogLength -1
     ns_param  LobBufferSize      32768
@@ -539,7 +539,7 @@ ns_section ns/db/pool/pool1
     ns_param   verbose            $debug
     ns_param   extendedtableinfo  true
     ns_param   logsqlerrors       $debug
-    if { $database == "oracle" } {
+    if { $database eq "oracle" } {
         ns_param   driver             ora8
         ns_param   datasource         {}
         ns_param   user               $db_name
@@ -558,7 +558,7 @@ ns_section ns/db/pool/pool2
     ns_param   verbose            $debug
     ns_param   extendedtableinfo  true
     ns_param   logsqlerrors       $debug
-    if { $database == "oracle" } {
+    if { $database eq "oracle" } {
         ns_param   driver             ora8
         ns_param   datasource         {}
         ns_param   user               $db_name
@@ -577,7 +577,7 @@ ns_section ns/db/pool/pool3
     ns_param   verbose            $debug
     ns_param   extendedtableinfo  true
     ns_param   logsqlerrors       $debug
-    if { $database == "oracle" } {
+    if { $database eq "oracle" } {
         ns_param   driver             ora8
         ns_param   datasource         {}
         ns_param   user               $db_name

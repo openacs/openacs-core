@@ -56,7 +56,7 @@ aa_register_case \
                      -password "blabla"]
 
             aa_equals "auth_status for bad password authentication" $auth_info(auth_status) "bad_password"
-            aa_true "auth_message for bad password authentication" ![empty_string_p $auth_info(auth_message)]
+            aa_true "auth_message for bad password authentication" [expr {$auth_info(auth_message) ne ""}]
 
             # Blank password
             array unset auth_info
@@ -67,7 +67,7 @@ aa_register_case \
                      -password ""]
 
             aa_equals "auth_status for blank password authentication" $auth_info(auth_status) "bad_password"
-            aa_true "auth_message for blank password authentication" ![empty_string_p $auth_info(auth_message)]
+            aa_true "auth_message for blank password authentication" [expr {$auth_info(auth_message) ne ""}]
 
             # Incorrect username
             array unset auth_info
@@ -78,7 +78,7 @@ aa_register_case \
                      -password $password]
 
             aa_equals "auth_status for bad username authentication" $auth_info(auth_status) "no_account"
-            aa_true "auth_message for bad username authentication" ![empty_string_p $auth_info(auth_message)]
+            aa_true "auth_message for bad username authentication" [expr {$auth_info(auth_message) ne ""}]
 
             # Blank username
             array unset auth_info
@@ -89,7 +89,7 @@ aa_register_case \
                      -password $password]
 
             aa_equals "auth_status for blank username authentication" $auth_info(auth_status) "auth_error"
-            aa_true "auth_message for blank username authentication" ![empty_string_p $auth_info(auth_message)]
+            aa_true "auth_message for blank username authentication" [expr {$auth_info(auth_message) ne ""}]
 
             # Authority bogus
             array unset auth_info
@@ -101,7 +101,7 @@ aa_register_case \
                      -password $password]
 
             aa_equals "auth_status for bad authority_id authentication" $auth_info(auth_status) "failed_to_connect"
-            aa_true "auth_message for bad authority_id authentication" ![empty_string_p $auth_info(auth_message)]
+            aa_true "auth_message for bad authority_id authentication" [expr {$auth_info(auth_message) ne ""}]
 
             # Closed account status
             set closed_states {banned rejected "needs approval" deleted}
@@ -117,7 +117,7 @@ aa_register_case \
                          -password $password]
     
                 aa_equals "auth_status for '$closed_state' user" $auth_info(auth_status) "ok"
-                if { [string equal $auth_info(auth_status) "ok"] } {
+                if {$auth_info(auth_status) eq "ok"} {
                     # Only perform this test if auth_status is ok, otherwise account_status won't be set
                     aa_equals "account_status for '$closed_state' user" $auth_info(account_status) "closed"
                 }
@@ -157,7 +157,7 @@ aa_register_case \
             if { [info exists user_info(creation_status)] } {
                 aa_equals "creation_status for successful creation" $user_info(creation_status) "ok"
                 
-                if { ![string equal $user_info(creation_status) "ok"] } {
+                if { $user_info(creation_status) ne "ok" } {
                     aa_log "Element messages: '$user_info(element_messages)'"
                     aa_log "Element messages: '$user_info(creation_message)'"
                 }
@@ -284,8 +284,8 @@ aa_register_case  \
 
     aa_log "Elements array: '[array get element_array]'"
 
-    aa_true "there is more than one required element" [expr [llength $element_array(required)] > 0]
-    aa_true "there is more than one optional element" [expr [llength $element_array(optional)] > 0]
+    aa_true "there is more than one required element" [expr {[llength $element_array(required)] > 0}]
+    aa_true "there is more than one optional element" [expr {[llength $element_array(optional)] > 0}]
 }
 
 aa_register_case  \
@@ -296,7 +296,7 @@ aa_register_case  \
 } {
     set form_elements [auth::get_registration_form_elements]
 
-    aa_true "Form elements are not empty: $form_elements" [expr ![empty_string_p $form_elements]]
+    aa_true "Form elements are not empty: $form_elements" [expr {$form_elements ne ""}] 
 }
 
 ###########
@@ -414,7 +414,7 @@ aa_register_case  \
                                            -username $test_vars(username)]
 
             aa_equals "status ok" $password_result(password_status) "ok"
-            aa_true "non-empty message" [expr ![empty_string_p $password_result(password_message)]]
+            aa_true "non-empty message" [expr {$password_result(password_message) ne ""}] 
         }
 }
 
@@ -451,7 +451,7 @@ aa_register_case  \
                           -username $test_vars(username)]
     
     aa_equals "retrieve pwd from local auth" $result(password_status) "ok"
-    aa_true "must have message on failure" [expr ![empty_string_p $result(password_message)]]
+    aa_true "must have message on failure" [expr {$result(password_message) ne ""}] 
 }
 
 aa_register_case  \
@@ -484,7 +484,7 @@ aa_register_case  \
                                          -secret_question "foo" \
                                          -secret_answer "bar"]
             aa_equals "status should be ok for creating user" $create_result(creation_status) "ok"
-            if { ![string equal $create_result(creation_status) "ok"] } {
+            if { $create_result(creation_status) ne "ok" } {
                 aa_log "Create-result: '[array get create_result]'"
             }
                 
@@ -606,7 +606,7 @@ aa_register_case  \
 
             set parameters [array names parameters_array]
 
-            aa_true "List of parameters is not empty" [expr [llength $parameters] != 0]
+            aa_true "List of parameters is not empty" [expr {[llength $parameters] != 0}]
 
             array set values [list]
 
@@ -671,7 +671,7 @@ aa_register_case  \
 
             # GetElements
             array set elms [auth::get_registration_elements]
-            aa_true "Registration elements do NOT contain username" [expr [lsearch [concat $elms(required) $elms(optional)] "username"] == -1]
+            aa_true "Registration elements do NOT contain username" [expr {[lsearch [concat $elms(required) $elms(optional)] "username"] == -1}]
             
             # Create a user with no username
             set email [string tolower "[ad_generate_random_string]@foobar.com"]

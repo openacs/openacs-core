@@ -98,7 +98,7 @@ set token_value_db [db_string get_token_value {
     where token_id = :token_id
 }]
 
-if { [string compare $token_value $token_value_db] == 0 } {
+if { $token_value eq $token_value_db  } {
     ns_write "<li>Success: sec_get_token test 1 passed."
 } else {
     ns_write "<li>Failure: sec_get_token test 1 failed."
@@ -107,7 +107,7 @@ if { [string compare $token_value $token_value_db] == 0 } {
 # do the same thing again to test the caching of tcl_
 set token_value [sec_get_token $token_id]
 
-if { [string compare $token_value $token_value_db] == 0 } {
+if { $token_value eq $token_value_db  } {
     ns_write "<li>Success: sec_get_token test 2
     passed."
 } else {

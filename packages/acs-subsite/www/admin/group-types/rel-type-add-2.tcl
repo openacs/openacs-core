@@ -47,7 +47,7 @@ if { [catch {db_dml insert_rel_type {
 
 db_release_unused_handles
 
-if { [empty_string_p $return_url] } {
+if { $return_url eq "" } {
     set return_url "one?[ad_export_vars {group_type}]"
 }
 

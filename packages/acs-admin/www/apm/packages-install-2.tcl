@@ -84,7 +84,7 @@ if { [lindex $dependency_results 0] == 1 && [llength [lindex $dependency_results
     [ad_footer]
     "
 
-} elseif { ([lindex $dependency_results 0] == 1) || ![string compare $force_p "t"]} {
+} elseif { ([lindex $dependency_results 0] == 1) || $force_p eq "t" } {
     ### Check passed!  Initiate install.
 
     # We use client properties to pass along this information as it is fairly large.

@@ -18,7 +18,7 @@ ad_page_contract {
     }
 }
 
-if { [string eq $operation "Yes, I really want to remove this relation"] } {
+if {$operation eq "Yes, I really want to remove this relation"} {
     db_transaction {
 	relation_remove $rel_id
     } on_error {
@@ -26,7 +26,7 @@ if { [string eq $operation "Yes, I really want to remove this relation"] } {
 	ad_script_abort
     }
 } else {
-    if { [empty_string_p $return_url] } {
+    if { $return_url eq "" } {
 	# redirect to the relation by default, if we haven't deleted it
 	set return_url "one?[ad_export_vars rel_id]"
     }

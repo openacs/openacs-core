@@ -25,7 +25,7 @@ if {[catch {set pair [ns_cache get util_memoize $key]} errmsg]} {
 	    }
 	}
     }
-    if {![info exists value] || [string equal "" $value]} {
+    if {![info exists value] || "" eq $value} {
 	set value "<i>could not retrieve</i>"
 	set time "?"
     }

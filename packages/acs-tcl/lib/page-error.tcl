@@ -61,7 +61,7 @@ if { $bug_number eq "" && $send_email_p} {
 set bt_instance [parameter::get -package_id [ad_acs_kernel_id] \
 		     -parameter BugTrackerInstance -default ""]
 
-if { ![empty_string_p $bt_instance] } {
+if { $bt_instance ne "" } {
     array set community_info [site_node::get -url "${bt_instance}/[bug_tracker::package_key]"]
     set bt_package_id $community_info(package_id)
     set auto_submit_p [parameter::get -parameter AutoSubmitErrorsP -package_id $bt_package_id -default 0]
@@ -79,7 +79,7 @@ if {$auto_submit_p && $user_id > 0} {
     set enabled_action_id [form get_action bug_edit]
     
     set exist_bug [db_string search_bug {} -default ""]
-    if { [empty_string_p $exist_bug]} {
+    if { $exist_bug eq ""} {
 	
 	#Submit the new Bug into the Bug - Tracker && Into the
 	# Auto_bugs tabble
@@ -111,7 +111,7 @@ if {$auto_submit_p && $user_id > 0} {
         array set row [list]
 	set bug_id $exist_bug
 	
-	if {[empty_string_p $bug_number]} {
+	if {$bug_number eq ""} {
 	    db_dml increase_reported_times { *SQL* }
 	}
 	
@@ -124,7 +124,7 @@ if {$auto_submit_p && $user_id > 0} {
         foreach available_enabled_action_id [workflow::case::get_available_enabled_action_ids -case_id $case_id] {
 	    workflow::case::enabled_action_get -enabled_action_id $available_enabled_action_id -array enabled_action
 	    workflow::action::get -action_id $enabled_action(action_id) -array available_action
-	    if [string match "*Reopen*" $available_action(pretty_name)] {
+	    if {[string match "*Reopen*" $available_action(pretty_name)]} {
 		bug_tracker::bug::edit \
 		    -bug_id $bug_id \
 		    -enabled_action_id $available_enabled_action_id \
@@ -133,7 +133,7 @@ if {$auto_submit_p && $user_id > 0} {
 		    -array row \
 		    -entry_id $bug(entry_id)
 	    }
-	    if [string match "*Comment*" $available_action(pretty_name)] {
+	    if {[string match "*Comment*" $available_action(pretty_name)]} {
 		set comment_action $available_enabled_action_id
 	    }
         }
@@ -156,7 +156,7 @@ if {$auto_submit_p && $user_id > 0} {
     
     # Registration required for all actions
     set action_id ""
-    #if { ![empty_string_p $enabled_action_id] } {
+    #if { $enabled_action_id ne "" } {
     #	workflow::case::enabled_action_get -enabled_action_id $enabled_action_id -array enabled_action
     #	set action_id $enabled_action(action_id)
     #    }
@@ -256,7 +256,7 @@ if {$auto_submit_p && $user_id > 0} {
 
 	array set row [list]
 	
-#	if { ![empty_string_p $enabled_action_id] } {
+#	if { $enabled_action_id ne "" } {
 #	    foreach field [workflow::action::get_element -action_id $action_id -element edit_fields] {
 #		set row($field) [element get_value bug_edit $field]
 #	    }
@@ -284,7 +284,7 @@ if {$auto_submit_p && $user_id > 0} {
   foreach available_enabled_action_id [workflow::case::get_available_enabled_action_ids -case_id $case_id] {
             workflow::case::enabled_action_get -enabled_action_id $available_enabled_action_id -array enabled_action
             workflow::action::get -action_id $enabled_action(action_id) -array available_action
-            if [string match "*Comment*" $available_action(pretty_name)] {
+            if {[string match "*Comment*" $available_action(pretty_name)]} {
                 set comment_action $available_enabled_action_id
             }
         }
@@ -322,7 +322,7 @@ if { ![form is_valid bug_edit] } {
     foreach {category_id category_name} [bug_tracker::category_types] {
         lappend element_names $category_id
         set bug($category_id) [cr::keyword::item_get_assigned -item_id $bug(bug_id) -parent_id $category_id]
-        if {[string compare $bug($category_id) ""] == 0} {
+        if {$bug($category_id) eq "" } {
             set bug($category_id) [bug_tracker::get_default_keyword -parent_id $category_id]
         }
     }
@@ -362,7 +362,7 @@ if { ![form is_valid bug_edit] } {
         # check that the element exists
         if { [info exists bug_edit:$element] && [info exists bug($element)] } {
             if {[form is_request bug_edit]
-                || [string equal [element get_property bug_edit $element mode] display] } {
+                || [string equal [element get_property bug_edit $element mode] "display"] } {
                 if { [string first "\#" $bug($element)] == 0 } {
                     element set_value bug_edit $element [lang::util::localize $bug($element)]
                 } else {
@@ -372,7 +372,7 @@ if { ![form is_valid bug_edit] } {
         }
     }
     # Add empty option to resolution code
-    if { ![empty_string_p $enabled_action_id] } {
+    if { $enabled_action_id ne "" } {
         if { [lsearch [workflow::action::get_element -action_id $action_id -element edit_fields] "resolution"] == -1 } {
             element set_properties bug_edit resolution -options [concat {{{} {}}} [element get_property bug_edit resolution options]]
         }

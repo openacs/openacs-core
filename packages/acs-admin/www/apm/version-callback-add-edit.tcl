@@ -15,7 +15,7 @@ db_1row package_version_info "select pretty_name, version_name from apm_package_
 set return_url "version-callbacks?[export_vars { version_id }]"
 
 # Set default values for type and proc name
-if { [empty_string_p $type] } {
+if { $type eq "" } {
     # We are in add mode
     set edit_mode_p 0
     set unused_types [apm_unused_callback_types -version_id $version_id]

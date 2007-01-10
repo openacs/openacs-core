@@ -14,7 +14,7 @@ array set auth_info [auth::authenticate \
                          -email [string trim $email] \
                          -password $password]
 
-if { [string equal $auth_info(auth_status) "ok"] } {
+if {$auth_info(auth_status) eq "ok"} {
     ad_returnredirect $return_url
     ad_script_abort
 } else {

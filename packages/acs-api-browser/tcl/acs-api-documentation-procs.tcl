@@ -50,7 +50,7 @@ ad_proc -public api_read_script_documentation {
 	# Eliminate any comment characters.
 	regsub -all {#.*$} $line "" line
 	set line [string trim $line]
-	if { ![empty_string_p $line] } {
+	if { $line ne "" } {
 	    set has_contract_p [regexp {^ad_page_contract\s} $line]
 	    break
 	}
@@ -177,10 +177,10 @@ ad_proc -public api_script_documentation {
 
     # If it's not a Tcl file, we can't do a heck of a lot yet. Eventually
     # we'll be able to handle ADPs, at least.
-    if { [string equal [file extension $path] ".xql"] } {
+    if {[file extension $path] eq ".xql"} {
 	append out "<blockquote>DB Query file</blockquote>\n"
 	return $out
-    } elseif { ![string equal [file extension $path] ".tcl"] } {
+    } elseif { [file extension $path] ne ".tcl" } {
 	append out "<blockquote><i>Delivered as [ns_guesstype $path]</i></blockquote>\n"
 	return $out
     }
@@ -236,7 +236,7 @@ ad_proc -public api_script_documentation {
 # 	    }
 # 	    append out "</dd>\n"
 # 	}
-# 	if { [info exists doc_elements(type)] && ![empty_string_p $doc_elements(type)] } {
+# 	if { [info exists doc_elements(type)] && $doc_elements(type) ne "" } {
 # 	    append out "<dt><b>Returns Type:</b><dd><a href=\"type-view?type=$doc_elements(type)\">$doc_elements(type)</a>\n"
 # 	}
 # 	# XXX: Need to support "Returns Properties:"
@@ -266,7 +266,7 @@ ad_proc -private api_format_see { see } {
     if {[nsv_exists api_proc_doc $see]} {
         return "<a href=\"proc-view?proc=[ns_urlencode ${see}]\">$see</a>"
     }
-    if {[string match /doc/*.html $see]
+    if {[string match "/doc/*.html" $see]
         || [util_url_valid_p $see]} { 
         return "<a href=\"${see}]\">$see</a>"
     }
@@ -287,7 +287,7 @@ ad_proc -public api_library_documentation {
     @param path the path to the file, relative to the OpenACS path root.
 
 } {
-    if { ![string equal $format "text/html"] } {
+    if { $format ne "text/html" } {
 	return -code error "Only text/html documentation is currently supported"
     }
 
@@ -349,13 +349,13 @@ ad_proc -public api_type_documentation {
 	set info $properties($property)
 	set type [lindex $info 0]
 	append out "<b>$property</b>"
-	if { ![string equal $type "onevalue"] } {
+	if { $type ne "onevalue" } {
 	    append out " ($type)"
 	}
 	if { [info exists property_doc($property)] } {
 	    append out " - $property_doc($property)"
 	}
-	if { [string equal $type "onerow"] } {
+	if {$type eq "onerow"} {
 	    append out "<br>\n"
 	} else {
 	    set columns [lindex $info 1]
@@ -393,9 +393,9 @@ ad_proc -private api_set_public {
 
 } {
     set public_property_name "api,package,$version_id,public_p"
-    if { [empty_string_p $public_p] } {
+    if { $public_p eq "" } {
 	set public_p [ad_get_client_property acs-api-browser $public_property_name]
-	if { [empty_string_p $public_p] } {
+	if { $public_p eq "" } {
 	    set public_p 1
 	}
     } else {
@@ -441,8 +441,8 @@ ad_proc -public api_proc_documentation {
 	@return the formatted documentation string.
 	@error if the procedure is not defined.	   
 } {
-	if { ![string equal $format "text/html"] && \
-			![string equal $format "text/plain"] } {
+	if { $format ne "text/html" && \
+			$format ne "text/plain" } {
 		return -code error "Only text/html and text/plain documentation are currently supported"
 	}
 	array set doc_elements [nsv_get api_proc_doc $proc_name]
@@ -471,7 +471,7 @@ ad_proc -public api_proc_documentation {
 	  if {[regexp {^(.+) (.+)$} $cl match scope cl]} {
 	    set cl "$scope do $cl"
 	  }
-	  if {[string equal "" $prefix]} {
+	  if {$prefix eq ""} {
 	    set pretty_proc_name "[::xotcl::api object_link $scope $cl] $method"
 	  } else {
 	    set pretty_proc_name \
@@ -557,7 +557,7 @@ ad_proc -public api_proc_documentation {
 			} 
 			
 			if { [info exists default_values($switch)] && \
-					![empty_string_p $default_values($switch)] } {
+					$default_values($switch) ne "" } {
 				append out " (defaults to <code>\"$default_values($switch)\"</code>)"
 			} 
 			
@@ -579,7 +579,7 @@ ad_proc -public api_proc_documentation {
 		foreach positional $doc_elements(positionals) {
 			append out "<b>$positional</b>"
 			if { [info exists default_values($positional)] } {
-				if { [empty_string_p $default_values($positional)] } {
+				if { $default_values($positional) eq "" } {
 					append out " (optional)"
 				} else {
 					append out " (defaults to <code>\"$default_values($positional)\"</code>)"
@@ -717,7 +717,7 @@ ad_proc -private ad_sort_by_second_string_proc {l1 l2} {
     basically a -1,0,1 result comparing the second element of the
     list inputs then the first (both strings)
 } {
-    if {[string equal [lindex $l1 1] [lindex $l2 1]]} {
+    if {[lindex $l1 1] eq [lindex $l2 1]} {
 	return [string compare [lindex $l1 0] [lindex $l2 0]]
     } else {
 	return [string compare [lindex $l1 1] [lindex $l2 1]]
@@ -728,7 +728,7 @@ ad_proc -private ad_sort_by_first_string_proc {l1 l2} {
     basically a -1,0,1 result comparing the second element of the
     list inputs then the first.  (both strings)
 } {
-    if {[string equal [lindex $l1 0] [lindex $l2 0]]} {
+    if {[lindex $l1 0] eq [lindex $l2 0]} {
 	return [string compare [lindex $l1 1] [lindex $l2 1]]
     } else {
 	return [string compare [lindex $l1 0] [lindex $l2 0]]
@@ -746,7 +746,7 @@ ad_proc -private ad_keywords_score {keywords string_to_search} {
     set score 0
     foreach word $keywords {
 	# turns out that "" is never found in a search, so we
-	# don't really have to special case $word == ""
+	# don't really have to special case $word eq ""
 	if {[string match -nocase "*$word*" $string_to_search]} {
 	    incr score
 	}
@@ -760,7 +760,7 @@ ad_proc -public api_apropos_functions { string } {
 } {
     set matches [list]
     foreach function [nsv_array names api_proc_doc] {
-        if [string match -nocase *$string* $function] {
+        if {[string match -nocase *$string* $function]} {
             array set doc_elements [nsv_get api_proc_doc $function]
             lappend matches [list "$function" "$doc_elements(positionals)"]
         }
@@ -807,7 +807,7 @@ ad_proc -private api_is_xotcl_object {scope proc_name} {
   @return boolean value
 } {
   set result 0
-  if {[string match ::* $proc_name]} { ;# only check for absolute names
+  if {[string match "::*" $proc_name]} { ;# only check for absolute names
     catch {set result [::xotcl::api inscope $scope ::xotcl::Object isobject $proc_name]}
   }
   return $result
@@ -877,7 +877,7 @@ ad_proc -private api_tcl_to_html {proc_name} {
     # Returns length of subexpression, from open to close quote inclusive
     proc length_string {data} {
         regexp -indices {[^\\]\"} $data match
-        return [expr [lindex $match 1]+1]
+        return [expr {[lindex $match 1]+1}]
     }
 
     # Returns length of subexpression, from open to close brace inclusive
@@ -885,31 +885,31 @@ ad_proc -private api_tcl_to_html {proc_name} {
     proc length_braces {data} {
         set i 1
         for {set count 1} {1} {incr i} {
-            if {[string index $data $i] == "\\"} {
+            if {[string index $data $i] eq "\\"} {
                 incr i
-            } elseif {[string index $data $i] == "\{"} {
+            } elseif {[string index $data $i] eq "\{"} {
                 incr count            
-            } elseif {[string index $data $i] == "\}"} {
+            } elseif {[string index $data $i] eq "\}"} {
                 incr count -1
             }
             if {!$count} { break }
         }
-        return [expr $i+1]
+        return [expr {$i+1}]
     }
 
     # Returns number of spaces until next subexpression
     proc length_spaces {data} {
         regexp -indices {\s+} $data match
-        return [expr [lindex $match 1]+1]
+        return [expr {[lindex $match 1]+1}]
     }
 
     # Returns length of a generic subexpression
     proc length_exp {data} {
-        if {[string index $data 0] == "\""} {
+        if {[string index $data 0] eq "\""} {
             return [length_string $data]
-        } elseif {[string index $data 0] == "\{"} {
+        } elseif {[string index $data 0] eq "\{"} {
             return [length_braces $data]
-        } elseif {[string index $data 0] == " "} {
+        } elseif {[string index $data 0] eq " "} {
             return [length_spaces $data]
         }
         if { [regexp -indices { } $data match] } {
@@ -924,9 +924,9 @@ ad_proc -private api_tcl_to_html {proc_name} {
         set found_regexp 0
         set curchar [string index $data $i]
         while {$curchar != "\$" && $curchar != "\[" &&
-               ($curchar != "\{" || !$found_regexp)} {
-            if {$curchar == "\{"} {set found_regexp 1}
-            if {[string match "-start" [string range $data $i [expr $i+5]]]} {
+               ($curchar ne "\{" || !$found_regexp)} {
+            if {$curchar eq "\{"} {set found_regexp 1}
+            if {[string match "-start" [string range $data $i [expr {$i+5}]]]} {
                 incr i [length_exp [string range $data $i end]] ;# -start
                 incr i [length_exp [string range $data $i end]] ;# spaces
                 incr i [length_exp [string range $data $i end]] ;# expression - it could be a var
@@ -934,7 +934,7 @@ ad_proc -private api_tcl_to_html {proc_name} {
             incr i [length_exp [string range $data $i end]]
             set curchar [string index $data $i]
         }
-        return [expr $i -1]
+        return [expr {$i -1}]
     }
 
     array set HTML {
@@ -967,7 +967,7 @@ ad_proc -private api_tcl_to_html {proc_name} {
         {gets puts socket tell format scan} \
         ]
 
-    if {[string compare "" [info command ::xotcl::api]]} {
+    if {"" ne [info command ::xotcl::api] } {
       set XOTCL_KEYWORDS [list self my next]
       # only command names are highlighted, otherwise we could add xotcl method
       # names by [lsort -unique [concat [list self my next] ..
@@ -1016,11 +1016,11 @@ ad_proc -private api_tcl_to_html {proc_name} {
         }
 
         "\$" {
-            if {$in_comment || ([string index $data [expr $i + 1]] == " ")} {
+            if {$in_comment || ([string index $data [expr {$i + 1}]] == " ")} {
                 append html "\$"
             } else {
                 set varl [length_var [string range $data $i end]]
-                append html "$HTML(var)[string range $data $i [expr $i + $varl]]$HTML(/var)"
+                append html "$HTML(var)[string range $data $i [expr {$i + $varl}]]$HTML(/var)"
                 incr i $varl
             }
         }
@@ -1039,7 +1039,7 @@ ad_proc -private api_tcl_to_html {proc_name} {
         }
 
         "\#" {
-            set prevchar [string index $data [expr $i-1]]
+            set prevchar [string index $data [expr {$i-1}]]
             if {$proc_ok && !$in_comment && [regexp {[\s;]} $prevchar]} {
                 set in_comment 1
                 set proc_ok 0
@@ -1095,7 +1095,7 @@ ad_proc -private api_tcl_to_html {proc_name} {
             if {$proc_ok} {
                 set proc_ok 0
                 set procl [length_proc [string range $data $i end]]
-                set proc_name [string range $data $i [expr $i + $procl]]
+                set proc_name [string range $data $i [expr {$i + $procl}]]
 
 	        if {[lsearch -exact $KEYWORDS $proc_name] != -1 ||
                     ([regexp {^::(.*)} $proc_name match had_colons] && 
@@ -1130,9 +1130,9 @@ ad_proc -private api_tcl_to_html {proc_name} {
                 incr i $procl
 
                 # Hack for nasty regexp stuff
-                if {[string match "regexp" $proc_name] || [string match "regsub" $proc_name]} {
+                if {"regexp" eq $proc_name || "regsub" eq $proc_name} {
                     set regexpl [length_regexp [string range $data $i end]]
-                    append html [string range $data [expr $i+1] [expr $i + $regexpl]]
+                    append html [string range $data [expr {$i+1}] [expr {$i + $regexpl}]]
                     incr i $regexpl
                 }
             } else {

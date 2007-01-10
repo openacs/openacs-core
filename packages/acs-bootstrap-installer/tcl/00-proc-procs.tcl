@@ -15,7 +15,7 @@ proc number_p { str } {
   #
   # Note that ACS 3.2 defined number_p like this:
   #
-  #   if { [empty_string_p $var] } {
+  #   if { $var eq "" } {
   #       return 0
   #   } else {
   #       return [regexp {^-?[0-9]*\.?[0-9]*$} $var match]
@@ -103,7 +103,7 @@ proc ad_proc args {
         # If the argument is "--", stop parsing for switches (but
         # bump up $i to the next argument, which is the first
         # argument which is not a switch).
-        if { [string equal $arg "--"] } {
+        if {$arg eq "--"} {
             incr i
             break
         }
@@ -146,15 +146,15 @@ proc ad_proc args {
         return -code error "Switch -warn can be provided to ad_proc only if -deprecated is also provided"
     }
 
-    if { ![string equal $impl ""] && [string equal $callback ""] } {
+    if { $impl ne "" && $callback eq "" } {
         return -code error "A callback contract name must be specified with -callback when defining an implementation with -impl"
     }
 
-    if { [string equal $impl impl] || [string match $impl "impl::*"] } {
+    if { $impl eq "impl" || [string match $impl "impl::*"] } {
         return -code error "Callback implementations may not be named impl"
     }
 
-    if { [string equal $callback contract] || [string match $callback "contract::*"] } {
+    if { $callback eq "contract" || [string match $callback "contract::*"] } {
         return -code error "Callbacks may not be named contract"
     }
 
@@ -162,7 +162,7 @@ proc ad_proc args {
     # There must be either three or four arguments remaining.
     set n_args_remaining [expr { [llength $args] - $i }]
 
-    if {[string equal $callback ""]} {
+    if {$callback eq ""} {
         # We are creating a normal proc so the proc name is an argument
         if { $n_args_remaining < 3 || $n_args_remaining > 4} {
             return -code error "Wrong number of arguments passed to ad_proc"
@@ -171,19 +171,19 @@ proc ad_proc args {
         # Set up the remaining arguments.
         set proc_name [lindex $args $i]
     } else {
-        if {![string equal $impl ""]} {
+        if {$impl ne "" } {
             # We are creating an implementation...
             if {$n_args_remaining != 3} {
                 return -code error "ad_proc callback implementation must have: arguments (can be empty) docs code_body"
             }
         }
-        if {[string equal $impl ""]} {
+        if {$impl eq ""} {
             # We are creating an callback contract...
             if {!( $n_args_remaining == 3 || $n_args_remaining == 2 ) } {
                 return -code error "ad_proc callback contract must have: arguments docs \[empty_code_body\]"
             } elseif {$n_args_remaining == 3
-                      && ![string equal [lindex $args end] ""]
-                      && ![string equal [lindex $args end] "-"]} {
+                      && [lindex $args end] ne "" 
+                      && [lindex $args end] ne "-" } {
                 return -code error "ad_proc callback contract must have an empty code_body"
             }
         }
@@ -191,7 +191,7 @@ proc ad_proc args {
         set callback [string trimleft $callback ::]
         set proc_name ::callback::${callback}
 
-        if {[string equal $impl ""]} {
+        if {$impl eq ""} {
             append proc_name ::contract
         } else {
             append proc_name ::impl::${impl}
@@ -219,23 +219,23 @@ proc ad_proc args {
     set proc_name_as_passed $proc_name
     set parent_namespace [string trimleft [uplevel 1 {::namespace current}] ::]
 
-    if { ![string match ::* $proc_name] } {
+    if { ![string match "::*" $proc_name] } {
         set proc_name ${parent_namespace}::$proc_name
     }
-    if {![string eq $parent_namespace {}] && ![string match ::* $proc_name]} {
+    if {$parent_namespace ne {} && ![string match "::*" $proc_name]} {
         ns_log Debug "proc $proc_name_as_passed declared in namespace $parent_namespace via namespace eval; coding standard is to declare as $proc_name"
     }
     set proc_name [string trimleft $proc_name ::]
 
 
-    if { ![string equal $callback ""] } {
+    if { $callback ne "" } {
         # Do a namespace eval of each namespace to ensure it exists
         set namespaces [split $proc_name ::]
         set namespaces [lrange $namespaces 0 end-1]
 
         set curr_ns ""
         foreach ns $namespaces {
-            if {![string equal $ns ""]} {
+            if {$ns ne "" } {
                 append curr_ns "::$ns"
                 namespace eval $curr_ns {}
             }
@@ -253,8 +253,8 @@ proc ad_proc args {
     }
     set code_block [lindex $args end]
 
-    if {![string equal $callback ""]
-        && ![string equal $impl ""] } {
+    if {$callback ne "" 
+        && $impl ne "" } {
         if {[info exists doc_elements(see)]} {
             lappend doc_elements(see) "callback::${callback}::contract"
         } else {
@@ -317,7 +317,7 @@ proc ad_proc args {
             set arg [lindex $arg_split 0]
             foreach flag [split [lindex $arg_split 1] ","] {
                 set flag [string trim $flag]
-                if { ![string equal $flag "required"] && ![string equal $flag "boolean"] } {
+                if { $flag ne "required" && $flag ne "boolean" } {
                     return -code error "Invalid flag \"$flag\""
                 }
                 lappend arg_flags $flag
@@ -326,7 +326,7 @@ proc ad_proc args {
             return -code error "Invalid element \"$arg\" in argument list"
         }
 
-        if { [string equal [string index $arg 0] "-"] } {
+        if {[string index $arg 0] eq "-"} {
             if { [llength $positionals] > 0 } {
                 return -code error "Switch -$arg specified after positional parameter"
             }
@@ -405,13 +405,13 @@ proc ad_proc args {
     # Backward compatibility: set proc_doc and proc_source_file
     nsv_set proc_doc $proc_name [lindex $doc_elements(main) 0]
     if { [nsv_exists proc_source_file $proc_name] \
-	    && [string compare [nsv_get proc_source_file $proc_name] [info script]] != 0 } {
+	    && [nsv_get proc_source_file $proc_name] ne [info script]  } {
         ns_log Warning "Multiple definition of $proc_name in [nsv_get proc_source_file $proc_name] and [info script]"
     }
     nsv_set proc_source_file $proc_name [info script]
 
-    if { [string equal $code_block "-"] } {
-        if { [string equal $callback ""] } {
+    if {$code_block eq "-"} {
+        if {$callback eq ""} {
             return
         } else {
             # we are creating a callback so create an empty body
@@ -605,7 +605,7 @@ ad_proc -public ::foobar::new {
 	\@param user_id The id for the user to process. Optional with default "" 
 	                (api-browser will show the default automatically)
 } {
-	if { [empty_string_p $user_id] } {
+	if { $user_id eq "" } {
 		# Do something if this is not an empty string
 	}
 
@@ -670,7 +670,7 @@ ad_proc -public ad_arg_parser { allowed_args argv } {
     @error if the list of command-line options is not valid.
 
 } {
-    if { [string equal [lindex $allowed_args end] "args"] } {
+    if {[lindex $allowed_args end] eq "args"} {
 	set varargs_p 1
 	set allowed_args [lrange $allowed_args 0 [expr { [llength $allowed_args] - 2 }]]
     } else {
@@ -684,7 +684,7 @@ ad_proc -public ad_arg_parser { allowed_args argv } {
 
     set counter 0
     foreach { switch value } $argv {
-	if { ![string equal [string index $switch 0] "-"] } {
+	if { [string index $switch 0] ne "-" } {
 	    if { $varargs_p } {
 		set args [lrange $argv $counter end]
 		return
@@ -768,7 +768,7 @@ ad_proc -public callback {
 
     @see ad_proc
 } {
-    if {$callback == ""} {
+    if {$callback eq ""} {
         error "callback: no callback name given"
     }
     # see that the contract exists and call the contract for

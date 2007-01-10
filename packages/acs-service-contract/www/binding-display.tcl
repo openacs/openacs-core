@@ -48,7 +48,7 @@ db_multirow -extend {check} binding binding {
     order by lower(impl_operation_name)
     
 } {
-    if {[string equal $impl_pl "TCL"]} {
+    if {$impl_pl eq "TCL"} {
         regsub {^::} $impl_alias {} impl_alias
         if {[empty_string_p [info proc ::$impl_alias]]} {
             append impl_alias {</b> - <b style="color: red">NOT FOUND!</b>}

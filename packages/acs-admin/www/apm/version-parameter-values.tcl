@@ -29,7 +29,7 @@ where  version_id = :version_id
 order by element_name
 } {
 
-    if $first_iteration {
+    if {$first_iteration} {
 	doc_body_append "
 	<tr>
 	 <th>Parameter</th>

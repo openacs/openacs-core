@@ -55,7 +55,7 @@ set user_id [db_nextval acs_object_id_seq]
 
 ad_form -name register -export {next_url user_id return_url} -form [auth::get_registration_form_elements]  -validate {
     {email
-        {[string eq "" [party::get_by_email -email $email]]}
+        {[string equal "" [party::get_by_email -email $email]]}
         "[_ acs-subsite.Email_already_exists]"
     }
 }
@@ -101,7 +101,7 @@ ad_form -extend -name register -on_request {
                                      -secret_question $secret_question \
                                      -secret_answer $secret_answer]
 	
-        if { [string equal $creation_info(creation_status) "ok"] && [exists_and_not_null rel_group_id] } {
+        if { $creation_info(creation_status) eq "ok" && [exists_and_not_null rel_group_id] } {
             group::add_member \
                 -group_id $rel_group_id \
                 -user_id $user_id \
@@ -144,7 +144,7 @@ ad_form -extend -name register -on_request {
     
 } -after_submit {
     
-    if { ![empty_string_p $next_url] } {
+    if { $next_url ne "" } {
         # Add user_id and account_message to the URL
         
         ad_returnredirect [export_vars -base $next_url {user_id password {account_message $creation_info(account_message)}}]
@@ -166,14 +166,14 @@ ad_form -extend -name register -on_request {
 	# lang::user::locale, as we are now a registered user,
 	# but one without a valid locale setting.
 	set locale [ad_get_cookie "ad_locale"]
-	if { ![empty_string_p $locale] } {
+	if { $locale ne "" } {
 	    lang::user::set_locale $locale
 	    ad_set_cookie -replace t -max_age 0 "ad_locale" ""
 	}
     }
     
     # Handle account_message
-    if { ![empty_string_p $creation_info(account_message)] && $self_register_p } {
+    if { $creation_info(account_message) ne "" && $self_register_p } {
         # Only do this if user is self-registering
         # as opposed to creating an account for someone else
         ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-message" { { message $creation_info(account_message) } return_url }]

@@ -35,7 +35,7 @@ set context [list [list "package-list?[export_vars { locale }]" $locale_label] \
 # locale. If not, we can't allow the creation of a new localized 
 # message.
 
-if { ![string equal $current_locale $default_locale] } {
+if { $current_locale ne $default_locale } {
     ad_return_error "Can only create messages in the default locale" "Can only create messages in the default locale"
     ad_script_abort
 }
@@ -64,7 +64,7 @@ if { [form is_request message_new] } {
     element set_value message_new locale $current_locale
     element set_value message_new message_key $message_key
     element set_value message_new return_url $return_url
-    if { [empty_string_p $message_key] } {
+    if { $message_key eq "" } {
         set focus message_new.message_key
     } else {
         set focus message_new.message

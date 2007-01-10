@@ -9,7 +9,7 @@ ad_page_contract {
 set page_title  "\"#acs-subsite.Change_my_email_P\#\""
 set context [list [list [ad_pvt_home] [ad_pvt_home_name]] $page_title]
 
-if { [string equal $user_id ""] } {
+if {$user_id eq ""} {
     set user_id [auth::require_login -account_status closed]
 }
 

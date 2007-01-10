@@ -14,7 +14,7 @@ set context [list]
 multirow create servers path admin_login_url local_url remote_url name description install_date error_total_count parse_errors
 
 set xml_report_dir [aa_test::xml_report_dir]
-if { ![empty_string_p $xml_report_dir] } {
+if { $xml_report_dir ne "" } {
     foreach path [glob $xml_report_dir/*-installreport.xml] {
         aa_test::parse_install_file -path $path -array service
 

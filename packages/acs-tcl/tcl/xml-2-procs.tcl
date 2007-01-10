@@ -209,7 +209,7 @@ proc xml::ParseCommand_parse {object xml} {
     variable substExpr
 
     set parent [namespace parent]
-    if {![string compare :: $parent]} {
+    if {"::" eq $parent } {
 	set parent {}
     }
 

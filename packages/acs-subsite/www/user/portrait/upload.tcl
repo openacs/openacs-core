@@ -15,7 +15,7 @@ ad_page_contract {
 
 set current_user_id [ad_conn user_id]
 
-if [empty_string_p $user_id] {
+if {$user_id eq ""} {
     subsite::upload_allowed
     set user_id $current_user_id
     set admin_p 0
@@ -25,10 +25,10 @@ if [empty_string_p $user_id] {
 
 ad_require_permission $user_id "write"
 
-if ![db_0or1row name "select 
+if {![db_0or1row name "select 
   first_names, last_name
 from persons 
-where person_id=:user_id"] {
+where person_id=:user_id"]} {
     ad_return_error "Account Unavailable" "We can't find you (user #$user_id) in the users table.  Probably your account was deleted for some reason."
     return
 }

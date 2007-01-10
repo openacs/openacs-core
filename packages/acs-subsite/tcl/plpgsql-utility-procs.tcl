@@ -63,7 +63,7 @@ namespace eval plpgsql_utility {
 	    if { [info exists user_supplied($arg_name)] } {
 		lappend pieces "${prepend}$user_supplied($arg_name)"
 	    } else {
-		if { $arg_default == "" } {
+		if { $arg_default eq "" } {
 		    lappend pieces "NULL"
 		} else {
 		    lappend pieces "'[db_quote $arg_default]'"
@@ -150,11 +150,11 @@ namespace eval plpgsql_utility {
 	foreach triple $attr_list {
 	    set attr  [string trim [lindex $triple 1]]
 	    set dft   [string trim [lindex $triple 2]]
-	    if { [empty_string_p $dft] || $dft == "NULL" } {
+	    if { $dft eq "" || $dft eq "NULL" } {
 		set default ""
 	    } else {
-		if { [string index $dft 0] == "'" } {
-		    set dft [string range $dft 1 [expr [string length $dft] - 2]]
+		if { [string index $dft 0] eq "'" } {
+		    set dft [string range $dft 1 [expr {[string length $dft] - 2}]]
 		}
 		set default ";${dft}"
 	    }

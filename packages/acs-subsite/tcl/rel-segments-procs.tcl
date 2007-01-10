@@ -27,10 +27,10 @@ ad_proc -public rel_segments_new {
 
 } {
     if { [ad_conn isconnected] } {
-	if { [empty_string_p $creation_user] } {
+	if { $creation_user eq "" } {
 	    set creation_user [ad_conn user_id]
 	}
-	if { [empty_string_p $creation_ip] } {
+	if { $creation_ip eq "" } {
 	    set creation_ip [ad_conn peeraddr]
 	}
     }

@@ -15,7 +15,7 @@ aa_register_case -cats {smoke production_safe} files__tcl_file_syntax_errors {
     set nfiles 0
     # couple of local helper procs 
     proc ::tcl_p {file} { 
-        return [expr [string match {*.tcl} $file] || [file isdirectory $file]]
+        return [expr {[string match {*.tcl} $file] || [file isdirectory $file]}]
     }
 
     # if startdir is not [acs_root_dir]/packages, then somebody checked in the wrong thing by accident
@@ -48,7 +48,7 @@ aa_register_case -cats {smoke production_safe} -error_level notice files__tcl_fi
 } {
     # couple of local helper procs
     proc ::tcl_p {file} {
-        return [expr [string match {*.tcl} $file] || [file isdirectory $file]]
+        return [expr {[string match {*.tcl} $file] || [file isdirectory $file]}]
     }
 
     # if startdir is not [acs_root_dir]/packages, then somebody checked in the wrong thing by accident
@@ -90,11 +90,11 @@ aa_register_case -cats {smoke production_safe} files__check_info_files {
                 set errp 1
             }
             # check on the requires, provides, etc stuff.
-            if {[empty_string_p $version(provides)]
+            if {$version(provides) eq ""
                 && [string equal $version(package.type) apm_service] } {
                 aa_log_result fail "$spec_file SERVICE MISSING PROVIDES: $key"
                 set errp 1
-            } elseif { ![empty_string_p $version(provides)]} {
+            } elseif { $version(provides) ne ""} {
                 if { ![string equal $version(name) [lindex [lindex $version(provides) 0] 1]]} {
                     aa_log_result fail "$spec_file: MISMATCH PROVIDES VERSION: $version(provides) $version(name)"
                     set errp 1
@@ -145,12 +145,12 @@ aa_register_case -cats {smoke production_safe} files__check_upgrade_ordering {
                      [string first upgrade $file] == -1 } {
                     set db [apm_guess_db_type $package $file]
                     if {[string is space $db] 
-                        || [string equal $db $db_type]} {
+                        || $db eq $db_type} {
                         set tail [file tail $file]
                         if {[regexp {\-(.*)-(.*).sql} $tail match v1 v2]} {
                             set v1s [apm_version_sortable $v1]
                             set v2s [apm_version_sortable $v2]
-                            if {[string compare $v1s $v2s] > -1} {
+                            if {$v1s ne $v2s  > -1} {
                                 set error_p 1
                                 aa_log_result fail "$file: from after to version"
                             } else {
@@ -170,7 +170,7 @@ aa_register_case -cats {smoke production_safe} files__check_upgrade_ordering {
                 set u2 [lsort -dictionary -index 1 $upgrades]
 
                 foreach f1 $u1 f2 $u2 {
-                    if {![string equal $f1 $f2]} {
+                    if {$f1 ne $f2 } {
                         set error_p 1
                         aa_log_result fail "$package upgrade not well ordered [lindex $f1 end] [lindex $f2 end]\n"
                     }
@@ -196,7 +196,7 @@ aa_register_case -cats {smoke} files__check_xql_files {
 } {
     # couple of local helper procs 
     proc ::xql_p {file} { 
-        return [expr [string match {*.xql} $file] || [file isdirectory $file]]
+        return [expr {[string match {*.xql} $file] || [file isdirectory $file]}]
     }
     
     # if startdir is not [acs_root_dir]/packages, then somebody checked in the wrong thing by accident
@@ -236,21 +236,21 @@ aa_register_case -cats {smoke} files__check_xql_files {
             # the file did not exist so we must have a -db extension...
             regexp {(.*?)(-)?([A-Za-z_]*)[.]xql$} $file match base dummy db
             ns_log debug "JCD: acs_tcl__check_xql_files: $db $base from $file"
-            if { ![empty_string_p $db] 
-                 && ![empty_string_p $dummy]
+            if { $db ne "" 
+                 && $dummy ne ""
                  && ![string match $db oracle]
                  && ![string match $db postgresql] } {
                 aa_log_result fail "bad db name \"$db\" file $file (or maybe .tcl or .vuh missing)"
-            } elseif { ![empty_string_p $db]
-                       && ![empty_string_p $dummy]
+            } elseif { $db ne ""
+                       && $dummy ne ""
                        && ![regexp $db $data] } {
                 aa_log_result fail "rdbms \"$db\" missing $file"
-            } elseif {[empty_string_p $dummy]
+            } elseif {$dummy eq ""
                       && [regexp {<rdbms>} $data] } {
                 aa_log_result fail "rdbms found in generic $file"
             }
 
-            if {[string equal $db postgresql] || [empty_string_p $dummy]} {
+            if {$db eq "postgresql" || $dummy eq ""} {
                 if {[regexp -nocase {(nvl[ ]*\(|decode[ ]*\(| connect by )} $data match]} {
                     aa_log_result fail "postgres or generic with oracle code $file: $match"
                 }
@@ -259,7 +259,7 @@ aa_register_case -cats {smoke} files__check_xql_files {
                 }
                 set allxql($base) $file
             } else {
-                if {[regexp -nocase {(now[ ]*\(| limit | offset | outer join )} $data match ] || [empty_string_p $dummy]} {
+                if {[regexp -nocase {(now[ ]*\(| limit | offset | outer join )} $data match ] || $dummy eq ""} {
                     aa_log_result fail "oracle or generic with postgres code $file: $match"
                 }
                 set allxql($base) $file

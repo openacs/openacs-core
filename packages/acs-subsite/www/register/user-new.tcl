@@ -8,6 +8,6 @@ ad_page_contract {
 }
 
 set registration_url [parameter::get -parameter RegistrationRedirectUrl]
-if {![string eq "" $registration_url]} {
+if {$registration_url ne ""} {
     ad_returnredirect $registration_url
 }

@@ -157,7 +157,7 @@ template::list::create \
 
 # Pull out all the relations of the specified type
 
-set show_partial_email_p [expr $user_id == 0]
+set show_partial_email_p [expr {$user_id == 0}]
 
 db_multirow -extend { 
     email_url
@@ -175,7 +175,7 @@ db_multirow -extend {
     if { $member_admin_p > 0 } {
         set rel_role_pretty [lang::util::localize $admin_role_pretty]
     } else {
-        if { ![empty_string_p $other_role_pretty] } {
+        if { $other_role_pretty ne "" } {
             set rel_role_pretty [lang::util::localize $other_role_pretty]
         } else {
             set rel_role_pretty [lang::util::localize $member_role_pretty]
@@ -217,7 +217,7 @@ db_multirow -extend {
 
     if { [ad_conn user_id] == 0 } {
         set email [string replace $email \
-                       [expr [string first "@" $email]+3] end "..."]
+                       [expr {[string first "@" $email]+3}] end "..."]
     } else {
         set email_url "mailto:$email"
     }

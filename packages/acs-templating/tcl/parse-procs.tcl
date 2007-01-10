@@ -51,7 +51,7 @@ ad_proc -public template::adp_include {
   # set the stack frame at which the template is being parsed so that
   # other procedures can reference variables cleanly
   variable parse_level
-  lappend parse_level [expr [info level] - $uplevel]
+  lappend parse_level [expr {[info level] - $uplevel}]
 
   set __adp_out [template::adp_parse [template::util::url_to_file $src] $varlist]
 
@@ -79,7 +79,7 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
 
   foreach {__key __value} $__args {
     if {[string match "&*" $__key]} {	# "&" triggers call by reference
-      if {[string compare "&" $__key]} {
+      if {"&" ne $__key } {
 	set __name [string range $__key 1 end]
       } else {
 	set __name $__value
@@ -112,7 +112,7 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
     # and other clever users of the include tag work properly ...
     template::util::lpop parse_level
 
-    if { [string equal $errMsg ADP_ABORT] } { 
+    if {$errMsg eq "ADP_ABORT"} { 
       return "" 
     } else {
       global errorInfo errorCode
@@ -280,10 +280,10 @@ ad_proc -public template::adp_level { { up "" } } {
   # but we need to check it for the case of isolated compilation
 
   if { [info exists parse_level] } {
-    if { [string equal $up "" ] } {
+    if {$up eq ""} {
       set result [lindex $parse_level end]
     } else {
-      set result [lindex $parse_level [expr [llength $parse_level] - $up]]
+      set result [lindex $parse_level [expr {[llength $parse_level] - $up}]]
     }
   }
 
@@ -324,14 +324,14 @@ ad_proc -private template::adp_prepare {} {
 
       # propagate aborting
       global request_aborted
-      if [info exists request_aborted] {
+      if {[info exists request_aborted]} {
 	ns_log warning "propagating abortion from $__adp_remember_stub.tcl\
           (status [lindex $request_aborted 0]): '[lindex $request_aborted 1]')"
 	adp_abort
       }
      
       # if the file has changed than prepare again
-      if { ! [string equal $__adp_stub $__adp_remember_stub] } {
+      if { $__adp_stub ne $__adp_remember_stub } {
 	adp_prepare;			# propagate result up
       } { return 1 }
     }
@@ -377,10 +377,10 @@ ad_proc -private template::adp_init { type file_stub } {
   set refresh_cache [ad_parameter -package_id $pkg_id RefreshCache dummy\
 			 "as needed"]
 
-  if {[string equal $proc_name {}] || [string compare $refresh_cache "never"]} {
+  if {$proc_name eq {} || $refresh_cache ne "never" } {
     set mtime [file mtime $file_stub.$type]
-    if {[string equal $proc_name {}] || $mtime != [$proc_name]
-	|| [string equal $refresh_cache "always"]} {
+    if {$proc_name eq {} || $mtime != [$proc_name]
+	|| $refresh_cache eq "always"} {
 
       # either the procedure does not already exist or is not up-to-date
 
@@ -436,7 +436,7 @@ ad_proc -public template::expand_percentage_signs { message } {
   while { [regexp [lang::message::embedded_vars_regexp] $remaining_message match before_percent percent_match remaining_message] } {
     append formatted_message $before_percent 
 
-    if { [string equal $percent_match "%%"] } {
+    if {$percent_match eq "%%"} {
       # A quoted percentage sing
       set substitution "%"
     } else {
@@ -660,7 +660,7 @@ ad_proc -private template::adp_append_code { code { nobreak "" } } {
 
   variable parse_list
 
-  if { [string equal $nobreak -nobreak] } {
+  if {$nobreak eq "-nobreak"} {
 
     set last_line [lindex $parse_list end]
     append last_line " $code"
@@ -752,13 +752,13 @@ ad_proc -private template::enclosing_tag {
 
   variable tag_stack
 
-  set last [expr [llength $tag_stack] - 2]
+  set last [expr {[llength $tag_stack] - 2}]
 
   for { set i $last } { $i >= 0 } { incr i -1 } {
 
     set pair [lindex $tag_stack $i]
 
-    if { [string equal [lindex $pair 0] $tag] } {
+    if {[lindex $pair 0] eq $tag} {
       set name [lindex $pair 1]
       break
     }
@@ -786,13 +786,13 @@ ad_proc -private -deprecated template::get_enclosing_tag { tag } {
 
   variable tag_stack
 
-  set last [expr [llength $tag_stack] - 1]
+  set last [expr {[llength $tag_stack] - 1}]
 
   for { set i $last } { $i >= 0 } { incr i -1 } {
 
     set pair [lindex $tag_stack $i]
 
-    if { [string equal [lindex $pair 0] $tag] } {
+    if {[lindex $pair 0] eq $tag} {
       set name [ns_set get [lindex $pair 1] name]
       break
     }
@@ -818,7 +818,7 @@ ad_proc -private template::get_attribute { tag params name { default "ERROR" } }
 } {
   set value [ns_set iget $params $name]
 
-  if { [string equal $value {}] } {
+  if {$value eq {}} {
     if { [string equal $default {ERROR}] } {
       error "Missing [string toupper $name] property\
              in [string toupper $tag] tag"

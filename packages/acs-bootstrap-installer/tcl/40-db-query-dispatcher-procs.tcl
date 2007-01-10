@@ -16,7 +16,7 @@
 # The following code allows ad_proc to be used
 # here (a local workalike is declared if absent).
 # added 2002-09-11 Jeff Davis (davis@xarg.net)
-if {! [string equal {} [info procs ad_library]]} { 
+if {{} ne [info procs ad_library] } { 
     ad_library {
         Query Dispatching for multi-RDBMS capability
 
@@ -26,7 +26,7 @@ if {! [string equal {} [info procs ad_library]]} {
     } 
 }
 
-if { ! [string equal {} [info procs ad_proc]] } {
+if { {} ne [info procs ad_proc] } {
     set remove_ad_proc_p 0
 } else { 
     set remove_ad_proc_p 1
@@ -46,7 +46,7 @@ if { ! [string equal {} [info procs ad_proc]] } {
         set args [lrange $args $count end]
         # args can be {docs body} {body} {docs -} 
         # make sure it is non empty and does not end in -
-        if {[llength $args] && ![string equal [lindex $args end] "-"]} { 
+        if {[llength $args] && [lindex $args end] ne "-" } { 
             proc $name $arglist [lindex $args end]
         }
     }
@@ -105,7 +105,7 @@ ad_proc -public db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
     # the current RDBMS then we have compatibility. Otherwise we don't.
     foreach t [split [db_rdbms_get_version $rdbms_test   ] "\."] \
             p [split [db_rdbms_get_version $rdbms_pattern] "\."] {
-                if {$t != $p} {return [expr $t < $p]}
+                if {$t != $p} {return [expr {$t < $p}]}
             }
     
     # Same version (though not strictly "older") is OK
@@ -242,14 +242,14 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
     # We catch this in case we're being called from the top level
     # (eg. from bootstrap.tcl), in which case we return what we
     # were given
-    if { [catch {string trimleft [info level [expr "-1 - $added_stack_num"]] ::} proc_name] } {
+    if { [catch {string trimleft [info level [expr {-1 - $added_stack_num}]] ::} proc_name] } {
 	return $local_name
     }
 
     # If util_memoize, we have to go back up one in the stack
-    if {[lindex $proc_name 0] == "util_memoize"} {
+    if {[lindex $proc_name 0] eq "util_memoize"} {
 	# db_qd_log QDDebug "util_memoize! going up one level"
-	set proc_name [info level [expr "-2 - $added_stack_num"]]
+	set proc_name [info level [expr {-2 - $added_stack_num}]]
     }
 
     set list_of_source_procs {ns_sourceproc apm_source template::adp_parse template::frm_page_handler rp_handle_tcl_request}
@@ -262,7 +262,7 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
 
 	# TEST
 	# for {set i 0} {$i < 6} {incr i} {
-        #   if {[catch {db_qd_log QDDebug "LEVEL=$i= [info level [expr "-1 - $i"]]"} errmsg]} {}
+        #   if {[catch {db_qd_log QDDebug "LEVEL=$i= [info level [expr {-1 - $i}]]"} errmsg]} {}
         # }
 
 	# Check the ad_conn stuff
@@ -341,10 +341,10 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
         # proc_name, so that the correct query can be looked up. 
         # (Openacs - DanW)
 
-        set calling_namespace [string range [uplevel [expr 1 + $added_stack_num] {namespace current}] 2 end]
+        set calling_namespace [string range [uplevel [expr {1 + $added_stack_num}] {namespace current}] 2 end]
         # db_qd_log QDDebug "calling namespace = $calling_namespace"
 
-        if {![string equal $calling_namespace ""] && 
+        if {$calling_namespace ne "" && 
             ![regexp {::} $proc_name all]} {
 
             set proc_name ${calling_namespace}::${proc_name}
@@ -423,11 +423,11 @@ ad_proc -public db_qd_replace_sql {statement_name sql} {
 } { 
     set fullquery [db_qd_fetch $statement_name]
 
-    if {![empty_string_p $fullquery]} {
+    if {$fullquery ne ""} {
 	set sql [db_fullquery_get_querytext $fullquery]
     } else {
 	db_qd_log Debug "NO FULLQUERY FOR $statement_name --> using default SQL"
-        if { [empty_string_p $sql] } {
+        if { $sql eq "" } {
             # The default SQL is empty, that implies a bug somewhere in the code.
             error "No fullquery for $statement_name and default SQL empty - query for statement missing"
         }
@@ -512,7 +512,7 @@ ad_proc -private db_qd_internal_load_queries {file_pointer file_tag} {
 	# db_qd_log QDDebug "one parse result -$result-"
 
 	# If we get the empty string, we are done parsing
-	if {$result == ""} {
+	if {$result eq ""} {
 	    break
 	}
 
@@ -560,7 +560,7 @@ ad_proc -private db_qd_internal_get_cache {fullquery_name} {
     set fullquery_array [nsv_get OACS_FULLQUERIES $fullquery_name]
 
     # If this isn't cached!
-    if {$fullquery_array == ""} {
+    if {$fullquery_array eq ""} {
 	# we need to do something
 	return ""
     }
@@ -666,7 +666,7 @@ ad_proc -private db_qd_internal_parse_init {stuff_to_parse file_path} {
     set root_node [xml_doc_get_first_node $parsed_doc]
 
     # Check that it's a queryset
-    if {[xml_node_get_name $root_node] != "queryset"} {
+    if {[xml_node_get_name $root_node] ne "queryset"} {
 	# db_qd_log Error "OH OH, error, first node is [xml_node_get_name $root_node] and not 'queryset'"
         return ""
     }
@@ -739,7 +739,7 @@ ad_proc -private db_qd_internal_parse_one_query_from_xml_node {one_query_node {d
     # db_qd_log QDDebug "parsing one query node in XML with name -[xml_node_get_name $one_query_node]-"
 
     # Check that this is a fullquery
-    if {[xml_node_get_name $one_query_node] != "fullquery"} {
+    if {[xml_node_get_name $one_query_node] ne "fullquery"} {
 	return ""
     }
     
@@ -767,7 +767,7 @@ ad_proc -private db_rdbms_parse_from_xml_node {rdbms_node} {
     Parse and RDBMS struct from an XML fragment node
 } { 
     # Check that it's RDBMS
-    if {[xml_node_get_name $rdbms_node] != "rdbms"} {
+    if {[xml_node_get_name $rdbms_node] ne "rdbms"} {
 	db_qd_log Debug "db_rdbms_parse_from_xml_node: PARSER = BAD RDBMS NODE!"
 	return {}
     }
@@ -805,7 +805,7 @@ ad_proc -private db_qd_relative_path_p {path} {
     set root_path_length [string length $root_path]
 
     # Check if the path starts with the root
-    if {[string range $path 0 [expr "$root_path_length - 1"]] == $root_path} {
+    if {[string range $path 0 [expr {$root_path_length - 1}]] == $root_path} {
 	return 0
     } else {
 	return 1
@@ -853,16 +853,16 @@ ad_proc -private db_qd_internal_prepare_queryfile_content {file_content} {
 	}
 
 	# append first chunk before the querytext including "<querytext>"
-	append new_file_content [string range $rest_of_file_content 0 [expr "$first_querytext_open + $querytext_open_len - 1"]]
+	append new_file_content [string range $rest_of_file_content 0 [expr {$first_querytext_open + $querytext_open_len - 1}]]
 
 	# append quoted querytext
-	append new_file_content [ns_quotehtml [string range $rest_of_file_content [expr "$first_querytext_open + $querytext_open_len"] [expr "$first_querytext_close - 1"]]]
+	append new_file_content [ns_quotehtml [string range $rest_of_file_content [expr {$first_querytext_open + $querytext_open_len}] [expr {$first_querytext_close - 1}]]]
 
 	# append close querytext
 	append new_file_content $querytext_close
 
 	# Set up the rest
-	set rest_of_file_content [string range $rest_of_file_content [expr "$first_querytext_close + $querytext_close_len"] end]
+	set rest_of_file_content [string range $rest_of_file_content [expr {$first_querytext_close + $querytext_close_len}] end]
     }
 
     # db_qd_log QDDebug "new massaged file content: \n $new_file_content \n"
@@ -879,7 +879,7 @@ ad_proc -private db_qd_log {level msg} {
     Centralized DB QD logging
     If you want to debug the QD, change QDDebug below to Debug
 } {
-    if {![string equal "QDDebug" $level]} {
+    if {"QDDebug" ne $level } {
         ns_log $level "$msg"
     }
 }

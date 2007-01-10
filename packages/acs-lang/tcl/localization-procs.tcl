@@ -39,7 +39,7 @@ ad_proc -public lc_parse_number {
     @return         Canonical form of the number
 
 } {
-    if {[empty_string_p $num]} {
+    if {$num eq ""} {
 	return ""
     }
 
@@ -81,7 +81,7 @@ ad_proc -public lc_parse_number {
 	
 	# if number is real and mod(number)<1, then we have pulled off the leading zero; i.e. 0.231 -> .231 -- this is still fine for tcl though...
 	# Last pathological case
-	if {![string compare "." $number]} {
+	if {"." eq $number } {
 	    set number 0
 	}
 
@@ -123,8 +123,8 @@ ad_proc -private lc_sepfmt {
 } {
     # with empty seperator or grouping string we behave 
     # posixly
-    if {[empty_string_p $grouping] 
-        || [empty_string_p $sep] } { 
+    if {$grouping eq "" 
+        || $sep eq "" } { 
         return $num
     }
     
@@ -165,7 +165,7 @@ ad_proc -public lc_numeric {
     @return         Localized form of the number
 
 } { 
-    if {![empty_string_p $fmt]} { 
+    if {$fmt ne ""} { 
         set out [format $fmt $num]
     } else { 
         set out $num
@@ -215,7 +215,7 @@ ad_proc -public lc_monetary_currency {
     }
     
     if { $label_p } {
-	if {[string compare $style int] == 0} {
+	if {$style eq "int" } {
 	    set use_as_label $currency
 	} else {
 	    set use_as_label $html_entity
@@ -249,11 +249,11 @@ ad_proc -private lc_monetary {
     @return            Formatted monetary amount
 } { 
 
-    if {![empty_string_p $forced_frac_digits] && [string is integer $forced_frac_digits]} {
+    if {$forced_frac_digits ne "" && [string is integer $forced_frac_digits]} {
 	set dig $forced_frac_digits
     } else {
 	# look up the digits
-	if {[string compare $style int] == 0} { 
+	if {$style eq "int" } { 
 	    set dig [lc_get -locale $locale "int_frac_digits"]
 	} else { 
 	    set dig [lc_get -locale $locale "frac_digits"]
@@ -262,7 +262,7 @@ ad_proc -private lc_monetary {
 
     # figure out if negative 
     if {$num < 0} { 
-        set num [expr abs($num)]
+        set num [expr {abs($num)}]
         set neg 1
     } else { 
         set neg 0
@@ -272,9 +272,9 @@ ad_proc -private lc_monetary {
     set out [format "%.${dig}f" $num]
 
     # look up the label if needed 
-    if {[empty_string_p $forced_currency_symbol]} {
+    if {$forced_currency_symbol eq ""} {
 	if {$label_p} {
-	    if {[string compare $style int] == 0} { 
+	    if {$style eq "int" } { 
 		set sym [lc_get -locale $locale "int_curr_symbol"]
 	    } else { 
 		set sym [lc_get -locale $locale "currency_symbol"]
@@ -411,7 +411,7 @@ ad_proc -public lc_time_fmt {
                            (or have an 'on this day in history' style page that goes back a good few hundred years).
     @return                A date formatted for a locale
 } {
-    if { [empty_string_p $datetime] } {
+    if { $datetime eq "" } {
         return ""
     }
 
@@ -438,8 +438,8 @@ ad_proc -public lc_time_fmt {
     }
 
     set a [expr (14 - $lc_time_month) / 12]
-    set y [expr $lc_time_year - $a]
-    set m [expr $lc_time_month + 12*$a - 2]
+    set y [expr {$lc_time_year - $a}]
+    set m [expr {$lc_time_month + 12*$a - 2}]
     
     # day_no becomes 0 for Sunday, through to 6 for Saturday. Perfect for addressing zero-based lists pulled from locale info.
     set lc_time_day_no [expr (($lc_time_days + $y + ($y/4) - ($y / 100) + ($y / 400)) + ((31*$m) / 12)) % 7]
@@ -507,7 +507,7 @@ ad_proc -public lc_time_utc_to_local {
     @param tz                Timezone that must exist in tz_data table.
     @return                  Local time
 } {
-    if { [empty_string_p $tz] } {
+    if { $tz eq "" } {
         set tz [lang::conn::timezone]
     }
 
@@ -520,7 +520,7 @@ ad_proc -public lc_time_utc_to_local {
 	ns_log Warning "lc_time_utc_to_local: Query exploded on time conversion from UTC, probably just an invalid date, $time_value: $errmsg"
     }
 
-    if {[empty_string_p $local_time]} {
+    if {$local_time eq ""} {
 	# If no conversion possible, log it and assume local is as given (i.e. UTC)	    
 	ns_log Notice "lc_time_utc_to_local: Timezone adjustment in ad_localization.tcl found no conversion to UTC for $time_value $tz"	
     }
@@ -538,7 +538,7 @@ ad_proc -public lc_time_local_to_utc {
     @param tz                Timezone that must exist in tz_data table.
     @return                  UTC time.
 } {
-    if { [empty_string_p $tz] } {
+    if { $tz eq "" } {
         set tz [lang::conn::timezone]
     }
 
@@ -550,7 +550,7 @@ ad_proc -public lc_time_local_to_utc {
 	ns_log Warning "lc_time_local_to_utc: Query exploded on time conversion to UTC, probably just an invalid date, $time_value: $errmsg"
     }
 
-    if {[empty_string_p $utc_time]} {
+    if {$utc_time eq ""} {
 	# If no conversion possible, log it and assume local is as given (i.e. UTC)	    
 	ns_log Notice "lc_time_local_to_utc: Timezone adjustment in ad_localization.tcl found no conversion to local time for $time_value $tz"	
     }
@@ -577,7 +577,7 @@ ad_proc -public lc_time_system_to_conn {
     set system_tz [lang::system::timezone]
     set conn_tz [lang::conn::timezone]
 
-    if { [empty_string_p $conn_tz] || [string equal $system_tz $conn_tz] } {
+    if { $conn_tz eq "" || $system_tz eq $conn_tz } {
         return $time_value
     }
 
@@ -600,7 +600,7 @@ ad_proc -public lc_time_conn_to_system {
     set system_tz [lang::system::timezone]
     set conn_tz [lang::conn::timezone]
 
-    if { [empty_string_p $conn_tz] || [string equal $system_tz $conn_tz] } {
+    if { $conn_tz eq "" || $system_tz eq $conn_tz } {
         return $time_value
     }
 

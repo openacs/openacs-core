@@ -19,7 +19,7 @@ ad_require_permission $object_id admin
 # RBM: Check if this is the Main Site and prevent the user from being
 #      able to remove Read permission on "The Public" and locking
 #      him/herself out.
-if { [string equal $object_id [subsite::main_site_id]] } {
+if {$object_id eq [subsite::main_site_id]} {
     set mainsite_p 1
 } else {
     set mainsite_p 0
@@ -42,7 +42,7 @@ lappend controls "<a href=\"grant?[export_vars {application_url object_id}]\">[_
 
 db_1row context { *SQL* }
 
-if { $security_inherit_p == "t" && ![empty_string_p $context_id] } {
+if { $security_inherit_p eq "t" && $context_id ne "" } {
     lappend controls "<a href=\"toggle-inherit?[export_vars {application_url object_id}]\">Don't Inherit Permissions from [ad_quotehtml $context_name]</a>"
 } else {
     lappend controls "<a href=\"toggle-inherit?[export_vars {application_url object_id}]\">Inherit Permissions from [ad_quotehtml $context_name]</a>"
@@ -55,7 +55,7 @@ set export_form_vars [export_vars -form {object_id application_url}]
 set show_children_url "one?[export_vars {object_id application_url {children_p t}}]"
 set hide_children_url "one?[export_vars {object_id application_url {children_p f}}]"
 
-if [string equal $children_p "t"] {
+if {$children_p eq "t"} {
     db_multirow children children { *SQL* } {
     }
 } else {

@@ -92,7 +92,7 @@ if {![catch {package require Trf 2.0}]} {
 		append res [string range $result 0 $edge]$wrapchar
 		set result [string range $result $maxlen end]
 	    }
-	    if {[string length $result] > 0} {
+	    if {$result ne ""} {
 		append res $result
 	    }
 	    set result $res
@@ -275,7 +275,7 @@ if {![catch {package require Trf 2.0}]} {
     #	The decoded value.
 
     proc ::base64::decode {string} {
-	if {[string length $string] == 0} {return ""}
+	if {$string eq ""} {return ""}
 
 	set base64 $::base64::base64
 

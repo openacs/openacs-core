@@ -61,7 +61,7 @@ db_multirow -extend {
             group  by package_key) q
     order  by package_key
 } {
-    set num_untranslated [expr $num_messages - $num_translated]
+    set num_untranslated [expr {$num_messages - $num_translated}]
 
     set num_messages_pretty [lc_numeric $num_messages]
     set num_translated_pretty [lc_numeric $num_translated]
@@ -92,7 +92,7 @@ ad_form -name search -action message-search -form {
     {locale:text(hidden) {value $locale}}
 }
 
-if { ![string equal $default_locale $current_locale] } {
+if { $default_locale ne $current_locale } {
     ad_form -extend -name search -form {
         {search_locale:text(select)
             {options $search_locales}

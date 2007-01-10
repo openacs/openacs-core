@@ -46,8 +46,8 @@ db_1row rel_type_info {
 
 set extra_tables ""
 set extra_where_clauses ""
-if {[string equal $ancestor_rel_type membership_rel]} {
-    if {![empty_string_p $member_state]} {
+if {$ancestor_rel_type eq "membership_rel"} {
+    if {$member_state ne ""} {
 	set extra_tables "membership_rels mr,"
 	set extra_where_clauses "
         and mr.rel_id = rels.rel_id

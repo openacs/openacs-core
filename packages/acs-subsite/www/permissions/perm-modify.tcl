@@ -14,7 +14,7 @@ foreach elm $perm {
     set elmv [split $elm ","]
     set party_id [lindex $elmv 0]
     set priv [lindex $elmv 1]
-    if { ![string equal $priv "remove"] } {
+    if { $priv ne "remove" } {
         set perm_array($elm) add
     }
 }
@@ -23,7 +23,7 @@ foreach elm $perm {
     set elmv [split $elm ","]
     set party_id [lindex $elmv 0]
     set priv [lindex $elmv 1]
-    if { [string equal $priv "remove"] } {
+    if {$priv eq "remove"} {
         foreach priv $privs {
             if { [info exists perm_array(${party_id},${priv})] } {
                 unset perm_array(${party_id},${priv})

@@ -17,16 +17,16 @@ ad_page_contract {
     context:onevalue
 }
 
-if { [empty_string_p $group_rel_id] || [empty_string_p $group_type_rel_id] } {
+if { $group_rel_id eq "" || $group_type_rel_id eq "" } {
     error "Either group_rel_id or group_rel_type_id must be specified"
 }
 
-if { ![empty_string_p $group_rel_id] } {
+if { $group_rel_id ne "" } {
     db_dml delete_group_rel_mapping {
 	delete from group_rels 
 	 where group_rel_id = :group_rel_id
     }
-} elseif { ![empty_string_p $group_rel_id] } {
+} elseif { $group_rel_id ne "" } {
     db_dml delete_group_type_rel_mapping {
 	delete from group_type_rels 
 	 where group_type_rel_id = :group_type_rel_id

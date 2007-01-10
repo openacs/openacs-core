@@ -55,7 +55,7 @@ foreach pkg_info $pkg_install_list {
 
     set sql_file_list [concat $sql_file_list $data_model_files]
 
-    if {![empty_string_p $data_model_files]} {
+    if {$data_model_files ne ""} {
 	foreach file $data_model_files {
 	    set path [lindex $file 0]
 	    set file_type [lindex $file 1]
@@ -90,7 +90,7 @@ foreach pkg_info $pkg_install_list {
 
 ad_set_client_property -clob t apm sql_file_paths $sql_file_list
 
-if {[empty_string_p $sql_file_list]} {
+if {$sql_file_list eq ""} {
     ad_returnredirect packages-install-4
     ad_script_abort
 }

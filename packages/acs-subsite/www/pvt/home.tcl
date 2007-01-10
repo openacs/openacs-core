@@ -53,9 +53,9 @@ if { [llength [lang::system::get_locales]] > 1 } {
 
 
 
-if [ad_parameter SolicitPortraitP "user-info" 0] {
+if {[ad_parameter SolicitPortraitP "user-info" 0]} {
     # we have portraits for some users 
-    if ![db_0or1row get_portrait_info "
+    if {![db_0or1row get_portrait_info "
     select cr.publish_date, nvl(cr.title,'your portrait') as portrait_title,
     nvl(cr.description,'no description') as portrait_description 
     from cr_revisions cr, cr_items ci, acs_rels a
@@ -63,10 +63,10 @@ if [ad_parameter SolicitPortraitP "user-info" 0] {
     and  ci.item_id = a.object_id_two
     and a.object_id_one = :user_id
     and a.rel_type = 'user_portrait_rel'
-    "] {
+    "]} {
 	set portrait_state "upload"
     } else {
-        if { [empty_string_p $portrait_title] } {
+        if { $portrait_title eq "" } {
             set portrait_title "[_ acs-subsite.no_portrait_title_message]"
         }
 

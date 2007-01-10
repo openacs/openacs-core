@@ -131,7 +131,7 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
     
     foreach { cur_work_dir cur_cvs_root cur_module } $checkout_list {
         cd $cur_work_dir
-        if { ![string equal $channel_tag($channel) HEAD] } {
+        if { $channel_tag($channel) ne "HEAD" } {
             ns_write "<li>Checking out $cur_module from CVS:"
             catch { exec $cvs_command -d $cur_cvs_root -z3 co -r $channel_tag($channel) $cur_module } output
             ns_write " [llength $output] files\n"

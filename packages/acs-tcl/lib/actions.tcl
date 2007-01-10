@@ -15,11 +15,11 @@ if {![catch {
 
     foreach action $action_list {
 
-        if {[string equal [lindex $action 0] "LINK"]} {
+        if {[lindex $action 0] eq "LINK"} {
             foreach {type stub text title long} $action {break}
             multirow append actions $type "$base_url$stub" $text $title $long
 
-        } elseif {[string equal [lindex $action 0] "SECTION"]} {
+        } elseif {[lindex $action 0] eq "SECTION"} {
             foreach {type title long} $action {break}
             multirow append actions $type {} {} $title $long
 

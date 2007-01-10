@@ -74,7 +74,7 @@ ad_proc -public template_tag_if_concat_params { params } {
   for { set i 0 } { $i < $size } { incr i } {
      set key [ns_set key $params $i]
      set value [ns_set value $params $i]
-     if { [string equal $key $value] } {
+     if {$key eq $value} {
        lappend tokens $key
      } else {
        lappend tokens "$key=$value"
@@ -101,7 +101,7 @@ ad_proc -public template_tag_if_interp_expr {} {
 
   set op [lindex $args 1]
 
-  if { $op == "not" } {
+  if { $op eq "not" } {
     append condition "! ("
     set close_paren ")"
     set op [lindex $args 2]
@@ -119,27 +119,27 @@ ad_proc -public template_tag_if_interp_expr {} {
 
     gt { 
       append condition "$arg1 > \"[lindex $args $i]\"" 
-      set next [expr $i + 1]
+      set next [expr {$i + 1}]
     }
     ge { 
       append condition "$arg1 >= \"[lindex $args $i]\"" 
-      set next [expr $i + 1]
+      set next [expr {$i + 1}]
     }
     lt { 
       append condition "$arg1 <  \"[lindex $args $i]\"" 
-      set next [expr $i + 1]
+      set next [expr {$i + 1}]
     }
     le { 
       append condition "$arg1 <= \"[lindex $args $i]\"" 
-      set next [expr $i + 1]
+      set next [expr {$i + 1}]
     }
     eq { 
       append condition "\[string equal $arg1 \"[lindex $args $i]\"\]" 
-      set next [expr $i + 1]
+      set next [expr {$i + 1}]
     }
     ne { 
       append condition "! \[string equal $arg1 \"[lindex $args $i]\"\]" 
-      set next [expr $i + 1]
+      set next [expr {$i + 1}]
     }
 
     in { 
@@ -150,9 +150,9 @@ ad_proc -public template_tag_if_interp_expr {} {
 
     between { 
       set expr1 "$arg1 >= \"[lindex $args $i]\""
-      set expr2 "$arg1 <= \"[lindex $args [expr $i + 1]]\""
+      set expr2 "$arg1 <= \"[lindex $args [expr {$i + 1}]]\""
       append condition "($expr1 && $expr2)" 
-      set next [expr $i + 2]
+      set next [expr {$i + 2}]
     }
 
     nil {
@@ -182,12 +182,12 @@ ad_proc -public template_tag_if_interp_expr {} {
     }
 
     odd { 
-      append condition "\[expr $arg1 % 2\]" 
+      append condition "\[expr {$arg1 % 2}\]" 
       set next $i
     }
 
     even { 
-      append condition "! \[expr $arg1 % 2\]" 
+      append condition "! \[expr {$arg1 % 2}\]" 
       set next $i
     }
     
@@ -204,7 +204,7 @@ ad_proc -public template_tag_if_interp_expr {} {
     default { 
       # treat <if @foo_p@> as a shortcut for <if @foo_p@ true>
       append condition "\[template::util::is_true $arg1\]"
-      set next [expr $i - 1]
+      set next [expr {$i - 1}]
     }
   }
 

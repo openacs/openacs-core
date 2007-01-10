@@ -174,7 +174,7 @@ ad_proc -public acs_sc::contract::delete {
 
             # Delete msg types
             foreach msg_type_id $msg_types {
-                if { ![empty_string_p $msg_type_id] } {
+                if { $msg_type_id ne "" } {
                     acs_sc::msg_type::delete -msg_type_id $msg_type_id
                 }
             }

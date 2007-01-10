@@ -38,7 +38,7 @@ ad_proc -private ::install::xml::action::source { node } {
     set src [apm_required_attribute_value $node src]
     set type [apm_attribute_value -default {} $node type]
 
-    if {[string equal $type ""]} {
+    if {$type eq ""} {
         switch -glob $src {
             *.tcl { set type tcl }
             *.sql { set type sql }
@@ -49,7 +49,7 @@ ad_proc -private ::install::xml::action::source { node } {
     set params [xml_node_get_children [lindex $node 0]]
 
     foreach param $params {
-        if {![string equal [xml_node_get_name $param] param]} {
+        if {[xml_node_get_name $param] ne "param" } {
             error "Unknown xml element \"[xml_node_get_name $param]\""
         }
 
@@ -57,7 +57,7 @@ ad_proc -private ::install::xml::action::source { node } {
         set id [apm_attribute_value -default {} $param id]
         set value [apm_attribute_value -default {} $param value]
 
-        if {![string equal $id ""]} {
+        if {$id ne "" } {
             set value [install::xml::util::get_id $id]
         }
 
@@ -174,13 +174,13 @@ ad_proc -public install::xml::action::mount { node } {
         [string equal $mount_point "/"]} {
         array set site_node [site_node::get -url "/"]
 
-        if { ![empty_string_p $site_node(object_id)] } {
+        if { $site_node(object_id) ne "" } {
             ns_log Error "A package is already mounted at \"$mount_point\""
             ns_write "<br>mount: A package is already mounted at \"$mount_point\", ignoring mount command."
             set node_id ""
         }
 
-        if {[string equal $context_id ""]} {
+        if {$context_id eq ""} {
             set context_id default_context
         }
 
@@ -188,7 +188,7 @@ ad_proc -public install::xml::action::mount { node } {
     } else {
         regexp {(.*)/([^/]*)$} $mount_point match parent_url mount_point
 
-        if {[string eq $parent_url ""]} { 
+        if {$parent_url eq ""} { 
             set parent_url /
         }
 
@@ -203,7 +203,7 @@ ad_proc -public install::xml::action::mount { node } {
             # There is already a node with that path, check if there is a 
             # package mounted there
             array set site_node [site_node::get -url "/$mount_point"]
-            if { [empty_string_p $site_node(object_id)] } {
+            if { $site_node(object_id) eq "" } {
                 # There is no package mounted there so go ahead and mount the 
                 # new package
                 set node_id $site_node(node_id)
@@ -214,12 +214,12 @@ ad_proc -public install::xml::action::mount { node } {
             }
         }
 
-        if {![string equal $context_id ""]} {
+        if {$context_id ne "" } {
             set context_id [install::xml::util::get_id $context_id]
         }
     }
 
-    if { ![empty_string_p $node_id] } {
+    if { $node_id ne "" } {
         lappend out "Mounting new instance of package $package_key at /$mount_point"
         set package_id [site_node::instantiate_and_mount \
             -node_id $node_id \
@@ -232,7 +232,7 @@ ad_proc -public install::xml::action::mount { node } {
             permission::set_not_inherit -object_id $package_id
         }
 
-        if {![string equal $id ""]} {
+        if {$id ne "" } {
             set ::install::xml::ids($id) $package_id
         }
     }
@@ -258,7 +258,7 @@ ad_proc -public install::xml::action::mount-existing { node } {
         [string equal $mount_point "/"]} {
         array set site_node [site_node::get -url "/"]
 
-        if { ![empty_string_p $site_node(object_id)] } {
+        if { $site_node(object_id) ne "" } {
             ns_log Error "A package is already mounted at \"$mount_point\""
             ns_write "<br>mount: A package is already mounted at \"$mount_point\", ignoring mount command."
             set node_id ""
@@ -266,7 +266,7 @@ ad_proc -public install::xml::action::mount-existing { node } {
     } else {
         regexp {(.*)/([^/]*)$} $mount_point match parent_url mount_point
 
-        if {[string eq $parent_url ""]} { 
+        if {$parent_url eq ""} { 
             set parent_url /
         }
 
@@ -281,7 +281,7 @@ ad_proc -public install::xml::action::mount-existing { node } {
             # There is already a node with that path, check if there is a 
             # package mounted there
             array set site_node [site_node::get -url "/$mount_point"]
-            if { [empty_string_p $site_node(object_id)] } {
+            if { $site_node(object_id) eq "" } {
                 # There is no package mounted there so go ahead and mount the 
                 # new package
                 set node_id $site_node(node_id)
@@ -293,12 +293,12 @@ ad_proc -public install::xml::action::mount-existing { node } {
         }
     }
 
-    if { ![empty_string_p $node_id] } {
+    if { $node_id ne "" } {
         lappend out "Mounting existing package $package_id at /$mount_point"
 
-        if { ![string equal $package_id ""] } {
+        if { $package_id ne "" } {
             set package_id [install::xml::util::get_id $package_id]
-        } elseif { ![string equal $package_key ""] } {
+        } elseif { $package_key ne "" } {
             set package_id [apm_package_id_from_key $package_key]
         } 
 
@@ -320,7 +320,7 @@ ad_proc -public install::xml::action::create-package { node } {
     set instance_name [apm_attribute_value -default "" $node name]
     set context_id [apm_attribute_value -default "" $node context-id]
 
-    if {[string equal $context_id ""]} {
+    if {$context_id eq ""} {
         set context_id [db_null]
     } else {
         set context_id [install::xml::util::get_id $context_id]
@@ -499,7 +499,7 @@ ad_proc -public install::xml::action::create-user { node } {
             -username $username \
             -array user_info]
 
-        if {[string equal $result(creation_status) "ok"]} {
+        if {$result(creation_status) eq "ok"} {
             # Need to find out which username was set
             set username $result(username)
 
@@ -531,8 +531,8 @@ ad_proc -public install::xml::action::create-user { node } {
             ]
     }
 
-    if {[string equal $result(creation_status) "ok"]} {
-        if {![string equal $id ""]} {
+    if {$result(creation_status) eq "ok"} {
+        if {$id ne "" } {
             set ::install::xml::ids($id) $result(user_id)
         }
 
@@ -552,7 +552,7 @@ ad_proc -public install::xml::action::add-subsite-member { node } {
     set user_nodes [xml_node_get_children [lindex $node 0]]
 
     foreach node $user_nodes {
-        if {![string equal [xml_node_get_name $node] user]} {
+        if {[xml_node_get_name $node] ne "user" } {
             error "Unknown xml element \"[xml_node_get_name $node]\""
         }
 
@@ -604,23 +604,23 @@ ad_proc -public install::xml::object_id::package { node } {
     set url [apm_attribute_value -default "" $node url]
 
     set package_key [apm_attribute_value -default "" $node package-key]
-    if {[string equal $package_key ""]} {
+    if {$package_key eq ""} {
         set package_key [apm_attribute_value -default "" $node package]
     }
 
     # Remove double slashes
     regsub -all {//} $url "/" url
 
-    if { ![string equal $package_key ""] && ![string equal $url ""] } {
+    if { $package_key ne "" && $url ne "" } {
         error "set-parameter: Can't specify both package and url for $url and $package_key"
 
-    } elseif { ![string equal $id ""] } {
+    } elseif { $id ne "" } {
         if {[string is integer $id]} {
             return $id
         } else {
             return [install::xml::util::get_id $id]
         }
-    } elseif { ![string equal $package_key ""] } {
+    } elseif { $package_key ne "" } {
         return [apm_package_id_from_key $package_key]
 
     } else {
@@ -640,17 +640,17 @@ ad_proc -public install::xml::object_id::group { node } {
     set group_type [apm_attribute_value -default "group" $node type]
     set relation_type [apm_attribute_value -default "membership_rel" $node relation]
     
-    if {[string equal $group_type "group"]} {
+    if {$group_type eq "group"} {
         set id [apm_required_attribute_value $node group-id]
-    } elseif {[string equal $group_type "rel_segment"]} {
+    } elseif {$group_type eq "rel_segment"} {
         set id [apm_required_attribute_value $node parent-id]
     }
 
     set group_id [install::xml::util::get_id $id]
 
-    if {[string equal $group_type "group"]} {
+    if {$group_type eq "group"} {
         return $group_id
-    } elseif {[string equal $group_type "rel_segment"]} {
+    } elseif {$group_type eq "rel_segment"} {
         return [group::get_rel_segment -group_id $group_id -type $relation_type]
     }
 }
@@ -671,9 +671,9 @@ ad_proc -public install::xml::object_id::application-group { node } {
     set group_id [application_group::group_id_from_package_id \
         -package_id $package_id] 
 
-    if {[string equal $group_type "group"]} {
+    if {$group_type eq "group"} {
         return $group_id
-    } elseif {[string equal $group_type "rel_segment"]} {
+    } elseif {$group_type eq "rel_segment"} {
         return [group::get_rel_segment -group_id $group_id -type $relation_type]
     }
 }

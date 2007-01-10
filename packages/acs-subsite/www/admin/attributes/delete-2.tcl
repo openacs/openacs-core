@@ -14,7 +14,7 @@ ad_page_contract {
     { operation "" }
 }
 
-if { [string eq $operation "Yes, I really want to delete this attribute"] } {
+if {$operation eq "Yes, I really want to delete this attribute"} {
     db_transaction {
 	set object_type [db_string select_object_type {
 	    select attr.object_type 
@@ -23,12 +23,12 @@ if { [string eq $operation "Yes, I really want to delete this attribute"] } {
 	} -default ""]
 
 	# If object type is empty, that means the attribute doesn't exist
-	if { ![empty_string_p $object_type] && [attribute::delete $attribute_id] } {
+	if { $object_type ne "" && [attribute::delete $attribute_id] } {
 	    # Recreate all the packages to use the new attribute
 	    package_recreate_hierarchy $object_type
 	}
     }
-} elseif { [empty_string_p $return_url] } {
+} elseif { $return_url eq "" } {
     set return_url one?[ad_export_vars attribute_id]
 }
 

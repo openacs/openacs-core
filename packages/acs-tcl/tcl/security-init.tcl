@@ -32,7 +32,7 @@ proc sec_session_timeout {} "
 "
 
 proc sec_session_renew {} "
-    return \"[expr [sec_session_timeout] - [ad_parameter -package_id [ad_acs_kernel_id] SessionRenew security 300]]\"
+    return \"[expr {[sec_session_timeout] - [ad_parameter -package_id [ad_acs_kernel_id] SessionRenew security 300]}]\"
 "
 
 proc sec_login_timeout {} "

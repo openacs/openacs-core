@@ -19,7 +19,7 @@ form create user_search -elements {
 set user_search [element get_value user_search user_search]
 
 # the main logic depends on whether the request includes a user ID or not.
-if { ! [string equal $user_id {}] } {
+if { $user_id ne {} } {
 
   # the request included a user ID
   set display "user_edit"
@@ -28,7 +28,7 @@ if { ! [string equal $user_id {}] } {
 
   # handle a missing user ID
   
-  if { [string equal $user_search {}] } {
+  if {$user_search eq {}} {
 
     # no user search string returned.  
     set display "user_search"
@@ -79,7 +79,7 @@ if { ! [string equal $user_id {}] } {
 }
 
 # return without instantiating the edit form if we don't know the user_id yet
-if { $display != "user_edit" } { 
+if { $display ne "user_edit" } { 
 
   return 
 }

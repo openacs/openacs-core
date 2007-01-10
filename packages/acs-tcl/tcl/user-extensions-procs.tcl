@@ -24,7 +24,7 @@ namespace eval acs_user_extension {
 	notified of changes in user information.
 
     } {
-        if {[empty_string_p $impl]} {
+        if {$impl eq ""} {
             set extensions [list_extensions]
         } else {
             set extensions [list $impl]

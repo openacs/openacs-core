@@ -14,7 +14,7 @@ set page_title "\#acs-subsite.Send_email_to_this_user\#"
 set context [list [list [ad_pvt_home] [ad_pvt_home_name]] "Send Email"]
 
 
-if {[string equal $return_url ""]} {
+if {$return_url eq ""} {
     set return_url [ad_pvt_home]
 }
 
@@ -42,7 +42,7 @@ ad_form -name send-email -export {sendto $sendto} -form {
     }
 } -on_submit {
     set to [email_image::get_email -user_id $sendto]
-    if [catch {ns_sendmail "$to" "$from" "$subject" "$body"} errmsg] {
+    if {[catch {ns_sendmail "$to" "$from" "$subject" "$body"} errmsg]} {
     ad_return_error "Mail Failed" "The system was unable to send email.  Please notify the user personally. \
                     This problem is probably caused by a misconfiguration of your email system.  Here is the error:
                     <blockquote><pre>
@@ -50,8 +50,8 @@ ad_form -name send-email -export {sendto $sendto} -form {
                     </pre></blockquote>"
 	return
     }
-    if { [string equal $copy 1]} {
-	if [catch {ns_sendmail "$from" "$from" "$subject" "$body"} errmsg] {
+    if {$copy eq "1"} {
+	if {[catch {ns_sendmail "$from" "$from" "$subject" "$body"} errmsg]} {
 	    ad_return_error "Mail Failed" "The system was unable to send email.  Please notify the user personally. \
                             This problem is probably caused by a misconfiguration of your email system.  Here is the error:
                             <blockquote><pre>

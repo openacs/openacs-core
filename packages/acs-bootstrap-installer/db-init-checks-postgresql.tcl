@@ -12,7 +12,7 @@ proc db_bootstrap_checks { errors error_p } {
     set my_errors "We found the following problems with your PostgreSQL installation:<p><ul>\n"
 
     foreach pool [db_available_pools {}] {
-        if { [catch { set db [ns_db gethandle -timeout 15 $pool]}] || ![string compare $db ""] } {
+        if { [catch { set db [ns_db gethandle -timeout 15 $pool]}] || $db eq "" } {
             # This should never happened - we were able to grab a handle previously, why not now?
             append my_errors "<li>(db_bootstrap_checks) Internal error accessing pool \"$pool\".<br>"
             set my_error_p 1

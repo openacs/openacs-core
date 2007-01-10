@@ -53,14 +53,14 @@ foreach pkg_info $pkg_install_list {
     set data_model_files [list]
     # Find the correct data model files for this package.
     foreach file $sql_files {
-	if {![string compare [lindex $file 2] $package_key]} {
+	if {[lindex $file 2] eq $package_key } {
 	    # Pass on the file path and its type.
 	    lappend data_model_files $file
 	}
     }
 
     # Mount path of package
-    if { [lsearch $mount_p $package_key] != -1 && [info exists mount_path($package_key)] && ![empty_string_p $mount_path($package_key)] } {
+    if { [lsearch $mount_p $package_key] != -1 && [info exists mount_path($package_key)] && $mount_path($package_key) ne "" } {
         set selected_mount_path $mount_path($package_key)
     } else {
         set selected_mount_path ""
@@ -69,7 +69,7 @@ foreach pkg_info $pkg_install_list {
     # Install the packages.
     ns_log Debug "APM: Installing package at $package_path."
 
-    set enable_p [expr [lsearch -exact $pkg_enable_list $package_key] != -1]
+    set enable_p [expr {[lsearch -exact $pkg_enable_list $package_key] != -1}]
 
     set version_id [apm_package_install \
                 -enable=$enable_p \

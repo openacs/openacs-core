@@ -45,15 +45,15 @@ ad_proc -public cr_write_content {
         ad_return -code error "Either revision_id or item_id must be specified"
     }
 
-    if { ![string equal $storage_type "file"] && \
-         ![string equal $storage_type "text"] && \
-         ![string equal $storage_type "lob"] } {
+    if { $storage_type ne "file" && \
+         $storage_type ne "text" && \
+         $storage_type ne "lob" } {
         ad_return -code error "Storage type '$storage_type' is invalid."
     }
 
     # I set content length to 0 here because otherwise I need to do
     # db-specific queries for get_revision_info
-    if {[empty_string_p $content_length]} {
+    if {$content_length eq ""} {
 	set content_length 0
     }
 
@@ -69,7 +69,7 @@ ad_proc -public cr_write_content {
         file {
             set path [cr_fs_path $storage_area_key]
             set filename [db_string write_file_content ""]
-	    if {[empty_string_p $filename]} {
+	    if {$filename eq ""} {
 		ad_return -code error "No content for the revision $revision_id. This seems to be an error which occured during the upload of the file"
 	    } else {
 		if { $string_p } {
@@ -181,15 +181,15 @@ ad_proc -public cr_import_content {
 
     # DRB: Eventually we should allow for text storage ... (CLOB for Oracle)
 
-    if { ![string equal $storage_type "file"] && ![string equal $storage_type "lob"] } {
+    if { $storage_type ne "file" && $storage_type ne "lob" } {
         return -code error "Imported content must be stored in the file system or as a large object"
     }
 
-    if {[string equal $mime_type "*/*"]} {
+    if {$mime_type eq "*/*"} {
         set mime_type "application/octet-stream"
     }
 
-    if {[empty_string_p $package_id]} {
+    if {$package_id eq ""} {
 	set package_id [ad_conn package_id]
     }
 
@@ -199,7 +199,7 @@ ad_proc -public cr_import_content {
     }
 
     # use content_type of existing item 
-    if $old_item_p {
+    if {$old_item_p} {
 	set content_type [db_string get_content_type ""]
     } else {
         # all we really need to know is if the mime type is mapped to image, we
@@ -222,16 +222,16 @@ ad_proc -public cr_import_content {
         switch $content_type {
             image {
 
-                if { [db_string image_subclass ""] == "f" } {
+                if { [db_string image_subclass ""] eq "f" } {
                     ad_return -code error "Image file must be stored in an image object"
                 }
     
                 set what_aolserver_told_us ""
-                if { [string equal $mime_type "image/jpeg"] } {
+                if {$mime_type eq "image/jpeg"} {
                     catch { set what_aolserver_told_us [ns_jpegsize $tmp_filename] }
-                } elseif { [string equal $mime_type "image/gif"] } {
+                } elseif {$mime_type eq "image/gif"} {
                     catch { set what_aolserver_told_us [ns_gifsize $tmp_filename] }
-                } elseif { [string equal $mime_type "image/png"] } { 
+                } elseif {$mime_type eq "image/png"} { 
 		    # we don't have built in png size detection
 		    # but we want to allow upload of png images
 		} else {
@@ -240,7 +240,7 @@ ad_proc -public cr_import_content {
 
                 # the AOLserver jpegsize command has some bugs where the height comes 
                 # through as 1 or 2 
-                if { ![empty_string_p $what_aolserver_told_us] && \
+                if { $what_aolserver_told_us ne "" && \
                       [lindex $what_aolserver_told_us 0] > 10 && \
                       [lindex $what_aolserver_told_us 1] > 10 } {
                     set original_width [lindex $what_aolserver_told_us 0]
@@ -264,7 +264,7 @@ ad_proc -public cr_import_content {
                     ad_return -code error "The file you uploaded was not an image (.gif, .jpg or .jpeg) file"
                 }
 
-                if { [db_string content_revision_subclass ""] == "f" } {
+                if { [db_string content_revision_subclass ""] eq "f" } {
                     ad_return -code error "Content must be stored in a content revision object"
                 }
 
@@ -313,7 +313,7 @@ ad_proc cr_set_imported_content_live {
     needed for its private type.   This is a hack.   Executing this SQL can't be done
     within cr_import_content because the caller can't see the new revision's key...
 } {
-    if { [cr_registered_type_for_mime_type $mime_type] == "image" } {
+    if { [cr_registered_type_for_mime_type $mime_type] eq "image" } {
         if { [info exists image_sql] } {
             uplevel 1 [list db_dml dynamic_query $image_sql]
         }
@@ -353,7 +353,7 @@ ad_proc -public cr_filename_to_mime_type {
 } { 
     set extension [string tolower [string trimleft [file extension $filename] "."]]
     
-    if {[empty_string_p $extension]} { 
+    if {$extension eq ""} { 
         return "*/*"
     } 
     
@@ -362,7 +362,7 @@ ad_proc -public cr_filename_to_mime_type {
     } else { 
         set mime_type [string tolower [ns_guesstype $filename]]
         ns_log Debug "guessed mime \"$mime_type\" create_p $create_p" 
-        if {(!$create_p) || [string equal $mime_type "*/*"] || [empty_string_p $mime_type]} {
+        if {(!$create_p) || $mime_type eq "*/*" || $mime_type eq ""} {
             # we don't have anything meaningful for this mimetype 
             # so just */* it.
 

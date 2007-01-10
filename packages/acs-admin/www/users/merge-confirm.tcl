@@ -14,14 +14,14 @@ ad_page_contract {
     if_diff_authority {
 	set from_authority_id [db_string gettoa "select authority_id from cc_users where user_id = :from_user_id"]
 	set to_authority_id [db_string getfroma "select authority_id from cc_users where user_id = :to_user_id"]
-	if { ![string equal $from_authority_id $to_authority_id] } {
+	if { $from_authority_id ne $to_authority_id } {
 	    ad_complain "Merge only works for users from the same authority"
 	}
     }
 }
 
 
-if { [string equal $merge_action "0"] } {
+if {$merge_action eq "0"} {
     set tempid $from_user_id
     set from_user_id $to_user_id
     set to_user_id $tempid

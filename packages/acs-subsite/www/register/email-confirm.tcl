@@ -7,7 +7,7 @@ ad_page_contract {
 }
 
 if {![db_0or1row userp {select 1 from users where user_id = :user_id}]
-    || ![string equal $token [auth::get_user_secret_token -user_id $user_id]] } {
+    || $token ne [auth::get_user_secret_token -user_id $user_id] } {
     set title "Bad token"
     set message "The link given to authenticate your email was invalid."
     ad_return_template /packages/acs-subsite/lib/message

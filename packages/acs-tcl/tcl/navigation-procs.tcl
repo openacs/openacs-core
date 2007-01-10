@@ -32,7 +32,7 @@ ad_proc -public ad_context_bar_html {
     @see ad_context_bar
 } { 
     set out {}
-    foreach element [lrange $context 0 [expr [llength $context] - 2]] { 
+    foreach element [lrange $context 0 [expr {[llength $context] - 2}]] { 
         append out "<a href=\"[lindex $element 0]\">[lindex $element 1]</a>$separator"
     }
     append out [lindex $context end]
@@ -54,13 +54,13 @@ ad_proc ad_context_node_list {
 } {
     set context [list]
 
-    while { ![empty_string_p $node_id] } {
+    while { $node_id ne "" } {
         array set node [site_node::get -node_id $node_id]
         
         # JCD: Provide something for the name if the instance name is
         # absent.  name is the tail bit of the url which seems like a
         # reasonable thing to display.
-        if {[empty_string_p $node(instance_name)]
+        if {$node(instance_name) eq ""
             && [info exists node(name)]} { 
             set node(instance_name) $node(name)
         }
@@ -68,7 +68,7 @@ ad_proc ad_context_node_list {
         set context [concat [list [list $node(url) [ad_quotehtml $node(instance_name)]]] $context]
 
         # We have the break here, so that 'from_node' itself is included
-        if { [string equal $node_id $from_node] } {
+        if {$node_id eq $from_node} {
             break
         }
         
@@ -151,7 +151,7 @@ ad_proc -public ad_context_bar {
 
     set context [ad_context_node_list -from_node $from_node $node_id]
 
-    if { [string match admin/* [ad_conn extra_url]] } {
+    if { [string match "admin/*" [ad_conn extra_url]] } {
         lappend context [list "[ad_conn package_url]admin/" \
                              "Administration"]
     }
@@ -160,7 +160,7 @@ ad_proc -public ad_context_bar {
         # fix last element to just be literal string
         set context [lreplace $context end end [lindex [lindex $context end] 1]]
     } else {
-	if ![string match "\{*" $args] {
+	if {![string match "\{*" $args]} {
 	    # args is not a list, transform it into one.
 	    set args [list $args]
 	}	
@@ -245,7 +245,7 @@ ad_proc -public ad_choice_bar { items links values {default ""} } {
     set return_list [list]
 
     foreach value $values {
-	if { [string compare $default $value] == 0 } {
+	if { $default eq $value  } {
 	        lappend return_list "<strong>[lindex $items $count]</strong>"
 	} else {
 	        lappend return_list "<a href=\"[lindex $links $count]\">[lindex $items $count]</a>"
@@ -350,9 +350,9 @@ proc menu_submenu_select_list {items urls {highlight_url "" }} {
 	# if the url matches the url you would redirect to, as determined
 	# either by highlight_url, or if highlight_url is not set,
 	# the current url then select it
-	if {$highlight_url != "" && $highlight_url == [lindex $urls $counter]} {
+	if {$highlight_url ne "" && $highlight_url == [lindex $urls $counter]} {
  	    append return_string "<OPTION VALUE=\"[lindex $urls $counter]\" selected>$item"
-	} elseif {$highlight_url == "" && [string match *$url_stub* [lindex $urls $counter]]} {
+	} elseif {$highlight_url eq "" && [string match *$url_stub* [lindex $urls $counter]]} {
 	    append return_string "<OPTION VALUE=\"[lindex $urls $counter]\" selected>$item"
 	} else {
 	    append return_string "<OPTION VALUE=\"[lindex $urls $counter]\">$item"

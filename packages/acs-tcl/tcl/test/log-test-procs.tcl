@@ -13,7 +13,7 @@ aa_register_case -cats {smoke} -error_level warning server_error_log {
     
     set logfile [ns_info log]
 
-    if { [string equal $logfile "STDOUT"] } {
+    if {$logfile eq "STDOUT"} {
         set logfile "[acs_root_dir]/log/error/current"
     }
 
@@ -28,7 +28,7 @@ aa_register_case -cats {smoke} -error_level warning server_error_log {
                 aa_log_result "fail" "$timestamp: $entry"
                 set inside_error_p 0
             }
-            if { [string equal $level "Error"] } {
+            if {$level eq "Error"} {
                 set inside_error_p 1
                 set entry {}
                 append entry $rest \n

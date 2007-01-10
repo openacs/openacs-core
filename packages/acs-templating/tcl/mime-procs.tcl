@@ -53,7 +53,7 @@ ad_proc -public template::get_mime_type {} {
     } else { 
         set mime_type {} 
     }
-    if { [empty_string_p $mime_type] } {
+    if { $mime_type eq "" } {
         set mime_type "text/html"
     }
 

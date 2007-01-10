@@ -72,19 +72,19 @@ ad_proc -public ad_sql_append {
     Adds to the SQL statement.
 } {
     upvar $sqlarrayname sql
-    if { ![empty_string_p $select] } {
+    if { $select ne "" } {
 	lappend sql(select) $select
     }
-    if { ![empty_string_p $from] } {
+    if { $from ne "" } {
 	lappend sql(from) $from
     }
-    if { ![empty_string_p $where] } {
+    if { $where ne "" } {
 	lappend sql(where) $where
     }
-    if { ![empty_string_p $groupby] } {
+    if { $groupby ne "" } {
 	lappend sql(groupby) $groupby
     }
-    if { ![empty_string_p $orderby] } {
+    if { $orderby ne "" } {
 	lappend sql(orderby) $orderby
     }
 }

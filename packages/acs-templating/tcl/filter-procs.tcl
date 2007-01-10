@@ -27,7 +27,7 @@ ad_proc -public template::forward { url args } {
 
     set cache_p [lindex $args 0]
 
-    if { [string equal $cache_p "t"] } {
+    if {$cache_p eq "t"} {
         set persistent_p [lindex $args 1]
 	set excluded_vars [lindex $args 2]
 

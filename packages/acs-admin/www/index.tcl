@@ -13,7 +13,7 @@ db_multirow -extend { admin_url path_pretty } subsites subsite_admin_urls {} {
     array set node [site_node::get -node_id $node_id]
     set parent_id $node(parent_id)
 
-    while { ![empty_string_p $parent_id] } {
+    while { $parent_id ne "" } {
         array unset node
         array set node [site_node::get -node_id $parent_id]
         set path_pretty "$node(instance_name) > $path_pretty"

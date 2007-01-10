@@ -102,7 +102,7 @@ ad_proc -public template::get_datasources { code } {
 	set structure [lindex $info 1]
 	set comment [lrange $info 2 end]
 
-	if { [string match one* $structure] } {
+	if { [string match "one*" $structure] } {
 
 	  # directive is a onevalue or onelist.  add a row and move on
 	  incr rowcount

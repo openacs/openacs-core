@@ -25,7 +25,7 @@ namespace eval group_type {
 	@creation-date 12/2000
 
     } {
-	if { [empty_string_p $user_id] } {
+	if { $user_id eq "" } {
 	    if { ![ad_conn isconnected] } {
 		error "group_type::drop_all_groups_p: User ID not specified and we have no connection from which to obtain current user ID.\n"
 	    } 
@@ -71,10 +71,10 @@ namespace eval group_type {
 
 	@return the <code>group_type</code> of the object created
     } {
-	if { [empty_string_p $group_type] } {
+	if { $group_type eq "" } {
 	    # generate a unique group type name. Note that we expect
 	    # the while loop to finish immediately
-	    while { [empty_string_p $group_type] || [plsql_utility::object_type_exists_p $group_type] } {
+	    while { $group_type eq "" || [plsql_utility::object_type_exists_p $group_type] } {
 		set group_type "GROUP_[db_nextval "acs_object_id_seq"]"
 	    }
 	} else {
@@ -136,14 +136,14 @@ namespace eval group_type {
         lappend plsql_drop [list remove_rel_types "delete from group_type_rels where group_type = :group_type"]
         lappend plsql [list copy_rel_types [db_map copy_rel_types]]
 
-        if { $execute_p == "f" } {
+        if { $execute_p eq "f" } {
 	    set text "-- Create script"
 	    foreach pair $plsql {
 		append text "[plsql_utility::parse_sql [lindex $pair 1]]\n\n"
 	    }
 	    # Now add the drop script
 	    append text "-- Drop script\n";
-	    for { set i [expr [llength $plsql_drop] - 1] } { $i >= 0 } { set i [expr $i - 1] } {
+	    for { set i [expr {[llength $plsql_drop] - 1}] } { $i >= 0 } { set i [expr {$i - 1}] } {
 		# Don't need the sql keys when we display debugging information
 		append text "-- [lindex [lindex $plsql_drop $i] 1]\n\n"
 	    }
@@ -164,7 +164,7 @@ create table $table_name (
                    references $references_table ($references_column)
 )"} errmsg] } {
             # Roll back our work so for
-            for { set i [expr [llength $plsql_drop] - 1] } { $i >= 0 } { incr i -1 } {
+            for { set i [expr {[llength $plsql_drop] - 1}] } { $i >= 0 } { incr i -1 } {
 		set pair [lindex $plsql_drop $i]
 		if { [catch {db_exec_plsql [lindex $drop_pair 0] [lindex $drop_pair 1]} err_msg_2] } {
 		    append errmsg "\nAdditional error while trying to roll back: $err_msg_2"

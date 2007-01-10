@@ -128,10 +128,10 @@ db_multirow -extend {
     set sort_order_url_up "authority-set-sort-order?[export_vars { authority_id {direction up} }]"
     set sort_order_url_down "authority-set-sort-order?[export_vars { authority_id {direction down} }]"
 
-    if { [string equal $authority_id $register_authority_id] } {
+    if {$authority_id eq $register_authority_id} {
         # The authority is selected as register authority
         set registration_status "selected"
-    } elseif { ![empty_string_p $reg_impl] } {
+    } elseif { $reg_impl ne "" } {
         # The authority can be selected as register authority
         set registration_status "can_select"
         set registration_url [export_vars -base authority-registration-select { authority_id }]

@@ -74,7 +74,7 @@ set actions [list \
                  [_ acs-subsite.Grant_Permission] "${perm_url}grant?[export_vars {return_url application_url object_id}]" [_ acs-subsite.Grant_Permission] \
                  [_ acs-subsite.Search_For_Exist_User] $user_add_url [_ acs-subsite.Search_For_Exist_User]]
 
-if { ![empty_string_p $context_id] } {
+if { $context_id ne "" } {
     set inherit_p [permission::inherit_p -object_id $object_id]
 
     if { $inherit_p } {
@@ -117,7 +117,7 @@ set application_group_id [application_group::group_id_from_package_id -package_i
 # We do not include site-wide admins in the list
 
 db_multirow -extend { name_url } permissions permissions {} {
-    if { [string equal $object_type "user"] && $grantee_id != 0 } {
+    if { $object_type eq "user" && $grantee_id != 0 } {
         set name_url [acs_community_member_url -user_id $grantee_id]
     }
 }

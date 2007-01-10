@@ -83,7 +83,7 @@ ad_proc ::twt::admin::set_acs_kernel_param { server_url param_section old_parame
     ::twt::do_request "$server_url/admin/site-map"
     link follow ~u {parameter-set\?package%5fid=[0-9]+&package%5fkey=acs%2dkernel}
 
-    if { ![string equal $param_section "acs-kernel"] } {
+    if { $param_section ne "acs-kernel" } {
 	link follow ~c "$param_section"
     }
 

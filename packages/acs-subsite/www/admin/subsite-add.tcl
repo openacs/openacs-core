@@ -47,7 +47,7 @@ ad_form -name subsite -cancel_url . -form {
                     -folder $folder \
                     -instance_name $instance_name]
 
-    if { [empty_string_p $folder] } {
+    if { $folder eq "" } {
         form set_error subsite folder "This folder name is already used"
         break
     }
@@ -77,7 +77,7 @@ ad_form -name subsite -cancel_url . -form {
             -user_id [ad_conn user_id]
         
         # Set inheritance (called 'visibility' in form)
-        if { ![string equal $visibility "any"] } {
+        if { $visibility ne "any" } {
             permission::set_not_inherit -object_id $new_package_id
         }
         

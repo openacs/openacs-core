@@ -31,7 +31,7 @@ foreach attribute_name [array names all_attributes] {
     if { [info exists attribute(validation_proc)] } {
         set attribute_error [eval $attribute(validation_proc) $attribute_value]
 
-        if { ![empty_string_p $attribute_error] } {
+        if { $attribute_error ne "" } {
             ad_return_complaint 1 $attribute_error
         }
     }
@@ -46,15 +46,15 @@ if {![regexp {^[0-9]+((\.[0-9]+)+((d|a|b|)[0-9]*)?)$} $version_name match]} {
 
 # Figure out if we're changing version
 db_1row old_version_info {}
-set version_changed_p [expr ![string equal $version_name $old_version_name]]
+set version_changed_p [expr {$version_name ne $old_version_name }] 
 
-if { [string equal $old_version_name $version_name] } {
+if {$old_version_name eq $version_name} {
     # The version name didn't change, so don't attempt to upgrade
     set upgrade_p 0
 }
 
 # The user has to update the URL if he changes the name.
-if { $version_changed_p && [string equal $version_uri $old_version_uri] } {
+if { $version_changed_p && $version_uri eq $old_version_uri } {
     ad_return_complaint 1 {You have changed the version number but not the version URL. When creating
         a package for a new version, you must select a new URL for the version.}
 }

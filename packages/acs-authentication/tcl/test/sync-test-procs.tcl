@@ -51,7 +51,7 @@ aa_register_case -cats {api db} sync_start_end {
             # End job
             array set job [auth::sync::job::end -job_id $job_id]
             
-            aa_true "Elapsed time less than 30 seconds" [expr $job(run_time_seconds) < 30]
+            aa_true "Elapsed time less than 30 seconds" [expr {$job(run_time_seconds) < 30}]
             
             aa_log "Elapsed time: $job(run_time_seconds) seconds"
             
@@ -61,7 +61,7 @@ aa_register_case -cats {api db} sync_start_end {
             
             aa_equals "Number of problems" $job(num_problems) 1
             
-            aa_false "Log URL non-empty" [empty_string_p $job(log_url)]
+            aa_false "Log URL non-empty" [expr {$job(log_url) eq ""}]
             
             # Purge not deleting the job
             auth::sync::purge_jobs \
@@ -323,7 +323,7 @@ aa_register_case -cats {api} sync_actions {
 
             array set job [auth::sync::job::end -job_id $job_id]
             
-            aa_true "Elapsed time less than 30 seconds" [expr $job(run_time_seconds) < 30]
+            aa_true "Elapsed time less than 30 seconds" [expr {$job(run_time_seconds) < 30}]
 
             aa_false "Not interactive" [template::util::is_true $job(interactive_p)]
 
@@ -331,7 +331,7 @@ aa_register_case -cats {api} sync_actions {
 
             aa_equals "Number of problems" $job(num_problems) 2
            
-            aa_false "Log URL non-empty" [empty_string_p $job(log_url)]
+            aa_false "Log URL non-empty" [expr {$job(log_url) eq ""}]
             
         }
 }
@@ -465,15 +465,15 @@ aa_register_case -cats {api db} sync_snapshot {
 
             array set job [auth::sync::job::end -job_id $job_id]
             
-            aa_true "Elapsed time less than 30 seconds" [expr $job(run_time_seconds) < 30]
+            aa_true "Elapsed time less than 30 seconds" [expr {$job(run_time_seconds) < 30}]
 
             aa_false "Not interactive" [template::util::is_true $job(interactive_p)]
 
-            aa_equals "Number of actions" $job(num_actions) [expr $num_users_not_banned + 1]
+            aa_equals "Number of actions" $job(num_actions) [expr {$num_users_not_banned + 1}]
 
             aa_equals "Number of problems" $job(num_problems) 0
            
-            aa_false "Log URL non-empty" [empty_string_p $job(log_url)]
+            aa_false "Log URL non-empty" [expr {$job(log_url) eq ""}]
             
         }    
 }
@@ -502,7 +502,7 @@ aa_register_case -cats {api} sync_batch_ims_example_doc {
     aa_stub acs_sc::invoke {
         acs_sc::invoke__arg_parser
 
-        if { [string equal $contract "auth_sync_retrieve"] && [string equal $operation "GetDocument"] } {
+        if { $contract eq "auth_sync_retrieve" && $operation eq "GetDocument" } {
             array set result {
                 doc_status ok
                 doc_message {}
@@ -665,10 +665,10 @@ aa_register_case -cats {api} sync_batch_ims_example_doc {
                         aa_true "email has a problem (email missing)" [util_sets_equal_p { email } [array names elm_msgs]]
                     }
                     update {
-                        aa_true "User does not exist" [expr ![empty_string_p $entry(message)]]
+                        aa_true "User does not exist" [expr {$entry(message) ne ""}] 
                     }
                     delete {
-                        aa_false "Message is not empty" [empty_string_p $entry(message)]
+                        aa_false "Message is not empty" [expr {$entry(message) eq ""}]
                     }
                 }
             }
@@ -685,7 +685,7 @@ aa_register_case -cats {api} sync_batch_ims_test {
     aa_stub acs_sc::invoke {
         acs_sc::invoke__arg_parser
 
-        if { [string equal $contract "auth_sync_retrieve"] && [string equal $operation "GetDocument"] } {
+        if { $contract eq "auth_sync_retrieve" && $operation eq "GetDocument" } {
             array set result {
                 doc_status ok
                 doc_message {}
@@ -957,7 +957,7 @@ aa_register_case -cats {api smoke} sync_http_get_document {
     
 
     aa_equals "result.doc_status is ok" $result(doc_status) "ok"
-    aa_true "result.doc_message is empty" [empty_string_p $result(doc_message)]
+    aa_true "result.doc_message is empty" [expr {$result(doc_message) eq ""}]
     aa_equals "result.document is 'success'" $result(document) "success"
 }
 
@@ -976,6 +976,6 @@ aa_register_case -cats {api web} sync_file_get_document {
                           -call_args [list [list SnapshotPath {} IncrementalPath $path]]]
     
     aa_equals "result.doc_status is ok" $result(doc_status) "ok"
-    aa_true "result.doc_message is empty" [empty_string_p $result(doc_message)]
+    aa_true "result.doc_message is empty" [expr {$result(doc_message) eq ""}]
     aa_equals "result.document is 'success'" $result(document) [template::util::read_file $path]
 }

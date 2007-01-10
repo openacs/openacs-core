@@ -93,19 +93,19 @@ ad_proc -private ::install::xml::action::application-link { node } {
     set from_package_id [apm_attribute_value -default "" $node from-package-id]
     set to_package_id [apm_attribute_value -default "" $node to-package-id]
 
-    if {![string equal $this_package_url ""]} {
+    if {$this_package_url ne "" } {
         set this_package_id [site_node::get_element -url $this_package_url \
             -element package_id]
-    } elseif {![string equal $from_package_id ""]} {
+    } elseif {$from_package_id ne "" } {
         set this_package_id [install::xml::util::get_id $from_package_id]
     } else {
         error "application-link tag must specify either this_package_url or from-package-id"
     }
 
-    if {![string equal $target_package_url ""]} {
+    if {$target_package_url ne "" } {
         set target_package_id [site_node::get_element -url $target_package_url \
             -element package_id]
-    } elseif {![string equal $to_package_id ""]} {
+    } elseif {$to_package_id ne "" } {
         set target_package_id [install::xml::util::get_id $to_package_id]
     } else {
         error "application-link tag must specify either target_package_url or to-package-id"

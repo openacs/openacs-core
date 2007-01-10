@@ -33,7 +33,7 @@ ad_page_contract {
 
 set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] "Add a group"]
 
-if {[empty_string_p $add_to_group_id]} {
+if {$add_to_group_id eq ""} {
     set add_to_group_id [application_group::group_id_from_package_id]
 }
 
@@ -60,8 +60,8 @@ set create_p [group::permission_p -privilege create $add_to_group_id]
 
 # Membership relations have a member_state attribute that gets set
 # based on the group's join policy.
-if {[string equal $ancestor_rel_type membership_rel]} {
-    if {[string equal $add_to_group_join_policy "closed"] && !$create_p} {
+if {$ancestor_rel_type eq "membership_rel"} {
+    if {$add_to_group_join_policy eq "closed" && !$create_p} {
 	ad_complain "You do not have permission to add elements to $add_to_group_name"
 	return
     }
@@ -95,7 +95,7 @@ set export_var_list [list group_id group_type \
 ## constraint violations in the database because the constraints are enforced
 ## by triggers in the DB.
 
-if { [string eq $group_type_exact_p "f"] && \
+if { $group_type_exact_p eq "f" && \
 	[subsite::util::sub_type_exists_p $group_type] } {
 
     # Sub rel-types exist... select one

@@ -78,7 +78,7 @@ proc dom::GetHandle {type token varName} {
     array set data [set $token]
 
 # Type checking not implemented
-#    if {[string compare $data(node:nodeType) "document"]} {
+#    if {$data(node:nodeType) ne "document" } {
 #	return -code error "node is not of type document"
 #    }
 
@@ -142,7 +142,7 @@ proc dom::DOMImplementation {method args} {
 
 	    # Later on, could use Tcl package facility
 	    if {[regexp {create|destroy|parse|serialize|trim} [lindex $args 0]]} {
-		if {![string compare [lindex $args 1] "1.0"]} {
+		if {[lindex $args 1] eq "1.0" } {
 		    return 1
 		} else {
 		    return 0
@@ -394,7 +394,7 @@ proc dom::document {method token args} {
 	configure {
 	    if {[llength $args] == 1} {
 		return [document cget $token [lindex $args 0]]
-	    } elseif {[expr [llength $args] % 2]} {
+	    } elseif {[expr {[llength $args] % 2}]} {
 		return -code error "no value specified for option \"[lindex $args end]\""
 	    } else {
 		foreach {option value} $args {
@@ -560,7 +560,7 @@ proc dom::CreateElement {token name aList args} {
 
     if {[string length $token]} {
 
-	if {![string compare $parent(node:nodeType) documentFragment]} {
+	if {$parent(node:nodeType) eq "documentFragment" } {
 	    if {$parent(id) == $parent(documentFragment:masterDoc)} {
 		if {[info exists parent(document:documentElement)] && \
 		    [string length $parent(document:documentElement)]} {
@@ -571,7 +571,7 @@ proc dom::CreateElement {token name aList args} {
 		    # Check against document type decl
 		    if {[string length $parent(document:doctype)]} {
 			array set doctypedecl [set $parent(document:doctype)]
-			if {[string compare $name $doctypedecl(doctype:name)]} {
+			if {$name ne $doctypedecl(doctype:name) } {
 			    return -code error "mismatch between root element type in document type declaration \"$doctypedecl(doctype:name)\" and root element \"$name\""
 			}
 
@@ -845,7 +845,7 @@ proc dom::node {method token args} {
 			}
 		    }
 		    attributes {
-			if {[string compare $node(node:nodeType) element]} {
+			if {$node(node:nodeType) ne "element" } {
 			    set result {}
 			} else {
 			    set result $node(element:attributeList)
@@ -866,7 +866,7 @@ proc dom::node {method token args} {
 
 	    if {[llength $args] == 1} {
 		return [document cget $token [lindex $args 0]]
-	    } elseif {[expr [llength $args] % 2]} {
+	    } elseif {[expr {[llength $args] % 2}]} {
 		return -code error "no value specified for option \"[lindex $args end]\""
 	    } else {
 		foreach {option value} $args {
@@ -893,7 +893,7 @@ proc dom::node {method token args} {
 	    }
 
 	    GetHandle node [lindex $args 0] newChild
-	    if {[string compare $newChild(docArray) $node(docArray)]} {
+	    if {$newChild(docArray) ne $node(docArray) } {
 		return -code error "new node must be in the same document"
 	    }
 
@@ -909,7 +909,7 @@ proc dom::node {method token args} {
 		2 {
 
 		    GetHandle node [lindex $args 1] refChild
-		    if {[string compare $refChild(docArray) $newChild(docArray)]} {
+		    if {$refChild(docArray) ne $newChild(docArray) } {
 			return -code error "nodes must be in the same document"
 		    }
 		    set idx [lsearch [set $node(node:childNodes)] [lindex $args 1]]
@@ -1204,7 +1204,7 @@ proc dom::element {method token args} {
 	configure {
 	    if {[llength $args] == 1} {
 		return [document cget $token [lindex $args 0]]
-	    } elseif {[expr [llength $args] % 2]} {
+	    } elseif {[expr {[llength $args] % 2}]} {
 		return -code error "no value specified for option \"[lindex $args end]\""
 	    } else {
 		foreach {option value} $args {
@@ -1304,12 +1304,12 @@ proc dom::Element:GetByTagName {token name} {
 
     set result {}
 
-    if {[string compare $node(node:nodeType) "documentFragment"]} {
+    if {$node(node:nodeType) ne "documentFragment" } {
 	foreach child [set $node(node:childNodes)] {
 	    catch {unset childNode}
 	    array set childNode [set $child]
-	    if {![string compare $childNode(node:nodeType) element] && \
-		![string compare [GetField childNode(node:nodeName)] $name]} {
+	    if {$childNode(node:nodeType) eq "element" && \
+		[GetField childNode(node:nodeName)] eq $name } {
 		lappend result $child
 	    }
 	}
@@ -1317,7 +1317,7 @@ proc dom::Element:GetByTagName {token name} {
 	# Document Element must exist and must be an element type node
 	catch {unset childNode}
 	array set childNode [set $node(document:documentElement)]
-	if {![string compare $childNode(node:nodeName) $name]} {
+	if {$childNode(node:nodeName) eq $name } {
 	    set result $node(document:documentElement)
 	}
     }
@@ -1438,7 +1438,7 @@ proc dom::processinginstruction {method token args} {
 	configure {
 	    if {[llength $args] == 1} {
 		return [document cget $token [lindex $args 0]]
-	    } elseif {[expr [llength $args] % 2]} {
+	    } elseif {[expr {[llength $args] % 2}]} {
 		return -code error "no value specified for option \"[lindex $args end]\""
 	    } else {
 		foreach {option value} $args {
@@ -1491,10 +1491,10 @@ proc dom::processinginstruction {method token args} {
 proc dom::Serialize:documentFragment {token args} {
     array set node [set $token]
 
-    if {[string compare "node1" $node(documentFragment:masterDoc)]} {
+    if {"node1" ne $node(documentFragment:masterDoc) } {
 	return [eval [list Serialize:node $token] $args]
     } else {
-	if {[string compare {} [GetField node(document:documentElement)]]} {
+	if {{} ne [GetField node(document:documentElement)] } {
 	    return [eval Serialize:document [list $token] $args]
 	} else {
 	    return -code error "document has no document element"

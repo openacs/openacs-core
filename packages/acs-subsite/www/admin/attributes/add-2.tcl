@@ -39,7 +39,7 @@ if { [attribute::exists_p $object_type $pretty_name] } {
 
 # Right now, we do not support multiple values for attributes
 set max_n_values 1
-if { [string eq $required_p "t"] } {
+if {$required_p eq "t"} {
     set min_n_values 1
 } else {
     set min_n_values 0
@@ -56,9 +56,9 @@ db_transaction {
 }
 
 # If we're an enumeration, redirect to start adding possible values.
-if { [string equal $datatype "enumeration"] } {
+if {$datatype eq "enumeration"} {
     ad_returnredirect enum-add?[ad_export_vars {attribute_id return_url}]
-} elseif { [empty_string_p $return_url] } {
+} elseif { $return_url eq "" } {
     ad_returnredirect add?[ad_export_vars {object_type}]
 } else {
     ad_returnredirect $return_url

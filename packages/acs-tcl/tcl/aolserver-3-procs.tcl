@@ -16,7 +16,7 @@ proc ns_dbformvalue {formdata column type valuebyref} {
 
     upvar $valuebyref value
 
-    if {[ns_set get $formdata $column.NULL] == "t"} {
+    if {[ns_set get $formdata $column.NULL] eq "t"} {
 	set value ""
 	return 0
     }
@@ -113,12 +113,12 @@ proc _ns_updatebutton {table var} {
     if { ![info exists updatebutton] } {
 	set updatebutton ""
     }
-    if { [string match "" $updatebutton] } {
+    if { "" eq $updatebutton } {
 	db_with_handle db {
 	    set updatebutton [ns_table value $db $table update_button_label]
 	}
     }
-    if { [string match "" $updatebutton] } {
+    if { "" eq $updatebutton } {
 	set updatebutton "Update Record"
     }
 }

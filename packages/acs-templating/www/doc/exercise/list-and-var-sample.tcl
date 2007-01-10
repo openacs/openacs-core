@@ -42,7 +42,7 @@
 # First, let's set the name variable, which can be displayed in your template using 
 # the @name@ marker
 
-#if {![info exists name] || $name == ""} {
+#if {![info exists name] || $name eq ""} {
     set name "(Your Name)"
 #}
 

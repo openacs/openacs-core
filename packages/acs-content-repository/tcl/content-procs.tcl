@@ -47,7 +47,7 @@ ad_proc -private cr_create_content_file_path {item_id revision_id} {
 	ns_mkdir [cr_fs_path]$path
     }
 
-    if {![string equal [string index $path end] "/"]} {
+    if {[string index $path end] ne "/" } {
         append path "/"
     }
 

@@ -234,7 +234,7 @@ namespace eval acs_mail_lite {
     } {
 
 	set mail_package_id [apm_package_id_from_key "acs-mail-lite"]
-	if {[empty_string_p $package_id]} {
+	if {$package_id eq ""} {
 	    set package_id $mail_package_id
 	}
 
@@ -242,7 +242,7 @@ namespace eval acs_mail_lite {
 	set fixed_sender [parameter::get -parameter "FixedSenderEmail" \
 			      -package_id $mail_package_id]
 
-	if { ![empty_string_p $fixed_sender] && !$use_sender_p} {
+	if { $fixed_sender ne "" && !$use_sender_p} {
 	    set sender_addr $fixed_sender
 	} else {
 	    set sender_addr $from_addr
@@ -251,13 +251,13 @@ namespace eval acs_mail_lite {
 	# Get the SMTP Parameters
 	set smtp [parameter::get -parameter "SMTPHost" \
 	     -package_id $mail_package_id -default [ns_config ns/parameters mailhost]]
-	if {[empty_string_p $smtp]} {
+	if {$smtp eq ""} {
 	    set smtp localhost
 	}
 
 	set timeout [parameter::get -parameter "SMTPTimeout" \
 	     -package_id $mail_package_id -default  [ns_config ns/parameters smtptimeout]]
-	if {[empty_string_p $timeout]} {
+	if {$timeout eq ""} {
 	    set timeout 60
 	}
 
@@ -273,7 +273,7 @@ namespace eval acs_mail_lite {
         # default values for alternative_part_p
         # TRUE on mime_type text/html
         # FALSE on mime_type text/plain
-        # if { [empty_string_p $alternative_part_p] } {    ...} 
+        # if { $alternative_part_p eq "" } {    ...} 
         if { $alternative_part_p eq "" } {
 	    if { $mime_type eq "text/plain" } {
                 set alternative_part_p "0"
@@ -332,7 +332,7 @@ namespace eval acs_mail_lite {
 	    # Check if we are dealing with revisions or items.
 	    foreach file_id $file_ids {
 		set item_id [content::revision::item_id -revision_id $file_id]
-		if {[string eq "" $item_id]} {
+		if {$item_id eq ""} {
 		    lappend item_ids $file_id
 		} else {
 		    lappend item_ids $item_id
@@ -349,7 +349,7 @@ namespace eval acs_mail_lite {
 
 
 	# Append files from the filesystem
-	if {![string eq "" $files]} {
+	if {$files ne ""} {
 	    foreach file $files {
 		lappend tokens [mime::initialize -param [list name "[ad_quotehtml [lindex $file 0]]"] -canonical [lindex $file 1] -file "[lindex $file 2]"]
 	    }
@@ -515,8 +515,8 @@ namespace eval acs_mail_lite {
 	# Rollout support (see above for details)
 
 	set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode] 
-	if {![empty_string_p $delivery_mode]
-	    && ![string equal $delivery_mode default]
+	if {$delivery_mode ne ""
+	    && $delivery_mode ne "default" 
 	} {
 	    set eh [util_list_to_ns_set $extraheaders]
 	    ns_sendmail $to_addr $sender_addr $subject $packaged $eh $bcc_addr
@@ -704,7 +704,7 @@ namespace eval acs_mail_lite {
 			    -alternative_part_p $alternative_part_p \
 			    -use_sender_p $use_sender_p        
 		    } errMsg]
-		    if $err {
+		    if {$err} {
 			ns_log Error "Error while sending queued complex mail: $errMsg"
 			# release the lock
 			set locking_server ""

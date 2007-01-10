@@ -92,7 +92,7 @@ ad_proc -public content::type::attribute::new {
 
     @return attribute_id for created attribute
 } {
-    if {[db_type] == "oracle"} {
+    if {[db_type] eq "oracle"} {
 	switch -- $column_spec {
 	    text { set column_spec clob }
 	    boolean { set column_spec "char(1)" }

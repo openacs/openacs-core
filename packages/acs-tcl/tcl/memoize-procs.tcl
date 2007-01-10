@@ -29,7 +29,7 @@ ad_proc -public util_memoize {script {max_age ""}} {
     @return The possibly-cached value returned by <i>script</i>.
 } {
 
-    if {![string equal $max_age ""] && $max_age < 0} {
+    if {$max_age ne "" && $max_age < 0} {
         error "max_age must not be negative"
     }
 
@@ -37,7 +37,7 @@ ad_proc -public util_memoize {script {max_age ""}} {
 
     set cached_p [ns_cache get util_memoize $script pair]
 
-    if {$cached_p && [string compare $max_age ""] != 0} {
+    if {$cached_p && $max_age ne "" } {
         set cache_time [lindex $pair 0]
         if {$current_time - $cache_time > $max_age} {
 	    ns_cache flush util_memoize $script
@@ -99,7 +99,7 @@ ad_proc -public util_memoize_cached_p {script {max_age ""}} {
         return 0
     }
 
-    if {[string equal $max_age ""]} {
+    if {$max_age eq ""} {
         return 1
     } else {
         set cache_time [lindex $pair 0]
@@ -129,11 +129,11 @@ ad_proc -public util_memoize_flush_regexp {
 
 } {
     foreach name [ns_cache names util_memoize] {
-       if $log_p {
+       if {$log_p} {
            ns_log Debug "util_memoize_flush_regexp: checking $name for $expr"
        }
        if { [regexp $expr $name] } {
-           if $log_p {
+           if {$log_p} {
                ns_log Debug "util_memoize_flush_regexp: flushing $name"
            }
            util_memoize_flush $name

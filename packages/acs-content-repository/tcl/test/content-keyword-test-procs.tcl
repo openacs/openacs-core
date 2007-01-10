@@ -26,7 +26,7 @@ aa_register_case content_keyword {
             # check that keyword_id, heading, description
             # are set correctly
             aa_true "Keyword_id assigned" \
-                [expr $assigned_keyword_id == $keyword_id]
+                [expr {$assigned_keyword_id == $keyword_id}]
             aa_true "Keyword heading set" \
                 [string equal "--test_keyword" [content::keyword::get_heading -keyword_id $keyword_id]]
             aa_true "Keyword description set" \

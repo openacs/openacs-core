@@ -56,7 +56,7 @@ foreach package_key $install {
     
     if { [exists_and_not_null version(download_url)] } {
         set spec_file [apm_load_apm_file -url $version(download_url)]
-        if { [empty_string_p $spec_file] } {
+        if { $spec_file eq "" } {
             ns_log Error "Error downloading package $package_key from $version(download_url). Installing package failed."
             set success_p 0
             continue

@@ -55,7 +55,7 @@ template::element create edit_attribute return_url -value $return_url \
 	-optional -datatype text -widget hidden
 
 
-if { [string eq $datatype "enumeration"] } {
+if {$datatype eq "enumeration"} {
     set focus ""
     set option_list [db_list_of_lists select_enum_values {
 	select enum.pretty_name, enum.enum_value

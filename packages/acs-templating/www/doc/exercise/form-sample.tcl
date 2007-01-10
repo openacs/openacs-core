@@ -55,11 +55,11 @@
 
 set start_row [ns_queryget start_row]
 
-if { $start_row == "" } {
+if { $start_row eq "" } {
     set start_row 1
 }
 
-if {![info exists num_rows] || [string trim $num_rows] != ""} {
+if {![info exists num_rows] || [string trim $num_rows] ne ""} {
   set num_rows 5
 }
 
@@ -117,14 +117,14 @@ db_multirow address get_address ""
 
 set rowcount [set address:rowcount]
 
-if { $rowcount > [expr $start_row + $num_rows] } {
-    set next_set [expr $start_row + $num_rows]
+if { $rowcount > [expr {$start_row + $num_rows}] } {
+    set next_set [expr {$start_row + $num_rows}]
 } else {
     set next_set ""
 }
 
 if { $start_row > 1 } {
-    set previous_set [expr $start_row - $num_rows]
+    set previous_set [expr {$start_row - $num_rows}]
 } else {
     set previous_set ""
 }
@@ -133,8 +133,8 @@ if { $previous_set < 1} {
     set previous_set 1 
 }
 
-if {$rowcount > [expr $next_set + $num_rows]} {
-    set last_set [expr $rowcount - ($rowcount % $num_rows)]
+if {$rowcount > [expr {$next_set + $num_rows}]} {
+    set last_set [expr {$rowcount - ($rowcount % $num_rows)}]
 } else {
     set last_set ""
 }

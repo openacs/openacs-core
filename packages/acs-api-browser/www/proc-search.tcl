@@ -51,7 +51,7 @@ if { ($name_weight == 0) && ($doc_weight == 0) && ($param_weight == 0) && ($sour
 }
 
 # Exact name search
-if { [string equal $name_weight "exact"] } {
+if {$name_weight eq "exact"} {
     set name_weight 5
     set exact_match_p 1
 } else {
@@ -80,9 +80,9 @@ foreach proc [nsv_array names api_proc_doc] {
 
         ##Exact match:
         if {[string tolower $query_string] == [string tolower $proc]} {
-            incr score [expr $name_weight * 2]
+            incr score [expr {$name_weight * 2}]
         } elseif { ! $exact_match_p } {
-            incr score [expr $name_weight * [ad_keywords_score $query_string $proc]] 
+            incr score [expr {$name_weight * [ad_keywords_score $query_string $proc]}] 
         }
     }
    
@@ -90,7 +90,7 @@ foreach proc [nsv_array names api_proc_doc] {
     ## Param Search:
     ################
     if {$param_weight} {
-        incr score [expr $param_weight * [ad_keywords_score $query_string "$doc_elements(positionals) $doc_elements(switches)"]]
+        incr score [expr {$param_weight * [ad_keywords_score $query_string "$doc_elements(positionals) $doc_elements(switches)"]}]
     }
     
 
@@ -100,15 +100,15 @@ foreach proc [nsv_array names api_proc_doc] {
     if {$doc_weight} {
         
         set doc_string "[lindex $doc_elements(main) 0]"
-        if [info exists doc_elements(param)] {
+        if {[info exists doc_elements(param)]} {
             foreach parameter $doc_elements(param) {
                 append doc_string " $parameter"
             }
         }
-        if [info exists doc_elements(return)] {
+        if {[info exists doc_elements(return)]} {
             append doc_string " $doc_elements(return)"
         }
-        incr score [expr $doc_weight * [ad_keywords_score $query_string $doc_string]]
+        incr score [expr {$doc_weight * [ad_keywords_score $query_string $doc_string]}]
         
     }
     
@@ -117,7 +117,7 @@ foreach proc [nsv_array names api_proc_doc] {
     #################
     if {$source_weight} {
         if {![catch {set source [info body $proc]}]} {
-            incr score [expr $source_weight * [ad_keywords_score $query_string $source]] 
+            incr score [expr {$source_weight * [ad_keywords_score $query_string $source]}] 
         }    
     }
 
@@ -143,7 +143,7 @@ foreach proc [nsv_array names api_proc_doc] {
 
 set matches [lsort -command ad_sort_by_score_proc $matches]
 
-if {$quick_view && ![empty_string_p $matches] || [llength $matches] == 1 } {
+if {$quick_view && $matches ne "" || [llength $matches] == 1 } {
     ad_returnredirect [api_proc_url [lindex [lindex $matches 0] 0]]
     ad_script_abort
 }

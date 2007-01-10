@@ -20,13 +20,13 @@ ad_page_contract {
     }
 }
 
-if { [string eq $operation "Yes, I really want to delete this segment"] } {
-    if { [empty_string_p $return_url] } {
+if {$operation eq "Yes, I really want to delete this segment"} {
+    if { $return_url eq "" } {
 	# Go back to the group for this segment
 	set group_id [db_string select_group_id {
 	    select s.group_id from rel_segments s where s.segment_id = :segment_id
 	} -default ""]
-	if { ![empty_string_p $group_id] } {
+	if { $group_id ne "" } {
 	    set return_url "../groups/one?[ad_export_vars group_id]"
 	}
     }
@@ -37,7 +37,7 @@ if { [string eq $operation "Yes, I really want to delete this segment"] } {
     }
 } 
 
-if { [empty_string_p $return_url] } {
+if { $return_url eq "" } {
     set return_url "one?[ad_export_vars {segment_id}]"
 }
 

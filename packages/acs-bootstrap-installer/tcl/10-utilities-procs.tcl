@@ -45,7 +45,7 @@ ad_proc -public ad_find_all_files {
 		# Remember that we've examined the file.
 		set examined_files($file) 1
 
-		if { [empty_string_p $check_file_func] || [eval [list $check_file_func $file]] } {
+		if { $check_file_func eq "" || [eval [list $check_file_func $file]] } {
 		    # If it's a file, add to our list. If it's a
 		    # directory, add its contents to our list of files to
 		    # examine next time.

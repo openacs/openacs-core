@@ -43,18 +43,18 @@ if {$dotlrn_p} {
 
     # Ugly .LRNism: guests must not search for people. Here's the security
     # check that makes sure they cannot fiddle around with the URL
-    if {$is_guest_p && [string equal $object_type "phb_person"]} {
+    if {$is_guest_p && $object_type eq "phb_person"} {
 	ad_return_error "Security Breakin!" "Security Alert. This incident has been logged."
     }
 }
 
-if { [array get info] == "" } {
+if { [array get info] eq "" } {
     ReturnHeaders
     ns_write "[_ search.lt_FtsEngineDriver_not_a]"
     ad_script_abort
 }
 
-if {[string equal "" [string trim $q]]} {
+if {"" eq [string trim $q]} {
     set query {}
     set empty_p 1
     set url_advanced_search "advanced-search"
@@ -80,15 +80,15 @@ if { $num <= 0} {
 set df ""
 set dt ""
 
-if { $dfs == "all" } {
+if { $dfs eq "all" } {
     set dfs ""
 }
 
 array set symbol2interval [ad_parameter -package_id $package_id Symbol2Interval]
-if { $dfs != "" } {
+if { $dfs ne "" } {
     set df [db_exec_plsql get_df "select now() + '$symbol2interval($dfs)'::interval"]
 }
-if { $dts != "" } {
+if { $dts ne "" } {
     set dt [db_exec_plsql get_dt "select now() + '$symbol2interval($dts)'::interval"]
 }
 
@@ -108,12 +108,12 @@ if {$search_package_id eq "" && [ad_parameter -package_id $package_id SubsiteSea
 set t0 [clock clicks -milliseconds]
 
 # TODO calculate subsite or dotlrn package_ids
-if {![string equal "this" $scope]} {
+if {"this" ne $scope } {
     # don't send package_id if its not searching this package
     set search_package_id ""
 } else {
     set search_node_id [site_node::get_node_id_from_object_id -object_id $search_package_id]
-    if {[string equal "dotlrn" [site_node::get_element -node_id $search_node_id -element package_key]]} {
+    if {"dotlrn" eq [site_node::get_element -node_id $search_node_id -element package_key]} {
 	set search_package_id [site_node::get_children -node_id $search_node_id -element package_id]
     }
 }
@@ -129,7 +129,7 @@ if {[callback::impl_exists -impl $driver -callback search::search]} {
 }
 set tend [clock clicks -milliseconds]
 
-if { $t == "Feeling Lucky" && $result(count) > 0} {
+if { $t eq "Feeling Lucky" && $result(count) > 0} {
     set object_id [lindex $result(ids) 0]
     set object_type [acs_object_type $object_id]
     if {[callback::impl_exists -impl -callback search::url]} {
@@ -141,10 +141,10 @@ if { $t == "Feeling Lucky" && $result(count) > 0} {
     ad_script_abort
 }
 
-set elapsed [format "%.02f" [expr double(abs($tend - $t0)) / 1000.0]]
+set elapsed [format "%.02f" [expr {double(abs($tend - $t0)) / 1000.0}]]
 if { $offset >= $result(count) } { set offset [expr ($result(count) / $limit) * $limit] }
-set low [expr $offset + 1]
-set high [expr $offset + $limit]
+set low [expr {$offset + 1}]
+set high [expr {$offset + $limit}]
 if { $high > $result(count) } { set high $result(count) }
 if { $info(automatic_and_queries_p) && ([lsearch -exact $q and] > 0) } {
     set and_queries_notice_p 1
@@ -165,7 +165,7 @@ set count $result(count)
 
 template::multirow create searchresult title_summary txt_summary url_one object_id
 
-for { set __i 0 } { $__i < [expr $high - $low +1] } { incr __i } {
+for { set __i 0 } { $__i < [expr {$high - $low +1}] } { incr __i } {
 
     set object_id [lindex $result(ids) $__i]
     set object_type [acs_object_type $object_id]
@@ -191,17 +191,17 @@ for { set __i 0 } { $__i < [expr $high - $low +1] } { incr __i } {
 
 set from_result_page 1
 set current_result_page [expr ($low / $limit) + 1]
-set to_result_page [expr ceil(double($result(count)) / double($limit))]
+set to_result_page [expr {ceil(double($result(count)) / double($limit))}]
 
 set url_previous ""
 set url_next ""
 append url_previous "search?q=${urlencoded_query}&search_package_id=$search_package_id"
 append url_next "search?q=${urlencoded_query}&search_package_id=$search_package_id"
-if { [expr $current_result_page - 1] > $from_result_page } { 
+if { [expr {$current_result_page - 1}] > $from_result_page } { 
     append url_previous "&offset=[expr ($current_result_page - 2) * $limit]"
 }
 if { $current_result_page < $to_result_page } { 
-    append url_next "&offset=[expr $current_result_page * $limit]"
+    append url_next "&offset=[expr {$current_result_page * $limit}]"
 }
 if { $num > 0 } {
     append url_previous "&num=$num"
@@ -224,7 +224,7 @@ for { set __i $from_result_page } { $__i <= $to_result_page} { incr __i } {
 }
 
 set search_the_web [ad_parameter -package_id $package_id SearchTheWeb]
-if [llength $search_the_web] {
+if {[llength $search_the_web]} {
     set stw ""
     foreach {url site} $search_the_web {
 	append stw "<a href=\"[format $url $urlencoded_query]\">$site</a> "

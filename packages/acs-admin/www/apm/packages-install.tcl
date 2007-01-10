@@ -66,7 +66,7 @@ apm_log APMDebug $spec_files
 ns_write "Done.<p>
 "
 
-if { [empty_string_p $spec_files] } {
+if { $spec_files eq "" } {
     # No spec files to work with.
     ns_write "
     <h2>No New Packages to Install</h2><p>
@@ -85,12 +85,12 @@ if { [empty_string_p $spec_files] } {
 
 <script language=javascript>
 function uncheckAll() {
-    for (var i = 0; i < [expr [llength $spec_files] ]; ++i)
+    for (var i = 0; i < [expr {[llength $spec_files] }]; ++i)
         document.forms\[0\].elements\[i\].checked = false;
     this.href='';
 }
 function checkAll() {
-    for (var i = 0; i < [expr [llength $spec_files] ]; ++i)
+    for (var i = 0; i < [expr {[llength $spec_files] }]; ++i)
         document.forms\[0\].elements\[i\].checked = true;
     this.href='';
 }
@@ -131,7 +131,7 @@ function checkAll() {
         set widget [apm_package_selection_widget $pkg_info_list]
     }
 
-    if {[empty_string_p $widget]} {
+    if {$widget eq ""} {
 	ns_write "There are no new packages available.<p>
 	[ad_footer]"
 	ad_script_abort
@@ -143,7 +143,7 @@ function checkAll() {
     </form>
     "
     
-    if {![empty_string_p $errors]} {
+    if {$errors ne ""} {
 	ns_write "The following errors were generated
 	<ul>
 	    $errors

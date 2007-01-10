@@ -90,7 +90,7 @@ ad_context_bar
 
 	set leave_node "ref_final"
 	set root_node [list "/" \#acs-kernel.Main_Site\#]
-	if { [string match admin/* [ad_conn extra_url]] } {
+	if { [string match "admin/*" [ad_conn extra_url]] } {
 	    set admin_node [list "[ad_conn package_url]admin/" "Administration"]
 	} else {
 	    set admin_node ""

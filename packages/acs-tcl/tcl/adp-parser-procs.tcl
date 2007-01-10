@@ -181,7 +181,7 @@ ad_proc -public doc_adp_execute {
     incr doc_adp_depth -1
 
     global errorCode
-    if { $errno == 0 || [string equal $errorCode "doc_adp_abort"] } {
+    if { $errno == 0 || $errorCode eq "doc_adp_abort" } {
 	return $adp_var
     }
 
@@ -241,7 +241,7 @@ ad_proc -public doc_adp_compile { adp } {
 
 	# Currently index points to a "<".
 	incr index
-	if { [string index $adp $index] == "/" } {
+	if { [string index $adp $index] eq "/" } {
 	    set end_tag_p 1
 	    incr index
 	} elseif { ![info exists literal_tag] && [string index $adp $index] == "%" } {
@@ -286,14 +286,14 @@ ad_proc -public doc_adp_compile { adp } {
 	if { ![info exists tag] } {
 	    # Find the next non-word character.
 	    set tag_begin $index
-	    while { [string index $adp $index] == "-" || \
+	    while { [string index $adp $index] eq "-" || \
 		    [string is wordchar -strict [string index $adp $index]] } {
 		incr index
 	    }
 	    set tag [string range $adp $tag_begin [expr { $index - 1 }]]
 	}
 
-	if { (![info exists literal_tag] || ($end_tag_p && [string equal $tag $literal_tag])) && \
+	if { (![info exists literal_tag] || ($end_tag_p && $tag eq $literal_tag)) && \
 		[nsv_exists doc_adptags $tag] } {
 	    doc_adp_flush_text_buffer
 
@@ -338,10 +338,10 @@ ad_proc -public doc_adp_compile { adp } {
 		    while { [string is space -strict [string index $adp $index]] } {
 			incr index
 		    }
-		    if { [string index $adp $index] == "\"" } {
+		    if { [string index $adp $index] eq "\"" } {
 			# Quoted string.
 			set value_begin [incr index]
-			while { $index < $adp_length && [string index $adp $index] != "\"" } {
+			while { $index < $adp_length && [string index $adp $index] ne "\"" } {
 			    incr index
 			}
 			set value_end $index
@@ -366,7 +366,7 @@ ad_proc -public doc_adp_compile { adp } {
 		if { [llength $balanced_tag_stack] == 0 } {
 		    return -code error "Unexpected end tag </$tag>"
 		}
-		if { ![string equal $tag [lindex $balanced_tag_stack end]] } {
+		if { $tag ne [lindex $balanced_tag_stack end] } {
 		    return -code error "Expected end tag to be </[lindex $balanced_tag_stack end]>, not </$tag>"
 		}
 		set balanced_tag_stack [lrange $balanced_tag_stack 0 [expr { [llength $balanced_tag_stack] - 2 }]]

@@ -71,7 +71,7 @@ if { ![template::util::is_nil focus] } {
     }
 }
 
-if {![empty_string_p $onload]} { 
+if {$onload ne ""} { 
     multirow append attribute onload [join $onload " "]
 }
 
@@ -117,7 +117,7 @@ set openacs_version [ad_acs_version]
 # Toggle translator mode link
 
 set acs_lang_url [apm_package_url_from_key "acs-lang"]
-if { [empty_string_p $acs_lang_url] } {
+if { $acs_lang_url eq "" } {
     set lang_admin_p 0
 } else {
     set lang_admin_p [permission::permission_p \

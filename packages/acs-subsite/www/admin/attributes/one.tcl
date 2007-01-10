@@ -43,7 +43,7 @@ foreach n [lsort [array names attribute]] {
     template::multirow append attr_props $n $attribute($n)
 }
 
-if { [string eq $attribute(datatype) "enumeration"] } {
+if {$attribute(datatype) eq "enumeration"} {
     # set up the enum values datasource
     db_multirow enum_values enum_values {
 	select v.enum_value, v.pretty_name

@@ -50,7 +50,7 @@ if { $argc < 3 } {
 } else {
     # oracle_data_path specified. make sure it has a trailing slash.
     set oracle_data_path [lindex $argv 2]
-    if { [string index $oracle_data_path end] != "/" } {
+    if { [string index $oracle_data_path end] ne "/" } {
 	set oracle_data_path "${oracle_data_path}/"
     }
 }

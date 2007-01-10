@@ -12,12 +12,12 @@ ad_library {
     @cvs-id $Id$
 }
 
-if {[string equal {} [info procs ds_add]]} {
+if {{} eq [info procs ds_add]} {
     proc ds_add {args} {}
 }
-if {[string equal {} [info procs ds_collect_db_call]]} {
+if {{} eq [info procs ds_collect_db_call]} {
     proc ds_collect_db_call {args} {}
 }
-if {[string equal {} [info procs ds_collect_connection_info]]} {
+if {{} eq [info procs ds_collect_connection_info]} {
     proc ds_collect_connection_info {} {}
 }

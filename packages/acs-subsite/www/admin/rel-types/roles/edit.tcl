@@ -56,7 +56,7 @@ if { [template::form is_valid role_form] } {
 	       r.pretty_plural = :pretty_plural
 	 where r.role = :role
     } -bind [ns_getform]
-    if { [empty_string_p $return_url] } {
+    if { $return_url eq "" } {
 	set return_url "one?[ad_export_vars role]"
     }
     ad_returnredirect $return_url

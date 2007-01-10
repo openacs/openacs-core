@@ -30,7 +30,7 @@ ad_page_contract {
 set subsite_group_id [application_group::group_id_from_package_id]
 
 # If the user has specified a rel_type, redirect to new-2
-if { ![empty_string_p $rel_type] } {
+if { $rel_type ne "" } {
     ad_returnredirect new-2?[ad_export_vars {group_id rel_type return_url}]
     ad_script_abort
 } 
