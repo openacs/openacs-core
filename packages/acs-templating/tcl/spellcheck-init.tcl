@@ -61,7 +61,7 @@ if { [regexp aspell $bin] } {
 # Build the select options list and filter out unwanted dictionaries.
 set wanted_dicts [list {"No" :nospell:}]
 
-if { [empty_string_p $dicts] } {
+if { $dicts eq "" } {
     # Just add the default locale (the empty string will work too).
     lappend wanted_dicts [list "Yes" $default_lang]
 }

@@ -22,10 +22,10 @@ ad_page_contract {
 }
 set title "System test cases"
 
-if {$by_package_key != ""} {
+if {$by_package_key ne ""} {
     append title " for package $by_package_key"
 }
-if {$by_category != ""} {
+if {$by_category ne ""} {
     append title ", category $by_category"
 } else {
     append title ", all categories"
@@ -54,11 +54,11 @@ db_foreach acs-automated-testing.results_queryx {
         # If viewing by package, update the by-package results, taking into
         # account whether a specific category has been specified.
         #
-        if {$view_by == "package"} {
+        if {$view_by eq "package"} {
             set package_total [lindex $packages($package_key) 0]
             set package_pass  [lindex $packages($package_key) 1]
             set package_fail  [lindex $packages($package_key) 2]
-            if {$by_category != ""} {
+            if {$by_category ne ""} {
                 # Category specific, only add results if this testcase is of the
                 # specified category.
                 set categories  [lindex $results("$testcase_id,$package_key") 2]
@@ -81,7 +81,7 @@ db_foreach acs-automated-testing.results_queryx {
     }
 }
 
-if {$view_by == "package"} {
+if {$view_by eq "package"} {
     #
     # Prepare the template data for a view_by "package"
     #
@@ -115,8 +115,8 @@ if {$view_by == "package"} {
         # - The package key is blank or it matches the specified.
         # - The category is blank or it matches the specified.
         #
-        if {($by_package_key == "" || ($by_package_key == $package_key)) && \
-                ($by_category == "" || ([lsearch $categories $by_category] != -1))} {
+        if {($by_package_key eq "" || ($by_package_key == $package_key)) && \
+                ($by_category eq "" || ([lsearch $categories $by_category] != -1))} {
             # Swap the highlight flag between packages.
             if {$old_package_key != $package_key} {
                 set marker 1

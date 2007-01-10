@@ -11,7 +11,7 @@ ad_page_contract {
 } -properties {
 }
 
-if {$testcase_id == ""} {
+if {$testcase_id eq ""} {
   if {$quiet} {
     aa_runseries -stress $stress -security_risk $security_risk -quiet $package_key $category
   } else {

@@ -61,8 +61,8 @@ set table_def {
     { version_name "Ver." "" "" }
     {
 	status "Status" "" {<td align=center>&nbsp;&nbsp;[eval {
-	    if { $installed_p == "t" } {
-		if { $enabled_p == "t" } {
+	    if { $installed_p eq "t" } {
+		if { $enabled_p eq "t" } {
 		    set status "Enabled"
 		} else {
 		    set status "Disabled"
@@ -82,7 +82,7 @@ set table_def {
             set file_link_list [list]
             lappend file_link_list "<a href=\"version-files?version_id=$version_id\">view files</a>"
 
-	    if { $installed_p == "t" && $enabled_p == "t" } {
+	    if { $installed_p eq "t" && $enabled_p eq "t" } {
 	        if { ! [ad_parameter -package_id [ad_acs_kernel_id] PerformanceModeP request-processor 1] } {
                     lappend file_link_list "<a href=\"package-watch?package_key=$package_key\">watch all files</a>"
                 } 
@@ -139,7 +139,7 @@ if { $use_watches_p } {
         append body "<h3>Watches</h3><ul>
 <li><a href=\"file-watch-cancel\">Stop watching all files</a></li><br />"
         foreach file [lsort $watch_files] {
-            if { [string compare $file "."] } {
+            if {$file ne "."  } {
                 append body "<li>$file (<a href=\"file-watch-cancel?watch_file=[ns_urlencode $file]\">stop watching this file</a>)\n"
             }
         }

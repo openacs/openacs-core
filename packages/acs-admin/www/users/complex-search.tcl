@@ -66,7 +66,7 @@ set exception_text ""
 
 set context [list [list "index" "Users"] "Complex search"]
 
-if { ![info exists target] || [empty_string_p $target] } {
+if { ![info exists target] || $target eq "" } {
     incr exception_count
     append exception_text "<li>Target was not specified. This shouldn't have
 happened, please contact the
@@ -80,7 +80,7 @@ if { $exception_count != 00 } {
 }
 
 
-if {[string equal $combine_method "any"]} {
+if {$combine_method eq "any"} {
     set where_conjunction "or"
 } else {
     set where_conjunction "and"
@@ -231,7 +231,7 @@ db_foreach user_search_admin $query {
     set user_search:[set rowcount](export_vars) [export_url_vars user_id_from_search first_names_from_search last_name_from_search email_from_search]
     set user_search:[set rowcount](member_state) $member_state
     
-    if { $member_state != "approved" } {
+    if { $member_state ne "approved" } {
 	set user_search:[set rowcount](user_finite_state_links) [join [ad_registration_finite_state_machine_admin_links $member_state $email_verified_p $user_id_from_search "complex-search?[export_url_vars email last_name keyword target passthrough limit_users_in_group_id only_authorized_p]"] " | "]
     } else {
 	set user_search:[set rowcount](user_finite_state_links) ""

@@ -34,7 +34,7 @@ ad_proc -private whos_online::flush {} {
     array set last_hit [nsv_array get last_hit]
     set onliners_out [list]
     set interval 1
-    set oldtime [expr [ns_time] - [interval]]
+    set oldtime [expr {[ns_time] - [interval]}]
 
     for { set search [array startsearch last_hit] } { [array anymore last_hit $search] } {} {
         set user [array nextelement last_hit $search]
@@ -91,7 +91,7 @@ ad_proc -public whos_online::seconds_since_last_request { user_id } {
     @author Peter Marklund
 } {
     if { [nsv_exists last_hit $user_id] } {
-        return [expr [ns_time] - [nsv_get last_hit $user_id]]
+        return [expr {[ns_time] - [nsv_get last_hit $user_id]}]
     } else {
         return {}
     }
@@ -104,7 +104,7 @@ ad_proc -public whos_online::seconds_since_first_request { user_id } {
     @author Peter Marklund
 } {
     if { [nsv_exists last_hit $user_id] } {
-        return [expr [ns_time] - [nsv_get first_hit $user_id]]
+        return [expr {[ns_time] - [nsv_get first_hit $user_id]}]
     } else {
         return {}
     }
@@ -136,7 +136,7 @@ ad_proc -public whos_online::user_ids {
 } {
     array set last_hit [nsv_array get last_hit]
     set onliners [list]
-    set oldtime [expr [ns_time] - [interval]]
+    set oldtime [expr {[ns_time] - [interval]}]
 
     for { set search [array startsearch last_hit] } { [array anymore last_hit $search] } {} {
         set user_id [array nextelement last_hit $search]

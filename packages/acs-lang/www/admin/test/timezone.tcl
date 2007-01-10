@@ -33,7 +33,7 @@ db_1row lang_system_time_select "SELECT to_char(sysdate, 'YYYY-MM-DD HH24:MI:SS'
 
 set NYC_time [lc_time_utc_to_local $system_time "America/New_York"]
 set NYC_utc_time [lc_time_local_to_utc $NYC_time "America/New_York"]
-if {[string compare $system_time $NYC_utc_time] == 0} {
+if {$system_time eq $NYC_utc_time } {
     set NYC_p "OK"
 } else {
     set NYC_p "<font color=red>FAILED</font>"
@@ -42,7 +42,7 @@ if {[string compare $system_time $NYC_utc_time] == 0} {
 
 set LA_time [lc_time_utc_to_local $system_time "America/Los_Angeles"]
 set LA_utc_time [lc_time_local_to_utc $LA_time "America/Los_Angeles"]
-if {[string compare $system_time $LA_utc_time] == 0} {
+if {$system_time eq $LA_utc_time } {
     set LA_p "OK"
 } else {
     set LA_p "<font color=red>FAILED</font>"
@@ -50,7 +50,7 @@ if {[string compare $system_time $LA_utc_time] == 0} {
 
 set paris_time [lc_time_utc_to_local $system_time "Europe/Paris"]
 set paris_utc_time [lc_time_local_to_utc $paris_time "Europe/Paris"]
-if {[string compare $system_time $paris_utc_time] == 0} {
+if {$system_time eq $paris_utc_time } {
     set paris_p "OK"
 } else {
     set paris_p "<font color=red>FAILED</font>"
@@ -58,7 +58,7 @@ if {[string compare $system_time $paris_utc_time] == 0} {
 
 set tokyo_time [lc_time_utc_to_local $system_time "Asia/Tokyo"]
 set tokyo_utc_time [lc_time_local_to_utc $tokyo_time "Asia/Tokyo"]
-if {[string compare $system_time $tokyo_utc_time] == 0} {
+if {$system_time eq $tokyo_utc_time } {
     set tokyo_p "OK"
 } else {
     set tokyo_p "<font color=red>FAILED</font>"

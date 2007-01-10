@@ -33,7 +33,7 @@ ad_proc -public template::widget::select_locales {
     append output "<select name=\"$element(name)\" "
 
     foreach name [array names attributes] {
-        if { [string equal $attributes($name) {}] } {
+        if {$attributes($name) eq {}} {
             append output " $name=\"$name\""
         } else {
             append output " $name=\"$attributes($name)\""

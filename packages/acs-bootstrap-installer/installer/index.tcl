@@ -64,7 +64,7 @@ if { [file exists [apm_install_xml_file_path]] } {
     # Parse the xml document
     set root_node [apm_load_install_xml_file]
 
-    if { ![string equal [xml_node_get_name $root_node] application] } {
+    if { [xml_node_get_name $root_node] ne "application" } {
         error "Installer: Could not find root node application in install.xml file"
     }
 
@@ -77,7 +77,7 @@ The installer will automatically install the $acs_application(pretty_name)
 application after the basic OpenACS tookit has been installed.
 "
 
-    if { ![string equal $acs_application(home) ""] } {
+    if { $acs_application(home) ne "" } {
         append body "<p>
 For more information about the $acs_application(pretty_name) application visit the
 <a href=\"$acs_application(home)\">$acs_application(pretty_name) home page</a>
@@ -172,7 +172,7 @@ if {![xml_support_ok xml_status_msg]} {
 
 # AOLserver must support the "fancy" ADP parser.
 set adp_support [ns_config "ns/server/[ns_info server]/adp" DefaultParser]
-if { [string compare $adp_support "fancy"] } {
+if {$adp_support ne "fancy"  } {
     append errors "<li><p><strong>The fancy ADP parser is not enabled.  This is required to support 
 the OpenACS Templating System.  Without this templating system, none of the OpenACS pages installed by default
 will display.  Please add the following to your AOLserver configuration file (usually in 
@@ -194,14 +194,14 @@ After adding support for the fancy ADP parser, please restart your web server.
 set stacksize [ns_config "ns/threads" StackSize]
 
 if { ![string is integer $stacksize] ||
-     $stacksize < [expr $acs_application(min_stack_size) * 1024] } {
+     $stacksize < [expr {$acs_application(min_stack_size) * 1024}] } {
     append errors "<li><p><strong>The configured AOLserver Stacksize is too small, missing, or a non-integer value.
 $acs_application(pretty_name) requires a StackSize parameter of at least
 ${acs_application(min_stack_size)}K.
 <p>Please add the following line to your .tcl configuration file
 <blockquote><pre>
 ns_section \"ns/threads\"
-        ns_param StackSize \[expr ${acs_application(min_stack_size)}*1024\]
+        ns_param StackSize \[expr {${acs_application(min_stack_size)}*1024}\]
 </blockquote></pre>
 After adding support the larger stacksize, please restart your web server.
 </strong></p>"

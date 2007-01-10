@@ -48,11 +48,11 @@ ad_form -name batch_action_form \
                 # Prettify certain elements
                 if { [regexp {_p$} $element_name] } {
                     set $element_name [ad_decode $batch_action($element_name) "t" "Yes" "No"]
-                } elseif { [string equal $element_name "user_id"] && ![empty_string_p $batch_action($element_name)] } {
+                } elseif { $element_name eq "user_id" && $batch_action($element_name) ne "" } {
                     if { [catch {set $element_name [acs_community_member_link -user_id $batch_action($element_name)]}] } {
                         set $element_name $batch_action($element_name)
                     }
-                } elseif { [string equal $element_name "element_messages"] && ![empty_string_p $batch_action($element_name)] } {
+                } elseif { $element_name eq "element_messages" && $batch_action($element_name) ne "" } {
                     array set messages_array $batch_action($element_name)
                     append $element_name "<ul>"
                     foreach message_name [array names messages_array] {

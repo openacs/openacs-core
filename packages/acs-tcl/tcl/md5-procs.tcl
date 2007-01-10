@@ -168,10 +168,10 @@ if {![catch {package require Trf 2.0}] && ![catch {::md5 -- test}]} {
 	# 3.3 Step 3. Initialize MD Buffer
 	#
 
-	set A [expr 0x67452301]
-	set B [expr 0xefcdab89]
-	set C [expr 0x98badcfe]
-	set D [expr 0x10325476]
+	set A [expr {0x67452301}]
+	set B [expr {0xefcdab89}]
+	set C [expr {0x98badcfe}]
+	set D [expr {0x10325476}]
 
 	#
 	# 3.4 Step 4. Process Message in 16-Word Blocks

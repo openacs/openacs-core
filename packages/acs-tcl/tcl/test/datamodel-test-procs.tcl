@@ -13,7 +13,7 @@ aa_register_case -cats {db smoke production_safe} datamodel__named_constraints {
     @author Jeff Davis davis@xarg.net
 } {
 
-    set db_is_pg_p [string eq [db_name] "PostgreSQL"]
+    set db_is_pg_p [string equal [db_name] "PostgreSQL"]
 
     if { $db_is_pg_p } {
 	set get_constraints "select 
@@ -64,7 +64,7 @@ aa_register_case -cats {db smoke production_safe} datamodel__named_constraints {
 		set column_name [db_string get_col $get_constraint_col]
 		
 		# NOT NULL constraints (oracle only)
-		if { [string eq $search_condition "\"$column_name\" IS NOT NULL"] } {
+		if { [string equal $search_condition "\"$column_name\" IS NOT NULL"] } {
 		    set constraint_type "NN"
 		}
 
@@ -77,13 +77,13 @@ aa_register_case -cats {db smoke production_safe} datamodel__named_constraints {
 	    }
 
 	    # Giving a hint for constraint naming
-	    if { [string eq [string range $standard_name 0 2] "SYS"] } {
+	    if {[string range $standard_name 0 2] eq "SYS"} {
 		set hint "unnamed"
 	    } else {
 		set hint "hint: $standard_name"
 	    }
 
-	    if { ![string eq $standard_name $constraint_name] } {
+	    if { $standard_name ne $constraint_name } {
 		aa_log_result fail "Table $table_name constraint $constraint_name ($constraint_type) violates naming standard ($hint)"
 	    }
 	}
@@ -99,17 +99,17 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_object_type_che
     @author Jeff Davis davis@xarg.net
 } {
     db_foreach object_type {select * from acs_object_types} {
-        if {![string eq [string tolower $table_name] $table_name]} {
+        if {[string tolower $table_name] ne $table_name } {
             aa_log_result fail "Type $object_type: table_name $table_name mixed case"
         }
-        if {![string eq [string tolower $id_column] $id_column]} {
+        if {[string tolower $id_column] ne $id_column } {
             aa_log_result fail "Type $object_type: id_column $id_column mixed case"
         }
         set table_name [string tolower $table_name]
         set id_column [string tolower $id_column]
 
         set the_pk {}
-	while { [string is space $table_name] && ![string eq $object_type $supertype]} {
+	while { [string is space $table_name] && $object_type ne $supertype } {
 	    if {![db_0or1row get_supertype "select * from acs_object_types where object_type = :supertype"]} {
 		break
 	    }
@@ -129,7 +129,7 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_object_type_che
         }
 
         if {![string is space $name_method]} {
-            if {![string eq [string tolower $name_method] $name_method]} {
+            if {[string tolower $name_method] ne $name_method } {
                 aa_log_result fail "Type $object_type: name method $name_method mixed case"
             }
             set name_method [string tolower $name_method]
@@ -173,7 +173,7 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_attribute_check
 
     db_foreach attribute {select a.*, lower(ot.table_name) as obj_type_table from acs_attributes a, acs_object_types ot where ot.object_type = a.object_type order by a.object_type} {
 
-        if {![string eq [string tolower $table_name] $table_name]} {
+        if {[string tolower $table_name] ne $table_name } {
             aa_log_result fail "Type $object_type attribute $attribute table name $table_name mixed case"
             set table_name [string tolower $table_name]
         } elseif {[string is space $table_name]} {

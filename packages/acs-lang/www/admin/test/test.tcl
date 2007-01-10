@@ -21,12 +21,12 @@ set german [_ de test.German]
 
 #set lang [lang::user::language]
 set lang [ad_get_client_property lang locale]
-if {[empty_string_p $lang]} {
+if {$lang eq ""} {
     set lang "en"
 }
 
 db_1row lang_get_lang_name "SELECT nls_language as language FROM ad_locales WHERE language = :lang"
-if [empty_string_p $language] {
+if {$language eq ""} {
     set language English
 }
 

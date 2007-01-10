@@ -91,7 +91,7 @@ ad_proc -public template::list::create {
             }
             extended_price {
                 label "Extended Price"
-                display_eval {[lc_sepfmt [expr $quantity $item_price]]}
+                display_eval {[lc_sepfmt [expr {$quantity $item_price}]]}
             }
         }
 
@@ -290,7 +290,7 @@ ad_proc -public template::list::create {
     set row_pretty_plural [lang::util::localize $row_pretty_plural]
     set no_data [ad_decode $no_data "" [_ acs-templating.No_row_pretty_plural] $no_data]
     # Set ulevel to the level of the page, so we can access it later
-    set list_properties(ulevel) "\#[expr [info level] - $ulevel]"
+    set list_properties(ulevel) "\#[expr {[info level] - $ulevel}]"
 
     # Set properties from the parameters passed
     foreach elm { 
@@ -319,18 +319,18 @@ ad_proc -public template::list::create {
     }
 
     # Default 'class' to 'main_class'
-    if { [empty_string_p $list_properties(class)] } {
+    if { $list_properties(class) eq "" } {
         set list_properties(class) $list_properties(main_class)
     }
 
     # Default 'multirow' to list name
-    if { [empty_string_p $list_properties(multirow)] } {
+    if { $list_properties(multirow) eq "" } {
 	set list_properties(multirow) $name
     }
 
     # Set up automatic 'checkbox' element as the first element
     if { !$has_checkboxes_p && [llength $bulk_actions] > 0 } {
-	if { [empty_string_p $key] } {
+	if { $key eq "" } {
 	    error "You cannot have bulk_actions without providing a key"
 	}
         # Create the checkbox element
@@ -386,7 +386,7 @@ ad_proc -public template::list::create {
         set filter_default {}
 
         foreach { orderby_name orderby_spec } $orderby {
-            if { [string equal $orderby_name "default_value"] } {
+            if {$orderby_name eq "default_value"} {
                 set filter_default $orderby_spec
             } else {
                 template::list::orderby::create \
@@ -434,9 +434,9 @@ ad_proc -public template::list::create {
             -spec [list label "[_ acs-templating.Page_Size]" default_value 20 hide_p t]
     }
 
-    if { (![empty_string_p $list_properties(page_size)] && $list_properties(page_size) != 0) || $list_properties(page_size_variable_p) == 1 } {
+    if { ($list_properties(page_size) ne "" && $list_properties(page_size) != 0) || $list_properties(page_size_variable_p) == 1 } {
         # Check that we have either page_query or page_query_name
-        if { [empty_string_p $list_properties(page_query)] && [empty_string_p $list_properties(page_query_name)] } {
+        if { $list_properties(page_query) eq "" && $list_properties(page_query_name) eq "" } {
             error "[_ acs-templating.lt_When_specifying_a_non]"
         }
 
@@ -472,7 +472,7 @@ ad_proc -public template::list::prepare {
     }
 
     # Set the bulk_action_export_chunk
-    if { ![empty_string_p $list_properties(bulk_action_export_vars)] } {
+    if { $list_properties(bulk_action_export_vars) ne "" } {
         set list_properties(bulk_action_export_chunk) [uplevel $list_properties(ulevel) \
                                                            [list export_vars -form $list_properties(bulk_action_export_vars)]]
     }
@@ -489,7 +489,7 @@ ad_proc -public template::list::prepare {
 
         set list_properties(orderby_selected_name) $orderby_name
 
-        if { [empty_string_p $orderby_direction] } {
+        if { $orderby_direction eq "" } {
             template::list::orderby::get_reference \
                 -list_name $name \
                 -orderby_name $orderby_name
@@ -502,7 +502,7 @@ ad_proc -public template::list::prepare {
     # This sets orderby, etc., for filters
     prepare_elements \
         -name $name \
-        -ulevel [expr $ulevel + 1]
+        -ulevel [expr {$ulevel + 1}]
     
     # Make groupby information available to templates
     if { [exists_and_not_null list_properties(filter,groupby)] } {
@@ -519,9 +519,9 @@ ad_proc -public template::list::prepare {
         set list_properties(page_size_export_chunk) [uplevel $list_properties(ulevel) [list export_vars -form -exclude {page_size page} $list_properties(filters_export)]]
     }
 
-    if { ![empty_string_p $list_properties(page_size)] && $list_properties(page_size) != 0 } {
+    if { $list_properties(page_size) ne "" && $list_properties(page_size) != 0 } {
 
-        if { [string equal $list_properties(page_query) ""] } {
+        if {$list_properties(page_query) eq ""} {
             # We need to uplevel db_map it to get the query from the right context
             set list_properties(page_query_substed) \
                 [uplevel $list_properties(ulevel) [list db_map $list_properties(page_query_name)]]
@@ -538,7 +538,7 @@ ad_proc -public template::list::prepare {
         set page_size $list_properties(page_size)
         set page_group [expr ($page - 1 - (($page - 1) % $groupsize)) / $groupsize + 1]
         set first_row [expr ($page_group - 1) * $groupsize * $page_size + 1]
-        set last_row [expr $first_row + ($groupsize + 1) * $page_size - 1]
+        set last_row [expr {$first_row + ($groupsize + 1) * $page_size - 1}]
         set page_offset [expr ($page_group - 1) * $groupsize]
 
         # Now wrap the provided query with the limit information
@@ -549,7 +549,7 @@ ad_proc -public template::list::prepare {
         set paginator_name $list_properties(name)
 
         foreach filter $list_properties(filters) {
-            if { ![string equal $filter "page"] && [info exists list_properties(filter,$filter)] } {
+            if { $filter ne "page" && [info exists list_properties(filter,$filter)] } {
                 append paginator_name ",$filter=$list_properties(filter,$filter)"
             }
         }
@@ -680,7 +680,7 @@ ad_proc -public template::list::page_where_clause {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
 
-    if { [empty_string_p $list_properties(page_size)] || $list_properties(page_size) == 0 } {
+    if { $list_properties(page_size) eq "" || $list_properties(page_size) == 0 } {
         return {}
     }
     
@@ -780,7 +780,7 @@ ad_proc -public template::list::page_get_ids {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
 
-    if { [empty_string_p $list_properties(page_size)] || $list_properties(page_size) == 0 } {
+    if { $list_properties(page_size) eq "" || $list_properties(page_size) == 0 } {
         return {}
     }
     
@@ -810,7 +810,7 @@ ad_proc -public template::list::page_get_rowcount {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
 
-    if { [empty_string_p $list_properties(page_size)] || $list_properties(page_size) == 0 } {
+    if { $list_properties(page_size) eq "" || $list_properties(page_size) == 0 } {
         return {}
     }
     
@@ -834,7 +834,7 @@ ad_proc -public template::list::orderby_clause {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
 
-    if { [empty_string_p $list_properties(orderby_selected_name)] } {
+    if { $list_properties(orderby_selected_name) eq "" } {
         return {}
     }
     
@@ -842,7 +842,7 @@ ad_proc -public template::list::orderby_clause {
     template::list::orderby::get_reference -list_name $name -orderby_name $list_properties(orderby_selected_name)
     
     set result $orderby_properties(orderby_$list_properties(orderby_selected_direction))
-    if { $orderby_p && ![empty_string_p $result] } {
+    if { $orderby_p && $result ne "" } {
         set result "order by $result"
     }
     
@@ -859,14 +859,14 @@ ad_proc -public template::list::multirow_cols {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
 
-    if { [empty_string_p $list_properties(orderby_selected_name)] } {
+    if { $list_properties(orderby_selected_name) eq "" } {
         return {}
     }
     
     template::list::orderby::get_reference -list_name $name -orderby_name $list_properties(orderby_selected_name)
 
     set result [list]
-    if { [string equal $list_properties(orderby_selected_direction) "desc"] } {
+    if {$list_properties(orderby_selected_direction) eq "desc"} {
         lappend result "-decreasing"
     }
 
@@ -936,11 +936,11 @@ ad_proc -private template::list::template {
     # Find the list template
     #
 
-    if { [string equal $style {}] } { 
+    if {$style eq {}} { 
         set style $list_properties(style)
     }
 
-    if { [string equal $style {}] } { 
+    if {$style eq {}} { 
       set style [parameter::get \
                      -package_id [ad_conn subsite_id] \
                      -parameter DefaultListStyle \
@@ -980,7 +980,7 @@ ad_proc -private template::list::prepare_for_rendering {
 
     # Sort in webserver layer, if requested to do so    
     set __multirow_cols [template::list::multirow_cols -name $__list_properties(name)]
-    if { ![empty_string_p $__multirow_cols] } {
+    if { $__multirow_cols ne "" } {
         eval template::multirow sort $__list_properties(multirow) $__multirow_cols
     }
 
@@ -1056,14 +1056,14 @@ ad_proc -private template::list::prepare_for_rendering {
                 if { [exists_and_not_null __element_properties(aggregate)] } {
                     # Update totals
                     incr __agg_counter($__element_properties(name))
-                    if { ![string equal $__element_properties(aggregate) "count"] } {
+                    if { $__element_properties(aggregate) ne "count" } {
                         set __agg_sum($__element_properties(name)) \
-                            [expr $__agg_sum($__element_properties(name)) + [set $__element_properties(name)]]
+                            [expr {$__agg_sum($__element_properties(name)) + [set $__element_properties(name)]}]
                     }
 
                     # Check if the value of the groupby column has changed
                     if { [exists_and_not_null $__list_properties(groupby)] } {
-                        if { ![string equal $__last_group_val [set $__list_properties(groupby)]] } {
+                        if { $__last_group_val ne [set $__list_properties(groupby)] } {
                             # Initialize our group counters to 0
                             set __agg_group_counter($__element_properties(name)) 0
                             set __agg_group_sum($__element_properties(name)) 0
@@ -1071,7 +1071,7 @@ ad_proc -private template::list::prepare_for_rendering {
                         # Update subtotals
                         incr __agg_group_counter($__element_properties(name))
                         set __agg_group_sum($__element_properties(name)) \
-                            [expr $__agg_group_sum($__element_properties(name)) + [set $__element_properties(name)]]
+                            [expr {$__agg_group_sum($__element_properties(name)) + [set $__element_properties(name)]}]
                     }
 
                     switch $__element_properties(aggregate) {
@@ -1083,18 +1083,18 @@ ad_proc -private template::list::prepare_for_rendering {
                         }
                         average {
                             set $__element_properties(aggregate_col) \
-                                [expr $__agg_sum($__element_properties(name)) / $__agg_counter($__element_properties(name))]
+                                [expr {$__agg_sum($__element_properties(name)) / $__agg_counter($__element_properties(name))}]
                             if { [exists_and_not_null $__list_properties(groupby)] } {
                                 set $__element_properties(aggregate_group_col) \
-                                    [expr $__agg_sum($__element_properties(name)) / $__agg_group_counter($__element_properties(name))]
+                                    [expr {$__agg_sum($__element_properties(name)) / $__agg_group_counter($__element_properties(name))}]
                             }
                         }
                         count {
                             set $__element_properties(aggregate_col) \
-                                [expr $__agg_counter($__element_properties(name))]
+                                [expr {$__agg_counter($__element_properties(name))}]
                             if { [exists_and_not_null $__list_properties(groupby)] } {
                                 set $__element_properties(aggregate_group_col) \
-                                    [expr $__agg_group_counter($__element_properties(name))]
+                                    [expr {$__agg_group_counter($__element_properties(name))}]
                             }
                         }
                         default {
@@ -1154,7 +1154,7 @@ ad_proc -private template::list::render {
 	template::util::list_to_multirow page_sizes {{name 10 value 10} {name 20 value 20} {name 50 value 50} {name 100 value 100}}
     }
 
-    if { ![empty_string_p $list_properties(page_size)] && $list_properties(page_size) != 0 } {
+    if { $list_properties(page_size) ne "" && $list_properties(page_size) != 0 } {
         
         set current_page $list_properties(filter,page)
 
@@ -1179,7 +1179,7 @@ ad_proc -private template::list::render {
         if 0 {
             set num_pages 11
             set pages [list]
-            for { set i [expr $current_page - $num_pages] } { $i < [expr $current_page + $num_pages] } { incr i } {
+            for { set i [expr {$current_page - $num_pages}] } { $i < [expr {$current_page + $num_pages}] } { incr i } {
                 if { $i > 0 && $i <= $paginator(page_count) } {
                     lappend pages $i
                 }
@@ -1276,9 +1276,9 @@ ad_proc -private template::list::prepare_elements {
     foreach element_name $list_properties(elements) {
         template::list::element::get_reference -list_name $name -element_name $element_name
 
-        if { ![empty_string_p $element_properties(default_direction)] } {
+        if { $element_properties(default_direction) ne "" } {
 
-            if { [string equal $list_properties(orderby_selected_name) $element_name] } {
+            if {$list_properties(orderby_selected_name) eq $element_name} {
                 # We're currently ordering on this column
                 set direction [ad_decode $list_properties(orderby_selected_direction) "asc" "desc" "asc"]
                 set element_properties(orderby_url) [get_url \
@@ -1317,7 +1317,7 @@ ad_proc -private template::list::prepare_filters {
         upvar $list_properties(ulevel) $filter_properties(name) current_filter_value
 
         # Set to default value if undefined
-        if { ![exists_and_not_null current_filter_value] && ![empty_string_p $filter_properties(default_value)] } {
+        if { ![exists_and_not_null current_filter_value] && $filter_properties(default_value) ne "" } {
             set current_filter_value $filter_properties(default_value)
         }
 
@@ -1325,14 +1325,14 @@ ad_proc -private template::list::prepare_filters {
         if { [info exists current_filter_value] } {
 
             # Get the where clause
-            if { [empty_string_p $current_filter_value] } {
+            if { $current_filter_value eq "" } {
                 set search_order { null_where_clause_eval null_where_clause where_clause_eval where_clause }
             } else {
                 set search_order { where_clause_eval where_clause }
             }
 
             foreach property $search_order {
-                if { ![empty_string_p $filter_properties($property)] } {
+                if { $filter_properties($property) ne "" } {
                     # We've found a where_clause to include
 
                     if { [string match *_eval $property] } {
@@ -1399,7 +1399,7 @@ ad_proc -private template::list::prepare_filters {
 		    set selected_p 0
                     foreach elm $value {
                         foreach { elm_key elm_value } [lrange $elm 0 1] {}
-                        if { [string equal $elm_key $filter_properties(name)] } { 
+                        if {$elm_key eq $filter_properties(name)} { 
                             set selected_p [exists_and_equal current_filter_value $elm_value]
                         }
                     }
@@ -1407,7 +1407,7 @@ ad_proc -private template::list::prepare_filters {
             }
 
             lappend filter_properties(selected_p) $selected_p
-            set found_selected_p [expr $found_selected_p || $selected_p]
+            set found_selected_p [expr {$found_selected_p || $selected_p}]
 
             if { $selected_p } {
                 # Remember the filter label
@@ -1440,7 +1440,7 @@ ad_proc -private template::list::prepare_filters {
         # Handle 'other_label'
         if { [exists_and_not_null current_filter_value] && \
                  !$found_selected_p && \
-                 ![empty_string_p $filter_properties(other_label)] } {
+                 $filter_properties(other_label) ne "" } {
 
             # Add filter entry with the 'other_label'.
             lappend filter_properties(values) [list $filter_properties(other_label) {}]
@@ -1499,7 +1499,7 @@ ad_proc -private template::list::render_filters {
                     set label $filter_properties(null_label)
                 }
 
-		if { [string equal $filter_properties(type) "multival"] } {
+		if {$filter_properties(type) eq "multival"} {
 		    # We need to ns_urlencode the name to work
 		    set filter_properties_name [ns_urlencode $filter_properties(name)]
 		} else {
@@ -1522,7 +1522,7 @@ ad_proc -private template::list::render_filters {
         }
     }
     
-    if { [string equal $style {}] } { 
+    if {$style eq {}} { 
         set style [parameter::get \
                        -package_id [apm_package_id_from_key "acs-templating"] \
                        -parameter DefaultListFilterStyle \
@@ -1554,7 +1554,7 @@ ad_proc -public template::list::util_html_to_attributes_string {
 } {
     set output {}
     foreach { key value } $html {
-        if { ![empty_string_p $value] } {
+        if { $value ne "" } {
             append output " [ad_quotehtml $key]=\"[ad_quotehtml $value]\""
         } else {
             append output " [ad_quotehtml $key]"
@@ -1736,30 +1736,30 @@ ad_proc -public template::list::element::create {
         -ulevel $ulevel
 
     # Default display_col to element name
-    if { [empty_string_p $element_properties(display_col)] } {
+    if { $element_properties(display_col) eq "" } {
         set element_properties(display_col) $element_properties(name)
     }
 
     # Default csv_col to display_col
-    if { [empty_string_p $element_properties(csv_col)] } {
+    if { $element_properties(csv_col) eq "" } {
         set element_properties(csv_col) $element_properties(display_col)
     }
 
     # Default sub_class to list:sub_class
-    if { [empty_string_p $element_properties(sub_class)] } {
+    if { $element_properties(sub_class) eq "" } {
         set element_properties(sub_class) $list_properties(sub_class)
     }
 
     # Default class to (list:main_class)-(element:sub_class)
-    if { [empty_string_p $element_properties(class)] } {
+    if { $element_properties(class) eq "" } {
         set element_properties(class) [join [concat $list_properties(main_class) $element_properties(sub_class)] "-"]
     }
 
     # Create the orderby filter, if specified
-    if { ![empty_string_p $element_properties(orderby)] || ![empty_string_p $element_properties(orderby_asc)] || ![empty_string_p $element_properties(orderby_desc)] } {
+    if { $element_properties(orderby) ne "" || $element_properties(orderby_asc) ne "" || $element_properties(orderby_desc) ne "" } {
         set orderby_spec [list]
         foreach elm { orderby orderby_asc orderby_desc default_direction label } {
-            if { ![empty_string_p $element_properties($elm)] } {
+            if { $element_properties($elm) ne "" } {
                 lappend orderby_spec $elm $element_properties($elm)
             }
         }
@@ -1767,7 +1767,7 @@ ad_proc -public template::list::element::create {
         template::list::orderby::create \
             -list_name $list_name \
             -orderby_name $element_properties(name) \
-            -ulevel [expr $ulevel + 1] \
+            -ulevel [expr {$ulevel + 1}] \
             -spec $orderby_spec
     }
 }
@@ -1927,7 +1927,7 @@ ad_proc -private template::list::element::render {
         set link_html $element_properties(link_html)
     }
     
-    if { ![empty_string_p $link_url] } {
+    if { $link_url ne "" } {
         set old_output $output
 
         set output "<if \"$link_url\" not nil><a href=\"$link_url\"[template::list::util_html_to_attributes_string $link_html]>$old_output</a></if><else>$old_output</else>"
@@ -2078,7 +2078,7 @@ ad_proc -public template::list::filter::create {
         -list_name $list_name \
         -filter_name $filter_name \
         -spec $spec \
-        -ulevel [expr $ulevel + 1]
+        -ulevel [expr {$ulevel + 1}]
 
     # This is to be used by the export_vars function
     switch $filter_properties(type) {
@@ -2147,7 +2147,7 @@ ad_proc -public template::list::filter::set_property {
         default_value {
             set value [uplevel $ulevel [list subst $value]]
             set filter_properties($property) $value
-            if { ![empty_string_p $value] } {
+            if { $value ne "" } {
                 set filter_properties(has_default_p) 1
             }
         }
@@ -2331,7 +2331,7 @@ ad_proc -public template::list::format::create {
         switch $key {
             row {
                 # We only care about this for the currently selected format
-                if { [string equal $format_name $selected_format] } {
+                if {$format_name eq $selected_format} {
 
                     # This is the layout specification for table layouts
                     set value [uplevel $ulevel [list subst $value]]
@@ -2353,7 +2353,7 @@ ad_proc -public template::list::format::create {
                             -list_name $list_name \
                             -element_name $element_name \
                             -spec $spec \
-                            -ulevel [expr $ulevel + 1] 
+                            -ulevel [expr {$ulevel + 1}] 
                         
                         # Remember the display order
                         lappend list_properties(display_elements) $element_name
@@ -2362,7 +2362,7 @@ ad_proc -public template::list::format::create {
             }
             template {
                 # We only care about this for the currently selected format
-                if { [string equal $format_name $selected_format] } {
+                if {$format_name eq $selected_format} {
                     # All other vars, do an uplevel subst on the value now
                     set value [uplevel $ulevel [list subst $value]]
                     set format_properties($key) $value
@@ -2382,28 +2382,28 @@ ad_proc -public template::list::format::create {
     }
     
     # For the currently selected format, copy some things over to the list properties
-    if { [string equal $format_name $selected_format] } {
-        if { [empty_string_p $format_properties(style)] } {
+    if {$format_name eq $selected_format} {
+        if { $format_properties(style) eq "" } {
             set format_properties(style) $format_properties(layout)
         }
         
         # Move style up to the list_properties
-        if { ![empty_string_p $format_properties(style)] } {
+        if { $format_properties(style) ne "" } {
             set list_properties(style) $format_properties(style)
         }
         
         # Move output up to the list_properties
-        if { ![empty_string_p $format_properties(output)] } {
+        if { $format_properties(output) ne "" } {
             set list_properties(output) $format_properties(output)
         }
         
         # Move page_size up to the list_properties
-        if { ![empty_string_p $format_properties(page_size)] } {
+        if { $format_properties(page_size) ne "" } {
             set list_properties(page_size) $format_properties(page_size)
         }
 
         # Move elements up to the list_properties as display_elements
-        if { ![empty_string_p $format_properties(elements)] } {
+        if { $format_properties(elements) ne "" } {
             set list_properties(display_elements) $format_properties(elements)
         }
 
@@ -2739,7 +2739,7 @@ ad_proc -private template::list::render_form_filters {
     {-style ""}
 } {
     
-    if { [string equal $style {}] } { 
+    if {$style eq {}} { 
         set style [parameter::get \
                        -package_id [apm_package_id_from_key "acs-templating"] \
                        -parameter DefaultListFilterStyle \

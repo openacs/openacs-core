@@ -468,15 +468,15 @@ ad_proc -public head {xs} "first element of a list" {
 }
  
 ad_proc -public last {xs} "last element of a list" {
-    lindex $xs [expr [llength $xs]-1]
+    lindex $xs [expr {[llength $xs]-1}]
 }
 
 ad_proc -public init {xs} "all elements of a list but the last" {
-    lrange $xs 0 [expr [llength $xs]-2]
+    lrange $xs 0 [expr {[llength $xs]-2}]
 }
 
 ad_proc -public tail {xs} "all elements of a list but the first" {
-    lrange $xs 1 [expr [llength $xs]-1]
+    lrange $xs 1 [expr {[llength $xs]-1}]
 }
 
 ad_proc -public take {n xs} "returns the first n elements of xs" {
@@ -484,7 +484,7 @@ ad_proc -public take {n xs} "returns the first n elements of xs" {
 }
 
 ad_proc -public drop {n xs} "returns the remaining elements of xs (without the first n)" {
-    lrange $xs $n [expr [llength $xs]-1]
+    lrange $xs $n [expr {[llength $xs]-1}]
 }
 
 ad_proc -public filter {pred xs} {
@@ -602,7 +602,7 @@ ad_proc -public zip_with {f xs ys} "takes two lists {x1 x2 x3 ...} and {y1 y2 y3
 
 ad_proc -public transpose {lists} "tranposes a matrix (a list of lists)" {
     set num_lists [llength $lists]
-    if !$num_lists { return "" }
+    if {!$num_lists} { return "" }
     for {set i 0} {$i<$num_lists} {incr i} {
 	set l($i) [lindex $lists $i]
     }
@@ -610,7 +610,7 @@ ad_proc -public transpose {lists} "tranposes a matrix (a list of lists)" {
     while {1} {
 	set element {}
 	for {set i 0} {$i<$num_lists} {incr i} {
-	    if [null_p $l($i)] { return $result }
+	    if {[null_p $l($i)]} { return $result }
 	    lappend element [head $l($i)]
 	    set l($i) [tail $l($i)]
 	}

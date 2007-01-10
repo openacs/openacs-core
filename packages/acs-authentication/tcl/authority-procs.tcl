@@ -72,7 +72,7 @@ ad_proc -public auth::authority::create {
 
     db_transaction {
 
-        if { [empty_string_p $authority_id] } {
+        if { $authority_id eq "" } {
             set authority_id [db_nextval "acs_object_id_seq"]
         }
 
@@ -119,7 +119,7 @@ ad_proc -public auth::authority::create {
         # Auto generate short name if not provided and make
         # sure it's unique
         # TODO: check for max length 255?
-        if { [empty_string_p $short_name] } {
+        if { $short_name eq "" } {
             set existing_short_names [db_list select_short_names {
                 select short_name
                 from auth_authorities
@@ -251,7 +251,7 @@ ad_proc -public auth::authority::edit {
         if { [lsearch -exact $columns $name] == -1 } {
             error "Attribute '$name' isn't valid for auth_authorities."
         }
-        if { [string equal $name "authority_id"] } {
+        if {$name eq "authority_id"} {
             error "Attribute '$name' is the primary key for auth_authorities, and thus cannot be edited."
         }
         set $name $row($name)
@@ -268,7 +268,7 @@ ad_proc -public auth::authority::edit {
 
     # check if we need to update the object title
     set new_short_name [get_element -authority_id $authority_id -element short_name]
-    if {![string equal $old_short_name $new_short_name]} {
+    if {$old_short_name ne $new_short_name } {
 	db_dml update_object_title {}
     }
 }
@@ -310,9 +310,9 @@ ad_proc -public auth::authority::batch_sync {
     set message {}
 
     # Verify that we have implementations
-    if { [empty_string_p $authority(get_doc_impl_id)] } {
+    if { $authority(get_doc_impl_id) eq "" } {
         set message "No Get Document implementation"
-    } elseif { [empty_string_p $authority(process_doc_impl_id)] } { 
+    } elseif { $authority(process_doc_impl_id) eq "" } { 
         set message "No Process Document implementation"
     } else {
         auth::sync::job::start_get_document -job_id $job_id
@@ -341,7 +341,7 @@ ad_proc -public auth::authority::batch_sync {
             -document $doc_result(document) \
             -snapshot=$snapshot_p
 
-        if { [string equal $doc_result(doc_status) "ok"] && ![empty_string_p $doc_result(document)] } {
+        if { $doc_result(doc_status) eq "ok" && $doc_result(document) ne "" } {
             with_catch errmsg {
                 auth::sync::ProcessDocument \
                     -authority_id $authority_id \
@@ -358,7 +358,7 @@ ad_proc -public auth::authority::batch_sync {
                                        -package_key acs-authentication \
                                        -default {}]
                                        
-                if { ![empty_string_p $ack_file_name] } {
+                if { $ack_file_name ne "" } {
                     # Interpolate
                     set pairs [list \
                                    acs_root_dir [acs_root_dir] \
@@ -378,7 +378,7 @@ ad_proc -public auth::authority::batch_sync {
                 set message "Error processing sync document: $errmsg"
             }
         } else {
-            if { [empty_string_p $message] } {
+            if { $message eq "" } {
                 set message $doc_result(doc_message)
             }
         }
@@ -492,7 +492,7 @@ ad_proc -private auth::authority::get_flush {
     
     @see auth::authority::get
 } {
-    if { ![empty_string_p $authority_id] } {
+    if { $authority_id ne "" } {
         util_memoize_flush [list auth::authority::get_not_cached $authority_id]
     } else {
         util_memoize_flush_regexp [list auth::authority::get_not_cached .*]
@@ -529,7 +529,7 @@ ad_proc -private auth::authority::get_id_flush {
 } {
     Flush the cache for gett authority_id by short_name.
 } {
-    if { [empty_string_p $short_name] } {
+    if { $short_name eq "" } {
         util_memoize_flush_regexp [list auth::authority::get_id_not_cached .*]
     } else {
         util_memoize_flush [list auth::authority::get_id_not_cached -short_name $short_name]

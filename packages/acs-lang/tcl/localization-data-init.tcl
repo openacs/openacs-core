@@ -95,7 +95,7 @@ namespace eval ::lang::util {
     
     # Composites, now directly expanded, note that writing for %r specifically would be quicker than what we have here.
     set percent_match(T) {[lc_leading_zeros $lc_time_hours 2]:[lc_leading_zeros $lc_time_minutes 2]:[lc_leading_zeros $lc_time_seconds 2]}
-    set percent_match(D) {[lc_leading_zeros $lc_time_days 2]/[lc_leading_zeros $lc_time_month 2]/[lc_leading_zeros [expr $lc_time_year%100] 2]}
+    set percent_match(D) {[lc_leading_zeros $lc_time_days 2]/[lc_leading_zeros $lc_time_month 2]/[lc_leading_zeros [expr {$lc_time_year%100}] 2]}
     set percent_match(F) {${lc_time_year}-[lc_leading_zeros $lc_time_month 2]-[lc_leading_zeros $lc_time_days 2]}
     set percent_match(r) {[lc_leading_zeros [lc_time_drop_meridian $lc_time_hours] 2]:[lc_leading_zeros $lc_time_minutes 2] [lc_time_name_meridian $locale $lc_time_hours]}
     
@@ -113,18 +113,18 @@ namespace eval ::lang::util {
     set percent_match(M) {[lc_leading_zeros $lc_time_minutes 2]}
 
     # Calculable values (based on assumptions above)
-    set percent_match(C) {[expr int($lc_time_year/100)]}
+    set percent_match(C) {[expr {int($lc_time_year/100)}]}
     set percent_match(I) {[lc_leading_zeros [lc_time_drop_meridian $lc_time_hours] 2]}
-    set percent_match(w) {[expr $lc_time_day_no]}
-    set percent_match(y) {[lc_leading_zeros [expr $lc_time_year%100] 2]}
+    set percent_match(w) {[expr {$lc_time_day_no}]}
+    set percent_match(y) {[lc_leading_zeros [expr {$lc_time_year%100}] 2]}
     set percent_match(Z) [lang::conn::timezone]
 
     # Straight (localian) lookups
     set percent_match(a) {[lindex [lc_get -locale $locale "abday"] $lc_time_day_no]}
     set percent_match(A) {[lindex [lc_get -locale $locale "day"] $lc_time_day_no]}
-    set percent_match(b) {[lindex [lc_get -locale $locale "abmon"] [expr $lc_time_month-1]]}
-    set percent_match(h) {[lindex [lc_get -locale $locale "abmon"] [expr $lc_time_month-1]]}
-    set percent_match(B) {[lindex [lc_get -locale $locale "mon"] [expr $lc_time_month-1]]}
+    set percent_match(b) {[lindex [lc_get -locale $locale "abmon"] [expr {$lc_time_month-1}]]}
+    set percent_match(h) {[lindex [lc_get -locale $locale "abmon"] [expr {$lc_time_month-1}]]}
+    set percent_match(B) {[lindex [lc_get -locale $locale "mon"] [expr {$lc_time_month-1}]]}
     set percent_match(p) {[lc_time_name_meridian $locale $lc_time_hours]}
 
     # Finally, static string replacements

@@ -116,7 +116,7 @@ ad_proc -private template::data::transform::party_search {
     set value [string trim [ns_queryget $element_id]]
     set is_optional [info exists element(optional)]
 
-    if { [empty_string_p $value] } {
+    if { $value eq "" } {
         if { [string is true $is_optional] } {
 	    return ""
 	} else {
@@ -125,7 +125,7 @@ ad_proc -private template::data::transform::party_search {
 	}
     }
 
-    if { [string equal $value ":search:"] } {
+    if {$value eq ":search:"} {
         # user has selected 'search again' previously
         template::element::set_error $element(form_id) $element_id "Please enter a search string."
         return [list]
@@ -288,7 +288,7 @@ ad_proc -public template::widget::textarea {
     # Spell-checker
     array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
     
-    if { [string equal $element(mode) "edit"] && $spellcheck(render_p) } {
+    if { $element(mode) eq "edit" && $spellcheck(render_p) } {
         append output "<br>[_ acs-templating.Spellcheck]: 
 [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) {}]"
   }   
@@ -316,16 +316,16 @@ ad_proc -private template::widget::textarea_internal {
 } {
     upvar $attribute_reference attributes
 
-    if { ![string equal $mode "edit"] } {
+    if { $mode ne "edit" } {
         set output {}
-        if { ![empty_string_p $value] } {
+        if { $value ne "" } {
             append output "[ad_quotehtml $value]<input type=\"hidden\" name=\"$name\" value=\"[ad_quotehtml $value]\">"
         }
     } else {
         set output "<textarea name=\"$name\""
         
         foreach attribute_name [array names attributes] {
-            if { [string equal $attributes($attribute_name) {}] } {
+            if {$attributes($attribute_name) eq {}} {
                 append output " $attribute_name"
             } else {
                 append output " $attribute_name=\"$attributes($attribute_name)\""
@@ -375,13 +375,13 @@ ad_proc -public template::widget::input {
 
     array set attributes $tag_attributes
 
-    if { ( [string equal $type "checkbox"] || [string equal $type "radio"] ) && [info exists element(value)] } {
+    if { ( $type eq "checkbox" || $type eq "radio" ) && [info exists element(value)] } {
         # This can be used in the form template in a <label for="id">...</label> tag.
         set attributes(id) "$element(form_id):elements:$element(name):$element(value)"
     }
     
     # Handle display mode of visible normal form elements, i.e. not hidden, not submit, not button, not clear
-    if { ![string equal $element(mode) "edit"] && [lsearch -exact { hidden submit button clear checkbox radio } $type] == -1 } {
+    if { $element(mode) ne "edit" && [lsearch -exact { hidden submit button clear checkbox radio } $type] == -1 } {
         set output ""
         if { [info exists element(value)] } {
             append output [ad_quotehtml $element(value)]
@@ -390,7 +390,7 @@ ad_proc -public template::widget::input {
     } else {
         set output "<input type=\"$type\" name=\"$element(name)\""
 
-        if { ![string equal $element(mode) "edit"] && [lsearch -exact { hidden submit button clear } $type] == -1 } {
+        if { $element(mode) ne "edit" && [lsearch -exact { hidden submit button clear } $type] == -1 } {
             append output " disabled"
         }
 
@@ -399,7 +399,7 @@ ad_proc -public template::widget::input {
         } 
 
         foreach name [array names attributes] {
-            if { [string equal $attributes($name) {}] } {
+            if {$attributes($name) eq {}} {
                 append output " $name"
             } else {
                 append output " $name=\"$attributes($name)\""
@@ -434,7 +434,7 @@ ad_proc -public template::widget::text {
     # Spell-checker
     array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
 
-    if { [string equal $element(mode) "edit"] && $spellcheck(render_p) } {
+    if { $element(mode) eq "edit" && $spellcheck(render_p) } {
         return "[input text element $tag_attributes] <br>[_ acs-templating.Spellcheck]: 
 [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) {}]"
   } else {
@@ -622,7 +622,7 @@ ad_proc -public template::widget::menu {
     template::util::list_to_lookup $values_list values
 
     set output {}
-    if { ![string equal $mode "edit"] } {
+    if { $mode ne "edit" } {
         set selected_list [list]
 
         foreach option $options_list {
@@ -661,7 +661,7 @@ ad_proc -public template::widget::menu {
                 append output "<select name=\"$widget_name\" "
 
                 foreach name [array names attributes] {
-                    if { [string equal $attributes($name) {}] } {
+                    if {$attributes($name) eq {}} {
                         append output " $name=\"$name\""
                     } else {
                         append output " $name=\"$attributes($name)\""
@@ -766,9 +766,9 @@ ad_proc -public template::data::transform::search {
 
     # there will no value for the initial request or if the form
     # is submitted with no search criteria (text box blank)
-    if { [string equal $value {}] } { return [list] } 
+    if {$value eq {}} { return [list] } 
 
-    if { [string equal $value ":search:"] } { 
+    if {$value eq ":search:"} { 
         if { [info exists element(options)] } {
             unset element(options)
         }
@@ -852,7 +852,7 @@ ad_proc -public template::widget::comment {
         append output "$element(history)"
     }
 
-    if { [string equal $element(mode) "edit"] } {
+    if {$element(mode) eq "edit"} {
         if { [info exists element(header)] } {
             append output "<p><b>$element(header)</b></p>"
         }
@@ -902,7 +902,7 @@ ad_proc -public template::widget::block {
 	    foreach answer_desc $option {
 		set answer_description [lindex $answer_desc 0]
 		set no_of_answers [lindex $answer_desc 1]
-		append output "<th colspan=\"[expr $no_of_answers + 1]\" align=\"center\">$answer_description</td>"
+		append output "<th colspan=\"[expr {$no_of_answers + 1}]\" align=\"center\">$answer_description</td>"
 	    }
 	    append output "</tr>"
 	} elseif {$count == 1} {

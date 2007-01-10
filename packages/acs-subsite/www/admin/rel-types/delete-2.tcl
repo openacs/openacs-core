@@ -14,9 +14,9 @@ ad_page_contract {
     { return_url "" }
 }
 
-if { ![string eq $operation "Yes, I really want to delete this relationship type"] } {
+if { $operation ne "Yes, I really want to delete this relationship type" } {
     # set the return_url to something useful if we are not deleting
-    if { [empty_string_p $return_url] } {
+    if { $return_url eq "" } {
 	set return_url "one?[ad_export_vars rel_type]"
     }
 } else {
@@ -56,7 +56,7 @@ if { ![string eq $operation "Yes, I really want to delete this relationship type
 	    relation_remove $rel_id
 	}
 	
-	if { ![empty_string_p $segment_id] } {
+	if { $segment_id ne "" } {
 	    rel_segments_delete $segment_id
 	}
 	    

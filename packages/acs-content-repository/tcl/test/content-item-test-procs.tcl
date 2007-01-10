@@ -30,7 +30,7 @@ aa_register_case content_item {
                 -folder_id $first_folder_id \
                 -content_type "content_revision" 
 
-            aa_true "Folder created" [expr $first_folder_id == $returned_first_folder_id]
+            aa_true "Folder created" [expr {$first_folder_id == $returned_first_folder_id}]
 
             set is_empty [content::folder::is_empty -folder_id $first_folder_id]
             aa_true "Folder is empty" [string is true $is_empty]
@@ -43,7 +43,7 @@ aa_register_case content_item {
             set returned_second_folder_id [content::folder::new \
                                                -folder_id $second_folder_id \
                                                -name "test_folder_${second_folder_id}"]
-            aa_true "Folder 2 created" [expr $second_folder_id == $returned_second_folder_id]
+            aa_true "Folder 2 created" [expr {$second_folder_id == $returned_second_folder_id}]
 
 
             #########################################################
@@ -59,9 +59,9 @@ aa_register_case content_item {
                                             -attributes [list [list title "$test_name"]]
                                        ]
 
-            aa_true "First item created" [expr $first_item_id == $returned_first_item_id]
+            aa_true "First item created" [expr {$first_item_id == $returned_first_item_id}]
 
-            aa_true "first item exists" [expr [content::item::get -item_id $first_item_id] == 1]
+            aa_true "first item exists" [expr {[content::item::get -item_id $first_item_id] == 1}]
 
             aa_true "First item's revision exists" \
                 [expr \
@@ -87,7 +87,7 @@ aa_register_case content_item {
                                            -attributes [list [list title "${evil_test_name}"]]
                                        ]
 
-            aa_true "Evil_name item created" [expr $evil_item_id == $returned_evil_item_id]
+            aa_true "Evil_name item created" [expr {$evil_item_id == $returned_evil_item_id}]
 
             aa_true "Evil_name item exists" [expr \
                                                  [content::item::get \
@@ -96,7 +96,7 @@ aa_register_case content_item {
                                                       -array_name evil_name] == 1]
             aa_true "Evil_name item's revision exists" \
                 [expr \
-                     {![string equal "" $evil_name(latest_revision)]}]
+                     {$evil_name(latest_revision) ne ""}]
 
             #########################################################
             # delete the evil_name item
@@ -165,11 +165,11 @@ aa_register_case content_item {
             # check that the item exists
             #########################################################
 
-            aa_true "New Type item created" [expr $new_type_item_id == $returned_new_type_item_id]
-            aa_true "New Type item exists" [expr [content::item::get \
+            aa_true "New Type item created" [expr {$new_type_item_id == $returned_new_type_item_id}]
+            aa_true "New Type item exists" [expr {[content::item::get \
                                                       -item_id $new_type_item_id \
                                                       -revision "latest" \
-                                                      -array_name new_type_item] == 1]
+                                                      -array_name new_type_item] == 1}]
 
             #########################################################
             # check that extended attribute exists

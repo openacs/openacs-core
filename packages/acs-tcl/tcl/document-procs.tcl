@@ -23,7 +23,7 @@ ad_proc -private doc_parse_property_string { properties } {
     set lines [split $properties \n]
     foreach line_raw $lines {
 	set line [string trim $line_raw]
-	if { [empty_string_p $line] } {
+	if { $line eq "" } {
 	    continue
 	}
 	
@@ -40,7 +40,7 @@ ad_proc -private doc_parse_property_string { properties } {
                      are not Unicode word characters, but we don't allow that."
 	}
 
-	if { [info exists type_raw] && ![empty_string_p $type_raw] } { 
+	if { [info exists type_raw] && $type_raw ne "" } { 
 	    set type [string trim $type_raw]
 	} else {
 	    set type onevalue
@@ -62,7 +62,7 @@ ad_proc -private doc_parse_property_string { properties } {
 		set column_list [list]
 		foreach column_raw $column_split {
 		    set column [string trim $column_raw]
-		    if { [empty_string_p $column] } {
+		    if { $column eq "" } {
 			return -code error "You have an empty column name in\
 				the definition of the $property property in the\
 				type $type"
@@ -162,7 +162,7 @@ proc_doc doc_serve_template { __template_path } { Serves the document in the env
 
     set adp [ns_adp_parse -file $__template_path]
     set content_type [ns_set iget [ad_conn outputheaders] "content-type"]
-    if { [empty_string_p $content_type] } {
+    if { $content_type eq "" } {
 	set content_type "text/html"
     }
     doc_return 200 $content_type $adp
@@ -174,7 +174,7 @@ proc_doc doc_serve_document {} { Serves the document currently in the environmen
     }
 
     set mime_type [doc_get_property mime_type]
-    if { [empty_string_p $mime_type] } {
+    if { $mime_type eq "" } {
 	if { [doc_property_exists_p title] } {
 	    set mime_type "text/html;content-pane"
 	} else {
@@ -186,7 +186,7 @@ proc_doc doc_serve_document {} { Serves the document currently in the environmen
 	text/html;content-pane - text/x-html-content-pane {
 	    # It's a content pane. Find the appropriate template.
 	    set template_path [doc_find_template [ad_conn file]]
-	    if { [empty_string_p $template_path] } {
+	    if { $template_path eq "" } {
 		ns_returnerror 500 "Unable to find master template"
 	        ns_log error \
 		    "Unable to find master template for file '[ad_conn file]'"
@@ -211,7 +211,7 @@ proc doc_tag_ad_document { contents params } {
 
 proc doc_tag_ad_property { contents params } {
     set name [ns_set iget $params name]
-    if { [empty_string_p $name] } {
+    if { $name eq "" } {
 	return "<em>No <tt>name</tt> property in <tt>AD-PROPERTY</tt> tag</em>"
     }
     doc_set_property $name $contents

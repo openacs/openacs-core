@@ -81,7 +81,7 @@ ad_proc -public lang::system::locale {
         return [site_wide_locale]
     } 
 
-    if { [empty_string_p $package_id] && [ad_conn isconnected] } {
+    if { $package_id eq "" && [ad_conn isconnected] } {
         set package_id [ad_conn package_id]
     }
 
@@ -90,7 +90,7 @@ ad_proc -public lang::system::locale {
     set locale [package_level_locale $package_id]
 
     # If there's no package setting, use the site-wide setting
-    if { [empty_string_p $locale] } {
+    if { $locale eq "" } {
         set locale [site_wide_locale]
     } 
     return $locale
@@ -106,7 +106,7 @@ ad_proc -public lang::system::set_locale {
     @param package_id The package for which you want to set the locale setting, if you want to set system setting for one package only. Leave blank for site-wide setting.
     @param locale The new locale that you want to use as your system locale.
 } {
-    if { [empty_string_p $package_id] } {
+    if { $package_id eq "" } {
 
         parameter::set_value \
             -package_id [apm_package_id_from_key "acs-lang"] \
@@ -266,7 +266,7 @@ ad_proc -public lang::user::package_level_locale {
     given by its package id.
 } {
     # default to current user
-    if { [empty_string_p $user_id] } {
+    if { $user_id eq "" } {
         set user_id [ad_conn untrusted_user_id]
     }
 
@@ -285,7 +285,7 @@ ad_proc -public lang::user::site_wide_locale {
     Get the user's preferred site wide locale.
 } {
     # default to current user
-    if { [empty_string_p $user_id] } {
+    if { $user_id eq "" } {
         set user_id [ad_conn untrusted_user_id]
     }
 
@@ -307,7 +307,7 @@ ad_proc -private lang::user::site_wide_locale_not_cached {
     set system_locale [lang::system::site_wide_locale]
     if { $user_id == 0 } {
 	set locale [ad_get_cookie "ad_locale"]
-	if { [empty_string_p $locale] } {
+	if { $locale eq "" } {
 	    set locale $system_locale
 	}
 	return $locale
@@ -331,12 +331,12 @@ ad_proc -public lang::user::locale {
     @param user_id Set this to the user you want to get the locale of, defaults to current user.
 } {
     # default to current user
-    if { [empty_string_p $user_id] } {
+    if { $user_id eq "" } {
         set user_id [ad_conn untrusted_user_id]
     }
 
     # default to current connection package
-    if { [empty_string_p $package_id] } {
+    if { $package_id eq "" } {
         set package_id [ad_conn package_id]
     }
 
@@ -344,7 +344,7 @@ ad_proc -public lang::user::locale {
     set locale [package_level_locale -user_id $user_id $package_id]
 
     # If there's no package setting, then use the site-wide setting
-    if { [empty_string_p $locale] } {
+    if { $locale eq "" } {
         set locale [site_wide_locale -user_id $user_id]
     } 
 
@@ -374,7 +374,7 @@ ad_proc -public lang::user::set_locale {
         return
     }
 
-    if { [empty_string_p $package_id] } {
+    if { $package_id eq "" } {
         # Set site-wide locale in user_preferences table
         db_dml set_user_site_wide_locale {}
 
@@ -388,13 +388,13 @@ ad_proc -public lang::user::set_locale {
 
     set user_locale_exists_p [db_string user_locale_exists_p {}]
     if { $user_locale_exists_p } {
-        if { ![empty_string_p $locale] } {
+        if { $locale ne "" } {
             db_dml update_user_locale {}
         } else {
             db_dml delete_user_locale {}
         }
     } else {
-        if { ![empty_string_p $locale] } {
+        if { $locale ne "" } {
             db_dml insert_user_locale {}
         }
     }
@@ -479,7 +479,7 @@ ad_proc -public lang::conn::locale {
 } {
     if { $site_wide_p } { 
         set locale [lang::user::site_wide_locale]
-        if { [empty_string_p $locale] } {
+        if { $locale eq "" } {
             set locale [lang::system::site_wide_locale]
         }
         return $locale
@@ -487,7 +487,7 @@ ad_proc -public lang::conn::locale {
 
     # default value for package_id
 
-    if { [empty_string_p $package_id] } {
+    if { $package_id eq "" } {
         set package_id [ad_conn package_id]
     }
 
@@ -497,32 +497,32 @@ ad_proc -public lang::conn::locale {
 
     # if that does not exist use system's package level locale
 
-    if { [empty_string_p $locale] } {
+    if { $locale eq "" } {
         set locale [lang::system::package_level_locale $package_id]
     } 
 
     # if that does not exist use user's site wide locale
 
-    if { [empty_string_p $locale] } {
+    if { $locale eq "" } {
         set locale [lang::user::site_wide_locale]
     } 
 
     # Use the accept-language browser heading
 
-    if { [empty_string_p $locale] } {
+    if { $locale eq "" } {
         set locale [lang::conn::browser_locale]
     }    
 
     # if that does not exist use system's site wide locale
 
-    if { [empty_string_p $locale] } {
+    if { $locale eq "" } {
         set locale [lang::system::site_wide_locale]
     } 
 
     # if that does not exist then we are back to just another language
     # let's pick uhmm... en_US
 
-    if { [empty_string_p $locale] } {
+    if { $locale eq "" } {
         set locale en_US
     } 
 
@@ -558,7 +558,7 @@ ad_proc -private lang::conn::browser_locale {} {
                 # i.e. a tentative match
                 if { ![info exists tentative_match] } {
                     set default_locale [lang::util::default_locale_from_lang $language]
-                    if { ![empty_string_p $default_locale] } {
+                    if { $default_locale ne "" } {
                         set tentative_match $default_locale
                     }                    
                 } else {
@@ -570,7 +570,7 @@ ad_proc -private lang::conn::browser_locale {} {
         } else {
             # We have just a language, e.g. en
             set default_locale [lang::util::default_locale_from_lang $locale]
-            if { ![empty_string_p $default_locale] } {
+            if { $default_locale ne "" } {
                 set perfect_match $default_locale
                 break
             }
@@ -650,7 +650,7 @@ ad_proc -public lang::conn::timezone {} {
         set timezone [lang::user::timezone]
     }
 
-    if { [empty_string_p $timezone] } {
+    if { $timezone eq "" } {
         # No user timezone, return the system timezone
         set timezone [lang::system::timezone]
     }

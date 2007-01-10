@@ -54,7 +54,7 @@ aa_register_case \
 				 -password $password  -secret_question [ad_generate_random_string] \
 				 -secret_answer [ad_generate_random_string]]
 	
-	if { ![string equal $user_info(creation_status) ok] } {
+	if { $user_info(creation_status) ne "ok" } {
 	    # Could not create user
 	    error "Could not create test user with username=$username user_info=[array get user_info]"
 	}
@@ -119,7 +119,7 @@ aa_register_case \
 				 -secret_question [ad_generate_random_string] \
 				 -secret_answer [ad_generate_random_string]]
 	
-        if { ![string equal $user_info(creation_status) ok] } {
+        if { $user_info(creation_status) ne "ok" } {
 	    # Could not create user                                                                                                    
             error "Could not create test user with username=$username user_info=[array get user_info]"
         }

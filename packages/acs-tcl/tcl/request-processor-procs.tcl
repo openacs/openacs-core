@@ -54,7 +54,7 @@ ad_proc -public rp_internal_redirect {
     }
 
     if { [string is false $absolute_path_p] } {
-        if { [string index $path 0] != "/" } {
+        if { [string index $path 0] ne "/" } {
             # it's a relative path, prepend the current location
             set path "[file dirname [ad_conn file]]/$path"
         } else {
@@ -204,7 +204,7 @@ ad_proc -public ad_register_proc {
   sitewide (not subsite-by-subsite basis).
 
 } {
-    if { [string equal $method "*"] } {
+    if {$method eq "*"} {
 	# Shortcut to allow registering filter for all methods. Just
         # call ad_register_proc again, with each of the three methods.
 	foreach method { GET POST HEAD } {
@@ -257,7 +257,7 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
       rp_debug "error in filter $proc for [ns_conn method] [ns_conn url]?[ns_conn query] errno is $errno message is $errorInfo"
       rp_report_error
       set result "filter_return"
-    } elseif { [string compare $result "filter_ok"] && [string compare $result "filter_break"] && \
+    } elseif {$result ne "filter_ok"  && $result ne "filter_break"  && \
 	    [string compare $result "filter_return"] } {
        set error_msg "error in filter $proc for [ns_conn method] [ns_conn url]?[ns_conn query].  Filter returned invalid result \"$result\""
        ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] $startclicks [clock clicks -milliseconds] "error" $error_msg]
@@ -273,7 +273,7 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
 
 # JCD: Why was this here?  the rp_finish_serving_page is called inside the 
 # handlers and this handles trace filters 
-#    if { [string compare $result "filter_return"] } {
+#    if {$result ne "filter_return"  } {
 #      rp_finish_serving_page
 #    }
 
@@ -322,7 +322,7 @@ ad_proc -private rp_invoke_proc { conn argv } {
 ad_proc -private rp_finish_serving_page {} {
     global doc_properties
     if { [info exists doc_properties(body)] } {
-        rp_debug "Returning page:[info level [expr [info level] - 1]]: [ad_quotehtml [string range $doc_properties(body) 0 100]]"
+        rp_debug "Returning page:[info level [expr {[info level] - 1}]]: [ad_quotehtml [string range $doc_properties(body) 0 100]]"
 	doc_return 200 text/html $doc_properties(body)
     }
 }
@@ -366,7 +366,7 @@ ad_proc -public ad_register_filter {
   sitewide (not subsite-by-subsite basis).
 
 } {
-    if { [string equal $method "*"] } {
+    if {$method eq "*"} {
 	# Shortcut to allow registering filter for all methods.
 	foreach method { GET POST HEAD } {
 	    ad_register_filter -debug $debug -priority $priority -critical $critical $kind $method $path $proc $arg
@@ -421,7 +421,7 @@ ad_proc -private rp_html_directory_listing { dir } {
 
 	# Build the stat array containing information about the file.
 	file stat $file stat
-	set size [expr $stat(size) / 1000 + 1]K
+	set size [expr {$stat(size) / 1000 + 1}]K
 	set mtime $stat(mtime)
 	set time [clock format $mtime -format "%d-%h-%Y %H:%M"]
 
@@ -525,7 +525,7 @@ ad_proc -private rp_filter { why } {
     set url [ad_conn url]
     # 2. handle special case: if the root is a prefix of the URL, 
     #                         remove this prefix from the URL, and redirect.
-    if { ![empty_string_p $root] } {
+    if { $root ne "" } {
         if { [regexp "^${root}(.*)$" $url match url] } {
 
             if { [regexp {^GET [^\?]*\?(.*) HTTP} [ns_conn request] match vars] } {
@@ -560,14 +560,14 @@ ad_proc -private rp_filter { why } {
     # should not redirect since we got a hostname we know about.
 
     set acs_kernel_id [util_memoize ad_acs_kernel_id]
-    if { [empty_string_p $root] 
+    if { $root eq "" 
          && [ad_parameter -package_id $acs_kernel_id ForceHostP request-processor 0] } { 
 	set host_header [ns_set iget [ns_conn headers] "Host"]
 	regexp {^([^:]*)} $host_header "" host_no_port
 	regexp {^https?://([^:]+)} [ns_conn location] "" desired_host_no_port
-	if { $host_header != "" && [string compare $host_no_port $desired_host_no_port] } {
+	if { $host_header ne "" && $host_no_port ne $desired_host_no_port  } {
 	    set query [ns_getform]
-	    if { $query != "" } {
+	    if { $query ne "" } {
 		set query "?[export_entire_form_as_url_vars]"
 	    }
 	    ad_returnredirect "[ns_conn location][ns_conn url]$query"
@@ -582,7 +582,7 @@ ad_proc -private rp_filter { why } {
     # trailing element except in the case where urlc is 0 and urlv the empty list.
 
     if { [lindex [ad_conn urlv] end] == "" } {
-        ad_conn -set urlc [expr [ad_conn urlc] - 1]
+        ad_conn -set urlc [expr {[ad_conn urlc] - 1}]
         ad_conn -set urlv [lrange [ad_conn urlv] 0 [expr {[llength [ad_conn urlv]] - 2}] ]
     }
 
@@ -592,7 +592,7 @@ ad_proc -private rp_filter { why } {
         # log and do nothing
         rp_debug "error within rp_filter [ns_conn method] [ns_conn url] [ns_conn query].  $errmsg"
     } else {
-	if { [string equal $node(url) "[ad_conn url]/"] } {
+	if {$node(url) eq "[ad_conn url]/"} {
 	    ad_returnredirect $node(url)
             rp_debug "rp_filter: returnredirect $node(url)"
             rp_debug "rp_filter: return filter_return"
@@ -699,8 +699,8 @@ ad_proc -private rp_debug { { -debug f } { -ns_log_level notice } string } {
         ds_add rp [list debug $string $clicks $clicks]
     }
     if { [ad_parameter -package_id [ad_acs_kernel_id] LogDebugP request-processor 0]
-         || [string equal $debug t] 
-         || [string equal $debug 1]
+         || $debug eq "t" 
+         || $debug eq "1"
      } {
 	global ad_conn
 	if { [info exists ad_conn(start_clicks)] } {
@@ -769,17 +769,17 @@ $message"
 ad_proc -private rp_path_prefixes {path} {
   Returns all the prefixes of a path ordered from most to least specific.
 } {
-  if {[string index $path 0] != "/"} {
+  if {[string index $path 0] ne "/"} {
     set path "/$path"
   }
   set path [string trimright $path /]
-  if { [string length $path] == 0 } {
+  if { $path eq "" } {
     return "/"
   }
 
   set components [split $path "/"]
   set prefixes [list]
-  for {set i [expr [llength $components] -1]} {$i > 0} {incr i -1} {
+  for {set i [expr {[llength $components] -1}]} {$i > 0} {incr i -1} {
     lappend prefixes "[join [lrange $components 0 $i] "/"]/"
     lappend prefixes "[join [lrange $components 0 $i] "/"]"
   }
@@ -882,7 +882,7 @@ ad_proc -private rp_handler {} {
     # Now visit the candidates columnwise: from most specific to least
     foreach cand0 [lindex $candidates 0] cand1 [lindex $candidates 1] {
       foreach candidate [list $cand0 $cand1] {
-	if { [empty_string_p $candidate] } {
+	if { $candidate eq "" } {
             continue
         }
 	set root   [lindex $candidate 0]; # fewer instructions than util_unlist
@@ -890,7 +890,7 @@ ad_proc -private rp_handler {} {
 	set prefix [lindex $candidate 2]
 	ad_try {
 	  ad_conn -set path_info \
-	      [string range $path [expr [string length $prefix] - 1] end]
+	      [string range $path [expr {[string length $prefix] - 1}] end]
 	  rp_serve_abstract_file -noredirect -nodirectory \
 	      -extension_pattern ".vuh" "$root$prefix"
 	  set tcl_url2file([ad_conn url]) [ad_conn file]
@@ -914,7 +914,7 @@ ad_proc -private rp_handler {} {
     ns_returnnotfound
   } errmsg]] } {
     if {$code == 1} {
-        if {![string equal [ns_conn query] ""]} {
+        if {[ns_conn query] ne "" } {
             set q ?
         } else {
             set q ""
@@ -944,7 +944,7 @@ ad_proc -private rp_serve_abstract_file {
 
     @see rp_internal_redirect  
 } {
-  if { [string equal [string index $path end] "/"] } {
+  if {[string index $path end] eq "/"} {
     if { [file isdirectory $path] } {
       # The path specified was a directory; return its index file.
 
@@ -985,7 +985,7 @@ ad_proc -private rp_serve_abstract_file {
 	# URL but with a trailing slash.
 	
 	set url "[ad_conn url]/"
-	if { [ad_conn query] != "" } {
+	if { [ad_conn query] ne "" } {
 	  append url "?[ad_conn query]"
 	}
 	
@@ -1133,7 +1133,7 @@ ad_proc -public ad_conn {args} {
   global ad_conn
 
   set flag [lindex $args 0]
-  if {[string index $flag 0] != "-"} {
+  if {[string index $flag 0] ne "-"} {
     set var $flag
     set flag "-get"
   } else {
@@ -1302,7 +1302,7 @@ ad_proc -private rp_handle_adp_request {} {
 	doc_serve_document
     } else {
 	set content_type [ns_set iget [ad_conn outputheaders] "content-type"]
-	if { $content_type == "" } {
+	if { $content_type eq "" } {
 	    set content_type "text/html"
 	}
 	doc_return 200 $content_type $adp
@@ -1449,10 +1449,10 @@ ad_proc root_of_host {host} {
     # Other hostnames map to subsites.
     set node_id [util_memoize [list rp_lookup_node_from_host $host]]
 
-    if { ![empty_string_p $node_id] } {
+    if { $node_id ne "" } {
 	set url [site_node::get_url -node_id $node_id]
 
-       return [string range $url 0 [expr [string length $url]-2]]
+       return [string range $url 0 [expr {[string length $url]-2}]]
     } else {
        # Hack to provide a useful default
        return ""

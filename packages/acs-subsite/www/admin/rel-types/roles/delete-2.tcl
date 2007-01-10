@@ -15,7 +15,7 @@ ad_page_contract {
 }
 
 
-if { [string eq $operation "Yes, I really want to delete this role"] } {
+if {$operation eq "Yes, I really want to delete this role"} {
     db_transaction {
 	if { [catch {db_exec_plsql drop_role {begin acs_rel_type.drop_role(:role);end;}} errmsg] } {
 	    if { [db_string role_used_p {

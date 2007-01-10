@@ -8,7 +8,7 @@ ad_page_contract {
 }
 
 # Cannot delete local authority
-if { [string equal $authority_id [auth::authority::local]] } {
+if {$authority_id eq [auth::authority::local]} {
     ad_return_error "Cannot delete local authority" "The system requires the local authority to operate."
 }
 

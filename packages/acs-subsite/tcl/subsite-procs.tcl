@@ -130,7 +130,7 @@ ad_proc -public subsite::default::create_app_group {
         array set node [site_node::get_from_object_id -object_id $package_id]
         set node_id $node(node_id)
 
-        if { [empty_string_p $name] } {
+        if { $name eq "" } {
             set subsite_name [db_string subsite_name_query {}]
         } else {
             set subsite_name $name
@@ -243,12 +243,12 @@ ad_proc -public subsite::auto_mount_application {
     @return The package id of the newly mounted package 
 
 } {
-    if { [empty_string_p $node_id] } {
+    if { $node_id eq "" } {
 	set node_id [ad_conn node_id]
     }
 
     set ctr 2
-    if { [empty_string_p $instance_name] } {
+    if { $instance_name eq "" } {
 	# Default the instance name to the package key. Add a number,
 	# if necessary, until we find a unique name
 	set instance_name $package_key
@@ -260,7 +260,7 @@ ad_proc -public subsite::auto_mount_application {
 	regsub -all { } $instance_name "-" instance_name
     }
 
-    if { [empty_string_p $pretty_name] } {
+    if { $pretty_name eq "" } {
 	# Get the name of the object mounted at this node
 	db_1row select_package_object_names {
 	    select t.pretty_name as package_name, acs_object.name(s.object_id) as object_name
@@ -271,7 +271,7 @@ ad_proc -public subsite::auto_mount_application {
 	set pretty_name "$object_name $package_name"
 	if { $ctr > 2 } {	    
 	    # This was a duplicate pkg name... append the ctr used in the instance name
-	    append pretty_name " [expr $ctr - 1]"
+	    append pretty_name " [expr {$ctr - 1}]"
 	}
     }
 
@@ -293,7 +293,7 @@ ad_proc -public subsite::package_keys {
     @return the packages keys of all installed packages acting as subsites.
 } {
     if {$no_cache_p} {
-        #if {[catch {set keys [db_list get_keys {}]} errMsg] || [empty_string_p $keys]} {
+        #if {[catch {set keys [db_list get_keys {}]} errMsg] || $keys eq ""} {
         return {acs-subsite}
         # }
         return $keys
@@ -318,7 +318,7 @@ ad_proc -public subsite::get {
 } {
     upvar $array subsite_info
 
-    if { [empty_string_p $subsite_id] } {
+    if { $subsite_id eq "" } {
 	set subsite_id [ad_conn subsite_id]
     }
 
@@ -352,7 +352,7 @@ ad_proc -public subsite::get_element {
     @author Frank Nikolajsen (frank@warpspace.com)
     @creation-date 2003-03-08
 } {
-    if { [empty_string_p $subsite_id] } {
+    if { $subsite_id eq "" } {
 	set subsite_id [ad_conn subsite_id]
     }
 
@@ -429,7 +429,7 @@ ad_proc -public subsite::util::object_type_path_list {
 
     foreach type $type_list {
 	lappend path_list $type
-	if {[string equal $type $ancestor_type]} {
+	if {$type eq $ancestor_type} {
 	    break
 	}
     }
@@ -558,7 +558,7 @@ ad_proc -public subsite::add_section_row {
     upvar $array info
 
     # the folder index page is called .
-    if { [string equal $info(url) ""] || [string equal $info(url) "index"] || \
+    if { $info(url) eq "" || $info(url) eq "index" || \
              [string match "*/" $info(url)] || [string match "*/index" $info(url)] } {
         set info(url) "[string range $info(url) 0 [string last / $info(url)]]."
     }
@@ -572,7 +572,7 @@ ad_proc -public subsite::add_section_row {
         # Need to prepend the path from the subsite to this package
         set current_url [string range [ad_conn url] [string length $base_url] end]
     }
-    if { [empty_string_p $current_url] || [string equal $current_url "index"] || \
+    if { $current_url eq "" || $current_url eq "index" || \
              [string match "*/" $current_url] || [string match "*/index" $current_url] } {
         set current_url "[string range $current_url 0 [string last / $current_url]]."
     }
@@ -583,7 +583,7 @@ ad_proc -public subsite::add_section_row {
     # Default to not selected
     set selected_p 0
     
-    if { [string equal $current_url $info(url)] || [string equal $info(name) $section] } {
+    if { $current_url eq $info(url) || $info(name) eq $section } {
         set selected_p 1
     } else {
         foreach pattern $info(selected_patterns) {
@@ -595,7 +595,7 @@ ad_proc -public subsite::add_section_row {
         }
     }
     
-    set link_p [expr ![string equal $current_url $info(url)]]
+    set link_p [expr {$current_url ne $info(url) }] 
     
     template::multirow append $multirow \
         $info(name) \
@@ -654,7 +654,7 @@ ad_proc -public subsite::get_pageflow_struct {} {
 
     set child_urls [lsort -ascii [site_node::get_children -node_id $subsite_node_id -package_type apm_application]]
 
-    if { [empty_string_p $index_redirect_url] } {
+    if { $index_redirect_url eq "" } {
         lappend pageflow home {
             label "Home"
             folder ""
@@ -668,7 +668,7 @@ ad_proc -public subsite::get_pageflow_struct {} {
         # See if the redirect-url to a package inside this subsite
         for { set i 0 } { $i < [llength $child_urls] } { incr i } {
             array set child_node [site_node::get_from_url -exact -url [lindex $child_urls $i]]
-            if { [string equal $index_redirect_url $child_node(url)] ||
+            if { $index_redirect_url eq $child_node(url) ||
                  [string equal ${index_redirect_url}/ $child_node(url)]} {
                 lappend pageflow $child_node(name) [list \
                                                         label "Home" \
@@ -788,7 +788,7 @@ ad_proc -public subsite::get_template_options {} {
     set current_master [parameter::get -parameter DefaultMaster -package_id [ad_conn subsite_id]]
     set found_p 0
     foreach elm $master_template_options {
-        if { [string equal $current_master [lindex $elm 1]] } {
+        if {$current_master eq [lindex $elm 1]} {
             set found_p 1
             break
         }
@@ -852,7 +852,7 @@ ad_proc -public subsite::get_url {
         regardless of the current connection state
 } {
     if {[ad_conn isconnected]} {
-        if {[string equal $node_id ""]} {
+        if {$node_id eq ""} {
             set node_id [ad_conn subsite_node_id]
         }
 
@@ -868,13 +868,13 @@ ad_proc -public subsite::get_url {
         set host_addr [split [ns_set iget $headers host] :]
         set request(vhost) [lindex $host_addr 0]
 
-        if {![string equal [lindex $host_addr 1] ""]} {
+        if {[lindex $host_addr 1] ne "" } {
             set request(port) [lindex $host_addr 1]
         }
 
-        set request_vhost_p [expr {![string equal $main_host $request(vhost)]}]
+        set request_vhost_p [expr {$main_host ne $request(vhost) }]
     } else {
-        if {[string equal $node_id ""]} {
+        if {$node_id eq ""} {
             error "You must supply node_id when not connected."
         } else {
             array set subsite_node [site_node::get -node_id $node_id]
@@ -886,14 +886,14 @@ ad_proc -public subsite::get_url {
     set default_port(http) 80
     set default_port(https) 443
 
-    set force_host_p [expr {![string equal $force_host ""]}]
+    set force_host_p [expr {$force_host ne "" }]
 
-    set force_protocol_p [expr {![string equal $protocol ""]}]
+    set force_protocol_p [expr {$protocol ne "" }]
     if {!$force_protocol_p} {
         set protocol http
     } 
 
-    set force_port_p [expr {![string equal $port ""]}]
+    set force_port_p [expr {$port ne "" }]
     if {!$force_port_p} {
         set port 80
     }
@@ -911,7 +911,7 @@ ad_proc -public subsite::get_url {
         # Figure out which hostname to use
         if {!$force_host_p} {
             set search_vhost $request(vhost)
-        } elseif {[string equal $force_host "any"]} {
+        } elseif {$force_host eq "any"} {
             if {$request_vhost_p} {
                 set search_vhost $request(vhost)
                 set where_clause [db_map orderby]
@@ -924,19 +924,19 @@ ad_proc -public subsite::get_url {
         set site_node $subsite_node(node_id)
         set mapped_vhost [db_string get_vhost {} -default ""]
 
-        if {$root_p && [string equal $mapped_vhost ""]} {
+        if {$root_p && $mapped_vhost eq ""} {
             if {$strict_p} {
                 error "$search_vhost is not mapped to this subsite or any of its parents."
             }
 
-            if {[string equal $search_vhost "any"]} {
+            if {$search_vhost eq "any"} {
                 set mapped_vhost $main_host
             } else {
                 set mapped_vhost $search_vhost
             }
         }
 
-        if {[string equal $mapped_vhost ""]} {
+        if {$mapped_vhost eq ""} {
             set result "[subsite::get_url \
                 -node_id $subsite_node(parent_id) \
                 -absolute_p $absolute_p \
@@ -957,7 +957,7 @@ ad_proc -public subsite::get_url {
             if {$absolute_p} {
                 set result "${protocol}://${mapped_vhost}"
 
-                if {![string equal $port $default_port($protocol)]} {
+                if {$port ne $default_port($protocol) } {
                     append result ":$port"
                 }
 
@@ -970,7 +970,7 @@ ad_proc -public subsite::get_url {
         if {$absolute_p} {
             set result "${protocol}://${main_host}"
 
-            if {![string equal $port $default_port($protocol)]} {
+            if {$port ne $default_port($protocol) } {
                 append result ":$port"
             }
 
@@ -995,7 +995,7 @@ ad_proc -private subsite::util::packages_no_mem {
     # need to strip nodes which have no mounted package...
     set packages [list]
     foreach package [site_node::get_children -all -node_id $node_id -element package_id] {
-        if {![empty_string_p $package]} {
+        if {$package ne ""} {
             lappend packages $package
         }
     }

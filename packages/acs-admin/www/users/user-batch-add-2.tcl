@@ -25,7 +25,7 @@ set title "Adding new users in bulk"
 while {[regexp {(.[^\n]+)} $userlist match_fodder row] } {
     # remove each row as it's handled
     set remove_count [string length $row]
-    set userlist [string range $userlist [expr $remove_count + 1] end]
+    set userlist [string range $userlist [expr {$remove_count + 1}] end]
     set row [split $row ,]
     set email [string trim [lindex $row 0]]
     set first_names [string trim [lindex $row 1]]
@@ -44,12 +44,12 @@ from parties where email = lower(:email)"]
 	}
     }
     
-    if {![info exists first_names] || [empty_string_p $first_names]} {
+    if {![info exists first_names] || $first_names eq ""} {
 	append exception_text "<li> No first name in ($row)</li>\n"
 	continue
     }
     
-    if {![info exists last_name] || [empty_string_p $last_name]} {
+    if {![info exists last_name] || $last_name eq ""} {
 	append exception_text "<li> No last name in ($row)</li>\n"
 	continue
     }

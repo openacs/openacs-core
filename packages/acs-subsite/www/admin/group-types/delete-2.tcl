@@ -22,8 +22,8 @@ ad_page_contract {
     }
 }
 
-if { ![string eq $operation "Yes, I really want to delete this group type"] } {
-    if { [empty_string_p $return_url] } {
+if { $operation ne "Yes, I really want to delete this group type" } {
+    if { $return_url eq "" } {
 	ad_returnredirect "one?[ad_export_vars {group_type}]"
     } else {
 	ad_returnredirect $return_url
@@ -72,7 +72,7 @@ if { [db_string type_exists {
 }
 
 # Make sure we drop the table last
-if { ![empty_string_p $table_name] && [db_table_exists $table_name] } {
+if { $table_name ne "" && [db_table_exists $table_name] } {
     lappend plsql [list "drop_table" [db_map drop_table]]
 }
 
@@ -89,7 +89,7 @@ set user_id [ad_conn user_id]
 
 db_transaction {
     # First delete the groups
-    if { ![empty_string_p $package_name] } {
+    if { $package_name ne "" } {
 
 	foreach group_id [db_list select_group_ids {
 	    select o.object_id

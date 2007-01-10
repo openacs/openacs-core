@@ -168,7 +168,7 @@ namespace eval party {
 	# Special case "party" because we don't want to display "party" itself
 	# as an option, and we don't want to display "rel_segment" as an
 	# option.
-	if {[string equal $start_with "party"]} {
+	if {$start_with eq "party"} {
 	    set start_with_clause [db_map start_with_clause_party]
 	} else {
 	    set start_with_clause [db_map start_with_clause]
@@ -243,7 +243,7 @@ namespace eval party {
     } {
 	if {$party_id eq "" && $email eq ""} {
 	    error "You need to provide either party_id or email"
-	} elseif {![string eq "" $party_id] && ![string eq "" $email]} {
+	} elseif {"" ne $party_id && "" ne $email } {
 	    error "Only provide provide party_id OR email, not both"
 	}
 	
@@ -258,11 +258,11 @@ namespace eval party {
 		set name [db_string get_org_name {} -default ""]
 	    } 
 	    
-	    if { [empty_string_p $name] } {
+	    if { $name eq "" } {
 		set name [db_string get_group_name {} -default ""]
 	    }
 
-	    if { [empty_string_p $name] } {
+	    if { $name eq "" } {
 		set name [db_string get_party_name {} -default ""]
 	    }
 	    

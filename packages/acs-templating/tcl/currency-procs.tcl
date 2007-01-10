@@ -97,7 +97,7 @@ ad_proc -public template::data::validate::currency {
     set format_fractional_part [lindex $format 3]
 
     set whole_part_valid_p [template::data::validate integer whole_part message]
-    if { ![empty_string_p $fractional_part] } {
+    if { $fractional_part ne "" } {
         set fractional_part_valid_p [template::data::validate integer fractional_part message]
     } else {
         set fractional_part_valid_p 1
@@ -139,7 +139,7 @@ ad_proc -private template::data::transform::currency {
 
 	    # let's put a leading zero if the whole part is empty
 	    if { $i == 1 } {
-		if { [string equal $value ""] } {
+		if {$value eq ""} {
 		    set value 0
 		} else {
                     set have_values 1
@@ -148,11 +148,11 @@ ad_proc -private template::data::transform::currency {
 
 	    # and let's fill in the zeros at the end up to the precision
 	    if { $i == 3 } {
-		if { ![string equal $value ""] } {
+		if { $value ne "" } {
                     set have_values 1
                 }
 		set fractional_part_format [lindex $format 3]
-		for { set j [string length $value] } { $j < $fractional_part_format } { set j [expr $j + 1] } {
+		for { set j [string length $value] } { $j < $fractional_part_format } { set j [expr {$j + 1}] } {
 		    append $value 0
 		}
 	    }
@@ -203,7 +203,7 @@ ad_proc -public template::util::currency::set_property {
     switch $what {
         sql_number {
 
-            if { [empty_string_p $value]} {
+            if { $value eq ""} {
                 return ""
             }
 
@@ -271,7 +271,7 @@ ad_proc -public template::util::currency::get_property {
         }
         sql_number {
 
-            if { [empty_string_p $whole_part] && [empty_string_p $fractional_part] } {
+            if { $whole_part eq "" && $fractional_part eq "" } {
                 return ""
             }
 
@@ -284,7 +284,7 @@ ad_proc -public template::util::currency::get_property {
         }
         display_currency {
 
-            if { [empty_string_p $whole_part] && [empty_string_p $fractional_part] } {
+            if { $whole_part eq "" && $fractional_part eq "" } {
                 return ""
             }
 
@@ -350,7 +350,7 @@ ad_proc -public template::widget::currency {
         }
         if { $i == 0 || $i == 2 || $i == 4 } {
             append output "$format_property<input type=\"hidden\" name=\"$element(name).$i\" value=\"$format_property\" />"
-        } elseif { [string equal $element(mode) "edit"] && ($i == 1 || $i == 3) } {
+        } elseif { $element(mode) eq "edit" && ($i == 1 || $i == 3) } {
             append output "<input type=\"text\" name=\"$element(name).$i\" maxlength=\"$format_property\" size=\"$format_property\" value=\"$value$trailing_zero\" />\n"
         } else {
             append output "$value$trailing_zero<input type=\"hidden\" name=\"$element(name).$i\" maxlength=\"$format_property\" size=\"$format_property\" value=\"$value\" />"

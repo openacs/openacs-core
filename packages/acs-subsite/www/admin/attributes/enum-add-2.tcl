@@ -23,10 +23,10 @@ set max_sort_order [db_string select_max_sort_order {
 
 db_transaction {
     foreach ideal_sort_order [array names attribute_enum_values] {
-	set sort_order [expr $ideal_sort_order + $max_sort_order]
+	set sort_order [expr {$ideal_sort_order + $max_sort_order}]
 	set pretty_name $attribute_enum_values($ideal_sort_order)
 	# delete if the value is empty. Update otherwise
-	if { [empty_string_p $pretty_name] } {
+	if { $pretty_name eq "" } {
 	    db_dml delete_enum_value {
 		delete from acs_enum_values 
 		 where attribute_id = :attribute_id 
@@ -59,10 +59,10 @@ db_transaction {
 
 db_release_unused_handles
 
-if { [string equal $operation "Add more values"] } {
+if {$operation eq "Add more values"} {
     # redirect to add more values
     set return_url enum-add?[ad_export_vars {attribute_id return_url}]
-} elseif { [empty_string_p $return_url] } {
+} elseif { $return_url eq "" } {
     set return_url one?[ad_export_vars attribute_id]
 }
 

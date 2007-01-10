@@ -36,7 +36,7 @@ ad_proc ::twt::assert { explanation expression } {
 } 
 
 ad_proc ::twt::assert_equals { explanation actual_value expected_value } {
-    if { ![string equal $actual_value $expected_value] } {
+    if { $actual_value ne $expected_value } {
         ::twt::log_alert "Assertion \"$explanation\" failed: actual_value=\"$actual_value\", expected_value=\"$expected_value\""
     }
 } 
@@ -98,7 +98,7 @@ ad_proc ::twt::get_url_list { page_url link_url_pattern } {
 	set errno [catch {
             array set link_array [link find -next ~u "$link_url_pattern"]} error]
 
-         if { [string equal $errno "0"] } {
+         if {$errno eq "0"} {
             set url $link_array(url)
      
             lappend urls_list $url
@@ -158,7 +158,7 @@ ad_proc ::twt::randomRange {range} {
     Given an integer N, return an integer between 0 and N.
 } {
 
-     return [expr int([expr rand()] * $range)]
+     return [expr int([expr {rand()}] * $range)]
 }
 
 ad_proc ::twt::write_response_to_file { filename } {
@@ -252,7 +252,7 @@ ad_proc ::twt::crawl_links {
 
     @author Peter Marklund
 } {
-    if { ![empty_string_p $previous_url] } {
+    if { $previous_url ne "" } {
         # For relative links to work, when we come back from the recursive crawling of a link, we need to make
         # Tclwebtest understand that we are now relative to a different URL than the one last requested, namely
         # relative to the URL of the page the link is on.
@@ -298,7 +298,7 @@ ad_proc ::twt::crawl_links {
     # Note that we are re-initializing start_url_absolute here since a trailing slash will be added if the URL is a directory
     # and we need that to resolve relative URLs
     if { [catch {set foobar [::twt::do_request $start_url_absolute]} errmsg] } {
-        if { ![string equal "$previous_url" ""] } {
+        if { "$previous_url" ne "" } {
             set previous_page_message " (link found on page $previous_url)"
         } else {
             set previous_page_message ""
@@ -324,16 +324,16 @@ ad_proc ::twt::crawl_links {
 
         # Don't revisit URL:s we have already tested
         # Don't follow relative anchors on pages - can't get them to work with TclWebtest
-        set new_url_p [expr [lsearch -exact $__url_history $absolute_url] == -1]
+        set new_url_p [expr {[lsearch -exact $__url_history $absolute_url] == -1}]
         if { [string range $url 0 0] == "#" } {
             set anchor_link_p 1
         } else {
             set anchor_link_p 0
         }
         #::twt::log "pm debug under_start_url_p - string first $start_url_absolute $absolute_url"
-        set under_start_url_p [expr [string first $start_url_absolute $absolute_url] != -1]
+        set under_start_url_p [expr {[string first $start_url_absolute $absolute_url] != -1}]
 
-        set visit_p [expr $new_url_p && !$anchor_link_p && $under_start_url_p]
+        set visit_p [expr {$new_url_p && !$anchor_link_p && $under_start_url_p}]
         if { $visit_p } {
             crawl_links -previous_url $start_url_absolute $url
         }
@@ -353,7 +353,7 @@ ad_proc ::twt::multiple_select_value { name value } {
     set field_choices $current_field(choices)
     set index 0
     foreach field_choice $field_choices {
-        if { [string equal $value [lindex $field_choice 0]] } {
+        if {$value eq [lindex $field_choice 0]} {
             break
         }
         incr index

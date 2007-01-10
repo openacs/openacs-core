@@ -14,7 +14,7 @@ ad_page_contract {
 
 permission::require_permission -object_id $object_id -privilege admin
 
-if { [string eq $operation "Yes"] } {
+if {$operation eq "Yes"} {
     db_transaction {
 	foreach item $revoke_list {
 	    set party_id [lindex $item 0]

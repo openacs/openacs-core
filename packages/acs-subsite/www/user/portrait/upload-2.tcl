@@ -15,7 +15,7 @@ ad_page_contract {
 subsite::upload_allowed
 set current_user_id [auth::require_login]
 
-if [empty_string_p $user_id] {
+if {$user_id eq ""} {
     set user_id $current_user_id
 }
 
@@ -25,7 +25,7 @@ set exception_text ""
 set exception_count 0
 
 if {![info exists upload_file] 
-    || [empty_string_p $upload_file] 
+    || $upload_file eq "" 
 } {
     append exception_text "<li>Please specify a file to upload</li>\n"
     incr exception_count
@@ -78,7 +78,7 @@ if { $exception_count > 0 } {
 
 db_transaction {
     set item_id [content::item::get_id_by_name -name "portrait-of-user-$user_id" -parent_id $user_id]
-    if { [empty_string_p $item_id]} { 
+    if { $item_id eq ""} { 
 	# The user doesn't have a portrait relation yet
 	set item_id [content::item::new -name "portrait-of-user-$user_id" -parent_id $user_id -content_type image]
     }
@@ -100,7 +100,7 @@ db_transaction {
     content::item::set_live_revision -revision_id $revision_id
     # Only create the new relationship if there does not exist one already
    set user_portrait_rel_id [relation::get_id -object_id_one $user_id -object_id_two $item_id -rel_type "user_portrait_rel"]
-   if {[empty_string_p $user_portrait_rel_id]} {
+   if {$user_portrait_rel_id eq ""} {
 	db_exec_plsql create_rel {}
     }
 }

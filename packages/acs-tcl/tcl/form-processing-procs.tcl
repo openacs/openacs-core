@@ -511,7 +511,7 @@ ad_proc -public ad_form {
 
     # Are we extending the form?
 
-    if { [string equal [lindex $args 0] "-extend"] } {
+    if {[lindex $args 0] eq "-extend"} {
         set extend_p 1
         set args [lrange $args 1 end]
     } else {
@@ -608,7 +608,7 @@ ad_proc -public ad_form {
 
             # This can easily be generalized if we add more embeddable form commands ...
 
-            if { [string equal $element_name_part "-section"] } {
+            if {$element_name_part eq "-section"} {
                 lappend af_element_names($form_name) "[list "-section" [uplevel [list subst [lindex $element 1]]]]"
             } else {
                 set element_name_part [uplevel [list subst $element_name_part]]
@@ -626,11 +626,11 @@ ad_proc -public ad_form {
                     set af_element_parameters($element_name:$flag) [list]
                     set left_paren [string first "(" $flag]
                     if { $left_paren != -1 } {
-                        if { ![string equal [string index $flag end] ")"] } {
+                        if { [string index $flag end] ne ")" } {
                             return -code error "Missing or misplaced end parenthesis for flag '$flag' on argument '$element_name'"
                         }
-                        set flag_stem [string range $flag 0 [expr $left_paren - 1]]
-                        lappend af_element_parameters($element_name:$flag_stem) [string range $flag [expr $left_paren + 1] [expr [string length $flag]-2]]
+                        set flag_stem [string range $flag 0 [expr {$left_paren - 1}]]
+                        lappend af_element_parameters($element_name:$flag_stem) [string range $flag [expr {$left_paren + 1}] [expr {[string length $flag]-2}]]
                         lappend af_flag_list(${form_name}__$element_name) $flag_stem
                     } else {
                         lappend af_flag_list(${form_name}__$element_name) $flag
@@ -777,7 +777,7 @@ ad_proc -public ad_form {
                             return -code error "element $element_name: a form can only declare one key"
                         }
                         set af_key_name($form_name) $element_name
-                        if { ![empty_string_p $af_element_parameters($element_name:key)] } {
+                        if { $af_element_parameters($element_name:key) ne "" } {
                             if { [info exists af_sequence_name($form_name)] } {
                                 return -code error "element $element_name: duplicate sequence"
                             }
@@ -789,14 +789,14 @@ ad_proc -public ad_form {
                     }
 
                     multiple {
-                        if { ![empty_string_p $af_element_parameters($element_name:$flag)] } {
+                        if { $af_element_parameters($element_name:$flag) ne "" } {
                             return -code error "element $element_name: $flag attribute can not have a parameter"
                         }
                     }
 
                     nospell -
 		    optional {
-                        if { ![empty_string_p $af_element_parameters($element_name:$flag)] } {
+                        if { $af_element_parameters($element_name:$flag) ne "" } {
                             return -code error "element $element_name: $flag attribute can not have a parameter"
                         }
                         lappend form_command "-$flag"
@@ -805,7 +805,7 @@ ad_proc -public ad_form {
                     from_sql -
                     to_sql -
                     to_html {
-                        if { [empty_string_p $af_element_parameters($element_name:$flag)] } {
+                        if { $af_element_parameters($element_name:$flag) eq "" } {
                             return -code error "element $element_name: \"$flag\" attribute must have a parameter"
                         }
                         set name af_$flag
@@ -824,7 +824,7 @@ ad_proc -public ad_form {
                         lappend form_command "-datatype"
                         lappend form_command $flag
                         set af_type(${form_name}__$element_name) $flag
-                        if { [empty_string_p $af_element_parameters($element_name:$flag)] } {
+                        if { $af_element_parameters($element_name:$flag) eq "" } {
                             if { ![empty_string_p [info command "::template::widget::$flag"]] } {
                                 lappend form_command "-widget" $flag
                             }
@@ -1252,6 +1252,6 @@ ad_proc -public ad_form_new_p {
 
     set form [ns_getform]
 
-    return [expr {[empty_string_p $form] || [ns_set find $form $key] == -1 || [ns_set get $form __new_p] == 1 }]
+    return [expr {$form eq "" || [ns_set find $form $key] == -1 || [ns_set get $form __new_p] == 1 }]
 
 }

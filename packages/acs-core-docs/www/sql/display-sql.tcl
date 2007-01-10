@@ -40,7 +40,7 @@ if {[exists_and_not_null package_key]} {
 }
 
 
-if {[empty_string_p $db]} { 
+if {$db eq ""} { 
 
     # if we were not passed a DB string get a list of matching files.
 
@@ -50,7 +50,7 @@ if {[empty_string_p $db]} {
         regexp {([^/]*)/([^/]*)$} $f match db url
         append text "<li> <a href=\"display-sql?[export_url_vars db url package_key]\">$db</a></li>"
     }
-    if {[empty_string_p $files]} { 
+    if {$files eq ""} { 
         append text "<li> No sql file found."
     }
     append text {</ul>}
@@ -60,7 +60,7 @@ if {[empty_string_p $db]} {
 
     # we have a db.  
 
-    if {[string equal $db sql]} { 
+    if {$db eq "sql"} { 
         set files [glob -nocomplain "[acs_package_root_dir $package_key]/sql/$url"]       
     } else { 
         set files [glob -nocomplain "[acs_package_root_dir $package_key]/sql/$db/$url"]       

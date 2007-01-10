@@ -73,7 +73,7 @@ ad_proc -public ::content::folder::new {
 
     # inherit the attributes of the parent folder
     
-    if {![string eq $parent_id ""]} {
+    if {$parent_id ne "" } {
 	
 	db_dml inherit_folder_type ""
 
@@ -198,13 +198,13 @@ ad_proc -public ::content::folder::update {
 	    # create local variable to use for binding
 
 	    set $attribute $value
-	    if {![string equal "" $update_text]} {
+	    if {$update_text ne ""} {
 		append update_text ","
 	    }
 	    append update_text " ${attribute} = :${attribute} "
    	}
     }
-    if {![string equal "" $update_text]} {
+    if {$update_text ne ""} {
 
 	# we have valid attributes, update them
 

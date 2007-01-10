@@ -38,18 +38,18 @@ set matches [list]
 foreach proc [nsv_array names api_proc_doc] {
     array set doc_elements [nsv_get api_proc_doc $proc]
 
-    if { $type == "All"} {
+    if { $type eq "All"} {
 	lappend matches [list $proc $doc_elements(script)] 
-    } elseif {$type == "Deprecated" && $doc_elements(deprecated_p)} {
+    } elseif {$type eq "Deprecated" && $doc_elements(deprecated_p)} {
 	lappend matches [list $proc $doc_elements(script)] 
-    } elseif {$type == "Private" && $doc_elements(private_p) } {
+    } elseif {$type eq "Private" && $doc_elements(private_p) } {
 	lappend matches [list $proc $doc_elements(script)] 
-    } elseif {$type == "Public" && $doc_elements(public_p) } {
+    } elseif {$type eq "Public" && $doc_elements(public_p) } {
 	lappend matches [list $proc $doc_elements(script)] 
     } 
 }
 
-if { [string equal $sort_by "file"] } {
+if {$sort_by eq "file"} {
     set matches [lsort -command ad_sort_by_second_string_proc $matches]    
 } else {
     set matches [lsort -command ad_sort_by_first_string_proc $matches]

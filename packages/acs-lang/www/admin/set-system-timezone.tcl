@@ -18,9 +18,9 @@ if { ![lang::system::timezone_support_p] } {
     ad_script_abort
 }
 
-if { ![empty_string_p $timezone_recommended] } {
+if { $timezone_recommended ne "" } {
     lang::system::set_timezone $timezone_recommended
-} elseif { ![empty_string_p $timezone_all] } {
+} elseif { $timezone_all ne "" } {
     lang::system::set_timezone $timezone_all
 }
 
@@ -71,10 +71,10 @@ set correct_p {}
 if { [info exists utc_epoch] } {
     with_catch errmsg {
         set sysdate_utc_epoch [clock scan $sysdate_utc]
-        set delta_hours [expr round(($sysdate_utc_epoch - $utc_epoch)*4.0 / (60*60)) / 4.0]
-        set recommended_offset [expr $system_utc_offset + $delta_hours]
+        set delta_hours [expr {round(($sysdate_utc_epoch - $utc_epoch)*4.0 / (60*60)) / 4.0}]
+        set recommended_offset [expr {$system_utc_offset + $delta_hours}]
 
-        set recommended_offset_pretty "UTC [format "+%d:%02d" [expr int($recommended_offset)] [expr int($recommended_offset*60) % 60]]"
+        set recommended_offset_pretty "UTC [format "+%d:%02d" [expr {int($recommended_offset)}] [expr {int($recommended_offset*60) % 60}]]"
 
         if { $delta_hours == 0 } {
             set correct_p 1
@@ -83,7 +83,7 @@ if { [info exists utc_epoch] } {
         }
         
         set try_offsets [list]
-        foreach offset [list $recommended_offset [expr $recommended_offset -24]] {
+        foreach offset [list $recommended_offset [expr {$recommended_offset -24}]] {
             # LARS 2003-11-05
             # This is a workaround for a Tcl 8.3 bug on Solaris that causes int() on negative decimal
             # numbers to fail with "integer value too large to represent".
@@ -91,7 +91,7 @@ if { [info exists utc_epoch] } {
             if { $offset < 0 } {
                 lappend try_offsets "'[db_quote [expr -int(abs($offset)*60*60)]]'"
             } else {
-                lappend try_offsets "'[db_quote [expr int($offset*60*60)]]'"
+                lappend try_offsets "'[db_quote [expr {int($offset*60*60)}]]'"
             }
         }
 

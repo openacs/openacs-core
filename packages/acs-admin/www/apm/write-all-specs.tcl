@@ -20,7 +20,7 @@ db_foreach apm_get_all_packages {
     and v.package_key = t.package_key
     order by upper(pretty_name)
 } {
-    if { [empty_string_p $distribution_uri] } {
+    if { $distribution_uri eq "" } {
 	ns_log Debug "Generating package specificaiton for $package_key"
 	ns_write "<li>$pretty_name $version_name... "
 	if { [catch { 

@@ -69,7 +69,7 @@ switch $email_verified_p {
     }
 }
 
-if [empty_string_p $action] {
+if {$action eq ""} {
     ad_return_complaint 1 "Not valid action: You have not changed the user in any way"
     return
 }
@@ -97,7 +97,7 @@ set email_from [db_string admin_email "select email from parties where party_id 
 set subject "$action"
 set message $email_message
 
-if [empty_string_p $return_url] {
+if {$return_url eq ""} {
     set return_url "/acs-admin/users/one?[export_url_vars user_id]"
 } else {
     ad_returnredirect $return_url

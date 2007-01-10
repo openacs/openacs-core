@@ -43,7 +43,7 @@ aa_register_case -cats {
 	
 	whos_online::set_invisible $user_id
 	
-	aa_true "User $user_info(email) is Invisible" [expr [nsv_exists invisible_users $user_id] == 1 ]
+	aa_true "User $user_info(email) is Invisible" [expr {[nsv_exists invisible_users $user_id] == 1 }]
 	
         #---------------------------------------------------------------------------------------------------
         #Test all-invisible_user_ids
@@ -61,7 +61,7 @@ aa_register_case -cats {
 	whos_online::unset_invisible $user_id
 	
 	aa_false "User $user_info(email) is Visible" \
-	    [expr [whos_online::user_invisible_p $user_id ] == 1 ]
+	    [expr {[whos_online::user_invisible_p $user_id ] == 1 }]
 	
         #---------------------------------------------------------------------------------------------------
         #Test user_ids

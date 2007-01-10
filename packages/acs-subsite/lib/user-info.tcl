@@ -33,7 +33,7 @@ foreach elm $form_elms {
     set elm_mode($elm) {}
 }
 set read_only_elements [auth::sync::get_sync_elements -authority_id $user(authority_id)]
-set read_only_notice_p [expr [llength $read_only_elements] > 0]
+set read_only_notice_p [expr {[llength $read_only_elements] > 0}]
 if { ![acs_user::site_wide_admin_p] } {
     lappend read_only_elements authority_id username
 }
@@ -42,7 +42,7 @@ foreach elm $read_only_elements {
 }
 set first_element {}
 foreach elm $form_elms {
-    if { [empty_string_p $elm_mode($elm)] && (![string equal $elm "username"] && [auth::UseEmailForLoginP]) } {
+    if { $elm_mode($elm) eq "" && ($elm ne "username" && [auth::UseEmailForLoginP]) } {
         set first_element $elm
         break
     }
@@ -101,7 +101,7 @@ ad_form -extend -name user_info -form {
     }
 }
 
-if { ![string equal [acs_user::ScreenName] "none"] } {
+if { [acs_user::ScreenName] ne "none" } {
     ad_form -extend -name user_info -form \
         [list \
              [list screen_name:text[ad_decode [acs_user::ScreenName] "solicit" ",optional" ""] \
@@ -159,7 +159,7 @@ ad_form -extend -name user_info -form {
     set user_info(authority_id) $user(authority_id)
     set user_info(username) $user(username)
     foreach elm $form_elms {
-        if { [empty_string_p $elm_mode($elm)] && [info exists $elm] } {
+        if { $elm_mode($elm) eq "" && [info exists $elm] } {
             set user_info($elm) [string trim [set $elm]]
         }
     }
@@ -207,7 +207,7 @@ ad_form -extend -name user_info -form {
     }
  
 } -after_submit {
-    if { [string equal [ad_conn account_status] "closed"] } {
+    if {[ad_conn account_status] eq "closed"} {
         auth::verify_account_status
     }
     

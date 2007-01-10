@@ -42,7 +42,7 @@ ad_proc -public site_node_object_map::get_url {
 } {
     set node_id [site_node_object_map::get_node_id -object_id $object_id]
 
-    if {[empty_string_p $node_id]} {
+    if {$node_id eq ""} {
         return {}
     }
 

@@ -16,7 +16,7 @@ db_1row select_sort_order {
     where authority_id = :authority_id
 }
 
-if { $direction == "up" } {
+if { $direction eq "up" } {
 
     db_transaction {
         # Increase next authority's sort_order by one
@@ -36,7 +36,7 @@ if { $direction == "up" } {
         }
     }
 
-} elseif { $direction == "down"} {
+} elseif { $direction eq "down"} {
 
     db_transaction {
         # Decrease previous authority's sort_order by one

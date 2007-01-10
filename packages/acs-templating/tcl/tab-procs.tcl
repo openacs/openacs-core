@@ -152,7 +152,7 @@ ad_proc -public template::tabstrip::add_tab {
 
   lappend code -template $template 
 
-  if { [string equal $properties(current_tab) $name] } {
+  if {$properties(current_tab) eq $name} {
     lappend code -current 1
   } else {
     lappend code -current 0
@@ -217,12 +217,12 @@ template_tag tabstrip { chunk params } {
     upvar 0 \"$id:properties\" form_properties"
 
   # Change the default style if no style is specified
-  if { [string equal [ns_set iget $params style] ""] } {
+  if {[ns_set iget $params style] eq ""} {
     ns_set update $params style tabbed-dialog
   }
 
   # Render the template
-  if { [string equal [string trim $chunk] {}] } {
+  if {[string trim $chunk] eq {}} {
     # generate the form body dynamically if none specified.
     set style [ns_set iget $params style]
     if { [template::util::is_nil style] } {
@@ -257,12 +257,12 @@ template_tag tabstrip { chunk params } {
     upvar 0 \"$id:properties\" form_properties"
 
   # Change the default style if no style is specified
-  if { [string equal [ns_set iget $params style] ""] } {
+  if {[ns_set iget $params style] eq ""} {
     ns_set update $params style tabbed-dialog
   }
 
   # Render the template
-  if { [string equal [string trim $chunk] {}] } {
+  if {[string trim $chunk] eq {}} {
     # generate the form body dynamically if none specified.
     set style [ns_set iget $params style]
     if { [template::util::is_nil style] } {

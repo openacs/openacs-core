@@ -160,7 +160,7 @@ ad_proc -private ad_user_class_description { set_id } {
 	}
     }
 
-    if { [info exists combine_method] && $combine_method == "or" } {
+    if { [info exists combine_method] && $combine_method eq "or" } {
 	set pretty_description [join $clauses " or "]
     } else {
 	set pretty_description [join $clauses " and "]
@@ -191,7 +191,7 @@ ad_proc -private ad_user_class_query { set_id  } {
     # Get all the non-LOB columns.
     set user_columns [list]
     foreach column [db_columns users] {
-	if { $column != "portrait" && $column != "portrait_thumbnail" } {
+	if { $column ne "portrait" && $column ne "portrait_thumbnail" } {
 	    lappend user_columns "users.$column"
 	}
     }
@@ -209,7 +209,7 @@ ad_proc -private ad_user_class_query { set_id  } {
 	lappend select_list "user_demographics_summary(users.user_id) as demographics_summary"
     }
     
-    if { [info exists user_class_id] && ![empty_string_p $user_class_id] } {
+    if { [info exists user_class_id] && $user_class_id ne "" } {
 	set sql_post_select [db_string sql_post_select_for_user_class "
 	    select sql_post_select
 	    from user_classes where user_class_id = [ns_dbquotevalue $user_class_id]
@@ -218,7 +218,7 @@ ad_proc -private ad_user_class_query { set_id  } {
 	return "select [join $select_list ",\n    "]\n$sql_post_select"
     }
     
-    if { [info exists sql_post_select] && ![empty_string_p $sql_post_select] } {
+    if { [info exists sql_post_select] && $sql_post_select ne "" } {
 	return "select [join $select_list ",\n    "]\n$sql_post_select"
     }
 
@@ -249,7 +249,7 @@ ad_proc -private ad_user_class_query { set_id  } {
 		    
 		}
 		"intranet_user_p" {
-		    if {$intranet_user_p == "t" && [lsearch $tables "intranet_users"] == -1 } {
+		    if {$intranet_user_p eq "t" && [lsearch $tables "intranet_users"] == -1 } {
 			lappend tables "intranet_users"
 			lappend join_clauses "users.user_id = intranet_users.user_id"
 		    }
@@ -365,7 +365,7 @@ ad_proc -private ad_user_class_query { set_id  } {
     }
     #stuff related to the query itself
     
-    if { [info exists combine_method] && $combine_method == "or" } {
+    if { [info exists combine_method] && $combine_method eq "or" } {
 	set complete_where [join $where_clauses " or "]
     } else {
 	set complete_where [join $where_clauses " and "]
@@ -379,7 +379,7 @@ ad_proc -private ad_user_class_query { set_id  } {
     if { [llength $join_clauses] == 0 } {
 	set final_query "select [join $select_list ",\n    "]
 	from [join $tables ", "]"
-	if { ![empty_string_p $complete_where] } {
+	if { $complete_where ne "" } {
 	    append final_query "\nwhere $complete_where"
 	}
     } else {
@@ -387,7 +387,7 @@ ad_proc -private ad_user_class_query { set_id  } {
 	set final_query "select [join $select_list ",\n    "]
 	from [join $tables ", "]
 	where [join $join_clauses "\nand "]"
-	if { ![empty_string_p $complete_where] } {
+	if { $complete_where ne "" } {
 	    append final_query "\n and ($complete_where)"
 	}
     }
@@ -440,7 +440,7 @@ ad_proc -private ad_registration_finite_state_machine_admin_links {
 	}
     }
 
-    if { $email_verified_p == "t" } {
+    if { $email_verified_p eq "t" } {
  	lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&email_verified_p=f\">[_ acs-tcl.lt_require_email_verific]</a>"	
     } else {
  	lappend user_finite_state_links "<a href=\"/acs-admin/users/member-state-change?[export_url_vars user_id return_url]&email_verified_p=t\">[_ acs-tcl.approve_email]</a>"

@@ -44,10 +44,10 @@ ad_proc -private ad_try {code args} {
 	}
       }
 
-      if $matched {
-	upvar [lindex $args [expr $i + 1]] var
+      if {$matched} {
+	upvar [lindex $args [expr {$i + 1}]] var
 	set var $result
-	set errno [catch {uplevel [lindex $args [expr $i + 2]]} result]
+	set errno [catch {uplevel [lindex $args [expr {$i + 2}]]} result]
       }
     }
 

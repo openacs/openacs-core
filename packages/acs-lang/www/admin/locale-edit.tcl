@@ -129,10 +129,10 @@ if { [form is_request locale_editing] } {
 
     set locale_label [lang::util::get_label $locale]
 
-    if { $label == "" } {
+    if { $label eq "" } {
         element set_error locale_editing label "Label is required"
     }
-    if { $mime_charset == "" } {
+    if { $mime_charset eq "" } {
         element set_error locale_editing mime_charset "Mime charset is required"
     }
 

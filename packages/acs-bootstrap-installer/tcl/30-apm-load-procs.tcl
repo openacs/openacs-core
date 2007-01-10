@@ -85,7 +85,7 @@ ad_proc -public apm_guess_file_type { package_key path } {
     set dirs_in_pageroot [llength [split [ns_info pageroot] "/"]]	   ;# See comments by RBM
 
     # Fix to cope with both full and relative paths
-    if { [string index $path 0] == "/"} {                          
+    if { [string index $path 0] eq "/"} {                          
 	set components_lesser [lrange $components $dirs_in_pageroot end] 
     } else {
 	set components_lesser $components
@@ -105,7 +105,7 @@ ad_proc -public apm_guess_file_type { package_key path } {
     # was being recognized as a datamodel create script for the forums
     # package.
 
-    if { [string equal $extension ".sql"] } {
+    if {$extension eq ".sql"} {
 	if { [lsearch -glob $components "*upgrade-*-*"] >= 0 } {
 	    set type "data_model_upgrade"
         } elseif { [regexp -- "^$package_key-(create|drop)\.sql\$" [file tail $path] "" kind] } {
@@ -113,30 +113,30 @@ ad_proc -public apm_guess_file_type { package_key path } {
 	} else {
 	    set type "data_model"
 	}
-    } elseif { [string equal $extension ".dat"] } {
+    } elseif {$extension eq ".dat"} {
 	set type "sql_data"
-    } elseif { [string equal $extension ".ctl"] } {
+    } elseif {$extension eq ".ctl"} {
 	set type "ctl_file"
-    } elseif { [string equal $extension ".sqlj"] } {
+    } elseif {$extension eq ".sqlj"} {
 	set type "sqlj_code"
-    } elseif { [string equal $extension ".info"] } {
+    } elseif {$extension eq ".info"} {
 	set type "package_spec"
-    } elseif { [string equal $extension ".xql"] } {
+    } elseif {$extension eq ".xql"} {
 	set type "query_file"
-    } elseif { [string equal $extension ".java"] } {
+    } elseif {$extension eq ".java"} {
 	set type "java_code"
-    } elseif { [string equal $extension ".jar"] } {
+    } elseif {$extension eq ".jar"} {
 	set type "java_archive"
     } elseif { [lsearch $components "doc"] >= 0 } {
 	set type "documentation"
-    } elseif { [string equal $extension ".pl"] || \
-	       [string equal $extension ".sh"] || \
+    } elseif { $extension eq ".pl" || \
+	       $extension eq ".sh" || \
 	       [lsearch $components "bin"] >= 0 } {
 	set type "shell"
     } elseif { [lsearch $components "templates"] >= 0 } {
 	set type "template"
     } elseif { [llength $components] == 1 && \
-              ([string equal $extension ".html"] || [string equal $extension ".adp"]) } {
+              ($extension eq ".html" || $extension eq ".adp") } {
 		# HTML or ADP file in the top level of a package - assume it's documentation.
 	set type "documentation"
 
@@ -147,10 +147,10 @@ ad_proc -public apm_guess_file_type { package_key path } {
 	set type "content_page"
     } elseif { [lsearch $components_lesser "lib"] >= 0 } {
 	set type "include_page"
-    } elseif { [string equal $extension ".tcl"] && [string equal [lindex $components_lesser 0] "tcl"] } {
+    } elseif { $extension eq ".tcl" && [string equal [lindex $components_lesser 0] "tcl"] } {
         # A .tcl file residing under dir .../package_key/tcl/
         if { [regexp -- {-(procs|init)(-[0-9a-zA-Z]*)?\.tcl$} [file tail $path] "" kind] } {
-            if { [string equal [lindex $components end-1] test] } {
+            if {[lindex $components end-1] eq "test"} {
                 set type "test_$kind"
             } else {
                 set type "tcl_$kind"
@@ -197,7 +197,7 @@ ad_proc -public apm_get_package_files {
   @see apm_guess_file_type
   @see apm_guess_db_type
 } {
-    if { [empty_string_p $package_path] } {
+    if { $package_path eq "" } {
         set package_path [acs_package_root_dir $package_key]
     }
 
@@ -207,16 +207,16 @@ ad_proc -public apm_get_package_files {
 
     set matching_files [list]
     foreach file $files {
-        set rel_path [string range $file [expr [string length $package_path] + 1] end]
+        set rel_path [string range $file [expr {[string length $package_path] + 1}] end]
         set file_type [apm_guess_file_type $package_key $rel_path]
         set file_db_type [apm_guess_db_type $package_key $rel_path]
 
-        set type_match_p [expr [empty_string_p $file_types] || [lsearch $file_types $file_type] != -1]
+        set type_match_p [expr {$file_types eq "" || [lsearch $file_types $file_type] != -1}]
 
         if { $all_db_types_p } {
             set db_match_p 1
         } else {
-            set db_match_p [expr [empty_string_p $file_db_type] || [string equal $file_db_type $system_db_type]]
+            set db_match_p [expr {$file_db_type eq "" || $file_db_type eq $system_db_type}]
         }
 
         if { $type_match_p && $db_match_p } {
@@ -275,7 +275,7 @@ ad_proc -public apm_is_catalog_file { file_path } {
     } else {
         # Parsing succeeded
         set prefix $filename_info(prefix)
-        if { [empty_string_p $prefix] } {
+        if { $prefix eq "" } {
             # No prefix - this is considered a catalog file
             set return_value 1
         } else {
@@ -325,15 +325,15 @@ ad_proc -private apm_guess_db_type { package_key path } {
     set file_type [apm_guess_file_type $package_key $path]
 
     if { [string match "data_model*" $file_type] ||
-         [string match "ctl_file" $file_type] } {
+         "ctl_file" eq $file_type } {
         set sql_index [lsearch $components "sql"]
         if { $sql_index >= 0 } {
-            set db_dir [lindex $components [expr $sql_index + 1]]
-            if { [string equal $db_dir "common"] } {
+            set db_dir [lindex $components [expr {$sql_index + 1}]]
+            if {$db_dir eq "common"} {
                 return ""
             }
             foreach known_database_type [db_known_database_types] {
-                if { [string equal [lindex $known_database_type 0] $db_dir] } {
+                if {[lindex $known_database_type 0] eq $db_dir} {
                     return $db_dir
                 }
             }
@@ -475,8 +475,8 @@ proc apm_bootstrap_load_queries { package_key } {
         set file_db_type [apm_guess_db_type $package_key $file]
         set file_type [apm_guess_file_type $package_key $file]
 
-        if {[string equal $file_type query_file] &&
-            ([empty_string_p $file_db_type] || [string equal $file_db_type $db_type])} {
+        if {$file_type eq "query_file" &&
+            ($file_db_type eq "" || $file_db_type eq $db_type)} {
 	    db_qd_load_query_file $file
         } 
     }
@@ -518,7 +518,7 @@ ad_proc -private apm_ignore_file_p { path } {
     if { [apm_backup_file_p $tail] } {
 	return 1
     }
-    if { [string equal $tail "CVS"] } {
+    if {$tail eq "CVS"} {
 	return 1
     }
     return 0
@@ -545,5 +545,5 @@ ad_proc -private apm_include_file_p { filename } {
     Files for which apm_ignore_file_p returns true will be ignored.
     Backup files are ignored.
 } {
-    return [expr ![apm_ignore_file_p $filename]]
+    return [expr {![apm_ignore_file_p $filename]}] 
 }

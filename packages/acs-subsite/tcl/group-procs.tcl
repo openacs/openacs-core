@@ -104,10 +104,10 @@ ad_proc -public group::new {
     set var_list [list]
     lappend var_list [list context_id $context_id]
     lappend var_list [list $id_column $group_id]
-    if { ![empty_string_p $group_name] } {
+    if { $group_name ne "" } {
 	set group_name [lang::util::convert_to_i18n -prefix "group" -text "$group_name"]
         lappend var_list [list group_name $group_name]
-	if {[empty_string_p $pretty_name]} {
+	if {$pretty_name eq ""} {
 	    set pretty_name $group_name
 	}
     }
@@ -133,7 +133,7 @@ ad_proc -public group::new {
     } 
 	
     # Update the title to the pretty name
-    if {![empty_string_p $pretty_name]} {
+    if {$pretty_name ne ""} {
 	db_dml title_update "update acs_objects set title=:pretty_name where object_id = :group_id"
     }
     return $group_id
@@ -467,11 +467,11 @@ ad_proc -public group::default_member_state {
     @param create_p - 1 if the user has 'create' privilege on the group, 
                       0 otherwise.
 } {
-    if {$create_p || [string equal $join_policy open]} {
+    if {$create_p || $join_policy eq "open"} {
         return "approved"
     }
 
-    if {[string equal $join_policy "needs approval"]} {
+    if {$join_policy eq "needs approval"} {
         return "needs approval"
     }
 
@@ -508,17 +508,17 @@ ad_proc -public group::member_p {
 
 } {
 
-    if { [empty_string_p $user_id] } {
+    if { $user_id eq "" } {
 	set user_id [ad_conn user_id]
     }
 
-    if { [empty_string_p $group_name] && [empty_string_p $group_id] } {
+    if { $group_name eq "" && $group_id eq "" } {
 	return 0
     }
 
-    if { ![empty_string_p $group_name] } {
+    if { $group_name ne "" } {
 	set group_id [group::get_id -group_name $group_name -subsite_id $subsite_id]
-	if { [empty_string_p $group_id] } {
+	if { $group_id eq "" } {
 	    return 0
 	}
     }
@@ -574,13 +574,13 @@ ad_proc -public group::party_member_p {
     
 } {
 
-    if { [empty_string_p $group_name] && [empty_string_p $group_id] } {
+    if { $group_name eq "" && $group_id eq "" } {
 	return 0
     }
 
-    if { ![empty_string_p $group_name] } {
+    if { $group_name ne "" } {
 	set group_id [group::get_id -group_name $group_name -subsite_id $subsite_id]
-	if { [empty_string_p $group_id] } {
+	if { $group_id eq "" } {
 	    return 0
 	}
     }
@@ -633,7 +633,7 @@ ad_proc -public group::admin_p {
                           -rel_type "admin_rel"]
 
     # The party is an admin if the call above returned something non-empty
-    return [expr ![empty_string_p $admin_rel_id]]
+    return [expr {$admin_rel_id ne ""}] 
 }
 
 
@@ -650,8 +650,8 @@ ad_proc -public group::add_member {
     set admin_p [permission::permission_p -object_id $group_id -privilege "admin"]
 
     # Only admins can add non-membership_rel members
-    if { [empty_string_p $rel_type] || \
-             (!$no_perm_check_p && ![empty_string_p $rel_type] && ![string equal $rel_type "membership_rel"] && \
+    if { $rel_type eq "" || \
+             (!$no_perm_check_p && $rel_type ne "" && $rel_type ne "membership_rel" && \
                   ![permission::permission_p -object_id $group_id -privilege "admin"]) } {
         set rel_type "membership_rel"
     }
@@ -660,20 +660,20 @@ ad_proc -public group::add_member {
 
     if { !$no_perm_check_p } {
         set create_p [group::permission_p -privilege create $group_id]
-        if { [string equal $group(join_policy) "closed"] && !$create_p } {
+        if { $group(join_policy) eq "closed" && !$create_p } {
             error "You do not have permission to add members to the group '$group(group_name)'"
         }
     } else {
         set create_p 1
     }
 
-    if { [empty_string_p $member_state] } {
+    if { $member_state eq "" } {
         set member_state [group::default_member_state \
                               -join_policy $group(join_policy) \
                               -create_p $create_p]
     }
 
-    if { ![string equal $rel_type "membership_rel"] } {
+    if { $rel_type ne "membership_rel" } {
         # Add them with a membership_rel first
         relation_add -member_state $member_state "membership_rel" $group_id $user_id
     }
@@ -722,11 +722,11 @@ ad_proc -public group::title {
     @param group_id The group_id of the group
     @param group_name The name of the group. Note this is not the I18N title we want to retrieve with this procedure
 } {
-    if {![empty_string_p $group_name]} {
+    if {$group_name ne ""} {
 	set group_id [group::get_id -group_name $group_name]
     } 
 
-    if {![empty_string_p $group_id]} {
+    if {$group_id ne ""} {
 	return [util_memoize [list group::title_not_cached -group_id $group_id]]
     } else {
 	return ""

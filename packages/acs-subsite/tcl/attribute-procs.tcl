@@ -59,7 +59,7 @@ ad_proc -public exists_p {
     specified name. 0 otherwise
     
 } {
-    if { $convert_p == "t" } {
+    if { $convert_p eq "t" } {
 	set attribute [plsql_utility::generate_oracle_name $orig_attribute]
     } else {
 	set attribute $orig_attribute
@@ -77,7 +77,7 @@ ad_proc -public exists_p {
           from dual
     }]
 	
-    if { $attr_exists_p || $convert_p == "f" } {
+    if { $attr_exists_p || $convert_p eq "f" } {
 	# If the attribute exists, o
         return $attr_exists_p
     }    
@@ -153,7 +153,7 @@ ad_proc -public add {
             # execute drop statements until we reach position $i+1
             #  This position represents the operation on which we failed, and thus
             #  is not executed
-            for { set inner [expr [llength $plsql_drop] - 1] } { $inner > [expr $i + 1] } { set inner [expr $inner - 1] } {
+            for { set inner [expr {[llength $plsql_drop] - 1}] } { $inner > [expr {$i + 1}] } { set inner [expr {$inner - 1}] } {
                 set drop_pair [lindex $plsql_drop $inner]
                 if { [catch {eval [lindex $drop_pair 2] [lindex $drop_pair 0] [lindex $drop_pair 1]} err_msg_2] } {
                     append err_msg "\nAdditional error while trying to roll back: $err_msg_2"
@@ -210,7 +210,7 @@ ad_proc -private datatype_to_sql_type {
 
     set sql "$type"
     
-    if { ![empty_string_p $default] } {
+    if { $default ne "" } {
         # This is also pretty nasty - we have to make sure we
         # treat db literals appropriately - null is much different
         # than 'null' - mbryzek
@@ -220,7 +220,7 @@ ad_proc -private datatype_to_sql_type {
         }
         append sql " default $default"
     }
-    if { ![empty_string_p $constraint] } {
+    if { $constraint ne "" } {
         append sql " constraint $constraint"
     }
     return $sql
@@ -252,7 +252,7 @@ ad_proc -public delete { attribute_id } {
         # Attribute doesn't exist
         return 0
     }
-    if { [empty_string_p $table_name] || [empty_string_p $column_name] } {
+    if { $table_name eq "" || $column_name eq "" } {
 	# We have to have both a non-empty table name and column name
 	error "We do not have enough information to automatically remove this attribute. Namely, we are missing either the table name or the column name"
     }
@@ -379,10 +379,10 @@ ad_proc -public datatype_validator_exists_p {
     @creation-date 12/2000
 
 } {
-    if { [string eq $datatype "date"] } { 
+    if {$datatype eq "date"} { 
 	return 0
     }
-    if { [string eq $datatype "enumeration"] } { 
+    if {$datatype eq "enumeration"} { 
 	return 1
     }
     if { [empty_string_p [info procs "::template::data::validate::$datatype"]] } {
@@ -437,7 +437,7 @@ ad_proc -public array_for_type {
 
     set storage_clause ""
 
-    if {![empty_string_p $include_storage_types]} {
+    if {$include_storage_types ne ""} {
 	set storage_clause "
           and a.storage in ('[join $include_storage_types "', '"]')"
     }
@@ -464,7 +464,7 @@ ad_proc -public array_for_type {
 	    set attr_props(datatype:$name) $datatype
 	    set attr_props(id:$name) $attribute_id
 	}
-	if { [string eq $datatype "enumeration"] } {
+	if {$datatype eq "enumeration"} {
 	    set enum_values($name:$enum_value) $value_pretty_name
 	}
     }
@@ -487,13 +487,13 @@ ad_proc -public multirow {
 
     upvar $datasource_name attributes
 
-    if {[empty_string_p $object_type]} {
+    if {$object_type eq ""} {
 	set object_type [db_string object_type_query {
 	    select object_type from acs_objects where object_id = :object_id
 	}]
     }
 
-    if {[empty_string_p $return_url]} {
+    if {$return_url eq ""} {
 	set return_url "[ad_conn url]?[ad_conn query]"
     }
 
@@ -519,7 +519,7 @@ ad_proc -public multirow {
 	    foreach key $attr_list {
 		set col_value [set $key]
 		set attribute_id $attr_props(id:$key)
-		if { [string eq $attr_props(datatype:$key) "enumeration"] && [info exists enum_values($key:$col_value)] } {
+		if { $attr_props(datatype:$key) eq "enumeration" && [info exists enum_values($key:$col_value)] } {
 		    # Replace the value stored in the column with the
 		    # pretty name for that attribute
 		    set col_value $enum_values($key:$col_value)
@@ -546,15 +546,15 @@ ad_proc -public add_form_elements {
     @param variable_prefix Variable prefix.
 } {
 
-    if {[empty_string_p $form_id]} {
+    if {$form_id eq ""} {
 	error "attribute::add_form_elements - form_id not specified"
     }
 
-    if {[empty_string_p $object_type]} {
+    if {$object_type eq ""} {
 	error "attribute::add_form_elements - object type not specified"
     }
 
-    if {![empty_string_p $variable_prefix]} {
+    if {$variable_prefix ne ""} {
 	append variable_prefix "."
     }
 
@@ -572,7 +572,7 @@ ad_proc -public add_form_elements {
 	set required_p [lindex $row 5]
 	set default [lindex $row 6]
 
-	if { [string eq $datatype "enumeration"] } {
+	if {$datatype eq "enumeration"} {
 	    # For enumerations, we generate a select box of all the possible values
 	    set option_list [db_list_of_lists select_enum_values {
 		select enum.pretty_name, enum.enum_value
@@ -580,7 +580,7 @@ ad_proc -public add_form_elements {
 		where enum.attribute_id = :attribute_id 
 		order by enum.sort_order
 	    }]
-	    if { [string eq $required_p "f"] } {
+	    if {$required_p eq "f"} {
 		# This is not a required option list... offer a default
 		lappend option_list [list " (no value) " ""]
 	    }

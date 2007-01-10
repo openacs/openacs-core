@@ -112,7 +112,7 @@ set form_widgets_full {
 # For the local authority we allow only limited editing
 # Is this the local authority?
 set local_authority_p 0
-if { $authority_exists_p && [string equal $authority_id [auth::authority::local]] } {
+if { $authority_exists_p && $authority_id eq [auth::authority::local] } {
     set local_authority_p 1
 }
 
@@ -162,7 +162,7 @@ ad_form -name authority \
         # Set the value of the help_contact_text element - both contents and format attributes
         set help_contact_text [template::util::richtext::create]
         set help_contact_text [template::util::richtext::set_property contents $help_contact_text $element_array(help_contact_text)]
-        if { [empty_string_p $element_array(help_contact_text_format)] } {
+        if { $element_array(help_contact_text_format) eq "" } {
             set element_array(help_contact_text_format) "text/enhanced"
         }
         set help_contact_text [template::util::richtext::set_property format $help_contact_text  $element_array(help_contact_text_format)]     
@@ -190,7 +190,7 @@ ad_form -name authority \
 } -edit_data {
 
     foreach var_name [template::form::get_elements -no_api authority] {
-        if { ![string equal $var_name "authority_id"] } {
+        if { $var_name ne "authority_id" } {
             set element_array($var_name) [set $var_name]
         }
     }
@@ -249,7 +249,7 @@ list::create \
         }
     }
 
-set display_batch_history_p [expr $authority_exists_p && [string equal $ad_form_mode "display"]]
+set display_batch_history_p [expr {$authority_exists_p && $ad_form_mode eq "display"}]
 if { $display_batch_history_p } {
     
     db_multirow -extend { 
@@ -272,7 +272,7 @@ if { $display_batch_history_p } {
 
         set actions_per_minute {}
         if { $run_time_seconds > 0 && $num_actions > 0 } {
-            set actions_per_minute [expr round(60.0 * $num_actions / $run_time_seconds)]
+            set actions_per_minute [expr {round(60.0 * $num_actions / $run_time_seconds)}]
         }
         set run_time [util::interval_pretty -seconds $run_time_seconds]
     }

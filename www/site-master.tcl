@@ -27,7 +27,7 @@ set css_url "/resources/acs-subsite/site-master.css"
 # Get system name
 set system_name [ad_system_name]
 set system_url [ad_url]
-if { [string equal [ad_conn url] "/"] } {
+if {[ad_conn url] eq "/"} {
     set system_url ""
 }
 

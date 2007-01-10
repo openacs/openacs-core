@@ -38,7 +38,7 @@ ad_proc -private subsite::after_upgrade {
 	    }
 	    5.2.0a1 5.2.0a2 {
 		set value [parameter::get -parameter "AsmForRegisterId" -package_id [subsite::main_site_id]]
-		if {[empty_string_p $value]} {
+		if {$value eq ""} {
 		    apm_parameter_register "AsmForRegisterId" "Assessment used on the registration process." "acs-subsite" "0" "number" "user-login"
 		}
 		apm_parameter_register "RegImplName" "Name of the implementation used in the registration process" "acs-subsite" "asm_url" "string" "user-login"
@@ -46,11 +46,11 @@ ad_proc -private subsite::after_upgrade {
 	    }
 	    5.2.0a1 5.2.0a2 {
 		set value [parameter::get -parameter "RegistrationId" -package_id [subsite::main_site_id]]
-		if {[empty_string_p $value]} {
+		if {$value eq ""} {
 		    apm_parameter_register "RegistrationId" "Assessment used on the registration process." "acs-subsite" "0" "number" "user-login"
 		}
 		set value [parameter::get -parameter "RegistrationId" -package_id [subsite::main_site_id]]
-		if {[empty_string_p $value]} {
+		if {$value eq ""} {
 		    apm_parameter_register "RegistrationImplName" "Name of the implementation used in the registration process" "acs-subsite" "asm_url" "string" "user-login"
                 }
 	    }
@@ -69,11 +69,11 @@ ad_proc -private subsite::after_upgrade {
 	    }
 	    5.2.0a1 5.2.0a2 {
 		set value [parameter::get -parameter "RegistrationId" -package_id [subsite::main_site_id]]
-		if {[empty_string_p $value]} {
+		if {$value eq ""} {
 		    apm_parameter_register "RegistrationId" "Assessment used on the registration process." "acs-subsite" "0" "number" "user-login"
 		}
 		set value [parameter::get -parameter "RegistrationId" -package_id [subsite::main_site_id]]
-		if {[empty_string_p $value]} {
+		if {$value eq ""} {
 		    apm_parameter_register "RegistrationImplName" "Name of the implementation used in the registration process" "acs-subsite" "asm_url" "string" "user-login"
                 }
 	    }

@@ -188,7 +188,7 @@ namespace eval ::mime {
     array set encodings $encList
     variable reversemap
     foreach {enc mimeType} $encList {
-        if {$mimeType != ""} {
+        if {$mimeType ne ""} {
             set reversemap([string tolower $mimeType]) $enc
         }
     } 
@@ -333,14 +333,14 @@ proc ::mime::initializeaux {token args} {
                     error "-header expects a key and a value, not $value"
                 }
                 set lower [string tolower [set mixed [lindex $value 0]]]
-                if {![string compare $lower content-type]} {
+                if {$lower eq "content-type" } {
                     error "use -canonical instead of -header $value"
                 }
-                if {![string compare $lower content-transfer-encoding]} {
+                if {$lower eq "content-transfer-encoding" } {
                     error "use -encoding instead of -header $value"
                 }
-                if {(![string compare $lower content-md5]) \
-                        || (![string compare $lower mime-version])} {
+                if {($lower eq "content-md5" ) \
+                        || ($lower eq "mime-version" )} {
                     error "don't go there..."
                 }
                 if {[lsearch -exact $state(lowerL) $lower] < 0} {
@@ -428,7 +428,7 @@ proc ::mime::initializeaux {token args} {
                     }
     
                     default {
-                        if {[string compare $state(encoding) ""]} {
+                        if {$state(encoding) ne "" } {
                             error "-encoding and -parts do not mix"
                         }
                     }
@@ -451,13 +451,13 @@ proc ::mime::initializeaux {token args} {
         return
     }
 
-    if {[string compare $state(params) ""]} {
+    if {$state(params) ne "" } {
         error "-param requires -canonical"
     }
-    if {[string compare $state(encoding) ""]} {
+    if {$state(encoding) ne "" } {
         error "-encoding requires -canonical"
     }
-    if {[string compare $state(header) ""]} {
+    if {$state(header) ne "" } {
         error "-header requires -canonical"
     }
     if {[info exists state(parts)]} {
@@ -559,7 +559,7 @@ proc ::mime::parsepart {token} {
             continue
         }      
 
-        if {![string compare $vline ""]} {
+        if {$vline eq "" } {
             if {$blankP} {
                 break
             }
@@ -630,7 +630,7 @@ proc ::mime::parsepart {token} {
         set state(params) [list charset us-ascii]
     }
 
-    if {![string match multipart/* $state(content)]} {
+    if {![string match "multipart/*" $state(content)]} {
         if {$fileP} {
             set x [tell $state(fd)]
             incr state(count) [expr {$state(offset)-$x}]
@@ -641,7 +641,7 @@ proc ::mime::parsepart {token} {
 					 $state(lines.current) end] "\n"]
         }
 
-        if {[string match message/* $state(content)]} {
+        if {[string match "message/*" $state(content)]} {
 	    # FRINK: nocheck
             variable [set child $token-[incr state(cid)]]
 
@@ -665,15 +665,15 @@ proc ::mime::parsepart {token} {
 
     set boundary ""
     foreach {k v} $state(params) {
-        if {![string compare $k boundary]} {
+        if {$k eq "boundary" } {
             set boundary $v
             break
         }
     }
-    if {![string compare $boundary ""]} {
+    if {$boundary eq "" } {
         error "boundary parameter is missing in $state(content)"
     }
-    if {![string compare [string trim $boundary] ""]} {
+    if {[string trim $boundary] eq "" } {
         error "boundary parameter is empty in $state(content)"
     }
 
@@ -719,7 +719,7 @@ proc ::mime::parsepart {token} {
         }
 
         if {!$inP} {
-            if {![string compare $line "--$boundary"]} {
+            if {$line eq "--$boundary" } {
                 set inP 1
                 if {$fileP} {
                     set start $pos
@@ -821,7 +821,7 @@ proc ::mime::parsetypeaux {token string} {
     variable $token
     upvar 0 $token state
 
-    if {[string compare [parselexeme $token] LX_ATOM]} {
+    if {[parselexeme $token] ne "LX_ATOM" } {
         error [format "expecting type (found %s)" $state(buffer)]
     }
     set type [string tolower $state(buffer)]
@@ -831,7 +831,7 @@ proc ::mime::parsetypeaux {token string} {
         }
 
         LX_END {
-            if {[string compare $type message]} {
+            if {$type ne "message" } {
                 error "expecting type/subtype (found $type)"
             }
 
@@ -843,7 +843,7 @@ proc ::mime::parsetypeaux {token string} {
         }
     }
 
-    if {[string compare [parselexeme $token] LX_ATOM]} {
+    if {[parselexeme $token] ne "LX_ATOM" } {
         error [format "expecting subtype (found %s)" $state(buffer)]
     }
     append type [string tolower /$state(buffer)]
@@ -878,7 +878,7 @@ proc ::mime::parsetypeaux {token string} {
 
         set attribute [string tolower $state(buffer)]
 
-        if {[string compare [parselexeme $token] LX_EQUALS]} {
+        if {[parselexeme $token] ne "LX_EQUALS" } {
             error [format "expecting \"=\" (found %s)" $state(buffer)]
         }
 
@@ -926,7 +926,7 @@ proc ::mime::finalize {token args} {
 
     switch -- $options(-subordinates) {
         all {
-            if {![string compare $state(value) parts]} {
+            if {$state(value) eq "parts" } {
                 foreach part $state(parts) {
                     eval [list mime::finalize $part] $args
                 }
@@ -1085,7 +1085,7 @@ proc ::mime::getsize {token} {
 	}
     }
 
-    if {![string compare $state(encoding) base64]} {
+    if {$state(encoding) eq "base64" } {
         set size [expr {($size*3+2)/4}]
     }
 
@@ -1336,7 +1336,7 @@ proc ::mime::getbody {token args} {
                                              end]
                     }
                 }
-                if {[string length $fragment] > 0} {
+                if {$fragment ne ""} {
                     uplevel #0 $options(-command) [list data $fragment]
                 }
             } result]
@@ -1397,7 +1397,7 @@ proc ::mime::getbody {token args} {
                     set fragment [string range $fragment \
                                          $options(-blocksize) end]
                 }
-                if {[string length $fragment] > 0} {
+                if {$fragment ne ""} {
                     uplevel #0 $options(-command) [list data $fragment]
                 }
             } result]
@@ -1528,7 +1528,7 @@ proc ::mime::copymessageaux {token channel} {
 
     array set header $state(header)
 
-    if {[string compare $state(version) ""]} {
+    if {$state(version) ne "" } {
         puts $channel "MIME-Version: $state(version)"
     }
     foreach lower $state(lowerL) mixed $state(mixedL) {
@@ -1544,7 +1544,7 @@ proc ::mime::copymessageaux {token channel} {
     puts -nonewline $channel "Content-Type: $state(content)"
     set boundary ""
     foreach {k v} $state(params) {
-        if {![string compare $k boundary]} {
+        if {$k eq "boundary" } {
             set boundary $v
         }
 
@@ -1553,14 +1553,14 @@ proc ::mime::copymessageaux {token channel} {
 
     set converter ""
     set encoding ""
-    if {[string compare $state(value) parts]} {
+    if {$state(value) ne "parts" } {
         puts $channel ""
 
         if {$state(canonicalP)} {
-            if {![string compare [set encoding $state(encoding)] ""]} {
+            if {[set encoding $state(encoding)] eq "" } {
                 set encoding [encoding $token]
             }
-            if {[string compare $encoding ""]} {
+            if {$encoding ne "" } {
                 puts $channel "Content-Transfer-Encoding: $encoding"
             }
             switch -- $encoding {
@@ -1578,8 +1578,8 @@ proc ::mime::copymessageaux {token channel} {
 		}
             }
         }
-    } elseif {([string match multipart/* $state(content)]) \
-                    && (![string compare $boundary ""])} {
+    } elseif {([string match "multipart/*" $state(content)]) \
+                    && ($boundary eq "" )} {
 # we're doing everything in one pass...
         set key [clock seconds]$token[info hostname][array get state]
         set seqno 8
@@ -1634,7 +1634,7 @@ proc ::mime::copymessageaux {token channel} {
 		if {$size > 0} {
 		    set size [expr {$size - [string length $X]}]
 		}
-		if {[string compare $converter ""]} {
+		if {$converter ne "" } {
 		    puts $channel [$converter -mode encode -- $X]
 		} else {
 		    puts $channel $X
@@ -1688,7 +1688,7 @@ proc ::mime::copymessageaux {token channel} {
 
             puts $channel ""
 
-            if {[string compare $converter ""]} {
+            if {$converter ne "" } {
                 puts $channel [$converter -mode encode -- $state(string)]
             } else {
 		puts $channel $state(string)
@@ -1701,7 +1701,7 @@ proc ::mime::copymessageaux {token channel} {
 
     flush $channel
 
-    if {[string compare $converter ""]} {
+    if {$converter ne "" } {
         unstack $channel
     }
     if {[info exists state(error)]} {
@@ -1767,7 +1767,7 @@ proc ::mime::buildmessageaux {token} {
     array set header $state(header)
 
     set result ""
-    if {[string compare $state(version) ""]} {
+    if {$state(version) ne "" } {
         append result "MIME-Version: $state(version)\r\n"
     }
     foreach lower $state(lowerL) mixed $state(mixedL) {
@@ -1783,7 +1783,7 @@ proc ::mime::buildmessageaux {token} {
     append result "Content-Type: $state(content)"
     set boundary ""
     foreach {k v} $state(params) {
-        if {![string compare $k boundary]} {
+        if {$k eq "boundary" } {
             set boundary $v
         }
 
@@ -1792,14 +1792,14 @@ proc ::mime::buildmessageaux {token} {
 
     set converter ""
     set encoding ""
-    if {[string compare $state(value) parts]} {
+    if {$state(value) ne "parts" } {
         append result \r\n
 
         if {$state(canonicalP)} {
-            if {![string compare [set encoding $state(encoding)] ""]} {
+            if {[set encoding $state(encoding)] eq "" } {
                 set encoding [encoding $token]
             }
-            if {[string compare $encoding ""]} {
+            if {$encoding ne "" } {
                 append result "Content-Transfer-Encoding: $encoding\r\n"
             }
             switch -- $encoding {
@@ -1817,8 +1817,8 @@ proc ::mime::buildmessageaux {token} {
 		}
             }
         }
-    } elseif {([string match multipart/* $state(content)]) \
-                    && (![string compare $boundary ""])} {
+    } elseif {([string match "multipart/*" $state(content)]) \
+                    && ($boundary eq "" )} {
 # we're doing everything in one pass...
         set key [clock seconds]$token[info hostname][array get state]
         set seqno 8
@@ -1872,7 +1872,7 @@ proc ::mime::buildmessageaux {token} {
 		if {$size > 0} {
 		    set size [expr {$size - [string length $X]}]
 		}
-		if {[string compare $converter ""]} {
+		if {$converter ne "" } {
 		    append result "[$converter -mode encode -- $X]\r\n"
 		} else {
 		    append result "$X\r\n"
@@ -1920,7 +1920,7 @@ proc ::mime::buildmessageaux {token} {
 
             append result "\r\n"
 
-	    if {[string compare $converter ""]} {
+	    if {$converter ne "" } {
 		append result "[$converter -mode encode -- $state(string)]\r\n"
 	    } else {
 		append result "$state(string)\r\n"
@@ -2018,9 +2018,9 @@ proc ::mime::encoding {token} {
         text/* {
             if {!$asciiP} {
                 foreach {k v} $state(params) {
-                    if {![string compare $k charset]} {
+                    if {$k eq "charset" } {
                         set v [string tolower $v]
-                        if {([string compare $v us-ascii]) \
+                        if {([string compare $v "us-ascii"]) \
                                 && (![string match {iso-8859-[1-8]} $v])} {
                             return base64
                         }
@@ -2117,7 +2117,7 @@ proc ::mime::fcopy {token count {error ""}} {
     variable $token
     upvar 0 $token state
 
-    if {[string compare $error ""]} {
+    if {$error ne "" } {
         set state(error) $error
     }
     set state(doneP) 1
@@ -2401,16 +2401,16 @@ proc ::mime::parseaddressaux {token string} {
 
     set result ""
     while {[addr_next $token]} {
-        if {[string compare [set tail $state(domain)] ""]} {
+        if {[set tail $state(domain)] ne "" } {
             set tail @$state(domain)
         } else {
             set tail @[info hostname]
         }
-        if {[string compare [set address $state(local)] ""]} {
+        if {[set address $state(local)] ne "" } {
             append address $tail
         }
 
-        if {[string compare $state(phrase) ""]} {
+        if {$state(phrase) ne "" } {
             set state(phrase) [string trim $state(phrase) "\""]
             foreach t $state(tokenL) {
                 if {[string first $t $state(phrase)] >= 0} {
@@ -2424,8 +2424,8 @@ proc ::mime::parseaddressaux {token string} {
             set proper $address
         }
 
-        if {![string compare [set friendly $state(phrase)] ""]} {
-            if {[string compare [set note $state(comment)] ""]} {
+        if {[set friendly $state(phrase)] eq "" } {
+            if {[set note $state(comment)] ne "" } {
                 if {[string first "(" $note] == 0} {
                     set note [string trimleft [string range $note 1 end]]
                 }
@@ -2436,7 +2436,7 @@ proc ::mime::parseaddressaux {token string} {
                 set friendly $note
             }
 
-            if {(![string compare $friendly ""]) \
+            if {($friendly eq "" ) \
                     && ([string compare [set mbox $state(local)] ""])} {
                 set mbox [string trim $mbox "\""]
 
@@ -2454,7 +2454,7 @@ proc ::mime::parseaddressaux {token string} {
                     set friendly "$g $friendly"
                 }
 
-                if {![string compare $friendly ""]} {
+                if {$friendly eq "" } {
                     set friendly $mbox
                 }
             }
@@ -2657,7 +2657,7 @@ proc ::mime::addr_specification {token} {
             -
         LX_END {
             set state(memberP) $state(glevel)
-            if {(![string compare $state(lastC) LX_SEMICOLON]) \
+            if {($state(lastC) eq "LX_SEMICOLON" ) \
                     && ([incr state(glevel) -1] < 0)} {
                 return -code 7 "extraneous semi-colon"
             }
@@ -2692,7 +2692,7 @@ proc ::mime::addr_routeaddr {token {checkP 1}} {
     upvar 0 $token state
 
     set lookahead $state(input)
-    if {![string compare [parselexeme $token] LX_ATSIGN]} {
+    if {[parselexeme $token] eq "LX_ATSIGN" } {
         mime::addr_route $token
     } else {
         set state(input) $lookahead
@@ -2721,7 +2721,7 @@ proc ::mime::addr_routeaddr {token {checkP 1}} {
         }
     }
 
-    if {($checkP) && ([string compare $state(lastC) LX_RBRACKET])} {
+    if {($checkP) && ([string compare $state(lastC) "LX_RBRACKET"])} {
         return -code 7 [format "expecting right-bracket (found %s)" \
                                $state(buffer)]
     }
@@ -3089,7 +3089,7 @@ proc ::mime::addr_x400 {mbox key} {
 #       specified in 'value'.
 
 proc ::mime::parsedatetime {value property} {
-    if {![string compare $value -now]} {
+    if {$value eq "-now" } {
         set clock [clock seconds]
     } else {
         set clock [clock scan $value]
@@ -3140,7 +3140,7 @@ proc ::mime::parsedatetime {value property} {
         }
 
         rclock {
-            if {![string compare $value -now]} {
+            if {$value eq "-now" } {
                 return 0
             } else {
                 return [expr {[clock seconds]-$clock}]
@@ -3176,7 +3176,7 @@ proc ::mime::parsedatetime {value property} {
             set value [string range $value [expr {$x+1}] end]
             switch -- [set s [string index $value 0]] {
                 + - - {
-                    if {![string compare $s +]} {
+                    if {$s eq "+" } {
                         set s ""
                     }
                     set value [string trim [string range $value 1 end]]
@@ -3261,7 +3261,7 @@ proc ::mime::parselexeme {token} {
     set state(input) [string trimleft $state(input)]
 
     set state(buffer) ""
-    if {![string compare $state(input) ""]} {
+    if {$state(input) eq "" } {
         set state(buffer) end-of-input
         return [set state(lastC) LX_END]
     }
@@ -3269,7 +3269,7 @@ proc ::mime::parselexeme {token} {
     set c [string index $state(input) 0]
     set state(input) [string range $state(input) 1 end]
 
-    if {![string compare $c "("]} {
+    if {$c eq "(" } {
         set noteP 0
         set quoteP 0
 
@@ -3341,7 +3341,7 @@ proc ::mime::parselexeme {token} {
         }
     }
 
-    if {![string compare $c "\["]} {
+    if {$c eq "\[" } {
         set quoteP 0
 
         while {1} {
@@ -3462,11 +3462,11 @@ proc ::mime::word_encode {charset method string} {
 	error "unknown charset '$charset'"
     }
 
-    if {$encodings($charset) == ""} {
+    if {$encodings($charset) eq ""} {
 	error "invalid charset '$charset'"
     }
 
-    if {$method != "base64" && $method != "quoted-printable"} {
+    if {$method != "base64" && $method ne "quoted-printable"} {
 	error "unknown method '$method', must be base64 or quoted-printable"
     }
 
@@ -3509,7 +3509,7 @@ proc ::mime::word_decode {encoded} {
     }
 
     set enc [reversemapencoding $charset]
-    if {[string equal "" $enc]} {
+    if {$enc eq ""} {
 	error "unknown charset '$charset'"
     }
 

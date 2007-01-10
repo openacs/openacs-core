@@ -91,12 +91,12 @@ ad_proc -public ad_complain {
     global ad_page_contract_complaints ad_page_contract_errorkeys ad_page_contract_error_string
 
     # if no key was specified, grab one from the internally kept stack
-    if { [empty_string_p $key] && [info exists ad_page_contract_errorkeys] } {
+    if { $key eq "" && [info exists ad_page_contract_errorkeys] } {
 	set key [lindex $ad_page_contract_errorkeys 0]
     }
     if { [info exists ad_page_contract_error_string($key)] } {
 	lappend ad_page_contract_complaints $ad_page_contract_error_string($key)
-    } elseif { [empty_string_p $message] } {
+    } elseif { $message eq "" } {
 	lappend ad_page_contract_complaints "[_ acs-tcl.lt_Validation_key_compla]"
     } else {
 	lappend ad_page_contract_complaints $message
@@ -155,11 +155,11 @@ ad_proc -private ad_complaints_parse_error_strings { errorstrings } {
 	    }
 	    set name [lindex $errorkeyv 0]
 	    set flags [lindex $errorkeyv 1]
-	    if { [empty_string_p $flags] } {
+	    if { $flags eq "" } {
 		set ad_page_contract_error_string($name) $text
 	    } else {
 		foreach flag [split $flags ","] {
-		    if { ![empty_string_p $flag] } {
+		    if { $flag ne "" } {
 			set ad_page_contract_error_string($name:$flag) $text
 		    } else {
 			set ad_page_contract_error_string($name) $text
@@ -258,7 +258,7 @@ ad_proc -public ad_page_contract {
 } {
     foo
     bar:integer,notnull,multiple,trim
-    {greble:integer {[expr [lindex $bar 0] + 1]}}
+    {greble:integer {[expr {[lindex $bar 0] + 1}]}}
 } -validate {
     greble_is_in_range -requires {greble:integer} {
 	if { $greble < 1 || $greble > 100 } {
@@ -625,11 +625,11 @@ ad_proc -public ad_page_contract {
 	    if { $left_paren == -1 } {
 		lappend flag_list $flag
 	    } else {
-		if { ![string equal [string index $flag end] ")"] } {
+		if { [string index $flag end] ne ")" } {
 		    return -code error "Missing or misplaced end parenthesis for flag '$flag' on argument '$name'"
 		}
-		set flag_parameters [string range $flag [expr $left_paren + 1] [expr [string length $flag]-2]]
-		set flag [string range $flag 0 [expr $left_paren - 1]]
+		set flag_parameters [string range $flag [expr {$left_paren + 1}] [expr {[string length $flag]-2}]]
+		set flag [string range $flag 0 [expr {$left_paren - 1}]]
 
 		lappend flag_list $flag
 		foreach flag_parameter [split $flag_parameters "|"] {
@@ -739,7 +739,7 @@ ad_proc -public ad_page_contract {
     }
 
     # If there are no query arguments to process, we're done
-    if { ![info exists query] || [empty_string_p $query] } {
+    if { ![info exists query] || $query eq "" } {
 	return
     }
 
@@ -777,7 +777,7 @@ ad_proc -public ad_page_contract {
 
 	incr i
 	if { [string index [lindex $validate $i] 0] == "-" } {
-	    if { ![string equal [lindex $validate $i] -requires] } {
+	    if { [lindex $validate $i] ne "-requires" } {
 		return -code error "[_ acs-tcl.lt_Valid_switches_are_-r]"
 	    }
 	    set requires [lindex $validate [incr i]]
@@ -792,7 +792,7 @@ ad_proc -public ad_page_contract {
 		    return -code error "[_ acs-tcl.lt_The_-requires_element_1]"
 		}
 		set req_filter [lindex $parts_v 1]
-		if { [string equal $req_filter array] || [string equal $req_filter multiple] } {
+		if { $req_filter eq "array" || $req_filter eq "multiple" } {
 		    return -code error "You can't require \"$req_name:$req_filter\" for block \"$name\"."
 		}
 	    }
@@ -820,11 +820,11 @@ ad_proc -public ad_page_contract {
     # 
     ####################
 
-    if { [empty_string_p $form] } {
+    if { $form eq "" } {
         set form [ns_getform]
     }
     
-    if { [empty_string_p $form] } {
+    if { $form eq "" } {
 	set form_size 0
     } else {
 	set form_size [ns_set size $form]
@@ -879,7 +879,7 @@ ad_proc -public ad_page_contract {
 		set formal_name [join [lrange $actual_name_v 0 $i] "."]
 		if { [info exists apc_internal_filter($formal_name:array)] } {
 		    set found_p 1
-		    set variable_to_set var([join [lrange $actual_name_v [expr $i+1] end] "."])
+		    set variable_to_set var([join [lrange $actual_name_v [expr {$i+1}] end] "."])
 		    break
 		}
 	    }
@@ -891,7 +891,7 @@ ad_proc -public ad_page_contract {
 	    }
 	}
 	
-	if { [info exists apc_internal_filter($formal_name:multiple)] && [empty_string_p $actual_value] } {
+	if { [info exists apc_internal_filter($formal_name:multiple)] && $actual_value eq "" } {
             # LARS:
             # If you lappend an emptry_string, it'll actually add the empty string to the list as an element
             # which is not what we want
@@ -911,7 +911,7 @@ ad_proc -public ad_page_contract {
 	    ad_page_contract_set_validation_passed $formal_name:trim
 	}
 
-	if { [empty_string_p $actual_value] } {
+	if { $actual_value eq "" } {
 	    if { [info exists apc_internal_filter($formal_name:notnull)] } {
 		ad_complain -key $formal_name:notnull "[_ acs-tcl.lt_You_must_specify_some]"
 		continue
@@ -972,17 +972,17 @@ ad_proc -public ad_page_contract {
 	upvar 1 $formal_name var
 
 	if { [info exists apc_internal_filter($formal_name:cached)] } {
-	    if { ![ad_page_contract_get_validation_passed_p $formal_name] && ![info exists apc_internal_filter($formal_name:notnull)] && (![info exists apc_default_value($formal_name)] || [empty_string_p $apc_default_value($formal_name)]) } {
+	    if { ![ad_page_contract_get_validation_passed_p $formal_name] && ![info exists apc_internal_filter($formal_name:notnull)] && (![info exists apc_default_value($formal_name)] || $apc_default_value($formal_name) eq "") } {
 		if { [info exists apc_internal_filter($formal_name:array)] } {
 		    # This is an array variable, so we need to loop through each name.* variable for this package we have ...
 		    set array_list ""
 		    foreach arrayvar [ns_cache names util_memoize] {
 			if [regexp [list [ad_conn session_id] [ad_conn package_id] "$formal_name."] $arrayvar] {
-			    set arrayvar [lindex $arrayvar [expr [llength $arrayvar] - 1]]
-			    if { ![empty_string_p $array_list] } {
+			    set arrayvar [lindex $arrayvar [expr {[llength $arrayvar] - 1}]]
+			    if { $array_list ne "" } {
 				append array_list " "
 			    }
-			    set arrayvar_formal [string range $arrayvar [expr [string first "." $arrayvar] + 1] [string length $arrayvar]]
+			    set arrayvar_formal [string range $arrayvar [expr {[string first "." $arrayvar] + 1}] [string length $arrayvar]]
 			    append array_list "{$arrayvar_formal} {[ad_get_client_property [ad_conn package_id] $arrayvar]}"
 			}
 		    }
@@ -1090,9 +1090,9 @@ ad_proc -public ad_page_contract {
 		set validation_ok_p [ad_page_contract_eval uplevel 1 $code]
 		set ad_page_contract_errorkeys [lrange $ad_page_contract_errorkeys 1 end]
 
-		if { [empty_string_p $validation_ok_p] || \
-			(![string equal $validation_ok_p 1] && ![string equal $validation_ok_p 0])} {
-		    set validation_ok_p [expr [ad_complaints_count] == $no_complaints_before]
+		if { $validation_ok_p eq "" || \
+			($validation_ok_p ne "1" && $validation_ok_p ne "0" )} {
+		    set validation_ok_p [expr {[ad_complaints_count] == $no_complaints_before}]
 		}
 		
 		if { $validation_ok_p } {
@@ -1204,7 +1204,7 @@ ad_proc -public ad_page_contract_filter {
 	}
 	# trim leading zeros, so as not to confuse Tcl
 	set value [string trimleft $value "0"]
-	if { [empty_string_p $value] } {
+	if { $value eq "" } {
 	    # but not all of the zeros
 	    set value "0"
 	}
@@ -1261,10 +1261,10 @@ ad_proc -public ad_page_contract_filter {
     @creation-date 25 July 2000
 } {
 
-    if { ![string is wordchar $name] || [empty_string_p $name] } {
+    if { ![string is wordchar $name] || $name eq "" } {
 	return -code error "[_ acs-tcl.lt_Flag_name_must_be_a_v]"
     }
-    if { ![string equal [string tolower $name] $name] } {
+    if { [string tolower $name] ne $name } {
 	return -code error "[_ acs-tcl.lt_Flag_names_must_be_al]"
     }
     if { ![string match $type filter] && ![string match $type post] } {
@@ -1289,12 +1289,12 @@ ad_proc -public ad_page_contract_filter {
 
     set prior_type [ad_page_contract_filter_type $name]
 
-    if { [string equal $prior_type internal] } {
+    if {$prior_type eq "internal"} {
 	ns_mutex unlock $mutex
 	return -code error "[_ acs-tcl.lt_The_flag_name_name_is]"
-    } elseif { ![empty_string_p $prior_type] } {
+    } elseif { $prior_type ne "" } {
 	set prior_script [ad_page_contract_filter_script $name]
-	if { ![string equal $prior_script $script] } {
+	if { $prior_script ne $script } {
 	    ns_log Warning "[_ acs-tcl.lt_Multiple_definitions_]"
 	}
     }
@@ -1385,7 +1385,7 @@ ad_proc ad_page_contract_filter_invoke {
     @creation-date 25 July 2000
 } {
     upvar $value_varname value
-    if { [empty_string_p $parameters] } {
+    if { $parameters eq "" } {
 	set filter_result [[ad_page_contract_filter_proc $filter] $name value]
     } else {
 	set filter_result [[ad_page_contract_filter_proc $filter] $name value $parameters]
@@ -1450,7 +1450,7 @@ ad_proc ad_page_contract_filter_rule {
 
     if { [nsv_exists ad_page_contract_filter_rules $name] } {
 	set prior_script [ad_page_contract_filter_rule_script $name]
-	if { ![string equal $script $prior_script] } {
+	if { $script ne $prior_script } {
 	    ns_log Warning "Multiple definitions of the ad_page_contract_filter_rule \"$name\" in $script and $prior_script"
 	}
     }
@@ -1579,7 +1579,7 @@ ad_page_contract_filter html { name value } {
     @creation-date 25 July 2000
 } {
     set naughty_prompt [ad_html_security_check $value]
-    if { ![empty_string_p $naughty_prompt] } {
+    if { $naughty_prompt ne "" } {
 	ad_complain $naughty_prompt
 	return 0
     }
@@ -1596,7 +1596,7 @@ ad_page_contract_filter tmpfile { name value } {
     
     # check to make sure path is to an authorized directory
     set tmpdir_list [ad_parameter_all_values_as_list -package_id [site_node_closest_ancestor_package "acs-subsite"] TmpDir]
-    if { [empty_string_p $tmpdir_list] } {
+    if { $tmpdir_list eq "" } {
 	set tmpdir_list [list "/var/tmp" "/tmp"]
     }
     
@@ -1639,7 +1639,7 @@ ad_page_contract_filter -type post date { name date } {
 	set date($date_element) $real_value
     }
 
-    if { ![empty_string_p $date(year)] && [string length $date(year)] != 4 } {
+    if { $date(year) ne "" && [string length $date(year)] != 4 } {
 	ad_complain "[_ acs-tcl.lt_Invalid_date_The_year]"
 	return 0
     } 
@@ -1648,13 +1648,13 @@ ad_page_contract_filter -type post date { name date } {
 	set date(month) $real_value
     } else {
         set months_list {January February March April May June July August September October November December}
-	set date(month) [expr [lsearch $months_list $date(month)] + 1]
+	set date(month) [expr {[lsearch $months_list $date(month)] + 1}]
     }
 
     if {
-	[string match "" $date(month)] \
-	    || [string match "" $date(day)] \
-	    || [string match "" $date(year)] \
+	"" eq $date(month) \
+	    || "" eq $date(day) \
+	    || "" eq $date(year) \
 	    || $date(month) < 1 || $date(month) > 12 \
 	    || $date(day) < 1 || $date(day) > 31 \
 	    || $date(year) < 1 \
@@ -1704,9 +1704,9 @@ ad_page_contract_filter -type post time { name time } {
     }
 
     if {
-	[string match "" $time(hours)] \
-	    || [string match "" $time(minutes)] \
-	    || [string match "" $time(seconds)] \
+	"" eq $time(hours) \
+	    || "" eq $time(minutes) \
+	    || "" eq $time(seconds) \
 	    || (![string equal -nocase "pm" $time(ampm)] && ![string equal -nocase "am" $time(ampm)])
 	    || $time(hours) < 1 || $time(hours) > 12 \
 	    || $time(minutes) < 0 || $time(minutes) > 59 \
@@ -1748,9 +1748,9 @@ ad_page_contract_filter -type post time24 { name time } {
     }
 
     if {
-	[string match "" $time(hours)] \
-	    || [string match "" $time(minutes)] \
-	    || [string match "" $time(seconds)] \
+	"" eq $time(hours) \
+	    || "" eq $time(minutes) \
+	    || "" eq $time(seconds) \
 	    || $time(hours) < 0 || $time(hours) > 23 \
 	    || $time(minutes) < 0 || $time(minutes) > 59 \
 	    || $time(seconds) < 0 || $time(seconds) > 59
@@ -1788,7 +1788,7 @@ ad_page_contract_filter string_length { name value length } {
     @author Randy Beggs (randyb@arsdigita.com)
     @creation-date August 2000
 } {
-    if { [lindex $length 0] == "min" } {
+    if { [lindex $length 0] eq "min" } {
 	if { [string length $value] < [lindex $length 1] } {
 	    ad_complain "[_ acs-tcl.lt_name_is_too_short__Pl_1]"
 	    return 0
@@ -1842,7 +1842,7 @@ ad_page_contract_filter float { name value } {
     }
     # trim leading zeros, so as not to confuse Tcl
     set value [string trimleft $value "0"]
-    if { [empty_string_p $value] } {
+    if { $value eq "" } {
         # but not all of the zeros
         set value "0"
     }

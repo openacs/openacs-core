@@ -358,7 +358,7 @@ ad_proc -public template::data::transform {
 
   set proc_name [info procs ::template::data::transform::$type]
 
-  if { ! [string equal $proc_name {}] } {
+  if { $proc_name ne {} } {
 
     transform::$type $value_ref
   }

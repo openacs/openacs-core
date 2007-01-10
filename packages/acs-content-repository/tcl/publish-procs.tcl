@@ -26,7 +26,7 @@ ad_proc -public publish::get_page_root {} {
                        -package_id [ad_conn package_id] \
                        -parameter PageRoot]
     
-    if { [string index $root_path 0] != "/" } {
+    if { [string index $root_path 0] ne "/" } {
         # Relative path, prepend server_root
         set root_path "[ns_info pageroot]/$root_path"
     }
@@ -62,7 +62,7 @@ ad_proc -public publish::get_publish_roots {} {
     set page_root [publish::get_page_root]
     set absolute_paths [list]
     foreach path $root_paths {
-        if { [string index $path 0] != "/" } {
+        if { [string index $path 0] ne "/" } {
             lappend absolute_paths [ns_normalizepath "$page_root/$path"]
         } else {
             lappend absolute_paths $path
@@ -79,7 +79,7 @@ ad_proc -public publish::mkdirs { path } {
 } {
     set index [string last "/" $path]
     if { $index != -1 } {
-        file mkdir [string range $path 0 [expr $index - 1]]
+        file mkdir [string range $path 0 [expr {$index - 1}]]
     } 
 }
 
@@ -457,7 +457,7 @@ ad_proc -private publish::merge_with_template { item_id args } {
   # Get the template 
   set ::content::template_url [item::get_template_url $item_id]    
 
-  if { [string equal $::content::template_url {}] } { 
+  if {$::content::template_url eq {}} { 
     ns_log Warning "publish::merge_with_template: no template for item $item_id"
     return "" 
   }
@@ -812,13 +812,13 @@ ad_proc -public publish::render_subitem {
 } {
   # Get the child item
 
-  if { [string equal $relation_type child] } {
+  if {$relation_type eq "child"} {
       set subitems [db_list rs_get_subitems ""]
   } else {
       set subitems [db_list cs_get_subitems_related ""]
   }
 
-  set sub_item_id [lindex $subitems [expr $index - 1]]
+  set sub_item_id [lindex $subitems [expr {$index - 1}]]
 
   if { [template::util::is_nil sub_item_id] } {
     ns_log notice "publish::render_subitem: No such subitem"
@@ -828,7 +828,7 @@ ad_proc -public publish::render_subitem {
   # Call the appropriate handler function
   set code [list handle_item $sub_item_id -html $extra_args]
 
-  if { [string equal $is_embed t] } {
+  if {$is_embed eq "t"} {
     lappend code -embed
   }
 

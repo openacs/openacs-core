@@ -69,6 +69,6 @@ db_multirow -extend {
     set locale_enabled_p_url "locale-set-enabled-p?[export_vars { locale {enabled_p $toggle_enabled_p} }]"
     
     set num_translated_pretty [lc_numeric $num_translated]
-    set num_untranslated [expr $num_messages - $num_translated]
+    set num_untranslated [expr {$num_messages - $num_translated}]
     set num_untranslated_pretty [lc_numeric $num_untranslated]
 }

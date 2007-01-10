@@ -74,7 +74,7 @@ ad_proc -private auth::sync::job::get_authority_id_flush {
     
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    if { ![empty_string_p $job_id] } {
+    if { $job_id ne "" } {
         util_memoize_flush [list auth::sync::job::get_authority_id_not_cached $job_id]
     } else {
         util_memoize_flush_regexp [list auth::sync::job::get_authority_id_not_cached .*]
@@ -125,11 +125,11 @@ ad_proc -public auth::sync::job::start {
     @author Lars Pind (lars@collaboraid.biz)
 } {
     db_transaction {
-        if { [empty_string_p $job_id] } {
+        if { $job_id eq "" } {
             set job_id [db_nextval "auth_batch_jobs_job_id_seq"]
         }
 
-        if { $interactive_p && [empty_string_p $creation_user] } {
+        if { $interactive_p && $creation_user eq "" } {
             set creation_user [ad_conn user_id]
         }
         
@@ -309,7 +309,7 @@ ad_proc -public auth::sync::job::action {
     
     @return entry_id of newly created entry
 } {
-    if { ![string equal $operation "delete"] && [empty_string_p $array] } {
+    if { $operation ne "delete" && $array eq "" } {
         error "Switch -array is required when operation is not delete"
     }
     upvar 1 $array user_info
@@ -332,7 +332,7 @@ ad_proc -public auth::sync::job::action {
         
         switch $operation {
             snapshot {
-                if { ![empty_string_p $user_id] } {
+                if { $user_id ne "" } {
                     # user exists, it's an update
                     set operation "update"
                 } else {
@@ -341,13 +341,13 @@ ad_proc -public auth::sync::job::action {
                 }
             }
             update - delete {
-                if { [empty_string_p $user_id] } {
+                if { $user_id eq "" } {
                     # Updating/deleting a user that doesn't exist
                     set success_p 0
                     set result(message) "A user with username '$username' does not exist"
                 } else {
                     acs_user::get -user_id $user_id -array existing_user_info
-                    if { [string equal $existing_user_info(member_state) "banned"] } {
+                    if {$existing_user_info(member_state) eq "banned"} {
                         # Updating/deleting a user that's already deleted
                         set success_p 0
                         set result(message) "The user with username '$username' has been deleted (banned)"
@@ -355,9 +355,9 @@ ad_proc -public auth::sync::job::action {
                 }
             }
             insert {
-                if { ![empty_string_p $user_id] } {
+                if { $user_id ne "" } {
                     acs_user::get -user_id $user_id -array existing_user_info
-                    if { ![string equal $existing_user_info(member_state) "banned"] } {
+                    if { $existing_user_info(member_state) ne "banned" } {
                         # Inserting a user that already exists (and is not deleted)
                         set success_p 0
                         set result(message) "A user with username '$username' already exists"
@@ -379,7 +379,7 @@ ad_proc -public auth::sync::job::action {
                                               -username $username \
                                               -array user_info]
 
-                        if { ![string equal $result(creation_status) "ok"] } {
+                        if { $result(creation_status) ne "ok" } {
                             set result(message) $result(creation_message)
                             set success_p 0
                         } else {
@@ -433,7 +433,7 @@ ad_proc -public auth::sync::job::action {
                                               -username $username \
                                               -array user_info]
                         
-                        if { ![string equal $result(update_status) "ok"] } {
+                        if { $result(update_status) ne "ok" } {
                             set result(message) $result(update_message)
                             set success_p 0
                         } else {
@@ -445,7 +445,7 @@ ad_proc -public auth::sync::job::action {
                                               -authority_id $authority_id \
                                               -username $username]
                         
-                        if { ![string equal $result(delete_status) "ok"] } {
+                        if { $result(delete_status) ne "ok" } {
                             set result(message) $result(delete_message)
                             set success_p 0
                         } else {
@@ -533,8 +533,8 @@ ad_proc -private auth::sync::get_sync_elements {
     These should not be editable by the user. Supply either user_id or authority_id. 
     Authority_id is the most efficient.
 } {
-    if { [empty_string_p $authority_id] } {
-        if { [empty_string_p $user_id] } {
+    if { $authority_id eq "" } {
+        if { $user_id eq "" } {
             error "You must supply either user_id or authority_id"
         }
         set authority_id [acs_user::get_element -user_id $user_id -element authority_id]
@@ -567,7 +567,7 @@ ad_proc -private auth::sync::GetDocument {
 } {
     set impl_id [auth::authority::get_element -authority_id $authority_id -element "get_doc_impl_id"]
 
-    if { [empty_string_p $impl_id] } {
+    if { $impl_id eq "" } {
         # No implementation of GetDocument
         set authority_pretty_name [auth::authority::get_element -authority_id $authority_id -element "pretty_name"]
         error "The authority '$authority_pretty_name' doesn't support GetDocument"
@@ -594,7 +594,7 @@ ad_proc -private auth::sync::ProcessDocument {
 } {
     set impl_id [auth::authority::get_element -authority_id $authority_id -element "process_doc_impl_id"]
 
-    if { [empty_string_p $impl_id] } {
+    if { $impl_id eq "" } {
         # No implementation of auth_sync_process
         set authority_pretty_name [auth::authority::get_element -authority_id $authority_id -element "pretty_name"]
         error "The authority '$authority_pretty_name' doesn't support auth_sync_process"
@@ -621,7 +621,7 @@ ad_proc -private auth::sync::GetAcknowledgementDocument {
 } {
     set impl_id [auth::authority::get_element -authority_id $authority_id -element "process_doc_impl_id"]
 
-    if { [empty_string_p $impl_id] } {
+    if { $impl_id eq "" } {
         # No implementation of auth_sync_process
         set authority_pretty_name [auth::authority::get_element -authority_id $authority_id -element "pretty_name"]
         error "The authority '$authority_pretty_name' doesn't support auth_sync_process"
@@ -646,7 +646,7 @@ ad_proc -private auth::sync::GetElements {
 } {
     set impl_id [auth::authority::get_element -authority_id $authority_id -element "process_doc_impl_id"]
 
-    if { [empty_string_p $impl_id] } {
+    if { $impl_id eq "" } {
         # No implementation of auth_sync_process
         set authority_pretty_name [auth::authority::get_element -authority_id $authority_id -element "pretty_name"]
         error "The authority '$authority_pretty_name' doesn't support auth_sync_process"
@@ -721,8 +721,8 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
     
     array set param $parameters
     
-    if { (![empty_string_p $param(SnapshotURL)] && [string equal [clock format [clock seconds] -format "%d"] "01"]) || \
-             [empty_string_p $param(IncrementalURL)] } {
+    if { ($param(SnapshotURL) ne "" && [string equal [clock format [clock seconds] -format "%d"] "01"]) || \
+             $param(IncrementalURL) eq "" } {
 
         # On the first day of the month, we get a snapshot
         set url $param(SnapshotURL)
@@ -732,7 +732,7 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
         set url $param(IncrementalURL)
     }
 
-    if { [empty_string_p $url] } {
+    if { $url eq "" } {
         error "You must specify at least one URL to get."
     }
 
@@ -798,8 +798,8 @@ ad_proc -private auth::sync::get_doc::file::GetDocument {
     
     array set param $parameters
     
-    if { (![empty_string_p $param(SnapshotPath)] && [string equal [clock format [clock seconds] -format "%d"] "01"]) || \
-             [empty_string_p $param(IncrementalPath)] } {
+    if { ($param(SnapshotPath) ne "" && [string equal [clock format [clock seconds] -format "%d"] "01"]) || \
+             $param(IncrementalPath) eq "" } {
 
         # On the first day of the month, we get a snapshot
         set path $param(SnapshotPath)
@@ -809,7 +809,7 @@ ad_proc -private auth::sync::get_doc::file::GetDocument {
         set path $param(IncrementalPath)
     }
 
-    if { [empty_string_p $path] } {
+    if { $path eq "" } {
         error "You must specify at least one path to get."
     }
 
@@ -883,7 +883,7 @@ ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
 
     set root_node [xml_doc_get_first_node $tree]
 
-    if { ![string equal [xml_node_get_name $root_node] "enterprise"] } {
+    if { [xml_node_get_name $root_node] ne "enterprise" } {
         error "Root node was not <enterprise>"
     }
 
@@ -916,9 +916,9 @@ ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
         set user_info(first_names) [xml_get_child_node_content_by_path $person_node { { name n given } }]
         set user_info(last_name) [xml_get_child_node_content_by_path $person_node { { name n family } }]
 
-        if { [empty_string_p $user_info(first_names)] || [empty_string_p $user_info(last_name)] } {
+        if { $user_info(first_names) eq "" || $user_info(last_name) eq "" } {
             set formatted_name [xml_get_child_node_content_by_path $person_node { { name fn } }]
-            if { ![empty_string_p $formatted_name] || [string first " " $formatted_name] > -1 } {
+            if { $formatted_name ne "" || [string first " " $formatted_name] > -1 } {
                 # Split, so everything up to the last space goes to first_names, the rest to last_name
                 regexp {^(.+) ([^ ]+)$} $formatted_name match user_info(first_names) user_info(last_name)
             }
@@ -943,7 +943,7 @@ ad_proc -public auth::sync::process_doc::ims::GetAcknowledgementDocument {
 } {
     set tree [xml_parse -persist $document]
     set root_node [xml_doc_get_first_node $tree]
-    if { ![string equal [xml_node_get_name $root_node] "enterprise"] } {
+    if { [xml_node_get_name $root_node] ne "enterprise" } {
         error "Root node was not <enterprise>"
     }
 

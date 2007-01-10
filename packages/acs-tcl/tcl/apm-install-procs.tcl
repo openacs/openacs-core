@@ -23,7 +23,7 @@ ad_proc apm_scan_packages {
     @return A list of unregistered .info files that can be parsed for further information.
 } {
 
-    if { [empty_string_p $path] } {
+    if { $path eq "" } {
 	set path "[apm_workspace_install_dir]"
     }
 
@@ -99,10 +99,10 @@ ad_proc -public apm_dependency_provided_p {
 	return 1
     }
 
-    if { ![empty_string_p $dependency_list] } {
+    if { $dependency_list ne "" } {
 	# They provided a list of provisions.
 	foreach prov $dependency_list {
-	    if { [string equal $dependency_uri [lindex $prov 0]] } {
+	    if {$dependency_uri eq [lindex $prov 0]} {
 
                 set provided_version [lindex $prov 1]
                 set provided_p [db_string version_greater_p {}]
@@ -658,7 +658,7 @@ ad_proc -private apm_package_install {
 
     # Determine if we are upgrading or installing.
     set upgrade_from_version_name [apm_package_upgrade_from $package_key $version(name)]
-    set upgrade_p [expr ![empty_string_p $upgrade_from_version_name]]
+    set upgrade_p [expr {$upgrade_from_version_name ne ""}] 
 
     if { [string match "[apm_workspace_install_dir]*" $package_path] } {
         # Package is being installed from the apm_workspace dir (expanded from .apm file)
@@ -713,7 +713,7 @@ ad_proc -private apm_package_install {
         # to invoke any Tcl callbacks after mounting and instantiation. Note that this reloading 
         # is only done in the Tcl interpreter of this particular request.
         # Note that acs-tcl is a special case as its procs are always sourced on startup from boostrap.tcl
-        if { ![string equal $package_key "acs-tcl"] } {
+        if { $package_key ne "acs-tcl" } {
             apm_load_libraries -procs -force_reload -packages $package_key
             apm_load_queries -packages $package_key
         }
@@ -819,7 +819,7 @@ ad_proc -private apm_package_install {
         apm_invoke_callback_proc -version_id $version_id -type after-install
 
         set priority_mount_path [ad_decode $version(auto-mount) "" $mount_path $version(auto-mount)]
-        if { ![empty_string_p $priority_mount_path] } {
+        if { $priority_mount_path ne "" } {
             # This is a package that should be auto mounted
 
             set parent_id [site_node::get_node_id -url "/"]
@@ -831,7 +831,7 @@ ad_proc -private apm_package_install {
             } error] } {
                 # There is already a node with that path, check if there is a package mounted there
                 array set node [site_node::get -url "/${priority_mount_path}"]
-                if { [empty_string_p $node(object_id)] } {
+                if { $node(object_id) eq "" } {
                    # There is no package mounted there so go ahead and mount the new package
                    set node_id $node(node_id)
                 } else {
@@ -840,7 +840,7 @@ ad_proc -private apm_package_install {
                 }
            }
 
-           if { ![empty_string_p $node_id] } {
+           if { $node_id ne "" } {
 
                 site_node::instantiate_and_mount \
                                              -node_id $node_id \
@@ -857,7 +857,7 @@ ad_proc -private apm_package_install {
                 apm_callback_and_log $callback "<p> $error_text </p>"
             } 
 
-        } elseif { [string equal $package_type "apm_service"] && [string equal $singleton_p "t"] } {
+        } elseif { $package_type eq "apm_service" && $singleton_p eq "t" } {
             # This is a singleton package.  Instantiate it automatically, but don't mount.
 
             # Using empty context_id
@@ -889,10 +889,10 @@ ad_proc -private apm_package_install_version {
 } {
     upvar $array local_array
 
-    if { [empty_string_p $version_id] } {
+    if { $version_id eq "" } {
 	set version_id [db_null]
     }
-    if { [empty_string_p $release_date] } {
+    if { $release_date eq "" } {
 	set release_date [db_null]
     }
 
@@ -1012,7 +1012,7 @@ ad_proc -private apm_package_delete {
     }
 
     # Source SQL drop scripts
-    if {![empty_string_p $sql_drop_scripts]} {
+    if {$sql_drop_scripts ne ""} {
         
         apm_callback_and_log $callback "Now executing drop scripts.
     <ul>
@@ -1077,7 +1077,7 @@ ad_proc -private apm_package_install_data_model {
     set package_key $version(package.key)
     set upgrade_to_version_name $version(name)
 
-    if { [empty_string_p $path] } {
+    if { $path eq "" } {
 	set path "[acs_package_root_dir $package_key]"
     }
     set ul_p 0
@@ -1090,7 +1090,7 @@ ad_proc -private apm_package_install_data_model {
 		$package_key]
     }
 
-    if { ![empty_string_p $data_model_files] } {
+    if { $data_model_files ne "" } {
 	apm_callback_and_log $callback "<p><li>Installing data model for $version(package-name) $version(name)...\n"
     }
 
@@ -1098,8 +1098,8 @@ ad_proc -private apm_package_install_data_model {
 	set file_path [lindex $item 0]
 	set file_type [lindex $item 1]
 	ns_log Debug "apm_package_install_data_model: Now processing $file_path of type $file_type"
-	if {![string compare $file_type "data_model_create"] || \
-		![string compare $file_type "data_model_upgrade"] } {
+	if {$file_type eq "data_model_create" || \
+		$file_type eq "data_model_upgrade" } {
 	    if { !$ul_p } {
 		apm_callback_and_log $callback "<ul>\n"
 		set ul_p 1
@@ -1109,7 +1109,7 @@ ad_proc -private apm_package_install_data_model {
 "
 	    db_source_sql_file -callback $callback $path/$file_path
 	    apm_callback_and_log $callback "</pre></blockquote>\n"
-	} elseif { ![string compare $file_type "sqlj_code"] } {
+	} elseif { $file_type eq "sqlj_code" } {
 	    if { !$ul_p } {
 		apm_callback_and_log $callback "<ul>\n"
 		set ul_p 1
@@ -1119,7 +1119,7 @@ ad_proc -private apm_package_install_data_model {
 "
 	    db_source_sqlj_file -callback $callback "$path/$file_path"
 	    apm_callback_and_log $callback "</pre></blockquote>\n"
-	} elseif { [string equal $file_type "ctl_file"] } {
+	} elseif {$file_type eq "ctl_file"} {
             ns_log Debug "apm_package_install_data_model: Now processing $file_path of type ctl_file"
             if { !$ul_p } {
                 apm_callback_and_log $callback "<ul>\n"
@@ -1385,17 +1385,17 @@ ad_proc -public apm_package_register {
     Register the package in the system.
 } {
 
-    if { [empty_string_p $spec_file_path] } {
+    if { $spec_file_path eq "" } {
 	set spec_file_path [db_null]
     } 
 
-    if { [empty_string_p $spec_file_mtime] } {
+    if { $spec_file_mtime eq "" } {
 	set spec_file_mtime [db_null]
     }
 
-    if { ![string compare $package_type "apm_application"] } {
+    if { $package_type eq "apm_application" } {
 	db_exec_plsql application_register {}
-    } elseif { ![string compare $package_type "apm_service"] } {
+    } elseif { $package_type eq "apm_service" } {
 	db_exec_plsql service_register {}
     } else {
 	error "Unrecognized package type: $package_type"
@@ -1412,7 +1412,7 @@ ad_proc -public apm_version_update {
 } {
     upvar $array local_array
 
-    if { [empty_string_p $release_date] } {
+    if { $release_date eq "" } {
  	set release_date [db_null]
     }
 
@@ -1557,7 +1557,7 @@ ad_proc -private apm_data_model_scripts_find {
     @file_list A list of files and file types of form [list [list "foo.sql" "data_model_upgrade"] ...] 
 } {
     set types_to_retrieve [list "sqlj_code"]
-    if {[empty_string_p $upgrade_from_version_name]} {
+    if {$upgrade_from_version_name eq ""} {
 	lappend types_to_retrieve "data_model_create"
         # Assuming here that ctl_file files are not upgrade scripts
         # TODO: Make it possible to determine which ctl files are upgrade scripts and which aren't
@@ -1577,7 +1577,7 @@ ad_proc -private apm_data_model_scripts_find {
 
 	if {[lsearch -exact $types_to_retrieve $file_type] != -1 } {
             set list_item [list $path $file_type $package_key]
-	    if { [string equal $file_type "data_model_upgrade"] } {
+	    if {$file_type eq "data_model_upgrade"} {
                 # Upgrade script
 		if {[apm_upgrade_for_version_p $path $upgrade_from_version_name \
 			$upgrade_to_version_name]} {
@@ -1585,7 +1585,7 @@ ad_proc -private apm_data_model_scripts_find {
 		    ns_log Debug "apm_data_model_scripts_find: Adding $path to the list of upgrade files."
 		    lappend upgrade_file_list $list_item
 		}
-	    } elseif { [string equal $file_type "ctl_file"] } {
+	    } elseif {$file_type eq "ctl_file"} {
                 lappend ctl_file_list $list_item
             } else {
                 # Install script
@@ -1623,7 +1623,7 @@ ad_proc -private apm_query_files_find {
         # supported databases.
 
 	if {[lsearch -exact "query_file" $file_type] != -1 && \
-            ([empty_string_p $file_db_type] || ![string compare [db_type] $file_db_type])} {
+            ($file_db_type eq "" || [db_type] eq $file_db_type )} {
             ns_log Debug "apm_query_files_find: Adding $path to the list of query files."
             lappend query_file_list $path
 	}
@@ -1812,7 +1812,7 @@ ad_proc -public apm_upgrade_logic {
 
     @author Lars Pind
 } {
-    if { [expr [llength $spec] % 3] != 0 } {
+    if { [expr {[llength $spec] % 3}] != 0 } {
         error "The length of spec should be dividable by 3"
     }
 
@@ -1863,17 +1863,17 @@ ad_proc -private apm_get_package_repository {
 
     apm_get_installed_versions -array installed_version
 
-    if { ![empty_string_p $repository_url] } {
+    if { $repository_url ne "" } {
         set manifest_url "${repository_url}manifest.xml"
 
         # See if we already have it in a client property
         set manifest [ad_get_client_property acs-admin [string range $manifest_url end-49 end]]
 
-        if { [empty_string_p $manifest] } {
+        if { $manifest eq "" } {
             # Nope, get it now
             array set result [ad_httpget -url $manifest_url]
         
-            if { ![string equal $result(status) 200] } {
+            if { $result(status) ne "200" } {
                 error "Couldn't get the package list. Please try again later."
             }
             
@@ -1924,7 +1924,7 @@ ad_proc -private apm_get_package_repository {
 
             ns_log Debug "apm_get_package_repository: $version(package.key) = $version(install_type) -- [array get installed_version]"
             
-            if { ![string equal $version(install_type) already_installed] } {
+            if { $version(install_type) ne "already_installed" } {
                 set repository($version(package.key)) [array get version]
             }
         }
@@ -1950,7 +1950,7 @@ ad_proc -private apm_get_package_repository {
                         set version(install_type) upgrade
                     }
 
-                    if { ![string equal $version(install_type) already_installed] } {
+                    if { $version(install_type) ne "already_installed" } {
                         set repository($version(package.key)) [array get version]
                     }
                 }
@@ -1997,7 +1997,7 @@ ad_proc -private apm_load_install_xml {filename binds} {
     set __the_body__ [read $file]
     close $file
     # Interpolate the vars.
-    if {![empty_string_p $binds]} { 
+    if {$binds ne ""} { 
         foreach {var val} $binds {
             set $var [ad_quotehtml $val]
         }
@@ -2173,10 +2173,10 @@ ad_proc -private apm::package_version::attributes::get_pretty_name { attribute_n
 
 ad_proc -private apm::package_version::attributes::validate_maturity { maturity } {
     set error_message ""
-    if { ![empty_string_p $maturity] } {
+    if { $maturity ne "" } {
         if { ![regexp {^-?[0-9]+$} $maturity] } {
             set error_message "Maturity must be integer"
-        } elseif { [expr $maturity < -1 || $maturity > 3] } {
+        } elseif { [expr {$maturity < -1 || $maturity > 3}] } {
             set error_message "Matuirity must be integer between -1 and 3"
         }
     }
@@ -2192,7 +2192,7 @@ ad_proc -private apm::package_version::attributes::maturity_int_to_text { maturi
 } {
     if {[exists_and_not_null maturity]} {
 
-        if { ![expr $maturity >= -1 && $maturity <= 3] } {
+        if { ![expr {$maturity >= -1 && $maturity <= 3}] } {
             error "Maturity must be between -1 and 3 but is \"$maturity\""
         }
 
@@ -2233,7 +2233,7 @@ ad_proc -private apm::package_version::attributes::parse_xml {
         set attribute_node [xml_node_get_first_child_by_name $parent_node $attribute_name]
         array set attribute $dynamic_attributes($attribute_name)
 
-        if { ![empty_string_p $attribute_node] } {
+        if { $attribute_node ne "" } {
             # There is a tag for the attribute so use the tag contents
             set attributes($attribute_name) [xml_node_get_content $attribute_node]
         } else {
@@ -2345,7 +2345,7 @@ ad_proc -private apm::package_version::attributes::generate_xml {
     # its stable for CVS.
     foreach attribute_name [lsort [array names attributes]] {
         # Only output tag if its value is non-empty
-        if { ![empty_string_p $attributes($attribute_name)] } {
+        if { $attributes($attribute_name) ne "" } {
             append xml_string "${indentation}<${attribute_name}>[ad_quotehtml $attributes($attribute_name)]</${attribute_name}>\n"
         }
     }

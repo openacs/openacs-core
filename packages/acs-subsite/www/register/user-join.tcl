@@ -40,7 +40,7 @@ if { [exists_and_not_null return_url] } {
     set ret_link ""
 }
 
-if { [string equal $join_policy closed] } {
+if {$join_policy eq "closed"} {
     ad_return_error [_ acs-subsite.Closed_group] "[_ acs-subsite.This_group_is_closed]<p>$ret_link"
     ad_script_abort
 }
@@ -64,7 +64,7 @@ if { [form is_request join] } {
         set required_seg [multirow get required_segments $rownum]
         if { ![group::member_p -group_id $required_segments(group_id)] } {
 
-            if { [string equal $required_segments(join_policy) "closed"] } {
+            if {$required_segments(join_policy) eq "closed"} {
                 ad_return_error [_ acs-subsite.Closed_group] "[_ acs-subsite.This_group_is_closed]<p>$ret_link"
                 ad_script_abort
             }
@@ -151,12 +151,12 @@ if { $not_hidden == 0 || [template::form is_valid join] } {
 
         if { [permission::permission_p -object_id $group_id -privilege "admin"] } {
             set member_state "approved"
-            if { [string equal $rel_type "membership_rel"] } {
+            if {$rel_type eq "membership_rel"} {
                 # If they already have admin, bump them to an admin_rel
                 set rel_type "admin_rel"
             }
         } else {
-            if { [string equal $join_policy "needs approval"]  } {
+            if {$join_policy eq "needs approval"} {
                 set member_state "needs approval"
             } else {
                 set member_state "approved"

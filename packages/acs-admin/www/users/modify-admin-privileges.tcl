@@ -16,12 +16,12 @@ set return_url "/acs-admin/users/one?user_id=$user_id"
 
 set context [list [list "./" "Users"] "Modify privileges"]
 
-if ![info exists confirmed_p] {
+if {![info exists confirmed_p]} {
     set confirmed_p 0
 }
 
-if $confirmed_p {
-    if [string equal grant $action] {
+if {$confirmed_p} {
+    if {"grant" eq $action} {
         permission::grant -object_id [acs_magic_object "security_context_root"] -party_id $user_id -privilege "admin"
     } else {
         permission::revoke -object_id [acs_magic_object "security_context_root"] -party_id $user_id -privilege "admin"

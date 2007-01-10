@@ -40,7 +40,7 @@ if { $admin_p } {
 ad_form -extend -name user_search -on_submit {
     set create_p [group::permission_p -privilege create $group_id]
     
-    if { [string equal $group_info(join_policy) "closed"] && !$create_p} {
+    if { $group_info(join_policy) eq "closed" && !$create_p} {
         ad_return_forbidden "Cannot invite members" "I'm sorry, but you're not allowed to invite members to this group"
         ad_script_abort
     }

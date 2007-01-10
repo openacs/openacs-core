@@ -7,7 +7,7 @@ ad_library {
 proc_doc state_widget { {default ""} {select_name "usps_abbrev"}} "Returns a state selection box" {
 
     set widget_value "<select name=\"$select_name\">\n"
-    if { $default == "" } {
+    if { $default eq "" } {
         append widget_value "<option value=\"\" selected=\"selected\">Choose a State</option>\n"
     }
 
@@ -27,7 +27,7 @@ proc_doc state_widget { {default ""} {select_name "usps_abbrev"}} "Returns a sta
 proc_doc country_widget { {default ""} {select_name "country_code"} {size_subtag "size=4"}} "Returns a country selection box" {
 
     set widget_value "<select name=\"$select_name\" $size_subtag>\n"
-    if { $default == "" } {
+    if { $default eq "" } {
         if { [ad_parameter SomeAmericanReadersP] } {
 	    append widget_value "<option value=\"\">Choose a Country</option>
 <option value=\"us\" selected=\"selected\">United States</option>\n"
@@ -59,7 +59,7 @@ proc_doc ad_generic_optionlist {items values {default ""}} "Use this to build se
     set count 0
     set return_string ""
     foreach value $values {
-	if {  [string compare $default $value] == 0 } {
+	if {  $default eq $value  } {
 	    append return_string "<option selected=\"selected\" value=\"$value\">[lindex $items $count]</option>\n"
 	} else {
 	    append return_string "<option value=\"$value\">[lindex $items $count]</option>\n"
@@ -140,7 +140,7 @@ proc_doc ad_dateentrywidget {column { value 0 } } {
     } 
 
     set date_parts [split $value "-"]
-    if { $value == "" } {
+    if { $value eq "" } {
 	set month ""
 	set day ""
 	set year ""
@@ -156,7 +156,7 @@ proc_doc ad_dateentrywidget {column { value 0 } } {
     # take care of cases like 09 for month
     regsub "^0" $month "" month
     for {set i 0} {$i < 12} {incr i} {
-	if { $i == [expr $month - 1] } {
+	if { $i == [expr {$month - 1}] } {
 	    append output "<option selected=\"selected\"> [lindex $NS(months) $i]</option>\n"
 	} else {
 	    append output "<option>[lindex $NS(months) $i]</option>\n"
@@ -201,12 +201,12 @@ ad_proc ad_db_select_widget {
     set retval {}
     set count 0
     set dbcount 0
-    if {![empty_string_p $option_list]} {
+    if {$option_list ne ""} {
         foreach opt $option_list { 
             incr count
             set item [lindex $opt 1]
             set value [lindex $opt 0]
-            if { (!$multiple && [string compare $value $default] == 0) 
+            if { (!$multiple && $value eq $default ) 
                  || ($multiple && [lsearch -exact $default $value] > -1)} {
                 append retval "<option selected value=\"$value\">$item</option>\n"
             } else {
@@ -219,7 +219,7 @@ ad_proc ad_db_select_widget {
         set count 0
     }
 
-    if {! [empty_string_p $sql_qry]} {
+    if {$sql_qry ne ""} {
 	set columns [ns_set create]
 	
 	db_foreach $statement_name $sql_qry -column_set selection -bind $bind {
@@ -227,14 +227,14 @@ ad_proc ad_db_select_widget {
 	    incr dbcount
 	    set item [ns_set value $selection 0]
 	    set value [ns_set value $selection 1]
-	    if { (!$multiple && [string compare $value $default] == 0) 
+	    if { (!$multiple && $value eq $default ) 
 		 || ($multiple && [lsearch -exact $default $value] > -1)} {
 		append retval "<option selected=\"selected\" value=\"$value\">$item</option>\n"
 	    } else {
 		append retval "<option value=\"$value\">$item</option>\n"
 	    }
 	} if_no_rows {
-	    if {![empty_string_p $default]} { 
+	    if {$default ne ""} { 
 		return "<input type=\"hidden\" value=\"[philg_quote_double_quotes $default]\" name=\"$name\" />\n"
 	    } else { 
 		return {}            
@@ -261,7 +261,7 @@ ad_proc ad_db_select_widget {
 proc_doc currency_widget {{default ""} {select_name "currency_code"} {size_subtag "size=\"4\""}} "Returns a currency selection box" {
 
     set widget_value "<select name=\"$select_name\" $size_subtag>\n"
-    if { $default == "" } {
+    if { $default eq "" } {
         if { [ad_parameter SomeAmericanReadersP] } {
 	    append widget_value "<option value=\"\">Currency</option>
 <option value=\"USD\" selected=\"selected\">United States Dollar</option>\n"
@@ -399,7 +399,7 @@ proc_doc ad_color_widget { name default { use_js 0 } } "Returns a color selectio
     }
 
     if { $use_js == 1 } {
-	if { $c1 == "" } {
+	if { $c1 eq "" } {
 	    set c1 255
 	    set c2 255
 	    set c3 255
@@ -414,7 +414,7 @@ proc_doc ad_process_color_widgets args { Sets variables corresponding to the col
     foreach field $args {
 	upvar $field var
 	set var [ns_queryget "$field.list"]
-	if { $var == "custom" } {
+	if { $var eq "custom" } {
 	    set var "[ns_queryget "$field.c1"],[ns_queryget "$field.c2"],[ns_queryget "$field.c3"]"
 	}
 	if { ![regexp {^([0-9]+),([0-9]+),([0-9]+)$} $var "" r g b] || $r > 255 || $g > 255 || $b > 255 } {

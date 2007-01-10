@@ -77,7 +77,7 @@ ad_proc twt::server_url {} {
     set ip_address [ns_config ns/server/[ns_info server]/module/nssock Address]
 
     # If the IP is not configured in the config.tcl we will use the ip of localhost
-    if {[empty_string_p $ip_address]} {
+    if {$ip_address eq ""} {
      set ip_address 127.0.0.1
     }
 
@@ -123,7 +123,7 @@ ad_proc twt::user::create {
                                      -secret_question [ad_generate_random_string] \
                                      -secret_answer [ad_generate_random_string]]
 
-    if { ![string equal $user_info(creation_status) ok] } {
+    if { $user_info(creation_status) ne "ok" } {
         # Could not create user
         error "Could not create test user with username=$username user_info=[array get user_info]"
     }

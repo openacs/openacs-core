@@ -44,7 +44,7 @@ ad_proc -public acs_sc::invoke {
         }
         acs_sc::impl::get -impl_id $impl_id -array impl_info
         set impl $impl_info(impl_name)
-        if { ![empty_string_p $contract] && ![string equal $contract $impl_info(impl_contract_name)] } {
+        if { $contract ne "" && $contract ne $impl_info(impl_contract_name) } {
             error "The contract of implementation with id $impl_id does not match contract passed in. Expected contract to be '$contract', but contract of impl_id was '$impl_info(impl_contract_name)'"
         }
         set contract $impl_info(impl_contract_name)
@@ -110,7 +110,7 @@ ad_proc -private acs_sc_get_alias {
 
     #set exists_p [util_memoize "acs_sc_binding_exists_p $contract $impl"]
 
-    if ![set exists_p] {return ""}
+    if {![set exists_p]} {return ""}
     
     db_0or1row get_alias {*SQL*}
 
@@ -141,11 +141,11 @@ ad_proc -private acs_sc_proc {
 
     acs_sc_log SCDebug "ACS_SC_PROC: proc_name = $proc_name"
     
-    if { [empty_string_p $impl_alias] } {
+    if { $impl_alias eq "" } {
         foreach {impl_alias impl_pl} [acs_sc_get_alias $contract $operation $impl] break 
     }
 
-    if { [empty_string_p $impl_alias] } {
+    if { $impl_alias eq "" } {
 	error "ACS-SC: Cannot find alias for $proc_name"
     }
 
@@ -274,7 +274,7 @@ ad_proc -private -deprecated acs_sc_call {
 # Private logging proc
 proc acs_sc_log {level msg} {
     # If you want to debug the SC, uncomment the Debug log below
-    if { ![string equal "SCDebug" $level] } {
+    if { "SCDebug" ne $level } {
         ns_log $level "$msg"
     } else { 
         # ns_log Debug "$msg"

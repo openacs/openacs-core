@@ -25,7 +25,7 @@ ad_page_contract {
     return_url
 } -validate {
     referrer_error {
-        if { ![string equal $session_property(referrer) [get_referrer]] } {
+        if { $session_property(referrer) ne [get_referrer] } {
             ad_complain "Expected referrer does not match actual referrer"
         }
     }

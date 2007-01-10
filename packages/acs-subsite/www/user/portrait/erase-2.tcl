@@ -15,7 +15,7 @@ auth::require_login
 
 set current_user_id [ad_conn user_id]
 
-if [empty_string_p $user_id] {
+if {$user_id eq ""} {
     set user_id $current_user_id
     set admin_p 0
 } else {
@@ -32,7 +32,7 @@ where item_id = (
    where object_id_one = :user_id
    and rel_type = 'user_portrait_rel')"
 
-if [empty_string_p $return_url] {
+if {$return_url eq ""} {
     set return_url "/pvt/home"
 }
 

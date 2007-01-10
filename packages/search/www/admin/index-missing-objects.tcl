@@ -7,7 +7,7 @@ ad_page_contract {
 } -properties {
 }
 
-if {[string equal $object_type "file_storage_object"]} {
+if {$object_type eq "file_storage_object"} {
     db_dml reindex_file_storage_object {
       insert into search_observer_queue (object_id, event) 
         select object_id, 'INSERT' from acs_objects, cr_items 

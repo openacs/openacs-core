@@ -58,7 +58,7 @@ set body "[ad_header "Parameters for $instance_name"]
 <hr>
 "
 
-if { ![empty_string_p $dimensional_list] } {
+if { $dimensional_list ne "" } {
     append body "[ad_dimensional $dimensional_list]<p>"
 }
 

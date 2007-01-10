@@ -30,7 +30,7 @@ namespace eval plsql_utility {
 	@creation-date 11/2000
 
     } {
-	set max_length_without_stem [expr $max_length - [expr [string length $stem] + 1]]
+	set max_length_without_stem [expr $max_length - [expr {[string length $stem] + 1}]]
 
 	set text "${table}_$column"
 	if { [string length $text] > $max_length_without_stem } {
@@ -41,7 +41,7 @@ namespace eval plsql_utility {
 	    }
 	    append text "_$column"
 	}
-	return [string toupper "[string range $text 0 [expr $max_length_without_stem - 1]]_$stem"]
+	return [string toupper "[string range $text 0 [expr {$max_length_without_stem - 1}]]_$stem"]
     }
 
     ad_proc -public object_type_exists_p { object_type } {
@@ -109,14 +109,14 @@ object_type    => group,
 
 	# Generate text
 	set text ""
-	set col_width [expr $max_length + $num_spaces]
+	set col_width [expr {$max_length + $num_spaces}]
 	foreach pair $pieces {
 	    set left [lindex $pair 0]
 	    set right [lindex $pair 1]
 	    while { [string length $left] < $col_width } {
 		append left " "
 	    }
-	    if { ![empty_string_p $text] } {
+	    if { $text ne "" } {
 		append text "$line_term\n$indent_text"
 	    }
 	    append text "${left}${delim}${right}"
@@ -147,7 +147,7 @@ object_type    => group,
 
     } {
 	
-	if { $include_object_id == "t" } {
+	if { $include_object_id eq "t" } {
 	    set id [db_nextval "acs_object_id_seq"]
 	    set suffix "_$id"
 	} else {
@@ -161,11 +161,11 @@ object_type    => group,
 	# change spaces to underscores
 	regsub -all {\s+} $stem "_" stem
 	#Trim to fit in $max_length character limit
-	set max_length_without_suffix [expr $max_length - [string length $suffix]]
+	set max_length_without_suffix [expr {$max_length - [string length $suffix]}]
 	if { [string length $stem] >= $max_length_without_suffix } {
-	    set stem [string range $stem 0 [expr $max_length_without_suffix - 1]]
+	    set stem [string range $stem 0 [expr {$max_length_without_suffix - 1}]]
 	}
-	if { [empty_string_p $stem] } {
+	if { $stem eq "" } {
 	    error "generate_oracle_name failed to generate a safe oracle name from the stem \"$stem\"\n"
 	}
 	return "$stem$suffix"
@@ -269,7 +269,7 @@ select acs_group.name('-2') from dual
 	foreach row $pairs {
 	    set attr [string trim [lindex $row 0]]
 	    set attr_value [string trim [lindex $row 1]]
-	    if { [empty_string_p $attr_value] } {
+	    if { $attr_value eq "" } {
 		set attr_value $attr
 	    }
 	    lappend pieces [list "$attr" "$prepend$attr_value"]
@@ -302,7 +302,7 @@ select acs_group.name('-2') from dual
 		# Ignore this column
 		continue
 	    }
-	    if { [string equal $table $table_name] } {
+	    if {$table eq $table_name} {
 		lappend this_columns "$prepend$column"
 	    }
 	}
@@ -311,7 +311,7 @@ select acs_group.name('-2') from dual
 	    return ""
 	}
 	set return_value [join $this_columns ", "]
-	if { $start_with_comma == "t" } {
+	if { $start_with_comma eq "t" } {
 	    return ", $return_value"
 	}
 	return $return_value

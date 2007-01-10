@@ -49,16 +49,16 @@ ad_form -name application -cancel_url . -form {
     set instance_name $node(instance_name)
     set folder $node(name)
 } -on_submit {
-    if { [empty_string_p $instance_name] } {
+    if { $instance_name eq "" } {
         # Find the package pretty name from the list of packages
 
         foreach elm $packages {
-            if { [string equal [lindex $elm 1] $package_key] } {
+            if {[lindex $elm 1] eq $package_key} {
                 set instance_name [lindex $elm 0]
                 break
             }
         }
-        if { [empty_string_p $instance_name] } {
+        if { $instance_name eq "" } {
             error "Couldn't find package_key '$package_key' in list of system applications"
         }
 
@@ -76,7 +76,7 @@ ad_form -name application -cancel_url . -form {
                     -folder $folder \
                     -instance_name $instance_name]
 
-    if { [empty_string_p $folder] } {
+    if { $folder eq "" } {
         form set_error application folder "This folder name is already used"
         break
     }

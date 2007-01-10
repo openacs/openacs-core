@@ -21,7 +21,7 @@ ad_proc -public template::util::file_transform { element_id } {
     # Work around Windows bullshit
     set filename [ns_queryget $element_id]
 
-    if { [string equal $filename ""] } {
+    if {$filename eq ""} {
         return ""
     }
 

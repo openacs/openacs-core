@@ -101,7 +101,7 @@ if {[permission::permission_p -party_id $user_id -object_id $folder_id \
 	set upload_tmpfile [template::util::file::get_property tmp_filename $upload_file]
 	set mime_type [template::util::file::get_property mime_type $upload_file]
 	
-	if {$selector_type eq "image" && ![string match image/* $mime_type]} {
+	if {$selector_type eq "image" && ![string match "image/*" $mime_type]} {
 	  template::form::set_error upload_form upload_file \
 	      [_ acs-templating.HTMLArea_SelectImageUploadNoImage]
 	  break
@@ -249,7 +249,7 @@ db_multirow -extend {
   set file_upload_name [fs::remove_special_file_system_characters \
 			    -string $file_upload_name]
   
-  if { ![empty_string_p $content_size] } {
+  if { $content_size ne "" } {
     incr content_size_total $content_size
   }
   

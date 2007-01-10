@@ -71,7 +71,7 @@ aa_register_case -cats {api db smoke} apm__test_info_file {
                                              from apm_package_versions
                                              where version_id = :version_id}]
     set auto_mount $auto_mount_orig
-    if { [empty_string_p $auto_mount] } {
+    if { $auto_mount eq "" } {
         set auto_mount "test_auto_mount_dir"
         db_dml set_test_mount {update apm_package_versions
                                set auto_mount = :auto_mount
@@ -285,7 +285,7 @@ aa_register_case -cats {api} -on_error {
         [site_node::get_children -all -element node_id -node_id $node_id -package_type "apm_service"] \
         $nodes
     
-    aa_true "Found at least one apm_service node" [expr [llength $nodes] > 0]
+    aa_true "Found at least one apm_service node" [expr {[llength $nodes] > 0}]
 
     # nonexistent package_type
     aa_true "No nodes with package type 'foo'" \
@@ -1040,7 +1040,7 @@ aa_register_case \
 	    } {
 
 		set value [random]
-		if {![string equal $parameter_name "PasswordExpirationDays"] && $value > 0.7} {
+		if {$parameter_name ne "PasswordExpirationDays" && $value > 0.7} {
 
 		    set package_id [apm_package_id_from_key $package_key]	    
 		    set actual_value [db_string real_value {
@@ -1064,12 +1064,12 @@ aa_register_case \
 		    aa_true "check parameter::set_default" \
 			[string equal $value $value_db]
 
-		    set value [expr $value + 10]
+		    set value [expr {$value + 10}]
 		    parameter::set_from_package_key -package_key $package_key -parameter $parameter_name -value $value
 		    aa_true "check parameter::set_from_package_key" \
 			[string equal $value [parameter::get -package_id $package_id -parameter $parameter_name]]
 
-		    set value [expr $value + 10]
+		    set value [expr {$value + 10}]
 		    parameter::set_value -package_id $package_id -parameter $parameter_name -value $value
 		    aa_true "check parameter::set_value" \
 			[string equal $value [parameter::get -package_id $package_id -parameter $parameter_name]]
@@ -1088,5 +1088,5 @@ aa_register_case -cats {api smoke} acs_object__package_id {
     # Retrieve an objects_package_id
     set object_id [db_string get_object_id "select max(object_id) from acs_objects where package_id >0"]
     set package_id [db_string get_package_id "select package_id from acs_objects where object_id = :object_id"]
-    aa_true "package_id returned is correct" [string eq $package_id [acs_object::package_id -object_id $object_id]]
+    aa_true "package_id returned is correct" [string equal $package_id [acs_object::package_id -object_id $object_id]]
 }

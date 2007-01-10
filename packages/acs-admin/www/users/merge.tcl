@@ -15,7 +15,7 @@ ad_page_contract {			#
     if_the_logged_in_user_is_crazy {
 	# Just for security reasons...
 	set current_user_id [ad_conn user_id]
-	if { [string equal $current_user_id $user_id] || [string equal $current_user_id $user_id_from_search] } {
+	if { $current_user_id eq $user_id || $current_user_id eq $user_id_from_search } {
 	    ad_complain "You can't merge yourself"
 	}
     }
@@ -39,7 +39,7 @@ db_multirow -extend {one_item_object_url} one_user_contributions one_user_contri
 }
 
 set user_id_one_items [callback merge::MergeShowUserInfo -user_id $user_id ]
-if { ![empty_string_p $user_id_one_items] } {
+if { $user_id_one_items ne "" } {
     set user_id_one_items_html "<ul><li><b>Packages User Information </b><ul>"
     foreach pkg_list $user_id_one_items {
 	append user_id_one_items_html "<li><i>[lindex $pkg_list 0]</i><ul>"
@@ -70,7 +70,7 @@ db_multirow -extend {two_item_object_url} two_user_contributions two_user_contri
 }
 
 set user_id_two_items [callback merge::MergeShowUserInfo -user_id $user_id_from_search ]
-if { ![empty_string_p $user_id_two_items] } {
+if { $user_id_two_items ne "" } {
     set user_id_two_items_html "<ul><li><b>Packages User Information </b><ul>"
     foreach pkg_list $user_id_two_items {
 	append user_id_two_items_html "<li><i>[lindex $pkg_list 0]</i><ul>"

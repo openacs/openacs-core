@@ -43,9 +43,9 @@ namespace eval rel_types {
 	@author Michael Bryzek (mbryzek@arsdigita.com)
 	@creation-date 12/2000
     } {
-	if {![empty_string_p $group_id]} {
+	if {$group_id ne ""} {
 	    return [additional_rel_types_group_p $group_id]
-	} elseif {![empty_string_p $group_type]} {
+	} elseif {$group_type ne ""} {
 	    return [additional_rel_types_group_type_p $group_type]
 	} else {
 	    error "rel_types::rel_types_p error: One of group_id or group_type must be specified"
@@ -136,7 +136,7 @@ namespace eval rel_types {
 	# use 29 chars to leave 1 character in the name for later dynamic
 	# views
 
-	if {[empty_string_p $table_name]} {
+	if {$table_name eq ""} {
 	    set table_name [plsql_utility::generate_oracle_name \
 				-max_length 29 "${rel_type}_ext"]
 	}
@@ -183,7 +183,7 @@ namespace eval rel_types {
 	# The following create table statement commits the transaction. If it
 	# fails, we roll back what we've done
 
-	if {$create_table_p == "t"} {
+	if {$create_table_p eq "t"} {
 	    if {[catch {db_exec_plsql create_table "
 		create table $table_name (
         	   rel_id constraint $fk_constraint_name
@@ -193,7 +193,7 @@ namespace eval rel_types {
 
 		# Roll back our work so for
 
-		for {set i [expr [llength $plsql_drop] - 1]} {$i >= 0} {incr i -1} {
+		for {set i [expr {[llength $plsql_drop] - 1}]} {$i >= 0} {incr i -1} {
 		    set drop_pair [lindex $plsql_drop $i]
 		    if {[catch {eval [lindex $drop_pair 0] [lindex $drop_pair 1] [lindex $drop_pair 2]} err_msg_2]} {
 			append errmsg "\nAdditional error while trying to roll back: $err_msg_2"

@@ -147,7 +147,7 @@ if { [template::form is_valid constraint_new] } {
 	ad_return_template violations
 	return
     }
-    if { [empty_string_p $return_url] } {
+    if { $return_url eq "" } {
 	set return_url "../one?segment_id=$rel_segment"
     }
     ad_returnredirect $return_url

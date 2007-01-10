@@ -267,7 +267,7 @@ ad_proc -public aa_call_component {
     # If the component exists, execute the body code in the testcases stack
     # level.
     #
-    if {$body != ""} {
+    if {$body ne ""} {
         aa_log "Running component $component_id"
         uplevel 1 "_${aa_package_key}__c_$component_id"
         return
@@ -350,7 +350,7 @@ ad_proc -public aa_register_case {
 
     # run library specific code
     foreach library $libraries {
-        if { $library == "tclwebtest" } {
+        if { $library eq "tclwebtest" } {
 
             # kludge: until tclwebtest installs itself in the proper
             # place following the tcl way, we use this absolute path
@@ -375,7 +375,7 @@ ad_proc -public aa_register_case {
     #
     set filtered_inits {}
     foreach init_class $init_classes {
-        if {[string trim $init_class] != ""} {
+        if {[string trim $init_class] ne ""} {
             set found 0
             foreach init_class_info [nsv_get aa_test init_classes] {
                 if {$init_class == [lindex $init_class_info 0]} {
@@ -420,7 +420,7 @@ ad_proc -public aa_register_case {
         nsv_lappend aa_test cases $test_case_list
     }
 
-    if { $case_error != "" } {
+    if { $case_error ne "" } {
 
         # we don't source this file but insert a little warning text
         # into the procs body. There seems to be no better way to
@@ -517,7 +517,7 @@ ad_proc -public aa_runseries {
     # Work out the list of initialisation classes.
     #
     set testcase_ids {}
-    if {$testcase_id != ""} {
+    if {$testcase_id ne ""} {
         lappend testcase_ids $testcase_id
         foreach testcase [nsv_get aa_test cases] {
             if {$testcase_id == [lindex $testcase 0]} {
@@ -705,7 +705,7 @@ ad_proc -public aa_equals {
     global aa_testcase_id
     global aa_package_key
 
-    if { [string equal $affirm_actual $affirm_value] } {
+    if {$affirm_actual eq $affirm_value} {
         aa_log_result "pass" "$affirm_name Affirm PASSED, actual = \"$affirm_actual\""
         return 1
     } else {
@@ -820,17 +820,17 @@ ad_proc -public aa_log_result {
     # entry, but don't write it to the database.  Individual testcase will make
     # their own copies of these log entries.
     #
-    if {$aa_in_init_class != ""} {
+    if {$aa_in_init_class ne ""} {
         lappend aa_init_class_logs($aa_in_init_class) \
             [list $test_result $test_notes]
         return
     }
 
     incr aa_testcase_test_id
-    if {$test_result == "pass"} {
+    if {$test_result eq "pass"} {
         ns_log Debug "aa_log_result: PASSED: $aa_testcase_id, $test_notes"
         incr aa_testcase_passes
-    } elseif {$test_result == "fail"} {
+    } elseif {$test_result eq "fail"} {
         switch $aa_error_level {
             notice {
                 ns_log notice "aa_log_result: NOTICE: $aa_testcase_id, $test_notes"
@@ -935,7 +935,7 @@ ad_proc -public aa_run_with_teardown {
 
     # Teardown
     set teardown_error_p 0
-    if { ![empty_string_p $teardown_code] } {
+    if { $teardown_code ne "" } {
         set teardown_error_p [catch {uplevel $teardown_code} teardown_error]
         global errorInfo
         set teardown_error_stack $errorInfo
@@ -949,7 +949,7 @@ ad_proc -public aa_run_with_teardown {
     if { $teardown_error_p } {
         append error_text "\n\nTeardown failed with error $teardown_error\n\n$teardown_error_stack"
     }
-    if { ![empty_string_p $error_text] } {
+    if { $error_text ne "" } {
         error $error_text
     }
 }
@@ -1061,13 +1061,13 @@ ad_proc -public aa_test::parse_install_file {
     set service(parse_errors) {}
 
     set service(name) [xml_node_get_attribute $root_node "name"]
-    if { [empty_string_p $service(name)] } {
+    if { $service(name) eq "" } {
         append service(parse_error) "No service name attribute;"
     }
 
     foreach child [xml_node_get_children $root_node] {
         set info_type [xml_node_get_attribute $child "type"]
-        if { [empty_string_p $info_type] } {
+        if { $info_type eq "" } {
             append service(parse_error) "No type on info tag;"
             continue
         } 
@@ -1077,7 +1077,7 @@ ad_proc -public aa_test::parse_install_file {
     }
 
     if { [string is integer -strict $service(install_begin_epoch)] && [string is integer -strict $service(install_end_epoch)] } {
-        set service(install_duration) [expr $service(install_end_epoch) - $service(install_begin_epoch)]
+        set service(install_duration) [expr {$service(install_end_epoch) - $service(install_begin_epoch)}]
         set service(install_duration_pretty) [util::interval_pretty -seconds $service(install_duration)]
     }
 

@@ -98,8 +98,8 @@ ad_proc -public template::paginator::create { statement_name name query args } {
   set cache_key	$name:$query
   set row_ids [cache get $cache_key:row_ids]
 
-    if { ([string equal $row_ids {}] && ![nsv_exists __template_cache_timeout $cache_key]) || ([info exists opts(flush_p)] && [string equal $opts(flush_p) "t"]) } {
-      if { [info exists opts(printing_prefs)] && ![empty_string_p $opts(printing_prefs)] } {
+    if { ($row_ids eq {} && ![nsv_exists __template_cache_timeout $cache_key]) || ([info exists opts(flush_p)] && $opts(flush_p) eq "t") } {
+      if { [info exists opts(printing_prefs)] && $opts(printing_prefs) ne "" } {
 	  ReturnHeaders "text/html"
 	  ns_write "
 <html>
@@ -108,29 +108,29 @@ ad_proc -public template::paginator::create { statement_name name query args } {
 	  ns_write "<title>$title</title>
           <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">"
 	  set stylesheet [lindex $opts(printing_prefs) 1]
-	  if { ![empty_string_p $stylesheet] } {
+	  if { $stylesheet ne "" } {
 	      ns_write "<link rel=\"stylesheet\" href=\"$stylesheet\" type=\"text/css\">"
 	  }
 	  ns_write "</head>"
 	  ns_write "<body "
 	  set background [lindex $opts(printing_prefs) 2]
-	  if { ![empty_string_p $background] } {
+	  if { $background ne "" } {
 	      ns_write "background=\"$background\""
 	  }
 	  ns_write ">"
 	  set header_file [lindex $opts(printing_prefs) 3]
-	  if { ![empty_string_p $header_file] } {
+	  if { $header_file ne "" } {
 	      ns_write [ns_adp_parse -file $header_file]
 	  }
 	  ns_write [lindex $opts(printing_prefs) 6]
 	  init $statement_name $name $query 1
 	  ns_write [lindex $opts(printing_prefs) 7]
 	  set footer_file [lindex $opts(printing_prefs) 4]
-	  if { ![empty_string_p $footer_file] } {
+	  if { $footer_file ne "" } {
 	      ns_write [ns_adp_parse -file $footer_file]
 	  }
 	  set return_url [lindex $opts(printing_prefs) 5]
-	  if { ![empty_string_p $return_url] } {
+	  if { $return_url ne "" } {
 	      if { [llength $opts(row_ids)]==0 } {
 		  nsv_set __template_cache_timeout $cache_key $opts(timeout)
 	      }
@@ -216,7 +216,7 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
 
           lappend row_ids [lindex $row 0]
 
-          if { [expr $i % $page_size] == 0 } {
+          if { [expr {$i % $page_size}] == 0 } {
               lappend context_ids [lindex $row 1]
           }
           incr i
@@ -325,7 +325,7 @@ ad_proc -public template::paginator::get_row_last { name pagenum } {
   if {$page_count == $pagenum} {
     return $properties(row_count)
   } else {
-    return [expr $pagenum * $properties(pagesize)]
+    return [expr {$pagenum * $properties(pagesize)}]
   }
 }
 
@@ -366,7 +366,7 @@ ad_proc -public template::paginator::get_row_ids { name pagenum } {
 
   # get the set of ids for the current page
   set start [expr ($pagenum - $page_offset - 1) * $pagesize]
-  set end [expr $start + $pagesize - 1]
+  set end [expr {$start + $pagesize - 1}]
   set ids [lrange $properties(row_ids) $start $end]
 
   return $ids
@@ -408,7 +408,7 @@ ad_proc -public template::paginator::get_pages { name group } {
   }
 
   set start [expr ($group - 1) * $group_size + 1]
-  set end [expr $start + $group_size - 1]
+  set end [expr {$start + $group_size - 1}]
 
     if { $end > $page_count } { set end $page_count }
 
@@ -449,7 +449,7 @@ ad_proc -public template::paginator::get_groups { name group count } {
   set first [expr ($group - 1 - (($group - 1) % $count)) / $count + 1]
 
   set start [expr ($first - 1) * $group_size + 1]
-  set end [expr $start + $group_size * $page_size - 1]
+  set end [expr {$start + $group_size * $page_size - 1}]
 
   if { $end > $page_count } { set end $page_count) }
 
@@ -496,7 +496,7 @@ ad_proc -public template::paginator::get_context { name datasource pages } {
 
     set row(rownum) $rowcount
     set row(page) $page
-    set row(context) [lindex $context_ids [expr $page - 1]]
+    set row(context) [lindex $context_ids [expr {$page - 1}]]
   }
 }
 
@@ -631,11 +631,11 @@ ad_proc -public template::paginator::get_display_info { name datasource page } {
   }
 
   if { $page > 1 } { 
-    set info(previous_page) [expr $page - 1] 
+    set info(previous_page) [expr {$page - 1}] 
   }
 
   if { $page < $properties(page_count) } { 
-    set info(next_page) [expr $page + 1] 
+    set info(next_page) [expr {$page + 1}] 
   }
 
 
@@ -644,14 +644,14 @@ ad_proc -public template::paginator::get_display_info { name datasource page } {
   }
 
   if { $group < $properties(group_count) && $groupsize > 1 } {
-    set info(next_group) [expr $group * $groupsize + 1]
+    set info(next_group) [expr {$group * $groupsize + 1}]
   }
 
   # If the paginator is contextual, set the context
   if { [info exists properties(context_ids)] } {
     foreach elm { next_page previous_page next_group previous_group } {
       if { [exists_and_not_null info($elm)] } {
-        set info(${elm}_context) [lindex $properties(context_ids) [expr $info($elm) -1]]
+        set info(${elm}_context) [lindex $properties(context_ids) [expr {$info($elm) -1}]]
       }
     }
   }
@@ -679,7 +679,7 @@ ad_proc -public template::paginator::get_data { statement_name name datasource q
   template::util::list_to_lookup $ids row_order
 
   # substitute the current page set
-  if { [empty_string_p $query] } {
+  if { $query eq "" } {
     set query [uplevel 2 "db_map ${statement_name}_partial"]
   }
 
@@ -744,7 +744,7 @@ ad_proc -public template::paginator::get_query { name id_column page } {
 } {
     set ids [get_row_ids $name $page]
 
-    if { ![empty_string_p $ids] } {
+    if { $ids ne "" } {
 	# calculate the base row number for the page
 	upvar 2 __page_firstrow firstrow
 	set firstrow [get_row $name $page]

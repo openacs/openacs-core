@@ -20,12 +20,12 @@ ad_page_contract {
     root_id:integer,optional
 }
 
-if { [string equal $package_key "/new"] } {
+if {$package_key eq "/new"} {
     ad_returnredirect "/acs-admin/apm/packages-install"
     ad_script_abort
 }
 
-if { [empty_string_p $instance_name] } {
+if { $instance_name eq "" } {
         set instance_name [db_string instance_default_name "select pretty_name from apm_package_types where package_key = :package_key"]
 }
 
@@ -36,7 +36,7 @@ db_transaction {
     set context_id [ad_conn package_id]
     array set node [site_node::get -node_id $node_id]
 
-    if { ![empty_string_p $node(object_id)] } {
+    if { $node(object_id) ne "" } {
             set context_id $node(object_id)
     }
 

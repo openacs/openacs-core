@@ -36,7 +36,7 @@ if { ![info exists email] } {
     set email {}
 }
 
-if { [empty_string_p $email] && [empty_string_p $username] && [ad_conn untrusted_user_id] != 0 } {
+if { $email eq "" && $username eq "" && [ad_conn untrusted_user_id] != 0 } {
     acs_user::get -user_id [ad_conn untrusted_user_id] -array untrusted_user
     if { [auth::UseEmailForLoginP] } {
         set email $untrusted_user(email)
@@ -86,7 +86,7 @@ if { ![exists_and_not_null authority_id] } {
 set forgotten_pwd_url [auth::password::get_forgotten_url -authority_id $authority_id -username $username -email $email]
 
 set register_url [export_vars -base "[subsite::get_url]register/user-new" { return_url }]
-if { [string equal $authority_id [auth::get_register_authority]] || [auth::UseEmailForLoginP] } {
+if { $authority_id eq [auth::get_register_authority] || [auth::UseEmailForLoginP] } {
     set register_url [export_vars -no_empty -base $register_url { username email }]
 }
 
@@ -107,7 +107,7 @@ set focus {}
 if { [auth::UseEmailForLoginP] } {
     ad_form -extend -name login -form [list [list email:text($username_widget),nospell [list label [_ acs-subsite.Email]] [list html [list style "width: 150px"]]]]
     set user_id_widget_name email
-    if { ![empty_string_p $email] } {
+    if { $email ne "" } {
         set focus "password"
     } else {
         set focus "email"
@@ -124,7 +124,7 @@ if { [auth::UseEmailForLoginP] } {
 
     ad_form -extend -name login -form [list [list username:text($username_widget),nospell [list label [_ acs-subsite.Username]] [list html [list style "width: 150px"]]]]
     set user_id_widget_name username
-    if { ![empty_string_p $username] } {
+    if { $username ne "" } {
         set focus "password"
     } else {
         set focus "username"
@@ -177,7 +177,7 @@ ad_form -extend -name login -on_request {
         set expiration_time 30
     }
 
-    if { [string compare $hash $computed_hash] != 0 || \
+    if { $hash ne $computed_hash  || \
              $time < [ns_time] - $expiration_time } {
         ad_returnredirect -message [_ acs-subsite.Login_has_expired] -- [export_vars -base [ad_conn url] { return_url }]
         ad_script_abort
@@ -198,7 +198,7 @@ ad_form -extend -name login -on_request {
                              -email [string trim $email] \
                              -username [string trim $username] \
                              -password $password \
-                             -persistent=[expr $allow_persistent_login_p && [template::util::is_true $persistent_p]]]
+                             -persistent=[expr {$allow_persistent_login_p && [template::util::is_true $persistent_p]}]]
     
     # Handle authentication problems
     switch $auth_info(auth_status) {

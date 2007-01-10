@@ -18,9 +18,9 @@ ad_require_permission $constraint_id delete
 
 set package_id [ad_conn package_id]
 
-if { [string eq $operation "Yes, I really want to delete this constraint"] } {
+if {$operation eq "Yes, I really want to delete this constraint"} {
 
-    if { [empty_string_p $return_url] } {
+    if { $return_url eq "" } {
 	# Redirect to the rel-segment page by default. 
 	if { [db_0or1row select_segment_id {
 	    select c.rel_segment as segment_id from rel_constraints c where c.constraint_id = :constraint_id
@@ -49,7 +49,7 @@ if { [string eq $operation "Yes, I really want to delete this constraint"] } {
     }
     db_release_unused_handles
 
-} elseif { [empty_string_p $return_url] } {
+} elseif { $return_url eq "" } {
     # if we're not deleting, redirect to the constraint page
     set return_url one?[ad_export_vars constraint_id]
 }

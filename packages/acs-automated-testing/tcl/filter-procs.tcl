@@ -2,8 +2,8 @@ ad_page_contract_filter aa_test_view_by { name value } {
   Checks whether a view_by value has a value of "testcase", "package" or
   "category"
 } {
-  if {$value != "testcase" &&
-      $value != "package"} {
+  if {$value ne "testcase" &&
+      $value ne "package"} {
     ad_complain "Invalid view_by name"
     return 0
   }

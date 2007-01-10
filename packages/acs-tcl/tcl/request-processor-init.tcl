@@ -47,7 +47,7 @@ ns_unregister_proc HEAD /*.tcl
 ns_unregister_proc POST /*.tcl
 
 set listings [ns_config "ns/server/[ns_info server]" "directorylisting" "none"]
-if { [string equal $listings "fancy"] || [string equal $listings "simple"] } {
+if { $listings eq "fancy" || $listings eq "simple" } {
   nsv_set rp_directory_listing_p . 1
 } else {
   nsv_set rp_directory_listing_p . 0
@@ -90,7 +90,7 @@ ad_after_server_initialization filters_register {
 	    set arg_count [llength [info args $proc]]
 	}
 
-	if { $debug == "t" } {
+	if { $debug eq "t" } {
 	    set debug_p 1
 	} else {
 	    set debug_p 0
@@ -116,7 +116,7 @@ ad_after_server_initialization procs_register {
     foreach proc_info $procs {
 	util_unlist $proc_info method path proc arg debug noinherit description script
 
-	if { $noinherit == "t" } {
+	if { $noinherit eq "t" } {
 	    set noinherit_switch "-noinherit"
 	} else {
 	    set noinherit_switch ""
@@ -132,7 +132,7 @@ ad_after_server_initialization procs_register {
 	    set arg_count [llength [info args $proc]]
 	}
 
-	if { $debug == "t" } {
+	if { $debug eq "t" } {
 	    set debug_p 1
 	} else {
 	    set debug_p 0

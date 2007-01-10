@@ -26,7 +26,7 @@ if { ![db_0or1row select_group_id {
     ad_script_abort
 }
 
-if { [string eq $operation "Yes, I really want to delete this relationship type"] } {
+if {$operation eq "Yes, I really want to delete this relationship type"} {
     set rel_id_list [db_list select_rel_ids {
 	select r.rel_id 
           from acs_rels r
@@ -64,7 +64,7 @@ if { [string eq $operation "Yes, I really want to delete this relationship type"
 }
 
 
-if { [empty_string_p $return_url] } {
+if { $return_url eq "" } {
     set return_url one?[ad_export_vars {group_id}]
 }
 

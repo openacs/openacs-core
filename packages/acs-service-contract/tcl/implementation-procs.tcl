@@ -32,7 +32,7 @@ ad_proc -public acs_sc::impl::new {
     
     @return the ID of the new implementation
 } {
-    if { [empty_string_p $pretty_name] } {
+    if { $pretty_name eq "" } {
         set pretty_name $name
     }
     return [db_exec_plsql impl_new {}]
@@ -196,7 +196,7 @@ ad_proc -public acs_sc::impl::get_options {
 
     set impl_list [list]
 
-    if { ![empty_string_p $empty_label] } {
+    if { $empty_label ne "" } {
         lappend impl_list [list $empty_label ""]
     }
 

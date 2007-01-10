@@ -19,7 +19,7 @@ ad_proc -public -callback search::action -impl syndicate {} {
     if {![parameter::get -boolean -package_id [apm_package_id_from_key search] -parameter Syndicate -default 0]} {
         return
     }
-    if {[string equal $action DELETE]} {
+    if {$action eq "DELETE"} {
         db_dml nuke {delete from syndication where object_id = :object_id}
     } else {
         upvar $datasource d

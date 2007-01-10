@@ -265,5 +265,5 @@ ad_proc ::twt::dotlrn::test::manage_my_memberships {} {
     ::twt::assert_equals \
             "Should be one less class to dergister from after deregistering" \
             $deregister_count_after \
-            [expr $deregister_count_before - 1]
+            [expr {$deregister_count_before - 1}]
 }

@@ -17,7 +17,7 @@ foreach url [site_node::get_children -package_type apm_service -node_id [subsite
     array unset node 
     array set node [site_node::get_from_url -url $url -exact]
 
-    if { ![string equal $node(package_key) "acs-subsite"] && [permission::permission_p -object_id $node(object_id) -privilege read] } {
+    if { $node(package_key) ne "acs-subsite" && [permission::permission_p -object_id $node(object_id) -privilege read] } {
         lappend services [list \
                                   $node(instance_name) \
                                   $node(node_id) \

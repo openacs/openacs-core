@@ -79,7 +79,7 @@ ad_proc ::twt::class::setup_memberships { server_url } {
         set admin_rels [list dotlrn_ta_rel dotlrn_cadmin_rel dotlrn_ca_rel]
         set admin_counter 0
         for { set admin_counter 0 } \
-            { [expr $admin_counter < 2 && $admin_counter < [llength $admin_users]] } \
+            { [expr {$admin_counter < 2 && $admin_counter < [llength $admin_users]}] } \
             { incr admin_counter } {
 
             set admin_rel [::twt::get_random_items_from_list $admin_rels 1]
@@ -96,7 +96,7 @@ ad_proc ::twt::class::add_members { email_list rel_type } {
 
 ad_proc ::twt::class::add_member { email rel_type } {
 
-    if { [empty_string_p $email] } {
+    if { $email eq "" } {
         return
     }
 

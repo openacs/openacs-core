@@ -16,7 +16,7 @@ ad_page_contract {
   phrase:onevalue
 } -return_errors error_list
 
-if [info exists error_list] {
+if {[info exists error_list]} {
   # divert to error-handling page
   ad_return_template "contract-err"
 } else {
@@ -25,7 +25,7 @@ if [info exists error_list] {
   if {$count == 1} {
     append phrase "one $noun"
   } else {
-    if {[empty_string_p $plural]} {
+    if {$plural eq ""} {
       set plural "${noun}s"
     }
     append phrase "$count $plural"

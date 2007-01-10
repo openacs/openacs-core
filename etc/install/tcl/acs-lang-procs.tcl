@@ -12,7 +12,7 @@ ad_proc ::twt::acs_lang::load_i18n_messages {
     Enables all locales, or a given list of locales, and 
     loads all message catalogs for those locales.
 } {
-    if { [empty_string_p $locales] } {
+    if { $locales eq "" } {
         set locales [::twt::oacs::eval {db_list all_locales {select locale from ad_locales}}]
     }
 

@@ -7,7 +7,7 @@ ad_page_contract {
 }
 
 
-if { ![empty_string_p $repository_url] } {
+if { $repository_url ne "" } {
     set page_title "Install or Upgrade From OpenACS Repository"
 } else {
     set page_title "Install or Upgrade From Local File System"
@@ -36,7 +36,7 @@ foreach package_key [array names repository] {
         set package_key $version(package.key)
             
         # If in upgrade mode, only add to list if it's an upgrade
-        if { !$upgrade_p || [string equal $version(install_type) upgrade] } {
+        if { !$upgrade_p || $version(install_type) eq "upgrade" } {
 	    if {![exists_and_not_null version(maturity)]} {
 		set version(maturity) ""
 	    }

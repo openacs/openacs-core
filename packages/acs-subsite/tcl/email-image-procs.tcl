@@ -132,12 +132,12 @@ ad_proc -public email_image::new_item {
     set image_name "email${user_id}.gif"
     set email_length [string length $email]
     set dest_path "/tmp/$image_name"
-    set width [expr [expr $email_length * [expr $font_size / 2]] + 2]
+    set width [expr [expr {$email_length * [expr {$font_size / 2}]}] + 2]
     set height $font_size
-    set ypos [expr [expr $height / 2] + 3 ]
+    set ypos [expr {[expr {$height / 2}] + 3 }]
     set size "${width}x$height"
 
-    if { [string equal $bgcolor ""]} {
+    if {$bgcolor eq ""} {
         set bgcolor "\#ffffff"
     }
 
@@ -150,7 +150,7 @@ ad_proc -public email_image::new_item {
     exec convert -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $email" \
         $dest_path $dest_path
 
-    if { [string equal $transparent ""] || [string equal $transparent "1"] } {
+    if { $transparent eq "" || $transparent eq "1" } {
         # Making the bg color transparent
         exec convert $dest_path -transparent $bgcolor $dest_path
     }
@@ -210,12 +210,12 @@ ad_proc -public email_image::edit_email_image {
     set image_name "email${user_id}.gif"
     set email_length [string length $new_email]
     set dest_path "/tmp/$image_name"
-    set width [expr [expr $email_length * [expr $font_size / 2]] + 2]
+    set width [expr [expr {$email_length * [expr {$font_size / 2}]}] + 2]
     set height $font_size
-    set ypos [expr [expr $height / 2] + 3 ]
+    set ypos [expr {[expr {$height / 2}] + 3 }]
     set size "${width}x$height"
 
-    if { [string equal $bgcolor ""]} {
+    if {$bgcolor eq ""} {
         set bgcolor "\#ffffff"
     }
 
@@ -231,7 +231,7 @@ ad_proc -public email_image::edit_email_image {
     exec convert -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $new_email" \
         $dest_path $dest_path
 
-    if { [string equal $transparent ""] || [string equal $transparent "1"] } {
+    if { $transparent eq "" || $transparent eq "1" } {
         # Making the bg color transparent
         exec convert $dest_path -transparent $bgcolor $dest_path
     }

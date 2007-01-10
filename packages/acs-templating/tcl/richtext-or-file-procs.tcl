@@ -81,7 +81,7 @@ ad_proc -public template::data::validate::richtext_or_file {
     set tmp_filename [lindex $richtext_or_file_list 4]
     set content_url  [lindex $richtext_or_file_list 5]
 
-    if { ![empty_string_p $text] && [lsearch -exact [template::util::richtext_or_file::formats] $mime_type] == -1 } {
+    if { $text ne "" && [lsearch -exact [template::util::richtext_or_file::formats] $mime_type] == -1 } {
 	set message "Invalid text format, '$mime_type'."
 	return 0
     }
@@ -89,7 +89,7 @@ ad_proc -public template::data::validate::richtext_or_file {
     # enhanced text and HTML needs to be security checked
     if { [lsearch { text/enhanced text/html } $mime_type] == -1 } {
         set check_result [ad_html_security_check $text]
-        if { ![empty_string_p $check_result] } {
+        if { $check_result ne "" } {
             set message $check_result
             return 0
         }
@@ -119,7 +119,7 @@ ad_proc -public template::data::transform::richtext_or_file {
     switch $storage_type {
         text {
             set text [ns_queryget $element_id.text]
-            if { [empty_string_p $text] } {
+            if { $text eq "" } {
                 return [list]
             }
             set mime_type [ns_queryget $element_id.mime_type]
@@ -128,7 +128,7 @@ ad_proc -public template::data::transform::richtext_or_file {
         }  
         file {
             set file [template::util::file_transform $element_id.file]
-            if { [empty_string_p $file] } {
+            if { $file eq "" } {
                 return [list]
             }
             set filename [template::util::file::get_property filename $file]
@@ -287,8 +287,8 @@ ad_proc -public template::widget::richtext_or_file {
   
   set output {}
 
-  if { [string equal $element(mode) "edit"] } {
-      if { [empty_string_p $storage_type] } {
+  if {$element(mode) eq "edit"} {
+      if { $storage_type eq "" } {
           append output "<input type=\"radio\" name=\"$element(id).storage_type\" id=\"$element(id).storage_type_text\" value=\"text\" "
           append output "checked "
           append output "onclick=\"javascript:acs_RichText_Or_File_InputMethodChanged('$element(form_id)', '$element(id)', this);\">"
@@ -297,14 +297,14 @@ ad_proc -public template::widget::richtext_or_file {
           append output "<input type=\"hidden\" name=\"$element(id).storage_type\" value=\"[ad_quotehtml $storage_type]\">"
       }
 
-      if { [empty_string_p $storage_type] || [string equal $storage_type "text"] } {
+      if { $storage_type eq "" || $storage_type eq "text" } {
           append output {<script language="javascript"><!--} \n {acs_RichText_WriteButtons();  //--></script>}
 
           append output [textarea_internal "$element(id).text" attributes $text]
           append output "<br>Format: [menu "$element(id).mime_type" [template::util::richtext_or_file::format_options] $mime_type attributes]"
       }
 
-      if { [empty_string_p $storage_type] } {
+      if { $storage_type eq "" } {
           append output "</blockquote>"
           append output "<input type=\"radio\" name=\"$element(id).storage_type\" id=\"$element(id).storage_type_file\" value=\"file\" "
           append output "onclick=\"javascript:acs_RichText_Or_File_InputMethodChanged('$element(form_id)', '$element(id)', this);\">"
@@ -312,17 +312,17 @@ ad_proc -public template::widget::richtext_or_file {
           append output "<blockquote>"
       }
 
-      if { [string equal $storage_type "file"] } {
+      if {$storage_type eq "file"} {
           append output [template::util::richtext_or_file::get_property html_value $element(value)]
           append output "<p>Replace uploaded file: "
           append output "<input type=\"file\" name=\"$element(id).file\">" 
       }
-      if { [empty_string_p $storage_type] } {
+      if { $storage_type eq "" } {
           append output "<input type=\"file\" name=\"$element(id).file\" disabled>" 
       }
 
       
-      if { [empty_string_p $storage_type] } {
+      if { $storage_type eq "" } {
           append output "</blockquote>"
       }
   } else {

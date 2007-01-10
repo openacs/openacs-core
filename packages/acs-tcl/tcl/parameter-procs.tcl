@@ -38,7 +38,7 @@ ad_proc -public parameter::set_value {
     @param parameter which parameter's value to set
     @param value what value to set said parameter to
 } {
-    if {[empty_string_p $package_id]} {
+    if {$package_id eq ""} {
         set package_id [ad_requested_object_id]
     }
 
@@ -66,13 +66,13 @@ ad_proc -public parameter::get {
     @return The string trimmed (leading and trailing spaces removed) parameter value
 } {
 
-    if {[empty_string_p $package_id]} {
+    if {$package_id eq ""} {
         set package_id [ad_requested_object_id]
     }
 
     set package_key ""
     set value ""
-    if {![empty_string_p $package_id]} {
+    if {$package_id ne ""} {
         # This can fail at server startup--OpenACS calls parameter::get to
         # get the size of the util_memoize cache so it can setup the cache.
         # apm_package_key_from_id needs that cache, but on server start 
@@ -86,16 +86,16 @@ ad_proc -public parameter::get {
     # If I convert the package_id to a package_key, is there a parameter by this
     # name in the parameter file?  If so, it takes precedence.
     # 1. use the parameter file
-    if {![empty_string_p $package_key]} {
+    if {$package_key ne ""} {
         set value [ad_parameter_from_file $parameter $package_key]
     }
 
     # 2. check the parameter cache
-    if {[empty_string_p $value]} {
+    if {$value eq ""} {
         set value [ad_parameter_cache $package_id $parameter]
     }
     # 3. use the default value
-    if {[empty_string_p $value]} {
+    if {$value eq ""} {
         set value $default
     }
 
@@ -164,7 +164,7 @@ ad_proc -public parameter::get_from_package_key {
 
     # 2. try to get a package_id for this package_key and use the standard
     # parameter::get function to get the value
-    if {[empty_string_p $value]} {
+    if {$value eq ""} {
         with_catch errmsg {
             set value [parameter::get \
                              -localize=$localize_p \

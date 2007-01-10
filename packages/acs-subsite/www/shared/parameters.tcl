@@ -22,9 +22,9 @@ set package_url [site_node::get_url_from_object_id -object_id $package_id]
 
 set page_title "$instance_name Parameters"
 
-if { [string equal $package_url [subsite::get_element -element url]] } {
+if {$package_url eq [subsite::get_element -element url]} {
     set context [list [list "${package_url}admin/" "Administration"] $page_title]
-} elseif { ![empty_string_p $package_url] } {
+} elseif { $package_url ne "" } {
         set context [list [list $package_url $instance_name] [list "${package_url}admin/" "Administration"] $page_title]
 } else {
     set context [list $page_title]
@@ -41,14 +41,14 @@ ad_form -name parameters -export {section} -cancel_url $return_url -form {
 set display_warning_p 0
 set counter 0
 set focus_elm {}
-if {![empty_string_p $section]} {
+if {$section ne ""} {
     set section_where_clause [db_map section_where_clause]
 } else {
     set section_where_clause ""
 }
 
 db_foreach select_params {} {
-    if { [empty_string_p $section_name] } {
+    if { $section_name eq "" } {
         set section_name "Main"
     } else {
         set section_name [string map {_ { } - { }} $section_name]
@@ -66,7 +66,7 @@ db_foreach select_params {} {
                  {html {size 50}}]
 
     set file_val [ad_parameter_from_file $parameter_name $package_key]
-    if { ![empty_string_p $file_val] } { 
+    if { $file_val ne "" } { 
         set display_warning_p 1 
         lappend elm [list after_html "<br><span style=\"color: red; font-weight: bold;\">$file_val (*)</span>"]
     } 

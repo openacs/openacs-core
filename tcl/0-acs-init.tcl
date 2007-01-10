@@ -20,7 +20,7 @@ if { [file isfile $bootstrap_file] } {
 
     # Check that the appropriate version of tDom (http://www.tdom.org) is installed
     # and spit out a comment or try to install it if not.
-    if {[string equal {} [info commands domNode]]} { 
+    if {{} eq [info commands domNode]} { 
 	if {[ns_info version] < 4} {
 	    ns_log Error "0-acs-init.tcl: domNode command not found -- libtdom.so not loaded?"
 	} elseif {[ns_info version] >= 4} {

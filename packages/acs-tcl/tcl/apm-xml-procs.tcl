@@ -16,7 +16,7 @@ ad_proc -private apm_required_attribute_value { element attribute } {
 
 } {
     set value [apm_attribute_value $element $attribute]
-    if { [empty_string_p $value] } {
+    if { $value eq "" } {
 	error "Required attribute \"$attribute\" missing from <[xml_node_get_name $element]>"
     }
     return $value
@@ -46,7 +46,7 @@ ad_proc -private apm_tag_value {
     ns_log Debug "apm_tag_value [$root nodeName] $property_name"
     set node [xml_node_get_first_child_by_name $root $property_name]
 
-    if { ![empty_string_p $node] } {
+    if { $node ne "" } {
 	return [xml_node_get_content $node]
     }    
     ns_log Debug "apm_tag_value $root $property_name $default --> $default"
@@ -77,29 +77,29 @@ ad_proc -private apm_generate_package_spec { version_id } {
 
     db_foreach owner_info {} {
         append spec "        <owner"
-        if { ![empty_string_p $owner_uri] } {
+        if { $owner_uri ne "" } {
     	append spec " url=\"[ad_quotehtml $owner_uri]\""
         }
         append spec ">[ad_quotehtml $owner_name]</owner>\n"
     }
 
     apm_log APMDebug "APM: Writing Version summary and description"
-    if { ![empty_string_p $summary] } {
+    if { $summary ne "" } {
         append spec "        <summary>[ad_quotehtml $summary]</summary>\n"
     }
-    if { ![empty_string_p $release_date] } {
+    if { $release_date ne "" } {
         append spec "        <release-date>[ad_quotehtml [string range $release_date 0 9]]</release-date>\n"
     }
-    if { ![empty_string_p $vendor] || ![empty_string_p $vendor_uri] } {
+    if { $vendor ne "" || $vendor_uri ne "" } {
         append spec "        <vendor"
-        if { ![empty_string_p $vendor_uri] } {
+        if { $vendor_uri ne "" } {
     	append spec " url=\"[ad_quotehtml $vendor_uri]\""
         }
         append spec ">[ad_quotehtml $vendor]</vendor>\n"
     }
-    if { ![empty_string_p $description] } {
+    if { $description ne "" } {
         append spec "        <description"
-        if { ![empty_string_p $description_format] } {
+        if { $description_format ne "" } {
 	    append spec " format=\"[ad_quotehtml $description_format]\""
         }
         append spec ">[ad_quotehtml $description]</description>\n"
@@ -132,15 +132,15 @@ ad_proc -private apm_generate_package_spec { version_id } {
 		min_n_values=\"[ad_quotehtml $min_n_values]\" \
 		max_n_values=\"[ad_quotehtml $max_n_values]\" \
 		name=\"[ad_quotehtml $parameter_name]\" "
-	if { ![empty_string_p $default_value] } {
+	if { $default_value ne "" } {
 	    append spec " default=\"[ad_quotehtml $default_value]\""
 	}
 
-	if { ![empty_string_p $description] } {
+	if { $description ne "" } {
 	    append spec " description=\"[ad_quotehtml $description]\""
 	}
 	
-	if { ![empty_string_p $section_name] } {
+	if { $section_name ne "" } {
 	    append spec " section_name=\"[ad_quotehtml $section_name]\""
 	}
 
@@ -246,7 +246,7 @@ ad_proc -public apm_read_package_info_file { path } {
 	apm_log APMDebug "XML - one root child: [xml_node_get_name $child]"
     }
 
-    if { ![string equal $root_name "package"] } {
+    if { $root_name ne "package" } {
 	apm_log APMDebug "XML: the root name is $root_name"
 	error "Expected <package> as root node"
     }
@@ -290,7 +290,7 @@ ad_proc -public apm_read_package_info_file { path } {
 	description format
     } {
 	set node [xml_node_get_first_child_by_name $version $property_name]
-	if { ![empty_string_p $node] } {
+	if { $node ne "" } {
 	    set properties($property_name.$attribute_name) [apm_attribute_value $node $attribute_name]
 	} else {
 	    set properties($property_name.$attribute_name) ""
@@ -314,7 +314,7 @@ ad_proc -public apm_read_package_info_file { path } {
 	    set service_uri [apm_required_attribute_value $node url]
 	    set service_version [apm_required_attribute_value $node version]
             # Package always provides itself, we'll add that below, so don't add it here
-            if { ![string equal $dependency_type provides] || ![string equal $service_uri $properties(package.key)] } {
+            if { $dependency_type ne "provides" || ![string equal $service_uri $properties(package.key)] } {
                 lappend properties($dependency_type) [list $service_uri $service_version]
             }
 	}

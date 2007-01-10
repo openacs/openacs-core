@@ -25,7 +25,7 @@ ad_proc -public auth::driver::get_parameters {
     @author Simon Carstensen (simon@collaboraid.biz)
     @creation-date 2003-08-27
 } {
-    if { [empty_string_p $impl_id] } {
+    if { $impl_id eq "" } {
         return {}
     }
 

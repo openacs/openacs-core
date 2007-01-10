@@ -32,7 +32,7 @@ db_dml update_join_policy {
     where group_id = :group_id
 }
 
-if {[empty_string_p $return_url]} {
+if {$return_url eq ""} {
     set return_url one?group_id=@group_id@
 }
 

@@ -47,7 +47,7 @@ ad_proc -public lang::util::lang_sort {
     set lang(fr) "XFrench" 
     set lang(es) "XSpanish" 
     
-    if { [empty_string_p $locale] || ![info exists lang($locale)] } {
+    if { $locale eq "" || ![info exists lang($locale)] } {
         return $field
     } else { 
         return "NLSSORT($field,'NLS_SORT = $lang($locale)')"
@@ -109,11 +109,11 @@ ad_proc -private lang::util::get_regexp_indices { multilingual_string regexp_pat
         set start_idx [lindex $key_match_idx 0]
         set end_idx [lindex $key_match_idx 1]
 
-        lappend indices_list [list [expr $multilingual_string_offset + $start_idx] \
-                [expr $multilingual_string_offset + $end_idx]]
+        lappend indices_list [list [expr {$multilingual_string_offset + $start_idx}] \
+                [expr {$multilingual_string_offset + $end_idx}]]
         
-        set new_offset [expr $end_idx + 1]
-        set multilingual_string_offset [expr $multilingual_string_offset + $new_offset]
+        set new_offset [expr {$end_idx + 1}]
+        set multilingual_string_offset [expr {$multilingual_string_offset + $new_offset}]
         set offset_string [string range $offset_string $new_offset end]
     }
     
@@ -214,12 +214,12 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
 
             # if the message key is the _ symbol (an underscore) then automatically generate a key
             # based on the message text
-            if { [string equal $message_key "_"] } {
+            if {$message_key eq "_"} {
                 set message_key [suggest_key $new_text]
             }
 
             # If this is an adp file - replace adp variable syntax with percentage variables
-            if { [string equal $file_ending "adp"] } {
+            if {$file_ending eq "adp"} {
                 set new_text [convert_adp_variables_to_percentage_signs $new_text]
             }
 
@@ -229,10 +229,10 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
             while { 1 } {
                 set existing_text [lindex [array get messages_array $unique_key] 1]
 
-                if { ![empty_string_p $existing_text] } {
+                if { $existing_text ne "" } {
                     # The key already exists
 
-                    if { [string equal $existing_text $new_text] } {
+                    if {$existing_text eq $new_text} {
                         # New and old texts are identical - don't add the key
                         ns_log Notice [list lang::util::replace_temporary_tags_with_lookups - \
                                        message key $unique_key already exists in catalog \
@@ -242,12 +242,12 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
                         break
                     } else {
                         # New and old texts differ, try to make the key unique and check again
-                        set unique_key "${message_key}_[expr ${key_comp_counter} + 1]"
+                        set unique_key "${message_key}_[expr {${key_comp_counter} + 1}]"
                     }
                 } else {
                     # The key is new - save it in the array for addition
 
-                    if { ![string equal $message_key $unique_key] } {
+                    if { $message_key ne $unique_key } {
                         # The message key had to be changed to be made unique
                         ns_log Warning [list lang::util::replace_temporary_tags_with_lookups - \
                                             The message key $message_key was changed to $unique_key \
@@ -326,7 +326,7 @@ ad_proc -public lang::util::localize {
         return $string_with_hashes
     }
 
-    if {[string equal "" $locale]} {   
+    if {$locale eq ""} {   
          set locale [ad_conn locale]   
     } 
 
@@ -338,7 +338,7 @@ ad_proc -public lang::util::localize {
         # The replacement string starts and ends with a hash mark
         set replacement_string [string range $string_with_hashes [lindex $item_idx 0] \
                 [lindex $item_idx 1]]
-        set message_key [string range $replacement_string 1 [expr [string length $replacement_string] - 2]]
+        set message_key [string range $replacement_string 1 [expr {[string length $replacement_string] - 2}]]
 
         # Attempt a message lookup
         set message_value [lang::message::lookup $locale $message_key "" "" 2]
@@ -346,10 +346,10 @@ ad_proc -public lang::util::localize {
         # Replace the string
         # LARS: We don't use regsub here, because regsub interprets certain characters
         # in the replacement string specially.
-        append subst_string [string range $string_with_hashes $start_idx [expr [lindex $item_idx 0]-1]]
+        append subst_string [string range $string_with_hashes $start_idx [expr {[lindex $item_idx 0]-1}]]
         append subst_string $message_value
 
-        set start_idx [expr [lindex $item_idx 1] + 1]
+        set start_idx [expr {[lindex $item_idx 1] + 1}]
     }        
 
     append subst_string [string range $string_with_hashes $start_idx end]
@@ -537,8 +537,8 @@ ad_proc -public lang::util::replace_adp_text_with_message_tags {
 
     #ns_write "input== s=[string range $s 0 600]\n"
     set x {}
-    while {![empty_string_p $s] && $n < 1000} { 
-        if { $state == "text" } { 
+    while {$s ne "" && $n < 1000} { 
+        if { $state eq "text" } { 
 
             # clip non tag stuff
             if {![regexp {(^[^<]*?)(<.*)$} $s match text s x]} { 
@@ -565,7 +565,7 @@ ad_proc -public lang::util::replace_adp_text_with_message_tags {
 
                 regexp {^(\s*)(.*?)(\s*)$} $text match lead text lag
 
-                if { $mode == "report" } {
+                if { $mode eq "report" } {
                     # create a key for the text
                     
                     set key [suggest_key $text]
@@ -575,7 +575,7 @@ ad_proc -public lang::util::replace_adp_text_with_message_tags {
                     # Write mode
                     if { [llength $keys] != 0} {
                         # Use keys supplied                            
-                        if { [lindex $keys $n] != "" } {
+                        if { [lindex $keys $n] ne "" } {
                             # Use supplied key
                             set write_key [lindex $keys $n]
                         } else {
@@ -587,7 +587,7 @@ ad_proc -public lang::util::replace_adp_text_with_message_tags {
                         set write_key [suggest_key $text]                            
                     }
 
-                    if { ![empty_string_p $write_key] } {
+                    if { $write_key ne "" } {
                         # Write tag to file
                         lappend report [list ${write_key} "<code>[string range [remove_gt_lt $out$lead] end-20 end]<b><span style=\"background:yellow\">$text</span></b>[string range [remove_gt_lt $lag$s] 0 20]</code>" ]
 
@@ -623,7 +623,7 @@ ad_proc -public lang::util::replace_adp_text_with_message_tags {
             }
             set state tag            
 
-        } elseif { $state == "tag"} { 
+        } elseif { $state eq "tag"} { 
             if {![regexp {(^<[^>]*?>)(.*)$} $s match tag s]} { 
                 set s {}
             } 
@@ -633,7 +633,7 @@ ad_proc -public lang::util::replace_adp_text_with_message_tags {
         }
     }
 
-    if { $mode == "write" } {
+    if { $mode eq "write" } {
         if { $n > 0 } {
             # backup original file - fail silently if backup already exists
 
@@ -698,7 +698,7 @@ ad_proc -private lang::util::record_message_lookup {
     global __lang_message_lookups
 
     # Only makes sense to offer translation list if we're not in en_US locale
-    if { ![string equal [ad_conn locale] "en_US"] } {
+    if { [ad_conn locale] ne "en_US" } {
         if { ![info exists __lang_message_lookups] } {
             lappend __lang_message_lookups $message_key
         } elseif { [lsearch -exact $__lang_message_lookups $message_key] == -1 } {
@@ -768,8 +768,8 @@ ad_proc -public lang::util::convert_to_i18n {
     # magic, otherwise just return the text again.
 
     if {[apm_package_id_from_key acs-translations]} {
-	if {[empty_string_p $message_key]} {
-	    if {[empty_string_p $prefix]} {
+	if {$message_key eq ""} {
+	    if {$prefix eq ""} {
 		# Having no prefix or message_key is discouraged as it
 		# might have interesting side effects due to double
 		# meanings of the same english string in multiple contexts

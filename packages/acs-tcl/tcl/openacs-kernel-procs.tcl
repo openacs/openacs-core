@@ -25,7 +25,7 @@ ad_proc -public oacs_util::process_objects_csv {
     set csv_stream [open $file r]
 
     # Check if there are headers
-    if {![empty_string_p $override_headers]} {
+    if {$override_headers ne ""} {
         set headers $override_headers
     } else {
         if {!$header_line} {
@@ -61,7 +61,7 @@ ad_proc -public oacs_util::process_objects_csv {
             }
 
             # Add in the constants
-            if {![empty_string_p $constants]} {
+            if {$constants ne ""} {
                 # This modifies extra_vars, without touching constants
                 ns_set merge $constants $extra_vars
             }
@@ -97,7 +97,7 @@ ad_proc -public oacs_util::csv_foreach {
     set csv_stream [open $file r]
 
     # Check if there are headers
-    if {![empty_string_p $override_headers]} {
+    if {$override_headers ne ""} {
         set headers $override_headers
     } else {
         if {!$header_line} {

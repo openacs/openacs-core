@@ -114,12 +114,12 @@ ad_proc -private lang::test::check_import_result {
         aa_equals "Import check: $message_key - lang_messages.conflict_p" $message_actual(conflict_p) $expect_property(conflict_p)
         aa_equals "Import check: $message_key - lang_messages.upgrade_status" \
             $message_actual(upgrade_status) $expect_property(upgrade_status)
-        if { [string equal $expect_property(sync_time) "not_null"] } {
+        if {$expect_property(sync_time) eq "not_null"} {
             aa_true "Import check: $message_key - lang_messages.sync_time not null" \
-                [expr ![empty_string_p $message_actual(sync_time)]]
+                [expr {$message_actual(sync_time) ne ""}] 
         } else {
             aa_true "Import check: $message_key - lang_messages.sync_time null" \
-                [expr [empty_string_p $message_actual(sync_time)]]
+                [expr {$message_actual(sync_time) eq ""}]
         }
     }
 }
@@ -350,7 +350,7 @@ ad_proc -private lang::test::execute_upgrade {
             # Message is supposed to exist in DB
             # Is it new or changed?
             if { ![info exists base_messages($message_key)] || \
-                     ![string equal $base_messages($message_key) $db_messages($message_key)] } {
+                     $base_messages($message_key) ne $db_messages($message_key) } {
                 # Added || updated 
                 aa_log "Adding/updating message $message_key"
                 lang::message::register \
@@ -414,7 +414,7 @@ ad_proc -private lang::test::execute_upgrade {
         key08 "accept"
     }
     foreach message_key [array names conflict_resolutions] {
-        if { [string equal $conflict_resolutions($message_key) "accept"] } {
+        if {$conflict_resolutions($message_key) eq "accept"} {
             # Resolution is an accept - just toggle conflict_p flag
             lang::message::edit $package_key $message_key $locale [list conflict_p f]
 
@@ -581,7 +581,7 @@ aa_register_case \
   set indices_list [lang::util::get_hash_indices $multilingual_string]
   set expected_indices_list [list [list 0 14] [list 21 35]]
 
-  aa_true "there should be two hash entries" [expr [llength $indices_list] == 2]
+  aa_true "there should be two hash entries" [expr {[llength $indices_list] == 2}]
 
   set counter 0
   foreach index_item $indices_list {
@@ -591,7 +591,7 @@ aa_register_case \
               [expr [string equal [lindex $index_item 0] [lindex $expected_index_item 0]] && \
               [string equal [lindex $index_item 1] [lindex $expected_index_item 1]]]
 
-      set counter [expr $counter + 1]
+      set counter [expr {$counter + 1}]
   }
 }
 
@@ -861,8 +861,8 @@ aa_register_case \
 
         set timezones [lc_list_all_timezones]
         
-        set desired_user_timezone [lindex [lindex $timezones [randomRange [expr [llength $timezones]-1]]] 0]
-        set desired_system_timezone [lindex [lindex $timezones [randomRange [expr [llength $timezones]-1]]] 0]
+        set desired_user_timezone [lindex [lindex $timezones [randomRange [expr {[llength $timezones]-1}]]] 0]
+        set desired_system_timezone [lindex [lindex $timezones [randomRange [expr {[llength $timezones]-1}]]] 0]
         
         set error_p 0
         with_catch errmsg {

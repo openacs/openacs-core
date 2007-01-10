@@ -15,7 +15,7 @@ set no_alerts_until [db_string no_alerts_until {
     select no_alerts_until from users where user_id = :user_id
 } -default ""] 
 
-if { ![empty_string_p $no_alerts_until] } {
+if { $no_alerts_until ne "" } {
     set clear [db_null] 
     db_dml pvt_unset_no_alerts_until {
 	    update users 

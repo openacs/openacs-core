@@ -149,7 +149,7 @@ ad_proc -public acs_community_member_link {
     @return the link of the community member page of a particular user
     @see acs_community_member_url
 } {
-    if {[empty_string_p $label]} {
+    if {$label eq ""} {
         acs_user::get -user_id $user_id -array user
         set label "$user(first_names) $user(last_name)"
     }
@@ -189,7 +189,7 @@ ad_proc -public acs_community_member_admin_link {
 } {
     @return the HTML link of the community member page of a particular admin user.
 } {
-    if {[empty_string_p $label]} {
+    if {$label eq ""} {
         set label [db_string select_community_member_link_label {
             select persons.first_names || ' ' || persons.last_name
             from persons
@@ -259,7 +259,7 @@ $extra_stuff_for_document_head
     set attrs(bgcolor) [ad_parameter -package_id [ad_acs_kernel_id]  bgcolor "" "white"]
     set attrs(text) [ad_parameter -package_id [ad_acs_kernel_id]  textcolor "" "black"]
 
-    if { ![empty_string_p $focus] } {
+    if { $focus ne "" } {
 	set attrs(onLoad) "javascript:document.${focus}.focus()"
     }
 
@@ -284,7 +284,7 @@ ad_proc -deprecated ad_footer {
     @see  Documentation on the site master template for the proper way to standardize page footers
 } {
     global sidegraphic_displayed_p
-    if { [empty_string_p $signatory] } {
+    if { $signatory eq "" } {
 	set signatory [ad_system_owner]
     } 
     if { [info exists sidegraphic_displayed_p] && $sidegraphic_displayed_p } {
@@ -491,7 +491,7 @@ ad_proc ad_return_if_another_copy_is_running {
     if { $n_matches > $max_simultaneous_copies } {
 	ad_return_warning "Too many copies" "This is an expensive page for our server, which is already running the same program on behalf of some other users.  Please try again at a less busy hour."
 	# blow out of the caller as well
-	if $call_adp_break_p {
+	if {$call_adp_break_p} {
 	    # we were called from an ADP page; we have to abort processing
 	    ns_adp_break
 	}
@@ -516,16 +516,16 @@ ad_proc ad_pretty_mailing_address_from_args {
     @author Roberto Mello
 } {
     set lines [list]
-    if { [empty_string_p $line2] } {
+    if { $line2 eq "" } {
 	lappend lines $line1
-    } elseif { [empty_string_p $line1] } {
+    } elseif { $line1 eq "" } {
 	lappend lines $line2
     } else {
 	lappend lines $line1
 	lappend lines $line2
     }
     lappend lines "$city, $state $postal_code"
-    if { ![empty_string_p $country_code] && $country_code != "us" } {
+    if { $country_code ne "" && $country_code ne "us" } {
 	lappend lines [ad_country_name_from_country_code $country_code]
     }
     return [join $lines "\n"]
@@ -567,7 +567,7 @@ ad_proc ad_decorate_top {
     string, ad_decorate_top will make a one-row table for the 
     top of the page
 } {
-    if { [empty_string_p $potential_decoration] } {
+    if { $potential_decoration eq "" } {
 	return $simple_headline
     } else {
 	return "<table cellspacing=10><tr><td>$potential_decoration<td>$simple_headline</tr></table>"
@@ -585,7 +585,7 @@ ad_proc -private ad_requested_object_id {} {
 	set package_id [ad_conn package_id]
     }
 
-    if { [empty_string_p $package_id] } {
+    if { $package_id eq "" } {
 	if { [catch {
 	    set package_id [ad_acs_kernel_id]
 	}] } {
@@ -651,7 +651,7 @@ ad_proc -public ad_parameter_from_file {
     # The below is really a hack because none of the calls to ad_parameter in the system
     # actually call 'ad_parameter param_name acs-kernel'.
 
-    if { [empty_string_p $package_key] || $package_key == "acs-kernel"} {
+    if { $package_key eq "" || $package_key eq "acs-kernel"} {
 	set ns_param [ns_config "ns/server/[ns_info server]/acs" $name]
     } else {
 	set ns_param [ns_config "ns/server/[ns_info server]/acs/$package_key" $name]

@@ -13,7 +13,7 @@ if { ![exists_and_not_null package_id] } {
     set package_id [ad_conn package_id]
 }
 
-set use_timezone_p [expr [lang::system::timezone_support_p] && [ad_conn user_id]]
+set use_timezone_p [expr {[lang::system::timezone_support_p] && [ad_conn user_id]}]
 
 #
 # LARS:
@@ -53,7 +53,7 @@ if { [form is_valid locale] } {
 }
 
 # are we selecting package level locale as well?
-set package_level_locales_p [expr [lang::system::use_package_level_locales_p] && ![empty_string_p $package_id] && [ad_conn user_id] != 0]
+set package_level_locales_p [expr {[lang::system::use_package_level_locales_p] && $package_id ne "" && [ad_conn user_id] != 0}]
 
 if { $package_level_locales_p } {
     element create locale site_wide_explain -datatype text -widget inform -label "&nbsp;" \
@@ -91,7 +91,7 @@ if { [form is_request locale] } {
     }
     
     set site_wide_locale [lang::user::site_wide_locale]
-    if { [empty_string_p $site_wide_locale] } {
+    if { $site_wide_locale eq "" } {
         set site_wide_locale [lang::system::site_wide_locale]
     }
 
@@ -101,7 +101,7 @@ if { [form is_request locale] } {
 
     if { $use_timezone_p } {
         set timezone [lang::user::timezone]
-        if { [empty_string_p $timezone] } {
+        if { $timezone eq "" } {
             set timezone [lang::system::timezone]
         }
         element set_properties locale timezone -value $timezone

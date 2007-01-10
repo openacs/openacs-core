@@ -104,7 +104,7 @@ if { $replace_tags_p } {
         append processing_html_result "<h3>Message tag replacements for $file</h3>"
 
         set number_of_replacements [lang::util::replace_temporary_tags_with_lookups $file]
-        set total_number_of_replacements [expr $total_number_of_replacements + $number_of_replacements]
+        set total_number_of_replacements [expr {$total_number_of_replacements + $number_of_replacements}]
 
         append processing_html_result "Did $number_of_replacements replacements, see the log file for details"
     }

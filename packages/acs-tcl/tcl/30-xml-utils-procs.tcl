@@ -23,7 +23,7 @@ proc xml_support_ok {varname} {
 # Parse a document and return a doc_id
 proc xml_parse args {
 #   ns_log notice "xml_parse $args"
-    if {[lindex $args 0] == "-persist"} {
+    if {[lindex $args 0] eq "-persist"} {
 	return [dom parse -simple [lindex $args 1]]
     } else {
 	dom parse -simple [lindex $args 0] doc

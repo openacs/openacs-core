@@ -13,8 +13,8 @@ ad_page_contract {
 } -validate {
     
     url_xor_file_path {
-	if {([empty_string_p $url] && [empty_string_p $file_path]) ||
-	(![empty_string_p $url] && ![empty_string_p $file_path]) } {
+	if {($url eq "" && $file_path eq "") ||
+	($url ne "" && $file_path ne "") } {
 	    ad_complain
 	}
     }
@@ -30,9 +30,9 @@ if {$delete} {
 ad_return_top_of_page "[apm_header -form "package-load" [list "package-load" "Load a New Package"] "View Package Contents"]
 "
 
-if {[empty_string_p $file_path]} {
+if {$file_path eq ""} {
 
-    if {[string range $url 0 6] == "http://"} {
+    if {[string range $url 0 6] eq "http://"} {
 	set url [string range $url 7 end]
     }
 
@@ -68,14 +68,14 @@ if {[empty_string_p $file_path]} {
 }
 ns_log Debug "APM: Loading $file_path"
 # If file_path ends in .apm, then load the single package.
-if { ![string compare [string range $file_path [expr [string length $file_path] -3] end] "apm"] } {
+if { ![string compare [string range $file_path [expr {[string length $file_path] -3}] end] "apm"] } {
     apm_load_apm_file -callback apm_ns_write_callback $file_path
 } else {
     # See if this is a directory.
     if { [file isdirectory $file_path] } {
 	#Find all the .APM and load them.
 	set apm_file_list [glob -nocomplain "$file_path/*.apm"] 
-	if {[empty_string_p $apm_file_list]} {
+	if {$apm_file_list eq ""} {
 	    ns_write "The directory specified, <code>$file_path</code>, does not contain any APM files.  Please <a href=\"package-load\">try again</a>.[ad_footer]"
 	    return
 	} else {

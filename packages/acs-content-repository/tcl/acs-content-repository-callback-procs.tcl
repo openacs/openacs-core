@@ -33,7 +33,7 @@ ad_proc -public -callback subsite::parameter_changed -impl acs-content-repositor
     
     set package_key [apm_package_key_from_id $package_id]
     
-    if {[string equal $package_key "acs-content-repository"] && [string equal "CRFileLocationRoot" $parameter] && ![empty_string_p $value]} {
+    if {$package_key eq "acs-content-repository" && "CRFileLocationRoot" eq $parameter && $value ne ""} {
 	nsv_unset CR_LOCATIONS CR_FILES
 	nsv_set CR_LOCATIONS CR_FILES "[file dirname [string trimright [ns_info tcllib] "/"]]/$value"
     } else {

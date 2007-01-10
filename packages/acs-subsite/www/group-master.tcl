@@ -30,6 +30,6 @@ set subsite_name $subsite_sitenode(instance_name)
 # Where to find the stylesheet
 set css_url "/resources/acs-subsite/group-master.css"
 
-if { [string equal [ad_conn url] $subsite_url] } {
+if {[ad_conn url] eq $subsite_url} {
     set subsite_url {}
 }

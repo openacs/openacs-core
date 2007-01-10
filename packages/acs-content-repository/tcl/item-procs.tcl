@@ -82,7 +82,7 @@ ad_proc -public -deprecated item::is_publishable { item_id } {
 } {
     set is_publishable [db_string ip_is_publishable_p ""]
 
-    return [string equal $is_publishable t]
+    return [string equal $is_publishable "t"]
 } 
 
 
@@ -180,7 +180,7 @@ ad_proc -public item::content_methods_by_type { content_type args } {
 
   set types [db_list cmbt_get_content_mime_types ""]
 
-  set need_text [expr [llength $types] > 0]
+  set need_text [expr {[llength $types] > 0}]
 
   if { [info exists opts(get_labels)] } {
     set methods [list \
@@ -268,7 +268,7 @@ ad_proc -public -deprecated item::get_id { url {root_folder ""}} {
   # Strip off file extension
   set last [string last "." $url]
   if { $last > 0 } {
-    set url [string range $url 0 [expr $last - 1]]
+    set url [string range $url 0 [expr {$last - 1}]]
   }
 
   if { ![template::util::is_nil root_folder] } {
@@ -665,16 +665,16 @@ ad_proc -public item::get_content {
 } {
     upvar 1 $array content
 
-    if { [empty_string_p $item_id] } {
+    if { $item_id eq "" } {
         set item_id [get_item_from_revision $revision_id]
-        if { [empty_string_p $item_id] } {
+        if { $item_id eq "" } {
             ns_log notice "item::get_content: no such revision: $reivision_id"
             return 0
         }  
-    } elseif { [empty_string_p $revision_id] } {
+    } elseif { $revision_id eq "" } {
         set revision_id [item::get_live_revision $item_id]
     }
-    if { [empty_string_p $revision_id] } {
+    if { $revision_id eq "" } {
         error "You must supply revision_id, or the item must have a live revision."
     }
     
@@ -706,7 +706,7 @@ ad_proc -public item::publish {
 
     @author Peter Marklund
 } {
-    if { [empty_string_p $revision_id] } {
+    if { $revision_id eq "" } {
         set revision_id [item::get_element -item_id $item_id -element latest_revision]
     }
 

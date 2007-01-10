@@ -51,8 +51,8 @@ set create_p [group::permission_p -privilege create $add_to_group_id]
 
 # Membership relations have a member_state attribute that gets set
 # based on the group's join policy.
-if {[string equal $ancestor_rel_type membership_rel]} {
-    if {[string equal $add_to_group_join_policy "closed"] && !$create_p} {
+if {$ancestor_rel_type eq "membership_rel"} {
+    if {$add_to_group_join_policy eq "closed" && !$create_p} {
 	ad_complain "You do not have permission to add elements to $add_to_group_name"
 	return
     }
@@ -86,7 +86,7 @@ db_1row select_type_info {
 ## constraint violations in the database because the constraints are enforced
 ## by triggers in the DB.
 
-if { [string eq $user_type_exact_p "f"] && \
+if { $user_type_exact_p eq "f" && \
 	[subsite::util::sub_type_exists_p $user_type] } {
 
     # Sub user-types exist... select one
@@ -150,7 +150,7 @@ if { [template::form is_valid add_user] } {
 
     set password [ad_generate_random_string]
 
-    if {[empty_string_p $add_to_group_id]} {
+    if {$add_to_group_id eq ""} {
 	set add_to_group_id [application_group::group_id_from_package_id]
     }
 
@@ -189,7 +189,7 @@ if { [template::form is_valid add_user] } {
             # Hack for adding users to the main subsite, whose application group is the registered users group.
 
             if { $add_to_group_id != [acs_lookup_magic_object "registered_users"] ||
-                 ![string equal $add_with_rel_type "membership_rel"] } {
+                 $add_with_rel_type ne "membership_rel" } {
 	        relation_add -member_state $rel_member_state $add_with_rel_type $add_to_group_id $user_id
             }
 
@@ -212,7 +212,7 @@ if { [template::form is_valid add_user] } {
 
     set return_url_stacked [subsite::util::return_url_stack $return_url_list]
 
-    if {[empty_string_p $return_url_stacked]} {
+    if {$return_url_stacked eq ""} {
 	set return_url_stacked "../parties/one?party_id=$user_id"
     }
     ad_returnredirect $return_url_stacked
@@ -242,7 +242,7 @@ The user was added by $creation_name from [ad_conn url].
 	"
         }
 
-	if { $email_verified_p == "f" } {
+	if { $email_verified_p eq "f" } {
 	
 	    set row_id [db_string user_new_2_rowid_for_email "select rowid from users where user_id = :user_id"]
 	    # the user has to come back and activate their account

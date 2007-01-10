@@ -118,7 +118,7 @@ ad_proc -public apm_package_info_file_path {
     as a specification file.
 
 } {
-    if { [empty_string_p $path] } {
+    if { $path eq "" } {
 	set path "[acs_package_root_dir $package_key]/$package_key.info"
     } else {
 	set path "$path/$package_key/$package_key.info"
@@ -242,7 +242,7 @@ ad_proc -private apm_generate_tarball { version_id } {
         #Let's check if a current revision exists:
         if {![db_0or1row get_revision_id "select live_revision as revision_id
               from cr_items
-             where item_id = :item_id"] || [empty_string_p $revision_id]} {
+             where item_id = :item_id"] || $revision_id eq ""} {
             # It's an insert rather than an update            
             set revision_id [db_exec_plsql create_revision $create_revision]
         }
@@ -314,7 +314,7 @@ ad_proc -public apm_file_watch {path} {
 
     @param path The path of the file relative to server root
 } {
-    if { [string equal $path "packages/acs-bootstrap-installer/tcl/30-apm-load-procs.tcl"] } {
+    if {$path eq "packages/acs-bootstrap-installer/tcl/30-apm-load-procs.tcl"} {
         ns_log Warning "apm_file_watch: Skipping file $path as it cannot be watched. You have to restart the server instead"
     }
 
@@ -332,7 +332,7 @@ ad_proc -public apm_file_watch_cancel {
 
     @author Peter Marklund
 } {
-    if { ![empty_string_p $path] } {
+    if { $path ne "" } {
         catch { nsv_unset apm_reload_watch $path }
     } else {
         catch {nsv_unset apm_reload_watch}
@@ -368,7 +368,7 @@ ad_proc -public apm_file_watchable_p { path } {
 
     # Check the db type
     set file_db_type [apm_guess_db_type $package_key $package_rel_path]
-    set right_db_type_p [expr [empty_string_p $file_db_type] || \
+    set right_db_type_p [expr {$file_db_type eq ""} || \
                             [string equal $file_db_type [db_type]]]
 
     # Check the file type
@@ -376,10 +376,10 @@ ad_proc -public apm_file_watchable_p { path } {
     # I would like to add test_procs to the list but currently test_procs files are used to register test cases
     # and we don't want to resource these files in every interpreter. Test procs should be defined in test_init files.
     set watchable_file_types [list tcl_procs query_file test_procs]
-    set right_file_type_p [expr [lsearch -exact $watchable_file_types $file_type] != -1]
+    set right_file_type_p [expr {[lsearch -exact $watchable_file_types $file_type] != -1}]
 
     # Both db type and file type must be right
-    set watchable_p [expr $right_db_type_p && $right_file_type_p]
+    set watchable_p [expr {$right_db_type_p && $right_file_type_p}]
 
     return $watchable_p
 }
@@ -448,7 +448,7 @@ ad_proc -private apm_system_paths {} {
 
 } {
     set paths [ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] SystemCommandPaths acs-kernel]
-    if {[empty_string_p $paths]} {
+    if {$paths eq ""} {
 	return [list "/usr/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/sbin"]
     } else {
 	return $paths
@@ -495,7 +495,7 @@ ad_proc -private apm_load_apm_file {
 
 } {    
     # First download the apm file if a URL is provided
-    if { ![empty_string_p $url] } {
+    if { $url ne "" } {
         apm_callback_and_log $callback "<li>Downloading $url..."
         if { [catch {
             # Open a destination file.
@@ -553,7 +553,7 @@ ad_proc -private apm_load_apm_file {
     foreach file $files {
 	set components [split $file "/"]
 
-	if { [string compare [lindex $components 0] $package_key] } {
+	if {[lindex $components 0] ne $package_key  } {
 	    apm_callback_and_log $callback  "All files in the archive must be contained in the same directory 
 	    (corresponding to the package's key). This is not the case, so the archive is not 
 	    a valid APM file.\n"
@@ -561,7 +561,7 @@ ad_proc -private apm_load_apm_file {
 	    return
 	}
     
-	if { [llength $components] == 2 && ![string compare [file extension $file] ".info"] } {
+	if { [llength $components] == 2 && [file extension $file] eq ".info" } {
 	    if { [info exists info_file] } {
 		apm_callback_and_log $callback  "The archive contains more than one <tt>package/*/*.info</tt> file, so it is not a valid APM file.</ul>\n"
                 ns_log Error "Error loading APM file form url $url: Invalid APM file. More than one package .info file."

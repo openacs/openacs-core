@@ -22,7 +22,7 @@ aa_register_case \
                 mfp::note::delete -item_id $new_id
                 
                 set get_again [catch {mfp::note::get -item_id $new_id -array note_array}]
-                aa_false "After deleting a note, retrieving it fails" [expr $get_again == 0]
+                aa_false "After deleting a note, retrieving it fails" [expr {$get_again == 0}]
             }
     }
 
@@ -47,7 +47,7 @@ aa_register_case \
                 mfp::note::delete -item_id $new_id
                 
                 set get_again [catch {mfp::note::get -item_id $new_id -array note_array}]
-                aa_false "After deleting a note, retrieving it fails" [expr $get_again == 0]
+                aa_false "After deleting a note, retrieving it fails" [expr {$get_again == 0}]
             }
     }
 

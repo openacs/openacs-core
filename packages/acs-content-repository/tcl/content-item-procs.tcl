@@ -72,14 +72,14 @@ ad_proc -public ::content::item::new {
 
     @see content::symlink::new content::extlink::new content::folder::new
 } {
-    if {[empty_string_p $creation_user]} {
+    if {$creation_user eq ""} {
         set creation_user [ad_conn user_id]
     }
 
-    if {[empty_string_p $creation_ip]} {
+    if {$creation_ip eq ""} {
         set creation_ip [ad_conn peeraddr]
     }
-    if {[empty_string_p $package_id]} {
+    if {$package_id eq ""} {
         set package_id [ad_conn package_id]
     }
 
@@ -225,11 +225,11 @@ ad_proc -public ::content::item::get {
         error "content::item::get revision was '${revision}'. It must be 'live' or 'latest'"
     }
     set content_type [content_type -item_id $item_id]
-    if {[string equal "" $content_type]} {
+    if {$content_type eq ""} {
         # content_type query was unsucessful, item does not exist
         return 0
     }
-    if {[string equal "content_folder" $content_type]} {
+    if {"content_folder" eq $content_type} {
         return [db_0or1row get_item_folder "" -column_array local_array]
     }
     set table_name [db_string get_table_name "select table_name from acs_object_types where object_type=:content_type"]
@@ -271,13 +271,13 @@ ad_proc -public ::content::item::update {
 	    # create local variable to use for binding
 
 	    set $attribute $value
-	    if {![string equal "" $update_text]} {
+	    if {$update_text ne ""} {
 		append update_text ","
 	    }
 	    append update_text " ${attribute} = :${attribute} "
 	}
     }
-    if {![string equal "" $update_text]} {
+    if {$update_text ne ""} {
 
 	# we have valid attributes, update them
 
@@ -746,7 +746,7 @@ ad_proc -public content::item::upload_file {
 } {
 
     set filename [template::util::file::get_property filename $upload_file]
-    if {$filename != "" } {
+    if {$filename ne "" } {
 	set tmp_filename [template::util::file::get_property tmp_filename $upload_file]
 	set mime_type [template::util::file::get_property mime_type $upload_file]
 	set tmp_size [file size $tmp_filename]

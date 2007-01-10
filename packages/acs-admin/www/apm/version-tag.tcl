@@ -14,7 +14,7 @@ db_1row apm_package_by_version_id {
     from apm_package_version_info where version_id = :version_id
 }
 
-if { $installed_p == "f" } {
+if { $installed_p eq "f" } {
     ad_return_complaint 1 "<li>The selected version is not installed"
     return
 }

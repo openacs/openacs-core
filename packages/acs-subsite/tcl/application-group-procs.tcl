@@ -25,11 +25,11 @@ ad_proc -public application_group::contains_party_p {
 
 } {
 
-    if {[empty_string_p $package_id] && [ad_conn isconnected]} {
+    if {$package_id eq "" && [ad_conn isconnected]} {
         set package_id [ad_conn package_id]
     }
 
-    if {[empty_string_p $package_id]} {
+    if {$package_id eq ""} {
         error "application_group::contains_party_p - package_id not specified"
     }
 
@@ -79,11 +79,11 @@ ad_proc -public application_group::contains_relation_p {
     [ad_conn package_id]).
 } {
 
-    if {[empty_string_p $package_id] && [ad_conn isconnected]} {
+    if {$package_id eq "" && [ad_conn isconnected]} {
         set package_id [ad_conn package_id]
     }
 
-    if {[empty_string_p $package_id]} {
+    if {$package_id eq ""} {
         error "application_group::contains_party_p - package_id not specified"
     }
 
@@ -115,11 +115,11 @@ ad_proc -public application_group::contains_segment_p {
 
 } {
 
-    if {[empty_string_p $package_id] && [ad_conn isconnected]} {
+    if {$package_id eq "" && [ad_conn isconnected]} {
         set package_id [ad_conn package_id]
     }
 
-    if {[empty_string_p $package_id]} {
+    if {$package_id eq ""} {
         error "application_group::contains_segment_p - package_id not specified"
     }
 
@@ -157,12 +157,12 @@ ad_proc -public application_group::group_id_from_package_id {
     }
 
     if { [ad_conn isconnected] } {
-        if {[empty_string_p $package_id]} {
+        if {$package_id eq ""} {
     	set package_id [ad_conn package_id]
         }
     }
 
-    if {[empty_string_p $package_id]} {
+    if {$package_id eq ""} {
         error "application_group::group_id_from_package_id - no package_id specified."
     }
 
@@ -197,22 +197,22 @@ ad_proc -public application_group::new {
     if { [ad_conn isconnected] } {
         # Since we have a connection, default user_id / peeraddr
         # if they're not specified
-        if { [empty_string_p $creation_user] } {
+        if { $creation_user eq "" } {
     	set creation_user [ad_conn user_id]
         }
-        if { [empty_string_p $creation_ip] } {
+        if { $creation_ip eq "" } {
     	set creation_ip [ad_conn peeraddr]
         }
-        if { [empty_string_p $package_id] } {
+        if { $package_id eq "" } {
     	set package_id [ad_conn package_id]
         }
     }
 
-    if {[empty_string_p $package_id]} {
+    if {$package_id eq ""} {
         error "application_group::new - package_id not specified"
     }
 
-    if {[empty_string_p $group_name]} {
+    if {$group_name eq ""} {
         set group_name [db_string group_name_query {
     	select substr(instance_name, 1, 90)
     	from apm_packages

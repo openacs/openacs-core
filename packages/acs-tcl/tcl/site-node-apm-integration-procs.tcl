@@ -41,7 +41,7 @@ namespace eval site_node_apm_integration {
         get the package_id of package_key that is mounted directly under
         package_id. returns empty string if not found.
     } {
-        if {[empty_string_p $package_id]} {
+        if {$package_id eq ""} {
             if {[ad_conn isconnected]} { 
                 set package_id [ad_conn package_id]
             } else { 
@@ -64,7 +64,7 @@ namespace eval site_node_apm_integration {
             -package_key $package_key
         ]
 
-        if {[empty_string_p $child_package_id]} {
+        if {$child_package_id eq ""} {
             return 0
         } else {
             return 1 

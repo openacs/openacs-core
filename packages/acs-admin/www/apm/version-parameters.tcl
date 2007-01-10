@@ -49,14 +49,14 @@ append body "
 <blockquote>
 "
 
-if { ![empty_string_p $dimensional_list] } {
+if { $dimensional_list ne "" } {
     append body "[ad_dimensional $dimensional_list]<p>"
 }
 
 # LARS hack
 set sections [lindex [lindex $dimensional_list 0] 3]
 foreach section $sections {
-    if { [string equal $section_name [lindex $section 0]] } {
+    if {$section_name eq [lindex $section 0]} {
         set section_name [lindex $section 1]
         break
     }

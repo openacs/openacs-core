@@ -27,7 +27,7 @@ ad_proc -public template::util::spellcheck::merge_text { element_id } {
     set merge_text [ns_set get $__form__ $element_id.merge_text]
     ns_set delkey $__form__ $element_id.merge_text
 
-    if { [empty_string_p $merge_text] } {
+    if { $merge_text eq "" } {
 
 	return {}
     } 
@@ -64,19 +64,19 @@ ad_proc -public template::data::transform::spellcheck {
     if { [set richtext_p [string equal "richtext" $element(datatype)]] } {
 	# special treatment for the "richtext" datatype.
     	set format [template::util::richtext::get_property format [lindex $values 0]]
-	if { ![empty_string_p $merge_text] } {
+	if { $merge_text ne "" } {
             set richtext_value [lindex [template::data::transform::richtext element] 0]
             return [list [template::util::richtext::set_property contents $richtext_value $merge_text]]
 	} 
     	set contents [template::util::richtext::get_property contents [lindex $values 0]]
     } else {
-	if { ![empty_string_p $merge_text] } {
+	if { $merge_text ne "" } {
             return [list $merge_text]
 	} 
 	set contents [lindex $values 0]
     }
 
-    if { [empty_string_p $contents] } {
+    if { $contents eq "" } {
 	return $values
     } 
     # if language is empty string don't spellcheck
@@ -145,7 +145,7 @@ ad_proc -public template::util::spellcheck::get_sorted_list_with_unique_elements
     
     set old_element "XXinitial_conditionXX"
     foreach list_element $sorted_list {
-	if { ![string equal $list_element $old_element] } {
+	if { $list_element ne $old_element } {
 	    lappend new_list $list_element
 	}
 	set old_element $list_element
@@ -204,7 +204,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 
     # the --lang switch only works with aspell and if it is not present
     # aspell's (or ispell's) default language will have to do.
-    if { ![empty_string_p $language] } {
+    if { $language ne "" } {
 	set language "--lang=$language"
     }
 
@@ -294,9 +294,9 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     foreach { errtype errnum errword erroptions } $error_list {
 	set wordlen [string length $errword]
 	
-	if { [string equal "miss" $errtype] } {
+	if {"miss" eq $errtype} {
 	    regsub "\#$errnum\#" $formtext "<input type=\"text\" name=\"${var_to_spellcheck}.error_$errnum\" value=\"$errword\" size=\"$wordlen\" />" formtext
-	} elseif { [string equal "nearmiss" $errtype] } {
+	} elseif {"nearmiss" eq $errtype} {
 	    regsub -all ", " $erroptions "," erroptions
 	    set options [split $erroptions ","]
 	    set select_text "<select name=\"${var_to_spellcheck}.error_$errnum\">\n<option value=\"$errword\">$errword</option>\n"
@@ -330,7 +330,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     # just_the_errwords
     ####
 
-    if { ![empty_string_p $just_the_errwords_ref]} {
+    if { $just_the_errwords_ref ne ""} {
 	
 	upvar $just_the_errwords_ref just_the_errwords
 	
@@ -370,9 +370,9 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 						    -parameter SpellcheckFormWidgets \
 						    -default ""]]
 	    
-	    set spellcheck_p [expr [array size widget_info] \
-				  && ([string equal $element(widget) "richtext"] || [string equal $element(widget) "textarea"] || [string equal $element(widget) "text"]) \
-				  && [lsearch -exact [array names widget_info] $element(widget)] != -1]
+	    set spellcheck_p [expr {[array size widget_info] \
+				  && ($element(widget) eq "richtext" || $element(widget) eq "textarea" || $element(widget) eq "text") \
+				  && [lsearch -exact [array names widget_info] $element(widget)] != -1}]
 	    
 	}
 	
@@ -409,7 +409,7 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 	set spellcheck(selected_option) $spellcheck_value
 	set spellcheck(render_p) 1
 
-	if { [string equal ":nospell:" $spellcheck(selected_option)] } {
+	if {":nospell:" eq $spellcheck(selected_option)} {
 	    set spellcheck(perform_p) 0
 	} else {
 	    set spellcheck(perform_p) 1

@@ -144,12 +144,12 @@ ad_proc -private auth::local::authentication::Authenticate {
 } {
     array set auth_info [list]
 
-    if [empty_string_p $authority_id] {
+    if {$authority_id eq ""} {
 	set authority_id [auth::authority::local]
     }
 
     set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
-    if { [empty_string_p $user_id] } {
+    if { $user_id eq "" } {
         set result(auth_status) "no_account"
         return [array get result]
     }
@@ -263,12 +263,12 @@ ad_proc -private auth::local::password::ChangePassword {
     }
 
     set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
-    if { [empty_string_p $user_id] } {
+    if { $user_id eq "" } {
         set result(password_status) "no_account"
         return [array get result]
     }
 
-    if { ![empty_string_p $old_password] } {
+    if { $old_password ne "" } {
 	if { ![ad_check_password $user_id $old_password] } {
 	    set result(password_status) "old_password_bad"
 	    return [array get result]
@@ -357,13 +357,13 @@ ad_proc -private auth::local::password::ResetPassword {
     }
 
     set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
-    if { [empty_string_p $user_id] } {
+    if { $user_id eq "" } {
         set result(password_status) "no_account"
         return [array get result]
     }
 
     # Reset the password
-    if [exists_and_not_null new_password] {
+    if {[exists_and_not_null new_password]} {
 	set password $new_password
     } else {
 	set password [ad_generate_random_string]
@@ -480,7 +480,7 @@ ad_proc -private auth::local::registration::Register {
     # LARS TODO: Move this out of the local driver and into the auth framework
     # Generate random password?
     set generated_pwd_p 0
-    if { [empty_string_p $password] || [parameter::get -package_id [ad_conn subsite_id] -parameter RegistrationProvidesRandomPasswordP -default 0] } {
+    if { $password eq "" || [parameter::get -package_id [ad_conn subsite_id] -parameter RegistrationProvidesRandomPasswordP -default 0] } {
         set password [ad_generate_random_string]
         set generated_pwd_p 1
     }

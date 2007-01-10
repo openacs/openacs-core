@@ -15,7 +15,7 @@ ad_page_contract {
     { return_url "one?[ad_export_vars attribute_id]" }    
 }
 
-if { [string eq $operation "Yes, I really want to delete this attribute value"] } {
+if {$operation eq "Yes, I really want to delete this attribute value"} {
     db_transaction {
 	attribute::value_delete $attribute_id $enum_value
     }

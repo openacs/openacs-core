@@ -14,7 +14,7 @@ ad_page_contract {
     { operation:trim "No, I want to cancel my request" }
 }
 
-if { [empty_string_p $return_url] } {
+if { $return_url eq "" } {
     # Pull out the group_type now as we may delete the row later
     db_1row select_group_type {
 	select g.group_type
@@ -24,7 +24,7 @@ if { [empty_string_p $return_url] } {
     set return_url one?[ad_export_vars {group_type}]
 }
 
-if { [string eq $operation "Yes, I really want to remove this relationship type"] } {
+if {$operation eq "Yes, I really want to remove this relationship type"} {
     db_transaction {
 	db_dml remove_relation {
 	    delete from group_type_rels where group_rel_type_id = :group_rel_type_id

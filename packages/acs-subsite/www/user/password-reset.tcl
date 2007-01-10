@@ -86,7 +86,7 @@ ad_form -extend -name reset -form {
     }
 
 } -after_submit {
-    if { [empty_string_p $return_url] } {
+    if { $return_url eq "" } {
         set return_url [ad_pvt_home]
         set pvt_home_name [ad_pvt_home_name]
         set continue_label [_ acs-subsite.Continue_to_your_account]

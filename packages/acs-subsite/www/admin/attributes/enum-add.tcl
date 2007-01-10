@@ -40,7 +40,7 @@ set max_values 5
 template::multirow create value_form sort_order field_name
 
 for { set i 1 } { $i <= $max_values } { incr i } {
-    template::multirow append value_form [expr $i + $number_values] "attribute_enum_values.[expr $i + $number_values]"
+    template::multirow append value_form [expr {$i + $number_values}] "attribute_enum_values.[expr {$i + $number_values}]"
 }
 
 db_1row select_attr_name {

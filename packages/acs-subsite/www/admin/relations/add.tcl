@@ -25,13 +25,13 @@ ad_page_contract {
     add_party_url:onevalue
 } -validate {
     party_in_scope_p -requires {party_id:notnull} {
-	if { [string equal $allow_out_of_scope_p "f"] && \
+	if { $allow_out_of_scope_p eq "f" && \
 		![application_group::contains_party_p -party_id $party_id]} {
 	    ad_complain "The party either does not exist or does not belong to this subsite."
 	}
     }
     rel_type_valid_p -requires {group_id:notnull rel_type:notnull exact_p:notnull} {
-	if {[string equal $exact_p t] && \
+	if {$exact_p eq "t" && \
 	    ![relation_type_is_valid_to_group_p -group_id $group_id $rel_type]} {
 	    ad_complain "Relations of this type to this group would violate a relational constraint."
 	}
@@ -46,7 +46,7 @@ set context [list "Add relation"]
 
 set export_var_list [list group_id rel_type exact_p return_url allow_out_of_scope_p]
 
-if {![empty_string_p $party_id]} {
+if {$party_id ne ""} {
     lappend export_var_list party_id
 }
 
@@ -81,8 +81,8 @@ db_1row rel_type_info {
 # to be localized before they are displayed
 set role_pretty_name [lang::util::localize $role_pretty_name]
 
-if {[string equal $ancestor_rel_type membership_rel]} {
-    if {[string equal $join_policy "closed"] && !$create_p} {
+if {$ancestor_rel_type eq "membership_rel"} {
+    if {$join_policy eq "closed" && !$create_p} {
 	ad_complain "You do not have permission to add elements to $group_name"
 	return
     }
@@ -92,7 +92,7 @@ if {[string equal $ancestor_rel_type membership_rel]} {
     set member_state ""
 }
 
-if { [string eq $exact_p "f"] && \
+if { $exact_p eq "f" && \
 	[subsite::util::sub_type_exists_p $rel_type] } {
 
     # Sub rel-types exist... select one
@@ -158,7 +158,7 @@ if { [template::form is_valid add_relation] } {
 	ad_return_error "Error creating the relation" "We got the following error message while trying to create this relation: <pre>$errmsg</pre>"
 	ad_script_abort
     }
-    if { [empty_string_p $return_url] } { 
+    if { $return_url eq "" } { 
 	set return_url one?[ad_export_vars rel_id]
     }
     ad_returnredirect $return_url
@@ -166,7 +166,7 @@ if { [template::form is_valid add_relation] } {
 }
 
 
-if {![empty_string_p $party_id]} {
+if {$party_id ne ""} {
     # ISSUES / TO DO: add a check to make sure the party is not
     # already in the group.  We only want to do this on is_request,
     # in which case we know its not a double-click issue.
@@ -182,7 +182,7 @@ if {![empty_string_p $party_id]} {
 	    -widget "inform" -value "$party_name" -label "$role_pretty_name"
     
 } else {
-    if {[string equal $object_type_two party]} {
+    if {$object_type_two eq "party"} {
 	# We special case 'party' because we don't want to include
 	# parties whose direct object_type is:
 	#    'rel_segment' - users will get confused by segments here.
@@ -202,7 +202,7 @@ if {![empty_string_p $party_id]} {
     # the list of parties that can be added to $group_id with a relation
     # of type $rel_type.
     
-    if {[string equal $allow_out_of_scope_p "f"]} {
+    if {$allow_out_of_scope_p eq "f"} {
 	set scope_query [db_map select_parties_scope_query]
 
 	set scope_clause "

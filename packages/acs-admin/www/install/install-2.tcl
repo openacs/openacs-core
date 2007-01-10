@@ -37,7 +37,7 @@ switch $result(status) {
     }
 }
 
-if { ![empty_string_p $repository_url] } {
+if { $repository_url ne "" } {
     set parent_page_title "Install From OpenACS Repository"
 } else {
     set parent_page_title "Install From Local File System"
@@ -63,7 +63,7 @@ array set failed $result(failed)
 multirow create install package_key version_name package_name comment extra_p
 
 foreach key $result(packages) {
-    set extra_p [expr [lsearch $package_key $key] == -1]
+    set extra_p [expr {[lsearch $package_key $key] == -1}]
     if { $extra_p } {
         set extras_p 1
     }

@@ -118,10 +118,10 @@ ad_proc -private sec_handler {} {
         ns_log Debug "Security: Insecure session OK: session_id = $session_id, untrusted_user_id = $untrusted_user_id, auth_level = $auth_level, user_id = $user_id"
 
         # We're okay, insofar as the insecure session, check if it's also secure
-        if { [string equal $auth_level "ok"] && [security::secure_conn_p] } {
+        if { $auth_level eq "ok" && [security::secure_conn_p] } {
             catch { 
                 set sec_token [split [ad_get_signed_cookie "ad_secure_token"] {,}] 
-                if { [string equal [lindex $sec_token 0] $session_id] } {
+                if {[lindex $sec_token 0] eq $session_id} {
                     set auth_level secure
                 }
             }
@@ -173,7 +173,7 @@ ad_proc -private sec_login_handler {} {
                 set login_list [split [ad_get_signed_cookie "ad_user_login_secure"] ","]
             }
         } 
-        if { [empty_string_p $login_list] } {
+        if { $login_list eq "" } {
             set login_list [split [ad_get_signed_cookie "ad_user_login"] ","]
         }
         
@@ -187,7 +187,7 @@ ad_proc -private sec_login_handler {} {
         # First, check expiration 
         if { [sec_login_timeout] == 0 || [ns_time] - $login_expr < [sec_login_timeout] } {
             # Then check auth_token
-            if { [string equal $auth_token [sec_get_user_auth_token $untrusted_user_id]] } {
+            if {$auth_token eq [sec_get_user_auth_token $untrusted_user_id]} {
                 # Are we secure?
                 if { [security::secure_conn_p] } {
                     # We retrieved the secure login cookie over HTTPS, we're secure
@@ -201,7 +201,7 @@ ad_proc -private sec_login_handler {} {
         # Check account status
         set account_status [auth::get_local_account_status -user_id $untrusted_user_id]
 
-        if { [string equal $account_status "no_account"] } {
+        if {$account_status eq "no_account"} {
             set untrusted_user_id 0
             set auth_level none
             set account_status "closed"
@@ -270,7 +270,7 @@ ad_proc -public sec_get_user_auth_token {
     } -default {}]
     db_release_unused_handles
 
-    if { [empty_string_p $auth_token] } {
+    if { $auth_token eq "" } {
         ns_log Debug "Security: User $user_id does not have any auth_token, creating a new one."
         set auth_token [sec_change_user_auth_token $user_id]
     }
@@ -319,7 +319,7 @@ ad_proc -public ad_check_password {
 
     set salt [string trim $salt]
 
-    if { [string compare $password [ns_sha1 "$password_from_form$salt"]] } {
+    if {$password ne [ns_sha1 "$password_from_form$salt"]  } {
 	return 0
     }
 
@@ -335,7 +335,7 @@ ad_proc -public ad_change_password {
     # In case someone wants to change the salt from now on, you can do
     # this and still support old users by changing the salt below.
 
-    if { [empty_string_p $user_id] } {
+    if { $user_id eq "" } {
         error "No user_id supplied"
     } 
     
@@ -360,7 +360,7 @@ ad_proc -private sec_setup_session {
     set session_id [ad_conn session_id]
 
     # figure out the session id, if we don't already have it
-    if { [empty_string_p $session_id]} {
+    if { $session_id eq ""} {
 
 	ns_log debug "OACS= empty session_id"
 
@@ -401,7 +401,7 @@ ad_proc -private sec_setup_session {
     set user_id 0
 
     # If both auth_level and account_status are 'ok' or better, we have a solid user_id
-    if { ([string equal $auth_level "ok"] || [string equal $auth_level "secure"]) && [string equal $account_status "ok"] } {
+    if { ($auth_level eq "ok" || $auth_level eq "secure") && $account_status eq "ok" } {
         set user_id $new_user_id
     }
 
@@ -418,7 +418,7 @@ ad_proc -private sec_setup_session {
 
     ns_log debug "OACS= done generating session id cookie"
 
-    if { [string equal $auth_level "secure"] && [security::secure_conn_p] && $new_user_id != 0 } {
+    if { $auth_level eq "secure" && [security::secure_conn_p] && $new_user_id != 0 } {
         # this is a secure session, so the browser needs
         # a cookie marking it as such
 	sec_generate_secure_token_cookie
@@ -451,8 +451,8 @@ ad_proc -private sec_generate_session_id_cookie {} {
     set account_status [ad_conn account_status]
     
     set login_level 0
-    if { [string equal $auth_level "ok"] || [string equal $auth_level "secure"] } {
-        if { [string equal $account_status "ok"] } {
+    if { $auth_level eq "ok" || $auth_level eq "secure" } {
+        if {$account_status eq "ok"} {
             set login_level 1 
         } else {
             set login_level 2
@@ -491,7 +491,7 @@ ad_proc -private sec_allocate_session {} {
 	# Thread just spawned or we exceeded preallocated count.
 	set tcl_current_sequence_id [db_nextval sec_id_seq]
 	db_release_unused_handles
-	set tcl_max_value [expr $tcl_current_sequence_id + 100]
+	set tcl_max_value [expr {$tcl_current_sequence_id + 100}]
     } 
 
     set session_id $tcl_current_sequence_id
@@ -509,7 +509,7 @@ ad_proc -private ad_login_page {} {
     set url [ad_conn url]
     if { [string match "*register/*" $url] || [string match "/index*" $url] || \
             [string match "/index*" $url] || \
-            [string match "/" $url] || \
+            "/" eq $url || \
             [string match "*password-update*" $url] } {
 	return 1
     }
@@ -623,10 +623,10 @@ ad_proc -public ad_get_logout_url {
 
     append url "register/logout"
 
-    if { $return_p && [empty_string_p $return_url] } {
+    if { $return_p && $return_url eq "" } {
         set return_url [ad_return_url]
     } 
-    if { ![empty_string_p $return_url] } {
+    if { $return_url ne "" } {
         set url [export_vars -base $url { return_url }]
     } 
 
@@ -645,7 +645,7 @@ ad_proc -public ad_restrict_entire_server_to_registered_users {
     unregistered, except the site index page and stuff underneath
     [subsite]/register. Use permissions on the site node map to control access.
 } {
-    if {![string match "/index.tcl" [ad_conn url]] && ![string match "/" [ad_conn url]] && ![string match "*/register/*" [ad_conn url]] && ![string match "*/SYSTEM/*" [ad_conn url]] && ![string match "*/user_please_login.tcl" [ad_conn url]]} {
+    if {"/index.tcl" ne [ad_conn url] && "/" ne [ad_conn url] && ![string match "*/register/*" [ad_conn url]] && ![string match "*/SYSTEM/*" [ad_conn url]] && ![string match "*/user_please_login.tcl" [ad_conn url]]} {
 	# not one of the magic acceptable URLs
 	set user_id [ad_conn user_id]
 	if {$user_id == 0} {
@@ -695,8 +695,8 @@ ad_proc -public ad_sign {
     @param value the value to be signed.
 } {
 
-    if { [empty_string_p $secret] } {
-        if {[empty_string_p $token_id]} { 
+    if { $secret eq "" } {
+        if {$token_id eq ""} { 
             # pick a random token_id
             set token_id [sec_get_random_cached_token_id]
         }
@@ -708,10 +708,10 @@ ad_proc -public ad_sign {
 
     ns_log Debug "Security: Getting token_id $token_id, value $secret_token"
 
-    if { $max_age == "" } {
+    if { $max_age eq "" } {
 	set expire_time 0
     } else {
-	set expire_time [expr $max_age + [ns_time]]
+	set expire_time [expr {$max_age + [ns_time]}]
     }
 
     set hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
@@ -776,8 +776,8 @@ ad_proc -private __ad_verify_signature {
 
 } {
 
-    if { [empty_string_p $secret] } {
-	if { [empty_string_p $token_id] } {
+    if { $secret eq "" } {
+	if { $token_id eq "" } {
 	    ns_log Debug "__ad_verify_signature: Neither secret, nor token_id supplied"
 	    return 0
 	}
@@ -797,7 +797,7 @@ ad_proc -private __ad_verify_signature {
     set hash_ok_p 0
     set expiration_ok_p 0
     
-    if { [string equal $computed_hash $hash] } {
+    if {$computed_hash eq $hash} {
 	ns_log Debug "__ad_verify_signature: Hash matches - Hash check OK"
 	set hash_ok_p 1
     } else {
@@ -807,7 +807,7 @@ ad_proc -private __ad_verify_signature {
 	set org_computed_hash $computed_hash
 	set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
 
-	if { [string equal $computed_hash $hash] } {
+	if {$computed_hash eq $hash} {
 	    ns_log Debug "__ad_verify_signature: Hash matches after correcting for IE bug - Hash check OK"
 	    set hash_ok_p 1
 	} else {
@@ -826,7 +826,7 @@ ad_proc -private __ad_verify_signature {
     }
 
     # Return validation result
-    return [expr $hash_ok_p && $expiration_ok_p]
+    return [expr {$hash_ok_p && $expiration_ok_p}]
 
 }
 
@@ -842,13 +842,13 @@ ad_proc -public ad_get_signed_cookie {
 
 } {
 
-    if { $include_set_cookies == "t" } {
+    if { $include_set_cookies eq "t" } {
 	set cookie_value [ns_urldecode [ad_get_cookie $name]]
     } else {
 	set cookie_value [ns_urldecode [ad_get_cookie -include_set_cookies f $name]]
     }
 
-    if { [empty_string_p $cookie_value] } {
+    if { $cookie_value eq "" } {
 	error "Cookie does not exist."
     }
 
@@ -880,13 +880,13 @@ ad_proc -public ad_get_signed_cookie_with_expr {
 
 } {
 
-    if { $include_set_cookies == "t" } {
+    if { $include_set_cookies eq "t" } {
 	set cookie_value [ns_urldecode [ad_get_cookie $name]]
     } else {
 	set cookie_value [ns_urldecode [ad_get_cookie -include_set_cookies f $name]]
     }
 
-    if { [empty_string_p $cookie_value] } {
+    if { $cookie_value eq "" } {
 	error "Cookie does not exist."
     }
 
@@ -938,10 +938,10 @@ ad_proc -public ad_set_signed_cookie {
     url-encoded.
 
 } {
-    if { [empty_string_p $signature_max_age] } {
-        if { $max_age == "inf" } {
+    if { $signature_max_age eq "" } {
+        if { $max_age eq "inf" } {
             set signature_max_age ""
-        } elseif { $max_age != "" } {
+        } elseif { $max_age ne "" } {
             set signature_max_age $max_age
         } else {
             # this means we want a session level cookie,
@@ -1138,12 +1138,12 @@ ad_proc -public ad_get_client_property {
     @param session_id controls which session is used
 
 } {
-    if { [empty_string_p $session_id] } {
+    if { $session_id eq "" } {
         set id [ad_conn session_id]
         
         # if session_id is still undefined in the connection then we 
         # should just return the default
-        if { [empty_string_p $id] } {
+        if { $id eq "" } {
             return $default
         }
     } else {
@@ -1152,22 +1152,22 @@ ad_proc -public ad_get_client_property {
 
     set cmd [list sec_lookup_property $id $module $name]
 
-    if { $cache_only == "t" && ![util_memoize_cached_p $cmd] } {
+    if { $cache_only eq "t" && ![util_memoize_cached_p $cmd] } {
 	return ""
     }
 
-    if { $cache != "t" } {
+    if { $cache ne "t" } {
 	util_memoize_flush $cmd
     }
 
     set property [util_memoize $cmd [sec_session_timeout]]
-    if { $property == "" } {
+    if { $property eq "" } {
 	return $default
     }
     set value [lindex $property 0]
     set secure_p [lindex $property 1]
     
-    if { $secure_p != "f" && ![security::secure_conn_p] } {
+    if { $secure_p ne "f" && ![security::secure_conn_p] } {
 	return ""
     }
 
@@ -1196,15 +1196,15 @@ ad_proc -public ad_set_client_property {
 
 } {
 
-    if { $secure != "f" && ![security::secure_conn_p] } {
+    if { $secure ne "f" && ![security::secure_conn_p] } {
 	error "Unable to set secure property in insecure or invalid session"
     }
 
-    if { [empty_string_p $session_id] } {
+    if { $session_id eq "" } {
         set session_id [ad_conn session_id]
     }
 
-    if { $persistent == "t" } {
+    if { $persistent eq "t" } {
         # Write to database - either defer, or write immediately. First delete the old
         # value if any; then insert the new one.
 	
@@ -1229,7 +1229,7 @@ ad_proc -public ad_set_client_property {
 
             db_dml prop_insert_dml ""
 
-            if { $clob == "t" && ![empty_string_p $clob_update_dml] } {
+            if { $clob eq "t" && $clob_update_dml ne "" } {
                 db_dml prop_update_dml_clob "" -clobs [list $value]
             } else {
                 db_dml prop_update_dml ""
@@ -1500,7 +1500,7 @@ ad_proc -private security::get_secure_location {} {
 
         # Add port number if non-standard
         set https_port [get_https_port]
-        if { ![string equal $https_port 443] } {
+        if { $https_port ne "443" } {
             set secure_location ${secure_location}:$https_port
         }
 

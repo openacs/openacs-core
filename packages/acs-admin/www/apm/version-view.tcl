@@ -35,7 +35,7 @@ db_0or1row apm_data_model_install_version {
     where rownum = 1
 }
 
-if { [empty_string_p $vendor] } {
+if { $vendor eq "" } {
     set vendor $vendor_uri
 }
 foreach field { summary description release_date vendor } {
@@ -60,7 +60,7 @@ want to <a href=\"version-generate-info?version_id=$version_id&write_p=1\">gener
     lappend prompts $status
 } elseif { $installed_version_id == $version_id } {
     set status "This version of the package is installed"
-    if { $enabled_p == "t" } {
+    if { $enabled_p eq "t" } {
 	append status " and enabled."
 	set can_disable_p 1
     } else {
@@ -77,7 +77,7 @@ version $installed_version_name, is installed and [ad_decode $installed_enabled_
 
 if { ![info exists data_model_installed_version] } {
     set data_model_status " No version of the data model for this package has been loaded."
-} elseif { [string compare $data_model_installed_version $version_name] } {
+} elseif {$data_model_installed_version ne $version_name  } {
     set data_model_status " The data model for version $data_model_installed_version of this package has been
 loaded."
 } else {
@@ -96,7 +96,7 @@ set owners [list]
 db_foreach apm_all_owners {
     select owner_uri, owner_name from apm_package_owners where version_id = :version_id
 } {
-    if { [empty_string_p $owner_uri] } {
+    if { $owner_uri eq "" } {
 	lappend owners $owner_name
     } else {
 	lappend owners "$owner_name (<a href=\"$owner_uri\">$owner_uri</a>)"
@@ -136,7 +136,7 @@ $prompt_text
 "
 
 set supported_databases_list [apm_package_supported_databases $package_key]
-if { [empty_string_p $supported_databases_list] } {
+if { $supported_databases_list eq "" } {
     set supported_databases "none specified"
 } else {
     set supported_databases [join $supported_databases_list ", "]
@@ -171,24 +171,24 @@ append body "
 <tr valign=baseline><th align=left>Version URL:</th><td><a href=\"$version_uri\">$version_uri</a></td></th></tr>
 <tr valign=baseline><th align=left>Distribution File:</th><td>"
 
-if { ![empty_string_p $tarball_length] && $tarball_length > 0 } {
+if { $tarball_length ne "" && $tarball_length > 0 } {
     append body "<a href=\"packages/[file tail $version_uri]?version_id=$version_id\">[format "%.1f" [expr { $tarball_length / 1024.0 }]]KB</a> "
-    if { [empty_string_p $distribution_uri] } {
+    if { $distribution_uri eq "" } {
 	append body "(generated on this system"
-	if { ![empty_string_p $distribution_date] } {
+	if { $distribution_date ne "" } {
 	    append body " on $distribution_date"
 	}
 	append body ")"
     } else {
 	append body "(downloaded from $distribution_uri"
-	if { ![empty_string_p $distribution_date] } {
+	if { $distribution_date ne "" } {
 	    append body " on $distribution_date"
 	}
 	append body ")"
     }
 } else {
     append body "None available"
-    if { $installed_p == "t" } {
+    if { $installed_p eq "t" } {
 	append body " (<a href=\"version-generate-tarball?version_id=$version_id\">generate one now</a> from the filesystem)"
     }
 }
@@ -224,15 +224,15 @@ append body "
 "
 
 if { ![info exists installed_version_id] || $installed_version_id == $version_id && \
-	[empty_string_p $distribution_uri] } {
+	$distribution_uri eq "" } {
     # As long as there isn't a different installed version, and this package is being
     # generated locally, allow the user to write a specification file for this version
     # of the package.
     append body "<li><a href=\"version-generate-info?[export_vars { version_id }]&write_p=1\">Write an XML package specification to the <tt>packages/$package_key/$package_key.info</tt> file</a>\n"
 }
 
-if { $installed_p == "t" } {
-    if { [empty_string_p $distribution_uri] } {
+if { $installed_p eq "t" } {
+    if { $distribution_uri eq "" } {
 	# The distribution tarball was either (a) never generated, or (b) generated on this
 	# system. Allow the user to make a tarball based on files in the filesystem.
 	append body "<p><li><a href=\"version-generate-tarball?[export_vars { version_id }]\">Generate a distribution file for this package from the filesystem</a>\n"
@@ -249,7 +249,7 @@ if { $installed_p == "t" } {
     
     append body "<p>"
     
-    if { $installed_p == "t" } {	
+    if { $installed_p eq "t" } {	
 	append body "
 	<li><a href=\"package-delete?[export_vars { version_id }]\">Uninstall this package from your system.</a> (be very careful!)\n"
 	

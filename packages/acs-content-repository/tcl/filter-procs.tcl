@@ -36,7 +36,7 @@ ad_proc -public content::get_template_root {} {
     set template_root \
         [ad_parameter -package_id $package_id TemplateRoot dummy ""]
 
-    if { [empty_string_p $template_root] } {
+    if { $template_root eq "" } {
         # Look for template root defined in the CR
         set package_id [apm_package_id_from_key "acs-content-repository"]
 
@@ -44,7 +44,7 @@ ad_proc -public content::get_template_root {} {
                                TemplateRoot dummy "templates"]
     }
 
-    if { [string index $template_root 0] != "/" } {
+    if { [string index $template_root 0] ne "/" } {
         # Relative path, prepend server_root
         set template_root "[acs_root_dir]/$template_root"
     }
@@ -112,7 +112,7 @@ ad_proc -public content::get_content { { content_type {} } } {
     }
 
     # Get the content type
-    if { [empty_string_p $content_type] } {
+    if { $content_type eq "" } {
         set content_type [db_string get_content_type ""]
     }
 
@@ -208,13 +208,13 @@ ad_proc -public content::init {
                                      -item_id $item_info(item_id)]
 
     # No item found, so do not handle this request
-    if { [string equal "" $item_info(item_id)] } {
+    if {$item_info(item_id) eq ""} {
         set item_info(item_id) [::content::item::get_id -item_path $url \
                                     -root_folder_id $content_root \
                                     -resolve_index $resolve_index]
         set item_info(content_type) [::content::item::get_content_type \
                                          -item_id $item_info(item_id)]
-        if { [string equal "" $item_info(item_id)] } {
+        if {$item_info(item_id) eq ""} {
             ns_log notice "content::init: no content found for url $url"
             return 0
         }
@@ -224,14 +224,14 @@ ad_proc -public content::init {
     set item_url $url
 
     set item_id $item_info(item_id)
-    if { [empty_string_p $content_type] } {
+    if { $content_type eq "" } {
         set content_type $item_info(content_type)
     }
 
     # TODO accept latest revision as well. DaveB
     # Make sure that a live revision exists
-    if { [empty_string_p $rev_id] } {
-      if {[string equal "best" $revision]} {
+    if { $rev_id eq "" } {
+      if {"best" eq $revision} {
 	  # lastest_revision unless live_revision is set, then live_revision
 	  set revision_id [::item::get_best_revision $item_id]
       } else {
@@ -239,7 +239,7 @@ ad_proc -public content::init {
 	  set revision_id [::item::get_live_revision $item_id]
       }
 
-      if { [string equal "" $revision_id] } {
+      if {$revision_id eq ""} {
             ns_log notice "content::init: no live revision found for content item $item_id"
             return 0
         }
@@ -253,7 +253,7 @@ ad_proc -public content::init {
     # Get the template 
     set template_found_p [db_0or1row get_template_url "" -column_array info]
 
-    if { !$template_found_p || [string equal $info(template_url) {}] } { 
+    if { !$template_found_p || $info(template_url) eq {} } { 
         ns_log notice "content::init: No template found to render content item $item_id in context '$context'"
         return 0
     }

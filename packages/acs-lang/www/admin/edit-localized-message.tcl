@@ -20,7 +20,7 @@ ad_page_contract {
 if { [string length $locale] == 2 } {
     # Only language provided, let's get the default locale for this language
     set default_locale [lang::util::default_locale_from_lang $locale]
-    if { [empty_string_p $default_locale] } {
+    if { $default_locale eq "" } {
         error "Could not look up locale for language $locale"
     } else {
         set locale $default_locale
@@ -68,7 +68,7 @@ ad_form -name message -form {
     }
 } 
 
-if { ![string equal $default_locale $current_locale] } {
+if { $default_locale ne $current_locale } {
     ad_form -extend -name message -form {
         {original_message:text(inform)
             {label "$default_locale_label Message"}
@@ -124,14 +124,14 @@ ad_form -extend -name message -form {
 	set message $original_message
     }
 
-    if { [empty_string_p $description] } {
+    if { $description eq "" } {
         set description [subst {(<a href="$description_edit_url">add description</a>)}]
     } else {
         set description "[ad_text_to_html -- $description] [subst { (<a href="$description_edit_url">edit</a>)}]"
     }
 
     # Augment the audit trail with info on who created the first message
-    if { ![string equal $current_locale $default_locale] && $translated_p } {
+    if { $current_locale ne $default_locale && $translated_p } {
         set edited_p [db_string edit_count {
             select count(*)
             from lang_messages_audit
@@ -171,7 +171,7 @@ ad_form -extend -name message -form {
     # Register message via acs-lang
     lang::message::register -comment $comment $locale $package_key $message_key $message
 
-    if { [empty_string_p $return_url] } {
+    if { $return_url eq "" } {
         set return_url "[ad_conn url]?[export_vars { locale package_key message_key show }]"
     }
     ad_returnredirect $return_url

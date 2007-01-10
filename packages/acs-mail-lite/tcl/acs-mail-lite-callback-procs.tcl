@@ -111,8 +111,8 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
     util_unlist [acs_mail_lite::parse_bounce_address -bounce_address $to] user_id package_id signature
     
     # If no user_id found or signature invalid, ignore message
-    if {[empty_string_p $user_id]} {
-        if {[empty_string_p $user_id]} {
+    if {$user_id eq ""} {
+        if {$user_id eq ""} {
             ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: No equivalent user found for $to"
         } else {
             ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: Invalid mail signature $signature"

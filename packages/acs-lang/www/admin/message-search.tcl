@@ -31,7 +31,7 @@ ad_form -name search -action message-search -form {
     {locale:text(hidden) {value $locale}}
 }
 
-if { ![string equal $default_locale $current_locale] } {
+if { $default_locale ne $current_locale } {
     ad_form -extend -name search -form {
         {search_locale:text(select)
             {options $search_locales}
@@ -69,8 +69,8 @@ if { [exists_and_not_null search_locale] && [exists_and_not_null q] } {
         set message_key_pretty "$package_key.$message_key"
     }
 
-    if { ![string equal $current_locale $default_locale] } {
-        if { [string equal $default_locale $search_locale] } {
+    if { $current_locale ne $default_locale } {
+        if {$default_locale eq $search_locale} {
             set other_locale $locale_label
             set other_search_url "[ad_conn url]?[export_vars { locale q {search_locale $current_locale} }]"
         } else {

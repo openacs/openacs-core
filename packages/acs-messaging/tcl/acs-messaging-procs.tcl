@@ -23,10 +23,10 @@ ad_page_contract_filter acs_message_id { name value } {
     of an already-existing OpenACS message.
 } {
     # empty is okay (handled by notnull)
-    if [empty_string_p $value] {
+    if {$value eq ""} {
         return 1
     }
-    if ![acs_message_p $value] {
+    if {![acs_message_p $value]} {
         ad_complain "$name ($value) does not refer to a valid OpenACS message"
         return 0
     }
@@ -43,11 +43,11 @@ ad_proc -public acs_messaging_format_as_html {
     @param mime_type MIME content-type of content
     @param content   Text to view
 } {
-    if {[string eq $mime_type "text/plain"]} {
+    if {$mime_type eq "text/plain"} {
 	set result "<pre>[ad_quotehtml $content]</pre>"
-    } elseif {[string eq $mime_type "text/plain; format=flowed"]} {
+    } elseif {$mime_type eq "text/plain; format=flowed"} {
 	set result [ad_text_to_html -- $content]
-    } elseif {[string eq $mime_type "text/html"]} {
+    } elseif {$mime_type eq "text/html"} {
 	set result $content
     } else {
 	set result "<i>content type undecipherable</i>"
@@ -163,7 +163,7 @@ ad_proc -private acs_messaging_process_queue {
         set headers [ns_set create]
 		
         ns_set put $headers Sender [ad_parameter "OutgoingSender" "acs-kernel"]
-	if ![string equal $in_reply_to ""] {
+	if {$in_reply_to ne "" } {
 	    ns_set put $headers In-Reply-To "<$in_reply_to>"
 	}
         ns_set put $headers Message-ID "<$rfc822_id>"
@@ -171,9 +171,9 @@ ad_proc -private acs_messaging_process_queue {
         ns_set put $headers MIME-Version "1.0"
         ns_set put $headers Content-Type $mime_type
         ns_log "Notice" "About to send"
-        if ![catch {
+        if {![catch {
              ns_sendmail $recip_email $sender_email $title $content $headers
-        } errMsg] {
+        } errMsg]} {
             ns_log "Notice" "Sending"
             # everything went well, dequeue
             db_dml acs_message_remove_from_queue {

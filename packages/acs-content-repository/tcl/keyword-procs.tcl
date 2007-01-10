@@ -24,7 +24,7 @@ ad_proc -public -deprecated cr::keyword::new {
     set user_id [ad_conn user_id]
     set creation_ip [ad_conn peeraddr]
 
-    if {[empty_string_p $package_id]} {
+    if {$package_id eq ""} {
 	set package_id [ad_conn package_id]
     }
 

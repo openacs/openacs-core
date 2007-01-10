@@ -23,12 +23,12 @@ set check_list [list]
 # in the tree are also checked as well
 
 foreach check_node $checkbox {
-    if { [string equal $main_node $check_node] } {
+    if {$main_node eq $check_node} {
 
 	# The main site node is always checked
 	lappend check_list $check_node
 
-    } elseif {[string equal [site_node::get_parent_id -node_id $check_node] $main_node] } {
+    } elseif {[site_node::get_parent_id -node_id $check_node] eq $main_node} {
 
 	# This node doesn't have a parent node, only the  main site node
 	lappend check_list $check_node

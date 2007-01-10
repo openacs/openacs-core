@@ -29,7 +29,7 @@ ad_proc -private template::apm::before_upgrade {
                                               -package_id $package_id \
                                               -parameter DefaultFormStyle]
 
-                    if { [string equal $DefaultFormStyle "standard-lars"] } {
+                    if {$DefaultFormStyle eq "standard-lars"} {
                         parameter::set_value \
                             -package_id $package_id \
                             -parameter DefaultFormStyle \
@@ -45,7 +45,7 @@ ad_proc -private template::apm::before_upgrade {
                                                   -package_id $package_id \
                                                   -parameter DefaultFormStyle]
 
-                        if { [string equal $DefaultFormStyle "standard-lars"] } {
+                        if {$DefaultFormStyle eq "standard-lars"} {
                             parameter::set_value \
                                 -package_id $package_id \
                                 -parameter DefaultFormStyle \

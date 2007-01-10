@@ -129,7 +129,7 @@ aa_register_case -cats {api smoke} ad_proc_fire_callback {
         [expr {[callback -impl an_impl2 a_callback -arg1 {} {}] == {}}]
 
     aa_true "callback errors with missing arg" \
-        [expr [catch {callback -impl an_impl2 a_callback -arg1 foo} err] == 1]
+        [expr {[catch {callback -impl an_impl2 a_callback -arg1 foo} err] == 1}]
 
     aa_true "throws error for invalid arguments with implementations" \
         [catch {callback a_callback bar} error]

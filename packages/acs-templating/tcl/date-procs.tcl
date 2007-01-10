@@ -80,7 +80,7 @@ ad_proc -public template::util::date::init {} {
 ad_proc -public template::util::date::monthName { month length } {
     Return the specified month name (short or long)
 } {
-  if { [string equal $length long] } {
+  if {$length eq "long"} {
     return [lc_time_fmt "2002-[format "%02d" $month]-01" "%B"]
   } else {
     return [lc_time_fmt "2002-[format "%02d" $month]-01" "%b"]
@@ -98,10 +98,10 @@ ad_proc -public template::util::date::daysInMonth { month {year 0} } {
   set days [lindex $month_desc 2]
   
   if { $month == 2 && (
-          ([expr $year % 4] == 0 && [expr $year % 100] != 0) ||
-          [expr $year % 400] == 0
+          (($year % 4) == 0 && ($year % 100) != 0) ||
+          ($year % 400) == 0
         ) } {
-    return [expr $days + 1]
+    return [expr {$days + 1}]
   } else {
     return $days
   } 
@@ -212,14 +212,14 @@ ad_proc -public template::util::date::get_property { what date } {
     seconds    { return [lindex $date 5] }
     format     { return [lindex $date 6] }
     long_month_name {
-      if { [string equal [lindex $date 1] {}] } {
+      if {[lindex $date 1] eq {}} {
         return {}
       } else {
         return [monthName [lindex $date 1] long]
       }
     }
     short_month_name {
-      if { [string equal [lindex $date 1] {}] } {
+      if {[lindex $date 1] eq {}} {
         return {}
       } else {
         return [monthName [lindex $date 1] short]
@@ -235,17 +235,17 @@ ad_proc -public template::util::date::get_property { what date } {
       }
     }
     short_year {
-      if { [string equal [lindex $date 0] {}] } {
+      if {[lindex $date 0] eq {}} {
         return {}
       } else {
-	  return [expr [lindex $date 0] % 100]
+	  return [expr {[lindex $date 0] % 100}]
       }
     }
     short_hours {
-      if { [string equal [lindex $date 3] {}] } {
+      if {[lindex $date 3] eq {}} {
         return {}
       } else {    
-        set value [expr [lindex $date 3] % 12]
+        set value [expr {[lindex $date 3] % 12}]
 	if { $value == 0 } {
           return 12
 	} else {
@@ -254,7 +254,7 @@ ad_proc -public template::util::date::get_property { what date } {
       }
     }
     ampm {
-      if { [string equal [lindex $date 3] {}] } {
+      if {[lindex $date 3] eq {}} {
         return {}
       } else { 
         if { [lindex $date 3] > 11 } {
@@ -266,7 +266,7 @@ ad_proc -public template::util::date::get_property { what date } {
     }
     not_null {
       for { set i 0 } { $i < 6 } { incr i } {
-        if { ![string equal [lindex $date $i] {}] } {
+        if { [lindex $date $i] ne {} } {
           return 1
         } 
       }
@@ -274,7 +274,7 @@ ad_proc -public template::util::date::get_property { what date } {
     }
     sql_date {
       # LARS: Empty date results in NULL value
-      if { [empty_string_p $date] } {
+      if { $date eq "" } {
         return "NULL"
       }
       set value ""
@@ -283,7 +283,7 @@ ad_proc -public template::util::date::get_property { what date } {
       set pad "0000"
       foreach { index sql_form } { 0 YYYY 1 MM 2 DD 3 HH24 4 MI 5 SS } {
         set piece [lindex $date $index]
-        if { ![string equal $piece {}] } {
+        if { $piece ne {} } {
           append value "$space[string range $pad [string length $piece] end]$piece"
           append format $space
           append format $sql_form
@@ -304,7 +304,7 @@ ad_proc -public template::util::date::get_property { what date } {
   }
     ansi {
       # LARS: Empty date results in NULL value
-      if { [empty_string_p $date] } {
+      if { $date eq "" } {
           return {}
       }
       set value ""
@@ -364,10 +364,10 @@ ad_proc -public template::util::date::get_property { what date } {
       }
       set value [lc_time_fmt [join $date_list "-"] "%q"]
       unpack $date
-      if { ![string equal $hours {}] && \
-           ![string equal $minutes {}] } {
+      if { $hours ne {} && \
+           $minutes ne {} } {
 	  append value " [string range $pad [string length $hours] end]${hours}:[string range $pad [string length $minutes] end]$minutes"
-	  if { ![string equal $seconds {}] } {
+	  if { $seconds ne {} } {
 	      append value ":[string range $pad [string length $seconds] end]$seconds"
 	  }
       }
@@ -377,15 +377,15 @@ ad_proc -public template::util::date::get_property { what date } {
       set value ""
       # Unreliable !
       unpack $date
-      if { ![string equal $year {}] && \
-           ![string equal $month {}] && \
-           ![string equal $day {}] } {
+      if { $year ne {} && \
+           $month ne {} && \
+           $day ne {} } {
         append value "$month/$day/$year"
       }
-      if { ![string equal $hours {}] && \
-           ![string equal $minutes {}] } {
+      if { $hours ne {} && \
+           $minutes ne {} } {
         append value " ${hours}:${minutes}"
-        if { ![string equal $seconds {}] } {
+        if { $seconds ne {} } {
           append value ":$seconds"
 	}
       }
@@ -427,7 +427,7 @@ ad_proc -public template::util::date::set_property { what date value } {
     # This is needed for the automated sql/linear conversion used by
     # ad_form.
 
-    if {[empty_string_p $value]} {
+    if {$value eq ""} {
         return $date
     }
     
@@ -450,16 +450,16 @@ ad_proc -public template::util::date::set_property { what date value } {
     format     { return [lreplace $date 6 6 $value] }
     short_year {
       if { $value < 69 } {
-        return [lreplace $date 0 0 [expr $value + 2000]]
+        return [lreplace $date 0 0 [expr {$value + 2000}]]
       } else {
-        return [lreplace $date 0 0 [expr $value + 1900]]  
+        return [lreplace $date 0 0 [expr {$value + 1900}]]  
       }
     }
     short_hours {
       return [lreplace $date 3 3 $value]
     }
     ampm {
-      if { [string equal [lindex $date 3] {}] } {
+      if {[lindex $date 3] eq {}} {
         return $date
       } else { 
         set hours [lindex $date 3]
@@ -470,10 +470,10 @@ ad_proc -public template::util::date::set_property { what date value } {
             set hours $trimmed_hours
         }
 
-        if { [string equal $value pm] && $hours < 12 } {
-          return [lreplace $date 3 3 [expr $hours + 12]]
-        } elseif { [string equal $value am] } {
-          return [lreplace $date 3 3 [expr $hours % 12]]
+        if { $value eq "pm" && $hours < 12 } {
+          return [lreplace $date 3 3 [expr {$hours + 12}]]
+        } elseif {$value eq "am"} {
+          return [lreplace $date 3 3 [expr {$hours % 12}]]
 	} else {
           return $date
         }
@@ -651,17 +651,17 @@ ad_proc -public template::util::date::add_time { {-time_array_name:required} {-d
     # add time properties
     foreach field [array names time_in] {
 	# skip format
-	if ![string equal $field "format"] {
+	if {$field ne "format" } {
 	    # Coerce values to non-negative integers
-	    if { ![string equal $field ampm] } {
+	    if { $field ne "ampm" } {
 		if { ![regexp {[0-9]+} $time_in($field) value] } {
 		    set value {}
 		}
 	    }
 	    # If the value is not null, set it
-	    if { ![string equal $value {}] } {
+	    if { $value ne {} } {
 		set the_date [template::util::date::set_property $field $the_date $value]
-		if { ![string equal $field ampm] } {
+		if { $field ne "ampm" } {
 		    set have_values 1
 		}
 	    }
@@ -671,13 +671,13 @@ ad_proc -public template::util::date::add_time { {-time_array_name:required} {-d
     # add date properties
     foreach field [array names date_in] {
 	# skip format
-	if ![string equal $field "format"] {
+	if {$field ne "format" } {
 	    # Coerce values to non-negative integers
 	    if { ![regexp {[0-9]+} $date_in($field) value] } {
 		set value {}
 	    }
 	    # If the value is not null, set it
-	    if { ![string equal $value {}] } {
+	    if { $value ne {} } {
 		set the_date [template::util::date::set_property $field $the_date $value]
 		set have_values 1
 	    }
@@ -695,10 +695,10 @@ ad_proc -public template::util::negative { value } {
     Check if a value is less than zero, but return false
     if the value is an empty string
 } {
-  if { [string equal $value {}] } {
+  if {$value eq {}} {
     return 0
   } else {
-    return [expr $value < 0]
+    return [expr {$value < 0}]
   }
 }
 
@@ -724,7 +724,7 @@ ad_proc -public template::util::date::validate { date error_ref } {
                       hours "HH24|HH12" minutes "MI" seconds "SS" } {
 
     # If the field is required, but missing, report an error
-    if {  [string equal [set $field] {}] } {
+    if {[set $field] eq {}} {
 	if { [regexp $exp $format match] } {
 	    set field_pretty [_ acs-templating.${field}]
 	    lappend error_msg [_ acs-templating.lt_No_value_supplied_for_-field_pretty-]
@@ -743,12 +743,12 @@ ad_proc -public template::util::date::validate { date error_ref } {
       lappend error_msg [_ acs-templating.Year_must_be_positive]
   }
 
-  if { ![string equal $month {}] } {
+  if { $month ne {} } {
     if { $month < 1 || $month > 12 } {
 	lappend error_msg [_ acs-templating.Month_must_be_between_1_and_12]
     } else {
       if { $year > 0 } { 
-        if { ![string equal $day {}] } {
+        if { $day ne {} } {
           set maxdays [get_property days_in_month $date]
           if { $day < 1 || $day > $maxdays } {
 	      set month_pretty [template::util::date::get_property long_month_name $date]
@@ -788,11 +788,11 @@ ad_proc -public template::util::leadingPad { string size } {
     Pad a string with leading zeroes
 } {
   
-  if { [string equal $string {}] } {
+  if {$string eq {}} {
     return {}
   }
 
-  set ret [string repeat "0" [expr $size - [string length $string]]]
+  set ret [string repeat "0" [expr {$size - [string length $string]}]]
   append ret $string
   return $ret
 
@@ -804,7 +804,7 @@ ad_proc -public template::util::leadingTrim { value } {
 } {
   set empty [string equal $value {}]
   set value [string trimleft $value 0]
-  if { !$empty && [string equal $value {}] } {
+  if { !$empty && $value eq {} } {
     set value 0
   }
   return $value
@@ -843,7 +843,7 @@ ad_proc -public template::widget::numericRange { name interval_def size {value "
 
   if {$interval_size > 1} {
     # round minutes or seconds to nearest interval
-    if { ![empty_string_p $value] } {
+    if { $value ne "" } {
       set value [expr {$value-($value - [lindex $interval_def 0])%$interval_size}]
     }
   }
@@ -865,7 +865,7 @@ ad_proc -public template::widget::dateFragment {
   set value [template::util::date::get_property $fragment $value]
   set value [template::util::leadingTrim $value]
 
-  if { ![string equal $mode "edit"] } {
+  if { $mode ne "edit" } {
     set output {}
     append output "<input type=\"hidden\" name=\"$element(name).$fragment\" value=\"[template::util::leadingPad $value $size]\">"
     append output $value
@@ -875,13 +875,13 @@ ad_proc -public template::widget::dateFragment {
       set interval $element(${fragment}_interval)
     } else {
        # Display text entry for some elements, or if the type is text
-       if { [string equal $type t] ||
+       if { $type eq "t" ||
             [regexp "year|short_year" $fragment] } {
          set output "<input type=\"text\" name=\"$element(name).$fragment\" size=\"$size\""
          append output " maxlength=\"$size\" value=\"[template::util::leadingPad $value $size]\""
          array set attributes $tag_attributes
          foreach attribute_name [array names attributes] {
-           if { [string equal $attributes($attribute_name) {}] } {
+           if {$attributes($attribute_name) eq {}} {
              append output " $attribute_name"
            } else {
              append output " $attribute_name=\"$attributes($attribute_name)\""
@@ -909,7 +909,7 @@ ad_proc -public template::widget::ampmFragment {
 
   set value [template::util::date::get_property $fragment $value]
 
-  if { ![string equal $mode "edit"] } {
+  if { $mode ne "edit" } {
     set output {}
     append output "<input type=\"hidden\" name=\"$element(name).$fragment\" value=\"$value\">"
     append output $value
@@ -932,7 +932,7 @@ ad_proc -public template::widget::monthFragment {
 
   set value [template::util::date::get_property $fragment $value]
 
-  if { ![string equal $mode "edit"] } {
+  if { $mode ne "edit" } {
     set output {}
     if { [exists_and_not_null value] } {
       append output "<input type=\"hidden\" name=\"$element(name).$fragment\" value=\"$value\">"
@@ -1000,9 +1000,9 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
     expiration {
       set element(format) "MM/YY"
       set current_year [clock format [clock seconds] -format "%Y"]
-      set current_year [expr $current_year % 100]
+      set current_year [expr {$current_year % 100}]
       set element(short_year_interval) \
-        [list $current_year [expr $current_year + 10] 1]
+        [list $current_year [expr {$current_year + 10}] 1]
       set element(help) 1 
     }
   }
@@ -1035,7 +1035,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
        set id_attr_name $attributes(id)
   }
 
-  while { ![string equal $format_string {}] } {
+  while { $format_string ne {} } {
 
     # Snip off the next token
     regexp {([^/\-.: ]*)([/\-.: ]*)(.*)} \
@@ -1066,7 +1066,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
                      [array get attributes]]
 
     # Output the separator
-    if { [string equal $sep " "] } {
+    if {$sep eq " "} {
       append output "&nbsp;"
     } else {
       append output "$sep"
@@ -1114,15 +1114,15 @@ ad_proc -public template::data::transform::date { element_ref } {
      if { [ns_queryexists $key] } {
        set value [ns_queryget $key]
        # Coerce values to non-negative integers
-       if { ![string equal $field ampm] } {
+       if { $field ne "ampm" } {
 	 if { ![regexp {[0-9]+} $value value] } {
            set value {}
          }
        }
        # If the value is not null, set it
-       if { ![string equal $value {}] } {
+       if { $value ne {} } {
          set the_date [template::util::date::set_property $field $the_date $value]
-         if { ![string equal $field ampm] } {
+         if { $field ne "ampm" } {
            set have_values 1
 	 }
        }
@@ -1348,7 +1348,7 @@ ad_proc -public template::widget::textdate { element_reference tag_attributes } 
       set javascriptdate ""
   }
 
-  if { [string equal $element(mode) "edit"] } {
+  if {$element(mode) eq "edit"} {
       append output "<input type=\"text\" name=\"$element(id)\" size=\"10\" maxlength=\"10\" id=\"$element(id)_input_field\" value=\"[ad_quotehtml $textdate]\" />"
       append output "<input type=\"button\" style=\"border-width: 0px; height: 17px; width: 19px; background-image: url('/resources/acs-templating/calendar.gif'); background-repeat: no-repeat; cursor: pointer;\" onclick=\"return showCalendarWithDefault('$element(id)_input_field', '$javascriptdate', '[template::util::textdate_localized_format]');\" />"
   } else {

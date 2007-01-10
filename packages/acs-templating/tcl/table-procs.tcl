@@ -150,7 +150,7 @@ ad_proc -public template::widget::table::prepare {
         "
 
         # Append to the row html  
-        if { ![string equal $presentation ""] } {
+        if { $presentation ne "" } {
           # Debug !
           regsub -all {"} $presentation {\\"} presentation  
           append eval_code "set row($row_key) \"$presentation\"\n"
@@ -175,13 +175,13 @@ ad_proc -public template::widget::table::prepare {
     # Get the column definition if it does not exist
     if { [template::util::is_nil widget(column_def)] } {
       template::widget::table::default_column_def widget \
-        [expr $level + 1]
+        [expr {$level + 1}]
     }
 
   } else {
     uplevel $level "uplevel 0 tw_${name}_rows $widget(rows_data)"
     template::widget::table::default_column_def widget \
-      [expr $level + 1]
+      [expr {$level + 1}]
   }
 
   # Process the rows datasource and get the columns
@@ -194,7 +194,7 @@ ad_proc -public template::widget::table::prepare {
     set the_joiner "?"
     if { ![template::util::is_nil $the_form] } {
       foreach key [ns_set keys $the_form] {
-        if { ![string equal $key "tablewidget:${name}_orderby"] } {
+        if { $key ne "tablewidget:${name}_orderby" } {
           append url "${the_joiner}${key}\=[ns_set get $the_form $key]"
           set the_joiner "&"
         }
@@ -211,11 +211,11 @@ ad_proc -public template::widget::table::prepare {
       set row(name) $column_name
 
       set label [lindex $column 0]
-      if { [string equal $label {}] } {
+      if {$label eq {}} {
         set label $column_name
       }
       set orderby_clause [lindex $column 1]
-      if { [string equal $orderby_clause {}] } {
+      if {$orderby_clause eq {}} {
         set orderby_clause $column_name
       }
  

@@ -19,7 +19,7 @@ foreach var_name {system_owner admin_owner host_administrator outgoing_sender ne
 #
 #############
 
-if { [string compare $password $password_confirmation] } {
+if {$password ne $password_confirmation  } {
     install_return 200 "Passwords Don't Match" "
 The passwords you've entered don't match. Please <a href=\"javascript:history.back()\">try again</a>.
 "
@@ -51,7 +51,7 @@ if { ![install_good_data_model_p] } {
 
 install_do_packages_install
 
-if { [empty_string_p $username] } {
+if { $username eq "" } {
     set username $email
 }
 
@@ -173,7 +173,7 @@ ns_write "<b>Installation finished</b>
 
 <p> If not, please check your server error log, or contact your system administrator. </p>"
 
-if { ![string equal $post_installation_message ""] } {
+if { $post_installation_message ne "" } {
     ns_write $post_installation_message
 } else {
     ns_write "

@@ -16,7 +16,7 @@ db_multirow -extend { url admin_url param_url } packages services_select {} {
     if { [file exists "[acs_package_root_dir $package_key]/www/"] } {
         catch {
             set url [apm_package_url_from_key $package_key]
-            if { ![empty_string_p $url] && [file exists "[acs_package_root_dir $package_key]/www/admin/"] } {
+            if { $url ne "" && [file exists "[acs_package_root_dir $package_key]/www/admin/"] } {
                 set admin_url "${url}admin/"
             }
             if { [file exists "[acs_package_root_dir $package_key]/www/sitewide-admin/"] } {
@@ -30,7 +30,7 @@ db_multirow -extend { url admin_url param_url } packages services_select {} {
     }
     set instance_name [lang::util::localize $instance_name]
 
-    if { [empty_string_p $url] && [empty_string_p $admin_url] && [empty_string_p $param_url] } {
+    if { $url eq "" && $admin_url eq "" && $param_url eq "" } {
         continue
     }
 }

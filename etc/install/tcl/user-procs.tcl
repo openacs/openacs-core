@@ -12,7 +12,7 @@ ad_proc ::twt::user::get_users { {type ""} } {
     set user_emails [list]
 
     foreach user_data [get_test_data] {
-        if { [empty_string_p $type] || \
+        if { $type eq "" || \
                 [string equal -nocase [lindex $user_data 4] $type] } {
             
             lappend user_emails [lindex $user_data 2]
@@ -32,7 +32,7 @@ ad_proc ::twt::user::get_random_users { type number } {
 
 ad_proc ::twt::user::get_password { email } {
 
-    if { [string equal $email  [::twt::config::admin_email]] } {
+    if {$email eq [::twt::config::admin_email]} {
         return [::twt::config::admin_password]
     } else {
         global __demo_users_password
