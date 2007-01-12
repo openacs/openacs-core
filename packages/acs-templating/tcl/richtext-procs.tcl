@@ -483,7 +483,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
     } else {
         # Display mode
-        if { [info exists element(value)] } {
+        if { $element(mode) eq "display" && [info exists element(value)] } {
             append output [template::util::richtext::get_property html_value $element(value)]
             append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ad_quotehtml $contents]\">"
             append output "<input type=\"hidden\" name=\"$element(id).format\" value=\"[ad_quotehtml $format]\">"
@@ -503,7 +503,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     }
   } else {
     # Display mode
-    if { [info exists element(value)] } {
+      if { $element(mode) eq "display" && [info exists element(value)] } {
       append output [template::util::richtext::get_property html_value $element(value)]
       append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ad_quotehtml $contents]\">"
       append output "<input type=\"hidden\" name=\"$element(id).format\" value=\"[ad_quotehtml $format]\">"
