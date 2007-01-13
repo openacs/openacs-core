@@ -75,7 +75,7 @@ function OacsAttach(editor) {
 
 OacsAttach.btnList = [
 		  ["insert-ilink", "Insert Internal Link"],
-		  ["insert-image", "Insert Image"],
+		  ["insert-image", "Insert Image"]
 		  ];
 
 OacsAttach.prototype.buttonPress = function(editor, id) {
