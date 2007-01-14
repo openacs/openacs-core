@@ -1,8 +1,9 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS Style Guide</title><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="next" href="cvs-guidelines.html" title="
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS Style Guide</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="next" href="cvs-guidelines.html" title="
     CVS Guidelines
-  "><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="eng-standards.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="cvs-guidelines.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="style-guide"></a>OpenACS Style Guide</h2></div></div></div><p>
+  "><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="eng-standards.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="cvs-guidelines.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="style-guide"></a>OpenACS Style Guide</h2></div></div><div></div></div><p>
     By Jeff Davis
-  </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="style-guide-motivation"></a>Motivation</h3></div></div></div><p>
+  </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="style-guide-motivation"></a>Motivation</h3></div></div><div></div></div><p>
       Why have coding standards for OpenACS?  And if the code works why change it to
       adhere to some arbitrary rules?
     </p><p>
@@ -11,7 +12,7 @@
       lines of tcl code, about 460,000 lines of sql (in datamodel
       scripts and .xql files), about 80,000 lines of markup in .adp
       files, and about 100,000 lines of documentation.  All told, just
-      about a million lines of "stuff".  In terms of logical units
+      about a million lines of &quot;stuff&quot;.  In terms of logical units
       there are about 160 packages, 800 tables, 2,000 stored
       procedures, about 2,000 functional pages, and about 3,200 tcl
       procedures.
@@ -27,7 +28,7 @@
       over a long period by a lot of different people, OpenACS 
       sometimes lacks this basic guessability and in the interest 
       of bringing it into line we have advanced these guidelines.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="style-commandments"></a>Commandments</h3></div></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="style-commandments"></a>Commandments</h3></div></div><div></div></div><p>
       Here is a short list of the basic rules code contributed to 
       OpenACS should follow...
     </p><div class="orderedlist"><ol type="1"><li><p><b>Follow the file naming and the package structure rules. </b>
@@ -74,8 +75,8 @@
             toolkit more useful for everyone and more easily extended.
           </p></li><li><p><b>Make sure your datamodel create/drop scripts work. </b>
             Break the table creation out from the package/stored
-            procedure creation and use <code class="computeroutput">create or
-            replace</code> where possible so that scripts
+            procedure creation and use <tt class="computeroutput">create or
+            replace</tt> where possible so that scripts
             can be sourced more than once.  Make sure your drop script
             works if data has been inserted (and permissioned and
             notifications have been attached etc).
@@ -89,6 +90,6 @@
         </p></li><li><p><b>Solicit code reviews. </b>
             Ask others to look over your code and provide feedback and do 
             the same for others.  
-          </p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="style-guide-rev-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Document Revision #</th><th>Action Taken, Notes</th><th>When?</th><th>By Whom?</th></tr></thead><tbody><tr><td>0.1</td><td>Creation</td><td>12/2003</td><td>Jeff Davis</td></tr></tbody></table></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eng-standards.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="cvs-guidelines.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 12. Engineering Standards </td><td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td><td width="40%" align="right"> 
+          </p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="style-guide-rev-history"></a>Revision History</h3></div></div><div></div></div><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Document Revision #</th><th>Action Taken, Notes</th><th>When?</th><th>By Whom?</th></tr></thead><tbody><tr><td>0.1</td><td>Creation</td><td>12/2003</td><td>Jeff Davis</td></tr></tbody></table></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eng-standards.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="cvs-guidelines.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 12. Engineering Standards </td><td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td><td width="40%" align="right"> 
     CVS Guidelines
   </td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/style-guide.html#comments">View comments on this page at openacs.org</a></center></body></html>
