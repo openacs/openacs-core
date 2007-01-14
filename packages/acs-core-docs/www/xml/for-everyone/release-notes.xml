@@ -37,6 +37,17 @@ END OF TEMPLATE -->
 linkend="changelog-latest"></xref>) since the last release and in the
 entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
 
+  <sect2 id="release-notes-5-3-0">
+    <title>Release 5.3.0</title>
+    <itemizedlist>
+      <listitem>
+        <para>Bug fixes.</para>
+        <para>New TIPs implemented.</para>
+	<para>All Core Automated Tests for Postgres pass.</para>
+      </listitem>
+    </itemizedlist>
+   </sect2>
+
   <sect2 id="release-notes-5-2-0">
     <title>Release 5.2.0</title>
     <itemizedlist>
