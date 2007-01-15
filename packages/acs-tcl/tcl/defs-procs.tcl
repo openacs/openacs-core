@@ -364,6 +364,22 @@ $ds_link
 </html>"
 }
 
+ad_proc -public ad_return_string_as_file {
+    -string
+    -filename
+    -mime_type
+} {
+    Return a string as the content of a file
+    
+    @param string Content of the file to be sent back
+    @param filename Name of the file to be returned
+    @param mime_type Mime Type of the file being returned
+} {
+    ns_set put [ns_conn outputheaders] "Content-Disposition" "attachment; filename=\"$filename\""
+    ReturnHeaders "$mime_type"
+    ns_write $string
+}
+
 ad_proc -public ad_return_complaint {
     exception_count 
     exception_text
