@@ -1,16 +1,15 @@
 <html>
 <head>
-<title>#acs-templating.HTMLArea_InsertImageTitle#</title>
+  <title>#acs-templating.HTMLArea_InsertImageTitle#</title>
 
 <script type="text/javascript" src="/resources/acs-templating/xinha-nightly/popups/popup.js"></script>
   
 @js_source;noquote@
-  
-<script type="text/javascript">
 
+<script type="text/javascript">
 	var selector_window;
 	window.resizeTo(415, 300);
-
+	
 	function Init() {
 	  __dlg_init();
 	  var param = window.dialogArguments;
@@ -30,15 +29,15 @@
 	  if (url) {
       		 onOK();
 	      	 __dlg_close(null);
+	  } else {
+	  	initCarousel_html_carousel();
 	  }
-	  initCarousel_html_carousel();
 	};
 	
 	function onOK() {
 	  var required = {
 	    "f_url": "#acs-templating.HTMLArea_NoURL#"
 	  };
-	  
 	  for (var i in required) {
 	    var el = document.getElementById(i);
 	    if (!el.value) {
@@ -47,22 +46,17 @@
 	      return false;
 	    }
 	  }
-	  
 	  // pass data back to the calling window
-	  /*
-		  var fields = ["f_url"];
-		  var param = new Object();
-		  for (var i in fields) {
-		    var id = fields[i];
-		    var el = document.getElementById(id);
-		    param[id] = el.value;
-		  }
+	  var param = new Object();
+	  /* 
+	  var fields = ["f_url"];
+	  for (var i in fields) {
+	    var id = fields[i];
+	    var el = document.getElementById(id);
+	    param[id] = el.value;
+	  } 
 	  */
-	  
-      var el = document.getElementById("f_url");
-      var param = new Object();
-	  param["f_url"] = el.value;
-	  
+	  param["f_url"] = document.getElementById("f_url").value;
 	  if (selector_window) {
 	    selector_window.close();
 	  }
@@ -152,17 +146,17 @@
 	border-bottom: 1px solid black; letter-spacing: 2px;
 	}
 	form { padding: 0px; margin: 0px; }
-
+	.form-error { color : red}
 	#html-carousel {
 		background: #f5f4e4; 
 	} 
 	#html-carousel .carousel-list li {
-		margin:4px 10px 0px 10px; 
+		margin:4px 0px 0px 0px; 
 	} 
 	#html-carousel .carousel-list li {
 		width: 106px;
 		border: 0px solid green;
-		padding: 10px;
+		padding: 2px;
 		padding-top: 15px;
 		margin: 0;
 		color: #3F3F3F; 
@@ -170,12 +164,12 @@
 	#html-carousel .carousel-list li img {
 		border:1px solid #999;
 		display:block; 
-		height:100;
+		width:100px;
 	} 
 	#html-carousel {
 		margin-bottom: 10px;
 		float: left;     
-		width: 330px;     
+		width: 330px;;     
 		height: 155px; 
 	} 
 	/* BUTTONS */ 
@@ -186,6 +180,7 @@
 	} 
 	#next-arrow {
 		cursor:pointer; 
+		float:right;
 	} 
 	#prev-arrow {
 		cursor:pointer; 
@@ -199,6 +194,7 @@
 </head>
 
 <body onload="Init()">
+<!-- @parent_id@ -->
 <div id="insert_image_upload">
 
 	<table border="0" style="margin: 0 auto; text-align: left;padding: 0px;" width="100%">
@@ -207,9 +203,8 @@
 	<if @write_p@ eq 1>
 	    <legend><b>@HTML_UploadTitle@</b></legend>
 	    <formtemplate id="upload_form">
-			<input type="hidden" name="f_url" id="f_url" value="@f_url@"/>
+		   <input type="hidden" name="f_url" id="f_url" value="@f_url@"/>
 	      <table cellspacing="2" cellpadding="2" border="0">
-	<if @recent_images_options@ not nil>
 		<tr class="form-group">
 		  <if @formerror.upload_file@ not nil>
 		    <td class="form-widget-error">
@@ -218,19 +213,31 @@
 		    <td class="form-widget">
                   </else> 	
 		<fieldset>
-        <legend>#acs-templating.Choose_Image#</legend>
-        	<table border=0 cellpadding=2 cellspacing=0 width="100%">
+        <legend>Choose Image</legend>
+        	<table border=0 cellpadding=0 cellspacing=0 width="100%">
         	<tr>
         	<td>
+        	<table border=0 cellpadding=0 cellspacing=0 width="330px">
+        	<tr><td>
 			<div id="prev-arrow-container">
 				<img id="prev-arrow" class="left-button-image" src="/resources/ajaxhelper/carousel/left-enabled.gif"/>
 			</div> 
+			</td><td>
+			<div id="next-arrow-container" >
+				<img id="next-arrow" class="right-button-image" src="/resources/ajaxhelper/carousel/right-enabled.gif"/>
+			</div> 
+			</td></tr>
+			</table>
+			</td>			
+			</tr>
+			<tr>
+			<td align="center">
 			<div class="carousel-component" id="html-carousel">
 				<div class="carousel-clip-region">
 					<ul class="carousel-list">
 						<formgroup id="choose_file">
 							<li>
-								<img src="/image/@formgroup.option@/thumbnail" onclick="document.getElementById('upload_form:elements:choose_file:@formgroup.option@').click()" /><br / >@formgroup.widget;noquote@
+								<img src="/image/@formgroup.option@/thumbnail" onclick="document.getElementById('upload_form:elements:choose_file:@formgroup.option@').click()"  /><br / >@formgroup.widget;noquote@
 								<formerror id="upload_file">
 									<div class="form-error"><br />@formerror.upload_file@</div>
 								</formerror>	
@@ -239,27 +246,23 @@
 					</ul>   
 				</div> 			
 			</div> 
-			
-			<div id="next-arrow-container" >
-				<img id="next-arrow" class="right-button-image" src="/resources/ajaxhelper/carousel/right-enabled.gif"/>
-			</div> 
-			
+						
 			<script type="text/javascript">   
 
 			function initCarousel_html_carousel() {
-				carousel = new Carousel('html-carousel', {numVisible:1,scrollInc:1,animHandler:animHandler, animParameters:{duration:0.5}, buttonStateHandler:buttonStateHandler, nextElementID:'next-arrow', prevElementID:'prev-arrow', size:@recent_images:rowcount@})
-			};
-
+				carousel = new Carousel('html-carousel', {numVisible:1,scrollInc:3,animHandler:animHandler, animParameters:{duration:0.5}, buttonStateHandler:buttonStateHandler, nextElementID:'next-arrow', prevElementID:'prev-arrow', size:@recent_images:rowcount@})
+			}
 									
 			function buttonStateHandler(button, enabled) {
-				if (button == "prev-arrow") 
+				if (button == "prev-arrow") {
 					$('prev-arrow').src = enabled ? "/resources/ajaxhelper/carousel/left-enabled.gif" : "/resources/ajaxhelper/carousel/left-disabled.gif"
-				else 
+				} else {
 					$('next-arrow').src = enabled ? "/resources/ajaxhelper/carousel/right-enabled.gif" : "/resources/ajaxhelper/carousel/right-disabled.gif"
+				}
 			}
 			
 			function animHandler(carouselID, status, direction) {
-				var region = $(carouselID).childrenWithClassName("carousel-clip-region")[0]
+				var region = $(carouselID).down(".carousel-clip-region")
 				if (status == "before") {
 					Effect.Fade(region, {to: 0.3, queue: { position:'end', scope: "carousel" }, duration: 0.2})
 				}
@@ -267,7 +270,7 @@
 					Effect.Fade(region, {to: 1, queue: { position:'end', scope: "carousel" }, duration: 0.2})
 				}
 			}			
-				
+			
 			</script> 
 		</td></tr>
 		<tr><td>
@@ -277,7 +280,6 @@
 		</fieldset>
 		</td>
 	        </tr> 
-</if>
 		<tr class="form-element">
 		  <if @formerror.upload_file@ not nil>
 		    <td class="form-widget-error">
@@ -286,8 +288,7 @@
 		    <td class="form-widget">
 		  </else>
 	<fieldset>
-
-	<legend>#acs-templating.Upload_a_New_Image#</legend>
+	<legend>or Upload a New Image</legend>
 
 		  <formwidget id="upload_file">
 		    <formerror id="upload_file">
@@ -302,7 +303,7 @@
 		    <formerror id="share">
 		      <div class="form-error">@formerror.share@</div>
 		    </formerror>                        
-	<formwidget id="upload_btn">&nbsp;<button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
+	<br /><formwidget id="upload_btn">&nbsp;<button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
 	</fieldset>
       </td>
     </tr>
