@@ -78,15 +78,17 @@
   
 	  <noparse>
 	    <formerror id="@elements.id@">
-	      <br/>
-		  <b>\@formerror.@elements.id@;noquote\@<b>
+	      <br />
+		  \@formerror.@elements.id@;noquote\@
 	    </formerror>
 	  </noparse>
 
 	  <if @elements.help_text@ not nil>
+	    <p class="form-help-text">
 	      <noparse>
-		<i><formhelp id="@elements.id@"></i>
+		<formhelp id="@elements.id@">
 	      </noparse>
+	    </p>
 	  </if>
 
 	</span>	  
