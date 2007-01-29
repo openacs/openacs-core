@@ -43,5 +43,16 @@
 		party_id = :party_id
     </querytext>
 </fullquery>
+
+<fullquery name="party::party_p.party_p">
+    <querytext>
+	select
+		1
+	from 
+		parties
+	where
+		party_id = :object_id
+    </querytext>
+</fullquery>
  
 </queryset>
