@@ -35,11 +35,11 @@
       </querytext>
 </fullquery>
 
-<fullquery name="acs_object::package_id.get_package_id">
+<fullquery name="acs_object::object_p.object_exists">
   <querytext>
-    select package_id
+    select 1
       from acs_objects
-      where object_id = :object_id
+      where object_id = :id
    </querytext>
 </fullquery>
 
