@@ -270,5 +270,18 @@ namespace eval party {
 	return $name
     }
 
+    ad_proc -public party_p {
+	-object_id:required
+    } {
+	
+	@author Malte Sussdorff
+	@creation-date 2007-01-26
+	
+	@param object_id object_id which is checked if it is a party
+	@return true if object_id is a party
+	
+    } {
+	return [db_string party_p {} -default 0]
+    }
     
 }
