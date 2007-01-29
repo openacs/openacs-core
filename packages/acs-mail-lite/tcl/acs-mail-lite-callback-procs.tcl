@@ -71,7 +71,15 @@ ad_proc -public -callback acs_mail_lite::incoming_email {
     -array:required
     -package_id
 } {
-}
+    Callback that is executed for incoming e-mails if the email is *NOT* like $object_id@servername
+} -
+
+ad_proc -public -callback acs_mail_lite::incoming_object_email {
+    -array:required
+    -object_id:required
+} {
+    Callback that is executed for incoming e-mails if the email is like $object_id@servername
+} - 
 
 ad_proc -public -callback acs_mail_lite::email_form_elements {
     -varname:required

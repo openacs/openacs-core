@@ -7,7 +7,7 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="1.3b11" url="http://openacs.org/repository/download/apm/acs-mail-lite-1.3b11.apm">
+    <version name="5.4.0d1" url="http://openacs.org/repository/download/apm/acs-mail-lite-5.4.0d1.apm">
 
         <owner url="mailto:eric@openforce.biz">Eric Lorenzo</owner>
         <owner url="mailto:timo@studio-k4.de">Timo Hentschel</owner>
@@ -16,8 +16,8 @@
         <description format="text/html">This package provides a simple ns_sendmail-like interface for sending messages, but queues messages in the database to ensure reliable sending and make sending a message 'transactional'. Prefered over acs-messaging or acs-mail.</description>
         <maturity>2</maturity>
 
-        <provides url="acs-mail-lite" version="1.3b11"/>
-
+        <provides url="acs-mail-lite" version="5.4.0d1"/>
+	<requires url="acs-tcl" version="5.4.0d2"/>
 
         <callbacks>
         </callbacks>
