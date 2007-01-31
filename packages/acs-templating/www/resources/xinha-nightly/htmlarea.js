@@ -1871,7 +1871,8 @@ HTMLArea.prototype.generate = function ()
     
     HTMLArea.freeLater(this, '_doc');
     
-    doc.open();
+    doc.open("text/html","replace");
+
     if (!editor.config.fullPage) {
       var html = "<html>\n";
       html += "<head>\n";
@@ -2012,7 +2013,8 @@ HTMLArea.prototype.setFullHTML = function(html) {
     if(reac) this.deactivateEditor();
     var html_re = /<html>((.|\n)*?)<\/html>/i;
     html = html.replace(html_re, "$1");
-    this._doc.open();
+    this._doc.open("text/html","replace");
+
     this._doc.write(html);
     this._doc.close();
     if(reac) this.activateEditor();
