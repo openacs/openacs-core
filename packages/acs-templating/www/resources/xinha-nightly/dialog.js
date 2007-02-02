@@ -23,8 +23,12 @@ function Dialog(url, action, init) {
 
 Dialog._parentEvent = function(ev) {
 	setTimeout( function() { if (Dialog._modal && !Dialog._modal.closed) { Dialog._modal.focus() } }, 50);
-	if (Dialog._modal && !Dialog._modal.closed) {
-		HTMLArea._stopEvent(ev);
+	try {
+		if (Dialog._modal && !Dialog._modal.closed) {
+			Xinha._stopEvent(ev);
+		} 
+	} catch (e) {
+		//after closing the popup in IE the events are not released and trying to access Dialog._modal.closed causes an error
 	}
 };
 
@@ -47,15 +51,15 @@ Dialog._geckoOpenModal = function(url, action, init) {
 
 	// capture some window's events
 	function capwin(w) {
-		HTMLArea._addEvent(w, "click", Dialog._parentEvent);
-		HTMLArea._addEvent(w, "mousedown", Dialog._parentEvent);
-		HTMLArea._addEvent(w, "focus", Dialog._parentEvent);
+		Xinha._addEvent(w, "click", Dialog._parentEvent);
+		Xinha._addEvent(w, "mousedown", Dialog._parentEvent);
+		Xinha._addEvent(w, "focus", Dialog._parentEvent);
 	}
 	// release the captured events
 	function relwin(w) {
-		HTMLArea._removeEvent(w, "click", Dialog._parentEvent);
-		HTMLArea._removeEvent(w, "mousedown", Dialog._parentEvent);
-		HTMLArea._removeEvent(w, "focus", Dialog._parentEvent);
+		Xinha._removeEvent(w, "click", Dialog._parentEvent);
+		Xinha._removeEvent(w, "mousedown", Dialog._parentEvent);
+		Xinha._removeEvent(w, "focus", Dialog._parentEvent);
 	}
 	capwin(window);
 	// capture other frames, note the exception trapping, this is because

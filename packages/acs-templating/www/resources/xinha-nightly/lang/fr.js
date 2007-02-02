@@ -148,5 +148,20 @@
   "Set format to paragraph": "Applique le format paragraphe",
   "Clean content pasted from Word": "Nettoyage du contenu copié depuis Word",
   "Headings": "Titres",
-  "Close": "Fermer"
+  "Close": "Fermer",
+
+  // Loading messages
+  "Loading in progress. Please wait !": "Chargement en cours. Veuillez patienter !",
+  "Constructing main object": "Construction de l'objet principal",
+  "Constructing object": "Construction de l'objet",
+  "Register panel right": "Enregistrement du panneau droit",
+  "Register panel left": "Enregistrement du panneau gauche",
+  "Register panel top": "Enregistrement du panneau supérieur",
+  "Register panel bottom": "Enregistrement du panneau inférieur",
+  "Create Toolbar": "Construction de la barre d'icones",
+  "Create StatusBar": "Construction de la barre de status",
+  "Generate Xinha object": "Génération de l'objet Xinha",
+  "Init editor size": "Initialisation de la taille d'édition",
+  "Init IFrame": "Initialisation de l'iframe",
+  "Register plugin $plugin": "Enregistrement du plugin $plugin"
 };

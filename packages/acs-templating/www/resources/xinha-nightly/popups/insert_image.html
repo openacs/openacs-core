@@ -10,13 +10,13 @@
 
 window.resizeTo(400, 100);
 
-HTMLArea = window.opener.HTMLArea;
+Xinha = window.opener.Xinha;
 function i18n(str) {
-  return (HTMLArea._lc(str, 'HTMLArea'));
+  return (Xinha._lc(str, 'Xinha'));
 }
 
 function Init() {
-  __dlg_translate('HTMLArea');
+  __dlg_translate('Xinha');
   __dlg_init();
   // Make sure the translated string appears in the drop down. (for gecko)
   document.getElementById("f_align").selectedIndex = 1;
@@ -159,7 +159,8 @@ title="Vertical padding" />
  <tr>
   <td valign="bottom">
     <div class="fr">Image Preview:</div>
-    <iframe name="ipreview" id="ipreview" frameborder="0" style="border : 1px solid gray;" height="200" width="300" src=""></iframe>
+    <iframe name="ipreview" id="ipreview" frameborder="0" style="border : 1px solid gray;" 
+	height="200" width="300" src="blank.html"></iframe>
   </td>
   <td valign="bottom" style="text-align: right">
     <button type="button" name="ok" onclick="return onOK();">OK</button><br>

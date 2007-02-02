@@ -7,7 +7,7 @@
  */
 
 
-require_once('Transform.php');
+require_once('../ImageManager/Classes/Transform.php');
 
 /**
  * Thumbnail creation

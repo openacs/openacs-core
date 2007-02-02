@@ -6,7 +6,7 @@
  * @package ImageManager
  */
 
-require_once('Files.php');
+require_once('../ImageManager/Classes/Files.php');
 
 // uncomment to turn on debugging
 
@@ -63,7 +63,7 @@ class ImageManager
 
 	/**
 	 * Get the tmp file prefix.
-     * @return string tmp file prefix.
+	 * @return string tmp file prefix.
 	 */
 	function getTmpPrefix() 
 	{
@@ -335,13 +335,13 @@ class ImageManager
 	}
 
 
- 	/**
+	/**
 	 * For a given image file, get the respective resized filename
 	 * no file existence check is done.
 	 * @param string $fullpathfile the full path to the image file
-   * @param integer $width the intended width
-   * @param integer $height the intended height
-   * @param boolean $mkDir whether to attempt to make the resized_dir if it doesn't exist
+	 * @param integer $width the intended width
+	 * @param integer $height the intended height
+	 * @param boolean $mkDir whether to attempt to make the resized_dir if it doesn't exist
 	 * @return string of the resized filename
 	 */
 	function getResizedName($fullpathfile, $width, $height, $mkDir = TRUE)
@@ -356,10 +356,10 @@ class ImageManager
 		}
 		else
 		{
-      $path = Files::makePath($path_parts['dirname'],$this->config['resized_dir']);
-      if($mkDir && !is_dir($path))
-        Files::createFolder($path);
-      Return Files::makeFile($path,$thumbnail);
+			$path = Files::makePath($path_parts['dirname'],$this->config['resized_dir']);
+			if($mkDir && !is_dir($path))
+				Files::createFolder($path);
+			Return Files::makeFile($path,$thumbnail);
 		}
 	}
 

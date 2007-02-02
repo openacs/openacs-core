@@ -3,7 +3,7 @@
 /**
 * @fileoverview By Adam Wright, for The University of Western Australia
 *
-* Distributed under the same terms as HTMLArea itself.
+* Distributed under the same terms as Xinha itself.
 * This notice MUST stay intact for use (see license.txt).
 *
 * Heavily modified by Yermo Lamers of DTLink, LLC, College Park, Md., USA.
@@ -107,7 +107,7 @@ function EnterParagraphs(editor)
   // hook into the event handler to intercept key presses if we are using
 	// gecko (Mozilla/FireFox)
 
-  if (HTMLArea.is_gecko)
+  if (Xinha.is_gecko)
 		{
 		//this.ddt._ddt( "enter-paragraphs.js","23", "EnterParagraphs(): we are gecko. Setting event handler." );
     this.onKeyPress = this.__onKeyPress;
@@ -426,7 +426,7 @@ EnterParagraphs.prototype._fenEmptySet = function( node, next_node, mode, last_f
 				// does not return content.
 
 		    return new Array(true, false );
-				breal;
+				break;
 
 			case "find_cursorpoint":
 
@@ -700,12 +700,15 @@ EnterParagraphs.prototype.processRng = function(rng, search_direction, roam, nei
 	  }
 
 	// NODE TYPE 11 is DOCUMENT_FRAGMENT NODE
-
-  if ( cnt.nodeType == 11 && !cnt.firstChild )
-		{
-		cnt.appendChild(editor._doc.createElement(pify.nodeName));
-		}
-
+  // I do not profess to understand any of this, simply applying a patch that others say is good - ticket:446
+  if ( cnt.nodeType == 11 && !cnt.firstChild)
+  {	
+    if (pify.nodeName != "BODY" || (pify.nodeName == "BODY" && pifyOffset != 0)) 
+    { //WKR: prevent body tag in empty doc
+      cnt.appendChild(editor._doc.createElement(pify.nodeName));
+    }
+  }
+  
 	// YmL: Added additional last parameter for fill case to work around logic
 	// error in forEachNode()
 
@@ -779,7 +782,7 @@ EnterParagraphs.prototype.processRng = function(rng, search_direction, roam, nei
 			{
 
 			// FIXME:/CHECKME: When Xinha is switched from WYSIWYG to text mode
-			// HTMLArea.getHTMLWrapper() will strip out the trailing br. Not sure why.
+			// Xinha.getHTMLWrapper() will strip out the trailing br. Not sure why.
 
 			// fill.appendChild(editor._doc.createElement('br'));
 
@@ -960,8 +963,8 @@ EnterParagraphs.prototype.handleEnter = function(ev)
 
   // Grab the selection and associated range
 
-  var sel = this.editor._getSelection();
-  var rng = this.editor._createRange(sel);
+  var sel = this.editor.getSelection();
+  var rng = this.editor.createRange(sel);
 
 	//this.ddt._ddtDumpNode( "enter-paragraphs.js", "757", "handleEnter(): initial range is: ", rng );
 
@@ -1078,7 +1081,7 @@ EnterParagraphs.prototype.handleEnter = function(ev)
 
   this.editor.updateToolbar();
 
-	HTMLArea._stopEvent(ev);
+	Xinha._stopEvent(ev);
 
 	return true;
 

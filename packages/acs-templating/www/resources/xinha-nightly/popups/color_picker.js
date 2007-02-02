@@ -47,14 +47,19 @@
    *              // but it will take (much) longer to display, while a small number
    *              // displays quickly, but doesn't show as many different colors.
    *              // Experiement with it, 18 seems like a good number.
-   *            granularity: 18
+   *            granularity: 18,
+   *              // Websafe specifies whether or not to include the Web Safe checkbox
+   *            websafe: false,
+   *              // Savecolors specifies the number of recently-selected colors to remember
+   *            savecolors: 20
    *           }
    *        );
    *
    *      // And now hookup the button to open the picker,
    *      //  the function to do that is myPicker.open()
-   *      //  it accepts two parameters, the "anchorage" and the element to anchor to
-   *      //  to anchor to.
+   *      //  it accepts two parameters, the "anchorage" and the element to anchor to,
+   *      //  and an optional third parameter, an initial color code to show in 
+   *      //  the text box and sample.
    *      //
    *      //  anchorage is made up of two of the keywords bottom,top,left and right
    *      //    left:   the left edge of the picker will align to the left edge of the element
@@ -65,7 +70,7 @@
    *      myButton.onclick =
    *        function()
    *        {              // anchorage   , element to anchor to
-   *          myPicker.open('bottom,right', myPicker)
+   *          myPicker.open('bottom,right', myButton, initcolor)
    *        };
    *    }
    *  </script>
@@ -74,59 +79,100 @@
 
   function colorPicker(params)
   {
+    // if the savedColors is empty, try to read the savedColors from cookie
+    if ( colorPicker.savedColors.length === 0 )
+    {
+      colorPicker.loadColors();
+    }
     var picker = this;
-    this.callback = params.callback?params.callback:function(color){alert('You picked ' + color )};
+    var enablepick = false;
+    var enablevalue = false;
+    var pickrow = 0;
+    var pickcol = 0;
+    this.callback = params.callback?params.callback:function(color){alert('You picked ' + color );};
+    this.websafe  = params.websafe?params.websafe:false;
+    this.savecolors = params.savecolors? params.savecolors: 20;
 
-    this.cellsize = params.cellsize?params.cellsize:'10px';
+    this.cellsize = parseInt(params.cellsize?params.cellsize:'10px', 10);
     this.side     = params.granularity?params.granularity:18;
+    var valuecol = this.side + 1;
+    var valuerow = this.side - 1;
 
     this.value = 1;
     this.saved_cells = null;
     this.table = document.createElement('table');
     this.table.cellSpacing = this.table.cellPadding = 0;
+    this.table.onmouseup = function()
+    {
+    	 enablepick = false;
+    	 enablevalue = false;
+    };
     this.tbody = document.createElement('tbody');
     this.table.appendChild(this.tbody);
     this.table.style.border = '1px solid WindowFrame';
-    this.table.style.backgroundColor = 'Window';
+    this.table.style.backgroundColor = '#fff';
+    this.table.style.zIndex = '1000';
     // Add a title bar and close button
     var tr = document.createElement('tr');
+    
     var td = document.createElement('td');
-    var but = document.createElement('button');
-    but.onclick = function() { picker.close(); }
-    but.appendChild(document.createTextNode('x'));
-    td.appendChild(but);
-    td.style.position = 'relative';
-    td.style.verticalAlign = 'middle';
-    but.style.cssFloat = 'right';
-    but.style.styleFloat = 'right';
-
-
-    td.colSpan = this.side + 3;
-    td.style.backgroundColor = 'ActiveCaption';
-    td.style.color = 'CaptionText';
+    td.colSpan = this.side;
+    td.style.backgroundColor = '#ccc';
+    td.style.color = '#000';
     td.style.fontFamily = 'small-caption,caption,sans-serif';
     td.style.fontSize = 'x-small';
     td.appendChild(document.createTextNode('Click a color...'));
     td.style.borderBottom = '1px solid WindowFrame';
-
     tr.appendChild(td);
+    td = null;
+
+    var td = document.createElement('td');
+    td.colSpan = 2;
+    td.style.backgroundColor = '#ccc'; //'ActiveCaption';
+    td.style.borderBottom = '1px solid WindowFrame';
+    tr.appendChild(td);
+
+    var but = document.createElement('div');
+    but.style.height = '12px';
+    but.style.width = '12px';
+    but.style.border = '2px outset';
+    but.style.cursor = 'pointer';
+    but.onclick = function() { picker.close(); };
+    but.appendChild(document.createTextNode('\u00D7'));
+    but.align = 'center';
+    but.style.verticalAlign = 'top';
+    but.style.position = 'relative';
+    but.style.cssFloat = 'right';
+    but.style.styleFloat = 'right';
+    but.style.backgroundColor = '#eee';
+    td.appendChild(but);
+
     this.tbody.appendChild(tr);
     but = tr = td = null;
 
     this.constrain_cb = document.createElement('input');
     this.constrain_cb.type = 'checkbox';
 
-    this.chosenColor     = document.createElement('input');
+    this.chosenColor = document.createElement('input');
     this.chosenColor.type = 'text';
-    this.chosenColor.size = '7';
+    this.chosenColor.maxLength = 7;
+    this.chosenColor.style.width = '56px';
+    this.chosenColor.onchange = function()
+      {
+      	if(/#[0-9a-f]{6,6}/i.test(this.value))
+      	{
+    	      picker.backSample.style.backgroundColor = this.value;
+          picker.foreSample.style.color = this.value;
+      	}
+      };
 
-    this.backSample     = document.createElement('div');
+    this.backSample = document.createElement('div');
     this.backSample.appendChild(document.createTextNode('\u00A0'));
     this.backSample.style.fontWeight = 'bold';
     this.backSample.style.fontFamily = 'small-caption,caption,sans-serif';
     this.backSample.fontSize = 'x-small';
 
-    this.foreSample     = document.createElement('div');
+    this.foreSample = document.createElement('div');
     this.foreSample.appendChild(document.createTextNode('Sample'));
     this.foreSample.style.fontWeight = 'bold';
     this.foreSample.style.fontFamily = 'small-caption,caption,sans-serif';
@@ -141,7 +187,7 @@
     function toHex(dec)
     {
       var h = dec.toString(16);
-      if(h.length < 2) h = '0' + h;
+      if(h.length < 2) { h = '0' + h; }
       return h;
     }
 
@@ -210,10 +256,10 @@
     function hsvToRGB(h,s,v)
     {
       var colors;
-      if(s == 0)
+      if(s === 0)
       {
         // GREY
-        colors = {red:v,green:v,blue:v}
+        colors = {red:v,green:v,blue:v};
       }
       else
       {
@@ -230,7 +276,6 @@
           case 2: colors =  {red:p, green:v, blue:t}; break;
           case 3: colors =  {red:p, green:q, blue:v}; break;
           case 4: colors =  {red:t, green:p, blue:v}; break;
-          case 5:
           default:colors =  {red:v, green:p, blue:q}; break;
         }
       }
@@ -251,11 +296,17 @@
      * for the class.
      */
 
-    this.open = function(anchorage,element)
+    this.open = function(anchorage,element,initcolor)
     {
       this.table.style.display = '';
 
       this.pick_color();
+      if(initcolor && /#[0-9a-f]{6,6}/i.test(initcolor))
+      {
+        this.chosenColor.value = initcolor;
+    	    this.backSample.style.backgroundColor = initcolor;
+        this.foreSample.style.color = initcolor;
+      }
 
       // Find position of the element
       this.table.style.position = 'absolute';
@@ -268,12 +319,19 @@
         left += e.offsetLeft;
         e = e.offsetParent;
       }
-      while(e)
+      while(e);
 
       var x, y;
       if(/top/.test(anchorage))
       {
-        this.table.style.top = (top - this.table.offsetHeight) + 'px';
+        if(top - this.table.offsetHeight > 0)
+        {
+          this.table.style.top = (top - this.table.offsetHeight) + 'px';
+        } 
+        else
+        {
+        	  this.table.style.top = 0;
+        }
       }
       else
       {
@@ -286,29 +344,85 @@
       }
       else
       {
-        this.table.style.left = (left - (this.table.offsetWidth - element.offsetWidth)) + 'px';
+        if(left - (this.table.offsetWidth - element.offsetWidth) > 0)
+        {
+          this.table.style.left = (left - (this.table.offsetWidth - element.offsetWidth)) + 'px';
+        }
+        else
+        {
+        	  this.table.style.left = 0;
+        }
       }
+     // IE ONLY - prevent windowed elements (<SELECT>) to render above the colorpicker
+      /*@cc_on
+      this.iframe.style.top = this.table.style.top;
+      this.iframe.style.left = this.table.style.left;
+      @*/
     };
 
+    function pickCell(cell)
+    {
+        picker.chosenColor.value = cell.colorCode;
+        picker.backSample.style.backgroundColor = cell.colorCode;
+        picker.foreSample.style.color = cell.colorCode;
+        if((cell.hue >= 195  && cell.saturation > 0.5) || 
+        		(cell.hue === 0 && cell.saturation === 0 && cell.value < 0.5) || 
+        		(cell.hue !== 0 && picker.value < 0.75))
+        {
+          cell.style.borderColor = '#fff';
+        }
+        else
+        {
+          cell.style.borderColor = '#000';
+        }
+        pickrow = cell.thisrow;
+        pickcol = cell.thiscol;
+     }
+    
+    function pickValue(cell)
+    {
+   //     cell.style.borderWidth = '1px';
+   //     cell.style.borderStyle = 'solid';
+        if(picker.value < 0.5)
+        {
+           cell.style.borderColor = '#fff';
+        }
+        else
+        {
+        	  cell.style.borderColor = '#000';
+        }
+        valuerow = cell.thisrow;
+        valuecol = cell.thiscol;
+        picker.chosenColor.value = picker.saved_cells[pickrow][pickcol].colorCode;
+        picker.backSample.style.backgroundColor = picker.saved_cells[pickrow][pickcol].colorCode;
+        picker.foreSample.style.color = picker.saved_cells[pickrow][pickcol].colorCode;
+    }
+    
+    function unpickCell(row,col)
+    {
+    	  picker.saved_cells[row][col].style.borderColor = picker.saved_cells[row][col].colorCode;
+    }
+    
     /** Draw the color picker. */
     this.pick_color = function()
     {
       var rows, cols;
       var picker = this;
-      var huestep = 359/this.side;
-      var saturstep = 1/this.side;
-      var valustep  = 1/this.side;
+      var huestep = 359/(this.side);
+      var saturstep = 1/(this.side - 1);
+      var valustep  = 1/(this.side - 1);
       var constrain = this.constrain_cb.checked;
+      
 
-      if(this.saved_cells == null)
+      if(this.saved_cells === null)
       {
-        this.saved_cells = new Array();
+        this.saved_cells = [];
 
-        for(var row = 0; row <= this.side; row++)
+        for(var row = 0; row < this.side; row++)
         {
           var tr = document.createElement('tr');
-          this.saved_cells[row] = new Array();
-          for(var col = 0; col <= this.side; col++)
+          this.saved_cells[row] = [];
+          for(var col = 0; col < this.side; col++)
           {
             var td = document.createElement('td');
             if(constrain)
@@ -320,58 +434,105 @@
               td.colorCode = tupleToColor(hsvToRGB(huestep*row, saturstep*col, this.value));
             }
             this.saved_cells[row][col] = td;
-            td.style.height = td.style.width = this.cellsize;
+            td.style.height = this.cellsize + 'px';
+            td.style.width = this.cellsize -2 +'px';
+            td.style.borderWidth = '1px';
+            td.style.borderStyle = 'solid';
+            td.style.borderColor = td.colorCode;
             td.style.backgroundColor = td.colorCode;
+            if(row == pickrow && col == pickcol)
+            {
+              td.style.borderColor = '#000';
+              this.chosenColor.value = td.colorCode;
+              this.backSample.style.backgroundColor = td.colorCode;
+              this.foreSample.style.color = td.colorCode;
+            }
             td.hue = huestep * row;
             td.saturation = saturstep*col;
+            td.thisrow = row;
+            td.thiscol = col;
+            td.onmousedown = function()
+            {
+              enablepick = true;
+//            	 unpickCell(pickrow,pickcol);
+              picker.saved_cells[pickrow][pickcol].style.borderColor = picker.saved_cells[pickrow][pickcol].colorCode;
+              pickCell(this);
+            };
             td.onmouseover = function()
             {
-              picker.chosenColor.value = this.colorCode;
-              picker.backSample.style.backgroundColor = this.colorCode;
-              picker.foreSample.style.color = this.colorCode;
-              if((this.hue >= 195  && this.saturation > 0.25) || picker.value < 0.75)
-              {
-                picker.backSample.style.color = 'white';
-              }
-              else
-              {
-                picker.backSample.style.color = 'black';
-              }
-            }
-            td.onclick = function() { picker.callback(this.colorCode); picker.close(); }
+            	 if(enablepick)
+            	 {
+            	 	pickCell(this);
+            	 }
+            };
+            td.onmouseout = function()
+            {
+            	 if(enablepick)
+            	 {
+    //            this.style.borderColor = picker.saved_cells[this.thisrow][this.thiscol].colorCode;
+                this.style.borderColor = this.colorCode;
+            	 }
+            };
+            td.ondblclick = function() { colorPicker.remember(this.colorCode, picker.savecolors); picker.callback(this.colorCode); picker.close(); };
             td.appendChild(document.createTextNode(' '));
             td.style.cursor = 'pointer';
             tr.appendChild(td);
             td = null;
           }
 
-          // Add a blank and thena value column
+          // Add a blank and then a value column
           var td = document.createElement('td');
           td.appendChild(document.createTextNode(' '));
-          td.style.width = this.cellsize;
+          td.style.width = this.cellsize + 'px';
           tr.appendChild(td);
           td = null;
 
           var td = document.createElement('td');
+          this.saved_cells[row][col+1] = td;
           td.appendChild(document.createTextNode(' '));
-          td.style.width  = this.cellsize;
-          td.style.height = this.cellsize;
+          td.style.width  = this.cellsize -2 + 'px';
+          td.style.height = this.cellsize + 'px';
           td.constrainedColorCode  = tupleToColor(rgbToWebsafe(hsvToRGB(0,0,valustep*row)));
           td.style.backgroundColor = td.colorCode = tupleToColor(hsvToRGB(0,0,valustep*row));
+          td.style.borderWidth = '1px';
+          td.style.borderStyle = 'solid';
+//          td.style.borderColor = td.style.backgroundColor;
+          td.style.borderColor = td.colorCode;
+          if(row == valuerow)
+          {
+            td.style.borderColor = 'black';
+          }
           td.hue = huestep * row;
           td.saturation = saturstep*col;
           td.hsv_value = valustep*row;
-          td.onclick = function() {
-            picker.value = this.hsv_value; picker.pick_color();
-            if(picker.constrain_cb.checked)
+          td.thisrow = row;
+          td.thiscol = col + 1;
+          td.onmousedown = function()
+          {
+            enablevalue = true;
+//            unpickCell(valuerow,valuecol);
+            picker.saved_cells[valuerow][valuecol].style.borderColor = picker.saved_cells[valuerow][valuecol].colorCode;
+            picker.value = this.hsv_value; 
+            picker.pick_color();
+            pickValue(this);
+          };
+          td.onmouseover = function() {
+            if(enablevalue)
             {
-              picker.chosenColor.value = this.constrainedColorCode;
+              picker.value = this.hsv_value; 
+              picker.pick_color();
+              pickValue(this);
             }
-            else
+          };
+          td.onmouseout = function()
+          {
+            if(enablevalue)
             {
-              picker.chosenColor.value = this.colorCode;
+       //       this.style.borderWidth = 0;
+       //       this.style.borderStyle = 'none';
+              this.style.borderColor = this.colorCode;//'';
             }
-          }
+          };
           td.style.cursor = 'pointer';
           tr.appendChild(td);
           td = null;
@@ -382,38 +543,53 @@
 
         // Add one row of greys
         var tr = document.createElement('tr');
-        this.saved_cells[row] = new Array();
-        for(var col = 0; col <= this.side; col++)
+        this.saved_cells[row] = [];
+        for(var col = 0; col < this.side; col++)
         {
           var td = document.createElement('td');
           if(constrain)
           {
-            td.colorCode = tupleToColor(rgbToWebsafe(hsvToRGB(0, 0, valustep*(this.side-col))));
+            td.colorCode = tupleToColor(rgbToWebsafe(hsvToRGB(0, 0, valustep*(this.side-col-1))));
           }
           else
           {
-            td.colorCode = tupleToColor(hsvToRGB(0, 0, valustep*(this.side-col)));
+            td.colorCode = tupleToColor(hsvToRGB(0, 0, valustep*(this.side-col-1)));
           }
           this.saved_cells[row][col] = td;
-          td.style.height = td.style.width = this.cellsize;
+          td.style.height = this.cellsize + 'px';
+          td.style.width = this.cellsize -2 +'px';
+          td.style.borderWidth = '1px';
+          td.style.borderStyle = 'solid';
+          td.style.borderColor = td.colorCode;
           td.style.backgroundColor = td.colorCode;
           td.hue = 0;
           td.saturation = 0;
+          td.value = valustep*(this.side-col-1);
+          td.thisrow = row;
+          td.thiscol = col;
+          td.onmousedown = function()
+          {
+            enablepick = true;
+  //          unpickCell(pickrow,pickcol);
+            picker.saved_cells[pickrow][pickcol].style.borderColor = picker.saved_cells[pickrow][pickcol].colorCode;
+            pickCell(this);
+          };
           td.onmouseover = function()
           {
-            picker.chosenColor.value = this.colorCode;
-            picker.backSample.style.backgroundColor = this.colorCode;
-            picker.foreSample.style.color = this.colorCode;
-            if((this.hue >= 195  && this.saturation > 0.25) || picker.value < 0.75)
+            if(enablepick)
             {
-              picker.backSample.style.color = 'white';
+              pickCell(this);
             }
-            else
+          };
+          td.onmouseout = function()
+          {
+            if(enablepick)
             {
-              picker.backSample.style.color = 'black';
-            }
-          }
-          td.onclick = function() { picker.callback(this.colorCode); picker.close(); }
+   //           this.style.borderColor = picker.saved_cells[this.thisrow][this.thiscol].colorCode;
+              this.style.borderColor = this.colorCode;
+        	   }
+          };
+          td.ondblclick = function() { colorPicker.remember(this.colorCode, picker.savecolors); picker.callback(this.colorCode); picker.close(); };
           td.appendChild(document.createTextNode(' '));
           td.style.cursor = 'pointer';
           tr.appendChild(td);
@@ -422,23 +598,26 @@
         this.tbody.appendChild(tr);
         tr = null;
 
-
         var tr = document.createElement('tr');
         var td = document.createElement('td');
         tr.appendChild(td);
-        td.colSpan = this.side + 3;
+        td.colSpan = this.side + 2;
         td.style.padding = '3px';
 
+        if ( this.websafe )
+        {
         var div = document.createElement('div');
         var label = document.createElement('label');
         label.appendChild(document.createTextNode('Web Safe: '));
 
-        this.constrain_cb.onclick = function() { picker.pick_color() };
+        this.constrain_cb.onclick = function() { picker.pick_color(); };
         label.appendChild(this.constrain_cb);
         label.style.fontFamily = 'small-caption,caption,sans-serif';
         label.style.fontSize = 'x-small';
         div.appendChild(label);
         td.appendChild(div);
+        div = null;
+        }
 
         var div = document.createElement('div');
         var label = document.createElement('label');
@@ -447,6 +626,17 @@
         label.appendChild(document.createTextNode('Color: '));
         label.appendChild(this.chosenColor);
         div.appendChild(label);
+        var but = document.createElement('span');
+        but.style.height = '12px';
+        but.style.width = '24px';
+        but.style.border = '2px outset';
+        but.style.backgroundColor = '#eee';
+        but.style.marginLeft = '6px';
+        but.style.cursor = 'pointer';
+        but.onclick = function() { colorPicker.remember(picker.chosenColor.value, picker.savecolors); picker.callback(picker.chosenColor.value); picker.close(); };
+        but.appendChild(document.createTextNode('OK'));
+        but.align = 'center';
+        div.appendChild(but);
         td.appendChild(div);
 
         var sampleTable = document.createElement('table');
@@ -465,17 +655,62 @@
         rightSampleCell.style.width = '50%';
 
         td.appendChild(sampleTable);
+        var savedColors = document.createElement('div');
+        savedColors.style.clear = 'both';
 
+        function createSavedColors(color)
+        {
+          var is_ie = false;
+          /*@cc_on is_ie = true; @*/
+          var div = document.createElement('div');
+          div.style.width = picker.cellsize + 'px';//13px';
+          div.style.height = picker.cellsize + 'px';//13px';
+          div.style.margin = '1px';
+          div.style.border = '1px solid black';
+          div.style.cursor = 'pointer';
+          div.style.backgroundColor = color;
+          div.style[ is_ie ? 'styleFloat' : 'cssFloat'] = 'left';
+     //     div.onclick = function() { picker.callback(color); picker.close(); };
+          div.ondblclick = function() { picker.callback(color); picker.close(); };
+   //       div.onmouseover = function()
+          div.onclick = function()
+          {
+            picker.chosenColor.value = color;
+            picker.backSample.style.backgroundColor = color;
+            picker.foreSample.style.color = color;
+          };
+          savedColors.appendChild(div);
+        }
+        for ( var savedCols = 0; savedCols < colorPicker.savedColors.length; savedCols++ )
+        {
+          createSavedColors(colorPicker.savedColors[savedCols]);
+        }
+        td.appendChild(savedColors);
 
         this.tbody.appendChild(tr);
         document.body.appendChild(this.table);
-
+        
+        //put an iframe behind the table to mask select lists in ie
+        // IE ONLY - prevent windowed elements (<SELECT>) to render above the colorpicker
+        /*@cc_on
+        if ( !this.iframe )
+        {
+        this.iframe = document.createElement('iframe');
+        this.iframe.frameBorder = 0;
+        this.iframe.src = "javascript:;";
+        this.iframe.style.position = "absolute";
+        this.iframe.style.width = this.table.offsetWidth;
+        this.iframe.style.height = this.table.offsetHeight;
+        document.body.insertBefore(this.iframe, this.table);
+        }
+        this.iframe.style.display = '';
+        @*/
       }
       else
       {
-        for(var row = 0; row <= this.side; row++)
+        for(var row = 0; row < this.side; row++)
         {
-          for(var col = 0; col <= this.side; col++)
+          for(var col = 0; col < this.side; col++)
           {
             if(constrain)
             {
@@ -486,7 +721,22 @@
               this.saved_cells[row][col].colorCode = tupleToColor(hsvToRGB(huestep*row, saturstep*col, this.value));
             }
             this.saved_cells[row][col].style.backgroundColor = this.saved_cells[row][col].colorCode;
+            this.saved_cells[row][col].style.borderColor = this.saved_cells[row][col].colorCode;
           }
+        }
+        var pickcell = this.saved_cells[pickrow][pickcol];
+        this.chosenColor.value = pickcell.colorCode;
+        this.backSample.style.backgroundColor = pickcell.colorCode;
+        this.foreSample.style.color = pickcell.colorCode;
+        if((pickcell.hue >= 195  && pickcell.saturation > 0.5) || 
+        		(pickcell.hue === 0 && pickcell.saturation === 0 && pickcell.value < 0.5) || 
+        		(pickcell.hue !== 0 && picker.value < 0.75))
+        {
+           pickcell.style.borderColor = '#fff';
+        }
+        else
+        {
+        	  pickcell.style.borderColor = '#000';
         }
       }
     };
@@ -495,6 +745,51 @@
     this.close = function()
     {
       this.table.style.display = 'none';
+      // IE ONLY - prevent windowed elements (<SELECT>) to render above the colorpicker
+      /*@cc_on
+      if ( this.iframe ) { this.iframe.style.display = 'none'; }
+      @*/
     };
 
   }
+
+// array of the saved colors
+colorPicker.savedColors = [];
+
+// add the color to the savedColors
+colorPicker.remember = function(color, savecolors)
+{
+  // check if this color is known
+  for ( var i = colorPicker.savedColors.length; i--; )
+  {
+    if ( colorPicker.savedColors[i] == color )
+    {
+      return false;
+    }
+  }
+  // insert the new color
+  colorPicker.savedColors.splice(0, 0, color);
+  // limit elements
+  colorPicker.savedColors = colorPicker.savedColors.slice(0, savecolors);
+  //[mokhet] probably some more parameters to send to the cookie definition
+  // like domain, secure and such, especially with https connection i presume
+  // save the cookie
+  var expdate = new Date();
+  expdate.setMonth(expdate.getMonth() + 1);
+
+  document.cookie = 'XinhaColorPicker=' + escape (colorPicker.savedColors.join('-')) + ';expires=' + expdate.toGMTString();
+  return true;
+};
+
+// try to read the colors from the cookie
+colorPicker.loadColors = function()
+{
+  var index = document.cookie.indexOf('XinhaColorPicker');
+  if ( index != -1 )
+  {
+    var begin = (document.cookie.indexOf('=', index) + 1);
+    var end = document.cookie.indexOf(';', index);
+    if ( end == -1 ) { end = document.cookie.length; }
+    colorPicker.savedColors = unescape(document.cookie.substring(begin, end)).split('-');
+  }
+};

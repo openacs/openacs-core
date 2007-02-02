@@ -1,69 +1,61 @@
 <?PHP
   //this plugin only use the relativ webpath to the picturefolder
-  //default ~  /htmlarea/plugins/InsertPicture/demo_pictures/
+  //default ~  /Xinha/plugins/InsertPicture/demo_pictures/
   strstr( PHP_OS, "WIN") ? $strPathSeparator = "\\" : $strPathSeparator = "/";
   if (isset($_REQUEST['picturepath'])) {
-    $getRequest = true;
-    $PicturePath = 'http://'.$_SERVER['HTTP_HOST'].$_REQUEST['picturepath'];
-    //$LocalPicturePath = $_REQUEST['localpicturepath'];
+    $PicturePath = $_REQUEST['picturepath'];
 
-    $AInsertPicturePath = explode ('/', 'http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']).'/demo_pictures/');
-    $ALocalInsertPicturePath = explode($strPathSeparator, dirname(__FILE__).$strPathSeparator.'demo_pictures');
-    $APicturePath = explode('/', 'http://'.$_SERVER['HTTP_HOST'].$_REQUEST['picturepath']);
-
-    $AtheFilePath = array_values (array_diff ($APicturePath, $AInsertPicturePath));
-    $theFilePath = implode($strPathSeparator, $AtheFilePath).$strPathSeparator;
-
+    $AInsertPicturePath = explode ('/', dirname($_SERVER['PHP_SELF']));
+    $ALocalInsertPicturePath = explode($strPathSeparator, dirname(__FILE__));
     $AtheRootPath = array_values (array_diff ($ALocalInsertPicturePath, $AInsertPicturePath));
-    $theRootPath = implode($strPathSeparator, $AtheRootPath);
+    $RootPath = implode($strPathSeparator, $AtheRootPath);
 
-    $LocalPicturePath = $theRootPath.$strPathSeparator.$theFilePath.$strPathSeparator;
-  } else {
-    $getRequest = false;
-    $PicturePath =  'http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']).'/demo_pictures/';
-    $LocalPicturePath = dirname(__FILE__).$strPathSeparator.'demo_pictures';
+    $LocalPicturePath = str_replace('http://'.$_SERVER['HTTP_HOST'], "", $PicturePath);
+    $LocalPicturePath = str_replace('/', $strPathSeparator, $LocalPicturePath);
+    $LocalPicturePath = $RootPath.$LocalPicturePath;
+
+    $LocalPicturePath = dirname(__FILE__).$strPathSeparator.'demo_pictures'.$strPathSeparator;
+    //$LocalPicturePath = realpath('../../../../images/content/').$strPathSeparator;
   }
   $limitedext = array(".gif",".jpg",".png",".jpeg"); //Extensions you want files uploaded limited to.
   $limitedsize = "1000000"; //size limit in bytes
   $message = "";
-  function formatSize($size) 
-  {
-    if($size < 1024) 
-      return $size.' bytes';	
-    else if($size >= 1024 && $size < 1024*1024) 
-      return sprintf('%01.2f',$size/1024.0).' Kb';	
-    else
-      return sprintf('%01.2f',$size/(1024.0*1024)).' Mb';	
-  }
 
+  function formatSize($size)
+  {
+    if($size < 1024)
+      return $size.' bytes';
+    else if($size >= 1024 && $size < 1024*1024)
+      return sprintf('%01.2f',$size/1024.0).' Kb';
+    else
+      return sprintf('%01.2f',$size/(1024.0*1024)).' Mb';
+  }
+  $DestFileName = "";
   if (isset($_FILES['file'])) {
     $file = $_FILES['file'];
     $ext = strrchr($file['name'],'.');
-    if (!in_array($ext,$limitedext)) {
+    if (!in_array($ext,$limitedext))
       $message = "The file you are uploading doesn't have the correct extension.";
-    } else if (file_exists($LocalPicturePath.'\\'.$file['name'])) {
+    else if (file_exists($LocalPicturePath.$file['name']))
       $message = "The file you are uploading already exists.";
-    } else if ($file['size'] > $limitedsize) {
+    else if ($file['size'] > $limitedsize)
       $message = "The file you are uploading is to big. The max Filesize is</span><span> ".formatSize($limitedsize).".";
-    } else {
-      copy($file['tmp_name'], $LocalPicturePath.$strPathSeparator.$file['name']);
-    }
+    else
+      copy($file['tmp_name'], $LocalPicturePath.$file['name']);
+    $DestFileName = $file['name'];
   }
-
 ?>
 <html>
-
 <head>
   <title>Insert Image</title>
-	
 <link rel="stylesheet" type="text/css" href="../../popups/popup.css" />
 <script type="text/javascript" src="../../popups/popup.js"></script>
 
 <script type="text/javascript">
 
-var HTMLArea = window.opener.HTMLArea;
+var Xinha = window.opener.Xinha;
 function i18n(str) {
-  return (HTMLArea._lc(str, 'HTMLArea'));
+  return (Xinha._lc(str, 'Xinha'));
 }
 
 function Init() {
@@ -71,21 +63,25 @@ function Init() {
   __dlg_init();
   window.resizeTo(500, 490);
   // Make sure the translated string appears in the drop down. (for gecko)
-  document.getElementById("f_align").selectedIndex = 1;
-  document.getElementById("f_align").selectedIndex = 5;
+  document.getElementById("f_align").selectedIndex = 0;
+  document.getElementById("f_align").selectedIndex = document.getElementById("f_align").selectedIndex;
   var param = window.dialogArguments;
   if (param) {
       document.getElementById("f_url").value = param["f_url"];
       document.getElementById("f_alt").value = param["f_alt"];
       document.getElementById("f_border").value = param["f_border"];
       document.getElementById("f_align").value = param["f_align"];
-      document.getElementById("f_vert").value = param["f_vert"];
-      document.getElementById("f_horiz").value = param["f_horiz"];
+      document.getElementById("f_vert").value = (param["f_vert"]!="-1") ? param["f_vert"] : "";
+      document.getElementById("f_horiz").value = (param["f_horiz"]!="-1") ? param["f_horiz"] : "";
       document.getElementById("f_height").value = param["f_height"];
-      document.getElementById("f_width").value = param["f_width"];			
+      document.getElementById("f_width").value = param["f_width"];
       window.ipreview.location.replace(param.f_url);
   }
   document.getElementById("f_url").focus();
+  document.getElementById("filelist").selectedIndex = document.getElementById("filelist").selectedIndex;
+<?php If ($DestFileName<>"")
+  echo "CopyToURL(\"".$PicturePath.$DestFileName."\");"
+?>
 }
 
 function onOK() {
@@ -101,8 +97,7 @@ function onOK() {
     }
   }
   // pass data back to the calling window
-  var fields = ["f_url", "f_alt", "f_align", "f_border",
-                "f_horiz", "f_vert"];
+  var fields = ["f_url", "f_alt", "f_align", "f_border", "f_horiz", "f_vert", "f_width", "f_height"];
   var param = new Object();
   for (var i in fields) {
     var id = fields[i];
@@ -125,8 +120,7 @@ function onUpload() {
       return false;
     }
   }
-  submit();
-  return false;
+  return true;
 }
 
 function onCancel() {
@@ -173,36 +167,33 @@ function openFile() {
   window.open(document.getElementById("f_url").value,'','');
 }
 </script>
-
 </head>
-
 <body class="dialog" onload="Init()">
-
 <div class="title">Insert Image</div>
 <table border="0" width="100%" style="padding: 0px; margin: 0px">
   <tbody>
   <tr>
-    <td>Images on the Server:<br>
-    <select value="" style="width:200" size="10" onClick="CopyToURL(this[this.selectedIndex].value);">
+    <td>Images on the Server:<?php /*echo $LocalPicturePath*/ ?><br>
+    <select id="filelist" name="filelist" style="width:200" size="10" onClick="CopyToURL(this[this.selectedIndex].value);">
 <?php
   $d = @dir($LocalPicturePath);
-  while (false !== ($entry = $d->read())) { //not a dot file or directory
-    if(substr($entry,0,1) != '.') { 
-      echo '<OPTION value="' . $PicturePath.$entry. '">' . $entry . '(' . formatSize(filesize($LocalPicturePath.'\\'.$entry)) .')</OPTION>';
+  while (false !== ($entry = $d->read())) {
+    if(substr($entry,0,1) != '.') {  //not a dot file or directory
+      if ($entry == $DestFileName)
+        echo '<OPTION value="' . $PicturePath.$entry. '" selected="selected">' . $entry . '(' . formatSize(filesize($LocalPicturePath.'\\'.$entry)) .')</OPTION>';
+      else
+        echo '<OPTION value="' . $PicturePath.$entry. '">' . $entry . '(' . formatSize(filesize($LocalPicturePath.'\\'.$entry)) .')</OPTION>';
     }
   }
   $d->close();
 ?>
     </select>
-<?php
-  if ($getRequest == true) {
-    echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?picturepath='.$_REQUEST['picturepath'].'" enctype="multipart/form-data">';
-  } else {
-    echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'" enctype="multipart/form-data">';
-  }
-?>
+
+      <form method="post" action="" enctype="multipart/form-data">
+        <input type="hidden" name="localpicturepath" value="<?php echo $LocalPicturePath ?>">
+        <input type="hidden" name="picturepath" value="<?php echo $PicturePath ?>">
         <input type="file" name="file" id="file" size="30"><br>
-        <button type="submit" name="ok" onclick="return onUpload();">Upload file</button><br>
+        <button type="submit" name="ok" onclick="onUpload();">Upload file</button><br>
         <span><?php echo $message ?></span>
       </form>
 
@@ -217,13 +208,15 @@ function openFile() {
 </table>
 
 <form action="" method="get">
+  <input type="hidden" name="localpicturepath" value="<?php echo $LocalPicturePath ?>">
+  <input type="hidden" name="picturepath" value="<?php echo $PicturePath ?>">
 <table border="0" width="100%" style="padding: 0px; margin: 0px">
   <tbody>
 
   <tr>
     <td style="width: 7em; text-align: right">Image URL:</td>
     <td><input type="text" name="url" id="f_url" style="width:75%"
-      title="Enter the image URL here" />
+      title="Enter the image URL here"  value="<?php echo $PicturePath.$DestFileName ?>"/>
       <button name="preview" onclick="return onPreview();"
       title="Preview the image in a new window">Preview</button>
     </td>
@@ -252,7 +245,7 @@ function openFile() {
   <option value="right"                        >Right</option>
   <option value="texttop"                      >Texttop</option>
   <option value="absmiddle"                    >Absmiddle</option>
-  <option value="baseline" selected="1"        >Baseline</option>
+  <option value="baseline"                     >Baseline</option>
   <option value="absbottom"                    >Absbottom</option>
   <option value="bottom"                       >Bottom</option>
   <option value="middle"                       >Middle</option>
@@ -262,9 +255,7 @@ function openFile() {
 <p />
 
 <div class="fl" style="width: 6em;">Border thickness:</div>
-<input type="text" name="border" id="f_border" size="5"
-title="Leave empty for no border" />
-
+<input type="text" name="border" id="f_border" size="5" title="Leave empty for no border" />
 <div class="space"></div>
 
 </fieldset>
@@ -290,14 +281,11 @@ title="Leave empty for no border" />
 <div class="space"></div>
 
 <div class="fr" style="width: 5em;">Horizontal:</div>
-<input type="text" name="horiz" id="f_horiz" size="5"
-title="Horizontal padding" />
-
+<input type="text" name="horiz" id="f_horiz" size="5" title="Horizontal padding" />
 <p />
 
 <div class="fr" style="width: 5em;">Vertical:</div>
-<input type="text" name="vert" id="f_vert" size="5"
-title="Vertical padding" />
+<input type="text" name="vert" id="f_vert" size="5" title="Vertical padding" />
 
 <div class="space"></div>
 

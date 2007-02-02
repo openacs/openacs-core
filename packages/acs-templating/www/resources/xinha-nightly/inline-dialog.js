@@ -1,5 +1,5 @@
 
-HTMLArea.Dialog = function(editor, html, localizer)
+Xinha.Dialog = function(editor, html, localizer)
 {
   this.id    = { };
   this.r_id  = { }; // reverse lookup id
@@ -23,7 +23,7 @@ HTMLArea.Dialog = function(editor, html, localizer)
   {
     this._lc = function(string)
     {
-      return HTMLArea._lc(string,localizer);
+      return Xinha._lc(string,localizer);
     };
   }
   else
@@ -39,7 +39,7 @@ HTMLArea.Dialog = function(editor, html, localizer)
                       {
                         if(typeof dialog.id[id] == 'undefined')
                         {
-                          dialog.id[id] = HTMLArea.uniq('Dialog');
+                          dialog.id[id] = Xinha.uniq('Dialog');
                           dialog.r_id[dialog.id[id]] = id;
                         }
                         return dialog.id[id];
@@ -72,15 +72,15 @@ HTMLArea.Dialog = function(editor, html, localizer)
     );
 };
 
-HTMLArea.Dialog.prototype.onresize = function()
+Xinha.Dialog.prototype.onresize = function()
 {
   return true;
 };
 
-HTMLArea.Dialog.prototype.show = function(values)
+Xinha.Dialog.prototype.show = function(values)
 {
   // We need to preserve the selection for IE
-  if(HTMLArea.is_ie)
+  if(Xinha.is_ie)
   {
     this._lastRange = this.editor._createRange(this.editor._getSelection());
   }
@@ -96,7 +96,7 @@ HTMLArea.Dialog.prototype.show = function(values)
   this.rootElem.style.display   = '';
 };
 
-HTMLArea.Dialog.prototype.hide = function()
+Xinha.Dialog.prototype.hide = function()
 {
   this.rootElem.style.display         = 'none';
   this.editor._textArea.style.display = this._restoreTo[0];
@@ -104,7 +104,7 @@ HTMLArea.Dialog.prototype.hide = function()
   this.editor.showPanels(this._restoreTo[2]);
 
   // Restore the selection
-  if(HTMLArea.is_ie)
+  if(Xinha.is_ie)
   {
     this._lastRange.select();
   }
@@ -112,7 +112,7 @@ HTMLArea.Dialog.prototype.hide = function()
   return this.getValues();
 };
 
-HTMLArea.Dialog.prototype.toggle = function()
+Xinha.Dialog.prototype.toggle = function()
 {
   if(this.rootElem.style.display == 'none')
   {
@@ -124,7 +124,7 @@ HTMLArea.Dialog.prototype.toggle = function()
   }
 };
 
-HTMLArea.Dialog.prototype.setValues = function(values)
+Xinha.Dialog.prototype.setValues = function(values)
 {
   for(var i in values)
   {
@@ -209,12 +209,12 @@ HTMLArea.Dialog.prototype.setValues = function(values)
   }
 };
 
-HTMLArea.Dialog.prototype.getValues = function()
+Xinha.Dialog.prototype.getValues = function()
 {
   var values = [ ];
-  var inputs = HTMLArea.collectionToArray(this.rootElem.getElementsByTagName('input'))
-              .append(HTMLArea.collectionToArray(this.rootElem.getElementsByTagName('textarea')))
-              .append(HTMLArea.collectionToArray(this.rootElem.getElementsByTagName('select')));
+  var inputs = Xinha.collectionToArray(this.rootElem.getElementsByTagName('input'))
+              .append(Xinha.collectionToArray(this.rootElem.getElementsByTagName('textarea')))
+              .append(Xinha.collectionToArray(this.rootElem.getElementsByTagName('select')));
 
   for(var x = 0; x < inputs.length; x++)
   {
@@ -316,12 +316,12 @@ HTMLArea.Dialog.prototype.getValues = function()
   return values;
 };
 
-HTMLArea.Dialog.prototype.getElementById = function(id)
+Xinha.Dialog.prototype.getElementById = function(id)
 {
   return this.document.getElementById(this.id[id] ? this.id[id] : id);
 };
 
-HTMLArea.Dialog.prototype.getElementsByName = function(name)
+Xinha.Dialog.prototype.getElementsByName = function(name)
 {
   return this.document.getElementsByName(this.id[name] ? this.id[name] : name);
 };

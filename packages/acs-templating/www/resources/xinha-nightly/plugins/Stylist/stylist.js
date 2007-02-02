@@ -407,7 +407,7 @@ HTMLArea.prototype._ancestorsWithClasses = function(sel, tag, classes)
 
   while(prnt)
   {
-    if(prnt.nodeType == 1)
+    if(prnt.nodeType == 1 && prnt.className)
     {
       if(tag == null || prnt.tagName.toLowerCase() == tag)
       {
@@ -517,7 +517,7 @@ Stylist._pluginInfo =
   sponsor_url  : "http://www.gogo.co.nz/"
 };
 
-Stylist.prototype.onGenerate = function()
+Stylist.prototype.onGenerateOnce = function()
 {
   var editor = this.editor;
   if(typeof editor.config.css_style == 'undefined' || HTMLArea.objectProperties(editor.config.css_style).length == 0)

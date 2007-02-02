@@ -19,10 +19,11 @@ function Filter(editor) {
                self.buttonPress(editor);
              }
   });
-	//cfg.Filters = ["Paragraph","Word"];
+  if (!cfg.Filters)
+    cfg.Filters = ["Paragraph","Word"];
   for (var i = 0; i < editor.config.Filters.length; i++) {
     self.add(editor.config.Filters[i]);
-	}
+  }
   cfg.addToolbarElement("filter", "removeformat", 1);
 }
 
@@ -39,7 +40,7 @@ Filter._pluginInfo =
 };
 
 Filter.prototype.add = function(filterName) {
-	if(eval('typeof ' + filterName) == 'undefined') {
+  if(eval('typeof ' + filterName) == 'undefined') {
     var filter = _editor_url + "plugins/filter/filters/" + filterName + ".js";
     var head = document.getElementsByTagName("head")[0];
     var evt = HTMLArea.is_ie ? "onreadystatechange" : "onload";

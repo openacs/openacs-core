@@ -115,8 +115,8 @@ CharacterMap.prototype.addEntity = function ( entite, pos )
   {
     if (HTMLArea.is_ie) editor.focusEditor();
     editor.insertHTML( entite );
-    self._isActive = false;
-    editor.hidePanel( editor._CharacterMap );
+    //self._isActive = false;
+    //editor.hidePanel( editor._CharacterMap );
     return false;
   };
   editor._CharacterMap.appendChild( a );

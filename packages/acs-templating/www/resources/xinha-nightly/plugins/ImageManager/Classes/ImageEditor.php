@@ -6,7 +6,7 @@
  * @package ImageManager
  */
 
-require_once('Transform.php');
+require_once('../ImageManager/Classes/Transform.php');
 
 /**
  * Handles the basic image editing capbabilities.
