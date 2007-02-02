@@ -1,27 +1,22 @@
-var snippets = new Array();
-var i = 0;
 <?php
+$snippets_file = 'snippets.html';
 
-function get_all_parts($string)
+include_once('../../contrib/php-xinha.php');
+
+if($passed_data = xinha_read_passed_data())
 {
-	preg_match_all('#<!--(.*?)-->(.*?)<!--/.*?-->#s',$string,$matches);
+	extract($passed_data);      
+}
+$snippets = file_get_contents($snippets_file);
+preg_match_all('/<!--(.*?)-->(.*?)<!--\/.*?-->/s',$snippets,$matches);
 	
-	$array=array();
-	for ($i=0;$i<count($matches[1]);$i++)
-	{
-		$array[$matches[1][$i]] = $matches[2][$i];
-	}
-	return $array;
-}
-$snippets = file_get_contents('snippets.html');
-
-$matches = get_all_parts($snippets);
-foreach ($matches as $name =>$html)
+$array=array();
+for ($i=0;$i<count($matches[1]);$i++)
 {
-	print "snippets[i] = new Object();\n";
-	print "snippets[i]['id'] = '$name';\n";
-	print "snippets[i]['HTML'] = '".str_replace("\n",'\n',addcslashes($html,"'"))."';\n";
-	print "i++;\n";
+	$id = $matches[1][$i];
+	$html = $matches[2][$i];
+	$array[] = array('id'=>$id,'HTML'=>$html);
 }
+print "var snippets = " . xinha_to_js($array);
 
 ?>

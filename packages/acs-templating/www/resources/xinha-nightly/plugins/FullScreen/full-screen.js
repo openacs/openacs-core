@@ -56,25 +56,9 @@ HTMLArea.prototype._fullScreen = function()
     if(!e._isFullScreen || e._sizing) return false;
     e._sizing = true;
     // Width & Height of window
-    var x,y;
-    if (window.innerHeight) // all except Explorer
-    {
-      x = window.innerWidth;
-      y = window.innerHeight;
-    }
-    else if (document.documentElement && document.documentElement.clientHeight)
-      // Explorer 6 Strict Mode
-    {
-      x = document.documentElement.clientWidth;
-      y = document.documentElement.clientHeight;
-    }
-    else if (document.body) // other Explorers
-    {
-      x = document.body.clientWidth;
-      y = document.body.clientHeight;
-    }
+    var dim = HTMLArea.viewportSize();
 
-    e.sizeEditor(x + 'px',y + 'px',true,true);
+    e.sizeEditor(dim.x + 'px',dim.y + 'px',true,true);
     e._sizing = false;
   }
 

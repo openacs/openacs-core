@@ -4,14 +4,14 @@
 
   <!-- ---------------------------------------------------------------------
     --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/examples/ext_example-body.html $
-    --  $LastChangedDate: 2005-07-27 16:43:19 +0200 (Mi, 27 Jul 2005) $
-    --  $LastChangedRevision: 287 $
+    --  $LastChangedDate: 2007-01-23 04:06:18 +1300 (Tue, 23 Jan 2007) $
+    --  $LastChangedRevision: 686 $
     --  $LastChangedBy: gocher $
     ------------------------------------------------------------------------ -->
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>Example of Xinha</title>
-  <link rel="stylesheet" href="full_example.css" />
+  <link rel="stylesheet" type="text/css" href="full_example.css" />
 
   <script type="text/javascript">
     function showError( sMsg, sUrl, sLine){
@@ -20,7 +20,6 @@
                                                  'Line: ' + sLine + '\n';
       return false;
     }
-    var f = top.frames["menu"].document.forms["fsettings"];
     // You must set _editor_url to the URL (including trailing slash) where
     // where xinha is installed, it's highly recommended to use an absolute URL
     //  eg: _editor_url = "/path/to/xinha/";
@@ -28,24 +27,25 @@
     //  eg: _editor_url = "../";
     // in this example we do a little regular expression to find the absolute path.
     _editor_url  = document.location.href.replace(/examples\/ext_example-body\.html.*/, '')
-    _editor_lang = f.lang[f.lang.selectedIndex].value; // the language we need to use in the editor.
-    _editor_skin = f.skin[f.skin.selectedIndex].value; // the skin we use in the editor
+    //moved _editor_lang & _editor_skin to init function because of error thrown when frame document not ready
   </script>
 
   <!-- Load up the actual editor core -->
-  <script type="text/javascript" src="../htmlarea.js"></script>
+  <script type="text/javascript" src="../XinhaCore.js"></script>
 
   <script type="text/javascript">
     xinha_editors = null;
     xinha_init    = null;
     xinha_config  = null;
     xinha_plugins = null;
-    
+
     xinha_init = xinha_init ? xinha_init : function() {
       window.onerror = showError;
       document.onerror = showError;
 
       var f = top.frames["menu"].document.forms["fsettings"];
+      _editor_lang = f.lang[f.lang.selectedIndex].value; // the language we need to use in the editor.
+      _editor_skin = f.skin[f.skin.selectedIndex].value; // the skin we use in the editor
 // What are the plugins you will be using in the editors on this page.
 // List all the plugins you will need, even if not all the editors will use all the plugins.
       xinha_plugins = [ ];
@@ -54,7 +54,7 @@
       }
 
       // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
-      if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
+      if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
 
 // What are the names of the textareas you will be turning into editors?
       var num = 1;
@@ -70,7 +70,7 @@
       for(var x = 0; x < num; x++) {
         var ta = 'myTextarea' + x;
         xinha_editors.push(ta);
-        
+
         var div = document.createElement('div');
         div.className = 'area_holder';
 
@@ -87,7 +87,7 @@
 
 // Create a default configuration to be used by all the editors.
       settings = top.frames["menu"].settings;
-      xinha_config = new HTMLArea.Config();
+      xinha_config = new Xinha.Config();
       xinha_config.width = settings.width;
       xinha_config.height = settings.height;
       xinha_config.sizeIncludesBars = settings.sizeIncludesBars;
@@ -152,33 +152,28 @@
         }
       }
 
-      if(typeof InsertPicture != 'undefined') {
-        // Path for InsertPicture plugin
-        InsertPicture.PicturePath = '/schmal/pictures/';
-      }
-
       if(typeof Filter != 'undefined') {
         xinha_config.Filters = ["Word", "Paragraph"];
       }
 
 // First create editors for the textareas.
 // You can do this in two ways, either
-//   xinha_editors   = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+//   xinha_editors   = Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
 // if you want all the editor objects to use the same set of plugins, OR;
-//   xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config);
-//   xinha_editors['myTextArea'].registerPlugins(['Stylist','FullScreen']);
-//   xinha_editors['anotherOne'].registerPlugins(['CSS','SuperClean']);
+//   xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config);
+//   xinha_editors['myTextarea0'].registerPlugins(['Stylist','FullScreen']);
+//   xinha_editors['myTextarea1'].registerPlugins(['CSS','SuperClean']);
 // if you want to use a different set of plugins for one or more of the editors.
-      xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+      xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
 
-// If you want to change the configuration variables of any of the editors,  
+// If you want to change the configuration variables of any of the editors,
 // this is the place to do that, for example you might want to
 // change the width and height of one of the editors, like this...
-//   xinha_editors.myTextArea.config.width  = '640px';
-//   xinha_editors.myTextArea.config.height = '480px';
+//   xinha_editors['myTextarea0'].config.width  = '640px';
+//   xinha_editors['myTextarea0'].config.height = '480px';
 
 // Finally we "start" the editors, this turns the textareas into Xinha editors.
-      HTMLArea.startEditors(xinha_editors);
+      Xinha.startEditors(xinha_editors);
     }
 
 // javascript submit handler
@@ -193,7 +188,7 @@
     }
 
     window.onload = xinha_init;
-//    window.onunload = HTMLArea.collectGarbageForIE;
+//    window.onunload = Xinha.collectGarbageForIE;
   </script>
 </head>
 

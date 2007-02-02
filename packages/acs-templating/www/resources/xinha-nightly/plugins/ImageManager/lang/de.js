@@ -13,8 +13,6 @@
   "Upload": "Hochladen",
   "Width": "Breite",
   "Height": "Höhe",
-  "Width:": "Breite:",
-  "Height:": "Höhe:",
   "Constrain Proportions": "Proportional",
   "Border": "Rand",
   "V Space": "vertikaler Freiraum",
@@ -61,10 +59,7 @@
   "No Image selected.": "Kein Bild ausgewählt.",
   "Description:": "Beschreibung:",
   "Align:": "Ausrichtung:",
-  "Description:": "Beschreibung:",
   "Margin:": "Außenabstand:",
   "Padding:": "Innenabstand:",
-  "Border:": "Rand:",
-  "Color:": "Farbe:",
-  "Upload:": "Hochladen:"
+  "Color:": "Farbe:"
 };

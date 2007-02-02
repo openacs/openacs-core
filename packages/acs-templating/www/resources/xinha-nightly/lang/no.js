@@ -66,4 +66,13 @@
   "Split Block": "Seperasjonsblokk",
   "Toggle Borders": "Skru av/på hjelpelinjer på tabeller",
   "Select all": "Merk alt"
+  // Loading messages
+  "Loading in progress. Please wait !": "WYSIWYG laster, vennligst vent!",
+  "Constructing main object": "Vennligst vent",
+  "Create Toolbar": "Lag verktøylinje",
+  "Register panel right": "Registrer høyrepanel",
+  "Register panel left": "Registrer venstrepanel",
+  "Register panel top": "Registrer toppanel",
+  "Register panel bottom": "Registrer bunnpanel"
+
 };

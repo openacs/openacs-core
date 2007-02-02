@@ -8,5 +8,8 @@
   "Images on the Server:": "Bilder auf dem Server:",
   "Please select a file to upload.": "Wählen Sie eine Datei zum hochladen aus.",
   "Upload file": "Datei hochladen",
-  "Open file in new window": "Datei in neuen Fenster anzeigen"
+  "Open file in new window": "Datei in neuen Fenster anzeigen",
+  "Size": "Größe",
+  "Width:": "Breite",
+  "Height:": "Höhe"
 };

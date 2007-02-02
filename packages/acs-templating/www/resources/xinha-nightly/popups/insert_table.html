@@ -8,17 +8,17 @@
 
 <script type="text/javascript">
 
-window.resizeTo(400, 100);
+window.resizeTo(410, 250);
 
-HTMLArea = window.opener.HTMLArea;
+Xinha = window.opener.Xinha;
 function i18n(str) {
-  return (HTMLArea._lc(str, 'HTMLArea'));
+  return (Xinha._lc(str, 'Xinha'));
 }
 
 function Init() {
-  HTMLArea = window.opener.HTMLArea; // load the HTMLArea plugin and lang file
-  __dlg_translate('HTMLArea');
-  __dlg_init();
+  Xinha = window.opener.Xinha; // load the Xinha plugin and lang file
+  __dlg_translate('Xinha');
+  __dlg_init(null, Xinha.is_ie ? null : {width:410,height:250});
   // Make sure the translated string appears in the drop down. (for gecko)
   document.getElementById("f_unit").selectedIndex = 1;
   document.getElementById("f_unit").selectedIndex = 0;

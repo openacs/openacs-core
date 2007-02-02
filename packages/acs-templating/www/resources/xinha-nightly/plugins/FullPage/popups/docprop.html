@@ -2,7 +2,7 @@
 <head>
 <title>Document properties</title>
 <script type="text/javascript" src="../../../popups/popup.js"></script>
-<script type="text/javascript" src="../../../popups/color_picker.js"></script>
+<script type="text/javascript" src="../../../modules/ColorPicker/ColorPicker.js"></script>
 <link rel="stylesheet" type="text/css" href="../../../popups/popup.css" />
 <script type="text/javascript">
 FullPage = window.opener.FullPage; // load the FullPage plugin and lang file ;-)
@@ -34,12 +34,12 @@ function Init() {
 
   var bgCol_pick = document.getElementById('bgCol_pick');
   var f_body_bgcolor = document.getElementById('f_body_bgcolor');
-  var bgColPicker = new colorPicker({cellsize:'5px',callback:function(color){f_body_bgcolor.value=color;}});
+  var bgColPicker = new Xinha.colorPicker({cellsize:'5px',callback:function(color){f_body_bgcolor.value=color;}});
   bgCol_pick.onclick = function() { bgColPicker.open('top,right', f_body_bgcolor ); }
 
   var fgCol_pick = document.getElementById('fgCol_pick');
   var f_body_fgcolor = document.getElementById('f_body_fgcolor');
-  var fgColPicker = new colorPicker({cellsize:'5px',callback:function(color){f_body_fgcolor.value=color;}});
+  var fgColPicker = new Xinha.colorPicker({cellsize:'5px',callback:function(color){f_body_fgcolor.value=color;}});
   fgCol_pick.onclick = function() { fgColPicker.open('top,right', f_body_fgcolor ); }
 
   document.getElementById("f_title").focus();

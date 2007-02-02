@@ -14,7 +14,7 @@
   border: 0px;
   vertical-align: middle;
 }
-.dtree a {
+.dtree a,.dtree a:visited {
   color: #333;
   text-decoration: none;
 }

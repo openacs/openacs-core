@@ -23,8 +23,11 @@ function TableOperations(editor) {
 
 	// register the toolbar buttons provided by this plugin
 
+  // Remove existing inserttable and toggleborders, we will replace it in our group  
+  cfg.removeToolbarElement(' inserttable toggleborders '); 
+  
+	var toolbar = ["linebreak", "inserttable", "toggleborders"];
     
-	var toolbar = ["linebreak"];
 	for (var i = 0; i < bl.length; ++i) {
 		var btn = bl[i];
 		if (!btn) {
@@ -42,6 +45,11 @@ function TableOperations(editor) {
 
 	// add a new line in the toolbar
 	cfg.toolbar.push(toolbar);
+	
+  if ( typeof PopupWin == 'undefined' )
+  {
+    Xinha._loadback(_editor_url + 'modules/Dialogs/popupwin.js');
+  }
 }
 
 TableOperations._pluginInfo = {
@@ -173,8 +181,7 @@ TableOperations.prototype.dialogTableProperties = function() {
 		// dialog contents
 		dialog.content.style.width = "400px";
 		dialog.content.innerHTML = " \
-<div class='title'\
- style='background: url(" + dialog.baseURL + dialog.editor.imgURL("table-prop.gif", "TableOperations") + ") #fff 98% 50% no-repeat'>" + HTMLArea._lc("Table Properties", "TableOperations") + "\
+<div class='title'>" + HTMLArea._lc("Table Properties", "TableOperations") + "\
 </div> \
 <table style='width:100%'> \
   <tr> \
@@ -326,8 +333,7 @@ TableOperations.prototype.dialogRowCellProperties = function(cell) {
 		// dialog contents
 		dialog.content.style.width = "400px";
 		dialog.content.innerHTML = " \
-<div class='title'\
- style='background: url(" + dialog.baseURL + dialog.editor.imgURL(cell ? "cell-prop.gif" : "row-prop.gif", "TableOperations") + ") #fff 98% 50% no-repeat'>" + HTMLArea._lc(cell ? "Cell Properties" : "Row Properties", "TableOperations") + "</div> \
+<div class='title'>" + HTMLArea._lc(cell ? "Cell Properties" : "Row Properties", "TableOperations") + "</div> \
 <table style='width:100%'> \
   <tr> \
     <td id='--HA-layout'> \
@@ -597,6 +603,10 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		var cells = null;
 		if (!HTMLArea.is_ie) {
 			try {
+				if (sel.rangeCount < 2) {
+					alert("Please select the cells you want to merge.")
+					break;
+				}
 				while (range = sel.getRangeAt(i++)) {
 					var td = range.startContainer.childNodes[range.startOffset];
 					if (td.parentNode != row) {

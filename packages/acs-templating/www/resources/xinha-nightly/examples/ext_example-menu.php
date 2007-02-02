@@ -1,6 +1,6 @@
 <?PHP
-  $LocalPluginPath = dirname(dirname(__FILE__)).'\plugins';
-  $LocalSkinPath = dirname(dirname(__File__)).'\skins';
+  $LocalPluginPath = dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'plugins';
+  $LocalSkinPath = dirname(dirname(__File__)).DIRECTORY_SEPARATOR.'skins';
 ?>
 <html>
 <head>
@@ -10,10 +10,10 @@
     --  frame to provide a menu for generating example editors using
     --  full_example-body.html, and full_example.js.
     --
-    --  $HeadURL$
-    --  $LastChangedDate$
-    --  $LastChangedRevision$
-    --  $LastChangedBy$
+    --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/examples/ext_example-menu.php $
+    --  $LastChangedDate: 2007-01-20 11:24:36 +1300 (Sat, 20 Jan 2007) $
+    --  $LastChangedRevision: 677 $
+    --  $LastChangedBy: ray $
     --------------------------------------------------------------------------->
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -140,15 +140,15 @@ Dialog._geckoOpenModal = function(url, action, init) {
 
 	// capture some window's events
 	function capwin(w) {
-//		HTMLArea._addEvent(w, "click", Dialog._parentEvent);
-//		HTMLArea._addEvent(w, "mousedown", Dialog._parentEvent);
-//		HTMLArea._addEvent(w, "focus", Dialog._parentEvent);
+//		Xinha._addEvent(w, "click", Dialog._parentEvent);
+//		Xinha._addEvent(w, "mousedown", Dialog._parentEvent);
+//		Xinha._addEvent(w, "focus", Dialog._parentEvent);
 	};
 	// release the captured events
 	function relwin(w) {
-//		HTMLArea._removeEvent(w, "click", Dialog._parentEvent);
-//		HTMLArea._removeEvent(w, "mousedown", Dialog._parentEvent);
-//		HTMLArea._removeEvent(w, "focus", Dialog._parentEvent);
+//		Xinha._removeEvent(w, "click", Dialog._parentEvent);
+//		Xinha._removeEvent(w, "mousedown", Dialog._parentEvent);
+//		Xinha._removeEvent(w, "focus", Dialog._parentEvent);
 	};
 	capwin(window);
 	// capture other frames
@@ -259,12 +259,20 @@ Dialog._geckoOpenModal = function(url, action, init) {
       <div id="div_plugins" style="width:100%; overflow:auto">
 <?php
 	$d = @dir($LocalPluginPath);
+	$dir_array = array();
 	while (false !== ($entry = $d->read()))  //not a dot file or directory
 	{	if(substr($entry,0,1) != '.')
-		{ echo '<label><input type="checkbox" name="plugins" id="plugins" value="' . $entry . '"> ' . $entry . '</label>'."\n";
+		{
+			$dir_array[] = $entry;
 		}
 	}
 	$d->close();
+	sort($dir_array);
+	foreach ($dir_array as $entry)
+	{
+		echo '<label><input type="checkbox" name="plugins" id="plugins" value="' . $entry . '"> ' . $entry . '</label>'."\n";
+	}
+
 ?>
       </div>
     </fieldset>

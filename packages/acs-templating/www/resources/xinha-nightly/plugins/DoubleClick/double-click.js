@@ -36,12 +36,8 @@ function DoubleClick(editor) {
 	//              - editor is the HTMLArea object that triggered the call
 	//							- target is the selected object
 	this.editor.dblClickList = {
-		u: [ function(e) {e.execCommand("underline");} ],
-		strike: [ function(e) {e.execCommand("strikethrough");} ],
-		sub: [ function(e) {e.execCommand("subscript");} ],
-		sup: [ function(e) {e.execCommand("superscript");} ],
 		// Edit Link dialog
-		a: [ function(e) {e.execCommand("createlink");} ],
+		a: [ function(e) {e.config.btnList['createlink'][3](e); } ],
 		// Follow link
 		//a: [ function(editor, target) { window.location = target.href; properties(target); } ],
 

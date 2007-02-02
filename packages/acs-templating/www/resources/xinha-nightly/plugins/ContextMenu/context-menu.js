@@ -44,11 +44,13 @@ ContextMenu.prototype.getContextMenu = function(target) {
 	if (tbo) tbo = tbo.instance;
 
 	var selection = editor.hasSelectedText();
-	if (selection)
-		menu.push([ HTMLArea._lc("Cut", "ContextMenu"), function() { editor.execCommand("cut"); }, null, config.btnList["cut"][1] ],
-			  [ HTMLArea._lc("Copy", "ContextMenu"), function() { editor.execCommand("copy"); }, null, config.btnList["copy"][1] ]);
-	menu.push([ HTMLArea._lc("Paste", "ContextMenu"), function() { editor.execCommand("paste"); }, null, config.btnList["paste"][1] ]);
-
+	if (!HTMLArea.is_gecko) {
+		if (selection) {
+			menu.push([ HTMLArea._lc("Cut", "ContextMenu"), function() { editor.execCommand("cut"); }, null, config.btnList["cut"][1] ],
+				  [ HTMLArea._lc("Copy", "ContextMenu"), function() { editor.execCommand("copy"); }, null, config.btnList["copy"][1] ]);
+			menu.push([ HTMLArea._lc("Paste", "ContextMenu"), function() { editor.execCommand("paste"); }, null, config.btnList["paste"][1] ]);
+		}
+	}
 	var currentTarget = target;
 	var elmenus = [];
 
@@ -130,7 +132,27 @@ ContextMenu.prototype.getContextMenu = function(target) {
 				     [ HTMLArea._lc("C_ell Properties...", "ContextMenu"),
 				       function() { tableOperation("TO-cell-prop"); },
 				       HTMLArea._lc("Show the Table Cell Properties dialog", "ContextMenu"),
-				       config.btnList["TO-cell-prop"][1] ]
+				       config.btnList["TO-cell-prop"][1] ],
+
+             [ HTMLArea._lc("Insert Cell After", "ContextMenu"),
+				       function() { tableOperation("TO-cell-insert-after"); },
+				       HTMLArea._lc("Insert Cell After", "ContextMenu"),
+				       config.btnList["TO-cell-insert-after"][1] ],
+
+             [ HTMLArea._lc("Insert Cell Before", "ContextMenu"),
+				       function() { tableOperation("TO-cell-insert-before"); },
+				       HTMLArea._lc("Insert Cell After", "ContextMenu"),
+				       config.btnList["TO-cell-insert-before"][1] ],
+
+             [ HTMLArea._lc("Delete Cell", "ContextMenu"),
+				       function() { tableOperation("TO-cell-delete"); },
+				       HTMLArea._lc("Delete Cell", "ContextMenu"),
+				       config.btnList["TO-cell-delete"][1] ],
+
+             [ HTMLArea._lc("Merge Cells", "ContextMenu"),
+				       function() { tableOperation("TO-cell-merge"); },
+				       HTMLArea._lc("Merge Cells", "ContextMenu"),
+				       config.btnList["TO-cell-merge"][1] ]
 				);
 			break;
 		    case "tr":
@@ -243,13 +265,16 @@ ContextMenu.prototype.getContextMenu = function(target) {
 			    function() { insertPara(true); },
 			    HTMLArea._lc("Insert a paragraph after the current node", "ContextMenu") ]
 			  );
+	if (!menu[0]) menu.shift(); //If the menu begins with a separator, remove it for cosmetical reasons
 	return menu;
 };
 
 ContextMenu.prototype.popupMenu = function(ev) {
 	var self = this;
 	if (this.currentMenu)
-		this.currentMenu.parentNode.removeChild(this.currentMenu);
+	{
+		this.closeMenu();
+	}
 	function getPos(el) {
 		var r = { x: el.offsetLeft, y: el.offsetTop };
 		if (el.offsetParent) {

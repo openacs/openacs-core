@@ -8,10 +8,10 @@
   <script type="text/javascript">
     window.resizeTo(400, 200);
 
-HTMLArea = window.opener.HTMLArea;
+Xinha = window.opener.Xinha;
 
 function i18n(str) {
-  return (HTMLArea._lc(str, 'HTMLArea'));
+  return (Xinha._lc(str, 'Xinha'));
 }
 
 function onTargetChanged() {
@@ -24,7 +24,7 @@ function onTargetChanged() {
 }
 
 function Init() {
-  __dlg_translate('HTMLArea');
+  __dlg_translate('Xinha');
   __dlg_init();
 
   // Make sure the translated string appears in the drop down. (for gecko)

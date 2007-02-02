@@ -13,7 +13,7 @@
   "Left": "links",
   "Center": "zentriert",
   "Right": "rechts",
-  "Style": "Stiel",
+  "Style": "Stil",
   "Color:": "Farbe",
   "No shading": "keine Schattierung",
   "Note:": "Anmerkung",

@@ -28,7 +28,7 @@
 //
 // Image Transformation interface using command line NetPBM
 
-require_once "Transform.php";
+require_once "../ImageManager/Classes/Transform.php";
 
 Class Image_Transform_Driver_NetPBM extends Image_Transform
 {

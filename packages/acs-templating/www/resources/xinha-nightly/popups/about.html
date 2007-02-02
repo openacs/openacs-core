@@ -44,7 +44,7 @@ function selectTab(idx) {
 var editor = null;
 function initDocument() {
   editor = window.dialogArguments;
-  HTMLArea = window.opener.HTMLArea;
+  Xinha = window.opener.Xinha;
 
   var plugins = document.getElementById("plugins");
   var j = 0;
@@ -92,7 +92,7 @@ function initDocument() {
   for (var i = bar.firstChild; i; i = i.nextSibling) {
     TABS.push(i);
     i.__msh_tab = j;
-    i.onmousedown = function(ev) { selectTab(this.__msh_tab); HTMLArea._stopEvent(ev || window.event); };
+    i.onmousedown = function(ev) { selectTab(this.__msh_tab); Xinha._stopEvent(ev || window.event); };
     var area = document.getElementById("tab-area-" + j);
     if (/tab-current/.test(i.className)) {
       CURRENT_TAB = j;
@@ -181,7 +181,7 @@ window.onresize = function() {
 
 <tr style="height: 1em"><td id="tdheader">
 
-<h1>Xinha</h1>
+<h1><img src="../images/xinha_logo.gif" alt="Xinha" /></h1>
 
 </td></tr>
 <tr><td id="tdcontent" style="padding: 0.5em;">
@@ -255,9 +255,9 @@ POSSIBILITY OF SUCH DAMAGE.</pre>
 
 <div id="tab-area-4">
   <script type="text/javascript">
-    if(window.opener && window.opener.HTMLArea)
+    if(window.opener && window.opener.Xinha)
     {
-      var ver = window.opener.HTMLArea.version;
+      var ver = window.opener.Xinha.version;
       document.write('<pre>'
                       + '\nRelease: ' + ver.Release + ' (' + ver.Date + ')'
                       + '\nHead: ' + ver.Head

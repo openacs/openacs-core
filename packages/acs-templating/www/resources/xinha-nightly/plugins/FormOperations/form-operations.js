@@ -2,10 +2,10 @@
   /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
     --  FormOperations Plugin
     --
-    --  $HeadURL: http://gogo@svn.xinha.python-hosting.com/trunk/htmlarea.js $
-    --  $LastChangedDate: 2005-05-25 09:30:03 +1200 (Wed, 25 May 2005) $
-    --  $LastChangedRevision: 193 $
-    --  $LastChangedBy: gogo $
+    --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/plugins/FormOperations/form-operations.js $
+    --  $LastChangedDate: 2007-01-20 11:24:36 +1300 (Sat, 20 Jan 2007) $
+    --  $LastChangedRevision: 677 $
+    --  $LastChangedBy: ray $
     --------------------------------------------------------------------------*/
 
 HTMLArea.Config.prototype.FormOperations =
@@ -227,8 +227,7 @@ FormOperations.prototype.onUpdateToolbar = function()
     if(activeElement == this.activeElement) return true;
 
     var tag = activeElement.tagName.toLowerCase();
-    this.panel.show();
-
+    
     this.hideAll();
     if(tag === 'form')
     {
@@ -310,6 +309,9 @@ FormOperations.prototype.onUpdateToolbar = function()
         }
       }
     }
+    
+    this.panel.show();
+    
     //this.editor.scrollToElement(activeElement);
     this.activeElement = activeElement;
     return true;

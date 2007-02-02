@@ -1,0 +1,34 @@
+Xinha - The Community-Built Online HTML Editor
+
+For bug reports, forum, and updates go to 
+http://xinha.org
+
+Release History
+
+Xinha 0.92beta
+ - fixed Ticket #831 stop empty anchors from being removed
+ - Make htmlarea.js just load XinhaCore.js instead of being a copy of it.
+ - fixed Ticket #445 Toggle TableBorder doesn't work if this.fullpage=true or using FullPage plugin
+ - fixed Ticket #551 shape and coord attributes of area element are ignored by IE
+ - fixed Ticket #650 SpellChecker is not compatible with FullPage plugin
+ - fixed Ticket #816 CharacterMap and ListType panel modes make editor jump to top in IE
+ - fixed Ticket #570 change behaviour of justify when an image is selected to make the image float left/right, 
+   click the justify button again to undo it
+ - fixed Ticket #891 noscript content got escaped
+ - fixed Ticket #857 Firefox fails to load in fullpage mode when <link ..> tag in wrong place.
+ - fixed Ticket #841 Spell Checker - Won't return to xinha.
+ - fixed Ticket #914 All buttons stay grey & this.getParentElement is not a function message when not calling
+   Xinha.loadPlugins() in xinha_init function
+ - fixed Ticket #911 Background color does not work in Firefox
+ - fixed Ticket #912 an error is thrown in Mozilla when clicking merge cells button and fewer than 2 cells are selected
+ 
+Xinha 0.91beta
+ - changed namespace from HTMLArea to Xinha
+ - the core file is now named XinhaCore.js instead of htmlarea.js,
+   please change your pages accordingly (the htmlarea.js will be removed!)
+ - the color picker script is now loaded on demand to reduce initial loading time
+ 
+Xinha 0.9beta
+This equals Xinha revision 635 of Jan 11 2007
+ - All JavaScript files over 2kb have been compressed using the dojo JavaScript compressor
+ - All gifs have been optimized using Trout's GIF Optimizer version 2.3

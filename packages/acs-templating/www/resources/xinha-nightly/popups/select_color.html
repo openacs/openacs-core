@@ -7,9 +7,9 @@ window.resizeTo(240, 182);
 // run on page load
 function Init()
 {
-  __dlg_translate('HTMLArea');
+  __dlg_translate('Xinha');
   __dlg_init();
-  HTMLArea.addDom0Event(document, 'keypress', __dlg_close_on_esc);
+  Xinha.addDom0Event(document, 'keypress', __dlg_close_on_esc);
 
   var color = window.dialogArguments;
   color = ValidateColor(color) || '000000';

@@ -33,54 +33,47 @@ ImageManager._pluginInfo = {
 	license       : "htmlArea"
 };
 
-// default Xinha layout. plugins are beneath the Xinha directory.
-// Note the trailing &. Makes forming our URL's easier. 
+
+// CONFIGURATION README:
 //
-// To change the backend, just set this config variable in the calling page.
-// The images_url config option is used to strip out the directory info when
-// images are selected from the document.
+//  It's useful to pass the configuration to the backend through javascript
+//  (this saves editing the backend config itself), this needs to be done
+//  in a trusted/secure manner... here is how to do it..
+//
+//  1. You need to be able to put PHP in your xinha_config setup
+//  2. In step 3 write something like
+//  --------------------------------------------------------------
+//  with (xinha_config.ImageManager)
+//  { 
+//    <?php 
+//      require_once('/path/to/xinha/contrib/php-xinha.php');
+//      xinha_pass_to_php_backend
+//      (       
+//        array
+//        (
+//         'images_dir' => '/home/your/directory',
+//         'images_url' => '/directory'
+//        )
+//      )
+//    ?>
+//  }
+//  --------------------------------------------------------------
+//
+//  this will work provided you are using normal file-based PHP sessions
+//  (most likely), if not, you may need to modify the php-xinha.php
+//  file to suit your setup.
 
 HTMLArea.Config.prototype.ImageManager =
 {
   'backend'    : _editor_url + 'plugins/ImageManager/backend.php?__plugin=ImageManager&',
-
-  //  It's useful to pass the configuration to the backend through javascript
-  //  (this saves editing the backend config itself), but the problem is
-  //  how do you make it so that the enduser can not sneakily send thier own
-  //  config to the server (including directory locations etc!).
-  //
-  //  Well, we specify 3 config variables (if the first is given all 3 are required)
-  //  first in backend_config we provide the backend configuration (in the format
-  //  required by the backend, in the case of PHP this is a serialized structure).  We do not
-  //  need to provide a complete configuration here, it will be merged with defaults.
-  //
-  //  Then in backend_config_secret_key_location we store the name of a key in a
-  //  session structure which stores a secret key (anything random), for example
-  //  when making the Xinha editor in PHP we might do
-  //  <?php $_SESSION['Xinha:ImageManager'] = uniqid('secret_'); ?>
-  //  xinha_config.ImageManager.backend_config_secret_key_location = 'Xinha:ImageManager';
-  //
-  //  Then finally in backend_config_hash we store an SHA1 hash of the config combined
-  //  with the secret.
-  //
-  //  A full example in PHP might look like
-  //
-  //  <?php
-  //   $myConfig = array('base_dir' = '/home/your/directory', 'base_url' => '/directory')
-  //   $myConfig = serialize($myConfig);
-  //   if(!isset($_SESSION['Xinha:ImageManager'])) $_SESSION['Xinha:ImageManager'] = uniqid('secret_');
-  //   $secret = $_SESSION['Xinha:ImageManager'];
-  //  ?>
-  //  xinha_config.ImageManager.backend_config      = '<?php echo jsaddslashes($myConfig)?>';
-  //  xinha_config.ImageManager.backend_config_hash = '<?php echo sha1($myConfig . $secret)?>';
-  //  xinha_config.ImageManager.backend_config_secret_key_location = 'Xinha:ImageManager';
-  //
-  // (for jsspecialchars() see http://nz.php.net/manual/en/function.addcslashes.php)
-  //
-  //
+  'backend_data' : null,
+  
+  // Deprecated method for passing config, use above instead!
+  //---------------------------------------------------------
   'backend_config'     : null,
   'backend_config_hash': null,
   'backend_config_secret_key_location': 'Xinha:ImageManager'
+  //---------------------------------------------------------
 };
 
 // Over ride the _insertImage function in htmlarea.js.
@@ -158,7 +151,15 @@ HTMLArea.prototype._insertImage = function(image) {
     manager += '&backend_config_secret_key_location='
       + encodeURIComponent(editor.config.ImageManager.backend_config_secret_key_location);
   }
-
+  
+  if(editor.config.ImageManager.backend_data != null)
+  {
+    for ( var i in editor.config.ImageManager.backend_data )
+    {
+      manager += '&' + i + '=' + encodeURIComponent(editor.config.ImageManager.backend_data[i]);
+    }
+  }
+  
 	Dialog(manager, function(param) {
 		if (!param) {	// user must have pressed Cancel
 			return false;

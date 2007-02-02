@@ -29,7 +29,7 @@
  <link href="<?php print $IMConfig['base_url'];?>assets/manager.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="../../popups/popup.js"></script>
 <script type="text/javascript" src="assets/popup.js"></script>
-<script type="text/javascript" src="../../popups/color_picker.js"></script>
+<script type="text/javascript" src="../../modules/ColorPicker/ColorPicker.js"></script>
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/dialog.js"></script>
 <script type="text/javascript">
 /*<![CDATA[*/
@@ -43,7 +43,7 @@
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/manager.js"></script>
 </head>
 <body>
-<div class="title">Insert Image</div>
+
 <form action="<?php print $IMConfig['backend_url'] ?>" id="uploadForm" method="post" enctype="multipart/form-data">
 
 <input type="hidden" name="__plugin" value="ImageManager">
@@ -150,7 +150,7 @@
 
 
   <tr>
-    <th align="left">Align:</th>
+    <th align="left">Alignment:</th>
     <td colspan="2">
       <select size="1" id="f_align"  title="Positioning of this image">
         <option value=""                             >Not set</option>

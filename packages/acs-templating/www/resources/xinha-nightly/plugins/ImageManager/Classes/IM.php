@@ -30,7 +30,7 @@
 // Image Transformation interface using command line ImageMagick
 //
 
-require_once "Transform.php";
+require_once "../ImageManager/Classes/Transform.php";
 
 Class Image_Transform_Driver_IM extends Image_Transform
 {
