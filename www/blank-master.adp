@@ -16,7 +16,7 @@
         _editor_url  = "@xinha_dir@"  // (preferably absolute)URL (including trailing slash) where Xinha is installed   
         _editor_lang = "@lang@";
        </script>
-       <script type="text/javascript" src="@xinha_dir@htmlarea.js" language="javascript"></script>
+       <script type="text/javascript" src="@xinha_dir@XinhaCore.js" language="javascript"></script>
       </if>
     </if>
 
