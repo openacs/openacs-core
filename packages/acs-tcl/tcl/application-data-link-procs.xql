@@ -105,5 +105,10 @@
 	and object_id_two = :to_object_id
     </querytext>
 </fullquery>
-	
+
+<fullquery name="application_data_link::scan_for_links.confirm_object_ids">
+    <querytext>
+	select object_id from acs_objects where object_id in ([template::util::tcl_to_sql_list $refs])
+    </querytext>
+</fullquery>	
 </queryset>

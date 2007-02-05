@@ -248,6 +248,9 @@ ad_proc -public application_data_link::scan_for_links {
     foreach {discard ref} $ref_data {
             lappend refs $ref
     } 
+    if {[llength $refs]} {
+	set refs [db_list confirm_object_ids {}]
+    }
     return $refs
 }
 
