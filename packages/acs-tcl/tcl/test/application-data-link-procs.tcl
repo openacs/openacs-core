@@ -5,15 +5,17 @@ ad_library {
 aa_register_case -cats api data_links_scan_links {
     Test scanning content for object URLs
 } {
-    set text {Some random text /o/1 /file/2 /image/3 /image/4/ /image/5/thumbnail /image/6/info
-              Some More Random Text /o/junk /file/junk /image/junk
+    set text {Some random text <img src="/o/1"> <a href="/file/2"> <img src="/image/3"> <img src="/image/4/"> <img src="/image/5/thumbnail"> <img src="/image/6/info"> <a href="http://example.com/o/9">
+              Some More Random Text <a href="/o/junk"> <a href="/file/junk"> <a href="/image/junk"> /o/10 /file/11 /image/12
 	/o/[junk] /file/[junk] /image/[junk]
         /o/" /file/" /image/"
         /o/[ /file/[ /image/[
+       
     }
-    
+    append text "<a href=\"[ad_url]/o/7\"> "
+    aa_log "ad_url = '[ad_url]'"
     set links [application_data_link::scan_for_links -text $text]
-    set correct_links [list 1 2 3 4 5 6]
+    set correct_links [list 1 2 3 4 5 6 7]
     aa_log "Links = '${links}'"
     aa_true "Number of links found is correct" \
         [expr {[llength $correct_links] eq [llength $links]}]

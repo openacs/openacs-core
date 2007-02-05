@@ -241,9 +241,12 @@ ad_proc -public application_data_link::scan_for_links {
 
 } {
     set refs [list]
-    set ref_data [regexp -inline -all {/(?:o|image|file)/(\d{1,8})} $text]
+    set http_url [string trimright [ad_url] /]/
+    set https_url [string map {http https} $http_url]
+    set re "(?:\")(?:$http_url|$https_url|/)(?:o|image|file)/(\\d{1,8})"
+    set ref_data [regexp -inline -all $re $text]
     foreach {discard ref} $ref_data {
-	lappend refs $ref
+            lappend refs $ref
     } 
     return $refs
 }
