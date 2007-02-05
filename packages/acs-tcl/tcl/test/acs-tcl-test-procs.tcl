@@ -1090,3 +1090,4 @@ aa_register_case -cats {api smoke} acs_object__package_id {
     set package_id [db_string get_package_id "select package_id from acs_objects where object_id = :object_id"]
     aa_true "package_id returned is correct" [string equal $package_id [acs_object::package_id -object_id $object_id]]
 }
+

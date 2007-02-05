@@ -137,6 +137,16 @@
       </querytext>
 </fullquery>
 
+<fullquery name="acs_user::registered_user_p.registered_user_p">
+      <querytext>
+
+            select 1
+            from   registered_users
+            where  user_id = :user_id
+
+      </querytext>
+</fullquery>
+
 <fullquery name="party::update.party_update">      
       <querytext>
       
