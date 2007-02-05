@@ -1091,3 +1091,28 @@ aa_register_case -cats {api smoke} acs_object__package_id {
     aa_true "package_id returned is correct" [string equal $package_id [acs_object::package_id -object_id $object_id]]
 }
 
+aa_register_case -cats {api smoke} acs_user__registered_user_p {
+    Tests the acs_user::registered_user_p procedure
+
+    @author Malte Sussdorff
+} {
+    # Retrieve a registered user
+    set user_id [db_string get_registered_id "select max(user_id) from registered_users"]
+
+    # Check if the registered_user_p procedure finds him
+    set is_registered_p [acs_user::registered_user_p -user_id $user_id]
+    
+    # Ban the user and check if he is not a registered_user anymore
+    acs_user::ban -user_id $user_id
+    set is_not_registered_p [acs_user::registered_user_p -user_id $user_id]
+
+    if {$is_registered_p eq 1 && $is_not_registered_p eq 0} {
+	set works_p 1
+    } else {
+	set works_p 0
+    }
+
+    acs_user::approve -user_id $user_id
+    aa_true "registered_user_p works correct" $works_p
+}
+
