@@ -620,6 +620,27 @@ ad_proc -public acs_user::site_wide_admin_p {
 		-privilege "admin"]
 }
 
+ad_proc -public acs_user::registered_user_p {
+    {-user_id ""}
+} {
+    Return 1 if the specified user (defaults to logged in user)
+    is a registered user and 0 otherwise.
+
+    A registered user is a user who is in the view registered_users and
+    this is primarily true for any user who is approved and has a
+    verified e-mail.
+
+    @param user_id The id of the user to check.
+
+    @author Malte Sussdorff (malte.sussdorff@cognovis.de)
+} {
+    if { [empty_string_p $user_id]} {
+        set user_id [ad_conn user_id]
+    }
+
+    return [db_string registered_user_p {} -default 0]
+}
+
 
 ad_proc -public acs_user::ScreenName {} {
     Get the value of the ScreenName parameter. Checked to ensure that it only returns none, solicit, or require.
