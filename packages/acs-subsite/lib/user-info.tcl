@@ -146,23 +146,6 @@ ad_form -extend -name user_info -form {
                           -array user_info]
 
 
-    if {[apm_package_installed_p categories]} {
-	set cat_ids [list]
-	foreach group_id $group_ids {
-	    set element_name "category_ids$group_id"
-	    if {$group_id < 0} {
-		set element_name "category_ids[expr - $group_id]"
-	    }
-
-	    set cat_ids [concat $cat_ids \
-			     [category::ad_form::get_categories \
-				  -container_object_id $group_id \
-				  -element_name $element_name]]
-	}
-
-	category::map_object -remove_old -object_id $user_id $cat_ids
-    }
-
     # Handle authentication problems
     switch $result(update_status) {
         ok {
