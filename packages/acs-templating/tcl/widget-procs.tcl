@@ -279,7 +279,7 @@ ad_proc -public template::widget::textarea {
         set mode {}
     }
 
-
+	set attributes(id) $element(name)
     set output [textarea_internal $element(name) attributes $value $mode]
 
     # Spell-checker
@@ -375,7 +375,10 @@ ad_proc -public template::widget::input {
     if { ( [string equal $type "checkbox"] || [string equal $type "radio"] ) && [info exists element(value)] } {
         # This can be used in the form template in a <label for="id">...</label> tag.
         set attributes(id) "$element(form_id):elements:$element(name):$element(value)"
+    } elseif { [string equal $type "password"] || [string equal $type "text"] } { 
+		set attributes(id) "$element(name)" 
     }
+
     
     # Handle display mode of visible normal form elements, i.e. not hidden, not submit, not button, not clear
     if { ![string equal $element(mode) "edit"] && [lsearch -exact { hidden submit button clear checkbox radio } $type] == -1 } {
@@ -389,7 +392,7 @@ ad_proc -public template::widget::input {
 
         if { ![string equal $element(mode) "edit"] && [lsearch -exact { hidden submit button clear } $type] == -1 } {
             append output " disabled"
-        }
+		}
 
         if { [info exists element(value)] } {
             append output " value=\"[template::util::quote_html $element(value)]\""
@@ -655,7 +658,7 @@ ad_proc -public template::widget::menu {
                 }
             }
             default {
-                append output "<select name=\"$widget_name\" "
+                append output "<select name=\"$widget_name\" id=\"$widget_name\" "
 
                 foreach name [array names attributes] {
                     if { [string equal $attributes($name) {}] } {

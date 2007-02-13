@@ -877,7 +877,7 @@ ad_proc -public template::widget::dateFragment {
        # Display text entry for some elements, or if the type is text
        if { [string equal $type t] ||
             [regexp "year|short_year" $fragment] } {
-         set output "<input type=\"text\" name=\"$element(name).$fragment\" size=\"$size\""
+         set output "<input type=\"text\" name=\"$element(name).$fragment\" id=\"$element(name).$fragment\" size=\"$size\""
          append output " maxlength=\"$size\" value=\"[template::util::leadingPad $value $size]\""
          array set attributes $tag_attributes
          foreach attribute_name [array names attributes] {
