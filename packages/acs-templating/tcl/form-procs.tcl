@@ -524,6 +524,28 @@ ad_proc -private template::form::render { id tag_attributes } {
 
   append output ">"
 
+  ### 2/11/2007
+  ### Adding Form Fieldset legend and attributes
+  if { [info exists properties(fieldset)] } {
+      # Fieldset
+      append output " <fieldset"
+      set fieldset_list $properties(fieldset)
+
+      foreach {fa_name fa_value} [lindex $fieldset_list 0] {
+	  append output " $fa_name=\"$fa_value\""
+      }
+      append output ">"
+
+      # Legend
+      set fieldset_legend [lindex $fieldset_list 1]
+      if {![empty_string_p $fieldset_legend]} {
+	  append output "<legend>$fieldset_legend</legend>"
+      }
+
+  } else {
+      append output "<fieldset>"
+  }
+
   # Export form ID and current form mode
   append output [export_vars -form { { form\:id $id } { form\:mode $properties(mode) } }]
   
