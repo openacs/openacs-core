@@ -2,8 +2,8 @@
 
   <multiple name=elements>
   <if @elements.section@ not nil>
-
-    <span class="form-section">@elements.section@</span>
+	  <fieldset>
+    <legend>@elements.section@</legend>
   </if>
   
   <group column="section">
@@ -95,5 +95,8 @@
         </else>
     </else>
   </group>
+	<if @elements.section@ not nil>
+	</fieldset>
+	  </if>
   </multiple>
  
