@@ -482,6 +482,27 @@ template_tag formgroup { chunk params } {
   }
 }
 
+# render one element from a formgroup
+template_tag formgroup-widget { chunk params } {
+    set id [template::get_attribute formgroup-widget $params id]
+
+    set row [template::get_attribute formgroup-widget $params row]
+    # get any additional HTML attributes specified by the designer
+    set tag_attributes [template::util::set_to_list $params id]
+
+    # generate a list of options and option labels as a data source
+
+
+    template::adp_append_code \
+        "template::element options \${form:id} $id { $tag_attributes }"
+    
+  # make sure name is a parameter to pass to the rendering tag handler
+  ns_set update $params name formgroup
+  ns_set update $params id formgroup
+    template::adp_append_code "append __adp_output \"\$\{formgroup:${row}(widget)\} \$\{formgroup:${row}(label)\}\""
+
+}
+
 # Render a form, incorporating any additional markup attributes
 # specified in the template.  Set the magic variable "form:id"
 # for elements to reference
@@ -532,7 +553,7 @@ template_tag formtemplate { chunk params } {
     "\[template::form check_elements $id\]"
   }
 
-  template::adp_append_string "</form>"
+  template::adp_append_string "</fieldset></form>"
 }
 
 
