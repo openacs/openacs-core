@@ -1,5 +1,5 @@
 @doc_type;noquote@
-<html>
+<html lang="@html_lang_attribute@">
   <head>
     <title>@title;noquote@</title>
     <meta name="generator" content="OpenACS version @openacs_version@">
@@ -9,7 +9,6 @@
     <multiple name="header_links">
       <link rel="@header_links.rel@" type="@header_links.type@" href="@header_links.href@" media="@header_links.media@">
     </multiple>
-
     <if @acs_blank_master.xinha@ not nil>
       <if @htmlarea_support:rowcount@ ne 0>
        <script type="text/javascript">
@@ -33,7 +32,7 @@
     @header_stuff;noquote@
   </head>
   <body<multiple name="attribute"> @attribute.key@="@attribute.value@"</multiple>>
-  <textarea id="holdtext" style="display: none;" rows="1" cols="1"></textarea>
+
 
     <if @dotlrn_toolbar_p@ true>
       <include src="/packages/dotlrn/lib/toolbar">
