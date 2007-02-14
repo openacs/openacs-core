@@ -3,12 +3,19 @@
 # Set basic attributes and provide the logical defaults for variables that
 # aren't provided by the slave page.
 #
-# Author: Kevin Scaldeferri (kevin@arsdigita.com)
+# Author: Kevin Scaldeferri
 # Creation Date: 14 Sept 2000
 # $Id$
 #
 
 # fall back on defaults
+
+# The html element at the beginning of each page should use the
+# "lang" attribute to help specify the main language of the text 
+# on the page (i.e. en, fr, de, etc.). This helps the computer or 
+# assistive device present information in a way that is 
+# appropriate to the language and also helps translation software.
+set html_lang_attribute [lang::system::language -site_wide]
 
 if { [template::util::is_nil doc_type] } { 
     set doc_type {<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">}
@@ -38,7 +45,6 @@ set onload $on_load
 
 # Handle richtext widgets, which needs special javascript and css 
 # in the page header
-
 multirow create htmlarea_support id 
 global acs_blank_master__htmlareas acs_blank_master
 
