@@ -78,8 +78,8 @@
 							<legend>optional legend (@elements.widget@)- Need to code for this</legend>
 							
 							<formgroup id="@elements.id@">			
+									\@formgroup.widget;noquote@
 								<label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">
-									<formwidget id="@elements.id@">
 										\@formgroup.label;noquote@
 								</label><br/>
 							</formgroup>
