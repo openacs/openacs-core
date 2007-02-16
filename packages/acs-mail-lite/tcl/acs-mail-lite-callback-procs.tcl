@@ -21,8 +21,7 @@ ad_proc -public -callback acs_mail_lite::complex_send {
     {-file_ids}
 } {
     Malte: please document this
-} {
-}
+} -
 
 ad_proc -public -callback acs_mail_lite::send {
     {-package_id:required}
@@ -33,5 +32,4 @@ ad_proc -public -callback acs_mail_lite::send {
     {-subject}
 } {
     Malte: please document this
-} {
-}
+} -
