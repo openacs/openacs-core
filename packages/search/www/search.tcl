@@ -110,7 +110,7 @@ set t0 [clock clicks -milliseconds]
 # TODO calculate subsite or dotlrn package_ids
 if {"this" ne $scope } {
     # don't send package_id if its not searching this package
-    set search_package_id ""
+  # set search_package_id "" ;# don't overwrite this, when you are restricting search to package_id
 } else {
     set search_node_id [site_node::get_node_id_from_object_id -object_id $search_package_id]
     if {"dotlrn" eq [site_node::get_element -node_id $search_node_id -element package_key]} {
@@ -214,7 +214,7 @@ set links [list]
 set values [list]
 for { set __i $from_result_page } { $__i <= $to_result_page} { incr __i } {
     set link ""
-    append link "search?q=${urlencoded_query}"
+    append link "search?q=${urlencoded_query}&search_package_id=$search_package_id"
     if { $__i > 1 } { append link "&offset=[expr ($__i - 1) * $limit]" }
     if { $num > 0 } { append link "&num=$num" }
 
