@@ -158,7 +158,7 @@ ad_proc -private search::indexer {} {
                             ns_log Error "search::indexer: error getting datasource for $object_id $object_type: $errMsg\n[ad_print_stack_trace]\n"
                         } else {
                             # call the action so other people who do indexey things have a hook
-#                            callback -catch search::action \
+                            callback -catch search::action \
                                 -action $event \
                                 -object_id $object_id \
                                 -datasource datasource \
