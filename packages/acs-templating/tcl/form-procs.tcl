@@ -513,6 +513,12 @@ ad_proc -private template::form::render { id tag_attributes } {
   set output "<form name=\"$id\" method=\"$properties(method)\" 
                     action=\"$properties(action)\""
 
+  ### 2/17/2007
+  ### Adding a default class for forms if one does not exist 
+  if {![info exists attributes(class)]} {
+      append output " class=\"margin-form\""
+  }
+
   # append attributes to form tag
   foreach name [array names attributes] {
     if { [string equal $attributes($name) {}] } {
