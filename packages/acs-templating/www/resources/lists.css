@@ -1,17 +1,97 @@
+/* zen */
+div.list-button-bar-top {
+	padding-top: 5px;
+	padding-bottom: 10px;
+}
+div.list-button-bar-bottom {
+	padding-top: 10px;
+}
+
+
+table.list-table {
+	border-collapse: collapse;
+	border: 1px solid #ccc;	
+}
+
+.list-table tr.list-header {
+	background-color: #ffffff;
+}
+
+th.list-table, th.list-table-narrow, .list-table th {
+	padding: 8px 16px;
+	border-bottom: 3px solid #A0BDEB;
+}
+
+.list-table tr.even {
+	background-color: #ffffff;
+}
+
+.list-table tr.odd {
+	background-color: #EAF2FF;
+}
+
+td.list-table, td.list-table-narrow, .list-table td {
+	padding: 8px 16px;
+	border-bottom: 1px solid #A0BDEB;
+}
+
+td.list-table-narrow, th.list-table-narrow {
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+tr.last td {
+  border-bottom: 3px solid #A0BDEB;
+}
+
+/* pagination ------------------------------------------ */
+div.list-paginator-top {
+ padding-bottom: 5px;
+}
+
+div.list-paginator-bottom {
+	padding-top: 15px;
+}
+
+.list-paginator li {
+	padding:5px;
+}
+
+.list-paginator li {
+	border: 1px solid #f00;
+	background-color: white;
+	padding: 2px 4px;
+	font-weight: bold;
+	border: 1px solid #FFF;
+}
+
+.list-paginator li a:hover {
+	background-color: #e5e5e5;
+}
+
+.list-paginator li.current {
+	background-color: #e5e5e5;
+	border: 1px solid #999;
+}
+
+/* end pagination ------------------------------------------ */
+
+
+/* end zen */
+
+/*
+
 table.list {
-  font-family: tahoma, verdana, helvetica; 
   border-collapse: collapse;
-  font-size: 85%;
+border: 1px solid #f00;
 }
 table.list-tiny {
-  font-family: tahoma, verdana, helvetica; 
-  font-size: 75%;
+  font-size: .75em;
   border-collapse: collapse;
 }
 
 p.list-row {
-  font-family: tahoma, verdana, helvetica; 
-  font-size: 85%;
+
 }
 
 span.list-label {
@@ -89,10 +169,9 @@ td.list-button-bar {
   font-size: 115%;
   line-height: 250%;
 }
-
+*/
 .list-filter { 
-  font-size: 70%; 
-  font-family: tahoma,verdana,arial,helvetica; 
+  font-size: .70em; 
 }
 tr.list-filter-selected { 
   background-color: #eeeeff;
@@ -101,13 +180,11 @@ span.list-filter-selected {
   color: black;
 }
 .list-filter-header { 
-  font-size: 70%; 
-  font-family: tahoma,verdana,arial,helvetica; 
+  font-size: .70em; 
   font-weight: bold; 
 }
 .list-filter-section { 
-  font-size: 70%; 
-  font-family: tahoma,verdana,arial,helvetica; 
+  font-size: .7em; 
   font-weight: bold; 
   background-color: #bbbbff; 
   padding-left: 4px; 
@@ -118,8 +195,7 @@ span.list-filter-selected {
 }
 
 div.list-inline-filter { 
-  font-size: 70%; 
-  font-family: tahoma,verdana,arial,helvetica; 
+  font-size: .70em; 
 }
 span.list-inline-filter { 
 }
@@ -134,9 +210,10 @@ td.list-filter-pane {
   background-color: #ddddff;
   vertical-align: top;
 }
-
+/*
 td.list-list-pane {
   background-color: white;
   vertical-align: middle;
   padding-left: 10px;
 }
+*/
