@@ -35,7 +35,7 @@ ad_proc -public template::list::create {
     {-orderby_name "orderby"}
     {-row_pretty_plural "#acs-templating.data#"}
     {-no_data ""}
-    {-main_class "list"}
+    {-main_class "list-table"}
     {-sub_class ""}
     {-class ""}
     {-html ""}
@@ -339,7 +339,7 @@ ad_proc -public template::list::create {
             -list_name $name \
             -element_name $checkbox_name \
             -spec {
-                label {<input type="checkbox" name="_dummy" onclick="acs_ListCheckAll('$name', this.checked)" title="[_ acs-templating.lt_Checkuncheck_all_rows]">}
+                label {<input type="checkbox" name="_dummy" onclick="acs_ListCheckAll('$name', this.checked)" onkeypress="acs_ListCheckAll('$name', this.checked)" title="[_ acs-templating.lt_Checkuncheck_all_rows]">}
                 display_template {<input type="checkbox" name="$key" value="@$list_properties(multirow).$key@" id="$name,@$list_properties(multirow).$key@" title="[_ acs-templating.lt_Checkuncheck_this_row]">}
                 sub_class {narrow}
                 html { align center }
