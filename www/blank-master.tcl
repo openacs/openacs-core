@@ -33,6 +33,11 @@ if { ![info exists on_load] } {
 
 # Attributes
 
+multirow create head_attribute key value
+multirow append head_attribute lang [ad_conn language]
+multirow append head_attribute xml:lang [ad_conn language]
+multirow append head_attribute xmlns http://www.w3.org/1999/xhtml
+
 multirow create attribute key value
 set onload $on_load
 

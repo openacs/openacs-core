@@ -1,6 +1,6 @@
 @doc_type;noquote@
 <html>
-  <head>
+  <head<multiple name="head_attribute"> @head_attribute.key@="@head_attribute.value@"</multiple>>
     <title>@title;noquote@</title>
     <meta name="generator" content="OpenACS version @openacs_version@">
     <if @developer_support_p@ true>
