@@ -513,6 +513,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
+select define_function_args('acs_rel__delete','rel_id');
 create function acs_rel__delete (integer)
 returns integer as '
 declare
