@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="acs-kernel" package_version="5.3.0d1" locale="ca_ES" charset="ISO-8859-1">
 
+  <msg key="Administrator">Administrador</msg>
+  <msg key="Administrators">Administradors</msg>
   <msg key="authentication_authority">Autoritat</msg>
   <msg key="common_Actions">Accions</msg>
   <msg key="common_actions">accions</msg>
@@ -8,6 +10,7 @@
   <msg key="common_add">afegeix</msg>
   <msg key="common_Administration">Administració</msg>
   <msg key="common_administration">administració</msg>
+  <msg key="common_All">Tot</msg>
   <msg key="common_Apply">Aplica</msg>
   <msg key="common_apply">aplica</msg>
   <msg key="common_Cancel">Cancel·la</msg>
@@ -18,6 +21,7 @@
   <msg key="common_closed">tancat</msg>
   <msg key="common_Continue">Continua</msg>
   <msg key="common_continue">continua</msg>
+  <msg key="common_Copy">Copia</msg>
   <msg key="common_Default">Empra l'element per defecte </msg>
   <msg key="common_default">empra l'element per defecte</msg>
   <msg key="common_Delete">Suprimeix</msg>
@@ -38,6 +42,8 @@
   <msg key="common_go">vés</msg>
   <msg key="common_Help">Ajuda</msg>
   <msg key="common_help">ajuda</msg>
+  <msg key="common_Last">Darrer</msg>
+  <msg key="common_lastt">darrer</msg>
   <msg key="common_Login">Entra</msg>
   <msg key="common_login">entra</msg>
   <msg key="common_Needs_Approval">Es necessita una aprovació</msg>
@@ -67,12 +73,31 @@
   <msg key="common_Stop">Atura</msg>
   <msg key="common_stop">atura</msg>
   <msg key="common_Submit">Envia</msg>
+  <msg key="common_submit">envia</msg>
+  <msg key="common_Title">Títol</msg>
+  <msg key="common_Type">Tipus</msg>
   <msg key="common_Update">Actualitza</msg>
   <msg key="common_update">actualitza</msg>
   <msg key="common_View">Veure</msg>
   <msg key="common_view">veure</msg>
   <msg key="common_Yes">Sí</msg>
   <msg key="common_yes">sí</msg>
+  <msg key="Default_Context">Context per defecte</msg>
+  <msg key="Email_Address">Adreça de correu electrònic</msg>
+  <msg key="First_Names">Nom</msg>
+  <msg key="Group">Grup</msg>
+  <msg key="Group_name">Nom del grup</msg>
+  <msg key="Groups">Grups</msg>
+  <msg key="Last_Name">Cognoms</msg>
+  <msg key="lt_Administrator_Relatio">Relació d'administració </msg>
+  <msg key="lt_Main_Site_Administrat">Administradors del lloc principal</msg>
+  <msg key="lt_Relational_Constraint">Restricció relacional </msg>
+  <msg key="lt_Relational_Constraint_1">Restriccions relacionals</msg>
+  <msg key="lt_Relational_Party_Segm">Segment relacional d'agrupació </msg>
+  <msg key="lt_Relational_Party_Segm_1">Segments relacionals d'agrupació</msg>
+  <msg key="lt_Security_context_root">Arrel del context de seguretat</msg>
+  <msg key="Main_Site">Lloc principal</msg>
+  <msg key="Main_Site_Members">Membres del lloc principal</msg>
   <msg key="Member_role_pretty_name">Membre</msg>
   <msg key="member_role_pretty_name">membre</msg>
   <msg key="Member_role_pretty_plural">Membres</msg>
@@ -87,4 +112,16 @@
   <msg key="member_state_needs_approval">es necessita una aprovació</msg>
   <msg key="member_state_Rejected">Refusat</msg>
   <msg key="member_state_rejected">refusat</msg>
+  <msg key="Membership_Relation">Relació de pertinença</msg>
+  <msg key="Party">Agrupació</msg>
+  <msg key="Person">Persona</msg>
+  <msg key="Registered_Users">Usuaris registrats</msg>
+  <msg key="registered_users">Usuaris registrats</msg>
+  <msg key="The_Public">Públic</msg>
+  <msg key="the_public">Públic</msg>
+  <msg key="Unregistered">No registrat</msg>
+  <msg key="Unregistered_Visitor">Visitant no registrat </msg>
+  <msg key="URL">URL</msg>
+  <msg key="User">Usuari</msg>
+  <msg key="Visitor">Visitant</msg>
 </message_catalog>
