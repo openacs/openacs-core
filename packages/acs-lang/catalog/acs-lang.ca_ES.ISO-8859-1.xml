@@ -6,7 +6,8 @@
   <msg key="English">Anglès</msg>
   <msg key="French">Francès</msg>
   <msg key="German">Alemany</msg>
-  <msg key="Locale_for">Idioma per a $package_name</msg>
+  <msg key="Locale">Configuració local</msg>
+  <msg key="Locale_for">Idioma per a %package_name%</msg>
   <msg key="localization-abday">{dg.} {dl.} {dt.} {dc.} {dj.} {dv.} {ds.}</msg>
   <msg key="localization-abmon">{gen.} {febr.} {març} {abr.} {maig} {juny} {jul.} {ag.} {set.} {oct.} {nov.} {des.}</msg>
   <msg key="localization-am_str">AM</msg>
@@ -43,7 +44,7 @@
   <msg key="Spanish">Castellà</msg>
   <msg key="this-language">Català</msg>
   <msg key="Translated_messages_on_this_page">Missatges traduïts en aquesta pàgina (%locale%)</msg>
-  <msg key="Your_locale_for_package">La configuració local en $package_name. Si se selecciona, anul·larà la configuració de tot el lloc per aquesta aplicació.</msg>
+  <msg key="Your_locale_for_package">La configuració local en %package_name%. Si se selecciona, anul·larà la configuració de tot el lloc per aquesta aplicació.</msg>
   <msg key="Your_locale_site_wide">El vostre idioma s'aplica a tot el lloc </msg>
   <msg key="Your_Preferred_Locale">El vostre idioma preferit</msg>
   <msg key="Your_timezone">La vostra zona horària</msg>
