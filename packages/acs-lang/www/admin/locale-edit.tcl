@@ -153,7 +153,6 @@ if { [form is_valid locale_editing] } {
             where locale = :locale"
 
     }
-    db_flush_cache -cache_key_pattern ad_lang_mime_charset_$locale
     forward "index?tab=locales"
 
 }

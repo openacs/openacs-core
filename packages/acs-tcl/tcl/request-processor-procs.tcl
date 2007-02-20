@@ -645,7 +645,6 @@ ad_proc -private rp_filter { why } {
     if { [catch {
         ad_conn -set locale [lang::conn::locale]
         ad_conn -set language [lang::conn::language]
-        ad_conn -set charset [lang::util::charset_for_locale [ad_conn locale]] 
     }] } {
         # acs-lang doesn't seem to be installed. Even though it must be installed now,
         # the problem is that if it isn't, everything breaks. So we wrap it in
@@ -654,7 +653,6 @@ ad_proc -private rp_filter { why } {
         # to assume that most people have added acs-lang to their system.
         ad_conn -set locale ""
         ad_conn -set language ""
-        ad_conn -set charset ""
     }
 
     # Who's online

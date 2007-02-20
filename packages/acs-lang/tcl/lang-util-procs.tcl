@@ -366,8 +366,9 @@ ad_proc -public lang::util::charset_for_locale {
     @param locale  Name of a locale, as language_COUNTRY using ISO 639 and ISO 3166
     @return        IANA MIME character set name
 } {
-    # DRB: cache this now that ad_conn tracks it
-    return [db_string -cache_key ad_lang_mime_charset_$locale charset_for_locale {}]
+    # LARS:
+    # This should probably be cached
+    return [db_string charset_for_locale {}]
 }
 
 ad_proc -private lang::util::default_locale_from_lang_not_cached { 
