@@ -1290,7 +1290,7 @@ ad_proc -private template::list::prepare_elements {
                 set element_properties(orderby_url) [get_url \
                                                          -name $name \
                                                          -override [list [list $list_properties(orderby_name) "${element_name},$direction"]]]
-                set element_properties(orderby_html_title) "Reverse the sort order of this column"
+                set element_properties(orderby_html_title) [_ acs-templating.reverse_sort_order_of_label [list label $element_properties(label)]]
                 set element_properties(ordering_p) "t"
                 set element_properties(orderby_direction) $list_properties(orderby_selected_direction)
 
@@ -1299,7 +1299,7 @@ ad_proc -private template::list::prepare_elements {
                 set element_properties(orderby_url) [get_url \
                                                          -name $name \
                                                          -override [list [list $list_properties(orderby_name) "${element_name},$element_properties(default_direction)"]]]
-                set element_properties(orderby_html_title) "Sort the list by this column"
+                set element_properties(orderby_html_title) [_ acs-templating.sort_the_list_by_label [list label $element_properties(label)]]
             }
         }
     }
