@@ -1,5 +1,5 @@
-<!-- top pagination -->
 <if @list_properties.page_size@ not nil>
+<!-- top pagination -->
   <noparse>
     <if \@paginator.page_count@ gt 1 or \@list_properties.page_size_variable_p@ eq 1>
       <div class="list-paginator-top">
@@ -19,7 +19,7 @@
             <else>
                <li>&lt;</li>
             </else>
-
+	
             <multiple name="paginator_pages">
               <if \@paginator.current_page@ ne \@paginator_pages.page@>
                 <li><a href="\@paginator_pages.url@" title="\@paginator_pages.context@">\@paginator_pages.page@</a></li>
@@ -60,8 +60,9 @@
       </div>
     </if>
   </noparse>
-</if>
 <!-- end of top pagination -->
+</if>
+
 
 <if @list_properties.bulk_actions@ not nil>
   <if @list_properties.bulk_action_method@ not nil>
@@ -73,8 +74,9 @@
   @list_properties.bulk_action_export_chunk;noquote@
 </if>
 
-<!-- list-button-bar-top div -->
+
 <if @actions:rowcount@ gt 0>
+<!-- list-button-bar-top div -->
   <div class="list-button-bar-top">
 	<ul class="compact">
       <multiple name="actions">
@@ -82,14 +84,17 @@
       </multiple>
 	</ul>
   </div>
-</if>
 <!-- end of list-button-bar-top div -->
+</if>
+
 
 <table class="@list_properties.class@" cellpadding="3" cellspacing="1"@list_properties.table_attributes;noquote@ summary="summary variable">
+  <caption>Optional Caption</caption>
   <multiple name="elements">
-    <tr class="list-header">
+    <thead>
+      <tr class="list-header">
       <group column="subrownum">
-        <th class="@elements.class@"@elements.cell_attributes;noquote@>
+        <th class="@elements.class@"@elements.cell_attributes;noquote@ id="@elements.rownum@">
           <if @elements.orderby_url@ not nil>
             <if @elements.ordering_p@ true>
               <a href="@elements.orderby_url@" title="@elements.orderby_html_title@">@elements.label;noquote@</a>
@@ -105,24 +110,29 @@
         </th>
       </group>
     </tr>
+	</thead>
   </multiple>
 
 <noparse>
   <if \@@list_properties.multirow@:rowcount@ eq 0>
-    <tr class="list-odd last">
-      <td colspan="@elements:rowcount@">
+    <tbody>
+	<tr class="list-odd last">
+        <td colspan="@elements:rowcount@" headers="1">
         @list_properties.no_data@
       </td>
     </tr>
+	</tbody>
   </if>
   <else>
+
+	<tbody>
     <multiple name="@list_properties.multirow@">
 </noparse>
       
   <if @list_properties.groupby@ not nil>
 
       <tr class="list-subheader">
-        <td colspan="@elements:rowcount@">
+        <td colspan="@elements:rowcount@" headers="1">
           <if @list_properties.groupby_label@ ne "">@list_properties.groupby_label@: </if><listelement name="@list_properties.groupby@">
         </td>
       </tr>
@@ -133,6 +143,7 @@
   </if>
 
         <multiple name="elements">
+		
   <noparse>
           <if \@@list_properties.multirow@.rownum@ lt \@@list_properties.multirow@:rowcount@>
             <if \@@list_properties.multirow@.rownum@ odd>
@@ -153,7 +164,7 @@
   </noparse>
 
             <group column="subrownum">
-              <td class="@elements.class@"@elements.cell_attributes;noquote@>
+              <td class="@elements.class@"@elements.cell_attributes;noquote@ headers="@elements.element_index@">
                 <listelement name="@elements.name@">
               </td>
             </group>
@@ -204,14 +215,16 @@
 
   <noparse>
       </multiple>
+</tbody>
     </else>
   </noparse>
 
 </table>
 
 
-<!-- bottom pagination -->
+
 <if @list_properties.page_size@ not nil>
+<!-- bottom pagination -->
   <noparse>
     <if \@paginator.page_count@ gt 1>
       <div class="list-paginator-bottom">
@@ -258,14 +271,16 @@
 	  </div>
     </if>
   </noparse>
+<!-- end of bottom pagination -->
 </if>
 
-<!-- end of bottom pagination -->
 
 
-<!-- list-button-bar-bottom div -->
+
+
 <noparse><if \@@list_properties.multirow@:rowcount@ gt 0></noparse>
   <if @bulk_actions:rowcount@ gt 0>
+	<!-- list-button-bar-bottom div -->
     <div class="list-button-bar-bottom">
 		<ul class="compact">
         <multiple name="bulk_actions">
@@ -274,9 +289,10 @@
         </multiple>
 		</ul>
     </div>
+	<!-- end of list-button-bar-bottom div -->
   </if>
 <noparse></if></noparse>
-<!-- end of list-button-bar-bottom div -->
+
 
 <if @list_properties.bulk_actions@ not nil>
   </form>
