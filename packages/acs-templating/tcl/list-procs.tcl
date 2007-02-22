@@ -328,13 +328,8 @@ ad_proc -public template::list::create {
 	set list_properties(multirow) $name
     }
 
-    # 2/21/2007
-    # Project Zen - element index
-    set elm_index 0
-
     # Set up automatic 'checkbox' element as the first element
     if { !$has_checkboxes_p && [llength $bulk_actions] > 0 } {
-	incr elm_index
 	if { [empty_string_p $key] } {
 	    error "You cannot have bulk_actions without providing a key"
 	}
@@ -353,7 +348,6 @@ ad_proc -public template::list::create {
 
     # Define the elements
     foreach { elm_name elm_spec } $elements {
-	incr elm_index
         # Create the element
         # Need to uplevel 2 the subst command to get to our caller's namespace
 
@@ -361,8 +355,7 @@ ad_proc -public template::list::create {
             -list_name $name \
             -element_name $elm_name \
             -spec $elm_spec \
-            -ulevel 2 \
-	    -element_index $elm_index
+            -ulevel 2 
     }
     set reserved_filter_names { groupby orderby format page }
 
@@ -1583,7 +1576,6 @@ ad_proc -public template::list::element::create {
     {-element_name:required}
     {-spec:required}
     {-ulevel 1}
-    {-element_index 1}
 } {
     Adds an element to a list builder list.
     
@@ -1677,7 +1669,6 @@ ad_proc -public template::list::element::create {
                          is 'subst'ed in the caller's namespace, except for *_eval properties, which are 'subst'ed inside the multirow.
     
     @param ulevel        Where we should uplevel to when doing the subst's. Defaults to '1', meaning the caller's scope.
-    @param element_index The column number of the element. Starts with '1' and also defaults to '1'.
 } {
     # Get an upvar'd reference to list_properties
     template::list::get_reference -name $list_name
@@ -1735,10 +1726,6 @@ ad_proc -public template::list::element::create {
     # Let the element know its owner's name
     set element_properties(list_name) $list_name
     
-    # 2/21/2007
-    # Project Zen: adding element_index
-    set element_properties(element_index) $element_index
-
     incr ulevel
     
     set_properties \
