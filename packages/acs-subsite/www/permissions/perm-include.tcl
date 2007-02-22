@@ -13,7 +13,7 @@ if { ![exists_and_not_null return_url] } {
 }
 
 if { ![exists_and_not_null privs] } {
-    set privs { read create write admin }
+    set privs { read create write delete admin }
 }
 
 db_1row object_info {}
