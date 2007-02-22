@@ -94,7 +94,7 @@
     <thead>
       <tr class="list-header">
       <group column="subrownum">
-        <th class="@elements.class@"@elements.cell_attributes;noquote@ id="@elements.rownum@">
+        <th class="@elements.class@"@elements.cell_attributes;noquote@ id="@list_properties.name@_@elements.name@">
           <if @elements.orderby_url@ not nil>
             <if @elements.ordering_p@ true>
               <a href="@elements.orderby_url@" title="@elements.orderby_html_title@">@elements.label;noquote@</a>
@@ -117,7 +117,7 @@
   <if \@@list_properties.multirow@:rowcount@ eq 0>
     <tbody>
 	<tr class="list-odd last">
-        <td colspan="@elements:rowcount@" headers="1">
+        <td colspan="@elements:rowcount@" headers="@list_properties.name@_nodata">
         @list_properties.no_data@
       </td>
     </tr>
@@ -132,7 +132,7 @@
   <if @list_properties.groupby@ not nil>
 
       <tr class="list-subheader">
-        <td colspan="@elements:rowcount@" headers="1">
+        <td colspan="@elements:rowcount@" headers="@list_properties.name@_@list_properties.groupby@">
           <if @list_properties.groupby_label@ ne "">@list_properties.groupby_label@: </if><listelement name="@list_properties.groupby@">
         </td>
       </tr>
@@ -164,7 +164,7 @@
   </noparse>
 
             <group column="subrownum">
-              <td class="@elements.class@"@elements.cell_attributes;noquote@ headers="@elements.element_index@">
+              <td class="@elements.class@"@elements.cell_attributes;noquote@ headers="@list_properties.name@_@elements.name@">
                 <listelement name="@elements.name@">
               </td>
             </group>
