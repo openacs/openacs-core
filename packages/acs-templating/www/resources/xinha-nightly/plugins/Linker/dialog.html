@@ -3,7 +3,7 @@
 <div id="[dTree]">(the dTree goes in here)</div>
 <div id="[options]" >
   <fieldset>
-    <legend><label><input type="radio" name="[type]" value="url" checked onclick="
+    <legend><label><input type="radio" name="[type]" value="url" checked="checked" onclick="
       document.getElementById('[urltable]').style.display=this.checked?'':'none';
       document.getElementById('[mailtable]').style.display=this.checked?'none':'';
       document.getElementById('[anchortable]').style.display=this.checked?'none':'';
@@ -11,12 +11,12 @@
     <table id="[urltable]" width="100%">
       <tr>
         <th><label for="[href]"><l10n>URL:</l10n> </label></th>
-        <td><input type="text" name="[href]" style="width:100%" value="http://www.example.com/" /></td>
+        <td><input type="text" name="[href]" style="width:100%" value="http://www.example.com/" onfocus="if (this.value == 'http://www.example.com/') this.value = '';" /></td>
       </tr>
       <tr valign="top">
         <th><l10n>Target:</l10n></th>
         <td>
-          <div><label><input type="radio" name="[target]" value="" onclick="document.getElementById('[popuptable]').style.display='none';"      checked /> <l10n>Ordinary Link</l10n></label></div>
+          <div><label><input type="radio" name="[target]" value="" onclick="document.getElementById('[popuptable]').style.display='none';"  checked="checked" /> <l10n>Ordinary Link</l10n></label></div>
           <div><label><input type="radio" name="[target]" value="_top" onclick="document.getElementById('[popuptable]').style.display='none';"   /> <l10n>Same Window (jump out of frames)</l10n></label></div>
           <div><label><input type="radio" name="[target]" value="_blank" onclick="document.getElementById('[popuptable]').style.display='none';"/> <l10n>New Window</l10n> </label></div>
           <div>
@@ -36,7 +36,7 @@
                   <td><input type="checkbox" name="[p_options]" value="menubar=yes" /></td>
 
                   <th align="left"><l10n>Toolbar:</l10n></th>
-                  <td><input type="checkbox" name="[p_options]" value="toolbar=yes" checked /></td>
+                  <td><input type="checkbox" name="[p_options]" value="toolbar=yes" checked="checked" /></td>
                 </tr>
                 <tr>
                   <th align="left"><l10n>Location Bar:</l10n></th>
@@ -47,10 +47,10 @@
                 </tr>
                 <tr>
                   <th align="left"><l10n>Scrollbars:</l10n></th>
-                  <td><input type="checkbox" name="[p_options]" value="scrollbars=yes" checked /></td>
+                  <td><input type="checkbox" name="[p_options]" value="scrollbars=yes" checked="checked" /></td>
 
                   <th align="left"><l10n>Resizeable:</l10n></th>
-                  <td><input type="checkbox" name="[p_options]" value="resizeable=yes" checked /></td>
+                  <td><input type="checkbox" name="[p_options]" value="resizeable=yes" checked="checked" /></td>
                 </tr>
               </table>
             </div>
@@ -68,7 +68,7 @@
     <table id="[mailtable]" width="100%">
       <tr>
         <th><label for="[to]"><l10n>Email Address:</l10n> </label></th>
-        <td><input type="text" name="[to]" style="width:100%" value="alice@example.com" /></td>
+        <td><input type="text" name="[to]" style="width:100%" value="alice@example.com" onfocus="if (this.value == 'alice@example.com') this.value = '';" /></td>
       </tr>
       <tr>
         <th><label for="[subject]"><l10n>Subject:</l10n> </label></th>
@@ -100,8 +100,8 @@
 
   <div style="text-align:right">
     <input type="button" id="[ok]"     value="_(OK)"     />
-    <input type="button" id="[clear]"  value="_(REMOVE LINK)" onclick="this.form['[href]'].value='';this.form['[to]'].value='';document.getElementById('[ok]').click();" />
-    <input type="button" id="[cancel]" value="_(CANCEL)" />
+    <input type="button" id="[clear]"  value="_(Remove Link)" onclick="this.form['[href]'].value='';this.form['[to]'].value='';document.getElementById('[ok]').click();" />
+    <input type="button" id="[cancel]" value="_(Cancel)" />
   </div>
 </div>
 </div>

@@ -33,7 +33,7 @@ function Init() {
 function onOK() {
 	var el = document.getElementById("f_name");
 	if (!el.value) {
-  	alert("You must enter a Name");
+		alert(HTMLArea._lc("You must enter a Name","Forms"));
 		el.focus();
 	  return false;
 	}
@@ -84,7 +84,7 @@ function getValues(){
 //Add or update options to the select box
 function addItem(item) {
 	var d = document;
-	if (item.f_optiontext.value =="") {alert("Please enter a Label");}
+	if (item.f_optiontext.value =="") {alert(HTMLArea._lc("Please enter a Label","Forms"));}
  	else { 
 		if (d.getElementById("f_select").options.selectedIndex != -1) { //update item
 			var indx = d.getElementById("f_select").options.selectedIndex;

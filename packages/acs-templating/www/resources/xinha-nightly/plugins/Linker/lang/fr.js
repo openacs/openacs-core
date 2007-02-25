@@ -3,8 +3,7 @@
 {
   "You must select some text before making a new link.": "Vous devez sélectionner un texte avant de créer un nouveau lien",
   "Are you sure you wish to remove this link?": "Confirmez-vous la suppression de ce lien ?",
-  "REMOVE LINK": "Supprimer",
-  "CANCEL": "Annuler",
+  "Remove Link": "Supprimer",
   "URL Link": "Lien URL",
   "Ordinary Link": "Lien standard",
   "Same Window (jump out of frames)": "Même fenêtre (sort des frames)",

@@ -169,7 +169,7 @@ $IMConfig['resized_dir'] = '';
   Possible values: true, false
 
  TRUE -  Allow the user to create new sub-directories in the
-         $IMConfig['base_dir'].
+         $IMConfig['images_dir']/$IMConfig['files_dir'].
 
  FALSE - No directory creation.
 
@@ -301,7 +301,7 @@ Available icons are for "doc,fla,gif,gz,html,jpg,js,mov,pdf,php,png,ppt,rar,txt,
 */
 
 $IMConfig['allowed_image_extensions'] = array("jpg","gif","png","bmp");
-$IMConfig['allowed_link_extensions'] = array("jpg","gif","js","php","pdf","zip","txt","psd","png","html","swf","xml","xls");
+$IMConfig['allowed_link_extensions'] = array("jpg","gif","js","php","pdf","zip","txt","psd","png","html","swf","xml","xls","doc");
 
 
 /*

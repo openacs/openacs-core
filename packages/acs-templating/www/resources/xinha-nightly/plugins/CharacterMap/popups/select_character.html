@@ -6,6 +6,7 @@
 <script type="text/javascript" src="../../../popups/popup.js"></script>
 <link rel="stylesheet" type="text/css" href="../../../popups/popup.css" />
 <script type="text/javascript">
+  window.resizeTo(480, 300);
 // HTMLSource based on HTMLArea XTD 1.5 modified by Holger Hees
 // Original Author - Bernhard Pfeifer novocaine@gmx.net
 HTMLArea = window.opener.HTMLArea;
@@ -13,7 +14,7 @@ function Init() // run on page load
 {
   __dlg_translate('CharacterMap');
   __dlg_init();
-  window.resizeTo(480, 300);
+
   var character = ''; // set default input to empty
   View( null, character );
   document.getElementById("cancel").focus();

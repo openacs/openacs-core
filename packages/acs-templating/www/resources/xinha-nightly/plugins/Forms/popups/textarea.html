@@ -29,7 +29,7 @@ function Init() {
 function onOK() {
 	var el = document.getElementById("f_name");
 	if (!el.value) {
-  	alert("You must enter a Name");
+		alert(HTMLArea._lc("You must enter a Name","Forms"));
 		el.focus();
 	  return false;
 	}

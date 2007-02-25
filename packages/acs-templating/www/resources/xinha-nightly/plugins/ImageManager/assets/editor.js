@@ -1,172 +1,127 @@
-/**
- * Functions for the ImageEditor interface, used by editor.php only	
- * @author $Author$
- * @version $Id$
- * @package ImageManager
- */
+var current_action=null;
+var actions=["crop","scale","rotate","measure","save"];
+var orginal_width=null,orginal_height=null;
+function toggle(_1){
+if(current_action!=_1){
+for(var i in actions){
+if(actions[i]!=_1){
+var _3=document.getElementById("tools_"+actions[i]);
+_3.style.display="none";
+var _4=document.getElementById("icon_"+actions[i]);
+_4.className="";
+}
+}
+current_action=_1;
+var _3=document.getElementById("tools_"+_1);
+_3.style.display="block";
+var _4=document.getElementById("icon_"+_1);
+_4.className="iconActive";
+var _5=document.getElementById("indicator_image");
+_5.src="img/"+_1+".gif";
+editor.setMode(current_action);
+if(_1=="scale"){
+var _6=editor.window.document.getElementById("theImage");
+orginal_width=_6.width;
+orginal_height=_6.height;
+var w=document.getElementById("sw");
+w.value=orginal_width;
+var h=document.getElementById("sh");
+h.value=orginal_height;
+}
+}
+}
+function toggleMarker(){
+var _9=document.getElementById("markerImg");
+if(_9!=null&&_9.src!=null){
+if(_9.src.indexOf("t_black.gif")>=0){
+_9.src="img/t_white.gif";
+}else{
+_9.src="img/t_black.gif";
+}
+editor.toggleMarker();
+}
+}
+function toggleConstraints(){
+var _a=document.getElementById("scaleConstImg");
+var _b=document.getElementById("constProp");
+if(_a!=null&&_a.src!=null){
+if(_a.src.indexOf("unlocked2.gif")>=0){
+_a.src="img/islocked2.gif";
+_b.checked=true;
+checkConstrains("width");
+}else{
+_a.src="img/unlocked2.gif";
+_b.checked=false;
+}
+}
+}
+function checkConstrains(_c){
+var _d=document.getElementById("constProp");
+if(_d.checked){
+var w=document.getElementById("sw");
+var _f=w.value;
+var h=document.getElementById("sh");
+var _11=h.value;
+if(orginal_width>0&&orginal_height>0){
+if(_c=="width"&&_f>0){
+h.value=parseInt((_f/orginal_width)*orginal_height);
+}else{
+if(_c=="height"&&_11>0){
+w.value=parseInt((_11/orginal_height)*orginal_width);
+}
+}
+}
+}
+updateMarker("scale");
+}
+function updateMarker(_12){
+if(_12=="crop"){
+var _13=document.getElementById("cx");
+var _14=document.getElementById("cy");
+var _15=document.getElementById("cw");
+var _16=document.getElementById("ch");
+editor.setMarker(parseInt(_13.value),parseInt(_14.value),parseInt(_15.value),parseInt(_16.value));
+}else{
+if(_12=="scale"){
+var _17=document.getElementById("sw");
+var _18=document.getElementById("sh");
+editor.setMarker(0,0,parseInt(_17.value),parseInt(_18.value));
+}
+}
+}
+function rotatePreset(_19){
+var _1a=_19.options[_19.selectedIndex].value;
+if(_1a.length>0&&parseInt(_1a)!=0){
+var ra=document.getElementById("ra");
+ra.value=parseInt(_1a);
+}
+}
+function updateFormat(_1c){
+var _1d=_1c.options[_1c.selectedIndex].value;
+var _1e=_1d.split(",");
+if(_1e.length>1){
+updateSlider(parseInt(_1e[1]));
+}
+}
+function addEvent(obj,_20,fn){
+if(obj.addEventListener){
+obj.addEventListener(_20,fn,true);
+return true;
+}else{
+if(obj.attachEvent){
+var r=obj.attachEvent("on"+_20,fn);
+return r;
+}else{
+return false;
+}
+}
+}
+init=function(){
+var _23=document.getElementById("bottom");
+if(window.opener){
+__dlg_init(_23);
+__dlg_translate("ImageManager");
+}
+};
+addEvent(window,"load",init);
 
-	var current_action = null;
-	var actions = ['crop', 'scale', 'rotate', 'measure', 'save'];
-	var orginal_width = null, orginal_height=null;
-	function toggle(action) 
-	{
-		if(current_action != action)
-		{
-
-			for (var i in actions)
-			{
-				if(actions[i] != action)
-				{
-					var tools = document.getElementById('tools_'+actions[i]);
-					tools.style.display = 'none';
-					var icon = document.getElementById('icon_'+actions[i]);
-					icon.className = '';
-				}
-			}
-
-			current_action = action;
-			
-			var tools = document.getElementById('tools_'+action);
-			tools.style.display = 'block';
-			var icon = document.getElementById('icon_'+action);
-			icon.className = 'iconActive';
-
-			var indicator = document.getElementById('indicator_image');
-			indicator.src = 'img/'+action+'.gif';
-
-			editor.setMode(current_action);
-
-			//constraints on the scale,
-			//code by Frédéric Klee <fklee@isuisse.com>
-			if(action == 'scale') 
-			{
-				var theImage = editor.window.document.getElementById('theImage');
-				orginal_width = theImage.width ;
-				orginal_height = theImage.height;
-
-                var w = document.getElementById('sw');
-				w.value = orginal_width ;
-				var h = document.getElementById('sh') ;
-				h.value = orginal_height ;
-			}
-
-		}
-	}
-
-	function toggleMarker() 
-	{
-		var marker = document.getElementById("markerImg");
-		
-		if(marker != null && marker.src != null) {
-			if(marker.src.indexOf("t_black.gif") >= 0)
-				marker.src = "img/t_white.gif";
-			else
-				marker.src = "img/t_black.gif";
-
-			editor.toggleMarker();
-		}
-	}
-
-	//Togggle constraints, by Frédéric Klee <fklee@isuisse.com>
-	function toggleConstraints() 
-	{
-		var lock = document.getElementById("scaleConstImg");
-		var checkbox = document.getElementById("constProp");
-		
-		if(lock != null && lock.src != null) {
-			if(lock.src.indexOf("unlocked2.gif") >= 0)
-			{
-				lock.src = "img/islocked2.gif";
-				checkbox.checked = true;
-				checkConstrains('width');
-
-			}
-			else
-			{
-				lock.src = "img/unlocked2.gif";
-				checkbox.checked = false;
-			}
-		}
-	}
-	
-	//check the constraints, by Frédéric Klee <fklee@isuisse.com>
-	function checkConstrains(changed) 
-	{
-		var constrained = document.getElementById('constProp');
-		if(constrained.checked) 
-		{
-			var w = document.getElementById('sw') ;
-			var width = w.value ;
-			var h = document.getElementById('sh') ;
-			var height = h.value ;
-			
-			if(orginal_width > 0 && orginal_height > 0) 
-			{
-				if(changed == 'width' && width > 0) 
-					h.value = parseInt((width/orginal_width)*orginal_height);
-				else if(changed == 'height' && height > 0) 
-					w.value = parseInt((height/orginal_height)*orginal_width);
-			}
-		}
-		
-		updateMarker('scale') ;
-	}
-
-
-	function updateMarker(mode) 
-	{
-		if (mode == 'crop')
-		{
-			var t_cx = document.getElementById('cx');
-			var t_cy = document.getElementById('cy');
-			var t_cw = document.getElementById('cw');
-			var t_ch = document.getElementById('ch');
-
-			editor.setMarker(parseInt(t_cx.value), parseInt(t_cy.value), parseInt(t_cw.value), parseInt(t_ch.value));
-		}
-		else if(mode == 'scale') {
-			var s_sw = document.getElementById('sw');
-			var s_sh = document.getElementById('sh');
-			editor.setMarker(0, 0, parseInt(s_sw.value), parseInt(s_sh.value));
-		}
-	}
-
-	
-	function rotatePreset(selection) 
-	{
-		var value = selection.options[selection.selectedIndex].value;
-		
-		if(value.length > 0 && parseInt(value) != 0) {
-			var ra = document.getElementById('ra');
-			ra.value = parseInt(value);
-		}
-	}
-
-	function updateFormat(selection) 
-	{
-		var selected = selection.options[selection.selectedIndex].value;
-
-		var values = selected.split(",");
-		if(values.length >1) {
-			updateSlider(parseInt(values[1]));
-		}
-
-	}
-	function addEvent(obj, evType, fn)
-	{ 
-		if (obj.addEventListener) { obj.addEventListener(evType, fn, true); return true; } 
-		else if (obj.attachEvent) {  var r = obj.attachEvent("on"+evType, fn);  return r;  } 
-		else {  return false; } 
-	} 
-
-	init = function()
-	{
-		var bottom = document.getElementById('bottom');
-		if(window.opener)
-		{
-			__dlg_init(bottom);
-			__dlg_translate('ImageManager');
-		}
-	}
-
-	addEvent(window, 'load', init);

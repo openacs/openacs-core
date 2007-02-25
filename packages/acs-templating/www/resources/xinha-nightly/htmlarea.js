@@ -3,8 +3,8 @@
     --  COMPATABILITY FILE
     --  htmlarea.js is now XinhaCore.js  
     --
-    --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/htmlarea.js $
-    --  $LastChangedDate: 2007-01-16 03:28:57 +1300 (Tue, 16 Jan 2007) $
+    --  $HeadURL: http://svn.xinha.python-hosting.com/tags/0.92beta/htmlarea.js $
+    --  $LastChangedDate: 2007-01-15 15:28:57 +0100 (Mo, 15 Jan 2007) $
     --  $LastChangedRevision: 659 $
     --  $LastChangedBy: gogo $
     --------------------------------------------------------------------------*/

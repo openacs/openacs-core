@@ -4,7 +4,7 @@
 <link rel="stylesheet" type="text/css" href="../../../popups/popup.css" />
 <script type="text/javascript" src="../../../popups/popup.js"></script>
 <script type="text/javascript">
-
+  window.resizeTo(400, 300);
 var InsertSmiley = window.opener.InsertSmiley;
 var editor = null;
 var param;
@@ -15,7 +15,7 @@ function Init() {
   __dlg_init();
   param = window.dialogArguments;
   editor = param['editor'];
-  window.resizeTo(400, 300);
+
   var tbody = document.getElementById("smileytable");
   var inum;
   var trow;

@@ -4,8 +4,7 @@
 {
   "You must select some text before making a new link.": "Zaznacz tekst przed dodaniem odnośnika.",
   "Are you sure you wish to remove this link?": "Na pewno chcesz usunąć odnośnik?",
-  "REMOVE LINK": "USUŃ ODNOŚNIK",
-  "CANCEL": "ANULUJ",
+  "Remove Link": "USUŃ ODNOŚNIK",
   "URL Link": "Adres URL",
   "Ordinary Link": "Zwykły odnośnik",
   "Same Window (jump out of frames)": "To samo okno (wyskocz z ramek)",

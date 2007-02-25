@@ -1,348 +1,204 @@
-
-  /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
-    --  Xinha (is not htmlArea) - http://xinha.gogo.co.nz/
-    --
-    --  Use of Xinha is granted by the terms of the htmlArea License (based on
-    --  BSD license)  please read license.txt in this package for details.
-    --
-    --  Xinha was originally based on work by Mihai Bazon which is:
-    --      Copyright (c) 2003-2004 dynarch.com.
-    --      Copyright (c) 2002-2003 interactivetools.com, inc.
-    --      This copyright notice MUST stay intact for use.
-    --
-    --  This is the implementation of the inline dialog (as use by the Linker plugin)
-    --
-    --  
-    --
-    --
-    --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/modules/Dialogs/inline-dialog.js $
-    --  $LastChangedDate: 2007-01-24 03:26:04 +1300 (Wed, 24 Jan 2007) $
-    --  $LastChangedRevision: 694 $
-    --  $LastChangedBy: gogo $
-    --------------------------------------------------------------------------*/
-Xinha.Dialog = function(editor, html, localizer)
-{
-  this.id    = { };
-  this.r_id  = { }; // reverse lookup id
-  this.editor   = editor;
-  this.document = document;
-
-  this.rootElem = document.createElement('div');
-  this.rootElem.className = 'dialog';
-  this.rootElem.style.position = 'absolute';
-  this.rootElem.style.display  = 'none';
-  this.editor._framework.ed_cell.insertBefore(this.rootElem, this.editor._framework.ed_cell.firstChild);
-  this.rootElem.style.width  = this.width  =  this.editor._framework.ed_cell.offsetWidth + 'px';
-  this.rootElem.style.height = this.height =  this.editor._framework.ed_cell.offsetHeight + 'px';
-
-  var dialog = this;
-  if(typeof localizer == 'function')
-  {
-    this._lc = localizer;
-  }
-  else if(localizer)
-  {
-    this._lc = function(string)
-    {
-      return Xinha._lc(string,localizer);
-    };
-  }
-  else
-  {
-    this._lc = function(string)
-    {
-      return string;
-    };
-  }
-
-  html = html.replace(/\[([a-z0-9_]+)\]/ig,
-                      function(fullString, id)
-                      {
-                        if(typeof dialog.id[id] == 'undefined')
-                        {
-                          dialog.id[id] = Xinha.uniq('Dialog');
-                          dialog.r_id[dialog.id[id]] = id;
-                        }
-                        return dialog.id[id];
-                      }
-             ).replace(/<l10n>(.*?)<\/l10n>/ig,
-                       function(fullString,translate)
-                       {
-                         return dialog._lc(translate) ;
-                       }
-             ).replace(/="_\((.*?)\)"/g,
-                       function(fullString, translate)
-                       {
-                         return '="' + dialog._lc(translate) + '"';
-                       }
-             );
-
-  this.rootElem.innerHTML = html;
-
-
-
-
-  this.editor.notifyOn
-   ('resize',
-      function(e, args)
-      {
-        dialog.rootElem.style.width  = dialog.width  =  dialog.editor._framework.ed_cell.offsetWidth + 'px';
-        dialog.rootElem.style.height = dialog.height =  dialog.editor._framework.ed_cell.offsetHeight + 'px';
-        dialog.onresize();
-      }
-    );
+Xinha.Dialog=function(_1,_2,_3){
+this.id={};
+this.r_id={};
+this.editor=_1;
+this.document=document;
+this.rootElem=document.createElement("div");
+this.rootElem.className="dialog";
+this.rootElem.style.position="absolute";
+this.rootElem.style.display="none";
+this.editor._framework.ed_cell.insertBefore(this.rootElem,this.editor._framework.ed_cell.firstChild);
+this.rootElem.style.width=this.width=this.editor._framework.ed_cell.offsetWidth+"px";
+this.rootElem.style.height=this.height=this.editor._framework.ed_cell.offsetHeight+"px";
+var _4=this;
+if(typeof _3=="function"){
+this._lc=_3;
+}else{
+if(_3){
+this._lc=function(_5){
+return Xinha._lc(_5,_3);
+};
+}else{
+this._lc=function(_6){
+return _6;
+};
+}
+}
+_2=_2.replace(/\[([a-z0-9_]+)\]/ig,function(_7,id){
+if(typeof _4.id[id]=="undefined"){
+_4.id[id]=Xinha.uniq("Dialog");
+_4.r_id[_4.id[id]]=id;
+}
+return _4.id[id];
+}).replace(/<l10n>(.*?)<\/l10n>/ig,function(_9,_a){
+return _4._lc(_a);
+}).replace(/="_\((.*?)\)"/g,function(_b,_c){
+return "=\""+_4._lc(_c)+"\"";
+});
+this.rootElem.innerHTML=_2;
+this.editor.notifyOn("resize",function(e,_e){
+_4.rootElem.style.width=_4.width=_4.editor._framework.ed_cell.offsetWidth+"px";
+_4.rootElem.style.height=_4.height=_4.editor._framework.ed_cell.offsetHeight+"px";
+_4.onresize();
+});
+};
+Xinha.Dialog.prototype.onresize=function(){
+return true;
+};
+Xinha.Dialog.prototype.show=function(_f){
+if(Xinha.is_ie){
+this._lastRange=this.editor._createRange(this.editor._getSelection());
+}
+if(typeof _f!="undefined"){
+this.setValues(_f);
+}
+this._restoreTo=[this.editor._textArea.style.display,this.editor._iframe.style.visibility,this.editor.hidePanels()];
+this.editor._textArea.style.display="none";
+this.editor._iframe.style.visibility="hidden";
+this.rootElem.style.display="";
+};
+Xinha.Dialog.prototype.hide=function(){
+this.rootElem.style.display="none";
+this.editor._textArea.style.display=this._restoreTo[0];
+this.editor._iframe.style.visibility=this._restoreTo[1];
+this.editor.showPanels(this._restoreTo[2]);
+if(Xinha.is_ie){
+this._lastRange.select();
+}
+this.editor.updateToolbar();
+return this.getValues();
+};
+Xinha.Dialog.prototype.toggle=function(){
+if(this.rootElem.style.display=="none"){
+this.show();
+}else{
+this.hide();
+}
+};
+Xinha.Dialog.prototype.setValues=function(_10){
+for(var i in _10){
+var _12=this.getElementsByName(i);
+if(!_12){
+continue;
+}
+for(var x=0;x<_12.length;x++){
+var e=_12[x];
+switch(e.tagName.toLowerCase()){
+case "select":
+for(var j=0;j<e.options.length;j++){
+if(typeof _10[i]=="object"){
+for(var k=0;k<_10[i].length;k++){
+if(_10[i][k]==e.options[j].value){
+e.options[j].selected=true;
+}
+}
+}else{
+if(_10[i]==e.options[j].value){
+e.options[j].selected=true;
+}
+}
+}
+break;
+case "textarea":
+case "input":
+switch(e.getAttribute("type")){
+case "radio":
+if(e.value==_10[i]){
+e.checked=true;
+}
+break;
+case "checkbox":
+if(typeof _10[i]=="object"){
+for(var j in _10[i]){
+if(_10[i][j]==e.value){
+e.checked=true;
+}
+}
+}else{
+if(_10[i]==e.value){
+e.checked=true;
+}
+}
+break;
+default:
+e.value=_10[i];
+}
+break;
+default:
+break;
+}
+}
+}
+};
+Xinha.Dialog.prototype.getValues=function(){
+var _17=[];
+var _18=Xinha.collectionToArray(this.rootElem.getElementsByTagName("input")).append(Xinha.collectionToArray(this.rootElem.getElementsByTagName("textarea"))).append(Xinha.collectionToArray(this.rootElem.getElementsByTagName("select")));
+for(var x=0;x<_18.length;x++){
+var i=_18[x];
+if(!(i.name&&this.r_id[i.name])){
+continue;
+}
+if(typeof _17[this.r_id[i.name]]=="undefined"){
+_17[this.r_id[i.name]]=null;
+}
+var v=_17[this.r_id[i.name]];
+switch(i.tagName.toLowerCase()){
+case "select":
+if(i.multiple){
+if(!v.push){
+if(v!=null){
+v=[v];
+}else{
+v=new Array();
+}
+}
+for(var j=0;j<i.options.length;j++){
+if(i.options[j].selected){
+v.push(i.options[j].value);
+}
+}
+}else{
+if(i.selectedIndex>=0){
+v=i.options[i.selectedIndex];
+}
+}
+break;
+case "textarea":
+case "input":
+default:
+switch(i.type.toLowerCase()){
+case "radio":
+if(i.checked){
+v=i.value;
+break;
+}
+case "checkbox":
+if(v==null){
+if(this.getElementsByName(this.r_id[i.name]).length>1){
+v=new Array();
+}
+}
+if(i.checked){
+if(v!=null&&typeof v=="object"&&v.push){
+v.push(i.value);
+}else{
+v=i.value;
+}
+}
+break;
+default:
+v=i.value;
+break;
+}
+}
+_17[this.r_id[i.name]]=v;
+}
+return _17;
+};
+Xinha.Dialog.prototype.getElementById=function(id){
+return this.document.getElementById(this.id[id]?this.id[id]:id);
+};
+Xinha.Dialog.prototype.getElementsByName=function(_1e){
+return this.document.getElementsByName(this.id[_1e]?this.id[_1e]:_1e);
 };
 
-Xinha.Dialog.prototype.onresize = function()
-{
-  return true;
-};
-
-Xinha.Dialog.prototype.show = function(values)
-{
-  // We need to preserve the selection for IE
-  if(Xinha.is_ie)
-  {
-    this._lastRange = this.editor._createRange(this.editor._getSelection());
-  }
-
-  if(typeof values != 'undefined')
-  {
-    this.setValues(values);
-  }
-  this._restoreTo = [this.editor._textArea.style.display, this.editor._iframe.style.visibility, this.editor.hidePanels()];
-
-  this.editor._textArea.style.display = 'none';
-  this.editor._iframe.style.visibility   = 'hidden';
-  this.rootElem.style.display   = '';
-};
-
-Xinha.Dialog.prototype.hide = function()
-{
-  this.rootElem.style.display         = 'none';
-  this.editor._textArea.style.display = this._restoreTo[0];
-  this.editor._iframe.style.visibility   = this._restoreTo[1];
-  this.editor.showPanels(this._restoreTo[2]);
-
-  // Restore the selection
-  if(Xinha.is_ie)
-  {
-    this._lastRange.select();
-  }
-  this.editor.updateToolbar();
-  return this.getValues();
-};
-
-Xinha.Dialog.prototype.toggle = function()
-{
-  if(this.rootElem.style.display == 'none')
-  {
-    this.show();
-  }
-  else
-  {
-    this.hide();
-  }
-};
-
-Xinha.Dialog.prototype.setValues = function(values)
-{
-  for(var i in values)
-  {
-    var elems = this.getElementsByName(i);
-    if(!elems) continue;
-    for(var x = 0; x < elems.length; x++)
-    {
-      var e = elems[x];
-      switch(e.tagName.toLowerCase())
-      {
-        case 'select'  :
-        {
-          for(var j = 0; j < e.options.length; j++)
-          {
-            if(typeof values[i] == 'object')
-            {
-              for(var k = 0; k < values[i].length; k++)
-              {
-                if(values[i][k] == e.options[j].value)
-                {
-                  e.options[j].selected = true;
-                }
-              }
-            }
-            else if(values[i] == e.options[j].value)
-            {
-              e.options[j].selected = true;
-            }
-          }
-          break;
-        }
-
-
-        case 'textarea':
-        case 'input'   :
-        {
-          switch(e.getAttribute('type'))
-          {
-            case 'radio'   :
-            {
-              if(e.value == values[i])
-              {
-                e.checked = true;
-              }
-              break;
-            }
-
-            case 'checkbox':
-            {
-              if(typeof values[i] == 'object')
-              {
-                for(var j in values[i])
-                {
-                  if(values[i][j] == e.value)
-                  {
-                    e.checked = true;
-                  }
-                }
-              }
-              else
-              {
-                if(values[i] == e.value)
-                {
-                  e.checked = true;
-                }
-              }
-              break;
-            }
-
-            default    :
-            {
-              e.value = values[i];
-            }
-          }
-          break;
-        }
-
-        default        :
-        break;
-      }
-    }
-  }
-};
-
-Xinha.Dialog.prototype.getValues = function()
-{
-  var values = [ ];
-  var inputs = Xinha.collectionToArray(this.rootElem.getElementsByTagName('input'))
-              .append(Xinha.collectionToArray(this.rootElem.getElementsByTagName('textarea')))
-              .append(Xinha.collectionToArray(this.rootElem.getElementsByTagName('select')));
-
-  for(var x = 0; x < inputs.length; x++)
-  {
-    var i = inputs[x];
-    if(!(i.name && this.r_id[i.name])) continue;
-
-    if(typeof values[this.r_id[i.name]] == 'undefined')
-    {
-      values[this.r_id[i.name]] = null;
-    }
-    var v = values[this.r_id[i.name]];
-
-    switch(i.tagName.toLowerCase())
-    {
-      case 'select':
-      {
-        if(i.multiple)
-        {
-          if(!v.push)
-          {
-            if(v != null)
-            {
-              v = [v];
-            }
-            else
-            {
-              v = new Array();
-            }
-          }
-          for(var j = 0; j < i.options.length; j++)
-          {
-            if(i.options[j].selected)
-            {
-              v.push(i.options[j].value);
-            }
-          }
-        }
-        else
-        {
-          if(i.selectedIndex >= 0)
-          {
-            v = i.options[i.selectedIndex];
-          }
-        }
-        break;
-      }
-
-      case 'textarea':
-      case 'input'   :
-      default        :
-      {
-        switch(i.type.toLowerCase())
-        {
-          case  'radio':
-          {
-            if(i.checked)
-            {
-              v = i.value;
-              break;
-            }
-          }
-
-          case 'checkbox':
-          {
-            if(v == null)
-            {
-              if(this.getElementsByName(this.r_id[i.name]).length > 1)
-              {
-                v = new Array();
-              }
-            }
-
-            if(i.checked)
-            {
-              if(v != null && typeof v == 'object' && v.push)
-              {
-                v.push(i.value);
-              }
-              else
-              {
-                v = i.value;
-              }
-            }
-            break;
-          }
-
-          default   :
-          {
-            v = i.value;
-            break;
-          }
-        }
-      }
-
-    }
-
-    values[this.r_id[i.name]] = v;
-  }
-  return values;
-};
-
-Xinha.Dialog.prototype.getElementById = function(id)
-{
-  return this.document.getElementById(this.id[id] ? this.id[id] : id);
-};
-
-Xinha.Dialog.prototype.getElementsByName = function(name)
-{
-  return this.document.getElementsByName(this.id[name] ? this.id[name] : name);
-};

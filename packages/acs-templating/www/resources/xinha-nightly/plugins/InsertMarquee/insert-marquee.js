@@ -1,107 +1,64 @@
-// Marquee plugin for HTMLArea
-// Implementation by Udo Schmal based on HTMLArea 3.0
-// Original Author - Udo Schmal, Schaffrath-NeueMedien
-//
-// (c) Udo Schmal.2004
-// Distributed under the same terms as HTMLArea itself.
-// This notice MUST stay intact for use (see license.txt).
-
-function InsertMarquee(editor) {
-	this.editor = editor;
-
-	var cfg = editor.config;
-	var self = this;
-
-	// register the toolbar buttons provided by this plugin
-	cfg.registerButton({
-	id       : "insertmarquee",
-	tooltip  : this._lc("Insert scrolling marquee"),
-	image    : editor.imgURL("ed_marquee.gif", "InsertMarquee"),
-	textMode : false,
-	action   : function(editor) {
-			self.buttonPress(editor);
-		}
-	})
-	cfg.addToolbarElement("insertmarquee", "inserthorizontalrule", -1);
+function InsertMarquee(_1){
+this.editor=_1;
+var _2=_1.config;
+var _3=this;
+_2.registerButton({id:"insertmarquee",tooltip:this._lc("Insert scrolling marquee"),image:_1.imgURL("ed_marquee.gif","InsertMarquee"),textMode:false,action:function(_4){
+_3.buttonPress(_4);
+}});
+_2.addToolbarElement("insertmarquee","inserthorizontalrule",-1);
 }
-
-InsertMarquee._pluginInfo = {
-	name          : "InsertMarquee",
-	version       : "1.0",
-	developer     : "Udo Schmal",
-	developer_url : "http://www.schaffrath-NeueMedien.de/",
-	c_owner       : "Udo Schmal & Schaffrath NeueMedien",
-	license       : "htmlArea"
+InsertMarquee._pluginInfo={name:"InsertMarquee",version:"1.0",developer:"Udo Schmal",developer_url:"http://www.schaffrath-NeueMedien.de/",c_owner:"Udo Schmal & Schaffrath NeueMedien",license:"htmlArea"};
+InsertMarquee.prototype._lc=function(_5){
+return HTMLArea._lc(_5,"InsertMarquee");
+};
+InsertMarquee.prototype.buttonPress=function(_6,_7){
+function setAttr(el,_9,_a){
+if(_a!=""){
+el.setAttribute(_9,_a);
+}else{
+el.removeAttribute(_9);
+}
+}
+var _b=new Object();
+if(typeof _7=="undefined"){
+_7=_6.getParentElement();
+}
+if(_7.tagName.toLowerCase()=="marquee"){
+_b.f_name=_7.name;
+_b.f_behavior=_7.behavior;
+_b.f_direction=_7.direction;
+_b.f_text=_7.innerHTML;
+_b.f_width=_7.width;
+_b.f_height=_7.height;
+_b.f_bgcolor=_7.bgColor;
+_b.f_scrollamount=_7.scrollAmount;
+_b.f_scrolldelay=_7.scrollDelay;
+}else{
+_b={f_name:"",f_behavior:"",f_direction:"",f_text:"",f_width:"",f_height:"",f_bgcolor:"",f_scrollamount:"",f_scrolldelay:""};
+}
+_6._popupDialog("plugin://InsertMarquee/insert_marquee",function(_c){
+if(!_c){
+return false;
+}else{
+if(_7.tagName.toLowerCase()=="marquee"){
+setAttr(_7,"name",_c["f_name"]);
+setAttr(_7,"id",_c["f_name"]);
+setAttr(_7,"behavior",_c["f_behavior"]);
+setAttr(_7,"direction",_c["f_direction"]);
+setAttr(_7,"width",_c["f_width"]);
+setAttr(_7,"height",_c["f_height"]);
+setAttr(_7,"bgColor",_c["f_bgcolor"]);
+setAttr(_7,"scrollAmount",_c["f_scrollamount"]);
+setAttr(_7,"scrollDelay",_c["f_scrolldelay"]);
+_7.innerHTML=_c["f_text"];
+}else{
+var _d="<marquee name=\""+_c["f_name"]+"\" "+"id=\""+_c["f_name"]+"\" "+"behavior=\""+_c["f_behavior"]+"\" "+"direction=\""+_c["f_direction"]+"\" "+"width=\""+_c["f_width"]+"\" "+"height=\""+_c["f_height"]+"\" "+"bgcolor=\""+_c["f_bgcolor"]+"\" "+"scrollamount=\""+_c["f_scrollamount"]+"\" "+"scrolldelay=\""+_c["f_scrolldelay"]+"\">\n";
+alert(_d);
+_d=_d+_c["f_text"];
+_d=_d+"</marquee>";
+_6.insertHTML(_d);
+}
+}
+},_b);
 };
 
-InsertMarquee.prototype._lc = function(string) {
-    return HTMLArea._lc(string, "InsertMarquee");
-};
-
-InsertMarquee.prototype.buttonPress = function(editor, node) {
-  function setAttr(el, attr, value) {
-    if (value != "")
-      el.setAttribute(attr, value);
-    else
-      el.removeAttribute(attr);
-  }
-  var outparam = new Object();
-	if (typeof node == "undefined") {
-	  node = editor.getParentElement();
-	}
-  if ( node.tagName.toLowerCase() == "marquee") {
-    outparam.f_name         = node.name;
-		outparam.f_behavior     = node.behavior;
-		outparam.f_direction    = node.direction;
-		outparam.f_text         = node.innerHTML;
-		outparam.f_width	      = node.width;
-		outparam.f_height	      = node.height;
-		outparam.f_bgcolor      = node.bgColor;
-		outparam.f_scrollamount = node.scrollAmount;
-		outparam.f_scrolldelay  = node.scrollDelay;
-	} else {
-	outparam = {
-    f_name    : '',
-		f_behavior	: '',
-		f_direction	: '',
-		f_text		: '',
-		f_width		: '',
-		f_height	: '',
-		f_bgcolor	: '',
-		f_scrollamount	: '',
-		f_scrolldelay	: ''
-		};
-	}
-	editor._popupDialog( "plugin://InsertMarquee/insert_marquee", function( param )
-	{
-		if ( !param )
-		{ //user must have pressed Cancel
-			return false;
-		} else if ( node.tagName.toLowerCase() == "marquee") {
-        setAttr(node, "name", param["f_name"]);
-        setAttr(node, "id", param["f_name"]);
-				setAttr(node, "behavior",	param["f_behavior"]);
-				setAttr(node, "direction", param["f_direction"]);
-				setAttr(node, "width", param["f_width"]);
-				setAttr(node, "height", param["f_height"]);
-				setAttr(node, "bgColor", param["f_bgcolor"]);
-				setAttr(node, "scrollAmount", param["f_scrollamount"]);
-				setAttr(node, "scrollDelay", param["f_scrolldelay"]);
-        node.innerHTML = param["f_text"];
-		} else {
-			var text = '<marquee name="' + param["f_name"] + '" ' +
-          'id="' + param["f_name"] + '" ' + 
-          'behavior="' + param["f_behavior"] + '" ' +
-					'direction="' + param["f_direction"] + '" ' +
-					'width="' + param["f_width"] + '" ' +
-					'height="' + param["f_height"] + '" ' +
-					'bgcolor="' + param["f_bgcolor"] + '" ' +
-					'scrollamount="' + param["f_scrollamount"] + '" ' +
-					'scrolldelay="' + param["f_scrolldelay"] + '">\n';
-          alert(text);
-			text = text + param["f_text"];
-			text = text + '</marquee>';
-			editor.insertHTML( text );
-		}
-	}, outparam);
-};

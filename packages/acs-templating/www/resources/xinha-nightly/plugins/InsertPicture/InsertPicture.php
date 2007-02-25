@@ -52,7 +52,7 @@
 <script type="text/javascript" src="../../popups/popup.js"></script>
 
 <script type="text/javascript">
-
+  window.resizeTo(500, 490);
 var Xinha = window.opener.Xinha;
 function i18n(str) {
   return (Xinha._lc(str, 'Xinha'));
@@ -61,7 +61,7 @@ function i18n(str) {
 function Init() {
   __dlg_translate("InsertPicture");
   __dlg_init();
-  window.resizeTo(500, 490);
+
   // Make sure the translated string appears in the drop down. (for gecko)
   document.getElementById("f_align").selectedIndex = 0;
   document.getElementById("f_align").selectedIndex = document.getElementById("f_align").selectedIndex;
