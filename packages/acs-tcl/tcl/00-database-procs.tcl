@@ -1054,7 +1054,7 @@ ad_proc -public db_string {
 
     if { [info exists cache_key] } {
         set value [ns_cache eval $cache_pool $cache_key {
-            db_with_handle db {
+            db_with_handle -dbn $dbn db {
                 set selection [db_exec 0or1row $db $full_name $sql]
             }
             if { $selection ne ""} {
@@ -1071,7 +1071,7 @@ ad_proc -public db_string {
             return [lindex $value 0]
         }
     } else {
-        db_with_handle db {
+        db_with_handle -dbn $dbn db {
             set selection [db_exec 0or1row $db $full_name $sql]
         }
         if { $selection eq ""} {
