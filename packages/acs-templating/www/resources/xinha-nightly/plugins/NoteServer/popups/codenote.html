@@ -72,7 +72,7 @@ function message(){
 if (document.getElementById("f_applet").checked)
   if (!((navigator.userAgent.toLowerCase().indexOf("msie") != -1)
     && (navigator.userAgent.toLowerCase().indexOf("opera") == -1))) {
-    alert("With Mozilla, the applet will not be visible in editor, but only in Web page after submitting.");
+    alert(HTMLArea._lc("With Mozilla, the applet will not be visible in editor, but only in Web page after submitting.", 'NoteServer'));
   }
 }
 

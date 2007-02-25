@@ -1,278 +1,168 @@
-
-  /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
-    --  Xinha (is not htmlArea) - http://xinha.gogo.co.nz/
-    --
-    --  Use of Xinha is granted by the terms of the htmlArea License (based on
-    --  BSD license)  please read license.txt in this package for details.
-    --
-    --  Xinha was originally based on work by Mihai Bazon which is:
-    --      Copyright (c) 2003-2004 dynarch.com.
-    --      Copyright (c) 2002-2003 interactivetools.com, inc.
-    --      This copyright notice MUST stay intact for use.
-    --
-    --  This is the standard implementation of the method for rendering HTML code from the DOM
-    --
-    --  The file is loaded by the Xinha Core when no alternative method (plugin) is loaded.
-    --
-    --
-    --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/modules/GetHtml/DOMwalk.js $
-    --  $LastChangedDate: 2007-01-24 03:26:04 +1300 (Wed, 24 Jan 2007) $
-    --  $LastChangedRevision: 694 $
-    --  $LastChangedBy: gogo $
-    --------------------------------------------------------------------------*/
-function GetHtmlImplementation(editor) {
-    this.editor = editor;
+function GetHtmlImplementation(_1){
+this.editor=_1;
 }
-
-GetHtmlImplementation._pluginInfo = {
-  name          : "GetHtmlImplementation DOMwalk",
-  origin        : "Xinha Core",
-  version       : "$LastChangedRevision: 694 $".replace(/^[^:]*: (.*) \$$/, '$1'),
-  developer     : "The Xinha Core Developer Team",
-  developer_url : "$HeadURL: http://svn.xinha.python-hosting.com/trunk/modules/GetHtml/DOMwalk.js $".replace(/^[^:]*: (.*) \$$/, '$1'),
-  sponsor       : "",
-  sponsor_url   : "",
-  license       : "htmlArea"
+GetHtmlImplementation._pluginInfo={name:"GetHtmlImplementation DOMwalk",origin:"Xinha Core",version:"$LastChangedRevision: 742 $".replace(/^[^:]*: (.*) \$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL: http://svn.xinha.python-hosting.com/tags/0.92beta/modules/GetHtml/DOMwalk.js $".replace(/^[^:]*: (.*) \$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};
+Xinha.getHTML=function(_2,_3,_4){
+try{
+return Xinha.getHTMLWrapper(_2,_3,_4);
+}
+catch(ex){
+alert(Xinha._lc("Your Document is not well formed. Check JavaScript console for details."));
+return _4._iframe.contentWindow.document.body.innerHTML;
+}
+};
+Xinha.emptyAttributes=" checked disabled ismap readonly nowrap compact declare selected defer multiple noresize noshade ";
+Xinha.getHTMLWrapper=function(_5,_6,_7,_8){
+var _9="";
+if(!_8){
+_8="";
+}
+switch(_5.nodeType){
+case 10:
+case 6:
+case 12:
+break;
+case 2:
+break;
+case 4:
+_9+=(Xinha.is_ie?("\n"+_8):"")+"<![CDATA["+_5.data+"]]>";
+break;
+case 5:
+_9+="&"+_5.nodeValue+";";
+break;
+case 7:
+_9+=(Xinha.is_ie?("\n"+_8):"")+"<?"+_5.target+" "+_5.data+" ?>";
+break;
+case 1:
+case 11:
+case 9:
+var _a;
+var i;
+var _c=(_5.nodeType==1)?_5.tagName.toLowerCase():"";
+if((_c=="script"||_c=="noscript")&&_7.config.stripScripts){
+break;
+}
+if(_6){
+_6=!(_7.config.htmlRemoveTags&&_7.config.htmlRemoveTags.test(_c));
+}
+if(Xinha.is_ie&&_c=="head"){
+if(_6){
+_9+=(Xinha.is_ie?("\n"+_8):"")+"<head>";
+}
+var _d=RegExp.multiline;
+RegExp.multiline=true;
+var _e=_5.innerHTML.replace(Xinha.RE_tagName,function(_f,p1,p2){
+return p1+p2.toLowerCase();
+});
+RegExp.multiline=_d;
+_9+=_e+"\n";
+if(_6){
+_9+=(Xinha.is_ie?("\n"+_8):"")+"</head>";
+}
+break;
+}else{
+if(_6){
+_a=(!(_5.hasChildNodes()||Xinha.needsClosingTag(_5)));
+_9+=(Xinha.is_ie&&Xinha.isBlockElement(_5)?("\n"+_8):"")+"<"+_5.tagName.toLowerCase();
+var _12=_5.attributes;
+for(i=0;i<_12.length;++i){
+var a=_12.item(i);
+if(typeof a.nodeValue=="object"){
+continue;
+}
+if(_5.tagName.toLowerCase()=="input"&&_5.type.toLowerCase()=="checkbox"&&a.nodeName.toLowerCase()=="value"&&a.nodeValue.toLowerCase()=="on"){
+continue;
+}
+if(!a.specified&&!(_5.tagName.toLowerCase().match(/input|option/)&&a.nodeName=="value")&&!(_5.tagName.toLowerCase().match(/area/)&&a.nodeName.match(/shape|coords/i))){
+continue;
+}
+var _14=a.nodeName.toLowerCase();
+if(/_moz_editor_bogus_node/.test(_14)){
+_9="";
+break;
+}
+if(/(_moz)|(contenteditable)|(_msh)/.test(_14)){
+continue;
+}
+var _15;
+if(Xinha.emptyAttributes.indexOf(" "+_14+" ")!=-1){
+_15=_14;
+}else{
+if(_14!="style"){
+if(typeof _5[a.nodeName]!="undefined"&&_14!="href"&&_14!="src"&&!(/^on/.test(_14))){
+_15=_5[a.nodeName];
+}else{
+_15=a.nodeValue;
+if(Xinha.is_ie&&(_14=="href"||_14=="src")){
+_15=_7.stripBaseURL(_15);
+}
+if(_7.config.only7BitPrintablesInURLs&&(_14=="href"||_14=="src")){
+_15=_15.replace(/([^!-~]+)/g,function(_16){
+return escape(_16);
+});
+}
+}
+}else{
+if(!Xinha.is_ie){
+_15=_5.style.cssText.replace(/rgb\(.*?\)/ig,function(rgb){
+return Xinha._colorToRgb(rgb);
+});
+}
+}
+}
+if(/^(_moz)?$/.test(_15)){
+continue;
+}
+_9+=" "+_14+"=\""+Xinha.htmlEncode(_15)+"\"";
+}
+if(Xinha.is_ie&&_5.style.cssText){
+_9+=" style=\""+_5.style.cssText.toLowerCase()+"\"";
+}
+if(Xinha.is_ie&&_5.tagName.toLowerCase()=="option"&&_5.selected){
+_9+=" selected=\"selected\"";
+}
+if(_9!==""){
+if(_a&&_c=="p"){
+_9+=">&nbsp;</p>";
+}else{
+if(_a){
+_9+=" />";
+}else{
+_9+=">";
+}
+}
+}
+}
+}
+var _18=false;
+if(_c=="script"||_c=="noscript"){
+if(!_7.config.stripScripts){
+if(Xinha.is_ie){
+var _19="\n"+_5.innerHTML.replace(/^[\n\r]*/,"").replace(/\s+$/,"")+"\n"+_8;
+}else{
+var _19=(_5.hasChildNodes())?_5.firstChild.nodeValue:"";
+}
+_9+=_19+"</"+_c+">"+((Xinha.is_ie)?"\n":"");
+}
+}else{
+for(i=_5.firstChild;i;i=i.nextSibling){
+if(!_18&&i.nodeType==1&&Xinha.isBlockElement(i)){
+_18=true;
+}
+_9+=Xinha.getHTMLWrapper(i,true,_7,_8+"  ");
+}
+if(_6&&!_a){
+_9+=(Xinha.is_ie&&Xinha.isBlockElement(_5)&&_18?("\n"+_8):"")+"</"+_5.tagName.toLowerCase()+">";
+}
+}
+break;
+case 3:
+_9=/^script|noscript|style$/i.test(_5.parentNode.tagName)?_5.data:Xinha.htmlEncode(_5.data);
+break;
+case 8:
+_9="<!--"+_5.data+"-->";
+break;
+}
+return _9;
 };
 
-// Retrieves the HTML code from the given node.	 This is a replacement for
-// getting innerHTML, using standard DOM calls.
-// Wrapper catch a Mozilla-Exception with non well formed html source code
-Xinha.getHTML = function(root, outputRoot, editor)
-{
-  try
-  {
-    return Xinha.getHTMLWrapper(root,outputRoot,editor);
-  }
-  catch(ex)
-  {   
-    alert(Xinha._lc('Your Document is not well formed. Check JavaScript console for details.'));
-    return editor._iframe.contentWindow.document.body.innerHTML;
-  }
-};
-
-Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
-{
-  var html = "";
-  if ( !indent )
-  {
-    indent = '';
-  }
-
-  switch ( root.nodeType )
-  {
-    case 10:// Node.DOCUMENT_TYPE_NODE
-    case 6: // Node.ENTITY_NODE
-    case 12:// Node.NOTATION_NODE
-      // this all are for the document type, probably not necessary
-    break;
-
-    case 2: // Node.ATTRIBUTE_NODE
-      // Never get here, this has to be handled in the ELEMENT case because
-      // of IE crapness requring that some attributes are grabbed directly from
-      // the attribute (nodeValue doesn't return correct values), see
-      //http://groups.google.com/groups?hl=en&lr=&ie=UTF-8&oe=UTF-8&safe=off&selm=3porgu4mc4ofcoa1uqkf7u8kvv064kjjb4%404ax.com
-      // for information
-    break;
-
-    case 4: // Node.CDATA_SECTION_NODE
-      // Mozilla seems to convert CDATA into a comment when going into wysiwyg mode,
-      //  don't know about IE
-      html += (Xinha.is_ie ? ('\n' + indent) : '') + '<![CDATA[' + root.data + ']]>' ;
-    break;
-
-    case 5: // Node.ENTITY_REFERENCE_NODE
-      html += '&' + root.nodeValue + ';';
-    break;
-
-    case 7: // Node.PROCESSING_INSTRUCTION_NODE
-      // PI's don't seem to survive going into the wysiwyg mode, (at least in moz)
-      // so this is purely academic
-      html += (Xinha.is_ie ? ('\n' + indent) : '') + '<?' + root.target + ' ' + root.data + ' ?>';
-    break;
-
-    case 1: // Node.ELEMENT_NODE
-    case 11: // Node.DOCUMENT_FRAGMENT_NODE
-    case 9: // Node.DOCUMENT_NODE
-      var closed;
-      var i;
-      var root_tag = (root.nodeType == 1) ? root.tagName.toLowerCase() : '';
-      if ( ( root_tag == "script" || root_tag == "noscript" ) && editor.config.stripScripts )
-      {
-        break;
-      }
-      if ( outputRoot )
-      {
-        outputRoot = !(editor.config.htmlRemoveTags && editor.config.htmlRemoveTags.test(root_tag));
-      }
-      if ( Xinha.is_ie && root_tag == "head" )
-      {
-        if ( outputRoot )
-        {
-          html += (Xinha.is_ie ? ('\n' + indent) : '') + "<head>";
-        }
-        // lowercasize
-        var save_multiline = RegExp.multiline;
-        RegExp.multiline = true;
-        var txt = root.innerHTML.replace(Xinha.RE_tagName, function(str, p1, p2) { return p1 + p2.toLowerCase(); });
-        RegExp.multiline = save_multiline;
-        html += txt + '\n';
-        if ( outputRoot )
-        {
-          html += (Xinha.is_ie ? ('\n' + indent) : '') + "</head>";
-        }
-        break;
-      }
-      else if ( outputRoot )
-      {
-        closed = (!(root.hasChildNodes() || Xinha.needsClosingTag(root)));
-        html += (Xinha.is_ie && Xinha.isBlockElement(root) ? ('\n' + indent) : '') + "<" + root.tagName.toLowerCase();
-        var attrs = root.attributes;
-        
-        for ( i = 0; i < attrs.length; ++i )
-        {
-          var a = attrs.item(i);
-          if (typeof a.nodeValue != 'string') continue;
-          if ( !a.specified 
-            // IE claims these are !a.specified even though they are.  Perhaps others too?
-            && !(root.tagName.toLowerCase().match(/input|option/) && a.nodeName == 'value')                
-            && !(root.tagName.toLowerCase().match(/area/) && a.nodeName.match(/shape|coords/i)) 
-          )
-          {
-            continue;
-          }
-          var name = a.nodeName.toLowerCase();
-          if ( /_moz_editor_bogus_node/.test(name) )
-          {
-            html = "";
-            break;
-          }
-          if ( /(_moz)|(contenteditable)|(_msh)/.test(name) )
-          {
-            // avoid certain attributes
-            continue;
-          }
-          var value;
-          if ( name != "style" )
-          {
-            // IE5.5 reports 25 when cellSpacing is
-            // 1; other values might be doomed too.
-            // For this reason we extract the
-            // values directly from the root node.
-            // I'm starting to HATE JavaScript
-            // development.  Browser differences
-            // suck.
-            //
-            // Using Gecko the values of href and src are converted to absolute links
-            // unless we get them using nodeValue()
-            if ( typeof root[a.nodeName] != "undefined" && name != "href" && name != "src" && !(/^on/.test(name)) )
-            {
-              value = root[a.nodeName];
-            }
-            else
-            {
-              value = a.nodeValue;
-              // IE seems not willing to return the original values - it converts to absolute
-              // links using a.nodeValue, a.value, a.stringValue, root.getAttribute("href")
-              // So we have to strip the baseurl manually :-/
-              if ( Xinha.is_ie && (name == "href" || name == "src") )
-              {
-                value = editor.stripBaseURL(value);
-              }
-
-              // High-ascii (8bit) characters in links seem to cause problems for some sites,
-              // while this seems to be consistent with RFC 3986 Section 2.4
-              // because these are not "reserved" characters, it does seem to
-              // cause links to international resources not to work.  See ticket:167
-
-              // IE always returns high-ascii characters un-encoded in links even if they
-              // were supplied as % codes (it unescapes them when we pul the value from the link).
-
-              // Hmmm, very strange if we use encodeURI here, or encodeURIComponent in place
-              // of escape below, then the encoding is wrong.  I mean, completely.
-              // Nothing like it should be at all.  Using escape seems to work though.
-              // It's in both browsers too, so either I'm doing something wrong, or
-              // something else is going on?
-
-              if ( editor.config.only7BitPrintablesInURLs && ( name == "href" || name == "src" ) )
-              {
-                value = value.replace(/([^!-~]+)/g, function(match) { return escape(match); });
-              }
-            }
-          }
-          else
-          {
-            // IE fails to put style in attributes list
-            // FIXME: cssText reported by IE is UPPERCASE
-            value = root.style.cssText;
-          }
-          if ( /^(_moz)?$/.test(value) )
-          {
-            // Mozilla reports some special tags
-            // here; we don't need them.
-            continue;
-          }
-          html += " " + name + '="' + Xinha.htmlEncode(value) + '"';
-        }
-        if ( html !== "" )
-        {
-          if ( closed && root_tag=="p" )
-          {
-            //never use <p /> as empty paragraphs won't be visible
-            html += ">&nbsp;</p>";
-          }
-          else if ( closed )
-          {
-            html += " />";
-          }
-          else
-          {
-            html += ">";
-          }
-        }
-      }
-      var containsBlock = false;
-      if ( root_tag == "script" || root_tag == "noscript" )
-      {
-        if ( !editor.config.stripScripts )
-        {
-          if (Xinha.is_ie)
-          {
-            var innerText = "\n" + root.innerHTML.replace(/^[\n\r]*/,'').replace(/\s+$/,'') + '\n' + indent;
-          }
-          else
-          {
-            var innerText = (root.hasChildNodes()) ? root.firstChild.nodeValue : '';
-          }
-          html += innerText + '</'+root_tag+'>' + ((Xinha.is_ie) ? '\n' : '');
-        }
-      }
-      else
-      {
-        for ( i = root.firstChild; i; i = i.nextSibling )
-        {
-          if ( !containsBlock && i.nodeType == 1 && Xinha.isBlockElement(i) )
-          {
-            containsBlock = true;
-          }
-          html += Xinha.getHTMLWrapper(i, true, editor, indent + '  ');
-        }
-        if ( outputRoot && !closed )
-        {
-          html += (Xinha.is_ie && Xinha.isBlockElement(root) && containsBlock ? ('\n' + indent) : '') + "</" + root.tagName.toLowerCase() + ">";
-        }
-      }
-    break;
-
-    case 3: // Node.TEXT_NODE
-      html = /^script|noscript|style$/i.test(root.parentNode.tagName) ? root.data : Xinha.htmlEncode(root.data);
-    break;
-
-    case 8: // Node.COMMENT_NODE
-      html = "<!--" + root.data + "-->";
-    break;
-  }
-  return html;
-};
-
-/** @see getHTMLWrapper (search for "value = a.nodeValue;") */

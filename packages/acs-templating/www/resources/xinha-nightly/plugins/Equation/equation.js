@@ -1,198 +1,120 @@
-/*------------------------------------------*\
- AsciiMathML Formula Editor for Xinha
- _______________________
- 
- Based on AsciiMathML by Peter Jipsen http://www.chapman.edu/~jipsen
- 
- Including a table with math symbols for easy input modified from CharacterMap for ASCIIMathML by Peter Jipsen
- HTMLSource based on HTMLArea XTD 1.5 (http://mosforge.net/projects/htmlarea3xtd/) modified by Holger Hees
- Original Author - Bernhard Pfeifer novocaine@gmx.net
- 
- See readme.txt
- 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU Lesser General Public License as published by
- the Free Software Foundation; either version 2.1 of the License, or (at
- your option) any later version.
-
- This program is distributed in the hope that it will be useful, 
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- Lesser General Public License (at http://www.gnu.org/licenses/lgpl.html) 
- for more details.
-
- Raimund Meyer  11/23/2006
-     
-\*------------------------------------------*/
-function Equation(editor) {
-	this.editor = editor;
-
-	var cfg = editor.config;
-	var self = this;
-	
-
-	// register the toolbar buttons provided by this plugin
-	cfg.registerButton({
-	id       : "equation",
-	tooltip  : this._lc("Formula Editor"),
-	image    : editor.imgURL("equation.gif", "Equation"),
-	textMode : false,
-	action   : function(editor, id) {
-			self.buttonPress(editor, id);
-		}
-	});
-	cfg.addToolbarElement("equation", "inserthorizontalrule", -1);
-	
-	mathcolor = cfg.Equation.mathcolor;       // change it to "" (to inherit) or any other color
-	mathfontfamily = cfg.Equation.mathfontfamily;
-	
-	//if (Xinha.is_ie) return;
-	if (!Xinha.is_ie)
-	{	
-		editor.notifyOn( 'modechange',
-			function( e, args )
-				{
-					self.onModeChange( args );
-				}
-			);
-    	Xinha.prependDom0Event (editor._textArea.form,'submit',function () {self.unParse();self.reParse = true});
-	}
-	
-	if (typeof  AMprocessNode != "function")
-	{
-		Xinha._loadback(_editor_url + "plugins/Equation/ASCIIMathML.js", function () { translate(); });
-	}
+function Equation(_1){
+this.editor=_1;
+var _2=_1.config;
+var _3=this;
+_2.registerButton({id:"equation",tooltip:this._lc("Formula Editor"),image:_1.imgURL("equation.gif","Equation"),textMode:false,action:function(_4,id){
+_3.buttonPress(_4,id);
+}});
+_2.addToolbarElement("equation","inserthorizontalrule",-1);
+mathcolor=_2.Equation.mathcolor;
+mathfontfamily=_2.Equation.mathfontfamily;
+if(!Xinha.is_ie){
+_1.notifyOn("modechange",function(e,_7){
+_3.onModeChange(_7);
+});
+Xinha.prependDom0Event(_1._textArea.form,"submit",function(){
+_3.unParse();
+_3.reParse=true;
+});
 }
-
-Xinha.Config.prototype.Equation =
-{
-	"mathcolor" : "red",       // change it to "" (to inherit) or any other color
-	"mathfontfamily" : "serif" // change to "" to inherit (works in IE) 
-                               // or another family (e.g. "arial")
+if(typeof AMprocessNode!="function"){
+Xinha._loadback(_editor_url+"plugins/Equation/ASCIIMathML.js",function(){
+translate();
+});
 }
-
-Equation._pluginInfo = {
-	name          : "ASCIIMathML Formula Editor",
-	version       : "2.0",
-	developer     : "Raimund Meyer",
-	developer_url : "http://rheinaufCMS.de",
-	c_owner       : "",
-	sponsor       : "Rheinauf",
-	sponsor_url   : "http://rheinaufCMS.de",
-	license       : "GNU/LGPL"
-};
-
-Equation.prototype._lc = function(string) 
-{
-    return Xinha._lc(string, 'Equation');
-};
-Equation.prototype.onGenerate = function() 
-{
-	this.parse();
-};
-Equation.prototype.onUpdateToolbar = function() 
-{
-	if (!Xinha.is_ie && this.reParse) AMprocessNode(this.editor._doc.body, false);
-};
-
-Equation.prototype.onModeChange = function( args )
-{
-	var doc = this.editor._doc;
-	switch (args.mode)
-	{
-		case 'text':
-			this.unParse();
-		break;
-		case 'wysiwyg':
-			this.parse();
-		break;
-	}
-};
-
-Equation.prototype.parse = function ()
-{
-	if (!Xinha.is_ie)
-	{
-		var doc = this.editor._doc;
-		var spans = doc.getElementsByTagName("span");
-		for (var i = 0;i<spans.length;i++)
-		{
-			var node = spans[i];
-			if (node.className != 'AM') continue;
-			node.title = node.innerHTML;
-			AMprocessNode(node, false);
-		}
-	}
 }
-
-Equation.prototype.unParse = function ()
-{
-	var doc = this.editor._doc;
-	var spans = doc.getElementsByTagName("span");
-	for (var i = 0;i<spans.length;i++)
-	{
-		var node = spans[i];
-		if (node.className.indexOf ("AM") == -1) continue;
-		var formula = node.getAttribute("title");
-		node.innerHTML = formula;
-		node.setAttribute("title", null);
-		this.editor.setHTML(this.editor.getHTML());
-	}
+Xinha.Config.prototype.Equation={"mathcolor":"red","mathfontfamily":"serif"};
+Equation._pluginInfo={name:"ASCIIMathML Formula Editor",version:"2.0",developer:"Raimund Meyer",developer_url:"http://rheinaufCMS.de",c_owner:"",sponsor:"Rheinauf",sponsor_url:"http://rheinaufCMS.de",license:"GNU/LGPL"};
+Equation.prototype._lc=function(_8){
+return Xinha._lc(_8,"Equation");
+};
+Equation.prototype.onGenerate=function(){
+this.parse();
+};
+Equation.prototype.onUpdateToolbar=function(){
+if(!Xinha.is_ie&&this.reParse){
+AMprocessNode(this.editor._doc.body,false);
 }
-
-Equation.prototype.buttonPress = function() 
-{
-	var self = this;
-	var editor = this.editor;
-	var args = {};
-	
-	args['editor'] = editor;
-	
-	var parent = editor._getFirstAncestor(editor.getSelection(),['span']);
-	if (parent)
-	{
-		args["editedNode"] = parent;
-	}
-	editor._popupDialog("plugin://Equation/dialog", function(params) {
-				self.insert(params);
-			}, args);
+};
+Equation.prototype.onModeChange=function(_9){
+var _a=this.editor._doc;
+switch(_9.mode){
+case "text":
+this.unParse();
+break;
+case "wysiwyg":
+this.parse();
+break;
+}
+};
+Equation.prototype.parse=function(){
+if(!Xinha.is_ie){
+var _b=this.editor._doc;
+var _c=_b.getElementsByTagName("span");
+for(var i=0;i<_c.length;i++){
+var _e=_c[i];
+if(_e.className!="AM"){
+continue;
+}
+_e.title=_e.innerHTML;
+AMprocessNode(_e,false);
+}
+}
+};
+Equation.prototype.unParse=function(){
+var _f=this.editor._doc;
+var _10=_f.getElementsByTagName("span");
+for(var i=0;i<_10.length;i++){
+var _12=_10[i];
+if(_12.className.indexOf("AM")==-1){
+continue;
+}
+var _13=_12.getAttribute("title");
+_12.innerHTML=_13;
+_12.setAttribute("title",null);
+this.editor.setHTML(this.editor.getHTML());
+}
+};
+Equation.prototype.buttonPress=function(){
+var _14=this;
+var _15=this.editor;
+var _16={};
+_16["editor"]=_15;
+var _17=_15._getFirstAncestor(_15.getSelection(),["span"]);
+if(_17){
+_16["editedNode"]=_17;
+}
+_15._popupDialog("plugin://Equation/dialog",function(_18){
+_14.insert(_18);
+},_16);
+};
+Equation.prototype.insert=function(_19){
+if(typeof _19["formula"]!="undefined"){
+var _1a=(_19["formula"]!="")?_19["formula"].replace(/^`?(.*)`?$/m,"`$1`"):"";
+if(_19["editedNode"]&&(_19["editedNode"].tagName.toLowerCase()=="span")){
+var _1b=_19["editedNode"];
+if(_1a!=""){
+_1b.innerHTML=_1a;
+_1b.title=_1a;
+}else{
+_1b.parentNode.removeChild(_1b);
+}
+}else{
+if(!_19["editedNode"]&&_1a!=""){
+if(!Xinha.is_ie){
+var _1b=document.createElement("span");
+_1b.className="AM";
+this.editor.insertNodeAtSelection(_1b);
+_1b.innerHTML=_1a;
+_1b.title=_1a;
+}else{
+this.editor.insertHTML("<span class=\"AM\" title=\""+_1a+"\">"+_1a+"</span>");
+}
+}
+}
+if(!Xinha.is_ie){
+AMprocessNode(this.editor._doc.body,false);
+}
+}
 };
 
-Equation.prototype.insert = function (param)
-{
-	if (typeof param["formula"] != "undefined")
-	{
-		var formula = (param["formula"] != '') ? param["formula"].replace(/^`?(.*)`?$/m,"`$1`") : '';
-
-		if (param["editedNode"] && (param["editedNode"].tagName.toLowerCase() == 'span')) 
-		{
-			var span = param["editedNode"]; 
-			if (formula != '')
-			{
-				span.innerHTML = formula;
-				span.title = formula;
-			}
-			else
-			{
-				span.parentNode.removeChild(span);
-			}
-			
-		}
-		else if (!param["editedNode"] && formula != '')
-		{
-			if (!Xinha.is_ie)
-			{			
-				var span = document.createElement('span');
-				span.className = 'AM';
-				this.editor.insertNodeAtSelection(span);
-				span.innerHTML = formula;
-				span.title = formula;
-			}
-			else
-			{
-				this.editor.insertHTML('<span class="AM" title="'+formula+'">'+formula+'</span>');
-			}
-		}
-		if (!Xinha.is_ie) AMprocessNode(this.editor._doc.body, false);
-	}
-}

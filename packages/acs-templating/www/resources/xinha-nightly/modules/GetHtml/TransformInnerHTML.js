@@ -1,209 +1,143 @@
-/**
-  * Based on XML_Utility functions submitted by troels_kn.
-  * credit also to adios, who helped with reg exps:
-  * http://www.sitepoint.com/forums/showthread.php?t=201052
-  * 
-  * A replacement for HTMLArea.getHTML
-  *
-  * Features:
-  *   - Generates XHTML code
-  *   - Much faster than HTMLArea.getHTML
-  *   - Eliminates the hacks to accomodate browser quirks
-  *   - Returns correct code for Flash objects and scripts
-  *   - Formats html in an indented, readable format in html mode
-  *   - Preserves script and pre formatting
-  *   - Preserves formatting in comments
-  *   - Removes contenteditable from body tag in full-page mode
-  *   - Supports only7BitPrintablesInURLs config option
-  *   - Supports htmlRemoveTags config option
-  */
-  
-function GetHtmlImplementation(editor) {
-    this.editor = editor;
+function GetHtmlImplementation(_1){
+this.editor=_1;
 }
-
-GetHtmlImplementation._pluginInfo = {
-	name          : "GetHtmlImplementation TransformInnerHTML",
-	version       : "1.0",
-	developer     : "Nelson Bright",
-	developer_url : "http://www.brightworkweb.com/",
-	sponsor       : "",
-    sponsor_url   : "",
-	license       : "htmlArea"
+GetHtmlImplementation._pluginInfo={name:"GetHtmlImplementation TransformInnerHTML",version:"1.0",developer:"Nelson Bright",developer_url:"http://www.brightworkweb.com/",sponsor:"",sponsor_url:"",license:"htmlArea"};
+HTMLArea.RegExpCache=[new RegExp().compile(/<\s*\/?([^\s\/>]+)[\s*\/>]/gi),new RegExp().compile(/(\s+)_moz[^=>]*=[^\s>]*/gi),new RegExp().compile(/\s*=\s*(([^'"][^>\s]*)([>\s])|"([^"]+)"|'([^']+)')/g),new RegExp().compile(/\/>/g),new RegExp().compile(/<(br|hr|img|input|link|meta|param|embed|area)((\s*\S*="[^"]*")*)>/g),new RegExp().compile(/(checked|compact|declare|defer|disabled|ismap|multiple|no(href|resize|shade|wrap)|readonly|selected)([\s>])/gi),new RegExp().compile(/(="[^']*)'([^'"]*")/),new RegExp().compile(/&(?=[^<]*>)/g),new RegExp().compile(/<\s+/g),new RegExp().compile(/\s+(\/)?>/g),new RegExp().compile(/\s{2,}/g),new RegExp().compile(/\s+([^=\s]+)((="[^"]+")|([\s>]))/g),new RegExp().compile(/\s+contenteditable(=[^>\s\/]*)?/gi),new RegExp().compile(/((href|src)=")([^\s]*)"/g),new RegExp().compile(/<\/?(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|br|hr|img|embed|param|pre|script|html|head|body|meta|link|title|area|input|form|textarea|select|option)[^>]*>/g),new RegExp().compile(/<\/(div|p|h[1-6]|table|tr|ul|ol|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g),new RegExp().compile(/<(div|p|h[1-6]|table|tr|ul|ol|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g),new RegExp().compile(/<(td|th|li|option|br|hr|embed|param|pre|meta|link|title|area|input|textarea)[^>]*>/g),new RegExp().compile(/(^|<\/(pre|script)>)(\s|[^\s])*?(<(pre|script)[^>]*>|$)/g),new RegExp().compile(/(<pre[^>]*>)([\s\S])*?(<\/pre>)/g),new RegExp().compile(/(^|<!--[\s\S]*?-->)([\s\S]*?)(?=<!--[\s\S]*?-->|$)/g),new RegExp().compile(/\S*=""/g),new RegExp().compile(/<!--[\s\S]*?-->|<\?[\s\S]*?\?>|<\/?\w[^>]*>/g),new RegExp().compile(/(^|<\/script>)[\s\S]*?(<script[^>]*>|$)/g)];
+HTMLArea.prototype.cleanHTML=function(_2){
+var c=HTMLArea.RegExpCache;
+_2=_2.replace(c[0],function(_4){
+return _4.toLowerCase();
+}).replace(c[1]," ").replace(c[12]," ").replace(c[2],"=\"$2$4$5\"$3").replace(c[21]," ").replace(c[11],function(_5,p1,p2){
+return " "+p1.toLowerCase()+p2;
+}).replace(c[3],">").replace(c[9],"$1>").replace(c[5],"$1=\"$1\"$3").replace(c[4],"<$1$2 />").replace(c[6],"$1$2").replace(c[8],"<").replace(c[10]," ");
+if(HTMLArea.is_ie&&c[13].test(_2)){
+_2=_2.replace(c[13],"$1"+this.stripBaseURL(RegExp.$3)+"\"");
+}
+if(this.config.only7BitPrintablesInURLs){
+if(HTMLArea.is_ie){
+c[13].test(_2);
+}
+if(c[13].test(_2)){
+try{
+_2=_2.replace(c[13],"$1"+decodeURIComponent(RegExp.$3).replace(/([^!-~]+)/g,function(_8){
+return escape(_8);
+})+"\"");
+}
+catch(e){
+_2=_2.replace(c[13],"$1"+RegExp.$3.replace(/([^!-~]+)/g,function(_9){
+return escape(_9);
+})+"\"");
+}
+}
+}
+return _2;
+};
+HTMLArea.indent=function(s,_b){
+HTMLArea.__nindent=0;
+HTMLArea.__sindent="";
+HTMLArea.__sindentChar=(typeof _b=="undefined")?"  ":_b;
+var c=HTMLArea.RegExpCache;
+if(HTMLArea.is_gecko){
+s=s.replace(c[19],function(_d){
+return _d.replace(/<br \/>/g,"\n");
+});
+}
+s=s.replace(c[18],function(_e){
+_e=_e.replace(c[20],function(st,$1,$2){
+string=$2.replace(/[\n\r]/gi," ").replace(/\s+/gi," ").replace(c[14],function(str){
+if(str.match(c[16])){
+var s="\n"+HTMLArea.__sindent+str;
+HTMLArea.__sindent+=HTMLArea.__sindentChar;
+++HTMLArea.__nindent;
+return s;
+}else{
+if(str.match(c[15])){
+--HTMLArea.__nindent;
+HTMLArea.__sindent="";
+for(var i=HTMLArea.__nindent;i>0;--i){
+HTMLArea.__sindent+=HTMLArea.__sindentChar;
+}
+return "\n"+HTMLArea.__sindent+str;
+}else{
+if(str.match(c[17])){
+return "\n"+HTMLArea.__sindent+str;
+}
+}
+}
+return str;
+});
+return $1+string;
+});
+return _e;
+});
+s=s.replace(/^\s*/,"").replace(/ +\n/g,"\n").replace(/[\r\n]+<\/script>/g,"\n</script>");
+return s;
+};
+HTMLArea.getHTML=function(_15,_16,_17){
+var _18="";
+var c=HTMLArea.RegExpCache;
+if(_15.nodeType==11){
+var div=document.createElement("div");
+var _1b=_15.insertBefore(div,_15.firstChild);
+for(j=_1b.nextSibling;j;j=j.nextSibling){
+_1b.appendChild(j.cloneNode(true));
+}
+_18+=_1b.innerHTML.replace(c[23],function(_1c){
+_1c=_1c.replace(c[22],function(tag){
+if(/^<[!\?]/.test(tag)){
+return tag;
+}else{
+return _17.cleanHTML(tag);
+}
+});
+return _1c;
+});
+}else{
+var _1e=(_15.nodeType==1)?_15.tagName.toLowerCase():"";
+if(_16){
+_18+="<"+_1e;
+var _1f=_15.attributes;
+for(i=0;i<_1f.length;++i){
+var a=_1f.item(i);
+if(!a.specified){
+continue;
+}
+var _21=a.nodeName.toLowerCase();
+var _22=a.nodeValue;
+_18+=" "+_21+"=\""+_22+"\"";
+}
+_18+=">";
+}
+if(_1e=="html"){
+innerhtml=_17._doc.documentElement.innerHTML;
+}else{
+innerhtml=_15.innerHTML;
+}
+_18+=innerhtml.replace(c[23],function(_23){
+_23=_23.replace(c[22],function(tag){
+if(/^<[!\?]/.test(tag)){
+return tag;
+}else{
+if(!(_17.config.htmlRemoveTags&&_17.config.htmlRemoveTags.test(tag.replace(/<([^\s>\/]+)/,"$1")))){
+return _17.cleanHTML(tag);
+}else{
+return "";
+}
+}
+});
+return _23;
+});
+if(HTMLArea.is_ie){
+_18=_18.replace(/<li( [^>]*)?>/g,"</li><li$1>").replace(/(<(ul|ol)[^>]*>)[\s\n]*<\/li>/g,"$1").replace(/<\/li>([\s\n]*<\/li>)+/g,"</li>");
+}
+if(HTMLArea.is_gecko){
+_18=_18.replace(/<br \/>\n$/,"");
+}
+if(_16){
+_18+="</"+_1e+">";
+}
+_18=HTMLArea.indent(_18);
+}
+return _18;
 };
 
-HTMLArea.RegExpCache = [
-/*00*/  new RegExp().compile(/<\s*\/?([^\s\/>]+)[\s*\/>]/gi),//lowercase tags
-/*01*/  new RegExp().compile(/(\s+)_moz[^=>]*=[^\s>]*/gi),//strip _moz attributes
-/*02*/  new RegExp().compile(/\s*=\s*(([^'"][^>\s]*)([>\s])|"([^"]+)"|'([^']+)')/g),// find attributes
-/*03*/  new RegExp().compile(/\/>/g),//strip singlet terminators
-/*04*/  new RegExp().compile(/<(br|hr|img|input|link|meta|param|embed|area)((\s*\S*="[^"]*")*)>/g),//terminate singlet tags
-/*05*/  new RegExp().compile(/(checked|compact|declare|defer|disabled|ismap|multiple|no(href|resize|shade|wrap)|readonly|selected)([\s>])/gi),//expand singlet attributes
-/*06*/  new RegExp().compile(/(="[^']*)'([^'"]*")/),//check quote nesting
-/*07*/  new RegExp().compile(/&(?=[^<]*>)/g),//expand query ampersands
-/*08*/  new RegExp().compile(/<\s+/g),//strip tagstart whitespace
-/*09*/  new RegExp().compile(/\s+(\/)?>/g),//trim whitespace
-/*10*/  new RegExp().compile(/\s{2,}/g),//trim extra whitespace
-/*11*/  new RegExp().compile(/\s+([^=\s]+)((="[^"]+")|([\s>]))/g),// lowercase attribute names
-/*12*/  new RegExp().compile(/\s+contenteditable(=[^>\s\/]*)?/gi),//strip contenteditable
-/*13*/  new RegExp().compile(/((href|src)=")([^\s]*)"/g), //find href and src for stripBaseHref()
-/*14*/  new RegExp().compile(/<\/?(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|br|hr|img|embed|param|pre|script|html|head|body|meta|link|title|area|input|form|textarea|select|option)[^>]*>/g),
-/*15*/  new RegExp().compile(/<\/(div|p|h[1-6]|table|tr|ul|ol|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g),//blocklevel closing tag
-/*16*/  new RegExp().compile(/<(div|p|h[1-6]|table|tr|ul|ol|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g),//blocklevel opening tag
-/*17*/  new RegExp().compile(/<(td|th|li|option|br|hr|embed|param|pre|meta|link|title|area|input|textarea)[^>]*>/g),//singlet tag or output on 1 line
-/*18*/  new RegExp().compile(/(^|<\/(pre|script)>)(\s|[^\s])*?(<(pre|script)[^>]*>|$)/g),//find content NOT inside pre and script tags
-/*19*/  new RegExp().compile(/(<pre[^>]*>)([\s\S])*?(<\/pre>)/g),//find content inside pre tags
-/*20*/  new RegExp().compile(/(^|<!--[\s\S]*?-->)([\s\S]*?)(?=<!--[\s\S]*?-->|$)/g),//find content NOT inside comments
-/*21*/  new RegExp().compile(/\S*=""/g), //find empty attributes
-/*22*/  new RegExp().compile(/<!--[\s\S]*?-->|<\?[\s\S]*?\?>|<\/?\w[^>]*>/g), //find all tags, including comments and php
-/*23*/  new RegExp().compile(/(^|<\/script>)[\s\S]*?(<script[^>]*>|$)/g) //find content NOT inside script tags
-];
-
-/** 
-  * Cleans HTML into wellformed xhtml
-  */
-HTMLArea.prototype.cleanHTML = function(sHtml) {
-	var c = HTMLArea.RegExpCache;
-	sHtml = sHtml.
-		replace(c[0], function(str) { return str.toLowerCase(); } ).//lowercase tags/attribute names
-		replace(c[1], ' ').//strip _moz attributes
-		replace(c[12], ' ').//strip contenteditable
-		replace(c[2], '="$2$4$5"$3').//add attribute quotes
-		replace(c[21], ' ').//strip empty attributes
-		replace(c[11], function(str, p1, p2) { return ' '+p1.toLowerCase()+p2; }).//lowercase attribute names
-		replace(c[3], '>').//strip singlet terminators
-		replace(c[9], '$1>').//trim whitespace
-		replace(c[5], '$1="$1"$3').//expand singlet attributes
-		replace(c[4], '<$1$2 />').//terminate singlet tags
-		replace(c[6], '$1$2').//check quote nesting
-	//	replace(c[7], '&amp;').//expand query ampersands
-		replace(c[8], '<').//strip tagstart whitespace
-		replace(c[10], ' ');//trim extra whitespace
-	if(HTMLArea.is_ie && c[13].test(sHtml)) {
-		sHtml = sHtml.replace(c[13],'$1'+this.stripBaseURL(RegExp.$3)+'"');
-	}
-	if(this.config.only7BitPrintablesInURLs) {
-		if (HTMLArea.is_ie) c[13].test(sHtml); // oddly the test below only triggers when we call this once before (IE6), in Moz it fails if tested twice
-		if ( c[13].test(sHtml)) {
-			try { //Mozilla returns an incorrectly encoded value with innerHTML
-				sHtml = sHtml.replace(c[13], '$1'+decodeURIComponent(RegExp.$3).replace(/([^!-~]+)/g,function(chr){return escape(chr);})+'"');
-			} catch (e) { // once the URL is escape()ed, you can't decodeURIComponent() it anymore
-				sHtml = sHtml.replace(c[13], '$1'+RegExp.$3.replace(/([^!-~]+)/g,function(chr){return escape(chr);})+'"');
-			}
-		}
-	}
-	return sHtml;
-};
-
-/**
-  * Prettyfies html by inserting linebreaks before tags, and indenting blocklevel tags
-  */
-HTMLArea.indent = function(s, sindentChar) {
-	HTMLArea.__nindent = 0;
-	HTMLArea.__sindent = "";
-	HTMLArea.__sindentChar = (typeof sindentChar == "undefined") ? "  " : sindentChar;
-	var c = HTMLArea.RegExpCache;
-	if(HTMLArea.is_gecko) { //moz changes returns into <br> inside <pre> tags
-		s = s.replace(c[19], function(str){return str.replace(/<br \/>/g,"\n")});
-	}
-	s = s.replace(c[18], function(strn) { //skip pre and script tags
-	  strn = strn.replace(c[20], function(st,$1,$2) { //exclude comments
-		string = $2.replace(/[\n\r]/gi, " ").replace(/\s+/gi," ").replace(c[14], function(str) {
-			if (str.match(c[16])) {
-				var s = "\n" + HTMLArea.__sindent + str;
-				// blocklevel openingtag - increase indent
-				HTMLArea.__sindent += HTMLArea.__sindentChar;
-				++HTMLArea.__nindent;
-				return s;
-			} else if (str.match(c[15])) {
-				// blocklevel closingtag - decrease indent
-				--HTMLArea.__nindent;
-				HTMLArea.__sindent = "";
-				for (var i=HTMLArea.__nindent;i>0;--i) {
-					HTMLArea.__sindent += HTMLArea.__sindentChar;
-				}
-				return "\n" + HTMLArea.__sindent + str;
-			} else if (str.match(c[17])) {
-				// singlet tag
-				return "\n" + HTMLArea.__sindent + str;
-			}
-			return str; // this won't actually happen
-		});
-		return $1 + string;
-	  });return strn;
-    });
-    //final cleanup
-    s = s.replace(/^\s*/,'').//strip leading whitespace
-        replace(/ +\n/g,'\n').//strip spaces at end of lines
-        replace(/[\r\n]+<\/script>/g,'\n</script>');//strip returns added into scripts
-    return s;
-};
-
-HTMLArea.getHTML = function(root, outputRoot, editor) {
-	var html = "";
-	var c = HTMLArea.RegExpCache;
-
-	if(root.nodeType == 11) {//document fragment
-	    //we can't get innerHTML from the root (type 11) node, so we 
-	    //copy all the child nodes into a new div and get innerHTML from the div
-	    var div = document.createElement("div");
-	    var temp = root.insertBefore(div,root.firstChild);
-	    for (j = temp.nextSibling; j; j = j.nextSibling) { 
-	    		temp.appendChild(j.cloneNode(true));
-	    }
-		html += temp.innerHTML.replace(c[23], function(strn) { //skip content inside script tags
-			strn = strn.replace(c[22], function(tag){
-				if(/^<[!\?]/.test(tag)) return tag; //skip comments and php tags
-				else return editor.cleanHTML(tag)});
-			return strn;
-		});
-
-	} else {
-
-		var root_tag = (root.nodeType == 1) ? root.tagName.toLowerCase() : ''; 
-		if (outputRoot) { //only happens with <html> tag in fullpage mode
-			html += "<" + root_tag;
-			var attrs = root.attributes; // strangely, this doesn't work in moz
-			for (i = 0; i < attrs.length; ++i) {
-				var a = attrs.item(i);
-				if (!a.specified) {
-				  continue;
-				}
-				var name = a.nodeName.toLowerCase();
-				var value = a.nodeValue;
-				html += " " + name + '="' + value + '"';
-			}
-			html += ">";
-		}
-		if(root_tag == "html") {
-			innerhtml = editor._doc.documentElement.innerHTML;
-		} else {
-			innerhtml = root.innerHTML;
-		}
-		//pass tags to cleanHTML() one at a time
-		//includes support for htmlRemoveTags config option
-		html += innerhtml.replace(c[23], function(strn) { //skip content inside script tags
-			strn = strn.replace(c[22], function(tag){
-				if(/^<[!\?]/.test(tag)) return tag; //skip comments and php tags
-				else if(!(editor.config.htmlRemoveTags && editor.config.htmlRemoveTags.test(tag.replace(/<([^\s>\/]+)/,'$1'))))
-					return editor.cleanHTML(tag);
-				else return ''});
-			return strn;
-		});
-		//IE drops  all </li> tags in a list except the last one
-		if(HTMLArea.is_ie) {
-			html = html.replace(/<li( [^>]*)?>/g,'</li><li$1>').
-				replace(/(<(ul|ol)[^>]*>)[\s\n]*<\/li>/g, '$1').
-				replace(/<\/li>([\s\n]*<\/li>)+/g, '<\/li>');
-		}
-		if(HTMLArea.is_gecko)
-			html = html.replace(/<br \/>\n$/, ''); //strip trailing <br> added by moz
-		if (outputRoot) {
-			html += "</" + root_tag + ">";
-		}
-		html = HTMLArea.indent(html);
-	};
-//	html = HTMLArea.htmlEncode(html);
-
-	return html;
-};

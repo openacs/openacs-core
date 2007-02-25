@@ -1,550 +1,402 @@
-/**
- * Functions for the ExtendedFileManager, used by manager.php only
- * Authors: Wei Zhuo, Afru, Krzysztof Kotowicz, Raimund Meyer
- * Version: Updated on 08-01-2005 by Afru
- * Version: Updated on 20-06-2006 by Krzysztof Kotowicz
- * Version: Updated on 17-11-2006 by Raimund Meyer
- * Package: ExtendedFileManager (EFM 1.1.3)
- * http://www.afrusoft.com/htmlarea
- */
-
-function comboSelectValue(c, val) {
-    var ops = c.getElementsByTagName("option");
-    for (var i = ops.length; --i >= 0;) {
-        var op = ops[i];
-        op.selected = (op.value == val);
-    }
-    c.value = val;
+function comboSelectValue(c,_2){
+var _3=c.getElementsByTagName("option");
+for(var i=_3.length;--i>=0;){
+var op=_3[i];
+op.selected=(op.value==_2);
 }
-
-//Translation
-function i18n(str) {
-    return Xinha._lc(str, 'ExtendedFileManager');
+c.value=_2;
 }
-
-//set the alignment options
-function setAlign(align)
-{
-    var selection = document.getElementById('f_align');
-    for(var i = 0; i < selection.length; i++)
-    {
-        if(selection.options[i].value == align)
-        {
-            selection.selectedIndex = i;
-            break;
-        }
-    }
+function i18n(_6){
+return Xinha._lc(_6,"ExtendedFileManager");
 }
-
-function onTargetChanged() {
-  var f = document.getElementById("f_other_target");
-  if (this.value == "_other") {
-    f.style.visibility = "visible";
-    f.select();
-    f.focus();
-  } else f.style.visibility = "hidden";
+function setAlign(_7){
+var _8=document.getElementById("f_align");
+for(var i=0;i<_8.length;i++){
+if(_8.options[i].value==_7){
+_8.selectedIndex=i;
+break;
 }
-
-//initialise the form
-
-if (manager_mode == "link")
-{
-    var offsetForInputs = (Xinha.is_ie) ? 155 : 140;
 }
-else
-{
-    var offsetForInputs = (Xinha.is_ie) ? 220 : 200;
-}    
-init = function ()
-{
-    
-	var h =  100 // space above files 
-           + 250 // files iframe
-           + offsetForInputs;
-    
-    __dlg_init(null,  {width:650,height:h});
-
-    __dlg_translate('ExtendedFileManager');
-
-    var uploadForm = document.getElementById('uploadForm');
-    if(uploadForm) uploadForm.target = 'imgManager';
-    
-    var editor = window.dialogArguments.editor;
-    if (manager_mode == 'image' && typeof Xinha.colorPicker != "undefined" && document.getElementById('bgCol_pick')) {
-        // Hookup color pickers
-        var pickerConfig = {
-            cellsize:editor.config.colorPickerCellSize,
-            granularity:editor.config.colorPickerGranularity,
-            websafe:editor.config.colorPickerWebSafe,
-            savecolors:editor.config.colorPickerSaveColors
-        };
-
-        var bgCol_pick = document.getElementById('bgCol_pick');
-        var f_backgroundColor = document.getElementById('f_backgroundColor');
-        pickerConfig.callback = function(color){f_backgroundColor.value=color;};
-        var bgColPicker = new Xinha.colorPicker(pickerConfig);
-        bgCol_pick.onclick = function() { bgColPicker.open('top,right', f_backgroundColor ); }
-
-        var bdCol_pick = document.getElementById('bdCol_pick');
-        var f_borderColor = document.getElementById('f_borderColor');
-        pickerConfig.callback = function(color){f_borderColor.value=color;};
-        var bdColPicker = new Xinha.colorPicker(pickerConfig);
-        bdCol_pick.onclick = function() { bdColPicker.open('top,right', f_borderColor ); }
-    }
-
-    var param = window.dialogArguments.param;
-
-    if(manager_mode=="image" && param)
-    {
-        var absoluteURL = new RegExp('^https?://');
-
-        if (param.f_url.length > 0 && !absoluteURL.test(param.f_url) && typeof param.baseHref == "string") {
-            // URL is not absolute, prepend baseHref
-            param.f_url = param.baseHref + param.f_url;
-        }
-
-        // strip base_url from url
-        var image_regex = new RegExp( '(https?://[^/]*)?' + base_url.replace(/\/$/, '') );
-        param.f_url = param.f_url.replace( image_regex, "" );
-
-        // The image URL may reference one of the automatically resized images
-        // (when the user alters the dimensions in the picker), clean that up
-        // so it looks right and we get back to a normal f_url
-        var rd = (_resized_dir) ? _resized_dir.replace(Xinha.RE_Specials, '\\$1') + '/' : '';
-        var rp = _resized_prefix.replace(Xinha.RE_Specials, '\\$1');
-        var dreg = new RegExp('^(.*/)' + rd + rp + '_([0-9]+)x([0-9]+)_([^/]+)$');
-
-        var match = param.f_url.match(dreg);
-
-        if(dreg.test(param.f_url))
-        {
-          param.f_url    = RegExp.$1 + RegExp.$4;
-          param.f_width  = RegExp.$2;
-          param.f_height = RegExp.$3;
-        }
-
-        document.getElementById("f_url").value = param["f_url"];
-        document.getElementById("f_alt").value = param["f_alt"];
-        document.getElementById("f_title").value = param["f_title"];
-        document.getElementById("f_border").value = param["f_border"];
-        document.getElementById("f_width").value = param["f_width"];
-        document.getElementById("f_height").value = param["f_height"];
-        document.getElementById("f_margin").value = param["f_margin"];
-        document.getElementById("f_padding").value = param["f_padding"];
-        document.getElementById("f_borderColor").value = param["f_borderColor"];
-        document.getElementById("f_backgroundColor").value = param["f_backgroundColor"];
-
-        setAlign(param["f_align"]);
-
-        document.getElementById("f_url").focus();
-
-        document.getElementById("orginal_width").value = param["f_width"];
-        document.getElementById("orginal_height").value = param["f_height"];
-
-        // Locate to the correct directory
-        var dreg = new RegExp('^(.*/)([^/]+)$');
-        if (dreg.test(param['f_url']))
-        {
-          changeDir(RegExp.$1);
-          var dirPath = document.getElementById('dirPath');
-          for(var i = 0; i < dirPath.options.length; i++)
-          {
-            if(dirPath.options[i].value == encodeURIComponent(RegExp.$1))
-            {
-              dirPath.options[i].selected = true;
-              break;
-            }
-          }
-        }
-
-        document.getElementById('f_preview').src = _backend_url + '__function=thumbs&img=' + param.f_url;
-
-    }
-
-    else if(manager_mode=="link" && param)
-    {
-        var target_select = document.getElementById("f_target");
-        var use_target = true;
-
-        var absoluteURL = new RegExp('^https?://');
-
-        if (param.f_href.length > 0 && !absoluteURL.test(param.f_href) && typeof param.baseHref == "string") {
-            // URL is not absolute, prepend baseHref
-            param.f_href = param.baseHref + param.f_href;
-        }
-
-        // strip base_url from href
-        var href_regex = new RegExp( '(https?://[^/]*)?' + base_url.replace(/\/$/, '') );
-        param.f_href = param.f_href.replace( href_regex, "" );
-
-        // Locate to the correct directory
-        var startDir;
-        var dreg = new RegExp('^(.*/)([^/]+)$');
-        if (dreg.test(param['f_href']))
-        {
-        	startDir = RegExp.$1;
-        }
-        else
-        {
-        	startDir = document.cookie.match(/EFMStartDirlink=(.*?)(;|$)/);
-        	if (startDir) startDir = startDir[1];
-        }
-        
-        if (startDir)
-        {
-          changeDir(startDir);
-          var dirPath = document.getElementById('dirPath');
-          for(var i = 0; i < dirPath.options.length; i++)
-          {
-            if(dirPath.options[i].value == encodeURIComponent(RegExp.$1))
-            {
-              dirPath.options[i].selected = true;
-              break;
-            }
-          }
-        }
-
-        if (param)
-        {
-            if ( typeof param["f_usetarget"] != "undefined" )
-            {
-                use_target = param["f_usetarget"];
-            }
-            if ( typeof param["f_href"] != "undefined" )
-            {
-                document.getElementById("f_href").value = param["f_href"];
-                document.getElementById("f_title").value = param["f_title"];
-                comboSelectValue(target_select, param["f_target"]);
-                if (target_select.value != param.f_target)
-                {
-                    var opt = document.createElement("option");
-                    opt.value = param.f_target;
-                    opt.innerHTML = opt.value;
-                    target_select.appendChild(opt);
-                    opt.selected = true;
-                }
-            }
-        }
-        if (! use_target)
-        {
-            document.getElementById("f_target_label").style.visibility = "hidden";
-            document.getElementById("f_target").style.visibility = "hidden";
-            document.getElementById("f_other_target").style.visibility = "hidden";
-        }
-
-        var opt = document.createElement("option");
-        opt.value = "_other";
-        opt.innerHTML = i18n("Other");
-        target_select.appendChild(opt);
-        target_select.onchange = onTargetChanged;
-        document.getElementById("f_href").focus();
-    }
-    else if (!param)
-    {
-    	var startDir = document.cookie.match(new RegExp ("EFMStartDir" + manager_mode + "=(.*?)(;|$)"));
-    	if (startDir)
-    	{
-    		startDir = startDir[1];
-    		changeDir(startDir);
-	        var dirPath = document.getElementById('dirPath');
-	        for(var i = 0; i < dirPath.options.length; i++)
-	        {
-	          if(dirPath.options[i].value == encodeURIComponent(startDir))
-	          {
-	            dirPath.options[i].selected = true;
-	            break;
-	          }
-	        }
-    	}
-    }
 }
-
-function pasteButton(action)
-{
-	var buttonHolder = document.getElementById('pasteBtn');
-	if (!buttonHolder.firstChild)
-	{
-		var a = document.createElement('a');
-			a.href = "javascript:void(0);";
-			
-		var img = document.createElement('img');
-			img.src = window.opener._editor_url+'plugins/ExtendedFileManager/img/edit_paste.gif';
-			img.alt = i18n('Paste');
-			a.appendChild(img);
-			buttonHolder.appendChild(a);
-	}
-	buttonHolder.onclick = function() {  
-				if(typeof imgManager != 'undefined') imgManager.paste(action);
-				if (action.action ==  'moveFile' || action.action ==  'moveDir' )
-				{
-					this.onclick = null;
-					this.removeChild(this.firstChild)
-				}
-	}
-	switch (action.action)
-	{
-		case 'copyFile':
-			buttonHolder.firstChild.title = i18n('Copy "$file='+action.file+'$" from "$dir='+decodeURIComponent(action.dir)+'$" here');			
-		break;
-		case 'copyDir':
-			buttonHolder.firstChild.title = i18n('Copy folder "$file='+action.file+'$" from "$dir='+decodeURIComponent(action.dir)+'$" here');		
-		break;
-		case 'moveFile':
-			buttonHolder.firstChild.title = i18n('Move "$file='+action.file+'$" from "$dir='+decodeURIComponent(action.dir)+'$" here');
-		break;
-		break;
-		case 'moveDir':
-			buttonHolder.firstChild.title = i18n('Move folder "$file='+action.file+'$" from "$dir='+decodeURIComponent(action.dir)+'$" here');
-		break;	
-	}
-	
+function onTargetChanged(){
+var f=document.getElementById("f_other_target");
+if(this.value=="_other"){
+f.style.visibility="visible";
+f.select();
+f.focus();
+}else{
+f.style.visibility="hidden";
 }
-function onCancel()
-{
-    __dlg_close(null);
-    return false;
 }
-
-function onOK()
-{
-    if(manager_mode=="image")
-    {
-        // pass data back to the calling window
-        var fields = ["f_url", "f_alt", "f_title", "f_align", "f_border", "f_margin", "f_padding", "f_height", "f_width", "f_borderColor", "f_backgroundColor"];
-        var param = new Object();
-        for (var i in fields)
-        {
-            var id = fields[i];
-            var el = document.getElementById(id);
-            if(id == "f_url" && el.value.indexOf('://') < 0 && el.value )
-                param[id] = makeURL(base_url,el.value);
-            else
-                param[id] = el.value;
-        }
-
-        // See if we need to resize the image
-        var origsize =
-        {
-          w:document.getElementById('orginal_width').value,
-          h:document.getElementById('orginal_height').value
-        }
-
-        if(  (origsize.w != param.f_width)
-          || (origsize.h != param.f_height) )
-        {
-          // Yup, need to resize
-          var resized = Xinha._geturlcontent(window.opener._editor_url + 'plugins/ExtendedFileManager/' + _backend_url + '&__function=resizer&img=' + encodeURIComponent(document.getElementById('f_url').value) + '&width=' + param.f_width + '&height=' + param.f_height);
-
-          // alert(resized);
-          resized = eval(resized);
-          if(resized)
-          {
-            param.f_url = makeURL(base_url, resized);
-          }
-        }
-        __dlg_close(param);
-        return false;
-    }
-    else if(manager_mode=="link")
-    {
-        var required = {
-            // f_href shouldn't be required or otherwise removing the link by entering an empty
-
-            // url isn't possible anymore.
-
-            // "f_href": i18n("You must enter the URL where this link points to")
-
-        };
-        for (var i in required) {
-        var el = document.getElementById(i);
-            if (!el.value) {
-              alert(required[i]);
-              el.focus();
-              return false;
-            }
-        }
-
-        // pass data back to the calling window
-        var fields = ["f_href", "f_title", "f_target" ];
-        var param = new Object();
-        for (var i in fields) {
-            var id = fields[i];
-            var el = document.getElementById(id);
-
-            if(id == "f_href" && el.value.indexOf('://') < 0 )
-                param[id] = makeURL(base_url,el.value);
-            else
-                param[id] = el.value;
-
-        }
-        if (param.f_target == "_other")
-            param.f_target = document.getElementById("f_other_target").value;
-
-//          alert(param.f_target);
-          __dlg_close(param);
-        return false;
-    }
+if(manager_mode=="link"){
+var offsetForInputs=(Xinha.is_ie)?165:150;
+}else{
+var offsetForInputs=(Xinha.is_ie)?230:210;
 }
-
-//similar to the Files::makeFile() in Files.php
-function makeURL(pathA, pathB)
-{
-    if(pathA.substring(pathA.length-1) != '/')
-        pathA += '/';
-
-    if(pathB.charAt(0) == '/');
-        pathB = pathB.substring(1);
-
-    return pathA+pathB;
+init=function(){
+var h=100+250+offsetForInputs;
+__dlg_init(null,{width:650,height:h});
+__dlg_translate("ExtendedFileManager");
+var _c=document.getElementById("uploadForm");
+if(_c){
+_c.target="imgManager";
 }
-
-function updateDir(selection)
-{
-    var newDir = selection.options[selection.selectedIndex].value;
-    changeDir(newDir);
+var _d=window.dialogArguments.editor;
+if(manager_mode=="image"&&typeof Xinha.colorPicker!="undefined"&&document.getElementById("bgCol_pick")){
+var _e={cellsize:_d.config.colorPickerCellSize,granularity:_d.config.colorPickerGranularity,websafe:_d.config.colorPickerWebSafe,savecolors:_d.config.colorPickerSaveColors};
+var _f=document.getElementById("bgCol_pick");
+var _10=document.getElementById("f_backgroundColor");
+_e.callback=function(_11){
+_10.value=_11;
+};
+var _12=new Xinha.colorPicker(_e);
+_f.onclick=function(){
+_12.open("top,right",_10);
+};
+var _13=document.getElementById("bdCol_pick");
+var _14=document.getElementById("f_borderColor");
+_e.callback=function(_15){
+_14.value=_15;
+};
+var _16=new Xinha.colorPicker(_e);
+_13.onclick=function(){
+_16.open("top,right",_14);
+};
 }
-
-function goUpDir()
-{
-    var selection = document.getElementById('dirPath');
-    var currentDir = selection.options[selection.selectedIndex].text;
-    if(currentDir.length < 2)
-        return false;
-    var dirs = currentDir.split('/');
-
-    var search = '';
-
-    for(var i = 0; i < dirs.length - 2; i++)
-    {
-        search += dirs[i]+'/';
-    }
-
-    for(var i = 0; i < selection.length; i++)
-    {
-        var thisDir = selection.options[i].text;
-        if(thisDir == search)
-        {
-            selection.selectedIndex = i;
-            var newDir = selection.options[i].value;
-            changeDir(newDir);
-            break;
-        }
-    }
+var _17=window.dialogArguments.param;
+if(manager_mode=="image"&&_17){
+var _18=new RegExp("^https?://");
+if(_17.f_url.length>0&&!_18.test(_17.f_url)&&typeof _17.baseHref=="string"){
+_17.f_url=_17.baseHref+_17.f_url;
 }
-
-function changeDir(newDir)
-{
-    if(typeof imgManager != 'undefined')
-        imgManager.changeDir(newDir);
+var _19=new RegExp("(https?://[^/]*)?"+base_url.replace(/\/$/,""));
+_17.f_url=_17.f_url.replace(_19,"");
+var rd=(_resized_dir)?_resized_dir.replace(Xinha.RE_Specials,"\\$1")+"/":"";
+var rp=_resized_prefix.replace(Xinha.RE_Specials,"\\$1");
+var _1c=new RegExp("^(.*/)"+rd+rp+"_([0-9]+)x([0-9]+)_([^/]+)$");
+var _1d=_17.f_url.match(_1c);
+if(_1c.test(_17.f_url)){
+_17.f_url=RegExp.$1+RegExp.$4;
+_17.f_width=RegExp.$2;
+_17.f_height=RegExp.$3;
 }
-
-function updateView()
-{
-    refresh();
+document.getElementById("f_url").value=_17["f_url"];
+document.getElementById("f_alt").value=_17["f_alt"];
+document.getElementById("f_title").value=_17["f_title"];
+document.getElementById("f_border").value=_17["f_border"];
+document.getElementById("f_width").value=_17["f_width"];
+document.getElementById("f_height").value=_17["f_height"];
+document.getElementById("f_margin").value=_17["f_margin"];
+document.getElementById("f_padding").value=_17["f_padding"];
+document.getElementById("f_borderColor").value=_17["f_borderColor"];
+document.getElementById("f_backgroundColor").value=_17["f_backgroundColor"];
+setAlign(_17["f_align"]);
+document.getElementById("f_url").focus();
+document.getElementById("orginal_width").value=_17["f_width"];
+document.getElementById("orginal_height").value=_17["f_height"];
+var _1c=new RegExp("^(.*/)([^/]+)$");
+if(_1c.test(_17["f_url"])){
+changeDir(RegExp.$1);
+var _1e=document.getElementById("dirPath");
+for(var i=0;i<_1e.options.length;i++){
+if(_1e.options[i].value==encodeURIComponent(RegExp.$1)){
+_1e.options[i].selected=true;
+break;
 }
-
-function toggleConstrains(constrains)
-{
-    var lockImage = document.getElementById('imgLock');
-    var constrains = document.getElementById('constrain_prop');
-
-    if(constrains.checked)
-    {
-        lockImage.src = "img/locked.gif";
-        checkConstrains('width')
-    }
-    else
-    {
-        lockImage.src = "img/unlocked.gif";
-    }
 }
-
-function checkConstrains(changed)
-{
-    //alert(document.form1.constrain_prop);
-    var constrains = document.getElementById('constrain_prop');
-
-    if(constrains.checked)
-    {
-        var obj = document.getElementById('orginal_width');
-        var orginal_width = parseInt(obj.value);
-        var obj = document.getElementById('orginal_height');
-        var orginal_height = parseInt(obj.value);
-
-        var widthObj = document.getElementById('f_width');
-        var heightObj = document.getElementById('f_height');
-
-        var width = parseInt(widthObj.value);
-        var height = parseInt(heightObj.value);
-
-        if(orginal_width > 0 && orginal_height > 0)
-        {
-            if(changed == 'width' && width > 0) {
-                heightObj.value = parseInt((width/orginal_width)*orginal_height);
-            }
-
-            if(changed == 'height' && height > 0) {
-                widthObj.value = parseInt((height/orginal_height)*orginal_width);
-            }
-        }
-    }
 }
-
-function showMessage(newMessage)
-{
-    var message = document.getElementById('message');
-    var messages = document.getElementById('messages');
-    if(message.firstChild)
-        message.removeChild(message.firstChild);
-
-    message.appendChild(document.createTextNode(i18n(newMessage)));
-
-    messages.style.display = "block";
+document.getElementById("f_preview").src=_backend_url+"__function=thumbs&img="+_17.f_url;
+}else{
+if(manager_mode=="link"&&_17){
+var _20=document.getElementById("f_target");
+var _21=true;
+var _18=new RegExp("^https?://");
+if(_17.f_href.length>0&&!_18.test(_17.f_href)&&typeof _17.baseHref=="string"){
+_17.f_href=_17.baseHref+_17.f_href;
 }
-
-function addEvent(obj, evType, fn)
-{
-    if (obj.addEventListener) { obj.addEventListener(evType, fn, true); return true; }
-    else if (obj.attachEvent) {  var r = obj.attachEvent("on"+evType, fn);  return r;  }
-    else {  return false; }
+var _22=new RegExp("(https?://[^/]*)?"+base_url.replace(/\/$/,""));
+_17.f_href=_17.f_href.replace(_22,"");
+var _23;
+var _1c=new RegExp("^(.*/)([^/]+)$");
+if(_1c.test(_17["f_href"])){
+_23=RegExp.$1;
+}else{
+_23=document.cookie.match(/EFMStartDirlink=(.*?)(;|$)/);
+if(_23){
+_23=_23[1];
 }
-
-function doUpload()
-{
-    var uploadForm = document.getElementById('uploadForm');
-    if(uploadForm)
-        showMessage('Uploading');
 }
-
-function refresh()
-{
-    var selection = document.getElementById('dirPath');
-    updateDir(selection);
+if(_23){
+changeDir(_23);
+var _1e=document.getElementById("dirPath");
+for(var i=0;i<_1e.options.length;i++){
+if(_1e.options[i].value==encodeURIComponent(RegExp.$1)){
+_1e.options[i].selected=true;
+break;
 }
-
-function newFolder()
-{
-    var folder = prompt(i18n('Please enter name for new folder...'), i18n('Untitled'));
-    var selection = document.getElementById('dirPath');
-    var dir = selection.options[selection.selectedIndex].value;
-
-    if(folder == thumbdir)
-    {
-        alert(i18n('Invalid folder name, please choose another folder name.'));
-        return false;
-    }
-
-    if (folder && folder != '' && typeof imgManager != 'undefined')
-        imgManager.newFolder(dir, encodeURI(folder));
 }
-
-
-function resize()
-{
-	var win = Xinha.viewportSize(window);
-	document.getElementById('imgManager').style.height = parseInt( win.y - 150 - offsetForInputs, 10 ) + 'px';
-	
-	return true;
 }
-addEvent(window, 'load', init);
-addEvent(window, 'resize', resize);
+if(_17){
+if(typeof _17["f_usetarget"]!="undefined"){
+_21=_17["f_usetarget"];
+}
+if(typeof _17["f_href"]!="undefined"){
+document.getElementById("f_href").value=_17["f_href"];
+document.getElementById("f_title").value=_17["f_title"];
+comboSelectValue(_20,_17["f_target"]);
+if(_20.value!=_17.f_target){
+var opt=document.createElement("option");
+opt.value=_17.f_target;
+opt.innerHTML=opt.value;
+_20.appendChild(opt);
+opt.selected=true;
+}
+}
+}
+if(!_21){
+document.getElementById("f_target_label").style.visibility="hidden";
+document.getElementById("f_target").style.visibility="hidden";
+document.getElementById("f_other_target").style.visibility="hidden";
+}
+var opt=document.createElement("option");
+opt.value="_other";
+opt.innerHTML=i18n("Other");
+_20.appendChild(opt);
+_20.onchange=onTargetChanged;
+document.getElementById("f_href").focus();
+}else{
+if(!_17){
+var _23=document.cookie.match(new RegExp("EFMStartDir"+manager_mode+"=(.*?)(;|$)"));
+if(_23){
+_23=_23[1];
+changeDir(_23);
+var _1e=document.getElementById("dirPath");
+for(var i=0;i<_1e.options.length;i++){
+if(_1e.options[i].value==encodeURIComponent(_23)){
+_1e.options[i].selected=true;
+break;
+}
+}
+}
+}
+}
+}
+};
+function pasteButton(_25){
+var _26=document.getElementById("pasteBtn");
+if(!_26.firstChild){
+var a=document.createElement("a");
+a.href="javascript:void(0);";
+var img=document.createElement("img");
+img.src=window.opener._editor_url+"plugins/ExtendedFileManager/img/edit_paste.gif";
+img.alt=i18n("Paste");
+a.appendChild(img);
+_26.appendChild(a);
+}
+_26.onclick=function(){
+if(typeof imgManager!="undefined"){
+imgManager.paste(_25);
+}
+if(_25.action=="moveFile"||_25.action=="moveDir"){
+this.onclick=null;
+this.removeChild(this.firstChild);
+}
+};
+switch(_25.action){
+case "copyFile":
+_26.firstChild.title=i18n("Copy \"$file="+_25.file+"$\" from \"$dir="+decodeURIComponent(_25.dir)+"$\" here");
+break;
+case "copyDir":
+_26.firstChild.title=i18n("Copy folder \"$file="+_25.file+"$\" from \"$dir="+decodeURIComponent(_25.dir)+"$\" here");
+break;
+case "moveFile":
+_26.firstChild.title=i18n("Move \"$file="+_25.file+"$\" from \"$dir="+decodeURIComponent(_25.dir)+"$\" here");
+break;
+break;
+case "moveDir":
+_26.firstChild.title=i18n("Move folder \"$file="+_25.file+"$\" from \"$dir="+decodeURIComponent(_25.dir)+"$\" here");
+break;
+}
+}
+function onCancel(){
+__dlg_close(null);
+return false;
+}
+function onOK(){
+if(manager_mode=="image"){
+var _29=["f_url","f_alt","f_title","f_align","f_border","f_margin","f_padding","f_height","f_width","f_borderColor","f_backgroundColor"];
+var _2a=new Object();
+for(var i in _29){
+var id=_29[i];
+var el=document.getElementById(id);
+if(id=="f_url"&&el.value.indexOf("://")<0&&el.value){
+_2a[id]=makeURL(base_url,el.value);
+}else{
+_2a[id]=el.value;
+}
+}
+var _2e={w:document.getElementById("orginal_width").value,h:document.getElementById("orginal_height").value};
+if((_2e.w!=_2a.f_width)||(_2e.h!=_2a.f_height)){
+var _2f=Xinha._geturlcontent(window.opener._editor_url+"plugins/ExtendedFileManager/"+_backend_url+"&__function=resizer&img="+encodeURIComponent(document.getElementById("f_url").value)+"&width="+_2a.f_width+"&height="+_2a.f_height);
+_2f=eval(_2f);
+if(_2f){
+_2a.f_url=makeURL(base_url,_2f);
+}
+}
+__dlg_close(_2a);
+return false;
+}else{
+if(manager_mode=="link"){
+var _30={};
+for(var i in _30){
+var el=document.getElementById(i);
+if(!el.value){
+alert(_30[i]);
+el.focus();
+return false;
+}
+}
+var _29=["f_href","f_title","f_target"];
+var _2a=new Object();
+for(var i in _29){
+var id=_29[i];
+var el=document.getElementById(id);
+if(id=="f_href"&&el.value.indexOf("://")<0){
+_2a[id]=makeURL(base_url,el.value);
+}else{
+_2a[id]=el.value;
+}
+}
+if(_2a.f_target=="_other"){
+_2a.f_target=document.getElementById("f_other_target").value;
+}
+__dlg_close(_2a);
+return false;
+}
+}
+}
+function makeURL(_31,_32){
+if(_31.substring(_31.length-1)!="/"){
+_31+="/";
+}
+if(_32.charAt(0)=="/"){
+}
+_32=_32.substring(1);
+return _31+_32;
+}
+function updateDir(_33){
+var _34=_33.options[_33.selectedIndex].value;
+changeDir(_34);
+}
+function goUpDir(){
+var _35=document.getElementById("dirPath");
+var _36=_35.options[_35.selectedIndex].text;
+if(_36.length<2){
+return false;
+}
+var _37=_36.split("/");
+var _38="";
+for(var i=0;i<_37.length-2;i++){
+_38+=_37[i]+"/";
+}
+for(var i=0;i<_35.length;i++){
+var _3a=_35.options[i].text;
+if(_3a==_38){
+_35.selectedIndex=i;
+var _3b=_35.options[i].value;
+changeDir(_3b);
+break;
+}
+}
+}
+function changeDir(_3c){
+if(typeof imgManager!="undefined"){
+imgManager.changeDir(_3c);
+}
+}
+function updateView(){
+refresh();
+}
+function toggleConstrains(_3d){
+var _3e=document.getElementById("imgLock");
+var _3d=document.getElementById("constrain_prop");
+if(_3d.checked){
+_3e.src="img/locked.gif";
+checkConstrains("width");
+}else{
+_3e.src="img/unlocked.gif";
+}
+}
+function checkConstrains(_3f){
+var _40=document.getElementById("constrain_prop");
+if(_40.checked){
+var obj=document.getElementById("orginal_width");
+var _42=parseInt(obj.value);
+var obj=document.getElementById("orginal_height");
+var _43=parseInt(obj.value);
+var _44=document.getElementById("f_width");
+var _45=document.getElementById("f_height");
+var _46=parseInt(_44.value);
+var _47=parseInt(_45.value);
+if(_42>0&&_43>0){
+if(_3f=="width"&&_46>0){
+_45.value=parseInt((_46/_42)*_43);
+}
+if(_3f=="height"&&_47>0){
+_44.value=parseInt((_47/_43)*_42);
+}
+}
+}
+}
+function showMessage(_48){
+var _49=document.getElementById("message");
+var _4a=document.getElementById("messages");
+if(_49.firstChild){
+_49.removeChild(_49.firstChild);
+}
+_49.appendChild(document.createTextNode(i18n(_48)));
+_4a.style.display="block";
+}
+function addEvent(obj,_4c,fn){
+if(obj.addEventListener){
+obj.addEventListener(_4c,fn,true);
+return true;
+}else{
+if(obj.attachEvent){
+var r=obj.attachEvent("on"+_4c,fn);
+return r;
+}else{
+return false;
+}
+}
+}
+function doUpload(){
+var _4f=document.getElementById("uploadForm");
+if(_4f){
+showMessage("Uploading");
+}
+}
+function refresh(){
+var _50=document.getElementById("dirPath");
+updateDir(_50);
+}
+function newFolder(){
+var _51=prompt(i18n("Please enter name for new folder..."),i18n("Untitled"));
+var _52=document.getElementById("dirPath");
+var dir=_52.options[_52.selectedIndex].value;
+if(_51==thumbdir){
+alert(i18n("Invalid folder name, please choose another folder name."));
+return false;
+}
+if(_51&&_51!=""&&typeof imgManager!="undefined"){
+imgManager.newFolder(dir,encodeURI(_51));
+}
+}
+function resize(){
+var win=Xinha.viewportSize(window);
+document.getElementById("imgManager").style.height=parseInt(win.y-130-offsetForInputs,10)+"px";
+return true;
+}
+addEvent(window,"resize",resize);
+addEvent(window,"load",init);
+

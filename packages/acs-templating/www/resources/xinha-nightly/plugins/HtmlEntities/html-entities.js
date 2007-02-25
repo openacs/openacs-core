@@ -9,6 +9,12 @@ Using the conversion map provided by mharrisonline in ticket #127
 If you want to adjust the list, e.g. to except the characters that are available in the used charset,
 edit Entities.js. 
 You may save it under a different name using the xinha_config.HtmlEntities.EntitiesFile variable
+
+ISO-8859-1 preset is default, set
+  
+  xinha_config.HtmlEntities.Encoding = null;
+
+if you want all special characters to be converted or want to load a custom file 
 \*------------------------------------------*/
 
 function HtmlEntities(editor) {
@@ -25,15 +31,21 @@ HtmlEntities._pluginInfo = {
   sponsor_url   : "",
   license       : "Creative Commons Attribution-ShareAlike License"
 }
-HTMLArea.Config.prototype.HtmlEntities =
+Xinha.Config.prototype.HtmlEntities =
 {
+	Encoding     : 'iso-8859-1',
 	EntitiesFile : _editor_url + "plugins/HtmlEntities/Entities.js"
 }
 HtmlEntities.prototype.onGenerate = function() {
-    eval("var e = "+ HTMLArea._geturlcontent(this.editor.config.HtmlEntities.EntitiesFile));
-    var specialReplacements = this.editor.config.specialReplacements;
-    for (var i in e)
-    {
-    	specialReplacements[i] = e[i];	
+    var e = this.editor;
+    var url = (e.config.HtmlEntities.Encoding) ?  _editor_url + "plugins/HtmlEntities/"+e.config.HtmlEntities.Encoding+".js" : e.config.HtmlEntities.EntitiesFile;
+    var callback = function (getback) {
+    	var specialReplacements = e.config.specialReplacements;
+    	eval("var replacements =" + getback);
+    	for (var i in  replacements)
+		{
+			specialReplacements[i] =  replacements[i];	
+		}
     }
+    Xinha._getback(url,callback);
 }

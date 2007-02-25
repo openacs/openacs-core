@@ -13,7 +13,7 @@ function Init() {
 	__dlg_init();
 	var param = window.dialogArguments;
   type = param.f_type;
-  document.getElementById("f_type").innerHTML = 'Form Element: INPUT (' + type + ')';
+  document.getElementById("f_type").innerHTML = HTMLArea._lc('Form Element: INPUT', "Forms") + '(' + type + ')';
   document.getElementById("txt").style.display = "none";
   document.getElementById("chk").style.display = "none";
   document.getElementById("btn").style.display = "none";
@@ -77,7 +77,7 @@ function Init() {
 function onOK() {
 	var el = document.getElementById("f_name");
 	if (!el.value) {
-  	alert("You must enter a Name");
+		alert(HTMLArea._lc("You must enter a Name","Forms"));
 		el.focus();
 	  return false;
 	}

@@ -27,7 +27,7 @@ function onOK() {
   for (var i in required) {
 	  var el = document.getElementById(i);
 	  if (!el.value) {
-		alert(required[i]);
+		alert(HTMLArea._lc(required[i],"Forms"));
 		el.focus();
 		return false;
 	  }

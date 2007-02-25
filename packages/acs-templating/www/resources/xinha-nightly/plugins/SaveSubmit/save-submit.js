@@ -1,164 +1,130 @@
-/*------------------------------------------*\
-SaveSubmit for Xinha
-____________________
-
-See README.txt for information
-
-\*------------------------------------------*/
-
-function SaveSubmit(editor) {
-	this.editor = editor;
-	this.initial_html = null;
-	this.changed = false;
-	var self = this;
-	var cfg = editor.config;
-	this.textarea = this.editor._textArea;
-
-	this.imgage_changed = _editor_url+"plugins/SaveSubmit/img/ed_save_red.gif";
-	this.imgage_unchanged = _editor_url+"plugins/SaveSubmit/img/ed_save_green.gif";
-	cfg.registerButton({
-	id       : "savesubmit",
-	tooltip  : self._lc("Save"),
-	image    : this.imgage_unchanged,
-	textMode : false,
-	action   :  function(editor) {
-			self.save(editor);
-		}
-	});
-	cfg.addToolbarElement("savesubmit", "popupeditor", -1);
+function SaveSubmit(_1){
+this.editor=_1;
+this.changed=false;
+var _2=this;
+var _3=_1.config;
+this.textarea=this.editor._textArea;
+this.image_changed=_editor_url+"plugins/SaveSubmit/img/ed_save_red.gif";
+this.image_unchanged=_editor_url+"plugins/SaveSubmit/img/ed_save_green.gif";
+_3.registerButton({id:"savesubmit",tooltip:_2._lc("Save"),image:this.image_unchanged,textMode:false,action:function(_4){
+_2.save(_4);
+}});
+_3.addToolbarElement("savesubmit","popupeditor",-1);
 }
-
-SaveSubmit.prototype._lc = function(string) {
-    return Xinha._lc(string, 'SaveSubmit');
+SaveSubmit.prototype._lc=function(_5){
+return Xinha._lc(_5,"SaveSubmit");
+};
+SaveSubmit._pluginInfo={name:"SaveSubmit",version:"1.0",developer:"Raimund Meyer",developer_url:"http://rheinauf.de",c_owner:"Raimund Meyer",sponsor:"",sponsor_url:"",license:"htmlArea"};
+SaveSubmit.prototype.onGenerateOnce=function(){
+this.initial_html=this.editor.getInnerHTML();
+};
+SaveSubmit.prototype.onKeyPress=function(ev){
+if(ev.ctrlKey&&this.editor.getKey(ev)=="s"){
+this.save(this.editor);
+Xinha._stopEvent(ev);
+return true;
+}else{
+if(!this.changed){
+if(this.getChanged()){
+this.setChanged();
 }
-
-SaveSubmit._pluginInfo = {
-  name          : "SaveSubmit",
-  version       : "1.0",
-  developer     : "Raimund Meyer",
-  developer_url : "http://rheinauf.de",
-  c_owner       : "Raimund Meyer",
-  sponsor       : "",
-  sponsor_url   : "",
-  license       : "htmlArea"
+return false;
 }
-
-SaveSubmit.prototype.onGenerate = function() {
-	var self = this;
-	var doc = this.editordoc = this.editor._iframe.contentWindow.document;
-	Xinha._addEvents(doc, ["mouseup","keyup","keypress","keydown"],
-			    function (event) {
-			    return self.onEvent(Xinha.is_ie ? self.editor._iframe.contentWindow.event : event);
-			    });
 }
-
-SaveSubmit.prototype.onEvent = function(ev) {
-
-	var keyEvent = (Xinha.is_ie && ev.type == "keydown") || (!Xinha.is_ie && ev.type == "keypress");
-
-	if (keyEvent && ev.ctrlKey && String.fromCharCode(Xinha.is_ie ? ev.keyCode : ev.charCode).toLowerCase() == 's') {
-			this.save(this.editor);
-	}
-	else {
-		if (!this.changed) {
-			if (this.getChanged()) this.setChanged();
-		}
-	}
+};
+SaveSubmit.prototype.onExecCommand=function(_7){
+if(this.changed&&_7=="undo"){
+if(this.initial_html==this.editor.getInnerHTML()){
+this.setUnChanged();
 }
-
-SaveSubmit.prototype.getChanged = function() {
-	if (this.initial_html == null) this.initial_html = this.editor.getHTML();
-	if (this.initial_html != this.editor.getHTML() && this.changed == false) {
-
-		this.changed = true;
-		return true;
-	}
-	else return false;
+return false;
 }
-SaveSubmit.prototype.setChanged = function() {
-	toolbar_objects = this.editor._toolbarObjects;
-	for (var i in toolbar_objects) {
-		var btn = toolbar_objects[i];
-		if (btn.name == 'savesubmit') {
-			btn.swapImage(this.imgage_changed);
-		}
-	}
-	this.editor.updateToolbar();
+};
+SaveSubmit.prototype.onUpdateToolbar=function(){
+if(!this.changed){
+if(this.getChanged()){
+this.setChanged();
 }
-SaveSubmit.prototype.changedReset = function() {
-	this.changed = false;
-	this.initial_html = null;
-	toolbar_objects = this.editor._toolbarObjects;
-	for (var i in toolbar_objects) {
-		var btn = toolbar_objects[i];
-		if (btn.name == 'savesubmit') {
-			btn.swapImage(this.imgage_unchanged);
-		}
-	}
+return false;
 }
-
-SaveSubmit.prototype.save =  function(editor) {
-	this.buildMessage()
-	var self =this;
-	var form = editor._textArea.form;
-	form.onsubmit();
-
-	var content ='';
-
-	for (var i=0;i<form.elements.length;i++)
-	{
-		content += ((i>0) ? '&' : '') + form.elements[i].name + '=' + encodeURIComponent(form.elements[i].value);
-	}
-
-	Xinha._postback(editor._textArea.form.action, content, function(getback) {
-
-		if (getback) {
-			self.setMessage(getback);
-			//self.setMessage(self._lc("Ready"));
-			self.changedReset();
-		}
-		removeMessage = function() { self.removeMessage()} ;
-		window.setTimeout("removeMessage()",1000);
-
-	});
+};
+SaveSubmit.prototype.getChanged=function(){
+if(this.initial_html===null){
+this.initial_html=this.editor.getInnerHTML();
 }
-
-SaveSubmit.prototype.setMessage = function(string) {
-  var textarea = this.textarea;
-  if ( !document.getElementById("message_sub_" + textarea.name)) { return ; }
-  var elt = document.getElementById("message_sub_" + textarea.name);
-  elt.innerHTML = Xinha._lc(string, 'SaveSubmit');
+if(this.initial_html!=this.editor.getInnerHTML()&&this.changed==false){
+this.changed=true;
+return true;
+}else{
+return false;
 }
-
-SaveSubmit.prototype.removeMessage = function() {
-  var textarea = this.textarea;
-  if (!document.getElementById("message_" + textarea.name)) { return ; }
-  document.body.removeChild(document.getElementById("message_" + textarea.name));
+};
+SaveSubmit.prototype.setChanged=function(){
+this.editor._toolbarObjects.savesubmit.swapImage(this.image_changed);
+this.editor.updateToolbar();
+};
+SaveSubmit.prototype.setUnChanged=function(){
+this.changed=false;
+this.editor._toolbarObjects.savesubmit.swapImage(this.image_unchanged);
+};
+SaveSubmit.prototype.changedReset=function(){
+this.initial_html=null;
+this.setUnChanged();
+};
+SaveSubmit.prototype.save=function(_8){
+this.buildMessage();
+var _9=this;
+var _a=_8._textArea.form;
+_a.onsubmit();
+var _b="";
+for(var i=0;i<_a.elements.length;i++){
+_b+=((i>0)?"&":"")+_a.elements[i].name+"="+encodeURIComponent(_a.elements[i].value);
 }
-
-//ripped mokhet's loading message function
-SaveSubmit.prototype.buildMessage   = function() {
-
-	var textarea = this.textarea;
-	var htmlarea = this.editor._htmlArea;
-	var loading_message = document.createElement("div");
-	loading_message.id = "message_" + textarea.name;
-	loading_message.className = "loading";
-	loading_message.style.width    = htmlarea.offsetWidth +'px' ;//(this.editor._iframe.offsetWidth != 0) ? this.editor._iframe.offsetWidth +'px' : this.editor._initial_ta_size.w;
-
-	loading_message.style.left     = Xinha.findPosX(htmlarea) +  'px';
-	loading_message.style.top      = (Xinha.findPosY(htmlarea) + parseInt(htmlarea.offsetHeight) / 2) - 50 +  'px';
-
-	var loading_main = document.createElement("div");
-	loading_main.className = "loading_main";
-	loading_main.id = "loading_main_" + textarea.name;
-	loading_main.appendChild(document.createTextNode(this._lc("Saving...")));
-
-	var loading_sub = document.createElement("div");
-	loading_sub.className = "loading_sub";
-	loading_sub.id = "message_sub_" + textarea.name;
-	loading_sub.appendChild(document.createTextNode(this._lc("in progress")));
-	loading_message.appendChild(loading_main);
-	loading_message.appendChild(loading_sub);
-	document.body.appendChild(loading_message);
+Xinha._postback(_8._textArea.form.action,_b,function(_d){
+if(_d){
+_9.setMessage(_d);
+_9.changedReset();
 }
+removeMessage=function(){
+_9.removeMessage();
+};
+window.setTimeout("removeMessage()",1000);
+});
+};
+SaveSubmit.prototype.setMessage=function(_e){
+var _f=this.textarea;
+if(!document.getElementById("message_sub_"+_f.id)){
+return;
+}
+var elt=document.getElementById("message_sub_"+_f.id);
+elt.innerHTML=Xinha._lc(_e,"SaveSubmit");
+};
+SaveSubmit.prototype.removeMessage=function(){
+var _11=this.textarea;
+if(!document.getElementById("message_"+_11.id)){
+return;
+}
+document.body.removeChild(document.getElementById("message_"+_11.id));
+};
+SaveSubmit.prototype.buildMessage=function(){
+var _12=this.textarea;
+var _13=this.editor._htmlArea;
+var _14=document.createElement("div");
+_14.id="message_"+_12.id;
+_14.className="loading";
+_14.style.width=_13.offsetWidth+"px";
+_14.style.left=Xinha.findPosX(_13)+"px";
+_14.style.top=(Xinha.findPosY(_13)+parseInt(_13.offsetHeight)/2)-50+"px";
+var _15=document.createElement("div");
+_15.className="loading_main";
+_15.id="loading_main_"+_12.id;
+_15.appendChild(document.createTextNode(this._lc("Saving...")));
+var _16=document.createElement("div");
+_16.className="loading_sub";
+_16.id="message_sub_"+_12.id;
+_16.appendChild(document.createTextNode(this._lc("in progress")));
+_14.appendChild(_15);
+_14.appendChild(_16);
+document.body.appendChild(_14);
+};
+

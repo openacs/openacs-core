@@ -1,208 +1,90 @@
-// GUIDO Music Notation plugin for HTMLArea
-// Implementation by Richard Christophe
-// Original Author - Richard Christophe cvrichard@infonie.fr
-//
-// Distributed under the same terms as HTMLArea itself.
-// This notice MUST stay intact for use (see license.txt).
-
-// this is a collection of JavaScript routines that
-// facilitate accessing the GUIDO NoteServer.
-//
-// These Functions can be used within WEB-Pages
-// examples can be found at
-// www.noteserver.org/javascript/index.html
-//
-
-function NoteServer(editor) {
-  this.editor = editor;
-  var cfg = editor.config;
-  var self = this;
-
-  cfg.registerButton({
-                id       : "insertscore",
-                tooltip  : this._lc("Insert GUIDO Music Notation"),
-                image    : editor.imgURL("note.gif", "NoteServer"),
-                textMode : false,
-                action   : function(editor) {
-                                self.buttonPress(editor);
-                           }
-            });
-	cfg.addToolbarElement("insertscore", "insertimage", 1);
+function NoteServer(_1){
+this.editor=_1;
+var _2=_1.config;
+var _3=this;
+_2.registerButton({id:"insertscore",tooltip:this._lc("Insert GUIDO Music Notation"),image:_1.imgURL("note.gif","NoteServer"),textMode:false,action:function(_4){
+_3.buttonPress(_4);
+}});
+_2.addToolbarElement("insertscore","insertimage",1);
 }
-
-NoteServer._pluginInfo = {
-  name          : "NoteServer",
-  version       : "1.1",
-  developer     : "Richard Christophe",
-  developer_url : "http://piano-go.chez.tiscali.fr/guido.html",
-  c_owner       : "Richard Christophe",
-  sponsor       : "",
-  sponsor_url   : "",
-  license       : "htmlArea"
+NoteServer._pluginInfo={name:"NoteServer",version:"1.1",developer:"Richard Christophe",developer_url:"http://piano-go.chez.tiscali.fr/guido.html",c_owner:"Richard Christophe",sponsor:"",sponsor_url:"",license:"htmlArea"};
+NoteServer.prototype._lc=function(_5){
+return HTMLArea._lc(_5,"NoteServer");
 };
-
-NoteServer.prototype._lc = function(string) {
-  return HTMLArea._lc(string, 'NoteServer');
+NoteServer.prototype.buttonPress=function(_6){
+_6._popupDialog("plugin://NoteServer/codenote",function(_7){
+if(!_7){
+return false;
+}else{
+IncludeGuido(_6,_7);
+}
+},null);
 };
-
-NoteServer.prototype.buttonPress = function(editor) {
-  editor._popupDialog( "plugin://NoteServer/codenote", function(param) {
-    if (!param) {	// user must have pressed Cancel
-      return false;
-    } else IncludeGuido(editor,param);
-  }, null);
-};
-
-// this variable is the address of the noteserver
-// can be set to another address (local address if availalble) 
-
-// var noteserveraddress = "www.noteserver.org";
-// var htmlbase = "";
-
-// alternative: specify server-adress directly:
-var noteserveraddress = "clef.cs.ubc.ca"; //"www.noteserver.org"
-var htmlbase = "/salieri/nview";
-
-
-// this is the version of the NoteServer used.
-// one of "0_4", "0_5", "0_6", or "0_7", or ""
-// "" means: take the current version
-// var versionstring = "0_7";
-var versionstring = "";
-
-// this functions takes a GMN-string and returns the URL
-// that converts it into a GIF-file
-function GetGIFURL(gmnstring,zoom,pagenum) {
-  gmnstring = escape(gmnstring);
-  gmnstring = gmnstring.replace(/\//g,"%2F");
-
-  if (!zoom) {
-    zoom = "1.0";
-  }
-  if (!pagenum) {
-    pagenum = "1";
-  }
-
-  var string = "http://" + noteserveraddress +
-               "/scripts/salieri" + versionstring +
-               "/gifserv.pl?" +
-               "pagewidth=21" +
-               "&pageheight=29.7" +
-               "&zoomfactor=" + zoom +
-               "&pagesizeadjust=yes" +
-               "&outputformat=gif87" +
-               "&pagenum=" + pagenum +
-               "&gmndata=" + gmnstring;
-
-  //	document.write(string);
-  return string;
+var noteserveraddress="clef.cs.ubc.ca";
+var htmlbase="/salieri/nview";
+var versionstring="";
+function GetGIFURL(_8,_9,_a){
+_8=escape(_8);
+_8=_8.replace(/\//g,"%2F");
+if(!_9){
+_9="1.0";
+}
+if(!_a){
+_a="1";
+}
+var _b="http://"+noteserveraddress+"/scripts/salieri"+versionstring+"/gifserv.pl?"+"pagewidth=21"+"&pageheight=29.7"+"&zoomfactor="+_9+"&pagesizeadjust=yes"+"&outputformat=gif87"+"&pagenum="+_a+"&gmndata="+_8;
+return _b;
+}
+function GetMIDIURL(_c){
+_c=escape(_c);
+_c=_c.replace(/\//g,"%2F");
+var _d="http://"+noteserveraddress+"/scripts/salieri"+versionstring+"/midserv.pl?"+"gmndata="+_c;
+return _d;
+}
+function GetAPPLETURL(_e,_f){
+_e=escape(_e);
+_e=_e.replace(/\//g,"%2F");
+var _10="<applet "+"code=\"NoteServerApplet\" "+"codebase=\"http://"+noteserveraddress+htmlbase+"/java\" "+" width=700 height=300>"+"<param name=server value=\""+noteserveraddress+"\">"+"<param name=serverVersion value=\""+versionstring+"\">"+"<param name=zoomFactor value=\""+_f+"\">"+"<param name=pageWidth value=\"21\">"+"<param name=pageHeight value=\"29.7\">"+"<param name=gmn value=\""+_e+"\">"+"</applet>";
+return _10;
+}
+function IncludeGuido(_11,_12){
+if(!_12["f_zoom"]){
+zoom="";
+}
+var _13=GetGIFURL(_12["f_code"],_12["f_zoom"],"");
+var _14=GetMIDIURL(_12["f_code"]);
+var _15="<br>";
+if(_12["f_applet"]==false){
+if(((navigator.userAgent.toLowerCase().indexOf("msie")!=-1)&&(navigator.userAgent.toLowerCase().indexOf("opera")==-1))){
+_11.focusEditor();
+_11.insertHTML("<img src="+_13+">");
+}else{
+img=new Image();
+img.src=_13;
+var doc=_11._doc;
+var sel=_11._getSelection();
+var _18=_11._createRange(sel);
+_11._doc.execCommand("insertimage",false,img.src);
+}
+}else{
+var _19=GetAPPLETURL(_12["f_code"],_12["f_zoom"]);
+_15=_15+_19+"<br>";
+}
+if(_12["f_affcode"]){
+_15=_15+HTMLArea._lc("GUIDO Code","NoteServer")+" : "+_12["f_code"]+"<br>";
+}
+if(_12["f_midi"]){
+_15=_15+"<a href="+_14+">"+HTMLArea._lc("MIDI File","NoteServer")+"</a> <br>";
+}
+_11.focusEditor();
+_11.insertHTML(_15);
+}
+function IncludeGuidoStringAsApplet(_1a,_1b,_1c){
+_1b=escape(_1b);
+_1b=_1b.replace(/\//g,"%2F");
+var _1d="<applet "+"codebase=\"http://"+noteserveraddress+htmlbase+"/java\"\n"+"code=\"NoteServerApplet\" width=480 height=230>"+"<PARAM NAME=server VALUE='"+noteserveraddress+"'>"+"<PARAM NAME=serverVersion VALUE='"+versionstring+"'>"+"<PARAM NAME=zoomFactor VALUE='"+_1c+"'>"+"<param name=pageWidth value=\"21\">"+"<param name=pageHeight value=\"29.7\">"+"<PARAM NAME=gmn VALUE='"+_1b+"'>"+"</applet>";
+alert(_1d);
+_1a.focusEditor();
+_1a.insertHTML(_1d);
 }
 
-// this functions takes a GMN-string and returns the URL
-// that converts it into a MIDI-file
-function GetMIDIURL(gmnstring) {
-  gmnstring = escape(gmnstring);
-  gmnstring = gmnstring.replace(/\//g,"%2F");
-
-  var string = "http://" + noteserveraddress +
-               "/scripts/salieri" + versionstring + 
-               "/midserv.pl?" +
-               "gmndata=" + gmnstring;
-
-  return string;
-}
-
-// this functions takes a GMN-string and returns the URL
-// that insert Applet
-function GetAPPLETURL(gmnstring,zoom) {
-  gmnstring = escape(gmnstring);
-  gmnstring = gmnstring.replace(/\//g,"%2F");
-
-  var string = '<applet ' +
-               'code="NoteServerApplet" ' +
-               'codebase="http://' +
-               noteserveraddress + htmlbase + '/java" ' +
-               ' width=700 height=300>' +
-               '<param name=server value="' +
-               noteserveraddress + '">' +
-               '<param name=serverVersion value="' +
-               versionstring + '">' +
-               '<param name=zoomFactor value="' +
-               zoom + '">' +
-               '<param name=pageWidth value="21">' +
-               '<param name=pageHeight value="29.7">' +
-               '<param name=gmn value="' +
-               gmnstring + '">' +
-               '</applet>';
-
-  return string;
-}
-
-// This function takes a GUIDO string, accesses the
-// NoteServer (address specified as a constant above)
-// and then embeds the GIF-Image in the document.
-
-
-function IncludeGuido(editor,param) {
-  // this  holds the URL for retrieving the picture ...
-
-  if (!param["f_zoom"])
-    zoom = "";
-  //if (!pagenum)
-   // pagenum = "";
-
-  var string = GetGIFURL(param["f_code"],param["f_zoom"],"");
-  var stringmidi = GetMIDIURL(param["f_code"]);
-  var string2 = "<br>";
-
-if (param["f_applet"] == false ){
-  if (((navigator.userAgent.toLowerCase().indexOf("msie") != -1)
-    && (navigator.userAgent.toLowerCase().indexOf("opera") == -1))) {
-    editor.focusEditor();
-    editor.insertHTML("<img src=" + string + ">");
-  }	else {
-    img = new Image();
-    img.src = string;
-
-    var doc = editor._doc;
-    var sel = editor._getSelection();
-    var range = editor._createRange(sel);
-    editor._doc.execCommand("insertimage", false, img.src);
-  }
-} else {
-  var stringapplet = GetAPPLETURL(param["f_code"],param["f_zoom"]);
-  string2 = string2 + stringapplet + "<br>";
-}
-
-// To test code source in textarea
-//if (param["f_affcode"]) string2 = string2 + HTMLArea._lc("Source Code","NoteServer") + " :" + '<br> <textarea  cols=60 rows=10 style = "background: #FFFFE6">' +  param["f_code"] + '</textarea> <br>';
-
-if (param["f_affcode"]) string2 = string2 + HTMLArea._lc("GUIDO Code","NoteServer") + " : "  + param["f_code"] + "<br>";
-if (param["f_midi"]) string2 = string2 + "<a href=" + stringmidi + ">" + HTMLArea._lc("MIDI File","NoteServer") + "</a> <br>";
-
-  editor.focusEditor();
-  editor.insertHTML(string2);
-
-    //var html = linktext.link(stringmidi);
-    //editor.insertHTML(html);
-}
-
-// this routine includes the applet-definition 
-function IncludeGuidoStringAsApplet(editor, gmnstring, zoom) {
-  gmnstring = escape(gmnstring);
-  gmnstring = gmnstring.replace(/\//g,"%2F");
-
-  var string = '<applet ' + 
-               'codebase="http://' + noteserveraddress + htmlbase + '/java"\n' +
-               'code="NoteServerApplet" width=480 height=230>' +
-               "<PARAM NAME=server VALUE='" + noteserveraddress + "'>" +
-               "<PARAM NAME=serverVersion VALUE='" + versionstring + "'>" +
-               "<PARAM NAME=zoomFactor VALUE='"	+ zoom + "'>" +
-               '<param name=pageWidth value="21">' +
-               '<param name=pageHeight value="29.7">' +
-               "<PARAM NAME=gmn VALUE='" + gmnstring + "'>" +
-               "</applet>";
-  alert(string);
-  editor.focusEditor();
-  editor.insertHTML(string);
-}

@@ -1,6 +1,7 @@
-<html>
-
-<head>
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <title>Insert Image</title>
 
 <script type="text/javascript" src="../../popups/popup.js"></script>
@@ -8,7 +9,6 @@
 
 <script type="text/javascript">
 
-window.resizeTo(400, 100);
 
 Xinha = window.opener.Xinha;
 function i18n(str) {
@@ -17,19 +17,22 @@ function i18n(str) {
 
 function Init() {
   __dlg_translate('Xinha');
-  __dlg_init();
+  __dlg_init(null,{width:410,height:400});
   // Make sure the translated string appears in the drop down. (for gecko)
   document.getElementById("f_align").selectedIndex = 1;
   document.getElementById("f_align").selectedIndex = 5;
   var param = window.dialogArguments;
-  if (param) {
-      document.getElementById("f_url").value = param["f_url"];
-      document.getElementById("f_alt").value = param["f_alt"];
-      document.getElementById("f_border").value = param["f_border"];
-      document.getElementById("f_align").value = param["f_align"];
-      document.getElementById("f_vert").value = param["f_vert"];
-      document.getElementById("f_horiz").value = param["f_horiz"];
-      window.ipreview.location.replace(param.f_url);
+  if (param["f_base"]) {
+      document.getElementById("f_base").value = param["f_base"];
+  }
+  document.getElementById("f_url").value    = param["f_url"] ? param["f_url"] : "";
+  document.getElementById("f_alt").value    = param["f_alt"] ? param["f_alt"] : "";
+  document.getElementById("f_border").value = (typeof param["f_border"]!="undefined") ? param["f_border"] : "";
+  document.getElementById("f_align").value  = param["f_align"] ? param["f_align"] : "";
+  document.getElementById("f_vert").value   = (typeof param["f_vert"]!="undefined") ? param["f_vert"] : "";
+  document.getElementById("f_horiz").value  = (typeof param["f_horiz"]!="undefined") ? param["f_horiz"] : "";
+  if (param["f_url"]) {
+      window.ipreview.location.replace(Xinha._resolveRelativeUrl(param.f_base, param.f_url));
   }
   document.getElementById("f_url").focus();
 }
@@ -67,12 +70,13 @@ function onCancel() {
 function onPreview() {
   var f_url = document.getElementById("f_url");
   var url = f_url.value;
+  var base = document.getElementById("f_base").value;
   if (!url) {
     alert(i18n("You must enter the URL"));
     f_url.focus();
     return false;
   }
-  window.ipreview.location.replace(url);
+  window.ipreview.location.replace(Xinha._resolveRelativeUrl(base, url));
   return false;
 }
 </script>
@@ -84,6 +88,7 @@ function onPreview() {
 <div class="title">Insert Image</div>
 <!--- new stuff --->
 <form action="" method="get">
+<input type="hidden" name="base" id="f_base"/>
 <table border="0" width="100%" style="padding: 0px; margin: 0px">
   <tbody>
 
@@ -104,7 +109,7 @@ function onPreview() {
   </tbody>
 </table>
 
-<p />
+<br />
 
 <fieldset style="float: left; margin-left: 5px;">
 <legend>Layout</legend>
@@ -126,7 +131,7 @@ function onPreview() {
   <option value="top"                          >Top</option>
 </select>
 
-<p />
+<br />
 
 <div class="fl">Border thickness:</div>
 <input type="text" name="border" id="f_border" size="5"
@@ -136,7 +141,7 @@ title="Leave empty for no border" />
 
 </fieldset>
 
-<fieldset style="float:right; margin-right: 5px;">
+<fieldset>
 <legend>Spacing</legend>
 
 <div class="space"></div>
@@ -145,7 +150,7 @@ title="Leave empty for no border" />
 <input type="text" name="horiz" id="f_horiz" size="5"
 title="Horizontal padding" />
 
-<p />
+<br />
 
 <div class="fr">Vertical:</div>
 <input type="text" name="vert" id="f_vert" size="5"
@@ -154,20 +159,16 @@ title="Vertical padding" />
 <div class="space"></div>
 
 </fieldset>
-<br clear="all" />
-<table width="100%" style="margin-bottom: 0.2em">
- <tr>
-  <td valign="bottom">
-    <div class="fr">Image Preview:</div>
+<br style="clear:all"/>
+<div>
+Image Preview:<br />
     <iframe name="ipreview" id="ipreview" frameborder="0" style="border : 1px solid gray;" 
-	height="200" width="300" src="../../popups/blank.html"></iframe>
-  </td>
-  <td valign="bottom" style="text-align: right">
-    <button type="button" name="ok" onclick="return onOK();">OK</button><br>
-    <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
-  </td>
- </tr>
-</table>
+	height="200" width="100%" src="../../popups/blank.html"></iframe>
+</div>
+<div id="buttons">
+<button type="button" name="ok" onclick="return onOK();">OK</button>
+<button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
+</div>
 </form>
 </body>
 </html>

@@ -21,6 +21,35 @@ Xinha 0.92beta
    Xinha.loadPlugins() in xinha_init function
  - fixed Ticket #911 Background color does not work in Firefox
  - fixed Ticket #912 an error is thrown in Mozilla when clicking merge cells button and fewer than 2 cells are selected
+ - fixed Ticket #816 CharacterMap and ListType panel modes make editor jump to top in IE
+ - fixed Ticket #917 getHTMLWrapper in IE renders attributes like _stylist_usedtobe="[object Object]"
+ - fixed Ticket #556 stripBaseHref didn't work without baseHref defined explicitly.
+ - Update InsertPicture plugin Update
+ - fixed Ticket #921 EFM extended file manager - iframe height problem (IE)
+ - Ticket #923 colorPicker face lift & localisation
+ - fixed Ticket #924 EFM + ImageManager re-transforming of url to original image after automatic resize broken
+ - Ticket #900- retain editing position position between modes
+ - fixed Ticket #928 ImageManager fails if (another) Files.php exists in include path
+ - fixed Ticket #935 EFM demo_images php upload allowed: possible security risk
+ - Ticket #939 Japanese langage support 
+ - fixed Ticket #3 Horizontal Rule Selection
+ - Plugin ExtendedFileManager: added doc to allowed upload extensions
+ - Plugin PasteText update
+ - Plugin HtmlEntities: default preset iso-8859-1
+ - fixed Ticket #948 IE: inline styles are not rendered by DOMwalk getHTML()
+ - Plugin HorizontalRule update
+ - Plugin SaveSubmit update
+ - Plugin Linker update
+ - fixed Ticket #823 editor contents was not submitted when using JavaScript form.submit() without prior form.onsubmit()
+ - fixed Ticket #459 all body attributes removed in full page mode in FireFox
+ - _editor_url is now converted to absolute if it is relative. 
+ - fixed Ticket #594 IE: insertHTML() inserts HTML outside editor when editor is not focussed
+ - Ticket #954 FullScreen mode can now be called programmatically or on startup with or without button
+ - fixed Ticket #321 FullScreen : select elements show through in IE6 
+ - fixed Ticket #953 Statusbar has ugly white gap at the bottom when switching back from full screen in IE 
+ - fixed Ticket #952 FullScreen: scrollbars don't disappear in IE in QuirksMode
+ - fixed Ticket #603 Popop Dialog Height problems
+ - fixed Ticket #955 DOMwalk getHTML outputs empty attribute with value "true" instead of attribute name and some are skipped at all
  
 Xinha 0.91beta
  - changed namespace from HTMLArea to Xinha

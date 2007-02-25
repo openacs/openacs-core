@@ -1,361 +1,354 @@
-// Form plugin for HTMLArea
-// Distributed under the same terms as HTMLArea itself.
-// This notice MUST stay intact for use (see license.txt).
-
-
-function Forms(editor) {
-  this.editor = editor;
-  var cfg = editor.config;
-  var bl = Forms.btnList;
-  var self = this;
-  // register the toolbar buttons provided by this plugin
-  var toolbar = ["linebreak"];
-  for (var i = 0; i < bl.length; ++i) {
-    var btn = bl[i];
-    if (!btn) {
-      toolbar.push("separator");
-    } else {
-      var id = btn[0];
-      if (i<3)
-        cfg.registerButton(id, HTMLArea._lc(btn[1]), editor.imgURL("ed_" + btn[0] + ".gif", "Forms"), false,
-             function(editor, id) {
-               // dispatch button press event
-               self.buttonPress(editor, id);
-             });
-      else
-        cfg.registerButton(id, HTMLArea._lc(btn[1]), editor.imgURL("ed_" + btn[0] + ".gif", "Forms"), false,
-             function(editor, id) {
-               // dispatch button press event
-               self.buttonPress(editor, id);
-             },"form");
-      toolbar.push(id);
-    }
-  }
-  // add a new line in the toolbar
-  cfg.toolbar.push(toolbar);
+function Forms(_1){
+this.editor=_1;
+var _2=_1.config;
+var bl=Forms.btnList;
+var _4=this;
+var _5=["linebreak"];
+for(var i=0;i<bl.length;++i){
+var _7=bl[i];
+if(!_7){
+_5.push("separator");
+}else{
+var id=_7[0];
+if(i<3){
+_2.registerButton(id,this._lc(_7[1]),_1.imgURL("ed_"+_7[0]+".gif","Forms"),false,function(_9,id){
+_4.buttonPress(_9,id);
+});
+}else{
+_2.registerButton(id,this._lc(_7[1]),_1.imgURL("ed_"+_7[0]+".gif","Forms"),false,function(_b,id){
+_4.buttonPress(_b,id);
+},"form");
 }
-
-Forms._pluginInfo = {
-  name          : "Forms",
-  origin        : "version: 1.0, by Nelson Bright, BrightWork, Inc., http://www.brightworkweb.com",
-  version       : "2.0",
-  developer     : "Udo Schmal",
-  developer_url : "",
-  sponsor       : "L.N.Schaffrath NeueMedien",
-  sponsor_url   : "http://www.schaffrath-neuemedien.de/",
-  c_owner       : "Udo Schmal & Schaffrath-NeueMedien",
-  license       : "htmlArea"
+_5.push(id);
+}
+}
+_2.toolbar.push(_5);
+}
+Forms._pluginInfo={name:"Forms",origin:"version: 1.0, by Nelson Bright, BrightWork, Inc., http://www.brightworkweb.com",version:"2.0",developer:"Udo Schmal",developer_url:"",sponsor:"L.N.Schaffrath NeueMedien",sponsor_url:"http://www.schaffrath-neuemedien.de/",c_owner:"Udo Schmal & Schaffrath-NeueMedien",license:"htmlArea"};
+Forms.btnList=[null,["form","Form"],null,["textarea","Textarea"],["select","Selection Field"],["checkbox","Checkbox"],["radio","Radio Button"],["text","Text Field"],["password","Password Field"],["file","File Field"],["button","Button"],["submit","Submit Button"],["reset","Reset Button"],["image","Image Button"],["hidden","Hidden Field"],["label","Label"],["fieldset","Field Set"]];
+Forms.prototype._lc=function(_d){
+return HTMLArea._lc(_d,"Forms");
+};
+Forms.prototype.onGenerate=function(){
+var _e="Form-style";
+var _f=this.editor._doc.getElementById(_e);
+if(_f==null){
+_f=this.editor._doc.createElement("link");
+_f.id=_e;
+_f.rel="stylesheet";
+_f.href=_editor_url+"plugins/Forms/forms.css";
+this.editor._doc.getElementsByTagName("HEAD")[0].appendChild(_f);
+}
+};
+Forms.prototype.buttonPress=function(_10,_11,_12){
+function optionValues(_13,_14){
+this.text=_13;
+this.value=_14;
+}
+var _15=new Object();
+var _16=_11;
+var sel=_10._getSelection();
+var _18=_10._createRange(sel);
+if(_11=="form"){
+var pe=_10.getParentElement();
+var frm=null;
+while(pe&&(pe.nodeType==1)&&(pe.tagName.toLowerCase()!="body")){
+if(pe.tagName.toLowerCase()=="form"){
+frm=pe;
+break;
+}else{
+pe=pe.parentNode;
+}
+}
+if(frm){
+_15.f_name=frm.name;
+_15.f_action=frm.action;
+_15.f_method=frm.method;
+_15.f_enctype=frm.enctype;
+_15.f_target=frm.target;
+}else{
+_15.f_name="";
+_15.f_action="";
+_15.f_method="";
+_15.f_enctype="";
+_15.f_target="";
+}
+_10._popupDialog("plugin://Forms/form",function(_1b){
+if(_1b){
+if(frm){
+frm.name=_1b["f_name"];
+frm.setAttribute("action",_1b["f_action"]);
+frm.setAttribute("method",_1b["f_method"]);
+frm.setAttribute("enctype",_1b["f_enctype"]);
+frm.setAttribute("target",_1b["f_target"]);
+}else{
+frm="<form name=\""+_1b["f_name"]+"\"";
+if(_1b["f_action"]!=""){
+frm+=" action=\""+_1b["f_action"]+"\"";
+}
+if(_1b["f_method"]!=""){
+frm+=" method=\""+_1b["f_method"]+"\"";
+}
+if(_1b["f_enctype"]!=""){
+frm+=" enctype=\""+_1b["f_enctype"]+"\"";
+}
+if(_1b["f_target"]!=""){
+frm+=" target=\""+_1b["f_target"]+"\"";
+}
+frm+=">";
+_10.surroundHTML(frm,"&nbsp;</form>");
+}
+}
+},_15);
+}else{
+var _1c="";
+if(typeof _12=="undefined"){
+_12=_10.getParentElement();
+var tag=_12.tagName.toLowerCase();
+if(_12&&(tag=="legend")){
+_12=_12.parentElement;
+tag=_12.tagName.toLowerCase();
+}
+if(_12&&!(tag=="textarea"||tag=="select"||tag=="input"||tag=="label"||tag=="fieldset")){
+_12=null;
+}
+}
+if(_12){
+_16=_12.tagName.toLowerCase();
+_15.f_name=_12.name;
+_1c=_12.tagName;
+if(_16=="input"){
+_15.f_type=_12.type;
+_16=_12.type;
+}
+switch(_16){
+case "textarea":
+_15.f_cols=_12.cols;
+_15.f_rows=_12.rows;
+_15.f_text=_12.innerHTML;
+_15.f_wrap=_12.getAttribute("wrap");
+_15.f_readOnly=_12.getAttribute("readOnly");
+_15.f_disabled=_12.getAttribute("disabled");
+_15.f_tabindex=_12.getAttribute("tabindex");
+_15.f_accesskey=_12.getAttribute("accesskey");
+break;
+case "select":
+_15.f_size=parseInt(_12.size);
+_15.f_multiple=_12.getAttribute("multiple");
+_15.f_disabled=_12.getAttribute("disabled");
+_15.f_tabindex=_12.getAttribute("tabindex");
+var _1e=new Array();
+for(var i=0;i<=_12.options.length-1;i++){
+_1e[i]=new optionValues(_12.options[i].text,_12.options[i].value);
+}
+_15.f_options=_1e;
+break;
+case "text":
+case "password":
+_15.f_value=_12.value;
+_15.f_size=_12.size;
+_15.f_maxLength=_12.maxLength;
+_15.f_readOnly=_12.getAttribute("readOnly");
+_15.f_disabled=_12.getAttribute("disabled");
+_15.f_tabindex=_12.getAttribute("tabindex");
+_15.f_accesskey=_12.getAttribute("accesskey");
+break;
+case "hidden":
+_15.f_value=_12.value;
+break;
+case "submit":
+case "reset":
+_15.f_value=_12.value;
+_15.f_disabled=_12.getAttribute("disabled");
+_15.f_tabindex=_12.getAttribute("tabindex");
+_15.f_accesskey=_12.getAttribute("accesskey");
+break;
+case "checkbox":
+case "radio":
+_15.f_value=_12.value;
+_15.f_checked=_12.checked;
+_15.f_disabled=_12.getAttribute("disabled");
+_15.f_tabindex=_12.getAttribute("tabindex");
+_15.f_accesskey=_12.getAttribute("accesskey");
+break;
+case "button":
+_15.f_value=_12.value;
+_15.f_onclick=_12.getAttribute("onclick");
+_15.f_disabled=_12.getAttribute("disabled");
+_15.f_tabindex=_12.getAttribute("tabindex");
+_15.f_accesskey=_12.getAttribute("accesskey");
+break;
+case "image":
+_15.f_value=_12.value;
+_15.f_src=_12.src;
+_15.f_disabled=_12.getAttribute("disabled");
+_15.f_tabindex=_12.getAttribute("tabindex");
+_15.f_accesskey=_12.getAttribute("accesskey");
+break;
+case "file":
+_15.f_disabled=_12.getAttribute("disabled");
+_15.f_tabindex=_12.getAttribute("tabindex");
+_15.f_accesskey=_12.getAttribute("accesskey");
+break;
+case "label":
+_15.f_text=_12.innerHTML;
+_15.f_for=_12.getAttribute("for");
+_15.f_accesskey=_12.getAttribute("accesskey");
+break;
+case "fieldset":
+if(_12.firstChild.tagName.toLowerCase()=="legend"){
+_15.f_text=_12.firstChild.innerHTML;
+}else{
+_15.f_text="";
+}
+break;
+}
+}else{
+_15.f_name="";
+switch(_11){
+case "textarea":
+case "select":
+case "label":
+case "fieldset":
+_1c=_11;
+break;
+default:
+_1c="input";
+_15.f_type=_11;
+break;
+}
+_15.f_options="";
+_15.f_cols="20";
+_15.f_rows="4";
+_15.f_multiple="false";
+_15.f_value="";
+_15.f_size="";
+_15.f_maxLength="";
+_15.f_checked="";
+_15.f_src="";
+_15.f_onclick="";
+_15.f_wrap="";
+_15.f_readOnly="false";
+_15.f_disabled="false";
+_15.f_tabindex="";
+_15.f_accesskey="";
+_15.f_for="";
+_15.f_text="";
+_15.f_legend="";
+}
+_10._popupDialog("plugin://Forms/"+_1c+".html",function(_20){
+if(_20){
+if(_20["f_cols"]){
+if(isNaN(parseInt(_20["f_cols"],10))||parseInt(_20["f_cols"],10)<=0){
+_20["f_cols"]="";
+}
+}
+if(_20["f_rows"]){
+if(isNaN(parseInt(_20["f_rows"],10))||parseInt(_20["f_rows"],10)<=0){
+_20["f_rows"]="";
+}
+}
+if(_20["f_size"]){
+if(isNaN(parseInt(_20["f_size"],10))||parseInt(_20["f_size"],10)<=0){
+_20["f_size"]="";
+}
+}
+if(_20["f_maxlength"]){
+if(isNaN(parseInt(_20["f_maxLength"],10))||parseInt(_20["f_maxLength"],10)<=0){
+_20["f_maxLength"]="";
+}
+}
+if(_12){
+for(field in _20){
+if((field=="f_text")||(field=="f_options")||(field=="f_onclick")||(field=="f_checked")){
+continue;
+}
+if(_20[field]!=""){
+_12.setAttribute(field.substring(2,20),_20[field]);
+}else{
+_12.removeAttribute(field.substring(2,20));
+}
+}
+if(_16=="textarea"){
+_12.innerHTML=_20["f_text"];
+}else{
+if(_16=="select"){
+_12.options.length=0;
+var _21=_20["f_options"];
+for(i=0;i<=_21.length-1;i++){
+_12.options[i]=new Option(_21[i].text,_21[i].value);
+}
+}else{
+if(_16=="label"){
+_12.innerHTML=_20["f_text"];
+}else{
+if(_16=="fieldset"){
+if(_15.f_text!=""){
+if(_12.firstChild.tagName.toLowerCase()=="legend"){
+_12.firstChild.innerHTML=_20["f_text"];
+}
+}else{
+}
+}else{
+if((_16=="checkbox")||(_16=="radio")){
+if(_20["f_checked"]!=""){
+_12.checked=true;
+}else{
+_12.checked=false;
+}
+}else{
+if(_20["f_onclick"]){
+_12.onclick="";
+if(_20["f_onclick"]!=""){
+_12.onclick=_20["f_onclick"];
+}
+}
+}
+}
+}
+}
+}
+}else{
+var _22="";
+for(field in _20){
+if(!_20[field]){
+continue;
+}
+if((_20[field]=="")||(field=="f_text")||(field=="f_options")){
+continue;
+}
+_22+=" "+field.substring(2,20)+"=\""+_20[field]+"\"";
+}
+if(_16=="textarea"){
+_22="<textarea"+_22+">"+_20["f_text"]+"</textarea>";
+}else{
+if(_16=="select"){
+_22="<select"+_22+">";
+var _21=_20["f_options"];
+for(i=0;i<=_21.length-1;i++){
+_22+="<option value=\""+_21[i].value+"\">"+_21[i].text+"</option>";
+}
+_22+="</select>";
+}else{
+if(_16=="label"){
+_22="<label"+_22+">"+_20["f_text"]+"</label>";
+}else{
+if(_16=="fieldset"){
+_22="<fieldset"+_22+">";
+if(_20["f_legend"]!=""){
+_22+="<legend>"+_20["f_text"]+"</legend>";
+}
+_22+="</fieldset>";
+}else{
+_22="<input type=\""+_16+"\""+_22+">";
+}
+}
+}
+}
+_10.insertHTML(_22);
+}
+}
+},_15);
+}
 };
 
-// the list of buttons added by this plugin
-Forms.btnList = [
-  // form properties button
-  null, // separator
-  ["form",        "Form"],
-  null, // separator
-  // form elements
-  ["textarea",    "Textarea"],
-  ["select",      "Selection Field"],
-  ["checkbox",    "Checkbox"],
-  ["radio",       "Radio Button"],
-  ["text",        "Text Field"],
-  ["password",    "Password Field"],
-  ["file",        "File Field"],
-  ["button",      "Button"],
-  ["submit",      "Submit Button"],
-  ["reset",       "Reset Button"],
-  ["image",       "Image Button"],
-  ["hidden",      "Hidden Field"],
-  ["label",       "Label"],
-  ["fieldset",    "Field Set"]
-  ];
-
-Forms.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'Forms');
-};
-
-Forms.prototype.onGenerate = function() {
-  var style_id = "Form-style"
-  var style = this.editor._doc.getElementById(style_id);
-  if (style == null) {
-    style = this.editor._doc.createElement("link");
-    style.id = style_id;
-    style.rel = 'stylesheet';
-    style.href = _editor_url + 'plugins/Forms/forms.css';
-    this.editor._doc.getElementsByTagName("HEAD")[0].appendChild(style);
-  }
-};
-
-Forms.prototype.buttonPress = function(editor,button_id, node) {
-  function optionValues(text,value) {
-    this.text = text;
-    this.value = value;
-  }
-  var outparam = new Object();
-  var type = button_id;
-  var sel = editor._getSelection();
-  var range = editor._createRange(sel);
-  if (button_id=="form") { //Form
-    // see if selection is inside an existing 'form' tag
-    var pe = editor.getParentElement();
-    var frm = null;
-    while (pe && (pe.nodeType == 1) && (pe.tagName.toLowerCase() != 'body')) {
-      if(pe.tagName.toLowerCase() == "form") {
-        frm = pe;
-        break;
-      } else
-        pe = pe.parentNode;
-    }
-    if (frm) {
-      outparam.f_name = frm.name;
-      outparam.f_action = frm.action;
-      outparam.f_method = frm.method;
-      outparam.f_enctype = frm.enctype;
-      outparam.f_target = frm.target;
-    } else {;
-      outparam.f_name = "";
-      outparam.f_action = "";
-      outparam.f_method = "";
-      outparam.f_enctype = "";
-      outparam.f_target = "";
-    }
-    editor._popupDialog("plugin://Forms/form", function(param) {
-      if (param) {
-        if(frm) {
-          frm.name = param["f_name"];
-          setAttr(frm, "action", param["f_action"]);
-          setAttr(frm, "method", param["f_method"]);
-          setAttr(frm, "enctype",param["f_enctype"]);
-          setAttr(frm, "target", param["f_target"]);
-        } else {
-          frm = '<form name="' + param["f_name"] + '"';
-          if (param["f_action"] != "") frm += ' action="' + param["f_action"] + '"';
-          if (param["f_method"] != "") frm += ' method="' + param["f_method"] + '"';
-          if (param["f_enctype"] != "") frm += ' enctype="' + param["f_enctype"] + '"';
-          if (param["f_target"] != "") frm += ' target="' + param["f_target"] + '"';
-          frm += '>';
-          editor.surroundHTML(frm, '&nbsp;</form>');
-        }
-      }
-    }, outparam);
-
-  } else { // form element (checkbox, radio, text, password, textarea, select, button, submit, reset, image, hidden)
-    var tagName = "";
-    // see if selection is an form element
-    if (typeof node == "undefined") {
-      node = editor.getParentElement();
-      var tag = node.tagName.toLowerCase()
-      if (node && (tag == "legend")) {
-        node = node.parentElement;
-        tag = node.tagName.toLowerCase();
-      }
-      if (node && !(tag == "textarea" || tag == "select" || tag == "input" || tag == "label" || tag == "fieldset"))
-        node = null;
-    }
-
-    if(node) {
-      type = node.tagName.toLowerCase();
-      outparam.f_name = node.name;
-      tagName = node.tagName;
-      if (type == "input") {
-        outparam.f_type = node.type;
-        type = node.type;
-      }
-      switch (type) {
-        case "textarea":
-          outparam.f_cols = node.cols;
-          outparam.f_rows = node.rows;
-          outparam.f_text = node.innerHTML;
-          outparam.f_wrap = node.getAttribute("wrap");
-          outparam.f_readOnly = node.getAttribute("readOnly");
-          outparam.f_disabled = node.getAttribute("disabled");
-          outparam.f_tabindex = node.getAttribute("tabindex");
-          outparam.f_accesskey = node.getAttribute("accesskey");
-          break;
-        case "select":
-          outparam.f_size = parseInt(node.size);
-          outparam.f_multiple = node.getAttribute("multiple");
-          outparam.f_disabled = node.getAttribute("disabled");
-          outparam.f_tabindex = node.getAttribute("tabindex");
-          var a_options = new Array();
-          for (var i=0; i<=node.options.length-1; i++) {
-            a_options[i] = new optionValues(node.options[i].text, node.options[i].value);
-          }
-          outparam.f_options = a_options;
-          break;
-        case "text":
-        case "password":
-          outparam.f_value = node.value;
-          outparam.f_size = node.size;
-          outparam.f_maxLength = node.maxLength;
-          outparam.f_readOnly = node.getAttribute("readOnly");
-          outparam.f_disabled = node.getAttribute("disabled");
-          outparam.f_tabindex = node.getAttribute("tabindex");
-          outparam.f_accesskey = node.getAttribute("accesskey");
-          break;
-        case "hidden":
-          outparam.f_value = node.value;
-          break;
-        case "submit":
-        case "reset":
-          outparam.f_value = node.value;
-          outparam.f_disabled = node.getAttribute("disabled");
-          outparam.f_tabindex = node.getAttribute("tabindex");
-          outparam.f_accesskey = node.getAttribute("accesskey");
-          break;
-        case "checkbox":
-        case "radio":
-          outparam.f_value = node.value;
-          outparam.f_checked = node.checked;
-          outparam.f_disabled = node.getAttribute("disabled");
-          outparam.f_tabindex = node.getAttribute("tabindex");
-          outparam.f_accesskey = node.getAttribute("accesskey");
-          break;
-        case "button":
-          outparam.f_value = node.value;
-          outparam.f_onclick = node.getAttribute("onclick");
-          outparam.f_disabled = node.getAttribute("disabled");
-          outparam.f_tabindex = node.getAttribute("tabindex");
-          outparam.f_accesskey = node.getAttribute("accesskey");
-          break;
-        case "image":
-          outparam.f_value = node.value;
-          outparam.f_src = node.src;
-          outparam.f_disabled = node.getAttribute("disabled");
-          outparam.f_tabindex = node.getAttribute("tabindex");
-          outparam.f_accesskey = node.getAttribute("accesskey");
-          break;
-        case "file":
-          outparam.f_disabled = node.getAttribute("disabled");
-          outparam.f_tabindex = node.getAttribute("tabindex");
-          outparam.f_accesskey = node.getAttribute("accesskey");
-          break;
-        case "label":
-          outparam.f_text = node.innerHTML;
-          outparam.f_for = node.getAttribute("for");
-          outparam.f_accesskey = node.getAttribute("accesskey");
-          break;
-        case "fieldset":
-          if(node.firstChild.tagName.toLowerCase()=="legend")
-            outparam.f_text = node.firstChild.innerHTML;
-          else
-            outparam.f_text = "";
-          break;
-      }
-    } else {
-      outparam.f_name = "";
-      switch (button_id) {
-        case "textarea":
-        case "select":
-        case "label":
-        case "fieldset":
-          tagName = button_id;
-          break;
-        default:
-          tagName = "input";
-          outparam.f_type = button_id;
-          break;
-      }
-      outparam.f_options = "";
-      outparam.f_cols = "20";
-      outparam.f_rows = "4";
-      outparam.f_multiple = "false";
-      outparam.f_value = "";
-      outparam.f_size = "";
-      outparam.f_maxLength = "";
-      outparam.f_checked = "";
-      outparam.f_src = "";
-      outparam.f_onclick = "";
-      outparam.f_wrap = "";
-      outparam.f_readOnly = "false";
-      outparam.f_disabled = "false";
-      outparam.f_tabindex = "";
-      outparam.f_accesskey = "";
-      outparam.f_for = "";
-      outparam.f_text = "";
-      outparam.f_legend = "";
-    }
-    editor._popupDialog("plugin://Forms/" + tagName + ".html", function(param) {
-      if (param) {
-        if(param["f_cols"])
-          if (isNaN(parseInt(param["f_cols"],10)) || parseInt(param["f_cols"],10) <= 0)
-            param["f_cols"] = "";
-        if(param["f_rows"])
-          if(isNaN(parseInt(param["f_rows"],10)) || parseInt(param["f_rows"],10) <= 0)
-            param["f_rows"] = "";
-        if(param["f_size"])
-          if(isNaN(parseInt(param["f_size"],10)) || parseInt(param["f_size"],10) <= 0)
-            param["f_size"] = "";
-        if(param["f_maxlength"])
-          if(isNaN(parseInt(param["f_maxLength"],10)) || parseInt(param["f_maxLength"],10) <= 0)
-            param["f_maxLength"] = "";
-        if(node) {
-          //prepare existing Element
-          for (field in param) {
-            alert(field.substring(2,20) + '=' + param[field]);
-            if ((field=="f_text") || (field=="f_options") || (field=="f_onclick") || (field=="f_checked"))continue;
-            if (param[field] != "")
-              node.setAttribute(field.substring(2,20), param[field]);
-            else
-              node.removeAttribute(field.substring(2,20));
-          }
-          if (type == "textarea") {
-            node.innerHTML = param["f_text"];
-          } else if(type == "select") {
-            node.options.length = 0;
-            var optionsList =  param["f_options"];
-            for (i=0; i<= optionsList.length-1; i++) {
-              node.options[i] = new Option(optionsList[i].text, optionsList[i].value)
-            }
-          } else if(type == "label") {
-            node.innerHTML = param["f_text"];
-          } else if(type == "fieldset") {
-            if(outparam.f_text != "") {
-              if(node.firstChild.tagName.toLowerCase()=="legend")
-                node.firstChild.innerHTML = param["f_text"];
-            } else {}// not implemented jet
-          } else if((type == "checkbox") || (type == "radio")) { //input
-              if(param["f_checked"]!="")
-                node.checked = true;
-              else
-                node.checked = false;
-          } else {
-            if(param["f_onclick"]){
-              node.onclick = "";
-              if(param["f_onclick"]!="")
-                node.onclick = param["f_onclick"];
-            }
-          }
-        } else {
-          //create Element
-          var text = "";
-          for (field in param) {
-            if (!param[field]) continue;
-            if ((param[field]=="") || (field=="f_text")|| (field=="f_options"))continue;
-            text += " " + field.substring(2,20) + '="' + param[field] + '"';
-          }
-
-          if(type == "textarea") {
-            text = '<textarea' + text + '>' + param["f_text"] + '</textarea>';
-          } else if(type == "select") {
-            text = '<select' + text + '>';
-            var optionsList =  param["f_options"];
-            for (i=0; i<= optionsList.length-1; i++) {
-              text += '<option value="'+optionsList[i].value+'">'+optionsList[i].text+'</option>';
-            }
-            text += '</select>';
-          } else if(type == "label") {
-            text = '<label' + text + '>' + param["f_text"] + '</label>';
-          } else if(type == "fieldset") {
-            text = '<fieldset' + text + '>';
-            if (param["f_legend"] != "") text += '<legend>' + param["f_text"] + '</legend>';
-            text += '</fieldset>';
-          } else {
-            text = '<input type="'+type+'"' + text + '>';
-          }
-          editor.insertHTML(text);
-        }
-      }
-    }, outparam);
-  }
-};

@@ -77,6 +77,7 @@
 	<title>Insert <?php echo ($insertMode == 'image' ? 'Image' : 'File Link') ?></title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
  <link href="<?php print $IMConfig['base_url'];?>assets/manager.css" rel="stylesheet" type="text/css" />
+ <link href="../../popups/popup.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="../../popups/popup.js"></script>
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/popup.js"></script>
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/dialog.js"></script>
