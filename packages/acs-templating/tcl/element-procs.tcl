@@ -84,6 +84,15 @@ ad_proc -public template::element::create { form_id element_id args } {
                           two-element lists in the form 
                           { {label value} {label value} {label value} ...}
 
+    @option fieldset      A list of name-value attribute pairs to include in 
+	                      the HTML tag for checkboxes and radio FIELDSET.
+
+    @option legend        A list of name-value attribute pairs to include in 
+	                      the HTML tag for checkboxes and radio LEGEND.
+
+    @option legendtext    A text for the LEGEND tag to include in 
+	                      the checkboxes and radio FIELDSET block
+
     @option value         The default value of the element
 
     @option values        The default values of the element, where multiple values
@@ -181,6 +190,49 @@ ad_proc -public template::element::create { form_id element_id args } {
     set opts(optional) 1
     if { ! [info exists opts(value)] } { set opts(value) $opts(label) }
     if { ! [info exists opts(label)] } { set opts(label) $opts(value) }
+  }
+
+  # If the widget is a checkbox or radio widget, set attributes
+  if { [string equal $opts(widget) radio] || \
+       [string equal $opts(widget) checkbox] } {
+
+	  # set fieldset attributes
+	  if { ![info exists opts(fieldset)] } {
+		  set opts(fieldset) {class $opts(widget)}
+	  }
+
+	  array set attributes $opts(fieldset)
+	  if { ![info exists attributes(class)] } {
+		  set attributes(class) $opts(widget)
+	  }
+
+	  set options ""
+	  foreach name [array names attributes] {
+		  if { [string equal $attributes($name) {}] } {
+			  append options " $name"
+		  } else {
+			  append options " $name=\"$attributes($name)\""
+		  }
+	  }
+	  set opts(fieldset) $options
+
+	  # set legend attributes
+	  if { ![info exists opts(legendtext)] } {
+		  set opts(legendtext) ""
+	  }
+	  if { ![info exists opts(legend)] } {
+		  set opts(legend) {}
+	  }
+	  array set attributes $opts(legend)
+	  set options ""
+	  foreach name [array names attributes] {
+		  if { [string equal $attributes($name) {}] } {
+			  append options " $name"
+		  } else {
+			  append options " $name=\"$attributes($name)\""
+		  }
+	  }
+	  set opts(legend) $options
   }
 
   # Remember that the element has not been rendered yet

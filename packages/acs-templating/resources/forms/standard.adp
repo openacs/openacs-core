@@ -20,6 +20,12 @@
         
 			<else> <!-- wrap the form item in the form-item-wrapper class -->
 				<div class="form-item-wrapper">
+					<if @elements.widget@ in radio checkbox> <!-- radio button groups and checkbox groups get their own fieldsets -->
+						<fieldset @elements.fieldset;noquote@>
+				        <if @elements.legendtext@ not nil>
+				          <legend @elements.legend;noquote@>@elements.legendtext@</legend>
+				        </if>
+				    </if>
 					<if @elements.label@ not nil>
 						<noparse>
 							<if \@formerror.@elements.id@\@ not nil>
@@ -74,16 +80,12 @@
 	
 					<if @elements.widget@ in radio checkbox> <!-- radio button groups and checkbox groups get their own fieldsets -->
 						<noparse>
-						<fieldset class=@elements.widget@ title=".. more attributes">
-							<legend>optional legend (@elements.widget@)- Need to code for this</legend>
-							
 							<formgroup id="@elements.id@">			
 									\@formgroup.widget;noquote@
 								<label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">
 										\@formgroup.label;noquote@
 								</label><br/>
 							</formgroup>
-						</fieldset>
 						</noparse>
 					</if>
 
@@ -110,6 +112,9 @@
 						</div> <!-- /form-help-text -->
 					</if>
 
+					<if @elements.widget@ in radio checkbox> <!-- radio button groups and checkbox groups get their own fieldsets -->
+						</fieldset>
+				    </if>
 				</div>
        		</else>
 	</else>
