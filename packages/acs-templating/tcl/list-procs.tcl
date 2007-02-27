@@ -39,6 +39,7 @@ ad_proc -public template::list::create {
     {-sub_class ""}
     {-class ""}
     {-html ""}
+    {-caption ""}
     {-page_size ""}
     {-page_size_variable_p 0}
     {-page_groupsize 10}
@@ -177,6 +178,8 @@ ad_proc -public template::list::create {
     @param  html           HTML attributes to be output for the table tag, e.g. { align right style "background-color: yellow;" }. 
                            Value should be a Tcl list with { name value name value }
 
+    @param caption         Caption tag that appears right below the table tag. Required for AA. Added 2/27/2007
+
     @param  page_size      The number of rows to display on each page. If specified, the list will be paginated.
 
     @param  page_size_variable_p Displays a selectbox to let the user change the number of rows to display on each page. If specified, the list will be paginated.
@@ -255,6 +258,7 @@ ad_proc -public template::list::create {
         sub_class {}
         class {}
         html {}
+	caption {}
         actions {}
         bulk_actions {}
         bulk_action_export_vars {}
@@ -308,6 +312,7 @@ ad_proc -public template::list::create {
         sub_class
         class
         html
+	caption
         page_size
         page_groupsize
         page_query
@@ -321,6 +326,10 @@ ad_proc -public template::list::create {
     # Default 'class' to 'main_class'
     if { [empty_string_p $list_properties(class)] } {
         set list_properties(class) $list_properties(main_class)
+    }
+
+    if { [empty_string_p $list_properties(caption)]} {
+	set list_properties(caption) ""
     }
 
     # Default 'multirow' to list name
