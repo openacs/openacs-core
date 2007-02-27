@@ -31,6 +31,10 @@ form .form-item-wrapper .form-error {
 }
 */
 
+.form-label-error, .form-widget-error, .form-required-mark, .form-error {
+	color: #c30000;
+}
+
 /* form layout for forms with divs*/
 
 .margin-form fieldset, .vertical-form fieldset, fieldset {
@@ -38,7 +42,6 @@ form .form-item-wrapper .form-error {
 }
 
 .margin-form .form-required-mark {
-    color: #ff0000;
     display: inline;
 }
 
@@ -63,15 +66,13 @@ form .form-item-wrapper .form-error {
 	margin-left: 16em;
 }
 
-.margin-form .form-item-wrapper .form-error {
+.margin-form .form-item-wrapper .form-error, .margin-form .form-item-wrapper .form-widget-error {
 	display: block;
 	margin-left: 16em;
-	color: #ff0000;
 }
 
 
 .vertical-form .form-required-mark {
-    color: #ff0000;
     display: inline;
 }
 
@@ -91,8 +92,9 @@ form .form-item-wrapper .form-error {
 
 }
 
-.vertical-form .form-item-wrapper .form-error {
-	color: #ff0000;
+
+.inline-form div {
+	display: inline;	
 }
 
 
