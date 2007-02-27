@@ -328,10 +328,6 @@ ad_proc -public template::list::create {
         set list_properties(class) $list_properties(main_class)
     }
 
-    if { [empty_string_p $list_properties(caption)]} {
-	set list_properties(caption) ""
-    }
-
     # Default 'multirow' to list name
     if { [empty_string_p $list_properties(multirow)] } {
 	set list_properties(multirow) $name
