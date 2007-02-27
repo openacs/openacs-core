@@ -88,8 +88,8 @@
 </if>
 
 
-<table class="@list_properties.class@" cellpadding="3" cellspacing="1"@list_properties.table_attributes;noquote@ summary="summary variable">
-  <caption>Optional Caption</caption>
+<table class="@list_properties.class@" cellpadding="3" cellspacing="1"@list_properties.table_attributes;noquote@>
+  <if "@list_properties.caption@" ne ""><caption>@list_properties.caption;noquote@</caption</if>
   <multiple name="elements">
     <thead>
       <tr class="list-header">
