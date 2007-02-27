@@ -3,7 +3,7 @@
 		<fieldset class="formelement" title="for screen readers .. more attributes">
    		<legend>@elements.section@</legend>
 	</if>
-
+	
 	<group column="section">
 		<if @elements.widget@ eq "hidden"> 
 			<noparse><formwidget id=@elements.id@></noparse>
@@ -29,7 +29,7 @@
 					<if @elements.label@ not nil>
 						<noparse>
 							<if \@formerror.@elements.id@\@ not nil>
-								<div class="form-error">
+								<div class="form-label form-label-error">
 									<label for="@elements.id@">
 							</if>
 							<else>
@@ -43,7 +43,7 @@
 						<if @form_properties.show_required_p@ true>
 							<if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform">
 								<div class="form-required-mark">
-								#acs-templating.required# 
+								(#acs-templating.required#)
 								</div>
 							</if>
 						</if>
@@ -61,7 +61,7 @@
 						</noparse>
 						<if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform">
 							<div class="form-required-mark">
-								#acs-templating.required# 
+								#acs-templating.required#
 							</div>
 						</if>
 
@@ -70,7 +70,7 @@
 
 					<noparse>
 					<if \@formerror.@elements.id@\@ not nil>
-						<div class="form-widget-error">
+						<div class="form-widget form-widget-error">
 					</if>
 					
 					<else>
