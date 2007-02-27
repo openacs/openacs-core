@@ -1,7 +1,10 @@
 /* Put this inside a @media qualifier so Netscape 4 ignores it */
-@media screen { 
+@media screen {
+	/* reduce the amount of UL padding*/
+	ul.mktree {padding-left: 5px;} 
     /* Turn off list bullets */
-    ul.mktree  li { list-style: none; } 
+    ul.mktree  li { list-style: none; }
+ 	ul.mktree li h1 {display: inline; margin-top: 5px;}
     /* Control how "spaced out" the tree is */
     ul.mktree, ul.mktree ul , ul.mktree li { margin-left:5px; }
     /* Provide space for our own "bullet" inside the LI */
