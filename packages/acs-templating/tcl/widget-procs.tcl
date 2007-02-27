@@ -118,9 +118,9 @@ ad_proc -private template::data::transform::party_search {
 
     if { [empty_string_p $value] } {
         if { [string is true $is_optional] } {
-	        return ""
+	    return ""
 	} else {
-	        template::element::set_error $element(form_id) $element_id "Please enter a search string."
+	    template::element::set_error $element(form_id) $element_id "Please enter a search string."
 	    return [list]
 	}
     }
@@ -279,7 +279,7 @@ ad_proc -public template::widget::textarea {
         set mode {}
     }
 
-    set attributes(id) $element(name)
+	set attributes(id) $element(name)
     set output [textarea_internal $element(name) attributes $value $mode]
 
     # Spell-checker
@@ -376,7 +376,7 @@ ad_proc -public template::widget::input {
         # This can be used in the form template in a <label for="id">...</label> tag.
         set attributes(id) "$element(form_id):elements:$element(name):$element(value)"
     } elseif { [string equal $type "password"] || [string equal $type "text"] } { 
-	set attributes(id) "$element(name)" 
+		set attributes(id) "$element(name)" 
     }
 
     
@@ -392,7 +392,7 @@ ad_proc -public template::widget::input {
 
         if { ![string equal $element(mode) "edit"] && [lsearch -exact { hidden submit button clear } $type] == -1 } {
             append output " disabled"
-	}
+		}
 
         if { [info exists element(value)] } {
             append output " value=\"[template::util::quote_html $element(value)]\""
@@ -898,38 +898,38 @@ ad_proc -public template::widget::block {
     foreach option $options {
 	if {$count == 0} {
 	    # answer descriptions in a list: {{desc1 no_of_answers} {desc2 no_of_answers} ...}
-	        append output "<tr align=center><td></td><td></td>"
-		foreach answer_desc $option {
-		    set answer_description [lindex $answer_desc 0]
-		    set no_of_answers [lindex $answer_desc 1]
-		    append output "<th colspan=\"[expr $no_of_answers + 1]\" align=\"center\">$answer_description</td>"
-		}
-		    append output "</tr>"
-	    } elseif {$count == 1} {
-		append output "<tr><td><span style=\"font-weight: bold\">[lindex $option 0]</span></td>"
-		foreach answer_set [lindex $option 1] {
-		    append output "<td>required?</td>"
-		    foreach answer $answer_set {
-			    append output "<td>$answer</td>"
-		    }
-		}
-		    append output "</tr>"
-	    } else {
-		append output "<tr><td><span style=\"font-weight: bold\">[lindex $option 0]</span></td>"
-		foreach question [lindex $option 1] {
-		    set name [lindex $question 0]
-		    set required_p [lindex $question 1]
-		    append output "<td>[ad_decode $required_p "t" "<span style=\"color: \#f00;\">*</span>" "&nbsp;"]</td>"
-		    foreach choice [lindex $question 2] {
-			if {[lsearch -exact $value $choice]==-1} {
-			    append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\"></td>"
-			} else {
-			    append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\" checked></td>"
-			}
-		    }
-		}
-		    append output "</tr>"
+	    append output "<tr align=center><td></td><td></td>"
+	    foreach answer_desc $option {
+		set answer_description [lindex $answer_desc 0]
+		set no_of_answers [lindex $answer_desc 1]
+		append output "<th colspan=\"[expr $no_of_answers + 1]\" align=\"center\">$answer_description</td>"
 	    }
+	    append output "</tr>"
+	} elseif {$count == 1} {
+	    append output "<tr><td><span style=\"font-weight: bold\">[lindex $option 0]</span></td>"
+	    foreach answer_set [lindex $option 1] {
+		append output "<td>required?</td>"
+		foreach answer $answer_set {
+		    append output "<td>$answer</td>"
+		}
+	    }
+	    append output "</tr>"
+	} else {
+	    append output "<tr><td><span style=\"font-weight: bold\">[lindex $option 0]</span></td>"
+	    foreach question [lindex $option 1] {
+		set name [lindex $question 0]
+		set required_p [lindex $question 1]
+		append output "<td>[ad_decode $required_p "t" "<span style=\"color: #f00;\">*</span>" "&nbsp;"]</td>"
+		foreach choice [lindex $question 2] {
+		    if {[lsearch -exact $value $choice]==-1} {
+			append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\"></td>"
+		    } else {
+			append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\" checked></td>"
+		    }
+		}
+	    }
+	    append output "</tr>"
+	}
 	incr count
     }
 
