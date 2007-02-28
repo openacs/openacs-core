@@ -186,7 +186,7 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
   template::util::lpop parse_level
 
   switch $return_code {
-    0 {
+    0 - 2 {
       # CODE executed without a non-local exit -- return what it
       # evaluated to.
       return $return_value
@@ -194,10 +194,6 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
     1 {
       # Error
       return -code error -errorinfo $s_errorInfo -errorcode $s_errorCode $return_value
-    }
-    2 {
-      # Return from the caller.
-      return -code return $return_value
     }
     default {
       if { [string equal $return_value ADP_ABORT] } { 
