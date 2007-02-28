@@ -643,7 +643,7 @@ ns_section ns/server/${server}/modules
     }
 
     if {[ns_info version] >= 4.5} {
-        ns_limits set default -maxupload [ns_config ns/server/wieners/module/nssock maxinput]
+        ns_limits set default -maxupload [ns_config ns/server/${server}/module/nssock maxinput]
     }
 
 ns_log notice "nsd.tcl: using threadsafe tcl: [info exists tcl_platform(threaded)]"
