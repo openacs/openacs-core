@@ -1,3 +1,8 @@
+2007-02-27 16:05 -8 (pdt)  jiml
+	* etc/config.tcl:
+	  correct a recent change in config file that had name of server
+	  hardwired
+
 2006-05-01 15:18  victorg
 
 	* packages/search/: search.info,
