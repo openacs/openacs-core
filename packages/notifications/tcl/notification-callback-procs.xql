@@ -2,7 +2,7 @@
 
 <queryset>
 
-    <fullquery name="callback::MergeShowUserInfo::impl::notifications.user_notification">
+    <fullquery name="callback::merge::MergeShowUserInfo::impl::notifications.user_notification">
         <querytext>	
           select notification_id, notif_subject
           from notifications
@@ -10,7 +10,7 @@
         </querytext>
     </fullquery>	
 
-    <fullquery name="callback::MergePackageUser::impl::notifications.upd_notifications">
+    <fullquery name="callback::merge::MergePackageUser::impl::notifications.upd_notifications">
         <querytext>	
           update notifications
 	  set notif_user  = :to_user_id
@@ -18,7 +18,7 @@
         </querytext>
     </fullquery>	
 
-    <fullquery name="callback::MergePackageUser::impl::notifications.upd_map">
+    <fullquery name="callback::merge::MergePackageUser::impl::notifications.upd_map">
         <querytext>	
           update notification_user_map
 	  set user_id  = :to_user_id
