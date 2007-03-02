@@ -11,10 +11,17 @@ body {
   margin: 0px;
 }
 
+#skiptocontent {
+  display: none;
+}
+
+.block-marker {
+  display: none;
+}
 
 /* Site Header */
 
-#site-header {
+#header {
   background-color: #313063; 
   color: white;
   font-family: tahoma, verdana, helvetica, sans-serif;
@@ -26,36 +33,31 @@ body {
   text-align: center;
 }
 
-#site-header .system-name {
+#system-name {
   font-size: 120%;
   font-weight: bold;
   float: left;
 }
-#site-header .system-name a {
+#system-name a {
   color: white;
   text-decoration: none;
 }
-#site-header .system-name a:hover {
+#system-name a:hover {
   color: white;
   text-decoration: none;
 }
 
-#site-header .users-online {
-  display: inline;
-  float: right;
-  padding-right: 4em;
+#header-navigation {
+    float: right;
+    display:inline;
+    padding-right: 0.4em;
 }
 
-#site-header .user-greeting {
+#header-navigation li {
   display: inline;
 }
 
-#site-header .permanent-navigation {
-  display: inline;
-  float: right;
-}
-
-#site-header .action-list a { 
+#header-navigation a { 
   border: solid 1px #313063;
   text-align: center; 
   padding: 1px;
@@ -64,7 +66,7 @@ body {
   color: white;
   text-decoration: none;
 }
-#site-header .action-list a:hover { 
+#header-navigation a:hover { 
   text-decoration: none;
   background-color: #666666;
   border: solid 1px #999999;
@@ -74,7 +76,7 @@ body {
 
 /* User Messages */
 
-#user-message {
+#alert-message {
   background-color: #ccff99; 
   padding: 4px;
   padding-top: 6px;
@@ -82,17 +84,10 @@ body {
   font-size: 85%;
 }
 
-#user-message ul {
-  margin-left: 0;
-  padding-left: 0;
-  display: inline;
-  border: none;
-} 
-#user-message ul li {
+#alert-message .alert {
   margin-left: 0;
   padding-left: 2px;
   border: none;
-  list-style: none;
 }
 
 
@@ -120,37 +115,18 @@ body {
 
 /* Context Bar */
 
-#context-bar {
-  font-family: Arial, sans-serif;
-  font-size: 11px;
-  margin-bottom: 2px;
-  padding-left: 8px;
-}
-#context-bar .breadcrumbs {
-  clear: left;
-  float: left;
-  padding-top: 3px;
-}
-#context-bar .breadcrumbs ul {
-  display: inline;
+#breadcrumb .compact {
   margin-left: 0;
   padding-left: 0;
-  display: inline;
   border: none;
 } 
-#context-bar .breadcrumbs ul li {
-  list-style: none;
-  display: inline;
+#breadcrumb .compact li {
   margin-left: 0;
   padding-left: 2px;
   border: none;
   list-style: none;
   display: inline;
 }
-#context-bar #navlinks {
-  float: right;
-}
-
 
 
 /* Subsite Name */
@@ -170,26 +146,10 @@ a.subsite-name:hover {
   text-decoration: none;
 }
 
-/* This wraps everything except site-header and site-footer, and is used to ensure proper margins */
-/* Only used on non-tabbed (navbar and subnavbar) pages */
-
-#page-body {
-  margin-left: 8px;
-  margin-right: 8px;
-}
-
-
-
-
-/* Title of page, typically used on an H1 tag */
-
-.page-title {
-}
-
 
 /* Site Footer */
 
-#site-footer {
+#footer {
   clear: both;
   border-top: 1px solid #ccc;
   font-family: tahoma, verdana, helvetica, sans-serif;
@@ -202,14 +162,14 @@ a.subsite-name:hover {
   text-align: center;
 }
 
-#site-footer ul {
+#footer ul {
   display: inline;
   margin-left: 0;
   padding-left: 0;
   border: none;
 }
 
-#site-footer ul li {
+#footer ul li {
   margin-left: 0;
   padding-left: 10px;
   border: none;
@@ -217,14 +177,9 @@ a.subsite-name:hover {
   display: inline;
 }
 
-#site-footer .action-list {
+#footer .action-list {
   float: left;
 }
-
-
-
-
-
 
 /**********************************************************************
 /* General navigation

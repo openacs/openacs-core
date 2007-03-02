@@ -1,119 +1,69 @@
 <master src="/www/blank-master">
-  <if @title@ not nil>
-    <property name="title">@title;noquote@</property>
-  </if>
-  <if @signatory@ not nil>
-    <property name="signatory">@signatory;noquote@</property>
-  </if>
-  <if @focus@ not nil>
-    <property name="focus">@focus;noquote@</property>
-  </if>
-  <property name="header_stuff">
-    <link rel="stylesheet" type="text/css" href="@css_url@" media="all">
-    @header_stuff;noquote@
-    @extra_headers;noquote@
-  </property>
-  <property name="on_load">
-    @on_load;noquote@@callback_on_load;noquote@
-  </property>
+<if @meta:rowcount@ not nil><property name="&meta">meta</property></if>
+<if @link:rowcount@ not nil><property name="&link">link</property></if>
+<if @script:rowcount@ not nil><property name="&script">script</property></if>
+<if @doc@ defined><property name="&doc">doc</property></if>
+<if @body@ defined><property name="&body">body</property></if>
+<if @head@ not nil><property name="head">@head;noquote@</property></if>
 
-
-
-<!-- Header -->
-
-<div id="site-header">
-  <div class="system-name">
-    <if @system_url@ not nil><a href="@system_url@">@system_name@</a></if>
-    <else>@system_name@</else>
-  </div>
-
-  <div class="action-list permanent-navigation">
-    <ul>
-      <if @admin_url@ not nil>
-        <span id="oacs-admin-url"><li><a href="@admin_url@" title="#acs-subsite.Site_wide_administration#">#acs-subsite.Admin#</a></li></span>
-      </if>
-      <if @pvt_home_url@ not nil>
-        <li><a href="@pvt_home_url@" title="#acs-subsite.Change_pass_email_por#">@pvt_home_name@</a></li>
-      </if>
-      <if @login_url@ not nil>
-        <li><a href="@login_url@" title="#acs-subsite.Log_in_to_system#">#acs-subsite.Log_In#</a></li>
-      </if>
-      <if @logout_url@ not nil>
-        <li><a href="@logout_url@" title="#acs-subsite.Logout_from_system#">#acs-subsite.Logout#</a></li>
-      </if>
-    </ul>
-  </div>
-
-  <div class="action-list users-online">
-    <ul>
-      <li><a href="@whos_online_url@">@num_users_online@ <if @num_users_online@ eq 1>#acs-subsite.Member#</if><else>#acs-subsite.Members#</else> #acs-subsite.Online#</a></li>
-    </ul>
-  </div>
-
-  <div class="user-greeting">
-    <if @untrusted_user_id@ ne 0>
-      #acs-subsite.Welcome_user#
-    </if>
-    <else>
-      #acs-subsite.Not_logged_in#
-    </else>
-  </div>
-
-</div>
-
-<if @user_messages:rowcount@ gt 0>
-  <div id="user-message">
-    <ul>
-      <multiple name="user_messages">
-        <li>@user_messages.message;noquote@</li>
-      </multiple>
-    </ul>
-  </div>
+<if @acs_blank_master.rte@ not nil and @acs_blank_master__htmlareas@ not nil>
+<script language="JavaScript" type="text/javascript">
+<!--
+    initRTE("/resources/acs-templating/rte/images/", 
+            "/resources/acs-templating/rte/", 
+            "/resources/acs-templating/rte/rte.css");
+// -->
+</script>
 </if>
 
-<div id="context-bar">
-  <if @context_bar@ not nil>
-    <div class="breadcrumbs">@context_bar;noquote@</div>
-  </if>
-  <else>
-    <if @context:rowcount@ not nil>
-      <div class="breadcrumbs">
-        <ul>
-          <multiple name="context">
-            <if @context.url@ not nil>
-              <li><a href="@context.url@">@context.label@</a> &#187;</li>
-            </if>
-            <else>
-              <li>@context.label@</li>
-            </else>
-          </multiple>
-        </ul>
-      </div>
-    </if>
-  </else>
-  <div id="navlinks">@subnavbar_link;noquote@</div>
-  <div style="clear: both;"></div>
-</div>
+<if @acs_blank_master.xinha@ not nil and @acs_blank_master__htmlareas@ not nil>
+<script type="text/javascript">
+<!--
+  xinha_editors = null;
+  xinha_init = null;
+  xinha_config = null;
+  xinha_plugins = null;
+  xinha_init = xinha_init ? xinha_init : function() {
+    xinha_plugins = xinha_plugins ? xinha_plugins : [@xinha_plugins;noquote@];
+    // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
+    if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
+      xinha_editors = xinha_editors ? xinha_editors :
+        [
+          <list name="acs_blank_master__htmlareas">
+          '@htmlarea_support.id@'<if @acs_blank_master__htmlareas:rownum@ ne @acs_blank_master__htmlareas:rowcount@>,</if>
+          </list>
+        ];
+      xinha_config = xinha_config ? xinha_config() : new HTMLArea.Config();
+      @xinha_params;noquote@
+      @xinha_options;noquote@
+      xinha_editors = 
+        HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+      HTMLArea.startEditors(xinha_editors);
+  }
+  window.onload = xinha_init;
+// -->
+</script>
+</if>
 
-<slave>
+<if @skip_link@ not nil><div id="skiptocontent"><a href="@skip_link;noquote@" title="#acs-subsite.skip_to_content#" accesskey="#acs-subsite.skiptocontent_accesskey#">#acs-subsite.skip_to_content#</a></div></if>
+<if @acs_blank_master__htmlareas@ not nil><textarea id="holdtext" style="display: none;" rows="1" cols="1"></textarea></if>
 
-<div id="site-footer">
-  <div class="action-list">
-      <if @num_of_locales@ gt 1>
-    <ul>
-        <li><a href="@change_locale_url@">#acs-subsite.Change_locale_label#</a></li>
-    </ul>
-      </if>
-      <else>
-        <if @locale_admin_url@ not nil>
-    <ul>
-          <li><a href="@locale_admin_url@">Install locales</a></li>
-    </ul>
-        </if>
-      </else>
-  </div>
-</div>
+<comment>
+    TODO: remove this and add a more systematic / package independent way 
+    TODO  of getting this content here
+</comment>
+<if @dotlrn_toolbar_p@ true><include src="/packages/dotlrn/lib/toolbar"></if>
 
-<if @curriculum_bar_p@ true>
-  <p><include src="/packages/curriculum/lib/bar" />
+<if @developer_support_p@ true>
+  <include src="/packages/acs-developer-support/lib/toolbar">
+</if>
+
+<slave />
+
+<if @developer_support_p@ true>
+  <include src="/packages/acs-developer-support/lib/footer">
+</if>
+
+<if @translator_mode_p@ true>
+  <include src="/packages/acs-lang/lib/messages-to-translate">
 </if>
