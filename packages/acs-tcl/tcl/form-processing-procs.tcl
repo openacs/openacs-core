@@ -608,7 +608,7 @@ ad_proc -public ad_form {
             # This can easily be generalized if we add more embeddable form commands ...
 
             if { [string equal $element_name_part "-section"] } {
-                lappend af_element_names($form_name) "[list "-section" [uplevel [list subst [lindex $element 1]]]]"
+                lappend af_element_names($form_name) "[concat "-section" [uplevel [list subst [lrange $element 1 end]]]]"
             } else {
                 set element_name_part [uplevel [list subst $element_name_part]]
                 if { ![regexp {^([^ \t:]+)(?::([a-zA-Z0-9_,(|)]*))?$} $element_name_part match element_name flags] } {
@@ -763,10 +763,24 @@ ad_proc -public ad_form {
     global af_sequence_name
 
     foreach element_name $element_names {
-        if { [llength $element_name] == 2 } {
-            switch [string range [lindex $element_name 0] 1 end] {
-                section { template::form section $form_name [lindex $element_name 1] }
+        if { [lindex $element_name 0] eq "-section" } {
+            set command [list template::form section]
+            foreach {option} [lrange $element_name 2 end] {
+                set switch [lindex $option 0]
+                set args [lindex $option 1]
+                switch $switch {
+                    fieldset -
+                    legendtext -
+                    legend {
+                        lappend command -$switch
+                        lappend command $args
+                    }
+                    default {return -code error "\"$switch\" is not a legal -section option"}
+                }
             }
+            lappend command $form_name
+            lappend command [lindex $element_name 1]
+            eval $command
         } else {
             set form_command [list template::element create $form_name $element_name]
             foreach flag $af_flag_list(${form_name}__$element_name) {
