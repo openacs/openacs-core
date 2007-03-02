@@ -10,6 +10,7 @@
   <msg key="data">data</msg>
   <msg key="Day">Day</msg>
   <msg key="day">day</msg>
+  <msg key="DefaultSummary">Data for %list_name%</msg>
   <msg key="Element_is_required">%label% is required</msg>
   <msg key="Element_is_too_long_Plural">%label% is %excess_no_bytes% characters too long.</msg>
   <msg key="Element_is_too_long_Singular">%label% is one character too long.</msg>
