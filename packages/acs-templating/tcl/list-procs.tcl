@@ -1555,15 +1555,30 @@ ad_proc -public template::list::util_html_to_attributes_string {
     @param html A misnomer?  The input isn't HTML, the output is HTML.
 
     @return HTML attributes built from the list in array get format
+    
+    2/28/2007 - Project Zen - Modifying to handle a default value for table summary
 } {
     set output {}
+    set summary_exists_p 0
     foreach { key value } $html {
-        if { ![empty_string_p $value] } {
-            append output " [ad_quotehtml $key]=\"[ad_quotehtml $value]\""
-        } else {
-            append output " [ad_quotehtml $key]"
-        }
+	if {[string equal $key "summary"]} {
+	    if {![empty_string_p $value]} {
+		set summary_exists_p 1
+		append output " summary=\"[ad_quotehtml $value]\""
+	    } 
+	} else {
+	    if { ![empty_string_p $value] } {
+		append output " [ad_quotehtml $key]=\"[ad_quotehtml $value]\""
+	    } else {
+		append output " [ad_quotehtml $key]"
+	    }
+	}
     }
+
+    if {!$summary_exists_p} {
+	append output " summary=\"[_ acs-templating.DefaultSummary [list list_name \@list_properties.name\@]]\""
+    }
+
     return $output
 }
 
