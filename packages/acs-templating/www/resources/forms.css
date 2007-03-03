@@ -61,7 +61,7 @@ form .form-item-wrapper .form-error {
 	width: 15em;
 }
 
-.margin-form .form-item-wrapper .form-widget, .margin-form .form-button, .margin-form .form-help-text {
+.margin-form .form-item-wrapper .form-widget, .margin-form .form-button, .margin-form div.form-help-text {
 	display: block;
 	margin-left: 16em;
 }
