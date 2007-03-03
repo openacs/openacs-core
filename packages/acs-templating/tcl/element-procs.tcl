@@ -68,8 +68,6 @@ ad_proc -public template::element::create { form_id element_id args } {
 
     @option label         The label for the form element.
     
-    @option section       The section name for the element.
-
     @option html          A list of name-value attribute pairs to include in
                           the HTML tag for widget.  Typically used for additional
                           formatting options, such as <tt>cols</tt> or 
@@ -106,7 +104,7 @@ ad_proc -public template::element::create { form_id element_id args } {
                           1 or 0, and message is to be displayed to the user when 
                           the validation step fails, that is, if the expression 
                           evaluates to 0. Use the special variable <tt>$value</tt> 
-			  to refer to the value entered by the user in that field.
+  			              to refer to the value entered by the user in that field.
 
     @option sign          specify for a hidden widget that its value should be
                           signed
@@ -141,6 +139,7 @@ ad_proc -public template::element::create { form_id element_id args } {
     @see template::widget
     @see template::data::validate
     @see template::form::create
+	@see template::form::section
 } {
   set level [template::adp_level]
 
