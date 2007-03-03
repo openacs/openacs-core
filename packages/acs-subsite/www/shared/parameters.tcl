@@ -47,14 +47,25 @@ if {![empty_string_p $section]} {
     set section_where_clause ""
 }
 
+
+array set sections {}
+
 db_foreach select_params {} {
     if { [empty_string_p $section_name] } {
-        set section_name "Main"
+        set section_name "main"
+		set section_pretty "Main"
     } else {
-        set section_name [string map {_ { } - { }} $section_name]
-        set section_name "[string toupper [string index $section_name 0]][string range $section_name 1 end]"
+        set section_name [string map {- {_} " " {_}} $section_name]
+        set section_pretty [string map {_ { }} $section_name]
+        set section_pretty "[string toupper [string index $section_pretty 0]][string range $section_pretty 1 end]"
     }
     
+	if { ![info exists sections($section_name)] } {
+		set sec [list "-section" $section_name {legendtext "$section_pretty"}]
+		ad_form -extend -name parameters -form [list $sec]
+		set sections($section_name) "$section_pretty"
+	}
+
     if { $counter == 0 } {
         set focus_elm $parameter_name
     }
@@ -62,7 +73,6 @@ db_foreach select_params {} {
     set elm [list ${parameter_name}:text,optional,nospell \
                  {label {$parameter_name}} \
                  {help_text {$description}} \
-                 {section {$section_name}} \
                  {html {size 50}}]
 
     set file_val [ad_parameter_from_file $parameter_name $package_key]
