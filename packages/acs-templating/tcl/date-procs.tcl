@@ -1082,7 +1082,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
   set tfoot_content ""
   if { [info exists element(help)] } {
       
-    append tfoot_content "<tfoot><tr>\n" 
+    append tfoot_content "<tfoot><tr class=\"form-help-text small center\">\n" 
     foreach token $tokens {
 	set fragment_def $template::util::date::fragment_widgets([string toupper $token])
 	set fragment [lindex $fragment_def 1]
