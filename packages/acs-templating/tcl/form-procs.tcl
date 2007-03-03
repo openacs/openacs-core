@@ -385,19 +385,53 @@ ad_proc -private template::form::generate { id { style "" } } {
   return [template::adp_eval code]
 }
 
-ad_proc -public template::form::section { id section } {
-    Set the name of the current section of the form.  A form may be
-    divided into any number of sections for layout purposes.  Elements
-    are tagged with the current section name as they are added to the
-    form.  A form style template may insert a divider in the form
-    whenever the section name changes.
-
-    @param id      The form identifier.
-    @param section The name of the current section.
+ad_proc -public template::form::section { 
+	{-fieldset ""}
+	{-legendtext ""}
+	{-legend ""}
+	id 
+	section 
 } {
-  get_reference
+    Set the current section (fieldset) of the form. A form may be
+    divided into any number of fieldsets to group related
+    elements. Elements are tagged with the current fieldset properties
+    as they are added to the form. A form style template may insert a
+    divider in the form whenever the fieldset identifier changes.
 
-  set properties(section) $section
+    @param id          The form identifier.
+    @param section     The current fieldset identifier
+	@param fieldset    A list of name-value attribute pairs for the FIELDSET tag
+	@param legendtext  The legend text
+	@param legend      A list of name-value attribute pairs for the LEGEND tag
+} {
+	get_reference
+
+	set properties(section) $section
+	set properties(sec_legendtext) $legendtext
+
+	# fieldset attributes
+	set properties(sec_fieldset) ""
+	array set fs_attributes $fieldset
+	foreach name [array names fs_attributes] {
+		if { [string equal $fs_attributes($name) {}] } {
+			append properties(sec_fieldset) " $name"
+		} else {
+			append properties(sec_fieldset) " $name=\"$fs_attributes($name)\""
+		}
+	}
+
+	# legend attributes
+	set properties(sec_legend) ""
+	if { ![string eq $legendtext ""] } {
+		array set lg_attributes $legend
+		foreach name [array names lg_attributes] {
+			if { [string equal $lg_attributes($name) {}] } {
+				append properties(sec_legend) " $name"
+			} else {
+				append properties(sec_legend) " $name=\"$lg_attributes($name)\""
+			}
+		}
+	}
 }
 
 ad_proc -private template::form::render { id tag_attributes } {

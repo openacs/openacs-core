@@ -1,7 +1,9 @@
 <multiple name=elements>
 	<if @elements.section@ not nil>
-		<fieldset class="formelement" title="for screen readers .. more attributes">
-   		<legend>@elements.section@</legend>
+		<fieldset id="@elements.section@" @elements.sec_fieldset;noquote@><!-- section fieldset -->
+		<if @elements.sec_legendtext@ not nil>
+		  <legend @elements.sec_legend;noquote@>@elements.sec_legendtext@</legend>
+		</if>
 	</if>
 	
 	<group column="section">
@@ -121,16 +123,6 @@
 </group>
 
 <if @elements.section@ not nil>
-	</fieldset>
+	</fieldset> <!-- section fieldset -->
 </if>
 </multiple>
-
-
-<multiple name="elements">
-	<if @form_properties.show_required_p@ true>
-		<if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform" and @elements.widget@ ne "hidden" and @elements.widget@ ne "submit">
-			#acs-templating.required# <% break %>
-		</if>
-	</if>
-</multiple>
-

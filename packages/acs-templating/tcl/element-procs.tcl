@@ -173,6 +173,11 @@ ad_proc -public template::element::create { form_id element_id args } {
 
   # set the form section
   set opts(section) $form_properties(section)
+	if { ![string equal $opts(section) ""] } {
+		set opts(sec_fieldset) $form_properties(sec_fieldset)
+		set opts(sec_legend) $form_properties(sec_legend)
+		set opts(sec_legendtext) $form_properties(sec_legendtext)
+	}
 
   template::util::get_opts $args
 
