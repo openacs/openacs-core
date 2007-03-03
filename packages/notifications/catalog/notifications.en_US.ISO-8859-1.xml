@@ -20,6 +20,7 @@
   <msg key="lt_Notification_Requests">Notification Requests</msg>
   <msg key="lt_Request_Notification_">Request Notification for %pretty_name%</msg>
   <msg key="lt_system_name_-_Batched">[%system_name% - Batched Notification]</msg>
+  <msg key="lt_Ubsubscribe_Notification_">Unsubscribe from %pretty_name%</msg>
   <msg key="lt_You_have_no_notificat">You have no notifications.</msg>
   <msg key="lt_You_have_requested_no">You have requested notification for %pretty_name%. You may &lt;a href=&quot;%sub_url%&quot; title=&quot;Unsubscribe for %pretty_name%&quot;&gt;unsubscribe&lt;/a&gt;.</msg>
   <msg key="lt_You_may_a_hrefsub_url">You may &lt;a href=&quot;%sub_url%&quot; title=&quot;Request notification for %pretty_name%&quot;&gt;request notification&lt;/a&gt; for %pretty_name%.</msg>

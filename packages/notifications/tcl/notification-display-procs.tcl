@@ -39,12 +39,16 @@ ad_proc -public notification::display::request_widget {
     set request_id [notification::request::get_request_id -type_id $type_id -object_id $object_id -user_id $user_id]
     
     if {![empty_string_p $request_id]} {
+        set icon /resources/email_delete.gif
         set sub_url [ad_quotehtml [unsubscribe_url -request_id $request_id -url $url]]
         set pretty_name [ad_quotehtml $pretty_name]
+        set title [_ notifications.lt_Ubsubscribe_Notification_]
         set sub_chunk "[_ notifications.lt_You_have_requested_no]"
     } else {
+        set icon /resources/email_add.gif
         set sub_url [ad_quotehtml [subscribe_url -type $type -object_id $object_id -url $url -user_id $user_id -pretty_name $pretty_name]]
         set pretty_name [ad_quotehtml $pretty_name]
+        set title [_ notifications.lt_Request_Notification_]
         set sub_chunk "[_ notifications.lt_You_may_a_hrefsub_url]"
     }
 
@@ -52,7 +56,7 @@ ad_proc -public notification::display::request_widget {
          return ""
     }
 
-    return $sub_chunk
+    return "<a href=\"$sub_url\" title=\"$title\"><img src=\"$icon\" alt=\"$title\" /></a> $sub_chunk"
 }
 
 ad_proc -public notification::display::subscribe_url {
