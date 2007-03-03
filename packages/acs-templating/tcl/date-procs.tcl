@@ -1011,7 +1011,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
   # the user to enter a freeform format
   append output "<input type=\"hidden\" name=\"$element(name).format\" "
   append output "value=\"$element(format)\" />\n"
-  append output "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\">\n<tr>"
+  append output "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\">\n<tbody><tr>"
 
   # Prepare the value to set defaults on the form
   if { [info exists element(value)] && 
@@ -1075,16 +1075,17 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
     append output "</td>\n"
   }
 
-  append output "</tr>\n"
+  append output "</tr></tbody>\n"
 
   # Append help text under each widget, if neccessary
   if { [info exists element(help)] } {
-    append output "<tr>" 
+    append output "<tfoot><tr>" 
     foreach token $tokens {
-      set fragment_def $template::util::date::fragment_widgets($token)
-      append output "<td nowrap=\"nowrap\" align=\"center\"><font size=\"-2\">[lindex $fragment_def 3]</font></td>"
+	set fragment_def $template::util::date::fragment_widgets([string toupper $token])
+	set fragment [lindex $fragment_def 1]
+	append output "<td><label for=\"$element(name).$fragment\">[lindex $fragment_def 3]</label></td>"
     }
-    append output "</tr>\n"
+    append output "</tr></tfoot>\n"
   } 
 
   append output "</table>\n"
