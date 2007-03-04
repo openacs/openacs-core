@@ -30,14 +30,13 @@ template::list::create \
         interval {
             label {[_ notifications.Frequency]}
             display_template {
-                @notifications.interval@ 
-                (<a href="@notifications.interval_url@" title="\#notifications.change_interval_object_name\#">\#notifications.Change\#</a>)
+                @notifications.interval@ <a href="@notifications.interval_url@" title="\#notifications.change_interval_object_name\#" class="button ">\#notifications.Change\#</a>
             }
         }
         action {
             label {[_ notifications.Action]}
             display_template {\#notifications.Unsubscribe\#}
             link_url_eval {[export_vars -base request-delete { request_id {return_url [ad_return_url]} }]}
-	    link_html {title "\#notifications.Unsubscribe_from_object_name\#"}
+	    link_html {title "\#notifications.Unsubscribe_from_object_name\#" class "button"}
         }
     }
