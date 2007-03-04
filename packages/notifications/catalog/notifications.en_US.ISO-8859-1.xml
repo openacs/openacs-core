@@ -2,6 +2,7 @@
 <message_catalog package_key="notifications" package_version="5.2.0" locale="en_US" charset="ISO-8859-1">
 
   <msg key="Action">Action</msg>
+  <msg key="Administer_Notifications">Administer Notifications</msg>
   <msg key="Change">Change</msg>
   <msg key="change_interval_object_name">Change notification interval for %notifications.object_name%</msg>
   <msg key="Contents">Contents:</msg>
@@ -34,6 +35,7 @@
   <msg key="Notification_Types">Notification Types</msg>
   <msg key="Notifications">Notifications</msg>
   <msg key="Request_Notification">Request Notification</msg>
+  <msg key="Send_out_notifications_now">Send out notifications now</msg>
   <msg key="SUBJECT">SUBJECT:</msg>
   <msg key="Unsubscribe">Unsubscribe</msg>
   <msg key="Unsubscribe_from_object_name">Unsubscribe from %notifications.object_name%</msg>
