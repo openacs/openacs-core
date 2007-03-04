@@ -122,19 +122,16 @@ set toggle_translator_mode_url [export_vars \
     -base ${acs_lang_url}admin/translator-mode-toggle \
     {{return_url [ad_return_url]}}]
 
+set package_id [ad_conn package_id]
 if { $num_of_locales > 1 } {
-    set change_locale_url [export_vars \
-        -base $acs_lang_url \
-        {{package_id [ad_conn package_id]}}]
+    set change_locale_url [export_vars -base $acs_lang_url {package_id}]
 }
 
 #
 # Change locale link
 #
 if {[llength [lang::system::get_locales]] > 1} {
-    set change_locale_url [export_vars \
-        -base "/acs-lang/" \
-        [list [list package_id [ad_conn package_id]]]]
+    set change_locale_url [export_vars -base "/acs-lang/" {package_id}]
 }
 
 #
