@@ -40,32 +40,32 @@ template::list::create \
     -multirow packages \
     -elements {
         instance_name {
-            label {Service}
+            label {#acs-admin.Service#}
         }
         www {
-            label "Pages"
+            label "\#acs-admin.Pages\#"
             link_url_col url
-            link_html { title "Visit service pages" }
-            display_template {<if @packages.url@ not nil>Pages</if>}
+            link_html { title "\#acs-admin.Visit_service_pages\#" }
+            display_template {<if @packages.url@ not nil>\#acs-admin.Pages\#</if>}
         }
         admin {
-            label "Administration"
+            label "\#acs-admin.Administration\#"
             link_url_col admin_url
-            link_html { title "Service administration" }
-            display_template {<if @packages.admin_url@ not nil>Administration</if>}
+            link_html { title "\#acs-admin.Service_administration\#" }
+            display_template {<if @packages.admin_url@ not nil>\#acs-admin.Administration\#</if>}
         }
         sitewide_admin {
-            label "Site-Wide Admin"
+            label "\#acs-admin.Site-Wide_Admin\#"
             link_url_col sitewide_admin_url
-            link_html { title "Service administration" }
-            display_template {<if @packages.sitewide_admin_url@ not nil>Administration</if>}
+            link_html { title "\#acs-admin.Service_administration\#" }
+            display_template {<if @packages.sitewide_admin_url@ not nil>\#acs-admin.Administration\#</if>}
             hide_p {[ad_decode $swadmin_p 1 0 1]}
         }
         parameters {
-            label "Parameters"
+            label "\#acs-admin.Parameters\#"
             link_url_col param_url
-            link_html { title "Service parameters" }
-            display_template {<if @packages.param_url@ not nil>Parameters</if>}
+            link_html { title "\#acs-admin.Service_parameters\#" }
+            display_template {<if @packages.param_url@ not nil>\#acs-admin.Parameters\#</if>}
         }
     }
 

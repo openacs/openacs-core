@@ -102,7 +102,6 @@ if { [string equal $file_type adp] } {
         -label $action_label \
         -options {{{Find human language text and replace with <# ... #> tags} replace_text} {{Replace <# ... #> tags with #...# keys and insert message into catalog} replace_tags}} \
         -values {replace_text} \
-        -section action_section
 } else {
     # TCL files or SQL files
     element create file_list_form tcl_action_inform \
