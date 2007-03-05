@@ -151,17 +151,25 @@ ad_form -name batch_editor -edit_buttons $edit_buttons -form {
 
 
 set count $page_start
+array set sections {}
 db_foreach get_messages {} {
     ad_form -extend -name batch_editor -form \
         [list [list "message_key_$count:text(hidden)" {value $message_key}]]
     
     set message_url "edit-localized-message?[export_vars { locale package_key message_key show }]"
 
+	# Adding section
+	set section_name "$package_key.$message_key"
+	if { ![info exists sections($section_name)] } {
+		set sec [list "-section" $section_name {legendtext "$section_name"}]
+		ad_form -extend -name batch_editor -form [list $sec]
+		set sections($section_name) "$section_name"
+	}
+
     ad_form -extend -name batch_editor -form \
         [list [list "message_key_pretty_$count:text(inform)" \
                    {label "Message Key"} \
-                   {value "<a href=\"$message_url\">$package_key.$message_key</a>"} \
-                   {section "$package_key.$message_key"}]]
+                   {value "<a href=\"$message_url\">$package_key.$message_key</a>"}]]
     
     if { ![empty_string_p $description] } {
         set description_edit_url "edit-description?[export_vars { locale package_key message_key show }]"

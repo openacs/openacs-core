@@ -56,17 +56,18 @@ if { $recipients_num <= 1 } {
 	no_callback_p:text(hidden)
 	title:text(hidden),optional
 	{message_type:text(hidden) {value "email"}}
+    {-section "recipients" {legendtext "[_ acs-mail-lite.Recipients]"}}
 	{to:text(checkbox),multiple 
 	    {label "[_ acs-mail-lite.Recipients]"} 
 	    {options  $recipients }
 	    {html {checked 1}}
-	    {section "[_ acs-mail-lite.Recipients]"}
 	}
 	{cc:text(text),optional
 	    {label "[_ acs-mail-lite.CC]:"} 
 	    {html {size 56}}
 	    {help_text "[_ acs-mail-lite.cc_help]"}
 	}
+    {-section ""}
     }
 } else {
     set form_elements {
@@ -75,10 +76,10 @@ if { $recipients_num <= 1 } {
 	no_callback_p:text(hidden)
 	title:text(hidden),optional
 	{message_type:text(hidden) {value "email"}}
+    {-section "recipients" {legendtext "[_ acs-mail-lite.Recipients]"}}
 	{check_uncheck:text(checkbox),multiple,optional
 	    {label "[_ acs-mail-lite.check_uncheck]"}
 	    {options {{"" 1}}}
-	    {section "[_ acs-mail-lite.Recipients]"}
 	    {html {onclick check_uncheck_boxes(this.checked)}}
 	}
 	{to:text(checkbox),multiple 
@@ -86,6 +87,7 @@ if { $recipients_num <= 1 } {
 	    {options  $recipients }
 	    {html {checked 1}}
 	}
+    {-section ""}
     }
 }
 
@@ -125,10 +127,10 @@ foreach var $export_vars {
 set content_list [list $content $mime_type]
 
 append form_elements {
+	{-section "message" {legendtext "[_ acs-mail-lite.Message]"}}
     {subject:text(text),optional
 	{label "[_ acs-mail-lite.Subject]"}
 	{html {size 55}}
-	{section "[_ acs-mail-lite.Message]"}
     }
     {content_body:text(richtext),optional
 	{label "[_ acs-mail-lite.Message]"}
@@ -138,6 +140,7 @@ append form_elements {
     {upload_file:file(file),optional
 	{label "[_ acs-mail-lite.Upload_file]"}
     }
+	{-section ""}
 }
 
 if { [exists_and_not_null item_id] } {
