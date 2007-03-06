@@ -349,15 +349,15 @@ ad_proc -public template::widget::currency {
             set trailing_zero [string range [string repeat "0" $format_property] [string length $value] end]
         }
         if { $i == 0 || $i == 2 || $i == 4 } {
-            append output "$format_property<input type=\"hidden\" name=\"$element(name).$i\" value=\"$format_property\" />"
+            append output "$format_property<input type=\"hidden\" name=\"$element(name).$i\" value=\"$format_property\" >"
         } elseif { [string equal $element(mode) "edit"] && ($i == 1 || $i == 3) } {
-            append output "<input type=\"text\" name=\"$element(name).$i\" maxlength=\"$format_property\" size=\"$format_property\" value=\"$value$trailing_zero\" />\n"
+            append output "<input type=\"text\" name=\"$element(name).$i\" maxlength=\"$format_property\" size=\"$format_property\" value=\"$value$trailing_zero\" >\n"
         } else {
-            append output "$value$trailing_zero<input type=\"hidden\" name=\"$element(name).$i\" maxlength=\"$format_property\" size=\"$format_property\" value=\"$value\" />"
+            append output "$value$trailing_zero<input type=\"hidden\" name=\"$element(name).$i\" maxlength=\"$format_property\" size=\"$format_property\" value=\"$value\" >"
         }
         incr i
     }
-    append output "<input type=\"hidden\" name=\"$element(name).format\" value=\"$element(format)\" />\n"
+    append output "<input type=\"hidden\" name=\"$element(name).format\" value=\"$element(format)\" >\n"
 
     return $output
 }
