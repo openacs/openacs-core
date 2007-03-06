@@ -578,12 +578,10 @@ ad_proc -private template::form::render { id tag_attributes } {
 
       # Legend
       set fieldset_legend [lindex $fieldset_list 1]
-      if {![empty_string_p $fieldset_legend]} {
 	  append output "<legend>$fieldset_legend</legend>"
-      }
 
   } else {
-      append output "<fieldset>"
+      append output "<fieldset><legend></legend>"
   }
 
   # Export form ID and current form mode

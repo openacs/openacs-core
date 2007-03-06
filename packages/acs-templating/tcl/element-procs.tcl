@@ -205,20 +205,20 @@ ad_proc -public template::element::create { form_id element_id args } {
 		  set opts(fieldset) [list class $opts(widget)]
 	  }
 
-	  array set attributes $opts(fieldset)
-	  if { ![info exists attributes(class)] } {
-		  set attributes(class) $opts(widget)
+	  array set fs_attributes $opts(fieldset)
+	  if { ![info exists fs_attributes(class)] } {
+		  set fs_attributes(class) $opts(widget)
 	  }
 
-	  set options ""
-	  foreach name [array names attributes] {
-		  if { [string equal $attributes($name) {}] } {
-			  append options " $name"
+	  set fs_options ""
+	  foreach name [array names fs_attributes] {
+		  if { [string equal $fs_attributes($name) {}] } {
+			  append fs_options " $name"
 		  } else {
-			  append options " $name=\"$attributes($name)\""
+			  append fs_options " $name=\"$fs_attributes($name)\""
 		  }
 	  }
-	  set opts(fieldset) $options
+	  set opts(fieldset) $fs_options
 
 	  # set legend attributes
 	  if { ![info exists opts(legendtext)] } {
@@ -227,16 +227,16 @@ ad_proc -public template::element::create { form_id element_id args } {
 	  if { ![info exists opts(legend)] } {
 		  set opts(legend) {}
 	  }
-	  array set attributes $opts(legend)
-	  set options ""
-	  foreach name [array names attributes] {
-		  if { [string equal $attributes($name) {}] } {
-			  append options " $name"
+	  array set lg_attributes $opts(legend)
+	  set lg_options ""
+	  foreach name [array names lg_attributes] {
+		  if { [string equal $lg_attributes($name) {}] } {
+			  append lg_options " $name"
 		  } else {
-			  append options " $name=\"$attributes($name)\""
+			  append lg_options " $name=\"$lg_attributes($name)\""
 		  }
 	  }
-	  set opts(legend) $options
+	  set opts(legend) $lg_options
   }
 
   # Remember that the element has not been rendered yet

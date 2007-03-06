@@ -1,9 +1,7 @@
 <multiple name=elements>
 	<if @elements.section@ not nil>
 		<fieldset id="@elements.section@" @elements.sec_fieldset;noquote@><!-- section fieldset -->
-		<if @elements.sec_legendtext@ not nil>
-		  <legend @elements.sec_legend;noquote@>@elements.sec_legendtext@</legend>
-		</if>
+        <legend @elements.sec_legend;noquote@>@elements.sec_legendtext@</legend>
 	</if>
 	
 	<group column="section">
@@ -24,9 +22,7 @@
 				<div class="form-item-wrapper">
 					<if @elements.widget@ in radio checkbox> <!-- radio button groups and checkbox groups get their own fieldsets -->
 						<fieldset @elements.fieldset;noquote@>
-				        <if @elements.legendtext@ not nil>
 				          <legend @elements.legend;noquote@>@elements.legendtext@</legend>
-				        </if>
 				    </if>
 					<if @elements.label@ not nil>
 						<noparse>
