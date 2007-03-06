@@ -863,7 +863,6 @@ ad_proc -public ad_form {
 
     # Check that any acquire and get_property attributes are supported by their element's datatype
     # These are needed at submission and fill-the-form-with-db-values time 
-
     foreach element_name $af_element_names($form_name) {
         if { [llength $element_name] == 1 } {
             if { [info exists af_from_sql(${form_name}__$element_name)] } {
@@ -991,7 +990,7 @@ ad_proc -public ad_form {
                     return -code error "Couldn't get the next value from sequence: $errmsg\""
                 }
                 set values(__new_p) 1
-
+		
                 if { [info exists new_request] } {
                     ad_page_contract_eval uplevel #$level $new_request
                     # LARS: Set form values based on local vars in the new_request block
@@ -1088,7 +1087,6 @@ ad_proc -public ad_form {
                             lappend args [list $element_name [uplevel #$level [list set $element_name]]]
                         }
                     }
-
                     # This is serious abuse of ad_return_exception_template, but hell, I wrote it so I'm entitled ...
                     ad_return_exception_template -status 200 -params $args $confirm_template
 

@@ -839,7 +839,7 @@ ad_proc -public template::form::export {} {
 
     append export_data "
       <input type=\"hidden\" name=\"$key\" 
-             value=\"[template::util::quote_html $value]\" />"
+             value=\"[template::util::quote_html $value]\" >"
   }
 
   return $export_data

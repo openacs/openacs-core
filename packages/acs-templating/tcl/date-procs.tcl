@@ -887,7 +887,7 @@ ad_proc -public template::widget::dateFragment {
              append output " $attribute_name=\"$attributes($attribute_name)\""
            }
          }
-         append output "/>\n"
+         append output ">\n"
          return $output
        } else {
          # Use a default range for others
@@ -1010,7 +1010,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
   # Just remember the format for now - in the future, allow
   # the user to enter a freeform format
   append output "<input type=\"hidden\" name=\"$element(name).format\" "
-  append output "value=\"$element(format)\" />\n"
+  append output "value=\"$element(format)\" >\n"
   append output "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\">\n"
 
   # Prepare the value to set defaults on the form
@@ -1354,8 +1354,8 @@ ad_proc -public template::widget::textdate { element_reference tag_attributes } 
   }
 
   if { [string equal $element(mode) "edit"] } {
-      append output "<input type=\"text\" name=\"$element(id)\" size=\"10\" maxlength=\"10\" id=\"$element(id)_input_field\" value=\"[ad_quotehtml $textdate]\" />"
-      append output "<input type=\"button\" style=\"border-width: 0px; height: 17px; width: 19px; background-image: url('/resources/acs-templating/calendar.gif'); background-repeat: no-repeat; cursor: pointer;\" onclick=\"return showCalendarWithDefault('$element(id)_input_field', '$javascriptdate', '[template::util::textdate_localized_format]');\" />"
+      append output "<input type=\"text\" name=\"$element(id)\" size=\"10\" maxlength=\"10\" id=\"$element(id)_input_field\" value=\"[ad_quotehtml $textdate]\" >"
+      append output "<input type=\"button\" style=\"border-width: 0px; height: 17px; width: 19px; background-image: url('/resources/acs-templating/calendar.gif'); background-repeat: no-repeat; cursor: pointer;\" onclick=\"return showCalendarWithDefault('$element(id)_input_field', '$javascriptdate', '[template::util::textdate_localized_format]');\" >"
   } else {
       append output $textdate
       append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ad_quotehtml $textdate]\">"

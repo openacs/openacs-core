@@ -823,7 +823,7 @@ ad_proc -public export_vars {
 	set export_string [join $export_list "&"]
     } else {
 	for { set i 0 } { $i < $export_size } { incr i } {
-	    append export_string "<input type=\"hidden\" name=\"[ad_quotehtml [ns_set key $export_set $i]]\" value=\"[ad_quotehtml "[ns_set value $export_set $i]"]\" />\n"
+	    append export_string "<input type=\"hidden\" name=\"[ad_quotehtml [ns_set key $export_set $i]]\" value=\"[ad_quotehtml "[ns_set value $export_set $i]"]\" >\n"
 	}
     }
 
@@ -997,7 +997,7 @@ doc_body_append [ad_export_vars -override { order_by $new_order_by } $my_vars]</
 	set export_list [list]
 	foreach varname [array names export] {
 	    lappend export_list "<input type=\"hidden\" name=\"[ad_quotehtml $varname]\"\
-		    value=\"[ad_quotehtml $export($varname)]\" />"
+		    value=\"[ad_quotehtml $export($varname)]\" >"
 	}
 	return [join $export_list \n]
     }
@@ -1043,15 +1043,15 @@ ad_proc -deprecated export_form_vars {
 	    switch $type {
 		multiple {
 		    foreach item $value {
-			append hidden "<input type=\"hidden\" name=\"[ad_quotehtml $var]\" value=\"[ad_quotehtml $item]\" />\n"
+			append hidden "<input type=\"hidden\" name=\"[ad_quotehtml $var]\" value=\"[ad_quotehtml $item]\" >\n"
 		    }
 		}
 		default {
-		    append hidden "<input type=\"hidden\" name=\"[ad_quotehtml $var]\" value=\"[ad_quotehtml $value]\" />\n"
+		    append hidden "<input type=\"hidden\" name=\"[ad_quotehtml $var]\" value=\"[ad_quotehtml $value]\" >\n"
 		}
 	    }
 	    if { $sign_p } {
-		append hidden "<input type=\"hidden\" name=\"[ad_quotehtml "$var:sig"]\" value=\"[ad_quotehtml [ad_sign $value]]\" />\n"
+		append hidden "<input type=\"hidden\" name=\"[ad_quotehtml "$var:sig"]\" value=\"[ad_quotehtml [ad_sign $value]]\" >\n"
 	    }
 	}
     }
@@ -1074,7 +1074,7 @@ ad_proc -public export_entire_form {} {
 	for {set i 0} {$i<[ns_set size $the_form]} {incr i} {
 	    set varname [ns_set key $the_form $i]
 	    set varvalue [ns_set value $the_form $i]
-	    append hidden "<input type=\"hidden\" name=\"[ad_quotehtml $varname]\" value=\"[ad_quotehtml $varvalue]\" />\n"
+	    append hidden "<input type=\"hidden\" name=\"[ad_quotehtml $varname]\" value=\"[ad_quotehtml $varvalue]\" >\n"
 	}
     }
     return $hidden
@@ -1119,7 +1119,7 @@ ad_proc export_ns_set_vars {{format "url"} {exclusion_list ""} {setid ""}} {
     if {$format == "url"} {
         return [join $return_list "&"]
     } else {
-        return "<input type=\"hidden\" [join $return_list " />\n <input type=\"hidden\" "] />"
+        return "<input type=\"hidden\" [join $return_list " />\n <input type=\"hidden\" "] >"
     }
 }
 

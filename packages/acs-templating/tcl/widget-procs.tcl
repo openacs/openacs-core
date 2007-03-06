@@ -72,11 +72,11 @@ ad_proc -public template::widget::party_search { element_reference tag_attribute
 
     } else {
 
-        set output "<input type=\"hidden\" name=\"$element(id):select\" value=\"t\" />"
-        append output "<input type=\"hidden\" name=\"$element(id):search_string\" value=\"$element(search_string)\" />"
+        set output "<input type=\"hidden\" name=\"$element(id):select\" value=\"t\" >"
+        append output "<input type=\"hidden\" name=\"$element(id):search_string\" value=\"$element(search_string)\" >"
 
         if { ![info exists element(confirmed_p)] } {
-            append output "<input type=\"hidden\" name=\"$element(id):confirmed_p\" value=\"t\" />"
+            append output "<input type=\"hidden\" name=\"$element(id):confirmed_p\" value=\"t\" >"
         }
 
         append output [select $element_reference $tag_attributes]
@@ -236,7 +236,7 @@ ad_proc -public template::widget::search {
         # include an extra hidden element to indicate that the
         # value is being selected as opposed to entered
 
-        set output "\n<input type=\"hidden\" name=\"$element(id):select\" value=\"t\" />"
+        set output "\n<input type=\"hidden\" name=\"$element(id):select\" value=\"t\" >"
         append output [select element $tag_attributes]
 
     }
@@ -410,7 +410,7 @@ ad_proc -public template::widget::input {
             append output " maxlength=\"$element(maxlength)\""
         }
 
-        append output " />"
+        append output " >"
     }
 
     return $output
@@ -654,7 +654,7 @@ ad_proc -public template::widget::menu {
                         append output " selected=\"selected\""
                     }
 
-                    append output ">$label<br />\n"
+                    append output ">$label<br>\n"
                 }
             }
             default {

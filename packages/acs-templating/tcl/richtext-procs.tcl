@@ -264,7 +264,7 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
 
       append output [textarea_internal "$element(id)" attributes $contents]
       if { $htmlarea_p } {
-          append output "<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\"/>"
+          append output "<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\">"
       } else {
           append output "<br/>Format: [menu $element(id).format [template::util::richtext::format_options] $format attributes]"
       }
@@ -436,9 +436,9 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 	# some others)
 	append output "<noscript><br/>Format: $format_menu</noscript>\n"
 
-	set output "<script type='text/javascript'><!--\nwriteRichText('$element(id)','$contents',500,200,true,false,'<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\"/>','[string map {\n \\n \r {} "'" "&\#39"} $output]'); //--></script><noscript id=\"rte-noscr-$element(id)\">$output</noscript>"
+	set output "<script type='text/javascript'><!--\nwriteRichText('$element(id)','$contents',500,200,true,false,'<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\">','[string map {\n \\n \r {} "'" "&\#39"} $output]'); //--></script><noscript id=\"rte-noscr-$element(id)\">$output</noscript>"
       } elseif {$richtextEditor eq "xinha"} {
-	append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'/>\");</script>\n"
+	append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
 	append output "<noscript><br/>Format: $format_menu</noscript>\n"
 	
 	# we have a xinha richtext widget, specified by "options {editor xinha}"
