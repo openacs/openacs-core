@@ -202,7 +202,7 @@ ad_proc -public template::element::create { form_id element_id args } {
 
 	  # set fieldset attributes
 	  if { ![info exists opts(fieldset)] } {
-		  set opts(fieldset) {class $opts(widget)}
+		  set opts(fieldset) [list class $opts(widget)]
 	  }
 
 	  array set attributes $opts(fieldset)

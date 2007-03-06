@@ -80,7 +80,7 @@
 					</else>
 					</noparse>
 	
-					<if @elements.widget@ in radio checkbox> <!-- radio button groups and checkbox groups get their own fieldsets -->
+					<if @elements.widget@ in radio checkbox>
 						<noparse>
 							<formgroup id="@elements.id@">			
 									\@formgroup.widget;noquote@
