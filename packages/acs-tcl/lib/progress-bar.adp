@@ -1,7 +1,7 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="/resources/acs-subsite/site-master.css" media="all">
-<title@title@</title>
+<title>@title@</title>
 </head>
 <body>
 
