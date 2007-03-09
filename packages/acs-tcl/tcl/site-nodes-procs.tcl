@@ -257,10 +257,24 @@ ad_proc -private site_node::init_cache {} {
     nsv_array reset site_node_url_by_object_id [list]
     nsv_array reset site_node_url_by_package_key [list]
 
-    set root_node_id [db_string get_root_node_id {} -default {}]
+    set root_node_id [site_node::get_root_node_id]
     if { $root_node_id ne "" } {
         site_node::update_cache -sync_children -node_id $root_node_id
     }
+}
+
+ad_proc -public site_node::get_root_node_id {
+} {
+    Returns the root node id of the site
+} {
+    util_memoize [list site_node::get_root_node_id_not_cached]
+}
+
+ad_proc -public site_node::get_root_node_id_not_cached {
+} {
+    Returns the root node id of the site
+} {
+    return [db_string get_root_node_id {} -default {}]
 }
 
 ad_proc -private site_node::update_cache {
@@ -486,6 +500,7 @@ ad_proc -public site_node::get_from_url {
         }
     }
 
+
     error "site node not found at url \"$url\""
 }
 
@@ -497,6 +512,7 @@ ad_proc -public site_node::exists_p {
     @author Peter Marklund
 } {
     set url_no_trailing [string trimright $url "/"]
+    
     return [nsv_exists site_nodes "$url_no_trailing/"]
 }        
 
