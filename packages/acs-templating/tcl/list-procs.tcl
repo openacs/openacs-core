@@ -935,7 +935,7 @@ ad_proc -private template::list::template {
     }
 
     # Table tag HTML attributes
-    set list_properties(table_attributes) [template::list::util_html_to_attributes_string $list_properties(html)]
+    set list_properties(table_attributes) [template::list::util_html_to_attributes_string $list_properties(html) 1]
 
     #
     # Find the list template
@@ -1549,14 +1549,16 @@ ad_proc -private template::list::render_filters {
 
 ad_proc -public template::list::util_html_to_attributes_string {
     html
+    {default_summary_p "0"}
 } {
     Takes a list in array get format and builds HTML attributes from them.
 
     @param html A misnomer?  The input isn't HTML, the output is HTML.
+    @param default_summary_p Include a default summary if one does not exist
 
     @return HTML attributes built from the list in array get format
     
-    2/28/2007 - Project Zen - Modifying to handle a default value for table summary
+    2/28/2007 - Project Zen - Modifying to handle a default value for summary if default_summary_p = 1
 } {
     set output {}
     set summary_exists_p 0
@@ -1575,7 +1577,7 @@ ad_proc -public template::list::util_html_to_attributes_string {
 	}
     }
 
-    if {!$summary_exists_p} {
+    if {$default_summary_p && !$summary_exists_p} {
 	append output " summary=\"[_ acs-templating.DefaultSummary [list list_name \@list_properties.name\@]]\""
     }
 
