@@ -8,6 +8,10 @@ ad_page_contract {
   $Id$
 }
 
+if { [template::util::is_nil title] } {
+    set title [ad_conn instance_name]
+}
+
 if {![array exists doc]} {
     array set doc [list]
 }
@@ -23,6 +27,8 @@ foreach {from to} $translations {
     if {[info exists $from]} {
         ns_log warning "blank-compat: [ad_conn file] uses deprecated property $from instead of $to."
         set $to [set $from]
+    } else {
+        set $to {}
     }
 }
 
