@@ -1,5 +1,5 @@
 @doc.type;noquote@
-<html<if @doc.lang@ not nil> lang="@doc.lang;noquote@" xml:lang="@doc.lang;noquote@"</if><if @doc.xmlns@ not nil> xmlns="@doc.xmlns;noquote@"</if>>
+<html<if @doc.lang@ not nil> lang="@doc.lang;noquote@"</if>>
 <head>
     <title<if @doc.title_lang@ not nil and @doc.title_lang@ ne @doc.lang@> lang="@doc.title_lang;noquote@" xml:lang="@doc.title_lang;noquote@"</if>>@doc.title;noquote@</title>
 

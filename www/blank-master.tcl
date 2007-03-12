@@ -12,7 +12,6 @@ ad_page_contract {
   The document output can be customised by supplying the following variables:
 
   @property doc(type)         The declared xml DOCTYPE.
-  @property doc(xmlns)        The declared xml namespace.
   @property doc(charset)      The document character set.
   @property body(id)          The id attribute of the body tag.
   @property body(class)       The class of the body tag.
@@ -49,10 +48,6 @@ ad_page_contract {
 
 if {[template::util::is_nil doc(type)]} { 
     set doc(type) {<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">}
-}
-
-if {[template::util::is_nil doc(xmlns)]} {
-    set doc(xmlns) {http://www.w3.org/1999/xhtml}
 }
 
 if {[template::util::is_nil doc(charset)]} {
