@@ -645,5 +645,5 @@ ns_section ns/server/${server}/modules
 ns_log notice "nsd.tcl: using threadsafe tcl: [info exists tcl_platform(threaded)]"
 ns_log notice "nsd.tcl: finished reading config file."
 if {[ns_info version] >= 4.5} {
-    ns_limits set default -maxupload [ns_config ns/server/cognovis/module/nssock maxinput]
+    ns_limits set default -maxupload [ns_config ns/server/${server}/module/nssock maxinput]
 }
