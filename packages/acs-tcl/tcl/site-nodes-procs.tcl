@@ -60,7 +60,7 @@ ad_proc -public site_node::new {
     } -finally {
         ns_mutex unlock [nsv_get site_nodes_mutex mutex]
     }
-
+ 
     return $node_id
 }
 
@@ -159,7 +159,7 @@ ad_proc -public site_node::rename {
     db_dml rename_node {}
     db_dml update_object_title {}
 
-    update_cache -sync_children -node_id $node_id
+    update_cache -node_id $node_id
 }
 
 ad_proc -public site_node::instantiate_and_mount {
@@ -259,7 +259,12 @@ ad_proc -private site_node::init_cache {} {
 
     set root_node_id [site_node::get_root_node_id]
     if { $root_node_id ne "" } {
-        site_node::update_cache -sync_children -node_id $root_node_id
+        site_node::update_cache -node_id $root_node_id
+    }
+    
+    # Update the cache for the acs-* nodes
+    db_foreach acs_nodes {select node_id from site_nodes where name like 'acs-%'} {
+	site_node::update_cache -node_id $node_id -sync_children
     }
 }
 
@@ -280,6 +285,7 @@ ad_proc -public site_node::get_root_node_id_not_cached {
 ad_proc -private site_node::update_cache {
     {-sync_children:boolean}
     {-node_id:required}
+    {-sync_direct_children:boolean}
 } {
     Brings the in memory copy of the site nodes hierarchy in sync with the
     database version. Only updates the given node and its children.
@@ -343,7 +349,9 @@ ad_proc -private site_node::update_cache {
 
         if { $sync_children_p } {
             set query_name select_child_site_nodes
-        } else {
+        } elseif { $sync_direct_children_p} {
+            set query_name select_direct_child_site_nodes
+	} else {
             set query_name select_site_node
         }
         
@@ -372,13 +380,20 @@ ad_proc -private site_node::update_cache {
                 set object_type "apm_package"
             }
 
+	    if { $num_children eq 0 } {
+		set has_children_p 0
+	    } else {
+		set has_children_p 1
+	    }
+
             # save new node
             set nodes($url) \
                 [list url $url node_id $node_id parent_id $parent_id name $name \
                      directory_p $directory_p pattern_p $pattern_p \
                      object_id $object_id object_type $object_type \
                      package_key $package_key package_id $package_id \
-                     instance_name $instance_name package_type $package_type]
+                     instance_name $instance_name package_type $package_type \
+		     has_children_p $has_children_p]
         }
 
         # AG: This lsort used to live in the db_foreach loop above.  I moved it here
@@ -420,11 +435,11 @@ ad_proc -public site_node::get {
     }
 
     if {$node_id ne ""} {
-        return [get_from_node_id -node_id $node_id]
+        return [site_node::get_from_node_id -node_id $node_id]
     }
 
     if {$url ne ""} {
-        return [get_from_url -url $url]
+        return [site_node::get_from_url -url $url]
     }
 
 }
@@ -460,6 +475,7 @@ ad_proc -public site_node::get_from_node_id {
 ad_proc -public site_node::get_from_url {
     {-url:required}
     {-exact:boolean}
+    {-retry:boolean}
 } {
     Returns an array representing the site node that matches the given url.<p>
 
@@ -469,7 +485,12 @@ ad_proc -public site_node::get_from_url {
     first match found by successively removing the trailing $url path component.<p>
 
     @see site_node::get
+    
+    @param url URL to retrieve the site node from
+    @param exact Switch which will prevent us from trying to find the parent site_node
+    @param retry Notes that the procedure is being called by itself. This is to prevent a loop.
 } {
+    set orig_url $url
     # attempt an exact match
     if {[nsv_exists site_nodes $url]} {
         return [nsv_get site_nodes $url]
@@ -480,28 +501,85 @@ ad_proc -public site_node::get_from_url {
     if {[string index $url end] ne "/" } {
         append url "/"
         if {[nsv_exists site_nodes $url]} {
-            return [nsv_get site_nodes $url]
+	    return  [nsv_get site_nodes $url]
         }
     }
 
-    # chomp off part of the url and re-attempt
-    if {!$exact_p} {
-        while {$url ne ""} {
-        set url [string trimright $url /]
-        set url [string range $url 0 [string last / $url]]
+    set url_list [split [string trim "$orig_url" "/"] "/"]
+    set url_list_length [llength $url_list]
+    # We could not find it directly, so we have to go from top to bottom, trying to load the side node cache
+    # Obviously try to do this only once
 
-        if {[nsv_exists site_nodes $url]} {
-            array set node [nsv_get site_nodes $url]
+    set new_url ""
+    set parent_id [site_node::get_root_node_id]
 
-            if {$node(pattern_p) eq "t" && $node(object_id) ne ""} {
-                return [array get node]
-            }
-        }
-        }
+    # Set a counter to figure out if we are at the last element
+    # We need the last element because, if it is the last element, then the check down below is different
+    set counter 0
+
+    # We need to exclude acs-subsite directories from being called
+    set acs_subsite_dir_list [list admin shared resources x]
+    if {!$retry_p} {
+	foreach name $url_list {
+	    incr counter
+	    if {$name ne ""} {
+		# Append the current name to the url to test
+		set test_url "${new_url}/$name"
+
+		# If the site node is in the cache, continue
+		if {[nsv_exists site_nodes $test_url] || [nsv_exists site_nodes "${test_url}/"]} {
+		    # It is already in the cache, just continue
+		    # Set the new_url to the test_url and update the parent_id
+		    set new_url $test_url
+		    set parent_id [site_node::get_node_id -url $new_url]
+		} else {
+
+		    # Try loading it from the database
+		    # Do this only if we have children marked with the parent
+		    # Also exclude all directories in acs-subsite, as subsites usually have children
+		    array set new_node [nsv_get site_nodes "${new_url}/"]
+		    if {$new_node(has_children_p) && [lsearch $acs_subsite_dir_list $name] == -1} {
+			set node_id [db_string node_id "select node_id from site_nodes where parent_id = :parent_id and name=:name" -default ""]
+			ns_log Debug "Loading from the database $test_url $name $parent_id"
+		    } else {
+			set node_id ""
+		    }
+
+		    if {$node_id ne ""} {
+			site_node::update_cache -node_id $node_id
+			if {$counter eq $url_list_length} {
+			    # This is the last element, return the site_node
+			    return  [nsv_get site_nodes "${test_url}/"]
+			} else {
+			    set parent_id $node_id
+			    set new_url $test_url
+			}
+		    } else {
+			# Okay, it is not in the database, but maybe the new_url itself is in the cache
+			# So we can just return it.
+			# Actually, we should not even have to bother with the cmd_string anymore as this should work all the time
+			# Lets see....
+			if {[nsv_exists site_nodes "${new_url}/"]} {
+			    return [nsv_get site_nodes "${new_url}/"]
+			}
+		    }
+		}
+	    }
+	}
+
+	# MS: Now we have the lowest site_node, try it from there
+	# I am not entirely sure this really is still needed which is why we have to monitor 
+	# it a little bit if there are conditions where we hit the command string method or recursively 
+	# calling itself again.
+	set cmd_string "site_node::get_from_url -retry -url ${new_url}/"
+	ns_log Notice "cmd:: $cmd_string"
+	if {$exact_p} {
+	    append cmd_string " -exact"
+	}
+	eval $cmd_string
+    } else {
+	error "site node not found at url \"$url\""
     }
-
-
-    error "site node not found at url \"$url\""
 }
 
 ad_proc -public site_node::exists_p {
@@ -554,6 +632,13 @@ ad_proc -public site_node::get_url {
     set url ""
     if {[nsv_exists site_node_url_by_node_id $node_id]} {
         set url [nsv_get site_node_url_by_node_id $node_id]
+    } else {
+	# The node was not found, update the cache with the node to be on the save side
+	site_node::update_cache -node_id $node_id
+	if {[nsv_exists site_node_url_by_node_id $node_id]} {
+	    # And try again
+	    set url [nsv_get site_node_url_by_node_id $node_id]
+	}
     }
     
     if { $notrailing_p } {
@@ -575,7 +660,15 @@ ad_proc -public site_node::get_url_from_object_id {
     if { [nsv_exists site_node_url_by_object_id $object_id] } {
         return [nsv_get site_node_url_by_object_id $object_id]
     } else {
-        return [list]
+	# Try to load it from the database
+	set node_id [db_string get_node_id {} -default ""]
+	if {$node_id ne ""} {
+	    # Update the cache and return the result
+	    site_node::update_cache -node_id $node_id	    
+	    return [nsv_get site_node_url_by_object_id $object_id]
+	} else {
+	    return [list]
+	}
     }
 }
 
@@ -584,7 +677,7 @@ ad_proc -public site_node::get_node_id {
 } {
     return the node_id for this url
 } {
-    array set node [get -url $url]
+    array set node [site_node::get_from_url -url $url]
     return $node(node_id)
 }
 
@@ -700,9 +793,11 @@ ad_proc -public site_node::get_children {
         lappend filters package_key $package_key
     }
 
-    set node_url [site_node::get_url -node_id $node_id]
-
     if { !$all_p } { 
+	# First update the site_node cache to be on the save side
+	site_node::update_cache -node_id $node_id -sync_direct_children
+	set node_url [site_node::get_url -node_id $node_id]
+
         set child_urls [list]
         set s [string length "$node_url"]
         # find all child_urls who have only one path element below node_id
@@ -714,6 +809,10 @@ ad_proc -public site_node::get_children {
             }
         }
     } else {
+	# Update the site_node cache as we do not know if all children are already in the cache
+	# Once we have a children_p flag in the nsv_array, this might get easier to accomplish
+	site_node::update_cache -node_id $node_id -sync_children
+	set node_url [site_node::get_url -node_id $node_id]
         set child_urls [nsv_array names site_nodes "${node_url}?*"]
     }
 

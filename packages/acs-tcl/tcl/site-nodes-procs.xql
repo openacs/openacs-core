@@ -66,4 +66,12 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="site_node::get_url_from_object_id.get_node_id">
+        <querytext>
+            select node_id
+            from site_nodes
+            where object_id = :object_id
+        </querytext>
+    </fullquery>
+
 </queryset>
