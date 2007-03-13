@@ -66,3 +66,13 @@ if {[exists_and_not_null body_attributes]} {
         }
     }
 }
+
+if {![template::multirow exists link]} {
+    template::multirow create link rel type href title lang media
+}
+
+# DRB: this shouldn't really be in blank master, there should be some way for the templating
+# package to associate a particular css file with pages that use particular form or list
+# templates.  Therefore I'll put the hard-wired values in blank-compat for the moment.
+multirow append link stylesheet text/css /resources/acs-templating/lists.css "" [ad_conn language] all
+multirow append link stylesheet text/css /resources/acs-templating/forms.css "" [ad_conn language] all
