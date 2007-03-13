@@ -15,9 +15,9 @@ ad_page_contract {
   @property doc(charset)      The document character set.
   @property body(id)          The id attribute of the body tag.
   @property body(class)       The class of the body tag.
-  @property meta:multirow     A multirow of <meta /> tags to render.
-  @property link:multirow     A multirow of <link /> tags to render.
-  @property script:multirow   A multirow of <script /> tags to render.
+  @property meta:multirow     A multirow of <meta> tags to render.
+  @property link:multirow     A multirow of <link> tags to render.
+  @property script:multirow   A multirow of <script> tags to render.
 
   ad_conn -set language       Must be used to override the document language
                               if necessary.
@@ -47,7 +47,7 @@ ad_page_contract {
 }
 
 if {[template::util::is_nil doc(type)]} { 
-    set doc(type) {<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">}
+    set doc(type) {<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">}
 }
 
 if {[template::util::is_nil doc(charset)]} {
