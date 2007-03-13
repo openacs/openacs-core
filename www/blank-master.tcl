@@ -75,6 +75,7 @@ if {![template::multirow exists link]} {
 if {![template::multirow exists script]} {
     template::multirow create script type src charset defer content
 }
+template::multirow append script text/javascript /resources/acs-subsite/core.js "" "" ""
 
 # Concatenate the javascript event handlers for the body tag
 if {[array exists body]} {
