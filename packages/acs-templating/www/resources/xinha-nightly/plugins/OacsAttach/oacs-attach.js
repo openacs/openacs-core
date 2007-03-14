@@ -113,9 +113,10 @@ OacsAttach.prototype.insertInternalLink = function(link) {
 	    f_usetarget : link.f_usetarget
 	};
     } else {
+        f_title = editor.getSelectedHTML();		
 	outparam = {
 	    f_href   : '',
-	    f_title  : '',
+	    f_title  : f_title,
 	    f_target : '',
 	    f_usetarget : ''
 	};
@@ -170,7 +171,7 @@ OacsAttach.prototype.insertInternalLink = function(link) {
 OacsAttach.prototype.insertInternalLinkTlf = function(link) {
     var editor = OacsAttach.editor;
     var outparam = null;
-	
+
     if (typeof link == "undefined") {
 	link = editor.getParentElement();
 	if (link && /^a$/i.test(link.tagName)) {
@@ -206,6 +207,7 @@ OacsAttach.prototype.insertInternalLinkTlf = function(link) {
     if (typeof OacsAttach.folder_id != "undefined") {
 	PopupUrl = PopupUrl + "&folder_id=" + OacsAttach.folder_id;
     }
+
     Dialog(PopupUrl, function(param) {
 	       if (!param)
 		   return false;
@@ -279,6 +281,7 @@ OacsAttach.prototype.insertImage = function(image) {
     if (typeof OacsAttach.folder_id != "undefined") {
 	PopupUrl = PopupUrl + "&folder_id=" + OacsAttach.folder_id;
     }
+
     Dialog(PopupUrl, function(param) {
 	       if (!param) {	// user must have pressed Cancel
 		   return false;
