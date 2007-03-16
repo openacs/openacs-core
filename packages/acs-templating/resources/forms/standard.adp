@@ -28,15 +28,23 @@
 						<noparse>
 							<if \@formerror.@elements.id@\@ not nil>
 								<div class="form-label form-label-error">
-									<label for="@elements.id@">
+                                  <if @elements.widget@ in radio checkbox date>
+									@elements.label;noquote@
+                                  </if>
+                                  <else>
+									<label for="@elements.id@">@elements.label;noquote@</label>
+                                  </else>
 							</if>
 							<else>
 								<div class="form-label">
-									<label for="@elements.id@">
+                                  <if @elements.widget@ in radio checkbox date>
+									@elements.label;noquote@
+                                  </if>
+                                  <else>
+									<label for="@elements.id@">@elements.label;noquote@</label>
+                                  </else>
 							</else>
 						</noparse>
-						@elements.label;noquote@
-								</label>
 
 						<if @form_properties.show_required_p@ true>
 							<if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform">
