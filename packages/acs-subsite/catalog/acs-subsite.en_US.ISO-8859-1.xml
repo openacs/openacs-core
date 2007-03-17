@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.3.0d1" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.3.0" locale="en_US" charset="ISO-8859-1">
 
   <msg key="_or">, or</msg>
   <msg key="_Update_Basic_Information">Update Basic Information</msg>
@@ -28,6 +28,7 @@
   <msg key="Account_not_avail_now">This account is not available at this time.</msg>
   <msg key="Account_reopened_message">Your account at %system_name% has been reopened. Welcome back.</msg>
   <msg key="Account_reopened_title">Account Reopened</msg>
+  <msg key="acs-subsite.icon_of_envelope">Icon of Envelope</msg>
   <msg key="Action">Action</msg>
   <msg key="Add">Add</msg>
   <msg key="add_folder">add folder</msg>
