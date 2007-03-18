@@ -375,8 +375,8 @@ ad_proc -public template::widget::input {
     if { ( [string equal $type "checkbox"] || [string equal $type "radio"] ) && [info exists element(value)] } {
         # This can be used in the form template in a <label for="id">...</label> tag.
         set attributes(id) "$element(form_id):elements:$element(name):$element(value)"
-    } elseif { [string equal $type "password"] || [string equal $type "text"] } { 
-		set attributes(id) "$element(name)" 
+    } elseif { [string equal $type "password"] || [string equal $type "text"] || [string equal $type "button"] || [string equal $type "file"]} { 
+	set attributes(id) "$element(name)" 
     }
 
     
