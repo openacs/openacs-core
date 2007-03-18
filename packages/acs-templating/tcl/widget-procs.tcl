@@ -902,7 +902,7 @@ ad_proc -public template::widget::block {
 	    foreach answer_desc $option {
 		set answer_description [lindex $answer_desc 0]
 		set no_of_answers [lindex $answer_desc 1]
-		append output "<th colspan=\"[expr $no_of_answers + 1]\" align=\"center\">$answer_description</td>"
+		append output "<th colspan=\"[expr $no_of_answers + 1]\" align=\"center\">$answer_description</th>"
 	    }
 	    append output "</tr>"
 	} elseif {$count == 1} {
