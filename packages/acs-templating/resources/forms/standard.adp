@@ -28,7 +28,7 @@
 						<noparse>
 							<if \@formerror.@elements.id@\@ not nil>
 								<div class="form-label form-label-error">
-                                  <if @elements.widget@ in radio checkbox date>
+                                  <if @elements.widget@ in radio checkbox date inform>
 									@elements.label;noquote@
                                   </if>
                                   <else>
@@ -37,7 +37,7 @@
 							</if>
 							<else>
 								<div class="form-label">
-                                  <if @elements.widget@ in radio checkbox date>
+                                  <if @elements.widget@ in radio checkbox date inform>
 									@elements.label;noquote@
                                   </if>
                                   <else>
