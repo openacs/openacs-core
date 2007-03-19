@@ -434,9 +434,9 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 	# which the richtext widget won't work but which do have js enabled 
 	# should output since we need the format widget (this for Safari among 
 	# some others)
-	append output "<noscript><br/>Format: $format_menu</noscript>\n"
+	set noscript_output "$output <br/>Format: $format_menu\n"
 
-	set output "<script type='text/javascript'><!--\nwriteRichText('$element(id)','$contents',500,200,true,false,'<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\">','[string map {\n \\n \r {} "'" "&\#39"} $output]'); //--></script><noscript id=\"rte-noscr-$element(id)\">$output</noscript>"
+	set output "<script type='text/javascript'><!--\nwriteRichText('$element(id)','$contents',500,200,true,false,'<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\">','[string map {\n \\n \r {} "'" "&\#39"} $output]'); //--></script><noscript id=\"rte-noscr-$element(id)\">$noscript_output</noscript>"
       } elseif {$richtextEditor eq "xinha"} {
 	append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
 	append output "<noscript><br/>Format: $format_menu</noscript>\n"
