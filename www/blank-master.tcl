@@ -93,10 +93,14 @@ global acs_blank_master__htmlareas acs_blank_master
 if { [info exists acs_blank_master__htmlareas] } {
 
     if {[info exists acs_blank_master(rte)]} {
+        set rte_dir /resources/acs-templating/rte/
         foreach htmlarea_id [lsort -unique $acs_blank_master__htmlareas] {
             lappend body(onload) "acs_rteInit('${htmlarea_id}');"
         }
-        template::multirow append script text/javascript /resources/acs-templating/rte/richtext.js "" "" ""
+        template::multirow append script text/javascript ${rte_dir}richtext.js "" "" ""
+        template::multirow append body_script text/javascript "" "" "" "
+        initRTE(\"${rte_dir}images/\", \"$rte_dir\", \"${rte_dir}rte.css\");
+        "
     }
 
     if { [info exists acs_blank_master(xinha)] } {
