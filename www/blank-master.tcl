@@ -119,7 +119,7 @@ if { [info exists acs_blank_master__htmlareas] } {
 	        // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
 	        if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
 	        xinha_editors = xinha_editors ? xinha_editors :
-	        \[[join $acs_blank_master__htmlareas ,]\];
+	        \['[join $acs_blank_master__htmlareas ',']'\];
                 xinha_config = xinha_config ? xinha_config() : new HTMLArea.Config();
                 $acs_blank_master(xinha.options)
                 xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
