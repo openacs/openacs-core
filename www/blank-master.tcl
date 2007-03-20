@@ -18,6 +18,7 @@ ad_page_contract {
   @property meta:multirow     A multirow of <meta> tags to render.
   @property link:multirow     A multirow of <link> tags to render.
   @property script:multirow   A multirow of <script> tags to render in the head.
+  @property body_script:multirow   A multirow of <script> tags to render in the body.
 
   ad_conn -set language       Must be used to override the document language
                               if necessary.
@@ -77,6 +78,10 @@ if {![template::multirow exists script]} {
 }
 template::multirow append script text/javascript /resources/acs-subsite/core.js "" "" ""
 
+if {![template::multirow exists body_script]} {
+    template::multirow create body_script type src charset defer content
+}
+
 # Handle richtext widgets, which needs special javascript and css 
 # in the page header and body.
 
@@ -85,7 +90,7 @@ template::multirow append script text/javascript /resources/acs-subsite/core.js 
 
 global acs_blank_master__htmlareas acs_blank_master
 
-if {[info exists acs_blank_master__htmlareas] } {
+if { [info exists acs_blank_master__htmlareas] } {
 
     if {[info exists acs_blank_master(rte)]} {
         foreach htmlarea_id [lsort -unique $acs_blank_master__htmlareas] {
@@ -94,13 +99,15 @@ if {[info exists acs_blank_master__htmlareas] } {
         template::multirow append script text/javascript /resources/acs-templating/rte/richtext.js "" "" ""
     }
 
-    if {[info exists acs_blank_master(xinha)]} {
+    if { [info exists acs_blank_master(xinha)] } {
         set xinha_dir /resources/acs-templating/xinha-nightly/
+        set editor_lang [expr { $doc(lang) eq "en" || $doc(lang) eq "de" ? $doc(lang) : "en" }]
         template::multirow append script text/javascript "" "" "" "
-            _editor_url  = \"$xinha_dir\"
-            _editor_lang = \"[expr { $doc(lang) eq \"en\" || $doc(lang) eq \"de\"? $doc(lang) : en }]\";"
+            _editor_url  = \"$xinha_dir\";
+            _editor_lang = \"$editor_lang\";
+        "
         template::multirow append script text/javascript ${xinha_dir}htmlarea.js "" "" ""
-        template::multirow append script text/javascript "" "" "" "
+        template::multirow append body_script text/javascript "" "" "" "
 	    xinha_editors = null;
 	    xinha_init = null;
 	    xinha_config = null;
@@ -118,7 +125,7 @@ if {[info exists acs_blank_master__htmlareas] } {
                 xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
                 HTMLArea.startEditors(xinha_editors);
             \}
-            Xinha._addEvent(window,'load', xinha_init);
+	    window.onload = xinha_init;
         "
     }
 }
