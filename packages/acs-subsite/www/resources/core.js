@@ -146,7 +146,7 @@ function acs_ListCheckAll(listName, checkP) {
   var Obj, Type, Name, Id;
   var Controls = acs_ListFindInput(); if (!Controls) { return; }
   // Regexp to find name of controls
-  var re = new RegExp('^' + listName + ',.+');
+  var re = new RegExp('^' + listName + '..+');
 
   checkP = checkP ? true : false;
 
