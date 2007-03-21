@@ -47,7 +47,7 @@
 
           <if \@list_properties.page_size_variable_p@ eq 1>
             </td><td align="right" width="5%">
-            <form name="\@list_properties.name@_resize" method="GET">
+            <form name="\@list_properties.name@_resize" method="GET" action="">
               \@list_properties.page_size_export_chunk;noquote@
               <select name="page_size" onChange="acs_ListBulkActionClick('\@list_properties.name@_resize', '\@list_properties.url@'); return false;">
                 <multiple name="page_sizes">
@@ -66,10 +66,10 @@
 
 <if @list_properties.bulk_actions@ not nil>
   <if @list_properties.bulk_action_method@ not nil>
-  <form name="@list_properties.name@" method="@list_properties.bulk_action_method@">  
+  <form name="@list_properties.name@" method="@list_properties.bulk_action_method@" action="">  
   </if>
   <else>
-  <form name="@list_properties.name@" method="GET">
+  <form name="@list_properties.name@" method="GET" action="">
   </else>
   @list_properties.bulk_action_export_chunk;noquote@
 </if>
