@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="notifications" package_version="5.2.0" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="notifications" package_version="5.3.0d1" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="Action">Acción</msg>
+  <msg key="Administer_Notifications">Administrar notificaciones</msg>
   <msg key="Change">Cambiar</msg>
   <msg key="change_interval_object_name">Cambiar el intervalo de notificación para %notifications.object_name%</msg>
   <msg key="Contents">Contenido:</msg>
@@ -20,9 +21,9 @@
   <msg key="lt_Notification_Requests">Solicitudes de Notificación</msg>
   <msg key="lt_Request_Notification_">Pedir notificación para %pretty_name%</msg>
   <msg key="lt_system_name_-_Batched">[%system_name% - Notificación en Batch]</msg>
+  <msg key="lt_Ubsubscribe_Notification_">Anular notificaciones para %pretty_name%</msg>
   <msg key="lt_You_have_no_notificat">No tiene avisos.</msg>
-  <msg key="lt_You_have_requested_no">Ha pedido notificación para %pretty_name%. Puede &lt;a href=&quot;%sub_url%&quot;&gt;darse de baja&lt;/a&gt;.</msg>
-  <msg key="lt_You_may_a_hrefsub_url">Puede &lt;a href=&quot;%sub_url%&quot;&gt;activar un aviso&lt;/a&gt; para %pretty_name%.</msg>
+  <msg key="lt_You_may_a_hrefsub_url">Solicitar notificaciones</msg>
   <msg key="Manage_Notifications">Administrar Notificaciones</msg>
   <msg key="Notification">Notificaciones</msg>
   <msg key="Notification_Replies">Respuestas de notificaciones</msg>
@@ -33,6 +34,7 @@
   <msg key="Notification_Types">Tipos de Notificación</msg>
   <msg key="Notifications">Notificaciones</msg>
   <msg key="Request_Notification">Pedir Notificación</msg>
+  <msg key="Send_out_notifications_now">Enviar notificaciones ahora</msg>
   <msg key="SUBJECT">Asunto:</msg>
   <msg key="Unsubscribe">Darse de baja</msg>
   <msg key="Unsubscribe_from_object_name">Dar de baja la suscripción a %notications.object_name%</msg>
