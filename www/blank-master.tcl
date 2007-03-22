@@ -146,3 +146,22 @@ if {[array exists body]} {
         append event_handlers "\""
     }
 }
+
+# DRB: Devsup toolbar moved here temporarily until we rewrite things so package can push
+# tool bars up to the blank master.
+
+# Determine whether developer support is installed and enabled
+#
+set developer_support_p [expr {
+    [llength [info procs ::ds_show_p]] == 1 && [ds_show_p]
+}]
+
+if {$developer_support_p} {
+    template::multirow append link \
+        stylesheet \
+        "text/css" \
+        "/resources/acs-developer-support/acs-developer-support.css" \
+        "Developer Support Styles" \
+        en \
+        "all"
+}
