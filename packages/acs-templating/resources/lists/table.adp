@@ -117,7 +117,7 @@
   <if \@@list_properties.multirow@:rowcount@ eq 0>
     <tbody>
 	<tr class="list-odd last">
-        <td colspan="@elements:rowcount@" headers="@list_properties.name@_nodata">
+        <td colspan="@elements:rowcount@">
         @list_properties.no_data@
       </td>
     </tr>
