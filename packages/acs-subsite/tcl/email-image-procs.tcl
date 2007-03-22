@@ -64,7 +64,7 @@ ad_proc -public email_image::get_user_email {
     }
     switch $priv_level {
         "4" {
-            return "<a href="mailto:$email" title=\"#acs-subsite.Send_email_to_this_user#\">$email</a>"
+            return "<a href=\"mailto:$email\" title=\"#acs-subsite.Send_email_to_this_user#\">$email</a>"
         }
         "3" {
             set email_image_id [email_image::get_related_item_id -user_id $user_id]
