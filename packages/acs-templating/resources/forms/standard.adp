@@ -37,7 +37,7 @@
 							</if>
 							<else>
 								<div class="form-label">
-                                  <if @elements.widget@ in radio checkbox date inform>
+                                  <if @form_properties.mode@ eq display or @elements.widget@ in radio checkbox date inform>
 									@elements.label;noquote@
                                   </if>
                                   <else>
