@@ -14,10 +14,17 @@
   <msg key="Element_is_required">%label% es obligatorio</msg>
   <msg key="Element_is_too_long_Plural">%label% es %excess_no_bytes% caracteres demasiado largo.</msg>
   <msg key="Element_is_too_long_Singular">%label% es un caracater muy largo.</msg>
+  <msg key="Enhanced_Text">Texto Enriquecido</msg>
   <msg key="Enter_your_search_text">Introduzca el texto a buscar</msg>
+  <msg key="Fixed_width_Text">Preformateado
+</msg>
+  <msg key="Format">Formato
+</msg>
   <msg key="Formats">Formatos</msg>
   <msg key="hours">horas</msg>
   <msg key="Hours_must_be_between_0_and_23">La hora debe estar comprendida entre 0 y 23</msg>
+  <msg key="HTML">HTML
+</msg>
   <msg key="HTMLArea_action_cancel">Cancelar</msg>
   <msg key="HTMLArea_ImageAlignment">Alineación</msg>
   <msg key="HTMLArea_ImageAlignmentBottom">Inferior</msg>
@@ -80,6 +87,7 @@
   <msg key="Only_myself">Sólo yo</msg>
   <msg key="Page">Página</msg>
   <msg key="Page_Size">Tamaño de Página</msg>
+  <msg key="Plain_Text">Texto Plano</msg>
   <msg key="Previous_with_arrow">&lt;&lt; Anterior</msg>
   <msg key="required">obligatorio</msg>
   <msg key="reverse_sort_order_of_label">Invertir el orden de %label%</msg>
