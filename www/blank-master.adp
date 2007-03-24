@@ -18,5 +18,10 @@
   <include src="/packages/acs-developer-support/lib/toolbar">
 </if>
 <slave>
+
+<if @developer_support_p@ true>
+  <include src="/packages/acs-developer-support/lib/footer">
+</if>
+
 </body>
 </html>

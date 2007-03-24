@@ -52,17 +52,7 @@
     TODO: remove this and add a more systematic / package independent way 
     TODO  of getting this content here
 </comment>
-<if @dotlrn_toolbar_p@ true><include src="/packages/dotlrn/lib/toolbar"></if>
-
-<if @developer_support_p@ true>
-  <include src="/packages/acs-developer-support/lib/toolbar">
-</if>
-
-<slave />
-
-<if @developer_support_p@ true>
-  <include src="/packages/acs-developer-support/lib/footer">
-</if>
+<slave>
 
 <if @translator_mode_p@ true>
   <include src="/packages/acs-lang/lib/messages-to-translate">

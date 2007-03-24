@@ -69,13 +69,6 @@ template::multirow append link \
     "all"
 
 #
-# Add standard javascript
-#
-template::multirow append script \
-    "text/javascript" \
-    "/resources/acs-subsite/core.js" 
-
-#
 # Process focus variable in onload
 # 
 if { ![template::util::is_nil focus] } {
@@ -144,40 +137,4 @@ if {[info exists acs_blank_master__htmlareas]
 # Determine if we should be displaying the translation UI
 #
 set translator_mode_p [lang::util::translator_mode_p]
-
-#
-# Determine whether developer support is installed and enabled
-#
-set developer_support_p [expr {
-    [llength [info procs ::ds_show_p]] == 1 && [ds_show_p]
-}]
-
-if {$developer_support_p} {
-    template::multirow append link \
-        stylesheet \
-        "text/css" \
-        "/resources/acs-developer-support/acs-developer-support.css" \
-        "Developer Support Styles" \
-        en \
-        "all"
-}
-
-# 
-# dotLRN specific toolbar
-#   TODO: remove this and add a more systematic / package independent way 
-#   TODO  of getting this content here
-#
-set dotlrn_toolbar_p [expr {
-    [llength [namespace eval :: info procs dotlrn_toolbar::show_p]] == 1 
-}]
-
-if {$dotlrn_toolbar_p} {
-    template::multirow append link \
-        stylesheet \
-        "text/css" \
-        "/resources/dotlrn/dotlrn-toolbar.css" \
-        "dotLRN Toolbar Styles" \
-        en \
-        "all"
-}
 
