@@ -161,7 +161,7 @@ if {$developer_support_p} {
         stylesheet \
         "text/css" \
         "/resources/acs-developer-support/acs-developer-support.css" \
-        "Developer Support Styles" \
+        "" \
         en \
         "all"
 }
