@@ -48,7 +48,7 @@ template::multirow append link \
     stylesheet \
     "text/css" \
     "/resources/acs-templating/lists.css" \
-    "Standard List Styles" \
+    "" \
     en \
     "all"
 
@@ -56,7 +56,7 @@ template::multirow append link \
     stylesheet \
     "text/css" \
     "/resources/acs-templating/forms.css" \
-    "Standard Form Styles" \
+    "" \
     en \
     "all"
 
