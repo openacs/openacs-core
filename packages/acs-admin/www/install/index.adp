@@ -8,7 +8,7 @@
     <th>Local Files</th>
   </tr>
   <tr>
-    <td>Download and install/upgrade automatically from <a href="http://openacs.org/repository">OpenACS.org repository</a>
+    <td>Download and install/upgrade automatically from <a href="http://openacs.org/repository/">OpenACS.org repository</a>
     </td>
     <td>
       Install/upgrade from local files.  Use this if your site has custom code or is in a local CVS repository.  <a href="/doc/upgrade.html">Help</a>
