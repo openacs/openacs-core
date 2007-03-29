@@ -175,6 +175,8 @@ insert into cr_mime_types (label,mime_type,file_extension) values ('Audio - MP3'
 insert into cr_mime_types (label,mime_type,file_extension) values ('Image - Progressive JPEG','image/pjpeg', 'pjpeg');
 insert into cr_mime_types (label,mime_type,file_extension) values ('SPPS data file','application/x-spss-savefile', 'sav');
 insert into cr_mime_types (label,mime_type,file_extension) values ('SPPS data file','application/x-spss-outputfile', 'spo');
+insert into cr_mime_types (label,mime_type,file_extension) values ('Video MP4', 'video/mp4', 'mp4');
+insert into cr_mime_types (label,mime_type,file_extension) values ('XPInstall', 'application/x-xpinstall', 'xpi'); 
 
 -- Open Documents MIME types
 insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.text', 'odt', 'OpenDocument Text');
@@ -463,6 +465,8 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ('sxg', 'ap
 insert into cr_extension_mime_type_map (extension, mime_type) values ('stw', 'application/vnd.sun.xml.writer.template');
 insert into cr_extension_mime_type_map (extension, mime_type) values ('sav', 'application/x-spss-savefile');
 insert into cr_extension_mime_type_map (extension, mime_type) values ('spo', 'application/x-spss-outputfile');
+insert into cr_extension_mime_type_map (extension, mime_type) values ('mp4', 'video/mp4');
+insert into cr_extension_mime_type_map (extension, mime_type) values ('xpi', 'application/x-xpinstall');
 
 -- Open Documents MIME types
 insert into cr_extension_mime_type_map (mime_type, extension) values ('application/vnd.oasis.opendocument.text', 'odt');
