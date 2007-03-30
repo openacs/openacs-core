@@ -92,7 +92,7 @@ proc_doc ad_dimensional {option_list {url {}} {options_set ""} {optionstype url}
             if {[string compare $option_val $thisoption] == 0} {
                 append html "<strong>[lindex $option_value 1]</strong>"
             } else {
-                append html "<a href=\"$url?[export_ns_set_vars "url" $option_key $options_set]&[ns_urlencode $option_key]=[ns_urlencode $thisoption]\">[lindex $option_value 1]</a>"
+                append html "<a href=\"$url?[export_ns_set_vars "url" $option_key $options_set][ad_quotehtml &][ns_urlencode $option_key]=[ns_urlencode $thisoption]\">[lindex $option_value 1]</a>"
             }
         }
         append html "\]</td>\n"
