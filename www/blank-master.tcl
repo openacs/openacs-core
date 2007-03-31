@@ -147,8 +147,8 @@ if {[array exists body]} {
     }
 }
 
-# DRB: Devsup toolbar moved here temporarily until we rewrite things so package can push
-# tool bars up to the blank master.
+# DRB: Devsup and dotlrn toolbars moved here temporarily until we rewrite things so packages
+#  can push tool bars up to the blank master.
 
 # Determine whether developer support is installed and enabled
 #
@@ -165,3 +165,20 @@ if {$developer_support_p} {
         en \
         "all"
 }
+
+# Determine whether or not to show the dotlrn toolbar.
+#
+set dotlrn_toolbar_p [expr {
+    [llength [namespace eval :: info procs dotlrn_toolbar::show_p]] == 1
+}]
+
+if {$dotlrn_toolbar_p} {
+    template::multirow append link \
+        stylesheet \
+        "text/css" \
+        "/resources/dotlrn/dotlrn-toolbar.css" \
+        "" \
+        en \
+        "all"
+}
+

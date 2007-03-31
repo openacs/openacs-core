@@ -17,6 +17,10 @@
 <if @developer_support_p@ true>
   <include src="/packages/acs-developer-support/lib/toolbar">
 </if>
+<if @dotlrn_toolbar_p@ true>
+  <include src="/packages/dotlrn/lib/toolbar">
+</if>
+
 <slave>
 
 <if @developer_support_p@ true>
