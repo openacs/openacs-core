@@ -464,6 +464,7 @@ ul.action-links li {
   font-size: 1.4em;
   font-weight: bold;
   float: left;
+  padding-left: 0.4em;
 }
 
 #header-navigation {
