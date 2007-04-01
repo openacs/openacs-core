@@ -1,31 +1,31 @@
 /* Styles originally defined in default-master.css */
 
 #login-box {
-    border: black 1px solid;
-    padding: 4px;
+  border: black 1px solid;
+  padding: 4px;
 }
 
 TABLE.table-display {
-    font-family: tahoma, verdana, helvetica; 
-    font-size: 85%;
+  font-family: tahoma, verdana, helvetica; 
+  font-size: 85%;
 }
 
 TR.table-header {
-    background-color: #cccccc; 
+  background-color: #cccccc; 
 }
 
 TR.even {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 
 TR.odd {
-    background-color: #e0e0e0;
+  background-color: #e0e0e0;
 }
 
 /* Replace deprecated center tags in forms. Eventually all forms should use form builder and this tag should not be used */
 
 DIV.submit-button {
-	text-align: center;
+  text-align: center;
 }
 
 
@@ -33,76 +33,11 @@ DIV.submit-button {
 /* Site-Wide/Master Templates
 /**********************************************************************/
 
-/* BODY tag */
-
-body {
-  font-family: verdana, helvetica, arial, sans-serif;
-  background-color: white;
-  margin: 0px;
-}
-
 #skiptocontent {
   display: none;
 }
 
-.block-marker {
-  display: none;
-}
-
-/* Site Header */
-
-#header {
-  background-color: #313063; 
-  color: white;
-  font-family: tahoma, verdana, helvetica, sans-serif;
-  font-size: 85%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 8px;
-  padding-right: 8px;
-  text-align: center;
-}
-
-#system-name {
-  font-size: 120%;
-  font-weight: bold;
-  float: left;
-}
-#system-name a {
-  color: white;
-  text-decoration: none;
-}
-#system-name a:hover {
-  color: white;
-  text-decoration: none;
-}
-
-#header-navigation {
-    float: right;
-    display:inline;
-    padding-right: 0.4em;
-}
-
-#header-navigation li {
-  display: inline;
-}
-
-#header-navigation a { 
-  border: solid 1px #313063;
-  text-align: center; 
-  padding: 1px;
-  padding-left: 4px;
-  padding-right: 4px;
-  color: white;
-  text-decoration: none;
-}
-#header-navigation a:hover { 
-  text-decoration: none;
-  background-color: #666666;
-  border: solid 1px #999999;
-}
-
-
+.block-marker {display: none;}
 
 /* User Messages */
 
@@ -140,22 +75,6 @@ body {
 
 .boxed-user-message .body {
   color: #990000;
-}
-
-
-/* Context Bar */
-
-#breadcrumb .compact {
-  margin-left: 0;
-  padding-left: 0;
-  border: none;
-} 
-#breadcrumb .compact li {
-  margin-left: 0;
-  padding-left: 2px;
-  border: none;
-  list-style: none;
-  display: inline;
 }
 
 
@@ -320,7 +239,6 @@ html>body #subnavbar { bottom: 0px }
   color: black;
 }
 
-
 #subnavbar-body { 
   border-bottom: 1px solid #016799;
   border-left: 1px solid #016799;
@@ -333,12 +251,102 @@ html>body #subnavbar { bottom: 0px }
   padding-right: 6px;
 }
 
+/* END NAVIGATION */
 
 
 /**********************************************************************
 /* Widgets
 /**********************************************************************/
 
+/* STANDARD TAGS -----------------------------------------------------------*/
+/* standard html (body, h1, p, form...) */
+
+body {
+  margin:5px 5px 0px 5px;
+  padding:0;
+  font:small/1.5em Tahoma, "Lucida Grande", sans-serif; voice-family: "\"}\""; voice-family:inherit;
+}
+
+h1 {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #666666;
+  margin-bottom: 12px;
+}
+
+h2 {
+  font-size: 1.1em;
+  font-weight:bold;
+  color: #555555;
+  margin-bottom: 12px;
+}
+
+h3 {
+  font-size: 1.05em;
+  font-weight:bold;
+  color: #444444;
+  margin-bottom: 12px;
+}
+
+h3 {
+  font-size: 1.00em;
+  font-weight:bold;
+  color: #444444;
+  margin-bottom: 12px;
+}
+
+a:link {
+  color: #235c96;
+  text-decoration:none;
+}
+
+a:visited {
+  color: #235c96;
+  text-decoration:none;
+}
+
+a:hover {
+  color: #235c96;
+  text-decoration:underline;
+  background: #CCCCCC;
+}
+
+/* BUTTON ---- */
+a.button { 
+  font: .85em arial;
+  border: solid 1px black;
+  background-color: #E1E1E1;
+  text-align: center; 
+  padding: 1px;
+  padding-left: 8px;
+  padding-right: 8px;
+  color: black;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+a.button:link { 
+  text-decoration: none;
+  border: solid 1px black;
+}
+
+a.button:hover { 
+  text-decoration: none;
+  background-color: #CCCCCC;
+  border: solid 1px black;
+}
+
+a.button:active { 
+  text-decoration: none;
+  border: solid 1px black;
+}
+
+/* END BUTTON ---- */
+
+.center {text-align: center;}
+.small {font-size: x-small;}
+
+/*  ARE THESE NEEDED ??? -----------------------------------------------------------*/
 
 /* Various forms of links */
 
@@ -361,45 +369,11 @@ html>body #subnavbar { bottom: 0px }
   display: inline;
 }
 
-a.refresh {
-  color: white;
-  text-decoration: underline;
+div.subsite-context-bar {
+  font-size: 85%;
+  margin-bottom: 4px;
+  position: relative;
 }
-a.refresh:hover {
-  color: red;
-  text-decoration: underline;
-}
-
-a.button { 
-  font: 85% arial;
-  border: solid 1px black;
-  background-color: #e1e1e1;
-  text-align: center; 
-  padding: 1px;
-  padding-left: 8px;
-  padding-right: 8px;
-  color: black;
-  text-decoration: none;
-  white-space: nowrap;
-}
-a.button:link { 
-  text-decoration: none;
-  border: solid 1px black;
-}
-a.button:visited { 
-  text-decoration: none;
-  border: solid 1px black;
-}
-a.button:hover { 
-  text-decoration: none;
-  background-color: #ccc;
-  border: solid 1px black;
-}
-a.button:active { 
-  text-decoration: none;
-  border: solid 1px black;
-}
-
 
 a.admin-button { 
   font: 85% arial;
@@ -444,6 +418,9 @@ a.admin:hover {
   background: #f00;
 }
 
+.highlight { 
+  background-color: #ffc; 
+}
 
 ul.action-links li {
   list-style: circle url(/resources/acs-subsite/action-link-marker.png);
@@ -451,40 +428,67 @@ ul.action-links li {
   margin-left: -16px;
 }
 
-div.subsite-context-bar {
-  font-size: 85%;
-  margin-bottom: 4px;
-  position: relative;
+/*  END ARE THESE NEEDED -----------------------------------------------------------*/
+
+/* END STANDARD TAGS ---------------------------------------------------------------*/
+
+/* HEADER TAGS ---------------------------------------------------------------------*/
+
+#header {
+  font-size: 0.92em;
+  background-color: #EFEFEF;
+  color: #444444;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
-
-
-/* Text Styles */
-
-h1 {
-  font-size: 120%;
-  margin-bottom: 12px;
-}
-h2 {
-  font-size: 115%;
-  margin-bottom: 12px;
-}
-h3 {
-  font-size: 110%;
-  margin-bottom: 12px;
-}
-h4 {
-  font-size: 105%;
-  margin-bottom: 12px;
+#header a {
+  color: #444444;
+  padding: 1px;
+  padding-left: 4px;
+  padding-right: 4px;
+  text-decoration: none;
 }
 
-.small {
-  font-size: 85%;
+#header a:visited {
+  color: #444444;
+  text-decoration:none;
 }
 
-.highlight { 
-  background-color: #ffc; 
+#header a:hover {
+  color: #444444;
+  text-decoration:underline;
 }
+
+#system-name {
+  font-size: 1.4em;
+  font-weight: bold;
+  float: left;
+}
+
+#header-navigation {
+  float: right;
+  display:inline;
+  padding-right: 0.4em;
+}
+
+#header-navigation li {
+  display: inline;
+}
+
+/* CONTEXT BAR ---- */
+
+#breadcrumbs {
+  padding-left: 100px
+}
+
+#breadcrumbs .compact li {
+  display: inline;
+}
+
+/* END CONTEXT BAR ---- */ 
+
+/* END HEADER TAGS -----------------------------------------------------------*/
 
 
 /* Portlets */
@@ -513,12 +517,6 @@ h4 {
   border-top: 0px; 
   padding: 6px 8px 6px 8px;
 }
-
-
-
-
-
-
 
 
 /* Generally Available Tabs */
@@ -642,14 +640,6 @@ html>body #tabs { bottom: 0px }
   background-color: #e1e1e1;
   margin-top: 4px;
 }
-
-
-
-
-
-
-
-
 
 
 /**********************************************************************
