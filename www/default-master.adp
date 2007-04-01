@@ -22,9 +22,9 @@
           <if @untrusted_user_id@ ne 0>#acs-subsite.Welcome_user#</if>
           <else>#acs-subsite.Not_logged_in#</else> | 
         </li>
-        <li><a href="@whos_online_url@" title="#acs-subsite.view_all_online_members#">@num_users_online@ <if @num_users_online@ eq 1>#acs-subsite.Member#</if><else>#acs-subsite.Members#</else> #acs-subsite.Online#</a></li>
+        <li><a href="@whos_online_url@" title="#acs-subsite.view_all_online_members#">@num_users_online@ <if @num_users_online@ eq 1>#acs-subsite.Member#</if><else>#acs-subsite.Members#</else> #acs-subsite.Online#</a> |</li>
         <if @pvt_home_url@ not nil>
-          <li><a href="@pvt_home_url@" title="#acs-subsite.Change_pass_email_por#">@pvt_home_name@</a></li>
+          <li><a href="@pvt_home_url@" title="#acs-subsite.Change_pass_email_por#">@pvt_home_name@</a> |</li>
         </if>
         <if @login_url@ not nil>
           <li><a href="@login_url@" title="#acs-subsite.Log_in_to_system#">#acs-subsite.Log_In#</a></li>
@@ -34,7 +34,7 @@
         </if>
       </ul>
     </div>
-    <div id="breadcrumb">
+    <div id="breadcrumbs">
       <if @context_bar@ not nil>
         @context_bar;noquote@
       </if>
