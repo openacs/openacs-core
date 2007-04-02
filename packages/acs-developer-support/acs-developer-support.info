@@ -19,7 +19,7 @@
         <maturity>0</maturity>
 
         <provides url="acs-developer-support" version="5.2.0d1"/>
-        <requires url="acs-kernel" version="5.2.0d1"/>
+        <requires url="acs-kernel" version="5.3.1a1"/>
 
         <callbacks>
         </callbacks>
