@@ -297,17 +297,15 @@ h3 {
 
 a:link {
   color: #235c96;
-  text-decoration:none;
+  text-decoration:underline;
 }
 
 a:visited {
   color: #235c96;
-  text-decoration:none;
 }
 
 a:hover {
   color: #235c96;
-  text-decoration:underline;
   background: #CCCCCC;
 }
 
@@ -442,24 +440,6 @@ ul.action-links li {
   padding-bottom: 4px;
 }
 
-#header a {
-  color: #444444;
-  padding: 1px;
-  padding-left: 4px;
-  padding-right: 4px;
-  text-decoration: none;
-}
-
-#header a:visited {
-  color: #444444;
-  text-decoration:none;
-}
-
-#header a:hover {
-  color: #444444;
-  text-decoration:underline;
-}
-
 #system-name {
   font-size: 1.4em;
   font-weight: bold;
@@ -467,29 +447,39 @@ ul.action-links li {
   padding-left: 0.4em;
 }
 
-#header-navigation {
-  float: right;
-  display:inline;
-  padding-right: 0.4em;
+#system-name a {
+  color: #333333;
+  text-decoration: none;
 }
 
-#header-navigation li {
-  display: inline;
+#header-navigation {
+  float: right;
+  padding-right: 0.4em;
 }
 
 /* CONTEXT BAR ---- */
 
 #breadcrumbs {
-  padding-left: 100px
-}
-
-#breadcrumbs .compact li {
-  display: inline;
+  clear: right;
+  padding-left: 100px;
 }
 
 /* END CONTEXT BAR ---- */ 
 
 /* END HEADER TAGS -----------------------------------------------------------*/
+
+/* LISTS -----------------------------------------------------------*/
+
+ul.compact, .action-list ul{
+  margin: 0px;
+  padding: 0px;
+}
+ul.compact li, .action-list ul li {
+  list-style:none;
+  display: inline;
+}
+
+/* END OF LISTS */
 
 
 /* Portlets */
