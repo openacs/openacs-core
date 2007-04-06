@@ -144,15 +144,21 @@ ad_proc -public email_image::new_item {
     set bg "xc:$bgcolor"
     
     # Creating an image of the rigth length where the email will be
-    exec convert -size $size $bg $dest_path
+    if {[catch {exec convert -size $size $bg $dest_path} errmsg]} {
+	return ""
+    }
     
     # Creating the image with the email of the user on it
-    exec convert -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $email" \
-        $dest_path $dest_path
+    if {[catch {exec convert -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $email" \
+		    $dest_path $dest_path} errmsg]} {
+	return ""
+    }
 
     if { [string equal $transparent ""] || [string equal $transparent "1"] } {
-        # Making the bg color transparent
-        exec convert $dest_path -transparent $bgcolor $dest_path
+	# Making the bg color transparent
+	if {[catch {exec convert $dest_path -transparent $bgcolor $dest_path} errmsg]} {
+	    return ""
+	}
     }
     
     # Time to store the image in the content repository
