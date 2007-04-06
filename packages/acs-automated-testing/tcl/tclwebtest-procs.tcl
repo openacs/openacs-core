@@ -151,13 +151,16 @@ ad_proc twt::user::delete {
         -permanent
 }
 
-ad_proc twt::user::login { email password }  {
+ad_proc twt::user::login { email password {username ""}}  {
     tclwebtest for logging the user in.
 
     @param email Email of user to log in.
     @param password Password of user to log in.
 } {
-
+    if {$username eq ""} {
+	set username $email
+    }
+    aa_log "twt::login email $email password $password username $username"
     tclwebtest::cookies clear
 
     # Request the start page
@@ -165,8 +168,21 @@ ad_proc twt::user::login { email password }  {
 
     # Login the user
     tclwebtest::form find ~n login
-    tclwebtest::field find ~n email
-    tclwebtest::field fill "$email"
+    
+    set local_authority_id [auth::authority::local]
+    set local_authority_pretty_name [auth::authority::get_element -authority_id $local_authority_id -element pretty_name]
+    if {![catch {tclwebtest::field find ~n authority_id} errmsg]} {
+	tclwebtest::field select $local_authority_pretty_name
+	aa_log "twt::login selecting authority_id $local_authority_id"
+    }
+    if {[catch {tclwebtest::field find ~n email} errmsg]} {
+	tclwebtest::field find ~n username
+	tclwebtest::field fill $username
+	aa_log "twt::login using username instead of email"
+    } else {
+	aa_log "twt::login using email instead of username"
+	tclwebtest::field fill "$email"
+    }
     tclwebtest::field find ~n password
     tclwebtest::field fill $password
     tclwebtest::form submit
@@ -175,6 +191,7 @@ ad_proc twt::user::login { email password }  {
     set home_uri "/pvt/home"
     twt::do_request $home_uri
     set response_url [tclwebtest::response url]
+
     if { ![string match "*${home_uri}*" $response_url] } {
         if { [empty_string_p [cc_lookup_email_user $email]] } {
             error "Failed to login user with email=\"$email\" and password=\"$password\". No user with such email in database."
