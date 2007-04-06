@@ -130,7 +130,7 @@ ad_form -extend -name user_info -form {
 } -on_submit {
 
     # Makes the email an image or text according to the level of privacy
-    email_image::edit_email_image -user_id $user_id -new_email $email
+    catch {email_image::edit_email_image -user_id $user_id -new_email $email} errmsg
 
     set user_info(authority_id) $user(authority_id)
     set user_info(username) $user(username)
