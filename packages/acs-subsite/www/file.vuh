@@ -6,7 +6,7 @@
 # @creation-date 2006-08-01
 # @cvs-id $Id$
 
-if {![regexp {^/([0-9]{1,8})(/(private)/([0-9]{1,8}))?(/(.+))?$} [ad_conn path_info] match object_id private_slash private dummy anchor]} {
+if {![regexp {^/([0-9]{1,8})(/(private)/([0-9]{1,8}))?(/(.*))?$} [ad_conn path_info] match object_id private_slash private dummy anchor]} {
     ad_return_warning "Invalid object id" [subst {
         The identifier given for this object is invalid.  Please check your url 
         or contact the webmaster if you think it should work.
@@ -40,12 +40,17 @@ if {$private eq "private"} {
 	-party_id [ad_conn user_id]]} {
 	ns_returnnotfound
 	ad_script_abort
+	}
 } else {
-	permission::require_permission \
-    -privilege "read" \
-    -object_id $object_id \
-    -party_id [ad_conn user_id]
+	if {![permission::permission_p \
+	    -privilege "read" \
+	    -object_id $object_id \
+	    -party_id [ad_conn user_id]]} {
+		ns_returnnotfound 
+		ad_script_abort
+	}
 }
+
 # find a cr_item and serve it
 
 cr_write_content -item_id $object_id
