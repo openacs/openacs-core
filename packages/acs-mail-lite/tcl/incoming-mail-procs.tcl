@@ -14,6 +14,18 @@ package require base64 2.3.1
 namespace eval acs_mail_lite {
 
     #---------------------------------------
+    ad_proc -public address_domain {} {
+	@returns domain address to which bounces are directed to
+    } {
+        set domain [get_parameter -name "BounceDomain"]
+        if { $domain eq "" } {
+	    regsub {http://} [ns_config ns/server/[ns_info server]/module/nssock hostname] {} domain
+	}
+	return $domain
+    }
+    
+
+    #---------------------------------------
     ad_proc -private load_mails {
         -queue_dir:required
     } {
