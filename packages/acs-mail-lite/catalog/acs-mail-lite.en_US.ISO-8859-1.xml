@@ -4,6 +4,7 @@
   <msg key="Associated_files">Associated Files:</msg>
   <msg key="BCC">BCC</msg>
   <msg key="Bounce_disabled">Bouncing recorded as disabled. You will receive E-Mails again.</msg>
+  <msg key="Bouncing_users">Bouncing users</msg>
   <msg key="CC">CC</msg>
   <msg key="cc_help">Send copy to multiple addresses separated by &quot;;&quot;</msg>
   <msg key="check_uncheck">Check/Uncheck</msg>
@@ -15,6 +16,7 @@
   <msg key="Send">Send</msg>
   <msg key="Sender">Sender</msg>
   <msg key="Subject">Subject</msg>
+  <msg key="Unbounce">Unbounce</msg>
   <msg key="Untitled">Untitled</msg>
   <msg key="Upload_file">Upload File</msg>
   <msg key="Your_message_was_sent_to">Your message was sent to: &amp;lt;strong&amp;gt;%recipients%&amp;lt;/strong&amp;gt;</msg>
