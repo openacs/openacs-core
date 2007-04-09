@@ -73,22 +73,34 @@ namespace eval acs_mail_lite {
 	    ns_log Debug "load_mails: opening $msg"
 	    array set email {}
 	    
+	    # This will parse the E-mail and extract the files to the file system
 	    parse_email -file $msg -array email
+	    
  	    set email(to) [parse_email_address -email $email(to)]
  	    set email(from) [parse_email_address -email $email(from)]
+	    set subject [lindex $email(subject) 0]
+	    if {$email(bodies) eq ""} {
+		ad_script_abort
+		ns_log Notice "E-Mail without body"
+	    }
 
-	    # Special treatment for e-mails which look like they contain an object_id
-	    set callback_executed_p 0
-	    set pot_object_id [lindex [split $email(to) "@"] 0]
-	    if {[ad_var_type_check_number_p $pot_object_id]} {
-		if {[acs_object::object_p -id $pot_object_id]} {
-		    callback acs_mail_lite::incoming_object_email -array email -object_id $pot_object_id
+	    # Do no execute any callbacks if the email is an autoreply.
+	    # Thanks to Vinod for the idea and the code
+	    set callback_executed_p [acs_mail_lite::autoreply_p -subject $subject -from $email(from)]
 
-		    # Mark that the callback has been executed already
-		    set callback_executed_p 1
+	    if {!$callback_executed_p} {
+		# Special treatment for e-mails which look like they contain an object_id
+		set pot_object_id [lindex [split $email(to) "@"] 0]
+		if {[ad_var_type_check_number_p $pot_object_id]} {
+		    if {[acs_object::object_p -id $pot_object_id]} {
+			callback acs_mail_lite::incoming_object_email -array email -object_id $pot_object_id
+			
+			# Mark that the callback has been executed already
+			set no_callback_p 1
+		    }
 		}
 	    }
-	    
+
 	    if {!$callback_executed_p} {
 		# We execute all callbacks now
 		callback acs_mail_lite::incoming_email -array email
@@ -205,10 +217,9 @@ namespace eval acs_mail_lite {
 	
 	#now extract all parts (bodies/files) and fill the email array
 	foreach part $all_parts {
-
 	    # Attachments have a "Content-disposition" part
 	    # Therefore we filter out if it is an attachment here
-	    if {[catch {mime::getheader $part Content-disposition}]} {
+	    if {[catch {mime::getheader $part Content-disposition}] || [mime::getheader $part Content-disposition] eq "inline"} {
 		switch [mime::getproperty $part content] {
 		    "text/plain" {
 			lappend bodies [list "text/plain" [mime::getbody $part]]
@@ -222,19 +233,20 @@ namespace eval acs_mail_lite {
 		set body [mime::getbody $part -decode]
 		set content  $body
 		set params [mime::getproperty $part params]
-		if {[lindex $params 0] eq "name"} {
-		    set filename [lindex $params 1]
-		} else {
-		    set filename ""
-		}
+		array set param $params
 
-		# Determine the content_type
-		set content_type [mime::getproperty $part content]
-		if {$content_type eq "application/octet-stream"} {
-		    set content_type [ns_guesstype $filename]
-		}
+		# Append the file if there exist a filename to use. Otherwise do not append
+		if {[exists_and_not_null param(name)]} {
+		    set filename $param(name)
 
-		lappend files [list $content_type $encoding $filename $content]
+		    # Determine the content_type
+		    set content_type [mime::getproperty $part content]
+		    if {$content_type eq "application/octet-stream"} {
+			set content_type [ns_guesstype $filename]
+		    }
+		    
+		    lappend files [list $content_type $encoding $filename $content]
+		}
 	    }
 	}
 
@@ -244,5 +256,31 @@ namespace eval acs_mail_lite {
 	#release the message
 	mime::finalize $mime -subordinates all
     }    
-        
+
+    ad_proc -public autoreply_p {
+	{-subject ""}
+	{-from ""}
+    } {
+	Parse the subject, from and body to determin if the email is an auto reply
+	Typical autoreplies are "Out of office" messages. This is what the procedure does
+	
+	@param subject Subject of the Email that will be scanned for "out of office"
+	@param from From address which will be checked if it is coming from a mailer daemon
+
+	@return 1 if this is actually an autoreply
+    } {
+	set autoreply_p 0
+	if {$subject ne ""} {
+	    # check subject
+	    set autoreply_p [regexp -nocase "(out of.*office|automated response|autoreply)" $subject]
+	    set autoreply_p [regexp "NDN" $subject]
+	    set autoreply_p [regexp "\[QuickML\] Error" $subject]
+	} 
+
+	if {$from ne ""} {
+	    # check from if it comes from the mailer daemon
+	    set autoreply_p [regexp -nocase "mailer.*daemon" $from]
+	}
+	return $autoreply_p
+    }
 }
