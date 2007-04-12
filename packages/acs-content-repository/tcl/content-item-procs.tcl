@@ -153,7 +153,10 @@ ad_proc -public ::content::item::delete {
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-05-28
 
-    Delete a content item
+    Delete a content item from the database. If the content item
+    to delete has children content items referencing its parent
+    via acs_objects.context_id then this proc will fail.
+
     @param item_id
 } {
     return [package_exec_plsql \
@@ -294,7 +297,7 @@ ad_proc -public ::content::item::content_type {
     Retrieves the content type of the item. If the item does not exist,
     returns an empty string.
 
-    @param  item_id   The item id
+    @param  item_id   The item_id of the content item
 
     @return The content type of the item, or an empty string if no such
     item exists
@@ -305,25 +308,19 @@ ad_proc -public ::content::item::content_type {
 }
 
 
-ad_proc -public content::item::get_best_revision {
-    -item_id:required
-} {
-    @param item_id
 
-    @return NUMBER(38)
-} {
-    return [package_exec_plsql -var_list [list \
-        [list item_id $item_id ] \
-    ] content_item get_best_revision]
-}
 
 
 ad_proc -public content::item::get_content_type {
     -item_id:required
 } {
-    @param item_id
+    Retrieves the content type of the item. If the item does not exist,
+    returns an empty string.
 
-    @return VARCHAR2(100)
+    @param  item_id   The item_id of the content item
+
+    @return The content type of the item, or an empty string if no such
+    item exists
 } {
     return [package_exec_plsql -var_list [list \
         [list item_id $item_id ] \
@@ -349,11 +346,14 @@ ad_proc -public content::item::get_id {
     {-root_folder_id ""}
     {-resolve_index ""}
 } {
-    @param item_path
-    @param root_folder_id
-    @param resolve_index
+  Looks up the item_path starting with the root folder and returns item_id for that
+  content item or empty, if none exists
 
-    @return NUMBER(38)
+  @param item_path
+  @param root_folder_id
+  @param resolve_index
+
+  @return The item_id of the found item, or the empty string on failure
 } {
     return [package_exec_plsql -var_list [list \
         [list item_path $item_path ] \
@@ -362,13 +362,41 @@ ad_proc -public content::item::get_id {
     ] content_item get_id]
 }
 
+ad_proc -public content::item::get_best_revision {
+    -item_id:required
+} {
+  Attempts to retrieve the live revision for the item. If no live revision
+  exists, attempts to retrieve the latest revision. If the item has no
+  revisions, returns an empty string.
+
+  @param  item_id   The item_id of the content item
+ 
+  @return The best revision_id for the item, or an empty string if no
+          revisions exist
+
+  @see content::revision::item_id
+  @see content::item::get_live_revision 
+  @see content::item::get_latest_revision
+} {
+    return [package_exec_plsql -var_list [list \
+        [list item_id $item_id ] \
+    ] content_item get_best_revision]
+}
 
 ad_proc -public content::item::get_latest_revision {
     -item_id:required
 } {
-    @param item_id
+  Retrieves the latest revision for the item. If the item has no live
+  revision, returns an empty string.
+ 
+  @param  item_id   The item_id of the content item
+ 
+  @return The latest revision_id for the item, or an empty string if no
+          revisions exist
 
-    @return NUMBER(38)
+  @see content::revision::item_id
+  @see content::item::get_best_revision
+  @see content::item::get_live_revision 
 } {
     return [package_exec_plsql -var_list [list \
         [list item_id $item_id ] \
@@ -379,9 +407,17 @@ ad_proc -public content::item::get_latest_revision {
 ad_proc -public content::item::get_live_revision {
     -item_id:required
 } {
-    @param item_id
+  Retrieves the live revision for the item. If the item has no live
+  revision, returns an empty string.
+ 
+  @param  item_id   The item_id of the content item
+ 
+  @return The live revision_id for the item, or an empty string if no
+          live revision exists
 
-    @return NUMBER(38)
+  @see content::revision::item_id
+  @see content::item::get_best_revision 
+  @see content::item::get_latest_revision 
 } {
     return [package_exec_plsql -var_list [list \
         [list item_id $item_id ] \
@@ -464,10 +500,16 @@ ad_proc -public content::item::get_template {
     -item_id:required
     -use_context:required
 } {
-    @param item_id
-    @param use_context
-
-    @return template_id
+  Retrieves the template which can be used to render the item. If there is
+  a template registered directly to the item, returns the id of that template.
+  Otherwise, returns the id of the default template registered to the item's
+  content_type. Returns an empty string on failure.
+ 
+  @param  item_id   The item_id
+  @param  context   The context in which the template will be used (e.g. public)
+ 
+  @return The template_id of the template which can be used to render the
+    item, or an empty string on failure
 } {
     return [package_exec_plsql -var_list [list \
         [list item_id $item_id ] \
@@ -480,10 +522,16 @@ ad_proc -public content::item::get_title {
     -item_id:required
     {-is_live ""}
 } {
-    @param item_id
-    @param is_live
-
-    @return VARCHAR2(1000)
+  Get the title for the item. If a live revision for the item exists,
+  use the live revision. Otherwise, use the latest revision.
+ 
+  @param item_id    The item_id of the content item
+  @param is_live
+ 
+  @return The title of the item
+ 
+  @see content::item::get_best_revision
+  @see content::item::get_title
 } {
     return [package_exec_plsql -var_list [list \
         [list item_id $item_id ] \
@@ -496,10 +544,14 @@ ad_proc -public content::item::get_virtual_path {
     -item_id:required
     {-root_folder_id ""}
 } {
-    @param item_id
-    @param root_folder_id
+  Retrieves the relative path to the item. The path is relative to the
+  page root, and has no extension (Example: "/foo/bar/baz"). 
+ 
+  @param  item_id         The item_id for the item, for which the path is computed
+  @param  root_folder_id  Starts path resolution from this folder.
+                          Defaults to the root of the sitemap (when null).
 
-    @return VARCHAR2
+  @return The path to the item, or an empty string on failure
 } {
     return [package_exec_plsql -var_list [list \
         [list item_id $item_id ] \
@@ -527,9 +579,20 @@ ad_proc -public content::item::is_index_page {
 ad_proc -public content::item::is_publishable {
     -item_id:required
 } {
-    @param item_id
 
-    @return CHAR
+  Determine if the item is publishable. The item is publishable only
+  if:
+  <ul>
+   <li>All child relations, as well as item relations, are satisfied
+     (according to min_n and max_n)</li>
+   <li>The workflow (if any) for the item is finished</li>
+  </ul>
+ 
+  @param  item_id   The item_id of the content item
+
+  @see content::item::is_publishable
+ 
+  @return    't' if the item is publishable, 'f' otherwise
 } {
     return [package_exec_plsql -var_list [list \
         [list item_id $item_id ] \
@@ -708,13 +771,13 @@ ad_proc -public content::item::copy {
 
     copy a content item to a new content item
 
-    @param item_id - item id of the content to be copied from. source content item
+    @param item_id - item_id of the content to be copied from. source content item
     @param target_folder_id - destination folder where the new content item is be passed
     @param creation_user - 
     @param creation_ip -
     @param name - the name of the new item, useful if you are copying in the same folder.
 
-    @return item id of the new copied item
+    @return item_id of the new copied item
 } {
     return [package_exec_plsql \
                 -var_list [list \
@@ -786,12 +849,44 @@ ad_proc -public content::item::get_id_by_name {
     {-name:required}
     {-parent_id:required}
 } {
-    Returns the item_id of the a content item with the passed in name
+    Returns The item_id of the a content item with the passed in name
 
     @param name Name of the content item
     @param parent_id Parent_id of the content item
 
-    @return the item id belonging to the name, empty string if no item_id was found
+    @return The item_id belonging to the name, empty string if no item_id was found
 } {
     return [db_string get_item_id_by_name {} -default ""]
+}
+
+#
+#
+#
+
+ad_proc -public ::content::item::get_publish_status { 
+    -item_id:required
+} {
+  Get the publish status of the item. The publish status will be one of
+  the following: 
+  <ul>
+    <li><tt>production</tt> - The item is still in production. The workflow
+      (if any) is not finished, and the item has no live revision.</li>
+    <li><tt>ready</tt> - The item is ready for publishing</li> 
+    <li><tt>live</tt> - The item has been published</li>
+    <li><tt>expired</tt> - The item has been published in the past, but 
+     its publication has expired</li>
+  </ul>
+ 
+  @param item_id  The item_id of the content item
+ 
+  @return The publish status of the item, or the empty string on failure
+ 
+  @see proc content::item::is_publishable
+
+} {
+
+  set publish_status [db_string gps_get_publish_status \
+                          "select publish_status from cr_items where item_id = :item_id"]
+
+  return $publish_status
 }
