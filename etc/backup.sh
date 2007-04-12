@@ -24,7 +24,7 @@ FULL_SPACE_FREE=5                    # must be this many GB free to run full bac
                                      # if not, try incremental
 INCR_SPACE_FREE=1                    # must be this many GB free to run incremental
                                      # if not, don't back up
-OTHERHOST=                           # another server, to receive backup
+OTHERHOST=theservice.de              # another server, to receive backup
                                      # files
                                      # leave blank to skip scp exchange
 
@@ -34,7 +34,7 @@ WIPE_OLD_AFTER_SCP_FULL=false        # if true, then whenever a full backup file
                                      # rationale is, keep last good full + incrementals
                                      # on this box, keep everything on other box
 
-OTHERUSER=backup                     # the user on the recipient server
+OTHERUSER=malte                     # the user on the recipient server
                                      # must have silent authentication, ie,
                                      # certificates
 
@@ -49,6 +49,8 @@ ORACLE8I_DBS="service0"              # space-separated list of Oracle8i database
                                      # space-separated list of directories to be backed up
 
 KEEP_DAYS=7                          # Number of days to keep backups in $BACKUPDIR
+RSYNC="no"                          # Use RSYNC for the content-repository. Useful with large amount of content
+
 #---------------------------------------------------------------------
 # a space-delimited list of directories to back up
 # A minimal backup  
@@ -59,7 +61,7 @@ DIRECTORIES="/var/lib/aolserver/service0"
 #---------------------------------------------------------------------
 
 # System Program Paths
-PG_BINDIR=/usr/local/pgsql/bin       # path to PostGreSQL binaries
+PG_BINDIR=/usr/local/pg80/bin       # path to PostGreSQL binaries
 TIMEDIR=$BACKUPDIR/last-full         # where to store time of full backup
 TAR=/bin/tar                         # name and location of tar
 CHOWN=/bin/chown
@@ -105,12 +107,12 @@ if [ ! -s $TIMEDIR/$COMPUTER-full-date ];
     TYPE="full";
 fi
 
-if [[ "$DOM" = "01" || "$DOW" = "Sun" ]];
+if [[ $DOM == "01" || $DOW == "Sun" ]];
     then
     TYPE="full";
 fi
 
-if [ "$TYPE" = "full" ];
+if [ $TYPE == "full" ];
     then
     NEW_FLAG=""
 else
@@ -122,23 +124,18 @@ fi
 #---------------------------------------------------------------------
 # Check for free space
 #---------------------------------------------------------------------
-# get free byte count -
+# get free byte count
 free=`df | grep $BACKUPPART | awk '{print $4}'`
-if [ "$free" = "" ]
-    then
-    # BACKUPPART may be too long, causing df output to wrap, let's try another method
-    free=`df | grep -A 1 $BACKUPPART | awk '{print $3}' | sed /^$/d`
-fi
 
 # force to incremental if there isn't room for full
-if [ "$free" -lt `expr $FULL_SPACE_FREE \* 1024 \* 1024` ];
+if [ $free -lt `expr $FULL_SPACE_FREE \* 1024 \* 1024` ];
     then
     TYPE="incremental"
     echo "Not enough free space for full backup; trying incremental"
 fi
 
 # abort if there isn't room for incremental
-if [ "$free" -lt `expr $INCR_SPACE_FREE \* 1024 \* 1024` ];
+if [ $free -lt `expr $INCR_SPACE_FREE \* 1024 \* 1024` ];
     then
     echo "Not enough free space for backup; aborting"
     exit -1
@@ -163,7 +160,6 @@ do
     time $PG_BINDIR/pg_dump -f $dmp_file -Fp $dbname -h $DBHOST
     /bin/ls -lh $dmp_file | awk '{print $5}'
     gzip -f $dmp_file
-    time $PG_BINDIR/vacuumdb -fz -U postgres $dbname -h $DBHOST
 done
 
 #---------------------------------------------------------------------
@@ -192,17 +188,30 @@ for directory in $DIRECTORIES
   FULLNAME=$BACKUPDIR/$DATE-$COMPUTER-${directory//\//-}-backup-$TYPE.tar.gz
   # to use bzip2 instead of gzip, change z to j in the tar flags
   cd $directory
-  tar -zcpsh --file $FULLNAME $NEW_FLAG .
+
+  if [[ $RSYNC == "yes" ]];
+    then
+      # Exclude at least on GNU Tar is picky about using the full patch and the order exclude and directoy.
+      tar -zcpsh --file $FULLNAME --exclude "$directory/content-repository-content-files" $NEW_FLAG $directory
+  else
+      tar -zcpsh . --file $FULLNAME $NEW_FLAG
+  fi
+
   $CHOWN $BACKUPUSER $FULLNAME
   $CHMOD 660 $FULLNAME
   if [ -n "$OTHERHOST" ]
       then 
       
       scp_success=1
-      scp_success=`$SCP -q $FULLNAME $OTHERUSER@$OTHERHOST:$BACKUPDIR`
+      if [[ $RSYNC == "yes" ]];
+	  then
+	  rsync -aq $BACKUPDIR $OTHERUSER@$OTHERHOST:$BACKUPDIR
+      else
+	  scp_success=`$SCP -q $FULLNAME $OTHERUSER@$OTHERHOST:$BACKUPDIR`
+      fi
       
      # if scp returns success, see if we should wipe
-      if [[ scp_success -eq 0 && "$WIPE_OLD_AFTER_SCP_FULL" = "true" && "$TYPE" = "full" ]];
+      if [[ scp_success -eq 0 && $WIPE_OLD_AFTER_SCP_FULL == "true" && $TYPE == "full" ]];
 	  then
 
           # wipe out all similar backups except for the just-copied one
@@ -223,9 +232,9 @@ done
 # incremental backups are relative to the last successful full
 # backup
 
-if [ "$TYPE" = "full" ];
+if [ $TYPE == "full" ];
     then
-    NEW_FLAG=""
+    NEWER=""
     NOW=`date +%Y-%m-%d`
     echo $NOW> $TIMEDIR/$COMPUTER-full-date;
 fi
