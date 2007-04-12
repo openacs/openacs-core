@@ -354,9 +354,11 @@ ad_proc -public content::revision::is_live {
 ad_proc -public content::revision::item_id {
     -revision_id:required
 } {
-    @param revision_id
-
-    @return item_id
+  Gets the item_id of the item to which the revision belongs.
+ 
+  @param  revision_id   The revision id
+ 
+  @return The item_id of the item to which this revision belongs
 } {
     return [db_string item_id {} -default ""]
 }
