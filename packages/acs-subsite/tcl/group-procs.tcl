@@ -105,7 +105,6 @@ ad_proc -public group::new {
     lappend var_list [list context_id $context_id]
     lappend var_list [list $id_column $group_id]
     if { ![empty_string_p $group_name] } {
-	set group_name [lang::util::convert_to_i18n -prefix "group" -text "$group_name"]
         lappend var_list [list group_name $group_name]
 	if {[empty_string_p $pretty_name]} {
 	    set pretty_name $group_name
