@@ -352,6 +352,7 @@ create table acs_permissions (
 
 create index acs_permissions_grantee_idx on acs_permissions (grantee_id);
 create index acs_permissions_privilege_idx on acs_permissions (privilege);
+create index acs_permissions_object_id_idx on acs_permissions(object_id); 
 
 -- Added table to materialize view that previously used 
 -- acs_privilege_descendant_map name
