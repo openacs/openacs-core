@@ -105,7 +105,6 @@ ad_proc -public group::new {
     lappend var_list [list context_id $context_id]
     lappend var_list [list $id_column $group_id]
     if { $group_name ne "" } {
-	set group_name [lang::util::convert_to_i18n -prefix "group" -text "$group_name"]
         lappend var_list [list group_name $group_name]
 	if {$pretty_name eq ""} {
 	    set pretty_name $group_name
@@ -128,7 +127,7 @@ ad_proc -public group::new {
     # (through the pretty name). We just have to change the display of
     # groups to the title at the appropriate places.
 
-    if { ![empty_string_p [info procs "::lang::util::convert_to_i18n"]] } {
+    if { [info procs "::lang::util::convert_to_i18n"] ne "" } {
 	set pretty_name [lang::util::convert_to_i18n -message_key "group_title_${group_id}" -text "$pretty_name"]
     } 
 	
