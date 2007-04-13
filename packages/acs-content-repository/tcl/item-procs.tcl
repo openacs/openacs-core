@@ -411,8 +411,6 @@ ad_proc -public -deprecated item::get_publish_status { item_id } {
 
 ad_proc -public -deprecated item::is_publishable { item_id } {
 
-  @public is_publishable
- 
   Determine if the item is publishable. The item is publishable only
   if:
   <ul>
@@ -544,7 +542,7 @@ ad_proc -public -deprecated item::get_template_url { item_id {context public} } 
     return ""
   }
 
-  return [get_url $template_id]
+  return [::content::item::get_virtual_path -item_id $template_id]
 }
 
 ad_proc -public -deprecated item::get_url {

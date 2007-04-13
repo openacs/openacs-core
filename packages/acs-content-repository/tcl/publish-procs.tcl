@@ -19,7 +19,6 @@ ad_proc -public publish::get_page_root {} {
     
     @see publish::get_template_root
     @see publish::get_publish_roots
-    
 } {
     # LARS TODO: This parameter doesn't exist, it's a remnant from the CMS package
     set root_path [parameter::get \
@@ -271,7 +270,7 @@ ad_proc -public publish::handle_binary_file {
   set error_msg ""
 
   if { [template::util::is_nil opts(revision_id)] } {
-    set revision_id [item::get_live_revision $item_id]
+    set revision_id [::content::item::get_live_revision -item_id $item_id]
   } else {
     set revision_id $opts(revision_id)
   }
@@ -349,14 +348,14 @@ ad_proc -public publish::item_include_tag { item_id {extra_args {}} } {
  
   @return The HTML for the include tag
  
-  @see item::get_url
+  @see content::item::get_virtual_path
   @see publish::html_args
 
 } {
 
   # Concatenate all the extra html arguments into a string
   set extra_html [publish::html_args $extra_args]""
-  set item_url [item::get_url $item_id]
+  set item_url [::content::item::get_virtual_path -item_id $item_id]
   return "<include src=\"$item_url\" $extra_html item_id=$item_id>"
 }
 
@@ -443,7 +442,7 @@ ad_proc -private publish::merge_with_template { item_id args } {
 
 } {
   #set ::content::item_id $item_id
-  set ::content::item_url [item::get_url $item_id]
+  set ::content::item_url [::content::item::get_virtual_path -item_id $item_id]
 
   template::util::get_opts $args
 
@@ -451,11 +450,11 @@ ad_proc -private publish::merge_with_template { item_id args } {
   if { ![template::util::is_nil opts(revision_id)] } {
     set revision_id $opts(revision_id)
   } else {
-    set revision_id [item::get_live_revision $item_id]
+    set revision_id [::content::item::get_live_revision -item_id $item_id]
   }
 
   # Get the template 
-  set ::content::template_url [item::get_template_url $item_id]    
+  set ::content::template_url [::content::item::get_template -item_id $item_id -use_context public]
 
   if {$::content::template_url eq {}} { 
     ns_log Warning "publish::merge_with_template: no template for item $item_id"
@@ -495,7 +494,7 @@ ad_proc -public publish::handle::text { item_id args } {
   template::util::get_opts $args
 
   if { [template::util::is_nil opts(revision_id)] } {
-    set revision_id [item::get_live_revision $item_id]
+    set revision_id [::content::item::get_live_revision -item_id $item_id]
   } else {
     set revision_id $opts(revision_id)
   } 
@@ -626,7 +625,7 @@ ad_proc -private publish::get_main_revision_id {} {
 
   if { [template::util::is_nil ::content::revision_id] } {
     set item_id [get_main_item_id]
-    set ret [item::get_live_revision $item_id]
+    set ret [::content::item::get_live_revision -item_id $item_id]
   } else {
     set ret $::content::revision_id
   }
@@ -683,7 +682,7 @@ ad_proc -private publish::handle_item { item_id args } {
 
   # Process options
   if { [template::util::is_nil opts(revision_id)] } {
-    set revision_id [item::get_live_revision $item_id]
+    set revision_id [::content::item::get_live_revision -item_id $item_id]
   } else {
     set revision_id $opts(revision_id)
   }
