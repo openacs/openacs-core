@@ -7,18 +7,18 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.3.1a1" url="http://openacs.org/repository/download/apm/acs-mail-lite-5.3.1a1.apm">
+    <version name="5.3.1b1" url="http://openacs.org/repository/download/apm/acs-mail-lite-5.3.1b1.apm">
         <owner url="mailto:malte.sussdorff@cognovis.de">Malte Sussdorff</owner>
         <owner url="mailto:timo@studio-k4.de">Timo Hentschel</owner>
         <summary>Simplified reliable email transmission with bounce management.</summary>
-        <release-date>2007-03-24</release-date>
+        <release-date>2007-04-15</release-date>
         <vendor url="http://www.openacs.org">OpenACS</vendor>
         <description format="text/html">This package provides a simple ns_sendmail-like interface for sending messages, but queues messages in the database to ensure reliable sending and make sending a message 'transactional'. Prefered over acs-messaging or acs-mail.</description>
         <maturity>3</maturity>
 
-        <provides url="acs-mail-lite" version="5.3.1a1"/>
-	<requires url="acs-kernel" version="5.3.1a1"/>
-	<requires url="acs-service-contract" version="5.3.1a1"/>
+        <provides url="acs-mail-lite" version="5.3.1b1"/>
+	<requires url="acs-kernel" version="5.3.1b1"/>
+	<requires url="acs-service-contract" version="5.3.1b1"/>
 
         <callbacks>
             <callback type="before-uninstall"  proc="acs_mail_lite::before_uninstall"/>
