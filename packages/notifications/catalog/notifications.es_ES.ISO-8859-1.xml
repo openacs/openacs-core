@@ -23,6 +23,7 @@
   <msg key="lt_system_name_-_Batched">[%system_name% - Notificación en Batch]</msg>
   <msg key="lt_Ubsubscribe_Notification_">Anular notificaciones para %pretty_name%</msg>
   <msg key="lt_You_have_no_notificat">No tiene avisos.</msg>
+  <msg key="lt_You_have_requested_no">Desuscribirse</msg>
   <msg key="lt_You_may_a_hrefsub_url">Solicitar notificaciones</msg>
   <msg key="Manage_Notifications">Administrar Notificaciones</msg>
   <msg key="Notification">Notificaciones</msg>
