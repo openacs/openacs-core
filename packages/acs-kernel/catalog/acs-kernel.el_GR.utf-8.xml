@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="acs-kernel" package_version="5.3.1a1" locale="el_GR" charset="utf-8">
+
+  <msg key="common_Administration">Διαχείριση</msg>
+  <msg key="common_Cancel">Άκυρο</msg>
+  <msg key="common_go">Προβολή</msg>
+  <msg key="common_no">Όχι</msg>
+  <msg key="common_update">Αλλαγή</msg>
+  <msg key="Main_Site">Κυρίως Ιστοχώρος</msg>
+</message_catalog>
