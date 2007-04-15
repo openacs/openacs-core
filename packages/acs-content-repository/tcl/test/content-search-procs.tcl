@@ -110,9 +110,8 @@ aa_register_case -cats db cr_item_search_triggers {
 		-events [list DELETE]
 	    cr_item_search::remove_from_queue \
 		-revision_id $latest_revision
-
-	    db_dml set_publish_date \
-		"update cr_revisions set publish_date=current_timestamp + '1 day' :: interval where revision_id=:latest_revision"
+            set next_date [clock format [clock scan "tomorrow"] -format "%Y-%m-%d"]
+	    db_dml set_publish_date "update cr_revisions set publish_date=:next_date where revision_id=:latest_revision"
 	    aa_log "Publish Date in future, live revision not set"
 	    cr_item_search::assert_not_in_queue \
 		-revision_id $latest_revision \
