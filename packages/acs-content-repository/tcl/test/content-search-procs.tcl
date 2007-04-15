@@ -61,6 +61,7 @@ ad_proc -private cr_item_search::test_setup {
 aa_register_case -cats db cr_item_search_triggers {
     Test search update trigger
 } {
+    if {![string match -nocase  "oracle*" [db_name]]} {
     aa_run_with_teardown \
 	-rollback \
 	-test_code \
@@ -129,4 +130,5 @@ aa_register_case -cats db cr_item_search_triggers {
 		-events [list INSERT UPDATE]
 	    
 	}
+    }
 }
