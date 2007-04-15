@@ -42,7 +42,7 @@ aa_register_case -cats api data_links_update_links {
 	    
 	    # generate some text with links between the objects
 	    foreach n [array names o] {
-		append text "\nTest Content Link to $o($n) /o/$o($n) \n"
+		append text "\nTest Content Link to $o($n) <a href=\"/o/$o($n)\">Link</a> \n"
 	    }
 	    # update the links
 	    foreach n [array names o] {
