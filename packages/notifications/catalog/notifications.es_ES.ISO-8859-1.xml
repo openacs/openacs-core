@@ -38,5 +38,5 @@
   <msg key="Send_out_notifications_now">Enviar notificaciones ahora</msg>
   <msg key="SUBJECT">Asunto:</msg>
   <msg key="Unsubscribe">Darse de baja</msg>
-  <msg key="Unsubscribe_from_object_name">Dar de baja la suscripción a %notications.object_name%</msg>
+  <msg key="Unsubscribe_from_object_name">Dar de baja la suscripción a %notifications.object_name%</msg>
 </message_catalog>
