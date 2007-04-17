@@ -125,6 +125,8 @@ Level 0: New Submission. This is the default for packages that don't have it set
 http://openacs.org/forums/message-view?message%5fid=161393 </description>
 
   <msg key="Page">Page with error:</msg>
+  <msg key="Page_current_of_total">Page %current% of %total%</msg>
+  <msg key="Percentage_complete">Percentage complete</msg>
   <msg key="Previus">Previous Page:</msg>
   <msg key="Public_User">Public User</msg>
   <msg key="reject">reject</msg>
