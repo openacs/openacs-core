@@ -465,7 +465,7 @@ namespace eval acs_mail_lite {
 	@option bcc see to_addr
 	@option package_id To be used for calling a package-specific proc when mail has bounced
 	@option no_callback_p Boolean that indicates if callback should be executed or not. If you don't provide it it will execute callbacks
-        @returns the Message-Id of the mail
+        @returns the Message-Id of the mail or an empty string if e-mail was discarded
     } {
 
 	## Extract "from" email address
@@ -514,26 +514,29 @@ namespace eval acs_mail_lite {
 	    set send_p [parameter::get -package_id [get_package_id] -parameter "send_immediately" -default 0]
 	}
 
-
-	# if send_p true, then start acs_mail_lite::send_immediately, so mail is not stored in the db before delivery
-	if { $send_p } {
-	    acs_mail_lite::send_immediately -to_addr $to_addr -from_addr $from_addr -subject $subject -body $body -extraheaders $eh_list -bcc $bcc -valid_email_p $valid_email_p -package_id $package_id
+	if {$to_addr ne ""} {
+	    # if send_p true, then start acs_mail_lite::send_immediately, so mail is not stored in the db before delivery
+	    if { $send_p } {
+		acs_mail_lite::send_immediately -to_addr $to_addr -from_addr $from_addr -subject $subject -body $body -extraheaders $eh_list -bcc $bcc -valid_email_p $valid_email_p -package_id $package_id
+	    } else {
+		# else, store it in the db and let the sweeper deliver the mail
+		db_dml create_queue_entry {}
+	    }
+	    
+	    if { !$no_callback_p } {
+		callback acs_mail_lite::send \
+		    -package_id $package_id \
+		    -from_party_id $from_party_id \
+		    -to_party_id $to_party_id \
+		    -body $body \
+		    -message_id $message_id \
+		    -subject $subject
+	    }
+	    
+	    return $message_id
 	} else {
-	    # else, store it in the db and let the sweeper deliver the mail
-	    db_dml create_queue_entry {}
+	    return ""
 	}
-
-	if { !$no_callback_p } {
-	    callback acs_mail_lite::send \
-		-package_id $package_id \
-		-from_party_id $from_party_id \
-		-to_party_id $to_party_id \
-		-body $body \
-		-message_id $message_id \
-		-subject $subject
-	}
-
-        return $message_id
     }
 
 
