@@ -7,23 +7,24 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.3.1b1" url="http://openacs.org/repository/download/apm/acs-kernel-5.3.1b1.apm">
+    <version name="5.3.1b2" url="http://openacs.org/repository/download/apm/acs-kernel-5.3.1b2.apm">
         <owner url="mailto:oct@openacs.org">OpenACS Core Team</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
-        <release-date>2007-04-15</release-date>
+        <release-date>2007-04-19</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, partiies and the supporting PL/SQL and PL/pgSQL procedures.</description>
+        <maturity>0</maturity>
 
-        <provides url="acs-kernel" version="5.3.1b1"/>
+        <provides url="acs-kernel" version="5.3.1b2"/>
 
         <callbacks>
         </callbacks>
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AdminOwner"  default="a-programmer@yourdomain.com" description="who signs the admin pages, e.g., a programmer who can fix/enhance them" section_name="system-information"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowPersistentLoginP"  default="1" description="do we allow persistent logins?" section_name="security"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowedAttribute"  default="align alt border cellpadding cellspacing color face height href hspace id name size src style target title valign vspace width" description="A space separated list of allowed attribute names, e.g. title, src, etc.. You probably want to avoid onMouseOver and the like. Add a * to always allow all attributes." section_name="antispam"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowedProtocol"  default="http https ftp mailto" description="A space separated list of protocols that are valid attributes of HTML tags in submitted content. Add a * to always all all protocols." section_name="antispam"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowedTag"  default="A ADDRESS B BLOCKQUOTE BR CODE DIV DD DL DT EM FONT HR I LI OL P PRE SPAN STRIKE STRONG SUB SUP TABLE TBODY TD TR TT U UL EMAIL FIRST_NAMES LAST_NAME GROUP_NAME H1 H2 H3 H4 H5 H6" description="A space separated list of all the HTML tags that people may use. Add a * to always allow all tags." section_name="antispam"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowPersistentLoginP"  default="1" description="do we allow persistent logins?" section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ApprovalExpirationDays"  default="0" description="The number of days after which registration approval expires, which will cause the user to change state to 'needs_approval'. Set to 0 to disable expiration of approval." section_name="security"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="BugTrackerInstance"  description="Use this parameter to indicate the instance of the bug tracker where the errors will be automatically submited. You must use a relative url indicating where is mounted the instance of the bug tracker. For instance, if you have your bug tracker instance mounted under &quot;/bug&quot;, this parameter must be &quot;/bug&quot;.  Leave this parameter in blank if you do not want to use it." section_name="request-processor"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CanonicalServer"  description="In the list of IPs above, which is the canonical (primary) server? If a port is not listed, we assume port 80." section_name="server-cluster"/>
@@ -32,6 +33,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterPeerIP"  description="A space separated list of servers in the cluster. This server's IP may be included too." section_name="server-cluster"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CommunityMemberAdminURL"  default="/acs-admin/users/one" description="the URL of the admin community member page" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CommunityMemberURL"  default="/shared/community-member" description="the URL of the public community member page" section_name="system-information"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="DBCacheSize"  default="200000" description="The size of the database API cache" section_name="caching"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DebugP"  default="0" description="save debugging information for developer support?" section_name="request-processor"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="DefaultPersistentLoginP"  default="1" description="On the login screen, should the default be to login the user permanently (1) or not (0)." section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="EmailAccountOwnerOnPasswordChangeP"  default="1" description="Say 1 if you want us to send an email to the account owner when changing password for local accounts." section_name="Local Accounts"/>
@@ -49,7 +51,6 @@
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="LoginPageExpirationTime"  default="600" description="The expiration time in seconds for the login page. This is needed to protect against browser cached passwords." section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="LoginTimeout"  default="28800" description="The maximum number of seconds to let users stay logged in without requiring them to refresh their password. 0 for infinite. Requires a restart of the server to take effect." section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MaxSize"  default="200000" description="The size of the util_memoize cache" section_name="caching"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="DBCacheSize"  default="200000" description="The size of the database API cache" section_name="caching"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="OutgoingSender"  default="somenerd@yourdomain.com" description="The email address that will sign outgoing alerts." section_name="system-information"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PasswordExpirationDays"  default="0" description="How long can a password be used before it expires and must be changed. Specify 0 to disable password expiration." section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PerformanceModeP"  default="0" description="Setting this to 1 will tell the request processor to make the assumption that once a url is mapped to a file, that mapping never changes. This obviously would cause problems on a development system, but will improve performance on a production server." section_name="request-processor"/>
