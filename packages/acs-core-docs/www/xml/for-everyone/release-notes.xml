@@ -37,6 +37,24 @@ END OF TEMPLATE -->
 linkend="changelog-latest"></xref>) since the last release and in the
 entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
 
+  <sect2 id="release-notes-5-3-1">
+    <title>Release 5.3.1</title>
+    <itemizedlist>
+      <listitem>
+        <para>Bug fixes.</para>
+        <para>New TIPs implemented.</para>
+	<para>All Core Automated Tests for Postgres pass.</para>
+	<para>New Site and Blank master templates and CSS compatible with the .LRN Zen
+	      work.  Compatibility master templates are provided for existing sites.</para>
+      </listitem>
+    </itemizedlist>
+   </sect2>
+
+
+<para>The ChangeLogs include an annotated list of changes (<xref
+linkend="changelog-latest"></xref>) since the last release and in the
+entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
+
   <sect2 id="release-notes-5-3-0">
     <title>Release 5.3.0</title>
     <itemizedlist>
