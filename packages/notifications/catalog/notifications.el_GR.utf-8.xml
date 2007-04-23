@@ -5,7 +5,6 @@
   <msg key="Frequency">Συχνότητα </msg>
   <msg key="Item">Στοιχείο </msg>
   <msg key="lt_You_have_no_notificat">Δεν υπάρχει καμία ειδοποίηση</msg>
-  <msg key="lt_You_may_a_hrefsub_url">Μπορείτε να &lt;a href=&quot;%sub_url%&quot; title=&quot;Request notification for %pretty_name%&quot;&gt;ζητήσετε ειδοποίηση&lt;/a&gt; για το %pretty_name%.</msg>
   <msg key="Manage_Notifications">Διαχείριση Ειδοποιείσεων </msg>
   <msg key="Notification_type">Τύπος ειδοποίησης</msg>
 </message_catalog>

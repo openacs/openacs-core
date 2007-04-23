@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-templating" package_version="5.3.1a1" locale="el_GR" charset="utf-8">
+<message_catalog package_key="acs-templating" package_version="5.3.1" locale="el_GR" charset="utf-8">
 
   <msg key="data">δεδομένα</msg>
   <msg key="Formats">Μορφές</msg>
