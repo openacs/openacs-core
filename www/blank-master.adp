@@ -7,7 +7,8 @@
 </multiple>
 <multiple name="link">    <link rel="@link.rel;noquote@" href="@link.href;noquote@"<if @link.lang@ not nil and @link.lang@ ne @doc.lang@> lang="@link.lang;noquote@"</if><if @link.title@ not nil> title="@link.title;noquote@"</if><if @link.type@ not nil> type="@link.type;noquote@"</if><if @link.media@ not nil> media="@link.media@"</if>>
 </multiple>
-<multiple name="script">    <script type="@script.type;noquote@"<if @script.src@ not nil> src="@script.src;noquote@"</if><if @script.charset@ not nil> charset="@script.charset;noquote@"</if><if @script.defer@ not nil> defer="@script.defer;noquote@"</if>><if @script.content@ not nil>@script.content;noquote@</if></script>
+<multiple name="script">    <script type="@script.type;noquote@"<if @script.src@ not nil> src="@script.src;noquote@"</if><if @script.charset@ not nil> charset="@script.charset;noquote@"</if><if @script.defer@ not nil> defer="@script.defer;noquote@"</if>><if @script.content@ not nil>@script.content;noquote@
+    </if></script>
 </multiple>
 <if @head@ not nil>@head;noquote@</if>
 </head>

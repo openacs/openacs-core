@@ -82,58 +82,6 @@ if {![template::multirow exists body_script]} {
     template::multirow create body_script type src charset defer content
 }
 
-# Handle richtext widgets, which needs special javascript and css 
-# in the page header and body.
-
-# DRB: This stuff really doesn't belong here - templating should probably be setting
-# this stuff up.  But for now ... at least it's using the new multirows correctly.
-
-global acs_blank_master__htmlareas acs_blank_master
-
-if { [info exists acs_blank_master__htmlareas] } {
-
-    if {[info exists acs_blank_master(rte)]} {
-        set rte_dir /resources/acs-templating/rte/
-        foreach htmlarea_id [lsort -unique $acs_blank_master__htmlareas] {
-            lappend body(onload) "acs_rteInit('${htmlarea_id}');"
-        }
-        template::multirow append script text/javascript ${rte_dir}richtext.js "" "" ""
-        template::multirow append body_script text/javascript "" "" "" "
-        initRTE(\"${rte_dir}images/\", \"$rte_dir\", \"${rte_dir}rte.css\");
-        "
-    }
-
-    if { [info exists acs_blank_master(xinha)] } {
-        set xinha_dir /resources/acs-templating/xinha-nightly/
-        set editor_lang [expr { $doc(lang) eq "en" || $doc(lang) eq "de" ? $doc(lang) : "en" }]
-        template::multirow append script text/javascript "" "" "" "
-            _editor_url  = \"$xinha_dir\";
-            _editor_lang = \"$editor_lang\";
-        "
-        template::multirow append script text/javascript ${xinha_dir}htmlarea.js "" "" ""
-        template::multirow append body_script text/javascript "" "" "" "
-	    xinha_editors = null;
-	    xinha_init = null;
-	    xinha_config = null;
-	    xinha_plugins = null;
-	    xinha_init = xinha_init ? xinha_init : function()
-	    \{
-	        xinha_plugins = xinha_plugins ? xinha_plugins :
-	        \[$acs_blank_master(xinha.plugins)\];
-	        // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
-	        if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
-	        xinha_editors = xinha_editors ? xinha_editors :
-	        \['[join $acs_blank_master__htmlareas ',']'\];
-                xinha_config = xinha_config ? xinha_config() : new HTMLArea.Config();
-                $acs_blank_master(xinha.options)
-                xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
-                HTMLArea.startEditors(xinha_editors);
-            \}
-	    window.onload = xinha_init;
-        "
-    }
-}
-
 # Concatenate the javascript event handlers for the body tag
 if {[array exists body]} {
     foreach name [array names body -glob "on*"] {

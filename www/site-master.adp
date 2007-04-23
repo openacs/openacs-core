@@ -30,7 +30,7 @@
       xinha_editors = xinha_editors ? xinha_editors :
         [
           <list name="acs_blank_master__htmlareas">
-          '@htmlarea_support.id@'<if @acs_blank_master__htmlareas:rownum@ ne @acs_blank_master__htmlareas:rowcount@>,</if>
+          '@acs_blank_master__htmlareas@'<if @acs_blank_master__htmlareas:rownum@ ne @acs_blank_master__htmlareas:rowcount@>,</if>
           </list>
         ];
       xinha_config = xinha_config ? xinha_config() : new HTMLArea.Config();

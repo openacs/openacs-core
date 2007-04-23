@@ -122,10 +122,9 @@ if {[info exists acs_blank_master__htmlareas]
             set xinha_lang en
         }
 
-        template::multirow append script "text/javasctipt" {} {} {} "
-            __editor_url = \"$xinha_dir\";
-            __editor_lang = \"$xinha_lang\";
-        "
+        template::multirow append script "text/javascript" {} {} {} "
+            _editor_url = \"$xinha_dir\";
+            _editor_lang = \"$xinha_lang\";"
 
         template::multirow append script \
             "text/javascript" \
