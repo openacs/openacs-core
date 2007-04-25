@@ -76,3 +76,53 @@ if {![template::multirow exists link]} {
 # templates.  Therefore I'll put the hard-wired values in blank-compat for the moment.
 multirow append link stylesheet text/css /resources/acs-templating/lists.css "" [ad_conn language] all
 multirow append link stylesheet text/css /resources/acs-templating/forms.css "" [ad_conn language] all
+
+if {![template::multirow exists script]} {
+    template::multirow create script type src charset defer content
+}
+
+# 
+# Add WYSIWYG editor content
+#
+global acs_blank_master__htmlareas acs_blank_master
+
+if {[info exists acs_blank_master__htmlareas]
+    && [llength $acs_blank_master__htmlareas] > 0} {
+    
+    # 
+    # Add RTE scripts if we are using RTE
+    #
+    if {[info exists acs_blank_master(rte)]} {
+        foreach htmlarea_id [lsort -unique $acs_blank_master__htmlareas] {
+          lappend body(onload) "acs_rteInit('${htmlarea_id}')"
+        }
+
+        template::multirow append script \
+            "text/javascript" \
+            "/resources/acs-templating/rte/richtext.js" 
+    }
+
+    # 
+    # Add Xinha scripts if we are using Xinha
+    #
+    if {[info exists acs_blank_master(xinha)]} {
+        set xinha_dir /resources/acs-templating/xinha-nightly/
+        set xinha_plugins $acs_blank_master(xinha.plugins)
+        set xinha_params ""
+        set xinha_options $acs_blank_master(xinha.options)
+        set xinha_lang [lang::conn::language]
+
+        if {$xinha_lang ne "en" && $xinha_lang ne "de"} {
+            set xinha_lang en
+        }
+
+        template::multirow append script "text/javascript" {} {} {} "
+            _editor_url = \"$xinha_dir\";
+            _editor_lang = \"$xinha_lang\";"
+
+        template::multirow append script \
+            "text/javascript" \
+            "${xinha_dir}htmlarea.js"
+    }
+}
+
