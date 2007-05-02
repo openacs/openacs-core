@@ -6,11 +6,13 @@
     <fullquery name="acs_mail_lite::send.create_queue_entry">
         <querytext>
             insert into acs_mail_lite_queue 
-            (message_id, to_addr, from_addr, subject, body, extra_headers, bcc,
-             package_id, valid_email_p)
+            (message_id, to_addr, from_addr, subject, 
+             package_id, valid_email_p,
+	     body, extra_headers, bcc)
             values
-            (acs_mail_lite_id_seq.nextval, :to_addr, :from_addr, :subject, :body,
-             :eh_list, :bcc, :package_id, decode(:valid_email_p,'1','t','f'))
+            (acs_mail_lite_id_seq.nextval, :to_addr, :from_addr, :subject,
+	     :package_id, decode(:valid_email_p,'1','t','f'),
+ 	     :body, :eh_list, :bcc)
         </querytext>
     </fullquery>
 
@@ -52,11 +54,13 @@
     <fullquery name="acs_mail_lite::send_immediately.create_queue_entry">
         <querytext>
             insert into acs_mail_lite_queue 
-            (message_id, to_addr, from_addr, subject, body, extra_headers, bcc,
-             package_id, valid_email_p)
+            (message_id, to_addr, from_addr, subject,
+             package_id, valid_email_p,
+             body, extra_headers, bcc)
             values
-            (acs_mail_lite_id_seq.nextval, :to_addr, :from_addr, :subject, :body,
-             :extraheaders, :bcc, :package_id, decode(:valid_email_p,'1','t','f'))
+            (acs_mail_lite_id_seq.nextval, :to_addr, :from_addr, :subject,
+             :package_id, decode(:valid_email_p,'1','t','f'),
+ 	     :body,:extraheaders, :bcc )
         </querytext>
     </fullquery>
 
