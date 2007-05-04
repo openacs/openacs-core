@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-templating" package_version="5.3.0d1" locale="pa_IN" charset="utf-8">
-
-  <msg key="No_row_pretty_plural">%row_pretty_plural% ਨਹੀਂ</msg>
-</message_catalog>
