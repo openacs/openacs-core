@@ -26,6 +26,7 @@
   <msg key="lt_You_have_requested_no">You have requested notification for %pretty_name%. You may &lt;a href=&quot;%sub_url%&quot; title=&quot;Unsubscribe for %pretty_name%&quot;&gt;unsubscribe&lt;/a&gt;.</msg>
   <msg key="lt_You_may_a_hrefsub_url">You may &lt;a href=&quot;%sub_url%&quot; title=&quot;Request notification for %pretty_name%&quot;&gt;request notification&lt;/a&gt; for %pretty_name%.</msg>
   <msg key="Manage_Notifications">Manage Notifications</msg>
+  <msg key="Manage_Notifications_Help">You can manage your notifications here</msg>
   <msg key="Notification">Notification</msg>
   <msg key="Notification_Replies">Notification Replies</msg>
   <msg key="Notification_Reply">Notification Reply</msg>
