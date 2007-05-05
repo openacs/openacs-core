@@ -490,15 +490,19 @@ ad_proc -public subsite::define_pageflow {
     {-sections_multirow "sections"}
     {-subsections_multirow "subsections"}
     {-section ""}
+    {-url ""}
 } {
     Defines the page flow of the subsite
 
     TODO: add an image
     TODO: add link_p/selected_p for subsections
 } {
-    set pageflow [get_pageflow_struct]
-
-    set base_url [subsite::get_element -element url]
+    set pageflow [get_pageflow_struct -url $url]
+    if {$url eq ""} {
+	set base_url [subsite::get_element -element url]
+    } else {
+	set base_url $url
+    }
 
     template::multirow create $sections_multirow name label title url selected_p link_p
 
@@ -632,7 +636,9 @@ ad_proc -public subsite::get_section_info {
     }
 }
 
-ad_proc -public subsite::get_pageflow_struct {} {
+ad_proc -public subsite::get_pageflow_struct {
+    {-url ""}
+} {
     Defines the page flow structure.
 } {
     # This is where the page flow structure is defined
@@ -645,7 +651,12 @@ ad_proc -public subsite::get_pageflow_struct {} {
 
     set pageflow [list]
 
-    set subsite_url [subsite::get_element -element url]
+    if {$url eq ""} {
+	set subsite_url [subsite::get_element -element url]
+    } else {
+	set substie_url $url
+    }
+
     set subsite_id [ad_conn subsite_id]
     array set subsite_sitenode [site_node::get -url $subsite_url]
     set subsite_node_id $subsite_sitenode(node_id)

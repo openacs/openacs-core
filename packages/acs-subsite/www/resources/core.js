@@ -175,7 +175,14 @@ function acs_ListBulkActionClick(formName, url) {
 }
 
 
-
+function acs_KeypressGoto(theUrl, event) {
+      var key;
+      if (event) {
+             if (event.which == 13) {
+               location.href = theUrl;                     
+ 	     }
+      }
+ }
 
 
 /*  Copyright Mihai Bazon, 2002, 2003  |  http://students.infoiasi.ro/~mishoo
