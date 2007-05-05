@@ -64,7 +64,7 @@ ad_proc -public email_image::get_user_email {
     }
     switch $priv_level {
         "4" {
-            return "<a href=mailto:$email title=\"Send email to this user\">$email</a>"
+            return "<a href=\"mailto:$email\" title=\"#acs-subsite.Send_email_to_this_user#\">$email</a>"
         }
         "3" {
             set email_image_id [email_image::get_related_item_id -user_id $user_id]
@@ -132,27 +132,33 @@ ad_proc -public email_image::new_item {
     set image_name "email${user_id}.gif"
     set email_length [string length $email]
     set dest_path "/tmp/$image_name"
-    set width [expr [expr {$email_length * [expr {$font_size / 2}]}] + 2]
+    set width [expr [expr $email_length * [expr $font_size / 2]] + 2]
     set height $font_size
-    set ypos [expr {[expr {$height / 2}] + 3 }]
+    set ypos [expr [expr $height / 2] + 3 ]
     set size "${width}x$height"
 
-    if {$bgcolor eq ""} {
+    if { [string equal $bgcolor ""]} {
         set bgcolor "\#ffffff"
     }
 
     set bg "xc:$bgcolor"
     
     # Creating an image of the rigth length where the email will be
-    exec convert -size $size $bg $dest_path
+    if {[catch {exec convert -size $size $bg $dest_path} errmsg]} {
+	return ""
+    }
     
     # Creating the image with the email of the user on it
-    exec convert -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $email" \
-        $dest_path $dest_path
+    if {[catch {exec convert -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $email" \
+		    $dest_path $dest_path} errmsg]} {
+	return ""
+    }
 
-    if { $transparent eq "" || $transparent eq "1" } {
-        # Making the bg color transparent
-        exec convert $dest_path -transparent $bgcolor $dest_path
+    if { [string equal $transparent ""] || [string equal $transparent "1"] } {
+	# Making the bg color transparent
+	if {[catch {exec convert $dest_path -transparent $bgcolor $dest_path} errmsg]} {
+	    return ""
+	}
     }
     
     # Time to store the image in the content repository
@@ -210,12 +216,12 @@ ad_proc -public email_image::edit_email_image {
     set image_name "email${user_id}.gif"
     set email_length [string length $new_email]
     set dest_path "/tmp/$image_name"
-    set width [expr [expr {$email_length * [expr {$font_size / 2}]}] + 2]
+    set width [expr [expr $email_length * [expr $font_size / 2]] + 2]
     set height $font_size
-    set ypos [expr {[expr {$height / 2}] + 3 }]
+    set ypos [expr [expr $height / 2] + 3 ]
     set size "${width}x$height"
 
-    if {$bgcolor eq ""} {
+    if { [string equal $bgcolor ""]} {
         set bgcolor "\#ffffff"
     }
 
@@ -231,7 +237,7 @@ ad_proc -public email_image::edit_email_image {
     exec convert -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $new_email" \
         $dest_path $dest_path
 
-    if { $transparent eq "" || $transparent eq "1" } {
+    if { [string equal $transparent ""] || [string equal $transparent "1"] } {
         # Making the bg color transparent
         exec convert $dest_path -transparent $bgcolor $dest_path
     }

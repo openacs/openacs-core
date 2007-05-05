@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.4.0d2" url="http://openacs.org/repository/download/apm/acs-subsite-5.4.0d2.apm">
+    <version name="5.4.0d3" url="http://openacs.org/repository/download/apm/acs-subsite-5.4.0d3.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
         <release-date>2006-11-19</release-date>
@@ -16,7 +16,7 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.4.0d2"/>
+        <provides url="acs-subsite" version="5.4.0d3"/>
         <requires url="acs-authentication" version="5.3.0d1"/>
         <requires url="acs-content-repository" version="5.3.0d1"/>
         <requires url="acs-kernel" version="5.3.0d1"/>
@@ -69,7 +69,10 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SomeAmericanReadersP"  default="1" description="is it even worth bothering asking for state and zip code?"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="TmpDir"  default="/tmp /var/tmp" description="What tmp directories are used on this system? Note the leading / character."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="application"  default="default" description="Name of the ETP application to use (default, faq, wiki, or create your own with the etp::define_applicaton procedure)" section_name="EditThisPage"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="subtopic_application"  default="default" description="Name of the ETP application to use when creating a subtopic" section_name="EditThisPage"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="subtopic_application"  default="default" description="Name of the ETP application to use when creating a subtopic" section_name="EditThisPage"/> 
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="LoginTemplate"  default="/packages/acs-subsite/lib/login" description="Name of the template used for login" section_name="Templates"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="UserNewTemplate"  default="/packages/acs-subsite/lib/user-new" description="Name of the template used for creation of a new user" section_name="Templates"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="UserInfoTemplate"  default="/packages/acs-subsite/lib/user-info" description="Name of the template used for description of a user" section_name="Templates"/>
         </parameters>
 
     </version>
