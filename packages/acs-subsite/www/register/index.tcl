@@ -8,3 +8,9 @@ ad_page_contract {
     {return_url ""}
 }
 
+set subsite_id [ad_conn subsite_id]
+set login_template [parameter::get -parameter "LoginTemplate" -package_id $subsite_id]
+
+if {$login_template eq ""} {
+    set login_template "/packages/acs-subsite/lib/login"
+}

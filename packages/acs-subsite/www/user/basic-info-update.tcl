@@ -22,3 +22,10 @@ if { $user_id eq "" || ($user_id == [ad_conn untrusted_user_id]) } {
 
 set focus {}
 
+set subsite_id [ad_conn subsite_id]
+set user_new_template [parameter::get -parameter "UserNewTemplate" -package_id $subsite_id]
+
+if {$user_new_template eq ""} {
+    set user_new_template "/packages/acs-subsite/lib/user_new"
+}
+
