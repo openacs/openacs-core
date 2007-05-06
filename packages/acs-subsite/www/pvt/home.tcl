@@ -82,3 +82,10 @@ set whos_online_url "[subsite::get_element -element url]shared/whos-online"
 set make_visible_url "[subsite::get_element -element url]shared/make-visible"
 set make_invisible_url "[subsite::get_element -element url]shared/make-invisible"
 set invisible_p [whos_online::user_invisible_p [ad_conn untrusted_user_id]]
+
+set subsite_id [ad_conn subsite_id]
+set user_new_template [parameter::get -parameter "UserNewTemplate" -package_id $subsite_id]
+
+if {$user_new_template eq ""} {
+    set user_new_template "/packages/acs-subsite/lib/user_new"
+}

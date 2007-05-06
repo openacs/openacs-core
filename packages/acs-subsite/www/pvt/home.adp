@@ -66,7 +66,7 @@
 	<span><h2> #acs-subsite.My_Account# </h2></span>
 	</div>
         <div class="portlet">
-  	<include src="/packages/acs-subsite/lib/user-info" />
+  	<include src="@user_new_template@" />
   	<if @account_status@ eq "closed">
     	#acs-subsite.Account_closed_workspace_msg#
   	</if>

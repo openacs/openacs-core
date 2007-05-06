@@ -65,3 +65,10 @@ if { $party_id ne "" } {
     ad_returnredirect .
     ad_script_abort
 }
+
+set subsite_id [ad_conn subsite_id]
+set user_new_template [parameter::get -parameter "UserNewTemplate" -package_id $subsite_id]
+
+if {$user_new_template eq ""} {
+    set user_new_template "/packages/acs-subsite/lib/user-new"
+}

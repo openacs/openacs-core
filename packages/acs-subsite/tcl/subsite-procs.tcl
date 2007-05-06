@@ -654,7 +654,7 @@ ad_proc -public subsite::get_pageflow_struct {
     if {$url eq ""} {
 	set subsite_url [subsite::get_element -element url]
     } else {
-	set substie_url $url
+	set subsite_url $url
     }
 
     set subsite_id [ad_conn subsite_id]
