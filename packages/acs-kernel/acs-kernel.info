@@ -13,7 +13,7 @@
         <release-date>2007-04-22</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, partiies and the supporting PL/SQL and PL/pgSQL procedures.</description>
-        <maturity>0</maturity>
+        <maturity>3</maturity>
 
         <provides url="acs-kernel" version="5.3.1"/>
 
