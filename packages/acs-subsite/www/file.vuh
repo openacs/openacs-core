@@ -48,11 +48,6 @@ if {$private eq "private"} {
     }
 }
 
-if {[apm_package_installed_p views]} {
-	set user_id [ad_conn user_id]
-	views::record_view -object_id $object_id -viewer_id $user_id
-}
-
 # find a cr_item and serve it
 
 cr_write_content -item_id $object_id
