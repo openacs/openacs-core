@@ -51,12 +51,11 @@ ad_proc -public template::util::richtext::formats {} {
 ad_proc -public template::util::richtext::format_options {} {
     Returns a formatting option list
 } {
-    return { 
-        {"Enhanced Text" text/enhanced}
-        {"Plain Text" text/plain}
-        {"Fixed-width Text" text/fixed-width}
-        {"HTML" text/html}
-    }
+    return [list \
+                [list [_ acs-templating.Enhanced_Text] text/enhanced] \
+                [list [_ acs-templating.Plain_Text] text/plain] \
+                [list [_ acs-templating.Fixed_width_Text] text/fixed-width] \
+                [list [_ acs-templating.HTML] text/html]]
 }
 
 ad_proc -public template::data::validate::richtext {
@@ -275,15 +274,15 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
 
       append output [textarea_internal "$element(id)" attributes $contents]
       if { $htmlarea_p } {
-          append output "<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\"/>"
+          append output "<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\">"
       } else {
-          append output "<br/>Format: [menu $element(id).format [template::util::richtext::format_options] $format attributes]"
+          append output "<br/>[_ acs-templating.Format]: [menu $element(id).format [template::util::richtext::format_options] $format attributes]"
       }
           
       # Spell-checker
       array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
       if { $spellcheck(render_p) } {
-          append output " Spellcheck: [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) attributes]"
+          append output " [_ acs-templating.Spellcheck]: [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) attributes]"
       }
   } else {
       # Display mode
@@ -445,12 +444,12 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 	# which the richtext widget won't work but which do have js enabled 
 	# should output since we need the format widget (this for Safari among 
 	# some others)
-	append output "<noscript><br/>Format: $format_menu</noscript>\n"
+          set noscript_output "$output <br/>[_ acs-templating.Format]: $format_menu\n"
 
-	set output "<script type='text/javascript'><!--\nwriteRichText('$element(id)','$contents',500,200,true,false,'<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\"/>','[string map {\n \\n \r {} "'" "&\#39"} $output]'); //--></script><noscript id=\"rte-noscr-$element(id)\">$output</noscript>"
+	set output "<script type='text/javascript'><!--\nwriteRichText('$element(id)','$contents',500,200,true,false,'<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\">','[string map {\n \\n \r {} "'" "&\#39"} $output]'); //--></script><noscript id=\"rte-noscr-$element(id)\">$noscript_output</noscript>"
       } elseif {$richtextEditor eq "xinha"} {
-	append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'/>\");</script>\n"
-	append output "<noscript><br/>Format: $format_menu</noscript>\n"
+	append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
+          append output "<noscript><br/>[_ acs-templating.Format]: $format_menu</noscript>\n"
 	
 	# we have a xinha richtext widget, specified by "options {editor xinha}"
 	# The following options are supported: 
@@ -493,20 +492,28 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
       } 
 
     } else {
-      append output "<br/>Format: $format_menu"
+        # Display mode
+        if { $element(mode) eq "display" && [info exists element(value)] } {
+            append output [template::util::richtext::get_property html_value $element(value)]
+            append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ad_quotehtml $contents]\">"
+            append output "<input type=\"hidden\" name=\"$element(id).format\" value=\"[ad_quotehtml $format]\">"
+        } else {
+	    append output ""
+	}
+        append output "<br/>[_ acs-templating.Format]: $format_menu"
     }
 
     # Spell-checker
     array set spellcheck [template::util::spellcheck::spellcheck_properties \
 			      -element_ref element]
     if { $spellcheck(render_p) } {
-      append output " Spellcheck: " \
+        append output " [_  acs-templating.Spellcheck]: " \
 	  [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] \
 	       $spellcheck(selected_option) attributes]
     }
   } else {
     # Display mode
-    if { $element(mode) eq "display" && [info exists element(value)] } {
+      if { $element(mode) eq "display" && [info exists element(value)] } {
       append output [template::util::richtext::get_property html_value $element(value)]
       append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ad_quotehtml $contents]\">"
       append output "<input type=\"hidden\" name=\"$element(id).format\" value=\"[ad_quotehtml $format]\">"

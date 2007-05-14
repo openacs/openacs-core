@@ -8,5 +8,8 @@ ad_library {
 
 }
 
+#DRB: the default value is needed during the initial install of OpenACS
 ns_cache create db_cache_pool -size \
-    [parameter::get_from_package_key  -package_key acs-kernel -parameter DBCacheSize]
+    [parameter::get_from_package_key  \
+        -package_key acs-kernel \
+        -parameter DBCacheSize -default 50000]

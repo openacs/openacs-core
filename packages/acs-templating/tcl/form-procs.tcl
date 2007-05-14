@@ -385,19 +385,53 @@ ad_proc -private template::form::generate { id { style "" } } {
   return [template::adp_eval code]
 }
 
-ad_proc -public template::form::section { id section } {
-    Set the name of the current section of the form.  A form may be
-    divided into any number of sections for layout purposes.  Elements
-    are tagged with the current section name as they are added to the
-    form.  A form style template may insert a divider in the form
-    whenever the section name changes.
-
-    @param id      The form identifier.
-    @param section The name of the current section.
+ad_proc -public template::form::section { 
+	{-fieldset ""}
+	{-legendtext ""}
+	{-legend ""}
+	id 
+	section 
 } {
-  get_reference
+    Set the current section (fieldset) of the form. A form may be
+    divided into any number of fieldsets to group related
+    elements. Elements are tagged with the current fieldset properties
+    as they are added to the form. A form style template may insert a
+    divider in the form whenever the fieldset identifier changes.
 
-  set properties(section) $section
+    @param id          The form identifier.
+    @param section     The current fieldset identifier
+	@param fieldset    A list of name-value attribute pairs for the FIELDSET tag
+	@param legendtext  The legend text
+	@param legend      A list of name-value attribute pairs for the LEGEND tag
+} {
+	get_reference
+
+	set properties(section) $section
+	set properties(sec_legendtext) $legendtext
+
+	# fieldset attributes
+	set properties(sec_fieldset) ""
+	array set fs_attributes $fieldset
+	foreach name [array names fs_attributes] {
+		if { [string equal $fs_attributes($name) {}] } {
+			append properties(sec_fieldset) " $name"
+		} else {
+			append properties(sec_fieldset) " $name=\"$fs_attributes($name)\""
+		}
+	}
+
+	# legend attributes
+	set properties(sec_legend) ""
+	if { ![string eq $legendtext ""] } {
+		array set lg_attributes $legend
+		foreach name [array names lg_attributes] {
+			if { [string equal $lg_attributes($name) {}] } {
+				append properties(sec_legend) " $name"
+			} else {
+				append properties(sec_legend) " $name=\"$lg_attributes($name)\""
+			}
+		}
+	}
 }
 
 ad_proc -private template::form::render { id tag_attributes } {
@@ -513,6 +547,12 @@ ad_proc -private template::form::render { id tag_attributes } {
   set output "<form name=\"$id\" method=\"$properties(method)\" 
                     action=\"$properties(action)\""
 
+  ### 2/17/2007
+  ### Adding a default class for forms if one does not exist 
+  if {![info exists attributes(class)]} {
+      append output " class=\"margin-form\""
+  }
+
   # append attributes to form tag
   foreach name [array names attributes] {
     if {$attributes($name) eq {}} {
@@ -523,6 +563,26 @@ ad_proc -private template::form::render { id tag_attributes } {
   }
 
   append output ">"
+
+  ### 2/11/2007
+  ### Adding Form Fieldset legend and attributes
+  if { [info exists properties(fieldset)] } {
+      # Fieldset
+      append output " <fieldset"
+      set fieldset_list $properties(fieldset)
+
+      foreach {fa_name fa_value} [lindex $fieldset_list 0] {
+	  append output " $fa_name=\"$fa_value\""
+      }
+      append output ">"
+
+      # Legend
+      set fieldset_legend [lindex $fieldset_list 1]
+	  append output "<legend>$fieldset_legend</legend>"
+
+  } else {
+      append output "<fieldset><legend></legend>"
+  }
 
   # Export form ID and current form mode
   append output [export_vars -form { { form\:id $id } { form\:mode $properties(mode) } }]
@@ -777,7 +837,7 @@ ad_proc -public template::form::export {} {
 
     append export_data "
       <input type=\"hidden\" name=\"$key\" 
-             value=\"[template::util::quote_html $value]\" />"
+             value=\"[template::util::quote_html $value]\" >"
   }
 
   return $export_data

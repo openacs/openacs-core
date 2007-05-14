@@ -1,92 +1,32 @@
-@doc_type;noquote@
-<html lang="@html_lang_attribute@">
-  <head>
-    <title>@title;noquote@</title>
-    <meta name="generator" content="OpenACS version @openacs_version@">
-    <if @developer_support_p@ true>
-      <link rel="stylesheet" type="text/css" href="/resources/acs-developer-support/acs-developer-support.css" media="all">
-    </if>
-    <multiple name="header_links">
-      <link rel="@header_links.rel@" type="@header_links.type@" href="@header_links.href@" media="@header_links.media@">
-    </multiple>
-    <if @acs_blank_master.xinha@ not nil>
-      <if @htmlarea_support:rowcount@ ne 0>
-       <script type="text/javascript">
-        _editor_url  = "@xinha_dir@"  // (preferably absolute)URL (including trailing slash) where Xinha is installed   
-        _editor_lang = "@lang@";
-       </script>
-       <script type="text/javascript" src="@xinha_dir@XinhaCore.js" language="javascript"></script>
-      </if>
-    </if>
+@doc.type;noquote@
+<html<if @doc.lang@ not nil> lang="@doc.lang;noquote@"</if>>
+<head>
+    <title<if @doc.title_lang@ not nil and @doc.title_lang@ ne @doc.lang@> lang="@doc.title_lang;noquote@"</if>>@doc.title;noquote@</title>
 
-    <if @acs_blank_master.rte@ not nil>
-      <if @acs_blank_master__htmlareas@ not nil>
-        <script language="JavaScript" type="text/javascript" 
-             src="/resources/acs-templating/rte/richtext.js">
-         </script>
-      </if>
-    </if>
+<multiple name="meta">    <meta<if @meta.http_equiv@ not nil> http-equiv="@meta.http_equiv;noquote"</if><if @meta.name@ not nil> name="@meta.name;noquote@"</if><if @meta.scheme@ not nil> scheme="@meta.scheme;noquote@"</if><if @meta.lang@ not nil and @meta.lang@ ne @doc.lang@> lang="@meta.lang;noquote@"</if> content="@meta.content@">
+</multiple>
+<multiple name="link">    <link rel="@link.rel;noquote@" href="@link.href;noquote@"<if @link.lang@ not nil and @link.lang@ ne @doc.lang@> lang="@link.lang;noquote@"</if><if @link.title@ not nil> title="@link.title;noquote@"</if><if @link.type@ not nil> type="@link.type;noquote@"</if><if @link.media@ not nil> media="@link.media@"</if>>
+</multiple>
+<multiple name="script">    <script type="@script.type;noquote@"<if @script.src@ not nil> src="@script.src;noquote@"</if><if @script.charset@ not nil> charset="@script.charset;noquote@"</if><if @script.defer@ not nil> defer="@script.defer;noquote@"</if>><if @script.content@ not nil>@script.content;noquote@
+    </if></script>
+</multiple>
+<if @head@ not nil>@head;noquote@</if>
+</head>
+<body<if @body.class@ not nil> class="@body.class;noquote@"</if><if @body.id@ not nil> id="@body.id;noquote@"</if><if @event_handlers@ not nil>@event_handlers;noquote@</if>>
+<multiple name="body_script">    <script type="@body_script.type;noquote@"<if @body_script.src@ not nil> src="@body_script.src;noquote@"</if><if @body_script.charset@ not nil> charset="@body_script.charset;noquote@"</if><if @body_script.defer@ not nil> defer="@body_script.defer;noquote@"</if>><if @body_script.content@ not nil>@body_script.content;noquote@</if></script>
+</multiple>
+<if @developer_support_p@ true>
+  <include src="/packages/acs-developer-support/lib/toolbar">
+</if>
+<if @dotlrn_toolbar_p@ true>
+  <include src="/packages/dotlrn/lib/toolbar">
+</if>
 
-    <script type="text/javascript" src="/resources/acs-subsite/core.js" language="javascript"></script>
+<slave>
 
-    @header_stuff;noquote@
-  </head>
-  <body<multiple name="attribute"> @attribute.key@="@attribute.value@"</multiple>>
+<if @developer_support_p@ true>
+  <include src="/packages/acs-developer-support/lib/footer">
+</if>
 
-
-    <if @dotlrn_toolbar_p@ true>
-      <include src="/packages/dotlrn/lib/toolbar">
-    </if>
-    <if @developer_support_p@ true>
-      <include src="/packages/acs-developer-support/lib/toolbar">
-    </if>
-
-    <if @acs_blank_master.rte@ not nil>
-     <if @acs_blank_master__htmlareas@ not nil>
-       <script language="JavaScript" type="text/javascript"><!--
-           initRTE("/resources/acs-templating/rte/images/", "/resources/acs-templating/rte/", "/resources/acs-templating/rte/rte.css");
-      // -->
-       </script>
-     </if>
-  </if>
-
-  <if @acs_blank_master.xinha@ not nil>
-    <if @htmlarea_support:rowcount@ ne 0>
-      <script type="text/javascript">
-	xinha_editors = null;
-	xinha_init = null;
-	xinha_config = null;
-	xinha_plugins = null;
-	xinha_init = xinha_init ? xinha_init : function()
-	{
-	xinha_plugins = xinha_plugins ? xinha_plugins :
-	[@xinha_plugins@];
-	// THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
-	if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
-	xinha_editors = xinha_editors ? xinha_editors :
-	[
-           <multiple name="htmlarea_support" delimiter=",">
-             '@htmlarea_support.id@'
-           </multiple>
-	];
-       xinha_config = xinha_config ? xinha_config() : new HTMLArea.Config();
-       @xinha_params;noquote@
-       @xinha_options;noquote@
-        xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
-       HTMLArea.startEditors(xinha_editors);
-    }
-    window.onload = xinha_init;
-    </script>
-   </if>
-  </if>
-
-    <slave>
-
-    <if @developer_support_p@ true>
-      <include src="/packages/acs-developer-support/lib/footer">
-    </if>
-    <if @translator_mode_p@ true>
-      <include src="/packages/acs-lang/lib/messages-to-translate">
-    </if>
-  </body>
+</body>
 </html>

@@ -7,9 +7,9 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.3.0b1" url="http://openacs.org/repository/download/apm/search-5.3.0b1.apm">
+    <version name="5.3.1" url="http://openacs.org/repository/download/apm/search-5.3.1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
-        <release-date>2006-11-19</release-date>
+        <release-date>2007-04-22</release-date>
         <maturity>3</maturity>
         <summary>Site wide search</summary>
         <vendor url="http://openacs.org">OpenACS</vendor>
@@ -18,7 +18,7 @@
         <description format="text/html">Site wide search implemented with service contracts, currently 
         only supports postgres via the OpenFTS driver.</description>
 
-        <provides url="search" version="5.3.0b1"/>
+        <provides url="search" version="5.3.1"/>
 
         <callbacks>
         </callbacks>
@@ -30,7 +30,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="Symbol2Interval"  default="m3 {3 month ago} m6 {6 month ago} y1 {1 year ago}" description="Translate symbol to date interval."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SubsiteSearchP"  default="0" description="If mounted in a subsite should the search be restricted to items in the subsite by default.  Requires that package_id in acs_objects be properly populated."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="Syndicate"  default="0" description="Should syndication data be stored when indexing for search."/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="application/msword"  default="0" default="/usr/local/bin/catdoc" Description="What is the converter for the MIME type text/doc?"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="application/msword"  default="/usr/local/bin/catdoc" Description="What is the converter for the MIME type text/doc?"/>
         </parameters>
 
     </version>

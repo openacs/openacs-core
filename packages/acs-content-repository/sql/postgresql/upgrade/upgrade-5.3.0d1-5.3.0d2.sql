@@ -255,7 +255,7 @@ begin
 	or (o.object_type=''content_revision'')
     loop
 	if table_exists(v_row.table_name) then 
-	    perform content_type__refresh_trigger(v_row.object_type);
+	    perform content_type__refresh_view(v_row.object_type);
 	end if;
     end loop;
 return 0;

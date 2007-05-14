@@ -243,7 +243,7 @@ ad_proc ad_db_select_widget {
     }
 
     if { $count == 1 || ($dbcount == 1 && $hidden_if_one_db) } {
-        return "$item<input type=\"hidden\" value=\"[philg_quote_double_quotes $value]\" name=\"$name\" />\n"
+        return "$item<input type=\"hidden\" value=\"[philg_quote_double_quotes $value]\" name=\"$name\" >\n"
     } elseif {!$count && !$dbcount && $blank_if_no_db} {
 	return {}
     } else { 

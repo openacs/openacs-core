@@ -34,7 +34,7 @@
 
 <div class="portlet-wrapper">
   <div class="portlet-title">
-  <span><h2>#acs-subsite.Privacy#<h2></span>
+  <span><h2>#acs-subsite.Privacy#</h2></span>
   </div>
   <div class="portlet">
   <ul>

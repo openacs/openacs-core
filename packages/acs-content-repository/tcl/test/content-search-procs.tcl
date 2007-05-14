@@ -61,6 +61,7 @@ ad_proc -private cr_item_search::test_setup {
 aa_register_case -cats db cr_item_search_triggers {
     Test search update trigger
 } {
+    if {![string match -nocase  "oracle*" [db_name]]} {
     aa_run_with_teardown \
 	-rollback \
 	-test_code \
@@ -110,9 +111,8 @@ aa_register_case -cats db cr_item_search_triggers {
 		-events [list DELETE]
 	    cr_item_search::remove_from_queue \
 		-revision_id $latest_revision
-
-	    db_dml set_publish_date \
-		"update cr_revisions set publish_date=current_timestamp + '1 day' :: interval where revision_id=:latest_revision"
+            set next_date [clock format [clock scan "tomorrow"] -format "%Y-%m-%d"]
+	    db_dml set_publish_date "update cr_revisions set publish_date=:next_date where revision_id=:latest_revision"
 	    aa_log "Publish Date in future, live revision not set"
 	    cr_item_search::assert_not_in_queue \
 		-revision_id $latest_revision \
@@ -130,4 +130,5 @@ aa_register_case -cats db cr_item_search_triggers {
 		-events [list INSERT UPDATE]
 	    
 	}
+    }
 }

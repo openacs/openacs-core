@@ -2027,8 +2027,8 @@ ad_proc -public db_0or1row {
         }
     } elseif { ![info exists column_set] } {
         for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-            upvar 1 [ns_set key $selection $i] value
-            set value [ns_set value $selection $i]
+            upvar 1 [ns_set key $selection $i] return_value
+            set return_value [ns_set value $selection $i]
         }
     }
 

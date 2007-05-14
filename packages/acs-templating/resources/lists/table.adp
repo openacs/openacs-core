@@ -1,54 +1,53 @@
-<table class="@list_properties.class@" cellpadding="3" cellspacing="1"@list_properties.table_attributes;noquote@>
-
 <if @list_properties.page_size@ not nil>
+<!-- top pagination -->
   <noparse>
     <if \@paginator.page_count@ gt 1 or \@list_properties.page_size_variable_p@ eq 1>
-      <tr width="100%" class="list-paginator">
-        <td colspan="@elements:rowcount@"><table width="100%"><tr width="100%"><td align="center">
+      <div class="list-paginator-top">
+		<ul class="compact list-paginator">
           <if \@paginator.page_count@ gt 1>
             <if \@paginator.group_count@ gt 1 and \@paginator.groupsize@ gt 1>
               <if \@paginator.previous_group_url@ not nil>
-                <a href="\@paginator.previous_group_url@" title="\@paginator.previous_group_context@">&lt;&lt;</a>
+                <li><a href="\@paginator.previous_group_url@" title="\@paginator.previous_group_context@">&lt;&lt;</a></li>
               </if>
               <else>
-                &lt;&lt;
+                 <li>&lt;&lt;</li>
               </else>
             </if>
             <if \@paginator.previous_page_url@ not nil>
-              &nbsp;<a href="\@paginator.previous_page_url@" title="\@paginator.previous_page_context@">&lt;</a>&nbsp;
+              <li><a href="\@paginator.previous_page_url@" title="\@paginator.previous_page_context@">&lt;</a></li>
             </if>
             <else>
-              &nbsp;&lt;&nbsp;
+               <li>&lt;</li>
             </else>
-
+	
             <multiple name="paginator_pages">
               <if \@paginator.current_page@ ne \@paginator_pages.page@>
-                <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><a href="\@paginator_pages.url@" title="\@paginator_pages.context@">\@paginator_pages.page@</a>
+                <li><a href="\@paginator_pages.url@" title="\@paginator_pages.context@">\@paginator_pages.page@</a></li>
               </if>
               <else>
-                <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><b>\@paginator_pages.page@</b>
+                <li class="current">\@paginator_pages.page@</li>
               </else>
             </multiple>
 
             <if \@paginator.next_page_url@ not nil>
-              &nbsp;<a href="\@paginator.next_page_url@" title="\@paginator.next_page_context@">&gt;</a>&nbsp;
+             <li><a href="\@paginator.next_page_url@" title="\@paginator.next_page_context@">&gt;</a></li>
             </if>
             <else>
-              &nbsp;&gt;&nbsp;
+              <li>&gt;</li>
             </else>
             <if \@paginator.group_count@ gt 1 and \@paginator.groupsize@ gt 1>
               <if \@paginator.next_group_url@ not nil>
-                <a href="\@paginator.next_group_url@" title="\@paginator.next_group_context@">&gt;&gt;</a>
+                <li><a href="\@paginator.next_group_url@" title="\@paginator.next_group_context@">&gt;&gt;</a></li>
               </if>
               <else>
-                &gt;&gt;
+                <li>&gt;&gt;</li>
               </else>
             </if>
           </if>
 
           <if \@list_properties.page_size_variable_p@ eq 1>
             </td><td align="right" width="5%">
-            <form name="\@list_properties.name@_resize" method="GET">
+            <form name="\@list_properties.name@_resize" method="GET" action="">
               \@list_properties.page_size_export_chunk;noquote@
               <select name="page_size" onChange="acs_ListBulkActionClick('\@list_properties.name@_resize', '\@list_properties.url@'); return false;">
                 <multiple name="page_sizes">
@@ -57,38 +56,45 @@
               </select>
             </form>
           </if>
-
-        </td></tr></table></td>
-      </tr>
+		</ul>
+      </div>
     </if>
   </noparse>
+<!-- end of top pagination -->
 </if>
+
 
 <if @list_properties.bulk_actions@ not nil>
   <if @list_properties.bulk_action_method@ not nil>
-  <form name="@list_properties.name@" method="@list_properties.bulk_action_method@">  
+  <form name="@list_properties.name@" method="@list_properties.bulk_action_method@" action="">  
   </if>
   <else>
-  <form name="@list_properties.name@" method="GET">
+  <form name="@list_properties.name@" method="GET" action="">
   </else>
   @list_properties.bulk_action_export_chunk;noquote@
 </if>
 
+
 <if @actions:rowcount@ gt 0>
-  <tr class="list-button-bar">
-    <td colspan="@elements:rowcount@" class="list-button-bar">
+<!-- list-button-bar-top div -->
+  <div class="list-button-bar-top">
+	<ul class="compact">
       <multiple name="actions">
-        <a href="@actions.url@" title="@actions.title@" class="button">@actions.label@</a>
+        <li><a href="@actions.url@" title="@actions.title@" class="button">@actions.label@</a></li>
       </multiple>
-    </td>
-  </tr>
+	</ul>
+  </div>
+<!-- end of list-button-bar-top div -->
 </if>
 
 
+<table class="@list_properties.class@" cellpadding="3" cellspacing="1"@list_properties.table_attributes;noquote@>
+  <if "@list_properties.caption@" ne ""><caption>@list_properties.caption;noquote@</caption></if>
   <multiple name="elements">
-    <tr class="list-header">
+    <thead>
+      <tr class="list-header">
       <group column="subrownum">
-        <th class="@elements.class@"@elements.cell_attributes;noquote@>
+        <th class="@elements.class@"@elements.cell_attributes;noquote@ id="@list_properties.name@_@elements.name@">
           <if @elements.orderby_url@ not nil>
             <if @elements.ordering_p@ true>
               <a href="@elements.orderby_url@" title="@elements.orderby_html_title@">@elements.label;noquote@</a>
@@ -104,24 +110,29 @@
         </th>
       </group>
     </tr>
+	</thead>
   </multiple>
 
 <noparse>
   <if \@@list_properties.multirow@:rowcount@ eq 0>
-    <tr class="list-odd last">
-      <td colspan="@elements:rowcount@">
+    <tbody>
+	<tr class="list-odd last">
+        <td colspan="@elements:rowcount@">
         @list_properties.no_data@
       </td>
     </tr>
+	</tbody>
   </if>
   <else>
+
+	<tbody>
     <multiple name="@list_properties.multirow@">
 </noparse>
       
   <if @list_properties.groupby@ not nil>
 
       <tr class="list-subheader">
-        <td colspan="@elements:rowcount@">
+        <td colspan="@elements:rowcount@" headers="@list_properties.name@_@list_properties.groupby@">
           <if @list_properties.groupby_label@ ne "">@list_properties.groupby_label@: </if><listelement name="@list_properties.groupby@">
         </td>
       </tr>
@@ -132,27 +143,28 @@
   </if>
 
         <multiple name="elements">
+		
   <noparse>
           <if \@@list_properties.multirow@.rownum@ lt \@@list_properties.multirow@:rowcount@>
             <if \@@list_properties.multirow@.rownum@ odd>
-              <tr class="list-odd">
+              <tr class="odd">
             </if>
             <else>
-              <tr class="list-even">
+              <tr class="even">
             </else>
           </if>
           <else>
             <if \@@list_properties.multirow@.rownum@ odd>
-              <tr class="list-odd last">
+              <tr class="odd last">
             </if>
             <else>
-              <tr class="list-even last">
+              <tr class="even last">
             </else>
           </else>
   </noparse>
 
             <group column="subrownum">
-              <td class="@elements.class@"@elements.cell_attributes;noquote@>
+              <td class="@elements.class@"@elements.cell_attributes;noquote@ headers="@list_properties.name@_@elements.name@">
                 <listelement name="@elements.name@">
               </td>
             </group>
@@ -203,70 +215,81 @@
 
   <noparse>
       </multiple>
+</tbody>
     </else>
   </noparse>
 
+</table>
+
+
 
 <if @list_properties.page_size@ not nil>
+<!-- bottom pagination -->
   <noparse>
     <if \@paginator.page_count@ gt 1>
-      <tr width="100%" class="list-paginator">
-        <td colspan="@elements:rowcount@" align="center">
+      <div class="list-paginator-bottom">
+		<ul class="compact list-paginator">
           <if \@paginator.group_count@ gt 1 and \@paginator.groupsize@ gt 1>
             <if \@paginator.previous_group_url@ not nil>
-              <a href="\@paginator.previous_group_url@" title="\@paginator.previous_group_context@">&lt;&lt;</a>
+              <li><a href="\@paginator.previous_group_url@" title="\@paginator.previous_group_context@">&lt;&lt;</a></li>
             </if>
             <else>
-              &lt;&lt;
+              <li>&lt;&lt;</li>
             </else>
           </if>
           <if \@paginator.previous_page_url@ not nil>
-            &nbsp;<a href="\@paginator.previous_page_url@" title="\@paginator.previous_page_context@">&lt;</a>&nbsp;
+            <li><a href="\@paginator.previous_page_url@" title="\@paginator.previous_page_context@">&lt;</a></li>
           </if>
           <else>
-            &nbsp;&lt;&nbsp;
+            <li>&lt;</li>
           </else>
 
           <multiple name="paginator_pages">
-            <if \@paginator.current_page@ ne \@paginator_pages.page@>
-              <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><a 
-              href="\@paginator_pages.url@" title="\@paginator_pages.context@">\@paginator_pages.page@</a>
-            </if>
-            <else>
-              <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><b>\@paginator_pages.page@</b>
-            </else>
-          </multiple>
+              <if \@paginator.current_page@ ne \@paginator_pages.page@>
+                <li><a href="\@paginator_pages.url@" title="\@paginator_pages.context@">\@paginator_pages.page@</a></li>
+              </if>
+              <else>
+                <li class="current">\@paginator_pages.page@</li>
+              </else>
+            </multiple>
 
           <if \@paginator.next_page_url@ not nil>
-            &nbsp;<a href="\@paginator.next_page_url@" title="\@paginator.next_page_context@">&gt;</a>&nbsp;
+            <li><a href="\@paginator.next_page_url@" title="\@paginator.next_page_context@">&gt;</a></li>
           </if>
           <else>
-            &nbsp;&gt;&nbsp;
+            <li>&gt;</li>
           </else>
           <if \@paginator.group_count@ gt 1 and \@paginator.groupsize@ gt 1>
             <if \@paginator.next_group_url@ not nil>
-              <a href="\@paginator.next_group_url@" title="\@paginator.next_group_context@">&gt;&gt;</a>
+              <li><a href="\@paginator.next_group_url@" title="\@paginator.next_group_context@">&gt;&gt;</a></li>
             </if>
             <else>
-              &gt;&gt;
+              <li>&gt;&gt;</li>
             </else>
           </if>
-        </td>
-      </tr>
+		</ul>
+	  </div>
     </if>
   </noparse>
+<!-- end of bottom pagination -->
 </if>
+
+
+
+
 
 <noparse><if \@@list_properties.multirow@:rowcount@ gt 0></noparse>
   <if @bulk_actions:rowcount@ gt 0>
-    <tr class="list-button-bar">
-      <td colspan="@elements:rowcount@" class="list-button-bar">
+	<!-- list-button-bar-bottom div -->
+    <div class="list-button-bar-bottom">
+		<ul class="compact">
         <multiple name="bulk_actions">
-          <a href="#" title="@bulk_actions.title@" class="button"
-          onclick="acs_ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@'); return false;">@bulk_actions.label@</a>
+          <li><a href="#" title="@bulk_actions.title@" class="button"
+          onclick="acs_ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@'); return false;" onkeypress="acs_ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@'); return false;">@bulk_actions.label@</a></li>
         </multiple>
-      </td>
-    </tr>
+		</ul>
+    </div>
+	<!-- end of list-button-bar-bottom div -->
   </if>
 <noparse></if></noparse>
 
@@ -275,4 +298,4 @@
   </form>
 </if>
 
-</table>
+

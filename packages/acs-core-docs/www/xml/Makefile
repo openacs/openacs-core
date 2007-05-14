@@ -20,7 +20,7 @@
 # I'm a Makefile newbie, so feel free to comment/slash/change.
 
 # Paths
-XSLTPROC=/sw/bin/xsltproc
+XSLTPROC=xsltproc
 HTMLDOC=htmldoc
 
 all: html 

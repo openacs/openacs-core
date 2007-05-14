@@ -1,35 +1,28 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="search" package_version="5.3.0d1" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="search" package_version="5.3.1" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="Advanced_Search">Erweiterte Suche</msg>
-  <msg key="and_not_needed">Der '&lt;b&gt;AND&lt;/&gt;' operator is unnötig -- es sind alle Suchbegriffe standardmässig enthalten</msg>
   <msg key="anytime">jederzeit</msg>
   <msg key="Date_Range">Datumsspanne</msg>
   <msg key="details">Details</msg>
-  <msg key="Display">Ansicht</msg>
   <msg key="Feeling_Lucky">Auf gut Glück</msg>
   <msg key="lt_bstopwordsb_is_a_very">'&lt;b&gt;%stopwords%&lt;/b&gt;' is ein sehr gebräuchliches Wort und ist daher in der Suche nicht verwendet worden</msg>
   <msg key="lt_FtsEngineDriver_not_a">FtsEngineDriver ist nicht verfügbar</msg>
   <msg key="lt_Make_sure_all_words_a">Stellen Sie sicher das alle Worte richtig geschrieben sind.</msg>
-  <msg key="lt_No_pages_were_found_c">Es wurden keine Seiten gefunden welche '&lt;b&gt;%query%&lt;/b&gt;' enthalten.</msg>
-  <msg key="lt_The_following_words_a">Die folgenden Wörter sind sehr gebräuchlich und werden nicht in Ihrer Suche enthalten sein: &lt;strong&gt;%stopwords;noquote%&lt;/strong&gt;</msg>
   <msg key="lt_Try_different_keyword">Versuchen Sie unterschiedliche Schlüsselwörter</msg>
   <msg key="lt_Try_more_general_keyw">Versuchen Sie mehr generelle Schlüsselwörter</msg>
   <msg key="lt_Try_your_query_on_stw">Versuchen Sie Ihre Suche mit '%stw;noquote%'</msg>
   <msg key="lt_You_must_specify_some">Sie müssen wenigstens ein Schlüsselwort spezifizieren</msg>
   <msg key="Next">Nächste</msg>
-  <msg key="no_driver_contact_webmaster">'Search' ist im Augenblick nicht konfiguriert. Bitte kontaktieren Sie den Administrator der Webseite um es in Betrieb zu nehmen</msg>
   <msg key="past_3_months">letzten 3 Monate</msg>
   <msg key="past_6_months">letzten 6 Monate</msg>
   <msg key="past_year">letztes Jahr</msg>
   <msg key="Previous">Vorhergehendes</msg>
   <msg key="Result_page">Seite mit den Resultaten:</msg>
   <msg key="results">Resultate</msg>
-  <msg key="Results_count">Resultate &lt;b&gt;%low% - %high%&lt;/b&gt; von ca. &lt;b&gt;%count%&lt;/b&gt;. Die Suche dauerte %elapsed% Sekunden</msg>
   <msg key="Search">Suche</msg>
   <msg key="Searched_for_query">Gesucht wurde nach: &lt;b&gt;%query%&lt;/b&gt;</msg>
   <msg key="Suggestions">Vorschläge:</msg>
-  <msg key="Tip_In_most_browsers_return">Tip: In den meisten Browsern können Sie einfach die Eingabetaste drücken anstatt den &quot;Suche&quot; Knopf zu drücken.</msg>
   <msg key="Try_fewer_keywords">Versuchen Sie es mit weniger Schlüsselworten</msg>
   <msg key="Untitled">Unbenannt</msg>
 </message_catalog>

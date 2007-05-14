@@ -877,7 +877,7 @@ ad_proc -public template::widget::dateFragment {
        # Display text entry for some elements, or if the type is text
        if { $type eq "t" ||
             [regexp "year|short_year" $fragment] } {
-         set output "<input type=\"text\" name=\"$element(name).$fragment\" size=\"$size\""
+         set output "<input type=\"text\" name=\"$element(name).$fragment\" id=\"$element(name).$fragment\" size=\"$size\""
          append output " maxlength=\"$size\" value=\"[template::util::leadingPad $value $size]\""
          array set attributes $tag_attributes
          foreach attribute_name [array names attributes] {
@@ -887,7 +887,7 @@ ad_proc -public template::widget::dateFragment {
              append output " $attribute_name=\"$attributes($attribute_name)\""
            }
          }
-         append output "/>\n"
+         append output ">\n"
          return $output
        } else {
          # Use a default range for others
@@ -1010,8 +1010,8 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
   # Just remember the format for now - in the future, allow
   # the user to enter a freeform format
   append output "<input type=\"hidden\" name=\"$element(name).format\" "
-  append output "value=\"$element(format)\" />\n"
-  append output "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\">\n<tr>"
+  append output "value=\"$element(format)\" >\n"
+  append output "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\">\n"
 
   # Prepare the value to set defaults on the form
   if { [info exists element(value)] && 
@@ -1035,7 +1035,8 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
        set id_attr_name $attributes(id)
   }
 
-  while { $format_string ne {} } {
+  set tbody_content "<tbody><tr>"
+  while { ![string equal $format_string {}] } {
 
     # Snip off the next token
     regexp {([^/\-.: ]*)([/\-.: ]*)(.*)} \
@@ -1044,7 +1045,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
     regexp -nocase $template::util::date::token_exp $word \
           match token type
 
-    append output "<td nowrap=\"nowrap\">"
+    append tbody_content "<td nowrap=\"nowrap\">"
     
     lappend tokens $token
 
@@ -1053,10 +1054,10 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
     set fragment [lindex $fragment_def 1]
 
     if {[exists_and_not_null id_attr_name]} {
-           set attributes(id) "${id_attr_name}.${fragment}"
+	set attributes(id) "${id_attr_name}.${fragment}"
     }
 
-    append output [template::widget::[lindex $fragment_def 0] \
+    append tbody_content [template::widget::[lindex $fragment_def 0] \
                      element \
                      $fragment \
                      [lindex $fragment_def 2] \
@@ -1067,26 +1068,30 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
 
     # Output the separator
     if {$sep eq " "} {
-      append output "&nbsp;"
+      append tbody_content "&nbsp;"
     } else {
-      append output "$sep"
+      append tbody_content "$sep"
     }
 
-    append output "</td>\n"
+    append tbody_content "</td>\n"
   }
 
-  append output "</tr>\n"
+  append tbody_content "</tr></tbody>\n"
 
   # Append help text under each widget, if neccessary
+  set tfoot_content ""
   if { [info exists element(help)] } {
-    append output "<tr>" 
+      
+    append tfoot_content "<tfoot><tr class=\"form-help-text small center\">\n" 
     foreach token $tokens {
-      set fragment_def $template::util::date::fragment_widgets($token)
-      append output "<td nowrap=\"nowrap\" align=\"center\"><font size=\"-2\">[lindex $fragment_def 3]</font></td>"
+	set fragment_def $template::util::date::fragment_widgets([string toupper $token])
+	set fragment [lindex $fragment_def 1]
+	append tfoot_content "<td><label for=\"$element(name).$fragment\">[lindex $fragment_def 3]</label></td>\n"
     }
-    append output "</tr>\n"
+    append tfoot_content "</tr></tfoot>\n"
   } 
 
+  append output "$tfoot_content$tbody_content"
   append output "</table>\n"
 
   append output "<!-- date $element(name) end -->\n"
@@ -1349,8 +1354,8 @@ ad_proc -public template::widget::textdate { element_reference tag_attributes } 
   }
 
   if {$element(mode) eq "edit"} {
-      append output "<input type=\"text\" name=\"$element(id)\" size=\"10\" maxlength=\"10\" id=\"$element(id)_input_field\" value=\"[ad_quotehtml $textdate]\" />"
-      append output "<input type=\"button\" style=\"border-width: 0px; height: 17px; width: 19px; background-image: url('/resources/acs-templating/calendar.gif'); background-repeat: no-repeat; cursor: pointer;\" onclick=\"return showCalendarWithDefault('$element(id)_input_field', '$javascriptdate', '[template::util::textdate_localized_format]');\" />"
+      append output "<input type=\"text\" name=\"$element(id)\" size=\"10\" maxlength=\"10\" id=\"$element(id)_input_field\" value=\"[ad_quotehtml $textdate]\" >"
+      append output "<input type=\"button\" style=\"border-width: 0px; height: 17px; width: 19px; background-image: url('/resources/acs-templating/calendar.gif'); background-repeat: no-repeat; cursor: pointer;\" onclick=\"return showCalendarWithDefault('$element(id)_input_field', '$javascriptdate', '[template::util::textdate_localized_format]');\" >"
   } else {
       append output $textdate
       append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ad_quotehtml $textdate]\">"

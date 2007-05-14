@@ -24,37 +24,37 @@ list::create \
             sub_class narrow
         }
         pretty_name {
-            label "Name"
+            label "\#acs-admin.Name\#"
             link_url_eval {[export_vars -base authority { authority_id }]}
         }
         enabled {
-            label "Enabled"
+            label "\#acs-admin.Enabled\#"
             html { align center }
             display_template {
                 <if @authorities.enabled_p@ true>
-                  <a href="@authorities.enabled_p_url@" title="Disable this authority"><img src="/shared/images/checkboxchecked" height="13" width="13" border="0" style="background-color: white;"></a>
+                  <a href="@authorities.enabled_p_url@" title="\#acs-admin.Disable_this_authority\#"><img src="/shared/images/checkboxchecked" height="13" width="13" border="0" style="background-color: white;"></a>
                 </if>
                 <else>
-                  <a href="@authorities.enabled_p_url@" title="Enable this authority"><img src="/shared/images/checkbox" height="13" width="13" border="0" style="background-color: white;"></a>
+                  <a href="@authorities.enabled_p_url@" title="\#acs-admin.Enable_this_authority\#"><img src="/shared/images/checkbox" height="13" width="13" border="0" style="background-color: white;"></a>
                 </else>
             }
         }
         move {
-            label "Order*"
+            label "\#acs-admin.Order\#"
             html { align center }
             display_template {
                 <if @authorities.sort_order@ ne @authorities.highest_sort_order@>
-                  <a href="@authorities.sort_order_url_up@" title="Move this authority up"><img src="/resources/acs-subsite/arrow-up.gif" border="0" width="15" height="15"></a>
+                  <a href="@authorities.sort_order_url_up@" title="\#acs-admin.Move_this_authority_up\#"><img src="/resources/acs-subsite/arrow-up.gif" border="0" width="15" height="15"></a>
                 </if>
                 <else><img src="/resources/acs-subsite/spacer.gif" width="15" height="15"></else>
                 <if @authorities.sort_order@ ne  @authorities.lowest_sort_order@>
-                  <a href="@authorities.sort_order_url_down@" title="Move this authority down"><img src="/resources/acs-subsite/arrow-down.gif" border="0" width="15" height="15"></a>
+                  <a href="@authorities.sort_order_url_down@" title="\#acs-admin.Move_this_authority_down\#"><img src="/resources/acs-subsite/arrow-down.gif" border="0" width="15" height="15"></a>
                 </if>
                 <else><img src="/resources/acs-subsite/spacer.gif" width="15" height="15"></else>
           }
         }
         registration {
-            label "Registration"
+            label "\#acs-admin.Registration\#"
             html { align center }
             display_template {
                 <switch @authorities.registration_status@>
@@ -63,8 +63,8 @@ list::create \
                   </case>
                   <case value="can_select">
                     <a href="@authorities.registration_url@" 
-                       title="Make this the authority for registering new users"
-                       onclick="return confirm('You are changing all user registrations to be in authority @authorities.pretty_name@');">
+                       title="\#acs-admin.Make_this_the_authority_for_registering_new_users\#"
+                       onclick="return confirm('\#acs-admin.You_are_changing_all_user_registrations_to_be_in_authority_authorities_pretty_name\#');">
                       <img src="/resources/acs-subsite/radio.gif" height="13" width="13" border="0" style="background-color: white;">
                     </a> 
                   </case>
@@ -75,13 +75,13 @@ list::create \
             }
         }
         auth_impl {
-            label "Authentication"
+            label "\#acs-admin.Authentication\#"
         }
         pwd_impl {
-            label "Password"
+            label "\#acs-admin.Password\#"
         }
         reg_impl {
-            label "Registration"
+            label "\#acs-admin.Registration\#"
         }
         delete {
             label ""
@@ -89,8 +89,8 @@ list::create \
                 <if @authorities.short_name@ ne local>
                   <a href="@authorities.delete_url@"
                      title="Delete this authority"
-                     onclick="return confirm('Are you sure you want to delete authority @authorities.pretty_name@?');">
-                    <img src="/shared/images/Delete16.gif" height="16" width="16" alt="Delete" border="0">
+                     onclick="return confirm('\#acs-admin.Are_you_sure_you_want_to_delete_authority_authorities_pretty_name\#');">
+                    <img src="/shared/images/Delete16.gif" height="16" width="16" alt="\#acs-admin.Delete\#" border="0">
                   </a>
                 </if>
             }

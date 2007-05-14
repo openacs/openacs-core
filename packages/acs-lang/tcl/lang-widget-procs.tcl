@@ -30,7 +30,7 @@ ad_proc -public template::widget::select_locales {
 
     array set attributes $tag_attributes
 
-    append output "<select name=\"$element(name)\" "
+    append output "<select name=\"$element(name)\" id=\"$element(name)\" "
 
     foreach name [array names attributes] {
         if {$attributes($name) eq {}} {

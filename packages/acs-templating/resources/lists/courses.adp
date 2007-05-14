@@ -122,7 +122,6 @@
   
   <tr class="list-subheader">
     <td colspan="@elements:rowcount@">
-      <listelement name="@list_properties.groupby@">
 	<if @list_properties.groupby_label@ not nil>
 	  <font style="font-weight: normal">@list_properties.groupby_label;noquote@</font>
 	</if>

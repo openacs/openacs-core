@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-tcl" package_version="5.3.0d1" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-tcl" package_version="5.3.1" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="a_problem">un problema</msg>
   <msg key="approve">aprobar</msg>
@@ -11,14 +11,14 @@
   <msg key="Detais">Detalles:</msg>
   <msg key="Email">Email:</msg>
   <msg key="Error">Descripción del error:</msg>
-  <msg key="error">error</msg>
+  <msg key="error">el error</msg>
   <msg key="Error_Description">Descripción del Error</msg>
   <msg key="Error_details">Detalles del Error</msg>
   <msg key="Error_Report">Informe de Error</msg>
   <msg key="errors">Errores</msg>
   <msg key="File">Archivo con error:</msg>
   <msg key="Insert_error">Ha habido un error al guardar la información en la base de datos</msg>
-  <msg key="lt__and_resubmit_your_en">, y vuelva a intentarlo.</msg>
+  <msg key="lt__and_resubmit_your_en"> y vuelva a intentarlo.</msg>
   <msg key="lt_Argspec_element_is_in">Argspec %element% no es válido ya que contiene más de 2 elementos.</msg>
   <msg key="lt_Automatically_Submite">Error Registrado Automáticamente</msg>
   <msg key="lt_Error_Report_in_ad_sy">Informe de Error en %system_name%</msg>
@@ -49,7 +49,7 @@
   <msg key="lt_name_is_too_short__Pl">%name% es demasiado corto. Por favor, introduzca un valor de al menos [lindex $range 0] caracteres. El valor introducido contiene [string length $value] caracteres.</msg>
   <msg key="lt_name_is_too_short__Pl_1">%name% es demasiado corto. Por favor, introduzca un valor de al menos [lindex $length 0] caracteres. El valor introducido contiene [string length $value] caracteres.</msg>
   <msg key="lt_NB_This_error_was_sub">El error ha sido registrado</msg>
-  <msg key="lt_Please_back_up_using_">Por favor, vuelve atrás y corrija lo descrito arriba</msg>
+  <msg key="lt_Please_back_up_using_">Por favor, vuelva atrás, corrija </msg>
   <msg key="lt_Problem_with_a_Page_o">Hubo un problema con la página</msg>
   <msg key="lt_Problem_with_a_Templa">Hubo un problema con la plantilla de la página</msg>
   <msg key="lt_Problem_with_your_inp">Hubo un problema con los datos introducidos</msg>
@@ -75,13 +75,15 @@
   <msg key="lt_You_must_specify_some">Debe especificar algo para %formal_name%</msg>
   <msg key="lt_You_must_supply_a_val">Debe dar un valor a %formal_name%</msg>
   <msg key="lt_You_specified_a_path_">Especificó un camino hacía un fichero que no está permitido en este sistema</msg>
-  <msg key="lt_Youve_supplied_two_va">Debe dar 2 valores a %formal_name%</msg>
+  <msg key="lt_Youve_supplied_two_va">Ha proporcionado dos valores a %formal_name%</msg>
   <msg key="maturity_immature">Inestable</msg>
   <msg key="maturity_incompatible">Problemas de compatibilidad</msg>
   <msg key="maturity_mature">Estable</msg>
   <msg key="maturity_mature_and_standard">Estable y Estándar</msg>
   <msg key="maturity_new_submission">Nueva aportación o Nivel de Estabilidad Desconocido</msg>
   <msg key="Page">Página con error:</msg>
+  <msg key="Page_current_of_total">Página %current% de %total%</msg>
+  <msg key="Percentage_complete">Porcentaje completado</msg>
   <msg key="Previus">Página anterior:</msg>
   <msg key="Public_User">Público</msg>
   <msg key="reject">rechazar</msg>
@@ -100,6 +102,6 @@
   <msg key="User_comments">Commentarios de usuario:</msg>
   <msg key="User_Name">Nombre de Usuario:</msg>
   <msg key="We">Le agradecemos que indique algunos detalles sobre lo que estaba intentando realizar.</msg>
-  <msg key="We_had">Hemos tenido</msg>
+  <msg key="We_had">Ha sucedido</msg>
   <msg key="with_your_input">con su petición:</msg>
 </message_catalog>

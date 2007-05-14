@@ -68,8 +68,6 @@ ad_proc -public template::element::create { form_id element_id args } {
 
     @option label         The label for the form element.
     
-    @option section       The section name for the element.
-
     @option html          A list of name-value attribute pairs to include in
                           the HTML tag for widget.  Typically used for additional
                           formatting options, such as <tt>cols</tt> or 
@@ -84,6 +82,15 @@ ad_proc -public template::element::create { form_id element_id args } {
                           two-element lists in the form 
                           { {label value} {label value} {label value} ...}
 
+    @option fieldset      A list of name-value attribute pairs to include in 
+	                      the HTML tag for checkboxes and radio FIELDSET.
+
+    @option legend        A list of name-value attribute pairs to include in 
+	                      the HTML tag for checkboxes and radio LEGEND.
+
+    @option legendtext    A text for the LEGEND tag to include in 
+	                      the checkboxes and radio FIELDSET block
+
     @option value         The default value of the element
 
     @option values        The default values of the element, where multiple values
@@ -97,7 +104,7 @@ ad_proc -public template::element::create { form_id element_id args } {
                           1 or 0, and message is to be displayed to the user when 
                           the validation step fails, that is, if the expression 
                           evaluates to 0. Use the special variable <tt>$value</tt> 
-			  to refer to the value entered by the user in that field.
+  			              to refer to the value entered by the user in that field.
 
     @option sign          specify for a hidden widget that its value should be
                           signed
@@ -132,6 +139,7 @@ ad_proc -public template::element::create { form_id element_id args } {
     @see template::widget
     @see template::data::validate
     @see template::form::create
+	@see template::form::section
 } {
   set level [template::adp_level]
 
@@ -164,6 +172,11 @@ ad_proc -public template::element::create { form_id element_id args } {
 
   # set the form section
   set opts(section) $form_properties(section)
+	if { ![string equal $opts(section) ""] } {
+		set opts(sec_fieldset) $form_properties(sec_fieldset)
+		set opts(sec_legend) $form_properties(sec_legend)
+		set opts(sec_legendtext) $form_properties(sec_legendtext)
+	}
 
   template::util::get_opts $args
 
@@ -181,6 +194,49 @@ ad_proc -public template::element::create { form_id element_id args } {
     set opts(optional) 1
     if { ! [info exists opts(value)] } { set opts(value) $opts(label) }
     if { ! [info exists opts(label)] } { set opts(label) $opts(value) }
+  }
+
+  # If the widget is a checkbox or radio widget, set attributes
+  if { [string equal $opts(widget) radio] || \
+       [string equal $opts(widget) checkbox] } {
+
+	  # set fieldset attributes
+	  if { ![info exists opts(fieldset)] } {
+		  set opts(fieldset) [list class $opts(widget)]
+	  }
+
+	  array set fs_attributes $opts(fieldset)
+	  if { ![info exists fs_attributes(class)] } {
+		  set fs_attributes(class) $opts(widget)
+	  }
+
+	  set fs_options ""
+	  foreach name [array names fs_attributes] {
+		  if { [string equal $fs_attributes($name) {}] } {
+			  append fs_options " $name"
+		  } else {
+			  append fs_options " $name=\"$fs_attributes($name)\""
+		  }
+	  }
+	  set opts(fieldset) $fs_options
+
+	  # set legend attributes
+	  if { ![info exists opts(legendtext)] } {
+		  set opts(legendtext) ""
+	  }
+	  if { ![info exists opts(legend)] } {
+		  set opts(legend) {}
+	  }
+	  array set lg_attributes $opts(legend)
+	  set lg_options ""
+	  foreach name [array names lg_attributes] {
+		  if { [string equal $lg_attributes($name) {}] } {
+			  append lg_options " $name"
+		  } else {
+			  append lg_options " $name=\"$lg_attributes($name)\""
+		  }
+	  }
+	  set opts(legend) $lg_options
   }
 
   # Remember that the element has not been rendered yet

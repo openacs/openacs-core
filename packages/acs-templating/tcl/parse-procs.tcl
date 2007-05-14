@@ -104,95 +104,106 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
   lappend parse_level [info level]
   
   # execute the code to prepare the data sources for a template
-  if { [catch { adp_prepare } errMsg] } {
-    
-    # return without rendering any HTML if the code aborts
+  set return_code [catch { 
+    set found_script_p [adp_prepare]
 
-    # DRB: after popping off the parse level so the portal package
-    # and other clever users of the include tag work properly ...
-    template::util::lpop parse_level
+    # if we get here, adp_prepare ran without throwing an error.
 
-    if {$errMsg eq "ADP_ABORT"} { 
-      return "" 
-    } else {
-      global errorInfo errorCode
-      error $errMsg $errorInfo $errorCode
+    # initialize the ADP output
+    set __adp_output ""
+
+    set mime_type [get_mime_type]
+    set template_extension [get_mime_template_extension $mime_type]
+
+    # generate ADP output if a template exists (otherwise assume plain Tcl page)
+
+    set templated_p 0
+    if { [ad_conn locale] ne ""
+         && [file exists "$__adp_stub.[ad_conn locale].$template_extension"]} {
+      # it's a localized version of a templated page
+      set templated_p 1
+      append __adp_stub ".[ad_conn locale]"
+    } elseif {[file exists "$__adp_stub.$template_extension"]} {
+      # it's a regular templated page
+      set templated_p 1
     }
-  }
-  # if we get here, adp_prepare ran without throwing an error.
-  # and errMsg contains its return value
 
-  # initialize the ADP output
-  set __adp_output ""
-
-  set mime_type [get_mime_type]
-  set template_extension [get_mime_template_extension $mime_type]
-
-  # generate ADP output if a template exists (otherwise assume plain Tcl page)
-
-  set templated_p 0
-  if { ![empty_string_p [ad_conn locale]]
-       && [file exists "$__adp_stub.[ad_conn locale].$template_extension"]} {
-    # it's a localized version of a templated page
-    set templated_p 1
-    append __adp_stub ".[ad_conn locale]"
-  } elseif {[file exists "$__adp_stub.$template_extension"]} {
-    # it's a regular templated page
-    set templated_p 1
-  }
-
-  if { [llength [info procs ::ds_page_fragment_cache_enabled_p]]
-       && [::ds_enabled_p]
-       && [::ds_page_fragment_cache_enabled_p]
-       && [::ds_collection_enabled_p] } {
-    ns_cache get ds_page_bits [ad_conn request] template_list
-    lappend template_list $__adp_stub.$template_extension
-    ns_cache set ds_page_bits [ad_conn request] $template_list
-  }
-
-  if { $templated_p } {
-
-    # ensure that template output procedure exists and is up-to-date
-    template::adp_init $template_extension $__adp_stub
-
-    # get result of template output procedure into __adp_output, and properties into __adp_properties
-    template::code::${template_extension}::$__adp_stub
-
-    # JCD: Lets keep a copy of all the page fragments!  WooHoo.
     if { [llength [info procs ::ds_page_fragment_cache_enabled_p]]
          && [::ds_enabled_p]
          && [::ds_page_fragment_cache_enabled_p]
          && [::ds_collection_enabled_p] } {
-      ns_cache set ds_page_bits "[ad_conn request]:$__adp_stub.$template_extension" $__adp_output
+      ns_cache get ds_page_bits [ad_conn request] template_list
+      lappend template_list $__adp_stub.$template_extension
+      ns_cache set ds_page_bits [ad_conn request] $template_list
     }
 
-    # call the master template if one has been defined
-    if { [info exists __adp_master] } {
+    if { $templated_p } {
 
-      # pass properties on to master template
-      set __adp_output [template::adp_parse $__adp_master \
-        [concat [list __adp_slave $__adp_output] [array get __adp_properties]]]
+      # ensure that template output procedure exists and is up-to-date
+      template::adp_init $template_extension $__adp_stub
+
+      # get result of template output procedure into __adp_output, and properties into __adp_properties
+      template::code::${template_extension}::$__adp_stub
+
+      # JCD: Lets keep a copy of all the page fragments!  WooHoo.
+      if { [llength [info procs ::ds_page_fragment_cache_enabled_p]]
+           && [::ds_enabled_p]
+           && [::ds_page_fragment_cache_enabled_p]
+           && [::ds_collection_enabled_p] } {
+        ns_cache set ds_page_bits "[ad_conn request]:$__adp_stub.$template_extension" $__adp_output
+      }
+
+      # call the master template if one has been defined
+      if { [info exists __adp_master] } {
+        # pass properties on to master template
+        set __adp_output [template::adp_parse $__adp_master \
+          [concat [list __adp_slave $__adp_output] [array get __adp_properties]]]
+      }
+    } else {
+      # no template;  found_script_p tells us if adp_prepare at least found a script.
+      if { !$found_script_p } {
+        # No template. Perhaps there is an html file.
+        if { [file exists $__adp_stub.html] } {
+          ns_log debug "getting output from ${__adp_stub}.html"
+          set __adp_output [template::util::read_file "${__adp_stub}.html"]
+        } elseif  { [file exists $__adp_stub.htm] } {
+          ns_log debug "getting output from ${__adp_stub}.htm"
+          set __adp_output [template::util::read_file "${__adp_stub}.htm"]
+        } else {
+          error "No script or template found for page '$__adp_stub'"
+        }
+      }
     }
-  } else {
-    # no template;  errMsg tells us if adp_prepare at least found a script.
-    if { !$errMsg } {
-      # No template. Perhaps there is an html file.
-      if { [file exists $__adp_stub.html] } {
-	ns_log debug "getting output from ${__adp_stub}.html"
-	set __adp_output [template::util::read_file "${__adp_stub}.html"]
-      } elseif  { [file exists $__adp_stub.htm] } {
-	ns_log debug "getting output from ${__adp_stub}.htm"
-	set __adp_output [template::util::read_file "${__adp_stub}.htm"]
+
+    return $__adp_output				; # empty in non-templated page
+  } return_value]
+
+  global errorInfo errorCode
+  set s_errorInfo $errorInfo
+  set s_errorCode $errorCode
+
+  # Always pop off the parse_level no matter how we exit
+  template::util::lpop parse_level
+
+  switch $return_code {
+    0 - 2 {
+      # CODE executed without a non-local exit -- return what it
+      # evaluated to.
+      return $return_value
+    }
+    1 {
+      # Error
+      return -code error -errorinfo $s_errorInfo -errorcode $s_errorCode $return_value
+    }
+    default {
+      if { [string equal $return_value ADP_ABORT] } { 
+        # return without rendering any HTML if the code aborts
+        return "" 
       } else {
-	error "No script or template found for page '$__adp_stub'"
+        return -code $return_code $return_value
       }
     }
   }
-
-  # pop off parse level
-  template::util::lpop parse_level
-
-  return $__adp_output				; # empty in non-templated page
 }
 
 ad_proc -private template::adp_set_vars {} {

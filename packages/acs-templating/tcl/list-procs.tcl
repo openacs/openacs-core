@@ -35,10 +35,11 @@ ad_proc -public template::list::create {
     {-orderby_name "orderby"}
     {-row_pretty_plural "#acs-templating.data#"}
     {-no_data ""}
-    {-main_class "list"}
+    {-main_class "list-table"}
     {-sub_class ""}
     {-class ""}
     {-html ""}
+    {-caption ""}
     {-page_size ""}
     {-page_size_variable_p 0}
     {-page_groupsize 10}
@@ -177,6 +178,8 @@ ad_proc -public template::list::create {
     @param  html           HTML attributes to be output for the table tag, e.g. { align right style "background-color: yellow;" }. 
                            Value should be a Tcl list with { name value name value }
 
+    @param caption         Caption tag that appears right below the table tag. Required for AA. Added 2/27/2007
+
     @param  page_size      The number of rows to display on each page. If specified, the list will be paginated.
 
     @param  page_size_variable_p Displays a selectbox to let the user change the number of rows to display on each page. If specified, the list will be paginated.
@@ -255,6 +258,7 @@ ad_proc -public template::list::create {
         sub_class {}
         class {}
         html {}
+	caption {}
         actions {}
         bulk_actions {}
         bulk_action_export_vars {}
@@ -308,6 +312,7 @@ ad_proc -public template::list::create {
         sub_class
         class
         html
+	caption
         page_size
         page_groupsize
         page_query
@@ -339,8 +344,8 @@ ad_proc -public template::list::create {
             -list_name $name \
             -element_name $checkbox_name \
             -spec {
-                label {<input type="checkbox" name="_dummy" onclick="acs_ListCheckAll('$name', this.checked)" title="[_ acs-templating.lt_Checkuncheck_all_rows]">}
-                display_template {<input type="checkbox" name="$key" value="@$list_properties(multirow).$key@" id="$name,@$list_properties(multirow).$key@" title="[_ acs-templating.lt_Checkuncheck_this_row]">}
+                label {<input type="checkbox" name="_dummy" onclick="acs_ListCheckAll('$name', this.checked)" onkeypress="acs_ListCheckAll('$name', this.checked)" title="[_ acs-templating.lt_Checkuncheck_all_rows]">}
+                display_template {<input type="checkbox" name="$key" value="@$list_properties(multirow).$key@" id="$name.@$list_properties(multirow).$key@" title="[_ acs-templating.lt_Checkuncheck_this_row]">}
                 sub_class {narrow}
                 html { align center }
             }
@@ -350,13 +355,13 @@ ad_proc -public template::list::create {
     foreach { elm_name elm_spec } $elements {
         # Create the element
         # Need to uplevel 2 the subst command to get to our caller's namespace
+
         template::list::element::create \
             -list_name $name \
             -element_name $elm_name \
             -spec $elm_spec \
-            -ulevel 2
+            -ulevel 2 
     }
-    
     set reserved_filter_names { groupby orderby format page }
 
     # Handle filters
@@ -930,7 +935,7 @@ ad_proc -private template::list::template {
     }
 
     # Table tag HTML attributes
-    set list_properties(table_attributes) [template::list::util_html_to_attributes_string $list_properties(html)]
+    set list_properties(table_attributes) [template::list::util_html_to_attributes_string $list_properties(html) 1]
 
     #
     # Find the list template
@@ -1071,7 +1076,7 @@ ad_proc -private template::list::prepare_for_rendering {
                         # Update subtotals
                         incr __agg_group_counter($__element_properties(name))
                         set __agg_group_sum($__element_properties(name)) \
-                            [expr {$__agg_group_sum($__element_properties(name)) + [set $__element_properties(name)]}]
+                            [expr $__agg_group_sum($__element_properties(name)) + [expr {[string is double [set $__element_properties(name)]] ? [set $__element_properties(name)] : 0}]]
                     }
 
                     switch $__element_properties(aggregate) {
@@ -1284,7 +1289,7 @@ ad_proc -private template::list::prepare_elements {
                 set element_properties(orderby_url) [get_url \
                                                          -name $name \
                                                          -override [list [list $list_properties(orderby_name) "${element_name},$direction"]]]
-                set element_properties(orderby_html_title) "Reverse the sort order of this column"
+                set element_properties(orderby_html_title) [_ acs-templating.reverse_sort_order_of_label [list label $element_properties(label)]]
                 set element_properties(ordering_p) "t"
                 set element_properties(orderby_direction) $list_properties(orderby_selected_direction)
 
@@ -1293,7 +1298,7 @@ ad_proc -private template::list::prepare_elements {
                 set element_properties(orderby_url) [get_url \
                                                          -name $name \
                                                          -override [list [list $list_properties(orderby_name) "${element_name},$element_properties(default_direction)"]]]
-                set element_properties(orderby_html_title) "Sort the list by this column"
+                set element_properties(orderby_html_title) [_ acs-templating.sort_the_list_by_label [list label $element_properties(label)]]
             }
         }
     }
@@ -1545,21 +1550,38 @@ ad_proc -private template::list::render_filters {
 
 ad_proc -public template::list::util_html_to_attributes_string {
     html
+    {default_summary_p "0"}
 } {
     Takes a list in array get format and builds HTML attributes from them.
 
     @param html A misnomer?  The input isn't HTML, the output is HTML.
+    @param default_summary_p Include a default summary if one does not exist
 
     @return HTML attributes built from the list in array get format
+    
+    2/28/2007 - Project Zen - Modifying to handle a default value for summary if default_summary_p = 1
 } {
     set output {}
+    set summary_exists_p 0
     foreach { key value } $html {
-        if { $value ne "" } {
-            append output " [ad_quotehtml $key]=\"[ad_quotehtml $value]\""
-        } else {
-            append output " [ad_quotehtml $key]"
-        }
+	if { $key eq "summary" } {
+	    if { $value ne "" } {
+		set summary_exists_p 1
+		append output " summary=\"[ad_quotehtml $value]\""
+	    } 
+	} else {
+	    if { $value ne "" } {
+		append output " [ad_quotehtml $key]=\"[ad_quotehtml $value]\""
+	    } else {
+		append output " [ad_quotehtml $key]"
+	    }
+	}
     }
+
+    if {$default_summary_p && !$summary_exists_p} {
+	append output " summary=\"[_ acs-templating.DefaultSummary [list list_name \@list_properties.name\@]]\""
+    }
+
     return $output
 }
 
@@ -1726,7 +1748,7 @@ ad_proc -public template::list::element::create {
         
     # Let the element know its owner's name
     set element_properties(list_name) $list_name
-
+    
     incr ulevel
     
     set_properties \

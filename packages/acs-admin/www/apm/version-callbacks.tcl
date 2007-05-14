@@ -9,13 +9,13 @@ ad_page_contract {
 
 db_1row package_version_info "select pretty_name, version_name from apm_package_version_info where version_id = :version_id"
 
-set page_title "Tcl Callbacks"
-set context [list [list "." "Package Manager"] [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] $page_title]
+set page_title "\#acs-admin.Tcl_Callbacks\#"
+set context [list [list "." "\#acs-admin.Package_Manager\#"] [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] $page_title]
 
 set unused_callback_types [apm_unused_callback_types -version_id $version_id]
 
 if { [llength $unused_callback_types] > 0  } {
-    set actions [list "Add callback" [export_vars -base "version-callback-add-edit" { version_id }]]
+    set actions [list "\#acs-admin.Add_callback\#" [export_vars -base "version-callback-add-edit" { version_id }]]
 } else {
     set actions [list]
 }
@@ -33,19 +33,19 @@ template::list::create \
                 <img src="/resources/acs-subsite/Edit16.gif" width="16" height="16" border="0">
             } 
             link_url_eval {[export_vars -base "version-callback-add-edit" { version_id type }]}
-            link_html { title "Edit callback" }
+            link_html { title "\#acs-admin.Edit_callback\#" }
         }
         type {
-            label "Type"
+            label "\#acs-admin.Type\#"
         }
         proc {
-            label "Tcl Proc"
+            label "\#acs-admin.Tcl_Proc\#"
         }
         invoke {
-            label "Invoke"
-            display_template {<if @callbacks.type@ in "before-install" "after-install" "before-uninstall" "after-uninstall">Invoke</if><else><i style="color: gray;">N/A</i></else>}
+            label "\#acs-admin.Invoke\#"
+            display_template {<if @callbacks.type@ in "before-install" "after-install" "before-uninstall" "after-uninstall">\#acs-admin.Invoke\#</if><else><i style="color: gray;">N/A</i></else>}
             link_url_eval {[ad_decode [lsearch { before-install after-install before-uninstall after-uninstall } $type] -1 {} [export_vars -base "version-callback-invoke" { version_id type }]]}
-            link_html { title "Invoke this callback proc now. Be careful!" }
+            link_html { title "\#acs-admin.Invoke_this_callback_proc_now_Be_careful\#" }
             html { align center }
         }
         delete {
@@ -55,7 +55,7 @@ template::list::create \
                 <img src="/resources/acs-subsite/Delete16.gif" width="16" height="16" border="0">
             } 
             link_url_eval {[export_vars -base "version-callback-delete" { version_id type }]}
-            link_html { title "Delete callback" }
+            link_html { title "\#acs-admin.Delete_callback\#" }
         }
     }
 
