@@ -1,5 +1,4 @@
 <multiple name="filters">
-  <p style="margin-top: 0px; margin-bottom: 12px;">
     <table border="0" cellspacing="0" cellpadding="2" width="100%">
       <tr>
         <td colspan="3" class="list-filter-header">
@@ -17,7 +16,7 @@
           <tr>
         </else>
           <td class="list-filter">
-            <if @filters.selected_p@ true><span class="list-filter-selected">@filters.label@</span></if>
+            <if @filters.selected_p@ true><strong><span class="list-filter-selected">@filters.label@</span></strong></if>
             <else><a href="@filters.url@" title="@filters.url_html_title@">@filters.label@</a></else>
           </td>
           <td align="right" class="list-filter">
@@ -31,5 +30,4 @@
         </tr>
       </group>
     </table>
-  </p>
 </multiple>

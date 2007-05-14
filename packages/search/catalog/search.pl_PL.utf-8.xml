@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="search" package_version="5.3.0d1" locale="pl_PL" charset="utf-8">
+<message_catalog package_key="search" package_version="5.3.1" locale="pl_PL" charset="utf-8">
 
-  <msg key="lt_No_pages_were_found_c">Nie znaleziono stron zawierających &quot;&lt;b&gt;%query%&lt;/b&gt;&quot;.</msg>
   <msg key="lt_Try_different_keyword">Spróbuj z innymi słowami kluczowymi.</msg>
   <msg key="lt_Try_more_general_keyw">Spróbuj bardziej ogólnych słów kluczowych.</msg>
   <msg key="lt_You_must_specify_some">Musisz podać jakieś słowa kluczowe.</msg>

@@ -48,7 +48,7 @@ if { [catch {
 
     set time_and_date_page [util_httpget "http://www.timeanddate.com/worldclock/"]
 
-    regexp {Current <strong>UTC</strong> \(or GMT/Zulu\)-time used: <strong>([^<]*)</strong>} $time_and_date_page match utc_from_page
+    regexp {Current <strong>UTC</strong> \(or GMT/Zulu\)-time used: <strong[^>]*>([^<]*)</strong>} $time_and_date_page match utc_from_page
 
     # UTC in format:
     # Wednesday, November 20, 2002, at 2:49:07 PM

@@ -9,7 +9,7 @@
 #acs-subsite.lt_Upload_your_favorite#
 
 <blockquote>
-<form enctype=multipart/form-data method=POST action="upload-2">
+<form enctype="multipart/form-data" method=POST action="upload-2">
 @export_vars;noquote@
 <table>
 <tr>
@@ -24,7 +24,7 @@
 <br>
 <font size=-1>#acs-subsite.optional#</font>
 </td>
-<td><textarea rows=6 cols=50 wrap=soft name=portrait_comment>
+<td><textarea rows=6 cols=50 name="portrait_comment">
 </textarea>
 </td>
 </tr>
@@ -34,7 +34,5 @@
 <center>
 <input type=submit value="Upload">
 </center>
-</blockquote>
 </form>
-
-
+</blockquote>

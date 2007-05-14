@@ -1,35 +1,28 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="search" package_version="5.2.3" locale="pt_BR" charset="ISO-8859-1">
+<message_catalog package_key="search" package_version="5.3.1" locale="pt_BR" charset="ISO-8859-1">
 
   <msg key="Advanced_Search">Busca Avançada</msg>
-  <msg key="and_not_needed">O operator &quot;&lt;b&gt;AND&lt;/b&gt;&quot; é desnecessário - nós incluímos todos os termos de busca como padrão</msg>
   <msg key="anytime">qualquer hora</msg>
   <msg key="Date_Range">Intervalo de Data</msg>
   <msg key="details">detelhes</msg>
-  <msg key="Display">Exibir</msg>
   <msg key="Feeling_Lucky">Sinto-me com Sorte</msg>
   <msg key="lt_bstopwordsb_is_a_very">&quot;&lt;b&gt;%stopwords%&lt;/b&gt;&quot; é uma palavra muito comum e não foi incluída na sua pesquisa.</msg>
   <msg key="lt_FtsEngineDriver_not_a">FtsEngineDriver não está disponível!</msg>
   <msg key="lt_Make_sure_all_words_a">Tenha certeza de que todas as palavras são soletradas corretamente.</msg>
-  <msg key="lt_No_pages_were_found_c">Não foram encontradas páginas contendo &quot;&lt;b&gt;%query%&lt;/b&gt;&quot;.</msg>
-  <msg key="lt_The_following_words_a">As palavras seguintes são muito comuns e não foram incluídas na sua busca: &lt;strong&gt;%stopwords;noquote%&lt;/strong&gt;.</msg>
   <msg key="lt_Try_different_keyword">Tente palavras-chave diferentes.</msg>
   <msg key="lt_Try_more_general_keyw">Tente palavras-chave mais específicas.</msg>
   <msg key="lt_Try_your_query_on_stw">Tente sua pergunta em: %stw;noquote%</msg>
   <msg key="lt_You_must_specify_some">Você precisa especificar algumas palavras-chave.</msg>
   <msg key="Next">Próximo</msg>
-  <msg key="no_driver_contact_webmaster">A busca não está configurada corretamente. Por favor contate o administrador do site para ativá-la.</msg>
   <msg key="past_3_months">3 meses depois</msg>
   <msg key="past_6_months">6 meses depois</msg>
   <msg key="past_year">ano passado</msg>
   <msg key="Previous">Anterior</msg>
   <msg key="Result_page">Página de resultados:</msg>
   <msg key="results">resultados</msg>
-  <msg key="Results_count">Resultados &lt;b&gt;%low% - %high%&lt;/b&gt; de aproximadamente &lt;b&gt;%count%&lt;/b&gt;. A busca levou %elapsed% segundos.</msg>
   <msg key="Search">Busca</msg>
   <msg key="Searched_for_query">Busca realizada por: &lt;b&gt;%query%&lt;/b&gt;</msg>
   <msg key="Suggestions">Sugestões</msg>
-  <msg key="Tip_In_most_browsers_return">Dica: Na maioria dos navegadores você pode apenas apertar enter ao invés de clicar no botão buscar.</msg>
   <msg key="Try_fewer_keywords">Tente menos palavras-chave</msg>
   <msg key="Untitled">Sem Título</msg>
 </message_catalog>

@@ -1,36 +1,28 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="search" package_version="5.3.0d1" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="search" package_version="5.3.1" locale="nl_NL" charset="ISO-8859-1">
 
   <msg key="Advanced_Search">Geavanceerd zoeken</msg>
-  <msg key="and_not_needed">&quot;&lt;b&gt;AND&lt;/b&gt;&quot;-operator is onnodig -- we gebruiken standaard alle zoektermen.</msg>
   <msg key="anytime">eender wanneer</msg>
   <msg key="Date_Range">Datumbereik</msg>
   <msg key="details">details</msg>
-  <msg key="Display">Tonen</msg>
   <msg key="Feeling_Lucky">Doe een gok</msg>
   <msg key="lt_bstopwordsb_is_a_very">&quot;&lt;b&gt;%stopwords%&lt;/b&gt;&quot; is een zeer veel voorkomend woord en is niet in de zoekopdracht meegenomen.</msg>
   <msg key="lt_FtsEngineDriver_not_a">FtsEngineDriver niet beschikbaar</msg>
   <msg key="lt_Make_sure_all_words_a">Let op dat alle woorden correct gespeld zijn.</msg>
-  <msg key="lt_No_pages_were_found_c">Geen pagina's die &quot;&lt;b&gt;%query%&lt;/b&gt;&quot; bevatten.</msg>
-  <msg key="lt_The_following_words_a">De volgende woorden komen zeer veel voor en zijn niet in de zoekopdracht meegenomen:
-&lt;strong&gt;%stopwords;noquote%&lt;/strong&gt;.</msg>
   <msg key="lt_Try_different_keyword">Probeer andere kernwoorden.</msg>
   <msg key="lt_Try_more_general_keyw">Probeer meer algemene kernwoorden.</msg>
   <msg key="lt_Try_your_query_on_stw">Probeer je zoekvraag op: %stw;noquote%</msg>
   <msg key="lt_You_must_specify_some">Je moet een aantal kernwoorden opgeven.</msg>
   <msg key="Next">Volgende</msg>
-  <msg key="no_driver_contact_webmaster">Volgende</msg>
   <msg key="past_3_months">afgelopen 3 maanden</msg>
   <msg key="past_6_months">afgelopen 6 maanden</msg>
   <msg key="past_year">afgelopen jaar</msg>
   <msg key="Previous">Vorige</msg>
   <msg key="Result_page">Resultaatpagina:</msg>
   <msg key="results">Resultaten</msg>
-  <msg key="Results_count">Resultaten &lt;b&gt;%low% - %high%&lt;/b&gt; uit ongeveer &lt;b&gt;%count%&lt;/b&gt;. Zoektocht vergde %elapsed% seconds.</msg>
   <msg key="Search">Zoeken</msg>
   <msg key="Searched_for_query">Gezocht naar: %query%</msg>
   <msg key="Suggestions">Suggesties:</msg>
-  <msg key="Tip_In_most_browsers_return">Tip: In de meeste browsers kunt u gewoon op return drukken in plaats van op de zoekknop.</msg>
   <msg key="Try_fewer_keywords">Probeer minder kernwoorden.</msg>
   <msg key="Untitled">Naamloos</msg>
 </message_catalog>

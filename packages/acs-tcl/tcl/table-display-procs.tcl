@@ -92,7 +92,7 @@ proc_doc ad_dimensional {option_list {url {}} {options_set ""} {optionstype url}
             if {$option_val eq $thisoption } {
                 append html "<strong>[lindex $option_value 1]</strong>"
             } else {
-                append html "<a href=\"$url?[export_ns_set_vars "url" $option_key $options_set]&[ns_urlencode $option_key]=[ns_urlencode $thisoption]\">[lindex $option_value 1]</a>"
+                append html "<a href=\"$url?[export_ns_set_vars "url" $option_key $options_set][ad_quotehtml &][ns_urlencode $option_key]=[ns_urlencode $thisoption]\">[lindex $option_value 1]</a>"
             }
         }
         append html "\]</td>\n"
@@ -601,8 +601,8 @@ proc_doc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {i
     if {$item ne ""} {
         append html "<h2>Editing <strong>$item</strong></h2>"
         append html "<form method=\"get\" action=\"/tools/table-custom\">"
-        append html "<input type=\"submit\" value=\"Delete this view\" />"
-        append html "<input type=\"hidden\" name=\"delete_the_view\" value=\"1\" />"
+        append html "<input type=\"submit\" value=\"Delete this view\" >"
+        append html "<input type=\"hidden\" name=\"delete_the_view\" value=\"1\" >"
         append html "[export_form_vars item_group item]"
         if {$return_url ne ""} {
             append html "[export_form_vars return_url]"
@@ -622,9 +622,9 @@ proc_doc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {i
     if {$item ne ""} {
         set item_original $item
         append html "[export_form_vars item_original]"
-        append html "<input type=\"submit\" value=\"Save changes\" />"
+        append html "<input type=\"submit\" value=\"Save changes\" >"
     } else {
-        append html "<input type=\"submit\" value=\"Save new view\" />"
+        append html "<input type=\"submit\" value=\"Save new view\" >"
     }
 
     append html "<table>"
@@ -660,7 +660,7 @@ proc_doc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {i
         append html "</tr>"
 
         foreach opt $sel_list { 
-            append options "<td><input name=\"col_@@\" type=\"radio\" value=\"[lindex [lindex $datadef $opt] 0]\" /></td>"
+            append options "<td><input name=\"col_@@\" type=\"radio\" value=\"[lindex [lindex $datadef $opt] 0]\" ></td>"
         }
         for {set i 0} { $i < $max_columns} {incr i} {
             if {$i < $n_sel_columns} {
@@ -726,8 +726,8 @@ proc_doc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {
     if {$item ne ""} {
         append html "<h2>Editing <strong>$item</strong></h2>"
         append html "<form method=\"get\" action=\"/tools/sort-custom\">"
-        append html "<input type=\"submit\" value=\"Delete this sort\" />"
-        append html "<input type=\"hidden\" name=\"delete_the_sort\" value=\"1\" />"
+        append html "<input type=\"submit\" value=\"Delete this sort\" >"
+        append html "<input type=\"hidden\" name=\"delete_the_sort\" value=\"1\" >"
         append html "[export_form_vars item_group item]"
         if {$return_url ne ""} {
             append html "[export_form_vars return_url]"
@@ -966,7 +966,7 @@ proc_doc ad_custom_form {return_url item_group item} {
     }
     set item_original $item
     append html "[export_form_vars item_group item item_original]\n"
-    append html "<input type=\"submit\" value=\"Save settings\" />"
+    append html "<input type=\"submit\" value=\"Save settings\" >"
 }
 
 proc_doc ad_dimensional_settings {define current} {

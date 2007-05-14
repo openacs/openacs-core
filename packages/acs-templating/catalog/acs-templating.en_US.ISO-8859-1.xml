@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-templating" package_version="5.3.0d1" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-templating" package_version="5.3.1" locale="en_US" charset="ISO-8859-1">
 
   <msg key="12-Hour">12-Hour</msg>
   <msg key="24-Hour">24-Hour</msg>
@@ -14,13 +14,20 @@
   <msg key="data">data</msg>
   <msg key="Day">Day</msg>
   <msg key="day">day</msg>
+  <msg key="DefaultSummary">Data for %list_name%</msg>
   <msg key="Element_is_required">%label% is required</msg>
   <msg key="Element_is_too_long_Plural">%label% is %excess_no_bytes% characters too long.</msg>
   <msg key="Element_is_too_long_Singular">%label% is one character too long.</msg>
+  <msg key="Enhanced_Text">Enhanced Text
+</msg>
   <msg key="Enter_your_search_text">Enter your search text here</msg>
+  <msg key="Fixed_width_Text">Fixed-width Text</msg>
+  <msg key="Format">Format
+</msg>
   <msg key="Formats">Formats</msg>
   <msg key="hours">hours</msg>
   <msg key="Hours_must_be_between_0_and_23">Hours must be between 0 and 23</msg>
+  <msg key="HTML">HTML</msg>
   <msg key="HTMLArea_action_cancel">Cancel</msg>
   <msg key="HTMLArea_ImageAlignment">Alignment</msg>
   <msg key="HTMLArea_ImageAlignmentBottom">Bottom</msg>
@@ -84,12 +91,15 @@
   <msg key="Only_myself">Only myself</msg>
   <msg key="Page">Page</msg>
   <msg key="Page_Size">Page Size</msg>
+  <msg key="Plain_Text">Plain Text</msg>
   <msg key="Previous_with_arrow">&lt;&lt; Previous</msg>
   <msg key="required">required</msg>
+  <msg key="reverse_sort_order_of_label">Reverse the sort order of %label%</msg>
   <msg key="Seconds">Seconds</msg>
   <msg key="seconds">seconds</msg>
   <msg key="Seconds_must_be_between_0_and_59">Seconds must be between 0 and 59</msg>
   <msg key="Sort_order">Sort order</msg>
+  <msg key="sort_the_list_by_label">Sort the list by %label%</msg>
   <msg key="Spellcheck">Spellcheck</msg>
   <msg key="Table">Table</msg>
   <msg key="Tag_handler_invalid_number_of_args">Invalid number of arguments to tag handler.</msg>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.3.0d1" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.3.1" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="Administrator">Administrador</msg>
   <msg key="Administrators">Administradores</msg>
@@ -11,6 +11,7 @@
   <msg key="common_Administration">Administración</msg>
   <msg key="common_administration">administración</msg>
   <msg key="common_All">Todo</msg>
+  <msg key="common_Any">Cualquiera</msg>
   <msg key="common_Apply">Aplicar</msg>
   <msg key="common_apply">aplicar</msg>
   <msg key="common_Cancel">Cancelar</msg>
@@ -84,13 +85,17 @@
   <msg key="common_yes">sí</msg>
   <msg key="Default_Context">Contexto por Defecto</msg>
   <msg key="Email_Address">Dirección de correo</msg>
+  <msg key="Email_Addresses">Dirección de correo</msg>
   <msg key="First_Names">Nombre</msg>
   <msg key="Group">Grupo</msg>
   <msg key="Group_name">Nombre del grupo</msg>
   <msg key="Groups">Grupos</msg>
   <msg key="Last_Name">Apellidos</msg>
+  <msg key="Last_Names">Apellidos</msg>
   <msg key="lt_Administrator_Relatio">Relación de Administración</msg>
+  <msg key="lt_Administrator_Relatio_1">Relaciones para administrador</msg>
   <msg key="lt_Main_Site_Administrat">Administradores del Sitio Principal</msg>
+  <msg key="lt_Membership_Relationsh">Relaciones para miembros</msg>
   <msg key="lt_Relational_Constraint">Restricción Relacional</msg>
   <msg key="lt_Relational_Constraint_1">Restricciones Relacionales</msg>
   <msg key="lt_Relational_Party_Segm">Segmento Relacional de Agrupación</msg>
@@ -113,7 +118,10 @@
   <msg key="member_state_Rejected">Rechazado</msg>
   <msg key="member_state_rejected">rechazado</msg>
   <msg key="Membership_Relation">Relación de Pertenencia</msg>
+  <msg key="OpenACS_Local">OpenACS local</msg>
+  <msg key="Parties">Partes</msg>
   <msg key="Party">Agrupación</msg>
+  <msg key="People">Gente</msg>
   <msg key="Person">Persona</msg>
   <msg key="Registered_Users">Usuarios Registrados</msg>
   <msg key="registered_users">usuarios registrados</msg>

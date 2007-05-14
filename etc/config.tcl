@@ -245,8 +245,30 @@ ns_section ns/server/${server}/module/nssock
 # setting maxinput higher than practical may leave the server vulnerable to resource DoS attacks
 # see http://www.panoptic.com/wiki/aolserver/166
     ns_param   maxinput           [expr {$max_file_upload_mb * 1024 * 1024}] ;# Maximum File Size for uploads in bytes
+    ns_param   maxpost            [expr {$max_file_upload_mb * 1024 * 1024}] ;# Maximum File Size for uploads in bytes
     ns_param   recvwait           [expr {$max_file_upload_min * 60}] ;# Maximum request time in minutes
 
+# maxsock will limit the number of simultanously returned pages,
+# regardless of what maxthreads is saying
+    ns_param   maxsock               100 ;# 100 = default
+
+# On Windows you need to set this parameter to define the number of
+# connections as well (it seems).
+    ns_param   backlog               5  ;# if < 1 == 5 
+
+# Optional params with defaults:
+    ns_param   bufsize               16000
+    ns_param   rcvbuf                0
+    ns_param   sndbuf                0
+    ns_param   socktimeout           30 ;# if < 1 == 30
+    ns_param   sendwait              30 ;# if < 1 == socktimeout
+    ns_param   recvwait              30 ;# if < 1 == socktimeout
+    ns_param   closewait             2  ;# if < 0 == 2
+    ns_param   keepwait              30 ;# if < 0 == 30
+    ns_param   readtimeoutlogging    false
+    ns_param   serverrejectlogging   false
+    ns_param   sockerrorlogging      false
+    ns_param   sockshuterrorlogging  false
 
 #---------------------------------------------------------------------
 # 
@@ -648,3 +670,6 @@ ns_section ns/server/${server}/modules
 
 ns_log notice "nsd.tcl: using threadsafe tcl: [info exists tcl_platform(threaded)]"
 ns_log notice "nsd.tcl: finished reading config file."
+if {[ns_info version] >= 4.5} {
+    ns_limits set default -maxupload [ns_config ns/server/${server}/module/nssock maxinput]
+}

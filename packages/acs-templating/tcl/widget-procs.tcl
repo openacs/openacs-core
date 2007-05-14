@@ -72,11 +72,11 @@ ad_proc -public template::widget::party_search { element_reference tag_attribute
 
     } else {
 
-        set output "<input type=\"hidden\" name=\"$element(id):select\" value=\"t\" />"
-        append output "<input type=\"hidden\" name=\"$element(id):search_string\" value=\"$element(search_string)\" />"
+        set output "<input type=\"hidden\" name=\"$element(id):select\" value=\"t\" >"
+        append output "<input type=\"hidden\" name=\"$element(id):search_string\" value=\"$element(search_string)\" >"
 
         if { ![info exists element(confirmed_p)] } {
-            append output "<input type=\"hidden\" name=\"$element(id):confirmed_p\" value=\"t\" />"
+            append output "<input type=\"hidden\" name=\"$element(id):confirmed_p\" value=\"t\" >"
         }
 
         append output [select $element_reference $tag_attributes]
@@ -239,7 +239,7 @@ ad_proc -public template::widget::search {
         # include an extra hidden element to indicate that the
         # value is being selected as opposed to entered
 
-        set output "\n<input type=\"hidden\" name=\"$element(id):select\" value=\"t\" />"
+        set output "\n<input type=\"hidden\" name=\"$element(id):select\" value=\"t\" >"
         append output [select element $tag_attributes]
 
     }
@@ -282,7 +282,7 @@ ad_proc -public template::widget::textarea {
         set mode {}
     }
 
-
+	set attributes(id) $element(name)
     set output [textarea_internal $element(name) attributes $value $mode]
 
     # Spell-checker
@@ -378,7 +378,10 @@ ad_proc -public template::widget::input {
     if { ( $type eq "checkbox" || $type eq "radio" ) && [info exists element(value)] } {
         # This can be used in the form template in a <label for="id">...</label> tag.
         set attributes(id) "$element(form_id):elements:$element(name):$element(value)"
+    } elseif { [string equal $type "password"] || [string equal $type "text"] || [string equal $type "button"] || [string equal $type "file"]} { 
+	set attributes(id) "$element(name)" 
     }
+
     
     # Handle display mode of visible normal form elements, i.e. not hidden, not submit, not button, not clear
     if { $element(mode) ne "edit" && [lsearch -exact { hidden submit button clear checkbox radio } $type] == -1 } {
@@ -392,7 +395,7 @@ ad_proc -public template::widget::input {
 
         if { $element(mode) ne "edit" && [lsearch -exact { hidden submit button clear } $type] == -1 } {
             append output " disabled"
-        }
+		}
 
         if { [info exists element(value)] } {
             append output " value=\"[template::util::quote_html $element(value)]\""
@@ -410,7 +413,7 @@ ad_proc -public template::widget::input {
             append output " maxlength=\"$element(maxlength)\""
         }
 
-        append output " />"
+        append output " >"
     }
 
     return $output
@@ -654,11 +657,11 @@ ad_proc -public template::widget::menu {
                         append output " selected=\"selected\""
                     }
 
-                    append output ">$label<br />\n"
+                    append output ">$label<br>\n"
                 }
             }
             default {
-                append output "<select name=\"$widget_name\" "
+                append output "<select name=\"$widget_name\" id=\"$widget_name\" "
 
                 foreach name [array names attributes] {
                     if {$attributes($name) eq {}} {
@@ -902,7 +905,7 @@ ad_proc -public template::widget::block {
 	    foreach answer_desc $option {
 		set answer_description [lindex $answer_desc 0]
 		set no_of_answers [lindex $answer_desc 1]
-		append output "<th colspan=\"[expr {$no_of_answers + 1}]\" align=\"center\">$answer_description</td>"
+		append output "<th colspan=\"[expr $no_of_answers + 1]\" align=\"center\">$answer_description</th>"
 	    }
 	    append output "</tr>"
 	} elseif {$count == 1} {

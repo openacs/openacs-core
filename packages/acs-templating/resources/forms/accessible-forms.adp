@@ -2,8 +2,8 @@
 
   <multiple name=elements>
   <if @elements.section@ not nil>
-
-    <span class="form-section">@elements.section@</span>
+	  <fieldset>
+    <legend>@elements.section@</legend>
   </if>
   
   <group column="section">
@@ -78,20 +78,25 @@
   
 	  <noparse>
 	    <formerror id="@elements.id@">
-	      <br/>
-		  <b>\@formerror.@elements.id@;noquote\@<b>
+	      <br />
+		  \@formerror.@elements.id@;noquote\@
 	    </formerror>
 	  </noparse>
 
 	  <if @elements.help_text@ not nil>
+	    <p class="form-help-text">
 	      <noparse>
-		<i><formhelp id="@elements.id@"></i>
+		<formhelp id="@elements.id@">
 	      </noparse>
+	    </p>
 	  </if>
 
 	</span>	  
         </else>
     </else>
   </group>
+	<if @elements.section@ not nil>
+	</fieldset>
+	  </if>
   </multiple>
  

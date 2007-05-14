@@ -16,6 +16,7 @@
   </else>
     <noparse>
     @list_properties.bulk_action_export_chunk;noquote@
+    </noparse>
   </if>
 
   <if @actions:rowcount@ gt 0>

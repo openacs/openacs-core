@@ -146,7 +146,7 @@ function acs_ListCheckAll(listName, checkP) {
   var Obj, Type, Name, Id;
   var Controls = acs_ListFindInput(); if (!Controls) { return; }
   // Regexp to find name of controls
-  var re = new RegExp('^' + listName + ',.+');
+  var re = new RegExp('^' + listName + '..+');
 
   checkP = checkP ? true : false;
 
@@ -174,15 +174,14 @@ function acs_ListBulkActionClick(formName, url) {
   form.submit();
 }
 
-
 function acs_KeypressGoto(theUrl, event) {
-      var key;
-      if (event) {
-             if (event.which == 13) {
-               location.href = theUrl;                     
- 	     }
-      }
- }
+	var key;
+    	if (event) {
+	      if (event.which == 13) {
+	        location.href = theUrl;
+      	      }
+    	}
+}
 
 
 /*  Copyright Mihai Bazon, 2002, 2003  |  http://students.infoiasi.ro/~mishoo

@@ -1,35 +1,37 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="search" package_version="5.3.0d1" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="search" package_version="5.3.1" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="Advanced_Search">Búsqueda Avanzada</msg>
-  <msg key="and_not_needed">El operador &quot;&lt;b&gt;AND&lt;/b&gt;&quot; no es necesario, por defecto se toman en cuenta todos los términos para realizar la búsqueda.</msg>
+  <msg key="advanced_search">&quot;búsqueda avanzada&quot;</msg>
   <msg key="anytime">cualquier hora</msg>
   <msg key="Date_Range">Rango de Fechas</msg>
   <msg key="details">detalles</msg>
-  <msg key="Display">Mostrar</msg>
   <msg key="Feeling_Lucky">Me siento afortunado</msg>
   <msg key="lt_bstopwordsb_is_a_very">&quot;&lt;b&gt;%stopwords%&lt;/b&gt;&quot; es una palabra muy común y no ha sido tomada en cuenta para la búsqueda.</msg>
   <msg key="lt_FtsEngineDriver_not_a">¡FtsEngineDriver no disponible!</msg>
   <msg key="lt_Make_sure_all_words_a">Asegúrese que todas las palabras estén escritas correctamente.</msg>
-  <msg key="lt_No_pages_were_found_c">No se encontraron páginas que contengan &quot;&lt;b&gt;%query%&lt;/b&gt;&quot;.</msg>
-  <msg key="lt_The_following_words_a">Las siguientes palabras son muy comunes y no han sido incluidas en la búsqueda: &lt;strong&gt;%stopwords;noquote%&lt;/strong&gt;.</msg>
+  <msg key="lt_No_pages_were_found_c">No se ha encontrado páginas que contengan &quot;</msg>
+  <msg key="lt_The_following_words_a">Las palabras siguientes son demasiado comunes y no han sido incluidas en su búsqueda:</msg>
+  <msg key="lt_Tip_In_most_browsers_">Consejo: En la mayoría de los navegadores, puede pulsar la tecla Intro en lugar de pulsar el botón de búsqueda</msg>
   <msg key="lt_Try_different_keyword">Inténtelo con otras palabras.</msg>
   <msg key="lt_Try_more_general_keyw">Inténtelo con palabras más genéricas.</msg>
   <msg key="lt_Try_your_query_on_stw">Intente realizar la búsqueda sobre %stw;noquote%</msg>
   <msg key="lt_You_must_specify_some">Debe especificar algunas palabras.</msg>
+  <msg key="nbspDisplay">&amp;nbsp;Mostrar</msg>
   <msg key="Next">Siguiente</msg>
-  <msg key="no_driver_contact_webmaster">Buscar no está habilitado. Por favor, contacte el webmaster para que lo active.</msg>
+  <msg key="of_about">de</msg>
   <msg key="past_3_months">últimos 3 meses</msg>
   <msg key="past_6_months">últimos 6 meses</msg>
   <msg key="past_year">año anterior</msg>
   <msg key="Previous">Anterior</msg>
   <msg key="Result_page">Página de resultados:</msg>
+  <msg key="Results">Resultados</msg>
   <msg key="results">resultados</msg>
-  <msg key="Results_count">&lt;b&gt;%low% - %high%&lt;/b&gt; resultados de &lt;b&gt;%count%&lt;/b&gt;. La búsqueda se realizó en %elapsed% segundos.</msg>
   <msg key="Search">Buscar</msg>
   <msg key="Searched_for_query">Búsquedas para: &lt;b&gt;%query%&lt;/b&gt;</msg>
+  <msg key="seconds">segundos.</msg>
+  <msg key="selected">seleccionado</msg>
   <msg key="Suggestions">Sugerencias:</msg>
-  <msg key="Tip_In_most_browsers_return">Nota: En la mayoría de los navegadores, puede pulsar simplemente el &quot;intro&quot; en lugar de hacer click sobre el botón de búsqueda.</msg>
   <msg key="Try_fewer_keywords">Inténtelo con más palabras.</msg>
   <msg key="Untitled">Sin título</msg>
 </message_catalog>

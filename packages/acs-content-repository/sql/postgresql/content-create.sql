@@ -1344,7 +1344,7 @@ begin
                now(),
                ''text/html'',
                null,
-               ''<html><body><content></body></html>'',
+               ''<html><body>@text;noquote@</body></html>'',
                v_item_id,
                NULL,
                now(),

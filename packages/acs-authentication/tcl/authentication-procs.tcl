@@ -58,16 +58,15 @@ ad_proc -public auth::require_login {
     #   a) a user edits a form with text entries
     #   b) before submitting the form logs out of OpenACS from a different browser window
     #   c) submits the form. 
-    #
     # When submitting needs authentication, OpenACS generates the redirect to 
     # /register with the form-data coded into the URL to continue there.....
-    #
+
     # set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
     # ns_log notice "URL have url, len=[string length $return_url] $user_agent"
 
     set url_too_long [expr {[string length $return_url] > 2083}]
     if {$url_too_long} {
-      set message "URL too long. If you were editing a from, please use the back button after logginin and resubmit the form" 
+      set message "URL too long. If you were editing a from, please use the back button after logging in and resubmit the form" 
       set return_url "."
     }
 
