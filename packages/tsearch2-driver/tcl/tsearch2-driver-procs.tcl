@@ -29,6 +29,10 @@ ad_proc -public tsearch2::index {
 } {
     set index_exists_p [db_0or1row object_exists "select 1 from txt where object_id=:object_id"]
     if {!$index_exists_p} {
+      set max_size_to_index [db_string get_max_size_to_index "select min(default_value) from apm_parameters where package_key = 'tsearch2-driver' and parameter_name = 'max_size_to_index'" -default "0"]
+      if {$max_size_to_index > 0} {
+        set txt [string range $txt 0 $max_size_to_index]
+      }
 	db_dml index "
             insert into txt (object_id,fti)
             values ( :object_id,
@@ -77,6 +81,10 @@ ad_proc -public tsearch2::update_index {
     if {!$index_exists_p} {
 	tsearch2::index $object_id $txt $title $keywords
     } else {
+      set max_size_to_index [db_string get_max_size_to_index "select min(default_value) from apm_parameters where package_key = 'tsearch2-driver' and parameter_name = 'max_size_to_index'" -default "0"]
+      if {$max_size_to_index > 0} {
+        set txt [string range $txt 0 $max_size_to_index]
+      }
 	db_dml update_index "
             update txt set fti =
                      setweight(to_tsvector('default',coalesce(:title,'')),'A')

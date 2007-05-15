@@ -7,13 +7,13 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="0.4d" url="http://openacs.org/repository/download/apm/tsearch2-driver-0.4d.apm">
+    <version name="0.5d" url="http://openacs.org/repository/download/apm/tsearch2-driver-0.5d.apm">
         <owner url="mailto:dave@thedesignexperience.org">Dave Bauer</owner>
         <summary>Full text search support for Search via Tsearch2.</summary>
         <description format="text/html">Provides an implementation for the search packages service contract for searching on postgresql.</description>
         <maturity>0</maturity>
 
-        <provides url="tsearch2-driver" version="0.4d"/>
+        <provides url="tsearch2-driver" version="0.5d"/>
 
         <callbacks>
             <callback type="before-install" proc="tsearch2_driver::install::preinstall_checks"/>
@@ -21,6 +21,7 @@
         </callbacks>
         <parameters>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="permission_check_enabled_p"  default="1" description="Check whether the user is allowed to read the object. This is used to filter the search results w.r.t the privileges of the user performing the query."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="max_size_to_index"  default="0" description="Maximum size of doc to index, in bytes. 0 to index the full document. If the doc is greater than this parameter, the indexing is truncated."/>            
         </parameters>
 
     </version>
