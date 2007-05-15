@@ -19,7 +19,7 @@
         <maturity>0</maturity>
 
         <provides url="acs-developer-support" version="5.2.0d1"/>
-        <requires url="acs-kernel" version="5.2.0d1"/>
+        <requires url="acs-kernel" version="5.3.1a1"/>
 
         <callbacks>
         </callbacks>
@@ -29,7 +29,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DataSweepInterval"  default="900" description="Number of seconds between sweeping for old data" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DatabaseEnabledP"  default="0" description="Remember information about every database request?" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EnabledIPs"  default="*" description="remember information for which client hosts?" section_name="developer-support"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EnabledOnStartupP"  default="1" description="Remember information about connections, for developers' benefit?" section_name="developer-support"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EnabledOnStartupP"  default="0" description="Remember information about connections, for developers' benefit?" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="PackageWatchList"  description="A space separated list of keys for packages that you are developing on and that will have full watches (automatic reloading of tcl libraries and xql files) activated on every server startup.
 " section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="PageFragmentCacheP"  default="0" description="Should page fragments generated be cached for searching and validation.  This is potentially very expensive and should be used with caution given it's performance implications." section_name="developer-support"/>

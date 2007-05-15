@@ -91,6 +91,30 @@ if { $show_p } {
     # Profiling information
     global ds_profile__total_ms ds_profile__iterations
 
+    template::list::create -name profiling -multirow profiling -elements {
+	file_links {
+	    label "Ops"
+	    display_template {
+		@profiling.file_links;noquote@
+	    }
+	}
+	tag {
+	    label "Tag"
+	}
+	num_iterations {
+	    label "Iterations"
+	}
+	total_ms {
+	    label "Total time"
+	}
+	ms_per_iteration {
+	    label "Avg. time per iteration"
+	}
+	size {
+	    label "Size"
+	}
+    }
+
     multirow create profiling tag num_iterations total_ms ms_per_iteration file_links size
 
     if {[ns_cache get ds_page_bits "$request:error" errors]} {
