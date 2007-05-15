@@ -17,7 +17,7 @@
         <maturity>0</maturity>
 
         <provides url="notifications" version="5.4.0d1"/>
-        <requires url="acs-kernel" version="5.3.0d1"/>
+        <requires url="acs-kernel" version="5.3.1a1"/>
         <requires url="acs-mail-lite" version="5.4.0d1"/>
 
         <callbacks>
