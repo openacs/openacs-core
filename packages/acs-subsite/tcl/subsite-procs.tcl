@@ -253,9 +253,7 @@ ad_proc -public subsite::auto_mount_application {
 	# if necessary, until we find a unique name
 	set instance_name $package_key
 	while { [subsite::instance_name_exists_p $node_id $instance_name] } {
-	    set instance_name "$package_key $ctr"
-	    # Convert spaces to dashes
-	    regsub -all { } $instance_name "-" instance_name
+	    set instance_name "$package_key-$ctr"
 	    incr ctr
 	}
     }
