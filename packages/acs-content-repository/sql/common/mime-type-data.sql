@@ -194,22 +194,6 @@ insert into cr_mime_types (mime_type, file_extension, label) values ('applicatio
 insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.database', 'odb', 'OpenDocument Database');
 insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.image', 'odi', 'OpenDocument Image');
 
--- Open Documents MIME types
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.text', 'odt', 'OpenDocument Text');
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.text-template', 'ott', 'OpenDocument Text Template');
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.text-web', 'oth', 'HTML Document Template');
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.text-master', 'odm', 'OpenDocument Master Document');
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.graphics', 'odg', 'OpenDocument Drawing');
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.graphics-template', 'otg', 'OpenDocument Drawing Template');
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.presentation', 'odp', 'OpenDocument Presentation');
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.presentation-template', 'otp', 'OpenDocument Presentation Template');
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.spreadsheet', 'ods', 'OpenDocument Spreadsheet');
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.spreadsheet-template', 'ots', 'OpenDocument Spreadsheet Template');
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.chart', 'odc', 'OpenDocument Chart');
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.formula', 'odf', 'OpenDocument Formula');
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.database', 'odb', 'OpenDocument Database');
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.image', 'odi', 'OpenDocument Image');
-
 -- Extension to mime type maps.
 
 -- text/plain for prog langs (maybe we should do application/x-LANG but then you can't look
