@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="search" package_version="5.3.1" locale="es_ES" charset="ISO-8859-1">
 
+  <msg key="________Search_took">. Búsqueda tardo</msg>
   <msg key="Advanced_Search">Búsqueda Avanzada</msg>
   <msg key="advanced_search">&quot;búsqueda avanzada&quot;</msg>
   <msg key="anytime">cualquier hora</msg>
@@ -32,6 +33,7 @@
   <msg key="seconds">segundos.</msg>
   <msg key="selected">seleccionado</msg>
   <msg key="Suggestions">Sugerencias:</msg>
+  <msg key="The">El operador &quot;&lt;b&gt;AND&lt;/b&gt;&quot; no es necesario  -- por defecto, se incluyen todos los términos en la búsqueda.</msg>
   <msg key="Try_fewer_keywords">Inténtelo con más palabras.</msg>
   <msg key="Untitled">Sin título</msg>
 </message_catalog>
