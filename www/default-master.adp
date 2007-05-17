@@ -1,4 +1,4 @@
-<master src="site-master">
+<master src="/www/site-master">
 <if @meta:rowcount@ not nil><property name="&meta">meta</property></if>
 <if @link:rowcount@ not nil><property name="&link">link</property></if>
 <if @script:rowcount@ not nil><property name="&script">script</property></if>
@@ -9,13 +9,12 @@
 <property name="skip_link">#content-wrapper</property>
 
 <div id="wrapper">
-
-  <div id="header">
-    <div class="block-marker">Begin header</div>
     <div id="system-name">
       <if @system_url@ not nil><a href="@system_url@">@system_name@</a></if>
       <else>@system_name@</else>
     </div>
+  <div id="header">
+    <div class="block-marker">Begin header</div>
     <div id="header-navigation">
       <ul class="compact">
         <li>
