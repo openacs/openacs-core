@@ -906,31 +906,6 @@ end;' language 'plpgsql';
 
 select define_function_args('content_keyword__new','heading,description,parent_id,keyword_id,creation_date;now,creation_user,creation_ip,object_type;content_keyword,package_id');
 
-create or replace function inline_0() returns integer as '
-
-declare v_row record;
-
-begin
-
-    for v_row in select o.object_type,o.table_name 
-        from acs_object_type_supertype_map m,
-	     acs_object_types o
-        where (m.ancestor_type=''content_revision''
-        and o.object_type=m.object_type)
-	or (o.object_type=''content_revision'')
-    loop
-	if table_exists(v_row.table_name) then 
-            perform content_type__refresh_view(v_row.object_type);
-	    perform content_type__refresh_trigger(v_row.object_type);
-	end if;
-    end loop;
-return 0;
-end;' language 'plpgsql';
-
-select inline_0();
-
-drop function inline_0();
-
 -- add new versions of content_keyword__new that support package_id
 
 create or replace function content_keyword__new (varchar,varchar,integer,integer,timestamptz,integer,varchar,varchar,integer)
