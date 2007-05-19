@@ -41,37 +41,3 @@ select acs_reference__new (
         now() -- effective_date
     );
 
--- This is the translated mapping of country names
-
-create table country_names (
-    -- lookup into the countries table
-    iso char(2)
-        constraint country_names_iso_fk
-        references countries (iso),
-    -- lookup into the language_codes table
-    language_code char(2)
-        constraint country_names_language_code_fk
-        references language_codes (language_id),
-    -- the translated name
-    name varchar(100)
-);
-
-comment on table country_names is ' 
-    This is the translated mapping of country names and language codes.
-';
-
-comment on column country_names.language_code is '
-    This is a lookup into the iso languages table.
-';
-
--- DRB: Added this so the drop script will get rid of it.  Currently
--- country_names is unused.
-
-select acs_reference__new (
-        'COUNTRY_NAMES', -- table_name
-        null,
-        'Internal', -- source
-        '', -- source_url
-        now() -- effective_date
-    );
--- I need to know the easy way to add extended chars in sqlplus then I can add french and spanish
