@@ -17,12 +17,12 @@ ad_page_contract {
     {max_n_values:integer 1}
 } -validate {
     datatype_type_ck {
-	if {$datatype != "number" && $datatype != "string"} {
+	if {$datatype != "number" && $datatype != "string" && $datatype != "text"} {
 	    ad_complain
 	}
     }
 } -errors {
-    datatype_type_ck {The datatype must be either a number or a string.}
+    datatype_type_ck {The datatype must be either a number or a string or text.}
 }
 
 db_transaction {  

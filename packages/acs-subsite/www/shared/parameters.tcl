@@ -70,10 +70,20 @@ db_foreach select_params {} {
         set focus_elm $parameter_name
     }
 
-    set elm [list ${parameter_name}:text,optional,nospell \
+    switch $datatype {
+        text {
+            set widget textarea
+            set html [list cols 100 rows 15]
+        }
+        default {
+            set widget text
+            set html [list size 50]
+        }
+    }
+    set elm [list ${parameter_name}:text($widget),optional,nospell \
                  {label {$parameter_name}} \
                  {help_text {$description}} \
-                 {html {size 50}}]
+                 [list html $html]]
 
     set file_val [ad_parameter_from_file $parameter_name $package_key]
     if { ![empty_string_p $file_val] } { 
