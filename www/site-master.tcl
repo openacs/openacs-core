@@ -23,6 +23,11 @@ if {![template::multirow exists meta]} {
     template::multirow create meta name content http_equiv scheme lang
 }
 
+template::multirow append meta \
+    "" \
+    "text/html; charset=[ad_conn charset]" \
+    "content-type"
+
 if {![template::multirow exists link]} {
     template::multirow create link rel type href title lang media
 }
