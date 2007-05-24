@@ -27,7 +27,6 @@ set context_base_url $package_url
 # Do we want debugging information at the end of the page
 set debug_p 0
 
-set dotlrn_p [apm_package_installed_p "dotlrn"]
 set user_id [ad_conn user_id]
 set driver [ad_parameter -package_id $package_id FtsEngineDriver]
 if {[callback::impl_exists -impl $driver -callback search::driver_info]} {
@@ -35,17 +34,6 @@ if {[callback::impl_exists -impl $driver -callback search::driver_info]} {
 #    array set info [list package_key intermedia-driver version 1 automatic_and_queries_p 1  stopwords_p 1]
 } else {
     array set info [acs_sc_call FtsEngineDriver info [list] $driver]
-}
-
-if {$dotlrn_p} {
-    set dotlrn_package_id [dotlrn::get_package_id]
-    set is_guest_p [search::is_guest_p]
-
-    # Ugly .LRNism: guests must not search for people. Here's the security
-    # check that makes sure they cannot fiddle around with the URL
-    if {$is_guest_p && [string equal $object_type "phb_person"]} {
-	ad_return_error "Security Breakin!" "Security Alert. This incident has been logged."
-    }
 }
 
 if { [array get info] == "" } {

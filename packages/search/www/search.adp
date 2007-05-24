@@ -1,5 +1,4 @@
 <master>
-<if @dotlrn_p@ true><include src="/packages/dotlrn/www/dotlrn-search"></if>
 <if @t@ eq "Search">
   <i>#search.lt_Tip_In_most_browsers_#</i><br><br>
 </if>
@@ -83,17 +82,12 @@
 </if>
 <if @count@ gt 0>
   <center>
-  <if @dotlrn_p@>
-    <include src="/packages/dotlrn/www/dotlrn-search">
-  </if>
-  <else>
-      <div>
-        <form method="get" action="search">
-          <input type="text" name="q" size="60" maxlength="256" value="@query@" />
-          <input type="submit" value="#search.Search#" />
-        </form>
-      </div>
-  </else>
+    <div>
+      <form method="get" action="search">
+        <input type="text" name="q" size="60" maxlength="256" value="@query@" />
+        <input type="submit" value="#search.Search#" />
+      </form>
+    </div>
   </center>
 
   <if @stw@ not nil>
