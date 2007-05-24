@@ -195,7 +195,7 @@ if { $num > 0 } {
     append url_previous "&num=$num"
     append url_next "&num=$num"
 }
-
+set ol_start [expr $offset + 1]
 
 set items [list]
 set links [list]
@@ -220,3 +220,15 @@ if [llength $search_the_web] {
 }
 
 set choice_bar [search::choice_bar $items $links $values $current_result_page]
+
+# header stuffs
+if {![template::multirow exists link]} {
+    template::multirow create link rel type href title lang media
+}
+template::multirow append link \
+    stylesheet \
+    "text/css" \
+    "/resources/search/search.css" \
+    "" \
+    "" \
+    "all"

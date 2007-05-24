@@ -1,7 +1,9 @@
 <master>
-<if @t@ eq "Search">
-  <i>#search.lt_Tip_In_most_browsers_#</i><br><br>
-</if>
+<property name="header_stuff">
+  <link href="/resources/search/search.css" rel="stylesheet" type="text/css">
+</property>
+<if @link:rowcount@ not nil><property name="&link">link</property></if>
+
 <if @empty_p@ true>
     <p class="hint">#search.lt_You_must_specify_some#</p>
 </if>
@@ -25,22 +27,6 @@
       	  </font>
 	</if>
 
-   <multiple name="searchresult">
-	<if @searchresult.title_summary@ nil>
-  		<a href="@searchresult.url_one@">#search.Untitled#</a><br>
-	</if>	
-	<else>
-	  <a href="@searchresult.url_one@">@searchresult.title_summary;noquote@</a><br>
-	</else>
-
-	<if @searchresult.txt_summary@ nil>	
-	</if>
-	<else>	
-	@searchresult.txt_summary;noquote@<br>	
-	</else>
-	<font color="green">@searchresult.url_one@</font><br><br>
-   </multiple>
-
   <if @count@ eq 0>
   Your search - <b>@query@</b> - did not match any content.
   <br>#search.lt_No_pages_were_found_c#<b>@query@</b>".
@@ -55,30 +41,47 @@
   </ul>
   </if>
   <else>
-  <table width="100%" bgcolor="3366cc" border=0 cellpadding=3 cellspacing=0>
-    <tr><td>
-        #search.Searched_for_query#
-    </td><td align=right>
-        #search.Results# <b>@low@-@high@</b> #search.of_about# <b>@count@</b>#search.________Search_took# <b>@elapsed@</b> #search.seconds# 
-    </td></tr>
-  </table>
-  <br clear=all>
+        <div id="search-info">
+          <p class="subtitle">#search.Searched_for_query#</p>
+          <p class="times">
+        #search.Results# <strong>@low@-@high@</strong> #search.of_about# <strong>@count@</strong>#search.________Search_took# <strong>@elapsed@</strong> #search.seconds# 
+          </p>
+        </div>
+        <div id="search-results">
+          <ol start="@ol_start@">
+            <multiple name="searchresult">
+              <li>
+                <div>
+                  <a href="@searchresult.url_one@" class="result-title">
+                    <if @searchresult.title_summary@ nil>#search.Untitled#</if>	
+                    <else>@searchresult.title_summary;noquote@</else>
+                  </a>
+                </div>
+                <if @searchresult.txt_summary@ not nil>	
+                  <div>@searchresult.txt_summary;noquote@</div>
+                </if>
+                <div class="result-url">@searchresult.url_one@</div>
+              </li>
+            </multiple>
+          </ol>
+        </div>
   </else>
 
-<if @from_result_page@ lt @to_result_page@>
-  <center>
 
-    <small>#search.Result_page#</small>
+<if @from_result_page@ lt @to_result_page@>
+  <div id="results-pages">
+
+    #search.Result_page#
 
     <if @from_result_page@ lt @current_result_page@>
-      <small><a href=@url_previous@><font color="0000cc"><b>#search.Previous#</b></font></a></small>
+      <a href="@url_previous@"><b>#search.Previous#</b></a>
     </if>
     &nbsp;@choice_bar;noquote@&nbsp;
     
     <if @current_result_page@ lt @to_result_page@>
-	<small><a href=@url_next@><font color="0000cc"><b>#search.Next#</b></font></a></small>
+	<a href="@url_next@"><b>#search.Next#</b></a>
     </if>
-  </center>
+  </div>
 </if>
 <if @count@ gt 0>
   <center>
@@ -87,14 +90,15 @@
         <input type="text" name="q" size="60" maxlength="256" value="@query@" />
         <input type="submit" value="#search.Search#" />
       </form>
+      <if @t@ eq "Search">
+        <i>#search.lt_Tip_In_most_browsers_#</i>
+      </if>
     </div>
-  </center>
 
-  <if @stw@ not nil>
-    <center>
-      <font size=-1>#search.lt_Try_your_query_on_stw#</font>
-    </center>
-  </if>
+    <if @stw@ not nil>
+      <p><font size=-1>#search.lt_Try_your_query_on_stw#</font></p>
+    </if>
+  </center>
 </if>
 </else>
 
