@@ -2072,9 +2072,13 @@ ad_proc util_ReturnMetaRefresh { url { seconds_delay 0 } } {
     ns_write "
     <head>
     <meta http-equiv=\"refresh\" content=\"$seconds_delay;URL=$url\">
+    <script type=\"text/javascript\">
+    window.location.href=\"$url\";
+    </script>
     </head>
     <body>
-    If your browser does not automatically redirect you, please go <a href=\"$url\">here</a>.
+    <h2>Loading...</h2>
+    If your browser does not automatically redirect you, <a href=\"$url\">please click here</a>.
     </body>"
 }
 
@@ -2203,6 +2207,11 @@ ad_proc -public ad_returnredirect {
     if { [string match *multipart/form-data* [string tolower $type]] } {
         set user_agent [ns_set get [ad_conn headers] User-Agent]
         set use_metarefresh_p [regexp -nocase "msie 5.0" $user_agent match]
+    }
+    if {[string match "https://*" [ad_conn location]] && [string match "http://*" $url]} {
+	# workaround the You are about to be redirected to a connection that
+        # is not secure bug in IE
+	set use_metarefresh_p 1
     }
     if { $use_metarefresh_p != 0 } {
         util_ReturnMetaRefresh $url 
