@@ -2,25 +2,25 @@
 <if @dotlrn_p@ true><include src="/packages/dotlrn/www/dotlrn-search"></if>
 <if @t@ eq "Search">
   <i>#search.lt_Tip_In_most_browsers_#</i><br><br>
-  </if>
+</if>
 <if @empty_p@ true>
     <p class="hint">#search.lt_You_must_specify_some#</p>
 </if>
 <else>
 	<if @and_queries_notice_p@ eq 1>
-      	  <font color=6f6f6f>
+      	  <font color="6f6f6f">
           #search.The#
           [<a href=help/basics#and>#search.details#</a>]<br>
         </font>
 	</if>
 	<if @nstopwords@ eq 1>
-        <font color=6f6f6f>
+        <font color="6f6f6f">
           #search.lt_bstopwordsb_is_a_very#
           [<a href=help/basics#stopwords>#search.details#</a>]<br>
         </font>
 	</if>
 	<if @nstopwords@ gt 1>
-      	  <font color=6f6f6f>
+      	  <font color="6f6f6f">
           #search.lt_The_following_words_a# <b>@stopwords@</b>.
           [<a href=help/basics#stopwords>#search.details#</a>]<br>
       	  </font>
@@ -39,7 +39,7 @@
 	<else>	
 	@searchresult.txt_summary;noquote@<br>	
 	</else>
-	<font color=green>@searchresult.url_one@</font><br><br>
+	<font color="green">@searchresult.url_one@</font><br><br>
    </multiple>
 
   <if @count@ eq 0>
@@ -56,15 +56,11 @@
   </ul>
   </if>
   <else>
-  <table width=100% bgcolor=3366cc border=0 cellpadding=3 cellspacing=0>
+  <table width="100%" bgcolor="3366cc" border=0 cellpadding=3 cellspacing=0>
     <tr><td>
-      <font color=white>
         #search.Searched_for_query#
-      </font>
     </td><td align=right>
-      <font color=white>
         #search.Results# <b>@low@-@high@</b> #search.of_about# <b>@count@</b>#search.________Search_took# <b>@elapsed@</b> #search.seconds# 
-      </font>     
     </td></tr>
   </table>
   <br clear=all>
@@ -76,12 +72,12 @@
     <small>#search.Result_page#</small>
 
     <if @from_result_page@ lt @current_result_page@>
-      <small><a href=@url_previous@><font color=0000cc><b>#search.Previous#</b></font></a></small>
+      <small><a href=@url_previous@><font color="0000cc"><b>#search.Previous#</b></font></a></small>
     </if>
     &nbsp;@choice_bar;noquote@&nbsp;
     
     <if @current_result_page@ lt @to_result_page@>
-	<small><a href=@url_next@><font color=0000cc><b>#search.Next#</b></font></a></small>
+	<small><a href=@url_next@><font color="0000cc"><b>#search.Next#</b></font></a></small>
     </if>
   </center>
 </if>
@@ -102,11 +98,12 @@
 
   <if @stw@ not nil>
     <center>
-      <font size=-1>#search.lt_Try_your_query_on_stw#</font></center>
+      <font size=-1>#search.lt_Try_your_query_on_stw#</font>
     </center>
   </if>
 </if>
 </else>
+
     <if @and_queries_notice_p@ eq 1>
       <p class="hint">#search.and_not_needed# [<a href="help/basics#and">#search.details#</a>]</p>
     </if>
@@ -122,5 +119,3 @@
       <p>#search.Results_count#</p>
     </if>
 
-    </if>
-  </else>
