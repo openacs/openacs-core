@@ -53,6 +53,10 @@ ad_proc -public notification::display::request_widget {
         set title [_ notifications.lt_Request_Notification_]
         set sub_chunk "[_ notifications.lt_You_may_a_hrefsub_url]"
     }
+    # if they are an admin give them to view all subscribers
+    if { [permission::permission_p -object_id $object_id -privilege admin] } {
+	append sub_chunk " \[<a href=\"[export_vars -base /notifications/subscribers -url {object_id}]\">[_ notifications.Subscribers]</a>\]"
+    }
 
     if { [empty_string_p $sub_url] } {
          return ""
