@@ -4,21 +4,30 @@ ad_page_contract {
 
     @author Tracy Adams (teadams@alum.mit.edu)
     @creation-date 2002-07-22
-    @cvs-id $Id$
-} {}
-
-auth::require_login
-set user_id [ad_conn user_id]
-set return_url [ad_conn url]
-
-db_multirow -extend { interval_url } notifications select_notifications {} {
-    set interval_url [export_vars -base request-change-frequency { request_id {return_url [ad_return_url]} }]
+} {
+    {user_id ""}
 }
 
-template::list::create \
-    -name notifications \
-    -no_data [_ notifications.lt_You_have_no_notificat] \
-    -elements {
+auth::require_login
+if { $user_id ne "" && $user_id ne [ad_conn user_id] } {
+    # we need to verify that they are an admin
+    permission::require_permission -object_id [ad_conn package_id] -privilege "admin"
+    set elements {
+        type {
+            label {[_ notifications.Notification_type]}
+        }
+        object_name {
+            label {[_ notifications.Item]}
+            link_url_eval {[export_vars -base subscribers { object_id }]}
+        }
+        interval {
+            label {[_ notifications.Frequency]}
+        }
+    }
+    set notice "[acs_community_member_link -user_id $user_id -label [contact::name -party_id $user_id]] - [_ notifications.Notifications]"
+} else {
+    set user_id [ad_conn user_id]
+    set elements {
         type {
             label {[_ notifications.Notification_type]}
         }
@@ -41,3 +50,18 @@ template::list::create \
 	    link_html {title "\#notifications.Unsubscribe_from_object_name\#"}
         }
     }
+}
+
+set return_url [ad_conn url]
+
+db_multirow -extend { interval_url } notifications select_notifications {} {
+    set interval_url [export_vars -base request-change-frequency { request_id {return_url [ad_return_url]} }]
+}
+
+
+
+template::list::create \
+    -name notifications \
+    -no_data [_ notifications.lt_You_have_no_notificat] \
+    -elements $elements
+
