@@ -409,7 +409,7 @@ ad_proc -private site_node::update_cache {
             }
 
             
-            ns_log Debug "Update cache:: $url :: node_id: $node_id :: $orig_node_id :: $mounted_children_p :: $mounted_children"
+            ns_log Debug "Update cache:: $url :: node_id: $node_id :: $orig_node_id :: $has_children_p :: $mounted_children_p :: $mounted_children"
             # save new node
             set nodes($url) \
                 [list url $url node_id $node_id parent_id $parent_id name $name \
@@ -817,6 +817,11 @@ ad_proc -public site_node::get_children {
     array set node [site_node::get -node_id $node_id]
 
     # Check if the site_node has children in the first place
+    if {![exists_and_not_null node(has_children_p)]} {
+	site_node::update_cache -node_id $node_id
+	array set node [site_node::get -node_id $node_id]
+    }
+
     if {!$node(has_children_p)} {
         return ""
     } 
