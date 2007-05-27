@@ -1,4 +1,4 @@
-<master>
+<master src=/www/default-master>
   <property name="title">#acs-tcl.lt_Problem_with_your_inp#</property>
 
 <p>
