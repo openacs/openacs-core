@@ -233,11 +233,14 @@ ad_proc -public ad_user_login {
 
     set auth_level "ok"
 
+    set domain [parameter::get -parameter CookieDomain -package_id [ad_acs_kernel_id]]
+
     # If you're logged in over a secure connection, you're secure
     if { [security::secure_conn_p] } {
         ad_set_signed_cookie \
             -max_age $max_age \
             -secure t \
+	    -domain $domain \
             ad_user_login_secure \
             "$user_id,[ns_time],[sec_get_user_auth_token $user_id],[ns_time]"
 
@@ -252,6 +255,7 @@ ad_proc -public ad_user_login {
     ns_log Debug "ad_user_login: Setting new ad_user_login cookie with max_age $max_age"
     ad_set_signed_cookie \
         -max_age $max_age \
+	-domain $domain \
         -secure f \
         ad_user_login \
         "$user_id,[ns_time],[sec_get_user_auth_token $user_id]"
@@ -298,10 +302,12 @@ ad_proc -public sec_change_user_auth_token {
 ad_proc -public ad_user_logout {} { 
     Logs the user out. 
 } {
-    ad_set_cookie -replace t -max_age 0 ad_session_id ""
-    ad_set_cookie -replace t -max_age 0 ad_secure_token ""
-    ad_set_cookie -replace t -max_age 0 ad_user_login ""
-    ad_set_cookie -replace t -max_age 0 ad_user_login_secure ""
+    set domain [parameter::get -parameter CookieDomain -package_id [ad_acs_kernel_id]]
+
+    ad_set_cookie -replace t -max_age 0 -domain $domain ad_session_id ""
+    ad_set_cookie -replace t -max_age 0 -domain $domain ad_secure_token ""
+    ad_set_cookie -replace t -max_age 0 -domain $domain ad_user_login ""
+    ad_set_cookie -replace t -max_age 0 -domain $domain ad_user_login_secure ""
 }
 
 ad_proc -public ad_check_password { 
@@ -460,7 +466,10 @@ ad_proc -private sec_generate_session_id_cookie {} {
     }
 
     ns_log Debug "Security: [ns_time] sec_generate_session_id_cookie setting session_id=$session_id, user_id=$user_id, login_level=$login_level"
-    ad_set_signed_cookie -replace t -max_age [sec_session_timeout] \
+
+    set domain [parameter::get -parameter CookieDomain -package_id [ad_acs_kernel_id]]
+
+    ad_set_signed_cookie -replace t -max_age [sec_session_timeout] -domain $domain \
 	    "ad_session_id" "$session_id,$user_id,$login_level"
 }
 
