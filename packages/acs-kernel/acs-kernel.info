@@ -7,7 +7,8 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.3.1" url="http://openacs.org/repository/download/apm/acs-kernel-5.3.1.apm">
+
+    <version name="5.4.0d1" url="http://openacs.org/repository/download/apm/acs-kernel-5.4.0d1.apm">
         <owner url="mailto:oct@openacs.org">OpenACS Core Team</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
         <release-date>2007-04-22</release-date>
@@ -15,8 +16,7 @@
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, partiies and the supporting PL/SQL and PL/pgSQL procedures.</description>
         <maturity>3</maturity>
 
-        <provides url="acs-kernel" version="5.3.1"/>
-
+        <provides url="acs-kernel" version="5.4.0d1"/>
         <callbacks>
         </callbacks>
         <parameters>
@@ -70,6 +70,7 @@
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SessionRenew"  default="300" description="How much time do we let elapse before renewing a session cookie? This should be less than SessionTimeout." section_name="security"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SessionSweepInterval"  default="3600" description="how often should we sweep for old stale sessions?" section_name="security"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SessionTimeout"  default="1200" description="for how long can a be session inactive before it times out? (in seconds)" section_name="security"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CookieDomain"  default="" description="Domain to pass to ad_set_cookie. Set this if you want to access multiple hostnames under the same domain." section_name="security"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemCommandPaths"  default="/usr/local/bin /usr/bin /bin /usr/sbin /sbin /usr/sbin" description="Directories that contain system commands, such as tar, wget, and gunzip" section_name="apm"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemName"  default="yourdomain Network" description="the name of your system" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemOwner"  default="webmaster@yourdomain.com" description="who signs the average user-visible pages" section_name="system-information"/>
