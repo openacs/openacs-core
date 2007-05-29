@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.4.0d4" url="http://openacs.org/repository/download/apm/acs-subsite-5.4.0d4.apm">
+    <version name="5.4.0d5" url="http://openacs.org/repository/download/apm/acs-subsite-5.4.0d5.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
         <release-date>2007-04-22</release-date>
@@ -16,7 +16,7 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.4.0d4"/>
+        <provides url="acs-subsite" version="5.4.0d5"/>
         <requires url="acs-authentication" version="5.3.1"/>
         <requires url="acs-content-repository" version="5.3.1"/>
         <requires url="acs-kernel" version="5.3.1"/>
@@ -59,6 +59,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationProvidesRandomPasswordP"  default="0" description="have the system generate a random password instead of the user" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRequiresApprovalP"  default="0" description="set this to 1 if user does not go live immediately" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRequiresEmailVerificationP"  default="0" description="set this to 1 if the user has to receive and email and come back to the site" section_name="user-login"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailConfirmTemplate"  default="/packages/acs-subsite/lib/email-confirm" description="Template to use for the page the user comes to for verification of the email. Can be used to trigger additional events."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRedirectUrl"  description="A URL to redirect to instead of showing the normal registration page. Useful if you want to replace the registration page with a custom page." section_name="user-login" />
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="RestrictEntireServerToRegisteredUsersP"  default="0" description="Do we want to allow only registered users to visit this subsite? (restart required)"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RestrictToSSL"  default="admin/*" description="URLs we want restricted to SSL. Note that this only takes effect if you have an SSL listener configured on your AOLserver and kernel parameter RegisterRestrictToSSLFilters is set to 1 (its default)."/>
