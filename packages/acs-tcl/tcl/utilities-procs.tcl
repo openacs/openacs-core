@@ -4372,3 +4372,15 @@ ad_proc -public util::find_all_files {
     }
     return $files
 }
+
+ad_proc -public util::string_check_urlsafe {
+	s1
+} {
+	This proc accepts a string and verifies if it is url safe.
+	- make sure there is no space
+	- make sure there is no special characters except '-' or '_'
+	Returns 1 if yes and 0 if not. 
+	Meant to be used in the validation section of ad_form.
+} {
+	return [regexp {[<>:\"|/@\#%&+\\ ]} $s1]
+}

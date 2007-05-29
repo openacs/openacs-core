@@ -569,12 +569,18 @@ ad_proc -public site_node::get_from_url {
 		# Exclude all parents who have been marked with having already all children mounted.
 		
 		array set new_node [nsv_get site_nodes "${new_url}/"]
+		# Check if the site_node has children in the first place
+		if {![exists_and_not_null new_node(has_children_p)]} {
+		    set new_node(has_children_p) 1
+		    set new_node(mounted_children_p) 0
+		}
+
 		if {$new_node(has_children_p) && !$new_node(mounted_children_p)} {
 		    if {[lsearch -exact $subsite_list $name] > -1} {
 			set node_id $parent_id
 		    } else {
 			set node_id [db_string node_id "select node_id from site_nodes where parent_id = :parent_id and name=:name" -default ""]
-			ns_log Notice "Loading from the database $test_url $name $parent_id"
+			ns_log Debug "Loading from the database $test_url $name $parent_id"
 		    }
 		} else {
                     set node_id ""
