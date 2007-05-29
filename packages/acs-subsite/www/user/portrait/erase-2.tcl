@@ -24,13 +24,23 @@ if {$user_id eq ""} {
 
 ad_require_permission $user_id "write"
 
-db_dml portrait_delete "update cr_items
-set live_revision = NULL
-where item_id = (
-   select object_id_two
+set item_id [db_string item_id "select object_id_two
    from acs_rels
    where object_id_one = :user_id
-   and rel_type = 'user_portrait_rel')"
+   and rel_type = 'user_portrait_rel'"]
+
+set resized_item_id [image::get_resized_item_id -item_id $item_id]
+
+# Delete the resized version
+if {$resized_item_id ne ""} {
+    content::item::delete -item_id $resized_item_id
+}
+
+# Delete the relationship
+db_dml delete_rel "delete from acs_rels where object_id_two = :item_id and object_id_one = :user_id and rel_type = 'user_portrait_rel'"
+
+# Delete the item
+content::item::delete -item_id $item_id
 
 if {$return_url eq ""} {
     set return_url "/pvt/home"

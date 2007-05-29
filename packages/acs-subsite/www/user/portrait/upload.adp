@@ -12,6 +12,15 @@
 <form enctype="multipart/form-data" method=POST action="upload-2">
 @export_vars;noquote@
 <table>
+<if @portrait_p@ eq 1>
+<tr>
+<td colspan=2 align="center">
+<img src="/shared/portrait-bits.tcl?user_id=@current_user_id@"/>
+<br>
+(<a href="erase?return_url=@return_url;noquote@">Delete Portrait</a>)
+</td>
+</tr>
+</if>
 <tr>
 <td valign=top align=right>#acs-subsite.Filename#: </td>
 <td>
