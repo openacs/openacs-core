@@ -15,6 +15,22 @@ ad_page_contract {
 
 set current_user_id [ad_conn user_id]
 
+set portrait_p [db_0or1row "checkportrait" {SELECT live_revision as revision_id, item_id
+          FROM acs_rels a, cr_items c
+          WHERE a.object_id_two = c.item_id
+          AND a.rel_type = 'user_portrait_rel'
+          AND a.object_id_one = :current_user_id
+          AND c.live_revision is not NULL
+} ]
+
+
+if { $portrait_p } {
+	set story [db_string "getstory" "select description from cr_revisions where revision_id = :revision_id"]
+} else {
+	set story ""
+	set revision_id ""
+}
+
 if {$user_id eq ""} {
     subsite::upload_allowed
     set user_id $current_user_id

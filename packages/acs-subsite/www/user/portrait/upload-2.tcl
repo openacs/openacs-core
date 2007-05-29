@@ -60,13 +60,14 @@ if {![info exists upload_file]
 	# couldn't find a match
 	set client_filename $upload_file
     }
-    
+
     if { ![empty_string_p [ad_parameter MaxPortraitBytes "user-info"]] 
          && $n_bytes > [ad_parameter MaxPortraitBytes "user-info"] } {
 	append exception_text "<li>Your file is too large.  The publisher of [ad_system_name] has chosen to limit portraits to [util_commify_number [ad_parameter MaxPortraitBytes "user-info"]] bytes.  You can use PhotoShop or the GIMP (free) to shrink your image.</li>\n"
 	incr exception_count
     }
 }
+
 
 if { $exception_count > 0 } {
     ad_return_complaint $exception_count $exception_text
@@ -76,11 +77,15 @@ if { $exception_count > 0 } {
 # Wrap the whole creation along with the relationship in a big transaction
 # Just to make sure it really worked.
 
+
 db_transaction {
     set item_id [content::item::get_id_by_name -name "portrait-of-user-$user_id" -parent_id $user_id]
     if { $item_id eq ""} { 
 	# The user doesn't have a portrait relation yet
 	set item_id [content::item::new -name "portrait-of-user-$user_id" -parent_id $user_id -content_type image]
+	set resized_item_id ""
+    } else {
+	set resized_item_id [image::get_resized_item_id -item_id $item_id -size_name "thumbnail"]
     }
 
     # Load the file into the revision
@@ -98,9 +103,18 @@ db_transaction {
 			 "portrait-of-user-$user_id"]
 
     content::item::set_live_revision -revision_id $revision_id
+    
+    if {$resized_item_id ne ""} {
+	# Delete the item
+	content::item::delete -item_id $resized_item_id
+
+	# Resize the item
+	image::resize -item_id $item_id -size_name "thumbnail"
+    }
+
     # Only create the new relationship if there does not exist one already
-   set user_portrait_rel_id [relation::get_id -object_id_one $user_id -object_id_two $item_id -rel_type "user_portrait_rel"]
-   if {$user_portrait_rel_id eq ""} {
+    set user_portrait_rel_id [relation::get_id -object_id_one $user_id -object_id_two $item_id -rel_type "user_portrait_rel"]
+    if {$user_portrait_rel_id eq ""} {
 	db_exec_plsql create_rel {}
     }
 }
