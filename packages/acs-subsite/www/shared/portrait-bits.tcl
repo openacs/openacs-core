@@ -10,7 +10,7 @@ ad_page_contract {
 }
 
 if { ![db_0or1row get_item_id ""] } {
-    ad_return_error "Couldn't find portrait" "Couldn't find a portrait for User $user_id"
+#    ad_return_error "Couldn't find portrait" "Couldn't find a portrait for User $user_id"
     return
 }
 
