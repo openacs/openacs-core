@@ -1,6 +1,6 @@
 <multiple name=elements>
 	<if @elements.section@ not nil>
-		<fieldset id="@elements.section@" @elements.sec_fieldset;noquote@><!-- section fieldset -->
+		<fieldset id="@elements.form_id@:@elements.section@" @elements.sec_fieldset;noquote@><!-- section fieldset -->
         <legend @elements.sec_legend;noquote@>@elements.sec_legendtext@</legend>
 	</if>
 	
