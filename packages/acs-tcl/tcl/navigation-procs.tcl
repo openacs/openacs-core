@@ -220,7 +220,6 @@ ad_proc -public ad_navbar args {
 
     @return html fragment
 
-    @see ad_choice_bar
     @see ad_context_bar_html
 } {
     set counter 0
@@ -233,33 +232,6 @@ ad_proc -public ad_navbar args {
     } else {
 	return ""
     }
-}
-
-ad_proc -public ad_choice_bar { items links values {default ""} } {
-    Displays a list of choices (Yahoo style), with the currently selected one highlighted.
-
-    @see ad_navbar 
-} {
-
-    set count 0
-    set return_list [list]
-
-    foreach value $values {
-	if { [string compare $default $value] == 0 } {
-	        lappend return_list "<strong>[lindex $items $count]</strong>"
-	} else {
-	        lappend return_list "<a href=\"[lindex $links $count]\">[lindex $items $count]</a>"
-	}
-
-	incr count
-    }
-
-    if { [llength $return_list] > 0 } {
-        return "\[[join $return_list " | "]\]"
-    } else {
-	return ""
-    }
-    
 }
 
 
