@@ -68,21 +68,30 @@
   </else>
 
 
-<if @from_result_page@ lt @to_result_page@>
-  <div id="results-pages">
+        <if @results_paginator:rowcount@ gt 1>
+          <div id="results-pages" class="list-paginator-bottom">
 
-    #search.Result_page#
+          <ul class="compact list-paginator">
+            <li>#search.Result_page#</li>
+            <if @from_result_page@ lt @current_result_page@>
+              <li><a href="@url_previous@">#search.Previous#</a></li>
+            </if>
 
-    <if @from_result_page@ lt @current_result_page@>
-      <a href="@url_previous@"><b>#search.Previous#</b></a>
-    </if>
-    &nbsp;@choice_bar;noquote@&nbsp;
-    
-    <if @current_result_page@ lt @to_result_page@>
-	<a href="@url_next@"><b>#search.Next#</b></a>
-    </if>
-  </div>
-</if>
+            <multiple name="results_paginator">
+              <if @current_result_page@ eq @results_paginator.item@>
+                <li class="current">@results_paginator.item@</li>
+              </if>
+              <else>
+                <li><a href="@results_paginator.link@">@results_paginator.item@</a></li>
+              </else>
+            </multiple>
+            <if @current_result_page@ lt @to_result_page@>
+              <li><a href="@url_next@">#search.Next#</a></li>
+            </if>
+          </ul>
+        </div>
+      </if>
+
 <if @count@ gt 0>
   <center>
     <div>

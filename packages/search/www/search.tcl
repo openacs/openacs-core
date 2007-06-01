@@ -197,18 +197,13 @@ if { $num > 0 } {
 }
 set ol_start [expr $offset + 1]
 
-set items [list]
-set links [list]
-set values [list]
+template::multirow create results_paginator item link
 for { set __i $from_result_page } { $__i <= $to_result_page} { incr __i } {
-    set link ""
-    append link "search?q=${urlencoded_query}&search_package_id=$search_package_id"
+    set link "search?q=${urlencoded_query}&search_package_id=$search_package_id"
     if { $__i > 1 } { append link "&offset=[expr ($__i - 1) * $limit]" }
     if { $num > 0 } { append link "&num=$num" }
 
-    lappend items $__i
-    lappend links $link
-    lappend values $__i
+    template::multirow append results_paginator $__i $link
 }
 
 set search_the_web [ad_parameter -package_id $package_id SearchTheWeb]
@@ -218,8 +213,6 @@ if [llength $search_the_web] {
 	append stw "<a href=\"[format $url $urlencoded_query]\">$site</a> "
     }
 }
-
-set choice_bar [search::choice_bar $items $links $values $current_result_page]
 
 # header stuffs
 if {![template::multirow exists link]} {
