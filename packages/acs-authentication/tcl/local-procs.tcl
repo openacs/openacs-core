@@ -329,12 +329,13 @@ ad_proc -private auth::local::password::RetrievePassword {
 
     db_1row get_usr_id_and_password_hash {SELECT user_id, password as password_hash FROM users WHERE username = :username}
 
+    set email [party::email -party_id $user_id]
     # TODO: This email message text should go in the recipient user language, english or every language supported
     set subject "[ad_system_name]: [_ acs-subsite.change_password_email_subject] $username"
     set body "[_ acs-subsite.change_password_email_body_0]\n\n[export_vars -base "[ad_url]/user/password-reset" {user_id password_hash}]\n\n[_ acs-subsite.change_password_email_body_1]"
 
     ns_sendmail \
-	$username \
+	$email \
 	[ad_outgoing_sender] \
 	$subject \
 	$body
