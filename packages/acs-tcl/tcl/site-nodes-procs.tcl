@@ -262,8 +262,8 @@ ad_proc -private site_node::init_cache {} {
         site_node::update_cache -node_id $root_node_id
     }
 
-    # Update the cache for the acs-* nodes
-    db_foreach acs_nodes {select node_id from site_nodes s, apm_packages where parent_id = '502' and s.object_id = package_id and package_key != 'acs-subsite'} {
+    # Update the cache for the mounted packages except acs-subsite
+    db_foreach acs_nodes {select node_id from site_nodes s, apm_packages where parent_id = :root_node_id and s.object_id = package_id and package_key != 'acs-subsite'} {
 	    site_node::update_cache -node_id $node_id -sync_children
     }
 }
