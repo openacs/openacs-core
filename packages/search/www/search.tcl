@@ -12,7 +12,13 @@ ad_page_contract {
     {search_package_id ""}
     {scope ""}
     {object_type "all"}
-} 
+} -validate {
+    keywords_p {
+        if {![exists_and_not_null q]} {
+            ad_complain "#search.lt_You_must_specify_some#"
+        }
+    }
+}
 
 set page_title "Search Results"
 
