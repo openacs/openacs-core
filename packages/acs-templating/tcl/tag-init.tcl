@@ -553,7 +553,10 @@ template_tag formtemplate { chunk params } {
     "\[template::form check_elements $id\]"
   }
 
-  template::adp_append_string "</fieldset></form>"
+  if { [info exists form_properties(fieldset)] } {
+      template::adp_append_string "</fieldset>"
+  }
+  template::adp_append_string "</form>"
 }
 
 

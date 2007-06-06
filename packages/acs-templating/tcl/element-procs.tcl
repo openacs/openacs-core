@@ -197,47 +197,48 @@ ad_proc -public template::element::create { form_id element_id args } {
   }
 
   # If the widget is a checkbox or radio widget, set attributes
-  if { [string equal $opts(widget) radio] || \
-       [string equal $opts(widget) checkbox] } {
+    if { [string equal $opts(widget) radio] || \
+             [string equal $opts(widget) checkbox] } {
 
-	  # set fieldset attributes
-	  if { ![info exists opts(fieldset)] } {
-		  set opts(fieldset) [list class $opts(widget)]
-	  }
+        # If there's no legend text, no point to generate the fieldset
+        if { ![info exists opts(legendtext)] } {
+            if { [info exists opts(legend)] || [info exists opts(fieldset)] } {
+                ns_log Warning "template::element::create (form: $form_id, element: $opts(name)): you set fieldset and/or legend properties but not the legendtext one. You must provide text for the legend tag."
+            }
+        } else {
 
-	  array set fs_attributes $opts(fieldset)
-	  if { ![info exists fs_attributes(class)] } {
-		  set fs_attributes(class) $opts(widget)
-	  }
+            # set fieldset attributes
+            if { ![info exists opts(fieldset)] } {
+                set opts(fieldset) {}
+            }
 
-	  set fs_options ""
-	  foreach name [array names fs_attributes] {
-		  if { [string equal $fs_attributes($name) {}] } {
-			  append fs_options " $name"
-		  } else {
-			  append fs_options " $name=\"$fs_attributes($name)\""
-		  }
-	  }
-	  set opts(fieldset) $fs_options
+            array set fs_attributes $opts(fieldset)
+            set fs_options ""
+            foreach name [array names fs_attributes] {
+                if { [string equal $fs_attributes($name) {}] } {
+                    append fs_options " $name"
+                } else {
+                    append fs_options " $name=\"$fs_attributes($name)\""
+                }
+            }
+            set opts(fieldset) $fs_options
 
-	  # set legend attributes
-	  if { ![info exists opts(legendtext)] } {
-		  set opts(legendtext) ""
-	  }
-	  if { ![info exists opts(legend)] } {
-		  set opts(legend) {}
-	  }
-	  array set lg_attributes $opts(legend)
-	  set lg_options ""
-	  foreach name [array names lg_attributes] {
-		  if { [string equal $lg_attributes($name) {}] } {
-			  append lg_options " $name"
-		  } else {
-			  append lg_options " $name=\"$lg_attributes($name)\""
-		  }
-	  }
-	  set opts(legend) $lg_options
-  }
+            # set legend attributes
+            if { ![info exists opts(legend)] } {
+                set opts(legend) {}
+            }
+            array set lg_attributes $opts(legend)
+            set lg_options ""
+            foreach name [array names lg_attributes] {
+                if { [string equal $lg_attributes($name) {}] } {
+                    append lg_options " $name"
+                } else {
+                    append lg_options " $name=\"$lg_attributes($name)\""
+                }
+            }
+            set opts(legend) $lg_options
+        }
+    }
 
   # Remember that the element has not been rendered yet
   set opts(is_rendered) f

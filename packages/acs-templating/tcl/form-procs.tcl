@@ -406,6 +406,12 @@ ad_proc -public template::form::section {
 } {
 	get_reference
 
+    # legend can't be empty
+    if { ![string equal $section ""] && [string equal $legendtext ""] } {
+        ns_log Warning "template::form::section (form: $id, section: $section): The section legend is empty. You must provide text for the legend otherwise the section fieldset won't be created."
+        return
+    }
+
 	set properties(section) $section
 	set properties(sec_legendtext) $legendtext
 
@@ -579,9 +585,6 @@ ad_proc -private template::form::render { id tag_attributes } {
       # Legend
       set fieldset_legend [lindex $fieldset_list 1]
 	  append output "<legend>$fieldset_legend</legend>"
-
-  } else {
-      append output "<fieldset><legend></legend>"
   }
 
   # Export form ID and current form mode
