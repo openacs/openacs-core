@@ -5,7 +5,18 @@
 -- @creation-date 2007-05-24
 -- @cvs-id $Id$
 --
+create or replace function inline_0() returns integer as '
 
-alter table apm_parameters drop constraint apm_parameter_datatype_ck;
-alter table apm_parameters add constraint apm_parameter_datatype_ck check(datat\
-ype in ('number', 'string','text'));
+begin
+    if (select count(*) from pg_constraint where conname=''apm_parameters_datatype_ck'') > 0 then
+        alter table apm_parameters drop constraint apm_parameters_datatype_ck;
+    end if;
+    if (select count(*) from pg_constraint where conname=''apm_parameter_datatype_ck'') > 0 then
+        alter table apm_parameters drop constraint apm_parameter_datatype_ck;
+    end if;
+    alter table apm_parameters add constraint apm_parameters_datatype_ck check(datatype in (''number'', ''string'',''text''));
+    return null;
+end;' language 'plpgsql';
+
+select inline_0();
+drop function inline_0();
