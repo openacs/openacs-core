@@ -214,6 +214,9 @@ ad_proc -public template::element::create { form_id element_id args } {
 
             array set fs_attributes $opts(fieldset)
             set fs_options ""
+            if {![info exists fs_attributes(class)]} {
+                append fs_options " class=\"form-fieldset\""
+            }
             foreach name [array names fs_attributes] {
                 if { [string equal $fs_attributes($name) {}] } {
                     append fs_options " $name"

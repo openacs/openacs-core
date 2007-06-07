@@ -37,16 +37,12 @@ form .form-item-wrapper .form-error {
 
 /* form layout for forms with divs*/
 
-.margin-form fieldset, .vertical-form fieldset, fieldset {
-	border: 0px solid #000;
+.form-fieldset {
+	border: 0px solid #FFFFFF;
 }
 
 .margin-form .form-required-mark {
     display: inline;
-}
-
-.margin-form fieldset {
-	border: 0 solid #FFFFFF;
 }
 
 .margin-form .form-item-wrapper {

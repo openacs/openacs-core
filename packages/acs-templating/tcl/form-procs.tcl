@@ -418,6 +418,9 @@ ad_proc -public template::form::section {
 	# fieldset attributes
 	set properties(sec_fieldset) ""
 	array set fs_attributes $fieldset
+    if {![info exists fs_attributes(class)]} {
+        append properties(sec_fieldset) " class=\"form-fieldset\""
+    }
 	foreach name [array names fs_attributes] {
 		if { [string equal $fs_attributes($name) {}] } {
 			append properties(sec_fieldset) " $name"
@@ -575,15 +578,21 @@ ad_proc -private template::form::render { id tag_attributes } {
   if { [info exists properties(fieldset)] } {
       # Fieldset
       append output " <fieldset"
-      set fieldset_list $properties(fieldset)
-
-      foreach {fa_name fa_value} [lindex $fieldset_list 0] {
-	  append output " $fa_name=\"$fa_value\""
+      array set fs_attributes [lindex $properties(fieldset) 0]
+      if {![info exists fs_attributes(class)]} {
+          append output " class=\"form-fieldset\""
+      }
+      foreach name [array names fs_attributes] {
+          if { [string equal $fs_attributes($name) {}] } {
+              append output " $name"
+          } else {
+              append output " $name=\"$fs_attributes($name)\""
+          }
       }
       append output ">"
 
       # Legend
-      set fieldset_legend [lindex $fieldset_list 1]
+      set fieldset_legend [lindex $properties(fieldset) 1]
 	  append output "<legend>$fieldset_legend</legend>"
   }
 
