@@ -39,7 +39,9 @@ create table acs_sc_msg_type_elements (
     element_pos		     integer
 );
 
-
+-- register function record
+select define_function_args('acs_sc_msg_type__new','msg_type_name,msg_type_spec');
+-- declare function
 create or replace function acs_sc_msg_type__new(varchar,varchar)
 returns integer as '
 declare
@@ -74,7 +76,9 @@ begin
 
 end;' language 'plpgsql';
 
-
+-- register function record
+select define_function_args('acs_sc_msg_type__get_id','msg_type_name');
+-- declare function
 create or replace function acs_sc_msg_type__get_id(varchar)
 returns integer as '
 declare
@@ -90,7 +94,9 @@ begin
 
 end;' language 'plpgsql' stable strict;
 
-
+-- register function record
+select define_function_args('acs_sc_msg_type__get_name','msg_type_id');
+-- declare function
 create or replace function acs_sc_msg_type__get_name(integer)
 returns varchar as '
 declare
@@ -105,7 +111,6 @@ begin
     return v_msg_type_name;
 
 end;' language 'plpgsql' stable strict;
-
 
 create or replace function acs_sc_msg_type__delete(integer)
 returns integer as '
@@ -122,6 +127,9 @@ end;' language 'plpgsql';
 
 -- XXX: this might be a bug that it does not return 0 as the above does.
 -- anyway now it is strict as being called with null is a noop and returns null
+-- register function record
+select define_function_args('acs_sc_msg_type__delete','msg_type_name');
+-- declare function
 create or replace function acs_sc_msg_type__delete(varchar)
 returns integer as '
 declare
@@ -141,7 +149,9 @@ end;' language 'plpgsql' strict;
 
 
 
-
+-- register function record
+select define_function_args('acs_sc_msg_type__new_element','msg_type_name,element_name,element_msg_type_name,element_msg_type_isset_p;f,element_pos');
+-- declare function
 create or replace function acs_sc_msg_type__new_element(varchar,varchar,varchar,boolean,integer)
 returns integer as '
 declare
@@ -186,7 +196,9 @@ end;' language 'plpgsql';
 
 
 
-
+-- register function record
+select define_function_args('acs_sc_msg_type__parse_spec','msg_type_name,msg_type_spec');
+-- declare function
 create or replace function acs_sc_msg_type__parse_spec(varchar,varchar)
 returns integer as '
 declare
