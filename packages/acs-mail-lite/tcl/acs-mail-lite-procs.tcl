@@ -910,12 +910,14 @@ namespace eval acs_mail_lite {
 	with_finally -code {
 	    db_foreach get_queued_messages {} {
 		with_finally -code {
-		    deliver_mail -to_addr $to_addr -from_addr $from_addr \
+		    if { [catch {deliver_mail -to_addr $to_addr -from_addr $from_addr \
 			-subject $subject -body $body -extraheaders $extra_headers \
 			-bcc $bcc -valid_email_p $valid_email_p \
-			-package_id $package_id
-
-		    db_dml delete_queue_entry {}
+                             -package_id $package_id} errmsg] } {
+                ns_log Error "acs_mail_lite::sweeper error sending to $to_addr:\n $errmsg\n"
+            } else {
+                db_dml delete_queue_entry {}
+            }
 		} -finally {
 		}
 	    }
