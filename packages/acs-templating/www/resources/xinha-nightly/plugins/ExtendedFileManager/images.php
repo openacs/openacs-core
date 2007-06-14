@@ -26,11 +26,9 @@ $uploadStatus=$manager->processUploads();
 $renameStatus=$manager->processRenames();
 
 //process paste
-if (isset($_GET['paste']))
-	$pasteStatus = $manager->processPaste();
+$pasteStatus = (isset($_GET['paste'])) ? 	$manager->processPaste() : false;
 
-if ($manager->deleteFiles())
-    $refreshFile = true;
+$refreshFile = ($manager->deleteFiles()) ? true : false;
 
 $refreshDir = false;
 //process any directory functions
@@ -50,16 +48,12 @@ if(isset($_REQUEST['dir']))
 		$relative = $path;
 }
 
+$afruViewType = (isset($_REQUEST['viewtype'])) ? $afruViewType=$_REQUEST['viewtype'] : '';
 
-$afruViewType="";
-if(isset($_REQUEST['viewtype']))
-{
-	$afruViewType=$_REQUEST['viewtype'];
-}
 if($afruViewType!="thumbview" && $afruViewType!="listview")
-
-$afruViewType=$IMConfig['view_type'];
-
+{
+  $afruViewType=$IMConfig['view_type'];
+}
 //get the list of files and directories
 $list = $manager->getFiles($relative);
 
@@ -138,7 +132,7 @@ function drawDirs_Files($list, &$manager)
         			<?php if ($IMConfig['allow_cut_copy_paste']) { ?>
                     <a href="#" title="Cut" onclick="copyFile('<?php echo rawurlencode($entry);?>','move'); return false;"><img src="<?php print $IMConfig['base_url'];?>img/edit_cut.gif" height="15" width="15" alt="Cut" /></a>
                      <a href="#" title="Copy" onclick="copyFile('<?php echo rawurlencode($entry);?>','copy'); return false;"><img src="<?php print $IMConfig['base_url'];?>img/edit_copy.gif" height="15" width="15" alt="Copy" /></a>
-                    <?php $thisFileNameLength -= 6; }  ?>
+                    <?php }  ?>
                   </td>
                 </tr>
     		  <?php

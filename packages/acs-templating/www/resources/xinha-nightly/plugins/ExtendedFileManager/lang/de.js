@@ -88,7 +88,7 @@
   "Image Size": "Bildgröße",
   "Other" : "Andere...",
   "Rename": "Umbenennen",
-  "Please enter new name for this file...": "Bite neuen Namen für diese Datei eingeben...",
+  "Please enter new name for this file...": "Bitte neuen Namen für diese Datei eingeben...",
   "Unable to rename file. File of the same name already exists or\nfolder doesn't have write permission.": "Umbenennen nicht möglich. Evtl. Dateiname schon vorhanden oder keine Schreibrechte.",
   "Cancelled rename.": "Umbenennen abgebrochen.",
   'File "$file" successfully uploaded.': 'Datei "$file" erfolgreich hochgeladen.',

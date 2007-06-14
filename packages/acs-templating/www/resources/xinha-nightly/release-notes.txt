@@ -5,6 +5,41 @@ http://xinha.org
 
 Release History
 
+Xinha 0.93
+ - fixed Ticket #967 Font Color Picker stops working after using one of ImageManager, ExtendedFileManager, FullPage, or HorizontalRule
+ - fixed Ticket #965 When switching between Xinhas in the same page, in textmode toolbar stays disabled
+ - fixwd Ticket #963 DOMwalk IE: head tag attributes without quotes and closing slash
+ - Ticket #962 DOMwalk Mozilla: improved source indentation
+ - fixed Ticket #957 If item in in xinha_editors is not a textarea: skip gracefully
+ - fixed Ticket #900: catch an fatal error that occured sometimes when switching between modes in fullpage mode in Mozilla
+ - fixed Ticket #969 DOMwalk Gecko: line breaks rendered as <br>s inside <pre> blocks
+ - fixed Ticket #976 Loading message misplaced in IE7
+ - fixed Ticket #977 TableOperations toolbar off-place in ext_example.html
+ - fixed Ticket #978 defining a padding for <td>s in global css affects Xinha framework
+ - Ticket #979 improve checking for non-supported browsers
+ - fixed Ticket #934 SuperClean plugin returns just quotation when executed on localhost
+ - Ticket #929 Save changes on page unload fixed for Mozilla 
+ - fixed Ticket #980 ImageManager color format bug
+ - fixed Ticket #981 No doctype in iframe content document/ editor always in quirks mode
+ - fixed Ticket #543 Stylist Panel overflow broken
+ - Ticket #983 added id for iframe
+ - fixed Ticket #984 !ExtendedFileManager produces php warning
+ - optimized icon file size
+ - fixed !JavaScript error in !ImageManager/!ExtendedFileManager image editor
+ - Ticket #908* Prompts broken in IE7: fixed for EFM, !ImageManager & !TableOperations
+ - Fixes for TableOperations, tickets #82, #908*, #912 and #947
+ - fixed Ticket #998* whitespace added before and/or after content (in non-fullpage mode)
+ - fixed slow unloading in Mozilla
+ - Fix focus problem when switching from html to wysiwyg in Gecko. See ticket #900.
+ - fixed toolbar floating issue
+ - fixed #1003 HTML length limited to 1024 characters with plugin CharCounter
+ - Ticket #1000 new public methods for getting/setting editor content
+ - fixed #735 - IE eating scripts and comments at the beginning of pages.
+ - Added new config variables to set iframe width if less than editor width (ticket:322) and set alignment of toolbar buttons.
+ - added Basque translation for XinhaCore
+ - prevent an error if server is set to parse .js files as PHP
+ - Ticket #127 plugin HtmlEntities: Entities.js  file corrupt
+
 Xinha 0.92beta
  - fixed Ticket #831 stop empty anchors from being removed
  - Make htmlarea.js just load XinhaCore.js instead of being a copy of it.

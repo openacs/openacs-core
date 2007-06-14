@@ -151,17 +151,19 @@
   "Close": "Fermer",
 
   // Loading messages
-  "Loading in progress. Please wait !": "Chargement en cours. Veuillez patienter !",
-  "Constructing main object": "Construction de l'objet principal",
+  "Loading in progress. Please wait!": "Chargement en cours. Veuillez patienter!",
+  "Finishing" : "Chargement bientôt terminé", 
   "Constructing object": "Construction de l'objet",
-  "Register panel right": "Enregistrement du panneau droit",
-  "Register panel left": "Enregistrement du panneau gauche",
-  "Register panel top": "Enregistrement du panneau supérieur",
-  "Register panel bottom": "Enregistrement du panneau inférieur",
   "Create Toolbar": "Construction de la barre d'icones",
-  "Create StatusBar": "Construction de la barre de status",
-  "Generate Xinha object": "Génération de l'objet Xinha",
+  "Create Statusbar": "Construction de la barre de status",
+  "Register right panel" : "Enregistrement du panneau droit", 
+  "Register left panel" : "Enregistrement du panneau gauche", 
+  "Register bottom panel" : "Enregistrement du panneau supérieur", 
+  "Register top panel" : "Enregistrement du panneau inférieur", 
+  "Generate Xinha framework": "Génération de Xinha",
   "Init editor size": "Initialisation de la taille d'édition",
   "Init IFrame": "Initialisation de l'iframe",
   "Register plugin $plugin": "Enregistrement du plugin $plugin"
+  "Loading plugin $plugin" : "Chargement du plugin $plugin"
+
 };

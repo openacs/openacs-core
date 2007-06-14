@@ -81,17 +81,17 @@ for(var i=0;i<arguments.length;++i){
 var btn=arguments[i];
 var _18=this.doc.createElement("button");
 div.appendChild(_18);
-_18.innerHTML=HTMLArea._lc(btn,"HTMLArea");
+_18.innerHTML=Xinha._lc(btn,"Xinha");
 switch(btn.toLowerCase()){
 case "ok":
-HTMLArea.addDom0Event(_18,"click",function(){
+Xinha.addDom0Event(_18,"click",function(){
 _14.callHandler();
 _14.close();
 return false;
 });
 break;
 case "cancel":
-HTMLArea.addDom0Event(_18,"click",function(){
+Xinha.addDom0Event(_18,"click",function(){
 _14.close();
 return false;
 });
@@ -109,7 +109,7 @@ var s=el.style;
 s.position="absolute";
 s.left=parseInt((w-el.offsetWidth)/2,10)+"px";
 s.top=parseInt((h-el.offsetHeight)/2,10)+"px";
-if(HTMLArea.is_gecko){
+if(Xinha.is_gecko){
 _19.window.innerWidth=w;
 _19.window.innerHeight=h;
 }else{

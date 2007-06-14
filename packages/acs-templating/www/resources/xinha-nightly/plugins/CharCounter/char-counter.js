@@ -3,15 +3,14 @@ this.editor=_1;
 this._Chars=0;
 this._Words=0;
 this._HTML=0;
-this.maxHTML=1024;
 this.onKeyPress=this.__onKeyPress;
 }
-HTMLArea.Config.prototype.CharCounter={"showChar":true,"showWord":true,"showHtml":true,"separator":" | "};
-CharCounter._pluginInfo={name:"CharCounter",version:"1.3",developer:"Udo Schmal",developer_url:"http://www.schaffrath-neuemedien.de",sponsor:"L.N.Schaffrath NeueMedien",sponsor_url:"http://www.schaffrath-neuemedien.de",c_owner:"Udo Schmal & L.N.Schaffrath NeueMedien",license:"htmlArea"};
+HTMLArea.Config.prototype.CharCounter={"showChar":true,"showWord":true,"showHtml":true,"separator":" | ","maxHTML":-1};
+CharCounter._pluginInfo={name:"CharCounter",version:"1.31",developer:"Udo Schmal",developer_url:"http://www.schaffrath-neuemedien.de",sponsor:"L.N.Schaffrath NeueMedien",sponsor_url:"http://www.schaffrath-neuemedien.de",c_owner:"Udo Schmal & L.N.Schaffrath NeueMedien",license:"htmlArea"};
 CharCounter.prototype._lc=function(_2){
 return HTMLArea._lc(_2,"CharCounter");
 };
-CharCounter.prototype.onGenerate=function(){
+CharCounter.prototype.onGenerateOnce=function(){
 var _3=this;
 if(this.charCount==null){
 var _4=document.createElement("span");
@@ -36,9 +35,9 @@ this.charCount=_4;
 };
 CharCounter.prototype.__onKeyPress=function(ev){
 if((ev.keyCode!=8)&&(ev.keyCode!=46)){
-if(this.maxHTML!=-1){
+if(this.editor.config.CharCounter.maxHTML!=-1){
 var _7=this.editor.getHTML();
-if(_7.length>=this.maxHTML){
+if(_7.length>=this.editor.config.CharCounter.maxHTML){
 HTMLArea._stopEvent(ev);
 return true;
 }

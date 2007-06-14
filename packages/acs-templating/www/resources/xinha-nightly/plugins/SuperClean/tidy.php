@@ -115,7 +115,7 @@
       $content = ob_get_contents();
     ob_end_clean();
 
-    if(!strlen($content))
+    if(strlen($content) < 4)
     {
       // Tidy on the local machine failed, try a post
       $res_1
