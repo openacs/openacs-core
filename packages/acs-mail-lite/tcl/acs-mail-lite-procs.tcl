@@ -13,59 +13,6 @@ ad_library {
 # package require base64
 namespace eval acs_mail_lite {
 
-    ad_proc -public with_finally {
-	-code:required
-	-finally:required
-    } {
-	Execute CODE, then execute cleanup code FINALLY.
-	If CODE completes normally, its value is returned after
-	executing FINALLY.
-	If CODE exits non-locally (as with error or return), FINALLY
-	is executed anyway.
-
-	@option code Code to be executed that could throw and error
-	@option finally Cleanup code to be executed even if an error occurs
-    } {
-	global errorInfo errorCode
-
-	# Execute CODE.
-	set return_code [catch {uplevel $code} string]
-	set s_errorInfo $errorInfo
-	set s_errorCode $errorCode
-
-	# As promised, always execute FINALLY.  If FINALLY throws an
-	# error, Tcl will propagate it the usual way.  If FINALLY contains
-	# stuff like break or continue, the result is undefined.
-	uplevel $finally
-
-	switch $return_code {
-	    0 {
-		# CODE executed without a non-local exit -- return what it
-		# evaluated to.
-		return $string
-	    }
-	    1 {
-		# Error
-		return -code error -errorinfo $s_errorInfo -errorcode $s_errorCode $string
-	    }
-	    2 {
-		# Return from the caller.
-		return -code return $string
-	    }
-	    3 {
-		# break
-		return -code break
-	    }
-	    4 {
-		# continue
-		return -code continue
-	    }
-	    default {
-		return -code $return_code $string
-	    }
-	}
-    }
-
     ad_proc -public get_package_id {} {
 	@returns package_id of this package
     } {
@@ -909,7 +856,6 @@ namespace eval acs_mail_lite {
 
 	with_finally -code {
 	    db_foreach get_queued_messages {} {
-		with_finally -code {
 		    if { [catch {deliver_mail -to_addr $to_addr -from_addr $from_addr \
 			-subject $subject -body $body -extraheaders $extra_headers \
 			-bcc $bcc -valid_email_p $valid_email_p \
@@ -918,8 +864,6 @@ namespace eval acs_mail_lite {
             } else {
                 db_dml delete_queue_entry {}
             }
-		} -finally {
-		}
 	    }
 	} -finally {
 	    nsv_incr acs_mail_lite send_mails_p -1
