@@ -47,3 +47,19 @@ function __dlg_close(val) {
     opener.Dialog._return(val);
     window.close();
 }
+
+function popupPrompt( prompt, value, handler, title)
+{
+  
+    Dialog("prompt.html", function(param)
+    {
+      if (!param) // user must have pressed Cancel
+      {
+        return false;
+      }
+      else
+      {
+        handler (param.value);
+      }
+    }, {prompt:prompt,value:value,title:title});
+}

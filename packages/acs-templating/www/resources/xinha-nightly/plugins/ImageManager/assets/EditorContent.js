@@ -432,6 +432,18 @@ return false;
 }
 }
 function setMarker(nx,ny,nw,nh){
+if(isNaN(nx)){
+nx=0;
+}
+if(isNaN(ny)){
+ny=0;
+}
+if(isNaN(nw)){
+nw=0;
+}
+if(isNaN(nh)){
+nh=0;
+}
 if(ant==null){
 ant=MM_findObj("ant");
 }

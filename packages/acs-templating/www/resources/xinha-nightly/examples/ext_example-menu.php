@@ -10,7 +10,7 @@
     --  frame to provide a menu for generating example editors using
     --  full_example-body.html, and full_example.js.
     --
-    --  $HeadURL: http://svn.xinha.python-hosting.com/tags/0.92beta/examples/ext_example-menu.php $
+    --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/examples/ext_example-menu.php $
     --  $LastChangedDate: 2007-02-07 20:12:42 +0100 (Mi, 07 Feb 2007) $
     --  $LastChangedRevision: 715 $
     --  $LastChangedBy: htanaka $

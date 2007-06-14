@@ -19,11 +19,15 @@
 {
   margin-top:0px;
   margin-bottom:0px;
-  border:1px solid transparent;
+  border:1px solid #F1F1F1;
   padding:0px;
   -moz-border-radius:15px;
   margin:4px;
   height:20px;
+}
+/* hack: IE6 does not know border-color: transparent;*/
+html > body .htmlarea .toolbarRow {
+  border-color: transparent;
 }
 
 .htmlarea .toolbar .button
@@ -31,8 +35,12 @@
   width:18px;
   height:18px;
   padding:1px 2px 2px 1px ;
-  border: solid transparent;
+  border: solid #F1F1F1;
   border-width:1px;
+}
+
+html > body .htmlarea .toolbar .button {
+  border-color: transparent;
 }
 
 .buttonImageContainer
@@ -110,7 +118,8 @@
 }
 
 .dialog {
-  background: url(dialog.jpg) #f0f0f0 no-repeat;
+  /* background: url(dialog.jpg) #f0f0f0 no-repeat; */
+  background-color: #f0f0f0;
  }
 body.dialog {
 	padding-top:0;
@@ -135,7 +144,7 @@ body.dialog {
   font-weight:400;
 }  
 .dialog .title {
-  margin:5px -5px;
+
 }
 
 .dialog button{

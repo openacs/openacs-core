@@ -144,7 +144,7 @@
     <th align="left">Color:</th>
     <td>
       <input name="f_backgroundColor" type="text" id="f_backgroundColor" size="7" />
-      <input type="button" id="bgCol_pick" value="..." />
+     
     </td>
   </tr>
 
@@ -172,7 +172,7 @@
     <th align="left">Color:</th>
     <td>
       <input name="f_borderColor" type="text" id="f_borderColor" size="7" />
-      <input type="button" id="bdCol_pick" value="..." />
+      
     </td>
   </tr>
 

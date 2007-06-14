@@ -1,4 +1,4 @@
-InternetExplorer._pluginInfo={name:"Internet Explorer",origin:"Xinha Core",version:"$LastChangedRevision: 737 $".replace(/^[^:]*: (.*) \$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL: http://svn.xinha.python-hosting.com/tags/0.92beta/modules/InternetExplorer/InternetExplorer.js $".replace(/^[^:]*: (.*) \$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};
+InternetExplorer._pluginInfo={name:"Internet Explorer",origin:"Xinha Core",version:"$LastChangedRevision: 816 $".replace(/^[^:]*: (.*) \$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL: http://svn.xinha.python-hosting.com/trunk/modules/InternetExplorer/InternetExplorer.js $".replace(/^[^:]*: (.*) \$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};
 function InternetExplorer(_1){
 this.editor=_1;
 _1.InternetExplorer=this;
@@ -56,50 +56,55 @@ return true;
 };
 InternetExplorer.prototype.inwardHtml=function(_9){
 _9=_9.replace(/<(\/?)del(\s|>|\/)/ig,"<$1strike$2");
+_9=_9.replace(/(&nbsp;)?([\s\S]*?)(<script|<!--)/i,"$2&nbsp;$3");
 return _9;
 };
-Xinha.prototype.insertNodeAtSelection=function(_a){
-this.insertHTML(_a.outerHTML);
+InternetExplorer.prototype.outwardHtml=function(_a){
+_a=_a.replace(/&nbsp;(\s*)(<script|<!--)/i,"$1$2");
+return _a;
 };
-Xinha.prototype.getParentElement=function(_b){
-if(typeof _b=="undefined"){
-_b=this.getSelection();
+Xinha.prototype.insertNodeAtSelection=function(_b){
+this.insertHTML(_b.outerHTML);
+};
+Xinha.prototype.getParentElement=function(_c){
+if(typeof _c=="undefined"){
+_c=this.getSelection();
 }
-var _c=this.createRange(_b);
-switch(_b.type){
+var _d=this.createRange(_c);
+switch(_c.type){
 case "Text":
-var _d=_c.parentElement();
+var _e=_d.parentElement();
 while(true){
-var _e=_c.duplicate();
-_e.moveToElementText(_d);
-if(_e.inRange(_c)){
+var _f=_d.duplicate();
+_f.moveToElementText(_e);
+if(_f.inRange(_d)){
 break;
 }
-if((_d.nodeType!=1)||(_d.tagName.toLowerCase()=="body")){
+if((_e.nodeType!=1)||(_e.tagName.toLowerCase()=="body")){
 break;
 }
-_d=_d.parentElement;
+_e=_e.parentElement;
 }
-return _d;
+return _e;
 case "None":
-return _c.parentElement();
+return _d.parentElement();
 case "Control":
-return _c.item(0);
+return _d.item(0);
 default:
 return this._doc.body;
 }
 };
-Xinha.prototype.activeElement=function(_f){
-if((_f===null)||this.selectionEmpty(_f)){
+Xinha.prototype.activeElement=function(sel){
+if((sel===null)||this.selectionEmpty(sel)){
 return null;
 }
-if(_f.type.toLowerCase()=="control"){
-return _f.createRange().item(0);
+if(sel.type.toLowerCase()=="control"){
+return sel.createRange().item(0);
 }else{
-var _10=_f.createRange();
-var _11=this.getParentElement(_f);
-if(_11.innerHTML==_10.htmlText){
-return _11;
+var _11=sel.createRange();
+var _12=this.getParentElement(sel);
+if(_12.innerHTML==_11.htmlText){
+return _12;
 }
 return null;
 }
@@ -110,34 +115,40 @@ return true;
 }
 return this.createRange(sel).htmlText==="";
 };
-Xinha.prototype.selectNodeContents=function(_13,pos){
+Xinha.prototype.saveSelection=function(){
+return this.createRange(this._getSelection());
+};
+Xinha.prototype.restoreSelection=function(_14){
+_14.select();
+};
+Xinha.prototype.selectNodeContents=function(_15,pos){
 this.focusEditor();
 this.forceRedraw();
-var _15;
-var _16=typeof pos=="undefined"?true:false;
-if(_16&&_13.tagName&&_13.tagName.toLowerCase().match(/table|img|input|select|textarea/)){
-_15=this._doc.body.createControlRange();
-_15.add(_13);
+var _17;
+var _18=typeof pos=="undefined"?true:false;
+if(_18&&_15.tagName&&_15.tagName.toLowerCase().match(/table|img|input|select|textarea/)){
+_17=this._doc.body.createControlRange();
+_17.add(_15);
 }else{
-_15=this._doc.body.createTextRange();
-_15.moveToElementText(_13);
+_17=this._doc.body.createTextRange();
+_17.moveToElementText(_15);
 }
-_15.select();
+_17.select();
 };
-Xinha.prototype.insertHTML=function(_17){
+Xinha.prototype.insertHTML=function(_19){
 this.focusEditor();
 var sel=this.getSelection();
-var _19=this.createRange(sel);
-_19.pasteHTML(_17);
+var _1b=this.createRange(sel);
+_1b.pasteHTML(_19);
 };
 Xinha.prototype.getSelectedHTML=function(){
 var sel=this.getSelection();
-var _1b=this.createRange(sel);
-if(_1b.htmlText){
-return _1b.htmlText;
+var _1d=this.createRange(sel);
+if(_1d.htmlText){
+return _1d.htmlText;
 }else{
-if(_1b.length>=1){
-return _1b.item(0).outerHTML;
+if(_1d.length>=1){
+return _1d.item(0).outerHTML;
 }
 }
 return "";
@@ -148,46 +159,46 @@ return this._doc.selection;
 Xinha.prototype.createRange=function(sel){
 return sel.createRange();
 };
-Xinha.prototype.isKeyEvent=function(_1d){
-return _1d.type=="keydown";
+Xinha.prototype.isKeyEvent=function(_1f){
+return _1f.type=="keydown";
 };
-Xinha.prototype.getKey=function(_1e){
-return String.fromCharCode(_1e.keyCode);
+Xinha.prototype.getKey=function(_20){
+return String.fromCharCode(_20.keyCode);
 };
-Xinha.getOuterHTML=function(_1f){
-return _1f.outerHTML;
+Xinha.getOuterHTML=function(_21){
+return _21.outerHTML;
 };
 Xinha.prototype.cc=String.fromCharCode(8201);
-Xinha.prototype.setCC=function(_20){
-if(_20=="textarea"){
+Xinha.prototype.setCC=function(_22){
+if(_22=="textarea"){
 var ta=this._textArea;
 var pos=document.selection.createRange();
 pos.collapse();
 pos.text=this.cc;
-var _23=ta.value.indexOf(this.cc);
-var _24=ta.value.substring(0,_23);
-var _25=ta.value.substring(_23+this.cc.length,ta.value.length);
-if(_25.match(/^[^<]*>/)){
-var _26=_25.indexOf(">")+1;
-ta.value=_24+_25.substring(0,_26)+this.cc+_25.substring(_26,_25.length);
+var _25=ta.value.indexOf(this.cc);
+var _26=ta.value.substring(0,_25);
+var _27=ta.value.substring(_25+this.cc.length,ta.value.length);
+if(_27.match(/^[^<]*>/)){
+var _28=_27.indexOf(">")+1;
+ta.value=_26+_27.substring(0,_28)+this.cc+_27.substring(_28,_27.length);
 }else{
-ta.value=_24+this.cc+_25;
+ta.value=_26+this.cc+_27;
 }
 }else{
 var sel=this.getSelection();
 var r=sel.createRange();
 if(sel.type=="Control"){
-var _29=r.item(0);
-_29.outerHTML+=this.cc;
+var _2b=r.item(0);
+_2b.outerHTML+=this.cc;
 }else{
 r.collapse();
 r.text=this.cc;
 }
 }
 };
-Xinha.prototype.findCC=function(_2a){
-var _2b=(_2a=="textarea")?this._textArea:this._doc.body;
-range=_2b.createTextRange();
+Xinha.prototype.findCC=function(_2c){
+var _2d=(_2c=="textarea")?this._textArea:this._doc.body;
+range=_2d.createTextRange();
 if(range.findText(escape(this.cc))){
 range.select();
 range.text="";
@@ -196,8 +207,11 @@ if(range.findText(this.cc)){
 range.select();
 range.text="";
 }
-if(_2a=="textarea"){
+if(_2c=="textarea"){
 this._textArea.focus();
 }
+};
+Xinha.getDoctype=function(doc){
+return (doc.compatMode=="CSS1Compat")?"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">":"";
 };
 

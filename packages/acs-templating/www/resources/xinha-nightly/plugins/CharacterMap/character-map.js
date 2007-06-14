@@ -63,5 +63,6 @@ _e.insertHTML(_c);
 return false;
 };
 _e._CharacterMap.appendChild(a);
+a=null;
 };
 

@@ -85,7 +85,7 @@ _17.p_options.push("width="+_17.p_width);
 if(_17.p_height){
 _17.p_options.push("height="+_17.p_height);
 }
-atr.onclick="try{if(document.designMode && document.designMode == 'on') return false;}catch(e){} window.open(this.href, '"+(_17.p_name.replace(/[^a-z0-9_]/i,"_"))+"', '"+_17.p_options.join(",")+"');return false;";
+atr.onclick="if(window.top && window.top.Xinha){return false}window.open(this.href, '"+(_17.p_name.replace(/[^a-z0-9_]/i,"_"))+"', '"+_17.p_options.join(",")+"');return false;";
 }
 }
 }else{

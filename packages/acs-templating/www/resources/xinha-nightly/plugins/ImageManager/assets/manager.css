@@ -21,9 +21,26 @@ iframe { border:1px inset; border-right:none; border-left:none; border-bottom:no
 
 table { margin-top:10px; }
 th, td { padding-right:3px; text-align:left; font-family:small-caption,helvetica,sans-serif; }
+
 .buttonColor {
-  padding: 1px;
+  width :1em;
+  margin-left: 2px;
   cursor: default;
+}
+
+.buttonColor .chooser, .buttonColor .nocolor {
+  height: 0.6em;
   border: 1px solid;
+  padding: 0px 1em;
   border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 }
+
+.buttonColor .buttonClick {
+  border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
+}
+.buttonColor .buttonColor-hilite {
+  border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
+}
+
+.buttonColor .nocolor { padding: 0px; }
+.buttonColor .nocolor-hilite { background-color: #fff; color: #f00; }

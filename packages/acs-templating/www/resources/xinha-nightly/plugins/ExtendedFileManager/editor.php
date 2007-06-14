@@ -72,7 +72,7 @@ $editor = new ImageEditor($manager);
               <option selected>Flip Image</option>
               <option>-----------------</option>
               <option value="hoz">Flip Horizontal</option>
-              <option value="ver">Flip Virtical</option>
+              <option value="ver">Flip Vertical</option>
          </select>
 			<select name="rotate" onchange="rotatePreset(this)" style="margin-left: 20px; vertical-align: middle;">
               <option selected>Rotate Image</option>

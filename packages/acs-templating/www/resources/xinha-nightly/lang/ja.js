@@ -153,17 +153,23 @@
   "Close": "閉じる",
 
   // Loading messages
-  "Loading in progress. Please wait !": "ロード中です。しばらくお待ちください",
-  "Constructing main object": "構成中 main object",
-  "Constructing object": "構成中 object",
-  "Register panel right": "登録 右パネル",
-  "Register panel left": "登録 左パネル",
-  "Register panel top": "登録 上パネル",
-  "Register panel bottom": "登録 下パネル",
-  "Create Toolbar": "作成 ツールバー",
-  "Create StatusBar": "作成 ステータスバー",
-  "Generate Xinha object": "生成 Xinha object",
-  "Init editor size": "初期化 エディタのサイズ",
-  "Init IFrame": "初期化 IFrame",
-  "Register plugin $plugin": "プラグインの登録 $plugin"
+  "Loading in progress. Please wait!": "ロード中です。しばらくお待ちください",
+  "Loading plugin $plugin" : "ロード中プラグイン $plugin",
+  "Register plugin $plugin" : "登録中プラグイン $plugin", 
+  "Constructing object": "オブジェクト構築中",
+  "Generate Xinha framework": "Xinhaフレームワーク生成中",
+  "Init editor size":"エディタサイズの初期化", 
+  "Create Toolbar": "ツールバーの作成",
+  "Create Statusbar" : "ステータスバーの作成",
+  "Register right panel" : "登録 右パネル", 
+  "Register left panel" : "登録 左パネル", 
+  "Register bottom panel" : "登録 下パネル", 
+  "Register top panel" : "登録 上パネル", 
+  "Finishing" : "完了",
+  
+  // ColorPicker
+  "Click a color..." : "色をクリック...",
+  "Sample" : "サンプル",
+  "Web Safe: " : "Webセーフ: ",
+  "Color: " : "色: "  
 };
