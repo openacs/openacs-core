@@ -2790,7 +2790,7 @@ ad_proc -private template::list::filter_form {
     # Provide a reference to the list properties for use by the list template
     # Get an upvar'd reference to list_properties
     get_reference -name $name
-    
+
     set filter_names_options_tmp [list]
     set filter_names_options [list]
     set filter_hidden_filters [list]
@@ -2799,9 +2799,8 @@ ad_proc -private template::list::filter_form {
 
     # loop through all the filters in this list
     foreach filter_ref $list_properties(filter_refs) {
-
         upvar #$level $filter_ref filter_properties
-	if {$filter_properties(label) ne "" && $filter_properties(name) ne "orderby" && $filter_properties(name) ne "groupby"} {
+	if {$filter_properties(label) ne "" && [lsearch {orderby groupby page} $filter_properties(name)] < 0} {
 	    # filters with a label will be added to the form for the user
 	    # to choose from
 	    lappend filter_names_options_tmp [list $filter_properties(label) $filter_properties(name)]
@@ -2832,7 +2831,6 @@ ad_proc -private template::list::filter_form {
     set list_filter_form_client_property_key [ns_sha1 [list [ad_conn url] $name $filter_key_filters]]
     upvar \#[template::adp_level] __client_property_filters client_property_filters
     set client_property_filters [ad_get_client_property acs-templating $list_filter_form_client_property_key]
-
     # take out filters we already applied...
     set i 0
     foreach option_list $filter_names_options_tmp {
@@ -2881,7 +2879,6 @@ ad_proc -private template::list::filter_form {
 	    # form of selected filters
 	    set client_property_filters $__client_property_filters
 	    ad_set_client_property acs-templating $__list_filter_form_client_property_key $__client_property_filters
-
            # now reload the form. excluding var clear_one
            set pattern [ns_urlencode "clear_one"]=[ns_urlencode "$clear_one"]
            regsub "${pattern}&?" [ad_return_url] {} url
@@ -2987,6 +2984,5 @@ ad_proc -private template::list::filter_form {
 	    {submit:text(submit) {label "Apply Filters"}}
 	}
     }
-
 }
 
