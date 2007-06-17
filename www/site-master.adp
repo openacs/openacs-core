@@ -29,9 +29,7 @@
     if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
       xinha_editors = xinha_editors ? xinha_editors :
         [
-          <list name="acs_blank_master__htmlareas">
-          '@acs_blank_master__htmlareas@'<if @acs_blank_master__htmlareas:rownum@ ne @acs_blank_master__htmlareas:rowcount@>,</if>
-          </list>
+          @htmlarea_ids@
         ];
       xinha_config = xinha_config ? xinha_config() : new HTMLArea.Config();
       @xinha_params;noquote@
