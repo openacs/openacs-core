@@ -31,7 +31,7 @@
             <callback type="before-upgrade"  proc="subsite::before_upgrade"/>
         </callbacks>
         <parameters>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AcceptablePortraitMIMETypes"  default="image/gif image/jpeg" description="Enter a set of acceptable MIME types for portrait submissions." section_name="user-info"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AcceptablePortraitMIMETypes"  default="image/gif image/jpeg image/png" description="Enter a set of acceptable MIME types for portrait submissions." section_name="user-info"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowPersistentLoginP"  default="1" description="do we allow persistent logins?" section_name="user-login"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="AsmForRegisterId"  default="1" description="Assessment used in the registration process." section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultFormStyle"  description="The default form template to use if a particular form doesn't have something more specific defined already."/>
