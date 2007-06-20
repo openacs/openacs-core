@@ -18,6 +18,13 @@
   </ul>
 </if>
 
+<if @too_many_subsites_p gt 0>
+  <h3>Subsite Administration</h3>
+Too many subsites to display: @subsite_number@
+<p />
+</if>
+<else>
+
 <if @subsites:rowcount@ gt 0>
   <h3>Subsite Administration</h3>
   <ul>
@@ -26,7 +33,7 @@
     </multiple>
   </ul>
 </if>
-
+</else>
 <h3>Service Administration</h3>
 
 <include src="/packages/acs-admin/lib/service-parameters">
