@@ -1,4 +1,6 @@
 User-agent: *
+Disallow: /bugtracker
+Disallow: /bugtracker/
 Disallow: /register
 Disallow: /register/
 Disallow: /comments/
@@ -9,6 +11,13 @@ Disallow: /acs-service-contract/
 Disallow: /acs-lang/
 Disallow: /acs-admin/
 Disallow: /RPC2/
+Disallow: /storage/download-archive/
+Disallow: /calendar
+Disallow: /calendar/
+Disallow: /projects/openacs/download/
+Disallow: /projects/openacs/download/
+Disallow: /projects/dotlrn/download/
+Disallow: /projects/dotlrn/download/
 
 # googlebot knows wildcards so block all register
 User-agent: googlebot
@@ -24,3 +33,13 @@ Disallow: /acs-service-contract/
 Disallow: /acs-lang/
 Disallow: /acs-admin/
 Disallow: /RPC2/
+Disallow: /bugtracker
+Disallow: /bugtracker/
+Disallow: /calendar
+Disallow: /calendar/
+
+# Gustaf added following rule (see
+# http://help.yahoo.com/help/us/ysearch/slurp/slurp-03.html)
+User-agent: *
+Crawl-delay: 1 
+
