@@ -7,6 +7,7 @@ set show_p [ds_show_p]
 if { $show_p } {
     set ds_url [ds_support_url]
 
+    set base_url [ad_url]
     set num_comments [llength [ds_get_comments]]
 
     multirow create ds_buttons label title toggle_url state
@@ -33,7 +34,7 @@ if { $show_p } {
 
     multirow append ds_buttons TRN \
         "Toggle translation mode" \
-        [export_vars -base "/acs-lang/admin/translator-mode-toggle" { { return_url [ad_return_url] } }] \
+        [export_vars -base "[ad_url]/acs-lang/admin/translator-mode-toggle" { { return_url [ad_return_url] } }] \
         [ad_decode [lang::util::translator_mode_p] 1 "on" "off"]
 
     multirow append ds_buttons ADP \
@@ -60,7 +61,7 @@ if { $show_p } {
     set db_num_cmds [lindex $db_info 0]
     set db_num_ms [lc_numeric [lindex $db_info 1]]
 
-    set flush_url [export_vars -base "/acs-admin/cache/flush-cache" { { suffix util_memoize } { return_url [ad_return_url] } }]
+    set flush_url [export_vars -base "[ad_url]/acs-admin/cache/flush-cache" { { suffix util_memoize } { return_url [ad_return_url] } }]
 
     if { [empty_string_p $page_ms] } {
         set request_info_label "Request info"
@@ -75,7 +76,7 @@ if { $show_p } {
 
 set rm_package_id [apm_package_id_from_key xotcl-request-monitor]
 if {$rm_package_id > 0} {
-    set rm_url [apm_package_url_from_id $rm_package_id]
+    set rm_url "${base_url}[apm_package_url_from_id $rm_package_id]"
 } else {
     set rm_url ""
 }
