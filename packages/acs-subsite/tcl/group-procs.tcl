@@ -672,13 +672,46 @@ ad_proc -public group::add_member {
                               -create_p $create_p]
     }
 
-    if { $rel_type ne "membership_rel" } {
-        # Add them with a membership_rel first
-        relation_add -member_state $member_state "membership_rel" $group_id $user_id
-    }
-    
-    relation_add -member_state $member_state $rel_type $group_id $user_id
+    if { $rel_type eq "organization_rel" } {
+	# They are using the special organization_rel which
+        # needs to be added differently since organizations
+        # can be part of a group which violates the membership_rel
+        # constraint for a group member to be a person see:
+        # http://openacs.org/forums/message-view?message_id=1059049
+        #
+        # The organization_rel behaves exactly like a basic membership_rel
+        # and uses the exact same tables, but it allows an organization
+        # to be a member of a group. If the constraint is dropped/changed
+        # then this code could be cleaned up to act like the other rel
+        # types listed below - and potentially all organization_rels can be
+        # updated and changed into membership_rels
+
+	set existing_rel_id [db_string rel_exists { 
+	    select rel_id
+	    from   acs_rels 
+	    where  rel_type = :rel_type 
+            and    object_id_one = :group_id
+            and    object_id_two = :user_id
+	} -default {}]
+        if { [empty_string_p $existing_rel_id] } {
+	    set peeraddr [ad_conn peeraddr]
+	    set creation_user [ad_conn user_id]
+	    set rel_id [db_string insert_rels { select acs_rel__new (NULL::integer,:rel_type,:group_id,:user_id,NULL,:creation_user,:peeraddr) as org_rel_id }]
+	    db_dml insert_state { insert into membership_rels (rel_id,member_state) values (:rel_id,:member_state) }
+	} else {
+            # update member state
+            db_dml update_state { update membership_rels set member_state = :member_state where rel_id = :existing_rel_id }
+        }
+    } else {
+	if { $rel_type ne "membership_rel" } {
+	    # add them with a membership_rel first
+	    relation_add -member_state $member_state "membership_rel" $group_id $user_id
+	}
+	relation_add -member_state $member_state $rel_type $group_id $user_id
+    }    
     flush_members_cache -group_id $group_id
+
+    callback group::add_member -group_id $group_id -user_id $user_id -rel_type $rel_type -member_state $member_state
 }
 
 
