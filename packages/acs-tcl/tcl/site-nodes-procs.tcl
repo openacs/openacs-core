@@ -689,7 +689,6 @@ ad_proc -public site_node::get_url_from_object_id {
     as we must delete child site nodes before their parents.
 } {
     if { [nsv_exists site_node_url_by_object_id $object_id] } {
-	ds_comment "node [nsv_get site_node_url_by_object_id $object_id]"
         return [nsv_get site_node_url_by_object_id $object_id]
     } else {
 	# Try to load it from the database
