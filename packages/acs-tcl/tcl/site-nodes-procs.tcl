@@ -112,7 +112,7 @@ ad_proc -public site_node::mount {
                  instance_name $instance_name package_type $package_type]
     
         set url_by_object_id [list $node(url)]
-        if { [nsv_exists site_node_url_by_object_id $object_id] } {
+        if { [nsv_exists site_node_url_by_object_id $object_id] && $url_by_object_id ne [nsv_get site_node_url_by_object_id $object_id] } {
             set url_by_object_id [concat [nsv_get site_node_url_by_object_id $object_id] $url_by_object_id]
             set url_by_object_id [lsort \
                                       -decreasing \
@@ -366,6 +366,11 @@ ad_proc -private site_node::update_cache {
                 set url "/"
             } else {
                 # append directory to url of parent node
+		# Check that the parent is in the cache
+		if {![exists_and_not_null url_by_node_id($parent_id)]} {
+		    site_node::update_cache -node_id $parent_id
+		    array set url_by_node_id [nsv_array get site_node_url_by_node_id]
+		}
                 set url $url_by_node_id($parent_id)
                 append url $name
                 if { $directory_p eq "t" } { append url "/" }
@@ -684,6 +689,7 @@ ad_proc -public site_node::get_url_from_object_id {
     as we must delete child site nodes before their parents.
 } {
     if { [nsv_exists site_node_url_by_object_id $object_id] } {
+	ds_comment "node [nsv_get site_node_url_by_object_id $object_id]"
         return [nsv_get site_node_url_by_object_id $object_id]
     } else {
 	# Try to load it from the database
