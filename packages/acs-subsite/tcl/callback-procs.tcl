@@ -18,15 +18,6 @@ ad_proc -public -callback user::workspace {
     @see callback::user::workspace::impl::acs-subsite
 } -
 
-ad_proc -public -callback group::add_member {
-    -group_id
-    -user_id
-    -rel_type
-    -member_state
-} {
-    Used to perform actions when a user is added to a group
-} -
-
 ad_proc -public -callback user::workspace -impl acs-subsite {
 	-user_id
 } {
