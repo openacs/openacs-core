@@ -8,22 +8,23 @@
     <singleton-p>t</singleton-p>
     <auto-mount>notifications</auto-mount>
 
-    <version name="5.4.0d3" url="http://openacs.org/repository/download/apm/notifications-5.4.0d3.apm">
+    <version name="5.4.0d4" url="http://openacs.org/repository/download/apm/notifications-5.4.0d4.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Email notifications management</summary>
-        <release-date>2006-02-12</release-date>
+        <release-date>2007-06-27</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides an API for packages to provide subscription based email notifications and handle replies.  Used by forums, bug-tracker, etc.  The currently prefered package for email notifications.</description>
         <maturity>0</maturity>
+        <package_instance_name>#notifications.Notifications#</package_instance_name>
 
-        <provides url="notifications" version="5.4.0d3"/>
+        <provides url="notifications" version="5.4.0d4"/>
         <requires url="acs-kernel" version="5.3.1a1"/>
         <requires url="acs-mail-lite" version="5.4.0d1"/>
 
         <callbacks>
             <callback type="after-install"  proc="notification::apm::after_install"/>
-            <callback type="before-uninstall"  proc="notification::apm::before_uninstall"/>
             <callback type="after-upgrade"  proc="notification::apm::after_upgrade"/>
+            <callback type="before-uninstall"  proc="notification::apm::before_uninstall"/>
         </callbacks>
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailDomain"  description="The domain for the notification email address" section_name="email"/>
