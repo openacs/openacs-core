@@ -22,6 +22,7 @@
                    notif_subject,
                    notif_text,
                    notif_html,
+                   file_ids,
                    user_id,
                    type_id,
                    delivery_method_id,

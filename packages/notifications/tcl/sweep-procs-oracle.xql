@@ -30,6 +30,7 @@
                     notifications.notif_subject,
                     notifications.notif_text,
                     notifications.notif_html,
+                    notifications.file_ids,
                     notification_requests.user_id,
                     notification_requests.type_id,
                     notification_requests.delivery_method_id,

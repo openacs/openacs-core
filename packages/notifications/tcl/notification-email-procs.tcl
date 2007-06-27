@@ -96,6 +96,7 @@ namespace eval notification::email {
         subject
         content_text
         content_html
+        file_ids
     } {
         Send the actual email.
 
@@ -152,6 +153,7 @@ namespace eval notification::email {
            -mime_type $mime_type \
            -subject $subject \
            -body $content \
+           -file_ids $file_ids \
            -use_sender \
            -extraheaders $eh_list_of_lists
     }
