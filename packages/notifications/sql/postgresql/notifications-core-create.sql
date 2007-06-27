@@ -176,7 +176,8 @@ create table notifications (
                                     references users(user_id),
     notif_subject                   varchar(1000),
     notif_text                      text,
-    notif_html                      text
+    notif_html                      text,
+    file_ids                        text
 );
 
 -- RI indexes 
