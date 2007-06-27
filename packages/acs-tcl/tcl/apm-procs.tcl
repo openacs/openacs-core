@@ -1517,9 +1517,15 @@ ad_proc -public apm_package_instance_new {
     @return The id of the instantiated package
 } {
     if { $instance_name eq "" } {
-        set instance_name [db_string pretty_name_from_key {select pretty_name 
+	set p_name [apm::package_version::attributes::get_instance_name $package_key]
+
+	if {$p_name eq ""} {
+	    set instance_name [db_string pretty_name_from_key {select pretty_name 
                                                           from apm_enabled_package_versions 
                                                           where package_key = :package_key}]
+	} else {
+	    set instance_name  "$p_name"
+	}
     }
 
     if { $package_id eq "" } {
