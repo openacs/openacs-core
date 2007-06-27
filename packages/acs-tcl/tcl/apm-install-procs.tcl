@@ -2132,6 +2132,77 @@ ad_proc -private apm_invoke_install_proc {
 #
 #############
 
+ad_proc -private apm::package_version::attributes::set_all_instances_names {} {
+    Set all names of the instances for those packages that have 
+    the attribute package_instance_name. After running 
+    this script you must restart your installation.
+} {
+    # packages list
+    db_foreach get_packages_keys {
+	select package_key
+	from apm_enabled_package_versions
+    } {
+	# Getting the instance name
+	set package_instance_name [apm::package_version::attributes::get_instance_name $package_key]
+
+	# Getting package_name
+	set path [apm_package_info_file_path $package_key]
+	array set version_properties [apm_read_package_info_file $path]
+	set package_name $version_properties(package-name)
+	
+	# Getting instances name
+	db_foreach get_instances_names {
+	    select instance_name
+	    from apm_packages
+	    where package_key = :package_key
+	} {
+	    # Removing the character "#".
+	    regsub -all {[\#]*} $instance_name {\1} instance_name
+	
+	    # Verifying whether this instance_name is a message_key
+	    set is_msg [lang::message::message_exists_p [ad_conn locale] $instance_name]
+	    if {$package_name eq $instance_name && $is_msg eq 0} {
+		if { $package_instance_name ne ""} {
+		    # Updating the names of the instances for this package_key
+		    db_transaction {
+			db_dml app_rename {
+			    update apm_packages
+			    set instance_name = :package_instance_name
+			    where package_key = :package_key
+			}
+		    }
+		}
+	    } 
+	}
+    }
+}
+
+ad_proc -private apm::package_version::attributes::get_instance_name { package_key } {
+    Return the package_instance_name which is used for
+    naming instances in .LRN, every time that we are creating
+    a class.
+    
+    @author Cesar Hernandez
+} {
+
+    set parameter "package_instance_name"
+    set version_id [apm_version_id_from_package_key $package_key]
+
+    if {![empty_string_p $version_id]} {
+        apm::package_version::attributes::get -version_id $version_id -array packages_names
+	# it was added this catch for those packages that does not
+	# have the attribute package instance name, in this case
+	# return ""
+	
+	if {[catch {set instance_name $packages_names($parameter)} errmsg]} {
+            return ""
+        } else {
+            return $instance_name
+        }
+
+    }
+}
+
 ad_proc -private apm::package_version::attributes::get_spec {} {
     Return dynamic attributes of package versions in
     an array list. The rationale for introducing the dynamic
@@ -2156,6 +2227,9 @@ ad_proc -private apm::package_version::attributes::get_spec {} {
         }
         license_url {
             pretty_name "License URL"
+        }
+	package_instance_name {
+            pretty_name "Package instance name"
         }
     }
 }
