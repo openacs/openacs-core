@@ -286,13 +286,16 @@ ad_proc -private site_node::update_cache {
     {-sync_children:boolean}
     {-node_id:required}
     {-sync_direct_children:boolean}
+    {-no_mutex:boolean}
 } {
     Brings the in memory copy of the site nodes hierarchy in sync with the
     database version. Only updates the given node and its children.
 } {
-    # don't let any other thread try to do a concurrent update
-    # until cache is fully updated
-    ns_mutex lock [nsv_get site_nodes_mutex mutex]
+    if {$no_mutex_p eq 0} {
+	# don't let any other thread try to do a concurrent update
+	# until cache is fully updated
+	ns_mutex lock [nsv_get site_nodes_mutex mutex]
+    }
 
     ns_log Debug "Updating URL:: $node_id :: $sync_children_p :: $sync_direct_children_p"
     with_finally -code {
@@ -368,7 +371,7 @@ ad_proc -private site_node::update_cache {
                 # append directory to url of parent node
 		# Check that the parent is in the cache
 		if {![exists_and_not_null url_by_node_id($parent_id)]} {
-		    site_node::update_cache -node_id $parent_id
+		    site_node::update_cache -node_id $parent_id -no_mutex
 		    array set url_by_node_id [nsv_array get site_node_url_by_node_id]
 		}
                 set url $url_by_node_id($parent_id)
