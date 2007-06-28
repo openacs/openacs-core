@@ -382,6 +382,7 @@ as
       notif_subject                     in notifications.notif_subject%TYPE default null,
       notif_text                        in varchar default null,
       notif_html                        in varchar default null,
+      file_ids                          in varchar default null,
       creation_date                     in acs_objects.creation_date%TYPE default sysdate,
       creation_user                     in acs_objects.creation_user%TYPE,
       creation_ip                       in acs_objects.creation_ip%TYPE,
@@ -400,9 +401,9 @@ as
                            );
 
       insert into notifications
-      (notification_id, type_id, object_id, notif_date, response_id, notif_user, notif_subject, notif_text, notif_html)
+      (notification_id, type_id, object_id, notif_date, response_id, notif_user, notif_subject, notif_text, notif_html, file_ids)
       values
-      (v_notification_id, type_id, object_id, notif_date, response_id, notif_user, notif_subject, notif_text, notif_html);
+      (v_notification_id, type_id, object_id, notif_date, response_id, notif_user, notif_subject, notif_text, notif_html, file_ids);
 
       return v_notification_id;
    end new;

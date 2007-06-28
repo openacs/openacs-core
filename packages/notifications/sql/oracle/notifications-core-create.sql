@@ -163,7 +163,8 @@ create table notifications (
                                     references users(user_id),
     notif_subject                   varchar(1000),
     notif_text                      clob,
-    notif_html                      clob
+    notif_html                      clob,
+    file_ids                        varchar(4000)
 );
 
 -- RI indexes 
