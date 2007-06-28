@@ -363,7 +363,14 @@ ad_proc -private site_node::update_cache {
         }
         
         set orig_node_id $node_id
-        db_foreach $query_name {} {
+
+        # Because you can run out of db pools if this proc
+        # is called for too many parent nodes this needs to
+        # be run through a foreach tcl loop and cannot
+        # use db_foreach
+        foreach item [db_list_of_lists $query_name {}] {
+            util_unlist $item node_id parent_id name directory_p pattern_p object_id package_key package_id instance_name package_type num_children
+
             if {$parent_id eq ""} {
                 # url of root node
                 set url "/"
