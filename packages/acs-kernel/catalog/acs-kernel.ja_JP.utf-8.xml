@@ -12,6 +12,7 @@
   <msg key="common_login">ログイン</msg>
   <msg key="common_next">次へ</msg>
   <msg key="common_no">いいえ</msg>
+  <msg key="common_No">いいえ</msg>
   <msg key="common_previous">戻る</msg>
   <msg key="common_reset">リセット</msg>
   <msg key="common_save">の保存</msg>

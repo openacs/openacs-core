@@ -42,7 +42,8 @@
   <msg key="common_new">berria</msg>
   <msg key="common_Next">Hurrengoa</msg>
   <msg key="common_next">hurrengoa</msg>
-  <msg key="common_no">Ez</msg>
+  <msg key="common_No">Ez</msg>
+  <msg key="common_no">ez</msg>
   <msg key="common_OK">Ados</msg>
   <msg key="common_ok">ados</msg>
   <msg key="common_Open">Ireki</msg>

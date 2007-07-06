@@ -42,7 +42,8 @@
   <msg key="common_new">nou</msg>
   <msg key="common_Next">Următorul</msg>
   <msg key="common_next">următorul</msg>
-  <msg key="common_no">Nu</msg>
+  <msg key="common_No">Nu</msg>
+  <msg key="common_no">nu</msg>
   <msg key="common_OK">OK</msg>
   <msg key="common_ok">OK</msg>
   <msg key="common_Open">Deschide</msg>

@@ -42,7 +42,8 @@
   <msg key="common_new">новый</msg>
   <msg key="common_Next">Следующий</msg>
   <msg key="common_next">след.</msg>
-  <msg key="common_no">Нет</msg>
+  <msg key="common_No">Нет</msg>
+  <msg key="common_no">нет</msg>
   <msg key="common_OK">OK</msg>
   <msg key="common_ok">ok</msg>
   <msg key="common_Open">Открыть</msg>

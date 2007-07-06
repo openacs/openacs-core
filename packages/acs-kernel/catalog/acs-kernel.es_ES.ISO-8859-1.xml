@@ -53,7 +53,8 @@
   <msg key="common_new">nuevo</msg>
   <msg key="common_Next">Siguiente</msg>
   <msg key="common_next">siguiente</msg>
-  <msg key="common_no">No</msg>
+  <msg key="common_No">No</msg>
+  <msg key="common_no">no</msg>
   <msg key="common_OK">OK</msg>
   <msg key="common_ok">ok</msg>
   <msg key="common_Open">Abrir</msg>

@@ -31,7 +31,7 @@
   <msg key="common_First">首</msg>
   <msg key="common_first">首</msg>
   <msg key="common_Go">到</msg>
-  <msg key="common_go">Go</msg>
+  <msg key="common_go">go</msg>
   <msg key="common_Help">協助</msg>
   <msg key="common_help">幫助</msg>
   <msg key="common_Login">登入</msg>
@@ -42,6 +42,7 @@
   <msg key="common_new">新</msg>
   <msg key="common_Next">後一</msg>
   <msg key="common_next">下一個</msg>
+  <msg key="common_No">否</msg>
   <msg key="common_no">否</msg>
   <msg key="common_OK">完成</msg>
   <msg key="common_ok">好</msg>

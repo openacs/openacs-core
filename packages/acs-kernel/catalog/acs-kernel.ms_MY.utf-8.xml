@@ -42,7 +42,8 @@
   <msg key="common_new">baru</msg>
   <msg key="common_Next">Terus</msg>
   <msg key="common_next">terus</msg>
-  <msg key="common_no">Tidak</msg>
+  <msg key="common_No">Tidak</msg>
+  <msg key="common_no">tidak</msg>
   <msg key="common_OK">OK</msg>
   <msg key="common_ok">ok</msg>
   <msg key="common_Open">Buka</msg>

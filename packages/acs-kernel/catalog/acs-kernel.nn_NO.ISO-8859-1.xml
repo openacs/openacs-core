@@ -42,7 +42,8 @@
   <msg key="common_new">ny</msg>
   <msg key="common_Next">Neste</msg>
   <msg key="common_next">Neste</msg>
-  <msg key="common_no">Nei</msg>
+  <msg key="common_No">Nei</msg>
+  <msg key="common_no">nei</msg>
   <msg key="common_OK">OK</msg>
   <msg key="common_ok">OK</msg>
   <msg key="common_Open">Åpen</msg>
