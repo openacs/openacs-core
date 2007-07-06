@@ -52,7 +52,8 @@
   <msg key="common_new">novo</msg>
   <msg key="common_Next">Seguinte</msg>
   <msg key="common_next">Próximo</msg>
-  <msg key="common_no">Non</msg>
+  <msg key="common_no">non</msg>
+  <msg key="common_No">Non</msg>
   <msg key="common_OK">OK</msg>
   <msg key="common_ok">ok</msg>
   <msg key="common_Open">Abrir</msg>

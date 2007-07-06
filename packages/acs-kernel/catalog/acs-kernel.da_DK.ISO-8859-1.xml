@@ -15,7 +15,8 @@
   <msg key="common_help">Hjælp</msg>
   <msg key="common_login">Log ind</msg>
   <msg key="common_next">Næste</msg>
-  <msg key="common_no">Nej</msg>
+  <msg key="common_No">Nej</msg>
+  <msg key="common_no">nej</msg>
   <msg key="common_previous">Forrige</msg>
   <msg key="common_register">Registrer</msg>
   <msg key="common_reset">Nulstil</msg>

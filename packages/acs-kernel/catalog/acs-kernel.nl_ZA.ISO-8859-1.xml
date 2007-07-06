@@ -52,7 +52,8 @@
   <msg key="common_new">nieuw</msg>
   <msg key="common_Next">Volgende</msg>
   <msg key="common_next">volgende</msg>
-  <msg key="common_no">Nee</msg>
+  <msg key="common_No">Nee</msg>
+  <msg key="common_no">nee</msg>
   <msg key="common_OK">OK</msg>
   <msg key="common_ok">ok</msg>
   <msg key="common_Open">Open</msg>

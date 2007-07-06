@@ -42,7 +42,8 @@
   <msg key="common_new">yeni</msg>
   <msg key="common_Next">Sonraki</msg>
   <msg key="common_next">sonraki</msg>
-  <msg key="common_no">Hayir</msg>
+  <msg key="common_No">Hayir</msg>
+  <msg key="common_no">hayir</msg>
   <msg key="common_OK">Tamam</msg>
   <msg key="common_ok">tamam</msg>
   <msg key="common_Open">Ac</msg>

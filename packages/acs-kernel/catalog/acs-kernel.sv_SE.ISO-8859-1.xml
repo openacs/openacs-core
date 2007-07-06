@@ -19,7 +19,8 @@
   <msg key="common_login">Logga in</msg>
   <msg key="common_needs_approval">Behöver godkännande</msg>
   <msg key="common_next">Nästa</msg>
-  <msg key="common_no">Nej</msg>
+  <msg key="common_No">Nej</msg>
+  <msg key="common_no">nej</msg>
   <msg key="common_ok">OK</msg>
   <msg key="common_open">Öppna</msg>
   <msg key="common_previous">Föregående</msg>

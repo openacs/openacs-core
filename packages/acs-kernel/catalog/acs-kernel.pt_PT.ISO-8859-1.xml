@@ -14,7 +14,8 @@
   <msg key="common_help">Ajuda</msg>
   <msg key="common_login">Log in</msg>
   <msg key="common_next">Próximo</msg>
-  <msg key="common_no">Não</msg>
+  <msg key="common_No">Não</msg>
+  <msg key="common_no">não</msg>
   <msg key="common_previous">Anterior</msg>
   <msg key="common_register">Registar</msg>
   <msg key="common_reset">Restaurar</msg>
