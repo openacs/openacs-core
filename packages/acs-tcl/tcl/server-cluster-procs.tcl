@@ -22,7 +22,12 @@ proc_doc server_cluster_peer_hosts {} { Returns a list of all hosts, excluding t
     set my_ip [ns_config ns/server/[ns_info server]/module/nssock Address]
 
     foreach host [server_cluster_all_hosts] {
-	if { $host != $my_ip } {
+       #AGUSTIN
+       if { ![regexp {(.*):(.*)} $host match myhost myport] } {
+            set myport 80
+            set myhost $host
+       }
+       if { $myhost != $my_ip } {
 	    lappend peer_hosts $host
 	}
     }
