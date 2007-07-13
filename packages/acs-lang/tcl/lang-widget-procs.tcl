@@ -27,7 +27,9 @@ ad_proc -public template::widget::select_locales {
     if { [info exists element(html)] } {
         array set attributes $element(html)
     }
-
+    if { [info exists element(values)] } {
+         template::util::list_to_lookup $element(values) values
+    }
     array set attributes $tag_attributes
 
     append output "<select name=\"$element(name)\" id=\"$element(name)\" "

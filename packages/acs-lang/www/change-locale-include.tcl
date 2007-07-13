@@ -65,7 +65,8 @@ element create locale site_wide_locale \
     -widget select_locales \
     -optional \
     -label "[_ acs-lang.Your_Preferred_Locale]" \
-    -options $list_of_locales
+    -options $list_of_locales \
+    -values [ad_conn locale]
 
 if { $package_level_locales_p } {
     set package_name [apm_instance_name_from_id $package_id]
