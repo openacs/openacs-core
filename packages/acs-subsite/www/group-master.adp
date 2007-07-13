@@ -1,111 +1,171 @@
-  <master src="/www/site-master">
-  <if @title@ not nil>
-    <property name="title">@title;noquote@</property>
-  </if>
-  <if @signatory@ not nil>
-    <property name="signatory">@signatory;noquote@</property>
-  </if>
-  <if @focus@ not nil>
-    <property name="focus">@focus;noquote@</property>
-  </if>
-  <if @context@ not nil>
-    <property name="context">@context;noquote@</property>
-  </if>
-  <property name="header_stuff">
-    @header_stuff;noquote@
-    <!--<link rel="stylesheet" type="text/css" href="@css_url@" media="all">-->
-  </property>
-  <if @displayed_object_id@ not nil><property name="displayed_object_id">@displayed_object_id;noquote@</property></if>
+<master src="/www/site-master">
+<if @meta:rowcount@ not nil><property name="&meta">meta</property></if>
+<if @link:rowcount@ not nil><property name="&link">link</property></if>
+<if @script:rowcount@ not nil><property name="&script">script</property></if>
+<if @doc@ defined><property name="&doc">doc</property></if>
+<if @body@ defined><property name="&body">body</property></if>
+<if @head@ not nil><property name="head">@head;noquote@</property></if>
+<if @focus@ not nil><property name="focus">@focus;noquote@</property></if>
+<property name="skip_link">#content-wrapper</property>
 
-<div id="subsite-name">
-  <if @subsite_url@ not nil><a href="@subsite_url@" class="subsite-name">@subsite_name@</a></if>
-  <else>@subsite_name@</else>
-</div>
-
-<!-- Top level navigation -->
-
-<div id="navbar-div">
-  <div id="navbar-container">
-    <div id="navbar"> 
-      <multiple name="sections">
-        <if @sections.selected_p@ true>
-          <div class="tab" id="navbar-here">
-            <if @sections.link_p@ true>
-              <a href="@sections.url@" title="@sections.title@">@sections.label@</a>
-            </if>
-            <else>        
-              @sections.label@
-            </else>
-          </div>
-        </if>
-        <else>
-          <div class="tab">
-            <if @sections.link_p@ true>
-              <a href="@sections.url@" title="@sections.title@">@sections.label@</a>
-            </if>
-            <else>        
-              @sections.label@
-            </else>
-          </div>
-        </else>
-      </multiple>
-    </div>
+<div id="wrapper">
+  <div id="system-name">
+    <if @system_url@ not nil><a href="@system_url@">@system_name@</a></if>
+    <else>@system_name@</else>
   </div>
-</div>
-<div id="navbar-body">
-
-<!-- Second level navigation -->
-
-  <if @subsections:rowcount@ gt 0>
-
-    <div id="subnavbar-div">
-      <div id="subnavbar-container">
-        <div id="subnavbar">
-          <multiple name="subsections">
-            <if @subsections.selected_p@ true>
-              <div class="tab" id="subnavbar-here">
-                <if @subsections.link_p@ true>
-                  <a href="@subsections.url@" title="@subsections.title@">@subsections.label@</a>
-                </if>
-                <else>        
-                  @subsections.label@
-                </else>
-              </div>
-            </if>
-            <else>
-              <div class="tab">
-                <if @subsections.link_p@ true>
-                  <a href="@subsections.url@" title="@subsections.title@">@subsections.label@</a>
-                </if>
-                <else>        
-                  @subsections.label@
-                </else>
-              </div>
-            </else>
+  <div id="header">
+    <div class="block-marker">Begin header</div>
+    <div id="header-navigation">
+      <ul class="compact">
+        <li>
+          <if @untrusted_user_id@ ne 0>#acs-subsite.Welcome_user#</if>
+          <else>#acs-subsite.Not_logged_in#</else> | 
+        </li>
+        <li><a href="@whos_online_url@" title="#acs-subsite.view_all_online_members#">@num_users_online@ <if @num_users_online@ eq 1>#acs-subsite.Member#</if><else>#acs-subsite.Members#</else> #acs-subsite.Online#</a> |</li>
+        <if @pvt_home_url@ not nil>
+          <li><a href="@pvt_home_url@" title="#acs-subsite.Change_pass_email_por#">@pvt_home_name@</a> |</li>
+        </if>
+        <if @login_url@ not nil>
+          <li><a href="@login_url@" title="#acs-subsite.Log_in_to_system#">#acs-subsite.Log_In#</a></li>
+        </if>
+        <if @logout_url@ not nil>
+          <li><a href="@logout_url@" title="#acs-subsite.Logout_from_system#">#acs-subsite.Logout#</a></li>
+        </if>
+      </ul>
+    </div>
+    <div id="breadcrumbs">
+      <if @context_bar@ not nil>
+        @context_bar;noquote@
+      </if>
+      <else>
+        <if @context:rowcount@ not nil>
+        <ul class="compact">
+          <multiple name="context">
+          <if @context.url@ not nil>
+            <li><a href="@context.url@">@context.label@</a> :</li>
+          </if>
+          <else>
+            <li>@context.label@</li>
+          </else>
           </multiple>
-        </div>
-      </div>
+        </ul>
+        </if>
+      </else>
     </div>
-    <div id="subnavbar-body">
-  </if>
-  <else>
-  </else>
+  </div> <!-- /header -->
 
-<!-- Page Title -->
+  <div id="content-wrapper">
+    <div class="block-marker">Begin main content</div>
+    <div id="inner-wrapper">
+        
+     <if @user_messages:rowcount@ gt 0>
+       <div id="alert-message">
+         <multiple name="user_messages">
+           <div class="alert">
+             <strong>@user_messages.message;noquote@</strong>
+           </div>
+         </multiple>
+       </div>
+     </if>
 
-    <if @title@ not nil>
-      <h1 class="page-title">@title@</h1>
-    </if>
+     <div id="navbar-div">
+       <div id="navbar-container">
+         <div id="navbar"> 
+           <multiple name="sections">
+             <if @sections.selected_p@ true>
+               <div class="tab" id="navbar-here">
+                 <if @sections.link_p@ true>
+                   <a href="@sections.url@" title="@sections.title@">@sections.label@</a>
+                 </if>
+                 <else>        
+                   @sections.label@
+                 </else>
+               </div>
+             </if>
+             <else>
+               <div class="tab">
+                 <if @sections.link_p@ true>
+                   <a href="@sections.url@" title="@sections.title@">@sections.label@</a>
+                 </if>
+                 <else>        
+                   @sections.label@
+                 </else>
+               </div>
+             </else>
+           </multiple>
+         </div>
+       </div>
+     </div>
+     <div id="navbar-body">
+     <!-- Second level navigation -->
+       <if @subsections:rowcount@ gt 0>
+         <div id="subnavbar-div">
+           <div id="subnavbar-container">
+             <div id="subnavbar">
+               <multiple name="subsections">
+                 <if @subsections.selected_p@ true>
+                   <div class="tab" id="subnavbar-here">
+                     <if @subsections.link_p@ true>
+                       <a href="@subsections.url@" title="@subsections.title@">@subsections.label@</a>
+                     </if>
+                     <else>        
+                       @subsections.label@
+                     </else>
+                   </div>
+                 </if>
+                 <else>
+                   <div class="tab">
+                     <if @subsections.link_p@ true>
+                       <a href="@subsections.url@" title="@subsections.title@">@subsections.label@</a>
+                     </if>
+                     <else>        
+                       @subsections.label@
+                     </else>
+                   </div>
+                 </else>
+               </multiple>
+             </div>
+           </div>
+         </div>
+         <div id="subnavbar-body">
+       </if>
 
-<!-- Body -->
+       <div id="main">
+         <div id="main-content">
+           <div class="main-content-padding">
+             <h1>@title;noquote@</h1>
+             <slave />
+           </div>
+         </div>
+       </div>
 
-    <slave>
-    <div style="clear: both;"></div>
+       <if @subsections:rowcount@ gt 0>
+         </div>
+       </if>
 
-  <if @subsections:rowcount@ gt 0>
     </div>
-  </if>
-</div>
+  </div> <!-- /content-wrapper -->
 
+  <comment>
+    TODO: remove this and add a more systematic / package independent way 
+    TODO  of getting this content here
+  </comment>
+  <if @curriculum_bar_p@ true><include src="/packages/curriculum/lib/bar" /></if>
 
- 
+  <div id="footer">
+    <div class="block-marker">Begin footer</div>
+    <div id="footer-links">
+      <ul class="compact">
+      <if @num_of_locales@ gt 1>
+        <li><a href="@change_locale_url@">#acs-subsite.Change_locale_label#</a></li>
+      </if>
+      <else>
+        <if @locale_admin_url@ not nil>
+          <li><a href="@locale_admin_url@">Install locales</a></li>
+        </if>
+      </else>
+      </ul>
+    </div>
+  </div> <!-- /footer -->
+
+</div> <!-- /wrapper -->
