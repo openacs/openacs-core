@@ -158,7 +158,7 @@ ad_proc -private sec_login_handler {} {
 
 } {
     ns_log debug "OACS= sec_login_handler: enter"
-ns_log notice "--login handler"
+
     set auth_level none
     set new_user_id 0
     set untrusted_user_id 0
@@ -186,7 +186,6 @@ ns_log notice "--login handler"
         # Check authentication cookie
         # First, check expiration 
         if { [sec_login_timeout] == 0 || [ns_time] - $login_expr < [sec_login_timeout] } {
-ns_log notice "-CHECK AUTH TOKEN"
             # Then check auth_token
             if {$auth_token eq [sec_get_user_auth_token $untrusted_user_id]} {
                 # Are we secure?
