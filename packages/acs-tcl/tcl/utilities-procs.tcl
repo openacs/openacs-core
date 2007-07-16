@@ -1987,9 +1987,12 @@ ad_proc -private ad_run_scheduled_proc { proc_info } {
     ns_mutex unlock [nsv_get ad_procs mutex]
 
     ns_log debug "Running scheduled proc $proc..."
-
+  set start_time [clock clicks -milliseconds]
+  ns_log notice "Running scheduled proc $proc... $thread $once $interval"
     # Actually run the procedure.
     eval [concat [list $proc] $args]
+  set end_time [clock clicks -milliseconds]
+  ns_log notice "Done running scheduled proc $proc... -> [expr {$end_time-$start_time}]ms"
     ns_log debug "Done running scheduled proc $proc."
 }
 
