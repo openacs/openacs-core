@@ -11,7 +11,7 @@
         <owner url="http://openacs.org">OpenACS</owner>
 
         <summary>The canonical repository for OpenACS content.</summary>
-        <release-date>2007-07-14</release-date>
+        <release-date>2007-07-18</release-date>
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
