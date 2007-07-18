@@ -60,7 +60,7 @@ template::multirow append link \
     stylesheet \
     "text/css" \
     "/resources/acs-subsite/default-master.css" \
-    "Standard OpenACS Styles" \
+    "" \
     en \
     "all"
 
