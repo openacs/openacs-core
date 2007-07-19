@@ -133,7 +133,6 @@
        <div id="main">
          <div id="main-content">
            <div class="main-content-padding">
-             <h1>@title;noquote@</h1>
              <slave />
            </div>
          </div>
