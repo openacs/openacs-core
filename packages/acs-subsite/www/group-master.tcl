@@ -15,6 +15,21 @@
 # But for now - kludge city.
 
 set system_name [ad_system_name]
+if { [string equal [ad_conn url] "/"] } {
+    set system_url ""
+} else {
+    set system_url [ad_url]
+}
+
+if {[template::util::is_nil title]} {
+    # TODO: decide how best to set the lang attribute for the title
+    set title [ad_conn instance_name]
+}
+
+if {![template::multirow exists link]} {
+    template::multirow create link rel type href title lang media
+}
+
 set untrusted_user_id [ad_conn untrusted_user_id]
 set sw_admin_p 0
 
