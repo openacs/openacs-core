@@ -108,14 +108,19 @@ ad_proc -private search::indexer {} {
     }
     # JCD: pull out the rows all at once so we release the handle
     foreach row [db_list_of_lists search_observer_queue_entry {}] {
-        nsv_incr search_static_variables item_counter
-        if {[nsv_get search_static_variables item_counter] > 1000} {
-            nsv_set search_static_variables item_counter 0
-            db_exec_plsql optimize_intermedia_index {begin
-                ctx_ddl.sync_index ('swi_index');
-                end;
+
+        # DRB: only do Oracle shit for oracle (doh)
+        if { [ns_config "ns/db/drivers" oracle] ne "" } {
+            nsv_incr search_static_variables item_counter
+            if {[nsv_get search_static_variables item_counter] > 1000} {
+                nsv_set search_static_variables item_counter 0
+                db_exec_plsql optimize_intermedia_index {begin
+                    ctx_ddl.sync_index ('swi_index');
+                    end;
+                }
             }
         }
+
         foreach {object_id event_date event} $row { break }
         array unset datasource
         switch -- $event {
