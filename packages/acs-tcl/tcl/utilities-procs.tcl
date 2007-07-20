@@ -3320,11 +3320,11 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
             return -code error -errorinfo $errorInfo $errMsg
         }
     } errmsg] } {
-        if {[lsearch [file channels] $wfd] >= 0} {
+        if {[info exists wfd] && [lsearch [file channels] $wfd] >= 0} {
             close $wfd
         }
 
-        if {[lsearch [file channels] $rfd] >= 0} {
+        if {[info exists rfd] && [lsearch [file channels] $rfd] >= 0} {
             close $rfd
         }
 
