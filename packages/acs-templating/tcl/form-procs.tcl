@@ -328,8 +328,13 @@ ad_proc -private template::form::template { id { style "" } } {
                                    -default "standard-lars"]]
   }
 
-  set file_stub [template::get_resource_path]/forms/$style
-
+    # Added support for storing form templates outside acs-templating
+    if {[regexp {^/(.*)} $style path]} {
+        set file_stub "[acs_root_dir]$path"
+    } else {
+        set file_stub [template::get_resource_path]/forms/$style  
+    }
+  
   if { ![file exists "${file_stub}.adp"] } {
       # We always have a template named 'standard'
       set file_stub "[template::get_resource_path]/forms/standard"
