@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.3.1" url="http://openacs.org/repository/download/apm/acs-templating-5.3.1.apm">
+    <version name="5.4.0d1" url="http://openacs.org/repository/download/apm/acs-templating-5.4.0d1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Templating library.</summary>
         <release-date>2007-04-22</release-date>
@@ -25,16 +25,16 @@ layout of a site can be more easily administered.
         <license>GPL version 2</license>
         <maturity>3</maturity>
 
-        <provides url="acs-templating" version="5.3.1"/>
+        <provides url="acs-templating" version="5.4.0d1"/>
         <requires url="acs-kernel" version="5.3.1"/>
 
         <callbacks>
             <callback type="before-upgrade"  proc="template::apm::before_upgrade"/>
         </callbacks>
         <parameters>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultFormStyle"  default="standard" description="The default form template to use if a particular form does not explicitly specify the form style to use."/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultListFilterStyle"  default="filters" description="The default list filter template to use if a particular listfilter tag does not explicitly specify the list filter style to use."/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultListStyle"  default="table" description="The default list template to use if a particular list does not explicitly specify the list style to use."/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultFormStyle"  default="standard" description="The default form template to use if a particular form does not explicitly specify the form style to use. <br> Relative to [acs_root_dir]/packages/acs-templating/resources/forms. If it starts with '/' then it is relative to [acs_root_dir]"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultListFilterStyle"  default="filters" description="The default list filter template to use if a particular listfilter tag does not explicitly specify the list filter style to use. <br> Relative to [acs_root_dir]/packages/acs-templating/resources/lists. If it starts with '/' then it is relative to [acs_root_dir]"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultListStyle"  default="table" description="The default list template to use if a particular list does not explicitly specify the list style to use. <br> Relative to [acs_root_dir]/packages/acs-templating/resources/lists. If it starts with '/' then it is relative to [acs_root_dir]"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RefreshCache"  default="as needed" description="When to re-translate templates.  Values: never, as needed, always."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RichTextEditor"  default="rte" description="Use the specified javascript text editor when UseHtmlAreaForRichtextP is activated. Valid arguments are &quot;rte&quot; or &quot;xinha&quot;."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowCompiledTemplatesP"  default="0" description="Show thecompiled template (for debugging) at .cmp URL"/>

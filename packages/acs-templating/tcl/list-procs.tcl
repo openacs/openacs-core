@@ -954,7 +954,13 @@ ad_proc -private template::list::template {
                                    -parameter DefaultListStyle \
                                    -default "table"]]
     }
-    set file_stub "[template::get_resource_path]/lists/$style"
+    
+    # Added support for storing form templates outside acs-templating
+    if {[regexp {^/(.*)} $style path]} {
+        set file_stub "[acs_root_dir]$path"
+    } else {
+        set file_stub [template::get_resource_path]/lists/$style  
+    }
 
     # ensure that the style template has been compiled and is up-to-date
     template::adp_init adp $file_stub
@@ -1533,7 +1539,12 @@ ad_proc -private template::list::render_filters {
                        -parameter DefaultListFilterStyle \
                        -default "filters"]
     }
-    set file_stub "[template::get_resource_path]/lists/$style"
+    # Added support for storing form templates outside acs-templating
+    if {[regexp {^/(.*)} $style path]} {
+        set file_stub "[acs_root_dir]$path"
+    } else {
+        set file_stub [template::get_resource_path]/lists/$style  
+    }
 
     # ensure that the style template has been compiled and is up-to-date
     template::adp_init adp $file_stub
