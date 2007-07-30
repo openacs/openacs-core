@@ -654,7 +654,7 @@ ad_proc -public template::widget::menu {
 
                     append output " <input type=\"$widget_type\" name=\"$widget_name\" value=\"[template::util::quote_html $value]\""
                     if { [info exists values($value)] } {
-                        append output " selected=\"selected\""
+                        append output " checked=\"checked\""
                     }
 
                     append output ">$label<br>\n"
