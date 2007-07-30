@@ -112,7 +112,7 @@
       
 		begin
 		application_group.del (
-	                group_id      => :group_id,
+	                group_id      => :group_id
 		);
 		end;
 	    
