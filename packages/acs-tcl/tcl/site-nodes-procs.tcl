@@ -552,7 +552,7 @@ ad_proc -public site_node::get_from_url {
     set parent_id [site_node::get_root_node_id]
 
     # Skip this for all subsite urls of the root node
-    set subsite_list [list admin resources file image x o shared register images]
+    set subsite_list [list resources file image x o shared register images]
     set root_url [lindex $url_list 0]
     
     if {[lsearch -exact $subsite_list $root_url] > -1} {
