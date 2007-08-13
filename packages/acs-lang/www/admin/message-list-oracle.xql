@@ -22,7 +22,6 @@
     and    lm2.locale (+) = :locale
     and    lm2.message_key (+) = lmk.message_key
     and    lm2.package_key (+) = lmk.package_key
-    and    lm1.deleted_p = 'f'
     $where_clause
     order  by upper(lm1.message_key), lm1.message_key
 

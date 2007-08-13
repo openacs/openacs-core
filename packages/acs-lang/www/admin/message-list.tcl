@@ -32,13 +32,33 @@ set context [list [list [export_vars -base package-list { locale }] $locale_labe
 
 set site_wide_admin_p [acs_user::site_wide_admin_p]
 
-set export_messages_url [export_vars -base "export-messages" { package_key locale { return_url {[ad_return_url]} } }]
-set import_messages_url [export_vars -base "import-messages" { package_key locale { return_url {[ad_return_url]} } }]
+set return_url [export_vars -base [ad_conn url] {locale package_key}]
+
+set export_messages_url [export_vars -base "export-messages" { package_key locale  return_url }]
+
+set keeplocal_p [parameter::get -parameter KeepLocalTranslations -default ""]
+set import_messages_url [export_vars -base "import-messages" { package_key locale keeplocal_p  return_url }]
+
+if {[string length $keeplocal_p]} {
+    # we have the parameter, turn to opposite for the special url
+    if {[string is true $keeplocal_p]} {
+        set keeplocal_p 0
+        set import_messages_normal_text "Keep local changes"
+        set import_messages_special_text "Discard local changes"
+    } else {
+        set keeplocal_p 1
+        set import_messages_normal_text "Discard local changes"
+        set import_messages_special_text "Keep local changes"
+    }
+    set import_messages_special_url [export_vars -base "import-messages" { package_key locale keeplocal_p { return_url {[ad_return_url]} } }]
+}
 
 # We let you create new messages keys if you're in the default locale
 set create_p [string equal $current_locale $default_locale]
 
-set new_message_url "localized-message-new?[export_vars { locale package_key }]"
+set new_message_url "[export_vars -base localized-message-new { locale package_key }]"
+
+set package_list_url "[export_vars -base package-list { locale }]"
 
 
 

@@ -78,6 +78,13 @@ ad_proc -public lang::message::register {
         set locale [lang::util::default_locale_from_lang $locale]
     } 
 
+    # check for a valid package_key, or we end up with zombie-packages
+    if {![apm_package_installed_p_not_cached $package_key]} {
+        set error_message "lang::message::register - refusing to register message. The package key in ${package_key}.${message_key} is invalid!"
+        ns_log Error $error_message
+        error $error_message
+    }
+    
     # Create a globally (across packages) unique key for the cache
     set key "${package_key}.${message_key}"
 

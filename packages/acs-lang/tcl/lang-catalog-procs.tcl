@@ -545,6 +545,7 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
 }
 
 ad_proc -private lang::catalog::import_from_file { 
+    {-keeplocal_p ""}
     file_path
 } {
     <p>
@@ -561,6 +562,8 @@ ad_proc -private lang::catalog::import_from_file {
     with what's in the database).
     </p>
 
+    @param keeplocal Overwrites the package parameter to keep local changes regardless what happened in the
+                     catalog file.
     @param file_path The absolute path of the XML file to import messages from.
                      The path must be on valid format, see apm_is_catalog_file
 
@@ -606,7 +609,8 @@ ad_proc -private lang::catalog::import_from_file {
     array set message_count [lang::catalog::import_messages \
                                  -file_messages_list [array get messages_array] \
                                  -package_key $package_key \
-                                 -locale $locale]
+                                 -locale $locale \
+                                 -keeplocal_p $keeplocal_p]
 
     # Register descriptions
     foreach message_key $messages_array_names {
@@ -630,6 +634,7 @@ ad_proc -private lang::catalog::import_messages {
     {-file_messages_list:required}
     {-package_key:required}
     {-locale:required}
+    {-keeplocal_p ""}
 } {
     <p>
       Import a given set of messages from a catalog file to the database
@@ -706,11 +711,22 @@ ad_proc -private lang::catalog::import_messages {
     14. All different. upgrade_action=update, conflict_p=t
     </pre>
 
+    <p>
+    Introduction of a package parameter 'KeepLocalTranslations'. 
+    If this parameter is set then we change the behaviour of the 
+    following cases to upgrade_action=none: 4, 6, 7, 8, 12, 14.
+    A conflict is raised in this case.
+
+    The parameter -keeplocal_p overwrites this package paramter if set.
+    </p>	
+
     @param file_messages_list An array list with message keys as keys and 
                               the message of those keys as values, 
                               i.e. (key, value, key, value, ...)
 
     @param package_key        The package_key for the messages.
+    
+    @param keeplocal_p 	      Overwrites the package parameter if set
 
     @param locale             The locale of the messages.
 
@@ -721,6 +737,18 @@ ad_proc -private lang::catalog::import_messages {
     @author Peter Marklund
     @author Lars Pind
 } {
+    
+    # package parameter or argument -keeplocal_p
+    if {![string length $keeplocal_p]} {
+    	set keeplocal_p [parameter::get -parameter KeepLocalTranslations -default 1]
+    }
+
+    if { [string is true $keeplocal_p] } {
+    	ns_log Notice "Keep Local Changes while updating catalog for $package_key/$locale (keeplocal_p=$keeplocal_p)"
+    } else {
+    	ns_log Notice "Overwrite Changes while updating catalog for $package_key/$locale (keeplocal_p=$keeplocal_p)"
+    }
+    
     set message_count(processed) 0
     set message_count(added) 0
     set message_count(updated) 0
@@ -828,14 +856,24 @@ ad_proc -private lang::catalog::import_messages {
                     update {
                         # case 12
                         set import_case 12
-                        # update db with file message
-                        set upgrade_status "updated"
+                        
+                        if {! $keeplocal_p} {
+                            # update db with file message
+                            set upgrade_status "updated"
+                        } else {
+                            set conflict_p "t"
+                        }
                     }
                     delete {
                         # case 7
                         set import_case 7
-                        # mark message in db deleted
-                        set upgrade_status "deleted"
+                        
+                        if {! $keeplocal_p} {
+                            # mark message in db deleted
+                            set upgrade_status "deleted"
+                        } else {
+                            set conflict_p "t"
+                        }
                     }
                 }
             }
@@ -846,8 +884,10 @@ ad_proc -private lang::catalog::import_messages {
                         if { $db_messages($message_key) ne $file_messages($message_key) } {
                             # case 8
                             set import_case 8
-                            # differing additions in db and file
-                            set upgrade_status "updated"
+                            if {! $keeplocal_p} {
+                                # differing additions in db and file
+                                set upgrade_status "updated"
+                            }
                             set conflict_p "t"
                         }
                     }
@@ -860,16 +900,22 @@ ad_proc -private lang::catalog::import_messages {
                         if { $db_messages($message_key) ne $file_messages($message_key) } {
                             # case 14
                             set import_case 14
-                            # differing updates in file and db
-                            set upgrade_status "updated"
+                            
+                            if {! $keeplocal_p} {
+                                # differing updates in file and db
+                                set upgrade_status "updated"
+                            }
                             set conflict_p "t"
                         }
                     }
                     delete {
                         # case 6
                         set import_case 6
-                        # deletion in file but update in db
-                        set upgrade_status "deleted"
+                        
+                        if {! $keeplocal_p}
+                            # deletion in file but update in db
+                            set upgrade_status "deleted"
+                        }
                         set conflict_p "t"
                     }
                 }           
@@ -880,8 +926,11 @@ ad_proc -private lang::catalog::import_messages {
                     update {
                         # case 4
                         set import_case 4
-                        # deletion in db but update in file
-                        set upgrade_status "added" ;# resurrect
+                        
+                        if {! $keeplocal_p} {
+                            # deletion in db but update in file
+                            set upgrade_status "added" ;# resurrect
+                        }
                         set conflict_p "t"
                     }
                     delete {
@@ -972,6 +1021,7 @@ ad_proc -private lang::catalog::import_messages {
 ad_proc -public lang::catalog::import {
     {-package_key {}}
     {-locales {}}
+    {-keeplocal_p {}}
     {-initialize:boolean}
     {-cache:boolean}
 } {
@@ -982,6 +1032,7 @@ ad_proc -public lang::catalog::import {
 
     @param package_key Restrict the import to the package with this key
     @param locales     A list of locales to restrict the import to
+    @param keeplocal_p Overwrites the package parameter if set
     @param initialize  Only load messages from packages that have never before had any message imported
     @param cache       Provide this switch if you want the proc to cache all the imported messages
 
@@ -1033,7 +1084,7 @@ ad_proc -public lang::catalog::import {
         foreach file_path $catalog_files {
             # Use a catch so that parse failure of one file doesn't cause the import of all files to fail
             array unset loop_message_count
-            if { [catch { array set loop_message_count [lang::catalog::import_from_file $file_path] } errMsg] } {
+            if { [catch { array set loop_message_count [lang::catalog::import_from_file -keeplocal_p $keeplocal_p $file_path] } errMsg] } {
                 global errorInfo
                 
                 ns_log Error "The import of file $file_path failed, error message is:\n\n${errMsg}\n\nstack trace:\n\n$errorInfo\n\n"

@@ -31,7 +31,28 @@ set context [list $page_title]
 set locale_enabled_p [expr [lsearch [lang::system::get_locales] $current_locale] != -1]
 set site_wide_admin_p [acs_user::site_wide_admin_p]
 
+set import_all_url [export_vars -base import-messages { { locale $current_locale } {return_url {[ad_return_url]}} }]
+set export_all_url [export_vars -base export-messages { { locale $current_locale } {return_url {[ad_return_url]}} }]
 
+set keeplocal_p [parameter::get -parameter KeepLocalTranslations -default ""]
+##qst::Debug "keeplocal_p=$keeplocal_p" ==1==
+set import_all_url [export_vars -base "import-messages" { keeplocal_p {locale $current_locale} {return_url {[ad_return_url]}} }]
+
+if {[string length $keeplocal_p]} {
+    # we have the parameter, turn to opposite for the special url
+    if {[string is true $keeplocal_p]} {
+        set keeplocal_p 0
+        set import_all_normal_text "Keep local changes"
+        set import_all_special_text "Discard local changes"
+    } else {
+        set keeplocal_p 1
+        set import_all_normal_text "Discard local changes"
+        set import_all_special_text "Keep local changes"
+    }
+    set import_all_special_url [export_vars -base "import-messages" { keeplocal_p {locale $current_locale} {return_url {[ad_return_url]}} }]
+} else {
+    set import_all_special_url {}
+}
 
 
 #####
@@ -113,6 +134,3 @@ ad_form -extend -name search -form {
     }
 }
 
-
-set import_all_url [export_vars -base import-messages { { locale $current_locale } {return_url {[ad_return_url]}} }]
-set export_all_url [export_vars -base export-messages { { locale $current_locale } {return_url {[ad_return_url]}} }]
