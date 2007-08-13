@@ -5,6 +5,8 @@ ad_page_contract {
 } {
     {locale ""}
     {package_key ""}
+    {keeplocal_p ""}
+    {confirmed_p ""}
     {return_url "/acs-lang/admin"}
 }
 

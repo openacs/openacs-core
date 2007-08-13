@@ -912,7 +912,7 @@ ad_proc -private lang::catalog::import_messages {
                         # case 6
                         set import_case 6
                         
-                        if {! $keeplocal_p}
+                        if {! $keeplocal_p} {
                             # deletion in file but update in db
                             set upgrade_status "deleted"
                         }

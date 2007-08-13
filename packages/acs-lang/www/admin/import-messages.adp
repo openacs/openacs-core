@@ -25,7 +25,7 @@ locale <b>@locale@</b>
 <hr />
 <br />
 <p>
-  Import finished. Number of messages processed: @message_count.processed@, added: @message_count.added@, updated: @message_count.updated@, 
+  Import finished. Number of messages processed: @message_count.processed@, added: @message_count.added@, updated: @message_count.updated@,
   deleted: @message_count.deleted@.
 </p>
 
