@@ -276,7 +276,7 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
       if { $htmlarea_p } {
           append output "<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\">"
       } else {
-          append output "<br/>[_ acs-templating.Format]: [menu $element(id).format [template::util::richtext::format_options] $format attributes]"
+          append output "<br>[_ acs-templating.Format]: [menu $element(id).format [template::util::richtext::format_options] $format attributes]"
       }
           
       # Spell-checker
@@ -378,8 +378,8 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
   Note that the rich-rext editor interacts with <tt>blank-master.tcl</tt> and 
   <tt>blank-master.adp</tt>.
   <p>
-  Derived from the htmlarea richtext widget for htmlarea by lars@pinds.com<br/>
-  modified for RTE http://www.kevinroth.com/ by davis@xarg.net<br/>
+  Derived from the htmlarea richtext widget for htmlarea by lars@pinds.com<br>
+  modified for RTE http://www.kevinroth.com/ by davis@xarg.net<br>
   xinha support by gustaf.neumann@wu-wien.ac.at
 } {
 
@@ -444,12 +444,12 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 	# which the richtext widget won't work but which do have js enabled 
 	# should output since we need the format widget (this for Safari among 
 	# some others)
-          set noscript_output "$output <br/>[_ acs-templating.Format]: $format_menu\n"
+          set noscript_output "$output <br>[_ acs-templating.Format]: $format_menu\n"
 
 	set output "<script type='text/javascript'><!--\nwriteRichText('$element(id)','$contents',500,200,true,false,'<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\">','[string map {\n \\n \r {} "'" "&\#39"} $output]'); //--></script><noscript id=\"rte-noscr-$element(id)\">$noscript_output</noscript>"
       } elseif {$richtextEditor eq "xinha"} {
 	append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
-          append output "<noscript><br/>[_ acs-templating.Format]: $format_menu</noscript>\n"
+          append output "<noscript><br>[_ acs-templating.Format]: $format_menu</noscript>\n"
 	
 	# we have a xinha richtext widget, specified by "options {editor xinha}"
 	# The following options are supported: 
@@ -500,7 +500,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
         } else {
 	    append output ""
 	}
-        append output "<br/>[_ acs-templating.Format]: $format_menu"
+        append output "<br>[_ acs-templating.Format]: $format_menu"
     }
 
     # Spell-checker

@@ -603,7 +603,7 @@ ad_proc -public api_proc_documentation {
 		append out "<b>Options:</b><dl>"
 		foreach param $doc_elements(option) {
 			if { [regexp {^([^ \t]+)[ \t](.+)$} $param "" name value] } {
-                            append out "<dt><b>-$name</b></dt><dd>$value<br/></dd>"
+                            append out "<dt><b>-$name</b></dt><dd>$value<br></dd>"
 			}
 		}
 		append out "</dl>"
