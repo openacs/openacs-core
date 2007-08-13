@@ -15,7 +15,7 @@
 
     <p/>
     <img border=2 width="80" height="80" src="@to_img_src@" alt="Portrait of @to_user_id@" />		  
-		    <br/>
+		    <br>
     <span style="font-size:14pt;">@to_first_names@ @to_last_name@ (@to_email@)</span>	      
     <p/>
 

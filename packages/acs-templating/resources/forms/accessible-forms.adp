@@ -12,14 +12,14 @@
     </if>
     
     <else>
-      <br/>
+      <br>
         <if @elements.widget@ eq "submit">
 	  <span class="form-element">
 	    <group column="widget">
 	      <noparse><formwidget id="@elements.id@"></noparse>
 	    </group>
-	    <br/>
-	    <br/>
+	    <br>
+	    <br>
 	  </span>
         </if>
 	
