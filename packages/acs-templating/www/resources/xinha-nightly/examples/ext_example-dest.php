@@ -14,7 +14,7 @@ if (get_magic_quotes_gpc()) {
 //magic_quotes_gpc = Off
   foreach($_REQUEST as $key=>$value){
     if(substr($key,0,10) == 'myTextarea') {
-      echo '<h3 style="border-bottom:1px solid black;">'.$key.'(source):</h3><xmp style="border:1px solid black; width: 100%; height: 200px; overflow: auto;">'.$value.'</xmp><br/>';
+      echo '<h3 style="border-bottom:1px solid black;">'.$key.'(source):</h3><xmp style="border:1px solid black; width: 100%; height: 200px; overflow: auto;">'.$value.'</xmp><br>';
       echo '<h3 style="border-bottom:1px solid black;">'.$key.'(preview):</h3>'.$value;
     }
   }
