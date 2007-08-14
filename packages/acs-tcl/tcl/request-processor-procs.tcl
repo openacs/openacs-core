@@ -559,6 +559,22 @@ ad_proc -private rp_filter { why } {
     # if root non empty then we had a hostname based subsite and 
     # should not redirect since we got a hostname we know about.
 
+
+    ### BLOCK NASTY YAHOO START
+    set headers [ns_conn headers]
+    set user_agent [ns_set iget $headers User-Agent]
+    ns_log Debug "user agent is $user_agent" 
+
+    set match_seeker [regexp ".*YahooSeeker.*" $user_agent]
+    set match_slurp  [regexp ".*Yahoo! Slurp.*" $user_agent]
+    if {$match_seeker == 1 || $match_slurp == 1} {
+        ns_log Notice "nasty spider $user_agent"
+        ns_returnredirect "http://www.yahoo.com"
+        return "filter_return"
+    }
+
+    ## BLOCK NASTY YAHOO FINISH
+
     set acs_kernel_id [util_memoize ad_acs_kernel_id]
     if { $root eq "" 
          && [ad_parameter -package_id $acs_kernel_id ForceHostP request-processor 0] } { 
@@ -1254,6 +1270,18 @@ ad_proc -public ad_conn {args} {
                         set ad_conn(recursion_count) 0
                         return 0
                     }
+		    peeraddr {
+			# We need for NGINX to make use of the X-Forwarded-For address
+			set headers [ns_conn headers]
+			set headers [ns_conn headers]
+			set i [ns_set find $headers "X-Forwarded-For"]
+			if {$i < 0 } {
+			    # Use ns_conn
+			    return [ns_conn $var]
+			} else {
+			    return "[ns_set value $headers $i]"
+			}
+		    }
                     default {
                         return [ns_conn $var]
                     }
