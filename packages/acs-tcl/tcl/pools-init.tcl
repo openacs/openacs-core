@@ -2,10 +2,10 @@ set cfgsection "ns/server/[ns_info server]"
 
 set minthreads [ns_config $cfgsection minthreads 0]
 set maxthreads [ns_config $cfgsection maxthreads 10]
-set maxconns [ns_config $cfgsection maxconnections 0]
+set maxconnections [ns_config $cfgsection maxconnections 0]
 set timeout [ns_config $cfgsection threadtimeout 0]
 
-ns_pools set default -minthreads $minthreads -maxthreads $maxthreads -maxconns $maxconns -timeout $timeout
+ns_pools set default -minthreads $minthreads -maxthreads $maxthreads -maxconnections $maxconnections -timeout $timeout
 
 ns_log Notice "Default Pool: [ns_pools get default]"
 
@@ -28,10 +28,10 @@ if {"$poolSet" ne ""} {
 	}
 	set poolMinthreads [ns_config $poolConfigSection minthreads $minthreads]
 	set poolMaxthreads [ns_config $poolConfigSection maxthreads $maxthreads]
-	set poolMaxconns   [ns_config $poolConfigSection maxconnections $maxconns]
+	set poolMaxconnections   [ns_config $poolConfigSection maxconnections $maxconnections]
 	set poolTimeout    [ns_config $poolConfigSection threadtimeout $timeout]
 	
-	ns_pools set $poolName -minthreads $poolMinthreads -maxthreads $poolMaxthreads -maxconns $poolMaxconns -timeout $poolTimeout
+	ns_pools set $poolName -minthreads $poolMinthreads -maxthreads $poolMaxthreads -maxconnections $poolMaxconnections -timeout $poolTimeout
 	ns_log Notice  "$poolName Pool: [ns_pools get $poolName]"
 	set poolConfigSize [ns_set size $poolConfigSet]
 	for {set j 0} {$j < $poolConfigSize} {incr j} {
