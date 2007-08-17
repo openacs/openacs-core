@@ -233,7 +233,7 @@ ad_proc -public person::name_not_cached {
     } else {
 	# As the old functionality returned an error, but I want an empty string for e-mail
 	# Therefore for emails we use db_string
-	set person_name [db_string get_person_name {} -default ""]
+	set person_name [db_string get_party_name {} -default ""]
     }
     return $person_name
 }
