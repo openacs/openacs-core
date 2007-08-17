@@ -1,4 +1,4 @@
-<master src=/www/default-master>
+<master>
   <property name="title">#acs-tcl.Server#</property>
 <p>
   #acs-tcl.There#
