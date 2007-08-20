@@ -6,13 +6,18 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     user_id:integer
-	{size ""}
+    {item_id ""}
+    {size ""}
 }
 
-if { ![db_0or1row get_item_id ""] } {
-#    ad_return_error "Couldn't find portrait" "Couldn't find a portrait for User $user_id"
-    return
-}
+
+# If the item_id is provided then we are fine
+if {$item_id eq ""} {
+    if { ![db_0or1row get_item_id ""] } {
+	#    ad_return_error "Couldn't find portrait" "Couldn't find a portrait for User $user_id"
+	return
+    }
+}    
 
 if {$size eq ""} {
 	cr_write_content -item_id $item_id
