@@ -407,6 +407,21 @@ ad_proc -public acs_user::get_by_username {
         set authority_id [auth::authority::local]
     }
 
+    return [util_memoize [list acs_user::get_by_username_not_cached -authority_id $authority_id -username $username]]
+}    
+
+ad_proc -public acs_user::get_by_username_not_cached {
+    {-authority_id:required}
+    {-username:required}
+} {
+    Returns user_id from authority and username. Returns the empty string if no user found.
+    
+    @param authority_id The authority. Defaults to local authority.
+
+    @param username The username of the user you're trying to find.
+
+    @return user_id of the user, or the empty string if no user found.
+}  {
     return [db_string user_id_from_username {} -default {}]
 }    
 

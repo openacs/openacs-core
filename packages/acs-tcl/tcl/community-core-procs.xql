@@ -137,7 +137,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="acs_user::get_by_username.user_id_from_username">      
+<fullquery name="acs_user::get_by_username_not_cached.user_id_from_username">      
       <querytext>
 
             select user_id
