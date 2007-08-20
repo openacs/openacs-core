@@ -740,3 +740,23 @@ ad_proc -public party::approved_members {
              where pamm.party_id = :party_id
              $where_clause"]
 }
+
+ad_proc -public acs_user::get_portrait_id {
+    {-user_id:required}
+} {
+    Return the image_id of the portrait of a user, if it does not exist, return 0
+
+    @param user_id user_id of the user for whom we need the portrait
+} {
+    return [util_memoize [list acs_user::get_portrait_id_not_cached -user_id $user_id] 600]
+}
+
+ad_proc -public acs_user::get_portrait_id_not_cached {
+    {-user_id:required}
+} {
+    Return the image_id of the portrait of a user, if it does not exist, return 0
+
+    @param user_id user_id of the user for whom we need the portrait
+} {
+    return [db_string get_item_id "" -default 0]
+}
