@@ -388,8 +388,12 @@ ad_proc -private site_node::update_cache {
             # save new url
             set url_by_node_id($node_id) $url
             if { $object_id ne "" } {
-		if {[lsearch $url_by_object_id($object_id) $url] < 0} {
-		    lappend url_by_object_id($object_id) $url
+		if {[info exists url_by_object_id($object_id)]} {
+		    if {[lsearch $url_by_object_id($object_id) $url] < 0} {
+			lappend url_by_object_id($object_id) $url
+		    }
+		} else {
+		    set url_by_object_id($object_id) $url
 		}
             }
             if { $package_key ne "" } {
