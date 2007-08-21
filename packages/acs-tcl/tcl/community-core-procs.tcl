@@ -406,8 +406,12 @@ ad_proc -public acs_user::get_by_username {
     if { $authority_id eq "" } {
         set authority_id [auth::authority::local]
     }
-
-    return [util_memoize [list acs_user::get_by_username_not_cached -authority_id $authority_id -username $username]]
+    
+    set user_id [util_memoize [list acs_user::get_by_username_not_cached -authority_id $authority_id -username $username]]
+    if {$user_id eq ""} {
+	util_memoize_flush [list acs_user::get_by_username_not_cached -authority_id $authority_id -username $username]
+    }
+    return $user_id
 }    
 
 ad_proc -public acs_user::get_by_username_not_cached {
