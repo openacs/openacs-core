@@ -1,6 +1,6 @@
 <multiple name=elements>
 	<if @elements.section@ not nil>
-		<fieldset id="@elements.section@" @elements.sec_fieldset;noquote@><!-- section fieldset -->
+		<fieldset id="@elements.form_id@:@elements.section@" @elements.sec_fieldset;noquote@><!-- section fieldset -->
         <legend @elements.sec_legend;noquote@>@elements.sec_legendtext@</legend>
 	</if>
 	
@@ -20,9 +20,12 @@
         
 			<else> <!-- wrap the form item in the form-item-wrapper class -->
 				<div class="form-item-wrapper">
-					<if @elements.widget@ in radio checkbox> <!-- radio button groups and checkbox groups get their own fieldsets -->
+					<if @elements.widget@ in radio checkbox> 
+                      <if @elements.legendtext@ defined>
 						<fieldset @elements.fieldset;noquote@>
+                          <!-- radio button groups and checkbox groups get their own fieldsets -->
 				          <legend @elements.legend;noquote@>@elements.legendtext@</legend>
+                      </if>
 				    </if>
 					<if @elements.label@ not nil>
 						<noparse>
@@ -118,8 +121,11 @@
 						</div> <!-- /form-help-text -->
 					</if>
 
-					<if @elements.widget@ in radio checkbox> <!-- radio button groups and checkbox groups get their own fieldsets -->
+					<if @elements.widget@ in radio checkbox> 
+                      <if @elements.legendtext@ defined>
+                        <!-- radio button groups and checkbox groups get their own fieldsets -->
 						</fieldset>
+                      </if>
 				    </if>
 				</div>
        		</else>
