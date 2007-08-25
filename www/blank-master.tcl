@@ -4,7 +4,7 @@ ad_page_contract {
   anything site specific.
 
   You MUST supply the following variables:
-
+    
   @property doc(title)        The document title, ie. <title /> tag.
   @property doc(title_lang)   The language of the document title, if different
                               from the document language.
@@ -51,6 +51,10 @@ if {[template::util::is_nil doc(type)]} {
     set doc(type) {<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">}
 }
 
+if {![info exists doc(title)]} {
+    set doc(title) "[ad_conn instance_name]"
+    ns_log warning "[ad_conn url] has no doc(title) set."
+}
 if {[template::util::is_nil doc(charset)]} {
     set doc(charset) [ad_conn charset]
 }
@@ -58,7 +62,7 @@ if {[template::util::is_nil doc(charset)]} {
 # The document language is always set from [ad_conn lang] which by default 
 # returns the language setting for the current user.  This is probably
 # not a bad guess, but the rest of OpenACS must override this setting when
-# appropriate and set the lang attribute of tags which differ from the language
+# appropriate and set the lang attribxute of tags which differ from the language
 # of the page.  Otherwise we are lying to the browser.
 set doc(lang) [ad_conn language]
 
