@@ -21,12 +21,9 @@ if {$item_id eq ""} {
 }    
 
 if {$size eq ""} {
-	cr_write_content -item_id $item_id
+    cr_write_content -item_id $item_id
 } else {	
-	set thumbnail_id [image::get_resized_item_id -item_id $item_id -size_name $size]
-	if {$thumbnail_id eq ""} {
-		set thumbnail_id [image::resize -item_id $item_id -size_name $size]
-	}
-	cr_write_content -item_id $thumbnail_id
+    ad_returnredirect "/image/${item_id}/thumbnail"
+    
 }
 
