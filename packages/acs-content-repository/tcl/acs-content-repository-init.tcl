@@ -30,7 +30,16 @@ set file_location [parameter::get_from_package_key -package_key "acs-content-rep
 nsv_set CR_LOCATIONS . ""
 if {![nsv_exists CR_LOCATIONS CR_FILES]} {
 
-    nsv_set CR_LOCATIONS CR_FILES "[file dirname [string trimright [ns_info tcllib] "/"]]/$file_location"
+    # Take the directory from the FileLocation parameter that 
+    # must be specified in acs-content-repository package.
+    set relativepath_p [parameter::get_from_package_key -package_key "acs-content-repository" -parameter FileLocationRelative]
+	set file_location ""
+	if {$relativepath_p} {
+		append file_location "[acs_root_dir]/"
+	}
+	append file_location "[parameter::get_from_package_key -package_key "acs-content-repository" -parameter FileLocation]"
+	
+    nsv_set CR_LOCATIONS CR_FILES "$file_location"
 
 }
 

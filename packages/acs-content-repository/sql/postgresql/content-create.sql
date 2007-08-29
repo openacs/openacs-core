@@ -398,6 +398,7 @@ create table cr_child_rels (
 
 create index cr_child_rels_by_parent on cr_child_rels(parent_id);
 create unique index cr_child_rels_unq_id on cr_child_rels(parent_id, child_id);
+CREATE UNIQUE INDEX CR_CHILD_RELS_kids_IDx ON CR_CHILD_RELS(CHILD_ID);
 
 comment on table cr_child_rels is '
   Provides for richer parent-child relationships than the simple
