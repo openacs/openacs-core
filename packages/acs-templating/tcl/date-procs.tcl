@@ -80,11 +80,13 @@ ad_proc -public template::util::date::init {} {
 ad_proc -public template::util::date::monthName { month length } {
     Return the specified month name (short or long)
 } {
-  if {$length eq "long"} {
-    return [lc_time_fmt "2002-[format "%02d" $month]-01" "%B"]
-  } else {
-    return [lc_time_fmt "2002-[format "%02d" $month]-01" "%b"]
-  }
+    # trim leading zeros to avoid octal problem
+    set month [template::util::leadingTrim $month]
+    if {$length eq "long"} {
+        return [lc_time_fmt "2002-[format "%02d" $month]-01" "%B"]
+    } else {
+        return [lc_time_fmt "2002-[format "%02d" $month]-01" "%b"]
+    }
 }
 
 
@@ -698,6 +700,7 @@ ad_proc -public template::util::negative { value } {
   if {$value eq {}} {
     return 0
   } else {
+    return [expr [template::util::leadingTrim $value] < 0]
     return [expr {$value < 0}]
   }
 }
@@ -744,14 +747,14 @@ ad_proc -public template::util::date::validate { date error_ref } {
   }
 
   if { $month ne {} } {
-    if { $month < 1 || $month > 12 } {
-	lappend error_msg [_ acs-templating.Month_must_be_between_1_and_12]
+    if { [string trimleft $month "0"] < 1 || [string trimleft $month "0"] > 12 } {
+      lappend error_msg [_ acs-templating.Month_must_be_between_1_and_12]
     } else {
       if { $year > 0 } { 
         if { $day ne {} } {
           set maxdays [get_property days_in_month $date]
-          if { $day < 1 || $day > $maxdays } {
-	      set month_pretty [template::util::date::get_property long_month_name $date]
+          if { [string trimleft $day "0"] < 1 || [string trimleft $day "0"] > $maxdays } {
+            set month_pretty [template::util::date::get_property long_month_name $date]
 	      if { $month == "2" } {
 		  # February has a different number of days depending on the year
 		  append month_pretty " ${year}"

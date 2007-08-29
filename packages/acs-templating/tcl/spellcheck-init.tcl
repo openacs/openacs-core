@@ -58,6 +58,16 @@ if { [regexp aspell $bin] } {
     set default_lang ""
 } 
 
+#Do we include all availabale dicts or not ?
+set use_dicts_p [parameter::get_from_package_key \
+		    -package_key acs-templating \
+		    -parameter SpellcheckUseDictsP \
+		    -default 0]
+
+if {$use_dicts_p == 0} {
+	set dicts ""
+}	    
+		    
 # Build the select options list and filter out unwanted dictionaries.
 set wanted_dicts [list {"No" :nospell:}]
 
