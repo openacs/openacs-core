@@ -33,10 +33,20 @@ ad_proc -public -callback subsite::parameter_changed -impl acs-content-repositor
     
     set package_key [apm_package_key_from_id $package_id]
     
-    if {$package_key eq "acs-content-repository" && "CRFileLocationRoot" eq $parameter && $value ne ""} {
-	nsv_unset CR_LOCATIONS CR_FILES
-	nsv_set CR_LOCATIONS CR_FILES "[file dirname [string trimright [ns_info tcllib] "/"]]/$value"
-    } else {
-	ns_log Debug "subsite::parameter_changed -impl acs-content-repository don't care about $parameter"
+    if {$package_key eq "acs-content-repository" && $parameter eq "CRFileLocationRoot" && $value ne ""} {
+        nsv_unset CR_LOCATIONS CR_FILES
+        # Take the directory from the FileLocation parameter that 
+        # must be specified in acs-content-repository package.
+        set relativepath_p [parameter::get -package_id $package_id -parameter FileLocationRelative]
+        set file_location ""
+        if {$relativepath_p} {
+		    append file_location "[acs_root_dir]/"
+	    }
+	    append file_location "[parameter::get -package_id $package_id -parameter FileLocation]"
+	
+        nsv_set CR_LOCATIONS CR_FILES "$file_location"
+    
+	} else {
+	    ns_log Debug "subsite::parameter_changed -impl acs-content-repository don't care about $parameter"
     }
 }

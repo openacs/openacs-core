@@ -74,6 +74,7 @@ ad_proc -public cr_write_content {
 	    } else {
 		if { $string_p } {
 		    set fd [open $filename "r"]
+		    fconfigure $fd -translation binary
 		    set text [read $fd]
 		    close $fd
 		    return $text
