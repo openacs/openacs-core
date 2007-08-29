@@ -89,7 +89,13 @@
     <a href="rerun?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@&stress=@stress@&security_risk=@security_risk@"> Rerun displayed test cases</a>
     <br>
     <b>&raquo;</b>
-    <a href="clear?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@&stress=@stress@&security_risk=@security_risk@"> Clear test result data</a> </li>
+    <a href="clear?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@&stress=@stress@&security_risk=@security_risk@"> Clear test result data</a> 
+    <if @by_package_key@ ne "">
+      <br>
+      <b>&raquo;</b>
+      <a href="@record_url@"> Record a test</a> 
+    </if>
+   </li>
   </blockquote>
 
   <if @view_by@ eq "package">
@@ -182,7 +188,13 @@
     <a href="rerun?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@&stress=@stress@&security_risk=@security_risk@"> Rerun displayed test cases</a>
     <br>
     <b>&raquo;</b>
-    <a href="clear?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@&stress=@stress@&security_risk=@security_risk@"> Clear test result data</a> </li>
+    <a href="clear?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@&stress=@stress@&security_risk=@security_risk@"> Clear test result data</a> 
+    <if @by_package_key@ ne "">
+      <br>
+      <b>&raquo;</b>
+      <a href="@record_url@"> Record a test</a> 
+    </if>  
+   </li>
   </blockquote>
 <p><a href="doc/">Documentation</a>
 

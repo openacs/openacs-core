@@ -115,10 +115,10 @@ if {$view_by eq "package"} {
         # - The package key is blank or it matches the specified.
         # - The category is blank or it matches the specified.
         #
-        if {($by_package_key eq "" || ($by_package_key == $package_key)) && \
+        if {($by_package_key eq "" || ($by_package_key eq $package_key)) && \
                 ($by_category eq "" || ([lsearch $categories $by_category] != -1))} {
             # Swap the highlight flag between packages.
-            if {$old_package_key != $package_key} {
+            if {$old_package_key ne $package_key} {
                 set marker 1
                 set old_package_key $package_key
             } else {
@@ -147,5 +147,9 @@ foreach category [nsv_get aa_test categories] {
         template::multirow append exclusion_categories $category
     }
 }
+#
+# Set return url 
+#
 
+set record_url [export_vars -base "record-test" -url {{return_url [ad_return_url]} package_key}]
 ad_return_template
