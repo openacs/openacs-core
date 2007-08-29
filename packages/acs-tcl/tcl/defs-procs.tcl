@@ -392,10 +392,12 @@ ad_proc -public ad_return_complaint {
 
     @param exception_text HTML chunk to go inside an UL tag with the error messages.
 } {
+    set complaint_template [parameter::get_from_package_key -package_key "acs-tcl" -parameter "ReturnComplaint" -default "/packages/acs-tcl/lib/ad-return-complaint"]
     ns_return 200 text/html [ad_parse_template \
                                  -params [list [list exception_count $exception_count] \
                                               [list exception_text $exception_text]] \
-                                 "/packages/acs-tcl/lib/ad-return-complaint"]
+				 $complaint_template]
+				 
     
     # raise abortion flag, e.g., for templating
     global request_aborted
@@ -416,7 +418,8 @@ ad_proc ad_return_exception_page {
     @param title Title to be used for the error (will be shown to user)
     @param explanation Explanation for the exception.
 } {
-    set page [ad_parse_template -params [list [list title $title] [list explanation $explanation]] "/packages/acs-tcl/lib/ad-return-error"]
+    set error_template [parameter::get_from_package_key -package_key "acs-tcl" -parameter "ReturnError" -default "/packages/acs-tcl/lib/ad-return-error"]
+    set page [ad_parse_template -params [list [list title $title] [list explanation $explanation]] $error_template]
     if {$status > 399 
         && [string match {*; MSIE *} [ns_set iget [ad_conn headers] User-Agent]]
         && [string length $page] < 512 } { 
