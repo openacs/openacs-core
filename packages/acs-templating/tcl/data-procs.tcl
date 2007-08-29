@@ -21,8 +21,10 @@ ad_proc -public template::data::validate { type value_ref message_ref } {
     @see template::data::validate::date 
     @see template::data::validate::email 
     @see template::data::validate::filename 
+    @see template::data::validate::float
     @see template::data::validate::integer 
     @see template::data::validate::keyword 
+    @see template::data::validate::naturalnum 
     @see template::data::validate::search 
     @see template::data::validate::string 
     @see template::data::validate::text 
