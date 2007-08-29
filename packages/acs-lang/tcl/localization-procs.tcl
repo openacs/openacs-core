@@ -251,8 +251,6 @@ ad_proc -private lc_monetary {
     passing forced_frac_digits to lc_monetary). If truncate_p is true, forced_frac_digits will be ignored.
     
     
-
-
     @param label_p     Specify this switch if you want to specify the label used for the currency.
     @param style       Set to int to display the ISO code as the currency label. Otherwise displays
                        an HTML entity for the currency. The label parameter must be specified for this

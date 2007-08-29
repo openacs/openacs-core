@@ -740,7 +740,7 @@ ad_proc -private lang::catalog::import_messages {
     
     # package parameter or argument -keeplocal_p
     if {![string length $keeplocal_p]} {
-    	set keeplocal_p [parameter::get -parameter KeepLocalTranslations -default 1]
+    	set keeplocal_p [parameter::get_from_package_key -package_key "acs-lang" -parameter KeepLocalTranslations -default 1]
     }
 
     if { [string is true $keeplocal_p] } {
@@ -1021,7 +1021,7 @@ ad_proc -private lang::catalog::import_messages {
 ad_proc -public lang::catalog::import {
     {-package_key {}}
     {-locales {}}
-    {-keeplocal_p {}}
+    {-keeplocal_p ""}
     {-initialize:boolean}
     {-cache:boolean}
 } {
@@ -1059,6 +1059,13 @@ ad_proc -public lang::catalog::import {
     if { $initialize_p } {
         set uninitialized_packages [uninitialized_packages]
     }
+
+    # package parameter or argument -keeplocal_p
+    if {$keeplocal_p eq ""} {
+    	set keeplocal_p [parameter::get_from_package_key -package_key "acs-lang" -parameter KeepLocalTranslations -default 1]
+    }
+
+    ns_log Notice "KEEPLOCAL:: $keeplocal_p"
 
     foreach package_key $package_key_list {
         if {$initialize_p && [lsearch -exact $uninitialized_packages $package_key] == -1} {
