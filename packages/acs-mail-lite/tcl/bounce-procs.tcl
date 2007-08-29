@@ -17,14 +17,14 @@ namespace eval acs_mail_lite {
     ad_proc -private bounce_sendmail {} {
 	@returns path to the sendmail executable
     } {
-	return [get_parameter -name "SendmailBin"]
+	return [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "SendmailBin"]
     }
     
     #---------------------------------------
     ad_proc -private bounce_prefix {} {
 	@returns bounce prefix for x-envelope-from
     } {
-        return [get_parameter -name "EnvelopePrefix"]
+        return [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "EnvelopePrefix"]
     }
     
     #---------------------------------------
@@ -105,11 +105,11 @@ namespace eval acs_mail_lite {
 	Daily proc that sends out warning mail that emails
 	are bouncing and disables emails if necessary
     } {
-	set max_bounce_count [get_parameter -name MaxBounceCount -default 10]
-	set max_days_to_bounce [get_parameter -name MaxDaysToBounce -default 3]
-	set notification_interval [get_parameter -name NotificationInterval -default 7]
-	set max_notification_count [get_parameter -name MaxNotificationCount -default 4]
-	set notification_sender [get_parameter -name NotificationSender -default "reminder@[address_domain]"]
+	set max_bounce_count [parameter::get_from_package_key -package_key "acs-mail-lite" -name MaxBounceCount -default 10]
+	set max_days_to_bounce [parameter::get_from_package_key -package_key "acs-mail-lite" -name MaxDaysToBounce -default 3]
+	set notification_interval [parameter::get_from_package_key -package_key "acs-mail-lite" -name NotificationInterval -default 7]
+	set max_notification_count [parameter::get_from_package_key -package_key "acs-mail-lite" -name MaxNotificationCount -default 4]
+	set notification_sender [parameter::get_from_package_key -package_key "acs-mail-lite" -name NotificationSender -default "reminder@[address_domain]"]
 
 	# delete all bounce-log-entries for users who received last email
 	# X days ago without any bouncing (parameter)
