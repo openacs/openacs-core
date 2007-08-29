@@ -24,6 +24,7 @@
       select distinct package_key
       from apm_package_versions
       where enabled_p='t'
+      order by package_key
     </querytext>
   </fullquery>
   

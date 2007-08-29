@@ -1853,6 +1853,33 @@ ad_page_contract_filter float { name value } {
     return 1
 }
 
+ad_page_contract_filter negative_float { name value } {
+    Same as float but allows negative numbers too
+
+    @author Brian Fenton 
+    @creation-date 1 December 2004
+} {
+    # remove the first decimal point, the theory being that
+    # at this point a valid float will pass an integer test
+    regsub {\.} $value "" value2
+    # remove the first minus sign, the theory being that
+    # at this point a valid float will pass an integer test
+    regsub {\-} $value2 "" value_to_be_tested
+
+    if { ![regexp {^[0-9]+$} $value_to_be_tested] } {
+	ad_complain "Value is not an decimal number."
+	return 0
+    }
+    # trim leading zeros, so as not to confuse Tcl
+    set value [string trimleft $value "0"]
+    if { [empty_string_p $value] } {
+			# but not all of the zeros
+			set value "0"
+    }
+    return 1
+}
+
+
 ad_page_contract_filter phone { name value } {
 
     Checks whether the value is more or less a valid phone number with
