@@ -17,7 +17,7 @@ namespace eval acs_mail_lite {
     ad_proc -public address_domain {} {
 	@returns domain address to which bounces are directed to
     } {
-        set domain [get_parameter -name "BounceDomain"]
+        set domain [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "BounceDomain"]
         if { $domain eq "" } {
 	    regsub {http://} [ns_config ns/server/[ns_info server]/module/nssock hostname] {} domain
 	}
@@ -91,6 +91,7 @@ namespace eval acs_mail_lite {
 	    if {!$callback_executed_p} {
 		# Special treatment for e-mails which look like they contain an object_id
 		set pot_object_id [lindex [split $email(to) "@"] 0]
+		ns_log Debug "Object_id for mail:: $pot_object_id"
 		if {[ad_var_type_check_number_p $pot_object_id]} {
 		    if {[acs_object::object_p -id $pot_object_id]} {
 			callback acs_mail_lite::incoming_object_email -array email -object_id $pot_object_id

@@ -248,28 +248,6 @@ namespace eval acs_mail_lite {
 	    set sender_addr $from_addr
 	}
 
-	# Get the SMTP Parameters
-	set smtp [parameter::get -parameter "SMTPHost" \
-	     -package_id $mail_package_id -default [ns_config ns/parameters mailhost]]
-	if {$smtp eq ""} {
-	    set smtp localhost
-	}
-
-	set timeout [parameter::get -parameter "SMTPTimeout" \
-	     -package_id $mail_package_id -default  [ns_config ns/parameters smtptimeout]]
-	if {$timeout eq ""} {
-	    set timeout 60
-	}
-
-	set smtpport [parameter::get -parameter "SMTPPort" \
-	     -package_id [apm_package_id_from_key "acs-mail-lite"] -default 25]
-
-	set smtpuser [parameter::get -parameter "SMTPUser" \
-	     -package_id [apm_package_id_from_key "acs-mail-lite"]]
-
-	set smtppassword [parameter::get -parameter "SMTPPassword" \
-	     -package_id [apm_package_id_from_key "acs-mail-lite"]]
-
         # default values for alternative_part_p
         # TRUE on mime_type text/html
         # FALSE on mime_type text/plain
@@ -550,16 +528,10 @@ namespace eval acs_mail_lite {
 		    lappend bcc_list "\"[party::name -party_id $party]\" <[party::email_not_cached -party_id $party]>"
 		}
 
-		smtp::sendmessage $multi_token \
-		    -header [list From "$from_string"] \
-		    -header [list Reply-To "$reply_to_string"] \
-		    -header [list To "[join $to_list ","]"] \
-		    -header [list CC "[join $cc_list ","]"] \
-		    -header [list BCC "[join $bcc_list ","]"] \
-		    -servers $smtp \
-		    -ports $smtpport \
-		    -username $smtpuser \
-		    -password $smtppassword
+        
+		acs_mail_lite::complex_smtp -multi_token $multi_token \
+		    -headers [list [list From "$from_string"] [list Reply-To "$reply_to_string"] \
+				  [list To "[join $to_list ","]"] [list CC "[join $cc_list ","]"]]    
 		
 		#Close all mime tokens
 		mime::finalize $multi_token -subordinates all
@@ -597,14 +569,8 @@ namespace eval acs_mail_lite {
 		foreach email $recipient_list {
 		    set message_id [mime::uniqueID]
 
-		    smtp::sendmessage $multi_token \
-			-header [list From "$from_string"] \
-			-header [list Reply-To "$reply_to_string"] \
-			-header [list To "$email"] \
-			-servers $smtp \
-			-ports $smtpport \
-			-username $smtpuser \
-			-password $smtppassword
+		    acs_mail_lite::complex_smtp -multi_token $multi_token \
+			-headers [list [list From "$from_string"] [list Reply-To "$reply_to_string"] [list To "$email"]]
 
 		    if { !$no_callback_p } {
 			callback acs_mail_lite::complex_send \
@@ -626,14 +592,8 @@ namespace eval acs_mail_lite {
 		    set message_id [mime::uniqueID]
 		    set email "\"[party::name -party_id $party]\" <[party::email_not_cached -party_id $party]>"
 
-		    smtp::sendmessage $multi_token \
-			-header [list From "$from_string"] \
-			-header [list Reply-To "$reply_to_string"] \
-			-header [list To "$email"] \
-			-servers $smtp \
-			-ports $smtpport \
-			-username $smtpuser \
-			-password $smtppassword
+		    acs_mail_lite::complex_smtp -multi_token $multi_token \
+			-headers [list [list From "$from_string"] [list Reply-To "$reply_to_string"] [list To "$email"]]
 		    
 		    if { !$no_callback_p } {
 			callback acs_mail_lite::complex_send \
@@ -718,5 +678,46 @@ namespace eval acs_mail_lite {
         } -finally {
             nsv_incr acs_mail_lite complex_send_mails_p -1
         }
-    }                 
+    }      
+    
+    ad_proc -private complex_smtp {
+        -multi_token:required
+        -headers:required
+    } {
+        Send messages via SMTP
+        
+        @param multi_token Multi Token generated which is passed directly to smtp::sendmessage
+        @param headers List of list of header key-value pairs like {{from malte@cognovis.de} {to malte@cognovis.de}}
+    } {
+        # Get the SMTP Parameters
+    	set smtp [parameter::get -parameter "SMTPHost" \
+    	     -package_id $mail_package_id -default [ns_config ns/parameters mailhost]]
+    	if {$smtp eq ""} {
+    	    set smtp localhost
+    	}
+
+    	set timeout [parameter::get -parameter "SMTPTimeout" \
+    	     -package_id $mail_package_id -default  [ns_config ns/parameters smtptimeout]]
+    	if {$timeout eq ""} {
+    	    set timeout 60
+    	}
+
+    	set smtpport [parameter::get -parameter "SMTPPort" \
+    	     -package_id [apm_package_id_from_key "acs-mail-lite"] -default 25]
+
+    	set smtpuser [parameter::get -parameter "SMTPUser" \
+    	     -package_id [apm_package_id_from_key "acs-mail-lite"]]
+
+    	set smtppassword [parameter::get -parameter "SMTPPassword" \
+    	     -package_id [apm_package_id_from_key "acs-mail-lite"]]
+    	
+    	set cmd_string "smtp::sendmessage $multi_token"     
+    	foreach header $headers {
+    	    append cmd_string "-header $header"
+    	}
+    	append cmd_string "-servers $smtp -ports $smtpport -username $smtpuser -password $smtppassword"
+    	ds_comment $cmd_string
+        eval $cmd_string
+    	
+    }
 }
