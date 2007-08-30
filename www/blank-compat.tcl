@@ -123,6 +123,8 @@ if {[info exists acs_blank_master__htmlareas]
         template::multirow append script \
             "text/javascript" \
             "${xinha_dir}htmlarea.js"
+
+        set htmlarea_ids '[join $acs_blank_master__htmlareas "','"]'
     }
 }
 
