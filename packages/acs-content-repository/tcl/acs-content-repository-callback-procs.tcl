@@ -35,18 +35,21 @@ ad_proc -public -callback subsite::parameter_changed -impl acs-content-repositor
     
     if {$package_key eq "acs-content-repository" && $parameter eq "CRFileLocationRoot" && $value ne ""} {
         nsv_unset CR_LOCATIONS CR_FILES
-        # Take the directory from the FileLocation parameter that 
-        # must be specified in acs-content-repository package.
-        set relativepath_p [parameter::get -package_id $package_id -parameter FileLocationRelative]
-        set file_location ""
-        if {$relativepath_p} {
-		    append file_location "[acs_root_dir]/"
-	    }
-	    append file_location "[parameter::get -package_id $package_id -parameter FileLocation]"
 	
-        nsv_set CR_LOCATIONS CR_FILES "$file_location"
-    
-	} else {
-	    ns_log Debug "subsite::parameter_changed -impl acs-content-repository don't care about $parameter"
+	# Take the directory from the FileLocation parameter that 
+	# must be specified in acs-content-repository package.
+	set relativepath_p [parameter::get_from_package_key -package_key "acs-content-repository" -parameter FileLocationRelativeP]
+	set file_location ""
+	
+	if {$relativepath_p} {
+	    # The file location is relative to acs_root_dir
+	    append file_location "[acs_root_dir]/"
+	}
+	append file_location [parameter::get_from_package_key -package_key "acs-content-repository" -parameter "CRFileLocationRoot" -default "content-repository-content-files"]
+	
+	nsv_set CR_LOCATIONS CR_FILES "$file_location"
+	
+    } else {
+	ns_log Debug "subsite::parameter_changed -impl acs-content-repository don't care about $parameter"
     }
 }
