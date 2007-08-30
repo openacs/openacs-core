@@ -25,20 +25,21 @@ ad_proc -public acs_cr_scheduled_release_exec {} {
 }
 
 ad_schedule_proc [expr {15 * 60}] acs_cr_scheduled_release_exec
-
-set file_location [parameter::get_from_package_key -package_key "acs-content-repository" -parameter "CRFileLocationRoot" -default "content-repository-content-files"]
 nsv_set CR_LOCATIONS . ""
-if {![nsv_exists CR_LOCATIONS CR_FILES]} {
 
+if {![nsv_exists CR_LOCATIONS CR_FILES]} {
+    
     # Take the directory from the FileLocation parameter that 
     # must be specified in acs-content-repository package.
-    set relativepath_p [parameter::get_from_package_key -package_key "acs-content-repository" -parameter FileLocationRelative]
-	set file_location ""
-	if {$relativepath_p} {
-		append file_location "[acs_root_dir]/"
-	}
-	append file_location "[parameter::get_from_package_key -package_key "acs-content-repository" -parameter FileLocation]"
-	
+    set relativepath_p [parameter::get_from_package_key -package_key "acs-content-repository" -parameter FileLocationRelativeP]
+    set file_location ""
+
+    if {$relativepath_p} {
+	# The file location is relative to acs_root_dir
+	append file_location "[acs_root_dir]/"
+    }
+    append file_location [parameter::get_from_package_key -package_key "acs-content-repository" -parameter "CRFileLocationRoot" -default "content-repository-content-files"]
+    
     nsv_set CR_LOCATIONS CR_FILES "$file_location"
 
 }
