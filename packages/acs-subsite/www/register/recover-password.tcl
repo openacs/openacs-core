@@ -10,7 +10,7 @@ ad_page_contract {
     {email ""}
 }
 
-set page_title [_ acs-subsite.Recover_Password]
+set page_title [_ acs-subsite.Reset_Password]
 set context [list $page_title]
 
 if { ![exists_and_not_null authority_id] } {

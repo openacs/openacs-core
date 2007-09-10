@@ -35,8 +35,8 @@ proc db_bootstrap_checks { errors error_p } {
         nsv_set ad_database_version . $version
     }
 
-    if { $version < 7.3 } {
-        append my_errors "<li>Your installed version of Postgres is too old.  Please install PostgreSQL 7.2 or later.\n"
+    if { $version < 8.0 } {
+        append my_errors "<li>Your installed version of Postgres is too old.  Please install PostgreSQL 8.0 or later.\n"
         set my_error_p 1
     }
 
