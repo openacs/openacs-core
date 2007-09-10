@@ -49,6 +49,15 @@ set context [list $page_title]
 
 set user_id [ad_conn user_id]
 
+set subsite_number [db_string count_subsites "select count(*) from apm_packages where package_key = 'acs-subsite'"]
+if {$subsite_number > 100} {
+    set too_many_subsites_p 1
+    set where_limit "where apm_packages.package_key <> 'acs-subsite'"
+} else {
+    set too_many_subsites_p 0
+    set where_limit ""
+}
+
 db_foreach path_select {} {
     if {$node_id != $root_id && $admin_p eq "t"} {
 	append head "<a href=.?[export_url_vars expand:multiple root_id=$node_id]>"
