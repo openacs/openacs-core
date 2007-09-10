@@ -12,7 +12,7 @@ ad_page_contract {
 #----------------------------------------------------------------------
 
 set cvs_command "cvs"
-set cvs_root ":pserver:anonymous@cvs.openacs.org:/cvsroot"
+set cvs_root ":pserver:anonymous@openacs.org:/cvsroot"
 
 set work_dir "[acs_root_dir]/repository-builder/"
 
@@ -26,7 +26,7 @@ set index_template "/packages/acs-admin/www/apm/repository-index"
 # from these packages
 #set exclude_package_list { cms cms-news-demo glossary site-wide-search spam library }
 set exclude_package_list {}
-set head_channel "5-3"
+set head_channel "5-2"
 
 # Set this to 1 to only checkout sample packages -- useful for debugging and testing
 set debug_p 0
@@ -48,8 +48,8 @@ ns_write <ul>
 file mkdir $work_dir
 
 cd $work_dir
-
 catch { exec $cvs_command -d $cvs_root -z3 co openacs-4/readme.txt }
+
 catch { exec $cvs_command -d $cvs_root -z3 log -h openacs-4/readme.txt } output
 
 set lines [split $output \n]
@@ -224,15 +224,11 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
 
                         # The path to the 'packages' directory in the checkout
                         set packages_root_path [eval file join [lrange [file split $spec_file] 0 end-2]]
-                        set tmp_filename [ns_tmpnam]
-                        lappend cmd  --files-from $tmp_filename -C $packages_root_path
-
-                        set fp [open $tmp_filename w]
+                        
+                        lappend cmd -C $packages_root_path
                         foreach file $files {
-                          puts $fp $package_key/$file
+                            lappend cmd $package_key/$file
                         }
-                        close $fp
-
                         lappend cmd "|" [apm_gzip_cmd] -c ">" $apm_file
                         #ns_log Notice "Executing: [ad_quotehtml $cmd]"
                         eval $cmd

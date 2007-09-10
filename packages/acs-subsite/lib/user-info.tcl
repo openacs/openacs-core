@@ -111,6 +111,30 @@ if { ![string equal [acs_user::ScreenName] "none"] } {
                  ]]
 }
 
+
+if {[apm_package_installed_p categories]} {
+    # get groups the user is in
+    set group_ids  [db_list get_groups {
+	select distinct groups.group_id
+	from groups, group_member_map gm
+	where groups.group_id = gm.group_id
+	and gm.member_id = :user_id
+    }]
+
+    foreach group_id $group_ids {
+	set element_name "category_ids$group_id"
+	if {$group_id < 0} {
+	    set element_name "category_ids[expr - $group_id]"
+	}
+
+	category::ad_form::add_widgets \
+	    -container_object_id $group_id \
+	    -categorized_object_id $user_id \
+	    -form_name user_info \
+	    -element_name $element_name
+    }
+}
+
 ad_form -extend -name user_info -form {
     {url:text,optional
         {label "[_ acs-subsite.Home_page]"}

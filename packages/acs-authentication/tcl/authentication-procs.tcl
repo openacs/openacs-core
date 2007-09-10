@@ -47,31 +47,8 @@ ad_proc -public auth::require_login {
         set message [_ acs-subsite.lt_Your_login_has_expire]
     }
 
-    set return_url [ad_get_login_url -return]
-
-    # Long URLs (slightly above 4000 bytes) can kill aolserver-4.0.10, causing
-    # a restart. They lead to empty Bowser-windows with aolserver 4.5 (but no 
-    # crash so far). May browsers have length limitations for URLs. E.g. 
-    # 2083 is the documented maximal length of MSIE.
-    #
-    # Long URLs will be generated e.g. when 
-    #   a) a user edits a form with text entries
-    #   b) before submitting the form logs out of OpenACS from a different browser window
-    #   c) submits the form. 
-    # When submitting needs authentication, OpenACS generates the redirect to 
-    # /register with the form-data coded into the URL to continue there.....
-
-    # set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
-    # ns_log notice "URL have url, len=[string length $return_url] $user_agent"
-
-    set url_too_long [expr {[string length $return_url] > 2083}]
-    if {$url_too_long} {
-      set message "URL too long. If you were editing a from, please use the back button after logging in and resubmit the form" 
-      set return_url "."
-    }
-
     # The -return switch causes the URL to return to the current page
-    ad_returnredirect -message $message -- $return_url
+    ad_returnredirect -message $message -- [ad_get_login_url -return]
     ad_script_abort
 }
 
