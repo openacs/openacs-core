@@ -6,19 +6,19 @@
 
     	select case when email_bouncing_p = 't' then 1 else 0 end 
 	as send_p 
-      	from cc_users 
+      	from users, parties 
      	where lower(email) = lower(:email)
+          and party_id = user_id
 
       </querytext>
     </fullquery>
-
 
     <fullquery name="acs_mail_lite::bouncing_user_p.bouncing_p">
       <querytext>
 
     	select case when email_bouncing_p = 't' then 1 else 0 end 
 	as send_p 
-      	from cc_users 
+      	from users 
      	where user_id = :user_id
 
       </querytext>
@@ -29,7 +29,7 @@
 
        update acs_mail_lite_mail_log
        set last_mail_date = sysdate
-       where user_id = :user_id
+       where party_id = :user_id
 
      </querytext>
    </fullquery>
@@ -37,7 +37,7 @@
    <fullquery name="acs_mail_lite::log_mail_sending.insert_log_entry">
      <querytext>
 
-       insert into acs_mail_lite_mail_log (user_id, last_mail_date)
+       insert into acs_mail_lite_mail_log (party_id, last_mail_date)
        values (:user_id, sysdate)
 
      </querytext>
@@ -48,7 +48,7 @@
 
        update acs_mail_lite_bounce
        set bounce_count = bounce_count + 1
-       where user_id = :user_id
+       where party_id = :user_id
 
      </querytext>
    </fullquery>
@@ -56,7 +56,7 @@
    <fullquery name="acs_mail_lite::load_mail_dir.insert_bounce">
      <querytext>
 
-       insert into acs_mail_lite_bounce (user_id, bounce_count)
+       insert into acs_mail_lite_bounce (party_id, bounce_count)
        values (:user_id, 1)
 
      </querytext>
@@ -66,7 +66,7 @@
      <querytext>
 
        delete from acs_mail_lite_bounce
-       where user_id in (select user_id
+       where party_id in (select party_id
                          from acs_mail_lite_mail_log
                          where last_mail_date < sysdate - :max_days_to_bounce)
 
@@ -78,7 +78,7 @@
 
        update users
        set email_bouncing_p = 't'
-       where user_id in (select user_id
+       where user_id in (select party_id
                          from acs_mail_lite_bounce
                          where bounce_count >= :max_bounce_count)
 
@@ -97,9 +97,12 @@
    <fullquery name="acs_mail_lite::get_address_array.get_user_name_and_id">
      <querytext>
 
-       select user_id, first_names || ' ' || last_name as user_name
-       from cc_users
+       select person_id as user_id, first_names || ' ' || last_name as user_name
+       from parties, persons
        where email = :email
+         and party_id = person_id
+	order by party_id desc
+	limit 1
 
      </querytext>
    </fullquery>
@@ -113,7 +116,11 @@
         </querytext>
     </fullquery>
 
-
+    <fullquery name="acs_mail_lite::load_mails.select_impl">
+        <querytext>
+	        select * from acs_mail_lite_reply_prefixes where prefix = :package_prefix
+        </querytext>
+    </fullquery>
 
 
 </queryset>
