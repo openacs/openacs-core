@@ -50,6 +50,7 @@
                   and n.tree_sortkey between n2.tree_sortkey and tree_right(n2.tree_sortkey)
                   and (n.parent_id is null or n.parent_id in ([join $expand ", "]))) site_map
             on site_map.object_id = p.package_id
+	    $where_limit
             order by url
         </querytext>
     </fullquery>
