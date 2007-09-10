@@ -53,8 +53,12 @@ if {$private eq "private"} {
 # find a cr_item and serve it
 
 if {$extra_arg eq "thumbnail"} {
-	#find the thumbnail object_id
-	set object_id [image::get_resized_item_id -item_id $object_id -size_name thumbnail]
+    #find the thumbnail object_id
+    set new_object_id [image::get_resized_item_id -item_id $object_id -size_name thumbnail]
+    if {$new_object_id ne ""} {
+	# We need to resize the image it seems
+	set object_id [image::resize -item_id $object_id]
+    }
 }
 
 if {$extra_arg eq "info"} {
