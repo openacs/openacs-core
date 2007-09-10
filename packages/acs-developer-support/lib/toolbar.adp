@@ -2,7 +2,7 @@
   <table width="100%" id="developer-toolbar">
     <tr align="center">
       <td>
-        <a href="@ds_url@">Developer&nbsp;Support</a>
+        <a href="@ds_url@" title="@ip_address@">Developer&nbsp;Support</a>
       </td>
 
       <td class="actions">
