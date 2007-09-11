@@ -14,5 +14,5 @@
 <center>
 <input type="submit" value="#acs-subsite.Yes_I_am_sure#" />
 </center>
-
+</form>
 

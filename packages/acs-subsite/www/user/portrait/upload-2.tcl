@@ -119,6 +119,9 @@ db_transaction {
     }
 }
 
+# Flush the portrait cache
+util_memoize_flush [list acs_user::get_portrait_id_not_cached -user_id $user_id]
+
 if { [exists_and_not_null return_url] } {
     ad_returnredirect $return_url
 } else {
