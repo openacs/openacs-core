@@ -183,7 +183,7 @@ namespace eval acs_mail_lite {
 	array set rcpts $sendlist
 	if {[info exists rcpts(email)]} {
 	    foreach rcpt $rcpts(email) rcpt_id $rcpts(user_id) rcpt_name $rcpts(name) {
-		if { $valid_email_p || ![bouncing_email_p -email $rcpt] } {
+		if { $valid_email_p || ([acs_mail_lite::valid_email_p -email $rcpt] && ![bouncing_email_p -email $rcpt]) } {
 		    with_finally -code {
 			set sendmail [list [bounce_sendmail] "-f[bounce_address -user_id $rcpt_id -package_id $package_id -message_id $message_id]" "-t" "-i"]
 			
@@ -208,7 +208,7 @@ namespace eval acs_mail_lite {
 		    } -finally {
 		    }
 		} else {
-		    ns_log Notice "acs-mail-lite: Email bouncing from $rcpt, mail not sent and deleted from queue"
+		    ns_log Debug "acs-mail-lite: Email bouncing from $rcpt, mail not sent and deleted from queue"
 		}
 		# log mail sending time
 		if {$rcpt_id ne ""} { log_mail_sending -user_id $rcpt_id }
@@ -253,68 +253,74 @@ namespace eval acs_mail_lite {
 	}
 	array set rcpts $sendlist
         foreach rcpt $rcpts(email) rcpt_id $rcpts(user_id) rcpt_name $rcpts(name) {
-	    if { $valid_email_p || ![bouncing_email_p -email $rcpt] } {
-		# add username if it exists
-		if {$rcpt_name ne ""} {
-		    set pretty_to "$rcpt_name <$rcpt>"
-		} else {
-		    set pretty_to $rcpt
-		}
-
-		set msg "From: $from_addr\r\nTo: $pretty_to\r\n$msg"
-		set mail_from [bounce_address -user_id $rcpt_id -package_id $package_id -message_id $message_id]
-
-		## Open the connection
-		set sock [ns_sockopen $smtp $smtpport]
-		set rfp [lindex $sock 0]
-		set wfp [lindex $sock 1]
-
-		## Perform the SMTP conversation
-		with_finally -code {
-		    _ns_smtp_recv $rfp 220 $timeout
-		    _ns_smtp_send $wfp "HELO [ns_info hostname]" $timeout
-		    _ns_smtp_recv $rfp 250 $timeout
-		    _ns_smtp_send $wfp "MAIL FROM:<$mail_from>" $timeout
-		    _ns_smtp_recv $rfp 250 $timeout
-
-		    # By now we are sure that the server connection works, otherwise
-		    # we would have gotten an error already
+	    if { $valid_email_p || ![bouncing_email_p -email $rcpt]} {
+		if {[acs_mail_lite::valid_email_p -email $rcpt]} {		   
+		    # add username if it exists
+		    if {$rcpt_name ne ""} {
+			set pretty_to "$rcpt_name <$rcpt>"
+		    } else {
+			set pretty_to $rcpt
+		    }
 		    
-		    if {[catch {
-			_ns_smtp_send $wfp "RCPT TO:<$rcpt>" $timeout
+		    set msg "From: $from_addr\r\nTo: $pretty_to\r\n$msg"
+		    set mail_from [bounce_address -user_id $rcpt_id -package_id $package_id -message_id $message_id]
+		    
+		    ## Open the connection
+		    set sock [ns_sockopen $smtp $smtpport]
+		    set rfp [lindex $sock 0]
+		    set wfp [lindex $sock 1]
+		    
+		    ## Perform the SMTP conversation
+		    with_finally -code {
+			_ns_smtp_recv $rfp 220 $timeout
+			_ns_smtp_send $wfp "HELO [ns_info hostname]" $timeout
 			_ns_smtp_recv $rfp 250 $timeout
-		    } errmsg]} {
+			_ns_smtp_send $wfp "MAIL FROM:<$mail_from>" $timeout
+			_ns_smtp_recv $rfp 250 $timeout
 			
-			# This user has a problem with retrieving the email
-			# Record this fact as a bounce e-mail
-			if { $rcpt_id ne "" && ![bouncing_user_p -user_id $rcpt_id] } {
-			    ns_log Notice "acs-mail-lite: Bouncing email from user $rcpt_id due to $errmsg"
-			    # record the bounce in the database
-			    db_dml record_bounce {}
+			# By now we are sure that the server connection works, otherwise
+			# we would have gotten an error already
+			
+			if {[catch {
+			    _ns_smtp_send $wfp "RCPT TO:<$rcpt>" $timeout
+			    _ns_smtp_recv $rfp 250 $timeout
+			} errmsg]} {
 			    
-			    if {![db_resultrows]} {
-				db_dml insert_bounce {}
+			    # This user has a problem with retrieving the email
+			    # Record this fact as a bounce e-mail
+			    if { $rcpt_id ne "" && ![bouncing_user_p -user_id $rcpt_id] } {
+				ns_log Notice "acs-mail-lite: Bouncing email from user $rcpt_id due to $errmsg"
+				# record the bounce in the database
+				db_dml record_bounce {}
+				
+				if {![db_resultrows]} {
+				    db_dml insert_bounce {}
+				}
+				
 			    }
 			    
+			    return
 			}
 			
-			return
+			_ns_smtp_send $wfp DATA $timeout
+			_ns_smtp_recv $rfp 354 $timeout
+			_ns_smtp_send $wfp $msg $timeout
+			_ns_smtp_recv $rfp 250 $timeout
+			_ns_smtp_send $wfp QUIT $timeout
+			_ns_smtp_recv $rfp 221 $timeout
+			
+		    } -finally {
+			## Close the connection
+			close $rfp
+			close $wfp
 		    }
-
-		    _ns_smtp_send $wfp DATA $timeout
-		    _ns_smtp_recv $rfp 354 $timeout
-		    _ns_smtp_send $wfp $msg $timeout
-		    _ns_smtp_recv $rfp 250 $timeout
-		    _ns_smtp_send $wfp QUIT $timeout
-		    _ns_smtp_recv $rfp 221 $timeout
-
-		} -finally {
-		    ## Close the connection
-		    close $rfp
-		    close $wfp
+		} else {
+		    # email is invalid
+		    ns_log Debug "Invalid E-Mail $rcpt"
+		    acs_mail_lite::record_bounce -email $rcpt
 		}
 	    } else {
-		ns_log Notice "acs-mail-lite: Email bouncing from $rcpt, mail not sent and deleted from queue"
+		ns_log Debug "acs-mail-lite: Email bouncing from $rcpt, mail not sent and deleted from queue"
 	    }
 	    # log mail sending time
 	    if {$rcpt_id ne ""} { log_mail_sending -user_id $rcpt_id }
@@ -438,7 +444,7 @@ namespace eval acs_mail_lite {
 	    set send_p $send_immediately_p
 	} else {
 	    # if parameter is not set, get the global setting
-	    set send_p [parameter::get -package_id [get_package_id] -parameter "send_immediately" -default 0]
+	    set send_p [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "send_immediately" -default 0]
 	}
 
 	if {$to_addr ne ""} {
