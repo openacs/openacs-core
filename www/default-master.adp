@@ -100,6 +100,9 @@
   </comment>
   <if @curriculum_bar_p@ true><include src="/packages/curriculum/lib/bar" /></if>
 
+  <comment> empty UL gives a validation error for the W3C validator 
+  </comment>
+  <if @num_of_locales@ gt 1 or @locale_admin_url@ not nil>
   <div id="footer">
     <div class="block-marker">Begin footer</div>
     <div id="footer-links">
@@ -115,6 +118,7 @@
       </ul>
     </div>
   </div> <!-- /footer -->
+  </if>
 
 </div> <!-- /wrapper -->
 
