@@ -25,7 +25,7 @@ if {![template::multirow exists meta]} {
 
 template::multirow append meta \
     "" \
-    "text/html; charset=[ad_conn charset]" \
+    "text/html; charset=[ns_config ns/parameters OutputCharset [ad_conn charset]]" \
     "content-type"
 
 if {![template::multirow exists link]} {
