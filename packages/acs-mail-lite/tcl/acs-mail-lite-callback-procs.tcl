@@ -127,16 +127,7 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
         }
     } else {
 	ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: Bounce checking $to, $user_id"
-	
-	if { ![acs_mail_lite::bouncing_user_p -user_id $user_id] } {
-	    ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: Bouncing email from user $user_id"
-	    # record the bounce in the database
-	    db_dml record_bounce {}
-	    
-	    if {![db_resultrows]} {
-		db_dml insert_bounce {}
-	    }
-	}
+	acs_mail_lite::record_bounce -user $user_id
     }
 }
 

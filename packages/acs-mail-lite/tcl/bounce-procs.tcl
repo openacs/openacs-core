@@ -146,6 +146,25 @@ namespace eval acs_mail_lite {
 	    db_dml log_notication_sending {}
 	}
     }
-    
+
+    ad_proc -public record_bounce {
+	{-user_id ""}
+	{-email ""}
+    } { 
+	Records that an email bounce for this user
+    } {
+	if {$user_id eq ""} {
+	    set user_id [party::get_by_email -email $email]
+	}
+	if { $user_id ne "" && ![acs_mail_lite::bouncing_user_p -user_id $user_id] } {
+	    ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: Bouncing email from user $user_id"
+	    # record the bounce in the database
+	    db_dml record_bounce {}
+	    
+	    if {![db_resultrows]} {
+		db_dml insert_bounce {}
+	    }
+	}
+    }
 
 }

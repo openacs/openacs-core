@@ -96,6 +96,8 @@ namespace eval acs_mail_lite {
         @param alternative_part_p Boolean whether or not the code generates a multipart/alternative mail (text/html)
     } {
 
+	# Check if the e-mail is valid, meaning it contains at least an "@" sign
+	
 	# check, if send_immediately is set
 	# if not, take global parameter
 	if {$send_immediately_p} {
@@ -172,7 +174,7 @@ namespace eval acs_mail_lite {
 	{-no_callback_p ""}
 	{-extraheaders ""}
         {-alternative_part_p ""}
-	{-use_sender_p ""}
+	{-use_sender_p "0"}
     } {
 
 	Prepare an email to be send immediately with the option to pass in a list
@@ -242,6 +244,7 @@ namespace eval acs_mail_lite {
 	set fixed_sender [parameter::get -parameter "FixedSenderEmail" \
 			      -package_id $mail_package_id]
 
+	
 	if { $fixed_sender ne "" && !$use_sender_p} {
 	    set sender_addr $fixed_sender
 	} else {
@@ -569,20 +572,24 @@ namespace eval acs_mail_lite {
 		foreach email $recipient_list {
 		    set message_id [mime::uniqueID]
 
-		    acs_mail_lite::complex_smtp -multi_token $multi_token \
-			-headers [list [list From "$from_string"] [list Reply-To "$reply_to_string"] [list To "$email"]]
 
-		    if { !$no_callback_p } {
-			callback acs_mail_lite::complex_send \
-			    -package_id $package_id \
-			    -from_party_id $party_id($from_addr) \
-			    -from_addr $from_addr \
-			    -to_addr $email \
-			    -body $body \
-			    -message_id $message_id \
-			    -subject $subject \
-			    -object_id $object_id \
-			    -file_ids $item_ids
+		    if {[acs_mail_lite::valid_email_p $email]} {
+			acs_mail_lite::complex_smtp -multi_token $multi_token \
+			    -headers [list [list From "$from_string"] [list Reply-To "$reply_to_string"] [list To "$email"]]
+			if { !$no_callback_p } {
+			    callback acs_mail_lite::complex_send \
+				-package_id $package_id \
+				-from_party_id $party_id($from_addr) \
+				-from_addr $from_addr \
+				-to_addr $email \
+				-body $body \
+				-message_id $message_id \
+				-subject $subject \
+				-object_id $object_id \
+				-file_ids $item_ids
+			}
+		    } else {
+			acs_mail_lite::record_bounce -email $email
 		    }
 		}
 
@@ -590,25 +597,29 @@ namespace eval acs_mail_lite {
 		set recipient_list [concat $to_party_ids $cc_party_ids $bcc_party_ids]
 		foreach party $recipient_list {
 		    set message_id [mime::uniqueID]
-		    set email "\"[party::name -party_id $party]\" <[party::email_not_cached -party_id $party]>"
-
-		    acs_mail_lite::complex_smtp -multi_token $multi_token \
-			-headers [list [list From "$from_string"] [list Reply-To "$reply_to_string"] [list To "$email"]]
-		    
-		    if { !$no_callback_p } {
-			callback acs_mail_lite::complex_send \
-			    -package_id $package_id \
-			    -from_party_id $party_id($from_addr) \
-			    -from_addr $from_addr \
-			    -to_party_ids $party \
-			    -body $body \
-			    -message_id $message_id \
-			    -subject $subject \
-			    -object_id $object_id \
-			    -file_ids $item_ids
+		    set email [party::email_not_cached -party_id $party]
+		    if {[acs_mail_lite::valid_email_p -email $email]} {
+			set email "\"[party::name -party_id $party]\" <$email>"
+			
+			acs_mail_lite::complex_smtp -multi_token $multi_token \
+			    -headers [list [list From "$from_string"] [list Reply-To "$reply_to_string"] [list To "$email"]]
+			
+			if { !$no_callback_p } {
+			    callback acs_mail_lite::complex_send \
+				-package_id $package_id \
+				-from_party_id $party_id($from_addr) \
+				-from_addr $from_addr \
+				-to_party_ids $party \
+				-body $body \
+				-message_id $message_id \
+				-subject $subject \
+				-object_id $object_id \
+				-file_ids $item_ids
+			}
+		    } else {
+			acs_mail_lite::record_bounce -user_id $party
 		    }
 		}
-
 		#Close all mime tokens
 		mime::finalize $multi_token -subordinates all
 	    }
@@ -719,5 +730,23 @@ namespace eval acs_mail_lite {
     	ds_comment $cmd_string
         eval $cmd_string
     	
+    }
+
+    ad_proc -public valid_email_p {
+	{-email ""}
+    } {
+	Checks if the email is valid. Returns 1 if it is. Uses mime::parsemail to determine this
+    } {
+	array set test [lindex [mime::parseaddress "$email"] 0]
+	if {$email ne $test(proper)} {
+	    regsub "\"" $test(proper) "" proper
+	    if {$email ne $proper} {
+		return 0
+	    } else {
+		return 1
+	    }
+	} else {
+	    return 1
+	}
     }
 }
