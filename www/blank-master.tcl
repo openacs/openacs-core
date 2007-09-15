@@ -4,6 +4,14 @@ ad_page_contract {
   anything site specific.
 
   You MUST supply the following variables:
+  You should NEVER need to modify this file.  
+  
+  Most of the time your pages or master templates should not directly set this
+  file in their <master> tag.  They should instead use site-master with 
+  provides a set of standard OpenACS content.  Only pages which need to return
+  raw HTML should use this template directly.
+
+  When using this template directly you MUST supply the following variables:
 
   @property doc(title)        The document title, ie. <title /> tag.
   @property doc(title_lang)   The language of the document title, if different
@@ -15,31 +23,36 @@ ad_page_contract {
   @property doc(charset)      The document character set.
   @property body(id)          The id attribute of the body tag.
   @property body(class)       The class of the body tag.
-  @property meta:multirow     A multirow of <meta> tags to render.
-  @property link:multirow     A multirow of <link> tags to render.
-  @property script:multirow   A multirow of <script> tags to render in the head.
-  @property body_script:multirow   A multirow of <script> tags to render in the body.
 
   ad_conn -set language       Must be used to override the document language
                               if necessary.
 
-  The following event handlers can be customised by supplying the appropriate 
-  variable.  Each variable is a list of valid javascript code fragments to be
-  executed in order.
+  To add a CSS or Javascripts to the <head> section of the document you can 
+  call the corresponding template::head::add_* functions within your page.
 
-  @property body(onload)
-  @property body(onunload)
-  @property body(onclick)
-  @property body(ondblclick)
-  @property body(onmousedown)
-  @property body(onmouseup)
-  @property body(onmouseover)
-  @property body(onmousemove)
-  @property body(onmouseout)
-  @property body(onkeypress)
-  @property body(onkeydown)
-  @property body(onkeyup)
+  @see template::head::add_css
+  @see template::head::add_javascript
 
+  More generally, meta, link and script tags can be added to the <head> section
+  of the document by calling their template::head::add_* function within your
+  page.
+
+  @see template::head::add_meta
+  @see template::head::add_link
+  @see template::head::add_script
+
+  Javascript event handlers, such as onload, an be added to the <body> tag by 
+  calling template::add_body_handler within your page.
+
+  @see template::add_body_handler
+
+  Finally, for more advanced functionality see the documentation for 
+  template::add_body_script, template::add_header and template::add_footer.
+
+  @see template::add_body_script
+  @see template::add_header
+  @see template::add_footer
+ 
   @author Kevin Scaldeferri (kevin@arsdigita.com)
           Lee Denison (lee@xarg.co.uk)
   @creation-date 14 Sept 2000
@@ -65,68 +78,117 @@ set doc(lang) [ad_conn language]
 # AG: Markup in <title> tags doesn't render well.
 set doc(title) [ns_striphtml $doc(title)]
 
-if {![template::multirow exists meta]} {
-    template::multirow create meta name content http_equiv scheme lang
-}
+# Generate the <meta /> tag multirow
+variable ::template::head::metas
+template::multirow create meta name content http_equiv scheme lang
+template::multirow append meta \
+    "" \
+    "text/html; charset=$doc(charset)" \
+    "content-type"
 
-if {![template::multirow exists link]} {
-    template::multirow create link rel type href title lang media
-}
-
-if {![template::multirow exists script]} {
-    template::multirow create script type src charset defer content
-}
-template::multirow append script text/javascript /resources/acs-subsite/core.js "" "" ""
-
-if {![template::multirow exists body_script]} {
-    template::multirow create body_script type src charset defer content
-}
-
-# Concatenate the javascript event handlers for the body tag
-if {[array exists body]} {
-    foreach name [array names body -glob "on*"] {
-        append event_handlers " ${name}=\""
-
-        foreach javascript $body($name) {
-            append event_handlers "[string trimright $javascript "; "]; "
+if {[array exists metas]} {
+    foreach name [array names metas] {
+        foreach {http_equiv name scheme content lang} $metas($name) {
+            template::multirow append meta \
+                $name \
+                $content \
+                $http_equiv \
+                $scheme \
+                $lang
         }
-
-        append event_handlers "\""
     }
 }
 
-# DRB: Devsup and dotlrn toolbars moved here temporarily until we rewrite things so packages
-#  can push tool bars up to the blank master.
-
-# Determine whether developer support is installed and enabled
-#
-set developer_support_p [expr {
-    [llength [info procs ::ds_show_p]] == 1 && [ds_show_p]
-}]
-
-if {$developer_support_p} {
-    template::multirow append link \
-        stylesheet \
-        "text/css" \
-        "/resources/acs-developer-support/acs-developer-support.css" \
-        "" \
-        en \
-        "all"
+# Generate the <link /> tag multirow
+variable ::template::head::links
+template::multirow create link rel type href title lang media
+if {[array exists links]} {
+    foreach name [array names links] {
+        foreach {rel href type media title lang} $links($name) {
+            template::multirow append link \
+                $rel \
+                $type \
+                $href \
+                $title \
+                $lang \
+                $media
+        }
+    }
 }
 
-# Determine whether or not to show the dotlrn toolbar.
-#
-set dotlrn_toolbar_p [expr {
-    [llength [namespace eval :: info procs dotlrn_toolbar::show_p]] == 1
-}]
-
-if {$dotlrn_toolbar_p} {
-    template::multirow append link \
-        stylesheet \
-        "text/css" \
-        "/resources/dotlrn/dotlrn-toolbar.css" \
-        "" \
-        en \
-        "all"
+# Generate the head <script /> tag multirow
+variable ::template::head::scripts
+template::multirow create script type src charset defer content
+if {[array exists scripts]} {
+    foreach name [array names scripts] {
+        foreach {type src charset script defer} $scripts($name) {
+            template::multirow append script \
+                $type \
+                $src \
+                $charset \
+                $defer \
+                $content
+        }
+    }
 }
 
+# Generate the body <script /> tag multirow
+variable ::template::body_scripts
+template::multirow create body_script type src charset defer content
+if {[info exists body_scripts]} {
+    foreach {type src charset script defer} $body_scripts {
+        template::multirow append body_script \
+            $type \
+            $src \
+            $charset \
+            $defer \
+            $content
+    }
+}
+
+# Concatenate the javascript event handlers for the body tag
+variable ::template::body_handlers
+if {[array exists body_handlers]} {
+    set names [array names body_handlers]
+
+    foreach name $names {
+        set event [lindex [split $name ","] 0]
+
+        foreach javascript $body_handlers($name) {
+            lappend body_handlers($event) "[string trimright $javascript "; "];"
+        }
+
+        unset body_handlers($name)
+     }
+}
+
+# Now create the event handlers string
+foreach {event script} [array get body_handlers] {
+    append event_handlers " ${event}=\"$script\""
+}
+ 
+# Generate the body headers
+variable ::template::headers
+set header [list]
+if {[info exists headers]} {
+    foreach {type src params} $headers {
+        if {$type eq "literal"} {
+            lappend header $src
+        } else {
+            lappend header [template::adp_include $src $params]
+        }
+    }
+}
+
+# Generate the body footers
+variable ::template::footers
+set footer [list]
+if {[info exists footers]} {
+    foreach {type src params} $footers {
+        if {$type eq "literal"} {
+            lappend footer $src
+        } else {
+            lappend footer [template::adp_include $src $params]
+        }
+    }
+}

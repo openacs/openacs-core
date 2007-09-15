@@ -30,7 +30,7 @@ if {![template::multirow exists link]} {
 # Create standard top level navigation
 #
 if {![info exists navigation_groups]} {
-    set navigation_groups [list main sub]
+    set navigation_groups [list]
 }
 
 if {![template::multirow exists navigation]} {
@@ -45,6 +45,14 @@ if {![template::multirow exists navigation]} {
         class \
         id \
         tabindex 
+}
+
+for {set i 1} {$i <= [template::multirow size navigation]} {incr i} {
+    template::multirow get navigation $i
+
+    if {[lsearch $navigation_groups $navigation(group)] < 0} {
+        lappend navigation_groups $navigation(group)
+    }
 }
 
 #
