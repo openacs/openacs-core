@@ -220,8 +220,8 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
-
-select define_function_args('content_type__drop_type','content_type,drop_children_p;f,drop_table_p;f');
+-- don't define function_args twice
+-- select define_function_args('content_type__drop_type','content_type,drop_children_p;f,drop_table_p;f');
 
 create or replace function content_type__drop_type (varchar,boolean,boolean)
 returns integer as '
