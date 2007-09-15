@@ -229,7 +229,7 @@ create table acs_objects (
 	unique (context_id, object_id)
 );
 
--- The unique constriant about will force create of this index...
+-- The unique constraint above will force create of this index...
 -- create index acs_objects_context_object_idx onacs_objects (context_id, object_id);
 -- The unique constraint should generate an index automatically so this is not needed
 -- create index acs_objs_tree_skey_idx on acs_objects (tree_sortkey);
@@ -637,7 +637,7 @@ end;' language 'plpgsql';
 
 -- function new
 
-select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id,new__security_inherit_p;t,new__title,new__package_id');
+select define_function_args('acs_object__new','object_id;null,object_type;acs_object,creation_date;now(),creation_user;null,creation_ip;null,context_id;null,security_inherit_p;t,title;null,package_id;null');
 
 create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean,varchar,integer)
 returns integer as '
@@ -790,7 +790,7 @@ end;' language 'plpgsql';
 
 -- procedure delete
 
-select define_function_args('acs_object__delete','delete__object_id');
+select define_function_args('acs_object__delete','object_id');
 
 create function acs_object__delete (integer)
 returns integer as '
