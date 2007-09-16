@@ -174,7 +174,7 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_attribute_check
     db_foreach attribute {select a.*, lower(ot.table_name) as obj_type_table from acs_attributes a, acs_object_types ot where ot.object_type = a.object_type order by a.object_type} {
 
         if {[string tolower $table_name] ne $table_name } {
-            aa_log_result fail "Type $object_type attribute $attribute table name $table_name mixed case"
+            aa_log_result fail "Type $object_type attribute $table_name.$attribute_name mixed case"
             set table_name [string tolower $table_name]
         } elseif {[string is space $table_name]} {
             set table_name $obj_type_table
@@ -211,7 +211,7 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_attribute_check
             }
             default {
                 # it was null which is probably not sensible.
-                aa_log_result fail "Type $object_type attribute $attribute storage type null"
+                aa_log_result fail "Type $object_type attribute $table_name.$attribute_name storage type null"
             }
         }
     }
