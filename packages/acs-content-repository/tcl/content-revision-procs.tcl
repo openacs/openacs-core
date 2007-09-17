@@ -269,19 +269,6 @@ ad_proc -public content::revision::delete {
 }
 
 
-ad_proc -public content::revision::export_xml {
-    -revision_id:required
-} {
-    @param revision_id
-
-    @return NUMBER(38)
-} {
-    return [package_exec_plsql -var_list [list \
-        [list revision_id $revision_id ] \
-    ] content_revision export_xml]
-}
-
-
 ad_proc -public content::revision::get_number {
     -revision_id:required
 } {
@@ -292,25 +279,6 @@ ad_proc -public content::revision::get_number {
     return [package_exec_plsql -var_list [list \
         [list revision_id $revision_id ] \
     ] content_revision get_number]
-}
-
-
-ad_proc -public content::revision::import_xml {
-    -item_id:required
-    -revision_id:required
-    -doc_id:required
-} {
-    @param item_id
-    @param revision_id
-    @param doc_id
-
-    @return NUMBER(38)
-} {
-    return [package_exec_plsql -var_list [list \
-        [list item_id $item_id ] \
-        [list revision_id $revision_id ] \
-        [list doc_id $doc_id ] \
-    ] content_revision import_xml]
 }
 
 
@@ -364,24 +332,6 @@ ad_proc -public content::revision::item_id {
 }
 
 
-ad_proc -public content::revision::read_xml {
-    -item_id:required
-    -revision_id:required
-    -clob_loc:required
-} {
-    @param item_id
-    @param revision_id
-    @param clob_loc
-
-    @return NUMBER
-} {
-    return [package_exec_plsql -var_list [list \
-        [list item_id $item_id ] \
-        [list revision_id $revision_id ] \
-        [list clob_loc $clob_loc ] \
-    ] content_revision read_xml]
-}
-
 
 ad_proc -public content::revision::replace {
     -revision_id:required
@@ -432,29 +382,6 @@ ad_proc -public content::revision::to_temporary_clob {
     return [package_exec_plsql -var_list [list \
         [list revision_id $revision_id ] \
     ] content_revision to_temporary_clob]
-}
-
-
-ad_proc -public content::revision::write_xml {
-    -revision_id:required
-    -clob_loc:required
-} {
-    @param revision_id
-    @param clob_loc
-
-    @return NUMBER
-} {
-    return [package_exec_plsql -var_list [list \
-        [list revision_id $revision_id ] \
-        [list clob_loc $clob_loc ] \
-    ] content_revision write_xml]
-}
-
-
-ad_proc -public content::revision::update_attribute_index {
-} {
-} {
-    return [package_exec_plsql content_revision update_attribute_index]
 }
 
 
