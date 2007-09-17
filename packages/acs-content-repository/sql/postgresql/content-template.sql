@@ -14,8 +14,11 @@ create view content_template_globals as
 select -200 as c_root_folder_id;
 
 create or replace function content_template__get_root_folder() returns integer as '
+declare
+  v_folder_id                 integer;
 begin
-  return content_template_globals.c_root_folder_id;
+  select c_root_folder_id from content_template_globals into v_folder_id;
+  return v_folder_id;
 end;' language 'plpgsql' immutable;
 
 -- create or replace package body content_template

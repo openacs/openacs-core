@@ -23,7 +23,7 @@ begin
 
   if get_root_folder__item_id is NULL or get_root_folder__item_id in (-4,-100,-200) then
 
-    v_folder_id := content_item_globals.c_root_folder_id;
+    select c_root_folder_id from content_item_globals into v_folder_id;
 
   else
 
@@ -104,7 +104,7 @@ begin
   -- context specified 
 
   if new__parent_id is null then
-    v_parent_id := content_item_globals.c_root_folder_id;
+    select c_root_folder_id from content_item_globals into v_parent_id;
   else
     v_parent_id := new__parent_id;
   end if;
@@ -338,7 +338,7 @@ begin
   -- context specified 
 
   if new__parent_id is null then
-    v_parent_id := content_item_globals.c_root_folder_id;
+    select c_root_folder_id from content_item_globals into v_parent_id;
   else
     v_parent_id := new__parent_id;
   end if;
@@ -532,7 +532,7 @@ begin
   -- context specified 
 
   if new__parent_id is null then
-    v_parent_id := content_item_globals.c_root_folder_id;
+    select c_root_folder_id from content_item_globals into v_parent_id;
   else
     v_parent_id := new__parent_id;
   end if;
@@ -809,7 +809,7 @@ begin
   -- context specified 
 
   if new__parent_id is null then
-    v_parent_id := content_item_globals.c_root_folder_id;
+    select c_root_folder_id from content_item_globals into v_parent_id;
   else
     v_parent_id := new__parent_id;
   end if;
@@ -1427,8 +1427,11 @@ declare
   item_name                      varchar;  
 begin
 
-  v_root_folder_id := coalesce(get_id__root_folder_id, 
-                               content_item_globals.c_root_folder_id);
+  if get_id__root_folder_id is null then
+    select c_root_folder_id from content_item_globals into v_root_folder_id;
+  else
+    v_root_folder_id := get_id__root_folder_id;
+  end if;
 
   -- If the request path is the root, then just return the root folder
   if get_id__item_path = ''/'' then
