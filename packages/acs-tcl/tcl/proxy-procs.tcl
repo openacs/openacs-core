@@ -12,6 +12,7 @@ ad_library {
 # First check that ns_proxy is configured
 if {![catch {ns_proxy get exec_proxy}]} {
     namespace eval proxy {}
+    
     ad_proc -public proxy::exec {
 	{-call}
     } {
@@ -24,4 +25,8 @@ if {![catch {ns_proxy get exec_proxy}]} {
 	ns_proxy release $handle
 	return $return_string
     }
+
+    # Now rename exec
+    rename exec real_exec
+    ad_proc exec {args} {This is the wrapped version of exec} {proxy::exec -call $args}
 }
