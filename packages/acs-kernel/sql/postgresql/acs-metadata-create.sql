@@ -654,7 +654,7 @@ select define_function_args('acs_attribute__create_attribute','object_type,attri
 
 -- create or replace package body acs_attribute
 -- function create_attribute
-create function acs_attribute__create_attribute (varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer,integer,varchar,boolean)
+create or replace function acs_attribute__create_attribute (varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer,integer,varchar,boolean)
 returns integer as '
 declare
   create_attribute__object_type            alias for $1;  
@@ -683,7 +683,7 @@ begin
       v_sort_order := create_attribute__sort_order;
     end if;
 
-    select acs_attribute_id_seq.nextval from dual into v_attribute_id;
+    select nextval(''t_acs_attribute_id_seq'') into v_attribute_id;
 
     insert into acs_attributes
       (attribute_id, object_type, table_name, column_name, attribute_name,
@@ -702,7 +702,7 @@ begin
    
 end;' language 'plpgsql';
 
-create function acs_attribute__create_attribute (varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer,integer,integer,varchar,boolean)
+create or replace function acs_attribute__create_attribute (varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer,integer,integer,varchar,boolean)
 returns integer as '
 begin
     return acs_attribute__create_attribute ($1, $2, $3, $4, $5, $6, $7, cast ($8 as varchar), $9, $10, $11, $12, $13);

@@ -657,8 +657,7 @@ declare
   v_object_type_pretty_name   acs_object_types.pretty_name%TYPE;
 begin
   if new__object_id is null then
-   select acs_object_id_seq.nextval
-   into v_object_id from dual;
+    select nextval(''t_acs_object_id_seq'') into v_object_id;
   else
     v_object_id := new__object_id;
   end if;

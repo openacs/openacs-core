@@ -47,7 +47,7 @@
       <querytext>
 
 	    insert into secret_tokens(token_id, token, token_timestamp)
-	    values(sec_security_token_id_seq.nextval, :random_token, now())
+	    values(nextval('t_sec_security_token_id_seq'), :random_token, now())
 	
       </querytext>
 </fullquery>
