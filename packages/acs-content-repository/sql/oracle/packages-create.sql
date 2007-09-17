@@ -915,47 +915,6 @@ function revision_name (
   revision_id   in cr_revisions.revision_id%TYPE
 ) return varchar2;
 
-procedure index_attributes(
-  --/** Generates an XML document for insertion into cr_revision_attributes,
-  --    which is indexed by Intermedia for searching attributes.
-  --    @author Karl Goldstein
-  --    @param revision_id The id of the revision to index
-  --    @see {content_revision.new}
-  --*/
-  revision_id IN cr_revisions.revision_id%TYPE
-);
-
-function export_xml (
-  revision_id IN cr_revisions.revision_id%TYPE
-) return cr_xml_docs.doc_id%TYPE;
-
-function write_xml (
-  revision_id IN number,
-  clob_loc IN clob
-) return number as language
-  java
-name
-  'com.arsdigita.content.XMLExchange.exportRevision(
-     java.lang.Integer, oracle.sql.CLOB
-  ) return int';
-
-function import_xml (
-  item_id IN cr_items.item_id%TYPE,
-  revision_id IN cr_revisions.revision_id%TYPE,
-  doc_id IN number
-) return cr_revisions.revision_id%TYPE;
-
-function read_xml (
-  item_id IN number,
-  revision_id IN number,
-  clob_loc IN clob
-) return number as language
-  java
-name
-  'com.arsdigita.content.XMLExchange.importRevision(
-     java.lang.Integer, java.lang.Integer, oracle.sql.CLOB
-  ) return int';
-
 procedure to_html (
   --/** Converts a revision uploaded as a binary document to html
   --    @author Karl Goldstein
@@ -963,15 +922,6 @@ procedure to_html (
   --*/
   revision_id IN cr_revisions.revision_id%TYPE
 );
-
-procedure replace(
-  revision_id number, search varchar2, replace varchar2)
-as language 
-  java 
-name 
-  'com.arsdigita.content.Regexp.replace(
-    int, java.lang.String, java.lang.String
-   )';
 
 function is_live (
   -- /** Determine if the revision is live
