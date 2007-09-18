@@ -118,11 +118,11 @@ if {[array exists links]} {
 
 # Generate the head <script /> tag multirow
 variable ::template::head::scripts
-template::multirow create script type src charset defer content
+template::multirow create headscript type src charset defer content
 if {[array exists scripts]} {
     foreach name [array names scripts] {
-        foreach {type src charset script defer} $scripts($name) {
-            template::multirow append script \
+        foreach {type src charset script defer content} $scripts($name) {
+            template::multirow append headscript \
                 $type \
                 $src \
                 $charset \
@@ -169,26 +169,38 @@ foreach {event script} [array get body_handlers] {
  
 # Generate the body headers
 variable ::template::headers
-set header [list]
+set header ""
 if {[info exists headers]} {
-    foreach {type src params} $headers {
+    foreach header_list $headers {
+	set type [lindex $header_list 0]
+	set src [lindex $header_list 1]
+	set params [lindex $header_list 2]
         if {$type eq "literal"} {
-            lappend header $src
-        } else {
-            lappend header [template::adp_include $src $params]
+            append header $src
+        } elseif {$type eq "include"} {
+	    set adp_html  [template::adp_include $src $params]
+	    if {$adp_html ne ""} {
+		append header $adp_html
+	    }
         }
     }
 }
 
 # Generate the body footers
 variable ::template::footers
-set footer [list]
+set footer ""
 if {[info exists footers]} {
-    foreach {type src params} $footers {
+    foreach footer_list $footers {
+	set type [lindex $footer_list 0]
+	set src [lindex $footer_list 1]
+	set params [lindex $footer_list 2]
         if {$type eq "literal"} {
-            lappend footer $src
+            append footer $src
         } else {
-            lappend footer [template::adp_include $src $params]
+	    set adp_html  [template::adp_include $src $params]
+	    if {$adp_html ne ""} {
+		lappend footer
+	    }
         }
     }
 }
