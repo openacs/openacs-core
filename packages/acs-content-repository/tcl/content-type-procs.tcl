@@ -19,7 +19,7 @@ ad_proc -public content::type::new {
     {-supertype "content_revision"}
     -pretty_name:required
     -pretty_plural:required
-    {-table_name ""}
+    -table_name:required
     -id_column:required
     {-name_method ""}
 } {
