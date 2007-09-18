@@ -31,7 +31,7 @@ if {![nsv_exists CR_LOCATIONS CR_FILES]} {
     
     # Take the directory from the FileLocation parameter that 
     # must be specified in acs-content-repository package.
-    set relativepath_p [parameter::get_from_package_key -package_key "acs-content-repository" -parameter FileLocationRelativeP]
+    set relativepath_p [parameter::get_from_package_key -package_key "acs-content-repository" -parameter FileLocationRelativeP -default "1"]
     set file_location ""
 
     if {$relativepath_p} {
