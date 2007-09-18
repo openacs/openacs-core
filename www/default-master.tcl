@@ -58,13 +58,10 @@ for {set i 1} {$i <= [template::multirow size navigation]} {incr i} {
 #
 # Add standard css
 #
-template::multirow append link \
-    stylesheet \
-    "text/css" \
-    "/resources/acs-subsite/default-master.css" \
-    "Standard OpenACS Styles" \
-    en \
-    "all"
+
+template::head::add_css \
+    -href "/resources/acs-subsite/default-master.css" \
+    -media "all"
 
 # 
 # User information and top level navigation links
