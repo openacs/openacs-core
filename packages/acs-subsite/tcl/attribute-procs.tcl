@@ -66,16 +66,10 @@ ad_proc -public exists_p {
     }
     
     set attr_exists_p [db_string attr_exists_p {
-	select case when exists (select 1 
-                                   from acs_attributes a
-                                  where (a.attribute_name = :attribute
-                                         or a.column_name = :attribute)
-                                    and a.object_type = :object_type)
-                    then 1
-                    else 0
-                    end
-          from dual
-    }]
+       select 1 from acs_attributes a 
+       where (a.attribute_name = :attribute or a.column_name = :attribute)
+       and a.object_type = :object_type
+    } -default 0]
 	
     if { $attr_exists_p || $convert_p eq "f" } {
 	# If the attribute exists, o
