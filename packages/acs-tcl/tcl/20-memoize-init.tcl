@@ -16,7 +16,7 @@ if {[llength [info commands ncf.send]] > 0} {
     set flush_body {
         ncf.send util_memoize $script
     }
-} elseif {[llength [info commands server_cluster_httpget_from_peers]] > 0} {
+} elseif {[server_cluster_enabled_p] && [info commands server_cluster_httpget_from_peers] ne ""} {
     set flush_body {
         server_cluster_httpget_from_peers "/SYSTEM/flush-memoized-statement.tcl?statement=[ns_urlencode $script]"
     }
