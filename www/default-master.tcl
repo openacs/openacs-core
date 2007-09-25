@@ -46,6 +46,12 @@ if {![template::multirow exists navigation]} {
         id \
         tabindex 
 }
+for {set i 1} {$i <= [template::multirow size navigation]} {incr i} {
+    template::multirow get navigation $i
+    if {[lsearch $navigation_groups $navigation(group)] < 0} {
+        lappend navigation_groups $navigation(group)
+    }
+}
 
 for {set i 1} {$i <= [template::multirow size navigation]} {incr i} {
     template::multirow get navigation $i

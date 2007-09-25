@@ -9,7 +9,8 @@
     select p.parameter_name,
            coalesce(p.description, 'No Description') as description,
            v.attr_value,
-           coalesce(p.section_name, '') as section_name
+           coalesce(p.section_name, '') as section_name,
+           p.datatype
     from   apm_parameters p left outer join
            (select v.parameter_id,
                    v.attr_value

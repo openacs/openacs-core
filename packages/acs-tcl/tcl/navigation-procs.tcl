@@ -220,7 +220,6 @@ ad_proc -public ad_navbar args {
 
     @return html fragment
 
-    @see ad_choice_bar
     @see ad_context_bar_html
 } {
     set counter 0
@@ -261,7 +260,6 @@ ad_proc -public ad_choice_bar { items links values {default ""} } {
     }
     
 }
-
 
 # directories that should not receive links to move up one level
 

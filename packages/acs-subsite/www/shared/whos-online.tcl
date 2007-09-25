@@ -20,11 +20,11 @@ template::list::create \
     -no_data "No registered users online" \
     -elements {
         name {
-            label "User name"
+            label "[_ acs-subsite.User_name]"
             link_url_col url
         }
         online_time_pretty {
-            label "Online Time"
+            label "[_ acs-subsite.Online_time]"
             html { align right }
         }
     }

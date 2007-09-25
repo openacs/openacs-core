@@ -12,7 +12,13 @@ ad_page_contract {
     {search_package_id ""}
     {scope ""}
     {object_type "all"}
-} 
+} -validate {
+    keywords_p {
+        if {![exists_and_not_null q]} {
+            ad_complain "#search.lt_You_must_specify_some#"
+        }
+    }
+}
 
 set page_title "Search Results"
 
@@ -27,7 +33,6 @@ set context_base_url $package_url
 # Do we want debugging information at the end of the page
 set debug_p 0
 
-set dotlrn_p [apm_package_installed_p "dotlrn"]
 set user_id [ad_conn user_id]
 set driver [ad_parameter -package_id $package_id FtsEngineDriver]
 if {[callback::impl_exists -impl $driver -callback search::driver_info]} {
@@ -37,18 +42,7 @@ if {[callback::impl_exists -impl $driver -callback search::driver_info]} {
     array set info [acs_sc_call FtsEngineDriver info [list] $driver]
 }
 
-if {$dotlrn_p} {
-    set dotlrn_package_id [dotlrn::get_package_id]
-    set is_guest_p [search::is_guest_p]
-
-    # Ugly .LRNism: guests must not search for people. Here's the security
-    # check that makes sure they cannot fiddle around with the URL
-    if {$is_guest_p && $object_type eq "phb_person"} {
-	ad_return_error "Security Breakin!" "Security Alert. This incident has been logged."
-    }
-}
-
-if { [array get info] eq "" } {
+if { [array get info] == "" } {
     ReturnHeaders
     ns_write "[_ search.lt_FtsEngineDriver_not_a]"
     ad_script_abort
@@ -207,20 +201,15 @@ if { $num > 0 } {
     append url_previous "&num=$num"
     append url_next "&num=$num"
 }
+set ol_start [expr $offset + 1]
 
-
-set items [list]
-set links [list]
-set values [list]
+template::multirow create results_paginator item link
 for { set __i $from_result_page } { $__i <= $to_result_page} { incr __i } {
-    set link ""
-    append link "search?q=${urlencoded_query}&search_package_id=$search_package_id"
+    set link "search?q=${urlencoded_query}&search_package_id=$search_package_id"
     if { $__i > 1 } { append link "&offset=[expr ($__i - 1) * $limit]" }
     if { $num > 0 } { append link "&num=$num" }
 
-    lappend items $__i
-    lappend links $link
-    lappend values $__i
+    template::multirow append results_paginator $__i $link
 }
 
 set search_the_web [ad_parameter -package_id $package_id SearchTheWeb]
@@ -231,4 +220,14 @@ if {[llength $search_the_web]} {
     }
 }
 
-set choice_bar [search::choice_bar $items $links $values $current_result_page]
+# header stuffs
+if {![template::multirow exists link]} {
+    template::multirow create link rel type href title lang media
+}
+template::multirow append link \
+    stylesheet \
+    "text/css" \
+    "/resources/search/search.css" \
+    "" \
+    "" \
+    "all"

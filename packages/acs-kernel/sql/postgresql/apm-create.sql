@@ -684,7 +684,7 @@ create table apm_parameters (
 	section_name		varchar(200),
 	datatype	        varchar(100) not null
 			        constraint apm_parameters_datatype_ck 
-				check(datatype in ('number', 'string')),
+				check(datatype in ('number', 'string','text')),
 	default_value		text,
 	min_n_values		integer default 1 not null
 			        constraint apm_parameters_min_n_values_ck

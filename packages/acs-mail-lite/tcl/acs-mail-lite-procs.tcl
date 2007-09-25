@@ -13,6 +13,51 @@ package require smtp 1.4
 package require base64 2.3.1
 namespace eval acs_mail_lite {
 
+    ad_proc -public get_package_id {} {
+	@returns package_id of this package
+    } {
+        return [apm_package_id_from_key acs-mail-lite]
+    }
+    
+    ad_proc -public get_parameter {
+        -name:required
+        {-default ""}
+    } {
+	Returns an apm-parameter value of this package
+	@option name parameter name
+	@option default default parameter value
+	@returns apm-parameter value of this package
+    } {
+        return [parameter::get -package_id [get_package_id] -parameter $name -default $default]
+    }
+    
+    ad_proc -public address_domain {} {
+	@returns domain address to which bounces are directed to
+    } {
+        set domain [get_parameter -name "BounceDomain"]
+        if { [empty_string_p $domain] } {
+	    regsub {http://} [ns_config ns/server/[ns_info server]/module/nssock hostname] {} domain
+	}
+	return $domain
+    }
+    
+    ad_proc -private bounce_sendmail {} {
+	@returns path to the sendmail executable
+    } {
+	return [get_parameter -name "SendmailBin"]
+    }
+    
+    ad_proc -private bounce_prefix {} {
+	@returns bounce prefix for x-envelope-from
+    } {
+        return [get_parameter -name "EnvelopePrefix"]
+    }
+    
+    ad_proc -private mail_dir {} {
+	@returns incoming mail directory to be scanned for bounces
+    } {
+        return [get_parameter -name "BounceMailDir"]
+    }
     
     #---------------------------------------
     ad_proc -public parse_email_address {
@@ -485,15 +530,14 @@ namespace eval acs_mail_lite {
 
 	with_finally -code {
 	    db_foreach get_queued_messages {} {
-		with_finally -code {
-		    deliver_mail -to_addr $to_addr -from_addr $from_addr \
+		    if { [catch {deliver_mail -to_addr $to_addr -from_addr $from_addr \
 			-subject $subject -body $body -extraheaders $extra_headers \
 			-bcc $bcc -valid_email_p $valid_email_p \
-			-package_id $package_id
-
-		    db_dml delete_queue_entry {}
-		} -finally {
-		}
+                             -package_id $package_id} errmsg] } {
+                ns_log Error "acs_mail_lite::sweeper error sending to $to_addr:\n $errmsg\n"
+            } else {
+                db_dml delete_queue_entry {}
+            }
 	    }
 	} -finally {
 	    nsv_incr acs_mail_lite send_mails_p -1

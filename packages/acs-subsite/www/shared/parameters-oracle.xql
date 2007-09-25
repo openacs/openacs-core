@@ -9,7 +9,8 @@
     select p.parameter_name,
            nvl(p.description, 'No Description') as description,
            v.attr_value,
-           nvl(p.section_name, '') as section_name
+           nvl(p.section_name, '') as section_name,
+           p.datatype
     from   apm_parameters p,
            (select v.parameter_id,
                    v.attr_value

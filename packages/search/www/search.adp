@@ -1,46 +1,31 @@
 <master>
-<if @dotlrn_p@ true><include src="/packages/dotlrn/www/dotlrn-search"></if>
-<if @t@ eq "Search">
-  <i>#search.lt_Tip_In_most_browsers_#</i><br><br>
-  </if>
+<property name="header_stuff">
+  <link href="/resources/search/search.css" rel="stylesheet" type="text/css">
+</property>
+<if @link:rowcount@ not nil><property name="&link">link</property></if>
+
 <if @empty_p@ true>
     <p class="hint">#search.lt_You_must_specify_some#</p>
 </if>
 <else>
 	<if @and_queries_notice_p@ eq 1>
-      	  <font color=6f6f6f>
+      	  <font color="6f6f6f">
           #search.The#
           [<a href=help/basics#and>#search.details#</a>]<br>
         </font>
 	</if>
 	<if @nstopwords@ eq 1>
-        <font color=6f6f6f>
+        <font color="6f6f6f">
           #search.lt_bstopwordsb_is_a_very#
           [<a href=help/basics#stopwords>#search.details#</a>]<br>
         </font>
 	</if>
 	<if @nstopwords@ gt 1>
-      	  <font color=6f6f6f>
+      	  <font color="6f6f6f">
           #search.lt_The_following_words_a# <b>@stopwords@</b>.
           [<a href=help/basics#stopwords>#search.details#</a>]<br>
       	  </font>
 	</if>
-
-   <multiple name="searchresult">
-	<if @searchresult.title_summary@ nil>
-  		<a href="@searchresult.url_one@">#search.Untitled#</a><br>
-	</if>	
-	<else>
-	  <a href="@searchresult.url_one@">@searchresult.title_summary;noquote@</a><br>
-	</else>
-
-	<if @searchresult.txt_summary@ nil>	
-	</if>
-	<else>	
-	@searchresult.txt_summary;noquote@<br>	
-	</else>
-	<font color=green>@searchresult.url_one@</font><br><br>
-   </multiple>
 
   <if @count@ eq 0>
   Your search - <b>@query@</b> - did not match any content.
@@ -56,57 +41,76 @@
   </ul>
   </if>
   <else>
-  <table width=100% bgcolor=3366cc border=0 cellpadding=3 cellspacing=0>
-    <tr><td>
-      <font color=white>
-        #search.Searched_for_query#
-      </font>
-    </td><td align=right>
-      <font color=white>
-        #search.Results# <b>@low@-@high@</b> #search.of_about# <b>@count@</b>#search.________Search_took# <b>@elapsed@</b> #search.seconds# 
-      </font>     
-    </td></tr>
-  </table>
-  <br clear=all>
+        <div id="search-info">
+          <p class="subtitle">#search.Searched_for_query#</p>
+          <p class="times">
+        #search.Results# <strong>@low@-@high@</strong> #search.of_about# <strong>@count@</strong>#search.________Search_took# <strong>@elapsed@</strong> #search.seconds# 
+          </p>
+        </div>
+        <div id="search-results">
+          <ol start="@ol_start@">
+            <multiple name="searchresult">
+              <li>
+                <div>
+                  <a href="@searchresult.url_one@" class="result-title">
+                    <if @searchresult.title_summary@ nil>#search.Untitled#</if>	
+                    <else>@searchresult.title_summary;noquote@</else>
+                  </a>
+                </div>
+                <if @searchresult.txt_summary@ not nil>	
+                  <div>@searchresult.txt_summary;noquote@</div>
+                </if>
+                <div class="result-url">@searchresult.url_one@</div>
+              </li>
+            </multiple>
+          </ol>
+        </div>
   </else>
 
-<if @from_result_page@ lt @to_result_page@>
-  <center>
 
-    <small>#search.Result_page#</small>
+        <if @results_paginator:rowcount@ gt 1>
+          <div id="results-pages" class="list-paginator-bottom">
 
-    <if @from_result_page@ lt @current_result_page@>
-      <small><a href=@url_previous@><font color=0000cc><b>#search.Previous#</b></font></a></small>
-    </if>
-    &nbsp;@choice_bar;noquote@&nbsp;
-    
-    <if @current_result_page@ lt @to_result_page@>
-	<small><a href=@url_next@><font color=0000cc><b>#search.Next#</b></font></a></small>
-    </if>
-  </center>
-</if>
+          <ul class="compact list-paginator">
+            <li>#search.Result_page#</li>
+            <if @from_result_page@ lt @current_result_page@>
+              <li><a href="@url_previous@">#search.Previous#</a></li>
+            </if>
+
+            <multiple name="results_paginator">
+              <if @current_result_page@ eq @results_paginator.item@>
+                <li class="current">@results_paginator.item@</li>
+              </if>
+              <else>
+                <li><a href="@results_paginator.link@">@results_paginator.item@</a></li>
+              </else>
+            </multiple>
+            <if @current_result_page@ lt @to_result_page@>
+              <li><a href="@url_next@">#search.Next#</a></li>
+            </if>
+          </ul>
+        </div>
+      </if>
+
 <if @count@ gt 0>
   <center>
-  <if @dotlrn_p@>
-    <include src="/packages/dotlrn/www/dotlrn-search">
-  </if>
-  <else>
-      <div>
-        <form method="get" action="search">
-          <input type="text" name="q" size="60" maxlength="256" value="@query@" />
-          <input type="submit" value="#search.Search#" />
-        </form>
-      </div>
-  </else>
-  </center>
+    <div>
+      <form method="get" action="search">
+        <input type="text" name="q" size="60" maxlength="256" value="@query@" />
+        <input type="submit" value="#search.Search#" />
+      </form>
+      <if @t@ eq "Search">
+        <i>#search.lt_Tip_In_most_browsers_#</i>
+      </if>
+    </div>
 
-  <if @stw@ not nil>
-    <center>
-      <font size=-1>#search.lt_Try_your_query_on_stw#</font></center>
-    </center>
-  </if>
+    <if @stw@ not nil>
+      <p><font size=-1>#search.lt_Try_your_query_on_stw#</font></p>
+    </if>
+  </center>
 </if>
 </else>
+
     <if @and_queries_notice_p@ eq 1>
       <p class="hint">#search.and_not_needed# [<a href="help/basics#and">#search.details#</a>]</p>
     </if>
@@ -122,5 +126,3 @@
       <p>#search.Results_count#</p>
     </if>
 
-    </if>
-  </else>

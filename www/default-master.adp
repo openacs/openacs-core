@@ -9,13 +9,12 @@
 <property name="skip_link">#content-wrapper</property>
 
 <div id="wrapper">
-
-  <div id="header">
-    <div class="block-marker">Begin header</div>
     <div id="system-name">
       <if @system_url@ not nil><a href="@system_url@">@system_name@</a></if>
       <else>@system_name@</else>
     </div>
+  <div id="header">
+    <div class="block-marker">Begin header</div>
     <div id="header-navigation">
       <ul class="compact">
         <li>
@@ -85,7 +84,6 @@
       <div id="main">
         <div id="main-content">
           <div class="main-content-padding">
-            <h1>@title;noquote@</h1>
             <slave />
           </div>
         </div>
@@ -102,6 +100,7 @@
 
   <comment> empty UL gives a validation error for the W3C validator 
   </comment>
+
   <if @num_of_locales@ gt 1 or @locale_admin_url@ not nil>
   <div id="footer">
     <div class="block-marker">Begin footer</div>
