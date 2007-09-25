@@ -30,7 +30,7 @@
   <msg key="Results">Results</msg>
   <msg key="results">results</msg>
   <msg key="Search">Search</msg>
-  <msg key="Searched_for_query">Searched for: %query%</msg>
+  <msg key="Searched_for_query">Search results for &lt;strong&gt;%query%&lt;/strong&gt;</msg>
   <msg key="seconds">seconds.</msg>
   <msg key="selected">selected</msg>
   <msg key="Suggestions">Suggestions:</msg>

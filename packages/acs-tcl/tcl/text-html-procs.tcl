@@ -1231,10 +1231,10 @@ ad_proc util_expand_entities_ie_style { html } {
 			set match_p 1
 		    }
 		    [0-9] {
-			regexp -indices -start [expr {$i+2}] {[0-9]*} $html dec_idx
-                        set dec [string range $html [lindex $dec_idx 0] [lindex $dec_idx 1]]
+			regexp -indices -start [expr $i+2] {[0-9]*} $html dec_idx
+			set dec [string range $html [lindex $dec_idx 0] [lindex $dec_idx 1]]
                         # $dec might contain leading 0s. Since format evaluates $dec as expr
-                        # leading 0s causing octal interpretation, causing errors on e.g. &#0038;
+                        # leading 0s cause octal interpretation and therefore errors on e.g. &#0038;
 			set dec [string trimleft $dec 0]
                         if {$dec eq ""} {set dec 0}
 			set html [string replace $html $i [lindex $dec_idx 1] \

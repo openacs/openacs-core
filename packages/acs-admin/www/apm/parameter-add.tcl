@@ -72,7 +72,7 @@ to indicate which parameters pertain to security.
 <tr>
   <th align=right nowrap>Type:</th>
   <td><select name=datatype>
-      [ad_generic_optionlist {number string} {number string}]
+[ad_generic_optionlist {number string textarea} {number string text}]
       </select>
   </td>
 </tr>

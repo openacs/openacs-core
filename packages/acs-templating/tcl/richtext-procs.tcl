@@ -404,7 +404,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 			   $element(options) : ""}]
 
   if { $element(mode) eq "edit" } {
-    set attributes(id) "richtext__$element(form_id)__$element(id)"
+    set attributes(id) $element(id)
     set package_id_templating [apm_package_id_from_key "acs-templating"]
 
     set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
@@ -448,8 +448,8 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
 	set output "<script type='text/javascript'><!--\nwriteRichText('$element(id)','$contents',500,200,true,false,'<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\">','[string map {\n \\n \r {} "'" "&\#39"} $output]'); //--></script><noscript id=\"rte-noscr-$element(id)\">$noscript_output</noscript>"
       } elseif {$richtextEditor eq "xinha"} {
-	append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
-          append output "<noscript><br>[_ acs-templating.Format]: $format_menu</noscript>\n"
+	append output "<script type='text/javascript'>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
+          append output "<noscript><br/>[_ acs-templating.Format]: $format_menu</noscript>\n"
 	
 	# we have a xinha richtext widget, specified by "options {editor xinha}"
 	# The following options are supported: 
@@ -509,7 +509,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     if { $spellcheck(render_p) } {
         append output " [_  acs-templating.Spellcheck]: " \
 	  [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] \
-	       $spellcheck(selected_option) attributes]
+	       $spellcheck(selected_option) {}]
     }
   } else {
     # Display mode

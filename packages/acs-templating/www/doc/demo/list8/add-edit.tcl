@@ -39,7 +39,7 @@ ad_form -form {
 
     {body:text(textarea) \
         {label Body}
-        {html {rows 10 cols 40 wrap soft}}
+        {html {rows 10 cols 40}}
     }
 
     # 'color' is a text using a text widget
