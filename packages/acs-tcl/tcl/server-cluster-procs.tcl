@@ -27,7 +27,7 @@ proc_doc server_cluster_peer_hosts {} { Returns a list of all hosts, excluding t
             set myport 80
             set myhost $host
        }
-       if { $myhost != $my_ip } {
+       if { $myhost ne $my_ip } {
 	    lappend peer_hosts $host
 	}
     }
