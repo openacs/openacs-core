@@ -973,14 +973,14 @@ begin
 end;' language 'plpgsql';
 
 
-select define_function_args('content_type__unregister_relation_type','content_type,target_type,relation_tag;generic');
+select define_function_args('content_type__unregister_relation_type','content_type,target_type,relation_tag;null');
 
 create or replace function content_type__unregister_relation_type (varchar,varchar,varchar)
 returns integer as '
 declare
   unregister_relation_type__content_type  alias for $1;  
   unregister_relation_type__target_type   alias for $2;  
-  unregister_relation_type__relation_tag  alias for $3;  -- default null  
+  unregister_relation_type__relation_tag  alias for $3;  -- default null
                                         
 begin
 
@@ -1077,7 +1077,7 @@ begin
 end;' language 'plpgsql' stable;
 
 
-select define_function_args('content_type__rotate_template','template_id,content_type,use_context');
+select define_function_args('content_type__rotate_template','template_id,v_content_type,use_context');
 
 create or replace function content_type__rotate_template (integer,varchar,varchar)
 returns integer as '
