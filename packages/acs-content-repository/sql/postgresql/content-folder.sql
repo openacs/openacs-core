@@ -282,7 +282,7 @@ create or replace function content_folder__del (integer, boolean)
 returns integer as '
 declare
   delete__folder_id              alias for $1;  
-  p_cascade_p                    alias for $2;
+  p_cascade_p                    alias for $2; -- default ''f''
   v_count                        integer;       
   v_child_row                    record;
   v_parent_id                    integer;  
@@ -347,7 +347,7 @@ create or replace function content_folder__delete (integer, boolean)
 returns integer as '
 declare
   delete__folder_id              alias for $1;  
-  p_cascade_p                    alias for $2;
+  p_cascade_p                    alias for $2;  -- default ''f''
 begin
         PERFORM content_folder__del(delete__folder_id,p_cascade_p);
   return 0; 
@@ -419,14 +419,14 @@ end;' language 'plpgsql';
 -- 3) update the parent_id for the folder
 
 -- procedure move
-select define_function_args('content_folder__move','folder_id,target_folder_id,name;NULL');
+select define_function_args('content_folder__move','folder_id,target_folder_id,name;null');
 
 create or replace function content_folder__move (integer,integer,varchar)
 returns integer as '
 declare
   move__folder_id              alias for $1;  
   move__target_folder_id       alias for $2;
-  move__name                   alias for $3;
+  move__name                   alias for $3; -- default null
   v_source_folder_id           integer;       
   v_valid_folders_p            integer;
 begin

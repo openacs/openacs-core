@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="5.4.0d7" url="http://openacs.org/repository/download/apm/acs-content-repository-5.4.0d7.apm">
+    <version name="5.4.0d8" url="http://openacs.org/repository/download/apm/acs-content-repository-5.4.0d8.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The canonical repository for OpenACS content.</summary>
         <release-date>2007-07-18</release-date>
@@ -20,7 +20,7 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-content-repository" version="5.4.0d7"/>
+        <provides url="acs-content-repository" version="5.4.0d8"/>
         <requires url="acs-kernel" version="5.3.2"/>
         <requires url="acs-service-contract" version="5.3.2"/>
         <requires url="search" version="5.3.2"/>
