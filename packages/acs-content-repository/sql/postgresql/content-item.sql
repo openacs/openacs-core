@@ -44,7 +44,7 @@ end;' language 'plpgsql' stable;
 
 -- new 19 param version of content_item__new (now its 20 with package_id)
 
-select define_function_args('content_item__new','name,parent_id,item_id,locale,creation_date;now,creation_user,context_id,creation_ip,item_subtype;content_item,content_type;content_revision,title,description,mime_type;text/plain,nls_language,text,data,relation_tag,is_live;f,storage_type;lob,package_id');
+select define_function_args('content_item__new','name,parent_id,item_id,locale,creation_date;now,creation_user,context_id,creation_ip,item_subtype;content_item,content_type;content_revision,title,description,mime_type;text/plain,nls_language,text,data,relation_tag,is_live;f,storage_type;null,package_id');
 
 create or replace function content_item__new (
   cr_items.name%TYPE,
@@ -70,25 +70,25 @@ create or replace function content_item__new (
 ) returns integer as '
 declare
   new__name       alias for $1;
-  new__parent_id  alias for $2;
-  new__item_id    alias for $3;
-  new__locale     alias for $4;
-  new__creation_date alias for $5;
-  new__creation_user alias for $6;
-  new__context_id    alias for $7;
-  new__creation_ip   alias for $8;
-  new__item_subtype  alias for $9;
-  new__content_type  alias for $10;
-  new__title         alias for $11;
-  new__description   alias for $12;
-  new__mime_type     alias for $13;
-  new__nls_language  alias for $14;
-  new__text          alias for $15;
-  new__data          alias for $16;
-  new__relation_tag  alias for $17;
-  new__is_live       alias for $18;
-  new__storage_type  alias for $19;
-  new__package_id    alias for $20;
+  new__parent_id  alias for $2;  -- default null 
+  new__item_id    alias for $3;  -- default null 
+  new__locale     alias for $4;  -- default null 
+  new__creation_date alias for $5;  -- default now
+  new__creation_user alias for $6;  -- default null
+  new__context_id    alias for $7;  -- default null
+  new__creation_ip   alias for $8;  -- default null
+  new__item_subtype  alias for $9;  -- default ''content_item''
+  new__content_type  alias for $10; -- default ''content_revision''
+  new__title         alias for $11; -- default null
+  new__description   alias for $12; -- default null
+  new__mime_type     alias for $13; -- default ''text/plain''
+  new__nls_language  alias for $14; -- default null
+  new__text          alias for $15; -- default null
+  new__data          alias for $16; -- default null
+  new__relation_tag  alias for $17; -- default null
+  new__is_live       alias for $18; -- default ''f''
+  new__storage_type  alias for $19; -- default null
+  new__package_id    alias for $20; -- default null
   v_parent_id      cr_items.parent_id%TYPE;
   v_parent_type    acs_objects.object_type%TYPE;
   v_item_id        cr_items.item_id%TYPE;
