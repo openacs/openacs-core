@@ -196,7 +196,7 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
       return -code error -errorinfo $s_errorInfo -errorcode $s_errorCode $return_value
     }
     default {
-      if { [string equal $return_value ADP_ABORT] } { 
+      if {$return_value eq "ADP_ABORT"} { 
         # return without rendering any HTML if the code aborts
         return "" 
       } else {
