@@ -700,7 +700,7 @@ ad_proc -public template::util::negative { value } {
   if {$value eq {}} {
     return 0
   } else {
-    return [expr [template::util::leadingTrim $value] < 0]
+    return [expr {[template::util::leadingTrim $value] < 0}]
     return [expr {$value < 0}]
   }
 }
@@ -1039,7 +1039,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
   }
 
   set tbody_content "<tbody><tr>"
-  while { ![string equal $format_string {}] } {
+  while { $format_string ne {} } {
 
     # Snip off the next token
     regexp {([^/\-.: ]*)([/\-.: ]*)(.*)} \
