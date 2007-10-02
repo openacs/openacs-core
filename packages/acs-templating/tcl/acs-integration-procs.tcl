@@ -23,7 +23,7 @@ ad_proc -public ad_return_template {
     @param string If specified, will return the resulting page to the caller
                   string instead sending it to the connection.
 } {
-    if {![empty_string_p $template]} {
+    if {$template ne ""} {
 	template::set_file \
 	    [template::util::url_to_file $template [ad_conn file]]
     }
@@ -101,7 +101,7 @@ ad_proc adp_parse_ad_conn_file {} {
 
     set parsed_template [template::adp_parse [file root [ad_conn file]] {}]
 
-    if {![empty_string_p $parsed_template]} {
+    if {$parsed_template ne ""} {
         
         #
         # acs-lang translator mode
@@ -124,9 +124,9 @@ ad_proc adp_parse_ad_conn_file {} {
                 if { [string first "</select" [string tolower $select]] != -1 } {
                     set start [lindex $indices 1]
                 } else {
-                    set before [string range $parsed_template 0 [expr [lindex $indices 0]-1]]
+                    set before [string range $parsed_template 0 [expr {[lindex $indices 0]-1}]]
                     set message [string range $parsed_template [lindex $message_idx 0] [lindex $message_idx 1]]
-                    set after [string range $parsed_template [expr [lindex $indices 1] + 1] end]
+                    set after [string range $parsed_template [expr {[lindex $indices 1] + 1}] end]
                     set parsed_template "${before}${message}${select}${after}"
                 }
             }
@@ -134,8 +134,8 @@ ad_proc adp_parse_ad_conn_file {} {
             # TODO: We could also move message keys out of <head>...</head>
 
             while { [regexp -indices {\x002\(\x001([^\x001]*)\x001\)\x002} $parsed_template indices key] } {
-                set before [string range $parsed_template 0 [expr [lindex $indices 0] - 1]]
-                set after [string range $parsed_template [expr [lindex $indices 1] + 1] end]
+                set before [string range $parsed_template 0 [expr {[lindex $indices 0] - 1}]]
+                set after [string range $parsed_template [expr {[lindex $indices 1] + 1}] end]
 
                 set key [string range $parsed_template [lindex $key 0] [lindex $key 1]]
 
