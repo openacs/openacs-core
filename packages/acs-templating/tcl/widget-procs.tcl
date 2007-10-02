@@ -378,7 +378,7 @@ ad_proc -public template::widget::input {
     if { ( $type eq "checkbox" || $type eq "radio" ) && [info exists element(value)] } {
         # This can be used in the form template in a <label for="id">...</label> tag.
         set attributes(id) "$element(form_id):elements:$element(name):$element(value)"
-    } elseif { [string equal $type "password"] || [string equal $type "text"] || [string equal $type "button"] || [string equal $type "file"]} { 
+    } elseif { $type eq "password" || $type eq "text" || $type eq "button" || $type eq "file"} { 
 	set attributes(id) "$element(name)" 
     }
 
@@ -905,7 +905,7 @@ ad_proc -public template::widget::block {
 	    foreach answer_desc $option {
 		set answer_description [lindex $answer_desc 0]
 		set no_of_answers [lindex $answer_desc 1]
-		append output "<th colspan=\"[expr $no_of_answers + 1]\" align=\"center\">$answer_description</th>"
+		append output "<th colspan=\"[expr {$no_of_answers + 1}]\" align=\"center\">$answer_description</th>"
 	    }
 	    append output "</tr>"
 	} elseif {$count == 1} {

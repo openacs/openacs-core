@@ -412,7 +412,7 @@ ad_proc -public template::form::section {
 	get_reference
 
     # legend can't be empty
-    if { ![string equal $section ""] && [string equal $legendtext ""] } {
+    if { $section ne "" && $legendtext eq "" } {
         ns_log Warning "template::form::section (form: $id, section: $section): The section legend is empty. You must provide text for the legend otherwise the section fieldset won't be created."
         return
     }
@@ -427,7 +427,7 @@ ad_proc -public template::form::section {
         append properties(sec_fieldset) " class=\"form-fieldset\""
     }
 	foreach name [array names fs_attributes] {
-		if { [string equal $fs_attributes($name) {}] } {
+		if {$fs_attributes($name) eq {}} {
 			append properties(sec_fieldset) " $name"
 		} else {
 			append properties(sec_fieldset) " $name=\"$fs_attributes($name)\""
@@ -436,10 +436,10 @@ ad_proc -public template::form::section {
 
 	# legend attributes
 	set properties(sec_legend) ""
-	if { ![string eq $legendtext ""] } {
+	if { $legendtext ne "" } {
 		array set lg_attributes $legend
 		foreach name [array names lg_attributes] {
-			if { [string equal $lg_attributes($name) {}] } {
+			if {$lg_attributes($name) eq {}} {
 				append properties(sec_legend) " $name"
 			} else {
 				append properties(sec_legend) " $name=\"$lg_attributes($name)\""
@@ -588,7 +588,7 @@ ad_proc -private template::form::render { id tag_attributes } {
           append output " class=\"form-fieldset\""
       }
       foreach name [array names fs_attributes] {
-          if { [string equal $fs_attributes($name) {}] } {
+          if {$fs_attributes($name) eq {}} {
               append output " $name"
           } else {
               append output " $name=\"$fs_attributes($name)\""

@@ -172,7 +172,7 @@ ad_proc -public template::element::create { form_id element_id args } {
 
   # set the form section
   set opts(section) $form_properties(section)
-	if { ![string equal $opts(section) ""] } {
+	if { $opts(section) ne "" } {
 		set opts(sec_fieldset) $form_properties(sec_fieldset)
 		set opts(sec_legend) $form_properties(sec_legend)
 		set opts(sec_legendtext) $form_properties(sec_legendtext)
@@ -197,8 +197,8 @@ ad_proc -public template::element::create { form_id element_id args } {
   }
 
   # If the widget is a checkbox or radio widget, set attributes
-    if { [string equal $opts(widget) radio] || \
-             [string equal $opts(widget) checkbox] } {
+    if { $opts(widget) eq "radio" || \
+             [string equal $opts(widget) "checkbox"] } {
 
         # If there's no legend text, no point to generate the fieldset
         if { ![info exists opts(legendtext)] } {
@@ -218,7 +218,7 @@ ad_proc -public template::element::create { form_id element_id args } {
                 append fs_options " class=\"form-fieldset\""
             }
             foreach name [array names fs_attributes] {
-                if { [string equal $fs_attributes($name) {}] } {
+                if {$fs_attributes($name) eq {}} {
                     append fs_options " $name"
                 } else {
                     append fs_options " $name=\"$fs_attributes($name)\""
@@ -233,7 +233,7 @@ ad_proc -public template::element::create { form_id element_id args } {
             array set lg_attributes $opts(legend)
             set lg_options ""
             foreach name [array names lg_attributes] {
-                if { [string equal $lg_attributes($name) {}] } {
+                if {$lg_attributes($name) eq {}} {
                     append lg_options " $name"
                 } else {
                     append lg_options " $name=\"$lg_attributes($name)\""
