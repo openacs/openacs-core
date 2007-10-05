@@ -20,6 +20,7 @@
 
         <provides url="acs-developer-support" version="5.2.0d1"/>
         <requires url="acs-kernel" version="5.3.1a1"/>
+        <requires url="acs-templating" version="5.4.0d1"/>
 
         <callbacks>
         </callbacks>
