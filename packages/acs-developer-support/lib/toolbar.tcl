@@ -74,6 +74,29 @@ if { $show_p } {
     }
 }
 
+
+# Retrieve all CSS files loaded on this page
+# Generate the <link /> tag multirow
+variable ::template::head::links
+
+set css_list [list]
+if {[array exists links]} {
+    foreach name [array names links] {
+        foreach {rel href type media title lang} $links($name) {
+            if {$type eq "text/css"} {
+                lappend css_list $href
+            }
+	}
+    }
+}
+
+if {$css_list ne ""} {
+    multirow append ds_buttons CSS \
+        "Show CSS" \
+        [export_vars -base "/ds/css-list" { css_list { return_url [ad_return_url] } }] \
+	off
+}
+
 set rm_package_id [apm_package_id_from_key xotcl-request-monitor]
 if {$rm_package_id > 0} {
     set rm_url [apm_package_url_from_id $rm_package_id]
