@@ -124,7 +124,7 @@ variable ::template::head::scripts
 template::multirow create headscript type src charset defer content
 if {[array exists scripts]} {
     foreach name [array names scripts] {
-        foreach {type src charset script defer content} $scripts($name) {
+        foreach {type src charset defer content order} $scripts($name) {
             template::multirow append headscript \
                 $type \
                 $src \
@@ -134,6 +134,7 @@ if {[array exists scripts]} {
         }
     }
 }
+unset scripts
 
 # Generate the body <script /> tag multirow
 variable ::template::body_scripts
