@@ -55,6 +55,56 @@ template::head::add_css \
 template::head::add_javascript -src "/resources/acs-subsite/core.js"
 
 #
+# Temporary (?) fix to get xinha working
+#
+if {[info exists ::acs_blank_master(xinha)]} {
+  set ::xinha_dir /resources/acs-templating/xinha-nightly/
+  set ::xinha_lang [lang::conn::language]
+  #
+  # Xinha localization covers 33 languages, removing
+  # the following restriction should be fine.
+  #
+  #if {$::xinha_lang ne "en" && $::xinha_lang ne "de"} {
+  #  set ::xinha_lang en
+  #}
+
+  # We could add site wide Xinha configurations (.js code) into xinha_params
+  set xinha_params ""
+
+  # Per call configuration
+  set xinha_plugins $::acs_blank_master(xinha.plugins)
+  set xinha_options $::acs_blank_master(xinha.options)
+  
+  # HTML ids of the textareas used for Xinha
+  set htmlarea_ids '[join $::acs_blank_master__htmlareas "','"]'
+  
+  template::head::add_script -type text/javascript -script "
+         xinha_editors = null;
+         xinha_init = null;
+         xinha_config = null;
+         xinha_plugins = null;
+         xinha_init = xinha_init ? xinha_init : function() {
+            xinha_plugins = xinha_plugins ? xinha_plugins : 
+              \[$xinha_plugins\];
+
+            // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  
+            if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
+
+            xinha_editors = xinha_editors ? xinha_editors :\[ $htmlarea_ids \];
+            xinha_config = xinha_config ? xinha_config() : new HTMLArea.Config();
+            $xinha_params
+            $xinha_options
+            xinha_editors = 
+                 HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+            HTMLArea.startEditors(xinha_editors);
+         }
+         window.onload = xinha_init;
+      "
+
+  template::head::add_javascript -src ${::xinha_dir}XinhaCore.js
+}
+
+#
 # Fire subsite callbacks to get header content
 # FIXME: it's not clear why these callbacks are scoped to subsite or if 
 # FIXME  callbacks are the right way to add content of this type.  Either way
