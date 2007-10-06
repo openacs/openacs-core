@@ -100,6 +100,7 @@ if {[array exists metas]} {
                 $lang
         }
     }
+  unset metas
 }
 
 # Generate the <link /> tag multirow
@@ -117,6 +118,7 @@ if {[array exists links]} {
                 $media
         }
     }
+  unset links
 }
 
 # Generate the head <script /> tag multirow
@@ -133,8 +135,9 @@ if {[array exists scripts]} {
                 $content
         }
     }
+  unset scripts
 }
-unset scripts
+
 
 # Generate the body <script /> tag multirow
 variable ::template::body_scripts
@@ -148,6 +151,7 @@ if {[info exists body_scripts]} {
             $defer \
             $content
     }
+  unset body_scripts
 }
 
 # Concatenate the javascript event handlers for the body tag
@@ -188,6 +192,7 @@ if {[info exists headers]} {
 	    }
         }
     }
+  unset headers
 }
 
 # Generate the body footers
@@ -207,4 +212,5 @@ if {[info exists footers]} {
 	    }
         }
     }
+  unset footers
 }

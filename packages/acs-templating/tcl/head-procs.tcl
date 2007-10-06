@@ -342,16 +342,19 @@ ad_proc -public template::add_header {
         if {$html eq ""} {
             error "You must supply either -src or -html."
         }
-
         set values [list literal $html ""]
     } else {
         set values [list include $src $params]
     }
 
-    if {$direction eq "outer"} {
-        set headers [concat [list $values] $headers]
+    if {[info exists headers]} {
+      switch $direction {
+	outer {set headers [concat [list $values] $headers]}
+	inner {lappend headers $values}
+	default {error "unknown direction $direction"}
+      }
     } else {
-        lappend headers $values
+      set headers [list $values]
     }
 }
 
@@ -384,15 +387,18 @@ ad_proc -public template::add_footer {
         if {$html eq ""} {
             error "You must supply either -src or -html."
         }
-
         set values [list literal $html ""]
     } else {
         set values [list include $src $params]
     }
 
-    if {$direction eq "outer"} {
-        lappend footers $values
+    if {[info exists footers]} {
+      switch $direction {
+	outer {lappend footers $values}
+	inner {set footers [concat [list $values] $footers]}
+	default {error "unknown direction $direction"}
+      }
     } else {
-        set footers [concat [list $values] $headers]
+      set footers [list $values]
     }
 }
