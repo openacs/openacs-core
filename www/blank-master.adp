@@ -7,6 +7,18 @@
 </multiple>
 <multiple name="link">    <link rel="@link.rel;noquote@" href="@link.href;noquote@"<if @link.lang@ not nil and @link.lang@ ne @doc.lang@> lang="@link.lang;noquote@"</if><if @link.title@ not nil> title="@link.title;noquote@"</if><if @link.type@ not nil> type="@link.type;noquote@"</if><if @link.media@ not nil> media="@link.media@"</if>>
 </multiple>
+
+<comment>
+   These two variables have to be set before the XinhaCore.js is loaded. To 
+   enforce the order, it is put here.
+</comment>
+<if @::acs_blank_master__htmlareas@ not nil and @::acs_blank_master.xinha@>
+<script type="text/javascript">
+_editor_url = "@::xinha_dir@"; 
+_editor_lang = "@::xinha_lang@";
+</script>
+</if>
+
 <multiple name="headscript">   <script type="@headscript.type;noquote@"<if @headscript.src@ not nil> src="@headscript.src;noquote@"</if><if @headscript.charset@ not nil> charset="@headscript.charset;noquote@"</if><if @headscript.defer@ not nil> defer="@headscript.defer;noquote@"</if>><if @headscript.content@ not nil>@headscript.content;noquote@</if></script>
 
 </multiple>
