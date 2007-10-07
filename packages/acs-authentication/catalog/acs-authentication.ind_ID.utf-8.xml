@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-authentication" package_version="5.3.1" locale="ind_ID" charset="utf-8">
-
-  <msg key="Invalid_username_or_password">Invalid username or password</msg>
-</message_catalog>
