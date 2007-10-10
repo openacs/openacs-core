@@ -746,8 +746,12 @@ ad_proc -public template::list::write_csv {
 
     # Output header row
     set __cols [list]
+    set __csv_cols [list]
     foreach __element_name $list_properties(display_elements) {
-        lappend __cols [csv_quote $__element_name]
+         template::list::element::get_reference -list_name $name -element_name $__element_name
+        if {!$element_properties(hide_p)} {
+            lappend __csv_cols [csv_quote $__element_name]
+        }
     }
     append __output "\"[join $__cols "\",\""]\"\n"
 
@@ -757,7 +761,7 @@ ad_proc -public template::list::write_csv {
 
         set __cols [list]
 
-        foreach __element_name $list_properties(display_elements) {
+        foreach __element_name $__csv_cols {
             template::list::element::get_reference \
                 -list_name $__list_name \
                 -element_name $__element_name \
