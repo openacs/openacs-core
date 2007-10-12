@@ -1723,15 +1723,16 @@ ad_proc -public ReturnHeaders {{content_type text/html}} {
    It returns status 200 and all headers including
    any added to outputheaders.
 } {
+
+   if {[string match "text/*" $content_type] && ![string match *charset=* $content_type]} {
+     append content_type "; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
+   }
+
    set all_the_headers "HTTP/1.0 200 OK
 MIME-Version: 1.0
 Content-Type: $content_type\r\n"
     util_WriteWithExtraOutputHeaders $all_the_headers
-    if {[string match "text/*" $content_type]} {
-      if {![string match *charset=* $content_type]} {
-	append content_type \
-	    "; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
-      }
+   if {[string match "text/*" $content_type]} {
       ns_startcontent -type $content_type
     } else {
       ns_startcontent
