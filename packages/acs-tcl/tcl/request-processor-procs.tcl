@@ -488,6 +488,7 @@ ad_proc -private rp_resources_filter { why } {
         set path "[acs_root_dir]/www/resources/[join [lrange [ns_conn urlv] 1 end] /]"
     }
     if { [file isfile $path] } {
+        ns_setexpires 300
         ns_returnfile 200 [ns_guesstype $path] $path
         return filter_return
     } else {
