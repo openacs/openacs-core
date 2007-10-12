@@ -611,7 +611,6 @@ ad_proc -public ad_form {
                 lappend af_element_names($form_name) "[concat "-section" [uplevel [list subst [lrange $element 1 end]]]]"
             } else {
                 set element_name_part [uplevel [list subst $element_name_part]]
-ns_log notice "element_name_part=$element_name_part"
                 if { ![regexp {^([^ \t:]+)(?::([a-zA-Z0-9_,(|)]*))?$} $element_name_part match element_name flags] } {
                     return -code error "Form element '$element_name_part' doesn't have the right format. It must be var\[:flag\[,flag ...\]\]"
                 }
