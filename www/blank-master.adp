@@ -12,7 +12,7 @@
    These two variables have to be set before the XinhaCore.js is loaded. To 
    enforce the order, it is put here.
 </comment>
-<if @::acs_blank_master__htmlareas@ not nil and @::acs_blank_master.xinha@>
+<if @::acs_blank_master__htmlareas@ defined and @::xinha_dir@ defined and @::xinha_lang@ defined>
 <script type="text/javascript">
 _editor_url = "@::xinha_dir@"; 
 _editor_lang = "@::xinha_lang@";
