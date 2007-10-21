@@ -143,19 +143,20 @@ ad_proc -public tsearch2::search {
 	set offset_clause " offset $offset "
     }
 
+    set need_acs_objects 0
     set base_query {
-        from txt, acs_objects o
         where fti @@ to_tsquery('default',:query)
-        and o.object_id = txt.object_id
         and exists (select 1
                     from acs_object_party_privilege_map m
                     where m.object_id = txt.object_id
                       and m.party_id = :user_id
                       and m.privilege = 'read')}
     if {![empty_string_p $df]} {
+        set need_acs_objects 1
         append base_query " and o.creation_date > :df"
     }
     if {![empty_string_p $dt]} {
+        set need_acs_objects 1
         append base_query " and o.creation_date < :dt"
     }
 
@@ -167,11 +168,17 @@ ad_proc -public tsearch2::search {
         }
     }
     if {![empty_string_p $ids]} {
+        set need_acs_objects 1
         append base_query " and o.package_id in ([join $ids ,])"
+    }
+    if {$need_acs_objects} {
+        set base_query "from txt, acs_objects o $base_query and o.object_id = txt.object_id"
+    } else {
+        set base_query "from txt $base_query"
     }
 
     set results_ids [db_list search \
-                         "select o.object_id $base_query
+                         "select txt.object_id $base_query
    order by rank(fti,to_tsquery('default',:query)) desc
    $limit_clause $offset_clause"]
 
