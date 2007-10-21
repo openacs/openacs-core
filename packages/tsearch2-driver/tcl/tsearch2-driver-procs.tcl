@@ -151,11 +151,11 @@ ad_proc -public tsearch2::search {
                     where m.object_id = txt.object_id
                       and m.party_id = :user_id
                       and m.privilege = 'read')}
-    if {![empty_string_p $df]} {
+    if {$df ne ""} {
         set need_acs_objects 1
         append base_query " and o.creation_date > :df"
     }
-    if {![empty_string_p $dt]} {
+    if {$dt ne ""} {
         set need_acs_objects 1
         append base_query " and o.creation_date < :dt"
     }
@@ -167,7 +167,7 @@ ad_proc -public tsearch2::search {
             lappend ids $id
         }
     }
-    if {![empty_string_p $ids]} {
+    if {$ids ne ""} {
         set need_acs_objects 1
         append base_query " and o.package_id in ([join $ids ,])"
     }
@@ -299,7 +299,7 @@ ad_proc -public tsearch2::seperate_query_and_operators {
     # match quotes
     set quote_count [regexp -all {\"} $query]
     # if quotes don't match, just remove all of them
-    if {[expr $quote_count % 2] == 1} {
+    if {[expr {$quote_count % 2}] == 1} {
 	regsub -all {\"} $query {} query
     }
 
@@ -355,7 +355,7 @@ DB -----------------------------------------------------------------------------
         }
 	# regular search term
 	ns_log debug "operator(e)='${e}' start_q=$start_q end_q=$end_q"
-	if {![string equal "" $last_operator]} {
+	if {$last_operator ne ""} {
 	    # FIXME need introspection for operator phrase support
 	    if {($last_operator eq "title:" || $last_operator eq "description:") && ($start_q || $end_q)} {
 		lappend ${last_operator}_phrase [regsub -all {\"} $e {}]
@@ -377,7 +377,7 @@ DB -----------------------------------------------------------------------------
 	}
     }
     lappend result $main_query
-    if {![string equal "" $operators]} {
+    if {$operators ne ""} {
         lappend result $operators
     }
     return $result
