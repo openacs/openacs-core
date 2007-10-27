@@ -240,14 +240,15 @@ begin
  acs_privilege.create_privilege('admin');
  acs_privilege.create_privilege('annotate');
 
- ---------------------------------------------------------
- -- Administrators can read, write, create, and delete. -- 
- ---------------------------------------------------------
+ -------------------------------------------------------------------
+ -- Administrators can read, write, create, delete, and annotate. -- 
+ -------------------------------------------------------------------
 
  acs_privilege.add_child('admin', 'read');
  acs_privilege.add_child('admin', 'write');
  acs_privilege.add_child('admin', 'create');
  acs_privilege.add_child('admin', 'delete');
+ acs_privilege.add_child('admin', 'annotate');
 
  commit;
 end;
