@@ -1,0 +1,54 @@
+#search-info 
+{
+  margin-bottom:0px;
+  border-top:1px solid #cfcfcf;
+  background:#dddddd;
+  padding:3px 0;
+  width:100%;
+}
+
+#search-info p
+{ 
+  font-size:100%;
+  color: #000000;
+}
+
+#search-info p.subtitle 
+{
+  margin-left:3px;
+  position:absolute;
+  left:10px;
+  padding-left:5px;
+  margin-top:-1px;
+}
+
+#search-info p.times 
+{
+  text-align:right;
+  margin:0;
+  padding-right:5px;
+  margin-left:13em;
+  white-space:nowrap;
+}
+
+#search-results li
+{ 
+  margin-bottom:15px;
+}
+
+#search-results a.result-title
+{ 
+  font-size:110%;
+}
+
+#search-results .result-url
+{ 
+  color: #008000;
+}
+
+#results-pages 
+{
+  text-align:center;
+  margin-bottom:5px;
+}
+
