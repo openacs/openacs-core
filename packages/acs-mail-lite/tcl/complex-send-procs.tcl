@@ -700,6 +700,9 @@ namespace eval acs_mail_lite {
         @param multi_token Multi Token generated which is passed directly to smtp::sendmessage
         @param headers List of list of header key-value pairs like {{from malte@cognovis.de} {to malte@cognovis.de}}
     } {
+
+	set mail_package_id [apm_package_id_from_key "acs-mail-lite"]
+
         # Get the SMTP Parameters
     	set smtp [parameter::get -parameter "SMTPHost" \
     	     -package_id $mail_package_id -default [ns_config ns/parameters mailhost]]
@@ -714,13 +717,13 @@ namespace eval acs_mail_lite {
     	}
 
     	set smtpport [parameter::get -parameter "SMTPPort" \
-    	     -package_id [apm_package_id_from_key "acs-mail-lite"] -default 25]
+    	     -package_id $mail_package_id -default 25]
 
     	set smtpuser [parameter::get -parameter "SMTPUser" \
-    	     -package_id [apm_package_id_from_key "acs-mail-lite"]]
+    	     -package_id $mail_package_id]
 
     	set smtppassword [parameter::get -parameter "SMTPPassword" \
-    	     -package_id [apm_package_id_from_key "acs-mail-lite"]]
+    	     -package_id $mail_package_id]
     	
     	set cmd_string "smtp::sendmessage $multi_token"     
     	foreach header $headers {
