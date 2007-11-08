@@ -68,7 +68,7 @@ if {![info exists doc(title)]} {
     ns_log warning "[ad_conn url] has no doc(title) set."
 }
 if {[template::util::is_nil doc(charset)]} {
-    set doc(charset) [ad_conn charset]
+    set doc(charset) [ns_config ns/parameters OutputCharset [ad_conn charset]]
 }
 
 # The document language is always set from [ad_conn lang] which by default 
