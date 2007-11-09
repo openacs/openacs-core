@@ -11,7 +11,7 @@ ad_library {
 ad_proc build_mime_message {
     text_body
     html_body
-    {charset "iso-8859-1"}
+    {charset "UTF-8"}
 } {
     Composes multipart/alternative email containing plain text
     and html versions of the message, parses out the headers we need,
@@ -20,10 +20,6 @@ ad_proc build_mime_message {
     This proc is based on ad_html_sendmail, written by Doug Harris at
     the World Bank.
 
-    Comment from the original code:  The message
-    is encoded with iso-8859-x charset (all mail readers I've tested seem
-    to be unable to handle utf-8 encoding). A future version of this proc
-    should probably support an alternative charset argument or switch.
 } {
     # switched to using tcllib, its required for openacs >= 5.3
     package require mime
