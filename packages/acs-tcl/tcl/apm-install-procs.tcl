@@ -767,8 +767,6 @@ ad_proc -private apm_package_install {
 	} else {
             # We are installing a new package
 
-            apm_load_catalog_files $package_key
-
 	    set version_id [apm_package_install_version \
                                 -callback $callback \
                                 -array version \
@@ -780,6 +778,9 @@ ad_proc -private apm_package_install {
                 ns_log Error "apm_package_install: Package $package_key could not be installed. Received version_id $version_id"
 		apm_callback_and_log $callback "The package version could not be created."
 	    }
+
+	    apm_load_catalog_files $package_key
+	    
 	    # Install the parameters for the version.
 	    apm_package_install_parameters -callback $callback $version(parameters) $package_key
 	}
