@@ -217,13 +217,6 @@ ad_proc -private lang::catalog::get_catalog_files { package_key } {
     return $catalog_paths
 }
 
-ad_proc -private lang::catalog::system_package_version_name { package_key } {
-    Returns the version name of the highest version of the given
-    package_key in the system.
-} {
-    return [db_string get_version_name {}]
-}
-
 ad_proc -private lang::catalog::messages_in_db {
     {-package_key:required}
     {-locale:required}
@@ -356,9 +349,8 @@ ad_proc -private lang::catalog::export_to_file {
     fconfigure $catalog_file_id -encoding $file_encoding
 
     # Open the root node of the document
-    set package_version [system_package_version_name $filename_info(package_key)]
     puts $catalog_file_id "<?xml version=\"1.0\" encoding=\"$filename_info(charset)\"?>
-<message_catalog package_key=\"$filename_info(package_key)\" package_version=\"$package_version\" locale=\"$filename_info(locale)\" charset=\"$filename_info(charset)\">
+<message_catalog package_key=\"$filename_info(package_key)\" locale=\"$filename_info(locale)\" charset=\"$filename_info(charset)\">
 "
 
    # Loop over and write the messages to the file
@@ -472,7 +464,6 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
 
     <pre>
       package_key
-      package_version
       locale
       charset
       messages    - An array-list with message keys as keys and the message texts as values.
@@ -491,7 +482,6 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
     # The names of xml tags and attributes
     set MESSAGE_CATALOG_TAG "message_catalog"
     set PACKAGE_KEY_ATTR "package_key"
-    set PACKAGE_VERSION_ATTR "package_version"
     set LOCALE_ATTR "locale"
     set CHARSET_ATTR "charset"
     set MESSAGE_TAG "msg"
@@ -512,7 +502,6 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
 
     # Set the message catalog root level attributes
     set msg_catalog_array(package_key) [get_required_xml_attribute $root_node ${PACKAGE_KEY_ATTR}]
-    set msg_catalog_array(package_version) [get_required_xml_attribute $root_node ${PACKAGE_VERSION_ATTR}]
     set msg_catalog_array(locale) [get_required_xml_attribute $root_node ${LOCALE_ATTR}]
     set msg_catalog_array(charset) [get_required_xml_attribute $root_node ${CHARSET_ATTR}]
 
