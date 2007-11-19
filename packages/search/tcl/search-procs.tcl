@@ -262,33 +262,6 @@ ad_proc -private search::content_filter {
     }
 }
 
-ad_proc -private search::choice_bar { 
-    items links values {default ""} 
-} {
-    @author Neophytos Demetriou
-} {
-
-    set count 0
-    set return_list [list]
-
-    foreach value $values {
-        if {$default eq $value } {
-            lappend return_list "<font color=\"\#a90a08\"><strong>[lindex $items $count]</strong></font>"
-        } else {
-            lappend return_list "<a href=\"[lindex $links $count]\"><font color=\"\#000000\">[lindex $items $count]</font></a>"
-        }
-
-        incr count
-    }
-
-    if {[llength $return_list] > 0} {
-        return "[join $return_list " "]"
-    } else {
-        return ""
-    }
-
-}
-
 ad_proc -callback search::datasource {
     -object_id:required
 } {
