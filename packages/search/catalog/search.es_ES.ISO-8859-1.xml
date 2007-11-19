@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="search" package_version="5.3.1" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="search" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="________Search_took">. Búsqueda tardo</msg>
   <msg key="Advanced_Search">Búsqueda Avanzada</msg>

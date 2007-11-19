@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-admin" package_version="5.3.1" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-admin" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="Account_reg_URL_help_text">URL donde los usuarios pueden registrarse</msg>
   <msg key="Account_Registration">Registro</msg>
