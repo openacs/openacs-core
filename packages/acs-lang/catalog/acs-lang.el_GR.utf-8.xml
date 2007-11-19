@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-lang" package_version="5.3.1" locale="el_GR" charset="utf-8">
+<message_catalog package_key="acs-lang" package_version="5.3.2" locale="el_GR" charset="utf-8">
 
   <msg key="available-in-this-language">Διαθέσιμο στα Αγγλικά</msg>
   <msg key="change-locale">Αλλαγή γλώσσας</msg>
   <msg key="English">Αγγλικά</msg>
   <msg key="French">Γαλλικά</msg>
   <msg key="German">Γερμανικά</msg>
+  <msg key="Locale">Ρυθμίσεις γλώσσας</msg>
+  <msg key="Locale_for">Ρυθμίσεις γλώσσας για %package_name%</msg>
   <msg key="localization-abday">{Κ} {Δ} {Τ} {Τ} {Π} {Π} {Σ}</msg>
   <msg key="localization-abmon">{Ιαν} {Φεβ} {Μαρ} {Απρ} {Μαι} {Ιουν} {Ιουλ} {Αυγ} {Σεπ} {Οκτ} {Νοε} {Δεκ}</msg>
   <msg key="localization-am_str">πμ</msg>
@@ -38,7 +40,12 @@
   <msg key="localization-positive_sign">+</msg>
   <msg key="localization-t_fmt">%r</msg>
   <msg key="localization-thousands_sep">.</msg>
+  <msg key="Resolve_message_conflicts">Επίλυση προβλημάτων μηνύματος</msg>
   <msg key="Spanish">Ισπανικά</msg>
-  <msg key="this-language">Αγγλικά</msg>
+  <msg key="this-language">Ελληνικά</msg>
   <msg key="Translated_messages_on_this_page">Μεταφρασμένα μηνύματα σε αυτή την σελίδα (%locale%)</msg>
+  <msg key="Your_locale_for_package">Οι ρυθμίσεις γλώσσας για %package_name%. Εαν τις ενεργοποιήσετε θα επικαλύψετε τις ρυθμίσεις που έχουν οριστεί για τη συγκεκριμένη εφαρμογή. </msg>
+  <msg key="Your_locale_site_wide">Οι ρυθμίσεις γλώσσας που επιλέξατε για όλο τον ιστοχώρο</msg>
+  <msg key="Your_Preferred_Locale">Ρυθμίσεις Γλώσσας</msg>
+  <msg key="Your_timezone">Ζώνη ώρας</msg>
 </message_catalog>
