@@ -4,7 +4,7 @@
 <package key="acs-mail-lite" url="http://openacs.org/repository/apm/packages/acs-mail-lite" type="apm_service">
     <package-name>Mail Services Lite</package-name>
     <pretty-plural>Mail Services Lite</pretty-plural>
-    <initial-install-p>f</initial-install-p>
+    <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
     <version name="5.4.0d2" url="http://openacs.org/repository/download/apm/acs-mail-lite-5.4.0d2.apm">
