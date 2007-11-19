@@ -4,7 +4,7 @@
 <package key="notifications" url="http://openacs.org" type="apm_application">
     <package-name>Notifications</package-name>
     <pretty-plural>Notifications</pretty-plural>
-    <initial-install-p>t</initial-install-p>
+    <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
     <auto-mount>notifications</auto-mount>
 
