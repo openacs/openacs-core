@@ -2,6 +2,7 @@
 <property name="header_stuff">
   <link href="/resources/search/search.css" rel="stylesheet" type="text/css">
 </property>
+<property name="context">Results</property>
 <if @link:rowcount@ not nil><property name="&link">link</property></if>
 
 <if @empty_p@ true>
