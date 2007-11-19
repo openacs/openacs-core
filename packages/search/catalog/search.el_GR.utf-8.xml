@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="search" package_version="5.3.2" locale="el_GR" charset="utf-8">
+
+  <msg key="________Search_took">. Η αναζήτηση διήρκησε</msg>
+  <msg key="Advanced_Search">Προχωρημένη αναζήτηση</msg>
+  <msg key="advanced_search">&quot;προχωρημένη αναζήτηση&quot;</msg>
+  <msg key="anytime">οποτεδήποτε</msg>
+  <msg key="Date_Range">Χρονική περίοδος</msg>
+  <msg key="details">Λεπτομέρειες</msg>
+  <msg key="Feeling_Lucky">Νιώθω τυχερός</msg>
+  <msg key="lt_bstopwordsb_is_a_very">Η &quot;&lt;b&gt;%stopwords%&lt;/b&gt;&quot;  είναι μια πολύ κοινή λέξη και δεν συμπεριελήφθη στην αναζήτηση.</msg>
+  <msg key="lt_FtsEngineDriver_not_a">Ο FtsEngineDriver δεν είναι διαθέσιμος! </msg>
+  <msg key="lt_Make_sure_all_words_a">Σιγουρευθείτε ότι όλες οι λέξεις έχουν γραφεί κανονικά.</msg>
+  <msg key="lt_No_pages_were_found_c">Δεν βρέθηκαν σελίδες που να περιέχουν &quot; </msg>
+  <msg key="lt_The_following_words_a">Οι ακόλουθες λέξεις είναι πολύ κοινές και δεν έχουν συμπεριληφθεί στην αναζήτηση σας:</msg>
+  <msg key="lt_Tip_In_most_browsers_">Συμβουλή: Στις περισσότερες εφαρμογές πλοήγησης μπορείτε να πατήσετε το enter αντί να κάνετε κλικ στο κουμπί αναζήτησης. </msg>
+  <msg key="lt_Try_different_keyword">Προσπαθήστε με διάφορες λέξεις κλειδιά.</msg>
+  <msg key="lt_Try_more_general_keyw">Προσπαθήστε με πιο γενικές λέξεις κλειδιά.</msg>
+  <msg key="lt_Try_your_query_on_stw">Προσπαθήστε την αναζήτηση σας στο: %stw;noquote%
+</msg>
+  <msg key="lt_You_must_specify_some">Πρέπει να ορίσετε κάποιες λέξεις κλειδιά</msg>
+  <msg key="nbspDisplay">&amp;nbsp;Display</msg>
+  <msg key="Next">Επόμενο</msg>
+  <msg key="of_about">από </msg>
+  <msg key="past_3_months">τους τελευταίους 3 μήνες</msg>
+  <msg key="past_6_months">τους τελευταίους  6 μήνες</msg>
+  <msg key="past_year">τον τελευταίο χρόνο </msg>
+  <msg key="Previous">Προηγούμενο</msg>
+  <msg key="Result_page">Σελίδα αποτελεσμάτων:</msg>
+  <msg key="Results">Αποτελέσματα</msg>
+  <msg key="results">αποτελέσματα</msg>
+  <msg key="Search">Αναζήτηση</msg>
+  <msg key="Searched_for_query">Αναζήτηση αποτελεσμάτων για &lt;strong&gt;%query%&lt;/strong&gt;</msg>
+  <msg key="seconds">δευτερόλεπτα.</msg>
+  <msg key="selected">επιλεγμένο</msg>
+  <msg key="Suggestions">Προτάσεις:</msg>
+  <msg key="The">Το &quot;&lt;b&gt;AND&lt;/b&gt;&quot; δεν χρειάζεται - όλοι οι όροι έχουν ληφθεί υπόψη κατά την αναζήτηση.</msg>
+  <msg key="Try_fewer_keywords">Προσπαθήστε με λιγότερες λέξεις κλειδιά.</msg>
+  <msg key="Untitled">Χωρίς τίτλο</msg>
+</message_catalog>
