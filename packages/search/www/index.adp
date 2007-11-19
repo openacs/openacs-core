@@ -1,6 +1,5 @@
 <master>
 <property name="title">#search.Search#</property>
-<property name="context">#search.Search#</property>
 
 <center>
 <form method=GET action=search>
