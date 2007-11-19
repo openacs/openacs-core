@@ -2,7 +2,7 @@
 <property name="title">@page_title;noquote@</property>
 <property name="context">@context;noquote@</property>	
 <property name="javascript">@javascript;noquote@</property>
-<script language=javascript>
+<script language="javascript" type="text/javascript">
 
 <!--
 
@@ -16,12 +16,9 @@ function check_checkbox () {
 
 </script>
 
-<small>
-	
-
 <listtemplate name="nodes"></listtemplate>
 
 <if @site_wide_admin_p@>
-	<a href="/admin/site-map/site-map">Edit Site Map</a>
+	<p><a href="/admin/site-map/site-map" class="button">Edit Site Map</a></p>
 </if>
 
