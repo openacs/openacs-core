@@ -35,7 +35,7 @@ list::create \
         edit {
             sub_class narrow
             display_template {
-                <img src="/shared/images/Edit16.gif" height="16" width="16" border="0">
+                <img src="/shared/images/Edit16.gif" height="16" width="16" alt="Edit application name and path" style="border:0">
             }
             link_url_eval {[export_vars -base application-add { node_id }]}
             link_html { title "Edit application name and path" }
@@ -65,7 +65,7 @@ list::create \
         delete {
             sub_class narrow
             display_template {
-                <img src="/shared/images/Delete16.gif" height="16" width="16" border="0">
+                <img src="/shared/images/Delete16.gif" height="16" width="16" alt="Delete this application" style="border:0">
             }
             link_url_eval {[export_vars -base application-delete { node_id }]}
             link_html { title "Delete this application" }

@@ -33,7 +33,7 @@
 </div>
 
 
-<script language="javascript">
+<script type="text/javascript">
 var progressEnd = 5;// set to number of progress <span>'s.
 var progressColor = 'blue';// set to progress bar color
 var progressInterval = 1000;// set to time between updates (milli-seconds)

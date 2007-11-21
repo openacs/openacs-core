@@ -1,4 +1,4 @@
-<SCRIPT LANGUAGE = "JavaScript">
+<SCRIPT type = "text/javascript">
 <!--
 function check_uncheck_boxes(checkP){
     for ( i=0 ; i < document.email.to.length; i++) {

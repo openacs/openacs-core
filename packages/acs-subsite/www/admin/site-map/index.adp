@@ -3,7 +3,6 @@
 <property name="context">@context;noquote@</property>
 <property name="javascript">@javascript;noquote@</property>
 
-<small>
 <b>@head;noquote@</b>
 
 <listtemplate name="nodes"></listtemplate>
@@ -45,4 +44,4 @@ the empty folder will remove it from the site node.
 <em>delete</em> it from the <em>Unmounted Applications</em> link below
 the site map.
 </ul>
-</small>
+

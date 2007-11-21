@@ -866,6 +866,6 @@ ad_proc -public ad_progress_bar_end {
     @see ad_progress_bar_begin
 } { 
     util_user_message -message $message_after_redirect
-    ns_write "<script language=\"javascript\">window.location='$url';</script>"
+    ns_write "<script type=\"text/javascript\">window.location='$url';</script>"
     ns_conn close
 }

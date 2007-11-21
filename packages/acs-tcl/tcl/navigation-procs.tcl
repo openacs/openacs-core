@@ -396,7 +396,7 @@ proc ad_menu_header {{section ""} {uplink ""}} {
 
     if { $java_script_p } {
     	append return_string " 
-	<script language=\"JavaScript\">
+	<script type=\"text/javascript\">
 	//<!--
 	
 	go = new Image();
@@ -465,7 +465,7 @@ proc ad_menu_header {{section ""} {uplink ""}} {
 	
 	append return_string "
 
-	<script language=\"JavaScript\">
+	<script type=\"text/javascript\">
 	//<!--
 	
 	function hiLite(imgObjName) \{

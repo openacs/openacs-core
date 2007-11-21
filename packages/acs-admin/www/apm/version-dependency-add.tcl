@@ -22,7 +22,7 @@ doc_body_append "[apm_header -form "action=version-dependency-add-2" [list "vers
 
 [export_form_vars version_id dependency_type dependency_id]
 
-<script language=javascript>
+<script type=\"text/javascript\">
 // Invoked when the user selects a service from the select list.
 function selectService(which) {
     // Select the radio button next to the list of services.

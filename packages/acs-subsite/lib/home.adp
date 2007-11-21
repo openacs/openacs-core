@@ -1,8 +1,8 @@
 <table> <tr valign="top"> 
-<td width="35%">
+<td style="width:35%">
 <div class="portlet-wrapper">
 	<div class="portlet-title">
-	<span><h2>#acs-subsite.Edit_Options#</h2></span>
+	<h2>#acs-subsite.Edit_Options#</h2>
 	</div>
 	<div class="portlet">
   <ul>
@@ -27,7 +27,7 @@
 
 <div class="portlet-wrapper">
   <div class="portlet-title">
-  <span><h2>#acs-subsite.Privacy#</h2></span>
+  <h2>#acs-subsite.Privacy#</h2>
   </div>
   <div class="portlet">
   <ul>
@@ -56,7 +56,7 @@
 
 <div class="portlet-wrapper">
 	<div class="portlet-title">
-	<span><h2> #acs-subsite.My_Account# </h2></span>
+	<h2> #acs-subsite.My_Account# </h2>
 	</div>
         <div class="portlet">
   	<include src="@user_info_template@" />
@@ -71,7 +71,7 @@
 
 <div class="portlet-wrapper">
         <div class="portlet-title">
-	     <span><h2>#acs-subsite.Your_Portrait#</h2></span>
+	     <h2>#acs-subsite.Your_Portrait#</h2>
 	</div>
         <div class="portlet">
 	    <p>
@@ -84,7 +84,7 @@
   <if @portrait_state@ eq show>
 <div class="portlet-wrapper">  
   <div class="portlet-title">
-             <span><h2>#acs-subsite.Your_Portrait#</h2></span>
+             <h2>#acs-subsite.Your_Portrait#</h2>
   </div>
   <div class="portlet">
     <p>
@@ -100,10 +100,7 @@
   </if>
 
 <div class="portlet-wrapper">
-        <div class="portlet-title">
-  	<span><h2><list name="fragments"><h2></span>
-	</div>
-	<div class="portlet">
+  	<list name="fragments">
     	@fragments:item;noquote@
   	</list>
 </div>

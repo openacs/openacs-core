@@ -298,10 +298,10 @@ db_foreach nodes_select {} {
 
 }
 
-set new_app_form_part_1 "<p align=\"top\"><form name=new_application action=package-new><input type=hidden name=node_id value=$node(node_id) /><input type=hidden name=root_id value=$node(node_id) /><input type=hidden name=new_node_p value=t />[export_form_vars expand:multiple]<input name=node_name type=text size=8>"
+set new_app_form_part_1 "<form name=new_application action=package-new><input type=hidden name=node_id value=$node(node_id)><input type=hidden name=root_id value=$node(node_id)><input type=hidden name=new_node_p value=t>[export_form_vars expand:multiple]<input name=node_name type=text size=8>"
 
 set new_app_form_part_2 "[apm_application_new_checkbox]"
-set new_app_form_part_3 "<input type=submit value=\"Mount Package\"></form></p>"
+set new_app_form_part_3 "<input type=submit value=\"Mount Package\"></form>"
     multirow append nodes -99999 "" "" "" $new_app_form_part_1 "" "" "" $new_app_form_part_2 "" "" "" "" "" "" "" "" "" "" $new_app_form_part_3
 
 set services ""

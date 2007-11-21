@@ -135,7 +135,7 @@ ad_proc -public template::paginator::create { statement_name name query args } {
 		  nsv_set __template_cache_timeout $cache_key $opts(timeout)
 	      }
 	      ns_write "
-          <SCRIPT LANGUAGE=\"JavaScript\">
+          <SCRIPT type=\"text/javascript\">
           <!-- Begin
           document.location.href=\"$return_url\";
           // End -->
