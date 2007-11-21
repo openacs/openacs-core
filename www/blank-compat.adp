@@ -7,7 +7,7 @@
 <if @head@ not nil><property name="head">@head;noquote@</property></if>
 
 <if @acs_blank_master.rte@ not nil and @acs_blank_master__htmlareas@ not nil>
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 <!--
     initRTE("/resources/acs-templating/rte/images/", 
             "/resources/acs-templating/rte/", 
