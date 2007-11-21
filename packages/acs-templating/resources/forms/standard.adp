@@ -6,7 +6,7 @@
 	
 	<group column="section">
 		<if @elements.widget@ eq "hidden"> 
-			<noparse><formwidget id=@elements.id@></noparse>
+			<noparse><div><formwidget id=@elements.id@></div></noparse>
 		</if>
   
 		<else>
@@ -93,7 +93,7 @@
 									\@formgroup.widget;noquote@
 								<label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">
 										\@formgroup.label;noquote@
-								</label><br/>
+								</label><br>
 							</formgroup>
 						</noparse>
 					</if>
@@ -116,7 +116,7 @@
 
 					<if @elements.help_text@ not nil>
 						<div class="form-help-text">
-							<img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" border="0">
+							<img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" style="border:0">
 							<noparse><formhelp id="@elements.id@"></noparse>
 						</div> <!-- /form-help-text -->
 					</if>

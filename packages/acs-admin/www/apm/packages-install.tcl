@@ -83,7 +83,7 @@ if { $spec_files eq "" } {
 
     ns_write "
 
-<script language=javascript>
+<script type=\"text/javascript\">
 function uncheckAll() {
     for (var i = 0; i < [expr {[llength $spec_files] }]; ++i)
         document.forms\[0\].elements\[i\].checked = false;

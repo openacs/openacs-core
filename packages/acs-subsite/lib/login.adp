@@ -6,7 +6,7 @@
 <if @forgotten_pwd_url@ not nil>
   <if @email_forgotten_password_p@ true>
   <a href="@forgotten_pwd_url@">#acs-subsite.Forgot_your_password#</a>
-  <br />
+  <br>
   </if>
 </if>
 

@@ -20,7 +20,7 @@ doc_body_append "[apm_header -form "action=package-add-2 method=post" "Add a New
 [export_form_vars package_id version_id]
 
 
-<script language=javascript>
+<script type=\"text/javascript\">
 function updateURLs() {
     // Update the package and version URL, if the package key and/or version name change.
     var form = document.forms\[0\];
@@ -31,7 +31,7 @@ function updateURLs() {
 }
 </script>
 
-<script language=javascript>
+<script type=\"text/javascript\">
 function checkMailto(element) {
     // If it looks like an email address without a mailto: (contains an @ but
     // no colon) then prepend 'mailto:'.

@@ -289,7 +289,7 @@ We'll need to create a site-wide administrator for your server (like the root
 user in UNIX). Please type in the email address, first and last name, and password
 for this user.
 
-<script language=\"javascript\">
+<script type=\"text/javascript\">
 function updateSystemEmails() {
     var form = document.forms\[0\];
     

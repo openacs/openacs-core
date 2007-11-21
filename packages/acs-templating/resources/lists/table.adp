@@ -98,10 +98,10 @@
           <if @elements.orderby_url@ not nil>
             <if @elements.ordering_p@ true>
               <a href="@elements.orderby_url@" title="@elements.orderby_html_title@">@elements.label;noquote@</a>
-              <a href="@elements.orderby_url@" title="@elements.orderby_html_title@"><if @elements.orderby_direction@ eq "desc"><img src="/resources/acs-templating/sort-descending.png" alt="#acs-templating.descending_order#" border=0></if><else><img src="/resources/acs-templating/sort-ascending.png" alt="#acs-templating.ascending_order#" border=0></else></a>
+              <a href="@elements.orderby_url@" title="@elements.orderby_html_title@"><if @elements.orderby_direction@ eq "desc"><img src="/resources/acs-templating/sort-descending.png" alt="#acs-templating.descending_order#" style="border:0"></if><else><img src="/resources/acs-templating/sort-ascending.png" alt="#acs-templating.ascending_order#" style="border:0"></else></a>
             </if>
             <else>
-              <a href="@elements.orderby_url@" title="@elements.orderby_html_title@">@elements.label;noquote@</a> <img src="/resources/acs-templating/sort-neither.png" alt="#acs-templating.not_ordered#" border=0>
+              <a href="@elements.orderby_url@" title="@elements.orderby_html_title@">@elements.label;noquote@</a> <img src="/resources/acs-templating/sort-neither.png" alt="#acs-templating.not_ordered#" style="border:0">
             </else>
           </if>
           <else>

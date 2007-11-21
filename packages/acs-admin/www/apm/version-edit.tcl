@@ -26,7 +26,7 @@ if { $version_name_index >= 0 } {
     set version_uri_suffix [string range $version_uri [expr { $version_name_index + [string length $version_name] }] end]
 
     doc_body_append "
-<script language=javascript>
+<script type=\"text/javascript\">
 function updateVersionURL() {
     var form = document.forms\[0\];
     form.version_uri.value = '$version_uri_prefix' + form.version_name.value + '$version_uri_suffix';
@@ -39,7 +39,7 @@ function updateVersionURL() {
 }
 
 doc_body_append "
-<script language=javascript>
+<script type=\"text/javascript\">
 function checkMailto(element) {
     // If it looks like an email address without a mailto: (contains an @ but
     // no colon) then prepend 'mailto:'.
