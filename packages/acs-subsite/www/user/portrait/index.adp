@@ -9,17 +9,14 @@
 <p>#acs-subsite.lt_This_is_the_image_that#:</p>
 </if>
 
-<center>
-<img @widthheight@ src="@subsite_url@shared/portrait-bits.tcl?@export_vars@"
-alt="Portrait of @first_names@ @last_name@">
-</center>
+<div style="text-align:center">
+<img @widthheight@ src="@subsite_url@shared/portrait-bits.tcl?@export_vars@" alt="Portrait of @first_names@ @last_name@">
+</div>
 
 <ul>
 <li>#acs-subsite.lt_Uploaded_pretty_date#</li>
 <li>#acs-subsite.Comment#: 
-<blockquote>
-@description@
-</blockquote>
+<p>@description@</p>
 </li>
 </ul>
 
@@ -37,15 +34,18 @@ alt="Portrait of @first_names@ @last_name@">
 </case>
 
 <case value="no_user">
-#acs-subsite.lt_We_cant_find_you#
+<p>#acs-subsite.lt_We_cant_find_you#</p>
 </case>
 
 <case value="no_portrait_info">
+<p>
 #acs-subsite.lt_The_picture_of_you_in#
 <a href="upload?return_url=@return_url@">#acs-subsite.upload#</a> #acs-subsite.another_picture#
+</p>
 </case>
 
 <case value="no_portrait">
+<p>
 <if @admin_p@ eq "0">
 #acs-subsite.lt_This_user_doesnt_have#
 <a href="upload?@export_edit_vars@">#acs-subsite.go_upload_the_users_por#</a>.
@@ -54,6 +54,7 @@ alt="Portrait of @first_names@ @last_name@">
 #acs-subsite.You_dont_have_a_portrait#
 <a href="upload?return_url=@return_url@">#acs-subsite.go_upload_your_portrait#</a>.
 </else>
+</p>
 </case>
  
 </switch>

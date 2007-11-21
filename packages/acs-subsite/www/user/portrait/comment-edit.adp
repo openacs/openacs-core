@@ -2,18 +2,18 @@
 <property name="title">#acs-subsite.lt_Edit_comment_for_the_#</property>
 <property name="context">@context;noquote@</property>
 
+<div>
 <form method="post" action="comment-edit-2.tcl">
-@export_vars;noquote@
-#acs-subsite.Story_behind_photo#:<br />
+<div>@export_vars;noquote@</div>
+<p>#acs-subsite.Story_behind_photo#:</p>
+<p>
 <textarea rows="6" cols="50" name="description">
 @description@
 </textarea>
+</p>
 
-<br><br>
-<center>
+<p style="text-align:center">
 <input type="submit" value="#acs-subsite.Save_comment#">
-</center>
+</p>
 </form>
-
-
-
+</div>
