@@ -1110,7 +1110,7 @@ ad_proc -private api_tcl_to_html {proc_name} {
 		  append html "<A style='text-decoration:none' href=\
 			'$url'>$HTML(object)${proc_name}$HTML(/object)</A>"
                 } elseif {[string match "ns*" $proc_name]} {
-		  set url "tcl-proc-view?tcl_proc=$proc_name"
+		  set url "/api-doc/tcl-proc-view?tcl_proc=$proc_name"
 		  append html "<A style='text-decoration:none' href=\
  			'$url'>$HTML(procs)${proc_name}$HTML(/procs)</A>"
                 } elseif {[string match "*__arg_parser" $proc_name]} {
