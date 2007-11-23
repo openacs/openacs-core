@@ -28,8 +28,8 @@ ad_proc -public -callback acs_mail_lite::complex_send {
 } {
 
     Callback for executing code after an email has been send using the complex send mechanism.
-   
-    	@param from_party_id Who is sending the email
+    
+    @param from_party_id Who is sending the email
 	
 	@param to_party_ids list of ids to whom did we send this email
 
@@ -126,8 +126,8 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
             ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: Invalid mail signature $signature"
         }
     } else {
-	ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: Bounce checking $to, $user_id"
-	acs_mail_lite::record_bounce -user $user_id
+        ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: Bounce checking $to, $user_id"
+        acs_mail_lite::record_bounce -user $user_id
     }
 }
 
