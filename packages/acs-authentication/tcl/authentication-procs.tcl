@@ -64,10 +64,10 @@ ad_proc -public auth::require_login {
     # set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
     # ns_log notice "URL have url, len=[string length $return_url] $user_agent"
 
-    set url_too_long [expr {[string length $return_url] > 2083}]
-    if {$url_too_long} {
-      set message "URL too long. If you were editing a from, please use the back button after logging in and resubmit the form" 
-      set return_url "."
+   if {[expr {[string length $return_url] > 2083}]} {
+     set message "Your login expired and the computed URL for automated continuation is too long. " 
+     append message "If you were editing a from, please use the back button after logging in and resubmit the form." 
+     set return_url [ad_get_login_url]
     }
 
     # The -return switch causes the URL to return to the current page
