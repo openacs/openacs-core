@@ -1,8 +1,9 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 function ImageManager(_1){
 }
 ImageManager._pluginInfo={name:"ImageManager",version:"1.0",developer:"Xiang Wei Zhuo",developer_url:"http://www.zhuo.org/htmlarea/",license:"htmlArea"};
-HTMLArea.Config.prototype.ImageManager={"backend":_editor_url+"plugins/ImageManager/backend.php?__plugin=ImageManager&","backend_data":null,"backend_config":null,"backend_config_hash":null,"backend_config_secret_key_location":"Xinha:ImageManager"};
-HTMLArea.prototype._insertImage=function(_2){
+Xinha.Config.prototype.ImageManager={"backend":_editor_url+"plugins/ImageManager/backend.php?__plugin=ImageManager&","backend_data":null,"backend_config":null,"backend_config_hash":null,"backend_config_secret_key_location":"Xinha:ImageManager"};
+Xinha.prototype._insertImage=function(_2){
 var _3=this;
 var _4=null;
 if(typeof _2=="undefined"){
@@ -12,7 +13,7 @@ _2=null;
 }
 }
 if(_2){
-_4={f_url:HTMLArea.is_ie?_2.src:_2.src,f_alt:_2.alt,f_border:_2.style.borderWidth?_2.style.borderWidth:_2.border,f_align:_2.align,f_padding:_2.style.padding,f_margin:_2.style.margin,f_width:_2.width,f_height:_2.height,f_backgroundColor:_2.style.backgroundColor,f_borderColor:_2.style.borderColor};
+_4={f_url:Xinha.is_ie?_2.src:_2.src,f_alt:_2.alt,f_border:_2.style.borderWidth?_2.style.borderWidth:_2.border,f_align:_2.align,f_padding:_2.style.padding,f_margin:_2.style.margin,f_width:_2.width,f_height:_2.height,f_backgroundColor:_2.style.backgroundColor,f_borderColor:_2.style.borderColor};
 function shortSize(_5){
 if(/ /.test(_5)){
 var _6=_5.split(" ");
@@ -69,7 +70,7 @@ return false;
 }
 var img=_2;
 if(!img){
-if(HTMLArea.is_ie){
+if(Xinha.is_ie){
 var sel=_3._getSelection();
 var _12=_3._createRange(sel);
 _3._doc.execCommand("insertimage",false,_f.f_url);

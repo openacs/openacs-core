@@ -54,6 +54,7 @@ Xinha.PanelDialog = function(editor, side, html, localizer)
 
 Xinha.PanelDialog.prototype.show = function(values)
 {
+  this.setValues(values);
   this.editor.showPanel(this.rootElem);
 };
 

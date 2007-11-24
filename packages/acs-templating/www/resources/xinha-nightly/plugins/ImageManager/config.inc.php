@@ -184,6 +184,15 @@ $IMConfig['resized_prefix'] = '.resized';
 
 $IMConfig['resized_dir'] = '.resized';
 
+/**
+ * Full options
+ *
+ * Determines whether the user is given options for padding, 
+ * background/padding colour, margin, border and border colour. 
+ */
+
+$IMConfig['show_full_options'] = true;
+ 
 // -------------------------------------------------------------------------
 
 /**

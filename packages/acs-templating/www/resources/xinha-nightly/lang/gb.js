@@ -23,7 +23,7 @@
   "Insert Table": "插入表格",
   "Toggle HTML Source": "切换HTML原始码",
   "Enlarge Editor": "放大",
-  "About this editor": "关於 HTMLArea",
+  "About this editor": "关於 Xinha",
   "Help using editor": "说明",
   "Current style": "字体例子"
 }

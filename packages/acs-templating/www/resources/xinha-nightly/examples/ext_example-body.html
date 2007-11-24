@@ -3,10 +3,10 @@
 <head>
 
   <!-- ---------------------------------------------------------------------
-    --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/examples/ext_example-body.html $
-    --  $LastChangedDate: 2007-01-22 16:06:18 +0100 (Mo, 22 Jan 2007) $
-    --  $LastChangedRevision: 686 $
-    --  $LastChangedBy: gocher $
+    --  $HeadURL: http://svn.xinha.webfactional.com/trunk/examples/ext_example-body.html $
+    --  $LastChangedDate: 2007-06-23 18:16:09 +0200 (Sa, 23 Jun 2007) $
+    --  $LastChangedRevision: 858 $
+    --  $LastChangedBy: ray $
     ------------------------------------------------------------------------ -->
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -91,30 +91,42 @@
       xinha_config.width = settings.width;
       xinha_config.height = settings.height;
       xinha_config.sizeIncludesBars = settings.sizeIncludesBars;
+      xinha_config.sizeIncludesPanels = settings.sizeIncludesPanels;
       xinha_config.statusBar = settings.statusBar;
+      xinha_config.htmlareaPaste = settings.htmlareaPaste;
       xinha_config.mozParaHandler = settings.mozParaHandler;
+      xinha_config.getHtmlMethod = settings.getHtmlMethod;
       xinha_config.undoSteps = settings.undoSteps;
+      xinha_config.undoTimeout = settings.undoTimeout;
+      xinha_config.changeJustifyWithDirection = settings.changeJustifyWithDirection;
+      xinha_config.fullPage = settings.fullPage;
+      xinha_config.pageStyle = settings.pageStyle;
       xinha_config.baseHref = settings.baseHref;
+      xinha_config.expandRelativeUrl = settings.expandRelativeUrl;
       xinha_config.stripBaseHref = settings.stripBaseHref;
       xinha_config.stripSelfNamedAnchors = settings.stripSelfNamedAnchors;
       xinha_config.only7BitPrintablesInURLs = settings.only7BitPrintablesInURLs;
       xinha_config.sevenBitClean = settings.sevenBitClean;
       xinha_config.killWordOnPaste = settings.killWordOnPaste;
+      xinha_config.makeLinkShowsTarget = settings.makeLinkShowsTarget;
+      xinha_config.flowToolbars = settings.flowToolbars;
+      xinha_config.stripScripts = settings.stripScripts;
       xinha_config.flowToolbars = settings.flowToolbars;
       xinha_config.showLoading = settings.showLoading;
+      xinha_config.pageStyleSheets = ["own.css"];
 
+// Create a default configuration for the plugins
       if (typeof CharCounter != 'undefined') {
         xinha_config.CharCounter.showChar = settings.showChar;
         xinha_config.CharCounter.showWord = settings.showWord;
         xinha_config.CharCounter.showHtml = settings.showHtml;
       }
 
-      if (typeof CharacterMap != 'undefined') xinha_config.CharacterMap.mode = settings.CharacterMapMode;
-      if (typeof ListType != 'undefined') xinha_config.ListType.mode = settings.ListTypeMode;
-
-      if(typeof CSS != 'undefined') {
-        xinha_config.pageStyle = "@import url(custom.css);";
-      }
+      if(typeof CharacterMap != 'undefined') xinha_config.CharacterMap.mode = settings.CharacterMapMode;
+      if(typeof ListType != 'undefined') xinha_config.ListType.mode = settings.ListTypeMode;
+      if(typeof CSS != 'undefined') xinha_config.pageStyle = xinha_config.pageStyle + "\n" + "@import url(custom.css);";
+      if(typeof DynamicCSS != 'undefined') xinha_config.pageStyle = "@import url(dynamic.css);";
+      if(typeof Filter != 'undefined') xinha_config.Filters = ["Word", "Paragraph"];
 
       if(typeof Stylist != 'undefined') {
         // We can load an external stylesheet like this - NOTE : YOU MUST GIVE AN ABSOLUTE URL
@@ -127,10 +139,6 @@
         // If you want to provide "friendly" names you can do so like
         // (you can do this for stylistLoadStylesheet as well)
         xinha_config.stylistLoadStyles('p.pink_text { color:pink }', {'p.pink_text' : 'Pretty Pink'});
-      }
-
-      if(typeof DynamicCSS != 'undefined') {
-        xinha_config.pageStyle = "@import url(dynamic.css);";
       }
 
       if(typeof InsertWords != 'undefined') {
@@ -152,16 +160,12 @@
         }
       }
 
-      if(typeof Filter != 'undefined') {
-        xinha_config.Filters = ["Word", "Paragraph"];
-      }
-
 // First create editors for the textareas.
 // You can do this in two ways, either
 //   xinha_editors   = Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
 // if you want all the editor objects to use the same set of plugins, OR;
 //   xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config);
-//   xinha_editors['myTextarea0'].registerPlugins(['Stylist','FullScreen']);
+//   xinha_editors['myTextarea0'].registerPlugins(['Stylist']);
 //   xinha_editors['myTextarea1'].registerPlugins(['CSS','SuperClean']);
 // if you want to use a different set of plugins for one or more of the editors.
       xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
@@ -194,7 +198,7 @@
 
 <body>
   <form id="to_submit" name="to_submit" method="post" action="ext_example-dest.php">
-  <div id="editors_here" name="editors_here"></div>
+  <div id="editors_here"></div>
   <button type="button" onclick="submitHandler('to_submit');">Submit</button>
   <textarea id="errors" name="errors" style="width:100%; height:100px; background:silver;"></textarea><!-- style="display:none;" -->
   </form>

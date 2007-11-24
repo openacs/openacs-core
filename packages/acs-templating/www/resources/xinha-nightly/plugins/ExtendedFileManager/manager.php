@@ -143,7 +143,7 @@
 </td>
 </tr>
 <tr><td style="padding:10px; padding-top:0px;">
-	<div id="messages" style="display: none;"><span id="message"></span><img src="<?php print $IMConfig['base_url'];?>img/dots.gif" width="22" height="12" alt="..." /></div>
+	<div id="messages"><span id="message">Loading</span><img src="<?php print $IMConfig['base_url'];?>img/dots.gif" width="22" height="12" alt="..." /></div>
 	<iframe src="<?php print $IMConfig['backend_url']; ?>__function=images&amp;mode=<?php echo $insertMode;?>&amp;viewtype=<?php echo $IMConfig['view_type'] ?>" name="imgManager" id="imgManager" class="imageFrame" scrolling="auto" title="Image Selection" frameborder="0"></iframe>
 </td></tr>
 </table>

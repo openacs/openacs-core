@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 function PopupWin(_1,_2,_3,_4){
 this.editor=_1;
 this.handler=_3;

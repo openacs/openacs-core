@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 ColorPicker._pluginInfo={name:"colorPicker",version:"1.0",developer:"James Sleeman",developer_url:"http://www.gogo.co.nz/",c_owner:"Gogo Internet Services",license:"htmlArea",sponsor:"Gogo Internet Services",sponsor_url:"http://www.gogo.co.nz/"};
 function ColorPicker(){
 }
@@ -191,6 +192,9 @@ var e=_20;
 var top=0;
 var _24=0;
 do{
+if(e.style.position=="fixed"){
+this.table.style.position="fixed";
+}
 top+=e.offsetTop;
 _24+=e.offsetLeft;
 e=e.offsetParent;
@@ -437,7 +441,7 @@ Xinha.colorPicker.remember(_2b.chosenColor.value,_2b.savecolors);
 _2b.callback(_2b.chosenColor.value);
 _2b.close();
 };
-but.appendChild(document.createTextNode("OK"));
+but.appendChild(document.createTextNode(Xinha._lc("OK")));
 but.align="center";
 div.appendChild(but);
 td.appendChild(div);
@@ -538,53 +542,54 @@ end=document.cookie.length;
 Xinha.colorPicker.savedColors=unescape(document.cookie.substring(_47,end)).split("-");
 }
 };
-Xinha.colorPicker._lc=function(_49){
-return Xinha._lc(_49);
-};
-Xinha.colorPicker.InputBinding=function(_4a,_4b){
-var _4c=document.createElement("span");
-_4c.className="buttonColor";
-var _4d=this.chooser=document.createElement("span");
-_4d.className="chooser";
-if(_4a.value){
-_4d.style.backgroundColor=_4a.value;
+Xinha.colorPicker.InputBinding=function(_49,_4a){
+var _4b=document.createElement("span");
+_4b.className="buttonColor";
+var _4c=this.chooser=document.createElement("span");
+_4c.className="chooser";
+if(_49.value){
+_4c.style.backgroundColor=_49.value;
 }
+_4c.onmouseover=function(){
+_4c.className="chooser buttonColor-hilite";
+};
+_4c.onmouseout=function(){
+_4c.className="chooser";
+};
+_4c.appendChild(document.createTextNode("\xa0"));
+_4b.appendChild(_4c);
+var _4d=document.createElement("span");
+_4d.className="nocolor";
 _4d.onmouseover=function(){
-_4d.className="chooser buttonColor-hilite";
+_4d.className="nocolor buttonColor-hilite";
+_4d.style.color="#f00";
 };
 _4d.onmouseout=function(){
-_4d.className="chooser";
-};
-_4d.appendChild(document.createTextNode("\xa0"));
-_4c.appendChild(_4d);
-var _4e=document.createElement("span");
-_4e.className="nocolor";
-_4e.onmouseover=function(){
-_4e.className="nocolor buttonColor-hilite";
-_4e.style.color="#f00";
-};
-_4e.onmouseout=function(){
-_4e.className="nocolor";
-_4e.style.color="#000";
-};
-_4e.onclick=function(){
-_4a.value="";
-_4d.style.backgroundColor="";
-};
-_4e.appendChild(document.createTextNode("\xd7"));
-_4c.appendChild(_4e);
-_4a.parentNode.insertBefore(_4c,_4a.nextSibling);
-Xinha._addEvent(_4a,"change",function(){
-_4d.style.backgroundColor=this.value;
-});
-_4b=(_4b)?Xinha.cloneObject(_4b):{cellsize:"5px"};
-_4b.callback=(_4b.callback)?_4b.callback:function(_4f){
-_4d.style.backgroundColor=_4f;
-_4a.value=_4f;
+_4d.className="nocolor";
+_4d.style.color="#000";
 };
 _4d.onclick=function(){
-var _50=new Xinha.colorPicker(_4b);
-_50.open("",_4d,_4a.value);
+_49.value="";
+_4c.style.backgroundColor="";
 };
+_4d.appendChild(document.createTextNode("\xd7"));
+_4b.appendChild(_4d);
+_49.parentNode.insertBefore(_4b,_49.nextSibling);
+Xinha._addEvent(_49,"change",function(){
+_4c.style.backgroundColor=this.value;
+});
+_4a=(_4a)?Xinha.cloneObject(_4a):{cellsize:"5px"};
+_4a.callback=(_4a.callback)?_4a.callback:function(_4e){
+_4c.style.backgroundColor=_4e;
+_49.value=_4e;
+};
+_4c.onclick=function(){
+var _4f=new Xinha.colorPicker(_4a);
+_4f.open("",_4c,_49.value);
+};
+Xinha.freeLater(this,"chooser");
+};
+Xinha.colorPicker.InputBinding.prototype.setColor=function(_50){
+this.chooser.style.backgroundColor=_50;
 };
 

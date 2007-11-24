@@ -279,7 +279,7 @@ class Files
 		else return FILE_COPY_OK;
 	}
 	
-		/**
+	/**
 	 * copy a directory and all subdirectories and files (recursive)
 	 * @author SBoisvert at Don'tSpamMe dot Bryxal dot ca (adapted from php.net)
 	 * @author Raimund Meyer

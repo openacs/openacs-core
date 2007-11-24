@@ -163,7 +163,7 @@
   "Generate Xinha framework": "Génération de Xinha",
   "Init editor size": "Initialisation de la taille d'édition",
   "Init IFrame": "Initialisation de l'iframe",
-  "Register plugin $plugin": "Enregistrement du plugin $plugin"
+  "Register plugin $plugin": "Enregistrement du plugin $plugin",
   "Loading plugin $plugin" : "Chargement du plugin $plugin"
 
 };

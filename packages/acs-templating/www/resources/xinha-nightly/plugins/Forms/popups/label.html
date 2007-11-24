@@ -9,10 +9,9 @@
 var fields = ["f_text","f_for","f_accesskey"];
 
 function Init() {
-	window.resizeTo(350,320);
   __dlg_translate("Forms");
-	__dlg_init();
-	var param = window.dialogArguments;
+  __dlg_init(null,{width:260, height:220});
+  var param = window.dialogArguments;
   for (var i in fields) {
     document.getElementById(fields[i]).value = param[fields[i]];
   }
@@ -20,19 +19,19 @@ function Init() {
 }
 
 function onOK() {
-	// pass data back to the calling window
+  // pass data back to the calling window
     // pass data back to the calling window
   var param = new Object();
   for (var i in fields) {
     param[fields[i]] = document.getElementById(fields[i]).value;
   }
-	__dlg_close(param);
+  __dlg_close(param);
   return false;
 }
 
 function onCancel() {
-	__dlg_close(null);
-	return false;
+  __dlg_close(null);
+  return false;
 }
 
 </script>
@@ -53,7 +52,7 @@ function onCancel() {
     <div id="buttons">
       <button type="button" name="ok" onclick="return onOK();">OK</button>
       <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
-    </div>      
+    </div>
   </form>
 </body>
 </html>

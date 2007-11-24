@@ -71,9 +71,9 @@
   "Unset color": "Farve ikke valgt",
   "Vertical align": "Vertikal placering",
   "Width": "Bredde",
-  "HTMLArea cowardly refuses to delete the last cell in row.": "Du kan ikke slette den sidste celle i en række.",
-  "HTMLArea cowardly refuses to delete the last column in table.": "Du kan ikke slette den sidste kolonne i en tabel.",
-  "HTMLArea cowardly refuses to delete the last row in table.": "Du kan ikke slette den sidste række i en tabel.",
+  "Xinha cowardly refuses to delete the last cell in row.": "Du kan ikke slette den sidste celle i en række.",
+  "Xinha cowardly refuses to delete the last column in table.": "Du kan ikke slette den sidste kolonne i en tabel.",
+  "Xinha cowardly refuses to delete the last row in table.": "Du kan ikke slette den sidste række i en tabel.",
   "percent": "procent",
   "pixels": "pixel"
 };

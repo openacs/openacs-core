@@ -1,4 +1,5 @@
-HTMLArea.loadStyle("menu.css","ContextMenu");
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+Xinha.loadStyle("menu.css","ContextMenu");
 function ContextMenu(_1){
 this.editor=_1;
 }
@@ -6,8 +7,8 @@ ContextMenu._pluginInfo={name:"ContextMenu",version:"1.0",developer:"Mihai Bazon
 ContextMenu.prototype.onGenerate=function(){
 var _2=this;
 var _3=this.editordoc=this.editor._iframe.contentWindow.document;
-HTMLArea._addEvents(_3,["contextmenu"],function(_4){
-return _2.popupMenu(HTMLArea.is_ie?_2.editor._iframe.contentWindow.event:_4);
+Xinha._addEvents(_3,["contextmenu"],function(_4){
+return _2.popupMenu(Xinha.is_ie?_2.editor._iframe.contentWindow.event:_4);
 });
 this.currentMenu=null;
 };
@@ -21,14 +22,14 @@ if(_a){
 _a=_a.instance;
 }
 var _b=_7.hasSelectedText();
-if(!HTMLArea.is_gecko){
+if(!Xinha.is_gecko){
 if(_b){
-_9.push([HTMLArea._lc("Cut","ContextMenu"),function(){
+_9.push([Xinha._lc("Cut","ContextMenu"),function(){
 _7.execCommand("cut");
-},null,_8.btnList["cut"][1]],[HTMLArea._lc("Copy","ContextMenu"),function(){
+},null,_8.btnList["cut"][1]],[Xinha._lc("Copy","ContextMenu"),function(){
 _7.execCommand("copy");
 },null,_8.btnList["copy"][1]]);
-_9.push([HTMLArea._lc("Paste","ContextMenu"),function(){
+_9.push([Xinha._lc("Paste","ContextMenu"),function(){
 _7.execCommand("paste");
 },null,_8.btnList["paste"][1]]);
 }
@@ -51,7 +52,7 @@ p.appendChild(_7._doc.createElement("br"));
 par.insertBefore(p,_14?el.nextSibling:el);
 var sel=_7._getSelection();
 var _19=_7._createRange(sel);
-if(!HTMLArea.is_ie){
+if(!Xinha.is_ie){
 sel.removeAllRanges();
 _19.selectNodeContents(p);
 _19.collapse(true);
@@ -71,100 +72,100 @@ tag=tag.toLowerCase();
 switch(tag){
 case "img":
 img=_5;
-_d.push(null,[HTMLArea._lc("_Image Properties...","ContextMenu"),function(){
+_d.push(null,[Xinha._lc("_Image Properties...","ContextMenu"),function(){
 _7._insertImage(img);
-},HTMLArea._lc("Show the image properties dialog","ContextMenu"),_8.btnList["insertimage"][1]]);
+},Xinha._lc("Show the image properties dialog","ContextMenu"),_8.btnList["insertimage"][1]]);
 break;
 case "a":
 _e=_5;
-_d.push(null,[HTMLArea._lc("_Modify Link...","ContextMenu"),function(){
+_d.push(null,[Xinha._lc("_Modify Link...","ContextMenu"),function(){
 _7.config.btnList["createlink"][3](_7);
-},HTMLArea._lc("Current URL is","ContextMenu")+": "+_e.href,_8.btnList["createlink"][1]],[HTMLArea._lc("Chec_k Link...","ContextMenu"),function(){
+},Xinha._lc("Current URL is","ContextMenu")+": "+_e.href,_8.btnList["createlink"][1]],[Xinha._lc("Chec_k Link...","ContextMenu"),function(){
 window.open(_e.href);
-},HTMLArea._lc("Opens this link in a new window","ContextMenu")],[HTMLArea._lc("_Remove Link...","ContextMenu"),function(){
-if(confirm(HTMLArea._lc("Please confirm that you want to unlink this element.","ContextMenu")+"\n"+HTMLArea._lc("Link points to:","ContextMenu")+" "+_e.href)){
+},Xinha._lc("Opens this link in a new window","ContextMenu")],[Xinha._lc("_Remove Link...","ContextMenu"),function(){
+if(confirm(Xinha._lc("Please confirm that you want to unlink this element.","ContextMenu")+"\n"+Xinha._lc("Link points to:","ContextMenu")+" "+_e.href)){
 while(_e.firstChild){
 _e.parentNode.insertBefore(_e.firstChild,_e);
 }
 _e.parentNode.removeChild(_e);
 }
-},HTMLArea._lc("Unlink the current element","ContextMenu")]);
+},Xinha._lc("Unlink the current element","ContextMenu")]);
 break;
 case "td":
 td=_5;
 if(!_a){
 break;
 }
-_d.push(null,[HTMLArea._lc("C_ell Properties...","ContextMenu"),function(){
+_d.push(null,[Xinha._lc("C_ell Properties...","ContextMenu"),function(){
 tableOperation("TO-cell-prop");
-},HTMLArea._lc("Show the Table Cell Properties dialog","ContextMenu"),_8.btnList["TO-cell-prop"][1]],[HTMLArea._lc("Insert Cell After","ContextMenu"),function(){
+},Xinha._lc("Show the Table Cell Properties dialog","ContextMenu"),_8.btnList["TO-cell-prop"][1]],[Xinha._lc("Insert Cell After","ContextMenu"),function(){
 tableOperation("TO-cell-insert-after");
-},HTMLArea._lc("Insert Cell After","ContextMenu"),_8.btnList["TO-cell-insert-after"][1]],[HTMLArea._lc("Insert Cell Before","ContextMenu"),function(){
+},Xinha._lc("Insert Cell After","ContextMenu"),_8.btnList["TO-cell-insert-after"][1]],[Xinha._lc("Insert Cell Before","ContextMenu"),function(){
 tableOperation("TO-cell-insert-before");
-},HTMLArea._lc("Insert Cell After","ContextMenu"),_8.btnList["TO-cell-insert-before"][1]],[HTMLArea._lc("Delete Cell","ContextMenu"),function(){
+},Xinha._lc("Insert Cell After","ContextMenu"),_8.btnList["TO-cell-insert-before"][1]],[Xinha._lc("Delete Cell","ContextMenu"),function(){
 tableOperation("TO-cell-delete");
-},HTMLArea._lc("Delete Cell","ContextMenu"),_8.btnList["TO-cell-delete"][1]],[HTMLArea._lc("Merge Cells","ContextMenu"),function(){
+},Xinha._lc("Delete Cell","ContextMenu"),_8.btnList["TO-cell-delete"][1]],[Xinha._lc("Merge Cells","ContextMenu"),function(){
 tableOperation("TO-cell-merge");
-},HTMLArea._lc("Merge Cells","ContextMenu"),_8.btnList["TO-cell-merge"][1]]);
+},Xinha._lc("Merge Cells","ContextMenu"),_8.btnList["TO-cell-merge"][1]]);
 break;
 case "tr":
 tr=_5;
 if(!_a){
 break;
 }
-_d.push(null,[HTMLArea._lc("Ro_w Properties...","ContextMenu"),function(){
+_d.push(null,[Xinha._lc("Ro_w Properties...","ContextMenu"),function(){
 tableOperation("TO-row-prop");
-},HTMLArea._lc("Show the Table Row Properties dialog","ContextMenu"),_8.btnList["TO-row-prop"][1]],[HTMLArea._lc("I_nsert Row Before","ContextMenu"),function(){
+},Xinha._lc("Show the Table Row Properties dialog","ContextMenu"),_8.btnList["TO-row-prop"][1]],[Xinha._lc("I_nsert Row Before","ContextMenu"),function(){
 tableOperation("TO-row-insert-above");
-},HTMLArea._lc("Insert a new row before the current one","ContextMenu"),_8.btnList["TO-row-insert-above"][1]],[HTMLArea._lc("In_sert Row After","ContextMenu"),function(){
+},Xinha._lc("Insert a new row before the current one","ContextMenu"),_8.btnList["TO-row-insert-above"][1]],[Xinha._lc("In_sert Row After","ContextMenu"),function(){
 tableOperation("TO-row-insert-under");
-},HTMLArea._lc("Insert a new row after the current one","ContextMenu"),_8.btnList["TO-row-insert-under"][1]],[HTMLArea._lc("_Delete Row","ContextMenu"),function(){
+},Xinha._lc("Insert a new row after the current one","ContextMenu"),_8.btnList["TO-row-insert-under"][1]],[Xinha._lc("_Delete Row","ContextMenu"),function(){
 tableOperation("TO-row-delete");
-},HTMLArea._lc("Delete the current row","ContextMenu"),_8.btnList["TO-row-delete"][1]]);
+},Xinha._lc("Delete the current row","ContextMenu"),_8.btnList["TO-row-delete"][1]]);
 break;
 case "table":
 _f=_5;
 if(!_a){
 break;
 }
-_d.push(null,[HTMLArea._lc("_Table Properties...","ContextMenu"),function(){
+_d.push(null,[Xinha._lc("_Table Properties...","ContextMenu"),function(){
 tableOperation("TO-table-prop");
-},HTMLArea._lc("Show the Table Properties dialog","ContextMenu"),_8.btnList["TO-table-prop"][1]],[HTMLArea._lc("Insert _Column Before","ContextMenu"),function(){
+},Xinha._lc("Show the Table Properties dialog","ContextMenu"),_8.btnList["TO-table-prop"][1]],[Xinha._lc("Insert _Column Before","ContextMenu"),function(){
 tableOperation("TO-col-insert-before");
-},HTMLArea._lc("Insert a new column before the current one","ContextMenu"),_8.btnList["TO-col-insert-before"][1]],[HTMLArea._lc("Insert C_olumn After","ContextMenu"),function(){
+},Xinha._lc("Insert a new column before the current one","ContextMenu"),_8.btnList["TO-col-insert-before"][1]],[Xinha._lc("Insert C_olumn After","ContextMenu"),function(){
 tableOperation("TO-col-insert-after");
-},HTMLArea._lc("Insert a new column after the current one","ContextMenu"),_8.btnList["TO-col-insert-after"][1]],[HTMLArea._lc("De_lete Column","ContextMenu"),function(){
+},Xinha._lc("Insert a new column after the current one","ContextMenu"),_8.btnList["TO-col-insert-after"][1]],[Xinha._lc("De_lete Column","ContextMenu"),function(){
 tableOperation("TO-col-delete");
-},HTMLArea._lc("Delete the current column","ContextMenu"),_8.btnList["TO-col-delete"][1]]);
+},Xinha._lc("Delete the current column","ContextMenu"),_8.btnList["TO-col-delete"][1]]);
 break;
 case "body":
-_d.push(null,[HTMLArea._lc("Justify Left","ContextMenu"),function(){
+_d.push(null,[Xinha._lc("Justify Left","ContextMenu"),function(){
 _7.execCommand("justifyleft");
-},null,_8.btnList["justifyleft"][1]],[HTMLArea._lc("Justify Center","ContextMenu"),function(){
+},null,_8.btnList["justifyleft"][1]],[Xinha._lc("Justify Center","ContextMenu"),function(){
 _7.execCommand("justifycenter");
-},null,_8.btnList["justifycenter"][1]],[HTMLArea._lc("Justify Right","ContextMenu"),function(){
+},null,_8.btnList["justifycenter"][1]],[Xinha._lc("Justify Right","ContextMenu"),function(){
 _7.execCommand("justifyright");
-},null,_8.btnList["justifyright"][1]],[HTMLArea._lc("Justify Full","ContextMenu"),function(){
+},null,_8.btnList["justifyright"][1]],[Xinha._lc("Justify Full","ContextMenu"),function(){
 _7.execCommand("justifyfull");
 },null,_8.btnList["justifyfull"][1]]);
 break;
 }
 }
 if(_b&&!_e){
-_9.push(null,[HTMLArea._lc("Make lin_k...","ContextMenu"),function(){
+_9.push(null,[Xinha._lc("Make lin_k...","ContextMenu"),function(){
 _7.config.btnList["createlink"][3](_7);
-},HTMLArea._lc("Create a link","ContextMenu"),_8.btnList["createlink"][1]]);
+},Xinha._lc("Create a link","ContextMenu"),_8.btnList["createlink"][1]]);
 }
 for(var i=0;i<_d.length;++i){
 _9.push(_d[i]);
 }
 if(!/html|body/i.test(_c.tagName)){
-_9.push(null,[HTMLArea._lc({string:"Remove the $elem Element...",replace:{elem:"&lt;"+_c.tagName+"&gt;"}},"ContextMenu"),function(){
-if(confirm(HTMLArea._lc("Please confirm that you want to remove this element:","ContextMenu")+" "+_c.tagName)){
+_9.push(null,[Xinha._lc({string:"Remove the $elem Element...",replace:{elem:"&lt;"+_c.tagName+"&gt;"}},"ContextMenu"),function(){
+if(confirm(Xinha._lc("Please confirm that you want to remove this element:","ContextMenu")+" "+_c.tagName)){
 var el=_c;
 var p=el.parentNode;
 p.removeChild(el);
-if(HTMLArea.is_gecko){
+if(Xinha.is_gecko){
 if(p.tagName.toLowerCase()=="td"&&!p.hasChildNodes()){
 p.appendChild(_7._doc.createElement("br"));
 }
@@ -179,11 +180,11 @@ _f.style.borderCollapse=_1e;
 }
 }
 }
-},HTMLArea._lc("Remove this node from the document","ContextMenu")],[HTMLArea._lc("Insert paragraph before","ContextMenu"),function(){
+},Xinha._lc("Remove this node from the document","ContextMenu")],[Xinha._lc("Insert paragraph before","ContextMenu"),function(){
 insertPara(false);
-},HTMLArea._lc("Insert a paragraph before the current node","ContextMenu")],[HTMLArea._lc("Insert paragraph after","ContextMenu"),function(){
+},Xinha._lc("Insert a paragraph before the current node","ContextMenu")],[Xinha._lc("Insert paragraph after","ContextMenu"),function(){
 insertPara(true);
-},HTMLArea._lc("Insert a paragraph after the current node","ContextMenu")]);
+},Xinha._lc("Insert a paragraph after the current node","ContextMenu")]);
 }
 if(!_9[0]){
 _9.shift();
@@ -207,10 +208,10 @@ return r;
 function documentClick(ev){
 ev||(ev=window.event);
 if(!_20.currentMenu){
-alert(HTMLArea._lc("How did you get here? (Please report!)","ContextMenu"));
+alert(Xinha._lc("How did you get here? (Please report!)","ContextMenu"));
 return false;
 }
-var el=HTMLArea.is_ie?ev.srcElement:ev.target;
+var el=Xinha.is_ie?ev.srcElement:ev.target;
 for(;el!=null&&el!=_20.currentMenu;el=el.parentNode){
 }
 if(el==null){
@@ -220,12 +221,12 @@ _20.closeMenu();
 var _26=[];
 function keyPress(ev){
 ev||(ev=window.event);
-HTMLArea._stopEvent(ev);
+Xinha._stopEvent(ev);
 if(ev.keyCode==27){
 _20.closeMenu();
 return false;
 }
-var key=String.fromCharCode(HTMLArea.is_ie?ev.keyCode:ev.charCode).toLowerCase();
+var key=String.fromCharCode(Xinha.is_ie?ev.keyCode:ev.charCode).toLowerCase();
 for(var i=_26.length;--i>=0;){
 var k=_26[i];
 if(k[0].toLowerCase()==key){
@@ -236,22 +237,22 @@ k[1].__msh.activate();
 _20.closeMenu=function(){
 _20.currentMenu.parentNode.removeChild(_20.currentMenu);
 _20.currentMenu=null;
-HTMLArea._removeEvent(document,"mousedown",documentClick);
-HTMLArea._removeEvent(_20.editordoc,"mousedown",documentClick);
+Xinha._removeEvent(document,"mousedown",documentClick);
+Xinha._removeEvent(_20.editordoc,"mousedown",documentClick);
 if(_26.length>0){
-HTMLArea._removeEvent(_20.editordoc,"keypress",keyPress);
+Xinha._removeEvent(_20.editordoc,"keypress",keyPress);
 }
-if(HTMLArea.is_ie){
+if(Xinha.is_ie){
 _20.iePopup.hide();
 }
 };
-var _2b=HTMLArea.is_ie?ev.srcElement:ev.target;
+var _2b=Xinha.is_ie?ev.srcElement:ev.target;
 var _2c=getPos(_20.editor._htmlArea);
 var x=ev.clientX+_2c.x;
 var y=ev.clientY+_2c.y;
 var div;
 var doc;
-if(!HTMLArea.is_ie){
+if(!Xinha.is_ie){
 doc=document;
 }else{
 var _31=this.iePopup=window.createPopup();
@@ -261,14 +262,14 @@ doc.write("<html><head><style type='text/css'>@import url("+_editor_url+"plugins
 doc.close();
 }
 div=doc.createElement("div");
-if(HTMLArea.is_ie){
+if(Xinha.is_ie){
 div.unselectable="on";
 }
 div.oncontextmenu=function(){
 return false;
 };
 div.className="htmlarea-context-menu";
-if(!HTMLArea.is_ie){
+if(!Xinha.is_ie){
 div.style.left=div.style.top="0px";
 }
 doc.body.appendChild(div);
@@ -283,11 +284,11 @@ for(var i=0;i<_34.length;++i){
 var _36=_34[i];
 var _37=doc.createElement("tr");
 _33.appendChild(_37);
-if(HTMLArea.is_ie){
+if(Xinha.is_ie){
 _37.unselectable="on";
 }else{
 _37.onmousedown=function(ev){
-HTMLArea._stopEvent(ev);
+Xinha._stopEvent(ev);
 return false;
 };
 }
@@ -296,7 +297,7 @@ _37.className="separator";
 var td=doc.createElement("td");
 td.className="icon";
 var _3a=">";
-if(HTMLArea.is_ie){
+if(Xinha.is_ie){
 td.unselectable="on";
 _3a=" unselectable='on' style='height=1px'>&nbsp;";
 }
@@ -319,17 +320,17 @@ _26.push([RegExp.$1,_37]);
 }
 _3c=_3c.replace(/__/,"_");
 var td1=doc.createElement("td");
-if(HTMLArea.is_ie){
+if(Xinha.is_ie){
 td1.unselectable="on";
 }
 _37.appendChild(td1);
 td1.className="icon";
 if(_37.__msh.icon){
-var t=HTMLArea.makeBtnImg(_37.__msh.icon,doc);
+var t=Xinha.makeBtnImg(_37.__msh.icon,doc);
 td1.appendChild(t);
 }
 var td2=doc.createElement("td");
-if(HTMLArea.is_ie){
+if(Xinha.is_ie){
 td2.unselectable="on";
 }
 _37.appendChild(td2);
@@ -344,8 +345,8 @@ this.className="item";
 };
 _37.oncontextmenu=function(ev){
 this.__msh.activate();
-if(!HTMLArea.is_ie){
-HTMLArea._stopEvent(ev);
+if(!Xinha.is_ie){
+Xinha._stopEvent(ev);
 }
 return false;
 };
@@ -354,14 +355,14 @@ var _41=(new Date()).getTime();
 if(_41-_20.timeStamp>500){
 this.__msh.activate();
 }
-if(!HTMLArea.is_ie){
-HTMLArea._stopEvent(ev);
+if(!Xinha.is_ie){
+Xinha._stopEvent(ev);
 }
 return false;
 };
 }
 }
-if(!HTMLArea.is_ie){
+if(!Xinha.is_ie){
 div.style.left=x+"px";
 div.style.top=y+"px";
 }else{
@@ -372,12 +373,12 @@ this.iePopup.show(ev.screenX,ev.screenY,w,h);
 }
 this.currentMenu=div;
 this.timeStamp=(new Date()).getTime();
-HTMLArea._addEvent(document,"mousedown",documentClick);
-HTMLArea._addEvent(this.editordoc,"mousedown",documentClick);
+Xinha._addEvent(document,"mousedown",documentClick);
+Xinha._addEvent(this.editordoc,"mousedown",documentClick);
 if(_26.length>0){
-HTMLArea._addEvent(this.editordoc,"keypress",keyPress);
+Xinha._addEvent(this.editordoc,"keypress",keyPress);
 }
-HTMLArea._stopEvent(ev);
+Xinha._stopEvent(ev);
 return false;
 };
 

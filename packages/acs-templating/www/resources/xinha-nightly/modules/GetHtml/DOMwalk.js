@@ -1,7 +1,8 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 function GetHtmlImplementation(_1){
 this.editor=_1;
 }
-GetHtmlImplementation._pluginInfo={name:"GetHtmlImplementation DOMwalk",origin:"Xinha Core",version:"$LastChangedRevision: 821 $".replace(/^[^:]*: (.*) \$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL: http://svn.xinha.python-hosting.com/trunk/modules/GetHtml/DOMwalk.js $".replace(/^[^:]*: (.*) \$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};
+GetHtmlImplementation._pluginInfo={name:"GetHtmlImplementation DOMwalk",origin:"Xinha Core",version:"$LastChangedRevision: 871 $".replace(/^[^:]*: (.*) \$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL: http://svn.xinha.webfactional.com/trunk/modules/GetHtml/DOMwalk.js $".replace(/^[^:]*: (.*) \$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};
 Xinha.getHTML=function(_2,_3,_4){
 try{
 return Xinha.getHTMLWrapper(_2,_3,_4);
@@ -12,15 +13,12 @@ return _4._iframe.contentWindow.document.body.innerHTML;
 }
 };
 Xinha.emptyAttributes=" checked disabled ismap readonly nowrap compact declare selected defer multiple noresize noshade ";
-Xinha.elGetsNewLine=function(el){
-return (" br meta link title ".indexOf(" "+el.tagName.toLowerCase()+" ")!=-1);
-};
-Xinha.getHTMLWrapper=function(_6,_7,_8,_9){
-var _a="";
-if(!_9){
-_9="";
+Xinha.getHTMLWrapper=function(_5,_6,_7,_8){
+var _9="";
+if(!_8){
+_8="";
 }
-switch(_6.nodeType){
+switch(_5.nodeType){
 case 10:
 case 6:
 case 12:
@@ -28,156 +26,160 @@ break;
 case 2:
 break;
 case 4:
-_a+=(Xinha.is_ie?("\n"+_9):"")+"<![CDATA["+_6.data+"]]>";
+_9+=(Xinha.is_ie?("\n"+_8):"")+"<![CDATA["+_5.data+"]]>";
 break;
 case 5:
-_a+="&"+_6.nodeValue+";";
+_9+="&"+_5.nodeValue+";";
 break;
 case 7:
-_a+=(Xinha.is_ie?("\n"+_9):"")+"<"+"?"+_6.target+" "+_6.data+" ?>";
+_9+=(Xinha.is_ie?("\n"+_8):"")+"<"+"?"+_5.target+" "+_5.data+" ?>";
 break;
 case 1:
 case 11:
 case 9:
-var _b;
+var _a;
 var i;
-var _d=(_6.nodeType==1)?_6.tagName.toLowerCase():"";
-if((_d=="script"||_d=="noscript")&&_8.config.stripScripts){
+var _c=(_5.nodeType==1)?_5.tagName.toLowerCase():"";
+if((_c=="script"||_c=="noscript")&&_7.config.stripScripts){
 break;
 }
-if(_7){
-_7=!(_8.config.htmlRemoveTags&&_8.config.htmlRemoveTags.test(_d));
+if(_6){
+_6=!(_7.config.htmlRemoveTags&&_7.config.htmlRemoveTags.test(_c));
 }
-if(Xinha.is_ie&&_d=="head"){
-if(_7){
-_a+=(Xinha.is_ie?("\n"+_9):"")+"<head>";
+if(Xinha.is_ie&&_c=="head"){
+if(_6){
+_9+=(Xinha.is_ie?("\n"+_8):"")+"<head>";
 }
-var _e=RegExp.multiline;
+var _d=RegExp.multiline;
 RegExp.multiline=true;
-var _f=_6.innerHTML.replace(Xinha.RE_tagName,function(str,p1,p2){
+var _e=_5.innerHTML.replace(Xinha.RE_tagName,function(_f,p1,p2){
 return p1+p2.toLowerCase();
 }).replace(/\s*=\s*(([^'"][^>\s]*)([>\s])|"([^"]+)"|'([^']+)')/g,"=\"$2$4$5\"$3").replace(/<(link|meta)((\s*\S*="[^"]*")*)>/g,"<$1$2 />");
-RegExp.multiline=_e;
-_a+=_f+"\n";
-if(_7){
-_a+=(Xinha.is_ie?("\n"+_9):"")+"</head>";
+RegExp.multiline=_d;
+_9+=_e+"\n";
+if(_6){
+_9+=(Xinha.is_ie?("\n"+_8):"")+"</head>";
 }
 break;
 }else{
-if(_7){
-_b=(!(_6.hasChildNodes()||Xinha.needsClosingTag(_6)));
-_a+=((Xinha.isBlockElement(_6)||Xinha.elGetsNewLine(_6))?("\n"+_9):"")+"<"+_6.tagName.toLowerCase();
-var _13=_6.attributes;
-for(i=0;i<_13.length;++i){
-var a=_13.item(i);
+if(_6){
+_a=(!(_5.hasChildNodes()||Xinha.needsClosingTag(_5)));
+_9+=((Xinha.isBlockElement(_5))?("\n"+_8):"")+"<"+_5.tagName.toLowerCase();
+var _12=_5.attributes;
+for(i=0;i<_12.length;++i){
+var a=_12.item(i);
 if(typeof a.nodeValue=="object"){
 continue;
 }
-if(_6.tagName.toLowerCase()=="input"&&_6.type.toLowerCase()=="checkbox"&&a.nodeName.toLowerCase()=="value"&&a.nodeValue.toLowerCase()=="on"){
+if(_5.tagName.toLowerCase()=="input"&&_5.type.toLowerCase()=="checkbox"&&a.nodeName.toLowerCase()=="value"&&a.nodeValue.toLowerCase()=="on"){
 continue;
 }
-if(!a.specified&&!(_6.tagName.toLowerCase().match(/input|option/)&&a.nodeName=="value")&&!(_6.tagName.toLowerCase().match(/area/)&&a.nodeName.match(/shape|coords/i))){
+if(!a.specified&&!(_5.tagName.toLowerCase().match(/input|option/)&&a.nodeName=="value")&&!(_5.tagName.toLowerCase().match(/area/)&&a.nodeName.match(/shape|coords/i))){
 continue;
 }
-var _15=a.nodeName.toLowerCase();
-if(/_moz_editor_bogus_node/.test(_15)){
-_a="";
+var _14=a.nodeName.toLowerCase();
+if(/_moz_editor_bogus_node/.test(_14)){
+_9="";
 break;
 }
-if(/(_moz)|(contenteditable)|(_msh)/.test(_15)){
+if(/(_moz)|(contenteditable)|(_msh)/.test(_14)){
 continue;
 }
-var _16;
-if(Xinha.emptyAttributes.indexOf(" "+_15+" ")!=-1){
-_16=_15;
+var _15;
+if(Xinha.emptyAttributes.indexOf(" "+_14+" ")!=-1){
+_15=_14;
 }else{
-if(_15!="style"){
-if(typeof _6[a.nodeName]!="undefined"&&_15!="href"&&_15!="src"&&!(/^on/.test(_15))){
-_16=_6[a.nodeName];
+if(_14!="style"){
+if(typeof _5[a.nodeName]!="undefined"&&_14!="href"&&_14!="src"&&!(/^on/.test(_14))){
+_15=_5[a.nodeName];
 }else{
-_16=a.nodeValue;
-if(Xinha.is_ie&&(_15=="href"||_15=="src")){
-_16=_8.stripBaseURL(_16);
+_15=a.nodeValue;
+if(Xinha.is_ie&&(_14=="href"||_14=="src")){
+_15=_7.stripBaseURL(_15);
 }
-if(_8.config.only7BitPrintablesInURLs&&(_15=="href"||_15=="src")){
-_16=_16.replace(/([^!-~]+)/g,function(_17){
-return escape(_17);
+if(_7.config.only7BitPrintablesInURLs&&(_14=="href"||_14=="src")){
+_15=_15.replace(/([^!-~]+)/g,function(_16){
+return escape(_16);
 });
 }
 }
 }else{
 if(!Xinha.is_ie){
-_16=_6.style.cssText.replace(/rgb\(.*?\)/ig,function(rgb){
+_15=_5.style.cssText.replace(/rgb\(.*?\)/ig,function(rgb){
 return Xinha._colorToRgb(rgb);
 });
 }
 }
 }
-if(/^(_moz)?$/.test(_16)){
+if(/^(_moz)?$/.test(_15)){
 continue;
 }
-_a+=" "+_15+"=\""+Xinha.htmlEncode(_16)+"\"";
+_9+=" "+_14+"=\""+Xinha.htmlEncode(_15)+"\"";
 }
-if(Xinha.is_ie&&_6.style.cssText){
-_a+=" style=\""+_6.style.cssText.toLowerCase()+"\"";
+if(Xinha.is_ie&&_5.style.cssText){
+_9+=" style=\""+_5.style.cssText.toLowerCase()+"\"";
 }
-if(Xinha.is_ie&&_6.tagName.toLowerCase()=="option"&&_6.selected){
-_a+=" selected=\"selected\"";
+if(Xinha.is_ie&&_5.tagName.toLowerCase()=="option"&&_5.selected){
+_9+=" selected=\"selected\"";
 }
-if(_a!==""){
-if(_b&&_d=="p"){
-_a+=">&nbsp;</p>";
+if(_9!==""){
+if(_a&&_c=="p"){
+_9+=">&nbsp;</p>";
 }else{
-if(_b){
-_a+=" />";
+if(_a){
+_9+=" />";
 }else{
-_a+=">";
+_9+=">";
 }
 }
 }
 }
 }
-var _19=false;
-if(_d=="script"||_d=="noscript"){
-if(!_8.config.stripScripts){
+var _18=false;
+if(_c=="script"||_c=="noscript"){
+if(!_7.config.stripScripts){
 if(Xinha.is_ie){
-var _1a="\n"+_6.innerHTML.replace(/^[\n\r]*/,"").replace(/\s+$/,"")+"\n"+_9;
+var _19="\n"+_5.innerHTML.replace(/^[\n\r]*/,"").replace(/\s+$/,"")+"\n"+_8;
 }else{
-var _1a=(_6.hasChildNodes())?_6.firstChild.nodeValue:"";
+var _19=(_5.hasChildNodes())?_5.firstChild.nodeValue:"";
 }
-_a+=_1a+"</"+_d+">"+((Xinha.is_ie)?"\n":"");
+_9+=_19+"</"+_c+">"+((Xinha.is_ie)?"\n":"");
 }
 }else{
-if(_d=="pre"){
-_a+=((Xinha.is_ie)?"\n":"")+_6.innerHTML.replace(/<br>/g,"\n")+"</"+_d+">";
+if(_c=="pre"){
+_9+=((Xinha.is_ie)?"\n":"")+_5.innerHTML.replace(/<br>/g,"\n")+"</"+_c+">";
 }else{
-for(i=_6.firstChild;i;i=i.nextSibling){
-if(!_19&&i.nodeType==1&&Xinha.isBlockElement(i)){
-_19=true;
+for(i=_5.firstChild;i;i=i.nextSibling){
+if(!_18&&i.nodeType==1&&Xinha.isBlockElement(i)){
+_18=true;
 }
-_a+=Xinha.getHTMLWrapper(i,true,_8,_9+"  ");
+_9+=Xinha.getHTMLWrapper(i,true,_7,_8+"  ");
 }
-if(_7&&!_b){
-_a+=(((Xinha.isBlockElement(_6)&&_19)||_d=="head"||_d=="html")?("\n"+_9):"")+"</"+_6.tagName.toLowerCase()+">";
+if(_6&&!_a){
+_9+=(((Xinha.isBlockElement(_5)&&_18)||_c=="head"||_c=="html")?("\n"+_8):"")+"</"+_5.tagName.toLowerCase()+">";
 }
 }
 }
 break;
 case 3:
-if(/^script|noscript|style$/i.test(_6.parentNode.tagName)){
-_a=_6.data;
+if(/^script|noscript|style$/i.test(_5.parentNode.tagName)){
+_9=_5.data;
 }else{
-if(_6.data.trim()==""){
-_a="";
+if(_5.data.trim()==""){
+if(_5.data){
+_9=" ";
 }else{
-_a=Xinha.htmlEncode(_6.data);
+_9="";
+}
+}else{
+_9=Xinha.htmlEncode(_5.data);
 }
 }
 break;
 case 8:
-_a="<!--"+_6.data+"-->";
+_9="<!--"+_5.data+"-->";
 break;
 }
-return _a;
+return _9;
 };
 

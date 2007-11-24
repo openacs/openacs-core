@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 xinha_editors=null;
 xinha_init=null;
 xinha_config=null;

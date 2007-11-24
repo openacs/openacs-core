@@ -36,6 +36,8 @@ window.onload = init;
 
 <body class="dialog">
 <div class="title">Paste as Plain Text</div>
+<form>
+<div>
 <textarea name="inputArea" id="inputArea" cols=22 rows=5 style="width: 100%; height: 315px; margin-top: 8px; margin-bottom: 4px; font-family: monospace; font-size: 11px;"></textarea>
 <div id="buttons">
 <label for="insertParagraphs" style="float:left;display:none" id="paragraphOption">
@@ -44,5 +46,7 @@ window.onload = init;
     <button type="button" name="ok" onclick="return onOK();">OK</button>
     <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
 </div>
+</div>
+</form>
 </body>
 </html>

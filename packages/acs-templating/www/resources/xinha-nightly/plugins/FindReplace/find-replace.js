@@ -38,5 +38,5 @@ FindReplace._pluginInfo = {
 };
 
 FindReplace.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'FindReplace');
+    return Xinha._lc(string, 'FindReplace');
 };

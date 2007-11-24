@@ -2,7 +2,7 @@
 //Client-side spell check plugin
 //This implements the API for ieSpell, which is owned by Red Egg Software 
 //For more info about ieSpell, go to http://www.iespell.com/index.htm
-// Distributed under the same terms as HTMLArea itself.
+// Distributed under the same terms as Xinha itself.
 // This notice MUST stay intact for use (see license.txt).
 
 
@@ -23,7 +23,7 @@ function ClientsideSpellcheck(editor) {
                self.buttonPress(editor, id);
              });
 
-  if(HTMLArea.is_ie) {
+  if(Xinha.is_ie) {
     cfg.addToolbarElement("clientsidespellcheck", "print", 1);
 }
 
@@ -42,7 +42,7 @@ ClientsideSpellcheck._pluginInfo = {
 
 
 ClientsideSpellcheck.prototype._lc = function(string) {
-  return HTMLArea._lc(string, 'ClientsideSpellcheck');
+  return Xinha._lc(string, 'ClientsideSpellcheck');
 };
 
 ClientsideSpellcheck.prototype.buttonPress = function(editor) {

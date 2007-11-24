@@ -70,9 +70,9 @@
   "Unset color": "Enlever la couleur",
   "Vertical align": "Vertical",
   "Width": "Longeur",
-  "HTMLArea cowardly refuses to delete the last cell in row.": "Il est impossible de supprimer la dernière cellule de la rangée.",
-  "HTMLArea cowardly refuses to delete the last column in table.": "Il est impossible de supprimer la dernière colonne de la table.",
-  "HTMLArea cowardly refuses to delete the last row in table.": "Il est impossible de supprimer la dernière rangée de la table",
+  "Xinha cowardly refuses to delete the last cell in row.": "Il est impossible de supprimer la dernière cellule de la rangée.",
+  "Xinha cowardly refuses to delete the last column in table.": "Il est impossible de supprimer la dernière colonne de la table.",
+  "Xinha cowardly refuses to delete the last row in table.": "Il est impossible de supprimer la dernière rangée de la table",
   "percent": "%",
   "pixels": "pixels"
 };

@@ -26,7 +26,7 @@
   "Insert Table": "Inserisci tabella",
   "Toggle HTML Source": "Visualizza/nascondi sorgente HTML",
   "Enlarge Editor": "Allarga editor",
-  "About this editor": "Informazioni su HTMLArea",
+  "About this editor": "Informazioni su Xinha",
   "Help using editor": "Aiuto",
   "Current style": "Stile corrente",
   "Undoes your last action": "Annulla ultima azione",

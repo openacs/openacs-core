@@ -1,6 +1,7 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 var FindReplace=window.opener.FindReplace;
 var editor=FindReplace.editor;
-var is_mo=window.opener.HTMLArea.is_gecko;
+var is_mo=window.opener.Xinha.is_gecko;
 var tosearch="";
 var pater=null;
 var buffer=null;
@@ -8,7 +9,7 @@ var matches=0;
 var replaces=0;
 var fr_spans=new Array();
 function _lc(_1){
-return (window.opener.HTMLArea._lc(_1,"FindReplace"));
+return (window.opener.Xinha._lc(_1,"FindReplace"));
 }
 function execSearch(_2){
 var _3=editor._doc.body.innerHTML;

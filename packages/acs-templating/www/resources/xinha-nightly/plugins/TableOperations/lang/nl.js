@@ -71,9 +71,9 @@
   "Unset color": "Wis kleur",
   "Vertical align": "Vertikale uitlijning",
   "Width": "Breedte",
-  "HTMLArea cowardly refuses to delete the last cell in row.": "HTMLArea kan de laatste cel in deze tabel niet verwijderen.",
-  "HTMLArea cowardly refuses to delete the last column in table.": "HTMLArea kan de laatste kolom in deze tabel niet verwijderen.",
-  "HTMLArea cowardly refuses to delete the last row in table.": "HTMLArea kan de laatste rij in deze tabel niet verwijderen.",
+  "Xinha cowardly refuses to delete the last cell in row.": "Xinha kan de laatste cel in deze tabel niet verwijderen.",
+  "Xinha cowardly refuses to delete the last column in table.": "Xinha kan de laatste kolom in deze tabel niet verwijderen.",
+  "Xinha cowardly refuses to delete the last row in table.": "Xinha kan de laatste rij in deze tabel niet verwijderen.",
   "percent": "procent",
   "pixels": "pixels"
 };

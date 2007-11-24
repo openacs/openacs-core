@@ -71,9 +71,9 @@
   "Unset color": "צבע לא נבחר",
   "Vertical align": "יישור אנכי",
   "Width": "רוחב",
-  "HTMLArea cowardly refuses to delete the last cell in row.": "HTMLArea מסרב בפחדנות למחוק את התא האחרון בשורה.",
-  "HTMLArea cowardly refuses to delete the last column in table.": "HTMLArea מסרב בפחדנות למחוק את הטור האחרון בטבלה.",
-  "HTMLArea cowardly refuses to delete the last row in table.": "HTMLArea מסרב בפחדנות למחוק את השורה האחרונה בטבלה.",
+  "Xinha cowardly refuses to delete the last cell in row.": "Xinha מסרב בפחדנות למחוק את התא האחרון בשורה.",
+  "Xinha cowardly refuses to delete the last column in table.": "Xinha מסרב בפחדנות למחוק את הטור האחרון בטבלה.",
+  "Xinha cowardly refuses to delete the last row in table.": "Xinha מסרב בפחדנות למחוק את השורה האחרונה בטבלה.",
   "percent": "אחוז",
   "pixels": "פיקסלים"
 };

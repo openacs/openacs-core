@@ -57,7 +57,7 @@ HtmlTidy._pluginInfo = {
 };
 
 HtmlTidy.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'HtmlTidy');
+    return Xinha._lc(string, 'HtmlTidy');
 };
 
 HtmlTidy.prototype.__onSelect = function(editor, obj) {
@@ -92,7 +92,7 @@ HtmlTidy.prototype.buttonPress = function(editor, id) {
       var oldhtml = editor.getHTML();
       if(oldhtml=="") break; //don't clean empty text
       // Ask the server for some nice new html, based on the old...
-      HTMLArea._postback(_editor_url + 'plugins/HtmlTidy/html-tidy-logic.php', {'htisource_name' : oldhtml},
+      Xinha._postback(_editor_url + 'plugins/HtmlTidy/html-tidy-logic.php', {'htisource_name' : oldhtml},
                             function(javascriptResponse) { eval(javascriptResponse) });
     }
 		break;

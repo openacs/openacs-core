@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 function InsertMarquee(_1){
 this.editor=_1;
 var _2=_1.config;
@@ -9,7 +10,7 @@ _2.addToolbarElement("insertmarquee","inserthorizontalrule",-1);
 }
 InsertMarquee._pluginInfo={name:"InsertMarquee",version:"1.0",developer:"Udo Schmal",developer_url:"http://www.schaffrath-NeueMedien.de/",c_owner:"Udo Schmal & Schaffrath NeueMedien",license:"htmlArea"};
 InsertMarquee.prototype._lc=function(_5){
-return HTMLArea._lc(_5,"InsertMarquee");
+return Xinha._lc(_5,"InsertMarquee");
 };
 InsertMarquee.prototype.buttonPress=function(_6,_7){
 function setAttr(el,_9,_a){

@@ -1,5 +1,8 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+if(typeof Xinha=="undefined"){
 Xinha=window.opener.Xinha;
-HTMLArea=window.opener.Xinha;
+}
+HTMLArea=Xinha;
 function getAbsolutePos(el){
 var r={x:el.offsetLeft,y:el.offsetTop};
 if(el.offsetParent){

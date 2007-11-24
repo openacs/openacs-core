@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 var jg_ihtm,jg_ie,jg_dom,jg_n4=(document.layers&&typeof document.classes!="undefined");
 function chkDHTM(x,i){
 x=document.body||null;

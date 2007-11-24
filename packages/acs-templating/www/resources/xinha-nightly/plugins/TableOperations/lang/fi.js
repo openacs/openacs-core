@@ -60,9 +60,9 @@
   "The top side only": "Ainoastaan yläpuoli",
   "Vertical align": "Vertikaali kohdistus",
   "Width": "Leveys",
-  "HTMLArea cowardly refuses to delete the last cell in row.": "Ei voida poistaa viimeistä solua rivistä.",
-  "HTMLArea cowardly refuses to delete the last column in table.": "Ei voida poistaa viimeistä saraketta taulusta.",
-  "HTMLArea cowardly refuses to delete the last row in table.": "Ei voida poistaa viimeistä riviä taulusta.",
+  "Xinha cowardly refuses to delete the last cell in row.": "Ei voida poistaa viimeistä solua rivistä.",
+  "Xinha cowardly refuses to delete the last column in table.": "Ei voida poistaa viimeistä saraketta taulusta.",
+  "Xinha cowardly refuses to delete the last row in table.": "Ei voida poistaa viimeistä riviä taulusta.",
   "percent": "prosenttia",
   "pixels": "pikseliä"
 };

@@ -7,66 +7,39 @@
   window.resizeTo(400, 300);
 var InsertSmiley = window.opener.InsertSmiley;
 var editor = null;
+var _editor_url = opener._editor_url;
 var param;
-
+var smileys = null;
 function Init() {
-  var totalsmileys = 580;
   __dlg_translate("InsertSmiley");
   __dlg_init();
   param = window.dialogArguments;
   editor = param['editor'];
-
+  var smileyList = Xinha._geturlcontent(_editor_url + 'plugins/InsertSmiley/smileys.txt');
+  smileyList = smileyList.match(/^.+$/mg);
+  var smileyURL = editor.config.InsertSmiley.smileyURL;
   var tbody = document.getElementById("smileytable");
   var inum;
   var trow;
-  for(var i = 1; i <= totalsmileys; i++) {
-    if((i - 1) % 4 == 0) {
-	  trow = tbody.insertRow((i - 1) / 4);
-	}
-	// find new number to be found in smileys folder
-	inum = "";
-	if(i < 1000) {
-	  if(i < 100) {
-		if(i < 10) {
-		  inum = "000" + i;
-		} else {
-		  inum = "00" + i;
-		}
-	  } else {
-	    inum = "0" + i;
-	  }
-	} else {
-	  inum = i;
-	}
-	trow.insertCell((i - 1) % 4).innerHTML = "<a href=\"javascript:onOK('" + inum + "')\"><img style=\"border: 0px;\" alt=\"Smiley " + + i + "\" src=\""+ param.editor_url +"plugins/InsertSmiley/smileys/" + inum + ".gif\" />";
+  for(var i = 0; i < smileyList.length; i++) {
+    if((i) % 4 == 0) {
+      trow = tbody.insertRow((i ) / 4);
+    }
+   trow.insertCell((i) % 4).innerHTML = '<a onclick="onOK(\'' + encodeURIComponent( smileyList[i] ) + '\')" href="javascript:void(0);"><img style="border: 0px;" alt="Smiley ' + (i +1) + '" src="'+ smileyURL + encodeURIComponent(smileyList[i]) + '" />';
   }
-  document.body.onkeypress = __dlg_key_press;
 }
-
 function onCancel() {
   __dlg_close(null);
   return false;
 }
 
-function onOK(smileynum) {
+function onOK(smileyfile) {
   var params = {};
-  params.imgURL = param.editor_url +"plugins/InsertSmiley/smileys/" + smileynum + ".gif";
+  params.smileyfile = smileyfile;
   __dlg_close(params);
   return false;
 }
 
-function __dlg_key_press(ev) {
-  ev || (ev = window.event);
-  switch(ev.keyCode) {
-    case 13:
-    document.getElementById('bt_ok').click();
-      break;
-    case 27:
-    __dlg_close();
-    return false;
-  }
-return true;
-}
 </script>
 
 <style type="text/css">
@@ -77,7 +50,7 @@ return true;
 <form action="" method="get">
   <div class="title" style="width: 360px;">Insert Smiley</div>
   <div style="height: 175px; overflow:auto;" align="center">
-  <table style="border: 0; width: 370px;" id="smileytable" name="smileytable">
+  <table style="border: 0; width: 370px;" id="smileytable">
   </table>
   </div>
 <div class="space"></div>

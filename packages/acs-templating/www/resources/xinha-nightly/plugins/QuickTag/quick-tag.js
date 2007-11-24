@@ -49,5 +49,5 @@ license       : "htmlArea"
 };
 
 QuickTag.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'QuickTag');
+    return Xinha._lc(string, 'QuickTag');
 };

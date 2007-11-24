@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 function CharCounter(_1){
 this.editor=_1;
 this._Chars=0;
@@ -5,17 +6,17 @@ this._Words=0;
 this._HTML=0;
 this.onKeyPress=this.__onKeyPress;
 }
-HTMLArea.Config.prototype.CharCounter={"showChar":true,"showWord":true,"showHtml":true,"separator":" | ","maxHTML":-1};
+Xinha.Config.prototype.CharCounter={"showChar":true,"showWord":true,"showHtml":true,"separator":" | ","maxHTML":-1};
 CharCounter._pluginInfo={name:"CharCounter",version:"1.31",developer:"Udo Schmal",developer_url:"http://www.schaffrath-neuemedien.de",sponsor:"L.N.Schaffrath NeueMedien",sponsor_url:"http://www.schaffrath-neuemedien.de",c_owner:"Udo Schmal & L.N.Schaffrath NeueMedien",license:"htmlArea"};
 CharCounter.prototype._lc=function(_2){
-return HTMLArea._lc(_2,"CharCounter");
+return Xinha._lc(_2,"CharCounter");
 };
 CharCounter.prototype.onGenerateOnce=function(){
 var _3=this;
 if(this.charCount==null){
 var _4=document.createElement("span");
 _4.style.padding="2px 5px";
-if(HTMLArea.is_ie){
+if(Xinha.is_ie){
 _4.style.styleFloat="right";
 }else{
 _4.style.cssFloat="right";
@@ -23,7 +24,7 @@ _4.style.cssFloat="right";
 var _5=document.createElement("div");
 _5.style.height=_5.style.width=_5.style.lineHeight=_5.style.fontSize="1px";
 _5.style.clear="both";
-if(HTMLArea.is_ie){
+if(Xinha.is_ie){
 this.editor._statusBarTree.style.styleFloat="left";
 }else{
 this.editor._statusBarTree.style.cssFloat="left";
@@ -38,7 +39,7 @@ if((ev.keyCode!=8)&&(ev.keyCode!=46)){
 if(this.editor.config.CharCounter.maxHTML!=-1){
 var _7=this.editor.getHTML();
 if(_7.length>=this.editor.config.CharCounter.maxHTML){
-HTMLArea._stopEvent(ev);
+Xinha._stopEvent(ev);
 return true;
 }
 }

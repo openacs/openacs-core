@@ -1,4 +1,5 @@
-InternetExplorer._pluginInfo={name:"Internet Explorer",origin:"Xinha Core",version:"$LastChangedRevision: 816 $".replace(/^[^:]*: (.*) \$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL: http://svn.xinha.python-hosting.com/trunk/modules/InternetExplorer/InternetExplorer.js $".replace(/^[^:]*: (.*) \$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+InternetExplorer._pluginInfo={name:"Internet Explorer",origin:"Xinha Core",version:"$LastChangedRevision: 901 $".replace(/^[^:]*: (.*) \$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL: http://svn.xinha.webfactional.com/trunk/modules/InternetExplorer/InternetExplorer.js $".replace(/^[^:]*: (.*) \$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};
 function InternetExplorer(_1){
 this.editor=_1;
 _1.InternetExplorer=this;
@@ -56,7 +57,7 @@ return true;
 };
 InternetExplorer.prototype.inwardHtml=function(_9){
 _9=_9.replace(/<(\/?)del(\s|>|\/)/ig,"<$1strike$2");
-_9=_9.replace(/(&nbsp;)?([\s\S]*?)(<script|<!--)/i,"$2&nbsp;$3");
+_9=_9.replace(/(<script|<!--)/i,"&nbsp;$1");
 return _9;
 };
 InternetExplorer.prototype.outwardHtml=function(_a){
@@ -119,7 +120,11 @@ Xinha.prototype.saveSelection=function(){
 return this.createRange(this._getSelection());
 };
 Xinha.prototype.restoreSelection=function(_14){
+try{
 _14.select();
+}
+catch(e){
+}
 };
 Xinha.prototype.selectNodeContents=function(_15,pos){
 this.focusEditor();
@@ -170,35 +175,38 @@ return _21.outerHTML;
 };
 Xinha.prototype.cc=String.fromCharCode(8201);
 Xinha.prototype.setCC=function(_22){
+var cc=this.cc;
 if(_22=="textarea"){
 var ta=this._textArea;
 var pos=document.selection.createRange();
 pos.collapse();
-pos.text=this.cc;
-var _25=ta.value.indexOf(this.cc);
-var _26=ta.value.substring(0,_25);
-var _27=ta.value.substring(_25+this.cc.length,ta.value.length);
-if(_27.match(/^[^<]*>/)){
-var _28=_27.indexOf(">")+1;
-ta.value=_26+_27.substring(0,_28)+this.cc+_27.substring(_28,_27.length);
+pos.text=cc;
+var _26=ta.value.indexOf(cc);
+var _27=ta.value.substring(0,_26);
+var _28=ta.value.substring(_26+cc.length,ta.value.length);
+if(_28.match(/^[^<]*>/)){
+var _29=_28.indexOf(">")+1;
+ta.value=_27+_28.substring(0,_29)+cc+_28.substring(_29,_28.length);
 }else{
-ta.value=_26+this.cc+_27;
+ta.value=_27+cc+_28;
 }
+ta.value=ta.value.replace(new RegExp("(<script[^>]*>[^"+cc+"]*?)("+cc+")([^"+cc+"]*?</script>)"),"$1$3$2");
+ta.value=ta.value.replace(new RegExp("^([^"+cc+"]*)("+cc+")([^"+cc+"]*<body[^>]*>)(.*?)"),"$1$3$2$4");
 }else{
 var sel=this.getSelection();
 var r=sel.createRange();
 if(sel.type=="Control"){
-var _2b=r.item(0);
-_2b.outerHTML+=this.cc;
+var _2c=r.item(0);
+_2c.outerHTML+=cc;
 }else{
 r.collapse();
-r.text=this.cc;
+r.text=cc;
 }
 }
 };
-Xinha.prototype.findCC=function(_2c){
-var _2d=(_2c=="textarea")?this._textArea:this._doc.body;
-range=_2d.createTextRange();
+Xinha.prototype.findCC=function(_2d){
+var _2e=(_2d=="textarea")?this._textArea:this._doc.body;
+range=_2e.createTextRange();
 if(range.findText(escape(this.cc))){
 range.select();
 range.text="";
@@ -207,7 +215,7 @@ if(range.findText(this.cc)){
 range.select();
 range.text="";
 }
-if(_2c=="textarea"){
+if(_2d=="textarea"){
 this._textArea.focus();
 }
 };

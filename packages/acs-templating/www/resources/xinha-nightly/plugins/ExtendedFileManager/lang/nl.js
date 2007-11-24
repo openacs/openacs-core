@@ -1,6 +1,6 @@
 // I18N constants
-// LANG: "de", ENCODING: UTF-8
-// translated: Alun Jones a.jones@hccnet.nl
+// LANG: "nl", ENCODING: UTF-8
+// Author: Maarten Molenschot, maarten@nrgmm.nl
 {
   "File Manager": "Bestandsbeheer",
   "Insert Image": "Beeld invoegen",
@@ -71,12 +71,12 @@
   "Alt": "Alt",
   "Alt": "Alt",
   "File Name": "Bestandsnaam",
-  "Thumbnail View": "Miniatuuransicht",
-  "List View": "Listenansicht",
+  "Thumbnail View": "Miniaturen",
+  "List View": "Lijst",
   "Title (tooltip)": "Titel (tooltip)",
   "Target Window": "Doel venster",
   "Name": "Naam",
-  "Size": "Grote",
+  "Size": "Grootte",
   "Date Modified": "Datum aangepast",
   "Total Size": "Totaalgrootte",
   "Free Space": "Vrije ruimte",
@@ -86,31 +86,31 @@
   'Please enter name for new folder...': "Naam van nieuwe map...",
   "You must select some text before making a new link.": "Eerst tekst selecteren.",
   "Folder is not empty. Please delete all Files and Subfolders inside.": "Map is niet leeg. Verwijder eerst alle bestanden en onderliggendemappen.",
-  "Image Size": "Beeld grote",
+  "Image Size": "Beeld afmetingen",
   "Other" : "Andere...",
   "Rename": "Naam wijzigen",
   "Please enter new name for this file...": "Nieuwe bestandsnaam...",
-  "Unable to rename file. File of the same name already exists or\nfolder doesn't have write permission.": "Herbenoemen niet mogelijk. Bestand bestaat al of\nmap heeft geen schrijf toestemming.",
-  "Cancelled rename.": "Herbenoemen geannuleerd.",
-  'File "$file" successfully uploaded.': '"$file" bestand upload komplet.',
-  "Cannot upload. Maximum folder size reached.": "Uploaden niet mogelijk. Map is vol.",
+  "Unable to rename file. File of the same name already exists or\nfolder doesn't have write permission.": "Hernoemen niet mogelijk. Bestand bestaat al of\nmap heeft geen schrijf toestemming.",
+  "Cancelled rename.": "Hernoemen geannuleerd.",
+  'File "$file" successfully uploaded.': '"$file" bestand upload voltooid.',
+  "Cannot upload. Maximum folder size reached.": "Uploaden is niet mogelijk. De doel map is vol.",
   "Maximum file size [$max_size KB] exceeded.": "Maximale bestandgrootte [$max_size KB] overschreden.",
-  "Cannot upload $extension Files. Permission denied.": "Niet mogelijk om $extension bestanden te uploaden.",
-  "Unable to upload File. \nEither Maximum file size [$max_size KB] exceeded or\nFolder doesn\'t have write permission.": "Bestands upload niet mogelijk.\nMaximale bestandsgrootte [$max_size KB] overtreden\nof map heeft geen schrijf toestemming.",
-  "Total Size : $max_foldersize_mb MB, Free Space: $free_space": "Totaalgrootte: $max_foldersize_mb MB, noch vrij: $free_space",
-  "Please enter new name for this folder...":"Please enter new name for this folder...",
+  "Cannot upload $extension Files. Permission denied.": "Het is niet mogelijk om $extension bestanden te uploaden.",
+  "Unable to upload File. \nEither Maximum file size [$max_size KB] exceeded or\nFolder doesn\'t have write permission.": "Bestands upload niet mogelijk.\nMaximale bestandsgrootte [$max_size KB] overtreden\nof de map heeft geen schrijf toestemming.",
+  "Total Size : $max_foldersize_mb MB, Free Space: $free_space": "Totaalgrootte: $max_foldersize_mb MB, nog vrij: $free_space",
+  "Please enter new name for this folder...":"Geef een nieuwe naam voor deze map...",
 
-  "Cut":"Cut",
-  "Copy":"Copy",
-  "Paste":"Paste",
+  "Cut":"Knippen",
+  "Copy":"Kopiëren",
+  "Paste":"Plakken",
   
-  'Copy "$file" from "$dir" here': 'Copy "$file" from "$dir" here',
-  'Copy folder "$file" from "$dir" here' : 'Copy folder "$file" from "$dir" here',
-  'Move "$file" from "$dir" here':'Move "$file" from "$dir" here',
-  'Move folder "$file" from "$dir" here':'Move folder "$file" from "$dir" here',
+  'Copy "$file" from "$dir" here': 'Kopieer "$file" van "$dir" naar',
+  'Copy folder "$file" from "$dir" here' : 'Kopieer map "$file" van "$dir" naar',
+  'Move "$file" from "$dir" here':'Verplaats "$file" van "$dir" naar',
+  'Move folder "$file" from "$dir" here':'Verplaats map "$file" van "$dir" naar',
   
-  "Source file/folder not found.":"Source file/folder not found.",
-  "Paste failed.\nMaybe folder doesn't have write permission.": "Paste failed.\nMaybe folder doesn't have write permission.",
-  "Could not create destination folder.":"Could not create destination folder.",
-  "Destination file/folder already exists.":"Destination file/folder already exists."
+  "Source file/folder not found.":"Bron bestand/map niet gevonden.",
+  "Paste failed.\nMaybe folder doesn't have write permission.": "Plakken mislukt..\nDe map heeft mogelijk niet de juiste schrijfrechten.",
+  "Could not create destination folder.":"Bestemmings map kon niet worden gemaakt..",
+  "Destination file/folder already exists.":"Bestemmings bestand/map bestaat al."
 };

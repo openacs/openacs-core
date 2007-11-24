@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 Xinha.Config.prototype.css_style={};
 Xinha.Config.prototype.stylistLoadStylesheet=function(_1,_2){
 if(!_2){
@@ -65,6 +66,8 @@ _10="new";
 _10=this._getFirstAncestor(_a,["p","h1","h2","h3","h4","h5","h6","h7"]);
 if(_10!=null){
 _f=true;
+}else{
+_f=false;
 }
 }
 }else{

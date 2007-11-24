@@ -1,3 +1,5 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+Xinha.Config.prototype.TableOperations={"showButtons":true};
 function TableOperations(_1){
 this.editor=_1;
 var _2=_1.config;
@@ -8,13 +10,17 @@ var _5=["linebreak","inserttable","toggleborders"];
 for(var i=0;i<bl.length;++i){
 var _7=bl[i];
 if(!_7){
+if(_2.TableOperations.showButtons){
 _5.push("separator");
+}
 }else{
 var id="TO-"+_7[0];
-_2.registerButton(id,HTMLArea._lc(_7[2],"TableOperations"),_1.imgURL(_7[0]+".gif","TableOperations"),false,function(_9,id){
+_2.registerButton(id,Xinha._lc(_7[2],"TableOperations"),_1.imgURL(_7[0]+".gif","TableOperations"),false,function(_9,id){
 _4.buttonPress(_9,id);
 },_7[1]);
+if(_2.TableOperations.showButtons){
 _5.push(id);
+}
 }
 }
 _2.toolbar.push(_5);
@@ -24,7 +30,7 @@ Xinha._loadback(_editor_url+"modules/Dialogs/popupwin.js");
 }
 TableOperations._pluginInfo={name:"TableOperations",version:"1.0",developer:"Mihai Bazon",developer_url:"http://dynarch.com/mishoo/",c_owner:"Mihai Bazon",sponsor:"Zapatec Inc.",sponsor_url:"http://www.bloki.com",license:"htmlArea"};
 TableOperations.prototype._lc=function(_b){
-return HTMLArea._lc(_b,"TableOperations");
+return Xinha._lc(_b,"TableOperations");
 };
 TableOperations.prototype.getClosest=function(_c){
 var _d=this.editor;
@@ -42,7 +48,7 @@ return _f;
 };
 TableOperations.prototype.dialogTableProperties=function(){
 var _12=this.getClosest("table");
-var _13=new PopupWin(this.editor,HTMLArea._lc("Table Properties","TableOperations"),function(_14,_15){
+var _13=new PopupWin(this.editor,Xinha._lc("Table Properties","TableOperations"),function(_14,_15){
 TableOperations.processStyle(_15,_12);
 for(var i in _15){
 if(typeof _15[i]=="function"){
@@ -118,7 +124,7 @@ function selected(val){
 return val?" selected":"";
 }
 _1a.content.style.width="400px";
-_1a.content.innerHTML=" <div class='title'>"+HTMLArea._lc("Table Properties","TableOperations")+"</div> <table style='width:100%'>   <tr>     <td>       <fieldset><legend>"+HTMLArea._lc("Description","TableOperations")+"</legend>        <table style='width:100%'>         <tr>           <td class='label'>"+HTMLArea._lc("Caption","TableOperations")+":</td>           <td class='value'><input type='text' name='f_caption' value='"+_1b+"'/></td>         </tr><tr>           <td class='label'>"+HTMLArea._lc("Summary","TableOperations")+":</td>           <td class='value'><input type='text' name='f_summary' value='"+_1d+"'/></td>         </tr>        </table>       </fieldset>     </td>   </tr>   <tr><td id='--HA-layout'></td></tr>   <tr>     <td>       <fieldset><legend>"+HTMLArea._lc("Spacing and padding","TableOperations")+"</legend>        <table style='width:100%'> "+"        <tr>           <td class='label'>"+HTMLArea._lc("Spacing","TableOperations")+":</td>           <td><input type='text' name='f_spacing' size='5' value='"+_21+"' /> &nbsp;"+HTMLArea._lc("Padding","TableOperations")+":            <input type='text' name='f_padding' size='5' value='"+_22+"' /> &nbsp;&nbsp;"+HTMLArea._lc("pixels","TableOperations")+"          </td>         </tr>        </table>       </fieldset>     </td>   </tr>   <tr>     <td>       <fieldset><legend>"+HTMLArea._lc("Frame and borders","TableOperations")+"</legend>         <table width='100%'>           <tr>             <td class='label'>"+HTMLArea._lc("Borders","TableOperations")+":</td>             <td><input name='f_borders' type='text' size='5' value='"+_23+"' /> &nbsp;&nbsp;"+HTMLArea._lc("pixels","TableOperations")+"</td>           </tr>           <tr>             <td class='label'>"+HTMLArea._lc("Frames","TableOperations")+":</td>             <td>               <select name='f_frames'>                 <option value='void'"+selected(_24=="void")+">"+HTMLArea._lc("No sides","TableOperations")+"</option>                 <option value='above'"+selected(_24=="above")+">"+HTMLArea._lc("The top side only","TableOperations")+"</option>                 <option value='below'"+selected(_24=="below")+">"+HTMLArea._lc("The bottom side only","TableOperations")+"</option>                 <option value='hsides'"+selected(_24=="hsides")+">"+HTMLArea._lc("The top and bottom sides only","TableOperations")+"</option>                 <option value='vsides'"+selected(_24=="vsides")+">"+HTMLArea._lc("The right and left sides only","TableOperations")+"</option>                 <option value='lhs'"+selected(_24=="lhs")+">"+HTMLArea._lc("The left-hand side only","TableOperations")+"</option>                 <option value='rhs'"+selected(_24=="rhs")+">"+HTMLArea._lc("The right-hand side only","TableOperations")+"</option>                 <option value='box'"+selected(_24=="box")+">"+HTMLArea._lc("All four sides","TableOperations")+"</option>               </select>             </td>           </tr>           <tr>             <td class='label'>"+HTMLArea._lc("Rules","TableOperations")+":</td>             <td>               <select name='f_rules'>                 <option value='none'"+selected(_25=="none")+">"+HTMLArea._lc("No rules","TableOperations")+"</option>                 <option value='rows'"+selected(_25=="rows")+">"+HTMLArea._lc("Rules will appear between rows only","TableOperations")+"</option>                 <option value='cols'"+selected(_25=="cols")+">"+HTMLArea._lc("Rules will appear between columns only","TableOperations")+"</option>                 <option value='all'"+selected(_25=="all")+">"+HTMLArea._lc("Rules will appear between all rows and columns","TableOperations")+"</option>               </select>             </td>           </tr>         </table>       </fieldset>     </td>   </tr>   <tr>     <td id='--HA-style'></td>   </tr> </table> ";
+_1a.content.innerHTML=" <div class='title'>"+Xinha._lc("Table Properties","TableOperations")+"</div> <table style='width:100%'>   <tr>     <td>       <fieldset><legend>"+Xinha._lc("Description","TableOperations")+"</legend>        <table style='width:100%'>         <tr>           <td class='label'>"+Xinha._lc("Caption","TableOperations")+":</td>           <td class='value'><input type='text' name='f_caption' value='"+_1b+"'/></td>         </tr><tr>           <td class='label'>"+Xinha._lc("Summary","TableOperations")+":</td>           <td class='value'><input type='text' name='f_summary' value='"+_1d+"'/></td>         </tr>        </table>       </fieldset>     </td>   </tr>   <tr><td id='--HA-layout'></td></tr>   <tr>     <td>       <fieldset><legend>"+Xinha._lc("Spacing and padding","TableOperations")+"</legend>        <table style='width:100%'> "+"        <tr>           <td class='label'>"+Xinha._lc("Spacing","TableOperations")+":</td>           <td><input type='text' name='f_spacing' size='5' value='"+_21+"' /> &nbsp;"+Xinha._lc("Padding","TableOperations")+":            <input type='text' name='f_padding' size='5' value='"+_22+"' /> &nbsp;&nbsp;"+Xinha._lc("pixels","TableOperations")+"          </td>         </tr>        </table>       </fieldset>     </td>   </tr>   <tr>     <td>       <fieldset><legend>"+Xinha._lc("Frame and borders","TableOperations")+"</legend>         <table width='100%'>           <tr>             <td class='label'>"+Xinha._lc("Borders","TableOperations")+":</td>             <td><input name='f_borders' type='text' size='5' value='"+_23+"' /> &nbsp;&nbsp;"+Xinha._lc("pixels","TableOperations")+"</td>           </tr>           <tr>             <td class='label'>"+Xinha._lc("Frames","TableOperations")+":</td>             <td>               <select name='f_frames'>                 <option value='void'"+selected(_24=="void")+">"+Xinha._lc("No sides","TableOperations")+"</option>                 <option value='above'"+selected(_24=="above")+">"+Xinha._lc("The top side only","TableOperations")+"</option>                 <option value='below'"+selected(_24=="below")+">"+Xinha._lc("The bottom side only","TableOperations")+"</option>                 <option value='hsides'"+selected(_24=="hsides")+">"+Xinha._lc("The top and bottom sides only","TableOperations")+"</option>                 <option value='vsides'"+selected(_24=="vsides")+">"+Xinha._lc("The right and left sides only","TableOperations")+"</option>                 <option value='lhs'"+selected(_24=="lhs")+">"+Xinha._lc("The left-hand side only","TableOperations")+"</option>                 <option value='rhs'"+selected(_24=="rhs")+">"+Xinha._lc("The right-hand side only","TableOperations")+"</option>                 <option value='box'"+selected(_24=="box")+">"+Xinha._lc("All four sides","TableOperations")+"</option>               </select>             </td>           </tr>           <tr>             <td class='label'>"+Xinha._lc("Rules","TableOperations")+":</td>             <td>               <select name='f_rules'>                 <option value='none'"+selected(_25=="none")+">"+Xinha._lc("No rules","TableOperations")+"</option>                 <option value='rows'"+selected(_25=="rows")+">"+Xinha._lc("Rules will appear between rows only","TableOperations")+"</option>                 <option value='cols'"+selected(_25=="cols")+">"+Xinha._lc("Rules will appear between columns only","TableOperations")+"</option>                 <option value='all'"+selected(_25=="all")+">"+Xinha._lc("Rules will appear between all rows and columns","TableOperations")+"</option>               </select>             </td>           </tr>         </table>       </fieldset>     </td>   </tr>   <tr>     <td id='--HA-style'></td>   </tr> </table> ";
 var _27=TableOperations.createStyleFieldset(_1a.doc,_1a.editor,_12);
 var p=_1a.doc.getElementById("--HA-style");
 p.appendChild(_27);
@@ -133,7 +139,7 @@ _1a.showAtElement(_1a.editor._iframe,"c");
 TableOperations.prototype.dialogRowCellProperties=function(_2a){
 var _2b=this.getClosest(_2a?"td":"tr");
 var _2c=this.getClosest("table");
-var _2d=new PopupWin(this.editor,_2a?HTMLArea._lc("Cell Properties","TableOperations"):HTMLArea._lc("Row Properties","TableOperations"),function(_2e,_2f){
+var _2d=new PopupWin(this.editor,_2a?Xinha._lc("Cell Properties","TableOperations"):Xinha._lc("Row Properties","TableOperations"),function(_2e,_2f){
 TableOperations.processStyle(_2f,_2b);
 for(var i in _2f){
 if(typeof _2f[i]=="function"){
@@ -167,7 +173,7 @@ function selected(val){
 return val?" selected":"";
 }
 _33.content.style.width="400px";
-_33.content.innerHTML=" <div class='title'>"+HTMLArea._lc(_2a?"Cell Properties":"Row Properties","TableOperations")+"</div> <table style='width:100%'>   <tr>     <td id='--HA-layout'> "+"    </td>   </tr>   <tr>     <td id='--HA-style'></td>   </tr> </table> ";
+_33.content.innerHTML=" <div class='title'>"+Xinha._lc(_2a?"Cell Properties":"Row Properties","TableOperations")+"</div> <table style='width:100%'>   <tr>     <td id='--HA-layout'> "+"    </td>   </tr>   <tr>     <td id='--HA-style'></td>   </tr> </table> ";
 var _38=TableOperations.createStyleFieldset(_33.doc,_33.editor,_2b);
 var p=_33.doc.getElementById("--HA-style");
 p.appendChild(_38);
@@ -181,7 +187,7 @@ _33.showAtElement(_33.editor._iframe,"c");
 };
 TableOperations.prototype.buttonPress=function(_3b,_3c){
 this.editor=_3b;
-var _3d=HTMLArea.is_gecko?"<br />":"";
+var _3d=Xinha.is_gecko?"<br />":"";
 function clearRow(tr){
 var tds=tr.getElementsByTagName("td");
 for(var i=tds.length;--i>=0;){
@@ -313,7 +319,7 @@ break;
 }
 var par=tr.parentNode;
 if(par.rows.length==1){
-alert(HTMLArea._lc("HTMLArea cowardly refuses to delete the last row in table.","TableOperations"));
+alert(Xinha._lc("Xinha cowardly refuses to delete the last row in table.","TableOperations"));
 break;
 }
 selectNextNode(tr);
@@ -342,7 +348,7 @@ for(var i=_67.length;--i>=0;){
 var tr=_67[i];
 var otd=_3b._doc.createElement("td");
 otd.innerHTML=_3d;
-if(_69&&HTMLArea.is_ie){
+if(_69&&Xinha.is_ie){
 tr.insertBefore(otd);
 }else{
 var ref=tr.cells[_68+(/after/.test(_3c)?1:0)];
@@ -365,7 +371,7 @@ break;
 }
 var _68=td.cellIndex;
 if(td.parentNode.cells.length==1){
-alert(HTMLArea._lc("HTMLArea cowardly refuses to delete the last column in table.","TableOperations"));
+alert(Xinha._lc("Xinha cowardly refuses to delete the last column in table.","TableOperations"));
 break;
 }
 selectNextNode(td);
@@ -404,7 +410,7 @@ if(!td){
 break;
 }
 if(td.parentNode.cells.length==1){
-alert(HTMLArea._lc("HTMLArea cowardly refuses to delete the last cell in row.","TableOperations"));
+alert(Xinha._lc("Xinha cowardly refuses to delete the last cell in row.","TableOperations"));
 break;
 }
 selectNextNode(td);
@@ -414,7 +420,7 @@ _3b.updateToolbar();
 break;
 case "TO-cell-merge":
 var sel=_3b._getSelection();
-if(!HTMLArea.is_ie&&sel.rangeCount>1){
+if(!Xinha.is_ie&&sel.rangeCount>1){
 var _6e=sel.getRangeAt(0);
 var td=_6e.startContainer.childNodes[_6e.startOffset];
 var tr=td.parentNode;
@@ -447,7 +453,7 @@ cellMerge(_77,_6f,_70,_73,_76);
 }else{
 var td=this.getClosest("td");
 if(!td){
-alert(HTMLArea._lc("Please click into some cell","TableOperations"));
+alert(Xinha._lc("Please click into some cell","TableOperations"));
 break;
 }
 _3b._popupDialog("plugin://TableOperations/merge_cells.html",function(_78){
@@ -566,7 +572,7 @@ if(!_87){
 _87="";
 }else{
 if(!/#/.test(_87)){
-_87=HTMLArea._colorToRgb(_87);
+_87=Xinha._colorToRgb(_87);
 }
 }
 var df=doc.createElement("span");
@@ -606,7 +612,7 @@ _8a.value="#"+_8d;
 var _8e=doc.createElement("span");
 _8e.innerHTML="&#x00d7;";
 _8e.className="nocolor";
-_8e.title=HTMLArea._lc("Unset color","TableOperations");
+_8e.title=Xinha._lc("Unset color","TableOperations");
 _8b.appendChild(_8e);
 _8e.onmouseover=function(){
 if(!this.parentNode.disabled){
@@ -628,7 +634,7 @@ TableOperations.createStyleLayoutFieldset=function(doc,_90,el){
 var _92=doc.createElement("fieldset");
 var _93=doc.createElement("legend");
 _92.appendChild(_93);
-_93.innerHTML=HTMLArea._lc("Layout","TableOperations");
+_93.innerHTML=Xinha._lc("Layout","TableOperations");
 var _94=doc.createElement("table");
 _92.appendChild(_94);
 _94.style.width="100%";
@@ -642,7 +648,7 @@ _95.appendChild(tr);
 td=doc.createElement("td");
 td.className="label";
 tr.appendChild(td);
-td.innerHTML=HTMLArea._lc("Float","TableOperations")+":";
+td.innerHTML=Xinha._lc("Float","TableOperations")+":";
 td=doc.createElement("td");
 tr.appendChild(td);
 select=doc.createElement("select");
@@ -653,7 +659,7 @@ for(var i=0;i<options.length;++i){
 var Val=options[i];
 var val=options[i].toLowerCase();
 option=doc.createElement("option");
-option.innerHTML=HTMLArea._lc(Val,"TableOperations");
+option.innerHTML=Xinha._lc(Val,"TableOperations");
 option.value=val;
 option.selected=((""+el.style.cssFloat).toLowerCase()==val);
 select.appendChild(option);
@@ -664,7 +670,7 @@ _95.appendChild(tr);
 td=doc.createElement("td");
 td.className="label";
 tr.appendChild(td);
-td.innerHTML=HTMLArea._lc("Width","TableOperations")+":";
+td.innerHTML=Xinha._lc("Width","TableOperations")+":";
 td=doc.createElement("td");
 tr.appendChild(td);
 input=doc.createElement("input");
@@ -677,18 +683,18 @@ td.appendChild(input);
 select=doc.createElement("select");
 select.name="f_st_widthUnit";
 option=doc.createElement("option");
-option.innerHTML=HTMLArea._lc("percent","TableOperations");
+option.innerHTML=Xinha._lc("percent","TableOperations");
 option.value="%";
 option.selected=/%/.test(el.style.width);
 select.appendChild(option);
 option=doc.createElement("option");
-option.innerHTML=HTMLArea._lc("pixels","TableOperations");
+option.innerHTML=Xinha._lc("pixels","TableOperations");
 option.value="px";
 option.selected=/px/.test(el.style.width);
 select.appendChild(option);
 td.appendChild(select);
 select.style.marginRight="0.5em";
-td.appendChild(doc.createTextNode(HTMLArea._lc("Text align","TableOperations")+":"));
+td.appendChild(doc.createTextNode(Xinha._lc("Text align","TableOperations")+":"));
 select=doc.createElement("select");
 select.style.marginLeft=select.style.marginRight="0.5em";
 td.appendChild(select);
@@ -707,7 +713,7 @@ var Val=options[i];
 var val=Val.toLowerCase();
 option=doc.createElement("option");
 option.value=val;
-option.innerHTML=HTMLArea._lc(Val,"TableOperations");
+option.innerHTML=Xinha._lc(Val,"TableOperations");
 option.selected=((el.style.textAlign.toLowerCase()==val)||(el.style.textAlign==""&&Val=="-"));
 select.appendChild(option);
 }
@@ -727,7 +733,7 @@ _95.appendChild(tr);
 td=doc.createElement("td");
 td.className="label";
 tr.appendChild(td);
-td.innerHTML=HTMLArea._lc("Height","TableOperations")+":";
+td.innerHTML=Xinha._lc("Height","TableOperations")+":";
 td=doc.createElement("td");
 tr.appendChild(td);
 input=doc.createElement("input");
@@ -740,18 +746,18 @@ td.appendChild(input);
 select=doc.createElement("select");
 select.name="f_st_heightUnit";
 option=doc.createElement("option");
-option.innerHTML=HTMLArea._lc("percent","TableOperations");
+option.innerHTML=Xinha._lc("percent","TableOperations");
 option.value="%";
 option.selected=/%/.test(el.style.height);
 select.appendChild(option);
 option=doc.createElement("option");
-option.innerHTML=HTMLArea._lc("pixels","TableOperations");
+option.innerHTML=Xinha._lc("pixels","TableOperations");
 option.value="px";
 option.selected=/px/.test(el.style.height);
 select.appendChild(option);
 td.appendChild(select);
 select.style.marginRight="0.5em";
-td.appendChild(doc.createTextNode(HTMLArea._lc("Vertical align","TableOperations")+":"));
+td.appendChild(doc.createTextNode(Xinha._lc("Vertical align","TableOperations")+":"));
 select=doc.createElement("select");
 select.name="f_st_verticalAlign";
 select.style.marginLeft="0.5em";
@@ -762,7 +768,7 @@ var Val=options[i];
 var val=Val.toLowerCase();
 option=doc.createElement("option");
 option.value=val;
-option.innerHTML=HTMLArea._lc(Val,"TableOperations");
+option.innerHTML=Xinha._lc(Val,"TableOperations");
 option.selected=((el.style.verticalAlign.toLowerCase()==val)||(el.style.verticalAlign==""&&Val=="-"));
 select.appendChild(option);
 }
@@ -772,7 +778,7 @@ TableOperations.createStyleFieldset=function(doc,_9d,el){
 var _9f=doc.createElement("fieldset");
 var _a0=doc.createElement("legend");
 _9f.appendChild(_a0);
-_a0.innerHTML=HTMLArea._lc("CSS Style","TableOperations");
+_a0.innerHTML=Xinha._lc("CSS Style","TableOperations");
 var _a1=doc.createElement("table");
 _9f.appendChild(_a1);
 _a1.style.width="100%";
@@ -784,13 +790,13 @@ _a2.appendChild(tr);
 td=doc.createElement("td");
 tr.appendChild(td);
 td.className="label";
-td.innerHTML=HTMLArea._lc("Background","TableOperations")+":";
+td.innerHTML=Xinha._lc("Background","TableOperations")+":";
 td=doc.createElement("td");
 tr.appendChild(td);
 var df=TableOperations.createColorButton(doc,_9d,el.style.backgroundColor,"backgroundColor");
 df.firstChild.nextSibling.style.marginRight="0.5em";
 td.appendChild(df);
-td.appendChild(doc.createTextNode(HTMLArea._lc("Image URL","TableOperations")+": "));
+td.appendChild(doc.createTextNode(Xinha._lc("Image URL","TableOperations")+": "));
 input=doc.createElement("input");
 input.type="text";
 input.name="f_st_backgroundImage";
@@ -803,7 +809,7 @@ _a2.appendChild(tr);
 td=doc.createElement("td");
 tr.appendChild(td);
 td.className="label";
-td.innerHTML=HTMLArea._lc("FG Color","TableOperations")+":";
+td.innerHTML=Xinha._lc("FG Color","TableOperations")+":";
 td=doc.createElement("td");
 tr.appendChild(td);
 td.appendChild(TableOperations.createColorButton(doc,_9d,el.style.color,"color"));
@@ -816,7 +822,7 @@ _a2.appendChild(tr);
 td=doc.createElement("td");
 tr.appendChild(td);
 td.className="label";
-td.innerHTML=HTMLArea._lc("Border","TableOperations")+":";
+td.innerHTML=Xinha._lc("Border","TableOperations")+":";
 td=doc.createElement("td");
 tr.appendChild(td);
 var _a5=TableOperations.createColorButton(doc,_9d,el.style.borderColor,"borderColor");
@@ -864,7 +870,7 @@ input.size="5";
 td.appendChild(input);
 input.style.marginRight="0.5em";
 var _ae=doc.createElement("span");
-_ae.innerHTML=HTMLArea._lc("pixels","TableOperations");
+_ae.innerHTML=Xinha._lc("pixels","TableOperations");
 td.appendChild(_ae);
 _a7.push(_ae);
 setBorderFieldsStatus(select.value=="none");
@@ -885,7 +891,7 @@ td=doc.createElement("td");
 tr.appendChild(td);
 var _af=doc.createElement("label");
 _af.htmlFor="f_st_borderCollapse";
-_af.innerHTML=HTMLArea._lc("Collapsed borders","TableOperations");
+_af.innerHTML=Xinha._lc("Collapsed borders","TableOperations");
 td.appendChild(_af);
 }
 return _9f;

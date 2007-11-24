@@ -10,25 +10,24 @@ var Abbreviation = window.opener.Abbreviation; // load the Abbreviation plugin a
 function fillSelect(text) {
   var abbr = window.location.href;
   abbr = abbr.replace(/popups\/abbreviation.html/g, "abbr\/" + window.opener._editor_lang + ".js");
-  var abbrData = HTMLArea._geturlcontent(abbr);
+  var abbrData = Xinha._geturlcontent(abbr);
   if (abbrData) {
     eval('abbrObj = ' + abbrData);
     if (abbrObj != "") {
       dest = document.getElementById("select");
       for (var i in abbrObj) {
         same = (i==text);
-	    dest.options[dest.options.length] = new Option(i + "=" + abbrObj[i], abbrObj[i], false, same);
-	    if (same)
-	      document.getElementById("title").value = abbrObj[i];
+        dest.options[dest.options.length] = new Option(i + "=" + abbrObj[i], abbrObj[i], false, same);
+        if (same)
+        document.getElementById("title").value = abbrObj[i];
       }
     }
   }
 }
 
 function Init() {
-  window.resizeTo(260, 160);
   __dlg_translate("Abbreviation");
-  __dlg_init();
+  __dlg_init(null,{width: 260, height: 160});
   var param = window.dialogArguments;
   var text = null;
   if (param) {
@@ -70,13 +69,13 @@ function onCancel() {
     <td class="lable">Expansion:</td>
     <td>
     <select id="select" name="select"
-	        onChange="document.form.title.value=document.form.select.options[document.form.select.selectedIndex].value"
-	        style="position:absolute; top:35px; left:100px; width:118px; clip:rect(0 120 22 100)">
-	  <option value=""></option>
+            onChange="document.form.title.value=document.form.select.options[document.form.select.selectedIndex].value"
+            style="position:absolute; top:35px; left:100px; width:118px; clip:rect(0 120 22 100)">
+      <option value=""></option>
 
-	</select>
-	<input type="title" id="title" name="text"
-	       onChange="document.form.select.selectedIndex=-1"
+    </select>
+    <input type="text" id="title" name="title"
+           onChange="document.form.select.selectedIndex=-1"
            style="position:absolute; top:35px; left:100px; width:100px; border-right:0">
     <!--<input type="text" id="title" name="title" value="" size="30">-->
     </td>

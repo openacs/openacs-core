@@ -1,5 +1,6 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 function i18n(_1){
-return HTMLArea._lc(_1,"ImageManager");
+return Xinha._lc(_1,"ImageManager");
 }
 function setAlign(_2){
 var _3=document.getElementById("f_align");
@@ -10,7 +11,11 @@ break;
 }
 }
 }
+doneinit=0;
 init=function(){
+if(doneinit++){
+return;
+}
 __dlg_init(null,{width:600,height:460});
 __dlg_translate("ImageManager");
 document.getElementById("f_align").selectedIndex=1;
@@ -43,7 +48,7 @@ document.getElementById("orginal_width").value=_6["f_width"];
 document.getElementById("orginal_height").value=_6["f_height"];
 setAlign(_6["f_align"]);
 var _a=new RegExp("^(.*/)([^/]+)$");
-if(_a.test(_6["f_url"])){
+if(_a.test(_6["f_url"])&&!(new RegExp("^https?://","i")).test(_6["f_url"])){
 changeDir(RegExp.$1);
 var _c=document.getElementById("dirPath");
 for(var i=0;i<_c.options.length;i++){
@@ -85,7 +90,7 @@ alert("Missing "+_e[i]);
 }
 var _13={w:document.getElementById("orginal_width").value,h:document.getElementById("orginal_height").value};
 if((_13.w!=_f.f_width)||(_13.h!=_f.f_height)){
-var _14=HTMLArea._geturlcontent(_backend_url+"&__function=resizer&img="+encodeURIComponent(document.getElementById("f_url").value)+"&width="+_f.f_width+"&height="+_f.f_height);
+var _14=Xinha._geturlcontent(_backend_url+"&__function=resizer&img="+encodeURIComponent(document.getElementById("f_url").value)+"&width="+_f.f_width+"&height="+_f.f_height);
 _14=eval(_14);
 if(_14){
 _f.f_url=makeURL(base_url,_14);

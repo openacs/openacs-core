@@ -71,9 +71,9 @@
   "Unset color": "Rimuovi colore",
   "Vertical align": "Allineamento verticale",
   "Width": "Larghezza",
-  "HTMLArea cowardly refuses to delete the last cell in row.": "HTMLArea si rifiuta codardamente di cancellare l'ultima cella nella riga.",
-  "HTMLArea cowardly refuses to delete the last column in table.": "HTMLArea si rifiuta codardamente di cancellare l'ultima colonna nella tabella.",
-  "HTMLArea cowardly refuses to delete the last row in table.": "HTMLArea si rifiuta codardamente di cancellare l'ultima riga nella tabella.",
+  "Xinha cowardly refuses to delete the last cell in row.": "Xinha si rifiuta codardamente di cancellare l'ultima cella nella riga.",
+  "Xinha cowardly refuses to delete the last column in table.": "Xinha si rifiuta codardamente di cancellare l'ultima colonna nella tabella.",
+  "Xinha cowardly refuses to delete the last row in table.": "Xinha si rifiuta codardamente di cancellare l'ultima riga nella tabella.",
   "percent": "percento",
   "pixels": "pixels"
 };

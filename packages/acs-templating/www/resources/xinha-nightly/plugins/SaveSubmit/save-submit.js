@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 function SaveSubmit(_1){
 this.editor=_1;
 this.changed=false;
@@ -76,11 +77,14 @@ this.buildMessage();
 var _9=this;
 var _a=_8._textArea.form;
 _a.onsubmit();
-var _b="";
+var _b,value,content="";
 for(var i=0;i<_a.elements.length;i++){
-_b+=((i>0)?"&":"")+_a.elements[i].name+"="+encodeURIComponent(_a.elements[i].value);
+if((_a.elements[i].type=="checkbox"||_a.elements[i].type=="radio")&&!_a.elements[i].checked){
+continue;
 }
-Xinha._postback(_8._textArea.form.action,_b,function(_d){
+content+=((i>0)?"&":"")+_a.elements[i].name+"="+encodeURIComponent(_a.elements[i].value);
+}
+Xinha._postback(_8._textArea.form.action,content,function(_d){
 if(_d){
 _9.setMessage(_d);
 _9.changedReset();

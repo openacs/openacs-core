@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 function SmartReplace(_1){
 this.editor=_1;
 var _2=_1.config;

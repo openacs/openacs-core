@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 var allTags={"a":"a","a (full)":"a href=\"\" target=\"\"","address":"address","b":"b","big":"big","blockquote":"blockquote","code":"code","div":"div","em":"em","fieldset":"fieldset","font":"font","font (full)":"font face=\"\" size=\"\" color=\"\"","h1":"h1","h2":"h2","h3":"h3","h4":"h4","h5":"h5","h6":"h6","i":"i","legend":"legend","li":"li","ol":"ol","ul":"ul","p":"p","pre":"pre","small":"small","span":"span","strong":"strong","sub":"sub","sup":"sup","table":"table"};
 var tagLib={"a":true,"div":true,"font":true,"h1":true,"h2":true,"h3":true,"h4":true,"h5":true,"h6":true,"p":true,"table":true};
 var subTagLib={"table":{"op":"<tbody><tr><td>","cl":"</td></tr></tbody>"}};

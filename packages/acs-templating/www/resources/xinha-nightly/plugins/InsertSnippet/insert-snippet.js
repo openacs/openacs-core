@@ -59,15 +59,7 @@ InsertSnippet.prototype._lc = function(string) {
 };
 
 InsertSnippet.prototype.onGenerate = function() {
-  var style_id = "IS-style";
-  var style = this.editor._doc.getElementById(style_id);
-  if (style == null) {
-    style = this.editor._doc.createElement("link");
-    style.id = style_id;
-    style.rel = 'stylesheet';
-    style.href = _editor_url + 'plugins/InsertSnippet/InsertSnippet.css';
-    this.editor._doc.getElementsByTagName("HEAD")[0].appendChild(style);
-  }
+  this.editor.addEditorStylesheet(_editor_url + 'plugins/InsertSnippet/InsertSnippet.css');
 };
 
 Xinha.Config.prototype.InsertSnippet =

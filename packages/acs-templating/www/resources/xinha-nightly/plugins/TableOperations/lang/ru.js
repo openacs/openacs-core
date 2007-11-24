@@ -71,9 +71,9 @@
   "Unset color": "Отменить цвет",
   "Vertical align": "Вертикальное  выравнивание",
   "Width": "Ширина",
-  "HTMLArea cowardly refuses to delete the last cell in row.": "HTMLArea отказалась удалять последнюю ячейку в строке.",
-  "HTMLArea cowardly refuses to delete the last column in table.": "HTMLArea отказалась удалять последний столбец в таблице.",
-  "HTMLArea cowardly refuses to delete the last row in table.": "HTMLArea отказалась удалять последнюю строку в таблице.",
+  "Xinha cowardly refuses to delete the last cell in row.": "Xinha отказалась удалять последнюю ячейку в строке.",
+  "Xinha cowardly refuses to delete the last column in table.": "Xinha отказалась удалять последний столбец в таблице.",
+  "Xinha cowardly refuses to delete the last row in table.": "Xinha отказалась удалять последнюю строку в таблице.",
   "percent": "процентов",
   "pixels": "пикселей"
 };
